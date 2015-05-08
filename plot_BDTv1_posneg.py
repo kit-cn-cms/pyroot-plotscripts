@@ -1,6 +1,6 @@
 from plotutils import *
 # samples
-samples=[Sample('t#bar{t}H',ROOT.kBlue,'/nfs/dust/cms/user/hmildner/trees/tth.root','') , Sample('t#bar{t}',ROOT.kRed+1,'/nfs/dust/cms/user/hmildner/trees/ttbar.root','')]
+samples=[Sample('t#bar{t}H weight>0',ROOT.kBlue,'/nfs/dust/cms/user/hmildner/trees/tth.root','Weight>0') , Sample('t#bar{t}H weight<0',ROOT.kRed+1,'/nfs/dust/cms/user/hmildner/trees/tth.root','Weight<0')]
 
 # selecion for categories
 s4j3t="(N_Jets==4&&N_BTagsM==3)"
@@ -12,6 +12,8 @@ s6j3t="(N_Jets>=6&&N_BTagsM==3)"
 s6j4t="(N_Jets>=6&&N_BTagsM>=4)"
 
 plots=[
+    Plot(ROOT.TH1F("JT" ,"jet-tag categories",9,-0.5,8.5),"3*max(min(N_BTagsM-2,2),0)+max(min(N_Jets-4,2),0)",""),
+
     Plot(ROOT.TH1F("BDToutput_6j2t","BDT output (6j2t)",20,-1,1),"BDTOhio_v1_output",s6j2t),
     Plot(ROOT.TH1F("HT_6j2t","HT (6j2t)",30,0,1500),"BDTOhio_v1_input_HT",s6j2t),
     Plot(ROOT.TH1F("sphericity_6j2t","sphericity (6j2t)",25,0,1),"BDTOhio_v1_input_sphericity",s6j2t),
@@ -94,5 +96,5 @@ plots=[
 ]
 
 listOfhistoLists=createHistoLists_fromTree(plots,samples,'MVATree')
-writeListOfhistoLists(listOfhistoLists,samples,"bdtvars")
+writeListOfhistoLists(listOfhistoLists,samples,"bdtvars_posneg",True,'histoE',True)
 

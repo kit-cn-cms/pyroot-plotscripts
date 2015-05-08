@@ -1,4 +1,5 @@
 import ROOT
+import math
 from itertools import product
 from collections import namedtuple
 
@@ -43,14 +44,26 @@ def getLegend():
     legend.SetFillStyle(0);
     return legend
 
+def getStatTests(h1,h2):
+    ksprob = h1.KolmogorovTest(h2)
+    chi2prob = h1.Chi2Test(h2)
+    print ksprob,chi2prob
+    tests = ROOT.TLatex(0.2, 0.9, 'p(KS): '+str(round(ksprob,3))+', p(chi2): '+str(round(chi2prob,3))  );
+    tests.SetTextFont(42);
+    tests.SetTextSize(0.05);
+    tests.SetNDC()
+    return tests
+
+
 # draws a list of histos on a canvas and returns canvas. options for stackplots, ratioplot, etc will be implemented soon
-def drawHistosOnCanvas(listOfHistos_):
+def drawHistosOnCanvas(listOfHistos_,normalize=True,options_='histo'):
     listOfHistos=[h.Clone(h.GetName()+'_drawclone') for h in listOfHistos_]
     canvas=getCanvas(listOfHistos[0].GetName())        
     #prepare drawing
-    for h in listOfHistos:
-        if h.Integral()>0.:
-            h.Scale(1./h.Integral())
+    if normalize:
+        for h in listOfHistos:
+            if h.Integral()>0.:
+                h.Scale(1./h.Integral())
     yMax=1e-9
     for h in listOfHistos:
         h.SetBinContent(1,h.GetBinContent(0)+h.GetBinContent(1));
@@ -62,10 +75,12 @@ def drawHistosOnCanvas(listOfHistos_):
     #draw first
     h=listOfHistos[0]
     h.GetYaxis().SetRangeUser(0,yMax*1.3)
-    h.DrawCopy('histo')
-        #draw remaining
+    option='histo'
+    option+=options_
+    h.DrawCopy(option)
+    #draw remaining
     for h in listOfHistos[1:]:
-        h.DrawCopy('histosame')
+        h.DrawCopy(option+'same')
     h.DrawCopy('axissame')
     return canvas
 
@@ -81,7 +96,7 @@ def printCanvases(canvases,name):
 
 # writes canvases to root file 
 def writeCanvases(canvases,name):
-    outfile=ROOT.TFile('plots.root','recreate')
+    outfile=ROOT.TFile(name+'.root','recreate')
     for c in canvases:
         c.Write()
 
@@ -92,6 +107,7 @@ def createHistoLists_fromTree(plots,samples,treename):
         histoList=[]
         for sample in samples:
             h=plot.histo.Clone()
+            h.Sumw2()
             h.SetName(h.GetName()+'_'+sample.name)
 #            setupHisto(h,sample.color)
             histoList.append(h)
@@ -102,7 +118,13 @@ def createHistoLists_fromTree(plots,samples,treename):
         tree = f.Get(treename)
         ROOT.gDirectory.cd('PyROOT:/')
         for plot in plots:
-            tree.Project(plot.histo.GetName()+'_'+sample.name,plot.variable,plot.selection)
+            ss='('+sample.selection+')'
+            if sample.selection == '':
+                ss='1'
+            ps='('+plot.selection+')'
+            if plot.selection == '':
+                ps='1'
+            tree.Project(plot.histo.GetName()+'_'+sample.name,plot.variable,ps+'&&'+ss)
 
     return listOfhistoLists
 
@@ -121,22 +143,27 @@ def plotsForSelections_cross_Histos(selections,selectionnames,histos,variables):
     return plots
 
 # gets a list of histogramlist and creates a plot for every list
-def writeListOfhistoLists(listOfhistoLists,samples,name):
+def writeListOfhistoLists(listOfhistoLists,samples,name,normalize=True,options='histo',statTest=False):
     canvases=[]
-    legends=[]
+    objects=[]   
     i=0
     for listOfHistos in listOfhistoLists:
         i+=1
         for histo,sample in zip(listOfHistos,samples):
-            setupHisto(histo,sample.color)
-        c=drawHistosOnCanvas(listOfHistos)
+            setupHisto(histo,sample.color)        
+        c=drawHistosOnCanvas(listOfHistos,normalize,options)
         c.SetName('c'+str(i))
         l=getLegend()
         for h,sample in zip(listOfHistos,samples):
             l.AddEntry(h,sample.name,'l')
         canvases.append(c)
         l.Draw('same')
-        legends.append(l)
+        objects.append(l)
+        if statTest:
+            tests=getStatTests(listOfHistos[0],listOfHistos[1])
+            tests.Draw()
+            objects.append(tests)
+
 
     printCanvases(canvases,name)
     writeCanvases(canvases,name)

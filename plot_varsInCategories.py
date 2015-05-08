@@ -1,7 +1,7 @@
 from plotutils import *
 
 #samples
-samples=[Sample('t#bar{t}H',ROOT.kBlue,'tth.root','') , Sample('t#bar{t}',ROOT.kRed+1,'ttbar.root','')]
+samples=[Sample('t#bar{t}H',ROOT.kBlue,'/nfs/dust/cms/user/hmildner/trees/tth.root','') , Sample('t#bar{t}',ROOT.kRed+1,'/nfs/dust/cms/user/hmildner/trees/ttbar.root','')]
 
 #histos
 histos=[ROOT.TH1F('BDToutput','BDT output',10,-1,1),

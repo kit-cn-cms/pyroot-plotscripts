@@ -29,5 +29,3 @@ writeListOfhistoLists([list(superPair)],samples,'superhistos')
 roc=getROC(superPair[0],superPair[1])
 writeListOfROCs([roc],['Ohio BDT v1'],[ROOT.kRed],'roc')
 
-#writeListOfhistoLists(listOfhistoLists,samples,"bdtvars")
-
