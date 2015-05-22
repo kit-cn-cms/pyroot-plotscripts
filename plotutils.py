@@ -131,6 +131,32 @@ def createHistoLists_fromTree(plots,samples,treename):
 def transposeLOL(lol):
     return [list(x) for x  in zip(*lol)]
 
+def GetKeyNames( self, dir = "" ):
+        self.cd(dir)
+        return [key.GetName() for key in ROOT.gDirectory.GetListOfKeys()]
+ROOT.TFile.GetKeyNames = GetKeyNames
+
+
+def createHistoLists_fromHistoFile(samples):
+    listOfhistoListsT=[]
+    listLength=-1
+    for sample in samples:
+        f=ROOT.TFile(sample.path, "readonly")       
+        keyList = f.GetKeyNames()
+        ROOT.gDirectory.cd('PyROOT:/')
+        if listLength>0:
+            assert len(keyList) == listLength
+        listLength=len(keyList)
+        histoList = []
+        for key in keyList:
+            o=f.Get(key)
+            if isinstance(o,ROOT.TH1):                
+                histoList.append(o.Clone())
+                histoList[-1].SetName(o.GetName()+'_'+sample.name)
+        listOfhistoListsT.append(histoList)
+    listOfhistoLists=transposeLOL(listOfhistoListsT)
+    return listOfhistoLists
+
 # for a list of selections (and a list of their names) and a list of histos (and the variable expressions to fill them) the cartesian product is created and plots are booked
 def plotsForSelections_cross_Histos(selections,selectionnames,histos,variables):
     selection_histos=product(zip(selections,selectionnames),zip(histos,variables))
