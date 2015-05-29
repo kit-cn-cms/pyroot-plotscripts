@@ -60,16 +60,21 @@ def drawHistosOnCanvas(listOfHistos_,normalize=True,options_='histo'):
     listOfHistos=[h.Clone(h.GetName()+'_drawclone') for h in listOfHistos_]
     canvas=getCanvas(listOfHistos[0].GetName())        
     #prepare drawing
-    if normalize:
-        for h in listOfHistos:
-            if h.Integral()>0.:
-                h.Scale(1./h.Integral())
-    yMax=1e-9
+
+    # mover over/underflow
     for h in listOfHistos:
         h.SetBinContent(1,h.GetBinContent(0)+h.GetBinContent(1));
         h.SetBinContent(h.GetNbinsX(),h.GetBinContent(h.GetNbinsX()+1)+h.GetBinContent(h.GetNbinsX()));
         h.SetBinError(1,ROOT.TMath.Sqrt(ROOT.TMath.Power(h.GetBinError(0),2)+ROOT.TMath.Power(h.GetBinError(1),2)));
         h.SetBinError(h.GetNbinsX(),ROOT.TMath.Sqrt(ROOT.TMath.Power(h.GetBinError(h.GetNbinsX()+1),2)+ROOT.TMath.Power(h.GetBinError(h.GetNbinsX()),2)));
+
+    if normalize:
+        for h in listOfHistos:
+            if h.Integral()>0.:
+                h.Scale(1./h.Integral())
+
+    yMax=1e-9
+    for h in listOfHistos:
         yMax=max(h.GetBinContent(h.GetMaximumBin()),yMax)
 
     #draw first
