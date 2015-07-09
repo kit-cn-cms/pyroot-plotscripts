@@ -41,5 +41,5 @@ plots=[
 ]
 
 listOfhistoLists=createHistoLists_fromTree(plots,samples,'MVATree')
-writeListOfhistoLists(listOfhistoLists,samples,"plots_fastfull",True,'histoE',True)
+writeListOfhistoLists(listOfhistoLists,samples,"plots_fastfull",True,False,False,'histoE',True)
 

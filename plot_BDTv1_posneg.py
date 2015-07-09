@@ -1,6 +1,6 @@
 from plotutils import *
 # samples
-samples=[Sample('t#bar{t}H weight>0',ROOT.kBlue,'/nfs/dust/cms/user/hmildner/trees/tth.root','Weight>0') , Sample('t#bar{t}H weight<0',ROOT.kRed+1,'/nfs/dust/cms/user/hmildner/trees/tth.root','Weight<0')]
+samples=[Sample('t#bar{t}H weight>0',ROOT.kBlue,'/nfs/dust/cms/user/hmildner/trees/tth.root','Weight>0') , Sample('t#bar{t}H weight<0',ROOT.kRed+1,'/nfs/dust/cms/user/hmildner/trees/tth.root','-1*(Weight<0)')]
 
 # selecion for categories
 s4j3t="(N_Jets==4&&N_BTagsM==3)"
@@ -96,5 +96,5 @@ plots=[
 ]
 
 listOfhistoLists=createHistoLists_fromTree(plots,samples,'MVATree')
-writeListOfhistoLists(listOfhistoLists,samples,"bdtvars_posneg",True,'histoE',True)
+writeListOfhistoLists(listOfhistoLists,samples,"bdtvars_posneg",True,False,False,'histoE',True)
 

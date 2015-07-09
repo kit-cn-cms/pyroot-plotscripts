@@ -104,5 +104,5 @@ plots=[
 ]
 
 listOfhistoLists=createHistoLists_fromTree(plots,samples,'MVATree')
-writeListOfhistoLists(listOfhistoLists,samples,"bdtvars_fastfull",True,'histoE',True)
+writeListOfhistoLists(listOfhistoLists,samples,"bdtvars_fastfull",True,False,False,'histoE',True)
 
