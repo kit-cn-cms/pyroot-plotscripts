@@ -7,19 +7,25 @@ Sample = namedtuple("Sample", "name color path selection")
 Plot = namedtuple("Plot", "histo variable selection")
 
 # sets up the style of a histo and its axes. options for data and stackplots will follow.
-def setupHisto(histo,color):
+def setupHisto(histo,color,yTitle,filled):
     if isinstance(histo,ROOT.TH1):
         histo.SetStats(False)
-    histo.GetXaxis().SetTitle(histo.GetTitle())
-    histo.SetTitle('')
-    histo.GetYaxis().SetTitle('normalized')
+    if histo.GetTitle()!='':
+        histo.GetXaxis().SetTitle(histo.GetTitle())
+        histo.SetTitle('')
+    histo.GetYaxis().SetTitle(yTitle)
     histo.GetYaxis().SetTitleOffset(1.3)
     histo.GetYaxis().SetTitleSize(0.05)
     histo.GetXaxis().SetTitleSize(0.05)
     histo.GetYaxis().SetLabelSize(0.05)
     histo.GetXaxis().SetLabelSize(0.05)
-    histo.SetLineColor(color)
-    histo.SetLineWidth(3)
+    if filled:
+        histo.SetLineColor( ROOT.kBlack )
+        histo.SetFillColor( color )
+        histo.SetLineWidth(2)
+    else:
+        histo.SetLineColor(color)
+        histo.SetLineWidth(3)
 
 # creates canvas. option to add ratiopad will follow
 def getCanvas(name):
@@ -35,7 +41,7 @@ def getLegend():
     legend=ROOT.TLegend()
     legend.SetX1NDC(0.65)
     legend.SetX2NDC(0.93)
-    legend.SetY1NDC(0.75)
+    legend.SetY1NDC(0.92)
     legend.SetY2NDC(0.93)
     legend.SetBorderSize(0);
     legend.SetLineStyle(0);
@@ -56,7 +62,7 @@ def getStatTests(h1,h2):
 
 
 # draws a list of histos on a canvas and returns canvas. options for stackplots, ratioplot, etc will be implemented soon
-def drawHistosOnCanvas(listOfHistos_,normalize=True,options_='histo'):
+def drawHistosOnCanvas(listOfHistos_,normalize=True,stack=False,logscale=False,options_='histo'):
     listOfHistos=[h.Clone(h.GetName()+'_drawclone') for h in listOfHistos_]
     canvas=getCanvas(listOfHistos[0].GetName())        
     #prepare drawing
@@ -68,18 +74,35 @@ def drawHistosOnCanvas(listOfHistos_,normalize=True,options_='histo'):
         h.SetBinError(1,ROOT.TMath.Sqrt(ROOT.TMath.Power(h.GetBinError(0),2)+ROOT.TMath.Power(h.GetBinError(1),2)));
         h.SetBinError(h.GetNbinsX(),ROOT.TMath.Sqrt(ROOT.TMath.Power(h.GetBinError(h.GetNbinsX()+1),2)+ROOT.TMath.Power(h.GetBinError(h.GetNbinsX()),2)));
 
-    if normalize:
+    if normalize and not stack:
         for h in listOfHistos:
             if h.Integral()>0.:
                 h.Scale(1./h.Integral())
 
+    if stack:
+        for i in range(len(listOfHistos)-1,0,-1):
+            print 'add',i,'to',i-1
+            listOfHistos[i-1].Add(listOfHistos[i])
+        if normalize:
+            integral0=listOfHistos[0].Integral()
+            for h in listOfHistos:
+                h.Scale(1./integral0)
+
+            
+
     yMax=1e-9
+    yMinMax=1000.
     for h in listOfHistos:
         yMax=max(h.GetBinContent(h.GetMaximumBin()),yMax)
-
+        if h.GetBinContent(h.GetMaximumBin())>0:
+            yMinMax=min(h.GetBinContent(h.GetMaximumBin()),yMinMax)
     #draw first
     h=listOfHistos[0]
-    h.GetYaxis().SetRangeUser(0,yMax*1.3)
+    if logscale:
+        h.GetYaxis().SetRangeUser(yMinMax/10000,yMax*10)
+        canvas.SetLogy()
+    else:
+        h.GetYaxis().SetRangeUser(0,yMax*1.3)
     option='histo'
     option+=options_
     h.DrawCopy(option)
@@ -106,7 +129,7 @@ def writeCanvases(canvases,name):
         c.Write()
 
 # for a list of booked plots trees are opened and the histograms are filled using the TTree::Project function
-def createHistoLists_fromTree(plots,samples,treename):    
+def createHistoLists_fromTree(plots,samples,treename,weightexpression='Weight'):    
     listOfhistoLists=[]
     for plot in plots:
         histoList=[]
@@ -129,7 +152,7 @@ def createHistoLists_fromTree(plots,samples,treename):
             ps='('+plot.selection+')'
             if plot.selection == '':
                 ps='1'
-            tree.Project(plot.histo.GetName()+'_'+sample.name,plot.variable,ps+'&&'+ss)
+            tree.Project(plot.histo.GetName()+'_'+sample.name,plot.variable,'('+ps+'*'+ss+')*('+weightexpression+')')
 
     return listOfhistoLists
 
@@ -137,9 +160,22 @@ def transposeLOL(lol):
     return [list(x) for x  in zip(*lol)]
 
 def GetKeyNames( self, dir = "" ):
-        self.cd(dir)
-        return [key.GetName() for key in ROOT.gDirectory.GetListOfKeys()]
+    self.cd(dir)
+    return [key.GetName() for key in ROOT.gDirectory.GetListOfKeys()]
 ROOT.TFile.GetKeyNames = GetKeyNames
+
+def AddEntry2( self, histo, label, stacked=False):
+    option='L'
+    if stacked:
+        option='F'
+    self.SetY1NDC(self.GetY1NDC()-0.045)
+    width=self.GetX2NDC()-self.GetX1NDC()
+    ts=self.GetTextSize()
+    newwidth=max(len(label)*0.015*0.05/ts+0.1,width)
+    self.SetX1NDC(self.GetX2NDC()-newwidth)
+    
+    self.AddEntry(histo, label, option)
+ROOT.TLegend.AddEntry2 = AddEntry2
 
 
 def createHistoLists_fromHistoFile(samples):
@@ -174,19 +210,22 @@ def plotsForSelections_cross_Histos(selections,selectionnames,histos,variables):
     return plots
 
 # gets a list of histogramlist and creates a plot for every list
-def writeListOfhistoLists(listOfhistoLists,samples,name,normalize=True,options='histo',statTest=False):
+def writeListOfhistoLists(listOfhistoLists,samples,name,normalize=True,stack=False,logscale=False,options='histo',statTest=False):
     canvases=[]
     objects=[]   
     i=0
     for listOfHistos in listOfhistoLists:
         i+=1
         for histo,sample in zip(listOfHistos,samples):
-            setupHisto(histo,sample.color)        
-        c=drawHistosOnCanvas(listOfHistos,normalize,options)
+            yTitle='Events'
+            if normalize:
+                yTitle='normalized'
+            setupHisto(histo,sample.color,yTitle,stack)        
+        c=drawHistosOnCanvas(listOfHistos,normalize,stack,logscale,options)
         c.SetName('c'+str(i))
         l=getLegend()
         for h,sample in zip(listOfHistos,samples):
-            l.AddEntry(h,sample.name,'l')
+            l.AddEntry2(h,sample.name,stack)
         canvases.append(c)
         l.Draw('same')
         objects.append(l)
@@ -204,7 +243,7 @@ def writeListOfROCs(graphs,names,colors,filename):
     l=getLegend()
     first=True
     for graph,name,color in zip(graphs,names,colors):
-        l.AddEntry(graph,name,'l')
+        l.AddEntry2(graph,name)
         if first:
             graph.Draw('ALP')
             first=False
