@@ -317,3 +317,83 @@ def getROC(histo1,histo2):
         point+=1
     
     return roc
+
+
+
+def writeSyst(file,value):
+    for val in value[:-1]:
+        file.write(val+" &")
+    file.write(value[-1])
+    file.write('\\\\ \n')
+
+def writeFoot(file):
+    file.write('\\hline\n')
+    file.write('\end{tabular}\n')
+    file.write('\\end{center}\n')
+
+def writeHead(file,columns):
+    #print columns
+    file.write('\\begin{center}\n')
+    file.write('\\begin{tabular}{l')
+    for entry in columns[1:]:
+        file.write('c')
+    file.write('}\n')
+    file.write('\\hline\n')
+    for entry in columns[:-1]:
+        file.write(entry+' &')
+    file.write(columns[-1]+' \\\\ \n')
+    file.write('\\hline\n')
+
+def writeHistoToTable(histo,outfile):
+    out=open(outfile+".tex","w")
+    out.write( '\\documentclass{article}\n')
+    out.write( '\\begin{document}')
+    nx=histo.GetNbinsX()
+    ny=histo.GetNbinsY()
+    xtitle=[""]
+    for i in range(1,nx+1):
+        xtitle.append(histo.GetXaxis().GetBinLabel(i))
+    ytitle=[]
+    for i in range(1,ny+1):
+        ytitle.append(histo.GetYaxis().GetBinLabel(i))
+
+    writeHead(out,xtitle)
+    for y in range(1,ny+1):
+        contents=[ytitle[y-1]]
+        for x in range(1,nx+1):
+            contents.append("%.1f"%(histo.GetBinContent(x,y)))
+        writeSyst(out,contents)
+    writeFoot(out)
+    out.write("\\end{document}")
+    out.close()
+
+def writeHistoListToTable(histos,names,outfile):
+    names=["$"+n.replace("#","\\")+"$" for n in names]
+    out=open(outfile+".tex","w")
+    out.write( '\\documentclass{article}\n')
+    out.write( '\\begin{document}')
+    nx=histos[0].GetNbinsX()
+    ny=histos[0].GetNbinsY()
+    xtitle1=[""]
+    xtitle2=[""]
+    for i in range(1,nx+1):
+        xtitle1.append(histos[0].GetXaxis().GetBinLabel(i))
+        xtitle2.append(names[0])
+        for i in range(1,len(histos)):
+            xtitle1.append("")
+            xtitle2.append(names[i])
+    ytitle=[]
+    for i in range(1,ny+1):
+        ytitle.append(histos[0].GetYaxis().GetBinLabel(i))
+
+    writeHead(out,xtitle1)
+    writeSyst(out,xtitle2)
+    for y in range(1,ny+1):
+        contents=[ytitle[y-1]]
+        for x in range(1,nx+1):
+            for histo in histos:
+                contents.append("%.1f"%(histo.GetBinContent(x,y)))
+        writeSyst(out,contents)
+    writeFoot(out)
+    out.write("\\end{document}")
+    out.close()
