@@ -347,7 +347,8 @@ def writeHead(file,columns):
 def writeHistoToTable(histo,outfile):
     out=open(outfile+".tex","w")
     out.write( '\\documentclass{article}\n')
-    out.write( '\\begin{document}')
+    out.write( '\\begin{document}\n')
+    out.write( '\\thispagestyle{empty}\n')
     nx=histo.GetNbinsX()
     ny=histo.GetNbinsY()
     xtitle=[""]
@@ -371,7 +372,8 @@ def writeHistoListToTable(histos,names,outfile):
     names=["$"+n.replace("#","\\")+"$" for n in names]
     out=open(outfile+".tex","w")
     out.write( '\\documentclass{article}\n')
-    out.write( '\\begin{document}')
+    out.write( '\\begin{document}\n')
+    out.write( '\\thispagestyle{empty}\n')
     nx=histos[0].GetNbinsX()
     ny=histos[0].GetNbinsY()
     xtitle1=[""]
