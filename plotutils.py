@@ -7,13 +7,14 @@ Sample = namedtuple("Sample", "name color path selection")
 Plot = namedtuple("Plot", "histo variable selection")
 
 # sets up the style of a histo and its axes. options for data and stackplots will follow.
-def setupHisto(histo,color,yTitle,filled):
+def setupHisto(histo,color,yTitle=None,filled=False):
     if isinstance(histo,ROOT.TH1):
         histo.SetStats(False)
     if histo.GetTitle()!='':
         histo.GetXaxis().SetTitle(histo.GetTitle())
         histo.SetTitle('')
-    histo.GetYaxis().SetTitle(yTitle)
+    if yTitle!=None:
+        histo.GetYaxis().SetTitle(yTitle)
     histo.GetYaxis().SetTitleOffset(1.3)
     histo.GetYaxis().SetTitleSize(0.05)
     histo.GetXaxis().SetTitleSize(0.05)
@@ -52,9 +53,9 @@ def getLegend():
 
 def getStatTests(h1,h2):
     ksprob = h1.KolmogorovTest(h2)
-    chi2prob = h1.Chi2Test(h2)
+    chi2prob = h1.Chi2Test(h2,"WW")
     print ksprob,chi2prob
-    tests = ROOT.TLatex(0.2, 0.9, 'p(KS): '+str(round(ksprob,3))+', p(chi2): '+str(round(chi2prob,3))  );
+    tests = ROOT.TLatex(0.2, 0.85, '#splitline{p(KS): '+str(round(ksprob,3))+'}{p(chi2): '+str(round(chi2prob,3))+'}'  );
     tests.SetTextFont(42);
     tests.SetTextSize(0.05);
     tests.SetNDC()
@@ -152,7 +153,11 @@ def createHistoLists_fromTree(plots,samples,treename,weightexpression='Weight'):
             ps='('+plot.selection+')'
             if plot.selection == '':
                 ps='1'
-            tree.Project(plot.histo.GetName()+'_'+sample.name,plot.variable,'('+ps+'*'+ss+')*('+weightexpression+')')
+            project_name=plot.histo.GetName()+'_'+sample.name
+            project_var=plot.variable
+            project_sel='('+ps+'*'+ss+')*('+weightexpression+')'
+            print "projecting",project_name,"--",project_var,"--",project_sel
+            tree.Project(project_name,project_var,project_sel)
 
     return listOfhistoLists
 
@@ -238,8 +243,10 @@ def writeListOfhistoLists(listOfhistoLists,samples,name,normalize=True,stack=Fal
     printCanvases(canvases,name)
     writeCanvases(canvases,name)
 
-def writeListOfROCs(graphs,names,colors,filename):
+def writeListOfROCs(graphs,names,colors,filename,logscale=False,rej=True):
     c=getCanvas('ROC')
+    if logscale:
+        c.SetLogy()
     l=getLegend()
     first=True
     for graph,name,color in zip(graphs,names,colors):
@@ -251,7 +258,10 @@ def writeListOfROCs(graphs,names,colors,filename):
             graph.Draw('LP')
         setupHisto(graph,color)
         graph.GetXaxis().SetTitle('Signal efficiency')
-        graph.GetYaxis().SetTitle('Background rejection')
+        if rej:
+             graph.GetYaxis().SetTitle('Background rejection')
+        else:
+            graph.GetYaxis().SetTitle('Background efficiency')
         graph.SetMarkerStyle(20)
     l.Draw('same')
     printCanvases([c],filename)
@@ -296,7 +306,7 @@ def getSignifCurve(histoS,histoB):
     return sigs
 
 # calculate ROC for signal(1) and bkg(2) histo
-def getROC(histo1,histo2):
+def getROC(histo1,histo2,rej=True):
     nBins=histo1.GetNbinsX()
     nBins2=histo2.GetNbinsX()
     integral1=histo1.Integral(0,nBins+1)
@@ -304,19 +314,43 @@ def getROC(histo1,histo2):
 
     nonZeroBins=[]
     for i in range(nBins,-1,-1):
-        if histo1.GetBinContent(i)>0. or histo1.GetBinContent(i)>0.:
+        if histo1.GetBinContent(i)>0. or histo2.GetBinContent(i)>0.:
             nonZeroBins.append(i)           
 
     roc = ROOT.TGraphAsymmErrors(len(nonZeroBins)+1)
-    roc.SetPoint(0,0,1)
+    if rej:
+        roc.SetPoint(0,0,1)
+    else:
+        roc.SetPoint(0,0,0)
     point=1
     for i in nonZeroBins:
-        eff1=histo1.Integral(i,nBins)/integral1
-        eff2=histo2.Integral(i,nBins)/integral2
-        roc.SetPoint(point,eff1,1-eff2)
+        eff1=histo1.Integral(i,nBins+1)/integral1
+        eff2=histo2.Integral(i,nBins+1)/integral2
+        if rej:
+            roc.SetPoint(point,eff1,1-eff2)
+        else:
+            roc.SetPoint(point,eff1,eff2)
         point+=1
     
     return roc
+
+def getEff(histo1):
+    nBins=histo1.GetNbinsX()
+    integral1=histo1.Integral(0,nBins+1)
+
+    nonZeroBins=[]
+    for i in range(nBins+2):
+        if histo1.GetBinContent(i)>0.:
+            nonZeroBins.append(i)
+    eff = ROOT.TGraphAsymmErrors(len(nonZeroBins)+1)
+    point=0
+    for i in nonZeroBins:
+        eff1=histo1.Integral(i,nBins+1)/integral1
+        print i, histo1.GetBinLowEdge(i), eff1
+        eff.SetPoint(point,histo1.GetBinLowEdge(i),eff1)
+        point+=1
+    print "###"
+    return eff
 
 
 
