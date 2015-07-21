@@ -1,15 +1,8 @@
 from plotutils import *
-s4j3t="(N_Jets==4&&N_BTagsM==3)"
-s4j4t="(N_Jets==4&&N_BTagsM>=4)"
-s5j3t="(N_Jets==5&&N_BTagsM==3)"
-s5j4t="(N_Jets==5&&N_BTagsM>=4)"
-s6j2t="(N_Jets>=6&&N_BTagsM==2)"
-s6j3t="(N_Jets>=6&&N_BTagsM==3)"
-s6j4t="(N_Jets>=6&&N_BTagsM>=4)"
-
 
 samples=[Sample('t#bar{t} spring15 powheg',ROOT.kBlue,'/nfs/dust/cms/user/kelmorab/Spring15_Base16thJuly/forTraining/ttbar/ttbar_nominal.root','') ,
          Sample('t#bar{t} spring15 amcNLO',ROOT.kRed,'/nfs/dust/cms/user/kelmorab/Spring15_Base16thJuly/forLimit/ttbar/ttbar_nominal.root',''), 
+         Sample('t#bar{t} phys14 madgraph',ROOT.kGreen-3,'/nfs/dust/cms/user/hmildner/trees0717/ttbar.root',''), 
          ]
 
 
@@ -24,10 +17,18 @@ listOfhistoLists=createHistoLists_fromTree(plots,samples,'MVATree')
 
 writeListOfhistoLists(listOfhistoLists,samples,'btag_plots')
 
+roc_p=getROC(listOfhistoLists[0][0],listOfhistoLists[1][0],False)
+roc_a=getROC(listOfhistoLists[0][1],listOfhistoLists[1][1],False)
+writeListOfROCs([roc_p,roc_a],['powheg', 'amcnlo'],[ROOT.kBlue,ROOT.kRed],'btag_roc_pa',True,False)
+
+eff_p=getEff(listOfhistoLists[0][0])
+eff_a=getEff(listOfhistoLists[0][1])
+writeListOfROCs([eff_p,eff_a],['powheg', 'amcnlo'],[ROOT.kBlue,ROOT.kRed],'btag_eff_pa',False,True)
+
 roc_s15=getROC(listOfhistoLists[0][0],listOfhistoLists[1][0],False)
-roc_p14=getROC(listOfhistoLists[0][1],listOfhistoLists[1][1],False)
-writeListOfROCs([roc_s15,roc_p14],['spring15', 'phys14'],[ROOT.kBlue,ROOT.kRed],'btag_roc',True,False)
+roc_p14=getROC(listOfhistoLists[0][2],listOfhistoLists[1][2],False)
+writeListOfROCs([roc_s15,roc_p14],['spring15','phys14'],[ROOT.kBlue,ROOT.kRed],'btag_roc_sp',True,False)
 
 eff_s15=getEff(listOfhistoLists[0][0])
-eff_p14=getEff(listOfhistoLists[0][1])
-writeListOfROCs([eff_s15,eff_p14],['spring15', 'phys14'],[ROOT.kBlue,ROOT.kRed],'btag_eff',False,True)
+eff_p14=getEff(listOfhistoLists[0][2])
+writeListOfROCs([eff_s15,eff_p14],['spring15','phys14'],[ROOT.kBlue,ROOT.kRed],'btag_eff_sp',False,True)
