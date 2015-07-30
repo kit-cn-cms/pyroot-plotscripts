@@ -194,7 +194,7 @@ def AddEntry2( self, histo, label, stacked=False):
 ROOT.TLegend.AddEntry2 = AddEntry2
 
 
-def createHistoLists_fromHistoFile(samples):
+def createHistoLists_fromHistoFile(samples,rebin=1):
     listOfhistoListsT=[]
     listLength=-1
     for sample in samples:
@@ -207,7 +207,8 @@ def createHistoLists_fromHistoFile(samples):
         histoList = []
         for key in keyList:
             o=f.Get(key)
-            if isinstance(o,ROOT.TH1):                
+            if isinstance(o,ROOT.TH1): 
+                o.Rebin(rebin)
                 histoList.append(o.Clone())
                 histoList[-1].SetName(o.GetName()+'_'+sample.name)
         listOfhistoListsT.append(histoList)
