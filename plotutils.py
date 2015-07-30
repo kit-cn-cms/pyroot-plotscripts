@@ -61,6 +61,17 @@ def getStatTests(h1,h2):
     tests.SetNDC()
     return tests
 
+def getSepaTests(h1,h2):
+    pair=getSuperHistoPair([h1],[h2],'tmp')
+    roc=getROC(*pair)
+    rocint=roc.Integral()+0.5
+    print rocint
+    tests = ROOT.TLatex(0.2, 0.9, 'ROC integral: '+str(round(rocint,3)));
+    tests.SetTextFont(42);
+    tests.SetTextSize(0.05);
+    tests.SetNDC()
+    return tests
+
 
 # draws a list of histos on a canvas and returns canvas. options for stackplots, ratioplot, etc will be implemented soon
 def drawHistosOnCanvas(listOfHistos_,normalize=True,stack=False,logscale=False,options_='histo'):
@@ -215,7 +226,7 @@ def plotsForSelections_cross_Histos(selections,selectionnames,histos,variables):
     return plots
 
 # gets a list of histogramlist and creates a plot for every list
-def writeListOfhistoLists(listOfhistoLists,samples,name,normalize=True,stack=False,logscale=False,options='histo',statTest=False):
+def writeListOfhistoLists(listOfhistoLists,samples,name,normalize=True,stack=False,logscale=False,options='histo',statTest=False, sepaTest=False):
     canvases=[]
     objects=[]   
     i=0
@@ -238,6 +249,10 @@ def writeListOfhistoLists(listOfhistoLists,samples,name,normalize=True,stack=Fal
             tests=getStatTests(listOfHistos[0],listOfHistos[1])
             tests.Draw()
             objects.append(tests)
+        if sepaTest:
+            stests=getSepaTests(listOfHistos[0],listOfHistos[1])
+            stests.Draw()
+            objects.append(stests)
 
 
     printCanvases(canvases,name)
