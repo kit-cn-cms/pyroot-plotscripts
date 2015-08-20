@@ -3,6 +3,8 @@ import math
 from itertools import product
 from collections import namedtuple
 
+ROOT.gStyle.SetPaintTextFormat("4.2f");
+
 Sample = namedtuple("Sample", "name color path selection")
 Plot = namedtuple("Plot", "histo variable selection")
 
@@ -16,6 +18,7 @@ def setupHisto(histo,color,yTitle=None,filled=False):
     if yTitle!=None:
         histo.GetYaxis().SetTitle(yTitle)
     histo.GetYaxis().SetTitleOffset(1.3)
+    histo.GetXaxis().SetTitleOffset(1.2)
     histo.GetYaxis().SetTitleSize(0.05)
     histo.GetXaxis().SetTitleSize(0.05)
     histo.GetYaxis().SetLabelSize(0.05)
@@ -30,11 +33,11 @@ def setupHisto(histo,color,yTitle=None,filled=False):
 
 # creates canvas. option to add ratiopad will follow
 def getCanvas(name):
-    c=ROOT.TCanvas(name,name,1000,800)
+    c=ROOT.TCanvas(name,name,1024,768)
     c.SetRightMargin(0.05)
     c.SetTopMargin(0.05)
     c.SetLeftMargin(0.15)
-    c.SetBottomMargin(0.12)
+    c.SetBottomMargin(0.15)
     return c
 
 # creates legend
@@ -63,6 +66,7 @@ def getStatTests(h1,h2):
 
 def getSepaTests(h1,h2):
     pair=getSuperHistoPair([h1],[h2],'tmp')
+#    pair=(h1,h2)
     roc=getROC(*pair)
     rocint=roc.Integral()+0.5
     print rocint
@@ -135,16 +139,96 @@ def printCanvases(canvases,name):
     canvas.Print(name+'.pdf]')
 
 # writes canvases to root file 
-def writeCanvases(canvases,name):
+def writeObjects(objects,name):
     outfile=ROOT.TFile(name+'.root','recreate')
-    for c in canvases:
-        c.Write()
+    for o in objects:
+        o.Write()
+    outfile.Close()
 
-# for a list of booked plots trees are opened and the histograms are filled using the TTree::Project function
+def roundNumber(x):
+    loga = int(math.floor(math.log10(x)))
+    x_=x/(10**loga)
+    y=10
+    if x_ < 5:
+        y=5
+    if x_ < 2.5:
+        y=2.5
+    if x_ < 2:
+        y=2
+    y*=(10**loga)
+    return y
+
+# changes range of histos to reasonable values
+def setPlotRangeAuto(plots,samples,treename,weightexpression='Weight',maxentries=100000):
+    newplots=[]
+    files=[ROOT.TFile(sample.path, "readonly") for sample in samples]
+    trees=[f.Get(treename) for f in files]
+    ROOT.gDirectory.cd('PyROOT:/')
+    for plot in plots:
+        total_xmin=float('inf')
+        total_xmax=float('-inf')
+        for sample,tree in zip(samples,trees):
+            h=plot.histo
+            name=h.GetName()
+            title=h.GetTitle()
+            nbins=h.GetNbinsX()
+            project_name=name+'_temp'
+            project_var=plot.variable
+            ss='('+sample.selection+')'
+            if sample.selection == '':
+                ss='1'
+                ps='('+plot.selection+')'
+            if plot.selection == '':
+                ps='1'
+            project_sel='('+ps+'*'+ss+')*('+weightexpression+')'
+            tree.Draw(project_var+">>"+project_name+'('+str(nbins)+')',project_sel,"",maxentries)
+            project_histo=ROOT.gDirectory.Get(project_name)
+            xmax=project_histo.GetXaxis().GetXmax()
+            xmin=project_histo.GetXaxis().GetXmin()
+            ymax=project_histo.GetMaximum()
+            ycutoff=ymax/50
+        
+            overflow=0
+            nclip=0
+            for i in range(nbins,-1,-1):
+                xmax=project_histo.GetBinLowEdge(i+1)
+                nclip+=1
+                overflow+=project_histo.GetBinContent(i)
+                if (project_histo.GetBinContent(i)>ycutoff and project_histo.GetBinContent(i-1)>ycutoff and project_histo.GetBinContent(i)>2*h.GetBinError(i) and nclip>3 and nclip>nbins/6) or overflow>ymax:
+                    break
+
+            underflow=0
+            for i in range(nbins+1):
+                xmin=project_histo.GetBinLowEdge(i)
+                underflow+=project_histo.GetBinContent(i)
+                underflow+=project_histo.GetBinContent(i)
+                if (project_histo.GetBinContent(i)>ycutoff and project_histo.GetBinContent(i+1)>ycutoff and project_histo.GetBinContent(i)>2*h.GetBinError(i) and nclip>3 and nclip>nbins/6) or underflow>ymax:
+                    break
+            if xmin>0 and xmin<xmax/4:
+                xmin=0
+            total_xmin=min(xmin,total_xmin)
+            total_xmax=max(xmax,total_xmax)
+
+        xrange=total_xmax-total_xmin
+        binwidth=xrange/nbins
+        newbinwidth=roundNumber(binwidth)
+        nbins=int(nbins*binwidth/newbinwidth+1)
+        total_xmin=int(math.floor(total_xmin/newbinwidth))*newbinwidth
+        total_xmax=total_xmin+newbinwidth*nbins
+                      
+        h.SetDirectory(0)
+        newhisto=ROOT.TH1F(name,title,nbins,total_xmin,total_xmax)
+        newplots.append(Plot(newhisto,project_var,plot.selection))
+
+    for f in files:
+        f.Close()
+    return newplots
+        
+
 def createHistoLists_fromTree(plots,samples,treename,weightexpression='Weight'):    
     listOfhistoLists=[]
     for plot in plots:
-        histoList=[]
+        histoList=[]           
         for sample in samples:
             h=plot.histo.Clone()
             h.Sumw2()
@@ -169,6 +253,7 @@ def createHistoLists_fromTree(plots,samples,treename,weightexpression='Weight'):
             project_sel='('+ps+'*'+ss+')*('+weightexpression+')'
             print "projecting",project_name,"--",project_var,"--",project_sel
             tree.Project(project_name,project_var,project_sel)
+        f.Close()
 
     return listOfhistoLists
 
@@ -207,7 +292,7 @@ def createHistoLists_fromHistoFile(samples,rebin=1):
         histoList = []
         for key in keyList:
             o=f.Get(key)
-            if isinstance(o,ROOT.TH1): 
+            if isinstance(o,ROOT.TH1) and not isinstance(o,ROOT.TH2): 
                 o.Rebin(rebin)
                 histoList.append(o.Clone())
                 histoList[-1].SetName(o.GetName()+'_'+sample.name)
@@ -340,8 +425,12 @@ def getROC(histo1,histo2,rej=True):
         roc.SetPoint(0,0,0)
     point=1
     for i in nonZeroBins:
-        eff1=histo1.Integral(i,nBins+1)/integral1
-        eff2=histo2.Integral(i,nBins+1)/integral2
+        eff1=0
+        eff2=0
+        if integral1 > 0:
+            eff1=histo1.Integral(i,nBins+1)/integral1
+        if integral2 > 0:
+            eff2=histo2.Integral(i,nBins+1)/integral2
         if rej:
             roc.SetPoint(point,eff1,1-eff2)
         else:
@@ -361,7 +450,9 @@ def getEff(histo1):
     eff = ROOT.TGraphAsymmErrors(len(nonZeroBins)+1)
     point=0
     for i in nonZeroBins:
-        eff1=histo1.Integral(i,nBins+1)/integral1
+        eff1=0
+        if integral1 > 0:
+            eff1=histo1.Integral(i,nBins+1)/integral1
         print i, histo1.GetBinLowEdge(i), eff1
         eff.SetPoint(point,histo1.GetBinLowEdge(i),eff1)
         point+=1
@@ -370,31 +461,72 @@ def getEff(histo1):
 
 
 
-def writeSyst(file,value):
-    for val in value[:-1]:
-        file.write(val+" &")
-    file.write(value[-1])
-    file.write('\\\\ \n')
+def writeSyst(f,values):
+    for val in values[:-1]:
+        f.write(val+" &")
+    f.write(values[-1])
+    f.write('\\\\ \n')
 
-def writeFoot(file):
-    file.write('\\hline\n')
-    file.write('\end{tabular}\n')
-    file.write('\\end{center}\n')
+def writeFoot(f):
+    f.write('\\hline\n')
+    f.write('\end{tabular}\n')
+    f.write('\\end{center}\n')
 
-def writeHead(file,columns):
+def writeHead(f,columns):
     #print columns
-    file.write('\\begin{center}\n')
-    file.write('\\begin{tabular}{l')
+    f.write('\\begin{center}\n')
+    f.write('\\begin{tabular}{l')
     for entry in columns[1:]:
-        file.write('c')
-    file.write('}\n')
-    file.write('\\hline\n')
+        f.write('c')
+    f.write('}\n')
+    f.write('\\hline\n')
     for entry in columns[:-1]:
-        file.write(entry+' &')
-    file.write(columns[-1]+' \\\\ \n')
-    file.write('\\hline\n')
+        f.write(entry+' &')
+    f.write(columns[-1]+' \\\\ \n')
+    f.write('\\hline\n')
 
-def writeHistoToTable(histo,outfile):
+
+
+def root2latex(s,mth=True):
+    ns=""
+    if mth:
+        ns+="$"
+    ns+=s.replace('#','\\')
+    if mth:
+        ns+="$"
+    return ns
+
+def turn1dHistoToRow(h,witherror=True):
+    s=""
+    for i in range(1,h.GetNbinsX()+1):
+        s+="%.2f" % h.GetBinContent(i)
+        if witherror:
+            s+=" $\pm$ "
+            s+="%.2f" % h.GetBinError(i)
+        if i==h.GetNbinsX():
+            s+="\\\\"
+        else:
+            s+="&"
+    return s
+    
+
+def turn1dHistosToTable(histos,samples,outfile,witherror=True):
+    out=open(outfile+".tex","w")
+    out.write( '\\documentclass[landscape]{article}\n')
+    out.write( '\\usepackage[landscape]{geometry}\n')
+    out.write( '\\begin{document}\n')
+    out.write( '\\thispagestyle{empty}\n')
+    cls=['Process']
+    for i in range(1,histos[0].GetNbinsX()+1):
+        cls.append(histos[0].GetXaxis().GetBinLabel(i))
+    writeHead(out,cls)
+    for h,s in zip(histos,samples):
+        out.write(root2latex(s.name) + " & " + turn1dHistoToRow(h)+ "\\\\ \n") 
+    writeFoot(out)
+    out.write( '\\end{document}\n')
+
+
+def write2dHistoToTable(histo,outfile):
     out=open(outfile+".tex","w")
     out.write( '\\documentclass{article}\n')
     out.write( '\\begin{document}\n')
@@ -449,3 +581,16 @@ def writeHistoListToTable(histos,names,outfile):
     writeFoot(out)
     out.write("\\end{document}")
     out.close()
+
+
+def writeListOfHistoListsToFile(listOfhistoLists,samples,name):
+    hs=[]
+    for hl in listOfhistoLists:
+        for h,s in zip(hl,samples):
+            h.SetLineColor(s.color)
+            hs.append(h)
+    l=getLegend()
+    for h in listOfhistoLists[0]:
+        l.AddEntry(h)
+    hs.append(l)
+    writeObjects(hs,name)
