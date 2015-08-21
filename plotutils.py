@@ -596,4 +596,5 @@ def writeListOfHistoListsToFile(listOfhistoLists,samples,name):
     writeObjects(hs,name)
 
 def printPlots(plots):
-    print 'TH1F("'+plot.histo.GetName()+","+plot.histo.GetTitle()+'",'+plot.histo.GetNbinsX()+','+plot.histo.GetXaxis().GetXmax()+','+plot.histo.GetXaxis().GetXmin()+')'
+    for plot in plots:
+        print 'TH1F("'+plot.histo.GetName()+'","'+plot.histo.GetTitle()+'",'+str(plot.histo.GetNbinsX())+','+str(plot.histo.GetXaxis().GetXmin())+','+str(plot.histo.GetXaxis().GetXmax())+')'
