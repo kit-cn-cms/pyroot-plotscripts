@@ -342,7 +342,7 @@ def writeListOfhistoLists(listOfhistoLists,samples,name,normalize=True,stack=Fal
 
 
     printCanvases(canvases,name)
-    writeCanvases(canvases,name)
+    writeObjects(canvases,name)
 
 def writeListOfROCs(graphs,names,colors,filename,logscale=False,rej=True):
     c=getCanvas('ROC')
@@ -366,7 +366,7 @@ def writeListOfROCs(graphs,names,colors,filename,logscale=False,rej=True):
         graph.SetMarkerStyle(20)
     l.Draw('same')
     printCanvases([c],filename)
-    writeCanvases([c],filename)
+    writeObjects([c],filename)
 
 
 #from lists of background and signalhistos one signal and one background histo are created
@@ -594,3 +594,6 @@ def writeListOfHistoListsToFile(listOfhistoLists,samples,name):
         l.AddEntry(h)
     hs.append(l)
     writeObjects(hs,name)
+
+def printPlots(plots):
+    print 'TH1F("'+plot.histo.GetName()+","+plot.histo.GetTitle()+'",'+plot.histo.GetNbinsX()+','+plot.histo.GetXaxis().GetXmax()+','+plot.histo.GetXaxis().GetXmin()+')'
