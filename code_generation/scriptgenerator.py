@@ -26,6 +26,7 @@ void plot(){
   char* outfilename = getenv ("OUTFILENAME");
   string processname = string(getenv ("PROCESSNAME"));
   int maxevents = atoi(getenv ("MAXEVENTS"));
+  int skipevents = atoi(getenv ("SKIPEVENTS"));
 
   string buf;
   stringstream ss(filenames); 
@@ -99,7 +100,7 @@ def startLoop():
     return """  // loop over all events
   long nentries = chain->GetEntries(); 
   cout << "total number of events: " << nentries << endl;
-  for (long iEntry=0;iEntry<nentries;iEntry++) {
+  for (long iEntry=skipevents;iEntry<nentries;iEntry++) {
     if(iEntry==maxevents) break;
     if(iEntry%10000==0) cout << "analyzing event " << iEntry << endl;
     chain->GetEntry(iEntry); 

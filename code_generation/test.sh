@@ -8,6 +8,7 @@ cd -
 
 export FILENAMES="/nfs/dust/cms/user/hmildner/trees1019/ttbar_nominal.root"
 export OUTFILENAME="testplots.root"
-export MAXEVENTS="200000000"
-export PROCESSNAME="ttbarBBbar"
+export MAXEVENTS="2000000"
+export SKIPEVENTS="1000000"
+export PROCESSNAME="ttbarPlusBBbar"
 ./plot_syst
