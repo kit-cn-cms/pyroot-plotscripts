@@ -39,7 +39,7 @@ void plot(){
   // initialize variables from tree
 """
 
-def initDerived(var,t='F'):
+def initVar(var,t='F'):
     if t=='F':
         text='  float '+var+' = -999;\n'
     elif t=='I':
@@ -47,14 +47,26 @@ def initDerived(var,t='F'):
     else: "UNKNOWN TYPE",t
     return text
 
-def initVar(var,t='F'):
-    text= initDerived(var,t)
+def initVarFromTree(var,t='F'):
+    text= initVar(var,t)
     text+='  chain->SetBranchAddress("'+var+'",&'+var+');\n'
     return text
 
+def initHisto(name,nbins,xmin=0,xmax=0,title_=''):
+    if title_=='':
+        title=name
+    else:
+        title=title_
+    return '  TH1F* h_'+name+'=new TH1F("'+name+'","'+title+'",'+str(nbins)+','+str(xmin)+','+str(xmax)+');\n'
 
-def initHisto(var,nbins,xmin=0,xmax=0):
-    return '  TH1F* h_'+var+'=new TH1F((processname+"_'+var+'").c_str(),"'+var+'",'+str(nbins)+','+str(xmin)+','+str(xmax)+');\n'
+
+def initHistoWithProcessName(name,nbins,xmin=0,xmax=0,title_=''):
+    if title_=='':
+        title=name
+    else:
+        title=title_
+
+    return '  TH1F* h_'+name+'=new TH1F((processname+"_'+name+'").c_str(),"'+title+'",'+str(nbins)+','+str(xmin)+','+str(xmax)+');\n'
 
 def initReader(name):
     text=''
@@ -68,9 +80,9 @@ def calculateDerived(names,expressions):
             text+='    float '+n+' = '+e+';\n'
     return text
 
-def addVariables(readername,expressions,names):
+def addVariablesToReader(readername,expressions,variablenames):
     text=''
-    for e,n in zip(expressions,names):
+    for e,n in zip(expressions,variablenames):
         text+='  r_'+readername+'->AddVariable("'+e+'", &'+n+');\n'
     return text
 
@@ -128,14 +140,20 @@ int main(){
 }
 """
 
-def initVars(vs,typemap):
+def initVarsFromTree(vs,typemap):
     r=""
     for v in vs:
         if v in typemap:
-            r+=initVar(v,typemap[v])
+            r+=initVarFromTree(v,typemap[v])
         else:
-            r+=initVar(v)
+            r+=initVarFromTree(v)
     return r
+
+def compileScript(scriptname):
+    p = subprocess.Popen(['root-config', '--cflags', '--libs'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, err = p.communicate()
+    cmd= ['g++']+out[:-1].split(' ')+['-lTMVA']+[scriptname+'.cc','-o',scriptname]
+    subprocess.call(cmd)
 
 
 def parseWeights(weightfile):
@@ -153,23 +171,22 @@ def parseWeights(weightfile):
         types.append(var.get('Type'))
     return exprs,names,mins,maxs,types
 
-def createScriptFromWeights(scriptname,weightnames,catnames,catselections,systnames,systweights):
+def createScriptFromWeights(scriptname,weightnames,catnames,catselections,systnames,systweights,intvars):
     eventweight='Weight'
     # variables is the list of variables to be read from tree
     variablescandidates=re.findall(r"[\w]+", eventweight) #extract all words
     variablescandidates=variablescandidates+re.findall(r"[\w]+", ','.join(catselections))
-    variablescandidates=variablescandidates+re.findall(r"[\w]+", ','.join(systweights))
-
-    
+    variablescandidates=variablescandidates+re.findall(r"[\w]+", ','.join(systweights))   
     variablescandidates=variablescandidates+['GenEvt_I_TTPlusCC','GenEvt_I_TTPlusBB']
+
     # everything not a float has to be defined
     vartypes={}
-    vartypes['N_Jets']='I'
-    vartypes['N_BTagsM']='I'
+    for i in intvars:
+        vartypes[i]='I'
     vartypes['GenEvt_I_TTPlusCC']='I'
     vartypes['GenEvt_I_TTPlusBB']='I'
 
-    # extract variablescandidates of all categories
+    # extract variablescandidates of all weightfiles
     for weightname in weightnames:
         exprs,names,mins,maxs,types=parseWeights(weightname)
         for expr in exprs:
@@ -186,24 +203,27 @@ def createScriptFromWeights(scriptname,weightnames,catnames,catselections,systna
         if v[0].isalpha() or v[0]=='_':
             variables.append(v)
 
+    # start writing script
     script=""
     script+=getHead()
-    script+=initVars(variables,vartypes)
+    script+=initVarsFromTree(variables,vartypes)
+    # also init derived variables in bdt
     for n in names:
         if not n in variables:
             if n in vartypes:
-                script+=initDerived(n,vartypes[n])
+                script+=initVar(n,vartypes[n])
             else:
-                script+=initDerived(n)
+                script+=initVar(n)
+
     for c,w in zip(catnames,weightnames):
         exprs,names,mins,maxs,types=parseWeights(w)
         for n,mn,mx in zip(names,mins,maxs):
             for s in systnames:
-                script+=initHisto(c+'_'+n+s,50,mn,mx)
+                script+=initHistoWithProcessName(c+'_'+n+s,50,mn,mx)
         script+=initReader(c)
         for s in systnames:
-            script+=initHisto('BDT_ljets'+c+s,20,-1,1)
-        script+=addVariables(c,exprs,names)
+            script+=initHistoWithProcessName('BDT_ljets'+c+s,20,-1,1)
+        script+=addVariablesToReader(c,exprs,names)
         script+=bookMVA(c,w)
     script+=startLoop()
     script+=ttbarPlusX()
@@ -221,7 +241,64 @@ def createScriptFromWeights(scriptname,weightnames,catnames,catselections,systna
     f=open(scriptname+'.cc','w')
     f.write(script)
     f.close()
-    p = subprocess.Popen(['root-config', '--cflags', '--libs'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out, err = p.communicate()
-    cmd= ['g++']+out[:-1].split(' ')+['-lTMVA']+[scriptname+'.cc','-o',scriptname]
-    subprocess.call(cmd)
+
+def createScript(scriptname,plots,sample,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"]):
+    eventweight='Weight'
+    # variables is the list of variables to be read from tree
+    variablescandidates=re.findall(r"[\w]+", eventweight) #extract all words
+    variablescandidates=variablescandidates+re.findall(r"[\w]+", ','.join(catselections))
+    variablescandidates=variablescandidates+re.findall(r"[\w]+", ','.join(systweights))   
+#    variablescandidates=variablescandidates+['GenEvt_I_TTPlusCC','GenEvt_I_TTPlusBB']
+
+    # everything not a float has to be defined
+#    vartypes={}
+#    for i in intvars:
+#        vartypes[i]='I'
+#    vartypes['GenEvt_I_TTPlusCC']='I'
+#    vartypes['GenEvt_I_TTPlusBB']='I'
+
+
+    # extract variablescandidates of all plots
+    for plot in plots:
+        variablescandidates+=re.findall(r"[\w]+", plot.variable)
+        variablescandidates+=re.findall(r"[\w]+", plot.selection)
+    #TODO: find out type -- assuming float
+
+    # remove duplicates
+    variablescandidates=list(set(variablescandidates))
+    # remove everything not a true variable (e.g. number)
+    variables=[]
+    for v in variablescandidates:
+        if v[0].isalpha() or v[0]=='_':
+            variables.append(v)
+
+    # start writing script
+    script=""
+    script+=getHead()
+    script+=initVarsFromTree(variables,'F'*len(variables))
+
+    for c in catnames:
+        for plot in plots:
+            t=plot.histo.GetTitle()
+            n=plot.histo.GetName()
+            mx=plot.histo.GetXaxis().GetXmax()
+            mn=plot.histo.GetXaxis().GetXmin()
+            nb=plot.histo.GetNbinsX()
+            for s in systnames:
+                script+=initHisto(c+'_'+n+s,nb,mn,mx,t)
+    script+=startLoop()
+#    script+=ttbarPlusX()
+    for cn,cs in zip(catnames,catselections):
+        script+=startCat(cs)
+        for plot in plots:
+            n=plot.histo.GetName()
+            ex=plot.variable
+            pw=plot.selection            
+            for sn,sw in zip(systnames,systweights):
+                script+=fillHisto(cn+'_'+n+sn,ex,'('+pw+')*('+eventweight+')*('+sw+')')
+        script+=endCat()
+    script+=endLoop()
+    script+=getFoot()
+    f=open(scriptname+'.cc','w')
+    f.write(script)
+    f.close()

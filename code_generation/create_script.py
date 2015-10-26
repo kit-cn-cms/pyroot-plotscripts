@@ -34,5 +34,9 @@ systweights=["1",
              "Weight_CSVCErr1up","Weight_CSVCErr1down","Weight_CSVCErr2up","Weight_CSVCErr2down"]
 
 
-createScriptFromWeights("plot_syst",weights,catnames,catselections,systnames,systweights)
-createScriptFromWeights("plot_nominal",weights,catnames,catselections,[""],["1"])
+intvars=['N_Jets''N_BTagsM']
+
+createScriptFromWeights("plot_nominal",weights,catnames,catselections,[""],["1"],intvars )
+compileScript("plot_nominal")
+createScriptFromWeights("plot_syst",weights,catnames,catselections,systnames,systweights,intvars)
+compileScript("plot_syst")
