@@ -172,7 +172,7 @@ def parseWeights(weightfile):
         types.append(var.get('Type'))
     return exprs,names,mins,maxs,types
 
-def createScriptFromWeights(scriptname,weightnames,catnames,catselections,systnames,systweights,intvars):
+def createScriptFromWeights(scriptname,weightnames,catnames,catselections,bdtbinnings,systnames,systweights,intvars):
     eventweight='Weight'
     # variables is the list of variables to be read from tree
     variablescandidates=re.findall(r"[\w]+", eventweight) #extract all words
@@ -216,14 +216,14 @@ def createScriptFromWeights(scriptname,weightnames,catnames,catselections,systna
             else:
                 script+=initVar(n)
 
-    for c,w in zip(catnames,weightnames):
+    for c,w,binning in zip(catnames,weightnames,bdtbinnings):
         exprs,names,mins,maxs,types=parseWeights(w)
         for n,mn,mx in zip(names,mins,maxs):
             for s in systnames:
                 script+=initHistoWithProcessName(c+'_'+n+s,50,mn,mx)
         script+=initReader(c)
         for s in systnames:
-            script+=initHistoWithProcessName('BDT_ljets'+c+s,20,-1,1)
+            script+=initHistoWithProcessName('BDT_ljets'+c+s,binning[0],binning[1],binning[-1])
         script+=addVariablesToReader(c,exprs,names)
         script+=bookMVA(c,w)
     script+=startLoop()

@@ -11,8 +11,8 @@ outpath='/nfs/dust/cms/user/hmildner/fastsim/tthbb72/'
 scriptpath='/nfs/dust/cms/user/hmildner/BoostedAnalyzer_runscripts_NAF/alternative_runscripts_python/scripts_fastsim/'
 cmsswcfgpath='/nfs/dust/cms/user/hmildner/fastsim/run2fastsim/CMSSW_7_2_3/src/fastsimtest.py'
 cmsswpath='/nfs/dust/cms/user/hmildner/fastsim/run2fastsim/CMSSW_7_2_3/'
-events_per_job=1000000
 
+events_per_job=1000000
 
 import os
 import sys
@@ -42,7 +42,8 @@ for s in samples:
             print f
             sys.exit()
         
-
+for s in samples:
+    getEventsInFiles(s[1])
 
 script="""#!/bin/bash                                                                                                                                                  
 export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch                                                                                                                                
