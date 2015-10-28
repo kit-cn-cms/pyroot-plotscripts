@@ -25,6 +25,7 @@ void plot(){
   char* filenames = getenv ("FILENAMES");
   char* outfilename = getenv ("OUTFILENAME");
   string processname = string(getenv ("PROCESSNAME"));
+  string suffix = string(getenv ("SUFFIX"));
   int maxevents = atoi(getenv ("MAXEVENTS"));
   int skipevents = atoi(getenv ("SKIPEVENTS"));
 
@@ -40,17 +41,28 @@ void plot(){
   // initialize variables from tree
 """
 
-def initVar(var,t='F'):
-    if t=='F':
-        text='  float '+var+' = -999;\n'
-    elif t=='I':
-        text='  int '+var+' = -999;\n'
-    else: "UNKNOWN TYPE",t
+def initVar(var,t='F',isarray=False):
+    if isarray:
+        if t=='F':
+            text='  float* '+var+' = new float[100];\n'
+        elif t=='I':
+            text='  int* '+var+' = new int[100];\n'
+        else: "UNKNOWN TYPE",t
+    else:
+        if t=='F':
+            text='  float '+var+' = -999;\n'
+        elif t=='I':
+            text='  int '+var+' = -999;\n'
+        else: "UNKNOWN TYPE",t
     return text
 
-def initVarFromTree(var,t='F'):
-    text= initVar(var,t)
-    text+='  chain->SetBranchAddress("'+var+'",&'+var+');\n'
+def initVarFromTree(var,t='F',isarray=False):
+    if isarray:
+        text= initVar(var,t,True)
+        text+='  chain->SetBranchAddress("'+var+'",'+var+');\n'
+    else:
+        text= initVar(var,t)
+        text+='  chain->SetBranchAddress("'+var+'",&'+var+');\n'
     return text
 
 def initHisto(name,nbins,xmin=0,xmax=0,title_=''):
@@ -61,13 +73,13 @@ def initHisto(name,nbins,xmin=0,xmax=0,title_=''):
     return '  TH1F* h_'+name+'=new TH1F("'+name+'","'+title+'",'+str(nbins)+','+str(xmin)+','+str(xmax)+');\n'
 
 
-def initHistoWithProcessName(name,nbins,xmin=0,xmax=0,title_=''):
+def initHistoWithProcessNameAndSuffix(name,nbins,xmin=0,xmax=0,title_=''):
     if title_=='':
         title=name
     else:
         title=title_
 
-    return '  TH1F* h_'+name+'=new TH1F((processname+"_'+name+'").c_str(),"'+title+'",'+str(nbins)+','+str(xmin)+','+str(xmax)+');\n'
+    return '  TH1F* h_'+name+'=new TH1F((processname+"_'+name+'"+suffix).c_str(),"'+title+'",'+str(nbins)+','+str(xmin)+','+str(xmax)+');\n'
 
 def initReader(name):
     text=''
@@ -78,10 +90,10 @@ def calculateDerived(names,expressions):
     text=''
     for n,e in zip(names,expressions):
         if n!=e:
-            text+='    float '+n+' = '+e+';\n'
+            text+='    '+n+' = '+e+';\n'
     return text
 
-def addVariablesToReader(readername,expressions,variablenames):
+def addVariablesToReader(readername,expressions,variablenames,isarray):
     text=''
     for e,n in zip(expressions,variablenames):
         text+='  r_'+readername+'->AddVariable("'+e+'", &'+n+');\n'
@@ -93,7 +105,7 @@ def bookMVA(name,weightfile):
 def evaluateMVA(name,eventweight,systnames,systweights):
     text='      float output_'+name+' = r_'+name+'->EvaluateMVA("BDT");\n'
     for sn,sw in zip(systnames,systweights):
-        text+= '      h_BDT_ljets'+name+sn+'->Fill(output_'+name+',('+sw+')*('+eventweight+'));\n'
+        text+= '      h_BDT_ljets_'+name+sn+'->Fill(output_'+name+',('+sw+')*('+eventweight+'));\n'
     return text
 
 def startLoop():
@@ -141,13 +153,19 @@ int main(){
 }
 """
 
-def initVarsFromTree(vs,typemap):
+def initVarsFromTree(vs,typemap,isarray):
     r=""
     for v in vs:
-        if v in typemap:
-            r+=initVarFromTree(v,typemap[v])
+        if v in isarray:
+            if v in typemap:
+                r+=initVarFromTree(v,typemap[v],isarray[v])
+            else:
+                r+=initVarFromTree(v,'F',isarray[v])
         else:
-            r+=initVarFromTree(v)
+            if v in typemap:
+                r+=initVarFromTree(v,typemap[v])
+            else:
+                r+=initVarFromTree(v)
     return r
 
 def compileScript(scriptname):
@@ -187,6 +205,8 @@ def createScriptFromWeights(scriptname,weightnames,catnames,catselections,bdtbin
     vartypes['GenEvt_I_TTPlusCC']='I'
     vartypes['GenEvt_I_TTPlusBB']='I'
 
+    isarray={}
+
     # extract variablescandidates of all weightfiles
     for weightname in weightnames:
         exprs,names,mins,maxs,types=parseWeights(weightname)
@@ -194,6 +214,10 @@ def createScriptFromWeights(scriptname,weightnames,catnames,catselections,bdtbin
             vs=re.findall(r"[\w]+", expr)
             for v in vs:
                 variablescandidates.append(v)
+            for v in vs:
+                if v+"[" in expr:
+                    isarray[v]=True
+            
         for n,t in zip(names,types):
             vartypes[n]=t
     # remove duplicates
@@ -204,10 +228,11 @@ def createScriptFromWeights(scriptname,weightnames,catnames,catselections,bdtbin
         if v[0].isalpha() or v[0]=='_':
             variables.append(v)
 
+
     # start writing script
     script=""
     script+=getHead()
-    script+=initVarsFromTree(variables,vartypes)
+    script+=initVarsFromTree(variables,vartypes,isarray)
     # also init derived variables in bdt
     for n in names:
         if not n in variables:
@@ -220,11 +245,11 @@ def createScriptFromWeights(scriptname,weightnames,catnames,catselections,bdtbin
         exprs,names,mins,maxs,types=parseWeights(w)
         for n,mn,mx in zip(names,mins,maxs):
             for s in systnames:
-                script+=initHistoWithProcessName(c+'_'+n+s,50,mn,mx)
+                script+=initHistoWithProcessNameAndSuffix(c+'_'+n+s,50,mn,mx)
         script+=initReader(c)
         for s in systnames:
-            script+=initHistoWithProcessName('BDT_ljets'+c+s,binning[0],binning[1],binning[-1])
-        script+=addVariablesToReader(c,exprs,names)
+            script+=initHistoWithProcessNameAndSuffix('BDT_ljets_'+c+s,binning[0],binning[1],binning[-1])
+        script+=addVariablesToReader(c,exprs,names,isarray)
         script+=bookMVA(c,w)
     script+=startLoop()
     script+=ttbarPlusX()
