@@ -118,6 +118,7 @@ def varsIn(expr):
             variables.append(v)
     return variables
 
+
 def varsNoIndex(expr):
     # find all words not followed by [
     variablescandidates = re.findall(r"\w+\b(?!\[)", expr)
@@ -127,6 +128,34 @@ def varsNoIndex(expr):
             variables.append(v)
     return variables
 
+def varsWithMaxIndex(expr,arraylength):
+    # find all words not followed by [
+    variablescandidates = re.findall(r"\w+\b(?=\[)", expr)    
+    variables=[]
+    maxidxs=[]
+    for v in variablescandidates:
+        if v[0].isalpha() or v[0]=='_':
+            variables.append(v)
+    variables=list(set(variables))
+    maxmap={}
+    for v in variables:
+        maxidx=-1
+        lower=0
+        while True:
+            varstart=expr.find(v+'[',lower)
+            if varstart>-1:
+                lower=varstart+len(v)+1
+            else:
+                break
+            upper=expr.find(']',lower)
+            if lower > 0 and upper>0 and (varstart==0  or ( not expr[varstart-1].isalpha() and not expr[varstart-1] == '_' ) ):
+                idx=int(expr[lower:upper])
+                if idx>maxidx: maxidx=idx
+        if arraylength[v] not in maxmap.keys() or maxmap[arraylength[v]]<maxidx:
+            maxmap[arraylength[v]]=maxidx
+    return maxmap
+
+
 def getArrayEntries(expr,isarray,i):
     newexpr=expr
     variables=varsNoIndex(expr)
@@ -135,6 +164,10 @@ def getArrayEntries(expr,isarray,i):
             # substitute v by v[i]
             newexpr=re.sub(v+"(?!\[)",v+'['+str(i)+']',newexpr)
     return newexpr
+
+def maxIndex(expr,isarray):
+    newexpr=expr
+
 
 def startLoop():
     return """  
@@ -167,7 +200,7 @@ def endCat():
 
 
 def fillHisto(histo,var,weight):
-    return '      h_'+histo+'->Fill('+var+','+weight+');\n'
+    return '      if('+weight+'!=0) h_'+histo+'->Fill('+var+','+weight+');\n'
 
 def endLoop():
     return """  }\n // end of event loop
@@ -342,7 +375,6 @@ def createScript(scriptname,plots,sample,catnames=[""],catselections=["1"],systn
 
     # remove duplicates
     variables=list(set(variables))
-
     # start writing script
     script=""
     script+=getHead()
@@ -365,6 +397,7 @@ def createScript(scriptname,plots,sample,catnames=[""],catselections=["1"],systn
             n=plot.histo.GetName()
             ex=plot.variable
             pw=plot.selection
+
             if pw=='': pw='1'
             for sn,sw in zip(systnames,systweights):
                 vars_in_plot=varsNoIndex(ex)
@@ -379,7 +412,11 @@ def createScript(scriptname,plots,sample,catnames=[""],catselections=["1"],systn
                     pwi=getArrayEntries(pw,varisarray,"i")
                     swi=getArrayEntries(sw,varisarray,"i")
                     script+=varLoop("i",lengthvar)
-                    script+=fillHisto(cn+'_'+n+sn,exi,'('+pwi+')*('+eventweight+')*('+swi+')')
+                    maxidxs=varsWithMaxIndex(ex,arraylength)
+                    arrayselection="1"
+                    for v in maxidxs.keys():
+                        arrayselection+='&&'+v+'>'+str(maxidxs[v])
+                    script+=fillHisto(cn+'_'+n+sn,exi,'('+arrayselection+')*('+pwi+')*('+eventweight+')*('+swi+')')
                 else:
                     script+=fillHisto(cn+'_'+n+sn,ex,'('+pw+')*('+eventweight+')*('+sw+')')
         script+=endCat()
