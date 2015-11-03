@@ -32,18 +32,33 @@ def setupHisto(histo,color,yTitle=None,filled=False):
         histo.SetLineWidth(3)
 
 # creates canvas. option to add ratiopad will follow
-def getCanvas(name):
-    c=ROOT.TCanvas(name,name,1024,768)
-    c.SetRightMargin(0.05)
-    c.SetTopMargin(0.05)
-    c.SetLeftMargin(0.15)
-    c.SetBottomMargin(0.15)
+def getCanvas(name,ratiopad=False):
+    if ratiopad:
+        c=ROOT.TCanvas(name,name,1024,1024)
+        c.Divide(1,2)
+        c.cd(1).SetPad(0.,0.3,1.0,1.0);
+        c.cd(1).SetBottomMargin(0.0);
+        c.cd(2).SetPad(0.,0.0,1.0,0.3);
+        c.cd(2).SetTopMargin(0.0);
+        c.cd(1).SetTopMargin(0.05);
+        c.cd(2).SetBottomMargin(0.4);
+        c.cd(1).SetRightMargin(0.05);
+        c.cd(1).SetLeftMargin(0.15);
+        c.cd(2).SetRightMargin(0.05);
+        c.cd(2).SetLeftMargin(0.15);
+    else:
+        c=ROOT.TCanvas(name,name,1024,768)
+        c.SetRightMargin(0.05)
+        c.SetTopMargin(0.05)
+        c.SetLeftMargin(0.15)
+        c.SetBottomMargin(0.15)
+
     return c
 
 # creates legend
 def getLegend(): 
     legend=ROOT.TLegend()
-    legend.SetX1NDC(0.65)
+    legend.SetX1NDC(0.75)
     legend.SetX2NDC(0.93)
     legend.SetY1NDC(0.92)
     legend.SetY2NDC(0.93)
@@ -130,7 +145,7 @@ def drawHistosOnCanvas(listOfHistos_,normalize=True,stack=False,logscale=False,o
 
 # writes canvases to pdf 
 def printCanvases(canvases,name):
-    canvas=getCanvas('canvas')
+    canvas=canvases[0]
     canvas.Print(name+'.pdf[')
     for c in canvases:
         canvas=c
@@ -265,10 +280,7 @@ def GetKeyNames( self, dir = "" ):
     return [key.GetName() for key in ROOT.gDirectory.GetListOfKeys()]
 ROOT.TFile.GetKeyNames = GetKeyNames
 
-def AddEntry2( self, histo, label, stacked=False):
-    option='L'
-    if stacked:
-        option='F'
+def AddEntry2( self, histo, label, option='L'):
     self.SetY1NDC(self.GetY1NDC()-0.045)
     width=self.GetX2NDC()-self.GetX1NDC()
     ts=self.GetTextSize()
@@ -327,7 +339,10 @@ def writeListOfhistoLists(listOfhistoLists,samples,name,normalize=True,stack=Fal
         c.SetName('c'+str(i))
         l=getLegend()
         for h,sample in zip(listOfHistos,samples):
-            l.AddEntry2(h,sample.name,stack)
+            loption='L'
+            if stack:
+                loption='F'
+            l.AddEntry2(h,sample.name,loption)
         canvases.append(c)
         l.Draw('same')
         objects.append(l)
@@ -598,3 +613,214 @@ def writeListOfHistoListsToFile(listOfhistoLists,samples,name):
 def printPlots(plots):
     for plot in plots:
         print 'TH1F("'+plot.histo.GetName()+'","'+plot.histo.GetTitle()+'",'+str(plot.histo.GetNbinsX())+','+str(plot.histo.GetXaxis().GetXmin())+','+str(plot.histo.GetXaxis().GetXmax())+')'
+
+
+def moveOverFlow(h):
+    h.SetBinContent(1,h.GetBinContent(0)+h.GetBinContent(1));
+    h.SetBinContent(h.GetNbinsX(),h.GetBinContent(h.GetNbinsX()+1)+h.GetBinContent(h.GetNbinsX()));
+    h.SetBinError(1,ROOT.TMath.Sqrt(ROOT.TMath.Power(h.GetBinError(0),2)+ROOT.TMath.Power(h.GetBinError(1),2)));
+    h.SetBinError(h.GetNbinsX(),ROOT.TMath.Sqrt(ROOT.TMath.Power(h.GetBinError(h.GetNbinsX()+1),2)+ROOT.TMath.Power(h.GetBinError(h.GetNbinsX()),2)));
+
+# stack histo list 
+def stackHistoList(listOfHistos,normalize=False):
+    for i in range(len(listOfHistos)-1,0,-1):
+        listOfHistos[i-1].Add(listOfHistos[i])
+    if normalize:
+        integral0=listOfHistos[0].Integral()
+        for h in listOfHistos:
+            h.Scale(1./integral0)
+
+    
+
+def drawDataMC(listOfHistosData,listOfHistos_,data,ratio=True,logscale=False,options_='histo'):
+    listOfHistos=[h.Clone(h.GetName()+'_drawclone') for h in listOfHistos_]
+
+
+    return canvas
+
+def getDataGraph(listOfHistosData):
+    if len(listOfHistosData)>0:
+        datahisto=listOfHistosData[0]
+    for d in listOfHistosData[1:]:
+        datahisto.Add(d)
+    moveOverFlow(datahisto)
+    data=ROOT.TGraphAsymmErrors(datahisto)
+    data.SetMarkerStyle(20)
+    data.SetMarkerColor(ROOT.kBlack)
+    data.SetLineColor(ROOT.kBlack)
+    for i in range(0,data.GetN()):
+        data.SetPointEXlow(i,0)
+        data.SetPointEXhigh(i,0)
+    return data
+    # TODO: proper y-errors
+
+def getRatioGraph(data,mchisto):
+    ratio=data.Clone()
+    x, y = ROOT.Double(0), ROOT.Double(0)
+    for i in range(0,data.GetN()):
+        data.GetPoint(i,x,y)
+        if y>0:
+            ratio.SetPoint(i,x,y/mchisto.GetBinContent(i+1))
+        else:
+            ratio.SetPoint(i,x,0)
+        if y>0:
+            ratio.SetPointEYlow(i,1-(y-data.GetErrorYlow(i))/y)
+            ratio.SetPointEYhigh(i,(y+data.GetErrorYhigh(i))/y-1)
+        else:
+            ratio.SetPointEYlow(i,0)
+            ratio.SetPointEYhigh(i,0)
+#    moveOverFlow(datahisto)
+#    datahisto.Divide(mchisto)
+#    return datahisto
+#    data=ROOT.TGraphAsymmErrors(datahisto)
+#    data.SetMarkerStyle(20)
+#    data.SetMarkerColor(ROOT.kBlack)
+#    data.SetLineColor(ROOT.kBlack)
+#    for i in range(0,data.GetN()):
+#        data.SetPointEXlow(i,0)
+#        data.SetPointEXhigh(i,0)
+    return ratio
+
+
+
+def plotDataMC(listOfhistoListsData,listOfhistoLists,samples,name,logscale=False,labeltext='',ratio=True,options='histo'):
+    canvases=[]
+    objects=[]   
+    i=0
+    # for every plot, look at all samples
+    for listOfHistos,listOfHistosData in zip(listOfhistoLists,listOfhistoListsData):
+        i+=1
+        # setup histo style
+        for histo,sample in zip(listOfHistos,samples):
+            yTitle='Events'
+            setupHisto(histo,sample.color,yTitle,True) 
+        # 
+        # mover over/underflow
+        for h in listOfHistos:
+            moveOverFlow(h)
+        #stack
+        stackHistoList(listOfHistos)
+        # find maximum
+        yMax=1e-9
+        for h in listOfHistos:
+            yMax=max(h.GetBinContent(h.GetMaximumBin()),yMax)
+        canvas=getCanvas(listOfHistos[0].GetName(),ratio)        
+        canvas.cd(1)
+        #draw first histo
+        h=listOfHistos[0]
+        if logscale:
+            h.GetYaxis().SetRangeUser(yMax/1000000,yMax*10)
+            canvas.cd(1).SetLogy()
+        else:
+            h.GetYaxis().SetRangeUser(0,yMax*1.5)
+        option='histo'
+        option+=options
+        h.DrawCopy(option)
+        #draw remaining
+        for h in listOfHistos[1:]:
+            h.DrawCopy(option+'same')
+        h.DrawCopy('axissame')
+        #draw data
+        data=getDataGraph(listOfHistosData)
+        data.Draw('samePE1')
+        l=getLegend()
+        l.AddEntry2(data,'data','P')
+        for h,sample in zip(listOfHistos,samples):
+            l.AddEntry2(h,sample.name,'F')
+
+        canvases.append(canvas)
+        l.Draw('same')
+        objects.append(data)
+        objects.append(l)
+
+        cms = ROOT.TLatex(0.2, 0.96, 'CMS private work'  );
+        cms.SetTextFont(42)
+        cms.SetTextSize(0.05)
+        cms.SetNDC()
+        cms.Draw()
+        objects.append(cms)
+
+        lumi = ROOT.TLatex(0.2, 0.89, '1.28 fb^{-1} @ 13 TeV'  );
+        lumi.SetTextFont(42)
+        lumi.SetTextSize(0.06)
+        lumi.SetNDC()
+        lumi.Draw()
+        objects.append(lumi)
+
+        label = ROOT.TLatex(0.2, 0.83, labeltext);
+        label.SetTextFont(42)
+        label.SetTextSize(0.06)
+        label.SetNDC()
+        label.Draw()
+        objects.append(label)
+
+
+        ratiograph=getRatioGraph(data,listOfHistos[0])
+        canvas.cd(2)
+        line=listOfHistos[0].Clone()
+        line.SetFillStyle(0)
+        line.Divide(listOfHistos[0])
+        line.GetYaxis().SetRangeUser(0.5,1.6)
+        line.GetXaxis().SetRangeUser(listOfHistos[0].GetXaxis().GetXmin(),listOfHistos[0].GetXaxis().GetXmax())
+        for i in range(line.GetNbinsX()+1):
+            line.SetBinContent(i,1)
+            line.SetBinError(i,0)
+        line.GetXaxis().SetLabelSize(line.GetXaxis().GetLabelSize()*2.4)
+        line.GetYaxis().SetLabelSize(line.GetYaxis().GetLabelSize()*2.4)
+        line.GetXaxis().SetTitleSize(line.GetXaxis().GetTitleSize()*3)
+        line.GetYaxis().SetTitleSize(line.GetYaxis().GetTitleSize()*2.4)
+        line.GetYaxis().SetTitleSize(line.GetYaxis().GetTitleSize()*2.4)
+        line.GetYaxis().CenterTitle(1);
+        line.GetYaxis().SetTitle('data/MC');
+        line.GetYaxis().SetNdivisions( 503 );
+#        line.GetXaxis().SetLabelOffset( 0.006 );
+        line.GetXaxis().SetNdivisions( 510 );
+        line.GetXaxis().SetTickLength( line.GetXaxis().GetTickLength() * 2.0 );
+        line.GetYaxis().SetTickLength( line.GetYaxis().GetTickLength() * 1.65 );
+
+        line.Draw('histo')
+        line.SetLineWidth(1)
+        objects.append(line)
+        objects.append(ratiograph)
+        ratiograph.Draw('sameP')
+
+
+
+
+    printCanvases(canvases,name)
+    writeObjects(canvases,name)
+
+
+def writeLOLAndOneOnTop(listOfhistoLists,samples,listOfhistosOnTop,sampleOnTop,factor,name,logscale=False,options='histo'):
+    normalize=False
+    stack=True,
+    canvases=[]
+    objects=[]   
+    i=0
+    for listOfHistos,ot in zip(listOfhistoLists,listOfhistosOnTop):
+        i+=1
+        for histo,sample in zip(listOfHistos,samples):
+            yTitle='Events expected for 10 fb^{-1} @ 13 TeV'
+            setupHisto(histo,sample.color,yTitle,stack)        
+        c=drawHistosOnCanvas(listOfHistos,normalize,stack,logscale,options)       
+        c.SetName('c'+str(i))
+        c.cd()
+        otc=ot.Clone()
+        otc.Scale(factor)
+        setupHisto(otc,sampleOnTop.color,'',False)
+        otc.DrawCopy("samehisto")
+        l=getLegend()
+        l.AddEntry2(otc,sampleOnTop.name+' x '+str(factor),'L')
+        for h,sample in zip(listOfHistos,samples):
+            loption='L'
+            if stack:
+                loption='F'
+            l.AddEntry2(h,sample.name,loption)
+        canvases.append(c)
+        l.Draw('same')
+        objects.append(l)
+        objects.append(otc)
+
+
+    printCanvases(canvases,name)
+    writeObjects(canvases,name)
