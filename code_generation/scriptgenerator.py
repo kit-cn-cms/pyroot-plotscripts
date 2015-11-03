@@ -171,7 +171,7 @@ def maxIndex(expr,isarray):
 
 def startLoop():
     return """  
-   // loop over all events
+  // loop over all events
   long nentries = chain->GetEntries(); 
   cout << "total number of events: " << nentries << endl;
   for (long iEntry=skipevents;iEntry<nentries;iEntry++) {
@@ -189,18 +189,22 @@ def ttbarPlusX():
     text+= '    if(processname=="ttbarOther" && (GenEvt_I_TTPlusBB>0 || GenEvt_I_TTPlusCC>0)) continue;\n'
     return text
 
+def encodeSampleSelection(samples):
+    text=''
+    for sample in samples:
+        text+= '    if(processname=="'+sample.name+'" && !('+sample.selection+') ) continue;\n'
 
 def startCat(eventweight):
-    text='    // staring category\n'
+    text='\n    // staring category\n'
     text+='    if(('+eventweight+')!=0) {\n'
     return text
 
 def endCat():
-    return '    }\n // end of category\n'
+    return '    }\n    // end of category\n\n'
 
 
 def fillHisto(histo,var,weight):
-    return '      if('+weight+'!=0) h_'+histo+'->Fill('+var+','+weight+');\n'
+    return '      if(('+weight+')!=0) h_'+histo+'->Fill('+var+','+weight+');\n'
 
 def endLoop():
     return """  }\n // end of event loop
@@ -336,21 +340,22 @@ def createScriptFromWeights(scriptname,weightnames,catnames,catselections,bdtbin
     f.write(script)
     f.close()
 
-def createScript(scriptname,plots,sample,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"]):
-    f=ROOT.TFile(sample.path)
+def createScript(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"]):
+    f=ROOT.TFile(samples[0].path)
     tree=f.Get('MVATree')
     
     eventweight='Weight'
     # variables is the list of variables to be read from tree
-    variablescandidates=re.findall(r"[\w]+", eventweight) #extract all words
-    variablescandidates=variablescandidates+re.findall(r"[\w]+", ','.join(catselections))
-    variablescandidates=variablescandidates+re.findall(r"[\w]+", ','.join(systweights))   
-
+    variablescandidates=varsIn(eventweight) #extract all words
+    variablescandidates+=varsIn(','.join(catselections))
+    variablescandidates+=varsIn(','.join(systweights))   
 
     # extract variablescandidates of all plots
     for plot in plots:
-        variablescandidates+=re.findall(r"[\w]+", plot.variable)
-        variablescandidates+=re.findall(r"[\w]+", plot.selection)
+        variablescandidates+=varsIn(plot.variable)
+        variablescandidates+=varsIn(plot.selection)
+    for s in samples:
+        variablescandidates+=varsIn(s.selection)
 
     # remove duplicates
     variablescandidates=list(set(variablescandidates))
@@ -390,7 +395,7 @@ def createScript(scriptname,plots,sample,catnames=[""],catselections=["1"],systn
             for s in systnames:
                 script+=initHisto(c+'_'+n+s,nb,mn,mx,t)
     script+=startLoop()
-#    script+=ttbarPlusX()
+    encodeSampleSelection(samples)        
     for cn,cs in zip(catnames,catselections):
         script+=startCat(cs)
         for plot in plots:
