@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as ET
 import re
 import subprocess
+import ROOT
 
 def getHead():
     return """#include "TChain.h"
@@ -99,6 +100,7 @@ def addVariablesToReader(readername,expressions,variablenames,isarray):
         text+='  r_'+readername+'->AddVariable("'+e+'", &'+n+');\n'
     return text
 
+
 def bookMVA(name,weightfile):
     return '  r_'+name+'->BookMVA("BDT","'+weightfile+'");\n'
 
@@ -108,8 +110,35 @@ def evaluateMVA(name,eventweight,systnames,systweights):
         text+= '      h_BDT_ljets_'+name+sn+'->Fill(output_'+name+',('+sw+')*('+eventweight+'));\n'
     return text
 
+def varsIn(expr):
+    variablescandidates = re.findall(r"[\w]+", expr)
+    variables=[]
+    for v in variablescandidates:
+        if v[0].isalpha() or v[0]=='_':
+            variables.append(v)
+    return variables
+
+def varsNoIndex(expr):
+    # find all words not followed by [
+    variablescandidates = re.findall(r"\w+\b(?!\[)", expr)
+    variables=[]
+    for v in variablescandidates:
+        if v[0].isalpha() or v[0]=='_':
+            variables.append(v)
+    return variables
+
+def getArrayEntries(expr,isarray,i):
+    newexpr=expr
+    variables=varsNoIndex(expr)
+    for v in variables:
+        if isarray[v]:            
+            # substitute v by v[i]
+            newexpr=re.sub(v+"(?!\[)",v+'['+str(i)+']',newexpr)
+    return newexpr
+
 def startLoop():
-    return """  // loop over all events
+    return """  
+   // loop over all events
   long nentries = chain->GetEntries(); 
   cout << "total number of events: " << nentries << endl;
   for (long iEntry=skipevents;iEntry<nentries;iEntry++) {
@@ -129,23 +158,28 @@ def ttbarPlusX():
 
 
 def startCat(eventweight):
-    return '    if(('+eventweight+')!=0) {\n'
+    text='    // staring category\n'
+    text+='    if(('+eventweight+')!=0) {\n'
+    return text
 
 def endCat():
-    return '    }\n'
+    return '    }\n // end of category\n'
 
 
 def fillHisto(histo,var,weight):
     return '      h_'+histo+'->Fill('+var+','+weight+');\n'
 
 def endLoop():
-    return """  } // end of event loop
+    return """  }\n // end of event loop
+
 """
+def varLoop(i,n):
+    return '      for(uint '+str(i)+'=0; '+str(i)+'<'+str(n)+'; '+str(i)+'++)'
 
 
 def getFoot():
     return """  outfile->Write();
-outfile->Close();
+  outfile->Close();
 }
 
 int main(){
@@ -166,6 +200,7 @@ def initVarsFromTree(vs,typemap,isarray):
                 r+=initVarFromTree(v,typemap[v])
             else:
                 r+=initVarFromTree(v)
+    r+='\n'
     return r
 
 def compileScript(scriptname):
@@ -193,10 +228,10 @@ def parseWeights(weightfile):
 def createScriptFromWeights(scriptname,weightnames,catnames,catselections,bdtbinnings,systnames,systweights,intvars):
     eventweight='Weight'
     # variables is the list of variables to be read from tree
-    variablescandidates=re.findall(r"[\w]+", eventweight) #extract all words
-    variablescandidates=variablescandidates+re.findall(r"[\w]+", ','.join(catselections))
-    variablescandidates=variablescandidates+re.findall(r"[\w]+", ','.join(systweights))   
-    variablescandidates=variablescandidates+['GenEvt_I_TTPlusCC','GenEvt_I_TTPlusBB']
+    variablescandidates+=varsIn(eventweight) #extract all words
+    variablescandidates+=varsIn(','.join(catselections))
+    variablescandidates+=varsIn(','.join(systweights))   
+    variablescandidates+=['GenEvt_I_TTPlusCC','GenEvt_I_TTPlusBB']
 
     # everything not a float has to be defined
     vartypes={}
@@ -211,7 +246,7 @@ def createScriptFromWeights(scriptname,weightnames,catnames,catselections,bdtbin
     for weightname in weightnames:
         exprs,names,mins,maxs,types=parseWeights(weightname)
         for expr in exprs:
-            vs=re.findall(r"[\w]+", expr)
+            vs=varsIn(expr)
             for v in vs:
                 variablescandidates.append(v)
             for v in vs:
@@ -269,26 +304,20 @@ def createScriptFromWeights(scriptname,weightnames,catnames,catselections,bdtbin
     f.close()
 
 def createScript(scriptname,plots,sample,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"]):
+    f=ROOT.TFile(sample.path)
+    tree=f.Get('MVATree')
+    
     eventweight='Weight'
     # variables is the list of variables to be read from tree
     variablescandidates=re.findall(r"[\w]+", eventweight) #extract all words
     variablescandidates=variablescandidates+re.findall(r"[\w]+", ','.join(catselections))
     variablescandidates=variablescandidates+re.findall(r"[\w]+", ','.join(systweights))   
-#    variablescandidates=variablescandidates+['GenEvt_I_TTPlusCC','GenEvt_I_TTPlusBB']
-
-    # everything not a float has to be defined
-#    vartypes={}
-#    for i in intvars:
-#        vartypes[i]='I'
-#    vartypes['GenEvt_I_TTPlusCC']='I'
-#    vartypes['GenEvt_I_TTPlusBB']='I'
 
 
     # extract variablescandidates of all plots
     for plot in plots:
         variablescandidates+=re.findall(r"[\w]+", plot.variable)
         variablescandidates+=re.findall(r"[\w]+", plot.selection)
-    #TODO: find out type -- assuming float
 
     # remove duplicates
     variablescandidates=list(set(variablescandidates))
@@ -298,10 +327,26 @@ def createScript(scriptname,plots,sample,catnames=[""],catselections=["1"],systn
         if v[0].isalpha() or v[0]=='_':
             variables.append(v)
 
+    # find out variable type
+    vartypes={}
+    varisarray={}
+    arraylength={}
+    for v in variables:
+        b=tree.GetBranch(v).GetTitle()
+        vartypes[v]=b.split('/')[1]
+        varisarray[v]=b.split('/')[0][-1]==']'
+        if varisarray[v]:
+            arraylength[v]= re.findall(r"\[(.*?)\]",b.split('/')[0])[0]
+            variables.append(arraylength[v])
+            vartypes[arraylength[v]]='I'
+
+    # remove duplicates
+    variables=list(set(variables))
+
     # start writing script
     script=""
     script+=getHead()
-    script+=initVarsFromTree(variables,'F'*len(variables))
+    script+=initVarsFromTree(variables,'F'*len(variables),varisarray)
 
     for c in catnames:
         for plot in plots:
@@ -319,9 +364,24 @@ def createScript(scriptname,plots,sample,catnames=[""],catselections=["1"],systn
         for plot in plots:
             n=plot.histo.GetName()
             ex=plot.variable
-            pw=plot.selection            
+            pw=plot.selection
+            if pw=='': pw='1'
             for sn,sw in zip(systnames,systweights):
-                script+=fillHisto(cn+'_'+n+sn,ex,'('+pw+')*('+eventweight+')*('+sw+')')
+                vars_in_plot=varsNoIndex(ex)
+                vars_in_plot+=varsNoIndex(pw)
+                lengthvar=""
+                for v in vars_in_plot:
+                    if varisarray[v]:
+                        assert lengthvar == "" or lengthvar == arraylength[v]
+                        lengthvar=arraylength[v]
+                if lengthvar!="":
+                    exi=getArrayEntries(ex,varisarray,"i")
+                    pwi=getArrayEntries(pw,varisarray,"i")
+                    swi=getArrayEntries(sw,varisarray,"i")
+                    script+=varLoop("i",lengthvar)
+                    script+=fillHisto(cn+'_'+n+sn,exi,'('+pwi+')*('+eventweight+')*('+swi+')')
+                else:
+                    script+=fillHisto(cn+'_'+n+sn,ex,'('+pw+')*('+eventweight+')*('+sw+')')
         script+=endCat()
     script+=endLoop()
     script+=getFoot()
