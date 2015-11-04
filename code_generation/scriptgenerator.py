@@ -208,7 +208,8 @@ def encodeSampleSelection(samples,arraylength):
     text=''
     for sample in samples:
         arrayselection=checkArrayLengths(sample.selection,arraylength)
-        text+= '    if(processname=="'+sample.name+'" && ('+arrayselection+') && !('+sample.selection+') ) continue;\n'
+        text+= '    if(processname=="'+sample.name+'" && (!('+arrayselection+') || ('+sample.selection+')==0) ) continue;\n'
+    return text
 
 def startCat(eventweight,arraylength):
     text='\n    // staring category\n'
@@ -326,8 +327,7 @@ def createScript(scriptname,plots,samples,catnames=[""],catselections=["1"],syst
             for s in systnames:
                 script+=initHisto(c+'_'+n+s,nb,mn,mx,t)
     script+=startLoop()
-    #TODO: does it sth?
-    encodeSampleSelection(samples,arraylength)
+    script+=encodeSampleSelection(samples,arraylength)
     for cn,cs in zip(catnames,catselections):
         script+=startCat(cs,arraylength)
         for plot in plots:
