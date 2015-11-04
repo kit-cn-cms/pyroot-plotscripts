@@ -155,19 +155,34 @@ def varsWithMaxIndex(expr,arraylength):
             maxmap[arraylength[v]]=maxidx
     return maxmap
 
+def checkArrayLengths(ex,arraylength):
+    maxidxs=varsWithMaxIndex(ex,arraylength)
+    arrayselection="1"
+    for v in maxidxs.keys():
+        arrayselection+='&&'+v+'>'+str(maxidxs[v])
+    return arrayselection
 
-def getArrayEntries(expr,isarray,i):
+def getArrayEntries(expr,arraylength,i):
     newexpr=expr
     variables=varsNoIndex(expr)
     for v in variables:
-        if isarray[v]:            
+        if v in arraylength.keys():            
             # substitute v by v[i]
             newexpr=re.sub(v+"(?!\[)",v+'['+str(i)+']',newexpr)
     return newexpr
 
-def maxIndex(expr,isarray):
-    newexpr=expr
-
+def getVartypesAndLength(variables,tree):
+    vartypes={}
+    arraylength={}
+    for v in variables:
+        b=tree.GetBranch(v).GetTitle()
+        vartypes[v]=b.split('/')[1]
+        varisarray=b.split('/')[0][-1]==']'
+        if varisarray:
+            arraylength[v]= re.findall(r"\[(.*?)\]",b.split('/')[0])[0]
+            variables.append(arraylength[v])
+            vartypes[arraylength[v]]='I'
+    return vartypes,arraylength
 
 def startLoop():
     return """  
@@ -189,14 +204,16 @@ def ttbarPlusX():
     text+= '    if(processname=="ttbarOther" && (GenEvt_I_TTPlusBB>0 || GenEvt_I_TTPlusCC>0)) continue;\n'
     return text
 
-def encodeSampleSelection(samples):
+def encodeSampleSelection(samples,arraylength):
     text=''
     for sample in samples:
-        text+= '    if(processname=="'+sample.name+'" && !('+sample.selection+') ) continue;\n'
+        arrayselection=checkArrayLengths(sample.selection,arraylength)
+        text+= '    if(processname=="'+sample.name+'" && ('+arrayselection+') && !('+sample.selection+') ) continue;\n'
 
-def startCat(eventweight):
+def startCat(eventweight,arraylength):
     text='\n    // staring category\n'
-    text+='    if(('+eventweight+')!=0) {\n'
+    arrayselection=checkArrayLengths(eventweight,arraylength)
+    text+='    if((('+arrayselection+')*('+eventweight+'))!=0) {\n'
     return text
 
 def endCat():
@@ -224,14 +241,14 @@ int main(){
 }
 """
 
-def initVarsFromTree(vs,typemap,isarray):
+def initVarsFromTree(vs,typemap,arraylength):
     r=""
     for v in vs:
-        if v in isarray:
+        if v in arraylength.keys():
             if v in typemap:
-                r+=initVarFromTree(v,typemap[v],isarray[v])
+                r+=initVarFromTree(v,typemap[v],True)
             else:
-                r+=initVarFromTree(v,'F',isarray[v])
+                r+=initVarFromTree(v,'F',True)
         else:
             if v in typemap:
                 r+=initVarFromTree(v,typemap[v])
@@ -262,84 +279,6 @@ def parseWeights(weightfile):
         types.append(var.get('Type'))
     return exprs,names,mins,maxs,types
 
-def createScriptFromWeights(scriptname,weightnames,catnames,catselections,bdtbinnings,systnames,systweights,intvars):
-    eventweight='Weight'
-    # variables is the list of variables to be read from tree
-    variablescandidates+=varsIn(eventweight) #extract all words
-    variablescandidates+=varsIn(','.join(catselections))
-    variablescandidates+=varsIn(','.join(systweights))   
-    variablescandidates+=['GenEvt_I_TTPlusCC','GenEvt_I_TTPlusBB']
-
-    # everything not a float has to be defined
-    vartypes={}
-    for i in intvars:
-        vartypes[i]='I'
-    vartypes['GenEvt_I_TTPlusCC']='I'
-    vartypes['GenEvt_I_TTPlusBB']='I'
-
-    isarray={}
-
-    # extract variablescandidates of all weightfiles
-    for weightname in weightnames:
-        exprs,names,mins,maxs,types=parseWeights(weightname)
-        for expr in exprs:
-            vs=varsIn(expr)
-            for v in vs:
-                variablescandidates.append(v)
-            for v in vs:
-                if v+"[" in expr:
-                    isarray[v]=True
-            
-        for n,t in zip(names,types):
-            vartypes[n]=t
-    # remove duplicates
-    variablescandidates=list(set(variablescandidates))
-    # remove everything not a true variable (e.g. number)
-    variables=[]
-    for v in variablescandidates:
-        if v[0].isalpha() or v[0]=='_':
-            variables.append(v)
-
-
-    # start writing script
-    script=""
-    script+=getHead()
-    script+=initVarsFromTree(variables,vartypes,isarray)
-    # also init derived variables in bdt
-    for n in names:
-        if not n in variables:
-            if n in vartypes:
-                script+=initVar(n,vartypes[n])
-            else:
-                script+=initVar(n)
-
-    for c,w,binning in zip(catnames,weightnames,bdtbinnings):
-        exprs,names,mins,maxs,types=parseWeights(w)
-        for n,mn,mx in zip(names,mins,maxs):
-            for s in systnames:
-                script+=initHistoWithProcessNameAndSuffix(c+'_'+n+s,50,mn,mx)
-        script+=initReader(c)
-        for s in systnames:
-            script+=initHistoWithProcessNameAndSuffix('BDT_ljets_'+c+s,binning[0],binning[1],binning[-1])
-        script+=addVariablesToReader(c,exprs,names,isarray)
-        script+=bookMVA(c,w)
-    script+=startLoop()
-    script+=ttbarPlusX()
-    script+=calculateDerived(names,exprs)
-    for cn,cs,w in zip(catnames,catselections,weightnames):
-        exprs,names,mins,maxs,types=parseWeights(w)
-        script+=startCat(cs)
-        for n,ex in zip(names,exprs):
-            for sn,sw in zip(systnames,systweights):
-                script+=fillHisto(cn+'_'+n+sn,ex,'('+eventweight+')*('+sw+')')
-        script+=evaluateMVA(cn,eventweight,systnames,systweights)
-        script+=endCat()
-    script+=endLoop()
-    script+=getFoot()
-    f=open(scriptname+'.cc','w')
-    f.write(script)
-    f.close()
-
 def createScript(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"]):
     f=ROOT.TFile(samples[0].path)
     tree=f.Get('MVATree')
@@ -365,25 +304,17 @@ def createScript(scriptname,plots,samples,catnames=[""],catselections=["1"],syst
         if v[0].isalpha() or v[0]=='_':
             variables.append(v)
 
-    # find out variable type
-    vartypes={}
-    varisarray={}
-    arraylength={}
-    for v in variables:
-        b=tree.GetBranch(v).GetTitle()
-        vartypes[v]=b.split('/')[1]
-        varisarray[v]=b.split('/')[0][-1]==']'
-        if varisarray[v]:
-            arraylength[v]= re.findall(r"\[(.*?)\]",b.split('/')[0])[0]
-            variables.append(arraylength[v])
-            vartypes[arraylength[v]]='I'
-
     # remove duplicates
     variables=list(set(variables))
+
+    vartypes,arraylength=getVartypesAndLength(variables,tree)
+    # remove duplicates
+    variables=list(set(variables))
+
     # start writing script
     script=""
     script+=getHead()
-    script+=initVarsFromTree(variables,'F'*len(variables),varisarray)
+    script+=initVarsFromTree(variables,'F'*len(variables),arraylength)
 
     for c in catnames:
         for plot in plots:
@@ -395,9 +326,10 @@ def createScript(scriptname,plots,samples,catnames=[""],catselections=["1"],syst
             for s in systnames:
                 script+=initHisto(c+'_'+n+s,nb,mn,mx,t)
     script+=startLoop()
-    encodeSampleSelection(samples)        
+    #TODO: does it sth?
+    encodeSampleSelection(samples,arraylength)
     for cn,cs in zip(catnames,catselections):
-        script+=startCat(cs)
+        script+=startCat(cs,arraylength)
         for plot in plots:
             n=plot.histo.GetName()
             ex=plot.variable
@@ -409,18 +341,15 @@ def createScript(scriptname,plots,samples,catnames=[""],catselections=["1"],syst
                 vars_in_plot+=varsNoIndex(pw)
                 lengthvar=""
                 for v in vars_in_plot:
-                    if varisarray[v]:
+                    if v in arraylength.keys():
                         assert lengthvar == "" or lengthvar == arraylength[v]
                         lengthvar=arraylength[v]
                 if lengthvar!="":
-                    exi=getArrayEntries(ex,varisarray,"i")
-                    pwi=getArrayEntries(pw,varisarray,"i")
-                    swi=getArrayEntries(sw,varisarray,"i")
-                    script+=varLoop("i",lengthvar)
-                    maxidxs=varsWithMaxIndex(ex,arraylength)
-                    arrayselection="1"
-                    for v in maxidxs.keys():
-                        arrayselection+='&&'+v+'>'+str(maxidxs[v])
+                    exi=getArrayEntries(ex,arraylength,"i")
+                    pwi=getArrayEntries(pw,arraylength,"i")
+                    swi=getArrayEntries(sw,arraylength,"i")
+                    script+=varLoop("i",lengthvar)                    
+                    arrayselection=checkArrayLengths(ex,arraylength)
                     script+=fillHisto(cn+'_'+n+sn,exi,'('+arrayselection+')*('+pwi+')*('+eventweight+')*('+swi+')')
                 else:
                     script+=fillHisto(cn+'_'+n+sn,ex,'('+pw+')*('+eventweight+')*('+sw+')')
