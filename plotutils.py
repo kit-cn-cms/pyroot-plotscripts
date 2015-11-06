@@ -2,10 +2,22 @@ import ROOT
 import math
 from itertools import product
 from collections import namedtuple
+import glob
 
 ROOT.gStyle.SetPaintTextFormat("4.2f");
 
-Sample = namedtuple("Sample", "name color path selection")
+class Sample:
+    def __init__(self,name, color, path, selection,nick=''):
+        self.name=name
+        self.color=color
+        self.path=path
+        self.selection=selection
+        self.files=glob.glob(path)
+        if nick=='':
+            self.nick=name
+        else:
+            self.nick=nick
+
 Plot = namedtuple("Plot", "histo variable selection")
 
 # sets up the style of a histo and its axes. options for data and stackplots will follow.
