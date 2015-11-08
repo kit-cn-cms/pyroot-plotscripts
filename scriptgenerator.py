@@ -117,7 +117,8 @@ def evaluateMVA(name,eventweight,systnames,systweights):
 
 def varsIn(expr):
     # find all words not followed by ( (these are functions)
-    variablescandidates = re.findall(r"[\w]+", expr)
+    variablescandidates = re.findall(r"\w+\b(?!\()", expr)
+    print variablescandidates
     variables=[]
     for v in variablescandidates:
         if v[0].isalpha() or v[0]=='_':
