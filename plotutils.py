@@ -18,7 +18,12 @@ class Sample:
         else:
             self.nick=nick
 
-Plot = namedtuple("Plot", "histo variable selection")
+class Plot:
+    def __init__(self,histo, variable, selection):
+        self.histo=histo
+        self.variable=variable
+        self.selection=selection
+        self.name=histo.GetName()
 
 # sets up the style of a histo and its axes. options for data and stackplots will follow.
 def setupHisto(histo,color,yTitle=None,filled=False):
@@ -320,6 +325,27 @@ def createHistoLists_fromHistoFile(samples,rebin=1):
                 o.Rebin(rebin)
                 histoList.append(o.Clone())
                 histoList[-1].SetName(o.GetName()+'_'+sample.name)
+        listOfhistoListsT.append(histoList)
+    listOfhistoLists=transposeLOL(listOfhistoListsT)
+    return listOfhistoLists
+
+def createHistoLists_fromSuperHistoFile(path,samples,plots,rebin=1,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"]):
+    listOfhistoListsT=[]
+    f=ROOT.TFile(path, "readonly")
+    keyList = f.GetKeyNames()
+    for sample in samples:
+        print sample.name
+        histoList=[]
+        ROOT.gDirectory.cd('PyROOT:/')
+        for c in catnames:
+            for plot in plots:
+                key=sample.nick+'_'+c+plot.name
+                print key
+                o=f.Get(key)
+                print 
+                if isinstance(o,ROOT.TH1) and not isinstance(o,ROOT.TH2): 
+                    o.Rebin(rebin)
+                    histoList.append(o.Clone())
         listOfhistoListsT.append(histoList)
     listOfhistoLists=transposeLOL(listOfhistoListsT)
     return listOfhistoLists

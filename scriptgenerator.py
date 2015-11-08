@@ -6,7 +6,7 @@ import datetime
 import os
 import sys
 import stat
-import plot_config
+import time
 
 def getHead():
     return """#include "TChain.h"
@@ -112,10 +112,11 @@ def bookMVA(name,weightfile):
 def evaluateMVA(name,eventweight,systnames,systweights):
     text='      float output_'+name+' = r_'+name+'->EvaluateMVA("BDT");\n'
     for sn,sw in zip(systnames,systweights):
-        text+= '      h_BDT_ljets_'+name+sn+'->Fill(output_'+name+',('+sw+')*('+eventweight+'));\n'
+        text+= '      h_BDT_ljets_'+name+sn+'->Fill(output_'+name+',('+sw+')*('+eventweight+'));\n\n'
     return text
 
 def varsIn(expr):
+    # find all words not followed by ( (these are functions)
     variablescandidates = re.findall(r"[\w]+", expr)
     variables=[]
     for v in variablescandidates:
@@ -180,7 +181,12 @@ def getVartypesAndLength(variables,tree):
     vartypes={}
     arraylength={}
     for v in variables:
-        b=tree.GetBranch(v).GetTitle()
+        br=tree.GetBranch(v)
+        if not hasattr(tree, v):
+            print v,'does not exist in tree!'
+            vartypes[v]='F'
+            continue
+        b=br.GetTitle()
         vartypes[v]=b.split('/')[1]
         varisarray=b.split('/')[0][-1]==']'
         if varisarray:
@@ -217,12 +223,16 @@ def encodeSampleSelection(samples,arraylength):
         sselection=sample.selection
         if sselection=='': sselection='1'
         text+= '    if(processname=="'+sample.nick+'" && (!('+arrayselection+') || ('+sselection+')==0) ) continue;\n'
+        text+= '    else if(processname=="'+sample.nick+'") sampleweight='+sselection+';\n'
     return text
 
 def startCat(eventweight,arraylength):
     text='\n    // staring category\n'
     arrayselection=checkArrayLengths(eventweight,arraylength)
+    if arrayselection=='': arrayselection ='1' 
     text+='    if((('+arrayselection+')*('+eventweight+'))!=0) {\n'
+    if eventweight=='': eventweight='1'
+    text+='    float categoryweight='+eventweight+';\n'
     return text
 
 def endCat():
@@ -290,6 +300,7 @@ def parseWeights(weightfile):
 
 def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"]):
     f=ROOT.TFile(samples[0].files[0])
+    print 'using',samples[0].files[0],'to determining variable types'
     tree=f.Get('MVATree')
     
     eventweight='Weight'
@@ -320,8 +331,8 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 
     # start writing script
     script=""
-    script+=getHead()
-    script+=initVarsFromTree(variables,'F'*len(variables),arraylength)
+    script+=getHead()    
+    script+=initVarsFromTree(variables,vartypes,arraylength)
     
     # initialize histograms in all categories and for all systematics
     for c in catnames:
@@ -332,10 +343,12 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
             mn=plot.histo.GetXaxis().GetXmin()
             nb=plot.histo.GetNbinsX()
             for s in systnames:
-                script+=initHistoWithProcessNameAndSuffix(c+'_'+n+s,nb,mn,mx,t)
+                script+=initHistoWithProcessNameAndSuffix(c+n+s,nb,mn,mx,t)
 
     # start event loop
     script+=startLoop()
+    script+='    float sampleweight=1;\n'
+    script+='      float systweight=1;\n'
     script+=encodeSampleSelection(samples,arraylength)
     for cn,cs in zip(catnames,catselections):
         # for every category
@@ -355,15 +368,23 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
                     if v in arraylength.keys():
                         assert lengthvar == "" or lengthvar == arraylength[v]
                         lengthvar=arraylength[v]
+                histoname=cn+n+sn
+                eventweight='Weight'
+                script+="\n"
                 if lengthvar!="":
                     exi=getArrayEntries(ex,arraylength,"i")
                     pwi=getArrayEntries(pw,arraylength,"i")
-                    swi=getArrayEntries(sw,arraylength,"i")
+#                    swi=getArrayEntries(sw,arraylength,"i")
                     script+=varLoop("i",lengthvar)                    
-                    arrayselection=checkArrayLengths(ex,arraylength)
-                    script+=fillHisto(cn+'_'+n+sn,exi,'('+arrayselection+')*('+pwi+')*('+eventweight+')*('+swi+')')
+                    script+="{\n"
+                    arrayselection=checkArrayLengths(','.join([ex,pw]),arraylength)
+                    script+='      float weight_'+histoname+'=('+arrayselection+')*('+pwi+')*('+eventweight+')*systweight'+sn+'*categoryweight*sampleweight;\n'
+                    script+=fillHisto(histoname,exi,'weight_'+histoname)
+                    script+="      }\n"
                 else:
-                    script+=fillHisto(cn+'_'+n+sn,ex,'('+pw+')*('+eventweight+')*('+sw+')')
+                    arrayselection=checkArrayLengths(','.join([ex,pw]),arraylength)
+                    script+='      float weight_'+histoname+'=('+arrayselection+')*('+pw+')*('+eventweight+')*systweight'+sn+'*categoryweight*sampleweight;\n'
+                    script+=fillHisto(histoname,ex,'weight_'+histoname)
         script+=endCat()
     script+=endLoop()
     script+=getFoot()
@@ -375,10 +396,11 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 
 def createScript(scriptname,programpath,processname,filenames,outfilename,maxevents,skipevents,cmsswpath,suffix):
     script="#!/bin/bash \n"
-    script+="export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch \n"
-    script+="source $VO_CMS_SW_DIR/cmsset_default.sh \n"
-    script+='cd '+cmsswpath+'/src\neval `scram runtime -sh`\n'
-    script+='cd - \n'
+    if cmsswpath!='':
+        script+="export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch \n"
+        script+="source $VO_CMS_SW_DIR/cmsset_default.sh \n"
+        script+='cd '+cmsswpath+'/src\neval `scram runtime -sh`\n'
+        script+='cd - \n'
     script+='export PROCESSNAME="'+processname+'"\n'
     script+='export FILENAMES="'+filenames+'"\n'
     script+='export OUTFILENAME="'+outfilename+'"\n'
@@ -393,24 +415,47 @@ def createScript(scriptname,programpath,processname,filenames,outfilename,maxeve
     os.chmod(scriptname, st.st_mode | stat.S_IEXEC)
 
 
-def plotParallel(name,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"]):
-#    workdir='/nfs/dust/cms/user/hmildner/plotter'
-    workdir=plot_config.workdir
-    cmsswpath=plot_config.cmsswpath
+def plotParallel(name,events_per_job,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"]):
+    workdir=os.getcwd()+'/workdir/'+name
+    if not os.path.exists('workdir'):
+        os.makedirs('workdir')
     if not os.path.exists(workdir):
         os.makedirs(workdir)
-    programpath='./'+workdir+'/'+name
+    else:
+        workdir+=datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+        os.makedirs(workdir)
+
+    if not os.path.exists(workdir):
+        os.makedirs(workdir)
+    cmsswpath=os.environ['CMSSW_BASE']
+    programpath=workdir+'/'+name
+    print 'creating c++ program'
     createProgram(programpath,plots,samples,catnames,catselections,systnames,systweights)
+    if not os.path.exists(programpath+'.cc'):
+        print 'could not create c++ program'
+        sys.exit()
+    print 'compiling c++ program'
     compileProgram(programpath)
+    if not os.path.exists(programpath):
+        print 'could not compile c++ program'
+        sys.exit()
+    print 'creating folders'
     scriptsfolder=workdir+'/'+name+'_scripts'
     if not os.path.exists(scriptsfolder):
         os.makedirs(scriptsfolder)
     plotspath=workdir+'/'+name+'_plots/'
-    maxevents=plot_config.events_per_job
+    if not os.path.exists(plotspath):
+        os.makedirs(plotspath)
+    maxevents=events_per_job
     scripts=[]
     jobids=[]
     outputs=[]
+    if not os.path.exists(workdir):
+        print 'could not create workdirs'
+        sys.exit()
+    print 'creating scripts'
     for s in samples:
+        print 'creating scripts from',s.path
         njob=0
         events_in_files=0
         files_to_submit=[]
@@ -422,10 +467,10 @@ def plotParallel(name,plots,samples,catnames=[""],catselections=["1"],systnames=
                 for ijob in range(events_in_file/maxevents+1):
                     njob+=1
                     skipevents=(ijob)*maxevents       
-                    scriptname=scriptsfolder+'/'+s.name+'_'+str(njob)+'.sh'
+                    scriptname=scriptsfolder+'/'+s.nick+'_'+str(njob)+'.sh'
                     processname=s.nick
                     filenames=fn
-                    outfilename=plotspath+s.name+'_'+str(njob)+'.root'
+                    outfilename=plotspath+s.nick+'_'+str(njob)+'.root'
                     createScript(scriptname,programpath,processname,filenames,outfilename,maxevents,skipevents,cmsswpath,'')
                     scripts.append(scriptname)
                     outputs.append(outfilename)
@@ -435,28 +480,44 @@ def plotParallel(name,plots,samples,catnames=[""],catselections=["1"],systnames=
                 if events_in_files>maxevents or fn==s.files[-1]:
                     njob+=1
                     skipevents=0
-                    scriptname=scriptsfolder+'/'+s.name+'_'+str(njob)+'.sh'
-                    processname=s.name
+                    scriptname=scriptsfolder+'/'+s.nick+'_'+str(njob)+'.sh'
+                    processname=s.nick
                     filenames=' '.join(files_to_submit)
-                    outfilename=plotspath+s.name+'_'+str(njob)+'.root'
+                    outfilename=plotspath+s.nick+'_'+str(njob)+'.root'
                     createScript(scriptname,programpath,processname,filenames,outfilename,maxevents,skipevents,cmsswpath,'')
                     scripts.append(scriptname)
                     outputs.append(outfilename)
+                    files_to_submit=[]
+                    events_in_files=0
+
 
                 
     print 'submitting scripts'
     
     for script in scripts:
         print 'submitting',script
-        #command=['qsub', '-cwd', '-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=2000M', '-l', 's_vmem=2000M' ,'-o', 'logs/$JOB_NAME.o$JOB_ID', '-e', 'logs/$JOB_NAME.e$JOB_ID', script]
-        command=['pwd']
+        command=['qsub', '-cwd', '-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=2000M', '-l', 's_vmem=2000M' ,'-o', '/dev/null', '-e', '/dev/null', script]
         a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
         output = a.communicate()[0]
-        print output
         jobid = output.split(' ')[2]
-        print jobid
         jobids.append(jobid)
-        
-    # TODO qstat
-    #subprocess.call(['hadd', workdir'/output.root']+outputs)
-    
+    allfinished=False
+    while not allfinished:
+        time.sleep(3)
+        a = subprocess.Popen(['qstat'], stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
+        qstat=a.communicate()[0]
+        lines=qstat.split('\n')
+        nrunning=0
+        for line in lines:
+            words=line.split(' ')
+            if len(words)>0 and words[0] in jobids:
+                nrunning+=1
+        if nrunning>0:
+            print nrunning,'jobs running'
+        else:
+            allfinished=True
+    print 'hadd output'
+    outputpath=workdir+'/output.root'
+    subprocess.call(['hadd', outputpath]+outputs)
+    print 'done'
+    return  outputpath
