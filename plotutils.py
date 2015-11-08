@@ -13,19 +13,29 @@ class Sample:
         self.path=path
         self.selection=selection
         self.files=glob.glob(path)
+        if len(self.files)==0:
+            print 'no files found at',path    
         if nick=='':
             self.nick=name
         else:
             self.nick=nick
+    def GetTree(self,treename='MVATree'):
+        chain=ROOT.TChain(treename)
+        for f in self.files:
+            chain.Add(f)
+        return chain
 
 class Plot:
-    def __init__(self,histo, variable, selection):
+    def __init__(self,histo, variable='', selection=''):
         self.histo=histo
-        self.variable=variable
+        if variable=='':
+            self.variable=histo.GetName()
+        else:
+            self.variable=variable
         self.selection=selection
         self.name=histo.GetName()
 
-# sets up the style of a histo and its axes. options for data and stackplots will follow.
+# sets up the style of a histo and its axes
 def setupHisto(histo,color,yTitle=None,filled=False):
     if isinstance(histo,ROOT.TH1):
         histo.SetStats(False)
@@ -48,7 +58,7 @@ def setupHisto(histo,color,yTitle=None,filled=False):
         histo.SetLineColor(color)
         histo.SetLineWidth(3)
 
-# creates canvas. option to add ratiopad will follow
+# creates a canvas either with or without ratiopad
 def getCanvas(name,ratiopad=False):
     if ratiopad:
         c=ROOT.TCanvas(name,name,1024,1024)
@@ -86,9 +96,10 @@ def getLegend():
     legend.SetFillStyle(0);
     return legend
 
-def getStatTests(h1,h2):
+# returns tlatex item with results of chi2 and KS test between two histograms
+def getStatTests(h1,h2,option="WW"):
     ksprob = h1.KolmogorovTest(h2)
-    chi2prob = h1.Chi2Test(h2,"WW")
+    chi2prob = h1.Chi2Test(h2,option)
     print ksprob,chi2prob
     tests = ROOT.TLatex(0.2, 0.85, '#splitline{p(KS): '+str(round(ksprob,3))+'}{p(chi2): '+str(round(chi2prob,3))+'}'  );
     tests.SetTextFont(42);
@@ -96,9 +107,9 @@ def getStatTests(h1,h2):
     tests.SetNDC()
     return tests
 
+# calculates separation of two histogram (using the ROC integral of)
 def getSepaTests(h1,h2):
     pair=getSuperHistoPair([h1],[h2],'tmp')
-#    pair=(h1,h2)
     roc=getROC(*pair)
     rocint=roc.Integral()+0.5
     print rocint
@@ -109,7 +120,7 @@ def getSepaTests(h1,h2):
     return tests
 
 
-# draws a list of histos on a canvas and returns canvas. options for stackplots, ratioplot, etc will be implemented soon
+# draws a list of histos on a canvas and returns canvas
 def drawHistosOnCanvas(listOfHistos_,normalize=True,stack=False,logscale=False,options_='histo'):
     listOfHistos=[h.Clone(h.GetName()+'_drawclone') for h in listOfHistos_]
     canvas=getCanvas(listOfHistos[0].GetName())        
@@ -177,6 +188,7 @@ def writeObjects(objects,name):
         o.Write()
     outfile.Close()
 
+# returns the next decent round number (like 2, 2.5, 5, 10)
 def roundNumber(x):
     loga = int(math.floor(math.log10(x)))
     x_=x/(10**loga)
@@ -190,11 +202,10 @@ def roundNumber(x):
     y*=(10**loga)
     return y
 
-# changes range of histos to reasonable values
-def setPlotRangeAuto(plots,samples,treename,weightexpression='Weight',maxentries=100000):
+# changes range of histos in plot to reasonable values, returns plot
+def setPlotRangeAuto(plots,samples,treename='MVATree',weightexpression='Weight',maxentries=100000):
     newplots=[]
-    files=[ROOT.TFile(sample.path, "readonly") for sample in samples]
-    trees=[f.Get(treename) for f in files]
+    trees=[s.GetTree(treename) for s in samples]
     ROOT.gDirectory.cd('PyROOT:/')
     for plot in plots:
         total_xmin=float('inf')
@@ -256,9 +267,9 @@ def setPlotRangeAuto(plots,samples,treename,weightexpression='Weight',maxentries
         f.Close()
     return newplots
         
-
-def createHistoLists_fromTree(plots,samples,treename,weightexpression='Weight'):    
-    listOfhistoLists=[]
+# creates list of histolist from plots and samples -- draws every histogram after another, slow
+def createHistoLists_fromTree(plots,samples,treename='MVATree',weightexpression='Weight'):    
+    listOfHistoLists=[]
     for plot in plots:
         histoList=[]           
         for sample in samples:
@@ -267,11 +278,10 @@ def createHistoLists_fromTree(plots,samples,treename,weightexpression='Weight'):
             h.SetName(h.GetName()+'_'+sample.name)
 #            setupHisto(h,sample.color)
             histoList.append(h)
-        listOfhistoLists.append(histoList)
+        listOfHistoLists.append(histoList)
 
     for sample in samples:
-        f=ROOT.TFile(sample.path, "readonly")
-        tree = f.Get(treename)
+        tree = sample.GetTree(treename)
         ROOT.gDirectory.cd('PyROOT:/')
         for plot in plots:
             ss='('+sample.selection+')'
@@ -285,18 +295,19 @@ def createHistoLists_fromTree(plots,samples,treename,weightexpression='Weight'):
             project_sel='('+ps+'*'+ss+')*('+weightexpression+')'
             print "projecting",project_name,"--",project_var,"--",project_sel
             tree.Project(project_name,project_var,project_sel)
-        f.Close()
 
-    return listOfhistoLists
-
+    return listOfHistoLists
+# transpose list of list
 def transposeLOL(lol):
     return [list(x) for x  in zip(*lol)]
 
+# get keynames from rootfile
 def GetKeyNames( self, dir = "" ):
     self.cd(dir)
     return [key.GetName() for key in ROOT.gDirectory.GetListOfKeys()]
 ROOT.TFile.GetKeyNames = GetKeyNames
 
+# add entry to legend while adapting lenged size
 def AddEntry2( self, histo, label, option='L'):
     self.SetY1NDC(self.GetY1NDC()-0.045)
     width=self.GetX2NDC()-self.GetX1NDC()
@@ -307,9 +318,9 @@ def AddEntry2( self, histo, label, option='L'):
     self.AddEntry(histo, label, option)
 ROOT.TLegend.AddEntry2 = AddEntry2
 
-
+# get histolist from file
 def createHistoLists_fromHistoFile(samples,rebin=1):
-    listOfhistoListsT=[]
+    listOfHistoListsT=[]
     listLength=-1
     for sample in samples:
         f=ROOT.TFile(sample.path, "readonly")       
@@ -325,12 +336,12 @@ def createHistoLists_fromHistoFile(samples,rebin=1):
                 o.Rebin(rebin)
                 histoList.append(o.Clone())
                 histoList[-1].SetName(o.GetName()+'_'+sample.name)
-        listOfhistoListsT.append(histoList)
-    listOfhistoLists=transposeLOL(listOfhistoListsT)
-    return listOfhistoLists
+        listOfHistoListsT.append(histoList)
+    listOfHistoLists=transposeLOL(listOfHistoListsT)
+    return listOfHistoLists
 
 def createHistoLists_fromSuperHistoFile(path,samples,plots,rebin=1,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"]):
-    listOfhistoListsT=[]
+    listOfHistoListsT=[]
     f=ROOT.TFile(path, "readonly")
     keyList = f.GetKeyNames()
     for sample in samples:
@@ -346,9 +357,9 @@ def createHistoLists_fromSuperHistoFile(path,samples,plots,rebin=1,catnames=[""]
                 if isinstance(o,ROOT.TH1) and not isinstance(o,ROOT.TH2): 
                     o.Rebin(rebin)
                     histoList.append(o.Clone())
-        listOfhistoListsT.append(histoList)
-    listOfhistoLists=transposeLOL(listOfhistoListsT)
-    return listOfhistoLists
+        listOfHistoListsT.append(histoList)
+    listOfHistoLists=transposeLOL(listOfHistoListsT)
+    return listOfHistoLists
 
 # for a list of selections (and a list of their names) and a list of histos (and the variable expressions to fill them) the cartesian product is created and plots are booked
 def plotsForSelections_cross_Histos(selections,selectionnames,histos,variables):
@@ -362,11 +373,11 @@ def plotsForSelections_cross_Histos(selections,selectionnames,histos,variables):
     return plots
 
 # gets a list of histogramlist and creates a plot for every list
-def writeListOfhistoLists(listOfhistoLists,samples,name,normalize=True,stack=False,logscale=False,options='histo',statTest=False, sepaTest=False):
+def writeListOfHistoLists(listOfHistoLists,samples,name,normalize=True,stack=False,logscale=False,options='histo',statTest=False, sepaTest=False):
     canvases=[]
     objects=[]   
     i=0
-    for listOfHistos in listOfhistoLists:
+    for listOfHistos in listOfHistoLists:
         i+=1
         for histo,sample in zip(listOfHistos,samples):
             yTitle='Events'
@@ -636,14 +647,14 @@ def writeHistoListToTable(histos,names,outfile):
     out.close()
 
 
-def writeListOfHistoListsToFile(listOfhistoLists,samples,name):
+def writeListOfHistoListsToFile(listOfHistoLists,samples,name):
     hs=[]
-    for hl in listOfhistoLists:
+    for hl in listOfHistoLists:
         for h,s in zip(hl,samples):
             h.SetLineColor(s.color)
             hs.append(h)
     l=getLegend()
-    for h in listOfhistoLists[0]:
+    for h in listOfHistoLists[0]:
         l.AddEntry(h)
     hs.append(l)
     writeObjects(hs,name)
@@ -660,21 +671,19 @@ def moveOverFlow(h):
     h.SetBinError(h.GetNbinsX(),ROOT.TMath.Sqrt(ROOT.TMath.Power(h.GetBinError(h.GetNbinsX()+1),2)+ROOT.TMath.Power(h.GetBinError(h.GetNbinsX()),2)));
 
 # stack histo list 
-def stackHistoList(listOfHistos,normalize=False):
+def stackHistoList(listOfHistos_,normalize=False):
+    listOfHistos=[]
+    for h in listOfHistos_:
+        listOfHistos.append(h.Clone(h.GetName()+"_stack"))
     for i in range(len(listOfHistos)-1,0,-1):
         listOfHistos[i-1].Add(listOfHistos[i])
     if normalize:
         integral0=listOfHistos[0].Integral()
         for h in listOfHistos:
             h.Scale(1./integral0)
+    return listOfHistos
 
     
-
-def drawDataMC(listOfHistosData,listOfHistos_,data,ratio=True,logscale=False,options_='histo'):
-    listOfHistos=[h.Clone(h.GetName()+'_drawclone') for h in listOfHistos_]
-
-
-    return canvas
 
 def getDataGraph(listOfHistosData):
     if len(listOfHistosData)>0:
@@ -721,12 +730,12 @@ def getRatioGraph(data,mchisto):
 
 
 
-def plotDataMC(listOfhistoListsData,listOfhistoLists,samples,name,logscale=False,labeltext='',ratio=True,options='histo'):
+def plotDataMC(listOfHistoListsData,listOfHistoLists,samples,name,logscale=False,labeltext='',ratio=True,options='histo'):
     canvases=[]
     objects=[]   
     i=0
     # for every plot, look at all samples
-    for listOfHistos,listOfHistosData in zip(listOfhistoLists,listOfhistoListsData):
+    for listOfHistos,listOfHistosData in zip(listOfHistoLists,listOfHistoListsData):
         i+=1
         # setup histo style
         for histo,sample in zip(listOfHistos,samples):
@@ -737,15 +746,15 @@ def plotDataMC(listOfhistoListsData,listOfhistoLists,samples,name,logscale=False
         for h in listOfHistos:
             moveOverFlow(h)
         #stack
-        stackHistoList(listOfHistos)
+        listOfHistos=stackHistoList(listOfHistos)
         # find maximum
         yMax=1e-9
-        for h in listOfHistos:
+        for h in stackedListOfHistos:
             yMax=max(h.GetBinContent(h.GetMaximumBin()),yMax)
-        canvas=getCanvas(listOfHistos[0].GetName(),ratio)        
+        canvas=getCanvas(stackedListOfHistos[0].GetName(),ratio)        
         canvas.cd(1)
         #draw first histo
-        h=listOfHistos[0]
+        h=stackedListOfHistos[0]
         if logscale:
             h.GetYaxis().SetRangeUser(yMax/1000000,yMax*10)
             canvas.cd(1).SetLogy()
@@ -755,7 +764,7 @@ def plotDataMC(listOfhistoListsData,listOfhistoLists,samples,name,logscale=False
         option+=options
         h.DrawCopy(option)
         #draw remaining
-        for h in listOfHistos[1:]:
+        for h in stackedListOfHistos[1:]:
             h.DrawCopy(option+'same')
         h.DrawCopy('axissame')
         #draw data
@@ -763,7 +772,7 @@ def plotDataMC(listOfhistoListsData,listOfhistoLists,samples,name,logscale=False
         data.Draw('samePE1')
         l=getLegend()
         l.AddEntry2(data,'data','P')
-        for h,sample in zip(listOfHistos,samples):
+        for h,sample in zip(stackedListOfHistos,samples):
             l.AddEntry2(h,sample.name,'F')
 
         canvases.append(canvas)
@@ -829,13 +838,13 @@ def plotDataMC(listOfhistoListsData,listOfhistoLists,samples,name,logscale=False
     writeObjects(canvases,name)
 
 
-def writeLOLAndOneOnTop(listOfhistoLists,samples,listOfhistosOnTop,sampleOnTop,factor,name,logscale=False,options='histo'):
+def writeLOLAndOneOnTop(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,factor,name,logscale=False,options='histo'):
     normalize=False
     stack=True,
     canvases=[]
     objects=[]   
     i=0
-    for listOfHistos,ot in zip(listOfhistoLists,listOfhistosOnTop):
+    for listOfHistos,ot in zip(listOfHistoLists,listOfhistosOnTop):
         i+=1
         for histo,sample in zip(listOfHistos,samples):
             yTitle='Events expected for 10 fb^{-1} @ 13 TeV'
