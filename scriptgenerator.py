@@ -118,7 +118,6 @@ def evaluateMVA(name,eventweight,systnames,systweights):
 def varsIn(expr):
     # find all words not followed by ( (these are functions)
     variablescandidates = re.findall(r"\w+\b(?!\()", expr)
-    print variablescandidates
     variables=[]
     for v in variablescandidates:
         if v[0].isalpha() or v[0]=='_':
@@ -415,18 +414,33 @@ def createScript(scriptname,programpath,processname,filenames,outfilename,maxeve
     st = os.stat(scriptname)
     os.chmod(scriptname, st.st_mode | stat.S_IEXEC)
 
+def askYesNo(question):
+    print question
+    yes = set(['yes','y', 'ye', ''])
+    no = set(['no','n'])
+    choice = raw_input().lower()
+    if choice in yes:
+        return True
+    elif choice in no:
+        return False
+    else:
+        sys.stdout.write("Please respond with 'yes' or 'no'")
+
 
 def plotParallel(name,events_per_job,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"]):
     workdir=os.getcwd()+'/workdir/'+name
+    outputpath=workdir+'/output.root'
     if not os.path.exists('workdir'):
         os.makedirs('workdir')
     if not os.path.exists(workdir):
         os.makedirs(workdir)
     else:
         # TODO ask to reuse old histrograms
-        workdir+=datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+        if askYesNo('plot existing histograms?'):
+            return outputpath
+        workdirold=workdir+datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+        os.rename(workdir,workdirold)
         os.makedirs(workdir)
-
     if not os.path.exists(workdir):
         os.makedirs(workdir)
     cmsswpath=os.environ['CMSSW_BASE']
@@ -519,7 +533,6 @@ def plotParallel(name,events_per_job,plots,samples,catnames=[""],catselections=[
         else:
             allfinished=True
     print 'hadd output'
-    outputpath=workdir+'/output.root'
     subprocess.call(['hadd', outputpath]+outputs)
     print 'done'
     return  outputpath
