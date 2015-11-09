@@ -2,23 +2,30 @@ from scriptgenerator import *
 from plotutils import *
 import sys
 
-
 lumi='1.28'
-sel="(N_TightLeptons==1)*(N_LooseLeptons==1)*(N_BTagsM>=2)*(N_Jets>=4)"
+path='/nfs/dust/cms/user/hmildner/trees1027/'
+
+sel_all="(N_TightLeptons==1)*(N_LooseLeptons==1)*(N_BTagsM>=2)*(N_Jets>=4)"
+sel_echan="(N_TightElectrons==1)*(N_LooseElectrons==1)*(N_BTagsM>=2)*(N_Jets>=4)"
+sel_muchan="(N_TightElectrons==1)*(N_LooseElectrons==1)*(N_BTagsM>=2)*(N_Jets>=4)"
+catnames=["","echan","muchan"]
+catsels=[sel_all,sel_echan,sel_muchan]
+
 sel_mu='(N_TightMuons==1)*(N_LooseMuons==1)*(N_LooseElectrons==0)'
 sel_el='(N_TightElectrons==1)*(N_LooseElectrons==1)*(N_LooseMuons==0)'
-mcmatch="(BoostedJet_Top_Pt[0]>0)&&((BoostedJet_Dr_GenB[0]>=0&&BoostedJet_Dr_GenB[0]<1.5)&&(BoostedJet_Dr_GenQ1[0]>=0&&BoostedJet_Dr_GenQ1[0]<1.5)&&(BoostedJet_Dr_GenQ2[0]>=0&&BoostedJet_Dr_GenQ2[0]<1.5))"
-notmcmatch="(!((BoostedJet_Top_Pt[0]>0)&&((BoostedJet_Dr_GenB[0]>=0&&BoostedJet_Dr_GenB[0]<1.5)&&(BoostedJet_Dr_GenQ1[0]>=0&&BoostedJet_Dr_GenQ1[0]<1.5)&&(BoostedJet_Dr_GenQ2[0]>=0&&BoostedJet_Dr_GenQ2[0]<1.5))))"
+mcmatch='(BoostedJet_Top_Pt[0]>0)&&((BoostedJet_Dr_GenB[0]>=0&&BoostedJet_Dr_GenB[0]<1.5)&&(BoostedJet_Dr_GenQ1[0]>=0&&BoostedJet_Dr_GenQ1[0]<1.5)&&(BoostedJet_Dr_GenQ2[0]>=0&&BoostedJet_Dr_GenQ2[0]<1.5))'
+notmcmatch='(!((BoostedJet_Top_Pt[0]>0)&&((BoostedJet_Dr_GenB[0]>=0&&BoostedJet_Dr_GenB[0]<1.5)&&(BoostedJet_Dr_GenQ1[0]>=0&&BoostedJet_Dr_GenQ1[0]<1.5)&&(BoostedJet_Dr_GenQ2[0]>=0&&BoostedJet_Dr_GenQ2[0]<1.5))))'
 # samples
 
-samples_data=[Sample('SingleMu',ROOT.kBlack,'/nfs/dust/cms/user/hmildner/trees1027/mu_prompt/*nominal*.root',sel_mu),
-              Sample('SingleMuRe',ROOT.kBlack,'/nfs/dust/cms/user/hmildner/trees1027/mu_reminiaod/*nominal*.root',sel_mu),
-              Sample('SingleEl',ROOT.kBlack,'/nfs/dust/cms/user/hmildner/trees1027/el_prompt/*nominal*.root',sel_el),
-              Sample('SingleElRe',ROOT.kBlack,'/nfs/dust/cms/user/hmildner/trees1027/el_reminiaod/*nominal*.root',sel_el)]
-samples=[Sample('t#bar{t}',ROOT.kRed+1,'/nfs/dust/cms/user/hmildner/trees1027/ttbar/*nominal*.root',lumi,'ttbar') ,     
-         Sample('Single Top',ROOT.kMagenta,'/nfs/dust/cms/user/hmildner/trees1027/st_*/*nominal*.root',lumi,'SingleTop') , 
-         Sample('W+jets',ROOT.kGreen-3,'/nfs/dust/cms/user/hmildner/trees1027/Wjets/*nominal*.root',lumi,'Wjets') , 
-         Sample('Z+jets',ROOT.kAzure-2 ,'/nfs/dust/cms/user/hmildner/trees1027/Zjets_*/*nominal*root',lumi,'Zjets') , 
+samples_data=[Sample('SingleMu',ROOT.kBlack,path+'/mu_prompt/*nominal*.root',sel_mu),
+              Sample('SingleMuRe',ROOT.kBlack,path+'/mu_reminiaod/*nominal*.root',sel_mu),
+              Sample('SingleEl',ROOT.kBlack,path+'/el_prompt/*nominal*.root',sel_el),
+              Sample('SingleElRe',ROOT.kBlack,path+'/el_reminiaod/*nominal*.root',sel_el)]
+samples=[Sample('t#bar{t}H',ROOT.kBlue+1,path+'/ttH*/*nominal*.root',lumi,'ttH') ,     
+         Sample('t#bar{t}',ROOT.kRed+1,path+'/ttbar/*nominal*.root',lumi,'ttbar') ,     
+         Sample('Single Top',ROOT.kMagenta,path+'/st_*/*nominal*.root',lumi,'SingleTop') , 
+         Sample('W+jets',ROOT.kGreen-3,path+'/Wjets/*nominal*.root',lumi,'Wjets') , 
+         Sample('Z+jets',ROOT.kAzure-2 ,path+'/Zjets_*/*nominal*root',lumi,'Zjets') , 
 ]
 
 plots=[
@@ -49,10 +56,15 @@ plots=[
     Plot(ROOT.TH1F("csvalljets","csv of all jets",44,-.1,1),"Jet_CSV",''),
     Plot(ROOT.TH1F("csvallbjets","csv of all jets > 40 GeV",44,-.1,1),"Jet_CSV",'Jet_Pt>40'),
     Plot(ROOT.TH1F("N_PrimaryVertices","Reconstructed primary vertices",31,-.5,30.5),"N_PrimaryVertices",''),
-
+    Plot(ROOT.TH1F("JT" ,"jet-tag categories",9,-0.5,8.5),"3*max(min(N_BTagsM-2,2),0)+max(min(N_Jets-4,2),0)","(N_BTagsM>=2&&N_Jets>=4)")
 
 ]
-outputpath=plotParallel("allplots",2000000,plots,samples+samples_data,[''],[sel])
+outputpath=plotParallel("allplots",2000000,plots,samples+samples_data,catnames,catsels)
 listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots)
 listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots)
-plotDataMC(listOfHistoListsData,listOfHistoLists,samples,"allplots",False,"")
+for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
+    if "JT" in hld[0].GetName():
+        tablepath=("/".join((outputpath.split('/'))[:-1]))+"/yields"
+        print tablepath
+        eventYields(hld,hl,samples,tablepath)
+plotDataMC(listOfHistoListsData,listOfHistoLists,samples,outputpath,False,"")

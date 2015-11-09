@@ -117,7 +117,8 @@ def evaluateMVA(name,eventweight,systnames,systweights):
 
 def varsIn(expr):
     # find all words not followed by ( (these are functions)
-    variablescandidates = re.findall(r"[\w]+", expr)
+    variablescandidates = re.findall(r"\w+\b(?!\()", expr)
+    print variablescandidates
     variables=[]
     for v in variablescandidates:
         if v[0].isalpha() or v[0]=='_':
@@ -422,6 +423,7 @@ def plotParallel(name,events_per_job,plots,samples,catnames=[""],catselections=[
     if not os.path.exists(workdir):
         os.makedirs(workdir)
     else:
+        # TODO ask to reuse old histrograms
         workdir+=datetime.datetime.now().strftime("%Y%m%d%H%M%S")
         os.makedirs(workdir)
 
