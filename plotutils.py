@@ -3,6 +3,8 @@ import math
 from itertools import product
 from collections import namedtuple
 import glob
+import subprocess
+import os
 
 ROOT.gStyle.SetPaintTextFormat("4.2f");
 
@@ -109,7 +111,6 @@ def getLegend():
 def getStatTests(h1,h2,option="WW"):
     ksprob = h1.KolmogorovTest(h2)
     chi2prob = h1.Chi2Test(h2,option)
-    print ksprob,chi2prob
     tests = ROOT.TLatex(0.2, 0.85, '#splitline{p(KS): '+str(round(ksprob,3))+'}{p(chi2): '+str(round(chi2prob,3))+'}'  );
     tests.SetTextFont(42);
     tests.SetTextSize(0.05);
@@ -121,7 +122,6 @@ def getSepaTests(h1,h2):
     pair=getSuperHistoPair([h1],[h2],'tmp')
     roc=getROC(*pair)
     rocint=roc.Integral()+0.5
-    print rocint
     tests = ROOT.TLatex(0.2, 0.9, 'ROC integral: '+str(round(rocint,3)));
     tests.SetTextFont(42);
     tests.SetTextSize(0.05);
@@ -149,7 +149,6 @@ def drawHistosOnCanvas(listOfHistos_,normalize=True,stack=False,logscale=False,o
 
     if stack:
         for i in range(len(listOfHistos)-1,0,-1):
-            print 'add',i,'to',i-1
             listOfHistos[i-1].Add(listOfHistos[i])
         if normalize:
             integral0=listOfHistos[0].Integral()
@@ -354,15 +353,12 @@ def createHistoLists_fromSuperHistoFile(path,samples,plots,rebin=1,catnames=[""]
     f=ROOT.TFile(path, "readonly")
     keyList = f.GetKeyNames()
     for sample in samples:
-        print sample.name
         histoList=[]
         ROOT.gDirectory.cd('PyROOT:/')
         for c in catnames:
             for plot in plots:
                 key=sample.nick+'_'+c+plot.name
-                print key
                 o=f.Get(key)
-                print 
                 if isinstance(o,ROOT.TH1) and not isinstance(o,ROOT.TH2): 
                     o.Rebin(rebin)
                     histoList.append(o.Clone())
@@ -589,6 +585,7 @@ def turn1dHistosToTable(histos,samples,outfile,witherror=True):
     out.write( '\\usepackage[landscape]{geometry}\n')
     out.write( '\\begin{document}\n')
     out.write( '\\thispagestyle{empty}\n')
+    out.write( '\\footnotesize\n')
     cls=['Process']
     for i in range(1,histos[0].GetNbinsX()+1):
         cls.append(histos[0].GetXaxis().GetBinLabel(i))
@@ -755,7 +752,8 @@ def plotDataMC(listOfHistoListsData,listOfHistoLists,samples,name,logscale=False
         for h in listOfHistos:
             moveOverFlow(h)
         #stack
-        listOfHistos=stackHistoList(listOfHistos)
+        stackedListOfHistos=stackHistoList(listOfHistos)
+        objects.append(stackedListOfHistos)
         # find maximum
         yMax=1e-9
         for h in stackedListOfHistos:
@@ -811,7 +809,7 @@ def plotDataMC(listOfHistoListsData,listOfHistoLists,samples,name,logscale=False
         objects.append(label)
 
 
-        ratiograph=getRatioGraph(data,listOfHistos[0])
+        ratiograph=getRatioGraph(data,stackedListOfHistos[0])
         canvas.cd(2)
         line=listOfHistos[0].Clone()
         line.SetFillStyle(0)
@@ -881,9 +879,11 @@ def writeLOLAndOneOnTop(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,f
     printCanvases(canvases,name)
     writeObjects(canvases,name)
 
-def eventYields(hl_data,hl_mc,samples,"yields"):
-    h_data=hl_data[0]
+def eventYields(hl_data,hl_mc,samples,tablename):
+    h_data=hl_data[0].Clone()
     for h in hl_data[1:]:
         h_data.Add(h)
     s_data=Sample('data')
-    turn1dHistosToTable(hl+[h_data],samples+[s_data],"yields")
+    turn1dHistosToTable(hl_mc+[h_data],samples+[s_data],tablename)
+    command=['pdflatex',tablename+'.tex']
+    subprocess.call(command)
