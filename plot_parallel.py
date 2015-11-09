@@ -48,10 +48,11 @@ plots=[
     Plot(ROOT.TH1F("ptalljets","p_{T} of all jets",60,0,300),"Jet_Pt",''),
     Plot(ROOT.TH1F("csvalljets","csv of all jets",44,-.1,1),"Jet_CSV",''),
     Plot(ROOT.TH1F("csvallbjets","csv of all jets > 40 GeV",44,-.1,1),"Jet_CSV",'Jet_Pt>40'),
+    Plot(ROOT.TH1F("N_PrimaryVertices","Reconstructed primary vertices",31,-.5,30.5),"N_PrimaryVertices",''),
 
 
 ]
-outputpath=plotParallel("fatjets",2000000,plots,samples+samples_data,[''],[sel])
+outputpath=plotParallel("allplots",2000000,plots,samples+samples_data,[''],[sel])
 listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots)
 listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots)
 plotDataMC(listOfHistoListsData,listOfHistoLists,samples,"allplots",False,"")
