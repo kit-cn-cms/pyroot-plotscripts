@@ -7,13 +7,13 @@ import glob
 ROOT.gStyle.SetPaintTextFormat("4.2f");
 
 class Sample:
-    def __init__(self,name, color, path, selection,nick=''):
+    def __init__(self,name, color=ROOT.kBlack, path='', selection='',nick=''):
         self.name=name
         self.color=color
         self.path=path
         self.selection=selection
         self.files=glob.glob(path)
-        if len(self.files)==0:
+        if path!='' and len(self.files)==0:
             print 'no files found at',path    
         if nick=='':
             self.nick=name
@@ -34,6 +34,15 @@ class Plot:
             self.variable=variable
         self.selection=selection
         self.name=histo.GetName()
+
+# TODO implement tmva functionality
+class MVAPlot:
+    def __init__(self,histo, weightfile, selection=''):
+        self.histo=histo
+        self.weightfile=weightfile
+        self.selection=selection
+        self.name=histo.GetName()
+
 
 # sets up the style of a histo and its axes
 def setupHisto(histo,color,yTitle=None,filled=False):
@@ -871,3 +880,10 @@ def writeLOLAndOneOnTop(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,f
 
     printCanvases(canvases,name)
     writeObjects(canvases,name)
+
+def eventYields(hl_data,hl_mc,samples,"yields"):
+    h_data=hl_data[0]
+    for h in hl_data[1:]:
+        h_data.Add(h)
+    s_data=Sample('data')
+    turn1dHistosToTable(hl+[h_data],samples+[s_data],"yields")

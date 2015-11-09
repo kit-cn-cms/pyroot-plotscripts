@@ -8,8 +8,8 @@ path='/nfs/dust/cms/user/hmildner/trees1027/'
 sel="(N_TightLeptons==1)*(N_LooseLeptons==1)*(N_BTagsM>=2)*(N_Jets>=4)"
 sel_mu='(N_TightMuons==1)*(N_LooseMuons==1)*(N_LooseElectrons==0)'
 sel_el='(N_TightElectrons==1)*(N_LooseElectrons==1)*(N_LooseMuons==0)'
-mcmatch="(BoostedJet_Top_Pt[0]>0)&&((BoostedJet_Dr_GenB[0]>=0&&BoostedJet_Dr_GenB[0]<1.5)&&(BoostedJet_Dr_GenQ1[0]>=0&&BoostedJet_Dr_GenQ1[0]<1.5)&&(BoostedJet_Dr_GenQ2[0]>=0&&BoostedJet_Dr_GenQ2[0]<1.5))"
-notmcmatch="(!((BoostedJet_Top_Pt[0]>0)&&((BoostedJet_Dr_GenB[0]>=0&&BoostedJet_Dr_GenB[0]<1.5)&&(BoostedJet_Dr_GenQ1[0]>=0&&BoostedJet_Dr_GenQ1[0]<1.5)&&(BoostedJet_Dr_GenQ2[0]>=0&&BoostedJet_Dr_GenQ2[0]<1.5))))"
+mcmatch='(BoostedJet_Top_Pt[0]>0)&&((BoostedJet_Dr_GenB[0]>=0&&BoostedJet_Dr_GenB[0]<1.5)&&(BoostedJet_Dr_GenQ1[0]>=0&&BoostedJet_Dr_GenQ1[0]<1.5)&&(BoostedJet_Dr_GenQ2[0]>=0&&BoostedJet_Dr_GenQ2[0]<1.5))'
+notmcmatch='(!((BoostedJet_Top_Pt[0]>0)&&((BoostedJet_Dr_GenB[0]>=0&&BoostedJet_Dr_GenB[0]<1.5)&&(BoostedJet_Dr_GenQ1[0]>=0&&BoostedJet_Dr_GenQ1[0]<1.5)&&(BoostedJet_Dr_GenQ2[0]>=0&&BoostedJet_Dr_GenQ2[0]<1.5))))'
 # samples
 
 samples_data=[Sample('SingleMu',ROOT.kBlack,path+'/mu_prompt/*nominal*.root',sel_mu),
@@ -55,4 +55,7 @@ plots=[
 outputpath=plotParallel("allplots",2000000,plots,samples+samples_data,[''],[sel])
 listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots)
 listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots)
+for hld,hl in zip(listOfHistoListsData,listOfHistoLists)
+    if "JT" in hld[0].GetName():
+        eventYields(hld,hl,samples,"yields")
 plotDataMC(listOfHistoListsData,listOfHistoLists,samples,"allplots",False,"")
