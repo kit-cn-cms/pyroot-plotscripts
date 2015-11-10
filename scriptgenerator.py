@@ -34,6 +34,8 @@ void plot(){
   string suffix = string(getenv ("SUFFIX"));
   int maxevents = atoi(getenv ("MAXEVENTS"));
   int skipevents = atoi(getenv ("SKIPEVENTS"));
+  int eventsAnalyzed=0;
+  float sumOfWeights=0;
 
   string buf;
   stringstream ss(filenames); 
@@ -201,6 +203,8 @@ def startLoop():
   long nentries = chain->GetEntries(); 
   cout << "total number of events: " << nentries << endl;
   for (long iEntry=skipevents;iEntry<nentries;iEntry++) {
+    eventsAnalyzed++;
+    sumOfWeights+=Weight;
     if(iEntry==maxevents) break;
     if(iEntry%10000==0) cout << "analyzing event " << iEntry << endl;
     chain->GetEntry(iEntry); 
@@ -253,6 +257,9 @@ def varLoop(i,n):
 def getFoot():
     return """  outfile->Write();
   outfile->Close();
+  std::ofstream f_nevents((string(outfilename)+".cutflow.txt").c_str());
+  f_nevents << "0" << " : " << "all" << " : " << eventsAnalyzed << " : " << sumOfWeights <<endl;
+  f_nevents.close();
 }
 
 int main(){
@@ -426,8 +433,95 @@ def askYesNo(question):
     else:
         sys.stdout.write("Please respond with 'yes' or 'no'")
 
+def submitToNAF(scripts):
+    jobids=[]
+    for script in scripts:
+        print 'submitting',script
+        command=['qsub', '-cwd', '-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=2000M', '-l', 's_vmem=2000M' ,'-o', '/dev/null', '-e', '/dev/null', script]
+        a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
+        output = a.communicate()[0]
+        jobid = output.split(' ')[2]
+        jobids.append(jobid)
+    return jobids
 
-def plotParallel(name,events_per_job,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"]):
+def do_qstat(jobids):
+    allfinished=False
+    while not allfinished(jobids):
+        time.sleep(3)
+        a = subprocess.Popen(['qstat'], stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
+        qstat=a.communicate()[0]
+        lines=qstat.split('\n')
+        nrunning=0
+        for line in lines:
+            words=line.split(' ')
+            if len(words)>0 and words[0] in jobids:
+                nrunning+=1
+        if nrunning>0:
+            print nrunning,'jobs running'
+        else:
+            allfinished=True
+
+def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,programpath,cmsswpath):
+    scripts=[]
+    outputs=[]
+    nentries=[]    
+    for s in samples:
+        print 'creating scripts for',s.name,'from',s.path
+        ntotal_events=0
+        njob=0
+        events_in_files=0
+        files_to_submit=[]
+        for fn in s.files:
+            f=ROOT.TFile(fn)
+            t=f.Get('MVATree')
+            events_in_file=t.GetEntries()
+            if events_in_file > maxevents:
+                for ijob in range(events_in_file/maxevents+1):
+                    njob+=1
+                    skipevents=(ijob)*maxevents       
+                    scriptname=scriptsfolder+'/'+s.nick+'_'+str(njob)+'.sh'
+                    processname=s.nick
+                    filenames=fn
+                    outfilename=plotspath+s.nick+'_'+str(njob)+'.root'
+                    createScript(scriptname,programpath,processname,filenames,outfilename,maxevents,skipevents,cmsswpath,'')
+                    scripts.append(scriptname)
+                    outputs.append(outfilename)
+                    nentries.append(events_in_file)
+                    ntotal_events+=events_in_file
+            else:
+                files_to_submit+=[fn]
+                events_in_files+=events_in_file
+                if events_in_files>maxevents or fn==s.files[-1]:
+                    njob+=1
+                    skipevents=0
+                    scriptname=scriptsfolder+'/'+s.nick+'_'+str(njob)+'.sh'
+                    processname=s.nick
+                    filenames=' '.join(files_to_submit)
+                    outfilename=plotspath+s.nick+'_'+str(njob)+'.root'
+                    createScript(scriptname,programpath,processname,filenames,outfilename,maxevents,skipevents,cmsswpath,'')
+                    scripts.append(scriptname)
+                    outputs.append(outfilename)
+                    nentries.append(events_in_files)
+                    ntotal_events+=events_in_files
+                    files_to_submit=[]
+                    events_in_files=0
+        print ntotal_events,'events found in',s.name
+    return scripts,outputs,nentries
+
+def check_jobs(outputs,nentries):
+    failed_jobs=[]
+    for o,n in zip(outputs,nentries):
+        f=open(o+'.cutflow.txt')
+        processed_entries=-1
+        for line in f:
+            s=line.split(' : ')
+            if len(s)>2 and 'all' in s[1]:
+                processed_entries=int(s[2])
+        if n!=processed_entries:
+            failed_jobs.append(o)
+    return failed_jobs
+
+def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"]):
     workdir=os.getcwd()+'/workdir/'+name
     outputpath=workdir+'/output.root'
     if not os.path.exists('workdir'):
@@ -435,7 +529,6 @@ def plotParallel(name,events_per_job,plots,samples,catnames=[""],catselections=[
     if not os.path.exists(workdir):
         os.makedirs(workdir)
     else:
-        # TODO ask to reuse old histrograms
         if askYesNo('plot existing histograms?'):
             return outputpath
         workdirold=workdir+datetime.datetime.now().strftime("%Y%m%d%H%M%S")
@@ -462,76 +555,21 @@ def plotParallel(name,events_per_job,plots,samples,catnames=[""],catselections=[
     plotspath=workdir+'/'+name+'_plots/'
     if not os.path.exists(plotspath):
         os.makedirs(plotspath)
-    maxevents=events_per_job
-    scripts=[]
-    jobids=[]
-    outputs=[]
     if not os.path.exists(workdir):
         print 'could not create workdirs'
         sys.exit()
     print 'creating scripts'
-    for s in samples:
-        print 'creating scripts from',s.path
-        njob=0
-        events_in_files=0
-        files_to_submit=[]
-        for fn in s.files:          
-            f=ROOT.TFile(fn)
-            t=f.Get('MVATree')
-            events_in_file=t.GetEntries()
-            if events_in_file > maxevents:
-                for ijob in range(events_in_file/maxevents+1):
-                    njob+=1
-                    skipevents=(ijob)*maxevents       
-                    scriptname=scriptsfolder+'/'+s.nick+'_'+str(njob)+'.sh'
-                    processname=s.nick
-                    filenames=fn
-                    outfilename=plotspath+s.nick+'_'+str(njob)+'.root'
-                    createScript(scriptname,programpath,processname,filenames,outfilename,maxevents,skipevents,cmsswpath,'')
-                    scripts.append(scriptname)
-                    outputs.append(outfilename)
-            else:
-                files_to_submit+=[fn]
-                events_in_files+=events_in_file
-                if events_in_files>maxevents or fn==s.files[-1]:
-                    njob+=1
-                    skipevents=0
-                    scriptname=scriptsfolder+'/'+s.nick+'_'+str(njob)+'.sh'
-                    processname=s.nick
-                    filenames=' '.join(files_to_submit)
-                    outfilename=plotspath+s.nick+'_'+str(njob)+'.root'
-                    createScript(scriptname,programpath,processname,filenames,outfilename,maxevents,skipevents,cmsswpath,'')
-                    scripts.append(scriptname)
-                    outputs.append(outfilename)
-                    files_to_submit=[]
-                    events_in_files=0
-
-
-                
+    scripts,outputs,nenentries=get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,programpath,cmsswpath)
     print 'submitting scripts'
-    
-    for script in scripts:
-        print 'submitting',script
-        command=['qsub', '-cwd', '-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=2000M', '-l', 's_vmem=2000M' ,'-o', '/dev/null', '-e', '/dev/null', script]
-        a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
-        output = a.communicate()[0]
-        jobid = output.split(' ')[2]
-        jobids.append(jobid)
-    allfinished=False
-    while not allfinished:
-        time.sleep(3)
-        a = subprocess.Popen(['qstat'], stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
-        qstat=a.communicate()[0]
-        lines=qstat.split('\n')
-        nrunning=0
-        for line in lines:
-            words=line.split(' ')
-            if len(words)>0 and words[0] in jobids:
-                nrunning+=1
-        if nrunning>0:
-            print nrunning,'jobs running'
-        else:
-            allfinished=True
+    jobids=submitToNAF(scripts)
+    do_qstat(jobids)
+    print 'checking outputs'
+    failed_jobs=check_jobs(outputs,nentries)
+    if len(failed_jobs)>0:
+        print 'the following jobs failed'
+        for j in failed_jobs:
+            print j
+        sys.exit()        
     print 'hadd output'
     subprocess.call(['hadd', outputpath]+outputs)
     print 'done'
