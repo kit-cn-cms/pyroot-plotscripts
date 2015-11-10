@@ -9,7 +9,7 @@ import os
 ROOT.gStyle.SetPaintTextFormat("4.2f");
 
 class Sample:
-    def __init__(self,name, color=ROOT.kBlack, path='', selection='',nick=''):
+    def __init__(self,name, color=ROOT.kBlack, path='', selection='',nick='',checknevents=-1,treename='MVATree'):
         self.name=name
         self.color=color
         self.path=path
@@ -21,6 +21,14 @@ class Sample:
             self.nick=name
         else:
             self.nick=nick
+        if checknevents>0:
+            nevents=0
+            for fn in self.filenames:
+                f=ROOT.TFile(fn)
+                t=f.Get('MVATree')
+                nevents+=t.GetEntries()
+            assert nevents == checknevents
+
     def GetTree(self,treename='MVATree'):
         chain=ROOT.TChain(treename)
         for f in self.files:
