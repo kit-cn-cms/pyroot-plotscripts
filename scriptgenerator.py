@@ -203,11 +203,12 @@ def startLoop():
   long nentries = chain->GetEntries(); 
   cout << "total number of events: " << nentries << endl;
   for (long iEntry=skipevents;iEntry<nentries;iEntry++) {
-    eventsAnalyzed++;
-    sumOfWeights+=Weight;
     if(iEntry==maxevents) break;
     if(iEntry%10000==0) cout << "analyzing event " << iEntry << endl;
     chain->GetEntry(iEntry); 
+    eventsAnalyzed++;
+    sumOfWeights+=Weight;
+
 """
 
 def ttbarPlusX():
@@ -446,7 +447,7 @@ def submitToNAF(scripts):
 
 def do_qstat(jobids):
     allfinished=False
-    while not allfinished(jobids):
+    while not allfinished:
         time.sleep(3)
         a = subprocess.Popen(['qstat'], stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
         qstat=a.communicate()[0]
@@ -475,6 +476,7 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
             f=ROOT.TFile(fn)
             t=f.Get('MVATree')
             events_in_file=t.GetEntries()
+            # if the file is larger than maxevents it is analyzed in portions of nevents
             if events_in_file > maxevents:
                 for ijob in range(events_in_file/maxevents+1):
                     njob+=1
@@ -488,7 +490,8 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
                     outputs.append(outfilename)
                     nentries.append(events_in_file)
                     ntotal_events+=events_in_file
-            else:
+            # else additional files are appended to list of files to be submitted
+            else :
                 files_to_submit+=[fn]
                 events_in_files+=events_in_file
                 if events_in_files>maxevents or fn==s.files[-1]:
@@ -498,32 +501,53 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
                     processname=s.nick
                     filenames=' '.join(files_to_submit)
                     outfilename=plotspath+s.nick+'_'+str(njob)+'.root'
-                    createScript(scriptname,programpath,processname,filenames,outfilename,maxevents,skipevents,cmsswpath,'')
+                    createScript(scriptname,programpath,processname,filenames,outfilename,events_in_files,skipevents,cmsswpath,'')
                     scripts.append(scriptname)
                     outputs.append(outfilename)
                     nentries.append(events_in_files)
                     ntotal_events+=events_in_files
                     files_to_submit=[]
                     events_in_files=0
+        # submit remaining scripts (can happen if the last file was large)
+        if len(files_to_submit)>0:
+            njob+=1
+            skipevents=0
+            scriptname=scriptsfolder+'/'+s.nick+'_'+str(njob)+'.sh'
+            processname=s.nick
+            filenames=' '.join(files_to_submit)
+            outfilename=plotspath+s.nick+'_'+str(njob)+'.root'
+            createScript(scriptname,programpath,processname,filenames,outfilename,events_in_files,skipevents,cmsswpath,'')
+            scripts.append(scriptname)
+            outputs.append(outfilename)
+            nentries.append(events_in_files)
+            ntotal_events+=events_in_files
+            files_to_submit=[]
+            events_in_files=0
+
         print ntotal_events,'events found in',s.name
     return scripts,outputs,nentries
 
-def check_jobs(outputs,nentries):
+def check_jobs(scripts,outputs,nentries):
     failed_jobs=[]
-    for o,n in zip(outputs,nentries):
+    for script,o,n in zip(scripts,outputs,nentries):
+        if not os.path.exists(o+'.cutflow.txt'):
+            failed_jobs.append(script)
+            continue
         f=open(o+'.cutflow.txt')
         processed_entries=-1
         for line in f:
             s=line.split(' : ')
             if len(s)>2 and 'all' in s[1]:
                 processed_entries=int(s[2])
+                break
         if n!=processed_entries:
-            failed_jobs.append(o)
+            failed_jobs.append(script)
     return failed_jobs
 
 def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"]):
     workdir=os.getcwd()+'/workdir/'+name
     outputpath=workdir+'/output.root'
+
     if not os.path.exists('workdir'):
         os.makedirs('workdir')
     if not os.path.exists(workdir):
@@ -559,17 +583,24 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
         print 'could not create workdirs'
         sys.exit()
     print 'creating scripts'
-    scripts,outputs,nenentries=get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,programpath,cmsswpath)
+    scripts,outputs,nentries=get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,programpath,cmsswpath)
     print 'submitting scripts'
     jobids=submitToNAF(scripts)
     do_qstat(jobids)
+
     print 'checking outputs'
-    failed_jobs=check_jobs(outputs,nentries)
-    if len(failed_jobs)>0:
+    failed_jobs=check_jobs(scripts,outputs,nentries)
+    retries=0
+    while retries<=3 and len(failed_jobs)>0:
+        retries+=1
         print 'the following jobs failed'
         for j in failed_jobs:
             print j
-        sys.exit()        
+        print 'resubmitting'
+        jobids=submitToNAF(failed_jobs)
+        do_qstat(jobids)
+        failed_jobs=check_jobs(scripts,outputs,nentries)
+
     print 'hadd output'
     subprocess.call(['hadd', outputpath]+outputs)
     print 'done'
