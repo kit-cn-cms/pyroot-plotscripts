@@ -8,19 +8,22 @@ name='makeallplots'
 
 sel_singleel="(N_LooseMuons==0)" # need to veto muon events in electron dataset to avoid double countung
 sel_singlemu="(N_LooseElectrons==0)" # and vice versa...
-mcweight='(1.28*Weight_PV)' # some weights are only applied on mc
+mcweight='(1.28*Weight_PV)*(N_LooseElectrons==0||N_LooseMuons==0)' # some weights are only applied on mc
 # selections for categories
 sel_all="((N_TightLeptons==1)*(N_LooseLeptons==1)*(N_BTagsM>=2)*(N_Jets>=4))" # l+jets channel
 sel_muchan="((N_TightMuons==1)*(N_LooseMuons==1)*(N_LooseElectrons==0)*(N_BTagsM>=2)*(N_Jets>=4))" # e+jets channel
 sel_echan="((N_TightElectrons==1)*(N_LooseElectrons==1)*(N_LooseMuons==0)*(N_BTagsM>=2)*(N_Jets>=4))" # mu+jets channel
-sel_zmu="((N_TightElectrons==2)*(N_LooseElectrons==2)*(N_LooseMuons==0)*(DiElectron_M>81)*(DiElectron_M<101))" # z-control region for mumu
-sel_zel="((N_TightMuons==2)*(N_LooseMuons==2)*(N_LooseElectrons==0)*(DiElectron_M>81)*(DiElectron_M<101))" # z-control region for elel
+sel_zmu="((N_TightMuons==2)*(N_LooseMuons==2)*(N_LooseElectrons==0)*(DiMuon_M>81)*(DiMuon_M<101))" # z-control region for elel
+sel_zel="((N_TightElectrons==2)*(N_LooseElectrons==2)*(N_LooseMuons==0)*(DiElectron_M>81)*(DiElectron_M<101))" # z-control region for mumu
 sel_wmu="((N_TightMuons==1)*(N_LooseMuons==1)*(N_LooseElectrons==0)*(N_Jets>=0))" # W to mu
 sel_wel="((N_TightElectrons==1)*(N_LooseElectrons==1)*(N_LooseMuons==0)*(N_Jets>=0))" # W to el
 sel_pretagmu="((N_TightMuons==1)*(N_LooseMuons==1)*(N_LooseElectrons==0)*(N_Jets>=4))" # e+jets channel without btag
 sel_pretagel="((N_TightElectrons==1)*(N_LooseElectrons==1)*(N_LooseMuons==0)*(N_Jets>=4))" # mu+jets channel without btag
-catsels=[sel_all,sel_echan,sel_muchan,sel_zmu,sel_zel,sel_wmu,sel_wel,sel_pretagmu,sel_pretagel]
-catnames=["","_echan","_muchan","_ztomumu","_ztoelel","_wtomu","_wtoel","_pretagmu","_pretagel"] # names of categories
+sel_notagmu="((N_TightMuons==1)*(N_LooseMuons==1)*(N_LooseElectrons==0)*(N_BTagsM==0)*(N_Jets>=4))" # e+jets channel without btag
+sel_notagel="((N_TightElectrons==1)*(N_LooseElectrons==1)*(N_LooseMuons==0)*(N_BTagsM==0)*(N_Jets>=4))" # mu+jets channel without btag
+catsels=[sel_all,sel_echan,sel_muchan,sel_zmu,  sel_zel,   sel_wmu,  sel_wel, sel_pretagmu,sel_pretagel,sel_notagmu,sel_notagel]
+catnames=["",    "_echan", "_muchan","_ztomumu","_ztoelel","_wtomu","_wtoel","_pretagmu",   "_pretagel","_notagmu",  "_notagel"] # names of categories
+cattitles=["1 lepton, #geq 4 jets #geq 2 tags","1 #mu #geq 4 jets #geq 2 tags","1 electron #geq 4 jets #geq 2 tags","2 #mu, |m_{#mu#mu}-m_{Z}| #leq 10 GeV","2 e, |m_{ee}-m_{Z}| #leq 10 GeV","1 #mu","1 electron","1 #mu #geq 4 jets","1 electron #geq 4 jets","1 #mu #geq 4 jets == 0 tags","1 electron #geq 4 jets == 0 tags"]
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
 samples_data=[Sample('SingleMu',ROOT.kBlack,path+'/mu_*/*nominal*.root',sel_singlemu,'SingleMu',8427020+6226674),
               Sample('SingleEl',ROOT.kBlack,path+'/el_*/*nominal*.root',sel_singleel,'SingleEl',4692772+3638693)]
@@ -57,6 +60,8 @@ plots=[
     Plot(ROOT.TH1F("pt2","p_{T} of second jet",50,0,500),"Jet_Pt[1]",''),
     Plot(ROOT.TH1F("eta1","#eta of leading jet",50,-2.5,2.5),"Jet_Eta[0]",''),
     Plot(ROOT.TH1F("eta2","#eta of second jet",50,-2.5,2.5),"Jet_Eta[1]",''),
+    Plot(ROOT.TH1F("phij1","#phi of leading jet",64,-3.2,3.2),"Jet_Phi[0]",''),
+    Plot(ROOT.TH1F("phij2","#phi of second jet",64,-3.2,3.2),"Jet_Phi[1]",''),
     Plot(ROOT.TH1F("N_BTagsM","Number of b-tags",6,-0.5,5.5),"N_BTagsM",''),
     Plot(ROOT.TH1F("Evt_HT_Jets","Sum p_{T} jets",75,0,1500),"Evt_HT_Jets",''),
     Plot(ROOT.TH1F("N_BoostedJets","Number of CA 1.5 jets",5,-0.5,4.5),"N_BoostedJets",''),
@@ -89,12 +94,15 @@ for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
             h.GetXaxis().SetBinLabel(7,'4j4t')
             h.GetXaxis().SetBinLabel(8,'5j4t')
             h.GetXaxis().SetBinLabel(9,'6j4t')
+        tablepath=("/".join((outputpath.split('/'))[:-1]))+"/"+name+"_yields"+catnames[ntables]
         ntables+=1
-        tablepath=("/".join((outputpath.split('/'))[:-1]))+"/"+name+"_yields"+str(ntables)
         # make an event yield table
         eventYields(hld,hl,samples,tablepath)
 
 # plot dataMC comparison
-plotDataMC(listOfHistoListsData,listOfHistoLists,samples,name,False,"")
+labels=[]
+for c in cattitles:
+    labels+=([c]*len(plots))
+plotDataMC(listOfHistoListsData,listOfHistoLists,samples,name,False,labels)
 # plot dataMC comparison with logscale
 #plotDataMC(listOfHistoListsData,listOfHistoLists,samples,name,True,"")
