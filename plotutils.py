@@ -5,6 +5,7 @@ from collections import namedtuple
 import glob
 import subprocess
 import os
+import re
 
 ROOT.gStyle.SetPaintTextFormat("4.2f");
 
@@ -328,7 +329,14 @@ def AddEntry2( self, histo, label, option='L'):
     self.SetY1NDC(self.GetY1NDC()-0.045)
     width=self.GetX2NDC()-self.GetX1NDC()
     ts=self.GetTextSize()
-    newwidth=max(len(label)*0.015*0.05/ts+0.1,width)
+    neglen = 0
+    sscripts = re.findall("_{.+?}|\^{.+?}",label)
+    for s in sscripts:
+	neglen = neglen + 3
+    symbols = re.findall("#[a-zA-Z]+",label)
+    for symbol in symbols:
+	neglen = neglen + len(symbol)-1
+    newwidth=max((len(label)-neglen)*0.015*0.05/ts+0.1,width)
     self.SetX1NDC(self.GetX2NDC()-newwidth)
     
     self.AddEntry(histo, label, option)
