@@ -5,6 +5,7 @@ from collections import namedtuple
 import glob
 import subprocess
 import os
+import scriptgenerator
 
 ROOT.gStyle.SetPaintTextFormat("4.2f");
 
@@ -23,11 +24,14 @@ class Sample:
             self.nick=nick
         if checknevents>0:
             nevents=0
-            for fn in self.filenames:
+            for fn in self.files:
                 f=ROOT.TFile(fn)
                 t=f.Get('MVATree')
                 nevents+=t.GetEntries()
-            assert nevents == checknevents
+            if nevents != checknevents:
+                print 'wrong number of events in',self.name,':',nevents,'!=',checknevents
+                if not askYesNoQuestion('cancel?'): sys.exit()
+                
 
     def GetTree(self,treename='MVATree'):
         chain=ROOT.TChain(treename)
@@ -356,7 +360,7 @@ def createHistoLists_fromHistoFile(samples,rebin=1):
     listOfHistoLists=transposeLOL(listOfHistoListsT)
     return listOfHistoLists
 
-def createHistoLists_fromSuperHistoFile(path,samples,plots,rebin=1,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"]):
+def createHistoLists_fromSuperHistoFile(path,samples,plots,rebin=1,catnames=[""]):
     listOfHistoListsT=[]
     f=ROOT.TFile(path, "readonly")
     keyList = f.GetKeyNames()
@@ -720,7 +724,7 @@ def getRatioGraph(data,mchisto):
     x, y = ROOT.Double(0), ROOT.Double(0)
     for i in range(0,data.GetN()):
         data.GetPoint(i,x,y)
-        if y>0:
+        if mchisto.GetBinContent(i+1)>0:
             ratio.SetPoint(i,x,y/mchisto.GetBinContent(i+1))
         else:
             ratio.SetPoint(i,x,0)
