@@ -23,6 +23,7 @@ class Sample:
             self.nick=name
         else:
             self.nick=nick
+    def checkNevents():
         if checknevents>0:
             nevents=0
             for fn in self.files:
@@ -756,12 +757,16 @@ def getRatioGraph(data,mchisto):
 
 
 
-def plotDataMC(listOfHistoListsData,listOfHistoLists,samples,name,logscale=False,labeltext='',ratio=True,options='histo'):
+def plotDataMC(listOfHistoListsData,listOfHistoLists,samples,name,logscale=False,label='',ratio=True,options='histo'):    
+    if isinstance(label, basestring):
+        labeltexts=len(listOfHistoListsData)*[label]
+    else:
+        labeltexts=label
     canvases=[]
     objects=[]   
     i=0
     # for every plot, look at all samples
-    for listOfHistos,listOfHistosData in zip(listOfHistoLists,listOfHistoListsData):
+    for listOfHistos,listOfHistosData,labeltext in zip(listOfHistoLists,listOfHistoListsData,labeltexts):
         i+=1
         # setup histo style
         for histo,sample in zip(listOfHistos,samples):
