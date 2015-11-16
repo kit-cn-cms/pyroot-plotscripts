@@ -45,13 +45,30 @@ class Plot:
         self.selection=selection
         self.name=histo.GetName()
 
-# TODO implement tmva functionality
 class MVAPlot:
     def __init__(self,histo, weightfile, selection=''):
         self.histo=histo
         self.weightfile=weightfile
         self.selection=selection
         self.name=histo.GetName()
+    def parseWeights(weightfile):
+        root = ET.parse(weightfile).getroot()
+        exprs=[]
+        names=[]
+        mins=[]
+        maxs=[]
+        types=[]
+        for var in root.iter('Variable'):
+            exprs.append(var.get('Expression'))
+            names.append(var.get('Internal'))
+            mins.append(var.get('Min'))
+            maxs.append(var.get('Max'))
+            types.append(var.get('Type'))
+        self.input_exprs=exprs
+        self.input_names=names
+        self.input_mins=mins
+        self.input_maxs=maxs
+        self.input_types=types
 
 
 # sets up the style of a histo and its axes
