@@ -5,6 +5,8 @@ from collections import namedtuple
 import glob
 import subprocess
 import os
+import scriptgenerator
+import re
 
 ROOT.gStyle.SetPaintTextFormat("4.2f");
 
@@ -21,13 +23,17 @@ class Sample:
             self.nick=name
         else:
             self.nick=nick
+    def checkNevents():
         if checknevents>0:
             nevents=0
-            for fn in self.filenames:
+            for fn in self.files:
                 f=ROOT.TFile(fn)
                 t=f.Get('MVATree')
                 nevents+=t.GetEntries()
-            assert nevents == checknevents
+            if nevents != checknevents:
+                print 'wrong number of events in',self.name,':',nevents,'!=',checknevents
+                if not askYesNoQuestion('cancel?'): sys.exit()
+                
 
     def GetTree(self,treename='MVATree'):
         chain=ROOT.TChain(treename)
@@ -345,7 +351,14 @@ def AddEntry2( self, histo, label, option='L'):
     self.SetY1NDC(self.GetY1NDC()-0.045)
     width=self.GetX2NDC()-self.GetX1NDC()
     ts=self.GetTextSize()
-    newwidth=max(len(label)*0.015*0.05/ts+0.1,width)
+    neglen = 0
+    sscripts = re.findall("_{.+?}|\^{.+?}",label)
+    for s in sscripts:
+	neglen = neglen + 3
+    symbols = re.findall("#[a-zA-Z]+",label)
+    for symbol in symbols:
+	neglen = neglen + len(symbol)-1
+    newwidth=max((len(label)-neglen)*0.015*0.05/ts+0.1,width)
     self.SetX1NDC(self.GetX2NDC()-newwidth)
     
     self.AddEntry(histo, label, option)
@@ -373,7 +386,7 @@ def createHistoLists_fromHistoFile(samples,rebin=1):
     listOfHistoLists=transposeLOL(listOfHistoListsT)
     return listOfHistoLists
 
-def createHistoLists_fromSuperHistoFile(path,samples,plots,rebin=1,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"]):
+def createHistoLists_fromSuperHistoFile(path,samples,plots,rebin=1,catnames=[""]):
     listOfHistoListsT=[]
     f=ROOT.TFile(path, "readonly")
     keyList = f.GetKeyNames()
@@ -737,7 +750,7 @@ def getRatioGraph(data,mchisto):
     x, y = ROOT.Double(0), ROOT.Double(0)
     for i in range(0,data.GetN()):
         data.GetPoint(i,x,y)
-        if y>0:
+        if mchisto.GetBinContent(i+1)>0:
             ratio.SetPoint(i,x,y/mchisto.GetBinContent(i+1))
         else:
             ratio.SetPoint(i,x,0)
@@ -761,12 +774,16 @@ def getRatioGraph(data,mchisto):
 
 
 
-def plotDataMC(listOfHistoListsData,listOfHistoLists,samples,name,logscale=False,labeltext='',ratio=True,options='histo'):
+def plotDataMC(listOfHistoListsData,listOfHistoLists,samples,name,logscale=False,label='',ratio=True,options='histo'):    
+    if isinstance(label, basestring):
+        labeltexts=len(listOfHistoListsData)*[label]
+    else:
+        labeltexts=label
     canvases=[]
     objects=[]   
     i=0
     # for every plot, look at all samples
-    for listOfHistos,listOfHistosData in zip(listOfHistoLists,listOfHistoListsData):
+    for listOfHistos,listOfHistosData,labeltext in zip(listOfHistoLists,listOfHistoListsData,labeltexts):
         i+=1
         # setup histo style
         for histo,sample in zip(listOfHistos,samples):
