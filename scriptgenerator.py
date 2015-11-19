@@ -49,6 +49,12 @@ void plot(){
   // initialize variables from tree
 """
 
+class Variable():
+    def __init__(self,name,vartype,arraylength):
+        self.name=name
+        self.vartype=vartype
+        self.arraylength=arraylength
+
 def initVar(var,t='F',isarray=False):
     if isarray:
         if t=='F':
@@ -291,21 +297,6 @@ def compileProgram(scriptname):
     subprocess.call(cmd)
 
 
-def parseWeights(weightfile):
-    root = ET.parse(weightfile).getroot()
-    exprs=[]
-    names=[]
-    mins=[]
-    maxs=[]
-    types=[]
-    for var in root.iter('Variable'):
-        exprs.append(var.get('Expression'))
-        names.append(var.get('Internal'))
-        mins.append(var.get('Min'))
-        maxs.append(var.get('Max'))
-        types.append(var.get('Type'))
-    return exprs,names,mins,maxs,types
-
 def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"]):
     f=ROOT.TFile(samples[0].files[0])
     print 'using',samples[0].files[0],'to determining variable types'
@@ -319,20 +310,25 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 
     # extract variablescandidates of all plots
     for plot in plots:
-        variablescandidates+=varsIn(plot.variable)
+        if isinstance(plot,Plot):
+            variablescandidates+=varsIn(plot.variable)
         variablescandidates+=varsIn(plot.selection)
     for s in samples:
         variablescandidates+=varsIn(s.selection)
 
+    for plot in plots:
+        if isinstance(plot,MVAPlot):
+            variablescandidates=varsIn(plot.input_exprs)
+
     # remove duplicates
     variablescandidates=list(set(variablescandidates))
-    # remove everything not a true variable (e.g. number)
+    # remove everything not a true variable (e.g. number) TODO: isnt that done already in function?
     variables=[]
     for v in variablescandidates:
         if v[0].isalpha() or v[0]=='_':
             variables.append(v)
-            
-    # find put types of variables, length of arrays, and add length variables to variable list
+
+    # find out types of variables, length of arrays, and add length variables to variable list
     vartypes,arraylength=getVartypesAndLength(variables,tree)
     # remove duplicates
     variables=list(set(variables))
@@ -352,10 +348,14 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
             nb=plot.histo.GetNbinsX()
             for s in systnames:
                 script+=initHistoWithProcessNameAndSuffix(c+n+s,nb,mn,mx,t)
-
+            # TODO: init bdt readers and output histos
+            if isinstance(plot,MVAPlot):
+                for v in plot.input_names:
+                    initVar(v)
+                script+=initReader(plot.name)
     # start event loop
     script+=startLoop()
-    script+='    float sampleweight=1;\n'
+    script+='      float sampleweight=1;\n'
     script+='      float systweight=1;\n'
     script+=encodeSampleSelection(samples,arraylength)
     for cn,cs in zip(catnames,catselections):
