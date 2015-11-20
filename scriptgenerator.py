@@ -455,7 +455,7 @@ def do_qstat(jobids):
         nrunning=0
         for line in lines:
             words=line.split(' ')
-            if len(words)>0 and words[0] in jobids:
+            if len(words)>1 and words[1] in jobids:
                 nrunning+=1
         if nrunning>0:
             print nrunning,'jobs running'
@@ -600,7 +600,9 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
         jobids=submitToNAF(failed_jobs)
         do_qstat(jobids)
         failed_jobs=check_jobs(scripts,outputs,nentries)
-
+    if retries>=3:
+        print 'could not submit jobs'
+        sys.exit()
     print 'hadd output'
     subprocess.call(['hadd', outputpath]+outputs)
     print 'done'
