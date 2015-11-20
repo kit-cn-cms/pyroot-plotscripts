@@ -3,7 +3,6 @@ from plotutils import *
 import sys
 
 path='/nfs/dust/cms/user/hmildner/trees1107/'
-pathnew='/nfs/dust/cms/user/hmildner/trees1111/'
 name='makeallplots'
 
 sel_singleel="(N_LooseMuons==0)" # need to veto muon events in electron dataset to avoid double countung
@@ -26,15 +25,16 @@ catnames=["",    "_echan", "_muchan","_ztomumu","_ztoelel","_wtomu","_wtoel","_p
 cattitles=["1 lepton, #geq 4 jets #geq 2 tags","1 #mu #geq 4 jets #geq 2 tags","1 electron #geq 4 jets #geq 2 tags","2 #mu, |m_{#mu#mu}-m_{Z}| #leq 10 GeV","2 e, |m_{ee}-m_{Z}| #leq 10 GeV","1 #mu","1 electron","1 #mu #geq 4 jets","1 electron #geq 4 jets","1 #mu #geq 4 jets == 0 tags","1 electron #geq 4 jets == 0 tags"]
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
 samples_data=[Sample('SingleMu',ROOT.kBlack,path+'/mu_*/*nominal*.root',sel_singlemu,'SingleMu',8427020+6226674),
-              Sample('SingleEl',ROOT.kBlack,path+'/el_*/*nominal*.root',sel_singleel,'SingleEl',4692772+3638693)]
+              Sample('SingleEl',ROOT.kBlack,path+'/el_*/*nominal*.root',sel_singleel,'SingleEl',4692772+3638693)
+              ]
 
 # mc samples
-samples=[Sample('t#bar{t}H',ROOT.kBlue+1,pathnew+'/ttH*/*nominal*.root',mcweight,'ttH',1822862) ,     
-         Sample('t#bar{t}',ROOT.kRed+1,pathnew+'/ttbar/*nominal*.root',mcweight,'ttbar',24010004) ,     
-         Sample('Single Top',ROOT.kMagenta,pathnew+'/st*/*nominal*.root',mcweight,'SingleTop',2301345) , 
-         Sample('W+jets',ROOT.kGreen-3,pathnew+'/Wjets/*nominal*.root',mcweight,'Wjets',13599271) , 
-         Sample('Z+jets',ROOT.kAzure-2 ,pathnew+'/Zjets_*/*nominal*root',mcweight,'Zjets',10352375) , 
-         Sample('QCD',ROOT.kYellow ,path+'/QCD*/*nominal*root',mcweight,'QCD',9979) , 
+samples=[Sample('t#bar{t}H',ROOT.kBlue+1,path+'/ttH*/*nominal*.root',mcweight,'ttH',1822862) ,     
+         Sample('t#bar{t}',ROOT.kRed+1,path+'/ttbar/*nominal*.root',mcweight,'ttbar',24010004) ,     
+         Sample('Single Top',ROOT.kMagenta,path+'/st*/*nominal*.root',mcweight,'SingleTop',2301345) , 
+         Sample('W+jets',ROOT.kGreen-3,path+'/Wjets/*nominal*.root',mcweight,'Wjets',13599271) , 
+         Sample('Z+jets',ROOT.kAzure-2 ,path+'/Zjets_*/*nominal*root',mcweight,'Zjets',10352375) , 
+#         Sample('QCD',ROOT.kYellow ,path+'/QCD*/*nominal*root',mcweight,'QCD',9979) , 
 ]
 
 # book plots
