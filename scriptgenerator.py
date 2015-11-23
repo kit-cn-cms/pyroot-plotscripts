@@ -50,12 +50,15 @@ void plot(){
 """
 
 class Variable():
-    def __init__(self,name,vartype,arraylength):
+    def __init__(self,name,vartype='F',arraylength=None):
         self.name=name
         self.vartype=vartype
         self.arraylength=arraylength
 
-def initVar(var,t='F',isarray=False):
+def initVar(v):
+    var=v.name
+    t=v.vartype
+    isarray=v.arraylength!=None
     if isarray:
         if t=='F':
             text='  float* '+var+' = new float[100];\n'
@@ -70,7 +73,10 @@ def initVar(var,t='F',isarray=False):
         else: "UNKNOWN TYPE",t
     return text
 
-def initVarFromTree(var,t='F',isarray=False):
+def initVarFromTree(v):
+    var=v.name
+    t=v.vartype
+    isarray=v.arraylength!=None
     if isarray:
         text= initVar(var,t,True)
         text+='  chain->SetBranchAddress("'+var+'",'+var+');\n'
@@ -107,7 +113,7 @@ def calculateDerived(names,expressions):
             text+='    '+n+' = '+e+';\n'
     return text
 
-def addVariablesToReader(readername,expressions,variablenames,isarray):
+def addVariablesToReader(readername,expressions,variablenames):
     text=''
     for e,n in zip(expressions,variablenames):
         text+='  r_'+readername+'->AddVariable("'+e+'", &'+n+');\n'
@@ -123,6 +129,7 @@ def evaluateMVA(name,eventweight,systnames,systweights):
         text+= '      h_BDT_ljets_'+name+sn+'->Fill(output_'+name+',('+sw+')*('+eventweight+'));\n\n'
     return text
 
+# returns all variables of an expression
 def varsIn(expr):
     # find all words not followed by ( (these are functions)
     variablescandidates = re.findall(r"\w+\b(?!\()", expr)
@@ -132,7 +139,7 @@ def varsIn(expr):
             variables.append(v)
     return variables
 
-
+# returns all variables of an expression that are not followed by [ (e.g. variable[0])
 def varsNoIndex(expr):
     # find all words not followed by [
     variablescandidates = re.findall(r"\w+\b(?!\[)", expr)
@@ -142,8 +149,8 @@ def varsNoIndex(expr):
             variables.append(v)
     return variables
 
-def varsWithMaxIndex(expr,arraylength):
-    # find all words not followed by [
+def varsWithMaxIndex(expr,allvars):
+    # find all words followed by [
     variablescandidates = re.findall(r"\w+\b(?=\[)", expr)    
     variables=[]
     maxidxs=[]
@@ -151,6 +158,10 @@ def varsWithMaxIndex(expr,arraylength):
         if v[0].isalpha() or v[0]=='_':
             variables.append(v)
     variables=list(set(variables))
+    arraylength={}
+    for v in allvars:
+        if v.arraylength == None: continue
+        arraylength[v.name]=v.arraylength
     maxmap={}
     for v in variables:
         maxidx=-1
@@ -169,26 +180,27 @@ def varsWithMaxIndex(expr,arraylength):
             maxmap[arraylength[v]]=maxidx
     return maxmap
 
-def checkArrayLengths(ex,arraylength):
-    maxidxs=varsWithMaxIndex(ex,arraylength)
+def checkArrayLengths(ex,allvars):
+    maxidxs=varsWithMaxIndex(ex,allvars)
     arrayselection="1"
     for v in maxidxs.keys():
         arrayselection+='&&'+v+'>'+str(maxidxs[v])
     return arrayselection
 
-def getArrayEntries(expr,arraylength,i):
+def getArrayEntries(expr,allvars,i):
     newexpr=expr
     variables=varsNoIndex(expr)
     for v in variables:
-        if v in arraylength.keys():            
+        if v in allvars:
+            if v.arraylength==None: continue:
             # substitute v by v[i]
-            newexpr=re.sub(v+"(?!\[)",v+'['+str(i)+']',newexpr)
+            newexpr=re.sub(v.name+"(?!\[)",v.name+'['+str(i)+']',newexpr)
     return newexpr
 
-def getVartypesAndLength(variables,tree):
+def getVartypesAndLength(varnames,tree):
     vartypes={}
     arraylength={}
-    for v in variables:
+    for v in varnames:
         br=tree.GetBranch(v)
         if not hasattr(tree, v):
             print v,'does not exist in tree!'
@@ -199,9 +211,13 @@ def getVartypesAndLength(variables,tree):
         varisarray=b.split('/')[0][-1]==']'
         if varisarray:
             arraylength[v]= re.findall(r"\[(.*?)\]",b.split('/')[0])[0]
-            variables.append(arraylength[v])
+            varnames.append(arraylength[v])
             vartypes[arraylength[v]]='I'
-    return vartypes,arraylength
+    variables=[]
+    for v in varnames:
+        variables.append(Variable(v,vartype[v],arraylength[v])
+    vartypes,arraylength
+    return variables
 
 def startLoop():
     return """  
@@ -273,20 +289,14 @@ int main(){
   plot();
 }
 """
-
-def initVarsFromTree(vs,typemap,arraylength):
+                         
+def initVarsFromTree(variables):
     r=""
-    for v in vs:
-        if v in arraylength.keys():
-            if v in typemap:
-                r+=initVarFromTree(v,typemap[v],True)
-            else:
-                r+=initVarFromTree(v,'F',True)
+    for v in variables:
+        if v.arraylength != None:
+            r+=initVarFromTree(v,name,v.vartype,True)
         else:
-            if v in typemap:
-                r+=initVarFromTree(v,typemap[v])
-            else:
-                r+=initVarFromTree(v)
+            r+=initVarFromTree(v,name,v.vartype,False)
     r+='\n'
     return r
 
@@ -353,11 +363,20 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
                 for v in plot.input_names:
                     initVar(v)
                 script+=initReader(plot.name)
+                for s in systnames:
+                    script+=initHistoWithProcessNameAndSuffix('BDT_ljets_'+c+s,binning[0],binning[1],binning[-1])
+                    script+=addVariablesToReader(c,exprs,names,isarray)
+                    script+=bookMVA(c,w)
+
+            for s in systnames:
+                script+=initHistoWithProcessNameAndSuffix(c+n+s,nb,mn,mx,t)
+
     # start event loop
     script+=startLoop()
     script+='      float sampleweight=1;\n'
     script+='      float systweight=1;\n'
     script+=encodeSampleSelection(samples,arraylength)
+    script+=calculateDerived([v for ],inputexprs)
     for cn,cs in zip(catnames,catselections):
         # for every category
         script+=startCat(cs,arraylength)
