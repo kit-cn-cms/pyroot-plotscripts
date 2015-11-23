@@ -429,6 +429,14 @@ def writeListOfHistoLists(listOfHistoLists,samples,name,normalize=True,stack=Fal
             stests=getSepaTests(listOfHistos[0],listOfHistos[1])
             stests.Draw()
             objects.append(stests)
+#        cms = ROOT.TLatex(0.2, 0.96, 'CMS private work'  );
+#        cms.SetTextFont(42)
+#        cms.SetTextSize(0.05)
+#        cms.SetNDC()
+#        cms.Draw()
+#        print cms
+#        objects.append(cms)
+
 
 
     printCanvases(canvases,name)
@@ -812,14 +820,14 @@ def plotDataMC(listOfHistoListsData,listOfHistoLists,samples,name,logscale=False
         objects.append(data)
         objects.append(l)
 
-        cms = ROOT.TLatex(0.2, 0.96, 'CMS private work'  );
-        cms.SetTextFont(42)
-        cms.SetTextSize(0.05)
-        cms.SetNDC()
-        cms.Draw()
-        objects.append(cms)
+#        cms = ROOT.TLatex(0.2, 0.96, 'CMS private work'  );
+#        cms.SetTextFont(42)
+#        cms.SetTextSize(0.05)
+#        cms.SetNDC()
+#        cms.Draw()
+#        objects.append(cms)
 
-        lumi = ROOT.TLatex(0.2, 0.89, '1.28 fb^{-1} @ 13 TeV'  );
+        lumi = ROOT.TLatex(0.2, 0.89, '2.44 fb^{-1} @ 13 TeV'  );
         lumi.SetTextFont(42)
         lumi.SetTextSize(0.06)
         lumi.SetNDC()
@@ -899,6 +907,13 @@ def writeLOLAndOneOnTop(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,f
         l.Draw('same')
         objects.append(l)
         objects.append(otc)
+#        cms = ROOT.TLatex(0.2, 0.96, 'CMS private work'  );
+#        cms = ROOT.TLatex(0.18, 0.85, '#splitline{CMS simulation}{WORK IN PROGRESS}'  );
+#        cms.SetTextFont(42)
+#        cms.SetTextSize(0.065)
+#        cms.SetNDC()
+#        cms.Draw()
+#        objects.append(cms)
 
 
     printCanvases(canvases,name)
