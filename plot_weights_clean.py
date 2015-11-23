@@ -40,9 +40,8 @@ if (weightnum):
         run.getByLabel(LHEProductLabel, LHEProduct)
 
 
-##############################
-	
-	#read header and print the part about the weights
+##################################################
+#read header and print the part about the weights
 	var = LHEProduct.product()
 
 	test = var.headers_begin()
@@ -65,13 +64,12 @@ if (weightnum):
             test = test + 1
 
 #print wnum
-############################
+##################################################
 #Plot weights for all events
 outputfile = ROOT.TFile(outputname,"RECREATE")
-print wnum
+print "\nSample has",wnum,"weights stored\n"
 
 histos = []
-#print wnum
 for i in range(wnum):
     histos.append(ROOT.TH1F("Weights"+str(i),"Weights"+str(i),800,-10,10))
 histos.append(ROOT.TH1F("originalXWGTUP","originalXWGTUP",800,-10,10))
