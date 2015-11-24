@@ -9,6 +9,7 @@ import scriptgenerator
 import re
 
 ROOT.gStyle.SetPaintTextFormat("4.2f");
+ROOT.gROOT.SetBatch(True)
 
 class Sample:
     def __init__(self,name, color=ROOT.kBlack, path='', selection='',nick='',checknevents=-1,treename='MVATree'):
