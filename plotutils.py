@@ -82,7 +82,7 @@ def setupHisto(histo,color,yTitle=None,filled=False):
         histo.SetLineWidth(2)
     else:
         histo.SetLineColor(color)
-        histo.SetLineWidth(3)
+        histo.SetLineWidth(2)
 
 # creates a canvas either with or without ratiopad
 def getCanvas(name,ratiopad=False):
@@ -145,9 +145,9 @@ def getSepaTests(h1,h2):
 
 
 # draws a list of histos on a canvas and returns canvas
-def drawHistosOnCanvas(listOfHistos_,normalize=True,stack=False,logscale=False,options_='histo'):
+def drawHistosOnCanvas(listOfHistos_,normalize=True,stack=False,logscale=False,options_='histo',ratio=False):
     listOfHistos=[h.Clone(h.GetName()+'_drawclone') for h in listOfHistos_]
-    canvas=getCanvas(listOfHistos[0].GetName())        
+    canvas=getCanvas(listOfHistos[0].GetName(),ratio)        
     #prepare drawing
 
     # mover over/underflow
@@ -171,7 +171,7 @@ def drawHistosOnCanvas(listOfHistos_,normalize=True,stack=False,logscale=False,o
                 h.Scale(1./integral0)
 
             
-
+    canvas.cd(1)
     yMax=1e-9
     yMinMax=1000.
     for h in listOfHistos:
@@ -192,6 +192,28 @@ def drawHistosOnCanvas(listOfHistos_,normalize=True,stack=False,logscale=False,o
     for h in listOfHistos[1:]:
         h.DrawCopy(option+'same')
     h.DrawCopy('axissame')
+    if ratio:
+        canvas.cd(2)
+        line=listOfHistos[0].Clone()
+        line.Divide(listOfHistos[0])
+        line.GetYaxis().SetRangeUser(0.5,1.5)
+        line.GetYaxis().SetTitle('#frac{Sample}{Nominal Sample}')
+        line.GetXaxis().SetLabelSize(line.GetXaxis().GetLabelSize()*2.4)
+        line.GetYaxis().SetLabelSize(line.GetYaxis().GetLabelSize()*2.4)
+        line.GetXaxis().SetTitleSize(line.GetXaxis().GetTitleSize()*3)
+        line.GetYaxis().SetTitleSize(line.GetYaxis().GetTitleSize()*1.5)
+        line.GetYaxis().SetTitleOffset(0.9)
+        line.GetYaxis().SetNdivisions(505)
+        for i in range(line.GetNbinsX()+1):
+            line.SetBinContent(i,1)
+            line.SetBinError(i,0)
+        line.SetLineWidth(1)
+        line.DrawCopy('histo')
+        for hist in listOfHistos[1:]:
+            ratio=hist.Clone()
+            ratio.Divide(listOfHistos[0])
+            ratio.DrawCopy('sameP')
+        canvas.cd(1)
     return canvas
 
 # writes canvases to pdf 
@@ -400,7 +422,7 @@ def plotsForSelections_cross_Histos(selections,selectionnames,histos,variables):
     return plots
 
 # gets a list of histogramlist and creates a plot for every list
-def writeListOfHistoLists(listOfHistoLists,samples,name,normalize=True,stack=False,logscale=False,options='histo',statTest=False, sepaTest=False):
+def writeListOfHistoLists(listOfHistoLists,samples,name,normalize=True,stack=False,logscale=False,options='histo',statTest=False, sepaTest=False,ratio=False):
     canvases=[]
     objects=[]   
     i=0
@@ -411,7 +433,7 @@ def writeListOfHistoLists(listOfHistoLists,samples,name,normalize=True,stack=Fal
             if normalize:
                 yTitle='normalized'
             setupHisto(histo,sample.color,yTitle,stack)        
-        c=drawHistosOnCanvas(listOfHistos,normalize,stack,logscale,options)
+        c=drawHistosOnCanvas(listOfHistos,normalize,stack,logscale,options,ratio)
         c.SetName('c'+str(i))
         l=getLegend()
         for h,sample in zip(listOfHistos,samples):
@@ -430,6 +452,14 @@ def writeListOfHistoLists(listOfHistoLists,samples,name,normalize=True,stack=Fal
             stests=getSepaTests(listOfHistos[0],listOfHistos[1])
             stests.Draw()
             objects.append(stests)
+#        cms = ROOT.TLatex(0.2, 0.96, 'CMS private work'  );
+#        cms.SetTextFont(42)
+#        cms.SetTextSize(0.05)
+#        cms.SetNDC()
+#        cms.Draw()
+#        print cms
+#        objects.append(cms)
+
 
 
     printCanvases(canvases,name)
@@ -758,6 +788,7 @@ def getRatioGraph(data,mchisto):
 
 
 
+
 def plotDataMC(listOfHistoListsData,listOfHistoLists,samples,name,logscale=False,label='',ratio=True,options='histo'):    
     if isinstance(label, basestring):
         labeltexts=len(listOfHistoListsData)*[label]
@@ -813,14 +844,14 @@ def plotDataMC(listOfHistoListsData,listOfHistoLists,samples,name,logscale=False
         objects.append(data)
         objects.append(l)
 
-        cms = ROOT.TLatex(0.2, 0.96, 'CMS private work'  );
-        cms.SetTextFont(42)
-        cms.SetTextSize(0.05)
-        cms.SetNDC()
-        cms.Draw()
-        objects.append(cms)
+#        cms = ROOT.TLatex(0.2, 0.96, 'CMS private work'  );
+#        cms.SetTextFont(42)
+#        cms.SetTextSize(0.05)
+#        cms.SetNDC()
+#        cms.Draw()
+#        objects.append(cms)
 
-        lumi = ROOT.TLatex(0.2, 0.89, '1.28 fb^{-1} @ 13 TeV'  );
+        lumi = ROOT.TLatex(0.2, 0.89, '2.44 fb^{-1} @ 13 TeV'  );
         lumi.SetTextFont(42)
         lumi.SetTextSize(0.06)
         lumi.SetNDC()
@@ -900,6 +931,13 @@ def writeLOLAndOneOnTop(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,f
         l.Draw('same')
         objects.append(l)
         objects.append(otc)
+#        cms = ROOT.TLatex(0.2, 0.96, 'CMS private work'  );
+#        cms = ROOT.TLatex(0.18, 0.85, '#splitline{CMS simulation}{WORK IN PROGRESS}'  );
+#        cms.SetTextFont(42)
+#        cms.SetTextSize(0.065)
+#        cms.SetNDC()
+#        cms.Draw()
+#        objects.append(cms)
 
 
     printCanvases(canvases,name)
