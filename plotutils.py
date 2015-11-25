@@ -976,6 +976,8 @@ def plotDataMCwSysts(listOfHistoListsData,listOfHistoLists,ListSysHistosUp,ListS
           thisbinwidth=stackedListOfHistos[0].GetBinWidth(thisbin)
           centralY=stackedListOfHistos[0].GetBinContent(thisbin)
           centralX=stackedListOfHistos[0].GetBinCenter(thisbin)
+          thisStatUp=stackedListOfHistos[0].GetBinError(thisbin)
+          thisStatDown=stackedListOfHistos[0].GetBinError(thisbin)
           for wup, wdown in zip(ListSysHistosUp, ListSysHistosDown):
             stackedUp=stackHistoList(wup[i-1])[0]
             stackedDown=stackHistoList(wdown[i-1])[0]
@@ -991,6 +993,9 @@ def plotDataMCwSysts(listOfHistoListsData,listOfHistoLists,ListSysHistosUp,ListS
               thisbinErrorDown+=diffDown*diffDown
             print stackedUp.GetName(), centralX, stackedDown.GetBinContent(thisbin), centralY, stackedUp.GetBinContent(thisbin), diffUp, diffDown
           errorgraph.SetPoint(ibin, centralX,centralY)
+          thisbinErrorUp+=thisStatUp*thisStatUp
+          thisbinErrorDown+=thisStatDown*thisStatDown
+          print "stat error", thisStatDown, centralY, thisStatUp
           print ROOT.TMath.Sqrt(thisbinErrorDown), ROOT.TMath.Sqrt(thisbinErrorUp)
           errorgraph.SetPointError(ibin, thisbinwidth/2.0,thisbinwidth/2.0,ROOT.TMath.Sqrt(thisbinErrorDown), ROOT.TMath.Sqrt(thisbinErrorUp))
           ratioerrorgraph.SetPoint(ibin,centralX, 1.0)
@@ -1000,7 +1005,9 @@ def plotDataMCwSysts(listOfHistoListsData,listOfHistoLists,ListSysHistosUp,ListS
             relErrUp=ROOT.TMath.Sqrt(thisbinErrorUp)/centralY
             relErrDown=ROOT.TMath.Sqrt(thisbinErrorDown)/centralY
           ratioerrorgraph.SetPointError(ibin, thisbinwidth/2.0,thisbinwidth/2.0, relErrUp, relErrDown)
-	
+	  print 
+
+
         errorgraph.SetFillStyle(3154)
         errorgraph.SetLineColor(ROOT.kBlack)
         errorgraph.SetFillColor(ROOT.kBlack)
