@@ -134,12 +134,29 @@ def getStatTests(h1,h2,option="WW"):
 # calculates separation of two histogram (using the ROC integral of)
 def getSepaTests(h1,h2):
     pair=getSuperHistoPair([h1],[h2],'tmp')
+#    pair=h1,h2
     roc=getROC(*pair)
     rocint=roc.Integral()+0.5
     tests = ROOT.TLatex(0.2, 0.9, 'ROC integral: '+str(round(rocint,3)));
     tests.SetTextFont(42);
     tests.SetTextSize(0.05);
     tests.SetNDC()
+    return tests
+
+def getSepaTests2(hs,h1):
+    y=0
+    tests=[]
+    for h in hs:
+        pair=getSuperHistoPair([h1],[h],'tmp')
+        roc=getROC(*pair)
+        rocint=roc.Integral()+0.5
+        test = ROOT.TLatex(0.2, 0.9-y, 'ROC integral: '+str(round(rocint,3)));
+        y+=0.05
+        test.SetTextFont(42);
+        test.SetTextSize(0.04);
+        test.SetNDC()
+        tests.append(test)
+        
     return tests
 
 
@@ -183,7 +200,7 @@ def drawHistosOnCanvas(listOfHistos_,normalize=True,stack=False,logscale=False,o
         h.GetYaxis().SetRangeUser(yMinMax/10000,yMax*10)
         canvas.SetLogy()
     else:
-        h.GetYaxis().SetRangeUser(0,yMax*1.3)
+        h.GetYaxis().SetRangeUser(0,yMax*1.5)
     option='histo'
     option+=options_
     h.DrawCopy(option)
@@ -819,7 +836,7 @@ def plotDataMC(listOfHistoListsData,listOfHistoLists,samples,name,logscale=False
         #draw first histo
         h=stackedListOfHistos[0]
         if logscale:
-            h.GetYaxis().SetRangeUser(yMax/1000000,yMax*10)
+            h.GetYaxis().SetRangeUser(yMax/10000,yMax*10)
             canvas.cd(1).SetLogy()
         else:
             h.GetYaxis().SetRangeUser(0,yMax*1.5)
@@ -901,7 +918,7 @@ def plotDataMC(listOfHistoListsData,listOfHistoLists,samples,name,logscale=False
     writeObjects(canvases,name)
 
 
-def writeLOLAndOneOnTop(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,factor,name,logscale=False,options='histo'):
+def writeLOLAndOneOnTop(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,factor,name,logscale=False,options='histo',sepaTest=True):
     normalize=False
     stack=True,
     canvases=[]
@@ -910,7 +927,7 @@ def writeLOLAndOneOnTop(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,f
     for listOfHistos,ot in zip(listOfHistoLists,listOfhistosOnTop):
         i+=1
         for histo,sample in zip(listOfHistos,samples):
-            yTitle='Events expected for 10 fb^{-1} @ 13 TeV'
+            yTitle='Events expected for 2.44 fb^{-1} @ 13 TeV'
             setupHisto(histo,sample.color,yTitle,stack)        
         c=drawHistosOnCanvas(listOfHistos,normalize,stack,logscale,options)       
         c.SetName('c'+str(i))
@@ -930,6 +947,10 @@ def writeLOLAndOneOnTop(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,f
         l.Draw('same')
         objects.append(l)
         objects.append(otc)
+        stestss=getSepaTests2(listOfHistos,ot)
+        for stests in stestss:
+            stests.Draw()
+            objects.append(stests)
 #        cms = ROOT.TLatex(0.2, 0.96, 'CMS private work'  );
 #        cms = ROOT.TLatex(0.18, 0.85, '#splitline{CMS simulation}{WORK IN PROGRESS}'  );
 #        cms.SetTextFont(42)
