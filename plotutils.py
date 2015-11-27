@@ -403,10 +403,13 @@ def createHistoLists_fromSuperHistoFile(path,samples,plots,rebin=1,catnames=[""]
         for c in catnames:
             for plot in plots:
                 key=sample.nick+'_'+c+plot.name
+                print key, sample.nick, c, plot.name
                 o=f.Get(key)
+                print o
                 if isinstance(o,ROOT.TH1) and not isinstance(o,ROOT.TH2): 
                     o.Rebin(rebin)
                     histoList.append(o.Clone())
+                    print "ok", histoList[-1], len(histoList)
         listOfHistoListsT.append(histoList)
     listOfHistoLists=transposeLOL(listOfHistoListsT)
     return listOfHistoLists
@@ -819,9 +822,11 @@ def plotDataMC(listOfHistoListsData,listOfHistoLists,samples,name,logscale=False
     canvases=[]
     objects=[]   
     i=0
+    print len(listOfHistoLists)
     # for every plot, look at all samples
     for listOfHistos,listOfHistosData,labeltext in zip(listOfHistoLists,listOfHistoListsData,labeltexts):
         i+=1
+        print i
         # setup histo style
         for histo,sample in zip(listOfHistos,samples):
             yTitle='Events'
@@ -919,7 +924,7 @@ def plotDataMC(listOfHistoListsData,listOfHistoLists,samples,name,logscale=False
 
 
 
-
+    print len(canvases)
     printCanvases(canvases,name)
     writeObjects(canvases,name)
 
