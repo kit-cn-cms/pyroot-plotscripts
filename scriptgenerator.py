@@ -313,7 +313,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
     print 'using',samples[0].files[0],'to determining variable types'
     tree=f.Get('MVATree')
     
-    eventweight='Weight_XS'
+    eventweight='Weight'
     # variables is the list of variables to be read from tree
     variablescandidates=varsIn(eventweight) #extract all words
     variablescandidates+=varsIn(','.join(catselections))
@@ -379,7 +379,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
                         assert lengthvar == "" or lengthvar == arraylength[v]
                         lengthvar=arraylength[v]
                 histoname=cn+n+sn
-                eventweight='Weight_XS'
+                eventweight='Weight'
                 script+="\n"
                 if lengthvar!="":
                     exi=getArrayEntries(ex,arraylength,"i")
