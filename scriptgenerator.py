@@ -7,6 +7,7 @@ import os
 import sys
 import stat
 import time
+import plotutils
 
 def getHead():
     return """#include "TChain.h"
@@ -74,15 +75,13 @@ def initVar(v):
     return text
 
 def initVarFromTree(v):
-    var=v.name
-    t=v.vartype
     isarray=v.arraylength!=None
     if isarray:
-        text= initVar(var,t,True)
-        text+='  chain->SetBranchAddress("'+var+'",'+var+');\n'
+        text= initVar(v)
+        text+='  chain->SetBranchAddress("'+v.name+'",'+v.name+');\n'
     else:
-        text= initVar(var,t)
-        text+='  chain->SetBranchAddress("'+var+'",&'+var+');\n'
+        text= initVar(v)
+        text+='  chain->SetBranchAddress("'+v.name+'",&'+v.name+');\n'
     return text
 
 def initHisto(name,nbins,xmin=0,xmax=0,title_=''):
@@ -123,10 +122,17 @@ def addVariablesToReader(readername,expressions,variablenames):
 def bookMVA(name,weightfile):
     return '  r_'+name+'->BookMVA("BDT","'+weightfile+'");\n'
 
-def evaluateMVA(name,eventweight,systnames,systweights):
-    text='      float output_'+name+' = r_'+name+'->EvaluateMVA("BDT");\n'
+def fillHistoSyst(name,varname,weight,systnames,systweights):
+    text='      float weight_'+name+'='+weight+';\n'
     for sn,sw in zip(systnames,systweights):
-        text+= '      h_BDT_ljets_'+name+sn+'->Fill(output_'+name+',('+sw+')*('+eventweight+'));\n\n'
+        text+= '      h_'+name+sn+'->Fill('+varname+',('+sw+')*(weight_'+name+'));\n'
+    return text
+
+def evaluateMVA(plot,eventweight,systnames,systweights):
+    name=plot.name
+    weight='('+plot.selection+')*('+eventweight+')*categoryweight*sampleweight'
+    text='      float output_'+name+' = r_'+name+'->EvaluateMVA("BDT");\n'
+    text+=fillHistoSyst(name,'output_'+name,weight,systnames,systweights)
     return text
 
 # returns all variables of an expression
@@ -192,7 +198,7 @@ def getArrayEntries(expr,allvars,i):
     variables=varsNoIndex(expr)
     for v in variables:
         if v in allvars:
-            if v.arraylength==None: continue:
+            if v.arraylength==None: continue
             # substitute v by v[i]
             newexpr=re.sub(v.name+"(?!\[)",v.name+'['+str(i)+']',newexpr)
     return newexpr
@@ -213,10 +219,13 @@ def getVartypesAndLength(varnames,tree):
             arraylength[v]= re.findall(r"\[(.*?)\]",b.split('/')[0])[0]
             varnames.append(arraylength[v])
             vartypes[arraylength[v]]='I'
+    varnames=list(set(varnames))
     variables=[]
     for v in varnames:
-        variables.append(Variable(v,vartype[v],arraylength[v])
-    vartypes,arraylength
+        if v in arraylength:
+            variables.append(Variable(v,vartypes[v],arraylength[v]))
+        else:
+            variables.append(Variable(v,vartypes[v]))
     return variables
 
 def startLoop():
@@ -242,10 +251,10 @@ def ttbarPlusX():
     text+= '    if(processname=="ttbarOther" && (GenEvt_I_TTPlusBB>0 || GenEvt_I_TTPlusCC>0)) continue;\n'
     return text
 
-def encodeSampleSelection(samples,arraylength):
+def encodeSampleSelection(samples,allvars):
     text=''
     for sample in samples:
-        arrayselection=checkArrayLengths(sample.selection,arraylength)
+        arrayselection=checkArrayLengths(sample.selection,allvars)
         if arrayselection=='': arrayselection ='1' 
         sselection=sample.selection
         if sselection=='': sselection='1'
@@ -253,9 +262,9 @@ def encodeSampleSelection(samples,arraylength):
         text+= '    else if(processname=="'+sample.nick+'") sampleweight='+sselection+';\n'
     return text
 
-def startCat(eventweight,arraylength):
+def startCat(eventweight,allvars):
     text='\n    // staring category\n'
-    arrayselection=checkArrayLengths(eventweight,arraylength)
+    arrayselection=checkArrayLengths(eventweight,allvars)
     if arrayselection=='': arrayselection ='1' 
     text+='    if((('+arrayselection+')*('+eventweight+'))!=0) {\n'
     if eventweight=='': eventweight='1'
@@ -293,10 +302,7 @@ int main(){
 def initVarsFromTree(variables):
     r=""
     for v in variables:
-        if v.arraylength != None:
-            r+=initVarFromTree(v,name,v.vartype,True)
-        else:
-            r+=initVarFromTree(v,name,v.vartype,False)
+        r+=initVarFromTree(v)
     r+='\n'
     return r
 
@@ -317,36 +323,31 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
     variablescandidates=varsIn(eventweight) #extract all words
     variablescandidates+=varsIn(','.join(catselections))
     variablescandidates+=varsIn(','.join(systweights))   
-
+    
     # extract variablescandidates of all plots
     for plot in plots:
-        if isinstance(plot,Plot):
+        if isinstance(plot,plotutils.Plot):
             variablescandidates+=varsIn(plot.variable)
         variablescandidates+=varsIn(plot.selection)
     for s in samples:
         variablescandidates+=varsIn(s.selection)
 
     for plot in plots:
-        if isinstance(plot,MVAPlot):
-            variablescandidates=varsIn(plot.input_exprs)
+        if isinstance(plot,plotutils.MVAPlot):
+            variablescandidates+=varsIn(','.join(plot.input_exprs))
 
     # remove duplicates
     variablescandidates=list(set(variablescandidates))
-    # remove everything not a true variable (e.g. number) TODO: isnt that done already in function?
-    variables=[]
-    for v in variablescandidates:
-        if v[0].isalpha() or v[0]=='_':
-            variables.append(v)
 
     # find out types of variables, length of arrays, and add length variables to variable list
-    vartypes,arraylength=getVartypesAndLength(variables,tree)
-    # remove duplicates
-    variables=list(set(variables))
+    variables=getVartypesAndLength(variablescandidates,tree)
 
     # start writing script
     script=""
-    script+=getHead()    
-    script+=initVarsFromTree(variables,vartypes,arraylength)
+    script+=getHead()
+    for v in variables:
+        print v.name
+    script+=initVarsFromTree(variables)
     
     # initialize histograms in all categories and for all systematics
     for c in catnames:
@@ -359,29 +360,30 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
             for s in systnames:
                 script+=initHistoWithProcessNameAndSuffix(c+n+s,nb,mn,mx,t)
             # TODO: init bdt readers and output histos
-            if isinstance(plot,MVAPlot):
-                for v in plot.input_names:
-                    initVar(v)
+            if isinstance(plot,plotutils.MVAPlot):
+                for v,t in zip(plot.input_names,plot.input_types):
+                    initVar(Variable(v,t))
                 script+=initReader(plot.name)
-                for s in systnames:
-                    script+=initHistoWithProcessNameAndSuffix('BDT_ljets_'+c+s,binning[0],binning[1],binning[-1])
-                    script+=addVariablesToReader(c,exprs,names,isarray)
-                    script+=bookMVA(c,w)
-
-            for s in systnames:
-                script+=initHistoWithProcessNameAndSuffix(c+n+s,nb,mn,mx,t)
+                script+=addVariablesToReader(plot.name,plot.input_exprs,plot.input_names)
+                script+=bookMVA(plot.name,plot.weightfile)
 
     # start event loop
     script+=startLoop()
     script+='      float sampleweight=1;\n'
-    script+='      float systweight=1;\n'
-    script+=encodeSampleSelection(samples,arraylength)
-    script+=calculateDerived([v for ],inputexprs)
+    script+=encodeSampleSelection(samples,variables)
+    input_names=[]
+    input_exprs=[]
+    for plot in plots:
+        if isinstance(plot,plotutils.MVAPlot):
+            input_names.append(plot)
+            input_exprs.append(plot)
+    script+=calculateDerived(input_names,input_exprs)
     for cn,cs in zip(catnames,catselections):
         # for every category
-        script+=startCat(cs,arraylength)
+        script+=startCat(cs,variables)
         # plot everything
         for plot in plots:
+            if isinstance(plot,plotutils.MVAPlot): continue
             n=plot.histo.GetName()
             ex=plot.variable
             pw=plot.selection
@@ -405,13 +407,18 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
                     script+=varLoop("i",lengthvar)                    
                     script+="{\n"
                     arrayselection=checkArrayLengths(','.join([ex,pw]),arraylength)
-                    script+='      float weight_'+histoname+'=('+arrayselection+')*('+pwi+')*('+eventweight+')*systweight'+sn+'*categoryweight*sampleweight;\n'
+                    script+='      float weight_'+histoname+'=('+arrayselection+')*('+pwi+')*('+eventweight+')*categoryweight*sampleweight;\n'
                     script+=fillHisto(histoname,exi,'weight_'+histoname)
                     script+="      }\n"
                 else:
-                    arrayselection=checkArrayLengths(','.join([ex,pw]),arraylength)
-                    script+='      float weight_'+histoname+'=('+arrayselection+')*('+pw+')*('+eventweight+')*systweight'+sn+'*categoryweight*sampleweight;\n'
+                    arrayselection=checkArrayLengths(','.join([ex,pw]),variables)
+                    script+='      float weight_'+histoname+'=('+arrayselection+')*('+pw+')*('+eventweight+')*categoryweight*sampleweight;\n'
                     script+=fillHisto(histoname,ex,'weight_'+histoname)
+        exprs=[]
+        names=[]
+        for plot in plots:
+            if isinstance(plot,plotutils.MVAPlot):
+                script+=evaluateMVA(plot,eventweight,systnames,systweights)
         script+=endCat()
     script+=endLoop()
     script+=getFoot()
@@ -451,7 +458,8 @@ def askYesNo(question):
     elif choice in no:
         return False
     else:
-        sys.stdout.write("Please respond with 'yes' or 'no'")
+        print "Please respond with 'yes' or 'no'"
+        return askYesNo(question)
 
 def submitToNAF(scripts):
     jobids=[]
