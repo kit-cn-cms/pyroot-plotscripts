@@ -7,6 +7,7 @@ import subprocess
 import os
 import scriptgenerator
 import re
+import xml.etree.ElementTree as ET
 
 ROOT.gStyle.SetPaintTextFormat("4.2f");
 
@@ -57,7 +58,8 @@ class MVAPlot:
         self.weightfile=weightfile
         self.selection=selection
         self.name=histo.GetName()
-    def parseWeights(weightfile):
+        self.parseWeights(weightfile)
+    def parseWeights(self,weightfile):
         root = ET.parse(weightfile).getroot()
         exprs=[]
         names=[]
