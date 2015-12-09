@@ -1,4 +1,5 @@
 #Test, if all events have the right amount of weights
+#Usage: python test_dataset_weights.py "folder/file" "outputfile"
 import sys
 oldargv = sys.argv[:]
 sys.argv = ['-b-']
@@ -17,14 +18,26 @@ from DataFormats.FWLite import Handle, Events, Runs
 GenEvtInfo, GenEvtInfoLabel = Handle("GenEventInfoProduct") , "generator"
 LHEEvtHandle, LHEEvtHandleLabel = Handle("LHEEventProduct"), "externalLHEProducer"
 
+
 ############################################################################
-# Set folder containing Root Files to be tested and set name of the log file
-folder = "/pnfs/desy.de/cms/tier2//store/user/hmildner/ttHToNonbb_M125_13TeV_powheg_pythia8/Boostedv2MiniAOD/151017_154312/0000/"
-logfilename = 'BoostedTTHnonbb_weightsize_test.txt'
+# Set folder containing Root Files or single ROOT File to be tested and set name of the log file
+if(len(sys.argv) != 3):
+	print "no folder/file and logfilename set"
+	exit()
+else:
+	singlefile = False
+	if str(sys.argv[1])[-5:] == '.root':
+		filename = str(sys.argv[1])
+		singlefile = True
+	else:
+		folder = str(sys.argv[1])
+	logfilename = str(sys.argv[2])
 ############################################################################
 
-setlist = sorted(glob.glob(folder+"*.root"))
-
+if singlefile:
+	setlist = [str(filename)]
+else:
+	setlist = sorted(glob.glob(folder+"*.root"))
 #Get header from MiniAOD File and extract number of weights, that are given in the header
 weightheader = miniAODheader.getHeader(setlist[0])
 num_of_weights = miniAODheader.getnumofweights(weightheader)
@@ -34,7 +47,7 @@ print "Testing "+str(len(setlist))+" files...."
 
 
 #Loop over all files in Folder und compare the lengths of the weights vector from each event 
-#to the expected lenghts (== number expected weights)
+# to the expected lenghts (== number expected weights)
 with open(logfilename, 'w') as f:
 	for line in weightheader:
 		f.write(line+"\n")
