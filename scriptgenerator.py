@@ -8,6 +8,8 @@ import sys
 import stat
 import time
 
+ROOT.gROOT.SetBatch(True)
+
 def getHead():
     return """#include "TChain.h"
 #include "TBranch.h"
