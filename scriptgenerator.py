@@ -8,6 +8,8 @@ import sys
 import stat
 import time
 
+ROOT.gROOT.SetBatch(True)
+
 def getHead():
     return """#include "TChain.h"
 #include "TBranch.h"
@@ -441,22 +443,31 @@ def submitToNAF(scripts):
         command=['qsub', '-cwd', '-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=2000M', '-l', 's_vmem=2000M' ,'-o', '/dev/null', '-e', '/dev/null', script]
         a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
         output = a.communicate()[0]
-        jobid = output.split(' ')[2]
-        jobids.append(jobid)
+        jobidstring = output.split()
+        for jid in jobidstring:
+	  if jid.isdigit():
+	    jobid=int(jid)
+	    print "this JobID ", jobid
+            jobids.append(jobid)
+            break
     return jobids
 
 def do_qstat(jobids):
     allfinished=False
     while not allfinished:
-        time.sleep(3)
+        time.sleep(30)
         a = subprocess.Popen(['qstat'], stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
         qstat=a.communicate()[0]
         lines=qstat.split('\n')
         nrunning=0
         for line in lines:
-            words=line.split(' ')
-            if len(words)>0 and words[0] in jobids:
-                nrunning+=1
+            words=line.split()
+            for jid in words:
+	       if jid.isdigit():
+	         jobid=int(jid)
+                 if jobid in jobids:
+                   nrunning+=1
+                 break
         if nrunning>0:
             print nrunning,'jobs running'
         else:
@@ -600,7 +611,9 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
         jobids=submitToNAF(failed_jobs)
         do_qstat(jobids)
         failed_jobs=check_jobs(scripts,outputs,nentries)
-
+    if retries>=10:
+        print 'could not submit jobs'
+        sys.exit()
     print 'hadd output'
     subprocess.call(['hadd', outputpath]+outputs)
     print 'done'

@@ -22,7 +22,7 @@ def getHeader(filename, weightsonly=True):
 		header = []
 		while(test != var.headers_end()):
             		for line in range(test.lines().size()):
-            			header.append(test.lines().at(line)[0:-1])
+            			header.append(test.lines().at(line)[0:-1].strip())
             		test = test + 1
 	if weightsonly == True:
 		return getonlyweights(header)
