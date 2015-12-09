@@ -123,16 +123,15 @@ def bookMVA(name,weightfile):
     return '  r_'+name+'->BookMVA("BDT","'+weightfile+'");\n'
 
 def fillHistoSyst(name,varname,weight,systnames,systweights):
+    print 'fillhistosyse',name,varname,weight,systnames,systweights
     text='      float weight_'+name+'='+weight+';\n'
     for sn,sw in zip(systnames,systweights):
         text+= '      h_'+name+sn+'->Fill('+varname+',('+sw+')*(weight_'+name+'));\n'
     return text
 
-def evaluateMVA(plot,eventweight,systnames,systweights):
+def evaluateMVA(plot):
     name=plot.name
-    weight='('+plot.selection+')*('+eventweight+')*categoryweight*sampleweight'
-    text='      float output_'+name+' = r_'+name+'->EvaluateMVA("BDT");\n'
-    text+=fillHistoSyst(name,'output_'+name,weight,systnames,systweights)
+    text='      float bdtoutput_'+name+' = r_'+name+'->EvaluateMVA("BDT");\n'
     return text
 
 # returns all variables of an expression
@@ -193,14 +192,20 @@ def checkArrayLengths(ex,allvars):
         arrayselection+='&&'+v+'>'+str(maxidxs[v])
     return arrayselection
 
-def getArrayEntries(expr,allvars,i):
+def getArrayEntries(expr,variablesmap,i):
     newexpr=expr
+    print 'before',newexpr 
     variables=varsNoIndex(expr)
+    print 'potential for "i"',variables
     for v in variables:
-        if v in allvars:
-            if v.arraylength==None: continue
+        print 'loop at',v
+        if v in variablesmap.keys():
+            print 'is a vaiable',v
+            if variablesmap[v].arraylength==None: continue
+            print 'replacing'
             # substitute v by v[i]
-            newexpr=re.sub(v.name+"(?!\[)",v.name+'['+str(i)+']',newexpr)
+            newexpr=re.sub(v+"(?!\[)",v+'['+str(i)+']',newexpr)
+    print 'after',newexpr 
     return newexpr
 
 def getVartypesAndLength(varnames,tree):
@@ -268,7 +273,7 @@ def startCat(catweight,allvars):
     if catweight=='': catweight='1'
     if arrayselection=='': arrayselection ='1' 
     text+='    if((('+arrayselection+')*('+catweight+'))!=0) {\n'
-    text+='    float categoryweight='+catweight+';\n'
+    text+='      float categoryweight='+catweight+';\n'
     return text
 
 def endCat():
@@ -318,37 +323,47 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
     print 'using',samples[0].files[0],'to determining variable types'
     tree=f.Get('MVATree')
     
-    eventweight='Weight'
-    # variables is the list of variables to be read from tree
-    variablescandidates=varsIn(eventweight) #extract all words
-    variablescandidates+=varsIn(','.join(catselections))
-    variablescandidates+=varsIn(','.join(systweights))   
     
-    # extract variablescandidates of all plots
+    # variables is the list of variables to be read from tree
+    variablesnames=['Weight']
+    variablesnames+=varsIn(','.join(catselections))#extract all words
+    variablesnames+=varsIn(','.join(systweights))   
+    
+    # extract variablesnames of all plots
     for plot in plots:
         if isinstance(plot,plotutils.Plot):
-            variablescandidates+=varsIn(plot.variable)
-        variablescandidates+=varsIn(plot.selection)
+            variablesnames+=varsIn(plot.variable)
+        variablesnames+=varsIn(plot.selection)
     for s in samples:
-        variablescandidates+=varsIn(s.selection)
+        variablesnames+=varsIn(s.selection)
 
     for plot in plots:
         if isinstance(plot,plotutils.MVAPlot):
-            variablescandidates+=varsIn(','.join(plot.input_exprs))
+            variablesnames+=varsIn(','.join(plot.input_exprs))
 
     # remove duplicates
-    variablescandidates=list(set(variablescandidates))
+    variablesnames=list(set(variablesnames))
 
     # find out types of variables, length of arrays, and add length variables to variable list
-    variables=getVartypesAndLength(variablescandidates,tree)
-
+    variables=getVartypesAndLength(variablesnames,tree)
+    variablesmap={}
+    for v in variables:
+        variablesmap[v.name]=v
     # start writing script
     script=""
     script+=getHead()
-    for v in variables:
-        print v.name
     script+=initVarsFromTree(variables)
     
+    # for
+    for plot in plots:
+        if isinstance(plot,plotutils.MVAPlot):
+            for v,t in zip(plot.input_names,plot.input_types):
+                initVar(Variable(v,t))
+            script+=initReader(plot.name)
+            script+=addVariablesToReader(plot.name,plot.input_exprs,plot.input_names)
+            script+=bookMVA(plot.name,plot.weightfile)
+
+
     # initialize histograms in all categories and for all systematics
     for c in catnames:
         for plot in plots:
@@ -359,17 +374,12 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
             nb=plot.histo.GetNbinsX()
             for s in systnames:
                 script+=initHistoWithProcessNameAndSuffix(c+n+s,nb,mn,mx,t)
-            if isinstance(plot,plotutils.MVAPlot):
-                for v,t in zip(plot.input_names,plot.input_types):
-                    initVar(Variable(v,t))
-                script+=initReader(plot.name)
-                script+=addVariablesToReader(plot.name,plot.input_exprs,plot.input_names)
-                script+=bookMVA(plot.name,plot.weightfile)
 
     # start event loop
     script+=startLoop()
-    script+='      float sampleweight=1;\n'
+    script+='    float sampleweight=1;\n'
     script+=encodeSampleSelection(samples,variables)
+    # calculate derived variables used in BDT
     input_names=[]
     input_exprs=[]
     for plot in plots:
@@ -386,36 +396,40 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
             n=plot.histo.GetName()
             ex=plot.variable
             pw=plot.selection
-
             if pw=='': pw='1'
-            vars_in_plot=varsNoIndex(ex)
-            vars_in_plot+=varsNoIndex(pw)
-            lengthvar=""
-            for v in vars_in_plot:
-                if v in arraylength.keys():
-                    assert lengthvar == "" or lengthvar == arraylength[v]
-                    lengthvar=arraylength[v]
+            variablenames_without_index=varsNoIndex(ex) 
+            variablenames_without_index+=varsNoIndex(pw)
+            size_of_loop=None
+            for v in variablenames_without_index:
+                if not v in variablesmap.keys(): continue
+                if variablesmap[v].arraylength != None:
+                    assert size_of_loop == None or size_of_loop == variablesmap[v].arraylength
+                    size_of_loop=variablesmap[v].arraylength
             histoname=cn+n
-            eventweight='Weight'
             script+="\n"
-            if lengthvar!="":
-                exi=getArrayEntries(ex,arraylength,"i")
-                pwi=getArrayEntries(pw,arraylength,"i")
-                script+=varLoop("i",lengthvar)                    
+            if size_of_loop!=None:
+                print 'loop',plot
+                print 'loop',plot.name
+                exi=getArrayEntries(ex,variablesmap,"i")
+                pwi=getArrayEntries(pw,variablesmap,"i")
+                script+=varLoop("i",size_of_loop)                    
                 script+="{\n"
-                arrayselection=checkArrayLengths(','.join([ex,pw]),arraylength)
-                # TODO: systematics fill
-                script+=fillHistoSyst(histoname,exi,'('+arrayselection+')*('+pwi+')*('+eventweight+')*categoryweight*sampleweight',systnames,systweights)
+                arrayselection=checkArrayLengths(','.join([ex,pw]),variables)
+                weight='('+arrayselection+')*('+pwi+')*Weight*categoryweight*sampleweight'
+                script+=fillHistoSyst(histoname,exi,weight,systnames,systweights)
                 script+="      }\n"
             else:
+                print 'noneloop',plot
+                print 'noneloop',plot.name
                 arrayselection=checkArrayLengths(','.join([ex,pw]),variables)
-                script+=fillHistoSyst(histoname,ex,'('+arrayselection+')*('+pw+')*('+eventweight+')*categoryweight*sampleweight',systnames,systweights)
-        exprs=[]
-        names=[]
+                weight='('+arrayselection+')*('+pw+')*Weight*categoryweight*sampleweight'
+                script+=fillHistoSyst(histoname,ex,weight,systnames,systweights)
         for plot in plots:
-            # TODO: categoryname?
+            histoname=cn+plot.name
             if isinstance(plot,plotutils.MVAPlot):
-                script+=evaluateMVA(plot,eventweight,systnames,systweights)
+                script+=evaluateMVA(plot)
+                weight='('+plot.selection+')*Weight*categoryweight*sampleweight'
+                script+=fillHistoSyst(histoname,'bdtoutput_'+plot.name,weight,systnames,systweights)
         script+=endCat()
     script+=endLoop()
     script+=getFoot()
