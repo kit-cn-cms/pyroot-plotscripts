@@ -80,6 +80,13 @@ class MVAPlot:
         self.input_maxs=maxs
         self.input_types=types
 
+class Cateogry:
+    def __init__(self,name,title,selection):
+        self.name=name
+        self.title=title
+        self.selection=selection
+    
+
 
 # sets up the style of a histo and its axes
 def setupHisto(histo,color,yTitle=None,filled=False):
@@ -1159,7 +1166,7 @@ def writeLOLAndOneOnTop(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,f
         i+=1
         for histo,sample in zip(listOfHistos,samples):
 
-            yTitle='Events expected for 2.44 fb^{-1} @ 13 TeV'
+            yTitle='Events expected for 2.54 fb^{-1} @ 13 TeV'
             setupHisto(histo,sample.color,yTitle,stack)        
         c=drawHistosOnCanvas(listOfHistos,normalize,stack,logscale,options)       
         c.SetName('c'+str(i))
@@ -1167,6 +1174,10 @@ def writeLOLAndOneOnTop(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,f
         otc=ot.Clone()
         otc.Scale(factor)
         setupHisto(otc,sampleOnTop.color,'',False)
+        otc.SetBinContent(1,otc.GetBinContent(0)+otc.GetBinContent(1));
+        otc.SetBinContent(otc.GetNbinsX(),otc.GetBinContent(otc.GetNbinsX()+1)+otc.GetBinContent(otc.GetNbinsX()));
+        otc.SetBinError(1,ROOT.TMath.Sqrt(ROOT.TMath.Power(otc.GetBinError(0),2)+ROOT.TMath.Power(otc.GetBinError(1),2)));
+        otc.SetBinError(otc.GetNbinsX(),ROOT.TMath.Sqrt(ROOT.TMath.Power(otc.GetBinError(otc.GetNbinsX()+1),2)+ROOT.TMath.Power(otc.GetBinError(otc.GetNbinsX()),2)));
         otc.DrawCopy("samehisto")
         l=getLegend()
         l.AddEntry2(otc,sampleOnTop.name+' x '+str(factor),'L')
