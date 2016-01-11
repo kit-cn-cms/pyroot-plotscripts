@@ -6,7 +6,7 @@ path='/nfs/dust/cms/user/hmildner/trees1122/'
 name='allplots'
 sel_singleel="(N_LooseMuons==0)" # need to veto muon events in electron dataset to avoid double countung
 sel_singlemu="(N_LooseElectrons==0)" # and vice versa...
-mcweight='(Weight_PV*2.44)*(N_LooseElectrons==0||N_LooseMuons==0)' # some weights are only applied on mc
+mcweight='(2.54*Weight_PV)*(N_LooseElectrons==0||N_LooseMuons==0)' # some weights are only applied on mc
 # selections for categories
 sel_all="((N_TightLeptons==1)*(N_LooseLeptons==1)*(N_BTagsM>=2)*(N_Jets>=4))" # l+jets channel
 sel_muchan="((N_TightMuons==1)*(N_LooseMuons==1)*(N_LooseElectrons==0)*(N_BTagsM>=2)*(N_Jets>=4))" # e+jets channel
