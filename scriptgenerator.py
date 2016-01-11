@@ -125,10 +125,11 @@ def bookMVA(name,weightfile):
     return '  r_'+name+'->BookMVA("BDT","'+weightfile+'");\n'
 
 def fillHistoSyst(name,varname,weight,systnames,systweights):
-    print 'fillhistosyse',name,varname,weight,systnames,systweights
     text='      float weight_'+name+'='+weight+';\n'
     for sn,sw in zip(systnames,systweights):
-        text+= '      h_'+name+sn+'->Fill('+varname+',('+sw+')*(weight_'+name+'));\n'
+        text+=fillHisto(name+sn,varname,'('+sw+')*(weight_'+name+')')
+#        text+= '      if(('+sw+')*(weight_'+name+')>0)'
+#        text+= '        h_'+name+sn+'->Fill('+varname+',('+sw+')*(weight_'+name+'));\n'
     return text
 
 def evaluateMVA(plot):
@@ -196,18 +197,12 @@ def checkArrayLengths(ex,allvars):
 
 def getArrayEntries(expr,variablesmap,i):
     newexpr=expr
-    print 'before',newexpr 
     variables=varsNoIndex(expr)
-    print 'potential for "i"',variables
     for v in variables:
-        print 'loop at',v
         if v in variablesmap.keys():
-            print 'is a vaiable',v
             if variablesmap[v].arraylength==None: continue
-            print 'replacing'
             # substitute v by v[i]
             newexpr=re.sub(v+"(?!\[)",v+'['+str(i)+']',newexpr)
-    print 'after',newexpr 
     return newexpr
 
 def getVartypesAndLength(varnames,tree):
@@ -275,7 +270,9 @@ def endCat():
 
 
 def fillHisto(histo,var,weight):
-    return '      if(('+weight+')!=0) h_'+histo+'->Fill('+var+','+weight+');\n'
+    text= '        if(('+weight+')!=0)\n'
+    text+='          h_'+histo+'->Fill('+var+','+weight+');\n'
+    return text
 
 def endLoop():
     return """  }\n // end of event loop
@@ -402,8 +399,6 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
             histoname=cn+n
             script+="\n"
             if size_of_loop!=None:
-                print 'loop',plot
-                print 'loop',plot.name
                 exi=getArrayEntries(ex,variablesmap,"i")
                 pwi=getArrayEntries(pw,variablesmap,"i")
                 script+=varLoop("i",size_of_loop)                    
@@ -413,8 +408,6 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
                 script+=fillHistoSyst(histoname,exi,weight,systnames,systweights)
                 script+="      }\n"
             else:
-                print 'noneloop',plot
-                print 'noneloop',plot.name
                 arrayselection=checkArrayLengths(','.join([ex,pw]),variables)
                 weight='('+arrayselection+')*('+pw+')*Weight*categoryweight*sampleweight'
                 script+=fillHistoSyst(histoname,ex,weight,systnames,systweights)
@@ -477,7 +470,7 @@ def submitToNAF(scripts):
         for jid in jobidstring:
 	  if jid.isdigit():
 	    jobid=int(jid)
-	    print "this JobID ", jobid
+	    print "this job's ID is", jobid
             jobids.append(jobid)
             break
     return jobids
