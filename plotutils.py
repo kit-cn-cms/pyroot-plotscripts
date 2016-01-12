@@ -59,6 +59,8 @@ class MVAPlot:
         self.histo=histo
         self.weightfile=weightfile
         self.selection=selection
+        if selection =='':
+            self.selection='1'
         self.name=histo.GetName()
         self.parseWeights(weightfile)
     def parseWeights(self,weightfile):
