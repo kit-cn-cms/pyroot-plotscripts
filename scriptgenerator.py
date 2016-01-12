@@ -478,7 +478,7 @@ def submitToNAF(scripts):
 def do_qstat(jobids):
     allfinished=False
     while not allfinished:
-        time.sleep(30)
+        time.sleep(10)
         a = subprocess.Popen(['qstat'], stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
         qstat=a.communicate()[0]
         lines=qstat.split('\n')
