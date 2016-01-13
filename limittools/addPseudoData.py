@@ -5,7 +5,8 @@ infname=sys.argv[1]
 
 infile=ROOT.TFile(infname,"UPDATE")
 
-samplesWOttH=['ttbarOther','ttbarPlusCCbar','ttbarPlusBBbar','ttbarPlusB','ttbarPlus2B','singlet','wjets','zjets','ttbarZ','ttbarW','diboson']
+#samplesWOttH=['ttbarOther','ttbarPlusCCbar','ttbarPlusBBbar','ttbarPlusB','ttbarPlus2B','singlet','wjets','zjets','ttbarZ','ttbarW','diboson']
+samplesWOttH=['ttbarOther','ttbarPlusCCbar','ttbarPlusBBbar','ttbarPlusB','ttbarPlus2B']
 
 categories=["j4_t3","j4_t4","j5_t3","j5_tge4","jge6_t2","jge6_t3","jge6_tge4"]
 
