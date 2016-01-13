@@ -2,7 +2,7 @@ from scriptgenerator import *
 from plotutils import *
 import sys
 
-path='/nfs/dust/cms/user/hmildner/trees0108/'
+path='/nfs/dust/cms/user/kelmorab/treesMEM/'
 pathDB='/nfs/dust/cms/user/kelmorab/trees0108/'
 name='bdtplots_parrallel'
 
@@ -77,20 +77,20 @@ s5j4t="(N_Jets==5&&N_BTagsM>=4)"
 s6j2t="(N_Jets>=6&&N_BTagsM==2)"
 s6j3t="(N_Jets>=6&&N_BTagsM==3)"
 s6j4t="(N_Jets>=6&&N_BTagsM>=4)"
-bins=     [s4j3t,s4j4t,s5j3t,s5j4t,s6j2t,s6j3t,s6j4t]
+bins=     [s6j4t]
 # corresponding labels
-binlabels=["j4_t3","j4_t4","j5_t3","j5_tge4","jge6_t2","jge6_t3","jge6_tge4"]
+binlabels=["jge6_tge4"]
 # number of bins in each category
-nhistobins=    [20,    10,    20,    10      ,20,   20,    10]
-minxvals= [-0.87, -0.8, -0.94, -0.86, -0.84, -0.87, -0.71 ]
-maxxvals= [0.88, 0.82, 0.9, 0.9, 0.87, 0.87, 0.65]
+nhistobins=    [10]
+minxvals= [0.0]
+maxxvals= [1.0]
 
 #minxvals= [-1, -1, -1, -1, -1, -1, -1 ]
 #maxxvals= [ 1,  1,  1,  1,  1,  1,  1 ]
 
 bdts=[]
 for b,bl,nb,minx,maxx in zip(bins,binlabels,nhistobins,minxvals,maxxvals):
-    bdts.append(Plot(ROOT.TH1F("BDT_ljets"+"_"+bl,"BDT_ljets"+" ("+bl+")",nb,minx,maxx),"BDT_common5_output",b))
+    bdts.append(Plot(ROOT.TH1F("BDT_ljets"+"_"+bl,"BDT_ljets"+" ("+bl+")",nb,minx,maxx),"MEM_p",b))
 
 
 outputpath=plotParallel(name,2000000,bdts,allsamples)
