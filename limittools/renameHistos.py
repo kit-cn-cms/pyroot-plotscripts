@@ -10,9 +10,6 @@ outfname=sys.argv[2]
 infile=ROOT.TFile(infname,"READ")
 outfile=ROOT.TFile(outfname,"RECREATE")
 
-
-samplesWOttH=['ttbarOther','ttbarPlusCCbar','ttbarPlusBBbar','ttbarPlusB','ttbarPlus2B','singlet','wjets','zjets','ttZ','ttW','diboson']
-
 categories=["j4_t3","j4_t4","j5_t3","j5_tge4","jge6_t2","jge6_t3","jge6_tge4"]
 
 disc="BDT_ljets"
