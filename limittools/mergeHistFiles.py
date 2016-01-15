@@ -18,6 +18,8 @@ keylist=infile1.GetListOfKeys()
 
 for key in keylist:
   thisname=key.GetName()
+  if "BDTbin" in thisname or "data_obs" in thisname:
+    continue
   takeit=False
   for cat in categoriesToTakeFrom2:
     if cat in thisname:
@@ -26,8 +28,10 @@ for key in keylist:
     thish=infile2.Get(thisname)
   else:
     thish=infile1.Get(thisname)
-  outfile.cd()
-  thish.Write()
+  print thisname, thish
+  if thish!=None:
+    outfile.cd()
+    thish.Write()
   
 outfile.Close()
 infile1.Close()
