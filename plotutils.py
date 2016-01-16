@@ -26,6 +26,7 @@ class Sample:
             self.nick=name
         else:
             self.nick=nick
+
     def checkNevents():
         if checknevents>0:
             nevents=0
@@ -448,13 +449,13 @@ def createHistoLists_fromSuperHistoFile(path,samples,plots,rebin=1,catnames=[""]
         for c in catnames:
             for plot in plots:
                 key=sample.nick+'_'+c+plot.name
-                print key, sample.nick, c, plot.name
+#                print key, sample.nick, c, plot.name
                 o=f.Get(key)
-                print o
+#                print o
                 if isinstance(o,ROOT.TH1) and not isinstance(o,ROOT.TH2): 
                     o.Rebin(rebin)
                     histoList.append(o.Clone())
-                    print "ok", histoList[-1], len(histoList)
+#                    print "ok", histoList[-1], len(histoList)
         listOfHistoListsT.append(histoList)
     listOfHistoLists=transposeLOL(listOfHistoListsT)
     return listOfHistoLists
@@ -474,17 +475,17 @@ def plotsForSelections_cross_Histos(selections,selectionnames,histos,variables):
 def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,stack=False,logscale=False,options='histo',statTest=False, sepaTest=False,ratio=False):
     if isinstance(label, basestring):
         labeltexts=len(listOfHistoLists)*[label]
-        print "bla"
+#        print "bla"
     else:
         labeltexts=label
     canvases=[]
     objects=[]   
     i=0
-    print labeltexts
+#    print labeltexts
     for listOfHistos, labeltext in zip(listOfHistoLists, labeltexts):
         i+=1
         for histo,sample in zip(listOfHistos,samples):
-            print labeltext
+#            print labeltext
             yTitle='Events'
             if normalize:
                 yTitle='normalized'
@@ -520,7 +521,7 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
         lumi.SetTextFont(42)
         lumi.SetTextSize(0.06)
         lumi.SetNDC()
-        lumi.Draw()
+#        lumi.Draw()
         objects.append(lumi)
 
         label = ROOT.TLatex(0.2, 0.83, labeltext);
@@ -544,10 +545,10 @@ def writeListOfROCs(graphs,names,colors,filename,logscale=False,rej=True):
     for graph,name,color in zip(graphs,names,colors):
         l.AddEntry2(graph,name)
         if first:
-            graph.Draw('ALP')
+            graph.Draw('AL')
             first=False
         else:
-            graph.Draw('LP')
+            graph.Draw('L')
         setupHisto(graph,color)
         graph.GetXaxis().SetTitle('Signal efficiency')
         if rej:
@@ -644,10 +645,10 @@ def getEff(histo1):
         eff1=0
         if integral1 > 0:
             eff1=histo1.Integral(i,nBins+1)/integral1
-        print i, histo1.GetBinLowEdge(i), eff1
+#        print i, histo1.GetBinLowEdge(i), eff1
         eff.SetPoint(point,histo1.GetBinLowEdge(i),eff1)
         point+=1
-    print "###"
+#    print "###"
     return eff
 
 
@@ -867,11 +868,11 @@ def plotDataMC(listOfHistoListsData,listOfHistoLists,samples,name,logscale=False
     canvases=[]
     objects=[]   
     i=0
-    print len(listOfHistoLists)
+#    print len(listOfHistoLists)
     # for every plot, look at all samples
     for listOfHistos,listOfHistosData,labeltext in zip(listOfHistoLists,listOfHistoListsData,labeltexts):
         i+=1
-        print i
+#        print i
         # setup histo style
         for histo,sample in zip(listOfHistos,samples):
             yTitle='Events'
@@ -927,7 +928,7 @@ def plotDataMC(listOfHistoListsData,listOfHistoLists,samples,name,logscale=False
         lumi.SetTextFont(42)
         lumi.SetTextSize(0.06)
         lumi.SetNDC()
-        lumi.Draw()
+#        lumi.Draw()
         objects.append(lumi)
 
         label = ROOT.TLatex(0.2, 0.83, labeltext);
@@ -969,7 +970,7 @@ def plotDataMC(listOfHistoListsData,listOfHistoLists,samples,name,logscale=False
 
 
 
-    print len(canvases)
+#    print len(canvases)
     printCanvases(canvases,name)
     writeObjects(canvases,name)
 
@@ -998,8 +999,8 @@ def plotDataMCwSysts(listOfHistoListsData,listOfHistoLists,ListSysHistosUp,ListS
             moveOverFlow(h)
        # print i, "bla", len(ListSysHistosUp), len(ListSysHistosUp[0])
         for w in ListSysHistosUp:
-          print len(w)
-          print i, len(w[i-1])
+#          print len(w)
+#          print i, len(w[i-1])
           for h in w[i-1]:
             moveOverFlow(h)
         for w in ListSysHistosDown:
@@ -1108,7 +1109,7 @@ def plotDataMCwSysts(listOfHistoListsData,listOfHistoLists,ListSysHistosUp,ListS
         lumi.SetTextFont(42)
         lumi.SetTextSize(0.06)
         lumi.SetNDC()
-        lumi.Draw()
+#        lumi.Draw()
         objects.append(lumi)
 
         label = ROOT.TLatex(0.2, 0.83, labeltext);
@@ -1168,7 +1169,8 @@ def writeLOLAndOneOnTop(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,f
         i+=1
         for histo,sample in zip(listOfHistos,samples):
 
-            yTitle='Events expected for 2.54 fb^{-1} @ 13 TeV'
+#            yTitle='Events expected for 2.54 fb^{-1} @ 13 TeV'
+            yTitle='Events'
             setupHisto(histo,sample.color,yTitle,stack)        
         c=drawHistosOnCanvas(listOfHistos,normalize,stack,logscale,options)       
         c.SetName('c'+str(i))
