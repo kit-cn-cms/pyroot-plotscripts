@@ -1,10 +1,13 @@
 from scriptgenerator import *
 from plotutils import *
 import sys
+sys.path.insert(0, 'limittools')
+from limittools import renameHistos
+from limittools import addPseudoData
 
 path='/nfs/dust/cms/user/hmildner/trees0108/'
 pathDB='/nfs/dust/cms/user/kelmorab/trees0108/'
-name='bdtplots_parrallel'
+name='bdtplots_parrallel_test'
 
 #mcweight='(2.54*Weight_TopPt)*(N_LooseElectrons==0||N_LooseMuons==0)' 
 mcweight='2.0*2.54*(Evt_Odd==0)'
@@ -31,6 +34,19 @@ weightsystnames=["",
            "_CMS_ttH_CSVHFStats2Up","_CMS_ttH_CSVHFStats2Down","_CMS_ttH_CSVLFStats2Up","_CMS_ttH_CSVLFStats2Down",
            "_CMS_ttH_CSVCErr1Up","_CMS_ttH_CSVCErr1Down","_CMS_ttH_CSVCErr2Up","_CMS_ttH_CSVCErr2Down"]
 
+othersystnames=["_CMS_scale_jUp",
+                "_CMS_scale_jDown",
+#                "_CMS_res_jUp",
+#                "_CMS_res_jDown"
+                ]
+allsystnames=weightsystnames+othersystnames
+
+othersystfilenames=["JESUP",
+                    "JESDOWN",
+#                    "JERUP",
+#                    "JERDOWN"
+                    ]
+
 # corresponding weight names
 systweights=["1",
              "Weight_CSVLFup","Weight_CSVLFdown","Weight_CSVHFup","Weight_CSVHFdown",
@@ -38,37 +54,13 @@ systweights=["1",
              "Weight_CSVHFStats2up","Weight_CSVHFStats2down","Weight_CSVLFStats2up","Weight_CSVLFStats2down",
              "Weight_CSVCErr1up","Weight_CSVCErr1down","Weight_CSVCErr2up","Weight_CSVCErr2down"]
 
-# create extra samples with special weights
-samples_syst=[]
-#for sn,sw in zip(weightsystnames,systweights):
-#    for sample in samples:
-#        ss=sw
-#        if sample.selection != '':
-#            ss='('+sample.selection+')*'+ss
-#        samples_syst.append(Sample(sample.name+sn,sample.color,sample.path,ss,sample.nick+sn))
-samples_syst=samples
 
-samples_jesup=[]
+systsamples=[]
 for sample in samples:
-  samples_jesup.append(Sample(sample.name+'_CMS_scale_jUp',sample.color,sample.path.replace("nominal","JESUP"),sample.selection,sample.nick+"_CMS_scale_jUp"))
-
-samples_jesdown=[]
-for sample in samples:
-  samples_jesdown.append(Sample(sample.name+'_CMS_scale_jDown',sample.color,sample.path.replace("nominal","JESDOWN"),sample.selection,sample.nick+"_CMS_scale_jDown"))
-
-#samples_jerdown=[]
-#for sample in samples:
-  #samples_jerdown.append(Sample(sample.name+'_CMS_res_jDown',sample.color,sample.path.replace("nominal","JERDOWN"),sample.selection,sample.nick+"_CMS_res_jDown"))
+  for sysname,sysfilename in zip(othersystnames,othersystfilenames):
+    systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),sample.selection,sample.nick+sysname))
   
-#samples_jerup=[]
-#for sample in samples:
-  #samples_jerup.append(Sample(sample.name+'_CMS_res_jUp',sample.color,sample.path.replace("nominal","JERUP"),sample.selection,sample.nick+"_CMS_res_jUp"))  
-
-#plots=[Plot(ROOT.TH1F("BDTcommon5xc","BDTcommon5xc",20,-1,1),"BDT_common5_output"),
-       #]
-
-#allsamples=samples_syst+samples_jerdown+samples_jerup+samples_jesdown+samples_jesup
-allsamples=samples_syst+samples_jesdown+samples_jesup
+allsamples=samples+systsamples
 
 # definition of analysis bins
 s4j2t="(N_Jets==4&&N_BTagsM==2)"
@@ -85,21 +77,19 @@ bins=     [s4j2t,s5j2t,s4j3t,s4j4t,s5j3t,s5j4t,s6j2t,s6j3t,s6j4t]
 binlabels=["j4_t2","j5_t2","j4_t3","j4_t4","j5_t3","j5_tge4","jge6_t2","jge6_t3","jge6_tge4"]
 # number of bins in each category
 nhistobins=    [1, 1, 20,    10,    20,    10      ,20,   20,    10]
-minxvals= [0, 0, -0.87, -0.8, -0.94, -0.86, -0.84, -0.87, -0.71 ]
-maxxvals= [5000, 5000, 0.88, 0.82, 0.9, 0.9, 0.87, 0.87, 0.65]
-
-#minxvals= [-1, -1, -1, -1, -1, -1, -1 ]
-#maxxvals= [ 1,  1,  1,  1,  1,  1,  1 ]
+minxvals= [0., 0., -0.87, -0.8, -0.94, -0.86, -0.84, -0.87, -0.71 ]
+maxxvals= [5000., 5000., 0.88, 0.82, 0.9, 0.9, 0.87, 0.87, 0.65]
 
 bdts=[]
 for b,bl,nb,minx,maxx in zip(bins,binlabels,nhistobins,minxvals,maxxvals):
-  for sn, sw in zip(weightsystnames, systweights):
-    if bl=="j4_t2" or bl=="j5_t2":
-      bdts.append(Plot(ROOT.TH1F("BDT_ljets"+"_"+bl+sn,"BDT_ljets"+" ("+bl+")"+sn,nb,minx,maxx),"Evt_HT",b+"*"+sw))  
-    else:    
-      bdts.append(Plot(ROOT.TH1F("BDT_ljets"+"_"+bl+sn,"BDT_ljets"+" ("+bl+")"+sn,nb,minx,maxx),"BDT_common5_output",b+"*"+sw))
+  if bl=="j4_t2" or bl=="j5_t2":
+    bdts.append(Plot(ROOT.TH1F("BDT_ljets"+"_"+bl,"BDT_ljets"+" ("+bl+")",nb,minx,maxx),"Evt_HT",b))  
+  else:    
+    bdts.append(Plot(ROOT.TH1F("BDT_ljets"+"_"+bl,"BDT_ljets"+" ("+bl+")",nb,minx,maxx),"BDT_common5_output",b))
 
+outputpath=plotParallel(name,1000000,bdts,allsamples,[''],['1.'],weightsystnames, systweights)
+renameHistos(outputpath,name+'_limitInput.root',allsystnames)
+addPseudoData(name+'_limitInput.root',[s.name for s in samples[1:]],binlabels,allsystnames)
 
-outputpath=plotParallel(name,2000000,bdts,allsamples)
-listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,allsamples,bdts)
-writeListOfHistoLists(listOfHistoLists,allsamples,name,'')
+listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,bdts)
+writeListOfHistoLists(listOfHistoLists,allsamples,'',name,False)
