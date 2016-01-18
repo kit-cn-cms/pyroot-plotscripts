@@ -7,6 +7,9 @@ import os
 import sys
 import stat
 import time
+import plotutils
+
+ROOT.gROOT.SetBatch(True)
 
 def getHead():
     return """#include "TChain.h"
@@ -49,7 +52,16 @@ void plot(){
   // initialize variables from tree
 """
 
-def initVar(var,t='F',isarray=False):
+class Variable():
+    def __init__(self,name,vartype='F',arraylength=None):
+        self.name=name
+        self.vartype=vartype
+        self.arraylength=arraylength
+
+def initVar(v):
+    var=v.name
+    t=v.vartype
+    isarray=v.arraylength!=None
     if isarray:
         if t=='F':
             text='  float* '+var+' = new float[100];\n'
@@ -64,13 +76,14 @@ def initVar(var,t='F',isarray=False):
         else: "UNKNOWN TYPE",t
     return text
 
-def initVarFromTree(var,t='F',isarray=False):
+def initVarFromTree(v):
+    isarray=v.arraylength!=None
     if isarray:
-        text= initVar(var,t,True)
-        text+='  chain->SetBranchAddress("'+var+'",'+var+');\n'
+        text= initVar(v)
+        text+='  chain->SetBranchAddress("'+v.name+'",'+v.name+');\n'
     else:
-        text= initVar(var,t)
-        text+='  chain->SetBranchAddress("'+var+'",&'+var+');\n'
+        text= initVar(v)
+        text+='  chain->SetBranchAddress("'+v.name+'",&'+v.name+');\n'
     return text
 
 def initHisto(name,nbins,xmin=0,xmax=0,title_=''):
@@ -101,7 +114,7 @@ def calculateDerived(names,expressions):
             text+='    '+n+' = '+e+';\n'
     return text
 
-def addVariablesToReader(readername,expressions,variablenames,isarray):
+def addVariablesToReader(readername,expressions,variablenames):
     text=''
     for e,n in zip(expressions,variablenames):
         text+='  r_'+readername+'->AddVariable("'+e+'", &'+n+');\n'
@@ -111,12 +124,20 @@ def addVariablesToReader(readername,expressions,variablenames,isarray):
 def bookMVA(name,weightfile):
     return '  r_'+name+'->BookMVA("BDT","'+weightfile+'");\n'
 
-def evaluateMVA(name,eventweight,systnames,systweights):
-    text='      float output_'+name+' = r_'+name+'->EvaluateMVA("BDT");\n'
+def fillHistoSyst(name,varname,weight,systnames,systweights):
+    text='      float weight_'+name+'='+weight+';\n'
     for sn,sw in zip(systnames,systweights):
-        text+= '      h_BDT_ljets_'+name+sn+'->Fill(output_'+name+',('+sw+')*('+eventweight+'));\n\n'
+        text+=fillHisto(name+sn,varname,'('+sw+')*(weight_'+name+')')
+#        text+= '      if(('+sw+')*(weight_'+name+')>0)'
+#        text+= '        h_'+name+sn+'->Fill('+varname+',('+sw+')*(weight_'+name+'));\n'
     return text
 
+def evaluateMVA(plot):
+    name=plot.name
+    text='      float bdtoutput_'+name+' = r_'+name+'->EvaluateMVA("BDT");\n'
+    return text
+
+# returns all variables of an expression
 def varsIn(expr):
     # find all words not followed by ( (these are functions)
     variablescandidates = re.findall(r"\w+\b(?!\()", expr)
@@ -126,7 +147,7 @@ def varsIn(expr):
             variables.append(v)
     return variables
 
-
+# returns all variables of an expression that are not followed by [ (e.g. variable[0])
 def varsNoIndex(expr):
     # find all words not followed by [
     variablescandidates = re.findall(r"\w+\b(?!\[)", expr)
@@ -136,8 +157,8 @@ def varsNoIndex(expr):
             variables.append(v)
     return variables
 
-def varsWithMaxIndex(expr,arraylength):
-    # find all words not followed by [
+def varsWithMaxIndex(expr,allvars):
+    # find all words followed by [
     variablescandidates = re.findall(r"\w+\b(?=\[)", expr)    
     variables=[]
     maxidxs=[]
@@ -145,6 +166,10 @@ def varsWithMaxIndex(expr,arraylength):
         if v[0].isalpha() or v[0]=='_':
             variables.append(v)
     variables=list(set(variables))
+    arraylength={}
+    for v in allvars:
+        if v.arraylength == None: continue
+        arraylength[v.name]=v.arraylength
     maxmap={}
     for v in variables:
         maxidx=-1
@@ -163,26 +188,27 @@ def varsWithMaxIndex(expr,arraylength):
             maxmap[arraylength[v]]=maxidx
     return maxmap
 
-def checkArrayLengths(ex,arraylength):
-    maxidxs=varsWithMaxIndex(ex,arraylength)
+def checkArrayLengths(ex,allvars):
+    maxidxs=varsWithMaxIndex(ex,allvars)
     arrayselection="1"
     for v in maxidxs.keys():
         arrayselection+='&&'+v+'>'+str(maxidxs[v])
     return arrayselection
 
-def getArrayEntries(expr,arraylength,i):
+def getArrayEntries(expr,variablesmap,i):
     newexpr=expr
     variables=varsNoIndex(expr)
     for v in variables:
-        if v in arraylength.keys():            
+        if v in variablesmap.keys():
+            if variablesmap[v].arraylength==None: continue
             # substitute v by v[i]
             newexpr=re.sub(v+"(?!\[)",v+'['+str(i)+']',newexpr)
     return newexpr
 
-def getVartypesAndLength(variables,tree):
+def getVartypesAndLength(varnames,tree):
     vartypes={}
     arraylength={}
-    for v in variables:
+    for v in varnames:
         br=tree.GetBranch(v)
         if not hasattr(tree, v):
             print v,'does not exist in tree!'
@@ -193,9 +219,16 @@ def getVartypesAndLength(variables,tree):
         varisarray=b.split('/')[0][-1]==']'
         if varisarray:
             arraylength[v]= re.findall(r"\[(.*?)\]",b.split('/')[0])[0]
-            variables.append(arraylength[v])
+            varnames.append(arraylength[v])
             vartypes[arraylength[v]]='I'
-    return vartypes,arraylength
+    varnames=list(set(varnames))
+    variables=[]
+    for v in varnames:
+        if v in arraylength:
+            variables.append(Variable(v,vartypes[v],arraylength[v]))
+        else:
+            variables.append(Variable(v,vartypes[v]))
+    return variables
 
 def startLoop():
     return """  
@@ -211,19 +244,11 @@ def startLoop():
 
 """
 
-def ttbarPlusX():
-    text=''
-    text+= '    if(processname=="ttbarPlusB" && GenEvt_I_TTPlusBB!=1) continue;\n'
-    text+= '    if(processname=="ttbarPlus2B" && GenEvt_I_TTPlusBB!=2) continue;\n'
-    text+= '    if(processname=="ttbarPlusBBbar" && GenEvt_I_TTPlusBB!=3) continue;\n'
-    text+= '    if(processname=="ttbarPlusCCbar" && (GenEvt_I_TTPlusBB>0 || GenEvt_I_TTPlusCC<1)) continue;\n'
-    text+= '    if(processname=="ttbarOther" && (GenEvt_I_TTPlusBB>0 || GenEvt_I_TTPlusCC>0)) continue;\n'
-    return text
 
-def encodeSampleSelection(samples,arraylength):
+def encodeSampleSelection(samples,allvars):
     text=''
     for sample in samples:
-        arrayselection=checkArrayLengths(sample.selection,arraylength)
+        arrayselection=checkArrayLengths(sample.selection,allvars)
         if arrayselection=='': arrayselection ='1' 
         sselection=sample.selection
         if sselection=='': sselection='1'
@@ -231,13 +256,13 @@ def encodeSampleSelection(samples,arraylength):
         text+= '    else if(processname=="'+sample.nick+'") sampleweight='+sselection+';\n'
     return text
 
-def startCat(eventweight,arraylength):
+def startCat(catweight,allvars):
     text='\n    // staring category\n'
-    arrayselection=checkArrayLengths(eventweight,arraylength)
+    arrayselection=checkArrayLengths(catweight,allvars)
+    if catweight=='': catweight='1'
     if arrayselection=='': arrayselection ='1' 
-    text+='    if((('+arrayselection+')*('+eventweight+'))!=0) {\n'
-    if eventweight=='': eventweight='1'
-    text+='    float categoryweight='+eventweight+';\n'
+    text+='    if((('+arrayselection+')*('+catweight+'))!=0) {\n'
+    text+='      float categoryweight='+catweight+';\n'
     return text
 
 def endCat():
@@ -245,7 +270,9 @@ def endCat():
 
 
 def fillHisto(histo,var,weight):
-    return '      if(('+weight+')!=0) h_'+histo+'->Fill('+var+','+weight+');\n'
+    text= '        if(('+weight+')!=0)\n'
+    text+='          h_'+histo+'->Fill('+var+','+weight+');\n'
+    return text
 
 def endLoop():
     return """  }\n // end of event loop
@@ -267,20 +294,11 @@ int main(){
   plot();
 }
 """
-
-def initVarsFromTree(vs,typemap,arraylength):
+                         
+def initVarsFromTree(variables):
     r=""
-    for v in vs:
-        if v in arraylength.keys():
-            if v in typemap:
-                r+=initVarFromTree(v,typemap[v],True)
-            else:
-                r+=initVarFromTree(v,'F',True)
-        else:
-            if v in typemap:
-                r+=initVarFromTree(v,typemap[v])
-            else:
-                r+=initVarFromTree(v)
+    for v in variables:
+        r+=initVarFromTree(v)
     r+='\n'
     return r
 
@@ -291,57 +309,52 @@ def compileProgram(scriptname):
     subprocess.call(cmd)
 
 
-def parseWeights(weightfile):
-    root = ET.parse(weightfile).getroot()
-    exprs=[]
-    names=[]
-    mins=[]
-    maxs=[]
-    types=[]
-    for var in root.iter('Variable'):
-        exprs.append(var.get('Expression'))
-        names.append(var.get('Internal'))
-        mins.append(var.get('Min'))
-        maxs.append(var.get('Max'))
-        types.append(var.get('Type'))
-    return exprs,names,mins,maxs,types
-
 def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"]):
     f=ROOT.TFile(samples[0].files[0])
     print 'using',samples[0].files[0],'to determining variable types'
     tree=f.Get('MVATree')
     
-    eventweight='Weight'
+    
     # variables is the list of variables to be read from tree
-    variablescandidates=varsIn(eventweight) #extract all words
-    variablescandidates+=varsIn(','.join(catselections))
-    variablescandidates+=varsIn(','.join(systweights))   
-
-    # extract variablescandidates of all plots
+    variablesnames=['Weight']
+    variablesnames+=varsIn(','.join(catselections))#extract all words
+    variablesnames+=varsIn(','.join(systweights))   
+    
+    # extract variablesnames of all plots
     for plot in plots:
-        variablescandidates+=varsIn(plot.variable)
-        variablescandidates+=varsIn(plot.selection)
+        if isinstance(plot,plotutils.Plot):
+            variablesnames+=varsIn(plot.variable)
+        variablesnames+=varsIn(plot.selection)
     for s in samples:
-        variablescandidates+=varsIn(s.selection)
+        variablesnames+=varsIn(s.selection)
+
+    for plot in plots:
+        if isinstance(plot,plotutils.MVAPlot):
+            variablesnames+=varsIn(','.join(plot.input_exprs))
 
     # remove duplicates
-    variablescandidates=list(set(variablescandidates))
-    # remove everything not a true variable (e.g. number)
-    variables=[]
-    for v in variablescandidates:
-        if v[0].isalpha() or v[0]=='_':
-            variables.append(v)
-            
-    # find put types of variables, length of arrays, and add length variables to variable list
-    vartypes,arraylength=getVartypesAndLength(variables,tree)
-    # remove duplicates
-    variables=list(set(variables))
+    variablesnames=list(set(variablesnames))
 
+    # find out types of variables, length of arrays, and add length variables to variable list
+    variables=getVartypesAndLength(variablesnames,tree)
+    variablesmap={}
+    for v in variables:
+        variablesmap[v.name]=v
     # start writing script
     script=""
-    script+=getHead()    
-    script+=initVarsFromTree(variables,vartypes,arraylength)
+    script+=getHead()
+    script+=initVarsFromTree(variables)
     
+    # for
+    for plot in plots:
+        if isinstance(plot,plotutils.MVAPlot):
+            for v,t in zip(plot.input_names,plot.input_types):
+                initVar(Variable(v,t))
+            script+=initReader(plot.name)
+            script+=addVariablesToReader(plot.name,plot.input_exprs,plot.input_names)
+            script+=bookMVA(plot.name,plot.weightfile)
+
+
     # initialize histograms in all categories and for all systematics
     for c in catnames:
         for plot in plots:
@@ -356,43 +369,54 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
     # start event loop
     script+=startLoop()
     script+='    float sampleweight=1;\n'
-    script+='      float systweight=1;\n'
-    script+=encodeSampleSelection(samples,arraylength)
+    script+=encodeSampleSelection(samples,variables)
+    # calculate derived variables used in BDT
+    input_names=[]
+    input_exprs=[]
+    for plot in plots:
+        if isinstance(plot,plotutils.MVAPlot):
+            input_names.append(plot)
+            input_exprs.append(plot)
+    script+=calculateDerived(input_names,input_exprs)
     for cn,cs in zip(catnames,catselections):
         # for every category
-        script+=startCat(cs,arraylength)
+        script+=startCat(cs,variables)
         # plot everything
         for plot in plots:
+            if isinstance(plot,plotutils.MVAPlot): continue
             n=plot.histo.GetName()
             ex=plot.variable
             pw=plot.selection
-
             if pw=='': pw='1'
-            for sn,sw in zip(systnames,systweights):
-                vars_in_plot=varsNoIndex(ex)
-                vars_in_plot+=varsNoIndex(pw)
-                lengthvar=""
-                for v in vars_in_plot:
-                    if v in arraylength.keys():
-                        assert lengthvar == "" or lengthvar == arraylength[v]
-                        lengthvar=arraylength[v]
-                histoname=cn+n+sn
-                eventweight='Weight'
-                script+="\n"
-                if lengthvar!="":
-                    exi=getArrayEntries(ex,arraylength,"i")
-                    pwi=getArrayEntries(pw,arraylength,"i")
-#                    swi=getArrayEntries(sw,arraylength,"i")
-                    script+=varLoop("i",lengthvar)                    
-                    script+="{\n"
-                    arrayselection=checkArrayLengths(','.join([ex,pw]),arraylength)
-                    script+='      float weight_'+histoname+'=('+arrayselection+')*('+pwi+')*('+eventweight+')*systweight'+sn+'*categoryweight*sampleweight;\n'
-                    script+=fillHisto(histoname,exi,'weight_'+histoname)
-                    script+="      }\n"
-                else:
-                    arrayselection=checkArrayLengths(','.join([ex,pw]),arraylength)
-                    script+='      float weight_'+histoname+'=('+arrayselection+')*('+pw+')*('+eventweight+')*systweight'+sn+'*categoryweight*sampleweight;\n'
-                    script+=fillHisto(histoname,ex,'weight_'+histoname)
+            variablenames_without_index=varsNoIndex(ex) 
+            variablenames_without_index+=varsNoIndex(pw)
+            size_of_loop=None
+            for v in variablenames_without_index:
+                if not v in variablesmap.keys(): continue
+                if variablesmap[v].arraylength != None:
+                    assert size_of_loop == None or size_of_loop == variablesmap[v].arraylength
+                    size_of_loop=variablesmap[v].arraylength
+            histoname=cn+n
+            script+="\n"
+            if size_of_loop!=None:
+                exi=getArrayEntries(ex,variablesmap,"i")
+                pwi=getArrayEntries(pw,variablesmap,"i")
+                script+=varLoop("i",size_of_loop)                    
+                script+="{\n"
+                arrayselection=checkArrayLengths(','.join([ex,pw]),variables)
+                weight='('+arrayselection+')*('+pwi+')*Weight*categoryweight*sampleweight'
+                script+=fillHistoSyst(histoname,exi,weight,systnames,systweights)
+                script+="      }\n"
+            else:
+                arrayselection=checkArrayLengths(','.join([ex,pw]),variables)
+                weight='('+arrayselection+')*('+pw+')*Weight*categoryweight*sampleweight'
+                script+=fillHistoSyst(histoname,ex,weight,systnames,systweights)
+        for plot in plots:
+            histoname=cn+plot.name
+            if isinstance(plot,plotutils.MVAPlot):
+                script+=evaluateMVA(plot)
+                weight='('+plot.selection+')*Weight*categoryweight*sampleweight'
+                script+=fillHistoSyst(histoname,'bdtoutput_'+plot.name,weight,systnames,systweights)
         script+=endCat()
     script+=endLoop()
     script+=getFoot()
@@ -432,7 +456,8 @@ def askYesNo(question):
     elif choice in no:
         return False
     else:
-        sys.stdout.write("Please respond with 'yes' or 'no'")
+        print "Please respond with 'yes' or 'no'"
+        return askYesNo(question)
 
 def submitToNAF(scripts):
     jobids=[]
@@ -441,22 +466,31 @@ def submitToNAF(scripts):
         command=['qsub', '-cwd', '-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=2000M', '-l', 's_vmem=2000M' ,'-o', '/dev/null', '-e', '/dev/null', script]
         a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
         output = a.communicate()[0]
-        jobid = output.split(' ')[2]
-        jobids.append(jobid)
+        jobidstring = output.split()
+        for jid in jobidstring:
+	  if jid.isdigit():
+	    jobid=int(jid)
+	    print "this job's ID is", jobid
+            jobids.append(jobid)
+            break
     return jobids
 
 def do_qstat(jobids):
     allfinished=False
     while not allfinished:
-        time.sleep(3)
+        time.sleep(10)
         a = subprocess.Popen(['qstat'], stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
         qstat=a.communicate()[0]
         lines=qstat.split('\n')
         nrunning=0
         for line in lines:
-            words=line.split(' ')
-            if len(words)>1 and words[1] in jobids:
-                nrunning+=1
+            words=line.split()
+            for jid in words:
+	       if jid.isdigit():
+	         jobid=int(jid)
+                 if jobid in jobids:
+                   nrunning+=1
+                 break
         if nrunning>0:
             print nrunning,'jobs running'
         else:
@@ -600,7 +634,7 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
         jobids=submitToNAF(failed_jobs)
         do_qstat(jobids)
         failed_jobs=check_jobs(scripts,outputs,nentries)
-    if retries>=3:
+    if retries>=10:
         print 'could not submit jobs'
         sys.exit()
     print 'hadd output'
