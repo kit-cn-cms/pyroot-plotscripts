@@ -417,6 +417,26 @@ def AddEntry2( self, histo, label, option='L'):
     self.AddEntry(histo, label, option)
 ROOT.TLegend.AddEntry2 = AddEntry2
 
+def AddEntry3( self, histo, label, option='L'):
+    self.SetY1NDC(self.GetY1NDC()-0.045)
+    width=self.GetX2NDC()-self.GetX1NDC()
+    ts=self.GetTextSize()
+    neglen = 0
+    sscripts = re.findall("_{.+?}|\^{.+?}",label)
+    for s in sscripts:
+	neglen = neglen + 3
+    symbols = re.findall("#[a-zA-Z]+",label)
+    for symbol in symbols:
+	neglen = neglen + len(symbol)-1
+    label+=' ('+str(round(10*histo.Integral())/10.)+')'
+    newwidth=max((len(label)-neglen)*0.015*0.05/ts+0.1,width)
+    self.SetX1NDC(self.GetX2NDC()-newwidth)
+
+    
+    self.AddEntry(histo, label, option)
+ROOT.TLegend.AddEntry3 = AddEntry3
+
+
 # get histolist from file
 def createHistoLists_fromHistoFile(samples,rebin=1):
     listOfHistoListsT=[]
@@ -496,8 +516,8 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
         for h,sample in zip(listOfHistos,samples):
             loption='L'
             if stack:
-                loption='F'
-            l.AddEntry2(h,sample.name,loption)
+                loption='F'            
+            l.AddEntry3(h,sample.name,loption)
         canvases.append(c)
         l.Draw('same')
         objects.append(l)
@@ -691,10 +711,10 @@ def root2latex(s,mth=True):
 def turn1dHistoToRow(h,witherror=True):
     s=""
     for i in range(1,h.GetNbinsX()+1):
-        s+="%.2f" % h.GetBinContent(i)
+        s+="%.1f" % h.GetBinContent(i)
         if witherror:
             s+=" $\pm$ "
-            s+="%.2f" % h.GetBinError(i)
+            s+="%.1f" % h.GetBinError(i)
         if i==h.GetNbinsX():
             s+="\\\\"
         else:
@@ -714,7 +734,7 @@ def turn1dHistosToTable(histos,samples,outfile,witherror=True):
         cls.append(histos[0].GetXaxis().GetBinLabel(i))
     writeHead(out,cls)
     for h,s in zip(histos,samples):
-        out.write(root2latex(s.name) + " & " + turn1dHistoToRow(h)+ "\\\\ \n") 
+        out.write(root2latex(s.name) + " & " + turn1dHistoToRow(h,witherror)+ "\\\\ \n") 
     writeFoot(out)
     out.write( '\\end{document}\n')
 
@@ -1169,28 +1189,29 @@ def writeLOLAndOneOnTop(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,f
         i+=1
         for histo,sample in zip(listOfHistos,samples):
 
-#            yTitle='Events expected for 2.54 fb^{-1} @ 13 TeV'
-            yTitle='Events'
+            yTitle='Events expected for 2.61 fb^{-1} @ 13 TeV'
+#            yTitle='Events'
             setupHisto(histo,sample.color,yTitle,stack)        
         c=drawHistosOnCanvas(listOfHistos,normalize,stack,logscale,options)       
         c.SetName('c'+str(i))
         c.cd()
         otc=ot.Clone()
-        otc.Scale(factor)
         setupHisto(otc,sampleOnTop.color,'',False)
         otc.SetBinContent(1,otc.GetBinContent(0)+otc.GetBinContent(1));
         otc.SetBinContent(otc.GetNbinsX(),otc.GetBinContent(otc.GetNbinsX()+1)+otc.GetBinContent(otc.GetNbinsX()));
         otc.SetBinError(1,ROOT.TMath.Sqrt(ROOT.TMath.Power(otc.GetBinError(0),2)+ROOT.TMath.Power(otc.GetBinError(1),2)));
         otc.SetBinError(otc.GetNbinsX(),ROOT.TMath.Sqrt(ROOT.TMath.Power(otc.GetBinError(otc.GetNbinsX()+1),2)+ROOT.TMath.Power(otc.GetBinError(otc.GetNbinsX()),2)));
-        otc.DrawCopy("samehisto")
+        otc.SetLineWidth(3)
         l=getLegend()
-        l.AddEntry2(otc,sampleOnTop.name+' x '+str(factor),'L')
+        l.AddEntry3(otc,sampleOnTop.name+' x '+str(factor),'L')
         for h,sample in zip(listOfHistos,samples):
             loption='L'
             if stack:
                 loption='F'
-            l.AddEntry2(h,sample.name,loption)
+            l.AddEntry3(h,sample.name,loption)
         canvases.append(c)
+        otc.Scale(factor)
+        otc.DrawCopy("samehisto")
         l.Draw('same')
         objects.append(l)
         objects.append(otc)
@@ -1210,11 +1231,11 @@ def writeLOLAndOneOnTop(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,f
     printCanvases(canvases,name)
     writeObjects(canvases,name)
 
-def eventYields(hl_data,hl_mc,samples,tablename):
+def eventYields(hl_data,hl_mc,samples,tablename,witherror=True):
     h_data=hl_data[0].Clone()
     for h in hl_data[1:]:
         h_data.Add(h)
     s_data=Sample('data')
-    turn1dHistosToTable(hl_mc+[h_data],samples+[s_data],tablename)
+    turn1dHistosToTable(hl_mc+[h_data],samples+[s_data],tablename,witherror)
     command=['pdflatex',tablename+'.tex']
     subprocess.call(command)

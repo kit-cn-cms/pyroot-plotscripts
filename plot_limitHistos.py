@@ -11,15 +11,20 @@ pathDB='/nfs/dust/cms/user/kelmorab/trees0108/'
 name='bdtplots_parrallel_test'
 
 #mcweight='(2.54*Weight_TopPt)*(N_LooseElectrons==0||N_LooseMuons==0)' 
+<<<<<<< HEAD
 mcweight='2.0*2.5*(Evt_Odd==0)'
 mcweightSBKG='2.5'
+=======
+mcweight='2.0*2.61*(Evt_Odd==0)'
+mcweightSBKG='2.54'
+>>>>>>> 75b0fbe6c47903f9750889c6724e0ab5af73925e
 
-samples=[Sample('ttH125',ROOT.kBlue+1,path+'/ttH*/*nominal*.root',mcweight,'ttH125') ,     
-         Sample('ttbarOther',ROOT.kRed+1,path+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)','ttbarOther') ,     
-         Sample('ttbarPlusCCbar',ROOT.kRed+2,path+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==1)','ttbarPlusCCbar') ,     
-         Sample('ttbarPlusBBbar',ROOT.kRed+3,path+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==3)','ttbarPlusBBbar') ,     
-         Sample('ttbarPlusB',ROOT.kRed+4,path+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==1)','ttbarPlusB') ,     
-         Sample('ttbarPlus2B',ROOT.kRed+5,path+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==2)','ttbarPlus2B') ,
+samples=[Sample('t#bar{t}H',ROOT.kBlue+1,path+'/ttH*/*nominal*.root',mcweight,'ttH125') ,     
+         Sample('t#bar{t}+l',ROOT.kRed-7,path+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)','ttbarOther') ,     
+         Sample('t#bar{t}+c#bar{c}',ROOT.kRed,path+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==1)','ttbarPlusCCbar') ,     
+         Sample('t#bar{t}+b',ROOT.kRed+2,path+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==1)','ttbarPlusB') ,     
+         Sample('t#bar{t}+2b',ROOT.kRed+3,path+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==2)','ttbarPlus2B') ,
+         Sample('t#bar{t}+b#bar{b}',ROOT.kRed+4,path+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==3)','ttbarPlusBBbar') ,     
 #         Sample('singlet',ROOT.kMagenta,path+'/st*/*nominal*.root',mcweightSBKG,'singlet') ,
 #         Sample('wjets',ROOT.kGreen-3,path+'/WJets*/*nominal*.root',mcweightSBKG,'wjets') ,
 #         Sample('zjets',ROOT.kAzure-3,path+'/Zjets*/*nominal*.root',mcweightSBKG,'zjets') ,
@@ -90,10 +95,16 @@ for b,bl,nb,minx,maxx in zip(bins,binlabels,nhistobins,minxvals,maxxvals):
 
 outputpath=plotParallel(name,1000000,bdts,allsamples,[''],['1.'],weightsystnames, systweights)
 renameHistos(outputpath,name+'_limitInput.root',allsystnames)
+<<<<<<< HEAD
 addPseudoData(name+'_limitInput.root',[s.name for s in samples[1:]],binlabels,allsystnames)
 MoveOverUnderflow(name+'_limitInput.root',name+'_limitInput_rebinned.root')
 
 
+=======
+addPseudoData(name+'_limitInput.root',[s.nick for s in samples[1:]],binlabels,allsystnames)
+>>>>>>> 75b0fbe6c47903f9750889c6724e0ab5af73925e
 
 listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,bdts)
-writeListOfHistoLists(listOfHistoLists,allsamples,'',name,False)
+#writeListOfHistoLists(listOfHistoLists,allsamples,'',name,False)
+lolT=transposeLOL(listOfHistoLists)
+writeLOLAndOneOnTop(transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,name)
