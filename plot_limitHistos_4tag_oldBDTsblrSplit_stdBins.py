@@ -4,9 +4,8 @@ import sys
 sys.path.insert(0, 'limittools')
 from limittools import renameHistos
 from limittools import addPseudoData
-from limittools import MoveOverUnderflow
 
-path='/nfs/dust/cms/user/hmildner/trees0108/'
+path='/nfs/dust/cms/user/kelmorab/treesMEMblr'
 pathDB='/nfs/dust/cms/user/kelmorab/trees0108/'
 name='bdtplots_parrallel_test'
 
@@ -67,33 +66,41 @@ allsamples=samples+systsamples
 s4j2t="(N_Jets==4&&N_BTagsM==2)"
 s5j2t="(N_Jets==5&&N_BTagsM==2)"
 s4j3t="(N_Jets==4&&N_BTagsM==3)"
-s4j4t="(N_Jets==4&&N_BTagsM>=4)"
+s4j4tlblr="(N_Jets==4&&N_BTagsM>=4 && TMath::Log(Evt_blr_ETH/(1-Evt_blr_ETH))<6.4)"
+s4j4thblr="(N_Jets==4&&N_BTagsM>=4 && TMath::Log(Evt_blr_ETH/(1-Evt_blr_ETH))>=6.4)"
 s5j3t="(N_Jets==5&&N_BTagsM==3)"
-s5j4t="(N_Jets==5&&N_BTagsM>=4)"
+s5j4tlblr="(N_Jets==5&&N_BTagsM>=4 && TMath::Log(Evt_blr_ETH/(1-Evt_blr_ETH))<8.8)"
+s5j4thblr="(N_Jets==5&&N_BTagsM>=4 && TMath::Log(Evt_blr_ETH/(1-Evt_blr_ETH))>=8.8)"
 s6j2t="(N_Jets>=6&&N_BTagsM==2)"
 s6j3t="(N_Jets>=6&&N_BTagsM==3)"
-s6j4t="(N_Jets>=6&&N_BTagsM>=4)"
-bins=     [s4j2t,s5j2t,s4j3t,s4j4t,s5j3t,s5j4t,s6j2t,s6j3t,s6j4t]
+s6j4tlblr="(N_Jets>=6&&N_BTagsM>=4 && TMath::Log(Evt_blr_ETH/(1-Evt_blr_ETH))<7.2)"
+s6j4thblr="(N_Jets>=6&&N_BTagsM>=4 && TMath::Log(Evt_blr_ETH/(1-Evt_blr_ETH))>=7.2)"
+bins=     [s4j4tlblr,s5j4tlblr,s6j4tlblr,s4j4thblr,s5j4thblr,s6j4thblr]
 # corresponding labels
-binlabels=["j4_t2","j5_t2","j4_t3","j4_t4","j5_t3","j5_tge4","jge6_t2","jge6_t3","jge6_tge4"]
+binlabels=["j4_t4_lblr","j5_tge4_lblr","jge6_tge4_lblr","j4_t4_hblr","j5_tge4_hblr","jge6_tge4_hblr"]
 # number of bins in each category
-nhistobins=    [1, 1, 20,    10,    20,    10      ,20,   20,    10]
-minxvals= [0., 0.,      -0.77, -0.69, -0.82, -0.71, -0.70, -0.75, -0.59 ]
-maxxvals= [5000., 5000., 0.63,  0.57,  0.64,  0.56,  0.57,  0.58,  0.40]
+nhistobins=    [10,10,10,10,10,10]
+minxvals= [-0.8,-0.86,-0.71, -0.8,-0.86,-0.71]
+maxxvals= [0.82,0.9,0.65,0.82,0.9,0.65]
 
 bdts=[]
 for b,bl,nb,minx,maxx in zip(bins,binlabels,nhistobins,minxvals,maxxvals):
-  if bl=="j4_t2" or bl=="j5_t2":
-    bdts.append(Plot(ROOT.TH1F("BDT_ljets"+"_"+bl,"BDT_ljets"+" ("+bl+")",nb,minx,maxx),"Evt_HT",b))  
-  else:    
+  if bl=="jge6_tge4_lblr":
+    bdts.append(Plot(ROOT.TH1F("BDT_ljets"+"_"+bl,"BDT_ljets"+" ("+bl+")",nb,minx,maxx),"BDT_common5_output",b))
+  if bl=="j5_tge4_lblr":
+    bdts.append(Plot(ROOT.TH1F("BDT_ljets"+"_"+bl,"BDT_ljets"+" ("+bl+")",nb,minx,maxx),"BDT_common5_output",b))
+  if bl=="j4_t4_lblr":
+    bdts.append(Plot(ROOT.TH1F("BDT_ljets"+"_"+bl,"BDT_ljets"+" ("+bl+")",nb,minx,maxx),"BDT_common5_output",b))
+  if bl=="jge6_tge4_hblr":
+    bdts.append(Plot(ROOT.TH1F("BDT_ljets"+"_"+bl,"BDT_ljets"+" ("+bl+")",nb,minx,maxx),"BDT_common5_output",b))
+  if bl=="j5_tge4_hblr":
+    bdts.append(Plot(ROOT.TH1F("BDT_ljets"+"_"+bl,"BDT_ljets"+" ("+bl+")",nb,minx,maxx),"BDT_common5_output",b))
+  if bl=="j4_t4_hblr":
     bdts.append(Plot(ROOT.TH1F("BDT_ljets"+"_"+bl,"BDT_ljets"+" ("+bl+")",nb,minx,maxx),"BDT_common5_output",b))
 
 outputpath=plotParallel(name,1000000,bdts,allsamples,[''],['1.'],weightsystnames, systweights)
 renameHistos(outputpath,name+'_limitInput.root',allsystnames)
 addPseudoData(name+'_limitInput.root',[s.name for s in samples[1:]],binlabels,allsystnames)
-MoveOverUnderflow(name+'_limitInput.root',name+'_limitInput_rebinned.root')
-
-
 
 listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,bdts)
 writeListOfHistoLists(listOfHistoLists,allsamples,'',name,False)

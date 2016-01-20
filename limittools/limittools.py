@@ -42,3 +42,39 @@ def addPseudoData(infname,samplesWOttH,categories,sysnames,disc="BDT_ljets"):
     newhist.Write()
   
   infile.Close()
+
+def MoveOverUnderflow(infname,outfname):
+
+  infile=ROOT.TFile(infname,"READ")
+  outfile=ROOT.TFile(outfname,"RECREATE")
+
+  keylist=infile.GetListOfKeys()
+
+  for key in keylist:
+    thisname=key.GetName()
+    thishisto=infile.Get(thisname)
+
+    nBins=thishisto.GetNbinsX()
+    errMaxBin=thishisto.GetBinError(nBins)
+    errOFBin=thishisto.GetBinError(nBins+1)
+    newerrorMaxBin=ROOT.TMath.Sqrt(errMaxBin*errMaxBin + errOFBin*errOFBin)
+    thishisto.SetBinContent(nBins,thishisto.GetBinContent(nBins)+thishisto.GetBinContent(nBins+1))
+    thishisto.SetBinError(nBins,newerrorMaxBin)
+    thishisto.SetBinContent(nBins+1,0.0)
+
+    errMinBin=thishisto.GetBinError(1)
+    errUFBin=thishisto.GetBinError(0)
+    newerrorMinBin=ROOT.TMath.Sqrt(errMinBin*errMinBin + errUFBin*errUFBin)
+    thishisto.SetBinContent(1,thishisto.GetBinContent(1)+thishisto.GetBinContent(0))
+    thishisto.SetBinError(1,newerrorMinBin)
+    thishisto.SetBinContent(0,0.0)
+
+    #write to outfile
+    outfile.cd()
+    thishisto.Write()
+
+  outfile.Close()
+
+
+
+

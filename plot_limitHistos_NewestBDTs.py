@@ -4,7 +4,6 @@ import sys
 sys.path.insert(0, 'limittools')
 from limittools import renameHistos
 from limittools import addPseudoData
-from limittools import MoveOverUnderflow
 
 path='/nfs/dust/cms/user/hmildner/trees0108/'
 pathDB='/nfs/dust/cms/user/kelmorab/trees0108/'
@@ -77,13 +76,24 @@ bins=     [s4j2t,s5j2t,s4j3t,s4j4t,s5j3t,s5j4t,s6j2t,s6j3t,s6j4t]
 # corresponding labels
 binlabels=["j4_t2","j5_t2","j4_t3","j4_t4","j5_t3","j5_tge4","jge6_t2","jge6_t3","jge6_tge4"]
 # number of bins in each category
-nhistobins=    [1, 1, 20,    10,    20,    10      ,20,   20,    10]
-minxvals= [0., 0.,      -0.77, -0.69, -0.82, -0.71, -0.70, -0.75, -0.59 ]
-maxxvals= [5000., 5000., 0.63,  0.57,  0.64,  0.56,  0.57,  0.58,  0.40]
+nhistobins=    [1, 1, 1000,1000,1000,1000,1000,1000,1000]
+#old minxvals= [0., 0., -0.87, -0.89, -0.94, -0.7, -0.84, -0.87, -0.58 ]
+#old maxxvals= [5000., 5000., 0.88, 0.9, 0.9, 0.72, 0.87, 0.87, 0.8]
+minxvals= [0., 0.,      -0.88, -0.9, -0.94, -0.7, -0.84, -0.87, -0.6 ]
+maxxvals= [5000., 5000., 0.89,  0.5,  0.9,   0.3,  0.87,  0.87,  0.15]
+#minxvals= [0., 0., -1,-1,-1,-1,-1,-1,-1]
+#maxxvals= [5000., 5000., 1,1,1,1,1,1,1]
+
 
 bdts=[]
 for b,bl,nb,minx,maxx in zip(bins,binlabels,nhistobins,minxvals,maxxvals):
-  if bl=="j4_t2" or bl=="j5_t2":
+  if bl=="jge6_tge4":
+    bdts.append(MVAPlot(ROOT.TH1F("BDT_ljets"+"_"+bl,"BDT_ljets"+" ("+bl+")",nb,minx,maxx),"/nfs/dust/cms/user/kelmorab/weights0116/weights_Final_64_64MEMBDTRecoVars.xml",b))
+  elif bl=="j5_tge4":
+    bdts.append(MVAPlot(ROOT.TH1F("BDT_ljets"+"_"+bl,"BDT_ljets"+" ("+bl+")",nb,minx,maxx),"/nfs/dust/cms/user/kelmorab/weights0116/weights_Final_54_54MEMBDToldVars.xml",b))
+  elif bl=="j4_t4":
+    bdts.append(MVAPlot(ROOT.TH1F("BDT_ljets"+"_"+bl,"BDT_ljets"+" ("+bl+")",nb,minx,maxx),"/nfs/dust/cms/user/kelmorab/weights0116/weights_Final_44_44MEMBDToldVars.xml",b))
+  elif bl=="j4_t2" or bl=="j5_t2":
     bdts.append(Plot(ROOT.TH1F("BDT_ljets"+"_"+bl,"BDT_ljets"+" ("+bl+")",nb,minx,maxx),"Evt_HT",b))  
   else:    
     bdts.append(Plot(ROOT.TH1F("BDT_ljets"+"_"+bl,"BDT_ljets"+" ("+bl+")",nb,minx,maxx),"BDT_common5_output",b))
@@ -91,9 +101,6 @@ for b,bl,nb,minx,maxx in zip(bins,binlabels,nhistobins,minxvals,maxxvals):
 outputpath=plotParallel(name,1000000,bdts,allsamples,[''],['1.'],weightsystnames, systweights)
 renameHistos(outputpath,name+'_limitInput.root',allsystnames)
 addPseudoData(name+'_limitInput.root',[s.name for s in samples[1:]],binlabels,allsystnames)
-MoveOverUnderflow(name+'_limitInput.root',name+'_limitInput_rebinned.root')
-
-
 
 listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,bdts)
 writeListOfHistoLists(listOfHistoLists,allsamples,'',name,False)
