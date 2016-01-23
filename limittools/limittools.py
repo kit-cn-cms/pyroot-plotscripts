@@ -1,5 +1,6 @@
 import ROOT
 import sys
+from subprocess import call
 
 def renameHistos(infname,outfname,sysnames):
   infile=ROOT.TFile(infname,"READ")
@@ -75,6 +76,33 @@ def MoveOverUnderflow(infname,outfname):
 
   outfile.Close()
 
+def makeDatacards(filename,outname,categories=None):
+  if categories==None:
+    categories=["ljets_j4_t3","ljets_j4_t4","ljets_j5_t3","ljets_j5_tge4","ljets_jge6_t2","ljets_jge6_t3","ljets_jge6_tge4"]
+#  print 'mk_datacard_ttbb13TeV', '-d', 'BDT', '-c','"'+(' '.join(categories))+'"','-o', outname+'txt', filename
+  call(['mk_datacard_ttbb13TeV', '-d', 'BDT', '-c',' '.join(categories),'-o', outname+'.txt', filename])
+  for c in categories:
+    call(['mk_datacard_ttbb13TeV', '-d', 'BDT', '-c', c, '-o', outname+'_'+c+'.txt', filename])
 
+def readLimit(fn='higgsCombineTest.Asymptotic.mH125.root'):
+  f=ROOT.TFile(fn)
+  t=f.Get('limit')
+  for e in t:
+    if e.quantileExpected==0.5: 
+      return e.limit
+  f.Close()
+    
 
-
+def calcLimits(datacardname,categories=None):
+  
+  if categories==None:
+    categories=["ljets_j4_t3","ljets_j4_t4","ljets_j5_t3","ljets_j5_tge4","ljets_jge6_t2","ljets_jge6_t3","ljets_jge6_tge4"]
+  call(['combine', '-M', 'Asymptotic', '-m', '125', '-t', '-1',datacardname+'.txt']) 
+  limit_comb=readLimit('higgsCombineTest.Asymptotic.mH125.root')
+  limit_cats=[]
+  for c in categories:
+    call(['combine', '-M', 'Asymptotic', '-m', '125', '-t', '-1',datacardname+'_'+c+'.txt']) 
+    limit_cats.append(readLimit('higgsCombineTest.Asymptotic.mH125.root'))
+  print 'combined:',limit_comb
+  for c,l in zip(categories,limit_cats):
+    print c,":",l
