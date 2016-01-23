@@ -103,6 +103,10 @@ def calcLimits(datacardname,categories=None):
   for c in categories:
     call(['combine', '-M', 'Asymptotic', '-m', '125', '-t', '-1',datacardname+'_'+c+'.txt']) 
     limit_cats.append(readLimit('higgsCombineTest.Asymptotic.mH125.root'))
-  print 'combined:',limit_comb
+  report='combined: '+str(limit_comb)+'\n'
   for c,l in zip(categories,limit_cats):
-    print c,":",l
+    report+=c+": "+str(l)+"\n"
+  f=open('limits_'+datacardname+'.txt','w')
+  f.write(report)
+  print report
+  f.close()
