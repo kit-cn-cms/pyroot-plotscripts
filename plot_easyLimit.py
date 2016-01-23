@@ -82,14 +82,17 @@ else:
     bdts.append(Plot(ROOT.TH1F(discrname+"_"+bl,"final dicsriminator ("+bl+")",nb,minx,maxx),discr,b))
 
 outputpath=plotParallel(name,1000000,bdts,allsamples,[''],['1.'],weightsystnames, systweights)
-renameHistos(outputpath,name+'_limitInput.root',allsystnames)
-addPseudoData(name+'_limitInput.root',[s.nick for s in samples[1:]],binlabels,allsystnames,discrname)
+if not os.path.exists(name):
+  os.makedirs(name)
+
+renameHistos(outputpath,name+'/'+name+'_limitInput.root',allsystnames)
+addPseudoData(name+'/'+name+'_limitInput.root',[s.nick for s in samples[1:]],binlabels,allsystnames,discrname)
 
 listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,bdts)
 lolT=transposeLOL(listOfHistoLists)
-writeLOLAndOneOnTop(transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,name+'_controlplots')
-makeDatacards(name+'_limitInput.root',name+'_datacard',binlabels)
+writeLOLAndOneOnTop(transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,name+'/'+name+'_controlplots')
+makeDatacards(name+'/'+name+'_limitInput.root',name+'/'+name+'_datacard',binlabels)
 
 #if askYesNo('Calculate limits?'):
-calcLimits(name+'_datacard',binlabels)
+calcLimits(name+'/'+name+'_datacard',binlabels)
   
