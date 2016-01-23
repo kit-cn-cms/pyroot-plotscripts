@@ -47,13 +47,18 @@ class Sample:
 
 class Plot:
     def __init__(self,histo, variable='', selection=''):
-        self.histo=histo
+        if isinstance(histo,ROOT.TH1):
+            self.histo=histo
+            self.name=histo.GetName()
+        else:
+            self.name=histo
         if variable=='':
-            self.variable=histo.GetName()
+            if isinstance(histo,ROOT.TH1):
+                self.variable=histo.GetName()
         else:
             self.variable=variable
         self.selection=selection
-        self.name=histo.GetName()
+
 
 class MVAPlot:
     def __init__(self,histo, weightfile, selection=''):
