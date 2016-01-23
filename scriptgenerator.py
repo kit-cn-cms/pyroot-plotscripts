@@ -271,7 +271,7 @@ def endCat():
 
 def fillHisto(histo,var,weight):
     text= '        if(('+weight+')!=0)\n'
-    text+='          h_'+histo+'->Fill('+var+','+weight+');\n'
+    text+='          h_'+histo+'->Fill(fmin(h_'+histo+'->GetXaxis()->GetXmax()-1e-6,fmax(h_'+histo+'->GetXaxis()->GetXmin()+1e-6,'+var+')),'+weight+');\n'
     return text
 
 def endLoop():
