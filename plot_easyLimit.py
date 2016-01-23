@@ -90,6 +90,6 @@ lolT=transposeLOL(listOfHistoLists)
 writeLOLAndOneOnTop(transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,name+'_controlplots')
 makeDatacards(name+'_limitInput.root',name+'_datacard',binlabels)
 
-if askYesNo('Calculate limits?'):
-  calcLimits(name+'_datacard',binlabels)
+#if askYesNo('Calculate limits?'):
+calcLimits(name+'_datacard',binlabels)
   
