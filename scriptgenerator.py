@@ -339,18 +339,26 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
     variables=getVartypesAndLength(variablesnames,tree)
     
     variablesmap={}
-    for v in variables:
-        variablesmap[v.name]=v
     # start writing script
     script=""
     script+=getHead()
     script+=initVarsFromTree(variables)
     
-    # for
+    # init derived
+    derived_vars=[]
     for plot in plots:
         if isinstance(plot,plotutils.MVAPlot):
-            for v,t in zip(plot.input_names,plot.input_types):                
-                script+=initVar(Variable(v,t))
+            for n,e,t in zip(plot.input_names,plot.input_exprs,plot.input_types):
+                if n!=e and n not in [v.name for v in derived_vars]:
+                    derived_vars.append(Variable(n,t))
+    for v in derived_vars:
+        script+=initVar(v)
+
+    for v in variables:
+        variablesmap[v.name]=v
+
+    for plot in plots:
+        if isinstance(plot,plotutils.MVAPlot):
             script+=initReader(plot.name)
             script+=addVariablesToReader(plot.name,plot.input_exprs,plot.input_names)
             script+=bookMVA(plot.name,plot.weightfile)
