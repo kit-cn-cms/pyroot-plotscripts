@@ -375,8 +375,8 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
     input_exprs=[]
     for plot in plots:
         if isinstance(plot,plotutils.MVAPlot):
-            input_names.append(plot)
-            input_exprs.append(plot)
+            input_names=plot.input_names
+            input_exprs=plot.input_exprs
     script+=calculateDerived(input_names,input_exprs)
     for cn,cs in zip(catnames,catselections):
         # for every category
