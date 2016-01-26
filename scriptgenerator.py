@@ -337,6 +337,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 
     # find out types of variables, length of arrays, and add length variables to variable list
     variables=getVartypesAndLength(variablesnames,tree)
+    
     variablesmap={}
     for v in variables:
         variablesmap[v.name]=v
@@ -348,8 +349,8 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
     # for
     for plot in plots:
         if isinstance(plot,plotutils.MVAPlot):
-            for v,t in zip(plot.input_names,plot.input_types):
-                initVar(Variable(v,t))
+            for v,t in zip(plot.input_names,plot.input_types):                
+                script+=initVar(Variable(v,t))
             script+=initReader(plot.name)
             script+=addVariablesToReader(plot.name,plot.input_exprs,plot.input_names)
             script+=bookMVA(plot.name,plot.weightfile)
