@@ -107,6 +107,13 @@ def initReader(name):
     text+='  TMVA::Reader *r_'+name+' = new TMVA::Reader("Silent");\n'
     return text
 
+def InitDerivedMVAVariable(names):
+    print names
+    text=''
+    for n in names:
+        text+='  float '+n+' = -999.0;\n'
+    return text
+
 def calculateDerived(names,expressions):
     text=''
     for n,e in zip(names,expressions):
@@ -337,28 +344,28 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 
     # find out types of variables, length of arrays, and add length variables to variable list
     variables=getVartypesAndLength(variablesnames,tree)
-    
     variablesmap={}
+    for v in variables:
+        variablesmap[v.name]=v
     # start writing script
     script=""
     script+=getHead()
     script+=initVarsFromTree(variables)
     
-    # init derived
-    derived_vars=[]
+    innames=[]
     for plot in plots:
         if isinstance(plot,plotutils.MVAPlot):
-            for n,e,t in zip(plot.input_names,plot.input_exprs,plot.input_types):
-                if n!=e and n not in [v.name for v in derived_vars]:
-                    derived_vars.append(Variable(n,t))
-    for v in derived_vars:
-        script+=initVar(v)
-
-    for v in variables:
-        variablesmap[v.name]=v
-
+	    for inname,inexpr in zip(plot.input_names, plot.input_exprs):
+              if inname!=inexpr:
+                innames.append(inname)
+    
+    innames=list(set(innames))
+    script+=InitDerivedMVAVariable(innames)
+    # for
     for plot in plots:
         if isinstance(plot,plotutils.MVAPlot):
+            for v,t in zip(plot.input_names,plot.input_types):
+                initVar(Variable(v,t))
             script+=initReader(plot.name)
             script+=addVariablesToReader(plot.name,plot.input_exprs,plot.input_names)
             script+=bookMVA(plot.name,plot.weightfile)
@@ -384,8 +391,9 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
     input_exprs=[]
     for plot in plots:
         if isinstance(plot,plotutils.MVAPlot):
-            input_names=plot.input_names
-            input_exprs=plot.input_exprs
+	    for inname,inexpr in zip(plot.input_names, plot.input_exprs):
+              input_names.append(inname)
+              input_exprs.append(inexpr)
     script+=calculateDerived(input_names,input_exprs)
     for cn,cs in zip(catnames,catselections):
         # for every category
