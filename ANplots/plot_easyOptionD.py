@@ -13,7 +13,7 @@ from limittools import calcLimits
 path='/nfs/dust/cms/user/hmildner/treesMEM0126/'
 name='easyOptionD'
 mcweight='2.0*2.61*(Evt_Odd==0)'
-nhistobins_=      [ 20,       6,   6,     20,       6,     6,   20,   20,  6 ,6    ]
+nhistobins_=      [ 20,       4,   4,     20,       4,     4,   20,   20,  6 ,6    ]
 minxvals_=        [-0.9,    0.,  0.,     -0.8,     0.,     0.,   -0.80,  -0.8,  0.,   0.]
 maxxvals_=        [0.8,     .95,   0.95,  0.8,    0.95,   0.95,    0.76,   0.8,   0.95,    0.95]
 discrs =          ['/nfs/dust/cms/user/kelmorab/MEMstudies/3makeHistosAndCards/weights/weights_Final_43_MEMBDTv2.xml', 'MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg)','MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg)', '/nfs/dust/cms/user/kelmorab/MEMstudies/3makeHistosAndCards/weights/weights_Final_53_MEMBDTv2.xml', 'MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg)' ,'MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg)' , 'BDT_common5_output','/nfs/dust/cms/user/kelmorab/MEMstudies/3makeHistosAndCards/weights/weights_Final_63_MEMBDTv2.xml','MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg)','MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg)']
@@ -38,8 +38,7 @@ categories_=[("(N_Jets==4&&N_BTagsM==3)","ljets_j4_t3"),
             ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3"),
             ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4")]
 categories=[]
-blrcuts=[2.14,7.55,3.12,7.63,0.19,3.91,7.67]
-bdtcuts=[0.199,0.217,0.129,0.217,0.091,0.108,0.121]
+bdtcuts=[0.2,0.2,0.1,0.2,0.1,0.1,0.1]
 
 for cat,bdt in zip(categories_,bdtcuts):
   if cat[1] in ["ljets_jge6_tge4","ljets_j5_tge4","ljets_j4_t4"]:
@@ -54,18 +53,17 @@ discrname='BDT'
 
 bins= [c[0] for c in categories]
 binlabels= [c[1] for c in categories]
-samples=[Sample('t#bar{t}H',ROOT.kBlue+1,path+'/ttH*/*nominal*.root',mcweight,'ttH') ,     
-#         Sample('t#bar{t}',ROOT.kRed+1,path+'/ttbar/*nominal*.root',mcweight,'ttbar') ,     
-         Sample('t#bar{t}+lf',ROOT.kRed-7,path+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)','ttl'),
-         Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,path+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==1)','ttcc'),
-         Sample('t#bar{t}+b',ROOT.kRed-2,path+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==1)','tt1b'),
-         Sample('t#bar{t}+2b',ROOT.kRed+2,path+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==2)','tt2b'),
-         Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,path+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==3)','ttbb'),  
-         Sample('Single Top',ROOT.kMagenta,path+'/st*/*nominal*.root',mcweight,'SingleTop') , 
-         Sample('V+jets',ROOT.kGreen-3,path+'/??ets*/*nominal*.root',mcweight,'Vjets') , 
-         Sample('t#bar{t}+V',ROOT.kBlue-10,path+'/tt?_*/*nominal*.root',mcweight,'ttV'),         
-         Sample('Diboson',ROOT.kAzure+2,path+'/??/*nominal*.root',mcweight,'Diboson') , 
-#         Sample('QCD',ROOT.kYellow ,path+'/QCD*/*nominal*root',mcweight,'QCD') , 
+samples=[Sample('t#bar{t}H',ROOT.kBlue+1,path+'/ttH*/*nominal*.root',mcweight,'ttH125') ,     
+         Sample('t#bar{t}+lf',ROOT.kRed-7,path+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)','ttbarOther'),
+         Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,path+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==1)','ttbarPlusCCbar'),
+         Sample('t#bar{t}+b',ROOT.kRed-2,path+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==1)','ttbarPlusB'),
+         Sample('t#bar{t}+2b',ROOT.kRed+2,path+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==2)','ttbarPlus2B'),
+         Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,path+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==3)','ttbarPlusBBbar'),  
+#         Sample('Single Top',ROOT.kMagenta,path+'/st*/*nominal*.root',mcweight,'SingleTop') , 
+#         Sample('V+jets',ROOT.kGreen-3,path+'/??ets*/*nominal*.root',mcweight,'Vjets') , 
+#         Sample('t#bar{t}+V',ROOT.kBlue-10,path+'/tt?_*/*nominal*.root',mcweight,'ttV'),         
+#         Sample('Diboson',ROOT.kAzure+2,path+'/??/*nominal*.root',mcweight,'Diboson') , 
+
 ]
 
 # names of the systematics (proper names needed e.g. for combination)
@@ -129,5 +127,6 @@ writeLOLAndOneOnTop(transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,nam
 makeDatacards(name+'/'+name+'_limitInput.root',name+'/'+name+'_datacard',binlabels)
 
 #if askYesNo('Calculate limits?'):
-calcLimits(name+'/'+name+'_datacard',binlabels)
+limit=calcLimits(name+'/'+name+'_datacard',binlabels)
+limit.dump()
   
