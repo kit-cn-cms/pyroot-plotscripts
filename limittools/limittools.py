@@ -34,8 +34,8 @@ def renameHistos(infname,outfname,sysnames):
         newname+=sys
         nsysts+=1
         
-    if nsysts>=2:
-      continue
+    #if nsysts>=2:
+      #continue
   #if "125" in newname:
     #newname=newname.replace("125","")
 #    print "changed ", thisname, " to ", newname
