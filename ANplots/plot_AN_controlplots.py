@@ -4,7 +4,7 @@ sys.path.insert(0, '../')
 from scriptgenerator import *
 from plotutils import *
 
-path='/nfs/dust/cms/user/hmildner/trees0108/'
+path='/nfs/dust/cms/user/hmildner/treesMEM0126/'
 name='anplots'
 sel_singleel="(N_LooseMuons==0)" # need to veto muon events in electron dataset to avoid double countung
 sel_singlemu="(N_LooseElectrons==0)" # and vice versa...
@@ -37,18 +37,18 @@ samples=[Sample('t#bar{t}H',ROOT.kBlue+1,path+'/ttH*/*nominal*.root',mcweight,'t
          Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,path+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==3)','ttbb'),  
          Sample('Single Top',ROOT.kMagenta,path+'/st*/*nominal*.root',mcweight,'SingleTop') , 
          Sample('V+jets',ROOT.kGreen-3,path+'/??ets*/*nominal*.root',mcweight,'Vjets') , 
-         Sample('t#bar{t}+V',ROOT.kBlue-10,path+'/tt?_*/*nominal*.root',mcweight,'ttV'),         
+         #Sample('t#bar{t}+V',ROOT.kBlue-10,path+'/tt?_*/*nominal*.root',mcweight,'ttV'),         
          Sample('Diboson',ROOT.kAzure+2,path+'/??/*nominal*.root',mcweight,'Diboson') , 
 #         Sample('QCD',ROOT.kYellow ,path+'/QCD*/*nominal*root',mcweight,'QCD') , 
 ]
-
-categoriesJT=[("(N_Jets>=6&&N_BTagsM==2)","6j2t",""),
-              ("(N_Jets==4&&N_BTagsM==3)","4j3t","0.2"),
-              ("(N_Jets==5&&N_BTagsM==3)","5j3t","0.15"),
-              ("(N_Jets>=6&&N_BTagsM==3)","6j3t","0.1"),
-              ("(N_Jets==4&&N_BTagsM>=4)","4j4t","0.2"),
-              ("(N_Jets==5&&N_BTagsM>=4)","5j4t","0.2"),             
-              ("(N_Jets>=6&&N_BTagsM>=4)","6j4t","0.1")]
+#                                                 B C D                        
+categoriesJT=[("(N_Jets>=6&&N_BTagsM==2)","6j2t","","",""),
+              ("(N_Jets==4&&N_BTagsM==3)","4j3t","0.2","0.2","0.2"),
+              ("(N_Jets==5&&N_BTagsM==3)","5j3t","0.15","0.15","0.15"),
+              ("(N_Jets>=6&&N_BTagsM==3)","6j3t","0.1","0.1","0.1"),
+              ("(N_Jets==4&&N_BTagsM>=4)","4j4t","0.2","0.2","0.2"),
+              ("(N_Jets==5&&N_BTagsM>=4)","5j4t","0.2","0.2","0.2"),             
+              ("(N_Jets>=6&&N_BTagsM>=4)","6j4t","0.1","0.1","0.1")]
 
 categoriesSplitBDT=[]
 categoriesSplitBDT.append(categoriesJT[0])
@@ -56,16 +56,38 @@ for cat in categoriesJT[1:]:
     categoriesSplitBDT.append(('('+cat[0]+"*(BDT_common5_output<"+cat[2]+"))",cat[1]+"l"))
     categoriesSplitBDT.append(('('+cat[0]+"*(BDT_common5_output>="+cat[2]+"))",cat[1]+"h"))
 
+categoriesBDT=[]
+categoriesBDT.append(categoriesJT[0])
+for cat in categoriesJT[1:]:
+    categoriesBDT.append(cat)
 
+categoriesSplitByBDToptD=[]
+categoriesSplitByBDToptD.append(categoriesJT[0])
+for cat in categoriesJT[1:]:
+    if cat[1] in ["4j4t","5j4t","6j4t"]:
+      categoriesSplitByBDToptD.append(('('+cat[0]+"*(BDT_common5_output<"+cat[2]+"))",cat[1]+"l"))
+      categoriesSplitByBDToptD.append(('('+cat[0]+"*(BDT_common5_output>="+cat[2]+"))",cat[1]+"h"))
+    else:
+      categoriesSplitByBDToptD.append(cat)
+
+    
 # book plots
 label="#geq 1 lepton, #geq 4 jets, #geq 2 b-tags"
 catstringSplitByBDT="0"
 for i,cat in enumerate(categoriesSplitBDT):
     catstringSplitByBDT+=("+"+str(i+1)+"*"+cat[0])
-
+catstringBDT="0"
+for i,cat in enumerate(categoriesBDT):
+    catstringBDT+=("+"+str(i+1)+"*"+cat[0])
+catstringSplitByBDToptD="0"
+for i,cat in enumerate(categoriesSplitByBDToptD):
+    catstringSplitByBDToptD+=("+"+str(i+1)+"*"+cat[0])
 
 plots=[Plot(ROOT.TH1F("JT" ,"jet-tag categories",9,-0.5,8.5),"3*max(min(N_BTagsM-2,2),0)+max(min(N_Jets-4,2),0)","(N_BTagsM>=2&&N_Jets>=4)",label),
-       Plot(ROOT.TH1F("JTsplitByBDT" ,"2D analysis B categories",len(categoriesSplitBDT),0.5,0.5+len(categoriesSplitBDT)),catstringSplitByBDT,"(N_BTagsM>=2&&N_Jets>=6||N_BTagsM>=3&&N_Jets>=4)"),
+       Plot(ROOT.TH1F("JTsplitByBDToptB" ,"2D analysis B categories",len(categoriesSplitBDT),0.5,0.5+len(categoriesSplitBDT)),catstringSplitByBDT,"(N_BTagsM>=2&&N_Jets>=6||N_BTagsM>=3&&N_Jets>=4)"),
+       Plot(ROOT.TH1F("JTByBDToptC" ,"analysis C categories",len(categoriesBDT),0.5,0.5+len(categoriesBDT)),catstringBDT,"(N_BTagsM>=2&&N_Jets>=6||N_BTagsM>=3&&N_Jets>=4)"),
+       Plot(ROOT.TH1F("JTsplitByBDToptD" ,"2D analysis D categories",len(categoriesSplitByBDToptD),0.5,0.5+len(categoriesSplitByBDToptD)),catstringSplitByBDToptD,"(N_BTagsM>=2&&N_Jets>=6||N_BTagsM>=3&&N_Jets>=4)"),
+
        Plot(ROOT.TH1F("N_Jets","Number of ak4 jets",7,3.5,10.5),"N_Jets",'',label),
        Plot(ROOT.TH1F("N_BTagsM","Number of b-tags",4,1.5,5.5),"N_BTagsM",'',label),
        Plot(ROOT.TH1F("CSV0","B-tag of leading jet",22,-.1,1),"Jet_CSV[0]",'',label),
@@ -102,7 +124,9 @@ plots=[Plot(ROOT.TH1F("JT" ,"jet-tag categories",9,-0.5,8.5),"3*max(min(N_BTagsM
        Plot(ROOT.TH1F("CSVeta2","B-tag of jets with abs(#eta) between 0.4 and 0.8",44,-.1,1),"Jet_CSV",'fabs(Jet_Eta)>0.4&&fabs(Jet_Eta)<0.8',label),
        Plot(ROOT.TH1F("CSVeta3","B-tag of jets with abs(#eta) between 0.8 and 1.6",44,-.1,1),"Jet_CSV",'fabs(Jet_Eta)>0.8&&fabs(Jet_Eta)<1.6',label),
        Plot(ROOT.TH1F("CSVeta4","B-tag of jets with abs(#eta) between 0.8 and 1.6",44,-.1,1),"Jet_CSV",'fabs(Jet_Eta)>1.6',label),
-      
+       Plot(ROOT.TH1F("MEM","MEM discriminator for events with #geq 3 b-tags",22,0,1),"(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)",'(N_BTagsM>=3)',label),
+       Plot(ROOT.TH1F("blrHighTag","B-tagging likelihood ratio for events with #geq 3 b-tags",44,-4,10),"TMath::Log(Evt_blr_ETH/(1-Evt_blr_ETH))",'(N_BTagsM>=3)',label),
+       Plot(ROOT.TH1F("blrAll","B-tagging likelihood ratio",44,-6,10),"TMath::Log(Evt_blr_ETH/(1-Evt_blr_ETH))",'',label),
        ]
 # plot parallel -- alternatively there are also options to plot more traditional that also return lists of histo lists
 outputpath=plotParallel(name,2000000,plots,samples+samples_data)
@@ -111,7 +135,7 @@ listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data
 ntables=0
 # do some post processing
 for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
-    if "JT" in hld[0].GetName() and not "JTsplitByBDT" in hld[0].GetName():
+    if "JT" in hld[0].GetName() and not "JTsplitByBDToptB" in hld[0].GetName() and not "JTByBDToptC" in hld[0].GetName() and not "JTsplitByBDToptD" in hld[0].GetName() :
         for h in hld+hl:
             h.GetXaxis().SetBinLabel(1,'4j2t')
             h.GetXaxis().SetBinLabel(2,'5j2t')
@@ -128,12 +152,24 @@ for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
         eventYields(hld,hl,samples,tablepath)
 
 for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
-    if "JTsplitByBDT" in hld[0].GetName():       
+    if "JTsplitByBDToptB" in hld[0].GetName():       
         for h in hld+hl:
             for i,cat in enumerate(categoriesSplitBDT):
                 h.GetXaxis().SetBinLabel(i+1,cat[1])
                 print cat[1]
         tablepath=("/".join((outputpath.split('/'))[:-1]))+"/"+name+"_yields2"
+    if "JTByBDToptC" in hld[0].GetName():       
+        for h in hld+hl:
+            for i,cat in enumerate(categoriesBDT):
+                h.GetXaxis().SetBinLabel(i+1,cat[1])
+                print cat[1]
+        tablepath=("/".join((outputpath.split('/'))[:-1]))+"/"+name+"_yields3"
+    if "JTsplitByBDToptD" in hld[0].GetName():       
+        for h in hld+hl:
+            for i,cat in enumerate(categoriesSplitByBDToptD):
+                h.GetXaxis().SetBinLabel(i+1,cat[1])
+                print cat[1]
+        tablepath=("/".join((outputpath.split('/'))[:-1]))+"/"+name+"_yields4"
 
 # plot dataMC comparison
 labels=[plot.label for plot in plots]
@@ -146,7 +182,7 @@ listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data
 ntables=0
 # do some post processing
 for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
-    if "JT" in hld[0].GetName() and not "JTsplitByBDT":
+    if "JT" in hld[0].GetName() and not "JTsplitByBDToptB" in hld[0].GetName() and not "JTByBDToptC" in hld[0].GetName() and not "JTsplitByBDToptD" in hld[0].GetName() :
         for h in hld+hl:
             h.GetXaxis().SetBinLabel(1,'4j2t')
             h.GetXaxis().SetBinLabel(2,'5j2t')
@@ -158,11 +194,18 @@ for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
             h.GetXaxis().SetBinLabel(8,'5j4t')
             h.GetXaxis().SetBinLabel(9,'6j4t')
 for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
-    if "JTsplitByBDT" in hld[0].GetName():       
+    if "JTsplitByBDToptB" in hld[0].GetName():       
         for h in hld+hl:
             for i,cat in enumerate(categoriesSplitBDT):
                 h.GetXaxis().SetBinLabel(i+1,cat[1])
-
+    if "JTByBDToptC" in hld[0].GetName():       
+        for h in hld+hl:
+            for i,cat in enumerate(categoriesBDT):
+                h.GetXaxis().SetBinLabel(i+1,cat[1])
+    if "JTsplitByBDToptD" in hld[0].GetName():       
+        for h in hld+hl:
+            for i,cat in enumerate(categoriesSplitByBDToptD):
+                h.GetXaxis().SetBinLabel(i+1,cat[1])
 
 
 # plot dataMC comparison

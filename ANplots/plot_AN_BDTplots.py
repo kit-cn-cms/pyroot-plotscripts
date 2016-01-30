@@ -5,7 +5,7 @@ from scriptgenerator import *
 from plotutils import *
 
 
-path='/nfs/dust/cms/user/hmildner/trees0108/'
+path='/nfs/dust/cms/user/hmildner/treesMEM0126/'
 name='bdtplots'
 sel_singleel="(N_LooseMuons==0)" # need to veto muon events in electron dataset to avoid double countung
 sel_singlemu="(N_LooseElectrons==0)" # and vice versa...
@@ -38,7 +38,7 @@ samples=[Sample('t#bar{t}H',ROOT.kBlue+1,path+'/ttH*/*nominal*.root',mcweight,'t
          Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,path+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==3)','ttbb'),  
          Sample('Single Top',ROOT.kMagenta,path+'/st*/*nominal*.root',mcweight,'SingleTop') , 
          Sample('V+jets',ROOT.kGreen-3,path+'/??ets*/*nominal*.root',mcweight,'Vjets') , 
-         Sample('t#bar{t}+V',ROOT.kBlue-10,path+'/tt?_*/*nominal*.root',mcweight,'ttV'),         
+         #Sample('t#bar{t}+V',ROOT.kBlue-10,path+'/tt?_*/*nominal*.root',mcweight,'ttV'),         
          Sample('Diboson',ROOT.kAzure+2,path+'/??/*nominal*.root',mcweight,'Diboson') , 
 #         Sample('QCD',ROOT.kYellow ,path+'/QCD*/*nominal*root',mcweight,'QCD') , 
 ]
@@ -59,7 +59,9 @@ plots+=[Plot(ROOT.TH1F("s43_BDT_common5_input_avg_btag_disc_btags","avg CSV (tag
         Plot(ROOT.TH1F("s43_BDT_common5_input_pt_all_jets_over_E_all_jets","(#sum jet p_{T})/(#sum jet E))",20,0.,1),"BDT_common5_input_pt_all_jets_over_E_all_jets","(N_Jets==4&&N_BTagsM==3)",label),
         Plot(ROOT.TH1F("s43_BDT_common5_input_dr_between_lep_and_closest_jet","#Delta R (lepton,jet)",35,0,3.5),"BDT_common5_input_dr_between_lep_and_closest_jet","(N_Jets==4&&N_BTagsM==3)",label),
         Plot(ROOT.TH1F("s43_BDT_common5_input_first_jet_pt","jet 1 p_{T}",50,0,500),"BDT_common5_input_first_jet_pt","(N_Jets==4&&N_BTagsM==3)",label),
-        Plot(ROOT.TH1F("s43_BDT_common5_input_closest_tagged_dijet_mass","closest tagged dijet mass",20,0,400),"BDT_common5_input_closest_tagged_dijet_mass","(N_Jets==4&&N_BTagsM==3)",label),]
+        Plot(ROOT.TH1F("s43_BDT_common5_input_closest_tagged_dijet_mass","closest tagged dijet mass",20,0,400),"BDT_common5_input_closest_tagged_dijet_mass","(N_Jets==4&&N_BTagsM==3)",label),
+        Plot(ROOT.TH1F("s43_blr","B-tagging likelihood ratio",30,-3,8),"TMath::Log(Evt_blr_ETH/(1-Evt_blr_ETH))",'(N_Jets==4&&N_BTagsM==3)',label),
+]
 
 # /nfs/dust/cms/user/kelmorab/newTrain/3makeHistosAndCards/weights/CommonWeights/weights_Final_43_v5_OldVars.xml
 plots+=[Plot(ROOT.TH1F("s43_BDT_common5_input_avg_dr_tagged_jets","avg #Delta R (tag,tag)",20,0,4),"BDT_common5_input_avg_dr_tagged_jets","(N_Jets==4&&N_BTagsM==3)",label),
@@ -80,6 +82,8 @@ plots+=[Plot(ROOT.TH1F("s44_MEM_transformed","MEM discriminator",10,0,1),"(MEM_p
         Plot(ROOT.TH1F("s44_BDT_common5_input_aplanarity","aplanarity",9,0,0.3),"BDT_common5_input_aplanarity","(N_Jets==4&&N_BTagsM>=4)",label),
         Plot(ROOT.TH1F("s44_BDT_common5_input_invariant_mass_of_everything","mass(jets,lepton,MET)",15,0,1500),"BDT_common5_input_invariant_mass_of_everything","(N_Jets==4&&N_BTagsM>=4)",label),
         Plot(ROOT.TH1F("s44_BDT_common5_input_M3","M3",20,0,800),"BDT_common5_input_M3","(N_Jets==4&&N_BTagsM>=4)",label),
+        Plot(ROOT.TH1F("s44_blr","B-tagging likelihood ratio",10,-0,12),"TMath::Log(Evt_blr_ETH/(1-Evt_blr_ETH))",'(N_Jets==4&&N_BTagsM>=4)',label),
+
         ]
 
 # /nfs/dust/cms/user/kelmorab/newTrain/3makeHistosAndCards/weights/CommonWeights/weights_Final_44_v5_OldVars.xml
@@ -101,6 +105,7 @@ plots+=[Plot(ROOT.TH1F("s53_MEM_transformed","MEM discriminator",20,0,1),"(MEM_p
         Plot(ROOT.TH1F("s53_BDT_common5_input_fourth_highest_btag","fourth highest CSV",22,-.1,1),"BDT_common5_input_fourth_highest_btag","(N_Jets==5&&N_BTagsM==3)",label),
         Plot(ROOT.TH1F("s53_Evt_Deta_JetsAverage","avg #Delta #eta jets",25,0,2.5),"Evt_Deta_JetsAverage","(N_Jets==5&&N_BTagsM==3)",label),
         Plot(ROOT.TH1F("s53_Evt_CSV_Average","avg CSV",25,0.5,1),"Evt_CSV_Average","(N_Jets==5&&N_BTagsM==3)",label),
+        Plot(ROOT.TH1F("s53_blr","B-tagging likelihood ratio",20,-2,10),"TMath::Log(Evt_blr_ETH/(1-Evt_blr_ETH))",'(N_Jets==5&&N_BTagsM==3)',label),
         ]
 # /nfs/dust/cms/user/kelmorab/newTrain/3makeHistosAndCards/weights/CommonWeights/weights_Final_53_v5_OldVars.xml
 plots+=[Plot(ROOT.TH1F("s53_BDT_common5_input_h1","H_{1}",27,-.2,.34),"BDT_common5_input_h1","(N_Jets==5&&N_BTagsM==3)",label),
@@ -121,6 +126,8 @@ plots+=[Plot(ROOT.TH1F("s54_MEM_transformed","MEM discriminator",10,0,1),"(MEM_p
         Plot(ROOT.TH1F("s54_BDT_common5_input_all_sum_pt_with_met","#sum (lepton pt,jet pt,met)",12,0,1200),"BDT_common5_input_all_sum_pt_with_met","(N_Jets==5&&N_BTagsM>=4)",label),
         Plot(ROOT.TH1F("s54_BDT_common5_input_h2","H_{2}",15,-.15,0.3),"BDT_common5_input_h2","(N_Jets==5&&N_BTagsM>=4)",label),
         Plot(ROOT.TH1F("s54_BDT_common5_input_avg_dr_tagged_jets","avg #Delta R (tag,tag)",18,0,3.6),"BDT_common5_input_avg_dr_tagged_jets","(N_Jets==5&&N_BTagsM>=4)",label),
+        Plot(ROOT.TH1F("s54_blr","B-tagging likelihood ratio",10,-0,12),"TMath::Log(Evt_blr_ETH/(1-Evt_blr_ETH))",'(N_Jets==5&&N_BTagsM>=4)',label),
+
     ]
 # /nfs/dust/cms/user/kelmorab/newTrain/3makeHistosAndCards/weights/CommonWeights/weights_Final_54_v5_OldVars.xml
 plots+=[Plot(ROOT.TH1F("s54_BDT_common5_input_pt_all_jets_over_E_all_jets","(#sum jet p_{T})/(#sum jet E))",10,0,1),"BDT_common5_input_pt_all_jets_over_E_all_jets","(N_Jets==5&&N_BTagsM>=4)",label),
@@ -141,6 +148,7 @@ plots+=[Plot(ROOT.TH1F("s62_BDT_common5_input_h1","H_{1}",27,-0.2,.34),"BDT_comm
         Plot(ROOT.TH1F("s62_BDT_common5_input_Mlb","mass(lepton,closest tag)",20,0,400),"BDT_common5_input_Mlb","(N_Jets>=6&&N_BTagsM==2)",label),
         Plot(ROOT.TH1F("s62_BDT_common5_input_fifth_highest_CSV","fifth highest CSV",20,-.1,.91),"BDT_common5_input_fifth_highest_CSV","(N_Jets>=6&&N_BTagsM==2)",label),
         Plot(ROOT.TH1F("s62_BDT_common5_input_fourth_highest_btag","fourth highes CSV",20,-.1,.9),"BDT_common5_input_fourth_highest_btag","(N_Jets>=6&&N_BTagsM==2)",label),
+        Plot(ROOT.TH1F("s62_blr","B-tagging likelihood ratio",20,-6,6),"TMath::Log(Evt_blr_ETH/(1-Evt_blr_ETH))",'(N_Jets>=6&&N_BTagsM==2)',label),
 ]
 
 
@@ -157,6 +165,8 @@ plots+=[Plot(ROOT.TH1F("s63_MEM_transformed","MEM discriminator",20,0.,1),"(MEM_
         Plot(ROOT.TH1F("s63_BDT_common5_input_tagged_dijet_mass_closest_to_125","tagged dijet mass closest to 125",30,0,300),"BDT_common5_input_tagged_dijet_mass_closest_to_125","(N_Jets>=6&&N_BTagsM==3)",label),
         Plot(ROOT.TH1F("s63_BDT_common5_input_h2","H_{2}",20,-.1,.3),"BDT_common5_input_h2","(N_Jets>=6&&N_BTagsM==3)",label),
         Plot(ROOT.TH1F("s63_BDT_common5_input_fifth_highest_CSV","fifth-highest CSV",20,-.1,.9),"BDT_common5_input_fifth_highest_CSV","(N_Jets>=6&&N_BTagsM==3)",label),
+        Plot(ROOT.TH1F("s63_blr","B-tagging likelihood ratio",20,-2,8),"TMath::Log(Evt_blr_ETH/(1-Evt_blr_ETH))",'(N_Jets>=6&&N_BTagsM==3)',label),
+
     ]
 # /nfs/dust/cms/user/kelmorab/newTrain/3makeHistosAndCards/weights/CommonWeights/weights_Final_63_v5_OldVars.xml
 plots+=[Plot(ROOT.TH1F("s63_BDT_common5_input_min_dr_tagged_jets","min #Delta R (tag,tag)",17,0,3.4),"BDT_common5_input_min_dr_tagged_jets","(N_Jets>=6&&N_BTagsM==3)",label),
@@ -174,6 +184,8 @@ plots+=[Plot(ROOT.TH1F("s64_BDT_common5_input_third_highest_btag","third-highest
         Plot(ROOT.TH1F("s64_BDT_common5_input_aplanarity","aplanarity",20,0,0.4),"BDT_common5_input_aplanarity","(N_Jets>=6&&N_BTagsM>=4)",label),
         Plot(ROOT.TH1F("s64_BDT_common5_input_M3","M3",20,0,1000),"BDT_common5_input_M3","(N_Jets>=6&&N_BTagsM>=4)",label),
         Plot(ROOT.TH1F("s64_BDT_common5_input_third_jet_pt","jet 3 p_{T}",20,0,400),"BDT_common5_input_third_jet_pt","(N_Jets>=6&&N_BTagsM>=4)",label),
+        Plot(ROOT.TH1F("s64_blr","B-tagging likelihood ratio",20,0,12),"TMath::Log(Evt_blr_ETH/(1-Evt_blr_ETH))",'(N_Jets>=6&&N_BTagsM>=4)',label),
+
        ]
 
 # /nfs/dust/cms/user/kelmorab/newTrain/3makeHistosAndCards/weights/CommonWeights/weights_Final_64_v5_OldVars.xml
