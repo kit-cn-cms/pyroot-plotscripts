@@ -316,17 +316,29 @@ def compileProgram(scriptname):
     subprocess.call(cmd)
 
 
-def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"]):
+def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],allsystweights=["1"]):
     f=ROOT.TFile(samples[0].files[0])
     print 'using',samples[0].files[0],'to determining variable types'
     tree=f.Get('MVATree')
     
-    
+    systweights=[]
+    systweightexpressions=[]
+    derivedsystweights=[]
+    for w in allsystweights:
+      if ":=" in w:
+	derivedsystweights.append(w.split(":=")[0])
+	systweightexpressions.append(w.split(":=")[1])
+      else:
+	systweights.append(w)
     # variables is the list of variables to be read from tree
     variablesnames=['Weight']
     variablesnames+=varsIn(','.join(catselections))#extract all words
     variablesnames+=varsIn(','.join(systweights))   
     
+    for sys in derivedsystweights:
+      systweights.append(sys)
+    
+    # What happens here if a variable name contains a number??
     # extract variablesnames of all plots
     for plot in plots:
         if isinstance(plot,plotutils.Plot):
@@ -338,7 +350,9 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
     for plot in plots:
         if isinstance(plot,plotutils.MVAPlot):
             variablesnames+=varsIn(','.join(plot.input_exprs))
-
+    
+    variablesnames+=varsIn(','.join(systweightexpressions))
+      
     # remove duplicates
     variablesnames=list(set(variablesnames))
 
@@ -359,6 +373,8 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
               if inname!=inexpr:
                 innames.append(inname)
     
+    for sys in derivedsystweights:
+      innames.append(sys)
     innames=list(set(innames))
     script+=InitDerivedMVAVariable(innames)
     # for
@@ -394,6 +410,10 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 	    for inname,inexpr in zip(plot.input_names, plot.input_exprs):
               input_names.append(inname)
               input_exprs.append(inexpr)
+    for sys, sysexp in zip(derivedsystweights,systweightexpressions):
+      input_names.append(sys)
+      input_exprs.append(sysexp)
+      
     script+=calculateDerived(input_names,input_exprs)
     for cn,cs in zip(catnames,catselections):
         # for every category

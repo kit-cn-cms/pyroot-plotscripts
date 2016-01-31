@@ -2,7 +2,6 @@ import sys
 import os
 sys.path.insert(0, '../limittools')
 sys.path.insert(0, '../')
-
 from scriptgenerator import *
 from plotutils import *
 from limittools import renameHistos
@@ -10,8 +9,8 @@ from limittools import addPseudoData
 from limittools import makeDatacards
 from limittools import calcLimits
 
-path='/nfs/dust/cms/user/kelmorab/treesMEMtest/'
-name='easyOptionDallsamplesHdecay'
+path='/nfs/dust/cms/user/hmildner/treesMEM0126/'
+name='easyOptionC'
 mcweight='2.0*2.61*(Evt_Odd==0)'
 # hcc is uu dd ss cc with ids 1 2 3 4
 hccSel='*((abs(GenHiggs_DecProd1_PDGID)==1 && abs(GenHiggs_DecProd2_PDGID)==1) || (abs(GenHiggs_DecProd1_PDGID)==2 && abs(GenHiggs_DecProd2_PDGID)==2) || (abs(GenHiggs_DecProd1_PDGID)==3 && abs(GenHiggs_DecProd2_PDGID)==3) || (abs(GenHiggs_DecProd1_PDGID)==4 && abs(GenHiggs_DecProd2_PDGID)==4) )'
@@ -27,13 +26,10 @@ hwwSel='*((abs(GenHiggs_DecProd1_PDGID)==24 && abs(GenHiggs_DecProd2_PDGID)==24)
 hzzSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==23))'
 # hzg with id 23 and id 22
 hzgSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==22) || (abs(GenHiggs_DecProd1_PDGID)==22 && abs(GenHiggs_DecProd2_PDGID)==23))'
-
-nhistobins_=      [ 20,       4,   4,     20,       4,     4,   20,   20,  6 ,6    ]
-minxvals_=        [-0.9,    0.,  0.,     -0.8,     0.,     0.,   -0.80,  -0.8,  0.,   0.]
-#maxxvals_=        [0.8,     .95,   0.95,  0.8,    0.95,   0.95,    0.76,   0.8,   0.95,    0.95] 
-maxxvals_=        [0.8,     .95,   0.95,  0.8,    0.95,   0.95,    0.76,   0.6,   0.95,    0.95] 
-
-discrs =          ['/nfs/dust/cms/user/kelmorab/MEMstudies/3makeHistosAndCards/weights/weights_Final_43_MEMBDTv2.xml', 'MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg)','MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg)', '/nfs/dust/cms/user/kelmorab/MEMstudies/3makeHistosAndCards/weights/weights_Final_53_MEMBDTv2.xml', 'MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg)' ,'MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg)' , 'BDT_common5_output','/nfs/dust/cms/user/kelmorab/MEMstudies/3makeHistosAndCards/weights/weights_Final_63_MEMBDTv2.xml','MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg)','MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg)']
+nhistobins_=      [ 20,       10,     20,       10,   20,   20,  10    ]
+minxvals_=        [-0.9,   -0.35,  -0.8, -0.75,   -0.80,  -0.8, -0.6]
+maxxvals_=        [0.8,     0.5,  0.8,    0.75,    0.76,   0.8,   0.7]
+discrs =          ['/nfs/dust/cms/user/kelmorab/MEMstudies/3makeHistosAndCards/weights/weights_Final_43_MEMBDTv2.xml', '/nfs/dust/cms/user/kelmorab/MEMstudies/3makeHistosAndCards/weights/weights_Final_44_MEMBDTv2.xml', '/nfs/dust/cms/user/kelmorab/MEMstudies/3makeHistosAndCards/weights/weights_Final_53_MEMBDTv2.xml', '/nfs/dust/cms/user/kelmorab/MEMstudies/3makeHistosAndCards/weights/weights_Final_54_MEMBDTv2.xml' , 'BDT_common5_output','/nfs/dust/cms/user/kelmorab/MEMstudies/3makeHistosAndCards/weights/weights_Final_63_MEMBDTv2.xml','/nfs/dust/cms/user/kelmorab/MEMstudies/3makeHistosAndCards/weights/weights_Final_64_MEMBDTv2.xml']
 
 nhistobins=[]
 minxvals=[]
@@ -42,10 +38,8 @@ for n in nhistobins_:
   nhistobins.append(n)
 for x in minxvals_:
   minxvals.append(x)
-
 for x in maxxvals_:
   maxxvals.append(x)
-
 
 categories_=[("(N_Jets==4&&N_BTagsM==3)","ljets_j4_t3"),
             ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4"),
@@ -58,10 +52,6 @@ categories=[]
 bdtcuts=[0.2,0.2,0.1,0.2,0.1,0.1,0.1]
 
 for cat,bdt in zip(categories_,bdtcuts):
-  if cat[1] in ["ljets_jge6_tge4","ljets_j5_tge4","ljets_j4_t4"]:
-    categories.append(('('+cat[0]+')*(BDT_common5_output>'+str(bdt)+')',cat[1]+'_high') )
-    categories.append(('('+cat[0]+')*(BDT_common5_output<='+str(bdt)+')',cat[1]+'_low') )
-  else:
     categories.append(cat )
 print categories
 
@@ -70,6 +60,7 @@ discrname='BDT'
 
 bins= [c[0] for c in categories]
 binlabels= [c[1] for c in categories]
+
 samples=[Sample('t#bar{t}H',ROOT.kBlue+1,path+'/ttH*/*nominal*.root',mcweight,'ttH') ,  
 	 Sample('t#bar{t}H, H to b#bar{b}',ROOT.kBlue+1,path+'/ttHbb*/*nominal*.root',mcweight,'ttH_hbb') ,  
 	 Sample('t#bar{t}H, H to c#bar{c}',ROOT.kBlue+1,path+'/ttHnonbb*/*nominal*.root',mcweight+hccSel,'ttH_hcc') ,  
@@ -93,7 +84,6 @@ samples=[Sample('t#bar{t}H',ROOT.kBlue+1,path+'/ttH*/*nominal*.root',mcweight,'t
          Sample('Diboson',ROOT.kAzure+2,path+'/??/*nominal*.root',mcweight,'diboson') , 
          #Sample('QCD',ROOT.kYellow ,path+'/QCD*/*nominal*root',mcweight,'QCD') , 
 ]
-
 
 # names of the systematics (proper names needed e.g. for combination)
 weightsystnames=["",
@@ -131,7 +121,6 @@ systweights=["1",
              "PDFweightUp:=Weight_NNPDFid260067/"+str(pdfweightscalefactor),"PDFWeightDown:=Weight_NNPDFid260005/"+str(pdfweightscalefactor)
              ]
 
-
 systsamples=[]
 for sample in samples:
   for sysname,sysfilename in zip(othersystnames,othersystfilenames):
@@ -144,9 +133,9 @@ print len(discrs),len(bins),len(binlabels),len(nhistobins),len(minxvals),len(max
 print len(zip(discrs,bins,binlabels,nhistobins,minxvals,maxxvals))
 for discr,b,bl,nb,minx,maxx in zip(discrs,bins,binlabels,nhistobins,minxvals,maxxvals):
   if '.xml' in discr:
-    bdts.append(MVAPlot(ROOT.TH1F(discrname+"_"+bl,"final discriminator ("+bl+")",nb,minx,maxx),discr,b))
+    bdts.append(MVAPlot(ROOT.TH1F(discrname+"_"+bl,"final dicsriminator ("+bl+")",nb,minx,maxx),discr,b))
   else:
-    bdts.append(Plot(ROOT.TH1F(discrname+"_"+bl,"final discriminator ("+bl+")",nb,minx,maxx),discr,b))
+    bdts.append(Plot(ROOT.TH1F(discrname+"_"+bl,"final dicsriminator ("+bl+")",nb,minx,maxx),discr,b))
   print discr,b,bl,nb,minx,maxx
 
 print "if cateries are correct press the \"any\" key"
