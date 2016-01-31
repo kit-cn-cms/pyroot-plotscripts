@@ -4,8 +4,8 @@ sys.path.insert(0, '../')
 from scriptgenerator import *
 from plotutils import *
 
-path='/nfs/dust/cms/user/hmildner/treesMEM0126/'
-name='anplots'
+path='/nfs/dust/cms/user/hmildner/merged_trees/output/'
+name='anplotsnew'
 sel_singleel="(N_LooseMuons==0)" # need to veto muon events in electron dataset to avoid double countung
 sel_singlemu="(N_LooseElectrons==0)" # and vice versa...
 mcweight='(2.61)*(N_LooseElectrons==0||N_LooseMuons==0)' # some weights are only applied on mc
@@ -37,7 +37,7 @@ samples=[Sample('t#bar{t}H',ROOT.kBlue+1,path+'/ttH*/*nominal*.root',mcweight,'t
          Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,path+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==3)','ttbb'),  
          Sample('Single Top',ROOT.kMagenta,path+'/st*/*nominal*.root',mcweight,'SingleTop') , 
          Sample('V+jets',ROOT.kGreen-3,path+'/??ets*/*nominal*.root',mcweight,'Vjets') , 
-         #Sample('t#bar{t}+V',ROOT.kBlue-10,path+'/tt?_*/*nominal*.root',mcweight,'ttV'),         
+         Sample('t#bar{t}+V',ROOT.kBlue-10,path+'/tt?_*/*nominal*.root',mcweight,'ttV'),         
          Sample('Diboson',ROOT.kAzure+2,path+'/??/*nominal*.root',mcweight,'Diboson') , 
 #         Sample('QCD',ROOT.kYellow ,path+'/QCD*/*nominal*root',mcweight,'QCD') , 
 ]
@@ -127,6 +127,15 @@ plots=[Plot(ROOT.TH1F("JT" ,"jet-tag categories",9,-0.5,8.5),"3*max(min(N_BTagsM
        Plot(ROOT.TH1F("MEM","MEM discriminator for events with #geq 3 b-tags",22,0,1),"(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)",'(N_BTagsM>=3)',label),
        Plot(ROOT.TH1F("blrHighTag","B-tagging likelihood ratio for events with #geq 3 b-tags",44,-4,10),"TMath::Log(Evt_blr_ETH/(1-Evt_blr_ETH))",'(N_BTagsM>=3)',label),
        Plot(ROOT.TH1F("blrAll","B-tagging likelihood ratio",44,-6,10),"TMath::Log(Evt_blr_ETH/(1-Evt_blr_ETH))",'',label),
+
+       Plot(ROOT.TH1F("BJN_N_Leptons","Number of soft leptons",6,-.5,5.5),"BJN_N_Leptons",'',label),
+       Plot(ROOT.TH1F("BJN_N_TracksNoPV","Number of tracks not from the PV",13,-.5,12.5),"BJN_N_TracksNoPV",'',label),
+       Plot(ROOT.TH1F("BJN_N_PVtrackOvCollTrk","Number PV tracks over all tracks",25,0.2,1.2),"BJN_N_PVtrackOvCollTrk",'',label),
+       Plot(ROOT.TH1F("BJN_N_AvgIp3D","Avg 3D IP",40,0,0.08),"BJN_N_AvgIp3D",'',label),
+       Plot(ROOT.TH1F("BJN_N_AvgIp3Dsig","Avg 1D IP significance",30,0,15),"BJN_N_AvgIp3Dsig",'',label),
+       Plot(ROOT.TH1F("BJN_N_AvgSip3Dsig","Avg 3D signed IP significance",30,-15,15),"BJN_N_AvgSip3Dsig",'',label),
+       Plot(ROOT.TH1F("BJN_N_AvgIp1Dsig","Avg 1D IP significance",25,0,25),"BJN_N_AvgIp1Dsig",'',label),
+
        ]
 # plot parallel -- alternatively there are also options to plot more traditional that also return lists of histo lists
 outputpath=plotParallel(name,2000000,plots,samples+samples_data)
