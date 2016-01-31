@@ -4,8 +4,8 @@ sys.path.insert(0, '../')
 from scriptgenerator import *
 from plotutils import *
 
-
-path='/nfs/dust/cms/user/hmildner/treesMEM0126/'
+path='/nfs/dust/cms/user/hmildner/merged_trees/output/'
+#path='/nfs/dust/cms/user/hmildner/treesMEM0126/'
 #path='/nfs/dust/cms/user/hmildner/trees0108/'
 name='discrplotsC'
 sel_singleel="(N_LooseMuons==0)" # need to veto muon events in electron dataset to avoid double countung

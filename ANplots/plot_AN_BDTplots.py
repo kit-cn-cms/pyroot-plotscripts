@@ -7,7 +7,7 @@ from plotutils import *
 
 
 #path='/nfs/dust/cms/user/hmildner/treesMEM0126/'
-path='/nfs/dust/cms/user/hmildner/trees0108/'
+path='/nfs/dust/cms/user/hmildner/merged_trees/output/'
 name='bdtplots'
 sel_singleel="(N_LooseMuons==0)" # need to veto muon events in electron dataset to avoid double countung
 sel_singlemu="(N_LooseElectrons==0)" # and vice versa...

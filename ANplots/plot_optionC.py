@@ -9,8 +9,8 @@ from limittools import addPseudoData
 from limittools import makeDatacards
 from limittools import calcLimits
 
-path='/nfs/dust/cms/user/hmildner/treesMEM0126/'
-name='easyOptionC'
+path='/nfs/dust/cms/user/hmildner/merged_trees/output/'
+name='optionC'
 mcweight='2.0*2.61*(Evt_Odd==0)'
 # hcc is uu dd ss cc with ids 1 2 3 4
 hccSel='*((abs(GenHiggs_DecProd1_PDGID)==1 && abs(GenHiggs_DecProd2_PDGID)==1) || (abs(GenHiggs_DecProd1_PDGID)==2 && abs(GenHiggs_DecProd2_PDGID)==2) || (abs(GenHiggs_DecProd1_PDGID)==3 && abs(GenHiggs_DecProd2_PDGID)==3) || (abs(GenHiggs_DecProd1_PDGID)==4 && abs(GenHiggs_DecProd2_PDGID)==4) )'
@@ -77,10 +77,10 @@ samples=[Sample('t#bar{t}H',ROOT.kBlue+1,path+'/ttH*/*nominal*.root',mcweight,'t
          Sample('t#bar{t}+2b',ROOT.kRed+2,path+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==2)','ttbarPlus2B'),
          Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,path+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==3)','ttbarPlusBBbar'),  
          Sample('Single Top',ROOT.kMagenta,path+'/st*/*nominal*.root',mcweight,'singlet') , 
-         Sample('Z+jets',ROOT.kGreen-3,path+'/Zjets/*nominal*.root',mcweight,'zjets') , 
-         Sample('W+jets',ROOT.kGreen-7,path+'/WJets/*nominal*.root',mcweight,'wjets') , 
-         #Sample('t#bar{t}+W',ROOT.kBlue-10,path+'/ttW_*/*nominal*.root',mcweight,'ttW'),
-         #Sample('t#bar{t}+Z',ROOT.kBlue-6,path+'/ttZ_*/*nominal*.root',mcweight,'ttZ'),
+         Sample('Z+jets',ROOT.kGreen-3,path+'/Zjets*/*nominal*.root',mcweight,'zjets') , 
+         Sample('W+jets',ROOT.kGreen-7,path+'/WJets*/*nominal*.root',mcweight,'wjets') , 
+         Sample('t#bar{t}+W',ROOT.kBlue-10,path+'/ttW_*/*nominal*.root',mcweight,'ttbarW'),
+         Sample('t#bar{t}+Z',ROOT.kBlue-6,path+'/ttZ_*/*nominal*.root',mcweight,'ttbarZ'),
          Sample('Diboson',ROOT.kAzure+2,path+'/??/*nominal*.root',mcweight,'diboson') , 
          #Sample('QCD',ROOT.kYellow ,path+'/QCD*/*nominal*root',mcweight,'QCD') , 
 ]
@@ -93,7 +93,7 @@ weightsystnames=["",
            "_CMS_ttH_CSVCErr1Up","_CMS_ttH_CSVCErr1Down","_CMS_ttH_CSVCErr2Up","_CMS_ttH_CSVCErr2Down",
            "_CMS_ttH_Q2scale_ttbarOtherUp","_CMS_ttH_Q2scale_ttbarPlusBUp","_CMS_ttH_Q2scale_ttbarPlus2BUp","_CMS_ttH_Q2scale_ttbarPlusBBbarUp","_CMS_ttH_Q2scale_ttbarPlusCCbarUp",
            "_CMS_ttH_Q2scale_ttbarOtherDown","_CMS_ttH_Q2scale_ttbarPlusBDown","_CMS_ttH_Q2scale_ttbarPlus2BDown","_CMS_ttH_Q2scale_ttbarPlusBBbarDown","_CMS_ttH_Q2scale_ttbarPlusCCbarDown",
-           "_CMS_ttH_NNPDFUp","_CMS_ttH_NNPDFUp"
+           "_CMS_ttH_NNPDFUp","_CMS_ttH_NNPDFDown"
            ]
 
 othersystnames=["_CMS_scale_jUp",

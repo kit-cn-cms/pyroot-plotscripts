@@ -2,6 +2,7 @@ import sys
 import os
 sys.path.insert(0, '../limittools')
 sys.path.insert(0, '../')
+
 from scriptgenerator import *
 from plotutils import *
 from limittools import renameHistos
@@ -9,8 +10,8 @@ from limittools import addPseudoData
 from limittools import makeDatacards
 from limittools import calcLimits
 
-path='/nfs/dust/cms/user/kelmorab/treesMEM/'
-name='easyOptionBallSamplesHdecay'
+path='/nfs/dust/cms/user/kelmorab/treesMEMtest/'
+name='optionD'
 mcweight='2.0*2.61*(Evt_Odd==0)'
 # hcc is uu dd ss cc with ids 1 2 3 4
 hccSel='*((abs(GenHiggs_DecProd1_PDGID)==1 && abs(GenHiggs_DecProd2_PDGID)==1) || (abs(GenHiggs_DecProd1_PDGID)==2 && abs(GenHiggs_DecProd2_PDGID)==2) || (abs(GenHiggs_DecProd1_PDGID)==3 && abs(GenHiggs_DecProd2_PDGID)==3) || (abs(GenHiggs_DecProd1_PDGID)==4 && abs(GenHiggs_DecProd2_PDGID)==4) )'
@@ -27,30 +28,41 @@ hzzSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==23)
 # hzg with id 23 and id 22
 hzgSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==22) || (abs(GenHiggs_DecProd1_PDGID)==22 && abs(GenHiggs_DecProd2_PDGID)==23))'
 
-nhistobins=      [ 10,10,          4,4 ,        10,10,         4,4,       16,    10,10,  6,6     ]
-minxvals=        [0.]*8 + [-.8] + [0.]*4
-maxxvals=        [.95]*8 + [.8] + [.95]*4
-discrs =          ["((MEM_p_sig>0)*MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))"]*8+['BDT_common5_output']+['((MEM_p_sig>0)*MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))']*4
-discrnames= ["MEM discriminator"]*8+["BDT discriminator"]+4*["MEM discriminator"]
-categories_=[("(N_Jets==4&&N_BTagsM==3)","ljets_j4_t3","4 jets, 3 b-tags category"),
-            ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4","4 jets, 4 b-tags category"),
-            ("(N_Jets==5&&N_BTagsM==3)","ljets_j5_t3","5 jets, 3 b-tags category"),
-            ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4","5 jets, #geq4 b-tags category"),
-            ("(N_Jets>=6&&N_BTagsM==2)","ljets_jge6_t2","#geq6 jets, 2 b-tags category"),
-            ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3","#geq6 jets, 3 b-tags category"),
-            ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4","#geq6 jets, #geq4 b-tags category")]
-categories=[]
+nhistobins_=      [ 20,       4,   4,     20,       4,     4,   20,   20,  6 ,6    ]
+minxvals_=        [-0.9,    0.,  0.,     -0.8,     0.,     0.,   -0.80,  -0.8,  0.,   0.]
+#maxxvals_=        [0.8,     .95,   0.95,  0.8,    0.95,   0.95,    0.76,   0.8,   0.95,    0.95] 
+maxxvals_=        [0.8,     .95,   0.95,  0.8,    0.95,   0.95,    0.76,   0.6,   0.95,    0.95] 
 
-bdtcuts=[0.2,0.2,0.15,
-         0.2,0.1,0.1,0.1]
+discrs =          ['/nfs/dust/cms/user/kelmorab/MEMstudies/3makeHistosAndCards/weights/weights_Final_43_MEMBDTv2.xml', 'MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg)','MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg)', '/nfs/dust/cms/user/kelmorab/MEMstudies/3makeHistosAndCards/weights/weights_Final_53_MEMBDTv2.xml', 'MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg)' ,'MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg)' , 'BDT_common5_output','/nfs/dust/cms/user/kelmorab/MEMstudies/3makeHistosAndCards/weights/weights_Final_63_MEMBDTv2.xml','MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg)','MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg)']
+
+nhistobins=[]
+minxvals=[]
+maxxvals=[]
+for n in nhistobins_:
+  nhistobins.append(n)
+for x in minxvals_:
+  minxvals.append(x)
+
+for x in maxxvals_:
+  maxxvals.append(x)
+
+
+categories_=[("(N_Jets==4&&N_BTagsM==3)","ljets_j4_t3"),
+            ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4"),
+            ("(N_Jets==5&&N_BTagsM==3)","ljets_j5_t3"),
+            ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4"),
+            ("(N_Jets>=6&&N_BTagsM==2)","ljets_jge6_t2"),
+            ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3"),
+            ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4")]
+categories=[]
+bdtcuts=[0.2,0.2,0.1,0.2,0.1,0.1,0.1]
 
 for cat,bdt in zip(categories_,bdtcuts):
-  if cat[1]=='ljets_jge6_t2':
-    categories.append(cat)
+  if cat[1] in ["ljets_jge6_tge4","ljets_j5_tge4","ljets_j4_t4"]:
+    categories.append(('('+cat[0]+')*(BDT_common5_output>'+str(bdt)+')',cat[1]+'_high') )
+    categories.append(('('+cat[0]+')*(BDT_common5_output<='+str(bdt)+')',cat[1]+'_low') )
   else:
-    categories.append(('('+cat[0]+')*(BDT_common5_output>'+str(bdt)+')',cat[1]+'_low',cat[2]+', BDT <= '+str(bdt)) )
-    categories.append(('('+cat[0]+')*(BDT_common5_output<='+str(bdt)+')',cat[1]+'_high',cat[2]+', BDT > '+str(bdt)) )
-
+    categories.append(cat )
 print categories
 
 
@@ -58,8 +70,6 @@ discrname='BDT'
 
 bins= [c[0] for c in categories]
 binlabels= [c[1] for c in categories]
-bintitles= [c[2] for c in categories]
-
 samples=[Sample('t#bar{t}H',ROOT.kBlue+1,path+'/ttH*/*nominal*.root',mcweight,'ttH') ,  
 	 Sample('t#bar{t}H, H to b#bar{b}',ROOT.kBlue+1,path+'/ttHbb*/*nominal*.root',mcweight,'ttH_hbb') ,  
 	 Sample('t#bar{t}H, H to c#bar{c}',ROOT.kBlue+1,path+'/ttHnonbb*/*nominal*.root',mcweight+hccSel,'ttH_hcc') ,  
@@ -78,11 +88,12 @@ samples=[Sample('t#bar{t}H',ROOT.kBlue+1,path+'/ttH*/*nominal*.root',mcweight,'t
          Sample('Single Top',ROOT.kMagenta,path+'/st*/*nominal*.root',mcweight,'singlet') , 
          Sample('Z+jets',ROOT.kGreen-3,path+'/Zjets/*nominal*.root',mcweight,'zjets') , 
          Sample('W+jets',ROOT.kGreen-7,path+'/WJets/*nominal*.root',mcweight,'wjets') , 
-         #Sample('t#bar{t}+W',ROOT.kBlue-10,path+'/ttW_*/*nominal*.root',mcweight,'ttW'),
-         #Sample('t#bar{t}+Z',ROOT.kBlue-6,path+'/ttZ_*/*nominal*.root',mcweight,'ttZ'),
+         Sample('t#bar{t}+W',ROOT.kBlue-10,path+'/ttW_*/*nominal*.root',mcweight,'ttbarW'),
+         Sample('t#bar{t}+Z',ROOT.kBlue-6,path+'/ttZ_*/*nominal*.root',mcweight,'ttbarZ'),
          Sample('Diboson',ROOT.kAzure+2,path+'/??/*nominal*.root',mcweight,'diboson') , 
          #Sample('QCD',ROOT.kYellow ,path+'/QCD*/*nominal*root',mcweight,'QCD') , 
 ]
+
 
 # names of the systematics (proper names needed e.g. for combination)
 weightsystnames=["",
@@ -92,7 +103,7 @@ weightsystnames=["",
            "_CMS_ttH_CSVCErr1Up","_CMS_ttH_CSVCErr1Down","_CMS_ttH_CSVCErr2Up","_CMS_ttH_CSVCErr2Down",
            "_CMS_ttH_Q2scale_ttbarOtherUp","_CMS_ttH_Q2scale_ttbarPlusBUp","_CMS_ttH_Q2scale_ttbarPlus2BUp","_CMS_ttH_Q2scale_ttbarPlusBBbarUp","_CMS_ttH_Q2scale_ttbarPlusCCbarUp",
            "_CMS_ttH_Q2scale_ttbarOtherDown","_CMS_ttH_Q2scale_ttbarPlusBDown","_CMS_ttH_Q2scale_ttbarPlus2BDown","_CMS_ttH_Q2scale_ttbarPlusBBbarDown","_CMS_ttH_Q2scale_ttbarPlusCCbarDown",
-           "_CMS_ttH_NNPDFUp","_CMS_ttH_NNPDFUp"
+           "_CMS_ttH_NNPDFUp","_CMS_ttH_NNPDFDown"
            ]
 
 othersystnames=["_CMS_scale_jUp",
@@ -120,6 +131,7 @@ systweights=["1",
              "PDFweightUp:=Weight_NNPDFid260067/"+str(pdfweightscalefactor),"PDFWeightDown:=Weight_NNPDFid260005/"+str(pdfweightscalefactor)
              ]
 
+
 systsamples=[]
 for sample in samples:
   for sysname,sysfilename in zip(othersystnames,othersystfilenames):
@@ -128,13 +140,19 @@ for sample in samples:
 allsamples=samples+systsamples
 
 bdts=[]
-for discr,b,bl,bt,nb,minx,maxx in zip(discrs,bins,binlabels,bintitles,nhistobins,minxvals,maxxvals):
+print len(discrs),len(bins),len(binlabels),len(nhistobins),len(minxvals),len(maxxvals),
+print len(zip(discrs,bins,binlabels,nhistobins,minxvals,maxxvals))
+for discr,b,bl,nb,minx,maxx in zip(discrs,bins,binlabels,nhistobins,minxvals,maxxvals):
   if '.xml' in discr:
-    bdts.append(MVAPlot(ROOT.TH1F(discrname+"_"+bl,"BDT discriminator w/o MEM in "+bt,nb,minx,maxx),discr,b))
+    bdts.append(MVAPlot(ROOT.TH1F(discrname+"_"+bl,"final discriminator ("+bl+")",nb,minx,maxx),discr,b))
   else:
-    bdts.append(Plot(ROOT.TH1F(discrname+"_"+bl,"MEM discriminator in "+bt,nb,minx,maxx),discr,b))
+    bdts.append(Plot(ROOT.TH1F(discrname+"_"+bl,"final discriminator ("+bl+")",nb,minx,maxx),discr,b))
+  print discr,b,bl,nb,minx,maxx
 
-outputpath=plotParallel(name,500000,bdts,allsamples,[''],['1.'],weightsystnames, systweights)
+print "if cateries are correct press the \"any\" key"
+raw_input()
+
+outputpath=plotParallel(name,1000000,bdts,allsamples,[''],['1.'],weightsystnames, systweights)
 if not os.path.exists(name):
   os.makedirs(name)
 
@@ -149,3 +167,4 @@ makeDatacards(name+'/'+name+'_limitInput.root',name+'/'+name+'_datacard',binlabe
 #if askYesNo('Calculate limits?'):
 limit=calcLimits(name+'/'+name+'_datacard',binlabels)
 limit.dump()
+  
