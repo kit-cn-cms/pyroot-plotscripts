@@ -109,7 +109,7 @@ othersystfilenames=["JESUP",
                     ]
 
 # corresponding weight names
-"+str(pdfweightscalefactor)+"=100.0
+pdfweightscalefactor=100.0
 systweights=["1",
              "Weight_CSVLFup","Weight_CSVLFdown","Weight_CSVHFup","Weight_CSVHFdown",
              "Weight_CSVHFStats1up","Weight_CSVHFStats1down","Weight_CSVLFStats1up","Weight_CSVLFStats1down",
