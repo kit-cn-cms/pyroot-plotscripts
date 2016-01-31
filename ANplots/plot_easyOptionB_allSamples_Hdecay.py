@@ -109,15 +109,15 @@ othersystfilenames=["JESUP",
                     ]
 
 # corresponding weight names
-pdfweightscalefactor=100.0
+pdfweightscalefactor=1.0
 systweights=["1",
              "Weight_CSVLFup","Weight_CSVLFdown","Weight_CSVHFup","Weight_CSVHFdown",
              "Weight_CSVHFStats1up","Weight_CSVHFStats1down","Weight_CSVLFStats1up","Weight_CSVLFStats1down",
              "Weight_CSVHFStats2up","Weight_CSVHFStats2down","Weight_CSVLFStats2up","Weight_CSVLFStats2down",
              "Weight_CSVCErr1up","Weight_CSVCErr1down","Weight_CSVCErr2up","Weight_CSVCErr2down",
-             "QScaleTTLFUp:=Weight_muRupmuFup/"+str(pdfweightscalefactor)","QScaleTTBUp:=Weight_muRupmuFup/"+str(pdfweightscalefactor)","QScaleTTtwoBUp:=Weight_muRupmuFup/"+str(pdfweightscalefactor)","QScaleTTBBUp:=Weight_muRupmuFup/"+str(pdfweightscalefactor)","QScaleTTCCUp:=Weight_muRupmuFup/"+str(pdfweightscalefactor)",
-             "QScaleTTLFDown:=Weight_muRdownmuFdown/"+str(pdfweightscalefactor)","QScaleTTBDown:=Weight_muRdownmuFdown/"+str(pdfweightscalefactor)","QScaleTTtwoBDown:=Weight_muRdownmuFdown/"+str(pdfweightscalefactor)","QScaleTTBBDown:=Weight_muRdownmuFdown/"+str(pdfweightscalefactor)","QScaleTTCCDown:=Weight_muRdownmuFdown/"+str(pdfweightscalefactor)",
-             "PDFweightUp:=Weight_NNPDFid260067/"+str(pdfweightscalefactor)","PDFWeightDown:=Weight_NNPDFid260005/"+str(pdfweightscalefactor)"
+             "QScaleTTLFUp:=Weight_muRupmuFup/"+str(pdfweightscalefactor),"QScaleTTBUp:=Weight_muRupmuFup/"+str(pdfweightscalefactor),"QScaleTTtwoBUp:=Weight_muRupmuFup/"+str(pdfweightscalefactor),"QScaleTTBBUp:=Weight_muRupmuFup/"+str(pdfweightscalefactor),"QScaleTTCCUp:=Weight_muRupmuFup/"+str(pdfweightscalefactor),
+             "QScaleTTLFDown:=Weight_muRdownmuFdown/"+str(pdfweightscalefactor),"QScaleTTBDown:=Weight_muRdownmuFdown/"+str(pdfweightscalefactor),"QScaleTTtwoBDown:=Weight_muRdownmuFdown/"+str(pdfweightscalefactor),"QScaleTTBBDown:=Weight_muRdownmuFdown/"+str(pdfweightscalefactor),"QScaleTTCCDown:=Weight_muRdownmuFdown/"+str(pdfweightscalefactor),
+             "PDFweightUp:=Weight_NNPDFid260067/"+str(pdfweightscalefactor),"PDFWeightDown:=Weight_NNPDFid260005/"+str(pdfweightscalefactor)
              ]
 
 systsamples=[]
