@@ -63,7 +63,7 @@ class Plot:
 
 
 class MVAPlot:
-    def __init__(self,histo, weightfile, selection=''):
+    def __init__(self,histo, weightfile, selection='',label=''):
         self.histo=histo
         self.weightfile=weightfile
         self.selection=selection
@@ -71,6 +71,7 @@ class MVAPlot:
             self.selection='1'
         self.name=histo.GetName()
         self.parseWeights(weightfile)
+        self.label=label
     def parseWeights(self,weightfile):
         root = ET.parse(weightfile).getroot()
         exprs=[]
@@ -845,7 +846,7 @@ def stackHistoList(listOfHistos_,normalize=False):
 
     
 
-def getDataGraph(listOfHistosData):
+def getDataGraph(listOfHistosData,nunblinded):
     if len(listOfHistosData)>0:
         datahisto=listOfHistosData[0]
     for d in listOfHistosData[1:]:
@@ -855,9 +856,12 @@ def getDataGraph(listOfHistosData):
     data.SetMarkerStyle(20)
     data.SetMarkerColor(ROOT.kBlack)
     data.SetLineColor(ROOT.kBlack)
-    for i in range(0,data.GetN()):
+    for i in range(0,data.GetN()+1):
         data.SetPointEXlow(i,0)
         data.SetPointEXhigh(i,0)
+        if i>nunblinded:
+            data.RemovePoint(nunblinded)
+
     return data
     # TODO: proper y-errors
 
@@ -1252,7 +1256,7 @@ def eventYields(hl_data,hl_mc,samples,tablename,witherror=True):
     command=['pdflatex',tablename+'.tex']
     subprocess.call(command)
 
-def plotDataMCan(listOfHistoListsData,listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,factor,name,logscale=False,label='',ratio=True,options='histo'):    
+def plotDataMCan(listOfHistoListsData,listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,factor,name,logscale=False,label='',ratio=True,blind=False,options='histo'):    
     if isinstance(label, basestring):
         labeltexts=len(listOfHistoListsData)*[label]
     else:
@@ -1297,9 +1301,14 @@ def plotDataMCan(listOfHistoListsData,listOfHistoLists,samples,listOfhistosOnTop
             h.DrawCopy(option+'same')
         h.DrawCopy('axissame')
         #draw data
-        data=getDataGraph(listOfHistosData)
-
         otc=ot.Clone()
+        nok=99999
+        if blind:
+            for ibin in range(stackedListOfHistos[0].GetNbinsX()):
+                if otc.GetBinContent(ibin)>0 and stackedListOfHistos[0].GetBinContent(ibin)/otc.GetBinContent(ibin)<100:
+                    nok=ibin-1
+                    break
+        data=getDataGraph(listOfHistosData,nok)
         setupHisto(otc,sampleOnTop.color,'',False)
         otc.SetBinContent(1,otc.GetBinContent(0)+otc.GetBinContent(1));
         otc.SetBinContent(otc.GetNbinsX(),otc.GetBinContent(otc.GetNbinsX()+1)+otc.GetBinContent(otc.GetNbinsX()));
@@ -1341,9 +1350,10 @@ def plotDataMCan(listOfHistoListsData,listOfHistoLists,samples,listOfhistosOnTop
         line=listOfHistos[0].Clone()
         line.SetFillStyle(0)
         line.Divide(listOfHistos[0])
+            
         line.GetYaxis().SetRangeUser(0.5,1.6)
         line.GetXaxis().SetRangeUser(listOfHistos[0].GetXaxis().GetXmin(),listOfHistos[0].GetXaxis().GetXmax())
-        for i in range(line.GetNbinsX()+1):
+        for i in range(line.GetNbinsX()+2):
             line.SetBinContent(i,1)
             line.SetBinError(i,0)
         line.GetXaxis().SetLabelSize(line.GetXaxis().GetLabelSize()*2.4)
