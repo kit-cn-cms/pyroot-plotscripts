@@ -5,6 +5,7 @@ from scriptgenerator import *
 from plotutils import *
 
 
+#path='/nfs/dust/cms/user/hmildner/treesMEM0126/'
 path='/nfs/dust/cms/user/hmildner/trees0108/'
 name='bdtplots'
 sel_singleel="(N_LooseMuons==0)" # need to veto muon events in electron dataset to avoid double countung
@@ -38,7 +39,7 @@ samples=[Sample('t#bar{t}H',ROOT.kBlue+1,path+'/ttH*/*nominal*.root',mcweight,'t
          Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,path+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==3)','ttbb'),  
          Sample('Single Top',ROOT.kMagenta,path+'/st*/*nominal*.root',mcweight,'SingleTop') , 
          Sample('V+jets',ROOT.kGreen-3,path+'/??ets*/*nominal*.root',mcweight,'Vjets') , 
-         Sample('t#bar{t}+V',ROOT.kBlue-10,path+'/tt?_*/*nominal*.root',mcweight,'ttV'),         
+#         Sample('t#bar{t}+V',ROOT.kBlue-10,path+'/tt?_*/*nominal*.root',mcweight,'ttV'),         
          Sample('Diboson',ROOT.kAzure+2,path+'/??/*nominal*.root',mcweight,'Diboson') , 
 #         Sample('QCD',ROOT.kYellow ,path+'/QCD*/*nominal*root',mcweight,'QCD') , 
 ]
@@ -130,7 +131,7 @@ plots+=[Plot(ROOT.TH1F("s54_BDT_common5_input_pt_all_jets_over_E_all_jets","(#su
         Plot(ROOT.TH1F("s54_BDT_common5_input_h1","H_{1}",18,-.2,.34),"BDT_common5_input_h1","(N_Jets==5&&N_BTagsM>=4)",label),
         Plot(ROOT.TH1F("s54_BDT_common5_input_best_higgs_mass","best higgs mass",20,0,400),"BDT_common5_input_best_higgs_mass","(N_Jets==5&&N_BTagsM>=4)",label),
    ]
-label="1 lepton, #geq6 jets, 3 b-tags"
+label="1 lepton, #geq6 jets, 2 b-tags"
 # /nfs/dust/cms/user/kelmorab/newTrain/3makeHistosAndCards/weights/CommonWeights/weights_Final_62_v5_OldVars.xml
 plots+=[Plot(ROOT.TH1F("s62_BDT_common5_input_h1","H_{1}",27,-0.2,.34),"BDT_common5_input_h1","(N_Jets>=6&&N_BTagsM==2)",label),
         Plot(ROOT.TH1F("s62_BDT_common5_input_avg_dr_tagged_jets","avg #Delta R (tag,tag)",25,0,5),"BDT_common5_input_avg_dr_tagged_jets","(N_Jets>=6&&N_BTagsM==2)",label),
