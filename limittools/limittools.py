@@ -32,6 +32,7 @@ class Limitresult:
     
 
 def renameHistos(infname,outfname,sysnames):
+  print sysnames
   infile=ROOT.TFile(infname,"READ")
   outfile=ROOT.TFile(outfname,"RECREATE")
 
@@ -41,10 +42,15 @@ def renameHistos(infname,outfname,sysnames):
     thisname=key.GetName()
     thish=infile.Get(thisname)
     newname=thisname
+    nsysts=0
     for sys in sysnames:
       if sys in newname:
         newname=newname.replace(sys,"")
         newname+=sys
+        nsysts+=1
+        
+    if nsysts>2:
+      continue
   #if "125" in newname:
     #newname=newname.replace("125","")
 #    print "changed ", thisname, " to ", newname
@@ -105,13 +111,18 @@ def MoveOverUnderflow(infname,outfname):
 
   outfile.Close()
 
-def makeDatacards(filename,outname,categories=None):
+def makeDatacards(filename,outname,categories=None,doHdecay=True):
   if categories==None:
     categories=["ljets_j4_t3","ljets_j4_t4","ljets_j5_t3","ljets_j5_tge4","ljets_jge6_t2","ljets_jge6_t3","ljets_jge6_tge4"]
 #  print 'mk_datacard_ttbb13TeV', '-d', 'BDT', '-c','"'+(' '.join(categories))+'"','-o', outname+'txt', filename
   call(['mk_datacard_ttbb13TeV', '-d', 'BDT', '-c',' '.join(categories),'-o', outname+'.txt', filename])
+  if doHdecay:
+    call(['mk_datacard_hdecay13TeV', '-d', 'BDT', '-c',' '.join(categories),'-o', outname+'_hdecay.txt', filename])
+
   for c in categories:
     call(['mk_datacard_ttbb13TeV', '-d', 'BDT', '-c', c, '-o', outname+'_'+c+'.txt', filename])
+    if doHdecay:
+      call(['mk_datacard_hdecay13TeV', '-d', 'BDT', '-c', c, '-o', outname+'_'+c+'_hdecay.txt', filename])
 
 def readLimit(fn='higgsCombineTest.Asymptotic.mH125.root'):
   f=ROOT.TFile(fn)
