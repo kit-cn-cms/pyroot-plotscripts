@@ -2,6 +2,7 @@ import ROOT
 import sys
 from subprocess import call
 
+
 class Limitresult:
   def __init__(self,combined,combined_up,combined_down,cats,catlimits,catlimits_up,catlimits_down):
     self.combined=combined
@@ -12,9 +13,22 @@ class Limitresult:
     self.catlimits_up=catlimits_up
     self.catlimits_down=catlimits_down
   def dump(self):
-    print 'combined:',round(self.combined*100)/100.,'+'+str(round((self.combined_up-self.combined)*100)/100.),str(round((self.combined_down-self.combined)*100)/100.)
+    catalias={}
+    catalias["ljets_j4_t3"]="= 4 jets, = 3 b-tags"
+    catalias["ljets_j4_t4"]="= 4 jets, = 4 b-tags"
+    catalias["ljets_j5_t3"]="= 5 jets, = 3 b-tags"
+    catalias["ljets_j5_tge4"]="= 5 jets, $\geq$ 4 b-tags"
+    catalias["ljets_jge6_t2"]="$\geq$ 6 jets, = 2 b-tags"
+    catalias["ljets_jge6_t3"]="$\geq$ 6 jets, = 3 b-tags"
+    catalias["ljets_jge6_tge4"]="$\geq$ 6 jets, $\geq$ 4 b-tags"
+
+    for c in catalias.keys():
+      catalias[c+"_high"]=catalias[c]+" high BDT output"
+      catalias[c+"_low"]=catalias[c]+" low BDT output"
+
+    print 'combined:',round(self.combined*10)/10.,'^{+'+str(round((self.combined_up-self.combined)*10)/10.)+'}_{'+str(round((self.combined_down-self.combined)*10)/10.)+'}'
     for cat,limit,limit_up,limit_down in zip(self.cats,self.catlimits,self.catlimits_up,self.catlimits_down):
-      print cat+':',round(limit*100.)/100.,'+'+str(round((limit_up-limit)*100)/100.),str(round((limit_down-limit)*100)/100.)
+      print catalias[cat]+':',round(limit*10.)/10.,'^{+'+str(round((limit_up-limit)*10)/10.)+'}_{'+str(round((limit_down-limit)*10)/10.)+'}'
     
 
 def renameHistos(infname,outfname,sysnames):
