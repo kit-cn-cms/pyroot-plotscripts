@@ -4,7 +4,7 @@ sys.path.insert(0, '../')
 from scriptgenerator import *
 from plotutils import *
 
-path='/nfs/dust/cms/user/hmildner/merged_trees/output/'
+path='/nfs/dust/cms/user/hmildner/merged_trees/output*/'
 name='anplotsnew'
 sel_singleel="(N_LooseMuons==0)" # need to veto muon events in electron dataset to avoid double countung
 sel_singlemu="(N_LooseElectrons==0)" # and vice versa...
