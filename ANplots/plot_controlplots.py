@@ -3,12 +3,12 @@ import os
 sys.path.insert(0, '../')
 from scriptgenerator import *
 from plotutils import *
+from plotconfig import *
 
-path='/nfs/dust/cms/user/hmildner/merged_trees/output*/'
-name='anplotsnew'
+name='anplots'
 sel_singleel="(N_LooseMuons==0)" # need to veto muon events in electron dataset to avoid double countung
 sel_singlemu="(N_LooseElectrons==0)" # and vice versa...
-mcweight='(2.61)*(N_LooseElectrons==0||N_LooseMuons==0)' # some weights are only applied on mc
+
 # selections for categories
 sel1="((N_TightLeptons==1)*(N_LooseLeptons==1)*(N_BTagsM>=2)*(N_Jets>=4))" # l+jets channel
 name1="1lge4ge2"
@@ -21,26 +21,8 @@ s62="(N_Jets>=6&&N_BTagsM==2)"
 s63="(N_Jets>=6&&N_BTagsM==3)"
 s64="(N_Jets>=6&&N_BTagsM>=4)"
 
-
-# data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
-samples_data=[Sample('SingleMu',ROOT.kBlack,path+'/mu_*/*nominal*.root',sel_singlemu,'SingleMu'),
-              Sample('SingleEl',ROOT.kBlack,path+'/el_*/*nominal*.root',sel_singleel,'SingleEl')
-              ]
-
-# mc samples
-samples=[Sample('t#bar{t}H',ROOT.kBlue+1,path+'/ttH*/*nominal*.root',mcweight,'ttH') ,     
-#         Sample('t#bar{t}',ROOT.kRed+1,path+'/ttbar/*nominal*.root',mcweight,'ttbar') ,     
-         Sample('t#bar{t}+lf',ROOT.kRed-7,path+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)','ttl'),
-         Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,path+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==1)','ttcc'),
-         Sample('t#bar{t}+b',ROOT.kRed-2,path+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==1)','tt1b'),
-         Sample('t#bar{t}+2b',ROOT.kRed+2,path+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==2)','tt2b'),
-         Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,path+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==3)','ttbb'),  
-         Sample('Single Top',ROOT.kMagenta,path+'/st*/*nominal*.root',mcweight,'SingleTop') , 
-         Sample('V+jets',ROOT.kGreen-3,path+'/??ets*/*nominal*.root',mcweight,'Vjets') , 
-         Sample('t#bar{t}+V',ROOT.kBlue-10,path+'/tt?_*/*nominal*.root',mcweight,'ttV'),         
-         Sample('Diboson',ROOT.kAzure+2,path+'/??/*nominal*.root',mcweight,'Diboson') , 
-#         Sample('QCD',ROOT.kYellow ,path+'/QCD*/*nominal*root',mcweight,'QCD') , 
-]
+samples=samplesControlPlots
+samples_data=samples_data_controlplots
 #                                                 B C D                        
 categoriesJT=[("(N_Jets>=6&&N_BTagsM==2)","6j2t","","",""),
               ("(N_Jets==4&&N_BTagsM==3)","4j3t","0.2","0.2","0.2"),
