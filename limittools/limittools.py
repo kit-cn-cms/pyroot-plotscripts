@@ -52,6 +52,29 @@ def renameHistos(infname,outfname,sysnames):
         
     if nsysts>2:
       continue
+    
+    #filter histograms for systs not belonging to the samples 
+    #for now until we have NNPDF syst for other samples
+    if "CMS_ttH_NNPDF" in thisname:
+      if thisname.split("_",1)[0]+"_" not in ["ttbarPlus2B_","ttbarPlusB_","ttbarPlusBBbar_","ttbarPlusCCbar_","ttbarOther_"]:
+        print "wrong syst: removing histogram", thisname
+        continue
+    if "CMS_ttH_Q2scale_ttbarOther" in thisname and "ttbarOther"!=thisname.split("_",1)[0]:
+      print "wrong syst: removing histogram", thisname
+      continue
+    if ("CMS_ttH_Q2scale_ttbarPlusBUp" in thisname or "CMS_ttH_Q2scale_ttbarPlusBDown" in thisname ) and "ttbarPlusB"!=thisname.split("_",1)[0] :
+      print "wrong syst: removing histogram", thisname
+      continue
+    if "CMS_ttH_Q2scale_ttbarPlusBBbar" in thisname and "ttbarPlusBBbar"!=thisname.split("_",1)[0] :
+      print "wrong syst: removing histogram", thisname
+      continue
+    if "CMS_ttH_Q2scale_ttbarPlusCCbar" in thisname and "ttbarPlusCCbar"!=thisname.split("_",1)[0] :
+      print "wrong syst: removing histogram", thisname
+      continue
+    if "CMS_ttH_Q2scale_ttbarPlus2B" in thisname and "ttbarPlus2B"!=thisname.split("_",1)[0] :
+      print "wrong syst: removing histogram", thisname
+      continue
+    
     #if nsysts ==1 and thish.Integral()<0.0:
       #print "nominal histogram has negativ integral"
       #print thish, thish.Integral()
