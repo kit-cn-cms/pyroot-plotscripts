@@ -46,7 +46,7 @@ bintitles= [c[2] for c in categories]
 samples_data=samples_data_bdtplots
 
 # mc samples
-samples=SamplesBDTplots
+samples=samplesBDTplots
 plots=[]
 for discr,b,bl,bt,nb,minx,maxx in zip(discrs,bins,binlabels,bintitles,nhistobins,minxvals,maxxvals):
   if 'common5' in discr:

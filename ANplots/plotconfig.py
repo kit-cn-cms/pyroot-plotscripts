@@ -1,3 +1,13 @@
+import sys
+import os
+sys.path.insert(0, '../')
+from scriptgenerator import *
+from plotutils import *
+
+mcweight='2.0*2.61*(Evt_Odd==0)'
+sel_singleel="(N_LooseMuons==0)" # need to veto muon events in electron dataset to avoid double countung
+sel_singlemu="(N_LooseElectrons==0)" # and vice versa...
+
 # hcc is uu dd ss cc with ids 1 2 3 4
 hccSel='*((abs(GenHiggs_DecProd1_PDGID)==1 && abs(GenHiggs_DecProd2_PDGID)==1) || (abs(GenHiggs_DecProd1_PDGID)==2 && abs(GenHiggs_DecProd2_PDGID)==2) || (abs(GenHiggs_DecProd1_PDGID)==3 && abs(GenHiggs_DecProd2_PDGID)==3) || (abs(GenHiggs_DecProd1_PDGID)==4 && abs(GenHiggs_DecProd2_PDGID)==4) )'
 # htt is mumu tautau with ids 13 15
@@ -33,8 +43,8 @@ samplesLimits=[Sample('t#bar{t}H',ROOT.kBlue+1,path_excl4252+'/ttH*/*nominal*.ro
                      Sample('t#bar{t}+2b',ROOT.kRed+2,path_excl4252+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==2)','ttbarPlus2B'),
                      Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,path_excl4252+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==3)','ttbarPlusBBbar'),  
                      Sample('Single Top',ROOT.kMagenta,path_excl4252+'/st*/*nominal*.root',mcweight,'singlet') , 
-                     Sample('Z+jets',ROOT.kGreen-3,path_excl4252+'/Zjets/*nominal*.root',mcweight,'zjets') , 
-                     Sample('W+jets',ROOT.kGreen-7,path_excl4252+'/WJets/*nominal*.root',mcweight,'wjets') , 
+                     Sample('Z+jets',ROOT.kGreen-3,path_excl4252+'/Zjets*/*nominal*.root',mcweight,'zjets') , 
+                     Sample('W+jets',ROOT.kGreen-7,path_excl4252+'/WJets*/*nominal*.root',mcweight,'wjets') , 
                      Sample('t#bar{t}+W',ROOT.kBlue-10,path_excl4252+'/ttW_*/*nominal*.root',mcweight,'ttbarW'),
                      Sample('t#bar{t}+Z',ROOT.kBlue-6,path_excl4252+'/ttZ_*/*nominal*.root',mcweight,'ttbarZ'),
                      Sample('Diboson',ROOT.kAzure+2,path_excl4252+'/??/*nominal*.root',mcweight,'diboson') , 
@@ -63,7 +73,7 @@ samplesControlPlots=[Sample('t#bar{t}H',ROOT.kBlue+1,path_incl4252+'/ttH*/*nomin
 #         Sample('QCD',ROOT.kYellow ,path_incl4252+'/QCD*/*nominal*root',mcweight,'QCD') , 
 ]
 
-samplesBDTPlots=[Sample('t#bar{t}H',ROOT.kBlue+1,path_excl4252+'/ttH*/*nominal*.root',mcweight,'ttH') ,     
+samplesBDTplots=[Sample('t#bar{t}H',ROOT.kBlue+1,path_excl4252+'/ttH*/*nominal*.root',mcweight,'ttH') ,     
 #         Sample('t#bar{t}',ROOT.kRed+1,path_excl4252+'/ttbar/*nominal*.root',mcweight,'ttbar') ,     
          Sample('t#bar{t}+lf',ROOT.kRed-7,path_excl4252+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)','ttl'),
          Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,path_excl4252+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==1)','ttcc'),
@@ -117,6 +127,6 @@ othersystfilenames=["JESUP",
                     ]
 
 
-mcweight='2.0*2.61*(Evt_Odd==0)'
+
 
 

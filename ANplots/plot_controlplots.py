@@ -1,13 +1,6 @@
-import sys
-import os
-sys.path.insert(0, '../')
-from scriptgenerator import *
-from plotutils import *
 from plotconfig import *
 
 name='anplots'
-sel_singleel="(N_LooseMuons==0)" # need to veto muon events in electron dataset to avoid double countung
-sel_singlemu="(N_LooseElectrons==0)" # and vice versa...
 
 # selections for categories
 sel1="((N_TightLeptons==1)*(N_LooseLeptons==1)*(N_BTagsM>=2)*(N_Jets>=4))" # l+jets channel
