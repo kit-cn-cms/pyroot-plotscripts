@@ -27,7 +27,7 @@ hzgSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==22)
 path_excl4252='/nfs/dust/cms/user/hmildner/merged_trees/output/'
 path_incl4252='/nfs/dust/cms/user/hmildner/merged_trees/output*/'
 
-samplesLimits=[Sample('t#bar{t}H',ROOT.kBlue+1,path_excl4252+'/ttH*/*nominal*.root',mcweight,'ttH') ,  
+samplesLimits=[Sample('t#bar{t}H',ROOT.kBlue+1,path_excl4252+'/ttHbb*/*nominal*.root',mcweight,'ttH') ,  
                     Sample('t#bar{t}H, H to b#bar{b}',ROOT.kBlue+1,path_excl4252+'/ttHbb*/*nominal*.root',mcweight,'ttH_hbb') ,  
                      Sample('t#bar{t}H, H to c#bar{c}',ROOT.kBlue+1,path_excl4252+'/ttHnonbb*/*nominal*.root',mcweight+hccSel,'ttH_hcc') ,  
                      Sample('t#bar{t}H, H to #tau#tau',ROOT.kBlue+1,path_excl4252+'/ttHnonbb*/*nominal*.root',mcweight+httSel,'ttH_htt') ,  
@@ -39,7 +39,7 @@ samplesLimits=[Sample('t#bar{t}H',ROOT.kBlue+1,path_excl4252+'/ttH*/*nominal*.ro
   	 
                      Sample('t#bar{t}+lf',ROOT.kRed-7,path_excl4252+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)','ttbarOther'),
                      Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,path_excl4252+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==1)','ttbarPlusCCbar'),
-                    Sample('t#bar{t}+b',ROOT.kRed-2,path_excl4252+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==1)','ttbarPlusB'),
+                     Sample('t#bar{t}+b',ROOT.kRed-2,path_excl4252+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==1)','ttbarPlusB'),
                      Sample('t#bar{t}+2b',ROOT.kRed+2,path_excl4252+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==2)','ttbarPlus2B'),
                      Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,path_excl4252+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==3)','ttbarPlusBBbar'),  
                      Sample('Single Top',ROOT.kMagenta,path_excl4252+'/st*/*nominal*.root',mcweight,'singlet') , 
