@@ -27,7 +27,7 @@ hzgSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==22)
 path_excl4252='/nfs/dust/cms/user/hmildner/merged_trees/output/'
 path_incl4252='/nfs/dust/cms/user/hmildner/merged_trees/output*/'
 
-samplesLimits=[Sample('t#bar{t}H',ROOT.kBlue+1,path_excl4252+'/ttHbb*/*nominal*.root',mcweight,'ttH') ,  
+samplesLimits=[Sample('t#bar{t}H',ROOT.kBlue+1,path_excl4252+'/ttH*/*nominal*.root',mcweight,'ttH') ,  
                      Sample('t#bar{t}H, H to b#bar{b}',ROOT.kBlue+1,path_excl4252+'/ttHbb*/*nominal*.root',mcweight,'ttH_hbb') ,  
                      Sample('t#bar{t}H, H to c#bar{c}',ROOT.kBlue+1,path_excl4252+'/ttHnonbb*/*nominal*.root',mcweight+hccSel,'ttH_hcc') ,  
                      Sample('t#bar{t}H, H to #tau#tau',ROOT.kBlue+1,path_excl4252+'/ttHnonbb*/*nominal*.root',mcweight+httSel,'ttH_htt') ,  
@@ -51,7 +51,7 @@ samplesLimits=[Sample('t#bar{t}H',ROOT.kBlue+1,path_excl4252+'/ttHbb*/*nominal*.
                      #Sample('QCD',ROOT.kYellow ,path_excl4252+'/QCD*/*nominal*root',mcweight,'QCD') , 
 ]
 
-samplesLimitsBoosted=[Sample('t#bar{t}H',ROOT.kBlue+1,path_incl4252+'/ttHbb*/*nominal*.root',mcweight,'ttH') ,  
+samplesLimitsBoosted=[Sample('t#bar{t}H',ROOT.kBlue+1,path_incl4252+'/ttH*/*nominal*.root',mcweight,'ttH') ,  
                       Sample('t#bar{t}H, H to b#bar{b}',ROOT.kBlue+1,path_incl4252+'/ttHbb*/*nominal*.root',mcweight,'ttH_hbb') ,  
                       Sample('t#bar{t}H, H to c#bar{c}',ROOT.kBlue+1,path_incl4252+'/ttHnonbb*/*nominal*.root',mcweight+hccSel,'ttH_hcc') ,  
                       Sample('t#bar{t}H, H to #tau#tau',ROOT.kBlue+1,path_incl4252+'/ttHnonbb*/*nominal*.root',mcweight+httSel,'ttH_htt') ,  
