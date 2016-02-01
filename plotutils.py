@@ -1252,7 +1252,11 @@ def eventYields(hl_data,hl_mc,samples,tablename,witherror=True):
     for h in hl_data[1:]:
         h_data.Add(h)
     s_data=Sample('data')
-    turn1dHistosToTable(hl_mc+[h_data],samples+[s_data],tablename,witherror)
+    s_bkg=Sample('sum of backgrounds')
+    h_bkg=hl_mc[1].Clone()
+    for h in hl_mc[2:]:
+        h_bkg.Add(h.Clone())
+    turn1dHistosToTable(hl_mc[1:]+[h_bkg]+[hl_mc[0]]+[h_data],samples[1:]+[s_bkg]+[samples[0]]+[s_data],tablename,witherror)
     command=['pdflatex',tablename+'.tex']
     subprocess.call(command)
 
