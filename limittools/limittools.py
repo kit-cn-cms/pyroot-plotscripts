@@ -21,7 +21,8 @@ class Limitresult:
     catalias["ljets_jge6_t2"]="$\geq$ 6 jets, = 2 b-tags"
     catalias["ljets_jge6_t3"]="$\geq$ 6 jets, = 3 b-tags"
     catalias["ljets_jge6_tge4"]="$\geq$ 6 jets, $\geq$ 4 b-tags"
-
+    catalias["ljets_boosted"]="boosted"
+    
     for c in catalias.keys():
       catalias[c+"_high"]=catalias[c]+" high BDT output"
       catalias[c+"_low"]=catalias[c]+" low BDT output"
@@ -60,6 +61,66 @@ def renameHistos(infname,outfname,sysnames):
   
   outfile.Close()
   infile.Close()
+  
+def mergeHistFiles(infname1,infname2,categoriesToTakeFrom2,outfname):
+  infile1=ROOT.TFile(infname1,"READ")
+  infile2=ROOT.TFile(infname2,"READ")
+  outfile=ROOT.TFile(outfname,"RECREATE")
+  
+  transferCategories = [(cat,False) for cat in categoriesToTakeFrom2]
+  
+  keylist1=infile1.GetListOfKeys()
+  
+  for key in keylist1:
+  
+    thisname=key.GetName()
+    
+    if "BDTbin" in thisname or "data_obs" in thisname:
+      continue
+    
+    takeit=False
+    
+    for cat,transferred in transferCategories:
+      if cat in thisname:
+        takeit=True
+        transferred=True
+    
+    if takeit:      
+      thish=infile2.Get(thisname)
+    else:
+      thish=infile1.Get(thisname)
+    
+    #print thisname, thish
+    if thish!=None:
+      outfile.cd()
+      thish.Write()
+  
+  keylist2=infile2.GetListOfKeys()
+
+  for key in keylist2:
+  
+    thisname=key.GetName()
+    
+    if "BDTbin" in thisname or "data_obs" in thisname:
+      continue
+    
+    takeit=False
+    
+    for cat,transferred in transferCategories:
+      #if cat in thisname:
+      if cat in thisname and not transferred:
+        takeit=True
+    
+    thish=infile2.Get(thisname)
+    
+    #print thisname, thish
+    if thish!=None:
+      outfile.cd()
+      thish.Write()
+
+  outfile.Close()
+  infile1.Close()
+  infile2.Close()
 
 def addPseudoData(infname,samplesWOttH,categories,sysnames,disc="BDT_ljets"):
 
