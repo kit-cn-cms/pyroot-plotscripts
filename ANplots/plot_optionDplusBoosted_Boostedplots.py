@@ -57,8 +57,6 @@ bdts=[]
 print len(discrs),len(bins),len(binlabels),len(nhistobins),len(minxvals),len(maxxvals),
 print len(zip(discrs,bins,binlabels,nhistobins,minxvals,maxxvals))
 for discr,b,bl,nb,minx,maxx in zip(discrs,bins,binlabels,nhistobins,minxvals,maxxvals):
-  for i,subdiscr in enumerate(subdiscrs):
-    bdts.append(MVAPlot(ROOT.TH1F("SubBDT_"+str(i)+"_"+bl,"BDT discriminator",20,-1.0,1.0),subdiscr,b))
     
   if '.xml' in discr:
     bdts.append(MVAPlot(ROOT.TH1F(discrname+"_"+bl,"final discriminator ("+bl+")",nb,minx,maxx),discr,b))
