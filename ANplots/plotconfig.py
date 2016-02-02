@@ -137,7 +137,10 @@ weightsystnames=["",
            ]
 
 # corresponding weight names
-pdfweightscalefactor=1.0
+mu_down_sf=1.1402
+mu_up_sf=0.8727
+pdf_05_sf=0.950964383883
+pdf_67_sf=1.04093344845
 
 
 systweights=["1",
@@ -145,9 +148,9 @@ systweights=["1",
              "Weight_CSVHFStats1up","Weight_CSVHFStats1down","Weight_CSVLFStats1up","Weight_CSVLFStats1down",
              "Weight_CSVHFStats2up","Weight_CSVHFStats2down","Weight_CSVLFStats2up","Weight_CSVLFStats2down",
              "Weight_CSVCErr1up","Weight_CSVCErr1down","Weight_CSVCErr2up","Weight_CSVCErr2down",
-             "QScaleTTLFUp:=Weight_muRupmuFup/"+str(pdfweightscalefactor),"QScaleTTBUp:=Weight_muRupmuFup/"+str(pdfweightscalefactor),"QScaleTTtwoBUp:=Weight_muRupmuFup/"+str(pdfweightscalefactor),"QScaleTTBBUp:=Weight_muRupmuFup/"+str(pdfweightscalefactor),"QScaleTTCCUp:=Weight_muRupmuFup/"+str(pdfweightscalefactor),
-             "QScaleTTLFDown:=Weight_muRdownmuFdown/"+str(pdfweightscalefactor),"QScaleTTBDown:=Weight_muRdownmuFdown/"+str(pdfweightscalefactor),"QScaleTTtwoBDown:=Weight_muRdownmuFdown/"+str(pdfweightscalefactor),"QScaleTTBBDown:=Weight_muRdownmuFdown/"+str(pdfweightscalefactor),"QScaleTTCCDown:=Weight_muRdownmuFdown/"+str(pdfweightscalefactor),
-             "PDFweightUp:=Weight_NNPDFid260067/"+str(pdfweightscalefactor),"PDFWeightDown:=Weight_NNPDFid260005/"+str(pdfweightscalefactor)
+             "QScaleTTLFUp:=Weight_muRupmuFup/"+str(mu_up_sf),"QScaleTTBUp:=Weight_muRupmuFup/"+str(mu_up_sf),"QScaleTTtwoBUp:=Weight_muRupmuFup/"+str(mu_up_sf),"QScaleTTBBUp:=Weight_muRupmuFup/"+str(mu_up_sf),"QScaleTTCCUp:=Weight_muRupmuFup/"+str(mu_up_sf),
+             "QScaleTTLFDown:=Weight_muRdownmuFdown/"+str(mu_down_sf),"QScaleTTBDown:=Weight_muRdownmuFdown/"+str(mu_down_sf),"QScaleTTtwoBDown:=Weight_muRdownmuFdown/"+str(mu_down_sf),"QScaleTTBBDown:=Weight_muRdownmuFdown/"+str(mu_down_sf),"QScaleTTCCDown:=Weight_muRdownmuFdown/"+str(mu_down_sf),
+             "PDFweightUp:=Weight_NNPDFid260067/"+str(pdf_67_sf),"PDFWeightDown:=Weight_NNPDFid260005/"+str(pdf_05_sf)
              ]
 
 othersystnames=["_CMS_scale_jUp",
