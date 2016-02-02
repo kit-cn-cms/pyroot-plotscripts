@@ -6,13 +6,8 @@ name='AN_controlplots_plusBoosted'
 sel1="((N_TightLeptons==1)*(N_LooseLeptons==1)*(N_BTagsM>=2)*(N_Jets>=4))" # l+jets channel
 name1="1lge4ge2"
 
-s43="(N_Jets==4&&N_BTagsM==3)"
-s44="(N_Jets==4&&N_BTagsM>=4)"
-s53="(N_Jets==5&&N_BTagsM==3)"
-s54="(N_Jets==5&&N_BTagsM>=4)"
-s62="(N_Jets>=6&&N_BTagsM==2)"
-s63="(N_Jets>=6&&N_BTagsM==3)"
-s64="(N_Jets>=6&&N_BTagsM>=4)"
+toptaggersel="(BoostedJet_Top_Pt[0]>=0)"
+higgstaggersel="(BoostedJet_Filterjet2_Pt[0]>=0)"
 
 samples=samplesControlPlots
 samples_data=samples_data_controlplots
@@ -114,8 +109,27 @@ plots=[Plot(ROOT.TH1F("JT" ,"jet-tag categories",len(categoriesJT),0.5,0.5+len(c
        Plot(ROOT.TH1F("BJN_N_AvgIp3D","Avg 3D IP",40,0,0.08),"BJN_N_AvgIp3D",'',label),
        Plot(ROOT.TH1F("BJN_N_AvgIp3Dsig","Avg 1D IP significance",30,0,15),"BJN_N_AvgIp3Dsig",'',label),
        Plot(ROOT.TH1F("BJN_N_AvgSip3Dsig","Avg 3D signed IP significance",30,-15,15),"BJN_N_AvgSip3Dsig",'',label),
-       Plot(ROOT.TH1F("BJN_N_AvgIp1Dsig","Avg 1D IP significance",25,0,25),"BJN_N_AvgIp1Dsig",'',label),
-
+       Plot(ROOT.TH1F("BJN_N_AvgIp1Dsig","Avg 1D IP significance",25,0,25),"BJN_N_AvgIp1Dsig",'',label)
+       
+#       Plot(ROOT.TH1F("N_BoostedJets","Number of fat jets",5,0,5),"N_BoostedJets",'',label),
+#       Plot(ROOT.TH1F("BoostedJet_Pt","transverse momentum of fat jet",40,200,600),"BoostedJet_Pt[0]",'',label)
+#       
+#       Plot(ROOT.TH1F("BoostedJet_PrunedMass","pruned mass of hardest fat jet",40,0,400),"BoostedJet_PrunedMass[0]",toptaggersel,label),
+#       Plot(ROOT.TH1F("BoostedJet_Top_M","invariant mass of top",40,0,300),"BoostedJet_Top_M[0]",toptaggersel,label),
+#       Plot(ROOT.TH1F("BoostedJet_Wbtag_M","invariant mass of W",40,0,200),"BoostedJet_Wbtag_M[0]",toptaggersel,label),
+#       Plot(ROOT.TH1F("BoostedJet_BW1btag_M","invariant mass of B and W1",40,0,250),"BoostedJet_BW1btag_M[0]",toptaggersel,label),
+#       Plot(ROOT.TH1F("BoostedJet_BW2btag_M","invariant mass of B and W2",40,0,250),"BoostedJet_BW2btag_M[0]",toptaggersel,label),
+#       Plot(ROOT.TH1F("BoostedJet_Bbtag_CSV","CSV output of B",40,-0.1,1.),"BoostedJet_Bbtag_CSV[0]",toptaggersel,label),
+#       Plot(ROOT.TH1F("BoostedJet_W1btag_CSV","CSV output of W1",40,-0.1,1.),"BoostedJet_W1btag_CSV[0]",toptaggersel,label),
+#       Plot(ROOT.TH1F("BoostedJet_W2btag_CSV","CSV output of W2",40,-0.1,1.),"BoostedJet_W2btag_CSV[0]",toptaggersel,label),
+#       Plot(ROOT.TH1F("BoostedJet_Tau21Filtered","#tau_2/#tau_1",40,0.,1.),"BoostedJet_Tau2Filtered[0]/BoostedJet_Tau1Filtered[0]",toptaggersel,label),
+#       Plot(ROOT.TH1F("BoostedJet_Tau32Filtered","#tau_3/#tau_2",40,0.,1.),"BoostedJet_Tau3Filtered[0]/BoostedJet_Tau2Filtered[0]",toptaggersel,label),
+#       Plot(ROOT.TH1F("BoostedJet_fRec","Difference to true W top mass ratio",40,0.,.6),"BoostedJet_fRec[0]",toptaggersel,label),
+#       Plot(ROOT.TH1F("BoostedJet_DRoptRoptCalc","D_{opt}-D_{opt}^{calc}",40,-2.,1.),"BoostedJet_Ropt[0]-BoostedJet_RoptCalc[0]",toptaggersel,label),
+#       
+#       Plot(ROOT.TH1F("BoostedJet_TopTag_BDT_Std","BDT top tagger output of hardest fat jet",40,-1.,1.),"BoostedJet_TopTag_BDT_Std[0]",toptaggersel,label)
+#       
+#       Plot(ROOT.TH1F("BoostedJet_HiggsTag_SecondCSV","b-tagging output of subjet B2 of hardest fat jet",40,-.1,1.),"BoostedJet_HiggsTag_SecondCSV[0]",higgstaggersel,label)
        ]
 # plot parallel -- alternatively there are also options to plot more traditional that also return lists of histo lists
 outputpath=plotParallel(name,2000000,plots,samples+samples_data)

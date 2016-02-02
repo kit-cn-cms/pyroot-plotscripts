@@ -26,6 +26,7 @@ hzgSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==22)
 
 path_excl4252='/nfs/dust/cms/user/hmildner/merged_trees/output/'
 path_incl4252='/nfs/dust/cms/user/hmildner/merged_trees/output*/'
+path_swold='/nfs/dust/cms/user/shwillia/BoostedTrees/Setup_160127/'
 
 samplesLimits=[Sample('t#bar{t}H',ROOT.kBlue+1,path_excl4252+'/ttH*/*nominal*.root',mcweight,'ttH') ,  
                      Sample('t#bar{t}H, H to b#bar{b}',ROOT.kBlue+1,path_excl4252+'/ttHbb*/*nominal*.root',mcweight,'ttH_hbb') ,  
@@ -76,9 +77,15 @@ samplesLimitsBoosted=[Sample('t#bar{t}H',ROOT.kBlue+1,path_incl4252+'/ttH*/*nomi
 ]
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
+
 samples_data_controlplots=[Sample('SingleMu',ROOT.kBlack,path_incl4252+'/mu_*/*nominal*.root',sel_singlemu,'SingleMu'),
                            Sample('SingleEl',ROOT.kBlack,path_incl4252+'/el_*/*nominal*.root',sel_singleel,'SingleEl')
                        ]
+                       
+samples_data_controlplots_swold=[Sample('SingleMu',ROOT.kBlack,path_swold+'/mu_*/*nominal*.root',sel_singlemu,'SingleMu'),
+                           Sample('SingleEl',ROOT.kBlack,path_swold+'/el_*/*nominal*.root',sel_singleel,'SingleEl')
+                       ]
+                       
 samples_data_bdtplots=[Sample('SingleMu',ROOT.kBlack,path_incl4252+'/mu_*/*nominal*.root',sel_singlemu,'SingleMu'),
                            Sample('SingleEl',ROOT.kBlack,path_incl4252+'/el_*/*nominal*.root',sel_singleel,'SingleEl')
                        ]
@@ -95,6 +102,20 @@ samplesControlPlots=[Sample('t#bar{t}H',ROOT.kBlue+1,path_incl4252+'/ttH*/*nomin
          Sample('t#bar{t}+V',ROOT.kBlue-10,path_incl4252+'/tt?_*/*nominal*.root',mcweight,'ttV'),         
          Sample('Diboson',ROOT.kAzure+2,path_incl4252+'/??/*nominal*.root',mcweight,'Diboson') , 
 #         Sample('QCD',ROOT.kYellow ,path_incl4252+'/QCD*/*nominal*root',mcweight,'QCD') , 
+]
+
+samplesControlPlots_swold=[Sample('t#bar{t}H',ROOT.kBlue+1,path_swold+'/ttH*/*nominal*.root',mcweight,'ttH') ,     
+#         Sample('t#bar{t}',ROOT.kRed+1,path_swold+'/ttbar/*nominal*.root',mcweight,'ttbar') ,     
+         Sample('t#bar{t}+lf',ROOT.kRed-7,path_swold+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)','ttl'),
+         Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,path_swold+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==1)','ttcc'),
+         Sample('t#bar{t}+b',ROOT.kRed-2,path_swold+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==1)','tt1b'),
+         Sample('t#bar{t}+2b',ROOT.kRed+2,path_swold+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==2)','tt2b'),
+         Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,path_swold+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==3)','ttbb'),  
+         Sample('Single Top',ROOT.kMagenta,path_swold+'/st*/*nominal*.root',mcweight,'SingleTop') , 
+         Sample('V+jets',ROOT.kGreen-3,path_swold+'/??ets*/*nominal*.root',mcweight,'Vjets') , 
+         Sample('t#bar{t}+V',ROOT.kBlue-10,path_swold+'/tt?_*/*nominal*.root',mcweight,'ttV'),         
+         Sample('Diboson',ROOT.kAzure+2,path_swold+'/??/*nominal*.root',mcweight,'Diboson') , 
+#         Sample('QCD',ROOT.kYellow ,path_swold+'/QCD*/*nominal*root',mcweight,'QCD') , 
 ]
 
 samplesBDTplots=[Sample('t#bar{t}H',ROOT.kBlue+1,path_excl4252+'/ttH*/*nominal*.root',mcweight,'ttH') ,     
