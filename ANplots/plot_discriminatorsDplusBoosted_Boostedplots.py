@@ -4,6 +4,9 @@ sys.path.insert(0, '../')
 from scriptgenerator import *
 from plotutils import *
 from plotconfig import *
+sys.path.insert(0, '../limittools')
+from limittools import renameHistos
+
 
 name='discrplotsDplusBoosted_Boostedplots'
 
