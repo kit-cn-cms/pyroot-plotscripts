@@ -271,6 +271,78 @@ def drawHistosOnCanvas(listOfHistos_,normalize=True,stack=False,logscale=False,o
         canvas.cd(1)
     return canvas
 
+def drawHistosOnCanvasAN(listOfHistos_,normalize=True,stack=False,logscale=False,options_='histo',ratio=False):
+    listOfHistos=[h.Clone(h.GetName()+'_drawclone') for h in listOfHistos_]
+    canvas=getCanvas(listOfHistos[0].GetName(),ratio)        
+    #prepare drawing
+
+    # mover over/underflow
+    for h in listOfHistos:
+        h.SetBinContent(1,h.GetBinContent(0)+h.GetBinContent(1));
+        h.SetBinContent(h.GetNbinsX(),h.GetBinContent(h.GetNbinsX()+1)+h.GetBinContent(h.GetNbinsX()));
+        h.SetBinError(1,ROOT.TMath.Sqrt(ROOT.TMath.Power(h.GetBinError(0),2)+ROOT.TMath.Power(h.GetBinError(1),2)));
+        h.SetBinError(h.GetNbinsX(),ROOT.TMath.Sqrt(ROOT.TMath.Power(h.GetBinError(h.GetNbinsX()+1),2)+ROOT.TMath.Power(h.GetBinError(h.GetNbinsX()),2)));
+
+    if normalize and not stack:
+        for h in listOfHistos:
+            if h.Integral()>0.:
+                h.Scale(1./h.Integral())
+
+    if stack:
+        for i in range(len(listOfHistos)-1,0,-1):
+            listOfHistos[i-1].Add(listOfHistos[i])
+        if normalize:
+            integral0=listOfHistos[0].Integral()
+            for h in listOfHistos:
+                h.Scale(1./integral0)
+
+            
+    canvas.cd(1)
+    yMax=1e-9
+    yMinMax=1000.
+    for h in listOfHistos:
+        yMax=max(h.GetBinContent(h.GetMaximumBin()),yMax)
+        if h.GetBinContent(h.GetMaximumBin())>0:
+            yMinMax=min(h.GetBinContent(h.GetMaximumBin()),yMinMax)
+    #draw first
+    h=listOfHistos[0]
+    if logscale:
+        h.GetYaxis().SetRangeUser(yMinMax/10000,yMax*10)
+        canvas.SetLogy()
+    else:
+        h.GetYaxis().SetRangeUser(0,yMax*1.5)
+    option='histo'
+    option+=options_
+    h.DrawCopy(option)
+    #draw remaining
+    for h in listOfHistos[1:]:
+        h.DrawCopy(option+'same')
+    h.DrawCopy('axissame')
+    if ratio:
+        canvas.cd(2)
+        line=listOfHistos[0].Clone()
+        line.Divide(listOfHistos[0])
+        line.GetYaxis().SetRangeUser(0.5,1.5)
+        line.GetYaxis().SetTitle('#frac{Sample}{Nominal Sample}')
+        line.GetXaxis().SetLabelSize(line.GetXaxis().GetLabelSize()*2.4)
+        line.GetYaxis().SetLabelSize(line.GetYaxis().GetLabelSize()*2.4)
+        line.GetXaxis().SetTitleSize(line.GetXaxis().GetTitleSize()*3)
+        line.GetYaxis().SetTitleSize(line.GetYaxis().GetTitleSize()*1.5)
+        line.GetYaxis().SetTitleOffset(0.9)
+        line.GetYaxis().SetNdivisions(505)
+        for i in range(line.GetNbinsX()+1):
+            line.SetBinContent(i,1)
+            line.SetBinError(i,0)
+        line.SetLineWidth(1)
+        line.DrawCopy('histo')
+        for hist in listOfHistos[1:]:
+            ratio=hist.Clone()
+            ratio.Divide(listOfHistos[0])
+            ratio.DrawCopy('sameP')
+        canvas.cd(1)
+    return canvas
+
+
 # writes canvases to pdf 
 def printCanvases(canvases,name):
     canvas=canvases[0]
@@ -448,6 +520,24 @@ def AddEntry3( self, histo, label, option='L'):
     self.AddEntry(histo, label, option)
 ROOT.TLegend.AddEntry3 = AddEntry3
 
+def AddEntry4( self, histo, label, option='L'):
+    self.SetY1NDC(self.GetY1NDC()-0.045)
+    width=self.GetX2NDC()-self.GetX1NDC()
+    ts=self.GetTextSize()
+    neglen = 0
+    sscripts = re.findall("_{.+?}|\^{.+?}",label)
+    for s in sscripts:
+	neglen = neglen + 3
+    symbols = re.findall("#[a-zA-Z]+",label)
+    for symbol in symbols:
+	neglen = neglen + len(symbol)-1
+    label+=' ('+str(round(10*histo.Integral())/10.)+')'
+    newwidth=max((len(label)-neglen)*0.015*0.05/ts+0.1,width)
+    self.SetX1NDC(self.GetX2NDC()-newwidth)
+
+    
+    self.AddEntry(histo, label, option)
+ROOT.TLegend.AddEntry4 = AddEntry4
 
 # get histolist from file
 def createHistoLists_fromHistoFile(samples,rebin=1):
@@ -467,6 +557,27 @@ def createHistoLists_fromHistoFile(samples,rebin=1):
                 o.Rebin(rebin)
                 histoList.append(o.Clone())
                 histoList[-1].SetName(o.GetName()+'_'+sample.name)
+        listOfHistoListsT.append(histoList)
+    listOfHistoLists=transposeLOL(listOfHistoListsT)
+    return listOfHistoLists
+  
+def createHistoLists_fromFiles(files,rebin=1):
+    listOfHistoListsT=[]
+    listLength=-1
+    for hfile in files:
+        f=ROOT.TFile(hfile, "readonly")       
+        keyList = f.GetKeyNames()
+        ROOT.gDirectory.cd('PyROOT:/')
+        if listLength>0:
+            assert len(keyList) == listLength
+        listLength=len(keyList)
+        histoList = []
+        for key in keyList:
+            o=f.Get(key)
+            if isinstance(o,ROOT.TH1) and not isinstance(o,ROOT.TH2): 
+                o.Rebin(rebin)
+                histoList.append(o.Clone())
+                #histoList[-1].SetName(o.GetName()+'_'+sample.name)
         listOfHistoListsT.append(histoList)
     listOfHistoLists=transposeLOL(listOfHistoListsT)
     return listOfHistoLists
@@ -567,6 +678,71 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
 
     printCanvases(canvases,name)
     writeObjects(canvases,name)
+
+def writeListOfHistoListsAN(listOfHistoLists,samples, label,name,normalize=True,stack=False,logscale=False,options='histo',statTest=False, sepaTest=False,ratio=False):
+    if isinstance(label, basestring):
+        labeltexts=len(listOfHistoLists)*[label]
+#        print "bla"
+    else:
+        labeltexts=label
+    canvases=[]
+    objects=[]   
+    i=0
+#    print labeltexts
+    for listOfHistos, labeltext in zip(listOfHistoLists, labeltexts):
+        i+=1
+        for histo,sample in zip(listOfHistos,samples):
+#            print labeltext
+            yTitle='Events'
+            if normalize:
+                yTitle='normalized'
+            setupHisto(histo,sample.color,yTitle,stack)        
+        c=drawHistosOnCanvas(listOfHistos,normalize,stack,logscale,options,ratio)
+        c.SetName('c'+str(i))
+        l=getLegend()
+        for h,sample in zip(listOfHistos,samples):
+            loption='L'
+            if stack:
+                loption='F'            
+            l.AddEntry2(h,sample.name,loption)
+        canvases.append(c)
+        l.Draw('same')
+        objects.append(l)
+        if statTest:
+            tests=getStatTests(listOfHistos[0],listOfHistos[1])
+            tests.Draw()
+            objects.append(tests)
+        if sepaTest:
+            stests=getSepaTests(listOfHistos[0],listOfHistos[1])
+            stests.Draw()
+            objects.append(stests)
+#        cms = ROOT.TLatex(0.2, 0.96, 'CMS private work'  );
+#        cms.SetTextFont(42)
+#        cms.SetTextSize(0.05)
+#        cms.SetNDC()
+#        cms.Draw()
+#        print cms
+#        objects.append(cms)
+
+        cms = ROOT.TLatex(0.2, 0.96, 'CMS preliminary,  2.61 fb^{-1},  #sqrt{s} = 13 TeV'  );
+        cms.SetTextFont(42)
+        cms.SetTextSize(0.05)
+        cms.SetNDC()
+        cms.Draw()
+        objects.append(cms)
+
+        label = ROOT.TLatex(0.2, 0.86, labeltext);
+        label.SetTextFont(42)
+        label.SetTextSize(0.05)
+        label.SetNDC()
+        label.Draw()
+        objects.append(label)
+
+
+
+    printCanvases(canvases,name)
+    writeObjects(canvases,name)
+
 
 def writeListOfROCs(graphs,names,colors,filename,logscale=False,rej=True):
     c=getCanvas('ROC')
