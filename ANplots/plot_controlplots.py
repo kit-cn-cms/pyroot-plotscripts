@@ -1,10 +1,24 @@
 from plotconfig import *
+sys.path.insert(0, '../limittools')
+from limittools import renameHistos
 
 name='anplots'
+
+samples=samplesControlPlots
+samples_data=samples_data_controlplots
+systsamples=[]
+for sample in samples:
+  for sysname,sysfilename in zip(othersystnames,othersystfilenames):
+    systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),sample.selection,sample.nick+sysname))
+  
+allsamples=samples+systsamples
+allsystnames=weightsystnames+othersystnames
 
 # selections for categories
 sel1="((N_TightLeptons==1)*(N_LooseLeptons==1)*(N_BTagsM>=2)*(N_Jets>=4))" # l+jets channel
 name1="1lge4ge2"
+
+toptaggersel="(BoostedJet_Top_Pt[0]>=0)"
 
 s43="(N_Jets==4&&N_BTagsM==3)"
 s44="(N_Jets==4&&N_BTagsM>=4)"
@@ -14,8 +28,6 @@ s62="(N_Jets>=6&&N_BTagsM==2)"
 s63="(N_Jets>=6&&N_BTagsM==3)"
 s64="(N_Jets>=6&&N_BTagsM>=4)"
 
-samples=samplesControlPlots
-samples_data=samples_data_controlplots
 #                                                 B C D                        
 categoriesJT=[("(N_Jets>=6&&N_BTagsM==2)","6j2t","","",""),
               ("(N_Jets==4&&N_BTagsM==3)","4j3t","0.2","0.2","0.2"),
@@ -47,7 +59,7 @@ for cat in categoriesJT[1:]:
 
     
 # book plots
-label="#geq 1 lepton, #geq 4 jets, #geq 2 b-tags"
+label="1 lepton, #geq 4 jets, #geq 2 b-tags"
 catstringSplitByBDT="0"
 for i,cat in enumerate(categoriesSplitBDT):
     catstringSplitByBDT+=("+"+str(i+1)+"*"+cat[0])
@@ -107,15 +119,20 @@ plots=[Plot(ROOT.TH1F("JT" ,"jet-tag categories",9,-0.5,8.5),"3*max(min(N_BTagsM
        Plot(ROOT.TH1F("BJN_N_TracksNoPV","Number of tracks not from the PV",13,-.5,12.5),"BJN_N_TracksNoPV",'',label),
        Plot(ROOT.TH1F("BJN_N_PVtrackOvCollTrk","Number PV tracks over all tracks",25,0.2,1.2),"BJN_N_PVtrackOvCollTrk",'',label),
        Plot(ROOT.TH1F("BJN_N_AvgIp3D","Avg 3D IP",40,0,0.08),"BJN_N_AvgIp3D",'',label),
-       Plot(ROOT.TH1F("BJN_N_AvgIp3Dsig","Avg 1D IP significance",30,0,15),"BJN_N_AvgIp3Dsig",'',label),
+       Plot(ROOT.TH1F("BJN_N_AvgIp3Dsig","Avg 3D IP significance",30,0,15),"BJN_N_AvgIp3Dsig",'',label),
        Plot(ROOT.TH1F("BJN_N_AvgSip3Dsig","Avg 3D signed IP significance",30,-15,15),"BJN_N_AvgSip3Dsig",'',label),
        Plot(ROOT.TH1F("BJN_N_AvgIp1Dsig","Avg 1D IP significance",25,0,25),"BJN_N_AvgIp1Dsig",'',label),
-
-       ]
+            ]
+#plots=[       Plot(ROOT.TH1F("pt1","p_{T} of leading jet",50,0,500),"Jet_Pt[0]",'',label),,]
 # plot parallel -- alternatively there are also options to plot more traditional that also return lists of histo lists
-outputpath=plotParallel(name,2000000,plots,samples+samples_data)
+outputpath=plotParallel(name,2000000,plots,samples+samples_data+systsamples,[''],['1.'],weightsystnames, systweights)
+
 listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
 listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots,1)
+if not os.path.exists(outputpath[:-4]+'_syst.root') or not askYesNo('reuse systematic histofile?'):
+    renameHistos(outputpath,outputpath[:-4]+'_syst.root',allsystnames)
+print othersystnames
+lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,allsystnames)
 ntables=0
 # do some post processing
 for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
@@ -159,7 +176,7 @@ for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
 labels=[plot.label for plot in plots]
 
 lolT=transposeLOL(listOfHistoLists)
-plotDataMCan(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,name,False,labels)
+plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,name,lll,False,labels)
 
 listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
 listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots,1)
@@ -196,4 +213,4 @@ for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
 labels=[plot.label for plot in plots]
 
 lolT=transposeLOL(listOfHistoLists)
-plotDataMCan(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,name+'_log',True,labels)
+plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,name+'_log',lll,True,labels)

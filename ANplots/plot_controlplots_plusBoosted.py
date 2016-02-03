@@ -1,4 +1,6 @@
 from plotconfig import *
+sys.path.insert(0, '../limittools')
+from limittools import renameHistos
 
 name='AN_controlplots_plusBoosted'
 
@@ -6,16 +8,18 @@ name='AN_controlplots_plusBoosted'
 sel1="((N_TightLeptons==1)*(N_LooseLeptons==1)*(N_BTagsM>=2)*(N_Jets>=4))" # l+jets channel
 name1="1lge4ge2"
 
-s43="(N_Jets==4&&N_BTagsM==3)"
-s44="(N_Jets==4&&N_BTagsM>=4)"
-s53="(N_Jets==5&&N_BTagsM==3)"
-s54="(N_Jets==5&&N_BTagsM>=4)"
-s62="(N_Jets>=6&&N_BTagsM==2)"
-s63="(N_Jets>=6&&N_BTagsM==3)"
-s64="(N_Jets>=6&&N_BTagsM>=4)"
-
+toptaggersel="(BoostedJet_Top_Pt[0]>=0)"
+higgstaggersel="(BoostedJet_Filterjet2_Pt[0]>=0)"
 samples=samplesControlPlots
 samples_data=samples_data_controlplots
+systsamples=[]
+for sample in samples:
+  for sysname,sysfilename in zip(othersystnames,othersystfilenames):
+    systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),sample.selection,sample.nick+sysname))
+  
+allsamples=samples+systsamples
+allsystnames=weightsystnames+othersystnames
+
 #                                                 B C D
 boosted="(BoostedTopHiggs_TopHadCandidate_TopMVAOutput>=-0.575&&BoostedTopHiggs_HiggsCandidate_HiggsTag>=0.9075)"                        
 categoriesJT=[("((N_Jets>=6&&N_BTagsM==2)&&!"+boosted+")","6j2t","","",""),
@@ -49,7 +53,7 @@ for cat in categoriesJT[1:]:
 
     
 # book plots
-label="#geq 1 lepton, #geq 4 jets, #geq 2 b-tags"
+label="1 lepton, #geq 4 jets, #geq 2 b-tags"
 catstringJT="0"
 for i,cat in enumerate(categoriesJT):
     catstringJT+=("+"+str(i+1)+"*"+cat[0])
@@ -112,15 +116,42 @@ plots=[Plot(ROOT.TH1F("JT" ,"jet-tag categories",len(categoriesJT),0.5,0.5+len(c
        Plot(ROOT.TH1F("BJN_N_TracksNoPV","Number of tracks not from the PV",13,-.5,12.5),"BJN_N_TracksNoPV",'',label),
        Plot(ROOT.TH1F("BJN_N_PVtrackOvCollTrk","Number PV tracks over all tracks",25,0.2,1.2),"BJN_N_PVtrackOvCollTrk",'',label),
        Plot(ROOT.TH1F("BJN_N_AvgIp3D","Avg 3D IP",40,0,0.08),"BJN_N_AvgIp3D",'',label),
-       Plot(ROOT.TH1F("BJN_N_AvgIp3Dsig","Avg 1D IP significance",30,0,15),"BJN_N_AvgIp3Dsig",'',label),
+       Plot(ROOT.TH1F("BJN_N_AvgIp3Dsig","Avg 3D IP significance",30,0,15),"BJN_N_AvgIp3Dsig",'',label),
        Plot(ROOT.TH1F("BJN_N_AvgSip3Dsig","Avg 3D signed IP significance",30,-15,15),"BJN_N_AvgSip3Dsig",'',label),
        Plot(ROOT.TH1F("BJN_N_AvgIp1Dsig","Avg 1D IP significance",25,0,25),"BJN_N_AvgIp1Dsig",'',label),
 
+       Plot(ROOT.TH1F("commonBDT43","BDT w/o MEM in training",10,-1,1),"BDT_common5_output",'N_BTagsM==3&&N_Jets==4','4 jets, 3 b-tags'),
+       Plot(ROOT.TH1F("MEM43","MEM discriminator",10,0,1),"(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)",'(N_BTagsM==3&&N_Jets==4)',""),
+       
+#       Plot(ROOT.TH1F("N_BoostedJets","Number of fat jets",5,0,5),"N_BoostedJets",'',label),
+#       Plot(ROOT.TH1F("BoostedJet_Pt","transverse momentum of fat jet",40,200,600),"BoostedJet_Pt[0]",'',label)
+#       
+#       Plot(ROOT.TH1F("BoostedJet_PrunedMass","pruned mass of hardest fat jet",40,0,400),"BoostedJet_PrunedMass[0]",toptaggersel,label),
+#       Plot(ROOT.TH1F("BoostedJet_Top_M","invariant mass of top",40,0,300),"BoostedJet_Top_M[0]",toptaggersel,label),
+#       Plot(ROOT.TH1F("BoostedJet_Wbtag_M","invariant mass of W",40,0,200),"BoostedJet_Wbtag_M[0]",toptaggersel,label),
+#       Plot(ROOT.TH1F("BoostedJet_BW1btag_M","invariant mass of B and W1",40,0,250),"BoostedJet_BW1btag_M[0]",toptaggersel,label),
+#       Plot(ROOT.TH1F("BoostedJet_BW2btag_M","invariant mass of B and W2",40,0,250),"BoostedJet_BW2btag_M[0]",toptaggersel,label),
+#       Plot(ROOT.TH1F("BoostedJet_Bbtag_CSV","CSV output of B",40,-0.1,1.),"BoostedJet_Bbtag_CSV[0]",toptaggersel,label),
+#       Plot(ROOT.TH1F("BoostedJet_W1btag_CSV","CSV output of W1",40,-0.1,1.),"BoostedJet_W1btag_CSV[0]",toptaggersel,label),
+#       Plot(ROOT.TH1F("BoostedJet_W2btag_CSV","CSV output of W2",40,-0.1,1.),"BoostedJet_W2btag_CSV[0]",toptaggersel,label),
+#       Plot(ROOT.TH1F("BoostedJet_Tau21Filtered","#tau_2/#tau_1",40,0.,1.),"BoostedJet_Tau2Filtered[0]/BoostedJet_Tau1Filtered[0]",toptaggersel,label),
+#       Plot(ROOT.TH1F("BoostedJet_Tau32Filtered","#tau_3/#tau_2",40,0.,1.),"BoostedJet_Tau3Filtered[0]/BoostedJet_Tau2Filtered[0]",toptaggersel,label),
+#       Plot(ROOT.TH1F("BoostedJet_fRec","Difference to true W top mass ratio",40,0.,.6),"BoostedJet_fRec[0]",toptaggersel,label),
+#       Plot(ROOT.TH1F("BoostedJet_DRoptRoptCalc","D_{opt}-D_{opt}^{calc}",40,-2.,1.),"BoostedJet_Ropt[0]-BoostedJet_RoptCalc[0]",toptaggersel,label),
+#       
+#       Plot(ROOT.TH1F("BoostedJet_TopTag_BDT_Std","BDT top tagger output of hardest fat jet",40,-1.,1.),"BoostedJet_TopTag_BDT_Std[0]",toptaggersel,label)
+#       
+#       Plot(ROOT.TH1F("BoostedJet_HiggsTag_SecondCSV","b-tagging output of subjet B2 of hardest fat jet",40,-.1,1.),"BoostedJet_HiggsTag_SecondCSV[0]",higgstaggersel,label)
        ]
 # plot parallel -- alternatively there are also options to plot more traditional that also return lists of histo lists
-outputpath=plotParallel(name,2000000,plots,samples+samples_data)
+outputpath=plotParallel(name,2000000,plots,samples+samples_data+systsamples,[''],['1.'],weightsystnames, systweights)
+
 listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
 listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots,1)
+if not os.path.exists(outputpath[:-4]+'_syst.root') or not askYesNo('reuse systematic histofile?'):
+    renameHistos(outputpath,outputpath[:-4]+'_syst.root',allsystnames)
+print othersystnames
+lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,allsystnames)
 ntables=0
 # do some post processing
 #for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
@@ -180,10 +211,12 @@ for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
 labels=[plot.label for plot in plots]
 
 lolT=transposeLOL(listOfHistoLists)
-plotDataMCan(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,name,False,labels)
+plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,name,lll,False,labels)
+
 
 listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
 listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots,1)
+lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,allsystnames)
 ntables=0
 # do some post processing
 for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
@@ -218,4 +251,4 @@ for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
 labels=[plot.label for plot in plots]
 
 lolT=transposeLOL(listOfHistoLists)
-plotDataMCan(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,name+'_log',True,labels)
+plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,name+'_log',lll,True,labels)
