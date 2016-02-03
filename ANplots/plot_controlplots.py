@@ -18,6 +18,8 @@ allsystnames=weightsystnames+othersystnames
 sel1="((N_TightLeptons==1)*(N_LooseLeptons==1)*(N_BTagsM>=2)*(N_Jets>=4))" # l+jets channel
 name1="1lge4ge2"
 
+toptaggersel="(BoostedJet_Top_Pt[0]>=0)"
+
 s43="(N_Jets==4&&N_BTagsM==3)"
 s44="(N_Jets==4&&N_BTagsM>=4)"
 s53="(N_Jets==5&&N_BTagsM==3)"
