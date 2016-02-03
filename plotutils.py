@@ -1546,7 +1546,7 @@ def plotDataMCan(listOfHistoListsData,listOfHistoLists,samples,listOfhistosOnTop
     writeObjects(canvases,name)
 
 
-def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,factor,name,lll,logscale=False,label='',ratio=True,blind=False):    
+def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,factor,name,lll,logscale=False,label='',ratio=True,blinded=False):    
 ################################################
 
 
@@ -1630,7 +1630,7 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         objects.append(ratioerrorgraph)
         otc=ot.Clone()
         nok=99999
-        if blind:
+        if blinded:
             for ibin in range(stackedListOfHistos[0].GetNbinsX()):
                 if otc.GetBinContent(ibin)>0 and stackedListOfHistos[0].GetBinContent(ibin)/otc.GetBinContent(ibin)<100:
                     nok=ibin-1
@@ -1648,8 +1648,8 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         blind.SetFillStyle(3004)
         blind.SetLineColor(12)
         blind.SetFillColor(12)
-
-        blind.Draw('same2')
+        if blinded:
+            blind.Draw('same2')
         objects.append(blind)
         l=getLegend()
         l.AddEntry2(data,'data','P')
