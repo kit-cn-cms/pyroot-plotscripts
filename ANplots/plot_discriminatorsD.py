@@ -1,9 +1,6 @@
-import sys
-import os
-sys.path.insert(0, '../')
-from scriptgenerator import *
-from plotutils import *
 from plotconfig import *
+sys.path.insert(0, '../limittools')
+from limittools import renameHistos
 name='discrplotsD'
 sel_singleel="(N_LooseMuons==0)" # need to veto muon events in electron dataset to avoid double countung
 sel_singlemu="(N_LooseElectrons==0)" # and vice versa...
@@ -48,9 +45,16 @@ binlabels= [c[1] for c in categories]
 binnames= [c[2] for c in categories]
 
 
-# data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
 samples_data=samples_data_bdtplots
 samples=samplesBDTplots
+systsamples=[]
+for sample in samples:
+  for sysname,sysfilename in zip(othersystnames,othersystfilenames):
+    systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),sample.selection,sample.nick+sysname))
+  
+allsamples=samples+systsamples
+allsystnames=weightsystnames+othersystnames
+
 plots=[]
 print len(discrs),len(bins),len(binlabels),len(nhistobins),len(minxvals),len(maxxvals),
 print len(zip(discrs,bins,binlabels,nhistobins,minxvals,maxxvals))
@@ -65,15 +69,21 @@ for discr,b,bl,bn,nb,minx,maxx in zip(discrs,bins,binlabels,binnames,nhistobins,
 
 
 # plot parallel -- alternatively there are also options to plot more traditional that also return lists of histo lists
-outputpath=plotParallel(name,2000000,plots,samples+samples_data)
-listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
-listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots,1)
-labels=[plot.label for plot in plots]
-lolT=transposeLOL(listOfHistoLists)
-plotDataMCan(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,name,False,labels,True,True)
+outputpath=plotParallel(name,2000000,plots,samples+samples_data+systsamples,[''],['1.'],weightsystnames, systweights)
 
 listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
 listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots,1)
+if not os.path.exists(outputpath[:-4]+'_syst.root') or not askYesNo('reuse systematic histofile?'):
+    renameHistos(outputpath,outputpath[:-4]+'_syst.root',allsystnames)
+print othersystnames
+lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,allsystnames)
 labels=[plot.label for plot in plots]
 lolT=transposeLOL(listOfHistoLists)
-plotDataMCan(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,name+'_log',True,labels,True,True)
+plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,name,lll,False,labels,True,True)
+
+lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,allsystnames)
+listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
+listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots,1)
+labels=[plot.label for plot in plots]
+lolT=transposeLOL(listOfHistoLists)
+plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,name+'_log',lll,True,labels,True,True)
