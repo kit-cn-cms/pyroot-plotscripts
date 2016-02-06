@@ -34,12 +34,14 @@ weightsystnames=["",
                  "_CMS_ttH_CSVHFStats1Up","_CMS_ttH_CSVHFStats1Down","_CMS_ttH_CSVLFStats1Up","_CMS_ttH_CSVLFStats1Down",
                  "_CMS_ttH_CSVHFStats2Up","_CMS_ttH_CSVHFStats2Down","_CMS_ttH_CSVLFStats2Up","_CMS_ttH_CSVLFStats2Down",
                  "_CMS_ttH_CSVCErr1Up","_CMS_ttH_CSVCErr1Down","_CMS_ttH_CSVCErr2Up","_CMS_ttH_CSVCErr2Down",
+                 "_CMS_ttH_TopPtUp","_CMS_ttH_TopPtDown",
+                 "_CMS_ttH_PUUp","_CMS_ttH_PUDown",
                  "_CMS_ttH_Q2scale_ttbarOtherUp","_CMS_ttH_Q2scale_ttbarOtherDown",
                  "_CMS_ttH_Q2scale_ttbarPlusBUp","_CMS_ttH_Q2scale_ttbarPlusBDown",
                  "_CMS_ttH_Q2scale_ttbarPlus2BUp","_CMS_ttH_Q2scale_ttbarPlus2BDown",
                  "_CMS_ttH_Q2scale_ttbarPlusBBbarUp","_CMS_ttH_Q2scale_ttbarPlusBBbarDown",
                  "_CMS_ttH_Q2scale_ttbarPlusCCbarUp","_CMS_ttH_Q2scale_ttbarPlusCCbarDown",
-                 "_CMS_ttH_NNPDFUp","_CMS_ttH_NNPDFDown"
+                 "_CMS_ttH_NNPDFUp","_CMS_ttH_NNPDFDown",
            ]
 
 systs_all_samples=["",
@@ -71,26 +73,28 @@ systweights=["1",
              "Weight_CSVHFStats1up","Weight_CSVHFStats1down","Weight_CSVLFStats1up","Weight_CSVLFStats1down",
              "Weight_CSVHFStats2up","Weight_CSVHFStats2down","Weight_CSVLFStats2up","Weight_CSVLFStats2down",
              "Weight_CSVCErr1up","Weight_CSVCErr1down","Weight_CSVCErr2up","Weight_CSVCErr2down",
+             "Weight_TopPtup","Weight_TopPt",
+             "Weight_pileupup","Weight_pileupdown",
              "QScaleTTLFUp:=Weight_muRupmuFup/"+str(mu_up_sf),"QScaleTTLFDown:=Weight_muRdownmuFdown/"+str(mu_down_sf),
              "QScaleTTBUp:=Weight_muRupmuFup/"+str(mu_up_sf),"QScaleTTBDown:=Weight_muRdownmuFdown/"+str(mu_down_sf),
              "QScaleTTtwoBUp:=Weight_muRupmuFup/"+str(mu_up_sf),"QScaleTTtwoBDown:=Weight_muRdownmuFdown/"+str(mu_down_sf),
              "QScaleTTBBUp:=Weight_muRupmuFup/"+str(mu_up_sf),"QScaleTTBBDown:=Weight_muRdownmuFdown/"+str(mu_down_sf),
              "QScaleTTCCUp:=Weight_muRupmuFup/"+str(mu_up_sf),"QScaleTTCCDown:=Weight_muRdownmuFdown/"+str(mu_down_sf),
-             "PDFweightUp:=Weight_NNPDFid260067/"+str(pdf_67_sf),"PDFWeightDown:=Weight_NNPDFid260005/"+str(pdf_05_sf)
+             "PDFweightUp:=Weight_NNPDFid260067/"+str(pdf_67_sf),"PDFWeightDown:=Weight_NNPDFid260005/"+str(pdf_05_sf),
              ]
 
 assert len(systweights)==len(weightsystnames)
 
 othersystnames=["_CMS_scale_jUp",
                 "_CMS_scale_jDown",
-#                "_CMS_res_jUp",
-#                "_CMS_res_jDown"
+               "_CMS_res_jUp",
+               "_CMS_res_jDown"
                 ]
 
 othersystfilenames=["JESUP",
                     "JESDOWN",
-#                    "JERUP",
-#                    "JERDOWN"
+                   "JERUP",
+                   "JERDOWN"
                     ]
 
 
@@ -216,17 +220,19 @@ systweightsForSysTest=["1",
              "Weight_CSVHFStats1up","Weight_CSVHFStats1down","Weight_CSVLFStats1up","Weight_CSVLFStats1down",
              "Weight_CSVHFStats2up","Weight_CSVHFStats2down","Weight_CSVLFStats2up","Weight_CSVLFStats2down",
              "Weight_CSVCErr1up","Weight_CSVCErr1down","Weight_CSVCErr2up","Weight_CSVCErr2down",
+             "Weight_TopPtup","Weight_TopPt",
+             "Weight_pileupup:=(Weight_PUup/Weight_PU ? Weight_PU!=0.0 : Weight_PUup)","Weight_pileupdown:=(Weight_PUdown/Weight_PU ? Weight_PU!=0.0 : Weight_PUdown)",
              "QScaleTTLFUp:=(Weight_muRupmuFup/"+str(mu_up_sf)+"*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)+1.0*(GenEvt_I_TTPlusCC!=0||GenEvt_I_TTPlusBB!=0))",
-             "QScaleTTBUp:=(Weight_muRupmuFup/"+str(mu_up_sf)+"*(GenEvt_I_TTPlusBB==1)+1.0*(GenEvt_I_TTPlusBB!=1))",
-             "QScaleTTtwoBUp:=(Weight_muRupmuFup/"+str(mu_up_sf)+"*(GenEvt_I_TTPlusBB==2)+1.0*(GenEvt_I_TTPlusBB!=2))",
-             "QScaleTTBBUp:=(Weight_muRupmuFup/"+str(mu_up_sf)+"*(GenEvt_I_TTPlusBB==3)+1.0*(GenEvt_I_TTPlusBB!=3))",
-             "QScaleTTCCUp:=(Weight_muRupmuFup/"+str(mu_up_sf)+"*(GenEvt_I_TTPlusCC==1)+1.0*(GenEvt_I_TTPlusCC!=1))",
              "QScaleTTLFDown:=(Weight_muRdownmuFdown/"+str(mu_down_sf)+"*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)+1.0*(GenEvt_I_TTPlusCC!=0||GenEvt_I_TTPlusBB!=0))",
+             "QScaleTTBUp:=(Weight_muRupmuFup/"+str(mu_up_sf)+"*(GenEvt_I_TTPlusBB==1)+1.0*(GenEvt_I_TTPlusBB!=1))",
              "QScaleTTBDown:=(Weight_muRdownmuFdown/"+str(mu_down_sf)+"*(GenEvt_I_TTPlusBB==1)+1.0*(GenEvt_I_TTPlusBB!=1))",
+             "QScaleTTtwoBUp:=(Weight_muRupmuFup/"+str(mu_up_sf)+"*(GenEvt_I_TTPlusBB==2)+1.0*(GenEvt_I_TTPlusBB!=2))",
              "QScaleTTtwoBDown:=(Weight_muRdownmuFdown/"+str(mu_down_sf)+"*(GenEvt_I_TTPlusBB==2)+1.0*(GenEvt_I_TTPlusBB!=2))",
+             "QScaleTTBBUp:=(Weight_muRupmuFup/"+str(mu_up_sf)+"*(GenEvt_I_TTPlusBB==3)+1.0*(GenEvt_I_TTPlusBB!=3))",
              "QScaleTTBBDown:=(Weight_muRdownmuFdown/"+str(mu_down_sf)+"*(GenEvt_I_TTPlusBB==3)+1.0*(GenEvt_I_TTPlusBB!=3))",
+             "QScaleTTCCUp:=(Weight_muRupmuFup/"+str(mu_up_sf)+"*(GenEvt_I_TTPlusCC==1)+1.0*(GenEvt_I_TTPlusCC!=1))",
              "QScaleTTCCDown:=(Weight_muRdownmuFdown/"+str(mu_down_sf)+"*(GenEvt_I_TTPlusCC==1)+1.0*(GenEvt_I_TTPlusCC!=1))",
-             "PDFweightUp:=Weight_NNPDFid260067/"+str(pdf_67_sf),"PDFWeightDown:=Weight_NNPDFid260005/"+str(pdf_05_sf)
+             "PDFweightUp:=Weight_NNPDFid260067/"+str(pdf_67_sf),"PDFWeightDown:=Weight_NNPDFid260005/"+str(pdf_05_sf),
              ]
 
 
