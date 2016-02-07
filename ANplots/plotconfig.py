@@ -34,8 +34,8 @@ weightsystnames=["",
                  "_CMS_ttH_CSVHFStats1Up","_CMS_ttH_CSVHFStats1Down","_CMS_ttH_CSVLFStats1Up","_CMS_ttH_CSVLFStats1Down",
                  "_CMS_ttH_CSVHFStats2Up","_CMS_ttH_CSVHFStats2Down","_CMS_ttH_CSVLFStats2Up","_CMS_ttH_CSVLFStats2Down",
                  "_CMS_ttH_CSVCErr1Up","_CMS_ttH_CSVCErr1Down","_CMS_ttH_CSVCErr2Up","_CMS_ttH_CSVCErr2Down",
-                 "_CMS_ttH_TopPtUp","_CMS_ttH_TopPtDown",
-                 "_CMS_ttH_PUUp","_CMS_ttH_PUDown",
+                 #"_CMS_ttH_TopPtUp","_CMS_ttH_TopPtDown",
+                 #"_CMS_ttH_PUUp","_CMS_ttH_PUDown",
                  "_CMS_ttH_Q2scale_ttbarOtherUp","_CMS_ttH_Q2scale_ttbarOtherDown",
                  "_CMS_ttH_Q2scale_ttbarPlusBUp","_CMS_ttH_Q2scale_ttbarPlusBDown",
                  "_CMS_ttH_Q2scale_ttbarPlus2BUp","_CMS_ttH_Q2scale_ttbarPlus2BDown",
@@ -59,7 +59,19 @@ systs_tt_2b=[ "_CMS_ttH_Q2scale_ttbarPlus2BUp","_CMS_ttH_Q2scale_ttbarPlus2BDown
 systs_tt_bb=[ "_CMS_ttH_Q2scale_ttbarPlusBBbarUp","_CMS_ttH_Q2scale_ttbarPlusBBbarDown"]
 systs_tt_cc=[ "_CMS_ttH_Q2scale_ttbarPlusCCbarUp","_CMS_ttH_Q2scale_ttbarPlusCCbarDown"]
 
-
+generatorSystnames=["",
+		 "","","","",
+		 "","","","",
+		 "","","","",
+		 "","","","",
+                 #"_CMS_ttH_TopPtUp","_CMS_ttH_TopPtDown",
+                 #"_CMS_ttH_PUUp","_CMS_ttH_PUDown",
+		 "_CMS_ttH_Q2scale_ttbarOtherUp","_CMS_ttH_Q2scale_ttbarOtherDown",
+                 "_CMS_ttH_Q2scale_ttbarPlusBUp","_CMS_ttH_Q2scale_ttbarPlusBDown",
+                 "_CMS_ttH_Q2scale_ttbarPlus2BUp","_CMS_ttH_Q2scale_ttbarPlus2BDown",
+                 "_CMS_ttH_Q2scale_ttbarPlusBBbarUp","_CMS_ttH_Q2scale_ttbarPlusBBbarDown",
+                 "_CMS_ttH_Q2scale_ttbarPlusCCbarUp","_CMS_ttH_Q2scale_ttbarPlusCCbarDown",
+                 "_CMS_ttH_NNPDFUp","_CMS_ttH_NNPDFDown",]
 
 # corresponding weight names
 mu_down_sf=1.1402
@@ -73,8 +85,8 @@ systweights=["1",
              "Weight_CSVHFStats1up","Weight_CSVHFStats1down","Weight_CSVLFStats1up","Weight_CSVLFStats1down",
              "Weight_CSVHFStats2up","Weight_CSVHFStats2down","Weight_CSVLFStats2up","Weight_CSVLFStats2down",
              "Weight_CSVCErr1up","Weight_CSVCErr1down","Weight_CSVCErr2up","Weight_CSVCErr2down",
-             "rwtptup:=(2.0*(Weight_TopPt - 1.0)+1.0)","rwtptdown:=Weight_TopPt",
-             "Weight_pileupup:=((Weight_PU!=0.0) ? Weight_PUup/Weight_PU : Weight_PUup)","Weight_pileupdown:=((Weight_PU!=0.0) ? Weight_PUdown/Weight_PU : Weight_PUdown)",
+             #"rwtptup:=(2.0*(Weight_TopPt - 1.0)+1.0)","rwtptdown:=Weight_TopPt",
+             #"Weight_pileupup:=((Weight_PU!=0.0) ? Weight_PUup/Weight_PU : Weight_PUup)","Weight_pileupdown:=((Weight_PU!=0.0) ? Weight_PUdown/Weight_PU : Weight_PUdown)",
              "QScaleTTLFUp:=Weight_muRupmuFup/"+str(mu_up_sf),"QScaleTTLFDown:=Weight_muRdownmuFdown/"+str(mu_down_sf),
              "QScaleTTBUp:=Weight_muRupmuFup/"+str(mu_up_sf),"QScaleTTBDown:=Weight_muRdownmuFdown/"+str(mu_down_sf),
              "QScaleTTtwoBUp:=Weight_muRupmuFup/"+str(mu_up_sf),"QScaleTTtwoBDown:=Weight_muRdownmuFdown/"+str(mu_down_sf),
@@ -87,14 +99,14 @@ assert len(systweights)==len(weightsystnames)
 
 othersystnames=["_CMS_scale_jUp",
                 "_CMS_scale_jDown",
-               "_CMS_res_jUp",
-               "_CMS_res_jDown"
+               #"_CMS_res_jUp",
+               #"_CMS_res_jDown"
                 ]
 
 othersystfilenames=["JESUP",
                     "JESDOWN",
-                   "JERUP",
-                   "JERDOWN"
+                   #"JERUP",
+                   #"JERDOWN"
                     ]
 
 
