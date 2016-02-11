@@ -12,7 +12,7 @@ from limittools import calcLimits
 from plotconfig import *
 
 
-name='optionDplusBoosted_Boostedplots'
+name='newBDToptionDplusBoosted_Boostedplots'
 
 nhistobins_=  [   8]
 minxvals_=    [-0.7]

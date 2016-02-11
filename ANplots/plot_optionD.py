@@ -12,7 +12,7 @@ from limittools import calcLimits
 from plotconfig import *
 
 
-name='optionD'
+name='newBDToptionD'
 
 nhistobins_=      [ 20,       4,   4,     20,       4,     4,   20,   20,  6 ,6    ]
 minxvals_=        [-0.9,    0.,  0.,     -0.8,     0.,     0.,   -0.80,  -0.8,  0.,   0.]
@@ -93,9 +93,9 @@ addPseudoData(name+'/'+name+'_limitInput.root',[s.nick for s in samples[9:]],bin
 listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,bdts)
 lolT=transposeLOL(listOfHistoLists)
 writeLOLAndOneOnTop(transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],20,name+'/'+name+'_controlplots')
-makeDatacards(name+'/'+name+'_limitInput.root',name+'/'+name+'_datacard',binlabels)
+#makeDatacards(name+'/'+name+'_limitInput.root',name+'/'+name+'_datacard',binlabels)
 
-#if askYesNo('Calculate limits?'):
-limit=calcLimits(name+'/'+name+'_datacard',binlabels)
-limit.dump()
+##if askYesNo('Calculate limits?'):
+#limit=calcLimits(name+'/'+name+'_datacard',binlabels)
+#limit.dump()
   

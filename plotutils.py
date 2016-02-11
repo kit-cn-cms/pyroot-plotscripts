@@ -357,12 +357,14 @@ def printCanvases(canvases,name):
     for c in canvases:
         canvas=c
         canvas.Print(name+'.pdf')
+        #canvas.SaveAs(name+"/"+c.GetName()+'.png')
         
     canvas.Print(name+'.pdf]')
     if not os.path.exists(name):
         os.makedirs(name)
     for c in canvases:
         c.Print(name+'/'+("_".join(((c.GetName()).split('_'))[1:]))+".pdf")
+        c.SaveAs(name+"/"+c.GetName()+'.png')
 
 # writes canvases to root file 
 def writeObjects(objects,name):
@@ -642,6 +644,8 @@ def createLLL_fromSuperHistoFileSyst(path,samples,plots,systnames=[""]):
 
 def createErrorbands(lll,samples,DoRateSysts=True):
     print "creating errorbands"
+    if DoRateSysts:
+      print "using ratesysts"
     #print lll
     graphs=[]
     for ll in lll: #for all plots
@@ -668,8 +672,10 @@ def createErrorbands(lll,samples,DoRateSysts=True):
 		    if DoRateSysts:
 		      ls[-1].Scale(1+sample.unc_up)
 	      syst=ls[0].Clone()
+	      print syst.GetName()
 	      for h in ls[1:]:
 		  syst.Add(h)
+		  print h.GetName()
 	      systs.append(syst)
 
 	      ls=[]
@@ -690,12 +696,15 @@ def createErrorbands(lll,samples,DoRateSysts=True):
 	  #print sys, sys.Integral()
         for ibin in range(0,nominal.GetNbinsX()):
             nerr=nominal.GetBinError(ibin+1)
-            uperrors[ibin]=ROOT.TMath.Sqrt(uperrors[ibin]*uperrors[ibin]+nerr)
-            downerrors[ibin]=ROOT.TMath.Sqrt(downerrors[ibin]*downerrors[ibin]+nerr)
+            print ibin, nominal.GetName(), nominal.GetBinError(ibin+1), nominal.GetBinContent(ibin+1)
+            uperrors[ibin]=ROOT.TMath.Sqrt(uperrors[ibin]*uperrors[ibin]+nerr*nerr)
+            downerrors[ibin]=ROOT.TMath.Sqrt(downerrors[ibin]*downerrors[ibin]+nerr*nerr)
             n=nominal.GetBinContent(ibin+1)
             ups=systs[0::2]
             downs=systs[1::2]
             for up,down in zip(ups,downs):
+	        print up.GetName(), down.GetName()
+	        print up.GetBinContent(ibin+1)-n, down.GetBinContent(ibin+1)-n
                 u_=up.GetBinContent(ibin+1)-n
                 d_=down.GetBinContent(ibin+1)-n
                 #print u_,d_
@@ -708,18 +717,20 @@ def createErrorbands(lll,samples,DoRateSysts=True):
                 elif u_ >= 0 and u_ <= d_:
                     u=d_
                     d=0
-                elif d_ <= 0 and d_ <= u_:
+                elif u_ < 0 and d_ <= u_:
                     d=d_
-                    if u_>0:
-                        u=u_
-                    else:
-                        u=0
-                elif d_ <= 0 and u_ <= d_:
-                    d=u_
                     u=0
+                elif u_ < 0 and u_ < d_:
+                    d=u_
+                    if d_>=0:
+		      u=d_
+		    else:
+                      u=0
                 
                 uperrors[ibin]=ROOT.TMath.Sqrt(uperrors[ibin]*uperrors[ibin]+u*u)
                 downerrors[ibin]=ROOT.TMath.Sqrt(downerrors[ibin]*downerrors[ibin]+d*d)
+                print u,d
+                print uperrors[ibin],downerrors[ibin]
                 
         graph=ROOT.TGraphAsymmErrors(nominal)
         for i in range(len(uperrors)):
@@ -1557,7 +1568,7 @@ def writeLOLAndOneOnTop(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,f
 #            yTitle='Events'
             setupHisto(histo,sample.color,yTitle,stack)        
         c=drawHistosOnCanvas(listOfHistos,normalize,stack,logscale,options)       
-        c.SetName('c'+str(i))
+        #c.SetName('c'+str(i))
         c.cd()
         otc=ot.Clone()
         setupHisto(otc,sampleOnTop.color,'',False)
@@ -1803,12 +1814,41 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         option='histo'
         option+=options
         h.DrawCopy(option)
+        print h.GetName()
+        #h.GetXaxis().SetBinLabel(1,"test")
         #draw remaining
         for h in stackedListOfHistos[1:]:
             h.DrawCopy(option+'same')
         h.DrawCopy('axissame')
 #make error bars ##########
 ###
+
+        otc=ot.Clone()
+        nok=99999
+        if blinded:
+            for ibin in range(stackedListOfHistos[0].GetNbinsX()):
+                if otc.GetBinContent(ibin)>0 and stackedListOfHistos[0].GetBinContent(ibin)/otc.GetBinContent(ibin)<100:
+                    nok=ibin-1
+                    break
+        data,blind=getDataGraphBlind(listOfHistosData,nok)
+        setupHisto(otc,sampleOnTop.color,'',False)
+        otc.SetBinContent(1,otc.GetBinContent(0)+otc.GetBinContent(1));
+        otc.SetBinContent(otc.GetNbinsX(),otc.GetBinContent(otc.GetNbinsX()+1)+otc.GetBinContent(otc.GetNbinsX()));
+        otc.SetBinError(1,ROOT.TMath.Sqrt(ROOT.TMath.Power(otc.GetBinError(0),2)+ROOT.TMath.Power(otc.GetBinError(1),2)));
+        otc.SetBinError(otc.GetNbinsX(),ROOT.TMath.Sqrt(ROOT.TMath.Power(otc.GetBinError(otc.GetNbinsX()+1),2)+ROOT.TMath.Power(otc.GetBinError(otc.GetNbinsX()),2)));
+        otc.SetLineWidth(3)
+        otc.Scale(factor)
+        otc.Draw('histosame')
+        data.Draw('samePE1')
+        blind.SetFillStyle(3665)
+        #blind.SetFillStyle(1001)
+        blind.SetLineColor(ROOT.kGray)
+        blind.SetFillColor(ROOT.kGray)
+        if blinded:
+            blind.Draw('same2')
+        objects.append(blind)
+        
+        
         listOfRatioErrorGraphs=[]
         graphcounter=0
         for errorgraph,thisFillStyle,ThisFillColor in errorgraphList:
@@ -1848,29 +1888,7 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
 	  listOfRatioErrorGraphs.append(ratioerrorgraph)
 	  #print objects
 	  #raw_input()
-        otc=ot.Clone()
-        nok=99999
-        if blinded:
-            for ibin in range(stackedListOfHistos[0].GetNbinsX()):
-                if otc.GetBinContent(ibin)>0 and stackedListOfHistos[0].GetBinContent(ibin)/otc.GetBinContent(ibin)<100:
-                    nok=ibin-1
-                    break
-        data,blind=getDataGraphBlind(listOfHistosData,nok)
-        setupHisto(otc,sampleOnTop.color,'',False)
-        otc.SetBinContent(1,otc.GetBinContent(0)+otc.GetBinContent(1));
-        otc.SetBinContent(otc.GetNbinsX(),otc.GetBinContent(otc.GetNbinsX()+1)+otc.GetBinContent(otc.GetNbinsX()));
-        otc.SetBinError(1,ROOT.TMath.Sqrt(ROOT.TMath.Power(otc.GetBinError(0),2)+ROOT.TMath.Power(otc.GetBinError(1),2)));
-        otc.SetBinError(otc.GetNbinsX(),ROOT.TMath.Sqrt(ROOT.TMath.Power(otc.GetBinError(otc.GetNbinsX()+1),2)+ROOT.TMath.Power(otc.GetBinError(otc.GetNbinsX()),2)));
-        otc.SetLineWidth(3)
-        otc.Scale(factor)
-        otc.Draw('histosame')
-        data.Draw('samePE1')
-        blind.SetFillStyle(3004)
-        blind.SetLineColor(12)
-        blind.SetFillColor(12)
-        if blinded:
-            blind.Draw('same2')
-        objects.append(blind)
+        
         l=getLegend()
         l.AddEntry2(data,'data','P')
         l.AddEntry2(otc,sampleOnTop.name+' x '+str(factor),'L')
@@ -1903,12 +1921,19 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         line=listOfHistos[0].Clone()
         line.SetFillStyle(0)
         line.Divide(listOfHistos[0])
+        
+        emptyHisto=listOfHistos[0].Clone()
+        print emptyHisto.GetName()
+        emptyHisto.SetFillStyle(0)
             
         line.GetYaxis().SetRangeUser(0.5,1.6)
         line.GetXaxis().SetRangeUser(listOfHistos[0].GetXaxis().GetXmin(),listOfHistos[0].GetXaxis().GetXmax())
         for i in range(line.GetNbinsX()+2):
             line.SetBinContent(i,1)
             line.SetBinError(i,0)
+        print listOfHistos[0].GetXaxis().GetXmin(),listOfHistos[0].GetXaxis().GetXmax(),listOfHistos[0].GetXaxis().GetBinLabel(1)
+        print line.GetXaxis().GetXmin(),line.GetXaxis().GetXmax(),line.GetXaxis().GetBinLabel(1)
+        #raw_input()
         line.GetXaxis().SetLabelSize(line.GetXaxis().GetLabelSize()*2.4)
         line.GetYaxis().SetLabelSize(line.GetYaxis().GetLabelSize()*2.4)
         line.GetXaxis().SetTitleSize(line.GetXaxis().GetTitleSize()*3)
@@ -1922,6 +1947,7 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         line.GetXaxis().SetTickLength( line.GetXaxis().GetTickLength() * 2.0 );
         line.GetYaxis().SetTickLength( line.GetYaxis().GetTickLength() * 1.65 );
 
+        #line.GetXaxis().SetBinLabel(4,"bla")
         line.Draw('histo')
         objects.append(ratiograph)
         #print len(listOfRatioErrorGraphs)
@@ -1931,6 +1957,8 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         ratiograph.Draw('sameP')
         line.Draw('histosame')
         line.SetLineWidth(1)
+        emptyHisto.Draw("axissame")
+        objects.append(emptyHisto)
         objects.append(line)
 
         #print labeltext
@@ -1940,4 +1968,228 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
 #    print len(canvases)
     printCanvases(canvases,name)
     writeObjects(canvases,name)
+
+
+###################################################
+
+def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,factor,name,listOflll,listOfmyCustomBinLabels,logscale=False,label='',ratio=True,blinded=False):    
+
+    options='histo'
+    if isinstance(label, basestring):
+        labeltexts=len(listOfHistoListsData)*[label]
+    else:
+        labeltexts=label
+    canvases=[]
+    objects=[]   
+    i=0
+#    print len(listOfHistoLists)
+    # for every plot, look at all samples
+    listOfErrorGraphs=[]
+    listOfErrorGraphStyles=[]
+    listOfErrorGraphColors=[]
+    
+    listOfErrorGraphLists=[]
+    #lll=[listOflistOflist of histograms, FillStyle, FillColor, DoRateSysts]
+    for lll in listOflll:
+      listOfErrorGraphLists.append(createErrorbands(lll[0],samples,lll[3]))
+      #print listOfErrorGraphLists[-1]
+      #raw_input()
+      listOfErrorGraphStyles.append(lll[1])
+      listOfErrorGraphColors.append(lll[2])
+    for igraph in range(len(listOfErrorGraphLists[0])):
+      thisgraphs=[]
+      for iband in range(len(listOfErrorGraphLists)):
+	thisgraphs.append([listOfErrorGraphLists[iband][igraph],listOfErrorGraphStyles[iband],listOfErrorGraphColors[iband]])
+      listOfErrorGraphs.append(thisgraphs)
+    #for g in listOfErrorGraphs:
+      #print g
+    print len(listOfhistosOnTop),len(listOfHistoLists),len(listOfHistoListsData),len(labeltexts),len(listOfErrorGraphs)
+    #raw_input()
+    for ot,listOfHistos,listOfHistosData,labeltext,errorgraphList, myCustomBinLabels in zip(listOfhistosOnTop,listOfHistoLists,listOfHistoListsData,labeltexts,listOfErrorGraphs,listOfmyCustomBinLabels):
+        i+=1
+#        print i
+        # setup histo style
+        for histo,sample in zip(listOfHistos,samples):
+            yTitle='Events'
+            setupHisto(histo,sample.color,yTitle,True) 
+        # 
+        # mover over/underflow
+        for h in listOfHistos:
+            moveOverFlow(h)
+        #stack
+        stackedListOfHistos=stackHistoList(listOfHistos)
+        objects.append(stackedListOfHistos)
+        # find maximum
+        yMax=1e-9
+        for h in stackedListOfHistos:
+            yMax=max(h.GetBinContent(h.GetMaximumBin()),yMax)
+        canvas=getCanvas(stackedListOfHistos[0].GetName(),ratio)        
+        canvas.cd(1)
+        #draw first histo
+        h=stackedListOfHistos[0]
+        if logscale:
+            h.GetYaxis().SetRangeUser(yMax/10000,yMax*10)
+            canvas.cd(1).SetLogy()
+        else:
+            h.GetYaxis().SetRangeUser(0,yMax*1.8)
+        option='histo'
+        option+=options
+        h.DrawCopy(option)
+        print h.GetName()
+        #h.GetXaxis().SetBinLabel(1,"test")
+        #draw remaining
+        for h in stackedListOfHistos[1:]:
+            h.DrawCopy(option+'same')
+        h.DrawCopy('axissame')
+#make error bars ##########
+###
+
+        otc=ot.Clone()
+        nok=99999
+        if blinded:
+            for ibin in range(stackedListOfHistos[0].GetNbinsX()):
+                if otc.GetBinContent(ibin)>0 and stackedListOfHistos[0].GetBinContent(ibin)/otc.GetBinContent(ibin)<100:
+                    nok=ibin-1
+                    break
+        data,blind=getDataGraphBlind(listOfHistosData,nok)
+        setupHisto(otc,sampleOnTop.color,'',False)
+        otc.SetBinContent(1,otc.GetBinContent(0)+otc.GetBinContent(1));
+        otc.SetBinContent(otc.GetNbinsX(),otc.GetBinContent(otc.GetNbinsX()+1)+otc.GetBinContent(otc.GetNbinsX()));
+        otc.SetBinError(1,ROOT.TMath.Sqrt(ROOT.TMath.Power(otc.GetBinError(0),2)+ROOT.TMath.Power(otc.GetBinError(1),2)));
+        otc.SetBinError(otc.GetNbinsX(),ROOT.TMath.Sqrt(ROOT.TMath.Power(otc.GetBinError(otc.GetNbinsX()+1),2)+ROOT.TMath.Power(otc.GetBinError(otc.GetNbinsX()),2)));
+        otc.SetLineWidth(3)
+        otc.Scale(factor)
+        otc.Draw('histosame')
+        data.Draw('samePE1')
+        blind.SetFillStyle(3665)
+        #blind.SetFillStyle(1001)
+        blind.SetLineColor(ROOT.kGray)
+        blind.SetFillColor(ROOT.kGray)
+        if blinded:
+            blind.Draw('same2')
+        objects.append(blind)
+        
+        
+        listOfRatioErrorGraphs=[]
+        graphcounter=0
+        for errorgraph,thisFillStyle,ThisFillColor in errorgraphList:
+	  ratioerrorgraph=ROOT.TGraphAsymmErrors(errorgraph.GetN())
+	  #print ratioerrorgraph
+	  #raw_input()
+	  x, y = ROOT.Double(0), ROOT.Double(0)
+	  for i in range(errorgraph.GetN()):
+	      errorgraph.GetPoint(i,x,y)
+	      ratioerrorgraph.SetPoint(i,x, 1.0)
+	      relErrUp=0.0
+	      relErrDown=0.0
+	      if y>0.0:
+		  relErrUp=errorgraph.GetErrorYhigh(i)/y
+		  relErrDown=errorgraph.GetErrorYlow(i)/y
+	      ratioerrorgraph.SetPointError(i, errorgraph.GetErrorXlow(i),errorgraph.GetErrorXhigh(i), relErrUp, relErrDown)
+
+  
+	  errorgraph.SetFillStyle(thisFillStyle)
+	  errorgraph.SetLineColor(ThisFillColor)
+	  errorgraph.SetFillColor(ThisFillColor)
+	  ratioerrorgraph.SetFillStyle(1001)
+	  ratioerrorgraph.SetLineColor(ThisFillColor)
+	  ratioerrorgraph.SetFillColor(ThisFillColor)
+  #        ratioerrorgraph.SetFillStyle(1001)
+  #        ratioerrorgraph.SetLineColor(ROOT.kBlack)
+  #        ratioerrorgraph.SetFillColor(ROOT.kGreen)
+
+	  #if graphcounter==0:
+	    #errorgraph.Draw("2")
+	  #else:
+	  errorgraph.Draw("same2")  
+	  graphcounter+=1
+
+	  objects.append(errorgraph)
+	  objects.append(ratioerrorgraph)
+	  listOfRatioErrorGraphs.append(ratioerrorgraph)
+	  #print objects
+	  #raw_input()
+        
+        l=getLegend()
+        l.AddEntry2(data,'data','P')
+        l.AddEntry2(otc,sampleOnTop.name+' x '+str(factor),'L')
+        for h,sample in zip(stackedListOfHistos,samples):
+            l.AddEntry2(h,sample.name,'F')
+
+        canvases.append(canvas)
+        l.Draw('same')
+        objects.append(data)
+        objects.append(l)
+        objects.append(otc)
+
+        cms = ROOT.TLatex(0.2, 0.96, 'CMS preliminary,  2.61 fb^{-1},  #sqrt{s} = 13 TeV'  );
+        cms.SetTextFont(42)
+        cms.SetTextSize(0.05)
+        cms.SetNDC()
+        cms.Draw()
+        objects.append(cms)
+
+        label = ROOT.TLatex(0.2, 0.89, labeltext);
+        label.SetTextFont(42)
+        label.SetTextSize(0.05)
+        label.SetNDC()
+        label.Draw()
+        objects.append(label)
+
+
+        ratiograph=getRatioGraph(data,stackedListOfHistos[0])
+        canvas.cd(2)
+        line=listOfHistos[0].Clone()
+        line.SetFillStyle(0)
+        line.Divide(listOfHistos[0])
+        
+        emptyHisto=listOfHistos[0].Clone()
+        print emptyHisto.GetName()
+        emptyHisto.SetFillStyle(0)
+            
+        line.GetYaxis().SetRangeUser(0.5,1.6)
+        line.GetXaxis().SetRangeUser(listOfHistos[0].GetXaxis().GetXmin(),listOfHistos[0].GetXaxis().GetXmax())
+        for i in range(line.GetNbinsX()+2):
+            line.SetBinContent(i,1)
+            line.SetBinError(i,0)
+        print listOfHistos[0].GetXaxis().GetXmin(),listOfHistos[0].GetXaxis().GetXmax(),listOfHistos[0].GetXaxis().GetBinLabel(1)
+        print line.GetXaxis().GetXmin(),line.GetXaxis().GetXmax(),line.GetXaxis().GetBinLabel(1)
+        #raw_input()
+        line.GetXaxis().SetLabelSize(line.GetXaxis().GetLabelSize()*2.4)
+        line.GetYaxis().SetLabelSize(line.GetYaxis().GetLabelSize()*2.4)
+        line.GetXaxis().SetTitleSize(line.GetXaxis().GetTitleSize()*3)
+        line.GetYaxis().SetTitleSize(line.GetYaxis().GetTitleSize()*2.4)
+        line.GetYaxis().SetTitleSize(line.GetYaxis().GetTitleSize()*2.4)
+        line.GetYaxis().CenterTitle(1);
+        line.GetYaxis().SetTitle('data/MC');
+        line.GetYaxis().SetNdivisions( 503 );
+#        line.GetXaxis().SetLabelOffset( 0.006 );
+        line.GetXaxis().SetNdivisions( 510 );
+        line.GetXaxis().SetTickLength( line.GetXaxis().GetTickLength() * 2.0 );
+        line.GetYaxis().SetTickLength( line.GetYaxis().GetTickLength() * 1.65 );
+
+        for icbl, cbl in enumerate(myCustomBinLabels):
+	  line.GetXaxis().SetBinLabel(icbl+1,cbl)
+        #line.GetXaxis().SetBinLabel(4,"bla")
+        line.Draw('histo')
+        objects.append(ratiograph)
+        #print len(listOfRatioErrorGraphs)
+        for ratioerrorgraph in listOfRatioErrorGraphs:
+          ratioerrorgraph.Draw("same2")
+#        objects.append(ratioerrorgraph)
+        ratiograph.Draw('sameP')
+        line.Draw('histosame')
+        line.SetLineWidth(1)
+        emptyHisto.Draw("axissame")
+        objects.append(emptyHisto)
+        objects.append(line)
+
+        #print labeltext
+        #raw_input()
+
+
+#    print len(canvases)
+    printCanvases(canvases,name)
+    writeObjects(canvases,name)
+
 

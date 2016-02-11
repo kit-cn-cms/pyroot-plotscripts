@@ -52,7 +52,7 @@ systs_all_samples=["",
                    "_CMS_scale_jUp","_CMS_scale_jDown",
                    ]
 
-systs_ttbar= ["_CMS_ttH_NNPDFUp","_CMS_ttH_NNPDFDown"]
+systs_ttbar= ["_CMS_ttH_NNPDFUp","_CMS_ttH_NNPDFDown","_CMS_ttH_PSscaleUp","_CMS_ttH_PSscaleDown",]
 systs_tt_lf=["_CMS_ttH_Q2scale_ttbarOtherUp","_CMS_ttH_Q2scale_ttbarOtherDown",]
 systs_tt_b=["_CMS_ttH_Q2scale_ttbarPlusBUp","_CMS_ttH_Q2scale_ttbarPlusBDown"]
 systs_tt_2b=[ "_CMS_ttH_Q2scale_ttbarPlus2BUp","_CMS_ttH_Q2scale_ttbarPlus2BDown"]
@@ -216,7 +216,7 @@ samplesBDTplots=[Sample('t#bar{t}H',ROOT.kBlue+1,path_excl4252+'/ttH*/*nominal*.
 samplesBDTplotsBoosted=[Sample('t#bar{t}H',ROOT.kBlue+1,path_incl4252+'/ttH*/*nominal*.root',mcweight,'ttH') ,     
 #         Sample('t#bar{t}',ROOT.kRed+1,path_incl4252+'/ttbar/*nominal*.root',mcweight,'ttbar') ,     
          Sample('t#bar{t}+lf',ROOT.kRed-7,path_incl4252+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)','ttbarOther'),
-         Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,path_incl4252+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==1)','ttbarPlusBBbar'),
+         Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,path_incl4252+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==1)','ttbarPlusCCbar'),
          Sample('t#bar{t}+b',ROOT.kRed-2,path_incl4252+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==1)','ttbarPlusB'),
          Sample('t#bar{t}+2b',ROOT.kRed+2,path_incl4252+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==2)','ttbarPlus2B'),
          Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,path_incl4252+'/ttbar/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==3)','ttbarPlusBBbar'),  

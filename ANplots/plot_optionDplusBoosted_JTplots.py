@@ -12,7 +12,7 @@ from limittools import calcLimits
 from plotconfig import *
 
 
-name='optionDplusBoosted_JTplots'
+name='newBDToptionDplusBoosted_JTplots'
 
 nhistobins_=      [ 20,       4,   4,     20,       4,     4,   20,   20,  6 ,6    ]
 minxvals_=        [-0.9,    0.,  0.,     -0.8,     0.,     0.,   -0.80,  -0.8,  0.,   0.]
