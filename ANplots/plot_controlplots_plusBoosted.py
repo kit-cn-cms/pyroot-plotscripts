@@ -2,7 +2,85 @@ from plotconfig import *
 sys.path.insert(0, '../limittools')
 from limittools import renameHistos
 
-name='AN_controlplots_plusBoosted'
+name='76controlplotsPlusBoosted'
+
+weightsystnames=["",
+                 "_CMS_ttH_CSVLFUp","_CMS_ttH_CSVLFDown","_CMS_ttH_CSVHFUp","_CMS_ttH_CSVHFDown",
+                 "_CMS_ttH_CSVHFStats1Up","_CMS_ttH_CSVHFStats1Down","_CMS_ttH_CSVLFStats1Up","_CMS_ttH_CSVLFStats1Down",
+                 "_CMS_ttH_CSVHFStats2Up","_CMS_ttH_CSVHFStats2Down","_CMS_ttH_CSVLFStats2Up","_CMS_ttH_CSVLFStats2Down",
+                 "_CMS_ttH_CSVCErr1Up","_CMS_ttH_CSVCErr1Down","_CMS_ttH_CSVCErr2Up","_CMS_ttH_CSVCErr2Down",
+                 #"_CMS_ttH_TopPtUp","_CMS_ttH_TopPtDown",
+                 #"_CMS_ttH_PUUp","_CMS_ttH_PUDown",
+                 "_CMS_ttH_Q2scale_ttbarOtherUp","_CMS_ttH_Q2scale_ttbarOtherDown",
+                 "_CMS_ttH_Q2scale_ttbarPlusBUp","_CMS_ttH_Q2scale_ttbarPlusBDown",
+                 "_CMS_ttH_Q2scale_ttbarPlus2BUp","_CMS_ttH_Q2scale_ttbarPlus2BDown",
+                 "_CMS_ttH_Q2scale_ttbarPlusBBbarUp","_CMS_ttH_Q2scale_ttbarPlusBBbarDown",
+                 "_CMS_ttH_Q2scale_ttbarPlusCCbarUp","_CMS_ttH_Q2scale_ttbarPlusCCbarDown",
+                 "_CMS_ttH_NNPDFUp","_CMS_ttH_NNPDFDown",
+           ]
+
+systs_all_samples=["",
+                  "_CMS_ttH_CSVLFUp","_CMS_ttH_CSVLFDown","_CMS_ttH_CSVHFUp","_CMS_ttH_CSVHFDown",
+                  "_CMS_ttH_CSVHFStats1Up","_CMS_ttH_CSVHFStats1Down","_CMS_ttH_CSVLFStats1Up","_CMS_ttH_CSVLFStats1Down",
+                  "_CMS_ttH_CSVHFStats2Up","_CMS_ttH_CSVHFStats2Down","_CMS_ttH_CSVLFStats2Up","_CMS_ttH_CSVLFStats2Down",
+                  "_CMS_ttH_CSVCErr1Up","_CMS_ttH_CSVCErr1Down","_CMS_ttH_CSVCErr2Up","_CMS_ttH_CSVCErr2Down",
+                   #"_CMS_ttH_PUUp","_CMS_ttH_PUDown",
+                   #"_CMS_scale_jUp","_CMS_scale_jDown",
+                   ]
+othersystnames=[
+		#"_CMS_scale_jUp",
+                #"_CMS_scale_jDown",
+               #"_CMS_res_jUp",
+               #"_CMS_res_jDown"
+               "_CMS_ttH_PSscaleUp",
+               "_CMS_ttH_PSscaleDown"
+                ]
+
+othersystfilenames=[
+		    #"JESUP",
+                    #"JESDOWN",
+                   #"JERUP",
+                   #"JERDOWN"
+                   "scaleup",
+                   "scaledown"
+                   ]
+
+systs_ttbar= [
+	      "_CMS_ttH_NNPDFUp","_CMS_ttH_NNPDFDown",
+	      #"_CMS_ttH_PSscaleUp","_CMS_ttH_PSscaleDown",
+	      ]
+
+PSSystnames=["",
+		 "","","","",
+		 "","","","",
+		 "","","","",
+		 "","","","",
+		 #"_CMS_ttH_TopPtUp","_CMS_ttH_TopPtDown",
+                 "","",
+		 "","",
+		 "","",
+		 "","",
+		 "","",
+		 "","",
+		 "","",
+                 #"","",
+                 "_CMS_ttH_PSscaleUp","_CMS_ttH_PSscaleDown"]
+
+errorSystnames=["",
+		 "_CMS_ttH_CSVLFUp","_CMS_ttH_CSVLFDown","_CMS_ttH_CSVHFUp","_CMS_ttH_CSVHFDown",
+                 "_CMS_ttH_CSVHFStats1Up","_CMS_ttH_CSVHFStats1Down","_CMS_ttH_CSVLFStats1Up","_CMS_ttH_CSVLFStats1Down",
+                 "_CMS_ttH_CSVHFStats2Up","_CMS_ttH_CSVHFStats2Down","_CMS_ttH_CSVLFStats2Up","_CMS_ttH_CSVLFStats2Down",
+                 "_CMS_ttH_CSVCErr1Up","_CMS_ttH_CSVCErr1Down","_CMS_ttH_CSVCErr2Up","_CMS_ttH_CSVCErr2Down",
+		 #"_CMS_ttH_TopPtUp","_CMS_ttH_TopPtDown",
+                 #"_CMS_ttH_PUUp","_CMS_ttH_PUDown",
+		 "_CMS_ttH_Q2scale_ttbarOtherUp","_CMS_ttH_Q2scale_ttbarOtherDown",
+                 "_CMS_ttH_Q2scale_ttbarPlusBUp","_CMS_ttH_Q2scale_ttbarPlusBDown",
+                 "_CMS_ttH_Q2scale_ttbarPlus2BUp","_CMS_ttH_Q2scale_ttbarPlus2BDown",
+                 "_CMS_ttH_Q2scale_ttbarPlusBBbarUp","_CMS_ttH_Q2scale_ttbarPlusBBbarDown",
+                 "_CMS_ttH_Q2scale_ttbarPlusCCbarUp","_CMS_ttH_Q2scale_ttbarPlusCCbarDown",
+                 "_CMS_ttH_NNPDFUp","_CMS_ttH_NNPDFDown",
+                 #"","",
+                 "_CMS_ttH_PSscaleUp","_CMS_ttH_PSscaleDown"]
 
 # selections for categories
 sel1="((N_TightLeptons==1)*(N_LooseLeptons==1)*(N_BTagsM>=2)*(N_Jets>=4))" # l+jets channel
@@ -68,9 +146,9 @@ for i,cat in enumerate(categoriesSplitByBDToptD):
     catstringSplitByBDToptD+=("+"+str(i+1)+"*"+cat[0])
 
 plots=[Plot(ROOT.TH1F("JT" ,"jet-tag categories",len(categoriesJT),0.5,0.5+len(categoriesJT)),catstringJT,"(((N_BTagsM>=2&&N_Jets>=6||N_BTagsM>=3&&N_Jets>=4)&&!"+categoriesJT[-1][0]+")||"+categoriesJT[-1][0]+")",label),
-       Plot(ROOT.TH1F("JTsplitByBDToptB" ,"2D analysis B + boosted categories",len(categoriesSplitBDT),0.5,0.5+len(categoriesSplitBDT)),catstringSplitByBDT,"(((N_BTagsM>=2&&N_Jets>=6||N_BTagsM>=3&&N_Jets>=4)&&!"+categoriesJT[-1][0]+")||"+categoriesJT[-1][0]+")"),
-       Plot(ROOT.TH1F("JTByBDToptC" ,"analysis C + boosted categories",len(categoriesBDT),0.5,0.5+len(categoriesBDT)),catstringBDT,"(((N_BTagsM>=2&&N_Jets>=6||N_BTagsM>=3&&N_Jets>=4)&&!"+categoriesJT[-1][0]+")||"+categoriesJT[-1][0]+")"),
-       Plot(ROOT.TH1F("JTsplitByBDToptD" ,"2D analysis D + boosted categories",len(categoriesSplitByBDToptD),0.5,0.5+len(categoriesSplitByBDToptD)),catstringSplitByBDToptD,"(((N_BTagsM>=2&&N_Jets>=6||N_BTagsM>=3&&N_Jets>=4)&&!"+categoriesJT[-1][0]+")||"+categoriesJT[-1][0]+")"),
+       #Plot(ROOT.TH1F("JTsplitByBDToptB" ,"2D analysis B + boosted categories",len(categoriesSplitBDT),0.5,0.5+len(categoriesSplitBDT)),catstringSplitByBDT,"(((N_BTagsM>=2&&N_Jets>=6||N_BTagsM>=3&&N_Jets>=4)&&!"+categoriesJT[-1][0]+")||"+categoriesJT[-1][0]+")"),
+       #Plot(ROOT.TH1F("JTByBDToptC" ,"analysis C + boosted categories",len(categoriesBDT),0.5,0.5+len(categoriesBDT)),catstringBDT,"(((N_BTagsM>=2&&N_Jets>=6||N_BTagsM>=3&&N_Jets>=4)&&!"+categoriesJT[-1][0]+")||"+categoriesJT[-1][0]+")"),
+       #Plot(ROOT.TH1F("JTsplitByBDToptD" ,"2D analysis D + boosted categories",len(categoriesSplitByBDToptD),0.5,0.5+len(categoriesSplitByBDToptD)),catstringSplitByBDToptD,"(((N_BTagsM>=2&&N_Jets>=6||N_BTagsM>=3&&N_Jets>=4)&&!"+categoriesJT[-1][0]+")||"+categoriesJT[-1][0]+")"),
 
        Plot(ROOT.TH1F("N_Jets","Number of ak4 jets",7,3.5,10.5),"N_Jets",'',label),
        Plot(ROOT.TH1F("N_BTagsM","Number of b-tags",4,1.5,5.5),"N_BTagsM",'',label),
@@ -108,40 +186,40 @@ plots=[Plot(ROOT.TH1F("JT" ,"jet-tag categories",len(categoriesJT),0.5,0.5+len(c
        Plot(ROOT.TH1F("CSVeta2","B-tag of jets with abs(#eta) between 0.4 and 0.8",44,-.1,1),"Jet_CSV",'fabs(Jet_Eta)>0.4&&fabs(Jet_Eta)<0.8',label),
        Plot(ROOT.TH1F("CSVeta3","B-tag of jets with abs(#eta) between 0.8 and 1.6",44,-.1,1),"Jet_CSV",'fabs(Jet_Eta)>0.8&&fabs(Jet_Eta)<1.6',label),
        Plot(ROOT.TH1F("CSVeta4","B-tag of jets with abs(#eta) between 0.8 and 1.6",44,-.1,1),"Jet_CSV",'fabs(Jet_Eta)>1.6',label),
-       Plot(ROOT.TH1F("MEM","MEM discriminator for events with #geq 3 b-tags",22,0,1),"(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)",'(N_BTagsM>=3)',label),
+       #Plot(ROOT.TH1F("MEM","MEM discriminator for events with #geq 3 b-tags",22,0,1),"(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)",'(N_BTagsM>=3)',label),
        Plot(ROOT.TH1F("blrHighTag","B-tagging likelihood ratio for events with #geq 3 b-tags",44,-4,10),"TMath::Log(Evt_blr_ETH/(1-Evt_blr_ETH))",'(N_BTagsM>=3)',label),
        Plot(ROOT.TH1F("blrAll","B-tagging likelihood ratio",44,-6,10),"TMath::Log(Evt_blr_ETH/(1-Evt_blr_ETH))",'',label),
 
-       Plot(ROOT.TH1F("BJN_N_Leptons","Number of soft leptons",6,-.5,5.5),"BJN_N_Leptons",'',label),
-       Plot(ROOT.TH1F("BJN_N_TracksNoPV","Number of tracks not from the PV",13,-.5,12.5),"BJN_N_TracksNoPV",'',label),
-       Plot(ROOT.TH1F("BJN_N_PVtrackOvCollTrk","Number PV tracks over all tracks",25,0.2,1.2),"BJN_N_PVtrackOvCollTrk",'',label),
-       Plot(ROOT.TH1F("BJN_N_AvgIp3D","Avg 3D IP",40,0,0.08),"BJN_N_AvgIp3D",'',label),
-       Plot(ROOT.TH1F("BJN_N_AvgIp3Dsig","Avg 3D IP significance",30,0,15),"BJN_N_AvgIp3Dsig",'',label),
-       Plot(ROOT.TH1F("BJN_N_AvgSip3Dsig","Avg 3D signed IP significance",30,-15,15),"BJN_N_AvgSip3Dsig",'',label),
-       Plot(ROOT.TH1F("BJN_N_AvgIp1Dsig","Avg 1D IP significance",25,0,25),"BJN_N_AvgIp1Dsig",'',label),
+       #Plot(ROOT.TH1F("BJN_N_Leptons","Number of soft leptons",6,-.5,5.5),"BJN_N_Leptons",'',label),
+       #Plot(ROOT.TH1F("BJN_N_TracksNoPV","Number of tracks not from the PV",13,-.5,12.5),"BJN_N_TracksNoPV",'',label),
+       #Plot(ROOT.TH1F("BJN_N_PVtrackOvCollTrk","Number PV tracks over all tracks",25,0.2,1.2),"BJN_N_PVtrackOvCollTrk",'',label),
+       #Plot(ROOT.TH1F("BJN_N_AvgIp3D","Avg 3D IP",40,0,0.08),"BJN_N_AvgIp3D",'',label),
+       #Plot(ROOT.TH1F("BJN_N_AvgIp3Dsig","Avg 3D IP significance",30,0,15),"BJN_N_AvgIp3Dsig",'',label),
+       #Plot(ROOT.TH1F("BJN_N_AvgSip3Dsig","Avg 3D signed IP significance",30,-15,15),"BJN_N_AvgSip3Dsig",'',label),
+       #Plot(ROOT.TH1F("BJN_N_AvgIp1Dsig","Avg 1D IP significance",25,0,25),"BJN_N_AvgIp1Dsig",'',label),
 
-       Plot(ROOT.TH1F("commonBDT43","BDT w/o MEM in training",10,-1,1),"BDT_common5_output",'N_BTagsM==3&&N_Jets==4','4 jets, 3 b-tags'),
-       Plot(ROOT.TH1F("MEM43","MEM discriminator",10,0,1),"(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)",'(N_BTagsM==3&&N_Jets==4)',""),
+       #Plot(ROOT.TH1F("commonBDT43","BDT w/o MEM in training",10,-1,1),"BDT_common5_output",'N_BTagsM==3&&N_Jets==4','4 jets, 3 b-tags'),
+       #Plot(ROOT.TH1F("MEM43","MEM discriminator",10,0,1),"(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)",'(N_BTagsM==3&&N_Jets==4)',""),
        
-#       Plot(ROOT.TH1F("N_BoostedJets","Number of fat jets",5,0,5),"N_BoostedJets",'',label),
-#       Plot(ROOT.TH1F("BoostedJet_Pt","transverse momentum of fat jet",40,200,600),"BoostedJet_Pt[0]",'',label)
-#       
-#       Plot(ROOT.TH1F("BoostedJet_PrunedMass","pruned mass of hardest fat jet",40,0,400),"BoostedJet_PrunedMass[0]",toptaggersel,label),
-#       Plot(ROOT.TH1F("BoostedJet_Top_M","invariant mass of top",40,0,300),"BoostedJet_Top_M[0]",toptaggersel,label),
-#       Plot(ROOT.TH1F("BoostedJet_Wbtag_M","invariant mass of W",40,0,200),"BoostedJet_Wbtag_M[0]",toptaggersel,label),
-#       Plot(ROOT.TH1F("BoostedJet_BW1btag_M","invariant mass of B and W1",40,0,250),"BoostedJet_BW1btag_M[0]",toptaggersel,label),
-#       Plot(ROOT.TH1F("BoostedJet_BW2btag_M","invariant mass of B and W2",40,0,250),"BoostedJet_BW2btag_M[0]",toptaggersel,label),
-#       Plot(ROOT.TH1F("BoostedJet_Bbtag_CSV","CSV output of B",40,-0.1,1.),"BoostedJet_Bbtag_CSV[0]",toptaggersel,label),
-#       Plot(ROOT.TH1F("BoostedJet_W1btag_CSV","CSV output of W1",40,-0.1,1.),"BoostedJet_W1btag_CSV[0]",toptaggersel,label),
-#       Plot(ROOT.TH1F("BoostedJet_W2btag_CSV","CSV output of W2",40,-0.1,1.),"BoostedJet_W2btag_CSV[0]",toptaggersel,label),
-#       Plot(ROOT.TH1F("BoostedJet_Tau21Filtered","#tau_2/#tau_1",40,0.,1.),"BoostedJet_Tau2Filtered[0]/BoostedJet_Tau1Filtered[0]",toptaggersel,label),
-#       Plot(ROOT.TH1F("BoostedJet_Tau32Filtered","#tau_3/#tau_2",40,0.,1.),"BoostedJet_Tau3Filtered[0]/BoostedJet_Tau2Filtered[0]",toptaggersel,label),
-#       Plot(ROOT.TH1F("BoostedJet_fRec","Difference to true W top mass ratio",40,0.,.6),"BoostedJet_fRec[0]",toptaggersel,label),
-#       Plot(ROOT.TH1F("BoostedJet_DRoptRoptCalc","D_{opt}-D_{opt}^{calc}",40,-2.,1.),"BoostedJet_Ropt[0]-BoostedJet_RoptCalc[0]",toptaggersel,label),
-#       
-#       Plot(ROOT.TH1F("BoostedJet_TopTag_BDT_Std","BDT top tagger output of hardest fat jet",40,-1.,1.),"BoostedJet_TopTag_BDT_Std[0]",toptaggersel,label)
-#       
-#       Plot(ROOT.TH1F("BoostedJet_HiggsTag_SecondCSV","b-tagging output of subjet B2 of hardest fat jet",40,-.1,1.),"BoostedJet_HiggsTag_SecondCSV[0]",higgstaggersel,label)
+      Plot(ROOT.TH1F("N_BoostedJets","Number of fat jets",5,0,5),"N_BoostedJets",'',label),
+      Plot(ROOT.TH1F("BoostedJet_Pt","transverse momentum of fat jet",40,200,600),"BoostedJet_Pt[0]",'',label),
+      
+      Plot(ROOT.TH1F("BoostedJet_PrunedMass","pruned mass of hardest fat jet",40,0,400),"BoostedJet_PrunedMass[0]",toptaggersel,label),
+      Plot(ROOT.TH1F("BoostedJet_Top_M","invariant mass of top",40,0,300),"BoostedJet_Top_M[0]",toptaggersel,label),
+      Plot(ROOT.TH1F("BoostedJet_Wbtag_M","invariant mass of W",40,0,200),"BoostedJet_Wbtag_M[0]",toptaggersel,label),
+      Plot(ROOT.TH1F("BoostedJet_BW1btag_M","invariant mass of B and W1",40,0,250),"BoostedJet_BW1btag_M[0]",toptaggersel,label),
+      Plot(ROOT.TH1F("BoostedJet_BW2btag_M","invariant mass of B and W2",40,0,250),"BoostedJet_BW2btag_M[0]",toptaggersel,label),
+      Plot(ROOT.TH1F("BoostedJet_Bbtag_CSV","CSV output of B",40,-0.1,1.),"BoostedJet_Bbtag_CSV[0]",toptaggersel,label),
+      Plot(ROOT.TH1F("BoostedJet_W1btag_CSV","CSV output of W1",40,-0.1,1.),"BoostedJet_W1btag_CSV[0]",toptaggersel,label),
+      Plot(ROOT.TH1F("BoostedJet_W2btag_CSV","CSV output of W2",40,-0.1,1.),"BoostedJet_W2btag_CSV[0]",toptaggersel,label),
+      Plot(ROOT.TH1F("BoostedJet_Tau21Filtered","#tau_2/#tau_1",40,0.,1.),"BoostedJet_Tau2Filtered[0]/BoostedJet_Tau1Filtered[0]",toptaggersel,label),
+      Plot(ROOT.TH1F("BoostedJet_Tau32Filtered","#tau_3/#tau_2",40,0.,1.),"BoostedJet_Tau3Filtered[0]/BoostedJet_Tau2Filtered[0]",toptaggersel,label),
+      Plot(ROOT.TH1F("BoostedJet_fRec","Difference to true W top mass ratio",40,0.,.6),"BoostedJet_fRec[0]",toptaggersel,label),
+      Plot(ROOT.TH1F("BoostedJet_DRoptRoptCalc","D_{opt}-D_{opt}^{calc}",40,-2.,1.),"BoostedJet_Ropt[0]-BoostedJet_RoptCalc[0]",toptaggersel,label),
+      
+      Plot(ROOT.TH1F("BoostedJet_TopTag_BDT_Std","BDT top tagger output of hardest fat jet",40,-1.,1.),"BoostedJet_TopTag_BDT_Std[0]",toptaggersel,label),
+      
+      Plot(ROOT.TH1F("BoostedJet_HiggsTag_SecondCSV","b-tagging output of subjet B2 of hardest fat jet",40,-.1,1.),"BoostedJet_HiggsTag_SecondCSV[0]",higgstaggersel,label),
        ]
 # plot parallel -- alternatively there are also options to plot more traditional that also return lists of histo lists
 outputpath=plotParallel(name,2000000,plots,samples+samples_data+systsamples,[''],['1.'],weightsystnames, systweights)
@@ -151,7 +229,9 @@ listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data
 if not os.path.exists(outputpath[:-4]+'_syst.root') or not askYesNo('reuse systematic histofile?'):
     renameHistos(outputpath,outputpath[:-4]+'_syst.root',allsystnames)
 print othersystnames
-lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,allsystnames)
+lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,errorSystnames)
+lllforPS=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,PSSystnames)
+
 ntables=0
 # do some post processing
 #for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
@@ -211,44 +291,45 @@ for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
 labels=[plot.label for plot in plots]
 
 lolT=transposeLOL(listOfHistoLists)
-plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,name,lll,False,labels)
+plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,name,[[lll,3354,ROOT.kGray+1,True],[lllforPS,3545,ROOT.kYellow,False]],False,labels)
+#plotDataMCan(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,name,False,labels)
+
+#listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
+#listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots,1)
+#lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,allsystnames)
+#ntables=0
+## do some post processing
+#for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
+    #if "JT" in hld[0].GetName() and not "JTsplitByBDToptB" in hld[0].GetName() and not "JTByBDToptC" in hld[0].GetName() and not "JTsplitByBDToptD" in hld[0].GetName() :
+        #for h in hld+hl:
+            #h.GetXaxis().SetBinLabel(1,'4j2t')
+            #h.GetXaxis().SetBinLabel(2,'5j2t')
+            #h.GetXaxis().SetBinLabel(3,'6j2t')
+            #h.GetXaxis().SetBinLabel(4,'4j3t')
+            #h.GetXaxis().SetBinLabel(5,'5j3t')
+            #h.GetXaxis().SetBinLabel(6,'6j3t')
+            #h.GetXaxis().SetBinLabel(7,'4j4t')
+            #h.GetXaxis().SetBinLabel(8,'5j4t')
+            #h.GetXaxis().SetBinLabel(9,'6j4t')
+            #h.GetXaxis().SetBinLabel(10,'boosted')
+#for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
+    #if "JTsplitByBDToptB" in hld[0].GetName():       
+        #for h in hld+hl:
+            #for i,cat in enumerate(categoriesSplitBDT):
+                #h.GetXaxis().SetBinLabel(i+1,cat[1])
+    #if "JTByBDToptC" in hld[0].GetName():       
+        #for h in hld+hl:
+            #for i,cat in enumerate(categoriesBDT):
+                #h.GetXaxis().SetBinLabel(i+1,cat[1])
+    #if "JTsplitByBDToptD" in hld[0].GetName():       
+        #for h in hld+hl:
+            #for i,cat in enumerate(categoriesSplitByBDToptD):
+                #h.GetXaxis().SetBinLabel(i+1,cat[1])
 
 
-listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
-listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots,1)
-lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,allsystnames)
-ntables=0
-# do some post processing
-for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
-    if "JT" in hld[0].GetName() and not "JTsplitByBDToptB" in hld[0].GetName() and not "JTByBDToptC" in hld[0].GetName() and not "JTsplitByBDToptD" in hld[0].GetName() :
-        for h in hld+hl:
-            h.GetXaxis().SetBinLabel(1,'4j2t')
-            h.GetXaxis().SetBinLabel(2,'5j2t')
-            h.GetXaxis().SetBinLabel(3,'6j2t')
-            h.GetXaxis().SetBinLabel(4,'4j3t')
-            h.GetXaxis().SetBinLabel(5,'5j3t')
-            h.GetXaxis().SetBinLabel(6,'6j3t')
-            h.GetXaxis().SetBinLabel(7,'4j4t')
-            h.GetXaxis().SetBinLabel(8,'5j4t')
-            h.GetXaxis().SetBinLabel(9,'6j4t')
-            h.GetXaxis().SetBinLabel(10,'boosted')
-for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
-    if "JTsplitByBDToptB" in hld[0].GetName():       
-        for h in hld+hl:
-            for i,cat in enumerate(categoriesSplitBDT):
-                h.GetXaxis().SetBinLabel(i+1,cat[1])
-    if "JTByBDToptC" in hld[0].GetName():       
-        for h in hld+hl:
-            for i,cat in enumerate(categoriesBDT):
-                h.GetXaxis().SetBinLabel(i+1,cat[1])
-    if "JTsplitByBDToptD" in hld[0].GetName():       
-        for h in hld+hl:
-            for i,cat in enumerate(categoriesSplitByBDToptD):
-                h.GetXaxis().SetBinLabel(i+1,cat[1])
+## plot dataMC comparison
+#labels=[plot.label for plot in plots]
 
-
-# plot dataMC comparison
-labels=[plot.label for plot in plots]
-
-lolT=transposeLOL(listOfHistoLists)
-plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,name+'_log',lll,True,labels)
+#lolT=transposeLOL(listOfHistoLists)
+##plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,name+'_log',[[lll,3354,ROOT.kGray+1,False]],True,labels)
+#plotDataMCan(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,name+'_log',True,labels)

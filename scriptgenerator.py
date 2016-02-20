@@ -17,6 +17,7 @@ def getHead():
 #include "TLorentzVector.h"
 #include "TFile.h"
 #include "TH1F.h"
+#include "TH2F.h"
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -102,6 +103,14 @@ def initHistoWithProcessNameAndSuffix(name,nbins,xmin=0,xmax=0,title_=''):
 
     return '  TH1F* h_'+name+'=new TH1F((processname+"_'+name+'"+suffix).c_str(),"'+title+'",'+str(nbins)+','+str(xmin)+','+str(xmax)+');\n'
 
+def initTwoDimHistoWithProcessNameAndSuffix(name,nbinsX=10,xminX=0,xmaxX=0,nbinsY=10,xminY=0,xmaxY=0,title_=''):
+    if title_=='':
+        title=name
+    else:
+        title=title_
+
+    return '  TH2F* h_'+name+'=new TH2F((processname+"_'+name+'"+suffix).c_str(),"'+title+'",'+str(nbinsX)+','+str(xminX)+','+str(xmaxX)+','+str(nbinsY)+','+str(xminY)+','+str(xmaxY)+');\n'
+
 def initReader(name):
     text=''
     text+='  TMVA::Reader *r_'+name+' = new TMVA::Reader("Silent");\n'
@@ -135,6 +144,14 @@ def fillHistoSyst(name,varname,weight,systnames,systweights):
     text='      float weight_'+name+'='+weight+';\n'
     for sn,sw in zip(systnames,systweights):
         text+=fillHisto(name+sn,varname,'('+sw+')*(weight_'+name+')')
+#        text+= '      if(('+sw+')*(weight_'+name+')>0)'
+#        text+= '        h_'+name+sn+'->Fill('+varname+',('+sw+')*(weight_'+name+'));\n'
+    return text
+
+def fillTwoDimHistoSyst(name,varname1,varname2,weight,systnames,systweights):
+    text='      float weight_'+name+'='+weight+';\n'
+    for sn,sw in zip(systnames,systweights):
+        text+=fillTwoDimHisto(name+sn,varname1,varname2,'('+sw+')*(weight_'+name+')')
 #        text+= '      if(('+sw+')*(weight_'+name+')>0)'
 #        text+= '        h_'+name+sn+'->Fill('+varname+',('+sw+')*(weight_'+name+'));\n'
     return text
@@ -281,6 +298,11 @@ def fillHisto(histo,var,weight):
     text+='          h_'+histo+'->Fill(fmin(h_'+histo+'->GetXaxis()->GetXmax()-1e-6,fmax(h_'+histo+'->GetXaxis()->GetXmin()+1e-6,'+var+')),'+weight+');\n'
     return text
 
+def fillTwoDimHisto(histo,var1,var2,weight):
+    text= '        if(('+weight+')!=0)\n'
+    text+='          h_'+histo+'->Fill(fmin(h_'+histo+'->GetXaxis()->GetXmax()-1e-6,fmax(h_'+histo+'->GetXaxis()->GetXmin()+1e-6,'+var1+')),fmin(h_'+histo+'->GetYaxis()->GetXmax()-1e-6,fmax(h_'+histo+'->GetYaxis()->GetXmin()+1e-6,'+var2+')),'+weight+');\n'
+    return text
+
 def endLoop():
     return """  }\n // end of event loop
 
@@ -348,6 +370,12 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
         variablesnames+=varsIn(s.selection)
 
     for plot in plots:
+        if isinstance(plot,plotutils.TwoDimPlot):
+            variablesnames+=varsIn(plot.variable1)
+            variablesnames+=varsIn(plot.variable2)
+        variablesnames+=varsIn(plot.selection)
+
+    for plot in plots:
         if isinstance(plot,plotutils.MVAPlot):
             variablesnames+=varsIn(','.join(plot.input_exprs))
     
@@ -390,6 +418,18 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
     # initialize histograms in all categories and for all systematics
     for c in catnames:
         for plot in plots:
+	  if isinstance(plot,plotutils.TwoDimPlot):
+	    t=plot.histo.GetTitle()+";"+plot.histo.GetXaxis().GetTitle()+";"+plot.histo.GetYaxis().GetTitle()
+            n=plot.histo.GetName()
+            mxX=plot.histo.GetXaxis().GetXmax()
+            mnX=plot.histo.GetXaxis().GetXmin()
+            nbX=plot.histo.GetNbinsX()
+            mxY=plot.histo.GetYaxis().GetXmax()
+            mnY=plot.histo.GetYaxis().GetXmin()
+            nbY=plot.histo.GetNbinsY()
+            for s in systnames:
+                script+=initTwoDimHistoWithProcessNameAndSuffix(c+n+s,nbX,mnX,mxX,nbY,mnY,mxY,t)
+	  else:
             t=plot.histo.GetTitle()
             n=plot.histo.GetName()
             mx=plot.histo.GetXaxis().GetXmax()
@@ -420,7 +460,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
         script+=startCat(cs,variables)
         # plot everything
         for plot in plots:
-            if isinstance(plot,plotutils.MVAPlot): continue
+            if isinstance(plot,plotutils.MVAPlot) or isinstance(plot,plotutils.TwoDimPlot) : continue
             n=plot.histo.GetName()
             ex=plot.variable
             pw=plot.selection
@@ -448,6 +488,40 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
                 arrayselection=checkArrayLengths(','.join([ex,pw]),variables)
                 weight='('+arrayselection+')*('+pw+')*Weight*categoryweight*sampleweight'
                 script+=fillHistoSyst(histoname,ex,weight,systnames,systweights)
+        
+        for plot in plots:
+            if not isinstance(plot,plotutils.TwoDimPlot) : continue
+            n=plot.histo.GetName()
+            exX=plot.variable1
+            exY=plot.variable2
+            pw=plot.selection
+            if pw=='': pw='1'
+            variablenames_without_index=varsNoIndex(exX)
+            variablenames_without_index+=varsNoIndex(exY)
+            variablenames_without_index+=varsNoIndex(pw)
+            size_of_loop=None
+            for v in variablenames_without_index:
+                if not v in variablesmap.keys(): continue
+                if variablesmap[v].arraylength != None:
+                    assert size_of_loop == None or size_of_loop == variablesmap[v].arraylength
+                    size_of_loop=variablesmap[v].arraylength
+            histoname=cn+n
+            script+="\n"
+            if size_of_loop!=None:
+                exiX=getArrayEntries(exX,variablesmap,"i")
+                pwi=getArrayEntries(pw,variablesmap,"i")
+                exiY=getArrayEntries(ex,variablesmap,"i")
+                script+=varLoop("i",size_of_loop)                    
+                script+="{\n"
+                arrayselection=checkArrayLengths(','.join([exX,exY,pw]),variables)
+                weight='('+arrayselection+')*('+pwi+')*Weight*categoryweight*sampleweight'
+                script+=fillTwoDimHistoSyst(histoname,exiX,exiY,weight,systnames,systweights)
+                script+="      }\n"
+            else:
+                arrayselection=checkArrayLengths(','.join([ex,pw]),variables)
+                weight='('+arrayselection+')*('+pw+')*Weight*categoryweight*sampleweight'
+                script+=fillTwoDimHistoSyst(histoname,exX,exY,weight,systnames,systweights)
+        
         for plot in plots:
             histoname=cn+plot.name
             if isinstance(plot,plotutils.MVAPlot):

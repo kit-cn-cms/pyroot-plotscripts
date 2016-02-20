@@ -2,6 +2,10 @@ from plotconfig import *
 sys.path.insert(0, '../limittools')
 from limittools import renameHistos
 
+
+DoCats=['43']
+
+
 systweights=["1*Weight_PU",
              "Weight_CSVLFup*Weight_PU","Weight_CSVLFdown*Weight_PU","Weight_CSVHFup*Weight_PU","Weight_CSVHFdown*Weight_PU",
              "Weight_CSVHFStats1up*Weight_PU","Weight_CSVHFStats1down*Weight_PU","Weight_CSVLFStats1up*Weight_PU","Weight_CSVLFStats1down*Weight_PU",
@@ -119,7 +123,9 @@ samplesGenerators=[
 
 
 #path='/nfs/dust/cms/user/hmildner/treesMEM0126/'
-name='bdtInputPlots'
+name='bdtInputPlotsComparisons'
+for cat in DoCats:
+  name+='_'+cat
 sel_singleel="(N_LooseMuons==0)" # need to veto muon events in electron dataset to avoid double countung
 sel_singlemu="(N_LooseElectrons==0)" # and vice versa...
 
@@ -149,6 +155,7 @@ allsystnames=weightsystnames+othersystnames
 allplots=[]
 TwoDimPlots=[]
 plots=[]
+
 
 
 # weights_Final_43_MEMBDTv2.xml
@@ -349,9 +356,9 @@ thiscatsel="(N_Jets>=6&&N_BTagsM>=4)"
 catsuf="s64"
 # weights_Final_64_MEMBDTv2.xml
 plots64=[
-	Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_third_highest_btag","third-highest CSV",16,.8,1.05),"BDT_common5_input_third_highest_btag",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_third_highest_btag","third-highest CSV",16,.82,1),"BDT_common5_input_third_highest_btag",thiscatsel,label),
         #Plot(ROOT.TH1F(catsuf+"_MEM_transformed","MEM discriminator",10,0,1),"(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)",thiscatsel,label),
-        Plot(ROOT.TH1F(catsuf+"_Evt_Deta_JetsAverage","avg #Delta #eta (jet,jet)",14,0,2.8),"Evt_Deta_JetsAverage",thiscatsel,label),
+        Plot(ROOT.TH1F(catsuf+"_Evt_Deta_JetsAverage","avg #Delta #eta (jet,jet)",14,0.4,2.3),"Evt_Deta_JetsAverage",thiscatsel,label),
         Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_sphericity","sphericity",20,0,1),"BDT_common5_input_sphericity",thiscatsel,label),
         Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_fourth_jet_pt","jet 4 p_{T}",20,0,200),"BDT_common5_input_fourth_jet_pt",thiscatsel,label),
         Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_aplanarity","aplanarity",20,0,0.4),"BDT_common5_input_aplanarity",thiscatsel,label),
@@ -376,75 +383,98 @@ plots64=[
         Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_maxeta_jet_jet","max #Delta #eta (jet,jet)",15,0,1.5),"BDT_common5_input_maxeta_jet_jet",thiscatsel,label),
 ]
 
-listOf1DPlotLists=[plots64,plots63,plots62,plots54,plots53,plots44,plots43]
-#TwoDimPlots=[]
-#for plotlist in listOf1DPlotLists:
-  ##print plotlist
-  #for ipl1, plot1 in enumerate(plotlist):
-    #for plot2 in plotlist:
-      #newName=plot1.name+"VS"+plot2.name
-      #newTitle=plot1.histo.GetTitle()+" VS "+plot2.histo.GetTitle()
-      #bins1=plot1.histo.GetNbinsX()
-      #minX1=plot1.histo.GetXaxis().GetXmin()
-      #maxX1=plot1.histo.GetXaxis().GetXmax()
-      #bins2=plot2.histo.GetNbinsX()
-      #minX2=plot2.histo.GetXaxis().GetXmin()
-      #maxX2=plot2.histo.GetXaxis().GetXmax()
-      ##newvarexp=plot2.variable+":"+plot1.variable
-      #newsel=plot1.selection
-      #newlabel=plot1.label
-      #TwoDimPlots+=[TwoDimPlot(ROOT.TH2F(newName,newTitle+";"+plot1.histo.GetTitle()+";"+plot2.histo.GetTitle(),bins1,minX1,maxX1,bins2,minX2,maxX2),plot1.variable,plot2.variable,newsel,newlabel)]
+listOf1DPlotLists=[]
+for cat in DoCats:
+  if cat=='43':
+    listOf1DPlotLists.append(plots43)
+  if cat=='44':
+      listOf1DPlotLists.append(plots44)
+  if cat=='53':
+      listOf1DPlotLists.append(plots53)
+  if cat=='54':
+      listOf1DPlotLists.append(plots54)
+  if cat=='62':
+      listOf1DPlotLists.append(plots62)
+  if cat=='63':
+      listOf1DPlotLists.append(plots63)
+  if cat=='64':
+      listOf1DPlotLists.append(plots64)
+
+
+
+#listOf1DPlotLists=[plots64,plots63,plots62,plots54,plots53,plots44,plots43]
+
+TwoDimPlots=[]
+for plotlist in listOf1DPlotLists:
+  #print plotlist
+  for ipl1, plot1 in enumerate(plotlist):
+    for plot2 in plotlist:
+      newName=plot1.name+"VS"+plot2.name
+      newTitle=plot1.histo.GetTitle()+" VS "+plot2.histo.GetTitle()
+      bins1=plot1.histo.GetNbinsX()
+      minX1=plot1.histo.GetXaxis().GetXmin()
+      maxX1=plot1.histo.GetXaxis().GetXmax()
+      bins2=plot2.histo.GetNbinsX()
+      minX2=plot2.histo.GetXaxis().GetXmin()
+      maxX2=plot2.histo.GetXaxis().GetXmax()
+      #newvarexp=plot2.variable+":"+plot1.variable
+      newsel=plot1.selection
+      newlabel=plot1.label
+      TwoDimPlots+=[TwoDimPlot(ROOT.TH2F(newName,newTitle+";"+plot1.histo.GetTitle()+";"+plot2.histo.GetTitle(),bins1,minX1,maxX1,bins2,minX2,maxX2),plot1.variable,plot2.variable,newsel,newlabel)]
 
 OneDimplots=[]
 for plotlist in listOf1DPlotLists:
   OneDimplots+=plotlist
-#allplots=OneDimplots+TwoDimPlots
+allplots=OneDimplots+TwoDimPlots
 
 # plot parallel -- alternatively there are also options to plot more traditional that also return lists of histo lists
-outputpath=plotParallel(name,2000000,OneDimplots,samples+samples_data+systsamples,[''],['1.'],weightsystnames, systweights)
+outputpath=plotParallel(name,2000000,allplots,samples_data+samplesGenerators,[''],['1.'],[''],['Weight_PU'])
 
-listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,OneDimplots,1)
-listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,OneDimplots,1)
-if not os.path.exists(outputpath[:-4]+'_syst.root') or not askYesNo('reuse systematic histofile?'):
-    renameHistos(outputpath,outputpath[:-4]+'_syst.root',allsystnames)
+#listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,OneDimplots,1)
+#listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,OneDimplots,1)
+#if not os.path.exists(outputpath[:-4]+'_syst.root') or not askYesNo('reuse systematic histofile?'):
+    #renameHistos(outputpath,outputpath[:-4]+'_syst.root',allsystnames)
 
-lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],OneDimplots,errorSystnames)
-lllforPS=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],OneDimplots,PSSystnames)
-#lllforPU=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],OneDimplots,PUSystnames)
+#lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],OneDimplots,errorSystnames)
+#lllforPS=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],OneDimplots,PSSystnames)
 
-labels=[plot.label for plot in OneDimplots]
-lolT=transposeLOL(listOfHistoLists)
-plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,name,[[lll,3354,ROOT.kGray+1,True],[lllforPS,3545,ROOT.kYellow,False]],False,labels)
+#labels=[plot.label for plot in OneDimplots]
+#lolT=transposeLOL(listOfHistoLists)
+#plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,name,[[lll,3354,ROOT.kGray+1,True],[lllforPS,3545,ROOT.kYellow,False]],False,labels)
 
-#listOfHistoListsDataForGenerators=createHistoLists_fromSuperHistoFile(outputpath,samples_data,allplots,1,[""],True)
-#listOfHistoListsGenerators=createHistoLists_fromSuperHistoFile(outputpath,samplesGenerators,allplots,1,[""],True)
+listOfHistoListsDataForGenerators=createHistoLists_fromSuperHistoFile(outputpath,samples_data,allplots,1,[""],True)
+listOfHistoListsGenerators=createHistoLists_fromSuperHistoFile(outputpath,samplesGenerators,allplots,1,[""],True)
 #print "genData"
 #print listOfHistoListsDataForGenerators
 #print "Generators"
 #print listOfHistoListsGenerators
 
-##TlistOfHistoListsDataForGenerators=transposeLOL(listOfHistoListsDataForGenerators)
-##TlistOfHistoListsGenerators=transposeLOL(listOfHistoListsGenerators)
-##print TlistOfHistoListsDataForGenerators
-##print TlistOfHistoListsGenerators
+#TlistOfHistoListsDataForGenerators=transposeLOL(listOfHistoListsDataForGenerators)
+#TlistOfHistoListsGenerators=transposeLOL(listOfHistoListsGenerators)
+#print TlistOfHistoListsDataForGenerators
+#print TlistOfHistoListsGenerators
 
-#listOfComparisonLists=[]
-#for histolistData, histoListGenerators in zip(listOfHistoListsDataForGenerators, listOfHistoListsGenerators):
-  #thishisto=histolistData[0].Clone()
-  #thishisto.Add(histolistData[1])
-  #thislist=[thishisto]
-  #for histo in histoListGenerators:
-    #thislist.append(histo)
-  #listOfComparisonLists.append(thislist)
+listOfComparisonLists=[]
+for histolistData, histoListGenerators in zip(listOfHistoListsDataForGenerators, listOfHistoListsGenerators):
+  thishisto=histolistData[0].Clone()
+  thishisto.Add(histolistData[1])
+  thislist=[thishisto]
+  for histo in histoListGenerators:
+    thislist.append(histo)
+  listOfComparisonLists.append(thislist)
 #print listOfComparisonLists
-##raw_input()
-#labels=[plot.label for plot in allplots]
+#raw_input()
+labels=[plot.label for plot in allplots]
 
-#samplesForComparison=[Sample('data',ROOT.kBlack,path_76x+'/mu_*/*nominal*.root','','SingleMu'),]+samplesGenerators
-#writeListOfHistoLists(listOfComparisonLists,samplesForComparison,labels,"comparisonsBDT",True,False,False,'histoE',False,False,True,True)
+outname='comparisonsBDT'
+for cat in DoCats:
+  outname+=cat
+
+samplesForComparison=[Sample('data',ROOT.kBlack,path_76x+'/mu_*/*nominal*.root','','SingleMu'),]+samplesGenerators
+writeListOfHistoLists(listOfComparisonLists,samplesForComparison,labels,outname,True,False,False,'histoE',True,False,True,True)
 
 
-##listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
+#listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
 #listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots,1)
 #lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,allsystnames)
 #labels=[plot.label for plot in plots]

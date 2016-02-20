@@ -21,6 +21,7 @@ class Sample:
         self.selection=selection
         self.files=glob.glob(path)
         if path!='' and len(self.files)==0:
+	    print name
             print 'no files found at',path    
         if nick=='':
             self.nick=name
@@ -68,6 +69,22 @@ class Plot:
         self.selection=selection
         self.label=label
 
+class TwoDimPlot:
+    def __init__(self,histo, variable1='', variable2='', selection='',label=''):
+        if isinstance(histo,ROOT.TH2):
+            self.histo=histo
+            self.name=histo.GetName()
+        else:
+            self.name=histo
+        #if variable=='':
+            #if isinstance(histo,ROOT.TH1):
+                #self.variable=histo.GetName()
+        #else:
+        self.variable1=variable1
+        self.variable2=variable2
+        self.selection=selection
+        self.label=label
+
 
 class MVAPlot:
     def __init__(self,histo, weightfile, selection='',label=''):
@@ -110,17 +127,28 @@ class Cateogry:
 def setupHisto(histo,color,yTitle=None,filled=False):
     if isinstance(histo,ROOT.TH1):
         histo.SetStats(False)
-    if histo.GetTitle()!='':
-        histo.GetXaxis().SetTitle(histo.GetTitle())
-        histo.SetTitle('')
-    if yTitle!=None:
-        histo.GetYaxis().SetTitle(yTitle)
+    print histo.GetTitle()
+    if not isinstance(histo,ROOT.TH2):   
+      if histo.GetYaxis().GetTitle()=="":
+	#print "setting up title"
+	if histo.GetTitle()!='':
+	    histo.GetXaxis().SetTitle(histo.GetTitle())
+	    histo.SetTitle('')
+	if yTitle!=None:
+	    histo.GetYaxis().SetTitle(yTitle)
+    if isinstance(histo,ROOT.TH2):
+      if histo.GetXaxis().GetTitle()=="" and "VS" in histo.GetTitle() :
+	histo.GetXaxis().SetTitle(histo.GetTitle().split("VS",1)[0])
+      if histo.GetYaxis().GetTitle()=="" and "VS" in histo.GetTitle() :
+	histo.GetYaxis().SetTitle(histo.GetTitle().split("VS",1)[1])
+      histo.SetTitle('')
     histo.GetYaxis().SetTitleOffset(1.3)
     histo.GetXaxis().SetTitleOffset(1.2)
     histo.GetYaxis().SetTitleSize(0.05)
     histo.GetXaxis().SetTitleSize(0.05)
     histo.GetYaxis().SetLabelSize(0.05)
     histo.GetXaxis().SetLabelSize(0.05)
+    histo.SetMarkerColor(color)
     if filled:
         histo.SetLineColor( ROOT.kBlack )
         histo.SetFillColor( color )
@@ -153,6 +181,29 @@ def getCanvas(name,ratiopad=False):
 
     return c
 
+def getCanvasLowRes(name,ratiopad=False):
+    if ratiopad:
+        c=ROOT.TCanvas(name,name,800,600)
+        c.Divide(1,2)
+        c.cd(1).SetPad(0.,0.3,1.0,1.0);
+        c.cd(1).SetBottomMargin(0.0);
+        c.cd(2).SetPad(0.,0.0,1.0,0.3);
+        c.cd(2).SetTopMargin(0.0);
+        c.cd(1).SetTopMargin(0.05);
+        c.cd(2).SetBottomMargin(0.4);
+        c.cd(1).SetRightMargin(0.05);
+        c.cd(1).SetLeftMargin(0.15);
+        c.cd(2).SetRightMargin(0.05);
+        c.cd(2).SetLeftMargin(0.15);
+    else:
+        c=ROOT.TCanvas(name,name,800,600)
+        c.SetRightMargin(0.05)
+        c.SetTopMargin(0.05)
+        c.SetLeftMargin(0.15)
+        c.SetBottomMargin(0.15)
+
+    return c
+
 # creates legend
 def getLegend(): 
     legend=ROOT.TLegend()
@@ -171,9 +222,33 @@ def getLegend():
 def getStatTests(h1,h2,option="WW"):
     ksprob = h1.KolmogorovTest(h2)
     chi2prob = h1.Chi2Test(h2,option)
-    tests = ROOT.TLatex(0.2, 0.85, '#splitline{p(KS): '+str(round(ksprob,3))+'}{p(chi2): '+str(round(chi2prob,3))+'}'  );
+    tests = ROOT.TLatex(0.2, 0.8, '#splitline{p(KS): '+str(round(ksprob,3))+'}{p(chi2): '+str(round(chi2prob,3))+'}'  );
     tests.SetTextFont(42);
-    tests.SetTextSize(0.05);
+    tests.SetTextSize(0.03);
+    tests.SetNDC()
+    return tests
+
+def getStatTestsList(h1,lh2,option="WW"):
+    mystrng=''
+    ss=[]
+    for h2 in lh2:      
+      ksprob = h1.KolmogorovTest(h2)
+      chi2prob = h1.Chi2Test(h2,option)
+      #mystrng+='#splitline{p(KS): '+str(round(ksprob,3))+'}{p(chi2): '+str(round(chi2prob,3))+'}'
+      ss.append('p(KS): '+str(round(ksprob,3))+'   p(chi2): '+str(round(chi2prob,3)))
+    if len(ss)==1:
+      mystrng=ss[0]
+    else:
+      mystrng='#splitline{'+ss[0]+'}{secline}'
+      for isss, sss in enumerate(ss[1:]):
+	submystrng='#splitline{'+sss+'}{secline}'
+	if isss==(len(ss[1:])-1):
+	  mystrng=mystrng.replace('secline',sss)
+	else:
+	  mystrng=mystrng.replace('secline',submystrng)
+    tests = ROOT.TLatex(0.15, 0.8, mystrng  );
+    tests.SetTextFont(42);
+    tests.SetTextSize(0.04);
     tests.SetNDC()
     return tests
 
@@ -207,7 +282,7 @@ def getSepaTests2(hs,h1):
 
 
 # draws a list of histos on a canvas and returns canvas
-def drawHistosOnCanvas(listOfHistos_,normalize=True,stack=False,logscale=False,options_='histo',ratio=False):
+def drawHistosOnCanvas(listOfHistos_,normalize=True,stack=False,logscale=False,options_='histo',ratio=False,DoProfile=False):
     listOfHistos=[h.Clone(h.GetName()+'_drawclone') for h in listOfHistos_]
     canvas=getCanvas(listOfHistos[0].GetName(),ratio)        
     #prepare drawing
@@ -254,6 +329,8 @@ def drawHistosOnCanvas(listOfHistos_,normalize=True,stack=False,logscale=False,o
     for h in listOfHistos[1:]:
         h.DrawCopy(option+'same')
     h.DrawCopy('axissame')
+    
+    #h.DrawCopy('axissame')
     if ratio:
         canvas.cd(2)
         line=listOfHistos[0].Clone()
@@ -277,6 +354,135 @@ def drawHistosOnCanvas(listOfHistos_,normalize=True,stack=False,logscale=False,o
             ratio.DrawCopy('sameP')
         canvas.cd(1)
     return canvas
+
+def drawHistosOnCanvas2D(listOfHistos_,normalize=True,stack=False,logscale=False,options_='',ratio=False,DoProfile=False,statTest=False):
+    listOfHistos=[h.Clone(h.GetName()+'_drawclone') for h in listOfHistos_]
+    canvas=getCanvas(listOfHistos[0].GetName(),False)        
+    #prepare drawing
+
+    # mover over/underflow
+    for h in listOfHistos:
+        nBinsX=h.GetNbinsX()
+        nBinsY=h.GetNbinsY()
+        allbins=[]
+        edgebins=[]
+        for ibx in range(1,nBinsX+1):
+	  for iby in range(1,nBinsY+1):
+	    allbins.append((ibx,iby))
+        for b in allbins:
+	  if b[0]==1 or b[0]==nBinsX or b[1]==1 or b[1]==nBinsY:
+	    edgebins.append(b)
+	
+	surrounding=[-1,0,1]
+	for b in edgebins:
+	  binsToAdd=[b]
+	  #for sx in surrounding:
+	    #for sy in surrounding:
+	      #touchingbin=(b[0]+sx,b[1]+sy)
+	      #if touchingbin not in allbins:
+	        #binsToAdd.append(touchingbin)
+	  if b[0]==1:
+	    binsToAdd.append((b[0]-1,b[1]))
+          if b[0]==nBinsX:
+	    binsToAdd.append((b[0]+1,b[1]))
+	  if b[1]==1:
+	    binsToAdd.append((b[0],b[1]-1))
+          if b[1]==nBinsY:
+	    binsToAdd.append((b[0],b[1]+1))
+          if b[0]==1 and b[1]==1:
+	    binsToAdd.append((b[0]-1,b[1]-1))
+          if b[0]==1 and b[1]==nBinsY:
+	    binsToAdd.append((b[0]-1,b[1]+1))
+          if b[0]==nBinsX and b[1]==1:
+	    binsToAdd.append((b[0]+1,b[1]-1))
+          if b[0]==nBinsX and b[1]==nBinsY:
+	    binsToAdd.append((b[0]+1,b[1]+1))
+
+          #print "adding bins ", binsToAdd
+          addedContents=0.0
+          addedSquaredError=0.0
+          for addb in binsToAdd:
+	    addedContents+=h.GetBinContent(addb[0],addb[1])
+	    addedSquaredError+=ROOT.TMath.Power(h.GetBinError(addb[0],addb[1]),2)
+	  h.SetBinContent(b[0],b[1],addedContents)
+          h.SetBinError(b[0],b[1],ROOT.TMath.Sqrt(addedSquaredError));
+        
+    if normalize and not stack:
+        for h in listOfHistos:
+            if h.Integral()>0.:
+                h.Scale(1./h.Integral())
+
+    if stack:
+        for i in range(len(listOfHistos)-1,0,-1):
+            listOfHistos[i-1].Add(listOfHistos[i])
+        if normalize:
+            integral0=listOfHistos[0].Integral()
+            for h in listOfHistos:
+                h.Scale(1./integral0)
+
+            
+    canvas.cd(1)
+    #yMax=1e-9
+    #yMinMax=1000.
+    #for h in listOfHistos:
+        #yMax=max(h.GetBinContent(h.GetMaximumBin()),yMax)
+        #if h.GetBinContent(h.GetMaximumBin())>0:
+            #yMinMax=min(h.GetBinContent(h.GetMaximumBin()),yMinMax)
+    #draw first
+    h=listOfHistos[0]
+    #if logscale:
+        #h.GetYaxis().SetRangeUser(yMinMax/10000,yMax*10)
+        #canvas.SetLogy()
+    #else:
+        #h.GetYaxis().SetRangeUser(0,yMax*1.5)
+    option=''
+    option+=options_
+    if option=='':
+      option='scat=5000.0'
+    h.DrawCopy(option)
+    #draw remaining
+    for h in listOfHistos[1:]:
+        h.DrawCopy(option+'same')
+    h.DrawCopy('axissame')
+    
+    #tests=None
+    if DoProfile:
+      profiles=[]
+      for h in listOfHistos:
+	profiles.append(h.ProfileX("prof_"+h.GetName(),1,h.GetNbinsX(),"o"))
+	profiles[-1].SetLineColor(h.GetLineColor())
+	profiles[-1].SetLineWidth(2)
+	profiles[-1].Draw("SAME")
+      if statTest:
+	#print "doing 2D stat test"
+	tests=getStatTestsList(profiles[0],profiles[1:],"WW")
+        #print tests
+        #tests.Draw()
+        #objects.append(tests)
+    #h.DrawCopy('axissame')
+    #if ratio:
+        #canvas.cd(2)
+        #line=listOfHistos[0].Clone()
+        #line.Divide(listOfHistos[0])
+        #line.GetYaxis().SetRangeUser(0.5,1.5)
+        #line.GetYaxis().SetTitle('#frac{Sample}{Nominal Sample}')
+        #line.GetXaxis().SetLabelSize(line.GetXaxis().GetLabelSize()*2.4)
+        #line.GetYaxis().SetLabelSize(line.GetYaxis().GetLabelSize()*2.4)
+        #line.GetXaxis().SetTitleSize(line.GetXaxis().GetTitleSize()*3)
+        #line.GetYaxis().SetTitleSize(line.GetYaxis().GetTitleSize()*1.5)
+        #line.GetYaxis().SetTitleOffset(0.9)
+        #line.GetYaxis().SetNdivisions(505)
+        #for i in range(line.GetNbinsX()+1):
+            #line.SetBinContent(i,1)
+            #line.SetBinError(i,0)
+        #line.SetLineWidth(1)
+        #line.DrawCopy('histo')
+        #for hist in listOfHistos[1:]:
+            #ratio=hist.Clone()
+            #ratio.Divide(listOfHistos[0])
+            #ratio.DrawCopy('sameP')
+        #canvas.cd(1)
+    return canvas, tests
 
 def drawHistosOnCanvasAN(listOfHistos_,normalize=True,stack=False,logscale=False,options_='histo',ratio=False):
     listOfHistos=[h.Clone(h.GetName()+'_drawclone') for h in listOfHistos_]
@@ -591,7 +797,7 @@ def createHistoLists_fromFiles(files,rebin=1):
     listOfHistoLists=transposeLOL(listOfHistoListsT)
     return listOfHistoLists
 
-def createHistoLists_fromSuperHistoFile(path,samples,plots,rebin=1,catnames=[""]):
+def createHistoLists_fromSuperHistoFile(path,samples,plots,rebin=1,catnames=[""],DoTwoDim=False):
     listOfHistoListsT=[]
     f=ROOT.TFile(path, "readonly")
     keyList = f.GetKeyNames()
@@ -608,6 +814,10 @@ def createHistoLists_fromSuperHistoFile(path,samples,plots,rebin=1,catnames=[""]
                     o.Rebin(rebin)
                     histoList.append(o.Clone())
 #                    print "ok", histoList[-1], len(histoList)
+                if DoTwoDim and isinstance(o,ROOT.TH2):
+		    #print "2D"
+		    histoList.append(o.Clone())
+
         listOfHistoListsT.append(histoList)
     listOfHistoLists=transposeLOL(listOfHistoListsT)
     return listOfHistoLists
@@ -672,10 +882,11 @@ def createErrorbands(lll,samples,DoRateSysts=True):
 		    if DoRateSysts:
 		      ls[-1].Scale(1+sample.unc_up)
 	      syst=ls[0].Clone()
-	      print syst.GetName()
+	      #print syst.GetName()
 	      for h in ls[1:]:
 		  syst.Add(h)
-		  print h.GetName()
+		  #print h.GetName()
+	      #print "rates ", sample.nick, syst.Integral()
 	      systs.append(syst)
 
 	      ls=[]
@@ -687,6 +898,7 @@ def createErrorbands(lll,samples,DoRateSysts=True):
 	      syst=ls[0].Clone()
 	      for h in ls[1:]:
 		  syst.Add(h)
+	      #print "rates ", sample.nick, syst.Integral()
 	      systs.append(syst)
 	      
         uperrors=[0]*ll[0][0].GetNbinsX()
@@ -696,15 +908,15 @@ def createErrorbands(lll,samples,DoRateSysts=True):
 	  #print sys, sys.Integral()
         for ibin in range(0,nominal.GetNbinsX()):
             nerr=nominal.GetBinError(ibin+1)
-            print ibin, nominal.GetName(), nominal.GetBinError(ibin+1), nominal.GetBinContent(ibin+1)
+            #print "Bin, name, content ",ibin, nominal.GetName(), nominal.GetBinContent(ibin+1)
             uperrors[ibin]=ROOT.TMath.Sqrt(uperrors[ibin]*uperrors[ibin]+nerr*nerr)
             downerrors[ibin]=ROOT.TMath.Sqrt(downerrors[ibin]*downerrors[ibin]+nerr*nerr)
             n=nominal.GetBinContent(ibin+1)
             ups=systs[0::2]
             downs=systs[1::2]
             for up,down in zip(ups,downs):
-	        print up.GetName(), down.GetName()
-	        print up.GetBinContent(ibin+1)-n, down.GetBinContent(ibin+1)-n
+	        #print "up/down name ", up.GetName(), down.GetName()
+	        #print "up/down diff ",  up.GetBinContent(ibin+1)-n, down.GetBinContent(ibin+1)-n
                 u_=up.GetBinContent(ibin+1)-n
                 d_=down.GetBinContent(ibin+1)-n
                 #print u_,d_
@@ -729,8 +941,8 @@ def createErrorbands(lll,samples,DoRateSysts=True):
                 
                 uperrors[ibin]=ROOT.TMath.Sqrt(uperrors[ibin]*uperrors[ibin]+u*u)
                 downerrors[ibin]=ROOT.TMath.Sqrt(downerrors[ibin]*downerrors[ibin]+d*d)
-                print u,d
-                print uperrors[ibin],downerrors[ibin]
+                #print u,d
+                #print "up/down errors ", uperrors[ibin],downerrors[ibin]
                 
         graph=ROOT.TGraphAsymmErrors(nominal)
         for i in range(len(uperrors)):
@@ -755,7 +967,11 @@ def plotsForSelections_cross_Histos(selections,selectionnames,histos,variables):
     return plots
 
 # gets a list of histogramlist and creates a plot for every list
-def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,stack=False,logscale=False,options='histo',statTest=False, sepaTest=False,ratio=False):
+def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,stack=False,logscale=False,options='histo',statTest=False, sepaTest=False,ratio=False,DoProfile=False):
+    #if DoProfile and not isinstance(listOfHistoLists[0][0], ROOT.TH2):
+      #print "need 2D plots for Profile Histograms"
+      #DoProfile=False
+    
     if isinstance(label, basestring):
         labeltexts=len(listOfHistoLists)*[label]
 #        print "bla"
@@ -773,25 +989,38 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
             if normalize:
                 yTitle='normalized'
             setupHisto(histo,sample.color,yTitle,stack)        
-        c=drawHistosOnCanvas(listOfHistos,normalize,stack,logscale,options,ratio)
+        stattests2D=None
+        if isinstance(listOfHistos[0], ROOT.TH2):
+	  print "drawing 2D"
+	  if not (options=='COLZ' or options=='colz' or options==''):
+	    currentoption=''
+	  else:
+	    currentoption=options
+	  c, stattests2D=drawHistosOnCanvas2D(listOfHistos,normalize,stack,logscale,currentoption,ratio,DoProfile,statTest)
+	else:
+          c=drawHistosOnCanvas(listOfHistos,normalize,stack,logscale,options,ratio,DoProfile)
         c.SetName('c'+str(i))
         l=getLegend()
         for h,sample in zip(listOfHistos,samples):
             loption='L'
             if stack:
                 loption='F'            
-            l.AddEntry3(h,sample.name,loption)
+            l.AddEntry2(h,sample.name,loption)
         canvases.append(c)
         l.Draw('same')
         objects.append(l)
         if statTest:
-            tests=getStatTests(listOfHistos[0],listOfHistos[1])
+	   if not isinstance(listOfHistos[0],ROOT.TH2):
+            tests=getStatTestsList(listOfHistos[0],listOfHistos[1:],"UW")
             tests.Draw()
             objects.append(tests)
         if sepaTest:
             stests=getSepaTests(listOfHistos[0],listOfHistos[1])
             stests.Draw()
             objects.append(stests)
+        if stattests2D!=None:
+	  stattests2D.Draw()
+	  objects.append(stattests2D)
 #        cms = ROOT.TLatex(0.2, 0.96, 'CMS private work'  );
 #        cms.SetTextFont(42)
 #        cms.SetTextSize(0.05)
@@ -800,25 +1029,23 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
 #        print cms
 #        objects.append(cms)
 
-        lumi = ROOT.TLatex(0.2, 0.89, '2.46 fb^{-1} @ 13 TeV'  );
-        lumi.SetTextFont(42)
-        lumi.SetTextSize(0.06)
-        lumi.SetNDC()
-#        lumi.Draw()
-        objects.append(lumi)
+        cms = ROOT.TLatex(0.15, 0.96, 'CMS preliminary,  2.61 fb^{-1},  #sqrt{s} = 13 TeV'  );
+        cms.SetTextFont(42)
+        cms.SetTextSize(0.05)
+        cms.SetNDC()
+        cms.Draw()
+        objects.append(cms)
 
-        label = ROOT.TLatex(0.2, 0.83, labeltext);
+        label = ROOT.TLatex(0.15, 0.9, labeltext);
         label.SetTextFont(42)
-        label.SetTextSize(0.06)
+        label.SetTextSize(0.04)
         label.SetNDC()
         label.Draw()
         objects.append(label)
 
-
-
     printCanvases(canvases,name)
     writeObjects(canvases,name)
-
+    
 def writeListOfHistoListsAN(listOfHistoLists,samples, label,name,normalize=True,stack=False,logscale=False,options='histo',statTest=False, sepaTest=False,ratio=False):
     if isinstance(label, basestring):
         labeltexts=len(listOfHistoLists)*[label]
@@ -1931,8 +2158,8 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         for i in range(line.GetNbinsX()+2):
             line.SetBinContent(i,1)
             line.SetBinError(i,0)
-        print listOfHistos[0].GetXaxis().GetXmin(),listOfHistos[0].GetXaxis().GetXmax(),listOfHistos[0].GetXaxis().GetBinLabel(1)
-        print line.GetXaxis().GetXmin(),line.GetXaxis().GetXmax(),line.GetXaxis().GetBinLabel(1)
+        #print listOfHistos[0].GetXaxis().GetXmin(),listOfHistos[0].GetXaxis().GetXmax(),listOfHistos[0].GetXaxis().GetBinLabel(1)
+        #print line.GetXaxis().GetXmin(),line.GetXaxis().GetXmax(),line.GetXaxis().GetBinLabel(1)
         #raw_input()
         line.GetXaxis().SetLabelSize(line.GetXaxis().GetLabelSize()*2.4)
         line.GetYaxis().SetLabelSize(line.GetYaxis().GetLabelSize()*2.4)
@@ -2152,8 +2379,8 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
         for i in range(line.GetNbinsX()+2):
             line.SetBinContent(i,1)
             line.SetBinError(i,0)
-        print listOfHistos[0].GetXaxis().GetXmin(),listOfHistos[0].GetXaxis().GetXmax(),listOfHistos[0].GetXaxis().GetBinLabel(1)
-        print line.GetXaxis().GetXmin(),line.GetXaxis().GetXmax(),line.GetXaxis().GetBinLabel(1)
+        #print listOfHistos[0].GetXaxis().GetXmin(),listOfHistos[0].GetXaxis().GetXmax(),listOfHistos[0].GetXaxis().GetBinLabel(1)
+        #print line.GetXaxis().GetXmin(),line.GetXaxis().GetXmax(),line.GetXaxis().GetBinLabel(1)
         #raw_input()
         line.GetXaxis().SetLabelSize(line.GetXaxis().GetLabelSize()*2.4)
         line.GetYaxis().SetLabelSize(line.GetYaxis().GetLabelSize()*2.4)
