@@ -21,13 +21,13 @@ systsamples=[]
 for sample in samples:
   for sysname,sysfilename in zip(othersystnames,othersystfilenames):
     thisnewsel=sample.selection
-    if sysname=="scaleup":
+    if sysname=="_CMS_ttH_PSscaleUp":
       thisnewsel=thisnewsel.replace('*(0.000919641*(N_GenTopHad==1 && N_GenTopLep==1)+0.000707116*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS','*(0.003106675*(N_GenTopHad==1 && N_GenTopLep==1)+0.002512789*(N_GenTopLep==2 && N_GenTopHad==0)+0.0171752783*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS')
       print "weights for scaleUp sample ", thisnewsel
-    if sysname=="scaleup":
+    if sysname=="_CMS_ttH_PSscaleDown":
       thisnewsel=thisnewsel.replace('*(0.000919641*(N_GenTopHad==1 && N_GenTopLep==1)+0.000707116*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS','*(0.0051290727*(N_GenTopHad==1 && N_GenTopLep==1)+0.0025191514*(N_GenTopLep==2 && N_GenTopHad==0)+0.0168392844*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS')
       print "weights for scaleDown sample ", thisnewsel
-    systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),sample.selection,sample.nick+sysname))
+    systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),thisnewsel,sample.nick+sysname))
   
 allsamples=samples+systsamples
 allsystnames=weightsystnames+othersystnames
