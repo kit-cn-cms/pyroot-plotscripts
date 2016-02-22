@@ -62,7 +62,7 @@ systs_all_samples=["",
 
 systs_ttbar= [
 	      "_CMS_ttH_NNPDFUp","_CMS_ttH_NNPDFDown",
-	      "_CMS_ttH_PSscaleUp","_CMS_ttH_PSscaleDown",
+	      #"_CMS_ttH_PSscaleUp","_CMS_ttH_PSscaleDown",
 	      ]
 systs_tt_lf=["_CMS_ttH_Q2scale_ttbarOtherUp","_CMS_ttH_Q2scale_ttbarOtherDown",]
 systs_tt_b=["_CMS_ttH_Q2scale_ttbarPlusBUp","_CMS_ttH_Q2scale_ttbarPlusBDown"]
@@ -70,19 +70,7 @@ systs_tt_2b=[ "_CMS_ttH_Q2scale_ttbarPlus2BUp","_CMS_ttH_Q2scale_ttbarPlus2BDown
 systs_tt_bb=[ "_CMS_ttH_Q2scale_ttbarPlusBBbarUp","_CMS_ttH_Q2scale_ttbarPlusBBbarDown"]
 systs_tt_cc=[ "_CMS_ttH_Q2scale_ttbarPlusCCbarUp","_CMS_ttH_Q2scale_ttbarPlusCCbarDown"]
 
-generatorSystnames=["",
-		 "","","","",
-		 "","","","",
-		 "","","","",
-		 "","","","",
-                 #"_CMS_ttH_TopPtUp","_CMS_ttH_TopPtDown",
-                 #"_CMS_ttH_PUUp","_CMS_ttH_PUDown",
-		 "_CMS_ttH_Q2scale_ttbarOtherUp","_CMS_ttH_Q2scale_ttbarOtherDown",
-                 "_CMS_ttH_Q2scale_ttbarPlusBUp","_CMS_ttH_Q2scale_ttbarPlusBDown",
-                 "_CMS_ttH_Q2scale_ttbarPlus2BUp","_CMS_ttH_Q2scale_ttbarPlus2BDown",
-                 "_CMS_ttH_Q2scale_ttbarPlusBBbarUp","_CMS_ttH_Q2scale_ttbarPlusBBbarDown",
-                 "_CMS_ttH_Q2scale_ttbarPlusCCbarUp","_CMS_ttH_Q2scale_ttbarPlusCCbarDown",
-                 "_CMS_ttH_NNPDFUp","_CMS_ttH_NNPDFDown",]
+
 
 PSSystnames=["",
 		 "","","","",
@@ -98,7 +86,7 @@ PSSystnames=["",
 		 "","",
 		 "","",
                  "_CMS_scale_jUp","_CMS_scale_jDown",
-                 "_CMS_ttH_PSscaleUp","_CMS_ttH_PSscaleDown",
+                 #"_CMS_ttH_PSscaleUp","_CMS_ttH_PSscaleDown",
                  #"","",
 		 #"","",
 		 #"","",
@@ -118,7 +106,7 @@ errorSystnames=["",
                  "_CMS_ttH_Q2scale_ttbarPlusCCbarUp","_CMS_ttH_Q2scale_ttbarPlusCCbarDown",
                  "_CMS_ttH_NNPDFUp","_CMS_ttH_NNPDFDown",
                  "_CMS_scale_jUp","_CMS_scale_jDown",
-                 "_CMS_ttH_PSscaleUp","_CMS_ttH_PSscaleDown",
+                 #"_CMS_ttH_PSscaleUp","_CMS_ttH_PSscaleDown",
                  #"","",
 		 #"","",
 		 #"","",
@@ -204,8 +192,8 @@ othersystnames=[
                 "_CMS_scale_jDown",
                #"_CMS_res_jUp",
                #"_CMS_res_jDown"
-               "_CMS_ttH_PSscaleUp",
-               "_CMS_ttH_PSscaleDown"
+               #"_CMS_ttH_PSscaleUp",
+               #"_CMS_ttH_PSscaleDown"
                 ]
 
 othersystfilenames=[
@@ -213,8 +201,8 @@ othersystfilenames=[
                     "JESDOWN",
                    #"JERUP",
                    #"JERDOWN"
-                   "scaleup",
-                   "scaledown"
+                   #"scaleup",
+                   #"scaledown"
                    ]
 
 samplesLimits=[Sample('t#bar{t}H',ROOT.kBlue+1,path_excl4252+'/ttH*/*nominal*.root',mcweight,'ttH') ,  
