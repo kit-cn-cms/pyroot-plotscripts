@@ -2,122 +2,6 @@ from plotconfig import *
 sys.path.insert(0, '../limittools')
 from limittools import renameHistos
 
-systweights=["1*Weight_PU",
-             "Weight_CSVLFup*Weight_PU","Weight_CSVLFdown*Weight_PU","Weight_CSVHFup*Weight_PU","Weight_CSVHFdown*Weight_PU",
-             "Weight_CSVHFStats1up*Weight_PU","Weight_CSVHFStats1down*Weight_PU","Weight_CSVLFStats1up*Weight_PU","Weight_CSVLFStats1down*Weight_PU",
-             "Weight_CSVHFStats2up*Weight_PU","Weight_CSVHFStats2down*Weight_PU","Weight_CSVLFStats2up*Weight_PU","Weight_CSVLFStats2down*Weight_PU",
-             "Weight_CSVCErr1up*Weight_PU","Weight_CSVCErr1down*Weight_PU","Weight_CSVCErr2up*Weight_PU","Weight_CSVCErr2down*Weight_PU",
-             #"rwtptup:=(2.0*(Weight_TopPt - 1.0)+1.0)*Weight_PU","rwtptdown:=Weight_TopPt*Weight_PU",
-             #"Weight_PUup","Weight_PUdown",
-             "QScaleTTLFUp:=Weight_muRupmuFup*Weight_PU/"+str(mu_up_sf),"QScaleTTLFDown:=Weight_muRdownmuFdown*Weight_PU/"+str(mu_down_sf),
-             "QScaleTTBUp:=Weight_muRupmuFup*Weight_PU/"+str(mu_up_sf),"QScaleTTBDown:=Weight_muRdownmuFdown*Weight_PU/"+str(mu_down_sf),
-             "QScaleTTtwoBUp:=Weight_muRupmuFup*Weight_PU/"+str(mu_up_sf),"QScaleTTtwoBDown:=Weight_muRdownmuFdown*Weight_PU/"+str(mu_down_sf),
-             "QScaleTTBBUp:=Weight_muRupmuFup*Weight_PU/"+str(mu_up_sf),"QScaleTTBBDown:=Weight_muRdownmuFdown*Weight_PU/"+str(mu_down_sf),
-             "QScaleTTCCUp:=Weight_muRupmuFup*Weight_PU/"+str(mu_up_sf),"QScaleTTCCDown:=Weight_muRdownmuFdown*Weight_PU/"+str(mu_down_sf),
-             "PDFweightUp:=Weight_NNPDFid260067*Weight_PU/"+str(pdf_67_sf),"PDFWeightDown:=Weight_NNPDFid260005*Weight_PU/"+str(pdf_05_sf),
-             ]
-
-weightsystnames=["",
-                 "_CMS_ttH_CSVLFUp","_CMS_ttH_CSVLFDown","_CMS_ttH_CSVHFUp","_CMS_ttH_CSVHFDown",
-                 "_CMS_ttH_CSVHFStats1Up","_CMS_ttH_CSVHFStats1Down","_CMS_ttH_CSVLFStats1Up","_CMS_ttH_CSVLFStats1Down",
-                 "_CMS_ttH_CSVHFStats2Up","_CMS_ttH_CSVHFStats2Down","_CMS_ttH_CSVLFStats2Up","_CMS_ttH_CSVLFStats2Down",
-                 "_CMS_ttH_CSVCErr1Up","_CMS_ttH_CSVCErr1Down","_CMS_ttH_CSVCErr2Up","_CMS_ttH_CSVCErr2Down",
-                 #"_CMS_ttH_TopPtUp","_CMS_ttH_TopPtDown",
-                 #"_CMS_ttH_PUUp","_CMS_ttH_PUDown",
-                 "_CMS_ttH_Q2scale_ttbarOtherUp","_CMS_ttH_Q2scale_ttbarOtherDown",
-                 "_CMS_ttH_Q2scale_ttbarPlusBUp","_CMS_ttH_Q2scale_ttbarPlusBDown",
-                 "_CMS_ttH_Q2scale_ttbarPlus2BUp","_CMS_ttH_Q2scale_ttbarPlus2BDown",
-                 "_CMS_ttH_Q2scale_ttbarPlusBBbarUp","_CMS_ttH_Q2scale_ttbarPlusBBbarDown",
-                 "_CMS_ttH_Q2scale_ttbarPlusCCbarUp","_CMS_ttH_Q2scale_ttbarPlusCCbarDown",
-                 "_CMS_ttH_NNPDFUp","_CMS_ttH_NNPDFDown",
-           ]
-
-systs_all_samples=["",
-                  "_CMS_ttH_CSVLFUp","_CMS_ttH_CSVLFDown","_CMS_ttH_CSVHFUp","_CMS_ttH_CSVHFDown",
-                  "_CMS_ttH_CSVHFStats1Up","_CMS_ttH_CSVHFStats1Down","_CMS_ttH_CSVLFStats1Up","_CMS_ttH_CSVLFStats1Down",
-                  "_CMS_ttH_CSVHFStats2Up","_CMS_ttH_CSVHFStats2Down","_CMS_ttH_CSVLFStats2Up","_CMS_ttH_CSVLFStats2Down",
-                  "_CMS_ttH_CSVCErr1Up","_CMS_ttH_CSVCErr1Down","_CMS_ttH_CSVCErr2Up","_CMS_ttH_CSVCErr2Down",
-                   #"_CMS_ttH_PUUp","_CMS_ttH_PUDown",
-                   #"_CMS_scale_jUp","_CMS_scale_jDown",
-                   ]
-othersystnames=[
-		#"_CMS_scale_jUp",
-                #"_CMS_scale_jDown",
-               #"_CMS_res_jUp",
-               #"_CMS_res_jDown"
-               "_CMS_ttH_PSscaleUp",
-               "_CMS_ttH_PSscaleDown"
-                ]
-
-othersystfilenames=[
-		    #"JESUP",
-                    #"JESDOWN",
-                   #"JERUP",
-                   #"JERDOWN"
-                   "scaleup",
-                   "scaledown"
-                   ]
-
-systs_ttbar= [
-	      "_CMS_ttH_NNPDFUp","_CMS_ttH_NNPDFDown",
-	      #"_CMS_ttH_PSscaleUp","_CMS_ttH_PSscaleDown",
-	      ]
-
-PSSystnames=["",
-		 "","","","",
-		 "","","","",
-		 "","","","",
-		 "","","","",
-		 #"_CMS_ttH_TopPtUp","_CMS_ttH_TopPtDown",
-                 #"","",
-		 "","",
-		 "","",
-		 "","",
-		 "","",
-		 "","",
-		 "","",
-                 #"","",
-                 "_CMS_ttH_PSscaleUp","_CMS_ttH_PSscaleDown"]
-
-#PUSystnames=["",
-		 #"","","","",
-		 #"","","","",
-		 #"","","","",
-		 #"","","","",
-		 ##"_CMS_ttH_TopPtUp","_CMS_ttH_TopPtDown",
-                 #"_CMS_ttH_PUUp","_CMS_ttH_PUDown",
-		 #"","",
-		 #"","",
-		 #"","",
-		 #"","",
-		 #"","",
-		 #"","",
-                 ##"","",
-                 #"",""]
-
-errorSystnames=["",
-		 "_CMS_ttH_CSVLFUp","_CMS_ttH_CSVLFDown","_CMS_ttH_CSVHFUp","_CMS_ttH_CSVHFDown",
-                 "_CMS_ttH_CSVHFStats1Up","_CMS_ttH_CSVHFStats1Down","_CMS_ttH_CSVLFStats1Up","_CMS_ttH_CSVLFStats1Down",
-                 "_CMS_ttH_CSVHFStats2Up","_CMS_ttH_CSVHFStats2Down","_CMS_ttH_CSVLFStats2Up","_CMS_ttH_CSVLFStats2Down",
-                 "_CMS_ttH_CSVCErr1Up","_CMS_ttH_CSVCErr1Down","_CMS_ttH_CSVCErr2Up","_CMS_ttH_CSVCErr2Down",
-		 #"_CMS_ttH_TopPtUp","_CMS_ttH_TopPtDown",
-                 #"_CMS_ttH_PUUp","_CMS_ttH_PUDown",
-		 "_CMS_ttH_Q2scale_ttbarOtherUp","_CMS_ttH_Q2scale_ttbarOtherDown",
-                 "_CMS_ttH_Q2scale_ttbarPlusBUp","_CMS_ttH_Q2scale_ttbarPlusBDown",
-                 "_CMS_ttH_Q2scale_ttbarPlus2BUp","_CMS_ttH_Q2scale_ttbarPlus2BDown",
-                 "_CMS_ttH_Q2scale_ttbarPlusBBbarUp","_CMS_ttH_Q2scale_ttbarPlusBBbarDown",
-                 "_CMS_ttH_Q2scale_ttbarPlusCCbarUp","_CMS_ttH_Q2scale_ttbarPlusCCbarDown",
-                 "_CMS_ttH_NNPDFUp","_CMS_ttH_NNPDFDown",
-                 #"","",
-                 "_CMS_ttH_PSscaleUp","_CMS_ttH_PSscaleDown"]
-
-samplesGenerators=[  
-         Sample('t#bar{t} Powheg+Pythia8',ROOT.kRed,path_76x+'/ttbar_????_*/*nominal*.root',mcweight,'ttbarPP8',systs_all_samples,0.05),
-         Sample('t#bar{t} aMC@NLOFXFX+Pythia8',ROOT.kSpring+5,path_76x+'/TTJETS_amcFXFX/TTJETS_amcFXFX_*_nominal_Tree.root','2.61*(N_Jets>=4 && N_BTagsM>=2)','ttbarAmcFxFx',systs_all_samples,0.05),
-         Sample('t#bar{t} MadGraphMLM+Pythia8',ROOT.kAzure+5,path_76x+'/TTJETS_*_MGP8/*_nominal_Tree.root','2.61*(N_Jets>=4 && N_BTagsM>=2)','ttbarMGP8',systs_all_samples,0.05),
-]
-
-
 #path='/nfs/dust/cms/user/hmildner/treesMEM0126/'
 name='bdtInputPlots'
 sel_singleel="(N_LooseMuons==0)" # need to veto muon events in electron dataset to avoid double countung
@@ -142,7 +26,15 @@ samples_data=samples_data_controlplots
 systsamples=[]
 for sample in samples:
   for sysname,sysfilename in zip(othersystnames,othersystfilenames):
+    thisnewsel=sample.selection
+    if sysname=="scaleup":
+      thisnewsel=thisnewsel.replace('*(0.000919641*(N_GenTopHad==1 && N_GenTopLep==1)+0.000707116*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS','*(0.003106675*(N_GenTopHad==1 && N_GenTopLep==1)+0.002512789*(N_GenTopLep==2 && N_GenTopHad==0)+0.0171752783*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS')
+      print "weights for scaleUp sample ", thisnewsel
+    if sysname=="scaleup":
+      thisnewsel=thisnewsel.replace('*(0.000919641*(N_GenTopHad==1 && N_GenTopLep==1)+0.000707116*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS','*(0.0051290727*(N_GenTopHad==1 && N_GenTopLep==1)+0.0025191514*(N_GenTopLep==2 && N_GenTopHad==0)+0.0168392844*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS')
+      print "weights for scaleDown sample ", thisnewsel
     systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),sample.selection,sample.nick+sysname))
+    
 allsamples=samples+systsamples
 allsystnames=weightsystnames+othersystnames
 

@@ -10,7 +10,7 @@ from limittools import renameHistos
 DoCats=['64']
 
 samplesGenerators=[  
-         Sample('t#bar{t} Powheg+Pythia8',ROOT.kRed,path_76x+'/ttbar_????_*/*nominal*.root',mcweight,'ttbarPP8',systs_all_samples,0.05),
+         Sample('t#bar{t} Powheg+Pythia8',ROOT.kRed,path_76x+'/ttbar_????_*/*nominal*.root',mcweight+ttbarMCweight,'ttbarPP8',systs_all_samples,0.05),
          #Sample('t#bar{t} aMC@NLOFXFX+Pythia8',ROOT.kAzure+5,path_76x+'/TTJETS_amcFXFX/TTJETS_amcFXFX_*_nominal_Tree.root','2.61*(N_Jets>=4 && N_BTagsM>=2)','ttbarAmcFxFx',systs_all_samples,0.05),
          Sample('t#bar{t} MadGraphMLM+Pythia8',ROOT.kSpring+5,path_76x+'/TTJETS_*_MGP8/*_nominal_Tree.root','2.61*(N_Jets>=4 && N_BTagsM>=2)','ttbarMGP8',systs_all_samples,0.05),
 ]
