@@ -1,119 +1,13 @@
+###############
+# plot comparison for generators and data for input variables
+###############
+
 from plotconfig import *
 sys.path.insert(0, '../limittools')
 from limittools import renameHistos
 
 
 DoCats=['64']
-
-
-systweights=["1*Weight_PU",
-             "Weight_CSVLFup*Weight_PU","Weight_CSVLFdown*Weight_PU","Weight_CSVHFup*Weight_PU","Weight_CSVHFdown*Weight_PU",
-             "Weight_CSVHFStats1up*Weight_PU","Weight_CSVHFStats1down*Weight_PU","Weight_CSVLFStats1up*Weight_PU","Weight_CSVLFStats1down*Weight_PU",
-             "Weight_CSVHFStats2up*Weight_PU","Weight_CSVHFStats2down*Weight_PU","Weight_CSVLFStats2up*Weight_PU","Weight_CSVLFStats2down*Weight_PU",
-             "Weight_CSVCErr1up*Weight_PU","Weight_CSVCErr1down*Weight_PU","Weight_CSVCErr2up*Weight_PU","Weight_CSVCErr2down*Weight_PU",
-             #"rwtptup:=(2.0*(Weight_TopPt - 1.0)+1.0)*Weight_PU","rwtptdown:=Weight_TopPt*Weight_PU",
-             #"Weight_PUup","Weight_PUdown",
-             "QScaleTTLFUp:=Weight_muRupmuFup*Weight_PU/"+str(mu_up_sf),"QScaleTTLFDown:=Weight_muRdownmuFdown*Weight_PU/"+str(mu_down_sf),
-             "QScaleTTBUp:=Weight_muRupmuFup*Weight_PU/"+str(mu_up_sf),"QScaleTTBDown:=Weight_muRdownmuFdown*Weight_PU/"+str(mu_down_sf),
-             "QScaleTTtwoBUp:=Weight_muRupmuFup*Weight_PU/"+str(mu_up_sf),"QScaleTTtwoBDown:=Weight_muRdownmuFdown*Weight_PU/"+str(mu_down_sf),
-             "QScaleTTBBUp:=Weight_muRupmuFup*Weight_PU/"+str(mu_up_sf),"QScaleTTBBDown:=Weight_muRdownmuFdown*Weight_PU/"+str(mu_down_sf),
-             "QScaleTTCCUp:=Weight_muRupmuFup*Weight_PU/"+str(mu_up_sf),"QScaleTTCCDown:=Weight_muRdownmuFdown*Weight_PU/"+str(mu_down_sf),
-             "PDFweightUp:=Weight_NNPDFid260067*Weight_PU/"+str(pdf_67_sf),"PDFWeightDown:=Weight_NNPDFid260005*Weight_PU/"+str(pdf_05_sf),
-             ]
-
-weightsystnames=["",
-                 "_CMS_ttH_CSVLFUp","_CMS_ttH_CSVLFDown","_CMS_ttH_CSVHFUp","_CMS_ttH_CSVHFDown",
-                 "_CMS_ttH_CSVHFStats1Up","_CMS_ttH_CSVHFStats1Down","_CMS_ttH_CSVLFStats1Up","_CMS_ttH_CSVLFStats1Down",
-                 "_CMS_ttH_CSVHFStats2Up","_CMS_ttH_CSVHFStats2Down","_CMS_ttH_CSVLFStats2Up","_CMS_ttH_CSVLFStats2Down",
-                 "_CMS_ttH_CSVCErr1Up","_CMS_ttH_CSVCErr1Down","_CMS_ttH_CSVCErr2Up","_CMS_ttH_CSVCErr2Down",
-                 #"_CMS_ttH_TopPtUp","_CMS_ttH_TopPtDown",
-                 #"_CMS_ttH_PUUp","_CMS_ttH_PUDown",
-                 "_CMS_ttH_Q2scale_ttbarOtherUp","_CMS_ttH_Q2scale_ttbarOtherDown",
-                 "_CMS_ttH_Q2scale_ttbarPlusBUp","_CMS_ttH_Q2scale_ttbarPlusBDown",
-                 "_CMS_ttH_Q2scale_ttbarPlus2BUp","_CMS_ttH_Q2scale_ttbarPlus2BDown",
-                 "_CMS_ttH_Q2scale_ttbarPlusBBbarUp","_CMS_ttH_Q2scale_ttbarPlusBBbarDown",
-                 "_CMS_ttH_Q2scale_ttbarPlusCCbarUp","_CMS_ttH_Q2scale_ttbarPlusCCbarDown",
-                 "_CMS_ttH_NNPDFUp","_CMS_ttH_NNPDFDown",
-           ]
-
-systs_all_samples=["",
-                  "_CMS_ttH_CSVLFUp","_CMS_ttH_CSVLFDown","_CMS_ttH_CSVHFUp","_CMS_ttH_CSVHFDown",
-                  "_CMS_ttH_CSVHFStats1Up","_CMS_ttH_CSVHFStats1Down","_CMS_ttH_CSVLFStats1Up","_CMS_ttH_CSVLFStats1Down",
-                  "_CMS_ttH_CSVHFStats2Up","_CMS_ttH_CSVHFStats2Down","_CMS_ttH_CSVLFStats2Up","_CMS_ttH_CSVLFStats2Down",
-                  "_CMS_ttH_CSVCErr1Up","_CMS_ttH_CSVCErr1Down","_CMS_ttH_CSVCErr2Up","_CMS_ttH_CSVCErr2Down",
-                   #"_CMS_ttH_PUUp","_CMS_ttH_PUDown",
-                   #"_CMS_scale_jUp","_CMS_scale_jDown",
-                   ]
-othersystnames=[
-		#"_CMS_scale_jUp",
-                #"_CMS_scale_jDown",
-               #"_CMS_res_jUp",
-               #"_CMS_res_jDown"
-               "_CMS_ttH_PSscaleUp",
-               "_CMS_ttH_PSscaleDown"
-                ]
-
-othersystfilenames=[
-		    #"JESUP",
-                    #"JESDOWN",
-                   #"JERUP",
-                   #"JERDOWN"
-                   "scaleup",
-                   "scaledown"
-                   ]
-
-systs_ttbar= [
-	      "_CMS_ttH_NNPDFUp","_CMS_ttH_NNPDFDown",
-	      #"_CMS_ttH_PSscaleUp","_CMS_ttH_PSscaleDown",
-	      ]
-
-PSSystnames=["",
-		 "","","","",
-		 "","","","",
-		 "","","","",
-		 "","","","",
-		 #"_CMS_ttH_TopPtUp","_CMS_ttH_TopPtDown",
-                 #"","",
-		 "","",
-		 "","",
-		 "","",
-		 "","",
-		 "","",
-		 "","",
-                 #"","",
-                 "_CMS_ttH_PSscaleUp","_CMS_ttH_PSscaleDown"]
-
-#PUSystnames=["",
-		 #"","","","",
-		 #"","","","",
-		 #"","","","",
-		 #"","","","",
-		 ##"_CMS_ttH_TopPtUp","_CMS_ttH_TopPtDown",
-                 #"_CMS_ttH_PUUp","_CMS_ttH_PUDown",
-		 #"","",
-		 #"","",
-		 #"","",
-		 #"","",
-		 #"","",
-		 #"","",
-                 ##"","",
-                 #"",""]
-
-errorSystnames=["",
-		 "_CMS_ttH_CSVLFUp","_CMS_ttH_CSVLFDown","_CMS_ttH_CSVHFUp","_CMS_ttH_CSVHFDown",
-                 "_CMS_ttH_CSVHFStats1Up","_CMS_ttH_CSVHFStats1Down","_CMS_ttH_CSVLFStats1Up","_CMS_ttH_CSVLFStats1Down",
-                 "_CMS_ttH_CSVHFStats2Up","_CMS_ttH_CSVHFStats2Down","_CMS_ttH_CSVLFStats2Up","_CMS_ttH_CSVLFStats2Down",
-                 "_CMS_ttH_CSVCErr1Up","_CMS_ttH_CSVCErr1Down","_CMS_ttH_CSVCErr2Up","_CMS_ttH_CSVCErr2Down",
-		 #"_CMS_ttH_TopPtUp","_CMS_ttH_TopPtDown",
-                 #"_CMS_ttH_PUUp","_CMS_ttH_PUDown",
-		 "_CMS_ttH_Q2scale_ttbarOtherUp","_CMS_ttH_Q2scale_ttbarOtherDown",
-                 "_CMS_ttH_Q2scale_ttbarPlusBUp","_CMS_ttH_Q2scale_ttbarPlusBDown",
-                 "_CMS_ttH_Q2scale_ttbarPlus2BUp","_CMS_ttH_Q2scale_ttbarPlus2BDown",
-                 "_CMS_ttH_Q2scale_ttbarPlusBBbarUp","_CMS_ttH_Q2scale_ttbarPlusBBbarDown",
-                 "_CMS_ttH_Q2scale_ttbarPlusCCbarUp","_CMS_ttH_Q2scale_ttbarPlusCCbarDown",
-                 "_CMS_ttH_NNPDFUp","_CMS_ttH_NNPDFDown",
-                 #"","",
-                 "_CMS_ttH_PSscaleUp","_CMS_ttH_PSscaleDown"]
 
 samplesGenerators=[  
          Sample('t#bar{t} Powheg+Pythia8',ROOT.kRed,path_76x+'/ttbar_????_*/*nominal*.root',mcweight,'ttbarPP8',systs_all_samples,0.05),
@@ -470,13 +364,6 @@ outname='comparisonsBDT'
 for cat in DoCats:
   outname+=cat
 
+# this is just a dummy sample
 samplesForComparison=[Sample('data',ROOT.kBlack,path_76x+'/mu_*/*nominal*.root','','SingleMu'),]+samplesGenerators
 writeListOfHistoLists(listOfComparisonLists,samplesForComparison,labels,outname,True,False,False,'histoE',True,False,True,True)
-
-
-#listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
-#listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots,1)
-#lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,allsystnames)
-#labels=[plot.label for plot in plots]
-#lolT=transposeLOL(listOfHistoLists)
-#plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,name+'_log',lll,True,labels)
