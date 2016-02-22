@@ -2,8 +2,32 @@ from plotconfig import *
 sys.path.insert(0, '../limittools')
 from limittools import renameHistos
 
-name='newanplots'
+name='76controlplots'
 
+systs_all_samples=["",
+                  "_CMS_ttH_CSVLFUp","_CMS_ttH_CSVLFDown","_CMS_ttH_CSVHFUp","_CMS_ttH_CSVHFDown",
+                  "_CMS_ttH_CSVHFStats1Up","_CMS_ttH_CSVHFStats1Down","_CMS_ttH_CSVLFStats1Up","_CMS_ttH_CSVLFStats1Down",
+                  "_CMS_ttH_CSVHFStats2Up","_CMS_ttH_CSVHFStats2Down","_CMS_ttH_CSVLFStats2Up","_CMS_ttH_CSVLFStats2Down",
+                  "_CMS_ttH_CSVCErr1Up","_CMS_ttH_CSVCErr1Down","_CMS_ttH_CSVCErr2Up","_CMS_ttH_CSVCErr2Down",
+                   #"_CMS_scale_jUp","_CMS_scale_jDown",
+                   ]
+othersystnames=[
+		#"_CMS_scale_jUp",
+                #"_CMS_scale_jDown",
+               #"_CMS_res_jUp",
+               #"_CMS_res_jDown"
+               "_CMS_ttH_PSscaleUp",
+               "_CMS_ttH_PSscaleDown"
+                ]
+
+othersystfilenames=[
+		    #"JESUP",
+                    #"JESDOWN",
+                   #"JERUP",
+                   #"JERDOWN"
+                   "scaleup",
+                   "scaledown"
+                   ]
 samples=samplesControlPlots
 samples_data=samples_data_controlplots
 systsamples=[]
