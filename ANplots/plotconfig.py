@@ -62,7 +62,7 @@ systs_all_samples=["",
 
 systs_ttbar= [
 	      "_CMS_ttH_NNPDFUp","_CMS_ttH_NNPDFDown",
-	      #"_CMS_ttH_PSscaleUp","_CMS_ttH_PSscaleDown",
+	      "_CMS_ttH_PSscaleUp","_CMS_ttH_PSscaleDown",
 	      ]
 systs_tt_lf=["_CMS_ttH_Q2scale_ttbarOtherUp","_CMS_ttH_Q2scale_ttbarOtherDown",]
 systs_tt_b=["_CMS_ttH_Q2scale_ttbarPlusBUp","_CMS_ttH_Q2scale_ttbarPlusBDown"]
@@ -86,7 +86,7 @@ PSSystnames=["",
 		 "","",
 		 "","",
 		 "","",
-                 #"_CMS_ttH_PSscaleUp","_CMS_ttH_PSscaleDown",
+                 "_CMS_ttH_PSscaleUp","_CMS_ttH_PSscaleDown",
                  #"","",
 		 #"","",
 		 #"","",
@@ -106,7 +106,7 @@ errorSystnames=["",
                  "_CMS_ttH_Q2scale_ttbarPlusCCbarUp","_CMS_ttH_Q2scale_ttbarPlusCCbarDown",
                  "_CMS_ttH_NNPDFUp","_CMS_ttH_NNPDFDown",
                  "_CMS_scale_jUp","_CMS_scale_jDown",
-                 #"_CMS_ttH_PSscaleUp","_CMS_ttH_PSscaleDown",
+                 "_CMS_ttH_PSscaleUp","_CMS_ttH_PSscaleDown",
                  #"","",
 		 #"","",
 		 #"","",
@@ -192,8 +192,8 @@ othersystnames=[
                 "_CMS_scale_jDown",
                #"_CMS_res_jUp",
                #"_CMS_res_jDown"
-               #"_CMS_ttH_PSscaleUp",
-               #"_CMS_ttH_PSscaleDown"
+               "_CMS_ttH_PSscaleUp",
+               "_CMS_ttH_PSscaleDown"
                 ]
 
 othersystfilenames=[
@@ -201,8 +201,8 @@ othersystfilenames=[
                     "JESDOWN",
                    #"JERUP",
                    #"JERDOWN"
-                   #"scaleup",
-                   #"scaledown"
+                   "scaleup",
+                   "scaledown"
                    ]
 
 samplesLimits=[Sample('t#bar{t}H',ROOT.kBlue+1,path_excl4252+'/ttH*/*nominal*.root',mcweight,'ttH') ,  
@@ -267,7 +267,7 @@ samples_data_bdtplots=[Sample('SingleMu',ROOT.kBlack,path_incl4252+'/mu_*/*nomin
                            Sample('SingleEl',ROOT.kBlack,path_incl4252+'/el_*/*nominal*.root',sel_singleel,'SingleEl')
                        ]
 
-ttbarMCweight='*(0.000919641*(N_TopHad==1 && N_TopLep==1)+0.000707116*(N_TopLep==2 && N_TopHad==0)+0.0084896859*(N_TopHad==2 && N_TopLep==0))'
+ttbarMCweight='*(0.000919641*(N_GenTopHad==1 && N_GenTopLep==1)+0.000707116*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS'
 samplesControlPlots=[Sample('t#bar{t}H',ROOT.kBlue+1,path_76x+'/ttH*/*nominal*.root',mcweight,'ttH',systs_all_samples) ,     
 #         Sample('t#bar{t}',ROOT.kRed+1,path_76x+'/ttbar/*nominal*.root',mcweight,'ttbar') ,     
          Sample('t#bar{t}+lf',ROOT.kRed-7,path_76x+'/ttbar_????_*/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)'+ttbarMCweight,'ttbarOther',systs_all_samples+systs_ttbar+systs_tt_lf,0.05),

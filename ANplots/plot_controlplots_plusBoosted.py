@@ -20,6 +20,13 @@ samples_data=samples_data_controlplots
 systsamples=[]
 for sample in samples:
   for sysname,sysfilename in zip(othersystnames,othersystfilenames):
+    thisnewsel=sample.selection
+    if sysname=="scaleup":
+      thisnewsel=thisnewsel.replace('*(0.000919641*(N_GenTopHad==1 && N_GenTopLep==1)+0.000707116*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS','*(0.003106675*(N_GenTopHad==1 && N_GenTopLep==1)+0.002512789*(N_GenTopLep==2 && N_GenTopHad==0)+0.0171752783*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS')
+      print "weights for scaleUp sample ", thisnewsel
+    if sysname=="scaleup":
+      thisnewsel=thisnewsel.replace('*(0.000919641*(N_GenTopHad==1 && N_GenTopLep==1)+0.000707116*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS','*(0.0051290727*(N_GenTopHad==1 && N_GenTopLep==1)+0.0025191514*(N_GenTopLep==2 && N_GenTopHad==0)+0.0168392844*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS')
+      print "weights for scaleDown sample ", thisnewsel
     systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),sample.selection,sample.nick+sysname))
   
 allsamples=samples+systsamples
@@ -73,9 +80,9 @@ for i,cat in enumerate(categoriesSplitByBDToptD):
     catstringSplitByBDToptD+=("+"+str(i+1)+"*"+cat[0])
 
 plots=[Plot(ROOT.TH1F("JT" ,"jet-tag categories",len(categoriesJT),0.5,0.5+len(categoriesJT)),catstringJT,"(((N_BTagsM>=2&&N_Jets>=6||N_BTagsM>=3&&N_Jets>=4)&&!"+categoriesJT[-1][0]+")||"+categoriesJT[-1][0]+")",label),
-       Plot(ROOT.TH1F("JTsplitByBDToptB" ,"2D analysis B + boosted categories",len(categoriesSplitBDT),0.5,0.5+len(categoriesSplitBDT)),catstringSplitByBDT,"(((N_BTagsM>=2&&N_Jets>=6||N_BTagsM>=3&&N_Jets>=4)&&!"+categoriesJT[-1][0]+")||"+categoriesJT[-1][0]+")"),
+       #Plot(ROOT.TH1F("JTsplitByBDToptB" ,"2D analysis B + boosted categories",len(categoriesSplitBDT),0.5,0.5+len(categoriesSplitBDT)),catstringSplitByBDT,"(((N_BTagsM>=2&&N_Jets>=6||N_BTagsM>=3&&N_Jets>=4)&&!"+categoriesJT[-1][0]+")||"+categoriesJT[-1][0]+")"),
        Plot(ROOT.TH1F("JTByBDToptC" ,"analysis C + boosted categories",len(categoriesBDT),0.5,0.5+len(categoriesBDT)),catstringBDT,"(((N_BTagsM>=2&&N_Jets>=6||N_BTagsM>=3&&N_Jets>=4)&&!"+categoriesJT[-1][0]+")||"+categoriesJT[-1][0]+")"),
-       Plot(ROOT.TH1F("JTsplitByBDToptD" ,"2D analysis D + boosted categories",len(categoriesSplitByBDToptD),0.5,0.5+len(categoriesSplitByBDToptD)),catstringSplitByBDToptD,"(((N_BTagsM>=2&&N_Jets>=6||N_BTagsM>=3&&N_Jets>=4)&&!"+categoriesJT[-1][0]+")||"+categoriesJT[-1][0]+")"),
+       #Plot(ROOT.TH1F("JTsplitByBDToptD" ,"2D analysis D + boosted categories",len(categoriesSplitByBDToptD),0.5,0.5+len(categoriesSplitByBDToptD)),catstringSplitByBDToptD,"(((N_BTagsM>=2&&N_Jets>=6||N_BTagsM>=3&&N_Jets>=4)&&!"+categoriesJT[-1][0]+")||"+categoriesJT[-1][0]+")"),
 
        Plot(ROOT.TH1F("N_Jets","Number of ak4 jets",7,3.5,10.5),"N_Jets",'',label),
        Plot(ROOT.TH1F("N_BTagsM","Number of b-tags",4,1.5,5.5),"N_BTagsM",'',label),
@@ -223,10 +230,11 @@ plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0
 
 ############
 # make category plots
-listOfHistoListsForCategories=createHistoLists_fromSuperHistoFile(outputpath,samples,plots[:4],1)
-listOfHistoListsDataForCategories=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots[:4],1)
-lllForCategories=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_systForCategories.root',samples[1:],plots[:4],errorSystnames)
-lllforPSForCategories=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_systForCategories.root',samples[1:],plots[:4],PSSystnames)
+categoryplotsindex=2
+listOfHistoListsForCategories=createHistoLists_fromSuperHistoFile(outputpath,samples,plots[:categoryplotsindex],1)
+listOfHistoListsDataForCategories=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots[:categoryplotsindex],1)
+lllForCategories=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_systForCategories.root',samples[1:],plots[:categoryplotsindex],errorSystnames)
+lllforPSForCategories=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_systForCategories.root',samples[1:],plots[:categoryplotsindex],PSSystnames)
 
 ntables=0
 
@@ -245,7 +253,7 @@ for i,cat in enumerate(categoriesSplitByBDToptD):
                 categoriesSplitByBDToptDlist.append(cat[1])
 
 listOfcustomBinLabels=[jtlist,categoriesBDTlist]               
-labels=[plot.label for plot in plots[:4]]
+labels=[plot.label for plot in plots[:categoryplotsindex]]
 lolT=transposeLOL(listOfHistoListsForCategories)
 plotDataMCanWsystCustomBinLabels(listOfHistoListsDataForCategories,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,name+'Categories_log',[[lllForCategories,3354,ROOT.kGray+1,True],[lllforPSForCategories,3545,ROOT.kYellow,False]],listOfcustomBinLabels,True,labels,True)
 
