@@ -4,7 +4,9 @@ sys.path.insert(0, '../')
 from scriptgenerator import *
 from plotutils import *
 
-mcweight='2.0*2.61*(Evt_Odd==0)*(N_Jets>=4 && N_BTagsM>=2)'
+mcweight='2.0*2.67*(Evt_Odd==0)*(N_Jets>=4 && N_BTagsM>=2)'
+mcweightAll='2.67*(N_Jets>=4 && N_BTagsM>=2)'
+
 sel_singleel="(N_LooseMuons==0)*(N_Jets>=4 && N_BTagsM>=2)" # need to veto muon events in electron dataset to avoid double countung
 sel_singlemu="(N_LooseElectrons==0)*(N_Jets>=4 && N_BTagsM>=2)" # and vice versa...
 
