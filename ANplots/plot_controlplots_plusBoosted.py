@@ -262,14 +262,25 @@ labels=[plot.label for plot in plots]
 lolT=transposeLOL(listOfHistoLists)
 plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,name,[[lll,3354,ROOT.kGray+1,True],[lllforPS,3545,ROOT.kYellow,False]],False,labels)
 
+# make log plots
+listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
+listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots,1)
+lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,errorSystnames)
+lllforPS=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,PSSystnames)
+labels=[plot.label for plot in plots]
+lolT=transposeLOL(listOfHistoLists)
+plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,name+'_log',[[lll,3354,ROOT.kGray+1,True],[lllforPS,3545,ROOT.kYellow,False]],True,labels)
+
+
+
 
 ############
 # make category plots
 categoryplotsindex=2
 listOfHistoListsForCategories=createHistoLists_fromSuperHistoFile(outputpath,samples,plots[:categoryplotsindex],1)
 listOfHistoListsDataForCategories=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots[:categoryplotsindex],1)
-lllForCategories=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_systForCategories.root',samples[1:],plots[:categoryplotsindex],errorSystnames)
-lllforPSForCategories=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_systForCategories.root',samples[1:],plots[:categoryplotsindex],PSSystnames)
+lllForCategories=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots[:categoryplotsindex],errorSystnames)
+lllforPSForCategories=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots[:categoryplotsindex],PSSystnames)
 
 ntables=0
 
@@ -291,22 +302,6 @@ listOfcustomBinLabels=[jtlist,categoriesBDTlist]
 labels=[plot.label for plot in plots[:categoryplotsindex]]
 lolT=transposeLOL(listOfHistoListsForCategories)
 plotDataMCanWsystCustomBinLabels(listOfHistoListsDataForCategories,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,name+'Categories_log',[[lllForCategories,3354,ROOT.kGray+1,True],[lllforPSForCategories,3545,ROOT.kYellow,False]],listOfcustomBinLabels,True,labels,True)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ##listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
 ##listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots,1)
