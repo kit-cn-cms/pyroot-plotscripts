@@ -154,6 +154,41 @@ plots=[Plot(ROOT.TH1F("JT" ,"jet-tag categories",len(categoriesJT),0.5,0.5+len(c
       Plot(ROOT.TH1F("BoostedJet_TopTag_BDT_Std","BDT top tagger output of hardest fat jet",40,-1.,1.),"BoostedJet_TopTag_BDT_Std[0]",toptaggersel,label),
       
       Plot(ROOT.TH1F("BoostedJet_HiggsTag_SecondCSV","b-tagging output of subjet B2 of hardest fat jet",40,-.1,1.),"BoostedJet_HiggsTag_SecondCSV[0]",higgstaggersel,label),
+
+       Plot(ROOT.TH1F("Evt_Deta_JetsAverage","", 60,0.0,3),"Evt_Deta_JetsAverage",'',label),
+       Plot(ROOT.TH1F("Evt_Deta_UntaggedJetsAverage","",45,0.,4.5),"Evt_Deta_UntaggedJetsAverage",'',label),
+       Plot(ROOT.TH1F("Evt_Deta_TaggedJetsAverage","",45,0.,4.5),"Evt_Deta_TaggedJetsAverage",'',label),
+       Plot(ROOT.TH1F("Evt_Dr_JetsAverage","",35,0.5,4.),"Evt_Dr_JetsAverage",'',label),
+       Plot(ROOT.TH1F("Evt_Dr_TaggedJetsAverage","",45,0.4,4.9),"Evt_Dr_TaggedJetsAverage",'',label),
+       Plot(ROOT.TH1F("Evt_Dr_UntaggedJetsAverage","",50,0.,5),"Evt_Dr_UntaggedJetsAverage",'',label),
+       Plot(ROOT.TH1F("Evt_M2_JetsAverage","",50,0,250),"Evt_M2_JetsAverage",'',label),
+       Plot(ROOT.TH1F("Evt_M2_UntaggedJetsAverage","",50,0.,250),"Evt_M2_UntaggedJetsAverage",'',label),
+       Plot(ROOT.TH1F("Evt_M2_TaggedJetsAverage","",50,0.,250),"Evt_M2_TaggedJetsAverage",'',label),
+
+       Plot(ROOT.TH1F("Evt_M_MinDeltaRJets","",30,0.,150),"Evt_M_MinDeltaRJets",'',label),
+       Plot(ROOT.TH1F("Evt_M_MinDeltaRTaggedJets","",45,0.,450),"Evt_M_MinDeltaRTaggedJets",'',label),
+       Plot(ROOT.TH1F("Evt_M_MinDeltaRUntaggedJets","",45,0.,450),"Evt_M_MinDeltaRUntaggedJets",'',label),
+       Plot(ROOT.TH1F("Evt_M_MinDeltaRLeptonJet","",60,0.4,3.4),"Evt_M_MinDeltaRLeptonJet",'',label),
+       Plot(ROOT.TH1F("Evt_Dr_MinDeltaRJets","",50,0.,5.0),"Evt_Dr_MinDeltaRJets",'',label),
+       Plot(ROOT.TH1F("Evt_Dr_MinDeltaRTaggedJets","",50,0.,5.0),"Evt_Dr_MinDeltaRTaggedJets",'',label),
+       Plot(ROOT.TH1F("Evt_Dr_MinDeltaRUntaggedJets","",50,0.,5.0),"Evt_Dr_MinDeltaRUntaggedJets",'',label),
+       Plot(ROOT.TH1F("Evt_Dr_MinDeltaRLeptonJet","",60,0.4,3.4),"Evt_Dr_MinDeltaRLeptonJet",'',label),
+
+       Plot(ROOT.TH1F("Evt_Jet_MaxDeta_Jets","",50,0.,5.0),"Evt_Jet_MaxDeta_Jets",'',label),
+       Plot(ROOT.TH1F("Evt_TaggedJet_MaxDeta_Jets","",50,0.,5.0),"Evt_TaggedJet_MaxDeta_Jets",'',label),
+       Plot(ROOT.TH1F("Evt_TaggedJet_MaxDeta_TaggedJets","",60,0.,6.0),"Evt_TaggedJet_MaxDeta_TaggedJets",'',label),
+
+       Plot(ROOT.TH1F("Evt_M_Total","",40,0.,4000),"Evt_M_Total",'',label),
+
+       Plot(ROOT.TH1F("Evt_H0","",40,0.5,4.5),"Evt_H0",'',label),
+       Plot(ROOT.TH1F("Evt_H1","",60,-0.2,0.4),"Evt_H1",'',label),
+       Plot(ROOT.TH1F("Evt_H2","",60,-0.2,0.4),"Evt_H2",'',label),
+       Plot(ROOT.TH1F("Evt_H3","",50,-0.05,1.05),"Evt_H3",'',label),
+       Plot(ROOT.TH1F("Evt_H4","",50,-0.15,0.35),"Evt_H4",'',label),
+
+       Plot(ROOT.TH1F("Sphericity","",50,0,1),"Evt_Sphericity",'',label),
+       Plot(ROOT.TH1F("Aplanarity","",50,0,0.5),"Evt_Aplanarity",'',label),
+       
        ]
 # plot parallel -- alternatively there are also options to plot more traditional that also return lists of histo lists
 outputpath=plotParallel(name,2000000,plots,samples+samples_data+systsamples,[''],['1.'],weightsystnames, systweights)
