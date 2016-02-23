@@ -277,10 +277,10 @@ samplesControlPlots=[Sample('t#bar{t}H',ROOT.kBlue+1,path_76x+'/ttH*/*nominal*.r
          Sample('t#bar{t}+b',ROOT.kRed-2,path_76x+'/ttbar_????_*/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==1)'+ttbarMCweight,'ttbarPlusB',systs_all_samples+systs_ttbar+systs_tt_b,0.5),
          Sample('t#bar{t}+2b',ROOT.kRed+2,path_76x+'/ttbar_????_*/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==2)'+ttbarMCweight,'ttbarPlus2B',systs_all_samples+systs_ttbar+systs_tt_2b,0.5),
          Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,path_76x+'/ttbar_????_*/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==3)'+ttbarMCweight,'ttbarPlusBBbar',systs_all_samples+systs_ttbar+systs_tt_bb,0.5),  
-         Sample('Single Top',ROOT.kMagenta,path_76x+'/st*/*nominal*.root',mcweight,'SingleTop',systs_all_samples) , 
-         Sample('V+jets',ROOT.kGreen-3,path_76x+'/??ets*/*nominal*.root',mcweight,'Vjets',systs_all_samples) , 
-         Sample('t#bar{t}+V',ROOT.kBlue-10,path_76x+'/tt?_*/*nominal*.root',mcweight,'ttV',systs_all_samples),         
-         Sample('Diboson',ROOT.kAzure+2,path_76x+'/??/*nominal*.root',mcweight,'Diboson',systs_all_samples) , 
+         Sample('Single Top',ROOT.kMagenta,path_76x+'/st*/*nominal*.root',mcweightAll,'SingleTop',systs_all_samples) , 
+         Sample('V+jets',ROOT.kGreen-3,path_76x+'/??ets*/*nominal*.root',mcweightAll,'Vjets',systs_all_samples) , 
+         Sample('t#bar{t}+V',ROOT.kBlue-10,path_76x+'/tt?_*/*nominal*.root',mcweightAll,'ttV',systs_all_samples),         
+         Sample('Diboson',ROOT.kAzure+2,path_76x+'/??/*nominal*.root',mcweightAll,'Diboson',systs_all_samples) , 
 #         Sample('QCD',ROOT.kYellow ,path_76x+'/QCD*/*nominal*root',mcweight,'QCD') , 
 ]
 

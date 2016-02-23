@@ -453,7 +453,7 @@ void plot(){
   int internalSystName=0;
   double csvWgtHF, csvWgtLF, csvWgtCF;
   int DoWeights=1;
-  if(processname=="SingleEl" || processname=="SingleMu"){DoWeights=0;}
+  if(processname=="SingleEl" || processname=="SingleMu"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
 
   CSVHelper csvReweighter = CSVHelper("/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/csv_rwt_fit_hf_76x_2016_02_08.root","/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/csv_rwt_fit_lf_76x_2016_02_08.root",5);
 
