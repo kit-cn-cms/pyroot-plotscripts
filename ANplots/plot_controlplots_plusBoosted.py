@@ -22,10 +22,10 @@ for sample in samples:
   for sysname,sysfilename in zip(othersystnames,othersystfilenames):
     thisnewsel=sample.selection
     if sysname=="_CMS_ttH_PSscaleUp":
-      thisnewsel=thisnewsel.replace('*(0.000919641*(N_GenTopHad==1 && N_GenTopLep==1)+0.000707116*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS','*(0.003106675*(N_GenTopHad==1 && N_GenTopLep==1)+0.002512789*(N_GenTopLep==2 && N_GenTopHad==0)+0.0171752783*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS')
+      thisnewsel=thisnewsel.replace('*(0.000919641*(N_GenTopHad==1 && N_GenTopLep==1)+0.000707116*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS','*(0.003106675*(N_GenTopHad==1 && N_GenTopLep==1)+0.00251279*(N_GenTopLep==2 && N_GenTopHad==0)+0.017175278*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS')
       print "weights for scaleUp sample ", thisnewsel
     if sysname=="_CMS_ttH_PSscaleDown":
-      thisnewsel=thisnewsel.replace('*(0.000919641*(N_GenTopHad==1 && N_GenTopLep==1)+0.000707116*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS','*(0.0051290727*(N_GenTopHad==1 && N_GenTopLep==1)+0.0025191514*(N_GenTopLep==2 && N_GenTopHad==0)+0.0168392844*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS')
+      thisnewsel=thisnewsel.replace('*(0.000919641*(N_GenTopHad==1 && N_GenTopLep==1)+0.000707116*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS','*(0.003070913*(N_GenTopHad==1 && N_GenTopLep==1)+0.002519151*(N_GenTopLep==2 && N_GenTopHad==0)+0.016839284*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS')
       print "weights for scaleDown sample ", thisnewsel
     systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),thisnewsel,sample.nick+sysname))
   
@@ -33,7 +33,7 @@ allsamples=samples+systsamples
 allsystnames=weightsystnames+othersystnames
 
 #                                                 B C D
-boosted="(BoostedTopHiggs_TopHadCandidate_TopMVAOutput>=-0.575&&BoostedTopHiggs_HiggsCandidate_HiggsTag>=0.9075)"                        
+boosted="(BoostedTopHiggs_TopHadCandidate_TopMVAOutput>=-0.485&&BoostedTopHiggs_HiggsCandidate_HiggsTag>=0.8925)"                        
 categoriesJT=[("((N_Jets>=6&&N_BTagsM==2)&&!"+boosted+")","6j2t","","",""),
               ("((N_Jets==4&&N_BTagsM==3)&&!"+boosted+")","4j3t","0.2","0.2","0.2"),
               ("((N_Jets==5&&N_BTagsM==3)&&!"+boosted+")","5j3t","0.15","0.15","0.15"),
@@ -79,7 +79,7 @@ catstringSplitByBDToptD="0"
 for i,cat in enumerate(categoriesSplitByBDToptD):
     catstringSplitByBDToptD+=("+"+str(i+1)+"*"+cat[0])
 
-plots=[Plot(ROOT.TH1F("JT" ,"jet-tag categories",len(categoriesJT),0.5,0.5+len(categoriesJT)),catstringJT,"(((N_BTagsM>=2&&N_Jets>=6||N_BTagsM>=3&&N_Jets>=4)&&!"+categoriesJT[-1][0]+")||"+categoriesJT[-1][0]+")",label),
+plots=[Plot(ROOT.TH1F("JT" ,"jet-tag categories",9,-0.5,8.5),"3*max(min(N_BTagsM-2,2),0)+max(min(N_Jets-4,2),0)","(N_BTagsM>=2&&N_Jets>=4)",label),
        #Plot(ROOT.TH1F("JTsplitByBDToptB" ,"2D analysis B + boosted categories",len(categoriesSplitBDT),0.5,0.5+len(categoriesSplitBDT)),catstringSplitByBDT,"(((N_BTagsM>=2&&N_Jets>=6||N_BTagsM>=3&&N_Jets>=4)&&!"+categoriesJT[-1][0]+")||"+categoriesJT[-1][0]+")"),
        Plot(ROOT.TH1F("JTByBDToptC" ,"analysis C + boosted categories",len(categoriesBDT),0.5,0.5+len(categoriesBDT)),catstringBDT,"(((N_BTagsM>=2&&N_Jets>=6||N_BTagsM>=3&&N_Jets>=4)&&!"+categoriesJT[-1][0]+")||"+categoriesJT[-1][0]+")"),
        #Plot(ROOT.TH1F("JTsplitByBDToptD" ,"2D analysis D + boosted categories",len(categoriesSplitByBDToptD),0.5,0.5+len(categoriesSplitByBDToptD)),catstringSplitByBDToptD,"(((N_BTagsM>=2&&N_Jets>=6||N_BTagsM>=3&&N_Jets>=4)&&!"+categoriesJT[-1][0]+")||"+categoriesJT[-1][0]+")"),
@@ -185,14 +185,15 @@ ntables=0
 #        ntables+=1
 #        # make an event yield table
 #        eventYields(hld,hl,samples,tablepath)
+jtlist=['4j2t','5j2t','6j2t','4j3t','5j3t','6j3t','4j4t','5j4t','6j4t']
 
 for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
     if "JT" in hld[0].GetName() and not "JTsplitByBDToptB" in hld[0].GetName() and not "JTByBDToptC" in hld[0].GetName() and not "JTsplitByBDToptD" in hld[0].GetName() :
         for h in hld+hl:
-            for i,cat in enumerate(categoriesJT):
+            for i,cat in enumerate(jtlist):
                 h.GetXaxis().SetBinLabel(i+1,cat[1])
                 print cat[1]
-        tablepath=("/".join((outputpath.split('/'))[:-1]))+"/"+name+"_yields"
+        tablepath=("/".join((outputpath.split('/'))[:-1]))+"/"+name+"_yieldsJT"
         ntables+=1
         # make an event yield table
         eventYields(hld,hl,samples,tablepath)
@@ -237,8 +238,6 @@ lolT=transposeLOL(listOfHistoLists)
 plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,name+'_log',[[lll,3354,ROOT.kGray+1,True],[lllforPS,3545,ROOT.kYellow,False]],True,labels)
 
 
-
-
 ############
 # make category plots
 categoryplotsindex=2
@@ -250,7 +249,6 @@ lllforPSForCategories=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.ro
 ntables=0
 
 listOfcustomBinLabels=[]
-jtlist=['4j2t','5j2t','6j2t','4j3t','5j3t','6j3t','4j4t','5j4t','6j4t']
 
 categoriesSplitBDTlist=[]
 for i,cat in enumerate(categoriesSplitBDT):

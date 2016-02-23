@@ -44,24 +44,27 @@ MuIDHelper::MuIDHelper()
     TFile *f_muonIDSF = new TFile(std::string(inputFile).c_str(),"READ");
 
     h_abseta_pt_ratio=(TH2D*)f_muonIDSF->Get("MC_NUM_TightIDandIPCut_DEN_genTracks_PAR_pt_spliteta_bin1/abseta_pt_ratio");
-    std::cout<<h_abseta_pt_ratio<<std::endl;
-    std::cout<<"done setting up muon ID SF"<<std::endl;
+    //std::cout<<h_abseta_pt_ratio<<std::endl;
+    //std::cout<<"done setting up muon ID SF"<<std::endl;
 }
 
 double MuIDHelper::GetSF(double muonPt, double muonEta, int syst){
   if(muonPt==0.0){return 1.0;}
 
-  std::cout<<muonPt<<" "<<muonEta<<std::endl;
+  //std::cout<<muonPt<<" "<<muonEta<<std::endl;
   int thisbin=0;
   double searcheta=fabs(muonEta);
-  double searchpt=TMath::Min(muonPt,120.0);
+  double searchpt=TMath::Min(muonPt,119.0);
   
   thisbin = h_abseta_pt_ratio->FindBin(searcheta,searchpt);
   double nomval=h_abseta_pt_ratio->GetBinContent(thisbin);
   double error=h_abseta_pt_ratio->GetBinError(thisbin);
-  double upval=(nomval+error)*(1.0+0.01);
-  double downval=(nomval-error)*(1.0-0.01);
-  if(syst==0){std::cout<<"ID SF "<<std::endl; std::cout<<nomval<<" "<<upval<<" "<<downval<<std::endl;}
+  //double upval=(nomval+error)*(1.0+0.01);
+  //double downval=(nomval-error)*(1.0-0.01);
+  double upval=nomval*(1.0+0.02);
+  double downval=nomval*(1.0-0.02);
+  
+  //if(syst==0){std::cout<<"ID SF "<<std::endl; std::cout<<nomval<<" "<<upval<<" "<<downval<<std::endl;}
   
   if (syst==-1){return downval;}
   else if (syst==1){return upval;}
@@ -85,8 +88,8 @@ MuIsoHelper::MuIsoHelper()
     TFile *f_muonIsoSF = new TFile(std::string(inputFile).c_str(),"READ");
 
     h_abseta_pt_ratio=(TH2D*)f_muonIsoSF->Get("MC_NUM_TightRelIso_DEN_TightID_PAR_pt_spliteta_bin1/abseta_pt_ratio");
-    std::cout<<h_abseta_pt_ratio<<std::endl;
-    std::cout<<"done setting up muon Iso SF"<<std::endl;
+    //std::cout<<h_abseta_pt_ratio<<std::endl;
+    //std::cout<<"done setting up muon Iso SF"<<std::endl;
 }
 
 double MuIsoHelper::GetSF(double muonPt, double muonEta, int syst){
@@ -95,14 +98,14 @@ double MuIsoHelper::GetSF(double muonPt, double muonEta, int syst){
   std::cout<<muonPt<<" "<<muonEta<<std::endl;
   int thisbin=0;
   double searcheta=fabs(muonEta);
-  double searchpt=TMath::Min(muonPt,120.0);
+  double searchpt=TMath::Min(muonPt,119.0);
   
   thisbin = h_abseta_pt_ratio->FindBin(searcheta,searchpt);
   double nomval=h_abseta_pt_ratio->GetBinContent(thisbin);
   double error=h_abseta_pt_ratio->GetBinError(thisbin);
-  double upval=(nomval+error)*(1.0+0.005);
-  double downval=(nomval-error)*(1.0-0.005);
-  if(syst==0){std::cout<<"Iso SF "<<std::endl; std::cout<<nomval<<" "<<upval<<" "<<downval<<std::endl;}
+  double upval=nomval*(1.0+0.02);
+  double downval=nomval*(1.0-0.02);
+  //if(syst==0){std::cout<<"Iso SF "<<std::endl; std::cout<<nomval<<" "<<upval<<" "<<downval<<std::endl;}
   
   if (syst==-1){return downval;}
   else if (syst==1){return upval;}
@@ -132,17 +135,17 @@ MuTriggerHelper::MuTriggerHelper()
 
 double MuTriggerHelper::GetSF(double muonPt, double muonEta, int syst){
   if(muonPt==0.0){return 1.0;}
-  std::cout<<muonPt<<" "<<muonEta<<std::endl;
+  //std::cout<<muonPt<<" "<<muonEta<<std::endl;
   int thisbin=0;
   double searcheta=fabs(muonEta);
-  double searchpt=TMath::Min(muonPt,120.0);
+  double searchpt=TMath::Min(muonPt,119.0);
   
   thisbin = h_abseta_pt_ratio->FindBin(searcheta,searchpt);
   double nomval=h_abseta_pt_ratio->GetBinContent(thisbin);
   double error=h_abseta_pt_ratio->GetBinError(thisbin);
-  double upval=(nomval+error)*(1.0+0.005);
-  double downval=(nomval-error)*(1.0-0.005);
-  if(syst==0){std::cout<<"Trigger SF "<<std::endl; std::cout<<nomval<<" "<<upval<<" "<<downval<<std::endl;}
+  double upval=nomval*(1.0+0.02);
+  double downval=nomval*(1.0-0.02);
+  // if(syst==0){std::cout<<"Trigger SF "<<std::endl; std::cout<<nomval<<" "<<upval<<" "<<downval<<std::endl;}
   
   if (syst==-1){return downval;}
   else if (syst==1){return upval;}
@@ -470,7 +473,7 @@ void plot(){
   if (buf.find("JESUP")!=string::npos){internalSystName=8;}
   if (buf.find("JERDOWN")!=string::npos){internalSystName=0;}
   if (buf.find("JERUP")!=string::npos){internalSystName=0;}
-  std::cout<<internalSystName<<std::endl;
+  //std::cout<<internalSystName<<std::endl;
   chain->SetBranchStatus("*",0);
 
   TFile* outfile=new TFile(outfilename,"RECREATE");    
@@ -724,7 +727,7 @@ def encodeSampleSelection(samples,allvars):
 
 def startCat(catweight,allvars):
     text='\n    // staring category\n'
-    text+='if(abs(Weight_CSV-csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,internalSystName,csvWgtHF,csvWgtLF,csvWgtCF))>0.0001){std::cout<<"diff "<<Weight_CSV<<" "<<csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,internalSystName,csvWgtHF,csvWgtLF,csvWgtCF)<<std::endl;}'
+    #text+='if(abs(Weight_CSV-csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,internalSystName,csvWgtHF,csvWgtLF,csvWgtCF))>0.0001){std::cout<<"diff "<<Weight_CSV<<" "<<csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,internalSystName,csvWgtHF,csvWgtLF,csvWgtCF)<<std::endl;}'
     
     arrayselection=checkArrayLengths(catweight,allvars)
     if catweight=='': catweight='1'

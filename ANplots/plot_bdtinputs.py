@@ -11,13 +11,14 @@ sel_singlemu="(N_LooseElectrons==0)" # and vice versa...
 sel1="((N_TightLeptons==1)*(N_LooseLeptons==1)*(N_BTagsM>=2)*(N_Jets>=4))" # l+jets channel
 name1="1lge4ge2"
 
-s43="(N_Jets==4&&N_BTagsM==3)"
-s44="(N_Jets==4&&N_BTagsM>=4)"
-s53="(N_Jets==5&&N_BTagsM==3)"
-s54="(N_Jets==5&&N_BTagsM>=4)"
-s62="(N_Jets>=6&&N_BTagsM==2)"
-s63="(N_Jets>=6&&N_BTagsM==3)"
-s64="(N_Jets>=6&&N_BTagsM>=4)"
+boosted="(BoostedTopHiggs_TopHadCandidate_TopMVAOutput>=-0.485&&BoostedTopHiggs_HiggsCandidate_HiggsTag>=0.8925)"                        
+s43="((N_Jets==4&&N_BTagsM==3)&&!"+boosted+")"
+s44="((N_Jets==4&&N_BTagsM>=4)&&!"+boosted+")"
+s53="((N_Jets==5&&N_BTagsM==3)&&!"+boosted+")"
+s54="((N_Jets==5&&N_BTagsM>=4)&&!"+boosted+")"
+s62="((N_Jets>=6&&N_BTagsM==2)&&!"+boosted+")"
+s63="((N_Jets>=6&&N_BTagsM==3)&&!"+boosted+")"
+s64="((N_Jets>=6&&N_BTagsM>=4)&&!"+boosted+")"
 
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
@@ -28,10 +29,10 @@ for sample in samples:
   for sysname,sysfilename in zip(othersystnames,othersystfilenames):
     thisnewsel=sample.selection
     if sysname=="_CMS_ttH_PSscaleUp":
-      thisnewsel=thisnewsel.replace('*(0.000919641*(N_GenTopHad==1 && N_GenTopLep==1)+0.000707116*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS','*(0.003106675*(N_GenTopHad==1 && N_GenTopLep==1)+0.002512789*(N_GenTopLep==2 && N_GenTopHad==0)+0.0171752783*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS')
+      thisnewsel=thisnewsel.replace('*(0.000919641*(N_GenTopHad==1 && N_GenTopLep==1)+0.000707116*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS','*(0.003106675*(N_GenTopHad==1 && N_GenTopLep==1)+0.00251279*(N_GenTopLep==2 && N_GenTopHad==0)+0.017175278*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS')
       print "weights for scaleUp sample ", thisnewsel
     if sysname=="_CMS_ttH_PSscaleDown":
-      thisnewsel=thisnewsel.replace('*(0.000919641*(N_GenTopHad==1 && N_GenTopLep==1)+0.000707116*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS','*(0.0051290727*(N_GenTopHad==1 && N_GenTopLep==1)+0.0025191514*(N_GenTopLep==2 && N_GenTopHad==0)+0.0168392844*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS')
+      thisnewsel=thisnewsel.replace('*(0.000919641*(N_GenTopHad==1 && N_GenTopLep==1)+0.000707116*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS','*(0.003070913*(N_GenTopHad==1 && N_GenTopLep==1)+0.002519151*(N_GenTopLep==2 && N_GenTopHad==0)+0.016839284*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS')
       print "weights for scaleDown sample ", thisnewsel
     systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),thisnewsel,sample.nick+sysname))
     
