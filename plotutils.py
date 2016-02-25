@@ -218,6 +218,19 @@ def getLegend():
     legend.SetFillStyle(0);
     return legend
 
+def getLegend2(): 
+    legend=ROOT.TLegend()
+    legend.SetX1NDC(0.85)
+    legend.SetX2NDC(0.99)
+    legend.SetY1NDC(0.92)
+    legend.SetY2NDC(0.93)
+    legend.SetBorderSize(0);
+    legend.SetLineStyle(0);
+    legend.SetTextFont(42);
+    legend.SetTextSize(0.04);
+    legend.SetFillStyle(0);
+    return legend
+
 # returns tlatex item with results of chi2 and KS test between two histograms
 def getStatTests(h1,h2,option="WW"):
     ksprob = h1.KolmogorovTest(h2)
@@ -246,7 +259,7 @@ def getStatTestsList(h1,lh2,option="WW"):
 	  mystrng=mystrng.replace('secline',sss)
 	else:
 	  mystrng=mystrng.replace('secline',submystrng)
-    tests = ROOT.TLatex(0.15, 0.8, mystrng  );
+    tests = ROOT.TLatex(0.2, 0.8, mystrng  );
     tests.SetTextFont(42);
     tests.SetTextSize(0.04);
     tests.SetNDC()
@@ -336,7 +349,7 @@ def drawHistosOnCanvas(listOfHistos_,normalize=True,stack=False,logscale=False,o
         line=listOfHistos[0].Clone()
         line.Divide(listOfHistos[0])
         line.GetYaxis().SetRangeUser(0.5,1.5)
-        line.GetYaxis().SetTitle('#frac{Sample}{Nominal Sample}')
+        line.GetYaxis().SetTitle('#frac{Data}{MC Sample}')
         line.GetXaxis().SetLabelSize(line.GetXaxis().GetLabelSize()*2.4)
         line.GetYaxis().SetLabelSize(line.GetYaxis().GetLabelSize()*2.4)
         line.GetXaxis().SetTitleSize(line.GetXaxis().GetTitleSize()*3)
@@ -716,6 +729,27 @@ def AddEntry2( self, histo, label, option='L'):
     self.AddEntry(histo, label, option)
 ROOT.TLegend.AddEntry2 = AddEntry2
 
+def AddEntry4545( self, histo, label, option='L'):
+    self.SetY1NDC(self.GetY1NDC()-0.045)
+    width=self.GetX2NDC()-self.GetX1NDC()
+    ts=self.GetTextSize()
+    neglen = 0
+    sscripts = re.findall("_{.+?}|\^{.+?}",label)
+    for s in sscripts:
+	neglen = neglen + 3
+    print sscripts, neglen
+    symbols = re.findall("#[a-zA-Z]+",label)
+    for symbol in symbols:
+	neglen = neglen + len(symbol)-1
+    print symbols, neglen
+    newwidth=max((len(label)-neglen)*0.015*0.04/ts+0.1,width)
+    print newwidth
+    self.SetX1NDC(self.GetX2NDC()-newwidth)
+    
+    self.AddEntry(histo, label, option)
+ROOT.TLegend.AddEntry4545 = AddEntry4545
+
+
 def AddEntry3( self, histo, label, option='L'):
     self.SetY1NDC(self.GetY1NDC()-0.045)
     width=self.GetX2NDC()-self.GetX1NDC()
@@ -861,7 +895,7 @@ def createErrorbands(lll,samples,DoRateSysts=True):
     for ll in lll: #for all plots
         llT=transposeLOL(ll)
         nominal=llT[0][0].Clone()
-        #print "addresses ", llT[0][0], nominal
+        print "addresses ", llT[0][0], nominal
         for h in llT[0][1:]:
             nominal.Add(h)
             #print h
@@ -908,7 +942,7 @@ def createErrorbands(lll,samples,DoRateSysts=True):
 	  #print sys, sys.Integral()
         for ibin in range(0,nominal.GetNbinsX()):
             nerr=nominal.GetBinError(ibin+1)
-            #print "Bin, name, content ",ibin, nominal.GetName(), nominal.GetBinContent(ibin+1)
+            print "Bin, name, content ",ibin, nominal.GetName(), nominal.GetBinContent(ibin+1)
             uperrors[ibin]=ROOT.TMath.Sqrt(uperrors[ibin]*uperrors[ibin]+nerr*nerr)
             downerrors[ibin]=ROOT.TMath.Sqrt(downerrors[ibin]*downerrors[ibin]+nerr*nerr)
             n=nominal.GetBinContent(ibin+1)
@@ -971,7 +1005,7 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
     #if DoProfile and not isinstance(listOfHistoLists[0][0], ROOT.TH2):
       #print "need 2D plots for Profile Histograms"
       #DoProfile=False
-    
+    listofallstattests=[]
     if isinstance(label, basestring):
         labeltexts=len(listOfHistoLists)*[label]
 #        print "bla"
@@ -982,6 +1016,7 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
     i=0
 #    print labeltexts
     for listOfHistos, labeltext in zip(listOfHistoLists, labeltexts):
+        listofthisstattests=[listOfHistos[0].GetTitle()]
         i+=1
         for histo,sample in zip(listOfHistos,samples):
 #            print labeltext
@@ -1000,12 +1035,12 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
 	else:
           c=drawHistosOnCanvas(listOfHistos,normalize,stack,logscale,options,ratio,DoProfile)
         c.SetName('c'+str(i))
-        l=getLegend()
+        l=getLegend2()
         for h,sample in zip(listOfHistos,samples):
             loption='L'
             if stack:
                 loption='F'            
-            l.AddEntry2(h,sample.name,loption)
+            l.AddEntry4545(h,sample.name,loption)
         canvases.append(c)
         l.Draw('same')
         objects.append(l)
@@ -1013,6 +1048,7 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
 	   if not isinstance(listOfHistos[0],ROOT.TH2):
             tests=getStatTestsList(listOfHistos[0],listOfHistos[1:],"UW")
             tests.Draw()
+            listofthisstattests.append(tests.GetTitle())
             objects.append(tests)
         if sepaTest:
             stests=getSepaTests(listOfHistos[0],listOfHistos[1])
@@ -1021,6 +1057,7 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
         if stattests2D!=None:
 	  stattests2D.Draw()
 	  objects.append(stattests2D)
+	  listofthisstattests.append(stattests2D.GetTitle())
 #        cms = ROOT.TLatex(0.2, 0.96, 'CMS private work'  );
 #        cms.SetTextFont(42)
 #        cms.SetTextSize(0.05)
@@ -1029,22 +1066,28 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
 #        print cms
 #        objects.append(cms)
 
-        cms = ROOT.TLatex(0.15, 0.96, 'CMS preliminary,  2.67 fb^{-1},  #sqrt{s} = 13 TeV'  );
+        cms = ROOT.TLatex(0.2, 0.96, 'CMS preliminary,  2.67 fb^{-1},  #sqrt{s} = 13 TeV'  );
         cms.SetTextFont(42)
         cms.SetTextSize(0.05)
         cms.SetNDC()
         cms.Draw()
         objects.append(cms)
 
-        label = ROOT.TLatex(0.15, 0.9, labeltext);
+        label = ROOT.TLatex(0.2, 0.9, labeltext);
         label.SetTextFont(42)
         label.SetTextSize(0.04)
         label.SetNDC()
         label.Draw()
         objects.append(label)
-
+        listofallstattests.append(listofthisstattests)
+        
     printCanvases(canvases,name)
     writeObjects(canvases,name)
+    stattestoutfile=open("stattests_"+name+".txt","w")
+    for stst in listofallstattests:
+      stattestoutfile.write(' '.join(stst)+'\n')
+    stattestoutfile.close()  
+      
     
 def writeListOfHistoListsAN(listOfHistoLists,samples, label,name,normalize=True,stack=False,logscale=False,options='histo',statTest=False, sepaTest=False,ratio=False):
     if isinstance(label, basestring):
@@ -2184,6 +2227,10 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         ratiograph.Draw('sameP')
         line.Draw('histosame')
         line.SetLineWidth(1)
+        emptyHisto.GetYaxis().SetTitle('data/MC');
+        print "title? ", emptyHisto.GetYaxis().GetTitle()
+        print "title? ", line.GetYaxis().GetTitle()
+        #line.Draw('axissame')
         emptyHisto.Draw("axissame")
         objects.append(emptyHisto)
         objects.append(line)
@@ -2405,8 +2452,11 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
           ratioerrorgraph.Draw("same2")
 #        objects.append(ratioerrorgraph)
         ratiograph.Draw('sameP')
-        line.Draw('histosame')
+        line.Draw('histosameaxis')
         line.SetLineWidth(1)
+        emptyHisto.GetYaxis().SetTitle('data/MC');
+        #print "title? ", line.GetTitle()
+        #line.Draw('axissame')
         emptyHisto.Draw("axissame")
         objects.append(emptyHisto)
         objects.append(line)

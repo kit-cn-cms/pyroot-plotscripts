@@ -5,19 +5,31 @@
 from plotconfig import *
 sys.path.insert(0, '../limittools')
 from limittools import renameHistos
+import sys
 
 
-DoCats=['64']
+#DoCats=['64']
+DoCats=sys.argv[1:]
+print DoCats
+#exit(0)
+
 
 samplesGenerators=[  
          Sample('t#bar{t} Powheg+Pythia8',ROOT.kRed,path_76x+'/ttbar_????_*/*nominal*.root',mcweight+ttbarMCweight,'ttbarPP8',systs_all_samples,0.05),
          #Sample('t#bar{t} aMC@NLOFXFX+Pythia8',ROOT.kAzure+5,path_76x+'/TTJETS_amcFXFX/TTJETS_amcFXFX_*_nominal_Tree.root','2.61*(N_Jets>=4 && N_BTagsM>=2)','ttbarAmcFxFx',systs_all_samples,0.05),
-         Sample('t#bar{t} MadGraphMLM+Pythia8',ROOT.kSpring+5,path_76x+'/TTJETS_*_MGP8/*_nominal_Tree.root','2.61*(N_Jets>=4 && N_BTagsM>=2)','ttbarMGP8',systs_all_samples,0.05),
+         Sample('t#bar{t} MadGraphMLM+Pythia8',ROOT.kSpring+5,path_76x+'/TTJETS_*_MGP8/*_nominal.root','2.61*(N_Jets>=4 && N_BTagsM>=2)','ttbarMGP8',systs_all_samples,0.05),
 ]
+
+muSF="muonIDHelper.GetSF(muonPt,muonEta,0)*muonIsoHelper.GetSF(muonPt,muonEta,0)*muonTriggerHelper.GetSF(muonPt,muonEta,0)"
+#muSF="1.0"
+usualweights="(1*Weight_PU*"+muSF+"*csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,internalSystName,csvWgtHF,csvWgtLF,csvWgtCF))"
+
+
+THEweight=["NomWeight:="+usualweights+"*(DoWeights==1)+(DoWeights==0)*1.0",]
 
 
 #path='/nfs/dust/cms/user/hmildner/treesMEM0126/'
-name='bdtInputPlotsComparisons'
+name='76bdtInputPlotsComparisons'
 for cat in DoCats:
   name+='_'+cat
 sel_singleel="(N_LooseMuons==0)" # need to veto muon events in electron dataset to avoid double countung
@@ -27,13 +39,14 @@ sel_singlemu="(N_LooseElectrons==0)" # and vice versa...
 sel1="((N_TightLeptons==1)*(N_LooseLeptons==1)*(N_BTagsM>=2)*(N_Jets>=4))" # l+jets channel
 name1="1lge4ge2"
 
-s43="(N_Jets==4&&N_BTagsM==3)"
-s44="(N_Jets==4&&N_BTagsM>=4)"
-s53="(N_Jets==5&&N_BTagsM==3)"
-s54="(N_Jets==5&&N_BTagsM>=4)"
-s62="(N_Jets>=6&&N_BTagsM==2)"
-s63="(N_Jets>=6&&N_BTagsM==3)"
-s64="(N_Jets>=6&&N_BTagsM>=4)"
+boosted="(BoostedTopHiggs_TopHadCandidate_TopMVAOutput>=-0.485&&BoostedTopHiggs_HiggsCandidate_HiggsTag>=0.8925)"                        
+s43="((N_Jets==4&&N_BTagsM==3)&&!"+boosted+")"
+s44="((N_Jets==4&&N_BTagsM>=4)&&!"+boosted+")"
+s53="((N_Jets==5&&N_BTagsM==3)&&!"+boosted+")"
+s54="((N_Jets==5&&N_BTagsM>=4)&&!"+boosted+")"
+s62="((N_Jets>=6&&N_BTagsM==2)&&!"+boosted+")"
+s63="((N_Jets>=6&&N_BTagsM==3)&&!"+boosted+")"
+s64="((N_Jets>=6&&N_BTagsM>=4)&&!"+boosted+")"
 
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
@@ -55,35 +68,35 @@ plots=[]
 # weights_Final_43_MEMBDTv2.xml
 label="1 lepton, 4 jets, 3 b-tags"
 plots43=[
-	Plot(ROOT.TH1F("s43_BDT_common5_input_avg_btag_disc_btags","avg CSV (tags)",30,0.8,1.05),"BDT_common5_input_avg_btag_disc_btags","(N_Jets==4&&N_BTagsM==3)",label),
-        Plot(ROOT.TH1F("s43_BDT_common5_input_HT","HT",20,0,1000),"BDT_common5_input_HT","(N_Jets==4&&N_BTagsM==3)",label),
-        #Plot(ROOT.TH1F("s43_MEM_transformed","MEM discriminator",24,0,1.2),"(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)","(N_Jets==4&&N_BTagsM==3)",label),
-        Plot(ROOT.TH1F("s43_BDT_common5_input_sphericity","sphericity",20,0,1),"BDT_common5_input_sphericity","(N_Jets==4&&N_BTagsM==3)",label),
-        Plot(ROOT.TH1F("s43_BDT_common5_input_third_highest_btag","third highest btag",22,0.79,1),"BDT_common5_input_third_highest_btag","(N_Jets==4&&N_BTagsM==3)",label),
-        Plot(ROOT.TH1F("s43_Evt_CSV_Average","avg CSV (jets)",20,0.5,0.9),"Evt_CSV_Average","(N_Jets==4&&N_BTagsM==3)",label),
-        Plot(ROOT.TH1F("s43_BDT_common5_input_M3","M3",30,0,600),"BDT_common5_input_M3","(N_Jets==4&&N_BTagsM==3)",label),
-        Plot(ROOT.TH1F("s43_BDT_common5_input_all_sum_pt_with_met","#sum p_{T} (lepton,jet,met)",20,0,1000),"BDT_common5_input_all_sum_pt_with_met","(N_Jets==4&&N_BTagsM==3)",label),
-        Plot(ROOT.TH1F("s43_BDT_common5_input_h1","H_{1}",30,-0.2,0.4),"BDT_common5_input_h1","(N_Jets==4&&N_BTagsM==3)",label),
-        Plot(ROOT.TH1F("s43_BDT_common5_input_pt_all_jets_over_E_all_jets","(#sum jet p_{T})/(#sum jet E))",20,0.2,1.2),"BDT_common5_input_pt_all_jets_over_E_all_jets","(N_Jets==4&&N_BTagsM==3)",label),
-        Plot(ROOT.TH1F("s43_BDT_common5_input_dr_between_lep_and_closest_jet","#Delta R (lepton,jet)",35,0,3.5),"BDT_common5_input_dr_between_lep_and_closest_jet","(N_Jets==4&&N_BTagsM==3)",label),
-        Plot(ROOT.TH1F("s43_BDT_common5_input_first_jet_pt","jet 1 p_{T}",50,0,500),"BDT_common5_input_first_jet_pt","(N_Jets==4&&N_BTagsM==3)",label),
-        Plot(ROOT.TH1F("s43_BDT_common5_input_closest_tagged_dijet_mass","closest tagged dijet mass",20,0,400),"BDT_common5_input_closest_tagged_dijet_mass","(N_Jets==4&&N_BTagsM==3)",label),
+	Plot(ROOT.TH1F("s43_BDT_common5_input_avg_btag_disc_btags","avg CSV (tags)",30,0.8,1.05),"BDT_common5_input_avg_btag_disc_btags",s43,label),
+        Plot(ROOT.TH1F("s43_BDT_common5_input_HT","HT",20,0,1000),"BDT_common5_input_HT",s43,label),
+        #Plot(ROOT.TH1F("s43_MEM_transformed","MEM discriminator",24,0,1.2),"(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)",s43,label),
+        Plot(ROOT.TH1F("s43_BDT_common5_input_sphericity","sphericity",20,0,1),"BDT_common5_input_sphericity",s43,label),
+        Plot(ROOT.TH1F("s43_BDT_common5_input_third_highest_btag","third highest btag",22,0.79,1),"BDT_common5_input_third_highest_btag",s43,label),
+        Plot(ROOT.TH1F("s43_Evt_CSV_Average","avg CSV (jets)",20,0.5,0.9),"Evt_CSV_Average",s43,label),
+        Plot(ROOT.TH1F("s43_BDT_common5_input_M3","M3",30,0,600),"BDT_common5_input_M3",s43,label),
+        Plot(ROOT.TH1F("s43_BDT_common5_input_all_sum_pt_with_met","#sum p_{T} (lepton,jet,met)",20,0,1000),"BDT_common5_input_all_sum_pt_with_met",s43,label),
+        Plot(ROOT.TH1F("s43_BDT_common5_input_h1","H_{1}",30,-0.2,0.4),"BDT_common5_input_h1",s43,label),
+        Plot(ROOT.TH1F("s43_BDT_common5_input_pt_all_jets_over_E_all_jets","(#sum jet p_{T})/(#sum jet E))",20,0.2,1.2),"BDT_common5_input_pt_all_jets_over_E_all_jets",s43,label),
+        Plot(ROOT.TH1F("s43_BDT_common5_input_dr_between_lep_and_closest_jet","#Delta R (lepton,jet)",35,0,3.5),"BDT_common5_input_dr_between_lep_and_closest_jet",s43,label),
+        Plot(ROOT.TH1F("s43_BDT_common5_input_first_jet_pt","jet 1 p_{T}",50,0,500),"BDT_common5_input_first_jet_pt",s43,label),
+        Plot(ROOT.TH1F("s43_BDT_common5_input_closest_tagged_dijet_mass","closest tagged dijet mass",20,0,400),"BDT_common5_input_closest_tagged_dijet_mass",s43,label),
         Plot(ROOT.TH1F("s43_blr","B-tagging likelihood ratio",30,-3,8),"Evt_blr_ETH_transformed",'(N_Jets==4&&N_BTagsM==3)',label),
-	Plot(ROOT.TH1F("s43_BDT_common5_input_avg_dr_tagged_jets","avg #Delta R (tag,tag)",20,0,4),"BDT_common5_input_avg_dr_tagged_jets","(N_Jets==4&&N_BTagsM==3)",label),
-        Plot(ROOT.TH1F("s43_BDT_common5_input_dev_from_avg_disc_btags","dev from avg CSV (tags)",25,0,0.008),"BDT_common5_input_dev_from_avg_disc_btags","(N_Jets==4&&N_BTagsM==3)",label),
-        Plot(ROOT.TH1F("s43_BDT_common5_input_min_dr_tagged_jets","min #Delta R(tag,tag)",30,0.3,3.5),"BDT_common5_input_min_dr_tagged_jets","(N_Jets==4&&N_BTagsM==3)",label),
-        Plot(ROOT.TH1F("s43_BDT_common5_input_h3","H_{3}",30,-0.2,0.9),"BDT_common5_input_h3","(N_Jets==4&&N_BTagsM==3)",label),
-        Plot(ROOT.TH1F("s43_BDT_common5_input_second_jet_pt","jet 2 p_{T}",40,0,300),"BDT_common5_input_second_jet_pt","(N_Jets==4&&N_BTagsM==3)",label),
-        Plot(ROOT.TH1F("s43_BDT_common5_input_fourth_jet_pt","jet 4 p_{T}",40,0,200),"BDT_common5_input_fourth_jet_pt","(N_Jets==4&&N_BTagsM==3)",label),
-        Plot(ROOT.TH1F("s43_BDT_common5_input_maxeta_tag_tag","max #Delta #eta(tag,tag)",20,0.,1.6),"BDT_common5_input_maxeta_tag_tag","(N_Jets==4&&N_BTagsM==3)",label),
-        Plot(ROOT.TH1F("s43_BDT_common5_input_maxeta_jet_tag","max #Delta #eta(jet,tag)",20,0.,1.6),"BDT_common5_input_maxeta_jet_tag","(N_Jets==4&&N_BTagsM==3)",label),
-        Plot(ROOT.TH1F("s43_Evt_Deta_JetsAverage","avg #Delta #eta (jet,jet)",20,0,3),"Evt_Deta_JetsAverage","(N_Jets==4&&N_BTagsM==3)",label),
-        Plot(ROOT.TH1F("s43_BDT_common5_input_third_jet_pt","jet 1 p_{T}",40,0,500),"BDT_common5_input_third_jet_pt","(N_Jets==4&&N_BTagsM==3)",label),
+	Plot(ROOT.TH1F("s43_BDT_common5_input_avg_dr_tagged_jets","avg #Delta R (tag,tag)",20,0,4),"BDT_common5_input_avg_dr_tagged_jets",s43,label),
+        Plot(ROOT.TH1F("s43_BDT_common5_input_dev_from_avg_disc_btags","dev from avg CSV (tags)",25,0,0.008),"BDT_common5_input_dev_from_avg_disc_btags",s43,label),
+        Plot(ROOT.TH1F("s43_BDT_common5_input_min_dr_tagged_jets","min #Delta R(tag,tag)",30,0.3,3.5),"BDT_common5_input_min_dr_tagged_jets",s43,label),
+        Plot(ROOT.TH1F("s43_BDT_common5_input_h3","H_{3}",30,-0.2,0.9),"BDT_common5_input_h3",s43,label),
+        Plot(ROOT.TH1F("s43_BDT_common5_input_second_jet_pt","jet 2 p_{T}",40,0,300),"BDT_common5_input_second_jet_pt",s43,label),
+        Plot(ROOT.TH1F("s43_BDT_common5_input_fourth_jet_pt","jet 4 p_{T}",40,0,200),"BDT_common5_input_fourth_jet_pt",s43,label),
+        Plot(ROOT.TH1F("s43_BDT_common5_input_maxeta_tag_tag","max #Delta #eta(tag,tag)",20,0.,1.6),"BDT_common5_input_maxeta_tag_tag",s43,label),
+        Plot(ROOT.TH1F("s43_BDT_common5_input_maxeta_jet_tag","max #Delta #eta(jet,tag)",20,0.,1.6),"BDT_common5_input_maxeta_jet_tag",s43,label),
+        Plot(ROOT.TH1F("s43_Evt_Deta_JetsAverage","avg #Delta #eta (jet,jet)",20,0,3),"Evt_Deta_JetsAverage",s43,label),
+        Plot(ROOT.TH1F("s43_BDT_common5_input_third_jet_pt","jet 1 p_{T}",40,0,500),"BDT_common5_input_third_jet_pt",s43,label),
         ]
 
         
 label="1 lepton, 4 jets, 4 b-tags"
-thiscatsel="(N_Jets==4&&N_BTagsM>=4)"
+thiscatsel=s44
 catsuf="s44"
 # weights_Final_44_MEMBDTv2.xml
 plots44=[
@@ -119,7 +132,7 @@ plots44=[
       ]
 
 label="1 lepton, 5 jets, 3 b-tags"
-thiscatsel="(N_Jets==5&&N_BTagsM==3)"
+thiscatsel=s53
 catsuf="s53"
     # weights_Final_53_MEMBDTv2.xml
 plots53=[
@@ -148,7 +161,7 @@ plots53=[
 ]
 
 label="1 lepton, 5 jets, #geq4 b-tags"
-thiscatsel="(N_Jets==5&&N_BTagsM>=4)"
+thiscatsel=s54
 catsuf="s54"
 
 # weights_Final_54_MEMBDTv2.xml
@@ -186,7 +199,7 @@ plots54=[
         Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_third_jet_pt","jet 3 p_{T}",15,0,200),"BDT_common5_input_third_jet_pt",thiscatsel,label),
    ]
 label="1 lepton, #geq6 jets, 2 b-tags"
-thiscatsel="(N_Jets>=6&&N_BTagsM==2)"
+thiscatsel=s62
 catsuf="s62"
 # /nfs/dust/cms/user/kelmorab/newTrain/3makeHistosAndCards/weights/CommonWeights/weights_Final_62_v5_OldVars.xml
 plots62=[
@@ -211,11 +224,60 @@ plots62=[
         Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_h2","H_{2}",30,-.15,0.3),"BDT_common5_input_h2",thiscatsel,label),
         Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_aplanarity","aplanarity",30,0,0.3),"BDT_common5_input_aplanarity",thiscatsel,label),
         Plot(ROOT.TH1F(catsuf+"_Evt_CSV_Average","avg CSV",25,0.2,0.65),"Evt_CSV_Average",thiscatsel,label),
+        
+        Plot(ROOT.TH1F(catsuf+"Evt_Deta_2JetsAverage","Evt_Deta_2JetsAverage", 60,0.0,3),"Evt_Deta_2JetsAverage",thiscatsel,label),
+       Plot(ROOT.TH1F(catsuf+"Evt_Deta_3JetsAverage","Evt_Deta_3JetsAverage", 60,0.0,3),"Evt_Deta_3JetsAverage",thiscatsel,label),
+       Plot(ROOT.TH1F(catsuf+"Evt_Deta_4JetsAverage","Evt_Deta_4JetsAverage", 60,0.0,3),"Evt_Deta_4JetsAverage",thiscatsel,label),
+
+
+       Plot(ROOT.TH1F(catsuf+"Evt_Deta_UntaggedJetsAverage","Evt_Deta_UntaggedJetsAverage",45,0.,4.5),"Evt_Deta_UntaggedJetsAverage",thiscatsel,label),
+       Plot(ROOT.TH1F(catsuf+"Evt_Deta_TaggedJetsAverage","Evt_Deta_TaggedJetsAverage",45,0.,4.5),"Evt_Deta_TaggedJetsAverage",thiscatsel,label),
+       Plot(ROOT.TH1F(catsuf+"Evt_Deta_2TaggedJetsAverage","Evt_Deta_2TaggedJetsAverage", 60,0.0,3),"Evt_Deta_2TaggedJetsAverage",thiscatsel,label),
+       Plot(ROOT.TH1F(catsuf+"Evt_Deta_3TaggedJetsAverage","Evt_Deta_3TaggedJetsAverage", 60,0.0,3),"Evt_Deta_3TaggedJetsAverage",thiscatsel,label),
+       Plot(ROOT.TH1F(catsuf+"Evt_Deta_4TaggedJetsAverage","Evt_Deta_4TaggedJetsAverage", 60,0.0,3),"Evt_Deta_4TaggedJetsAverage",thiscatsel,label),
+
+       Plot(ROOT.TH1F(catsuf+"Evt_Dr_JetsAverage","Evt_Dr_JetsAverage",35,0.5,4.),"Evt_Dr_JetsAverage",thiscatsel,label),
+       Plot(ROOT.TH1F(catsuf+"Evt_Dr_2JetsAverage","Evt_Dr_2JetsAverage",35,0.5,4.),"Evt_Dr_2JetsAverage",thiscatsel,label),
+       Plot(ROOT.TH1F(catsuf+"Evt_Dr_2TaggedJetsAverage","Evt_Dr_2TaggedJetsAverage",45,0.4,4.9),"Evt_Dr_2TaggedJetsAverage",thiscatsel,label),
+       Plot(ROOT.TH1F(catsuf+"Evt_Dr_3JetsAverage","Evt_Dr_3JetsAverage",35,0.5,4.),"Evt_Dr_3JetsAverage",thiscatsel,label),
+       Plot(ROOT.TH1F(catsuf+"Evt_Dr_3TaggedJetsAverage","Evt_Dr_3TaggedJetsAverage",45,0.4,4.9),"Evt_Dr_3TaggedJetsAverage",thiscatsel,label),
+       Plot(ROOT.TH1F(catsuf+"Evt_Dr_4JetsAverage","Evt_Dr_4JetsAverage",35,0.5,4.),"Evt_Dr_4JetsAverage",thiscatsel,label),
+       Plot(ROOT.TH1F(catsuf+"Evt_Dr_4TaggedJetsAverage","Evt_Dr_4TaggedJetsAverage",45,0.4,4.9),"Evt_Dr_4TaggedJetsAverage",thiscatsel,label),
+
+       Plot(ROOT.TH1F(catsuf+"Evt_Dr_UntaggedJetsAverage","Evt_Dr_UntaggedJetsAverage",50,0.,5),"Evt_Dr_UntaggedJetsAverage",thiscatsel,label),
+       Plot(ROOT.TH1F(catsuf+"Evt_M2_JetsAverage","Evt_M2_JetsAverage",50,0,250),"Evt_M2_JetsAverage",thiscatsel,label),
+       Plot(ROOT.TH1F(catsuf+"Evt_M2_UntaggedJetsAverage","Evt_M2_UntaggedJetsAverage",50,0.,250),"Evt_M2_UntaggedJetsAverage",thiscatsel,label),
+       Plot(ROOT.TH1F(catsuf+"Evt_M2_TaggedJetsAverage","Evt_M2_TaggedJetsAverage",50,0.,250),"Evt_M2_TaggedJetsAverage",thiscatsel,label),
+
+       Plot(ROOT.TH1F(catsuf+"Evt_M2_2JetsAverage","Evt_M2_2JetsAverage",50,0,250),"Evt_M2_2JetsAverage",thiscatsel,label),
+       Plot(ROOT.TH1F(catsuf+"Evt_M2_2TaggedJetsAverage","Evt_M2_2TaggedJetsAverage",50,0.,250),"Evt_M2_2TaggedJetsAverage",thiscatsel,label),
+       Plot(ROOT.TH1F(catsuf+"Evt_M2_3JetsAverage","Evt_M2_3JetsAverage",50,0,250),"Evt_M2_3JetsAverage",thiscatsel,label),
+       Plot(ROOT.TH1F(catsuf+"Evt_M2_3TaggedJetsAverage","Evt_M2_3TaggedJetsAverage",50,0.,250),"Evt_M2_3TaggedJetsAverage",thiscatsel,label),
+       Plot(ROOT.TH1F(catsuf+"Evt_M2_4JetsAverage","Evt_M2_4JetsAverage",50,0,250),"Evt_M2_4JetsAverage",thiscatsel,label),
+       Plot(ROOT.TH1F(catsuf+"Evt_M2_4TaggedJetsAverage","Evt_M2_4TaggedJetsAverage",50,0.,250),"Evt_M2_4TaggedJetsAverage",thiscatsel,label),
+
+       Plot(ROOT.TH1F(catsuf+"Evt_M_MinDeltaRJets","Evt_M_MinDeltaRJets",30,0.,150),"Evt_M_MinDeltaRJets",thiscatsel,label),
+       Plot(ROOT.TH1F(catsuf+"Evt_M_MinDeltaRTaggedJets","Evt_M_MinDeltaRTaggedJets",45,0.,450),"Evt_M_MinDeltaRTaggedJets",thiscatsel,label),
+       Plot(ROOT.TH1F(catsuf+"Evt_M_MinDeltaRUntaggedJets","Evt_M_MinDeltaRUntaggedJets",45,0.,450),"Evt_M_MinDeltaRUntaggedJets",thiscatsel,label),
+       Plot(ROOT.TH1F(catsuf+"Evt_M_MinDeltaRLeptonJet","Evt_M_MinDeltaRLeptonJet",60,0.4,3.4),"Evt_M_MinDeltaRLeptonJet",thiscatsel,label),
+       Plot(ROOT.TH1F(catsuf+"Evt_Dr_MinDeltaRJets","Evt_Dr_MinDeltaRJets",50,0.,5.0),"Evt_Dr_MinDeltaRJets",thiscatsel,label),
+       Plot(ROOT.TH1F(catsuf+"Evt_Dr_MinDeltaRTaggedJets","Evt_Dr_MinDeltaRTaggedJets",50,0.,5.0),"Evt_Dr_MinDeltaRTaggedJets",thiscatsel,label),
+       Plot(ROOT.TH1F(catsuf+"Evt_Dr_MinDeltaRUntaggedJets","Evt_Dr_MinDeltaRUntaggedJets",50,0.,5.0),"Evt_Dr_MinDeltaRUntaggedJets",thiscatsel,label),
+       Plot(ROOT.TH1F(catsuf+"Evt_Dr_MinDeltaRLeptonJet","Evt_Dr_MinDeltaRLeptonJet",60,0.4,3.4),"Evt_Dr_MinDeltaRLeptonJet",thiscatsel,label),
+
+       Plot(ROOT.TH1F(catsuf+"Evt_Jet_MaxDeta_Jets","Evt_Jet_MaxDeta_Jets",50,0.,5.0),"Evt_Jet_MaxDeta_Jets",thiscatsel,label),
+       Plot(ROOT.TH1F(catsuf+"Evt_TaggedJet_MaxDeta_Jets","Evt_TaggedJet_MaxDeta_Jets",50,0.,5.0),"Evt_TaggedJet_MaxDeta_Jets",thiscatsel,label),
+       Plot(ROOT.TH1F(catsuf+"Evt_TaggedJet_MaxDeta_TaggedJets","Evt_TaggedJet_MaxDeta_TaggedJets",60,0.,6.0),"Evt_TaggedJet_MaxDeta_TaggedJets",thiscatsel,label),
+
+       Plot(ROOT.TH1F(catsuf+"Evt_M_Total","Evt_M_Total",40,0.,4000),"Evt_M_Total",thiscatsel,label),
+
+       Plot(ROOT.TH1F(catsuf+"Evt_H0","Evt_H0",40,0.5,4.5),"Evt_H0",thiscatsel,label),
+       Plot(ROOT.TH1F(catsuf+"Evt_H4","Evt_H4",50,-0.15,0.35),"Evt_H4",thiscatsel,label),
 ]
 
 
 label="1 lepton, #geq6 jets, 3 b-tags"
-thiscatsel="(N_Jets>=6&&N_BTagsM==3)"
+thiscatsel=s63
 catsuf="s63"
 # weights_Final_63_MEMBDTv2.xml
 plots63=[
@@ -246,13 +308,13 @@ plots63=[
 ]
    
 label="1 lepton, #geq6 jets, #geq4 b-tags"
-thiscatsel="(N_Jets>=6&&N_BTagsM>=4)"
+thiscatsel=s64
 catsuf="s64"
 # weights_Final_64_MEMBDTv2.xml
 plots64=[
-	Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_third_highest_btag","third-highest CSV",16,.82,1),"BDT_common5_input_third_highest_btag",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_third_highest_btag","third-highest CSV",16,.8,1.05),"BDT_common5_input_third_highest_btag",thiscatsel,label),
         #Plot(ROOT.TH1F(catsuf+"_MEM_transformed","MEM discriminator",10,0,1),"(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)",thiscatsel,label),
-        Plot(ROOT.TH1F(catsuf+"_Evt_Deta_JetsAverage","avg #Delta #eta (jet,jet)",14,0.4,2.3),"Evt_Deta_JetsAverage",thiscatsel,label),
+        Plot(ROOT.TH1F(catsuf+"_Evt_Deta_JetsAverage","avg #Delta #eta (jet,jet)",14,0,2.8),"Evt_Deta_JetsAverage",thiscatsel,label),
         Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_sphericity","sphericity",20,0,1),"BDT_common5_input_sphericity",thiscatsel,label),
         Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_fourth_jet_pt","jet 4 p_{T}",20,0,200),"BDT_common5_input_fourth_jet_pt",thiscatsel,label),
         Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_aplanarity","aplanarity",20,0,0.4),"BDT_common5_input_aplanarity",thiscatsel,label),
@@ -277,6 +339,46 @@ plots64=[
         Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_maxeta_jet_jet","max #Delta #eta (jet,jet)",15,0,1.5),"BDT_common5_input_maxeta_jet_jet",thiscatsel,label),
 ]
 
+label="boosted"
+thiscatsel=boosted+"*(N_Jets>=4&&N_BTagsM>=2)"
+catsuf="sBoosted"
+# weights_Final_64_MEMBDTv2.xml
+plotsBoosted=[
+	Plot(ROOT.TH1F(catsuf+"BoostedTopHiggs_HiggsCandidate_M2","BoostedTopHiggs_HiggsCandidate_M2",20,30,300),"BoostedTopHiggs_HiggsCandidate_M2",thiscatsel,label),
+ 	Plot(ROOT.TH1F(catsuf+"BoostedTopHiggs_HiggsCandidate_Pt2","BoostedTopHiggs_HiggsCandidate_Pt2",20,30,600),"BoostedTopHiggs_HiggsCandidate_Pt2",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"BoostedTopHiggs_HiggsCandidate_Subjetiness21","BoostedTopHiggs_HiggsCandidate_Subjetiness21",20,0,1),"BoostedTopHiggs_HiggsCandidate_Subjetiness2/BoostedTopHiggs_HiggsCandidate_Subjetiness1",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"BoostedTopHiggs_HiggsCandidate_Dr_Lepton","BoostedTopHiggs_HiggsCandidate_Dr_Lepton",20,0,4),"BoostedTopHiggs_HiggsCandidate_Dr_Lepton",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"BoostedTopHiggs_HiggsCandidate_Deta_TopHadCandidate","BoostedTopHiggs_HiggsCandidate_Deta_TopHadCandidate",20,0,4),"BoostedTopHiggs_HiggsCandidate_Deta_TopHadCandidate",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"Evt_HT","Evt_HT",20,200,1500),"Evt_HT",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"Evt_Dr_MinDeltaRTaggedJets","Evt_Dr_MinDeltaRTaggedJets",20,0,4),"Evt_Dr_MinDeltaRTaggedJets",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"Evt_M_MinDeltaRTaggedJets","Evt_M_MinDeltaRTaggedJets",20,29,300),"Evt_M_MinDeltaRTaggedJets",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"Evt_Dr_TaggedJetsAverage","Evt_Dr_TaggedJetsAverage",20,0,4),"Evt_Dr_TaggedJetsAverage",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"Evt_Sphericity","Evt_Sphericity",20,0,1),"Evt_Sphericity",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"BoostedTopHiggs_HiggsCandidate_M3","BoostedTopHiggs_HiggsCandidate_M3",20,29,300),"BoostedTopHiggs_HiggsCandidate_M3",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"BoostedTopHiggs_HiggsCandidate_Pt3","BoostedTopHiggs_HiggsCandidate_Pt3",20,29,600),"BoostedTopHiggs_HiggsCandidate_Pt3",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"BoostedTopHiggs_TopHadCandidate_Top_M","BoostedTopHiggs_TopHadCandidate_Top_M",20,29,300),"BoostedTopHiggs_TopHadCandidate_Top_M",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"BoostedTopHiggs_TopHadCandidate_B_CSV","BoostedTopHiggs_TopHadCandidate_B_CSV",20,0,1),"BoostedTopHiggs_TopHadCandidate_B_CSV",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"BoostedTopHiggs_TopHadCandidate_W1_CSV","BoostedTopHiggs_TopHadCandidate_W1_CSV",20,0,1),"BoostedTopHiggs_TopHadCandidate_W1_CSV",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"BoostedTopHiggs_TopHadCandidate_W2_CSV","BoostedTopHiggs_TopHadCandidate_W2_CSV",20,0,1),"BoostedTopHiggs_TopHadCandidate_W2_CSV",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"Evt_H0","Evt_H0",20,0.2,0.5),"Evt_H0",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"Evt_H3","Evt_H3",20,0,1),"Evt_H3",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"Evt_JetPtOverJetE","Evt_JetPtOverJetE",20,0,1),"Evt_JetPtOverJetE",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"Evt_Deta_JetsAverage","Evt_Deta_JetsAverage",20,0,4),"Evt_Deta_JetsAverage",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"CSV2","CSV2",20,0,1),"CSV[2]",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"CSV3","CSV3",20,0,1),"CSV[3]",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"CSV4","CSV4",20,0,1),"CSV[4]",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"Evt_CSV_Average","Evt_CSV_Average",20,0,1),"Evt_CSV_Average",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"Evt_TaggedJet_MaxDeta_TaggedJets","Evt_TaggedJet_MaxDeta_TaggedJets",20,0,4),"Evt_TaggedJet_MaxDeta_TaggedJets",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"Evt_M_MedianTaggedJets","Evt_M_MedianTaggedJets",20,0,400),"Evt_M_MedianTaggedJets",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"Evt_Deta_2TaggedJetsAverage","Evt_Deta_2TaggedJetsAverage",20,0,3),"Evt_Deta_2TaggedJetsAverage",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"Evt_Aplanarity","Evt_Aplanarity",20,0,1),"Evt_Aplanarity",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"BDT_common5_input_dev_from_avg_disc_btags","BDT_common5_input_dev_from_avg_disc_btags",20,0,0.008),"BDT_common5_input_dev_from_avg_disc_btags",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"BDT_common5_input_invariant_mass_of_everything","BDT_common5_input_invariant_mass_of_everything",20,29,300),"BDT_common5_input_invariant_mass_of_everything",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"BDT_common5_input_Mlb","BDT_common5_input_Mlb",20,29,300),"BDT_common5_input_Mlb",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"Evt_M_Total","Evt_M_Total",20,29,300),"Evt_M_Total",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"Evt_CSV_Dev","Evt_CSV_Dev",20,0,0.008),"Evt_CSV_Dev",thiscatsel,label),
+]
+
 listOf1DPlotLists=[]
 for cat in DoCats:
   if cat=='43':
@@ -293,7 +395,8 @@ for cat in DoCats:
       listOf1DPlotLists.append(plots63)
   if cat=='64':
       listOf1DPlotLists.append(plots64)
-
+  if cat=='boosted':
+      listOf1DPlotLists.append(plotsBoosted)
 
 
 #listOf1DPlotLists=[plots64,plots63,plots62,plots54,plots53,plots44,plots43]
@@ -322,7 +425,7 @@ for plotlist in listOf1DPlotLists:
 allplots=OneDimplots+TwoDimPlots
 
 # plot parallel -- alternatively there are also options to plot more traditional that also return lists of histo lists
-outputpath=plotParallel(name,2000000,allplots,samples_data+samplesGenerators,[''],['1.'],[''],['Weight_PU'])
+outputpath=plotParallel(name,2000000,allplots,samples_data+samplesGenerators,[''],['1.'],[''],THEweight)
 
 #listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,OneDimplots,1)
 #listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,OneDimplots,1)
@@ -339,9 +442,9 @@ outputpath=plotParallel(name,2000000,allplots,samples_data+samplesGenerators,[''
 listOfHistoListsDataForGenerators=createHistoLists_fromSuperHistoFile(outputpath,samples_data,allplots,1,[""],True)
 listOfHistoListsGenerators=createHistoLists_fromSuperHistoFile(outputpath,samplesGenerators,allplots,1,[""],True)
 #print "genData"
-#print listOfHistoListsDataForGenerators
+print listOfHistoListsDataForGenerators
 #print "Generators"
-#print listOfHistoListsGenerators
+print listOfHistoListsGenerators
 
 #TlistOfHistoListsDataForGenerators=transposeLOL(listOfHistoListsDataForGenerators)
 #TlistOfHistoListsGenerators=transposeLOL(listOfHistoListsGenerators)
@@ -356,14 +459,14 @@ for histolistData, histoListGenerators in zip(listOfHistoListsDataForGenerators,
   for histo in histoListGenerators:
     thislist.append(histo)
   listOfComparisonLists.append(thislist)
-#print listOfComparisonLists
+print listOfComparisonLists
 #raw_input()
 labels=[plot.label for plot in allplots]
 
 outname='comparisonsBDT'
 for cat in DoCats:
   outname+=cat
-
+print "plotting"
 # this is just a dummy sample
 samplesForComparison=[Sample('data',ROOT.kBlack,path_76x+'/mu_*/*nominal*.root','','SingleMu'),]+samplesGenerators
 writeListOfHistoLists(listOfComparisonLists,samplesForComparison,labels,outname,True,False,False,'histoE',True,False,True,True)

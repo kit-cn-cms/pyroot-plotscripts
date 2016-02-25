@@ -29,10 +29,10 @@ for sample in samples:
       print "weights for scaleDown sample ", thisnewsel
     systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),thisnewsel,sample.nick+sysname))
 
-# DANGERZONE
-systsamples=[]
-othersystnames=[]
-# DANGERZONE
+## DANGERZONE
+#systsamples=[]
+#othersystnames=[]
+## DANGERZONE
 
 allsamples=samples+systsamples
 allsystnames=weightsystnames+othersystnames
