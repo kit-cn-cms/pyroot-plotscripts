@@ -2207,12 +2207,12 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         line.GetXaxis().SetLabelSize(line.GetXaxis().GetLabelSize()*2.4)
         line.GetYaxis().SetLabelSize(line.GetYaxis().GetLabelSize()*2.4)
         line.GetXaxis().SetTitleSize(line.GetXaxis().GetTitleSize()*3)
-        line.GetYaxis().SetTitleSize(line.GetYaxis().GetTitleSize()*2.4)
+        #line.GetYaxis().SetTitleSize(line.GetYaxis().GetTitleSize()*2.4)
         line.GetYaxis().SetTitleSize(line.GetYaxis().GetTitleSize()*2.4)
         line.GetYaxis().CenterTitle(1);
         line.GetYaxis().SetTitle('data/MC');
         line.GetYaxis().SetNdivisions( 503 );
-#        line.GetXaxis().SetLabelOffset( 0.006 );
+        line.GetYaxis().SetTitleOffset( 0.5 );
         line.GetXaxis().SetNdivisions( 510 );
         line.GetXaxis().SetTickLength( line.GetXaxis().GetTickLength() * 2.0 );
         line.GetYaxis().SetTickLength( line.GetYaxis().GetTickLength() * 1.65 );
@@ -2225,15 +2225,17 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
           ratioerrorgraph.Draw("same2")
 #        objects.append(ratioerrorgraph)
         ratiograph.Draw('sameP')
-        line.Draw('histosame')
         line.SetLineWidth(1)
-        emptyHisto.GetYaxis().SetTitle('data/MC');
-        print "title? ", emptyHisto.GetYaxis().GetTitle()
-        print "title? ", line.GetYaxis().GetTitle()
-        #line.Draw('axissame')
-        emptyHisto.Draw("axissame")
-        objects.append(emptyHisto)
+        line.Draw('histosame')
+        #emptyHisto.GetYaxis().SetTitle('data/MC');
+        #print "title? ", emptyHisto.GetYaxis().GetTitle()
+        #print "title? ", line.GetYaxis().GetTitle()
+        line.Draw('axissame')
+        #emptyHisto.Draw("axissame")
+        #objects.append(emptyHisto)
         objects.append(line)
+        #print labeltext
+        #raw_input()
 
         #print labeltext
         #raw_input()
@@ -2432,12 +2434,12 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
         line.GetXaxis().SetLabelSize(line.GetXaxis().GetLabelSize()*2.4)
         line.GetYaxis().SetLabelSize(line.GetYaxis().GetLabelSize()*2.4)
         line.GetXaxis().SetTitleSize(line.GetXaxis().GetTitleSize()*3)
-        line.GetYaxis().SetTitleSize(line.GetYaxis().GetTitleSize()*2.4)
+        #line.GetYaxis().SetTitleSize(line.GetYaxis().GetTitleSize()*2.4)
         line.GetYaxis().SetTitleSize(line.GetYaxis().GetTitleSize()*2.4)
         line.GetYaxis().CenterTitle(1);
         line.GetYaxis().SetTitle('data/MC');
         line.GetYaxis().SetNdivisions( 503 );
-#        line.GetXaxis().SetLabelOffset( 0.006 );
+        line.GetYaxis().SetTitleOffset( 0.5 );
         line.GetXaxis().SetNdivisions( 510 );
         line.GetXaxis().SetTickLength( line.GetXaxis().GetTickLength() * 2.0 );
         line.GetYaxis().SetTickLength( line.GetYaxis().GetTickLength() * 1.65 );
@@ -2452,15 +2454,15 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
           ratioerrorgraph.Draw("same2")
 #        objects.append(ratioerrorgraph)
         ratiograph.Draw('sameP')
-        line.Draw('histosameaxis')
         line.SetLineWidth(1)
-        emptyHisto.GetYaxis().SetTitle('data/MC');
-        #print "title? ", line.GetTitle()
-        #line.Draw('axissame')
-        emptyHisto.Draw("axissame")
-        objects.append(emptyHisto)
+        line.Draw('histosame')
+        #emptyHisto.GetYaxis().SetTitle('data/MC');
+        #print "title? ", emptyHisto.GetYaxis().GetTitle()
+        #print "title? ", line.GetYaxis().GetTitle()
+        line.Draw('axissame')
+        #emptyHisto.Draw("axissame")
+        #objects.append(emptyHisto)
         objects.append(line)
-
         #print labeltext
         #raw_input()
 

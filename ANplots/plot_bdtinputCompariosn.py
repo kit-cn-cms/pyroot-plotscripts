@@ -344,39 +344,37 @@ thiscatsel=boosted+"*(N_Jets>=4&&N_BTagsM>=2)"
 catsuf="sBoosted"
 # weights_Final_64_MEMBDTv2.xml
 plotsBoosted=[
-	Plot(ROOT.TH1F(catsuf+"BoostedTopHiggs_HiggsCandidate_M2","BoostedTopHiggs_HiggsCandidate_M2",20,30,300),"BoostedTopHiggs_HiggsCandidate_M2",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"BoostedTopHiggs_HiggsCandidate_M2","BoostedTopHiggs_HiggsCandidate_M2",20,30,250),"BoostedTopHiggs_HiggsCandidate_M2",thiscatsel,label),
  	Plot(ROOT.TH1F(catsuf+"BoostedTopHiggs_HiggsCandidate_Pt2","BoostedTopHiggs_HiggsCandidate_Pt2",20,30,600),"BoostedTopHiggs_HiggsCandidate_Pt2",thiscatsel,label),
 	Plot(ROOT.TH1F(catsuf+"BoostedTopHiggs_HiggsCandidate_Subjetiness21","BoostedTopHiggs_HiggsCandidate_Subjetiness21",20,0,1),"BoostedTopHiggs_HiggsCandidate_Subjetiness2/BoostedTopHiggs_HiggsCandidate_Subjetiness1",thiscatsel,label),
 	Plot(ROOT.TH1F(catsuf+"BoostedTopHiggs_HiggsCandidate_Dr_Lepton","BoostedTopHiggs_HiggsCandidate_Dr_Lepton",20,0,4),"BoostedTopHiggs_HiggsCandidate_Dr_Lepton",thiscatsel,label),
 	Plot(ROOT.TH1F(catsuf+"BoostedTopHiggs_HiggsCandidate_Deta_TopHadCandidate","BoostedTopHiggs_HiggsCandidate_Deta_TopHadCandidate",20,0,4),"BoostedTopHiggs_HiggsCandidate_Deta_TopHadCandidate",thiscatsel,label),
-	Plot(ROOT.TH1F(catsuf+"Evt_HT","Evt_HT",20,200,1500),"Evt_HT",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"Evt_HT","Evt_HT",20,200,2000),"Evt_HT",thiscatsel,label),
 	Plot(ROOT.TH1F(catsuf+"Evt_Dr_MinDeltaRTaggedJets","Evt_Dr_MinDeltaRTaggedJets",20,0,4),"Evt_Dr_MinDeltaRTaggedJets",thiscatsel,label),
-	Plot(ROOT.TH1F(catsuf+"Evt_M_MinDeltaRTaggedJets","Evt_M_MinDeltaRTaggedJets",20,29,300),"Evt_M_MinDeltaRTaggedJets",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"Evt_M_MinDeltaRTaggedJets","Evt_M_MinDeltaRTaggedJets",20,0,600),"Evt_M_MinDeltaRTaggedJets",thiscatsel,label),
 	Plot(ROOT.TH1F(catsuf+"Evt_Dr_TaggedJetsAverage","Evt_Dr_TaggedJetsAverage",20,0,4),"Evt_Dr_TaggedJetsAverage",thiscatsel,label),
 	Plot(ROOT.TH1F(catsuf+"Evt_Sphericity","Evt_Sphericity",20,0,1),"Evt_Sphericity",thiscatsel,label),
-	Plot(ROOT.TH1F(catsuf+"BoostedTopHiggs_HiggsCandidate_M3","BoostedTopHiggs_HiggsCandidate_M3",20,29,300),"BoostedTopHiggs_HiggsCandidate_M3",thiscatsel,label),
-	Plot(ROOT.TH1F(catsuf+"BoostedTopHiggs_HiggsCandidate_Pt3","BoostedTopHiggs_HiggsCandidate_Pt3",20,29,600),"BoostedTopHiggs_HiggsCandidate_Pt3",thiscatsel,label),
 	Plot(ROOT.TH1F(catsuf+"BoostedTopHiggs_TopHadCandidate_Top_M","BoostedTopHiggs_TopHadCandidate_Top_M",20,29,300),"BoostedTopHiggs_TopHadCandidate_Top_M",thiscatsel,label),
-	Plot(ROOT.TH1F(catsuf+"BoostedTopHiggs_TopHadCandidate_B_CSV","BoostedTopHiggs_TopHadCandidate_B_CSV",20,0,1),"BoostedTopHiggs_TopHadCandidate_B_CSV",thiscatsel,label),
-	Plot(ROOT.TH1F(catsuf+"BoostedTopHiggs_TopHadCandidate_W1_CSV","BoostedTopHiggs_TopHadCandidate_W1_CSV",20,0,1),"BoostedTopHiggs_TopHadCandidate_W1_CSV",thiscatsel,label),
-	Plot(ROOT.TH1F(catsuf+"BoostedTopHiggs_TopHadCandidate_W2_CSV","BoostedTopHiggs_TopHadCandidate_W2_CSV",20,0,1),"BoostedTopHiggs_TopHadCandidate_W2_CSV",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"BoostedTopHiggs_TopHadCandidate_B_CSV","BoostedTopHiggs_TopHadCandidate_B_CSV",20,-0.1,1),"BoostedTopHiggs_TopHadCandidate_B_CSV",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"BoostedTopHiggs_TopHadCandidate_W1_CSV","BoostedTopHiggs_TopHadCandidate_W1_CSV",20,-0.1,1),"BoostedTopHiggs_TopHadCandidate_W1_CSV",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"BoostedTopHiggs_TopHadCandidate_W2_CSV","BoostedTopHiggs_TopHadCandidate_W2_CSV",20,-0.1,1),"BoostedTopHiggs_TopHadCandidate_W2_CSV",thiscatsel,label),
 	Plot(ROOT.TH1F(catsuf+"Evt_H0","Evt_H0",20,0.2,0.5),"Evt_H0",thiscatsel,label),
 	Plot(ROOT.TH1F(catsuf+"Evt_H3","Evt_H3",20,0,1),"Evt_H3",thiscatsel,label),
 	Plot(ROOT.TH1F(catsuf+"Evt_JetPtOverJetE","Evt_JetPtOverJetE",20,0,1),"Evt_JetPtOverJetE",thiscatsel,label),
-	Plot(ROOT.TH1F(catsuf+"Evt_Deta_JetsAverage","Evt_Deta_JetsAverage",20,0,4),"Evt_Deta_JetsAverage",thiscatsel,label),
-	Plot(ROOT.TH1F(catsuf+"CSV2","CSV2",20,0,1),"CSV[2]",thiscatsel,label),
-	Plot(ROOT.TH1F(catsuf+"CSV3","CSV3",20,0,1),"CSV[3]",thiscatsel,label),
-	Plot(ROOT.TH1F(catsuf+"CSV4","CSV4",20,0,1),"CSV[4]",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"Evt_Deta_JetsAverage","Evt_Deta_JetsAverage",20,0,2.5),"Evt_Deta_JetsAverage",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"CSV2","CSV2",20,-0.1,1),"CSV[2]",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"CSV3","CSV3",20,-0.1,1),"CSV[3]",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"CSV4","CSV4",20,-0.1,1),"CSV[4]",thiscatsel,label),
 	Plot(ROOT.TH1F(catsuf+"Evt_CSV_Average","Evt_CSV_Average",20,0,1),"Evt_CSV_Average",thiscatsel,label),
 	Plot(ROOT.TH1F(catsuf+"Evt_TaggedJet_MaxDeta_TaggedJets","Evt_TaggedJet_MaxDeta_TaggedJets",20,0,4),"Evt_TaggedJet_MaxDeta_TaggedJets",thiscatsel,label),
-	Plot(ROOT.TH1F(catsuf+"Evt_M_MedianTaggedJets","Evt_M_MedianTaggedJets",20,0,400),"Evt_M_MedianTaggedJets",thiscatsel,label),
-	Plot(ROOT.TH1F(catsuf+"Evt_Deta_2TaggedJetsAverage","Evt_Deta_2TaggedJetsAverage",20,0,3),"Evt_Deta_2TaggedJetsAverage",thiscatsel,label),
-	Plot(ROOT.TH1F(catsuf+"Evt_Aplanarity","Evt_Aplanarity",20,0,1),"Evt_Aplanarity",thiscatsel,label),
-	Plot(ROOT.TH1F(catsuf+"BDT_common5_input_dev_from_avg_disc_btags","BDT_common5_input_dev_from_avg_disc_btags",20,0,0.008),"BDT_common5_input_dev_from_avg_disc_btags",thiscatsel,label),
-	Plot(ROOT.TH1F(catsuf+"BDT_common5_input_invariant_mass_of_everything","BDT_common5_input_invariant_mass_of_everything",20,29,300),"BDT_common5_input_invariant_mass_of_everything",thiscatsel,label),
-	Plot(ROOT.TH1F(catsuf+"BDT_common5_input_Mlb","BDT_common5_input_Mlb",20,29,300),"BDT_common5_input_Mlb",thiscatsel,label),
-	Plot(ROOT.TH1F(catsuf+"Evt_M_Total","Evt_M_Total",20,29,300),"Evt_M_Total",thiscatsel,label),
-	Plot(ROOT.TH1F(catsuf+"Evt_CSV_Dev","Evt_CSV_Dev",20,0,0.008),"Evt_CSV_Dev",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"Evt_M_MedianTaggedJets","Evt_M_MedianTaggedJets",20,0,800),"Evt_M_MedianTaggedJets",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"Evt_Deta_2TaggedJetsAverage","Evt_Deta_2TaggedJetsAverage",20,0,4),"Evt_Deta_2TaggedJetsAverage",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"Evt_Aplanarity","Evt_Aplanarity",20,0,0.4),"Evt_Aplanarity",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"BDT_common5_input_dev_from_avg_disc_btags","BDT_common5_input_dev_from_avg_disc_btags",20,0,0.006),"BDT_common5_input_dev_from_avg_disc_btags",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"BDT_common5_input_invariant_mass_of_everything","BDT_common5_input_invariant_mass_of_everything",20,0,3000),"BDT_common5_input_invariant_mass_of_everything",thiscatsel,label),
+  Plot(ROOT.TH1F(catsuf+"BDT_common5_input_Mlb","BDT_common5_input_Mlb",20,0,200),"BDT_common5_input_Mlb",thiscatsel,label),
+  Plot(ROOT.TH1F(catsuf+"Evt_M_Total","Evt_M_Total",20,400,4000),"Evt_M_Total",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"Evt_CSV_Dev","Evt_CSV_Dev",20,0,0.25),"Evt_CSV_Dev",thiscatsel,label),
 ]
 
 listOf1DPlotLists=[]
@@ -425,7 +423,7 @@ for plotlist in listOf1DPlotLists:
 allplots=OneDimplots+TwoDimPlots
 
 # plot parallel -- alternatively there are also options to plot more traditional that also return lists of histo lists
-outputpath=plotParallel(name,2000000,allplots,samples_data+samplesGenerators,[''],['1.'],[''],THEweight)
+outputpath=plotParallel(name,2000000,allplots,samplesGenerators+samples_data,[''],['1.'],[''],THEweight)
 
 #listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,OneDimplots,1)
 #listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,OneDimplots,1)
