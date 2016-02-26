@@ -94,7 +94,7 @@ def renameHistos(infname,outfname,sysnames):
         ttbartype="ttbarPlusCCbar"
       elif "ttbarPlus2B"!=thisname.split("_",1)[0] :
         ttbartype="ttbarPlus2B"
-      else
+      else:
         print "wrong syst: removing histogram", thisname
         continue
       
@@ -102,7 +102,7 @@ def renameHistos(infname,outfname,sysnames):
         newname.replace("CMS_ttH_PSscaleUp","CMS_ttH_PSscale_"+ttbartype+"Up")
       elif "CMS_ttH_PSscaleDown" in newname:
         newname.replace("CMS_ttH_PSscaleDown","CMS_ttH_PSscale_"+ttbartype+"Down")
-      else
+      else:
         print "wrong syst: removing histogram", thisname
 
 
