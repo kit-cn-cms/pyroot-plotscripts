@@ -369,8 +369,13 @@ def drawHistosOnCanvas(listOfHistos_,normalize=True,stack=False,logscale=False,o
     return canvas
 
 def drawHistosOnCanvas2D(listOfHistos_,normalize=True,stack=False,logscale=False,options_='',ratio=False,DoProfile=False,statTest=False):
+    print 'drawing 2d'
+ #   raw_input()
     listOfHistos=[h.Clone(h.GetName()+'_drawclone') for h in listOfHistos_]
     canvas=getCanvas(listOfHistos[0].GetName(),False)        
+    print 'canvas name',canvas.GetName()
+#    raw_input()
+
     #prepare drawing
 
     # mover over/underflow
@@ -494,7 +499,9 @@ def drawHistosOnCanvas2D(listOfHistos_,normalize=True,stack=False,logscale=False
             #ratio=hist.Clone()
             #ratio.Divide(listOfHistos[0])
             #ratio.DrawCopy('sameP')
-        #canvas.cd(1)
+        #canvas.cd(1)      
+#    print 'name2', canvas.GetName()
+#    raw_input()
     return canvas, tests
 
 def drawHistosOnCanvasAN(listOfHistos_,normalize=True,stack=False,logscale=False,options_='histo',ratio=False):
@@ -571,6 +578,9 @@ def drawHistosOnCanvasAN(listOfHistos_,normalize=True,stack=False,logscale=False
 
 # writes canvases to pdf 
 def printCanvases(canvases,name):
+
+    print 'printing canvases!'
+    print canvases,name
     canvas=canvases[0]
     canvas.Print(name+'.pdf[')
     for c in canvases:
@@ -584,6 +594,14 @@ def printCanvases(canvases,name):
     for c in canvases:
         c.Print(name+'/'+("_".join(((c.GetName()).split('_'))[1:]))+".pdf")
         c.SaveAs(name+"/"+c.GetName()+'.png')
+
+def printCanvasesPNG(canvases,name):
+
+    if not os.path.exists(name):
+        os.makedirs(name)
+    for c in canvases:
+        c.Print(name+'/'+("_".join(((c.GetName()).split('_'))[2:]))+".png")
+
 
 # writes canvases to root file 
 def writeObjects(objects,name):
@@ -1034,7 +1052,7 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
 	  c, stattests2D=drawHistosOnCanvas2D(listOfHistos,normalize,stack,logscale,currentoption,ratio,DoProfile,statTest)
 	else:
           c=drawHistosOnCanvas(listOfHistos,normalize,stack,logscale,options,ratio,DoProfile)
-        c.SetName('c'+str(i))
+        c.SetName('c_'+listOfHistos[0].GetName())
         l=getLegend2()
         for h,sample in zip(listOfHistos,samples):
             loption='L'
@@ -1055,7 +1073,7 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
             stests.Draw()
             objects.append(stests)
         if stattests2D!=None:
-	  stattests2D.Draw()
+#	  stattests2D.Draw()
 	  objects.append(stattests2D)
 	  listofthisstattests.append(stattests2D.GetTitle())
 #        cms = ROOT.TLatex(0.2, 0.96, 'CMS private work'  );
@@ -1081,7 +1099,7 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
         objects.append(label)
         listofallstattests.append(listofthisstattests)
         
-    printCanvases(canvases,name)
+    printCanvasesPNG(canvases,name)
     writeObjects(canvases,name)
     stattestoutfile=open("stattests_"+name+".txt","w")
     for stst in listofallstattests:
