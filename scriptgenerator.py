@@ -912,6 +912,8 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
             for s in systnames:
                 script+=initTwoDimHistoWithProcessNameAndSuffix(c+n+s,nbX,mnX,mxX,nbY,mnY,mxY,t)
 	  else:
+	    #if "splitdummybdt" in plot.histo.GetTitle():
+	      #continue
             t=plot.histo.GetTitle()
             n=plot.histo.GetName()
             mx=plot.histo.GetXaxis().GetXmax()
@@ -1009,6 +1011,8 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
         for plot in plots:
             histoname=cn+plot.name
             if isinstance(plot,plotutils.MVAPlot):
+		#if "splitdummybdt" in plot.histo.GetTitle():
+		  #continue
                 script+=evaluateMVA(plot)
                 weight='('+plot.selection+')*Weight_XS*categoryweight*sampleweight'
                 script+=fillHistoSyst(histoname,'bdtoutput_'+plot.name,weight,systnames,systweights)

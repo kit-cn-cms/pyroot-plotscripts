@@ -18,14 +18,14 @@ print "!!! NO BOOSTED ANYWHERE FOR TEST REASONS !!!"
 name='76xBDToptionD'
 
 bdtweightpath="/nfs/dust/cms/user/kelmorab/76xBDTWeights/"
-#memexp='(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)'
-memexp='1.0'
+memexp='(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)'
+#memexp='1.0'
 
-nhistobins_=      [ 20,        4,      4,     20,    4,     4,    20,   20,  6,       6,     ]
-minxvals_=        [ -1,       0.,     0.,   -0.8,    0.,    0.,   -1,  -1,   0.,      0.,   ]
-maxxvals_=        [  1,      .95,   0.95,      1,    1,      1,    1,   1,   0.95,    0.95,  ] 
+nhistobins_=      [ 20,        4,      4,     20,    4,     4,    20,   20,  6,       6, 10    ]
+minxvals_=        [ -1,       0.,     0.,   -0.8,    0.,    0.,   -1,  -1,   0.,      0., 0.9  ]
+maxxvals_=        [  1,      .95,   0.95,      1,    1,      1,    1,   1,   0.95,    0.95, 0.9 ] 
 
-discrs =          [bdtweightpath+'/weights_Final_43_76blr.xml', memexp, memexp, bdtweightpath+'/weights_Final_53_76blr.xml',memexp , memexp, bdtweightpath+'/weights_Final_62_76blr2.xml',bdtweightpath+'/weights_Final_63_76blr.xml',memexp, memexp,]
+discrs =          [bdtweightpath+'/weights_Final_43_76blr.xml', memexp, memexp, bdtweightpath+'/weights_Final_53_76blr.xml',memexp , memexp, bdtweightpath+'/weights_Final_62_76blr2.xml',bdtweightpath+'/weights_Final_63_76blr.xml',memexp, memexp,bdtweightpath+'/weights_Final_DB_boosted_76xmem.xml']
 
 nhistobins=[]
 minxvals=[]
@@ -45,9 +45,10 @@ categories_=[("(N_Jets==4&&N_BTagsM==3)&&!"+boosted+"","ljets_j4_t3"),
             ("(N_Jets==5&&N_BTagsM>=4)&&!"+boosted+"","ljets_j5_tge4"),
             ("(N_Jets>=6&&N_BTagsM==2)&&!"+boosted+"","ljets_jge6_t2"),
             ("(N_Jets>=6&&N_BTagsM==3)&&!"+boosted+"","ljets_jge6_t3"),
-            ("(N_Jets>=6&&N_BTagsM>=4)&&!"+boosted+"","ljets_jge6_tge4")]
+            ("(N_Jets>=6&&N_BTagsM>=4)&&!"+boosted+"","ljets_jge6_tge4"),
+            (boosted,"ljets_boosted")]
 categories=[]
-bdtcuts=[0.1,0.2,0.1,0.2,0.0,0.1,0.1]
+bdtcuts=[0.2,0.2,0.1,0.2,0.1,0.1,0.1,0.2]
 
 for cat,bdt in zip(categories_,bdtcuts):
   if cat[1] in ["ljets_jge6_tge4","ljets_j5_tge4","ljets_j4_t4"]:
@@ -75,6 +76,7 @@ for sample in samples:
     systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),sample.selection,sample.nick+sysname))
   
 allsamples=samples+systsamples
+
 
 bdts=[]
 print len(discrs),len(bins),len(binlabels),len(nhistobins),len(minxvals),len(maxxvals),

@@ -853,15 +853,19 @@ def createHistoLists_fromSuperHistoFile(path,samples,plots,rebin=1,catnames=[""]
     listOfHistoListsT=[]
     f=ROOT.TFile(path, "readonly")
     keyList = f.GetKeyNames()
+    #print keyList
     for sample in samples:
+        
         histoList=[]
         ROOT.gDirectory.cd('PyROOT:/')
+        print catnames
         for c in catnames:
             for plot in plots:
                 key=sample.nick+'_'+c+plot.name
+                #print key
 #                print key, sample.nick, c, plot.name
                 o=f.Get(key)
-#                print o
+                #print o
                 if isinstance(o,ROOT.TH1) and not isinstance(o,ROOT.TH2): 
                     o.Rebin(rebin)
                     histoList.append(o.Clone())
@@ -869,6 +873,7 @@ def createHistoLists_fromSuperHistoFile(path,samples,plots,rebin=1,catnames=[""]
                 if DoTwoDim and isinstance(o,ROOT.TH2):
 		    #print "2D"
 		    histoList.append(o.Clone())
+	#raw_input()
 
         listOfHistoListsT.append(histoList)
     listOfHistoLists=transposeLOL(listOfHistoListsT)
@@ -1848,7 +1853,9 @@ def writeLOLAndOneOnTop(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,f
     canvases=[]
     objects=[]   
     i=0
+    print "ok"
     for listOfHistos,ot in zip(listOfHistoLists,listOfhistosOnTop):
+        print i
         i+=1
         for histo,sample in zip(listOfHistos,samples):
 
