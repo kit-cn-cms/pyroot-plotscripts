@@ -29,7 +29,8 @@ hzgSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==22)
 path_excl4252='/nfs/dust/cms/user/hmildner/merged_trees/output/'
 path_incl4252='/nfs/dust/cms/user/hmildner/merged_trees/output*/'
 path_swold='/nfs/dust/cms/user/shwillia/BoostedTrees/Setup_160127/'
-path_76x='/nfs/dust/cms/user/kelmorab/Samples76x21022016'
+#path_76x='/nfs/dust/cms/user/kelmorab/Samples76x21022016'
+path_76x="/nfs/dust/cms/user/hmildner/samples76X"
 
 # names of the systematics (proper names needed e.g. for combination)
 weightsystnames=["",
@@ -44,7 +45,9 @@ weightsystnames=["",
                  "_CMS_ttH_Q2scale_ttbarPlus2BUp","_CMS_ttH_Q2scale_ttbarPlus2BDown",
                  "_CMS_ttH_Q2scale_ttbarPlusBBbarUp","_CMS_ttH_Q2scale_ttbarPlusBBbarDown",
                  "_CMS_ttH_Q2scale_ttbarPlusCCbarUp","_CMS_ttH_Q2scale_ttbarPlusCCbarDown",
-                 "_CMS_ttH_NNPDFUp","_CMS_ttH_NNPDFDown",
+                 #"_CMS_ttH_NNPDFUp","_CMS_ttH_NNPDFDown",
+                 "_CMS_ttH_eff_muUp","_CMS_ttH_eff_muDown",  
+                 "_CMS_ttH_eff_elUp","_CMS_ttH_eff_elDown",
                  #"_CMS_ttH_MuonIDUp","_CMS_ttH_MuonIDDown",
                  #"_CMS_ttH_MuonIsoUp","_CMS_ttH_MuonIsoDown",
                  #"_CMS_ttH_MuonTriggerUp","_CMS_ttH_MuonTriggerDown",                 
@@ -56,6 +59,8 @@ systs_all_samples=["",
                   "_CMS_ttH_CSVHFStats2Up","_CMS_ttH_CSVHFStats2Down","_CMS_ttH_CSVLFStats2Up","_CMS_ttH_CSVLFStats2Down",
                   "_CMS_ttH_CSVCErr1Up","_CMS_ttH_CSVCErr1Down","_CMS_ttH_CSVCErr2Up","_CMS_ttH_CSVCErr2Down",
                    "_CMS_ttH_PUUp","_CMS_ttH_PUDown",
+                   "_CMS_ttH_eff_muUp","_CMS_ttH_eff_muDown",  
+                 "_CMS_ttH_eff_elUp","_CMS_ttH_eff_elDown",
                    "_CMS_scale_jUp","_CMS_scale_jDown",
                   #"_CMS_ttH_MuonIDUp","_CMS_ttH_MuonIDDown",
                   #"_CMS_ttH_MuonIsoUp","_CMS_ttH_MuonIsoDown",
@@ -63,7 +68,7 @@ systs_all_samples=["",
                    ]
 
 systs_ttbar= [
-	      "_CMS_ttH_NNPDFUp","_CMS_ttH_NNPDFDown",
+	      #"_CMS_ttH_NNPDFUp","_CMS_ttH_NNPDFDown",
 	      "_CMS_ttH_PSscaleUp","_CMS_ttH_PSscaleDown",
 	      ]
 systs_tt_lf=["_CMS_ttH_Q2scale_ttbarOtherUp","_CMS_ttH_Q2scale_ttbarOtherDown",]
@@ -89,9 +94,9 @@ PSSystnames=["",
 		 "","",
 		 "","",
                  "_CMS_ttH_PSscaleUp","_CMS_ttH_PSscaleDown",
-                 #"","",
-		 #"","",
-		 #"","",
+                 "","",
+		 "","",
+		 "","",
                  ]
 
 errorSystnames=["",
@@ -106,7 +111,9 @@ errorSystnames=["",
                  "_CMS_ttH_Q2scale_ttbarPlus2BUp","_CMS_ttH_Q2scale_ttbarPlus2BDown",
                  "_CMS_ttH_Q2scale_ttbarPlusBBbarUp","_CMS_ttH_Q2scale_ttbarPlusBBbarDown",
                  "_CMS_ttH_Q2scale_ttbarPlusCCbarUp","_CMS_ttH_Q2scale_ttbarPlusCCbarDown",
-                 "_CMS_ttH_NNPDFUp","_CMS_ttH_NNPDFDown",
+                 #"_CMS_ttH_NNPDFUp","_CMS_ttH_NNPDFDown",
+                 "_CMS_ttH_eff_muUp","_CMS_ttH_eff_muDown",  
+                 "_CMS_ttH_eff_elUp","_CMS_ttH_eff_elDown",
                  "_CMS_scale_jUp","_CMS_scale_jDown",
                  "_CMS_ttH_PSscaleUp","_CMS_ttH_PSscaleDown",
                  #"","",
@@ -159,8 +166,12 @@ systweights=["NomWeight:="+usualweights+"*(DoWeights==1)+(DoWeights==0)*1.0",
              "QScaleTTBBDown:=Weight_muRdownmuFdown*"+usualweights+"/"+str(mu_down_sf),
              "QScaleTTCCUp:=Weight_muRupmuFup*"+usualweights+"/"+str(mu_up_sf),
              "QScaleTTCCDown:=Weight_muRdownmuFdown*"+usualweights+"/"+str(mu_down_sf),
-             "PDFweightUp:=Weight_NNPDFid260067*"+usualweights+"/"+str(pdf_67_sf),
-             "PDFWeightDown:=Weight_NNPDFid260005*"+usualweights+"/"+str(pdf_05_sf),
+             #"PDFweightUp:=Weight_NNPDFid260067*"+usualweights+"/"+str(pdf_67_sf),
+             #"PDFWeightDown:=Weight_NNPDFid260005*"+usualweights+"/"+str(pdf_05_sf),
+             "dummyCMS_ttH_eff_muUp:="+usualweights+"*(DoWeights==1)*(1.01*(N_TightMuons==1)+1.0*(N_TightMuons==0))+(DoWeights==0)*1.0",
+             "dummyCMS_ttH_eff_muDown:="+usualweights+"*(DoWeights==1)*(0.99*(N_TightMuons==1)+1.0*(N_TightMuons==0))+(DoWeights==0)*1.0",
+             "dummyCMS_ttH_eff_elUp:="+usualweights+"*(DoWeights==1)*(1.01*(N_TightElectrons==1)+1.0*(N_TightElectrons==0))+(DoWeights==0)*1.0",
+             "dummyCMS_ttH_eff_elDown:="+usualweights+"*(DoWeights==1)*(0.99*(N_TightElectrons==1)+1.0*(N_TightElectrons==0))+(DoWeights==0)*1.0",
              #"MuonIDUp:=(1*Weight_PU*muonIDHelper.GetSF(muonPt,muonEta,1)*muonIsoHelper.GetSF(muonPt,muonEta,0)*muonTriggerHelper.GetSF(muonPt,muonEta,0)*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
              #"MuonIDDown:=(1*Weight_PU*muonIDHelper.GetSF(muonPt,muonEta,-1)*muonIsoHelper.GetSF(muonPt,muonEta,0)*muonTriggerHelper.GetSF(muonPt,muonEta,0)*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
              #"MuonIsoUp:=(1*Weight_PU*muonIDHelper.GetSF(muonPt,muonEta,0)*muonIsoHelper.GetSF(muonPt,muonEta,1)*muonTriggerHelper.GetSF(muonPt,muonEta,0)*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
@@ -246,7 +257,8 @@ samples_data_bdtplots=[Sample('SingleMu',ROOT.kBlack,path_incl4252+'/mu_*/*nomin
                            Sample('SingleEl',ROOT.kBlack,path_incl4252+'/el_*/*nominal*.root',sel_singleel,'SingleEl')
                        ]
 
-ttbarMCweight='*(0.000919641*(N_GenTopHad==1 && N_GenTopLep==1)+0.000707116*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS'
+#ttbarMCweight='*(0.000919641*(N_GenTopHad==1 && N_GenTopLep==1)+0.000707116*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS'
+ttbarMCweight='0.0084896859/Weight_XS'
 samplesControlPlots=[Sample('t#bar{t}H',ROOT.kBlue+1,path_76x+'/ttH*/*nominal*.root',mcweight,'ttH',systs_all_samples) ,     
 #         Sample('t#bar{t}',ROOT.kRed+1,path_76x+'/ttbar/*nominal*.root',mcweight,'ttbar') ,     
          Sample('t#bar{t}+lf',ROOT.kRed-7,path_76x+'/ttbar_????_*/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)'+ttbarMCweight,'ttbarOther',systs_all_samples+systs_ttbar+systs_tt_lf,0.05),
@@ -261,7 +273,7 @@ samplesControlPlots=[Sample('t#bar{t}H',ROOT.kBlue+1,path_76x+'/ttH*/*nominal*.r
 #         Sample('QCD',ROOT.kYellow ,path_76x+'/QCD*/*nominal*root',mcweight,'QCD') , 
 ]
 
-
+ttbarMCweight='*0.0084896859/Weight_XS'
 samplesLimits=[Sample('t#bar{t}H',ROOT.kBlue+1,path_76x+'/ttH*/*nominal*.root',mcweight,'ttH',systs_all_samples) ,     
 #         Sample('t#bar{t}',ROOT.kRed+1,path_76x+'/ttbar/*nominal*.root',mcweight,'ttbar') ,     
 	      Sample('t#bar{t}H, H to b#bar{b}',ROOT.kBlue+1,path_76x+'/ttHbb*/*nominal*.root',mcweight,'ttH_hbb',systs_all_samples) ,  
@@ -272,11 +284,11 @@ samplesLimits=[Sample('t#bar{t}H',ROOT.kBlue+1,path_76x+'/ttH*/*nominal*.root',m
 	      Sample('t#bar{t}H, H to WW',ROOT.kBlue+1,path_76x+'/ttHnonbb*/*nominal*.root',mcweight+hwwSel,'ttH_hww',systs_all_samples) ,  
 	      Sample('t#bar{t}H, H to ZZ',ROOT.kBlue+1,path_76x+'/ttHnonbb*/*nominal*.root',mcweight+hzzSel,'ttH_hzz',systs_all_samples) ,  
 	      Sample('t#bar{t}H, H to #gamma Z',ROOT.kBlue+1,path_76x+'/ttHnonbb*/*nominal*.root',mcweight+hzgSel,'ttH_hzg',systs_all_samples) ,
-	      Sample('t#bar{t}+lf',ROOT.kRed-7,path_76x+'/ttbar_????_*/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)'+ttbarMCweight,'ttbarOther',systs_all_samples+systs_ttbar+systs_tt_lf,0.05),
-	      Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,path_76x+'/ttbar_????_*/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==1)'+ttbarMCweight,'ttbarPlusCCbar',systs_all_samples+systs_ttbar+systs_tt_cc,0.5),
-	      Sample('t#bar{t}+b',ROOT.kRed-2,path_76x+'/ttbar_????_*/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==1)'+ttbarMCweight,'ttbarPlusB',systs_all_samples+systs_ttbar+systs_tt_b,0.5),
-	      Sample('t#bar{t}+2b',ROOT.kRed+2,path_76x+'/ttbar_????_*/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==2)'+ttbarMCweight,'ttbarPlus2B',systs_all_samples+systs_ttbar+systs_tt_2b,0.5),
-	      Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,path_76x+'/ttbar_????_*/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==3)'+ttbarMCweight,'ttbarPlusBBbar',systs_all_samples+systs_ttbar+systs_tt_bb,0.5),  
+	      Sample('t#bar{t}+lf',ROOT.kRed-7,path_76x+'/ttbar_incl_*/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)'+ttbarMCweight,'ttbarOther',systs_all_samples+systs_ttbar+systs_tt_lf,0.05),
+	      Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,path_76x+'/ttbar_incl_*/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==1)'+ttbarMCweight,'ttbarPlusCCbar',systs_all_samples+systs_ttbar+systs_tt_cc,0.5),
+	      Sample('t#bar{t}+b',ROOT.kRed-2,path_76x+'/ttbar_incl_*/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==1)'+ttbarMCweight,'ttbarPlusB',systs_all_samples+systs_ttbar+systs_tt_b,0.5),
+	      Sample('t#bar{t}+2b',ROOT.kRed+2,path_76x+'/ttbar_incl_*/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==2)'+ttbarMCweight,'ttbarPlus2B',systs_all_samples+systs_ttbar+systs_tt_2b,0.5),
+	      Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,path_76x+'/ttbar_incl_*/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==3)'+ttbarMCweight,'ttbarPlusBBbar',systs_all_samples+systs_ttbar+systs_tt_bb,0.5),  
 	      Sample('Single Top',ROOT.kMagenta,path_76x+'/st*/*nominal*.root',mcweightAll,'SingleTop',systs_all_samples) , 
 	      Sample('V+jets',ROOT.kGreen-3,path_76x+'/??ets*/*nominal*.root',mcweightAll,'Vjets',systs_all_samples) , 
 	      Sample('t#bar{t}+V',ROOT.kBlue-10,path_76x+'/tt?_*/*nominal*.root',mcweightAll,'ttV',systs_all_samples),         

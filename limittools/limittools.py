@@ -80,6 +80,32 @@ def renameHistos(infname,outfname,sysnames):
       print "wrong syst: removing histogram", thisname
       continue
     
+#add ttbar type to systematics name for PS scale
+    if "CMS_ttH_PSscaleUp" in newname or "CMS_ttH_PSscaleDown" in newname:
+      
+      ttbartype=""
+      if "ttbarOther"!=thisname.split("_",1)[0]:
+        ttbartype="ttbarOther"
+      elif "ttbarPlusB"!=thisname.split("_",1)[0] :
+        ttbartype="ttbarPlusB"
+      elif "ttbarPlusBBbar"!=thisname.split("_",1)[0] :
+        ttbartype="ttbarPlusBBbar"
+      elif "ttbarPlusCCbar"!=thisname.split("_",1)[0] :
+        ttbartype="ttbarPlusCCbar"
+      elif "ttbarPlus2B"!=thisname.split("_",1)[0] :
+        ttbartype="ttbarPlus2B"
+      else
+        print "wrong syst: removing histogram", thisname
+        continue
+      
+      if "CMS_ttH_PSscaleUp" in newname:
+        newname.replace("CMS_ttH_PSscaleUp","CMS_ttH_PSscale_"+ttbartype+"Up")
+      elif "CMS_ttH_PSscaleDown" in newname:
+        newname.replace("CMS_ttH_PSscaleDown","CMS_ttH_PSscale_"+ttbartype+"Down")
+      else
+        print "wrong syst: removing histogram", thisname
+
+
     #if nsysts ==1 and thish.Integral()<0.0:
       #print "nominal histogram has negativ integral"
       #print thish, thish.Integral()
