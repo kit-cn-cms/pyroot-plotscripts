@@ -47,7 +47,7 @@ categories_=[("(N_Jets==4&&N_BTagsM==3)&&!"+boosted+"","ljets_j4_t3"),
             ("(N_Jets>=6&&N_BTagsM==3)&&!"+boosted+"","ljets_jge6_t3"),
             ("(N_Jets>=6&&N_BTagsM>=4)&&!"+boosted+"","ljets_jge6_tge4")]
 categories=[]
-bdtcuts=[0.2,0.2,0.1,0.2,0.1,0.1,0.1]
+bdtcuts=[0.1,0.2,0.1,0.2,0.0,0.1,0.1]
 
 for cat,bdt in zip(categories_,bdtcuts):
   if cat[1] in ["ljets_jge6_tge4","ljets_j5_tge4","ljets_j4_t4"]:
