@@ -244,8 +244,8 @@ othersystfilenames=[
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
 
-samples_data_controlplots=[Sample('SingleMu',ROOT.kBlack,path_76x+'/el_*/*nominal*.root',sel_singlemu,'SingleMu'),
-                           Sample('SingleEl',ROOT.kBlack,path_76x+'/mu_*/*nominal*.root',sel_singleel,'SingleEl')
+samples_data_controlplots=[Sample('SingleMu',ROOT.kBlack,path_76x+'/mu_*/*nominal*.root',sel_singlemu,'SingleMu'),
+                           Sample('SingleEl',ROOT.kBlack,path_76x+'/el_*/*nominal*.root',sel_singleel,'SingleEl')
                        ]
                        
 #samples_data_controlplots_swold=[Sample('SingleMu',ROOT.kBlack,path_swold+'/mu_*/*nominal*.root',sel_singlemu,'SingleMu'),
