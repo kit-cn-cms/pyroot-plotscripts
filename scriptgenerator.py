@@ -118,22 +118,21 @@ class MuTriggerHelper
     double GetSF(double muonPt, double muonEta, int syst);
 
   private:
-    TH2D *h_abseta_pt_ratio;
+    TH2D *h_abseta_pt_ratio4p2;
+    TH2D *h_abseta_pt_ratio4p3;
+
 };
 
 MuTriggerHelper::MuTriggerHelper()
 {
     std::string inputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/SingleMuonTrigger_Z_RunCD_Reco76X_Feb15.root";
 
-    TFile *f_muonTriggerSF4p3 = new TFile(std::string(inputFile).c_str(),"READ");
+    TFile *f_muonTriggerSF= new TFile(std::string(inputFile).c_str(),"READ");
 
-    h_abseta_pt_ratio4p3=(TH2D*)f_muonTriggerSF4p3->Get("runD_IsoMu20_OR_IsoTkMu20_HLTv4p3_PtEtaBins/abseta_pt_ratio");
-    
-    TFile *f_muonTriggerSF4p2 = new TFile(std::string(inputFile).c_str(),"READ");
+    h_abseta_pt_ratio4p3=(TH2D*)f_muonTriggerSF->Get("runD_IsoMu20_OR_IsoTkMu20_HLTv4p3_PtEtaBins/abseta_pt_ratio");
 
-    h_abseta_pt_ratio4p2=(TH2D*)f_muonTriggerSF4p2->Get("runD_IsoMu20_OR_IsoTkMu20_HLTv4p2_PtEtaBins/abseta_pt_ratio");
-    std::cout<<h_abseta_pt_ratio<<std::endl;
-    std::cout<<"done setting up muon Trigger SF"<<std::endl;
+    h_abseta_pt_ratio4p2=(TH2D*)f_muonTriggerSF->Get("runD_IsoMu20_OR_IsoTkMu20_HLTv4p2_PtEtaBins/abseta_pt_ratio");
+
 }
 
 double MuTriggerHelper::GetSF(double muonPt, double muonEta, int syst){
