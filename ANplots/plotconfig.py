@@ -249,13 +249,13 @@ samples_data_controlplots=[Sample('SingleMu',ROOT.kBlack,path_76x+'/mu_*/*nomina
                            Sample('SingleEl',ROOT.kBlack,path_76x+'/el_*/*nominal*.root',sel_singleel,'SingleEl')
                        ]
                        
-samples_data_controlplots_swold=[Sample('SingleMu',ROOT.kBlack,path_swold+'/mu_*/*nominal*.root',sel_singlemu,'SingleMu'),
-                           Sample('SingleEl',ROOT.kBlack,path_swold+'/el_*/*nominal*.root',sel_singleel,'SingleEl')
-                       ]
+#samples_data_controlplots_swold=[Sample('SingleMu',ROOT.kBlack,path_swold+'/mu_*/*nominal*.root',sel_singlemu,'SingleMu'),
+                           #Sample('SingleEl',ROOT.kBlack,path_swold+'/el_*/*nominal*.root',sel_singleel,'SingleEl')
+                       #]
                        
-samples_data_bdtplots=[Sample('SingleMu',ROOT.kBlack,path_incl4252+'/mu_*/*nominal*.root',sel_singlemu,'SingleMu'),
-                           Sample('SingleEl',ROOT.kBlack,path_incl4252+'/el_*/*nominal*.root',sel_singleel,'SingleEl')
-                       ]
+#samples_data_bdtplots=[Sample('SingleMu',ROOT.kBlack,path_incl4252+'/mu_*/*nominal*.root',sel_singlemu,'SingleMu'),
+                           #Sample('SingleEl',ROOT.kBlack,path_incl4252+'/el_*/*nominal*.root',sel_singleel,'SingleEl')
+                       #]
 
 #ttbarMCweight='*(0.000919641*(N_GenTopHad==1 && N_GenTopLep==1)+0.000707116*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS'
 ttbarMCweight='0.0084896859/Weight_XS'

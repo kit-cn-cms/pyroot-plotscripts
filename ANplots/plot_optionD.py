@@ -12,8 +12,8 @@ from limittools import calcLimits
 from plotconfig import *
 
 
-print "!!! NO MEMS ANYWHERE FOR TEST REASONS !!!"
-print "!!! NO BOOSTED ANYWHERE FOR TEST REASONS !!!"
+#print "!!! NO MEMS ANYWHERE FOR TEST REASONS !!!"
+#print "!!! NO BOOSTED ANYWHERE FOR TEST REASONS !!!"
 
 name='76xBDToptionD'
 
@@ -21,11 +21,12 @@ bdtweightpath="/nfs/dust/cms/user/kelmorab/76xBDTWeights/"
 memexp='(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)'
 #memexp='1.0'
 
-nhistobins_=      [ 20,        4,      4,     20,    4,     4,    20,   20,  6,       6, 10    ]
-minxvals_=        [ -1,       0.,     0.,   -0.8,    0.,    0.,   -1,  -1,   0.,      0., 0.9  ]
-maxxvals_=        [  1,      .95,   0.95,      1,    1,      1,    1,   1,   0.95,    0.95, 0.9 ] 
 
-discrs =          [bdtweightpath+'/weights_Final_43_76blr.xml', memexp, memexp, bdtweightpath+'/weights_Final_53_76blr.xml',memexp , memexp, bdtweightpath+'/weights_Final_62_76blr2.xml',bdtweightpath+'/weights_Final_63_76blr.xml',memexp, memexp,bdtweightpath+'/weights_Final_DB_boosted_76xmem.xml']
+nhistobins_=      [ 20,        4,      4,    	 20,    	4,     	4,    	20,   	20,  	6,       6, 	10    ]
+minxvals_=        [ -0.9,       0.,     0.,    -0.85,    	0.,    	0.,   	-0.8,  -0.8,   	0.,      0., 	-0.9  ]
+maxxvals_=        [  0.8,      0.85,   0.9,      0.95,    	0.95,   0.75,    0.8,   0.85,   0.95,    0.95, 	0.82 ] 
+
+discrs =          [bdtweightpath+'/weights_Final_43_76mem.xml', memexp, memexp, bdtweightpath+'/weights_Final_53_76mem.xml',memexp , memexp, bdtweightpath+'/weights_Final_62_76blr2.xml',bdtweightpath+'/weights_Final_63_76mem.xml',memexp, memexp,bdtweightpath+'/weights_Final_DB_boosted_76xmem.xml']
 
 nhistobins=[]
 minxvals=[]
@@ -68,7 +69,6 @@ samples=samplesLimits
 allsystnames=weightsystnames+othersystnames
 
 # corresponding weight names
-pdfweightscalefactor=1.0
 
 systsamples=[]
 for sample in samples:
@@ -76,7 +76,9 @@ for sample in samples:
     systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),sample.selection,sample.nick+sysname))
   
 allsamples=samples+systsamples
+samplesdata=samples_data_controlplots
 
+helperbdts=[]
 
 bdts=[]
 print len(discrs),len(bins),len(binlabels),len(nhistobins),len(minxvals),len(maxxvals),
@@ -84,21 +86,21 @@ print len(zip(discrs,bins,binlabels,nhistobins,minxvals,maxxvals))
 for discr,b,bl,nb,minx,maxx in zip(discrs,bins,binlabels,nhistobins,minxvals,maxxvals):
   if bl == "ljets_jge6_tge4_high":
     print "tst"
-    bdts.append(MVAPlot(ROOT.TH1F("splitdummybdt"+"ljets_jge6_tge4","BDT for splitting ("+bl+")",nb*5,-1.0,1.0),bdtweightpath+'/weights_Final_64_76blr.xml',b))
+    helperbdts.append(MVAPlot(ROOT.TH1F("splitdummybdt"+"ljets_jge6_tge4","BDT for splitting ("+bl+")",nb*10,-1.0,1.0),bdtweightpath+'/weights_Final_64_76blr.xml',b))
   if bl == "ljets_j5_tge4_high":
-    bdts.append(MVAPlot(ROOT.TH1F("splitdummybdt"+"ljets_j5_tge4","BDT for splitting ("+bl+")",nb*5,-1.0,1.0),bdtweightpath+'/weights_Final_54_76blr.xml',b))
+    helperbdts.append(MVAPlot(ROOT.TH1F("splitdummybdt"+"ljets_j5_tge4","BDT for splitting ("+bl+")",nb*10,-1.0,1.0),bdtweightpath+'/weights_Final_54_76blr.xml',b))
   if bl == "ljets_j4_t4_high":
-    bdts.append(MVAPlot(ROOT.TH1F("splitdummybdt"+"ljets_j4_t4","BDT for splitting ("+bl+")",nb*5,-1.0,1.0),bdtweightpath+'/weights_Final_44_76blr.xml',b))
+    helperbdts.append(MVAPlot(ROOT.TH1F("splitdummybdt"+"ljets_j4_t4","BDT for splitting ("+bl+")",nb*10,-1.0,1.0),bdtweightpath+'/weights_Final_44_76blr.xml',b))
   if '.xml' in discr:
     bdts.append(MVAPlot(ROOT.TH1F(discrname+"_"+bl,"final discriminator ("+bl+")",nb,minx,maxx),discr,b))
   else:
     bdts.append(Plot(ROOT.TH1F(discrname+"_"+bl,"final discriminator ("+bl+")",nb,minx,maxx),discr,b))
   print discr,b,bl,nb,minx,maxx
 
-print "if cateries are correct press the \"any\" key"
-raw_input()
+#print "if cateries are correct press the \"any\" key"
+#raw_input()
 
-outputpath=plotParallel(name,500000,bdts,allsamples,[''],['1.'],weightsystnames, systweights)
+outputpath=plotParallel(name,500000,bdts+helperbdts,allsamples+samplesdata,[''],['1.'],weightsystnames, systweights)
 if not os.path.exists(name):
   os.makedirs(name)
 
