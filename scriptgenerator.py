@@ -145,13 +145,13 @@ double MuTriggerHelper::GetSF(double muonPt, double muonEta, int syst){
   thisbin = h_abseta_pt_ratio4p3->FindBin(searcheta,searchpt);
   double nomval4p3=h_abseta_pt_ratio4p3->GetBinContent(thisbin);
   double error4p3=h_abseta_pt_ratio4p3->GetBinError(thisbin);
-  double upval4p3=nomval*(1.0+0.02);
-  double downval4p3=nomval*(1.0-0.02);
+  double upval4p3=nomval4p3*(1.0+0.02);
+  double downval4p3=nomval4p3*(1.0-0.02);
   thisbin = h_abseta_pt_ratio4p2->FindBin(searcheta,searchpt);
   double nomval4p2=h_abseta_pt_ratio4p2->GetBinContent(thisbin);
   double error4p2=h_abseta_pt_ratio4p2->GetBinError(thisbin);
-  double upval4p2=nomval*(1.0+0.02);
-  double downval4p2=nomval*(1.0-0.02);
+  double upval4p2=nomval4p2*(1.0+0.02);
+  double downval4p2=nomval4p2*(1.0-0.02);
   
   double nomval=0.2843*nomval4p2+0.716*nomval4p3;
   double upval=0.2843*upval4p2+0.716*upval4p3;
