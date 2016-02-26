@@ -23,7 +23,7 @@ memexp='(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)'
 
 nhistobins_=      [ 20,        4,      4,    	 20,    	4,     	4,    	20,   	20,  	6,       6, 	10    ]
 minxvals_=        [ -0.9,       0.,     0.,    -0.85,    	0.,    	0.,   	-0.8,  -0.8,   	0.,      0., 	-0.9  ]
-maxxvals_=        [  0.8,      0.85,   0.9,      0.95,    	0.95,   0.75,    0.8,   0.85,   0.95,    0.95, 	0.82 ] 
+maxxvals_=        [  0.85, 0.9, 0.9, 0.825,0.95,0.95,0.75,0.85,0.95,0.95,0.825 ] 
 
 discrs =          [bdtweightpath+'/weights_Final_43_76mem.xml', memexp, memexp, bdtweightpath+'/weights_Final_53_76mem.xml',memexp , memexp, bdtweightpath+'/weights_Final_62_76blr2.xml',bdtweightpath+'/weights_Final_63_76mem.xml',memexp, memexp,bdtweightpath+'/weights_Final_DB_boosted_76xmem.xml']
 
