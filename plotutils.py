@@ -2110,10 +2110,10 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         otc.Scale(factor)
         otc.Draw('histosame')
         data.Draw('samePE1')
-        #blind.SetFillStyle(3665)
-        blind.SetFillStyle(1001)
+        blind.SetFillStyle(3665)
+        #blind.SetFillStyle(1001)
         blind.SetLineColor(ROOT.kGray)
-        blind.SetFillColorAlpha(ROOT.kGray)
+        blind.SetFillColor(ROOT.kGray)
         if blinded:
             blind.Draw('same2')
         objects.append(blind)
