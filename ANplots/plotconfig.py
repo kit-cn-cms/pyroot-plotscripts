@@ -261,7 +261,7 @@ samples_data_controlplots=[Sample('SingleMu',ROOT.kBlack,path_76x+'/mu_*/*nomina
 #ttbarMCweight_incl='*(0.0084896859)'
 #=======
 #ttbarMCweight='*(0.000919641*(N_GenTopHad==1 && N_GenTopLep==1)+0.000707116*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS'
-ttbarMCweight='0.0084896859/Weight_XS'
+ttbarMCweight='*0.0084896859/Weight_XS'
 #>>>>>>> 69e2a4cf566105ed512b7dd9d5b1a3d3586dfe54
 samplesControlPlots=[Sample('t#bar{t}H',ROOT.kBlue+1,path_76x+'/ttH*/*nominal*.root',mcweight,'ttH',systs_all_samples) ,     
 #         Sample('t#bar{t}',ROOT.kRed+1,path_76x+'/ttbar/*nominal*.root',mcweight,'ttbar') ,     
