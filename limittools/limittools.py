@@ -37,7 +37,7 @@ class Limitresult:
       print catalias[cat]+':',round(limit*10.)/10.,'^{+'+str(round((limit_up-limit)*10)/10.)+'}_{'+str(round((limit_down-limit)*10)/10.)+'}','^{+'+str(round((limit_2up-limit)*10)/10.)+'}_{'+str(round((limit_2down-limit)*10)/10.)+'}'
     
 
-def renameHistos(infname,outfname,sysnames):
+def renameHistos(infname,outfname,sysnames,prune=True):
   print sysnames
   infile=ROOT.TFile(infname,"READ")
   outfile=ROOT.TFile(outfname,"RECREATE")
@@ -60,25 +60,26 @@ def renameHistos(infname,outfname,sysnames):
     
     #filter histograms for systs not belonging to the samples 
     #for now until we have NNPDF syst for other samples
-    if "CMS_ttH_NNPDF" in thisname:
-      if thisname.split("_",1)[0]+"_" not in ["ttbarPlus2B_","ttbarPlusB_","ttbarPlusBBbar_","ttbarPlusCCbar_","ttbarOther_"]:
+    if prune:
+      if "CMS_ttH_NNPDF" in thisname:
+        if thisname.split("_",1)[0]+"_" not in ["ttbarPlus2B_","ttbarPlusB_","ttbarPlusBBbar_","ttbarPlusCCbar_","ttbarOther_"]:
+          print "wrong syst: removing histogram", thisname
+          continue
+      if "CMS_ttH_Q2scale_ttbarOther" in thisname and "ttbarOther"!=thisname.split("_",1)[0]:
         print "wrong syst: removing histogram", thisname
         continue
-    if "CMS_ttH_Q2scale_ttbarOther" in thisname and "ttbarOther"!=thisname.split("_",1)[0]:
-      print "wrong syst: removing histogram", thisname
-      continue
-    if ("CMS_ttH_Q2scale_ttbarPlusBUp" in thisname or "CMS_ttH_Q2scale_ttbarPlusBDown" in thisname ) and "ttbarPlusB"!=thisname.split("_",1)[0] :
-      print "wrong syst: removing histogram", thisname
-      continue
-    if "CMS_ttH_Q2scale_ttbarPlusBBbar" in thisname and "ttbarPlusBBbar"!=thisname.split("_",1)[0] :
-      print "wrong syst: removing histogram", thisname
-      continue
-    if "CMS_ttH_Q2scale_ttbarPlusCCbar" in thisname and "ttbarPlusCCbar"!=thisname.split("_",1)[0] :
-      print "wrong syst: removing histogram", thisname
-      continue
-    if "CMS_ttH_Q2scale_ttbarPlus2B" in thisname and "ttbarPlus2B"!=thisname.split("_",1)[0] :
-      print "wrong syst: removing histogram", thisname
-      continue
+      if ("CMS_ttH_Q2scale_ttbarPlusBUp" in thisname or "CMS_ttH_Q2scale_ttbarPlusBDown" in thisname ) and "ttbarPlusB"!=thisname.split("_",1)[0] :
+        print "wrong syst: removing histogram", thisname
+        continue
+      if "CMS_ttH_Q2scale_ttbarPlusBBbar" in thisname and "ttbarPlusBBbar"!=thisname.split("_",1)[0] :
+        print "wrong syst: removing histogram", thisname
+        continue
+      if "CMS_ttH_Q2scale_ttbarPlusCCbar" in thisname and "ttbarPlusCCbar"!=thisname.split("_",1)[0] :
+        print "wrong syst: removing histogram", thisname
+        continue
+      if "CMS_ttH_Q2scale_ttbarPlus2B" in thisname and "ttbarPlus2B"!=thisname.split("_",1)[0] :
+        print "wrong syst: removing histogram", thisname
+        continue
     
 #add ttbar type to systematics name for PS scale
     if "CMS_ttH_PSscaleUp" in newname or "CMS_ttH_PSscaleDown" in newname:
@@ -108,14 +109,14 @@ def renameHistos(infname,outfname,sysnames):
 
     #if nsysts ==1 and thish.Integral()<0.0:
       #print "nominal histogram has negativ integral"
-      #print thish, thish.Integral()
-    nbins=thish.GetNbinsX()
-    for ibin in range(nbins):
-      if thish.GetBinContent(ibin+1)<0.0:
-        print "negative bins in ", thish
-        print "setting bin ", ibin+1, "from", thish.GetBinContent(ibin+1), "+-", thish.GetBinError(ibin+1), "to 0+-0"
-        thish.SetBinContent(ibin+1,0.0)
-        thish.SetBinError(ibin+1,0.0)
+        #print thish, thish.Integral()
+      nbins=thish.GetNbinsX()
+      for ibin in range(nbins):
+        if thish.GetBinContent(ibin+1)<0.0:
+          print "negative bins in ", thish
+          print "setting bin ", ibin+1, "from", thish.GetBinContent(ibin+1), "+-", thish.GetBinError(ibin+1), "to 0+-0"
+          thish.SetBinContent(ibin+1,0.0)
+          thish.SetBinError(ibin+1,0.0)
   #if "125" in newname:
     #newname=newname.replace("125","")
 #    print "changed ", thisname, " to ", newname

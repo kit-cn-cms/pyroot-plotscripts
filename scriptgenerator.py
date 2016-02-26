@@ -804,9 +804,13 @@ def compileProgram(scriptname):
 
 
 def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],allsystweights=["1"]):
-    f=ROOT.TFile(samples[0].files[0])
-    print 'using',samples[0].files[0],'to determining variable types'
-    tree=f.Get('MVATree')
+    for i in range(len(samples)):
+        for j in range(len(samples[i].files)):
+            f=ROOT.TFile(samples[i].files[j])
+            tree=f.Get('MVATree')
+            if tree.GetEntries()>0:
+                print 'using',samples[i].files[j],'to determining variable types'
+                break
     
     systweights=[]
     systweightexpressions=[]
