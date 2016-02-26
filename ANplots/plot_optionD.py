@@ -12,14 +12,20 @@ from limittools import calcLimits
 from plotconfig import *
 
 
-name='newBDToptionD'
+print "!!! NO MEMS ANYWHERE FOR TEST REASONS !!!"
+print "!!! NO BOOSTED ANYWHERE FOR TEST REASONS !!!"
 
-nhistobins_=      [ 20,       4,   4,     20,       4,     4,   20,   20,  6 ,6    ]
-minxvals_=        [-0.9,    0.,  0.,     -0.8,     0.,     0.,   -0.80,  -0.8,  0.,   0.]
-#maxxvals_=        [0.8,     .95,   0.95,  0.8,    0.95,   0.95,    0.76,   0.8,   0.95,    0.95] 
-maxxvals_=        [0.8,     .95,   0.95,  0.8,    0.95,   0.95,    0.76,   0.6,   0.95,    0.95] 
+name='76xBDToptionD'
 
-discrs =          ['/nfs/dust/cms/user/kelmorab/MEMstudies/3makeHistosAndCards/weights/weights_Final_43_MEMBDTv2.xml', 'MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg)','MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg)', '/nfs/dust/cms/user/kelmorab/MEMstudies/3makeHistosAndCards/weights/weights_Final_53_MEMBDTv2.xml', 'MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg)' ,'MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg)' , 'BDT_common5_output','/nfs/dust/cms/user/kelmorab/MEMstudies/3makeHistosAndCards/weights/weights_Final_63_MEMBDTv2.xml','MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg)','MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg)']
+bdtweightpath="/nfs/dust/cms/user/kelmorab/76xBDTWeights/"
+#memexp='(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)'
+memexp='1.0'
+
+nhistobins_=      [ 20,        4,      4,     20,    4,     4,    20,   20,  6,       6,     ]
+minxvals_=        [ -1,       0.,     0.,   -0.8,    0.,    0.,   -1,  -1,   0.,      0.,   ]
+maxxvals_=        [  1,      .95,   0.95,      1,    1,      1,    1,   1,   0.95,    0.95,  ] 
+
+discrs =          [bdtweightpath+'/weights_Final_43_76blr.xml', memexp, memexp, bdtweightpath+'/weights_Final_53_76blr.xml',memexp , memexp, bdtweightpath+'/weights_Final_62_76blr2.xml',bdtweightpath+'/weights_Final_63_76blr.xml',memexp, memexp,]
 
 nhistobins=[]
 minxvals=[]
@@ -32,21 +38,21 @@ for x in minxvals_:
 for x in maxxvals_:
   maxxvals.append(x)
 
-
-categories_=[("(N_Jets==4&&N_BTagsM==3)","ljets_j4_t3"),
-            ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4"),
-            ("(N_Jets==5&&N_BTagsM==3)","ljets_j5_t3"),
-            ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4"),
-            ("(N_Jets>=6&&N_BTagsM==2)","ljets_jge6_t2"),
-            ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3"),
-            ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4")]
+boosted="(BoostedTopHiggs_TopHadCandidate_TopMVAOutput>=-0.485&&BoostedTopHiggs_HiggsCandidate_HiggsTag>=0.8925)"                        
+categories_=[("(N_Jets==4&&N_BTagsM==3)&&!"+boosted+"","ljets_j4_t3"),
+            ("(N_Jets==4&&N_BTagsM>=4)&&!"+boosted+"","ljets_j4_t4"),
+            ("(N_Jets==5&&N_BTagsM==3)&&!"+boosted+"","ljets_j5_t3"),
+            ("(N_Jets==5&&N_BTagsM>=4)&&!"+boosted+"","ljets_j5_tge4"),
+            ("(N_Jets>=6&&N_BTagsM==2)&&!"+boosted+"","ljets_jge6_t2"),
+            ("(N_Jets>=6&&N_BTagsM==3)&&!"+boosted+"","ljets_jge6_t3"),
+            ("(N_Jets>=6&&N_BTagsM>=4)&&!"+boosted+"","ljets_jge6_tge4")]
 categories=[]
 bdtcuts=[0.2,0.2,0.1,0.2,0.1,0.1,0.1]
 
 for cat,bdt in zip(categories_,bdtcuts):
   if cat[1] in ["ljets_jge6_tge4","ljets_j5_tge4","ljets_j4_t4"]:
-    categories.append(('('+cat[0]+')*(BDT_common5_output>'+str(bdt)+')',cat[1]+'_high') )
-    categories.append(('('+cat[0]+')*(BDT_common5_output<='+str(bdt)+')',cat[1]+'_low') )
+    categories.append(('('+cat[0]+')*(splitdummybdt'+cat[1]+'>'+str(bdt)+')',cat[1]+'_high') )
+    categories.append(('('+cat[0]+')*(splitdummybdt'+cat[1]+'<='+str(bdt)+')',cat[1]+'_low') )
   else:
     categories.append(cat )
 print categories
@@ -74,14 +80,21 @@ bdts=[]
 print len(discrs),len(bins),len(binlabels),len(nhistobins),len(minxvals),len(maxxvals),
 print len(zip(discrs,bins,binlabels,nhistobins,minxvals,maxxvals))
 for discr,b,bl,nb,minx,maxx in zip(discrs,bins,binlabels,nhistobins,minxvals,maxxvals):
+  if bl == "ljets_jge6_tge4_high":
+    print "tst"
+    bdts.append(MVAPlot(ROOT.TH1F("splitdummybdt"+"ljets_jge6_tge4","BDT for splitting ("+bl+")",nb+'*5',-1.0,1.0),bdtweightpath+'/weights_Final_64_76blr.xml',b))
+  if bl == "ljets_j5_tge4_high":
+    bdts.append(MVAPlot(ROOT.TH1F("splitdummybdt"+"ljets_j5_tge4_high","BDT for splitting ("+bl+")",nb+'*5',-1.0,1.0),bdtweightpath+'/weights_Final_54_76blr.xml',b))
+  if bl == "ljets_j4_t4_high":
+    bdts.append(MVAPlot(ROOT.TH1F("splitdummybdt"+"ljets_j4_t4_high","BDT for splitting ("+bl+")",nb+'*5',-1.0,1.0),bdtweightpath+'/weights_Final_44_76blr.xml',b))
   if '.xml' in discr:
     bdts.append(MVAPlot(ROOT.TH1F(discrname+"_"+bl,"final discriminator ("+bl+")",nb,minx,maxx),discr,b))
   else:
     bdts.append(Plot(ROOT.TH1F(discrname+"_"+bl,"final discriminator ("+bl+")",nb,minx,maxx),discr,b))
   print discr,b,bl,nb,minx,maxx
 
-#print "if cateries are correct press the \"any\" key"
-#raw_input()
+print "if cateries are correct press the \"any\" key"
+raw_input()
 
 outputpath=plotParallel(name,1000000,bdts,allsamples,[''],['1.'],weightsystnames, systweights)
 if not os.path.exists(name):

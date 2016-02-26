@@ -544,6 +544,12 @@ def initReader(name):
     text+='  TMVA::Reader *r_'+name+' = new TMVA::Reader("Silent");\n'
     return text
 
+def connectReaderToDummyVariable(name):
+    text=''
+    text+='  '+name+'=r_'+name+'->EvaluateMVA("BDT");\n'
+    return text
+
+
 def InitDerivedMVAVariable(names):
     print names
     text=''
@@ -832,8 +838,11 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
     unprunedvariablesnames=list(set(variablesnames))
     #print unprunedvariablesnames
     variablesnames=[]
+    dummyBDTvarList=[]
     vetolist=['internalSystName','csvWgtCF','csvReweighter','csvWgtLF','csvWgtHF','jetPts','jetEtas','jetCSVs','jetFlavors','DoWeights','muonTriggerHelper','muonIsoHelper','muonIDHelper','muonPt','muonEta']
     for upv in unprunedvariablesnames:
+      if "splitdummybdt" in upv:
+	dummyBDTvarList.append(upv)
       if upv not in vetolist:
 	variablesnames.append(upv)
     #print variablesnames
@@ -898,6 +907,8 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
     script+=startLoop()
     script+='    float sampleweight=1;\n'
     script+=encodeSampleSelection(samples,variables)
+    for dv in dummyBDTvarList:
+      script+=connectReaderToDummyVariable(upv)
     # calculate derived variables used in BDT
     input_names=[]
     input_exprs=[]
