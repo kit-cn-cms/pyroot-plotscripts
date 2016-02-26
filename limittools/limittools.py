@@ -4,14 +4,19 @@ from subprocess import call
 
 
 class Limitresult:
-  def __init__(self,combined,combined_up,combined_down,cats,catlimits,catlimits_up,catlimits_down):
+  def __init__(self,combined,combined_up,combined_down,combined_2up,combined_2down,cats,catlimits,catlimits_up,catlimits_down,catlimits_2up,catlimits_2down):
     self.combined=combined
     self.combined_up=combined_up
     self.combined_down=combined_down
+    self.combined_2up=combined_2up
+    self.combined_2down=combined_2down
+    
     self.cats=cats
     self.catlimits=catlimits
     self.catlimits_up=catlimits_up
     self.catlimits_down=catlimits_down
+    self.catlimits_2up=catlimits_2up
+    self.catlimits_2down=catlimits_2down
   def dump(self):
     catalias={}
     catalias["ljets_j4_t3"]="= 4 jets, = 3 b-tags"
@@ -27,9 +32,9 @@ class Limitresult:
       catalias[c+"_high"]=catalias[c]+" high BDT output"
       catalias[c+"_low"]=catalias[c]+" low BDT output"
 
-    print 'combined:',round(self.combined*10)/10.,'^{+'+str(round((self.combined_up-self.combined)*10)/10.)+'}_{'+str(round((self.combined_down-self.combined)*10)/10.)+'}'
-    for cat,limit,limit_up,limit_down in zip(self.cats,self.catlimits,self.catlimits_up,self.catlimits_down):
-      print catalias[cat]+':',round(limit*10.)/10.,'^{+'+str(round((limit_up-limit)*10)/10.)+'}_{'+str(round((limit_down-limit)*10)/10.)+'}'
+    print 'combined:',round(self.combined*10)/10.,'^{+'+str(round((self.combined_up-self.combined)*10)/10.)+'}_{'+str(round((self.combined_down-self.combined)*10)/10.)+'}','^{+'+str(round((self.combined_2up-self.combined)*10)/10.)+'}_{'+str(round((self.combined_2down-self.combined)*10)/10.)+'}'
+    for cat,limit,limit_up,limit_down,limit_2up,limit_2down in zip(self.cats,self.catlimits,self.catlimits_up,self.catlimits_down,self.catlimits_2up,self.catlimits_2down):
+      print catalias[cat]+':',round(limit*10.)/10.,'^{+'+str(round((limit_up-limit)*10)/10.)+'}_{'+str(round((limit_down-limit)*10)/10.)+'}','^{+'+str(round((limit_2up-limit)*10)/10.)+'}_{'+str(round((limit_2down-limit)*10)/10.)+'}'
     
 
 def renameHistos(infname,outfname,sysnames,prune=True):
@@ -224,6 +229,8 @@ def readLimit(fn='higgsCombineTest.Asymptotic.mH125.root'):
   t=f.Get('limit')
   up=-1.
   down=-1.
+  upTwo=-1.
+  downTwo=-1.
   limit=-1.
   for e in t:
     if e.quantileExpected>0.1 and e.quantileExpected<0.2: 
@@ -232,8 +239,14 @@ def readLimit(fn='higgsCombineTest.Asymptotic.mH125.root'):
       limit= e.limit
     elif e.quantileExpected>0.8 and e.quantileExpected<0.9: 
       up = e.limit
+    elif e.quantileExpected>0.0 and e.quantileExpected<0.1: 
+      downTwo= e.limit
+    elif e.quantileExpected>0.1 and e.quantileExpected<1.0: 
+      upTwo = e.limit
+
+
   f.Close()
-  return down,limit,up
+  return downTwo, down,limit,up, upTwo
 
 def calcLimits(datacardname,categories=None):
   
@@ -252,10 +265,12 @@ def calcLimits(datacardname,categories=None):
   f.write(report)
   print report
   f.close()
-  result=Limitresult(limit_comb[1],limit_comb[2],limit_comb[0],
+  result=Limitresult(limit_comb[2],limit_comb[3],limit_comb[1],limit_comb[4],limit_comb[0], ## finisch this
                      categories,
-                     [catl[1] for catl in limit_cats],
                      [catl[2] for catl in limit_cats],
+                     [catl[3] for catl in limit_cats],
+                     [catl[1] for catl in limit_cats],
+                     [catl[4] for catl in limit_cats],
                      [catl[0] for catl in limit_cats])
   return result
 

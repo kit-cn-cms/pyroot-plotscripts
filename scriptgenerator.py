@@ -54,7 +54,7 @@ double MuIDHelper::GetSF(double muonPt, double muonEta, int syst){
   //std::cout<<muonPt<<" "<<muonEta<<std::endl;
   int thisbin=0;
   double searcheta=fabs(muonEta);
-  double searchpt=TMath::Min(muonPt,119.0);
+  double searchpt=TMath::Min(muonPt,115.0);
   
   thisbin = h_abseta_pt_ratio->FindBin(searcheta,searchpt);
   double nomval=h_abseta_pt_ratio->GetBinContent(thisbin);
@@ -95,10 +95,9 @@ MuIsoHelper::MuIsoHelper()
 double MuIsoHelper::GetSF(double muonPt, double muonEta, int syst){
   if(muonPt==0.0){return 1.0;}
 
-  std::cout<<muonPt<<" "<<muonEta<<std::endl;
   int thisbin=0;
   double searcheta=fabs(muonEta);
-  double searchpt=TMath::Min(muonPt,119.0);
+  double searchpt=TMath::Min(muonPt,115.0);
   
   thisbin = h_abseta_pt_ratio->FindBin(searcheta,searchpt);
   double nomval=h_abseta_pt_ratio->GetBinContent(thisbin);
@@ -126,9 +125,13 @@ MuTriggerHelper::MuTriggerHelper()
 {
     std::string inputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/SingleMuonTrigger_Z_RunCD_Reco76X_Feb15.root";
 
-    TFile *f_muonTriggerSF = new TFile(std::string(inputFile).c_str(),"READ");
+    TFile *f_muonTriggerSF4p3 = new TFile(std::string(inputFile).c_str(),"READ");
 
-    h_abseta_pt_ratio=(TH2D*)f_muonTriggerSF->Get("runD_IsoMu20_OR_IsoTkMu20_HLTv4p3_PtEtaBins/abseta_pt_ratio");
+    h_abseta_pt_ratio4p3=(TH2D*)f_muonTriggerSF4p3->Get("runD_IsoMu20_OR_IsoTkMu20_HLTv4p3_PtEtaBins/abseta_pt_ratio");
+    
+    TFile *f_muonTriggerSF4p2 = new TFile(std::string(inputFile).c_str(),"READ");
+
+    h_abseta_pt_ratio4p2=(TH2D*)f_muonTriggerSF4p2->Get("runD_IsoMu20_OR_IsoTkMu20_HLTv4p2_PtEtaBins/abseta_pt_ratio");
     std::cout<<h_abseta_pt_ratio<<std::endl;
     std::cout<<"done setting up muon Trigger SF"<<std::endl;
 }
@@ -138,13 +141,23 @@ double MuTriggerHelper::GetSF(double muonPt, double muonEta, int syst){
   //std::cout<<muonPt<<" "<<muonEta<<std::endl;
   int thisbin=0;
   double searcheta=fabs(muonEta);
-  double searchpt=TMath::Min(muonPt,119.0);
+  double searchpt=TMath::Min(muonPt,115.0);
   
-  thisbin = h_abseta_pt_ratio->FindBin(searcheta,searchpt);
-  double nomval=h_abseta_pt_ratio->GetBinContent(thisbin);
-  double error=h_abseta_pt_ratio->GetBinError(thisbin);
-  double upval=nomval*(1.0+0.02);
-  double downval=nomval*(1.0-0.02);
+  thisbin = h_abseta_pt_ratio4p3->FindBin(searcheta,searchpt);
+  double nomval4p3=h_abseta_pt_ratio->GetBinContent(thisbin);
+  double error4p3=h_abseta_pt_ratio->GetBinError(thisbin);
+  double upval4p3=nomval*(1.0+0.02);
+  double downval4p3=nomval*(1.0-0.02);
+  thisbin = h_abseta_pt_ratio4p2->FindBin(searcheta,searchpt);
+  double nomval4p2=h_abseta_pt_ratio->GetBinContent(thisbin);
+  double error4p2=h_abseta_pt_ratio->GetBinError(thisbin);
+  double upval4p2=nomval*(1.0+0.02);
+  double downval4p2=nomval*(1.0-0.02);
+  
+  double nomval=0.2843*nomval4p2+0.716*nomval4p3;
+  double upval=0.2843*upval4p2+0.716*upval4p3;
+  double downval=0.2843*downval4p2+0.716*downval4p3;
+    
   // if(syst==0){std::cout<<"Trigger SF "<<std::endl; std::cout<<nomval<<" "<<upval<<" "<<downval<<std::endl;}
   
   if (syst==-1){return downval;}
@@ -544,6 +557,12 @@ def initReader(name):
     text+='  TMVA::Reader *r_'+name+' = new TMVA::Reader("Silent");\n'
     return text
 
+def connectReaderToDummyVariable(name):
+    text=''
+    text+='  '+name+'=r_'+name+'->EvaluateMVA("BDT");\n'
+    return text
+
+
 def InitDerivedMVAVariable(names):
     print names
     text=''
@@ -832,8 +851,12 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
     unprunedvariablesnames=list(set(variablesnames))
     #print unprunedvariablesnames
     variablesnames=[]
+    dummyBDTvarList=[]
     vetolist=['internalSystName','csvWgtCF','csvReweighter','csvWgtLF','csvWgtHF','jetPts','jetEtas','jetCSVs','jetFlavors','DoWeights','muonTriggerHelper','muonIsoHelper','muonIDHelper','muonPt','muonEta']
     for upv in unprunedvariablesnames:
+      if "splitdummybdt" in upv:
+	print upv
+	dummyBDTvarList.append(upv)
       if upv not in vetolist:
 	variablesnames.append(upv)
     #print variablesnames
@@ -898,6 +921,8 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
     script+=startLoop()
     script+='    float sampleweight=1;\n'
     script+=encodeSampleSelection(samples,variables)
+    for dv in dummyBDTvarList:
+      script+=connectReaderToDummyVariable(dv)
     # calculate derived variables used in BDT
     input_names=[]
     input_exprs=[]
