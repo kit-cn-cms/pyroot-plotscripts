@@ -889,7 +889,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
             for v,t in zip(plot.input_names,plot.input_types):
                 initVar(Variable(v,t))
             script+=initReader(plot.name)
-            script+=addVariablesToReader(plot.name,plot.input_names,plot.input_names)
+            script+=addVariablesToReader(plot.name,plot.input_exprs,plot.input_names)
             script+=bookMVA(plot.name,plot.weightfile)
 
 
