@@ -120,8 +120,7 @@ class EleTriggerHelper
     double GetSF(double electronPt, double electronEta, int syst);
 
   private:
-    TH2D *h_abseta_pt_ratio4p2;
-    TH2D *h_abseta_pt_ratio4p3;
+    TH2D *h_abseta_pt_ratio;
 
 };
 
