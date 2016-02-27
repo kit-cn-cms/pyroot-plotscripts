@@ -27,6 +27,137 @@ def getHead():
 
 using namespace std;
 
+
+class EleIDHelper
+{
+  public:
+    EleIDHelper();
+    double GetSF(double electronPt, double electronEta, int syst);
+
+  private:
+    TH2D *h_abseta_pt_ratio;
+};
+
+EleIDHelper::EleIDHelper()
+{
+    std::string inputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/ScaleFactor_GsfElectronToRECO_passingTrigWP80.txt.egamma_SF2D.root";
+
+    TFile *f_electronIDSF = new TFile(std::string(inputFile).c_str(),"READ");
+
+    h_abseta_pt_ratio=(TH2D*)f_electronIDSF->Get("EGamma_SF2D");
+    //std::cout<<h_abseta_pt_ratio<<std::endl;
+    //std::cout<<"done setting up electron ID SF"<<std::endl;
+}
+
+double EleIDHelper::GetSF(double electronPt, double electronEta, int syst){
+  if(electronPt==0.0){return 1.0;}
+
+  //std::cout<<electronPt<<" "<<electronEta<<std::endl;
+  int thisbin=0;
+  double searcheta=electronEta;
+  double searchpt=TMath::Min(electronPt,150.0);
+  
+  thisbin = h_abseta_pt_ratio->FindBin(searcheta,searchpt);
+  double nomval=h_abseta_pt_ratio->GetBinContent(thisbin);
+  //double error=h_abseta_pt_ratio->GetBinError(thisbin);
+  //double upval=(nomval+error)*(1.0+0.01);
+  //double downval=(nomval-error)*(1.0-0.01);
+  double upval=nomval*(1.0+0.02);
+  double downval=nomval*(1.0-0.02);
+  
+  //if(syst==0){std::cout<<"ID SF "<<std::endl; std::cout<<nomval<<" "<<upval<<" "<<downval<<std::endl;}
+  
+  if (syst==-1){return downval;}
+  else if (syst==1){return upval;}
+  else {return nomval;}
+}
+
+class EleIsoHelper
+{
+  public:
+    EleIsoHelper();
+    double GetSF(double electronPt, double electronEta, int syst);
+
+  private:
+    TH2D *h_abseta_pt_ratio;
+};
+
+EleIsoHelper::EleIsoHelper()
+{
+    std::string inputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Isolation_SF.root";
+
+    TFile *f_electronIsoSF = new TFile(std::string(inputFile).c_str(),"READ");
+
+    h_abseta_pt_ratio=(TH2D*)f_electronIsoSF->Get("IsolationSF");
+    //std::cout<<h_abseta_pt_ratio<<std::endl;
+    //std::cout<<"done setting up electron Iso SF"<<std::endl;
+}
+
+double EleIsoHelper::GetSF(double electronPt, double electronEta, int syst){
+  if(electronPt==0.0){return 1.0;}
+
+  int thisbin=0;
+  double searcheta=electronEta;
+  double searchpt=TMath::Min(electronPt,150.0);
+  
+  thisbin = h_abseta_pt_ratio->FindBin(searcheta,searchpt);
+  double nomval=h_abseta_pt_ratio->GetBinContent(thisbin);
+  //double error=h_abseta_pt_ratio->GetBinError(thisbin);
+  double upval=nomval*(1.0+0.02);
+  double downval=nomval*(1.0-0.02);
+  //if(syst==0){std::cout<<"Iso SF "<<std::endl; std::cout<<nomval<<" "<<upval<<" "<<downval<<std::endl;}
+  
+  if (syst==-1){return downval;}
+  else if (syst==1){return upval;}
+  else {return nomval;}
+}
+
+
+class EleTriggerHelper
+{
+  public:
+    EleTriggerHelper();
+    double GetSF(double electronPt, double electronEta, int syst);
+
+  private:
+    TH2D *h_abseta_pt_ratio4p2;
+    TH2D *h_abseta_pt_ratio4p3;
+
+};
+
+EleTriggerHelper::EleTriggerHelper()
+{
+    std::string inputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/eleTrig_SF.root";
+
+    TFile *f_electronTriggerSF= new TFile(std::string(inputFile).c_str(),"READ");
+
+    h_abseta_pt_ratio=(TH2D*)f_electronTriggerSF->Get("h_eleTrig_SF");
+
+}
+
+double EleTriggerHelper::GetSF(double electronPt, double electronEta, int syst){
+  if(electronPt==0.0){return 1.0;}
+  //std::cout<<electronPt<<" "<<electronEta<<std::endl;
+  int thisbin=0;
+  double searcheta=electronEta;
+  double searchpt=TMath::Min(electronPt,150.0);
+  
+  thisbin = h_abseta_pt_ratio->FindBin(searchpt,searcheta);
+  double nomval=h_abseta_pt_ratio->GetBinContent(thisbin);
+  //double error=h_abseta_pt_ratio->GetBinError(thisbin);
+  double upval=nomval*(1.0+0.02);
+  double downval=nomval*(1.0-0.02);
+    
+  // if(syst==0){std::cout<<"Trigger SF "<<std::endl; std::cout<<nomval<<" "<<upval<<" "<<downval<<std::endl;}
+  
+  if (syst==-1){return downval;}
+  else if (syst==1){return upval;}
+  else {return nomval;}
+}
+
+
+//----------------------------------------
+
 class MuIDHelper
 {
   public:
@@ -475,6 +606,9 @@ void plot(){
   MuIDHelper muonIDHelper=MuIDHelper();
   MuIsoHelper muonIsoHelper=MuIsoHelper();
   MuTriggerHelper muonTriggerHelper=MuTriggerHelper();
+  EleIDHelper electronIDHelper=EleIDHelper();
+  EleIsoHelper electronIsoHelper=EleIsoHelper();
+  EleTriggerHelper electronTriggerHelper=EleTriggerHelper();
 
   string buf;
   stringstream ss(filenames); 
@@ -729,6 +863,12 @@ def startLoop():
     if(N_TightMuons==1){muonPt=Muon_Pt[0]; muonEta=Muon_Eta[0];} 
     else{muonPt=0.0; muonEta=0.0;} 
 
+    double electronPt=0.0;
+    double electronEta=0.0;
+    
+    if(N_TightElectrons==1){electronPt=Electron_Pt[0]; electronEta=Electron_Eta[0];} 
+    else{electronPt=0.0; electronEta=0.0;} 
+
 """
 
 
@@ -859,7 +999,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
     #print unprunedvariablesnames
     variablesnames=[]
     dummyBDTvarList=[]
-    vetolist=['internalSystName','csvWgtCF','csvReweighter','csvWgtLF','csvWgtHF','jetPts','jetEtas','jetCSVs','jetFlavors','DoWeights','muonTriggerHelper','muonIsoHelper','muonIDHelper','muonPt','muonEta']
+    vetolist=['internalSystName','csvWgtCF','csvReweighter','csvWgtLF','csvWgtHF','jetPts','jetEtas','jetCSVs','jetFlavors','DoWeights','muonTriggerHelper','muonIsoHelper','muonIDHelper','muonPt','muonEta','electronTriggerHelper','electronIsoHelper','electronIDHelper','electronPt','electronEta']
     for upv in unprunedvariablesnames:
       if "splitdummybdt" in upv:
 	print upv
