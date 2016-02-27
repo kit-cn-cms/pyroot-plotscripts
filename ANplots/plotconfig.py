@@ -112,8 +112,10 @@ errorSystnames=["",
 
 
 # corresponding weight names
-mu_down_sf=1.1402
-mu_up_sf=0.8727
+#mu_down_sf=1.1402
+#mu_up_sf=0.8727
+mu_down_sf=1.0
+mu_up_sf=1.0
 pdf_05_sf=0.950964383883
 pdf_67_sf=1.04093344845
 
