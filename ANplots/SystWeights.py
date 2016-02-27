@@ -1,13 +1,24 @@
 import ROOT
 
 # Put Plotsscript output here
-inputpath='/nfs/dust/cms/user/shwillia/BoostedTTHScripts/LimitCalculation/Setup_160222/pyroot-plotscripts/ANplots/workdir/76controlplotsPlusBoosted/output.root'
+inputpath='/nfs/dust/cms/user/shwillia/BoostedTTHScripts/LimitCalculation/Setup_160222/pyroot-plotscripts/ANplots/workdir/76controlplotsPlusBoosted_JER/output.root'
 
 # Histogram used for reweighting
 histname='JTByBDToptC'
 
 # Start with number binbias (e.g. 4 for N_Jets)
-binbias=4
+binbias=0
+
+# Bin Selections
+binSelections=[ ("((N_Jets>=6&&N_BTagsM==2)&&!"+boosted+")","6j2t","","",""),
+                ("((N_Jets==4&&N_BTagsM==3)&&!"+boosted+")","4j3t","0.2","0.2","0.2"),
+                ("((N_Jets==5&&N_BTagsM==3)&&!"+boosted+")","5j3t","0.15","0.15","0.15"),
+                ("((N_Jets>=6&&N_BTagsM==3)&&!"+boosted+")","6j3t","0.1","0.1","0.1"),
+                ("((N_Jets==4&&N_BTagsM>=4)&&!"+boosted+")","4j4t","0.2","0.2","0.2"),
+                ("((N_Jets==5&&N_BTagsM>=4)&&!"+boosted+")","5j4t","0.2","0.2","0.2"),             
+                ("((N_Jets>=6&&N_BTagsM>=4)&&!"+boosted+")","6j4t","0.1","0.1","0.1"),
+                ("((N_Jets>=4&&N_BTagsM>=2)&&"+boosted+")","boosted","0.1","0.1","0.1")
+]
 
 # name of wsystematic
 systname='CMS_res_j'
@@ -83,13 +94,16 @@ for proc in weights:
   downstring='('
   
   for ibin,jetbin in enumerate(proc):
-  
+    
+    upstring+='('+str(jetbin[0])+'*('+binSelections[ibin]+'))'
+    downstring+='('+str(jetbin[1])+'*('+binSelections[ibin]+'))'
+    
     if ibin < len(proc)-1:
-      upstring+='('+str(jetbin[0])+'*('+histname+'=='+str(ibin+binbias)+'))+'
-      downstring+='('+str(jetbin[1])+'*('+histname+'=='+str(ibin+binbias)+'))+'
+      upstring+='+'
+      downstring+='+'
     else:
-      upstring+='('+str(jetbin[0])+'*('+histname+'>='+str(ibin+binbias)+')))'
-      downstring+='('+str(jetbin[1])+'*('+histname+'>='+str(ibin+binbias)+')))'
+      upstring+=')'
+      downstring+=')'
     
   upstrings.append(upstring)
   downstrings.append(downstring)
