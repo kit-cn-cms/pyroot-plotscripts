@@ -998,7 +998,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
     #print unprunedvariablesnames
     variablesnames=[]
     dummyBDTvarList=[]
-    vetolist=['internalSystName','csvWgtCF','csvReweighter','csvWgtLF','csvWgtHF','jetPts','jetEtas','jetCSVs','jetFlavors','DoWeights','muonTriggerHelper','muonIsoHelper','muonIDHelper','muonPt','muonEta','electronTriggerHelper','electronIsoHelper','electronIDHelper','electronPt','electronEta']
+    vetolist=['processname','internalSystName','csvWgtCF','csvReweighter','csvWgtLF','csvWgtHF','jetPts','jetEtas','jetCSVs','jetFlavors','DoWeights','muonTriggerHelper','muonIsoHelper','muonIDHelper','muonPt','muonEta','electronTriggerHelper','electronIsoHelper','electronIDHelper','electronPt','electronEta']
     for upv in unprunedvariablesnames:
       if "splitdummybdt" in upv:
 	print upv

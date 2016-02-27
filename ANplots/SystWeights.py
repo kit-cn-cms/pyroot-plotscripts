@@ -4,20 +4,21 @@ import ROOT
 inputpath='/nfs/dust/cms/user/shwillia/BoostedTTHScripts/LimitCalculation/Setup_160222/pyroot-plotscripts/ANplots/workdir/76controlplotsPlusBoosted_JER/output.root'
 
 # Histogram used for reweighting
-histname='JTByBDToptC'
+histname='JT'
 
 # Start with number binbias (e.g. 4 for N_Jets)
 binbias=0
 
 # Bin Selections
-binSelections=[ ("((N_Jets>=6&&N_BTagsM==2)&&!"+boosted+")","6j2t","","",""),
-                ("((N_Jets==4&&N_BTagsM==3)&&!"+boosted+")","4j3t","0.2","0.2","0.2"),
-                ("((N_Jets==5&&N_BTagsM==3)&&!"+boosted+")","5j3t","0.15","0.15","0.15"),
-                ("((N_Jets>=6&&N_BTagsM==3)&&!"+boosted+")","6j3t","0.1","0.1","0.1"),
-                ("((N_Jets==4&&N_BTagsM>=4)&&!"+boosted+")","4j4t","0.2","0.2","0.2"),
-                ("((N_Jets==5&&N_BTagsM>=4)&&!"+boosted+")","5j4t","0.2","0.2","0.2"),             
-                ("((N_Jets>=6&&N_BTagsM>=4)&&!"+boosted+")","6j4t","0.1","0.1","0.1"),
-                ("((N_Jets>=4&&N_BTagsM>=2)&&"+boosted+")","boosted","0.1","0.1","0.1")
+binSelections=[ "N_Jets==4&&N_BTagsM==2",
+                "N_Jets==5&&N_BTagsM==2",
+                "N_Jets>=6&&N_BTagsM==2",
+                "N_Jets==4&&N_BTagsM==3",
+                "N_Jets==5&&N_BTagsM==3",
+                "N_Jets>=6&&N_BTagsM==3",
+                "N_Jets==4&&N_BTagsM>=4",
+                "N_Jets==5&&N_BTagsM>=4",             
+                "N_Jets>=6&&N_BTagsM>=4"
 ]
 
 # name of wsystematic
@@ -82,31 +83,65 @@ for hists in hists:
   
   nbins=hists[0].GetNbinsX()
   
+  print nbins
+  
   for bin in range(nbins):
-    weights[-1].append([upRatio.GetBinContent(bin+1),downRatio.GetBinContent(bin+1)])
+    bincontentup=upRatio.GetBinContent(bin+1)
+    bincontentdown=downRatio.GetBinContent(bin+1)
+    
+    if bincontentup<=0.:
+      bincontentup=1.
+    if bincontentdown<=0.:
+      bincontentdown=1.
+      
+    weights[-1].append([bincontentup,bincontentdown])
 
 upstrings=[]
 downstrings=[]
 
-for proc in weights:
+upstringall='('
+downstringall='('
+
+for iproc,proc in enumerate(weights):
   
   upstring='('
   downstring='('
   
+  upstringall  +='((processname=='+processes[iproc]+')*('
+  downstringall+='((processname=='+processes[iproc]+')*('
+  
+  print len(proc)
+  
   for ibin,jetbin in enumerate(proc):
     
-    upstring+='('+str(jetbin[0])+'*('+binSelections[ibin]+'))'
-    downstring+='('+str(jetbin[1])+'*('+binSelections[ibin]+'))'
+    upstring      +='('+str(jetbin[0])+'*('+binSelections[ibin]+'))'
+    upstringall   +='('+str(jetbin[0])+'*('+binSelections[ibin]+'))'
+    downstring    +='('+str(jetbin[1])+'*('+binSelections[ibin]+'))'
+    downstringall +='('+str(jetbin[1])+'*('+binSelections[ibin]+'))'
     
     if ibin < len(proc)-1:
       upstring+='+'
+      upstringall+='+'
       downstring+='+'
+      downstringall+='+'
     else:
       upstring+=')'
+      upstringall+=')'
       downstring+=')'
-    
+      downstringall+=')'
+  
   upstrings.append(upstring)
   downstrings.append(downstring)
+  
+  upstringall+=')'
+  downstringall+=')'
+  
+  if iproc < len(weights)-1:
+    upstringall   +='\\ +'
+    downstringall +='\\ +'
+  else:
+    upstringall+=')'
+    downstringall+=')'
   
 print upstrings
 print downstrings
@@ -115,8 +150,17 @@ outfile = open(systname+'_weights.txt', 'w')
 outfile.write(systname+'Up Weights:\n')
 for iproc,proc in enumerate(upstrings):
   outfile.write(processes[iproc]+':   '+proc+'\n')
+outfile.write('\n')  
+outfile.write('All '+systname+'Up Weights:\n')
+outfile.write(upstringall+'\n')
 outfile.write('\n')
 outfile.write(systname+'Down Weights:\n')
 for iproc,proc in enumerate(downstrings):
   outfile.write(processes[iproc]+':   '+proc+'\n')
+outfile.write('\n')
+outfile.write('All '+systname+'Down Weights:\n')
+outfile.write(downstringall+'\n')
+
 outfile.close()
+
+
