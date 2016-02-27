@@ -48,6 +48,8 @@ def renameHistos(infname,outfname,sysnames,prune=True):
     thisname=key.GetName()
     thish=infile.Get(thisname)
     newname=thisname
+    if "dummy" in thisname:
+      continue
     nsysts=0
     for sys in sysnames:
       if sys in newname:
@@ -85,24 +87,24 @@ def renameHistos(infname,outfname,sysnames,prune=True):
     if "CMS_ttH_PSscaleUp" in newname or "CMS_ttH_PSscaleDown" in newname:
       
       ttbartype=""
-      if "ttbarOther"!=thisname.split("_",1)[0]:
+      if "ttbarOther"==thisname.split("_",1)[0]:
         ttbartype="ttbarOther"
-      elif "ttbarPlusB"!=thisname.split("_",1)[0] :
+      elif "ttbarPlusB"==thisname.split("_",1)[0] :
         ttbartype="ttbarPlusB"
-      elif "ttbarPlusBBbar"!=thisname.split("_",1)[0] :
+      elif "ttbarPlusBBbar"==thisname.split("_",1)[0] :
         ttbartype="ttbarPlusBBbar"
-      elif "ttbarPlusCCbar"!=thisname.split("_",1)[0] :
+      elif "ttbarPlusCCbar"==thisname.split("_",1)[0] :
         ttbartype="ttbarPlusCCbar"
-      elif "ttbarPlus2B"!=thisname.split("_",1)[0] :
+      elif "ttbarPlus2B"==thisname.split("_",1)[0] :
         ttbartype="ttbarPlus2B"
       else:
         print "wrong syst: removing histogram", thisname
         continue
       
       if "CMS_ttH_PSscaleUp" in newname:
-        newname.replace("CMS_ttH_PSscaleUp","CMS_ttH_PSscale_"+ttbartype+"Up")
+        newname=newname.replace("CMS_ttH_PSscaleUp","CMS_ttH_PSscale_"+ttbartype+"Up")
       elif "CMS_ttH_PSscaleDown" in newname:
-        newname.replace("CMS_ttH_PSscaleDown","CMS_ttH_PSscale_"+ttbartype+"Down")
+        newname=newname.replace("CMS_ttH_PSscaleDown","CMS_ttH_PSscale_"+ttbartype+"Down")
       else:
         print "wrong syst: removing histogram", thisname
 
