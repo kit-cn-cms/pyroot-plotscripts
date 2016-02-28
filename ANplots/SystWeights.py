@@ -26,14 +26,25 @@ systname='CMS_res_j'
 
 # Get weights for the following processes
 processes=[ 'ttH',
+            'ttH_hbb',
+            'ttH_hcc',
+            'ttH_htt',
+            'ttH_hgg',
+            'ttH_hgluglu',
+            'ttH_hww',
+            'ttH_hzz',
+            'ttH_hzg',
             'ttbarOther',
             'ttbarPlusCCbar',
             'ttbarPlusB',
             'ttbarPlus2B',
             'ttbarPlusBBbar',
-            'SingleTop',
-            'Vjets',
-            'Diboson'
+            'singlet',
+            'zjets',
+            'wjets',
+            'ttbarW',
+            'ttbarZ',
+            'diboson'
 ]
 
 # Get file
@@ -53,7 +64,12 @@ for key in keys:
   
   for iproc,proc in enumerate(processes):
     
-    if proc == keyname.split('_')[0]:
+    if proc == keyname.split('_')[0] or proc == keyname.split('_')[0]+'_'+keyname.split('_')[1] :
+      
+      print proc,proc == "ttH",keyname, keyname.split('_')[1][0], keyname.split('_')[1][0] == "h"
+      if proc == "ttH" and keyname.split('_')[1][0] == "h":
+        continue
+      print proc,keyname
       procindex=iproc
     else:
       continue
@@ -107,8 +123,8 @@ for iproc,proc in enumerate(weights):
   upstring='('
   downstring='('
   
-  upstringall  +='((processname=='+processes[iproc]+')*('
-  downstringall+='((processname=='+processes[iproc]+')*('
+  upstringall  +='((processname==\''+processes[iproc]+'\')*('
+  downstringall+='((processname==\''+processes[iproc]+'\')*('
   
   print len(proc)
   
@@ -137,8 +153,8 @@ for iproc,proc in enumerate(weights):
   downstringall+=')'
   
   if iproc < len(weights)-1:
-    upstringall   +='\\ +'
-    downstringall +='\\ +'
+    upstringall   +='\\n +'
+    downstringall +='\\n +'
   else:
     upstringall+=')'
     downstringall+=')'

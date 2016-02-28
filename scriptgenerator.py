@@ -27,7 +27,6 @@ def getHead():
 
 using namespace std;
 
-
 class EleIDHelper
 {
   public:
@@ -608,7 +607,10 @@ void plot(){
   EleIDHelper electronIDHelper=EleIDHelper();
   EleIsoHelper electronIsoHelper=EleIsoHelper();
   EleTriggerHelper electronTriggerHelper=EleTriggerHelper();
-
+  
+  float JERUpWeight = 1.0;
+  float JERDownWeight = 1.0;
+  
   string buf;
   stringstream ss(filenames); 
   while (ss >> buf){
@@ -866,8 +868,130 @@ def startLoop():
     double electronEta=0.0;
     
     if(N_TightElectrons==1){electronPt=Electron_Pt[0]; electronEta=Electron_Eta[0];} 
-    else{electronPt=0.0; electronEta=0.0;} 
+    else{electronPt=0.0; electronEta=0.0;}
+    
+    float JERTTHUp          = ((0.999817311764*(N_Jets==4&&N_BTagsM==2))+(1.00011050701*(N_Jets==5&&N_BTagsM==2))+(0.99937492609*(N_Jets>=6&&N_BTagsM==2))+(0.998668551445*(N_Jets==4&&N_BTagsM==3))+(0.997254669666*(N_Jets==5&&N_BTagsM==3))+(0.999066412449*(N_Jets>=6&&N_BTagsM==3))+(0.997974276543*(N_Jets==4&&N_BTagsM>=4))+(0.99205738306*(N_Jets==5&&N_BTagsM>=4))+(0.996371328831*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERTTHBBUp        = ((1.0012370348*(N_Jets==4&&N_BTagsM==2))+(1.00015199184*(N_Jets==5&&N_BTagsM==2))+(0.998527228832*(N_Jets>=6&&N_BTagsM==2))+(0.999003887177*(N_Jets==4&&N_BTagsM==3))+(0.996920645237*(N_Jets==5&&N_BTagsM==3))+(0.998582601547*(N_Jets>=6&&N_BTagsM==3))+(0.998088777065*(N_Jets==4&&N_BTagsM>=4))+(0.992186248302*(N_Jets==5&&N_BTagsM>=4))+(0.996247768402*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERTTHCCUp        = ((1.00544202328*(N_Jets==4&&N_BTagsM==2))+(0.998624622822*(N_Jets==5&&N_BTagsM==2))+(1.00088405609*(N_Jets>=6&&N_BTagsM==2))+(0.988098919392*(N_Jets==4&&N_BTagsM==3))+(0.994389414787*(N_Jets==5&&N_BTagsM==3))+(0.997197210789*(N_Jets>=6&&N_BTagsM==3))+(0.944177687168*(N_Jets==4&&N_BTagsM>=4))+(1.0013538599*(N_Jets==5&&N_BTagsM>=4))+(1.01796555519*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERTTHTTUp        = ((0.998845696449*(N_Jets==4&&N_BTagsM==2))+(0.999661564827*(N_Jets==5&&N_BTagsM==2))+(1.00106012821*(N_Jets>=6&&N_BTagsM==2))+(0.996212303638*(N_Jets==4&&N_BTagsM==3))+(1.00131177902*(N_Jets==5&&N_BTagsM==3))+(1.00545287132*(N_Jets>=6&&N_BTagsM==3))+(1.03299260139*(N_Jets==4&&N_BTagsM>=4))+(1.02697110176*(N_Jets==5&&N_BTagsM>=4))+(0.988895177841*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERTTHGGUp        = ((0.984351873398*(N_Jets==4&&N_BTagsM==2))+(0.998820543289*(N_Jets==5&&N_BTagsM==2))+(1.00893437862*(N_Jets>=6&&N_BTagsM==2))+(1.0*(N_Jets==4&&N_BTagsM==3))+(1.12393069267*(N_Jets==5&&N_BTagsM==3))+(0.957889258862*(N_Jets>=6&&N_BTagsM==3))+(1.0*(N_Jets==4&&N_BTagsM>=4))+(1.0*(N_Jets==5&&N_BTagsM>=4))+(1.0*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERTTHGLUGLUUp    = ((0.996939301491*(N_Jets==4&&N_BTagsM==2))+(0.996565818787*(N_Jets==5&&N_BTagsM==2))+(1.00130987167*(N_Jets>=6&&N_BTagsM==2))+(1.00436687469*(N_Jets==4&&N_BTagsM==3))+(0.985964536667*(N_Jets==5&&N_BTagsM==3))+(0.998151183128*(N_Jets>=6&&N_BTagsM==3))+(1.0*(N_Jets==4&&N_BTagsM>=4))+(1.00110006332*(N_Jets==5&&N_BTagsM>=4))+(1.02388191223*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERTTHWWUp        = ((0.996340572834*(N_Jets==4&&N_BTagsM==2))+(1.00071108341*(N_Jets==5&&N_BTagsM==2))+(0.999866962433*(N_Jets>=6&&N_BTagsM==2))+(0.993735611439*(N_Jets==4&&N_BTagsM==3))+(1.00334370136*(N_Jets==5&&N_BTagsM==3))+(1.00164079666*(N_Jets>=6&&N_BTagsM==3))+(0.974233329296*(N_Jets==4&&N_BTagsM>=4))+(0.993894100189*(N_Jets==5&&N_BTagsM>=4))+(0.992114424706*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERTTHZZUp        = ((0.99169999361*(N_Jets==4&&N_BTagsM==2))+(1.00839984417*(N_Jets==5&&N_BTagsM==2))+(0.996844649315*(N_Jets>=6&&N_BTagsM==2))+(1.0035135746*(N_Jets==4&&N_BTagsM==3))+(0.995490133762*(N_Jets==5&&N_BTagsM==3))+(1.00040590763*(N_Jets>=6&&N_BTagsM==3))+(1.05204820633*(N_Jets==4&&N_BTagsM>=4))+(0.930224776268*(N_Jets==5&&N_BTagsM>=4))+(0.993218719959*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERTTHZGUp        = ((0.996787130833*(N_Jets==4&&N_BTagsM==2))+(0.990018665791*(N_Jets==5&&N_BTagsM==2))+(0.998834550381*(N_Jets>=6&&N_BTagsM==2))+(1.00195741653*(N_Jets==4&&N_BTagsM==3))+(1.00250411034*(N_Jets==5&&N_BTagsM==3))+(0.999686479568*(N_Jets>=6&&N_BTagsM==3))+(1.0*(N_Jets==4&&N_BTagsM>=4))+(1.0*(N_Jets==5&&N_BTagsM>=4))+(0.99796551466*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERTTLFUp         = ((0.998897075653*(N_Jets==4&&N_BTagsM==2))+(1.00081765652*(N_Jets==5&&N_BTagsM==2))+(1.00124669075*(N_Jets>=6&&N_BTagsM==2))+(0.996834516525*(N_Jets==4&&N_BTagsM==3))+(1.00057053566*(N_Jets==5&&N_BTagsM==3))+(0.999742150307*(N_Jets>=6&&N_BTagsM==3))+(0.982244491577*(N_Jets==4&&N_BTagsM>=4))+(1.01105821133*(N_Jets==5&&N_BTagsM>=4))+(1.01481699944*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERTTCCUp         = ((0.998970925808*(N_Jets==4&&N_BTagsM==2))+(0.997603237629*(N_Jets==5&&N_BTagsM==2))+(1.00229382515*(N_Jets>=6&&N_BTagsM==2))+(0.995214164257*(N_Jets==4&&N_BTagsM==3))+(0.999613106251*(N_Jets==5&&N_BTagsM==3))+(0.999891161919*(N_Jets>=6&&N_BTagsM==3))+(0.991523265839*(N_Jets==4&&N_BTagsM>=4))+(0.997544586658*(N_Jets==5&&N_BTagsM>=4))+(0.995744228363*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERTTBUp          = ((0.998170077801*(N_Jets==4&&N_BTagsM==2))+(0.996059775352*(N_Jets==5&&N_BTagsM==2))+(1.00474762917*(N_Jets>=6&&N_BTagsM==2))+(0.994872033596*(N_Jets==4&&N_BTagsM==3))+(0.997874617577*(N_Jets==5&&N_BTagsM==3))+(0.999351501465*(N_Jets>=6&&N_BTagsM==3))+(0.982555270195*(N_Jets==4&&N_BTagsM>=4))+(0.986198425293*(N_Jets==5&&N_BTagsM>=4))+(1.00102508068*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERTTtwoBUp       = ((0.998409450054*(N_Jets==4&&N_BTagsM==2))+(1.00296461582*(N_Jets==5&&N_BTagsM==2))+(1.00024020672*(N_Jets>=6&&N_BTagsM==2))+(0.993894338608*(N_Jets==4&&N_BTagsM==3))+(0.993970811367*(N_Jets==5&&N_BTagsM==3))+(1.00338232517*(N_Jets>=6&&N_BTagsM==3))+(0.97750544548*(N_Jets==4&&N_BTagsM>=4))+(0.990631461143*(N_Jets==5&&N_BTagsM>=4))+(0.996032714844*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERTTBBUp         = ((0.994340240955*(N_Jets==4&&N_BTagsM==2))+(1.00755405426*(N_Jets==5&&N_BTagsM==2))+(0.99849998951*(N_Jets>=6&&N_BTagsM==2))+(0.997601091862*(N_Jets==4&&N_BTagsM==3))+(1.00402545929*(N_Jets==5&&N_BTagsM==3))+(0.990340292454*(N_Jets>=6&&N_BTagsM==3))+(1.00384604931*(N_Jets==4&&N_BTagsM>=4))+(0.989267349243*(N_Jets==5&&N_BTagsM>=4))+(0.997949421406*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERSTUp           = ((1.00115859509*(N_Jets==4&&N_BTagsM==2))+(1.00402748585*(N_Jets==5&&N_BTagsM==2))+(1.00136303902*(N_Jets>=6&&N_BTagsM==2))+(0.998023688793*(N_Jets==4&&N_BTagsM==3))+(0.996269822121*(N_Jets==5&&N_BTagsM==3))+(1.00247299671*(N_Jets>=6&&N_BTagsM==3))+(1.0277608633*(N_Jets==4&&N_BTagsM>=4))+(0.967205405235*(N_Jets==5&&N_BTagsM>=4))+(1.01120901108*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERZJETSUp        = ((0.986613571644*(N_Jets==4&&N_BTagsM==2))+(0.93087542057*(N_Jets==5&&N_BTagsM==2))+(1.06827914715*(N_Jets>=6&&N_BTagsM==2))+(1.00000619888*(N_Jets==4&&N_BTagsM==3))+(1.74125385284*(N_Jets==5&&N_BTagsM==3))+(1.04399836063*(N_Jets>=6&&N_BTagsM==3))+(1.0*(N_Jets==4&&N_BTagsM>=4))+(1.0*(N_Jets==5&&N_BTagsM>=4))+(1.0*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERWJETSUp        = ((1.0017182827*(N_Jets==4&&N_BTagsM==2))+(1.00486624241*(N_Jets==5&&N_BTagsM==2))+(0.987593173981*(N_Jets>=6&&N_BTagsM==2))+(1.00414741039*(N_Jets==4&&N_BTagsM==3))+(1.02358448505*(N_Jets==5&&N_BTagsM==3))+(1.00841605663*(N_Jets>=6&&N_BTagsM==3))+(0.964459896088*(N_Jets==4&&N_BTagsM>=4))+(1.00593900681*(N_Jets==5&&N_BTagsM>=4))+(0.985216856003*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERTTWUp          = ((0.994187653065*(N_Jets==4&&N_BTagsM==2))+(1.00121879578*(N_Jets==5&&N_BTagsM==2))+(1.00024116039*(N_Jets>=6&&N_BTagsM==2))+(1.00224876404*(N_Jets==4&&N_BTagsM==3))+(0.993034243584*(N_Jets==5&&N_BTagsM==3))+(0.997025668621*(N_Jets>=6&&N_BTagsM==3))+(1.15991616249*(N_Jets==4&&N_BTagsM>=4))+(0.994125306606*(N_Jets==5&&N_BTagsM>=4))+(1.01136338711*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERTTZUp          = ((0.996260285378*(N_Jets==4&&N_BTagsM==2))+(0.996934473515*(N_Jets==5&&N_BTagsM==2))+(1.00602459908*(N_Jets>=6&&N_BTagsM==2))+(0.994053065777*(N_Jets==4&&N_BTagsM==3))+(1.00789821148*(N_Jets==5&&N_BTagsM==3))+(0.994761168957*(N_Jets>=6&&N_BTagsM==3))+(0.976114749908*(N_Jets==4&&N_BTagsM>=4))+(1.00990509987*(N_Jets==5&&N_BTagsM>=4))+(0.991571545601*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERDIBOSONUp      = ((1.00589513779*(N_Jets==4&&N_BTagsM==2))+(1.01406025887*(N_Jets==5&&N_BTagsM==2))+(1.0*(N_Jets>=6&&N_BTagsM==2))+(0.989874482155*(N_Jets==4&&N_BTagsM==3))+(1.0*(N_Jets==5&&N_BTagsM==3))+(1.0*(N_Jets>=6&&N_BTagsM==3))+(1.0*(N_Jets==4&&N_BTagsM>=4))+(1.0*(N_Jets==5&&N_BTagsM>=4))+(1.0*(N_Jets>=6&&N_BTagsM>=4)));
 
+    float JERTTHDown        = ((1.00136291981*(N_Jets==4&&N_BTagsM==2))+(1.00013780594*(N_Jets==5&&N_BTagsM==2))+(0.999844908714*(N_Jets>=6&&N_BTagsM==2))+(1.00015258789*(N_Jets==4&&N_BTagsM==3))+(1.00154578686*(N_Jets==5&&N_BTagsM==3))+(1.00094556808*(N_Jets>=6&&N_BTagsM==3))+(1.00701463223*(N_Jets==4&&N_BTagsM>=4))+(1.00375950336*(N_Jets==5&&N_BTagsM>=4))+(1.00381302834*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERTTHBBDown      = ((1.00030219555*(N_Jets==4&&N_BTagsM==2))+(1.00127255917*(N_Jets==5&&N_BTagsM==2))+(1.00026750565*(N_Jets>=6&&N_BTagsM==2))+(1.00014674664*(N_Jets==4&&N_BTagsM==3))+(1.00148248672*(N_Jets==5&&N_BTagsM==3))+(1.00093400478*(N_Jets>=6&&N_BTagsM==3))+(1.00688540936*(N_Jets==4&&N_BTagsM>=4))+(1.00370049477*(N_Jets==5&&N_BTagsM>=4))+(1.0042746067*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERTTHCCDown      = ((1.00515520573*(N_Jets==4&&N_BTagsM==2))+(0.991133332253*(N_Jets==5&&N_BTagsM==2))+(1.001765728*(N_Jets>=6&&N_BTagsM==2))+(0.98540353775*(N_Jets==4&&N_BTagsM==3))+(1.01308715343*(N_Jets==5&&N_BTagsM==3))+(1.00345110893*(N_Jets>=6&&N_BTagsM==3))+(1.0*(N_Jets==4&&N_BTagsM>=4))+(1.00877714157*(N_Jets==5&&N_BTagsM>=4))+(1.00151407719*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERTTHTTDown      = ((1.00127065182*(N_Jets==4&&N_BTagsM==2))+(0.998830854893*(N_Jets==5&&N_BTagsM==2))+(0.999824523926*(N_Jets>=6&&N_BTagsM==2))+(1.00322043896*(N_Jets==4&&N_BTagsM==3))+(0.995092332363*(N_Jets==5&&N_BTagsM==3))+(0.997868359089*(N_Jets>=6&&N_BTagsM==3))+(1.03179514408*(N_Jets==4&&N_BTagsM>=4))+(1.01885581017*(N_Jets==5&&N_BTagsM>=4))+(1.00638473034*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERTTHGGDown      = ((1.02118360996*(N_Jets==4&&N_BTagsM==2))+(0.9747813344*(N_Jets==5&&N_BTagsM==2))+(1.00082159042*(N_Jets>=6&&N_BTagsM==2))+(1.0*(N_Jets==4&&N_BTagsM==3))+(1.03929936886*(N_Jets==5&&N_BTagsM==3))+(1.00677919388*(N_Jets>=6&&N_BTagsM==3))+(1.0*(N_Jets==4&&N_BTagsM>=4))+(1.0*(N_Jets==5&&N_BTagsM>=4))+(1.0*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERTTHGLUGLUDown  = ((0.996608793736*(N_Jets==4&&N_BTagsM==2))+(1.00034070015*(N_Jets==5&&N_BTagsM==2))+(1.00162160397*(N_Jets>=6&&N_BTagsM==2))+(0.979127645493*(N_Jets==4&&N_BTagsM==3))+(1.01215314865*(N_Jets==5&&N_BTagsM==3))+(1.00213634968*(N_Jets>=6&&N_BTagsM==3))+(1.0*(N_Jets==4&&N_BTagsM>=4))+(1.03923106194*(N_Jets==5&&N_BTagsM>=4))+(1.00365209579*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERTTHWWDown      = ((1.00463020802*(N_Jets==4&&N_BTagsM==2))+(0.99989169836*(N_Jets==5&&N_BTagsM==2))+(0.998459100723*(N_Jets>=6&&N_BTagsM==2))+(1.00550532341*(N_Jets==4&&N_BTagsM==3))+(0.999519348145*(N_Jets==5&&N_BTagsM==3))+(0.999773800373*(N_Jets>=6&&N_BTagsM==3))+(1.0*(N_Jets==4&&N_BTagsM>=4))+(0.998823583126*(N_Jets==5&&N_BTagsM>=4))+(0.99129730463*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERTTHZZDown      = ((1.01330661774*(N_Jets==4&&N_BTagsM==2))+(0.99330842495*(N_Jets==5&&N_BTagsM==2))+(0.998818397522*(N_Jets>=6&&N_BTagsM==2))+(1.02230024338*(N_Jets==4&&N_BTagsM==3))+(0.997246563435*(N_Jets==5&&N_BTagsM==3))+(1.00536549091*(N_Jets>=6&&N_BTagsM==3))+(1.02808511257*(N_Jets==4&&N_BTagsM>=4))+(0.991494834423*(N_Jets==5&&N_BTagsM>=4))+(1.0009469986*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERTTHZGDown      = ((1.00122249126*(N_Jets==4&&N_BTagsM==2))+(0.971344590187*(N_Jets==5&&N_BTagsM==2))+(0.990911066532*(N_Jets>=6&&N_BTagsM==2))+(1.0*(N_Jets==4&&N_BTagsM==3))+(1.0085542202*(N_Jets==5&&N_BTagsM==3))+(1.10668063164*(N_Jets>=6&&N_BTagsM==3))+(1.0*(N_Jets==4&&N_BTagsM>=4))+(1.0*(N_Jets==5&&N_BTagsM>=4))+(0.961641073227*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERTTLFDown       = ((1.00133597851*(N_Jets==4&&N_BTagsM==2))+(0.999052643776*(N_Jets==5&&N_BTagsM==2))+(0.998512923717*(N_Jets>=6&&N_BTagsM==2))+(1.00358808041*(N_Jets==4&&N_BTagsM==3))+(0.998682916164*(N_Jets==5&&N_BTagsM==3))+(0.999181449413*(N_Jets>=6&&N_BTagsM==3))+(0.995810568333*(N_Jets==4&&N_BTagsM>=4))+(1.00176930428*(N_Jets==5&&N_BTagsM>=4))+(0.994085848331*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERTTCCDown       = ((1.00124847889*(N_Jets==4&&N_BTagsM==2))+(1.00049638748*(N_Jets==5&&N_BTagsM==2))+(0.998141825199*(N_Jets>=6&&N_BTagsM==2))+(1.00068449974*(N_Jets==4&&N_BTagsM==3))+(1.00000929832*(N_Jets==5&&N_BTagsM==3))+(1.00092720985*(N_Jets>=6&&N_BTagsM==3))+(0.982166588306*(N_Jets==4&&N_BTagsM>=4))+(0.997252464294*(N_Jets==5&&N_BTagsM>=4))+(0.998431026936*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERTTBDown        = ((0.998960375786*(N_Jets==4&&N_BTagsM==2))+(1.00226354599*(N_Jets==5&&N_BTagsM==2))+(0.999038040638*(N_Jets>=6&&N_BTagsM==2))+(0.998452603817*(N_Jets==4&&N_BTagsM==3))+(1.0062892437*(N_Jets==5&&N_BTagsM==3))+(1.00038576126*(N_Jets>=6&&N_BTagsM==3))+(1.02469241619*(N_Jets==4&&N_BTagsM>=4))+(1.00381219387*(N_Jets==5&&N_BTagsM>=4))+(1.00088846684*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERTTtwoBDown     = ((1.00320780277*(N_Jets==4&&N_BTagsM==2))+(1.00415027142*(N_Jets==5&&N_BTagsM==2))+(0.999468445778*(N_Jets>=6&&N_BTagsM==2))+(1.0028847456*(N_Jets==4&&N_BTagsM==3))+(1.00213396549*(N_Jets==5&&N_BTagsM==3))+(1.00247776508*(N_Jets>=6&&N_BTagsM==3))+(1.01289510727*(N_Jets==4&&N_BTagsM>=4))+(1.02559661865*(N_Jets==5&&N_BTagsM>=4))+(1.00733244419*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERTTBBDown       = ((1.00213575363*(N_Jets==4&&N_BTagsM==2))+(0.991662204266*(N_Jets==5&&N_BTagsM==2))+(1.00258922577*(N_Jets>=6&&N_BTagsM==2))+(1.00053107738*(N_Jets==4&&N_BTagsM==3))+(1.00298380852*(N_Jets==5&&N_BTagsM==3))+(1.00672721863*(N_Jets>=6&&N_BTagsM==3))+(1.00585448742*(N_Jets==4&&N_BTagsM>=4))+(0.997686803341*(N_Jets==5&&N_BTagsM>=4))+(0.999555885792*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERSTDown         = ((0.998657763004*(N_Jets==4&&N_BTagsM==2))+(1.0033634901*(N_Jets==5&&N_BTagsM==2))+(1.0005261898*(N_Jets>=6&&N_BTagsM==2))+(1.00121629238*(N_Jets==4&&N_BTagsM==3))+(0.998826920986*(N_Jets==5&&N_BTagsM==3))+(1.0028141737*(N_Jets>=6&&N_BTagsM==3))+(1.02697753906*(N_Jets==4&&N_BTagsM>=4))+(0.926265954971*(N_Jets==5&&N_BTagsM>=4))+(1.00311923027*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERZJETSDown      = ((1.0971622467*(N_Jets==4&&N_BTagsM==2))+(0.903486192226*(N_Jets==5&&N_BTagsM==2))+(0.951054930687*(N_Jets>=6&&N_BTagsM==2))+(1.00000309944*(N_Jets==4&&N_BTagsM==3))+(1.18525123596*(N_Jets==5&&N_BTagsM==3))+(1.0*(N_Jets>=6&&N_BTagsM==3))+(1.0*(N_Jets==4&&N_BTagsM>=4))+(1.0*(N_Jets==5&&N_BTagsM>=4))+(1.0*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERWJETSDown      = ((1.00260686874*(N_Jets==4&&N_BTagsM==2))+(0.983129858971*(N_Jets==5&&N_BTagsM==2))+(0.984754621983*(N_Jets>=6&&N_BTagsM==2))+(0.996493935585*(N_Jets==4&&N_BTagsM==3))+(1.01907086372*(N_Jets==5&&N_BTagsM==3))+(1.0339192152*(N_Jets>=6&&N_BTagsM==3))+(1.01830470562*(N_Jets==4&&N_BTagsM>=4))+(0.999929785728*(N_Jets==5&&N_BTagsM>=4))+(1.02137517929*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERTTWDown        = ((1.00814962387*(N_Jets==4&&N_BTagsM==2))+(0.995132267475*(N_Jets==5&&N_BTagsM==2))+(1.00271260738*(N_Jets>=6&&N_BTagsM==2))+(0.99211537838*(N_Jets==4&&N_BTagsM==3))+(0.995414316654*(N_Jets==5&&N_BTagsM==3))+(1.00503349304*(N_Jets>=6&&N_BTagsM==3))+(0.992954730988*(N_Jets==4&&N_BTagsM>=4))+(1.00409662724*(N_Jets==5&&N_BTagsM>=4))+(1.00142645836*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERTTZDown        = ((0.998806297779*(N_Jets==4&&N_BTagsM==2))+(1.00877356529*(N_Jets==5&&N_BTagsM==2))+(1.00082218647*(N_Jets>=6&&N_BTagsM==2))+(0.994803130627*(N_Jets==4&&N_BTagsM==3))+(0.990593314171*(N_Jets==5&&N_BTagsM==3))+(0.995595753193*(N_Jets>=6&&N_BTagsM==3))+(1.00228822231*(N_Jets==4&&N_BTagsM>=4))+(1.00535929203*(N_Jets==5&&N_BTagsM>=4))+(1.01914823055*(N_Jets>=6&&N_BTagsM>=4)));
+    float JERDIBOSONDown    = ((1.00646984577*(N_Jets==4&&N_BTagsM==2))+(1.01586461067*(N_Jets==5&&N_BTagsM==2))+(1.0005838871*(N_Jets>=6&&N_BTagsM==2))+(1.0*(N_Jets==4&&N_BTagsM==3))+(1.07564687729*(N_Jets==5&&N_BTagsM==3))+(0.62726187706*(N_Jets>=6&&N_BTagsM==3))+(1.0*(N_Jets==4&&N_BTagsM>=4))+(1.0*(N_Jets==5&&N_BTagsM>=4))+(1.0*(N_Jets>=6&&N_BTagsM>=4)));
+    
+    if(processname=="ttH"){
+      JERUpWeight   = JERTTHUp;
+      JERDownWeight = JERTTHDown;
+    }
+    if(processname=="ttH_hbb"){
+      JERUpWeight   = JERTTHBBUp;
+      JERDownWeight = JERTTHBBDown;
+    }
+    if(processname=="ttH_hcc"){
+      JERUpWeight   = JERTTHCCUp;
+      JERDownWeight = JERTTHCCDown;
+    }
+    if(processname=="ttH_htt"){
+      JERUpWeight   = JERTTHTTUp;
+      JERDownWeight = JERTTHTTDown;
+    }
+    if(processname=="ttH_hgg"){
+      JERUpWeight   = JERTTHGGUp;
+      JERDownWeight = JERTTHGGDown;
+    }
+    if(processname=="ttH_hgluglu"){
+      JERUpWeight   = JERTTHGLUGLUUp;
+      JERDownWeight = JERTTHGLUGLUDown;
+    }
+    if(processname=="ttH_hww"){
+      JERUpWeight   = JERTTHWWUp;
+      JERDownWeight = JERTTHWWDown;
+    }
+    if(processname=="ttH_hzz"){
+      JERUpWeight   = JERTTHZZUp;
+      JERDownWeight = JERTTHZZDown;
+    }
+    if(processname=="ttH_hzg"){
+      JERUpWeight   = JERTTHZGUp;
+      JERDownWeight = JERTTHZGDown;
+    }
+    if(processname=="ttbarOther"){
+      JERUpWeight   = JERTTLFUp;
+      JERDownWeight = JERTTLFDown;
+    }
+    if(processname=="ttbarPlusCCbar"){
+      JERUpWeight   = JERTTCCUp;
+      JERDownWeight = JERTTCCDown;
+    }
+    if(processname=="ttbarPlusB"){
+      JERUpWeight   = JERTTBUp;
+      JERDownWeight = JERTTBDown;
+    }
+    if(processname=="ttbarPlus2B"){
+      JERUpWeight   = JERTTtwoBUp;
+      JERDownWeight = JERTTtwoBDown;
+    }
+    if(processname=="ttbarPlusBBbar"){
+      JERUpWeight   = JERTTBBUp;
+      JERDownWeight = JERTTBBDown;
+    }
+    if(processname=="singlet"){
+      JERUpWeight   = JERSTUp;
+      JERDownWeight = JERSTDown;
+    }
+    if(processname=="zjets"){
+      JERUpWeight   = JERZJETSUp;
+      JERDownWeight = JERZJETSDown;
+    }
+    if(processname=="wjets"){
+      JERUpWeight   = JERWJETSUp;
+      JERDownWeight = JERWJETSDown;
+    }
+    if(processname=="ttbarW"){
+      JERUpWeight   = JERTTWUp;
+      JERDownWeight = JERTTWDown;
+    }
+    if(processname=="ttbarZ"){
+      JERUpWeight   = JERTTZUp;
+      JERDownWeight = JERTTZDown;
+    }
+    if(processname=="diboson"){
+      JERUpWeight   = JERDIBOSONUp;
+      JERDownWeight = JERDIBOSONDown;
+    }
 """
 
 
@@ -998,7 +1122,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
     #print unprunedvariablesnames
     variablesnames=[]
     dummyBDTvarList=[]
-    vetolist=['processname','internalSystName','csvWgtCF','csvReweighter','csvWgtLF','csvWgtHF','jetPts','jetEtas','jetCSVs','jetFlavors','DoWeights','muonTriggerHelper','muonIsoHelper','muonIDHelper','muonPt','muonEta','electronTriggerHelper','electronIsoHelper','electronIDHelper','electronPt','electronEta']
+    vetolist=['processname','internalSystName','csvWgtCF','csvReweighter','csvWgtLF','csvWgtHF','jetPts','jetEtas','jetCSVs','jetFlavors','DoWeights','muonTriggerHelper','muonIsoHelper','muonIDHelper','muonPt','muonEta','electronTriggerHelper','electronIsoHelper','electronIDHelper','electronPt','electronEta','JERUpWeight','JERDownWeight']
     for upv in unprunedvariablesnames:
       if "splitdummybdt" in upv:
 	print upv
