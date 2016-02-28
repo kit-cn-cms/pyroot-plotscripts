@@ -7,8 +7,10 @@ from scriptgenerator import *
 from plotutils import *
 from limittools import renameHistos
 from limittools import addPseudoData
+from limittools import addRealData
 from limittools import makeDatacards
 from limittools import calcLimits
+from limittools import replaceQ2scale
 from plotconfig import *
 
 
@@ -125,7 +127,11 @@ if not os.path.exists(name):
   os.makedirs(name)
 
 renameHistos(outputpath,name+'/'+name+'_limitInput.root',allsystnames)
-addPseudoData(name+'/'+name+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
+replaceQ2scale( os.getcwd()+'/'+name+'/'+name+'_limitInput.root')
+#addPseudoData(name+'/'+name+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
+#########DANGERZONE##############
+addRealData(name+'/'+name+'_limitInput.root',[s.nick for s in samples_data_controlplots],binlabels,discrname)
+#################################
 
 listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,bdts)
 lolT=transposeLOL(listOfHistoLists)
@@ -133,6 +139,6 @@ writeLOLAndOneOnTop(transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],20,nam
 makeDatacards(name+'/'+name+'_limitInput.root',name+'/'+name+'_datacard',binlabels)
 
 ##if askYesNo('Calculate limits?'):
-limit=calcLimits(name+'/'+name+'_datacard',binlabels)
-limit.dump()
+#limit=calcLimits(name+'/'+name+'_datacard',binlabels)
+#limit.dump()
   
