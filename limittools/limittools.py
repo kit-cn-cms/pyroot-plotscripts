@@ -1,5 +1,6 @@
 import ROOT
 import sys
+import os
 from subprocess import call
 
 
@@ -48,6 +49,29 @@ def renameHistos(infname,outfname,sysnames,prune=True):
     thisname=key.GetName()
     thish=infile.Get(thisname)
     newname=thisname
+    do=True
+    if do and "PSscaleUp" in thisname and "Q2scale" in thisname and thisname[-2:]=="Up":
+#      print thisname
+      #ttbarOther_CMS_ttH_PSscaleUp_BDT_ljets_j4_t4_low_CMS_ttH_Q2scale_ttbarPlusBUp
+      tmp=thisname
+      tmp=tmp.replace('_CMS_ttH_PSscaleUp','')
+#      print 'stripped',tmp
+#      raw_input()
+      newname=tmp.replace('Q2scale','CombinedScale')
+ #     print newname
+#      raw_input()
+
+    if "PSscaleDown" in thisname and "Q2scale" in thisname and thisname[-4:]=="Down":
+  #    print thisname
+      #ttbarOther_CMS_ttH_PSscaleUp_BDT_ljets_j4_t4_low_CMS_ttH_Q2scale_ttbarPlusBUp
+      tmp=thisname
+      tmp=tmp.replace('_CMS_ttH_PSscaleDown','')
+   #   print 'stripped',tmp
+     # raw_input()
+      newname=tmp.replace('Q2scale','CombinedScale')
+    #  print newname
+      #raw_input()
+
     if "dummy" in thisname:
       continue
     nsysts=0
@@ -189,6 +213,34 @@ def mergeHistFiles(infname1,infname2,categoriesToTakeFrom2,outfname):
   infile1.Close()
   infile2.Close()
 
+def replaceQ2scale(infname,toupdate="_CMS_ttH_Q2scale_",updatewith="_CMS_ttH_CombinedScale_"):
+  print infname,infname[:-5]+'_backup'+infname[-5:]
+#  raw_input('trying to rename' )
+  os.rename(infname,infname[:-5]+'_backup'+infname[-5:])
+  backup=infname[:-5]+'_backup'+infname[-5:]
+  infile=ROOT.TFile(backup)
+  outfile=ROOT.TFile(infname,'recreate')
+  keylist=infile.GetListOfKeys()
+  for key in keylist:
+    thisname=key.GetName()
+    thishisto=infile.Get(thisname).Clone()
+    if toupdate in thisname:
+      newname=thisname.replace(toupdate,toupdate+'backup_')
+      thishisto.SetName(newname)
+      print "updated", thisname, newname
+#      raw_input()
+    elif updatewith in thisname:
+      newname=thisname.replace(updatewith,toupdate)
+      thishisto.SetName(newname)     
+      print "updated", thisname, newname
+#      raw_input()
+    outfile.cd()
+    thishisto.Write()
+  infile.Close()
+  outfile.Close()
+
+
+
 def addPseudoData(infname,samplesWOttH,categories,sysnames,disc="BDT_ljets"):
 
   infile=ROOT.TFile(infname,"UPDATE")
@@ -206,6 +258,25 @@ def addPseudoData(infname,samplesWOttH,categories,sysnames,disc="BDT_ljets"):
     newhist.Write()
   
   infile.Close()
+
+def addRealData(infname,samplesData,categories,disc="BDT_ljets"):
+
+  infile=ROOT.TFile(infname,"UPDATE")
+
+  for cat in categories:
+    print "getting ", samplesData[0]+"_"+disc+"_"+cat
+    oldhist=infile.Get(samplesData[0]+"_"+disc+"_"+cat)
+    newhist=oldhist.Clone("data_obs_"+disc+"_"+cat)
+    print newhist
+    for s in samplesData[1:]:
+      print "doiung ", s+"_"+disc+"_"+cat
+      bufferhist=infile.Get(s+"_"+disc+"_"+cat)
+      print bufferhist
+      newhist.Add(bufferhist)
+    newhist.Write()
+  
+  infile.Close()
+
 
 def MoveOverUnderflow(infname,outfname):
 
