@@ -172,12 +172,15 @@ def getCanvas(name,ratiopad=False):
         c.cd(1).SetLeftMargin(0.15);
         c.cd(2).SetRightMargin(0.05);
         c.cd(2).SetLeftMargin(0.15);
+        c.cd(2).SetTicks(1,1)
+        c.cd(1).SetTicks(1,1)
     else:
         c=ROOT.TCanvas(name,name,1024,768)
         c.SetRightMargin(0.05)
         c.SetTopMargin(0.07)
         c.SetLeftMargin(0.15)
         c.SetBottomMargin(0.15)
+        c.SetTicks(1,1)
 
     return c
 
@@ -217,6 +220,33 @@ def getLegend():
     legend.SetTextSize(0.05);
     legend.SetFillStyle(0);
     return legend
+
+def getLegendL(): 
+    legend=ROOT.TLegend()
+    legend.SetX1NDC(0.6)
+    legend.SetX2NDC(0.76)
+    legend.SetY1NDC(0.9)
+    legend.SetY2NDC(0.91)
+    legend.SetBorderSize(0);
+    legend.SetLineStyle(0);
+    legend.SetTextFont(42);
+    legend.SetTextSize(0.04);
+    legend.SetFillStyle(0);
+    return legend
+
+def getLegendR(): 
+    legend=ROOT.TLegend()
+    legend.SetX1NDC(0.76)
+    legend.SetX2NDC(0.93)
+    legend.SetY1NDC(0.9)
+    legend.SetY2NDC(0.91)
+    legend.SetBorderSize(0);
+    legend.SetLineStyle(0);
+    legend.SetTextFont(42);
+    legend.SetTextSize(0.04);
+    legend.SetFillStyle(0);
+    return legend
+
 
 def getLegend2(): 
     legend=ROOT.TLegend()
@@ -747,6 +777,24 @@ def AddEntry2( self, histo, label, option='L'):
     
     self.AddEntry(histo, label, option)
 ROOT.TLegend.AddEntry2 = AddEntry2
+
+def AddEntry22( self, histo, label, option='L'):
+    self.SetY1NDC(self.GetY1NDC()-0.045)
+    width=self.GetX2NDC()-self.GetX1NDC()
+    ts=self.GetTextSize()
+    neglen = 0
+    sscripts = re.findall("_{.+?}|\^{.+?}",label)
+    for s in sscripts:
+	neglen = neglen + 3
+    symbols = re.findall("#[a-zA-Z]+",label)
+    for symbol in symbols:
+	neglen = neglen + len(symbol)-1
+    newwidth=max((len(label)-neglen)*0.015*0.05/ts+0.1,width)
+#    self.SetX1NDC(self.GetX2NDC()-newwidth)
+    
+    self.AddEntry(histo, label, option)
+ROOT.TLegend.AddEntry22 = AddEntry22
+
 
 def AddEntry4545( self, histo, label, option='L'):
     self.SetY1NDC(self.GetY1NDC()-0.045)
@@ -1495,6 +1543,8 @@ def getDataGraphBlind(listOfHistosData,nunblinded):
     moveOverFlow(datahisto)
     data=ROOT.TGraphAsymmErrors(datahisto)
     data.SetMarkerStyle(20)
+    data.SetMarkerSize(1.3)
+    data.SetLineWidth(3)
     data.SetMarkerColor(ROOT.kBlack)
     data.SetLineColor(ROOT.kBlack)
     blind_band=ROOT.TGraphAsymmErrors(datahisto.GetNbinsX()-nunblinded)
@@ -2184,7 +2234,7 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         otc.SetBinContent(otc.GetNbinsX(),otc.GetBinContent(otc.GetNbinsX()+1)+otc.GetBinContent(otc.GetNbinsX()));
         otc.SetBinError(1,ROOT.TMath.Sqrt(ROOT.TMath.Power(otc.GetBinError(0),2)+ROOT.TMath.Power(otc.GetBinError(1),2)));
         otc.SetBinError(otc.GetNbinsX(),ROOT.TMath.Sqrt(ROOT.TMath.Power(otc.GetBinError(otc.GetNbinsX()+1),2)+ROOT.TMath.Power(otc.GetBinError(otc.GetNbinsX()),2)));
-        otc.SetLineWidth(3)
+        otc.SetLineWidth(2)
         if factor >= 0.:
           otc.Scale(factor)
         else:
@@ -2240,19 +2290,27 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
 	  #print objects
 	  #raw_input()
         
-        l=getLegend()
-        l.AddEntry2(data,'data','P')
+        l1=getLegendL()
+        l2=getLegendR()
+        l1.AddEntry22(data,'data','P')
         if factor >= 0.: 
-          l.AddEntry2(otc,sampleOnTop.name+' x '+str(factor),'L')
+          l2.AddEntry22(otc,sampleOnTop.name+' x '+str(factor),'L')
         else:
-          l.AddEntry2(otc,sampleOnTop.name+(' x {:4.0f}').format(integralfactor),'L')
+          l2.AddEntry22(otc,sampleOnTop.name+(' x {:4.0f}').format(integralfactor),'L')
+        i=0
         for h,sample in zip(stackedListOfHistos,samples):
-            l.AddEntry2(h,sample.name,'F')
+            i+=1
+            if i%2==1:
+                l1.AddEntry22(h,sample.name,'F')
+            if i%2==0:
+                l2.AddEntry22(h,sample.name,'F')
 
         canvases.append(canvas)
-        l.Draw('same')
+        l1.Draw('same')
+        l2.Draw('same')
         objects.append(data)
-        objects.append(l)
+        objects.append(l1)
+        objects.append(l2)
         objects.append(otc)
         
         #draw the lumi text on the canvas
@@ -2275,9 +2333,9 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         
         CMS_lumi.CMS_lumi(canvas, iPeriod, iPos)
         
-        label = ROOT.TLatex(0.2, 0.89, labeltext);
+        label = ROOT.TLatex(0.18, 0.89, labeltext);
         label.SetTextFont(42)
-        label.SetTextSize(0.05)
+        label.SetTextSize(0.035)
         label.SetNDC()
         label.Draw()
         objects.append(label)
@@ -2439,7 +2497,7 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
         otc.SetBinContent(otc.GetNbinsX(),otc.GetBinContent(otc.GetNbinsX()+1)+otc.GetBinContent(otc.GetNbinsX()));
         otc.SetBinError(1,ROOT.TMath.Sqrt(ROOT.TMath.Power(otc.GetBinError(0),2)+ROOT.TMath.Power(otc.GetBinError(1),2)));
         otc.SetBinError(otc.GetNbinsX(),ROOT.TMath.Sqrt(ROOT.TMath.Power(otc.GetBinError(otc.GetNbinsX()+1),2)+ROOT.TMath.Power(otc.GetBinError(otc.GetNbinsX()),2)));
-        otc.SetLineWidth(3)
+        otc.SetLineWidth(2)
         if factor >= 0.:
           otc.Scale(factor)
         else:
@@ -2494,20 +2552,27 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
 	  listOfRatioErrorGraphs.append(ratioerrorgraph)
 	  #print objects
 	  #raw_input()
-        
-        l=getLegend()
-        l.AddEntry2(data,'data','P')
-        if factor >= 0.: 
-          l.AddEntry2(otc,sampleOnTop.name+' x '+str(factor),'L')
-        else:
-          l.AddEntry2(otc,sampleOnTop.name+(' x {:4.0f}').format(integralfactor),'L')
-        for h,sample in zip(stackedListOfHistos,samples):
-            l.AddEntry2(h,sample.name,'F')
+          l1=getLegendL()
+          l2=getLegendR()
+          l1.AddEntry22(data,'data','P')
+          if factor >= 0.: 
+              l2.AddEntry22(otc,sampleOnTop.name+' x '+str(factor),'L')
+          else:
+              l2.AddEntry22(otc,sampleOnTop.name+(' x {:4.0f}').format(integralfactor),'L')
+              i=0
+              for h,sample in zip(stackedListOfHistos,samples):
+                  i+=1
+                  if i%2==1:
+                      l1.AddEntry22(h,sample.name,'F')
+                  if i%2==0:
+                      l2.AddEntry22(h,sample.name,'F')
 
         canvases.append(canvas)
-        l.Draw('same')
+        l1.Draw('same')
+        l2.Draw('same')
         objects.append(data)
-        objects.append(l)
+        objects.append(l1)
+        objects.append(l2)
         objects.append(otc)
 
         #draw the lumi text on the canvas
@@ -2530,9 +2595,9 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
         
         CMS_lumi.CMS_lumi(canvas, iPeriod, iPos)
 
-        label = ROOT.TLatex(0.2, 0.89, labeltext);
+        label = ROOT.TLatex(0.18, 0.89, labeltext);
         label.SetTextFont(42)
-        label.SetTextSize(0.05)
+        label.SetTextSize(0.035)
         label.SetNDC()
         label.Draw()
         objects.append(label)
