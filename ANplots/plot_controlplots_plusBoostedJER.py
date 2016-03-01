@@ -21,15 +21,16 @@ allsamples=samples
 allsystnames=weightsystnames
 
 #                                                 B C D
-boosted="(BoostedTopHiggs_TopHadCandidate_TopMVAOutput>=-0.485&&BoostedTopHiggs_HiggsCandidate_HiggsTag>=0.8925)"                        
-categoriesJT=[("((N_Jets>=6&&N_BTagsM==2)&&!"+boosted+")","6j2t","","",""),
-              ("((N_Jets==4&&N_BTagsM==3)&&!"+boosted+")","4j3t","0.2","0.2","0.2"),
-              ("((N_Jets==5&&N_BTagsM==3)&&!"+boosted+")","5j3t","0.15","0.15","0.15"),
-              ("((N_Jets>=6&&N_BTagsM==3)&&!"+boosted+")","6j3t","0.1","0.1","0.1"),
-              ("((N_Jets==4&&N_BTagsM>=4)&&!"+boosted+")","4j4t","0.2","0.2","0.2"),
-              ("((N_Jets==5&&N_BTagsM>=4)&&!"+boosted+")","5j4t","0.2","0.2","0.2"),             
-              ("((N_Jets>=6&&N_BTagsM>=4)&&!"+boosted+")","6j4t","0.1","0.1","0.1"),
-              ("((N_Jets>=4&&N_BTagsM>=2)&&"+boosted+")","boosted","0.1","0.1","0.1")]
+categoriesJT=[("(N_Jets==4&&N_BTagsM==2)","4j2t","","",""),
+              ("(N_Jets==5&&N_BTagsM==2)","5j2t","","",""),
+              ("(N_Jets>=6&&N_BTagsM==2)","6j2t","","",""),
+              ("(N_Jets==4&&N_BTagsM==3)","4j3t","0.2","0.2","0.2"),
+              ("(N_Jets==5&&N_BTagsM==3)","5j3t","0.15","0.15","0.15"),
+              ("(N_Jets>=6&&N_BTagsM==3)","6j3t","0.1","0.1","0.1"),
+              ("(N_Jets==4&&N_BTagsM>=4)","4j4t","0.2","0.2","0.2"),
+              ("(N_Jets==5&&N_BTagsM>=4)","5j4t","0.2","0.2","0.2"),             
+              ("(N_Jets>=6&&N_BTagsM>=4)","6j4t","0.1","0.1","0.1")
+]
 
 categoriesSplitBDT=[]
 categoriesSplitBDT.append(categoriesJT[0])
@@ -69,7 +70,7 @@ for i,cat in enumerate(categoriesSplitByBDToptD):
 
 plots=[
        Plot(ROOT.TH1F("JT" ,"jet-tag categories",9,-0.5,8.5),"3*max(min(N_BTagsM-2,2),0)+max(min(N_Jets-4,2),0)","(N_BTagsM>=2&&N_Jets>=4)",label),
-       Plot(ROOT.TH1F("JTByBDToptC" ,"analysis C + boosted categories",len(categoriesBDT),0.5,0.5+len(categoriesBDT)),catstringBDT,"(((N_BTagsM>=2&&N_Jets>=6||N_BTagsM>=3&&N_Jets>=4)&&!"+categoriesJT[-1][0]+")||"+categoriesJT[-1][0]+")"),
+#       Plot(ROOT.TH1F("JTByBDToptC" ,"analysis C + boosted categories",len(categoriesBDT),0.5,0.5+len(categoriesBDT)),catstringBDT,"(((N_BTagsM>=2&&N_Jets>=6||N_BTagsM>=3&&N_Jets>=4)&&!"+categoriesJT[-1][0]+")||"+categoriesJT[-1][0]+")"),
        Plot(ROOT.TH1F("N_Jets","Number of ak4 jets",7,3.5,10.5),"N_Jets",'',label),
        Plot(ROOT.TH1F("N_BTagsM","Number of b-tags",4,1.5,5.5),"N_BTagsM",'',label),
 ]
