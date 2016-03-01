@@ -815,7 +815,7 @@ for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
 labels=[plot.label for plot in plots]
 
 lolT=transposeLOL(listOfHistoLists)
-plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,name,[[lll,3354,ROOT.kBlack,True]],False,labels)
+plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name,[[lll,3354,ROOT.kBlack,True]],False,labels)
 
 # make log plots
 listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
@@ -824,7 +824,7 @@ lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],pl
 #lllforPS=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,PSSystnames)
 labels=[plot.label for plot in plots]
 lolT=transposeLOL(listOfHistoLists)
-plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,name+'_log',[[lll,3354,ROOT.kBlack,True]],True,labels)
+plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name+'_log',[[lll,3354,ROOT.kBlack,True]],True,labels)
 
 
 ############
@@ -853,7 +853,7 @@ for i,cat in enumerate(categoriesSplitByBDToptD):
 listOfcustomBinLabels=[jtlist,categoriesBDTlist]               
 labels=[plot.label for plot in plots[:categoryplotsindex]]
 lolT=transposeLOL(listOfHistoListsForCategories)
-plotDataMCanWsystCustomBinLabels(listOfHistoListsDataForCategories,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,name+'Categories_log',[[lllForCategories,3354,ROOT.kBlack,True]],listOfcustomBinLabels,True,labels,True)
+plotDataMCanWsystCustomBinLabels(listOfHistoListsDataForCategories,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name+'Categories_log',[[lllForCategories,3354,ROOT.kBlack,True]],listOfcustomBinLabels,True,labels,True)
 
 ##listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
 ##listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots,1)
@@ -892,5 +892,5 @@ plotDataMCanWsystCustomBinLabels(listOfHistoListsDataForCategories,transposeLOL(
 ##labels=[plot.label for plot in plots]
 
 ##lolT=transposeLOL(listOfHistoLists)
-###plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,name+'_log',[[lll,3354,ROOT.kGray+1,False]],True,labels)
-##plotDataMCan(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],20,name+'_log',True,labels)
+###plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name+'_log',[[lll,3354,ROOT.kGray+1,False]],True,labels)
+##plotDataMCan(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name+'_log',True,labels)
