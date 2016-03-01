@@ -593,7 +593,8 @@ def printCanvases(canvases,name):
         os.makedirs(name)
     for c in canvases:
         c.Print(name+'/'+("_".join(((c.GetName()).split('_'))[1:]))+".pdf")
-        c.SaveAs(name+"/"+c.GetName()+'.png')
+        c.SaveAs(name+'/'+("_".join(((c.GetName()).split('_'))[1:]))+".png")
+
 
 def printCanvasesPNG(canvases,name):
 
@@ -881,7 +882,7 @@ def createHistoLists_fromSuperHistoFile(path,samples,plots,rebin=1,catnames=[""]
 
 def createLLL_fromSuperHistoFileSyst(path,samples,plots,systnames=[""]):
     f=ROOT.TFile(path, "readonly")
-    print path
+#    print path
     keyList = f.GetKeyNames()    
     lll=[]
     for plot in plots:
@@ -896,15 +897,15 @@ def createLLL_fromSuperHistoFileSyst(path,samples,plots,systnames=[""]):
                 ROOT.gDirectory.cd('PyROOT:/')               
                 key=sample.nick+'_'+plot.name+syst
                 if not syst in sample.shape_unc: 
-		    print "using nominal for ", key
+#		    print "using nominal for ", key
                     l.append(nominal.Clone(key))
                     continue
                 o=f.Get(key)
                 if isinstance(o,ROOT.TH1) and not isinstance(o,ROOT.TH2): 
-		    print "using right one for", key
+#		    print "using right one for", key
                     l.append(o.Clone())
-                else:
-                    print syst,'not used for',sample.name
+ #               else:
+  #                  print syst,'not used for',sample.name
             ll.append(l)
         lll.append(ll)
     return lll
@@ -918,7 +919,7 @@ def createErrorbands(lll,samples,DoRateSysts=True):
     for ll in lll: #for all plots
         llT=transposeLOL(ll)
         nominal=llT[0][0].Clone()
-        print "addresses ", llT[0][0], nominal
+#        print "addresses ", llT[0][0], nominal
         for h in llT[0][1:]:
             nominal.Add(h)
             #print h
@@ -965,7 +966,7 @@ def createErrorbands(lll,samples,DoRateSysts=True):
 	  #print sys, sys.Integral()
         for ibin in range(0,nominal.GetNbinsX()):
             nerr=nominal.GetBinError(ibin+1)
-            print "Bin, name, content ",ibin, nominal.GetName(), nominal.GetBinContent(ibin+1)
+#            print "Bin, name, content ",ibin, nominal.GetName(), nominal.GetBinContent(ibin+1)
             uperrors[ibin]=ROOT.TMath.Sqrt(uperrors[ibin]*uperrors[ibin]+nerr*nerr)
             downerrors[ibin]=ROOT.TMath.Sqrt(downerrors[ibin]*downerrors[ibin]+nerr*nerr)
             n=nominal.GetBinContent(ibin+1)
@@ -2165,7 +2166,7 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
 	  errorgraph.SetFillStyle(thisFillStyle)
 	  errorgraph.SetLineColor(ThisFillColor)
 	  errorgraph.SetFillColor(ThisFillColor)
-	  ratioerrorgraph.SetFillStyle(1001)
+	  ratioerrorgraph.SetFillStyle(thisFillStyle)
 	  ratioerrorgraph.SetLineColor(ThisFillColor)
 	  ratioerrorgraph.SetFillColor(ThisFillColor)
   #        ratioerrorgraph.SetFillStyle(1001)
@@ -2392,7 +2393,7 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
 	  errorgraph.SetFillStyle(thisFillStyle)
 	  errorgraph.SetLineColor(ThisFillColor)
 	  errorgraph.SetFillColor(ThisFillColor)
-	  ratioerrorgraph.SetFillStyle(1001)
+	  ratioerrorgraph.SetFillStyle(thisFillStyle)
 	  ratioerrorgraph.SetLineColor(ThisFillColor)
 	  ratioerrorgraph.SetFillColor(ThisFillColor)
   #        ratioerrorgraph.SetFillStyle(1001)
