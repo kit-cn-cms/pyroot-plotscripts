@@ -136,13 +136,14 @@ def renameHistos(infname,outfname,sysnames,prune=True):
     #if nsysts ==1 and thish.Integral()<0.0:
       #print "nominal histogram has negativ integral"
         #print thish, thish.Integral()
-    nbins=thish.GetNbinsX()
-    for ibin in range(nbins):
-      if thish.GetBinContent(ibin+1)<0.0:
-	print "negative bins in ", thish
-	print "setting bin ", ibin+1, "from", thish.GetBinContent(ibin+1), "+-", thish.GetBinError(ibin+1), "to 0+-0"
-	thish.SetBinContent(ibin+1,0.0)
-	thish.SetBinError(ibin+1,0.0)
+    if prune:
+      nbins=thish.GetNbinsX()
+      for ibin in range(nbins):
+        if thish.GetBinContent(ibin+1)<0.0:
+          print "negative bins in ", thish
+          print "setting bin ", ibin+1, "from", thish.GetBinContent(ibin+1), "+-", thish.GetBinError(ibin+1), "to 0+-0"
+          thish.SetBinContent(ibin+1,0.0)
+          thish.SetBinError(ibin+1,0.0)
   #if "125" in newname:
     #newname=newname.replace("125","")
 #    print "changed ", thisname, " to ", newname
