@@ -8,7 +8,7 @@ import os
 import scriptgenerator
 import re
 import xml.etree.ElementTree as ET
-
+import CMS_lumi
 
 ROOT.gStyle.SetPaintTextFormat("4.2f");
 ROOT.gROOT.SetBatch(True)
@@ -166,7 +166,7 @@ def getCanvas(name,ratiopad=False):
         c.cd(1).SetBottomMargin(0.0);
         c.cd(2).SetPad(0.,0.0,1.0,0.3);
         c.cd(2).SetTopMargin(0.0);
-        c.cd(1).SetTopMargin(0.05);
+        c.cd(1).SetTopMargin(0.07);
         c.cd(2).SetBottomMargin(0.4);
         c.cd(1).SetRightMargin(0.05);
         c.cd(1).SetLeftMargin(0.15);
@@ -175,7 +175,7 @@ def getCanvas(name,ratiopad=False):
     else:
         c=ROOT.TCanvas(name,name,1024,768)
         c.SetRightMargin(0.05)
-        c.SetTopMargin(0.05)
+        c.SetTopMargin(0.07)
         c.SetLeftMargin(0.15)
         c.SetBottomMargin(0.15)
 
@@ -1854,14 +1854,24 @@ def writeLOLAndOneOnTop(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,f
     objects=[]   
     i=0
     print "ok"
+    
     for listOfHistos,ot in zip(listOfHistoLists,listOfhistosOnTop):
         print i
         i+=1
+        
+        integralfactor=0
         for histo,sample in zip(listOfHistos,samples):
 
             yTitle='Events expected for 2.67 fb^{-1} @ 13 TeV'
 #            yTitle='Events'
-            setupHisto(histo,sample.color,yTitle,stack)        
+            setupHisto(histo,sample.color,yTitle,stack) 
+            
+            if factor < 0:
+              integralfactor+=histo.Integral()
+        
+        if factor < 0:    
+          integralfactor=integralfactor/ot.Integral()
+            
         c=drawHistosOnCanvas(listOfHistos,normalize,stack,logscale,options)       
         #c.SetName('c'+str(i))
         c.cd()
@@ -1873,14 +1883,21 @@ def writeLOLAndOneOnTop(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,f
         otc.SetBinError(otc.GetNbinsX(),ROOT.TMath.Sqrt(ROOT.TMath.Power(otc.GetBinError(otc.GetNbinsX()+1),2)+ROOT.TMath.Power(otc.GetBinError(otc.GetNbinsX()),2)));
         otc.SetLineWidth(3)
         l=getLegend()
-        l.AddEntry2(otc,sampleOnTop.name+' x '+str(factor),'L')
+        if factor >= 0.: 
+          l.AddEntry2(otc,sampleOnTop.name+' x '+str(factor),'L')
+        else:
+          l.AddEntry2(otc,sampleOnTop.name+(' x {:4.0f}').format(integralfactor),'L')
+          
         for h,sample in zip(listOfHistos,samples):
             loption='L'
             if stack:
                 loption='F'
             l.AddEntry2(h,sample.name,loption)
         canvases.append(c)
-        otc.Scale(factor)
+        if factor >= 0.:
+          otc.Scale(factor)
+        else:
+          otc.Scale(integralfactor)
         otc.DrawCopy("samehisto")
         l.Draw('same')
         objects.append(l)
@@ -1929,9 +1946,17 @@ def plotDataMCan(listOfHistoListsData,listOfHistoLists,samples,listOfhistosOnTop
         i+=1
 #        print i
         # setup histo style
+        integralfactor=0
         for histo,sample in zip(listOfHistos,samples):
             yTitle='Events'
-            setupHisto(histo,sample.color,yTitle,True) 
+            setupHisto(histo,sample.color,yTitle,True)
+            
+            if factor < 0:
+              integralfactor+=histo.Integral()
+        
+        if factor < 0:    
+          integralfactor=integralfactor/ot.Integral()
+          
         # 
         # mover over/underflow
         for h in listOfHistos:
@@ -1974,12 +1999,18 @@ def plotDataMCan(listOfHistoListsData,listOfHistoLists,samples,listOfhistosOnTop
         otc.SetBinError(1,ROOT.TMath.Sqrt(ROOT.TMath.Power(otc.GetBinError(0),2)+ROOT.TMath.Power(otc.GetBinError(1),2)));
         otc.SetBinError(otc.GetNbinsX(),ROOT.TMath.Sqrt(ROOT.TMath.Power(otc.GetBinError(otc.GetNbinsX()+1),2)+ROOT.TMath.Power(otc.GetBinError(otc.GetNbinsX()),2)));
         otc.SetLineWidth(3)
-        otc.Scale(factor)
+        if factor >= 0.:
+          otc.Scale(factor)
+        else:
+          otc.Scale(integralfactor)
         otc.Draw('histosame')
         data.Draw('samePE1')
         l=getLegend()
         l.AddEntry2(data,'data','P')
-        l.AddEntry2(otc,sampleOnTop.name+' x '+str(factor),'L')
+        if factor >= 0.: 
+          l.AddEntry2(otc,sampleOnTop.name+' x '+str(factor),'L')
+        else:
+          l.AddEntry2(otc,sampleOnTop.name+(' x {:4.0f}').format(integralfactor),'L')
         for h,sample in zip(stackedListOfHistos,samples):
             l.AddEntry2(h,sample.name,'F')
 
@@ -1989,12 +2020,25 @@ def plotDataMCan(listOfHistoListsData,listOfHistoLists,samples,listOfhistosOnTop
         objects.append(l)
         objects.append(otc)
 
-        cms = ROOT.TLatex(0.2, 0.96, 'CMS preliminary,  2.67 fb^{-1},  #sqrt{s} = 13 TeV'  );
-        cms.SetTextFont(42)
-        cms.SetTextSize(0.05)
-        cms.SetNDC()
-        cms.Draw()
-        objects.append(cms)
+        #draw the lumi text on the canvas
+        CMS_lumi.lumi_13TeV = "2.67 fb^{-1}"
+        CMS_lumi.writeExtraText = 1
+        CMS_lumi.extraText = "Preliminary"
+        CMS_lumi.lumi_sqrtS = "13 TeV" # used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
+
+        CMS_lumi.cmsTextSize = 0.55
+        CMS_lumi.cmsTextOffset = 0.49
+        CMS_lumi.lumiTextSize = 0.43
+        CMS_lumi.lumiTextOffset = 0.61
+        
+        CMS_lumi.relPosX = 0.15
+        
+        CMS_lumi.hOffset = 0.05
+        
+        iPeriod=4   # 13TeV
+        iPos=0     # CMS inside frame
+        
+        CMS_lumi.CMS_lumi(canvas, iPeriod, iPos)
 
         label = ROOT.TLatex(0.2, 0.89, labeltext);
         label.SetTextFont(42)
@@ -2083,9 +2127,17 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         i+=1
 #        print i
         # setup histo style
+        integralfactor=0
         for histo,sample in zip(listOfHistos,samples):
             yTitle='Events'
-            setupHisto(histo,sample.color,yTitle,True) 
+            setupHisto(histo,sample.color,yTitle,True)
+            
+            if factor < 0:
+              integralfactor+=histo.Integral()
+        
+        if factor < 0:    
+          integralfactor=integralfactor/ot.Integral()
+            
         # 
         # mover over/underflow
         for h in listOfHistos:
@@ -2132,7 +2184,10 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         otc.SetBinError(1,ROOT.TMath.Sqrt(ROOT.TMath.Power(otc.GetBinError(0),2)+ROOT.TMath.Power(otc.GetBinError(1),2)));
         otc.SetBinError(otc.GetNbinsX(),ROOT.TMath.Sqrt(ROOT.TMath.Power(otc.GetBinError(otc.GetNbinsX()+1),2)+ROOT.TMath.Power(otc.GetBinError(otc.GetNbinsX()),2)));
         otc.SetLineWidth(3)
-        otc.Scale(factor)
+        if factor >= 0.:
+          otc.Scale(factor)
+        else:
+          otc.Scale(integralfactor)
         otc.Draw('histosame')
         data.Draw('samePE1')
         blind.SetFillStyle(3665)
@@ -2186,7 +2241,10 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         
         l=getLegend()
         l.AddEntry2(data,'data','P')
-        l.AddEntry2(otc,sampleOnTop.name+' x '+str(factor),'L')
+        if factor >= 0.: 
+          l.AddEntry2(otc,sampleOnTop.name+' x '+str(factor),'L')
+        else:
+          l.AddEntry2(otc,sampleOnTop.name+(' x {:4.0f}').format(integralfactor),'L')
         for h,sample in zip(stackedListOfHistos,samples):
             l.AddEntry2(h,sample.name,'F')
 
@@ -2195,14 +2253,27 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         objects.append(data)
         objects.append(l)
         objects.append(otc)
+        
+        #draw the lumi text on the canvas
+        CMS_lumi.lumi_13TeV = "2.67 fb^{-1}"
+        CMS_lumi.writeExtraText = 1
+        CMS_lumi.extraText = "Preliminary"
+        CMS_lumi.lumi_sqrtS = "13 TeV" # used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
 
-        cms = ROOT.TLatex(0.2, 0.96, 'CMS preliminary,  2.67 fb^{-1},  #sqrt{s} = 13 TeV'  );
-        cms.SetTextFont(42)
-        cms.SetTextSize(0.05)
-        cms.SetNDC()
-        cms.Draw()
-        objects.append(cms)
-
+        CMS_lumi.cmsTextSize = 0.55
+        CMS_lumi.cmsTextOffset = 0.49
+        CMS_lumi.lumiTextSize = 0.43
+        CMS_lumi.lumiTextOffset = 0.61
+        
+        CMS_lumi.relPosX = 0.15
+        
+        CMS_lumi.hOffset = 0.05
+        
+        iPeriod=4   # 13TeV
+        iPos=0     # CMS inside frame
+        
+        CMS_lumi.CMS_lumi(canvas, iPeriod, iPos)
+        
         label = ROOT.TLatex(0.2, 0.89, labeltext);
         label.SetTextFont(42)
         label.SetTextSize(0.05)
@@ -2265,11 +2336,12 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         #print labeltext
         #raw_input()
 
-
+    
+    
 #    print len(canvases)
     printCanvases(canvases,name)
     writeObjects(canvases,name)
-
+    
 
 ###################################################
 
@@ -2310,9 +2382,17 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
         i+=1
 #        print i
         # setup histo style
+        integralfactor=0
         for histo,sample in zip(listOfHistos,samples):
             yTitle='Events'
             setupHisto(histo,sample.color,yTitle,True) 
+            
+            if factor < 0:
+              integralfactor+=histo.Integral()
+        
+        if factor < 0:    
+          integralfactor=integralfactor/ot.Integral()
+        
         # 
         # mover over/underflow
         for h in listOfHistos:
@@ -2359,7 +2439,10 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
         otc.SetBinError(1,ROOT.TMath.Sqrt(ROOT.TMath.Power(otc.GetBinError(0),2)+ROOT.TMath.Power(otc.GetBinError(1),2)));
         otc.SetBinError(otc.GetNbinsX(),ROOT.TMath.Sqrt(ROOT.TMath.Power(otc.GetBinError(otc.GetNbinsX()+1),2)+ROOT.TMath.Power(otc.GetBinError(otc.GetNbinsX()),2)));
         otc.SetLineWidth(3)
-        otc.Scale(factor)
+        if factor >= 0.:
+          otc.Scale(factor)
+        else:
+          otc.Scale(integralfactor)
         otc.Draw('histosame')
         data.Draw('samePE1')
         blind.SetFillStyle(3665)
@@ -2413,7 +2496,10 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
         
         l=getLegend()
         l.AddEntry2(data,'data','P')
-        l.AddEntry2(otc,sampleOnTop.name+' x '+str(factor),'L')
+        if factor >= 0.: 
+          l.AddEntry2(otc,sampleOnTop.name+' x '+str(factor),'L')
+        else:
+          l.AddEntry2(otc,sampleOnTop.name+(' x {:4.0f}').format(integralfactor),'L')
         for h,sample in zip(stackedListOfHistos,samples):
             l.AddEntry2(h,sample.name,'F')
 
@@ -2423,12 +2509,25 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
         objects.append(l)
         objects.append(otc)
 
-        cms = ROOT.TLatex(0.2, 0.96, 'CMS preliminary,  2.67 fb^{-1},  #sqrt{s} = 13 TeV'  );
-        cms.SetTextFont(42)
-        cms.SetTextSize(0.05)
-        cms.SetNDC()
-        cms.Draw()
-        objects.append(cms)
+        #draw the lumi text on the canvas
+        CMS_lumi.lumi_13TeV = "2.67 fb^{-1}"
+        CMS_lumi.writeExtraText = 1
+        CMS_lumi.extraText = "Preliminary"
+        CMS_lumi.lumi_sqrtS = "13 TeV" # used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
+
+        CMS_lumi.cmsTextSize = 0.55
+        CMS_lumi.cmsTextOffset = 0.49
+        CMS_lumi.lumiTextSize = 0.43
+        CMS_lumi.lumiTextOffset = 0.61
+        
+        CMS_lumi.relPosX = 0.15
+        
+        CMS_lumi.hOffset = 0.05
+        
+        iPeriod=4   # 13TeV
+        iPos=0     # CMS inside frame
+        
+        CMS_lumi.CMS_lumi(canvas, iPeriod, iPos)
 
         label = ROOT.TLatex(0.2, 0.89, labeltext);
         label.SetTextFont(42)

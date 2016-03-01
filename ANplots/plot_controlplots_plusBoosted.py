@@ -15,8 +15,8 @@ sl42sel="((N_TightLeptons==1)*(N_LooseLeptons==1)*(N_BTagsM>=2)*(N_Jets>=4))" # 
 
 name1="1lge4ge2"
 
-toptaggersel="(BoostedJet_Top_Pt[0]>=0)"
-higgstaggersel="(BoostedJet_Filterjet2_Pt[0]>=0)"
+toptaggersel="(BoostedJet_Top_Pt[0]>0.)"
+higgstaggersel="(BoostedJet_Filterjet2_Pt[0]>0.)"
 samples=samplesControlPlots
 samples_data=samples_data_controlplots
 systsamples=[]
@@ -142,7 +142,7 @@ plots=[Plot(ROOT.TH1F("JT" ,"jet-tag categories",9,-0.5,8.5),"3*max(min(N_BTagsM
        #Plot(ROOT.TH1F("commonBDT43","BDT w/o MEM in training",10,-1,1),"BDT_common5_output",'N_BTagsM==3&&N_Jets==4','4 jets, 3 b-tags'),
        #Plot(ROOT.TH1F("MEM43","MEM discriminator",10,0,1),"(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)",'(N_BTagsM==3&&N_Jets==4)',""),
        
-      Plot(ROOT.TH1F("N_BoostedJets","Number of fat jets",5,0,5),"N_BoostedJets",sl42sel,label),
+       Plot(ROOT.TH1F("N_BoostedJets","Number of fat jets",5,0,5),"N_BoostedJets",sl42sel,label),
        Plot(ROOT.TH1F("BoostedJet_Pt","transverse momentum of fat jet",40,200,600),"BoostedJet_Pt",sl42sel,label),
        Plot(ROOT.TH1F("BoostedJet_Eta","pseudo rapidity of fat jet",40,-2.5,2.5),"BoostedJet_Eta",sl42sel,label),
        Plot(ROOT.TH1F("BoostedJet_M","invariant mass of fat jet",40,0,1000),"BoostedJet_M",sl42sel,label),
@@ -168,7 +168,7 @@ plots=[Plot(ROOT.TH1F("JT" ,"jet-tag categories",9,-0.5,8.5),"3*max(min(N_BTagsM
        Plot(ROOT.TH1F("BoostedJet_W2btag_CSV","CSV output of W2",40,-0.1,1.),"BoostedJet_W2btag_CSV",sl42sel+"&&"+toptaggersel,label),
        Plot(ROOT.TH1F("BoostedJet_Tau21Filtered","#tau_2/#tau_1",40,0.,1.),"BoostedJet_Tau2Filtered/BoostedJet_Tau1Filtered",sl42sel+"&&"+toptaggersel,label),
        Plot(ROOT.TH1F("BoostedJet_Tau32Filtered","#tau_3/#tau_2",40,0.,1.),"BoostedJet_Tau3Filtered/BoostedJet_Tau2Filtered",sl42sel+"&&"+toptaggersel,label),
-       #Plot(ROOT.TH1F("BoostedJet_DRoptRoptCalc","D_{opt}-D_{opt}^{calc}",40,-2.,1.),"BoostedJet_Ropt-BoostedJet_RoptCalc",sl42sel+"&&"+toptaggersel,label),
+       Plot(ROOT.TH1F("BoostedJet_DRoptRoptCalc","D_{opt}-D_{opt}^{calc}",40,-1.5,0.7),"BoostedJet_Ropt-BoostedJet_RoptCalc",sl42sel+"&&"+toptaggersel,label),
        Plot(ROOT.TH1F("BoostedJet_TopTag_BDT_Std","BDT top tagger output of hardest fat jet",40,-1.,1.),"BoostedJet_TopTag_BDT_Std",sl42sel+"&&"+toptaggersel,label),
        Plot(ROOT.TH1F("BoostedJet_Filterjet1_Pt","transverse momentum of hardest filterjet",40,0,400),"BoostedJet_Filterjet1_Pt",sl42sel+"&&"+higgstaggersel,label),
        Plot(ROOT.TH1F("BoostedJet_Filterjet2_Pt","transverse momentum of second hardest filterjet",40,0,300),"BoostedJet_Filterjet2_Pt",sl42sel+"&&"+higgstaggersel,label),

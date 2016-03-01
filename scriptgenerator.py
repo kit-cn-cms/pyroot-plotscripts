@@ -807,7 +807,8 @@ def getArrayEntries(expr,variablesmap,i):
         if v in variablesmap.keys():
             if variablesmap[v].arraylength==None: continue
             # substitute v by v[i]
-            newexpr=re.sub(v+"(?!\[)",v+'['+str(i)+']',newexpr)
+            rexp=(v.encode('string-escape')+r"+\b(?!\[)")
+            newexpr=re.sub(rexp,v+'['+str(i)+']',newexpr)
     return newexpr
 
 def getVartypesAndLength(varnames,tree):
