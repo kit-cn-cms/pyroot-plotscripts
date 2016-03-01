@@ -73,6 +73,7 @@ for cat in categoriesJT[1:]:
     
 # book plots
 label="1 lepton, #geq 4 jets, #geq 2 b-tags"
+labelboosted="#splitline{1 lepton, #geq 4 jets, #geq 2 b-tags}{#geq 1 C/A 1.5 jet p_{T} > 200 GeV}"
 catstringJT="0"
 for i,cat in enumerate(categoriesJT):
     catstringJT+=("+"+str(i+1)+"*"+cat[0])
@@ -89,7 +90,7 @@ for i,cat in enumerate(categoriesSplitByBDToptD):
 plots=[Plot(ROOT.TH1F("JT" ,"jet-tag categories",9,-0.5,8.5),"3*max(min(N_BTagsM-2,2),0)+max(min(N_Jets-4,2),0)","(N_BTagsM>=2&&N_Jets>=4)",label),
        Plot(ROOT.TH1F("JTsplitByBDToptB" ,"2D analysis B + boosted categories",len(categoriesSplitBDT),0.5,0.5+len(categoriesSplitBDT)),catstringSplitByBDT,"(((N_BTagsM>=2&&N_Jets>=6||N_BTagsM>=3&&N_Jets>=4)&&!"+categoriesJT[-1][0]+")||"+categoriesJT[-1][0]+")",''),
        Plot(ROOT.TH1F("JTByBDToptC" ,"analysis C + boosted categories",len(categoriesBDT),0.5,0.5+len(categoriesBDT)),catstringBDT,"(((N_BTagsM>=2&&N_Jets>=6||N_BTagsM>=3&&N_Jets>=4)&&!"+categoriesJT[-1][0]+")||"+categoriesJT[-1][0]+")",''),
-       Plot(ROOT.TH1F("JTbaseline" ,"Baseline l+jets categories",len(categoriesBDT),0.5,0.5+len(categoriesBDT)),catstringBDT,"(((N_BTagsM>=2&&N_Jets>=6||N_BTagsM>=3&&N_Jets>=4)&&!"+categoriesJT[-1][0]+")||"+categoriesJT[-1][0]+")",''),
+#       Plot(ROOT.TH1F("JTbaseline" ,"Baseline l+jets categories",len(categoriesBDT),0.5,0.5+len(categoriesBDT)),catstringBDT,"(((N_BTagsM>=2&&N_Jets>=6||N_BTagsM>=3&&N_Jets>=4)&&!"+categoriesJT[-1][0]+")||"+categoriesJT[-1][0]+")",''),
        Plot(ROOT.TH1F("JTsplitByBDToptD" ,"2D analysis D + boosted categories",len(categoriesSplitByBDToptD),0.5,0.5+len(categoriesSplitByBDToptD)),catstringSplitByBDToptD,"(((N_BTagsM>=2&&N_Jets>=6||N_BTagsM>=3&&N_Jets>=4)&&!"+categoriesJT[-1][0]+")||"+categoriesJT[-1][0]+")",''),
 
        Plot(ROOT.TH1F("N_Jets","Number of ak4 jets",7,3.5,10.5),"N_Jets",'',label),
@@ -137,7 +138,7 @@ plots=[Plot(ROOT.TH1F("JT" ,"jet-tag categories",9,-0.5,8.5),"3*max(min(N_BTagsM
  #      Plot(ROOT.TH1F("CSVeta2","B-tag of jets with abs(#eta) between 0.4 and 0.8",44,-.1,1),"Jet_CSV",'fabs(Jet_Eta)>0.4&&fabs(Jet_Eta)<0.8',label),
  #      Plot(ROOT.TH1F("CSVeta3","B-tag of jets with abs(#eta) between 0.8 and 1.6",44,-.1,1),"Jet_CSV",'fabs(Jet_Eta)>0.8&&fabs(Jet_Eta)<1.6',label),
  #      Plot(ROOT.TH1F("CSVeta4","B-tag of jets with abs(#eta) between 0.8 and 1.6",44,-.1,1),"Jet_CSV",'fabs(Jet_Eta)>1.6',label),
-       #Plot(ROOT.TH1F("MEM","MEM discriminator for events with #geq 3 b-tags",22,0,1),"(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)",'(N_BTagsM>=3)',label),
+       Plot(ROOT.TH1F("MEM","MEM discriminator for events with #geq 3 b-tags",22,0,1),"(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)",'(N_BTagsM>=3)',label),
        Plot(ROOT.TH1F("blrHighTag","B-tagging likelihood ratio for events with #geq 3 b-tags",44,-4,10),"TMath::Log(Evt_blr_ETH/(1-Evt_blr_ETH))",'(N_BTagsM>=3)',label),
        Plot(ROOT.TH1F("blrAll","B-tagging likelihood ratio",44,-6,10),"TMath::Log(Evt_blr_ETH/(1-Evt_blr_ETH))",'',label),
 
@@ -152,45 +153,45 @@ plots=[Plot(ROOT.TH1F("JT" ,"jet-tag categories",9,-0.5,8.5),"3*max(min(N_BTagsM
        #Plot(ROOT.TH1F("commonBDT43","BDT w/o MEM in training",10,-1,1),"BDT_common5_output",'N_BTagsM==3&&N_Jets==4','4 jets, 3 b-tags'),
        #Plot(ROOT.TH1F("MEM43","MEM discriminator",10,0,1),"(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)",'(N_BTagsM==3&&N_Jets==4)',""),
        
-       Plot(ROOT.TH1F("N_BoostedJets","Number of fat jets",5,0,5),"N_BoostedJets",sl42sel,label),
-       Plot(ROOT.TH1F("BoostedJet_Pt","p_{T} of fat jet",40,200,600),"BoostedJet_Pt[0]",sl42sel,label),
-       Plot(ROOT.TH1F("BoostedJet_Eta","#eta of fat jet",40,-2.5,2.5),"BoostedJet_Eta[0]",sl42sel,label),
-#       Plot(ROOT.TH1F("BoostedJet_M","invariant mass of fat jet",40,0,1000),"BoostedJet_M[0]",sl42sel,label),
-       Plot(ROOT.TH1F("BoostedJet_Bbtag_Pt","p_{T} of B subjet",40,0,400),"BoostedJet_B_Pt[0]",sl42sel+"&&"+toptaggersel,label),
-       Plot(ROOT.TH1F("BoostedJet_W1btag_Pt","p_{T} of W1 subjet",40,0,400),"BoostedJet_W1_Pt[0]",sl42sel+"&&"+toptaggersel,label),
-       Plot(ROOT.TH1F("BoostedJet_W2btag_Pt","p_{T} of W2 subjet",40,0,200),"BoostedJet_W2_Pt[0]",sl42sel+"&&"+toptaggersel,label),
-       Plot(ROOT.TH1F("BoostedJet_Bbtag_Eta","#eta of B subjet",40,-2.5,2.5),"BoostedJet_B_Eta[0]",sl42sel+"&&"+toptaggersel,label),
-       Plot(ROOT.TH1F("BoostedJet_W1btag_Eta","#eta of W1 subjet",40,-2.5,2.5),"BoostedJet_W1_Eta[0]",sl42sel+"&&"+toptaggersel,label),
-       Plot(ROOT.TH1F("BoostedJet_W2btag_Eta","#eta of W2 subjet",40,-2.5,2.5),"BoostedJet_W2_Eta[0]",sl42sel+"&&"+toptaggersel,label),
-       Plot(ROOT.TH1F("BoostedJet_Top_Pt","p_{T} of boosted top",40,100,500),"BoostedJet_Top_Pt[0]",sl42sel+"&&"+toptaggersel,label),
-       Plot(ROOT.TH1F("BoostedJet_Top_Eta","#eta of boosted top",40,-2.5,2.5),"BoostedJet_Top_Eta[0]",sl42sel+"&&"+toptaggersel,label),
-       Plot(ROOT.TH1F("BoostedJet_Wbtag_Pt","p_{T} of W",40,0,500),"BoostedJet_Wbtag_Pt[0]",sl42sel+"&&"+toptaggersel,label),
-       Plot(ROOT.TH1F("BoostedJet_Wbtag_Eta","#eta of W",40,-2.5,2.5),"BoostedJet_Wbtag_Eta[0]",sl42sel+"&&"+toptaggersel,label),
-       Plot(ROOT.TH1F("BoostedJet_PrunedMass","pruned mass of hardest fat jet",40,0,400),"BoostedJet_PrunedMass[0]",sl42sel+"&&"+toptaggersel,label),
-       Plot(ROOT.TH1F("BoostedJet_Top_M","invariant mass of top",40,0,300),"BoostedJet_Top_M[0]",sl42sel+"&&"+toptaggersel,label),
-       Plot(ROOT.TH1F("BoostedJet_Wbtag_M","invariant mass of W",40,0,200),"BoostedJet_Wbtag_M[0]",sl42sel+"&&"+toptaggersel,label),
-       Plot(ROOT.TH1F("BoostedJet_BW1btag_M","invariant mass of B and W1",40,0,250),"BoostedJet_BW1btag_M[0]",sl42sel+"&&"+toptaggersel,label),
-       Plot(ROOT.TH1F("BoostedJet_BW2btag_M","invariant mass of B and W2",40,0,250),"BoostedJet_BW2btag_M[0]",sl42sel+"&&"+toptaggersel,label),
-       Plot(ROOT.TH1F("BoostedJet_MRatio_Wbtag_Top","W and top mass ratio",40,0.,1.),"BoostedJet_Wbtag_M[0]/BoostedJet_Top_M[0]",sl42sel+"&&"+toptaggersel,label),
-       Plot(ROOT.TH1F("BoostedJet_fRec","Difference to true W top mass ratio",40,0.,.6),"BoostedJet_fRec[0]",sl42sel+"&&"+toptaggersel,label),
-       Plot(ROOT.TH1F("BoostedJet_Bbtag_CSV","CSV output of B",40,-0.1,1.),"BoostedJet_Bbtag_CSV[0]",sl42sel+"&&"+toptaggersel,label),
-       Plot(ROOT.TH1F("BoostedJet_W1btag_CSV","CSV output of W1",40,-0.1,1.),"BoostedJet_W1btag_CSV[0]",sl42sel+"&&"+toptaggersel,label),
-       Plot(ROOT.TH1F("BoostedJet_W2btag_CSV","CSV output of W2",40,-0.1,1.),"BoostedJet_W2btag_CSV[0]",sl42sel+"&&"+toptaggersel,label),
-       Plot(ROOT.TH1F("BoostedJet_Tau21Filtered","#tau_2/#tau_1",40,0.,1.),"BoostedJet_Tau2Filtered[0]/BoostedJet_Tau1Filtered[0]",sl42sel+"&&"+toptaggersel,label),
-       Plot(ROOT.TH1F("BoostedJet_Tau32Filtered","#tau_3/#tau_2",40,0.,1.),"BoostedJet_Tau3Filtered[0]/BoostedJet_Tau2Filtered[0]",sl42sel+"&&"+toptaggersel,label),
-       #Plot(ROOT.TH1F("BoostedJet_DRoptRoptCalc","D_{opt}-D_{opt}^{calc}",40,-2.,1.),"BoostedJet_Ropt-BoostedJet_RoptCalc",sl42sel+"&&"+toptaggersel,label),
-       Plot(ROOT.TH1F("BoostedJet_TopTag_BDT_Std","BDT top tagger output of hardest fat jet",40,-1.,1.),"BoostedJet_TopTag_BDT_Std[0]",sl42sel+"&&"+toptaggersel,label),
-       Plot(ROOT.TH1F("BoostedJet_Filterjet1_Pt","p_{T} of hardest filterjet",40,0,400),"BoostedJet_Filterjet1_Pt[0]",sl42sel+"&&"+higgstaggersel,label),
-       Plot(ROOT.TH1F("BoostedJet_Filterjet2_Pt","p_{T} of second hardest filterjet",40,0,300),"BoostedJet_Filterjet2_Pt[0]",sl42sel+"&&"+higgstaggersel,label),
-  #     Plot(ROOT.TH1F("BoostedJet_Filterjet3_Pt","p_{T} of third hardest filterjet",40,0,200),"BoostedJet_Filterjet3_Pt[0]",sl42sel+"&&"+higgstaggersel,label),
-       Plot(ROOT.TH1F("BoostedJet_Filterjet1_Eta","#eta of hardest filterjet",40,-2.5,2.5),"BoostedJet_Filterjet1_Eta[0]",sl42sel+"&&"+higgstaggersel,label),
-       Plot(ROOT.TH1F("BoostedJet_Filterjet2_Eta","#eta of second hardest filterjet",40,-2.5,2.5),"BoostedJet_Filterjet2_Eta[0]",sl42sel+"&&"+higgstaggersel,label),
- #      Plot(ROOT.TH1F("BoostedJet_Filterjet3_Eta","#eta of third hardest filterjet",40,-2.5,2.5),"BoostedJet_Filterjet3_Eta[0]",sl42sel+"&&"+higgstaggersel,label),
-       Plot(ROOT.TH1F("BoostedJet_Filterjet1_CSV","CSV output of hardest filterjet",40,-0.1,1.0),"BoostedJet_Filterjet1_CSV[0]",sl42sel+"&&"+higgstaggersel,label),
-       Plot(ROOT.TH1F("BoostedJet_Filterjet2_CSV","CSV output of second hardest filterjet",40,-0.1,1.0),"BoostedJet_Filterjet2_CSV[0]",sl42sel+"&&"+higgstaggersel,label),
-#       Plot(ROOT.TH1F("BoostedJet_Filterjet3_CSV","CSV output of third hardest filterjet",40,-0.1,1.0),"BoostedJet_Filterjet3_CSV[0]",sl42sel+"&&"+higgstaggersel,label),
-       Plot(ROOT.TH1F("BoostedJet_Mbb","invariant mass of Higgs candidate",40,0,300),"BoostedJet_Mbb[0]",sl42sel+"&&"+higgstaggersel,label),
-       Plot(ROOT.TH1F("BoostedJet_HiggsTag_SecondCSV","b-tagging output of subjet B2 of hardest fat jet",40,-.1,1.),"BoostedJet_HiggsTag_SecondCSV[0]",sl42sel+"&&"+higgstaggersel,label),
+       Plot(ROOT.TH1F("N_BoostedJets","Number of fat jets",5,0,5),"N_BoostedJets",sl42sel,labelboosted),
+       Plot(ROOT.TH1F("BoostedJet_Pt","p_{T} of fat jet",40,200,600),"BoostedJet_Pt[0]",sl42sel,labelboosted),
+       Plot(ROOT.TH1F("BoostedJet_Eta","#eta of fat jet",40,-2.5,2.5),"BoostedJet_Eta[0]",sl42sel,labelboosted),
+#       Plot(ROOT.TH1F("BoostedJet_M","invariant mass of fat jet",40,0,1000),"BoostedJet_M[0]",sl42sel,labelboosted),
+       Plot(ROOT.TH1F("BoostedJet_Bbtag_Pt","p_{T} of B subjet",40,0,400),"BoostedJet_B_Pt[0]",sl42sel+"&&"+toptaggersel,labelboosted),
+       Plot(ROOT.TH1F("BoostedJet_W1btag_Pt","p_{T} of W1 subjet",40,0,400),"BoostedJet_W1_Pt[0]",sl42sel+"&&"+toptaggersel,labelboosted),
+       Plot(ROOT.TH1F("BoostedJet_W2btag_Pt","p_{T} of W2 subjet",40,0,200),"BoostedJet_W2_Pt[0]",sl42sel+"&&"+toptaggersel,labelboosted),
+       Plot(ROOT.TH1F("BoostedJet_Bbtag_Eta","#eta of B subjet",40,-2.5,2.5),"BoostedJet_B_Eta[0]",sl42sel+"&&"+toptaggersel,labelboosted),
+       Plot(ROOT.TH1F("BoostedJet_W1btag_Eta","#eta of W1 subjet",40,-2.5,2.5),"BoostedJet_W1_Eta[0]",sl42sel+"&&"+toptaggersel,labelboosted),
+       Plot(ROOT.TH1F("BoostedJet_W2btag_Eta","#eta of W2 subjet",40,-2.5,2.5),"BoostedJet_W2_Eta[0]",sl42sel+"&&"+toptaggersel,labelboosted),
+       Plot(ROOT.TH1F("BoostedJet_Top_Pt","p_{T} of boosted top",40,100,500),"BoostedJet_Top_Pt[0]",sl42sel+"&&"+toptaggersel,labelboosted),
+       Plot(ROOT.TH1F("BoostedJet_Top_Eta","#eta of boosted top",40,-2.5,2.5),"BoostedJet_Top_Eta[0]",sl42sel+"&&"+toptaggersel,labelboosted),
+       Plot(ROOT.TH1F("BoostedJet_Wbtag_Pt","p_{T} of W",40,0,500),"BoostedJet_Wbtag_Pt[0]",sl42sel+"&&"+toptaggersel,labelboosted),
+       Plot(ROOT.TH1F("BoostedJet_Wbtag_Eta","#eta of W",40,-2.5,2.5),"BoostedJet_Wbtag_Eta[0]",sl42sel+"&&"+toptaggersel,labelboosted),
+       Plot(ROOT.TH1F("BoostedJet_PrunedMass","pruned mass of hardest fat jet",40,0,400),"BoostedJet_PrunedMass[0]",sl42sel+"&&"+toptaggersel,labelboosted),
+       Plot(ROOT.TH1F("BoostedJet_Top_M","invariant mass of top",40,0,300),"BoostedJet_Top_M[0]",sl42sel+"&&"+toptaggersel,labelboosted),
+       Plot(ROOT.TH1F("BoostedJet_Wbtag_M","invariant mass of W",40,0,200),"BoostedJet_Wbtag_M[0]",sl42sel+"&&"+toptaggersel,labelboosted),
+       Plot(ROOT.TH1F("BoostedJet_BW1btag_M","invariant mass of B and W1",40,0,250),"BoostedJet_BW1btag_M[0]",sl42sel+"&&"+toptaggersel,labelboosted),
+       Plot(ROOT.TH1F("BoostedJet_BW2btag_M","invariant mass of B and W2",40,0,250),"BoostedJet_BW2btag_M[0]",sl42sel+"&&"+toptaggersel,labelboosted),
+       Plot(ROOT.TH1F("BoostedJet_MRatio_Wbtag_Top","W and top mass ratio",40,0.,1.),"BoostedJet_Wbtag_M[0]/BoostedJet_Top_M[0]",sl42sel+"&&"+toptaggersel,labelboosted),
+       Plot(ROOT.TH1F("BoostedJet_fRec","Difference to true W top mass ratio",40,0.,.6),"BoostedJet_fRec[0]",sl42sel+"&&"+toptaggersel,labelboosted),
+       Plot(ROOT.TH1F("BoostedJet_Bbtag_CSV","CSV output of B",40,-0.1,1.),"BoostedJet_Bbtag_CSV[0]",sl42sel+"&&"+toptaggersel,labelboosted),
+       Plot(ROOT.TH1F("BoostedJet_W1btag_CSV","CSV output of W1",40,-0.1,1.),"BoostedJet_W1btag_CSV[0]",sl42sel+"&&"+toptaggersel,labelboosted),
+       Plot(ROOT.TH1F("BoostedJet_W2btag_CSV","CSV output of W2",40,-0.1,1.),"BoostedJet_W2btag_CSV[0]",sl42sel+"&&"+toptaggersel,labelboosted),
+       Plot(ROOT.TH1F("BoostedJet_Tau21Filtered","#tau_2/#tau_1",40,0.,1.),"BoostedJet_Tau2Filtered[0]/BoostedJet_Tau1Filtered[0]",sl42sel+"&&"+toptaggersel,labelboosted),
+       Plot(ROOT.TH1F("BoostedJet_Tau32Filtered","#tau_3/#tau_2",40,0.,1.),"BoostedJet_Tau3Filtered[0]/BoostedJet_Tau2Filtered[0]",sl42sel+"&&"+toptaggersel,labelboosted),
+       #Plot(ROOT.TH1F("BoostedJet_DRoptRoptCalc","D_{opt}-D_{opt}^{calc}",40,-2.,1.),"BoostedJet_Ropt-BoostedJet_RoptCalc",sl42sel+"&&"+toptaggersel,labelboosted),
+       Plot(ROOT.TH1F("BoostedJet_TopTag_BDT_Std","BDT top tagger output of hardest fat jet",40,-1.,1.),"BoostedJet_TopTag_BDT_Std[0]",sl42sel+"&&"+toptaggersel,labelboosted),
+       Plot(ROOT.TH1F("BoostedJet_Filterjet1_Pt","p_{T} of hardest filterjet",40,0,400),"BoostedJet_Filterjet1_Pt[0]",sl42sel+"&&"+higgstaggersel,labelboosted),
+       Plot(ROOT.TH1F("BoostedJet_Filterjet2_Pt","p_{T} of second hardest filterjet",40,0,300),"BoostedJet_Filterjet2_Pt[0]",sl42sel+"&&"+higgstaggersel,labelboosted),
+  #     Plot(ROOT.TH1F("BoostedJet_Filterjet3_Pt","p_{T} of third hardest filterjet",40,0,200),"BoostedJet_Filterjet3_Pt[0]",sl42sel+"&&"+higgstaggersel,labelboosted),
+       Plot(ROOT.TH1F("BoostedJet_Filterjet1_Eta","#eta of hardest filterjet",40,-2.5,2.5),"BoostedJet_Filterjet1_Eta[0]",sl42sel+"&&"+higgstaggersel,labelboosted),
+       Plot(ROOT.TH1F("BoostedJet_Filterjet2_Eta","#eta of second hardest filterjet",40,-2.5,2.5),"BoostedJet_Filterjet2_Eta[0]",sl42sel+"&&"+higgstaggersel,labelboosted),
+ #      Plot(ROOT.TH1F("BoostedJet_Filterjet3_Eta","#eta of third hardest filterjet",40,-2.5,2.5),"BoostedJet_Filterjet3_Eta[0]",sl42sel+"&&"+higgstaggersel,labelboosted),
+       Plot(ROOT.TH1F("BoostedJet_Filterjet1_CSV","CSV output of hardest filterjet",40,-0.1,1.0),"BoostedJet_Filterjet1_CSV[0]",sl42sel+"&&"+higgstaggersel,labelboosted),
+       Plot(ROOT.TH1F("BoostedJet_Filterjet2_CSV","CSV output of second hardest filterjet",40,-0.1,1.0),"BoostedJet_Filterjet2_CSV[0]",sl42sel+"&&"+higgstaggersel,labelboosted),
+#       Plot(ROOT.TH1F("BoostedJet_Filterjet3_CSV","CSV output of third hardest filterjet",40,-0.1,1.0),"BoostedJet_Filterjet3_CSV[0]",sl42sel+"&&"+higgstaggersel,labelboosted),
+       Plot(ROOT.TH1F("BoostedJet_Mbb","invariant mass of Higgs candidate",40,0,300),"BoostedJet_Mbb[0]",sl42sel+"&&"+higgstaggersel,labelboosted),
+       Plot(ROOT.TH1F("BoostedJet_HiggsTag_SecondCSV","b-tagging output of subjet B2 of hardest fat jet",40,-.1,1.),"BoostedJet_HiggsTag_SecondCSV[0]",sl42sel+"&&"+higgstaggersel,labelboosted),
 
 #       Plot(ROOT.TH1F("Evt_Deta_JetsAverage","avg #Delta #eta (jet,jet)", 60,0.0,3),"",'',label),
        Plot(ROOT.TH1F("Evt_Deta_UntaggedJetsAverage","avg #Delta #eta (untagged,untagged)",45,0.,4.5),"Evt_Deta_UntaggedJetsAverage",'',label),
@@ -218,10 +219,10 @@ plots=[Plot(ROOT.TH1F("JT" ,"jet-tag categories",9,-0.5,8.5),"3*max(min(N_BTagsM
  #      Plot(ROOT.TH1F("Evt_M_Total","",40,0.,4000),"Evt_M_Total",'',label),
 
 #       Plot(ROOT.TH1F("Evt_H0","",40,0.5,4.5),"Evt_H0",'',label),
-       Plot(ROOT.TH1F("Evt_H1","",60,-0.2,0.4),"Evt_H1",'',label),
-       Plot(ROOT.TH1F("Evt_H2","",60,-0.2,0.4),"Evt_H2",'',label),
-       Plot(ROOT.TH1F("Evt_H3","",50,-0.05,1.05),"Evt_H3",'',label),
-       Plot(ROOT.TH1F("Evt_H4","",50,-0.15,0.35),"Evt_H4",'',label),
+       Plot(ROOT.TH1F("H1","",60,-0.2,0.4),"Evt_H1",'',label),
+       Plot(ROOT.TH1F("H2","",60,-0.2,0.4),"Evt_H2",'',label),
+       Plot(ROOT.TH1F("H3","",50,-0.05,1.05),"Evt_H3",'',label),
+       Plot(ROOT.TH1F("H4","",50,-0.15,0.35),"Evt_H4",'',label),
 
        Plot(ROOT.TH1F("Sphericity","",50,0,1),"Evt_Sphericity",'',label),
        Plot(ROOT.TH1F("Aplanarity","",50,0,0.5),"Evt_Aplanarity",'',label),
@@ -426,7 +427,7 @@ label="1 lepton, 4 jets, 3 b-tags"
 plots43=[
   Plot(ROOT.TH1F("s43_BDT_common5_input_avg_btag_disc_btags","avg CSV (tags)",30,0.8,1.05),"BDT_common5_input_avg_btag_disc_btags",s43,label),
 #        Plot(ROOT.TH1F("s43_BDT_common5_input_HT","HT",20,0,1000),"BDT_common5_input_HT",s43,label),
-        #Plot(ROOT.TH1F("s43_MEM_transformed","MEM discriminator",24,0,1.2),"(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)",s43,label),
+        Plot(ROOT.TH1F("s43_MEM_transformed","MEM discriminator",24,0,1.2),"(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)",s43,label),
  #       Plot(ROOT.TH1F("s43_BDT_common5_input_sphericity","sphericity",20,0,1),"BDT_common5_input_sphericity",s43,label),
  #       Plot(ROOT.TH1F("s43_BDT_common5_input_third_highest_btag","third highest btag",22,0.79,1),"BDT_common5_input_third_highest_btag",s43,label),
   Plot(ROOT.TH1F("s43_Evt_CSV_Average","avg CSV (jets)",20,0.6,1),"Evt_CSV_Average",s43,label),
@@ -456,7 +457,7 @@ thiscatsel=s44
 catsuf="s44"
 # weights_Final_44_MEMBDTv2.xml
 plots44=[
-  #Plot(ROOT.TH1F("s44_MEM_transformed","MEM discriminator",6,0,1.2),"(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)","(N_Jets==4&&N_BTagsM>=4)",label),
+  Plot(ROOT.TH1F("s44_MEM_transformed","MEM discriminator",6,0,1.2),"(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)","(N_Jets==4&&N_BTagsM>=4)",label),
 #        Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_avg_btag_disc_btags","avg CSV tagged",6,0.8,1.05),"BDT_common5_input_avg_btag_disc_btags",thiscatsel,label),
 #        Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_fourth_jet_pt","jet 4 p_{T}",7,30,100),"BDT_common5_input_fourth_jet_pt",thiscatsel,label),
         Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_first_jet_pt","jet 1 p_{T}",15,0,400),"BDT_common5_input_first_jet_pt",thiscatsel,label),
@@ -492,7 +493,7 @@ thiscatsel=s53
 catsuf="s53"
     # weights_Final_53_MEMBDTv2.xml
 plots53=[
-	#Plot(ROOT.TH1F(catsuf+"_MEM_transformed","MEM discriminator",20,0,1),"(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"_MEM_transformed","MEM discriminator",20,0,1),"(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)",thiscatsel,label),
         #Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_pt_all_jets_over_E_all_jets","(#sum jet p_{T})/(#sum jet E))",20,0.2,1.2),"BDT_common5_input_pt_all_jets_over_E_all_jets",thiscatsel,label),
         #Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_all_sum_pt_with_met","#sum p_{T} (lepton,jet,met)",30,0,1500),"BDT_common5_input_all_sum_pt_with_met",thiscatsel,label),
         Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_third_highest_btag","third highest CSV",22,.8,1),"BDT_common5_input_third_highest_btag",thiscatsel,label),
@@ -509,8 +510,8 @@ plots53=[
 	#Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_min_dr_tagged_jets","min #Delta R (tag,tag)",25,0,2.4),"BDT_common5_input_min_dr_tagged_jets",thiscatsel,label),
         Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_avg_btag_disc_btags","avg CSV tagged",25,0.8,1.05),"BDT_common5_input_avg_btag_disc_btags",thiscatsel,label),
         Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_dr_between_lep_and_closest_jet","#Delta R (lepton,jet)",25,0,3.2),"BDT_common5_input_dr_between_lep_and_closest_jet",thiscatsel,label),
-        Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_maxeta_jet_tag","max #Delta #eta(jet,tag)",25,0.2,1.6),"BDT_common5_input_maxeta_jet_tag",thiscatsel,label),
-        Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_maxeta_tag_tag","max #Delta #eta (tag,tag)",25,0,1.5),"BDT_common5_input_maxeta_tag_tag",thiscatsel,label),
+        Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_maxeta_jet_tag","max #Delta #eta(tag,avg jet #eta)",25,0.2,1.6),"BDT_common5_input_maxeta_jet_tag",thiscatsel,label),
+        Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_maxeta_tag_tag","max #Delta #eta (tag,avg tag #eta)",25,0,1.5),"BDT_common5_input_maxeta_tag_tag",thiscatsel,label),
 	#Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_second_jet_pt","jet 2 p_{T}",20,0,300),"BDT_common5_input_second_jet_pt",thiscatsel,label),
         #Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_third_jet_pt","jet 3 p_{T}",20,0,250),"BDT_common5_input_third_jet_pt",thiscatsel,label),
         #Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_h2","H_{2}",20,0,0.3),"BDT_common5_input_h2",thiscatsel,label),
@@ -522,7 +523,7 @@ catsuf="s54"
 
 # weights_Final_54_MEMBDTv2.xml
 plots54=[
-	##Plot(ROOT.TH1F(catsuf+"_MEM_transformed","MEM discriminator",10,0,1),"(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"_MEM_transformed","MEM discriminator",10,0,1),"(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)",thiscatsel,label),
         #Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_avg_btag_disc_btags","avg CSV (tags)",7,.8,1.04),"BDT_common5_input_avg_btag_disc_btags",thiscatsel,label),
         Plot(ROOT.TH1F(catsuf+"_Evt_Deta_JetsAverage","avg #Delta #eta jets",10,0,2.5),"Evt_Deta_JetsAverage",thiscatsel,label),
         #Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_fourth_jet_pt","jet 4 p_{T}",15,0,150),"BDT_common5_input_fourth_jet_pt",thiscatsel,label),
@@ -574,8 +575,8 @@ plots62=[
 	Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_min_dr_tagged_jets","min #Delta R (tag,tag)",30,0.5,3.4),"BDT_common5_input_min_dr_tagged_jets",thiscatsel,label),
         Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_avg_btag_disc_btags","avg CSV (tags)",30,.8,1.04),"BDT_common5_input_avg_btag_disc_btags",thiscatsel,label),
         #Plot(ROOT.TH1F(catsuf+"_Evt_Deta_JetsAverage","avg #Delta #eta jets",30,0,2.5),"Evt_Deta_JetsAverage",thiscatsel,label),
-        Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_maxeta_jet_tag","max #Delta #eta(jet,tag)",30,0.2,1.6),"BDT_common5_input_maxeta_jet_tag",thiscatsel,label),
-        Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_maxeta_tag_tag","max #Delta #eta (tag,tag)",30,0,1.5),"BDT_common5_input_maxeta_tag_tag",thiscatsel,label),
+        Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_maxeta_jet_tag","max #Delta #eta(tag, avg jet #eta)",30,0.2,1.6),"BDT_common5_input_maxeta_jet_tag",thiscatsel,label),
+        Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_maxeta_tag_tag","max #Delta #eta (tag,avg tag #eta)",30,0,1.5),"BDT_common5_input_maxeta_tag_tag",thiscatsel,label),
         #Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_maxeta_jet_jet","max #Delta #eta (jet,jet)",30,0,1.5),"BDT_common5_input_maxeta_jet_jet",thiscatsel,label),
 	#Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_pt_all_jets_over_E_all_jets","(#sum jet p_{T})/(#sum jet E))",30,0.2,1.1),"BDT_common5_input_pt_all_jets_over_E_all_jets",thiscatsel,label),
         Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_all_sum_pt_with_met","#sum (lepton pt,jet pt,met)",30,200,1300),"BDT_common5_input_all_sum_pt_with_met",thiscatsel,label),
@@ -639,8 +640,8 @@ thiscatsel=s63
 catsuf="s63"
 # weights_Final_63_MEMBDTv2.xml
 plots63=[
-	##Plot(ROOT.TH1F(catsuf+"_MEM_transformed","MEM discriminator",20,0.,1),"(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)",thiscatsel,label),
-        Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_maxeta_jet_tag","max #Delta #eta(jet,tag)",14,0.2,1.6),"BDT_common5_input_maxeta_jet_tag",thiscatsel,label),
+	Plot(ROOT.TH1F(catsuf+"_MEM_transformed","MEM discriminator",20,0.,1),"(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)",thiscatsel,label),
+        Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_maxeta_jet_tag","max #Delta #eta(tag,avg jet #eta)",14,0.2,1.6),"BDT_common5_input_maxeta_jet_tag",thiscatsel,label),
         #Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_maxeta_tag_tag","max #Delta #eta (tag,tag)",15,0,1.5),"BDT_common5_input_maxeta_tag_tag",thiscatsel,label),
         #Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_maxeta_jet_jet","max #Delta #eta (jet,jet)",15,0,1.5),"BDT_common5_input_maxeta_jet_jet",thiscatsel,label),
         Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_dr_between_lep_and_closest_jet","#Delta R (lepton,jet)",16,0,3.2),"BDT_common5_input_dr_between_lep_and_closest_jet",thiscatsel,label),
@@ -672,7 +673,7 @@ catsuf="s64"
 # weights_Final_64_MEMBDTv2.xml
 plots64=[
 	Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_third_highest_btag","third-highest CSV",16,.8,1.05),"BDT_common5_input_third_highest_btag",thiscatsel,label),
-        ##Plot(ROOT.TH1F(catsuf+"_MEM_transformed","MEM discriminator",10,0,1),"(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)",thiscatsel,label),
+        Plot(ROOT.TH1F(catsuf+"_MEM_transformed","MEM discriminator",10,0,1),"(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)",thiscatsel,label),
         #Plot(ROOT.TH1F(catsuf+"_Evt_Deta_JetsAverage","avg #Delta #eta (jet,jet)",14,0,2.8),"Evt_Deta_JetsAverage",thiscatsel,label),
         Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_sphericity","sphericity",20,0,1),"BDT_common5_input_sphericity",thiscatsel,label),
         Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_fourth_jet_pt","jet 4 p_{T}",20,0,200),"BDT_common5_input_fourth_jet_pt",thiscatsel,label),
@@ -694,7 +695,7 @@ plots64=[
 	Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_pt_all_jets_over_E_all_jets","(#sum jet p_{T})/(#sum jet E))",10,0.2,1.2),"BDT_common5_input_pt_all_jets_over_E_all_jets",thiscatsel,label),
         #Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_invariant_mass_of_everything","mass(jets,lepton,MET)",10,400,1600),"BDT_common5_input_invariant_mass_of_everything",thiscatsel,label),
         #Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_maxeta_jet_tag","max #Delta #eta(jet,tag)",14,0.2,1.6),"BDT_common5_input_maxeta_jet_tag",thiscatsel,label),
-        Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_maxeta_tag_tag","max #Delta #eta (tag,tag)",15,0,1.5),"BDT_common5_input_maxeta_tag_tag",thiscatsel,label),
+        Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_maxeta_tag_tag","max #Delta #eta (tag,avg tag #eta)",15,0,1.5),"BDT_common5_input_maxeta_tag_tag",thiscatsel,label),
         #Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_maxeta_jet_jet","max #Delta #eta (jet,jet)",15,0,1.5),"BDT_common5_input_maxeta_jet_jet",thiscatsel,label),
 ]
 
@@ -731,7 +732,8 @@ plotsBoosted=[
 	#Plot(ROOT.TH1F(catsuf+"_Evt_M_MedianTaggedJets","Evt_M_MedianTaggedJets",20,0,800),"Evt_M_MedianTaggedJets",thiscatsel,label),
 	#Plot(ROOT.TH1F(catsuf+"_Evt_Deta_2TaggedJetsAverage","Evt_Deta_2TaggedJetsAverage",20,0,4),"Evt_Deta_2TaggedJetsAverage",thiscatsel,label),
 	Plot(ROOT.TH1F(catsuf+"_Evt_Aplanarity","Aplanarity",17,0,0.34),"Evt_Aplanarity",thiscatsel,label),
-        Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_dEta_fn","#sqrt{#Delta #eta(t^{lep}, bb) #times #Delta #eta(t^{had}, bb)}",20,0,5),"BDT_common5_input_dEta_fn",thiscatsel,label),
+        Plot(ROOT.TH1F(catsuf+"_MEM","MEM discriminator (using subjets)",22,0,1),"(BoostedTopHiggs_MEM_p>=0.0)*(BoostedTopHiggs_MEM_p_sig/(BoostedTopHiggs_MEM_p_sig+0.15*BoostedTopHiggs_MEM_p_bkg))+(BoostedTopHiggs_MEM_p<0.0)*(0.01)",thiscatsel,label),
+#        Plot(ROOT.TH1F(catsuf+"_BDT_common5_input_dEta_fn","#sqrt{#Delta #eta(t^{lep}, bb) #times #Delta #eta(t^{had}, bb)}",20,0,5),"BDT_common5_input_dEta_fn",thiscatsel,label),
 	#Plot(ROOT.TH1F(catsuf+"BDT_common5_input_dev_from_avg_disc_btags","BDT_common5_input_dev_from_avg_disc_btags",20,0,0.006),"BDT_common5_input_dev_from_avg_disc_btags",thiscatsel,label),
 	#Plot(ROOT.TH1F(catsuf+"BDT_common5_input_invariant_mass_of_everything","BDT_common5_input_invariant_mass_of_everything",20,0,3000),"BDT_common5_input_invariant_mass_of_everything",thiscatsel,label),
   #Plot(ROOT.TH1F(catsuf+"BDT_common5_input_Mlb","BDT_common5_input_Mlb",20,0,200),"BDT_common5_input_Mlb",thiscatsel,label),
@@ -748,7 +750,7 @@ outputpath=plotParallel(name,2000000,plots,samples+samples_data+systsamples,['']
 listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
 listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots,1)
 if not os.path.exists(outputpath[:-4]+'_syst.root') or not askYesNo('reuse systematic histofile?'):
-    renameHistos(outputpath,outputpath[:-4]+'_syst.root',allsystnames)
+    renameHistos(outputpath,outputpath[:-4]+'_syst.root',allsystnames,False)
 print othersystnames
 lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,errorSystnames)
 #lllforPS=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,PSSystnames)
@@ -827,7 +829,7 @@ plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0
 
 ############
 # make category plots
-categoryplotsindex=5
+categoryplotsindex=4
 listOfHistoListsForCategories=createHistoLists_fromSuperHistoFile(outputpath,samples,plots[:categoryplotsindex],1)
 listOfHistoListsDataForCategories=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots[:categoryplotsindex],1)
 lllForCategories=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots[:categoryplotsindex],errorSystnames)
