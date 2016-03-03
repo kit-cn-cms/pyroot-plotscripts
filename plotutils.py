@@ -361,10 +361,10 @@ def drawHistosOnCanvas(listOfHistos_,normalize=True,stack=False,logscale=False,o
     #draw first
     h=listOfHistos[0]
     if logscale:
-        h.GetYaxis().SetRangeUser(yMinMax/10000,yMax*10)
+        h.GetYaxis().SetRangeUser(yMinMax/1000,yMax*50)
         canvas.SetLogy()
     else:
-        h.GetYaxis().SetRangeUser(0,yMax*1.5)
+        h.GetYaxis().SetRangeUser(1e-4,yMax*1.5)
     option='histo'
     option+=options_
     h.DrawCopy(option)
@@ -479,7 +479,7 @@ def drawHistosOnCanvas2D(listOfHistos_,normalize=True,stack=False,logscale=False
     #draw first
     h=listOfHistos[0]
     #if logscale:
-        #h.GetYaxis().SetRangeUser(yMinMax/10000,yMax*10)
+        #h.GetYaxis().SetRangeUser(yMinMax/1000,yMax*10)
         #canvas.SetLogy()
     #else:
         #h.GetYaxis().SetRangeUser(0,yMax*1.5)
@@ -570,10 +570,10 @@ def drawHistosOnCanvasAN(listOfHistos_,normalize=True,stack=False,logscale=False
     #draw first
     h=listOfHistos[0]
     if logscale:
-        h.GetYaxis().SetRangeUser(yMinMax/10000,yMax*10)
+        h.GetYaxis().SetRangeUser(yMinMax/1000,yMax*50)
         canvas.SetLogy()
     else:
-        h.GetYaxis().SetRangeUser(0,yMax*1.5)
+        h.GetYaxis().SetRangeUser(1e-4,yMax*1.5)
     option='histo'
     option+=options_
     h.DrawCopy(option)
@@ -1631,10 +1631,10 @@ def plotDataMC(listOfHistoListsData,listOfHistoLists,samples,name,logscale=False
         #draw first histo
         h=stackedListOfHistos[0]
         if logscale:
-            h.GetYaxis().SetRangeUser(yMax/10000,yMax*10)
+            h.GetYaxis().SetRangeUser(yMax/10000,yMax*50)
             canvas.cd(1).SetLogy()
         else:
-            h.GetYaxis().SetRangeUser(0,yMax*1.5)
+            h.GetYaxis().SetRangeUser(1e-4,yMax*1.5)
         option='histo'
         option+=options
         h.DrawCopy(option)
@@ -1810,10 +1810,10 @@ def plotDataMCwSysts(listOfHistoListsData,listOfHistoLists,ListSysHistosUp,ListS
         #draw first histo
         h=stackedListOfHistos[0]
         if logscale:
-            h.GetYaxis().SetRangeUser(yMax/1000000,yMax*10)
+            h.GetYaxis().SetRangeUser(yMax/1000000,yMax*50)
             canvas.cd(1).SetLogy()
         else:
-            h.GetYaxis().SetRangeUser(0,yMax*1.5)
+            h.GetYaxis().SetRangeUser(1e-4,yMax*1.5)
         option='histo'
         option+=options
         h.DrawCopy(option)
@@ -2024,10 +2024,10 @@ def plotDataMCan(listOfHistoListsData,listOfHistoLists,samples,listOfhistosOnTop
         #draw first histo
         h=stackedListOfHistos[0]
         if logscale:
-            h.GetYaxis().SetRangeUser(yMax/10000,yMax*10)
+            h.GetYaxis().SetRangeUser(yMax/10000,yMax*50)
             canvas.cd(1).SetLogy()
         else:
-            h.GetYaxis().SetRangeUser(0,yMax*1.5)
+            h.GetYaxis().SetRangeUser(1e-4,yMax*1.5)
         option='histo'
         option+=options
         h.DrawCopy(option)
@@ -2205,10 +2205,10 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         #draw first histo
         h=stackedListOfHistos[0]
         if logscale:
-            h.GetYaxis().SetRangeUser(yMax/10000,yMax*10)
+            h.GetYaxis().SetRangeUser(yMax/10000,yMax*50)
             canvas.cd(1).SetLogy()
         else:
-            h.GetYaxis().SetRangeUser(0,yMax*1.8)
+            h.GetYaxis().SetRangeUser(1e-4,yMax*1.8)
         option='histo'
         option+=options
         h.DrawCopy(option)
@@ -2298,12 +2298,12 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         else:
           l2.AddEntry22(otc,sampleOnTop.name+(' x {:4.0f}').format(integralfactor),'L')
         i=0
-        for h,sample in zip(stackedListOfHistos,samples):
+        for h,sample in zip(stackedListOfHistos+[errorgraph],[s.name for s in samples]+['prefit error']):
             i+=1
             if i%2==1:
-                l1.AddEntry22(h,sample.name,'F')
+                l1.AddEntry22(h,sample,'F')
             if i%2==0:
-                l2.AddEntry22(h,sample.name,'F')
+                l2.AddEntry22(h,sample,'F')
 
         canvases.append(canvas)
         l1.Draw('same')
@@ -2471,7 +2471,7 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
             h.GetYaxis().SetRangeUser(yMax/10000,yMax*10)
             canvas.cd(1).SetLogy()
         else:
-            h.GetYaxis().SetRangeUser(0,yMax*1.8)
+            h.GetYaxis().SetRangeUser(1e-4,yMax*1.8)
         option='histo'
         option+=options
         h.DrawCopy(option)
@@ -2560,7 +2560,7 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
           else:
               l2.AddEntry22(otc,sampleOnTop.name+(' x {:4.0f}').format(integralfactor),'L')
               i=0
-              for h,sample in zip(stackedListOfHistos,samples):
+              for h,sample in zip(stackedListOfHistos+[errorgraph],[s.name for s in samples]+['prefit error']):
                   i+=1
                   if i%2==1:
                       l1.AddEntry22(h,sample.name,'F')
