@@ -66,11 +66,19 @@ categoriesJT=[("((N_Jets>=6&&N_BTagsM==2)&&!"+boosted+")","6j2t","","",""),
               ("((N_Jets>=6&&N_BTagsM>=4)&&!"+boosted+")","6j4t","0.1","0.1","0.1"),
               ("((N_Jets>=4&&N_BTagsM>=2)&&"+boosted+")","boosted","0.1","0.1","0.1")]
 
+helperbdts=[]
+helperbdts.append(MVAPlot(ROOT.TH1F("splitdummybdt"+"6j4t","BDT for splitting (6j4t)",10*10,-1.0,1.0),bdtweightpath+'/weights_Final_64_76blr.xml',"((N_Jets>=6&&N_BTagsM>=4)&&!"+boosted+")"))
+helperbdts.append(MVAPlot(ROOT.TH1F("splitdummybdt"+"5j4t","BDT for splitting (5j4t)",10*10,-1.0,1.0),bdtweightpath+'/weights_Final_54_76blr.xml',"((N_Jets==5&&N_BTagsM>=4)&&!"+boosted+")"))
+helperbdts.append(MVAPlot(ROOT.TH1F("splitdummybdt"+"4j4t","BDT for splitting (4j4t)",10*10,-1.0,1.0),bdtweightpath+'/weights_Final_44_76blr.xml',"((N_Jets==4&&N_BTagsM>=4)&&!"+boosted+")"))
+
 categoriesSplitBDT=[]
 categoriesSplitBDT.append(categoriesJT[0])
 for cat in categoriesJT[1:]:
-    categoriesSplitBDT.append(('('+cat[0]+"*(BDT_common5_output<"+cat[2]+"))",cat[1]+"l"))
-    categoriesSplitBDT.append(('('+cat[0]+"*(BDT_common5_output>="+cat[2]+"))",cat[1]+"h"))
+    if cat[1] in ["4j4t","5j4t","6j4t"]:
+      categoriesSplitByBDToptD.append(('('+cat[0]+'*(splitdummybdt'+cat[1]+"<"+cat[2]+"))",cat[1]+"l"))
+      categoriesSplitByBDToptD.append(('('+cat[0]+'*(splitdummybdt'+cat[1]+">="+cat[2]+"))",cat[1]+"h"))
+    else:
+      categoriesSplitByBDToptD.append(cat)
 
 categoriesBDT=[]
 categoriesBDT.append(categoriesJT[0])
@@ -81,8 +89,8 @@ categoriesSplitByBDToptD=[]
 categoriesSplitByBDToptD.append(categoriesJT[0])
 for cat in categoriesJT[1:]:
     if cat[1] in ["4j4t","5j4t","6j4t"]:
-      categoriesSplitByBDToptD.append(('('+cat[0]+"*(BDT_common5_output<"+cat[2]+"))",cat[1]+"l"))
-      categoriesSplitByBDToptD.append(('('+cat[0]+"*(BDT_common5_output>="+cat[2]+"))",cat[1]+"h"))
+      categoriesSplitByBDToptD.append(('('+cat[0]+'*(splitdummybdt'+cat[1]+"<"+cat[2]+"))",cat[1]+"l"))
+      categoriesSplitByBDToptD.append(('('+cat[0]+'*(splitdummybdt'+cat[1]+">="+cat[2]+"))",cat[1]+"h"))
     else:
       categoriesSplitByBDToptD.append(cat)
 
@@ -759,9 +767,8 @@ plotsBoosted=[
 
 bdtplots=plots64+plots63+plots62+plots54+plots53+plots44+plots43+plotsBoosted
 #plots+=bdtplots
-
 print name,500000,plots,samples+samples_data+systsamples,[''],['1.'],weightsystnames, systweights
-outputpath=plotParallel(name,500000,plots,samples+samples_data+systsamples,[''],['1.'],weightsystnames, systweights)
+outputpath=plotParallel(name,500000,plots+helperbdts,samples+samples_data+systsamples,[''],['1.'],weightsystnames, systweights)
 
 listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
 listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots,1)
@@ -860,13 +867,13 @@ for hld,hl in zip(listOfHistoListsData,listOfHistoListsWerror):
         eventYields(hld,hl,samples,tablepath)
 
 
-#lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,errorSystnames)
+lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,errorSystnames)
 
-## plot dataMC comparison
-#labels=[plot.label for plot in plots]
+# plot dataMC comparison
+labels=[plot.label for plot in plots]
 
-#lolT=transposeLOL(listOfHistoLists)
-#plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name,[[lll,3354,ROOT.kBlack,True]],False,labels)
+lolT=transposeLOL(listOfHistoLists)
+plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name,[[lll,3354,ROOT.kBlack,True]],False,labels)
 
 ## make log plots
 #listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
