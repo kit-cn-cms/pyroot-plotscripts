@@ -2563,9 +2563,9 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
               for h,sample in zip(stackedListOfHistos+[errorgraph],[s.name for s in samples]+['prefit error']):
                   i+=1
                   if i%2==1:
-                      l1.AddEntry22(h,sample.name,'F')
+                      l1.AddEntry22(h,sample,'F')
                   if i%2==0:
-                      l2.AddEntry22(h,sample.name,'F')
+                      l2.AddEntry22(h,sample,'F')
 
         canvases.append(canvas)
         l1.Draw('same')
