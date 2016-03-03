@@ -9,6 +9,9 @@ from limittools import renameHistos
 
 name='76controlplotsPlusBoostedforTable'
 
+
+bdtweightpath="/nfs/dust/cms/user/kelmorab/76xBDTWeights/"
+memexp='(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)'
 # selections for categories
 sel1="((N_TightLeptons==1)*(N_LooseLeptons==1)*(N_BTagsM>=2)*(N_Jets>=4))" # l+jets channel
 sl42sel="((N_TightLeptons==1)*(N_LooseLeptons==1)*(N_BTagsM>=2)*(N_Jets>=4))" # l+jets channel
@@ -75,10 +78,10 @@ categoriesSplitBDT=[]
 categoriesSplitBDT.append(categoriesJT[0])
 for cat in categoriesJT[1:]:
     if cat[1] in ["4j4t","5j4t","6j4t"]:
-      categoriesSplitByBDToptD.append(('('+cat[0]+'*(splitdummybdt'+cat[1]+"<"+cat[2]+"))",cat[1]+"l"))
-      categoriesSplitByBDToptD.append(('('+cat[0]+'*(splitdummybdt'+cat[1]+">="+cat[2]+"))",cat[1]+"h"))
+      categoriesSplitBDT.append(('('+cat[0]+'*(splitdummybdt'+cat[1]+"<"+cat[2]+"))",cat[1]+"l"))
+      categoriesSplitBDT.append(('('+cat[0]+'*(splitdummybdt'+cat[1]+">="+cat[2]+"))",cat[1]+"h"))
     else:
-      categoriesSplitByBDToptD.append(cat)
+      categoriesSplitBDT.append(cat)
 
 categoriesBDT=[]
 categoriesBDT.append(categoriesJT[0])
@@ -765,7 +768,7 @@ plotsBoosted=[
 	#Plot(ROOT.TH1F(catsuf+"_Evt_CSV_Dev","Evt_CSV_Dev",20,0,0.25),"Evt_CSV_Dev",thiscatsel,label),
 ]
 
-bdtplots=plots64+plots63+plots62+plots54+plots53+plots44+plots43+plotsBoosted
+#bdtplots=plots64+plots63+plots62+plots54+plots53+plots44+plots43+plotsBoosted
 #plots+=bdtplots
 print name,500000,plots,samples+samples_data+systsamples,[''],['1.'],weightsystnames, systweights
 outputpath=plotParallel(name,500000,plots+helperbdts,samples+samples_data+systsamples,[''],['1.'],weightsystnames, systweights)
@@ -875,80 +878,80 @@ labels=[plot.label for plot in plots]
 lolT=transposeLOL(listOfHistoLists)
 plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name,[[lll,3354,ROOT.kBlack,True]],False,labels)
 
-## make log plots
+# make log plots
+listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
+listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots,1)
+lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,errorSystnames)
+#lllforPS=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,PSSystnames)
+labels=[plot.label for plot in plots]
+lolT=transposeLOL(listOfHistoLists)
+plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name+'_log',[[lll,3354,ROOT.kBlack,True]],True,labels)
+
+
+############
+# make category plots
+categoryplotsindex=4
+listOfHistoListsForCategories=createHistoLists_fromSuperHistoFile(outputpath,samples,plots[:categoryplotsindex],1)
+listOfHistoListsDataForCategories=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots[:categoryplotsindex],1)
+lllForCategories=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots[:categoryplotsindex],errorSystnames)
+#lllforPSForCategories=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots[:categoryplotsindex],PSSystnames)
+
+ntables=0
+
+listOfcustomBinLabels=[]
+
+categoriesSplitBDTlist=[]
+for i,cat in enumerate(categoriesSplitBDT):
+                categoriesSplitBDTlist.append(cat[1])
+                
+categoriesBDTlist=[]
+for i,cat in enumerate(categoriesBDT):
+               categoriesBDTlist.append(cat[1])
+categoriesSplitByBDToptDlist=[]
+for i,cat in enumerate(categoriesSplitByBDToptD):
+                categoriesSplitByBDToptDlist.append(cat[1])
+
+listOfcustomBinLabels=[jtlist,categoriesBDTlist]               
+labels=[plot.label for plot in plots[:categoryplotsindex]]
+lolT=transposeLOL(listOfHistoListsForCategories)
+plotDataMCanWsystCustomBinLabels(listOfHistoListsDataForCategories,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name+'Categories_log',[[lllForCategories,3354,ROOT.kBlack,True]],listOfcustomBinLabels,True,labels,True)
+
 #listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
 #listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots,1)
-#lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,errorSystnames)
-##lllforPS=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,PSSystnames)
-#labels=[plot.label for plot in plots]
-#lolT=transposeLOL(listOfHistoLists)
-#plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name+'_log',[[lll,3354,ROOT.kBlack,True]],True,labels)
-
-
-#############
-## make category plots
-#categoryplotsindex=4
-#listOfHistoListsForCategories=createHistoLists_fromSuperHistoFile(outputpath,samples,plots[:categoryplotsindex],1)
-#listOfHistoListsDataForCategories=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots[:categoryplotsindex],1)
-#lllForCategories=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots[:categoryplotsindex],errorSystnames)
-##lllforPSForCategories=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots[:categoryplotsindex],PSSystnames)
-
+#lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,allsystnames)
 #ntables=0
-
-#listOfcustomBinLabels=[]
-
-#categoriesSplitBDTlist=[]
-#for i,cat in enumerate(categoriesSplitBDT):
-                #categoriesSplitBDTlist.append(cat[1])
-                
-#categoriesBDTlist=[]
-#for i,cat in enumerate(categoriesBDT):
-               #categoriesBDTlist.append(cat[1])
-#categoriesSplitByBDToptDlist=[]
-#for i,cat in enumerate(categoriesSplitByBDToptD):
-                #categoriesSplitByBDToptDlist.append(cat[1])
-
-#listOfcustomBinLabels=[jtlist,categoriesBDTlist]               
-#labels=[plot.label for plot in plots[:categoryplotsindex]]
-#lolT=transposeLOL(listOfHistoListsForCategories)
-#plotDataMCanWsystCustomBinLabels(listOfHistoListsDataForCategories,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name+'Categories_log',[[lllForCategories,3354,ROOT.kBlack,True]],listOfcustomBinLabels,True,labels,True)
-
-##listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
-##listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots,1)
-##lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,allsystnames)
-##ntables=0
-### do some post processing
-##for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
-    ##if "JT" in hld[0].GetName() and not "JTsplitByBDToptB" in hld[0].GetName() and not "JTByBDToptC" in hld[0].GetName() and not "JTsplitByBDToptD" in hld[0].GetName() :
-        ##for h in hld+hl:
-            ##h.GetXaxis().SetBinLabel(1,'4j2t')
-            ##h.GetXaxis().SetBinLabel(2,'5j2t')
-            ##h.GetXaxis().SetBinLabel(3,'6j2t')
-            ##h.GetXaxis().SetBinLabel(4,'4j3t')
-            ##h.GetXaxis().SetBinLabel(5,'5j3t')
-            ##h.GetXaxis().SetBinLabel(6,'6j3t')
-            ##h.GetXaxis().SetBinLabel(7,'4j4t')
-            ##h.GetXaxis().SetBinLabel(8,'5j4t')
-            ##h.GetXaxis().SetBinLabel(9,'6j4t')
-            ##h.GetXaxis().SetBinLabel(10,'boosted')
-##for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
-    ##if "JTsplitByBDToptB" in hld[0].GetName():       
-        ##for h in hld+hl:
-            ##for i,cat in enumerate(categoriesSplitBDT):
-                ##h.GetXaxis().SetBinLabel(i+1,cat[1])
-    ##if "JTByBDToptC" in hld[0].GetName():       
-        ##for h in hld+hl:
-            ##for i,cat in enumerate(categoriesBDT):
-                ##h.GetXaxis().SetBinLabel(i+1,cat[1])
-    ##if "JTsplitByBDToptD" in hld[0].GetName():       
-        ##for h in hld+hl:
-            ##for i,cat in enumerate(categoriesSplitByBDToptD):
-                ##h.GetXaxis().SetBinLabel(i+1,cat[1])
+## do some post processing
+#for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
+    #if "JT" in hld[0].GetName() and not "JTsplitByBDToptB" in hld[0].GetName() and not "JTByBDToptC" in hld[0].GetName() and not "JTsplitByBDToptD" in hld[0].GetName() :
+        #for h in hld+hl:
+            #h.GetXaxis().SetBinLabel(1,'4j2t')
+            #h.GetXaxis().SetBinLabel(2,'5j2t')
+            #h.GetXaxis().SetBinLabel(3,'6j2t')
+            #h.GetXaxis().SetBinLabel(4,'4j3t')
+            #h.GetXaxis().SetBinLabel(5,'5j3t')
+            #h.GetXaxis().SetBinLabel(6,'6j3t')
+            #h.GetXaxis().SetBinLabel(7,'4j4t')
+            #h.GetXaxis().SetBinLabel(8,'5j4t')
+            #h.GetXaxis().SetBinLabel(9,'6j4t')
+            #h.GetXaxis().SetBinLabel(10,'boosted')
+#for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
+    #if "JTsplitByBDToptB" in hld[0].GetName():       
+        #for h in hld+hl:
+            #for i,cat in enumerate(categoriesSplitBDT):
+                #h.GetXaxis().SetBinLabel(i+1,cat[1])
+    #if "JTByBDToptC" in hld[0].GetName():       
+        #for h in hld+hl:
+            #for i,cat in enumerate(categoriesBDT):
+                #h.GetXaxis().SetBinLabel(i+1,cat[1])
+    #if "JTsplitByBDToptD" in hld[0].GetName():       
+        #for h in hld+hl:
+            #for i,cat in enumerate(categoriesSplitByBDToptD):
+                #h.GetXaxis().SetBinLabel(i+1,cat[1])
 
 
-### plot dataMC comparison
-##labels=[plot.label for plot in plots]
+## plot dataMC comparison
+#labels=[plot.label for plot in plots]
 
-##lolT=transposeLOL(listOfHistoLists)
-###plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name+'_log',[[lll,3354,ROOT.kGray+1,False]],True,labels)
-##plotDataMCan(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name+'_log',True,labels)
+#lolT=transposeLOL(listOfHistoLists)
+##plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name+'_log',[[lll,3354,ROOT.kGray+1,False]],True,labels)
+#plotDataMCan(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name+'_log',True,labels)
