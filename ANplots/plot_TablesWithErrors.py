@@ -890,7 +890,9 @@ plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0
 
 ############
 # make category plots
-categoryplotsindex=4
+print "binlabesl"
+categoryplotsindex=5
+print plots
 listOfHistoListsForCategories=createHistoLists_fromSuperHistoFile(outputpath,samples,plots[:categoryplotsindex],1)
 listOfHistoListsDataForCategories=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots[:categoryplotsindex],1)
 lllForCategories=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots[:categoryplotsindex],errorSystnames)
@@ -911,7 +913,7 @@ categoriesSplitByBDToptDlist=[]
 for i,cat in enumerate(categoriesSplitByBDToptD):
                 categoriesSplitByBDToptDlist.append(cat[1])
 
-listOfcustomBinLabels=[jtlist,categoriesBDTlist]               
+listOfcustomBinLabels=[jtlist,categoriesSplitBDTlist,categoriesBDTlist,categoriesSplitByBDToptDlist]               
 labels=[plot.label for plot in plots[:categoryplotsindex]]
 lolT=transposeLOL(listOfHistoListsForCategories)
 plotDataMCanWsystCustomBinLabels(listOfHistoListsDataForCategories,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name+'Categories_log',[[lllForCategories,3354,ROOT.kBlack,True]],listOfcustomBinLabels,True,labels,True)
