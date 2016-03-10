@@ -7,7 +7,7 @@ from plotconfig import *
 sys.path.insert(0, '../limittools')
 from limittools import renameHistos
 
-name='76controlplotsPlusBoostedforTable'
+name='approvalTables'
 
 
 bdtweightpath="/nfs/dust/cms/user/kelmorab/76xBDTWeights/"

@@ -1141,7 +1141,7 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
 #        print cms
 #        objects.append(cms)
 
-        cms = ROOT.TLatex(0.2, 0.96, 'CMS preliminary,  2.67 fb^{-1},  #sqrt{s} = 13 TeV'  );
+        cms = ROOT.TLatex(0.2, 0.96, 'CMS preliminary,  2.7 fb^{-1},  #sqrt{s} = 13 TeV'  );
         cms.SetTextFont(42)
         cms.SetTextSize(0.05)
         cms.SetNDC()
@@ -1209,7 +1209,7 @@ def writeListOfHistoListsAN(listOfHistoLists,samples, label,name,normalize=True,
 #        print cms
 #        objects.append(cms)
 
-        cms = ROOT.TLatex(0.2, 0.96, 'CMS preliminary,  2.67 fb^{-1},  #sqrt{s} = 13 TeV'  );
+        cms = ROOT.TLatex(0.2, 0.96, 'CMS preliminary,  2.7 fb^{-1},  #sqrt{s} = 13 TeV'  );
         cms.SetTextFont(42)
         cms.SetTextSize(0.05)
         cms.SetNDC()
@@ -1925,7 +1925,7 @@ def writeLOLAndOneOnTop(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,f
         integralfactor=0
         for histo,sample in zip(listOfHistos,samples):
 
-            yTitle='Events expected for 2.67 fb^{-1} @ 13 TeV'
+            yTitle='Events expected for 2.7 fb^{-1} @ 13 TeV'
 #            yTitle='Events'
             setupHisto(histo,sample.color,yTitle,stack) 
             
@@ -2094,7 +2094,7 @@ def plotDataMCan(listOfHistoListsData,listOfHistoLists,samples,listOfhistosOnTop
         objects.append(otc)
 
         #draw the lumi text on the canvas
-        CMS_lumi.lumi_13TeV = "2.67 fb^{-1}"
+        CMS_lumi.lumi_13TeV = "2.7 fb^{-1}"
         CMS_lumi.writeExtraText = 1
         CMS_lumi.extraText = "Preliminary"
         CMS_lumi.lumi_sqrtS = "13 TeV" # used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
@@ -2336,7 +2336,7 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         objects.append(otc)
         
         #draw the lumi text on the canvas
-        CMS_lumi.lumi_13TeV = "2.67 fb^{-1}"
+        CMS_lumi.lumi_13TeV = "2.7 fb^{-1}"
         CMS_lumi.writeExtraText = 1
         CMS_lumi.extraText = "Preliminary"
         CMS_lumi.lumi_sqrtS = "13 TeV" # used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
@@ -2598,7 +2598,7 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
         objects.append(otc)
 
         #draw the lumi text on the canvas
-        CMS_lumi.lumi_13TeV = "2.67 fb^{-1}"
+        CMS_lumi.lumi_13TeV = "2.7 fb^{-1}"
         CMS_lumi.writeExtraText = 1
         CMS_lumi.extraText = "Preliminary"
         CMS_lumi.lumi_sqrtS = "13 TeV" # used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)

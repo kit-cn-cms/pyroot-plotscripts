@@ -17,7 +17,7 @@ from plotconfig import *
 #print "!!! NO MEMS ANYWHERE FOR TEST REASONS !!!"
 #print "!!! NO BOOSTED ANYWHERE FOR TEST REASONS !!!"
 
-name='76xBDToptionD'
+name='common'
 
 bdtweightpath="/nfs/dust/cms/user/kelmorab/76xBDTWeights/"
 memexp='(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)'
@@ -89,12 +89,13 @@ for sample in samples:
     if sysname=="_CMS_scale_jUp":
       thisnewsel=thisnewsel.replace('*((N_BTagsM>=4)*((0.000919641*(N_GenTopHad==1 && N_GenTopLep==1)+0.0009753747*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS)+(0.0084896859/Weight_XS)*(N_BTagsM<4))',
 				    '*((N_BTagsM>=4)*((0.0011192298*(N_GenTopHad==1 && N_GenTopLep==1)+0.0007071164*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS)+(0.0084896859/Weight_XS)*(N_BTagsM<4))')
-      print "weights for scaleUp sample ", thisnewsel
+      print "weights for jes scaleUp sample ", thisnewsel
       
     if sysname=="_CMS_scale_jDown":
       thisnewsel=thisnewsel.replace('*((N_BTagsM>=4)*((0.000919641*(N_GenTopHad==1 && N_GenTopLep==1)+0.0009753747*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS)+(0.0084896859/Weight_XS)*(N_BTagsM<4))',
 				    '*((N_BTagsM>=4)*((0.0010096664*(N_GenTopHad==1 && N_GenTopLep==1)+0.0008658787*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS)+(0.0084896859/Weight_XS)*(N_BTagsM<4))')
-      
+      print "weights for jes scaleDown sample ", thisnewsel
+
     systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),thisnewsel,sample.nick+sysname))
   
 allsamples=samples+systsamples
@@ -127,7 +128,7 @@ if not os.path.exists(name):
   os.makedirs(name)
 
 renameHistos(outputpath,name+'/'+name+'_limitInput.root',allsystnames)
-replaceQ2scale( os.getcwd()+'/'+name+'/'+name+'_limitInput.root')
+#replaceQ2scale( os.getcwd()+'/'+name+'/'+name+'_limitInput.root')
 #addPseudoData(name+'/'+name+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
 #########DANGERZONE##############
 addRealData(name+'/'+name+'_limitInput.root',[s.nick for s in samples_data_controlplots],binlabels,discrname)
