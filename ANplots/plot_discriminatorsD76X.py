@@ -12,9 +12,6 @@ from limittools import calcLimits
 from plotconfig import *
 
 
-#print "!!! NO MEMS ANYWHERE FOR TEST REASONS !!!"
-#print "!!! NO BOOSTED ANYWHERE FOR TEST REASONS !!!"
-
 name='76xBDToptionD_discrplots'
 
 bdtweightpath="/nfs/dust/cms/user/kelmorab/76xBDTWeights/"
@@ -40,31 +37,33 @@ for x in maxxvals_:
   maxxvals.append(x)
 
 boosted="(BoostedTopHiggs_TopHadCandidate_TopMVAOutput>=-0.485&&BoostedTopHiggs_HiggsCandidate_HiggsTag>=0.8925)"                        
-categories_=[("(N_Jets==4&&N_BTagsM==3)&&!"+boosted+"","ljets_j4_t3"),
-            ("(N_Jets==4&&N_BTagsM>=4)&&!"+boosted+"","ljets_j4_t4"),
-            ("(N_Jets==5&&N_BTagsM==3)&&!"+boosted+"","ljets_j5_t3"),
-            ("(N_Jets==5&&N_BTagsM>=4)&&!"+boosted+"","ljets_j5_tge4"),
-            ("(N_Jets>=6&&N_BTagsM==2)&&!"+boosted+"","ljets_jge6_t2"),
-            ("(N_Jets>=6&&N_BTagsM==3)&&!"+boosted+"","ljets_jge6_t3"),
-            ("(N_Jets>=6&&N_BTagsM>=4)&&!"+boosted+"","ljets_jge6_tge4"),
-            (boosted,"ljets_boosted")]
+
+categories_=[("(N_Jets==4&&N_BTagsM==3)&&!"+boosted+"","ljets_j4_t3","4 jets, 3 b-tags"),
+            ("(N_Jets==4&&N_BTagsM>=4)&&!"+boosted+"","ljets_j4_t4","4 jets, 4 b-tags"),
+            ("(N_Jets==5&&N_BTagsM==3)&&!"+boosted+"","ljets_j5_t3","5 jets, 3 b-tags"),
+            ("(N_Jets==5&&N_BTagsM>=4)&&!"+boosted+"","ljets_j5_tge4","5 jets, #geq 4 b-tags"),
+            ("(N_Jets>=6&&N_BTagsM==2)&&!"+boosted+"","ljets_jge6_t2","#geq 6 jets, 2 b-tags"),
+            ("(N_Jets>=6&&N_BTagsM==3)&&!"+boosted+"","ljets_jge6_t3","#geq 6 jets, 3 b-tags"),
+            ("(N_Jets>=6&&N_BTagsM>=4)&&!"+boosted+"","ljets_jge6_tge4","#geq 6 jets, #geq 4 b-tags"),
+            (boosted,"ljets_boosted","boosted regime")]
 categories=[]
 bdtcuts=[0.2,0.2,0.1,0.2,0.1,0.1,0.1,0.2]
 
 for cat,bdt in zip(categories_,bdtcuts):
   if cat[1] in ["ljets_jge6_tge4","ljets_j5_tge4","ljets_j4_t4"]:
-    categories.append(('('+cat[0]+')*(splitdummybdt'+cat[1]+'>'+str(bdt)+')',cat[1]+'_high') )
-    categories.append(('('+cat[0]+')*(splitdummybdt'+cat[1]+'<='+str(bdt)+')',cat[1]+'_low') )
+    categories.append(('('+cat[0]+')*(splitdummybdt'+cat[1]+'>'+str(bdt)+')',cat[1]+'_high',cat[2]+', BDT > '+str(bdt) ))
+    categories.append(('('+cat[0]+')*(splitdummybdt'+cat[1]+'<='+str(bdt)+')',cat[1]+'_low',cat[2]+', BDT #leq '+str(bdt)))
   else:
     categories.append(cat )
-print categories
+
 
 
 discrname='BDT'
 
 bins= [c[0] for c in categories]
 binlabels= [c[1] for c in categories]
-samples=samplesLimits
+actualabels= [c[2] for c in categories]
+samples=samplesControlPlots
 
 allsystnames=weightsystnames+othersystnames
 
@@ -103,18 +102,24 @@ helperbdts=[]
 bdts=[]
 print len(discrs),len(bins),len(binlabels),len(nhistobins),len(minxvals),len(maxxvals),
 print len(zip(discrs,bins,binlabels,nhistobins,minxvals,maxxvals))
-for discr,b,bl,nb,minx,maxx in zip(discrs,bins,binlabels,nhistobins,minxvals,maxxvals):
+for discr,b,bl,nb,minx,maxx,al in zip(discrs,bins,binlabels,nhistobins,minxvals,maxxvals,actualabels):
   if bl == "ljets_jge6_tge4_high":
     print "tst"
-    helperbdts.append(MVAPlot(ROOT.TH1F("splitdummybdt"+"ljets_jge6_tge4","BDT for splitting ("+bl+")",nb*10,-1.0,1.0),bdtweightpath+'/weights_Final_64_76blr.xml',b))
+    helperbdts.append(MVAPlot(ROOT.TH1F("splitdummybdt"+"ljets_jge6_tge4","BDT w/o MEM (for 2D splitting)",nb*10,-1.0,1.0),bdtweightpath+'/weights_Final_64_76blr.xml',b,al))
+    bdts.append(MVAPlot(ROOT.TH1F("bdt"+"ljets_jge6_tge4","BDT w/o MEM (for 2D splitting)",10,-1.0,1.0),bdtweightpath+'/weights_Final_64_76blr.xml',"N_Jets>=6&&N_BTagsM>=4",'#geq 4 jets, 4 b-tags'))
   if bl == "ljets_j5_tge4_high":
-    helperbdts.append(MVAPlot(ROOT.TH1F("splitdummybdt"+"ljets_j5_tge4","BDT for splitting ("+bl+")",nb*10,-1.0,1.0),bdtweightpath+'/weights_Final_54_76blr.xml',b))
+    helperbdts.append(MVAPlot(ROOT.TH1F("splitdummybdt"+"ljets_j5_tge4","BDT for splitting ("+bl+")",nb*10,-1.0,1.0),bdtweightpath+'/weights_Final_54_76blr.xml',b,al))
+    bdts.append(MVAPlot(ROOT.TH1F("bdt"+"ljets_j5_tge4","BDT w/o MEM (for 2D splitting)",10,-1.0,1.0),bdtweightpath+'/weights_Final_54_76blr.xml',"N_Jets==5&&N_BTagsM>=4",'#geq 5 jets, #geq 4 b-tags'))
   if bl == "ljets_j4_t4_high":
-    helperbdts.append(MVAPlot(ROOT.TH1F("splitdummybdt"+"ljets_j4_t4","BDT for splitting ("+bl+")",nb*10,-1.0,1.0),bdtweightpath+'/weights_Final_44_76blr.xml',b))
+    helperbdts.append(MVAPlot(ROOT.TH1F("splitdummybdt"+"ljets_j4_t4","BDT w/o MEM (for 2D splitting)",nb*10,-1.0,1.0),bdtweightpath+'/weights_Final_44_76blr.xml',b,al))
+    bdts.append(MVAPlot(ROOT.TH1F("bdt_"+"ljets_j4_t4","BDT w/o MEM (for 2D splitting)",10,-1.0,1.0),bdtweightpath+'/weights_Final_44_76blr.xml',"N_Jets==4&&N_BTagsM>=4",'4 jets, #geq 4 b-tags'))
   if '.xml' in discr:
-    bdts.append(MVAPlot(ROOT.TH1F(discrname+"_"+bl,"final discriminator ("+bl+")",nb,minx,maxx),discr,b))
+    if "jge6_t2" in bl:
+      bdts.append(MVAPlot(ROOT.TH1F(discrname+"_"+bl,"BDT w/o MEM discriminator",nb,minx,maxx),discr,b,al))
+    else:
+      bdts.append(MVAPlot(ROOT.TH1F(discrname+"_"+bl,"BDT incl. MEM discriminator",nb,minx,maxx),discr,b,al))
   else:
-    bdts.append(Plot(ROOT.TH1F(discrname+"_"+bl,"final discriminator ("+bl+")",nb,minx,maxx),discr,b))
+    bdts.append(Plot(ROOT.TH1F(discrname+"_"+bl,"BDT incl. MEM discriminator",nb,minx,maxx),discr,b,al))
   print discr,b,bl,nb,minx,maxx
 
 #print "if cateries are correct press the \"any\" key"
@@ -125,7 +130,7 @@ if not os.path.exists(name):
   os.makedirs(name)
 
 renameHistos(outputpath,name+'/'+name+'_limitInput.root',allsystnames)
-addPseudoData(name+'/'+name+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
+#addPseudoData(name+'/'+name+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
 
 
 ######################################
@@ -135,9 +140,9 @@ listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samplesdata,
 if not os.path.exists(outputpath[:-4]+'_syst.root') or not askYesNo('reuse systematic histofile?'):
     renameHistos(outputpath,outputpath[:-4]+'_syst.root',allsystnames)
 
-lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[9:],bdts,errorSystnames)
+lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],bdts,errorSystnames)
 #lllforPS=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],bdts,PSSystnames)
 labels=[plot.label for plot in bdts]
 lolT=transposeLOL(listOfHistoLists)
-plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],20,name+'_lin2',[[lll,3354,ROOT.kGray+1,True]],False,labels,True,True)
+plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name+'_lin2',[[lll,3354,ROOT.kBlack,True]],False,labels,True,False)
 
