@@ -24,11 +24,24 @@ for sample in samples:
   for sysname,sysfilename in zip(othersystnames,othersystfilenames):
     thisnewsel=sample.selection
     if sysname=="_CMS_ttH_PSscaleUp":
-      thisnewsel=thisnewsel.replace('*(0.000919641*(N_GenTopHad==1 && N_GenTopLep==1)+0.000707116*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS','*(0.003106675*(N_GenTopHad==1 && N_GenTopLep==1)+0.00251279*(N_GenTopLep==2 && N_GenTopHad==0)+0.017175278*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS')
+      thisnewsel=thisnewsel.replace('*((N_BTagsM>=4)*((0.000919641*(N_GenTopHad==1 && N_GenTopLep==1)+0.0009753747*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS)+(0.0084896859/Weight_XS)*(N_BTagsM<4))',
+				    '*((N_BTagsM>=4)*((0.0033838531*(N_GenTopHad==1 && N_GenTopLep==1)+0.0027473283*(N_GenTopLep==2 && N_GenTopHad==0)+0.017175278*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS)+(0.017175278/Weight_XS)*(N_BTagsM<4))')
       print "weights for scaleUp sample ", thisnewsel
+      
     if sysname=="_CMS_ttH_PSscaleDown":
-      thisnewsel=thisnewsel.replace('*(0.000919641*(N_GenTopHad==1 && N_GenTopLep==1)+0.000707116*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS','*(0.003070913*(N_GenTopHad==1 && N_GenTopLep==1)+0.002519151*(N_GenTopLep==2 && N_GenTopHad==0)+0.016839284*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS')
+      thisnewsel=thisnewsel.replace('*((N_BTagsM>=4)*((0.000919641*(N_GenTopHad==1 && N_GenTopLep==1)+0.0009753747*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS)+(0.0084896859/Weight_XS)*(N_BTagsM<4))',
+				    '*((N_BTagsM>=4)*((0.003070913*(N_GenTopHad==1 && N_GenTopLep==1)+0.0027532915*(N_GenTopLep==2 && N_GenTopHad==0)+0.016839284*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS)+(0.016839284/Weight_XS)*(N_BTagsM<4))')
       print "weights for scaleDown sample ", thisnewsel
+    
+    if sysname=="_CMS_scale_jUp":
+      thisnewsel=thisnewsel.replace('*((N_BTagsM>=4)*((0.000919641*(N_GenTopHad==1 && N_GenTopLep==1)+0.0009753747*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS)+(0.0084896859/Weight_XS)*(N_BTagsM<4))',
+				    '*((N_BTagsM>=4)*((0.0011192298*(N_GenTopHad==1 && N_GenTopLep==1)+0.0007071164*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS)+(0.0084896859/Weight_XS)*(N_BTagsM<4))')
+      print "weights for scaleUp sample ", thisnewsel
+     
+    if sysname=="_CMS_scale_jDown":
+      thisnewsel=thisnewsel.replace('*((N_BTagsM>=4)*((0.000919641*(N_GenTopHad==1 && N_GenTopLep==1)+0.0009753747*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS)+(0.0084896859/Weight_XS)*(N_BTagsM<4))',
+				    '*((N_BTagsM>=4)*((0.0010096664*(N_GenTopHad==1 && N_GenTopLep==1)+0.0008658787*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS)+(0.0084896859/Weight_XS)*(N_BTagsM<4))')
+      
     systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),thisnewsel,sample.nick+sysname))
 
 ## DANGERZONE
@@ -43,23 +56,12 @@ allsystnames=weightsystnames+othersystnames
 boosted="(BoostedTopHiggs_TopHadCandidate_TopMVAOutput>=-0.485&&BoostedTopHiggs_HiggsCandidate_HiggsTag>=0.8925)"                        
 categoriesJT=[("((N_Jets>=6&&N_BTagsM==2)&&!"+boosted+")","6j2t","","",""),
               ("((N_Jets==4&&N_BTagsM==3)&&!"+boosted+")","4j3t","0.2","0.2","0.2"),
-              ("((N_Jets==5&&N_BTagsM==3)&&!"+boosted+")","5j3t","0.15","0.15","0.15"),
+              ("((N_Jets==5&&N_BTagsM==3)&&!"+boosted+")","5j3t","0.1","0.1","0.1"),
               ("((N_Jets>=6&&N_BTagsM==3)&&!"+boosted+")","6j3t","0.1","0.1","0.1"),
               ("((N_Jets==4&&N_BTagsM>=4)&&!"+boosted+")","4j4t","0.2","0.2","0.2"),
               ("((N_Jets==5&&N_BTagsM>=4)&&!"+boosted+")","5j4t","0.2","0.2","0.2"),             
               ("((N_Jets>=6&&N_BTagsM>=4)&&!"+boosted+")","6j4t","0.1","0.1","0.1"),
               ("((N_Jets>=4&&N_BTagsM>=2)&&"+boosted+")","boosted","0.1","0.1","0.1")]
-
-categoriesSplitBDT=[]
-categoriesSplitBDT.append(categoriesJT[0])
-for cat in categoriesJT[1:]:
-    categoriesSplitBDT.append(('('+cat[0]+"*(BDT_common5_output<"+cat[2]+"))",cat[1]+"l"))
-    categoriesSplitBDT.append(('('+cat[0]+"*(BDT_common5_output>="+cat[2]+"))",cat[1]+"h"))
-
-categoriesBDT=[]
-categoriesBDT.append(categoriesJT[0])
-for cat in categoriesJT[1:]:
-    categoriesBDT.append(cat)
 
 categoriesSplitByBDToptD=[]
 categoriesSplitByBDToptD.append(categoriesJT[0])
@@ -77,20 +79,11 @@ labelboosted="#splitline{1 lepton, #geq 4 jets, #geq 2 b-tags}{#geq 1 C/A 1.5 je
 catstringJT="0"
 for i,cat in enumerate(categoriesJT):
     catstringJT+=("+"+str(i+1)+"*"+cat[0])
-catstringSplitByBDT="0"
-for i,cat in enumerate(categoriesSplitBDT):
-    catstringSplitByBDT+=("+"+str(i+1)+"*"+cat[0])
-catstringBDT="0"
-for i,cat in enumerate(categoriesBDT):
-    catstringBDT+=("+"+str(i+1)+"*"+cat[0])
 catstringSplitByBDToptD="0"
 for i,cat in enumerate(categoriesSplitByBDToptD):
     catstringSplitByBDToptD+=("+"+str(i+1)+"*"+cat[0])
 
 plots=[Plot(ROOT.TH1F("JT" ,"jet-tag categories",9,-0.5,8.5),"3*max(min(N_BTagsM-2,2),0)+max(min(N_Jets-4,2),0)","(N_BTagsM>=2&&N_Jets>=4)",label),
-       Plot(ROOT.TH1F("JTsplitByBDToptB" ,"2D analysis B + boosted categories",len(categoriesSplitBDT),0.5,0.5+len(categoriesSplitBDT)),catstringSplitByBDT,"(((N_BTagsM>=2&&N_Jets>=6||N_BTagsM>=3&&N_Jets>=4)&&!"+categoriesJT[-1][0]+")||"+categoriesJT[-1][0]+")",''),
-       Plot(ROOT.TH1F("JTByBDToptC" ,"analysis C + boosted categories",len(categoriesBDT),0.5,0.5+len(categoriesBDT)),catstringBDT,"(((N_BTagsM>=2&&N_Jets>=6||N_BTagsM>=3&&N_Jets>=4)&&!"+categoriesJT[-1][0]+")||"+categoriesJT[-1][0]+")",''),
-#       Plot(ROOT.TH1F("JTbaseline" ,"Baseline l+jets categories",len(categoriesBDT),0.5,0.5+len(categoriesBDT)),catstringBDT,"(((N_BTagsM>=2&&N_Jets>=6||N_BTagsM>=3&&N_Jets>=4)&&!"+categoriesJT[-1][0]+")||"+categoriesJT[-1][0]+")",''),
        Plot(ROOT.TH1F("JTsplitByBDToptD" ,"2D analysis D + boosted categories",len(categoriesSplitByBDToptD),0.5,0.5+len(categoriesSplitByBDToptD)),catstringSplitByBDToptD,"(((N_BTagsM>=2&&N_Jets>=6||N_BTagsM>=3&&N_Jets>=4)&&!"+categoriesJT[-1][0]+")||"+categoriesJT[-1][0]+")",''),
 
        Plot(ROOT.TH1F("N_Jets","Number of ak4 jets",7,3.5,10.5),"N_Jets",'',label),
@@ -777,7 +770,7 @@ ntables=0
 jtlist=['4j2t','5j2t','6j2t','4j3t','5j3t','6j3t','4j4t','5j4t','6j4t']
 
 for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
-    if "JT" in hld[0].GetName() and not "JTsplitByBDToptB" in hld[0].GetName() and not "JTByBDToptC" in hld[0].GetName() and not "JTsplitByBDToptD" in hld[0].GetName() :
+    if "JT" in hld[0].GetName() and not 'optD' in hld[0].GetName():
         for h in hld+hl:
             for i,cat in enumerate(jtlist):
                 h.GetXaxis().SetBinLabel(i+1,cat)
@@ -786,23 +779,7 @@ for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
         ntables+=1
         # make an event yield table
         eventYields(hld,hl,samples,tablepath)
-    if "JTsplitByBDToptB" in hld[0].GetName():       
-        for h in hld+hl:
-            for i,cat in enumerate(categoriesSplitBDT):
-                h.GetXaxis().SetBinLabel(i+1,cat[1])
-                print cat[1]
-        tablepath=("/".join((outputpath.split('/'))[:-1]))+"/"+name+"_yieldsB"
-        # make an event yield table
-        eventYields(hld,hl,samples,tablepath)
-    if "JTByBDToptC" in hld[0].GetName():       
-        for h in hld+hl:
-            for i,cat in enumerate(categoriesBDT):
-                h.GetXaxis().SetBinLabel(i+1,cat[1])
-                print cat[1]
-        tablepath=("/".join((outputpath.split('/'))[:-1]))+"/"+name+"_yieldsC"
-        # make an event yield table
-        eventYields(hld,hl,samples,tablepath)
-    if "JTsplitByBDToptD" in hld[0].GetName():       
+    if "optD" in hld[0].GetName():       
         for h in hld+hl:
             for i,cat in enumerate(categoriesSplitByBDToptD):
                 h.GetXaxis().SetBinLabel(i+1,cat[1])
@@ -829,7 +806,7 @@ plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0
 
 ############
 # make category plots
-categoryplotsindex=4
+categoryplotsindex=2
 listOfHistoListsForCategories=createHistoLists_fromSuperHistoFile(outputpath,samples,plots[:categoryplotsindex],1)
 listOfHistoListsDataForCategories=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots[:categoryplotsindex],1)
 lllForCategories=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots[:categoryplotsindex],errorSystnames)
@@ -839,10 +816,7 @@ ntables=0
 
 listOfcustomBinLabels=[]
 
-categoriesSplitBDTlist=[]
-for i,cat in enumerate(categoriesSplitBDT):
-                categoriesSplitBDTlist.append(cat[1])
-                
+               
 categoriesBDTlist=[]
 for i,cat in enumerate(categoriesBDT):
                categoriesBDTlist.append(cat[1])
