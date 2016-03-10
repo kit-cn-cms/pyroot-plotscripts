@@ -58,11 +58,11 @@ double EleIDHelper::GetSF(double electronPt, double electronEta, int syst){
   
   thisbin = h_abseta_pt_ratio->FindBin(searcheta,searchpt);
   double nomval=h_abseta_pt_ratio->GetBinContent(thisbin);
-  //double error=h_abseta_pt_ratio->GetBinError(thisbin);
+  double error=h_abseta_pt_ratio->GetBinError(thisbin);
   //double upval=(nomval+error)*(1.0+0.01);
   //double downval=(nomval-error)*(1.0-0.01);
-  double upval=nomval*(1.0+0.02);
-  double downval=nomval*(1.0-0.02);
+  double upval=nomval+error;
+  double downval=nomval-error;
   
   //if(syst==0){std::cout<<"ID SF "<<std::endl; std::cout<<nomval<<" "<<upval<<" "<<downval<<std::endl;}
   
@@ -101,9 +101,9 @@ double EleIsoHelper::GetSF(double electronPt, double electronEta, int syst){
   
   thisbin = h_abseta_pt_ratio->FindBin(searcheta,searchpt);
   double nomval=h_abseta_pt_ratio->GetBinContent(thisbin);
-  //double error=h_abseta_pt_ratio->GetBinError(thisbin);
-  double upval=nomval*(1.0+0.02);
-  double downval=nomval*(1.0-0.02);
+  double error=h_abseta_pt_ratio->GetBinError(thisbin);
+  double upval=nomval+error;
+  double downval=nomval-error;
   //if(syst==0){std::cout<<"Iso SF "<<std::endl; std::cout<<nomval<<" "<<upval<<" "<<downval<<std::endl;}
   
   if (syst==-1){return downval;}
@@ -142,9 +142,9 @@ double EleTriggerHelper::GetSF(double electronPt, double electronEta, int syst){
   
   thisbin = h_abseta_pt_ratio->FindBin(searchpt,searcheta);
   double nomval=h_abseta_pt_ratio->GetBinContent(thisbin);
-  //double error=h_abseta_pt_ratio->GetBinError(thisbin);
-  double upval=nomval*(1.0+0.02);
-  double downval=nomval*(1.0-0.02);
+  double error=h_abseta_pt_ratio->GetBinError(thisbin);
+  double upval=nomval+error;
+  double downval=nomval-error;
     
   // if(syst==0){std::cout<<"Trigger SF "<<std::endl; std::cout<<nomval<<" "<<upval<<" "<<downval<<std::endl;}
   
@@ -188,11 +188,12 @@ double MuIDHelper::GetSF(double muonPt, double muonEta, int syst){
   thisbin = h_abseta_pt_ratio->FindBin(searcheta,searchpt);
   double nomval=h_abseta_pt_ratio->GetBinContent(thisbin);
   double error=h_abseta_pt_ratio->GetBinError(thisbin);
-  //double upval=(nomval+error)*(1.0+0.01);
-  //double downval=(nomval-error)*(1.0-0.01);
-  double upval=nomval*(1.0+0.02);
-  double downval=nomval*(1.0-0.02);
-  
+  double upval=(nomval+error);
+  double downval=(nomval-error);
+  //double upval=nomval*(1.0+0.02);
+  //double downval=nomval*(1.0-0.02);
+  upval=upval*(1.0+0.01);
+  downval=downval*(1.0-0.01);
   //if(syst==0){std::cout<<"ID SF "<<std::endl; std::cout<<nomval<<" "<<upval<<" "<<downval<<std::endl;}
   
   if (syst==-1){return downval;}
@@ -231,8 +232,10 @@ double MuIsoHelper::GetSF(double muonPt, double muonEta, int syst){
   thisbin = h_abseta_pt_ratio->FindBin(searcheta,searchpt);
   double nomval=h_abseta_pt_ratio->GetBinContent(thisbin);
   double error=h_abseta_pt_ratio->GetBinError(thisbin);
-  double upval=nomval*(1.0+0.02);
-  double downval=nomval*(1.0-0.02);
+  double upval=(nomval+error);
+  double downval=(nomval-error);
+  upval=upval*(1.0+0.005);
+  downval=downval*(1.0-0.005);
   //if(syst==0){std::cout<<"Iso SF "<<std::endl; std::cout<<nomval<<" "<<upval<<" "<<downval<<std::endl;}
   
   if (syst==-1){return downval;}
@@ -274,17 +277,20 @@ double MuTriggerHelper::GetSF(double muonPt, double muonEta, int syst){
   thisbin = h_abseta_pt_ratio4p3->FindBin(searcheta,searchpt);
   double nomval4p3=h_abseta_pt_ratio4p3->GetBinContent(thisbin);
   double error4p3=h_abseta_pt_ratio4p3->GetBinError(thisbin);
-  double upval4p3=nomval4p3*(1.0+0.02);
-  double downval4p3=nomval4p3*(1.0-0.02);
+  double upval4p3=nomval4p3+error4p3;
+  double downval4p3=nomval4p3-error4p3;
   thisbin = h_abseta_pt_ratio4p2->FindBin(searcheta,searchpt);
   double nomval4p2=h_abseta_pt_ratio4p2->GetBinContent(thisbin);
   double error4p2=h_abseta_pt_ratio4p2->GetBinError(thisbin);
-  double upval4p2=nomval4p2*(1.0+0.02);
-  double downval4p2=nomval4p2*(1.0-0.02);
+  double upval4p2=nomval4p2+error4p2;
+  double downval4p2=nomval4p2-error4p2;
   
   double nomval=0.2843*nomval4p2+0.716*nomval4p3;
   double upval=0.2843*upval4p2+0.716*upval4p3;
   double downval=0.2843*downval4p2+0.716*downval4p3;
+  upval=upval*(1.0+0.005);
+  downval=downval*(1.0-0.005);
+
     
   // if(syst==0){std::cout<<"Trigger SF "<<std::endl; std::cout<<nomval<<" "<<upval<<" "<<downval<<std::endl;}
   

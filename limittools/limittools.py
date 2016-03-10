@@ -46,6 +46,7 @@ def renameHistos(infname,outfname,sysnames,prune=True):
   keylist=infile.GetListOfKeys()
   
   for key in keylist:
+    print key.GetName()
     thisname=key.GetName()
     thish=infile.Get(thisname)
     newname=thisname
