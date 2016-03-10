@@ -30,6 +30,7 @@ hzgSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==22)
 
 
 path_76x="/nfs/dust/cms/user/hmildner/samples76X"
+path_bjn="/nfs/dust/cms/user/hmildner/treesBJN/"
 
 # names of the systematics (proper names needed e.g. for combination)
 weightsystnames=["",
@@ -129,29 +130,29 @@ eleSF="electronIDHelper.GetSF(electronPt,electronEta,0)*electronIsoHelper.GetSF(
 
 #muSF="1.0"
 #usualweights="(1*Weight_PU*TMath::Sign(1.0,Weight)*"+muSF+"*Weight_CSV)"
-usualweights="(1*Weight_PU*TMath::Sign(1.0,Weight)*"+muSF+"*"+eleSF+"*Weight_CSV)"
+usualweights="(1*Weight_PU*((Weight>0)-(Weight<0))*"+muSF+"*"+eleSF+"*Weight_CSV)"
 
 
 systweights=["NomWeight:="+usualweights+"*(DoWeights==1)+(DoWeights==0)*1.0",
-             "dummyWeight_CSVLFup:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVLFup*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-             "dummyWeight_CSVLFdown:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVLFdown*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-             "dummyWeight_CSVHFup:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVHFup*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-             "dummyWeight_CSVHFdown:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVHFdown*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-             "dummyWeight_CSVHFStats1up:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVHFStats1up*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-             "dummyWeight_CSVHFStats1down:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVHFStats1down*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-             "dummyWeight_CSVLFStats1up:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVLFStats1up*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-             "dummyWeight_CSVLFStats1down:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVLFStats1down*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-             "dummyWeight_CSVHFStats2up:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVHFStats2up*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-             "dummyWeight_CSVHFStats2down:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVHFStats2down*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-             "dummyWeight_CSVLFStats2up:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVLFStats2up*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-             "dummyWeight_CSVLFStats2down:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVLFStats2down*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-             "dummyWeight_CSVCErr1up:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVCErr1up*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-             "dummyWeight_CSVCErr1down:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVCErr1down*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-             "dummyWeight_CSVCErr2up:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVCErr2up*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-             "dummyWeight_CSVCErr2down:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVCErr2down*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             "dummyWeight_CSVLFup:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVLFup*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             "dummyWeight_CSVLFdown:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVLFdown*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             "dummyWeight_CSVHFup:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVHFup*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             "dummyWeight_CSVHFdown:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVHFdown*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             "dummyWeight_CSVHFStats1up:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVHFStats1up*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             "dummyWeight_CSVHFStats1down:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVHFStats1down*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             "dummyWeight_CSVLFStats1up:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVLFStats1up*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             "dummyWeight_CSVLFStats1down:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVLFStats1down*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             "dummyWeight_CSVHFStats2up:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVHFStats2up*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             "dummyWeight_CSVHFStats2down:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVHFStats2down*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             "dummyWeight_CSVLFStats2up:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVLFStats2up*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             "dummyWeight_CSVLFStats2down:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVLFStats2down*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             "dummyWeight_CSVCErr1up:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVCErr1up*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             "dummyWeight_CSVCErr1down:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVCErr1down*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             "dummyWeight_CSVCErr2up:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVCErr2up*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             "dummyWeight_CSVCErr2down:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVCErr2down*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
             ####"rwtptup:=(2.0*(Weight_TopPt - 1.0)+1.0):=1*Weight_PU*Weight_CSV","rwtptdown:=Weight_TopPt:=1*Weight_PU*Weight_CSV",
-             "dummyWeight_PUup:=(TMath::Sign(1.0,Weight)*Weight_PUup*"+muSF+"*"+eleSF+"*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-             "dummyWeight_PUdown:=(TMath::Sign(1.0,Weight)*Weight_PUdown*"+muSF+"*"+eleSF+"*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             "dummyWeight_PUup:=(((Weight>0)-(Weight<0))*Weight_PUup*"+muSF+"*"+eleSF+"*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             "dummyWeight_PUdown:=(((Weight>0)-(Weight<0))*Weight_PUdown*"+muSF+"*"+eleSF+"*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
              "QScaleTTLFUp:=((1.01414811611*(N_Jets==4))+(0.991304934025*(N_Jets==5))+(0.963434636593*(N_Jets==6))+(0.939875721931*(N_Jets==7))+(0.917543113232*(N_Jets==8))+(0.8953820467*(N_Jets==9))+(0.873915433884*(N_Jets>=10)))*"+usualweights+"/"+str(mu_up_sf),
              "QScaleTTLFDown:=((0.980245113373*(N_Jets==4))+(1.01328265667*(N_Jets==5))+(1.05405771732*(N_Jets==6))+(1.08945119381*(N_Jets==7))+(1.12380123138*(N_Jets==8))+(1.1570687294*(N_Jets==9))+(1.19215357304*(N_Jets>=10)))*"+usualweights+"/"+str(mu_down_sf),
              "QScaleTTBUp:=((1.00080752373*(N_Jets==4))+(0.98769146204*(N_Jets==5))+(0.959815919399*(N_Jets==6))+(0.937435746193*(N_Jets==7))+(0.916143894196*(N_Jets==8))+(0.894755899906*(N_Jets==9))+(0.868403971195*(N_Jets>=10)))*"+usualweights+"/"+str(mu_up_sf),
@@ -180,25 +181,25 @@ systweights=["NomWeight:="+usualweights+"*(DoWeights==1)+(DoWeights==0)*1.0",
 
 
 #systweights=["NomWeight:="+usualweights+"*(DoWeights==1)+(DoWeights==0)*1.0",
-             #"dummyWeight_CSVLFup:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVLFup*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-             #"dummyWeight_CSVLFdown:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVLFdown*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-             #"dummyWeight_CSVHFup:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVHFup*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-             #"dummyWeight_CSVHFdown:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVHFdown*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-             #"dummyWeight_CSVHFStats1up:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVHFStats1up*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-             #"dummyWeight_CSVHFStats1down:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVHFStats1down*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-             #"dummyWeight_CSVLFStats1up:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF++"*"+eleSF"*Weight_CSVLFStats1up*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-             #"dummyWeight_CSVLFStats1down:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVLFStats1down*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-             #"dummyWeight_CSVHFStats2up:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVHFStats2up*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-             #"dummyWeight_CSVHFStats2down:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVHFStats2down*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-             #"dummyWeight_CSVLFStats2up:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVLFStats2up*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-             #"dummyWeight_CSVLFStats2down:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVLFStats2down*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-             #"dummyWeight_CSVCErr1up:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVCErr1up*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-             #"dummyWeight_CSVCErr1down:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVCErr1down*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-             #"dummyWeight_CSVCErr2up:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVCErr2up*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-             #"dummyWeight_CSVCErr2down:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVCErr2down*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_CSVLFup:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVLFup*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_CSVLFdown:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVLFdown*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_CSVHFup:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVHFup*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_CSVHFdown:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVHFdown*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_CSVHFStats1up:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVHFStats1up*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_CSVHFStats1down:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVHFStats1down*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_CSVLFStats1up:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF++"*"+eleSF"*Weight_CSVLFStats1up*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_CSVLFStats1down:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVLFStats1down*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_CSVHFStats2up:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVHFStats2up*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_CSVHFStats2down:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVHFStats2down*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_CSVLFStats2up:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVLFStats2up*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_CSVLFStats2down:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVLFStats2down*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_CSVCErr1up:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVCErr1up*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_CSVCErr1down:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVCErr1down*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_CSVCErr2up:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVCErr2up*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_CSVCErr2down:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*"+eleSF+"*Weight_CSVCErr2down*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
             #####"rwtptup:=(2.0*(Weight_TopPt - 1.0)+1.0):=1*Weight_PU*Weight_CSV","rwtptdown:=Weight_TopPt:=1*Weight_PU*Weight_CSV",
-             #"dummyWeight_PUup:=(TMath::Sign(1.0,Weight)*Weight_PUup*"+muSF+"*"+eleSF+"*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-             #"dummyWeight_PUdown:=(TMath::Sign(1.0,Weight)*Weight_PUdown*"+muSF+"*"+eleSF+"*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_PUup:=(((Weight>0)-(Weight<0))*Weight_PUup*"+muSF+"*"+eleSF+"*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_PUdown:=(((Weight>0)-(Weight<0))*Weight_PUdown*"+muSF+"*"+eleSF+"*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
              #"QScaleTTLFUp:=Weight_muRueight_muRdowpmuFup*"+usualweights+"/"+str(mu_up_sf),
              #"QScaleTTLFDown:=WnmuFdown*"+usualweights+"/"+str(mu_down_sf),
              #"QScaleTTBUp:=Weight_muRupmuFup*"+usualweights+"/"+str(mu_up_sf),
@@ -224,25 +225,25 @@ systweights=["NomWeight:="+usualweights+"*(DoWeights==1)+(DoWeights==0)*1.0",
              #]
 
 #systweights=["NomWeight:="+usualweights+"*(DoWeights==1)+(DoWeights==0)*1.0",
-             #"dummyWeight_CSVLFup:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,9,csvWgtHF,csvWgtLF,csvWgtCF))*(DoWeights==1)+(DoWeights==0)*1.0",
-             #"dummyWeight_CSVLFdown:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,10,csvWgtHF,csvWgtLF,csvWgtCF))*(DoWeights==1)+(DoWeights==0)*1.0",
-             #"dummyWeight_CSVHFup:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,11,csvWgtHF,csvWgtLF,csvWgtCF))*(DoWeights==1)+(DoWeights==0)*1.0",
-             #"dummyWeight_CSVHFdown:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,12,csvWgtHF,csvWgtLF,csvWgtCF))*(DoWeights==1)+(DoWeights==0)*1.0",
-             #"dummyWeight_CSVHFStats1up:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,13,csvWgtHF,csvWgtLF,csvWgtCF))*(DoWeights==1)+(DoWeights==0)*1.0",
-             #"dummyWeight_CSVHFStats1down:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,14,csvWgtHF,csvWgtLF,csvWgtCF))*(DoWeights==1)+(DoWeights==0)*1.0",
-             #"dummyWeight_CSVLFStats1up:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,17,csvWgtHF,csvWgtLF,csvWgtCF))*(DoWeights==1)+(DoWeights==0)*1.0",
-             #"dummyWeight_CSVLFStats1down:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,18,csvWgtHF,csvWgtLF,csvWgtCF))*(DoWeights==1)+(DoWeights==0)*1.0",
-             #"dummyWeight_CSVHFStats2up:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,15,csvWgtHF,csvWgtLF,csvWgtCF))*(DoWeights==1)+(DoWeights==0)*1.0",
-             #"dummyWeight_CSVHFStats2down:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,16,csvWgtHF,csvWgtLF,csvWgtCF))*(DoWeights==1)+(DoWeights==0)*1.0",
-             #"dummyWeight_CSVLFStats2up:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,19,csvWgtHF,csvWgtLF,csvWgtCF))*(DoWeights==1)+(DoWeights==0)*1.0",
-             #"dummyWeight_CSVLFStats2down:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,20,csvWgtHF,csvWgtLF,csvWgtCF))*(DoWeights==1)+(DoWeights==0)*1.0",
-             #"dummyWeight_CSVCErr1up:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,21,csvWgtHF,csvWgtLF,csvWgtCF))*(DoWeights==1)+(DoWeights==0)*1.0",
-             #"dummyWeight_CSVCErr1down:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,22,csvWgtHF,csvWgtLF,csvWgtCF))*(DoWeights==1)+(DoWeights==0)*1.0",
-             #"dummyWeight_CSVCErr2up:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,23,csvWgtHF,csvWgtLF,csvWgtCF))*(DoWeights==1)+(DoWeights==0)*1.0",
-             #"dummyWeight_CSVCErr2down:=(1*TMath::Sign(1.0,Weight)*Weight_PU*"+muSF+"*csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,24,csvWgtHF,csvWgtLF,csvWgtCF))*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_CSVLFup:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,9,csvWgtHF,csvWgtLF,csvWgtCF))*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_CSVLFdown:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,10,csvWgtHF,csvWgtLF,csvWgtCF))*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_CSVHFup:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,11,csvWgtHF,csvWgtLF,csvWgtCF))*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_CSVHFdown:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,12,csvWgtHF,csvWgtLF,csvWgtCF))*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_CSVHFStats1up:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,13,csvWgtHF,csvWgtLF,csvWgtCF))*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_CSVHFStats1down:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,14,csvWgtHF,csvWgtLF,csvWgtCF))*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_CSVLFStats1up:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,17,csvWgtHF,csvWgtLF,csvWgtCF))*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_CSVLFStats1down:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,18,csvWgtHF,csvWgtLF,csvWgtCF))*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_CSVHFStats2up:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,15,csvWgtHF,csvWgtLF,csvWgtCF))*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_CSVHFStats2down:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,16,csvWgtHF,csvWgtLF,csvWgtCF))*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_CSVLFStats2up:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,19,csvWgtHF,csvWgtLF,csvWgtCF))*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_CSVLFStats2down:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,20,csvWgtHF,csvWgtLF,csvWgtCF))*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_CSVCErr1up:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,21,csvWgtHF,csvWgtLF,csvWgtCF))*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_CSVCErr1down:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,22,csvWgtHF,csvWgtLF,csvWgtCF))*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_CSVCErr2up:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,23,csvWgtHF,csvWgtLF,csvWgtCF))*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_CSVCErr2down:=(1*((Weight>0)-(Weight<0))*Weight_PU*"+muSF+"*csvReweighter.getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,24,csvWgtHF,csvWgtLF,csvWgtCF))*(DoWeights==1)+(DoWeights==0)*1.0",
             #####"rwtptup:=(2.0*(Weight_TopPt - 1.0)+1.0):=1*Weight_PU*Weight_CSV","rwtptdown:=Weight_TopPt:=1*Weight_PU*Weight_CSV",
-             #"dummyWeight_PUup:=(TMath::Sign(1.0,Weight)*Weight_PUup*"+muSF+"*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-             #"dummyWeight_PUdown:=(TMath::Sign(1.0,Weight)*Weight_PUdown*"+muSF+"*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_PUup:=(((Weight>0)-(Weight<0))*Weight_PUup*"+muSF+"*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+             #"dummyWeight_PUdown:=(((Weight>0)-(Weight<0))*Weight_PUdown*"+muSF+"*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
              #"QScaleTTLFUp:=Weight_muRupmuFup*"+usualweights+"/"+str(mu_up_sf),
              #"QScaleTTLFDown:=Weight_muRdownmuFdown*"+usualweights+"/"+str(mu_down_sf),
              #"QScaleTTBUp:=Weight_muRupmuFup*"+usualweights+"/"+str(mu_up_sf),
@@ -293,6 +294,10 @@ assert len(errorSystnames)==len(weightsystnames+othersystnames)
 samples_data_controlplots=[Sample('SingleMu',ROOT.kBlack,path_76x+'/mu_*/*nominal*.root',sel_singlemu,'SingleMu'),
                            Sample('SingleEl',ROOT.kBlack,path_76x+'/el_*/*nominal*.root',sel_singleel,'SingleEl')
                        ]
+
+samples_data_controlplots_bjn=[Sample('SingleMu',ROOT.kBlack,path_bjn+'/el_*/*nominal*.root',sel_singlemu,'SingleMu'),
+                               Sample('SingleEl',ROOT.kBlack,path_bjn+'/mu_*/*nominal*.root',sel_singleel,'SingleEl')
+                               ]
                        
 #samples_data_controlplots_swold=[Sample('SingleMu',ROOT.kBlack,path_swold+'/mu_*/*nominal*.root',sel_singlemu,'SingleMu'),
                            #Sample('SingleEl',ROOT.kBlack,path_swold+'/el_*/*nominal*.root',sel_singleel,'SingleEl')
@@ -307,6 +312,7 @@ samples_data_controlplots=[Sample('SingleMu',ROOT.kBlack,path_76x+'/mu_*/*nomina
 #ttbarMCweight_incl='*(0.0084896859)'
 #=======
 ttbarMCweight='*((N_BTagsM>=4)*((0.000919641*(N_GenTopHad==1 && N_GenTopLep==1)+0.0009753747*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS)+(0.0084896859/Weight_XS)*(N_BTagsM<4))'
+ttbarMCweightBJN='*(0.0084896859/2./Weight_XS)'
 #ttbarMCweight='*0.0084896859/Weight_XS'
 #>>>>>>> 69e2a4cf566105ed512b7dd9d5b1a3d3586dfe54
 samplesControlPlots=[Sample('t#bar{t}H',ROOT.kBlue+1,path_76x+'/ttH*/*nominal*.root',mcweight,'ttH',systs_all_samples) ,     
@@ -322,6 +328,21 @@ samplesControlPlots=[Sample('t#bar{t}H',ROOT.kBlue+1,path_76x+'/ttH*/*nominal*.r
          Sample('Diboson',ROOT.kAzure+2,path_76x+'/??/*nominal*.root',mcweightAll,'Diboson',systs_all_samples) , 
 #         Sample('QCD',ROOT.kYellow ,path_76x+'/QCD*/*nominal*root',mcweight,'QCD') , 
 ]
+
+samplesControlPlots_bjn=[Sample('t#bar{t}H',ROOT.kBlue+1,path_bjn+'/ttH*/*nominal*.root',mcweight,'ttH',systs_all_samples) ,     
+#         Sample('t#bar{t}',ROOT.kRed+1,path_bjn+'/ttbar/*nominal*.root',mcweight,'ttbar') ,     
+                         Sample('t#bar{t}+lf',ROOT.kRed-7,path_bjn+'/ttbar_????_*/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)'+ttbarMCweightBJN,'ttbarOther',systs_all_samples+systs_ttbar+systs_tt_lf,0.05),
+                         Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,path_bjn+'/ttbar_????_*/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==1)'+ttbarMCweightBJN,'ttbarPlusCCbar',systs_all_samples+systs_ttbar+systs_tt_cc,0.5),
+                         Sample('t#bar{t}+b',ROOT.kRed-2,path_bjn+'/ttbar_????_*/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==1)'+ttbarMCweightBJN,'ttbarPlusB',systs_all_samples+systs_ttbar+systs_tt_b,0.5),
+                         Sample('t#bar{t}+2b',ROOT.kRed+2,path_bjn+'/ttbar_????_*/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==2)'+ttbarMCweightBJN,'ttbarPlus2B',systs_all_samples+systs_ttbar+systs_tt_2b,0.5),
+                         Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,path_bjn+'/ttbar_????_*/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==3)'+ttbarMCweightBJN,'ttbarPlusBBbar',systs_all_samples+systs_ttbar+systs_tt_bb,0.5),  
+                         Sample('Single Top',ROOT.kMagenta,path_bjn+'/st*/*nominal*.root',mcweightAll,'SingleTop',systs_all_samples) , 
+                         Sample('V+jets',ROOT.kGreen-3,path_bjn+'/??ets*/*nominal*.root',mcweightAll,'Vjets',systs_all_samples) , 
+                         Sample('t#bar{t}+V',ROOT.kBlue-10,path_bjn+'/tt?_*/*nominal*.root',mcweightAll,'ttV',systs_all_samples),         
+                         Sample('Diboson',ROOT.kAzure+2,path_bjn+'/??/*nominal*.root',mcweightAll,'Diboson',systs_all_samples) , 
+                         #         Sample('QCD',ROOT.kYellow ,path_bjn+'/QCD*/*nominal*root',mcweight,'QCD') , 
+]
+
 
 ttbarMCweight='*((N_BTagsM>=4)*((0.000919641*(N_GenTopHad==1 && N_GenTopLep==1)+0.0009753747*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS)+(0.0084896859/Weight_XS)*(N_BTagsM<4))'
 
