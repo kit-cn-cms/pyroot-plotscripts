@@ -944,6 +944,7 @@ def createLLL_fromSuperHistoFileSyst(path,samples,plots,systnames=[""]):
             for syst in systnames:
                 ROOT.gDirectory.cd('PyROOT:/')               
                 key=sample.nick+'_'+plot.name+syst
+                print key
                 if not syst in sample.shape_unc: 
 #		    print "using nominal for ", key
                     l.append(nominal.Clone(key))
@@ -1523,6 +1524,22 @@ def getDataGraph(listOfHistosData,nunblinded):
         datahisto.Add(d)
     moveOverFlow(datahisto)
     data=ROOT.TGraphAsymmErrors(datahisto)
+    alpha = 1 - 0.6827
+    for i in range(0,data.GetN()):
+    
+      N = data.GetY()[i];
+      
+      L = 0
+      if N != 0:
+        L = ROOT.Math.gamma_quantile(alpha/2,N,1.)
+
+      U =  ROOT.Math.gamma_quantile_c(alpha/2,N+1,1)
+      
+      data.SetPointEYlow(i, N-L);
+      print "Error Down Hist: ", N-L
+      data.SetPointEYhigh(i, U-N);
+      print "Error Up Hist: ", U-N
+
     data.SetMarkerStyle(20)
     data.SetMarkerColor(ROOT.kBlack)
     data.SetLineColor(ROOT.kBlack)
@@ -1554,6 +1571,22 @@ def getDataGraphBlind(listOfHistosData,nunblinded):
         datahisto.Add(d)
     moveOverFlow(datahisto)
     data=ROOT.TGraphAsymmErrors(datahisto)
+    alpha = 1 - 0.6827
+    for i in range(0,data.GetN()):
+    
+      N = data.GetY()[i];
+      
+      L = 0
+      if N != 0:
+        L = ROOT.Math.gamma_quantile(alpha/2,N,1.)
+
+      U =  ROOT.Math.gamma_quantile_c(alpha/2,N+1,1)
+      
+      data.SetPointEYlow(i, N-L);
+      print "Error Down Hist: ", N-L
+      data.SetPointEYhigh(i, U-N);
+      print "Error Up Hist: ", U-N
+    
     data.SetMarkerStyle(20)
     data.SetMarkerSize(1.3)
     data.SetLineWidth(3)
