@@ -1536,9 +1536,7 @@ def getDataGraph(listOfHistosData,nunblinded):
       U =  ROOT.Math.gamma_quantile_c(alpha/2,N+1,1)
       
       data.SetPointEYlow(i, N-L);
-      print "Error Down Hist: ", N-L
       data.SetPointEYhigh(i, U-N);
-      print "Error Up Hist: ", U-N
 
     data.SetMarkerStyle(20)
     data.SetMarkerColor(ROOT.kBlack)
@@ -1583,9 +1581,7 @@ def getDataGraphBlind(listOfHistosData,nunblinded):
       U =  ROOT.Math.gamma_quantile_c(alpha/2,N+1,1)
       
       data.SetPointEYlow(i, N-L);
-      print "Error Down Hist: ", N-L
       data.SetPointEYhigh(i, U-N);
-      print "Error Up Hist: ", U-N
     
     data.SetMarkerStyle(20)
     data.SetMarkerSize(1.3)
@@ -1616,12 +1612,20 @@ def getDataGraphBlind(listOfHistosData,nunblinded):
 def getRatioGraph(data,mchisto):
     ratio=data.Clone()
     x, y = ROOT.Double(0), ROOT.Double(0)
+    minimum = 9999.
+    maximum = -9999.
     for i in range(0,data.GetN()):
         data.GetPoint(i,x,y)
         if mchisto.GetBinContent(i+1)>0:
-            ratio.SetPoint(i,x,y/mchisto.GetBinContent(i+1))
+            ratioval=y/mchisto.GetBinContent(i+1)
+            ratio.SetPoint(i,x,ratioval)
+            if ratioval>maximum and ratioval>0:
+              maximum=round(ratioval,1);
+            if ratioval<minimum and ratioval>0:
+              minimum=round(ratioval,1);
         else:
-            ratio.SetPoint(i,x,0)
+            ratio.SetPoint(i,x,-999)
+        
         if y>0:
             ratio.SetPointEYlow(i,1-(y-data.GetErrorYlow(i))/y)
             ratio.SetPointEYhigh(i,(y+data.GetErrorYhigh(i))/y-1)
@@ -1638,7 +1642,7 @@ def getRatioGraph(data,mchisto):
 #    for i in range(0,data.GetN()):
 #        data.SetPointEXlow(i,0)
 #        data.SetPointEXhigh(i,0)
-    return ratio
+    return ratio,minimum,maximum
 
 
 
@@ -1722,12 +1726,14 @@ def plotDataMC(listOfHistoListsData,listOfHistoLists,samples,name,logscale=False
         objects.append(label)
 
 
-        ratiograph=getRatioGraph(data,stackedListOfHistos[0])
+        ratiograph,ratiominimum,ratiomaximum=getRatioGraph(data,stackedListOfHistos[0])
         canvas.cd(2)
         line=listOfHistos[0].Clone()
         line.SetFillStyle(0)
         line.Divide(listOfHistos[0])
-        line.GetYaxis().SetRangeUser(0.5,1.6)
+        #line.GetYaxis().SetRangeUser(0.5,1.6)
+        line.GetYaxis().SetRangeUser(ratiominimum-0.2,ratiomaximum+0.2)
+        
         line.GetXaxis().SetRangeUser(listOfHistos[0].GetXaxis().GetXmin(),listOfHistos[0].GetXaxis().GetXmax())
         for i in range(line.GetNbinsX()+1):
             line.SetBinContent(i,1)
@@ -1904,12 +1910,14 @@ def plotDataMCwSysts(listOfHistoListsData,listOfHistoLists,ListSysHistosUp,ListS
         objects.append(label)
 
 
-        ratiograph=getRatioGraph(data,stackedListOfHistos[0])
+        ratiograph,ratiominimum,ratiomaximum=getRatioGraph(data,stackedListOfHistos[0])
         canvas.cd(2)
         line=listOfHistos[0].Clone()
         line.SetFillStyle(0)
         line.Divide(listOfHistos[0])
-        line.GetYaxis().SetRangeUser(0.5,1.6)
+        #line.GetYaxis().SetRangeUser(0.5,1.6)
+        line.GetYaxis().SetRangeUser(ratiominimum-0.2,ratiomaximum+0.2)
+
         line.GetXaxis().SetRangeUser(listOfHistos[0].GetXaxis().GetXmin(),listOfHistos[0].GetXaxis().GetXmax())
         for kbin in range(line.GetNbinsX()+1):
             line.SetBinContent(kbin,1)
@@ -2154,13 +2162,14 @@ def plotDataMCan(listOfHistoListsData,listOfHistoLists,samples,listOfhistosOnTop
         objects.append(label)
 
 
-        ratiograph=getRatioGraph(data,stackedListOfHistos[0])
+        ratiograph,ratiominimum,ratiomaximum=getRatioGraph(data,stackedListOfHistos[0])
         canvas.cd(2)
         line=listOfHistos[0].Clone()
         line.SetFillStyle(0)
         line.Divide(listOfHistos[0])
             
-        line.GetYaxis().SetRangeUser(0.5,1.6)
+        #line.GetYaxis().SetRangeUser(0.5,1.6)
+        line.GetYaxis().SetRangeUser(ratiominimum-0.2,ratiomaximum+0.2)
         line.GetXaxis().SetRangeUser(listOfHistos[0].GetXaxis().GetXmin(),listOfHistos[0].GetXaxis().GetXmax())
         for i in range(line.GetNbinsX()+2):
             line.SetBinContent(i,1)
@@ -2396,7 +2405,7 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         objects.append(label)
 
 
-        ratiograph=getRatioGraph(data,stackedListOfHistos[0])
+        ratiograph,ratiominimum,ratiomaximum=getRatioGraph(data,stackedListOfHistos[0])
         canvas.cd(2)
         line=listOfHistos[0].Clone()
         line.SetFillStyle(0)
@@ -2405,8 +2414,8 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         emptyHisto=listOfHistos[0].Clone()
         print emptyHisto.GetName()
         emptyHisto.SetFillStyle(0)
-            
-        line.GetYaxis().SetRangeUser(0.5,1.6)
+        #line.GetYaxis().SetRangeUser(0.5,1.6)
+        line.GetYaxis().SetRangeUser(ratiominimum-0.2,ratiomaximum+0.2)
         line.GetXaxis().SetRangeUser(listOfHistos[0].GetXaxis().GetXmin(),listOfHistos[0].GetXaxis().GetXmax())
         for i in range(line.GetNbinsX()+2):
             line.SetBinContent(i,1)
@@ -2658,7 +2667,7 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
         objects.append(label)
 
 
-        ratiograph=getRatioGraph(data,stackedListOfHistos[0])
+        ratiograph,ratiominimum,ratiomaximum=getRatioGraph(data,stackedListOfHistos[0])
         canvas.cd(2)
         line=listOfHistos[0].Clone()
         line.SetFillStyle(0)
@@ -2668,7 +2677,8 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
         print emptyHisto.GetName()
         emptyHisto.SetFillStyle(0)
             
-        line.GetYaxis().SetRangeUser(0.5,1.6)
+        #line.GetYaxis().SetRangeUser(0.5,1.6)
+        line.GetYaxis().SetRangeUser(ratiominimum-0.2,ratiomaximum+0.2)
         line.GetXaxis().SetRangeUser(listOfHistos[0].GetXaxis().GetXmin(),listOfHistos[0].GetXaxis().GetXmax())
         for i in range(line.GetNbinsX()+2):
             line.SetBinContent(i,1)
