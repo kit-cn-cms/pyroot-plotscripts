@@ -45,7 +45,7 @@ class Variable():
       self.arraylength=None
       return
      
-    self.arraylength=re.findall(r"\[(.*?)\]",b.split('/')[0])[0]
+    self.arraylength=re.findall(r"\[(.*?)\]",branchtitle.split('/')[0])[0]
     
     variables.initVar(tree,self.arraylength,self.arraylength,'I')
 
@@ -57,11 +57,13 @@ class Variable():
     
     self.mvavar=True
   
-    root = ET.parse(weightfile).getroot()
+    root = ET.parse(self.expression).getroot()
     for var in root.iter('Variable'):
       inputname=var.get('Internal')
       inputexpr=var.get('Expression')
       inputtype=var.get('Type')
+      
+      self.inputvariables.append(inputname)
       
       variables.initVar(tree,inputname,inputexpr,inputtype)
 
@@ -112,13 +114,14 @@ class Variable():
     if not self.mvavar:
       print 'Error! Trying to add input variables to TMVA reader for non MVA variable ',self.name,'!'
       return None
+    
     text=''
     for varname in self.inputvariables:
-      if not varname in variables:
+      if not varname in variables.variables:
         print 'Error! Input variable ',varname,' does not exist in input collection!'
         return None
       
-      var=variables[varname]
+      var=variables.variables[varname]
       text+='  r_'+self.name+'->AddVariable("'+var.expression+'", &'+var.name+');\n'
     return text
 
@@ -133,20 +136,20 @@ class Variable():
 
   
   # setup TMVA Reader
-  def setupTMVAReaderProgram(self):
+  def setupTMVAReaderProgram(self,variables):
     if not self.mvavar:
       print 'Error! Trying to setup TMVA Reader for non MVA variable ',self.name,'!'
       return None
     text=''
-    text+=initReaderProgram()
-    text+=addVariablesToReaderProgram(variables)
-    text+=bookMVAProgram()
+    text+=self.initReaderProgram()
+    text+=self.addVariablesToReaderProgram(variables)
+    text+=self.bookMVAProgram()
     text+='\n'
     return text
   
   
   # calculate variables not in Tree and MVA variables
-  def calculateVarProgram(self,variables):
+  def calculateVarProgram(self):
     text=''
     
     if not self.intree:
@@ -246,8 +249,12 @@ class Variables:
   # initialize variable
   def initVar(self,tree,name,expression='',vartype='F',arraylength=None):
     if not name in self.variables and not name in self.vetolist:
+      
+      if not ".xml" in expression and not hasattr(tree,expression):
+        self.initVarsFromExpr(expression,tree)
+        
       self.variables[name]=Variable(name,expression,vartype,arraylength)
-      self.variables[name].initVar(tree,self.variables)
+      self.variables[name].initVar(tree,self)
   
   
   # initialize variables from expression
@@ -297,7 +304,7 @@ class Variables:
     text=""
     for name,var in self.variables.iteritems():
       if var.mvavar:
-        text+=var.setupTMVAReaderProgram(self.variables)
+        text+=var.setupTMVAReaderProgram(self)
     return text
   
   
@@ -305,6 +312,6 @@ class Variables:
   def calculateVarsProgram(self):
     text=""
     for name,var in self.variables.iteritems():
-      text+=var.calculateVarProgram(self.variables)
+      text+=var.calculateVarProgram()
     text+='\n'
     return text

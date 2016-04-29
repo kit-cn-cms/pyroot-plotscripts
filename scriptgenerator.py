@@ -194,7 +194,7 @@ def compileProgram(scriptname):
   subprocess.call(cmd)
 
 
-def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],allsystweights=["1"]):
+def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],allsystweights=["1"],additionalvariables=[]):
   
   # collect variables
   # list varibles that should not be written to the program automatically
@@ -220,6 +220,10 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   # get standard variables
   standardvars=['Weight','Weight_CSV','Weight_XS']
   variables.initVarsFromExprList(standardvars,tree)
+  
+  # get additional variables
+  if len(additionalvariables)>0:
+    variables.initVarsFromExprList(additionalvariables,tree)
   
   # get systematic weight variables
   variables.initVarsFromExprList(allsystweights,tree)
@@ -247,7 +251,9 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
       variables.initVarsFromExpr(plot.variable2,tree)
   
     variables.initVarsFromExpr(plot.selection,tree)
-    
+  
+  
+  
   # write program
   # start writing program
   script=""
@@ -560,7 +566,7 @@ def check_jobs(scripts,outputs,nentries):
   return failed_jobs
 
 
-def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"]):
+def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[]):
   workdir=os.getcwd()+'/workdir/'+name
   outputpath=workdir+'/output.root'
   
@@ -586,7 +592,7 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   
   # create c++ program
   print 'creating c++ program'
-  createProgram(programpath,plots,samples,catnames,catselections,systnames,systweights)
+  createProgram(programpath,plots,samples,catnames,catselections,systnames,systweights,additionalvariables)
   if not os.path.exists(programpath+'.cc'):
     print 'could not create c++ program'
     sys.exit()

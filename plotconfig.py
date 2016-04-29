@@ -1,6 +1,5 @@
 import sys
 import os
-sys.path.insert(0, '../')
 from scriptgenerator import *
 from plotutils import *
 

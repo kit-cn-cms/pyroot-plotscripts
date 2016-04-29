@@ -1,7 +1,6 @@
 import sys
 import os
-sys.path.insert(0, '../limittools')
-sys.path.insert(0, '../')
+sys.path.insert(0, 'limittools')
 
 from scriptgenerator import *
 from plotutils import *
@@ -13,34 +12,10 @@ from limittools import calcLimits
 from limittools import replaceQ2scale
 from plotconfig import *
 
+# output name
+name='limits'
 
-#print "!!! NO MEMS ANYWHERE FOR TEST REASONS !!!"
-#print "!!! NO BOOSTED ANYWHERE FOR TEST REASONS !!!"
-
-name='common'
-
-bdtweightpath="/nfs/dust/cms/user/kelmorab/76xBDTWeights/"
-memexp='(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)'
-#memexp='1.0'
-
-
-nhistobins_=      [ 20,        4,      4,    	 20,    	4,     	4,    	20,   	20,  	6,       6, 	10    ]
-minxvals_=        [ -0.9,       0.,     0.,    -0.85,    	0.,    	0.,   	-0.8,  -0.8,   	0.,      0., 	-0.9  ]
-maxxvals_=        [ 0.85, 0.9, 0.9, 0.825,0.95,0.95,0.75,0.85,0.95,0.95,0.825 ] 
-
-discrs =          [bdtweightpath+'/weights_Final_43_76mem.xml', memexp, memexp, bdtweightpath+'/weights_Final_53_76mem.xml',memexp , memexp, bdtweightpath+'/weights_Final_62_76blr2.xml',bdtweightpath+'/weights_Final_63_76mem.xml',memexp, memexp,bdtweightpath+'/weights_Final_DB_boosted_76xmem.xml']
-
-nhistobins=[]
-minxvals=[]
-maxxvals=[]
-for n in nhistobins_:
-  nhistobins.append(n)
-for x in minxvals_:
-  minxvals.append(x)
-
-for x in maxxvals_:
-  maxxvals.append(x)
-
+# define categories
 boosted="(BoostedTopHiggs_TopHadCandidate_TopMVAOutput>=-0.485&&BoostedTopHiggs_HiggsCandidate_HiggsTag>=0.8925)"                        
 categories_=[("(N_Jets==4&&N_BTagsM==3)&&!"+boosted+"","ljets_j4_t3"),
             ("(N_Jets==4&&N_BTagsM>=4)&&!"+boosted+"","ljets_j4_t4"),
@@ -50,28 +25,47 @@ categories_=[("(N_Jets==4&&N_BTagsM==3)&&!"+boosted+"","ljets_j4_t3"),
             ("(N_Jets>=6&&N_BTagsM==3)&&!"+boosted+"","ljets_jge6_t3"),
             ("(N_Jets>=6&&N_BTagsM>=4)&&!"+boosted+"","ljets_jge6_tge4"),
             (boosted,"ljets_boosted")]
+
 categories=[]
 bdtcuts=[0.2,0.2,0.1,0.2,0.1,0.1,0.1,0.2]
-
 for cat,bdt in zip(categories_,bdtcuts):
   if cat[1] in ["ljets_jge6_tge4","ljets_j5_tge4","ljets_j4_t4"]:
-    categories.append(('('+cat[0]+')*(splitdummybdt'+cat[1]+'>'+str(bdt)+')',cat[1]+'_high') )
-    categories.append(('('+cat[0]+')*(splitdummybdt'+cat[1]+'<='+str(bdt)+')',cat[1]+'_low') )
+    categories.append(('('+cat[0]+')*(finalbdt_'+cat[1]+'>'+str(bdt)+')',cat[1]+'_high') )
+    categories.append(('('+cat[0]+')*(finalbdt_'+cat[1]+'<='+str(bdt)+')',cat[1]+'_low') )
   else:
-    categories.append(cat )
+    categories.append(cat)
 print categories
 
+# define MEM discriminator variable
+memexp='(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)'
 
-discrname='BDT'
+# define BDT output variables
+bdtweightpath="/nfs/dust/cms/user/kelmorab/76xBDTWeights/"
+additionalvariables=[
+                      'finalbdt_ljets_j4_t3:='+bdtweightpath+'/weights_Final_43_76mem.xml',
+                      'finalbdt_ljets_j4_t4:='+bdtweightpath+'/weights_Final_44_76blr.xml',
+                      'finalbdt_ljets_j5_t3:='+bdtweightpath+'/weights_Final_53_76mem.xml',
+                      'finalbdt_ljets_j5_tge4:='+bdtweightpath+'/weights_Final_54_76blr.xml',
+                      'finalbdt_ljets_jge6_t2:='+bdtweightpath+'/weights_Final_62_76blr2.xml',
+                      'finalbdt_ljets_jge6_t3:='+bdtweightpath+'/weights_Final_63_76mem.xml',
+                      'finalbdt_ljets_jge6_tge4:='+bdtweightpath+'/weights_Final_64_76blr.xml',
+                      'finalbdt_ljets_boosted:='+bdtweightpath+'/weights_Final_DB_boosted_76xmem.xml',
+]
 
+# set discriminator histograms configuration
+nhistobins= [   20,   4,   4,    20,    4,    4,   20,   20,    6,    6,    10 ]
+minxvals=   [ -0.9,  0.,  0., -0.85,   0.,   0., -0.8, -0.8,   0.,   0.,  -0.9 ]
+maxxvals=   [ 0.85, 0.9, 0.9, 0.825, 0.95, 0.95, 0.75, 0.85, 0.95, 0.95, 0.825 ] 
+
+discrs =    ['finalbdt_ljets_j4_t3', memexp, memexp, 'finalbdt_ljets_j5_t3', memexp, memexp, 'finalbdt_ljets_jge6_t2', 'finalbdt_ljets_jge6_t3', memexp, memexp, 'finalbdt_ljets_boosted']
+
+# get input for plotting function
 bins= [c[0] for c in categories]
 binlabels= [c[1] for c in categories]
 samples=samplesLimits
-
 allsystnames=weightsystnames+othersystnames
 
-# corresponding weight names
-
+# adapt weights for exlusive samples
 systsamples=[]
 for sample in samples:
   for sysname,sysfilename in zip(othersystnames,othersystfilenames):
@@ -101,45 +95,34 @@ for sample in samples:
 allsamples=samples+systsamples
 samplesdata=samples_data_controlplots
 
-helperbdts=[]
-
+# define plots
 bdts=[]
 print len(discrs),len(bins),len(binlabels),len(nhistobins),len(minxvals),len(maxxvals),
 print len(zip(discrs,bins,binlabels,nhistobins,minxvals,maxxvals))
 for discr,b,bl,nb,minx,maxx in zip(discrs,bins,binlabels,nhistobins,minxvals,maxxvals):
-  if bl == "ljets_jge6_tge4_high":
-    print "tst"
-    helperbdts.append(MVAPlot(ROOT.TH1F("splitdummybdt"+"ljets_jge6_tge4","BDT for splitting ("+bl+")",nb*10,-1.0,1.0),bdtweightpath+'/weights_Final_64_76blr.xml',b))
-  if bl == "ljets_j5_tge4_high":
-    helperbdts.append(MVAPlot(ROOT.TH1F("splitdummybdt"+"ljets_j5_tge4","BDT for splitting ("+bl+")",nb*10,-1.0,1.0),bdtweightpath+'/weights_Final_54_76blr.xml',b))
-  if bl == "ljets_j4_t4_high":
-    helperbdts.append(MVAPlot(ROOT.TH1F("splitdummybdt"+"ljets_j4_t4","BDT for splitting ("+bl+")",nb*10,-1.0,1.0),bdtweightpath+'/weights_Final_44_76blr.xml',b))
-  if '.xml' in discr:
-    bdts.append(MVAPlot(ROOT.TH1F(discrname+"_"+bl,"final discriminator ("+bl+")",nb,minx,maxx),discr,b))
-  else:
-    bdts.append(Plot(ROOT.TH1F(discrname+"_"+bl,"final discriminator ("+bl+")",nb,minx,maxx),discr,b))
-  print discr,b,bl,nb,minx,maxx
+  bdts.append(Plot(ROOT.TH1F("finaldiscr_"+bl,"final discriminator ("+bl+")",nb,minx,maxx),discr,b))
 
-#print "if cateries are correct press the \"any\" key"
-#raw_input()
+# plot everthing
+outputpath=plotParallel(name,500000,bdts+helperbdts,allsamples+samplesdata,[''],['1.'],weightsystnames,systweights,additionalvariables)
 
-outputpath=plotParallel(name,500000,bdts+helperbdts,allsamples+samplesdata,[''],['1.'],weightsystnames, systweights)
 if not os.path.exists(name):
   os.makedirs(name)
 
+# rename output histos and save in one file
 renameHistos(outputpath,name+'/'+name+'_limitInput.root',allsystnames)
 #replaceQ2scale( os.getcwd()+'/'+name+'/'+name+'_limitInput.root')
-#addPseudoData(name+'/'+name+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
-#########DANGERZONE##############
-addRealData(name+'/'+name+'_limitInput.root',[s.nick for s in samples_data_controlplots],binlabels,discrname)
-#################################
 
+# add real/pseudo data
+# addPseudoData(name+'/'+name+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
+addRealData(name+'/'+name+'_limitInput.root',[s.nick for s in samples_data_controlplots],binlabels,discrname)
+
+# make datacards
 listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,bdts)
 lolT=transposeLOL(listOfHistoLists)
 writeLOLAndOneOnTop(transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],20,name+'/'+name+'_controlplots')
 makeDatacards(name+'/'+name+'_limitInput.root',name+'/'+name+'_datacard',binlabels)
 
-##if askYesNo('Calculate limits?'):
-#limit=calcLimits(name+'/'+name+'_datacard',binlabels)
-#limit.dump()
-  
+# calculate limits
+if askYesNo('Calculate limits?'):
+limit=calcLimits(name+'/'+name+'_datacard',binlabels)
+limit.dump()
