@@ -198,7 +198,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   
   # collect variables
   # list varibles that should not be written to the program automatically
-  vetolist=['processname','DoWeights']
+  vetolist=['processname','DoWeights','TMath']
   
   # initialize variables object
   variables = variablebox.Variables(vetolist)
@@ -327,7 +327,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
           continue
         if variables.variables[v].arraylength != None:
           assert size_of_loop == None or size_of_loop == variables.variables[v].arraylength
-          size_of_loop=variablesmap[v].arraylength
+          size_of_loop=variables.variables[v].arraylength
       
       histoname=cn+n
       script+="\n"
@@ -338,6 +338,9 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
         script+="{\n"
         arrayselection=variables.checkArrayLengths(','.join([ex,pw]))
         weight='('+arrayselection+')*('+pwi+')*Weight_XS*categoryweight*sampleweight'
+        print histoname
+        print exi
+        print weight
         script+=fillHistoSyst(histoname,exi,weight,systnames,systweights)
         script+="      }\n"
       else:
@@ -369,7 +372,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
             continue
           if variables.variables[v].arraylength != None:
             assert size_of_loop == None or size_of_loop == variables.variables[v].arraylength
-            size_of_loop=variablesmap[v].arraylength
+            size_of_loop=variables.variables[v].arraylength
             
         
         histoname=cn+n

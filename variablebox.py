@@ -234,24 +234,33 @@ class Variables:
   
   # replaces all occurances of array variables with an instance i of that variable ( e.g. Jet_Pt -> Jet_Pt[3] )
   def getArrayEntries(self,expr,i):
+    print "getArrayEntries ", expr
     newexpr=expr
-    variables=varsNoIndex(expr)
+    variables=self.varsNoIndex(expr)
+    print variables
+    print self.variables
     for v in variables:
-      if v in self.variables.iteritems():
+      print "search ", v
+      if v in self.variables:
+	print "found"
         if self.variables[v].arraylength==None:
+	  print "no array"
           continue
         # substitute v by v[i]
         rexp=(v.encode('string-escape')+r"+\b(?!\[)")
         newexpr=re.sub(rexp,v+'['+str(i)+']',newexpr)
+        print "after subst ", newexpr
     return newexpr
   
   
   # initialize variable
   def initVar(self,tree,name,expression='',vartype='F',arraylength=None):
+    #print "initVar", tree,name,expression
     if not name in self.variables and not name in self.vetolist:
       
       if not ".xml" in expression and not hasattr(tree,expression):
         self.initVarsFromExpr(expression,tree)
+        #print expression
         
       self.variables[name]=Variable(name,expression,vartype,arraylength)
       self.variables[name].initVar(tree,self)
@@ -259,6 +268,7 @@ class Variables:
   
   # initialize variables from expression
   def initVarsFromExpr(self,expr,tree):
+    #print "initVarsFromExpr",expr,tree
     if ":=" in expr:
       name,expr=expr.split(":=")
       
@@ -271,6 +281,7 @@ class Variables:
       variablenames=self.varsIn(expr)
       
       for name in variablenames:
+	#print name
         self.initVar(tree,name,name,'F')
   
   
