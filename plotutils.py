@@ -970,7 +970,7 @@ def createErrorbands(lll,samples,DoRateSysts=True):
         llT=transposeLOL(ll)
         #print llT
         nominal=llT[0][0].Clone()
-#        print "addresses ", llT[0][0], nominal
+        print "addresses ", llT[0][0], nominal
         for h in llT[0][1:]:
             nominal.Add(h)
             #print h
@@ -1018,18 +1018,18 @@ def createErrorbands(lll,samples,DoRateSysts=True):
 	  #print sys, sys.Integral()
         for ibin in range(0,nominal.GetNbinsX()):
             nerr=nominal.GetBinError(ibin+1)
-            #print "Bin, name, content ",ibin, nominal.GetName(), nominal.GetBinContent(ibin+1)
+            print "Bin, name, content ",ibin, nominal.GetName(), nominal.GetBinContent(ibin+1)
             uperrors[ibin]=ROOT.TMath.Sqrt(uperrors[ibin]*uperrors[ibin]+nerr*nerr)
             downerrors[ibin]=ROOT.TMath.Sqrt(downerrors[ibin]*downerrors[ibin]+nerr*nerr)
             n=nominal.GetBinContent(ibin+1)
             ups=systs[0::2]
             downs=systs[1::2]
             for up,down in zip(ups,downs):
-	        #print "up/down name ", up.GetName(), down.GetName()
-	        #print "up/down diff ",  up.GetBinContent(ibin+1)-n, down.GetBinContent(ibin+1)-n
+	        print "up/down name ", up.GetName(), down.GetName()
+	        print "up/down diff ",  up.GetBinContent(ibin+1)-n, down.GetBinContent(ibin+1)-n
                 u_=up.GetBinContent(ibin+1)-n
                 d_=down.GetBinContent(ibin+1)-n
-                #print u_,d_
+                print u_,d_
                 if u_ >= 0 and u_ >= d_:
                     u=u_
                     if d_<0:
