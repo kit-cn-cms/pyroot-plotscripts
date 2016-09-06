@@ -127,7 +127,7 @@ class Cateogry:
 def setupHisto(histo,color,yTitle=None,filled=False):
     if isinstance(histo,ROOT.TH1):
         histo.SetStats(False)
-    print histo.GetTitle()
+    #print histo.GetTitle()
     if not isinstance(histo,ROOT.TH2):   
       if histo.GetYaxis().GetTitle()=="":
 	#print "setting up title"
@@ -142,7 +142,7 @@ def setupHisto(histo,color,yTitle=None,filled=False):
       if histo.GetYaxis().GetTitle()=="" and "VS" in histo.GetTitle() :
 	histo.GetYaxis().SetTitle(histo.GetTitle().split("VS",1)[1])
       histo.SetTitle('')
-    histo.GetYaxis().SetTitleOffset(1.3)
+    histo.GetYaxis().SetTitleOffset(1.4)
     histo.GetXaxis().SetTitleOffset(1.2)
     histo.GetYaxis().SetTitleSize(0.05)
     histo.GetXaxis().SetTitleSize(0.05)
@@ -609,8 +609,8 @@ def drawHistosOnCanvasAN(listOfHistos_,normalize=True,stack=False,logscale=False
 # writes canvases to pdf 
 def printCanvases(canvases,name):
 
-    print 'printing canvases!'
-    print canvases,name
+    #print 'printing canvases!'
+    #print canvases,name
     canvas=canvases[0]
     canvas.Print(name+'.pdf[')
     for c in canvases:
@@ -970,7 +970,7 @@ def createErrorbands(lll,samples,DoRateSysts=True):
         llT=transposeLOL(ll)
         #print llT
         nominal=llT[0][0].Clone()
-        print "addresses ", llT[0][0], nominal
+        #print "addresses ", llT[0][0], nominal
         for h in llT[0][1:]:
             nominal.Add(h)
             #print h
@@ -1018,18 +1018,18 @@ def createErrorbands(lll,samples,DoRateSysts=True):
 	  #print sys, sys.Integral()
         for ibin in range(0,nominal.GetNbinsX()):
             nerr=nominal.GetBinError(ibin+1)
-            print "Bin, name, content ",ibin, nominal.GetName(), nominal.GetBinContent(ibin+1)
+            #print "Bin, name, content ",ibin, nominal.GetName(), nominal.GetBinContent(ibin+1)
             uperrors[ibin]=ROOT.TMath.Sqrt(uperrors[ibin]*uperrors[ibin]+nerr*nerr)
             downerrors[ibin]=ROOT.TMath.Sqrt(downerrors[ibin]*downerrors[ibin]+nerr*nerr)
             n=nominal.GetBinContent(ibin+1)
             ups=systs[0::2]
             downs=systs[1::2]
             for up,down in zip(ups,downs):
-	        print "up/down name ", up.GetName(), down.GetName()
-	        print "up/down diff ",  up.GetBinContent(ibin+1)-n, down.GetBinContent(ibin+1)-n
+	        #print "up/down name ", up.GetName(), down.GetName()
+	        #print "up/down diff ",  up.GetBinContent(ibin+1)-n, down.GetBinContent(ibin+1)-n
                 u_=up.GetBinContent(ibin+1)-n
                 d_=down.GetBinContent(ibin+1)-n
-                print u_,d_
+                #print u_,d_
                 if u_ >= 0 and u_ >= d_:
                     u=u_
                     if d_<0:
@@ -1776,7 +1776,7 @@ def plotDataMCwSysts(listOfHistoListsData,listOfHistoLists,ListSysHistosUp,ListS
     print "listOfHistoLists", len(listOfHistoLists)
     # for every plot, look at all samples
     for listOfHistos,listOfHistosData,labeltext in zip(listOfHistoLists,listOfHistoListsData,labeltexts):
-        print "listOfHistos", len(listOfHistos), listOfHistos
+        #print "listOfHistos", len(listOfHistos), listOfHistos
         i+=1
         # setup histo style
         for histo,sample in zip(listOfHistos,samples):
@@ -1831,12 +1831,12 @@ def plotDataMCwSysts(listOfHistoListsData,listOfHistoLists,ListSysHistosUp,ListS
               thisbinErrorDown+=diffUp*diffUp
             else:
               thisbinErrorDown+=diffDown*diffDown
-            print stackedUp.GetName(), centralX, stackedDown.GetBinContent(thisbin), centralY, stackedUp.GetBinContent(thisbin), diffUp, diffDown
+            #print stackedUp.GetName(), centralX, stackedDown.GetBinContent(thisbin), centralY, stackedUp.GetBinContent(thisbin), diffUp, diffDown
           errorgraph.SetPoint(ibin, centralX,centralY)
           thisbinErrorUp+=thisStatUp*thisStatUp
           thisbinErrorDown+=thisStatDown*thisStatDown
-          print "stat error", thisStatDown, centralY, thisStatUp
-          print ROOT.TMath.Sqrt(thisbinErrorDown), ROOT.TMath.Sqrt(thisbinErrorUp)
+          #print "stat error", thisStatDown, centralY, thisStatUp
+          #print ROOT.TMath.Sqrt(thisbinErrorDown), ROOT.TMath.Sqrt(thisbinErrorUp)
           errorgraph.SetPointError(ibin, thisbinwidth/2.0,thisbinwidth/2.0,ROOT.TMath.Sqrt(thisbinErrorDown), ROOT.TMath.Sqrt(thisbinErrorUp))
           ratioerrorgraph.SetPoint(ibin,centralX, 1.0)
           relErrUp=0.0
@@ -1957,7 +1957,7 @@ def writeLOLAndOneOnTop(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,f
     canvases=[]
     objects=[]   
     i=0
-    print "ok"
+    #print "ok"
     
     for listOfHistos,ot in zip(listOfHistoLists,listOfhistosOnTop):
         print i
@@ -2236,7 +2236,7 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
       listOfErrorGraphs.append(thisgraphs)
     #for g in listOfErrorGraphs:
       #print g
-    print len(listOfhistosOnTop),len(listOfHistoLists),len(listOfHistoListsData),len(labeltexts),len(listOfErrorGraphs)
+    #print len(listOfhistosOnTop),len(listOfHistoLists),len(listOfHistoListsData),len(labeltexts),len(listOfErrorGraphs)
     #raw_input()
     for ot,listOfHistos,listOfHistosData,labeltext,errorgraphList in zip(listOfhistosOnTop,listOfHistoLists,listOfHistoListsData,labeltexts,listOfErrorGraphs):
         i+=1
@@ -2276,7 +2276,7 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         option='histo'
         option+=options
         h.DrawCopy(option)
-        print h.GetName()
+        #print h.GetName()
         #h.GetXaxis().SetBinLabel(1,"test")
         #draw remaining
         for h in stackedListOfHistos[1:]:
@@ -2380,7 +2380,10 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         #draw the lumi text on the canvas
         CMS_lumi.lumi_13TeV = "12.9 fb^{-1}"
         CMS_lumi.writeExtraText = 1
-        CMS_lumi.extraText = "Preliminary"
+        #CMS_lumi.extraText = "Preliminary"
+        CMS_lumi.extraText = ""
+        CMS_lumi.cmsText=""
+        
         CMS_lumi.lumi_sqrtS = "13 TeV" # used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
 
         CMS_lumi.cmsTextSize = 0.55
@@ -2415,7 +2418,10 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         print emptyHisto.GetName()
         emptyHisto.SetFillStyle(0)
         #line.GetYaxis().SetRangeUser(0.5,1.6)
-        line.GetYaxis().SetRangeUser(ratiominimum-0.2,ratiomaximum+0.2)
+        ## with this line you can let the ratio graph scale the y axis automatically
+        #line.GetYaxis().SetRangeUser(ratiominimum-0.2,ratiomaximum+0.2)
+        line.GetYaxis().SetRangeUser(0.4,1.65)
+        
         line.GetXaxis().SetRangeUser(listOfHistos[0].GetXaxis().GetXmin(),listOfHistos[0].GetXaxis().GetXmax())
         for i in range(line.GetNbinsX()+2):
             line.SetBinContent(i,1)
@@ -2642,7 +2648,9 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
         #draw the lumi text on the canvas
         CMS_lumi.lumi_13TeV = "12.9 fb^{-1}"
         CMS_lumi.writeExtraText = 1
-        CMS_lumi.extraText = "Preliminary"
+        #CMS_lumi.extraText = "Preliminary"
+        CMS_lumi.extraText = ""
+        CMS_lumi.cmsText=""
         CMS_lumi.lumi_sqrtS = "13 TeV" # used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
 
         CMS_lumi.cmsTextSize = 0.55

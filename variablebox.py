@@ -268,7 +268,7 @@ class Variables:
   
   # initialize variables from expression
   def initVarsFromExpr(self,expr,tree):
-    #print "initVarsFromExpr",expr,tree
+    print "initVarsFromExpr",expr,tree
     if ":=" in expr:
       name,expr=expr.split(":=")
       

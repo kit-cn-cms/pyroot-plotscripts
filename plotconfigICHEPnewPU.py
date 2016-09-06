@@ -137,8 +137,8 @@ CSVSystnames=[
 mcweightAll='12.9'
 mcweight='12.9'
 
-sfs="Weight_ElectronSFID*Weight_ElectronSFIso*Weight_MuonSFID*Weight_MuonSFTrigger*Weight_MuonSFIso*Weight_ElectronSFGFS*Weight_ElectronSFTrigger"
-usualweights="(1*Weight_PU*((Weight>0)-(Weight<0)))"+"*"+sfs
+sfs="Weight_ElectronSFID*Weight_MuonSFID*Weight_MuonSFIso*Weight_ElectronSFGFS*Weight_MuonSFHIP"
+usualweights="(1*Weight_pu69p2*((Weight>0)-(Weight<0)))"+"*"+sfs
 
 #ttbarMCweight='*((N_BTagsM>=4)*((0.000919641*(N_GenTopHad==1 && N_GenTopLep==1)+0.0009753747*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS)+(0.0084896859/Weight_XS)*(N_BTagsM<4))'
 #ttbarMCweight='*0.0084896859/Weight_XS'
@@ -169,9 +169,9 @@ systweights=[
                    "dummyWeight_CSVCErr1down:=("+usualweights+"*Weight_CSVCErr1down*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
                    "dummyWeight_CSVCErr2up:=("+usualweights+"*Weight_CSVCErr2up*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
                    "dummyWeight_CSVCErr2down:=("+usualweights+"*Weight_CSVCErr2down*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-                    ####"rwtptup:=(2.0*(Weight_TopPt - 1.0)+1.0):=1*Weight_PU*Weight_CSV","rwtptdown:=Weight_TopPt:=1*Weight_PU*Weight_CSV",
-                    #"dummyWeight_PUup:=(((Weight>0)-(Weight<0))*Weight_PUup)*(DoWeights==1)+(DoWeights==0)*1.0",
-                    #"dummyWeight_PUdown:=(((Weight>0)-(Weight<0))*Weight_PUdown)*(DoWeights==1)+(DoWeights==0)*1.0",
+                    ####"rwtptup:=(2.0*(Weight_TopPt - 1.0)+1.0):=1*Weight_pu69p2*Weight_CSV","rwtptdown:=Weight_TopPt:=1*Weight_pu69p2*Weight_CSV",
+                    #"dummyWeight_pu69p2up:=(((Weight>0)-(Weight<0))*Weight_pu69p2up)*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_pu69p2down:=(((Weight>0)-(Weight<0))*Weight_pu69p2down)*(DoWeights==1)+(DoWeights==0)*1.0",
                     ##"QScaleTTLFUp:=((1.01414811611*(N_Jets==4))+(0.991304934025*(N_Jets==5))+(0.963434636593*(N_Jets==6))+(0.939875721931*(N_Jets==7))+(0.917543113232*(N_Jets==8))+(0.8953820467*(N_Jets==9))+(0.873915433884*(N_Jets>=10)))*"+usualweights+"/"+str(mu_up_sf),
                     ##"QScaleTTLFDown:=((0.980245113373*(N_Jets==4))+(1.01328265667*(N_Jets==5))+(1.05405771732*(N_Jets==6))+(1.08945119381*(N_Jets==7))+(1.12380123138*(N_Jets==8))+(1.1570687294*(N_Jets==9))+(1.19215357304*(N_Jets>=10)))*"+usualweights+"/"+str(mu_down_sf),
                     #"QScaleTTBUp:=((1.00080752373*(N_Jets==4))+(0.98769146204*(N_Jets==5))+(0.959815919399*(N_Jets==6))+(0.937435746193*(N_Jets==7))+(0.916143894196*(N_Jets==8))+(0.894755899906*(N_Jets==9))+(0.868403971195*(N_Jets>=10)))*"+usualweights+"/"+str(mu_up_sf),
@@ -184,20 +184,20 @@ systweights=[
                     #"QScaleTTCCDown:=((1.00395655632*(N_Jets==4))+(1.03199350834*(N_Jets==5))+(1.06639623642*(N_Jets==6))+(1.10069298744*(N_Jets==7))+(1.13542354107*(N_Jets==8))+(1.16670846939*(N_Jets==9))+(1.19929921627*(N_Jets>=10)))*"+usualweights+"/"+str(mu_down_sf),
 #                    "PDFweightUp:=Weight_NNPDFid260067*"+usualweights+"/"+str(pdf_67_sf),
 #                    "PDFWeightDown:=Weight_NNPDFid260005*"+usualweights+"/"+str(pdf_05_sf),
-#                    "dummyCMS_ttH_ljets_TrigUp:="+"(1*Weight_PU*TMath::Sign(1.0,Weight)*"+"muonIDHelper.GetSF(muonPt,muonEta,0)*muonIsoHelper.GetSF(muonPt,muonEta,0)*muonTriggerHelper.GetSF(muonPt,muonEta,1)"+"*"+"electronIDHelper.GetSF(electronPt,electronEta,0)*electronIsoHelper.GetSF(electronPt,electronEta,0)*electronTriggerHelper.GetSF(electronPt,electronEta,1)"+"*Weight_CSV)"+"*(DoWeights==1)*(1.0*(N_TightMuons==1 && N_TightElectrons==0)+1.04*(N_TightMuons==0 && N_TightElectrons==1))+(DoWeights==0)*1.0",
-#                    "dummyCMS_ttH_ljets_TrigDown:="+"(1*Weight_PU*TMath::Sign(1.0,Weight)*"+"muonIDHelper.GetSF(muonPt,muonEta,0)*muonIsoHelper.GetSF(muonPt,muonEta,0)*muonTriggerHelper.GetSF(muonPt,muonEta,-1)"+"*"+"electronIDHelper.GetSF(electronPt,electronEta,0)*electronIsoHelper.GetSF(electronPt,electronEta,0)*electronTriggerHelper.GetSF(electronPt,electronEta,-1)"+"*Weight_CSV)"+"*(DoWeights==1)*(1.0*(N_TightMuons==1 && N_TightElectrons==0)+0.96*(N_TightMuons==0 && N_TightElectrons==1))+(DoWeights==0)*1.0",
-#                    "dummyCMS_ttH_ljets_Trig_elUp:="+"(1*Weight_PU*TMath::Sign(1.0,Weight)*"+muSF+"*"+"electronIDHelper.GetSF(electronPt,electronEta,0)*electronIsoHelper.GetSF(electronPt,electronEta,0)*electronTriggerHelper.GetSF(electronPt,electronEta,1)"+"*Weight_CSV)"+"*(DoWeights==1)*(1.01*(N_TightElectrons==1)+1.0*(N_TightElectrons==0))+(DoWeights==0)*1.0",
-#                    "dummyCMS_ttH_ljets_Trig_elDown:="+"(1*Weight_PU*TMath::Sign(1.0,Weight)*"+muSF+"*"+"electronIDHelper.GetSF(electronPt,electronEta,0)*electronIsoHelper.GetSF(electronPt,electronEta,0)*electronTriggerHelper.GetSF(electronPt,electronEta,-1)"+"*Weight_CSV)"+"*(DoWeights==1)*(0.99*(N_TightElectrons==1)+1.0*(N_TightElectrons==0))+(DoWeights==0)*1.0",
-#                    "dummyCMS_ttH_eff_leptonUp:="+"(1*Weight_PU*TMath::Sign(1.0,Weight)*"+"muonIDHelper.GetSF(muonPt,muonEta,1)*muonIsoHelper.GetSF(muonPt,muonEta,1)*muonTriggerHelper.GetSF(muonPt,muonEta,0)"+"*"+"electronIDHelper.GetSF(electronPt,electronEta,1)*electronIsoHelper.GetSF(electronPt,electronEta,1)*electronTriggerHelper.GetSF(electronPt,electronEta,0)"+"*Weight_CSV)"+"*(DoWeights==1)*(1.0*(N_TightMuons==1 && N_TightElectrons==0)+1.04*(N_TightMuons==0 && N_TightElectrons==1))+(DoWeights==0)*1.0",
-#                    "dummyCMS_ttH_eff_leptonDown:="+"(1*Weight_PU*TMath::Sign(1.0,Weight)*"+"muonIDHelper.GetSF(muonPt,muonEta,-1)*muonIsoHelper.GetSF(muonPt,muonEta,-1)*muonTriggerHelper.GetSF(muonPt,muonEta,0)"+"*"+"electronIDHelper.GetSF(electronPt,electronEta,-1)*electronIsoHelper.GetSF(electronPt,electronEta,-1)*electronTriggerHelper.GetSF(electronPt,electronEta,0)"+"*Weight_CSV)"+"*(DoWeights==1)*(1.0*(N_TightMuons==1 && N_TightElectrons==0)+0.96*(N_TightMuons==0 && N_TightElectrons==1))+(DoWeights==0)*1.0",
-#                    "dummyCMS_ttH_eff_elUp:="+"(1*Weight_PU*TMath::Sign(1.0,Weight)*"+muSF+"*"+"electronIDHelper.GetSF(electronPt,electronEta,1)*electronIsoHelper.GetSF(electronPt,electronEta,1)*electronTriggerHelper.GetSF(electronPt,electronEta,0)"+"*Weight_CSV)"+"*(DoWeights==1)*(1.01*(N_TightElectrons==1)+1.0*(N_TightElectrons==0))+(DoWeights==0)*1.0",
-#                    "dummyCMS_ttH_eff_elDown:="+"(1*Weight_PU*TMath::Sign(1.0,Weight)*"+muSF+"*"+"electronIDHelper.GetSF(electronPt,electronEta,1)*electronIsoHelper.GetSF(electronPt,electronEta,1)*electronTriggerHelper.GetSF(electronPt,electronEta,0)"+"*Weight_CSV)"+"*(DoWeights==1)*(0.99*(N_TightElectrons==1)+1.0*(N_TightElectrons==0))+(DoWeights==0)*1.0",
-#                    "MuonIDUp:=(1*Weight_PU*muonIDHelper.GetSF(muonPt,muonEta,1)*muonIsoHelper.GetSF(muonPt,muonEta,0)*muonTriggerHelper.GetSF(muonPt,muonEta,0)*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-#                    "MuonIDDown:=(1*Weight_PU*muonIDHelper.GetSF(muonPt,muonEta,-1)*muonIsoHelper.GetSF(muonPt,muonEta,0)*muonTriggerHelper.GetSF(muonPt,muonEta,0)*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-#                    "MuonIsoUp:=(1*Weight_PU*muonIDHelper.GetSF(muonPt,muonEta,0)*muonIsoHelper.GetSF(muonPt,muonEta,1)*muonTriggerHelper.GetSF(muonPt,muonEta,0)*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-#                    "MuonIsoDown:=(1*Weight_PU*muonIDHelper.GetSF(muonPt,muonEta,0)*muonIsoHelper.GetSF(muonPt,muonEta,-1)*muonTriggerHelper.GetSF(muonPt,muonEta,0)*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-#                    "MuonTriggerUp:=(1*Weight_PU*muonIDHelper.GetSF(muonPt,muonEta,0)*muonIsoHelper.GetSF(muonPt,muonEta,0)*muonTriggerHelper.GetSF(muonPt,muonEta,1)*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-#                    "MuonTriggerDown:=(1*Weight_PU*muonIDHelper.GetSF(muonPt,muonEta,0)*muonIsoHelper.GetSF(muonPt,muonEta,0)*muonTriggerHelper.GetSF(muonPt,muonEta,-1)*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+#                    "dummyCMS_ttH_ljets_TrigUp:="+"(1*Weight_pu69p2*TMath::Sign(1.0,Weight)*"+"muonIDHelper.GetSF(muonPt,muonEta,0)*muonIsoHelper.GetSF(muonPt,muonEta,0)*muonTriggerHelper.GetSF(muonPt,muonEta,1)"+"*"+"electronIDHelper.GetSF(electronPt,electronEta,0)*electronIsoHelper.GetSF(electronPt,electronEta,0)*electronTriggerHelper.GetSF(electronPt,electronEta,1)"+"*Weight_CSV)"+"*(DoWeights==1)*(1.0*(N_TightMuons==1 && N_TightElectrons==0)+1.04*(N_TightMuons==0 && N_TightElectrons==1))+(DoWeights==0)*1.0",
+#                    "dummyCMS_ttH_ljets_TrigDown:="+"(1*Weight_pu69p2*TMath::Sign(1.0,Weight)*"+"muonIDHelper.GetSF(muonPt,muonEta,0)*muonIsoHelper.GetSF(muonPt,muonEta,0)*muonTriggerHelper.GetSF(muonPt,muonEta,-1)"+"*"+"electronIDHelper.GetSF(electronPt,electronEta,0)*electronIsoHelper.GetSF(electronPt,electronEta,0)*electronTriggerHelper.GetSF(electronPt,electronEta,-1)"+"*Weight_CSV)"+"*(DoWeights==1)*(1.0*(N_TightMuons==1 && N_TightElectrons==0)+0.96*(N_TightMuons==0 && N_TightElectrons==1))+(DoWeights==0)*1.0",
+#                    "dummyCMS_ttH_ljets_Trig_elUp:="+"(1*Weight_pu69p2*TMath::Sign(1.0,Weight)*"+muSF+"*"+"electronIDHelper.GetSF(electronPt,electronEta,0)*electronIsoHelper.GetSF(electronPt,electronEta,0)*electronTriggerHelper.GetSF(electronPt,electronEta,1)"+"*Weight_CSV)"+"*(DoWeights==1)*(1.01*(N_TightElectrons==1)+1.0*(N_TightElectrons==0))+(DoWeights==0)*1.0",
+#                    "dummyCMS_ttH_ljets_Trig_elDown:="+"(1*Weight_pu69p2*TMath::Sign(1.0,Weight)*"+muSF+"*"+"electronIDHelper.GetSF(electronPt,electronEta,0)*electronIsoHelper.GetSF(electronPt,electronEta,0)*electronTriggerHelper.GetSF(electronPt,electronEta,-1)"+"*Weight_CSV)"+"*(DoWeights==1)*(0.99*(N_TightElectrons==1)+1.0*(N_TightElectrons==0))+(DoWeights==0)*1.0",
+#                    "dummyCMS_ttH_eff_leptonUp:="+"(1*Weight_pu69p2*TMath::Sign(1.0,Weight)*"+"muonIDHelper.GetSF(muonPt,muonEta,1)*muonIsoHelper.GetSF(muonPt,muonEta,1)*muonTriggerHelper.GetSF(muonPt,muonEta,0)"+"*"+"electronIDHelper.GetSF(electronPt,electronEta,1)*electronIsoHelper.GetSF(electronPt,electronEta,1)*electronTriggerHelper.GetSF(electronPt,electronEta,0)"+"*Weight_CSV)"+"*(DoWeights==1)*(1.0*(N_TightMuons==1 && N_TightElectrons==0)+1.04*(N_TightMuons==0 && N_TightElectrons==1))+(DoWeights==0)*1.0",
+#                    "dummyCMS_ttH_eff_leptonDown:="+"(1*Weight_pu69p2*TMath::Sign(1.0,Weight)*"+"muonIDHelper.GetSF(muonPt,muonEta,-1)*muonIsoHelper.GetSF(muonPt,muonEta,-1)*muonTriggerHelper.GetSF(muonPt,muonEta,0)"+"*"+"electronIDHelper.GetSF(electronPt,electronEta,-1)*electronIsoHelper.GetSF(electronPt,electronEta,-1)*electronTriggerHelper.GetSF(electronPt,electronEta,0)"+"*Weight_CSV)"+"*(DoWeights==1)*(1.0*(N_TightMuons==1 && N_TightElectrons==0)+0.96*(N_TightMuons==0 && N_TightElectrons==1))+(DoWeights==0)*1.0",
+#                    "dummyCMS_ttH_eff_elUp:="+"(1*Weight_pu69p2*TMath::Sign(1.0,Weight)*"+muSF+"*"+"electronIDHelper.GetSF(electronPt,electronEta,1)*electronIsoHelper.GetSF(electronPt,electronEta,1)*electronTriggerHelper.GetSF(electronPt,electronEta,0)"+"*Weight_CSV)"+"*(DoWeights==1)*(1.01*(N_TightElectrons==1)+1.0*(N_TightElectrons==0))+(DoWeights==0)*1.0",
+#                    "dummyCMS_ttH_eff_elDown:="+"(1*Weight_pu69p2*TMath::Sign(1.0,Weight)*"+muSF+"*"+"electronIDHelper.GetSF(electronPt,electronEta,1)*electronIsoHelper.GetSF(electronPt,electronEta,1)*electronTriggerHelper.GetSF(electronPt,electronEta,0)"+"*Weight_CSV)"+"*(DoWeights==1)*(0.99*(N_TightElectrons==1)+1.0*(N_TightElectrons==0))+(DoWeights==0)*1.0",
+#                    "MuonIDUp:=(1*Weight_pu69p2*muonIDHelper.GetSF(muonPt,muonEta,1)*muonIsoHelper.GetSF(muonPt,muonEta,0)*muonTriggerHelper.GetSF(muonPt,muonEta,0)*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+#                    "MuonIDDown:=(1*Weight_pu69p2*muonIDHelper.GetSF(muonPt,muonEta,-1)*muonIsoHelper.GetSF(muonPt,muonEta,0)*muonTriggerHelper.GetSF(muonPt,muonEta,0)*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+#                    "MuonIsoUp:=(1*Weight_pu69p2*muonIDHelper.GetSF(muonPt,muonEta,0)*muonIsoHelper.GetSF(muonPt,muonEta,1)*muonTriggerHelper.GetSF(muonPt,muonEta,0)*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+#                    "MuonIsoDown:=(1*Weight_pu69p2*muonIDHelper.GetSF(muonPt,muonEta,0)*muonIsoHelper.GetSF(muonPt,muonEta,-1)*muonTriggerHelper.GetSF(muonPt,muonEta,0)*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+#                    "MuonTriggerUp:=(1*Weight_pu69p2*muonIDHelper.GetSF(muonPt,muonEta,0)*muonIsoHelper.GetSF(muonPt,muonEta,0)*muonTriggerHelper.GetSF(muonPt,muonEta,1)*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+#                    "MuonTriggerDown:=(1*Weight_pu69p2*muonIDHelper.GetSF(muonPt,muonEta,0)*muonIsoHelper.GetSF(muonPt,muonEta,0)*muonTriggerHelper.GetSF(muonPt,muonEta,-1)*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
 #                    "dummyWeight_CMS_res_jUp:=JERUpWeight*"+usualweights+"*(DoWeights==1)+(DoWeights==0)*1.0",
 #                    "dummyWeight_CMS_res_jDown:=JERDownWeight*"+usualweights+"*(DoWeights==1)+(DoWeights==0)*1.0"
 ]
@@ -226,7 +226,7 @@ assert len(errorSystnames)==len(weightsystnames+othersystnames)
 
 # samples
 # input path 
-path_80x="/nfs/dust/cms/user/kelmorab/samples80X_BaseLine"
+path_80x="/nfs/dust/cms/user/kelmorab/samples80X_ICHEP_V1"
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
 samples_data_controlplots=[
@@ -268,7 +268,7 @@ samplesLimits=[
                     Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,path_80x+'/ttbar_????_*/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==3)','ttbarPlusBBbar',systs_all_samples+systs_ttbar+systs_tt_bb,0.5),
                     Sample('Single Top',ROOT.kMagenta,path_80x+'/st*/*nominal*.root',mcweightAll,'singlet',systs_all_samples) , 
                     #Sample('Z+jets',ROOT.kGreen-3,path_80x+'/Zjets*/*nominal*.root',mcweightAll,'zjets',systs_all_samples) , 
-                    Sample('W+jets',ROOT.kGreen-7,path_80x+'/WJets*/*nominal*.root',mcweightAll,'wjets',systs_all_samples) , 
+                    #Sample('W+jets',ROOT.kGreen-7,path_80x+'/WJets*/*nominal*.root',mcweightAll,'wjets',systs_all_samples) , 
                     #Sample('t#bar{t}+W',ROOT.kBlue-10,path_80x+'/ttW_*/*nominal*.root',mcweightAll,'ttbarW',systs_all_samples),
                     #Sample('t#bar{t}+Z',ROOT.kBlue-6,path_80x+'/ttZ_*/*nominal*.root',mcweightAll,'ttbarZ',systs_all_samples),
                     #Sample('Diboson',ROOT.kAzure+2,path_80x+'/??/*nominal*.root',mcweightAll,'diboson',systs_all_samples) , 

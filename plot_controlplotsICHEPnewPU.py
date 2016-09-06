@@ -2,11 +2,11 @@
 # plot general control distributions 
 ##############
 
-from plotconfig import *
+from plotconfigICHEPnewPU import *
 sys.path.insert(0, 'limittools')
 from limittools import renameHistos
 
-name='controlplots'
+name='controlplotsICHEPnewPU'
 
 # selections
 boosted="(BoostedTopHiggs_TopHadCandidate_TopMVAOutput>=-0.485&&BoostedTopHiggs_HiggsCandidate_HiggsTag>=0.8925)"
@@ -187,45 +187,45 @@ plots=[
 #        Plot(ROOT.TH1F("commonBDT43","BDT w/o MEM in training",10,-1,1),"BDT_common5_output",'N_BTagsM==3&&N_Jets==4','4 jets, 3 b-tags'),
 #        Plot(ROOT.TH1F("MEM43","MEM discriminator",10,0,1),"(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)",'(N_BTagsM==3&&N_Jets==4)',""),
        
-        #Plot(ROOT.TH1F("N_BoostedJets","Number of fat jets",5,0,5),"N_BoostedJets",plotselection,plotlabelboosted),
-        #Plot(ROOT.TH1F("BoostedJet_Pt","p_{T} of fat jet",40,200,600),"BoostedJet_Pt[0]",plotselection,plotlabelboosted),
-        #Plot(ROOT.TH1F("BoostedJet_Eta","#eta of fat jet",40,-2.5,2.5),"BoostedJet_Eta[0]",plotselection,plotlabelboosted),
-        #Plot(ROOT.TH1F("BoostedJet_M","invariant mass of fat jet",40,0,1000),"BoostedJet_M[0]",plotselection,plotlabelboosted),
-        #Plot(ROOT.TH1F("BoostedJet_Bbtag_Pt","p_{T} of B subjet",40,0,400),"BoostedJet_B_Pt[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
-        #Plot(ROOT.TH1F("BoostedJet_W1btag_Pt","p_{T} of W1 subjet",40,0,400),"BoostedJet_W1_Pt[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
-        #Plot(ROOT.TH1F("BoostedJet_W2btag_Pt","p_{T} of W2 subjet",40,0,200),"BoostedJet_W2_Pt[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
-        #Plot(ROOT.TH1F("BoostedJet_Bbtag_Eta","#eta of B subjet",40,-2.5,2.5),"BoostedJet_B_Eta[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
-        #Plot(ROOT.TH1F("BoostedJet_W1btag_Eta","#eta of W1 subjet",40,-2.5,2.5),"BoostedJet_W1_Eta[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
-        #Plot(ROOT.TH1F("BoostedJet_W2btag_Eta","#eta of W2 subjet",40,-2.5,2.5),"BoostedJet_W2_Eta[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
-        #Plot(ROOT.TH1F("BoostedJet_Top_Pt","p_{T} of boosted top",40,100,500),"BoostedJet_Top_Pt[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
-        #Plot(ROOT.TH1F("BoostedJet_Top_Eta","#eta of boosted top",40,-2.5,2.5),"BoostedJet_Top_Eta[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
-        #Plot(ROOT.TH1F("BoostedJet_Wbtag_Pt","p_{T} of W",40,0,500),"BoostedJet_Wbtag_Pt[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
-        #Plot(ROOT.TH1F("BoostedJet_Wbtag_Eta","#eta of W",40,-2.5,2.5),"BoostedJet_Wbtag_Eta[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
-        #Plot(ROOT.TH1F("BoostedJet_PrunedMass","pruned mass of hardest fat jet",40,0,400),"BoostedJet_PrunedMass[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
-        #Plot(ROOT.TH1F("BoostedJet_Top_M","invariant mass of top",40,0,300),"BoostedJet_Top_M[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
-        #Plot(ROOT.TH1F("BoostedJet_Wbtag_M","invariant mass of W",40,0,200),"BoostedJet_Wbtag_M[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
-        #Plot(ROOT.TH1F("BoostedJet_BW1btag_M","invariant mass of B and W1",40,0,250),"BoostedJet_BW1btag_M[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
-        #Plot(ROOT.TH1F("BoostedJet_BW2btag_M","invariant mass of B and W2",40,0,250),"BoostedJet_BW2btag_M[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
-        #Plot(ROOT.TH1F("BoostedJet_MRatio_Wbtag_Top","W and top mass ratio",40,0.,1.),"BoostedJet_Wbtag_M[0]/BoostedJet_Top_M[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
-        #Plot(ROOT.TH1F("BoostedJet_fRec","Difference to true W top mass ratio",40,0.,.6),"BoostedJet_fRec[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
-        #Plot(ROOT.TH1F("BoostedJet_Bbtag_CSV","CSV output of B",40,-0.1,1.),"BoostedJet_Bbtag_CSV[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
-        #Plot(ROOT.TH1F("BoostedJet_W1btag_CSV","CSV output of W1",40,-0.1,1.),"BoostedJet_W1btag_CSV[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
-        #Plot(ROOT.TH1F("BoostedJet_W2btag_CSV","CSV output of W2",40,-0.1,1.),"BoostedJet_W2btag_CSV[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
-        #Plot(ROOT.TH1F("BoostedJet_Tau21Filtered","#tau_2/#tau_1",40,0.,1.),"BoostedJet_Tau2Filtered[0]/BoostedJet_Tau1Filtered[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
-        #Plot(ROOT.TH1F("BoostedJet_Tau32Filtered","#tau_3/#tau_2",40,0.,1.),"BoostedJet_Tau3Filtered[0]/BoostedJet_Tau2Filtered[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
-        #Plot(ROOT.TH1F("BoostedJet_DRoptRoptCalc","D_{opt}-D_{opt}^{calc}",40,-2.,1.),"BoostedJet_Ropt-BoostedJet_RoptCalc",plotselection+"&&"+toptaggersel,plotlabelboosted),
-        #Plot(ROOT.TH1F("BoostedJet_TopTag_BDT_Std","BDT top tagger output of hardest fat jet",40,-1.,1.),"BoostedJet_TopTag_BDT_Std[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
-        #Plot(ROOT.TH1F("BoostedJet_Filterjet1_Pt","p_{T} of hardest filterjet",40,0,400),"BoostedJet_Filterjet1_Pt[0]",plotselection+"&&"+higgstaggersel,plotlabelboosted),
-        #Plot(ROOT.TH1F("BoostedJet_Filterjet2_Pt","p_{T} of second hardest filterjet",40,0,300),"BoostedJet_Filterjet2_Pt[0]",plotselection+"&&"+higgstaggersel,plotlabelboosted),
-##        Plot(ROOT.TH1F("BoostedJet_Filterjet3_Pt","p_{T} of third hardest filterjet",40,0,200),"BoostedJet_Filterjet3_Pt[0]",plotselection+"&&"+higgstaggersel,plotlabelboosted),
-        #Plot(ROOT.TH1F("BoostedJet_Filterjet1_Eta","#eta of hardest filterjet",40,-2.5,2.5),"BoostedJet_Filterjet1_Eta[0]",plotselection+"&&"+higgstaggersel,plotlabelboosted),
-        #Plot(ROOT.TH1F("BoostedJet_Filterjet2_Eta","#eta of second hardest filterjet",40,-2.5,2.5),"BoostedJet_Filterjet2_Eta[0]",plotselection+"&&"+higgstaggersel,plotlabelboosted),
-##        Plot(ROOT.TH1F("BoostedJet_Filterjet3_Eta","#eta of third hardest filterjet",40,-2.5,2.5),"BoostedJet_Filterjet3_Eta[0]",plotselection+"&&"+higgstaggersel,plotlabelboosted),
-        #Plot(ROOT.TH1F("BoostedJet_Filterjet1_CSV","CSV output of hardest filterjet",40,-0.1,1.0),"BoostedJet_Filterjet1_CSV[0]",plotselection+"&&"+higgstaggersel,plotlabelboosted),
-        #Plot(ROOT.TH1F("BoostedJet_Filterjet2_CSV","CSV output of second hardest filterjet",40,-0.1,1.0),"BoostedJet_Filterjet2_CSV[0]",plotselection+"&&"+higgstaggersel,plotlabelboosted),
-##        Plot(ROOT.TH1F("BoostedJet_Filterjet3_CSV","CSV output of third hardest filterjet",40,-0.1,1.0),"BoostedJet_Filterjet3_CSV[0]",plotselection+"&&"+higgstaggersel,plotlabelboosted),
+        Plot(ROOT.TH1F("N_BoostedJets","Number of fat jets",5,0,5),"N_BoostedJets",plotselection,plotlabelboosted),
+        Plot(ROOT.TH1F("BoostedJet_Pt","p_{T} of fat jet",40,200,600),"BoostedJet_Pt[0]",plotselection,plotlabelboosted),
+        Plot(ROOT.TH1F("BoostedJet_Eta","#eta of fat jet",40,-2.5,2.5),"BoostedJet_Eta[0]",plotselection,plotlabelboosted),
+        Plot(ROOT.TH1F("BoostedJet_M","invariant mass of fat jet",40,0,1000),"BoostedJet_M[0]",plotselection,plotlabelboosted),
+        Plot(ROOT.TH1F("BoostedJet_Bbtag_Pt","p_{T} of B subjet",40,0,400),"BoostedJet_B_Pt[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
+        Plot(ROOT.TH1F("BoostedJet_W1btag_Pt","p_{T} of W1 subjet",40,0,400),"BoostedJet_W1_Pt[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
+        Plot(ROOT.TH1F("BoostedJet_W2btag_Pt","p_{T} of W2 subjet",40,0,200),"BoostedJet_W2_Pt[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
+        Plot(ROOT.TH1F("BoostedJet_Bbtag_Eta","#eta of B subjet",40,-2.5,2.5),"BoostedJet_B_Eta[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
+        Plot(ROOT.TH1F("BoostedJet_W1btag_Eta","#eta of W1 subjet",40,-2.5,2.5),"BoostedJet_W1_Eta[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
+        Plot(ROOT.TH1F("BoostedJet_W2btag_Eta","#eta of W2 subjet",40,-2.5,2.5),"BoostedJet_W2_Eta[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
+        Plot(ROOT.TH1F("BoostedJet_Top_Pt","p_{T} of boosted top",40,100,500),"BoostedJet_Top_Pt[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
+        Plot(ROOT.TH1F("BoostedJet_Top_Eta","#eta of boosted top",40,-2.5,2.5),"BoostedJet_Top_Eta[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
+        Plot(ROOT.TH1F("BoostedJet_Wbtag_Pt","p_{T} of W",40,0,500),"BoostedJet_Wbtag_Pt[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
+        Plot(ROOT.TH1F("BoostedJet_Wbtag_Eta","#eta of W",40,-2.5,2.5),"BoostedJet_Wbtag_Eta[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
+        Plot(ROOT.TH1F("BoostedJet_PrunedMass","pruned mass of hardest fat jet",40,0,400),"BoostedJet_PrunedMass[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
+        Plot(ROOT.TH1F("BoostedJet_Top_M","invariant mass of top",40,0,300),"BoostedJet_Top_M[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
+        Plot(ROOT.TH1F("BoostedJet_Wbtag_M","invariant mass of W",40,0,200),"BoostedJet_Wbtag_M[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
+        Plot(ROOT.TH1F("BoostedJet_BW1btag_M","invariant mass of B and W1",40,0,250),"BoostedJet_BW1btag_M[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
+        Plot(ROOT.TH1F("BoostedJet_BW2btag_M","invariant mass of B and W2",40,0,250),"BoostedJet_BW2btag_M[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
+        Plot(ROOT.TH1F("BoostedJet_MRatio_Wbtag_Top","W and top mass ratio",40,0.,1.),"BoostedJet_Wbtag_M[0]/BoostedJet_Top_M[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
+        Plot(ROOT.TH1F("BoostedJet_fRec","Difference to true W top mass ratio",40,0.,.6),"BoostedJet_fRec[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
+        Plot(ROOT.TH1F("BoostedJet_Bbtag_CSV","CSV output of B",40,-0.1,1.),"BoostedJet_Bbtag_CSV[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
+        Plot(ROOT.TH1F("BoostedJet_W1btag_CSV","CSV output of W1",40,-0.1,1.),"BoostedJet_W1btag_CSV[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
+        Plot(ROOT.TH1F("BoostedJet_W2btag_CSV","CSV output of W2",40,-0.1,1.),"BoostedJet_W2btag_CSV[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
+        Plot(ROOT.TH1F("BoostedJet_Tau21Filtered","#tau_2/#tau_1",40,0.,1.),"BoostedJet_Tau2Filtered[0]/BoostedJet_Tau1Filtered[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
+        Plot(ROOT.TH1F("BoostedJet_Tau32Filtered","#tau_3/#tau_2",40,0.,1.),"BoostedJet_Tau3Filtered[0]/BoostedJet_Tau2Filtered[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
+        Plot(ROOT.TH1F("BoostedJet_DRoptRoptCalc","D_{opt}-D_{opt}^{calc}",40,-2.,1.),"BoostedJet_Ropt-BoostedJet_RoptCalc",plotselection+"&&"+toptaggersel,plotlabelboosted),
+        Plot(ROOT.TH1F("BoostedJet_TopTag_BDT_Std","BDT top tagger output of hardest fat jet",40,-1.,1.),"BoostedJet_TopTag_BDT_Std[0]",plotselection+"&&"+toptaggersel,plotlabelboosted),
+        Plot(ROOT.TH1F("BoostedJet_Filterjet1_Pt","p_{T} of hardest filterjet",40,0,400),"BoostedJet_Filterjet1_Pt[0]",plotselection+"&&"+higgstaggersel,plotlabelboosted),
+        Plot(ROOT.TH1F("BoostedJet_Filterjet2_Pt","p_{T} of second hardest filterjet",40,0,300),"BoostedJet_Filterjet2_Pt[0]",plotselection+"&&"+higgstaggersel,plotlabelboosted),
+       Plot(ROOT.TH1F("BoostedJet_Filterjet3_Pt","p_{T} of third hardest filterjet",40,0,200),"BoostedJet_Filterjet3_Pt[0]",plotselection+"&&"+higgstaggersel,plotlabelboosted),
+        Plot(ROOT.TH1F("BoostedJet_Filterjet1_Eta","#eta of hardest filterjet",40,-2.5,2.5),"BoostedJet_Filterjet1_Eta[0]",plotselection+"&&"+higgstaggersel,plotlabelboosted),
+        Plot(ROOT.TH1F("BoostedJet_Filterjet2_Eta","#eta of second hardest filterjet",40,-2.5,2.5),"BoostedJet_Filterjet2_Eta[0]",plotselection+"&&"+higgstaggersel,plotlabelboosted),
+       Plot(ROOT.TH1F("BoostedJet_Filterjet3_Eta","#eta of third hardest filterjet",40,-2.5,2.5),"BoostedJet_Filterjet3_Eta[0]",plotselection+"&&"+higgstaggersel,plotlabelboosted),
+        Plot(ROOT.TH1F("BoostedJet_Filterjet1_CSV","CSV output of hardest filterjet",40,-0.1,1.0),"BoostedJet_Filterjet1_CSV[0]",plotselection+"&&"+higgstaggersel,plotlabelboosted),
+        Plot(ROOT.TH1F("BoostedJet_Filterjet2_CSV","CSV output of second hardest filterjet",40,-0.1,1.0),"BoostedJet_Filterjet2_CSV[0]",plotselection+"&&"+higgstaggersel,plotlabelboosted),
+       Plot(ROOT.TH1F("BoostedJet_Filterjet3_CSV","CSV output of third hardest filterjet",40,-0.1,1.0),"BoostedJet_Filterjet3_CSV[0]",plotselection+"&&"+higgstaggersel,plotlabelboosted),
         #Plot(ROOT.TH1F("BoostedJet_Mbb","invariant mass of Higgs candidate",40,0,300),"BoostedJet_Mbb[0]",plotselection+"&&"+higgstaggersel,plotlabelboosted),
-        #Plot(ROOT.TH1F("BoostedJet_HiggsTag_SecondCSV","second highest filterjet CSV output",40,-.1,1.),"BoostedJet_HiggsTag_SecondCSV[0]",plotselection+"&&"+higgstaggersel,plotlabelboosted),
+        Plot(ROOT.TH1F("BoostedJet_HiggsTag_SecondCSV","second highest filterjet CSV output",40,-.1,1.),"BoostedJet_HiggsTag_SecondCSV[0]",plotselection+"&&"+higgstaggersel,plotlabelboosted),
 
 #        Plot(ROOT.TH1F("Evt_Deta_JetsAverage","avg #Delta #eta (jet,jet)", 60,0.0,3),"",plotselection,plotlabel),
         Plot(ROOT.TH1F("Evt_Deta_UntaggedJetsAverage","avg #Delta #eta (untagged,untagged)",45,0.,4.5),"Evt_Deta_UntaggedJetsAverage",plotselection,plotlabel),
@@ -267,123 +267,123 @@ plotlabel="1 lepton, 4 jets, 2 b-tags"
 plotselection="((N_Jets==4&&N_BTagsM==2)&&!"+boosted+")"
 plotprefix="4j2t"
 plots42=[
-#        Plot(ROOT.TH1F(plotprefix+"Evt_Deta_JetsAverage","Evt_Deta_JetsAverage", 60,0.0,3),"Evt_Deta_JetsAverage",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Evt_Deta_2JetsAverage","Evt_Deta_2JetsAverage", 60,0.0,3),"Evt_Deta_2JetsAverage",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Evt_Deta_3JetsAverage","Evt_Deta_3JetsAverage", 60,0.0,3),"Evt_Deta_3JetsAverage",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Evt_Deta_4JetsAverage","Evt_Deta_4JetsAverage", 60,0.0,3),"Evt_Deta_4JetsAverage",plotselection,plotlabel),
-#
-#        Plot(ROOT.TH1F(plotprefix+"Evt_Deta_UntaggedJetsAverage","Evt_Deta_UntaggedJetsAverage",45,0.,4.5),"Evt_Deta_UntaggedJetsAverage",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Evt_Deta_TaggedJetsAverage","Evt_Deta_TaggedJetsAverage",45,0.,4.5),"Evt_Deta_TaggedJetsAverage",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Evt_Deta_2TaggedJetsAverage","Evt_Deta_2TaggedJetsAverage", 60,0.0,3),"Evt_Deta_2TaggedJetsAverage",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Evt_Deta_3TaggedJetsAverage","Evt_Deta_3TaggedJetsAverage", 60,0.0,3),"Evt_Deta_3TaggedJetsAverage",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Evt_Deta_4TaggedJetsAverage","Evt_Deta_4TaggedJetsAverage", 60,0.0,3),"Evt_Deta_4TaggedJetsAverage",plotselection,plotlabel),
-#
-#        Plot(ROOT.TH1F(plotprefix+"Evt_Dr_JetsAverage","Evt_Dr_JetsAverage",35,0.5,4.),"Evt_Dr_JetsAverage",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Evt_Dr_TaggedJetsAverage","Evt_Dr_TaggedJetsAverage",45,0.4,4.9),"Evt_Dr_TaggedJetsAverage",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Evt_Dr_2JetsAverage","Evt_Dr_2JetsAverage",35,0.5,4.),"Evt_Dr_2JetsAverage",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Evt_Dr_2TaggedJetsAverage","Evt_Dr_2TaggedJetsAverage",45,0.4,4.9),"Evt_Dr_2TaggedJetsAverage",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Evt_Dr_3JetsAverage","Evt_Dr_3JetsAverage",35,0.5,4.),"Evt_Dr_3JetsAverage",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Evt_Dr_3TaggedJetsAverage","Evt_Dr_3TaggedJetsAverage",45,0.4,4.9),"Evt_Dr_3TaggedJetsAverage",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Evt_Dr_4JetsAverage","Evt_Dr_4JetsAverage",35,0.5,4.),"Evt_Dr_4JetsAverage",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Evt_Dr_4TaggedJetsAverage","Evt_Dr_4TaggedJetsAverage",45,0.4,4.9),"Evt_Dr_4TaggedJetsAverage",plotselection,plotlabel),
-#
-#        Plot(ROOT.TH1F(plotprefix+"Evt_Dr_UntaggedJetsAverage","Evt_Dr_UntaggedJetsAverage",50,0.,5),"Evt_Dr_UntaggedJetsAverage",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Evt_M2_JetsAverage","Evt_M2_JetsAverage",50,0,250),"Evt_M2_JetsAverage",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Evt_M2_UntaggedJetsAverage","Evt_M2_UntaggedJetsAverage",50,0.,250),"Evt_M2_UntaggedJetsAverage",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Evt_M2_TaggedJetsAverage","Evt_M2_TaggedJetsAverage",50,0.,250),"Evt_M2_TaggedJetsAverage",plotselection,plotlabel),
-#
-#        Plot(ROOT.TH1F(plotprefix+"Evt_M2_2JetsAverage","Evt_M2_2JetsAverage",50,0,250),"Evt_M2_2JetsAverage",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Evt_M2_2TaggedJetsAverage","Evt_M2_2TaggedJetsAverage",50,0.,250),"Evt_M2_2TaggedJetsAverage",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Evt_M2_3JetsAverage","Evt_M2_3JetsAverage",50,0,250),"Evt_M2_3JetsAverage",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Evt_M2_3TaggedJetsAverage","Evt_M2_3TaggedJetsAverage",50,0.,250),"Evt_M2_3TaggedJetsAverage",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Evt_M2_4JetsAverage","Evt_M2_4JetsAverage",50,0,250),"Evt_M2_4JetsAverage",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Evt_M2_4TaggedJetsAverage","Evt_M2_4TaggedJetsAverage",50,0.,250),"Evt_M2_4TaggedJetsAverage",plotselection,plotlabel),
-#
-#        Plot(ROOT.TH1F(plotprefix+"Evt_M_MinDeltaRJets","Evt_M_MinDeltaRJets",30,0.,150),"Evt_M_MinDeltaRJets",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Evt_M_MinDeltaRTaggedJets","Evt_M_MinDeltaRTaggedJets",45,0.,450),"Evt_M_MinDeltaRTaggedJets",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Evt_M_MinDeltaRUntaggedJets","Evt_M_MinDeltaRUntaggedJets",45,0.,450),"Evt_M_MinDeltaRUntaggedJets",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Evt_M_MinDeltaRLeptonJet","Evt_M_MinDeltaRLeptonJet",60,0.4,3.4),"Evt_M_MinDeltaRLeptonJet",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Evt_Dr_MinDeltaRJets","Evt_Dr_MinDeltaRJets",50,0.,5.0),"Evt_Dr_MinDeltaRJets",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Evt_Dr_MinDeltaRTaggedJets","Evt_Dr_MinDeltaRTaggedJets",50,0.,5.0),"Evt_Dr_MinDeltaRTaggedJets",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Evt_Dr_MinDeltaRUntaggedJets","Evt_Dr_MinDeltaRUntaggedJets",50,0.,5.0),"Evt_Dr_MinDeltaRUntaggedJets",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Evt_Dr_MinDeltaRLeptonJet","Evt_Dr_MinDeltaRLeptonJet",60,0.4,3.4),"Evt_Dr_MinDeltaRLeptonJet",plotselection,plotlabel),
-#
-#        Plot(ROOT.TH1F(plotprefix+"Evt_Jet_MaxDeta_Jets","Evt_Jet_MaxDeta_Jets",50,0.,5.0),"Evt_Jet_MaxDeta_Jets",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Evt_TaggedJet_MaxDeta_Jets","Evt_TaggedJet_MaxDeta_Jets",50,0.,5.0),"Evt_TaggedJet_MaxDeta_Jets",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Evt_TaggedJet_MaxDeta_TaggedJets","Evt_TaggedJet_MaxDeta_TaggedJets",60,0.,6.0),"Evt_TaggedJet_MaxDeta_TaggedJets",plotselection,plotlabel),
-#
-#        Plot(ROOT.TH1F(plotprefix+"Evt_M_Total","Evt_M_Total",40,0.,4000),"Evt_M_Total",plotselection,plotlabel),
-#
-#        Plot(ROOT.TH1F(plotprefix+"Evt_H0","Evt_H0",40,0.5,4.5),"Evt_H0",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Evt_H1","Evt_H1",60,-0.2,0.4),"Evt_H1",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Evt_H2","Evt_H2",60,-0.2,0.4),"Evt_H2",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Evt_H3","Evt_H3",50,-0.05,1.05),"Evt_H3",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Evt_H4","Evt_H4",50,-0.15,0.35),"Evt_H4",plotselection,plotlabel),
-#
-#        Plot(ROOT.TH1F(plotprefix+"Sphericity","Sphericity",50,0,1),"Evt_Sphericity",plotselection,plotlabel),
-#        Plot(ROOT.TH1F(plotprefix+"Aplanarity","Aplanarity",50,0,0.5),"Evt_Aplanarity",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Deta_JetsAverage","Evt_Deta_JetsAverage", 60,0.0,3),"Evt_Deta_JetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Deta_2JetsAverage","Evt_Deta_2JetsAverage", 60,0.0,3),"Evt_Deta_2JetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Deta_3JetsAverage","Evt_Deta_3JetsAverage", 60,0.0,3),"Evt_Deta_3JetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Deta_4JetsAverage","Evt_Deta_4JetsAverage", 60,0.0,3),"Evt_Deta_4JetsAverage",plotselection,plotlabel),
+
+       Plot(ROOT.TH1F(plotprefix+"Evt_Deta_UntaggedJetsAverage","Evt_Deta_UntaggedJetsAverage",45,0.,4.5),"Evt_Deta_UntaggedJetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Deta_TaggedJetsAverage","Evt_Deta_TaggedJetsAverage",45,0.,4.5),"Evt_Deta_TaggedJetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Deta_2TaggedJetsAverage","Evt_Deta_2TaggedJetsAverage", 60,0.0,3),"Evt_Deta_2TaggedJetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Deta_3TaggedJetsAverage","Evt_Deta_3TaggedJetsAverage", 60,0.0,3),"Evt_Deta_3TaggedJetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Deta_4TaggedJetsAverage","Evt_Deta_4TaggedJetsAverage", 60,0.0,3),"Evt_Deta_4TaggedJetsAverage",plotselection,plotlabel),
+
+       Plot(ROOT.TH1F(plotprefix+"Evt_Dr_JetsAverage","Evt_Dr_JetsAverage",35,0.5,4.),"Evt_Dr_JetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Dr_TaggedJetsAverage","Evt_Dr_TaggedJetsAverage",45,0.4,4.9),"Evt_Dr_TaggedJetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Dr_2JetsAverage","Evt_Dr_2JetsAverage",35,0.5,4.),"Evt_Dr_2JetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Dr_2TaggedJetsAverage","Evt_Dr_2TaggedJetsAverage",45,0.4,4.9),"Evt_Dr_2TaggedJetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Dr_3JetsAverage","Evt_Dr_3JetsAverage",35,0.5,4.),"Evt_Dr_3JetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Dr_3TaggedJetsAverage","Evt_Dr_3TaggedJetsAverage",45,0.4,4.9),"Evt_Dr_3TaggedJetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Dr_4JetsAverage","Evt_Dr_4JetsAverage",35,0.5,4.),"Evt_Dr_4JetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Dr_4TaggedJetsAverage","Evt_Dr_4TaggedJetsAverage",45,0.4,4.9),"Evt_Dr_4TaggedJetsAverage",plotselection,plotlabel),
+
+       Plot(ROOT.TH1F(plotprefix+"Evt_Dr_UntaggedJetsAverage","Evt_Dr_UntaggedJetsAverage",50,0.,5),"Evt_Dr_UntaggedJetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_M2_JetsAverage","Evt_M2_JetsAverage",50,0,250),"Evt_M2_JetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_M2_UntaggedJetsAverage","Evt_M2_UntaggedJetsAverage",50,0.,250),"Evt_M2_UntaggedJetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_M2_TaggedJetsAverage","Evt_M2_TaggedJetsAverage",50,0.,250),"Evt_M2_TaggedJetsAverage",plotselection,plotlabel),
+
+       Plot(ROOT.TH1F(plotprefix+"Evt_M2_2JetsAverage","Evt_M2_2JetsAverage",50,0,250),"Evt_M2_2JetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_M2_2TaggedJetsAverage","Evt_M2_2TaggedJetsAverage",50,0.,250),"Evt_M2_2TaggedJetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_M2_3JetsAverage","Evt_M2_3JetsAverage",50,0,250),"Evt_M2_3JetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_M2_3TaggedJetsAverage","Evt_M2_3TaggedJetsAverage",50,0.,250),"Evt_M2_3TaggedJetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_M2_4JetsAverage","Evt_M2_4JetsAverage",50,0,250),"Evt_M2_4JetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_M2_4TaggedJetsAverage","Evt_M2_4TaggedJetsAverage",50,0.,250),"Evt_M2_4TaggedJetsAverage",plotselection,plotlabel),
+
+       Plot(ROOT.TH1F(plotprefix+"Evt_M_MinDeltaRJets","Evt_M_MinDeltaRJets",30,0.,150),"Evt_M_MinDeltaRJets",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_M_MinDeltaRTaggedJets","Evt_M_MinDeltaRTaggedJets",45,0.,450),"Evt_M_MinDeltaRTaggedJets",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_M_MinDeltaRUntaggedJets","Evt_M_MinDeltaRUntaggedJets",45,0.,450),"Evt_M_MinDeltaRUntaggedJets",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_M_MinDeltaRLeptonJet","Evt_M_MinDeltaRLeptonJet",60,0.4,3.4),"Evt_M_MinDeltaRLeptonJet",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Dr_MinDeltaRJets","Evt_Dr_MinDeltaRJets",50,0.,5.0),"Evt_Dr_MinDeltaRJets",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Dr_MinDeltaRTaggedJets","Evt_Dr_MinDeltaRTaggedJets",50,0.,5.0),"Evt_Dr_MinDeltaRTaggedJets",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Dr_MinDeltaRUntaggedJets","Evt_Dr_MinDeltaRUntaggedJets",50,0.,5.0),"Evt_Dr_MinDeltaRUntaggedJets",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Dr_MinDeltaRLeptonJet","Evt_Dr_MinDeltaRLeptonJet",60,0.4,3.4),"Evt_Dr_MinDeltaRLeptonJet",plotselection,plotlabel),
+
+       Plot(ROOT.TH1F(plotprefix+"Evt_Jet_MaxDeta_Jets","Evt_Jet_MaxDeta_Jets",50,0.,5.0),"Evt_Jet_MaxDeta_Jets",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_TaggedJet_MaxDeta_Jets","Evt_TaggedJet_MaxDeta_Jets",50,0.,5.0),"Evt_TaggedJet_MaxDeta_Jets",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_TaggedJet_MaxDeta_TaggedJets","Evt_TaggedJet_MaxDeta_TaggedJets",60,0.,6.0),"Evt_TaggedJet_MaxDeta_TaggedJets",plotselection,plotlabel),
+
+       Plot(ROOT.TH1F(plotprefix+"Evt_M_Total","Evt_M_Total",40,0.,4000),"Evt_M_Total",plotselection,plotlabel),
+
+       Plot(ROOT.TH1F(plotprefix+"Evt_H0","Evt_H0",40,0.5,4.5),"Evt_H0",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_H1","Evt_H1",60,-0.2,0.4),"Evt_H1",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_H2","Evt_H2",60,-0.2,0.4),"Evt_H2",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_H3","Evt_H3",50,-0.05,1.05),"Evt_H3",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_H4","Evt_H4",50,-0.15,0.35),"Evt_H4",plotselection,plotlabel),
+
+       Plot(ROOT.TH1F(plotprefix+"Sphericity","Sphericity",50,0,1),"Evt_Sphericity",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Aplanarity","Aplanarity",50,0,0.5),"Evt_Aplanarity",plotselection,plotlabel),
 ]
 
 plotlabel="1 lepton, 5 jets, 2 b-tags"
 plotselection="((N_Jets==5&&N_BTagsM==2)&&!"+boosted+")"
 plotprefix="s52_"
 plots52=[
-       #Plot(ROOT.TH1F(plotprefix+"Evt_Deta_JetsAverage","Evt_Deta_JetsAverage", 60,0.0,3),"Evt_Deta_JetsAverage",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Evt_Deta_2JetsAverage","Evt_Deta_2JetsAverage", 60,0.0,3),"Evt_Deta_2JetsAverage",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Evt_Deta_3JetsAverage","Evt_Deta_3JetsAverage", 60,0.0,3),"Evt_Deta_3JetsAverage",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Evt_Deta_4JetsAverage","Evt_Deta_4JetsAverage", 60,0.0,3),"Evt_Deta_4JetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Deta_JetsAverage","Evt_Deta_JetsAverage", 60,0.0,3),"Evt_Deta_JetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Deta_2JetsAverage","Evt_Deta_2JetsAverage", 60,0.0,3),"Evt_Deta_2JetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Deta_3JetsAverage","Evt_Deta_3JetsAverage", 60,0.0,3),"Evt_Deta_3JetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Deta_4JetsAverage","Evt_Deta_4JetsAverage", 60,0.0,3),"Evt_Deta_4JetsAverage",plotselection,plotlabel),
 
 
-       #Plot(ROOT.TH1F(plotprefix+"Evt_Deta_UntaggedJetsAverage","Evt_Deta_UntaggedJetsAverage",45,0.,4.5),"Evt_Deta_UntaggedJetsAverage",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Evt_Deta_TaggedJetsAverage","Evt_Deta_TaggedJetsAverage",45,0.,4.5),"Evt_Deta_TaggedJetsAverage",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Evt_Deta_2TaggedJetsAverage","Evt_Deta_2TaggedJetsAverage", 60,0.0,3),"Evt_Deta_2TaggedJetsAverage",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Evt_Deta_3TaggedJetsAverage","Evt_Deta_3TaggedJetsAverage", 60,0.0,3),"Evt_Deta_3TaggedJetsAverage",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Evt_Deta_4TaggedJetsAverage","Evt_Deta_4TaggedJetsAverage", 60,0.0,3),"Evt_Deta_4TaggedJetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Deta_UntaggedJetsAverage","Evt_Deta_UntaggedJetsAverage",45,0.,4.5),"Evt_Deta_UntaggedJetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Deta_TaggedJetsAverage","Evt_Deta_TaggedJetsAverage",45,0.,4.5),"Evt_Deta_TaggedJetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Deta_2TaggedJetsAverage","Evt_Deta_2TaggedJetsAverage", 60,0.0,3),"Evt_Deta_2TaggedJetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Deta_3TaggedJetsAverage","Evt_Deta_3TaggedJetsAverage", 60,0.0,3),"Evt_Deta_3TaggedJetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Deta_4TaggedJetsAverage","Evt_Deta_4TaggedJetsAverage", 60,0.0,3),"Evt_Deta_4TaggedJetsAverage",plotselection,plotlabel),
 
-       #Plot(ROOT.TH1F(plotprefix+"Evt_Dr_JetsAverage","Evt_Dr_JetsAverage",35,0.5,4.),"Evt_Dr_JetsAverage",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Evt_Dr_TaggedJetsAverage","Evt_Dr_TaggedJetsAverage",45,0.4,4.9),"Evt_Dr_TaggedJetsAverage",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Evt_Dr_2JetsAverage","Evt_Dr_2JetsAverage",35,0.5,4.),"Evt_Dr_2JetsAverage",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Evt_Dr_2TaggedJetsAverage","Evt_Dr_2TaggedJetsAverage",45,0.4,4.9),"Evt_Dr_2TaggedJetsAverage",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Evt_Dr_3JetsAverage","Evt_Dr_3JetsAverage",35,0.5,4.),"Evt_Dr_3JetsAverage",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Evt_Dr_3TaggedJetsAverage","Evt_Dr_3TaggedJetsAverage",45,0.4,4.9),"Evt_Dr_3TaggedJetsAverage",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Evt_Dr_4JetsAverage","Evt_Dr_4JetsAverage",35,0.5,4.),"Evt_Dr_4JetsAverage",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Evt_Dr_4TaggedJetsAverage","Evt_Dr_4TaggedJetsAverage",45,0.4,4.9),"Evt_Dr_4TaggedJetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Dr_JetsAverage","Evt_Dr_JetsAverage",35,0.5,4.),"Evt_Dr_JetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Dr_TaggedJetsAverage","Evt_Dr_TaggedJetsAverage",45,0.4,4.9),"Evt_Dr_TaggedJetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Dr_2JetsAverage","Evt_Dr_2JetsAverage",35,0.5,4.),"Evt_Dr_2JetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Dr_2TaggedJetsAverage","Evt_Dr_2TaggedJetsAverage",45,0.4,4.9),"Evt_Dr_2TaggedJetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Dr_3JetsAverage","Evt_Dr_3JetsAverage",35,0.5,4.),"Evt_Dr_3JetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Dr_3TaggedJetsAverage","Evt_Dr_3TaggedJetsAverage",45,0.4,4.9),"Evt_Dr_3TaggedJetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Dr_4JetsAverage","Evt_Dr_4JetsAverage",35,0.5,4.),"Evt_Dr_4JetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Dr_4TaggedJetsAverage","Evt_Dr_4TaggedJetsAverage",45,0.4,4.9),"Evt_Dr_4TaggedJetsAverage",plotselection,plotlabel),
 
-       #Plot(ROOT.TH1F(plotprefix+"Evt_Dr_UntaggedJetsAverage","Evt_Dr_UntaggedJetsAverage",50,0.,5),"Evt_Dr_UntaggedJetsAverage",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Evt_M2_JetsAverage","Evt_M2_JetsAverage",50,0,250),"Evt_M2_JetsAverage",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Evt_M2_UntaggedJetsAverage","Evt_M2_UntaggedJetsAverage",50,0.,250),"Evt_M2_UntaggedJetsAverage",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Evt_M2_TaggedJetsAverage","Evt_M2_TaggedJetsAverage",50,0.,250),"Evt_M2_TaggedJetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Dr_UntaggedJetsAverage","Evt_Dr_UntaggedJetsAverage",50,0.,5),"Evt_Dr_UntaggedJetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_M2_JetsAverage","Evt_M2_JetsAverage",50,0,250),"Evt_M2_JetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_M2_UntaggedJetsAverage","Evt_M2_UntaggedJetsAverage",50,0.,250),"Evt_M2_UntaggedJetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_M2_TaggedJetsAverage","Evt_M2_TaggedJetsAverage",50,0.,250),"Evt_M2_TaggedJetsAverage",plotselection,plotlabel),
 
-       #Plot(ROOT.TH1F(plotprefix+"Evt_M2_2JetsAverage","Evt_M2_2JetsAverage",50,0,250),"Evt_M2_2JetsAverage",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Evt_M2_2TaggedJetsAverage","Evt_M2_2TaggedJetsAverage",50,0.,250),"Evt_M2_2TaggedJetsAverage",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Evt_M2_3JetsAverage","Evt_M2_3JetsAverage",50,0,250),"Evt_M2_3JetsAverage",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Evt_M2_3TaggedJetsAverage","Evt_M2_3TaggedJetsAverage",50,0.,250),"Evt_M2_3TaggedJetsAverage",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Evt_M2_4JetsAverage","Evt_M2_4JetsAverage",50,0,250),"Evt_M2_4JetsAverage",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Evt_M2_4TaggedJetsAverage","Evt_M2_4TaggedJetsAverage",50,0.,250),"Evt_M2_4TaggedJetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_M2_2JetsAverage","Evt_M2_2JetsAverage",50,0,250),"Evt_M2_2JetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_M2_2TaggedJetsAverage","Evt_M2_2TaggedJetsAverage",50,0.,250),"Evt_M2_2TaggedJetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_M2_3JetsAverage","Evt_M2_3JetsAverage",50,0,250),"Evt_M2_3JetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_M2_3TaggedJetsAverage","Evt_M2_3TaggedJetsAverage",50,0.,250),"Evt_M2_3TaggedJetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_M2_4JetsAverage","Evt_M2_4JetsAverage",50,0,250),"Evt_M2_4JetsAverage",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_M2_4TaggedJetsAverage","Evt_M2_4TaggedJetsAverage",50,0.,250),"Evt_M2_4TaggedJetsAverage",plotselection,plotlabel),
 
-       #Plot(ROOT.TH1F(plotprefix+"Evt_M_MinDeltaRJets","Evt_M_MinDeltaRJets",30,0.,150),"Evt_M_MinDeltaRJets",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Evt_M_MinDeltaRTaggedJets","Evt_M_MinDeltaRTaggedJets",45,0.,450),"Evt_M_MinDeltaRTaggedJets",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Evt_M_MinDeltaRUntaggedJets","Evt_M_MinDeltaRUntaggedJets",45,0.,450),"Evt_M_MinDeltaRUntaggedJets",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Evt_M_MinDeltaRLeptonJet","Evt_M_MinDeltaRLeptonJet",60,0.4,3.4),"Evt_M_MinDeltaRLeptonJet",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Evt_Dr_MinDeltaRJets","Evt_Dr_MinDeltaRJets",50,0.,5.0),"Evt_Dr_MinDeltaRJets",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Evt_Dr_MinDeltaRTaggedJets","Evt_Dr_MinDeltaRTaggedJets",50,0.,5.0),"Evt_Dr_MinDeltaRTaggedJets",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Evt_Dr_MinDeltaRUntaggedJets","Evt_Dr_MinDeltaRUntaggedJets",50,0.,5.0),"Evt_Dr_MinDeltaRUntaggedJets",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Evt_Dr_MinDeltaRLeptonJet","Evt_Dr_MinDeltaRLeptonJet",60,0.4,3.4),"Evt_Dr_MinDeltaRLeptonJet",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_M_MinDeltaRJets","Evt_M_MinDeltaRJets",30,0.,150),"Evt_M_MinDeltaRJets",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_M_MinDeltaRTaggedJets","Evt_M_MinDeltaRTaggedJets",45,0.,450),"Evt_M_MinDeltaRTaggedJets",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_M_MinDeltaRUntaggedJets","Evt_M_MinDeltaRUntaggedJets",45,0.,450),"Evt_M_MinDeltaRUntaggedJets",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_M_MinDeltaRLeptonJet","Evt_M_MinDeltaRLeptonJet",60,0.4,3.4),"Evt_M_MinDeltaRLeptonJet",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Dr_MinDeltaRJets","Evt_Dr_MinDeltaRJets",50,0.,5.0),"Evt_Dr_MinDeltaRJets",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Dr_MinDeltaRTaggedJets","Evt_Dr_MinDeltaRTaggedJets",50,0.,5.0),"Evt_Dr_MinDeltaRTaggedJets",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Dr_MinDeltaRUntaggedJets","Evt_Dr_MinDeltaRUntaggedJets",50,0.,5.0),"Evt_Dr_MinDeltaRUntaggedJets",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Dr_MinDeltaRLeptonJet","Evt_Dr_MinDeltaRLeptonJet",60,0.4,3.4),"Evt_Dr_MinDeltaRLeptonJet",plotselection,plotlabel),
 
-       #Plot(ROOT.TH1F(plotprefix+"Evt_Jet_MaxDeta_Jets","Evt_Jet_MaxDeta_Jets",50,0.,5.0),"Evt_Jet_MaxDeta_Jets",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Evt_TaggedJet_MaxDeta_Jets","Evt_TaggedJet_MaxDeta_Jets",50,0.,5.0),"Evt_TaggedJet_MaxDeta_Jets",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Evt_TaggedJet_MaxDeta_TaggedJets","Evt_TaggedJet_MaxDeta_TaggedJets",60,0.,6.0),"Evt_TaggedJet_MaxDeta_TaggedJets",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_Jet_MaxDeta_Jets","Evt_Jet_MaxDeta_Jets",50,0.,5.0),"Evt_Jet_MaxDeta_Jets",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_TaggedJet_MaxDeta_Jets","Evt_TaggedJet_MaxDeta_Jets",50,0.,5.0),"Evt_TaggedJet_MaxDeta_Jets",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_TaggedJet_MaxDeta_TaggedJets","Evt_TaggedJet_MaxDeta_TaggedJets",60,0.,6.0),"Evt_TaggedJet_MaxDeta_TaggedJets",plotselection,plotlabel),
 
-       #Plot(ROOT.TH1F(plotprefix+"Evt_M_Total","Evt_M_Total",40,0.,4000),"Evt_M_Total",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_M_Total","Evt_M_Total",40,0.,4000),"Evt_M_Total",plotselection,plotlabel),
 
-       #Plot(ROOT.TH1F(plotprefix+"Evt_H0","Evt_H0",40,0.5,4.5),"Evt_H0",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Evt_H1","Evt_H1",60,-0.2,0.4),"Evt_H1",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Evt_H2","Evt_H2",60,-0.2,0.4),"Evt_H2",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Evt_H3","Evt_H3",50,-0.05,1.05),"Evt_H3",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Evt_H4","Evt_H4",50,-0.15,0.35),"Evt_H4",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_H0","Evt_H0",40,0.5,4.5),"Evt_H0",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_H1","Evt_H1",60,-0.2,0.4),"Evt_H1",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_H2","Evt_H2",60,-0.2,0.4),"Evt_H2",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_H3","Evt_H3",50,-0.05,1.05),"Evt_H3",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Evt_H4","Evt_H4",50,-0.15,0.35),"Evt_H4",plotselection,plotlabel),
 
-       #Plot(ROOT.TH1F(plotprefix+"Sphericity","Sphericity",50,0,1),"Evt_Sphericity",plotselection,plotlabel),
-       #Plot(ROOT.TH1F(plotprefix+"Aplanarity","Aplanarity",50,0,0.5),"Evt_Aplanarity",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Sphericity","Sphericity",50,0,1),"Evt_Sphericity",plotselection,plotlabel),
+       Plot(ROOT.TH1F(plotprefix+"Aplanarity","Aplanarity",50,0,0.5),"Evt_Aplanarity",plotselection,plotlabel),
 ]
 
 plotlabel="1 lepton, 4 jets, 3 b-tags"
@@ -672,9 +672,9 @@ plotsBoosted=[
           Plot(ROOT.TH1F(plotprefix+"BoostedTopHiggs_HiggsCandidate_Subjetiness21","2-subjettiness / 1-subjettiness of Higgs candidate",20,0,1),"BoostedTopHiggs_HiggsCandidate_Subjetiness2/BoostedTopHiggs_HiggsCandidate_Subjetiness1",plotselection,plotlabel),
          Plot(ROOT.TH1F(plotprefix+"BoostedTopHiggs_HiggsCandidate_Dr_Lepton","BoostedTopHiggs_HiggsCandidate_Dr_Lepton",20,0,4),"BoostedTopHiggs_HiggsCandidate_Dr_Lepton",plotselection,plotlabel),
           Plot(ROOT.TH1F(plotprefix+"BoostedTopHiggs_HiggsCandidate_Deta_TopHadCandidate","#Delta #eta (boosted Higgs cand., boosted top cand.)",20,0,4),"BoostedTopHiggs_HiggsCandidate_Deta_TopHadCandidate",plotselection,plotlabel),
-#          Plot(ROOT.TH1F(plotprefix+"Evt_HT","Evt_HT",20,200,2000),"Evt_HT",plotselection,plotlabel),
+         Plot(ROOT.TH1F(plotprefix+"Evt_HT","Evt_HT",20,200,2000),"Evt_HT",plotselection,plotlabel),
           Plot(ROOT.TH1F(plotprefix+"Evt_Dr_MinDeltaRTaggedJets","min #Delta R (tag,tag)",20,0,4),"Evt_Dr_MinDeltaRTaggedJets",plotselection,plotlabel),
-#          Plot(ROOT.TH1F(plotprefix+"Evt_M_MinDeltaRTaggedJets","Evt_M_MinDeltaRTaggedJets",20,0,600),"Evt_M_MinDeltaRTaggedJets",plotselection,plotlabel),
+         Plot(ROOT.TH1F(plotprefix+"Evt_M_MinDeltaRTaggedJets","Evt_M_MinDeltaRTaggedJets",20,0,600),"Evt_M_MinDeltaRTaggedJets",plotselection,plotlabel),
           Plot(ROOT.TH1F(plotprefix+"Evt_Dr_TaggedJetsAverage","avg #Delta R (tag,tag)",20,0,4),"Evt_Dr_TaggedJetsAverage",plotselection,plotlabel),
          Plot(ROOT.TH1F(plotprefix+"Evt_Sphericity","Evt_Sphericity",20,0,1),"Evt_Sphericity",plotselection,plotlabel),
          Plot(ROOT.TH1F(plotprefix+"BoostedTopHiggs_TopHadCandidate_Top_M","BoostedTopHiggs_TopHadCandidate_Top_M",20,29,300),"BoostedTopHiggs_TopHadCandidate_Top_M",plotselection,plotlabel),
@@ -694,16 +694,17 @@ plotsBoosted=[
 #          Plot(ROOT.TH1F(plotprefix+"Evt_Deta_2TaggedJetsAverage","Evt_Deta_2TaggedJetsAverage",20,0,4),"Evt_Deta_2TaggedJetsAverage",plotselection,plotlabel),
           Plot(ROOT.TH1F(plotprefix+"Evt_Aplanarity","Aplanarity",17,0,0.34),"Evt_Aplanarity",plotselection,plotlabel),
           Plot(ROOT.TH1F(plotprefix+"MEM","MEM discriminator (using subjets)",22,0,1),"(BoostedTopHiggs_MEM_p>=0.0)*(BoostedTopHiggs_MEM_p_sig/(BoostedTopHiggs_MEM_p_sig+0.15*BoostedTopHiggs_MEM_p_bkg))+(BoostedTopHiggs_MEM_p<0.0)*(0.01)",plotselection,plotlabel),
-#          Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_dEta_fn","#sqrt{#Delta #eta(t^{lep}, bb) #times #Delta #eta(t^{had}, bb)}",20,0,5),"BDT_common5_input_dEta_fn",plotselection,plotlabel),
-#          Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_dev_from_avg_disc_btags","BDT_common5_input_dev_from_avg_disc_btags",20,0,0.006),"BDT_common5_input_dev_from_avg_disc_btags",plotselection,plotlabel),
-#          Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_invariant_mass_of_everything","BDT_common5_input_invariant_mass_of_everything",20,0,3000),"BDT_common5_input_invariant_mass_of_everything",plotselection,plotlabel),
-#          Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_Mlb","BDT_common5_input_Mlb",20,0,200),"BDT_common5_input_Mlb",plotselection,plotlabel),
-#          Plot(ROOT.TH1F(plotprefix+"Evt_M_Total","Evt_M_Total",20,400,4000),"Evt_M_Total",plotselection,plotlabel),
-#          Plot(ROOT.TH1F(plotprefix+"Evt_CSV_Dev","Evt_CSV_Dev",20,0,0.25),"Evt_CSV_Dev",plotselection,plotlabel),
+         Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_dEta_fn","#sqrt{#Delta #eta(t^{lep}, bb) #times #Delta #eta(t^{had}, bb)}",20,0,5),"BDT_common5_input_dEta_fn",plotselection,plotlabel),
+         Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_invariant_mass_of_everything","BDT_common5_input_invariant_mass_of_everything",20,0,3000),"BDT_common5_input_invariant_mass_of_everything",plotselection,plotlabel),
+         Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_dev_from_avg_disc_btags","BDT_common5_input_dev_from_avg_disc_btags",20,0,0.006),"BDT_common5_input_dev_from_avg_disc_btags",plotselection,plotlabel),
+         Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_Mlb","BDT_common5_input_Mlb",20,0,200),"BDT_common5_input_Mlb",plotselection,plotlabel),
+         Plot(ROOT.TH1F(plotprefix+"Evt_M_Total","Evt_M_Total",20,400,4000),"Evt_M_Total",plotselection,plotlabel),
+         Plot(ROOT.TH1F(plotprefix+"Evt_CSV_Dev","Evt_CSV_Dev",20,0,0.25),"Evt_CSV_Dev",plotselection,plotlabel),
 ]
 
 bdtplots=plots64+plots63+plots62+plots54+plots53+plots44+plots43+plotsBoosted
 plots+=bdtplots
+#plots+=plots62+plots63
 
 print name,2000000,plots,samples+samples_data,[''],['1.'],weightsystnames, systweights
 outputpath=plotParallel(name,2000000,plots,samples+samples_data+systsamples,[''],['1.'],weightsystnames, systweights)
@@ -780,3 +781,30 @@ listOfcustomBinLabels=[categoriesJTlist]
 labels=[plot.label for plot in plots[:categoryplotsindex]]
 lolT=transposeLOL(listOfHistoListsForCategories)
 plotDataMCanWsystCustomBinLabels(listOfHistoListsDataForCategories,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name+'Categories_log',[[lllForCategories,3354,ROOT.kBlack,True]],listOfcustomBinLabels,True,labels,True)
+
+
+
+# make category plots
+# again without log
+categoryplotsindex=3
+listOfHistoListsForCategoriesNL=createHistoLists_fromSuperHistoFile(outputpath,samples,plots[:categoryplotsindex],1)
+listOfHistoListsDataForCategoriesNL=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots[:categoryplotsindex],1)
+lllForCategoriesNL=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots[:categoryplotsindex],errorSystnames)
+
+listOfcustomBinLabels=[]
+
+categoriesJTlist=[]
+for i,cat in enumerate(categoriesJT):
+  categoriesJTlist.append(cat[1])
+#categoriesJTBlist=[]
+#for i,cat in enumerate(categoriesJTB):
+  #categoriesJTBlist.append(cat[1])
+#categoriesSplitByBDToptDlist=[]
+#for i,cat in enumerate(categoriesSplitByBDToptD):
+  #categoriesSplitByBDToptDlist.append(cat[1])
+
+listOfcustomBinLabels=[categoriesJTlist]               
+labels=[plot.label for plot in plots[:categoryplotsindex]]
+lolTNL=transposeLOL(listOfHistoListsForCategoriesNL)
+plotDataMCanWsystCustomBinLabels(listOfHistoListsDataForCategoriesNL,transposeLOL(lolTNL[1:]),samples[1:],lolTNL[0],samples[0],-1,name+'Categories_nolog',[[lllForCategoriesNL,3354,ROOT.kBlack,True]],listOfcustomBinLabels,False,labels,True)
+
