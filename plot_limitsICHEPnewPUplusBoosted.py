@@ -13,18 +13,20 @@ from limittools import replaceQ2scale
 from plotconfigICHEPnewPUforLimits import *
 
 # output name
-name='common80xblrV2'
+name='common80xblrV2PlusBoosted'
 
 # define categories
 boosted="(BoostedTopHiggs_TopHadCandidate_TopMVAOutput>=-0.485&&BoostedTopHiggs_HiggsCandidate_HiggsTag>=0.8925)"                        
 categories_=[
-              ("(N_Jets==4&&N_BTagsM==3)","j4t3",""),
-              ("(N_Jets==4&&N_BTagsM>=4)","j4t4",""),
-              ("(N_Jets==5&&N_BTagsM==3)","j5t3",""),
-              ("(N_Jets==5&&N_BTagsM>=4)","j5t4",""),             
-              ("(N_Jets>=6&&N_BTagsM==2)","j6t2",""),
-              ("(N_Jets>=6&&N_BTagsM==3)","j6t3",""),
-              ("(N_Jets>=6&&N_BTagsM>=4)","j6t4","")
+              ("(N_Jets==4&&N_BTagsM==3)&&!"+boosted+"","j4t3",""),
+              ("(N_Jets==4&&N_BTagsM>=4)&&!"+boosted+"","j4t4",""),
+              ("(N_Jets==5&&N_BTagsM==3)&&!"+boosted+"","j5t3",""),
+              ("(N_Jets==5&&N_BTagsM>=4)&&!"+boosted+"","j5t4",""),             
+              ("(N_Jets>=6&&N_BTagsM==2)&&!"+boosted+"","j6t2",""),
+              ("(N_Jets>=6&&N_BTagsM==3)&&!"+boosted+"","j6t3",""),
+              ("(N_Jets>=6&&N_BTagsM>=4)&&!"+boosted+"","j6t4",""),
+              (boosted,"boosted",""),
+              
 ]
 
 categories=categories_
@@ -42,7 +44,7 @@ memexp='(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)'
 
 # define BDT output variables
 bdtweightpath="/nfs/dust/cms/user/kelmorab/80xBDTWeights/"
-bdtset="80xblrV2"
+bdtset="80xblrDBV1"
 additionalvariables=[
                       'finalbdt_ljets_j4_t3:='+bdtweightpath+'/weights_Final_43_'+bdtset+'.xml',
                       'finalbdt_ljets_j4_t4:='+bdtweightpath+'/weights_Final_44_'+bdtset+'.xml',
@@ -51,15 +53,15 @@ additionalvariables=[
                       'finalbdt_ljets_jge6_t2:='+bdtweightpath+'/weights_Final_62_'+bdtset+'.xml',
                       'finalbdt_ljets_jge6_t3:='+bdtweightpath+'/weights_Final_63_'+bdtset+'.xml',
                       'finalbdt_ljets_jge6_tge4:='+bdtweightpath+'/weights_Final_64_'+bdtset+'.xml',
-                      #'finalbdt_ljets_boosted:='+bdtweightpath+'/weights_Final_DB_boosted_76xmem.xml',
+                      'finalbdt_ljets_boosted:='+bdtweightpath+'/weights_Final_boosted_'+bdtset+'.xml',
 ]
 
 # set discriminator histograms configuration
-nhistobins= [   20,   8,    20,    8,   20,   20,   10 ]
-minxvals=   [ -0.9,  -0.1, -0.8,   -0.5, -0.7, -0.8,   -0.55 ]
-maxxvals=   [ 0.85, 0.15, 0.8, 0.65, 0.6, 0.75, 0.65]
+nhistobins= [   20,   8,    20,    8,   20,   20,   10, 20 ]
+minxvals=   [ -0.9,  -0.09, -0.95,   -0.48, -0.74, -0.8,   -0.55, -0.7 ]
+maxxvals=   [ 0.9, 0.17, 0.85, 0.64, 0.6, 0.8, 0.6, 0.8]
 
-discrs =    ['finalbdt_ljets_j4_t3', 'finalbdt_ljets_j4_t4', 'finalbdt_ljets_j5_t3', 'finalbdt_ljets_j5_tge4', 'finalbdt_ljets_jge6_t2', 'finalbdt_ljets_jge6_t3', 'finalbdt_ljets_jge6_tge4']
+discrs =    ['finalbdt_ljets_j4_t3', 'finalbdt_ljets_j4_t4', 'finalbdt_ljets_j5_t3', 'finalbdt_ljets_j5_tge4', 'finalbdt_ljets_jge6_t2', 'finalbdt_ljets_jge6_t3', 'finalbdt_ljets_jge6_tge4','finalbdt_ljets_boosted']
 discrname='finaldiscr'
 
 # get input for plotting function
