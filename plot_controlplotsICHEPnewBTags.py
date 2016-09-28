@@ -6,7 +6,7 @@ from plotconfigICHEPnewBTags import *
 sys.path.insert(0, 'limittools')
 from limittools import renameHistos
 
-name='controlplotsICHEPnewBTags'
+name='controlplotsICHEPnewBTagsV2'
 
 # selections
 boosted="(BoostedTopHiggs_TopHadCandidate_TopMVAOutput>=-0.485&&BoostedTopHiggs_HiggsCandidate_HiggsTag>=0.8925)"
@@ -103,7 +103,7 @@ plotlabelboosted="#splitline{1 lepton, #geq 4 jets, #geq 2 b-tags}{#geq 1 C/A 1.
 plotselection="(N_Jets>=4&&N_BTagsM>=2)"
 plots=[
         Plot(ROOT.TH1F("JT" ,"jet-tag categories",len(categoriesJT),0.5,0.5+len(categoriesJT)),catstringJT,categoriesJTsel,"1 lepton"),
-        Plot(ROOT.TH1F("BJT" ,"jet-tag + boosted categories",len(categoriesJTB),0.5,0.5+len(categoriesJTB)),catstringJTB,categoriesJTBsel,"1 lepton"),
+        Plot(ROOT.TH1F("BCAT" ,"jet-tag + boosted categories",len(categoriesJTB),0.5,0.5+len(categoriesJTB)),catstringJTB,categoriesJTBsel,"1 lepton"),
         #Plot(ROOT.TH1F("JTsplitByBDToptD" ,"2D analysis D + boosted categories",len(categoriesSplitByBDToptD),0.5,0.5+len(categoriesSplitByBDToptD)),catstringSplitByBDToptD,categoriesJTBsel,"1 lepton"),
 
         Plot(ROOT.TH1F("N_Jets","Number of ak4 jets",7,3.5,10.5),"N_Jets",plotselection,plotlabel),
@@ -703,7 +703,7 @@ plotsBoosted=[
 ]
 
 bdtplots=plots64+plots63+plots62+plots54+plots53+plots44+plots43+plotsBoosted
-plots+=bdtplots
+#plots+=bdtplots
 #plots+=plots62+plots63
 
 print name,2000000,plots,samples+samples_data,[''],['1.'],weightsystnames, systweights
