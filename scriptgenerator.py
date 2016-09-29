@@ -128,6 +128,7 @@ void plot(){
   float sumOfWeights=0;
 
   int DoWeights=1;
+
   //initialize Trigger Helper
   EleTriggerHelper electronTriggerHelper=EleTriggerHelper();
   MuTriggerHelper muonTriggerHelper=MuTriggerHelper();
@@ -201,6 +202,7 @@ def startLoop():
 
     eventsAnalyzed++;
     sumOfWeights+=Weight;
+
     // Trigger SF
     double muonPt=0.0;
     double muonEta=0.0;
@@ -217,6 +219,7 @@ def startLoop():
     std::cout << "corresponding scale factor = " << electronTriggerHelper.GetSF(electronPt,electronEta,0) << std::endl;
     std::cout << "Muon_Pt = " << muonPt << " , Muon_Eta = " << muonEta << std::endl;
     std::cout << "corresponding scale factor = " << muonTriggerHelper.GetSF(muonPt,muonEta,0) << std::endl;*/
+
 
 """
 
@@ -300,7 +303,9 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 
   # collect variables
   # list varibles that should not be written to the program automatically
+
   vetolist=['processname','DoWeights','TMath','electronPt','electronEta','muonPt','muonEta','muonTriggerHelper','electronTriggerHelper']
+
 
   # initialize variables object
   variables = variablebox.Variables(vetolist)
@@ -514,6 +519,7 @@ def createScript(scriptname,programpath,processname,filenames,outfilename,maxeve
   if cmsswpath!='':
     script+="export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch \n"
     script+="source $VO_CMS_SW_DIR/cmsset_default.sh \n"
+    script+="export SCRAM_ARCH="+os.environ['SCRAM_ARCH']+"\n"
     script+='cd '+cmsswpath+'/src\neval `scram runtime -sh`\n'
     script+='cd - \n'
   script+='export PROCESSNAME="'+processname+'"\n'
@@ -546,9 +552,12 @@ def askYesNo(question):
 
 def submitToNAF(scripts):
   jobids=[]
+  logdir = os.getcwd()+"/logs"
+  if not os.path.exists(logdir):
+    os.makedirs(logdir)
   for script in scripts:
     print 'submitting',script
-    command=['qsub', '-cwd', '-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=2000M', '-l', 's_vmem=2000M' ,'-o', '/dev/null', '-e', '/dev/null', script]
+    command=['qsub', '-cwd', '-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=2000M', '-l', 's_vmem=2000M' ,'-o', logdir, '-e', logdir, script]
     a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
     output = a.communicate()[0]
     jobidstring = output.split()
