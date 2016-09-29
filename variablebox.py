@@ -16,58 +16,58 @@ class Variable():
     self.mvavar=False
     self.inputvariables=[]
 
-  
+
   def initVar(self,tree,variables):
-    
+
     if hasattr(tree,self.name):
       self.intree=True
-      branch=tree.GetBranch(self.name)  
+      branch=tree.GetBranch(self.name)
       branchtitle=branch.GetTitle()
       self.setupVarType(branchtitle)
       self.setupVarArray(tree,variables,branchtitle)
       return
-      
+
     print self.name,'does not exist in tree!'
-    
+
     self.intree=False
     self.vartype='F'
-    
+
     self.setupMVAVar(tree,variables)
-  
+
   def setupVarType(self,branchtitle):
     self.vartype=branchtitle.split('/')[1]
-    
-  
+
+
   def setupVarArray(self,tree,variables,branchtitle):
     varisarray=branchtitle.split('/')[0][-1]==']'
-    
+
     if not varisarray:
       self.arraylength=None
       return
-     
+
     self.arraylength=re.findall(r"\[(.*?)\]",branchtitle.split('/')[0])[0]
-    
+
     variables.initVar(tree,self.arraylength,self.arraylength,'I')
 
-      
-  def setupMVAVar(self,tree,variables): 
+
+  def setupMVAVar(self,tree,variables):
     if not '.xml' in self.expression:
       self.mvavar=False
       return
-    
+
     self.mvavar=True
-  
+
     root = ET.parse(self.expression).getroot()
     for var in root.iter('Variable'):
       inputname=var.get('Internal')
       inputexpr=var.get('Expression')
       inputtype=var.get('Type')
-      
+
       self.inputvariables.append(inputname)
-      
+
       variables.initVar(tree,inputname,inputexpr,inputtype)
 
-  
+
   # initialize new variable
   def initVarProgram(self):
     var=self.name
@@ -108,24 +108,24 @@ class Variable():
     text+='  TMVA::Reader *r_'+self.name+' = new TMVA::Reader("Silent");\n'
     return text
 
-  
+
   # add variables to TMVA Reader
   def addVariablesToReaderProgram(self,variables):
     if not self.mvavar:
       print 'Error! Trying to add input variables to TMVA reader for non MVA variable ',self.name,'!'
       return None
-    
+
     text=''
     for varname in self.inputvariables:
       if not varname in variables.variables:
         print 'Error! Input variable ',varname,' does not exist in input collection!'
         return None
-      
+
       var=variables.variables[varname]
       text+='  r_'+self.name+'->AddVariable("'+var.expression+'", &'+var.name+');\n'
     return text
 
-  
+
   # book MVA Method
   def bookMVAProgram(self):
     if not self.mvavar:
@@ -134,7 +134,7 @@ class Variable():
     text='  r_'+self.name+'->BookMVA("BDT","'+self.expression+'");\n'
     return text
 
-  
+
   # setup TMVA Reader
   def setupTMVAReaderProgram(self,variables):
     if not self.mvavar:
@@ -146,27 +146,27 @@ class Variable():
     text+=self.bookMVAProgram()
     text+='\n'
     return text
-  
-  
+
+
   # calculate variables not in Tree and MVA variables
   def calculateVarProgram(self):
     text=''
-    
+
     if not self.intree:
       if not self.mvavar:
         text+='    '+self.name+' = '+self.expression+';\n'
       else:
         text+='    '+self.name+' = r_'+self.name+'->EvaluateMVA("BDT");\n'
-    
+
     return text
 
 
-  
+
 class Variables:
   def __init__(self,veto=[]):
     self.variables={}
     self.vetolist=veto
-  
+
   # returns all variables of an expression
   def varsIn(self,expr):
     # find all words not followed by ( (these are functions)
@@ -192,7 +192,7 @@ class Variables:
   # returns map of maximum array indices of variables in an expression
   def varsWithMaxIndex(self,expr):
     # find all words followed by [
-    variablescandidates = re.findall(r"\w+\b(?=\[)", expr)    
+    variablescandidates = re.findall(r"\w+\b(?=\[)", expr)
     variables=[]
     maxidxs=[]
     for v in variablescandidates:
@@ -231,13 +231,13 @@ class Variables:
       arrayselection+='&&'+v+'>'+str(maxidxs[v])
     return arrayselection
 
-  
+
   # replaces all occurances of array variables with an instance i of that variable ( e.g. Jet_Pt -> Jet_Pt[3] )
   def getArrayEntries(self,expr,i):
     print "getArrayEntries ", expr
     newexpr=expr
     variables=self.varsNoIndex(expr)
-    print variables
+    #print variables
     print self.variables
     for v in variables:
       print "search ", v
@@ -251,56 +251,62 @@ class Variables:
         newexpr=re.sub(rexp,v+'['+str(i)+']',newexpr)
         print "after subst ", newexpr
     return newexpr
-  
-  
+
+
   # initialize variable
   def initVar(self,tree,name,expression='',vartype='F',arraylength=None):
     #print "initVar", tree,name,expression
+   # print self.vetolist
     if not name in self.variables and not name in self.vetolist:
-      
+
       if not ".xml" in expression and not hasattr(tree,expression):
+        print 'init vasr for ', expression
         self.initVarsFromExpr(expression,tree)
         #print expression
-        
+
+
+      print "creatubg variable", expression
       self.variables[name]=Variable(name,expression,vartype,arraylength)
       self.variables[name].initVar(tree,self)
-  
-  
+
+
   # initialize variables from expression
   def initVarsFromExpr(self,expr,tree):
-    print "initVarsFromExpr",expr,tree
+    #print "initVarsFromExpr",expr,tree
     if ":=" in expr:
+
       name,expr=expr.split(":=")
-      
+     # print name,expr
+
       if not ".xml" in expr:
         self.initVarsFromExpr(expr,tree)
-      
+
       self.initVar(tree,name,expr,'F')
-    
+
     else:
       variablenames=self.varsIn(expr)
-      
+      #print variablenames
       for name in variablenames:
 	#print name
         self.initVar(tree,name,name,'F')
-  
-  
+
+
   # initialize variables from expression list
   def initVarsFromExprList(self,exprlist,tree):
     for expr in exprlist:
       self.initVarsFromExpr(expr,tree)
-  
-  
-  # Program: Initialize all variables        
+
+
+  # Program: Initialize all variables
   def initVarsProgram(self):
     text=""
     for name,var in self.variables.iteritems():
       text+=var.initVarProgram()
     text+='\n'
     return text
-  
-  
-  # Program: Setup all branch addresses      
+
+
+  # Program: Setup all branch addresses
   def initBranchAddressesProgram(self):
     text=""
     for name,var in self.variables.iteritems():
@@ -317,9 +323,9 @@ class Variables:
       if var.mvavar:
         text+=var.setupTMVAReaderProgram(self)
     return text
-  
-  
-  # Program: Setup all branch addresses      
+
+
+  # Program: Setup all branch addresses
   def calculateVarsProgram(self):
     text=""
     for name,var in self.variables.iteritems():

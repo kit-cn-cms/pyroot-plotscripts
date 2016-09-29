@@ -13,6 +13,8 @@ boosted="(BoostedTopHiggs_TopHadCandidate_TopMVAOutput>=-0.485&&BoostedTopHiggs_
 toptaggersel="(BoostedJet_Top_Pt[0]>=0)"
 higgstaggersel="(BoostedJet_Filterjet2_Pt[0]>=0)"
 
+
+
 # definition of categories
 categoriesJT=[
               ("(N_Jets>=6&&N_BTagsM==2)","6j2t",""),
@@ -111,6 +113,8 @@ plots=[
         Plot(ROOT.TH1F("CSV0","B-tag of leading jet",22,-.1,1),"Jet_CSV[0]",plotselection,plotlabel),
         Plot(ROOT.TH1F("CSV1","B-tag of second jet",22,-.1,1),"Jet_CSV[1]",plotselection,plotlabel),
         Plot(ROOT.TH1F("CSV","B-tag of all jets",22,-.1,1),"Jet_CSV",plotselection,plotlabel),
+        Plot(ROOT.TH1F("N_TightMuons","Number of Tight Muons",10,0,10),"N_TightMuons",plotselection,plotlabel),
+        Plot(ROOT.TH1F("N_TightElectrons","Number of Tight Electrons",10,0,10),"N_TightElectrons",plotselection,plotlabel),
         
         #Plot(ROOT.TH1F("CSV0NPVgeq20","B-tag of leading jet (NPV#geq20)",22,-.1,1),"Jet_CSV[0]",plotselection+"*(N_PrimaryVertices>=20)",plotlabel),
         #Plot(ROOT.TH1F("CSV1NPVgeq20","B-tag of second jet (NPV#geq20)",22,-.1,1),"Jet_CSV[1]",plotselection+"*(N_PrimaryVertices>=20)",plotlabel),
