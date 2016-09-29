@@ -31,7 +31,7 @@ using namespace std;
 
 void plot(){
   TH1F::SetDefaultSumw2();
-  
+
   // open files
   TChain* chain = new TChain("MVATree");
   char* filenames = getenv ("FILENAMES");
@@ -40,22 +40,22 @@ void plot(){
   string suffix = string(getenv ("SUFFIX"));
   int maxevents = atoi(getenv ("MAXEVENTS"));
   int skipevents = atoi(getenv ("SKIPEVENTS"));
-  
+
   int eventsAnalyzed=0;
   float sumOfWeights=0;
-  
+
   int DoWeights=1;
-  
+
   if(processname=="SingleEl" || processname=="SingleMu"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
 
   string buf;
-  stringstream ss(filenames); 
+  stringstream ss(filenames);
   while (ss >> buf){
     chain->Add(buf.c_str());
   }
   chain->SetBranchStatus("*",0);
 
-  TFile* outfile=new TFile(outfilename,"RECREATE");    
+  TFile* outfile=new TFile(outfilename,"RECREATE");
 
   // initialize variables from tree
 """
@@ -102,20 +102,20 @@ def fillTwoDimHistoSyst(name,varname1,varname2,weight,systnames,systweights):
 
 
 def startLoop():
-  return """  
+  return """
   // loop over all events
-  long nentries = chain->GetEntries(); 
+  long nentries = chain->GetEntries();
   cout << "total number of events: " << nentries << endl;
-  
+
   for (long iEntry=skipevents;iEntry<nentries;iEntry++) {
     if(iEntry==maxevents) break;
     if(iEntry%10000==0) cout << "analyzing event " << iEntry << endl;
-    
-    chain->GetEntry(iEntry); 
-    
+
+    chain->GetEntry(iEntry);
+
     eventsAnalyzed++;
     sumOfWeights+=Weight;
-    
+
 """
 
 
@@ -124,7 +124,7 @@ def encodeSampleSelection(samples,variables):
   for sample in samples:
     arrayselection=variables.checkArrayLengths(sample.selection)
     if arrayselection=='':
-      arrayselection ='1' 
+      arrayselection ='1'
     sselection=sample.selection
     if sselection=='':
       sselection='1'
@@ -140,7 +140,7 @@ def startCat(catweight,variables):
   if catweight=='':
     catweight='1'
   if arrayselection=='':
-    arrayselection ='1' 
+    arrayselection ='1'
   text+='    if((('+arrayselection+')*('+catweight+'))!=0) {\n'
   text+='      float categoryweight='+catweight+';\n'
   return text
@@ -185,7 +185,7 @@ int main(){
   plot();
 }
 """
-                         
+
 
 def compileProgram(scriptname):
   p = subprocess.Popen(['root-config', '--cflags', '--libs'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -195,14 +195,14 @@ def compileProgram(scriptname):
 
 
 def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],allsystweights=["1"],additionalvariables=[]):
-  
+
   # collect variables
   # list varibles that should not be written to the program automatically
   vetolist=['processname','DoWeights','TMath']
-  
+
   # initialize variables object
   variables = variablebox.Variables(vetolist)
-  
+
   # get tree for variable check
   tree = ROOT.TTree()
   for i in range(len(samples)):
@@ -216,32 +216,32 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
         break
     if thistreeisgood:
       break
-	
+
   # get standard variables
   standardvars=['Weight','Weight_CSV','Weight_XS']
   variables.initVarsFromExprList(standardvars,tree)
-  
+
   # get additional variables
   if len(additionalvariables)>0:
     variables.initVarsFromExprList(additionalvariables,tree)
-  
+
   # get systematic weight variables
   variables.initVarsFromExprList(allsystweights,tree)
-    
+
   systweights=[]
   for systweight in allsystweights:
     if ":=" in systweight:
 	    systweights.append(systweight.split(":=")[0])
     else:
 	    systweights.append(systweight)
-        
+
   # get sample selection variables
   for sample in samples:
     variables.initVarsFromExpr(sample.selection,tree)
-  
+
   # get category selection variables
   variables.initVarsFromExprList(catselections,tree)
-  
+
   # get variables used in plots
   for plot in plots:
     if isinstance(plot,plotutils.Plot):
@@ -249,23 +249,23 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
     if isinstance(plot,plotutils.TwoDimPlot):
       variables.initVarsFromExpr(plot.variable1,tree)
       variables.initVarsFromExpr(plot.variable2,tree)
-  
+
     variables.initVarsFromExpr(plot.selection,tree)
-  
-  
-  
+
+
+
   # write program
   # start writing program
   script=""
   script+=getHead()
-  
-  # initialize all variables 
+
+  # initialize all variables
   script+=variables.initVarsProgram()
   script+=variables.initBranchAddressesProgram()
 
   # initialize TMVA Readers
   script+=variables.setupTMVAReadersProgram()
-  
+
   # initialize histograms in all categories and for all systematics
   for c in catnames:
     for plot in plots:
@@ -294,13 +294,13 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   script+='    float sampleweight=1;\n'
   script+=encodeSampleSelection(samples,variables)
   script+="\n"
-  
+
   # calculate varibles and get TMVA outputs
   script+=variables.calculateVarsProgram()
-  
-  # start plotting      
+
+  # start plotting
   for cn,cs in zip(catnames,catselections):
-    
+
      # for every category
     script+=startCat(cs,variables)
 
@@ -309,17 +309,17 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
     for plot in plots:
       if isinstance(plot,plotutils.TwoDimPlot):
         continue
-      
+
       n=plot.histo.GetName()
       ex=plot.variable
       pw=plot.selection
       if pw=='':
         pw='1'
-      
+
       # prepare loop over array variables
-      variablenames_without_index=variables.varsNoIndex(ex) 
+      variablenames_without_index=variables.varsNoIndex(ex)
       variablenames_without_index+=variables.varsNoIndex(pw)
-      
+
       # get size of array
       size_of_loop=None
       for v in variablenames_without_index:
@@ -328,13 +328,13 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
         if variables.variables[v].arraylength != None:
           assert size_of_loop == None or size_of_loop == variables.variables[v].arraylength
           size_of_loop=variables.variables[v].arraylength
-      
+
       histoname=cn+n
       script+="\n"
       if size_of_loop!=None:
         exi=variables.getArrayEntries(ex,"i")
         pwi=variables.getArrayEntries(pw,"i")
-        script+=varLoop("i",size_of_loop)                    
+        script+=varLoop("i",size_of_loop)
         script+="{\n"
         arrayselection=variables.checkArrayLengths(','.join([ex,pw]))
         weight='('+arrayselection+')*('+pwi+')*Weight_XS*categoryweight*sampleweight'
@@ -347,24 +347,24 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
         arrayselection=variables.checkArrayLengths(','.join([ex,pw]))
         weight='('+arrayselection+')*('+pw+')*Weight_XS*categoryweight*sampleweight'
         script+=fillHistoSyst(histoname,ex,weight,systnames,systweights)
-    
+
     # plot two dimensional plots
     for plot in plots:
         if not isinstance(plot,plotutils.TwoDimPlot):
           continue
-        
+
         n=plot.histo.GetName()
         exX=plot.variable1
         exY=plot.variable2
         pw=plot.selection
         if pw=='':
           pw='1'
-        
+
         # prepare loop over array variables
         variablenames_without_index=varsNoIndex(exX)
         variablenames_without_index+=varsNoIndex(exY)
         variablenames_without_index+=varsNoIndex(pw)
-        
+
         # get size of array
         size_of_loop=None
         for v in variablenames_without_index:
@@ -373,15 +373,15 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
           if variables.variables[v].arraylength != None:
             assert size_of_loop == None or size_of_loop == variables.variables[v].arraylength
             size_of_loop=variables.variables[v].arraylength
-            
-        
+
+
         histoname=cn+n
         script+="\n"
         if size_of_loop!=None:
           exiX=variables.getArrayEntries(exX,"i")
           exiY=variables.getArrayEntries(ex,"i")
           pwi=variables.getArrayEntries(pw,"i")
-          script+=varLoop("i",size_of_loop)                    
+          script+=varLoop("i",size_of_loop)
           script+="{\n"
           arrayselection=variables.checkArrayLengths(','.join([exX,exY,pw]))
           weight='('+arrayselection+')*('+pwi+')*Weight_XS*categoryweight*sampleweight'
@@ -391,16 +391,16 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
           arrayselection=variables.checkArrayLengths(','.join([ex,pw]),variables)
           weight='('+arrayselection+')*('+pw+')*Weight_XS*categoryweight*sampleweight'
           script+=fillTwoDimHistoSyst(histoname,exX,exY,weight,systnames,systweights)
-    
+
     # finish category
     script+=endCat()
 
   # finish loop
   script+=endLoop()
-  
+
   # get program footer
   script+=getFoot()
-  
+
   # write program text to file
   f=open(scriptname+'.cc','w')
   f.write(script)
@@ -412,6 +412,7 @@ def createScript(scriptname,programpath,processname,filenames,outfilename,maxeve
   if cmsswpath!='':
     script+="export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch \n"
     script+="source $VO_CMS_SW_DIR/cmsset_default.sh \n"
+    script+="export SCRAM_ARCH="+os.environ['SCRAM_ARCH']+"\n"
     script+='cd '+cmsswpath+'/src\neval `scram runtime -sh`\n'
     script+='cd - \n'
   script+='export PROCESSNAME="'+processname+'"\n'
@@ -444,9 +445,12 @@ def askYesNo(question):
 
 def submitToNAF(scripts):
   jobids=[]
+  logdir = os.getcwd()+"/logs"
+  if not os.path.exists(logdir):
+    os.makedirs(logdir)
   for script in scripts:
     print 'submitting',script
-    command=['qsub', '-cwd', '-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=2000M', '-l', 's_vmem=2000M' ,'-o', '/dev/null', '-e', '/dev/null', script]
+    command=['qsub', '-cwd', '-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=2000M', '-l', 's_vmem=2000M' ,'-o', 'logdir', '-e', 'logdir', script]
     a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
     output = a.communicate()[0]
     jobidstring = output.split()
@@ -456,7 +460,7 @@ def submitToNAF(scripts):
         print "this job's ID is", jobid
         jobids.append(jobid)
         break
-          
+
   return jobids
 
 
@@ -476,7 +480,7 @@ def do_qstat(jobids):
           if jobid in jobids:
            nrunning+=1
           break
-    
+
     if nrunning>0:
       print nrunning,'jobs running'
     else:
@@ -486,7 +490,7 @@ def do_qstat(jobids):
 def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,programpath,cmsswpath):
   scripts=[]
   outputs=[]
-  nentries=[]    
+  nentries=[]
   for s in samples:
     print 'creating scripts for',s.name,'from',s.path
     ntotal_events=0
@@ -501,7 +505,7 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
       if events_in_file > maxevents:
         for ijob in range(events_in_file/maxevents+1):
           njob+=1
-          skipevents=(ijob)*maxevents       
+          skipevents=(ijob)*maxevents
           scriptname=scriptsfolder+'/'+s.nick+'_'+str(njob)+'.sh'
           processname=s.nick
           filenames=fn
@@ -511,7 +515,7 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
           outputs.append(outfilename)
           nentries.append(events_in_file)
           ntotal_events+=events_in_file
-              
+
       # else additional files are appended to list of files to be submitted
       else :
         files_to_submit+=[fn]
@@ -530,7 +534,7 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
           ntotal_events+=events_in_files
           files_to_submit=[]
           events_in_files=0
-              
+
     # submit remaining scripts (can happen if the last file was large)
     if len(files_to_submit)>0:
       njob+=1
@@ -572,12 +576,12 @@ def check_jobs(scripts,outputs,nentries):
 def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[]):
   workdir=os.getcwd()+'/workdir/'+name
   outputpath=workdir+'/output.root'
-  
+
   # create workdir folder
   print 'creating workdir folder'
   if not os.path.exists('workdir'):
     os.makedirs('workdir')
-  
+
   if not os.path.exists(workdir):
     os.makedirs(workdir)
   else:
@@ -586,13 +590,13 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
     workdirold=workdir+datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     os.rename(workdir,workdirold)
     os.makedirs(workdir)
-  
+
   if not os.path.exists(workdir):
     os.makedirs(workdir)
 
   cmsswpath=os.environ['CMSSW_BASE']
   programpath=workdir+'/'+name
-  
+
   # create c++ program
   print 'creating c++ program'
   createProgram(programpath,plots,samples,catnames,catselections,systnames,systweights,additionalvariables)
@@ -604,7 +608,7 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   if not os.path.exists(programpath):
     print 'could not compile c++ program'
     sys.exit()
-  
+
   # create output folders
   print 'creating output folders'
   scriptsfolder=workdir+'/'+name+'_scripts'
@@ -616,16 +620,16 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   if not os.path.exists(workdir):
     print 'could not create workdirs'
     sys.exit()
-  
+
   # create run scripts
   print 'creating run scripts'
   scripts,outputs,nentries=get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,programpath,cmsswpath)
-  
+
   # submit run scripts
   print 'submitting scripts'
   jobids=submitToNAF(scripts)
   do_qstat(jobids)
-  
+
   # check outputs
   print 'checking outputs'
   failed_jobs=check_jobs(scripts,outputs,nentries)
@@ -642,7 +646,7 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   if retries>=10:
     print 'could not submit jobs'
     sys.exit()
-    
+
   # hadd outputs
   print 'hadd output'
   subprocess.call(['hadd', outputpath]+outputs)
