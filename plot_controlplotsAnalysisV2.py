@@ -1,5 +1,5 @@
 #############
-# plot general control distributions 
+# plot general control distributions
 ##############
 
 from plotconfigAnalysisV2 import *
@@ -7,6 +7,9 @@ sys.path.insert(0, 'limittools')
 from limittools import renameHistos
 
 name='controlplotsAnalysisV2'
+
+# if one wants to plot blinded: True (default: False)
+plotBlinded = True
 
 # selections
 boosted="(BoostedTopHiggs_TopHadCandidate_TopMVAOutput>=-0.485&&BoostedTopHiggs_HiggsCandidate_HiggsTag>=0.8925)"
@@ -20,7 +23,7 @@ categoriesJT=[
               ("(N_Jets==5&&N_BTagsM==3)","5j3t",""),
               ("(N_Jets>=6&&N_BTagsM==3)","6j3t",""),
               ("(N_Jets==4&&N_BTagsM>=4)","4j4t",""),
-              ("(N_Jets==5&&N_BTagsM>=4)","5j4t",""),             
+              ("(N_Jets==5&&N_BTagsM>=4)","5j4t",""),
               ("(N_Jets>=6&&N_BTagsM>=4)","6j4t","")
 ]
 
@@ -30,7 +33,7 @@ categoriesJTB=[
               ("((N_Jets==5&&N_BTagsM==3)&&!"+boosted+")","5j3t","0.1"),
               ("((N_Jets>=6&&N_BTagsM==3)&&!"+boosted+")","6j3t","0.1"),
               ("((N_Jets==4&&N_BTagsM>=4)&&!"+boosted+")","4j4t","0.2"),
-              ("((N_Jets==5&&N_BTagsM>=4)&&!"+boosted+")","5j4t","0.2"),             
+              ("((N_Jets==5&&N_BTagsM>=4)&&!"+boosted+")","5j4t","0.2"),
               ("((N_Jets>=6&&N_BTagsM>=4)&&!"+boosted+")","6j4t","0.1"),
               ("((N_Jets>=4&&N_BTagsM>=2)&&"+boosted+")","boosted","")
 ]
@@ -77,21 +80,21 @@ for sample in samples:
       #thisnewsel=thisnewsel.replace('*((N_BTagsM>=4)*((0.000919641*(N_GenTopHad==1 && N_GenTopLep==1)+0.0009753747*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS)+(0.0084896859/Weight_XS)*(N_BTagsM<4))',
 				    #'*((N_BTagsM>=4)*((0.0033838531*(N_GenTopHad==1 && N_GenTopLep==1)+0.0027473283*(N_GenTopLep==2 && N_GenTopHad==0)+0.017175278*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS)+(0.017175278/Weight_XS)*(N_BTagsM<4))')
       #print "weights for scaleUp sample", thisnewsel
-      
+
     #if sysname=="_CMS_ttH_PSscaleDown":
       #thisnewsel=thisnewsel.replace('*((N_BTagsM>=4)*((0.000919641*(N_GenTopHad==1 && N_GenTopLep==1)+0.0009753747*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS)+(0.0084896859/Weight_XS)*(N_BTagsM<4))',
 				    #'*((N_BTagsM>=4)*((0.003070913*(N_GenTopHad==1 && N_GenTopLep==1)+0.0027532915*(N_GenTopLep==2 && N_GenTopHad==0)+0.016839284*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS)+(0.016839284/Weight_XS)*(N_BTagsM<4))')
       #print "weights for scaleDown sample", thisnewsel
-    
+
     #if sysname=="_CMS_scale_jUp":
       #thisnewsel=thisnewsel.replace('*((N_BTagsM>=4)*((0.000919641*(N_GenTopHad==1 && N_GenTopLep==1)+0.0009753747*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS)+(0.0084896859/Weight_XS)*(N_BTagsM<4))',
 				    #'*((N_BTagsM>=4)*((0.0011192298*(N_GenTopHad==1 && N_GenTopLep==1)+0.0007071164*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS)+(0.0084896859/Weight_XS)*(N_BTagsM<4))')
       #print "weights for scaleUp sample", thisnewsel
-     
+
     #if sysname=="_CMS_scale_jDown":
       #thisnewsel=thisnewsel.replace('*((N_BTagsM>=4)*((0.000919641*(N_GenTopHad==1 && N_GenTopLep==1)+0.0009753747*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS)+(0.0084896859/Weight_XS)*(N_BTagsM<4))',
 				    #'*((N_BTagsM>=4)*((0.0010096664*(N_GenTopHad==1 && N_GenTopLep==1)+0.0008658787*(N_GenTopLep==2 && N_GenTopHad==0)+0.0084896859*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS)+(0.0084896859/Weight_XS)*(N_BTagsM<4))')
-      
+
     systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),thisnewsel,sample.nick+sysname))
 
 allsamples=samples+systsamples
@@ -111,15 +114,15 @@ plots=[
         Plot(ROOT.TH1F("CSV0","B-tag of leading jet",22,-.1,1),"Jet_CSV[0]",plotselection,plotlabel),
         Plot(ROOT.TH1F("CSV1","B-tag of second jet",22,-.1,1),"Jet_CSV[1]",plotselection,plotlabel),
         Plot(ROOT.TH1F("CSV","B-tag of all jets",22,-.1,1),"Jet_CSV",plotselection,plotlabel),
-        
+
         #Plot(ROOT.TH1F("CSV0NPVgeq20","B-tag of leading jet (NPV#geq20)",22,-.1,1),"Jet_CSV[0]",plotselection+"*(N_PrimaryVertices>=20)",plotlabel),
         #Plot(ROOT.TH1F("CSV1NPVgeq20","B-tag of second jet (NPV#geq20)",22,-.1,1),"Jet_CSV[1]",plotselection+"*(N_PrimaryVertices>=20)",plotlabel),
         #Plot(ROOT.TH1F("CSVNPVgeq20","B-tag of all jets (NPV#geq20)",22,-.1,1),"Jet_CSV",plotselection+"*(N_PrimaryVertices>=20)",plotlabel),
-	
+
 	#Plot(ROOT.TH1F("CSV0NPV15to20","B-tag of leading jet (15#leqNPV#leq20)",22,-.1,1),"Jet_CSV[0]",plotselection+"*(N_PrimaryVertices<=20 && N_PrimaryVertices>=15)",plotlabel),
         #Plot(ROOT.TH1F("CSV1NPV15to20","B-tag of second jet (15#leqNPV#leq20)",22,-.1,1),"Jet_CSV[1]",plotselection+"*(N_PrimaryVertices<=20 && N_PrimaryVertices>=15)",plotlabel),
         #Plot(ROOT.TH1F("CSVNPV15to20","B-tag of all jets (15#leqNPV#leq20)",22,-.1,1),"Jet_CSV",plotselection+"*(N_PrimaryVertices<=20 && N_PrimaryVertices>=15)",plotlabel),
-	
+
 	#Plot(ROOT.TH1F("CSV0NPV10to15","B-tag of leading jet (10#leqNPV#leq15)",22,-.1,1),"Jet_CSV[0]",plotselection+"*(N_PrimaryVertices<=15 && N_PrimaryVertices>=10)",plotlabel),
         #Plot(ROOT.TH1F("CSV1NPV10to15","B-tag of second jet (10#leqNPV#leq15)",22,-.1,1),"Jet_CSV[1]",plotselection+"*(N_PrimaryVertices<=15 && N_PrimaryVertices>=10)",plotlabel),
         #Plot(ROOT.TH1F("CSVNPV10to15","B-tag of all jets (10#leqNPV#leq15)",22,-.1,1),"Jet_CSV",plotselection+"*(N_PrimaryVertices<=15 && N_PrimaryVertices>=10)",plotlabel),
@@ -195,7 +198,7 @@ Plot(ROOT.TH1F("RECO__lab__Delta_Phi_lbarbbar","RECO__lab__Delta_Phi_lbarbbar",2
 
 #        Plot(ROOT.TH1F("commonBDT43","BDT w/o MEM in training",10,-1,1),"BDT_common5_output",'N_BTagsM==3&&N_Jets==4','4 jets, 3 b-tags'),
 #        Plot(ROOT.TH1F("MEM43","MEM discriminator",10,0,1),"(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)",'(N_BTagsM==3&&N_Jets==4)',""),
-       
+
         #Plot(ROOT.TH1F("N_BoostedJets","Number of fat jets",5,0,5),"N_BoostedJets",plotselection,plotlabelboosted),
         #Plot(ROOT.TH1F("BoostedJet_Pt","p_{T} of fat jet",40,200,600),"BoostedJet_Pt[0]",plotselection,plotlabelboosted),
         #Plot(ROOT.TH1F("BoostedJet_Eta","#eta of fat jet",40,-2.5,2.5),"BoostedJet_Eta[0]",plotselection,plotlabelboosted),
@@ -270,8 +273,8 @@ Plot(ROOT.TH1F("RECO__lab__Delta_Phi_lbarbbar","RECO__lab__Delta_Phi_lbarbbar",2
         #Plot(ROOT.TH1F("Sphericity","",50,0,1),"Evt_Sphericity",plotselection,plotlabel),
         #Plot(ROOT.TH1F("Aplanarity","",50,0,0.5),"Evt_Aplanarity",plotselection,plotlabel),
         #Plot(ROOT.TH1F("SPIN_cos_bb","",50,0,0.5),"Evt_Aplanarity",plotselection,plotlabel),
-        
-        
+
+
 ]
 
 
@@ -450,7 +453,7 @@ Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Phi_lbarbbar","RECO__lab__Delta_Phi_
 
 ]
 
-        
+
 plotlabel="1 lepton, 4 jets, 4 b-tags"
 plotselection=categoriesJT[4][0]
 plotprefix="s44_"
@@ -618,7 +621,7 @@ plots62=[
        Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_h2","H_{2}",30,-.15,0.3),"BDT_common5_input_h2",plotselection,plotlabel),
        Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_aplanarity","aplanarity",30,0,0.3),"BDT_common5_input_aplanarity",plotselection,plotlabel),
        Plot(ROOT.TH1F(plotprefix+"Evt_CSV_Average","avg CSV",25,0.2,0.65),"Evt_CSV_Average",plotselection,plotlabel),
-        
+
        #Plot(ROOT.TH1F(plotprefix+"Evt_Deta_2JetsAverage","Evt_Deta_2JetsAverage", 60,0.0,3),"Evt_Deta_2JetsAverage",plotselection,plotlabel),
        #Plot(ROOT.TH1F(plotprefix+"Evt_Deta_3JetsAverage","Evt_Deta_3JetsAverage", 60,0.0,3),"Evt_Deta_3JetsAverage",plotselection,plotlabel),
        #Plot(ROOT.TH1F(plotprefix+"Evt_Deta_4JetsAverage","Evt_Deta_4JetsAverage", 60,0.0,3),"Evt_Deta_4JetsAverage",plotselection,plotlabel),
@@ -722,7 +725,7 @@ Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Phi_bb","RECO__lab__Delta_Phi_bb",22
 Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Phi_lb","RECO__lab__Delta_Phi_lb",22,-.1,1),"RECO__lab__Delta_Phi_lb",plotselection,plotlabel),
 Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Phi_lbarbbar","RECO__lab__Delta_Phi_lbarbbar",22,-.1,5),"RECO__lab__Delta_Phi_lbarbbar",plotselection,plotlabel),
 ]
-   
+
 plotlabel="1 lepton, #geq6 jets, #geq4 b-tags"
 plotselection=categoriesJT[6][0]
 plotprefix="s64"
@@ -824,7 +827,7 @@ lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],pl
 #lllcsv=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,CSVSystnames)
 
 for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
-    
+
   makeEventyields=False
 
   if "optD" in hld[0].GetName():
@@ -845,14 +848,14 @@ for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
       for i,cat in enumerate(categoriesJT):
         h.GetXaxis().SetBinLabel(i+1,cat[1])
     tablepath=("/".join((outputpath.split('/'))[:-1]))+"/"+name+"_yieldsJT"
-  
+
   # make an event yield table
   if makeEventyields:
     eventYields(hld,hl,samples,tablepath)
 
 labels=[plot.label for plot in plots]
 lolT=transposeLOL(listOfHistoLists)
-plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name,[[lll,3354,ROOT.kBlack,True]],False,labels)
+plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name,[[lll,3354,ROOT.kBlack,True]],False,labels,True,plotBlinded)
 
 exit(0)
 
@@ -863,7 +866,7 @@ lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],pl
 #lllcsv=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,CSVSystnames)
 labels=[plot.label for plot in plots]
 lolT=transposeLOL(listOfHistoLists)
-plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name+'_log',[[lll,3354,ROOT.kBlack,True]],True,labels)
+plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name+'_log',[[lll,3354,ROOT.kBlack,True]],True,labels,True,plotBlinded)
 
 # make category plots
 categoryplotsindex=3
@@ -883,10 +886,10 @@ for i,cat in enumerate(categoriesJT):
 #for i,cat in enumerate(categoriesSplitByBDToptD):
   #categoriesSplitByBDToptDlist.append(cat[1])
 
-listOfcustomBinLabels=[categoriesJTlist]               
+listOfcustomBinLabels=[categoriesJTlist]
 labels=[plot.label for plot in plots[:categoryplotsindex]]
 lolT=transposeLOL(listOfHistoListsForCategories)
-plotDataMCanWsystCustomBinLabels(listOfHistoListsDataForCategories,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name+'Categories_log',[[lllForCategories,3354,ROOT.kBlack,True]],listOfcustomBinLabels,True,labels,True)
+plotDataMCanWsystCustomBinLabels(listOfHistoListsDataForCategories,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name+'Categories_log',[[lllForCategories,3354,ROOT.kBlack,True]],listOfcustomBinLabels,True,labels,True,plotBlinded)
 
 
 
@@ -909,8 +912,7 @@ for i,cat in enumerate(categoriesJT):
 #for i,cat in enumerate(categoriesSplitByBDToptD):
   #categoriesSplitByBDToptDlist.append(cat[1])
 
-listOfcustomBinLabels=[categoriesJTlist]               
+listOfcustomBinLabels=[categoriesJTlist]
 labels=[plot.label for plot in plots[:categoryplotsindex]]
 lolTNL=transposeLOL(listOfHistoListsForCategoriesNL)
 plotDataMCanWsystCustomBinLabels(listOfHistoListsDataForCategoriesNL,transposeLOL(lolTNL[1:]),samples[1:],lolTNL[0],samples[0],-1,name+'Categories_nolog',[[lllForCategoriesNL,3354,ROOT.kBlack,True]],listOfcustomBinLabels,False,labels,True)
-
