@@ -6,6 +6,20 @@ from plotutils import *
 sel_singleel="(N_LooseMuons==0)*(N_Jets>=4 && N_BTagsM>=2)" # need to veto muon events in electron dataset to avoid double countung
 sel_singlemu="(N_LooseElectrons==0)*(N_Jets>=4 && N_BTagsM>=2)" # and vice versa...
 
+#Define lepton trigger scale factors for calculation without ntuple branch
+CalcTriggerSF=True
+if CalcTriggerSF:
+    ElecTrigSF = 'electronTriggerHelper.GetSF(electronPt,electronEta,0)'
+    ElecTrigSFUp = 'electronTriggerHelper.GetSF(electronPt,electronEta,1)'
+    ElecTrigSFDown = 'electronTriggerHelper.GetSF(electronPt,electronEta,-1)'
+    MuonTrigSF = 'muonTriggerHelper.GetSF(electronPt,electronEta,0)'
+    MuonTrigSFUp = 'muonTriggerHelper.GetSF(muonPt,muonEta,1)'
+    MuonTrigSFDown = 'muonTriggerHelper.GetSF(muonPt,muonEta,-1)'
+else:
+    elecTrigSF='1'
+    muonTrigSF='1'
+
+
 # hcc is uu dd ss cc with ids 1 2 3 4
 hccSel='*((abs(GenHiggs_DecProd1_PDGID)==1 && abs(GenHiggs_DecProd2_PDGID)==1) || (abs(GenHiggs_DecProd1_PDGID)==2 && abs(GenHiggs_DecProd2_PDGID)==2) || (abs(GenHiggs_DecProd1_PDGID)==3 && abs(GenHiggs_DecProd2_PDGID)==3) || (abs(GenHiggs_DecProd1_PDGID)==4 && abs(GenHiggs_DecProd2_PDGID)==4) )'
 # htt is mumu tautau with ids 13 15
@@ -36,14 +50,14 @@ weightsystnames=[
                     #"_CMS_ttH_Q2scale_ttbarPlusBBbarUp","_CMS_ttH_Q2scale_ttbarPlusBBbarDown",
                     #"_CMS_ttH_Q2scale_ttbarPlusCCbarUp","_CMS_ttH_Q2scale_ttbarPlusCCbarDown",
 #                    "_CMS_ttH_NNPDFUp","_CMS_ttH_NNPDFDown",
-#                    "_CMS_ttH_ljets_TrigUp","_CMS_ttH_ljets_TrigDown",  
+#                    "_CMS_ttH_ljets_TrigUp","_CMS_ttH_ljets_TrigDown",
 #                    "_CMS_ttH_ljets_Trig_elUp","_CMS_ttH_ljets_Trig_elDown",
-#                    "_CMS_ttH_eff_leptonUp","_CMS_ttH_eff_leptonDown",  
+#                    "_CMS_ttH_eff_leptonUp","_CMS_ttH_eff_leptonDown",
 #                    "_CMS_ttH_eff_elUp","_CMS_ttH_eff_elDown",
-#                    "_CMS_res_jUp","_CMS_res_jDown"         
-#                    "_CMS_ttH_ljets_Trig_muUp","_CMS_ttH_ljets_Trig_muDown",  
+#                    "_CMS_res_jUp","_CMS_res_jDown"
+#                    "_CMS_ttH_ljets_Trig_muUp","_CMS_ttH_ljets_Trig_muDown",
 #                    "_CMS_ttH_ljets_Trig_elUp","_CMS_ttH_ljets_Trig_elDown",
-#                    "_CMS_ttH_eff_muUp","_CMS_ttH_eff_muDown",  
+#                    "_CMS_ttH_eff_muUp","_CMS_ttH_eff_muDown",
 #                    "_CMS_ttH_eff_elUp","_CMS_ttH_eff_elDown",
 #                    "_CMS_res_jUp","_CMS_res_jDown"
                     #"_CMS_scale_jUp","_CMS_scale_jDown",
@@ -56,13 +70,13 @@ systs_all_samples=[
                    "_CMS_ttH_CSVHFStats2Up","_CMS_ttH_CSVHFStats2Down","_CMS_ttH_CSVLFStats2Up","_CMS_ttH_CSVLFStats2Down",
                    "_CMS_ttH_CSVCErr1Up","_CMS_ttH_CSVCErr1Down","_CMS_ttH_CSVCErr2Up","_CMS_ttH_CSVCErr2Down",
                     #"_CMS_ttH_PUUp","_CMS_ttH_PUDown",
-#                    "_CMS_ttH_ljets_Trig_muUp","_CMS_ttH_ljets_Trig_muDown",  
+#                    "_CMS_ttH_ljets_Trig_muUp","_CMS_ttH_ljets_Trig_muDown",
 #                    "_CMS_ttH_ljets_Trig_elUp","_CMS_ttH_Trig_elDown",
-#                    "_CMS_ttH_eff_muUp","_CMS_ttH_eff_muDown",  
+#                    "_CMS_ttH_eff_muUp","_CMS_ttH_eff_muDown",
 #                    "_CMS_ttH_eff_elUp","_CMS_ttH_eff_elDown",
-#                    "_CMS_ttH_ljets_TrigUp","_CMS_ttH_ljets_TrigDown",  
+#                    "_CMS_ttH_ljets_TrigUp","_CMS_ttH_ljets_TrigDown",
 #                    "_CMS_ttH_ljets_Trig_elUp","_CMS_ttH_Trig_elDown",
-#                    "_CMS_ttH_eff_leptonUp","_CMS_ttH_eff_leptonDown",  
+#                    "_CMS_ttH_eff_leptonUp","_CMS_ttH_eff_leptonDown",
 #                    "_CMS_ttH_eff_elUp","_CMS_ttH_eff_elDown",
 #                    "_CMS_res_jUp","_CMS_res_jDown",
                     #"_CMS_scale_jUp","_CMS_scale_jDown",
@@ -100,9 +114,9 @@ errorSystnames=[
                     #"_CMS_ttH_Q2scale_ttbarPlusBBbarUp","_CMS_ttH_Q2scale_ttbarPlusBBbarDown",
                     #"_CMS_ttH_Q2scale_ttbarPlusCCbarUp","_CMS_ttH_Q2scale_ttbarPlusCCbarDown",
 #                    "_CMS_ttH_NNPDFUp","_CMS_ttH_NNPDFDown",
-#                    "_CMS_ttH_ljets_Trig_muUp","_CMS_ttH_ljets_Trig_muDown",  
+#                    "_CMS_ttH_ljets_Trig_muUp","_CMS_ttH_ljets_Trig_muDown",
 #                     "_CMS_ttH_ljets_TrigUp","_CMS_ttH_ljets_TrigDown",
-#                    "_CMS_ttH_eff_muUp","_CMS_ttH_eff_muDown",  
+#                    "_CMS_ttH_eff_muUp","_CMS_ttH_eff_muDown",
 #                    "_CMS_ttH_eff_leptonUp","_CMS_ttH_eff_leptonDown",
 #                    "_CMS_res_jUp","_CMS_res_jDown",
                     #"_CMS_scale_jUp","_CMS_scale_jDown",
@@ -123,9 +137,9 @@ CSVSystnames=[
                     #"_CMS_ttH_Q2scale_ttbarPlusBBbarUp","_CMS_ttH_Q2scale_ttbarPlusBBbarDown",
                     #"_CMS_ttH_Q2scale_ttbarPlusCCbarUp","_CMS_ttH_Q2scale_ttbarPlusCCbarDown",
 #                    "_CMS_ttH_NNPDFUp","_CMS_ttH_NNPDFDown",
-#                    "_CMS_ttH_ljets_Trig_muUp","_CMS_ttH_ljets_Trig_muDown",  
+#                    "_CMS_ttH_ljets_Trig_muUp","_CMS_ttH_ljets_Trig_muDown",
 #                     "_CMS_ttH_ljets_TrigUp","_CMS_ttH_ljets_TrigDown",
-#                    "_CMS_ttH_eff_muUp","_CMS_ttH_eff_muDown",  
+#                    "_CMS_ttH_eff_muUp","_CMS_ttH_eff_muDown",
 #                    "_CMS_ttH_eff_leptonUp","_CMS_ttH_eff_leptonDown",
 #                    "_CMS_res_jUp","_CMS_res_jDown",
                     #"_CMS_scale_jUp","_CMS_scale_jDown",
@@ -225,7 +239,7 @@ othersystfilenames=[
 assert len(errorSystnames)==len(weightsystnames+othersystnames)
 
 # samples
-# input path 
+# input path
 path_80x="/nfs/dust/cms/user/kelmorab/samples80X_BaseLine"
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
@@ -234,43 +248,43 @@ samples_data_controlplots=[
                     Sample('SingleEl',ROOT.kBlack,path_80x+'/el_*/*nominal*.root',sel_singleel,'SingleEl')
 ]
 
-# MC samples (name, color, path to files,weight,nickname_without_special_characters,systematics)                       
+# MC samples (name, color, path to files,weight,nickname_without_special_characters,systematics)
 samplesControlPlots=[
-                    Sample('t#bar{t}H',ROOT.kBlue+1,path_80x+'/ttH*/*nominal*.root',mcweight,'ttH',systs_all_samples) ,     
-#                    Sample('t#bar{t}',ROOT.kRed+1,path_80x+'/ttbar/*nominal*.root',mcweight,'ttbar',systs_all_samples) ,     
+                    Sample('t#bar{t}H',ROOT.kBlue+1,path_80x+'/ttH*/*nominal*.root',mcweight,'ttH',systs_all_samples) ,
+#                    Sample('t#bar{t}',ROOT.kRed+1,path_80x+'/ttbar/*nominal*.root',mcweight,'ttbar',systs_all_samples) ,
                     Sample('t#bar{t}+lf',ROOT.kRed-7,path_80x+'/ttbar_????_*/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)','ttbarOther',systs_all_samples+systs_ttbar+systs_tt_lf,0.05),
                     Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,path_80x+'/ttbar_????_*/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==1)','ttbarPlusCCbar',systs_all_samples+systs_ttbar+systs_tt_cc,0.5),
                     Sample('t#bar{t}+b',ROOT.kRed-2,path_80x+'/ttbar_????_*/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==1)','ttbarPlusB',systs_all_samples+systs_ttbar+systs_tt_b,0.5),
                     Sample('t#bar{t}+2b',ROOT.kRed+2,path_80x+'/ttbar_????_*/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==2)','ttbarPlus2B',systs_all_samples+systs_ttbar+systs_tt_2b,0.5),
-                    Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,path_80x+'/ttbar_????_*/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==3)','ttbarPlusBBbar',systs_all_samples+systs_ttbar+systs_tt_bb,0.5),  
-                    Sample('Single Top',ROOT.kMagenta,path_80x+'/st*/*nominal*.root',mcweightAll,'SingleTop',systs_all_samples) , 
-                    Sample('V+jets',ROOT.kGreen-3,path_80x+'/??ets*/*nominal*.root',mcweightAll,'Vjets',systs_all_samples) , 
-                    #Sample('t#bar{t}+V',ROOT.kBlue-10,path_80x+'/tt?_*/*nominal*.root',mcweightAll,'ttV',systs_all_samples),         
-                    ##Sample('Diboson',ROOT.kAzure+2,path_80x+'/??/*nominal*.root',mcweightAll,'Diboson',systs_all_samples) , 
-#                    Sample('QCD',ROOT.kYellow ,path_80x+'/QCD*/*nominal*root',mcweight,'QCD') , 
+                    Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,path_80x+'/ttbar_????_*/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==3)','ttbarPlusBBbar',systs_all_samples+systs_ttbar+systs_tt_bb,0.5),
+                    Sample('Single Top',ROOT.kMagenta,path_80x+'/st*/*nominal*.root',mcweightAll,'SingleTop',systs_all_samples) ,
+                    Sample('V+jets',ROOT.kGreen-3,path_80x+'/??ets*/*nominal*.root',mcweightAll,'Vjets',systs_all_samples) ,
+                    #Sample('t#bar{t}+V',ROOT.kBlue-10,path_80x+'/tt?_*/*nominal*.root',mcweightAll,'ttV',systs_all_samples),
+                    ##Sample('Diboson',ROOT.kAzure+2,path_80x+'/??/*nominal*.root',mcweightAll,'Diboson',systs_all_samples) ,
+#                    Sample('QCD',ROOT.kYellow ,path_80x+'/QCD*/*nominal*root',mcweight,'QCD') ,
 ]
 
 samplesLimits=[
-                    Sample('t#bar{t}H',ROOT.kBlue+1,path_80x+'/ttH*/*nominal*.root',mcweight,'ttH',systs_all_samples) ,     
-#                    Sample('t#bar{t}',ROOT.kRed+1,path_80x+'/ttbar/*nominal*.root',mcweight,'ttbar') ,     
-                    Sample('t#bar{t}H, H to b#bar{b}',ROOT.kBlue+1,path_80x+'/ttHbb*/*nominal*.root','1.009359*'+mcweight,'ttH_hbb',systs_all_samples) ,  
-                    Sample('t#bar{t}H, H to c#bar{c}',ROOT.kBlue+1,path_80x+'/ttHnonbb*/*nominal*.root','0.987234*'+mcweight+hccSel,'ttH_hcc',systs_all_samples) ,  
-                    Sample('t#bar{t}H, H to #tau#tau',ROOT.kBlue+1,path_80x+'/ttHnonbb*/*nominal*.root','0.987234*'+mcweight+httSel,'ttH_htt',systs_all_samples) ,  
-                    Sample('t#bar{t}H, H to #gamma#gamma',ROOT.kBlue+1,path_80x+'/ttHnonbb*/*nominal*.root','0.987234*'+mcweight+hggSel,'ttH_hgg',systs_all_samples) ,  
-                    Sample('t#bar{t}H, H to gluglu',ROOT.kBlue+1,path_80x+'/ttHnonbb*/*nominal*.root','0.987234*'+mcweight+hglugluSel,'ttH_hgluglu',systs_all_samples) ,  
-                    Sample('t#bar{t}H, H to WW',ROOT.kBlue+1,path_80x+'/ttHnonbb*/*nominal*.root','0.987234*'+mcweight+hwwSel,'ttH_hww',systs_all_samples) ,  
-                    Sample('t#bar{t}H, H to ZZ',ROOT.kBlue+1,path_80x+'/ttHnonbb*/*nominal*.root','0.987234*'+mcweight+hzzSel,'ttH_hzz',systs_all_samples) ,  
+                    Sample('t#bar{t}H',ROOT.kBlue+1,path_80x+'/ttH*/*nominal*.root',mcweight,'ttH',systs_all_samples) ,
+#                    Sample('t#bar{t}',ROOT.kRed+1,path_80x+'/ttbar/*nominal*.root',mcweight,'ttbar') ,
+                    Sample('t#bar{t}H, H to b#bar{b}',ROOT.kBlue+1,path_80x+'/ttHbb*/*nominal*.root','1.009359*'+mcweight,'ttH_hbb',systs_all_samples) ,
+                    Sample('t#bar{t}H, H to c#bar{c}',ROOT.kBlue+1,path_80x+'/ttHnonbb*/*nominal*.root','0.987234*'+mcweight+hccSel,'ttH_hcc',systs_all_samples) ,
+                    Sample('t#bar{t}H, H to #tau#tau',ROOT.kBlue+1,path_80x+'/ttHnonbb*/*nominal*.root','0.987234*'+mcweight+httSel,'ttH_htt',systs_all_samples) ,
+                    Sample('t#bar{t}H, H to #gamma#gamma',ROOT.kBlue+1,path_80x+'/ttHnonbb*/*nominal*.root','0.987234*'+mcweight+hggSel,'ttH_hgg',systs_all_samples) ,
+                    Sample('t#bar{t}H, H to gluglu',ROOT.kBlue+1,path_80x+'/ttHnonbb*/*nominal*.root','0.987234*'+mcweight+hglugluSel,'ttH_hgluglu',systs_all_samples) ,
+                    Sample('t#bar{t}H, H to WW',ROOT.kBlue+1,path_80x+'/ttHnonbb*/*nominal*.root','0.987234*'+mcweight+hwwSel,'ttH_hww',systs_all_samples) ,
+                    Sample('t#bar{t}H, H to ZZ',ROOT.kBlue+1,path_80x+'/ttHnonbb*/*nominal*.root','0.987234*'+mcweight+hzzSel,'ttH_hzz',systs_all_samples) ,
                     Sample('t#bar{t}H, H to #gamma Z',ROOT.kBlue+1,path_80x+'/ttHnonbb*/*nominal*.root','0.987234*'+mcweight+hzgSel,'ttH_hzg',systs_all_samples) ,
                     Sample('t#bar{t}+lf',ROOT.kRed-7,path_80x+'/ttbar_????_*/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)','ttbarOther',systs_all_samples+systs_ttbar+systs_tt_lf,0.05),
                     Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,path_80x+'/ttbar_????_*/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==1)','ttbarPlusCCbar',systs_all_samples+systs_ttbar+systs_tt_cc,0.5),
                     Sample('t#bar{t}+b',ROOT.kRed-2,path_80x+'/ttbar_????_*/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==1)','ttbarPlusB',systs_all_samples+systs_ttbar+systs_tt_b,0.5),
                     Sample('t#bar{t}+2b',ROOT.kRed+2,path_80x+'/ttbar_????_*/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==2)','ttbarPlus2B',systs_all_samples+systs_ttbar+systs_tt_2b,0.5),
                     Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,path_80x+'/ttbar_????_*/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==3)','ttbarPlusBBbar',systs_all_samples+systs_ttbar+systs_tt_bb,0.5),
-                    Sample('Single Top',ROOT.kMagenta,path_80x+'/st*/*nominal*.root',mcweightAll,'singlet',systs_all_samples) , 
-                    #Sample('Z+jets',ROOT.kGreen-3,path_80x+'/Zjets*/*nominal*.root',mcweightAll,'zjets',systs_all_samples) , 
-                    Sample('W+jets',ROOT.kGreen-7,path_80x+'/WJets*/*nominal*.root',mcweightAll,'wjets',systs_all_samples) , 
+                    Sample('Single Top',ROOT.kMagenta,path_80x+'/st*/*nominal*.root',mcweightAll,'singlet',systs_all_samples) ,
+                    #Sample('Z+jets',ROOT.kGreen-3,path_80x+'/Zjets*/*nominal*.root',mcweightAll,'zjets',systs_all_samples) ,
+                    Sample('W+jets',ROOT.kGreen-7,path_80x+'/WJets*/*nominal*.root',mcweightAll,'wjets',systs_all_samples) ,
                     #Sample('t#bar{t}+W',ROOT.kBlue-10,path_80x+'/ttW_*/*nominal*.root',mcweightAll,'ttbarW',systs_all_samples),
                     #Sample('t#bar{t}+Z',ROOT.kBlue-6,path_80x+'/ttZ_*/*nominal*.root',mcweightAll,'ttbarZ',systs_all_samples),
-                    #Sample('Diboson',ROOT.kAzure+2,path_80x+'/??/*nominal*.root',mcweightAll,'diboson',systs_all_samples) , 
-#                    Sample('QCD',ROOT.kYellow ,path_80x+'/QCD*/*nominal*root',mcweightAll,'QCD') , 
+                    #Sample('Diboson',ROOT.kAzure+2,path_80x+'/??/*nominal*.root',mcweightAll,'diboson',systs_all_samples) ,
+#                    Sample('QCD',ROOT.kYellow ,path_80x+'/QCD*/*nominal*root',mcweightAll,'QCD') ,
 ]

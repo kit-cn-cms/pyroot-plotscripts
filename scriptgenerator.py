@@ -29,6 +29,89 @@ def getHead():
 
 using namespace std;
 
+class EleTriggerHelper
+{
+  public:
+    EleTriggerHelper();
+    double GetSF(double electronPt, double electronEta, int syst);
+  private:
+    TH2D *h_abseta_pt_ratio;
+
+};
+
+EleTriggerHelper::EleTriggerHelper()
+{
+    std::string inputFile = "/nfs/dust/cms/user/asaibel/DataFilesForScriptGenerator/ElTriggerPerformance_Sep27.root";
+
+    TFile *f_electronTriggerSF= new TFile(std::string(inputFile).c_str(),"READ");
+
+    h_abseta_pt_ratio=(TH2D*)f_electronTriggerSF->Get("electrontrig_sf_eta_pt");
+
+}
+
+double EleTriggerHelper::GetSF(double electronPt, double electronEta, int syst){
+  if(electronPt==0.0){return 1.0;}
+  //std::cout<<electronPt<<" "<<electronEta<<std::endl;
+  int thisbin=0;
+  double searcheta=electronEta;
+  double searchpt=TMath::Min(electronPt,499.0);
+
+  thisbin = h_abseta_pt_ratio->FindBin(searcheta,searchpt);
+  double nomval=h_abseta_pt_ratio->GetBinContent(thisbin);
+  double error=h_abseta_pt_ratio->GetBinError(thisbin);
+  double upval=nomval+error;
+  double downval=nomval-error;
+
+  // if(syst==0){std::cout<<"Trigger SF "<<std::endl; std::cout<<nomval<<" "<<upval<<" "<<downval<<std::endl;}
+
+  if (syst==-1){return downval;}
+  else if (syst==1){return upval;}
+  else {return nomval;}
+}
+
+class MuTriggerHelper
+{
+  public:
+    MuTriggerHelper();
+    double GetSF(double muonPt, double muonEta, int syst);
+
+  private:
+    TH2D *h_mu_TRIGGER_abseta_pt;
+
+};
+
+MuTriggerHelper::MuTriggerHelper()
+{
+    std::string inputFile = "/nfs/dust/cms/user/asaibel/DataFilesForScriptGenerator/MuonTriggerPerformance_Sep06.root";
+
+    TFile *f_muonTriggerSF= new TFile(std::string(inputFile).c_str(),"READ");
+
+    h_mu_TRIGGER_abseta_pt=(TH2D*)f_muonTriggerSF->Get("muontrig_sf_abseta_pt");
+
+
+}
+
+double MuTriggerHelper::GetSF(double muonPt, double muonEta, int syst){
+  if(muonPt==0.0){return 1.0;}
+  //std::cout<<muonPt<<" "<<muonEta<<std::endl;
+  int thisBin=0;
+  double searchEta=fabs(muonEta);
+  double searchPt=TMath::Min(muonPt,499.0);
+
+  thisBin = h_mu_TRIGGER_abseta_pt->FindBin(searchEta,searchPt);
+  double nomval=h_mu_TRIGGER_abseta_pt->GetBinContent(thisBin);
+  double error=h_mu_TRIGGER_abseta_pt->GetBinError(thisBin);
+  double upval=nomval+error;
+  double downval=nomval-error;
+
+
+  // if(syst==0){std::cout<<"Trigger SF "<<std::endl; std::cout<<nomval<<" "<<upval<<" "<<downval<<std::endl;}
+
+  if (syst==-1){return downval;}
+  else if (syst==1){return upval;}
+  else {return nomval;}
+}
+
 void plot(){
   TH1F::SetDefaultSumw2();
 
@@ -45,6 +128,10 @@ void plot(){
   float sumOfWeights=0;
 
   int DoWeights=1;
+
+  //initialize Trigger Helper
+  EleTriggerHelper electronTriggerHelper=EleTriggerHelper();
+  MuTriggerHelper muonTriggerHelper=MuTriggerHelper();
 
   if(processname=="SingleEl" || processname=="SingleMu"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
 
@@ -115,6 +202,24 @@ def startLoop():
 
     eventsAnalyzed++;
     sumOfWeights+=Weight;
+
+    // Trigger SF
+    double muonPt=0.0;
+    double muonEta=0.0;
+
+    if(N_TightMuons==1){muonPt=Muon_Pt[0]; muonEta=Muon_Eta[0];}
+    else{muonPt=0.0; muonEta=0.0;}
+    double electronPt=0.0;
+    double electronEta=0.0;
+
+    if(N_TightElectrons==1){electronPt=Electron_Pt[0]; electronEta=Electron_Eta[0];}
+    else{electronPt=0.0; electronEta=0.0;}
+    //Debugging: print lepton pt, eta and the correspronding scale factor. 
+   /* std::cout << "Electron_Pt = " << electronPt << " , Electron_Eta = " << electronEta << std::endl;
+    std::cout << "corresponding scale factor = " << electronTriggerHelper.GetSF(electronPt,electronEta,0) << std::endl;
+    std::cout << "Muon_Pt = " << muonPt << " , Muon_Eta = " << muonEta << std::endl;
+    std::cout << "corresponding scale factor = " << muonTriggerHelper.GetSF(muonPt,muonEta,0) << std::endl;*/
+
 
 """
 
@@ -198,7 +303,9 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 
   # collect variables
   # list varibles that should not be written to the program automatically
-  vetolist=['processname','DoWeights','TMath']
+
+  vetolist=['processname','DoWeights','TMath','electronPt','electronEta','muonPt','muonEta','muonTriggerHelper','electronTriggerHelper']
+
 
   # initialize variables object
   variables = variablebox.Variables(vetolist)
