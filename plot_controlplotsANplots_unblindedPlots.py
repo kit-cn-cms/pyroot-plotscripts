@@ -6,10 +6,10 @@ from plotconfigAnalysisV2 import *
 sys.path.insert(0, 'limittools')
 from limittools import renameHistos
 
-name='controlplotsAnalysisV2_evtJetsHT'
+name='controlplotsAnalysisV2_unblindedCRPlots'
 
 # if one wants to plot blinded: True (default: False)
-plotBlinded = True
+plotBlinded = False
 
 # selections
 boosted="(BoostedTopHiggs_TopHadCandidate_TopMVAOutput>=-0.485&&BoostedTopHiggs_HiggsCandidate_HiggsTag>=0.8925)"
@@ -867,8 +867,8 @@ plotsBoosted=[
     #Plot(ROOT.TH1F(plotprefix+"BJN_N_AvgIp3D","Avg 3D IP",40,0,0.06),"BJN_N_AvgIp3D",plotselection,plotlabel),
 ]
 
-bdtplots=plots64+plots63+plots62+plots54+plots53+plots44+plots43+plotsBoosted+plots42+plots52
-plots+=bdtplots
+#bdtplots=plots64+plots63+plots62+plots54+plots53+plots44+plots43+plotsBoosted+plots42+plots52
+#plots+=bdtplots
 #plots+=plots62+plots63
 
 print name,2000000,plots,samples+samples_data,[''],['1.'],weightsystnames, systweights

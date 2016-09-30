@@ -64,8 +64,8 @@ systs_all_samples=[
 #                    "_CMS_ttH_ljets_Trig_elUp","_CMS_ttH_Trig_elDown",
 #                    "_CMS_ttH_eff_leptonUp","_CMS_ttH_eff_leptonDown",
 #                    "_CMS_ttH_eff_elUp","_CMS_ttH_eff_elDown",
-##                   "_CMS_res_jUp","_CMS_res_jDown",
-##                    "_CMS_scale_jUp","_CMS_scale_jDown",
+                   "_CMS_res_jUp","_CMS_res_jDown",
+                    "_CMS_scale_jUp","_CMS_scale_jDown",
 ]
 
 systs_ttbar= [
@@ -104,8 +104,8 @@ errorSystnames=[
 #                     "_CMS_ttH_ljets_TrigUp","_CMS_ttH_ljets_TrigDown",
 #                    "_CMS_ttH_eff_muUp","_CMS_ttH_eff_muDown",
 #                    "_CMS_ttH_eff_leptonUp","_CMS_ttH_eff_leptonDown",
-##                   "_CMS_res_jUp","_CMS_res_jDown",
-##                    "_CMS_scale_jUp","_CMS_scale_jDown",
+                   "_CMS_res_jUp","_CMS_res_jDown",
+                    "_CMS_scale_jUp","_CMS_scale_jDown",
                     #"_CMS_ttH_PSscaleUp","_CMS_ttH_PSscaleDown",
 ]
 
@@ -205,19 +205,19 @@ systweights=[
 assert len(systweights)==len(weightsystnames)
 
 othersystnames=[
-#                    "_CMS_scale_jUp",
-#                    "_CMS_scale_jDown",
-#                   "_CMS_res_jUp",
-#                   "_CMS_res_jDown"
+                    "_CMS_scale_jUp",
+                    "_CMS_scale_jDown",
+                   "_CMS_res_jUp",
+                   "_CMS_res_jDown"
                     #"_CMS_ttH_PSscaleUp",
                     #"_CMS_ttH_PSscaleDown"
 ]
 
 othersystfilenames=[
-#                    "JESUP",
-#                    "JESDOWN",
-#                   "JERUP",
-#                   "JERDOWN"
+                    "JESUP",
+                    "JESDOWN",
+                   "JERUP",
+                   "JERDOWN"
                     #"scaleup",
                     #"scaledown"
 ]
