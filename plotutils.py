@@ -946,7 +946,7 @@ def createLLL_fromSuperHistoFileSyst(path,samples,plots,systnames=[""]):
                 key=sample.nick+'_'+plot.name+syst
                 print key
                 if not syst in sample.shape_unc:
-#		    print "using nominal for ", key
+		    print "using nominal for ", key
                     l.append(nominal.Clone(key))
                     continue
                 o=f.Get(key)

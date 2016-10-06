@@ -13,20 +13,20 @@ from limittools import replaceQ2scale
 from plotconfigAnalysisV3 import *
 
 # output name
-name='commonAnaV3plus4252'
+name='common'
 
 # define categories
 boosted="(BoostedTopHiggs_TopHadCandidate_TopMVAOutput>=-0.485&&BoostedTopHiggs_HiggsCandidate_HiggsTag>=0.8925)"                        
 categories_=[
-              ("(N_Jets==4&&N_BTagsM==2)","j4t2",""),
-              ("(N_Jets==5&&N_BTagsM==2)","j5t2",""),
-              ("(N_Jets==4&&N_BTagsM==3)","j4t3",""),
-              ("(N_Jets==4&&N_BTagsM>=4)","j4t4",""),
-              ("(N_Jets==5&&N_BTagsM==3)","j5t3",""),
-              ("(N_Jets==5&&N_BTagsM>=4)","j5t4",""),             
-              ("(N_Jets>=6&&N_BTagsM==2)","j6t2",""),
-              ("(N_Jets>=6&&N_BTagsM==3)","j6t3",""),
-              ("(N_Jets>=6&&N_BTagsM>=4)","j6t4","")
+              ("(N_Jets==4&&N_BTagsM==2)","ljets_j4_t2",""),
+              ("(N_Jets==5&&N_BTagsM==2)","ljets_j5_t2",""),
+              ("(N_Jets==4&&N_BTagsM==3)","ljets_j4_t3",""),
+              ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4",""),
+              ("(N_Jets==5&&N_BTagsM==3)","ljets_j5_t3",""),
+              ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4",""),             
+              ("(N_Jets>=6&&N_BTagsM==2)","ljets_jge6_t2",""),
+              ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3",""),
+              ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4","")
 ]
 
 categories=categories_

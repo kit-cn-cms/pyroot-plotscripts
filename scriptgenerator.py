@@ -200,25 +200,32 @@ def startLoop():
 
     chain->GetEntry(iEntry);
 
+    TString currentfilename="";
+    currentfilename = chain->GetCurrentFile()->GetName();   
+    int hasTrigger=0;
+    if(currentfilename.Index("withTrigger")!=-1){hasTrigger=1;}
     eventsAnalyzed++;
     sumOfWeights+=Weight;
 
     // Trigger SF
-    double muonPt=0.0;
-    double muonEta=0.0;
+  //  double muonPt=0.0;
+ //   double muonEta=0.0;
+ //   float muonPt=0.0;
+//    float muonEta=0.0;
+    
 
-    if(N_TightMuons==1){muonPt=Muon_Pt[0]; muonEta=Muon_Eta[0];}
-    else{muonPt=0.0; muonEta=0.0;}
-    double electronPt=0.0;
-    double electronEta=0.0;
+ //   if(N_TightMuons==1){muonPt=Muon_Pt[0]; muonEta=Muon_Eta[0];}
+ //   else{muonPt=0.0; muonEta=0.0;}
+  //  double electronPt=0.0;
+   // double electronEta=0.0;
 
-    if(N_TightElectrons==1){electronPt=Electron_Pt[0]; electronEta=Electron_Eta[0];}
-    else{electronPt=0.0; electronEta=0.0;}
+    //if(N_TightElectrons==1){electronPt=Electron_Pt[0]; electronEta=Electron_Eta[0];}
+   // else{electronPt=0.0; electronEta=0.0;}
     //Debugging: print lepton pt, eta and the correspronding scale factor. 
-   /* std::cout << "Electron_Pt = " << electronPt << " , Electron_Eta = " << electronEta << std::endl;
-    std::cout << "corresponding scale factor = " << electronTriggerHelper.GetSF(electronPt,electronEta,0) << std::endl;
-    std::cout << "Muon_Pt = " << muonPt << " , Muon_Eta = " << muonEta << std::endl;
-    std::cout << "corresponding scale factor = " << muonTriggerHelper.GetSF(muonPt,muonEta,0) << std::endl;*/
+  // /* std::cout << "Electron_Pt = " << electronPt << " , Electron_Eta = " << electronEta << std::endl;
+//    std::cout << "corresponding scale factor = " << electronTriggerHelper.GetSF(electronPt,electronEta,0) << std::endl;
+  //  std::cout << "Muon_Pt = " << muonPt << " , Muon_Eta = " << muonEta << std::endl;
+  //  std::cout << "corresponding scale factor = " << muonTriggerHelper.GetSF(muonPt,muonEta,0) << std::endl;*/
 
 
 """
@@ -304,7 +311,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   # collect variables
   # list varibles that should not be written to the program automatically
 
-  vetolist=['processname','DoWeights','TMath','electronPt','electronEta','muonPt','muonEta','muonTriggerHelper','electronTriggerHelper']
+  vetolist=['processname','DoWeights','TMath','electronPt','electronEta','muonPt','muonEta','muonTriggerHelper','electronTriggerHelper','hasTrigger']
 
 
   # initialize variables object
