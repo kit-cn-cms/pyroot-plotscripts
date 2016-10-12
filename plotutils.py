@@ -939,12 +939,12 @@ def createLLL_fromSuperHistoFileSyst(path,samples,plots,systnames=[""]):
             nominal_key=sample.nick+'_'+plot.name+systnames[0]
             nominal=f.Get(nominal_key)
 #            print sample.name
-#            print sample.shape_unc
+            print "shapes ", sample.shape_unc
             l=[]
             for syst in systnames:
                 ROOT.gDirectory.cd('PyROOT:/')
                 key=sample.nick+'_'+plot.name+syst
-                print key
+                #print key
                 if not syst in sample.shape_unc:
 		    print "using nominal for ", key
                     l.append(nominal.Clone(key))
@@ -976,11 +976,13 @@ def createErrorbands(lll,samples,DoRateSysts=True):
             #print h
         #print "integrals ", llT[0][0].Integral(), nominal.Integral()
         systs=[]
-        #print llT[1:]
+        #print "LLT[1:]", llT[1:]
         for l in llT[1:]: #for all systematics
+	    #print "l[1:]",l[1:]
             syst=l[0].Clone()
             for h in l[1:]:
                 syst.Add(h)
+                #print "adding to errorband"
                 #print h
             systs.append(syst)
         assert len(samples)==len(llT[0])
@@ -1388,13 +1390,13 @@ def turn1dHistoToRow(h,witherror=True,rounding="3dig"):
         if rounding=="3dig":
           s+="%.3f" % h.GetBinContent(i)
         else:
-	  s+="%.1f" % h.GetBinContent(i)
+	  s+="%.4f" % h.GetBinContent(i)
         if witherror:
             s+=" $\pm$ "
             if rounding=="3dig":
               s+="%.3f" % h.GetBinError(i)
             else:
-	      s+="%.1f" % h.GetBinError(i)
+	      s+="%.4f" % h.GetBinError(i)
         if i==h.GetNbinsX():
             s+="\\\\"
         else:
@@ -1985,25 +1987,31 @@ def writeLOLAndOneOnTop(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,f
         otc.SetBinError(1,ROOT.TMath.Sqrt(ROOT.TMath.Power(otc.GetBinError(0),2)+ROOT.TMath.Power(otc.GetBinError(1),2)));
         otc.SetBinError(otc.GetNbinsX(),ROOT.TMath.Sqrt(ROOT.TMath.Power(otc.GetBinError(otc.GetNbinsX()+1),2)+ROOT.TMath.Power(otc.GetBinError(otc.GetNbinsX()),2)));
         otc.SetLineWidth(3)
-        l=getLegend()
-        if factor >= 0.:
-          l.AddEntry2(otc,sampleOnTop.name+' x '+str(factor),'L')
+        l1=getLegendL()
+        l2=getLegendR()
+        if factor >= 0.: 
+          l2.AddEntry22(otc,sampleOnTop.name+' x '+str(factor),'L')
         else:
-          l.AddEntry2(otc,sampleOnTop.name+(' x {:4.0f}').format(integralfactor),'L')
-
+          l2.AddEntry22(otc,sampleOnTop.name+(' x {:4.0f}').format(integralfactor),'L')
+        i=0
         for h,sample in zip(listOfHistos,samples):
-            loption='L'
-            if stack:
-                loption='F'
-            l.AddEntry2(h,sample.name,loption)
+            i+=1
+            if i%2==1:
+                l1.AddEntry22(h,sample.name,'F')
+            if i%2==0:
+                l2.AddEntry22(h,sample.name,'F')        
+                
+                
         canvases.append(c)
         if factor >= 0.:
           otc.Scale(factor)
         else:
           otc.Scale(integralfactor)
         otc.DrawCopy("samehisto")
-        l.Draw('same')
-        objects.append(l)
+	l1.Draw('same')
+        l2.Draw('same')        
+        objects.append(l1)
+        objects.append(l2)
         objects.append(otc)
         if sepaTest:
             stestss=getSepaTests2(listOfHistos,ot)
@@ -2027,7 +2035,7 @@ def eventYields(hl_data,hl_mc,samples,tablename,witherror=True,makeRatios=True):
     for h in hl_data[1:]:
         h_data.Add(h)
     s_data=Sample('data')
-    s_bkg=Sample('sum of backgrounds')
+    s_bkg=Sample('Total bkg')
     h_bkg=hl_mc[1].Clone()
     for h in hl_mc[2:]:
         h_bkg.Add(h.Clone())
@@ -2042,6 +2050,28 @@ def eventYields(hl_data,hl_mc,samples,tablename,witherror=True,makeRatios=True):
       turn1dHistosToTable(hl_mc[1:]+[h_bkg]+[hl_mc[0]]+[h_data]+[hratio,hratioData],samples[1:]+[s_bkg]+[samples[0]]+[s_data]+[s_ratio,s_ratioData],tablename,witherror)
     else:
       turn1dHistosToTable(hl_mc[1:]+[h_bkg]+[hl_mc[0]]+[h_data],samples[1:]+[s_bkg]+[samples[0]]+[s_data],tablename,witherror)
+    command=['pdflatex',tablename+'.tex']
+    subprocess.call(command)
+
+def eventYieldsNew(hl_data,hl_mc,samples,tablename,witherror=True,makeRatios=True):
+    h_data=hl_data[0].Clone()
+    for h in hl_data[1:]:
+        h_data.Add(h)
+    s_data=Sample('data')
+    s_bkg=samples[-1]
+    h_bkg=hl_mc[-1]
+
+    hratio=None
+    if makeRatios:
+      hratio=hl_mc[0].Clone()
+      hratio.Divide(h_bkg)
+      s_ratio=Sample('S/B')
+      hratioData=h_data.Clone()
+      hratioData.Divide(h_bkg)
+      s_ratioData=Sample('data/B')
+      turn1dHistosToTable(hl_mc[1:]+[hl_mc[0]]+[h_data]+[hratio,hratioData],samples[1:]+[samples[0]]+[s_data]+[s_ratio,s_ratioData],tablename,witherror)
+    else:
+      turn1dHistosToTable(hl_mc[1:]+[hl_mc[0]]+[h_data],samples[1:]+[samples[0]]+[s_data],tablename,witherror)
     command=['pdflatex',tablename+'.tex']
     subprocess.call(command)
 
@@ -2288,7 +2318,7 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         nok=99999
         if blinded:
             for ibin in range(stackedListOfHistos[0].GetNbinsX()):
-                if otc.GetBinContent(ibin)>0 and stackedListOfHistos[0].GetBinContent(ibin)/otc.GetBinContent(ibin)<100:
+                if otc.GetBinContent(ibin)>0 and stackedListOfHistos[0].GetBinContent(ibin)/otc.GetBinContent(ibin)<1000000:
                     nok=ibin-1
                     break
         data,blind=getDataGraphBlind(listOfHistosData,nok)
@@ -2308,9 +2338,9 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         #blind.SetFillStyle(1001)
         blind.SetLineColor(ROOT.kGray)
         blind.SetFillColor(ROOT.kGray)
-        if blinded:
-            blind.Draw('same2')
-        objects.append(blind)
+        #if blinded:
+            #blind.Draw('same2')
+        #objects.append(blind)
 
 
         listOfRatioErrorGraphs=[]
@@ -2577,9 +2607,9 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
         #blind.SetFillStyle(1001)
         blind.SetLineColor(ROOT.kGray)
         blind.SetFillColor(ROOT.kGray)
-        if blinded:
-            blind.Draw('same2')
-        objects.append(blind)
+        #if blinded:
+            #blind.Draw('same2')
+        #objects.append(blind)
 
 
         listOfRatioErrorGraphs=[]

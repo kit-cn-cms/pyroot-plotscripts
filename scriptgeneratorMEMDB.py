@@ -10,6 +10,7 @@ import xml.etree.ElementTree as ET
 import variablebox
 import plotutils
 import glob
+import json
 
 ROOT.gROOT.SetBatch(True)
 
@@ -30,6 +31,7 @@ def getHead(dataBases):
 #include "TMVA/Reader.h"
 #include <algorithm>
 #include <map>
+#include "TStopwatch.h"
 """
 
   if dataBases!=[]:
@@ -154,6 +156,9 @@ std::cout<<"processname" <<processname<<std::endl;
 
   // read in samples to add to chain and get relevant names for the database
   std::map<TString, TString> sampleDataBaseIdentifiers;
+  std::map<TString, std::map<TString, long>> sampleDataBaseFoundEvents;
+  std::map<TString, std::map<TString, long>> sampleDataBaseLostEvents;
+    
   
   string buf;
   stringstream ss(filenames); 
@@ -177,6 +182,24 @@ std::cout<<"processname" <<processname<<std::endl;
     //check if already in vectr
     if(! (std::find(databaseRelevantFilenames.begin(),databaseRelevantFilenames.end(),thisfilename)!=databaseRelevantFilenames.end()  )){
       databaseRelevantFilenames.push_back(thisfilename.Copy());
+      //sampleDataBaseFoundEvents["jt42"][thisfilename]=0;
+      //sampleDataBaseLostEvents["jt42"][thisfilename]=0;
+      //sampleDataBaseFoundEvents["jt52"][thisfilename]=0;
+      //sampleDataBaseLostEvents["jt52"][thisfilename]=0;
+      //sampleDataBaseFoundEvents["jt62"][thisfilename]=0;
+      //sampleDataBaseLostEvents["jt62"][thisfilename]=0;
+      sampleDataBaseFoundEvents["jt43"][thisfilename]=0;
+      sampleDataBaseLostEvents["jt43"][thisfilename]=0;
+      sampleDataBaseFoundEvents["jt53"][thisfilename]=0;
+      sampleDataBaseLostEvents["jt53"][thisfilename]=0;
+      sampleDataBaseFoundEvents["jt63"][thisfilename]=0;
+      sampleDataBaseLostEvents["jt63"][thisfilename]=0;
+      sampleDataBaseFoundEvents["jt44"][thisfilename]=0;
+      sampleDataBaseLostEvents["jt44"][thisfilename]=0;
+      sampleDataBaseFoundEvents["jt54"][thisfilename]=0;
+      sampleDataBaseLostEvents["jt54"][thisfilename]=0;
+      sampleDataBaseFoundEvents["jt64"][thisfilename]=0;
+      sampleDataBaseLostEvents["jt64"][thisfilename]=0;
     }
   }
   std::cout<<"relevant db samplenames"<<std::endl;
@@ -188,7 +211,12 @@ std::cout<<"processname" <<processname<<std::endl;
 
   TFile* outfile=new TFile(outfilename,"RECREATE");
 
-int Evt_ID;
+  TStopwatch* totalWatch= new TStopwatch();
+  TStopwatch* databaseWatch= new TStopwatch();
+  double memTime=0;
+
+  int nEventsVetoed=0;
+  int Evt_ID;
   int Evt_Run;
   int Evt_Lumi;
   
@@ -229,13 +257,14 @@ def InitDataBase(thisDataBase=[]):
   rstr+="  double "+thisDataBaseName+"n_perm_sig=-99.9;\n"
   rstr+="  double "+thisDataBaseName+"n_perm_bkg=-99.9;\n"
   rstr+="  DataBaseMEMResult* "+thisDataBaseName+"DummyResultPointer= new DataBaseMEMResult();\n"
-  
+  rstr+="  int "+thisDataBaseName+"FoundResult = 1;\n"
   
   return rstr
 
 def readOutDataBase(thisDataBase=[]):
   thisDataBaseName=thisDataBase[0]
   thisDataBasePath=thisDataBase[1]
+  skipNonExistingEvent=thisDataBase[2]
   
   rstr= """
   // read the database
@@ -271,8 +300,11 @@ def readOutDataBase(thisDataBase=[]):
   """
   
   rstr+=" // loop over subsamples of this database\n"
-  rstr+="    int nfoundresults=0;"
-
+  rstr+="    int nfoundresults=0;\n"
+  
+  rstr+="  if(N_BTagsM>=3){ \n"
+  rstr+="  databaseWatch->Start(); \n"
+  
   rstr+="  for(unsigned int isn=0; isn<"+thisDataBaseName+"DB.size();isn++){ \n"
   rstr+="    if(databaseRelevantFilenames.at(isn)==currentRelevantSampleName){;\n"
   rstr+="         DataBaseMEMResult "+thisDataBaseName+"Result = "+thisDataBaseName+"DB.at(isn)->GetMEMResult(databaseRelevantFilenames.at(isn),Evt_Run,Evt_Lumi,Evt_ID);\n"
@@ -280,7 +312,8 @@ def readOutDataBase(thisDataBase=[]):
   #rstr+="        std::cout<<\" p p_sig p_bkg p_err_sig p_err_bkg n_perm_sig n_perm_bkg \"<<"+thisDataBaseName+"p<<\" \"<<"+thisDataBaseName+"p_sig<<\"   \"<<"+thisDataBaseName+"p_bkg<<\" \"<<"+thisDataBaseName+"p_err_sig<<\" \"<<"+thisDataBaseName+"p_err_bkg<<\" \"<<"+thisDataBaseName+"n_perm_sig<<\" \"<<"+thisDataBaseName+"n_perm_bkg<<\" \"<<std::endl;\n"
   
   rstr+="        // check if the event was found using the default values. If any event was found the return values should be different and the resuilt will be replaced\n"
-  rstr+="        if(("+thisDataBaseName+"Result.p != "+thisDataBaseName+"DummyResultPointer->p) or ("+thisDataBaseName+"Result.p_sig != "+thisDataBaseName+"DummyResultPointer->p_sig) or ("+thisDataBaseName+"Result.p_bkg != "+thisDataBaseName+"DummyResultPointer->p_bkg) or ("+thisDataBaseName+"Result.p_err_sig != "+thisDataBaseName+"DummyResultPointer->p_err_sig) or ("+thisDataBaseName+"Result.p_err_bkg != "+thisDataBaseName+"DummyResultPointer->p_err_bkg) or ("+thisDataBaseName+"Result.n_perm_sig != "+thisDataBaseName+"DummyResultPointer->n_perm_sig) or ("+thisDataBaseName+"Result.n_perm_bkg != "+thisDataBaseName+"DummyResultPointer->n_perm_bkg)){\n"
+  #rstr+="        if(("+thisDataBaseName+"Result.p != "+thisDataBaseName+"DummyResultPointer->p) or ("+thisDataBaseName+"Result.p_sig != "+thisDataBaseName+"DummyResultPointer->p_sig) or ("+thisDataBaseName+"Result.p_bkg != "+thisDataBaseName+"DummyResultPointer->p_bkg) or ("+thisDataBaseName+"Result.p_err_sig != "+thisDataBaseName+"DummyResultPointer->p_err_sig) or ("+thisDataBaseName+"Result.p_err_bkg != "+thisDataBaseName+"DummyResultPointer->p_err_bkg) or ("+thisDataBaseName+"Result.n_perm_sig != "+thisDataBaseName+"DummyResultPointer->n_perm_sig) or ("+thisDataBaseName+"Result.n_perm_bkg != "+thisDataBaseName+"DummyResultPointer->n_perm_bkg)){\n"
+  rstr+="        if(("+thisDataBaseName+"Result.p != -99)){\n"
   rstr+="        nfoundresults+=1;"
 
   rstr+="      "+thisDataBaseName+"p="+thisDataBaseName+"Result.p;\n"
@@ -294,8 +327,42 @@ def readOutDataBase(thisDataBase=[]):
   rstr+="    }\n"
   rstr+="    }\n"
   rstr+="  }// end db loop \n"
-  rstr+="    if(nfoundresults!=1){std::cout<<\"WARNING found not exaclty one result \"<<nfoundresults<<\" \"<<currentRelevantSampleName<<\" \"<<Evt_ID<<\" \"<<N_Jets<<\" \"<<N_BTagsM<<std::endl;}"
-
+  rstr+="    if(nfoundresults!=1){\n"
+  rstr+="    //std::cout<<\"WARNING found not exaclty one result \"<<nfoundresults<<\" \"<<currentRelevantSampleName<<\" \"<<Evt_ID<<\" \"<<N_Jets<<\" \"<<N_BTagsM<<std::endl;\n"
+  rstr+="    if(N_BTagsM>=3){\n"
+  rstr+="      std::cout<<\"VETO this event\"<<\" \"<<currentRelevantSampleName<<\" \"<<Evt_ID<<\" \"<<N_Jets<<\" \"<<N_BTagsM<<std::endl;\n"
+  rstr+="      std::cout<<\"RedoThisEvent\"<<\" \"<<currentRelevantSampleName<<\" \"<<currentfilename<<\" \"<<Evt_Run<<\" \"<<Evt_Lumi<<\" \"<<Evt_ID<<std::endl;\n"
+  rstr+="      "+thisDataBaseName+"FoundResult=0;\n"
+  rstr+="      nEventsVetoed+=1;\n"
+  rstr+="""
+	       if(N_Jets==4 && N_BTagsM==3){sampleDataBaseLostEvents["jt43"][currentRelevantSampleName]+=1;}
+	       else if(N_Jets==4 && N_BTagsM>=4){sampleDataBaseLostEvents["jt44"][currentRelevantSampleName]+=1;}  
+	       else if(N_Jets==5 && N_BTagsM==3){sampleDataBaseLostEvents["jt53"][currentRelevantSampleName]+=1;}  
+	       else if(N_Jets==5 && N_BTagsM>=4){sampleDataBaseLostEvents["jt54"][currentRelevantSampleName]+=1;}  
+	       else if(N_Jets>=6 && N_BTagsM==3){sampleDataBaseLostEvents["jt63"][currentRelevantSampleName]+=1;}  
+	       else if(N_Jets>=6 && N_BTagsM>=4){sampleDataBaseLostEvents["jt64"][currentRelevantSampleName]+=1;}  
+	"""
+  rstr+="    }\n"
+  rstr+="  }\n"
+  rstr+="  else{\n"
+  rstr+="      "+thisDataBaseName+"FoundResult=1;\n"
+  rstr+="""
+	       if(N_Jets==4 && N_BTagsM==3){sampleDataBaseFoundEvents["jt43"][currentRelevantSampleName]+=1;}
+	       else if(N_Jets==4 && N_BTagsM>=4){sampleDataBaseFoundEvents["jt44"][currentRelevantSampleName]+=1;}  
+	       else if(N_Jets==5 && N_BTagsM==3){sampleDataBaseFoundEvents["jt53"][currentRelevantSampleName]+=1;}  
+	       else if(N_Jets==5 && N_BTagsM>=4){sampleDataBaseFoundEvents["jt54"][currentRelevantSampleName]+=1;}  
+	       else if(N_Jets>=6 && N_BTagsM==3){sampleDataBaseFoundEvents["jt63"][currentRelevantSampleName]+=1;}  
+	       else if(N_Jets>=6 && N_BTagsM>=4){sampleDataBaseFoundEvents["jt64"][currentRelevantSampleName]+=1;}  
+      """  
+  #rstr+="  std::cout<<\"FOUNDEVENT\"<<\" \"<<currentRelevantSampleName<<\" \"<<Evt_ID<<\" \"<<N_Jets<<\" \"<<N_BTagsM<<std::endl;\n"
+  rstr+=" }\n"
+  rstr+="  databaseWatch->Stop(); memTime+=databaseWatch->RealTime();\n"
+  if skipNonExistingEvent:
+    rstr+="  if("+thisDataBaseName+"FoundResult==0 and N_BTagsM>=3){ std::cout<<\"skipping\"<<std::endl; continue; }\n"
+  rstr+="  }\n"
+  #if skipNonExistingEvent:
+    #rstr+="  if("+thisDataBaseName+"FoundResult==0 and N_BTagsM>=3){ std::cout<<\"skipping\"<<std::endl; continue; }\n"
+  
   #rstr+="  std::cout<<\"FINAL p p_sig p_bkg p_err_sig p_err_bkg n_perm_sig n_perm_bkg \"<<"+thisDataBaseName+"p<<\" \"<<"+thisDataBaseName+"p_sig<<\" \"<<"+thisDataBaseName+"p_bkg<<\" \"<<"+thisDataBaseName+"p_err_sig<<\" \"<<"+thisDataBaseName+"p_err_bkg<<\" \"<<"+thisDataBaseName+"n_perm_sig<<\" \"<<"+thisDataBaseName+"n_perm_bkg<<\" \"<<std::endl;\n"
   
   return rstr
@@ -387,8 +454,6 @@ def startLoop():
 //    std::cout << "corresponding scale factor = " << electronTriggerHelper.GetSF(electronPt,electronEta,0) << std::endl;
   //  std::cout << "Muon_Pt = " << muonPt << " , Muon_Eta = " << muonEta << std::endl;
   //  std::cout << "corresponding scale factor = " << muonTriggerHelper.GetSF(muonPt,muonEta,0) << std::endl;*/
-
-
 """
 
 
@@ -452,6 +517,32 @@ def getFoot():
   std::ofstream f_nevents((string(outfilename)+".cutflow.txt").c_str());
   f_nevents << "0" << " : " << "all" << " : " << eventsAnalyzed << " : " << sumOfWeights <<endl;
   f_nevents.close();
+  std::cout<<"events vetoed because if missing mem "<<nEventsVetoed<<std::endl;
+  std::cout<<"all done"<<std::endl;
+  totalWatch->Stop();
+  std::cout<<"total time "<<totalWatch->RealTime()<<std::endl;
+  std::cout<<"time for databse "<<memTime<<std::endl;
+  
+  std::cout<<"All found events"<<std::endl;
+  for(auto const &ent1 : sampleDataBaseFoundEvents) {
+  // ent1.first is the first key
+    for(auto const &ent2 : ent1.second) {
+      // ent2.first is the second key
+      // ent2.second is the data
+      std::cout<<"FOUNDEVENTSINCAT "<<ent1.first<<" "<<ent2.first<<" "<<ent2.second<<std::endl;
+    }
+  }
+  std::cout<<"All lost events"<<std::endl;
+  for(auto const &ent1 : sampleDataBaseLostEvents) {
+  // ent1.first is the first key
+    for(auto const &ent2 : ent1.second) {
+      // ent2.first is the second key
+      // ent2.second is the data
+      std::cout<<"LOSTEVENTSINCAT "<<ent1.first<<" "<<ent2.first<<" "<<ent2.second<<std::endl;
+    }
+  }
+
+  
 }
 
 int main(){
@@ -486,6 +577,8 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
     vetolist.append(db[0]+"p_err_bkg")
     vetolist.append(db[0]+"n_perm_sig")
     vetolist.append(db[0]+"n_perm_bkg")
+    vetolist.append(db[0]+"FoundResult")
+    
   print vetolist # karim debug
 
   # initialize variables object
@@ -582,10 +675,11 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 
   # start event loop
   script+=startLoop()
-  for db in dataBases:
-    script+=readOutDataBase(db)  
+  
   script+='    float sampleweight=1;\n'
   script+=encodeSampleSelection(samples,variables)
+  for db in dataBases:
+    script+=readOutDataBase(db)  
   script+="\n"
 
   # calculate varibles and get TMVA outputs
@@ -780,10 +874,17 @@ def do_qstat(jobids):
       allfinished=True
 
 
-def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,programpath,cmsswpath):
+def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,programpath,cmsswpath,treejsonfile=""):
   scripts=[]
   outputs=[]
   nentries=[]
+  SaveTreeInforamtion={}
+  LoadedTreeInformation={}
+  if treejsonfile!="":
+    print "Loading file with tree event information"
+    jsonfile=open(treejsonfile,"r")
+    jsonstring=list(jsonfile)[0]
+    LoadedTreeInformation=json.loads(jsonstring)
   for s in samples:
     print 'creating scripts for',s.name,'from',s.path
     ntotal_events=0
@@ -791,9 +892,15 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
     events_in_files=0
     files_to_submit=[]
     for fn in s.files:
-      f=ROOT.TFile(fn)
-      t=f.Get('MVATree')
-      events_in_file=t.GetEntries()
+      events_in_file=0
+      if LoadedTreeInformation!={}:
+	#print "using tree event information"
+	events_in_file=LoadedTreeInformation[fn]
+      else:
+        f=ROOT.TFile(fn)
+        t=f.Get('MVATree')
+        events_in_file=t.GetEntries()
+      SaveTreeInforamtion[fn]=events_in_file
       # if the file is larger than maxevents it is analyzed in portions of nevents
       if events_in_file > maxevents:
         for ijob in range(events_in_file/maxevents+1):
@@ -845,6 +952,13 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
       events_in_files=0
 
     print ntotal_events,'events found in',s.name
+  
+  # save tree information to json file
+  treejson=json.dumps(SaveTreeInforamtion)
+  jsonfile=open(scriptsfolder+'/'+"treejson.json","w")
+  jsonfile.write(treejson)
+  jsonfile.close()
+  print "Saved information about events in trees to ", scriptsfolder+'/'+"treejson.json"
   return scripts,outputs,nentries
 
 
@@ -866,7 +980,7 @@ def check_jobs(scripts,outputs,nentries):
   return failed_jobs
 
 # the dataBases should be defined as follows e.g. [[memDB,path],[blrDB,path]]
-def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],dataBases=[]):
+def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],dataBases=[],treeInformationJsonFile=""):
   workdir=os.getcwd()+'/workdir/'+name
   outputpath=workdir+'/output.root'
 
@@ -920,7 +1034,7 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
 
   # create run scripts
   print 'creating run scripts'
-  scripts,outputs,nentries=get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,programpath,cmsswpath)
+  scripts,outputs,nentries=get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,programpath,cmsswpath,treeInformationJsonFile)
 
   # submit run scripts
   print 'submitting scripts'

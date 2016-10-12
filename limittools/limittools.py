@@ -51,16 +51,18 @@ def renameHistos(infname,outfname,sysnames,prune=True):
     thish=infile.Get(thisname)
     newname=thisname
     do=True
+    #print thisname
     if do and "PSscaleUp" in thisname and "Q2scale" in thisname and thisname[-2:]=="Up":
-#      print thisname
-      #ttbarOther_CMS_ttH_PSscaleUp_BDT_ljets_j4_t4_low_CMS_ttH_Q2scale_ttbarPlusBUp
+      #print thish
+#     print thisname
+      ttbarOther_CMS_ttH_PSscaleUp_BDT_ljets_j4_t4_low_CMS_ttH_Q2scale_ttbarPlusBUp
       tmp=thisname
       tmp=tmp.replace('_CMS_ttH_PSscaleUp','')
 #      print 'stripped',tmp
 #      raw_input()
       newname=tmp.replace('Q2scale','CombinedScale')
- #     print newname
-#      raw_input()
+      #print newname
+      #raw_input()
 
     if "PSscaleDown" in thisname and "Q2scale" in thisname and thisname[-4:]=="Down":
   #    print thisname
@@ -316,6 +318,7 @@ def makeDatacards(filename,outname,categories=None,doHdecay=True):
   if categories==None:
     categories=["ljets_j4_t3","ljets_j4_t4","ljets_j5_t3","ljets_j5_tge4","ljets_jge6_t2","ljets_jge6_t3","ljets_jge6_tge4"]
 #  print 'mk_datacard_ttbb13TeV', '-d', 'finaldiscr', '-c','"'+(' '.join(categories))+'"','-o', outname+'txt', filename
+  
   call(['mk_datacard_ttbb13TeV', '-d', 'finaldiscr', '-c',' '.join(categories),'-o', outname+'.txt', filename])
   if doHdecay:
     call(['mk_datacard_hdecay13TeV', '-d', 'finaldiscr', '-c',' '.join(categories),'-o', outname+'_hdecay.txt', filename])
@@ -324,7 +327,15 @@ def makeDatacards(filename,outname,categories=None,doHdecay=True):
     call(['mk_datacard_ttbb13TeV', '-d', 'finaldiscr', '-c', c, '-o', outname+'_'+c+'.txt', filename])
     if doHdecay:
       call(['mk_datacard_hdecay13TeV', '-d', 'finaldiscr', '-c', c, '-o', outname+'_'+c+'_hdecay.txt', filename])
-
+  cardscript=open("newCardScript.sh","w")
+  cardscript.write("#!/bin/bash \n")
+  cardscript.write('mk_datacard_ttbb13TeV'+' -d '+' finaldiscr'+' -c '+' '.join(categories)+' -o '+outname+'.txt '+filename+"\n")
+  cardscript.write('mk_datacard_hdecay13TeV'+' -d '+' finaldiscr '+' -c '+' '.join(categories)+' -o '+outname+'_hdecay.txt '+filename+"\n")
+  for c in categories:
+    cardscript.write('mk_datacard_ttbb13TeV '+' -d '+' finaldiscr '+' -c '+c+' -o '+outname+'_'+c+'.txt '+filename+"\n")
+    cardscript.write('mk_datacard_hdecay13TeV'+' -d '+' finaldiscr '+' -c '+c+' -o '+outname+'_'+c+'_hdecay.txt '+filename+"\n")
+  cardscript.close()
+  
 def readLimit(fn='higgsCombineTest.Asymptotic.mH125.root'):
   f=ROOT.TFile(fn)
   t=f.Get('limit')
@@ -357,7 +368,7 @@ def calcLimits(datacardname,categories=None):
   limit_comb=readLimit('higgsCombineTest.Asymptotic.mH125.root')
   limit_cats=[]
   for c in categories:
-    call(['combine', '-M', 'Asymptotic', '-m', '125', '-t', '-1',datacardname+'_'+c+'.txt']) 
+    call(['stdcombine',datacardname+'_'+c+'.txt']) 
     limit_cats.append(readLimit('higgsCombineTest.Asymptotic.mH125.root'))
   report='combined: '+str(limit_comb)+'\n'
   for c,l in zip(categories,limit_cats):
