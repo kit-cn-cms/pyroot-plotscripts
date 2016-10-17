@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.insert(0, 'limittools')
 
-from scriptgeneratorMEMDB import *
+from scriptgeneratorMEMDBCSV import *
 from plotutils import *
 from limittools import renameHistos
 from limittools import addPseudoData
@@ -10,10 +10,10 @@ from limittools import addRealData
 from limittools import makeDatacards
 from limittools import calcLimits
 from limittools import replaceQ2scale
-from plotconfigAnalysisV3 import *
+from plotconfigAnalysisV3csv import *
 
 # output name
-name='sl2DBDTMEMsplitTTHV8'
+name='sl2DV11'
 
 # define categories
 boosted="(BoostedTopHiggs_TopHadCandidate_TopMVAOutput>=-0.485&&BoostedTopHiggs_HiggsCandidate_HiggsTag>=0.8925)"                        
@@ -57,12 +57,13 @@ additionalvariables=[
                       'finalbdt_ljets_jge6_t3:='+bdtweightpath+'/weights_63_'+bdtset+'.xml',
                       'finalbdt_ljets_jge6_tge4:='+bdtweightpath+'/weights_64_'+bdtset+'.xml',
                       #'finalbdt_ljets_boosted:='+bdtweightpath+'/weights_Final_DB_boosted_76xmem.xml',
+                      "Jet_Pt","Jet_Eta","Jet_CSV","Jet_Flav","N_Jets","Weight_CSV","Weight_CSVLFup","Weight_CSVLFdown","Weight_CSVHFup","Weight_CSVHFdown","Weight_CSVHFStats1up","Weight_CSVHFStats1down","Weight_CSVLFStats1up","Weight_CSVLFStats1down","Weight_CSVHFStats2up","Weight_CSVHFStats2down","Weight_CSVLFStats2up","Weight_CSVLFStats2down","Weight_CSVCErr1up","Weight_CSVCErr1down","Weight_CSVCErr2up","Weight_CSVCErr2down",
 ]
 
 # set discriminator histograms configuration
-nhistobins= [  40,40, 	10, 10,     5,5,         10,10,    5,5,       20,      10,10,   5,5 ]
+nhistobins= [  20,20, 	10, 10,     5,5,         10,10,    5,5,       10,      10,10,   5,5 ]
 minxvals=   [200, 200, 0, 0,  	    0,0,         0,0       ,0,0 ,     -0.8,    0,0,0,0,]
-maxxvals=   [800,800,  0.95, 0.95,  0.93,0.93,   1.0,1.0,    1.0,1.0 ,   0.9,  1.0,   1.0,1.0,   1.0]
+maxxvals=   [800,800,  0.9, 0.9,  0.8,0.8,   0.95,0.95,    0.9,0.9 ,   0.7,  0.9,   0.9,0.9,   0.9]
 
 
 #nhistobins= [  200]*9

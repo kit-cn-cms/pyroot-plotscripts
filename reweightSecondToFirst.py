@@ -26,6 +26,7 @@ for key in keylist:
   newH=memH.Clone()
   intBDT=bdtH.Integral()
   intMEM=memH.Integral()
+  #print bdtH.Integral(), memH.Integral(), newH.Integral() 
   if not intMEM>0 :
     print "EMPTY MEM histO??", thisname
   elif "data" in thisname or "SingleMu" in thisname or "SingleEl" in thisname :
@@ -35,8 +36,9 @@ for key in keylist:
     if "ttH"==thisname.split("_")[0]:
       print "skippng ttH"
       #aaa=2
-  else:
-    newH.Scale(intBDT/float(intMEM))
+    else:
+      newH.Scale(intBDT/float(intMEM))
+      print "scaled"
   if intMEM==intBDT:
     a=1
     #print thisname, " BDT", intBDT, " MEM ", intMEM , " -> SAME"
@@ -45,7 +47,9 @@ for key in keylist:
       print thisname, " BDT", intBDT, " MEM ", intMEM , " -> ", intBDT/float(intMEM) ,newH.Integral()
     else:
       print thisname, " BDT", intBDT, " MEM ", intMEM , " -> ", 0 ,newH.Integral()
-      
+  if newH.Integral()!=bdtH.Integral():
+    print "PROBLEM PROBLEM ", newH.Integral(), bdtH.Integral()
+  #print bdtH.Integral(), memH.Integral(), newH.Integral() 
   outf.cd()
   newH.Write()
   ih+=1

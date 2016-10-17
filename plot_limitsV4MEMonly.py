@@ -13,7 +13,7 @@ from limittools import replaceQ2scale
 from plotconfigAnalysisV3 import *
 
 # output name
-name='slMEMonlyV8'
+name='slMEMonlyV9'
 
 # define categories
 boosted="(BoostedTopHiggs_TopHadCandidate_TopMVAOutput>=-0.485&&BoostedTopHiggs_HiggsCandidate_HiggsTag>=0.8925)"                        
@@ -60,9 +60,9 @@ additionalvariables=[
 ]
 
 # set discriminator histograms configuration
-nhistobins= [  40,40, 	20,   10,    20,    10,   20,   20,   10 ]
+nhistobins= [  20,20, 	10,   10,    10,    10,   20,   10,   10 ]
 minxvals=   [200, 200, 0,  0,0,0,-0.8,0,0,]
-maxxvals=   [800,800,  0.95,  0.93,   1.0,    1.0,  0.9,  1.0,   1.0]
+maxxvals=   [800,800,  0.9,  0.8,   0.95,    0.9,  0.7,  0.9,  0.9]
 
 #nhistobins= [  200]*9
 #minxvals=   [ 200, 200, -1,-1,-1,-1,-1,-1,-1]

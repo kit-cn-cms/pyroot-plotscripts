@@ -1,6 +1,6 @@
 import sys
 import os
-from scriptgeneratorMEMDB import *
+from scriptgeneratorMEMDBCSV import *
 from plotutils import *
 
 sel_singleel="(N_LooseMuons==0)*(N_Jets>=4 && N_BTagsM>=2)" # need to veto muon events in electron dataset to avoid double countung
@@ -155,59 +155,59 @@ pdf_05_sf=0.950964383883
 pdf_67_sf=1.04093344845
 
 systweights=[
-                    "NomWeight:="+usualweights+"*"+mcTriggerWeight+"*Weight_CSV*(DoWeights==1)+(DoWeights==0)*1.0",
-                   "dummyWeight_CSVLFup:=("+usualweights+"*"+mcTriggerWeight+"*Weight_CSVLFup*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-                   "dummyWeight_CSVLFdown:=("+usualweights+"*"+mcTriggerWeight+"*Weight_CSVLFdown*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-                   "dummyWeight_CSVHFup:=("+usualweights+"*"+mcTriggerWeight+"*Weight_CSVHFup*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-                   "dummyWeight_CSVHFdown:=("+usualweights+"*"+mcTriggerWeight+"*Weight_CSVHFdown*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-                   "dummyWeight_CSVHFStats1up:=("+usualweights+"*"+mcTriggerWeight+"*Weight_CSVHFStats1up*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-                   "dummyWeight_CSVHFStats1down:=("+usualweights+"*"+mcTriggerWeight+"*Weight_CSVHFStats1down*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-                   "dummyWeight_CSVLFStats1up:=("+usualweights+"*"+mcTriggerWeight+"*Weight_CSVLFStats1up*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-                   "dummyWeight_CSVLFStats1down:=("+usualweights+"*"+mcTriggerWeight+"*Weight_CSVLFStats1down*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-                   "dummyWeight_CSVHFStats2up:=("+usualweights+"*"+mcTriggerWeight+"*Weight_CSVHFStats2up*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-                   "dummyWeight_CSVHFStats2down:=("+usualweights+"*"+mcTriggerWeight+"*Weight_CSVHFStats2down*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-                   "dummyWeight_CSVLFStats2up:=("+usualweights+"*"+mcTriggerWeight+"*Weight_CSVLFStats2up*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-                   "dummyWeight_CSVLFStats2down:=("+usualweights+"*"+mcTriggerWeight+"*Weight_CSVLFStats2down*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-                   "dummyWeight_CSVCErr1up:=("+usualweights+"*"+mcTriggerWeight+"*Weight_CSVCErr1up*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-                   "dummyWeight_CSVCErr1down:=("+usualweights+"*"+mcTriggerWeight+"*Weight_CSVCErr1down*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-                   "dummyWeight_CSVCErr2up:=("+usualweights+"*"+mcTriggerWeight+"*Weight_CSVCErr2up*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-                   "dummyWeight_CSVCErr2down:=("+usualweights+"*"+mcTriggerWeight+"*Weight_CSVCErr2down*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+                    "NomWeight:="+usualweights+"*"+mcTriggerWeight+"*internalCSVweight*(DoWeights==1)+(DoWeights==0)*1.0",
+                   "dummyWeight_CSVLFup:=("+usualweights+"*"+mcTriggerWeight+"*internalCSVweight_CSVLFUp*internalCSVweight)*(DoWeights==1)+(DoWeights==0)*1.0",
+                   "dummyWeight_CSVLFdown:=("+usualweights+"*"+mcTriggerWeight+"*internalCSVweight_CSVLFDown*internalCSVweight)*(DoWeights==1)+(DoWeights==0)*1.0",
+                   "dummyWeight_CSVHFup:=("+usualweights+"*"+mcTriggerWeight+"*internalCSVweight_CSVHFUp*internalCSVweight)*(DoWeights==1)+(DoWeights==0)*1.0",
+                   "dummyWeight_CSVHFdown:=("+usualweights+"*"+mcTriggerWeight+"*internalCSVweight_CSVHFDown*internalCSVweight)*(DoWeights==1)+(DoWeights==0)*1.0",
+                   "dummyWeight_CSVHFStats1up:=("+usualweights+"*"+mcTriggerWeight+"*internalCSVweight_CSVHFStats1Up*internalCSVweight)*(DoWeights==1)+(DoWeights==0)*1.0",
+                   "dummyWeight_CSVHFStats1down:=("+usualweights+"*"+mcTriggerWeight+"*internalCSVweight_CSVHFStats1Down*internalCSVweight)*(DoWeights==1)+(DoWeights==0)*1.0",
+                   "dummyWeight_CSVLFStats1up:=("+usualweights+"*"+mcTriggerWeight+"*internalCSVweight_CSVLFStats1Up*internalCSVweight)*(DoWeights==1)+(DoWeights==0)*1.0",
+                   "dummyWeight_CSVLFStats1down:=("+usualweights+"*"+mcTriggerWeight+"*internalCSVweight_CSVLFStats1Down*internalCSVweight)*(DoWeights==1)+(DoWeights==0)*1.0",
+                   "dummyWeight_CSVHFStats2up:=("+usualweights+"*"+mcTriggerWeight+"*internalCSVweight_CSVHFStats2Up*internalCSVweight)*(DoWeights==1)+(DoWeights==0)*1.0",
+                   "dummyWeight_CSVHFStats2down:=("+usualweights+"*"+mcTriggerWeight+"*internalCSVweight_CSVHFStats2Down*internalCSVweight)*(DoWeights==1)+(DoWeights==0)*1.0",
+                   "dummyWeight_CSVLFStats2up:=("+usualweights+"*"+mcTriggerWeight+"*internalCSVweight_CSVLFStats2Up*internalCSVweight)*(DoWeights==1)+(DoWeights==0)*1.0",
+                   "dummyWeight_CSVLFStats2down:=("+usualweights+"*"+mcTriggerWeight+"*internalCSVweight_CSVLFStats2Down*internalCSVweight)*(DoWeights==1)+(DoWeights==0)*1.0",
+                   "dummyWeight_CSVCErr1up:=("+usualweights+"*"+mcTriggerWeight+"*internalCSVweight_CSVCErr1Up*internalCSVweight)*(DoWeights==1)+(DoWeights==0)*1.0",
+                   "dummyWeight_CSVCErr1down:=("+usualweights+"*"+mcTriggerWeight+"*internalCSVweight_CSVCErr1Down*internalCSVweight)*(DoWeights==1)+(DoWeights==0)*1.0",
+                   "dummyWeight_CSVCErr2up:=("+usualweights+"*"+mcTriggerWeight+"*internalCSVweight_CSVCErr2Up*internalCSVweight)*(DoWeights==1)+(DoWeights==0)*1.0",
+                   "dummyWeight_CSVCErr2down:=("+usualweights+"*"+mcTriggerWeight+"*internalCSVweight_CSVCErr2Down*internalCSVweight)*(DoWeights==1)+(DoWeights==0)*1.0",
                    
-                   "dummyWeight_CMS_ttH_Q2scale_ttbarOtherUp:=("+usualweights+"*"+mcTriggerWeight+"*Weight_muRupmuFup*Weight_CSV)*(DoWeights==1 && GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)+(DoWeights==0)*1.0"+"*("+usualweights+"*"+mcTriggerWeight+"*Weight_CSV)*(DoWeights==1 && !( GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0))",
+                   "dummyWeight_CMS_ttH_Q2scale_ttbarOtherUp:=("+usualweights+"*"+mcTriggerWeight+"*Weight_muRupmuFup*internalCSVweight)*(DoWeights==1 && GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)+(DoWeights==0)*1.0"+"*("+usualweights+"*"+mcTriggerWeight+"*internalCSVweight)*(DoWeights==1 && !( GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0))",
                    
-                   "dummyWeight_CMS_ttH_Q2scale_ttbarOtherDown:=("+usualweights+"*"+mcTriggerWeight+"*Weight_muRdownmuFdown*Weight_CSV)*(DoWeights==1 && GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)+(DoWeights==0)*1.0"+"*("+usualweights+"*"+mcTriggerWeight+"*Weight_CSV)*(DoWeights==1 && !( GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0))",
+                   "dummyWeight_CMS_ttH_Q2scale_ttbarOtherDown:=("+usualweights+"*"+mcTriggerWeight+"*Weight_muRdownmuFdown*internalCSVweight)*(DoWeights==1 && GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)+(DoWeights==0)*1.0"+"*("+usualweights+"*"+mcTriggerWeight+"*internalCSVweight)*(DoWeights==1 && !( GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0))",
                    
-                   "dummyWeight_CMS_ttH_Q2scale_ttbarPlusBUp:=("+usualweights+"*"+mcTriggerWeight+"*Weight_muRupmuFup*Weight_CSV)*(DoWeights==1)+(DoWeights==0 && GenEvt_I_TTPlusBB==1)*1.0"+"*("+usualweights+"*"+mcTriggerWeight+"*Weight_CSV)*(DoWeights==1 && !(GenEvt_I_TTPlusBB==1))",
+                   "dummyWeight_CMS_ttH_Q2scale_ttbarPlusBUp:=("+usualweights+"*"+mcTriggerWeight+"*Weight_muRupmuFup*internalCSVweight)*(DoWeights==1)+(DoWeights==0 && GenEvt_I_TTPlusBB==1)*1.0"+"*("+usualweights+"*"+mcTriggerWeight+"*internalCSVweight)*(DoWeights==1 && !(GenEvt_I_TTPlusBB==1))",
                    
-                   "dummyWeight_CMS_ttH_Q2scale_ttbarPlusBDown:=("+usualweights+"*"+mcTriggerWeight+"*Weight_muRdownmuFdown*Weight_CSV)*(DoWeights==1)+(DoWeights==0 && GenEvt_I_TTPlusBB==1)*1.0"+"*("+usualweights+"*"+mcTriggerWeight+"*Weight_CSV)*(DoWeights==1 && !( GenEvt_I_TTPlusBB==1))",
+                   "dummyWeight_CMS_ttH_Q2scale_ttbarPlusBDown:=("+usualweights+"*"+mcTriggerWeight+"*Weight_muRdownmuFdown*internalCSVweight)*(DoWeights==1)+(DoWeights==0 && GenEvt_I_TTPlusBB==1)*1.0"+"*("+usualweights+"*"+mcTriggerWeight+"*internalCSVweight)*(DoWeights==1 && !( GenEvt_I_TTPlusBB==1))",
                    
-                   "dummyWeight_CMS_ttH_Q2scale_ttbarPlus2BUp:=("+usualweights+"*"+mcTriggerWeight+"*Weight_muRupmuFup*Weight_CSV)*(DoWeights==1 && GenEvt_I_TTPlusBB==2)+(DoWeights==0)*1.0"+"*("+usualweights+"*"+mcTriggerWeight+"*Weight_CSV)*(DoWeights==1 && !( GenEvt_I_TTPlusBB==2))",
+                   "dummyWeight_CMS_ttH_Q2scale_ttbarPlus2BUp:=("+usualweights+"*"+mcTriggerWeight+"*Weight_muRupmuFup*internalCSVweight)*(DoWeights==1 && GenEvt_I_TTPlusBB==2)+(DoWeights==0)*1.0"+"*("+usualweights+"*"+mcTriggerWeight+"*internalCSVweight)*(DoWeights==1 && !( GenEvt_I_TTPlusBB==2))",
                    
-                   "dummyWeight_CMS_ttH_Q2scale_ttbarPlus2BDown:=("+usualweights+"*"+mcTriggerWeight+"*Weight_muRdownmuFdown*Weight_CSV)*(DoWeights==1 && GenEvt_I_TTPlusBB==2)+(DoWeights==0)*1.0"+"*("+usualweights+"*"+mcTriggerWeight+"*Weight_CSV)*(DoWeights==1 && !( GenEvt_I_TTPlusBB==2))",
+                   "dummyWeight_CMS_ttH_Q2scale_ttbarPlus2BDown:=("+usualweights+"*"+mcTriggerWeight+"*Weight_muRdownmuFdown*internalCSVweight)*(DoWeights==1 && GenEvt_I_TTPlusBB==2)+(DoWeights==0)*1.0"+"*("+usualweights+"*"+mcTriggerWeight+"*internalCSVweight)*(DoWeights==1 && !( GenEvt_I_TTPlusBB==2))",
                    
-                   "dummyWeight_CMS_CMS_ttH_Q2scale_ttbarPlusBBbarUp:=("+usualweights+"*"+mcTriggerWeight+"*Weight_muRupmuFup*Weight_CSV)*(DoWeights==1 && GenEvt_I_TTPlusBB==3)+(DoWeights==0)*1.0"+"*("+usualweights+"*"+mcTriggerWeight+"*Weight_CSV)*(DoWeights==1 && !( GenEvt_I_TTPlusBB==3))",
+                   "dummyWeight_CMS_CMS_ttH_Q2scale_ttbarPlusBBbarUp:=("+usualweights+"*"+mcTriggerWeight+"*Weight_muRupmuFup*internalCSVweight)*(DoWeights==1 && GenEvt_I_TTPlusBB==3)+(DoWeights==0)*1.0"+"*("+usualweights+"*"+mcTriggerWeight+"*internalCSVweight)*(DoWeights==1 && !( GenEvt_I_TTPlusBB==3))",
                    
-                   "dummyWeight_CMS_CMS_ttH_Q2scale_ttbarPlusBBbarDown:=("+usualweights+"*"+mcTriggerWeight+"*Weight_muRdownmuFdown*Weight_CSV)*(DoWeights==1 && GenEvt_I_TTPlusBB==3)+(DoWeights==0)*1.0"+"*("+usualweights+"*"+mcTriggerWeight+"*Weight_CSV)*(DoWeights==1 && !( GenEvt_I_TTPlusBB==3))",
+                   "dummyWeight_CMS_CMS_ttH_Q2scale_ttbarPlusBBbarDown:=("+usualweights+"*"+mcTriggerWeight+"*Weight_muRdownmuFdown*internalCSVweight)*(DoWeights==1 && GenEvt_I_TTPlusBB==3)+(DoWeights==0)*1.0"+"*("+usualweights+"*"+mcTriggerWeight+"*internalCSVweight)*(DoWeights==1 && !( GenEvt_I_TTPlusBB==3))",
                    
-                   "dummyWeight_CMS_ttH_Q2scale_ttbarPlusCCbarUp:=("+usualweights+"*"+mcTriggerWeight+"*Weight_muRupmuFup*Weight_CSV)*(DoWeights==1 && GenEvt_I_TTPlusCC==1)+(DoWeights==0)*1.0"+"*("+usualweights+"*"+mcTriggerWeight+"*Weight_CSV)*(DoWeights==1 && !( GenEvt_I_TTPlusCC==1))",
+                   "dummyWeight_CMS_ttH_Q2scale_ttbarPlusCCbarUp:=("+usualweights+"*"+mcTriggerWeight+"*Weight_muRupmuFup*internalCSVweight)*(DoWeights==1 && GenEvt_I_TTPlusCC==1)+(DoWeights==0)*1.0"+"*("+usualweights+"*"+mcTriggerWeight+"*internalCSVweight)*(DoWeights==1 && !( GenEvt_I_TTPlusCC==1))",
                    
-                   "dummyWeight_CMS_ttH_Q2scale_ttbarPlusCCbarDown:=("+usualweights+"*"+mcTriggerWeight+"*Weight_muRdownmuFdown*Weight_CSV)*(DoWeights==1 && GenEvt_I_TTPlusCC==1)+(DoWeights==0)*1.0"+"*("+usualweights+"*"+mcTriggerWeight+"*Weight_CSV)*(DoWeights==1 && !( GenEvt_I_TTPlusCC==1))",
+                   "dummyWeight_CMS_ttH_Q2scale_ttbarPlusCCbarDown:=("+usualweights+"*"+mcTriggerWeight+"*Weight_muRdownmuFdown*internalCSVweight)*(DoWeights==1 && GenEvt_I_TTPlusCC==1)+(DoWeights==0)*1.0"+"*("+usualweights+"*"+mcTriggerWeight+"*internalCSVweight)*(DoWeights==1 && !( GenEvt_I_TTPlusCC==1))",
 
-		   "dummyWeight_CMS_ttH_PUUp:="+"(1*Weight_pu69p2Up*((Weight>0)-(Weight<0)))"+"*"+sfs+"*"+mcTriggerWeight+"*Weight_CSV*(DoWeights==1)+(DoWeights==0)*1.0",
+		   "dummyWeight_CMS_ttH_PUUp:="+"(1*Weight_pu69p2Up*((Weight>0)-(Weight<0)))"+"*"+sfs+"*"+mcTriggerWeight+"*internalCSVweight*(DoWeights==1)+(DoWeights==0)*1.0",
 
-		   "dummyWeight_CMS_ttH_PUDown:="+"(1*Weight_pu69p2Down*((Weight>0)-(Weight<0)))"+"*"+sfs+"*"+mcTriggerWeight+"*Weight_CSV*(DoWeights==1)+(DoWeights==0)*1.0",
+		   "dummyWeight_CMS_ttH_PUDown:="+"(1*Weight_pu69p2Down*((Weight>0)-(Weight<0)))"+"*"+sfs+"*"+mcTriggerWeight+"*internalCSVweight*(DoWeights==1)+(DoWeights==0)*1.0",
 
-		   "dummyWeight_CMS_ttH_ljets_Trig_elUp:="+usualweights+"*"+"((hasTrigger==1)*(Weight_ElectronSFTrigger_Up*Weight_MuonSFTrigger)*((N_TightElectrons==1 && Triggered_HLT_Ele27_eta2p1_WPTight_Gsf_vX==1)||(N_TightMuons==1 && (Triggered_HLT_IsoMu22_vX==1 || Triggered_HLT_IsoTkMu22_vX==1))) + 1.0*(hasTrigger==0))"+"*Weight_CSV*(DoWeights==1)+(DoWeights==0)*1.0",
+		   "dummyWeight_CMS_ttH_ljets_Trig_elUp:="+usualweights+"*"+"((hasTrigger==1)*(Weight_ElectronSFTrigger_Up*Weight_MuonSFTrigger)*((N_TightElectrons==1 && Triggered_HLT_Ele27_eta2p1_WPTight_Gsf_vX==1)||(N_TightMuons==1 && (Triggered_HLT_IsoMu22_vX==1 || Triggered_HLT_IsoTkMu22_vX==1))) + 1.0*(hasTrigger==0))"+"*internalCSVweight*(DoWeights==1)+(DoWeights==0)*1.0",
 		    
-		    "dummyWeight_CMS_ttH_ljets_Trig_elDown:="+usualweights+"*"+"((hasTrigger==1)*(Weight_ElectronSFTrigger_Down*Weight_MuonSFTrigger)*((N_TightElectrons==1 && Triggered_HLT_Ele27_eta2p1_WPTight_Gsf_vX==1)||(N_TightMuons==1 && (Triggered_HLT_IsoMu22_vX==1 || Triggered_HLT_IsoTkMu22_vX==1))) + 1.0*(hasTrigger==0))"+"*Weight_CSV*(DoWeights==1)+(DoWeights==0)*1.0",
+		    "dummyWeight_CMS_ttH_ljets_Trig_elDown:="+usualweights+"*"+"((hasTrigger==1)*(Weight_ElectronSFTrigger_Down*Weight_MuonSFTrigger)*((N_TightElectrons==1 && Triggered_HLT_Ele27_eta2p1_WPTight_Gsf_vX==1)||(N_TightMuons==1 && (Triggered_HLT_IsoMu22_vX==1 || Triggered_HLT_IsoTkMu22_vX==1))) + 1.0*(hasTrigger==0))"+"*internalCSVweight*(DoWeights==1)+(DoWeights==0)*1.0",
 		    
-		    "dummyWeight_CMS_ttH_ljets_Trig_muUp:="+usualweights+"*"+"((hasTrigger==1)*(Weight_ElectronSFTrigger*Weight_MuonSFTrigger_Up)*((N_TightElectrons==1 && Triggered_HLT_Ele27_eta2p1_WPTight_Gsf_vX==1)||(N_TightMuons==1 && (Triggered_HLT_IsoMu22_vX==1 || Triggered_HLT_IsoTkMu22_vX==1))) + 1.0*(hasTrigger==0))"+"*Weight_CSV*(DoWeights==1)+(DoWeights==0)*1.0",
+		    "dummyWeight_CMS_ttH_ljets_Trig_muUp:="+usualweights+"*"+"((hasTrigger==1)*(Weight_ElectronSFTrigger*Weight_MuonSFTrigger_Up)*((N_TightElectrons==1 && Triggered_HLT_Ele27_eta2p1_WPTight_Gsf_vX==1)||(N_TightMuons==1 && (Triggered_HLT_IsoMu22_vX==1 || Triggered_HLT_IsoTkMu22_vX==1))) + 1.0*(hasTrigger==0))"+"*internalCSVweight*(DoWeights==1)+(DoWeights==0)*1.0",
 		    
-		    "dummyWeight_CMS_ttH_ljets_Trig_muDown:="+usualweights+"*"+"((hasTrigger==1)*(Weight_ElectronSFTrigger*Weight_MuonSFTrigger_Down)*((N_TightElectrons==1 && Triggered_HLT_Ele27_eta2p1_WPTight_Gsf_vX==1)||(N_TightMuons==1 && (Triggered_HLT_IsoMu22_vX==1 || Triggered_HLT_IsoTkMu22_vX==1))) + 1.0*(hasTrigger==0))"+"*Weight_CSV*(DoWeights==1)+(DoWeights==0)*1.0",
-		    "dummyWeight_CMS_ttH_eff_elUp:=(1*Weight_pu69p2*((Weight>0)-(Weight<0))*Weight_MuonSFID*Weight_MuonSFIso*Weight_MuonSFHIP*Weight_ElectronSFID_Up*Weight_ElectronSFGFS_Up*"+mcTriggerWeight+"*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-		    "dummyWeight_CMS_ttH_eff_elDown:=(1*Weight_pu69p2*((Weight>0)-(Weight<0))"+"*Weight_MuonSFID*Weight_MuonSFIso*Weight_MuonSFHIP"+"*Weight_ElectronSFID_Down*Weight_ElectronSFGFS_Down*"+mcTriggerWeight+"*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-		     "dummyWeight_CMS_ttH_eff_muUp:=(1*Weight_pu69p2*((Weight>0)-(Weight<0))"+"*Weight_ElectronSFID*Weight_ElectronSFGFS"+"*Weight_MuonSFID*Weight_MuonSFIso_Up*Weight_MuonSFHIP_Up*"+mcTriggerWeight+"*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
-		    "dummyWeight_CMS_ttH_eff_muDown:=(1*Weight_pu69p2*((Weight>0)-(Weight<0))"+"*Weight_ElectronSFID*Weight_ElectronSFGFS"+"*Weight_MuonSFID*Weight_MuonSFIso_Down*Weight_MuonSFHIP_Down*"+mcTriggerWeight+"*Weight_CSV)*(DoWeights==1)+(DoWeights==0)*1.0",
+		    "dummyWeight_CMS_ttH_ljets_Trig_muDown:="+usualweights+"*"+"((hasTrigger==1)*(Weight_ElectronSFTrigger*Weight_MuonSFTrigger_Down)*((N_TightElectrons==1 && Triggered_HLT_Ele27_eta2p1_WPTight_Gsf_vX==1)||(N_TightMuons==1 && (Triggered_HLT_IsoMu22_vX==1 || Triggered_HLT_IsoTkMu22_vX==1))) + 1.0*(hasTrigger==0))"+"*internalCSVweight*(DoWeights==1)+(DoWeights==0)*1.0",
+		    "dummyWeight_CMS_ttH_eff_elUp:=(1*Weight_pu69p2*((Weight>0)-(Weight<0))*Weight_MuonSFID*Weight_MuonSFIso*Weight_MuonSFHIP*Weight_ElectronSFID_Up*Weight_ElectronSFGFS_Up*"+mcTriggerWeight+"*internalCSVweight)*(DoWeights==1)+(DoWeights==0)*1.0",
+		    "dummyWeight_CMS_ttH_eff_elDown:=(1*Weight_pu69p2*((Weight>0)-(Weight<0))"+"*Weight_MuonSFID*Weight_MuonSFIso*Weight_MuonSFHIP"+"*Weight_ElectronSFID_Down*Weight_ElectronSFGFS_Down*"+mcTriggerWeight+"*internalCSVweight)*(DoWeights==1)+(DoWeights==0)*1.0",
+		     "dummyWeight_CMS_ttH_eff_muUp:=(1*Weight_pu69p2*((Weight>0)-(Weight<0))"+"*Weight_ElectronSFID*Weight_ElectronSFGFS"+"*Weight_MuonSFID*Weight_MuonSFIso_Up*Weight_MuonSFHIP_Up*"+mcTriggerWeight+"*internalCSVweight)*(DoWeights==1)+(DoWeights==0)*1.0",
+		    "dummyWeight_CMS_ttH_eff_muDown:=(1*Weight_pu69p2*((Weight>0)-(Weight<0))"+"*Weight_ElectronSFID*Weight_ElectronSFGFS"+"*Weight_MuonSFID*Weight_MuonSFIso_Down*Weight_MuonSFHIP_Down*"+mcTriggerWeight+"*internalCSVweight)*(DoWeights==1)+(DoWeights==0)*1.0",
 		    
 		    
                   
