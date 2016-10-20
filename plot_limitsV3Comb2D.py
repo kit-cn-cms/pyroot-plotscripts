@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.insert(0, 'limittools')
 
-from scriptgeneratorMEMDBCSV import *
+from scriptgeneratorMEMDB import *
 from plotutils import *
 from limittools import renameHistos
 from limittools import addPseudoData
@@ -10,10 +10,10 @@ from limittools import addRealData
 from limittools import makeDatacards
 from limittools import calcLimits
 from limittools import replaceQ2scale
-from plotconfigAnalysisV3csv import *
+from plotconfigAnalysisV3 import *
 
 # output name
-name='slMEMonlyV12'
+name='sl2DBDTMEMV6'
 
 # define categories
 boosted="(BoostedTopHiggs_TopHadCandidate_TopMVAOutput>=-0.485&&BoostedTopHiggs_HiggsCandidate_HiggsTag>=0.8925)"                        
@@ -29,18 +29,18 @@ categories_=[
               ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4","")
 ]
 
-categories=categories_
-#bdtcuts=[0.2,0.2,0.2,0.1,0.2,0.1,0.1,0.1,0.2]
-#for cat,bdt in zip(categories_,bdtcuts):
-  #if cat[1] in ["ljets_jge6_tge4","ljets_j5_tge4","ljets_j4_t4","ljets_jge6_t3","ljets_j5_t3","ljets_j4_t3"]:
-    #categories.append(('('+cat[0]+')*(finalbdt_'+cat[1]+'>'+str(bdt)+')',cat[1]+'_high') )
-    #categories.append(('('+cat[0]+')*(finalbdt_'+cat[1]+'<='+str(bdt)+')',cat[1]+'_low') )
-  #else:
-    #categories.append(cat)
+categories=[]
+#categories=categories_
+bdtcuts=[-0.2,-0.2,-0.2,-0.2,-0.2,-0.2,-0.2,-0.15,-0.1]
+for cat,bdt in zip(categories_,bdtcuts):
+  if cat[1] in ["ljets_jge6_tge4","ljets_j5_tge4","ljets_j4_t4","ljets_jge6_t3","ljets_j5_t3","ljets_j4_t3"]:
+    categories.append(('('+cat[0]+')*(finalbdt_'+cat[1]+'>'+str(bdt)+')',cat[1]+'_high') )
+    categories.append(('('+cat[0]+')*(finalbdt_'+cat[1]+'<='+str(bdt)+')',cat[1]+'_low') )
+  else:
+    categories.append(cat)
 print categories
 
 # define MEM discriminator variable
-#memexp='(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)'
 memexp='(memDBp>0.0)*(memDBp_sig/(memDBp_sig+0.15*memDBp_bkg))+(memDBp<0.0)*(0.01)'
 
 # define BDT output variables
@@ -57,13 +57,13 @@ additionalvariables=[
                       'finalbdt_ljets_jge6_t3:='+bdtweightpath+'/weights_63_'+bdtset+'.xml',
                       'finalbdt_ljets_jge6_tge4:='+bdtweightpath+'/weights_64_'+bdtset+'.xml',
                       #'finalbdt_ljets_boosted:='+bdtweightpath+'/weights_Final_DB_boosted_76xmem.xml',
-                      "Jet_Pt","Jet_Eta","Jet_CSV","Jet_Flav","N_Jets","Weight_CSV","Weight_CSVLFup","Weight_CSVLFdown","Weight_CSVHFup","Weight_CSVHFdown","Weight_CSVHFStats1up","Weight_CSVHFStats1down","Weight_CSVLFStats1up","Weight_CSVLFStats1down","Weight_CSVHFStats2up","Weight_CSVHFStats2down","Weight_CSVLFStats2up","Weight_CSVLFStats2down","Weight_CSVCErr1up","Weight_CSVCErr1down","Weight_CSVCErr2up","Weight_CSVCErr2down",
 ]
 
 # set discriminator histograms configuration
-nhistobins= [  20,20, 	10,   10,    10,    10,   20,   10,   10 ]
-minxvals=   [200, 200, 0,  0,0,0,-0.8,0,0,]
-maxxvals=   [800,800,  0.9,  0.8,   0.95,    0.9,  0.7,  0.9,  0.9]
+nhistobins= [  40,40, 	10, 10,     5,5,         10,10,    5,5,       20,      10,10,   5,5 ]
+minxvals=   [200, 200, 0, 0,  	    0,0,         0,0       ,0,0 ,     -0.8,    0,0,0,0,]
+maxxvals=   [800,800,  0.95, 0.95,  0.93,0.93,   1.0,1.0,    1.0,1.0 ,   0.9,  1.0,   1.0,1.0,   1.0]
+
 
 #nhistobins= [  200]*9
 #minxvals=   [ 200, 200, -1,-1,-1,-1,-1,-1,-1]
@@ -73,8 +73,12 @@ maxxvals=   [800,800,  0.9,  0.8,   0.95,    0.9,  0.7,  0.9,  0.9]
 #minxvals=   [-1.0]*7
 #maxxvals=   [1.0]*7
 
-discrs =    ['finalbdt_ljets_j4_t2','finalbdt_ljets_j5_t2',memexp,memexp,memexp,memexp,'finalbdt_ljets_jge6_t2',memexp,memexp]
+discrs =    ['finalbdt_ljets_j4_t2','finalbdt_ljets_j5_t2',memexp, memexp, memexp, memexp,memexp, memexp,memexp, memexp, 'finalbdt_ljets_jge6_t2', memexp, memexp,memexp, memexp]
 discrname='finaldiscr'
+assert(len(nhistobins)==len(maxxvals))
+assert(len(nhistobins)==len(minxvals))
+assert(len(nhistobins)==len(categories))
+assert(len(nhistobins)==len(discrs))
 
 # get input for plotting function
 bins= [c[0] for c in categories]
@@ -112,28 +116,14 @@ renameHistos(outputpath,name+'/'+name+'_limitInput.root',allsystnames)
 
 print samples
 # add real/pseudo data
-#addPseudoData(name+'/'+name+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
-addRealData(name+'/'+name+'_limitInput.root',[s.nick for s in samples_data_controlplots],binlabels,discrname)
+addPseudoData(name+'/'+name+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
+#addRealData(name+'/'+name+'_limitInput.root',[s.nick for s in samples_data_controlplots],binlabels,discrname)
 
 # make datacards
 listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,bdts)
 lolT=transposeLOL(listOfHistoLists)
 writeLOLAndOneOnTop(transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],20,name+'/'+name+'_controlplots')
 #writeListOfHistoListsAN(transposeLOL([lolT[0]]+lolT[9:]),samples_,"",name+'/'+name+'_controlplots_no_stack',True,False,False,'histo',False,False,False)
-
-labels=[plot.label for plot in bdts]
-#plotdiscriminants
-#listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,bdts,1)
-#listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samplesdata,bdts,1)
-#if not os.path.exists(outputpath[:-4]+'_syst.root') or not askYesNo('reuse systematic histofile?'):
-    #renameHistos(outputpath,outputpath[:-4]+'_syst.root',allsystnames,False)
-#lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[9:],bdts,errorSystnames)
-#plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-1,name+'/'+name+'_Blinded',[[lll,3354,ROOT.kBlack,True]],False,labels,True,True)
-
-#listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,bdts,1)
-#listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samplesdata,bdts,1)
-#lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[9:],bdts,errorSystnames)
-#plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-1,name+'/'+name+'_Unblinded',[[lll,3354,ROOT.kBlack,True]],False,labels,True,False)
 
 #exit(0)
 makeDatacards(name+'/'+name+'_limitInput.root',name+'/'+name+'_datacard',binlabels)

@@ -10,10 +10,10 @@ from limittools import addRealData
 from limittools import makeDatacards
 from limittools import calcLimits
 from limittools import replaceQ2scale
-from plotconfigAnalysisV3csv import *
+from plotconfigAnalysisV3csvForPSscale import *
 
 # output name
-name='slMEMonlyV12'
+name='slMEMonlyV12oldttbar'
 
 # define categories
 boosted="(BoostedTopHiggs_TopHadCandidate_TopMVAOutput>=-0.485&&BoostedTopHiggs_HiggsCandidate_HiggsTag>=0.8925)"                        
@@ -101,7 +101,7 @@ for discr,b,bl,nb,minx,maxx in zip(discrs,bins,binlabels,nhistobins,minxvals,max
 
 print bdts
 # plot everthing
-outputpath=plotParallel(name,500000,bdts,allsamples+samplesdata,[''],['1.'],weightsystnames,systweights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ICHEP_V5New",True]],"/nfs/dust/cms/user/kelmorab/plotscripts80X/higgsCoupling/pyroot-plotscripts/treejson.json")
+outputpath=plotParallel(name,500000,bdts,allsamples+samplesdata,[''],['1.'],weightsystnames,systweights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ICHEP_V5New",True]],"")
 
 if not os.path.exists(name):
   os.makedirs(name)
@@ -116,9 +116,9 @@ print samples
 addRealData(name+'/'+name+'_limitInput.root',[s.nick for s in samples_data_controlplots],binlabels,discrname)
 
 # make datacards
-listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,bdts)
-lolT=transposeLOL(listOfHistoLists)
-writeLOLAndOneOnTop(transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],20,name+'/'+name+'_controlplots')
+#listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,bdts)
+#lolT=transposeLOL(listOfHistoLists)
+#writeLOLAndOneOnTop(transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],20,name+'/'+name+'_controlplots')
 #writeListOfHistoListsAN(transposeLOL([lolT[0]]+lolT[9:]),samples_,"",name+'/'+name+'_controlplots_no_stack',True,False,False,'histo',False,False,False)
 
 labels=[plot.label for plot in bdts]

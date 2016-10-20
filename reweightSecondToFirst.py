@@ -23,6 +23,7 @@ for key in keylist:
   memH=infMEM.Get(thisname)
   if bdtH==None or memH==None:
     print "ERROR DID NOT FIND ",thisname
+    continue
   newH=memH.Clone()
   intBDT=bdtH.Integral()
   intMEM=memH.Integral()

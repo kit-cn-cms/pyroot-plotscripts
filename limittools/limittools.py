@@ -55,10 +55,10 @@ def renameHistos(infname,outfname,sysnames,prune=True):
     if do and "PSscaleUp" in thisname and "Q2scale" in thisname and thisname[-2:]=="Up":
       #print thish
 #     print thisname
-      ttbarOther_CMS_ttH_PSscaleUp_BDT_ljets_j4_t4_low_CMS_ttH_Q2scale_ttbarPlusBUp
+      #ttbarOther_CMS_ttH_PSscaleUp_BDT_ljets_j4_t4_low_CMS_ttH_Q2scale_ttbarPlusBUp
       tmp=thisname
       tmp=tmp.replace('_CMS_ttH_PSscaleUp','')
-#      print 'stripped',tmp
+      print 'stripped',tmp
 #      raw_input()
       newname=tmp.replace('Q2scale','CombinedScale')
       #print newname
@@ -270,6 +270,7 @@ def addRealData(infname,samplesData,categories,disc="BDT_ljets"):
   for cat in categories:
     print "getting ", samplesData[0]+"_"+disc+"_"+cat
     oldhist=infile.Get(samplesData[0]+"_"+disc+"_"+cat)
+    print oldhist, samplesData[0]+"_"+disc+"_"+cat
     newhist=oldhist.Clone("data_obs_"+disc+"_"+cat)
     print newhist
     for s in samplesData[1:]:
@@ -314,26 +315,26 @@ def MoveOverUnderflow(infname,outfname):
 
   outfile.Close()
 
-def makeDatacards(filename,outname,categories=None,doHdecay=True):
+def makeDatacards(filename,outname,categories=None,doHdecay=True,discrname='finaldiscr'):
   if categories==None:
     categories=["ljets_j4_t3","ljets_j4_t4","ljets_j5_t3","ljets_j5_tge4","ljets_jge6_t2","ljets_jge6_t3","ljets_jge6_tge4"]
 #  print 'mk_datacard_ttbb13TeV', '-d', 'finaldiscr', '-c','"'+(' '.join(categories))+'"','-o', outname+'txt', filename
   
-  call(['mk_datacard_ttbb13TeV', '-d', 'finaldiscr', '-c',' '.join(categories),'-o', outname+'.txt', filename])
-  if doHdecay:
-    call(['mk_datacard_hdecay13TeV', '-d', 'finaldiscr', '-c',' '.join(categories),'-o', outname+'_hdecay.txt', filename])
+  #call(['mk_datacard_ttbb13TeV', '-d', 'finaldiscr', '-c',' '.join(categories),'-o', outname+'.txt', filename])
+  #if doHdecay:
+    #call(['mk_datacard_hdecay13TeV', '-d', discrname, '-c',' '.join(categories),'-o', outname+'_hdecay.txt', filename])
 
   for c in categories:
-    call(['mk_datacard_ttbb13TeV', '-d', 'finaldiscr', '-c', c, '-o', outname+'_'+c+'.txt', filename])
+    #call(['mk_datacard_ttbb13TeV', '-d', 'finaldiscr', '-c', c, '-o', outname+'_'+c+'.txt', filename])
     if doHdecay:
-      call(['mk_datacard_hdecay13TeV', '-d', 'finaldiscr', '-c', c, '-o', outname+'_'+c+'_hdecay.txt', filename])
+      call(['mk_datacard_hdecay13TeV', '-d', discrname, '-c', c, '-o', outname+'_'+c+'_hdecay.txt', filename])
   cardscript=open("newCardScript.sh","w")
   cardscript.write("#!/bin/bash \n")
-  cardscript.write('mk_datacard_ttbb13TeV'+' -d '+' finaldiscr'+' -c '+' '.join(categories)+' -o '+outname+'.txt '+filename+"\n")
-  cardscript.write('mk_datacard_hdecay13TeV'+' -d '+' finaldiscr '+' -c '+' '.join(categories)+' -o '+outname+'_hdecay.txt '+filename+"\n")
+  #cardscript.write('mk_datacard_ttbb13TeV'+' -d '+' finaldiscr'+' -c '+' '.join(categories)+' -o '+outname+'.txt '+filename+"\n")
+  #cardscript.write('mk_datacard_hdecay13TeV'+' -d '+' '+discrname+' '+' -c '+' '.join(categories)+' -o '+outname+'_hdecay.txt '+filename+"\n")
   for c in categories:
-    cardscript.write('mk_datacard_ttbb13TeV '+' -d '+' finaldiscr '+' -c '+c+' -o '+outname+'_'+c+'.txt '+filename+"\n")
-    cardscript.write('mk_datacard_hdecay13TeV'+' -d '+' finaldiscr '+' -c '+c+' -o '+outname+'_'+c+'_hdecay.txt '+filename+"\n")
+    #cardscript.write('mk_datacard_ttbb13TeV '+' -d '+' finaldiscr '+' -c '+c+' -o '+outname+'_'+c+'.txt '+filename+"\n")
+    cardscript.write('mk_datacard_hdecay13TeV'+' -d '+' '+discrname+' '+' -c '+c+' -o '+outname+'_'+c+'_hdecay.txt '+filename+"\n")
   cardscript.close()
   
 def readLimit(fn='higgsCombineTest.Asymptotic.mH125.root'):
