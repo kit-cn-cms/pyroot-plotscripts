@@ -228,21 +228,22 @@ print samples
 addRealData(name+'/'+name+'_limitInput.root',[s.nick for s in samples_data_controlplots],binlabels,discrname)
 addRealData(name+'/'+name+'_limitInput.root',[s.nick for s in samples_data_controlplots],additbinlables,"inputVar")
 
-## make datacards
-#listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,bdts)
-#lolT=transposeLOL(listOfHistoLists)
-#writeLOLAndOneOnTop(transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],20,name+'/'+name+'_controlplots')
-##writeListOfHistoListsAN(transposeLOL([lolT[0]]+lolT[9:]),samples_,"",name+'/'+name+'_controlplots_no_stack',True,False,False,'histo',False,False,False)
+# make datacards
+listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,bdts)
+lolT=transposeLOL(listOfHistoLists)
+writeLOLAndOneOnTop(transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],20,name+'/'+name+'_controlplots')
+#writeListOfHistoListsAN(transposeLOL([lolT[0]]+lolT[9:]),samples_,"",name+'/'+name+'_controlplots_no_stack',True,False,False,'histo',False,False,False)
 
 
 #plotdiscriminants
-#labels=[plot.label for plot in bdts]
-#listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,bdts,1)
-#listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samplesdata,bdts,1)
-#if not os.path.exists(outputpath[:-4]+'_syst.root') or not askYesNo('reuse systematic histofile?'):
-    #renameHistos(outputpath,outputpath[:-4]+'_syst.root',allsystnames,False)
-#lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[9:],bdts,errorSystnames)
-#plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-1,name+'/'+name+'_Blinded',[[lll,3354,ROOT.kBlack,True]],False,labels,True,True)
+labels=[plot.label for plot in bdts]
+listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,bdts,1)
+listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samplesdata,bdts,1)
+if not os.path.exists(outputpath[:-4]+'_syst.root') or not askYesNo('reuse systematic histofile?'):
+    renameHistos(outputpath,outputpath[:-4]+'_syst.root',allsystnames,False)
+lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[9:],bdts,errorSystnames)
+exit(0)
+plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-1,name+'/'+name+'_Blinded',[[lll,3354,ROOT.kBlack,True]],False,labels,True,True)
 
 #listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,bdts,1)
 #listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samplesdata,bdts,1)

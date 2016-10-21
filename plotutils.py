@@ -982,8 +982,8 @@ def createErrorbands(lll,samples,DoRateSysts=True):
             syst=l[0].Clone()
             for h in l[1:]:
                 syst.Add(h)
-                #print "adding to errorband"
-                #print h
+                print "adding to errorband"
+                print h, h.Integral(), nominal.Integral()
             systs.append(syst)
         assert len(samples)==len(llT[0])
         for isample,sample in enumerate(samples): # for all normalization unc
@@ -1027,8 +1027,9 @@ def createErrorbands(lll,samples,DoRateSysts=True):
             ups=systs[0::2]
             downs=systs[1::2]
             for up,down in zip(ups,downs):
-	        #print "up/down name ", up.GetName(), down.GetName()
-	        #print "up/down diff ",  up.GetBinContent(ibin+1)-n, down.GetBinContent(ibin+1)-n
+	        print "up/down name ", up.GetName(), down.GetName()
+
+	        print "up/down diff ",  up.GetBinContent(ibin+1)-n, down.GetBinContent(ibin+1)-n
                 u_=up.GetBinContent(ibin+1)-n
                 d_=down.GetBinContent(ibin+1)-n
                 #print u_,d_
@@ -1053,8 +1054,8 @@ def createErrorbands(lll,samples,DoRateSysts=True):
 
                 uperrors[ibin]=ROOT.TMath.Sqrt(uperrors[ibin]*uperrors[ibin]+u*u)
                 downerrors[ibin]=ROOT.TMath.Sqrt(downerrors[ibin]*downerrors[ibin]+d*d)
-                #print u,d
-                #print "up/down errors ", uperrors[ibin],downerrors[ibin]
+                print u,d
+                print "up/down errors ", uperrors[ibin],downerrors[ibin]
 
         graph=ROOT.TGraphAsymmErrors(nominal)
         for i in range(len(uperrors)):
@@ -1390,13 +1391,13 @@ def turn1dHistoToRow(h,witherror=True,rounding="3dig"):
         if rounding=="3dig":
           s+="%.3f" % h.GetBinContent(i)
         else:
-	  s+="%.4f" % h.GetBinContent(i)
+	  s+="%.1f" % h.GetBinContent(i)
         if witherror:
             s+=" $\pm$ "
             if rounding=="3dig":
               s+="%.3f" % h.GetBinError(i)
             else:
-	      s+="%.4f" % h.GetBinError(i)
+	      s+="%.1f" % h.GetBinError(i)
         if i==h.GetNbinsX():
             s+="\\\\"
         else:
@@ -1521,7 +1522,7 @@ def stackHistoList(listOfHistos_,normalize=False):
 
 def getDataGraph(listOfHistosData,nunblinded):
     if len(listOfHistosData)>0:
-        datahisto=listOfHistosData[0]
+        datahisto=listOfHistosData[0].Clone()
     for d in listOfHistosData[1:]:
         datahisto.Add(d)
     moveOverFlow(datahisto)
@@ -1558,15 +1559,16 @@ def getDataGraph(listOfHistosData,nunblinded):
             blind_band.SetPointEXlow(j,datahisto.GetBinWidth(1))
             blind_band.SetPointEXhigh(j,datahisto.GetBinWidth(1))
 
-            data.RemovePoint(nunblinded)
+            #data.RemovePoint(nunblinded)
 
 
     return data
     # TODO: proper y-errors
 
 def getDataGraphBlind(listOfHistosData,nunblinded):
+    print "blind after point ", nunblinded
     if len(listOfHistosData)>0:
-        datahisto=listOfHistosData[0]
+        datahisto=listOfHistosData[0].Clone()
     for d in listOfHistosData[1:]:
         datahisto.Add(d)
     moveOverFlow(datahisto)
@@ -1584,6 +1586,7 @@ def getDataGraphBlind(listOfHistosData,nunblinded):
 
       data.SetPointEYlow(i, N-L);
       data.SetPointEYhigh(i, U-N);
+      print i,  N-L, U-N
 
     data.SetMarkerStyle(20)
     data.SetMarkerSize(1.3)
@@ -1593,32 +1596,51 @@ def getDataGraphBlind(listOfHistosData,nunblinded):
     blind_band=ROOT.TGraphAsymmErrors(datahisto.GetNbinsX()-nunblinded)
     j=0
     x, y = ROOT.Double(0), ROOT.Double(0)
-    for i in range(0,data.GetN()+1):
-        data.SetPointEXlow(i,0)
-        data.SetPointEXhigh(i,0)
-        if i>nunblinded:
+    for i in range(data.GetN()):
+      data.GetPoint(i,x,y)
+      print datahisto, x,y
+    print data.GetN()
+    print datahisto.GetNbinsX()
+    x, y = ROOT.Double(0), ROOT.Double(0)
+    for i in range(data.GetN()):
+        #data.SetPointEXlow(i,0)
+        #data.SetPointEXhigh(i,0)
+        if i>=nunblinded:
             data.GetPoint(nunblinded,x,y)
+            print i, datahisto, x,y
             blind_band.SetPoint(j,x,0)
             blind_band.SetPointEYlow(j,0)
             blind_band.SetPointEYhigh(j,200000)
             blind_band.SetPointEXlow(j,datahisto.GetBinWidth(1)/2)
             blind_band.SetPointEXhigh(j,datahisto.GetBinWidth(1)/2)
-            data.RemovePoint(nunblinded)
+            print "remove ", data.RemovePoint(nunblinded), data.GetN()
             j+=1
-
+    x, y = ROOT.Double(0), ROOT.Double(0)
+    print "done removing"
+    for i in range(data.GetN()):
+      data.GetPoint(i,x,y)
+      print datahisto, x,y
+      data.SetPointEXlow(i,0)
+      data.SetPointEXhigh(i,0)
+    print data.GetN()
     return data,blind_band
     # TODO: proper y-errors
 
 
 def getRatioGraph(data,mchisto):
+    print "creating ratio ", mchisto
     ratio=data.Clone()
     x, y = ROOT.Double(0), ROOT.Double(0)
     minimum = 9999.
     maximum = -9999.
     for i in range(0,data.GetN()):
         data.GetPoint(i,x,y)
-        if mchisto.GetBinContent(i+1)>0:
-            ratioval=y/mchisto.GetBinContent(i+1)
+        currentBin=mchisto.FindBin(x)
+        currentBinContent=mchisto.GetBinContent(currentBin)
+        #if mchisto.GetBinContent(i+1)>0:
+            #ratioval=y/mchisto.GetBinContent(i+1)
+        if currentBinContent>0:
+            ratioval=y/currentBinContent
             ratio.SetPoint(i,x,ratioval)
             if ratioval>maximum and ratioval>0:
               maximum=round(ratioval,1);
@@ -1628,8 +1650,16 @@ def getRatioGraph(data,mchisto):
             ratio.SetPoint(i,x,-999)
 
         if y>0:
-            ratio.SetPointEYlow(i,1-(y-data.GetErrorYlow(i))/y)
-            ratio.SetPointEYhigh(i,(y+data.GetErrorYhigh(i))/y-1)
+            #ratio.SetPointEYlow(i,1-(y-data.GetErrorYlow(i))/y)
+            #ratio.SetPointEYhigh(i,(y+data.GetErrorYhigh(i))/y-1)
+            if currentBinContent>0:
+              ratio.SetPointEYlow(i,data.GetErrorYlow(i)/currentBinContent)
+              ratio.SetPointEYhigh(i,data.GetErrorYhigh(i)/currentBinContent)
+            else:
+	      ratio.SetPointEYlow(i,1-(y-data.GetErrorYlow(i))/y)
+              ratio.SetPointEYhigh(i,(y+data.GetErrorYhigh(i))/y-1)
+            
+            print i, x, y, data.GetErrorYlow(i),data.GetErrorYhigh(i), ratioval, (y+data.GetErrorYhigh(i))/y-1, 1-(y-data.GetErrorYlow(i))/y
         else:
             ratio.SetPointEYlow(i,0)
             ratio.SetPointEYhigh(i,0)
@@ -2345,6 +2375,7 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
 
         listOfRatioErrorGraphs=[]
         graphcounter=0
+        print "doing ratio error graph"
         for errorgraph,thisFillStyle,ThisFillColor in errorgraphList:
 	  ratioerrorgraph=ROOT.TGraphAsymmErrors(errorgraph.GetN())
 	  #print ratioerrorgraph
@@ -2355,10 +2386,12 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
 	      ratioerrorgraph.SetPoint(i,x, 1.0)
 	      relErrUp=0.0
 	      relErrDown=0.0
+	      print x,y,errorgraph.GetErrorYhigh(i),errorgraph.GetErrorYlow(i)
 	      if y>0.0:
 		  relErrUp=errorgraph.GetErrorYhigh(i)/y
 		  relErrDown=errorgraph.GetErrorYlow(i)/y
-	      ratioerrorgraph.SetPointError(i, errorgraph.GetErrorXlow(i),errorgraph.GetErrorXhigh(i), relErrUp, relErrDown)
+		  print relErrUp,relErrDown
+	      ratioerrorgraph.SetPointError(i, errorgraph.GetErrorXlow(i),errorgraph.GetErrorXhigh(i), relErrDown, relErrUp)
 
 
 	  errorgraph.SetFillStyle(thisFillStyle)
@@ -2478,7 +2511,7 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         for ratioerrorgraph in listOfRatioErrorGraphs:
           ratioerrorgraph.Draw("same2")
 #        objects.append(ratioerrorgraph)
-        ratiograph.Draw('sameP')
+        ratiograph.Draw('sameP0')
         line.SetLineWidth(1)
         line.Draw('histosame')
         #emptyHisto.GetYaxis().SetTitle('data/MC');
@@ -2627,7 +2660,7 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
 	      if y>0.0:
 		  relErrUp=errorgraph.GetErrorYhigh(i)/y
 		  relErrDown=errorgraph.GetErrorYlow(i)/y
-	      ratioerrorgraph.SetPointError(i, errorgraph.GetErrorXlow(i),errorgraph.GetErrorXhigh(i), relErrUp, relErrDown)
+	      ratioerrorgraph.SetPointError(i, errorgraph.GetErrorXlow(i),errorgraph.GetErrorXhigh(i), relErrDown, relErrUp)
 
 
 	  errorgraph.SetFillStyle(thisFillStyle)
@@ -2745,7 +2778,7 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
         for ratioerrorgraph in listOfRatioErrorGraphs:
           ratioerrorgraph.Draw("same2")
 #        objects.append(ratioerrorgraph)
-        ratiograph.Draw('sameP')
+        ratiograph.Draw('sameP0')
         line.SetLineWidth(1)
         line.Draw('histosame')
         #emptyHisto.GetYaxis().SetTitle('data/MC');

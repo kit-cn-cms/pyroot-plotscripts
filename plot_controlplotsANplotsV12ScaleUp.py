@@ -2,19 +2,24 @@
 # plot general control distributions
 ##############
 
-from plotconfigAnalysisV3ForPlots import *
+from plotconfigAnalysisV3csvForPSscale import *
 sys.path.insert(0, 'limittools')
 from limittools import renameHistos
 
-name='controlplotsAnalysisV7'
+name='controlplotsAnalysisV12ScaleUp'
 
 # if one wants to plot blinded: True (default: False)
-plotBlinded = True
+plotBlinded = False
 
 # selections
 boosted="(BoostedTopHiggs_TopHadCandidate_TopMVAOutput>=-0.485&&BoostedTopHiggs_HiggsCandidate_HiggsTag>=0.8925)"
 toptaggersel="(BoostedJet_Top_Pt[0]>=0)"
 higgstaggersel="(BoostedJet_Filterjet2_Pt[0]>=0)"
+
+additionalvariables=[
+                      #'finalbdt_ljets_boosted:='+bdtweightpath+'/weights_Final_DB_boosted_76xmem.xml',
+                      "Jet_Pt","Jet_Eta","Jet_CSV","Jet_Flav","N_Jets","Weight_CSV","Weight_CSVLFup","Weight_CSVLFdown","Weight_CSVHFup","Weight_CSVHFdown","Weight_CSVHFStats1up","Weight_CSVHFStats1down","Weight_CSVLFStats1up","Weight_CSVLFStats1down","Weight_CSVHFStats2up","Weight_CSVHFStats2down","Weight_CSVLFStats2up","Weight_CSVLFStats2down","Weight_CSVCErr1up","Weight_CSVCErr1down","Weight_CSVCErr2up","Weight_CSVCErr2down",
+]
 
 # definition of categories
 categoriesJT=[
@@ -70,7 +75,7 @@ for i,cat in enumerate(categoriesJTB):
     #catstringSplitByBDToptD+=("+"+str(i+1)+"*"+cat[0])
 
 # samples
-samples=samplesControlPlots
+samples=samplesControlplotsSCALEUP
 samples_data=samples_data_controlplots
 systsamples=[]
 for sample in samples:
@@ -106,7 +111,7 @@ plotlabelboosted="#splitline{1 lepton, #geq 4 jets, #geq 2 b-tags}{#geq 1 C/A 1.
 plotselection="(N_Jets>=4&&N_BTagsM>=2)"
 plots=[
     Plot(ROOT.TH1F("JT" ,"jet-tag categories",len(categoriesJT),0.5,0.5+len(categoriesJT)),catstringJT,categoriesJTsel,"1 lepton"),
-    Plot(ROOT.TH1F("BCAT" ,"jet-tag + boosted categories",len(categoriesJTB),0.5,0.5+len(categoriesJTB)),catstringJTB,categoriesJTBsel,"1 lepton"),
+    #Plot(ROOT.TH1F("BCAT" ,"jet-tag + boosted categories",len(categoriesJTB),0.5,0.5+len(categoriesJTB)),catstringJTB,categoriesJTBsel,"1 lepton"),
     #Plot(ROOT.TH1F("JTsplitByBDToptD" ,"2D analysis D + boosted categories",len(categoriesSplitByBDToptD),0.5,0.5+len(categoriesSplitByBDToptD)),catstringSplitByBDToptD,categoriesJTBsel,"1 lepton"),
 
     Plot(ROOT.TH1F("N_Jets","Number of ak4 jets",7,3.5,10.5),"N_Jets",plotselection,plotlabel),
@@ -249,7 +254,7 @@ plots=[
     ##        Plot(ROOT.TH1F("Evt_M2_UntaggedJetsAverage","",50,0.,250),"Evt_M2_UntaggedJetsAverage",plotselection,plotlabel),
     ##        Plot(ROOT.TH1F("Evt_M2_TaggedJetsAverage","",50,0.,250),"Evt_M2_TaggedJetsAverage",plotselection,plotlabel),
 
-           Plot(ROOT.TH1F("Evt_M_MinDeltaRJets","dijet mass of closest jets",30,0.,150),"Evt_M_MinDeltaRJets",plotselection,plotlabel),
+    Plot(ROOT.TH1F("Evt_M_MinDeltaRJets","dijet mass of closest jets",30,0.,150),"Evt_M_MinDeltaRJets",plotselection,plotlabel),
     Plot(ROOT.TH1F("Evt_M_MinDeltaRTaggedJets","mass of closest tagged jets",45,0.,450),"Evt_M_MinDeltaRTaggedJets",plotselection,plotlabel),
     #Plot(ROOT.TH1F("Evt_M_MinDeltaRUntaggedJets","mass of closest untagged jets",45,0.,450),"Evt_M_MinDeltaRUntaggedJets",plotselection,plotlabel),
     ##        Plot(ROOT.TH1F("Evt_M_MinDeltaRLeptonJet","",60,0.4,3.4),"Evt_M_MinDeltaRLeptonJet",plotselection,plotlabel),
@@ -427,42 +432,14 @@ plotlabel="1 lepton, 4 jets, 3 b-tags"
 plotselection=categoriesJT[1][0]
 plotprefix="s43_"
 plots43=[
-    #Plot(ROOT.TH1F(plotprefix+"s43_BDT_common5_input_avg_btag_disc_btags","avg CSV (tags)",30,0.8,1.05),"BDT_common5_input_avg_btag_disc_btags",plotselection,plotlabel),
-    Plot(ROOT.TH1F(plotprefix+"s43_BDT_common5_input_HT","HT",20,0,1000),"BDT_common5_input_HT",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"s43_MEM_transformed","MEM discriminator",24,0,1.2),"(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)",plotselection,plotlabel),
+   Plot(ROOT.TH1F(plotprefix+"s43_BDT_common5_input_HT","HT",20,0,1000),"BDT_common5_input_HT",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"s43_BDT_common5_input_sphericity","sphericity",20,0,1),"BDT_common5_input_sphericity",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"s43_BDT_common5_input_third_highest_btag","third highest btag",22,0.79,1),"BDT_common5_input_third_highest_btag",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"s43_Evt_CSV_Average","avg CSV (jets)",20,0.6,1),"Evt_CSV_Average",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"s43_BDT_common5_input_M3","M3",30,0,600),"BDT_common5_input_M3",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"s43_BDT_common5_input_all_sum_pt_with_met","#sum p_{T} (lepton,jet,met)",20,0,1000),"BDT_common5_input_all_sum_pt_with_met",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"s43_BDT_common5_input_h1","H_{1}",30,-0.2,0.4),"BDT_common5_input_h1",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"s43_BDT_common5_input_pt_all_jets_over_E_all_jets","(#sum jet p_{T})/(#sum jet E))",20,0.2,1.2),"BDT_common5_input_pt_all_jets_over_E_all_jets",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"s43_BDT_common5_input_dr_between_lep_and_closest_jet","#Delta R (lepton,jet)",35,0,3.5),"BDT_common5_input_dr_between_lep_and_closest_jet",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"s43_BDT_common5_input_first_jet_pt","jet 1 p_{T}",50,0,500),"BDT_common5_input_first_jet_pt",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"s43_BDT_common5_input_closest_tagged_dijet_mass","closest tagged dijet mass",20,0,400),"BDT_common5_input_closest_tagged_dijet_mass",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"s43_blr","B-tagging likelihood ratio",30,-3,8),"Evt_blr_ETH_transformed",'(N_Jets==4&&N_BTagsM==3)',plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"s43_BDT_common5_input_avg_dr_tagged_jets","avg #Delta R (tag,tag)",20,0,4),"BDT_common5_input_avg_dr_tagged_jets",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"s43_BDT_common5_input_dev_from_avg_disc_btags","dev from avg b-tag (tags)",25,0,0.008),"BDT_common5_input_dev_from_avg_disc_btags",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"s43_BDT_common5_input_min_dr_tagged_jets","min #Delta R(tag,tag)",30,0.3,3.5),"BDT_common5_input_min_dr_tagged_jets",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"s43_BDT_common5_input_h3","H_{3}",30,-0.2,0.9),"BDT_common5_input_h3",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"s43_BDT_common5_input_second_jet_pt","jet 2 p_{T}",40,0,300),"BDT_common5_input_second_jet_pt",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"s43_BDT_common5_input_fourth_jet_pt","jet 4 p_{T}",32,0,160),"BDT_common5_input_fourth_jet_pt",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"s43_BDT_common5_input_maxeta_tag_tag","max #Delta #eta(tag,tag)",20,0.,1.6),"BDT_common5_input_maxeta_tag_tag",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"s43_BDT_common5_input_maxeta_jet_tag","max #Delta #eta(jet,tag)",20,0.,1.6),"BDT_common5_input_maxeta_jet_tag",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"s43_Evt_Deta_JetsAverage","avg #Delta #eta (jet,jet)",20,0,3),"Evt_Deta_JetsAverage",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"s43_BDT_common5_input_third_jet_pt","jet 1 p_{T}",40,0,500),"BDT_common5_input_third_jet_pt",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"s43_BJN_N_Leptons","Number of soft leptons",6,-.5,5.5),"BJN_N_Leptons",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"s43_BJN_N_PVtrackOvCollTrk","Number PV tracks over all tracks",25,0.2,0.6),"BJN_N_PVtrackOvCollTrk",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"s43_BJN_N_AvgIp3D","Avg 3D IP",40,0,0.06),"BJN_N_AvgIp3D",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_HT","Evt_HT",40,0.,2000),"Evt_HT",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__cos_theta_lb","RECO__lab__cos_theta_lb",22,-.1,1),"RECO__lab__cos_theta_lb",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__cos_theta_lbarbbar","RECO__lab__cos_theta_lbarbbar",22,-.1,1),"RECO__lab__cos_theta_lbarbbar",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Eta_bb","RECO__lab__Delta_Eta_bb",22,-.1,5),"RECO__lab__Delta_Eta_bb",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Eta_lb","RECO__lab__Delta_Eta_lb",22,-.1,5),"RECO__lab__Delta_Eta_lb",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Eta_lbarbbar","RECO__lab__Delta_Eta_lbarbbar",22,-.1,5),"RECO__lab__Delta_Eta_lbarbbar",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Phi_bb","RECO__lab__Delta_Phi_bb",22,-.1,5),"RECO__lab__Delta_Phi_bb",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Phi_lb","RECO__lab__Delta_Phi_lb",22,-.1,1),"RECO__lab__Delta_Phi_lb",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Phi_lbarbbar","RECO__lab__Delta_Phi_lbarbbar",22,-.1,5),"RECO__lab__Delta_Phi_lbarbbar",plotselection,plotlabel),
 ]
 
 
@@ -471,61 +448,12 @@ plotselection=categoriesJT[4][0]
 plotprefix="s44_"
 # weights_Final_44_MEMBDTv2.xml
 plots44=[
-    #Plot(ROOT.TH1F(plotprefix+"s44_MEM_transformed","MEM discriminator",6,0,1.2),"(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)","(N_Jets==4&&N_BTagsM>=4)",plotlabel),
-    Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_avg_btag_disc_btags","avg CSV tagged",6,0.8,1.05),"BDT_common5_input_avg_btag_disc_btags",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_fourth_jet_pt","jet 4 p_{T}",7,30,100),"BDT_common5_input_fourth_jet_pt",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_first_jet_pt","jet 1 p_{T}",15,0,400),"BDT_common5_input_first_jet_pt",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_Deta_JetsAverage","avg #Delta #eta (jet,jet)",15,0,3),"Evt_Deta_JetsAverage",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_dr_between_lep_and_closest_jet","#Delta R (lepton,jet)",16,0,3.2),"BDT_common5_input_dr_between_lep_and_closest_jet",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_fourth_highest_btag","fourth-highest CSV",11,0.8,1),"BDT_common5_input_fourth_highest_btag",plotselection,plotlabel),
+   Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_avg_btag_disc_btags","avg CSV tagged",6,0.8,1.05),"BDT_common5_input_avg_btag_disc_btags",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_aplanarity","aplanarity",9,0,0.3),"BDT_common5_input_aplanarity",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_invariant_mass_of_everything","mass(jets,lepton,MET)",15,0,1500),"BDT_common5_input_invariant_mass_of_everything",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_M3","M3",15,0,800),"BDT_common5_input_M3",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"blr","B-tagging likelihood ratio",12,0,12),"Evt_blr_ETH_transformed",'(N_Jets==4&&N_BTagsM>=4)',plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_avg_dr_tagged_jets","avg #Delta R (tag,tag)",10,1.6,3.6),"BDT_common5_input_avg_dr_tagged_jets",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_closest_tagged_dijet_mass","dijet mass of closest tagged jets",10,0,200),"BDT_common5_input_closest_tagged_dijet_mass",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_min_dr_tagged_jets","min #Delta R (tag,tag)",12,0,2.4),"BDT_common5_input_min_dr_tagged_jets",plotselection,plotlabel),
-    # Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_maxeta_tag_tag","max #Delta #eta (tag,tag)",15,0,1.5),"BDT_common5_input_maxeta_tag_tag",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_all_sum_pt_with_met","#sum p_{T} (lepton,jet,met)",10,0,1000),"BDT_common5_input_all_sum_pt_with_met",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_HT","HT",15,0,1000),"BDT_common5_input_HT",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_h1","H_{1}",15,-0.2,0.4),"BDT_common5_input_h1",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_third_highest_btag","third-highest CSV",11,0.8,1),"BDT_common5_input_third_highest_btag",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_h3","H_{3}",15,-0.2,1.0),"BDT_common5_input_h3",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_Mlb","mass(lepton,closest tag)",15,0,250),"BDT_common5_input_Mlb",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_second_highest_btag","second-highest CSV",11,0.8,1),"BDT_common5_input_second_highest_btag",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_maxeta_jet_jet","max #Delta #eta(jet,jet)",14,0.2,1.6),"BDT_common5_input_maxeta_jet_jet",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_maxeta_jet_tag","max #Delta #eta(jet,tag)",14,0.2,1.6),"BDT_common5_input_maxeta_jet_tag",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_pt_all_jets_over_E_all_jets","(#sum jet p_{T})/(#sum jet E))",20,0.2,1.2),"BDT_common5_input_pt_all_jets_over_E_all_jets",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_h0","H_{0}",15,0.2,0.4),"BDT_common5_input_h0",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_second_jet_pt","jet 2 p_{T}",20,0,250),"BDT_common5_input_second_jet_pt",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_dev_from_avg_disc_btags","dev from avg CSV (tags)",15,0,0.008),"BDT_common5_input_dev_from_avg_disc_btags",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_h2","H_{2}",15,-0.2,0.4),"BDT_common5_input_h2",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BJN_N_Leptons","Number of soft leptons",6,-.5,5.5),"BJN_N_Leptons",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BJN_N_PVtrackOvCollTrk","Number PV tracks over all tracks",25,0.2,0.6),"BJN_N_PVtrackOvCollTrk",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BJN_N_AvgIp3D","Avg 3D IP",40,0,0.06),"BJN_N_AvgIp3D",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__cos_theta_lb","RECO__lab__cos_theta_lb",22,-.1,1),"RECO__lab__cos_theta_lb",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__cos_theta_lbarbbar","RECO__lab__cos_theta_lbarbbar",22,-.1,1),"RECO__lab__cos_theta_lbarbbar",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Eta_bb","RECO__lab__Delta_Eta_bb",22,-.1,5),"RECO__lab__Delta_Eta_bb",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Eta_lb","RECO__lab__Delta_Eta_lb",22,-.1,5),"RECO__lab__Delta_Eta_lb",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Eta_lbarbbar","RECO__lab__Delta_Eta_lbarbbar",22,-.1,5),"RECO__lab__Delta_Eta_lbarbbar",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Phi_bb","RECO__lab__Delta_Phi_bb",22,-.1,5),"RECO__lab__Delta_Phi_bb",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Phi_lb","RECO__lab__Delta_Phi_lb",22,-.1,1),"RECO__lab__Delta_Phi_lb",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Phi_lbarbbar","RECO__lab__Delta_Phi_lbarbbar",22,-.1,5),"RECO__lab__Delta_Phi_lbarbbar",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_H1","Evt_H1",60,-0.2,0.4),"Evt_H1",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_H2","Evt_H2",60,-0.2,0.4),"Evt_H2",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_H3","Evt_H3",50,-0.05,1.05),"Evt_H3",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_H4","Evt_H4",50,-0.15,0.35),"Evt_H4",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Sphericity","Sphericity",50,0,1),"Evt_Sphericity",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Aplanarity","Aplanarity",50,0,0.5),"Evt_Aplanarity",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_Jet_MaxDeta_Jets","Evt_Jet_MaxDeta_Jets",50,0.,5.0),"Evt_Jet_MaxDeta_Jets",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_TaggedJet_MaxDeta_Jets","Evt_TaggedJet_MaxDeta_Jets",50,0.,5.0),"Evt_TaggedJet_MaxDeta_Jets",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_TaggedJet_MaxDeta_TaggedJets","Evt_TaggedJet_MaxDeta_TaggedJets",60,0.,6.0),"Evt_TaggedJet_MaxDeta_TaggedJets",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_Dr_MinDeltaRTaggedJets","Evt_Dr_MinDeltaRTaggedJets",50,0.,5.0),"Evt_Dr_MinDeltaRTaggedJets",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_Dr_MinDeltaRUntaggedJets","Evt_Dr_MinDeltaRUntaggedJets",50,0.,5.0),"Evt_Dr_MinDeltaRUntaggedJets",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_M_MinDeltaRTaggedJets","Evt_M_MinDeltaRTaggedJets",45,0.,450),"Evt_M_MinDeltaRTaggedJets",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_M_MinDeltaRUntaggedJets","Evt_M_MinDeltaRUntaggedJets",45,0.,450),"Evt_M_MinDeltaRUntaggedJets",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_Deta_UntaggedJetsAverage","Evt_Deta_UntaggedJetsAverage",45,0.,4.5),"Evt_Deta_UntaggedJetsAverage",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_Deta_TaggedJetsAverage","Evt_Deta_TaggedJetsAverage",45,0.,4.5),"Evt_Deta_TaggedJetsAverage",plotselection,plotlabel),
 ]
 
 
@@ -533,42 +461,17 @@ plotlabel="1 lepton, 5 jets, 3 b-tags"
 plotselection=categoriesJT[2][0]
 plotprefix="s53_"
 plots53=[
-    #Plot(ROOT.TH1F(plotprefix+"MEM_transformed","MEM discriminator",20,0,1),"(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_pt_all_jets_over_E_all_jets","(#sum jet p_{T})/(#sum jet E))",20,0.2,1.2),"BDT_common5_input_pt_all_jets_over_E_all_jets",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_all_sum_pt_with_met","#sum p_{T} (lepton,jet,met)",30,0,1500),"BDT_common5_input_all_sum_pt_with_met",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_third_highest_btag","third highest CSV",22,.8,1),"BDT_common5_input_third_highest_btag",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_fourth_highest_btag","fourth highest CSV",22,-.1,1),"BDT_common5_input_fourth_highest_btag",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_Deta_JetsAverage","avg #Delta #eta jets",25,0,2.5),"Evt_Deta_JetsAverage",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_CSV_Average","avg CSV",25,0.5,0.9),"Evt_CSV_Average",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"blr","B-tagging likelihood ratio",20,-2,10),"Evt_blr_ETH_transformed",'(N_Jets==5&&N_BTagsM==3)',plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_h1","H_{1}",27,-.2,.34),"BDT_common5_input_h1",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_avg_dr_tagged_jets","avg #Delta R (tag,tag)",30,0.5,3.5),"BDT_common5_input_avg_dr_tagged_jets",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_sphericity","sphericity",25,0,1),"BDT_common5_input_sphericity",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_h3","H_{3}",20,0,1),"BDT_common5_input_h3",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_HT","HT",25,0,1000),"BDT_common5_input_HT",plotselection,plotlabel),
-    Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_dev_from_avg_disc_btags","dev from ave CSV (tags)",25,0,0.008),"BDT_common5_input_dev_from_avg_disc_btags",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_min_dr_tagged_jets","min #Delta R (tag,tag)",25,0,2.4),"BDT_common5_input_min_dr_tagged_jets",plotselection,plotlabel),
+    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_dev_from_avg_disc_btags","dev from ave CSV (tags)",25,0,0.008),"BDT_common5_input_dev_from_avg_disc_btags",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_avg_btag_disc_btags","avg CSV tagged",25,0.8,1.05),"BDT_common5_input_avg_btag_disc_btags",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_dr_between_lep_and_closest_jet","#Delta R (lepton,jet)",25,0,3.2),"BDT_common5_input_dr_between_lep_and_closest_jet",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_maxeta_jet_tag","max #Delta #eta(tag,avg jet #eta)",25,0.2,1.6),"BDT_common5_input_maxeta_jet_tag",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_maxeta_tag_tag","max #Delta #eta (tag,avg tag #eta)",25,0,1.5),"BDT_common5_input_maxeta_tag_tag",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_second_jet_pt","jet 2 p_{T}",20,0,300),"BDT_common5_input_second_jet_pt",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_third_jet_pt","jet 3 p_{T}",20,0,250),"BDT_common5_input_third_jet_pt",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_h2","H_{2}",20,0,0.15),"BDT_common5_input_h2",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BJN_N_Leptons","Number of soft leptons",6,-.5,5.5),"BJN_N_Leptons",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BJN_N_PVtrackOvCollTrk","Number PV tracks over all tracks",25,0.2,0.6),"BJN_N_PVtrackOvCollTrk",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BJN_N_AvgIp3D","Avg 3D IP",40,0,0.06),"BJN_N_AvgIp3D",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_M3","M3",20,0,1000),"BDT_common5_input_M3",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_closest_tagged_dijet_mass","dijet mass of closest tagged jets",10,0,200),"BDT_common5_input_closest_tagged_dijet_mass",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_Mlb","mass(lepton,closest tag)",15,0,250),"BDT_common5_input_Mlb",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__cos_theta_lb","RECO__lab__cos_theta_lb",22,-.1,1),"RECO__lab__cos_theta_lb",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__cos_theta_lbarbbar","RECO__lab__cos_theta_lbarbbar",22,-.1,1),"RECO__lab__cos_theta_lbarbbar",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Eta_bb","RECO__lab__Delta_Eta_bb",22,-.1,5),"RECO__lab__Delta_Eta_bb",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Eta_lb","RECO__lab__Delta_Eta_lb",22,-.1,5),"RECO__lab__Delta_Eta_lb",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Eta_lbarbbar","RECO__lab__Delta_Eta_lbarbbar",22,-.1,5),"RECO__lab__Delta_Eta_lbarbbar",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Phi_bb","RECO__lab__Delta_Phi_bb",22,-.1,5),"RECO__lab__Delta_Phi_bb",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Phi_lb","RECO__lab__Delta_Phi_lb",22,-.1,1),"RECO__lab__Delta_Phi_lb",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Phi_lbarbbar","RECO__lab__Delta_Phi_lbarbbar",22,-.1,5),"RECO__lab__Delta_Phi_lbarbbar",plotselection,plotlabel),
 ]
 
 
@@ -576,63 +479,15 @@ plotlabel="1 lepton, 5 jets, #geq4 b-tags"
 plotselection=categoriesJT[5][0]
 plotprefix="s54_"
 plots54=[
-    #Plot(ROOT.TH1F(plotprefix+"MEM_transformed","MEM discriminator",10,0,1),"(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)",plotselection,plotlabel),
-    Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_avg_btag_disc_btags","avg CSV (tags)",7,.8,1.04),"BDT_common5_input_avg_btag_disc_btags",plotselection,plotlabel),
+   Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_avg_btag_disc_btags","avg CSV (tags)",7,.8,1.04),"BDT_common5_input_avg_btag_disc_btags",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"Evt_Deta_JetsAverage","avg #Delta #eta jets",10,0,2.5),"Evt_Deta_JetsAverage",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_fourth_jet_pt","jet 4 p_{T}",15,0,150),"BDT_common5_input_fourth_jet_pt",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_M3","M3",20,0,1000),"BDT_common5_input_M3",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_all_sum_pt_with_met","#sum (lepton pt,jet pt,met)",12,0,1200),"BDT_common5_input_all_sum_pt_with_met",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_h2","H_{2}",15,-.15,0.3),"BDT_common5_input_h2",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_avg_dr_tagged_jets","avg #Delta R (tag,tag)",10,1,4),"BDT_common5_input_avg_dr_tagged_jets",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"blr","B-tagging likelihood ratio",10,-2,12),"Evt_blr_ETH_transformed",'(N_Jets==5&&N_BTagsM>=4)',plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_pt_all_jets_over_E_all_jets","(#sum jet p_{T})/(#sum jet E))",10,0.2,1.2),"BDT_common5_input_pt_all_jets_over_E_all_jets",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_closest_tagged_dijet_mass","closest tagged dijet mass",10,0,200),"BDT_common5_input_closest_tagged_dijet_mass",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_tagged_dijet_mass_closest_to_125","tagged dijet mass closest to 125",10,80,180),"BDT_common5_input_tagged_dijet_mass_closest_to_125",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_HT","HT",10,0,1000),"BDT_common5_input_HT",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_h1","H_{1}",10,-.2,.34),"BDT_common5_input_h1",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_best_higgs_mass","best higgs mass",10,0,400),"BDT_common5_input_best_higgs_mass",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_third_highest_btag","third highest CSV",10,.8,1),"BDT_common5_input_third_highest_btag",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_sphericity","sphericity",10,0,1),"BDT_common5_input_sphericity",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_h3","H_{3}",10,0,1),"BDT_common5_input_h3",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_fourth_highest_btag","fourth highest CSV",10,0.79,1),"BDT_common5_input_fourth_highest_btag",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_fifth_highest_CSV","fifth highest CSV",10,-.1,.91),"BDT_common5_input_fifth_highest_CSV",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_maxeta_jet_tag","max #Delta #eta(jet,tag)",14,0.2,1.6),"BDT_common5_input_maxeta_jet_tag",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_maxeta_tag_tag","max #Delta #eta (tag,tag)",15,0,1.5),"BDT_common5_input_maxeta_tag_tag",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_maxeta_jet_jet","max #Delta #eta (jet,jet)",15,0,1.5),"BDT_common5_input_maxeta_jet_jet",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_dr_between_lep_and_closest_jet","#Delta R (lepton,jet)",16,0,3.2),"BDT_common5_input_dr_between_lep_and_closest_jet",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_aplanarity","aplanarity",9,0,0.3),"BDT_common5_input_aplanarity",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_invariant_mass_of_everything","mass(jets,lepton,MET)",15,0,1500),"BDT_common5_input_invariant_mass_of_everything",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_min_dr_tagged_jets","min #Delta R (tag,tag)",12,0,2.4),"BDT_common5_input_min_dr_tagged_jets",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_second_highest_btag","second highest btag",10,.8,1),"BDT_common5_input_second_highest_btag",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_h0","H_{0}",10,0.2,0.5),"BDT_common5_input_h0",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_CSV_Average","avg CSV",10,0.5,1),"Evt_CSV_Average",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_third_jet_pt","jet 3 p_{T}",15,0,200),"BDT_common5_input_third_jet_pt",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BJN_N_Leptons","Number of soft leptons",6,-.5,5.5),"BJN_N_Leptons",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BJN_N_PVtrackOvCollTrk","Number PV tracks over all tracks",25,0.2,0.6),"BJN_N_PVtrackOvCollTrk",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BJN_N_AvgIp3D","Avg 3D IP",40,0,0.06),"BJN_N_AvgIp3D",plotselection,plotlabel),
-    Plot(ROOT.TH1F(plotprefix+"RECO__lab__cos_theta_lb","RECO__lab__cos_theta_lb",22,-.1,1),"RECO__lab__cos_theta_lb",plotselection,plotlabel),
-    Plot(ROOT.TH1F(plotprefix+"RECO__lab__cos_theta_lbarbbar","RECO__lab__cos_theta_lbarbbar",22,-.1,1),"RECO__lab__cos_theta_lbarbbar",plotselection,plotlabel),
-    Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Eta_bb","RECO__lab__Delta_Eta_bb",22,-.1,5),"RECO__lab__Delta_Eta_bb",plotselection,plotlabel),
-    Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Eta_lb","RECO__lab__Delta_Eta_lb",22,-.1,5),"RECO__lab__Delta_Eta_lb",plotselection,plotlabel),
-    Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Eta_lbarbbar","RECO__lab__Delta_Eta_lbarbbar",22,-.1,5),"RECO__lab__Delta_Eta_lbarbbar",plotselection,plotlabel),
-    Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Phi_bb","RECO__lab__Delta_Phi_bb",22,-.1,5),"RECO__lab__Delta_Phi_bb",plotselection,plotlabel),
-    Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Phi_lb","RECO__lab__Delta_Phi_lb",22,-.1,1),"RECO__lab__Delta_Phi_lb",plotselection,plotlabel),
-    Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Phi_lbarbbar","RECO__lab__Delta_Phi_lbarbbar",22,-.1,5),"RECO__lab__Delta_Phi_lbarbbar",plotselection,plotlabel),
-    Plot(ROOT.TH1F(plotprefix+"Evt_H1","Evt_H1",60,-0.2,0.4),"Evt_H1",plotselection,plotlabel),
-    Plot(ROOT.TH1F(plotprefix+"Evt_H2","Evt_H2",60,-0.2,0.4),"Evt_H2",plotselection,plotlabel),
-    Plot(ROOT.TH1F(plotprefix+"Evt_H3","Evt_H3",50,-0.05,1.05),"Evt_H3",plotselection,plotlabel),
-    Plot(ROOT.TH1F(plotprefix+"Evt_H4","Evt_H4",50,-0.15,0.35),"Evt_H4",plotselection,plotlabel),
-    Plot(ROOT.TH1F(plotprefix+"Sphericity","Sphericity",50,0,1),"Evt_Sphericity",plotselection,plotlabel),
-    Plot(ROOT.TH1F(plotprefix+"Aplanarity","Aplanarity",50,0,0.5),"Evt_Aplanarity",plotselection,plotlabel),
-    Plot(ROOT.TH1F(plotprefix+"Evt_Jet_MaxDeta_Jets","Evt_Jet_MaxDeta_Jets",50,0.,5.0),"Evt_Jet_MaxDeta_Jets",plotselection,plotlabel),
-    Plot(ROOT.TH1F(plotprefix+"Evt_TaggedJet_MaxDeta_Jets","Evt_TaggedJet_MaxDeta_Jets",50,0.,5.0),"Evt_TaggedJet_MaxDeta_Jets",plotselection,plotlabel),
-    Plot(ROOT.TH1F(plotprefix+"Evt_TaggedJet_MaxDeta_TaggedJets","Evt_TaggedJet_MaxDeta_TaggedJets",60,0.,6.0),"Evt_TaggedJet_MaxDeta_TaggedJets",plotselection,plotlabel),
-    Plot(ROOT.TH1F(plotprefix+"Evt_Dr_MinDeltaRTaggedJets","Evt_Dr_MinDeltaRTaggedJets",50,0.,5.0),"Evt_Dr_MinDeltaRTaggedJets",plotselection,plotlabel),
-    Plot(ROOT.TH1F(plotprefix+"Evt_Dr_MinDeltaRUntaggedJets","Evt_Dr_MinDeltaRUntaggedJets",50,0.,5.0),"Evt_Dr_MinDeltaRUntaggedJets",plotselection,plotlabel),
-    Plot(ROOT.TH1F(plotprefix+"Evt_M_MinDeltaRTaggedJets","Evt_M_MinDeltaRTaggedJets",45,0.,450),"Evt_M_MinDeltaRTaggedJets",plotselection,plotlabel),
-    Plot(ROOT.TH1F(plotprefix+"Evt_M_MinDeltaRUntaggedJets","Evt_M_MinDeltaRUntaggedJets",45,0.,450),"Evt_M_MinDeltaRUntaggedJets",plotselection,plotlabel),
-    Plot(ROOT.TH1F(plotprefix+"Evt_Deta_UntaggedJetsAverage","Evt_Deta_UntaggedJetsAverage",45,0.,4.5),"Evt_Deta_UntaggedJetsAverage",plotselection,plotlabel),
-    Plot(ROOT.TH1F(plotprefix+"Evt_Deta_TaggedJetsAverage","Evt_Deta_TaggedJetsAverage",45,0.,4.5),"Evt_Deta_TaggedJetsAverage",plotselection,plotlabel),
 ]
 
 
@@ -664,64 +519,6 @@ plots62=[
     Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_aplanarity","aplanarity",30,0,0.3),"BDT_common5_input_aplanarity",plotselection,plotlabel),
     #Plot(ROOT.TH1F(plotprefix+"Evt_CSV_Average","avg CSV",25,0.2,0.65),"Evt_CSV_Average",plotselection,plotlabel),
 
-    #Plot(ROOT.TH1F(plotprefix+"Evt_Deta_2JetsAverage","Evt_Deta_2JetsAverage", 60,0.0,3),"Evt_Deta_2JetsAverage",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_Deta_3JetsAverage","Evt_Deta_3JetsAverage", 60,0.0,3),"Evt_Deta_3JetsAverage",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_Deta_4JetsAverage","Evt_Deta_4JetsAverage", 60,0.0,3),"Evt_Deta_4JetsAverage",plotselection,plotlabel),
-
-    #Plot(ROOT.TH1F(plotprefix+"Evt_Deta_UntaggedJetsAverage","Evt_Deta_UntaggedJetsAverage",45,0.,4.5),"Evt_Deta_UntaggedJetsAverage",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_Deta_TaggedJetsAverage","avg #Delta #eta (tag,tag)",45,0.,4.5),"Evt_Deta_TaggedJetsAverage",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_Deta_2TaggedJetsAverage","Evt_Deta_2TaggedJetsAverage", 60,0.0,3),"Evt_Deta_2TaggedJetsAverage",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_Deta_3TaggedJetsAverage","Evt_Deta_3TaggedJetsAverage", 60,0.0,3),"Evt_Deta_3TaggedJetsAverage",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_Deta_4TaggedJetsAverage","Evt_Deta_4TaggedJetsAverage", 60,0.0,3),"Evt_Deta_4TaggedJetsAverage",plotselection,plotlabel),
-
-    #Plot(ROOT.TH1F(plotprefix+"Evt_Dr_JetsAverage","Evt_Dr_JetsAverage",35,0.5,4.),"Evt_Dr_JetsAverage",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_Dr_2JetsAverage","#Delta R (jet 1, jet 2)",35,0.5,4.),"Evt_Dr_2JetsAverage",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_Dr_2TaggedJetsAverage","Evt_Dr_2TaggedJetsAverage",45,0.4,4.9),"Evt_Dr_2TaggedJetsAverage",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_Dr_3JetsAverage","Evt_Dr_3JetsAverage",35,0.5,4.),"Evt_Dr_3JetsAverage",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_Dr_3TaggedJetsAverage","Evt_Dr_3TaggedJetsAverage",45,0.4,4.9),"Evt_Dr_3TaggedJetsAverage",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_Dr_4JetsAverage","Evt_Dr_4JetsAverage",35,0.5,4.),"Evt_Dr_4JetsAverage",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_Dr_4TaggedJetsAverage","Evt_Dr_4TaggedJetsAverage",45,0.4,4.9),"Evt_Dr_4TaggedJetsAverage",plotselection,plotlabel),
-
-    #Plot(ROOT.TH1F(plotprefix+"Evt_Dr_UntaggedJetsAverage","Evt_Dr_UntaggedJetsAverage",50,0.,5),"Evt_Dr_UntaggedJetsAverage",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_M2_JetsAverage","Evt_M2_JetsAverage",50,0,250),"Evt_M2_JetsAverage",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_M2_UntaggedJetsAverage","Evt_M2_UntaggedJetsAverage",50,0.,250),"Evt_M2_UntaggedJetsAverage",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_M2_TaggedJetsAverage","Evt_M2_TaggedJetsAverage",50,0.,250),"Evt_M2_TaggedJetsAverage",plotselection,plotlabel),
-
-    #Plot(ROOT.TH1F(plotprefix+"Evt_M2_2JetsAverage","Evt_M2_2JetsAverage",50,0,250),"Evt_M2_2JetsAverage",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_M2_2TaggedJetsAverage","Evt_M2_2TaggedJetsAverage",50,0.,250),"Evt_M2_2TaggedJetsAverage",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_M2_3JetsAverage","Evt_M2_3JetsAverage",50,0,250),"Evt_M2_3JetsAverage",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_M2_3TaggedJetsAverage","Evt_M2_3TaggedJetsAverage",50,0.,250),"Evt_M2_3TaggedJetsAverage",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_M2_4JetsAverage","Evt_M2_4JetsAverage",50,0,250),"Evt_M2_4JetsAverage",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_M2_4TaggedJetsAverage","Evt_M2_4TaggedJetsAverage",50,0.,250),"Evt_M2_4TaggedJetsAverage",plotselection,plotlabel),
-
-    #Plot(ROOT.TH1F(plotprefix+"Evt_M_MinDeltaRJets","Evt_M_MinDeltaRJets",30,0.,150),"Evt_M_MinDeltaRJets",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_M_MinDeltaRTaggedJets","Evt_M_MinDeltaRTaggedJets",45,0.,450),"Evt_M_MinDeltaRTaggedJets",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_M_MinDeltaRUntaggedJets","Evt_M_MinDeltaRUntaggedJets",45,0.,450),"Evt_M_MinDeltaRUntaggedJets",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_M_MinDeltaRLeptonJet","Evt_M_MinDeltaRLeptonJet",60,0.4,3.4),"Evt_M_MinDeltaRLeptonJet",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_Dr_MinDeltaRJets","Evt_Dr_MinDeltaRJets",50,0.,5.0),"Evt_Dr_MinDeltaRJets",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_Dr_MinDeltaRTaggedJets","Evt_Dr_MinDeltaRTaggedJets",50,0.,5.0),"Evt_Dr_MinDeltaRTaggedJets",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_Dr_MinDeltaRUntaggedJets","Evt_Dr_MinDeltaRUntaggedJets",50,0.,5.0),"Evt_Dr_MinDeltaRUntaggedJets",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_Dr_MinDeltaRLeptonJet","Evt_Dr_MinDeltaRLeptonJet",60,0.4,3.4),"Evt_Dr_MinDeltaRLeptonJet",plotselection,plotlabel),
-
-    #Plot(ROOT.TH1F(plotprefix+"Evt_Jet_MaxDeta_Jets","Evt_Jet_MaxDeta_Jets",50,0.,5.0),"Evt_Jet_MaxDeta_Jets",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_TaggedJet_MaxDeta_Jets","Evt_TaggedJet_MaxDeta_Jets",50,0.,5.0),"Evt_TaggedJet_MaxDeta_Jets",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_TaggedJet_MaxDeta_TaggedJets","Evt_TaggedJet_MaxDeta_TaggedJets",60,0.,6.0),"Evt_TaggedJet_MaxDeta_TaggedJets",plotselection,plotlabel),
-
-    #Plot(ROOT.TH1F(plotprefix+"Evt_M_Total","Evt_M_Total",40,0.,4000),"Evt_M_Total",plotselection,plotlabel),
-
-    #Plot(ROOT.TH1F(plotprefix+"Evt_H0","Evt_H0",40,0.2,0.5),"Evt_H0",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_H4","Evt_H4",50,-0.15,0.35),"Evt_H4",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BJN_N_Leptons","Number of soft leptons",6,-.5,5.5),"BJN_N_Leptons",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BJN_N_PVtrackOvCollTrk","Number PV tracks over all tracks",25,0.2,0.6),"BJN_N_PVtrackOvCollTrk",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BJN_N_AvgIp3D","Avg 3D IP",40,0,0.06),"BJN_N_AvgIp3D",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__cos_theta_lb","RECO__lab__cos_theta_lb",22,-.1,1),"RECO__lab__cos_theta_lb",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__cos_theta_lbarbbar","RECO__lab__cos_theta_lbarbbar",22,-.1,1),"RECO__lab__cos_theta_lbarbbar",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Eta_bb","RECO__lab__Delta_Eta_bb",22,-.1,5),"RECO__lab__Delta_Eta_bb",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Eta_lb","RECO__lab__Delta_Eta_lb",22,-.1,5),"RECO__lab__Delta_Eta_lb",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Eta_lbarbbar","RECO__lab__Delta_Eta_lbarbbar",22,-.1,5),"RECO__lab__Delta_Eta_lbarbbar",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Phi_bb","RECO__lab__Delta_Phi_bb",22,-.1,5),"RECO__lab__Delta_Phi_bb",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Phi_lb","RECO__lab__Delta_Phi_lb",22,-.1,1),"RECO__lab__Delta_Phi_lb",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Phi_lbarbbar","RECO__lab__Delta_Phi_lbarbbar",22,-.1,5),"RECO__lab__Delta_Phi_lbarbbar",plotselection,plotlabel),
 ]
 
 
@@ -729,99 +526,25 @@ plotlabel="1 lepton, #geq6 jets, 3 b-tags"
 plotselection=categoriesJT[3][0]
 plotprefix="s63_"
 plots63=[
-    #Plot(ROOT.TH1F(plotprefix+"MEM_transformed","MEM discriminator",20,0.,1),"(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_maxeta_jet_tag","max #Delta #eta(tag,avg jet #eta)",14,0.2,1.6),"BDT_common5_input_maxeta_jet_tag",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_maxeta_tag_tag","max #Delta #eta (tag,tag)",15,0,1.5),"BDT_common5_input_maxeta_tag_tag",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_maxeta_jet_jet","max #Delta #eta (jet,jet)",15,0,1.5),"BDT_common5_input_maxeta_jet_jet",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_dr_between_lep_and_closest_jet","#Delta R (lepton,jet)",16,0,3.2),"BDT_common5_input_dr_between_lep_and_closest_jet",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_dev_from_avg_disc_btags","dev from ave CSV (tags)",25,0,0.008),"BDT_common5_input_dev_from_avg_disc_btags",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_Deta_JetsAverage","avg #Delta #eta jets",25,0,2.5),"Evt_Deta_JetsAverage",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_all_sum_pt_with_met","#sum (lepton pt,jet pt,met)",25,0,2000),"BDT_common5_input_all_sum_pt_with_met",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_fourth_highest_btag","fourth-highest b-tag",18,0,0.9),"BDT_common5_input_fourth_highest_btag",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_aplanarity","aplanarity",20,0,0.4),"BDT_common5_input_aplanarity",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_avg_btag_disc_btags","avg CSV (tags)",30,.8,1.05),"BDT_common5_input_avg_btag_disc_btags",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_avg_dr_tagged_jets","avg #Delta R (tag,tag)",28,0.5,3.9),"BDT_common5_input_avg_dr_tagged_jets",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_fourth_jet_pt","jet 4 p_{T}",20,0,160),"BDT_common5_input_fourth_jet_pt",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_tagged_dijet_mass_closest_to_125","tagged dijet mass closest to 125",30,0,300),"BDT_common5_input_tagged_dijet_mass_closest_to_125",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_h2","H_{2}",20,-.1,.3),"BDT_common5_input_h2",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_fifth_highest_CSV","fifth-highest CSV",20,-.1,.8),"BDT_common5_input_fifth_highest_CSV",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"blr","B-tagging likelihood ratio",20,-2,8),"Evt_blr_ETH_transformed",'(N_Jets>=6&&N_BTagsM==3)',plotlabel),
     Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_min_dr_tagged_jets","min #Delta R (tag,tag)",17,0,3.4),"BDT_common5_input_min_dr_tagged_jets",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_dEta_fn","#sqrt{#Delta #eta(t^{lep}, bb) #times #Delta #eta(t^{had}, bb)}",20,0,5),"BDT_common5_input_dEta_fn",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_h1","H_{1}",27,-.2,.34),"BDT_common5_input_h1",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_sphericity","sphericity",20,0,1),"BDT_common5_input_sphericity",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_third_highest_btag","third highest CSV",21,0.79,1),"BDT_common5_input_third_highest_btag",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_h3","H_{3}",20,0,1),"BDT_common5_input_h3",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_pt_all_jets_over_E_all_jets","(#sum jet p_{T})/(#sum jet E))",10,0.2,1.1),"BDT_common5_input_pt_all_jets_over_E_all_jets",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_HT","HT",10,0,2000),"BDT_common5_input_HT",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BJN_N_Leptons","Number of soft leptons",6,-.5,5.5),"BJN_N_Leptons",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BJN_N_PVtrackOvCollTrk","Number PV tracks over all tracks",25,0.2,0.6),"BJN_N_PVtrackOvCollTrk",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BJN_N_AvgIp3D","Avg 3D IP",40,0,0.06),"BJN_N_AvgIp3D",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__cos_theta_lb","RECO__lab__cos_theta_lb",22,-.1,1),"RECO__lab__cos_theta_lb",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__cos_theta_lbarbbar","RECO__lab__cos_theta_lbarbbar",22,-.1,1),"RECO__lab__cos_theta_lbarbbar",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Eta_bb","RECO__lab__Delta_Eta_bb",22,-.1,5),"RECO__lab__Delta_Eta_bb",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Eta_lb","RECO__lab__Delta_Eta_lb",22,-.1,5),"RECO__lab__Delta_Eta_lb",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Eta_lbarbbar","RECO__lab__Delta_Eta_lbarbbar",22,-.1,5),"RECO__lab__Delta_Eta_lbarbbar",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Phi_bb","RECO__lab__Delta_Phi_bb",22,-.1,5),"RECO__lab__Delta_Phi_bb",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Phi_lb","RECO__lab__Delta_Phi_lb",22,-.1,1),"RECO__lab__Delta_Phi_lb",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Phi_lbarbbar","RECO__lab__Delta_Phi_lbarbbar",22,-.1,5),"RECO__lab__Delta_Phi_lbarbbar",plotselection,plotlabel),
 ]
 
 plotlabel="1 lepton, #geq6 jets, #geq4 b-tags"
 plotselection=categoriesJT[6][0]
 plotprefix="s64"
 plots64=[
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_third_highest_btag","third-highest CSV",16,.8,1.05),"BDT_common5_input_third_highest_btag",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"MEM_transformed","MEM discriminator",10,0,1),"(MEM_p>=0.0)*(MEM_p_sig/(MEM_p_sig+0.15*MEM_p_bkg))+(MEM_p<0.0)*(0.01)",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_Deta_JetsAverage","avg #Delta #eta (jet,jet)",14,0,2.8),"Evt_Deta_JetsAverage",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_sphericity","sphericity",20,0,1),"BDT_common5_input_sphericity",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_fourth_jet_pt","jet 4 p_{T}",20,0,200),"BDT_common5_input_fourth_jet_pt",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_aplanarity","aplanarity",20,0,0.4),"BDT_common5_input_aplanarity",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_M3","M3",20,0,1000),"BDT_common5_input_M3",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_third_jet_pt","jet 3 p_{T}",20,0,250),"BDT_common5_input_third_jet_pt",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"blr","B-tagging likelihood ratio",14,0,12),"Evt_blr_ETH_transformed",'(N_Jets>=6&&N_BTagsM>=4)',plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_avg_dr_tagged_jets","avg #Delta R (tag,tag)",25,1,3.5),"BDT_common5_input_avg_dr_tagged_jets",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_best_higgs_mass","best higgs mass",30,0,600),"BDT_common5_input_best_higgs_mass",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_tagged_dijet_mass_closest_to_125","tagged dijet mass closest to 125",17,40,210),"BDT_common5_input_tagged_dijet_mass_closest_to_125",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_fourth_highest_btag","fourth highest btag",22,.8,1),"BDT_common5_input_fourth_highest_btag",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_closest_tagged_dijet_mass","closest tagged dijet mass",25,0,250),"BDT_common5_input_closest_tagged_dijet_mass",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_fifth_highest_CSV","fifth highest CSV",22,-.1,1),"BDT_common5_input_fifth_highest_CSV",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_second_highest_btag","second highest btag",22,.8,1),"BDT_common5_input_second_highest_btag",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_dr_between_lep_and_closest_jet","min #Delta R (lepton,jet)",25,0,2.5),"BDT_common5_input_dr_between_lep_and_closest_jet",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_h3","H_{3}",20,0,1),"BDT_common5_input_h3",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_HT","HT",10,0,2000),"BDT_common5_input_HT",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_all_sum_pt_with_met","#sum (lepton pt,jet pt,met)",10,200,2000),"BDT_common5_input_all_sum_pt_with_met",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_pt_all_jets_over_E_all_jets","(#sum jet p_{T})/(#sum jet E))",10,0.2,1.2),"BDT_common5_input_pt_all_jets_over_E_all_jets",plotselection,plotlabel),
     Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_invariant_mass_of_everything","mass(jets,lepton,MET)",10,400,1600),"BDT_common5_input_invariant_mass_of_everything",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_maxeta_jet_tag","max #Delta #eta(jet,tag)",14,0.2,1.6),"BDT_common5_input_maxeta_jet_tag",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_maxeta_tag_tag","max #Delta #eta (tag,avg tag #eta)",15,0,1.5),"BDT_common5_input_maxeta_tag_tag",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_maxeta_jet_jet","max #Delta #eta (jet,jet)",15,0,1.5),"BDT_common5_input_maxeta_jet_jet",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BJN_N_Leptons","Number of soft leptons",6,-.5,5.5),"BJN_N_Leptons",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BJN_N_PVtrackOvCollTrk","Number PV tracks over all tracks",25,0.2,0.6),"BJN_N_PVtrackOvCollTrk",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"BJN_N_AvgIp3D","Avg 3D IP",40,0,0.06),"BJN_N_AvgIp3D",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__cos_theta_lb","RECO__lab__cos_theta_lb",22,-.1,1),"RECO__lab__cos_theta_lb",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__cos_theta_lbarbbar","RECO__lab__cos_theta_lbarbbar",22,-.1,1),"RECO__lab__cos_theta_lbarbbar",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Eta_bb","RECO__lab__Delta_Eta_bb",22,-.1,5),"RECO__lab__Delta_Eta_bb",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Eta_lb","RECO__lab__Delta_Eta_lb",22,-.1,5),"RECO__lab__Delta_Eta_lb",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Eta_lbarbbar","RECO__lab__Delta_Eta_lbarbbar",22,-.1,5),"RECO__lab__Delta_Eta_lbarbbar",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Phi_bb","RECO__lab__Delta_Phi_bb",22,-.1,5),"RECO__lab__Delta_Phi_bb",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Phi_lb","RECO__lab__Delta_Phi_lb",22,-.1,1),"RECO__lab__Delta_Phi_lb",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"RECO__lab__Delta_Phi_lbarbbar","RECO__lab__Delta_Phi_lbarbbar",22,-.1,5),"RECO__lab__Delta_Phi_lbarbbar",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_H1","Evt_H1",60,-0.2,0.4),"Evt_H1",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_H2","Evt_H2",60,-0.2,0.4),"Evt_H2",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_H3","Evt_H3",50,-0.05,1.05),"Evt_H3",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_H4","Evt_H4",50,-0.15,0.35),"Evt_H4",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Sphericity","Sphericity",50,0,1),"Evt_Sphericity",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Aplanarity","Aplanarity",50,0,0.5),"Evt_Aplanarity",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_Jet_MaxDeta_Jets","Evt_Jet_MaxDeta_Jets",50,0.,5.0),"Evt_Jet_MaxDeta_Jets",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_TaggedJet_MaxDeta_Jets","Evt_TaggedJet_MaxDeta_Jets",50,0.,5.0),"Evt_TaggedJet_MaxDeta_Jets",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_TaggedJet_MaxDeta_TaggedJets","Evt_TaggedJet_MaxDeta_TaggedJets",60,0.,6.0),"Evt_TaggedJet_MaxDeta_TaggedJets",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_Dr_MinDeltaRTaggedJets","Evt_Dr_MinDeltaRTaggedJets",50,0.,5.0),"Evt_Dr_MinDeltaRTaggedJets",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_Dr_MinDeltaRUntaggedJets","Evt_Dr_MinDeltaRUntaggedJets",50,0.,5.0),"Evt_Dr_MinDeltaRUntaggedJets",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_M_MinDeltaRTaggedJets","Evt_M_MinDeltaRTaggedJets",45,0.,450),"Evt_M_MinDeltaRTaggedJets",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_M_MinDeltaRUntaggedJets","Evt_M_MinDeltaRUntaggedJets",45,0.,450),"Evt_M_MinDeltaRUntaggedJets",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_Deta_UntaggedJetsAverage","Evt_Deta_UntaggedJetsAverage",45,0.,4.5),"Evt_Deta_UntaggedJetsAverage",plotselection,plotlabel),
-    #Plot(ROOT.TH1F(plotprefix+"Evt_Deta_TaggedJetsAverage","Evt_Deta_TaggedJetsAverage",45,0.,4.5),"Evt_Deta_TaggedJetsAverage",plotselection,plotlabel),
 ]
 
 plotlabel="boosted"
@@ -868,18 +591,19 @@ plotsBoosted=[
 ]
 
 bdtplots=plots64+plots63+plots62+plots54+plots53+plots44+plots43+plotsBoosted+plots42+plots52
-#plots+=bdtplots
-plots=plots44
+plots+=bdtplots
+#plots=plots44
 #plots+=plots62+plots63
 
-print name,2000000,plots,samples+samples_data,[''],['1.'],weightsystnames, systweights
-outputpath=plotParallel(name,2000000,plots,samples+samples_data+systsamples,[''],['1.'],weightsystnames, systweights,[],[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ICHEP_V5New"]],"/nfs/dust/cms/user/kelmorab/plotscripts80X/higgsCoupling/pyroot-plotscripts/treejson.json")
+print name,500000,plots,samples+samples_data,[''],['1.'],weightsystnames, systweights
+outputpath=plotParallel(name,500000,plots,samples+samples_data+systsamples,[''],['1.'],weightsystnames, systweights,additionalvariables,[],"")
 
 # plot dataMC comparison
 listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
 listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots,1)
 if not os.path.exists(outputpath[:-4]+'_syst.root') or not askYesNo('reuse systematic histofile?'):
     renameHistos(outputpath,outputpath[:-4]+'_syst.root',allsystnames,False)
+exit(0)
 lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,errorSystnames)
 #lllcsv=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,CSVSystnames)
 
@@ -912,7 +636,7 @@ lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],pl
 
 labels=[plot.label for plot in plots]
 lolT=transposeLOL(listOfHistoLists)
-plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name,[[lll,3354,ROOT.kBlack,True]],False,labels,True,plotBlinded)
+plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name,[[lll,3354,ROOT.kBlack,False]],False,labels,True,plotBlinded)
 
 exit(0)
 

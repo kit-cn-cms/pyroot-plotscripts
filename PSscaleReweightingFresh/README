@@ -1,0 +1,26 @@
+
+% make
+% ./main -i [rootfile_old_nominal] \
+         -i [rootfile_old_syst]    \
+	 -i [rootfile_new_nominal] \
+	 -h [histogram_name in rootfile_old_nominal] \
+	 -h [histogram_name in rootfile_old_syst]    \
+	 -h [histogram_name in rootfile_new_nominal] \
+	 ( -o [output root name] ) \
+	 ( -H [output histogram name] ) \
+	 ( -v ) \
+
+ -o : if it is not given, out put file name will be "syst.root"
+ -H : if it is not given, the output histogram name will be the same as [histogram_name in rootfile_new_nominal]
+ -v : verbose output mode. no effect to the result.
+
+
+Tips 1 :
+ If you have the three histograms in one file, you only need one "-i".
+ e.g. ./main -i xxx -h h1 -h h2 -h h3 
+ 
+
+Tips 2 :
+ If you use the same name for all the three histograms in each file, you only need one "-h".
+ e.g. ./main -i f1 -i f2 -i f3 -h xxx
+

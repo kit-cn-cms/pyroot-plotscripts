@@ -6,7 +6,7 @@ from plotconfigAnalysisV3forTable import *
 sys.path.insert(0, 'limittools')
 from limittools import renameHistos
  
-name='controlplotsAnalysisV7OnlyTable'
+name='controlplotsV12OnlyTable'
 
 # if one wants to plot blinded: True (default: False)
 plotBlinded = False
@@ -18,11 +18,11 @@ higgstaggersel="(BoostedJet_Filterjet2_Pt[0]>=0)"
 
 # definition of categories
 categoriesJT=[
-              ("(N_Jets==4&&N_BTagsM==2)","4j2t",""),
-              ("(N_Jets==5&&N_BTagsM==2)","5j2t",""),
-              ("(N_Jets>=6&&N_BTagsM==2)","6j2t",""),
-              ("(N_Jets==4&&N_BTagsM==3)","4j3t",""),
-              ("(N_Jets==5&&N_BTagsM==3)","5j3t",""),
+              #("(N_Jets==4&&N_BTagsM==2)","4j2t",""),
+              #("(N_Jets==5&&N_BTagsM==2)","5j2t",""),
+              #("(N_Jets>=6&&N_BTagsM==2)","6j2t",""),
+              #("(N_Jets==4&&N_BTagsM==3)","4j3t",""),
+              #("(N_Jets==5&&N_BTagsM==3)","5j3t",""),
               ("(N_Jets>=6&&N_BTagsM==3)","6j3t",""),
               ("(N_Jets==4&&N_BTagsM>=4)","4j4t",""),
               ("(N_Jets==5&&N_BTagsM>=4)","5j4t",""),
@@ -40,6 +40,11 @@ categoriesJTB=[
               ("((N_Jets==5&&N_BTagsM>=4)&&!"+boosted+")","5j4t","0.2"),
               ("((N_Jets>=6&&N_BTagsM>=4)&&!"+boosted+")","6j4t","0.1"),
               ("((N_Jets>=4&&N_BTagsM>=2)&&"+boosted+")","boosted","")
+]
+
+additionalvariables=[
+                      #'finalbdt_ljets_boosted:='+bdtweightpath+'/weights_Final_DB_boosted_76xmem.xml',
+                      "Jet_Pt","Jet_Eta","Jet_CSV","Jet_Flav","N_Jets","Weight_CSV","Weight_CSVLFup","Weight_CSVLFdown","Weight_CSVHFup","Weight_CSVHFdown","Weight_CSVHFStats1up","Weight_CSVHFStats1down","Weight_CSVLFStats1up","Weight_CSVLFStats1down","Weight_CSVHFStats2up","Weight_CSVHFStats2down","Weight_CSVLFStats2up","Weight_CSVLFStats2down","Weight_CSVCErr1up","Weight_CSVCErr1down","Weight_CSVCErr2up","Weight_CSVCErr2down",
 ]
 
 #
@@ -118,92 +123,92 @@ plots=[
 ]
 
 
-plotlabel="1 lepton, 4 jets, 2 b-tags"
-plotselection="((N_Jets==4&&N_BTagsM==2))"
-#plotselection="((N_Jets==4&&N_BTagsM==2)&&!"+boosted+")"
+#plotlabel="1 lepton, 4 jets, 2 b-tags"
+#plotselection="((N_Jets==4&&N_BTagsM==2))"
+##plotselection="((N_Jets==4&&N_BTagsM==2)&&!"+boosted+")"
 
-plotprefix="4j2t"
-plots42=[
+#plotprefix="4j2t"
+#plots42=[
 
-]
+#]
 
-plotlabel="1 lepton, 5 jets, 2 b-tags"
-plotselection="((N_Jets==5&&N_BTagsM==2))"
-#plotselection="((N_Jets==5&&N_BTagsM==2)&&!"+boosted+")"
+#plotlabel="1 lepton, 5 jets, 2 b-tags"
+#plotselection="((N_Jets==5&&N_BTagsM==2))"
+##plotselection="((N_Jets==5&&N_BTagsM==2)&&!"+boosted+")"
 
-plotprefix="s52_"
-plots52=[
+#plotprefix="s52_"
+#plots52=[
 
-]
+#]
 
-plotlabel="1 lepton, 4 jets, 3 b-tags"
-plotselection=categoriesJT[1][0]
-plotprefix="s43_"
-plots43=[
+#plotlabel="1 lepton, 4 jets, 3 b-tags"
+#plotselection=categoriesJT[1][0]
+#plotprefix="s43_"
+#plots43=[
 
-]
-
-
-plotlabel="1 lepton, 4 jets, 4 b-tags"
-plotselection=categoriesJT[4][0]
-plotprefix="s44_"
-# weights_Final_44_MEMBDTv2.xml
-plots44=[
-
-]
+#]
 
 
-plotlabel="1 lepton, 5 jets, 3 b-tags"
-plotselection=categoriesJT[2][0]
-plotprefix="s53_"
-plots53=[
+#plotlabel="1 lepton, 4 jets, 4 b-tags"
+#plotselection=categoriesJT[4][0]
+#plotprefix="s44_"
+## weights_Final_44_MEMBDTv2.xml
+#plots44=[
 
-]
-
-
-plotlabel="1 lepton, 5 jets, #geq4 b-tags"
-plotselection=categoriesJT[5][0]
-plotprefix="s54_"
-plots54=[
-
-]
+#]
 
 
-plotlabel="1 lepton, #geq6 jets, 2 b-tags"
-plotselection=categoriesJT[0][0]
-plotprefix="s62_"
-plots62=[
+#plotlabel="1 lepton, 5 jets, 3 b-tags"
+#plotselection=categoriesJT[2][0]
+#plotprefix="s53_"
+#plots53=[
 
-]
+#]
 
 
-plotlabel="1 lepton, #geq6 jets, 3 b-tags"
-plotselection=categoriesJT[3][0]
-plotprefix="s63_"
-plots63=[
+#plotlabel="1 lepton, 5 jets, #geq4 b-tags"
+#plotselection=categoriesJT[5][0]
+#plotprefix="s54_"
+#plots54=[
 
-]
+#]
 
-plotlabel="1 lepton, #geq6 jets, #geq4 b-tags"
-plotselection=categoriesJT[6][0]
-plotprefix="s64"
-plots64=[
 
-]
+#plotlabel="1 lepton, #geq6 jets, 2 b-tags"
+#plotselection=categoriesJT[0][0]
+#plotprefix="s62_"
+#plots62=[
 
-plotlabel="boosted"
-plotselection=categoriesJTB[7][0]
-plotprefix="sboosted_"
-plotsBoosted=[
+#]
 
-]
+
+#plotlabel="1 lepton, #geq6 jets, 3 b-tags"
+#plotselection=categoriesJT[3][0]
+#plotprefix="s63_"
+#plots63=[
+
+#]
+
+#plotlabel="1 lepton, #geq6 jets, #geq4 b-tags"
+#plotselection=categoriesJT[6][0]
+#plotprefix="s64"
+#plots64=[
+
+#]
+
+#plotlabel="boosted"
+#plotselection=categoriesJTB[7][0]
+#plotprefix="sboosted_"
+#plotsBoosted=[
+
+#]
 
 #bdtplots=plots64+plots63+plots62+plots54+plots53+plots44+plots43+plotsBoosted+plots42+plots52
 #plots+=bdtplots
 #plots+=plots62+plots63
 
 print name,500000,plots,samples+samples_data,[''],['1.'],weightsystnames, systweights
-outputpath=plotParallel(name,500000,plots,samples+samples_data+systsamples,[''],['1.'],weightsystnames, systweights,[],[],"/nfs/dust/cms/user/kelmorab/plotscripts80X/higgsCoupling/pyroot-plotscripts/treejson.json")
+outputpath=plotParallel(name,500000,plots,samples+samples_data+systsamples,[''],['1.'],weightsystnames, systweights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/plotscripts80X/higgsCoupling/pyroot-plotscripts/treejson.json")
 
 # plot dataMC comparison
 listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)

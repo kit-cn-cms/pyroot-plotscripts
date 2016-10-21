@@ -2,11 +2,11 @@
 # plot general control distributions
 ##############
 
-from plotconfigAnalysisV3csvWithPS import *
+from plotconfigAnalysisV3csvForPSscale import *
 sys.path.insert(0, 'limittools')
 from limittools import renameHistos
-
-name='controlplotsV12OnlyCategories'
+ 
+name='controlplotsV12OnlyTableScaleDown'
 
 # if one wants to plot blinded: True (default: False)
 plotBlinded = False
@@ -18,11 +18,11 @@ higgstaggersel="(BoostedJet_Filterjet2_Pt[0]>=0)"
 
 # definition of categories
 categoriesJT=[
-              ("(N_Jets==4&&N_BTagsM==2)","4j2t",""),
-              ("(N_Jets==5&&N_BTagsM==2)","5j2t",""),
-              ("(N_Jets>=6&&N_BTagsM==2)","6j2t",""),
-              ("(N_Jets==4&&N_BTagsM==3)","4j3t",""),
-              ("(N_Jets==5&&N_BTagsM==3)","5j3t",""),
+              #("(N_Jets==4&&N_BTagsM==2)","4j2t",""),
+              #("(N_Jets==5&&N_BTagsM==2)","5j2t",""),
+              #("(N_Jets>=6&&N_BTagsM==2)","6j2t",""),
+              #("(N_Jets==4&&N_BTagsM==3)","4j3t",""),
+              #("(N_Jets==5&&N_BTagsM==3)","5j3t",""),
               ("(N_Jets>=6&&N_BTagsM==3)","6j3t",""),
               ("(N_Jets==4&&N_BTagsM>=4)","4j4t",""),
               ("(N_Jets==5&&N_BTagsM>=4)","5j4t",""),
@@ -79,7 +79,7 @@ for i,cat in enumerate(categoriesJTB):
     #catstringSplitByBDToptD+=("+"+str(i+1)+"*"+cat[0])
 
 # samples
-samples=samplesControlPlots
+samples=samplesControlplotsSCALEDOWN
 samples_data=samples_data_controlplots
 systsamples=[]
 for sample in samples:
@@ -123,142 +123,258 @@ plots=[
 ]
 
 
-plotlabel="1 lepton, 4 jets, 2 b-tags"
-plotselection="((N_Jets==4&&N_BTagsM==2))"
-#plotselection="((N_Jets==4&&N_BTagsM==2)&&!"+boosted+")"
+#plotlabel="1 lepton, 4 jets, 2 b-tags"
+#plotselection="((N_Jets==4&&N_BTagsM==2))"
+##plotselection="((N_Jets==4&&N_BTagsM==2)&&!"+boosted+")"
 
-plotprefix="4j2t"
-plots42=[
+#plotprefix="4j2t"
+#plots42=[
 
-]
+#]
 
-plotlabel="1 lepton, 5 jets, 2 b-tags"
-plotselection="((N_Jets==5&&N_BTagsM==2))"
-#plotselection="((N_Jets==5&&N_BTagsM==2)&&!"+boosted+")"
+#plotlabel="1 lepton, 5 jets, 2 b-tags"
+#plotselection="((N_Jets==5&&N_BTagsM==2))"
+##plotselection="((N_Jets==5&&N_BTagsM==2)&&!"+boosted+")"
 
-plotprefix="s52_"
-plots52=[
+#plotprefix="s52_"
+#plots52=[
 
-]
+#]
 
-plotlabel="1 lepton, 4 jets, 3 b-tags"
-plotselection=categoriesJT[1][0]
-plotprefix="s43_"
-plots43=[
+#plotlabel="1 lepton, 4 jets, 3 b-tags"
+#plotselection=categoriesJT[1][0]
+#plotprefix="s43_"
+#plots43=[
 
-]
-
-
-plotlabel="1 lepton, 4 jets, 4 b-tags"
-plotselection=categoriesJT[4][0]
-plotprefix="s44_"
-# weights_Final_44_MEMBDTv2.xml
-plots44=[
-
-]
+#]
 
 
-plotlabel="1 lepton, 5 jets, 3 b-tags"
-plotselection=categoriesJT[2][0]
-plotprefix="s53_"
-plots53=[
+#plotlabel="1 lepton, 4 jets, 4 b-tags"
+#plotselection=categoriesJT[4][0]
+#plotprefix="s44_"
+## weights_Final_44_MEMBDTv2.xml
+#plots44=[
 
-]
-
-
-plotlabel="1 lepton, 5 jets, #geq4 b-tags"
-plotselection=categoriesJT[5][0]
-plotprefix="s54_"
-plots54=[
-
-]
+#]
 
 
-plotlabel="1 lepton, #geq6 jets, 2 b-tags"
-plotselection=categoriesJT[0][0]
-plotprefix="s62_"
-plots62=[
+#plotlabel="1 lepton, 5 jets, 3 b-tags"
+#plotselection=categoriesJT[2][0]
+#plotprefix="s53_"
+#plots53=[
 
-]
+#]
 
 
-plotlabel="1 lepton, #geq6 jets, 3 b-tags"
-plotselection=categoriesJT[3][0]
-plotprefix="s63_"
-plots63=[
+#plotlabel="1 lepton, 5 jets, #geq4 b-tags"
+#plotselection=categoriesJT[5][0]
+#plotprefix="s54_"
+#plots54=[
 
-]
+#]
 
-plotlabel="1 lepton, #geq6 jets, #geq4 b-tags"
-plotselection=categoriesJT[6][0]
-plotprefix="s64"
-plots64=[
 
-]
+#plotlabel="1 lepton, #geq6 jets, 2 b-tags"
+#plotselection=categoriesJT[0][0]
+#plotprefix="s62_"
+#plots62=[
 
-plotlabel="boosted"
-plotselection=categoriesJTB[7][0]
-plotprefix="sboosted_"
-plotsBoosted=[
+#]
 
-]
+
+#plotlabel="1 lepton, #geq6 jets, 3 b-tags"
+#plotselection=categoriesJT[3][0]
+#plotprefix="s63_"
+#plots63=[
+
+#]
+
+#plotlabel="1 lepton, #geq6 jets, #geq4 b-tags"
+#plotselection=categoriesJT[6][0]
+#plotprefix="s64"
+#plots64=[
+
+#]
+
+#plotlabel="boosted"
+#plotselection=categoriesJTB[7][0]
+#plotprefix="sboosted_"
+#plotsBoosted=[
+
+#]
 
 #bdtplots=plots64+plots63+plots62+plots54+plots53+plots44+plots43+plotsBoosted+plots42+plots52
 #plots+=bdtplots
 #plots+=plots62+plots63
 
 print name,500000,plots,samples+samples_data,[''],['1.'],weightsystnames, systweights
-outputpath=plotParallel(name,500000,plots,samples+samples_data+systsamples,[''],['1.'],weightsystnames, systweights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/plotscripts80X/higgsCoupling/pyroot-plotscripts/treejson.json")
+outputpath=plotParallel(name,500000,plots,samples+samples_data+systsamples,[''],['1.'],weightsystnames, systweights,additionalvariables,[],"")
+
 
 # plot dataMC comparison
 listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
 listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots,1)
 if not os.path.exists(outputpath[:-4]+'_syst.root') or not askYesNo('reuse systematic histofile?'):
     renameHistos(outputpath,outputpath[:-4]+'_syst.root',allsystnames,False)
-lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,errorSystnames)
+lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples,plots,errorSystnames)
 #lllcsv=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,CSVSystnames)
 
-#for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
+exit(0)
 
-  #makeEventyields=False
+for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
 
-  #if "optD" in hld[0].GetName():
+  makeEventyields=False
+
+  if "optD" in hld[0].GetName():
+    makeEventyields=True
+    for h in hld+hl:
+      for i,cat in enumerate(categoriesSplitByBDToptD):
+        h.GetXaxis().SetBinLabel(i+1,cat[1])
+    tablepath=("/".join((outputpath.split('/'))[:-1]))+"/"+name+"_yieldsD"
+  #elif "JTB" in hld[0].GetName():
     #makeEventyields=True
     #for h in hld+hl:
-      #for i,cat in enumerate(categoriesSplitByBDToptD):
+      #for i,cat in enumerate(categoriesJTB):
         #h.GetXaxis().SetBinLabel(i+1,cat[1])
-    #tablepath=("/".join((outputpath.split('/'))[:-1]))+"/"+name+"_yieldsD"
-  ##elif "JTB" in hld[0].GetName():
-    ##makeEventyields=True
-    ##for h in hld+hl:
-      ##for i,cat in enumerate(categoriesJTB):
-        ##h.GetXaxis().SetBinLabel(i+1,cat[1])
-    ##tablepath=("/".join((outputpath.split('/'))[:-1]))+"/"+name+"_yieldsJTB"
-  #elif "JT" in hld[0].GetName():
+    #tablepath=("/".join((outputpath.split('/'))[:-1]))+"/"+name+"_yieldsJTB"
+  elif "JT" in hld[0].GetName():
+    makeEventyields=True
+    for h in hld+hl:
+      for i,cat in enumerate(categoriesJT):
+        h.GetXaxis().SetBinLabel(i+1,cat[1])
+    tablepath=("/".join((outputpath.split('/'))[:-1]))+"/"+name+"_yieldsJTstatOnly"
+
+  # make an event yield table
+  if makeEventyields:
+    eventYields(hld,hl,samples,tablepath)
+
+
+## make table with errors
+totrateunc=0.0
+sw=0
+sints=0
+for s,h in zip(samples[1:],listOfHistoLists[0][1:]):
+  print s, s.unc_up, h.Integral()
+  sw+=s.unc_up*h.Integral()
+  sints+=h.Integral()
+  print sw, s
+totrateunc=sw/float(sints)
+print "new rate unc", totrateunc
+print samples
+moresamples=samples+[Sample('Total bkg',ROOT.kAzure+2,path_80x+'/??/*nominal*.root',mcweightAll,'totalBackground',systs_all_samples,totrateunc)]
+print moresamples
+
+listOfHistoListsWerror=[]
+print "new errors"
+print listOfHistoLists
+print ""
+print lll
+addedBackgrounds=listOfHistoLists[0][1].Clone()
+addedBackgrounds.SetName("totalBackground_JT")
+addedBackgrounds.SetTitle("totalBackground_JT")
+print addedBackgrounds, addedBackgrounds.Integral()
+
+print listOfHistoLists[0][2:]
+for ih in listOfHistoLists[0][2:]:
+  print "adding ", ih, ih.Integral()
+  addedBackgrounds.Add(ih)
+  print addedBackgrounds.Integral()
+  
+addedBackgroundErrors=[]
+print "bkg errors"
+print lll[0][1]
+print lll[0][2]
+
+for ierr, err in enumerate(lll[0][1]):
+  addedBackgroundErrors.append(err.Clone())
+  print "doing ", addedBackgroundErrors[-1], addedBackgroundErrors[-1].Integral()
+  for ibh, bh in enumerate(lll[0][2:]):
+    print "adding ", bh[ierr], bh[ierr].Integral(),  addedBackgroundErrors[-1].Integral()
+    addedBackgroundErrors[-1].Add(bh[ierr])
+    print addedBackgroundErrors[-1].Integral()
+    
+
+print addedBackgroundErrors
+listOfHistoLists[0].append(addedBackgrounds)
+lll[0].append(addedBackgroundErrors)
+
+
+
+for hl, ell in zip(listOfHistoLists, lll):
+  thisplothistolist=[]
+  for h, ehl, s in zip(hl, ell,moresamples):
+    print "creating error bands for ", h
+    print ehl
+    print s
+    thiserrorgraph=createErrorbands([[ehl]],[s],True)
+    print thiserrorgraph
+    assert h.GetNbinsX()==thiserrorgraph[0].GetN()
+    print "old ", h.GetBinError(1)
+    hwe=h.Clone()
+    print "clone ", hwe.GetBinError(1)
+    for ieb in range(hwe.GetNbinsX()):
+      print hwe.GetBinContent(ieb+1)
+      testx=ROOT.Double(0.0)
+      testy=ROOT.Double(0.0)
+      thiserrorgraph[0].GetPoint(ieb,testx,testy)
+      print ieb, testx, testy
+      print "old error", hwe.GetBinError(ieb+1)
+      print thiserrorgraph[0].GetErrorYhigh(ieb), thiserrorgraph[0].GetErrorYlow(ieb)
+      newerror=max(thiserrorgraph[0].GetErrorYhigh(ieb),thiserrorgraph[0].GetErrorYlow(ieb))
+      print newerror
+      hwe.SetBinError(ieb+1,newerror)
+    thisplothistolist.append(hwe)
+    #raw_input()
+  listOfHistoListsWerror.append(thisplothistolist)  
+print listOfHistoListsWerror
+
+print "printing with error"
+
+for hld,hl in zip(listOfHistoListsData,listOfHistoListsWerror):
+
+  makeEventyields=False
+
+  if "optD" in hld[0].GetName():
+    makeEventyields=True
+    for h in hld+hl:
+      for i,cat in enumerate(categoriesSplitByBDToptD):
+        h.GetXaxis().SetBinLabel(i+1,cat[1])
+    tablepath=("/".join((outputpath.split('/'))[:-1]))+"/"+name+"_yieldsD"
+  #elif "JTB" in hld[0].GetName():
     #makeEventyields=True
     #for h in hld+hl:
-      #for i,cat in enumerate(categoriesJT):
+      #for i,cat in enumerate(categoriesJTB):
         #h.GetXaxis().SetBinLabel(i+1,cat[1])
-    #tablepath=("/".join((outputpath.split('/'))[:-1]))+"/"+name+"_yieldsJT"
+    #tablepath=("/".join((outputpath.split('/'))[:-1]))+"/"+name+"_yieldsJTB"
+  elif "JT" in hld[0].GetName():
+    makeEventyields=True
+    for h in hld+hl:
+      for i,cat in enumerate(categoriesJT):
+        h.GetXaxis().SetBinLabel(i+1,cat[1])
+    tablepath=("/".join((outputpath.split('/'))[:-1]))+"/"+name+"_yieldsJT"
 
-  ## make an event yield table
-  #if makeEventyields:
-    #eventYields(hld,hl,samples,tablepath)
+  
+  # make an event yield table
+  if makeEventyields:
+    eventYieldsNew(hld,hl,moresamples,tablepath)
 
+
+
+exit(0)
 labels=[plot.label for plot in plots]
-#lolT=transposeLOL(listOfHistoLists)
-#plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name,[[lll,3354,ROOT.kBlack,False]],False,labels,True,plotBlinded)
+lolT=transposeLOL(listOfHistoLists)
+plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name,[[lll,3354,ROOT.kBlack,True]],False,labels,True,plotBlinded)
 
 #exit(0)
 
 # make log plots
-#listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
-#listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots,1)
-#lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,errorSystnames)
-##lllcsv=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,CSVSystnames)
-#labels=[plot.label for plot in plots]
-#lolT=transposeLOL(listOfHistoLists)
-#plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name+'_log',[[lll,3354,ROOT.kBlack,False]],True,labels,True,plotBlinded)
+listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
+listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots,1)
+lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,errorSystnames)
+#lllcsv=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,CSVSystnames)
+labels=[plot.label for plot in plots]
+lolT=transposeLOL(listOfHistoLists)
+plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name+'_log',[[lll,3354,ROOT.kBlack,True]],True,labels,True,plotBlinded)
 
 # make category plots
 categoryplotsindex=3

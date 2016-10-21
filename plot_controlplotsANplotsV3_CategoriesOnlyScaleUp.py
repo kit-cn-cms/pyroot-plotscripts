@@ -2,11 +2,11 @@
 # plot general control distributions
 ##############
 
-from plotconfigAnalysisV3csvWithPS import *
+from plotconfigAnalysisV3csvForPSscale import *
 sys.path.insert(0, 'limittools')
 from limittools import renameHistos
 
-name='controlplotsV12OnlyCategories'
+name='controlplotsV12OnlyCategoriesScaleUp'
 
 # if one wants to plot blinded: True (default: False)
 plotBlinded = False
@@ -79,7 +79,7 @@ for i,cat in enumerate(categoriesJTB):
     #catstringSplitByBDToptD+=("+"+str(i+1)+"*"+cat[0])
 
 # samples
-samples=samplesControlPlots
+samples=samplesControlplotsSCALEUP
 samples_data=samples_data_controlplots
 systsamples=[]
 for sample in samples:
@@ -208,7 +208,7 @@ plotsBoosted=[
 #plots+=plots62+plots63
 
 print name,500000,plots,samples+samples_data,[''],['1.'],weightsystnames, systweights
-outputpath=plotParallel(name,500000,plots,samples+samples_data+systsamples,[''],['1.'],weightsystnames, systweights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/plotscripts80X/higgsCoupling/pyroot-plotscripts/treejson.json")
+outputpath=plotParallel(name,500000,plots,samples+samples_data+systsamples,[''],['1.'],weightsystnames, systweights,additionalvariables,[],"")
 
 # plot dataMC comparison
 listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
@@ -217,7 +217,7 @@ if not os.path.exists(outputpath[:-4]+'_syst.root') or not askYesNo('reuse syste
     renameHistos(outputpath,outputpath[:-4]+'_syst.root',allsystnames,False)
 lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,errorSystnames)
 #lllcsv=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,CSVSystnames)
-
+exit(0)
 #for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
 
   #makeEventyields=False

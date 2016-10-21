@@ -69,11 +69,11 @@ systs_ttbar= [
                     #"_CMS_ttH_PSscaleUp","_CMS_ttH_PSscaleDown",
 ]
 
-systs_tt_lf=["_CMS_ttH_Q2scale_ttbarOtherUp","_CMS_ttH_Q2scale_ttbarOtherDown"]
-systs_tt_b=["_CMS_ttH_Q2scale_ttbarPlusBUp","_CMS_ttH_Q2scale_ttbarPlusBDown"]
-systs_tt_2b=[ "_CMS_ttH_Q2scale_ttbarPlus2BUp","_CMS_ttH_Q2scale_ttbarPlus2BDown"]
-systs_tt_bb=[ "_CMS_ttH_Q2scale_ttbarPlusBBbarUp","_CMS_ttH_Q2scale_ttbarPlusBBbarDown"]
-systs_tt_cc=[ "_CMS_ttH_Q2scale_ttbarPlusCCbarUp","_CMS_ttH_Q2scale_ttbarPlusCCbarDown"]
+systs_tt_lf=["_CMS_ttH_Q2scale_ttbarOtherUp","_CMS_ttH_Q2scale_ttbarOtherDown","_CMS_ttH_PSscale_ttbarOtherUp","_CMS_ttH_PSscale_ttbarOtherDown"]
+systs_tt_b=["_CMS_ttH_Q2scale_ttbarPlusBUp","_CMS_ttH_Q2scale_ttbarPlusBDown","_CMS_ttH_PSscale_ttbarPlusBUp","_CMS_ttH_PSscale_ttbarPlusBDown"]
+systs_tt_2b=[ "_CMS_ttH_Q2scale_ttbarPlus2BUp","_CMS_ttH_Q2scale_ttbarPlus2BDown","_CMS_ttH_PSscale_ttbarPlus2BUp","_CMS_ttH_PSscale_ttbarPlus2BDown"]
+systs_tt_bb=[ "_CMS_ttH_Q2scale_ttbarPlusBBbarUp","_CMS_ttH_Q2scale_ttbarPlusBBbarDown","_CMS_ttH_PSscale_ttbarPlusBBbarUp","_CMS_ttH_PSscale_ttbarPlusBBbarDown"]
+systs_tt_cc=[ "_CMS_ttH_Q2scale_ttbarPlusCCbarUp","_CMS_ttH_Q2scale_ttbarPlusCCbarDown","_CMS_ttH_PSscale_ttbarPlusCCbarUp","_CMS_ttH_PSscale_ttbarPlusCCbarDown"]
 
 #systs_tt_lf=[]
 #systs_tt_b=[]
@@ -104,7 +104,11 @@ errorSystnames=[
                    #"_CMS_ttH_eff_leptonUp","_CMS_ttH_eff_leptonDown",
                    "_CMS_res_jUp","_CMS_res_jDown",
                     "_CMS_scale_jUp","_CMS_scale_jDown",
-                    #"_CMS_ttH_PSscaleUp","_CMS_ttH_PSscaleDown",
+		    "_CMS_ttH_PSscale_ttbarOtherUp","_CMS_ttH_PSscale_ttbarOtherDown",
+		    "_CMS_ttH_PSscale_ttbarPlusBUp","_CMS_ttH_PSscale_ttbarPlusBDown",
+		    "_CMS_ttH_PSscale_ttbarPlus2BUp","_CMS_ttH_PSscale_ttbarPlus2BDown",
+		    "_CMS_ttH_PSscale_ttbarPlusBBbarUp","_CMS_ttH_PSscale_ttbarPlusBBbarDown",
+		    "_CMS_ttH_PSscale_ttbarPlusCCbarUp","_CMS_ttH_PSscale_ttbarPlusCCbarDown",
 ]
 
 CSVSystnames=[
@@ -219,10 +223,13 @@ othersystnames=[
                     "_CMS_scale_jUp",
                     "_CMS_scale_jDown",
                    "_CMS_res_jUp",
-                   "_CMS_res_jDown"
-                    #"_CMS_ttH_PSscaleUp",
-                    #"_CMS_ttH_PSscaleDown"
-]
+                   "_CMS_res_jDown",
+                    "_CMS_ttH_PSscale_ttbarOtherUp","_CMS_ttH_PSscale_ttbarOtherDown",
+		    "_CMS_ttH_PSscale_ttbarPlusBUp","_CMS_ttH_PSscale_ttbarPlusBDown",
+		    "_CMS_ttH_PSscale_ttbarPlus2BUp","_CMS_ttH_PSscale_ttbarPlus2BDown",
+		    "_CMS_ttH_PSscale_ttbarPlusBBbarUp","_CMS_ttH_PSscale_ttbarPlusBBbarDown",
+		    "_CMS_ttH_PSscale_ttbarPlusCCbarUp","_CMS_ttH_PSscale_ttbarPlusCCbarDown",
+		    ]
 
 othersystfilenames=[
                     "JESUP",
@@ -233,6 +240,7 @@ othersystfilenames=[
                     #"scaledown"
 ]
 
+print len(errorSystnames), len(weightsystnames), len(othersystnames)
 assert len(errorSystnames)==len(weightsystnames+othersystnames)
 
 # samples
@@ -264,20 +272,20 @@ samplesControlPlots=[
 samplesLimits=[
                     Sample('t#bar{t}H',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttH*/*nominal*.root',mcweight+evenSel,'ttH',systs_all_samples) ,     
 #                    Sample('t#bar{t}',ROOT.kRed+1,path_80x+'/ttbar/*nominal*.root',mcweight+evenSel,'ttbar') ,     
-                    Sample('t#bar{t}H, H to b#bar{b}',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHbb/*nominal*.root','1.009359*'+mcweight+evenSel,'ttH_hbb',systs_all_samples) ,  
-                    Sample('t#bar{t}H, H to c#bar{c}',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','0.987234*'+mcweight+evenSel+hccSel,'ttH_hcc',systs_all_samples) ,  
-                    Sample('t#bar{t}H, H to #tau#tau',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','0.987234*'+mcweight+evenSel+httSel,'ttH_htt',systs_all_samples) ,  
-                    Sample('t#bar{t}H, H to #gamma#gamma',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','0.987234*'+mcweight+evenSel+hggSel,'ttH_hgg',systs_all_samples) ,  
-                    Sample('t#bar{t}H, H to gluglu',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','0.987234*'+mcweight+evenSel+hglugluSel,'ttH_hgluglu',systs_all_samples) ,  
-                    Sample('t#bar{t}H, H to WW',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','0.987234*'+mcweight+evenSel+hwwSel,'ttH_hww',systs_all_samples) ,  
-                    Sample('t#bar{t}H, H to ZZ',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','0.987234*'+mcweight+evenSel+hzzSel,'ttH_hzz',systs_all_samples) ,  
-                    Sample('t#bar{t}H, H to #gamma Z',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','0.987234*'+mcweight+evenSel+hzgSel,'ttH_hzg',systs_all_samples) ,
+                    Sample('t#bar{t}H, H to b#bar{b}',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHbb/*nominal*.root','1.0*'+mcweight+evenSel,'ttH_hbb',systs_all_samples) ,  
+                    Sample('t#bar{t}H, H to c#bar{c}',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hccSel,'ttH_hcc',systs_all_samples) ,  
+                    Sample('t#bar{t}H, H to #tau#tau',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+httSel,'ttH_htt',systs_all_samples) ,  
+                    Sample('t#bar{t}H, H to #gamma#gamma',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hggSel,'ttH_hgg',systs_all_samples) ,  
+                    Sample('t#bar{t}H, H to gluglu',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hglugluSel,'ttH_hgluglu',systs_all_samples) ,  
+                    Sample('t#bar{t}H, H to WW',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hwwSel,'ttH_hww',systs_all_samples) ,  
+                    Sample('t#bar{t}H, H to ZZ',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hzzSel,'ttH_hzz',systs_all_samples) ,  
+                    Sample('t#bar{t}H, H to #gamma Z',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hzgSel,'ttH_hzg',systs_all_samples) ,
                     
-                    Sample('t#bar{t}+lf',ROOT.kRed-7,path_80x+'/withTrigger_Tranche3_ttbar_??/*nominal*.root',mcweight+evenSel+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)','ttbarOther',systs_all_samples+systs_ttbar+systs_tt_lf,0.05),
-                    Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,path_80x+'/withTrigger_Tranche3_ttbar_??/*nominal*.root',mcweight+evenSel+'*(GenEvt_I_TTPlusCC==1)','ttbarPlusCCbar',systs_all_samples+systs_ttbar+systs_tt_cc,0.5),
-                    Sample('t#bar{t}+b',ROOT.kRed-2,path_80x+'/withTrigger_Tranche3_ttbar_??/*nominal*.root',mcweight+evenSel+'*(GenEvt_I_TTPlusBB==1)','ttbarPlusB',systs_all_samples+systs_ttbar+systs_tt_b,0.5),
-                    Sample('t#bar{t}+2b',ROOT.kRed+2,path_80x+'/withTrigger_Tranche3_ttbar_??/*nominal*.root',mcweight+evenSel+'*(GenEvt_I_TTPlusBB==2)','ttbarPlus2B',systs_all_samples+systs_ttbar+systs_tt_2b,0.5),
-                    Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,path_80x+'/withTrigger_Tranche3_ttbar_??/*nominal*.root',mcweight+evenSel+'*(GenEvt_I_TTPlusBB==3)','ttbarPlusBBbar',systs_all_samples+systs_ttbar+systs_tt_bb,0.5),
+                    Sample('t#bar{t}+lf',ROOT.kRed-7,path_80x+'/withTrigger_Tranche3_ttbar_??/*nominal*.root',mcweight+evenSel+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)','ttbarOther',systs_all_samples+systs_ttbar+systs_tt_lf),
+                    Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,path_80x+'/withTrigger_Tranche3_ttbar_??/*nominal*.root',mcweight+evenSel+'*(GenEvt_I_TTPlusCC==1)','ttbarPlusCCbar',systs_all_samples+systs_ttbar+systs_tt_cc),
+                    Sample('t#bar{t}+b',ROOT.kRed-2,path_80x+'/withTrigger_Tranche3_ttbar_??/*nominal*.root',mcweight+evenSel+'*(GenEvt_I_TTPlusBB==1)','ttbarPlusB',systs_all_samples+systs_ttbar+systs_tt_b),
+                    Sample('t#bar{t}+2b',ROOT.kRed+2,path_80x+'/withTrigger_Tranche3_ttbar_??/*nominal*.root',mcweight+evenSel+'*(GenEvt_I_TTPlusBB==2)','ttbarPlus2B',systs_all_samples+systs_ttbar+systs_tt_2b),
+                    Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,path_80x+'/withTrigger_Tranche3_ttbar_??/*nominal*.root',mcweight+evenSel+'*(GenEvt_I_TTPlusBB==3)','ttbarPlusBBbar',systs_all_samples+systs_ttbar+systs_tt_bb),
                     Sample('Single Top',ROOT.kMagenta,path_80x+'/st*/*nominal*.root',mcweightAll,'singlet',systs_all_samples) , 
                     Sample('Z+jets',ROOT.kGreen-3,path_80x+'/withTrigger_Zjets*/*nominal*.root',mcweightAll,'zjets',systs_all_samples) , 
                     Sample('W+jets',ROOT.kGreen-7,path_80x+'/WJets*/*nominal*.root',mcweightAll,'wjets',systs_all_samples) , 
@@ -291,20 +299,20 @@ samplesLimits=[
 samplesLimitsSCALEUP=[
                     Sample('t#bar{t}H',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttH*/*nominal*.root',mcweight+evenSel,'ttH',systs_all_samples) ,     
 #                    Sample('t#bar{t}',ROOT.kRed+1,path_80x+'/ttbar/*nominal*.root',mcweight+evenSel,'ttbar') ,     
-                    Sample('t#bar{t}H, H to b#bar{b}',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHbb/*nominal*.root','1.009359*'+mcweight+evenSel,'ttH_hbb',systs_all_samples) ,  
-                    Sample('t#bar{t}H, H to c#bar{c}',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','0.987234*'+mcweight+evenSel+hccSel,'ttH_hcc',systs_all_samples) ,  
-                    Sample('t#bar{t}H, H to #tau#tau',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','0.987234*'+mcweight+evenSel+httSel,'ttH_htt',systs_all_samples) ,  
-                    Sample('t#bar{t}H, H to #gamma#gamma',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','0.987234*'+mcweight+evenSel+hggSel,'ttH_hgg',systs_all_samples) ,  
-                    Sample('t#bar{t}H, H to gluglu',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','0.987234*'+mcweight+evenSel+hglugluSel,'ttH_hgluglu',systs_all_samples) ,  
-                    Sample('t#bar{t}H, H to WW',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','0.987234*'+mcweight+evenSel+hwwSel,'ttH_hww',systs_all_samples) ,  
-                    Sample('t#bar{t}H, H to ZZ',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','0.987234*'+mcweight+evenSel+hzzSel,'ttH_hzz',systs_all_samples) ,  
-                    Sample('t#bar{t}H, H to #gamma Z',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','0.987234*'+mcweight+evenSel+hzgSel,'ttH_hzg',systs_all_samples) ,
+                    Sample('t#bar{t}H, H to b#bar{b}',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHbb/*nominal*.root','1.0*'+mcweight+evenSel,'ttH_hbb',systs_all_samples) ,  
+                    Sample('t#bar{t}H, H to c#bar{c}',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hccSel,'ttH_hcc',systs_all_samples) ,  
+                    Sample('t#bar{t}H, H to #tau#tau',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+httSel,'ttH_htt',systs_all_samples) ,  
+                    Sample('t#bar{t}H, H to #gamma#gamma',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hggSel,'ttH_hgg',systs_all_samples) ,  
+                    Sample('t#bar{t}H, H to gluglu',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hglugluSel,'ttH_hgluglu',systs_all_samples) ,  
+                    Sample('t#bar{t}H, H to WW',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hwwSel,'ttH_hww',systs_all_samples) ,  
+                    Sample('t#bar{t}H, H to ZZ',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hzzSel,'ttH_hzz',systs_all_samples) ,  
+                    Sample('t#bar{t}H, H to #gamma Z',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hzgSel,'ttH_hzg',systs_all_samples) ,
                     
-                    Sample('t#bar{t}+lf',ROOT.kRed-7,path_80x+'/scaleUp_ttbar_??/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)','ttbarOther',systs_all_samples+systs_ttbar+systs_tt_lf,0.05),
-                    Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,path_80x+'/scaleUp_ttbar_??/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==1)','ttbarPlusCCbar',systs_all_samples+systs_ttbar+systs_tt_cc,0.5),
-                    Sample('t#bar{t}+b',ROOT.kRed-2,path_80x+'/scaleUp_ttbar_??/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==1)','ttbarPlusB',systs_all_samples+systs_ttbar+systs_tt_b,0.5),
-                    Sample('t#bar{t}+2b',ROOT.kRed+2,path_80x+'/scaleUp_ttbar_??/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==2)','ttbarPlus2B',systs_all_samples+systs_ttbar+systs_tt_2b,0.5),
-                    Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,path_80x+'/scaleUp_ttbar_??/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==3)','ttbarPlusBBbar',systs_all_samples+systs_ttbar+systs_tt_bb,0.5),
+                    Sample('t#bar{t}+lf',ROOT.kRed-7,path_80x+'/scaleUp_ttbar_SL/*nominal*.root',mcweight+evenSel+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)','ttbarOther',systs_all_samples+systs_ttbar+systs_tt_lf),
+                    Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,path_80x+'/scaleUp_ttbar_SL/*nominal*.root',mcweight+evenSel+'*(GenEvt_I_TTPlusCC==1)','ttbarPlusCCbar',systs_all_samples+systs_ttbar+systs_tt_cc),
+                    Sample('t#bar{t}+b',ROOT.kRed-2,path_80x+'/scaleUp_ttbar_SL/*nominal*.root',mcweight+evenSel+'*(GenEvt_I_TTPlusBB==1)','ttbarPlusB',systs_all_samples+systs_ttbar+systs_tt_b),
+                    Sample('t#bar{t}+2b',ROOT.kRed+2,path_80x+'/scaleUp_ttbar_SL/*nominal*.root',mcweight+evenSel+'*(GenEvt_I_TTPlusBB==2)','ttbarPlus2B',systs_all_samples+systs_ttbar+systs_tt_2b),
+                    Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,path_80x+'/scaleUp_ttbar_SL/*nominal*.root',mcweight+evenSel+'*(GenEvt_I_TTPlusBB==3)','ttbarPlusBBbar',systs_all_samples+systs_ttbar+systs_tt_bb),
                     Sample('Single Top',ROOT.kMagenta,path_80x+'/st*/*nominal*.root',mcweightAll,'singlet',systs_all_samples) , 
                     Sample('Z+jets',ROOT.kGreen-3,path_80x+'/withTrigger_Zjets*/*nominal*.root',mcweightAll,'zjets',systs_all_samples) , 
                     Sample('W+jets',ROOT.kGreen-7,path_80x+'/WJets*/*nominal*.root',mcweightAll,'wjets',systs_all_samples) , 
@@ -315,22 +323,22 @@ samplesLimitsSCALEUP=[
 ]
 
 samplesLimitsSCALEDOWN=[
-                    Sample('t#bar{t}H',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttH*/*nominal*.root',mcweight+evenSel,'ttH',systs_all_samples) ,     
+                     Sample('t#bar{t}H',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttH*/*nominal*.root',mcweight+evenSel,'ttH',systs_all_samples) ,     
 #                    Sample('t#bar{t}',ROOT.kRed+1,path_80x+'/ttbar/*nominal*.root',mcweight+evenSel,'ttbar') ,     
-                    Sample('t#bar{t}H, H to b#bar{b}',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHbb/*nominal*.root','1.009359*'+mcweight+evenSel,'ttH_hbb',systs_all_samples) ,  
-                    Sample('t#bar{t}H, H to c#bar{c}',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','0.987234*'+mcweight+evenSel+hccSel,'ttH_hcc',systs_all_samples) ,  
-                    Sample('t#bar{t}H, H to #tau#tau',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','0.987234*'+mcweight+evenSel+httSel,'ttH_htt',systs_all_samples) ,  
-                    Sample('t#bar{t}H, H to #gamma#gamma',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','0.987234*'+mcweight+evenSel+hggSel,'ttH_hgg',systs_all_samples) ,  
-                    Sample('t#bar{t}H, H to gluglu',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','0.987234*'+mcweight+evenSel+hglugluSel,'ttH_hgluglu',systs_all_samples) ,  
-                    Sample('t#bar{t}H, H to WW',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','0.987234*'+mcweight+evenSel+hwwSel,'ttH_hww',systs_all_samples) ,  
-                    Sample('t#bar{t}H, H to ZZ',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','0.987234*'+mcweight+evenSel+hzzSel,'ttH_hzz',systs_all_samples) ,  
-                    Sample('t#bar{t}H, H to #gamma Z',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','0.987234*'+mcweight+evenSel+hzgSel,'ttH_hzg',systs_all_samples) ,
+                    Sample('t#bar{t}H, H to b#bar{b}',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHbb/*nominal*.root','1.0*'+mcweight+evenSel,'ttH_hbb',systs_all_samples) ,  
+                    Sample('t#bar{t}H, H to c#bar{c}',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hccSel,'ttH_hcc',systs_all_samples) ,  
+                    Sample('t#bar{t}H, H to #tau#tau',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+httSel,'ttH_htt',systs_all_samples) ,  
+                    Sample('t#bar{t}H, H to #gamma#gamma',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hggSel,'ttH_hgg',systs_all_samples) ,  
+                    Sample('t#bar{t}H, H to gluglu',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hglugluSel,'ttH_hgluglu',systs_all_samples) ,  
+                    Sample('t#bar{t}H, H to WW',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hwwSel,'ttH_hww',systs_all_samples) ,  
+                    Sample('t#bar{t}H, H to ZZ',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hzzSel,'ttH_hzz',systs_all_samples) ,  
+                    Sample('t#bar{t}H, H to #gamma Z',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hzgSel,'ttH_hzg',systs_all_samples) ,
                     
-                    Sample('t#bar{t}+lf',ROOT.kRed-7,path_80x+'/scaleDown_ttbar_??/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)','ttbarOther',systs_all_samples+systs_ttbar+systs_tt_lf,0.05),
-                    Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,path_80x+'/scaleDown_ttbar_??/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==1)','ttbarPlusCCbar',systs_all_samples+systs_ttbar+systs_tt_cc,0.5),
-                    Sample('t#bar{t}+b',ROOT.kRed-2,path_80x+'/scaleDown_ttbar_??/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==1)','ttbarPlusB',systs_all_samples+systs_ttbar+systs_tt_b,0.5),
-                    Sample('t#bar{t}+2b',ROOT.kRed+2,path_80x+'/scaleDown_ttbar_??/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==2)','ttbarPlus2B',systs_all_samples+systs_ttbar+systs_tt_2b,0.5),
-                    Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,path_80x+'/scaleDown_ttbar_??/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==3)','ttbarPlusBBbar',systs_all_samples+systs_ttbar+systs_tt_bb,0.5),
+                    Sample('t#bar{t}+lf',ROOT.kRed-7,path_80x+'/scaleDown_ttbar_SL/*nominal*.root',mcweight+evenSel+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)','ttbarOther',systs_all_samples+systs_ttbar+systs_tt_lf),
+                    Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,path_80x+'/scaleDown_ttbar_SL/*nominal*.root',mcweight+evenSel+'*(GenEvt_I_TTPlusCC==1)','ttbarPlusCCbar',systs_all_samples+systs_ttbar+systs_tt_cc),
+                    Sample('t#bar{t}+b',ROOT.kRed-2,path_80x+'/scaleDown_ttbar_SL/*nominal*.root',mcweight+evenSel+'*(GenEvt_I_TTPlusBB==1)','ttbarPlusB',systs_all_samples+systs_ttbar+systs_tt_b),
+                    Sample('t#bar{t}+2b',ROOT.kRed+2,path_80x+'/scaleDown_ttbar_SL/*nominal*.root',mcweight+evenSel+'*(GenEvt_I_TTPlusBB==2)','ttbarPlus2B',systs_all_samples+systs_ttbar+systs_tt_2b),
+                    Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,path_80x+'/scaleDown_ttbar_SL/*nominal*.root',mcweight+evenSel+'*(GenEvt_I_TTPlusBB==3)','ttbarPlusBBbar',systs_all_samples+systs_ttbar+systs_tt_bb),
                     Sample('Single Top',ROOT.kMagenta,path_80x+'/st*/*nominal*.root',mcweightAll,'singlet',systs_all_samples) , 
                     Sample('Z+jets',ROOT.kGreen-3,path_80x+'/withTrigger_Zjets*/*nominal*.root',mcweightAll,'zjets',systs_all_samples) , 
                     Sample('W+jets',ROOT.kGreen-7,path_80x+'/WJets*/*nominal*.root',mcweightAll,'wjets',systs_all_samples) , 
@@ -343,20 +351,20 @@ samplesLimitsSCALEDOWN=[
 samplesLimitsOLD=[
                     Sample('t#bar{t}H',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttH*/*nominal*.root',mcweight+evenSel,'ttH',systs_all_samples) ,     
 #                    Sample('t#bar{t}',ROOT.kRed+1,path_80x+'/ttbar/*nominal*.root',mcweight+evenSel,'ttbar') ,     
-                    Sample('t#bar{t}H, H to b#bar{b}',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHbb/*nominal*.root','1.009359*'+mcweight+evenSel,'ttH_hbb',systs_all_samples) ,  
-                    Sample('t#bar{t}H, H to c#bar{c}',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','0.987234*'+mcweight+evenSel+hccSel,'ttH_hcc',systs_all_samples) ,  
-                    Sample('t#bar{t}H, H to #tau#tau',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','0.987234*'+mcweight+evenSel+httSel,'ttH_htt',systs_all_samples) ,  
-                    Sample('t#bar{t}H, H to #gamma#gamma',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','0.987234*'+mcweight+evenSel+hggSel,'ttH_hgg',systs_all_samples) ,  
-                    Sample('t#bar{t}H, H to gluglu',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','0.987234*'+mcweight+evenSel+hglugluSel,'ttH_hgluglu',systs_all_samples) ,  
-                    Sample('t#bar{t}H, H to WW',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','0.987234*'+mcweight+evenSel+hwwSel,'ttH_hww',systs_all_samples) ,  
-                    Sample('t#bar{t}H, H to ZZ',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','0.987234*'+mcweight+evenSel+hzzSel,'ttH_hzz',systs_all_samples) ,  
-                    Sample('t#bar{t}H, H to #gamma Z',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','0.987234*'+mcweight+evenSel+hzgSel,'ttH_hzg',systs_all_samples) ,
+                    Sample('t#bar{t}H, H to b#bar{b}',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHbb/*nominal*.root','1.0*'+mcweight+evenSel,'ttH_hbb',systs_all_samples) ,  
+                    Sample('t#bar{t}H, H to c#bar{c}',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hccSel,'ttH_hcc',systs_all_samples) ,  
+                    Sample('t#bar{t}H, H to #tau#tau',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+httSel,'ttH_htt',systs_all_samples) ,  
+                    Sample('t#bar{t}H, H to #gamma#gamma',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hggSel,'ttH_hgg',systs_all_samples) ,  
+                    Sample('t#bar{t}H, H to gluglu',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hglugluSel,'ttH_hgluglu',systs_all_samples) ,  
+                    Sample('t#bar{t}H, H to WW',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hwwSel,'ttH_hww',systs_all_samples) ,  
+                    Sample('t#bar{t}H, H to ZZ',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hzzSel,'ttH_hzz',systs_all_samples) ,  
+                    Sample('t#bar{t}H, H to #gamma Z',ROOT.kBlue+1,path_80x+'/withTrigger_Tranche3_ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hzgSel,'ttH_hzg',systs_all_samples) ,
                     
-                    Sample('t#bar{t}+lf',ROOT.kRed-7,path_80x+'/ttbar_??/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)','ttbarOther',systs_all_samples+systs_ttbar+systs_tt_lf,0.05),
-                    Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,path_80x+'/ttbar_??/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusCC==1)','ttbarPlusCCbar',systs_all_samples+systs_ttbar+systs_tt_cc,0.5),
-                    Sample('t#bar{t}+b',ROOT.kRed-2,path_80x+'/ttbar_??/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==1)','ttbarPlusB',systs_all_samples+systs_ttbar+systs_tt_b,0.5),
-                    Sample('t#bar{t}+2b',ROOT.kRed+2,path_80x+'/ttbar_??/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==2)','ttbarPlus2B',systs_all_samples+systs_ttbar+systs_tt_2b,0.5),
-                    Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,path_80x+'/ttbar_??/*nominal*.root',mcweight+'*(GenEvt_I_TTPlusBB==3)','ttbarPlusBBbar',systs_all_samples+systs_ttbar+systs_tt_bb,0.5),
+                    Sample('t#bar{t}+lf',ROOT.kRed-7,path_80x+'/ttbar_SL/*nominal*.root',mcweight+evenSel+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)','ttbarOther',systs_all_samples+systs_ttbar+systs_tt_lf),
+                    Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,path_80x+'/ttbar_SL/*nominal*.root',mcweight+evenSel+'*(GenEvt_I_TTPlusCC==1)','ttbarPlusCCbar',systs_all_samples+systs_ttbar+systs_tt_cc),
+                    Sample('t#bar{t}+b',ROOT.kRed-2,path_80x+'/ttbar_SL/*nominal*.root',mcweight+evenSel+'*(GenEvt_I_TTPlusBB==1)','ttbarPlusB',systs_all_samples+systs_ttbar+systs_tt_b),
+                    Sample('t#bar{t}+2b',ROOT.kRed+2,path_80x+'/ttbar_SL/*nominal*.root',mcweight+evenSel+'*(GenEvt_I_TTPlusBB==2)','ttbarPlus2B',systs_all_samples+systs_ttbar+systs_tt_2b),
+                    Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,path_80x+'/ttbar_SL/*nominal*.root',mcweight+evenSel+'*(GenEvt_I_TTPlusBB==3)','ttbarPlusBBbar',systs_all_samples+systs_ttbar+systs_tt_bb),
                     Sample('Single Top',ROOT.kMagenta,path_80x+'/st*/*nominal*.root',mcweightAll,'singlet',systs_all_samples) , 
                     Sample('Z+jets',ROOT.kGreen-3,path_80x+'/withTrigger_Zjets*/*nominal*.root',mcweightAll,'zjets',systs_all_samples) , 
                     Sample('W+jets',ROOT.kGreen-7,path_80x+'/WJets*/*nominal*.root',mcweightAll,'wjets',systs_all_samples) , 

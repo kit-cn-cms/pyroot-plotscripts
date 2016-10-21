@@ -10,7 +10,7 @@ from limittools import addRealData
 from limittools import makeDatacards
 from limittools import calcLimits
 from limittools import replaceQ2scale
-from plotconfigAnalysisV3csv import *
+from plotconfigAnalysisV3csvWithPS import *
 
 # output name
 name='inputs2DV12'
@@ -204,7 +204,8 @@ plots64=[
 ]
 
 additPlots=plots64+plots63+plots54+plots53+plots44+plots43
-bdts=bdts+additPlots
+#bdts=bdts+additPlots
+bdts=bdts
 print bdts
 # plot everthing
 outputpath=plotParallel(name,500000,bdts,allsamples+samplesdata,[''],['1.'],weightsystnames,systweights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ICHEP_V5New",True]],"/nfs/dust/cms/user/kelmorab/plotscripts80X/higgsCoupling/pyroot-plotscripts/treejson.json")
@@ -225,32 +226,37 @@ for p in additPlots:
 print samples
 # add real/pseudo data
 #addPseudoData(name+'/'+name+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
-addRealData(name+'/'+name+'_limitInput.root',[s.nick for s in samples_data_controlplots],binlabels,discrname)
-addRealData(name+'/'+name+'_limitInput.root',[s.nick for s in samples_data_controlplots],additbinlables,"inputVar")
+#addRealData(name+'/'+name+'_limitInput.root',[s.nick for s in samples_data_controlplots],binlabels,discrname)
+#addRealData(name+'/'+name+'_limitInput.root',[s.nick for s in samples_data_controlplots],additbinlables,"inputVar")
 
-## make datacards
+##make datacards
 #listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,bdts)
 #lolT=transposeLOL(listOfHistoLists)
 #writeLOLAndOneOnTop(transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],20,name+'/'+name+'_controlplots')
-##writeListOfHistoListsAN(transposeLOL([lolT[0]]+lolT[9:]),samples_,"",name+'/'+name+'_controlplots_no_stack',True,False,False,'histo',False,False,False)
+#writeListOfHistoListsAN(transposeLOL([lolT[0]]+lolT[9:]),samples_,"",name+'/'+name+'_controlplots_no_stack',True,False,False,'histo',False,False,False)
 
 
-plotdiscriminants
+#plotdiscriminants
 labels=[plot.label for plot in bdts]
 listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,bdts,1)
 listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samplesdata,bdts,1)
+lolT=transposeLOL(listOfHistoLists)
 if not os.path.exists(outputpath[:-4]+'_syst.root') or not askYesNo('reuse systematic histofile?'):
     renameHistos(outputpath,outputpath[:-4]+'_syst.root',allsystnames,False)
 lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[9:],bdts,errorSystnames)
-plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-1,name+'/'+name+'_Blinded',[[lll,3354,ROOT.kBlack,True]],False,labels,True,True)
+#exit(0)
+#print lll 
+#raw_input()
+plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-1,name+'/'+name+'_Blinded',[[lll,3354,ROOT.kBlack,False]],False,labels,True,True)
 
 listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,bdts,1)
 listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samplesdata,bdts,1)
+lolT=transposeLOL(listOfHistoLists)
 lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[9:],bdts,errorSystnames)
-plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-1,name+'/'+name+'_Unblinded',[[lll,3354,ROOT.kBlack,True]],False,labels,True,False)
+plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-1,name+'/'+name+'_Unblinded',[[lll,3354,ROOT.kBlack,False]],False,labels,True,False)
 
 
-#exit(0)
+exit(0)
 makeDatacards(name+'/'+name+'_limitInput.root',name+'/'+name+'_datacard',binlabels,True,"finaldiscr")
 makeDatacards(name+'/'+name+'_limitInput.root',name+'/'+name+'_datacard',additbinlables,True,"inputVar")
 
