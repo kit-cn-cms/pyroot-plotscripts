@@ -3,7 +3,7 @@ import sys
 incard=sys.argv[1]
 skipBinByBin=True
 onlyLnN=False
-onlyShapes=False
+onlyShapes=True
 infile=open(incard)
 inlist=list(infile)
 
