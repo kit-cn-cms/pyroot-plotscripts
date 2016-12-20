@@ -217,7 +217,8 @@ def getLegend():
     legend.SetBorderSize(0);
     legend.SetLineStyle(0);
     legend.SetTextFont(42);
-    legend.SetTextSize(0.05);
+    legend.SetTextSize(0.02);
+    #legend.SetTextSize(0.05);
     legend.SetFillStyle(0);
     return legend
 
@@ -774,9 +775,27 @@ def AddEntry2( self, histo, label, option='L'):
 	neglen = neglen + len(symbol)-1
     newwidth=max((len(label)-neglen)*0.015*0.05/ts+0.1,width)
     self.SetX1NDC(self.GetX2NDC()-newwidth)
-    
     self.AddEntry(histo, label, option)
 ROOT.TLegend.AddEntry2 = AddEntry2
+
+def AddEntryZprime( self, histo, label, option='L'):
+    self.SetY1NDC(self.GetY1NDC()-0.05)
+    width=self.GetX2NDC()-self.GetX1NDC()
+    ts=self.GetTextSize()
+    neglen = 0
+    sscripts = re.findall("_{.+?}|\^{.+?}",label)
+    for s in sscripts:
+	neglen = neglen + 3
+    symbols = re.findall("#[a-zA-Z]+",label)
+    for symbol in symbols:
+	neglen = neglen + len(symbol)-1
+	#print neglen
+    #newwidth=max((len(label)-neglen)*0.015*0.05/ts+0.1,width)
+    newwidth=max((len(label)-neglen)*0.35*ts+0.1,width)
+    #print 'old width ',width
+    self.SetX1NDC(self.GetX2NDC()-newwidth)
+    self.AddEntry(histo, label, option)
+ROOT.TLegend.AddEntryZprime = AddEntryZprime
 
 def AddEntry22( self, histo, label, option='L'):
     self.SetY1NDC(self.GetY1NDC()-0.045)
@@ -790,7 +809,8 @@ def AddEntry22( self, histo, label, option='L'):
     for symbol in symbols:
 	neglen = neglen + len(symbol)-1
     newwidth=max((len(label)-neglen)*0.015*0.05/ts+0.1,width)
-#    self.SetX1NDC(self.GetX2NDC()-newwidth)
+    #self.SetX1NDC(self.GetX2NDC()-newwidth)
+
     
     self.AddEntry(histo, label, option)
 ROOT.TLegend.AddEntry22 = AddEntry22
@@ -1950,8 +1970,7 @@ def plotDataMCwSysts(listOfHistoListsData,listOfHistoLists,ListSysHistosUp,ListS
     writeObjects(canvases,name)
 
 
-
-def writeLOLAndOneOnTop(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,factor,name,logscale=False,options='histo',sepaTest=False):
+def writeLOLAndOneOnTop(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,factor,name,logscale=False,options='histo',ontopoptions='samehisto',sepaTest=False):
     normalize=False
     stack=True,
     canvases=[]
@@ -2002,12 +2021,93 @@ def writeLOLAndOneOnTop(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,f
           otc.Scale(factor)
         else:
           otc.Scale(integralfactor)
-        otc.DrawCopy("samehisto")
+        otc.DrawCopy(ontopoptions)
         l.Draw('same')
         objects.append(l)
         objects.append(otc)
         if sepaTest:
             stestss=getSepaTests2(listOfHistos,ot)
+            for stests in stestss:
+                stests.Draw()
+                objects.append(stests)
+#        cms = ROOT.TLatex(0.2, 0.96, 'CMS private work'  );
+#        cms = ROOT.TLatex(0.18, 0.85, '#splitline{CMS simulation}{WORK IN PROGRESS}'  );
+#        cms.SetTextFont(42)
+#        cms.SetTextSize(0.065)
+#        cms.SetNDC()
+#        cms.Draw()
+#        objects.append(cms)
+
+
+    printCanvases(canvases,name)
+    writeObjects(canvases,name)
+
+
+
+
+def writeLOLSeveralOneOnTop(listOfHistoLists,samples,listOfHistoListsOnTop,samplesOnTop,factor,name,logscale=False,options='histo',ontopoptions='samehisto',sepaTest=False):
+    normalize=False
+    stack=True,
+    canvases=[]
+    objects=[]   
+    i=0
+    print "ok"
+    
+    for listOfHistos,listOfHistosOnTop in zip(listOfHistoLists,listOfHistoListsOnTop):
+        print i
+        i+=1
+        
+        integralfactor=0
+        for histo,sample in zip(listOfHistos,samples):
+
+            yTitle='Events expected for 27.3 fb^{-1} @ 13 TeV'
+#            yTitle='Events'
+#            print histo
+            setupHisto(histo,sample.color,yTitle,stack) 
+            
+            if factor < 0:
+              integralfactor+=histo.Integral()
+              print integralfactor
+        c=drawHistosOnCanvas(listOfHistos,normalize,stack,logscale,options)       
+        #c.SetName('c'+str(i))
+        c.cd()
+        otcs=[]
+        l=getLegend()
+        for ot, sampleOnTop in zip(listOfHistosOnTop, samplesOnTop):
+            #if factor < 0:    
+                #integralfactor=integralfactor/ot.Integral()
+
+            otc=ot.Clone()
+            otcs.append(otc)
+            setupHisto(otc,sampleOnTop.color,'',False)
+            otc.SetBinContent(1,otc.GetBinContent(0)+otc.GetBinContent(1));
+            otc.SetBinContent(otc.GetNbinsX(),otc.GetBinContent(otc.GetNbinsX()+1)+otc.GetBinContent(otc.GetNbinsX()));
+            otc.SetBinError(1,ROOT.TMath.Sqrt(ROOT.TMath.Power(otc.GetBinError(0),2)+ROOT.TMath.Power(otc.GetBinError(1),2)));
+            otc.SetBinError(otc.GetNbinsX(),ROOT.TMath.Sqrt(ROOT.TMath.Power(otc.GetBinError(otc.GetNbinsX()+1),2)+ROOT.TMath.Power(otc.GetBinError(otc.GetNbinsX()),2)));
+            otc.SetLineWidth(3)
+            if factor >= 0.: 
+                l.AddEntryZprime(otc,sampleOnTop.name+' x '+str(factor)[:4],'L')
+            else:
+                l.AddEntryZprime(otc,sampleOnTop.name+(' x ')+str(integralfactor/otc.Integral()*abs(factor))[:4],'L')
+                #l.AddEntryZprime(otc,sampleOnTop.name+(' x {:4.0f}').format(integralfactor/otc.Integral()*abs(factor)),'L')
+          
+        for h,sample in zip(listOfHistos,samples):
+            loption='L'
+            if stack:
+                loption='F'
+            l.AddEntryZprime(h,sample.name,loption)
+        canvases.append(c)
+        for otc in otcs:
+            if factor >= 0.:
+                otc.Scale(factor)
+            else:
+                otc.Scale(integralfactor/otc.Integral()*abs(factor))
+            otc.DrawCopy(ontopoptions)
+            l.Draw('same')
+            objects.append(l)
+            objects.append(otc)
+        if sepaTest:
+            stestss=getSepaTests2(listOfHistos,listOfHistosOnTop)
             for stests in stestss:
                 stests.Draw()
                 objects.append(stests)
@@ -2726,4 +2826,28 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
     printCanvases(canvases,name)
     writeObjects(canvases,name)
 
+def divideHistos(listOfHistoLists, numeratorPlot, denumeratorPlot, normalizefirst=False):
+    dividedHistoList=[]
+    print 'inumerator ',numeratorPlot
+    print 'denumerator ',denumeratorPlot
+    print 'lol[inumerator] ',listOfHistoLists[numeratorPlot]
+    for i in range(len(listOfHistoLists[numeratorPlot])):
+        numerator=listOfHistoLists[numeratorPlot][i].Clone()
+        denumerator=listOfHistoLists[denumeratorPlot][i].Clone()
+        if normalizefirst: 
+            print 'numerator before divide ',numerator
+            numerator.Scale(1./numerator.Integral())
+            denumerator.Scale(1./denumerator.Integral())
+        x=numerator.Divide(denumerator)
+        listOfHistoLists[numeratorPlot][i]=numerator   
+        print 'numerator after divide ', listOfHistoLists[numeratorPlot][i]
+        #print 'divide? ', listofHistoLists
+        #self.append(x)
+    #self.append(dividedHistoList)
+    #print len(self)
+    #return listofHistoLists
 
+def LOLSumw2(listOfHistoLists):
+    for listOfHisto in listOfHistoLists:
+        for h in listOfHisto:
+            h.Sumw2()

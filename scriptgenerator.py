@@ -38,8 +38,8 @@ void plot(){
   char* outfilename = getenv ("OUTFILENAME");
   string processname = string(getenv ("PROCESSNAME"));
   string suffix = string(getenv ("SUFFIX"));
-  int maxevents = atoi(getenv ("MAXEVENTS"));
-  int skipevents = atoi(getenv ("SKIPEVENTS"));
+  int lastevent = atoi(getenv ("LASTEVENT"));
+  int firstevent = atoi(getenv ("FIRSTEVENT"));
   
   int eventsAnalyzed=0;
   float sumOfWeights=0;
@@ -107,8 +107,8 @@ def startLoop():
   long nentries = chain->GetEntries(); 
   cout << "total number of events: " << nentries << endl;
   
-  for (long iEntry=skipevents;iEntry<nentries;iEntry++) {
-    if(iEntry==maxevents) break;
+  for (long iEntry=firstevent;iEntry<nentries;iEntry++) {
+    if(iEntry>lastevent) break;
     if(iEntry%10000==0) cout << "analyzing event " << iEntry << endl;
     
     chain->GetEntry(iEntry); 
@@ -407,7 +407,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   f.close()
 
 
-def createScript(scriptname,programpath,processname,filenames,outfilename,maxevents,skipevents,cmsswpath,suffix):
+def createScript(scriptname,programpath,processname,filenames,outfilename,lastevent,firstevent,cmsswpath,suffix):
   script="#!/bin/bash \n"
   if cmsswpath!='':
     script+="export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch \n"
@@ -417,8 +417,8 @@ def createScript(scriptname,programpath,processname,filenames,outfilename,maxeve
   script+='export PROCESSNAME="'+processname+'"\n'
   script+='export FILENAMES="'+filenames+'"\n'
   script+='export OUTFILENAME="'+outfilename+'"\n'
-  script+='export MAXEVENTS="'+str(maxevents)+'"\n'
-  script+='export SKIPEVENTS="'+str(skipevents)+'"\n'
+  script+='export LASTEVENT="'+str(lastevent)+'"\n'
+  script+='export FIRSTEVENT="'+str(firstevent)+'"\n'
   script+='export SUFFIX="'+suffix+'"\n'
   script+=programpath+'\n'
   f=open(scriptname,'w')
@@ -446,7 +446,7 @@ def submitToNAF(scripts):
   jobids=[]
   for script in scripts:
     print 'submitting',script
-    command=['qsub', '-cwd', '-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=2000M', '-l', 's_vmem=2000M' ,'-o', '/nfs/dust/cms/user/kelmorab/plotlogs/logs/$JOB_NAME.o$JOB_ID', '-e', '/nfs/dust/cms/user/kelmorab/plotlogs/logs/$JOB_NAME.e$JOB_ID', script]
+    command=['qsub', '-cwd', '-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=2000M', '-l', 's_vmem=2000M' ,'-o', '/nfs/dust/cms/user/skudella/pyroot-plotscripts/logs/$JOB_NAME.o$JOB_ID', '-e', '/nfs/dust/cms/user/skudella/pyroot-plotscripts/logs/$JOB_NAME.e$JOB_ID', script]
     a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
     output = a.communicate()[0]
     jobidstring = output.split()
@@ -501,16 +501,23 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
       if events_in_file > maxevents:
         for ijob in range(events_in_file/maxevents+1):
           njob+=1
-          skipevents=(ijob)*maxevents       
+          firstevent=(ijob)*maxevents
+          if ijob<(events_in_file/maxevents):
+            nentries.append(maxevents)
+            ntotal_events+=maxevents
+            lastevent=firstevent+maxevents-1
+          else:
+            nentries.append(events_in_file-maxevents*ijob)
+            ntotal_events+=(events_in_file-maxevents*ijob)
+            lastevent=events_in_file-1
           scriptname=scriptsfolder+'/'+s.nick+'_'+str(njob)+'.sh'
           processname=s.nick
           filenames=fn
           outfilename=plotspath+s.nick+'_'+str(njob)+'.root'
-          createScript(scriptname,programpath,processname,filenames,outfilename,maxevents,skipevents,cmsswpath,'')
+          createScript(scriptname,programpath,processname,filenames,outfilename,lastevent,firstevent,cmsswpath,'')
           scripts.append(scriptname)
           outputs.append(outfilename)
-          nentries.append(events_in_file)
-          ntotal_events+=events_in_file
+
               
       # else additional files are appended to list of files to be submitted
       else :
@@ -518,12 +525,12 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
         events_in_files+=events_in_file
         if events_in_files>maxevents or fn==s.files[-1]:
           njob+=1
-          skipevents=0
+          firstevent=0
           scriptname=scriptsfolder+'/'+s.nick+'_'+str(njob)+'.sh'
           processname=s.nick
           filenames=' '.join(files_to_submit)
           outfilename=plotspath+s.nick+'_'+str(njob)+'.root'
-          createScript(scriptname,programpath,processname,filenames,outfilename,events_in_files,skipevents,cmsswpath,'')
+          createScript(scriptname,programpath,processname,filenames,outfilename,events_in_files,firstevent,cmsswpath,'')
           scripts.append(scriptname)
           outputs.append(outfilename)
           nentries.append(events_in_files)
@@ -534,12 +541,12 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
     # submit remaining scripts (can happen if the last file was large)
     if len(files_to_submit)>0:
       njob+=1
-      skipevents=0
+      firstevent=0
       scriptname=scriptsfolder+'/'+s.nick+'_'+str(njob)+'.sh'
       processname=s.nick
       filenames=' '.join(files_to_submit)
       outfilename=plotspath+s.nick+'_'+str(njob)+'.root'
-      createScript(scriptname,programpath,processname,filenames,outfilename,events_in_files,skipevents,cmsswpath,'')
+      createScript(scriptname,programpath,processname,filenames,outfilename,events_in_files,firstevent,cmsswpath,'')
       scripts.append(scriptname)
       outputs.append(outfilename)
       nentries.append(events_in_files)

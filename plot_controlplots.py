@@ -35,6 +35,17 @@ categoriesJTB=[
               ("((N_Jets>=4&&N_BTagsM>=2)&&"+boosted+")","boosted","")
 ]
 
+categoriesZprimeTprime=[
+	("(tWb&&N_BTagsM=1)","tWb1",""),
+	("(tWb&&N_BTagsM=2)","tWb2",""),
+	("(ttH&&N_BTagsM=1)","ttH1",""),
+	("(ttH&&N_BTagsM=2)","ttH2",""),
+	("(ttH&&N_BTagsM=3)","ttH3",""),
+	("(ttH&&N_BTagsM=4)","ttH4",""),
+	("(ttZ&&N_BTagsM=1)","ttZ1",""),
+	("(ttZ&&N_BTagsM=2)","ttZ2",""),
+]
+
 #
 #categoriesSplitByBDToptD=[]
 #for cat in categoriesJTB:
@@ -55,6 +66,11 @@ for cat in categoriesJTB[1:]:
   categoriesJTBsel+="||"+cat[0]
 categoriesJTBsel+=")"
 
+categoriesZprimeTprimesel="("+categoriesZprimeTprime[0][0]
+for cat in categoriesZprimeTprime[1:]:
+  categoriesZprimeTprimesel+="||"+cat[0]
+categoriesZprimeTprimesel+=")"
+
 # category strings
 catstringJT="0"
 for i,cat in enumerate(categoriesJT):
@@ -65,6 +81,9 @@ for i,cat in enumerate(categoriesJTB):
 #catstringSplitByBDToptD="0"
 #for i,cat in enumerate(categoriesSplitByBDToptD):
     #catstringSplitByBDToptD+=("+"+str(i+1)+"*"+cat[0])
+catstringZprimeTprime="0"
+for i,cat in enumerate(categoriesZprimeTprimesel):
+    catstringZprimeTprime+=("+"+str(i+1)+"*"+cat[0])
 
 # samples
 samples=samplesControlPlots
