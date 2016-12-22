@@ -2826,7 +2826,7 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
     printCanvases(canvases,name)
     writeObjects(canvases,name)
 
-def divideHistos(listOfHistoLists, numeratorPlot, denumeratorPlot, normalizefirst=False):
+def divideHistos(listOfHistoLists, numeratorPlot, denumeratorPlot, normalizefirst=False,rebin=1):
     dividedHistoList=[]
     print 'inumerator ',numeratorPlot
     print 'denumerator ',denumeratorPlot
@@ -2834,6 +2834,8 @@ def divideHistos(listOfHistoLists, numeratorPlot, denumeratorPlot, normalizefirs
     for i in range(len(listOfHistoLists[numeratorPlot])):
         numerator=listOfHistoLists[numeratorPlot][i].Clone()
         denumerator=listOfHistoLists[denumeratorPlot][i].Clone()
+        numerator.Rebin(rebin)
+        denumerator.Rebin(rebin)
         if normalizefirst: 
             print 'numerator before divide ',numerator
             numerator.Scale(1./numerator.Integral())
@@ -2847,7 +2849,84 @@ def divideHistos(listOfHistoLists, numeratorPlot, denumeratorPlot, normalizefirs
     #print len(self)
     #return listofHistoLists
 
-def LOLSumw2(listOfHistoLists):
-    for listOfHisto in listOfHistoLists:
-        for h in listOfHisto:
-            h.Sumw2()
+#def LOLSumw2(listOfHistoLists):
+    #for listOfHisto in listOfHistoLists:
+        #for h in listOfHisto:
+            #h.Sumw2()
+    
+def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='define name', rebin=1):
+    canvases=[]
+    ratio=False
+    objects=[]  
+    print listOfHistoListsToPlot
+    print sampleListToPlot
+    for listOfHistos in listOfHistoListsToPlot:
+                
+        for histo,sample in zip(listOfHistos, sampleListToPlot):
+            yTitle='Ratio'
+            histo.Rebin(rebin)
+            data=ROOT.TGraphAsymmErrors(histo)
+        #print data
+            canvas=getCanvas(data.GetName(),ratio)
+        #print canvas
+            data.Draw('AP')
+            l=getLegend()
+            l.AddEntryZprime(data,'Singal-BKG-Shape-Ratio','P')
+            canvases.append(canvas)
+            l.Draw('same')
+            objects.append(data)
+            objects.append(l)
+            #objects.append(graph)
+            
+    printCanvases(canvases,name)
+    writeObjects(canvases,name)
+    
+#def writeRatioOfHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='define name',ratio=False):
+    #canvases=[]
+    #objects=[]  
+    #for listOfHistos in listOfHistoListsToPlot:
+        
+        ##for h in listOfHistos:
+            ##h.Sumw2()
+        #if len(listOfHistos)>0:
+            #XYgraphlist=listOfHistos[0]
+        #for d in listOfHistos[1:]:
+            #XYgraphlist.Add(d)
+        #moveOverFlow(XYgraphlist)
+        #XYgraph=ROOT.TGraphAsymmErrors(XYgraphlist)
+        ##alpha = 1 - 0.6827
+        ##for i in range(0,XYgraph.GetN()):
+            ##print i
+            ##N = XYgraph.GetY()[i];
+            
+            ##L = 0
+            ##if N != 0:
+                ##L = ROOT.Math.gamma_quantile(alpha/2,N,1.)
+
+            ##U =  ROOT.Math.gamma_quantile_c(alpha/2,N+1,1)
+      
+            ##XYgraph.SetPointEYlow(i, N-L);
+            ##XYgraph.SetPointEYhigh(i, U-N);
+
+        #XYgraph.SetMarkerStyle(20)
+        #XYgraph.SetMarkerColor(ROOT.kBlack)
+        #XYgraph.SetLineColor(ROOT.kBlack)
+        #x, y = ROOT.Double(0), ROOT.Double(0)
+        #for i in range(0,XYgraph.GetN()):
+            #XYgraph.GetPoint(i,x,y)
+            #XYgraph.SetPointEXlow(i,0)
+            #XYgraph.SetPointEXhigh(i,0)
+        
+        
+        #canvas=getCanvas(XYgraph.GetName(),ratio)
+        #XYgraph.Draw('AP')
+        #l=getLegend()
+        #l.AddEntryZprime(XYgraph,'Singal-BKG-Shape-Ratio','P')
+        #canvases.append(canvas)
+        #l.Draw('same')
+        #objects.append(XYgraph)
+        #objects.append(l)
+        #printCanvases(canvases,name)
+    #writeObjects(canvases,name)
+    
+#def fit 
