@@ -9,8 +9,11 @@ import scriptgenerator
 import re
 import xml.etree.ElementTree as ET
 import CMS_lumi
+from ROOT import TMinuit
+import array
 
 ROOT.gStyle.SetPaintTextFormat("4.2f");
+ROOT.gStyle.SetOptFit(1111);
 ROOT.gROOT.SetBatch(True)
 
 class Sample:
@@ -20,6 +23,12 @@ class Sample:
         self.path=path
         self.selection=selection
         self.files=glob.glob(path)
+        #self.files=[]
+        #if isinstance(path,list):
+            #for p in path:
+                #self.files.append(glob.glob(p))
+        #else:
+            #self.files.append(glob.glob(path))
         if path!='' and len(self.files)==0:
 	    print name
             print 'no files found at',path    
@@ -1110,12 +1119,12 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
     canvases=[]
     objects=[]   
     i=0
-#    print labeltexts
+    print labeltexts
     for listOfHistos, labeltext in zip(listOfHistoLists, labeltexts):
         listofthisstattests=[listOfHistos[0].GetTitle()]
         i+=1
         for histo,sample in zip(listOfHistos,samples):
-#            print labeltext
+            print labeltext
             yTitle='Events'
             if normalize:
                 yTitle='normalized'
@@ -2854,79 +2863,159 @@ def divideHistos(listOfHistoLists, numeratorPlot, denumeratorPlot, normalizefirs
         #for h in listOfHisto:
             #h.Sumw2()
     
-def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='define name', rebin=1):
+def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='define name', rebin=1, fitoption='pol2'):
     canvases=[]
     ratio=False
-    objects=[]  
-    print listOfHistoListsToPlot
-    print sampleListToPlot
+    objects=[] 
+    #ListofTgraphsforFile=[]
+    #ListofTgraphNamsforFile=[]
+    
     for listOfHistos in listOfHistoListsToPlot:
                 
         for histo,sample in zip(listOfHistos, sampleListToPlot):
             yTitle='Ratio'
             histo.Rebin(rebin)
             data=ROOT.TGraphAsymmErrors(histo)
-        #print data
+            fit=fitPolToHistogrammwitherrorband(histo)
             canvas=getCanvas(data.GetName(),ratio)
-        #print canvas
-            data.Draw('AP')
+            fit.SetFillColor(ROOT.kRed)
+            fit.SetLineColor(ROOT.kBlue)
+            #fit.ConfidenceIntervals()
+
+            #data.GetYaxis().SetRangeUser(0,2)
+            #histo.SetOptFit(0)
+            fit.Draw('A3')
+            fit.Draw('sameLXZ')
+            data.Draw('sameP')
+
             l=getLegend()
             l.AddEntryZprime(data,'Singal-BKG-Shape-Ratio','P')
+            l.AddEntryZprime(fit,"parabolic fit",'L')
             canvases.append(canvas)
             l.Draw('same')
             objects.append(data)
+            objects.append(fit)
             objects.append(l)
             #objects.append(graph)
+            #ListofTgraphsforFile.append(fit)
+            #ListofTgraphNamsforFile.append()
             
     printCanvases(canvases,name)
     writeObjects(canvases,name)
+    #writeTGraphstoextraFile(ListofTgraphsforFile,ListofTgraphNamsforFile,'SB_transferfunctions')
     
-#def writeRatioOfHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='define name',ratio=False):
-    #canvases=[]
-    #objects=[]  
-    #for listOfHistos in listOfHistoListsToPlot:
-        
-        ##for h in listOfHistos:
-            ##h.Sumw2()
-        #if len(listOfHistos)>0:
-            #XYgraphlist=listOfHistos[0]
-        #for d in listOfHistos[1:]:
-            #XYgraphlist.Add(d)
-        #moveOverFlow(XYgraphlist)
-        #XYgraph=ROOT.TGraphAsymmErrors(XYgraphlist)
-        ##alpha = 1 - 0.6827
-        ##for i in range(0,XYgraph.GetN()):
-            ##print i
-            ##N = XYgraph.GetY()[i];
-            
-            ##L = 0
-            ##if N != 0:
-                ##L = ROOT.Math.gamma_quantile(alpha/2,N,1.)
-
-            ##U =  ROOT.Math.gamma_quantile_c(alpha/2,N+1,1)
-      
-            ##XYgraph.SetPointEYlow(i, N-L);
-            ##XYgraph.SetPointEYhigh(i, U-N);
-
-        #XYgraph.SetMarkerStyle(20)
-        #XYgraph.SetMarkerColor(ROOT.kBlack)
-        #XYgraph.SetLineColor(ROOT.kBlack)
-        #x, y = ROOT.Double(0), ROOT.Double(0)
-        #for i in range(0,XYgraph.GetN()):
-            #XYgraph.GetPoint(i,x,y)
-            #XYgraph.SetPointEXlow(i,0)
-            #XYgraph.SetPointEXhigh(i,0)
-        
-        
-        #canvas=getCanvas(XYgraph.GetName(),ratio)
-        #XYgraph.Draw('AP')
-        #l=getLegend()
-        #l.AddEntryZprime(XYgraph,'Singal-BKG-Shape-Ratio','P')
-        #canvases.append(canvas)
-        #l.Draw('same')
-        #objects.append(XYgraph)
-        #objects.append(l)
-        #printCanvases(canvases,name)
-    #writeObjects(canvases,name)
     
-#def fit 
+def fitPolToHistogrammwitherrorband(histo, fitoption='pol2'):
+    res=histo.Fit(fitoption,'S0F')
+    fit=histo.GetFunction(fitoption)
+    res.Print('V')
+    cov=res.GetCovarianceMatrix()
+    #nParameters=res
+    xmax=0.0
+    #for i in range(histo.GetXaxis().GetNbins()):
+    for i in range(histo.GetNbinsX()):
+        xmax=xmax+histo.GetBinWidth(i)
+    fitgraphwitherrorband=makepolynomerrorbands(fit,cov,2,1000,0.0,xmax*1.1)
+    print xmax
+    return fitgraphwitherrorband
+
+def makepolynomerrorbands(fitfunction, covariancematrix, orderofpolynom, npoints=1000,xmin=0.0,xmax=6000.0):
+    xbin=(xmax-xmin)/float(npoints)
+    x=array.array("d",[])
+    y=array.array("d",[])
+    deltax=array.array("d",[])
+    deltay=array.array("d",[])
+    for i in range(npoints):
+        #print i
+        #print orderofpolynom
+        xi=xmin+i*xbin
+        x.append(xi)
+        yi=fitfunction.Eval(xi)
+        y.append(yi)
+        deltax.append(xbin/2.0)
+        deltay2=0.0
+        for j in range(0,(orderofpolynom+1)):
+            for k in range(0,(orderofpolynom+1)):
+                deltay2=deltay2+pow(xi,j)*pow(xi,k)*covariancematrix(j,k)
+        deltay.append(math.sqrt(deltay2))
+        
+    graph=ROOT.TGraphAsymmErrors(int(npoints),x,y,deltax,deltax,deltay,deltay)
+    return graph    
+
+
+#def writeTGraphstoextraFile(ListofTgraphs,ListofTgraphNames,filename='TGraphs',)
+#    print "writing Graphs into file"
+#    f=ROOT.TFile(filename+'.root','recreate')
+#    t=ROOT.TTree('MVATree','MVATree')
+#    zipi=zip(ListofTgraphs,ListofTgraphNames)
+#    for graph,graphname in zipi:
+#        t.Branch(graphnames,graph)
+#        t.Fill()
+#        
+#    f.Write()
+#    f.Close()
+
+def DrawErrorBand(graph):
+    isErrorBand = (graph.GetErrorYhigh(0)!=-1) and (graph.GetErrorYlow(0) != -1)
+    npoints     = graph.GetN()
+    
+    if not isErrorBand:
+        graph.Draw("l same")
+        return
+ 
+    # Declare individual TGraph objects used in drawing error band
+    central, min, max = ROOT.TGraph(), ROOT.TGraph(), ROOT.TGraph()
+    shapes = []
+    for i in range((npoints-1)*4):
+        shapes.append(ROOT.TGraph())
+ 
+    # Set ownership of TGraph objects
+    ROOT.SetOwnership(central, False)
+    ROOT.SetOwnership(    min, False)
+    ROOT.SetOwnership(    max, False)
+    for shape in shapes:
+        ROOT.SetOwnership(shape, False)
+ 
+    # Get data points from TGraphAsymmErrors
+    x, y, ymin, ymax = [], [], [], []
+    for i in range(npoints):
+        tmpX, tmpY = ROOT.Double(0), ROOT.Double(0)
+        graph.GetPoint(i, tmpX, tmpY)
+        x.append(tmpX)
+        y.append(tmpY)
+        ymin.append(tmpY - graph.GetErrorYlow(i))
+        ymax.append(tmpY + graph.GetErrorYhigh(i))
+ 
+    # Fill central, min and max graphs
+    for i in range(npoints):
+        central.SetPoint(i, x[i], y[i])
+    min.SetPoint(i, x[i], ymin[i])
+    max.SetPoint(i, x[i], ymax[i])
+ 
+    # Fill shapes which will be shaded to create the error band
+    for i in range(npoints-1):
+        for version in range(4):
+            shapes[i+(npoints-1)*version].SetPoint((version+0)%4, x[i],   ymax[i])
+            shapes[i+(npoints-1)*version].SetPoint((version+1)%4, x[i+1], ymax[i+1])
+            shapes[i+(npoints-1)*version].SetPoint((version+2)%4, x[i+1], ymin[i+1])
+            shapes[i+(npoints-1)*version].SetPoint((version+3)%4, x[i],   ymin[i])
+ 
+    # Set attributes to those of input graph
+    central.SetLineColor(graph.GetLineColor())
+    central.SetLineStyle(graph.GetLineStyle())
+    central.SetLineWidth(graph.GetLineWidth())
+    min.SetLineColor(graph.GetLineColor())
+    min.SetLineStyle(graph.GetLineStyle())
+    max.SetLineColor(graph.GetLineColor())
+    max.SetLineStyle(graph.GetLineStyle())
+    for shape in shapes:
+        shape.SetFillColor(graph.GetFillColor())
+        shape.SetFillStyle(graph.GetFillStyle())
+ 
+    # Draw
+    for shape in shapes:
+        shape.Draw("f same")
+    min.Draw("l same")
+    max.Draw("l same")
+    central.Draw("l same")
+    ROOT.gPad.RedrawAxis()

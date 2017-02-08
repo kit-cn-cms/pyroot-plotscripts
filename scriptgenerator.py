@@ -169,7 +169,10 @@ def endLoop():
 
 
 def varLoop(i,n):
-  return '      for(uint '+str(i)+'=0; '+str(i)+'<'+str(n)+'; '+str(i)+'++)'
+  return '    if('+n+'>0){\n      for(uint '+str(i)+'=0; '+str(i)+'<'+str(n)+'; '+str(i)+'++)'
+
+def checkLoopsize(size_of_Loop):
+  return 
 
 
 def getFoot():
@@ -331,9 +334,13 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
       
       histoname=cn+n
       script+="\n"
-      if size_of_loop!=None:
+      #if size_of_loop!=None:
+      print 'SIZE OF LOOP', size_of_loop
+      if (size_of_loop!=None and size_of_loop>0):
         exi=variables.getArrayEntries(ex,"i")
         pwi=variables.getArrayEntries(pw,"i")
+        #script+=checkLoopsize(size_of_loop)
+        #script+="{\n"
         script+=varLoop("i",size_of_loop)                    
         script+="{\n"
         arrayselection=variables.checkArrayLengths(','.join([ex,pw]))
@@ -342,6 +349,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
         print exi
         print weight
         script+=fillHistoSyst(histoname,exi,weight,systnames,systweights)
+        script+="      }\n"
         script+="      }\n"
       else:
         arrayselection=variables.checkArrayLengths(','.join([ex,pw]))
@@ -386,6 +394,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
           arrayselection=variables.checkArrayLengths(','.join([exX,exY,pw]))
           weight='('+arrayselection+')*('+pwi+')*Weight_XS*categoryweight*sampleweight'
           script+=fillTwoDimHistoSyst(histoname,exiX,exiY,weight,systnames,systweights)
+          script+="      }\n"
           script+="      }\n"
         else:
           arrayselection=variables.checkArrayLengths(','.join([ex,pw]),variables)
@@ -496,6 +505,7 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
     for fn in s.files:
       f=ROOT.TFile(fn)
       t=f.Get('MVATree')
+      print f
       events_in_file=t.GetEntries()
       # if the file is larger than maxevents it is analyzed in portions of nevents
       if events_in_file > maxevents:
