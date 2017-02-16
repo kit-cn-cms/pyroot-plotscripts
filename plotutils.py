@@ -10,6 +10,9 @@ import re
 import xml.etree.ElementTree as ET
 import CMS_lumi
 from ROOT import TMinuit
+from ROOT import TVirtualFitter
+from ROOT import TMath
+from ROOT import TF1
 import array
 
 ROOT.gStyle.SetPaintTextFormat("4.2f");
@@ -2054,14 +2057,14 @@ def writeLOLAndOneOnTop(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,f
 
 
 
-def writeLOLSeveralOneOnTop(listOfHistoLists,samples,listOfHistoListsOnTop,samplesOnTop,factor,name,logscale=False,options='histo',ontopoptions='samehisto',sepaTest=False):
+def writeLOLSeveralOnTop(listOfHistoLists,samples,listOfHistoListsOnTop,samplesOnTop,factor,name,logscale=False,options='histo',ontopoptions='samehisto',sepaTest=False):
     normalize=False
     stack=True,
     canvases=[]
     objects=[]   
     i=0
     print "ok"
-    
+        
     for listOfHistos,listOfHistosOnTop in zip(listOfHistoLists,listOfHistoListsOnTop):
         print i
         i+=1
@@ -2835,7 +2838,7 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
     printCanvases(canvases,name)
     writeObjects(canvases,name)
 
-def divideHistos(listOfHistoLists, numeratorPlot, denumeratorPlot, normalizefirst=False,rebin=1):
+def divideHistos(listOfHistoLists, numeratorPlot, denumeratorPlot, normalizefirst=False,rebin=1,option=''):
     dividedHistoList=[]
     print 'inumerator ',numeratorPlot
     print 'denumerator ',denumeratorPlot
@@ -2849,7 +2852,8 @@ def divideHistos(listOfHistoLists, numeratorPlot, denumeratorPlot, normalizefirs
             print 'numerator before divide ',numerator
             numerator.Scale(1./numerator.Integral())
             denumerator.Scale(1./denumerator.Integral())
-        x=numerator.Divide(denumerator)
+        x=numerator.Clone()
+        numerator.Divide(numerator,denumerator,1.0,1.0,option)
         listOfHistoLists[numeratorPlot][i]=numerator   
         print 'numerator after divide ', listOfHistoLists[numeratorPlot][i]
         #print 'divide? ', listofHistoLists
@@ -2876,7 +2880,7 @@ def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='d
             yTitle='Ratio'
             histo.Rebin(rebin)
             data=ROOT.TGraphAsymmErrors(histo)
-            fit=fitPolToHistogrammwitherrorband(histo)
+            fit=fitFunctionToHistogrammwitherrorband(histo,"[0]+[1]*log(x)+[2]*log(x)*log(x)")
             canvas=getCanvas(data.GetName(),ratio)
             fit.SetFillColor(ROOT.kRed)
             fit.SetLineColor(ROOT.kBlue)
@@ -2905,43 +2909,82 @@ def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='d
     #writeTGraphstoextraFile(ListofTgraphsforFile,ListofTgraphNamsforFile,'SB_transferfunctions')
     
     
-def fitPolToHistogrammwitherrorband(histo, fitoption='pol2'):
-    res=histo.Fit(fitoption,'S0F')
-    fit=histo.GetFunction(fitoption)
+def fitFunctionToHistogrammwitherrorband(histo, fitoption="[0]+[1]*log(x)+[2]*log(x)*log(x)"):
+    xmax=0.0
+    for ibin in range(histo.GetNbinsX()):
+        xmax=xmax+histo.GetBinWidth(ibin)
+        print ibin,' of ',histo.GetNbinsX(),' binwidth: ',histo.GetBinWidth(ibin),' of ',xmax
+    print 'ok'
+    fitfunction=ROOT.TF1("fit","[0]+[1]*log(x)+[2]*log(x)*log(x)",0.0,xmax)
+    fitfunction.SetParameter(0,1)
+    fitfunction.SetParameter(1,1)
+    fitfunction.SetParameter(2,1)
+    res=histo.Fit(fitfunction,'S0F')
+    fit=histo.GetFunction("fit")
     res.Print('V')
     cov=res.GetCovarianceMatrix()
-    #nParameters=res
-    xmax=0.0
-    #for i in range(histo.GetXaxis().GetNbins()):
-    for i in range(histo.GetNbinsX()):
-        xmax=xmax+histo.GetBinWidth(i)
-    fitgraphwitherrorband=makepolynomerrorbands(fit,cov,2,1000,0.0,xmax*1.1)
-    print xmax
+    #x=array.array("d",[])
+    fitgraphwitherrorband=ROOT.TGraphErrors(1000)
+    for ibingraph in range(1000):
+        print(ibingraph*xmax/1000.0)
+        fitgraphwitherrorband.SetPoint(ibingraph,ibingraph*xmax/1000.0,0)
+    (TVirtualFitter.GetFitter()).GetConfidenceIntervals(fitgraphwitherrorband)
+    #res.GetConfidenceIntervals(fitgraphwitherrorband,0.66)
+    #ROOT.Fit.FitResult.GetConfidenceIntervals(fitgraphwitherrorband,0.66)
+    #fitgraphwitherrorband.GetConfidenceIntervals(res,0.66)
+    #fitgraphwitherrorband=makefunctionerrorbands(fit,cov,1000,0.0,xmax*1.1)
+        
+    
+    
     return fitgraphwitherrorband
 
-def makepolynomerrorbands(fitfunction, covariancematrix, orderofpolynom, npoints=1000,xmin=0.0,xmax=6000.0):
-    xbin=(xmax-xmin)/float(npoints)
-    x=array.array("d",[])
-    y=array.array("d",[])
-    deltax=array.array("d",[])
-    deltay=array.array("d",[])
-    for i in range(npoints):
-        #print i
-        #print orderofpolynom
-        xi=xmin+i*xbin
-        x.append(xi)
-        yi=fitfunction.Eval(xi)
-        y.append(yi)
-        deltax.append(xbin/2.0)
-        deltay2=0.0
-        for j in range(0,(orderofpolynom+1)):
-            for k in range(0,(orderofpolynom+1)):
-                deltay2=deltay2+pow(xi,j)*pow(xi,k)*covariancematrix(j,k)
-        deltay.append(math.sqrt(deltay2))
+#def makefunctionerrorbands(fitfunction, covariancematrix, npoints=1000,xmin=0.0,xmax=6000.0):
+    #xbin=(xmax-xmin)/float(npoints)
+    #y=array.array("d",[])
+    #deltax=array.array("d",[])
+    #deltay=array.array("d",[])
+    #mu=array.array("d",[])
+    #fitfunctiontemp=fitfunction
+    #for i in range(fitfunction.GetNumberFreeParameters()):
+        #mu=append(fitfunction.GetParameter(i))
+    
+    #for i in range(npoints):
+        ##print i
+        ##print orderofpolynom
+        #xi=xmin+i*xbin
+        #x.append(xi)
+        #yi=fitfunction.Eval(xi)
+        #y.append(yi)
+        #deltax.append(xbin/2.0)
+        #deltay2=0.0
         
-    graph=ROOT.TGraphAsymmErrors(int(npoints),x,y,deltax,deltax,deltay,deltay)
-    return graph    
+        #k=array.array("d",[])
+        #z=array.array("d",[])
+        #dyi=array.array("d",[])
+        
+        #for i in range(1000):
+            #for j in range(fitfunction.GetNumberFreeParameters()):
+                #z.append(random.normalvariate(0,fitfunction.GetParError(j))
+                
+                #fitfunctiontemp.SetParameter(j,mu[j]+A*z)
+                
+            #dyi.append(fitfunctiontemp.Eval(xi))
+        
+        #deltay.append(variance(dyi,yi))
+                     
+        ##for j in range(0,(orderofpolynom+1)):
+            ##for k in range(0,(orderofpolynom+1)):
+                ##deltay2=deltay2+pow(xi,j)*pow(xi,k)*covariancematrix(j,k)
+        ##deltay.append(math.sqrt(deltay2))
+        
+    #graph=ROOT.TGraphAsymmErrors(int(npoints),x,y,deltax,deltax,deltay,deltay)
+    #return graph    
 
+#def variance(my_list, average):
+    #variance = 0
+    #for i in my_list:
+        #variance += (average - my_list[i]) ** 2
+    #return variance / len(my_list)
 
 #def writeTGraphstoextraFile(ListofTgraphs,ListofTgraphNames,filename='TGraphs',)
 #    print "writing Graphs into file"
@@ -3019,3 +3062,84 @@ def DrawErrorBand(graph):
     max.Draw("l same")
     central.Draw("l same")
     ROOT.gPad.RedrawAxis()
+    
+def SchmonCorrelation(listOfHistoListsX,listOfHistoListsY,name='define_name', rebin=1):
+    canvases=[]
+    ratio=False
+    objects=[]
+    print 'listOfHistoListsX ', listOfHistoListsX
+    print 'listOfHistoListsY ', listOfHistoListsY
+    #for listOfHistosX in listOfHistoListsX:
+        #print 'listOfHistosX ',listOfHistosX
+        #for listOfHistosY in listOfHistoListsY:
+            #print 'listOfHistosY ', listOfHistosY
+            #for histoX in listOfHistosX:
+                #for histoY in listOfHistosY:
+    for histoX in listOfHistoListsX:
+        for histoY in listOfHistoListsY:
+                    canvas=getCanvas(histoX.GetName()+'_vs_'+histoY.GetName(),ratio)
+                    canvas.Divide(2,1)
+                    
+                    hX=histoX.Clone()
+                    hY=histoY.Clone()
+                    hX.Rebin(rebin)
+                    hY.Rebin(rebin)
+                    
+                    hX.Scale(1./hX.Integral())
+                    hY.Scale(1./hY.Integral())
+
+                    #meanY1=0
+                    #meanY2=0
+                    #trace=0
+                    #x,y,ex,ey=[],[],[],[]
+                    x=array.array("d",[])
+                    y=array.array("d",[])
+                    ex=array.array("d",[])
+                    ey=array.array("d",[])
+                    
+                    corr2D=ROOT.TH2F("SchmonCorrelation","",20,0.0,0.05,20,0.0,0.05)
+                    #for i in range(hX.GetNbinsX()):
+                        #print i, ' in ', hX.GetNbinsX()
+                        #meanY1=meanY1+hX.GetBinContent(i)
+                    #meanY1=meanY1/float(hX.GetNbinsX())
+                    #print 'meanY1 ',meanY1
+                    #for j in range(hY.GetNbinsX()):
+                        #meanY2=meanY2+hY.GetBinContent(j)
+                    #meanY2=meanY2/float(hY.GetNbinsX())
+                    #print 'meanY2 ',meanY2
+                    for i in range(hX.GetNbinsX()):
+                        #for j in range(hY.GetNbinsX()):
+                            #if hX.GetBinCenter(i)>0 and hX.GetBinCenter(j)>0 and hX.GetBinError(i)>0 and hY.GetBinError(j)>0:
+                               #corr2D.Fill(hX.GetBinCenter(i),hX.GetBinCenter(j),(hX.GetBinContent(i)-meanY1)*(hY.GetBinContent(j)-meanY2)/(hX.GetBinError(i)*hY.GetBinError(j)))
+                               #if i is j:
+                                   #trace=trace+(hX.GetBinContent(i)-meanY1)*(hY.GetBinContent(j)-meanY2)
+                    #print 'trace ', trace
+                        if hX.GetBinContent(i) and hY.GetBinContent(i):
+                            corr2D.Fill(hX.GetBinContent(i),hY.GetBinContent(i),1.0/(hX.GetBinError(i)*hY.GetBinError(i)))
+                            x.append(hX.GetBinContent(i))
+                            y.append(hY.GetBinContent(i))
+                            ex.append(hX.GetBinError(i))
+                            ey.append(hY.GetBinError(i))
+                    canvas.cd(1)      
+                    corr2Dgraph=ROOT.TGraphErrors(len(x),x,y,ex,ey)
+                    corr2Dgraph.GetXaxis().SetTitle(hX.GetName())
+                    corr2Dgraph.GetYaxis().SetTitle(hY.GetName())
+                    corr2Dgraph.Draw('ap')
+                    canvas.cd(2)
+                    corr2D.GetXaxis().SetTitle(hX.GetName())
+                    corr2D.GetYaxis().SetTitle(hY.GetName())
+                    corr2D.SetStats(False)
+                    corr2D.Draw('colz')
+                    print 'histoX ',histoX
+                    print 'histoY ',histoY
+                    print 'Correlation Factor TGraph: ',corr2Dgraph.GetCorrelationFactor()
+                    print 'Covariance Factor TGraph: ',corr2Dgraph.GetCovariance()
+                    print 'Correlation Factor TH2: ',corr2D.GetCorrelationFactor()
+                    print 'Covariance Factor TH2: ',corr2D.GetCovariance()
+
+                    canvases.append(canvas)
+                    objects.append(corr2D)
+                    objects.append(corr2Dgraph)
+                    
+    printCanvases(canvases,name)
+    writeObjects(canvases,name)    
