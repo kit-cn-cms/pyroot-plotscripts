@@ -2873,36 +2873,39 @@ def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='d
     objects=[] 
     #ListofTgraphsforFile=[]
     #ListofTgraphNamsforFile=[]
-    
+    #ROOT.gStyle.SetOptFit()
     for listOfHistos in listOfHistoListsToPlot:
                 
         for histo,sample in zip(listOfHistos, sampleListToPlot):
             yTitle='Ratio'
             histo.Rebin(rebin)
             data=ROOT.TGraphAsymmErrors(histo)
-            fit=fitFunctionToHistogrammwitherrorband(histo,"[0]+[1]*log(x)+[2]*log(x)*log(x)")
+            fit=fitFunctionToHistogrammwitherrorband(histo,fitoption)
+            #fit=fitFunctionToHistogrammwitherrorband(histo,"[0]+([1]*log(x-[3])+[2]*log(x-[4])*log(x-[4]))")
+            #fit=fitFunctionToHistogrammwitherrorband(histo,"[0]+([1]*log(x)+[2]*log(x)*log(x))*erf(x-[3]/[4])")
             canvas=getCanvas(data.GetName(),ratio)
-            fit.SetFillColor(ROOT.kRed)
-            fit.SetLineColor(ROOT.kBlue)
-            #fit.ConfidenceIntervals()
-
+            fit[0].SetFillColor(ROOT.kRed)
+            fit[0].SetLineColor(ROOT.kBlue)
+            #fit[0].ConfidenceIntervals()
+            #ROOT.gStyle.SetOptFit(1111)
             #data.GetYaxis().SetRangeUser(0,2)
             #histo.SetOptFit(0)
-            fit.Draw('A3')
-            fit.Draw('sameLXZ')
+            fit[0].Draw('A3')
+            fit[0].Draw('sameLXZ')
             data.Draw('sameP')
 
             l=getLegend()
             l.AddEntryZprime(data,'Singal-BKG-Shape-Ratio','P')
-            l.AddEntryZprime(fit,"parabolic fit",'L')
+            l.AddEntryZprime(fit[0],"fit",'L')
             canvases.append(canvas)
-            l.Draw('same')
+            #l.Draw('same')
             objects.append(data)
-            objects.append(fit)
+            objects.append(fit[0])
             objects.append(l)
             #objects.append(graph)
-            #ListofTgraphsforFile.append(fit)
+            #ListofTgraphsforFile.append(fit[0])
             #ListofTgraphNamsforFile.append()
+            print 'here its ok'
             
     printCanvases(canvases,name)
     writeObjects(canvases,name)
@@ -2910,15 +2913,35 @@ def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='d
     
     
 def fitFunctionToHistogrammwitherrorband(histo, fitoption="[0]+[1]*log(x)+[2]*log(x)*log(x)"):
-    xmax=0.0
-    for ibin in range(histo.GetNbinsX()):
-        xmax=xmax+histo.GetBinWidth(ibin)
-        print ibin,' of ',histo.GetNbinsX(),' binwidth: ',histo.GetBinWidth(ibin),' of ',xmax
-    print 'ok'
-    fitfunction=ROOT.TF1("fit","[0]+[1]*log(x)+[2]*log(x)*log(x)",0.0,xmax)
-    fitfunction.SetParameter(0,1)
-    fitfunction.SetParameter(1,1)
-    fitfunction.SetParameter(2,1)
+    xmax=histo.GetNbinsX()*histo.GetBinWidth(histo.GetNbinsX())
+    xmin=0.0
+    ROOT.gStyle.SetOptFit(1111)
+    for ibin in range(0,histo.GetNbinsX()):
+        if histo.GetBinContent(ibin)==0 and histo.GetBinContent(ibin-1)!=0:
+            xmax=histo.GetBinCenter(ibin-1)
+        #print ibin,' of ',histo.GetNbinsX(),' binwidth: ',histo.GetBinWidth(ibin),' of ',xmax
+    for ibin in range(histo.GetNbinsX(),0,-1):
+        if histo.GetBinContent(ibin)==0 and histo.GetBinContent(ibin+1)!=0:
+            xmin=histo.GetBinCenter(ibin+1)
+        #print ibin,' of ',histo.GetNbinsX(),' xmin ',xmin
+        
+    print 'xmin=',xmin,'   xmax=',xmax
+    fitfunction=ROOT.TF1("fit",fitoption,xmin,xmax)
+    
+    if(fitoption=="[0]+([1]*log(x-[3])+[2]*log(x-[3])*log(x-[3]))"):
+        fitfunction.SetParameter(0,-1.0)
+        fitfunction.SetParameter(1,1.0)
+        fitfunction.SetParameter(2,0.0)
+        fitfunction.SetParameter(3,400.0)
+    if(fitoption=="pol2"):
+        fitfunction.SetParameter(0,1.0)
+        fitfunction.SetParameter(1,0.0)
+        fitfunction.SetParameter(2,0.0)
+    #fitfunction.SetParameter(4,400.0)
+    
+    #fitfunction.SetParameter(3,100.0)
+    #fitfunction.SetParameter(4,1.0)
+    
     res=histo.Fit(fitfunction,'S0F')
     fit=histo.GetFunction("fit")
     res.Print('V')
@@ -2926,17 +2949,23 @@ def fitFunctionToHistogrammwitherrorband(histo, fitoption="[0]+[1]*log(x)+[2]*lo
     #x=array.array("d",[])
     fitgraphwitherrorband=ROOT.TGraphErrors(1000)
     for ibingraph in range(1000):
-        print(ibingraph*xmax/1000.0)
-        fitgraphwitherrorband.SetPoint(ibingraph,ibingraph*xmax/1000.0,0)
-    (TVirtualFitter.GetFitter()).GetConfidenceIntervals(fitgraphwitherrorband)
-    #res.GetConfidenceIntervals(fitgraphwitherrorband,0.66)
+        #print(ibingraph*xmax/1000.0)
+        fitgraphwitherrorband.SetPoint(ibingraph,xmin+(ibingraph+1)*(xmax-xmin)/1000.0,fitfunction.Eval(xmin+(ibingraph+1)*(xmax-xmin)/1000.0))
+        fitgraphwitherrorband.SetPointError(ibingraph,0.5,0.5)
+        #print 'n: ',ibingraph,'  x: ',xmin+(ibingraph+1)*(xmax-xmin)/1000.0,'  y: ',fitfunction.Eval(xmin+(ibingraph+1)*(xmax-xmin)/1000.0)
+    ROOT.TVirtualFitter.GetFitter().GetConfidenceIntervals(fitgraphwitherrorband)
+    #for l in fitgraphwitherrorband.GetX():
+        #print l
+    #print fitgraphwitherrorband.GetY()
+    #print res.GetConfidenceIntervals(fitgraphwitherrorband,0.66)
+    #dy=res.GetConfidenceIntervals(0.68)
     #ROOT.Fit.FitResult.GetConfidenceIntervals(fitgraphwitherrorband,0.66)
     #fitgraphwitherrorband.GetConfidenceIntervals(res,0.66)
     #fitgraphwitherrorband=makefunctionerrorbands(fit,cov,1000,0.0,xmax*1.1)
         
     
     
-    return fitgraphwitherrorband
+    return [fitgraphwitherrorband,res]
 
 #def makefunctionerrorbands(fitfunction, covariancematrix, npoints=1000,xmin=0.0,xmax=6000.0):
     #xbin=(xmax-xmin)/float(npoints)
@@ -3067,8 +3096,8 @@ def SchmonCorrelation(listOfHistoListsX,listOfHistoListsY,name='define_name', re
     canvases=[]
     ratio=False
     objects=[]
-    print 'listOfHistoListsX ', listOfHistoListsX
-    print 'listOfHistoListsY ', listOfHistoListsY
+    #print 'listOfHistoListsX ', listOfHistoListsX
+    #print 'listOfHistoListsY ', listOfHistoListsY
     #for listOfHistosX in listOfHistoListsX:
         #print 'listOfHistosX ',listOfHistosX
         #for listOfHistosY in listOfHistoListsY:

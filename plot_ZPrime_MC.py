@@ -187,7 +187,6 @@ plots=[
 plotnames=[]
 for i in plots:
     plotnames.append(i.name)
-print plotnames
 
 #plotlabel="Wbt, #geq 3 jets, #geq 1 b-tags"
 #plotlabelboosted="#splitline{Wbt, #geq 3 jets, #geq 1 b-tags}{#geq 1 AK8 jet p_{T} > 400 GeV, #geq 1 AK8 jet p_{T} > 200 GeV, #geq 1 AK4 jet p_{T} > 100 GeV}"
@@ -248,18 +247,18 @@ divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_top_anti_Ws_t21")
 divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_top_anti_Bottoms_Pt"),plotnames.index("Sideband_top_anti_Topfirst_Bottoms_Pt"),True,1)
 divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_top_anti_Bottoms_CSVv2"),plotnames.index("Sideband_top_anti_Topfirst_Bottoms_CSVv2"),True,1)
 
-divideHistos(listOfHistoListsBackground,plotnames.index("t_tagrate"),plotnames.index("AK8_top_tag_candidates_pt"),False,1,'B')
-divideHistos(listOfHistoListsBackground,plotnames.index("W_tagrate"),plotnames.index("AK8_W_tag_candidates_pt"),False,1,'B')
-divideHistos(listOfHistoListsBackground,plotnames.index("b_tagrate"),plotnames.index("AK4_bottom_tag_candidates_pt"),False,1,'B')
-divideHistos(listOfHistoListsBackground,plotnames.index("t_misstagrate"),plotnames.index("AK8_top_misstagged_candidates_pt"),False,1,'B')
-divideHistos(listOfHistoListsBackground,plotnames.index("W_misstagrate"),plotnames.index("AK8_W_misstagged_candidates_pt"),False,1,'B')
-divideHistos(listOfHistoListsBackground,plotnames.index("b_misstagrate"),plotnames.index("AK4_bottom_misstagged_candidates_pt"),False,1,'B')
-divideHistos(listOfHistoListsBackground,plotnames.index("tanti_tagrate"),plotnames.index("AK8_top_misstagged_candidates_pt"),False,1,'B')
-divideHistos(listOfHistoListsBackground,plotnames.index("Wanti_tagrate"),plotnames.index("AK8_W_misstagged_candidates_pt"),False,1,'B')
-divideHistos(listOfHistoListsBackground,plotnames.index("banti_tagrate"),plotnames.index("AK4_bottom_misstagged_candidates_pt"),False,1,'B')
-divideHistos(listOfHistoListsBackground,plotnames.index("tanti_misstagrate"),plotnames.index("AK8_top_tag_candidates_pt"),False,1,'B')
-divideHistos(listOfHistoListsBackground,plotnames.index("Wanti_misstagrate"),plotnames.index("AK8_W_tag_candidates_pt"),False,1,'B')
-divideHistos(listOfHistoListsBackground,plotnames.index("banti_misstagrate"),plotnames.index("AK4_bottom_tag_candidates_pt"),False,1,'B')
+divideHistos(listOfHistoListsData,plotnames.index("t_tagrate"),plotnames.index("AK8_top_tag_candidates_pt"),False,1,'B')
+divideHistos(listOfHistoListsData,plotnames.index("W_tagrate"),plotnames.index("AK8_W_tag_candidates_pt"),False,1,'B')
+divideHistos(listOfHistoListsData,plotnames.index("b_tagrate"),plotnames.index("AK4_bottom_tag_candidates_pt"),False,1,'B')
+divideHistos(listOfHistoListsData,plotnames.index("t_misstagrate"),plotnames.index("AK8_top_misstagged_candidates_pt"),False,1,'B')
+divideHistos(listOfHistoListsData,plotnames.index("W_misstagrate"),plotnames.index("AK8_W_misstagged_candidates_pt"),False,1,'B')
+divideHistos(listOfHistoListsData,plotnames.index("b_misstagrate"),plotnames.index("AK4_bottom_misstagged_candidates_pt"),False,1,'B')
+divideHistos(listOfHistoListsData,plotnames.index("tanti_tagrate"),plotnames.index("AK8_top_misstagged_candidates_pt"),False,1,'B')
+divideHistos(listOfHistoListsData,plotnames.index("Wanti_tagrate"),plotnames.index("AK8_W_misstagged_candidates_pt"),False,1,'B')
+divideHistos(listOfHistoListsData,plotnames.index("banti_tagrate"),plotnames.index("AK4_bottom_misstagged_candidates_pt"),False,1,'B')
+divideHistos(listOfHistoListsData,plotnames.index("tanti_misstagrate"),plotnames.index("AK8_top_tag_candidates_pt"),False,1,'B')
+divideHistos(listOfHistoListsData,plotnames.index("Wanti_misstagrate"),plotnames.index("AK8_W_tag_candidates_pt"),False,1,'B')
+divideHistos(listOfHistoListsData,plotnames.index("banti_misstagrate"),plotnames.index("AK4_bottom_tag_candidates_pt"),False,1,'B')
 
 
 #LOLSumw2(listOfHistoLists)
@@ -270,20 +269,24 @@ lolSignalT=transposeLOL(listOfHistoListsSignal)
 lolBackgroundT=transposeLOL(listOfHistoListsBackground)
 lolDataT=transposeLOL(listOfHistoListsData)
 
-#writeLOLSeveralOnTop(transposeLOL(lolT[samplenames.index():5]),samples[3:5],transposeLOL(lolT[:3]),samples[:3],-0.2,'Zprime',False ,'histoE','samehistoE')
+#writeLOLSeveralOnTop(transposeLOL(lolT[3:5]),samples[3:5],transposeLOL(lolT[:3]),samples[:3],-0.2,'Zprime',False ,'histoE','samehistoE')
 #writeListOfHistoLists(transposeLOL(lolT[3:5])[:92],samples[3:5],'Zprime_HT_Pt_comparison','Zprime_HT_Pt_comparison',True,False,False,'EL',False,False,True)
 #writeHistoListwithXYErrors(transposeLOL(lolT[3:5])[60:82],samples[3:5],'Zprime_BKG',1)
 #writeListOfHistoLists(transposeLOL(lolT[5:6])[92:110],samples[5:6],'tagrates','tagrates',False,False,False,'EL')
 
 
 
-#writeLOLSeveralOnTop(transposeLOL(lolBackgroundT[BackgroundSampleNames.index("ttbar"):BackgroundSampleNames.index("QCD_HT")+1]),BackgroundSamples[BackgroundSampleNames.index("ttbar"):BackgroundSampleNames.index("QCD_HT")+1],transposeLOL(lolSignalT),SignalSamples,-0.2,'Zprime',False ,'histoE','samehistoE')
+#writeLOLSeveralOnTop(transposeLOL(lolBackgroundT[BackgroundSampleNames.index("ttbar"):BackgroundSampleNames.index("QCD_HT")+1])[:plotnames.index("Sideband_top_anti_Topfirst_Bottoms_CSVv2")+1],BackgroundSamples[BackgroundSampleNames.index("ttbar"):BackgroundSampleNames.index("QCD_HT")+1],transposeLOL(lolSignalT),SignalSamples,-0.2,'Zprime',False ,'histoE','samehistoE')
 
 #writeListOfHistoLists(transposeLOL(lolBackgroundT[BackgroundSampleNames.index("QCD_HT"):BackgroundSampleNames.index("QCD_PT")+1])[:plotnames.index("Jet_4_Pt")+1],BackgroundSamples[BackgroundSampleNames.index("QCD_HT"):BackgroundSampleNames.index("QCD_PT")+1],'Zprime_HT_Pt_comparison','Zprime_HT_Pt_comparison',True,False,False,'EL',False,False,True)
 
-writeHistoListwithXYErrors(transposeLOL(lolBackgroundT[BackgroundSampleNames.index("ttbar"):BackgroundSampleNames.index("QCD_PT")+1])[plotnames.index("SB_SF_bottom_anti_Zprime_M"):plotnames.index("SB_SF_top_anti_Bottoms_CSVv2")+1],BackgroundSamples[BackgroundSampleNames.index("ttbar"):BackgroundSampleNames.index("QCD_PT")+1],'Zprime_SBSSFs')
+#writeHistoListwithXYErrors(transposeLOL(lolBackgroundT[BackgroundSampleNames.index("ttbar"):BackgroundSampleNames.index("QCD_PT")+1])[plotnames.index("SB_SF_bottom_anti_Zprime_M"):plotnames.index("SB_SF_top_anti_Bottoms_CSVv2")+1],BackgroundSamples[BackgroundSampleNames.index("ttbar"):BackgroundSampleNames.index("QCD_PT")+1],'Zprime_SBSSFs')
+writeHistoListwithXYErrors(transposeLOL(lolBackgroundT)[plotnames.index("SB_SF_top_anti_Tops_Pt"):plotnames.index("SB_SF_top_anti_Ws_MSD")],BackgroundSamples,'Zprime_SBSSFs_tanti',1,"[0]+([1]*log(x-[3])+[2]*log(x-[3])*log(x-[3]))")
+writeHistoListwithXYErrors(transposeLOL(lolBackgroundT)[plotnames.index("SB_SF_bottom_anti_Zprime_M"):plotnames.index("SB_SF_bottom_anti_Tops_MSD")],BackgroundSamples,'Zprime_SBSSFs_banti',1,'pol2')
 
 #writeListOfHistoLists(transposeLOL(lolDataT)[plotnames.index("t_tagrate"):plotnames.index("banti_misstagrate")+1],DataSamples,'tagrates','tagrates',False,False,False,'EL') 
 
 #SchmonCorrelation(transposeLOL(lolT[3:5])[plotnames.index("SB_SF_bottom_anti_Bottoms_Pt")]+transposeLOL(lolT[3:5])[plotnames.index("SB_SF_W_anti_Ws_Pt")]+transposeLOL(lolT[3:5])[plotnames.index("SB_SF_top_anti_Tops_Pt")],transposeLOL(lolT[3:5])[plotnames.index("SB_SF_bottom_anti_Bottoms_Pt")]+transposeLOL(lolT[3:5])[plotnames.index("SB_SF_W_anti_Ws_Pt")]+transposeLOL(lolT[3:5])[plotnames.index("SB_SF_top_anti_Tops_Pt")],name='lada', rebin=1)
 #SchmonCorrelation(transposeLOL(lolBackgroundT[BackgroundSampleNames.index("QCD_HT"):BackgroundSampleNames.index("QCD_PT")+1])[plotnames.index("SB_SF_bottom_anti_Bottoms_Pt")]+transposeLOL(lolBackgroundT[BackgroundSampleNames.index("QCD_HT"):BackgroundSampleNames.index("QCD_PT")+1])[plotnames.index("SB_SF_W_anti_Ws_Pt")]+transposeLOL(lolBackgroundT[BackgroundSampleNames.index("QCD_HT"):BackgroundSampleNames.index("QCD_PT")+1])[plotnames.index("SB_SF_top_anti_Tops_Pt")],transposeLOL(lolDataT)[plotnames.index("t_misstagrate")]+transposeLOL(lolDataT)[plotnames.index("W_misstagrate")]+transposeLOL(lolDataT)[plotnames.index("b_misstagrate")],name='correlations', rebin=1)
+for i in plotnames:
+    print i
