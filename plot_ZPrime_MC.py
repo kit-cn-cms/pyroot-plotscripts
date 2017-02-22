@@ -119,15 +119,15 @@ plots=[
         Plot(ROOT.TH1F("SB_SF_top_anti_Bottoms_Pt" ,"p_{T}(b) in GeV, signal-anti-btag ratio",50,0,2000),"Signal_Topfirst_Bottoms_Pt",plotselection2+"&&Signal_Topfirst_Bottoms_Pt>0","1 btag"),
         Plot(ROOT.TH1F("SB_SF_top_anti_Bottoms_CSVv2" ,"CSVv2, signal-anti-btag ratio",40,-1,1),"Signal_Topfirst_Bottoms_CSVv2",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
 
-        #Plot(ROOT.TH2F("ABCD_top_tau32_vs_top_MSD" ,"tau_{32}(t) over m_{SD}(t)",20,0,1,30,0,300),"Tops_ABCD_MSD:Tops_ABCD_t32",plotselection2+"","1 btag"),
-        #Plot(ROOT.TH2F("ABCD_top_tau32_vs_W_tau21" ,"tau_{32}(t) over tau_{21}(W)",20,0,1,20,0,1),"Tops_ABCD_t32","Ws_ABCD_t21",plotselection2+"","1 btag"),
-        #Plot(ROOT.TH2F("ABCD_top_tau32_vs_W_MSD" ,"tau_{32}(t) over m_{SD}(W)",20,0,1,30,0,300),"Tops_ABCD_t32","Ws_ABCD_MSD",plotselection2+"","1 btag"),
-        #Plot(ROOT.TH2F("ABCD_top_tau32_vs_Bottom_CSV_v2" ,"tau_{32}(t) over CSV_v2(b)",20,0,1,20,0,1),"Tops_ABCD_t32","Bottoms_ABCD_CSV",plotselection2+"","1 btag"),
-        #Plot(ROOT.TH2F("ABCD_top_MSD_vs_W_tau21" ,"m_{SD}(t) over tau_{21}(W)",30,0,300,20,0,1),"Tops_ABCD_MSD","Ws_ABCD_t21",plotselection2+"","1 btag"),
-        #Plot(ROOT.TH2F("ABCD_top_MSD_vs_W_MSD" ,"m_{SD}(t) over tau_{21}(W)",30,0,300,30,0,300),"Tops_ABCD_MSD","Ws_ABCD_MSD",plotselection2+"","1 btag"),
-        #Plot(ROOT.TH2F("ABCD_top_MSD_vs_Bottom_CSV_v2" ,"m_{SD}(t) over CSV_v2(b)",30,0,300,20,0,1),"Tops_ABCD_MSD","Bottoms_ABCD_CSV",plotselection2+"","1 btag"),
-        #Plot(ROOT.TH2F("ABCD_W_MSD_vs_W_tau21" ,"m_{SD}(W) over tau_{21}(W)",30,0,300,20,0,1),"Ws_ABCD_MSD","Ws_ABCD_t21",plotselection2+"","1 btag"),
-        #Plot(ROOT.TH2F("ABCD_W_MSD_vs_Bottom_CSV_v2" ,"m_{SD}(W) over CSV_v2(b)",30,0,300,20,0,1),"Ws_ABCD_MSD","Bottoms_ABCD_CSV",plotselection2+"","1 btag"),
+        TwoDimPlot(ROOT.TH2F("ABCD_top_tau32_vs_top_MSD" ,"tau_{32}(t) over m_{SD}(t)",20,0,1,30,0,300),"Tops_ABCD_MSD","Tops_ABCD_t32",plotselection2+"","1 btag"),
+        TwoDimPlot(ROOT.TH2F("ABCD_top_tau32_vs_W_tau21" ,"tau_{32}(t) over tau_{21}(W)",20,0,1,20,0,1),"Tops_ABCD_t32","Ws_ABCD_t21",plotselection2+"","1 btag"),
+        TwoDimPlot(ROOT.TH2F("ABCD_top_tau32_vs_W_MSD" ,"tau_{32}(t) over m_{SD}(W)",20,0,1,30,0,300),"Tops_ABCD_t32","Ws_ABCD_MSD",plotselection2+"","1 btag"),
+        TwoDimPlot(ROOT.TH2F("ABCD_top_tau32_vs_Bottom_CSV_v2" ,"tau_{32}(t) over CSV_v2(b)",20,0,1,20,0,1),"Tops_ABCD_t32","Bottoms_ABCD_CSV",plotselection2+"","1 btag"),
+        #TwoDimPlot(ROOT.TH2F("ABCD_top_MSD_vs_W_tau21" ,"m_{SD}(t) over tau_{21}(W)",30,0,300,20,0,1),"Tops_ABCD_MSD","Ws_ABCD_t21",plotselection2+"","1 btag"),
+        #TwoDimPlot(ROOT.TH2F("ABCD_top_MSD_vs_W_MSD" ,"m_{SD}(t) over tau_{21}(W)",30,0,300,30,0,300),"Tops_ABCD_MSD","Ws_ABCD_MSD",plotselection2+"","1 btag"),
+        #TwoDimPlot(ROOT.TH2F("ABCD_top_MSD_vs_Bottom_CSV_v2" ,"m_{SD}(t) over CSV_v2(b)",30,0,300,20,0,1),"Tops_ABCD_MSD","Bottoms_ABCD_CSV",plotselection2+"","1 btag"),
+        #TwoDimPlot(ROOT.TH2F("ABCD_W_MSD_vs_W_tau21" ,"m_{SD}(W) over tau_{21}(W)",30,0,300,20,0,1),"Ws_ABCD_MSD","Ws_ABCD_t21",plotselection2+"","1 btag"),
+        #TwoDimPlot(ROOT.TH2F("ABCD_W_MSD_vs_Bottom_CSV_v2" ,"m_{SD}(W) over CSV_v2(b)",30,0,300,20,0,1),"Ws_ABCD_MSD","Bottoms_ABCD_CSV",plotselection2+"","1 btag"),
 
         Plot(ROOT.TH1F("N_packedPatJetsAK8PFCHSSoftDrop" ,"N_packedPatJetsAK8PFCHSSoftDrop",10,0,10),"N_packedPatJetsAK8PFCHSSoftDrop",plotselection1+"","1 btag"),
         Plot(ROOT.TH1F("packedPatJetsAK8PFCHSSoftDrop_1_Pt" ,"p_{T}(AK8_1) in GeV",50,0,1000),"packedPatJetsAK8PFCHSSoftDrop_Pt[0]",plotselection1+"&&packedPatJetsAK8PFCHSSoftDrop_Pt[0]>0","1 btag"),
@@ -141,18 +141,18 @@ plots=[
         Plot(ROOT.TH1F("Jet_3_Pt" ,"p_{T}(AK4_3) in GeV",50,0,1000),"Jet_Pt[2]",plotselection1+"&&Jet_Pt[2]>0","1 btag"),
         Plot(ROOT.TH1F("Jet_4_Pt" ,"p_{T}(AK4_4) in GeV",50,0,1000),"Jet_Pt[3]",plotselection1+"&&Jet_Pt[3]>0","1 btag"),
         
-        Plot(ROOT.TH1F("t_tagrate","p_{T} in GeV, t-tagrate",50,0,2000),"tagged_top_pt",plotselection1+"&&tagged_top_pt>0","1 btag"),
-        Plot(ROOT.TH1F("W_tagrate","p_{T} in GeV, W-tagrate",50,0,2000),"tagged_W_pt",plotselection1+"&&tagged_W_pt>0","1 btag"),
-        Plot(ROOT.TH1F("b_tagrate","p_{T} in GeV, b-tagrate",50,0,2000),"tagged_bottom_pt",plotselection1+"&&tagged_bottom_pt>0","1 btag"),
-        Plot(ROOT.TH1F("t_misstagrate","p_{T} in GeV, t-misstagrate",50,0,2000),"misstagged_top_pt",plotselection1+"&&misstagged_top_pt>0","1 btag"),
-        Plot(ROOT.TH1F("W_misstagrate","p_{T} in GeV, W-misstagrate",50,0,2000),"misstagged_W_pt",plotselection1+"&&misstagged_W_pt>0","1 btag"),
-        Plot(ROOT.TH1F("b_misstagrate","p_{T} in GeV, b-misstagrate",50,0,2000),"misstagged_bottom_pt",plotselection1+"&&misstagged_bottom_pt>0","1 btag"),
-        Plot(ROOT.TH1F("tanti_tagrate","p_{T} in GeV, tanti-tagrate",50,0,2000),"tagged_top_anti_pt",plotselection1+"&&tagged_top_anti_pt>0","1 btag"),
-        Plot(ROOT.TH1F("Wanti_tagrate","p_{T} in GeV, Wanti-tagrate",50,0,2000),"tagged_W_anti_pt",plotselection1+"&&tagged_W_anti_pt>0","1 btag"),
-        Plot(ROOT.TH1F("banti_tagrate","p_{T} in GeV, banti-tagrate",50,0,2000),"tagged_bottom_anti_pt",plotselection1+"&&tagged_bottom_anti_pt>0","1 btag"),
-        Plot(ROOT.TH1F("tanti_misstagrate","p_{T} in GeV, tanti-misstagrate",50,0,2000),"misstagged_top_anti_pt",plotselection1+"&&misstagged_top_anti_pt>0","1 btag"),
-        Plot(ROOT.TH1F("Wanti_misstagrate","p_{T} in GeV, Wanti-misstagrate",50,0,2000),"misstagged_W_anti_pt",plotselection1+"&&misstagged_W_anti_pt>0","1 btag"),
-        Plot(ROOT.TH1F("banti_misstagrate","p_{T} in GeV, banti-misstagrate",50,0,2000),"misstagged_bottom_anti_pt",plotselection1+"&&misstagged_bottom_anti_pt>0","1 btag"),
+        Plot(ROOT.TH1F("t_tagrate_pt","p_{T} in GeV, t-tagrate",50,0,2000),"tagged_top_pt",plotselection1+"&&tagged_top_pt>0","1 btag"),
+        Plot(ROOT.TH1F("W_tagrate_pt","p_{T} in GeV, W-tagrate",50,0,2000),"tagged_W_pt",plotselection1+"&&tagged_W_pt>0","1 btag"),
+        Plot(ROOT.TH1F("b_tagrate_pt","p_{T} in GeV, b-tagrate",50,0,2000),"tagged_bottom_pt",plotselection1+"&&tagged_bottom_pt>0","1 btag"),
+        Plot(ROOT.TH1F("t_misstagrate_pt","p_{T} in GeV, t-misstagrate",50,0,2000),"misstagged_top_pt",plotselection1+"&&misstagged_top_pt>0","1 btag"),
+        Plot(ROOT.TH1F("W_misstagrate_pt","p_{T} in GeV, W-misstagrate",50,0,2000),"misstagged_W_pt",plotselection1+"&&misstagged_W_pt>0","1 btag"),
+        Plot(ROOT.TH1F("b_misstagrate_pt","p_{T} in GeV, b-misstagrate",50,0,2000),"misstagged_bottom_pt",plotselection1+"&&misstagged_bottom_pt>0","1 btag"),
+        Plot(ROOT.TH1F("tanti_tagrate_pt","p_{T} in GeV, tanti-tagrate",50,0,2000),"tagged_top_anti_pt",plotselection1+"&&tagged_top_anti_pt>0","1 btag"),
+        Plot(ROOT.TH1F("Wanti_tagrate_pt","p_{T} in GeV, Wanti-tagrate",50,0,2000),"tagged_W_anti_pt",plotselection1+"&&tagged_W_anti_pt>0","1 btag"),
+        Plot(ROOT.TH1F("banti_tagrate_pt","p_{T} in GeV, banti-tagrate",50,0,2000),"tagged_bottom_anti_pt",plotselection1+"&&tagged_bottom_anti_pt>0","1 btag"),
+        Plot(ROOT.TH1F("tanti_misstagrate_pt","p_{T} in GeV, tanti-misstagrate",50,0,2000),"misstagged_top_anti_pt",plotselection1+"&&misstagged_top_anti_pt>0","1 btag"),
+        Plot(ROOT.TH1F("Wanti_misstagrate_pt","p_{T} in GeV, Wanti-misstagrate",50,0,2000),"misstagged_W_anti_pt",plotselection1+"&&misstagged_W_anti_pt>0","1 btag"),
+        Plot(ROOT.TH1F("banti_misstagrate_pt","p_{T} in GeV, banti-misstagrate",50,0,2000),"misstagged_bottom_anti_pt",plotselection1+"&&misstagged_bottom_anti_pt>0","1 btag"),
         
         Plot(ROOT.TH1F("AK8_top_tag_candidates_pt","p_{T} in GeV, t-tagrate",50,0,2000),"AK8_top_tag_candidates_pt",plotselection1+"&&AK8_top_tag_candidates_pt>0","1 btag"),
         Plot(ROOT.TH1F("AK8_W_tag_candidates_pt","p_{T} in GeV, W-tagrate",50,0,2000),"AK8_W_tag_candidates_pt",plotselection1+"&&AK8_W_tag_candidates_pt>0","1 btag"),
@@ -247,18 +247,27 @@ divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_top_anti_Ws_t21")
 divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_top_anti_Bottoms_Pt"),plotnames.index("Sideband_top_anti_Topfirst_Bottoms_Pt"),True,1)
 divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_top_anti_Bottoms_CSVv2"),plotnames.index("Sideband_top_anti_Topfirst_Bottoms_CSVv2"),True,1)
 
-divideHistos(listOfHistoListsData,plotnames.index("t_tagrate"),plotnames.index("AK8_top_tag_candidates_pt"),False,1,'B')
-divideHistos(listOfHistoListsData,plotnames.index("W_tagrate"),plotnames.index("AK8_W_tag_candidates_pt"),False,1,'B')
-divideHistos(listOfHistoListsData,plotnames.index("b_tagrate"),plotnames.index("AK4_bottom_tag_candidates_pt"),False,1,'B')
-divideHistos(listOfHistoListsData,plotnames.index("t_misstagrate"),plotnames.index("AK8_top_misstagged_candidates_pt"),False,1,'B')
-divideHistos(listOfHistoListsData,plotnames.index("W_misstagrate"),plotnames.index("AK8_W_misstagged_candidates_pt"),False,1,'B')
-divideHistos(listOfHistoListsData,plotnames.index("b_misstagrate"),plotnames.index("AK4_bottom_misstagged_candidates_pt"),False,1,'B')
-divideHistos(listOfHistoListsData,plotnames.index("tanti_tagrate"),plotnames.index("AK8_top_misstagged_candidates_pt"),False,1,'B')
-divideHistos(listOfHistoListsData,plotnames.index("Wanti_tagrate"),plotnames.index("AK8_W_misstagged_candidates_pt"),False,1,'B')
-divideHistos(listOfHistoListsData,plotnames.index("banti_tagrate"),plotnames.index("AK4_bottom_misstagged_candidates_pt"),False,1,'B')
-divideHistos(listOfHistoListsData,plotnames.index("tanti_misstagrate"),plotnames.index("AK8_top_tag_candidates_pt"),False,1,'B')
-divideHistos(listOfHistoListsData,plotnames.index("Wanti_misstagrate"),plotnames.index("AK8_W_tag_candidates_pt"),False,1,'B')
-divideHistos(listOfHistoListsData,plotnames.index("banti_misstagrate"),plotnames.index("AK4_bottom_tag_candidates_pt"),False,1,'B')
+for i in plotnames:
+    print i
+
+print listOfHistoListsData
+print len(plotnames)
+print plotnames.index("AK8_top_misstagged_candidates_pt")
+print listOfHistoListsData[1]
+#print listOfHistoListsData[plotnames.index("AK8_top_misstagged_candidates_pt")]
+
+divideHistos(listOfHistoListsData,plotnames.index("t_tagrate_pt"),plotnames.index("AK8_top_tag_candidates_pt"),False,1,'B')
+divideHistos(listOfHistoListsData,plotnames.index("W_tagrate_pt"),plotnames.index("AK8_W_tag_candidates_pt"),False,1,'B')
+divideHistos(listOfHistoListsData,plotnames.index("b_tagrate_pt"),plotnames.index("AK4_bottom_tag_candidates_pt"),False,1,'B')
+#divideHistos(listOfHistoListsData,plotnames.index("t_misstagrate_pt"),plotnames.index("AK8_top_misstagged_candidates_pt"),False,1,'B')
+#divideHistos(listOfHistoListsData,plotnames.index("W_misstagrate_pt"),plotnames.index("AK8_W_misstagged_candidates_pt"),False,1,'B')
+#divideHistos(listOfHistoListsData,plotnames.index("b_misstagrate_pt"),plotnames.index("AK4_bottom_misstagged_candidates_pt"),False,1,'B')
+#divideHistos(listOfHistoListsData,plotnames.index("tanti_tagrate_pt"),plotnames.index("AK8_top_misstagged_candidates_pt"),False,1,'B')
+#divideHistos(listOfHistoListsData,plotnames.index("Wanti_tagrate_pt"),plotnames.index("AK8_W_misstagged_candidates_pt"),False,1,'B')
+#divideHistos(listOfHistoListsData,plotnames.index("banti_tagrate_pt"),plotnames.index("AK4_bottom_misstagged_candidates_pt"),False,1,'B')
+#divideHistos(listOfHistoListsData,plotnames.index("tanti_misstagrate_pt"),plotnames.index("AK8_top_tag_candidates_pt"),False,1,'B')
+#divideHistos(listOfHistoListsData,plotnames.index("Wanti_misstagrate_pt"),plotnames.index("AK8_W_tag_candidates_pt"),False,1,'B')
+#divideHistos(listOfHistoListsData,plotnames.index("banti_misstagrate_pt"),plotnames.index("AK4_bottom_tag_candidates_pt"),False,1,'B')
 
 
 #LOLSumw2(listOfHistoLists)
@@ -281,12 +290,19 @@ lolDataT=transposeLOL(listOfHistoListsData)
 #writeListOfHistoLists(transposeLOL(lolBackgroundT[BackgroundSampleNames.index("QCD_HT"):BackgroundSampleNames.index("QCD_PT")+1])[:plotnames.index("Jet_4_Pt")+1],BackgroundSamples[BackgroundSampleNames.index("QCD_HT"):BackgroundSampleNames.index("QCD_PT")+1],'Zprime_HT_Pt_comparison','Zprime_HT_Pt_comparison',True,False,False,'EL',False,False,True)
 
 #writeHistoListwithXYErrors(transposeLOL(lolBackgroundT[BackgroundSampleNames.index("ttbar"):BackgroundSampleNames.index("QCD_PT")+1])[plotnames.index("SB_SF_bottom_anti_Zprime_M"):plotnames.index("SB_SF_top_anti_Bottoms_CSVv2")+1],BackgroundSamples[BackgroundSampleNames.index("ttbar"):BackgroundSampleNames.index("QCD_PT")+1],'Zprime_SBSSFs')
-writeHistoListwithXYErrors(transposeLOL(lolBackgroundT)[plotnames.index("SB_SF_top_anti_Tops_Pt"):plotnames.index("SB_SF_top_anti_Ws_MSD")],BackgroundSamples,'Zprime_SBSSFs_tanti',1,"[0]+([1]*log(x-[3])+[2]*log(x-[3])*log(x-[3]))")
-writeHistoListwithXYErrors(transposeLOL(lolBackgroundT)[plotnames.index("SB_SF_bottom_anti_Zprime_M"):plotnames.index("SB_SF_bottom_anti_Tops_MSD")],BackgroundSamples,'Zprime_SBSSFs_banti',1,'pol2')
+#writeHistoListwithXYErrors(transposeLOL(lolBackgroundT[BackgroundSampleNames.index("QCD_HT"):])[plotnames.index("SB_SF_top_anti_Tops_Pt"):plotnames.index("SB_SF_top_anti_Ws_MSD")],BackgroundSamples,'Zprime_SBSSFs_tanti',1,"[0]+([1]*log(x-[3])+[2]*log(x-[3])*log(x-[3]))/x")
+#writeHistoListwithXYErrors(transposeLOL(lolBackgroundT[BackgroundSampleNames.index("QCD_HT"):])[plotnames.index("SB_SF_bottom_anti_Zprime_M"):plotnames.index("SB_SF_bottom_anti_Tops_MSD")],BackgroundSamples,'Zprime_SBSSFs_banti',1,'pol2')
 
-#writeListOfHistoLists(transposeLOL(lolDataT)[plotnames.index("t_tagrate"):plotnames.index("banti_misstagrate")+1],DataSamples,'tagrates','tagrates',False,False,False,'EL') 
+#writeHistoListwithXYErrors(transposeLOL(lolDataT[DataSampleNames.index("MC_BKG_DATA"):])[plotnames.index("t_misstagrate"):plotnames.index("b_misstagrate")],DataSamples,'tagrates_fit',1,"[0]+([1]*log(x-[3])+[2]*log(x-[3])*log(x-[3]))*x")
+
+
+#writeListOfHistoLists(transposeLOL(lolDataT[DataSampleNames.index("MC_BKG_DATA"):])[plotnames.index("t_tagrate"):plotnames.index("banti_misstagrate")+1],DataSamples,'tagrates','tagrates',False,False,False,'EL') 
 
 #SchmonCorrelation(transposeLOL(lolT[3:5])[plotnames.index("SB_SF_bottom_anti_Bottoms_Pt")]+transposeLOL(lolT[3:5])[plotnames.index("SB_SF_W_anti_Ws_Pt")]+transposeLOL(lolT[3:5])[plotnames.index("SB_SF_top_anti_Tops_Pt")],transposeLOL(lolT[3:5])[plotnames.index("SB_SF_bottom_anti_Bottoms_Pt")]+transposeLOL(lolT[3:5])[plotnames.index("SB_SF_W_anti_Ws_Pt")]+transposeLOL(lolT[3:5])[plotnames.index("SB_SF_top_anti_Tops_Pt")],name='lada', rebin=1)
 #SchmonCorrelation(transposeLOL(lolBackgroundT[BackgroundSampleNames.index("QCD_HT"):BackgroundSampleNames.index("QCD_PT")+1])[plotnames.index("SB_SF_bottom_anti_Bottoms_Pt")]+transposeLOL(lolBackgroundT[BackgroundSampleNames.index("QCD_HT"):BackgroundSampleNames.index("QCD_PT")+1])[plotnames.index("SB_SF_W_anti_Ws_Pt")]+transposeLOL(lolBackgroundT[BackgroundSampleNames.index("QCD_HT"):BackgroundSampleNames.index("QCD_PT")+1])[plotnames.index("SB_SF_top_anti_Tops_Pt")],transposeLOL(lolDataT)[plotnames.index("t_misstagrate")]+transposeLOL(lolDataT)[plotnames.index("W_misstagrate")]+transposeLOL(lolDataT)[plotnames.index("b_misstagrate")],name='correlations', rebin=1)
-for i in plotnames:
-    print i
+
+
+writeListOfHistoLists(transposeLOL(lolT[samplenames.index("Zprime25001200"):samplenames.index("QCD_HT")+1])[plotnames.index("ABCD_top_tau32_vs_top_MSD"):plotnames.index("ABCD_top_tau32_vs_W_MSD")],samples[samplenames.index("Zprime25001200"):samplenames.index("QCD_HT")+1],'ABCD','ABCD')
+
+#for i in plotnames:
+#    print i

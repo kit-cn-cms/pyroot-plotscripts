@@ -2843,9 +2843,11 @@ def divideHistos(listOfHistoLists, numeratorPlot, denumeratorPlot, normalizefirs
     print 'inumerator ',numeratorPlot
     print 'denumerator ',denumeratorPlot
     print 'lol[inumerator] ',listOfHistoLists[numeratorPlot]
-    for i in range(len(listOfHistoLists[numeratorPlot])):
-        numerator=listOfHistoLists[numeratorPlot][i].Clone()
-        denumerator=listOfHistoLists[denumeratorPlot][i].Clone()
+    print len(listOfHistoLists[numeratorPlot])
+    
+    if len(listOfHistoLists[numeratorPlot])==1:
+        numerator=listOfHistoLists[numeratorPlot][0].Clone()
+        denumerator=listOfHistoLists[denumeratorPlot][0].Clone()
         numerator.Rebin(rebin)
         denumerator.Rebin(rebin)
         if normalizefirst: 
@@ -2854,8 +2856,23 @@ def divideHistos(listOfHistoLists, numeratorPlot, denumeratorPlot, normalizefirs
             denumerator.Scale(1./denumerator.Integral())
         x=numerator.Clone()
         numerator.Divide(numerator,denumerator,1.0,1.0,option)
-        listOfHistoLists[numeratorPlot][i]=numerator   
-        print 'numerator after divide ', listOfHistoLists[numeratorPlot][i]
+        listOfHistoLists[numeratorPlot][0]=numerator   
+        print 'numerator after divide ', listOfHistoLists[numeratorPlot][0]   
+        
+    if len(listOfHistoLists[numeratorPlot])>1:
+        for i in range(len(listOfHistoLists[numeratorPlot])):
+            numerator=listOfHistoLists[numeratorPlot][i].Clone()
+            denumerator=listOfHistoLists[denumeratorPlot][i].Clone()
+            numerator.Rebin(rebin)
+            denumerator.Rebin(rebin)
+            if normalizefirst: 
+                print 'numerator before divide ',numerator
+                numerator.Scale(1./numerator.Integral())
+                denumerator.Scale(1./denumerator.Integral())
+            x=numerator.Clone()
+            numerator.Divide(numerator,denumerator,1.0,1.0,option)
+            listOfHistoLists[numeratorPlot][i]=numerator   
+            print 'numerator after divide ', listOfHistoLists[numeratorPlot][i]
         #print 'divide? ', listofHistoLists
         #self.append(x)
     #self.append(dividedHistoList)
@@ -2871,6 +2888,7 @@ def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='d
     canvases=[]
     ratio=False
     objects=[] 
+    logscale=False
     #ListofTgraphsforFile=[]
     #ListofTgraphNamsforFile=[]
     #ROOT.gStyle.SetOptFit()
@@ -2884,10 +2902,13 @@ def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='d
             #fit=fitFunctionToHistogrammwitherrorband(histo,"[0]+([1]*log(x-[3])+[2]*log(x-[4])*log(x-[4]))")
             #fit=fitFunctionToHistogrammwitherrorband(histo,"[0]+([1]*log(x)+[2]*log(x)*log(x))*erf(x-[3]/[4])")
             canvas=getCanvas(data.GetName(),ratio)
+            if logscale:
+                canvas.SetLogy()
+                canvas.SetLogx()
             fit[0].SetFillColor(ROOT.kRed)
             fit[0].SetLineColor(ROOT.kBlue)
             #fit[0].ConfidenceIntervals()
-            #ROOT.gStyle.SetOptFit(1111)
+            ROOT.gStyle.SetOptFit(1111)
             #data.GetYaxis().SetRangeUser(0,2)
             #histo.SetOptFit(0)
             fit[0].Draw('A3')
@@ -2898,7 +2919,7 @@ def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='d
             l.AddEntryZprime(data,'Singal-BKG-Shape-Ratio','P')
             l.AddEntryZprime(fit[0],"fit",'L')
             canvases.append(canvas)
-            #l.Draw('same')
+            l.Draw('same')
             objects.append(data)
             objects.append(fit[0])
             objects.append(l)
@@ -2932,7 +2953,50 @@ def fitFunctionToHistogrammwitherrorband(histo, fitoption="[0]+[1]*log(x)+[2]*lo
         fitfunction.SetParameter(0,-1.0)
         fitfunction.SetParameter(1,1.0)
         fitfunction.SetParameter(2,0.0)
+        fitfunction.SetParameter(3,600.0)
+        
+    if(fitoption=="[0]+([1]*log(x*x-[3])+[2]*log(x*x-[3])*log(x*x-[3]))"):
+        fitfunction.SetParameter(0,-1.0)
+        fitfunction.SetParameter(1,1.0)
+        fitfunction.SetParameter(2,0.0)
+        fitfunction.SetParameter(3,600.0)
+        
+    if(fitoption=="[0]+([1]*log([4]*x-[3])+[2]*log([4]*x-[3])*log([4]*x-[3]))"):
+        fitfunction.SetParameter(0,-1.0)
+        fitfunction.SetParameter(1,1.0)
+        fitfunction.SetParameter(2,0.0)
         fitfunction.SetParameter(3,400.0)
+        fitfunction.SetParameter(4,1.0)
+        
+    if(fitoption=="[0]+([1]*log(x-[4])+[2]*log(x-[4])*log(x-[4])+[3]*log(x-[4])*log(x-[4])*log(x-[4]))/x"):
+        fitfunction.SetParameter(0,-1.0)
+        fitfunction.SetParameter(1,1.0)
+        fitfunction.SetParameter(2,0.0)
+        fitfunction.SetParameter(3,1.0)
+        fitfunction.SetParameter(4,400.0)
+        
+    if(fitoption=="[0]+([1]*log(x-[3])+[2]*log(x-[3])*log(x-[3]))/x"):
+        fitfunction.SetParameter(0,-1.0)
+        fitfunction.SetParameter(1,1.0)
+        fitfunction.SetParameter(2,0.0)
+        fitfunction.SetParameter(3,400.0)
+        
+    if(fitoption=="[0]+([1]*log(x-[3])+[2]*log(x-[3])*log(x-[3]))*x"):
+        fitfunction.SetParameter(0,-1.0)
+        fitfunction.SetParameter(1,1.0)
+        fitfunction.SetParameter(2,0.0)
+        fitfunction.SetParameter(3,400.0)        
+        
+    if(fitoption=="[0]+([1]*x*(1/(exp([2]*x)-1)))"):
+        fitfunction.SetParameter(0,-1.0)
+        fitfunction.SetParameter(1,1.0)
+        fitfunction.SetParameter(2,0.0)
+        #fitfunction.SetParameter(3,400.0)        
+        #fitfunction.SetParameter(4,400.0)        
+        #fitfunction.SetParameter(5,400.0)        
+        
+        
+        
     if(fitoption=="pol2"):
         fitfunction.SetParameter(0,1.0)
         fitfunction.SetParameter(1,0.0)
@@ -2942,9 +3006,16 @@ def fitFunctionToHistogrammwitherrorband(histo, fitoption="[0]+[1]*log(x)+[2]*lo
     #fitfunction.SetParameter(3,100.0)
     #fitfunction.SetParameter(4,1.0)
     
-    res=histo.Fit(fitfunction,'S0F')
+    res=histo.Fit(fitfunction,'S0M')
     fit=histo.GetFunction("fit")
+    print ''
+    print 'Fit results of ',histo.GetName(),':'
     res.Print('V')
+    print 'Fit propability:  ',res.Prob()
+    print ' '
+    print ' '
+    print ' '
+    
     cov=res.GetCovarianceMatrix()
     #x=array.array("d",[])
     fitgraphwitherrorband=ROOT.TGraphErrors(1000)
