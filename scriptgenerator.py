@@ -387,7 +387,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
         script+="\n"
         if size_of_loop!=None:
           exiX=variables.getArrayEntries(exX,"i")
-          exiY=variables.getArrayEntries(ex,"i")
+          exiY=variables.getArrayEntries(exY,"i")
           pwi=variables.getArrayEntries(pw,"i")
           script+=varLoop("i",size_of_loop)                    
           script+="{\n"
@@ -455,7 +455,7 @@ def submitToNAF(scripts):
   jobids=[]
   for script in scripts:
     print 'submitting',script
-    command=['qsub', '-cwd', '-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=2000M', '-l', 's_vmem=2000M' ,'-o', '/nfs/dust/cms/user/skudella/pyroot-plotscripts/logs/$JOB_NAME.o$JOB_ID', '-e', '/nfs/dust/cms/user/skudella/pyroot-plotscripts/logs/$JOB_NAME.e$JOB_ID', script]
+    command=['qsub', '-cwd', '-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=2500M', '-l', 's_vmem=2500M' ,'-o', '/nfs/dust/cms/user/skudella/pyroot-plotscripts/logs/$JOB_NAME.o$JOB_ID', '-e', '/nfs/dust/cms/user/skudella/pyroot-plotscripts/logs/$JOB_NAME.e$JOB_ID', script]
     a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
     output = a.communicate()[0]
     jobidstring = output.split()

@@ -2948,7 +2948,7 @@ def fitFunctionToHistogrammwitherrorband(histo, fitoption="[0]+[1]*log(x)+[2]*lo
         
     print 'xmin=',xmin,'   xmax=',xmax
     fitfunction=ROOT.TF1("fit",fitoption,xmin,xmax)
-    
+    print 'here its ok aswell1'
     if(fitoption=="[0]+([1]*log(x-[3])+[2]*log(x-[3])*log(x-[3]))"):
         fitfunction.SetParameter(0,-1.0)
         fitfunction.SetParameter(1,1.0)
@@ -3005,36 +3005,43 @@ def fitFunctionToHistogrammwitherrorband(histo, fitoption="[0]+[1]*log(x)+[2]*lo
     
     #fitfunction.SetParameter(3,100.0)
     #fitfunction.SetParameter(4,1.0)
-    
-    res=histo.Fit(fitfunction,'S0M')
-    fit=histo.GetFunction("fit")
-    print ''
-    print 'Fit results of ',histo.GetName(),':'
-    res.Print('V')
-    print 'Fit propability:  ',res.Prob()
-    print ' '
-    print ' '
-    print ' '
-    
-    cov=res.GetCovarianceMatrix()
-    #x=array.array("d",[])
+
+
     fitgraphwitherrorband=ROOT.TGraphErrors(1000)
     for ibingraph in range(1000):
         #print(ibingraph*xmax/1000.0)
         fitgraphwitherrorband.SetPoint(ibingraph,xmin+(ibingraph+1)*(xmax-xmin)/1000.0,fitfunction.Eval(xmin+(ibingraph+1)*(xmax-xmin)/1000.0))
-        fitgraphwitherrorband.SetPointError(ibingraph,0.5,0.5)
-        #print 'n: ',ibingraph,'  x: ',xmin+(ibingraph+1)*(xmax-xmin)/1000.0,'  y: ',fitfunction.Eval(xmin+(ibingraph+1)*(xmax-xmin)/1000.0)
-    ROOT.TVirtualFitter.GetFitter().GetConfidenceIntervals(fitgraphwitherrorband)
-    #for l in fitgraphwitherrorband.GetX():
-        #print l
-    #print fitgraphwitherrorband.GetY()
-    #print res.GetConfidenceIntervals(fitgraphwitherrorband,0.66)
-    #dy=res.GetConfidenceIntervals(0.68)
-    #ROOT.Fit.FitResult.GetConfidenceIntervals(fitgraphwitherrorband,0.66)
-    #fitgraphwitherrorband.GetConfidenceIntervals(res,0.66)
-    #fitgraphwitherrorband=makefunctionerrorbands(fit,cov,1000,0.0,xmax*1.1)
-        
+        fitgraphwitherrorband.SetPointError(ibingraph,0.5,0.5)    
     
+    res=histo.Fit(fitfunction,'S0M')
+    fit=histo.GetFunction("fit")
+    if int(res)>=0:
+    #if not res.IsEmpty():
+        print 'Successfully fitted to histogramm ', histo.GetName()
+        #res.Dump()
+        res.Print('V')
+        print 'Fit propability:  ',res.Prob()
+        print ' '
+        print ' '
+        print ' '
+
+    
+    
+        cov=res.GetCovarianceMatrix()
+        #x=array.array("d",[])
+
+        #print 'n: ',ibingraph,'  x: ',xmin+(ibingraph+1)*(xmax-xmin)/1000.0,'  y: ',fitfunction.Eval(xmin+(ibingraph+1)*(xmax-xmin)/1000.0)
+        ROOT.TVirtualFitter.GetFitter().GetConfidenceIntervals(fitgraphwitherrorband)
+        #for l in fitgraphwitherrorband.GetX():
+            #print l
+        #print fitgraphwitherrorband.GetY()
+        #print res.GetConfidenceIntervals(fitgraphwitherrorband,0.66)
+        #dy=res.GetConfidenceIntervals(0.68)
+        #ROOT.Fit.FitResult.GetConfidenceIntervals(fitgraphwitherrorband,0.66)
+        #fitgraphwitherrorband.GetConfidenceIntervals(res,0.66)
+        #fitgraphwitherrorband=makefunctionerrorbands(fit,cov,1000,0.0,xmax*1.1)
+    else:
+        print 'No fit for ', histo.GetName(),'. Check if histogramm is filled'    
     
     return [fitgraphwitherrorband,res]
 
