@@ -1135,7 +1135,7 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
         stattests2D=None
         if isinstance(listOfHistos[0], ROOT.TH2):
 	  print "drawing 2D"
-	  if not (options=='COLZ' or options=='colz' or options==''):
+	  if not (options=='COLZ' or options=='colz' or options=='box' or options==''):
 	    currentoption=''
 	  else:
 	    currentoption=options
