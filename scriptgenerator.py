@@ -455,7 +455,8 @@ def submitToNAF(scripts):
   jobids=[]
   for script in scripts:
     print 'submitting',script
-    command=['qsub', '-cwd', '-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=2500M', '-l', 's_vmem=2500M' ,'-o', '/nfs/dust/cms/user/skudella/pyroot-plotscripts/logs/$JOB_NAME.o$JOB_ID', '-e', '/nfs/dust/cms/user/skudella/pyroot-plotscripts/logs/$JOB_NAME.e$JOB_ID', script]
+    #print 'I am here: ', os.getcwd()
+    command=['qsub', '-cwd', '-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=2500M', '-l', 's_vmem=2500M' ,'-o', os.getcwd()+'/logs/$JOB_NAME.o$JOB_ID', '-e', os.getcwd()+'/logs/$JOB_NAME.e$JOB_ID', script]
     a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
     output = a.communicate()[0]
     jobidstring = output.split()
