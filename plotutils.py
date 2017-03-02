@@ -506,7 +506,7 @@ def drawHistosOnCanvas2D(listOfHistos_,normalize=True,stack=False,logscale=False
         h.DrawCopy(option+'same')
     h.DrawCopy('axissame')
     
-    #tests=None
+    tests=None
     if DoProfile:
       profiles=[]
       for h in listOfHistos:
@@ -543,8 +543,17 @@ def drawHistosOnCanvas2D(listOfHistos_,normalize=True,stack=False,logscale=False
             #ratio.Divide(listOfHistos[0])
             #ratio.DrawCopy('sameP')
         #canvas.cd(1)      
-#    print 'name2', canvas.GetName()
-#    raw_input()
+    # print 'name2', canvas.GetName()
+    # raw_input()
+
+    #Draw List of Canvases for option "colz"
+    if option == "colz":
+        canvas = []
+        for h in listOfHistos:
+            canvas_tmp=getCanvas(h.GetName(),False) 
+            h.DrawCopy(option)
+            canvas.append(canvas_tmp)
+
     return canvas, tests
 
 def drawHistosOnCanvasAN(listOfHistos_,normalize=True,stack=False,logscale=False,options_='histo',ratio=False):
@@ -1108,6 +1117,7 @@ def plotsForSelections_cross_Histos(selections,selectionnames,histos,variables):
         plots.append(Plot(histopair[0],histopair[1],selectionpair[0]))
     return plots
 
+
 # gets a list of histogramlist and creates a plot for every list
 def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,stack=False,logscale=False,options='histo',statTest=False, sepaTest=False,ratio=False,DoProfile=False):
     #if DoProfile and not isinstance(listOfHistoLists[0][0], ROOT.TH2):
@@ -1142,14 +1152,28 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
 	  c, stattests2D=drawHistosOnCanvas2D(listOfHistos,normalize,stack,logscale,currentoption,ratio,DoProfile,statTest)
 	else:
           c=drawHistosOnCanvas(listOfHistos,normalize,stack,logscale,options,ratio,DoProfile)
-        c.SetName('c_'+listOfHistos[0].GetName())
+
+        if not isinstance(c, list):
+            c.SetName('c_'+listOfHistos[0].GetName())
+        else:
+            # tmp_names = []
+            for i,canv in enumerate(c):
+                canv.SetName('c_'+listOfHistos[i].GetName())
+                # tmp_names += len(listOfHistos)*[name[i]]
+            # name = tmp_names
+        
         l=getLegend2()
         for h,sample in zip(listOfHistos,samples):
             loption='L'
             if stack:
                 loption='F'            
             l.AddEntry4545(h,sample.name,loption)
-        canvases.append(c)
+
+        if not isinstance(c, list):
+            canvases.append(c)
+        else:
+            canvases+=c
+        
         l.Draw('same')
         objects.append(l)
         if statTest:
@@ -3250,3 +3274,50 @@ def SchmonCorrelation(listOfHistoListsX,listOfHistoListsY,name='define_name', re
                     
     printCanvases(canvases,name)
     writeObjects(canvases,name)    
+
+
+
+def GetListOfCorrelationLists(listOfHistoLists):
+    ListOfCorrelationLists = []
+    ListOfPlotNameLists=[]
+    for HistoList in listOfHistoLists:
+        CorrelationList = []
+        PlotNameList=[]
+        # print "iterate over LOL"
+        for Histo in HistoList:
+            # print "interate over L"
+            a = Histo.GetCorrelationFactor()
+            b = Histo.GetName()
+            CorrelationList.append(a)
+            PlotNameList.append(b)
+            # print "Correlation of Histogram: " , a
+        ListOfCorrelationLists.append(CorrelationList)
+        ListOfPlotNameLists.append(PlotNameList)
+    return ListOfCorrelationLists, ListOfPlotNameLists
+
+
+#Write CorrelationFactors of ListOfHistoLists to Textfile
+def writeCorrLOL(listOfHistoLists, FileName="Correlationfactors.txt", PlotNames="", SampleNames = None ):
+    with open(FileName, "w") as corrFile:
+        CorrLOL, PlotNamesLOL = GetListOfCorrelationLists(listOfHistoLists)
+        # print CorrLOL, PlotNamesLOL
+        if PlotNames != "":
+            if SampleNames == None:
+                SampleNames = len(listOfHistoLists[0])*[""]
+                
+            for CorrL, PlotName in zip(CorrLOL, PlotNames):
+                corrFile.write("----------------------------\n")
+                corrFile.write(PlotName+"\n")
+                for Corr, SampleName in zip(CorrL, SampleNames):
+                    corrFile.write(str(Corr)+"\t"+SampleName)
+                    corrFile.write("\n")
+                    
+        else:
+            for CorrL,NameL in zip( CorrLOL, PlotNamesLOL ):
+                corrFile.write("----------------------------------------\n")
+                for Corr, Name in zip(CorrL, NameL):
+                    corrFile.write(str(Corr)+"\t\t"+Name)
+                    corrFile.write("\n")
+
+              
+
