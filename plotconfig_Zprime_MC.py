@@ -13,7 +13,7 @@ usualweights="(1*Weight_PU*((Weight>0)-(Weight<0)))*Weight_ElectronSFID*Weight_E
 
 # samples
 # input path 
-path_80x="/nfs/dust/cms/user/skudella/processed_MC/flat_trees/"
+path_80x="/nfs/dust/cms/user/skudella/processed_MC/flat_trees_new/"
 
 # MC samples (name, color, path to files,weight,nickname_without_special_characters,systematics)                       
 samples=[ 
