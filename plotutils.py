@@ -13,6 +13,7 @@ from ROOT import TMinuit
 from ROOT import TVirtualFitter
 from ROOT import TMath
 from ROOT import TF1
+# from ROOT import gStyle
 import array
 
 ROOT.gStyle.SetPaintTextFormat("4.2f");
@@ -411,8 +412,8 @@ def drawHistosOnCanvas(listOfHistos_,normalize=True,stack=False,logscale=False,o
         canvas.cd(1)
     return canvas
 
-def drawHistosOnCanvas2D(listOfHistos_,normalize=True,stack=False,logscale=False,options_='',ratio=False,DoProfile=False,statTest=False):
-    print 'drawing 2d'
+def drawHistosOnCanvas2D(listOfHistos_,normalize=True,stack=False,logscale=False,options_='',ratio=False,DoProfile=False,statTest=False, samples=None):
+    # print 'drawing 2d'
  #   raw_input()
     listOfHistos=[h.Clone(h.GetName()+'_drawclone') for h in listOfHistos_]
     canvas=getCanvas(listOfHistos[0].GetName(),False)        
@@ -549,11 +550,12 @@ def drawHistosOnCanvas2D(listOfHistos_,normalize=True,stack=False,logscale=False
     #Draw List of Canvases for option "colz"
     if option == "colz":
         canvas = []
-        for h in listOfHistos:
+        for h, sample in zip(listOfHistos, samples):
             canvas_tmp=getCanvas(h.GetName(),False) 
+            h.SetTitle(sample.name)
+            ROOT.gStyle.SetTitleFontSize(0.03)
             h.DrawCopy(option)
             canvas.append(canvas_tmp)
-
     return canvas, tests
 
 def drawHistosOnCanvasAN(listOfHistos_,normalize=True,stack=False,logscale=False,options_='histo',ratio=False):
@@ -1133,7 +1135,7 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
     objects=[]   
     i=0
     print labeltexts
-    for listOfHistos, labeltext in zip(listOfHistoLists, labeltexts):
+    for listOfHistos, labeltext,s in zip(listOfHistoLists, labeltexts, samples):
         listofthisstattests=[listOfHistos[0].GetTitle()]
         i+=1
         for histo,sample in zip(listOfHistos,samples):
@@ -1149,33 +1151,26 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
 	    currentoption=''
 	  else:
 	    currentoption=options
-	  c, stattests2D=drawHistosOnCanvas2D(listOfHistos,normalize,stack,logscale,currentoption,ratio,DoProfile,statTest)
+	  c, stattests2D=drawHistosOnCanvas2D(listOfHistos,normalize,stack,logscale,currentoption,ratio,DoProfile,statTest, samples)
 	else:
           c=drawHistosOnCanvas(listOfHistos,normalize,stack,logscale,options,ratio,DoProfile)
 
         if not isinstance(c, list):
             c.SetName('c_'+listOfHistos[0].GetName())
+            l=getLegend2()
+            for h,sample in zip(listOfHistos,samples):
+                loption='L'
+                if stack:
+                    loption='F'            
+                    l.AddEntry4545(h,sample.name,loption)
+            canvases.append(c)
+            l.Draw('same')
+            objects.append(l)
         else:
-            # tmp_names = []
             for i,canv in enumerate(c):
                 canv.SetName('c_'+listOfHistos[i].GetName())
-                # tmp_names += len(listOfHistos)*[name[i]]
-            # name = tmp_names
-        
-        l=getLegend2()
-        for h,sample in zip(listOfHistos,samples):
-            loption='L'
-            if stack:
-                loption='F'            
-            l.AddEntry4545(h,sample.name,loption)
-
-        if not isinstance(c, list):
-            canvases.append(c)
-        else:
             canvases+=c
         
-        l.Draw('same')
-        objects.append(l)
         if statTest:
 	   if not isinstance(listOfHistos[0],ROOT.TH2):
             tests=getStatTestsList(listOfHistos[0],listOfHistos[1:],"UW")
@@ -1187,33 +1182,45 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
             stests.Draw()
             objects.append(stests)
         if stattests2D!=None:
-#	  stattests2D.Draw()
+            # stattests2D.Draw()
 	  objects.append(stattests2D)
 	  listofthisstattests.append(stattests2D.GetTitle())
-#        cms = ROOT.TLatex(0.2, 0.96, 'CMS private work'  );
-#        cms.SetTextFont(42)
-#        cms.SetTextSize(0.05)
-#        cms.SetNDC()
-#        cms.Draw()
-#        print cms
-#        objects.append(cms)
+        # cms = ROOT.TLatex(0.2, 0.96, 'CMS private work'  );
+        # cms.SetTextFont(42)
+        # cms.SetTextSize(0.05)
+        # cms.SetNDC()
+        # cms.Draw()
+        # print cms
+        # objects.append(cms)
 
-        cms = ROOT.TLatex(0.2, 0.96, 'CMS preliminary,  12.9 fb^{-1},  #sqrt{s} = 13 TeV'  );
-        cms.SetTextFont(42)
-        cms.SetTextSize(0.05)
-        cms.SetNDC()
-        cms.Draw()
-        objects.append(cms)
+        if not isinstance(c, list):
+            cms = ROOT.TLatex(0.2, 0.96, 'CMS preliminary,  12.9 fb^{-1},  #sqrt{s} = 13 TeV'  );
+            cms.SetTextFont(42)
+            cms.SetTextSize(0.05)
+            cms.SetNDC()
+            cms.Draw()
+            objects.append(cms)
 
-        label = ROOT.TLatex(0.2, 0.9, labeltext);
-        label.SetTextFont(42)
-        label.SetTextSize(0.04)
-        label.SetNDC()
-        label.Draw()
-        objects.append(label)
-        listofallstattests.append(listofthisstattests)
+            label = ROOT.TLatex(0.2, 0.9, labeltext);
+            label.SetTextFont(42)
+            label.SetTextSize(0.04)
+            label.SetNDC()
+            label.Draw()
+            objects.append(label)
+            listofallstattests.append(listofthisstattests)
+        # else:
+        #     for can, sam in zip(c,samples):
+        #         labeltext = sam.name
+        #         label = ROOT.TLatex(0.2, 0.96, labeltext);
+        #         label.SetTextFont(42)
+        #         label.SetTextSize(0.04)
+        #         label.SetNDC()
+        #         label.Draw()
+        #         objects.append(label)
+        #     listofallstattests.append(listofthisstattests)
+
         
-    printCanvasesPNG(canvases,name)
+    printCanvases(canvases,name)
     writeObjects(canvases,name)
     stattestoutfile=open("stattests_"+name+".txt","w")
     for stst in listofallstattests:
