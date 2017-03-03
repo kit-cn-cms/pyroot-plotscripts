@@ -133,6 +133,11 @@ plots=[
         Plot(ROOT.TH1F("Jet_3_Pt" ,"p_{T}(AK4_3) in GeV",50,0,1000),"Jet_Pt[2]",plotselection1+"&&Jet_Pt[2]>0","1 btag"),
         Plot(ROOT.TH1F("Jet_4_Pt" ,"p_{T}(AK4_4) in GeV",50,0,1000),"Jet_Pt[3]",plotselection1+"&&Jet_Pt[3]>0","1 btag"),
         
+        Plot(ROOT.TH1F("Evt_HT" ,"Evt_HT",40,0,4000),"Evt_HT",plotselection1+"","1 btag"),
+        Plot(ROOT.TH1F("Evt_HT_Jets" ,"Evt_HT_Jets",40,0,4000),"Evt_HT_Jets",plotselection1+"","1 btag"),
+        
+        
+        
         Plot(ROOT.TH1F("t_tagrate_pt","p_{T} in GeV, t-tagrate",50,0,2000),"tagged_top_pt",plotselection1+"&&tagged_top_pt>0","1 btag"),
         Plot(ROOT.TH1F("W_tagrate_pt","p_{T} in GeV, W-tagrate",50,0,2000),"tagged_W_pt",plotselection1+"&&tagged_W_pt>0","1 btag"),
         Plot(ROOT.TH1F("b_tagrate_pt","p_{T} in GeV, b-tagrate",50,0,2000),"tagged_bottom_pt",plotselection1+"&&tagged_bottom_pt>0","1 btag"),
@@ -152,10 +157,7 @@ plots=[
         Plot(ROOT.TH1F("AK8_top_misstagged_candidates_pt","p_{T} in GeV, t-misstagrate",50,0,2000),"AK8_top_misstagged_candidates_pt",plotselection1+"&&AK8_top_misstagged_candidates_pt>0","1 btag"),
         Plot(ROOT.TH1F("AK8_W_misstagged_candidates_pt","p_{T} in GeV, W-misstagrate",50,0,2000),"AK8_W_misstagged_candidates_pt",plotselection1+"&&AK8_W_misstagged_candidates_pt>0","1 btag"),
         Plot(ROOT.TH1F("AK4_bottom_misstagged_candidates_pt","p_{T} in GeV, b-misstagrate",50,0,2000),"AK4_bottom_misstagged_candidates_pt",plotselection1+"&&AK4_bottom_misstagged_candidates_pt>0","1 btag"),
-      
-]
 
-plotsABCD=[
     
         TwoDimPlot(ROOT.TH2F("ABCD_top_tau32_vs_top_MSD" ,"tau_{32}(t) VS m_{SD}(t)",20,0,1,30,0,300),"Tops_ABCD_MSD","Tops_ABCD_t32",plotselection2+"&& Tops_ABCD_MSD>0 && Tops_ABCD_t32>0","1 btag"),
         TwoDimPlot(ROOT.TH2F("ABCD_top_tau32_vs_W_tau21" ,"tau_{32}(t) VS tau_{21}(W)",20,0,1,20,0,1),"Tops_ABCD_t32","Ws_ABCD_t21",plotselection2+"&& Tops_ABCD_t32>0 && Ws_ABCD_t21>0","1 btag"),
@@ -171,7 +173,7 @@ plotsABCD=[
 
 
 plotnames=[]
-for i in plots+plotsABCD:
+for i in plots:
     plotnames.append(i.name)
 
 #plotnamesABCD=[]
@@ -180,17 +182,17 @@ for i in plots+plotsABCD:
 
 
 
-print name,3000000,plots+plotsABCD,SignalSamples+BackgroundSamples+DataSamples,[''],['1.']
-outputpath=plotParallel(name,3000000,plots+plotsABCD,SignalSamples+BackgroundSamples+DataSamples)
+print name,3000000,plots,SignalSamples+BackgroundSamples+DataSamples,[''],['1.']
+outputpath=plotParallel(name,3000000,plots,SignalSamples+BackgroundSamples+DataSamples)
 #outputpath=plotParallel(name,2000000,plotsABCD,SignalSamples)
 
 # plot dataMC comparison
 #listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
 #listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
 
-listOfHistoListsSignal=createHistoLists_fromSuperHistoFile(outputpath,SignalSamples,plots+plotsABCD,1)
-listOfHistoListsBackground=createHistoLists_fromSuperHistoFile(outputpath,BackgroundSamples,plots+plotsABCD,1)
-listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,DataSamples,plots+plotsABCD,1)
+listOfHistoListsSignal=createHistoLists_fromSuperHistoFile(outputpath,SignalSamples,plots,1)
+listOfHistoListsBackground=createHistoLists_fromSuperHistoFile(outputpath,BackgroundSamples,plots,1)
+listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,DataSamples,plots,1)
 
 
 #listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots,1)
@@ -241,7 +243,7 @@ divideHistos(listOfHistoListsData,plotnames.index("banti_misstagrate_pt"),plotna
 
 #LOLSumw2(listOfHistoLists)
 #dummylist=[[]]
-labels=[plot.label for plot in plots+plotsABCD]
+labels=[plot.label for plot in plots]
 #lolT=transposeLOL(listOfHistoLists)
 lolSignalT=transposeLOL(listOfHistoListsSignal)
 lolBackgroundT=transposeLOL(listOfHistoListsBackground)
@@ -256,7 +258,7 @@ lolDataT=transposeLOL(listOfHistoListsData)
 
 #writeLOLSeveralOnTop(transposeLOL(lolBackgroundT[BackgroundSampleNames.index("ttbar"):BackgroundSampleNames.index("QCD_HT")+1])[:plotnames.index("Sideband_top_anti_Topfirst_Bottoms_CSVv2")+1],BackgroundSamples[BackgroundSampleNames.index("ttbar"):BackgroundSampleNames.index("QCD_HT")+1],transposeLOL(lolSignalT),SignalSamples,-0.2,'Zprime',False ,'histoE','samehistoE')
 
-#writeListOfHistoLists(transposeLOL(lolBackgroundT[BackgroundSampleNames.index("QCD_HT"):BackgroundSampleNames.index("QCD_PT")+1])[:plotnames.index("Jet_4_Pt")+1],BackgroundSamples[BackgroundSampleNames.index("QCD_HT"):BackgroundSampleNames.index("QCD_PT")+1],'Zprime_HT_Pt_comparison','Zprime_HT_Pt_comparison',True,False,False,'EL',False,False,True)
+writeListOfHistoLists(transposeLOL(lolBackgroundT[BackgroundSampleNames.index("QCD_HT"):BackgroundSampleNames.index("QCD_PT")+1])[:plotnames.index("Evt_HT_Jets")+1],BackgroundSamples[BackgroundSampleNames.index("QCD_HT"):BackgroundSampleNames.index("QCD_PT")+1],'Zprime_HT_Pt_comparison','Zprime_HT_Pt_comparison',True,False,False,'EL',False,False,True)
 
 writeHistoListwithXYErrors(transposeLOL(lolBackgroundT[BackgroundSampleNames.index("QCD_HT"):])[plotnames.index("SB_SF_top_anti_Tops_Pt"):plotnames.index("SB_SF_top_anti_Ws_MSD")],BackgroundSamples[BackgroundSampleNames.index("QCD_HT"):],'Zprime_SBSSFs_tanti',1,"[0]+([1]*log(x-[3])+[2]*log(x-[3])*log(x-[3]))/x")
 writeHistoListwithXYErrors(transposeLOL(lolBackgroundT[BackgroundSampleNames.index("QCD_HT"):])[plotnames.index("SB_SF_bottom_anti_Zprime_M"):plotnames.index("SB_SF_bottom_anti_Tops_MSD")],BackgroundSamples[BackgroundSampleNames.index("QCD_HT"):],'Zprime_SBSSFs_banti',1,'pol2')
@@ -274,7 +276,4 @@ writeHistoListwithXYErrors(transposeLOL(lolDataT[DataSampleNames.index("MC_BKG_D
 
 
 
-writeListOfHistoLists(transposeLOL(lolBackgroundT[BackgroundSampleNames.index("ttbar"):BackgroundSampleNames.index("QCD_PT")+1])[plotnames.index("ABCD_top_tau32_vs_top_MSD"):plotnames.index("ABCD_top_tau32_vs_W_MSD")],BackgroundSamples[BackgroundSampleNames.index("ttbar"):BackgroundSampleNames.index("QCD_PT")+1],'ABCD','ABCD',False,False,False,'',False,False,False,True)
-
-print plots+plotsABCD
-print plotnames
+writeListOfHistoLists(transposeLOL(lolBackgroundT[BackgroundSampleNames.index("ttbar"):BackgroundSampleNames.index("QCD_PT")+1])[plotnames.index("ABCD_top_tau32_vs_top_MSD"):plotnames.index("ABCD_top_tau32_vs_W_MSD")],BackgroundSamples[BackgroundSampleNames.index("ttbar"):BackgroundSampleNames.index("QCD_PT")+1],plotnames[plotnames.index('ABCD_top_tau32_vs_top_MSD'):plotnames.index('ABCD_W_MSD_vs_Bottom_CSV_v2')+1],'ABCD',True,False,False,'colz',False,False,False,False)
