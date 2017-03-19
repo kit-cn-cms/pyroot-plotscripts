@@ -1629,6 +1629,7 @@ def getDataGraphBlind(listOfHistosData,nunblinded):
 
 def getRatioGraph(data,mchisto):
     print "creating ratio ", mchisto
+    #print "DEBUG: ", mchisto
     ratio=data.Clone()
     x, y = ROOT.Double(0), ROOT.Double(0)
     minimum = 9999.
@@ -1659,7 +1660,7 @@ def getRatioGraph(data,mchisto):
 	      ratio.SetPointEYlow(i,1-(y-data.GetErrorYlow(i))/y)
               ratio.SetPointEYhigh(i,(y+data.GetErrorYhigh(i))/y-1)
             
-            print i, x, y, data.GetErrorYlow(i),data.GetErrorYhigh(i), ratioval, (y+data.GetErrorYhigh(i))/y-1, 1-(y-data.GetErrorYlow(i))/y
+            #print i, x, y, data.GetErrorYlow(i),data.GetErrorYhigh(i), ratioval, (y+data.GetErrorYhigh(i))/y-1, 1-(y-data.GetErrorYlow(i))/y
         else:
             ratio.SetPointEYlow(i,0)
             ratio.SetPointEYhigh(i,0)

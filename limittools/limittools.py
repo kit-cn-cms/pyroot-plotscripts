@@ -315,7 +315,7 @@ def MoveOverUnderflow(infname,outfname):
 
   outfile.Close()
 
-def makeDatacards(filename,outname,categories=None,doHdecay=True,discrname='finaldiscr'):
+def makeDatacards(filename,outname,categories=None,doHdecay=True,discrname='finaldiscr',datacardmaker='mk_datacard_hdecay13TeV'):
   if categories==None:
     categories=["ljets_j4_t3","ljets_j4_t4","ljets_j5_t3","ljets_j5_tge4","ljets_jge6_t2","ljets_jge6_t3","ljets_jge6_tge4"]
 #  print 'mk_datacard_ttbb13TeV', '-d', 'finaldiscr', '-c','"'+(' '.join(categories))+'"','-o', outname+'txt', filename
@@ -327,14 +327,14 @@ def makeDatacards(filename,outname,categories=None,doHdecay=True,discrname='fina
   for c in categories:
     #call(['mk_datacard_ttbb13TeV', '-d', 'finaldiscr', '-c', c, '-o', outname+'_'+c+'.txt', filename])
     if doHdecay:
-      call(['mk_datacard_hdecay13TeV', '-d', discrname, '-c', c, '-o', outname+'_'+c+'_hdecay.txt', filename])
+      call([datacardmaker, '-d', discrname, '-c', c, '-o', outname+'_'+c+'_hdecay.txt', filename])
   cardscript=open("newCardScript.sh","w")
   cardscript.write("#!/bin/bash \n")
   #cardscript.write('mk_datacard_ttbb13TeV'+' -d '+' finaldiscr'+' -c '+' '.join(categories)+' -o '+outname+'.txt '+filename+"\n")
   #cardscript.write('mk_datacard_hdecay13TeV'+' -d '+' '+discrname+' '+' -c '+' '.join(categories)+' -o '+outname+'_hdecay.txt '+filename+"\n")
   for c in categories:
     #cardscript.write('mk_datacard_ttbb13TeV '+' -d '+' finaldiscr '+' -c '+c+' -o '+outname+'_'+c+'.txt '+filename+"\n")
-    cardscript.write('mk_datacard_hdecay13TeV'+' -d '+' '+discrname+' '+' -c '+c+' -o '+outname+'_'+c+'_hdecay.txt '+filename+"\n")
+    cardscript.write(datacardmaker+' -d '+' '+discrname+' '+' -c '+c+' -o '+outname+'_'+c+'_hdecay.txt '+filename+"\n")
   cardscript.close()
   
 def readLimit(fn='higgsCombineTest.Asymptotic.mH125.root'):
