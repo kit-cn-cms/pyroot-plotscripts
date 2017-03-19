@@ -3,8 +3,8 @@ import os
 from scriptgeneratorMEMDBCSV import *
 from plotutils import *
 
-sel_singleel="(N_LooseMuons==0)*(N_Jets>=4 && N_BTagsM>=2)" # need to veto muon events in electron dataset to avoid double countung
-sel_singlemu="(N_LooseElectrons==0)*(N_Jets>=4 && N_BTagsM>=2)" # and vice versa...
+sel_singleel="(N_LooseMuons==0 && N_TightElectrons==1 && Triggered_HLT_Ele27_eta2p1_WPTight_Gsf_vX==1)*(N_Jets>=4 && N_BTagsM>=2)" # need to veto muon events in electron dataset to avoid double countung
+sel_singlemu="(N_LooseElectrons==0 && (N_TightMuons==1 && (Triggered_HLT_IsoMu24_vX==1 || Triggered_HLT_IsoTkMu24_vX==1)))*(N_Jets>=4 && N_BTagsM>=2)" # and vice versa...
 
 # hcc is uu dd ss cc with ids 1 2 3 4
 hccSel='*((abs(GenHiggs_DecProd1_PDGID)==1 && abs(GenHiggs_DecProd2_PDGID)==1) || (abs(GenHiggs_DecProd1_PDGID)==2 && abs(GenHiggs_DecProd2_PDGID)==2) || (abs(GenHiggs_DecProd1_PDGID)==3 && abs(GenHiggs_DecProd2_PDGID)==3) || (abs(GenHiggs_DecProd1_PDGID)==4 && abs(GenHiggs_DecProd2_PDGID)==4) )'
@@ -36,11 +36,11 @@ weightsystnames=[
                     #"_CMS_ttH_Q2scale_ttbarPlusCCbarUp","_CMS_ttH_Q2scale_ttbarPlusCCbarDown",
 #                    "_CMS_ttH_NNPDFUp","_CMS_ttH_NNPDFDown",
 		      #"_CMS_ttH_PUUp","_CMS_ttH_PUDown",
-                  #"_CMS_ttH_ljets_Trig_elUp","_CMS_ttH_ljets_Trig_elDown",  
-                   #"_CMS_ttH_ljets_Trig_muUp","_CMS_ttH_ljets_Trig_muDown",  
+                  "_CMS_ttH_ljets_Trig_elUp","_CMS_ttH_ljets_Trig_elDown",  
+                   "_CMS_ttH_ljets_Trig_muUp","_CMS_ttH_ljets_Trig_muDown",  
 #                     "_CMS_ttH_ljets_TrigUp","_CMS_ttH_ljets_TrigDown",
-                   #"_CMS_ttH_eff_elUp","_CMS_ttH_eff_elDown", 
-                   #"_CMS_ttH_eff_muUp","_CMS_ttH_eff_muDown",  
+                   "_CMS_ttH_eff_elUp","_CMS_ttH_eff_elDown", 
+                   "_CMS_ttH_eff_muUp","_CMS_ttH_eff_muDown",  
 
                    #"_CMS_ttH_eff_leptonUp","_CMS_ttH_eff_leptonDown",
                    #"_CMS_res_jUp","_CMS_res_jDown"
@@ -54,11 +54,11 @@ systs_all_samples=[
                    "_CMS_ttH_CSVHFStats2Up","_CMS_ttH_CSVHFStats2Down","_CMS_ttH_CSVLFStats2Up","_CMS_ttH_CSVLFStats2Down",
                    "_CMS_ttH_CSVCErr1Up","_CMS_ttH_CSVCErr1Down","_CMS_ttH_CSVCErr2Up","_CMS_ttH_CSVCErr2Down",
                     #"_CMS_ttH_PUUp","_CMS_ttH_PUDown",
-                  #"_CMS_ttH_ljets_Trig_elUp","_CMS_ttH_ljets_Trig_elDown",  
-                   #"_CMS_ttH_ljets_Trig_muUp","_CMS_ttH_ljets_Trig_muDown",  
-#                     "_CMS_ttH_ljets_TrigUp","_CMS_ttH_ljets_TrigDown",
-                    ##"_CMS_ttH_eff_elUp","_CMS_ttH_eff_elDown", 
-                   #"_CMS_ttH_eff_muUp","_CMS_ttH_eff_muDown",  
+                  "_CMS_ttH_ljets_Trig_elUp","_CMS_ttH_ljets_Trig_elDown",  
+                   "_CMS_ttH_ljets_Trig_muUp","_CMS_ttH_ljets_Trig_muDown",  
+                    #"_CMS_ttH_ljets_TrigUp","_CMS_ttH_ljets_TrigDown",
+                    "_CMS_ttH_eff_elUp","_CMS_ttH_eff_elDown", 
+                   "_CMS_ttH_eff_muUp","_CMS_ttH_eff_muDown",  
                    #"_CMS_ttH_eff_leptonUp","_CMS_ttH_eff_leptonDown",
                    #"_CMS_res_jUp","_CMS_res_jDown",
                     #"_CMS_scale_jUp","_CMS_scale_jDown",
@@ -96,11 +96,11 @@ errorSystnames=[
                     #"_CMS_ttH_Q2scale_ttbarPlusCCbarUp","_CMS_ttH_Q2scale_ttbarPlusCCbarDown",
 #                    "_CMS_ttH_NNPDFUp","_CMS_ttH_NNPDFDown",
                     #"_CMS_ttH_PUUp","_CMS_ttH_PUDown",
-                   #"_CMS_ttH_ljets_Trig_elUp","_CMS_ttH_ljets_Trig_elDown",  
-                   #"_CMS_ttH_ljets_Trig_muUp","_CMS_ttH_ljets_Trig_muDown",  
+                   "_CMS_ttH_ljets_Trig_elUp","_CMS_ttH_ljets_Trig_elDown",  
+                   "_CMS_ttH_ljets_Trig_muUp","_CMS_ttH_ljets_Trig_muDown",  
 ##                     "_CMS_ttH_ljets_TrigUp","_CMS_ttH_ljets_TrigDown",
-                    #"_CMS_ttH_eff_elUp","_CMS_ttH_eff_elDown", 
-                   #"_CMS_ttH_eff_muUp","_CMS_ttH_eff_muDown",  
+                    "_CMS_ttH_eff_elUp","_CMS_ttH_eff_elDown", 
+                   "_CMS_ttH_eff_muUp","_CMS_ttH_eff_muDown",  
                    #"_CMS_ttH_eff_leptonUp","_CMS_ttH_eff_leptonDown",
                    #"_CMS_res_jUp","_CMS_res_jDown",
                     #"_CMS_scale_jUp","_CMS_scale_jDown",
@@ -111,12 +111,12 @@ mcweightAll='36.0'
 mcweight='36.0*2.0'
 
 
-#mcTriggerWeight='((1.0)*(Weight_ElectronSFTrigger*Weight_MuonSFTrigger)*((N_TightElectrons==1 && Triggered_HLT_Ele27_eta2p1_WPTight_Gsf_vX==1)||(N_TightMuons==1 && (Triggered_HLT_IsoMu24_vX==1 || Triggered_HLT_IsoTkMu24_vX==1))))'
+mcTriggerWeight='((1.0)*(internalEleTriggerWeight*internalMuTriggerWeight)*((N_TightElectrons==1 && Triggered_HLT_Ele27_eta2p1_WPTight_Gsf_vX==1)||(N_TightMuons==1 && (Triggered_HLT_IsoMu24_vX==1 || Triggered_HLT_IsoTkMu24_vX==1))))'
 #mcTriggerWeight='((1.0)*(Weight_ElectronSFTrigger*Weight_MuonSFTrigger)*((N_TightElectrons==1 && Triggered_HLT_Ele27_eta2p1_WPTight_Gsf_vX==1)||(N_TightMuons==1 && (Triggered_HLT_IsoMu24_vX==1 || Triggered_HLT_IsoTkMu24_vX==1))) )'
-mcTriggerWeight='((1.0)*(1.0)*((N_TightElectrons==1 && Triggered_HLT_Ele27_eta2p1_WPTight_Gsf_vX==1)||(N_TightMuons==1 && (Triggered_HLT_IsoMu24_vX==1 || Triggered_HLT_IsoTkMu24_vX==1))))'
+#mcTriggerWeight='((1.0)*(1.0)*((N_TightElectrons==1 && Triggered_HLT_Ele27_eta2p1_WPTight_Gsf_vX==1)||(N_TightMuons==1 && (Triggered_HLT_IsoMu24_vX==1 || Triggered_HLT_IsoTkMu24_vX==1))))'
 
 #sfs="Weight_ElectronSFID*Weight_MuonSFID*Weight_MuonSFIso*Weight_ElectronSFGFS*Weight_MuonSFHIP"
-sfs="1.0"
+sfs="internalEleIDWeight*internalMuIDWeight*internalEleIsoWeight*internalMuIsoWeight*internalEleGFSWeight*internalMuHIPWeight"
 
 usualweights="(1*Weight_PU*((Weight>0)-(Weight<0)))"+"*"+sfs
 
@@ -156,17 +156,17 @@ systweights=[
 
 		   #"dummyWeight_CMS_ttH_PUDown:="+"(1*Weight_PUDown*((Weight>0)-(Weight<0)))"+"*"+sfs+"*"+mcTriggerWeight+"*internalCSVweight*(DoWeights==1)+(DoWeights==0)*1.0",
 
-		   #"dummyWeight_CMS_ttH_ljets_Trig_elUp:="+usualweights+"*"+"((1.0)*(Weight_ElectronSFTrigger_Up*Weight_MuonSFTrigger)*((N_TightElectrons==1 && Triggered_HLT_Ele27_eta2p1_WPTight_Gsf_vX==1)||(N_TightMuons==1 && (Triggered_HLT_IsoMu24_vX==1 || Triggered_HLT_IsoTkMu24_vX==1))) )"+"*internalCSVweight*(DoWeights==1)+(DoWeights==0)*1.0",
+		   "dummyWeight_CMS_ttH_ljets_Trig_elUp:="+usualweights+"*"+"((1.0)*(internalEleTriggerWeightUp*internalMuTriggerWeight)*((N_TightElectrons==1 && Triggered_HLT_Ele27_eta2p1_WPTight_Gsf_vX==1)||(N_TightMuons==1 && (Triggered_HLT_IsoMu24_vX==1 || Triggered_HLT_IsoTkMu24_vX==1))) )"+"*internalCSVweight*(DoWeights==1)+(DoWeights==0)*1.0",
 		    
-		    #"dummyWeight_CMS_ttH_ljets_Trig_elDown:="+usualweights+"*"+"((1.0)*(Weight_ElectronSFTrigger_Down*Weight_MuonSFTrigger)*((N_TightElectrons==1 && Triggered_HLT_Ele27_eta2p1_WPTight_Gsf_vX==1)||(N_TightMuons==1 && (Triggered_HLT_IsoMu24_vX==1 || Triggered_HLT_IsoTkMu24_vX==1))) )"+"*internalCSVweight*(DoWeights==1)+(DoWeights==0)*1.0",
+		    "dummyWeight_CMS_ttH_ljets_Trig_elDown:="+usualweights+"*"+"((1.0)*(internalEleTriggerWeightDown*internalMuTriggerWeight)*((N_TightElectrons==1 && Triggered_HLT_Ele27_eta2p1_WPTight_Gsf_vX==1)||(N_TightMuons==1 && (Triggered_HLT_IsoMu24_vX==1 || Triggered_HLT_IsoTkMu24_vX==1))) )"+"*internalCSVweight*(DoWeights==1)+(DoWeights==0)*1.0",
 		    
-		    #"dummyWeight_CMS_ttH_ljets_Trig_muUp:="+usualweights+"*"+"((1.0)*(Weight_ElectronSFTrigger*Weight_MuonSFTrigger_Up)*((N_TightElectrons==1 && Triggered_HLT_Ele27_eta2p1_WPTight_Gsf_vX==1)||(N_TightMuons==1 && (Triggered_HLT_IsoMu24_vX==1 || Triggered_HLT_IsoTkMu24_vX==1))) )"+"*internalCSVweight*(DoWeights==1)+(DoWeights==0)*1.0",
+		    "dummyWeight_CMS_ttH_ljets_Trig_muUp:="+usualweights+"*"+"((1.0)*(internalEleTriggerWeight*internalMuTriggerWeightUp)*((N_TightElectrons==1 && Triggered_HLT_Ele27_eta2p1_WPTight_Gsf_vX==1)||(N_TightMuons==1 && (Triggered_HLT_IsoMu24_vX==1 || Triggered_HLT_IsoTkMu24_vX==1))) )"+"*internalCSVweight*(DoWeights==1)+(DoWeights==0)*1.0",
 		    
-		    #"dummyWeight_CMS_ttH_ljets_Trig_muDown:="+usualweights+"*"+"((1.0)*(Weight_ElectronSFTrigger*Weight_MuonSFTrigger_Down)*((N_TightElectrons==1 && Triggered_HLT_Ele27_eta2p1_WPTight_Gsf_vX==1)||(N_TightMuons==1 && (Triggered_HLT_IsoMu24_vX==1 || Triggered_HLT_IsoTkMu24_vX==1))) )"+"*internalCSVweight*(DoWeights==1)+(DoWeights==0)*1.0",
-		    #"dummyWeight_CMS_ttH_eff_elUp:=(1*Weight_PU*((Weight>0)-(Weight<0))*Weight_MuonSFID*Weight_MuonSFIso*Weight_MuonSFHIP*Weight_ElectronSFID_Up*Weight_ElectronSFGFS_Up*"+mcTriggerWeight+"*internalCSVweight)*(DoWeights==1)+(DoWeights==0)*1.0",
-		    #"dummyWeight_CMS_ttH_eff_elDown:=(1*Weight_PU*((Weight>0)-(Weight<0))"+"*Weight_MuonSFID*Weight_MuonSFIso*Weight_MuonSFHIP"+"*Weight_ElectronSFID_Down*Weight_ElectronSFGFS_Down*"+mcTriggerWeight+"*internalCSVweight)*(DoWeights==1)+(DoWeights==0)*1.0",
-		     #"dummyWeight_CMS_ttH_eff_muUp:=(1*Weight_PU*((Weight>0)-(Weight<0))"+"*Weight_ElectronSFID*Weight_ElectronSFGFS"+"*Weight_MuonSFID*Weight_MuonSFIso_Up*Weight_MuonSFHIP_Up*"+mcTriggerWeight+"*internalCSVweight)*(DoWeights==1)+(DoWeights==0)*1.0",
-		    #"dummyWeight_CMS_ttH_eff_muDown:=(1*Weight_PU*((Weight>0)-(Weight<0))"+"*Weight_ElectronSFID*Weight_ElectronSFGFS"+"*Weight_MuonSFID*Weight_MuonSFIso_Down*Weight_MuonSFHIP_Down*"+mcTriggerWeight+"*internalCSVweight)*(DoWeights==1)+(DoWeights==0)*1.0",
+		    "dummyWeight_CMS_ttH_ljets_Trig_muDown:="+usualweights+"*"+"((1.0)*(internalEleTriggerWeight*internalMuTriggerWeightDown)*((N_TightElectrons==1 && Triggered_HLT_Ele27_eta2p1_WPTight_Gsf_vX==1)||(N_TightMuons==1 && (Triggered_HLT_IsoMu24_vX==1 || Triggered_HLT_IsoTkMu24_vX==1))) )"+"*internalCSVweight*(DoWeights==1)+(DoWeights==0)*1.0",
+		    "dummyWeight_CMS_ttH_eff_elUp:=(1*Weight_PU*((Weight>0)-(Weight<0))*internalEleIDWeightUp*internalMuIDWeight*internalEleIsoWeightUp*internalMuIsoWeight*internalEleGFSWeightUp*internalMuHIPWeight*"+mcTriggerWeight+"*internalCSVweight)*(DoWeights==1)+(DoWeights==0)*1.0",
+		    "dummyWeight_CMS_ttH_eff_elDown:=(1*Weight_PU*((Weight>0)-(Weight<0))"+"*internalEleIDWeightDown*internalMuIDWeight*internalEleIsoWeightDown*internalMuIsoWeight*internalEleGFSWeightDown*internalMuHIPWeight*"+mcTriggerWeight+"*internalCSVweight)*(DoWeights==1)+(DoWeights==0)*1.0",
+		     "dummyWeight_CMS_ttH_eff_muUp:=(1*Weight_PU*((Weight>0)-(Weight<0))"+"*internalEleIDWeight*internalMuIDWeightUp*internalEleIsoWeight*internalMuIsoWeightUp*internalEleGFSWeight*internalMuHIPWeightUp*"+mcTriggerWeight+"*internalCSVweight)*(DoWeights==1)+(DoWeights==0)*1.0",
+		    "dummyWeight_CMS_ttH_eff_muDown:=(1*Weight_PU*((Weight>0)-(Weight<0))"+"*internalEleIDWeight*internalMuIDWeightDown*internalEleIsoWeight*internalMuIsoWeightDown*internalEleGFSWeight*internalMuHIPWeightDown*"+mcTriggerWeight+"*internalCSVweight)*(DoWeights==1)+(DoWeights==0)*1.0",
 		    
 		    
                   

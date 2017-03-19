@@ -42,87 +42,329 @@ def getHead(dataBases):
 
 using namespace std;
 
-class EleTriggerHelper
-{
-  public:
-    EleTriggerHelper();
-    double GetSF(double electronPt, double electronEta, int syst);
-  private:
-    TH2D *h_abseta_pt_ratio;
+//hacked Lepton SF Helper from MiniAODHelper
+
+
+class LeptonSFHelper {
+
+ public:
+  LeptonSFHelper( );
+  ~LeptonSFHelper( );
+
+  float GetElectronSF(  float electronPt , float electronEta , int syst , std::string type  );
+  float GetMuonSF(  float muonPt , float muonEta , int syst , std::string type  );
+  
+ private:
+
+  void SetElectronHistos( );
+  void SetMuonHistos( );
+
+  TH2F *h_ele_ID_abseta_pt_ratio;
+  TH2F *h_ele_TRIGGER_abseta_pt_ratio;
+  TH2F *h_ele_ISO_abseta_pt_ratio;
+  TH2F *h_ele_GFS_abseta_pt_ratio;
+
+    TH2F *h_mu_ID_abseta_pt_ratioBtoF;
+  TH1D *h_mu_HIP_eta_ratioBtoF;
+  TH2F *h_mu_TRIGGER_abseta_ptBtoF;
+  TH2F *h_mu_ISO_abseta_pt_ratioBtoF;
+
+    TH2F *h_mu_ID_abseta_pt_ratioGtoH;
+  TH1D *h_mu_HIP_eta_ratioGtoH;
+  TH2F *h_mu_TRIGGER_abseta_ptGtoH;
+  TH2F *h_mu_ISO_abseta_pt_ratioGtoH;
+
+  float electronMaxPt;
+  float electronMaxPtHigh;
+  float muonMaxPt;
+  float muonMaxPtHigh;
+  float ljets_mu_BtoF_lumi;
+  float ljets_mu_GtoH_lumi;
+  
 
 };
 
-EleTriggerHelper::EleTriggerHelper()
-{
-    std::string inputFile = "/nfs/dust/cms/user/asaibel/DataFilesForScriptGenerator/ElTriggerPerformance_Sep27.root";
+LeptonSFHelper::LeptonSFHelper( ){
 
-    TFile *f_electronTriggerSF= new TFile(std::string(inputFile).c_str(),"READ");
+  //std::cout << "Initializing Lepton scale factors" << std::endl;
 
-    h_abseta_pt_ratio=(TH2D*)f_electronTriggerSF->Get("electrontrig_sf_eta_pt");
+  SetElectronHistos( );
+  SetMuonHistos( );
 
-}
-
-double EleTriggerHelper::GetSF(double electronPt, double electronEta, int syst){
-  if(electronPt==0.0){return 1.0;}
-  //std::cout<<electronPt<<" "<<electronEta<<std::endl;
-  int thisbin=0;
-  double searcheta=electronEta;
-  double searchpt=TMath::Min(electronPt,499.0);
-
-  thisbin = h_abseta_pt_ratio->FindBin(searcheta,searchpt);
-  double nomval=h_abseta_pt_ratio->GetBinContent(thisbin);
-  double error=h_abseta_pt_ratio->GetBinError(thisbin);
-  double upval=nomval+error;
-  double downval=nomval-error;
-
-  // if(syst==0){std::cout<<"Trigger SF "<<std::endl; std::cout<<nomval<<" "<<upval<<" "<<downval<<std::endl;}
-
-  if (syst==-1){return downval;}
-  else if (syst==1){return upval;}
-  else {return nomval;}
-}
-
-class MuTriggerHelper
-{
-  public:
-    MuTriggerHelper();
-    double GetSF(double muonPt, double muonEta, int syst);
-
-  private:
-    TH2D *h_mu_TRIGGER_abseta_pt;
-
-};
-
-MuTriggerHelper::MuTriggerHelper()
-{
-    std::string inputFile = "/nfs/dust/cms/user/asaibel/DataFilesForScriptGenerator/MuonTriggerPerformance_Sep06.root";
-
-    TFile *f_muonTriggerSF= new TFile(std::string(inputFile).c_str(),"READ");
-
-    h_mu_TRIGGER_abseta_pt=(TH2D*)f_muonTriggerSF->Get("muontrig_sf_abseta_pt");
+  electronMaxPt = 199.0;
+  electronMaxPtHigh=250.0;
+  muonMaxPt = 119.0;
+  muonMaxPtHigh = 499.0;
+  
+  ljets_mu_BtoF_lumi=19691.782;
+  ljets_mu_GtoH_lumi=16226.452;
 
 
 }
 
-double MuTriggerHelper::GetSF(double muonPt, double muonEta, int syst){
-  if(muonPt==0.0){return 1.0;}
-  //std::cout<<muonPt<<" "<<muonEta<<std::endl;
+LeptonSFHelper::~LeptonSFHelper( ){
+
+}
+
+float LeptonSFHelper::GetElectronSF(  float electronPt , float electronEta , int syst , std::string type  ) {
+  if ( electronPt == 0.0 ){ return 1.0; }
+
   int thisBin=0;
-  double searchEta=fabs(muonEta);
-  double searchPt=TMath::Min(muonPt,499.0);
 
-  thisBin = h_mu_TRIGGER_abseta_pt->FindBin(searchEta,searchPt);
-  double nomval=h_mu_TRIGGER_abseta_pt->GetBinContent(thisBin);
-  double error=h_mu_TRIGGER_abseta_pt->GetBinError(thisBin);
-  double upval=nomval+error;
-  double downval=nomval-error;
+  float searchEta=electronEta;
+  float searchPt=TMath::Min( electronPt , electronMaxPt );
+  if (type=="Trigger"){
+    searchPt=TMath::Min( electronPt , electronMaxPtHigh );
+  }
+
+  float nomval = 0;
+  float error = 0;
+  float upval = 0;
+  float downval= 0;
 
 
-  // if(syst==0){std::cout<<"Trigger SF "<<std::endl; std::cout<<nomval<<" "<<upval<<" "<<downval<<std::endl;}
+  if ( type == "ID" ){
 
-  if (syst==-1){return downval;}
-  else if (syst==1){return upval;}
-  else {return nomval;}
+    thisBin = h_ele_ID_abseta_pt_ratio->FindBin( searchEta , searchPt );
+    nomval=h_ele_ID_abseta_pt_ratio->GetBinContent( thisBin );
+    error=h_ele_ID_abseta_pt_ratio->GetBinError( thisBin );
+
+    upval=nomval+error;
+    downval=nomval-error;
+
+  }
+  else if ( type == "Trigger" ){
+
+    thisBin = h_ele_TRIGGER_abseta_pt_ratio->FindBin( searchPt, searchEta );
+    nomval=h_ele_TRIGGER_abseta_pt_ratio->GetBinContent( thisBin );
+    error=h_ele_TRIGGER_abseta_pt_ratio->GetBinError( thisBin );
+    upval=nomval+error;
+    downval=nomval-error;
+
+  }
+  else if ( type == "Iso" ){
+
+    thisBin = h_ele_ISO_abseta_pt_ratio->FindBin( searchEta , searchPt );
+    nomval=h_ele_ISO_abseta_pt_ratio->GetBinContent( thisBin );
+    error=h_ele_ISO_abseta_pt_ratio->GetBinError( thisBin );
+    upval=nomval+error;  //DANGERZONE need to add pT depnednet 1% uncertainty
+    downval=nomval-error;
+
+  }
+  else if ( type == "GFS" ){
+
+    thisBin = h_ele_GFS_abseta_pt_ratio->FindBin( searchEta , searchPt );
+    nomval=h_ele_GFS_abseta_pt_ratio->GetBinContent( thisBin );
+    error=h_ele_GFS_abseta_pt_ratio->GetBinError( thisBin );
+    upval=nomval+error; //DANGERZONE need to add pT depnednet 1% uncertainty
+    downval=nomval-error;
+
+  }
+  else {
+
+    std::cout << "Unknown Type. Supported Types are: ID, Trigger, Iso" << std::endl;
+    nomval = -1;
+    upval = -1;
+    downval= -1;
+
+  }
+
+  if ( syst==-1 ){ return downval; }
+  else if ( syst==1 ){ return upval; }
+  else { return nomval; }
+
+}
+
+float LeptonSFHelper::GetMuonSF(  float muonPt , float muonEta , int syst , std::string type  ){
+  if ( muonPt == 0.0 ){ return 1.0; }
+
+  int thisBin=0;
+
+  float searchEta=fabs( muonEta );
+  float searchPt=TMath::Min( muonPt , muonMaxPt );
+  if (type=="Trigger"){
+    searchPt=TMath::Min( muonPt , muonMaxPtHigh );
+  }
+  float nomval = 0;
+  float error = 0;
+  float upval = 0;
+  float downval= 0;
+  float nomvalBtoF = 0;
+  float errorBtoF = 0;
+  float upvalBtoF = 0;
+  float downvalBtoF= 0;
+  float nomvalGtoH = 0;
+  float errorGtoH = 0;
+  float upvalGtoH = 0;
+  float downvalGtoH= 0;
+  
+
+  if ( type == "ID" ){
+
+    thisBin = h_mu_ID_abseta_pt_ratioBtoF->FindBin(  searchPt, searchEta  );
+    nomvalBtoF=h_mu_ID_abseta_pt_ratioBtoF->GetBinContent( thisBin );
+    errorBtoF=h_mu_ID_abseta_pt_ratioBtoF->GetBinError( thisBin );
+    upvalBtoF=( nomvalBtoF+errorBtoF );
+    downvalBtoF=( nomvalBtoF-errorBtoF );
+    upvalBtoF=upvalBtoF*( 1.0+sqrt(0.01*0.01+0.005*0.005) );
+    downvalBtoF=downvalBtoF*( 1.0-sqrt(0.01*0.01+0.005*0.005) );
+    
+    thisBin = h_mu_ID_abseta_pt_ratioGtoH->FindBin(  searchPt, searchEta  );
+    nomvalGtoH=h_mu_ID_abseta_pt_ratioGtoH->GetBinContent( thisBin );
+    errorGtoH=h_mu_ID_abseta_pt_ratioGtoH->GetBinError( thisBin );
+    upvalGtoH=( nomvalGtoH+errorGtoH );
+    downvalGtoH=( nomvalGtoH-errorGtoH );
+    upvalGtoH=upvalGtoH*( 1.0+sqrt(0.01*0.01+0.005*0.005) );
+    downvalGtoH=downvalGtoH*( 1.0-sqrt(0.01*0.01+0.005*0.005) );
+
+    nomval=(ljets_mu_BtoF_lumi*nomvalBtoF + ljets_mu_GtoH_lumi * nomvalGtoH)/(ljets_mu_BtoF_lumi+ljets_mu_GtoH_lumi);
+    upval=(ljets_mu_BtoF_lumi*upvalBtoF + ljets_mu_GtoH_lumi * upvalGtoH)/(ljets_mu_BtoF_lumi+ljets_mu_GtoH_lumi);
+    downval=(ljets_mu_BtoF_lumi*downvalBtoF + ljets_mu_GtoH_lumi * downvalGtoH)/(ljets_mu_BtoF_lumi+ljets_mu_GtoH_lumi);
+
+  }
+  else if ( type == "Trigger" ){
+
+    thisBin = h_mu_TRIGGER_abseta_ptBtoF->FindBin(  searchPt, searchEta  );
+    nomvalBtoF=h_mu_TRIGGER_abseta_ptBtoF->GetBinContent( thisBin );
+    errorBtoF=h_mu_TRIGGER_abseta_ptBtoF->GetBinError( thisBin );
+    upvalBtoF=( nomvalBtoF+errorBtoF );
+    downvalBtoF=( nomvalBtoF-errorBtoF );
+    
+    thisBin = h_mu_TRIGGER_abseta_ptGtoH->FindBin(  searchPt, searchEta  );
+    nomvalGtoH=h_mu_TRIGGER_abseta_ptGtoH->GetBinContent( thisBin );
+    errorGtoH=h_mu_TRIGGER_abseta_ptGtoH->GetBinError( thisBin );
+    upvalGtoH=( nomvalGtoH+errorGtoH );
+    downvalGtoH=( nomvalGtoH-errorGtoH );
+
+    nomval=(ljets_mu_BtoF_lumi*nomvalBtoF + ljets_mu_GtoH_lumi * nomvalGtoH)/(ljets_mu_BtoF_lumi+ljets_mu_GtoH_lumi);
+    upval=(ljets_mu_BtoF_lumi*upvalBtoF + ljets_mu_GtoH_lumi * upvalGtoH)/(ljets_mu_BtoF_lumi+ljets_mu_GtoH_lumi);
+    downval=(ljets_mu_BtoF_lumi*downvalBtoF + ljets_mu_GtoH_lumi * downvalGtoH)/(ljets_mu_BtoF_lumi+ljets_mu_GtoH_lumi);
+    
+  }
+  else if ( type == "Iso" ){
+    
+    
+    thisBin = h_mu_ISO_abseta_pt_ratioBtoF->FindBin(  searchPt, searchEta  );
+    nomvalBtoF=h_mu_ISO_abseta_pt_ratioBtoF->GetBinContent( thisBin );
+    errorBtoF=h_mu_ISO_abseta_pt_ratioBtoF->GetBinError( thisBin );
+    upvalBtoF=( nomvalBtoF+errorBtoF );
+    downvalBtoF=( nomvalBtoF-errorBtoF );
+    upvalBtoF=upvalBtoF*(1.0+0.005  );
+    downvalBtoF=downvalBtoF*(1.0-0.005 );
+    
+    thisBin = h_mu_ISO_abseta_pt_ratioGtoH->FindBin(  searchPt, searchEta  );
+    nomvalGtoH=h_mu_ISO_abseta_pt_ratioGtoH->GetBinContent( thisBin );
+    errorGtoH=h_mu_ISO_abseta_pt_ratioGtoH->GetBinError( thisBin );
+    upvalGtoH=( nomvalGtoH+errorGtoH );
+    downvalGtoH=( nomvalGtoH-errorGtoH );
+    upvalGtoH=upvalGtoH*(1.0+0.005  );
+    downvalGtoH=downvalGtoH*( 1.0-0.005 );
+
+    nomval=(ljets_mu_BtoF_lumi*nomvalBtoF + ljets_mu_GtoH_lumi * nomvalGtoH)/(ljets_mu_BtoF_lumi+ljets_mu_GtoH_lumi);
+    upval=(ljets_mu_BtoF_lumi*upvalBtoF + ljets_mu_GtoH_lumi * upvalGtoH)/(ljets_mu_BtoF_lumi+ljets_mu_GtoH_lumi);
+    downval=(ljets_mu_BtoF_lumi*downvalBtoF + ljets_mu_GtoH_lumi * downvalGtoH)/(ljets_mu_BtoF_lumi+ljets_mu_GtoH_lumi);
+
+  }
+
+  else if ( type == "HIP" ){
+
+    thisBin = h_mu_HIP_eta_ratioBtoF->FindBin( searchEta );
+    nomvalBtoF=h_mu_HIP_eta_ratioBtoF->GetBinContent( thisBin );
+    errorBtoF=h_mu_HIP_eta_ratioBtoF->GetBinError( thisBin );
+    upvalBtoF=( nomvalBtoF+errorBtoF );
+    downvalBtoF=( nomvalBtoF-errorBtoF );
+    
+    thisBin = h_mu_HIP_eta_ratioGtoH->FindBin( searchEta );
+    nomvalGtoH=h_mu_HIP_eta_ratioGtoH->GetBinContent( thisBin );
+    errorGtoH=h_mu_HIP_eta_ratioGtoH->GetBinError( thisBin );
+    upvalGtoH=( nomvalGtoH+errorGtoH );
+    downvalGtoH=( nomvalGtoH-errorGtoH );
+    
+    nomval=(ljets_mu_BtoF_lumi*nomvalBtoF + ljets_mu_GtoH_lumi * nomvalGtoH)/(ljets_mu_BtoF_lumi+ljets_mu_GtoH_lumi);
+    upval=(ljets_mu_BtoF_lumi*upvalBtoF + ljets_mu_GtoH_lumi * upvalGtoH)/(ljets_mu_BtoF_lumi+ljets_mu_GtoH_lumi);
+    downval=(ljets_mu_BtoF_lumi*downvalBtoF + ljets_mu_GtoH_lumi * downvalGtoH)/(ljets_mu_BtoF_lumi+ljets_mu_GtoH_lumi);
+   
+//     upval=upval*( 1.0+0.005 );
+//     downval=downval*( 1.0-0.005 );
+
+
+  }
+  else {
+
+    std::cout << "Unknown Type. Supported Types are: ID, Trigger, Iso" << std::endl;
+    nomval = -1;
+    upval = -1;
+    downval= -1;
+
+  }
+
+
+  if ( syst==-1 ){ return downval; }
+  else if ( syst==1 ){ return upval; }
+  else { return nomval; }
+
+
+}
+
+void LeptonSFHelper::SetElectronHistos( ){
+
+  std::string IDinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Spring150217/feb160317/ele_ID_SF.root";
+  std::string TRIGGERinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Spring150217/feb160317/ele_TriggerSF_Run2016All_v1.root";
+  std::string ISOinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Spring150217/feb160317/ele_Reco_EGM2D.root"; // DANGERZONE: no iso SF yet??
+  std::string GFSinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Spring150217/feb160317/ele_Reco_EGM2D.root";
+
+  TFile *f_IDSF = new TFile(std::string(IDinputFile).c_str(),"READ");
+  TFile *f_TRIGGERSF = new TFile(std::string(TRIGGERinputFile).c_str(),"READ");
+  TFile *f_ISOSF = new TFile(std::string(ISOinputFile).c_str(),"READ");
+  TFile *f_GFSSF = new TFile(std::string(GFSinputFile).c_str(),"READ");
+
+  h_ele_ID_abseta_pt_ratio = (TH2F*)f_IDSF->Get("EGamma_SF2D");
+  h_ele_TRIGGER_abseta_pt_ratio = (TH2F*)f_TRIGGERSF->Get("Ele27_WPTight_Gsf");
+  h_ele_ISO_abseta_pt_ratio = (TH2F*)f_ISOSF->Get("EGamma_SF2D");
+  h_ele_GFS_abseta_pt_ratio = (TH2F*)f_GFSSF->Get("EGamma_SF2D");
+
+}
+
+void LeptonSFHelper::SetMuonHistos( ){
+
+  std::string IDinputFileBtoF = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Spring150217/feb160317/mu_ID_EfficienciesAndSF_BCDEF.root";
+  std::string IDinputFileGtoH = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Spring150217/feb160317/mu_ID_EfficienciesAndSF_GH.root";
+
+  std::string TRIGGERinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Spring150217/feb160317/mu_TRIGGER_BtoF.root";
+  std::string TRIGGERinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Spring150217/feb160317/mu_TRIGGER_GtoH.root";
+
+  std::string ISOinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Spring150217/feb160317/mu_ISO_EfficienciesAndSF_BCDEF.root";
+  std::string ISOinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Spring150217/feb160317/mu_ISO_EfficienciesAndSF_GH.root";
+  
+  std::string HIPinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Spring150217/feb160317/HIP_BCDEF_histos.root";
+  std::string HIPinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Spring150217/feb160317/HIP_GH_histos.root";
+
+
+  TFile *f_IDSFBtoF = new TFile(std::string(IDinputFileBtoF).c_str(),"READ");
+  TFile *f_IDSFGtoH = new TFile(std::string(IDinputFileGtoH).c_str(),"READ");
+  
+  TFile *f_HIPSFBtoF = new TFile(std::string(HIPinputFileBtoF).c_str(),"READ");
+  TFile *f_HIPSFGtoH = new TFile(std::string(HIPinputFileGtoH).c_str(),"READ");
+
+  
+  TFile *f_TRIGGERSFBtoF = new TFile(std::string(TRIGGERinputFileBtoF).c_str(),"READ");
+  TFile *f_TRIGGERSFGtoH = new TFile(std::string(TRIGGERinputFileGtoH).c_str(),"READ");
+
+  TFile *f_ISOSFBtoF = new TFile(std::string(ISOinputFileBtoF).c_str(),"READ");
+  TFile *f_ISOSFGtoH = new TFile(std::string(ISOinputFileGtoH).c_str(),"READ");
+
+  h_mu_ID_abseta_pt_ratioBtoF = (TH2F*)f_IDSFBtoF->Get("MC_NUM_TightID_DEN_genTracks_PAR_pt_eta/pt_abseta_ratio");
+  h_mu_ID_abseta_pt_ratioGtoH = (TH2F*)f_IDSFGtoH->Get("MC_NUM_TightID_DEN_genTracks_PAR_pt_eta/pt_abseta_ratio");
+
+  h_mu_HIP_eta_ratioBtoF = (TH1D*)f_HIPSFBtoF->Get("ratio_eff_aeta_dr030e030_corr");
+  h_mu_HIP_eta_ratioGtoH = (TH1D*)f_HIPSFGtoH->Get("ratio_eff_aeta_dr030e030_corr");
+
+  h_mu_TRIGGER_abseta_ptBtoF= (TH2F*)f_TRIGGERSFBtoF->Get("IsoMu24_OR_IsoTkMu24_PtEtaBins/pt_abseta_ratio");
+  h_mu_TRIGGER_abseta_ptGtoH= (TH2F*)f_TRIGGERSFGtoH->Get("IsoMu24_OR_IsoTkMu24_PtEtaBins/pt_abseta_ratio");
+
+  h_mu_ISO_abseta_pt_ratioBtoF = (TH2F*)f_ISOSFBtoF->Get("TightISO_TightID_pt_eta/pt_abseta_ratio");
+  h_mu_ISO_abseta_pt_ratioGtoH = (TH2F*)f_ISOSFGtoH->Get("TightISO_TightID_pt_eta/pt_abseta_ratio");
+
 }
 
 // hacked in CSV helper
@@ -489,6 +731,7 @@ void plot(){
   std::string csvLFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/csv_rwt_fit_lf_v2_final_2017_1_10test.root";
   
   CSVHelper* internalCSVHelper= new CSVHelper(csvHFfile,csvLFfile, 5);
+  LeptonSFHelper* internalLeptonSFHelper= new LeptonSFHelper();
 
   // open files
   TChain* chain = new TChain("MVATree");
@@ -510,8 +753,6 @@ std::cout<<"processname" <<processname<<std::endl;
   int DoWeights=1;
 
   //initialize Trigger Helper
-  EleTriggerHelper electronTriggerHelper=EleTriggerHelper();
-  MuTriggerHelper muonTriggerHelper=MuTriggerHelper();
 
   if(processname=="SingleEl" || processname=="SingleMu"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
 
@@ -806,26 +1047,83 @@ def startLoop():
     eventsAnalyzed++;
     sumOfWeights+=Weight;
 
-    // Trigger SF
-  //  double muonPt=0.0;
- //   double muonEta=0.0;
- //   float muonPt=0.0;
-//    float muonEta=0.0;
+
+  // DANGERZONE
+  // Only Works for SL events at the moment
+  // Lepton SFs 
+     double muonPt=0.0;
+     double muonEta=0.0;
+     double electronEta=0.0;
+     double electronPt=0.0;
+
+    if(N_TightMuons==1){muonPt=Muon_Pt[0]; muonEta=Muon_Eta[0];}
+    else{muonPt=0.0; muonEta=0.0;}
+    if(N_TightElectrons==1){electronPt=Electron_Pt[0]; electronEta=Electron_Eta[0];}
+    else{electronPt=0.0; electronEta=0.0;}
+   
+    float internalEleTriggerWeight=1.0;
+    float internalEleTriggerWeightUp=1.0;
+    float internalEleTriggerWeightDown=1.0;
+    float internalEleIDWeight=1.0;
+    float internalEleIDWeightUp=1.0;
+    float internalEleIDWeightDown=1.0;
+    float internalEleIsoWeight=1.0;
+    float internalEleIsoWeightUp=1.0;
+    float internalEleIsoWeightDown=1.0;
+    float internalEleGFSWeight=1.0;
+    float internalEleGFSWeightUp=1.0;
+    float internalEleGFSWeightDown=1.0;
     
-
- //   if(N_TightMuons==1){muonPt=Muon_Pt[0]; muonEta=Muon_Eta[0];}
- //   else{muonPt=0.0; muonEta=0.0;}
-  //  double electronPt=0.0;
-   // double electronEta=0.0;
-
-    //if(N_TightElectrons==1){electronPt=Electron_Pt[0]; electronEta=Electron_Eta[0];}
-   // else{electronPt=0.0; electronEta=0.0;}
-    //Debugging: print lepton pt, eta and the correspronding scale factor. 
-  // /* std::cout << "Electron_Pt = " << electronPt << " , Electron_Eta = " << electronEta << std::endl;
-//    std::cout << "corresponding scale factor = " << electronTriggerHelper.GetSF(electronPt,electronEta,0) << std::endl;
-  //  std::cout << "Muon_Pt = " << muonPt << " , Muon_Eta = " << muonEta << std::endl;
-  //  std::cout << "corresponding scale factor = " << muonTriggerHelper.GetSF(muonPt,muonEta,0) << std::endl;*/
-  
+    float internalMuTriggerWeight=1.0;
+    float internalMuTriggerWeightUp=1.0;
+    float internalMuTriggerWeightDown=1.0;
+    float internalMuIDWeight=1.0;
+    float internalMuIDWeightUp=1.0;
+    float internalMuIDWeightDown=1.0;
+    float internalMuIsoWeight=1.0;
+    float internalMuIsoWeightUp=1.0;
+    float internalMuIsoWeightDown=1.0;
+    float internalMuHIPWeight=1.0;
+    float internalMuHIPWeightUp=1.0;
+    float internalMuHIPWeightDown=1.0;
+   
+    if(N_TightMuons==1){
+      internalMuTriggerWeight=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,0,"Trigger");
+      internalMuTriggerWeightUp=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,1,"Trigger");
+      internalMuTriggerWeightDown=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,-1,"Trigger");
+      
+      internalMuIDWeight=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,0,"ID");
+      internalMuIDWeightUp=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,1,"ID");
+      internalMuIDWeightDown=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,-1,"ID");
+      
+      internalMuIsoWeight=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,0,"Iso");
+      internalMuIsoWeightUp=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,1,"Iso");
+      internalMuIsoWeightDown=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,-1,"Iso");
+      
+      internalMuHIPWeight=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,0,"HIP");
+      internalMuHIPWeightUp=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,1,"HIP");
+      internalMuHIPWeightDown=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,-1,"HIP");
+    }
+   
+    if(N_TightElectrons==1){
+      internalEleTriggerWeight=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,0,"Trigger");
+      internalEleTriggerWeightUp=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,1,"Trigger");
+      internalEleTriggerWeightDown=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,-1,"Trigger");
+      
+      internalEleIDWeight=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,0,"ID");
+      internalEleIDWeightUp=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,1,"ID");
+      internalEleIDWeightDown=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,-1,"ID");
+      
+      internalEleIsoWeight=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,0,"Iso");
+      internalEleIsoWeightUp=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,1,"Iso");
+      internalEleIsoWeightDown=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,-1,"Iso");
+      
+      internalEleGFSWeight=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,0,"GFS");
+      internalEleGFSWeightUp=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,1,"GFS");
+      internalEleGFSWeightDown=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,-1,"GFS");
+    }
+   
+   
   std::vector<double> jetPts;    
   std::vector<double> jetEtas;    
   std::vector<double> jetCSVs;    
@@ -1016,7 +1314,16 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   # collect variables
   # list varibles that should not be written to the program automatically
 
-  vetolist=['processname','DoWeights','TMath','electronPt','electronEta','muonPt','muonEta','muonTriggerHelper','electronTriggerHelper','hasTrigger','internalCSVweight','internalCSVweight_CSVHFUp','internalCSVweight_CSVHFDown','internalCSVweight_CSVLFUp','internalCSVweight_CSVLFDown','internalCSVweight_CSVLFStats1Up','internalCSVweight_CSVLFStats1Down','internalCSVweight_CSVLFStats2Up','internalCSVweight_CSVLFStats2Down','internalCSVweight_CSVHFStats1Up','internalCSVweight_CSVHFStats1Down','internalCSVweight_CSVHFStats2Up','internalCSVweight_CSVHFStats2Down','internalCSVweight_CSVCErr1Up','internalCSVweight_CSVCErr1Down','internalCSVweight_CSVCErr2Up','internalCSVweight_CSVCErr2Down',]
+  vetolist=['processname','DoWeights','TMath','electronPt','electronEta','muonPt','muonEta','muonTriggerHelper','electronTriggerHelper','hasTrigger','internalCSVweight','internalCSVweight_CSVHFUp','internalCSVweight_CSVHFDown','internalCSVweight_CSVLFUp','internalCSVweight_CSVLFDown','internalCSVweight_CSVLFStats1Up','internalCSVweight_CSVLFStats1Down','internalCSVweight_CSVLFStats2Up','internalCSVweight_CSVLFStats2Down','internalCSVweight_CSVHFStats1Up','internalCSVweight_CSVHFStats1Down','internalCSVweight_CSVHFStats2Up','internalCSVweight_CSVHFStats2Down','internalCSVweight_CSVCErr1Up','internalCSVweight_CSVCErr1Down','internalCSVweight_CSVCErr2Up','internalCSVweight_CSVCErr2Down',
+	    "internalEleTriggerWeight","internalEleTriggerWeightUp","internalEleTriggerWeightDown",
+	    "internalEleIDWeight","internalEleIDWeightUp","internalEleIDWeightDown",
+	    "internalEleIsoWeight","internalEleIsoWeightUp","internalEleIsoWeightDown",
+	    "internalEleGFSWeight","internalEleGFSWeightUp","internalEleGFSWeightDown",
+	    "internalMuTriggerWeight","internalMuTriggerWeightUp","internalMuTriggerWeightDown",
+	    "internalMuIDWeight","internalMuIDWeightUp","internalMuIDWeightDown",
+	    "internalMuIsoWeight","internalMuIsoWeightUp","internalMuIsoWeightDown",
+	    "internalMuHIPWeight","internalMuHIPWeightUp","internalMuHIPWeightDown",
+]
   for db in dataBases:
     vetolist.append(db[0]+"p")
     vetolist.append(db[0]+"p_sig")
