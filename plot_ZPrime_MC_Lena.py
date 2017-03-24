@@ -40,11 +40,12 @@ plotselection_tau32 = " Tops_ABCD_t32 < 0.86   "
 plotselection_W_MSD =  " 70 < Ws_ABCD_MSD  &&   Ws_ABCD_MSD < 100 "
 plotselection_B_CSV = "  Bottoms_ABCD_CSV > 0.8   "
 
-plotselection_tau32_anti = "not (  " +plotselection_tau32+ " ) "
-plotselection_W_MSD_anti = " not (  " +plotselection_W_MSD+ " ) "
-plotselection_B_CSV_anti = " not (  " +plotselection_B_CSV+ " ) "
-
-
+#plotselection_tau32_anti = "!(  " +plotselection_tau32+ " ) "
+#plotselection_W_MSD_anti = "!(  " +plotselection_W_MSD+ " ) "
+#plotselection_B_CSV_anti = "!(  " +plotselection_B_CSV+ " ) "
+plotselection_tau32_anti=" Tops_ABCD_t32 > 0.86   "
+plotselection_W_MSD_anti =  " 70 < Ws_ABCD_MSD  &&   Ws_ABCD_MSD < 100 "
+plotselection_B_CSV_anti = "  Bottoms_ABCD_CSV > 0.8   "
 
 
 plotselection_ABCD_general_0 =  plotselection2 + "&& Zprimes_ABCD_M[0]>0   &&    Ws_ABCD_t21[0] >  0.6    &&    100 < Tops_ABCD_MSD[0]     &&    Tops_ABCD_MSD[0]  < 210   "
