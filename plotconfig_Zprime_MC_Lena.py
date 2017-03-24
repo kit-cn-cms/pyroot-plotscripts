@@ -58,9 +58,9 @@ SignalSamples=[
 
 BackgroundSamples=[
                     Sample('t#bar{t} + jets',ROOT.kBlue,path_80x+'BKG_TTbar/*nominal*.root',mcweight,'ttbar') , 
-                    Sample('QCD_HT',ROOT.kYellow,path_80x+'BKG_QCD/MC_QCD_H*nominal*Tree*.root',mcweight,'QCD_HT'),     
+                    Sample('QCD_HT',ROOT.kRed,path_80x+'BKG_QCD/MC_QCD_H*nominal*Tree*.root',mcweight,'QCD_HT'),     
                     Sample('QCD_Pt',ROOT.kGreen,path_80x+'BKG_QCD/MC_QCD_P*nominal*Tree*.root',mcweight,'QCD_PT'),
-                    Sample('QCD_comb',ROOT.kGreen,path_80x+'BKG_QCD/MC_QCD*nominal*Tree*.root',mcweight,'QCD_comb'),
+                    #Sample('QCD_comb',ROOT.kGreen,path_80x+'BKG_QCD/MC_QCD*nominal*Tree*.root',mcweight,'QCD_comb'),
 ]
 
 

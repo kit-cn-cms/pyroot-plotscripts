@@ -2973,6 +2973,53 @@ def divideHistos(listOfHistoLists, numeratorPlot, denumeratorPlot, normalizefirs
     #print len(self)
     #return listofHistoLists
 
+
+
+
+def multiplyHistos(listOfHistoLists, Factor1Plot, Factor2Plot, normalizefirst=False,rebin=1,option=''):
+    multipliedHistoList=[]
+    print 'First Factor ', Factor1Plot
+    print 'Second Factor ',Factor2Plot
+    print 'lol[First Factor] ',listOfHistoLists[Factor1Plot]
+    print len(listOfHistoLists[Factor1Plot])
+    
+    if len(listOfHistoLists[Factor1Plot])==1:
+        Factor1 = listOfHistoLists[Factor1Plot][0].Clone()
+        Factor2 = listOfHistoLists[Factor2Plot][0].Clone()
+        Factor1.Rebin(rebin)
+        Factor2.Rebin(rebin)
+        if normalizefirst: 
+            print 'Factor1 before divide ',Factor1
+            Factor1.Scale(1./Factor1.Integral())
+            Factor2.Scale(1./Factor2.Integral())
+        x=Factor1.Clone()
+        Factor1.Multiply(Factor1,Factor2,1.0,1.0,option)
+        listOfHistoLists[Factor1Plot][0]=Factor1   
+        print 'First Factor after divide ', listOfHistoLists[Factor1Plot][0]   
+        
+    if len(listOfHistoLists[Factor1Plot])>1:
+        for i in range(len(listOfHistoLists[Factor1Plot])):
+            Factor1=listOfHistoLists[Factor1Plot][i].Clone()
+            Factor2=listOfHistoLists[Factor2Plot][i].Clone()
+            Factor1.Rebin(rebin)
+            Factor2.Rebin(rebin)
+            if normalizefirst: 
+                print 'First Factor before divide ',Factor1
+                Factor1.Scale(1./Factor1.Integral())
+                Factor2.Scale(1./Factor2.Integral())
+            x=Factor1.Clone()
+            Factor1.Multiply(Factor1,Factor2,1.0,1.0,option)
+            listOfHistoLists[Factor1Plot][i]=Factor1   
+            print 'First Factor after divide ', listOfHistoLists[Factor1Plot][i]
+        #print 'divide? ', listofHistoLists
+        #self.append(x)
+    #self.append(dividedHistoList)
+    #print len(self)
+    #return listofHistoLists
+
+
+
+    
 #def LOLSumw2(listOfHistoLists):
     #for listOfHisto in listOfHistoLists:
         #for h in listOfHisto:
@@ -3367,7 +3414,7 @@ def GetListOfCorrelationLists(listOfHistoLists, DoSpear):
             if DoSpear:
                 c=  GetSpearCorrelationFactor(Histo)
             else: c="Spear Correlation Coefficient not activated."
-            d, df= CorrelationSignificanceHisto(Histo)
+            d, df= GetPValueHisto(Histo)
             CorrelationList.append(a)
             PlotNameList.append(b)
             SpearCorrelationList.append(c)
@@ -3413,47 +3460,113 @@ def writeCorrLOL(listOfHistoLists, FileName="Correlationfactors.txt", PlotNames=
                         corrFile.write(str(Spear)+"\t\t"+Name + "\tSpearman \n")
 
 
-def GetSpearCorrelationFactor(Histo):
-    X_ranked = []
-    Y_ranked_tmp = []
-    Y_ranked = []
-    
-    low = 0 
-    up = 0 
-    for xbin in range(Histo.GetNbinsX()):
-        for ybin in range(Histo.GetNbinsY()):
-            up += Histo.GetBin(xbin,ybin)
-        for ybin in range(Histo.GetNbinsY()):
-            X_ranked.append( (up + low)/2 )
-        low = up
-    
-    low = 0 
-    up = 0 
-    for ybin in range(Histo.GetNbinsY() ):
-        for xbin in range(Histo.GetNbinsX()):
-            up += Histo.GetBin(xbin,ybin)
-        Y_ranked_tmp.append( (up + low)/2 )
-        low = up
-    
-    #print len(X_ranked), "Len x ranked", Histo.GetNbinsX()
-    #print len(Y_ranked), "Len y ranked", Histo.GetNbinsY()
-    for xbin in range(Histo.GetNbinsX()):
-        for ybin in range(Histo.GetNbinsY()):
-            Y_ranked.append(Y_ranked_tmp[ybin])
+
+
+
+
+
+
+
+#Functions to get the Spearman CorrelationFactor
+
+
+#Get Temporary List of X an Y that can be ranked afterwards
+def GetXYBins(Histo2D):
+    X=[]
+    Y=[]
+    nx = Histo2D.GetNbinsX()
+    ny = Histo2D.GetNbinsY()
+    print "Entries of the Histogram", Histo2D.GetEntries()
+
+    for x in range(nx+2):
+        x_tmp = 0
+        for y in range(ny+2):
+            x_tmp += int(Histo2D.GetBinContent(x,y))
+        # print "x_tmp", x_tmp
+        for i in range(x_tmp):
+            X.append(x)
+
             
+    #Sort y, so that x-Entry at position i belongs to y-Entry at position i
+    Y = []
+    x_tmp = -1
+    for x in X:
+        if x == x_tmp:
+            continue
+        x_tmp = x
+        for y in range(ny+2):
+            
+            Y += int(Histo2D.GetBinContent(x,y) ) * [y]
+        
     
+    # print "unranked", X, Y    
+    return X,Y
+
+
+
+#return to old sortation (as X was sorted before)
+def unsorted(X_modified_sorted, X_):
+    X = X_
+    X_modified_unsorted= len(X)*['not changed yet']
     
-    #print X_ranked, "X RANKED HIER!!!!"
-    #print min(X_ranked), max(X_ranked), sum(X_ranked)/len(X_ranked), X_ranked[int(len(X_ranked)/2)], "Verteilung in X_ranked (max, min, mean, median)"
-    histo_rank = ROOT.TH2F("histo_rank", "Histogram of ranked variables", 2400, 0.95*min(X_ranked), 1.05*max(X_ranked), 2400, 0.95*min(Y_ranked), 1.05*max(Y_ranked) )
-    for ybin in range( len(Y_ranked) ):
-        for xbin in range( len(X_ranked) ):
-            histo_rank.Fill(X_ranked[xbin], Y_ranked[ybin], Histo.GetBin(xbin,ybin))
-            #print X_ranked[xbin], Y_ranked[ybin], Histo.GetBin(xbin,ybin)
+    for i in range( len(X) ):
+        index_tmp = X.index(  min( X ) )
+        X_modified_unsorted[index_tmp] = X_modified_sorted[i]
+        X[index_tmp] = max(X)+1
+    return X_modified_unsorted
+    
+
+
+#Rank a given array
+def RankArray(X_):
+    X=X_
+    X_sorted = sorted(X)
+    X_ranked = []
+    last = X_sorted[0]
+    X_Bool_MoreThanLast = []
+    
+    for element in X_sorted[1:]:
+        if element > last:
+            X_Bool_MoreThanLast.append(True)
+        else:
+            X_Bool_MoreThanLast.append(False)
+        last = element
+
+    size = 1
+    i = 1
+    for MoreThanLast in X_Bool_MoreThanLast:
+        if MoreThanLast:
+            X_ranked += size*[i - (size - 1)/2. ]
+            size = 1
+        else:
+            size += 1
+        i += 1
+        
+    X_ranked += size*[ i- (size-1)/ 2. ]
+    X_ranked = unsorted(X_ranked, X) #return to old sortation
+    return X_ranked
+
+
+
+
+def GetSpearCorrelationFactor(Histo_, Smaller=True):
+
+    Histo = Histo_.Clone()
+    if Smaller:
+        Histo.Scale(200/Histo.Integral())
+    
+    X_tmp, Y_tmp = GetXYBins(Histo)
+    X_ranked=RankArray(X_tmp)
+    Y_ranked=RankArray(Y_tmp)
+
+    
+    histo_rank = ROOT.TH2F("histo_rank", "Histogram of ranked variables", 15 , 0.95*min(X_ranked), 1.05*max(X_ranked), 15 , 0.95*min(Y_ranked), 1.05*max(Y_ranked) )
+    for i in range(len( X_ranked ) ):
+        histo_rank.Fill( X_ranked[i], Y_ranked[i] )
+        
     mycanv = ROOT.TCanvas("mycanv", "mycanv", 800, 600)
     histo_rank.Draw("colz")
     mycanv.SaveAs("ABCD/"+Histo.GetName()+"_ranked.png")
-    #Save in Root-Files?
     SpearCorr = histo_rank.GetCorrelationFactor()
     return SpearCorr
 
@@ -3462,17 +3575,25 @@ def GetSpearCorrelationFactor(Histo):
 
 
 
+
+
+
+
+
+
+
+
 #Is Correlation smaller than rho 0 -- probability Hypothesis is _what_ ?
 #r CorrelationCoefficient, p, probability hypothesis is true, rho0 - hyothesis
-def CorrelationSignificance(r, df, rho0=0):
+def GetPValue(r, df, rho0=0):
     #Get t Wert
     T =abs( (math.atanh(r) - math.atanh(rho0) - r/df )/(1/math.sqrt(df)) )
     #Get Propability, rho0 is true
-    return 1 - ROOT.TMath.StudentI(T , df)
+    return 2*(1 - ROOT.TMath.StudentI(T , df) )
 
-def CorrelationSignificanceHisto(Histo, rho0 = 0):
+def GetPValueHisto(Histo, rho0 = 0):
     r = Histo.GetCorrelationFactor()
     df = Histo.GetEntries()
-    return CorrelationSignificance(r, df , rho0), df
+    return GetPValue(r, df , rho0), df
 
 

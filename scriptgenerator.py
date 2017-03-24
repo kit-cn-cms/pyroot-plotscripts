@@ -397,7 +397,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
           script+="      }\n"
           script+="      }\n"
         else:
-          arrayselection=variables.checkArrayLengths(','.join([ex,pw]),variables)
+          arrayselection=variables.checkArrayLengths(','.join([exX,exY,pw]))
           weight='('+arrayselection+')*('+pw+')*Weight_XS*categoryweight*sampleweight'
           script+=fillTwoDimHistoSyst(histoname,exX,exY,weight,systnames,systweights)
     
