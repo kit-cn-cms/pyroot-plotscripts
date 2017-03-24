@@ -26,6 +26,7 @@ plotlabel="Wbt, #geq 3 jets, #geq 1 b-tags"
 plotlabelboosted="#splitline{Wbt, #geq 3 jets, #geq 1 b-tags}{#geq 1 AK8 jet p_{T} > 400 GeV, #geq 1 AK8 jet p_{T} > 200 GeV, #geq 1 AK4 jet p_{T} > 100 GeV}"
 #plotselection="N_packedPatJetsAK8PFCHSSoftDrop>=2&&packedPatJetsAK8PFCHSSoftDrop_Pt[0]>400&&packedPatJetsAK8PFCHSSoftDrop_Pt[1]>200&&Evt_HT>850"
 plotselection1="Evt_HT>850"
+plotselection3="Evt_HT>1000"
 #plotselection1=""
 plotselection2="N_packedPatJetsAK8PFCHSSoftDrop>=2 && packedPatJetsAK8PFCHSSoftDrop_Pt[0]>400 && packedPatJetsAK8PFCHSSoftDrop_Pt[1]>200 && Evt_HT>850 "
 plots=[
@@ -133,9 +134,10 @@ plots=[
         Plot(ROOT.TH1F("Jet_3_Pt" ,"p_{T}(AK4_3) in GeV",50,0,1000),"Jet_Pt[2]",plotselection1+"&&Jet_Pt[2]>0","1 btag"),
         Plot(ROOT.TH1F("Jet_4_Pt" ,"p_{T}(AK4_4) in GeV",50,0,1000),"Jet_Pt[3]",plotselection1+"&&Jet_Pt[3]>0","1 btag"),
         
-        Plot(ROOT.TH1F("Evt_HT" ,"Evt_HT",40,0,4000),"Evt_HT",plotselection1+"","1 btag"),
-        Plot(ROOT.TH1F("Evt_HT_Jets" ,"Evt_HT_Jets",40,0,4000),"Evt_HT_Jets",plotselection1+"","1 btag"),
+        Plot(ROOT.TH1F("Evt_HT" ,"Evt_HT",60,0,3000),"Evt_HT",plotselection3+"","1 btag"),
+        Plot(ROOT.TH1F("Evt_HT_Jets" ,"Evt_HT_Jets",60,0,3000),"Evt_HT_Jets",plotselection3+"","1 btag"),
         
+        Plot(ROOT.TH1F("Jet_GenJet_Pt" ,"Jet_GenJet_Pt",40,0,2000),"Jet_GenJet_Pt",plotselection1+"","1 btag"),
         
         
         Plot(ROOT.TH1F("t_tagrate_pt","p_{T} in GeV, t-tagrate",50,0,2000),"tagged_top_pt",plotselection1+"&&tagged_top_pt>0","1 btag"),
@@ -255,17 +257,21 @@ lolDataT=transposeLOL(listOfHistoListsData)
 #writeListOfHistoLists(transposeLOL(lolT[5:6])[92:110],samples[5:6],'tagrates','tagrates',False,False,False,'EL')
 
 
+#writeLOLSeveralOnTop(transposeLOL(lolBackgroundT[BackgroundSampleNames.index("QCD_HT"):BackgroundSampleNames.index("ttbar")+1])[:plotnames.index("Sideband_top_anti_Topfirst_Bottoms_CSVv2")+1],BackgroundSamples[BackgroundSampleNames.index("QCD_HT"):BackgroundSampleNames.index("ttbar")+1],transposeLOL(lolSignalT),SignalSamples,-0.2,'Zprime',True,False ,'histoE','samehistoE')
 
-#writeLOLSeveralOnTop(transposeLOL(lolBackgroundT[BackgroundSampleNames.index("ttbar"):BackgroundSampleNames.index("QCD_HT")+1])[:plotnames.index("Sideband_top_anti_Topfirst_Bottoms_CSVv2")+1],BackgroundSamples[BackgroundSampleNames.index("ttbar"):BackgroundSampleNames.index("QCD_HT")+1],transposeLOL(lolSignalT),SignalSamples,-0.2,'Zprime',False ,'histoE','samehistoE')
+writeListOfHistoLists(transposeLOL(lolBackgroundT[BackgroundSampleNames.index("QCD_HT"):BackgroundSampleNames.index("ttbar")+1])[plotnames.index("Signal_Topfirst_Zprime_M"):plotnames.index("Sideband_bottom_anti_Topfirst_Zprime_M")+1],BackgroundSamples[BackgroundSampleNames.index("QCD_HT"):BackgroundSampleNames.index("ttbar")+1],labels,'Zprime_DPG',True,True,False,'histoE')
+#BackgroundSamples[BackgroundSampleNames.index("QCD_HT"):BackgroundSampleNames.index("QCD_PT")+1],labels,'Zprime_HT_Pt_comparison',True,False,False,'EL',False,False,True)
 
-writeListOfHistoLists(transposeLOL(lolBackgroundT[BackgroundSampleNames.index("QCD_HT"):BackgroundSampleNames.index("QCD_PT")+1])[:plotnames.index("Evt_HT_Jets")+1],BackgroundSamples[BackgroundSampleNames.index("QCD_HT"):BackgroundSampleNames.index("QCD_PT")+1],'Zprime_HT_Pt_comparison','Zprime_HT_Pt_comparison',True,False,False,'EL',False,False,True)
+#writeListOfHistoLists(transposeLOL(lolBackgroundT[BackgroundSampleNames.index("QCD_HT"):BackgroundSampleNames.index("QCD_PT")+1])[plotnames.index("Signal_Topfirst_Zprime_M"):plotnames.index("Jet_GenJet_Pt")+1],BackgroundSamples[BackgroundSampleNames.index("QCD_HT"):BackgroundSampleNames.index("QCD_PT")+1],labels,'Zprime_HT_Pt_comparison',True,False,False,'EL',False,False,True)
+#BackgroundSamples[BackgroundSampleNames.index("QCD_HT"):BackgroundSampleNames.index("QCD_PT")+1],labels,'Zprime_HT_Pt_comparison',True,False,False,'EL',False,False,True)
+
 
 writeHistoListwithXYErrors(transposeLOL(lolBackgroundT[BackgroundSampleNames.index("QCD_HT"):])[plotnames.index("SB_SF_top_anti_Tops_Pt"):plotnames.index("SB_SF_top_anti_Ws_MSD")],BackgroundSamples[BackgroundSampleNames.index("QCD_HT"):],'Zprime_SBSSFs_tanti',1,"[0]+([1]*log(x-[3])+[2]*log(x-[3])*log(x-[3]))/x")
 writeHistoListwithXYErrors(transposeLOL(lolBackgroundT[BackgroundSampleNames.index("QCD_HT"):])[plotnames.index("SB_SF_bottom_anti_Zprime_M"):plotnames.index("SB_SF_bottom_anti_Tops_MSD")],BackgroundSamples[BackgroundSampleNames.index("QCD_HT"):],'Zprime_SBSSFs_banti',1,'pol2')
 
 #####################TAGRATES############################
-writeListOfHistoLists(transposeLOL(lolDataT[DataSampleNames.index("MC_BKG_DATA"):])[plotnames.index("t_tagrate_pt"):plotnames.index("b_misstagrate_pt")+1],DataSamples,'tagrates','tagrates',False,False,False,'EL') 
-writeHistoListwithXYErrors(transposeLOL(lolDataT[DataSampleNames.index("MC_BKG_DATA"):])[plotnames.index("t_tagrate_pt"):plotnames.index("b_misstagrate_pt")+1],DataSamples,'tagrates_fit',1,"[0]+([1]*log(x-[3])+[2]*log(x-[3])*log(x-[3]))/x")
+#writeListOfHistoLists(transposeLOL(lolDataT[DataSampleNames.index("MC_BKG_DATA"):])[plotnames.index("t_tagrate_pt"):plotnames.index("b_misstagrate_pt")+1],DataSamples,'tagrates','tagrates',False,False,False,'EL') 
+#writeHistoListwithXYErrors(transposeLOL(lolDataT[DataSampleNames.index("MC_BKG_DATA"):])[plotnames.index("t_tagrate_pt"):plotnames.index("b_misstagrate_pt")+1],DataSamples,'tagrates_fit',1,"[0]+([1]*log(x-[3])+[2]*log(x-[3])*log(x-[3]))/x")
 
 
 
@@ -273,7 +279,8 @@ writeHistoListwithXYErrors(transposeLOL(lolDataT[DataSampleNames.index("MC_BKG_D
 #SchmonCorrelation(transposeLOL(lolBackgroundT[BackgroundSampleNames.index("QCD_HT"):BackgroundSampleNames.index("QCD_PT")+1])[plotnames.index("SB_SF_bottom_anti_Bottoms_Pt")]+transposeLOL(lolBackgroundT[BackgroundSampleNames.index("QCD_HT"):BackgroundSampleNames.index("QCD_PT")+1])[plotnames.index("SB_SF_W_anti_Ws_Pt")]+transposeLOL(lolBackgroundT[BackgroundSampleNames.index("QCD_HT"):BackgroundSampleNames.index("QCD_PT")+1])[plotnames.index("SB_SF_top_anti_Tops_Pt")],transposeLOL(lolDataT)[plotnames.index("t_misstagrate_pt")]+transposeLOL(lolDataT)[plotnames.index("W_misstagrate_pt")]+transposeLOL(lolDataT)[plotnames.index("b_misstagrate_pt")],name='correlations', rebin=1)
 
 
+#print transposeLOL(lolBackgroundT[BackgroundSampleNames.index("QCD_HT"):BackgroundSampleNames.index("QCD_PT")+1])[plotnames.index("N_packedPatJetsAK8PFCHSSoftDrop"):plotnames.index("Evt_HT_Jets")+1]
 
 
 
-writeListOfHistoLists(transposeLOL(lolBackgroundT[BackgroundSampleNames.index("ttbar"):BackgroundSampleNames.index("QCD_PT")+1])[plotnames.index("ABCD_top_tau32_vs_top_MSD"):plotnames.index("ABCD_top_tau32_vs_W_MSD")],BackgroundSamples[BackgroundSampleNames.index("ttbar"):BackgroundSampleNames.index("QCD_PT")+1],plotnames[plotnames.index('ABCD_top_tau32_vs_top_MSD'):plotnames.index('ABCD_W_MSD_vs_Bottom_CSV_v2')+1],'ABCD',True,False,False,'colz',False,False,False,False)
+#w1riteListOfHistoLists(transposeLOL(lolBackgroundT[BackgroundSampleNames.index("ttbar"):BackgroundSampleNames.index("QCD_PT")+1])[plotnames.index("ABCD_top_tau32_vs_top_MSD"):plotnames.index("ABCD_top_tau32_vs_W_MSD")],BackgroundSamples[BackgroundSampleNames.index("ttbar"):BackgroundSampleNames.index("QCD_PT")+1],plotnames[plotnames.index('ABCD_top_tau32_vs_top_MSD'):plotnames.index('ABCD_W_MSD_vs_Bottom_CSV_v2')+1],'ABCD',True,False,False,'colz',False,False,False,False)
