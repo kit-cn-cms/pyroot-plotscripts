@@ -19,10 +19,14 @@ class Sample:
         self.color=color
         self.path=path
         self.selection=selection
-        self.files=glob.glob(path)
-        if path!='' and len(self.files)==0:
+        self.files=[]
+        subpaths=path.split(";")
+        # allow globbing samples from different paths 
+        for sp in subpaths:
+	  self.files=glob.glob(sp)
+          if sp!='' and len(self.files)==0:
 	    print name
-            print 'no files found at',path
+            print 'no files found at',sp
         if nick=='':
             self.nick=name
         else:
@@ -1145,7 +1149,7 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
 #        print cms
 #        objects.append(cms)
 
-        cms = ROOT.TLatex(0.2, 0.96, 'CMS preliminary,  12.9 fb^{-1},  #sqrt{s} = 13 TeV'  );
+        cms = ROOT.TLatex(0.2, 0.96, 'CMS preliminary,  36.0 fb^{-1},  #sqrt{s} = 13 TeV'  );
         cms.SetTextFont(42)
         cms.SetTextSize(0.05)
         cms.SetNDC()
@@ -1213,7 +1217,7 @@ def writeListOfHistoListsAN(listOfHistoLists,samples, label,name,normalize=True,
 #        print cms
 #        objects.append(cms)
 
-        cms = ROOT.TLatex(0.2, 0.96, 'CMS preliminary,  12.9 fb^{-1},  #sqrt{s} = 13 TeV'  );
+        cms = ROOT.TLatex(0.2, 0.96, 'CMS preliminary,  36.0 fb^{-1},  #sqrt{s} = 13 TeV'  );
         cms.SetTextFont(42)
         cms.SetTextSize(0.05)
         cms.SetNDC()
@@ -1233,14 +1237,18 @@ def writeListOfHistoListsAN(listOfHistoLists,samples, label,name,normalize=True,
     writeObjects(canvases,name)
 
 
-def writeListOfROCs(graphs,names,colors,filename,logscale=False,rej=True):
+def writeListOfROCs(graphs,names,colors,filename,printInts=True,logscale=False,rej=True):
     c=getCanvas('ROC')
     if logscale:
         c.SetLogy()
     l=getLegend()
     first=True
     for graph,name,color in zip(graphs,names,colors):
-        l.AddEntry2(graph,name)
+        integral=graph.Integral()+0.5
+        if printInts:
+	  l.AddEntry2(graph,name+" ("+str(round(integral,2))+")")
+	else:
+	  l.AddEntry2(graph,name)
         if first:
             graph.Draw('AL')
             first=False
