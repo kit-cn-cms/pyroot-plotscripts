@@ -23,7 +23,7 @@ class Sample:
         subpaths=path.split(";")
         # allow globbing samples from different paths 
         for sp in subpaths:
-	  self.files=glob.glob(sp)
+	  self.files+=glob.glob(sp)
           if sp!='' and len(self.files)==0:
 	    print name
             print 'no files found at',sp
