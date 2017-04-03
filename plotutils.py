@@ -943,7 +943,7 @@ def createLLL_fromSuperHistoFileSyst(path,samples,plots,systnames=[""]):
             nominal_key=sample.nick+'_'+plot.name+systnames[0]
             nominal=f.Get(nominal_key)
 #            print sample.name
-            print "shapes ", sample.shape_unc
+            #print "shapes ", sample.shape_unc
             l=[]
             for syst in systnames:
                 ROOT.gDirectory.cd('PyROOT:/')
