@@ -46,7 +46,7 @@ def renameHistos(infname,outfname,sysnames,prune=True):
   keylist=infile.GetListOfKeys()
   
   for key in keylist:
-    print key.GetName()
+    #print key.GetName()
     thisname=key.GetName()
     thish=infile.Get(thisname)
     newname=thisname
@@ -85,6 +85,7 @@ def renameHistos(infname,outfname,sysnames,prune=True):
         nsysts+=1
         
     if nsysts>2:
+      print "skipping", thisname
       continue
     
     #filter histograms for systs not belonging to the samples 
@@ -149,7 +150,7 @@ def renameHistos(infname,outfname,sysnames,prune=True):
           thish.SetBinError(ibin+1,0.0)
   #if "125" in newname:
     #newname=newname.replace("125","")
-#    print "changed ", thisname, " to ", newname
+    print "changed ", thisname, " to ", newname
     thish.SetName(newname)
     outfile.cd()
     thish.Write()

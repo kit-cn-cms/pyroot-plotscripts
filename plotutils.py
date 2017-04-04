@@ -13,20 +13,60 @@ import CMS_lumi
 ROOT.gStyle.SetPaintTextFormat("4.2f");
 ROOT.gROOT.SetBatch(True)
 
+
+class SampleDictionary:
+  def __init__(self):
+    self.samplemap={}
+    
+  def addToMap(self,path,files):
+    if not self.samplemap.has_key(path):
+      self.samplemap[path]=files
+    else:
+      print "already have this key", path
+  
+  def hasKey(self,path):
+    if self.samplemap.has_key(path):
+      return True
+  
+  def getFiles(self,path):
+    if self.samplemap.has_key(path):
+      return self.samplemap[path]
+    else:
+      print "key not in sample dictionary"
+      return []
+  
+  def doPrintout(self):
+    print self.samplemap
+
 class Sample:
-    def __init__(self,name, color=ROOT.kBlack, path='', selection='',nick='',listOfShapes=[],up=0,down=None,checknevents=-1,treename='MVATree'):
+    def __init__(self,name, color=ROOT.kBlack, path='', selection='',nick='',listOfShapes=[],up=0,down=None,samDict="",checknevents=-1,treename='MVATree'):
         self.name=name
         self.color=color
         self.path=path
         self.selection=selection
         self.files=[]
         subpaths=path.split(";")
-        # allow globbing samples from different paths 
-        for sp in subpaths:
-	  self.files+=glob.glob(sp)
-          if sp!='' and len(self.files)==0:
-	    print name
-            print 'no files found at',sp
+        # allow globbing samples from different paths
+        if samDict!="":
+	  if not samDict.hasKey(self.path):  
+	    print "globbing files for", name
+	    for sp in subpaths:
+	      self.files+=glob.glob(sp)
+	      if sp!='' and len(self.files)==0:
+		print name
+		print 'no files found at',sp
+	    samDict.addToMap(path,self.files)
+	  else:
+	    print "map already knows this sample", path
+	    self.files=samDict.getFiles(path)
+	else:
+          print "globbing files for", name
+	  for sp in subpaths:
+	      self.files+=glob.glob(sp)
+	      if sp!='' and len(self.files)==0:
+		print name
+		print 'no files found at',sp
+	  
         if nick=='':
             self.nick=name
         else:
