@@ -36,9 +36,8 @@ class Limitresult:
     print 'combined:',round(self.combined*10)/10.,'^{+'+str(round((self.combined_up-self.combined)*10)/10.)+'}_{'+str(round((self.combined_down-self.combined)*10)/10.)+'}','^{+'+str(round((self.combined_2up-self.combined)*10)/10.)+'}_{'+str(round((self.combined_2down-self.combined)*10)/10.)+'}'
     for cat,limit,limit_up,limit_down,limit_2up,limit_2down in zip(self.cats,self.catlimits,self.catlimits_up,self.catlimits_down,self.catlimits_2up,self.catlimits_2down):
       print catalias[cat]+':',round(limit*10.)/10.,'^{+'+str(round((limit_up-limit)*10)/10.)+'}_{'+str(round((limit_down-limit)*10)/10.)+'}','^{+'+str(round((limit_2up-limit)*10)/10.)+'}_{'+str(round((limit_2down-limit)*10)/10.)+'}'
-    
 
-def renameHistos(infname,outfname,sysnames,prune=True):
+def renameHistosOLD(infname,outfname,sysnames,prune=True):
   print sysnames
   infile=ROOT.TFile(infname,"READ")
   outfile=ROOT.TFile(outfname,"RECREATE")
@@ -150,12 +149,147 @@ def renameHistos(infname,outfname,sysnames,prune=True):
           thish.SetBinError(ibin+1,0.0)
   #if "125" in newname:
     #newname=newname.replace("125","")
-    print "changed ", thisname, " to ", newname
+    if newname!=thisname:
+      print "changed ", thisname, " to ", newname
     thish.SetName(newname)
     outfile.cd()
     thish.Write()
   
   outfile.Close()
+  infile.Close()    
+
+def renameHistos(infname,outfname,sysnames,prune=True):
+  print sysnames
+  cmd="cp -v "+infname+" "+outfname
+  call(cmd,shell=True)
+  infile=ROOT.TFile(outfname,"UPDATE")
+
+  keylist=infile.GetListOfKeys()
+  
+  counter=0
+  nplots=len(keylist)
+  for key in keylist:
+    histchanged=False
+    counter+=1
+    if counter%100==0:
+      print "renamed ", counter, "/",nplots
+    #print key.GetName()
+    thisname=key.GetName()
+    thish=infile.Get(thisname)
+    newname=thisname
+    do=True
+    #print thisname
+    if do and "PSscaleUp" in thisname and "Q2scale" in thisname and thisname[-2:]=="Up":
+      #print thish
+#     print thisname
+      #ttbarOther_CMS_ttH_PSscaleUp_BDT_ljets_j4_t4_low_CMS_ttH_Q2scale_ttbarPlusBUp
+      tmp=thisname
+      tmp=tmp.replace('_CMS_ttH_PSscaleUp','')
+      print 'stripped',tmp
+#      raw_input()
+      newname=tmp.replace('Q2scale','CombinedScale')
+      #print newname
+      #raw_input()
+
+    if "PSscaleDown" in thisname and "Q2scale" in thisname and thisname[-4:]=="Down":
+  #    print thisname
+      #ttbarOther_CMS_ttH_PSscaleUp_BDT_ljets_j4_t4_low_CMS_ttH_Q2scale_ttbarPlusBUp
+      tmp=thisname
+      tmp=tmp.replace('_CMS_ttH_PSscaleDown','')
+   #   print 'stripped',tmp
+     # raw_input()
+      newname=tmp.replace('Q2scale','CombinedScale')
+    #  print newname
+      #raw_input()
+
+    if "dummy" in thisname:
+      continue
+    nsysts=0
+    for sys in sysnames:
+      if sys in newname:
+        newname=newname.replace(sys,"")
+        newname+=sys
+        nsysts+=1
+        
+    if nsysts>2:
+      #print "skipping", thisname
+      continue
+    
+    #filter histograms for systs not belonging to the samples 
+    #for now until we have NNPDF syst for other samples
+    if prune:
+      if "CMS_ttH_NNPDF" in thisname:
+        if thisname.split("_",1)[0]+"_" not in ["ttbarPlus2B_","ttbarPlusB_","ttbarPlusBBbar_","ttbarPlusCCbar_","ttbarOther_"]:
+          print "wrong syst: removing histogram", thisname
+          continue
+      if "CMS_ttH_Q2scale_ttbarOther" in thisname and "ttbarOther"!=thisname.split("_",1)[0]:
+        print "wrong syst: removing histogram", thisname
+        continue
+      if ("CMS_ttH_Q2scale_ttbarPlusBUp" in thisname or "CMS_ttH_Q2scale_ttbarPlusBDown" in thisname ) and "ttbarPlusB"!=thisname.split("_",1)[0] :
+        print "wrong syst: removing histogram", thisname
+        continue
+      if "CMS_ttH_Q2scale_ttbarPlusBBbar" in thisname and "ttbarPlusBBbar"!=thisname.split("_",1)[0] :
+        print "wrong syst: removing histogram", thisname
+        continue
+      if "CMS_ttH_Q2scale_ttbarPlusCCbar" in thisname and "ttbarPlusCCbar"!=thisname.split("_",1)[0] :
+        print "wrong syst: removing histogram", thisname
+        continue
+      if "CMS_ttH_Q2scale_ttbarPlus2B" in thisname and "ttbarPlus2B"!=thisname.split("_",1)[0] :
+        print "wrong syst: removing histogram", thisname
+        continue
+    
+#add ttbar type to systematics name for PS scale
+    if "CMS_ttH_PSscaleUp" in newname or "CMS_ttH_PSscaleDown" in newname:
+      
+      ttbartype=""
+      if "ttbarOther"==thisname.split("_",1)[0]:
+        ttbartype="ttbarOther"
+      elif "ttbarPlusB"==thisname.split("_",1)[0] :
+        ttbartype="ttbarPlusB"
+      elif "ttbarPlusBBbar"==thisname.split("_",1)[0] :
+        ttbartype="ttbarPlusBBbar"
+      elif "ttbarPlusCCbar"==thisname.split("_",1)[0] :
+        ttbartype="ttbarPlusCCbar"
+      elif "ttbarPlus2B"==thisname.split("_",1)[0] :
+        ttbartype="ttbarPlus2B"
+      else:
+        print "wrong syst: removing histogram", thisname
+        continue
+      
+      if "CMS_ttH_PSscaleUp" in newname:
+        newname=newname.replace("CMS_ttH_PSscaleUp","CMS_ttH_PSscale_"+ttbartype+"Up")
+      elif "CMS_ttH_PSscaleDown" in newname:
+        newname=newname.replace("CMS_ttH_PSscaleDown","CMS_ttH_PSscale_"+ttbartype+"Down")
+      else:
+        print "wrong syst: removing histogram", thisname
+
+
+    #if nsysts ==1 and thish.Integral()<0.0:
+      #print "nominal histogram has negativ integral"
+        #print thish, thish.Integral()
+    if prune:
+      nbins=thish.GetNbinsX()
+      newhist=thish.Clone()
+      for ibin in range(nbins):
+        if newhist.GetBinContent(ibin+1)<0.0:
+          print "negative bins in ", newhist
+          print "setting bin ", ibin+1, "from", newhist.GetBinContent(ibin+1), "+-", newhist.GetBinError(ibin+1), "to 0+-0"
+          newhist.SetBinContent(ibin+1,0.0)
+          newhist.SetBinError(ibin+1,0.0)
+          histchanged=True
+  #if "125" in newname:
+    #newname=newname.replace("125","")
+    if newname!=thisname:      
+      print "changed ", thisname, " to ", newname
+      thish.SetName(newname)
+      #infile.cd()
+      thish.Write()
+    if histchanged:
+      print "histogram changed", thisname
+      newhist.SetName(newname)
+      infile.Delete(thish)
+      newhist.Write()
+  
   infile.Close()
   
 def mergeHistFiles(infname1,infname2,categoriesToTakeFrom2,outfname):
