@@ -7,7 +7,7 @@ sys.path.insert(0, 'limittools')
 from limittools import renameHistos
 from scriptgeneratorMEMDBCSV import *
 
-name='controlplotsSpring17v6'
+name='controlplotsSpring17v7'
 
 # if one wants to plot blinded: True (default: False)
 plotBlinded = False
