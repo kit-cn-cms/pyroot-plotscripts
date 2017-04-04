@@ -406,7 +406,6 @@ path_karim="/nfs/dust/cms/user/kelmorab/trees_Spring17_v2/"
 
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
-samples_data_controlplots  
 sampleDict=SampleDictionary()
 sampleDict.doPrintout()
 
