@@ -1737,7 +1737,7 @@ def check_jobs(scripts,outputs,nentries):
   return failed_jobs
 
 # the dataBases should be defined as follows e.g. [[memDB,path],[blrDB,path]]
-def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],dataBases=[],treeInformationJsonFile=""):
+def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],dataBases=[],treeInformationJsonFile="",otherSystnames=[]):
   workdir=os.getcwd()+'/workdir/'+name
   outputpath=workdir+'/output.root'
 
@@ -1778,7 +1778,7 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
     sys.exit()
     
   #create script to rename histograms
-  createRenameScript(programpath,systnames)
+  createRenameScript(programpath,systnames+otherSystnames)
   
   # create output folders
   print 'creating output folders'
@@ -1872,7 +1872,7 @@ def renameHistosParallel(infname,sysnames,prune=False):
 	nsysts+=1
 	
     if "JES" in thisname or "JER" in thisname:
-      if nsysts>=2:
+      if nsysts>2:
 	print nsysts, " systs: removing ", thisname
 	outfile.Delete(thisname)
 	outfile.Delete(thisname+";1")

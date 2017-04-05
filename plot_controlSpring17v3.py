@@ -642,7 +642,7 @@ plots+=plots64+plots63+plots62+plots54+plots53+plots44+plots43+plots42+plots52
 #plots+=plots62+plots63
 
 print name,2000000,plots,samples+samples_data,[''],['1.'],weightsystnames, systweights
-outputpath=plotParallel(name,500000,plots,samples+samples_data+systsamples,[''],['1.'],weightsystnames, systweights,additionalvariables,[],"")
+outputpath=plotParallel(name,2000000,plots,samples+samples_data+systsamples,[''],['1.'],weightsystnames, systweights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/pyroot-plotscripts/treejson_Spring117v7_wST.json",othersystnames)
 
 # plot dataMC comparison
 listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
