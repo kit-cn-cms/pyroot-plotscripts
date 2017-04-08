@@ -7,12 +7,12 @@ sys.path.insert(0, 'limittools')
 from limittools import renameHistos
 from scriptgeneratorMEMDBCSV import *
 
-name='controlplotsSpring17v7'
+name='controlplotsSpring17v8'
 
 # if one wants to plot blinded: True (default: False)
 plotBlinded = False
 
-bdtset="V4"
+bdtset="BDTShapes_Spring17v7"
 additionalvariables=[
                       "Muon_Pt","Electron_Pt","Muon_Eta","Electron_Eta","Jet_Pt","Jet_Eta","Jet_CSV","Jet_Flav","N_Jets","Weight_CSV","Weight_CSVLFup","Weight_CSVLFdown","Weight_CSVHFup","Weight_CSVHFdown","Weight_CSVHFStats1up","Weight_CSVHFStats1down","Weight_CSVLFStats1up","Weight_CSVLFStats1down","Weight_CSVHFStats2up","Weight_CSVHFStats2down","Weight_CSVLFStats2up","Weight_CSVLFStats2down","Weight_CSVCErr1up","Weight_CSVCErr1down","Weight_CSVCErr2up","Weight_CSVCErr2down",
 ]
@@ -642,7 +642,9 @@ plots+=plots64+plots63+plots62+plots54+plots53+plots44+plots43+plots42+plots52
 #plots+=plots62+plots63
 
 print name,2000000,plots,samples+samples_data,[''],['1.'],weightsystnames, systweights
-outputpath=plotParallel(name,2000000,plots,samples+samples_data+systsamples,[''],['1.'],weightsystnames, systweights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/pyroot-plotscripts/treejson_Spring117v7_wST.json",othersystnames)
+outputpath=plotParallel(name,1000000,plots,samples+samples_data+systsamples,[''],['1.'],weightsystnames, systweights,additionalvariables,[],"",othersystnames)
+
+#outputpath=plotParallel(name,1000000,plots,samples+samples_data+systsamples,[''],['1.'],weightsystnames, systweights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/pyroot-plotscripts/treejson_Spring117v7_wST.json",othersystnames)
 
 # plot dataMC comparison
 listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)

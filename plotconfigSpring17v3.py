@@ -457,9 +457,9 @@ samplesControlPlots=[
                     Sample('t#bar{t}+2b',ROOT.kRed+2,ttbarpathS,mcweightAll+ttbarMCweight+'*(GenEvt_I_TTPlusBB==2)','ttbarPlus2B',systs_all_samples+systs_ttbar+systs_tt_2b,samDict=sampleDict),
                     Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,ttbarpathS,mcweightAll+ttbarMCweight+'*(GenEvt_I_TTPlusBB==3)','ttbarPlusBBbar',systs_all_samples+systs_ttbar+systs_tt_bb,samDict=sampleDict),  
                     Sample('Single Top',ROOT.kMagenta,path_karim+'/st*/*nominal*.root',mcweightAll,'SingleTop',systs_all_samples,samDict=sampleDict) , 
-                    #Sample('V+jets',ROOT.kGreen-3,path_80x+'/*ets*/*nominal*.root',mcweightAll,'Vjets',systs_all_samples) , 
-                    #Sample('t#bar{t}+V',ROOT.kBlue-10,path_80x+'/tt?_*/*nominal*.root',mcweightAll,'ttV',systs_all_samples),         
-                    #Sample('Diboson',ROOT.kAzure+2,path_80x+'/??/*nominal*.root',mcweightAll,'Diboson',systs_all_samples) , 
+                    Sample('V+jets',ROOT.kGreen-3,path_karim+'/*ets*/*nominal*.root',mcweightAll,'Vjets',systs_all_samples,samDict=sampleDict) , 
+                    Sample('t#bar{t}+V',ROOT.kBlue-10,path_karim+'/tt?_*/*nominal*.root',mcweightAll,'ttV',systs_all_samples,samDict=sampleDict),         
+                    #Sample('Diboson',ROOT.kAzure+2,path_80x+'/??/*nominal*.root',mcweightAll,'Diboson',systs_all_samples,samDict=sampleDict) , 
 #                    Sample('QCD',ROOT.kYellow ,path_80x+'/QCD*/*nominal*root',mcweight,'QCD') , 
 ]
 
@@ -482,10 +482,10 @@ samplesLimits=[
                     Sample('t#bar{t}+2b',ROOT.kRed+2,ttbarpathS,mcweight+evenSel+ttbarMCweight+'*(GenEvt_I_TTPlusBB==2)','ttbarPlus2B',systs_all_samples+systs_ttbar+systs_tt_2b),
                     Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,ttbarpathS,mcweight+evenSel+ttbarMCweight+'*(GenEvt_I_TTPlusBB==3)','ttbarPlusBBbar',systs_all_samples+systs_ttbar+systs_tt_bb), 
                     Sample('Single Top',ROOT.kMagenta,path_karim+'/st*/*nominal*.root',mcweightAll,'singlet',systs_all_samples,samDict=sampleDict) , 
-                    #Sample('Z+jets',ROOT.kGreen-3,path_80x+'/withTrigger_Zjets*/*nominal*.root',mcweightAll,'zjets',systs_all_samples,samDict=sampleDict) , 
-                    #Sample('W+jets',ROOT.kGreen-7,path_80x+'/WJets*/*nominal*.root',mcweightAll,'wjets',systs_all_samples,samDict=sampleDict) , 
-                    #Sample('t#bar{t}+W',ROOT.kBlue-10,path_80x+'/ttW_*/*nominal*.root',mcweightAll,'ttbarW',systs_all_samples),
-                    #Sample('t#bar{t}+Z',ROOT.kBlue-6,path_80x+'/ttZ_*/*nominal*.root',mcweightAll,'ttbarZ',systs_all_samples),
+                    Sample('Z+jets',ROOT.kGreen-3,path_karim+'/Zjets*/*nominal*.root',mcweightAll,'zjets',systs_all_samples,samDict=sampleDict) , 
+                    Sample('W+jets',ROOT.kGreen-7,path_karim+'/WJets*/*nominal*.root',mcweightAll,'wjets',systs_all_samples,samDict=sampleDict) , 
+                    Sample('t#bar{t}+W',ROOT.kBlue-10,path_karim+'/ttW_*/*nominal*.root',mcweightAll,'ttbarW',systs_all_samples,samDict=sampleDict),
+                    Sample('t#bar{t}+Z',ROOT.kBlue-6,path_karim+'/ttZ_*/*nominal*.root',mcweightAll,'ttbarZ',systs_all_samples,samDict=sampleDict),
                     #Sample('Diboson',ROOT.kAzure+2,path_80x+'/??/*nominal*.root',mcweightAll,'diboson',systs_all_samples,samDict=sampleDict) , 
 ##                    Sample('QCD',ROOT.kYellow ,path_80x+'/QCD*/*nominal*root',mcweightAll,'QCD',samDict=sampleDict) , 
 ]
