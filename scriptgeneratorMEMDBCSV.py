@@ -11,6 +11,7 @@ import variablebox
 import plotutils
 import glob
 import json
+import filecmp
 
 ROOT.gROOT.SetBatch(True)
 
@@ -1650,12 +1651,12 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
     files_to_submit=[]
     for fn in s.files:
       events_in_file=0
-      if LoadedTreeInformation!={}:
+      if LoadedTreeInformation!={} and fn in LoadedTreeInformation:
 	#print "using tree event information"
 	events_in_file=LoadedTreeInformation[fn]
       else:
-	print "did not find this sample in the json file yet"
-	print "will add it"
+	#print "did not find this sample in the json file yet"
+	#print "will add it"
         f=ROOT.TFile(fn)
         t=f.Get('MVATree')
         events_in_file=t.GetEntries()
@@ -1760,6 +1761,10 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
     workdirold=workdir+datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     os.rename(workdir,workdirold)
     os.makedirs(workdir)
+    cmd='cp -v '+workdirold+'/'+name+'.cc'+' '+workdir+'/'+name+'.cc'
+    subprocess.call(cmd,shell=True)
+    cmd='cp -v '+workdirold+'/'+name+''+' '+workdir+'/'+name+'Backup'
+    subprocess.call(cmd,shell=True)
 
   if not os.path.exists(workdir):
     os.makedirs(workdir)
@@ -1770,7 +1775,9 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   # create c++ program
   # check if the program already exists
   alreadyWritten=os.path.exists(programpath+'.cc')
+  print os.path.exists(programpath+'.cc')
   if alreadyWritten:
+    print "a c++ program was written previously. Will check if this needs to be updated"
     cmd='cp -v '+programpath+'.cc'+' '+programpath+'.ccBackup'
     subprocess.call(cmd,shell=True)
   print 'creating c++ program'
@@ -1779,12 +1786,19 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
     print 'could not create c++ program'
     sys.exit()
   # check if the code changed
-  codeWasChanged=filecmp.cmp(programpath+'.ccBackup',programpath+'.cc')
+  codeWasChanged=True
+  if alreadyWritten:
+    print "comparing c++ code"
+    print programpath+'.ccBackup' ," vs ", programpath+'.cc'
+    codeWasChanged=not filecmp.cmp(programpath+'.ccBackup',programpath+'.cc')
   if codeWasChanged:
+    print "c++ codes differ"
     print 'compiling c++ program'
     compileProgram(programpath, usesDataBases)
   else:
     print 'c++ program already existing !!!! Check if this is reasonable!!!'
+    cmd = 'cp -v '+programpath+'Backup'+' '+programpath
+    subprocess.call(cmd,shell=True)
   if not os.path.exists(programpath):
     print 'could not compile c++ program'
     sys.exit()
