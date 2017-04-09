@@ -10,10 +10,10 @@ from limittools import addRealData
 from limittools import makeDatacards
 from limittools import calcLimits
 from limittools import replaceQ2scale
-from plotconfigDNNtest import *
+from plotconfigSpring17v3 import *
 
 # output name
-name='limits_Spring17v7_DNNtest'
+name='limits_DNNv8'
 
 # define categories
 categories_=[
@@ -49,7 +49,7 @@ memexp='(memDBp>0.0)*(memDBp_sig/(memDBp_sig+0.15*memDBp_bkg))+(memDBp<0.0)*(0.0
 
 # define BDT output variables
 bdtweightpath="/nfs/dust/cms/user/kelmorab/Spring17BDTWeights/"
-bdtset="ICHEP"
+bdtset="Spring17v1"
 additionalvariables=[
 			'finalbdt_ljets_j4_t2:=Evt_HT_Jets',
 			'finalbdt_ljets_j5_t2:=Evt_HT_Jets',
@@ -65,8 +65,8 @@ additionalvariables=[
 ]
 
 nhistobins= [  20,20, 	10,   10,    10,    10,   20,   10,   10 ]
-minxvals=   [ 200, 200, -0.7,  -0.75, -0.8,   -0.8, -0.8, -0.8,   -0.7]
-maxxvals=   [800,800,    0.8,  0.75,   0.8,    0.7,  0.7,  0.75,    0.65]
+minxvals=   [ 200, 200, -0.75,  -0.8, -0.8,   -0.8, -0.8, -0.8,   -0.8]
+maxxvals=   [800,800,    0.8,  0.75,   0.8,    0.7,  0.8,  0.8,    0.7]
 
 discrs =    ['finalbdt_ljets_j4_t2','finalbdt_ljets_j5_t2','finalbdt_ljets_j4_t3', 'finalbdt_ljets_j4_t4', 'finalbdt_ljets_j5_t3', 'finalbdt_ljets_j5_tge4', 'finalbdt_ljets_jge6_t2', 'finalbdt_ljets_jge6_t3', 'finalbdt_ljets_jge6_tge4']
 discrname='finaldiscr'
@@ -100,7 +100,7 @@ for discr,b,bl,nb,minx,maxx in zip(discrs,bins,binlabels,nhistobins,minxvals,max
 
 print bdts
 # plot everthing
-outputpath=plotParallel(name,500000,bdts,allsamples+samplesdata,[''],['1.'],weightsystnames,systweights,additionalvariables,[],"")
+outputpath=plotParallel(name,2000000,bdts,allsamples+samplesdata,[''],['1.'],weightsystnames[:1],systweights[:1],additionalvariables,[],"/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/pyroot-plotscripts/treejson_Spring17v2_moreBKGs.json",othersystnames,False)
 
 if not os.path.exists(name):
   os.makedirs(name)
@@ -136,7 +136,7 @@ writeListOfHistoListsAN(transposeLOL([lolT[0]]+lolT[9:]),[samples[0]]+samples[9:
 
 
 # make datacards
-makeDatacards(name+'/'+name+'_limitInput.root',name+'/'+name+'_datacard',binlabels)
+makeDatacards(name+'/'+name+'_limitInput.root',name+'/'+name+'_datacard',binlabels,doHdecay=True,discrname='finaldiscr',datacardmaker='mk_datacard_hdecay13TeV')
 
 # calculate limits
 #if askYesNo('Calculate limits?'):

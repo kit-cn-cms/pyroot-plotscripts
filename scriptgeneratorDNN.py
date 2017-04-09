@@ -1081,11 +1081,14 @@ public:
     DNNOutput()
         : DNNOutput(0., 0., 0., 0., 0., 0., 0.)
     {
+        reset();
     }
 
     ~DNNOutput()
     {
     }
+
+    void reset();
 
     inline double ttH() const
     {
@@ -1156,6 +1159,7 @@ public:
 
     static void pyInitialize();
     static void pyFinalize();
+    static void pyExcept(PyObject* pyObj, const std::string& msg);
 
 protected:
     string version_;
@@ -1170,7 +1174,7 @@ protected:
 class DNNClassifier_SL : public DNNClassifierBase
 {
 public:
-    DNNClassifier_SL(std::string version = "v3");
+    DNNClassifier_SL(std::string version = "v4");
 
     ~DNNClassifier_SL();
 
@@ -1197,7 +1201,7 @@ private:
 class DNNClassifier_DL : public DNNClassifierBase
 {
 public:
-    DNNClassifier_DL(std::string version = "v0");
+    DNNClassifier_DL(std::string version = "v1");
 
     ~DNNClassifier_DL();
 
@@ -1219,8 +1223,6 @@ private:
     PyObject* pyEvalArgs4_;
 };
 
-//DANGERZONE
-// HERE you need to add escapes to get the correct print out
 // python evaluation script
 static string evalScript = \"\\
 import sys, numpy as np\\n\\
@@ -1234,19 +1236,25 @@ def setup(python_path, model_files, input_name, output_name, dropout_name):\\n\\
         inputs.append(model.get(input_name))\\n\\
         outputs.append(model.get(output_name))\\n\\
         dropouts.append(model.get(dropout_name))\\n\\
-def eval(m, *values):\\n\\
-    return list(outputs[m].eval({inputs[m]: np.array(values).astype(np.float32), dropouts[m]: 1.}))\\n\\
+def eval(m, *values):\n\
+    return list(outputs[m].eval({inputs[m]: [np.array(values).astype(np.float32)], dropouts[m]: 1.})[0])\\n\\
 \";
+
 
 /*
  * DNN Classifier.
  * Please note that this classifier actually outputs 7 discriminator values simultaneously.They can
  * be interpreted as a classification probability as they sum up to 1. Classes (order is important):
  * ttH, ttbb, ttb, tt2b, ttcc, ttlf, other
- *
- * Note: Currently, the DL classifier always returns 1 for ttH and 0 everywhere else.
  */
 
+void DNNOutput::reset()
+{
+    for (size_t i = 0; i < 7; i++)
+    {
+        values[i] = -2.;
+    }
+}
 
 DNNClassifierBase::DNNClassifierBase(std::string version)
     : csvCut(0.8484)
@@ -1277,6 +1285,18 @@ void DNNClassifierBase::pyFinalize()
     Py_Finalize();
 }
 
+void DNNClassifierBase::pyExcept(PyObject* pyObj, const std::string& msg)
+{
+    if (pyObj == NULL)
+    {
+        if (PyErr_Occurred() != NULL)
+        {
+            PyErr_PrintEx(0);
+        }
+        throw runtime_error("a python error occured: " + msg);
+    }
+}
+
 DNNClassifier_SL::DNNClassifier_SL(std::string version)
     : DNNClassifierBase(version)
     , nFeatures4_(0)
@@ -1294,6 +1314,12 @@ DNNClassifier_SL::DNNClassifier_SL(std::string version)
         nFeatures6_ = 49;
     }
     else if (version_ == "v3")
+    {
+        nFeatures4_ = 30;
+        nFeatures5_ = 34;
+        nFeatures6_ = 38;
+    }
+    else if (version_ == "v4")
     {
         nFeatures4_ = 30;
         nFeatures5_ = 34;
@@ -1334,14 +1360,7 @@ DNNClassifier_SL::DNNClassifier_SL(std::string version)
     PyTuple_SetItem(pyArgs, 4, PyString_FromString(dropoutName_.c_str()));
 
     PyObject* pyResult = PyObject_CallObject(pySetup, pyArgs);
-    if (pyResult == NULL)
-    {
-        if (PyErr_Occurred() != NULL)
-        {
-            PyErr_PrintEx(0);
-        }
-        throw runtime_error("an error occured while loading the tfdeploy models");
-    }
+    pyExcept(pyResult, "could not load tfdeploy models");
 
     // store the evaluation function and prepare args
     // the "+ 1" is due to the model number being the first argument in the eval function
@@ -1363,12 +1382,15 @@ void DNNClassifier_SL::evaluate(const std::vector<TLorentzVector>& jets,
     const std::vector<double>& jetCSVs, const TLorentzVector& lepton, const TLorentzVector& met,
     DNNOutput& dnnOutput)
 {
+    dnnOutput.reset();
+
     size_t nJets = jets.size();
     size_t modelNum;
     PyObject* pyEvalArgs = NULL;
     if (nJets < 4)
     {
-        throw runtime_error("no DNN classifier existing for < 4 jets");
+        // no DNN classifier existing for < 4 jets
+        return;
     }
     else if (nJets == 4)
     {
@@ -1394,10 +1416,11 @@ void DNNClassifier_SL::evaluate(const std::vector<TLorentzVector>& jets,
 
     // evaluate
     PyObject* pyList = PyObject_CallObject(pyEval_, pyEvalArgs);
+    pyExcept(pyList, "could not evaluate models");
 
     // fill the dnnOutput
     dnnOutput.values.resize(7);
-    // v2 has the "other" category, v3 doesn't
+    // v2 has the "other" category, v3 and v4 don't
     bool hasOther = version_ == "v2";
     for (size_t i = 0; i < (hasOther ? 7 : 6); i++)
     {
@@ -1499,8 +1522,11 @@ void DNNClassifier_SL::fillFeatures_(PyObject* pyEvalArgs, const std::vector<TLo
     // min and max dR between b jets and the lepton
     double minDRBJetsLep, maxDRBJetsLep;
     dnnVars_.getMinMaxDR(bJets, &lepton, minDRBJetsLep, maxDRBJetsLep);
-    PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(minDRBJetsLep));
-    PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(maxDRBJetsLep));
+    if (version_ == "v2" || version_ == "v3")
+    {
+        PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(minDRBJetsLep));
+        PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(maxDRBJetsLep));
+    }
 
     // jet centrality
     PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(dnnVars_.getCentrality(allJets)));
@@ -1513,6 +1539,12 @@ void DNNClassifier_SL::fillFeatures_(PyObject* pyEvalArgs, const std::vector<TLo
     double tSphericity = ev2 == 0 ? 0 : (2. * ev2 / (ev1 + ev2));
     PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(tSphericity));
 
+    if (version_ == "v4")
+    {
+        PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(minDRBJetsLep));
+        PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(maxDRBJetsLep));
+    }
+
     // Fox-Wolfram moments
     // disabled for the moment, see https://gitlab.cern.ch/ttH/CommonClassifier/issues/1
     // double fw1, fw2, fw3, fw4, fw5;
@@ -1524,134 +1556,6 @@ void DNNClassifier_SL::fillFeatures_(PyObject* pyEvalArgs, const std::vector<TLo
     // PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(fw5));
 }
 
-DNNClassifier_DL::DNNClassifier_DL(std::string version)
-    : DNNClassifierBase(version)
-    , nFeatures3_(0)
-    , nFeatures4_(0)
-    , pyEvalArgs3_(0)
-    , pyEvalArgs4_(0)
-{
-    // set feature numbers based in the version
-    // nothing to do yet
-    if (version_ != "v0")
-    {
-        throw std::runtime_error("unknown version: " + version_);
-    }
-
-    // determine some local paths
-    std::string cmsswBase = std::string(getenv("CMSSW_BASE"));
-    std::string tfdeployBase = cmsswBase + "/python/TTH/CommonClassifier";
-    std::string modelsBase = cmsswBase + "/src/TTH/CommonClassifier/data/dnnmodels_DL_" + version_;
-    std::string modelFile3 = modelsBase + "/model_3j.pkl";
-    std::string modelFile4 = modelsBase + "/model_4j.pkl";
-
-    // // initialize the python main object, load the script
-    // PyObject* pyMainModule = PyImport_AddModule("__main__");
-
-    // PyObject* pyMainDict = PyModule_GetDict(pyMainModule);
-    // pyContext_ = PyDict_Copy(pyMainDict);
-
-    // PyRun_String(evalScript.c_str(), Py_file_input, pyContext_, pyContext_);
-
-    // // load the tfdeploy models
-    // PyObject* pySetup = PyDict_GetItemString(pyContext_, "setup");
-    // PyObject* pyModelFiles = PyTuple_New(2);
-    // PyTuple_SetItem(pyModelFiles, 1, PyString_FromString(modelFile3.c_str()));
-    // PyTuple_SetItem(pyModelFiles, 0, PyString_FromString(modelFile4.c_str()));
-    // PyObject* pyArgs = PyTuple_New(5);
-    // PyTuple_SetItem(pyArgs, 0, PyString_FromString(tfdeployBase.c_str()));
-    // PyTuple_SetItem(pyArgs, 1, pyModelFiles);
-    // PyTuple_SetItem(pyArgs, 2, PyString_FromString(inputName_.c_str()));
-    // PyTuple_SetItem(pyArgs, 3, PyString_FromString(outputName_.c_str()));
-    // PyTuple_SetItem(pyArgs, 4, PyString_FromString(dropoutName_.c_str()));
-
-    // PyObject* pyResult = PyObject_CallObject(pySetup, pyArgs);
-    // if (pyResult == NULL)
-    // {
-    //     if (PyErr_Occurred() != NULL)
-    //     {
-    //         PyErr_PrintEx(0);
-    //     }
-    //     throw runtime_error("an error occured while loading the tfdeploy models");
-    // }
-
-    // // store the evaluation function and prepare args
-    // // the "+ 1" is due to the model number being the first argument in the eval function
-    // pyEval_ = PyDict_GetItemString(pyContext_, "eval");
-    // pyEvalArgs3_ = PyTuple_New(nFeatures3_ + 1);
-    // pyEvalArgs4_ = PyTuple_New(nFeatures4_ + 1);
-}
-
-DNNClassifier_DL::~DNNClassifier_DL()
-{
-    // cleanup python objects
-    if (pyEvalArgs3_) Py_DECREF(pyEvalArgs3_);
-    if (pyEvalArgs4_) Py_DECREF(pyEvalArgs4_);
-}
-
-void DNNClassifier_DL::evaluate(const std::vector<TLorentzVector>& jets,
-    const std::vector<double>& jetCSVs, const std::vector<TLorentzVector>& leptons,
-    const TLorentzVector& met, DNNOutput& dnnOutput)
-{
-    // size_t nJets = jets.size();
-    // size_t modelNum;
-    // PyObject* pyEvalArgs = NULL;
-    // if (nJets < 3)
-    // {
-    //     throw runtime_error("no DNN classifier existing for < 3 jets");
-    // }
-    // else if (nJets == 3)
-    // {
-    //     pyEvalArgs = pyEvalArgs3_;
-    //     modelNum = 0;
-    // }
-    // else
-    // {
-    //     pyEvalArgs = pyEvalArgs4_;
-    //     modelNum = 1;
-    // }
-
-    // // modelNum is at pos 0
-    // PyTuple_SetItem(pyEvalArgs, 0, PyInt_FromSize_t(modelNum));
-
-    // // fill features into the py tuple
-    // fillFeatures_(pyEvalArgs, jets, jetCSVs, leptons, met);
-
-    // // evaluate
-    // PyObject* pyList = PyObject_CallObject(pyEval_, pyEvalArgs);
-
-    // // fill the dnnOutput
-    // dnnOutput.values.resize(7);
-    // for (size_t i = 0; i < 7; i++)
-    // {
-    //     dnnOutput.values[i] = PyFloat_AsDouble(PyList_GetItem(pyList, i));
-    // }
-
-    // dummy: 1 in ttH, 0 everywhere else
-    dnnOutput.values.resize(7);
-    dnnOutput.values[0] = 1.;
-    for (size_t i = 1; i < 7; i++)
-    {
-        dnnOutput.values[i] = 0.;
-    }
-
-    // Py_DECREF(pyList);
-}
-
-DNNOutput DNNClassifier_DL::evaluate(const std::vector<TLorentzVector>& jets,
-    const std::vector<double>& jetCSVs, const std::vector<TLorentzVector>& leptons,
-    const TLorentzVector& met)
-{
-    DNNOutput dnnOutput;
-    evaluate(jets, jetCSVs, leptons, met, dnnOutput);
-    return dnnOutput;
-}
-
-void DNNClassifier_DL::fillFeatures_(PyObject* pyEvalArgs, const std::vector<TLorentzVector>& jets,
-    const std::vector<double>& jetCSVs, const std::vector<TLorentzVector>& leptons,
-    const TLorentzVector& met)
-{
-}
 
 double DNNVariables::getHt(const std::vector<const TLorentzVector*>& lvecs) const
 {
@@ -3495,8 +3399,13 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   cmsswversion=os.environ['CMSSW_VERSION']
   splitcmsswversion=cmsswversion.split("_")
   if doAachenDNN and not int(splitcmsswversion[1])>=8:
-    print "You need at least CMSSW 8 for the DNNs from Aachen. Exiting!"
+    print "You need at least CMSSW 8_0_26_patch2 for the DNNs from Aachen. Exiting!"
     exit(0)
+  if doAaachenDNN:
+    commonclassifierexists=os.path.exists(cmsswpath+"/src/TTH/CommonClassifier")
+    if not commonclassifierexists:
+      print "You need the common classifier package with the dnns and tf installed. Exiting!"
+      exit(0)
   workdir=os.getcwd()+'/workdir/'+name
   outputpath=workdir+'/output.root'
 
