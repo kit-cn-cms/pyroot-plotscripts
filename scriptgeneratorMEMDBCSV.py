@@ -1654,6 +1654,8 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
 	#print "using tree event information"
 	events_in_file=LoadedTreeInformation[fn]
       else:
+	print "did not find this sample in the json file yet"
+	print "will add it"
         f=ROOT.TFile(fn)
         t=f.Get('MVATree')
         events_in_file=t.GetEntries()
@@ -1766,13 +1768,23 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   programpath=workdir+'/'+name
 
   # create c++ program
+  # check if the program already exists
+  alreadyWritten=os.path.exists(programpath+'.cc')
+  if alreadyWritten:
+    cmd='cp -v '+programpath+'.cc'+' '+programpath+'.ccBackup'
+    subprocess.call(cmd,shell=True)
   print 'creating c++ program'
   createProgram(programpath,plots,samples,catnames,catselections,systnames,systweights,additionalvariables, dataBases)
   if not os.path.exists(programpath+'.cc'):
     print 'could not create c++ program'
     sys.exit()
-  print 'compiling c++ program'
-  compileProgram(programpath, usesDataBases)
+  # check if the code changed
+  codeWasChanged=filecmp.cmp(programpath+'.ccBackup',programpath+'.cc')
+  if codeWasChanged:
+    print 'compiling c++ program'
+    compileProgram(programpath, usesDataBases)
+  else:
+    print 'c++ program already existing !!!! Check if this is reasonable!!!'
   if not os.path.exists(programpath):
     print 'could not compile c++ program'
     sys.exit()
