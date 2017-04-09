@@ -238,7 +238,7 @@ class Variables:
     newexpr=expr
     variables=self.varsNoIndex(expr)
     #print variables
-    print self.variables
+    #print self.variables
     for v in variables:
       print "search ", v
       if v in self.variables:
