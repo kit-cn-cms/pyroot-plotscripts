@@ -285,9 +285,9 @@ def renameHistos(infname,outfname,sysnames,prune=True):
       #infile.cd()
       thish.Write()
     if histchanged:
-      print "histogram changed", thisname
+      print "histogram changed", thisname, newname
       newhist.SetName(newname)
-      infile.Delete(thish)
+      infile.Delete(thisname)
       newhist.Write()
   
   infile.Close()
