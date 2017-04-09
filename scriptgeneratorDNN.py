@@ -11,10 +11,11 @@ import variablebox
 import plotutils
 import glob
 import json
+import filecmp
 
 ROOT.gROOT.SetBatch(True)
 
-def getHead(dataBases):
+def getHead(dataBases,doAachenDNN):
   
   retstr="""
 #include "TChain.h"
@@ -32,25 +33,29 @@ def getHead(dataBases):
 #include <algorithm>
 #include <map>
 #include "TStopwatch.h"
-
+"""
+  if doAachenDNN:
+    retstr+="""
 #include "TVector.h" 
 #include <iterator>
 #include "Python.h"
 #include "TMatrixDSym.h"
 #include "TMatrixDSymEigen.h"
 #include "TVectorD.h"
-
-
 """
 
   if dataBases!=[]:
     retstr+="""
 #include "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase/MEMDataBase/interface/MEMDataBase.h"
 """
+
   retstr+="""
 
 using namespace std;
+"""
 
+  if doAachenDNN:
+    retstr+="""
 // hacked DNN Classifier of RWTH from commit 
 // https://gitlab.cern.ch/ttH/CommonClassifier/commit/91f1d2f81291ce6ee3a168e3778c0b9c806e7f2b
 
@@ -1763,12 +1768,11 @@ void DNNVariables::getSphericalEigenValues(
     ev3 = fabs(ev[2]) < 0.00000000000001 ? 0 : ev[2];
 }
 
+"""
+  
 
-
-
-
-
-// --------------------------------------------------------------------
+  retstr+="""
+  
 //hacked Lepton SF Helper from MiniAODHelper
 
 
@@ -3024,23 +3028,28 @@ int main(){
 """
 
 
-def compileProgram(scriptname,usesDataBases):
+def compileProgram(scriptname,usesDataBases,doAachenDNN):
   p = subprocess.Popen(['root-config', '--cflags', '--libs'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
   out, err = p.communicate()
-  ppyc = subprocess.Popen(['python-config', '--cflags'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-  outpyc, errpyc = ppyc.communicate()
-  ppyl = subprocess.Popen(['python-config', '--ldflags'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-  outpyl, errpyl = ppyl.communicate()
-  print "communicated"
-  # get library path for python
-  print outpyc
-  pythonincludepath=outpyc.split(" ")[0]
-  pythonlibrarypath=pythonincludepath.replace("-I","-L").replace("include/python2.7","lib")
+  if doAachenDNN:
+    ppyc = subprocess.Popen(['python-config', '--cflags'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    outpyc, errpyc = ppyc.communicate()
+    ppyl = subprocess.Popen(['python-config', '--ldflags'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    outpyl, errpyl = ppyl.communicate()
+    print "communicated"
+    # get library path for python
+    print outpyc
+    pythonincludepath=outpyc.split(" ")[0]
+    pythonlibrarypath=pythonincludepath.replace("-I","-L").replace("include/python2.7","lib")
+  
   memDBccfiles=[]
+  dnnfiles=[]
+  if doAachenDNN:
+    dnnfiles=outpyc[:-1].replace("\n"," ").split(' ')+[pythonlibrarypath]+outpyl[:-1].replace("\n"," ").split(' ')
   if usesDataBases:
     memDBccfiles=glob.glob('/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase/MEMDataBase/src/*.cc') 
-  #TODO update the dataBases code
-  cmd= ['g++']+out[:-1].replace("\n"," ").split(' ')+outpyc[:-1].replace("\n"," ").split(' ')+[pythonlibrarypath]+outpyl[:-1].replace("\n"," ").split(' ')+['-lTMVA']+memDBccfiles+[scriptname+'.cc','-o',scriptname]
+    #TODO update the dataBases code
+  cmd= ['g++']+out[:-1].replace("\n"," ").split(' ')+dnnfiles+['-lTMVA']+memDBccfiles+[scriptname+'.cc','-o',scriptname]
   print cmd
   print ""
   print " ".join(cmd)
@@ -3303,6 +3312,8 @@ def createScript(scriptname,programpath,processname,filenames,outfilename,maxeve
   script+='export SKIPEVENTS="'+str(skipevents)+'"\n'
   script+='export SUFFIX="'+suffix+'"\n'
   script+=programpath+'\n'
+  #DANGERZONE
+  script+='python '+programpath+'_rename.py\n'
   f=open(scriptname,'w')
   f.write(script)
   f.close()
@@ -3387,10 +3398,12 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
     files_to_submit=[]
     for fn in s.files:
       events_in_file=0
-      if LoadedTreeInformation!={}:
+      if LoadedTreeInformation!={} and fn in LoadedTreeInformation:
 	#print "using tree event information"
 	events_in_file=LoadedTreeInformation[fn]
       else:
+	#print "did not find this sample in the json file yet"
+	#print "will add it"
         f=ROOT.TFile(fn)
         t=f.Get('MVATree')
         events_in_file=t.GetEntries()
@@ -3474,7 +3487,16 @@ def check_jobs(scripts,outputs,nentries):
   return failed_jobs
 
 # the dataBases should be defined as follows e.g. [[memDB,path],[blrDB,path]]
-def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],dataBases=[],treeInformationJsonFile=""):
+def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],dataBases=[],treeInformationJsonFile="",otherSystnames=[],doAachenDNN=False):
+  cmsswpath=os.environ['CMSSW_BASE']
+  if not "CMSSW" in cmsswpath:
+    print "you need CMSSW for this to work. Exiting!"
+    exit(0)
+  cmsswversion=os.environ['CMSSW_VERSION']
+  splitcmsswversion=cmsswversion.split("_")
+  if doAachenDNN and not int(splitcmsswversion[1])>=8:
+    print "You need at least CMSSW 8 for the DNNs from Aachen. Exiting!"
+    exit(0)
   workdir=os.getcwd()+'/workdir/'+name
   outputpath=workdir+'/output.root'
 
@@ -3495,6 +3517,10 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
     workdirold=workdir+datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     os.rename(workdir,workdirold)
     os.makedirs(workdir)
+    cmd='cp -v '+workdirold+'/'+name+'.cc'+' '+workdir+'/'+name+'.cc'
+    subprocess.call(cmd,shell=True)
+    cmd='cp -v '+workdirold+'/'+name+''+' '+workdir+'/'+name+'Backup'
+    subprocess.call(cmd,shell=True)
 
   if not os.path.exists(workdir):
     os.makedirs(workdir)
@@ -3503,17 +3529,39 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   programpath=workdir+'/'+name
 
   # create c++ program
+  # check if the program already exists
+  alreadyWritten=os.path.exists(programpath+'.cc')
+  print os.path.exists(programpath+'.cc')
+  if alreadyWritten:
+    print "a c++ program was written previously. Will check if this needs to be updated"
+    cmd='cp -v '+programpath+'.cc'+' '+programpath+'.ccBackup'
+    subprocess.call(cmd,shell=True)
   print 'creating c++ program'
   createProgram(programpath,plots,samples,catnames,catselections,systnames,systweights,additionalvariables, dataBases)
   if not os.path.exists(programpath+'.cc'):
     print 'could not create c++ program'
     sys.exit()
-  print 'compiling c++ program'
-  compileProgram(programpath, usesDataBases)
+  # check if the code changed
+  codeWasChanged=True
+  if alreadyWritten:
+    print "comparing c++ code"
+    print programpath+'.ccBackup' ," vs ", programpath+'.cc'
+    codeWasChanged=not filecmp.cmp(programpath+'.ccBackup',programpath+'.cc')
+  if codeWasChanged:
+    print "c++ codes differ"
+    print 'compiling c++ program'
+    compileProgram(programpath, usesDataBases,doAachenDNN)
+  else:
+    print 'c++ program already existing !!!! Check if this is reasonable!!!'
+    cmd = 'cp -v '+programpath+'Backup'+' '+programpath
+    subprocess.call(cmd,shell=True)
   if not os.path.exists(programpath):
     print 'could not compile c++ program'
     sys.exit()
-
+    
+  #create script to rename histograms
+  createRenameScript(programpath,systnames+otherSystnames)
+  
   # create output folders
   print 'creating output folders'
   scriptsfolder=workdir+'/'+name+'_scripts'
@@ -3557,3 +3605,131 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   subprocess.call(['hadd', outputpath]+outputs)
   print 'done'
   return  outputpath
+
+
+def createRenameScript(scriptname,systematics):
+  header= """
+import ROOT
+import sys
+import os
+from subprocess import call
+filename=os.getenv("OUTFILENAME")
+
+
+"""
+  
+  body="""
+
+def renameHistosParallel(infname,sysnames,prune=False):
+  cmd="cp -v "+infname+" "+infname.replace(".root","_original.root")
+  call(cmd,shell=True)
+  print sysnames
+  #infile=ROOT.TFile(infname,"READ")
+  outfile=ROOT.TFile(infname,"UPDATE")
+
+  keylist=outfile.GetListOfKeys()
+  for key in keylist:
+    thisname=key.GetName()
+    thish=outfile.Get(thisname)
+    newname=thisname
+    do=True
+    if do and "PSscaleUp" in thisname and "Q2scale" in thisname and thisname[-2:]=="Up":
+      tmp=thisname
+      tmp=tmp.replace('_CMS_ttH_PSscaleUp','')
+      print 'stripped',tmp
+      newname=tmp.replace('Q2scale','CombinedScale')
+
+    if "PSscaleDown" in thisname and "Q2scale" in thisname and thisname[-4:]=="Down":
+      tmp=thisname
+      tmp=tmp.replace('_CMS_ttH_PSscaleDown','')
+      newname=tmp.replace('Q2scale','CombinedScale')
+
+    if "dummy" in thisname:
+      continue
+    nsysts=0
+    for sys in sysnames:
+      if sys in newname:
+	newname=newname.replace(sys,"")
+	newname+=sys
+	nsysts+=1
+	
+    if "JES" in thisname or "JER" in thisname:
+      if nsysts>2:
+	print nsysts, " systs: removing ", thisname
+	outfile.Delete(thisname)
+	outfile.Delete(thisname+";1")
+	continue
+    	
+    #filter histograms for systs not belonging to the samples 
+    #for now until we have NNPDF syst for other samples
+    if prune:
+      if "CMS_ttH_NNPDF" in thisname:
+	if thisname.split("_",1)[0]+"_" not in ["ttbarPlus2B_","ttbarPlusB_","ttbarPlusBBbar_","ttbarPlusCCbar_","ttbarOther_"]:
+	  print "wrong syst: removing histogram", thisname
+	  continue
+      if "CMS_ttH_Q2scale_ttbarOther" in thisname and "ttbarOther"!=thisname.split("_",1)[0]:
+	print "wrong syst: removing histogram", thisname
+	continue
+      if ("CMS_ttH_Q2scale_ttbarPlusBUp" in thisname or "CMS_ttH_Q2scale_ttbarPlusBDown" in thisname ) and "ttbarPlusB"!=thisname.split("_",1)[0] :
+	print "wrong syst: removing histogram", thisname
+	continue
+      if "CMS_ttH_Q2scale_ttbarPlusBBbar" in thisname and "ttbarPlusBBbar"!=thisname.split("_",1)[0] :
+	print "wrong syst: removing histogram", thisname
+	continue
+      if "CMS_ttH_Q2scale_ttbarPlusCCbar" in thisname and "ttbarPlusCCbar"!=thisname.split("_",1)[0] :
+	print "wrong syst: removing histogram", thisname
+	continue
+      if "CMS_ttH_Q2scale_ttbarPlus2B" in thisname and "ttbarPlus2B"!=thisname.split("_",1)[0] :
+	print "wrong syst: removing histogram", thisname
+	continue
+    
+    #add ttbar type to systematics name for PS scale
+    if "CMS_ttH_PSscaleUp" in newname or "CMS_ttH_PSscaleDown" in newname:
+      
+      ttbartype=""
+      if "ttbarOther"==thisname.split("_",1)[0]:
+	ttbartype="ttbarOther"
+      elif "ttbarPlusB"==thisname.split("_",1)[0] :
+	ttbartype="ttbarPlusB"
+      elif "ttbarPlusBBbar"==thisname.split("_",1)[0] :
+	ttbartype="ttbarPlusBBbar"
+      elif "ttbarPlusCCbar"==thisname.split("_",1)[0] :
+	ttbartype="ttbarPlusCCbar"
+      elif "ttbarPlus2B"==thisname.split("_",1)[0] :
+	ttbartype="ttbarPlus2B"
+      else:
+	print "wrong syst: removing histogram", thisname
+	continue
+      
+      if "CMS_ttH_PSscaleUp" in newname:
+	newname=newname.replace("CMS_ttH_PSscaleUp","CMS_ttH_PSscale_"+ttbartype+"Up")
+      elif "CMS_ttH_PSscaleDown" in newname:
+	newname=newname.replace("CMS_ttH_PSscaleDown","CMS_ttH_PSscale_"+ttbartype+"Down")
+      else:
+	print "wrong syst: removing histogram", thisname
+
+    if newname!=thisname:
+      print "changed ", thisname, " to ", newname  
+      thish.SetName(newname)
+      #outfile.cd()
+      thish.Write()
+      outfile.Delete(thisname+";1")
+  
+  outfile.Close()
+  #infile.Close()    
+  
+renameHistosParallel(filename,systematics,False) 
+  
+  """
+  
+  script=header
+  script+="systematics="+str(systematics)+"\n"
+  script+=body
+  
+  scrfile=open(scriptname+"_rename.py","w")
+  scrfile.write(script)
+  scrfile.close()
+    
+    
+    
+    
