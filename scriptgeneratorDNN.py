@@ -70,6 +70,20 @@ typedef std::vector<std::string> vstring;
 typedef std::vector<double> vdouble;
 typedef std::vector<int> vint;
 
+const TLorentzVector makeVectorE(double pt, double eta, double phi, double energy)
+{
+    TLorentzVector lv;
+    lv.SetPtEtaPhiE(pt, eta, phi, energy);
+    return lv;
+}
+
+const TLorentzVector makeVectorM(double pt, double eta, double phi, double mass)
+{
+    TLorentzVector lv;
+    lv.SetPtEtaPhiM(pt, eta, phi, mass);
+    return lv;
+}
+
 class CommonBDTvars{
 
 	// === Functions === //
@@ -1198,31 +1212,11 @@ private:
     CommonBDTvars bdtVars_;
 };
 
-class DNNClassifier_DL : public DNNClassifierBase
-{
-public:
-    DNNClassifier_DL(std::string version = "v1");
 
-    ~DNNClassifier_DL();
 
-    void evaluate(const std::vector<TLorentzVector>& jets, const std::vector<double>& jetCSVs,
-        const std::vector<TLorentzVector>& leptons, const TLorentzVector& met,
-        DNNOutput& dnnOutput);
-
-    DNNOutput evaluate(const std::vector<TLorentzVector>& jets, const std::vector<double>& jetCSVs,
-        const std::vector<TLorentzVector>& leptons, const TLorentzVector& met);
-
-    void fillFeatures_(PyObject* pyEvalArgs, const std::vector<TLorentzVector>& jets,
-        const std::vector<double>& jetCSVs, const std::vector<TLorentzVector>& leptons,
-        const TLorentzVector& met);
-
-private:
-    size_t nFeatures3_;
-    size_t nFeatures4_;
-    PyObject* pyEvalArgs3_;
-    PyObject* pyEvalArgs4_;
-};
-
+//DANGERZONE
+// HERE you need to add escapes to get the correct print out
+// python evaluation script
 // python evaluation script
 static string evalScript = \"\\
 import sys, numpy as np\\n\\
@@ -1236,7 +1230,7 @@ def setup(python_path, model_files, input_name, output_name, dropout_name):\\n\\
         inputs.append(model.get(input_name))\\n\\
         outputs.append(model.get(output_name))\\n\\
         dropouts.append(model.get(dropout_name))\\n\\
-def eval(m, *values):\n\
+def eval(m, *values):\\n\\
     return list(outputs[m].eval({inputs[m]: [np.array(values).astype(np.float32)], dropouts[m]: 1.})[0])\\n\\
 \";
 
@@ -2623,6 +2617,16 @@ def readOutDataBase(thisDataBase=[]):
   # add those functions in the appropriate places ->CHECK
   # need to update the linked database code to the most current one. Also maybe create extra branch or handle the headers differently -> CHECK
 
+def initDNNs():
+  rstr="""
+  DNNClassifierBase::pyInitialize();
+  DNNClassifier_SL dnn("v4");
+"""
+  return rstr
+
+
+
+
 def initHisto(name,nbins,xmin=0,xmax=0,title_=''):
   if title_=='':
     title=name
@@ -2761,6 +2765,9 @@ def startLoop():
    
   std::vector<double> jetPts;    
   std::vector<double> jetEtas;    
+  std::vector<double> jetPhis; 
+  std::vector<double> jetMasses;
+  std::vector<double> jetEnergies; 
   std::vector<double> jetCSVs;    
   std::vector<int> jetFlavors;    
     
@@ -2769,7 +2776,22 @@ def startLoop():
 	jetEtas.push_back(Jet_Eta[ijet]);
 	jetCSVs.push_back(Jet_CSV[ijet]);
 	jetFlavors.push_back(Jet_Flav[ijet]);
+	jetMasses.push_back(Jet_M[ijet]);
+	jetPhis.push_back(Jet_Phi[ijet]);
+	jetEnergies.push_back(Jet_E[ijet]);
   }
+  
+  double primlepPt;    
+  double primlepEta;    
+  double primlepPhi; 
+  double primlepM;
+  double primlepE; 
+  
+  primlepPt=Evt_Pt_PrimaryLepton;
+  primlepE=Evt_E_PrimaryLepton;
+  primlepPhi=Evt_Phi_PrimaryLepton;
+  primlepEta=Evt_Eta_PrimaryLepton;
+  primlepM=Evt_M_PrimaryLepton;
   
   float internalCSVweight=1.0;
   float internalCSVweight_CSVHFUp=1.0;
@@ -2834,9 +2856,107 @@ def startLoop():
  if(internalCSVweight_CSVCErr2Up!=Weight_CSVCErr2up){ std::cout<<"internalCSVweight_CSVCErr2Up "<<internalCSVweight_CSVCErr2Up<<" "<<Weight_CSVCErr2up<<std::endl;}
  if(internalCSVweight_CSVCErr2Down!=Weight_CSVCErr2down){ std::cout<<"internalCSVweight_CSVCErr2Down "<<internalCSVweight_CSVCErr2Down<<" "<<Weight_CSVCErr2down<<std::endl;}
  */
+ 
+ // variables for Aachen DNNs
+ double aachen_Out_ttH=-2.0;
+ double aachen_Out_ttbarOther=-2.0;
+ double aachen_Out_ttbarCC=-2.0;
+ double aachen_Out_ttbarBB=-2.0;
+ double aachen_Out_ttbarB=-2.0;
+ double aachen_Out_ttbar2B=-2.0;
+ double aachen_Out_other=-2.0;
+ 
+ 
+ int aachen_pred_class=-2;
+
+ 
+"""
+
+def EvaluateAachenDNNs():
+  rstr="""
+
+  // first construct the needed lorentzvectors
+  std::vector<TLorentzVector> dnnInJets;
+  std::vector<double> dnnInCSVs;
+  TLorentzVector dnnInMET;
+  TLorentzVector dnnInLepton;
+
+  // DANGERZONE
+  // It looks like the MET is not actually used in v4 of SL DNNs
+  dnnInMET= makeVectorE(0.0,0.0,0.0,0.0);
+  dnnInLepton = makeVectorE(primlepPt,primlepEta,primlepPhi,primlepE);
+  int firstNJets=min(N_Jets,6);
+  for(int ijet=0; ijet<firstNJets; ijet++){
+    dnnInCSVs.push_back(jetCSVs[ijet]);
+    dnnInJets.push_back(makeVectorE(jetPts[ijet],jetEtas[ijet],jetPhis[ijet],jetEnergies[ijet]));
+    }
+  
+  DNNOutput aachenoutput;
+  aachenoutput=dnn.evaluate(dnnInJets,dnnInCSVs,dnnInLepton,dnnInMET);
+  
+  aachen_Out_ttH=aachenoutput.ttH();
+  aachen_Out_ttbarOther=aachenoutput.ttlf();
+  aachen_Out_ttbarBB=aachenoutput.ttbb();
+  aachen_Out_ttbarB=aachenoutput.ttb();
+  aachen_Out_ttbar2B=aachenoutput.tt2b();
+  aachen_Out_ttbarCC=aachenoutput.ttcc();
+  aachen_Out_other=aachenoutput.other();
+  
+  aachen_pred_class=aachenoutput.mostProbableClass();
+  // classes are 
+  // 0 = ttH 
+  // 1 = ttbb 
+  // 2 = ttb 
+  // 3 = tt2b 
+  // 4 = ttcc 
+  // 5 = ttlf
+  // 6 = other
+  
+  bool printstuff=0;
+  if(printstuff){
+    cout<<"-----DNN-----"<<std::endl;
+    cout<<"ttH node "<<aachen_Out_ttH<<std::endl;
+    cout<<"ttbarOther node "<<aachen_Out_ttbarOther<<std::endl;
+    cout<<"ttbarCC node "<<aachen_Out_ttbarCC<<std::endl;
+    cout<<"ttbarBB node "<<aachen_Out_ttbarBB<<std::endl;
+    cout<<"ttbarB node "<<aachen_Out_ttbarB<<std::endl;
+    cout<<"ttbar2B node "<<aachen_Out_ttbar2B<<std::endl;
+    cout<<"other node "<<aachen_Out_other<<std::endl;
+    cout<<"predicted class "<<aachen_pred_class<<std::endl;
+    }
   
 """
 
+  return rstr
+
+def testAachenDNN():
+  rstr="""
+  std::vector<TLorentzVector> testdnnjets = {
+        makeVectorM(104.253659103, -0.73279517889, -3.07644724846, 15.8214708715),
+        makeVectorM(93.7207496495, -1.09075820446, -0.518474698067, 11.1629637015),
+        makeVectorM(82.3087599786, -0.29058226943, 0.934316039085, 12.3491756063),
+        makeVectorM(71.0101406197, -0.311807841063, -0.00518677430227, 17.680727362),
+        makeVectorM(48.2224599416, -0.770735502243, 0.56352609396, 7.37671529065),
+        makeVectorM(46.0958273368, -0.883650183678, 1.04447424412, 5.60050991848)
+    };
+    std::vector<double> testdnnjetCSVs = {
+        0.597419083118, 0.759489059448, 0.635843455791, 0.603073060513, 0.999078631401, 0.988624215126
+    };
+
+    TLorentzVector testdnnlepton = makeVectorM(54.6405308843, -1.68255746365, -2.53192830086, 0.0313574418471);
+    TLorentzVector testdnnmet = makeVectorM(0.0, 0.0, 0.0, 0.0); // dummy
+
+    // evaluate
+    DNNOutput aachentestdnnoutput = dnn.evaluate(testdnnjets, testdnnjetCSVs, testdnnlepton, testdnnmet);
+    std::vector<double> targetOutputsfordnntest = { 0.51680371, 0.25959021, 0.07142095, 0.07112622, 0.05624627, 0.02481263, 0.0};
+    std::cout<<"doing DNN unit test"<<std::endl;
+    std::cout<<"No error printout means it worked"<<std::endl;
+    for (size_t i = 0; i < targetOutputsfordnntest.size(); ++i)
+    {
+        assert(fabs(targetOutputsfordnntest[i] - aachentestdnnoutput.values[i]) < 0.000001 && "The DNN output for 6 jet events is incorrect");
+    }
+"""
+  return rstr
 
 def encodeSampleSelection(samples,variables):
   text=''
@@ -2891,8 +3011,8 @@ def varLoop(i,n):
   return '      for(uint '+str(i)+'=0; '+str(i)+'<'+str(n)+'; '+str(i)+'++)'
 
 
-def getFoot():
-  return """
+def getFoot(doAachenDNN):
+  rstr= """
   outfile->Write();
   outfile->Close();
   std::ofstream f_nevents((string(outfilename)+".cutflow.txt").c_str());
@@ -2922,7 +3042,14 @@ def getFoot():
       std::cout<<"LOSTEVENTSINCAT "<<ent1.first<<" "<<ent2.first<<" "<<ent2.second<<std::endl;
     }
   }
+"""
+  if doAachenDNN:
+   rstr+="""
+     DNNClassifierBase::pyFinalize();
+"""
 
+  rstr+="""
+  
   
 }
 
@@ -2930,7 +3057,7 @@ int main(){
   plot();
 }
 """
-
+  return rstr
 
 def compileProgram(scriptname,usesDataBases,doAachenDNN):
   p = subprocess.Popen(['root-config', '--cflags', '--libs'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -2961,7 +3088,7 @@ def compileProgram(scriptname,usesDataBases,doAachenDNN):
   subprocess.call(cmd)
 
 
-def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],allsystweights=["1"],additionalvariables=[],dataBases=[]):
+def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],allsystweights=["1"],additionalvariables=[],dataBases=[],doAachenDNN=False):
 
   # collect variables
   # list varibles that should not be written to the program automatically
@@ -2975,6 +3102,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 	    "internalMuIDWeight","internalMuIDWeightUp","internalMuIDWeightDown",
 	    "internalMuIsoWeight","internalMuIsoWeightUp","internalMuIsoWeightDown",
 	    "internalMuHIPWeight","internalMuHIPWeightUp","internalMuHIPWeightDown",
+	    "aachen_Out_other","aachen_Out_ttbar2B","aachen_Out_ttbarB","aachen_Out_ttbarBB","aachen_Out_ttbarCC","aachen_Out_ttbarOther","aachen_Out_ttH","aachen_pred_class",
 ]
   for db in dataBases:
     vetolist.append(db[0]+"p")
@@ -3045,11 +3173,12 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   # write program
   # start writing program
   script=""
-  script+=getHead(dataBases)
+  script+=getHead(dataBases,doAachenDNN)
   
   for db in dataBases:
     script+=InitDataBase(db)
-
+  if doAachenDNN:
+    script+=initDNNs()
   # initialize all variables
   script+=variables.initVarsProgram()
   script+=variables.initBranchAddressesProgram()
@@ -3088,6 +3217,10 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   for db in dataBases:
     script+=readOutDataBase(db)  
   script+="\n"
+  
+  if doAachenDNN:
+    script+=EvaluateAachenDNNs()
+    script+="\n"
 
   # calculate varibles and get TMVA outputs
   script+=variables.calculateVarsProgram()
@@ -3191,9 +3324,14 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 
   # finish loop
   script+=endLoop()
-
+  
+  if doAachenDNN:
+    script+="\n"
+    script+=testAachenDNN()
+    script+="\n"
+  
   # get program footer
-  script+=getFoot()
+  script+=getFoot(doAachenDNN)
 
   # write program text to file
   f=open(scriptname+'.cc','w')
@@ -3401,7 +3539,7 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   if doAachenDNN and not int(splitcmsswversion[1])>=8:
     print "You need at least CMSSW 8_0_26_patch2 for the DNNs from Aachen. Exiting!"
     exit(0)
-  if doAaachenDNN:
+  if doAachenDNN:
     commonclassifierexists=os.path.exists(cmsswpath+"/src/TTH/CommonClassifier")
     if not commonclassifierexists:
       print "You need the common classifier package with the dnns and tf installed. Exiting!"
@@ -3446,7 +3584,7 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
     cmd='cp -v '+programpath+'.cc'+' '+programpath+'.ccBackup'
     subprocess.call(cmd,shell=True)
   print 'creating c++ program'
-  createProgram(programpath,plots,samples,catnames,catselections,systnames,systweights,additionalvariables, dataBases)
+  createProgram(programpath,plots,samples,catnames,catselections,systnames,systweights,additionalvariables, dataBases,doAachenDNN)
   if not os.path.exists(programpath+'.cc'):
     print 'could not create c++ program'
     sys.exit()
@@ -3486,7 +3624,9 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   # create run scripts
   print 'creating run scripts'
   scripts,outputs,nentries=get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,programpath,cmsswpath,treeInformationJsonFile)
-
+  
+  #DANGERZONE
+  #exit(0)
   # submit run scripts
   print 'submitting scripts'
   jobids=submitToNAF(scripts)

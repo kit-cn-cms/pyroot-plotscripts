@@ -10,36 +10,49 @@ from limittools import addRealData
 from limittools import makeDatacards
 from limittools import calcLimits
 from limittools import replaceQ2scale
-from plotconfigSpring17v3 import *
+from plotconfigDNN import *
 
 # output name
-name='limits_DNNv8'
+name='limits_DNNMultiv8'
 
 # define categories
 categories_=[
               ("(N_Jets==4&&N_BTagsM==2)","ljets_j4_t2",""),
               ("(N_Jets==5&&N_BTagsM==2)","ljets_j5_t2",""),
-              ("(N_Jets==4&&N_BTagsM==3)","ljets_j4_t3",""),
-              ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4",""),
-              ("(N_Jets==5&&N_BTagsM==3)","ljets_j5_t3",""),
-              ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4",""),             
-              ("(N_Jets>=6&&N_BTagsM==2)","ljets_jge6_t2",""),
-              ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3",""),
-              ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4","")
-]
+              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==0)","ljets_j4_tge3_ttHnode",""),
+              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==0)","ljets_j5_tge3_ttHnode",""),             
+              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==0)","ljets_jge6_tge3_ttHnode",""),
 
+              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==1)","ljets_j4_tge3_ttbbnode",""),
+              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==1)","ljets_j5_tge3_ttbbnode",""),             
+              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==1)","ljets_jge6_tge3_ttbbnode",""),
+
+              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==2)","ljets_j4_tge3_ttbnode",""),
+              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==2)","ljets_j5_tge3_ttbnode",""),             
+              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==2)","ljets_jge6_tge3_ttbnode",""),
+
+              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==3)","ljets_j4_tge3_tt2bnode",""),
+              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==3)","ljets_j5_tge3_tt2bnode",""),             
+              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==3)","ljets_jge6_tge3_tt2bnode",""),
+
+              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==4)","ljets_j4_tge3_ttccnode",""),
+              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==4)","ljets_j5_tge3_ttccnode",""),             
+              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==4)","ljets_jge6_tge3_ttccnode",""),
+
+              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==5)","ljets_j4_tge3_ttlfnode",""),
+              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==5)","ljets_j5_tge3_ttlfnode",""),             
+              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==5)","ljets_jge6_tge3_ttlfnode",""),
+
+              #("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==6)","ljets_j4_tge3_othernode",""),
+              #("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==6)","ljets_j5_tge3_othernode",""),             
+              #("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==6)","ljets_jge6_tge3_othernode",""),
+]
+# DANGERZONE
+# Need to remove the other node. Do not know what happens if the datacardmaker tries to use empty histograms
 categories=[]
-#categories=categories_
-bdtcuts=[-0.2,-0.2,0.2,0.26,0.17,0.26,0.1,0.12,0.13]
-#for cat,bdt in zip(categories_,bdtcuts):
-  #if cat[1] in ["ljets_jge6_tge4","ljets_j5_tge4","ljets_j4_t4","ljets_jge6_t3","ljets_j5_t3","ljets_j4_t3"]:
-    #categories.append(('('+cat[0]+')*(finalbdt_'+cat[1]+'>'+str(bdt)+')',cat[1]+'_high') )
-    #categories.append(('('+cat[0]+')*(finalbdt_'+cat[1]+'<='+str(bdt)+')',cat[1]+'_low') )
-  #else:
-    #categories.append(cat)
 
 # add unsplit categories
-for cat,bdt in zip(categories_,bdtcuts):
+for cat in categories_:
   categories.append(cat)
 
 print categories
@@ -53,22 +66,31 @@ bdtset="Spring17v1"
 additionalvariables=[
 			'finalbdt_ljets_j4_t2:=Evt_HT_Jets',
 			'finalbdt_ljets_j5_t2:=Evt_HT_Jets',
-                      'finalbdt_ljets_j4_t3:='+bdtweightpath+'/weights_Final_43_'+bdtset+'.xml',
-                      'finalbdt_ljets_j4_t4:='+bdtweightpath+'/weights_Final_44_'+bdtset+'.xml',
-                      'finalbdt_ljets_j5_t3:='+bdtweightpath+'/weights_Final_53_'+bdtset+'.xml',
-                      'finalbdt_ljets_j5_tge4:='+bdtweightpath+'/weights_Final_54_'+bdtset+'.xml',
-                      'finalbdt_ljets_jge6_t2:='+bdtweightpath+'/weights_Final_62_'+bdtset+'.xml',
-                      'finalbdt_ljets_jge6_t3:='+bdtweightpath+'/weights_Final_63_'+bdtset+'.xml',
-                      'finalbdt_ljets_jge6_tge4:='+bdtweightpath+'/weights_Final_64_'+bdtset+'.xml',
+                      #'finalbdt_ljets_j4_t3:='+bdtweightpath+'/weights_Final_43_'+bdtset+'.xml',
+                      #'finalbdt_ljets_j4_t4:='+bdtweightpath+'/weights_Final_44_'+bdtset+'.xml',
+                      #'finalbdt_ljets_j5_t3:='+bdtweightpath+'/weights_Final_53_'+bdtset+'.xml',
+                      #'finalbdt_ljets_j5_tge4:='+bdtweightpath+'/weights_Final_54_'+bdtset+'.xml',
+                      #'finalbdt_ljets_jge6_t2:='+bdtweightpath+'/weights_Final_62_'+bdtset+'.xml',
+                      #'finalbdt_ljets_jge6_t3:='+bdtweightpath+'/weights_Final_63_'+bdtset+'.xml',
+                      #'finalbdt_ljets_jge6_tge4:='+bdtweightpath+'/weights_Final_64_'+bdtset+'.xml',
                       #'finalbdt_ljets_boosted:='+bdtweightpath+'/weights_Final_DB_boosted_76xmem.xml',
-                      "Muon_Pt","Electron_Pt","Muon_Eta","Electron_Eta","Jet_Pt","Jet_Eta","Jet_CSV","Jet_Flav","N_Jets","Weight_CSV","Weight_CSVLFup","Weight_CSVLFdown","Weight_CSVHFup","Weight_CSVHFdown","Weight_CSVHFStats1up","Weight_CSVHFStats1down","Weight_CSVLFStats1up","Weight_CSVLFStats1down","Weight_CSVHFStats2up","Weight_CSVHFStats2down","Weight_CSVLFStats2up","Weight_CSVLFStats2down","Weight_CSVCErr1up","Weight_CSVCErr1down","Weight_CSVCErr2up","Weight_CSVCErr2down",
+                      "Muon_Pt","Electron_Pt","Muon_Eta","Electron_Eta","Jet_Pt","Jet_Eta","Jet_CSV","Jet_Flav","N_Jets","Jet_Phi","Jet_E","Jet_M",
+                      "Evt_Pt_PrimaryLepton","Evt_E_PrimaryLepton","Evt_M_PrimaryLepton","Evt_Phi_PrimaryLepton","Evt_Eta_PrimaryLepton",
+                      "Weight_CSV","Weight_CSVLFup","Weight_CSVLFdown","Weight_CSVHFup","Weight_CSVHFdown","Weight_CSVHFStats1up","Weight_CSVHFStats1down","Weight_CSVLFStats1up","Weight_CSVLFStats1down","Weight_CSVHFStats2up","Weight_CSVHFStats2down","Weight_CSVLFStats2up","Weight_CSVLFStats2down","Weight_CSVCErr1up","Weight_CSVCErr1down","Weight_CSVCErr2up","Weight_CSVCErr2down",
 ]
 
-nhistobins= [  20,20, 	10,   10,    10,    10,   20,   10,   10 ]
-minxvals=   [ 200, 200, -0.75,  -0.8, -0.8,   -0.8, -0.8, -0.8,   -0.8]
-maxxvals=   [800,800,    0.8,  0.75,   0.8,    0.7,  0.8,  0.8,    0.7]
+nhistobins= [  20,20, 	4,   4,    4, 	4,   4,    4, 	4,   4,    4, 	4,   4,    4, 	4,   4,    4, 	4,   4,    4,]
+minxvals=   [ 200, 200, 0,  0, 0, 0,  0, 0, 0,  0, 0, 0,  0, 0, 0,  0, 0, 0,  0, 0,]
+maxxvals=   [800,800,    1.0,  1.0, 1.0,    1.0,  1.0, 1.0,    1.0,  1.0, 1.0,    1.0,  1.0, 1.0,    1.0,  1.0, 1.0,    1.0,  1.0, 1.0,]
 
-discrs =    ['finalbdt_ljets_j4_t2','finalbdt_ljets_j5_t2','finalbdt_ljets_j4_t3', 'finalbdt_ljets_j4_t4', 'finalbdt_ljets_j5_t3', 'finalbdt_ljets_j5_tge4', 'finalbdt_ljets_jge6_t2', 'finalbdt_ljets_jge6_t3', 'finalbdt_ljets_jge6_tge4']
+discrs =    ['finalbdt_ljets_j4_t2','finalbdt_ljets_j5_t2',
+	     'aachen_Out_ttH','aachen_Out_ttH','aachen_Out_ttH',
+	     'aachen_Out_ttbarBB','aachen_Out_ttbarBB','aachen_Out_ttbarBB',
+	     'aachen_Out_ttbarB','aachen_Out_ttbarB','aachen_Out_ttbarB',
+	     'aachen_Out_ttbar2B','aachen_Out_ttbar2B','aachen_Out_ttbar2B',
+	     'aachen_Out_ttbarCC','aachen_Out_ttbarCC','aachen_Out_ttbarCC',
+	     'aachen_Out_ttbarOther','aachen_Out_ttbarOther','aachen_Out_ttbarOther',
+	     ]
 discrname='finaldiscr'
 assert(len(nhistobins)==len(maxxvals))
 assert(len(nhistobins)==len(minxvals))
@@ -100,7 +122,7 @@ for discr,b,bl,nb,minx,maxx in zip(discrs,bins,binlabels,nhistobins,minxvals,max
 
 print bdts
 # plot everthing
-outputpath=plotParallel(name,2000000,bdts,allsamples+samplesdata,[''],['1.'],weightsystnames[:1],systweights[:1],additionalvariables,[],"/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/pyroot-plotscripts/treejson_Spring17v2_moreBKGs.json",othersystnames,False)
+outputpath=plotParallel(name,2000000,bdts,allsamples+samplesdata,[''],['1.'],weightsystnames[:1],systweights[:1],additionalvariables,[],"/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/pyroot-plotscripts/treejson_Spring17v2_moreBKGs.json",othersystnames,True)
 
 if not os.path.exists(name):
   os.makedirs(name)
@@ -136,7 +158,7 @@ writeListOfHistoListsAN(transposeLOL([lolT[0]]+lolT[9:]),[samples[0]]+samples[9:
 
 
 # make datacards
-makeDatacards(name+'/'+name+'_limitInput.root',name+'/'+name+'_datacard',binlabels,doHdecay=True,discrname='finaldiscr',datacardmaker='mk_datacard_hdecay13TeV')
+makeDatacards(name+'/'+name+'_limitInput.root',name+'/'+name+'_datacard',binlabels,doHdecay=True,discrname='finaldiscr',datacardmaker='mk_datacard_hdecay13TeVJESTest')
 
 # calculate limits
 #if askYesNo('Calculate limits?'):
