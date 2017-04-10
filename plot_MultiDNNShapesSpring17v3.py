@@ -10,7 +10,7 @@ from limittools import addRealData
 from limittools import makeDatacards
 from limittools import calcLimits
 from limittools import replaceQ2scale
-from plotconfigDNN import *
+from plotconfigSpring17v3DNN import *
 
 # output name
 name='shapes_DNNMultiv8'
@@ -51,6 +51,11 @@ categories_=[
 # Need to remove the other node. Do not know what happens if the datacardmaker tries to use empty histograms
 categories=[]
 
+nhistobins= [  20,20, 	30,   30,    30, 	30,   30,    30, 	30,   30,    30, 	30,   30,    30, 	30,   30,    30, 	30,   30,    30,]
+minxvals=   [ 200, 200, 0.16,  0.16, 0.17, 0.16,  0.16, 0.16, 0.18,  0.18, 0.18, 0.16,  0.16, 0.16, 0.17,  0.17, 0.18, 0.17,  0.17, 0.19,]
+maxxvals=   [800,800,    0.6,  0.6, 0.65,    0.6,  0.6, 0.6,    0.35,  0.32, 0.35,    0.45,  0.5, 0.55,    0.35,  0.24, 0.25,    0.5,  0.4, 0.45,]
+
+
 # add unsplit categories
 for cat in categories_:
   categories.append(cat)
@@ -79,9 +84,6 @@ additionalvariables=[
                       "Weight_CSV","Weight_CSVLFup","Weight_CSVLFdown","Weight_CSVHFup","Weight_CSVHFdown","Weight_CSVHFStats1up","Weight_CSVHFStats1down","Weight_CSVLFStats1up","Weight_CSVLFStats1down","Weight_CSVHFStats2up","Weight_CSVHFStats2down","Weight_CSVLFStats2up","Weight_CSVLFStats2down","Weight_CSVCErr1up","Weight_CSVCErr1down","Weight_CSVCErr2up","Weight_CSVCErr2down",
 ]
 
-nhistobins= [  20,20, 	30,   30,    30, 	30,   30,    30, 	30,   30,    30, 	30,   30,    30, 	30,   30,    30, 	30,   30,    30,]
-minxvals=   [ 200, 200, 0,  0, 0, 0,  0, 0, 0,  0, 0, 0,  0, 0, 0,  0, 0, 0,  0, 0,]
-maxxvals=   [800,800,    1.0,  1.0, 1.0,    1.0,  1.0, 1.0,    1.0,  1.0, 1.0,    1.0,  1.0, 1.0,    1.0,  1.0, 1.0,    1.0,  1.0, 1.0,]
 
 discrs =    ['finalbdt_ljets_j4_t2','finalbdt_ljets_j5_t2',
 	     'aachen_Out_ttH','aachen_Out_ttH','aachen_Out_ttH',
@@ -123,7 +125,7 @@ for discr,b,bl,nb,minx,maxx in zip(discrs,bins,binlabels,nhistobins,minxvals,max
 
 print bdts
 # plot everthing
-outputpath=plotParallel(name,2000000,bdts,allsamples+samplesdata,[''],['1.'],weightsystnames[:1],systweights[:1],additionalvariables,[],"/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/pyroot-plotscripts/treejson_Spring17v2_moreBKGs.json",othersystnames,True)
+outputpath=plotParallel(name,3000000,bdts,allsamples+samplesdata,[''],['1.'],weightsystnames[:1],systweights[:1],additionalvariables,[],"/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/pyroot-plotscripts/treejson_Spring17v2_moreBKGs.json",othersystnames,True)
 
 if not os.path.exists(name):
   os.makedirs(name)

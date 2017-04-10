@@ -7,14 +7,16 @@ sys.path.insert(0, 'limittools')
 from limittools import renameHistos
 from scriptgeneratorMEMDBCSV import *
 
-name='controlplotsSpring17v8'
+name='inputsplotsSpring17v8'
 
 # if one wants to plot blinded: True (default: False)
 plotBlinded = False
 
 bdtset="BDTShapes_Spring17v7"
 additionalvariables=[
-                      "Muon_Pt","Electron_Pt","Muon_Eta","Electron_Eta","Jet_Pt","Jet_Eta","Jet_CSV","Jet_Flav","N_Jets","Weight_CSV","Weight_CSVLFup","Weight_CSVLFdown","Weight_CSVHFup","Weight_CSVHFdown","Weight_CSVHFStats1up","Weight_CSVHFStats1down","Weight_CSVLFStats1up","Weight_CSVLFStats1down","Weight_CSVHFStats2up","Weight_CSVHFStats2down","Weight_CSVLFStats2up","Weight_CSVLFStats2down","Weight_CSVCErr1up","Weight_CSVCErr1down","Weight_CSVCErr2up","Weight_CSVCErr2down",
+                      "Muon_Pt","Electron_Pt","Muon_Eta","Electron_Eta","Jet_Pt","Jet_Eta","Jet_CSV","Jet_Flav","N_Jets","Jet_Phi","Jet_E","Jet_M",
+                      "Evt_Pt_PrimaryLepton","Evt_E_PrimaryLepton","Evt_M_PrimaryLepton","Evt_Phi_PrimaryLepton","Evt_Eta_PrimaryLepton",
+                      "Weight_CSV","Weight_CSVLFup","Weight_CSVLFdown","Weight_CSVHFup","Weight_CSVHFdown","Weight_CSVHFStats1up","Weight_CSVHFStats1down","Weight_CSVLFStats1up","Weight_CSVLFStats1down","Weight_CSVHFStats2up","Weight_CSVHFStats2down","Weight_CSVLFStats2up","Weight_CSVLFStats2down","Weight_CSVCErr1up","Weight_CSVCErr1down","Weight_CSVCErr2up","Weight_CSVCErr2down",
 ]
 
 # selections
@@ -636,8 +638,8 @@ plots64=[
 ]
 
 
-plots+=plots64+plots63+plots62+plots54+plots53+plots44+plots43+plots42+plots52
-#plots=plots64+plots63+plots62+plots54+plots53+plots44+plots43+plots42+plots52
+#plots+=plots64+plots63+plots62+plots54+plots53+plots44+plots43+plots42+plots52
+plots=plots64+plots63+plots62+plots54+plots53+plots44+plots43+plots42+plots52
 
 #plots+=bdtplots
 #plots=plots44
