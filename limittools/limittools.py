@@ -267,6 +267,7 @@ def renameHistos(infname,outfname,sysnames,prune=True):
     #if nsysts ==1 and thish.Integral()<0.0:
       #print "nominal histogram has negativ integral"
         #print thish, thish.Integral()
+    newhist=""
     if prune:
       nbins=thish.GetNbinsX()
       newhist=thish.Clone()
@@ -287,8 +288,8 @@ def renameHistos(infname,outfname,sysnames,prune=True):
     if histchanged:
       print "histogram changed", thisname, newname
       newhist.SetName(newname)
-      infile.Delete(thisname)
       newhist.Write()
+      infile.Delete(thisname)
   
   infile.Close()
   
