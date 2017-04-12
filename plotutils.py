@@ -49,7 +49,7 @@ class Sample:
         # allow globbing samples from different paths
         if samDict!="":
 	  if not samDict.hasKey(self.path):  
-	    print "globbing files for", name
+	    print "globbing files for", name, self.path
 	    for sp in subpaths:
 	      self.files+=glob.glob(sp)
 	      if sp!='' and len(self.files)==0:
@@ -57,10 +57,10 @@ class Sample:
 		print 'no files found at',sp
 	    samDict.addToMap(path,self.files)
 	  else:
-	    print "map already knows this sample", path
+	    print "map already knows this sample", self.path
 	    self.files=samDict.getFiles(path)
 	else:
-          print "globbing files for", name
+          print "empty map: globbing files for", name, self.path
 	  for sp in subpaths:
 	      self.files+=glob.glob(sp)
 	      if sp!='' and len(self.files)==0:
@@ -1231,7 +1231,7 @@ def writeListOfHistoListsAN(listOfHistoLists,samples, label,name,normalize=True,
                 yTitle='normalized'
             setupHisto(histo,sample.color,yTitle,stack)
         c=drawHistosOnCanvas(listOfHistos,normalize,stack,logscale,options,ratio)
-        c.SetName('c'+str(i))
+        c.SetName(listOfHistos[0].GetName())
         l=getLegend()
         for h,sample in zip(listOfHistos,samples):
             loption='L'

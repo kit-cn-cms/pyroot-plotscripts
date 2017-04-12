@@ -3118,7 +3118,8 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 
   # initialize variables object
   variables = variablebox.Variables(vetolist)
-
+  #print variables
+  
   # get tree for variable check
   tree = ROOT.TTree()
   for i in range(len(samples)):
@@ -3139,6 +3140,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 
   # get additional variables
   if len(additionalvariables)>0:
+    #print additionalvariables
     variables.initVarsFromExprList(additionalvariables,tree)
 
   # get systematic weight variables

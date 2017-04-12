@@ -344,7 +344,7 @@ class Variables:
     #print rawVariableList
     allVariablesHandled=False
     nVariables=len(rawVariableList)
-    print "nVariables", nVariables
+    #print "nVariables", nVariables
     variableCounter=-1
     while allVariablesHandled==False:
       variableCounter+=1
@@ -356,9 +356,9 @@ class Variables:
 	exit(0)
       name, var = rawVariableList[variableCounter]
       # begin from begging of the raw list again
-      print len(sortedVariableList)
+      #print len(sortedVariableList)
       if variableCounter==nVariables-1:
-	print "starting loop from the beginning"
+	#print "starting loop from the beginning"
 	variableCounter=-1
       if len(sortedVariableList)>0:
 	if name in zip(*sortedVariableList)[0]:
