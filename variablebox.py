@@ -2,6 +2,7 @@ import os
 import re
 import ROOT
 import xml.etree.ElementTree as ET
+import collections
 
 class Variable():
   def __init__(self,name,expression='',vartype='F',arraylength=None):
@@ -273,6 +274,8 @@ class Variables:
   # initialize variables from expression
   def initVarsFromExpr(self,expr,tree):
     #print "initVarsFromExpr",expr,tree
+    #print "initializing", expr
+    #print self.variables
     if ":=" in expr:
 
       name,expr=expr.split(":=")
@@ -327,8 +330,76 @@ class Variables:
 
   # Program: Setup all branch addresses
   def calculateVarsProgram(self):
+    
+    #print self.variables
+    
     text=""
+    
+    # figure out the dependencies between the variables so that they can be calculated in the proper order
+    print "print figuring out variable dependencies"
+    rawVariableList=[]
+    sortedVariableList=[]
     for name,var in self.variables.iteritems():
+      rawVariableList.append([name,var])
+    #print rawVariableList
+    allVariablesHandled=False
+    nVariables=len(rawVariableList)
+    print "nVariables", nVariables
+    variableCounter=-1
+    while allVariablesHandled==False:
+      variableCounter+=1
+      #print variableCounter
+      if len(sortedVariableList)>len(rawVariableList):
+	print "PROBLEM: sorted list longer than raw list?"
+	print rawVariableList
+	print sortedVariableList
+	exit(0)
+      name, var = rawVariableList[variableCounter]
+      # begin from begging of the raw list again
+      print len(sortedVariableList)
+      if variableCounter==nVariables-1:
+	print "starting loop from the beginning"
+	variableCounter=-1
+      if len(sortedVariableList)>0:
+	if name in zip(*sortedVariableList)[0]:
+	  ##already have this variable
+	  continue
+      print "considering ", name, var
+      if var.name==var.expression:
+	sortedVariableList.append([name,var])
+	continue
+      if var.mvavar==True:
+	sortedVariableList.append([name,var])
+	continue
+      if var.intree==True:
+	sortedVariableList.append([name,var])
+	continue
+      alldependenciesresovled=True
+      for dvar in zip(*rawVariableList)[0]:
+	if dvar in var.expression:
+	  if dvar not in zip(*sortedVariableList)[0]:
+	    # the needed variable was not added to the sorted list yet
+	    alldependenciesresovled=False
+      if alldependenciesresovled==True:
+	sortedVariableList.append([name,var])
+      if collections.Counter(zip(*sortedVariableList)[0])==collections.Counter(zip(*rawVariableList)[0]):
+	if len(rawVariableList)!=len(sortedVariableList):
+	  print "PROBLEM: lists have different lengths"
+	  print rawVariableList
+	  print sortedVariableList
+	  exit(0)
+	# this will get the element with the most entries in the list and also how often it appears. If there are more than one it does not matter her
+	MaxOcc, numMaxOcc=collections.Counter(zip(*sortedVariableList)[0]).most_common(1)[0]
+	if numMaxOcc!=1:
+	  print "PROBLEM: sorted list contains the same entry multiple times"
+	  print MaxOcc, numMaxOcc
+	  exit(0)
+	allVariablesHandled=True
+	
+	
+    # now write the code for each variable
+    for name,var in sortedVariableList:
+      print "writing code for ", var.name
       text+=var.calculateVarProgram()
     text+='\n'
     return text
