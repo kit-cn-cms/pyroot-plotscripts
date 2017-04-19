@@ -75,9 +75,9 @@ class Variable():
     isarray=self.arraylength!=None
     if isarray:
       if t=='F':
-        text='  float* '+var+' = new float[100];\n'
+        text='  float* '+var+' = new float[500];\n'
       elif t=='I':
-        text='  int* '+var+' = new int[100];\n'
+        text='  int* '+var+' = new int[500];\n'
       else: "UNKNOWN TYPE",t
     else:
       if t=='F':
