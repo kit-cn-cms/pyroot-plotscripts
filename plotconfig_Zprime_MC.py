@@ -13,7 +13,7 @@ usualweights="(1*Weight_PU*((Weight>0)-(Weight<0)))*Weight_ElectronSFID*Weight_E
 
 # samples
 # input path 
-path_80x="/nfs/dust/cms/user/skudella/processed_MC/flat_trees/"
+path_80x="/nfs/dust/cms/user/skudella/processed_MC/flat_trees_new/"
 
 # MC samples (name, color, path to files,weight,nickname_without_special_characters,systematics)                       
 samples=[ 
@@ -57,18 +57,24 @@ SignalSamples=[
 ]
 
 BackgroundSamples=[
-                    Sample('QCD_HT',ROOT.kOrange,path_80x+'BKG_QCD/MC_QCD_H*nominal*Tree*.root',mcweight,'QCD_HT'),
                     Sample('t#bar{t} + jets',ROOT.kBlue,path_80x+'BKG_TTbar/*nominal*.root',mcweight,'ttbar') , 
-                    #Sample('QCD_Pt',ROOT.kGreen,path_80x+'BKG_QCD/MC_QCD_P*nominal*Tree*.root',mcweight,'QCD_PT'),
+                    Sample('QCD_HT',ROOT.kYellow,path_80x+'BKG_QCD/MC_QCD_H*nominal*Tree*.root',mcweight,'QCD_HT'),     
+                    Sample('QCD_Pt',ROOT.kGreen,path_80x+'BKG_QCD/MC_QCD_P*nominal*Tree*.root',mcweight,'QCD_PT'),
                     #Sample('QCD_comb',ROOT.kRed+2,path_80x+'BKG_QCD/MC_QCD_P*nominal*Tree*.root',mcweight,'QCD_comb'),
                     #Sample('QCD_comb',ROOT.kRed+2,path_80x+'BKG_QCD/MC_QCD_H*nominal*Tree*.root',mcweight,'QCD_comb'),
-                    #Sample('QCD_comb',ROOT.kRed+2,path_80x+'BKG_QCD/MC_QCD_*nominal*Tree*.root',mcweight,'QCD_comb'),
+                    Sample('QCD_comb',ROOT.kRed+2,path_80x+'BKG_QCD/MC_QCD_*nominal*Tree*.root',mcweight,'QCD_comb'),
 ]
 
 
 DataSamples=[
                     Sample('MC_BKG_DATA',ROOT.kAzure,path_80x+'BKG*/*nominal*.root',mcweight,'MC_BKG_DATA'),     
 
+]
+
+CombinedSamples=[
+
+                    Sample('MC_BKG_DATA',ROOT.kMagenta,path_80x+'BKG*/*nominal*.root',mcweight,'Sig_and_QCD_HT'),     
+                    Sample('MC_BKG_DATA',ROOT.kMagenta,path_80x+'BKG*/*nominal*.root',mcweight,'Sig_and_QCD_PT'),     
 ]
 
 
