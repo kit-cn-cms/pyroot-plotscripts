@@ -27,16 +27,16 @@ class Sample:
         self.color=color
         self.path=path
         self.selection=selection
-        self.files=glob.glob(path)
-        #self.files=[]
-        #if isinstance(path,list):
-            #for p in path:
-                #self.files.append(glob.glob(p))
-        #else:
-            #self.files.append(glob.glob(path))
+        # self.files=glob.glob(path)
+        self.files=[]
+        if isinstance(path,list):
+            for p in path:
+                self.files += glob.glob(p)
+        else:
+            self.files += glob.glob(path)
         if path!='' and len(self.files)==0:
 	    print name
-            print 'no files found at',path    
+            print 'no files found at',path
         if nick=='':
             self.nick=name
         else:
@@ -134,7 +134,7 @@ class Cateogry:
         self.name=name
         self.title=title
         self.selection=selection
-    
+
 
 
 # sets up the style of a histo and its axes
@@ -142,7 +142,7 @@ def setupHisto(histo,color,yTitle=None,filled=False):
     if isinstance(histo,ROOT.TH1):
         histo.SetStats(False)
     print histo.GetTitle()
-    if not isinstance(histo,ROOT.TH2):   
+    if not isinstance(histo,ROOT.TH2):
       if histo.GetYaxis().GetTitle()=="":
 	#print "setting up title"
 	if histo.GetTitle()!='':
@@ -224,7 +224,7 @@ def getCanvasLowRes(name,ratiopad=False):
     return c
 
 # creates legend
-def getLegend(): 
+def getLegend():
     legend=ROOT.TLegend()
     legend.SetX1NDC(0.85)
     legend.SetX2NDC(0.95)
@@ -238,7 +238,7 @@ def getLegend():
     legend.SetFillStyle(0);
     return legend
 
-def getLegendL(): 
+def getLegendL():
     legend=ROOT.TLegend()
     legend.SetX1NDC(0.6)
     legend.SetX2NDC(0.76)
@@ -251,7 +251,7 @@ def getLegendL():
     legend.SetFillStyle(0);
     return legend
 
-def getLegendR(): 
+def getLegendR():
     legend=ROOT.TLegend()
     legend.SetX1NDC(0.76)
     legend.SetX2NDC(0.93)
@@ -265,7 +265,7 @@ def getLegendR():
     return legend
 
 
-def getLegend2(): 
+def getLegend2():
     legend=ROOT.TLegend()
     legend.SetX1NDC(0.85)
     legend.SetX2NDC(0.99)
@@ -291,7 +291,7 @@ def getStatTests(h1,h2,option="WW"):
 def getStatTestsList(h1,lh2,option="WW"):
     mystrng=''
     ss=[]
-    for h2 in lh2:      
+    for h2 in lh2:
       ksprob = h1.KolmogorovTest(h2)
       chi2prob = h1.Chi2Test(h2,option)
       #mystrng+='#splitline{p(KS): '+str(round(ksprob,3))+'}{p(chi2): '+str(round(chi2prob,3))+'}'
@@ -337,14 +337,14 @@ def getSepaTests2(hs,h1):
         test.SetTextSize(0.04);
         test.SetNDC()
         tests.append(test)
-        
+
     return tests
 
 
 # draws a list of histos on a canvas and returns canvas
 def drawHistosOnCanvas(listOfHistos_,normalize=True,stack=False,logscale=False,options_='histo',ratio=False,DoProfile=False):
     listOfHistos=[h.Clone(h.GetName()+'_drawclone') for h in listOfHistos_]
-    canvas=getCanvas(listOfHistos[0].GetName(),ratio)        
+    canvas=getCanvas(listOfHistos[0].GetName(),ratio)
     #prepare drawing
 
     # mover over/underflow
@@ -367,7 +367,7 @@ def drawHistosOnCanvas(listOfHistos_,normalize=True,stack=False,logscale=False,o
             for h in listOfHistos:
                 h.Scale(1./integral0)
 
-            
+
     canvas.cd(1)
     yMax=1e-9
     yMinMax=1000.
@@ -389,7 +389,7 @@ def drawHistosOnCanvas(listOfHistos_,normalize=True,stack=False,logscale=False,o
     for h in listOfHistos[1:]:
         h.DrawCopy(option+'same')
     h.DrawCopy('axissame')
-    
+
     #h.DrawCopy('axissame')
     if ratio:
         canvas.cd(2)
@@ -418,7 +418,7 @@ def drawHistosOnCanvas(listOfHistos_,normalize=True,stack=False,logscale=False,o
 def drawHistosOnCanvas2D(listOfHistos_,normalize=True,stack=False,logscale=False,options_='',ratio=False,DoProfile=False,statTest=False, samples=None):
     # print 'drawing 2d'
  #   raw_input()
- 
+
     listOfHistos=[h.Clone(h.GetName()+'_drawclone') for h in listOfHistos_]
     canvas = []
     if options_ == "colz":
@@ -430,9 +430,9 @@ def drawHistosOnCanvas2D(listOfHistos_,normalize=True,stack=False,logscale=False
             h.DrawCopy(options_)
             canvas.append(canvas_tmp)
 
-    
+
     else:
-        canvas_tmp = getCanvas(listOfHistos[0].GetName(),False) #from here: Fix canvas as list, not element!      
+        canvas_tmp = getCanvas(listOfHistos[0].GetName(),False) #from here: Fix canvas as list, not element!
         print 'canvas name',canvas_tmp.GetName()
         #raw_input()
 
@@ -450,7 +450,7 @@ def drawHistosOnCanvas2D(listOfHistos_,normalize=True,stack=False,logscale=False
             for b in allbins:
                 if b[0]==1 or b[0]==nBinsX or b[1]==1 or b[1]==nBinsY:
                     edgebins.append(b)
-            
+
             surrounding=[-1,0,1]
             for b in edgebins:
                 binsToAdd=[b]
@@ -484,7 +484,7 @@ def drawHistosOnCanvas2D(listOfHistos_,normalize=True,stack=False,logscale=False
                 addedSquaredError+=ROOT.TMath.Power(h.GetBinError(addb[0],addb[1]),2)
             h.SetBinContent(b[0],b[1],addedContents)
             h.SetBinError(b[0],b[1],ROOT.TMath.Sqrt(addedSquaredError));
-                
+
         if normalize and not stack:
             for h in listOfHistos:
                 if h.Integral()>0.:
@@ -498,7 +498,7 @@ def drawHistosOnCanvas2D(listOfHistos_,normalize=True,stack=False,logscale=False
                 for h in listOfHistos:
                     h.Scale(1./integral0)
 
-                    
+
         canvas_tmp.cd(1)
         #yMax=1e-9
         #yMinMax=1000.
@@ -523,7 +523,7 @@ def drawHistosOnCanvas2D(listOfHistos_,normalize=True,stack=False,logscale=False
             h.DrawCopy(option+'same')
         h.DrawCopy('axissame')
         canvas.append(canvas_tmp)
-    
+
     tests=None
     if DoProfile:
         profilesx=[]
@@ -541,12 +541,12 @@ def drawHistosOnCanvas2D(listOfHistos_,normalize=True,stack=False,logscale=False
             profilesx[-1].SetTitle(listOfHistos[0].GetName()+"_XProfile")
             profilesx[-1].GetYaxis().SetRangeUser(0. ,max_y)
             profilesx[-1].Draw("same")
-            
-        #for px,sample in zip(profilesx,samples):    
+
+        #for px,sample in zip(profilesx,samples):
             #leg.AddEntry4545( "profx_"+h.GetName(), sample.name , "L")
         #leg.Draw("same")
         canvas.append(canvas_tmp)
-        
+
         profilesy = []
         canvas_tmp = getCanvas(listOfHistos[0].GetName()+"_YProfile", False)
         max_x = 0
@@ -562,8 +562,8 @@ def drawHistosOnCanvas2D(listOfHistos_,normalize=True,stack=False,logscale=False
             profilesy[-1].GetYaxis().SetRangeUser(0.,max_x)
             profilesy[-1].Draw("same")
         canvas.append(canvas_tmp)
-        
-        
+
+
     if statTest:
     #print "doing 2D stat test"
         tests=getStatTestsList(profiles[0],profiles[1:],"WW") #profiles has been renamed
@@ -571,7 +571,7 @@ def drawHistosOnCanvas2D(listOfHistos_,normalize=True,stack=False,logscale=False
             #tests.Draw()
             #objects.append(tests)
         #h.DrawCopy('axissame')
-    
+
     #if ratio:
         #canvas.cd(2)
         #line=listOfHistos[0].Clone()
@@ -593,7 +593,7 @@ def drawHistosOnCanvas2D(listOfHistos_,normalize=True,stack=False,logscale=False
             #ratio=hist.Clone()
             #ratio.Divide(listOfHistos[0])
             #ratio.DrawCopy('sameP')
-        #canvas.cd(1)      
+        #canvas.cd(1)
     # print 'name2', canvas.GetName()
 # raw_input()
     if not DoProfile:
@@ -603,7 +603,7 @@ def drawHistosOnCanvas2D(listOfHistos_,normalize=True,stack=False,logscale=False
 
 def drawHistosOnCanvasAN(listOfHistos_,normalize=True,stack=False,logscale=False,options_='histo',ratio=False):
     listOfHistos=[h.Clone(h.GetName()+'_drawclone') for h in listOfHistos_]
-    canvas=getCanvas(listOfHistos[0].GetName(),ratio)        
+    canvas=getCanvas(listOfHistos[0].GetName(),ratio)
     #prepare drawing
 
     # mover over/underflow
@@ -626,7 +626,7 @@ def drawHistosOnCanvasAN(listOfHistos_,normalize=True,stack=False,logscale=False
             for h in listOfHistos:
                 h.Scale(1./integral0)
 
-            
+
     canvas.cd(1)
     yMax=1e-9
     yMinMax=1000.
@@ -673,7 +673,7 @@ def drawHistosOnCanvasAN(listOfHistos_,normalize=True,stack=False,logscale=False
     return canvas
 
 
-# writes canvases to pdf 
+# writes canvases to pdf
 def printCanvases(canvases,name):
 
     print 'printing canvases!'
@@ -684,7 +684,7 @@ def printCanvases(canvases,name):
         canvas=c
         canvas.Print(name+'.pdf')
         #canvas.SaveAs(name+"/"+c.GetName()+'.png')
-        
+
     canvas.Print(name+'.pdf]')
     if not os.path.exists(name):
         os.makedirs(name)
@@ -701,7 +701,7 @@ def printCanvasesPNG(canvases,name):
         c.Print(name+'/'+("_".join(((c.GetName()).split('_'))[2:]))+".png")
 
 
-# writes canvases to root file 
+# writes canvases to root file
 def writeObjects(objects,name):
     outfile=ROOT.TFile(name+'.root','recreate')
     for o in objects:
@@ -750,7 +750,7 @@ def setPlotRangeAuto(plots,samples,treename='MVATree',weightexpression='Weight',
             xmin=project_histo.GetXaxis().GetXmin()
             ymax=project_histo.GetMaximum()
             ycutoff=ymax/50
-        
+
             overflow=0
             nclip=0
             for i in range(nbins,-1,-1):
@@ -778,7 +778,7 @@ def setPlotRangeAuto(plots,samples,treename='MVATree',weightexpression='Weight',
         nbins=int(nbins*binwidth/newbinwidth+1)
         total_xmin=int(math.floor(total_xmin/newbinwidth))*newbinwidth
         total_xmax=total_xmin+newbinwidth*nbins
-                      
+
         h.SetDirectory(0)
         newhisto=ROOT.TH1F(name,title,nbins,total_xmin,total_xmax)
         newplots.append(Plot(newhisto,project_var,plot.selection))
@@ -786,12 +786,12 @@ def setPlotRangeAuto(plots,samples,treename='MVATree',weightexpression='Weight',
     for f in files:
         f.Close()
     return newplots
-        
+
 # creates list of histolist from plots and samples -- draws every histogram after another, slow
-def createHistoLists_fromTree(plots,samples,treename='MVATree',weightexpression='Weight'):    
+def createHistoLists_fromTree(plots,samples,treename='MVATree',weightexpression='Weight'):
     listOfHistoLists=[]
     for plot in plots:
-        histoList=[]           
+        histoList=[]
         for sample in samples:
             h=plot.histo.Clone()
             h.Sumw2()
@@ -877,7 +877,7 @@ def AddEntry22( self, histo, label, option='L'):
     newwidth=max((len(label)-neglen)*0.015*0.05/ts+0.1,width)
     #self.SetX1NDC(self.GetX2NDC()-newwidth)
 
-    
+
     self.AddEntry(histo, label, option)
 ROOT.TLegend.AddEntry22 = AddEntry22
 
@@ -898,7 +898,7 @@ def AddEntry4545( self, histo, label, option='L'):
     newwidth=max((len(label)-neglen)*0.015*0.04/ts+0.1,width)
     print newwidth
     self.SetX1NDC(self.GetX2NDC()-newwidth)
-    
+
     self.AddEntry(histo, label, option)
 ROOT.TLegend.AddEntry4545 = AddEntry4545
 
@@ -918,7 +918,7 @@ def AddEntry3( self, histo, label, option='L'):
     newwidth=max((len(label)-neglen)*0.015*0.05/ts+0.1,width)
     self.SetX1NDC(self.GetX2NDC()-newwidth)
 
-    
+
     self.AddEntry(histo, label, option)
 ROOT.TLegend.AddEntry3 = AddEntry3
 
@@ -937,7 +937,7 @@ def AddEntry4( self, histo, label, option='L'):
     newwidth=max((len(label)-neglen)*0.015*0.05/ts+0.1,width)
     self.SetX1NDC(self.GetX2NDC()-newwidth)
 
-    
+
     self.AddEntry(histo, label, option)
 ROOT.TLegend.AddEntry4 = AddEntry4
 
@@ -946,7 +946,7 @@ def createHistoLists_fromHistoFile(samples,rebin=1):
     listOfHistoListsT=[]
     listLength=-1
     for sample in samples:
-        f=ROOT.TFile(sample.path, "readonly")       
+        f=ROOT.TFile(sample.path, "readonly")
         keyList = f.GetKeyNames()
         ROOT.gDirectory.cd('PyROOT:/')
         if listLength>0:
@@ -955,19 +955,19 @@ def createHistoLists_fromHistoFile(samples,rebin=1):
         histoList = []
         for key in keyList:
             o=f.Get(key)
-            if isinstance(o,ROOT.TH1) and not isinstance(o,ROOT.TH2): 
+            if isinstance(o,ROOT.TH1) and not isinstance(o,ROOT.TH2):
                 o.Rebin(rebin)
                 histoList.append(o.Clone())
                 histoList[-1].SetName(o.GetName()+'_'+sample.name)
         listOfHistoListsT.append(histoList)
     listOfHistoLists=transposeLOL(listOfHistoListsT)
     return listOfHistoLists
-  
+
 def createHistoLists_fromFiles(files,rebin=1):
     listOfHistoListsT=[]
     listLength=-1
     for hfile in files:
-        f=ROOT.TFile(hfile, "readonly")       
+        f=ROOT.TFile(hfile, "readonly")
         keyList = f.GetKeyNames()
         ROOT.gDirectory.cd('PyROOT:/')
         if listLength>0:
@@ -976,7 +976,7 @@ def createHistoLists_fromFiles(files,rebin=1):
         histoList = []
         for key in keyList:
             o=f.Get(key)
-            if isinstance(o,ROOT.TH1) and not isinstance(o,ROOT.TH2): 
+            if isinstance(o,ROOT.TH1) and not isinstance(o,ROOT.TH2):
                 o.Rebin(rebin)
                 histoList.append(o.Clone())
                 #histoList[-1].SetName(o.GetName()+'_'+sample.name)
@@ -990,7 +990,7 @@ def createHistoLists_fromSuperHistoFile(path,samples,plots,rebin=1,catnames=[""]
     keyList = f.GetKeyNames()
     #print keyList
     for sample in samples:
-        
+
         histoList=[]
         ROOT.gDirectory.cd('PyROOT:/')
         print catnames
@@ -1001,7 +1001,7 @@ def createHistoLists_fromSuperHistoFile(path,samples,plots,rebin=1,catnames=[""]
 #                print key, sample.nick, c, plot.name
                 o=f.Get(key)
                 #print o
-                if isinstance(o,ROOT.TH1) and not isinstance(o,ROOT.TH2): 
+                if isinstance(o,ROOT.TH1) and not isinstance(o,ROOT.TH2):
                     o.Rebin(rebin)
                     histoList.append(o.Clone())
 #                    print "ok", histoList[-1], len(histoList)
@@ -1017,7 +1017,7 @@ def createHistoLists_fromSuperHistoFile(path,samples,plots,rebin=1,catnames=[""]
 def createLLL_fromSuperHistoFileSyst(path,samples,plots,systnames=[""]):
     f=ROOT.TFile(path, "readonly")
 #    print path
-    keyList = f.GetKeyNames()    
+    keyList = f.GetKeyNames()
     lll=[]
     for plot in plots:
         ll=[]
@@ -1028,15 +1028,15 @@ def createLLL_fromSuperHistoFileSyst(path,samples,plots,systnames=[""]):
 #            print sample.shape_unc
             l=[]
             for syst in systnames:
-                ROOT.gDirectory.cd('PyROOT:/')               
+                ROOT.gDirectory.cd('PyROOT:/')
                 key=sample.nick+'_'+plot.name+syst
                 print key
-                if not syst in sample.shape_unc: 
+                if not syst in sample.shape_unc:
 #		    print "using nominal for ", key
                     l.append(nominal.Clone(key))
                     continue
                 o=f.Get(key)
-                if isinstance(o,ROOT.TH1) and not isinstance(o,ROOT.TH2): 
+                if isinstance(o,ROOT.TH1) and not isinstance(o,ROOT.TH2):
 #		    print "using right one for", key
                     l.append(o.Clone())
  #               else:
@@ -1096,10 +1096,10 @@ def createErrorbands(lll,samples,DoRateSysts=True):
 		  syst.Add(h)
 	      #print "rates ", sample.nick, syst.Integral()
 	      systs.append(syst)
-	      
+
         uperrors=[0]*ll[0][0].GetNbinsX()
         downerrors=[0]*ll[0][0].GetNbinsX()
-        
+
         #for sys in systs:
 	  #print sys, sys.Integral()
         for ibin in range(0,nominal.GetNbinsX()):
@@ -1134,23 +1134,23 @@ def createErrorbands(lll,samples,DoRateSysts=True):
 		      u=d_
 		    else:
                       u=0
-                
+
                 uperrors[ibin]=ROOT.TMath.Sqrt(uperrors[ibin]*uperrors[ibin]+u*u)
                 downerrors[ibin]=ROOT.TMath.Sqrt(downerrors[ibin]*downerrors[ibin]+d*d)
                 #print u,d
                 #print "up/down errors ", uperrors[ibin],downerrors[ibin]
-                
+
         graph=ROOT.TGraphAsymmErrors(nominal)
         for i in range(len(uperrors)):
             graph.SetPointEYlow(i,downerrors[i])
             graph.SetPointEYhigh(i,uperrors[i])
             graph.SetPointEXlow(i,nominal.GetBinWidth(i+1)/2.)
             graph.SetPointEXhigh(i,nominal.GetBinWidth(i+1)/2.)
-            
+
         graphs.append(graph)
     return graphs
-    
-    
+
+
 # for a list of selections (and a list of their names) and a list of histos (and the variable expressions to fill them) the cartesian product is created and plots are booked
 def plotsForSelections_cross_Histos(selections,selectionnames,histos,variables):
     selection_histos=product(zip(selections,selectionnames),zip(histos,variables))
@@ -1175,7 +1175,7 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
     else:
         labeltexts=label
     canvases=[]
-    objects=[]   
+    objects=[]
     i=0
     print labeltexts
     for listOfHistos, labeltext in zip(listOfHistoLists, labeltexts):
@@ -1186,7 +1186,7 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
             yTitle='Events'
             if normalize:
                 yTitle='normalized'
-            setupHisto(histo,sample.color,yTitle,stack)        
+            setupHisto(histo,sample.color,yTitle,stack)
         stattests2D=None
         if isinstance(listOfHistos[0], ROOT.TH2):
             print "drawing 2D"
@@ -1194,7 +1194,7 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
                 currentoption=''
             else:
                 currentoption=options
-            if not DoProfile:    
+            if not DoProfile:
                 c, stattests2D=drawHistosOnCanvas2D(listOfHistos,normalize,stack,logscale,currentoption,ratio,DoProfile,statTest, samples)
             else:
                 c, stattests2D, profilesx, profilesy = drawHistosOnCanvas2D(listOfHistos,normalize,stack,logscale,currentoption,ratio,DoProfile,statTest, samples)
@@ -1207,7 +1207,7 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
             for h,sample in zip(listOfHistos,samples):
                 loption='L'
                 if stack:
-                    loption='F'            
+                    loption='F'
                 l.AddEntry4545(h,sample.name,loption)
             canvases.append(c)
             l.Draw('same')
@@ -1223,7 +1223,7 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
                     lx.AddEntry4545( px.GetName() , sample.name, "L" )
                 lx.Draw("same")
                 objects.append(lx)
-                
+
                 c[-1].SetName('c_'+c[-1].GetName())
                 ly = getLegend2()
                 for  py, sample in zip( profilesy, samples):
@@ -1233,7 +1233,7 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
             canvases+=c
         else:
             canvases+=c
-        
+
         if statTest:
             if not isinstance(listOfHistos[0],ROOT.TH2):
                 tests=getStatTestsList(listOfHistos[0],listOfHistos[1:],"UW")
@@ -1257,7 +1257,7 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
         # objects.append(cms)
 
         if not isinstance(c, list):
-            cms = ROOT.TLatex(0.2, 0.96, 'CMS preliminary,  12.9 fb^{-1},  #sqrt{s} = 13 TeV'  );
+            cms = ROOT.TLatex(0.2, 0.96, 'CMS preliminary,  37.8 fb^{-1},  #sqrt{s} = 13 TeV'  );
             cms.SetTextFont(42)
             cms.SetTextSize(0.05)
             cms.SetNDC()
@@ -1282,15 +1282,15 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
         #         objects.append(label)
         #     listofallstattests.append(listofthisstattests)
 
-        
+
     printCanvases(canvases,name)
     writeObjects(canvases,name)
     stattestoutfile=open("stattests_"+name+".txt","w")
     for stst in listofallstattests:
       stattestoutfile.write(' '.join(stst)+'\n')
-    stattestoutfile.close()  
-      
-    
+    stattestoutfile.close()
+
+
 def writeListOfHistoListsAN(listOfHistoLists,samples, label,name,normalize=True,stack=False,logscale=False,options='histo',statTest=False, sepaTest=False,ratio=False):
     if isinstance(label, basestring):
         labeltexts=len(listOfHistoLists)*[label]
@@ -1298,7 +1298,7 @@ def writeListOfHistoListsAN(listOfHistoLists,samples, label,name,normalize=True,
     else:
         labeltexts=label
     canvases=[]
-    objects=[]   
+    objects=[]
     i=0
 #    print labeltexts
     for listOfHistos, labeltext in zip(listOfHistoLists, labeltexts):
@@ -1308,14 +1308,14 @@ def writeListOfHistoListsAN(listOfHistoLists,samples, label,name,normalize=True,
             yTitle='Events'
             if normalize:
                 yTitle='normalized'
-            setupHisto(histo,sample.color,yTitle,stack)        
+            setupHisto(histo,sample.color,yTitle,stack)
         c=drawHistosOnCanvas(listOfHistos,normalize,stack,logscale,options,ratio)
         c.SetName('c'+str(i))
         l=getLegend()
         for h,sample in zip(listOfHistos,samples):
             loption='L'
             if stack:
-                loption='F'            
+                loption='F'
             l.AddEntry2(h,sample.name,loption)
         canvases.append(c)
         l.Draw('same')
@@ -1336,7 +1336,7 @@ def writeListOfHistoListsAN(listOfHistoLists,samples, label,name,normalize=True,
 #        print cms
 #        objects.append(cms)
 
-        cms = ROOT.TLatex(0.2, 0.96, 'CMS preliminary,  12.9 fb^{-1},  #sqrt{s} = 13 TeV'  );
+        cms = ROOT.TLatex(0.2, 0.96, 'CMS preliminary,  37.8 fb^{-1},  #sqrt{s} = 13 TeV'  );
         cms.SetTextFont(42)
         cms.SetTextSize(0.05)
         cms.SetNDC()
@@ -1408,7 +1408,7 @@ def getSignifCurve(histoS,histoB):
     nonZeroBins=[]
     for i in range(nBins):
         if histoS.GetBinContent(i)>0. or histoB.GetBinContent(i)>0.:
-            nonZeroBins.append(i)     
+            nonZeroBins.append(i)
     sigs=ROOT.TGraphAsymmErrors(len(nonZeroBins))
     point=0
     for i in nonZeroBins:
@@ -1428,7 +1428,7 @@ def getROC(histo1,histo2,rej=True):
     nonZeroBins=[]
     for i in range(nBins,-1,-1):
         if histo1.GetBinContent(i)>0. or histo2.GetBinContent(i)>0.:
-            nonZeroBins.append(i)           
+            nonZeroBins.append(i)
 
     roc = ROOT.TGraphAsymmErrors(len(nonZeroBins)+1)
     if rej:
@@ -1448,7 +1448,7 @@ def getROC(histo1,histo2,rej=True):
         else:
             roc.SetPoint(point,eff1,eff2)
         point+=1
-    
+
     return roc
 
 def getEff(histo1):
@@ -1526,7 +1526,7 @@ def turn1dHistoToRow(h,witherror=True,rounding="3dig"):
         else:
             s+="&"
     return s
-    
+
 
 def turn1dHistosToTable(histos,samples,outfile,witherror=True):
     out=open(outfile+".tex","w")
@@ -1543,7 +1543,7 @@ def turn1dHistosToTable(histos,samples,outfile,witherror=True):
         rounding="1dig"
         if s.name=="S/B":
 	  rounding="3dig"
-        out.write(root2latex(s.name) + " & " + turn1dHistoToRow(h,witherror,rounding)+ "\\\\ \n")       
+        out.write(root2latex(s.name) + " & " + turn1dHistoToRow(h,witherror,rounding)+ "\\\\ \n")
     writeFoot(out)
     out.write( '\\end{document}\n')
 
@@ -1628,7 +1628,7 @@ def moveOverFlow(h):
     h.SetBinError(1,ROOT.TMath.Sqrt(ROOT.TMath.Power(h.GetBinError(0),2)+ROOT.TMath.Power(h.GetBinError(1),2)));
     h.SetBinError(h.GetNbinsX(),ROOT.TMath.Sqrt(ROOT.TMath.Power(h.GetBinError(h.GetNbinsX()+1),2)+ROOT.TMath.Power(h.GetBinError(h.GetNbinsX()),2)));
 
-# stack histo list 
+# stack histo list
 def stackHistoList(listOfHistos_,normalize=False):
     listOfHistos=[]
     for h in listOfHistos_:
@@ -1641,7 +1641,7 @@ def stackHistoList(listOfHistos_,normalize=False):
             h.Scale(1./integral0)
     return listOfHistos
 
-    
+
 
 def getDataGraph(listOfHistosData,nunblinded):
     if len(listOfHistosData)>0:
@@ -1652,15 +1652,15 @@ def getDataGraph(listOfHistosData,nunblinded):
     data=ROOT.TGraphAsymmErrors(datahisto)
     alpha = 1 - 0.6827
     for i in range(0,data.GetN()):
-    
+
       N = data.GetY()[i];
-      
+
       L = 0
       if N != 0:
         L = ROOT.Math.gamma_quantile(alpha/2,N,1.)
 
       U =  ROOT.Math.gamma_quantile_c(alpha/2,N+1,1)
-      
+
       data.SetPointEYlow(i, N-L);
       data.SetPointEYhigh(i, U-N);
 
@@ -1674,7 +1674,7 @@ def getDataGraph(listOfHistosData,nunblinded):
         data.GetPoint(i,x,y)
         data.SetPointEXlow(i,0)
         data.SetPointEXhigh(i,0)
-           
+
         if i>nunblinded:
             blind_band.SetPoint(j,x,0)
             blind_band.SetPointEYlow(j,0)
@@ -1697,18 +1697,18 @@ def getDataGraphBlind(listOfHistosData,nunblinded):
     data=ROOT.TGraphAsymmErrors(datahisto)
     alpha = 1 - 0.6827
     for i in range(0,data.GetN()):
-    
+
       N = data.GetY()[i];
-      
+
       L = 0
       if N != 0:
         L = ROOT.Math.gamma_quantile(alpha/2,N,1.)
 
       U =  ROOT.Math.gamma_quantile_c(alpha/2,N+1,1)
-      
+
       data.SetPointEYlow(i, N-L);
       data.SetPointEYhigh(i, U-N);
-    
+
     data.SetMarkerStyle(20)
     data.SetMarkerSize(1.3)
     data.SetLineWidth(3)
@@ -1719,7 +1719,7 @@ def getDataGraphBlind(listOfHistosData,nunblinded):
     x, y = ROOT.Double(0), ROOT.Double(0)
     for i in range(0,data.GetN()+1):
         data.SetPointEXlow(i,0)
-        data.SetPointEXhigh(i,0)          
+        data.SetPointEXhigh(i,0)
         if i>nunblinded:
             data.GetPoint(nunblinded,x,y)
             blind_band.SetPoint(j,x,0)
@@ -1751,7 +1751,7 @@ def getRatioGraph(data,mchisto):
               minimum=round(ratioval,1);
         else:
             ratio.SetPoint(i,x,-999)
-        
+
         if y>0:
             ratio.SetPointEYlow(i,1-(y-data.GetErrorYlow(i))/y)
             ratio.SetPointEYhigh(i,(y+data.GetErrorYhigh(i))/y-1)
@@ -1773,13 +1773,13 @@ def getRatioGraph(data,mchisto):
 
 
 
-def plotDataMC(listOfHistoListsData,listOfHistoLists,samples,name,logscale=False,label='',ratio=True,options='histo'):    
+def plotDataMC(listOfHistoListsData,listOfHistoLists,samples,name,logscale=False,label='',ratio=True,options='histo'):
     if isinstance(label, basestring):
         labeltexts=len(listOfHistoListsData)*[label]
     else:
         labeltexts=label
     canvases=[]
-    objects=[]   
+    objects=[]
     i=0
 #    print len(listOfHistoLists)
     # for every plot, look at all samples
@@ -1789,8 +1789,8 @@ def plotDataMC(listOfHistoListsData,listOfHistoLists,samples,name,logscale=False
         # setup histo style
         for histo,sample in zip(listOfHistos,samples):
             yTitle='Events'
-            setupHisto(histo,sample.color,yTitle,True) 
-        # 
+            setupHisto(histo,sample.color,yTitle,True)
+        #
         # mover over/underflow
         for h in listOfHistos:
             moveOverFlow(h)
@@ -1801,7 +1801,7 @@ def plotDataMC(listOfHistoListsData,listOfHistoLists,samples,name,logscale=False
         yMax=1e-9
         for h in stackedListOfHistos:
             yMax=max(h.GetBinContent(h.GetMaximumBin()),yMax)
-        canvas=getCanvas(stackedListOfHistos[0].GetName(),ratio)        
+        canvas=getCanvas(stackedListOfHistos[0].GetName(),ratio)
         canvas.cd(1)
         #draw first histo
         h=stackedListOfHistos[0]
@@ -1859,7 +1859,7 @@ def plotDataMC(listOfHistoListsData,listOfHistoLists,samples,name,logscale=False
         line.Divide(listOfHistos[0])
         #line.GetYaxis().SetRangeUser(0.5,1.6)
         line.GetYaxis().SetRangeUser(ratiominimum-0.2,ratiomaximum+0.2)
-        
+
         line.GetXaxis().SetRangeUser(listOfHistos[0].GetXaxis().GetXmin(),listOfHistos[0].GetXaxis().GetXmax())
         for i in range(line.GetNbinsX()+1):
             line.SetBinContent(i,1)
@@ -1891,13 +1891,13 @@ def plotDataMC(listOfHistoListsData,listOfHistoLists,samples,name,logscale=False
 
 
 ##WIP
-def plotDataMCwSysts(listOfHistoListsData,listOfHistoLists,ListSysHistosUp,ListSysHistosDown,samples,name,logscale=False,label='',ratio=True,options='histo'):    
+def plotDataMCwSysts(listOfHistoListsData,listOfHistoLists,ListSysHistosUp,ListSysHistosDown,samples,name,logscale=False,label='',ratio=True,options='histo'):
     if isinstance(label, basestring):
         labeltexts=len(listOfHistoListsData)*[label]
     else:
         labeltexts=label
     canvases=[]
-    objects=[]   
+    objects=[]
     i=0
     print "listOfHistoLists", len(listOfHistoLists)
     # for every plot, look at all samples
@@ -1907,8 +1907,8 @@ def plotDataMCwSysts(listOfHistoListsData,listOfHistoLists,ListSysHistosUp,ListS
         # setup histo style
         for histo,sample in zip(listOfHistos,samples):
             yTitle='Events'
-            setupHisto(histo,sample.color,yTitle,True) 
-        # 
+            setupHisto(histo,sample.color,yTitle,True)
+        #
         # mover over/underflow
         for h in listOfHistos:
             moveOverFlow(h)
@@ -1971,7 +1971,7 @@ def plotDataMCwSysts(listOfHistoListsData,listOfHistoLists,ListSysHistosUp,ListS
             relErrUp=ROOT.TMath.Sqrt(thisbinErrorUp)/centralY
             relErrDown=ROOT.TMath.Sqrt(thisbinErrorDown)/centralY
           ratioerrorgraph.SetPointError(ibin, thisbinwidth/2.0,thisbinwidth/2.0, relErrUp, relErrDown)
-	  print 
+	  print
 
 
         errorgraph.SetFillStyle(3154)
@@ -1982,7 +1982,7 @@ def plotDataMCwSysts(listOfHistoListsData,listOfHistoLists,ListSysHistosUp,ListS
         ratioerrorgraph.SetLineColor(ROOT.kBlack)
         ratioerrorgraph.SetFillColor(ROOT.kGreen)
 
-        canvas=getCanvas(stackedListOfHistos[0].GetName(),ratio)        
+        canvas=getCanvas(stackedListOfHistos[0].GetName(),ratio)
         canvas.cd(1)
         #draw first histo
         h=stackedListOfHistos[0]
@@ -2001,7 +2001,7 @@ def plotDataMCwSysts(listOfHistoListsData,listOfHistoLists,ListSysHistosUp,ListS
         #draw data
         data=getDataGraph(listOfHistosData)
         data.Draw('samePE1')
-        
+
         errorgraph.Draw("2")
         l=getLegend()
         l.AddEntry2(data,'data','P')
@@ -2080,28 +2080,28 @@ def writeLOLAndOneOnTop(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,f
     normalize=False
     stack=True,
     canvases=[]
-    objects=[]   
+    objects=[]
     i=0
     print "ok"
-    
+
     for listOfHistos,ot in zip(listOfHistoLists,listOfhistosOnTop):
         print i
         i+=1
-        
+
         integralfactor=0
         for histo,sample in zip(listOfHistos,samples):
 
-            yTitle='Events expected for 12.9 fb^{-1} @ 13 TeV'
+            yTitle='Events expected for 37.9 fb^{-1} @ 13 TeV'
 #            yTitle='Events'
-            setupHisto(histo,sample.color,yTitle,stack) 
-            
+            setupHisto(histo,sample.color,yTitle,stack)
+
             if factor < 0:
               integralfactor+=histo.Integral()
-        
-        if factor < 0:    
+
+        if factor < 0:
           integralfactor=integralfactor/ot.Integral()
-            
-        c=drawHistosOnCanvas(listOfHistos,normalize,stack,logscale,options)       
+
+        c=drawHistosOnCanvas(listOfHistos,normalize,stack,logscale,options)
         #c.SetName('c'+str(i))
         c.cd()
         otc=ot.Clone()
@@ -2112,11 +2112,11 @@ def writeLOLAndOneOnTop(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,f
         otc.SetBinError(otc.GetNbinsX(),ROOT.TMath.Sqrt(ROOT.TMath.Power(otc.GetBinError(otc.GetNbinsX()+1),2)+ROOT.TMath.Power(otc.GetBinError(otc.GetNbinsX()),2)));
         otc.SetLineWidth(3)
         l=getLegend()
-        if factor >= 0.: 
+        if factor >= 0.:
           l.AddEntry2(otc,sampleOnTop.name+' x '+str(factor),'L')
         else:
           l.AddEntry2(otc,sampleOnTop.name+(' x {:4.0f}').format(integralfactor),'L')
-          
+
         for h,sample in zip(listOfHistos,samples):
             loption='L'
             if stack:
@@ -2155,32 +2155,32 @@ def writeLOLSeveralOnTop(listOfHistoLists,samples,listOfHistoListsOnTop,samplesO
     normalize=False
     stack=True,
     canvases=[]
-    objects=[]   
+    objects=[]
     i=0
     print "ok"
-        
+
     for listOfHistos,listOfHistosOnTop in zip(listOfHistoLists,listOfHistoListsOnTop):
         print i
         i+=1
-        
+
         integralfactor=0
         for histo,sample in zip(listOfHistos,samples):
 
             yTitle='Events expected for 27.3 fb^{-1} @ 13 TeV'
 #            yTitle='Events'
 #            print histo
-            setupHisto(histo,sample.color,yTitle,stack) 
-            
+            setupHisto(histo,sample.color,yTitle,stack)
+
             if factor < 0:
               integralfactor+=histo.Integral()
               print integralfactor
-        c=drawHistosOnCanvas(listOfHistos,normalize,stack,logscale,options)       
+        c=drawHistosOnCanvas(listOfHistos,normalize,stack,logscale,options)
         #c.SetName('c'+str(i))
         c.cd()
         otcs=[]
         l=getLegend()
         for ot, sampleOnTop in zip(listOfHistosOnTop, samplesOnTop):
-            #if factor < 0:    
+            #if factor < 0:
                 #integralfactor=integralfactor/ot.Integral()
 
             otc=ot.Clone()
@@ -2191,12 +2191,12 @@ def writeLOLSeveralOnTop(listOfHistoLists,samples,listOfHistoListsOnTop,samplesO
             otc.SetBinError(1,ROOT.TMath.Sqrt(ROOT.TMath.Power(otc.GetBinError(0),2)+ROOT.TMath.Power(otc.GetBinError(1),2)));
             otc.SetBinError(otc.GetNbinsX(),ROOT.TMath.Sqrt(ROOT.TMath.Power(otc.GetBinError(otc.GetNbinsX()+1),2)+ROOT.TMath.Power(otc.GetBinError(otc.GetNbinsX()),2)));
             otc.SetLineWidth(3)
-            if factor >= 0.: 
+            if factor >= 0.:
                 l.AddEntryZprime(otc,sampleOnTop.name+' x '+str(factor)[:4],'L')
             else:
                 l.AddEntryZprime(otc,sampleOnTop.name+(' x ')+str(integralfactor/otc.Integral()*abs(factor))[:4],'L')
                 #l.AddEntryZprime(otc,sampleOnTop.name+(' x {:4.0f}').format(integralfactor/otc.Integral()*abs(factor)),'L')
-          
+
         for h,sample in zip(listOfHistos,samples):
             loption='L'
             if stack:
@@ -2252,13 +2252,13 @@ def eventYields(hl_data,hl_mc,samples,tablename,witherror=True,makeRatios=True):
     command=['pdflatex',tablename+'.tex']
     subprocess.call(command)
 
-def plotDataMCan(listOfHistoListsData,listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,factor,name,logscale=False,label='',ratio=True,blind=False,options='histo'):    
+def plotDataMCan(listOfHistoListsData,listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,factor,name,logscale=False,label='',ratio=True,blind=False,options='histo'):
     if isinstance(label, basestring):
         labeltexts=len(listOfHistoListsData)*[label]
     else:
         labeltexts=label
     canvases=[]
-    objects=[]   
+    objects=[]
     i=0
 #    print len(listOfHistoLists)
     # for every plot, look at all samples
@@ -2270,14 +2270,14 @@ def plotDataMCan(listOfHistoListsData,listOfHistoLists,samples,listOfhistosOnTop
         for histo,sample in zip(listOfHistos,samples):
             yTitle='Events'
             setupHisto(histo,sample.color,yTitle,True)
-            
+
             if factor < 0:
               integralfactor+=histo.Integral()
-        
-        if factor < 0:    
+
+        if factor < 0:
           integralfactor=integralfactor/ot.Integral()
-          
-        # 
+
+        #
         # mover over/underflow
         for h in listOfHistos:
             moveOverFlow(h)
@@ -2288,7 +2288,7 @@ def plotDataMCan(listOfHistoListsData,listOfHistoLists,samples,listOfhistosOnTop
         yMax=1e-9
         for h in stackedListOfHistos:
             yMax=max(h.GetBinContent(h.GetMaximumBin()),yMax)
-        canvas=getCanvas(stackedListOfHistos[0].GetName(),ratio)        
+        canvas=getCanvas(stackedListOfHistos[0].GetName(),ratio)
         canvas.cd(1)
         #draw first histo
         h=stackedListOfHistos[0]
@@ -2327,7 +2327,7 @@ def plotDataMCan(listOfHistoListsData,listOfHistoLists,samples,listOfhistosOnTop
         data.Draw('samePE1')
         l=getLegend()
         l.AddEntry2(data,'data','P')
-        if factor >= 0.: 
+        if factor >= 0.:
           l.AddEntry2(otc,sampleOnTop.name+' x '+str(factor),'L')
         else:
           l.AddEntry2(otc,sampleOnTop.name+(' x {:4.0f}').format(integralfactor),'L')
@@ -2341,7 +2341,7 @@ def plotDataMCan(listOfHistoListsData,listOfHistoLists,samples,listOfhistosOnTop
         objects.append(otc)
 
         #draw the lumi text on the canvas
-        CMS_lumi.lumi_13TeV = "12.9 fb^{-1}"
+        CMS_lumi.lumi_13TeV = "37.8 fb^{-1}"
         CMS_lumi.writeExtraText = 1
         CMS_lumi.extraText = "Preliminary"
         CMS_lumi.lumi_sqrtS = "13 TeV" # used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
@@ -2350,14 +2350,14 @@ def plotDataMCan(listOfHistoListsData,listOfHistoLists,samples,listOfhistosOnTop
         CMS_lumi.cmsTextOffset = 0.49
         CMS_lumi.lumiTextSize = 0.43
         CMS_lumi.lumiTextOffset = 0.61
-        
+
         CMS_lumi.relPosX = 0.15
-        
+
         CMS_lumi.hOffset = 0.05
-        
+
         iPeriod=4   # 13TeV
         iPos=0     # CMS inside frame
-        
+
         CMS_lumi.CMS_lumi(canvas, iPeriod, iPos)
 
         label = ROOT.TLatex(0.2, 0.89, labeltext);
@@ -2373,7 +2373,7 @@ def plotDataMCan(listOfHistoListsData,listOfHistoLists,samples,listOfhistosOnTop
         line=listOfHistos[0].Clone()
         line.SetFillStyle(0)
         line.Divide(listOfHistos[0])
-            
+
         #line.GetYaxis().SetRangeUser(0.5,1.6)
         line.GetYaxis().SetRangeUser(ratiominimum-0.2,ratiomaximum+0.2)
         line.GetXaxis().SetRangeUser(listOfHistos[0].GetXaxis().GetXmin(),listOfHistos[0].GetXaxis().GetXmax())
@@ -2406,7 +2406,7 @@ def plotDataMCan(listOfHistoListsData,listOfHistoLists,samples,listOfhistosOnTop
     writeObjects(canvases,name)
 
 
-def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,factor,name,listOflll,logscale=False,label='',ratio=True,blinded=False):    
+def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,factor,name,listOflll,logscale=False,label='',ratio=True,blinded=False):
 ################################################
 
 
@@ -2419,14 +2419,14 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
     else:
         labeltexts=label
     canvases=[]
-    objects=[]   
+    objects=[]
     i=0
 #    print len(listOfHistoLists)
     # for every plot, look at all samples
     listOfErrorGraphs=[]
     listOfErrorGraphStyles=[]
     listOfErrorGraphColors=[]
-    
+
     listOfErrorGraphLists=[]
     #lll=[listOflistOflist of histograms, FillStyle, FillColor, DoRateSysts]
     for lll in listOflll:
@@ -2452,14 +2452,14 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         for histo,sample in zip(listOfHistos,samples):
             yTitle='Events'
             setupHisto(histo,sample.color,yTitle,True)
-            
+
             if factor < 0:
               integralfactor+=histo.Integral()
-        
-        if factor < 0:    
+
+        if factor < 0:
           integralfactor=integralfactor/ot.Integral()
-            
-        # 
+
+        #
         # mover over/underflow
         for h in listOfHistos:
             moveOverFlow(h)
@@ -2470,7 +2470,7 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         yMax=1e-9
         for h in stackedListOfHistos:
             yMax=max(h.GetBinContent(h.GetMaximumBin()),yMax)
-        canvas=getCanvas(stackedListOfHistos[0].GetName(),ratio)        
+        canvas=getCanvas(stackedListOfHistos[0].GetName(),ratio)
         canvas.cd(1)
         #draw first histo
         h=stackedListOfHistos[0]
@@ -2518,8 +2518,8 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         if blinded:
             blind.Draw('same2')
         objects.append(blind)
-        
-        
+
+
         listOfRatioErrorGraphs=[]
         graphcounter=0
         for errorgraph,thisFillStyle,ThisFillColor in errorgraphList:
@@ -2537,7 +2537,7 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
 		  relErrDown=errorgraph.GetErrorYlow(i)/y
 	      ratioerrorgraph.SetPointError(i, errorgraph.GetErrorXlow(i),errorgraph.GetErrorXhigh(i), relErrUp, relErrDown)
 
-  
+
 	  errorgraph.SetFillStyle(thisFillStyle)
 	  errorgraph.SetLineColor(ThisFillColor)
 	  errorgraph.SetFillColor(ThisFillColor)
@@ -2551,7 +2551,7 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
 	  #if graphcounter==0:
 	    #errorgraph.Draw("2")
 	  #else:
-	  errorgraph.Draw("same2")  
+	  errorgraph.Draw("same2")
 	  graphcounter+=1
 
 	  objects.append(errorgraph)
@@ -2559,11 +2559,11 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
 	  listOfRatioErrorGraphs.append(ratioerrorgraph)
 	  #print objects
 	  #raw_input()
-        
+
         l1=getLegendL()
         l2=getLegendR()
         l1.AddEntry22(data,'data','P')
-        if factor >= 0.: 
+        if factor >= 0.:
           l2.AddEntry22(otc,sampleOnTop.name+' x '+str(factor),'L')
         else:
           l2.AddEntry22(otc,sampleOnTop.name+(' x {:4.0f}').format(integralfactor),'L')
@@ -2582,9 +2582,9 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         objects.append(l1)
         objects.append(l2)
         objects.append(otc)
-        
+
         #draw the lumi text on the canvas
-        CMS_lumi.lumi_13TeV = "12.9 fb^{-1}"
+        CMS_lumi.lumi_13TeV = "37.8 fb^{-1}"
         CMS_lumi.writeExtraText = 1
         CMS_lumi.extraText = "Preliminary"
         CMS_lumi.lumi_sqrtS = "13 TeV" # used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
@@ -2593,16 +2593,16 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         CMS_lumi.cmsTextOffset = 0.49
         CMS_lumi.lumiTextSize = 0.43
         CMS_lumi.lumiTextOffset = 0.61
-        
+
         CMS_lumi.relPosX = 0.15
-        
+
         CMS_lumi.hOffset = 0.05
-        
+
         iPeriod=4   # 13TeV
         iPos=0     # CMS inside frame
-        
+
         CMS_lumi.CMS_lumi(canvas, iPeriod, iPos)
-        
+
         label = ROOT.TLatex(0.18, 0.89, labeltext);
         label.SetTextFont(42)
         label.SetTextSize(0.035)
@@ -2616,7 +2616,7 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         line=listOfHistos[0].Clone()
         line.SetFillStyle(0)
         line.Divide(listOfHistos[0])
-        
+
         emptyHisto=listOfHistos[0].Clone()
         print emptyHisto.GetName()
         emptyHisto.SetFillStyle(0)
@@ -2665,16 +2665,16 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         #print labeltext
         #raw_input()
 
-    
-    
+
+
 #    print len(canvases)
     printCanvases(canvases,name)
     writeObjects(canvases,name)
-    
+
 
 ###################################################
 
-def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,factor,name,listOflll,listOfmyCustomBinLabels,logscale=False,label='',ratio=True,blinded=False):    
+def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,factor,name,listOflll,listOfmyCustomBinLabels,logscale=False,label='',ratio=True,blinded=False):
 
     options='histo'
     if isinstance(label, basestring):
@@ -2682,14 +2682,14 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
     else:
         labeltexts=label
     canvases=[]
-    objects=[]   
+    objects=[]
     i=0
 #    print len(listOfHistoLists)
     # for every plot, look at all samples
     listOfErrorGraphs=[]
     listOfErrorGraphStyles=[]
     listOfErrorGraphColors=[]
-    
+
     listOfErrorGraphLists=[]
     #lll=[listOflistOflist of histograms, FillStyle, FillColor, DoRateSysts]
     for lll in listOflll:
@@ -2714,15 +2714,15 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
         integralfactor=0
         for histo,sample in zip(listOfHistos,samples):
             yTitle='Events'
-            setupHisto(histo,sample.color,yTitle,True) 
-            
+            setupHisto(histo,sample.color,yTitle,True)
+
             if factor < 0:
               integralfactor+=histo.Integral()
-        
-        if factor < 0:    
+
+        if factor < 0:
           integralfactor=integralfactor/ot.Integral()
-        
-        # 
+
+        #
         # mover over/underflow
         for h in listOfHistos:
             moveOverFlow(h)
@@ -2733,7 +2733,7 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
         yMax=1e-9
         for h in stackedListOfHistos:
             yMax=max(h.GetBinContent(h.GetMaximumBin()),yMax)
-        canvas=getCanvas(stackedListOfHistos[0].GetName(),ratio)        
+        canvas=getCanvas(stackedListOfHistos[0].GetName(),ratio)
         canvas.cd(1)
         #draw first histo
         h=stackedListOfHistos[0]
@@ -2781,8 +2781,8 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
         if blinded:
             blind.Draw('same2')
         objects.append(blind)
-        
-        
+
+
         listOfRatioErrorGraphs=[]
         graphcounter=0
         for errorgraph,thisFillStyle,ThisFillColor in errorgraphList:
@@ -2800,7 +2800,7 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
 		  relErrDown=errorgraph.GetErrorYlow(i)/y
 	      ratioerrorgraph.SetPointError(i, errorgraph.GetErrorXlow(i),errorgraph.GetErrorXhigh(i), relErrUp, relErrDown)
 
-  
+
 	  errorgraph.SetFillStyle(thisFillStyle)
 	  errorgraph.SetLineColor(ThisFillColor)
 	  errorgraph.SetFillColor(ThisFillColor)
@@ -2814,7 +2814,7 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
 	  #if graphcounter==0:
 	    #errorgraph.Draw("2")
 	  #else:
-	  errorgraph.Draw("same2")  
+	  errorgraph.Draw("same2")
 	  graphcounter+=1
 
 	  objects.append(errorgraph)
@@ -2825,7 +2825,7 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
           l1=getLegendL()
           l2=getLegendR()
           l1.AddEntry22(data,'data','P')
-          if factor >= 0.: 
+          if factor >= 0.:
               l2.AddEntry22(otc,sampleOnTop.name+' x '+str(factor),'L')
           else:
               l2.AddEntry22(otc,sampleOnTop.name+(' x {:4.0f}').format(integralfactor),'L')
@@ -2846,7 +2846,7 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
         objects.append(otc)
 
         #draw the lumi text on the canvas
-        CMS_lumi.lumi_13TeV = "12.9 fb^{-1}"
+        CMS_lumi.lumi_13TeV = "37.8 fb^{-1}"
         CMS_lumi.writeExtraText = 1
         CMS_lumi.extraText = "Preliminary"
         CMS_lumi.lumi_sqrtS = "13 TeV" # used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
@@ -2855,14 +2855,14 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
         CMS_lumi.cmsTextOffset = 0.49
         CMS_lumi.lumiTextSize = 0.43
         CMS_lumi.lumiTextOffset = 0.61
-        
+
         CMS_lumi.relPosX = 0.15
-        
+
         CMS_lumi.hOffset = 0.05
-        
+
         iPeriod=4   # 13TeV
         iPos=0     # CMS inside frame
-        
+
         CMS_lumi.CMS_lumi(canvas, iPeriod, iPos)
 
         label = ROOT.TLatex(0.18, 0.89, labeltext);
@@ -2878,11 +2878,11 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
         line=listOfHistos[0].Clone()
         line.SetFillStyle(0)
         line.Divide(listOfHistos[0])
-        
+
         emptyHisto=listOfHistos[0].Clone()
         print emptyHisto.GetName()
         emptyHisto.SetFillStyle(0)
-            
+
         #line.GetYaxis().SetRangeUser(0.5,1.6)
         line.GetYaxis().SetRangeUser(ratiominimum-0.2,ratiomaximum+0.2)
         line.GetXaxis().SetRangeUser(listOfHistos[0].GetXaxis().GetXmin(),listOfHistos[0].GetXaxis().GetXmax())
@@ -2938,34 +2938,34 @@ def divideHistos(listOfHistoLists, numeratorPlot, denumeratorPlot, normalizefirs
     print 'denumerator ',denumeratorPlot
     print 'lol[inumerator] ',listOfHistoLists[numeratorPlot]
     print len(listOfHistoLists[numeratorPlot])
-    
+
     if len(listOfHistoLists[numeratorPlot])==1:
         numerator=listOfHistoLists[numeratorPlot][0].Clone()
         denumerator=listOfHistoLists[denumeratorPlot][0].Clone()
         numerator.Rebin(rebin)
         denumerator.Rebin(rebin)
-        if normalizefirst: 
+        if normalizefirst:
             print 'numerator before divide ',numerator
             numerator.Scale(1./numerator.Integral())
             denumerator.Scale(1./denumerator.Integral())
         x=numerator.Clone()
         numerator.Divide(numerator,denumerator,1.0,1.0,option)
-        listOfHistoLists[numeratorPlot][0]=numerator   
-        print 'numerator after divide ', listOfHistoLists[numeratorPlot][0]   
-        
+        listOfHistoLists[numeratorPlot][0]=numerator
+        print 'numerator after divide ', listOfHistoLists[numeratorPlot][0]
+
     if len(listOfHistoLists[numeratorPlot])>1:
         for i in range(len(listOfHistoLists[numeratorPlot])):
             numerator=listOfHistoLists[numeratorPlot][i].Clone()
             denumerator=listOfHistoLists[denumeratorPlot][i].Clone()
             numerator.Rebin(rebin)
             denumerator.Rebin(rebin)
-            if normalizefirst: 
+            if normalizefirst:
                 print 'numerator before divide ',numerator
                 numerator.Scale(1./numerator.Integral())
                 denumerator.Scale(1./denumerator.Integral())
             x=numerator.Clone()
             numerator.Divide(numerator,denumerator,1.0,1.0,option)
-            listOfHistoLists[numeratorPlot][i]=numerator   
+            listOfHistoLists[numeratorPlot][i]=numerator
             print 'numerator after divide ', listOfHistoLists[numeratorPlot][i]
         #print 'divide? ', listofHistoLists
         #self.append(x)
@@ -2982,34 +2982,34 @@ def multiplyHistos(listOfHistoLists, Factor1Plot, Factor2Plot, normalizefirst=Fa
     print 'Second Factor ',Factor2Plot
     print 'lol[First Factor] ',listOfHistoLists[Factor1Plot]
     print len(listOfHistoLists[Factor1Plot])
-    
+
     if len(listOfHistoLists[Factor1Plot])==1:
         Factor1 = listOfHistoLists[Factor1Plot][0].Clone()
         Factor2 = listOfHistoLists[Factor2Plot][0].Clone()
         Factor1.Rebin(rebin)
         Factor2.Rebin(rebin)
-        if normalizefirst: 
+        if normalizefirst:
             print 'Factor1 before divide ',Factor1
             Factor1.Scale(1./Factor1.Integral())
             Factor2.Scale(1./Factor2.Integral())
         x=Factor1.Clone()
         Factor1.Multiply(Factor1,Factor2,1.0,1.0,option)
-        listOfHistoLists[Factor1Plot][0]=Factor1   
-        print 'First Factor after divide ', listOfHistoLists[Factor1Plot][0]   
-        
+        listOfHistoLists[Factor1Plot][0]=Factor1
+        print 'First Factor after divide ', listOfHistoLists[Factor1Plot][0]
+
     if len(listOfHistoLists[Factor1Plot])>1:
         for i in range(len(listOfHistoLists[Factor1Plot])):
             Factor1=listOfHistoLists[Factor1Plot][i].Clone()
             Factor2=listOfHistoLists[Factor2Plot][i].Clone()
             Factor1.Rebin(rebin)
             Factor2.Rebin(rebin)
-            if normalizefirst: 
+            if normalizefirst:
                 print 'First Factor before divide ',Factor1
                 Factor1.Scale(1./Factor1.Integral())
                 Factor2.Scale(1./Factor2.Integral())
             x=Factor1.Clone()
             Factor1.Multiply(Factor1,Factor2,1.0,1.0,option)
-            listOfHistoLists[Factor1Plot][i]=Factor1   
+            listOfHistoLists[Factor1Plot][i]=Factor1
             print 'First Factor after divide ', listOfHistoLists[Factor1Plot][i]
         #print 'divide? ', listofHistoLists
         #self.append(x)
@@ -3018,28 +3018,76 @@ def multiplyHistos(listOfHistoLists, Factor1Plot, Factor2Plot, normalizefirst=Fa
     #return listofHistoLists
 
 
+#SubIndex: Use not all elements of The HistoList of the second summand but only a Special One( The one with SubIndex)
+def addHistos(listOfHistoLists, summand1Plot, summand2Plot,  weight=1. , UseSubIndex=False, SubIndex=0 , normalizefirst=False,rebin=1,option=''):
+    multipliedHistoList=[]
+    print 'First summand ', summand1Plot
+    print 'Second summand ',summand2Plot
+    print 'lol[First summand] ',listOfHistoLists[summand1Plot]
+    print len(listOfHistoLists[summand1Plot])
 
-    
+    if len(listOfHistoLists[summand1Plot])==1:
+        summand1 = listOfHistoLists[summand1Plot][0].Clone()
+        summand2 = listOfHistoLists[summand2Plot][0].Clone()
+        summand1.Rebin(rebin)
+        summand2.Rebin(rebin)
+        if normalizefirst:
+            print 'summand1 before divide ',summand1
+            summand1.Scale(1./summand1.Integral())
+            summand2.Scale(1./summand2.Integral())
+        x=summand1.Clone()
+        summand1.Add(summand2,weight)
+        listOfHistoLists[summand1Plot][0]=summand1
+        print 'First summand after divide ', listOfHistoLists[summand1Plot][0]
+
+    if len(listOfHistoLists[summand1Plot])>1:
+        for i in range(len(listOfHistoLists[summand1Plot])):
+            summand1=listOfHistoLists[summand1Plot][i].Clone()
+
+            if not UseSubIndex:
+                summand2=listOfHistoLists[summand2Plot][i].Clone()
+            else:
+                summand2=listOfHistoLists[summand2Plot][SubIndex].Clone()
+
+            summand1.Rebin(rebin)
+            summand2.Rebin(rebin)
+            if normalizefirst:
+                print 'First summand before divide ',summand1
+                summand1.Scale(1./summand1.Integral())
+                summand2.Scale(1./summand2.Integral())
+            x=summand1.Clone()
+            summand1.Add(summand2, weight)
+            listOfHistoLists[summand1Plot][i]=summand1
+            print 'First summand after divide ', listOfHistoLists[summand1Plot][i]
+
+
+
+
+
 #def LOLSumw2(listOfHistoLists):
     #for listOfHisto in listOfHistoLists:
         #for h in listOfHisto:
             #h.Sumw2()
-    
-def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='define name', rebin=1, fitoption='pol2'):
+
+def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='define name', rebin=1, fitoption='pol2', labels=None, autoXrange=False):
+    if labels==None:
+        labels = len(listOfHistoListsToPlot)*['Singal-BKG-Shape-Ratio']
     canvases=[]
     ratio=False
-    objects=[] 
+    objects=[]
     logscale=False
     #ListofTgraphsforFile=[]
     #ListofTgraphNamsforFile=[]
     #ROOT.gStyle.SetOptFit()
-    for listOfHistos in listOfHistoListsToPlot:
-                
+
+
+    for listOfHistos, label in zip(listOfHistoListsToPlot, labels):
+
         for histo,sample in zip(listOfHistos, sampleListToPlot):
             yTitle='Ratio'
             histo.Rebin(rebin)
             data=ROOT.TGraphAsymmErrors(histo)
-            fit=fitFunctionToHistogrammwitherrorband(histo,fitoption)
+            fit=fitFunctionToHistogrammwitherrorband(histo,fitoption, autoXrange)
             #fit=fitFunctionToHistogrammwitherrorband(histo,"[0]+([1]*log(x-[3])+[2]*log(x-[4])*log(x-[4]))")
             #fit=fitFunctionToHistogrammwitherrorband(histo,"[0]+([1]*log(x)+[2]*log(x)*log(x))*erf(x-[3]/[4])")
             canvas=getCanvas(data.GetName(),ratio)
@@ -3050,14 +3098,16 @@ def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='d
             fit[0].SetLineColor(ROOT.kBlue)
             #fit[0].ConfidenceIntervals()
             ROOT.gStyle.SetOptFit(1111)
-            #data.GetYaxis().SetRangeUser(0,2)
+            data.GetYaxis().SetRangeUser(0,2)
+            fit[0].GetYaxis().SetRangeUser(0,2)
+
             #histo.SetOptFit(0)
             fit[0].Draw('A3')
             fit[0].Draw('sameLXZ')
             data.Draw('sameP')
 
             l=getLegend()
-            l.AddEntryZprime(data,'Singal-BKG-Shape-Ratio','P')
+            l.AddEntryZprime(data,label ,'P')
             l.AddEntryZprime(fit[0],"fit",'L')
             canvases.append(canvas)
             l.Draw('same')
@@ -3068,25 +3118,26 @@ def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='d
             #ListofTgraphsforFile.append(fit[0])
             #ListofTgraphNamsforFile.append()
             print 'here its ok'
-            
+
     printCanvases(canvases,name)
     writeObjects(canvases,name)
     #writeTGraphstoextraFile(ListofTgraphsforFile,ListofTgraphNamsforFile,'SB_transferfunctions')
-    
-    
-def fitFunctionToHistogrammwitherrorband(histo, fitoption="[0]+[1]*log(x)+[2]*log(x)*log(x)"):
+
+
+def fitFunctionToHistogrammwitherrorband(histo, fitoption="[0]+[1]*log(x)+[2]*log(x)*log(x)", autoXrange = False):
     xmax=histo.GetNbinsX()*histo.GetBinWidth(histo.GetNbinsX())
     xmin=0.0
     ROOT.gStyle.SetOptFit(1111)
-    for ibin in range(0,histo.GetNbinsX()):
-        if histo.GetBinContent(ibin)==0 and histo.GetBinContent(ibin-1)!=0:
-            xmax=histo.GetBinCenter(ibin-1)
-        #print ibin,' of ',histo.GetNbinsX(),' binwidth: ',histo.GetBinWidth(ibin),' of ',xmax
-    for ibin in range(histo.GetNbinsX(),0,-1):
-        if histo.GetBinContent(ibin)==0 and histo.GetBinContent(ibin+1)!=0:
-            xmin=histo.GetBinCenter(ibin+1)
-        #print ibin,' of ',histo.GetNbinsX(),' xmin ',xmin
-        
+    if not autoXrange:
+        for ibin in range(0,histo.GetNbinsX()):
+            if histo.GetBinContent(ibin)==0 and histo.GetBinContent(ibin-1)!=0:
+                xmax=histo.GetBinCenter(ibin-1)
+            #print ibin,' of ',histo.GetNbinsX(),' binwidth: ',histo.GetBinWidth(ibin),' of ',xmax
+        for ibin in range(histo.GetNbinsX(),0,-1):
+            if histo.GetBinContent(ibin)==0 and histo.GetBinContent(ibin+1)!=0:
+                xmin=histo.GetBinCenter(ibin+1)
+            #print ibin,' of ',histo.GetNbinsX(),' xmin ',xmin
+
     print 'xmin=',xmin,'   xmax=',xmax
     fitfunction=ROOT.TF1("fit",fitoption,xmin,xmax)
     print 'here its ok aswell1'
@@ -3095,55 +3146,62 @@ def fitFunctionToHistogrammwitherrorband(histo, fitoption="[0]+[1]*log(x)+[2]*lo
         fitfunction.SetParameter(1,1.0)
         fitfunction.SetParameter(2,0.0)
         fitfunction.SetParameter(3,600.0)
-        
+
     if(fitoption=="[0]+([1]*log(x*x-[3])+[2]*log(x*x-[3])*log(x*x-[3]))"):
         fitfunction.SetParameter(0,-1.0)
         fitfunction.SetParameter(1,1.0)
         fitfunction.SetParameter(2,0.0)
         fitfunction.SetParameter(3,600.0)
-        
+
     if(fitoption=="[0]+([1]*log([4]*x-[3])+[2]*log([4]*x-[3])*log([4]*x-[3]))"):
         fitfunction.SetParameter(0,-1.0)
         fitfunction.SetParameter(1,1.0)
         fitfunction.SetParameter(2,0.0)
         fitfunction.SetParameter(3,400.0)
         fitfunction.SetParameter(4,1.0)
-        
+
     if(fitoption=="[0]+([1]*log(x-[4])+[2]*log(x-[4])*log(x-[4])+[3]*log(x-[4])*log(x-[4])*log(x-[4]))/x"):
         fitfunction.SetParameter(0,-1.0)
         fitfunction.SetParameter(1,1.0)
         fitfunction.SetParameter(2,0.0)
         fitfunction.SetParameter(3,1.0)
         fitfunction.SetParameter(4,400.0)
-        
+
     if(fitoption=="[0]+([1]*log(x-[3])+[2]*log(x-[3])*log(x-[3]))/x"):
         fitfunction.SetParameter(0,-1.0)
         fitfunction.SetParameter(1,1.0)
         fitfunction.SetParameter(2,0.0)
         fitfunction.SetParameter(3,400.0)
-        
+
     if(fitoption=="[0]+([1]*log(x-[3])+[2]*log(x-[3])*log(x-[3]))*x"):
         fitfunction.SetParameter(0,-1.0)
         fitfunction.SetParameter(1,1.0)
         fitfunction.SetParameter(2,0.0)
-        fitfunction.SetParameter(3,400.0)        
-        
+        fitfunction.SetParameter(3,400.0)
+
     if(fitoption=="[0]+([1]*x*(1/(exp([2]*x)-1)))"):
         fitfunction.SetParameter(0,-1.0)
         fitfunction.SetParameter(1,1.0)
         fitfunction.SetParameter(2,0.0)
-        #fitfunction.SetParameter(3,400.0)        
-        #fitfunction.SetParameter(4,400.0)        
-        #fitfunction.SetParameter(5,400.0)        
-        
-        
-        
+        #fitfunction.SetParameter(3,400.0)
+        #fitfunction.SetParameter(4,400.0)
+        #fitfunction.SetParameter(5,400.0)
+
+
+
     if(fitoption=="pol2"):
         fitfunction.SetParameter(0,1.0)
         fitfunction.SetParameter(1,0.0)
         fitfunction.SetParameter(2,0.0)
+
+    if(fitoption=="pol1"):
+        fitfunction.SetParameter(0,1.0)
+        fitfunction.SetParameter(1, 1.0)
+
+    if(fitoption=="pol0"):
+        fitfunction.SetParameter(0, 1.0)
     #fitfunction.SetParameter(4,400.0)
-    
+
     #fitfunction.SetParameter(3,100.0)
     #fitfunction.SetParameter(4,1.0)
 
@@ -3152,8 +3210,8 @@ def fitFunctionToHistogrammwitherrorband(histo, fitoption="[0]+[1]*log(x)+[2]*lo
     for ibingraph in range(1000):
         #print(ibingraph*xmax/1000.0)
         fitgraphwitherrorband.SetPoint(ibingraph,xmin+(ibingraph+1)*(xmax-xmin)/1000.0,fitfunction.Eval(xmin+(ibingraph+1)*(xmax-xmin)/1000.0))
-        fitgraphwitherrorband.SetPointError(ibingraph,0.5,0.5)    
-    
+        fitgraphwitherrorband.SetPointError(ibingraph,0.5,0.5)
+
     res=histo.Fit(fitfunction,'S0M')
     fit=histo.GetFunction("fit")
     if int(res)>=0:
@@ -3166,8 +3224,8 @@ def fitFunctionToHistogrammwitherrorband(histo, fitoption="[0]+[1]*log(x)+[2]*lo
         print ' '
         print ' '
 
-    
-    
+
+
         cov=res.GetCovarianceMatrix()
         #x=array.array("d",[])
 
@@ -3182,8 +3240,8 @@ def fitFunctionToHistogrammwitherrorband(histo, fitoption="[0]+[1]*log(x)+[2]*lo
         #fitgraphwitherrorband.GetConfidenceIntervals(res,0.66)
         #fitgraphwitherrorband=makefunctionerrorbands(fit,cov,1000,0.0,xmax*1.1)
     else:
-        print 'No fit for ', histo.GetName(),'. Check if histogramm is filled'    
-    
+        print 'No fit for ', histo.GetName(),'. Check if histogramm is filled'
+
     return [fitgraphwitherrorband,res]
 
 #def makefunctionerrorbands(fitfunction, covariancematrix, npoints=1000,xmin=0.0,xmax=6000.0):
@@ -3195,7 +3253,7 @@ def fitFunctionToHistogrammwitherrorband(histo, fitoption="[0]+[1]*log(x)+[2]*lo
     #fitfunctiontemp=fitfunction
     #for i in range(fitfunction.GetNumberFreeParameters()):
         #mu=append(fitfunction.GetParameter(i))
-    
+
     #for i in range(npoints):
         ##print i
         ##print orderofpolynom
@@ -3205,28 +3263,28 @@ def fitFunctionToHistogrammwitherrorband(histo, fitoption="[0]+[1]*log(x)+[2]*lo
         #y.append(yi)
         #deltax.append(xbin/2.0)
         #deltay2=0.0
-        
+
         #k=array.array("d",[])
         #z=array.array("d",[])
         #dyi=array.array("d",[])
-        
+
         #for i in range(1000):
             #for j in range(fitfunction.GetNumberFreeParameters()):
                 #z.append(random.normalvariate(0,fitfunction.GetParError(j))
-                
+
                 #fitfunctiontemp.SetParameter(j,mu[j]+A*z)
-                
+
             #dyi.append(fitfunctiontemp.Eval(xi))
-        
+
         #deltay.append(variance(dyi,yi))
-                     
+
         ##for j in range(0,(orderofpolynom+1)):
             ##for k in range(0,(orderofpolynom+1)):
                 ##deltay2=deltay2+pow(xi,j)*pow(xi,k)*covariancematrix(j,k)
         ##deltay.append(math.sqrt(deltay2))
-        
+
     #graph=ROOT.TGraphAsymmErrors(int(npoints),x,y,deltax,deltax,deltay,deltay)
-    #return graph    
+    #return graph
 
 #def variance(my_list, average):
     #variance = 0
@@ -3242,31 +3300,31 @@ def fitFunctionToHistogrammwitherrorband(histo, fitoption="[0]+[1]*log(x)+[2]*lo
 #    for graph,graphname in zipi:
 #        t.Branch(graphnames,graph)
 #        t.Fill()
-#        
+#
 #    f.Write()
 #    f.Close()
 
 def DrawErrorBand(graph):
     isErrorBand = (graph.GetErrorYhigh(0)!=-1) and (graph.GetErrorYlow(0) != -1)
     npoints     = graph.GetN()
-    
+
     if not isErrorBand:
         graph.Draw("l same")
         return
- 
+
     # Declare individual TGraph objects used in drawing error band
     central, min, max = ROOT.TGraph(), ROOT.TGraph(), ROOT.TGraph()
     shapes = []
     for i in range((npoints-1)*4):
         shapes.append(ROOT.TGraph())
- 
+
     # Set ownership of TGraph objects
     ROOT.SetOwnership(central, False)
     ROOT.SetOwnership(    min, False)
     ROOT.SetOwnership(    max, False)
     for shape in shapes:
         ROOT.SetOwnership(shape, False)
- 
+
     # Get data points from TGraphAsymmErrors
     x, y, ymin, ymax = [], [], [], []
     for i in range(npoints):
@@ -3276,13 +3334,13 @@ def DrawErrorBand(graph):
         y.append(tmpY)
         ymin.append(tmpY - graph.GetErrorYlow(i))
         ymax.append(tmpY + graph.GetErrorYhigh(i))
- 
+
     # Fill central, min and max graphs
     for i in range(npoints):
         central.SetPoint(i, x[i], y[i])
     min.SetPoint(i, x[i], ymin[i])
     max.SetPoint(i, x[i], ymax[i])
- 
+
     # Fill shapes which will be shaded to create the error band
     for i in range(npoints-1):
         for version in range(4):
@@ -3290,7 +3348,7 @@ def DrawErrorBand(graph):
             shapes[i+(npoints-1)*version].SetPoint((version+1)%4, x[i+1], ymax[i+1])
             shapes[i+(npoints-1)*version].SetPoint((version+2)%4, x[i+1], ymin[i+1])
             shapes[i+(npoints-1)*version].SetPoint((version+3)%4, x[i],   ymin[i])
- 
+
     # Set attributes to those of input graph
     central.SetLineColor(graph.GetLineColor())
     central.SetLineStyle(graph.GetLineStyle())
@@ -3302,7 +3360,7 @@ def DrawErrorBand(graph):
     for shape in shapes:
         shape.SetFillColor(graph.GetFillColor())
         shape.SetFillStyle(graph.GetFillStyle())
- 
+
     # Draw
     for shape in shapes:
         shape.Draw("f same")
@@ -3310,7 +3368,7 @@ def DrawErrorBand(graph):
     max.Draw("l same")
     central.Draw("l same")
     ROOT.gPad.RedrawAxis()
-    
+
 def SchmonCorrelation(listOfHistoListsX,listOfHistoListsY,name='define_name', rebin=1):
     canvases=[]
     ratio=False
@@ -3327,12 +3385,12 @@ def SchmonCorrelation(listOfHistoListsX,listOfHistoListsY,name='define_name', re
         for histoY in listOfHistoListsY:
                     canvas=getCanvas(histoX.GetName()+'_vs_'+histoY.GetName(),ratio)
                     canvas.Divide(2,1)
-                    
+
                     hX=histoX.Clone()
                     hY=histoY.Clone()
                     hX.Rebin(rebin)
                     hY.Rebin(rebin)
-                    
+
                     hX.Scale(1./hX.Integral())
                     hY.Scale(1./hY.Integral())
 
@@ -3344,7 +3402,7 @@ def SchmonCorrelation(listOfHistoListsX,listOfHistoListsY,name='define_name', re
                     y=array.array("d",[])
                     ex=array.array("d",[])
                     ey=array.array("d",[])
-                    
+
                     corr2D=ROOT.TH2F("SchmonCorrelation","",20,0.0,0.05,20,0.0,0.05)
                     #for i in range(hX.GetNbinsX()):
                         #print i, ' in ', hX.GetNbinsX()
@@ -3368,7 +3426,7 @@ def SchmonCorrelation(listOfHistoListsX,listOfHistoListsY,name='define_name', re
                             y.append(hY.GetBinContent(i))
                             ex.append(hX.GetBinError(i))
                             ey.append(hY.GetBinError(i))
-                    canvas.cd(1)      
+                    canvas.cd(1)
                     corr2Dgraph=ROOT.TGraphErrors(len(x),x,y,ex,ey)
                     corr2Dgraph.GetXaxis().SetTitle(hX.GetName())
                     corr2Dgraph.GetYaxis().SetTitle(hY.GetName())
@@ -3388,9 +3446,9 @@ def SchmonCorrelation(listOfHistoListsX,listOfHistoListsY,name='define_name', re
                     canvases.append(canvas)
                     objects.append(corr2D)
                     objects.append(corr2Dgraph)
-                    
+
     printCanvases(canvases,name)
-    writeObjects(canvases,name)    
+    writeObjects(canvases,name)
 
 
 
@@ -3438,7 +3496,7 @@ def writeCorrLOL(listOfHistoLists, FileName="Correlationfactors.txt", PlotNames=
         if PlotNames != "":
             if SampleNames == None:
                 SampleNames = len(listOfHistoLists[0])*[""]
-                
+
             for CorrL, PlotName, SpearL, PValueL, NDFs in zip(CorrLOL, PlotNames, SpearLOL, PValueLOL, NDFLOL):
                 corrFile.write("----------------------------\n")
                 corrFile.write(PlotName+"\n")
@@ -3449,7 +3507,7 @@ def writeCorrLOL(listOfHistoLists, FileName="Correlationfactors.txt", PlotNames=
                     if DoSpear:
                         corrFile.write(str(Spear) + "\t"+SampleName + "\tSpearman \n")
 
-                    
+
         else:
             for CorrL,NameL, SpearL, PValueL in zip( CorrLOL, PlotNamesLOL, SpearLOL, PValueLOL ):
                 corrFile.write("----------------------------------------\n")
@@ -3458,6 +3516,46 @@ def writeCorrLOL(listOfHistoLists, FileName="Correlationfactors.txt", PlotNames=
                     corrFile.write(str(PValue)+"\t\t"+Name + "\tPearson \n")
                     if DoSpear:
                         corrFile.write(str(Spear)+"\t\t"+Name + "\tSpearman \n")
+
+
+
+
+
+
+
+#Write CorrelationFactors of ListOfHistoLists to Textfile in TEX-Format
+def writeCorrLOLinTEX(listOfHistoLists, FileName="Correlationfactors.tex", PlotNames="", SampleNames = None, DoSpear=False ):
+    with open(FileName, "w") as corrFile:
+        corrFile.write( "%% Correlation ListOfList created by plotutils.py \n \\begin{longtable}{ccc} \n \\toprule \n  & \\textbf{Sample} & \\textbf{Wert} \\\\ \n" )
+
+        CorrLOL, PlotNamesLOL, SpearLOL, PValueLOL, NDFLOL = GetListOfCorrelationLists(listOfHistoLists, DoSpear)
+        print PValueLOL
+        # print CorrLOL, PlotNamesLOL
+        if PlotNames != "":
+            if SampleNames == None:
+                SampleNames = len(listOfHistoLists[0])*[""]
+
+
+            for CorrL, PlotName, SpearL, PValueL, NDFs in zip(CorrLOL, PlotNames, SpearLOL, PValueLOL, NDFLOL):
+                corrFile.write("\\midrule \n")
+                corrFile.write(PlotName+" \\\\ \n")
+                for Corr, SampleName, Spear, PValue, NDF in zip(CorrL, SampleNames, SpearL, PValueL, NDFs):
+                    corrFile.write("\\tablenum{"+str(Corr)+"}\t&\t"+SampleName + "&\tPearson \\\\ \n")
+                    corrFile.write("\\tablenum{"+str(PValue)+"}\t&\t"+SampleName + "&\tPValue \\\\ \n")
+                    # corrFile.write("\\tablenum{" + str(NDF) +"}\t&\t"+ SampleName+ "&\t Number of Degrees of Freedom \\\\ \n")
+                    if DoSpear:
+                        corrFile.write("\\tablenum{" + str(Spear) + "}\t&\t"+SampleName + "&\tSpearman \\\\ \n")
+
+
+        else:
+            for CorrL,NameL, SpearL, PValueL in zip( CorrLOL, PlotNamesLOL, SpearLOL, PValueLOL ):
+                corrFile.write("\\midrule \n")
+                for Corr, Name, Spear, PValue in zip(CorrL, NameL, SpearL, PValueL):
+                    corrFile.write("\\tablenum{" + str(Corr)+"}\t& \t\t"+Name + "& \tPearson \n")
+                    corrFile.write("\\tablenum{" + str(PValue)+"}\t& \t\t"+Name + "& \tPearson \n")
+                    if DoSpear:
+                        corrFile.write("\\tablenum{" + str(Spear)+"} \t & \t\t"+Name + "& \tSpearman \n")
+        corrFile.write("\\end{longtable} " )
 
 
 
@@ -3486,7 +3584,7 @@ def GetXYBins(Histo2D):
         for i in range(x_tmp):
             X.append(x)
 
-            
+
     #Sort y, so that x-Entry at position i belongs to y-Entry at position i
     Y = []
     x_tmp = -1
@@ -3495,11 +3593,11 @@ def GetXYBins(Histo2D):
             continue
         x_tmp = x
         for y in range(ny+2):
-            
+
             Y += int(Histo2D.GetBinContent(x,y) ) * [y]
-        
-    
-    # print "unranked", X, Y    
+
+
+    # print "unranked", X, Y
     return X,Y
 
 
@@ -3508,13 +3606,13 @@ def GetXYBins(Histo2D):
 def unsorted(X_modified_sorted, X_):
     X = X_
     X_modified_unsorted= len(X)*['not changed yet']
-    
+
     for i in range( len(X) ):
         index_tmp = X.index(  min( X ) )
         X_modified_unsorted[index_tmp] = X_modified_sorted[i]
         X[index_tmp] = max(X)+1
     return X_modified_unsorted
-    
+
 
 
 #Rank a given array
@@ -3524,7 +3622,7 @@ def RankArray(X_):
     X_ranked = []
     last = X_sorted[0]
     X_Bool_MoreThanLast = []
-    
+
     for element in X_sorted[1:]:
         if element > last:
             X_Bool_MoreThanLast.append(True)
@@ -3541,7 +3639,7 @@ def RankArray(X_):
         else:
             size += 1
         i += 1
-        
+
     X_ranked += size*[ i- (size-1)/ 2. ]
     X_ranked = unsorted(X_ranked, X) #return to old sortation
     return X_ranked
@@ -3554,16 +3652,16 @@ def GetSpearCorrelationFactor(Histo_, Smaller=True):
     Histo = Histo_.Clone()
     if Smaller:
         Histo.Scale(200/Histo.Integral())
-    
+
     X_tmp, Y_tmp = GetXYBins(Histo)
     X_ranked=RankArray(X_tmp)
     Y_ranked=RankArray(Y_tmp)
 
-    
+
     histo_rank = ROOT.TH2F("histo_rank", "Histogram of ranked variables", 15 , 0.95*min(X_ranked), 1.05*max(X_ranked), 15 , 0.95*min(Y_ranked), 1.05*max(Y_ranked) )
     for i in range(len( X_ranked ) ):
         histo_rank.Fill( X_ranked[i], Y_ranked[i] )
-        
+
     mycanv = ROOT.TCanvas("mycanv", "mycanv", 800, 600)
     histo_rank.Draw("colz")
     mycanv.SaveAs("ABCD/"+Histo.GetName()+"_ranked.png")
@@ -3597,3 +3695,94 @@ def GetPValueHisto(Histo, rho0 = 0):
     return GetPValue(r, df , rho0), df
 
 
+
+
+
+
+
+
+
+
+def GetIntegralLOL( ListOfHistoLists ):
+    ListOfIntegralLists = []
+    for HistoList in ListOfHistoLists:
+        IntegralList = []
+        for Histo in HistoList:
+            IntegralList.append( Histo.Integral() )
+        ListOfIntegralLists.append( IntegralList )
+    return ListOfIntegralLists
+
+
+
+
+def writeIntegralLOLinTEX( ListOfHistoLists, filename = "IntegralList.tex", samplenames_ = None ):
+
+    if samplenames_ == None:
+        samplenames = len(ListOfHistoLists[0])*[""]
+    else:
+        samplenames = samplenames_
+
+
+    with open( filename , "w") as IntFile:
+        IntFile.write( " %% List of Integrals of Histograms created in plotutils.py \n \\begin{tabular}{cc} \n \\toprule \n \\textbf{Integral} & \\textbf{Sample} \\\\ \n" )
+        for HistoList in ListOfHistoLists:
+            IntFile.write( "\\midrule \n " + str( HistoList[0].GetName()  )+ " & \\\\ \n " )
+            for Histo, sample in zip( HistoList, samplenames ):
+                IntFile.write( "\\tablenum{" +  str( Histo.Integral() ) + "}  & " + sample + "  \\\\ \n " )
+        IntFile.write( "\\bottomrule \n \\end{tabular} " )
+
+
+
+
+
+#Transposes specific Indices Example: transposeLOLextended( list,  [ [1, 3], [2, 4] ] ) converts     list = [ [a1, a2], [b1, b2], [c1, c2], [d1, d2] ]     to      [ [a1, c1] , [a2, c2], [b1, d1], [b2, d2] ]
+def transposeLOLextended( ListOfHistoList,  IndexListOfLists ):
+    Transposed = []
+
+    for IndexList in IndexListOfLists:
+        tmpList=[]
+        for Index in IndexList:
+            tmpList.append( ListOfHistoList[Index] )
+        Transposed += transposeLOL( tmpList )
+        print "Warning in Function transposeLOLextended(): If used with writeListOfHistoLists, not all elements are appended to pdf file. Spepearate PDF and JPG are created."
+    return Transposed
+
+
+
+
+def ReconstructWithABCD(ListOfHistoLists, PlotnameCatA, plotnames):
+    if(PlotnameCatA[8] != "A" ):
+        print "Error in Function ReconstructWithABCD(): This Plot is not Category A"
+        return
+
+    stringlist=list(PlotnameCatA)
+    stringlist[8]="B"
+    PlotnameCatB="".join(stringlist)
+    stringlist[8]="C"
+    PlotnameCatC="".join(stringlist)
+    stringlist[8]="D"
+    PlotnameCatD="".join(stringlist)
+    stringlist[8]="E"
+    PlotnameCatE="".join(stringlist)
+    stringlist[8]="F"
+    PlotnameCatF="".join(stringlist)
+    stringlist[8]="G"
+    PlotnameCatG="".join(stringlist)
+    stringlist[8]="H"
+    PlotnameCatH="".join(stringlist)
+
+    multiplyHistos(ListOfHistoLists, plotnames.index(PlotnameCatB) , plotnames.index(PlotnameCatC))
+    divideHistos(ListOfHistoLists, plotnames.index(PlotnameCatB), plotnames.index(PlotnameCatD) )
+
+    multiplyHistos(ListOfHistoLists, plotnames.index(PlotnameCatF) , plotnames.index(PlotnameCatG))
+    divideHistos(ListOfHistoLists, plotnames.index(PlotnameCatF), plotnames.index(PlotnameCatH) )
+
+
+def CloneListOfHistoLists(ListOfHistoLists):
+    ClonedListOfHistoLists=[]
+    for HistoList in ListOfHistoLists:
+        ClonedHistoList=[]
+        for Histo in HistoList:
+            ClonedHistoList.append( Histo.Clone() )
+        ClonedListOfHistoLists.append(ClonedHistoList)
+    return ClonedListOfHistoLists
