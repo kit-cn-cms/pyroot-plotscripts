@@ -3786,3 +3786,52 @@ def CloneListOfHistoLists(ListOfHistoLists):
             ClonedHistoList.append( Histo.Clone() )
         ClonedListOfHistoLists.append(ClonedHistoList)
     return ClonedListOfHistoLists
+
+
+#Function designed to compare Entrys in Signal and BackgroundRegion, Only Use with transposed ListOfHistoLists
+def compareEntriesInBackgroundAndSignalRegion( TransposedListsOfHistoLists, filename="set_filename.txt"):
+    with open(filename, "w") as filecontent:
+        filecontent.write("#List of Integrals in Signal and Background, constructed with function compareEntriesInBackgroundAndSignalRegion() in plotutils.py \n #NameOfHistogram;\tIntegral in Signalregion;\tIntegral in BackgroundRegion;\tRatio\n")
+
+
+        #Loop over ListOfHistoLists and calculation of Integrals (Only for ABCD)
+        for HistoList in TransposedListsOfHistoLists:
+            for CurrentIndex,Histo in enumerate(HistoList):
+                # filecontent.write("BUGFIX" + str(Histo.GetName()[8]) + "    " +str(Histo.GetName() + "\n") )
+                if Histo.GetName()[22] == "A" or Histo.GetName()[23] == "A":
+                    IntegralInSignalRegion=Histo.Integral()
+                    IntegralInBackgroundRegion=0
+                    for i in range(CurrentIndex+1,CurrentIndex+4):
+                        IntegralInBackgroundRegion += HistoList[i].Integral()
+                    filecontent.write(str(Histo.GetName()) + ";\t" + str(IntegralInSignalRegion) + ";\t" + str(IntegralInBackgroundRegion) + ";\t" + str( IntegralInSignalRegion / IntegralInBackgroundRegion)+ "\n" )
+
+#InputHistoList should contain all Histograms that shold be in the same stack Plot
+def stackPlotABCD(ListOfHistoList, name, optionlist=None, colorlist=None, labellist=None):
+    if optionlist==None:
+        optionlist = len(ListOfHistoList)*["histo"]
+    if colorlist == None:
+        colorlist = len(ListOfHistoList)*[kBlack]
+    if labellist == None:
+        labellist = len(ListOfHistoList)*[" "]
+    yTitle = "Not Set Yet"
+
+    canvases=[]
+    objects = []
+
+
+    for HistoList in ListOfHistoList:
+        for Histo, color, option in zip(HistoList, colorlist, optionlist):
+            setupHisto(Histo,color,yTitle,True)
+
+        c=drawHistosOnCanvas(HistoList,False,True,False,option)
+        c.cd()
+
+        l=getLegend()
+
+        for Histo, label in zip(HistoList, labellist):
+            l.AddEntryZprime(Histo, label, 'L') #For Filld, Option propably "F"
+        l.Draw("same")
+        canvases.append(c)
+
+    printCanvases(canvases,name)
+    writeObjects(canvases,name)
