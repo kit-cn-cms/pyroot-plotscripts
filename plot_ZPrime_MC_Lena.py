@@ -15,7 +15,7 @@ SignalSampleNames=['Zprime1500900',  'Zprime20001200',  'Zprime25001200']
 
 # definition of categories
 
-#categoriesZprimeTprime=[
+# categoriesZprimeTprime=[
 #	("(tWb&&N_BTagsM=1)","tWb1",""),#
 #	("(tWb&&N_BTagsM=2)","tWb2",""),
 #	("(ttH&&N_BTagsM=1)","ttH1",""),
@@ -454,17 +454,21 @@ for index in range( plotnames.index("ABCD_CatA_Zprime_M"),plotnames.index("ABCD_
 
 ##Create a hISTOlIST TO DO stackPlotABCD
 ListOfHistoListsFinalStackPlot = []
+titlelist = []
 for index in range( plotnames.index("ABCD_CatA_Zprime_M"), plotnames.index("ABCD_CatH_Zprime_M_first") +1):
     if plotnames[index][8] =="A":
         ListToAppend = []
-        ListToAppend.append(listOfHistoListsABCD[index][0]) #ttbar in Signal Region
+        titlelist.append( listOfHistoListsABCD[index][0].GetName()[5:] )
+        ListToAppend.append(listOfHistoListsSignalAndBackground25001200[index+1][0]) #Signal
+        ListToAppend.append(listOfHistoListsSignalAndBackground25001200[index+1][1]) #Signalkontamination
         ListToAppend.append(listOfHistoListsABCD[index+1][1]) #QCD_HAT in CatB
-        ListToAppend.append(listOfHistoListsSignalAndBackground25001200[index+1][1])
-        ListToAppend.append(listOfHistoListsSignalAndBackground25001200[index+1][0])
+        ListToAppend.append(listOfHistoListsABCD[index][0]) #ttbar in Signal Region
         ListOfHistoListsFinalStackPlot.append(ListToAppend)
 
-colorlist =[ROOT.kBlue, ROOT.kYellow, ROOT.kRed, ROOT.kBlack]
-stackPlotABCD(ListOfHistoListsFinalStackPlot, "StackPlotsABCD", colorlist=colorlist, labellist=["ttbar", "QCD-Backgroundestimation", "Signalcontamination", "Signal"])
+colorlist =[ ROOT.kBlack , ROOT.kRed, ROOT.kYellow,ROOT.kBlue]
+stacklist = [False, True, True, True]
+optionlist = ["E", "histoE", "histoE", "histoE"]
+stackPlotABCD(ListOfHistoListsFinalStackPlot, "StackPlotsABCD", colorlist=colorlist, labellist=["ttbar", "QCD-Backgroundestimation", "Signalcontamination", "Signal"], titlelist = titlelist, stacklist = stacklist, optionlist = optionlist)
 
 print "Plotnames contains:"
 for i in plotnames:

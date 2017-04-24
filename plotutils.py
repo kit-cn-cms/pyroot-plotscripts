@@ -3806,31 +3806,35 @@ def compareEntriesInBackgroundAndSignalRegion( TransposedListsOfHistoLists, file
                     filecontent.write(str(Histo.GetName()) + ";\t" + str(IntegralInSignalRegion) + ";\t" + str(IntegralInBackgroundRegion) + ";\t" + str( IntegralInSignalRegion / IntegralInBackgroundRegion)+ "\n" )
 
 #InputHistoList should contain all Histograms that shold be in the same stack Plot
-def stackPlotABCD(ListOfHistoList, name, optionlist=None, colorlist=None, labellist=None):
+def stackPlotABCD(ListOfHistoList, name, optionlist=None , stacklist=None, colorlist=None, labellist=None, titlelist=None, Fill=True):
+
     if optionlist==None:
         optionlist = len(ListOfHistoList)*["histo"]
+    if stacklist==None:
+        stacklist = len(ListOfHistoList)*[True]
     if colorlist == None:
         colorlist = len(ListOfHistoList)*[kBlack]
+        Fill=False
     if labellist == None:
         labellist = len(ListOfHistoList)*[" "]
-    yTitle = "Not Set Yet"
+    if titlelist == None:
+        titlelist = len(ListOfHistoList)*[" "]
+    # yTitle = "Not Set Yet"
 
     canvases=[]
     objects = []
 
 
-    for HistoList in ListOfHistoList:
-        for Histo, color, option in zip(HistoList, colorlist, optionlist):
-            setupHisto(Histo,color,yTitle,True)
+    for HistoList,  yTitle in zip(ListOfHistoList, titlelist):
+        for Histo, color, option, stack in zip(HistoList, colorlist, optionlist, stacklist):
+            setupHisto(Histo,color,yTitle, stack)
 
-        c=drawHistosOnCanvas(HistoList,False,True,False,option)
-        c.cd()
-
+        c=drawHistosOnCanvas(HistoList, normalize=True, stack=True, options_=option)
+        c.cd(1)
         l=getLegend()
-
         for Histo, label in zip(HistoList, labellist):
             l.AddEntryZprime(Histo, label, 'L') #For Filld, Option propably "F"
-        l.Draw("same")
+            l.Draw("same")
         canvases.append(c)
 
     printCanvases(canvases,name)
