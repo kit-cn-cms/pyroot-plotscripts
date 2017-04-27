@@ -19,7 +19,7 @@ import array
 ROOT.gStyle.SetPaintTextFormat("4.2f");
 ROOT.gStyle.SetOptFit(1111);
 ROOT.gStyle.SetOptStat(0000);
-ROOT.gROOT.SetBatch(True)
+ROOT.gROOT.SetBatch(False)
 
 class Sample:
     def __init__(self,name, color=ROOT.kBlack, path='', selection='',nick='',listOfShapes=[],up=0,down=None,checknevents=-1,treename='MVATree'):
@@ -1257,7 +1257,7 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
         # objects.append(cms)
 
         if not isinstance(c, list):
-            cms = ROOT.TLatex(0.2, 0.96, 'CMS preliminary,  12.9 fb^{-1},  #sqrt{s} = 13 TeV'  );
+            cms = ROOT.TLatex(0.2, 0.96, 'CMS preliminary,  37.8 fb^{-1},  #sqrt{s} = 13 TeV'  );
             cms.SetTextFont(42)
             cms.SetTextSize(0.05)
             cms.SetNDC()
@@ -2931,6 +2931,7 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
 #    print len(canvases)
     printCanvases(canvases,name)
     writeObjects(canvases,name)
+    writeObjects(objects,name)
 
 def divideHistos(listOfHistoLists, numeratorPlot, denumeratorPlot, normalizefirst=False,rebin=1,option=''):
     dividedHistoList=[]
@@ -3030,7 +3031,7 @@ def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='d
     ratio=False
     objects=[] 
     logscale=False
-    #ListofTgraphsforFile=[]
+    ListofTgraphsforFile=[]
     #ListofTgraphNamsforFile=[]
     #ROOT.gStyle.SetOptFit()
     for listOfHistos in listOfHistoListsToPlot:
@@ -3038,54 +3039,67 @@ def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='d
         for histo,sample in zip(listOfHistos, sampleListToPlot):
             yTitle='Ratio'
             histo.Rebin(rebin)
+            print histo.GetName()
             data=ROOT.TGraphAsymmErrors(histo)
-            fit=fitFunctionToHistogrammwitherrorband(histo,fitoption)
+            fit=fitFunctionToHistogrammwitherrorband(histo,fitoption,True)
             #fit=fitFunctionToHistogrammwitherrorband(histo,"[0]+([1]*log(x-[3])+[2]*log(x-[4])*log(x-[4]))")
             #fit=fitFunctionToHistogrammwitherrorband(histo,"[0]+([1]*log(x)+[2]*log(x)*log(x))*erf(x-[3]/[4])")
             canvas=getCanvas(data.GetName(),ratio)
+        
             if logscale:
                 canvas.SetLogy()
                 canvas.SetLogx()
             fit[0].SetFillColor(ROOT.kRed)
             fit[0].SetLineColor(ROOT.kBlue)
+            fit[0].SetName('Graph_'+histo.GetName())
             #fit[0].ConfidenceIntervals()
             ROOT.gStyle.SetOptFit(1111)
             #data.GetYaxis().SetRangeUser(0,2)
-            #histo.SetOptFit(0)
+            #data.SetOptFit(1111)
+            #canvas.Update()
             fit[0].Draw('A3')
-            fit[0].Draw('sameLXZ')
-            data.Draw('sameP')
+            #canvas.Update()
 
+            fit[0].Draw('sameLXZ')
+            #canvas.Update()
+            data.Draw('sameP')
+            #histo.GetFunction("fit").Draw("sameL")
+            #canvas.Update()
+            
             l=getLegend()
             l.AddEntryZprime(data,'Singal-BKG-Shape-Ratio','P')
             l.AddEntryZprime(fit[0],"fit",'L')
-            canvases.append(canvas)
             l.Draw('same')
+            
+            #canvas.Update()
+            canvases.append(canvas)
             objects.append(data)
             objects.append(fit[0])
             objects.append(l)
             #objects.append(graph)
-            #ListofTgraphsforFile.append(fit[0])
+            ListofTgraphsforFile.append(fit[0])
             #ListofTgraphNamsforFile.append()
             print 'here its ok'
             
     printCanvases(canvases,name)
     writeObjects(canvases,name)
+    writeObjects(ListofTgraphsforFile,name+'_Graphs')
     #writeTGraphstoextraFile(ListofTgraphsforFile,ListofTgraphNamsforFile,'SB_transferfunctions')
     
     
-def fitFunctionToHistogrammwitherrorband(histo, fitoption="[0]+[1]*log(x)+[2]*log(x)*log(x)"):
+def fitFunctionToHistogrammwitherrorband(histo, fitoption="[0]+[1]*log(x)+[2]*log(x)*log(x)",autoXrange=False):
     xmax=histo.GetNbinsX()*histo.GetBinWidth(histo.GetNbinsX())
     xmin=0.0
     ROOT.gStyle.SetOptFit(1111)
-    for ibin in range(0,histo.GetNbinsX()):
-        if histo.GetBinContent(ibin)==0 and histo.GetBinContent(ibin-1)!=0:
-            xmax=histo.GetBinCenter(ibin-1)
-        #print ibin,' of ',histo.GetNbinsX(),' binwidth: ',histo.GetBinWidth(ibin),' of ',xmax
-    for ibin in range(histo.GetNbinsX(),0,-1):
-        if histo.GetBinContent(ibin)==0 and histo.GetBinContent(ibin+1)!=0:
-            xmin=histo.GetBinCenter(ibin+1)
-        #print ibin,' of ',histo.GetNbinsX(),' xmin ',xmin
+    if autoXrange:
+        for ibin in range(0,histo.GetNbinsX()):
+            if histo.GetBinContent(ibin)==0 and histo.GetBinContent(ibin-1)!=0:
+                xmax=histo.GetBinCenter(ibin-1)
+            #print ibin,' of ',histo.GetNbinsX(),' binwidth: ',histo.GetBinWidth(ibin),' of ',xmax
+        for ibin in range(histo.GetNbinsX(),0,-1):
+            if histo.GetBinContent(ibin)==0 and histo.GetBinContent(ibin+1)!=0:
+                xmin=histo.GetBinCenter(ibin+1)
+            #print ibin,' of ',histo.GetNbinsX(),' xmin ',xmin
         
     print 'xmin=',xmin,'   xmax=',xmax
     fitfunction=ROOT.TF1("fit",fitoption,xmin,xmax)
@@ -3154,6 +3168,7 @@ def fitFunctionToHistogrammwitherrorband(histo, fitoption="[0]+[1]*log(x)+[2]*lo
         fitgraphwitherrorband.SetPoint(ibingraph,xmin+(ibingraph+1)*(xmax-xmin)/1000.0,fitfunction.Eval(xmin+(ibingraph+1)*(xmax-xmin)/1000.0))
         fitgraphwitherrorband.SetPointError(ibingraph,0.5,0.5)    
     
+    #res=histo.Fit(fitfunction,'S0M')
     res=histo.Fit(fitfunction,'S0M')
     fit=histo.GetFunction("fit")
     if int(res)>=0:
@@ -3572,6 +3587,119 @@ def GetSpearCorrelationFactor(Histo_, Smaller=True):
 
 
 
+#def closuretest(listOfHistos, listOfHistosPrediction, listOfHistosPrediction_systup, listOfHistosPrediction_systdown,samples, label,name,normalize=True,stack=False,logscale=False,options='histo',statTest=False, sepaTest=False,ratio=False):
+    ##if DoProfile and not isinstance(listOfHistoLists[0][0], ROOT.TH2):
+      ##print "need 2D plots for Profile Histograms"
+      ##DoProfile=False
+    #listofallstattests=[]
+    #if isinstance(label, basestring):
+        #labeltexts=len(listOfHistoLists)*[label]
+##        print "bla"
+    #else:
+        #labeltexts=label
+    #canvases=[]
+    #objects=[]   
+    #i=0
+    #print labeltexts
+        #listofthisstattests=[listOfHistos[0].GetTitle()]
+        #i+=1
+        #for histo, histoPrediction,histoPrediction_systup,histoPrediction_systdown,sample in zip(listOfHistos,listOfHistosPrediction,listOfHistosPrediction_systup,listOfHistosPrediction_systdown,samples):
+            #print labeltext
+            #yTitle='Events'
+            #if normalize:
+                #yTitle='normalized'
+            #setupHisto(histo,sample.color,yTitle,stack)        
+        #stattests2D=None
+        #c=drawHistosOnCanvas([histoPrediction]+[histoPrediction_systup]+[histoPrediction_systdown]+[histo],normalize,stack,logscale,options,ratio,DoProfile)
+
+        #if not isinstance(c, list):
+            #c.SetName('c_'+listOfHistos[0].GetName())
+            #l=getLegend2()
+            #for h,sample in zip(listOfHistos,samples):
+                #loption='L'
+                #if stack:
+                    #loption='F'            
+                #l.AddEntry4545(h,sample.name,loption)
+            #canvases.append(c)
+            #l.Draw('same')
+            #objects.append(l)
+        #elif options == "colz":
+            #for i in range(len(listOfHistos)):
+                #c[i].SetName('c_'+listOfHistos[i].GetName()) #wrong! What name should be set?
+
+            #if DoProfile:
+                #c[-2].SetName('c_'+c[-2].GetName())
+                #lx = getLegend2()
+                #for px,  sample in zip(profilesx,  samples):
+                    #lx.AddEntry4545( px.GetName() , sample.name, "L" )
+                #lx.Draw("same")
+                #objects.append(lx)
+                
+                #c[-1].SetName('c_'+c[-1].GetName())
+                #ly = getLegend2()
+                #for  py, sample in zip( profilesy, samples):
+                    #ly.AddEntry4545( py.GetName() , sample.name, "L" )
+                #ly.Draw("same")
+                #objects.append(ly)
+            #canvases+=c
+        #else:
+            #canvases+=c
+        
+        #if statTest:
+            #if not isinstance(listOfHistos[0],ROOT.TH2):
+                #tests=getStatTestsList(listOfHistos[0],listOfHistos[1:],"UW")
+                #tests.Draw()
+                #listofthisstattests.append(tests.GetTitle())
+                #objects.append(tests)
+        #if sepaTest:
+            #stests=getSepaTests(listOfHistos[0],listOfHistos[1])
+            #stests.Draw()
+            #objects.append(stests)
+        #if stattests2D!=None:
+            ## stattests2D.Draw()
+            #objects.append(stattests2D)
+            #listofthisstattests.append(stattests2D.GetTitle())
+        ## cms = ROOT.TLatex(0.2, 0.96, 'CMS private work'  );
+        ## cms.SetTextFont(42)
+        ## cms.SetTextSize(0.05)
+        ## cms.SetNDC()
+        ## cms.Draw()
+        ## print cms
+        ## objects.append(cms)
+
+        #if not isinstance(c, list):
+            #cms = ROOT.TLatex(0.2, 0.96, 'CMS preliminary,  37.8 fb^{-1},  #sqrt{s} = 13 TeV'  );
+            #cms.SetTextFont(42)
+            #cms.SetTextSize(0.05)
+            #cms.SetNDC()
+            #cms.Draw()
+            #objects.append(cms)
+
+            #label = ROOT.TLatex(0.2, 0.9, labeltext);
+            #label.SetTextFont(42)
+            #label.SetTextSize(0.04)
+            #label.SetNDC()
+            #label.Draw()
+            #objects.append(label)
+            #listofallstattests.append(listofthisstattests)
+        ## else:
+        ##     for can, sam in zip(c,samples):
+        ##         labeltext = sam.name
+        ##         label = ROOT.TLatex(0.2, 0.96, labeltext);
+        ##         label.SetTextFont(42)
+        ##         label.SetTextSize(0.04)
+        ##         label.SetNDC()
+        ##         label.Draw()
+        ##         objects.append(label)
+        ##     listofallstattests.append(listofthisstattests)
+
+        
+    #printCanvases(canvases,name)
+    #writeObjects(canvases,name)
+    #stattestoutfile=open("stattests_"+name+".txt","w")
+    #for stst in listofallstattests:
+      #stattestoutfile.write(' '.join(stst)+'\n')
+    #stattestoutfile.close()  
 
 
 

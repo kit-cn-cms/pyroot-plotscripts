@@ -260,7 +260,7 @@ class Variables:
       
       if not ".xml" in expression and not hasattr(tree,expression):
         self.initVarsFromExpr(expression,tree)
-        #print expression
+        print expression
         
       self.variables[name]=Variable(name,expression,vartype,arraylength)
       self.variables[name].initVar(tree,self)
@@ -268,7 +268,7 @@ class Variables:
   
   # initialize variables from expression
   def initVarsFromExpr(self,expr,tree):
-    #print "initVarsFromExpr",expr,tree
+    print "initVarsFromExpr",expr,tree
     if ":=" in expr:
       name,expr=expr.split(":=")
       
@@ -277,13 +277,16 @@ class Variables:
       
       self.initVar(tree,name,expr,'F')
     
+    #else if "function_":
+      #name,expr=espr.split("function_")
+      #self.
+        
     else:
       variablenames=self.varsIn(expr)
       
       for name in variablenames:
 	#print name
-        self.initVar(tree,name,name,'F')
-  
+        self.initVar(tree,name,name,'F')  
   
   # initialize variables from expression list
   def initVarsFromExprList(self,exprlist,tree):

@@ -12,7 +12,7 @@ import plotutils
 
 ROOT.gROOT.SetBatch(True)
 
-def getHead():
+def getHead1():
   return """
 #include "TChain.h"
 #include "TBranch.h"
@@ -28,7 +28,10 @@ def getHead():
 #include "TMVA/Reader.h"
 
 using namespace std;
+"""
 
+def getHead2():
+  return """
 void plot(){
   TH1F::SetDefaultSumw2();
   
@@ -197,11 +200,11 @@ def compileProgram(scriptname):
   subprocess.call(cmd)
 
 
-def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],allsystweights=["1"],additionalvariables=[]):
+def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],allsystweights=["1"],additionalvariables=[], additionalfunctions=[]):
   
   # collect variables
   # list varibles that should not be written to the program automatically
-  vetolist=['processname','DoWeights','TMath']
+  vetolist=['processname','DoWeights','TMath','cout','for','int', 'if', 'cout', ';','<','i','i++','*=', 'temp', 'float','anti_loose_btag(Sideband_top_withbtag_anti_Topfirst_Bottoms_CSVv2,N_Sideband_top_withbtag_anti_Topfirst_Bottoms)' ]
   
   # initialize variables object
   variables = variablebox.Variables(vetolist)
@@ -226,6 +229,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   
   # get additional variables
   if len(additionalvariables)>0:
+    print 'looking for additionalvariables ',len(additionalvariables)
     variables.initVarsFromExprList(additionalvariables,tree)
   
   # get systematic weight variables
@@ -260,14 +264,22 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   # write program
   # start writing program
   script=""
-  script+=getHead()
+  script+=getHead1()
   
+  # initialize additional functions
+  for f in additionalfunctions:
+    script+=(f+";\n")
+  
+  script+=getHead2()
+    
   # initialize all variables 
   script+=variables.initVarsProgram()
   script+=variables.initBranchAddressesProgram()
 
   # initialize TMVA Readers
   script+=variables.setupTMVAReadersProgram()
+  
+
   
   # initialize histograms in all categories and for all systematics
   for c in catnames:
@@ -325,12 +337,14 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
       
       # get size of array
       size_of_loop=None
+      print 'SIZE OF LOOP', size_of_loop
       for v in variablenames_without_index:
         if not v in variables.variables:
           continue
         if variables.variables[v].arraylength != None:
           assert size_of_loop == None or size_of_loop == variables.variables[v].arraylength
           size_of_loop=variables.variables[v].arraylength
+        print 'SIZE OF LOOP', size_of_loop
       
       histoname=cn+n
       script+="\n"
@@ -587,7 +601,7 @@ def check_jobs(scripts,outputs,nentries):
   return failed_jobs
 
 
-def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[]):
+def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],additionalfunctions=[]):
   workdir=os.getcwd()+'/workdir/'+name
   outputpath=workdir+'/output.root'
   
@@ -613,7 +627,7 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   
   # create c++ program
   print 'creating c++ program'
-  createProgram(programpath,plots,samples,catnames,catselections,systnames,systweights,additionalvariables)
+  createProgram(programpath,plots,samples,catnames,catselections,systnames,systweights,additionalvariables,additionalfunctions)
   if not os.path.exists(programpath+'.cc'):
     print 'could not create c++ program'
     sys.exit()
