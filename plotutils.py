@@ -2151,13 +2151,18 @@ def writeLOLAndOneOnTop(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,f
 
 
 
-def writeLOLSeveralOnTop(listOfHistoLists,samples,listOfHistoListsOnTop,samplesOnTop,factor,name,logscale=False,options='histo',ontopoptions='samehisto',sepaTest=False):
+def writeLOLSeveralOnTop(listOfHistoLists,samples,listOfHistoListsOnTop,samplesOnTop,factor,name,logscale=False,options='histo',ontopoptions=['samehisto'],sepaTest=False):
     normalize=False
     stack=True,
     canvases=[]
     objects=[]   
     i=0
     print "ok"
+    print 'histofhistolists', listOfHistoLists
+    print 'histofhistolistsontop', listOfHistoListsOnTop
+    print 'samples', samples
+    print 'samplesontop', samplesOnTop
+    
         
     for listOfHistos,listOfHistosOnTop in zip(listOfHistoLists,listOfHistoListsOnTop):
         print i
@@ -2166,14 +2171,14 @@ def writeLOLSeveralOnTop(listOfHistoLists,samples,listOfHistoListsOnTop,samplesO
         integralfactor=0
         for histo,sample in zip(listOfHistos,samples):
 
-            yTitle='Events expected for 27.3 fb^{-1} @ 13 TeV'
+            yTitle='Events expected for 37.8 fb^{-1} @ 13 TeV'
 #            yTitle='Events'
 #            print histo
             setupHisto(histo,sample.color,yTitle,stack) 
             
             if factor < 0:
               integralfactor+=histo.Integral()
-              print integralfactor
+              print 'INTEGRALFACTOR',integralfactor
         c=drawHistosOnCanvas(listOfHistos,normalize,stack,logscale,options)       
         #c.SetName('c'+str(i))
         c.cd()
@@ -2203,12 +2208,12 @@ def writeLOLSeveralOnTop(listOfHistoLists,samples,listOfHistoListsOnTop,samplesO
                 loption='F'
             l.AddEntryZprime(h,sample.name,loption)
         canvases.append(c)
-        for otc in otcs:
+        for otc, ontopoption in zip(otcs,ontopoptions):
             if factor >= 0.:
                 otc.Scale(factor)
             else:
                 otc.Scale(integralfactor/otc.Integral()*abs(factor))
-            otc.DrawCopy(ontopoptions)
+            otc.DrawCopy(ontopoption)
             l.Draw('same')
             objects.append(l)
             objects.append(otc)
@@ -2935,10 +2940,11 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
 
 def divideHistos(listOfHistoLists, numeratorPlot, denumeratorPlot, normalizefirst=False,rebin=1,option=''):
     dividedHistoList=[]
-    print 'inumerator ',numeratorPlot
+    print 'numerator ',numeratorPlot
     print 'denumerator ',denumeratorPlot
-    print 'lol[inumerator] ',listOfHistoLists[numeratorPlot]
-    print len(listOfHistoLists[numeratorPlot])
+    print 'lol[numerator] ',listOfHistoLists[numeratorPlot]
+    print 'lol[denumerator] ',listOfHistoLists[denumeratorPlot]
+    #print len(listOfHistoLists[numeratorPlot])
     
     if len(listOfHistoLists[numeratorPlot])==1:
         numerator=listOfHistoLists[numeratorPlot][0].Clone()
@@ -2946,13 +2952,18 @@ def divideHistos(listOfHistoLists, numeratorPlot, denumeratorPlot, normalizefirs
         numerator.Rebin(rebin)
         denumerator.Rebin(rebin)
         if normalizefirst: 
-            print 'numerator before divide ',numerator
+            print 'numerator before divide ',numerator, '     numerator Integral= ', numerator.Integral()
+            print 'denumerator before divide ',denumerator, '      denumerator Integral= ',denumerator.Integral() 
             numerator.Scale(1./numerator.Integral())
             denumerator.Scale(1./denumerator.Integral())
         x=numerator.Clone()
+        print 'numerator before divide ',numerator, '     numerator Integral= ', numerator.Integral()
+        print 'denumerator before divide ',denumerator, '      denumerator Integral= ',denumerator.Integral()
         numerator.Divide(numerator,denumerator,1.0,1.0,option)
-        listOfHistoLists[numeratorPlot][0]=numerator   
+        listOfHistoLists[numeratorPlot][0]=numerator
+        print 'numerator after divide temp ',numerator, '     numerator Integral= ', numerator.Integral()
         print 'numerator after divide ', listOfHistoLists[numeratorPlot][0]   
+        print 'denumerator after divide ', listOfHistoLists[denumeratorPlot][0]   
         
     if len(listOfHistoLists[numeratorPlot])>1:
         for i in range(len(listOfHistoLists[numeratorPlot])):
@@ -2960,14 +2971,27 @@ def divideHistos(listOfHistoLists, numeratorPlot, denumeratorPlot, normalizefirs
             denumerator=listOfHistoLists[denumeratorPlot][i].Clone()
             numerator.Rebin(rebin)
             denumerator.Rebin(rebin)
-            if normalizefirst: 
-                print 'numerator before divide ',numerator
+            if normalizefirst: #######check if integral>0
                 numerator.Scale(1./numerator.Integral())
                 denumerator.Scale(1./denumerator.Integral())
             x=numerator.Clone()
-            numerator.Divide(numerator,denumerator,1.0,1.0,option)
+            
+            print 'numerator before divide ',numerator, '     numerator Integral= ', numerator.Integral(), '    bing contents'
+            #for ibin in range (numerator.GetNbinsX()+1):
+                #print 'bincontent before', numerator.GetBinContent(ibin), denumerator.GetBinContent(ibin)
+            print 'denumerator before divide ',denumerator, '      denumerator Integral= ',denumerator.Integral()
+            #numerator.Divide(numerator, denumerator,1.0,1.0,option)
+            numerator.Divide(denumerator)
+            print 'numerator after divide temp1',numerator, '     numerator Integral= ', numerator.Integral()
+            print 'denumerator after divide temp1',denumerator, '     denumerator Integral= ', denumerator.Integral()
+            #for ibin in range (numerator.GetNbinsX()+1):
+                #print 'bincontent after', numerator.GetBinContent(ibin), denumerator.GetBinContent(ibin)
             listOfHistoLists[numeratorPlot][i]=numerator   
-            print 'numerator after divide ', listOfHistoLists[numeratorPlot][i]
+            print 'numerator after divide temp2',numerator, '     numerator Integral= ', numerator.Integral()
+            print 'denumerator after divide temp2',denumerator, '     denumerator Integral= ', denumerator.Integral()
+            print 'x after divide ahhhh',x, '     x Integral= ', x.Integral()
+            print 'numerator after divide ', listOfHistoLists[numeratorPlot][i], '     numerator Integral= ', listOfHistoLists[numeratorPlot][i].Integral()
+            print 'denumerator after divide ', listOfHistoLists[denumeratorPlot][i], '      denumerator Integral= ',listOfHistoLists[denumeratorPlot][i].Integral()
         #print 'divide? ', listofHistoLists
         #self.append(x)
     #self.append(dividedHistoList)
@@ -3724,4 +3748,8 @@ def GetPValueHisto(Histo, rho0 = 0):
     df = Histo.GetEntries()
     return GetPValue(r, df , rho0), df
 
-
+def addLOLTtoLOLT(ListOfHistoLists1,ListOfHistoLists2, c1=1.0, c2=1.0):
+    for HistoList1 in ListOfHistoLists1:
+      for  HistoList2 in ListOfHistoLists2:
+        for Histo1, Histo2, in zip(HistoList1,HistoList2):
+            Histo1.Add(Histo2,c2)

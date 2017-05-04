@@ -13,7 +13,7 @@ usualweights="(1*Weight_PU*((Weight>0)-(Weight<0)))*Weight_ElectronSFID*Weight_E
 
 # samples
 # input path 
-path_80x="/nfs/dust/cms/user/skudella/processed_MC/flat_trees/"
+path_80x="/nfs/dust/cms/user/skudella/processed_MC/flat_trees_new/"
 
 # MC samples (name, color, path to files,weight,nickname_without_special_characters,systematics)                       
 samples=[ 
@@ -68,7 +68,9 @@ BackgroundSamples=[
 
 
 DataSamples=[
-                    Sample('MC_BKG_DATA',ROOT.kAzure,path_80x+'BKG*/*nominal*.root',mcweight,'MC_BKG_DATA'),     
+                    Sample('Data = Background with (1pb), m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1200',ROOT.kBlack,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/37.6','BKG_Zprime25001200_1pb') ,     
+                    #Sample('Data = Background with (1pb), m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1200',ROOT.kBlack,path_80x+'Signal_Zprime/Zprime_2000_1200_LH_nominal_Tree.root',mcweight+'/86.28','BKG_Zprime20001200_1pb') ,     
+                    #Sample('Data = Background with (1pb), m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=900',ROOT.kBlack,path_80x+'Signal_Zprime/Zprime_1500_900_nominal_Tree.root',mcweight+'/138.07','BKG_Zprime1500900_1pb') ,     
 
 ]
 
