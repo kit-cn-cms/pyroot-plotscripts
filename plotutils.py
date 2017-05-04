@@ -2952,18 +2952,18 @@ def divideHistos(listOfHistoLists, numeratorPlot, denumeratorPlot, normalizefirs
         numerator.Rebin(rebin)
         denumerator.Rebin(rebin)
         if normalizefirst: 
-            print 'numerator before divide ',numerator, '     numerator Integral= ', numerator.Integral()
-            print 'denumerator before divide ',denumerator, '      denumerator Integral= ',denumerator.Integral() 
+            #print 'numerator before divide ',numerator, '     numerator Integral= ', numerator.Integral()
+            #print 'denumerator before divide ',denumerator, '      denumerator Integral= ',denumerator.Integral() 
             numerator.Scale(1./numerator.Integral())
             denumerator.Scale(1./denumerator.Integral())
-        x=numerator.Clone()
-        print 'numerator before divide ',numerator, '     numerator Integral= ', numerator.Integral()
-        print 'denumerator before divide ',denumerator, '      denumerator Integral= ',denumerator.Integral()
+        #x=numerator.Clone()
+        #print 'numerator before divide ',numerator, '     numerator Integral= ', numerator.Integral()
+        #print 'denumerator before divide ',denumerator, '      denumerator Integral= ',denumerator.Integral()
         numerator.Divide(numerator,denumerator,1.0,1.0,option)
         listOfHistoLists[numeratorPlot][0]=numerator
-        print 'numerator after divide temp ',numerator, '     numerator Integral= ', numerator.Integral()
-        print 'numerator after divide ', listOfHistoLists[numeratorPlot][0]   
-        print 'denumerator after divide ', listOfHistoLists[denumeratorPlot][0]   
+        #print 'numerator after divide temp ',numerator, '     numerator Integral= ', numerator.Integral()
+        #print 'numerator after divide ', listOfHistoLists[numeratorPlot][0]   
+        #print 'denumerator after divide ', listOfHistoLists[denumeratorPlot][0]   
         
     if len(listOfHistoLists[numeratorPlot])>1:
         for i in range(len(listOfHistoLists[numeratorPlot])):
@@ -2974,24 +2974,24 @@ def divideHistos(listOfHistoLists, numeratorPlot, denumeratorPlot, normalizefirs
             if normalizefirst: #######check if integral>0
                 numerator.Scale(1./numerator.Integral())
                 denumerator.Scale(1./denumerator.Integral())
-            x=numerator.Clone()
+            #x=numerator.Clone()
             
-            print 'numerator before divide ',numerator, '     numerator Integral= ', numerator.Integral(), '    bing contents'
+            #print 'numerator before divide ',numerator, '     numerator Integral= ', numerator.Integral(), '    bing contents'
             #for ibin in range (numerator.GetNbinsX()+1):
                 #print 'bincontent before', numerator.GetBinContent(ibin), denumerator.GetBinContent(ibin)
-            print 'denumerator before divide ',denumerator, '      denumerator Integral= ',denumerator.Integral()
+            #print 'denumerator before divide ',denumerator, '      denumerator Integral= ',denumerator.Integral()
             #numerator.Divide(numerator, denumerator,1.0,1.0,option)
             numerator.Divide(denumerator)
-            print 'numerator after divide temp1',numerator, '     numerator Integral= ', numerator.Integral()
-            print 'denumerator after divide temp1',denumerator, '     denumerator Integral= ', denumerator.Integral()
+            #print 'numerator after divide temp1',numerator, '     numerator Integral= ', numerator.Integral()
+            #print 'denumerator after divide temp1',denumerator, '     denumerator Integral= ', denumerator.Integral()
             #for ibin in range (numerator.GetNbinsX()+1):
                 #print 'bincontent after', numerator.GetBinContent(ibin), denumerator.GetBinContent(ibin)
             listOfHistoLists[numeratorPlot][i]=numerator   
-            print 'numerator after divide temp2',numerator, '     numerator Integral= ', numerator.Integral()
-            print 'denumerator after divide temp2',denumerator, '     denumerator Integral= ', denumerator.Integral()
-            print 'x after divide ahhhh',x, '     x Integral= ', x.Integral()
-            print 'numerator after divide ', listOfHistoLists[numeratorPlot][i], '     numerator Integral= ', listOfHistoLists[numeratorPlot][i].Integral()
-            print 'denumerator after divide ', listOfHistoLists[denumeratorPlot][i], '      denumerator Integral= ',listOfHistoLists[denumeratorPlot][i].Integral()
+            #print 'numerator after divide temp2',numerator, '     numerator Integral= ', numerator.Integral()
+            #print 'denumerator after divide temp2',denumerator, '     denumerator Integral= ', denumerator.Integral()
+            #print 'x after divide ahhhh',x, '     x Integral= ', x.Integral()
+            #print 'numerator after divide ', listOfHistoLists[numeratorPlot][i], '     numerator Integral= ', listOfHistoLists[numeratorPlot][i].Integral()
+            #print 'denumerator after divide ', listOfHistoLists[denumeratorPlot][i], '      denumerator Integral= ',listOfHistoLists[denumeratorPlot][i].Integral()
         #print 'divide? ', listofHistoLists
         #self.append(x)
     #self.append(dividedHistoList)
