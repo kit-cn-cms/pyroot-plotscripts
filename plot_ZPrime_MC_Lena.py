@@ -279,8 +279,8 @@ lolABCDT=transposeLOL(listOfHistoListsABCD)
 
 
 
-# writeIntegralLOLinTEX( listOfHistoListsABCD[ plotnames.index( "ABCD_CatA_Zprime_M" ) : plotnames.index( "ABCD_CatH_Zprime_M" ) +1] , "Integrallist_before_multiplication.tex" , SampleNames )
-# writeIntegralLOLinTEX( listOfHistoListsABCD[ plotnames.index( "ABCD_CatA_Zprime_M_beta" ) : plotnames.index( "ABCD_CatH_Zprime_M_beta" ) +1] , "Integrallist_before_multiplication_beta.tex" , SampleNames )
+writeIntegralLOLinTEX( listOfHistoListsABCD[ plotnames.index( "ABCD_CatA_Zprime_M" ) : plotnames.index( "ABCD_CatH_Zprime_M_first" ) +1] , "Integrallist_before_multiplication.tex" , SampleNames )
+#writeIntegralLOLinTEX( listOfHistoListsABCD[ plotnames.index( "ABCD_CatA_Zprime_M_beta" ) : plotnames.index( "ABCD_CatH_Zprime_M_beta" ) +1] , "Integrallist_before_multiplication_beta.tex" , SampleNames )
 
 
 #Compare BackgroundAndSignal in SignalSample (mistaged Signal infuences Background prediction )
@@ -342,9 +342,9 @@ for listOfHistoList in listOfHistoListsSignalAndBackground:
 #
 #
 #
-# # ##Write ListOfIntegralLists
-# # writeIntegralLOLinTEX( listOfHistoListsABCD[ plotnames.index( "ABCD_CatA_Zprime_M" ) : plotnames.index( "ABCD_CatH_Zprime_M" ) +1] , "Integrallist_after_multiplication.tex" , SampleNames )
-# # writeIntegralLOLinTEX( listOfHistoListsABCD[ plotnames.index( "ABCD_CatA_Zprime_M_beta" ) : plotnames.index( "ABCD_CatH_Zprime_M_beta" ) +1] , "Integrallist_after_multiplication_beta.tex" , SampleNames )
+##Write ListOfIntegralLists
+writeIntegralLOLinTEX( listOfHistoListsABCD[ plotnames.index( "ABCD_CatA_Zprime_M" ) : plotnames.index( "ABCD_CatH_Zprime_M_first" ) +1] , "Integrallist_after_multiplication.tex" , SampleNames )
+# writeIntegralLOLinTEX( listOfHistoListsABCD[ plotnames.index( "ABCD_CatA_Zprime_M_beta" ) : plotnames.index( "ABCD_CatH_Zprime_M_beta" ) +1] , "Integrallist_after_multiplication_beta.tex" , SampleNames )
 #
 #
 #
