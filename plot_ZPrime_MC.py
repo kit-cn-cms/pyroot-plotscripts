@@ -3,9 +3,10 @@
 ##############
 
 from plotconfig_Zprime_MC import *
+from plot_additional_Zprime_MC import *
 sys.path.insert(0, 'limittools')
 from limittools import renameHistos
-
+import copy
 name='Zprime_MC'
 
 
@@ -22,37 +23,6 @@ name='Zprime_MC'
 #]  N_Sideband_withtopbtag_bottom_anti_Topfirst_Bottoms
 
 
-additionalvariables=[
-			#'minimal_Sideband_top_withbtag_anti_Topfirst_Bottoms_CSVv2:=Sideband_top_withbtag_anti_Topfirst_Bottoms_CSVv2',
-			#'anti_loose_btag:=Sideband_top_withbtag_anti_Topfirst_Bottoms_CSVv2[0], for(int i =0, i<N_Sideband_top_withbtag_anti_Topfirst_Bottoms, i++){if(Sideband_top_withbtag_anti_Topfirst_Bottoms_CSVv2[i]<0.46){minimal_Sideband_top_withbtag_anti_Topfirst_Bottoms_CSVv2=Sideband_top_withbtag_anti_Topfirst_Bottoms_CSVv2[i]}}',
-                        #'minimal_Sideband_top_withbtag_anti_Topfirst_Bottoms_CSVv2:=Sideband_top_withbtag_anti_Topfirst_Bottoms_CSVv2<0.46',
-
-			'anti_btag_withtopbtag:=anti_loose_btag(Sideband_top_withbtag_anti_Topfirst_Bottoms_CSVv2,N_Sideband_top_withbtag_anti_Topfirst_Bottoms)',
-			'anti_btag:=anti_loose_btag(Sideband_bottom_anti_Topfirst_Bottoms_CSVv2,N_Sideband_bottom_anti_Topfirst_Bottoms)',
-			
-			#"minimal_Sideband_top_withbtag_anti_Topfirst_Bottoms_CSVv2",
-                        "Sideband_top_withbtag_anti_Topfirst_Bottoms_CSVv2","N_Sideband_top_withbtag_anti_Topfirst_Bottoms",
-                        "Sideband_bottom_anti_Topfirst_Bottoms_CSVv2","N_Sideband_bottom_anti_Topfirst_Bottoms",
-]
-
-additionalfunctions=[
-                        #'float temp=1',
-                        #for(int i; i<N_Sideband_top_withbtag_anti_Topfirst_Bottoms;i++){temp*=(Sideband_top_withbtag_anti_Topfirst_Bottoms_CSVv2[i]<0.46);};',
-                        ##"float anti_loose_btag(const float* bottomCSVs, int sizeofarray){"+"\n"+"   float anti_tag=1;"+"\n"+"      for (int i=0;  i<sizeofarray;i++){"+"\n"+"        if (bottomCSVs[i]>0.46){"+"\n"+"        anti_tag=0;"+"\n"+"      }"+"\n"+"      }"+"\n"+"    return anti_tag;"+"}",
-"""
-float anti_loose_btag(float const* bottomCSVs, int sizeofarray){
-    float anti_tag=1;
-    for (int i=0; i<sizeofarray; i++){
-        if(bottomCSVs[i]>0.46){
-            //std::cout<<"bottomcsv"<<bottomCSVs[i]<<endl;
-            //anti_tag=0;
-        }
-    }
-            //std::cout<<"anti_tag"<<anti_tag<<endl;
-    return anti_tag;
-}
-"""              
-    ]
 
 # book plots
 plotlabel="Wbt, #geq 3 jets, #geq 1 b-tags"
@@ -68,163 +38,150 @@ plots=[
         Plot(ROOT.TH1F("Signal_Topfirst_Zprime_Pt" ,"p_{T}(Z') in GeV",50,0,1000),"Signal_Topfirst_Zprime_Pt",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
         Plot(ROOT.TH1F("Signal_Topfirst_Tprime_M" ,"m(T') in GeV",50,0,5000),"Signal_Topfirst_Tprime_M",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
         Plot(ROOT.TH1F("Signal_Topfirst_Tprime_Pt" ,"p_{T}(T') in GeV",50,0,1000),"Signal_Topfirst_Tprime_Pt",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
-        Plot(ROOT.TH1F("Signal_Topfirst_Tops_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Signal_Topfirst_Tops_Pt",plotselection2+"&&N_Signal_Topfirst_Tops>0","1 btag"),
-        Plot(ROOT.TH1F("Signal_Topfirst_Tops_Eta" ,"eta(t)",60,-3,3),"Signal_Topfirst_Tops_Eta",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
-        Plot(ROOT.TH1F("Signal_Topfirst_Tops_MSD" ,"m_{SD}(t) in GeV",60,0,300),"Signal_Topfirst_Tops_MSD",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
-        Plot(ROOT.TH1F("Signal_Topfirst_Tops_t32" ,"tau_{32}(t)",20,0,1),"Signal_Topfirst_Tops_t32",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
-        Plot(ROOT.TH1F("Signal_Topfirst_Ws_Pt" ,"p_{T}(W) in GeV",50,0,2000),"Signal_Topfirst_Ws_Pt",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
-        Plot(ROOT.TH1F("Signal_Topfirst_Ws_Eta" ,"eta(W)",60,-3,3),"Signal_Topfirst_Ws_Eta",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
-        Plot(ROOT.TH1F("Signal_Topfirst_Ws_MSD" ,"m_{SD}(W) in GeV",60,0,300),"Signal_Topfirst_Ws_MSD",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
-        Plot(ROOT.TH1F("Signal_Topfirst_Ws_t21" ,"tau_{21}(W)",20,0,1),"Signal_Topfirst_Ws_t21",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
-        Plot(ROOT.TH1F("Signal_Topfirst_Bottoms_Pt" ,"p_{T}(b) in GeV",50,0,2000),"Signal_Topfirst_Bottoms_Pt",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
-        Plot(ROOT.TH1F("Signal_Topfirst_Bottoms_Eta" ,"eta(b)",60,-3,3),"Signal_Topfirst_Bottoms_Eta",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
-        Plot(ROOT.TH1F("Signal_Topfirst_Bottoms_CSVv2" ,"CSVv2",40,-1,1),"Signal_Topfirst_Bottoms_CSVv2",plotselection2+"&&Signal_Topfirst_Bottoms_CSVv2>-1","1 btag"),
+        Plot(ROOT.TH1F("Signal_Topfirst_Tops_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Signal_Topfirst_Tops_Pt[0]",plotselection2+"&&N_Signal_Topfirst_Tops>0","1 btag"),
+        Plot(ROOT.TH1F("Signal_Topfirst_Tops_Eta" ,"eta(t)",60,-3,3),"Signal_Topfirst_Tops_Eta[0]",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
+        Plot(ROOT.TH1F("Signal_Topfirst_Tops_MSD" ,"m_{SD}(t) in GeV",60,0,300),"Signal_Topfirst_Tops_MSD[0]",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
+        Plot(ROOT.TH1F("Signal_Topfirst_Tops_t32" ,"tau_{32}(t)",20,0,1),"Signal_Topfirst_Tops_t32[0]",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
+        Plot(ROOT.TH1F("Signal_Topfirst_Ws_Pt" ,"p_{T}(W) in GeV",50,0,2000),"Signal_Topfirst_Ws_Pt[0]",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
+        Plot(ROOT.TH1F("Signal_Topfirst_Ws_Eta" ,"eta(W)",60,-3,3),"Signal_Topfirst_Ws_Eta[0]",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
+        Plot(ROOT.TH1F("Signal_Topfirst_Ws_MSD" ,"m_{SD}(W) in GeV",60,0,300),"Signal_Topfirst_Ws_MSD[0]",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
+        Plot(ROOT.TH1F("Signal_Topfirst_Ws_t21" ,"tau_{21}(W)",20,0,1),"Signal_Topfirst_Ws_t21[0]",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
+        Plot(ROOT.TH1F("Signal_Topfirst_Bottoms_Pt" ,"p_{T}(b) in GeV",50,0,2000),"Signal_Topfirst_Bottoms_Pt[0]",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
+        Plot(ROOT.TH1F("Signal_Topfirst_Bottoms_Eta" ,"eta(b)",60,-3,3),"Signal_Topfirst_Bottoms_Eta[0]",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
+        Plot(ROOT.TH1F("Signal_Topfirst_Bottoms_CSVv2" ,"CSVv2",40,-1,1),"Signal_Topfirst_Bottoms_CSVv2[0]",plotselection2+"&&Signal_Topfirst_Bottoms_CSVv2>-1","1 btag"),
 
-        Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Zprime_M" ,"m(Z') in GeV, anti-btag",50,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"&&Sideband_bottom_anti_Topfirst_Zprime_M>0 && anti_btag==1","1 anti-btag"),
+        Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"&&Sideband_bottom_anti_Topfirst_Zprime_M>0 && anti_btag==1","1 anti-btag"),
         Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Zprime_Pt" ,"p_{T}(Z') in GeV, anti-btag",50,0,1000),"Sideband_bottom_anti_Topfirst_Zprime_Pt",plotselection2+"&&Sideband_bottom_anti_Topfirst_Zprime_Pt>0 && anti_btag==1","1 anti-btag"),
         Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Tprime_M" ,"m(T') in GeV, anti-btag",50,0,5000),"Sideband_bottom_anti_Topfirst_Tprime_M",plotselection2+"&&Sideband_bottom_anti_Topfirst_Tprime_M>0 && anti_btag==1","1 anti-btag"),
         Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Tprime_Pt" ,"p_{T}(T') in GeV, anti-btag",50,0,1000),"Sideband_bottom_anti_Topfirst_Tprime_Pt",plotselection2+"&&Sideband_bottom_anti_Topfirst_Tprime_Pt>0 && anti_btag==1","1 anti-btag"),
-        Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Tops_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_bottom_anti_Topfirst_Tops_Pt",plotselection2+"&&Sideband_bottom_anti_Topfirst_Tops_Pt>0 && anti_btag==1","1 btag"),
-        Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Tops_Eta" ,"eta(t), anti-btag",60,-3,3),"Sideband_bottom_anti_Topfirst_Tops_Eta",plotselection2+" && anti_btag==1","1 btag"),
-        Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Tops_MSD" ,"m_{SD}(t) in GeV, anti-btag",60,0,300),"Sideband_bottom_anti_Topfirst_Tops_MSD",plotselection2+"&&Sideband_bottom_anti_Topfirst_Zprime_M>0 && anti_btag==1","1 btag"),
-        Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Tops_t32" ,"tau_{32}(t), anti-btag",20,0,1),"Sideband_bottom_anti_Topfirst_Tops_t32",plotselection2+"&&Sideband_bottom_anti_Topfirst_Zprime_M>0 && anti_btag==1","1 btag"),
-        Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Ws_Pt" ,"p_{T}(W) in GeV, anti-btag",50,0,2000),"Sideband_bottom_anti_Topfirst_Ws_Pt",plotselection2+"&&Sideband_bottom_anti_Topfirst_Ws_Pt>0 && anti_btag==1","1 btag"),
-        Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Ws_Eta" ,"eta(W), anti-btag",60,-3,3),"Sideband_bottom_anti_Topfirst_Ws_Eta",plotselection2+" && anti_btag==1","1 btag"),
-        Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Ws_MSD" ,"m_{SD}(W) in GeV, anti-btag",60,0,300),"Sideband_bottom_anti_Topfirst_Ws_MSD",plotselection2+"&&Sideband_bottom_anti_Topfirst_Zprime_M>0 && anti_btag==1","1 btag"),
-        Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Ws_t21" ,"tau_{21}(W), anti-btag",20,0,1),"Sideband_bottom_anti_Topfirst_Ws_t21",plotselection2+"&&Sideband_bottom_anti_Topfirst_Zprime_M>0 && anti_btag==1","1 btag"),
-        Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Bottoms_Pt" ,"p_{T}(b) in GeV, anti-btag",50,0,2000),"Sideband_bottom_anti_Topfirst_Bottoms_Pt",plotselection2+"&&Sideband_bottom_anti_Topfirst_Bottoms_Pt>0 && anti_btag==1","1 btag"),
-        Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Bottoms_Eta" ,"eta(b), anti-btag",60,-3,3),"Sideband_bottom_anti_Topfirst_Bottoms_Eta",plotselection2+" && anti_btag==1","1 btag"),
-        Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Bottoms_CSVv2" ,"CSVv2, anti-btag",40,-1,1),"Sideband_bottom_anti_Topfirst_Bottoms_CSVv2",plotselection2+"&&Sideband_bottom_anti_Topfirst_Bottoms_CSVv2>-1 && anti_btag==1","1 btag"),
+        Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Tops_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_bottom_anti_Topfirst_Tops_Pt[0]",plotselection2+"&&Sideband_bottom_anti_Topfirst_Tops_Pt[0]>0 && anti_btag==1","1 btag"),
+        Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Tops_Eta" ,"eta(t), anti-btag",60,-3,3),"Sideband_bottom_anti_Topfirst_Tops_Eta[0]",plotselection2+" && anti_btag==1","1 btag"),
+        Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Tops_MSD" ,"m_{SD}(t) in GeV, anti-btag",60,0,300),"Sideband_bottom_anti_Topfirst_Tops_MSD[0]",plotselection2+"&&Sideband_bottom_anti_Topfirst_Zprime_M>0 && anti_btag==1","1 btag"),
+        Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Tops_t32" ,"tau_{32}(t), anti-btag",20,0,1),"Sideband_bottom_anti_Topfirst_Tops_t32[0]",plotselection2+"&&Sideband_bottom_anti_Topfirst_Zprime_M>0 && anti_btag==1","1 btag"),
+        Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Ws_Pt" ,"p_{T}(W) in GeV, anti-btag",50,0,2000),"Sideband_bottom_anti_Topfirst_Ws_Pt[0]",plotselection2+"&&Sideband_bottom_anti_Topfirst_Ws_Pt[0]>0 && anti_btag==1","1 btag"),
+        Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Ws_Eta" ,"eta(W), anti-btag",60,-3,3),"Sideband_bottom_anti_Topfirst_Ws_Eta[0]",plotselection2+" && anti_btag==1","1 btag"),
+        Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Ws_MSD" ,"m_{SD}(W) in GeV, anti-btag",60,0,300),"Sideband_bottom_anti_Topfirst_Ws_MSD[0]",plotselection2+"&&Sideband_bottom_anti_Topfirst_Zprime_M>0 && anti_btag==1","1 btag"),
+        Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Ws_t21" ,"tau_{21}(W), anti-btag",20,0,1),"Sideband_bottom_anti_Topfirst_Ws_t21[0]",plotselection2+"&&Sideband_bottom_anti_Topfirst_Zprime_M>0 && anti_btag==1","1 btag"),
+        Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Bottoms_Pt" ,"p_{T}(b) in GeV, anti-btag",50,0,2000),"Sideband_bottom_anti_Topfirst_Bottoms_Pt[0]",plotselection2+"&&Sideband_bottom_anti_Topfirst_Bottoms_Pt[0]>0 && anti_btag==1","1 btag"),
+        Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Bottoms_Eta" ,"eta(b), anti-btag",60,-3,3),"Sideband_bottom_anti_Topfirst_Bottoms_Eta[0]",plotselection2+" && anti_btag==1","1 btag"),
+        Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Bottoms_CSVv2" ,"CSVv2, anti-btag",40,-1,1),"Sideband_bottom_anti_Topfirst_Bottoms_CSVv2[0]",plotselection2+"&&Sideband_bottom_anti_Topfirst_Bottoms_CSVv2[0]>-1 && anti_btag==1","1 btag"),
 
-        Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Zprime_M" ,"m(Z') in GeV, anti-Wtag",50,0,5000),"Sideband_W_anti_Topfirst_Zprime_M",plotselection2+"&&Sideband_W_anti_Topfirst_Zprime_M>0","1 anti-Wtag"),
-        Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Zprime_Pt" ,"p_{T}(Z') in GeV, anti-Wtag",50,0,1000),"Sideband_W_anti_Topfirst_Zprime_Pt",plotselection2+"&&Sideband_W_anti_Topfirst_Zprime_Pt>0","1 anti-Wtag"),
-        Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Tprime_M" ,"m(T') in GeV, anti-Wtag",50,0,5000),"Sideband_W_anti_Topfirst_Tprime_M",plotselection2+"&&Sideband_W_anti_Topfirst_Tprime_M>0","1 anti-Wtag"),
-        Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Tprime_Pt" ,"p_{T}(T') in GeV, anti-Wtag",50,0,1000),"Sideband_W_anti_Topfirst_Tprime_Pt",plotselection2+"&&Sideband_W_anti_Topfirst_Tprime_Pt>0","1 anti-Wtag"),
-        Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Tops_Pt" ,"p_{T}(t) in GeV, anti-Wtag",50,0,2000),"Sideband_W_anti_Topfirst_Tops_Pt",plotselection2+"&&Sideband_W_anti_Topfirst_Tops_Pt>0","1 anti-Wtag"),
-        Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Tops_Eta" ,"eta(t), anti-Wtag",60,-3,3),"Sideband_W_anti_Topfirst_Tops_Eta",plotselection2+"","1 anti-Wtag"),
-        Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Tops_MSD" ,"m_{SD}(t) in GeV, anti-Wtag",60,0,300),"Sideband_W_anti_Topfirst_Tops_MSD",plotselection2+"&&Sideband_W_anti_Topfirst_Zprime_M>0","1 btag"),
-        Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Tops_t32" ,"tau_{32}(t), anti-Wtag",20,0,1),"Sideband_W_anti_Topfirst_Tops_t32",plotselection2+"&&Sideband_W_anti_Topfirst_Zprime_M>0","1 btag"),       
-        Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Ws_Pt" ,"p_{T}(W) in GeV, anti-Wtag",50,0,2000),"Sideband_W_anti_Topfirst_Ws_Pt",plotselection2+"&&Sideband_W_anti_Topfirst_Ws_Pt>0","1 anti-Wtag"),
-        Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Ws_Eta" ,"eta(W), anti-Wtag",60,-3,3),"Sideband_W_anti_Topfirst_Ws_Eta",plotselection2+"","1 anti-Wtag"),
-        Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Ws_MSD" ,"m_{SD}(W) in GeV, anti-Wtag",60,0,300),"Sideband_W_anti_Topfirst_Ws_MSD",plotselection2+"&&Sideband_W_anti_Topfirst_Zprime_M>0","1 btag"),
-        Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Ws_t21" ,"tau_{21}(W), anti-Wtag",20,0,1),"Sideband_W_anti_Topfirst_Ws_t21",plotselection2+"&&Sideband_W_anti_Topfirst_Zprime_M>0","1 btag"),
-        Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Bottoms_Pt" ,"p_{T}(b) in GeV, anti-Wtag",50,0,2000),"Sideband_W_anti_Topfirst_Bottoms_Pt",plotselection2+"&&Sideband_W_anti_Topfirst_Bottoms_Pt>0","1 anti-Wtag"),
-        Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Bottoms_Eta" ,"eta(b), anti-Wtag",60,-3,3),"Sideband_W_anti_Topfirst_Bottoms_Eta",plotselection2+"","1 anti-Wtag"),
-        Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Bottoms_CSVv2" ,"CSVv2, anti-Wtag",40,-1,1),"Sideband_W_anti_Topfirst_Bottoms_CSVv2",plotselection2+"&&Sideband_W_anti_Topfirst_Bottoms_CSVv2>-1","1 btag"),
+        #Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Zprime_M" ,"m(Z') in GeV, anti-Wtag",50,0,5000),"Sideband_W_anti_Topfirst_Zprime_M",plotselection2+"&&Sideband_W_anti_Topfirst_Zprime_M>0","1 anti-Wtag"),
+        #Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Zprime_Pt" ,"p_{T}(Z') in GeV, anti-Wtag",50,0,1000),"Sideband_W_anti_Topfirst_Zprime_Pt",plotselection2+"&&Sideband_W_anti_Topfirst_Zprime_Pt>0","1 anti-Wtag"),
+        #Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Tprime_M" ,"m(T') in GeV, anti-Wtag",50,0,5000),"Sideband_W_anti_Topfirst_Tprime_M",plotselection2+"&&Sideband_W_anti_Topfirst_Tprime_M>0","1 anti-Wtag"),
+        #Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Tprime_Pt" ,"p_{T}(T') in GeV, anti-Wtag",50,0,1000),"Sideband_W_anti_Topfirst_Tprime_Pt",plotselection2+"&&Sideband_W_anti_Topfirst_Tprime_Pt>0","1 anti-Wtag"),
+        #Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Tops_Pt" ,"p_{T}(t) in GeV, anti-Wtag",50,0,2000),"Sideband_W_anti_Topfirst_Tops_Pt[0]",plotselection2+"&&Sideband_W_anti_Topfirst_Tops_Pt[0]>0","1 anti-Wtag"),
+        #Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Tops_Eta" ,"eta(t), anti-Wtag",60,-3,3),"Sideband_W_anti_Topfirst_Tops_Eta[0]",plotselection2+"","1 anti-Wtag"),
+        #Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Tops_MSD" ,"m_{SD}(t) in GeV, anti-Wtag",60,0,300),"Sideband_W_anti_Topfirst_Tops_MSD[0]",plotselection2+"&&Sideband_W_anti_Topfirst_Zprime_M>0","1 btag"),
+        #Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Tops_t32" ,"tau_{32}(t), anti-Wtag",20,0,1),"Sideband_W_anti_Topfirst_Tops_t32[0]",plotselection2+"&&Sideband_W_anti_Topfirst_Zprime_M>0","1 btag"),       
+        #Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Ws_Pt" ,"p_{T}(W) in GeV, anti-Wtag",50,0,2000),"Sideband_W_anti_Topfirst_Ws_Pt[0]",plotselection2+"&&Sideband_W_anti_Topfirst_Ws_Pt[0]>0","1 anti-Wtag"),
+        #Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Ws_Eta" ,"eta(W), anti-Wtag",60,-3,3),"Sideband_W_anti_Topfirst_Ws_Eta[0]",plotselection2+"","1 anti-Wtag"),
+        #Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Ws_MSD" ,"m_{SD}(W) in GeV, anti-Wtag",60,0,300),"Sideband_W_anti_Topfirst_Ws_MSD[0]",plotselection2+"&&Sideband_W_anti_Topfirst_Zprime_M>0","1 btag"),
+        #Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Ws_t21" ,"tau_{21}(W), anti-Wtag",20,0,1),"Sideband_W_anti_Topfirst_Ws_t21[0]",plotselection2+"&&Sideband_W_anti_Topfirst_Zprime_M>0","1 btag"),
+        #Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Bottoms_Pt" ,"p_{T}(b) in GeV, anti-Wtag",50,0,2000),"Sideband_W_anti_Topfirst_Bottoms_Pt[0]",plotselection2+"&&Sideband_W_anti_Topfirst_Bottoms_Pt[0]>0","1 anti-Wtag"),
+        #Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Bottoms_Eta" ,"eta(b), anti-Wtag",60,-3,3),"Sideband_W_anti_Topfirst_Bottoms_Eta[0]",plotselection2+"","1 anti-Wtag"),
+        #Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Bottoms_CSVv2" ,"CSVv2, anti-Wtag",40,-1,1),"Sideband_W_anti_Topfirst_Bottoms_CSVv2[0]",plotselection2+"&&Sideband_W_anti_Topfirst_Bottoms_CSVv2[0]>-1","1 btag"),
         
-        Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Zprime_M" ,"m(Z') in GeV, anti-ttag",50,0,5000),"Sideband_top_anti_Topfirst_Zprime_M",plotselection2+"&&Sideband_top_anti_Topfirst_Zprime_M>0","1 anti-ttag"),
+        Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_top_anti_Topfirst_Zprime_M",plotselection2+"&&Sideband_top_anti_Topfirst_Zprime_M>0","1 anti-ttag"),
         Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Zprime_Pt" ,"p_{T}(Z') in GeV, anti-ttag",50,0,1000),"Sideband_top_anti_Topfirst_Zprime_Pt",plotselection2+"&&Sideband_top_anti_Topfirst_Zprime_Pt>0","1 anti-ttag"),
         Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Tprime_M" ,"m(T') in GeV, anti-ttag",50,0,5000),"Sideband_top_anti_Topfirst_Tprime_M",plotselection2+"&&Sideband_top_anti_Topfirst_Tprime_M>0","1 anti-ttag"),
         Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Tprime_Pt" ,"p_{T}(T') in GeV, anti-ttag",50,0,1000),"Sideband_top_anti_Topfirst_Tprime_Pt",plotselection2+"&&Sideband_top_anti_Topfirst_Tprime_Pt>0","1 anti-ttag"),
-        Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Tops_Pt" ,"p_{T}(t) in GeV, anti-ttag",50,0,2000),"Sideband_top_anti_Topfirst_Tops_Pt",plotselection2+"&&Sideband_top_anti_Topfirst_Tops_Pt>0","1 anti-ttag"),
-        Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Tops_Eta" ,"eta(t), anti-ttag",60,-3,3),"Sideband_top_anti_Topfirst_Tops_Eta",plotselection2+"","1 anti-ttag"),
-        Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Tops_MSD" ,"m_{SD}(t) in GeV, anti-ttag",60,0,300),"Sideband_top_anti_Topfirst_Tops_MSD",plotselection2+"&&Sideband_top_anti_Topfirst_Zprime_M>0","1 btag"),
-        Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Tops_t32" ,"tau_{32}(t), anti-ttag",20,0,1),"Sideband_top_anti_Topfirst_Tops_t32",plotselection2+"&&Sideband_top_anti_Topfirst_Zprime_M>0","1 btag"),       
-        Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Ws_Pt" ,"p_{T}(W) in GeV, anti-ttag",50,0,2000),"Sideband_top_anti_Topfirst_Ws_Pt",plotselection2+"&&Sideband_top_anti_Topfirst_Ws_Pt>0","1 anti-ttag"),
-        Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Ws_Eta" ,"eta(W), anti-ttag",60,-3,3),"Sideband_top_anti_Topfirst_Ws_Eta",plotselection2+"","1 anti-ttag"),
-        Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Ws_MSD" ,"m_{SD}(W) in GeV, anti-ttag",60,0,300),"Sideband_top_anti_Topfirst_Ws_MSD",plotselection2+"&&Sideband_top_anti_Topfirst_Zprime_M>0","1 btag"),
-        Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Ws_t21" ,"tau_{21}(W), anti-ttag",20,0,1),"Sideband_top_anti_Topfirst_Ws_t21",plotselection2+"&&Sideband_top_anti_Topfirst_Zprime_M>0","1 btag"),
-        Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Bottoms_Pt" ,"p_{T}(b) in GeV, anti-ttag",50,0,2000),"Sideband_top_anti_Topfirst_Bottoms_Pt",plotselection2+"&&Sideband_top_anti_Topfirst_Bottoms_Pt>0","1 anti-ttag"),
-        Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Bottoms_Eta" ,"eta(b), anti-ttag",60,-3,3),"Sideband_top_anti_Topfirst_Bottoms_Eta",plotselection2+"","1 anti-ttag"),        
-        Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Bottoms_CSVv2" ,"CSVv2, anti-ttag",40,-1,1),"Sideband_top_anti_Topfirst_Bottoms_CSVv2",plotselection2+"&&Sideband_top_anti_Topfirst_Bottoms_CSVv2>-1","1 btag"),
+        Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Tops_Pt" ,"p_{T}(t) in GeV, anti-ttag",50,0,2000),"Sideband_top_anti_Topfirst_Tops_Pt[0]",plotselection2+"&&Sideband_top_anti_Topfirst_Tops_Pt[0]>0","1 anti-ttag"),
+        Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Tops_Eta" ,"eta(t), anti-ttag",60,-3,3),"Sideband_top_anti_Topfirst_Tops_Eta[0]",plotselection2+"","1 anti-ttag"),
+        Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Tops_MSD" ,"m_{SD}(t) in GeV, anti-ttag",60,0,300),"Sideband_top_anti_Topfirst_Tops_MSD[0]",plotselection2+"&&Sideband_top_anti_Topfirst_Zprime_M>0","1 btag"),
+        Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Tops_t32" ,"tau_{32}(t), anti-ttag",20,0,1),"Sideband_top_anti_Topfirst_Tops_t32[0]",plotselection2+"&&Sideband_top_anti_Topfirst_Zprime_M>0","1 btag"),       
+        Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Ws_Pt" ,"p_{T}(W) in GeV, anti-ttag",50,0,2000),"Sideband_top_anti_Topfirst_Ws_Pt[0]",plotselection2+"&&Sideband_top_anti_Topfirst_Ws_Pt[0]>0","1 anti-ttag"),
+        Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Ws_Eta" ,"eta(W), anti-ttag",60,-3,3),"Sideband_top_anti_Topfirst_Ws_Eta[0]",plotselection2+"","1 anti-ttag"),
+        Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Ws_MSD" ,"m_{SD}(W) in GeV, anti-ttag",60,0,300),"Sideband_top_anti_Topfirst_Ws_MSD[0]",plotselection2+"&&Sideband_top_anti_Topfirst_Zprime_M>0","1 btag"),
+        Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Ws_t21" ,"tau_{21}(W), anti-ttag",20,0,1),"Sideband_top_anti_Topfirst_Ws_t21[0]",plotselection2+"&&Sideband_top_anti_Topfirst_Zprime_M>0","1 btag"),
+        Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Bottoms_Pt" ,"p_{T}(b) in GeV, anti-ttag",50,0,2000),"Sideband_top_anti_Topfirst_Bottoms_Pt[0]",plotselection2+"&&Sideband_top_anti_Topfirst_Bottoms_Pt[0]>0","1 anti-ttag"),
+        Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Bottoms_Eta" ,"eta(b), anti-ttag",60,-3,3),"Sideband_top_anti_Topfirst_Bottoms_Eta[0]",plotselection2+"","1 anti-ttag"),        
+        Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Bottoms_CSVv2" ,"CSVv2, anti-ttag",40,-1,1),"Sideband_top_anti_Topfirst_Bottoms_CSVv2[0]",plotselection2+"&&Sideband_top_anti_Topfirst_Bottoms_CSVv2[0]>-1","1 btag"),
         
         
-        Plot(ROOT.TH1F("SB_SF_bottom_anti_Zprime_M" ,"m(Z') in GeV, signal-anti-ttag ratio",50,0,5000),"Signal_Topfirst_Zprime_M",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
-        Plot(ROOT.TH1F("SB_SF_bottom_anti_Tops_Pt" ,"p_{T}(t) in GeV, signal-anti-ttag ratio",50,0,2000),"Signal_Topfirst_Tops_Pt",plotselection2+"&&Signal_Topfirst_Tops_Pt>0","1 btag"),
-        Plot(ROOT.TH1F("SB_SF_bottom_anti_Tops_MSD" ,"m_{SD}(t) in GeV, signal-anti-ttag ratio",60,0,300),"Signal_Topfirst_Tops_MSD",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
-        Plot(ROOT.TH1F("SB_SF_bottom_anti_Tops_t32" ,"tau_{32}(t), signal-anti-ttag ratio",20,0,1),"Signal_Topfirst_Tops_t32",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
-        Plot(ROOT.TH1F("SB_SF_bottom_anti_Ws_Pt" ,"p_{T}(W) in GeV, signal-anti-ttag ratio",50,0,2000),"Signal_Topfirst_Ws_Pt",plotselection2+"&&Signal_Topfirst_Ws_Pt>0","1 btag"),
-        Plot(ROOT.TH1F("SB_SF_bottom_anti_Ws_MSD" ,"m_{SD}(W) in GeV, signal-anti-ttag ratio",60,0,300),"Signal_Topfirst_Ws_MSD",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
-        Plot(ROOT.TH1F("SB_SF_bottom_anti_Ws_t21" ,"tau_{21}(W), signal-anti-ttag ratio",20,0,1),"Signal_Topfirst_Ws_t21",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
-        Plot(ROOT.TH1F("SB_SF_bottom_anti_Bottoms_Pt" ,"p_{T}(b) in GeV, signal-anti-ttag ratio",50,0,2000),"Signal_Topfirst_Bottoms_Pt",plotselection2+"&&Signal_Topfirst_Bottoms_Pt>0","1 btag"),
+        #Plot(ROOT.TH1F("SB_SF_bottom_anti_Zprime_M" ,"m(Z') in GeV, signal-anti-ttag ratio",50,0,5000),"Signal_Topfirst_Zprime_M",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
+        #Plot(ROOT.TH1F("SB_SF_bottom_anti_Tops_Pt" ,"p_{T}(t) in GeV, signal-anti-ttag ratio",50,0,2000),"Signal_Topfirst_Tops_Pt[0]",plotselection2+"&&Signal_Topfirst_Tops_Pt[0]>0","1 btag"),
+        #Plot(ROOT.TH1F("SB_SF_bottom_anti_Tops_MSD" ,"m_{SD}(t) in GeV, signal-anti-ttag ratio",60,0,300),"Signal_Topfirst_Tops_MSD[0]",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
+        #Plot(ROOT.TH1F("SB_SF_bottom_anti_Tops_t32" ,"tau_{32}(t), signal-anti-ttag ratio",20,0,1),"Signal_Topfirst_Tops_t32[0]",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
+        #Plot(ROOT.TH1F("SB_SF_bottom_anti_Ws_Pt" ,"p_{T}(W) in GeV, signal-anti-ttag ratio",50,0,2000),"Signal_Topfirst_Ws_Pt[0]",plotselection2+"&&Signal_Topfirst_Ws_Pt[0]>0","1 btag"),
+        #Plot(ROOT.TH1F("SB_SF_bottom_anti_Ws_MSD" ,"m_{SD}(W) in GeV, signal-anti-ttag ratio",60,0,300),"Signal_Topfirst_Ws_MSD[0]",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
+        #Plot(ROOT.TH1F("SB_SF_bottom_anti_Ws_t21" ,"tau_{21}(W), signal-anti-ttag ratio",20,0,1),"Signal_Topfirst_Ws_t21[0]",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
+        #Plot(ROOT.TH1F("SB_SF_bottom_anti_Bottoms_Pt" ,"p_{T}(b) in GeV, signal-anti-ttag ratio",50,0,2000),"Signal_Topfirst_Bottoms_Pt[0]",plotselection2+"&&Signal_Topfirst_Bottoms_Pt[0]>0","1 btag"),
 
-        Plot(ROOT.TH1F("SB_SF_W_anti_Zprime_M" ,"m(Z') in GeV, signal-anti-Wtag ratio",50,0,5000),"Signal_Topfirst_Zprime_M",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
-        Plot(ROOT.TH1F("SB_SF_W_anti_Tops_Pt" ,"p_{T}(t) in GeV, signal-anti-Wtag ratio",50,0,2000),"Signal_Topfirst_Tops_Pt",plotselection2+"&&Signal_Topfirst_Tops_Pt>0","1 btag"),
-        Plot(ROOT.TH1F("SB_SF_W_anti_Tops_MSD" ,"m_{SD}(t) in GeV, signal-anti-Wtag ratio",60,0,300),"Signal_Topfirst_Tops_MSD",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
-        Plot(ROOT.TH1F("SB_SF_W_anti_Tops_t32" ,"tau_{32}(t), signal-anti-Wtag ratio",20,0,1),"Signal_Topfirst_Tops_t32",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
-        Plot(ROOT.TH1F("SB_SF_W_anti_Ws_Pt" ,"p_{T}(W) in GeV, signal-anti-Wtag ratio",50,0,2000),"Signal_Topfirst_Ws_Pt",plotselection2+"&&Signal_Topfirst_Ws_Pt>0","1 btag"),
-        Plot(ROOT.TH1F("SB_SF_W_anti_Bottoms_Pt" ,"p_{T}(b) in GeV, signal-anti-Wtag ratio",50,0,2000),"Signal_Topfirst_Bottoms_Pt",plotselection2+"&&Signal_Topfirst_Bottoms_Pt>0","1 btag"),
-        Plot(ROOT.TH1F("SB_SF_W_anti_Bottoms_CSVv2" ,"CSVv2, signal-anti-Wtag ratio",40,-1,1),"Signal_Topfirst_Bottoms_CSVv2",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
+        #Plot(ROOT.TH1F("SB_SF_W_anti_Zprime_M" ,"m(Z') in GeV, signal-anti-Wtag ratio",50,0,5000),"Signal_Topfirst_Zprime_M",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
+        #Plot(ROOT.TH1F("SB_SF_W_anti_Tops_Pt" ,"p_{T}(t) in GeV, signal-anti-Wtag ratio",50,0,2000),"Signal_Topfirst_Tops_Pt[0]",plotselection2+"&&Signal_Topfirst_Tops_Pt[0]>0","1 btag"),
+        #Plot(ROOT.TH1F("SB_SF_W_anti_Tops_MSD" ,"m_{SD}(t) in GeV, signal-anti-Wtag ratio",60,0,300),"Signal_Topfirst_Tops_MSD[0]",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
+        #Plot(ROOT.TH1F("SB_SF_W_anti_Tops_t32" ,"tau_{32}(t), signal-anti-Wtag ratio",20,0,1),"Signal_Topfirst_Tops_t32[0]",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
+        #Plot(ROOT.TH1F("SB_SF_W_anti_Ws_Pt" ,"p_{T}(W) in GeV, signal-anti-Wtag ratio",50,0,2000),"Signal_Topfirst_Ws_Pt[0]",plotselection2+"&&Signal_Topfirst_Ws_Pt[0]>0","1 btag"),
+        #Plot(ROOT.TH1F("SB_SF_W_anti_Bottoms_Pt" ,"p_{T}(b) in GeV, signal-anti-Wtag ratio",50,0,2000),"Signal_Topfirst_Bottoms_Pt[0]",plotselection2+"&&Signal_Topfirst_Bottoms_Pt[0]>0","1 btag"),
+        #Plot(ROOT.TH1F("SB_SF_W_anti_Bottoms_CSVv2" ,"CSVv2, signal-anti-Wtag ratio",40,-1,1),"Signal_Topfirst_Bottoms_CSVv2[0]",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
         
-        Plot(ROOT.TH1F("SB_SF_top_anti_Zprime_M" ,"m(Z') in GeV, signal-anti-btag ratio",50,0,5000),"Signal_Topfirst_Zprime_M",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
-        Plot(ROOT.TH1F("SB_SF_top_anti_Tops_Pt" ,"p_{T}(t) in GeV, signal-anti-btag ratio",50,0,2000),"Signal_Topfirst_Tops_Pt",plotselection2+"&&Signal_Topfirst_Tops_Pt>0","1 btag"),
-        Plot(ROOT.TH1F("SB_SF_top_anti_Ws_Pt" ,"p_{T}(W) in GeV, signal-anti-btag ratio",50,0,2000),"Signal_Topfirst_Ws_Pt",plotselection2+"&&Signal_Topfirst_Ws_Pt>0","1 btag"),
-        Plot(ROOT.TH1F("SB_SF_top_anti_Ws_MSD" ,"m_{SD}(W) in GeV, signal-anti-btag ratio",60,0,300),"Signal_Topfirst_Ws_MSD",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
-        Plot(ROOT.TH1F("SB_SF_top_anti_Ws_t21" ,"tau_{21}(W), signal-anti-btag ratio",20,0,1),"Signal_Topfirst_Ws_t21",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
-        Plot(ROOT.TH1F("SB_SF_top_anti_Bottoms_Pt" ,"p_{T}(b) in GeV, signal-anti-btag ratio",50,0,2000),"Signal_Topfirst_Bottoms_Pt",plotselection2+"&&Signal_Topfirst_Bottoms_Pt>0","1 btag"),
-        Plot(ROOT.TH1F("SB_SF_top_anti_Bottoms_CSVv2" ,"CSVv2, signal-anti-btag ratio",40,-1,1),"Signal_Topfirst_Bottoms_CSVv2",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
+        #Plot(ROOT.TH1F("SB_SF_top_anti_Zprime_M" ,"m(Z') in GeV, signal-anti-btag ratio",50,0,5000),"Signal_Topfirst_Zprime_M",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
+        #Plot(ROOT.TH1F("SB_SF_top_anti_Tops_Pt" ,"p_{T}(t) in GeV, signal-anti-btag ratio",50,0,2000),"Signal_Topfirst_Tops_Pt[0]",plotselection2+"&&Signal_Topfirst_Tops_Pt[0]>0","1 btag"),
+        #Plot(ROOT.TH1F("SB_SF_top_anti_Ws_Pt" ,"p_{T}(W) in GeV, signal-anti-btag ratio",50,0,2000),"Signal_Topfirst_Ws_Pt[0]",plotselection2+"&&Signal_Topfirst_Ws_Pt[0]>0","1 btag"),
+        #Plot(ROOT.TH1F("SB_SF_top_anti_Ws_MSD" ,"m_{SD}(W) in GeV, signal-anti-btag ratio",60,0,300),"Signal_Topfirst_Ws_MSD[0]",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
+        #Plot(ROOT.TH1F("SB_SF_top_anti_Ws_t21" ,"tau_{21}(W), signal-anti-btag ratio",20,0,1),"Signal_Topfirst_Ws_t21[0]",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
+        #Plot(ROOT.TH1F("SB_SF_top_anti_Bottoms_Pt" ,"p_{T}(b) in GeV, signal-anti-btag ratio",50,0,2000),"Signal_Topfirst_Bottoms_Pt[0]",plotselection2+"&&Signal_Topfirst_Bottoms_Pt[0]>0","1 btag"),
+        #Plot(ROOT.TH1F("SB_SF_top_anti_Bottoms_CSVv2" ,"CSVv2, signal-anti-btag ratio",40,-1,1),"Signal_Topfirst_Bottoms_CSVv2[0]",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
 
 
 
-        ##Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_bottom_anti_Topfirst_Zprime_M>0 && QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M>0 && anti_btag==1)"+"*QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M","1 btag"),
-        ##Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_bottom_anti_Topfirst_Tops_Pt",plotselection2+"*(Sideband_bottom_anti_Topfirst_Tops_Pt>0 && QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt>0 && anti_btag==1)"+"*QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt","1 btag"),
-        ##Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_bottom_anti_Topfirst_Zprime_M>0 && QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt>0 && anti_btag==1)"+"*QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt","1 btag"),
-
-        ##Plot(ROOT.TH1F("Signal_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_top_anti_Topfirst_Tops_Pt",plotselection2+"*(Sideband_top_anti_Topfirst_Tops_Pt>0 && QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt>0)"+"*QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt","1 btag"),
-        ##Plot(ROOT.TH1F("Signal_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_top_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_top_anti_Topfirst_Zprime_M>0 && QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt>0)"+"*QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt","1 btag"),
-        ##Plot(ROOT.TH1F("Signal_SB_PredictiontantiQCDMadgraph_Topfirst_W_Pt" ,"p_{T}(W) in GeV",50,0,2000),"Sideband_top_anti_Topfirst_Ws_Pt",plotselection2+"*( Sideband_top_anti_Topfirst_Ws_Pt>0 && QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt>0)"+"*QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt","1 btag"),
-
-        ##Plot(ROOT.TH1F("QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,3),"QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M",plotselection2+"*(QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M>0)","1 btag"),
-        ##Plot(ROOT.TH1F("QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt" ,"m(Z') in GeV",50,0,3),"QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt",plotselection2+"*(QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt>0)","1 btag"),
 
 
-        ##Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDPythia8ZprimeM_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_bottom_anti_Topfirst_Zprime_M>0 && QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M>0 && anti_btag==1)"+"*QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M","1 btag"),        
-        ##Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_bottom_anti_Topfirst_Tops_Pt",plotselection2+"*(Sideband_bottom_anti_Topfirst_Tops_Pt>0 && QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt>0  && anti_btag==1)"+"*QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt","1 btag"),
-        ##Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_bottom_anti_Topfirst_Zprime_M>0 && QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt>0  && anti_btag==1)"+"*QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt","1 btag"),
+        #Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_bottom_anti_Topfirst_Zprime_M>0 && QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M>0 && anti_btag==1)","1 btag"),
+        #Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_bottom_anti_Topfirst_Tops_Pt[0]",plotselection2+"*(Sideband_bottom_anti_Topfirst_Tops_Pt[0]>0 && QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt>0 && anti_btag==1)","1 btag"),
+        #Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_bottom_anti_Topfirst_Zprime_M>0 && QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt>0 && anti_btag==1)","1 btag"),
+
+        #Plot(ROOT.TH1F("Signal_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_top_anti_Topfirst_Tops_Pt[0]",plotselection2+"*(Sideband_top_anti_Topfirst_Tops_Pt[0]>0 && QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt>0)","1 btag"),
+        #Plot(ROOT.TH1F("Signal_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_top_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_top_anti_Topfirst_Zprime_M>0 && QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt>0)","1 btag"),
+
+        #Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDPythia8ZprimeM_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_bottom_anti_Topfirst_Zprime_M>0 && QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M>0 && anti_btag==1)","1 btag"),        
+        #Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_bottom_anti_Topfirst_Tops_Pt[0]",plotselection2+"*(Sideband_bottom_anti_Topfirst_Tops_Pt[0]>0 && QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt>0  && anti_btag==1)","1 btag"),
+        #Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_bottom_anti_Topfirst_Zprime_M>0 && QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt>0  && anti_btag==1)","1 btag"),
                
-        ##Plot(ROOT.TH1F("Signal_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_top_anti_Topfirst_Tops_Pt",plotselection2+"*(Sideband_top_anti_Topfirst_Tops_Pt>0 && QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt>0)"+"*QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt","1 btag"),
-        ##Plot(ROOT.TH1F("Signal_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_top_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_top_anti_Topfirst_Zprime_M>0 && QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt>0)"+"*QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt","1 btag"),
-        ##Plot(ROOT.TH1F("Signal_SB_PredictiontantiQCDPythia8_Topfirst_W_Pt" ,"p_{T}(W) in GeV",50,0,2000),"Sideband_top_anti_Topfirst_Ws_Pt",plotselection2+"*( Sideband_top_anti_Topfirst_Ws_Pt>0 && QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Ws_Pt>0)"+"*QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Ws_Pt","1 btag"),
-
-        ##Plot(ROOT.TH1F("QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,3),"QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M",plotselection2+"*(QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M>0 && anti_btag==1)","1 btag"),
-        ##Plot(ROOT.TH1F("QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt" ,"m(Z') in GeV",50,0,3),"QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt",plotselection2+"*(QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt>0 && anti_btag==1)","1 btag"),
+        #Plot(ROOT.TH1F("Signal_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_top_anti_Topfirst_Tops_Pt[0]",plotselection2+"*(Sideband_top_anti_Topfirst_Tops_Pt[0]>0 && QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt>0)","1 btag"),
+        #Plot(ROOT.TH1F("Signal_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_top_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_top_anti_Topfirst_Zprime_M>0 && QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt>0)","1 btag"),
+        #Plot(ROOT.TH1F("Signal_SB_PredictiontantiQCDPythia8_Topfirst_W_Pt" ,"p_{T}(W) in GeV",50,0,2000),"Sideband_top_anti_Topfirst_Ws_Pt[0]",plotselection2+"*( Sideband_top_anti_Topfirst_Ws_Pt[0]>0 && QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Ws_Pt>0)","1 btag"),
 
 
 
 
 
-
-
-
-        Plot(ROOT.TH1F("Signal_withtopbtag_Topfirst_Zprime_M" ,"m(Z') in GeV, withtopbtag",50,0,5000),"Signal_withtopbtag_Topfirst_Zprime_M",plotselection2+"&&Signal_withtopbtag_Topfirst_Zprime_M>0","2 btags"),
-        Plot(ROOT.TH1F("Signal_withtopbtag_Topfirst_Tops_Pt" ,"p_{T}(t) in GeV, withtopbtag",50,0,2000),"Signal_withtopbtag_Topfirst_Tops_Pt",plotselection2+"&&Signal_withtopbtag_Topfirst_Tops_Pt>0","2 btag"),
-        Plot(ROOT.TH1F("Signal_withtopbtag_Topfirst_Ws_Pt" ,"p_{T}(W) in GeV, withtopbtag",50,0,2000),"Signal_withtopbtag_Topfirst_Ws_Pt",plotselection2+"&&Signal_withtopbtag_Topfirst_Ws_Pt>0","2 btag"),
+        Plot(ROOT.TH1F("Signal_withtopbtag_Topfirst_Zprime_M" ,"m(Z') in GeV, topbtag",50,0,5000),"Signal_withtopbtag_Topfirst_Zprime_M",plotselection2+"&&Signal_withtopbtag_Topfirst_Zprime_M>0","2 btags"),
+        #Plot(ROOT.TH1F("Signal_withtopbtag_Topfirst_Tops_Pt" ,"p_{T}(t) in GeV, withtopbtag",50,0,2000),"Signal_withtopbtag_Topfirst_Tops_Pt[0]",plotselection2+"&&Signal_withtopbtag_Topfirst_Tops_Pt[0]>0","2 btag"),
+        #Plot(ROOT.TH1F("Signal_withtopbtag_Topfirst_Ws_Pt" ,"p_{T}(W) in GeV, withtopbtag",50,0,2000),"Signal_withtopbtag_Topfirst_Ws_Pt[0]",plotselection2+"&&Signal_withtopbtag_Topfirst_Ws_Pt[0]>0","2 btag"),
         
-        Plot(ROOT.TH1F("Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M" ,"m(Z') in GeV, withtopbtag and anti-btag",50,0,5000),"Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M",plotselection2+"&&Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M>0 && anti_btag_withtopbtag==1","1 anti-btag, 1 topbtag"),
-        Plot(ROOT.TH1F("Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt" ,"p_{T}(t) in GeV, withtopbtag and anti-btag",50,0,2000),"Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt",plotselection2+"&&Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt>0 && anti_btag_withtopbtag==1","1 anti-btag, 1 topbtag"),
+        Plot(ROOT.TH1F("Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M" ,"m(Z') in GeV, topbtag",50,0,5000),"Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M",plotselection2+"&&Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M>0 && anti_btag_withtopbtag==1","1 anti-btag, 1 topbtag"),
+        #Plot(ROOT.TH1F("Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt" ,"p_{T}(t) in GeV, withtopbtag and anti-btag",50,0,2000),"Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt[0]",plotselection2+"&&Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt[0]>0 && anti_btag_withtopbtag==1","1 anti-btag, 1 topbtag"),
 
-        Plot(ROOT.TH1F("Sideband_top_withbtag_anti_Topfirst_Tops_Pt" ,"p_{T}(t) in GeV, withtopbtag anti-ttag",50,0,2000),"Sideband_top_withbtag_anti_Topfirst_Tops_Pt",plotselection2+"&&Sideband_top_withbtag_anti_Topfirst_Tops_Pt>0","1 anti-ttag withb"),
-        Plot(ROOT.TH1F("Sideband_top_withbtag_anti_Topfirst_Ws_Pt" ,"p_{T}(W) in GeV, withtopbtag anti-ttag",50,0,2000),"Sideband_top_withbtag_anti_Topfirst_Ws_Pt",plotselection2+"&&Sideband_top_withbtag_anti_Topfirst_Ws_Pt>0","1 anti-ttag withb"),
+        Plot(ROOT.TH1F("Sideband_top_withbtag_anti_Topfirst_Zprime_M" ,"m(Z') in GeV, topbtag",50,0,5000),"Sideband_top_withbtag_anti_Topfirst_Zprime_M",plotselection2+"&&Sideband_top_withbtag_anti_Topfirst_Zprime_M>0","1 anti-ttag withb"),
+        #Plot(ROOT.TH1F("Sideband_top_withbtag_anti_Topfirst_Tops_Pt" ,"p_{T}(t) in GeV, withtopbtag anti-ttag",50,0,2000),"Sideband_top_withbtag_anti_Topfirst_Tops_Pt[0]",plotselection2+"&&Sideband_top_withbtag_anti_Topfirst_Tops_Pt[0]>0","1 anti-ttag withb"),
+        #Plot(ROOT.TH1F("Sideband_top_withbtag_anti_Topfirst_Ws_Pt" ,"p_{T}(W) in GeV, withtopbtag anti-ttag",50,0,2000),"Sideband_top_withbtag_anti_Topfirst_Ws_Pt[0]",plotselection2+"&&Sideband_top_withbtag_anti_Topfirst_Ws_Pt[0]>0","1 anti-ttag withb"),
 
-        Plot(ROOT.TH1F("SB_SF_withtopbtag_bottom_anti_Zprime_M" ,"m(Z') in GeV, withtopbtag",50,0,5000),"Signal_withtopbtag_Topfirst_Zprime_M",plotselection2+"&&Signal_withtopbtag_Topfirst_Zprime_M>0","2 btags"),
-        Plot(ROOT.TH1F("SB_SF_withtopbtag_bottom_anti_Tops_Pt" ,"m(Z') in GeV, withtopbtag",50,0,2000),"Signal_withtopbtag_Topfirst_Tops_Pt",plotselection2+"&&Signal_withtopbtag_Topfirst_Tops_Pt>0","2 btags"),
-        Plot(ROOT.TH1F("SB_SF_withtopbtag_top_anti_Tops_Pt" ,"p_{T}(t) in GeV, withtopbtag",50,0,2000),"Signal_withtopbtag_Topfirst_Tops_Pt",plotselection2+"&&Signal_withtopbtag_Topfirst_Tops_Pt>0","2 btag"),
-        Plot(ROOT.TH1F("SB_SF_withtopbtag_top_anti_Ws_Pt" ,"p_{T}(W) in GeV, withtopbtag",50,0,2000),"Signal_withtopbtag_Topfirst_Ws_Pt",plotselection2+"&&Signal_withtopbtag_Topfirst_Ws_Pt>0","2 btag"),
-
-
-
-        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_bottom_anti_Topfirst_Zprime_M>0 && anti_btag_withtopbtag==1)"+"*QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M","1 btag"),
-        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_bottom_anti_Topfirst_Tops_Pt",plotselection2+"*(Sideband_bottom_anti_Topfirst_Tops_Pt>0 && anti_btag_withtopbtag==1)"+"*QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt","1 btag"),
-        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_bottom_anti_Topfirst_Zprime_M>0 && anti_btag_withtopbtag==1)"+"*QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt","1 btag"),
-
-        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_top_anti_Topfirst_Tops_Pt",plotselection2+"*(Sideband_top_anti_Topfirst_Tops_Pt>0)"+"*QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt","1 btag"),
-        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_top_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_top_anti_Topfirst_Zprime_M>0)"+"*QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt","1 btag"),
-        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictiontantiQCDMadgraph_Topfirst_W_Pt" ,"p_{T}(W) in GeV",50,0,2000),"Sideband_top_anti_Topfirst_Ws_Pt",plotselection2+"*( Sideband_top_anti_Topfirst_Ws_Pt>0)"+"*QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt","1 btag"),
-
-        #Plot(ROOT.TH1F("QCDMadgraph_SF_SB_bottom_anti_Signal_withtopbtag_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,3),"QCDMadgraph_SF_SB_bottom_anti_Signal_withtopbtag_Topfirst_Zprime_M",plotselection2+"*(QCDMadgraph_SF_SB_bottom_anti_Signal_withtopbtag_Topfirst_Zprime_M>0)","1 btag"),
-        #Plot(ROOT.TH1F("QCDMadgraph_SF_SB_bottom_anti_Signal_withtopbtag_Topfirst_Tops_Pt" ,"m(Z') in GeV",50,0,3),"QCDMadgraph_SF_SB_bottom_anti_Signal_withtopbtag_Topfirst_Tops_Pt",plotselection2+"*(QCDMadgraph_SF_SB_bottom_anti_Signal_withtopbtag_Topfirst_Tops_Pt>0)","1 btag"),
+        #Plot(ROOT.TH1F("SB_SF_withtopbtag_bottom_anti_Zprime_M" ,"m(Z') in GeV, withtopbtag",50,0,5000),"Signal_withtopbtag_Topfirst_Zprime_M",plotselection2+"&&Signal_withtopbtag_Topfirst_Zprime_M>0","2 btags"),
+        #Plot(ROOT.TH1F("SB_SF_withtopbtag_bottom_anti_Tops_Pt" ,"m(Z') in GeV, withtopbtag",50,0,2000),"Signal_withtopbtag_Topfirst_Tops_Pt[0]",plotselection2+"&&Signal_withtopbtag_Topfirst_Tops_Pt[0]>0","2 btags"),
+        #Plot(ROOT.TH1F("SB_SF_withtopbtag_top_anti_Tops_Pt" ,"p_{T}(t) in GeV, withtopbtag",50,0,2000),"Signal_withtopbtag_Topfirst_Tops_Pt[0]",plotselection2+"&&Signal_withtopbtag_Topfirst_Tops_Pt[0]>0","2 btag"),
+        #Plot(ROOT.TH1F("SB_SF_withtopbtag_top_anti_Ws_Pt" ,"p_{T}(W) in GeV, withtopbtag",50,0,2000),"Signal_withtopbtag_Topfirst_Ws_Pt[0]",plotselection2+"&&Signal_withtopbtag_Topfirst_Ws_Pt[0]>0","2 btag"),
 
 
-        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDPythia8ZprimeM_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_bottom_anti_Topfirst_Zprime_M>0 && anti_btag_withtopbtag==1)"+"*QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M","1 btag"),        
-        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_bottom_anti_Topfirst_Tops_Pt",plotselection2+"*(Sideband_bottom_anti_Topfirst_Tops_Pt>0 && anti_btag_withtopbtag==1)"+"*QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt","1 btag"),
-        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_bottom_anti_Topfirst_Zprime_M>0 && anti_btag_withtopbtag==1)"+"*QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt","1 btag"),
+
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M>0 && QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M>0 && anti_btag_withtopbtag==1)","1 btag"),
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt[0]",plotselection2+"*(Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt[0]>0 && QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt>0 && anti_btag_withtopbtag==1)","1 btag"),
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M>0 && QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt>0 && anti_btag_withtopbtag==1)","1 btag"),
+
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_top_withbtag_anti_Topfirst_Tops_Pt[0]",plotselection2+"*(Sideband_top_withbtag_anti_Topfirst_Tops_Pt[0]>0 && QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt>0)","1 btag"),
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_top_withbtag_anti_Topfirst_Zprime_M",plotselection2+"*(QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt>0 && Sideband_top_withbtag_anti_Topfirst_Zprime_M>0)","1 btag"),
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictiontantiQCDMadgraph_Topfirst_W_Pt" ,"p_{T}(W) in GeV",50,0,2000),"Sideband_top_withbtag_anti_Topfirst_Ws_Pt[0]",plotselection2+"*( Sideband_top_withbtag_anti_Topfirst_Ws_Pt[0]>0 && QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt>0)","1 btag"),
+
+
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDPythia8ZprimeM_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M>0 && anti_btag_withtopbtag==1 && QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M>0)","1 btag"),        
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt[0]",plotselection2+"*(Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt[0]>0 && anti_btag_withtopbtag==1 && QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt>0)","1 btag"),
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M>0 && anti_btag_withtopbtag==1 && QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt>0)","1 btag"),
                
-        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_top_anti_Topfirst_Tops_Pt",plotselection2+"*(Sideband_top_anti_Topfirst_Tops_Pt>0)"+"*QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt","1 btag"),
-        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_top_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_top_anti_Topfirst_Zprime_M>0)"+"*QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt","1 btag"),
-        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictiontantiQCDPythia8_Topfirst_W_Pt" ,"p_{T}(W) in GeV",50,0,2000),"Sideband_top_anti_Topfirst_Ws_Pt",plotselection2+"*( Sideband_top_anti_Topfirst_Ws_Pt>0)"+"*QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Ws_Pt","1 btag"),
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_top_withbtag_anti_Topfirst_Tops_Pt[0]",plotselection2+"*(Sideband_top_withbtag_anti_Topfirst_Tops_Pt[0]>0 && QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt>0)","1 btag"),
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_top_withbtag_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_top_withbtag_anti_Topfirst_Zprime_M>0 && QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt>0)","1 btag"),
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictiontantiQCDPythia8_Topfirst_W_Pt" ,"p_{T}(W) in GeV",50,0,2000),"Sideband_top_withbtag_anti_Topfirst_Ws_Pt[0]",plotselection2+"*( Sideband_top_withbtag_anti_Topfirst_Ws_Pt[0]>0 && QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt>0)","1 btag"),
 
-        #Plot(ROOT.TH1F("QCDPythia8_SF_SB_bottom_anti_Signal_withtopbtag_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,3),"QCDPythia8_SF_SB_bottom_anti_Signal_withtopbtag_Topfirst_Zprime_M",plotselection2+"*(QCDPythia8_SF_SB_bottom_anti_Signal_withtopbtag_Topfirst_Zprime_M>0)","1 btag"),
-        #Plot(ROOT.TH1F("QCDPythia8_SF_SB_bottom_anti_Signal_withtopbtag_Topfirst_Tops_Pt" ,"m(Z') in GeV",50,0,3),"QCDPythia8_SF_SB_bottom_anti_Signal_withtopbtag_Topfirst_Tops_Pt",plotselection2+"*(QCDPythia8_SF_SB_bottom_anti_Signal_withtopbtag_Topfirst_Tops_Pt>0)","1 btag"),
 
 
 
@@ -282,6 +239,53 @@ plots=[
 
 
 
+        #Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_bottom_anti_Topfirst_Zprime_M>0 && QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M>0 && anti_btag==1)"+"* QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M","1 btag"),
+        #Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_bottom_anti_Topfirst_Tops_Pt[0]",plotselection2+"*(Sideband_bottom_anti_Topfirst_Tops_Pt[0]>0 && QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt>0 && anti_btag==1)"+"* QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt","1 btag"),
+        #Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_bottom_anti_Topfirst_Zprime_M>0 && QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt>0 && anti_btag==1)"+"* QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt","1 btag"),
+
+        #Plot(ROOT.TH1F("Signal_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_top_anti_Topfirst_Tops_Pt[0]",plotselection2+"*(Sideband_top_anti_Topfirst_Tops_Pt[0]>0 && QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt>0)"+"* QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt","1 btag"),
+        #Plot(ROOT.TH1F("Signal_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_top_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_top_anti_Topfirst_Zprime_M>0 && QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt>0)"+"* QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt","1 btag"),
+        ##Plot(ROOT.TH1F("Signal_SB_PredictiontantiQCDMadgraph_Topfirst_W_Pt" ,"p_{T}(W) in GeV",50,0,2000),"Sideband_top_anti_Topfirst_Ws_Pt[0]",plotselection2+"*( Sideband_top_anti_Topfirst_Ws_Pt[0]>0 && QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt>0)"+"* QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt","1 btag"),
+
+        Plot(ROOT.TH1F("QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,3),"QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M",plotselection2+"*(QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M>0)","1 btag"),
+        Plot(ROOT.TH1F("QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt" ,"pT(t) in GeV",50,0,3),"QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt",plotselection2+"*(QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt>0)","1 btag"),
+
+        #Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDPythia8ZprimeM_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_bottom_anti_Topfirst_Zprime_M>0 && QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M>0 && anti_btag==1)"+"* QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M","1 btag"),        
+        #Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_bottom_anti_Topfirst_Tops_Pt[0]",plotselection2+"*(Sideband_bottom_anti_Topfirst_Tops_Pt[0]>0 && QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt>0  && anti_btag==1)"+"* QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt","1 btag"),
+        #Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_bottom_anti_Topfirst_Zprime_M>0 && QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt>0  && anti_btag==1)"+"* QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt","1 btag"),
+               
+        #Plot(ROOT.TH1F("Signal_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_top_anti_Topfirst_Tops_Pt[0]",plotselection2+"*(Sideband_top_anti_Topfirst_Tops_Pt[0]>0 && QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt>0)"+"* QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt","1 btag"),
+        #Plot(ROOT.TH1F("Signal_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_top_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_top_anti_Topfirst_Zprime_M>0 && QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt>0)"+"* QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt","1 btag"),
+        #Plot(ROOT.TH1F("Signal_SB_PredictiontantiQCDPythia8_Topfirst_W_Pt" ,"p_{T}(W) in GeV",50,0,2000),"Sideband_top_anti_Topfirst_Ws_Pt[0]",plotselection2+"*( Sideband_top_anti_Topfirst_Ws_Pt[0]>0 && QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Ws_Pt>0)"+"* QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Ws_Pt","1 btag"),
+
+        Plot(ROOT.TH1F("QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,3),"QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M",plotselection2+"*(QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M>0 && anti_btag==1)","1 btag"),
+        Plot(ROOT.TH1F("QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt" ,"pT(t) in GeV",50,0,3),"QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt",plotselection2+"*(QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt>0 && anti_btag==1)","1 btag"),
+
+
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M>0 && QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M>0 && anti_btag_withtopbtag==1)"+"* QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M","1 btag"),
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt[0]",plotselection2+"*(Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt[0]>0 && QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt>0 && anti_btag_withtopbtag==1)"+"* QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt * ","1 btag"),
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M>0 && QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt>0 && anti_btag_withtopbtag==1)"+"* QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt","1 btag"),
+
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_top_withbtag_anti_Topfirst_Tops_Pt[0]",plotselection2+"*(Sideband_top_withbtag_anti_Topfirst_Tops_Pt[0]>0 && QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt>0)"+"* QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt","1 btag"),
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_top_withbtag_anti_Topfirst_Zprime_M",plotselection2+"*(QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt[0]>0 && Sideband_top_withbtag_anti_Topfirst_Zprime_M>0)"+"* QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt","1 btag"),
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictiontantiQCDMadgraph_Topfirst_W_Pt" ,"p_{T}(W) in GeV",50,0,2000),"Sideband_top_withbtag_anti_Topfirst_Ws_Pt[0]",plotselection2+"*( Sideband_top_withbtag_anti_Topfirst_Ws_Pt[0]>0 && QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt>0)"+"* QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt","1 btag"),
+
+
+
+        #Plot(ROOT.TH1F("QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,3),"QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M",plotselection2+"*(QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M>0)","1 btag"),
+        #Plot(ROOT.TH1F("QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt" ,"m(Z') in GeV",50,0,3),"QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt",plotselection2+"*(QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt>0)","1 btag"),
+
+
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDPythia8ZprimeM_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M>0 && anti_btag_withtopbtag==1 && QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M>0)"+"* QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M","1 btag"),        
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt[0]",plotselection2+"*(Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt[0]>0 && anti_btag_withtopbtag==1 && QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt>0)"+"* QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt","1 btag"),
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M>0 && anti_btag_withtopbtag==1 && QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt>0)"+"* QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt","1 btag"),
+               
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_top_withbtag_anti_Topfirst_Tops_Pt[0]",plotselection2+"*(Sideband_top_withbtag_anti_Topfirst_Tops_Pt[0]>0 && QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt>0)"+"* QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt","1 btag"),
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_top_withbtag_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_top_withbtag_anti_Topfirst_Zprime_M>0 && QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt>0)"+"* QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt","1 btag"),
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictiontantiQCDPythia8_Topfirst_W_Pt" ,"p_{T}(W) in GeV",50,0,2000),"Sideband_top_withbtag_anti_Topfirst_Ws_Pt[0]",plotselection2+"*( Sideband_top_withbtag_anti_Topfirst_Ws_Pt[0]>0 && QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt>0)"+"* QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt","1 btag"),
+
+        #Plot(ROOT.TH1F("QCDPythia8_SF_SB_bottom_anti_Signal_withtopbtag_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,3),"QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M",plotselection2+"*(QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M>0)","1 btag"),
+        #Plot(ROOT.TH1F("QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt" ,"m(Z') in GeV",50,0,3),"QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt",plotselection2+"*(QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt>0)","1 btag"),
 
 
 ]
@@ -298,20 +302,59 @@ for i in plots:
 #for i in plotsABCD:
     #plotnamesABCD.append(i.name)
 
+print allweightsystnames
+print allsystweights
 
-
-print name,3000000,plots,SignalSamples+BackgroundSamples+DataSamples,[''],['1.']
-#outputpath=plotParallel(name,3000000,plots,SignalSamples+BackgroundSamples+DataSamples)
-outputpath=plotParallel(name,3000000,plots,SignalSamples+BackgroundSamples+DataSamples,[""],["1"],[""],["1"],additionalvariables,additionalfunctions)
-#outputpath=plotParallel(name,2000000,plotsABCD,SignalSamples)
+#print name,3000000,plots,SignalSamples+BackgroundSamples+DataSamples,[''],['1.']
+#outputpath=plotParallel(name,3000000,plots,SignalSamples+BackgroundSamples+DataSamples,[""],["1"],weigthsystnamesbasic+weightsystnamesMadgraphbantiZprimeM,systweightsbasic+systweightsMadgraphbantiZprimeM,additionalvariables,additionalfunctions,additionalobjectsfromaddtionalrootfile)
+#outputpath=plotParallel(name,3000000,plots,SignalSamples+BackgroundSamples+DataSamples,[""],["1"],weightsystnamesPythia8bantiZprimeM,systweightsPythia8bantiZprimeM,additionalvariables,additionalfunctions,additionalobjectsfromaddtionalrootfile)
+outputpath=plotParallel(name,3000000,plots,SignalSamples+BackgroundSamples+DataSamples,[""],["1"],allweightsystnames,allsystweights,additionalvariables,additionalfunctions,additionalobjectsfromaddtionalrootfile)
 
 # plot dataMC comparison
 #listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
 #listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
 
 listOfHistoListsSignal=createHistoLists_fromSuperHistoFile(outputpath,SignalSamples,plots,1)
+
 listOfHistoListsBackground=createHistoLists_fromSuperHistoFile(outputpath,BackgroundSamples,plots,1)
-listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,DataSamples,plots,1)
+listOfHistoListsDataMadgraph=createHistoLists_fromSuperHistoFile(outputpath,DataSamples,plots,1)
+listOfHistoListsDataPythia=createHistoLists_fromSuperHistoFile(outputpath,DataSamples,plots,1)
+
+
+addLOLtoLOL(listOfHistoListsDataMadgraph,transposeLOL([transposeLOL(listOfHistoListsBackground)[BackgroundSampleNames.index("QCDMadgraph")]]+[transposeLOL(listOfHistoListsBackground)[BackgroundSampleNames.index("ttbar")]]))
+addLOLtoLOL(listOfHistoListsDataPythia,transposeLOL([transposeLOL(listOfHistoListsBackground)[BackgroundSampleNames.index("QCDPythia8")]]+[transposeLOL(listOfHistoListsBackground)[BackgroundSampleNames.index("ttbar")]]))
+
+
+#listOfHistoListsDataNoTtbar=createHistoLists_fromSuperHistoFile(outputpath,DataSamples,plots,1)
+#listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,DataSamples,plots,1)
+
+
+#lll_nosyst=createLLL_fromSuperHistoFileSyst(outputpath,BackgroundSamples,[plots[plotnames.index('Signal_Topfirst_Zprime_M')]],weigthsystnamesbasic)
+lllBackgroundnosyst=createLLL_fromSuperHistoFileSyst(outputpath,BackgroundSamples,plots,weigthsystnamesbasic)
+
+
+
+lllBackground=createLLL_fromSuperHistoFileSyst(outputpath,BackgroundSamples,plots,allweightsystnames)
+lllData_Madgraph=createLLL_fromSuperHistoFileSyst(outputpath,DataSamples,plots,allweightsystnames)
+lllData_Pythia=createLLL_fromSuperHistoFileSyst(outputpath,DataSamples,plots,allweightsystnames)
+
+addLLLtoLLL(lllData_Madgraph,transposeLOL([transposeLOL(lllBackground)[BackgroundSampleNames.index("QCDMadgraph")]]+[transposeLOL(lllBackground)[BackgroundSampleNames.index("ttbar")]]))
+addLLLtoLLL(lllData_Pythia,transposeLOL([transposeLOL(lllBackground)[BackgroundSampleNames.index("QCDPythia8")]]+[transposeLOL(lllBackground)[BackgroundSampleNames.index("ttbar")]]))
+
+
+
+#lllQCDPythia8bantiZprimeM=createLLL_fromSuperHistoFileSyst(outputpath,BackgroundSamples,plots,weightsystnamesPythia8bantiZprimeM+weightsystnamesGeneratorDiffPythia8bantiZprimeM)
+#lllQCDPythia8bantiZprimeMData_Madgraph=createLLL_fromSuperHistoFileSyst(outputpath,DataSamples,plots,weightsystnamesPythia8bantiZprimeM+weightsystnamesGeneratorDiffPythia8bantiZprimeM)
+#lllQCDPythia8bantiZprimeMData_Pythia=createLLL_fromSuperHistoFileSyst(outputpath,DataSamples,plots,weightsystnamesPythia8bantiZprimeM+weightsystnamesGeneratorDiffPythia8bantiZprimeM)
+
+
+#lllQCDMadgraphtantiTopPt=createLLL_fromSuperHistoFileSyst(outputpath,BackgroundSamples,plots,weightsystnamesMadgraphtantiTopPt+weightsystnamesGeneratorDiffMadgraphtantiTopPt)
+#lllQCDMadgraphtantiTopPtData_Madgraph=createLLL_fromSuperHistoFileSyst(outputpath,DataSamples,plots,weightsystnamesMadgraphtantiTopPt+weightsystnamesGeneratorDiffMadgraphtantiTopPt)
+#lllQCDMadgraphtantiTopPtData_Pythia=createLLL_fromSuperHistoFileSyst(outputpath,DataSamples,plots,weightsystnamesMadgraphtantiTopPt+weightsystnamesGeneratorDiffMadgraphtantiTopPt)
+
+#lllQCDPythia8tantiTopPt=createLLL_fromSuperHistoFileSyst(outputpath,BackgroundSamples,plots,weightsystnamesPythia8tantiTopPt+weightsystnamesGeneratorDiffPythia8tantiTopPt)
+#lllQCDPythia8tantiTopPtData_Madgraph=createLLL_fromSuperHistoFileSyst(outputpath,DataSamples,plots,weightsystnamesPythia8tantiTopPt+weightsystnamesGeneratorDiffPythia8tantiTopPt)
+#lllQCDPythia8tantiTopPtData_Pythia=createLLL_fromSuperHistoFileSyst(outputpath,DataSamples,plots,weightsystnamesPythia8tantiTopPt+weightsystnamesGeneratorDiffPythia8tantiTopPt)
 
 
 
@@ -322,60 +365,22 @@ listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,DataSamples,
 
 
 
-
 #listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots,1)
 #if not os.path.exists(outputpath[:-4]+'_syst.root') or not askYesNo('reuse systematic histofile?'):
     #renameHistos(outputpath,outputpath[:-4]+'_syst.root',allsystnames,False)
 #lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,errorSystnames)
 #lllcsv=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,CSVSystnames)
-divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_bottom_anti_Zprime_M"),plotnames.index("Sideband_bottom_anti_Topfirst_Zprime_M"),True, 1)
-divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_bottom_anti_Tops_Pt"),plotnames.index("Sideband_bottom_anti_Topfirst_Tops_Pt"),True,1)
-#divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_bottom_anti_Tops_MSD"),plotnames.index("Sideband_bottom_anti_Topfirst_Tops_MSD"),True,1)
-#divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_bottom_anti_Tops_t32"),plotnames.index("Sideband_bottom_anti_Topfirst_Tops_t32"),True,1)
-#divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_bottom_anti_Ws_Pt"),plotnames.index("Sideband_bottom_anti_Topfirst_Ws_Pt"),True,1)
-#divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_bottom_anti_Ws_MSD"),plotnames.index("Sideband_bottom_anti_Topfirst_Ws_MSD"),True,1)
-#divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_bottom_anti_Ws_t21"),plotnames.index("Sideband_bottom_anti_Topfirst_Ws_t21"),True,1)
-#divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_bottom_anti_Bottoms_Pt"),plotnames.index("Sideband_bottom_anti_Topfirst_Bottoms_Pt"),True, 1)
-#divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_W_anti_Zprime_M"),plotnames.index("Sideband_top_anti_Topfirst_Zprime_M"),True,1)
-#divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_W_anti_Tops_Pt"),plotnames.index("Sideband_W_anti_Topfirst_Tops_Pt"),True,1)
-#divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_W_anti_Tops_MSD"),plotnames.index("Sideband_W_anti_Topfirst_Tops_MSD"),True,1)
-#divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_W_anti_Tops_t32"),plotnames.index("Sideband_W_anti_Topfirst_Tops_t32"),True,1)
-#divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_W_anti_Ws_Pt"),plotnames.index("Sideband_W_anti_Topfirst_Ws_Pt"),True, 1)
-#divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_W_anti_Bottoms_Pt"),plotnames.index("Sideband_W_anti_Topfirst_Bottoms_Pt"),True,1)
-#divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_W_anti_Bottoms_CSVv2"),plotnames.index("Sideband_W_anti_Topfirst_Bottoms_CSVv2"),True,1)
-#divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_top_anti_Zprime_M"),plotnames.index("Sideband_top_anti_Topfirst_Zprime_M"),True,1)
-divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_top_anti_Tops_Pt"),plotnames.index("Sideband_top_anti_Topfirst_Tops_Pt"),True, 1)
-divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_top_anti_Ws_Pt"),plotnames.index("Sideband_top_anti_Topfirst_Ws_Pt"),True,1)
-#divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_top_anti_Ws_MSD"),plotnames.index("Sideband_top_anti_Topfirst_Ws_MSD"),True,1)
-#divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_top_anti_Ws_t21"),plotnames.index("Sideband_top_anti_Topfirst_Ws_t21"),True,1)
-#divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_top_anti_Bottoms_Pt"),plotnames.index("Sideband_top_anti_Topfirst_Bottoms_Pt"),True,1)
-#divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_top_anti_Bottoms_CSVv2"),plotnames.index("Sideband_top_anti_Topfirst_Bottoms_CSVv2"),True,1)
 
 
-divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_withtopbtag_bottom_anti_Zprime_M"),plotnames.index("Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M"),True, 1)
-divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_withtopbtag_bottom_anti_Tops_Pt"),plotnames.index("Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt"),True,1)
-divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_withtopbtag_top_anti_Tops_Pt"),plotnames.index("Sideband_top_withbtag_anti_Topfirst_Tops_Pt"),True, 1)
-divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_withtopbtag_top_anti_Ws_Pt"),plotnames.index("Sideband_top_withbtag_anti_Topfirst_Ws_Pt"),True,1)
+#listofratios_Signal_bantiSB_ZprimeM=divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_bottom_anti_Zprime_M"),plotnames.index("Sideband_bottom_anti_Topfirst_Zprime_M"),True, 1)
+#listofratios_Signal_bantiSB_TopPt=divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_bottom_anti_Tops_Pt"),plotnames.index("Sideband_bottom_anti_Topfirst_Tops_Pt"),True,1)
+#listofratios_Signal_tantiSB_TopPt=divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_top_anti_Tops_Pt"),plotnames.index("Sideband_top_anti_Topfirst_Tops_Pt"),True, 1)
+#listofratios_Signal_tantiSB_WPt=divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_top_anti_Ws_Pt"),plotnames.index("Sideband_top_anti_Topfirst_Ws_Pt"),True,1)
 
-
-
-#print listOfHistoListsData[plotnames.index("AK8_top_misstagged_candidates_pt")]
-
-#divideHistos(listOfHistoListsData,plotnames.index("t_tagrate_pt"),plotnames.index("AK8_top_tag_candidates_pt"),False,1,'B')
-#divideHistos(listOfHistoListsData,plotnames.index("W_tagrate_pt"),plotnames.index("AK8_W_tag_candidates_pt"),False,1,'B')
-#divideHistos(listOfHistoListsData,plotnames.index("b_tagrate_pt"),plotnames.index("AK4_bottom_tag_candidates_pt"),False,1,'B')
-#divideHistos(listOfHistoListsData,plotnames.index("t_misstagrate_pt"),plotnames.index("AK8_top_misstagged_candidates_pt"),False,1,'B')
-#divideHistos(listOfHistoListsData,plotnames.index("W_misstagrate_pt"),plotnames.index("AK8_W_misstagged_candidates_pt"),False,1,'B')
-#divideHistos(listOfHistoListsData,plotnames.index("b_misstagrate_pt"),plotnames.index("AK4_bottom_misstagged_candidates_pt"),False,1,'B')
-#divideHistos(listOfHistoListsData,plotnames.index("tanti_tagrate_pt"),plotnames.index("AK8_top_misstagged_candidates_pt"),False,1,'B')
-#divideHistos(listOfHistoListsData,plotnames.index("Wanti_tagrate_pt"),plotnames.index("AK8_W_misstagged_candidates_pt"),False,1,'B')
-#divideHistos(listOfHistoListsData,plotnames.index("banti_tagrate_pt"),plotnames.index("AK4_bottom_misstagged_candidates_pt"),False,1,'B')
-#divideHistos(listOfHistoListsData,plotnames.index("tanti_misstagrate_pt"),plotnames.index("AK8_top_tag_candidates_pt"),False,1,'B')
-#divideHistos(listOfHistoListsData,plotnames.index("Wanti_misstagrate_pt"),plotnames.index("AK8_W_tag_candidates_pt"),False,1,'B')
-#divideHistos(listOfHistoListsData,plotnames.index("banti_misstagrate_pt"),plotnames.index("AK4_bottom_tag_candidates_pt"),False,1,'B')
-
-
-
+#listofratios_Signal_withtopbtag_bantiSB_ZprimeM=divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_withtopbtag_bottom_anti_Zprime_M"),plotnames.index("Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M"),True, 1)
+#listofratios_Signal_withtopbtag_bantiSB_TopPt=divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_withtopbtag_bottom_anti_Tops_Pt"),plotnames.index("Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt"),True,1)
+#listofratios_Signal_withtopbtag_tantiSB_TopPt=divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_withtopbtag_top_anti_Tops_Pt"),plotnames.index("Sideband_top_withbtag_anti_Topfirst_Tops_Pt"),True, 1)
+#listofratios_Signal_withtopbtag_tantiSB_WPt=divideHistos(listOfHistoListsBackground,plotnames.index("SB_SF_withtopbtag_top_anti_Ws_Pt"),plotnames.index("Sideband_top_withbtag_anti_Topfirst_Ws_Pt"),True,1)
 
 
 #################################################################Transosed LOL ######################
@@ -385,12 +390,42 @@ labels=[plot.label for plot in plots]
 #lolT=transposeLOL(listOfHistoLists)
 lolSignalT=transposeLOL(listOfHistoListsSignal)
 lolBackgroundT=transposeLOL(listOfHistoListsBackground)
+lolDataMadgraphT=transposeLOL(listOfHistoListsDataMadgraph)
+lolDataPythiaT=transposeLOL(listOfHistoListsDataPythia)
+#addLOLtoLOL(listOfHistoListsData,transposeLOL(lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph"):BackgroundSampleNames.index("SC_Zprime25001200_1pb")+1]))
+#addLOLtoLOL(listOfHistoListsData,transposeLOL(lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph"):BackgroundSampleNames.index("ttbar")+1]))
+#addLOLtoLOL(listOfHistoListsDataNoTtbar,transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]]))
 
-#addLOLTtoLOLT(transposeLOL(listOfHistoListsData),[lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])
+#print transposeLOL([transposeLOL(lllBackground)[BackgroundSampleNames.index("QCDMadgraph")]]+[transposeLOL(lllBackground)[BackgroundSampleNames.index("ttbar")]])[plotnames.index('Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M')]
 
-lolDataT=transposeLOL(listOfHistoListsData)
+ 
+#print lllData_Madgraph[plotnames.index('Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M')][DataSampleNames.index('DATA_BKG')][allweightsystnames.index('_ABMadgraphbantiZprimeM'+'_nominal')].Integral()
+
+
+
+#print lllData_Madgraph[plotnames.index('Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M')][DataSampleNames.index('DATA_BKG')][allweightsystnames.index('_ABMadgraphbantiZprimeM'+'_nominal')].Integral()
+
+
+
+#addLLLtoLLL(lllQCDPythia8bantiZprimeMData_Pythia,[[lllQCDPythia8bantiZprimeM[0][BackgroundSampleNames.index("QCDPythia8")]]])
+#addLLLtoLLL(lllQCDMadgraphtantiTopPtData_Madgraph,[[lllQCDMadgraphtantiTopPt[0][BackgroundSampleNames.index("QCDMadgraph")]]])
+#addLLLtoLLL(lllQCDPythia8tantiTopPtData_Pythia,[[lllQCDPythia8tantiTopPt[0][BackgroundSampleNames.index("QCDPythia8")]]])
+
+#addLLLtoLLL(lllQCDMadgraphbantiZprimeMData_Pythia,[[lllQCDMadgraphbantiZprimeM[0][BackgroundSampleNames.index("QCDPythia8")]]])
+#addLLLtoLLL(lllQCDPythia8bantiZprimeMData_Madgraph,[[lllQCDPythia8bantiZprimeM[0][BackgroundSampleNames.index("QCDMadgraph")]]])
+#addLLLtoLLL(lllQCDMadgraphtantiTopPtData_Pythia,[[lllQCDMadgraphtantiTopPt[0][BackgroundSampleNames.index("QCDPythia8")]]])
+#addLLLtoLLL(lllQCDPythia8tantiTopPtData_Madgraph,[[lllQCDPythia8tantiTopPt[0][BackgroundSampleNames.index("QCDMadgraph")]]])
+
+
+
+
+#lolDataNoTtbarT=transposeLOL(listOfHistoListsDataNoTtbar)
 #################################################################Transosed LOL end ######################
 
+#ratio_signal_banti_notopbtag=signal_sideband_integralratio(listOfHistoListsBackground[BackgroundSampleNames.index('QCDMadgraph')][plotnames.index('Signal_Topfirst_Zprime_M')],listOfHistoListsBackground[BackgroundSampleNames.index('QCDMadgraph')][plotnames.index('Sideband_bottom_anti_Topfirst_Zprime_M')])
+#ratio_signal_banti_withtopbtag=signal_sideband_integralratio(listOfHistoListsBackground[BackgroundSampleNames.index('QCDMadgraph')][plotnames.index('Signal_withtopbtag_Topfirst_Zprime_M')],listOfHistoListsBackground[BackgroundSampleNames.index('QCDMadgraph')][plotnames.index('Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M')])
+#ratio_signal_banti_notopbtag=signal_sideband_integralratio(transposeLOL([lolBackgroundT[BackgroundSampleNames.index('QCDMadgraph')]])[plotnames.index('Signal_Topfirst_Zprime_M')],transposeLOL(lolBackgroundT[BackgroundSampleNames.index('QCDMadgraph')])[plotnames.index('Sideband_bottom_anti_Topfirst_Zprime_M')])
+#ratio_signal_banti_withtopbtag=signal_sideband_integralratio(transposeLOL(lolBackgroundT[BackgroundSampleNames.index('QCDMadgraph')])[plotnames.index('Signal_withtopbtag_Topfirst_Zprime_M')],transposeLOL(lolBackgroundT[BackgroundSampleNames.index('QCDMadgraph')])[plotnames.index('Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M')])
 
 
 
@@ -406,94 +441,179 @@ lolDataT=transposeLOL(listOfHistoListsData)
 #writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("SC_Zprime25001200_1pb")]])[plotnames.index('Signal_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("SC_Zprime25001200_1pb")]])[plotnames.index('Signal_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("SC_Zprime25001200_1pb")]] , [plotnames[plotnames.index("Signal_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_Topfirst_Zprime_M")]], 'huuuu' , False , False, False, "histoE", False, False, True, False)
 #writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("SC_Zprime25001200_1pb")]])[plotnames.index('Signal_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("SC_Zprime25001200_1pb")]])[plotnames.index('Signal_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("SC_Zprime25001200_1pb")]] , [plotnames[plotnames.index("Signal_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_Topfirst_Zprime_M")]], 'huuuu' , False , False, False, "histoE", False, False, True, False)
 
+
+
+
+#writeListOfHistoLists( listOfHistoListsBackground , BackgroundSamples , plotnames, 'chekc' , False , False, False, "histoE", False, False, True, False)
+
+#writeListOfHistoLists( listOfHistoListsData , DataSamples , plotnames, 'datacheck' , False , False, False, "histoE", False, False, False, False)
+
+
+
+
+
+
+#multiplyListofHistoswithfactors(listOfHistoListsBackground[plotnames.index("Signal_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M")],listofratios_Signal_bantiSB_ZprimeM)
+#multiplyListofHistoswithfactors(listOfHistoListsBackground[plotnames.index('Signal_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Zprime_M')],listofratios_Signal_bantiSB_TopPt)
+#multiplyListofHistoswithfactors(listOfHistoListsBackground[plotnames.index('Signal_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Top_Pt')],listofratios_Signal_bantiSB_TopPt)
+#multiplyListofHistoswithfactors(listOfHistoListsBackground[plotnames.index('Signal_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Top_Pt')],listofratios_Signal_tantiSB_TopPt)
+#multiplyListofHistoswithfactors(listOfHistoListsBackground[plotnames.index('Signal_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Zprime_M')],listofratios_Signal_tantiSB_TopPt)
+
+#multiplyListofHistoswithfactors(listOfHistoListsBackground[plotnames.index('Signal_withtopbtag_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M')],listofratios_Signal_withtopbtag_bantiSB_ZprimeM)
+#multiplyListofHistoswithfactors(listOfHistoListsBackground[plotnames.index('Signal_withtopbtag_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Top_Pt')],listofratios_Signal_withtopbtag_bantiSB_TopPt)
+#multiplyListofHistoswithfactors(listOfHistoListsBackground[plotnames.index('Signal_withtopbtag_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Top_Pt')],listofratios_Signal_withtopbtag_tantiSB_TopPt)
+#multiplyListofHistoswithfactors(listOfHistoListsBackground[plotnames.index('Signal_withtopbtag_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Zprime_M')],listofratios_Signal_withtopbtag_tantiSB_TopPt)
+
+
+
+
 ################################### AB Closure ########################################
-######Using HT SBSSSSF
+######Using Madgraph SBSSSSF
 ####from banti sideband
-#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]] , [plotnames[plotnames.index("Signal_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingMadgraphSBSSSF' , True , False, False, "histoE", False, False, True, False)
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingMadgraphSBSSSF' , True , False, False, "histoE", False, False, True, False)
 
-#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Top_Pt')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_Topfirst_Tops_Pt')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]] , [plotnames[plotnames.index("Signal_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Top_Pt")]]+[plotnames[plotnames.index("Signal_Topfirst_Tops_Pt")]], 'ABbackgroundestimation_usingMadgraphSBSSSF' , True , False, False, "histoE", False, False, True, False)
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Top_Pt')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_Topfirst_Tops_Pt')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Top_Pt")]]+[plotnames[plotnames.index("Signal_Topfirst_Tops_Pt")]], 'ABbackgroundestimation_usingMadgraphSBSSSF' , True , False, False, "histoE", False, False, True, False)
 
-#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]] , [plotnames[plotnames.index("Signal_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingMadgraphSBSSSF' , True , False, False, "histoE", False, False, True, False)
-
-######from tanti sideband
-#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Top_Pt')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_Topfirst_Tops_Pt')]] ,[BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]] , [plotnames[plotnames.index("Signal_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Top_Pt")]]+[plotnames[plotnames.index("Signal_Topfirst_Tops_Pt")]], 'ABbackgroundestimation_usingMadgraphSBSSSF' , True , False, False, "histoE", False, False, True, False)
-
-#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]] , [plotnames[plotnames.index("Signal_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingMadgraphSBSSSF' , True , False, False, "histoE", False, False, True, False)
-
-######same?
-#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]] , [plotnames[plotnames.index("QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt")]], 'AB_background_estimation' , True , False, False, "histoE", False, False, True, False)
-
-
-#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]] , [plotnames[plotnames.index("Signal_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingMadgraphSBSSSF' , True , False, False, "histoE", False, False, True, False)
-
-#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Top_Pt')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_Topfirst_Tops_Pt')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]] , [plotnames[plotnames.index("Signal_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Top_Pt")]]+[plotnames[plotnames.index("Signal_Topfirst_Tops_Pt")]], 'ABbackgroundestimation_usingMadgraphSBSSSF' , True , False, False, "histoE", False, False, True, False)
-
-#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]] , [plotnames[plotnames.index("Signal_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingMadgraphSBSSSF' , True , False, False, "histoE", False, False, True, False)
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingMadgraphSBSSSF' , True , False, False, "histoE", False, False, True, False)
 
 ######from tanti sideband
-#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Top_Pt')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_Topfirst_Tops_Pt')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]] , [plotnames[plotnames.index("Signal_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Top_Pt")]]+[plotnames[plotnames.index("Signal_Topfirst_Tops_Pt")]], 'ABbackgroundestimation_usingMadgraphSBSSSF' , True , False, False, "histoE", False, False, True, False)
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Top_Pt')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_Topfirst_Tops_Pt')]] ,[BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Top_Pt")]]+[plotnames[plotnames.index("Signal_Topfirst_Tops_Pt")]], 'ABbackgroundestimation_usingMadgraphSBSSSF' , True , False, False, "histoE", False, False, True, False)
 
-#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]] , [plotnames[plotnames.index("Signal_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingMadgraphSBSSSF' , True , False, False, "histoE", False, False, True, False)
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingMadgraphSBSSSF' , True , False, False, "histoE", False, False, True, False)
 
 ######same?
-##writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('SF_SB_bottom_anti_Signal_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]] , [plotnames[plotnames.index("SF_SB_bottom_anti_Signal_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt")]], 'AB_background_estimation_PT' , True , False, False, "histoE", False, False, True, False)
+##writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt")]], 'AB_background_estimation' , True , False, False, "histoE", False, False, True, False)
+
+
+
+#####from banti sideband
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingMadgraphSBSSSF' , True , False, False, "histoE", False, False, True, False)
+
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Top_Pt')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_Topfirst_Tops_Pt')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Top_Pt")]]+[plotnames[plotnames.index("Signal_Topfirst_Tops_Pt")]], 'ABbackgroundestimation_usingMadgraphSBSSSF' , True , False, False, "histoE", False, False, True, False)
+
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingMadgraphSBSSSF' , True , False, False, "histoE", False, False, True, False)
+
+######from tanti sideband
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Top_Pt')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_Topfirst_Tops_Pt')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Top_Pt")]]+[plotnames[plotnames.index("Signal_Topfirst_Tops_Pt")]], 'ABbackgroundestimation_usingMadgraphSBSSSF' , True , False, False, "histoE", False, False, True, False)
+
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingMadgraphSBSSSF' , True , False, False, "histoE", False, False, True, False)
+
+######same?
+##writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt")]], 'AB_background_estimation' , True , False, False, "histoE", False, False, True, False)
+                      
+                      
+                      
+########Using PT SBSSSF
+#####from banti sideband
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_SB_PredictionbantiQCDPythia8ZprimeM_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_SB_PredictionbantiQCDPythia8ZprimeM_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingPythia8SBSSSF' , True , False, False, "histoE", False, False, True, False)
+
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Top_Pt')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_Topfirst_Tops_Pt')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Top_Pt")]]+[plotnames[plotnames.index("Signal_Topfirst_Tops_Pt")]], 'ABbackgroundestimation_usingPythia8SBSSSF' , True , False, False, "histoE", False, False, True, False)
+
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingPythia8SBSSSF' , True , False, False, "histoE", False, False, True, False)
+
+######from tanti sideband
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Top_Pt')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_Topfirst_Tops_Pt')]] ,[BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Top_Pt")]]+[plotnames[plotnames.index("Signal_Topfirst_Tops_Pt")]], 'ABbackgroundestimation_usingPythia8SBSSSF' , True , False, False, "histoE", False, False, True, False)
+
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingPythia8SBSSSF' , True , False, False, "histoE", False, False, True, False)
+
+######same?
+##writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt")]], 'AB_background_estimation' , True , False, False, "histoE", False, False, True, False)
+
+
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_SB_PredictionbantiQCDPythia8ZprimeM_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_SB_PredictionbantiQCDPythia8ZprimeM_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingPythia8SBSSSF' , True , False, False, "histoE", False, False, True, False)
+
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Top_Pt')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_Topfirst_Tops_Pt')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Top_Pt")]]+[plotnames[plotnames.index("Signal_Topfirst_Tops_Pt")]], 'ABbackgroundestimation_usingPythia8SBSSSF' , True , False, False, "histoE", False, False, True, False)
+
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingPythia8SBSSSF' , True , False, False, "histoE", False, False, True, False)
+
+######from tanti sideband
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Top_Pt')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_Topfirst_Tops_Pt')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Top_Pt")]]+[plotnames[plotnames.index("Signal_Topfirst_Tops_Pt")]], 'ABbackgroundestimation_usingPythia8SBSSSF' , True , False, False, "histoE", False, False, True, False)
+
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingPythia8SBSSSF' , True , False, False, "histoE", False, False, True, False)
+
+######same?
+##writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt")]], 'AB_background_estimation' , True , False, False, "histoE", False, False, True, False)
+
+
+
+
+
+
+
+
+
+#####################################AB Closure withtopbtag#########################
+#####Using Madgraph SBSSSSF
+####from banti sideband
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_withtopbtag_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_withtopbtag_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_withtopbtag_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_withtopbtag_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingMadgraphSBSSSF' , True , False, False, "histoE", False, False, True, False)
+
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_withtopbtag_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Top_Pt')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_withtopbtag_Topfirst_Tops_Pt')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_withtopbtag_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Top_Pt")]]+[plotnames[plotnames.index("Signal_withtopbtag_Topfirst_Tops_Pt")]], 'ABbackgroundestimation_usingMadgraphSBSSSF' , True , False, False, "histoE", False, False, True, False)
+
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_withtopbtag_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_withtopbtag_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_withtopbtag_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_withtopbtag_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingMadgraphSBSSSF' , True , False, False, "histoE", False, False, True, False)
+
+######from tanti sideband
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_withtopbtag_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Top_Pt')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_withtopbtag_Topfirst_Tops_Pt')]] ,[BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_withtopbtag_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Top_Pt")]]+[plotnames[plotnames.index("Signal_withtopbtag_Topfirst_Tops_Pt")]], 'ABbackgroundestimation_usingMadgraphSBSSSF' , True , False, False, "histoE", False, False, True, False)
+
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_withtopbtag_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_withtopbtag_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_withtopbtag_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_withtopbtag_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingMadgraphSBSSSF' , True , False, False, "histoE", False, False, True, False)
+
+######same?
+##writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('QCDMadgraph_SF_SB_bottom_anti_Signal_withtopbtag_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('QCDPythia8_SF_SB_bottom_anti_Signal_withtopbtag_Topfirst_Tops_Pt')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]] , [plotnames[plotnames.index("QCDMadgraph_SF_SB_bottom_anti_Signal_withtopbtag_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("QCDPythia8_SF_SB_bottom_anti_Signal_withtopbtag_Topfirst_Tops_Pt")]], 'AB_background_estimation' , True , False, False, "histoE", False, False, True, False)
+
+
+
+#####from banti sideband
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_withtopbtag_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_withtopbtag_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_withtopbtag_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_withtopbtag_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingMadgraphSBSSSF' , True , False, False, "histoE", False, False, True, False)
+
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_withtopbtag_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Top_Pt')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_withtopbtag_Topfirst_Tops_Pt')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_withtopbtag_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Top_Pt")]]+[plotnames[plotnames.index("Signal_withtopbtag_Topfirst_Tops_Pt")]], 'ABbackgroundestimation_usingMadgraphSBSSSF' , True , False, False, "histoE", False, False, True, False)
+
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_withtopbtag_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_withtopbtag_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_withtopbtag_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_withtopbtag_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingMadgraphSBSSSF' , True , False, False, "histoE", False, False, True, False)
+
+######from tanti sideband
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_withtopbtag_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Top_Pt')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_withtopbtag_Topfirst_Tops_Pt')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_withtopbtag_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Top_Pt")]]+[plotnames[plotnames.index("Signal_withtopbtag_Topfirst_Tops_Pt")]], 'ABbackgroundestimation_usingMadgraphSBSSSF' , True , False, False, "histoE", False, False, True, False)
+
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_withtopbtag_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_withtopbtag_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_withtopbtag_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_withtopbtag_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingMadgraphSBSSSF' , True , False, False, "histoE", False, False, True, False)
+
+######same?
+##writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('SF_SB_bottom_anti_Signal_withtopbtag_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('SF_SB_bottom_anti_Signal_withtopbtag_Topfirst_Tops_Pt')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]] , [plotnames[plotnames.index("SF_SB_bottom_anti_Signal_withtopbtag_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("SF_SB_bottom_anti_Signal_withtopbtag_Topfirst_Tops_Pt")]], 'AB_background_estimation_PT' , True , False, False, "histoE", False, False, True, False)
 
 ########Using PT SBSSSF
 #####from banti sideband
-#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_SB_PredictionbantiQCDPythia8ZprimeM_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]] , [plotnames[plotnames.index("Signal_SB_PredictionbantiQCDPythia8ZprimeM_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingPythia8SBSSSF' , True , False, False, "histoE", False, False, True, False)
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_withtopbtag_SB_PredictionbantiQCDPythia8ZprimeM_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_withtopbtag_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_withtopbtag_SB_PredictionbantiQCDPythia8ZprimeM_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_withtopbtag_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingPythia8SBSSSF' , True , False, False, "histoE", False, False, True, False)
 
-#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Top_Pt')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_Topfirst_Tops_Pt')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]] , [plotnames[plotnames.index("Signal_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Top_Pt")]]+[plotnames[plotnames.index("Signal_Topfirst_Tops_Pt")]], 'ABbackgroundestimation_usingPythia8SBSSSF' , True , False, False, "histoE", False, False, True, False)
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_withtopbtag_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Top_Pt')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_withtopbtag_Topfirst_Tops_Pt')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_withtopbtag_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Top_Pt")]]+[plotnames[plotnames.index("Signal_withtopbtag_Topfirst_Tops_Pt")]], 'ABbackgroundestimation_usingPythia8SBSSSF' , True , False, False, "histoE", False, False, True, False)
 
-#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]] , [plotnames[plotnames.index("Signal_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingPythia8SBSSSF' , True , False, False, "histoE", False, False, True, False)
-
-######from tanti sideband
-#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Top_Pt')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_Topfirst_Tops_Pt')]] ,[BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]] , [plotnames[plotnames.index("Signal_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Top_Pt")]]+[plotnames[plotnames.index("Signal_Topfirst_Tops_Pt")]], 'ABbackgroundestimation_usingPythia8SBSSSF' , True , False, False, "histoE", False, False, True, False)
-
-#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]] , [plotnames[plotnames.index("Signal_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingPythia8SBSSSF' , True , False, False, "histoE", False, False, True, False)
-
-######same?
-##writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('SF_SB_bottom_anti_Signal_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]] , [plotnames[plotnames.index("SF_SB_bottom_anti_Signal_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt")]], 'AB_background_estimation' , True , False, False, "histoE", False, False, True, False)
-
-
-#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_SB_PredictionbantiQCDPythia8ZprimeM_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]] , [plotnames[plotnames.index("Signal_SB_PredictionbantiQCDPythia8ZprimeM_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingPythia8SBSSSF' , True , False, False, "histoE", False, False, True, False)
-
-#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Top_Pt')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_Topfirst_Tops_Pt')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]] , [plotnames[plotnames.index("Signal_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Top_Pt")]]+[plotnames[plotnames.index("Signal_Topfirst_Tops_Pt")]], 'ABbackgroundestimation_usingPythia8SBSSSF' , True , False, False, "histoE", False, False, True, False)
-
-#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]] , [plotnames[plotnames.index("Signal_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingPythia8SBSSSF' , True , False, False, "histoE", False, False, True, False)
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_withtopbtag_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_withtopbtag_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_withtopbtag_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_withtopbtag_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingPythia8SBSSSF' , True , False, False, "histoE", False, False, True, False)
 
 ######from tanti sideband
-#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Top_Pt')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_Topfirst_Tops_Pt')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]] , [plotnames[plotnames.index("Signal_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Top_Pt")]]+[plotnames[plotnames.index("Signal_Topfirst_Tops_Pt")]], 'ABbackgroundestimation_usingPythia8SBSSSF' , True , False, False, "histoE", False, False, True, False)
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_withtopbtag_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Top_Pt')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_withtopbtag_Topfirst_Tops_Pt')]] ,[BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_withtopbtag_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Top_Pt")]]+[plotnames[plotnames.index("Signal_withtopbtag_Topfirst_Tops_Pt")]], 'ABbackgroundestimation_usingPythia8SBSSSF' , True , False, False, "histoE", False, False, True, False)
 
-#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]] , [plotnames[plotnames.index("Signal_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingPythia8SBSSSF' , True , False, False, "histoE", False, False, True, False)
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_withtopbtag_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_withtopbtag_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_withtopbtag_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_withtopbtag_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingPythia8SBSSSF' , True , False, False, "histoE", False, False, True, False)
 
 ######same?
-##writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('SF_SB_bottom_anti_Signal_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]] , [plotnames[plotnames.index("SF_SB_bottom_anti_Signal_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt")]], 'AB_background_estimation_PT' , True , False, False, "histoE", False, False, True, False)
+##writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('SF_SB_bottom_anti_Signal_withtopbtag_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('SF_SB_bottom_anti_Signal_withtopbtag_Topfirst_Tops_Pt')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]] , [plotnames[plotnames.index("SF_SB_bottom_anti_Signal_withtopbtag_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("SF_SB_bottom_anti_Signal_withtopbtag_Topfirst_Tops_Pt")]], 'AB_background_estimation' , True , False, False, "histoE", False, False, True, False)
+
+
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_withtopbtag_SB_PredictionbantiQCDPythia8ZprimeM_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_withtopbtag_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_withtopbtag_SB_PredictionbantiQCDPythia8ZprimeM_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_withtopbtag_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingPythia8SBSSSF' , True , False, False, "histoE", False, False, True, False)
+
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_withtopbtag_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Top_Pt')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_withtopbtag_Topfirst_Tops_Pt')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_withtopbtag_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Top_Pt")]]+[plotnames[plotnames.index("Signal_withtopbtag_Topfirst_Tops_Pt")]], 'ABbackgroundestimation_usingPythia8SBSSSF' , True , False, False, "histoE", False, False, True, False)
+
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_withtopbtag_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_withtopbtag_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_withtopbtag_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_withtopbtag_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingPythia8SBSSSF' , True , False, False, "histoE", False, False, True, False)
+
+######from tanti sideband
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_withtopbtag_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Top_Pt')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_withtopbtag_Topfirst_Tops_Pt')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_withtopbtag_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Top_Pt")]]+[plotnames[plotnames.index("Signal_withtopbtag_Topfirst_Tops_Pt")]], 'ABbackgroundestimation_usingPythia8SBSSSF' , True , False, False, "histoE", False, False, True, False)
+
+#writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_withtopbtag_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('Signal_withtopbtag_Topfirst_Zprime_M')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]]+[BackgroundSamples[BackgroundSampleNames.index("ttbar")]] , [plotnames[plotnames.index("Signal_withtopbtag_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("Signal_withtopbtag_Topfirst_Zprime_M")]], 'ABbackgroundestimation_usingPythia8SBSSSF' , True , False, False, "histoE", False, False, True, False)
+
+######same?
+##writeListOfHistoLists( [transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('SF_SB_bottom_anti_Signal_withtopbtag_Topfirst_Zprime_M')]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index('SF_SB_bottom_anti_Signal_withtopbtag_Topfirst_Tops_Pt')]] , [BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]] , [plotnames[plotnames.index("SF_SB_bottom_anti_Signal_withtopbtag_Topfirst_Zprime_M")]]+[plotnames[plotnames.index("SF_SB_bottom_anti_Signal_withtopbtag_Topfirst_Tops_Pt")]], 'AB_background_estimation_PT' , True , False, False, "histoE", False, False, True, False)
 
 
 
-################################################################################## AB Scale factors
+################################################################################### AB Scale factors
 
+#writeHistoListwithXYErrors(transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]]+[lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index("SB_SF_bottom_anti_Zprime_M"):plotnames.index("SB_SF_bottom_anti_Tops_Pt")+1]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]]+[lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index("SB_SF_withtopbtag_bottom_anti_Zprime_M"):plotnames.index("SB_SF_withtopbtag_bottom_anti_Tops_Pt")+1],[BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]]+[BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]],'Zprime_SBSSSFs_banti',1,'pol2')
 
-
-##BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph"):BackgroundSampleNames.index("QCDPythia8")+1],labels,'Zprime_HT_Pt_comparison',True,False,False,'EL',False,False,True)
-
-##writeListOfHistoLists(transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]]+[lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index("Signal_Topfirst_Zprime_M"):plotnames.index("Jet_GenJet_Pt")+1],[BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]]+[BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]],labels,'Zprime_HT_Pt_comparison',True,False,False,'histoE',False,False,True)
-##BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph"):BackgroundSampleNames.index("QCDPythia8")+1],labels,'Zprime_HT_Pt_comparison',True,False,False,'EL',False,False,True)
-
-
-##writeHistoListwithXYErrors(transposeLOL(lolBackgroundT)[plotnames.index("SB_SF_top_anti_Tops_Pt"):plotnames.index("SB_SF_top_anti_Ws_MSD")],BackgroundSamples,'Zprime_SBSSFs_tanti',1,"[0]+([1]*log(x-[3])+[2]*log(x-[3])*log(x-[3]))/x")
-##writeHistoListwithXYErrors(transposeLOL(lolBackgroundT)[plotnames.index("SB_SF_bottom_anti_Zprime_M"):plotnames.index("SB_SF_bottom_anti_Tops_MSD")],BackgroundSamples,'Zprime_SBSSFs_banti',1,'pol2')
-
-
-
-
-writeHistoListwithXYErrors(transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]]+[lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index("SB_SF_top_anti_Tops_Pt"):plotnames.index("SB_SF_top_anti_Ws_Pt")+1]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]]+[lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index("SB_SF_withtopbtag_top_anti_Tops_Pt"):plotnames.index("SB_SF_withtopbtag_top_anti_Ws_Pt")+1],[BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]]+[BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]],'Zprime_SBSSSFs_tanti',1,"[0]+([1]*log(x-[3])+[2]*log(x-[3])*log(x-[3]))/x")
-
-writeHistoListwithXYErrors(transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]]+[lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index("SB_SF_bottom_anti_Zprime_M"):plotnames.index("SB_SF_bottom_anti_Tops_Pt")+1]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]]+[lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index("SB_SF_withtopbtag_bottom_anti_Zprime_M"):plotnames.index("SB_SF_withtopbtag_bottom_anti_Tops_Pt")+1],[BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]]+[BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]],'Zprime_SBSSSFs_banti',1,'pol2')
-
-
-##writeHistoListwithXYErrors(transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]]+[lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index("SB_SF_withtopbtag_top_anti_Tops_Pt"):plotnames.index("SB_SF_withtopbtag_top_anti_Ws_Pt")],[BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]]+[BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]],'Zprime_SBSSSFs_tanti',1,"[0]+([1]*log(x-[3])+[2]*log(x-[3])*log(x-[3]))/x")
-##writeHistoListwithXYErrors(transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]]+[lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index("SB_SF_withtopbtag_bottom_anti_Zprime_M"):plotnames.index("SB_SF_withtopbtag_bottom_anti_Tops_Pt")],[BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]]+[BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]],'Zprime_SBSSSFs_banti',1,'pol2')
+#writeHistoListwithXYErrors(transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]]+[lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index("SB_SF_top_anti_Tops_Pt"):plotnames.index("SB_SF_top_anti_Ws_Pt")+1]+transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]]+[lolBackgroundT[BackgroundSampleNames.index("QCDPythia8")]])[plotnames.index("SB_SF_withtopbtag_top_anti_Tops_Pt"):plotnames.index("SB_SF_withtopbtag_top_anti_Ws_Pt")+1],[BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]]+[BackgroundSamples[BackgroundSampleNames.index("QCDPythia8")]],'Zprime_SBSSSFs_tanti',1,"[0]+([1]*log(x-[3])+[2]*log(x-[3])*log(x-[3]))/x")
 
 
 ######################TAGRATES############################
@@ -522,9 +642,61 @@ writeHistoListwithXYErrors(transposeLOL([lolBackgroundT[BackgroundSampleNames.in
 
 ################Final ###################
 
-##writeLOLSeveralOnTop([transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M')]]+[transposeLOL([lolBackgroundT[BackgroundSampleNames.index("ttbar")]])[plotnames.index('Signal_Topfirst_Zprime_M')]]+[transposeLOL([lolBackgroundT[BackgroundSampleNames.index("SC_Zprime25001200_1pb")]])[plotnames.index('Signal_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M')]],BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph"):BackgroundSampleNames.index("SC_Zprime25001200_1pb")],[transposeLOL([lolSignalT[SignalSampleNames.index("Zprime25001200")]])[plotnames.index('Signal_Topfirst_Zprime_M')]],[SignalSamples[SignalSampleNames.index("Zprime25001200")]],1,'fancy',logscale=False,options=['histoE','samehistoE','samehistoE'],ontopoptions=['sameE1'],sepaTest=False)
-#writeLOLSeveralOnTop(transposeLOL([transposeLOL([lolBackgroundT[BackgroundSampleNames.index("SC_Zprime25001200_1pb")]])[plotnames.index('Signal_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M')]]+[transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M')]]),[BackgroundSamples[BackgroundSampleNames.index("SC_Zprime25001200_1pb")]]+[BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]],[transposeLOL([lolDataT[DataSampleNames.index("BKG_Zprime25001200_1pb")]])[plotnames.index('Signal_Topfirst_Zprime_M')]],[DataSamples[DataSampleNames.index("BKG_Zprime25001200_1pb")]],-1,'fancy',logscale=False,options='histoE',ontopoptions=['sameE1'],sepaTest=False)
+#################with Syst notoptag #####################R
+
+#####################################BANTI ZPRIME CLOSURE######################
 
 
-#writeLOLSeveralOnTop(transposeLOL([transposeLOL([lolBackgroundT[BackgroundSampleNames.index("SC_Zprime25001200_1pb")]])[plotnames.index('Signal_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Zprime_M')]]+[transposeLOL([lolBackgroundT[BackgroundSampleNames.index("QCDMadgraph")]])[plotnames.index('Signal_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Zprime_M')]]),[BackgroundSamples[BackgroundSampleNames.index("SC_Zprime25001200_1pb")]]+[BackgroundSamples[BackgroundSampleNames.index("QCDMadgraph")]],[transposeLOL([lolDataT[DataSampleNames.index("BKG_Zprime25001200_1pb")]])[plotnames.index('Signal_Topfirst_Zprime_M')]],[DataSamples[DataSampleNames.index("BKG_Zprime25001200_1pb")]],-1,'fancy',logscale=False,options='histoE',ontopoptions=['sameE1'],sepaTest=False)
+#ABBackgroundEstimationCalculationAndPlotsWithSystematics(listOfHistoListsDataMadgraph,lllData_Madgraph,listOfHistoListsBackground,lllBackground,lllBackgroundnosyst,listOfHistoListsSignal,DataSamples,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames,SignalSampleNames,plotnames,allweightsystnames,'BKG_Zprime25001200_1pb','SC_Zprime25001200_1pb','Zprime25001200','_ABMadgraphbantiZprimeM','Signal_Topfirst_Zprime_M','Sideband_bottom_anti_Topfirst_Zprime_M', 'QCDMadgraph','fancy_notopbtag_gendiff_', True)
+#ABBackgroundEstimationCalculationAndPlotsWithSystematics(listOfHistoListsDataPythia,lllData_Pythia,listOfHistoListsBackground,lllBackground,lllBackgroundnosyst,listOfHistoListsSignal,DataSamples,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames,SignalSampleNames,plotnames,allweightsystnames,'BKG_Zprime25001200_1pb','SC_Zprime25001200_1pb','Zprime25001200','_ABPythiabantiZprimeM','Signal_Topfirst_Zprime_M','Sideband_bottom_anti_Topfirst_Zprime_M', 'QCDPythia8','fancy_notopbtag_gendiff_', True)
+#ABBackgroundEstimationCalculationAndPlotsWithSystematics(listOfHistoListsDataPythia,lllData_Pythia,listOfHistoListsBackground,lllBackground,lllBackgroundnosyst,listOfHistoListsSignal,DataSamples,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames,SignalSampleNames,plotnames,allweightsystnames,'BKG_Zprime25001200_1pb','SC_Zprime25001200_1pb','Zprime25001200','_ABMadgraphbantiZprimeM','Signal_Topfirst_Zprime_M','Sideband_bottom_anti_Topfirst_Zprime_M', 'QCDPythia8','fancy_notopbtag_gendiff_', True)
+#ABBackgroundEstimationCalculationAndPlotsWithSystematics(listOfHistoListsDataMadgraph,lllData_Madgraph,listOfHistoListsBackground,lllBackground,lllBackgroundnosyst,listOfHistoListsSignal,DataSamples,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames,SignalSampleNames,plotnames,allweightsystnames,'BKG_Zprime25001200_1pb','SC_Zprime25001200_1pb','Zprime25001200','_ABPythiabantiZprimeM','Signal_Topfirst_Zprime_M','Sideband_bottom_anti_Topfirst_Zprime_M', 'QCDMadgraph','fancy_notopbtag_gendiff_', True)
+
+
+#ABBackgroundEstimationCalculationAndPlotsWithSystematics(listOfHistoListsDataMadgraph,lllData_Madgraph,listOfHistoListsBackground,lllBackground,lllBackgroundnosyst,listOfHistoListsSignal,DataSamples,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames,SignalSampleNames,plotnames,allweightsystnames,'DATA_BKG','SC_none','Zprime25001200','_ABMadgraphbantiZprimeM','Signal_Topfirst_Zprime_M','Sideband_bottom_anti_Topfirst_Zprime_M', 'QCDMadgraph','fancy_notopbtag_gendiff_', True)
+#ABBackgroundEstimationCalculationAndPlotsWithSystematics(listOfHistoListsDataPythia,lllData_Pythia,listOfHistoListsBackground,lllBackground,lllBackgroundnosyst,listOfHistoListsSignal,DataSamples,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames,SignalSampleNames,plotnames,allweightsystnames,'DATA_BKG','SC_none','Zprime25001200','_ABPythiabantiZprimeM','Signal_Topfirst_Zprime_M','Sideband_bottom_anti_Topfirst_Zprime_M', 'QCDPythia8','fancy_notopbtag_gendiff_', True)
+#ABBackgroundEstimationCalculationAndPlotsWithSystematics(listOfHistoListsDataPythia,lllData_Pythia,listOfHistoListsBackground,lllBackground,lllBackgroundnosyst,listOfHistoListsSignal,DataSamples,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames,SignalSampleNames,plotnames,allweightsystnames,'DATA_BKG','SC_none','Zprime25001200','_ABMadgraphbantiZprimeM','Signal_Topfirst_Zprime_M','Sideband_bottom_anti_Topfirst_Zprime_M', 'QCDPythia8','fancy_notopbtag_gendiff_', True)
+#ABBackgroundEstimationCalculationAndPlotsWithSystematics(listOfHistoListsDataMadgraph,lllData_Madgraph,listOfHistoListsBackground,lllBackground,lllBackgroundnosyst,listOfHistoListsSignal,DataSamples,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames,SignalSampleNames,plotnames,allweightsystnames,'DATA_BKG','SC_none','Zprime25001200','_ABPythiabantiZprimeM','Signal_Topfirst_Zprime_M','Sideband_bottom_anti_Topfirst_Zprime_M', 'QCDMadgraph','fancy_notopbtag_gendiff_', True)
+
+
+
+
+####################################TANTI Top CLOSURE######################
+#ABBackgroundEstimationCalculationAndPlotsWithSystematics(listOfHistoListsDataMadgraph,lllData_Madgraph,listOfHistoListsBackground,lllBackground,lllBackgroundnosyst,listOfHistoListsSignal,DataSamples,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames,SignalSampleNames,plotnames,allweightsystnames,'BKG_Zprime25001200_1pb','SC_Zprime25001200_1pb','Zprime25001200','_ABMadgraphtantiTopPt','Signal_Topfirst_Zprime_M','Sideband_top_anti_Topfirst_Zprime_M', 'QCDMadgraph','fancy_notopbtag_gendiff_',True)
+#ABBackgroundEstimationCalculationAndPlotsWithSystematics(listOfHistoListsDataPythia,lllData_Pythia,listOfHistoListsBackground,lllBackground,lllBackgroundnosyst,listOfHistoListsSignal,DataSamples,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames,SignalSampleNames,plotnames,allweightsystnames,'BKG_Zprime25001200_1pb','SC_Zprime25001200_1pb','Zprime25001200','_ABPythiatantiTopPt','Signal_Topfirst_Zprime_M','Sideband_top_anti_Topfirst_Zprime_M', 'QCDPythia8','fancy_notopbtag_gendiff_',True)
+#ABBackgroundEstimationCalculationAndPlotsWithSystematics(listOfHistoListsDataPythia,lllData_Pythia,listOfHistoListsBackground,lllBackground,lllBackgroundnosyst,listOfHistoListsSignal,DataSamples,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames,SignalSampleNames,plotnames,allweightsystnames,'BKG_Zprime25001200_1pb','SC_Zprime25001200_1pb','Zprime25001200','_ABMadgraphtantiTopPt','Signal_Topfirst_Zprime_M','Sideband_top_anti_Topfirst_Zprime_M', 'QCDPythia8','fancy_notopbtag_gendiff_',True)
+#ABBackgroundEstimationCalculationAndPlotsWithSystematics(listOfHistoListsDataMadgraph,lllData_Madgraph,listOfHistoListsBackground,lllBackground,lllBackgroundnosyst,listOfHistoListsSignal,DataSamples,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames,SignalSampleNames,plotnames,allweightsystnames,'BKG_Zprime25001200_1pb','SC_Zprime25001200_1pb','Zprime25001200','_ABPythiatantiTopPt','Signal_Topfirst_Zprime_M','Sideband_top_anti_Topfirst_Zprime_M', 'QCDMadgraph','fancy_notopbtag_gendiff_',True)
+
+
+#ABBackgroundEstimationCalculationAndPlotsWithSystematics(listOfHistoListsDataMadgraph,lllData_Madgraph,listOfHistoListsBackground,lllBackground,lllBackgroundnosyst,listOfHistoListsSignal,DataSamples,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames,SignalSampleNames,plotnames,allweightsystnames,'DATA_BKG','SC_none','Zprime25001200','_ABMadgraphtantiTopPt','Signal_Topfirst_Zprime_M','Sideband_top_anti_Topfirst_Zprime_M', 'QCDMadgraph','fancy_notopbtag_gendiff_',True)
+#ABBackgroundEstimationCalculationAndPlotsWithSystematics(listOfHistoListsDataPythia,lllData_Pythia,listOfHistoListsBackground,lllBackground,lllBackgroundnosyst,listOfHistoListsSignal,DataSamples,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames,SignalSampleNames,plotnames,allweightsystnames,'DATA_BKG','SC_none','Zprime25001200','_ABPythiatantiTopPt','Signal_Topfirst_Zprime_M','Sideband_top_anti_Topfirst_Zprime_M', 'QCDPythia8','fancy_notopbtag_gendiff_',True)
+#ABBackgroundEstimationCalculationAndPlotsWithSystematics(listOfHistoListsDataPythia,lllData_Pythia,listOfHistoListsBackground,lllBackground,lllBackgroundnosyst,listOfHistoListsSignal,DataSamples,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames,SignalSampleNames,plotnames,allweightsystnames,'DATA_BKG','SC_none','Zprime25001200','_ABMadgraphtantiTopPt','Signal_Topfirst_Zprime_M','Sideband_top_anti_Topfirst_Zprime_M', 'QCDPythia8','fancy_notopbtag_gendiff_',True)
+#ABBackgroundEstimationCalculationAndPlotsWithSystematics(listOfHistoListsDataMadgraph,lllData_Madgraph,listOfHistoListsBackground,lllBackground,lllBackgroundnosyst,listOfHistoListsSignal,DataSamples,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames,SignalSampleNames,plotnames,allweightsystnames,'DATA_BKG','SC_none','Zprime25001200','_ABPythiatantiTopPt','Signal_Topfirst_Zprime_M','Sideband_top_anti_Topfirst_Zprime_M', 'QCDMadgraph','fancy_notopbtag_gendiff_',True)
+
+
+
+#################with Syst withtopbtag ############################
+
+####################################BANTI ZPRIME CLOSURE######################
+ABBackgroundEstimationCalculationAndPlotsWithSystematics(listOfHistoListsDataMadgraph,lllData_Madgraph,listOfHistoListsBackground,lllBackground,lllBackgroundnosyst,listOfHistoListsSignal,DataSamples,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames,SignalSampleNames,plotnames,allweightsystnames,'BKG_Zprime25001200_1pb','SC_Zprime25001200_1pb','Zprime25001200','_ABMadgraphbantiZprimeMWithtopbtag','Signal_withtopbtag_Topfirst_Zprime_M','Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M', 'QCDMadgraph','fancy_withtopbtag_gendiff_', True)
+ABBackgroundEstimationCalculationAndPlotsWithSystematics(listOfHistoListsDataPythia,lllData_Pythia,listOfHistoListsBackground,lllBackground,lllBackgroundnosyst,listOfHistoListsSignal,DataSamples,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames,SignalSampleNames,plotnames,allweightsystnames,'BKG_Zprime25001200_1pb','SC_Zprime25001200_1pb','Zprime25001200','_ABPythiabantiZprimeMWithtopbtag','Signal_withtopbtag_Topfirst_Zprime_M','Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M', 'QCDPythia8','fancy_withtopbtag_gendiff_', True)
+ABBackgroundEstimationCalculationAndPlotsWithSystematics(listOfHistoListsDataPythia,lllData_Pythia,listOfHistoListsBackground,lllBackground,lllBackgroundnosyst,listOfHistoListsSignal,DataSamples,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames,SignalSampleNames,plotnames,allweightsystnames,'BKG_Zprime25001200_1pb','SC_Zprime25001200_1pb','Zprime25001200','_ABMadgraphbantiZprimeMWithtopbtag','Signal_withtopbtag_Topfirst_Zprime_M','Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M', 'QCDPythia8','fancy_withtopbtag_gendiff_', True)
+ABBackgroundEstimationCalculationAndPlotsWithSystematics(listOfHistoListsDataMadgraph,lllData_Madgraph,listOfHistoListsBackground,lllBackground,lllBackgroundnosyst,listOfHistoListsSignal,DataSamples,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames,SignalSampleNames,plotnames,allweightsystnames,'BKG_Zprime25001200_1pb','SC_Zprime25001200_1pb','Zprime25001200','_ABPythiabantiZprimeMWithtopbtag','Signal_withtopbtag_Topfirst_Zprime_M','Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M', 'QCDMadgraph','fancy_withtopbtag_gendiff_', True)
+
+ABBackgroundEstimationCalculationAndPlotsWithSystematics(listOfHistoListsDataMadgraph,lllData_Madgraph,listOfHistoListsBackground,lllBackground,lllBackgroundnosyst,listOfHistoListsSignal,DataSamples,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames,SignalSampleNames,plotnames,allweightsystnames,'DATA_BKG','SC_none','Zprime25001200','_ABMadgraphbantiZprimeMWithtopbtag','Signal_withtopbtag_Topfirst_Zprime_M','Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M', 'QCDMadgraph','fancy_withtopbtag_gendiff_', True)
+ABBackgroundEstimationCalculationAndPlotsWithSystematics(listOfHistoListsDataPythia,lllData_Pythia,listOfHistoListsBackground,lllBackground,lllBackgroundnosyst,listOfHistoListsSignal,DataSamples,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames,SignalSampleNames,plotnames,allweightsystnames,'DATA_BKG','SC_none','Zprime25001200','_ABPythiabantiZprimeMWithtopbtag','Signal_withtopbtag_Topfirst_Zprime_M','Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M', 'QCDPythia8','fancy_withtopbtag_gendiff_', True)
+ABBackgroundEstimationCalculationAndPlotsWithSystematics(listOfHistoListsDataPythia,lllData_Pythia,listOfHistoListsBackground,lllBackground,lllBackgroundnosyst,listOfHistoListsSignal,DataSamples,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames,SignalSampleNames,plotnames,allweightsystnames,'DATA_BKG','SC_none','Zprime25001200','_ABMadgraphbantiZprimeMWithtopbtag','Signal_withtopbtag_Topfirst_Zprime_M','Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M', 'QCDPythia8','fancy_withtopbtag_gendiff_', True)
+ABBackgroundEstimationCalculationAndPlotsWithSystematics(listOfHistoListsDataMadgraph,lllData_Madgraph,listOfHistoListsBackground,lllBackground,lllBackgroundnosyst,listOfHistoListsSignal,DataSamples,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames,SignalSampleNames,plotnames,allweightsystnames,'DATA_BKG','SC_none','Zprime25001200','_ABPythiabantiZprimeMWithtopbtag','Signal_withtopbtag_Topfirst_Zprime_M','Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M', 'QCDMadgraph','fancy_withtopbtag_gendiff_', True)
+
+
+###################################TANTI Top CLOSURE######################
+ABBackgroundEstimationCalculationAndPlotsWithSystematics(listOfHistoListsDataMadgraph,lllData_Madgraph,listOfHistoListsBackground,lllBackground,lllBackgroundnosyst,listOfHistoListsSignal,DataSamples,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames,SignalSampleNames,plotnames,allweightsystnames,'BKG_Zprime25001200_1pb','SC_Zprime25001200_1pb','Zprime25001200','_ABMadgraphtantiTopPtWithtopbtag','Signal_withtopbtag_Topfirst_Zprime_M','Sideband_top_withbtag_anti_Topfirst_Zprime_M', 'QCDMadgraph','fancy_withtopbtag_gendiff_',True)
+ABBackgroundEstimationCalculationAndPlotsWithSystematics(listOfHistoListsDataPythia,lllData_Pythia,listOfHistoListsBackground,lllBackground,lllBackgroundnosyst,listOfHistoListsSignal,DataSamples,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames,SignalSampleNames,plotnames,allweightsystnames,'BKG_Zprime25001200_1pb','SC_Zprime25001200_1pb','Zprime25001200','_ABPythiatantiTopPtWithtopbtag','Signal_withtopbtag_Topfirst_Zprime_M','Sideband_top_withbtag_anti_Topfirst_Zprime_M', 'QCDPythia8','fancy_withtopbtag_gendiff_',True)
+ABBackgroundEstimationCalculationAndPlotsWithSystematics(listOfHistoListsDataPythia,lllData_Pythia,listOfHistoListsBackground,lllBackground,lllBackgroundnosyst,listOfHistoListsSignal,DataSamples,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames,SignalSampleNames,plotnames,allweightsystnames,'BKG_Zprime25001200_1pb','SC_Zprime25001200_1pb','Zprime25001200','_ABMadgraphtantiTopPtWithtopbtag','Signal_withtopbtag_Topfirst_Zprime_M','Sideband_top_withbtag_anti_Topfirst_Zprime_M', 'QCDPythia8','fancy_withtopbtag_gendiff_',True)
+ABBackgroundEstimationCalculationAndPlotsWithSystematics(listOfHistoListsDataMadgraph,lllData_Madgraph,listOfHistoListsBackground,lllBackground,lllBackgroundnosyst,listOfHistoListsSignal,DataSamples,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames,SignalSampleNames,plotnames,allweightsystnames,'BKG_Zprime25001200_1pb','SC_Zprime25001200_1pb','Zprime25001200','_ABPythiatantiTopPtWithtopbtag','Signal_withtopbtag_Topfirst_Zprime_M','Sideband_top_withbtag_anti_Topfirst_Zprime_M', 'QCDMadgraph','fancy_withtopbtag_gendiff_',True)
+
+ABBackgroundEstimationCalculationAndPlotsWithSystematics(listOfHistoListsDataMadgraph,lllData_Madgraph,listOfHistoListsBackground,lllBackground,lllBackgroundnosyst,listOfHistoListsSignal,DataSamples,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames,SignalSampleNames,plotnames,allweightsystnames,'DATA_BKG','SC_none','Zprime25001200','_ABMadgraphtantiTopPtWithtopbtag','Signal_withtopbtag_Topfirst_Zprime_M','Sideband_top_withbtag_anti_Topfirst_Zprime_M', 'QCDMadgraph','fancy_withtopbtag_gendiff_',True)
+ABBackgroundEstimationCalculationAndPlotsWithSystematics(listOfHistoListsDataPythia,lllData_Pythia,listOfHistoListsBackground,lllBackground,lllBackgroundnosyst,listOfHistoListsSignal,DataSamples,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames,SignalSampleNames,plotnames,allweightsystnames,'DATA_BKG','SC_none','Zprime25001200','_ABPythiatantiTopPtWithtopbtag','Signal_withtopbtag_Topfirst_Zprime_M','Sideband_top_withbtag_anti_Topfirst_Zprime_M', 'QCDPythia8','fancy_withtopbtag_gendiff_',True)
+ABBackgroundEstimationCalculationAndPlotsWithSystematics(listOfHistoListsDataPythia,lllData_Pythia,listOfHistoListsBackground,lllBackground,lllBackgroundnosyst,listOfHistoListsSignal,DataSamples,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames,SignalSampleNames,plotnames,allweightsystnames,'DATA_BKG','SC_none','Zprime25001200','_ABMadgraphtantiTopPtWithtopbtag','Signal_withtopbtag_Topfirst_Zprime_M','Sideband_top_withbtag_anti_Topfirst_Zprime_M', 'QCDPythia8','fancy_withtopbtag_gendiff_',True)
+ABBackgroundEstimationCalculationAndPlotsWithSystematics(listOfHistoListsDataMadgraph,lllData_Madgraph,listOfHistoListsBackground,lllBackground,lllBackgroundnosyst,listOfHistoListsSignal,DataSamples,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames,SignalSampleNames,plotnames,allweightsystnames,'DATA_BKG','SC_none','Zprime25001200','_ABPythiatantiTopPtWithtopbtag','Signal_withtopbtag_Topfirst_Zprime_M','Sideband_top_withbtag_anti_Topfirst_Zprime_M', 'QCDMadgraph','fancy_withtopbtag_gendiff_',True)
 

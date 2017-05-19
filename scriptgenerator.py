@@ -34,7 +34,13 @@ def getHead2():
   return """
 void plot(){
   TH1F::SetDefaultSumw2();
-  
+ 
+
+"""
+
+
+def getHead3():
+  return """
   // open files
   TChain* chain = new TChain("MVATree");
   char* filenames = getenv ("FILENAMES");
@@ -49,6 +55,7 @@ void plot(){
   
   int DoWeights=1;
   
+  //if(processname=="SingleEl" || processname=="SingleMu"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
   if(processname=="SingleEl" || processname=="SingleMu"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
 
   string buf;
@@ -63,6 +70,18 @@ void plot(){
   // initialize variables from tree
 """
 
+def loadaddobjects(additionalobjectsfromaddtionalrootfile):
+    returnscript="""   """
+    
+    for objectcode in additionalobjectsfromaddtionalrootfile:
+        returnscript+=objectcode
+    return returnscript
+
+def closeaddfiles():
+    return """
+  SFfile->Close();
+
+"""
 
 def initHisto(name,nbins,xmin=0,xmax=0,title_=''):
   if title_=='':
@@ -178,9 +197,16 @@ def checkLoopsize(size_of_Loop):
   return 
 
 
-def getFoot():
+def getFoot1():
   return """
+  outfile->cd();
   outfile->Write();
+
+"""
+   
+def getFoot2():
+  return """
+
   outfile->Close();
   std::ofstream f_nevents((string(outfilename)+".cutflow.txt").c_str());
   f_nevents << "0" << " : " << "all" << " : " << eventsAnalyzed << " : " << sumOfWeights <<endl;
@@ -189,9 +215,8 @@ def getFoot():
 
 int main(){
   plot();
-}
-"""
-                         
+}    
+"""   
 
 def compileProgram(scriptname):
   p = subprocess.Popen(['root-config', '--cflags', '--libs'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -200,11 +225,11 @@ def compileProgram(scriptname):
   subprocess.call(cmd)
 
 
-def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],allsystweights=["1"],additionalvariables=[], additionalfunctions=[]):
+def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],allsystweights=["1"],additionalvariables=[], additionalfunctions=[], additionalobjectsfromaddtionalrootfile=[]):
   
   # collect variables
   # list varibles that should not be written to the program automatically
-  vetolist=['processname','DoWeights','TMath','cout','for','int', 'if', 'cout', ';','<','i','i++','*=', 'temp', 'float','anti_loose_btag(Sideband_top_withbtag_anti_Topfirst_Bottoms_CSVv2,N_Sideband_top_withbtag_anti_Topfirst_Bottoms)' ]
+  vetolist=['processname','DoWeights','TMath','cout','for','int', 'if', 'cout', ';','<','i','i++','*=', 'temp','testea', 'anti_btag + 2', 'float','anti_loose_btag(Sideband_top_withbtag_anti_Topfirst_Bottoms_CSVv2,N_Sideband_top_withbtag_anti_Topfirst_Bottoms)','anti_loose_btag(Sideband_bottom_anti_Topfirst_Bottoms_CSVv2,N_Sideband_bottom_anti_Topfirst_Bottoms)' ]+['QCDMadgraph_Graph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M','QCDMadgraph_Graph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt','QCDMadgraph_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M','QCDMadgraph_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt','QCDPythia8_Graph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M','QCDPythia8_Graph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt','QCDPythia8_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M','QCDPythia8_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt','true', 'abs(', 'abs']+['abs( QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M)','abs( QCDPythia8_SF_SB_bottom_anti_Signal_Tops_Pt-QCDMadgraph_SF_SB_bottom_anti_Signal_Tops_Pt)']
   
   # initialize variables object
   variables = variablebox.Variables(vetolist)
@@ -260,7 +285,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
     variables.initVarsFromExpr(plot.selection,tree)
   
   
-  
+  print variables
   # write program
   # start writing program
   script=""
@@ -271,6 +296,10 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
     script+=(f+";\n")
   
   script+=getHead2()
+  # open additional objects from different root files
+  script+=loadaddobjects(additionalobjectsfromaddtionalrootfile)
+  
+  script+=getHead3()
     
   # initialize all variables 
   script+=variables.initVarsProgram()
@@ -422,7 +451,9 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   script+=endLoop()
   
   # get program footer
-  script+=getFoot()
+  script+=getFoot1()
+  script+=closeaddfiles()
+  script+=getFoot2()
   
   # write program text to file
   f=open(scriptname+'.cc','w')
@@ -470,7 +501,7 @@ def submitToNAF(scripts):
   for script in scripts:
     print 'submitting',script
     #print 'I am here: ', os.getcwd()
-    command=['qsub', '-cwd', '-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=2500M', '-l', 's_vmem=2500M' ,'-o', os.getcwd()+'/logs/$JOB_NAME.o$JOB_ID', '-e', os.getcwd()+'/logs/$JOB_NAME.e$JOB_ID', script]
+    command=['qsub', '-cwd', '-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=3000M', '-l', 's_vmem=2500M' ,'-o', os.getcwd()+'/logs/$JOB_NAME.o$JOB_ID', '-e', os.getcwd()+'/logs/$JOB_NAME.e$JOB_ID', script]
     a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
     output = a.communicate()[0]
     jobidstring = output.split()
@@ -601,7 +632,7 @@ def check_jobs(scripts,outputs,nentries):
   return failed_jobs
 
 
-def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],additionalfunctions=[]):
+def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],additionalfunctions=[],additionalobjectsfromaddtionalrootfile=[]):
   workdir=os.getcwd()+'/workdir/'+name
   outputpath=workdir+'/output.root'
   
@@ -627,7 +658,7 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   
   # create c++ program
   print 'creating c++ program'
-  createProgram(programpath,plots,samples,catnames,catselections,systnames,systweights,additionalvariables,additionalfunctions)
+  createProgram(programpath,plots,samples,catnames,catselections,systnames,systweights,additionalvariables,additionalfunctions,additionalobjectsfromaddtionalrootfile)
   if not os.path.exists(programpath+'.cc'):
     print 'could not create c++ program'
     sys.exit()
