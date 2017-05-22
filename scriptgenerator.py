@@ -1705,6 +1705,7 @@ class LeptonSFHelper {
 
   float electronMaxPt;
   float electronMaxPtHigh;
+  float electronMaxPtHigher;
   float muonMaxPt;
   float muonMaxPtHigh;
   float ljets_mu_BtoF_lumi;
@@ -1719,9 +1720,10 @@ LeptonSFHelper::LeptonSFHelper( ){
 
   SetElectronHistos( );
   SetMuonHistos( );
-
-  electronMaxPt = 199.0;
-  electronMaxPtHigh=250.0;
+  
+ electronMaxPt = 150.0;
+  electronMaxPtHigh= 201.0;
+  electronMaxPtHigher=499.0;
   muonMaxPt = 119.0;
   muonMaxPtHigh = 499.0;
   
@@ -1741,9 +1743,10 @@ float LeptonSFHelper::GetElectronSF(  float electronPt , float electronEta , int
   int thisBin=0;
 
   float searchEta=electronEta;
-  float searchPt=TMath::Min( electronPt , electronMaxPt );
+  float searchPt=TMath::Min( electronPt , electronMaxPt ); // if e_pt < 150 use the corresponding bin
+  if(searchPt==electronMaxPt) {searchPt=electronMaxPtHigher;}; // if e_pt >= 150 go to last bin by setting searchpt to 499
   if (type=="Trigger"){
-    searchPt=TMath::Min( electronPt , electronMaxPtHigh );
+    searchPt=TMath::Min( electronPt , electronMaxPtHigh ); // if pt > 200 use overflow bin by setting searchpt to 201
   }
 
   float nomval = 0;
@@ -1778,6 +1781,10 @@ float LeptonSFHelper::GetElectronSF(  float electronPt , float electronEta , int
     error=h_ele_ISO_abseta_pt_ratio->GetBinError( thisBin );
     upval=nomval+error;  //DANGERZONE need to add pT depnednet 1% uncertainty
     downval=nomval-error;
+    if(electronPt<20 || electronPt>80) {
+        upval=upval*( 1.0+sqrt(0.01*0.01) );
+        downval=downval*( 1.0-sqrt(0.01*0.01) );
+    }
 
   }
   else if ( type == "GFS" ){
@@ -1787,6 +1794,10 @@ float LeptonSFHelper::GetElectronSF(  float electronPt , float electronEta , int
     error=h_ele_GFS_abseta_pt_ratio->GetBinError( thisBin );
     upval=nomval+error; //DANGERZONE need to add pT depnednet 1% uncertainty
     downval=nomval-error;
+    if(electronPt<20 || electronPt>80) {
+        upval=upval*( 1.0+sqrt(0.01*0.01) );
+        downval=downval*( 1.0-sqrt(0.01*0.01) );
+    }
 
   }
   else {
@@ -1805,14 +1816,14 @@ float LeptonSFHelper::GetElectronSF(  float electronPt , float electronEta , int
 }
 
 float LeptonSFHelper::GetMuonSF(  float muonPt , float muonEta , int syst , std::string type  ){
-  if ( muonPt == 0.0 ){ return 1.0; }
+if ( muonPt == 0.0 ){ return 1.0; }
 
   int thisBin=0;
 
-  float searchEta=fabs( muonEta );
-  float searchPt=TMath::Min( muonPt , muonMaxPt );
+  float searchEta=fabs( muonEta ); 
+  float searchPt=TMath::Min( muonPt , muonMaxPt ); // if muonpt > 119 use last bin
   if (type=="Trigger"){
-    searchPt=TMath::Min( muonPt , muonMaxPtHigh );
+    searchPt=TMath::Min( muonPt , muonMaxPtHigh );// if muonpt > 499 use last bin
   }
   float nomval = 0;
   float error = 0;
@@ -1937,10 +1948,10 @@ float LeptonSFHelper::GetMuonSF(  float muonPt , float muonEta , int syst , std:
 
 void LeptonSFHelper::SetElectronHistos( ){
 
-  std::string IDinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Spring150217/feb160317/ele_ID_SF.root";
-  std::string TRIGGERinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Spring150217/feb160317/ele_TriggerSF_Run2016All_v1.root";
-  std::string ISOinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Spring150217/feb160317/ele_Reco_EGM2D.root"; // DANGERZONE: no iso SF yet??
-  std::string GFSinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Spring150217/feb160317/ele_Reco_EGM2D.root";
+   std::string IDinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/" + "ele_ID_SF.root";
+  std::string TRIGGERinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/" + "ele_TriggerSF_Run2016All_v1.root";
+  std::string ISOinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/" + "ele_Reco_EGM2D.root"; // DANGERZONE: no iso SF yet??
+  std::string GFSinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/" + "ele_Reco_EGM2D.root";
 
   TFile *f_IDSF = new TFile(std::string(IDinputFile).c_str(),"READ");
   TFile *f_TRIGGERSF = new TFile(std::string(TRIGGERinputFile).c_str(),"READ");
@@ -1956,17 +1967,17 @@ void LeptonSFHelper::SetElectronHistos( ){
 
 void LeptonSFHelper::SetMuonHistos( ){
 
-  std::string IDinputFileBtoF = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Spring150217/feb160317/mu_ID_EfficienciesAndSF_BCDEF.root";
-  std::string IDinputFileGtoH = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Spring150217/feb160317/mu_ID_EfficienciesAndSF_GH.root";
+  std::string IDinputFileBtoF = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/" + "mu_ID_EfficienciesAndSF_BCDEF.root";
+  std::string IDinputFileGtoH = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/" + "mu_ID_EfficienciesAndSF_GH.root";
 
-  std::string TRIGGERinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Spring150217/feb160317/mu_TRIGGER_BtoF.root";
-  std::string TRIGGERinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Spring150217/feb160317/mu_TRIGGER_GtoH.root";
+  std::string TRIGGERinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/" + "mu_TRIGGER_BtoF.root";
+  std::string TRIGGERinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/" + "mu_TRIGGER_GtoH.root";
 
-  std::string ISOinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Spring150217/feb160317/mu_ISO_EfficienciesAndSF_BCDEF.root";
-  std::string ISOinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Spring150217/feb160317/mu_ISO_EfficienciesAndSF_GH.root";
+  std::string ISOinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/" + "mu_ISO_EfficienciesAndSF_BCDEF.root";
+  std::string ISOinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/" + "mu_ISO_EfficienciesAndSF_GH.root";
   
-  std::string HIPinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Spring150217/feb160317/HIP_BCDEF_histos.root";
-  std::string HIPinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Spring150217/feb160317/HIP_GH_histos.root";
+  std::string HIPinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/" + "HIP_BCDEF_histos.root";
+  std::string HIPinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/" + "HIP_GH_histos.root";
 
 
   TFile *f_IDSFBtoF = new TFile(std::string(IDinputFileBtoF).c_str(),"READ");
@@ -2019,10 +2030,12 @@ class CSVHelper
 		      double &csvWgtHF,
 		      double &csvWgtLF,
 		      double &csvWgtCF) const;
+  void allowJetsOutOfBinning(const bool allow) { allowJetsOutOfBinning_ = allow; }
 
   private:
     bool isInit_;
     int nHFptBins_;
+    bool allowJetsOutOfBinning_;
 
     std::vector< std::vector<TH1*> > h_csv_wgt_hf;
     std::vector< std::vector<TH1*> > c_csv_wgt_hf;
@@ -2033,11 +2046,11 @@ class CSVHelper
 };
 
 CSVHelper::CSVHelper()
-  : isInit_(false), nHFptBins_(0) {}
+  : isInit_(false), nHFptBins_(0), allowJetsOutOfBinning_(false) {}
 
 
 CSVHelper::CSVHelper(const std::string& hf, const std::string& lf, const int nHFptBins)
-  : isInit_(false), nHFptBins_(0) {
+  : isInit_(false), nHFptBins_(0), allowJetsOutOfBinning_(false) {
   init(hf,lf,nHFptBins);
 }
 
@@ -2173,7 +2186,7 @@ TH1* CSVHelper::readHistogram(TFile* file, const TString& name) const {
   TH1* h = NULL;
   file->GetObject(name,h);
   if( h==NULL ) {
-    std::cout<<"CSVHelper: DID nit find histograms"<<std::endl;
+    std::cout<<"CSVHelper: DID not find histograms"<<std::endl;
   }
   h->SetDirectory(0);
   
@@ -2287,18 +2300,34 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
 
     int iPt = -1;
     int iEta = -1;
-    if (jetPt >= 19.99 && jetPt < 30)
-      iPt = 0;
-    else if (jetPt >= 30 && jetPt < 40)
-      iPt = 1;
-    else if (jetPt >= 40 && jetPt < 60)
-      iPt = 2;
-    else if (jetPt >= 60 && jetPt < 100)
-      iPt = 3;
-    else if (jetPt >= 100 && jetPt < 160)
-      iPt = 4;
-    else if (jetPt >= 160)
-      iPt = 5;
+    if(abs(flavor)>3) {
+        if (jetPt >= 19.99 && jetPt < 30)
+            iPt = 0;
+        else if (jetPt >= 30 && jetPt < 50)
+            iPt = 1;
+        else if (jetPt >= 50 && jetPt < 70)
+            iPt = 2;
+        else if (jetPt >= 70 && jetPt < 100)
+            iPt = 3;
+        else if (jetPt >= 100 && jetPt < 160)
+            iPt = 4;
+        else if (jetPt >= 160)
+            iPt = 5;
+    }
+    else {
+        if (jetPt >= 19.99 && jetPt < 30)
+            iPt = 0;
+        else if (jetPt >= 30 && jetPt < 40)
+            iPt = 1;
+        else if (jetPt >= 40 && jetPt < 60)
+            iPt = 2;
+        else if (jetPt >= 60 && jetPt < 100)
+            iPt = 3;
+        else if (jetPt >= 100 && jetPt < 160)
+            iPt = 4;
+        else if (jetPt >= 160)
+            iPt = 5;
+    }
     
     if (jetAbsEta >= 0 && jetAbsEta < 0.8)
       iEta = 0;
@@ -2307,8 +2336,9 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
     else if (jetAbsEta >= 1.6 && jetAbsEta < 2.41)
       iEta = 2;
     
-    if (iPt < 0 || iEta < 0)
-      std::cout<< "CSVHelper: couldn't find Pt, Eta bins for this b-flavor jet, jetPt = " << jetPt << ", jetAbsEta = " << jetAbsEta<<std::endl;
+    if (iPt < 0 || iEta < 0) {
+      if( allowJetsOutOfBinning_ ) continue;
+    }
     
     if (abs(flavor) == 5) {
       // RESET iPt to maximum pt bin (only 5 bins for new SFs)
@@ -2316,11 +2346,9 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
 	iPt=nHFptBins_-1;
       }
       const int useCSVBin = (csv >= 0.) ? h_csv_wgt_hf.at(iSysHF).at(iPt)->FindBin(csv) : 1;
-      double iCSVWgtHF = h_csv_wgt_hf.at(iSysHF).at(iPt)->GetBinContent(useCSVBin);
-      if (iCSVWgtHF==0){iCSVWgtHF=0.001;}
-      if (iCSVWgtHF != 0){
+      const double iCSVWgtHF = h_csv_wgt_hf.at(iSysHF).at(iPt)->GetBinContent(useCSVBin);
+      if (iCSVWgtHF != 0)
 	csvWgthf *= iCSVWgtHF;
-	}
       
     } else if (abs(flavor) == 4) {
       // RESET iPt to maximum pt bin (only 5 bins for new SFs)
@@ -2328,16 +2356,14 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
 	iPt=nHFptBins_-1;
       }
       const int useCSVBin = (csv >= 0.) ? c_csv_wgt_hf.at(iSysC).at(iPt)->FindBin(csv) : 1;
-      double iCSVWgtC = c_csv_wgt_hf.at(iSysC).at(iPt)->GetBinContent(useCSVBin);
-      if (iCSVWgtC==0){iCSVWgtC=0.001;}
+      const double iCSVWgtC = c_csv_wgt_hf.at(iSysC).at(iPt)->GetBinContent(useCSVBin);
       if (iCSVWgtC != 0)
 	csvWgtC *= iCSVWgtC;
     } else {
       if (iPt >= 3)
 	iPt = 3; /// [30-40], [40-60] and [60-10000] only 3 Pt bins for lf
       const int useCSVBin = (csv >= 0.) ? h_csv_wgt_lf.at(iSysLF).at(iPt).at(iEta)->FindBin(csv) : 1;
-      double iCSVWgtLF = h_csv_wgt_lf.at(iSysLF).at(iPt).at(iEta)->GetBinContent(useCSVBin);
-      if (iCSVWgtLF==0){iCSVWgtLF=0.001;}
+      const double iCSVWgtLF = h_csv_wgt_lf.at(iSysLF).at(iPt).at(iEta)->GetBinContent(useCSVBin);
       if (iCSVWgtLF != 0)
 	csvWgtlf *= iCSVWgtLF;
     }
@@ -2356,8 +2382,8 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
 void plot(){
   TH1F::SetDefaultSumw2();
 
-  std::string csvHFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/csv_rwt_fit_hf_v2_final_2017_1_10test.root";
-  std::string csvLFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/csv_rwt_fit_lf_v2_final_2017_1_10test.root";
+  std::string csvHFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/csv_rwt_fit_hf_v2_final_2017_3_29test.root";
+  std::string csvLFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/csv_rwt_fit_lf_v2_final_2017_3_29test.root";
   
   CSVHelper* internalCSVHelper= new CSVHelper(csvHFfile,csvLFfile, 5);
   LeptonSFHelper* internalLeptonSFHelper= new LeptonSFHelper();
