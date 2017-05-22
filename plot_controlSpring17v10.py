@@ -6,7 +6,6 @@ from plotconfigSpring17v10 import *
 sys.path.insert(0, 'limittools')
 from limittools import renameHistos
 from scriptgenerator import *
-print systs_ttbar
 
 name='controlplotsSpringV10'
 
