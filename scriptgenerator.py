@@ -109,17 +109,17 @@ def initTwoDimHistoWithProcessNameAndSuffix(name,nbinsX=10,xminX=0,xmaxX=0,nbins
   return '  TH2F* h_'+name+'=new TH2F((processname+"_'+name+'"+suffix).c_str(),"'+title+'",'+str(nbinsX)+','+str(xminX)+','+str(xmaxX)+','+str(nbinsY)+','+str(xminY)+','+str(xmaxY)+');\n'
 
 
-def fillHistoSyst(name,varname,weight,systnames,systweights):
+def fillHistoSyst(name,varname,weight,systnames,systweights,OnlyFirst=False):
   text='      float weight_'+name+'='+weight+';\n'
   for sn,sw in zip(systnames,systweights):
-    text+=fillHisto(name+sn,varname,'('+sw+')*(weight_'+name+')')
+    text+=fillHisto(name+sn,varname,'('+sw+')*(weight_'+name+')',OnlyFirst)
   return text
 
 
-def fillTwoDimHistoSyst(name,varname1,varname2,weight,systnames,systweights):
+def fillTwoDimHistoSyst(name,varname1,varname2,weight,systnames,systweights,OnlyFirst=False):
   text='      float weight_'+name+'='+weight+';\n'
   for sn,sw in zip(systnames,systweights):
-    text+=fillTwoDimHisto(name+sn,varname1,varname2,'('+sw+')*(weight_'+name+')')
+    text+=fillTwoDimHisto(name+sn,varname1,varname2,'('+sw+')*(weight_'+name+')',OnlyFirst)
   return text
 
 
@@ -172,15 +172,24 @@ def endCat():
   return '    }\n    // end of category\n\n'
 
 
-def fillHisto(histo,var,weight):
+def fillHisto(histo,var,weight,OnlyFirst=False):
   text= '        if(('+weight+')!=0)\n'
   text+='          h_'+histo+'->Fill(fmin(h_'+histo+'->GetXaxis()->GetXmax()-1e-6,fmax(h_'+histo+'->GetXaxis()->GetXmin()+1e-6,'+var+')),'+weight+');\n'
+  if OnlyFirst:
+    text+='         break;}'
+  else:
+    text+='         }'
   return text
 
 
-def fillTwoDimHisto(histo,var1,var2,weight):
+def fillTwoDimHisto(histo,var1,var2,weight,OnlyFirst=False):
   text= '        if(('+weight+')!=0)\n'
   text+='          h_'+histo+'->Fill(fmin(h_'+histo+'->GetXaxis()->GetXmax()-1e-6,fmax(h_'+histo+'->GetXaxis()->GetXmin()+1e-6,'+var1+')),fmin(h_'+histo+'->GetYaxis()->GetXmax()-1e-6,fmax(h_'+histo+'->GetYaxis()->GetXmin()+1e-6,'+var2+')),'+weight+');\n'
+  
+  if OnlyFirst:
+    text+= '         break;}'
+  else:
+    text+= '         }'
   return text
 
 
@@ -225,7 +234,14 @@ def compileProgram(scriptname):
   subprocess.call(cmd)
 
 
-def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],allsystweights=["1"],additionalvariables=[], additionalfunctions=[], additionalobjectsfromaddtionalrootfile=[]):
+def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],allsystweights=["1"],additionalvariables=[], additionalfunctions=[], additionalobjectsfromaddtionalrootfile=[],OnlyFirstList_=None):
+  
+  #Set default Value for OnlyFirstList
+  if OnlyFirstList_ == None:
+    OnlyFirstList = len(plots)*[False]
+  else:
+    OnlyFirstList = OnlyFirstList_
+  
   
   # collect variables
   # list varibles that should not be written to the program automatically
@@ -350,7 +366,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 
     # plot everything
     # plot one dimensional plots
-    for plot in plots:
+    for plot, OnlyFirst in zip(plots, OnlyFirstList):
       if isinstance(plot,plotutils.TwoDimPlot):
         continue
       
@@ -391,7 +407,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
         print histoname
         print exi
         print weight
-        script+=fillHistoSyst(histoname,exi,weight,systnames,systweights)
+        script+=fillHistoSyst(histoname,exi,weight,systnames,systweights, OnlyFirst)
         script+="      }\n"
         script+="      }\n"
       else:
@@ -400,9 +416,9 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
         script+=fillHistoSyst(histoname,ex,weight,systnames,systweights)
     
     # plot two dimensional plots
-    for plot in plots:
+    for plot, OnlyFirst in zip(plots, OnlyFirstList):
         if not isinstance(plot,plotutils.TwoDimPlot):
-          continue
+            continue
         
         n=plot.histo.GetName()
         exX=plot.variable1
@@ -436,7 +452,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
           script+="{\n"
           arrayselection=variables.checkArrayLengths(','.join([exX,exY,pw]))
           weight='('+arrayselection+')*('+pwi+')*Weight_XS*categoryweight*sampleweight'
-          script+=fillTwoDimHistoSyst(histoname,exiX,exiY,weight,systnames,systweights)
+          script+=fillTwoDimHistoSyst(histoname,exiX,exiY,weight,systnames,systweights, OnlyFirst)
           script+="      }\n"
           script+="      }\n"
         else:
@@ -632,7 +648,7 @@ def check_jobs(scripts,outputs,nentries):
   return failed_jobs
 
 
-def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],additionalfunctions=[],additionalobjectsfromaddtionalrootfile=[]):
+def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[], OnlyFirstList=None):
   workdir=os.getcwd()+'/workdir/'+name
   outputpath=workdir+'/output.root'
   
@@ -658,7 +674,7 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   
   # create c++ program
   print 'creating c++ program'
-  createProgram(programpath,plots,samples,catnames,catselections,systnames,systweights,additionalvariables,additionalfunctions,additionalobjectsfromaddtionalrootfile)
+  createProgram(programpath,plots,samples,catnames,catselections,systnames,systweights,additionalvariables,additionalfunctions,additionalobjectsfromaddtionalrootfile,OnlyFirstList)
   if not os.path.exists(programpath+'.cc'):
     print 'could not create c++ program'
     sys.exit()
