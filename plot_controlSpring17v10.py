@@ -59,7 +59,7 @@ for sample in samples:
 for sample in samples[1:6]: # only for ttbar samples
   for sysname,sysfilename in zip(PSsystnames,PSsystfilenames):
     thisnewsel=sample.selection
-    systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace(ttbarpathS,path_additionalSamples+"/ttbar_"+sysfilename),thisnewsel,sample.nick+sysname,samDict=sampleDict))
+    systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace(ttbarpathS,path_additionalSamples+"/ttbar_"+sysfilename+"/*nominal*.root"),thisnewsel,sample.nick+sysname,samDict=sampleDict))
 
 
 allsamples=samples+systsamples
