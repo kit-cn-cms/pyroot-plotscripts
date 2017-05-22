@@ -2091,7 +2091,7 @@ def writeLOLAndOneOnTop(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,f
         integralfactor=0
         for histo,sample in zip(listOfHistos,samples):
 
-             yTitle='Events expected for 12.9 fb^{-1} @ 13 TeV' 
+            yTitle='Events expected for 12.9 fb^{-1} @ 13 TeV' 
 #            yTitle='Events'
              setupHisto(histo,sample.color,yTitle,stack) 
             
