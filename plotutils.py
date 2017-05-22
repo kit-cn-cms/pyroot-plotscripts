@@ -2093,10 +2093,10 @@ def writeLOLAndOneOnTop(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,f
 
              yTitle='Events expected for 12.9 fb^{-1} @ 13 TeV' 
 #            yTitle='Events'
-            setupHisto(histo,sample.color,yTitle,stack) 
+             setupHisto(histo,sample.color,yTitle,stack) 
             
-            if factor < 0:
-              integralfactor+=histo.Integral()
+             if factor < 0:
+               integralfactor+=histo.Integral()
         
         if factor < 0:    
           integralfactor=integralfactor/ot.Integral()
