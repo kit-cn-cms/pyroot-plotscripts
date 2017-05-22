@@ -55,8 +55,15 @@ for sample in samples:
     thisnewsel=sample.selection
     systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),thisnewsel,sample.nick+sysname,samDict=sampleDict))
 
+# add Parton shower variation samples
+for sample in samples[1:6]: # only for ttbar samples
+  for sysname,sysfilename in zip(PSsystnames,PSsystfilenames):
+    thisnewsel=sample.selection
+    systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace(ttbarpathS,path_additionalSamples+"/ttbar_"+sysfilename),thisnewsel,sample.nick+sysname,samDict=sampleDict))
+
+
 allsamples=samples+systsamples
-allsystnames=weightsystnames+othersystnames
+allsystnames=weightsystnames+othersystnames+PSsystnames
 
 # book plots
 plotlabel="1 lepton, #geq 4 jets, #geq 2 b-tags"
@@ -655,11 +662,12 @@ listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data
 if not os.path.exists(outputpath[:-4]+'_syst.root') or not askYesNo('reuse systematic histofile?'):
     renameHistos(outputpath,outputpath[:-4]+'_syst.root',allsystnames,False)
 lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,errorSystnames)
+lllNoPS=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,errorSystnamesNoPS)
 
 
 labels=[plot.label for plot in plots]
 lolT=transposeLOL(listOfHistoLists)
-plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name,[[lll,3354,ROOT.kBlack,True]],False,labels,True,plotBlinded)
+plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name,[[lll,3354,ROOT.kBlack,True],[lllNoPS,3345,ROOT.kSpring,True]],False,labels,True,plotBlinded)
 
 exit(0)
 
