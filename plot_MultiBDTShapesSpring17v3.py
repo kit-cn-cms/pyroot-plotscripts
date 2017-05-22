@@ -79,7 +79,7 @@ additionalvariables=[
                       'dummybdt_ljets_jge6_t3:='+bdtweightpath+'/weights_Final_63_'+bdtset+'.xml',
                       'dummybdt_ljets_jge6_tge4:='+bdtweightpath+'/weights_Final_64_'+bdtset+'.xml',
                       'finalbdt_ljets_j4_tge3:=((N_Jets==4&&N_BTagsM==3)*dummybdt_ljets_j4_t3 + (N_Jets==4&&N_BTagsM==4)*dummybdt_ljets_j4_t4)',
-                      'finalbdt_ljets_j5_tge3:=((N_Jets==5&&N_BTagsM==3)*dummybdt_ljets_j5_t3 + (N_Jets==56&&N_BTagsM>=4)*dummybdt_ljets_j5_tge4)',
+                      'finalbdt_ljets_j5_tge3:=((N_Jets==5&&N_BTagsM==3)*dummybdt_ljets_j5_t3 + (N_Jets==5&&N_BTagsM>=4)*dummybdt_ljets_j5_tge4)',
                       'finalbdt_ljets_jge6_tge3:=((N_Jets>=6&&N_BTagsM==3)*dummybdt_ljets_jge6_t3 + (N_Jets>=6&&N_BTagsM>=4)*dummybdt_ljets_jge6_tge4)',
                
                       "Muon_Pt","Electron_Pt","Muon_Eta","Electron_Eta","Jet_Pt","Jet_Eta","Jet_CSV","Jet_Flav","N_Jets","Jet_Phi","Jet_E","Jet_M",

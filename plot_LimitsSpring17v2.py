@@ -13,7 +13,7 @@ from limittools import replaceQ2scale
 from plotconfigSpring17v2 import *
 
 # output name
-name='limits_Spring17v2p2_ttbarincl'
+name='limits_Spring17v7_ttbarincl'
 
 # define categories
 categories_=[

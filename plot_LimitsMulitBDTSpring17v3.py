@@ -13,7 +13,7 @@ from limittools import replaceQ2scale
 from plotconfigSpring17v3DNN import *
 
 # output name
-name='limits_DNNMultiv8'
+name='limits_BDTMultiv8'
 
 # define categories
 categories_=[
@@ -52,8 +52,11 @@ categories_=[
 categories=[]
 
 nhistobins= [  20,20, 	4,   4,    4, 	4,   4,    4, 	4,   4,    4, 	4,   4,    4, 	4,   4,    4, 	4,   4,    4,]
-minxvals=   [ 200, 200, 0.16,  0.16, 0.17, 0.16,  0.16, 0.16, 0.18,  0.18, 0.18, 0.16,  0.16, 0.16, 0.17,  0.17, 0.18, 0.17,  0.17, 0.19,]
-maxxvals=   [800,800,    0.6,  0.6, 0.65,    0.6,  0.6, 0.6,    0.35,  0.32, 0.35,    0.45,  0.5, 0.55,    0.35,  0.24, 0.25,    0.5,  0.4, 0.45,]
+minxvals=   [ 200, 200, -0.5,  -0.4, -0.7,  -0.8,  -0.7, -0.7,     -0.7,  -0.8, -0.8,   -0.3,  -0.8, -0.8, -0.8,  -0.8, -0.7, -0.8,  -0.8, -0.8,]
+maxxvals=   [800,800,    0.7,  0.7, 0.7,    0.8,  0.5, 0.5,        0.45,  0.3, 0.4,      0.7,  0.7, 0.6,    0.4,  0.3, 0.7,    0.2,  0.5, 0.6,]
+print len(nhistobins)
+print len(minxvals)
+print len(maxxvals)
 
 # add unsplit categories
 for cat in categories_:
@@ -70,32 +73,37 @@ bdtset="Spring17v1"
 additionalvariables=[
 			'finalbdt_ljets_j4_t2:=Evt_HT_Jets',
 			'finalbdt_ljets_j5_t2:=Evt_HT_Jets',
-                      #'finalbdt_ljets_j4_t3:='+bdtweightpath+'/weights_Final_43_'+bdtset+'.xml',
-                      #'finalbdt_ljets_j4_t4:='+bdtweightpath+'/weights_Final_44_'+bdtset+'.xml',
-                      #'finalbdt_ljets_j5_t3:='+bdtweightpath+'/weights_Final_53_'+bdtset+'.xml',
-                      #'finalbdt_ljets_j5_tge4:='+bdtweightpath+'/weights_Final_54_'+bdtset+'.xml',
-                      #'finalbdt_ljets_jge6_t2:='+bdtweightpath+'/weights_Final_62_'+bdtset+'.xml',
-                      #'finalbdt_ljets_jge6_t3:='+bdtweightpath+'/weights_Final_63_'+bdtset+'.xml',
-                      #'finalbdt_ljets_jge6_tge4:='+bdtweightpath+'/weights_Final_64_'+bdtset+'.xml',
-                      #'finalbdt_ljets_boosted:='+bdtweightpath+'/weights_Final_DB_boosted_76xmem.xml',
+                      'dummybdt_ljets_j4_t3:='+bdtweightpath+'/weights_Final_43_'+bdtset+'.xml',
+                      'dummybdt_ljets_j4_t4:='+bdtweightpath+'/weights_Final_44_'+bdtset+'.xml',
+                      'dummybdt_ljets_j5_t3:='+bdtweightpath+'/weights_Final_53_'+bdtset+'.xml',
+                      'dummybdt_ljets_j5_tge4:='+bdtweightpath+'/weights_Final_54_'+bdtset+'.xml',
+                      'dummybdt_ljets_jge6_t2:='+bdtweightpath+'/weights_Final_62_'+bdtset+'.xml',
+                      'dummybdt_ljets_jge6_t3:='+bdtweightpath+'/weights_Final_63_'+bdtset+'.xml',
+                      'dummybdt_ljets_jge6_tge4:='+bdtweightpath+'/weights_Final_64_'+bdtset+'.xml',
+                      'finalbdt_ljets_j4_tge3:=((N_Jets==4&&N_BTagsM==3)*dummybdt_ljets_j4_t3 + (N_Jets==4&&N_BTagsM==4)*dummybdt_ljets_j4_t4)',
+                      'finalbdt_ljets_j5_tge3:=((N_Jets==5&&N_BTagsM==3)*dummybdt_ljets_j5_t3 + (N_Jets==5&&N_BTagsM>=4)*dummybdt_ljets_j5_tge4)',
+                      'finalbdt_ljets_jge6_tge3:=((N_Jets>=6&&N_BTagsM==3)*dummybdt_ljets_jge6_t3 + (N_Jets>=6&&N_BTagsM>=4)*dummybdt_ljets_jge6_tge4)',
+               
                       "Muon_Pt","Electron_Pt","Muon_Eta","Electron_Eta","Jet_Pt","Jet_Eta","Jet_CSV","Jet_Flav","N_Jets","Jet_Phi","Jet_E","Jet_M",
                       "Evt_Pt_PrimaryLepton","Evt_E_PrimaryLepton","Evt_M_PrimaryLepton","Evt_Phi_PrimaryLepton","Evt_Eta_PrimaryLepton",
                       "Weight_CSV","Weight_CSVLFup","Weight_CSVLFdown","Weight_CSVHFup","Weight_CSVHFdown","Weight_CSVHFStats1up","Weight_CSVHFStats1down","Weight_CSVLFStats1up","Weight_CSVLFStats1down","Weight_CSVHFStats2up","Weight_CSVHFStats2down","Weight_CSVLFStats2up","Weight_CSVLFStats2down","Weight_CSVCErr1up","Weight_CSVCErr1down","Weight_CSVCErr2up","Weight_CSVCErr2down",
 ]
 
+
 discrs =    ['finalbdt_ljets_j4_t2','finalbdt_ljets_j5_t2',
-	     'aachen_Out_ttH','aachen_Out_ttH','aachen_Out_ttH',
-	     'aachen_Out_ttbarBB','aachen_Out_ttbarBB','aachen_Out_ttbarBB',
-	     'aachen_Out_ttbarB','aachen_Out_ttbarB','aachen_Out_ttbarB',
-	     'aachen_Out_ttbar2B','aachen_Out_ttbar2B','aachen_Out_ttbar2B',
-	     'aachen_Out_ttbarCC','aachen_Out_ttbarCC','aachen_Out_ttbarCC',
-	     'aachen_Out_ttbarOther','aachen_Out_ttbarOther','aachen_Out_ttbarOther',
+	     'finalbdt_ljets_j4_tge3','finalbdt_ljets_j5_tge3','finalbdt_ljets_jge6_tge3',
+	     'finalbdt_ljets_j4_tge3','finalbdt_ljets_j5_tge3','finalbdt_ljets_jge6_tge3',
+	     'finalbdt_ljets_j4_tge3','finalbdt_ljets_j5_tge3','finalbdt_ljets_jge6_tge3',
+	     'finalbdt_ljets_j4_tge3','finalbdt_ljets_j5_tge3','finalbdt_ljets_jge6_tge3',
+	     'finalbdt_ljets_j4_tge3','finalbdt_ljets_j5_tge3','finalbdt_ljets_jge6_tge3',
+	     'finalbdt_ljets_j4_tge3','finalbdt_ljets_j5_tge3','finalbdt_ljets_jge6_tge3',
 	     ]
 discrname='finaldiscr'
 assert(len(nhistobins)==len(maxxvals))
 assert(len(nhistobins)==len(minxvals))
 assert(len(nhistobins)==len(categories))
 assert(len(nhistobins)==len(discrs))
+
 
 # get input for plotting function
 bins= [c[0] for c in categories]
@@ -108,7 +116,7 @@ systsamples=[]
 for sample in samples:
   for sysname,sysfilename in zip(othersystnames,othersystfilenames):
     thisnewsel=sample.selection
-    systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),thisnewsel,sample.nick+sysname))
+    systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),thisnewsel,sample.nick+sysname,samDict=sampleDict))
   
 allsamples=samples+systsamples
 samplesdata=samples_data_controlplots
@@ -122,7 +130,11 @@ for discr,b,bl,nb,minx,maxx in zip(discrs,bins,binlabels,nhistobins,minxvals,max
 
 print bdts
 # plot everthing
-outputpath=plotParallel(name,2000000,bdts,allsamples+samplesdata,[''],['1.'],weightsystnames,systweights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/pyroot-plotscripts/treejson_Spring17v2_moreBKGs.json",othersystnames,True)
+outputpath=plotParallel(name,3000000,bdts,allsamples+samplesdata,[''],['1.'],weightsystnames,systweights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/pyroot-plotscripts/treejson_Spring17v2_moreBKGs.json",othersystnames,True)
+print "aha"
+
+if not os.path.exists(name):
+  os.makedirs(name)
 
 # rename output histos and save in one file
 renameHistos(outputpath,name+'/'+name+'_limitInput.root',allsystnames)
