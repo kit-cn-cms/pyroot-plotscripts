@@ -1,4 +1,5 @@
 *.root
 *.pdf
 *.png
-
+workdir/*
+*.pyc
