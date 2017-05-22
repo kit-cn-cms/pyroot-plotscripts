@@ -13,7 +13,7 @@ usualweights="(1*Weight_PU*((Weight>0)-(Weight<0)))*Weight_ElectronSFID*Weight_E
 
 # samples
 # input path
-path_80x="/nfs/dust/cms/user/skudella/processed_MC/flat_trees/"
+path_80x="/nfs/dust/cms/user/skudella/processed_MC/flat_trees_new/"
 
 # MC samples (name, color, path to files,weight,nickname_without_special_characters,systematics)
 samples=[
@@ -65,18 +65,18 @@ BackgroundSamples=[
 
 
 DataSamples=[
-                    Sample('MC_BKG_DATA',ROOT.kAzure,path_80x+'BKG*/*nominal*.root',mcweight,'MC_BKG_DATA'),
+                    #Sample('MC_BKG_DATA',ROOT.kAzure,path_80x+'BKG*/*nominal*.root',mcweight,'MC_BKG_DATA'),
 
 ]
 
 CombinedSamples=[
-                    Sample('Zprime15001200_and_QCD_HT',ROOT.kRed, [path_80x+'BKG_QCD/MC_QCD_P*nominal*Tree*.root', path_80x+'Signal_Zprime/Zprime_1500_900_nominal_Tree.root'],mcweight,'Zprime15001200_and_QCD_HT'),
-                    Sample('Zprime20001200_and_QCD_HT',ROOT.kRed, [path_80x+'BKG_QCD/MC_QCD_P*nominal*Tree*.root', path_80x+'Signal_Zprime/Zprime_2000_1200_nominal_Tree.root'],mcweight,'Zprime20001200_and_QCD_HT'),
-                    Sample('Zprime25001200_and_QCD_HT',ROOT.kRed, [path_80x+'BKG_QCD/MC_QCD_P*nominal*Tree*.root', path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root'],mcweight,'Zprime25001200_and_QCD_HT'),
+                    #Sample('Zprime15001200_and_QCD_HT',ROOT.kRed, [path_80x+'BKG_QCD/MC_QCD_P*nominal*Tree*.root', path_80x+'Signal_Zprime/Zprime_1500_900_nominal_Tree.root'],mcweight,'Zprime15001200_and_QCD_HT'),
+                    #Sample('Zprime20001200_and_QCD_HT',ROOT.kRed, [path_80x+'BKG_QCD/MC_QCD_P*nominal*Tree*.root', path_80x+'Signal_Zprime/Zprime_2000_1200_nominal_Tree.root'],mcweight,'Zprime20001200_and_QCD_HT'),
+                    #Sample('Zprime25001200_and_QCD_HT',ROOT.kRed, [path_80x+'BKG_QCD/MC_QCD_P*nominal*Tree*.root', path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root'],mcweight,'Zprime25001200_and_QCD_HT'),
 
-                    Sample('Zprime15001200_and_QCD_PT',ROOT.kRed, [path_80x+'BKG_QCD/MC_QCD_P*nominal*Tree*.root', path_80x+'Signal_Zprime/Zprime_1500_900_nominal_Tree.root'],mcweight,'Zprime15001200_and_QCD_PT'),
-                    Sample('Zprime20001200_and_QCD_PT',ROOT.kRed, [path_80x+'BKG_QCD/MC_QCD_P*nominal*Tree*.root', path_80x+'Signal_Zprime/Zprime_2000_1200_nominal_Tree.root'],mcweight,'Zprime20001200_and_QCD_PT'),
-                    Sample('Zprime25001200_and_QCD_PT',ROOT.kRed, [path_80x+'BKG_QCD/MC_QCD_P*nominal*Tree*.root', path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root'],mcweight,'Zprime25001200_and_QCD_PT'),
+                    #Sample('Zprime15001200_and_QCD_PT',ROOT.kRed, [path_80x+'BKG_QCD/MC_QCD_P*nominal*Tree*.root', path_80x+'Signal_Zprime/Zprime_1500_900_nominal_Tree.root'],mcweight,'Zprime15001200_and_QCD_PT'),
+                    #Sample('Zprime20001200_and_QCD_PT',ROOT.kRed, [path_80x+'BKG_QCD/MC_QCD_P*nominal*Tree*.root', path_80x+'Signal_Zprime/Zprime_2000_1200_nominal_Tree.root'],mcweight,'Zprime20001200_and_QCD_PT'),
+                    #Sample('Zprime25001200_and_QCD_PT',ROOT.kRed, [path_80x+'BKG_QCD/MC_QCD_P*nominal*Tree*.root', path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root'],mcweight,'Zprime25001200_and_QCD_PT'),
 
 	]
 
