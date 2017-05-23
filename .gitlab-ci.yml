@@ -9,7 +9,7 @@ variables:
 
 before_script:
     - export CI_HOME=${CI_PROJECT_DIR}
-    - echo "Gitlab User: " ${GITLAB_USER_ID}
+    - echo "Gitlab User " ${GITLAB_USER_ID}
     - export SCRAM_ARCH="slc6_amd64_gcc530"
     - export CMSSW_VERSION="CMSSW_8_0_26_patch2"
     - source /cvmfs/cms.cern.ch/cmsset_default.sh
@@ -26,7 +26,7 @@ plot_LimitsSpring17v3:
         - ssh
     stage: produceHistosDataCards
     script:
-        - echo "Gitlab User: " ${GITLAB_USER_ID}
+        - echo "Gitlab User " ${GITLAB_USER_ID}
         - set -x 
         - cd $CI_HOME
         - python plot_LimitsSpring17v3.py
