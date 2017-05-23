@@ -8,7 +8,6 @@ variables:
 
 
 before_script:
-    - set -x
     - export CI_HOME=${CI_PROJECT_DIR}
     - export SCRAM_ARCH="slc6_amd64_gcc530"
     - export CMSSW_VERSION="CMSSW_8_0_26_patch2"
@@ -27,8 +26,10 @@ plot_LimitsSpring17v3:
         - naf6
     stage: produceHistosDataCards
     script: 
+        - set -x 
         - cd $CI_HOME/pyroot-plotscripts
         - python plot_LimitsSpring17v3.py
+        - set +x
     artifacts:     
         paths:       
             - $CI_HOME/pyroot-plotscripts/limits_Spring17v8/*
