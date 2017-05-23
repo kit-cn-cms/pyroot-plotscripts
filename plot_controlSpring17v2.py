@@ -3,7 +3,8 @@
 ##############
 
 from plotconfigSpring17v2 import *
-sys.path.insert(0, 'limittools')
+sys.path.append('pyroot-plotscripts-base')
+sys.path.append('pyroot-plotscripts-base/limittools')
 from limittools import renameHistos
 
 name='controlplotsSpring17v2p2_ttbarincl'

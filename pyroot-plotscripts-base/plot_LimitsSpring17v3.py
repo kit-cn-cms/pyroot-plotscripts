@@ -1,6 +1,6 @@
 import sys
 import os
-sys.path.insert(0, 'limittools')
+sys.path.append('pyroot-plotscripts-base')/\n sys.path.append('pyroot-plotscripts-base/limittools')
 
 from scriptgeneratorMEMDBCSV import *
 from plotutils import *

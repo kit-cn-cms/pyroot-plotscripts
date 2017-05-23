@@ -3,7 +3,8 @@
 ##############
 
 from plotconfigAnalysisV3csvWithPS import *
-sys.path.insert(0, 'limittools')
+sys.path.append('pyroot-plotscripts-base')
+sys.path.append('pyroot-plotscripts-base/limittools')
 from limittools import renameHistos
 
 name='controlplotsV12OnlyCategories'

@@ -3,7 +3,8 @@
 ##############
 
 from plotconfigAnalysisV3 import *
-sys.path.insert(0, 'limittools')
+sys.path.append('pyroot-plotscripts-base')
+sys.path.append('pyroot-plotscripts-base/limittools')
 from limittools import renameHistos
 
 name='controlplotsAnalysisV6Test2'
