@@ -23,7 +23,6 @@ plot_LimitsSpring17v3:
     tags:
         - naf
         - ssh
-        - naf6
     stage: produceHistosDataCards
     script: 
         - set -x 
