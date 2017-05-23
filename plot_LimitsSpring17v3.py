@@ -113,7 +113,7 @@ renameHistos(outputpath,name+'/'+name+'_limitInput.root',allsystnames)
 
 print samples
 # add real/pseudo data
-addPseudoData(name+'/'+name+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
+#addPseudoData(name+'/'+name+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
 #addRealData(name+'/'+name+'_limitInput.root',[s.nick for s in samples_data_controlplots],binlabels,discrname)
 
 listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,bdts)
