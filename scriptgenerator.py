@@ -3497,7 +3497,7 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
       else :
         files_to_submit+=[fn]
         events_in_files+=events_in_file
-        if events_in_files>maxevents or fn==s.files[-1]:
+        if events_in_files>maxevents or fn==s.files[-1] or len(files_to_submit)>400: #avoid too long argument list wiht the last or. I hope
           njob+=1
           skipevents=0
           scriptname=scriptsfolder+'/'+s.nick+'_'+str(njob)+'.sh'
