@@ -8,12 +8,13 @@ variables:
 
 
 before_script:
+    - set -x
     - export CI_HOME=${CI_PROJECT_DIR}
     - export SCRAM_ARCH="slc6_amd64_gcc530"
     - export CMSSW_VERSION="CMSSW_8_0_26_patch2"
     - source /cvmfs/cms.cern.ch/cmsset_default.sh
-    - mkdir -p /nfs/dust/cms/user/${USERNAME}/gitlab-ci
-    - cd /nfs/dust/cms/user/${USERNAME}/gitlab-ci
+    - mkdir -p /nfs/dust/cms/user/${USER}/gitlab-ci
+    - cd /nfs/dust/cms/user/${USER}/gitlab-ci
     - scramv1 project CMSSW $CMSSW_VERSION
     - cd $CMSSW_VERSION/src
     - eval `scramv1 runtime -sh`
