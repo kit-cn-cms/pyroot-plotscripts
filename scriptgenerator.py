@@ -1948,10 +1948,10 @@ if ( muonPt == 0.0 ){ return 1.0; }
 
 void LeptonSFHelper::SetElectronHistos( ){
 
-   std::string IDinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/ele_ID_SF.root";
-  std::string TRIGGERinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/ele_TriggerSF_Run2016All_v1.root";
-  std::string ISOinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/ele_Reco_EGM2D.root"; // DANGERZONE: no iso SF yet??
-  std::string GFSinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/ele_Reco_EGM2D.root";
+   std::string IDinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/feb160317/ele_ID_SF.root";
+  std::string TRIGGERinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/feb160317/ele_TriggerSF_Run2016All_v1.root";
+  std::string ISOinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/feb160317/ele_Reco_EGM2D.root"; // DANGERZONE: no iso SF yet??
+  std::string GFSinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/feb160317/ele_Reco_EGM2D.root";
 
   TFile *f_IDSF = new TFile(std::string(IDinputFile).c_str(),"READ");
   TFile *f_TRIGGERSF = new TFile(std::string(TRIGGERinputFile).c_str(),"READ");
@@ -1967,17 +1967,17 @@ void LeptonSFHelper::SetElectronHistos( ){
 
 void LeptonSFHelper::SetMuonHistos( ){
 
-  std::string IDinputFileBtoF = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/mu_ID_EfficienciesAndSF_BCDEF.root";
-  std::string IDinputFileGtoH = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/mu_ID_EfficienciesAndSF_GH.root";
+  std::string IDinputFileBtoF = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/feb160317/mu_ID_EfficienciesAndSF_BCDEF.root";
+  std::string IDinputFileGtoH = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/feb160317/mu_ID_EfficienciesAndSF_GH.root";
 
-  std::string TRIGGERinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/mu_TRIGGER_BtoF.root";
-  std::string TRIGGERinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/mu_TRIGGER_GtoH.root";
+  std::string TRIGGERinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/feb160317/mu_TRIGGER_BtoF.root";
+  std::string TRIGGERinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/feb160317/mu_TRIGGER_GtoH.root";
 
-  std::string ISOinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/mu_ISO_EfficienciesAndSF_BCDEF.root";
-  std::string ISOinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/mu_ISO_EfficienciesAndSF_GH.root";
+  std::string ISOinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/feb160317/mu_ISO_EfficienciesAndSF_BCDEF.root";
+  std::string ISOinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/feb160317/mu_ISO_EfficienciesAndSF_GH.root";
   
-  std::string HIPinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/HIP_BCDEF_histos.root";
-  std::string HIPinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/HIP_GH_histos.root";
+  std::string HIPinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/feb160317/HIP_BCDEF_histos.root";
+  std::string HIPinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/feb160317/HIP_GH_histos.root";
 
 
   TFile *f_IDSFBtoF = new TFile(std::string(IDinputFileBtoF).c_str(),"READ");
@@ -3497,7 +3497,7 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
       else :
         files_to_submit+=[fn]
         events_in_files+=events_in_file
-        if events_in_files>maxevents or fn==s.files[-1]:
+        if events_in_files>maxevents or fn==s.files[-1] or len(files_to_submit)>400: #avoid too long argument list wiht the last or. I hope
           njob+=1
           skipevents=0
           scriptname=scriptsfolder+'/'+s.nick+'_'+str(njob)+'.sh'
