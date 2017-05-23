@@ -1632,7 +1632,7 @@ def do_qstat(jobids):
       allfinished=True
 
 
-def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,programpath,cmsswpath,treejsonfile=""):
+def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,programpath,cmsswpath,treejsonfile="",cirun=False):
   scripts=[]
   outputs=[]
   nentries=[]
@@ -1695,6 +1695,11 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
           files_to_submit=[]
           events_in_files=0
 
+      # If cirun = true, only use small number of files
+      if cirun:
+	#print "using tree event information"
+	break
+
     # submit remaining scripts (can happen if the last file was large)
     if len(files_to_submit)>0:
       njob+=1
@@ -1740,7 +1745,7 @@ def check_jobs(scripts,outputs,nentries):
   return failed_jobs
 
 # the dataBases should be defined as follows e.g. [[memDB,path],[blrDB,path]]
-def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],dataBases=[],treeInformationJsonFile="",otherSystnames=[]):
+def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],dataBases=[],treeInformationJsonFile="",otherSystnames=[],cirun=False):
   workdir=os.getcwd()+'/workdir/'+name
   outputpath=workdir+'/output.root'
 
@@ -1820,7 +1825,7 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
 
   # create run scripts
   print 'creating run scripts'
-  scripts,outputs,nentries=get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,programpath,cmsswpath,treeInformationJsonFile)
+  scripts,outputs,nentries=get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,programpath,cmsswpath,treeInformationJsonFile,cirun)
 
   # submit run scripts
   print 'submitting scripts'
