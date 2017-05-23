@@ -30,6 +30,8 @@ plot_LimitsSpring17v3:
         - cd $CI_HOME
         - python plot_LimitsSpring17v3.py
         - set +x
+    when: manual
+    allow_failure: false
     artifacts:     
         paths:       
             - $CI_HOME/limits_Spring17v8/*.pdf
