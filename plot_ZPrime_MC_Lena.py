@@ -6,7 +6,7 @@ from plotconfig_Zprime_MC_Lena import *
 sys.path.insert(0, 'limittools')
 from limittools import renameHistos
 
-name='Zprime_MC'
+name='Zprime_MC_Lena'
 SampleNames=['ttbar' , 'QCD_HT', 'QCD_Pt' ]
 SignalSampleNames=['Zprime1500900',  'Zprime20001200',  'Zprime25001200']
 
@@ -39,7 +39,7 @@ plotselection2="N_packedPatJetsAK8PFCHSSoftDrop>=2 && packedPatJetsAK8PFCHSSoftD
 
 
 #Own Plotselections for ABCD-method
-plotselection_ABCD_general=  plotselection2 + "&& Zprimes_ABCD_M>0   &&    Ws_ABCD_t21 <  0.6    &&    100 < Tops_ABCD_MSD     &&    Tops_ABCD_MSD  < 210   "
+plotselection_ABCD_general=  plotselection2 + "&& Zprimes_ABCD_M>0   &&    Ws_ABCD_t21 <  0.6    &&    100 < Tops_ABCD_MSD     &&    Tops_ABCD_MSD  < 210  "
 plotselection_ABCD_general_beta =  plotselection2 + "&& Zprimes_ABCD_M>0   &&    70 < Ws_ABCD_MSD  &&   Ws_ABCD_MSD < 100     &&    100 < Tops_ABCD_MSD     &&    Tops_ABCD_MSD  < 210   "
 
 plotselection_tau32 = " Tops_ABCD_t32 < 0.86   "
@@ -124,6 +124,9 @@ plots=[
     TwoDimPlot(ROOT.TH2F("ABCD_W_MSD_vs_Bottom_CSV_v2" ,"m_{SD}(W) VS CSV_v2(b)",30,0,300,20,0,1),"Ws_ABCD_MSD","Bottoms_ABCD_CSV",plotselection2+"&&Ws_ABCD_MSD>0 &&Bottoms_ABCD_CSV>0","1 btag"),
     TwoDimPlot(ROOT.TH2F("ABCD_W_tau21_vs_Bottom_CSV_v2" ,"m_{SD}(W) VS CSV_v2(b)",30,0,300,20,0,1),"Ws_ABCD_t21","Bottoms_ABCD_CSV",plotselection2+"&&Ws_ABCD_t21>0 &&Bottoms_ABCD_CSV>0","1 btag"),
 
+    TwoDimPlot(ROOT.TH2F("ABCD_top_tau32_vs_ZprimeM" ,"tau_{32}(t) VS m(Z')",20,0,1,50,0,5000),"Tops_ABCD_t32","Zprimes_ABCD_M",plotselection2+"&&Tops_ABCD_t32>0 && Zprimes_ABCD_M>0","1 btag"),
+    TwoDimPlot(ROOT.TH2F("ABCD_Bottom_CSV_v2_vs_ZprimeM" ,"CSV_v2(b) VS m(Z')",20,0,1,50,0,5000),"Bottoms_ABCD_CSV","Zprimes_ABCD_M",plotselection2+"&&Bottoms_ABCD_CSV>0 && Zprimes_ABCD_M>0","1 btag"),    
+    TwoDimPlot(ROOT.TH2F("ABCD_W_tau21_vs_ZprimeM" ,"tau_{21}(W) VS m(Z')",20,0,1,50,0,5000),"Ws_ABCD_t21","Zprimes_ABCD_M",plotselection2+"&&Ws_ABCD_t21>0 && Zprimes_ABCD_M>0","1 btag"),
 
 
 
@@ -231,7 +234,8 @@ print OnlyFirstList, 'This is the boolean List for only first elements'
 
 print name,3000000,plots,SignalSamples+BackgroundSamples+DataSamples,[''],['1.']
 #outputpath=plotParallel(name,4000000,plots,samples)
-outputpath=plotParallel(name,3000000,plots,SignalSamples+BackgroundSamples+CombinedSamples, [''], ['1'] , [''], ['1'], [],  OnlyFirstList)
+outputpath=plotParallel(name,3000000,plots,SignalSamples+BackgroundSamples, [''], ['1'] , [''], ['1'], [],  OnlyFirstList)
+#outputpath=plotParallel(name,3000000,plots,SignalSamples+BackgroundSamples+CombinedSamples, [''], ['1'] , [''], ['1'], [],  OnlyFirstList)
 #outputpathBackground=plotParallel(name,4000000,plots,BackgroundSamples)
 #outputpathData=plotParallel(name,4000000,plots,DataSamples)
 
@@ -262,233 +266,250 @@ labels=[plot.label for plot in plots]
 #lolBackgroundT=transposeLOL(listOfHistoListsBackground)
 lolABCDT=transposeLOL(listOfHistoListsABCD)
 #lolDataT=transposeLOL(listOfHistoListsData)
+divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_CatA_Zprime_M_beta_first"), plotnames.index("ABCD_CatB_Zprime_M_beta_first"), normalizefirst=True,rebin=1,option='')
+#divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_CatB_Zprime_M_beta_first"), plotnames.index("ABCD_CatD_Zprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
+#divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_CatA_Zprime_M_beta_first"), plotnames.index("ABCD_CatB_Zprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
+
+#divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_CatE_Zprime_M_beta_first"), plotnames.index("ABCD_CatG_Zprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
+#divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_CatF_Zprime_M_beta_first"), plotnames.index("ABCD_CatH_Zprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
+#divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_CatE_Zprime_M_beta_first"), plotnames.index("ABCD_CatF_Zprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
+
+
+GetIntegralLOL( transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index("ABCD_CatA_Zprime_M_beta_first"):plotnames.index("ABCD_CatH_Zprime_M_beta_first")+1]) 
+#GetIntegralLOL( listOfHistoListsABCD )
+
+
+##print listOfHistoListsABCD[plotnames.index("ABCD_CatA_Zprime_M_beta_first")][BackgroundSampleNames.index('QCD_HT')], '   integral ', listOfHistoListsABCD[plotnames.index("ABCD_CatA_Zprime_M_beta_first")][BackgroundSampleNames.index('QCD_HT')].Integral()
+#writeListOfHistoLists([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_CatA_Zprime_M_beta_first')]],BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], 'label','fuck',normalize=False,stack=False,logscale=False,options='histo',statTest=False, sepaTest=False,ratio=False,DoProfile=False)
+
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_CatA_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_shaperatioAB_pol1", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
+#writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_CatA_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_shaperatioAC_over_shaperatioBD", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
+#writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_CatE_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforEFGH_shaperatioEG_over_shaperatioFH", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
+
+
+
+
+#################################################################################################################
+##Here Starts: Plots And Calculating
+
+
+
+##Stack Plot, Background and Signal, Z_Prime_M
+##writeLOLSeveralOnTop(transposeLOL(lolBackgroundT[BackgroundSampleNames.index("ttbar"):BackgroundSampleNames.index("QCD_HT")+1])[:plotnames.index("Sideband_top_anti_W_anti_bottom_anti_Topfirst_Zprime_M")+1],BackgroundSamples[BackgroundSampleNames.index("ttbar"):BackgroundSampleNames.index("QCD_HT")+1],transposeLOL(lolSignalT),SignalSamples,-0.2,'Zprime',False ,'histoE','samehistoE')
+##print "plot_Zprime_MC_Lena Len(listOfHistoListsABCD):"+str( len(listOfHistoListsABCD) )
+
+
+
+#writeIntegralLOLinTEX( listOfHistoListsABCD[ plotnames.index( "ABCD_CatA_Zprime_M" ) : plotnames.index( "ABCD_CatH_Zprime_M_first" ) +1] , "Integrallist_before_multiplication.tex" , SampleNames )
+##writeIntegralLOLinTEX( listOfHistoListsABCD[ plotnames.index( "ABCD_CatA_Zprime_M_beta" ) : plotnames.index( "ABCD_CatH_Zprime_M_beta" ) +1] , "Integrallist_before_multiplication_beta.tex" , SampleNames )
+
+
+##Compare BackgroundAndSignal in SignalSample (mistaged Signal infuences Background prediction )
+#compareEntriesInBackgroundAndSignalRegion( transposeLOL(listOfHistoListsSignal), "ComparisonIntegralsinSignalSample.txt" )
+
+## ## TwoDimPlots (with difference to selection with only first element)
+writeListOfHistoLists( transposeLOL(lolABCDT)[plotnames.index('ABCD_top_tau32_vs_top_MSD'):plotnames.index("ABCD_W_tau21_vs_ZprimeM")+1] + listOfHistoListsABCD[-1], BackgroundSamples , plotnames[plotnames.index('ABCD_top_tau32_vs_top_MSD'):plotnames.index("ABCD_W_tau21_vs_ZprimeM")+1], 'ABCD_2D' , True, False, False, "colz", False, False, False, True)
+
+
+
+
+
+### Correlationfactor  (with difference to selection with only first element)
+writeCorrLOLinTEX( transposeLOL(lolABCDT)[plotnames.index('ABCD_top_tau32_vs_top_MSD'):plotnames.index("ABCD_W_tau21_vs_ZprimeM")+1], "Correlationfactors.tex", plotnames[plotnames.index('ABCD_top_tau32_vs_top_MSD'):plotnames.index("ABCD_W_tau21_vs_ZprimeM")+1], ["tt-bar", "QCD_HT", "QCD_Pt", "QCD_comb"] , True )
+
+
+
+##################
+##Test if shape of CatA=shape of CatB
 
 
 
 
 
 
-################################################################################################################
-#Here Starts: Plots And Calculating
+## # ABCD-Zprime_M Plots Work?
+## writeListOfHistoLists( transposeLOL(lolABCDT)[plotnames.index('ABCD_CatA_Zprime_M'):plotnames.index('ABCD_CatH_Zprime_M_first_beta')+1], BackgroundSamples , plotnames[plotnames.index('ABCD_CatA_Zprime_M'):plotnames.index('ABCD_CatH_Zprime_M_first_beta')+1], 'ABCD_ZPrime_M' , True, False, False, "histoE", False, False, False, True)
 
 
+##
+##
+##
+##
+### Multiply and Divide for ABCD Methode - short verion with funktion ReconstructWithABCD()
+#for plotname in CatAList:
+    #ReconstructWithABCD(listOfHistoListsABCD, plotname, plotnames)
+    #ReconstructWithABCD(listOfHistoListsSignal, plotname, plotnames)
 
-#Stack Plot, Background and Signal, Z_Prime_M
-#writeLOLSeveralOnTop(transposeLOL(lolBackgroundT[BackgroundSampleNames.index("ttbar"):BackgroundSampleNames.index("QCD_HT")+1])[:plotnames.index("Sideband_top_anti_W_anti_bottom_anti_Topfirst_Zprime_M")+1],BackgroundSamples[BackgroundSampleNames.index("ttbar"):BackgroundSampleNames.index("QCD_HT")+1],transposeLOL(lolSignalT),SignalSamples,-0.2,'Zprime',False ,'histoE','samehistoE')
-#print "plot_Zprime_MC_Lena Len(listOfHistoListsABCD):"+str( len(listOfHistoListsABCD) )
+##
+##
+##
+##
+##Add Signal and Backgroundhistos
+#XC_Factor=1
+#weights= [ XC_Factor/138.07, XC_Factor/86.28, XC_Factor/37.6 ]
+#for plotnameindex in range(plotnames.index("ABCD_CatA_Zprime_M"), plotnames.index("ABCD_CatH_Zprime_M_first") ):
+    #for index, listOfHistoList, weight in zip(range(3),listOfHistoListsSignalAndBackground, weights):
+        #addHistos(listOfHistoList, plotnameindex, plotnameindex + len(plotnames), weight , True, index)
 
+##Multiply and Divide for ABCD
+#for listOfHistoList in listOfHistoListsSignalAndBackground:
+    #for plotname in CatAList:
+        #ReconstructWithABCD(listOfHistoList, plotname, plotnames)
 
+##
+##
+##
+##
+##
+##
+##
+###Write ListOfIntegralLists
+#writeIntegralLOLinTEX( listOfHistoListsABCD[ plotnames.index( "ABCD_CatA_Zprime_M" ) : plotnames.index( "ABCD_CatH_Zprime_M_first" ) +1] , "Integrallist_after_multiplication.tex" , SampleNames )
+## writeIntegralLOLinTEX( listOfHistoListsABCD[ plotnames.index( "ABCD_CatA_Zprime_M_beta" ) : plotnames.index( "ABCD_CatH_Zprime_M_beta" ) +1] , "Integrallist_after_multiplication_beta.tex" , SampleNames )
+##
+##
+##
+##
+##
 
-writeIntegralLOLinTEX( listOfHistoListsABCD[ plotnames.index( "ABCD_CatA_Zprime_M" ) : plotnames.index( "ABCD_CatH_Zprime_M_first" ) +1] , "Integrallist_before_multiplication.tex" , SampleNames )
-#writeIntegralLOLinTEX( listOfHistoListsABCD[ plotnames.index( "ABCD_CatA_Zprime_M_beta" ) : plotnames.index( "ABCD_CatH_Zprime_M_beta" ) +1] , "Integrallist_before_multiplication_beta.tex" , SampleNames )
+##Create and Write List Of RatioPlots
+##Workaround to use writeListOfHistoLists with a Transposed ListOfHistoList (uses trnasposeLOLextendet in plotutils.py)
 
+#WASamples = 50*[ BackgroundSamples[0], BackgroundSamples[1] ]
+#WAPlotNames =  [   "ABCD_CatA_Zprime_M"   ,
+                 #"ABCD_CatE_Zprime_M"  ,
+                 #"ABCD_CatA_Zprime_M_beta" ,
+                 #"ABCD_CatE_Zprime_M_beta" ,
+                 ## "ABCD_CatA_Zprime_M_one_sided" ,
+                 ## "ABCD_CatE_Zprime_M_one_sided",
+                 #"ABCD_CatA_Zprime_M_beta_first",
+                 #"ABCD_CatE_Zprime_M_beta_first",
+                 #"ABCD_CatA_Zprime_M_first",
+                 #"ABCD_CatE_Zprime_M_first" ]
 
-#Compare BackgroundAndSignal in SignalSample (mistaged Signal infuences Background prediction )
-compareEntriesInBackgroundAndSignalRegion( transposeLOL(listOfHistoListsSignal), "ComparisonIntegralsinSignalSample.txt" )
-
-# ## TwoDimPlots (with difference to selection with only first element)
-writeListOfHistoLists( transposeLOL(lolABCDT)[plotnames.index('ABCD_top_tau32_vs_top_MSD'):plotnames.index("ABCD_W_tau21_vs_Bottom_CSV_v2")+1] + listOfHistoListsABCD[-1], BackgroundSamples , plotnames[plotnames.index('ABCD_top_tau32_vs_top_MSD'):plotnames.index("ABCD_W_tau21_vs_Bottom_CSV_v2")+1], 'ABCD_2D' , True, False, False, "colz", False, False, False, True)
-
-
-
-
-
-## Correlationfactor  (with difference to selection with only first element)
-writeCorrLOLinTEX( transposeLOL(lolABCDT)[plotnames.index('ABCD_top_tau32_vs_top_MSD'):plotnames.index("ABCD_W_tau21_vs_Bottom_CSV_v2")+1], "Correlationfactors.tex", plotnames[plotnames.index('ABCD_top_tau32_vs_top_MSD'):plotnames.index("ABCD_W_tau21_vs_Bottom_CSV_v2")+1], ["tt-bar", "QCD_HT", "QCD_Pt", "QCD_comb"] , True )
-
-
-
-
-
-
-
-
-
-
-
-# # ABCD-Zprime_M Plots Work?
-# writeListOfHistoLists( transposeLOL(lolABCDT)[plotnames.index('ABCD_CatA_Zprime_M'):plotnames.index('ABCD_CatH_Zprime_M_first_beta')+1], BackgroundSamples , plotnames[plotnames.index('ABCD_CatA_Zprime_M'):plotnames.index('ABCD_CatH_Zprime_M_first_beta')+1], 'ABCD_ZPrime_M' , True, False, False, "histoE", False, False, False, True)
-
-
-#
-#
-#
-#
-## Multiply and Divide for ABCD Methode - short verion with funktion ReconstructWithABCD()
-for plotname in CatAList:
-    ReconstructWithABCD(listOfHistoListsABCD, plotname, plotnames)
-    ReconstructWithABCD(listOfHistoListsSignal, plotname, plotnames)
-
-#
-#
-#
-#
-#Add Signal and Backgroundhistos
-XC_Factor=1
-weights= [ XC_Factor/138.07, XC_Factor/86.28, XC_Factor/37.6 ]
-for plotnameindex in range(plotnames.index("ABCD_CatA_Zprime_M"), plotnames.index("ABCD_CatH_Zprime_M_first") ):
-    for index, listOfHistoList, weight in zip(range(3),listOfHistoListsSignalAndBackground, weights):
-        addHistos(listOfHistoList, plotnameindex, plotnameindex + len(plotnames), weight , True, index)
-
-#Multiply and Divide for ABCD
-for listOfHistoList in listOfHistoListsSignalAndBackground:
-    for plotname in CatAList:
-        ReconstructWithABCD(listOfHistoList, plotname, plotnames)
-
-#
-#
-#
-#
-#
-#
-#
-##Write ListOfIntegralLists
-writeIntegralLOLinTEX( listOfHistoListsABCD[ plotnames.index( "ABCD_CatA_Zprime_M" ) : plotnames.index( "ABCD_CatH_Zprime_M_first" ) +1] , "Integrallist_after_multiplication.tex" , SampleNames )
-# writeIntegralLOLinTEX( listOfHistoListsABCD[ plotnames.index( "ABCD_CatA_Zprime_M_beta" ) : plotnames.index( "ABCD_CatH_Zprime_M_beta" ) +1] , "Integrallist_after_multiplication_beta.tex" , SampleNames )
-#
-#
-#
-#
-#
-
-#Create and Write List Of RatioPlots
-#Workaround to use writeListOfHistoLists with a Transposed ListOfHistoList (uses trnasposeLOLextendet in plotutils.py)
-
-WASamples = 50*[ BackgroundSamples[0], BackgroundSamples[1] ]
-WAPlotNames =  [   "ABCD_CatA_Zprime_M"   ,
-                 "ABCD_CatE_Zprime_M"  ,
-                 "ABCD_CatA_Zprime_M_beta" ,
-                 "ABCD_CatE_Zprime_M_beta" ,
-                 # "ABCD_CatA_Zprime_M_one_sided" ,
-                 # "ABCD_CatE_Zprime_M_one_sided",
-                 "ABCD_CatA_Zprime_M_beta_first",
-                 "ABCD_CatE_Zprime_M_beta_first",
-                 "ABCD_CatA_Zprime_M_first",
-                 "ABCD_CatE_Zprime_M_first" ]
-
-IndexListToTranspose = [ [plotnames.index( "ABCD_CatA_Zprime_M" ) , plotnames.index( "ABCD_CatB_Zprime_M" ) ] ,
-    [ plotnames.index( "ABCD_CatE_Zprime_M" ), plotnames.index( "ABCD_CatF_Zprime_M" ) ],
-    [plotnames.index( "ABCD_CatA_Zprime_M_beta" ), plotnames.index( "ABCD_CatB_Zprime_M_beta" ) ] ,
-    [plotnames.index( "ABCD_CatE_Zprime_M_beta" ), plotnames.index( "ABCD_CatF_Zprime_M_beta" ) ] ,
-    # [plotnames.index( "ABCD_CatA_Zprime_M_one_sided" ), plotnames.index( "ABCD_CatB_Zprime_M_one_sided" ) ],
-    # [plotnames.index( "ABCD_CatE_Zprime_M_one_sided" ), plotnames.index( "ABCD_CatF_Zprime_M_one_sided" ) ],
-    [plotnames.index( "ABCD_CatA_Zprime_M_beta_first") , plotnames.index("ABCD_CatB_Zprime_M_beta_first") ] ,
-    [plotnames.index( "ABCD_CatE_Zprime_M_beta_first") , plotnames.index( "ABCD_CatF_Zprime_M_beta_first")],
-    [plotnames.index( "ABCD_CatA_Zprime_M_first") , plotnames.index("ABCD_CatB_Zprime_M_first") ] ,
-    [plotnames.index( "ABCD_CatE_Zprime_M_first") , plotnames.index( "ABCD_CatF_Zprime_M_first")]]
+#IndexListToTranspose = [ [plotnames.index( "ABCD_CatA_Zprime_M" ) , plotnames.index( "ABCD_CatB_Zprime_M" ) ] ,
+    #[ plotnames.index( "ABCD_CatE_Zprime_M" ), plotnames.index( "ABCD_CatF_Zprime_M" ) ],
+    #[plotnames.index( "ABCD_CatA_Zprime_M_beta" ), plotnames.index( "ABCD_CatB_Zprime_M_beta" ) ] ,
+    #[plotnames.index( "ABCD_CatE_Zprime_M_beta" ), plotnames.index( "ABCD_CatF_Zprime_M_beta" ) ] ,
+    ## [plotnames.index( "ABCD_CatA_Zprime_M_one_sided" ), plotnames.index( "ABCD_CatB_Zprime_M_one_sided" ) ],
+    ## [plotnames.index( "ABCD_CatE_Zprime_M_one_sided" ), plotnames.index( "ABCD_CatF_Zprime_M_one_sided" ) ],
+    #[plotnames.index( "ABCD_CatA_Zprime_M_beta_first") , plotnames.index("ABCD_CatB_Zprime_M_beta_first") ] ,
+    #[plotnames.index( "ABCD_CatE_Zprime_M_beta_first") , plotnames.index( "ABCD_CatF_Zprime_M_beta_first")],
+    #[plotnames.index( "ABCD_CatA_Zprime_M_first") , plotnames.index("ABCD_CatB_Zprime_M_first") ] ,
+    #[plotnames.index( "ABCD_CatE_Zprime_M_first") , plotnames.index( "ABCD_CatF_Zprime_M_first")]]
 
 
 
 
 
-## For BackgroundSamples
-WASLnames2 =[]
-for string in WAPlotNames:
-    for sample in SampleNames:
-        WASLnames2.append( string + "_" + sample )
-
-RatioPlotList = transposeLOLextended( listOfHistoListsABCD,  IndexListToTranspose)
-writeListOfHistoLists( RatioPlotList , WASamples ,  WASLnames2 , 'RatioPlotList' , False , False, False, "histoE", False, False, True, False)
-
-
-
-###Print all Plots for Z_Prime (Signal)
-#WASignalSamplePlotNames2=[]
+### For BackgroundSamples
+#WASLnames2 =[]
 #for string in WAPlotNames:
-    #for sample in SignalSampleNames:
-        #WASignalSamplePlotNames2.append( string + "_" + sample)
+    #for sample in SampleNames:
+        #WASLnames2.append( string + "_" + sample )
 
-#RatioPlotListSignal = transposeLOLextended( listOfHistoListsSignal, IndexListToTranspose )
-#writeListOfHistoLists( RatioPlotListSignal , WASamples , WASignalSamplePlotNames2 , 'RatioPlotListSignal' , False , False, False, "histoE", False, False, True, False)
-
-
+#RatioPlotList = transposeLOLextended( listOfHistoListsABCD,  IndexListToTranspose)
+#writeListOfHistoLists( RatioPlotList , WASamples ,  WASLnames2 , 'RatioPlotList' , False , False, False, "histoE", False, False, True, False)
 
 
-#RatioPlots for Combined Background and Signal Sample
-WASignalSamplePlotNameListOfLists=[]
-for SignalSampleName in SignalSampleNames:
-    ListToAppend=[]
-    for PlotName in WAPlotNames:
-        for SampleName in SampleNames:
-            ListToAppend.append(SignalSampleName+SampleName+PlotName)
-    WASignalSamplePlotNameListOfLists.append(ListToAppend)
 
-for WASignalSamplePlotNameList, SignalSampleName, listOfHistoListSignalAndBackground in zip(WASignalSamplePlotNameListOfLists, SignalSampleNames, listOfHistoListsSignalAndBackground):
-    RatioPlotListComb = transposeLOLextended( listOfHistoListSignalAndBackground, IndexListToTranspose )
-    writeListOfHistoLists( RatioPlotListComb , WASamples , WASignalSamplePlotNameList , 'RatioPlotListComb'+SignalSampleName , False , False, False, "histoE", False, False, True, False)
+####Print all Plots for Z_Prime (Signal)
+##WASignalSamplePlotNames2=[]
+##for string in WAPlotNames:
+    ##for sample in SignalSampleNames:
+        ##WASignalSamplePlotNames2.append( string + "_" + sample)
+
+##RatioPlotListSignal = transposeLOLextended( listOfHistoListsSignal, IndexListToTranspose )
+##writeListOfHistoLists( RatioPlotListSignal , WASamples , WASignalSamplePlotNames2 , 'RatioPlotListSignal' , False , False, False, "histoE", False, False, True, False)
 
 
 
 
-### RatioPlots and Error Fit Polinomial , A/B - Signal over Background
+##RatioPlots for Combined Background and Signal Sample
+#WASignalSamplePlotNameListOfLists=[]
+#for SignalSampleName in SignalSampleNames:
+    #ListToAppend=[]
+    #for PlotName in WAPlotNames:
+        #for SampleName in SampleNames:
+            #ListToAppend.append(SignalSampleName+SampleName+PlotName)
+    #WASignalSamplePlotNameListOfLists.append(ListToAppend)
+
 #for WASignalSamplePlotNameList, SignalSampleName, listOfHistoListSignalAndBackground in zip(WASignalSamplePlotNameListOfLists, SignalSampleNames, listOfHistoListsSignalAndBackground):
     #RatioPlotListComb = transposeLOLextended( listOfHistoListSignalAndBackground, IndexListToTranspose )
-    #ListOfPureRatioPlots = []
-    #for HistoList in RatioPlotListComb:
-        #HistoList[0].Divide(HistoList[1])
-        #ListOfPureRatioPlots.append( [HistoList[0] ]  )
-    ## writeHistoListwithXYErrors(ListOfPureRatioPlots, [ WASamples[0] ], "RatioPlotFit_pol2_"+SignalSampleName, 1, "pol2", WASignalSamplePlotNameList, True)
-    #writeHistoListwithXYErrors(ListOfPureRatioPlots, [ WASamples[0] ], "RatioPlotFit_pol1_"+SignalSampleName, 1, "pol1", WASignalSamplePlotNameList, True)
-    ## writeHistoListwithXYErrors(ListOfPureRatioPlots, [ WASamples[0] ], "RatioPlotFit_pol0_"+SignalSampleName, 1, "pol0", WASignalSamplePlotNameList, True)
-
-
-## Ratio Plot with Errors, A/B - Signal over Background, without Signalcontamination
-ListOfPureRatioPlots=[]
-for histoList in RatioPlotList:
-    histoList[0].Divide(histoList[1])
-    ListOfPureRatioPlots.append( [histoList[0] ])
-writeHistoListwithXYErrors(ListOfPureRatioPlots, [ WASamples[0] ], "RatioPlotFit_pol1_Background", 1, "pol1", WASLnames2, True)
-# writeHistoListwithXYErrors(ListOfPureRatioPlots, [ WASamples[0] ], "RatioPlotFit_pol2_Background", 1, "pol2", WASLnames2, True)
-# writeHistoListwithXYErrors(ListOfPureRatioPlots, [ WASamples[0] ], "RatioPlotFit_pol0_Background", 1, "pol0", WASLnames2, True)
+    #writeListOfHistoLists( RatioPlotListComb , WASamples , WASignalSamplePlotNameList , 'RatioPlotListComb'+SignalSampleName , False , False, False, "histoE", False, False, True, False)
 
 
 
 
-## Uncomple STACK PLOT
+#### RatioPlots and Error Fit Polinomial , A/B - Signal over Background
+##for WASignalSamplePlotNameList, SignalSampleName, listOfHistoListSignalAndBackground in zip(WASignalSamplePlotNameListOfLists, SignalSampleNames, listOfHistoListsSignalAndBackground):
+    ##RatioPlotListComb = transposeLOLextended( listOfHistoListSignalAndBackground, IndexListToTranspose )
+    ##ListOfPureRatioPlots = []
+    ##for HistoList in RatioPlotListComb:
+        ##HistoList[0].Divide(HistoList[1])
+        ##ListOfPureRatioPlots.append( [HistoList[0] ]  )
+    ### writeHistoListwithXYErrors(ListOfPureRatioPlots, [ WASamples[0] ], "RatioPlotFit_pol2_"+SignalSampleName, 1, "pol2", WASignalSamplePlotNameList, True)
+    ##writeHistoListwithXYErrors(ListOfPureRatioPlots, [ WASamples[0] ], "RatioPlotFit_pol1_"+SignalSampleName, 1, "pol1", WASignalSamplePlotNameList, True)
+    ### writeHistoListwithXYErrors(ListOfPureRatioPlots, [ WASamples[0] ], "RatioPlotFit_pol0_"+SignalSampleName, 1, "pol0", WASignalSamplePlotNameList, True)
 
 
-###Modify Signal And Background listOfHistoList (substract from backgroundprediction)
-#for index in range( plotnames.index("ABCD_CatA_Zprime_M"),plotnames.index("ABCD_CatH_Zprime_M_first") +1):
-    #if plotnames[index][8] =="B":
-        #listOfHistoListsSignalAndBackground25001200[index][1].Add(listOfHistoListsABCD[index][1], -1)
-        ##listOfHistoListsSignalAndBackground25001200[index][1].Multiply(-1)
+### Ratio Plot with Errors, A/B - Signal over Background, without Signalcontamination
+#ListOfPureRatioPlots=[]
+#for histoList in RatioPlotList:
+    #histoList[0].Divide(histoList[1])
+    #ListOfPureRatioPlots.append( [histoList[0] ])
+#writeHistoListwithXYErrors(ListOfPureRatioPlots, [ WASamples[0] ], "RatioPlotFit_pol1_Background", 1, "pol1", WASLnames2, True)
+## writeHistoListwithXYErrors(ListOfPureRatioPlots, [ WASamples[0] ], "RatioPlotFit_pol2_Background", 1, "pol2", WASLnames2, True)
+## writeHistoListwithXYErrors(ListOfPureRatioPlots, [ WASamples[0] ], "RatioPlotFit_pol0_Background", 1, "pol0", WASLnames2, True)
 
-        #listOfHistoListsSignalAndBackground25001200[index-1][1].Add(listOfHistoListsABCD[index-1][0])#Add to Signal and QCD-Background in Signal ttbar in Signal Region
 
-###Create a hISTOlIST TO DO stackPlotABCD
-#ListOfHistoListsFinalStackPlot = []
-#titlelist = []
-#for index in range( plotnames.index("ABCD_CatA_Zprime_M"), plotnames.index("ABCD_CatH_Zprime_M_first") +1):
-    #if plotnames[index][8] =="A":
-        #ListToAppend = []
-        #titlelist.append( listOfHistoListsABCD[index][0].GetName()[5:] )
-        #ListToAppend.append(listOfHistoListsSignalAndBackground25001200[index+1][0]) #Signal
-        #ListToAppend.append(listOfHistoListsSignalAndBackground25001200[index+1][1]) #Signalkontamination
-        #ListToAppend.append(listOfHistoListsABCD[index+1][1]) #QCD_HAT in CatB
-        #ListToAppend.append(listOfHistoListsABCD[index][0]) #ttbar in Signal Region
-        #ListOfHistoListsFinalStackPlot.append(ListToAppend)
 
-#colorlist =[ ROOT.kBlack , ROOT.kRed, ROOT.kYellow,ROOT.kBlue]
-#stacklist = [False, True, True, True]
-#optionlist = ["E", "histoE", "histoE", "histoE"]
-#stackPlotABCD(ListOfHistoListsFinalStackPlot, "StackPlotsABCD", colorlist=colorlist, labellist=["ttbar", "QCD-Backgroundestimation", "Signalcontamination", "Signal"], titlelist = titlelist, stacklist = stacklist, optionlist = optionlist)
 
-#print "Plotnames contains:"
-#for i in plotnames:
-    #print i
+### Uncomple STACK PLOT
+
+
+####Modify Signal And Background listOfHistoList (substract from backgroundprediction)
+##for index in range( plotnames.index("ABCD_CatA_Zprime_M"),plotnames.index("ABCD_CatH_Zprime_M_first") +1):
+    ##if plotnames[index][8] =="B":
+        ##listOfHistoListsSignalAndBackground25001200[index][1].Add(listOfHistoListsABCD[index][1], -1)
+        ###listOfHistoListsSignalAndBackground25001200[index][1].Multiply(-1)
+
+        ##listOfHistoListsSignalAndBackground25001200[index-1][1].Add(listOfHistoListsABCD[index-1][0])#Add to Signal and QCD-Background in Signal ttbar in Signal Region
+
+####Create a hISTOlIST TO DO stackPlotABCD
+##ListOfHistoListsFinalStackPlot = []
+##titlelist = []
+##for index in range( plotnames.index("ABCD_CatA_Zprime_M"), plotnames.index("ABCD_CatH_Zprime_M_first") +1):
+    ##if plotnames[index][8] =="A":
+        ##ListToAppend = []
+        ##titlelist.append( listOfHistoListsABCD[index][0].GetName()[5:] )
+        ##ListToAppend.append(listOfHistoListsSignalAndBackground25001200[index+1][0]) #Signal
+        ##ListToAppend.append(listOfHistoListsSignalAndBackground25001200[index+1][1]) #Signalkontamination
+        ##ListToAppend.append(listOfHistoListsABCD[index+1][1]) #QCD_HAT in CatB
+        ##ListToAppend.append(listOfHistoListsABCD[index][0]) #ttbar in Signal Region
+        ##ListOfHistoListsFinalStackPlot.append(ListToAppend)
+
+##colorlist =[ ROOT.kBlack , ROOT.kRed, ROOT.kYellow,ROOT.kBlue]
+##stacklist = [False, True, True, True]
+##optionlist = ["E", "histoE", "histoE", "histoE"]
+##stackPlotABCD(ListOfHistoListsFinalStackPlot, "StackPlotsABCD", colorlist=colorlist, labellist=["ttbar", "QCD-Backgroundestimation", "Signalcontamination", "Signal"], titlelist = titlelist, stacklist = stacklist, optionlist = optionlist)
+
+##print "Plotnames contains:"
+##for i in plotnames:
+    ##print i
     
     
     
     
 
 
-#Anmerkungen fuer Simon:
-#Das Skript erzeugt die folgenden Dateien:
-#
-#Integrallist_before_multiplication.tex
-#2D Histogramme in Ordner "ABCD_2D"
-#Correlationfactors.tex
-#Integrallist_after_multiplication.tex
-#Rekonstruktion von Kategoie A und E in "RatioPlotList"
-#Signalkontamination in "RatioPlotListComb"+SignalSampleName
-#Fehlerbaender in "RatioPlotFit_pol1_Background"
+##Anmerkungen fuer Simon:
+##Das Skript erzeugt die folgenden Dateien:
+##
+##Integrallist_before_multiplication.tex
+##2D Histogramme in Ordner "ABCD_2D"
+##Correlationfactors.tex
+##Integrallist_after_multiplication.tex
+##Rekonstruktion von Kategoie A und E in "RatioPlotList"
+##Signalkontamination in "RatioPlotListComb"+SignalSampleName
+##Fehlerbaender in "RatioPlotFit_pol1_Background"

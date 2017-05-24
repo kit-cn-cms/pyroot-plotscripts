@@ -2946,52 +2946,32 @@ def divideHistos(listOfHistoLists, numeratorPlot, denumeratorPlot, normalizefirs
     print 'lol[denumerator] ',listOfHistoLists[denumeratorPlot]
     #print len(listOfHistoLists[numeratorPlot])
     
-    if len(listOfHistoLists[numeratorPlot])==1:
-        numerator=listOfHistoLists[numeratorPlot][0].Clone()
-        denumerator=listOfHistoLists[denumeratorPlot][0].Clone()
-        numerator.Rebin(rebin)
-        denumerator.Rebin(rebin)
-        if normalizefirst: 
-            #print 'numerator before divide ',numerator, '     numerator Integral= ', numerator.Integral()
-            #print 'denumerator before divide ',denumerator, '      denumerator Integral= ',denumerator.Integral() 
-            numerator.Scale(1./numerator.Integral())
-            denumerator.Scale(1./denumerator.Integral())
-        x=numerator.Clone()
-        #print 'numerator before divide ',numerator, '     numerator Integral= ', numerator.Integral()
-        #print 'denumerator before divide ',denumerator, '      denumerator Integral= ',denumerator.Integral()
-        numerator.Divide(numerator,denumerator,1.0,1.0,option)
-        listOfHistoLists[numeratorPlot][0]=numerator
-        #print 'numerator after divide temp ',numerator, '     numerator Integral= ', numerator.Integral()
-        #print 'numerator after divide ', listOfHistoLists[numeratorPlot][0]   
-        #print 'denumerator after divide ', listOfHistoLists[denumeratorPlot][0]   
-        
-    if len(listOfHistoLists[numeratorPlot])>1:
-        for i in range(len(listOfHistoLists[numeratorPlot])):
-            numerator=listOfHistoLists[numeratorPlot][i].Clone()
-            denumerator=listOfHistoLists[denumeratorPlot][i].Clone()
-            numerator.Rebin(rebin)
-            denumerator.Rebin(rebin)
+    for i in range(len(listOfHistoLists[numeratorPlot])):
+            #numerator=listOfHistoLists[numeratorPlot][i].Clone()
+            #denumerator=listOfHistoLists[denumeratorPlot][i].Clone()
+            listOfHistoLists[numeratorPlot][i].Rebin(rebin)
+            listOfHistoLists[denumeratorPlot][i].Rebin(rebin)
             if normalizefirst: #######check if integral>0
-                numerator.Scale(1./numerator.Integral())
-                denumerator.Scale(1./denumerator.Integral())
-            x=numerator.Clone()
+                listOfHistoLists[numeratorPlot][i].Scale(1./listOfHistoLists[numeratorPlot][i].Integral(0,listOfHistoLists[numeratorPlot][i].GetNbinsX()-1),"width")
+                listOfHistoLists[denumeratorPlot][i].Scale(1./listOfHistoLists[denumeratorPlot][i].Integral(0,listOfHistoLists[denumeratorPlot][i].GetNbinsX()-1),"width")
+            #x=numerator.Clone()
             
-            #print 'numerator before divide ',numerator, '     numerator Integral= ', numerator.Integral(), '    bing contents'
-            ##for ibin in range (numerator.GetNbinsX()+1):
-                ##print 'bincontent before', numerator.GetBinContent(ibin), denumerator.GetBinContent(ibin)
-            #print 'denumerator before divide ',denumerator, '      denumerator Integral= ',denumerator.Integral()
-            ##numerator.Divide(numerator, denumerator,1.0,1.0,option)
-            numerator.Divide(numerator,denumerator,1.0,1.0,option)
-            #print 'numerator after divide temp1',numerator, '     numerator Integral= ', numerator.Integral()
-            #print 'denumerator after divide temp1',denumerator, '     denumerator Integral= ', denumerator.Integral()
-            ##for ibin in range (numerator.GetNbinsX()+1):
-                #print 'bincontent after', numerator.GetBinContent(ibin), denumerator.GetBinContent(ibin)
-            listOfHistoLists[numeratorPlot][i]=numerator   
-            #print 'numerator after divide temp2',numerator, '     numerator Integral= ', numerator.Integral()
-            #print 'denumerator after divide temp2',denumerator, '     denumerator Integral= ', denumerator.Integral()
+            print 'numerator before divide ',listOfHistoLists[numeratorPlot][i], '     numerator Integral= ', listOfHistoLists[numeratorPlot][i].Integral(), '    bing contents'
+            #for ibin in range (listOfHistoLists[numeratorPlot][i].GetNbinsX()+1):
+                #print 'bincontent before', listOfHistoLists[numeratorPlot][i].GetBinContent(ibin), listOfHistoLists[denumeratorPlot][i].GetBinContent(ibin)
+            print 'denumerator before divide ',listOfHistoLists[denumeratorPlot][i], '      denumerator Integral= ',listOfHistoLists[denumeratorPlot][i].Integral()
+            #listOfHistoLists[numeratorPlot][i].Divide(listOfHistoLists[numeratorPlot][i], listOfHistoLists[denumeratorPlot][i],1.0,1.0,option)
+            listOfHistoLists[numeratorPlot][i].Divide(listOfHistoLists[numeratorPlot][i],listOfHistoLists[denumeratorPlot][i],1.0,1.0,option)
+            print 'numerator after divide temp1',listOfHistoLists[numeratorPlot][i], '     numerator Integral= ', listOfHistoLists[numeratorPlot][i].Integral()
+            print 'denumerator after divide temp1',listOfHistoLists[denumeratorPlot][i], '     denumerator Integral= ', listOfHistoLists[denumeratorPlot][i].Integral()
+            ##for ibin in range (listOfHistoLists[numeratorPlot][i].GetNbinsX()+1):
+                #print 'bincontent after', listOfHistoLists[numeratorPlot][i].GetBinContent(ibin), listOfHistoLists[denumeratorPlot][i].GetBinContent(ibin)
+            #listOfHistoLists[numeratorPlot][i][i]=listOfHistoLists[numeratorPlot][i]   
+            print 'numerator after divide temp2',listOfHistoLists[numeratorPlot][i], '     numerator Integral= ', listOfHistoLists[numeratorPlot][i].Integral()
+            print 'denumerator after divide temp2',listOfHistoLists[denumeratorPlot][i], '     denumerator Integral= ', listOfHistoLists[denumeratorPlot][i].Integral()
             #print 'x after divide ahhhh',x, '     x Integral= ', x.Integral()
-            #print 'numerator after divide ', listOfHistoLists[numeratorPlot][i], '     numerator Integral= ', listOfHistoLists[numeratorPlot][i].Integral()
-            #print 'denumerator after divide ', listOfHistoLists[denumeratorPlot][i], '      denumerator Integral= ',listOfHistoLists[denumeratorPlot][i].Integral()
+            print 'numerator after divide ', listOfHistoLists[numeratorPlot][i], '     numerator Integral= ', listOfHistoLists[numeratorPlot][i].Integral()
+            print 'denumerator after divide ', listOfHistoLists[denumeratorPlot][i], '      denumerator Integral= ',listOfHistoLists[denumeratorPlot][i].Integral()
         #print 'divide? ', listofHistoLists
         #self.append(x)
     #self.append(dividedHistoList)
@@ -3845,11 +3825,18 @@ def GetPValueHisto(Histo, rho0 = 0):
 
 
 def GetIntegralLOL( ListOfHistoLists ):
+    print ListOfHistoLists
     ListOfIntegralLists = []
     for HistoList in ListOfHistoLists:
         IntegralList = []
         for Histo in HistoList:
+            #IntegralList.append( Histo.IntegralAndError() )
             IntegralList.append( Histo.Integral() )
+            error = ROOT.Double(0)
+            if not isinstance(Histo,ROOT.TH2):
+                #print error
+                #print Histo, '  ', Histo.IntegralAndError(0,Histo.GetNbinsX(),error,"",)
+                print Histo, ' Integral=', Histo.IntegralAndError(0,Histo.GetNbinsX(),error,""),'+-',error
         ListOfIntegralLists.append( IntegralList )
     return ListOfIntegralLists
 
@@ -3870,6 +3857,7 @@ def writeIntegralLOLinTEX( ListOfHistoLists, filename = "IntegralList.tex", samp
             IntFile.write( "\\midrule \n " + str( HistoList[0].GetName()  )+ " & \\\\ \n " )
             for Histo, sample in zip( HistoList, samplenames ):
                 IntFile.write( "\\tablenum{" +  str( Histo.Integral() ) + "}  & " + sample + "  \\\\ \n " )
+                #IntFile.write( "\\tablenum{" +  str( Histo.IntegralAndError(0,GetNbinsX()-1) ) + "}  & " + sample + "  \\\\ \n " )
         IntFile.write( "\\bottomrule \n \\end{tabular} " )
 
 
@@ -3986,3 +3974,5 @@ def addLOLTtoLOLT(ListOfHistoLists1,ListOfHistoLists2, c1=1.0, c2=1.0):
       for  HistoList2 in ListOfHistoLists2:
         for Histo1, Histo2, in zip(HistoList1,HistoList2):
             Histo1.Add(Histo2,c2)
+            
+            

@@ -6,7 +6,7 @@ from plotconfig_Zprime_MC_Lena import *
 sys.path.insert(0, 'limittools')
 from limittools import renameHistos
 
-name='Zprime_MC'
+name='Zprime_MC_Lena'
 SampleNames=['ttbar' , 'QCD_HT', 'QCD_Pt' ]
 SignalSampleNames=['Zprime1500900',  'Zprime20001200',  'Zprime25001200']
 
