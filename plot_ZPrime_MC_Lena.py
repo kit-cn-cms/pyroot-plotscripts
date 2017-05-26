@@ -128,13 +128,24 @@ plots=[
     TwoDimPlot(ROOT.TH2F("ABCD_Bottom_CSV_v2_vs_ZprimeM" ,"CSV_v2(b) VS m(Z')",20,0,1,50,0,5000),"Bottoms_ABCD_CSV","Zprimes_ABCD_M",plotselection2+"&&Bottoms_ABCD_CSV>0 && Zprimes_ABCD_M>0","1 btag"),    
     TwoDimPlot(ROOT.TH2F("ABCD_W_tau21_vs_ZprimeM" ,"tau_{21}(W) VS m(Z')",20,0,1,50,0,5000),"Ws_ABCD_t21","Zprimes_ABCD_M",plotselection2+"&&Ws_ABCD_t21>0 && Zprimes_ABCD_M>0","1 btag"),
 
+    TwoDimPlot(ROOT.TH2F("ABCD_top_tau32_vs_Bottom_CSV_v2_Zprime0500" ,"tau_{32}(t) VS CSV_v2(b)",20,0,1,20,0,1),"Tops_ABCD_t32","Bottoms_ABCD_CSV",plotselection2+"&&Tops_ABCD_t32>0 && Bottoms_ABCD_CSV>0 && Zprimes_ABCD_M>0 && Zprimes_ABCD_M<500","1 btag"),
+    TwoDimPlot(ROOT.TH2F("ABCD_top_tau32_vs_Bottom_CSV_v2_Zprime5001000" ,"tau_{32}(t) VS CSV_v2(b)",20,0,1,20,0,1),"Tops_ABCD_t32","Bottoms_ABCD_CSV",plotselection2+"&&Tops_ABCD_t32>0 && Bottoms_ABCD_CSV>0 && Zprimes_ABCD_M>500 && Zprimes_ABCD_M<1000","1 btag"),
+    TwoDimPlot(ROOT.TH2F("ABCD_top_tau32_vs_Bottom_CSV_v2_Zprime10001250" ,"tau_{32}(t) VS CSV_v2(b)",20,0,1,20,0,1),"Tops_ABCD_t32","Bottoms_ABCD_CSV",plotselection2+"&&Tops_ABCD_t32>0 && Bottoms_ABCD_CSV>0 && Zprimes_ABCD_M>1000 && Zprimes_ABCD_M<1250","1 btag"),
+    TwoDimPlot(ROOT.TH2F("ABCD_top_tau32_vs_Bottom_CSV_v2_Zprime12501500" ,"tau_{32}(t) VS CSV_v2(b)",20,0,1,20,0,1),"Tops_ABCD_t32","Bottoms_ABCD_CSV",plotselection2+"&&Tops_ABCD_t32>0 && Bottoms_ABCD_CSV>0 && Zprimes_ABCD_M>1250 && Zprimes_ABCD_M<1500","1 btag"),
+    TwoDimPlot(ROOT.TH2F("ABCD_top_tau32_vs_Bottom_CSV_v2_Zprime15001750" ,"tau_{32}(t) VS CSV_v2(b)",20,0,1,20,0,1),"Tops_ABCD_t32","Bottoms_ABCD_CSV",plotselection2+"&&Tops_ABCD_t32>0 && Bottoms_ABCD_CSV>0 && Zprimes_ABCD_M>1500 && Zprimes_ABCD_M<1750","1 btag"),
+    TwoDimPlot(ROOT.TH2F("ABCD_top_tau32_vs_Bottom_CSV_v2_Zprime17502000" ,"tau_{32}(t) VS CSV_v2(b)",20,0,1,20,0,1),"Tops_ABCD_t32","Bottoms_ABCD_CSV",plotselection2+"&&Tops_ABCD_t32>0 && Bottoms_ABCD_CSV>0 && Zprimes_ABCD_M>1750 && Zprimes_ABCD_M<2000","1 btag"),
+    TwoDimPlot(ROOT.TH2F("ABCD_top_tau32_vs_Bottom_CSV_v2_Zprime20002250" ,"tau_{32}(t) VS CSV_v2(b)",20,0,1,20,0,1),"Tops_ABCD_t32","Bottoms_ABCD_CSV",plotselection2+"&&Tops_ABCD_t32>0 && Bottoms_ABCD_CSV>0 && Zprimes_ABCD_M>2000 && Zprimes_ABCD_M<2250","1 btag"),
+    TwoDimPlot(ROOT.TH2F("ABCD_top_tau32_vs_Bottom_CSV_v2_Zprime22502500" ,"tau_{32}(t) VS CSV_v2(b)",20,0,1,20,0,1),"Tops_ABCD_t32","Bottoms_ABCD_CSV",plotselection2+"&&Tops_ABCD_t32>0 && Bottoms_ABCD_CSV>0 && Zprimes_ABCD_M>2250 && Zprimes_ABCD_M<2500","1 btag"),
+    TwoDimPlot(ROOT.TH2F("ABCD_top_tau32_vs_Bottom_CSV_v2_Zprime25003000" ,"tau_{32}(t) VS CSV_v2(b)",20,0,1,20,0,1),"Tops_ABCD_t32","Bottoms_ABCD_CSV",plotselection2+"&&Tops_ABCD_t32>0 && Bottoms_ABCD_CSV>0 && Zprimes_ABCD_M>2500 && Zprimes_ABCD_M<3000","1 btag"),
+    TwoDimPlot(ROOT.TH2F("ABCD_top_tau32_vs_Bottom_CSV_v2_Zprime30003500" ,"tau_{32}(t) VS CSV_v2(b)",20,0,1,20,0,1),"Tops_ABCD_t32","Bottoms_ABCD_CSV",plotselection2+"&&Tops_ABCD_t32>0 && Bottoms_ABCD_CSV>0 && Zprimes_ABCD_M>3000 && Zprimes_ABCD_M<3500","1 btag"),
+    TwoDimPlot(ROOT.TH2F("ABCD_top_tau32_vs_Bottom_CSV_v2_Zprime35004000" ,"tau_{32}(t) VS CSV_v2(b)",20,0,1,20,0,1),"Tops_ABCD_t32","Bottoms_ABCD_CSV",plotselection2+"&&Tops_ABCD_t32>0 && Bottoms_ABCD_CSV>0 && Zprimes_ABCD_M>3500 && Zprimes_ABCD_M<4000","1 btag"),
+    TwoDimPlot(ROOT.TH2F("ABCD_top_tau32_vs_Bottom_CSV_v2_Zprime40004500" ,"tau_{32}(t) VS CSV_v2(b)",20,0,1,20,0,1),"Tops_ABCD_t32","Bottoms_ABCD_CSV",plotselection2+"&&Tops_ABCD_t32>0 && Bottoms_ABCD_CSV>0 && Zprimes_ABCD_M>4000 && Zprimes_ABCD_M<4500","1 btag"),
+    TwoDimPlot(ROOT.TH2F("ABCD_top_tau32_vs_Bottom_CSV_v2_Zprime45005000" ,"tau_{32}(t) VS CSV_v2(b)",20,0,1,20,0,1),"Tops_ABCD_t32","Bottoms_ABCD_CSV",plotselection2+"&&Tops_ABCD_t32>0 && Bottoms_ABCD_CSV>0 && Zprimes_ABCD_M>4500 && Zprimes_ABCD_M<5000","1 btag"),
 
 
 
     # Plots for ZPrime_M - with right plotselection - All Elements
     # W_ MSD is used as thrid variable
-
-
     Plot(ROOT.TH1F("ABCD_CatA_Zprime_M" ,"m(Z') in GeV, CatA " ,50,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_MSD , "1 btag"),
     Plot(ROOT.TH1F("ABCD_CatB_Zprime_M" ,"m(Z') in GeV, CatB " ,50,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_MSD + "&&" +plotselection_sideband ,"1 btag"),
     Plot(ROOT.TH1F("ABCD_CatC_Zprime_M" ,"m(Z') in GeV, CatC " ,50,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_MSD + "&&" +plotselection_sideband ,"1 btag"),
@@ -266,11 +277,11 @@ labels=[plot.label for plot in plots]
 #lolBackgroundT=transposeLOL(listOfHistoListsBackground)
 lolABCDT=transposeLOL(listOfHistoListsABCD)
 #lolDataT=transposeLOL(listOfHistoListsData)
-divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_CatA_Zprime_M_beta_first"), plotnames.index("ABCD_CatB_Zprime_M_beta_first"), normalizefirst=True,rebin=1,option='')
-#divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_CatB_Zprime_M_beta_first"), plotnames.index("ABCD_CatD_Zprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
-#divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_CatA_Zprime_M_beta_first"), plotnames.index("ABCD_CatB_Zprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
+divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_CatA_Zprime_M_beta_first"), plotnames.index("ABCD_CatB_Zprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
+divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_CatC_Zprime_M_beta_first"), plotnames.index("ABCD_CatD_Zprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
+divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_CatA_Zprime_M_beta_first"), plotnames.index("ABCD_CatC_Zprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
 
-#divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_CatE_Zprime_M_beta_first"), plotnames.index("ABCD_CatG_Zprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
+divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_CatE_Zprime_M_beta_first"), plotnames.index("ABCD_CatG_Zprime_M_beta_first"), normalizefirst=True,rebin=1,option='')
 #divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_CatF_Zprime_M_beta_first"), plotnames.index("ABCD_CatH_Zprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
 #divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_CatE_Zprime_M_beta_first"), plotnames.index("ABCD_CatF_Zprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
 
@@ -279,12 +290,12 @@ GetIntegralLOL( transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSample
 #GetIntegralLOL( listOfHistoListsABCD )
 
 
-##print listOfHistoListsABCD[plotnames.index("ABCD_CatA_Zprime_M_beta_first")][BackgroundSampleNames.index('QCD_HT')], '   integral ', listOfHistoListsABCD[plotnames.index("ABCD_CatA_Zprime_M_beta_first")][BackgroundSampleNames.index('QCD_HT')].Integral()
+#print listOfHistoListsABCD[plotnames.index("ABCD_CatA_Zprime_M_beta_first")][BackgroundSampleNames.index('QCD_HT')], '   integral ', listOfHistoListsABCD[plotnames.index("ABCD_CatA_Zprime_M_beta_first")][BackgroundSampleNames.index('QCD_HT')].Integral()
 #writeListOfHistoLists([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_CatA_Zprime_M_beta_first')]],BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], 'label','fuck',normalize=False,stack=False,logscale=False,options='histo',statTest=False, sepaTest=False,ratio=False,DoProfile=False)
 
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_CatA_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_shaperatioAB_pol1", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
-#writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_CatA_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_shaperatioAC_over_shaperatioBD", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
-#writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_CatE_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforEFGH_shaperatioEG_over_shaperatioFH", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_CatE_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_shaperatioEF_pol1", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
+#writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_CatA_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_shaperatioAB_over_shaperatioCD", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
+#writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_CatE_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforEFGH_shaperatioEG_over_shaperatioFH", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
 
 
 
@@ -308,14 +319,14 @@ writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[Back
 #compareEntriesInBackgroundAndSignalRegion( transposeLOL(listOfHistoListsSignal), "ComparisonIntegralsinSignalSample.txt" )
 
 ## ## TwoDimPlots (with difference to selection with only first element)
-writeListOfHistoLists( transposeLOL(lolABCDT)[plotnames.index('ABCD_top_tau32_vs_top_MSD'):plotnames.index("ABCD_W_tau21_vs_ZprimeM")+1] + listOfHistoListsABCD[-1], BackgroundSamples , plotnames[plotnames.index('ABCD_top_tau32_vs_top_MSD'):plotnames.index("ABCD_W_tau21_vs_ZprimeM")+1], 'ABCD_2D' , True, False, False, "colz", False, False, False, True)
+writeListOfHistoLists( transposeLOL(lolABCDT)[plotnames.index('ABCD_top_tau32_vs_top_MSD'):plotnames.index("ABCD_top_tau32_vs_Bottom_CSV_v2_Zprime45005000")+1] + listOfHistoListsABCD[-1], BackgroundSamples , plotnames[plotnames.index('ABCD_top_tau32_vs_top_MSD'):plotnames.index("ABCD_top_tau32_vs_Bottom_CSV_v2_Zprime45005000")+1], 'ABCD_2D' , True, False, False, "colz", False, False, False, True)
 
 
 
 
 
 ### Correlationfactor  (with difference to selection with only first element)
-writeCorrLOLinTEX( transposeLOL(lolABCDT)[plotnames.index('ABCD_top_tau32_vs_top_MSD'):plotnames.index("ABCD_W_tau21_vs_ZprimeM")+1], "Correlationfactors.tex", plotnames[plotnames.index('ABCD_top_tau32_vs_top_MSD'):plotnames.index("ABCD_W_tau21_vs_ZprimeM")+1], ["tt-bar", "QCD_HT", "QCD_Pt", "QCD_comb"] , True )
+writeCorrLOLinTEX( transposeLOL(lolABCDT)[plotnames.index('ABCD_top_tau32_vs_top_MSD'):plotnames.index("ABCD_top_tau32_vs_Bottom_CSV_v2_Zprime45005000")+1], "Correlationfactors.tex", plotnames[plotnames.index('ABCD_top_tau32_vs_top_MSD'):plotnames.index("ABCD_top_tau32_vs_Bottom_CSV_v2_Zprime45005000")+1], ["tt-bar", "QCD_HT", "QCD_Pt", "QCD_comb"] , True )
 
 
 

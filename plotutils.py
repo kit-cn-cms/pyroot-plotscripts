@@ -2952,8 +2952,10 @@ def divideHistos(listOfHistoLists, numeratorPlot, denumeratorPlot, normalizefirs
             listOfHistoLists[numeratorPlot][i].Rebin(rebin)
             listOfHistoLists[denumeratorPlot][i].Rebin(rebin)
             if normalizefirst: #######check if integral>0
-                listOfHistoLists[numeratorPlot][i].Scale(1./listOfHistoLists[numeratorPlot][i].Integral(0,listOfHistoLists[numeratorPlot][i].GetNbinsX()-1),"width")
-                listOfHistoLists[denumeratorPlot][i].Scale(1./listOfHistoLists[denumeratorPlot][i].Integral(0,listOfHistoLists[denumeratorPlot][i].GetNbinsX()-1),"width")
+                #listOfHistoLists[numeratorPlot][i].Scale(1./listOfHistoLists[numeratorPlot][i].Integral(0,listOfHistoLists[numeratorPlot][i].GetNbinsX()-1),"width")
+                #listOfHistoLists[denumeratorPlot][i].Scale(1./listOfHistoLists[denumeratorPlot][i].Integral(0,listOfHistoLists[denumeratorPlot][i].GetNbinsX()-1),"width")
+                listOfHistoLists[numeratorPlot][i].Scale(1./listOfHistoLists[numeratorPlot][i].Integral())
+                listOfHistoLists[denumeratorPlot][i].Scale(1./listOfHistoLists[denumeratorPlot][i].Integral())
             #x=numerator.Clone()
             
             print 'numerator before divide ',listOfHistoLists[numeratorPlot][i], '     numerator Integral= ', listOfHistoLists[numeratorPlot][i].Integral(), '    bing contents'
