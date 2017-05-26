@@ -173,7 +173,7 @@ def endCat():
 
 
 def fillHisto(histo,var,weight,OnlyFirst=False):
-  text= '        if(('+weight+')!=0)\n'
+  text= '        if(('+weight+')!=0){\n'
   text+='          h_'+histo+'->Fill(fmin(h_'+histo+'->GetXaxis()->GetXmax()-1e-6,fmax(h_'+histo+'->GetXaxis()->GetXmin()+1e-6,'+var+')),'+weight+');\n'
   if OnlyFirst:
     text+='         break;}'
@@ -648,7 +648,7 @@ def check_jobs(scripts,outputs,nentries):
   return failed_jobs
 
 
-def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[], OnlyFirstList=None):
+def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],additionalfunctions=[],additionalobjectsfromaddtionalrootfile=[], OnlyFirstList=None):
   workdir=os.getcwd()+'/workdir/'+name
   outputpath=workdir+'/output.root'
   
