@@ -508,7 +508,7 @@ assert len(errorSystnames)==len(weightsystnames+othersystnames+PSsystnames)
 # samples
 # input path 
 #path_Matthias="/nfs/dust/cms/user/matsch/ntuples/Spring17/v3"
-path_data="/nfs/dust/cms/user/mwassmer/ntuples/data"
+path_data="/nfs/dust/cms/user/mwassmer/ntuples/data_new"
 path_minorBackgrounds="/nfs/dust/cms/user/mwassmer/ntuples/minor_backgrounds"
 path_karim="/nfs/dust/cms/user/kelmorab/trees_Spring17_v4/"
 
