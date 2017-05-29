@@ -508,7 +508,7 @@ assert len(errorSystnames)==len(weightsystnames+othersystnames+PSsystnames)
 # samples
 # input path 
 #path_Matthias="/nfs/dust/cms/user/matsch/ntuples/Spring17/v3"
-path_data="/nfs/dust/cms/user/mwassmer/ntuples/data"
+path_data="/nfs/dust/cms/user/mwassmer/ntuples/data_new"
 path_minorBackgrounds="/nfs/dust/cms/user/mwassmer/ntuples/minor_backgrounds"
 path_karim="/nfs/dust/cms/user/kelmorab/trees_Spring17_v4/"
 
@@ -551,37 +551,37 @@ samplesControlPlots=[
                     Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,ttbarpathS,mcweightAll+ttbarMCweight+'*(GenEvt_I_TTPlusBB==3)','ttbarPlusBBbar',systs_all_samples+systs_ttbar+systs_tt_bb,samDict=sampleDict),  
                     Sample('Single Top',ROOT.kMagenta,path_minorBackgrounds+'/st*/*nominal*.root',mcweightAll,'SingleTop',systs_all_samples,samDict=sampleDict) , 
                     Sample('V+jets',ROOT.kGreen-3,path_minorBackgrounds+'/*ets*/*nominal*.root',mcweightAll,'Vjets',systs_all_samples,samDict=sampleDict) , 
-                    #Sample('t#bar{t}+V',ROOT.kBlue-10,path_minorBackgrounds+'/tt?_*/*nominal*.root',mcweightAll,'ttV',systs_all_samples,samDict=sampleDict),         
+                    Sample('t#bar{t}+V',ROOT.kBlue-10,path_karim+'/tt?_*/*nominal*.root',mcweightAll,'ttV',systs_all_samples,samDict=sampleDict),         
                     Sample('Diboson',ROOT.kAzure+2,path_minorBackgrounds+'/??_pythia_*/*nominal*.root',mcweightAll,'Diboson',systs_all_samples,samDict=sampleDict) , 
 #                    Sample('QCD',ROOT.kYellow ,path_80x+'/QCD*/*nominal*root',mcweight,'QCD') , 
 ]
 
 #print "limit samples"
-#samplesLimits=[
-                    #Sample('t#bar{t}H',ROOT.kBlue+1,path_Matthias+'/ttH*/*nominal*.root',mcweight+evenSel,'ttH',systs_all_samples,samDict=sampleDict) ,     
-##                    Sample('t#bar{t}',ROOT.kRed+1,path_80x+'/ttbar/*nominal*.root',mcweight+evenSel,'ttbar',samDict=sampleDict) ,     
-                    #Sample('t#bar{t}H, H to b#bar{b}',ROOT.kBlue+1,path_Matthias+'/ttHbb/*nominal*.root','1.0*'+mcweight+evenSel,'ttH_hbb',systs_all_samples,samDict=sampleDict) ,  
-                    #Sample('t#bar{t}H, H to c#bar{c}',ROOT.kBlue+1,path_Matthias+'/ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hccSel,'ttH_hcc',systs_all_samples,samDict=sampleDict) ,  
-                    #Sample('t#bar{t}H, H to #tau#tau',ROOT.kBlue+1,path_Matthias+'/ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+httSel,'ttH_htt',systs_all_samples,samDict=sampleDict) ,  
-                    #Sample('t#bar{t}H, H to #gamma#gamma',ROOT.kBlue+1,path_Matthias+'/ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hggSel,'ttH_hgg',systs_all_samples,samDict=sampleDict) ,  
-                    #Sample('t#bar{t}H, H to gluglu',ROOT.kBlue+1,path_Matthias+'/ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hglugluSel,'ttH_hgluglu',systs_all_samples,samDict=sampleDict) ,  
-                    #Sample('t#bar{t}H, H to WW',ROOT.kBlue+1,path_Matthias+'/ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hwwSel,'ttH_hww',systs_all_samples,samDict=sampleDict) ,  
-                    #Sample('t#bar{t}H, H to ZZ',ROOT.kBlue+1,path_Matthias+'/ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hzzSel,'ttH_hzz',systs_all_samples,samDict=sampleDict) ,  
-                    #Sample('t#bar{t}H, H to #gamma Z',ROOT.kBlue+1,path_Matthias+'/ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hzgSel,'ttH_hzg',systs_all_samples,samDict=sampleDict) ,
+samplesLimits=[
+                    Sample('t#bar{t}H',ROOT.kBlue+1,path_karim+'/ttH*/*nominal*.root',mcweight+evenSel,'ttH',systs_all_samples,samDict=sampleDict) ,     
+#                    Sample('t#bar{t}',ROOT.kRed+1,path_80x+'/ttbar/*nominal*.root',mcweight+evenSel,'ttbar',samDict=sampleDict) ,     
+                    Sample('t#bar{t}H, H to b#bar{b}',ROOT.kBlue+1,path_karim+'/ttHbb/*nominal*.root','1.0*'+mcweight+evenSel,'ttH_hbb',systs_all_samples,samDict=sampleDict) ,  
+                    Sample('t#bar{t}H, H to c#bar{c}',ROOT.kBlue+1,path_karim+'/ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hccSel,'ttH_hcc',systs_all_samples,samDict=sampleDict) ,  
+                    Sample('t#bar{t}H, H to #tau#tau',ROOT.kBlue+1,path_karim+'/ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+httSel,'ttH_htt',systs_all_samples,samDict=sampleDict) ,  
+                    Sample('t#bar{t}H, H to #gamma#gamma',ROOT.kBlue+1,path_karim+'/ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hggSel,'ttH_hgg',systs_all_samples,samDict=sampleDict) ,  
+                    Sample('t#bar{t}H, H to gluglu',ROOT.kBlue+1,path_karim+'/ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hglugluSel,'ttH_hgluglu',systs_all_samples,samDict=sampleDict) ,  
+                    Sample('t#bar{t}H, H to WW',ROOT.kBlue+1,path_karim+'/ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hwwSel,'ttH_hww',systs_all_samples,samDict=sampleDict) ,  
+                    Sample('t#bar{t}H, H to ZZ',ROOT.kBlue+1,path_karim+'/ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hzzSel,'ttH_hzz',systs_all_samples,samDict=sampleDict) ,  
+                    Sample('t#bar{t}H, H to #gamma Z',ROOT.kBlue+1,path_karim+'/ttHnonbb/*nominal*.root','1.0*'+mcweight+evenSel+hzgSel,'ttH_hzg',systs_all_samples,samDict=sampleDict) ,
                     
-                    #Sample('t#bar{t}+lf',ROOT.kRed-7,ttbarpathS,mcweight+evenSel+ttbarMCweight+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)','ttbarOther',systs_all_samples+systs_ttbar+systs_tt_lf,samDict=sampleDict),
-                    #Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,ttbarpathS,mcweight+evenSel+ttbarMCweight+'*(GenEvt_I_TTPlusCC==1)','ttbarPlusCCbar',systs_all_samples+systs_ttbar+systs_tt_cc,samDict=sampleDict),
-                    #Sample('t#bar{t}+b',ROOT.kRed-2,ttbarpathS,mcweight+evenSel+ttbarMCweight+'*(GenEvt_I_TTPlusBB==1)','ttbarPlusB',systs_all_samples+systs_ttbar+systs_tt_b,samDict=sampleDict),
-                    #Sample('t#bar{t}+2b',ROOT.kRed+2,ttbarpathS,mcweight+evenSel+ttbarMCweight+'*(GenEvt_I_TTPlusBB==2)','ttbarPlus2B',systs_all_samples+systs_ttbar+systs_tt_2b,samDict=sampleDict),
-                    #Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,ttbarpathS,mcweight+evenSel+ttbarMCweight+'*(GenEvt_I_TTPlusBB==3)','ttbarPlusBBbar',systs_all_samples+systs_ttbar+systs_tt_bb,samDict=sampleDict), 
-                    #Sample('Single Top',ROOT.kMagenta,path_karim+'/st*/*nominal*.root',mcweightAll,'singlet',systs_all_samples,samDict=sampleDict) , 
-                    #Sample('Z+jets',ROOT.kGreen-3,path_karim+'/Zjets*/*nominal*.root',mcweightAll,'zjets',systs_all_samples,samDict=sampleDict) , 
-                    #Sample('W+jets',ROOT.kGreen-7,path_karim+'/WJets*/*nominal*.root',mcweightAll,'wjets',systs_all_samples,samDict=sampleDict) , 
-                    #Sample('t#bar{t}+W',ROOT.kBlue-10,path_karim+'/ttW_*/*nominal*.root',mcweightAll,'ttbarW',systs_all_samples,samDict=sampleDict),
-                    #Sample('t#bar{t}+Z',ROOT.kBlue-6,path_karim+'/ttZ_*/*nominal*.root',mcweightAll,'ttbarZ',systs_all_samples,samDict=sampleDict),
-                    ##Sample('Diboson',ROOT.kAzure+2,path_80x+'/??/*nominal*.root',mcweightAll,'diboson',systs_all_samples,samDict=sampleDict) , 
-###                    Sample('QCD',ROOT.kYellow ,path_80x+'/QCD*/*nominal*root',mcweightAll,'QCD',samDict=sampleDict) , 
-#]
+                    Sample('t#bar{t}+lf',ROOT.kRed-7,ttbarpathS,mcweight+evenSel+ttbarMCweight+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)','ttbarOther',systs_all_samples+systs_ttbar+systs_tt_lf,samDict=sampleDict),
+                    Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,ttbarpathS,mcweight+evenSel+ttbarMCweight+'*(GenEvt_I_TTPlusCC==1)','ttbarPlusCCbar',systs_all_samples+systs_ttbar+systs_tt_cc,samDict=sampleDict),
+                    Sample('t#bar{t}+b',ROOT.kRed-2,ttbarpathS,mcweight+evenSel+ttbarMCweight+'*(GenEvt_I_TTPlusBB==1)','ttbarPlusB',systs_all_samples+systs_ttbar+systs_tt_b,samDict=sampleDict),
+                    Sample('t#bar{t}+2b',ROOT.kRed+2,ttbarpathS,mcweight+evenSel+ttbarMCweight+'*(GenEvt_I_TTPlusBB==2)','ttbarPlus2B',systs_all_samples+systs_ttbar+systs_tt_2b,samDict=sampleDict),
+                    Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,ttbarpathS,mcweight+evenSel+ttbarMCweight+'*(GenEvt_I_TTPlusBB==3)','ttbarPlusBBbar',systs_all_samples+systs_ttbar+systs_tt_bb,samDict=sampleDict), 
+                    Sample('Single Top',ROOT.kMagenta,path_minorBackgrounds+'/st*/*nominal*.root',mcweightAll,'singlet',systs_all_samples,samDict=sampleDict) , 
+                    Sample('Z+jets',ROOT.kGreen-3,path_minorBackgrounds+'/Zjets*/*nominal*.root',mcweightAll,'zjets',systs_all_samples,samDict=sampleDict) , 
+                    Sample('W+jets',ROOT.kGreen-7,path_minorBackgrounds+'/Wjets*/*nominal*.root',mcweightAll,'wjets',systs_all_samples,samDict=sampleDict) , 
+                    Sample('t#bar{t}+W',ROOT.kBlue-10,path_karim+'/ttW_*/*nominal*.root',mcweightAll,'ttbarW',systs_all_samples,samDict=sampleDict),
+                    Sample('t#bar{t}+Z',ROOT.kBlue-6,path_karim+'/ttZ_*/*nominal*.root',mcweightAll,'ttbarZ',systs_all_samples,samDict=sampleDict),
+                    Sample('Diboson',ROOT.kAzure+2,path_minorBackgrounds+'/??_pythia_*/*nominal*.root',mcweightAll,'Diboson',systs_all_samples,samDict=sampleDict) , 
+##                    Sample('QCD',ROOT.kYellow ,path_80x+'/QCD*/*nominal*root',mcweightAll,'QCD',samDict=sampleDict) , 
+]
 
 #print "shape samples"
 #samplesShapes=[

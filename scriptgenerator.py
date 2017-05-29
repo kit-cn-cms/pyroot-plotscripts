@@ -3710,16 +3710,16 @@ def renameHistosParallel(infname,sysnames,prune=False):
     thish=outfile.Get(thisname)
     newname=thisname
     do=True
-    if do and "PSscaleUp" in thisname and "Q2scale" in thisname and thisname[-2:]=="Up":
-      tmp=thisname
-      tmp=tmp.replace('_CMS_ttH_PSscaleUp','')
-      print 'stripped',tmp
-      newname=tmp.replace('Q2scale','CombinedScale')
+    #if do and "PSscaleUp" in thisname and "Q2scale" in thisname and thisname[-2:]=="Up":
+      #tmp=thisname
+      #tmp=tmp.replace('_CMS_ttH_PSscaleUp','')
+      #print 'stripped',tmp
+      #newname=tmp.replace('Q2scale','CombinedScale')
 
-    if "PSscaleDown" in thisname and "Q2scale" in thisname and thisname[-4:]=="Down":
-      tmp=thisname
-      tmp=tmp.replace('_CMS_ttH_PSscaleDown','')
-      newname=tmp.replace('Q2scale','CombinedScale')
+    #if "PSscaleDown" in thisname and "Q2scale" in thisname and thisname[-4:]=="Down":
+      #tmp=thisname
+      #tmp=tmp.replace('_CMS_ttH_PSscaleDown','')
+      #newname=tmp.replace('Q2scale','CombinedScale')
 
     if "dummy" in thisname:
       continue
@@ -3730,7 +3730,7 @@ def renameHistosParallel(infname,sysnames,prune=False):
 	newname+=sys
 	nsysts+=1
 	
-    if "JES" in thisname or "JER" in thisname:
+    if "JES" in thisname or "JER" in thisname or "_PS_fsr" in thisname or "_PS_isr" in thisname or "_PS_hdamp" in thisname or "CMS_ue" in thisname:
       if nsysts>2:
 	print nsysts, " systs: removing ", thisname
 	outfile.Delete(thisname)
@@ -3761,29 +3761,29 @@ def renameHistosParallel(infname,sysnames,prune=False):
 	continue
     
     #add ttbar type to systematics name for PS scale
-    if "CMS_ttH_PSscaleUp" in newname or "CMS_ttH_PSscaleDown" in newname:
+    #if "CMS_ttH_PSscaleUp" in newname or "CMS_ttH_PSscaleDown" in newname:
       
-      ttbartype=""
-      if "ttbarOther"==thisname.split("_",1)[0]:
-	ttbartype="ttbarOther"
-      elif "ttbarPlusB"==thisname.split("_",1)[0] :
-	ttbartype="ttbarPlusB"
-      elif "ttbarPlusBBbar"==thisname.split("_",1)[0] :
-	ttbartype="ttbarPlusBBbar"
-      elif "ttbarPlusCCbar"==thisname.split("_",1)[0] :
-	ttbartype="ttbarPlusCCbar"
-      elif "ttbarPlus2B"==thisname.split("_",1)[0] :
-	ttbartype="ttbarPlus2B"
-      else:
-	print "wrong syst: removing histogram", thisname
-	continue
+      #ttbartype=""
+      #if "ttbarOther"==thisname.split("_",1)[0]:
+	#ttbartype="ttbarOther"
+      #elif "ttbarPlusB"==thisname.split("_",1)[0] :
+	#ttbartype="ttbarPlusB"
+      #elif "ttbarPlusBBbar"==thisname.split("_",1)[0] :
+	#ttbartype="ttbarPlusBBbar"
+      #elif "ttbarPlusCCbar"==thisname.split("_",1)[0] :
+	#ttbartype="ttbarPlusCCbar"
+      #elif "ttbarPlus2B"==thisname.split("_",1)[0] :
+	#ttbartype="ttbarPlus2B"
+      #else:
+	#print "wrong syst: removing histogram", thisname
+	#continue
       
-      if "CMS_ttH_PSscaleUp" in newname:
-	newname=newname.replace("CMS_ttH_PSscaleUp","CMS_ttH_PSscale_"+ttbartype+"Up")
-      elif "CMS_ttH_PSscaleDown" in newname:
-	newname=newname.replace("CMS_ttH_PSscaleDown","CMS_ttH_PSscale_"+ttbartype+"Down")
-      else:
-	print "wrong syst: removing histogram", thisname
+      #if "CMS_ttH_PSscaleUp" in newname:
+	#newname=newname.replace("CMS_ttH_PSscaleUp","CMS_ttH_PSscale_"+ttbartype+"Up")
+      #elif "CMS_ttH_PSscaleDown" in newname:
+	#newname=newname.replace("CMS_ttH_PSscaleDown","CMS_ttH_PSscale_"+ttbartype+"Down")
+      #else:
+	#print "wrong syst: removing histogram", thisname
 
     if newname!=thisname:
       print "changed ", thisname, " to ", newname  

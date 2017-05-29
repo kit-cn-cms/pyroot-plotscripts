@@ -1,6 +1,7 @@
 import ROOT
 import sys
 import os
+import math
 from subprocess import call
 
 
@@ -158,7 +159,7 @@ def renameHistosOLD(infname,outfname,sysnames,prune=True):
   outfile.Close()
   infile.Close()    
 
-def renameHistos(infname,outfname,sysnames,prune=True):
+def renameHistos(infname,outfname,sysnames,prune=True,Epsilon=0.0):
   print sysnames
   cmd="cp -v "+infname+" "+outfname
   call(cmd,shell=True)
@@ -179,28 +180,28 @@ def renameHistos(infname,outfname,sysnames,prune=True):
     newname=thisname
     do=True
     #print thisname
-    if do and "PSscaleUp" in thisname and "Q2scale" in thisname and thisname[-2:]=="Up":
-      #print thish
-#     print thisname
-      #ttbarOther_CMS_ttH_PSscaleUp_BDT_ljets_j4_t4_low_CMS_ttH_Q2scale_ttbarPlusBUp
-      tmp=thisname
-      tmp=tmp.replace('_CMS_ttH_PSscaleUp','')
-      print 'stripped',tmp
-#      raw_input()
-      newname=tmp.replace('Q2scale','CombinedScale')
-      #print newname
-      #raw_input()
+    #if do and "PSscaleUp" in thisname and "Q2scale" in thisname and thisname[-2:]=="Up":
+      ##print thish
+##     print thisname
+      ##ttbarOther_CMS_ttH_PSscaleUp_BDT_ljets_j4_t4_low_CMS_ttH_Q2scale_ttbarPlusBUp
+      #tmp=thisname
+      #tmp=tmp.replace('_CMS_ttH_PSscaleUp','')
+      #print 'stripped',tmp
+##      raw_input()
+      #newname=tmp.replace('Q2scale','CombinedScale')
+      ##print newname
+      ##raw_input()
 
-    if "PSscaleDown" in thisname and "Q2scale" in thisname and thisname[-4:]=="Down":
-  #    print thisname
-      #ttbarOther_CMS_ttH_PSscaleUp_BDT_ljets_j4_t4_low_CMS_ttH_Q2scale_ttbarPlusBUp
-      tmp=thisname
-      tmp=tmp.replace('_CMS_ttH_PSscaleDown','')
-   #   print 'stripped',tmp
-     # raw_input()
-      newname=tmp.replace('Q2scale','CombinedScale')
-    #  print newname
-      #raw_input()
+    #if "PSscaleDown" in thisname and "Q2scale" in thisname and thisname[-4:]=="Down":
+  ##    print thisname
+      ##ttbarOther_CMS_ttH_PSscaleUp_BDT_ljets_j4_t4_low_CMS_ttH_Q2scale_ttbarPlusBUp
+      #tmp=thisname
+      #tmp=tmp.replace('_CMS_ttH_PSscaleDown','')
+   ##   print 'stripped',tmp
+     ## raw_input()
+      #newname=tmp.replace('Q2scale','CombinedScale')
+    ##  print newname
+      ##raw_input()
 
     if "dummy" in thisname:
       continue
@@ -239,29 +240,29 @@ def renameHistos(infname,outfname,sysnames,prune=True):
         continue
     
 #add ttbar type to systematics name for PS scale
-    if "CMS_ttH_PSscaleUp" in newname or "CMS_ttH_PSscaleDown" in newname:
+    #if "CMS_ttH_PSscaleUp" in newname or "CMS_ttH_PSscaleDown" in newname:
       
-      ttbartype=""
-      if "ttbarOther"==thisname.split("_",1)[0]:
-        ttbartype="ttbarOther"
-      elif "ttbarPlusB"==thisname.split("_",1)[0] :
-        ttbartype="ttbarPlusB"
-      elif "ttbarPlusBBbar"==thisname.split("_",1)[0] :
-        ttbartype="ttbarPlusBBbar"
-      elif "ttbarPlusCCbar"==thisname.split("_",1)[0] :
-        ttbartype="ttbarPlusCCbar"
-      elif "ttbarPlus2B"==thisname.split("_",1)[0] :
-        ttbartype="ttbarPlus2B"
-      else:
-        print "wrong syst: removing histogram", thisname
-        continue
+      #ttbartype=""
+      #if "ttbarOther"==thisname.split("_",1)[0]:
+        #ttbartype="ttbarOther"
+      #elif "ttbarPlusB"==thisname.split("_",1)[0] :
+        #ttbartype="ttbarPlusB"
+      #elif "ttbarPlusBBbar"==thisname.split("_",1)[0] :
+        #ttbartype="ttbarPlusBBbar"
+      #elif "ttbarPlusCCbar"==thisname.split("_",1)[0] :
+        #ttbartype="ttbarPlusCCbar"
+      #elif "ttbarPlus2B"==thisname.split("_",1)[0] :
+        #ttbartype="ttbarPlus2B"
+      #else:
+        #print "wrong syst: removing histogram", thisname
+        #continue
       
-      if "CMS_ttH_PSscaleUp" in newname:
-        newname=newname.replace("CMS_ttH_PSscaleUp","CMS_ttH_PSscale_"+ttbartype+"Up")
-      elif "CMS_ttH_PSscaleDown" in newname:
-        newname=newname.replace("CMS_ttH_PSscaleDown","CMS_ttH_PSscale_"+ttbartype+"Down")
-      else:
-        print "wrong syst: removing histogram", thisname
+      #if "CMS_ttH_PSscaleUp" in newname:
+        #newname=newname.replace("CMS_ttH_PSscaleUp","CMS_ttH_PSscale_"+ttbartype+"Up")
+      #elif "CMS_ttH_PSscaleDown" in newname:
+        #newname=newname.replace("CMS_ttH_PSscaleDown","CMS_ttH_PSscale_"+ttbartype+"Down")
+      #else:
+        #print "wrong syst: removing histogram", thisname
 
 
     #if nsysts ==1 and thish.Integral()<0.0:
@@ -272,11 +273,11 @@ def renameHistos(infname,outfname,sysnames,prune=True):
       nbins=thish.GetNbinsX()
       newhist=thish.Clone()
       for ibin in range(nbins):
-        if newhist.GetBinContent(ibin+1)<0.0:
-          print "negative bins in ", newhist
-          print "setting bin ", ibin+1, "from", newhist.GetBinContent(ibin+1), "+-", newhist.GetBinError(ibin+1), "to 0+-0"
-          newhist.SetBinContent(ibin+1,0.0)
-          newhist.SetBinError(ibin+1,0.0)
+        if newhist.GetBinContent(ibin+1)<=0.0:
+          print "negative or zero bins in ", newhist
+          print "setting bin ", ibin+1, "from", newhist.GetBinContent(ibin+1), "+-", newhist.GetBinError(ibin+1), "to ", Epsilon, "+-", math.sqrt(Epsilon)
+          newhist.SetBinContent(ibin+1,Epsilon)
+          newhist.SetBinError(ibin+1,ROOT.TMath.Sqrt(Epsilon))
           histchanged=True
   #if "125" in newname:
     #newname=newname.replace("125","")
