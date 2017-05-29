@@ -664,7 +664,7 @@ print plots
 #outputpath=plotParallel(name,1000000,plots,samples+samples_data+systsamples,[''],['1.'],weightsystnames, systweights,additionalvariables,[],"",othersystnames)
 
 if len(sys.argv) == 1 :                      #if some option is given plotParallelStep will be skipped
-    outputpath=plotParallel(name,5000000,plots,samples+samples_data+systsamples,[''],['1.'],weightsystnames, systweights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/pyroot-plotscripts/treejson26052017.json",othersystnames+PSsystnames)
+    outputpath=plotParallel(name,5000000,plots,samples+samples_data+systsamples,[''],['1.'],weightsystnames, systweights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/pyroot-plotscripts/treejson28052017.json",othersystnames+PSsystnames)
 else:
     workdir=os.getcwd()+'/workdir/'+name
     outputpath=workdir+'/output.root'
@@ -692,6 +692,23 @@ if len(sys.argv) > 1 :
   plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name,[[lll,3354,ROOT.kBlack,True]],False,labels,True,plotBlinded)
 
 if len(sys.argv) == 1 :
+  
+  
+  for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
+
+  makeEventyields=False
+
+  if "JT" in hld[0].GetName():
+    makeEventyields=True
+    for h in hld+hl:
+      for i,cat in enumerate(categoriesJT):
+        h.GetXaxis().SetBinLabel(i+1,cat[1])
+    tablepath=("/".join((outputpath.split('/'))[:-1]))+"/"+name+"_yieldsJTstatOnly"
+
+  # make an event yield table
+  if makeEventyields:
+    eventYields(hld,hl,samples,tablepath)
+
 
   ## make table with errors
   totrateunc=0.0
@@ -778,19 +795,7 @@ if len(sys.argv) == 1 :
 
     makeEventyields=False
 
-    if "optD" in hld[0].GetName():
-      makeEventyields=True
-      for h in hld+hl:
-	for i,cat in enumerate(categoriesSplitByBDToptD):
-	  h.GetXaxis().SetBinLabel(i+1,cat[1])
-      tablepath=("/".join((outputpath.split('/'))[:-1]))+"/"+name+"_yieldsD"
-    #elif "JTB" in hld[0].GetName():
-      #makeEventyields=True
-      #for h in hld+hl:
-	#for i,cat in enumerate(categoriesJTB):
-	  #h.GetXaxis().SetBinLabel(i+1,cat[1])
-      #tablepath=("/".join((outputpath.split('/'))[:-1]))+"/"+name+"_yieldsJTB"
-    elif "JT" in hld[0].GetName():
+    if "JT" in hld[0].GetName():
       makeEventyields=True
       for h in hld+hl:
 	for i,cat in enumerate(categoriesJT):
