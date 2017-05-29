@@ -150,6 +150,9 @@ writeListOfHistoListsAN(transposeLOL([lolT[0]]+lolT[9:]),[samples[0]]+samples[9:
 
 
 # make datacards
+#TODO
+# 1. Implement small Epsilon case
+# 2. Implement consisted Bin-by-Bin uncertainties
 makeDatacards(name+'/'+name+'_limitInput.root',name+'/'+name+'_datacard',binlabels,doHdecay=True,discrname='finaldiscr',datacardmaker='mk_datacard_JESTest13TeV')
 
 # calculate limits
