@@ -979,6 +979,7 @@ def createLLL_fromSuperHistoFileSyst(path,samples,plots,systnames=[""]):
     lll=[]
     for plot in plots:
         ll=[]
+        print "creating histolist for plot ", plot.name
         for sample in samples:
             nominal_key=sample.nick+'_'+plot.name+systnames[0]
             nominal=f.Get(nominal_key)

@@ -3366,6 +3366,61 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   f.write(script)
   f.close()
 
+def DrawParallel(ListOfPlots,name,PathToSelf):
+    ListofScripts=[]
+    workdir=os.getcwd()+'/workdir/'+name+'/DrawScripts/'
+    # create output folders
+    print 'creating output folders'
+    scriptsfolder=workdir
+    if not os.path.exists(scriptsfolder):
+      os.makedirs(scriptsfolder)
+
+    print "Creating Scripts for Parallel Drawing"
+    for iPlot, Plot in enumerate(ListOfPlots):
+        ListofScripts.append(createSingleDrawScript(iPlot,Plot,PathToSelf,scriptsfolder))
+
+    print "Submitting ", len(ListofScripts), " DrawScripts"
+    # print ListofScripts
+    # jobids=submitToNAF(["DrawScripts/DrawParallel0.sh"])
+    jobids=submitToNAF(ListofScripts)
+    do_qstat(jobids)
+
+
+def createSingleDrawScript(iPlot,Plot,PathToSelf,scriptsfolder):
+  # print "still needs to be implemented"
+  cmsswpath=os.environ['CMSSW_BASE']
+  script="#!/bin/bash \n"
+  if cmsswpath!='':
+    script+="export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch \n"
+    script+="source $VO_CMS_SW_DIR/cmsset_default.sh \n"
+    script+="export SCRAM_ARCH="+os.environ['SCRAM_ARCH']+"\n"
+    script+='export OUTFILENAME="'+"plot" +str(iPlot)+'"\n'
+    script+='cd '+cmsswpath+'/src\neval `scram runtime -sh`\n'
+    script+='cd - \n'
+  # script+='export NUMBEROFPLOT ='+str(iPlot)+'\n'
+  script+='python '+PathToSelf+" "+str(iPlot)+' noPlotParallel\n'
+  # script+="mv *.pdf " +os.getcwd()+"/plot"+str(iPlot)+".pdf\n"
+
+
+  scriptname=scriptsfolder+'DrawParallel'+str(iPlot)+'.sh'
+
+  # path = os.getcwd()+"/DrawScripts" 
+  # if not os.path.exists(path):
+  #   os.makedirs(path)
+  # os.chdir(path)
+  
+  f=open(scriptname,'w')
+  f.write(script)
+  f.close()
+  st = os.stat(scriptname)
+  os.chmod(scriptname, st.st_mode | stat.S_IEXEC)
+  os.chdir(os.path.dirname(PathToSelf))
+
+  # PathToShellScript=path+scriptname
+  # return PathToShellScript
+  # return "DrawScripts/"+scriptname
+  return scriptname
+
 
 def createScript(scriptname,programpath,processname,filenames,outfilename,maxevents,skipevents,cmsswpath,suffix):
   script="#!/bin/bash \n"
