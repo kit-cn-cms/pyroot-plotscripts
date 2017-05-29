@@ -686,7 +686,7 @@ for s,h in zip(samples[1:],listOfHistoLists[0][1:]):
 totrateunc=sw/float(sints)
 print "new rate unc", totrateunc
 print samples
-moresamples=samples+[Sample('Total bkg',ROOT.kAzure+2,ttbarpathS,mcweightAll,'totalBackground',systs_all_samples,samDict=sampleDict,totrateunc)]
+moresamples=samples+[Sample('Total bkg',ROOT.kAzure+2,ttbarpathS,mcweightAll,'totalBackground',systs_all_samples,samDict=sampleDict,up=totrateunc)]
 print moresamples
 
 listOfHistoListsWerror=[]
