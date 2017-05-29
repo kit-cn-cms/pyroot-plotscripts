@@ -300,8 +300,8 @@ errorSystnamesNoPS=[
   "","",
 ]
 
-mcweightAll='36.0'
-mcweight='36.0*2.0'
+mcweightAll='35.922'
+mcweight='35.922*2.0'
 
 
 mcTriggerWeight='((1.0)*(internalEleTriggerWeight*internalMuTriggerWeight)*((N_TightElectrons==1 && Triggered_HLT_Ele27_eta2p1_WPTight_Gsf_vX==1)||(N_TightMuons==1 && (Triggered_HLT_IsoMu24_vX==1 || Triggered_HLT_IsoTkMu24_vX==1))))'
@@ -527,14 +527,18 @@ samples_data_controlplots=[
 ## DANGERZONE 
 # Recheck these numbers !!!
 # Use incl and SL samples together
-# SL sample has nominally 152714188 events
+# SL sample has nominally 152720952  events
+#After skims but before ntupling at least 4 SL files are missing with events 235523/58319342 = 0.004038506 -> 0.995961494
 # incl sample has 77229341 events
-# the total number of SL events in both samples is 186086339,075337252 . This also included the fact that 3 MiniAOD files are missing
+# branching for Single lepton = 43.8 (pdg) -> nSL = 77229341*0.438 + 152720952*0.995961494
+# the total number of SL events in both samples is 185930638.8770223 . This also included the fact that 3 MiniAOD files are missing
 # Now Calculate new XS weights to mix the samples together
 # incl ttbar XS = 831.76
-# SL ttbar XS = 364.369
-# => weight had and DL = 831.76/77229341 = 0.01077
-# => weight SL = 364.369*1000/186086339,075337252 = 0.001958064
+# SL ttbar XS = 831.76*0.438 = 364.31088
+# => weight had and DL = 831.76*1000/77229341 = 0.01077
+# => weight SL = 364.31088*1000/185930638.8770223 = 0.00195939
+
+
 
 ttbarMCweight='*((0.001958064*(N_GenTopHad==1 && N_GenTopLep==1)+0.01077*(N_GenTopLep==2 && N_GenTopHad==0)+0.01077*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS)'
 
@@ -549,7 +553,7 @@ samplesControlPlots=[
                     Sample('t#bar{t}+b',ROOT.kRed-2,ttbarpathS,mcweightAll+ttbarMCweight+'*(GenEvt_I_TTPlusBB==1)','ttbarPlusB',systs_all_samples+systs_ttbar+systs_tt_b,samDict=sampleDict),
                     Sample('t#bar{t}+2b',ROOT.kRed+2,ttbarpathS,mcweightAll+ttbarMCweight+'*(GenEvt_I_TTPlusBB==2)','ttbarPlus2B',systs_all_samples+systs_ttbar+systs_tt_2b,samDict=sampleDict),
                     Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,ttbarpathS,mcweightAll+ttbarMCweight+'*(GenEvt_I_TTPlusBB==3)','ttbarPlusBBbar',systs_all_samples+systs_ttbar+systs_tt_bb,samDict=sampleDict),  
-                    Sample('Single Top',ROOT.kMagenta,path_minorBackgrounds+'/st*/*nominal*.root',mcweightAll,'SingleTop',systs_all_samples,samDict=sampleDict) , 
+                    Sample('Single Top',ROOT.kMagenta,path_karim+'/st*/*nominal*.root',mcweightAll,'SingleTop',systs_all_samples,samDict=sampleDict) , 
                     Sample('V+jets',ROOT.kGreen-3,path_minorBackgrounds+'/*ets*/*nominal*.root',mcweightAll,'Vjets',systs_all_samples,samDict=sampleDict) , 
                     Sample('t#bar{t}+V',ROOT.kBlue-10,path_karim+'/tt?_*/*nominal*.root',mcweightAll,'ttV',systs_all_samples,samDict=sampleDict),         
                     Sample('Diboson',ROOT.kAzure+2,path_minorBackgrounds+'/??_pythia_*/*nominal*.root',mcweightAll,'Diboson',systs_all_samples,samDict=sampleDict) , 
@@ -574,7 +578,7 @@ samplesLimits=[
                     Sample('t#bar{t}+b',ROOT.kRed-2,ttbarpathS,mcweight+evenSel+ttbarMCweight+'*(GenEvt_I_TTPlusBB==1)','ttbarPlusB',systs_all_samples+systs_ttbar+systs_tt_b,samDict=sampleDict),
                     Sample('t#bar{t}+2b',ROOT.kRed+2,ttbarpathS,mcweight+evenSel+ttbarMCweight+'*(GenEvt_I_TTPlusBB==2)','ttbarPlus2B',systs_all_samples+systs_ttbar+systs_tt_2b,samDict=sampleDict),
                     Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,ttbarpathS,mcweight+evenSel+ttbarMCweight+'*(GenEvt_I_TTPlusBB==3)','ttbarPlusBBbar',systs_all_samples+systs_ttbar+systs_tt_bb,samDict=sampleDict), 
-                    Sample('Single Top',ROOT.kMagenta,path_minorBackgrounds+'/st*/*nominal*.root',mcweightAll,'singlet',systs_all_samples,samDict=sampleDict) , 
+                    Sample('Single Top',ROOT.kMagenta,path_karim+'/st*/*nominal*.root',mcweightAll,'singlet',systs_all_samples,samDict=sampleDict) , 
                     Sample('Z+jets',ROOT.kGreen-3,path_minorBackgrounds+'/Zjets*/*nominal*.root',mcweightAll,'zjets',systs_all_samples,samDict=sampleDict) , 
                     Sample('W+jets',ROOT.kGreen-7,path_minorBackgrounds+'/Wjets*/*nominal*.root',mcweightAll,'wjets',systs_all_samples,samDict=sampleDict) , 
                     Sample('t#bar{t}+W',ROOT.kBlue-10,path_karim+'/ttW_*/*nominal*.root',mcweightAll,'ttbarW',systs_all_samples,samDict=sampleDict),

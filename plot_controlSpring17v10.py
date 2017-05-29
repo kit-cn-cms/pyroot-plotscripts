@@ -58,7 +58,11 @@ for sample in samples:
 # add Parton shower variation samples
 for sample in samples[1:6]: # only for ttbar samples
   for sysname,sysfilename in zip(PSsystnames,PSsystfilenames):
-    thisnewsel=sample.selection
+    thisoldsel=sample.selection
+    thisnewsel=sample.selection.replace(ttbarMCweight,"*1.0").replace(mcweight+evenSel,mcweightAll)
+    print "adding sample for ", sysname
+    print "selection ", thisnewsel
+    print "instead of ", thisoldsel
     systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace(ttbarpathS,path_additionalSamples+"/ttbar_"+sysfilename+"/*nominal*.root"),thisnewsel,sample.nick+sysname,samDict=sampleDict))
 
 
@@ -668,6 +672,118 @@ lllNoPS=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:
 labels=[plot.label for plot in plots]
 lolT=transposeLOL(listOfHistoLists)
 plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name,[[lll,3354,ROOT.kBlack,True],[lllNoPS,3345,ROOT.kSpring,True]],False,labels,True,plotBlinded)
+
+
+## make table with errors
+totrateunc=0.0
+sw=0
+sints=0
+for s,h in zip(samples[1:],listOfHistoLists[0][1:]):
+  print s, s.unc_up, h.Integral()
+  sw+=s.unc_up*h.Integral()
+  sints+=h.Integral()
+  print sw, s
+totrateunc=sw/float(sints)
+print "new rate unc", totrateunc
+print samples
+moresamples=samples+[Sample('Total bkg',ROOT.kAzure+2,ttbarpathS,mcweightAll,'totalBackground',systs_all_samples,samDict=sampleDict,totrateunc)]
+print moresamples
+
+listOfHistoListsWerror=[]
+print "new errors"
+print listOfHistoLists
+print ""
+print lll
+addedBackgrounds=listOfHistoLists[0][1].Clone()
+addedBackgrounds.SetName("totalBackground_JT")
+addedBackgrounds.SetTitle("totalBackground_JT")
+print addedBackgrounds, addedBackgrounds.Integral()
+
+print listOfHistoLists[0][2:]
+for ih in listOfHistoLists[0][2:]:
+  print "adding ", ih, ih.Integral()
+  addedBackgrounds.Add(ih)
+  print addedBackgrounds.Integral()
+  
+addedBackgroundErrors=[]
+print "bkg errors"
+print lll[0][1]
+print lll[0][2]
+
+for ierr, err in enumerate(lll[0][1]):
+  addedBackgroundErrors.append(err.Clone())
+  print "doing ", addedBackgroundErrors[-1], addedBackgroundErrors[-1].Integral()
+  for ibh, bh in enumerate(lll[0][2:]):
+    print "adding ", bh[ierr], bh[ierr].Integral(),  addedBackgroundErrors[-1].Integral()
+    addedBackgroundErrors[-1].Add(bh[ierr])
+    print addedBackgroundErrors[-1].Integral()
+    
+
+print addedBackgroundErrors
+listOfHistoLists[0].append(addedBackgrounds)
+lll[0].append(addedBackgroundErrors)
+
+
+
+for hl, ell in zip(listOfHistoLists, lll):
+  thisplothistolist=[]
+  for h, ehl, s in zip(hl, ell,moresamples):
+    print "creating error bands for ", h
+    print ehl
+    print s
+    thiserrorgraph=createErrorbands([[ehl]],[s],True)
+    print thiserrorgraph
+    assert h.GetNbinsX()==thiserrorgraph[0].GetN()
+    print "old ", h.GetBinError(1)
+    hwe=h.Clone()
+    print "clone ", hwe.GetBinError(1)
+    for ieb in range(hwe.GetNbinsX()):
+      print hwe.GetBinContent(ieb+1)
+      testx=ROOT.Double(0.0)
+      testy=ROOT.Double(0.0)
+      thiserrorgraph[0].GetPoint(ieb,testx,testy)
+      print ieb, testx, testy
+      print "old error", hwe.GetBinError(ieb+1)
+      print thiserrorgraph[0].GetErrorYhigh(ieb), thiserrorgraph[0].GetErrorYlow(ieb)
+      newerror=max(thiserrorgraph[0].GetErrorYhigh(ieb),thiserrorgraph[0].GetErrorYlow(ieb))
+      print newerror
+      hwe.SetBinError(ieb+1,newerror)
+    thisplothistolist.append(hwe)
+    #raw_input()
+  listOfHistoListsWerror.append(thisplothistolist)  
+print listOfHistoListsWerror
+
+print "printing with error"
+
+for hld,hl in zip(listOfHistoListsData,listOfHistoListsWerror):
+
+  makeEventyields=False
+
+  if "optD" in hld[0].GetName():
+    makeEventyields=True
+    for h in hld+hl:
+      for i,cat in enumerate(categoriesSplitByBDToptD):
+        h.GetXaxis().SetBinLabel(i+1,cat[1])
+    tablepath=("/".join((outputpath.split('/'))[:-1]))+"/"+name+"_yieldsD"
+  #elif "JTB" in hld[0].GetName():
+    #makeEventyields=True
+    #for h in hld+hl:
+      #for i,cat in enumerate(categoriesJTB):
+        #h.GetXaxis().SetBinLabel(i+1,cat[1])
+    #tablepath=("/".join((outputpath.split('/'))[:-1]))+"/"+name+"_yieldsJTB"
+  elif "JT" in hld[0].GetName():
+    makeEventyields=True
+    for h in hld+hl:
+      for i,cat in enumerate(categoriesJT):
+        h.GetXaxis().SetBinLabel(i+1,cat[1])
+    tablepath=("/".join((outputpath.split('/'))[:-1]))+"/"+name+"_yieldsJT"
+
+  
+  # make an event yield table
+  if makeEventyields:
+    eventYieldsNew(hld,hl,moresamples,tablepath)
+
+
 
 exit(0)
 
