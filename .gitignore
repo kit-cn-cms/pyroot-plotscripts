@@ -3,3 +3,6 @@
 *.png
 workdir/*
 *.pyc
+*.log
+*.aux
+*.nav
