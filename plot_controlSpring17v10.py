@@ -1,10 +1,12 @@
 #############
 # plot general control distributions
 ##############
-
-from plotconfigSpring17v10 import *
+import sys
+import os
 sys.path.append('pyroot-plotscripts-base')
 sys.path.append('pyroot-plotscripts-base/limittools')
+
+from plotconfigSpring17v10 import *
 from limittools import renameHistos
 from scriptgenerator import *
 
