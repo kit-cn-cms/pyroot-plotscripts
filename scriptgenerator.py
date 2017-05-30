@@ -3512,9 +3512,9 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
   LoadedTreeInformation={}
   if treejsonfile!="":
     print "Loading file with tree event information"
-    jsonfile=open(treejsonfile,"r")
-    jsonstring=list(jsonfile)[0]
-    LoadedTreeInformation=json.loads(jsonstring)
+    with open(treejsonfile,"r") as jsonfile:
+      jsonstring=list(jsonfile)[0]
+      LoadedTreeInformation=json.loads(jsonstring)
   for s in samples:
     print 'creating scripts for',s.name,'from',s.path
     ntotal_events=0
