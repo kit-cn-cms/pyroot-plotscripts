@@ -53,26 +53,26 @@ for i,cat in enumerate(categoriesJT):
 
 # samples
 samples=samplesControlPlots
-samples_data=samples_data_controlplots
+samples_data=samplesDataControlPlots
 systsamples=[]
 for sample in samples:
-  for sysname,sysfilename in zip(othersystnames,othersystfilenames):
+  for sysname,sysfilename in zip(otherSystNamess,otherSystFileNames):
     thisnewsel=sample.selection
     systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),thisnewsel,sample.nick+sysname,samDict=sampleDict))
 
 # add Parton shower variation samples
 for sample in samples[1:6]: # only for ttbar samples
-  for sysname,sysfilename in zip(PSsystnames,PSsystfilenames):
+  for sysname,sysfilename in zip(PSSystNames,PSSystFileNames):
     thisoldsel=sample.selection
-    thisnewsel=sample.selection.replace(ttbarMCweight,"*1.0").replace(mcweight+evenSel,mcweightAll)
+    thisnewsel=sample.selection.replace(ttbarMCWeight,"*1.0").replace(mcWeight+evenSel,mcWeightAll)
     print "adding sample for ", sysname
     print "selection ", thisnewsel
     print "instead of ", thisoldsel
-    systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace(ttbarpathS,path_additionalSamples+"/ttbar_"+sysfilename+"/*nominal*.root"),thisnewsel,sample.nick+sysname,samDict=sampleDict))
+    systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace(ttbarPathS,path_additionalSamples+"/ttbar_"+sysfilename+"/*nominal*.root"),thisnewsel,sample.nick+sysname,samDict=sampleDict))
 
 
 allsamples=samples+systsamples
-allsystnames=weightsystnames+othersystnames+PSsystnames
+allsystnames=weightSystNames+otherSystNamess+PSSystNames
 
 # book plots
 plotlabel="1 lepton, #geq 4 jets, #geq 2 b-tags"
@@ -665,11 +665,11 @@ if doDrawParallel and  len(sys.argv) > 1 :
     plots=[plots[int(sys.argv[1])]]
 print plots
 
-#print name,2000000,plots,samples+samples_data,[''],['1.'],weightsystnames, systweights
-#outputpath=plotParallel(name,1000000,plots,samples+samples_data+systsamples,[''],['1.'],weightsystnames, systweights,additionalvariables,[],"",othersystnames)
+#print name,2000000,plots,samples+samples_data,[''],['1.'],weightSystNames, systWeights
+#outputpath=plotParallel(name,1000000,plots,samples+samples_data+systsamples,[''],['1.'],weightSystNames, systWeights,additionalvariables,[],"",otherSystNamess)
 
 if doDrawParallel==False or len(sys.argv) == 1 :                      #if some option is given plotParallelStep will be skipped
-    outputpath=plotParallel(name,5000000,plots,samples+samples_data+systsamples,[''],['1.'],weightsystnames, systweights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/pyroot-plotscripts/treejson28052017.json",othersystnames+PSsystnames)
+    outputpath=plotParallel(name,5000000,plots,samples+samples_data+systsamples,[''],['1.'],weightSystNames, systWeights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/pyroot-plotscripts/treejson28052017.json",otherSystNamess+PSSystNames)
 else:
     workdir=os.getcwd()+'/workdir/'+name
     outputpath=workdir+'/output.root'
@@ -681,8 +681,8 @@ if doDrawParallel==False or len(sys.argv) == 1 :                      #if some o
   if not os.path.exists(outputpath[:-4]+'_syst.root') or not askYesNo('reuse systematic histofile?'):
     print "does syst file exist?", os.path.exists(outputpath[:-4]+'_syst.root')
     renameHistos(outputpath,outputpath[:-4]+'_syst.root',allsystnames,False)
-lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,errorSystnames)
-lllNoPS=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,errorSystnamesNoPS)
+lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,errorSystNames)
+lllNoPS=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,errorSystNamesNoPS)
 
 
 labels=[plot.label for plot in plots]
@@ -727,7 +727,7 @@ if doDrawParallel==False or len(sys.argv) == 1 :
     #totrateunc=sw/float(sints)
     #print "new rate unc", totrateunc
     #print samples
-    #moresamples=samples+[Sample('Total bkg',ROOT.kAzure+2,ttbarpathS,mcweightAll,'totalBackground',systs_all_samples,samDict=sampleDict,up=totrateunc)]
+    #moresamples=samples+[Sample('Total bkg',ROOT.kAzure+2,ttbarPathS,mcWeightAll,'totalBackground',systsAllSamples,samDict=sampleDict,up=totrateunc)]
     #print moresamples
 
     #listOfHistoListsWerror=[]
@@ -819,7 +819,7 @@ exit(0)
 ## make log plots
 #listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
 #listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots,1)
-#lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,errorSystnames)
+#lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,errorSystNames)
 ##lllcsv=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,CSVSystnames)
 #labels=[plot.label for plot in plots]
 #lolT=transposeLOL(listOfHistoLists)
@@ -829,7 +829,7 @@ exit(0)
 #categoryplotsindex=3
 #listOfHistoListsForCategories=createHistoLists_fromSuperHistoFile(outputpath,samples,plots[:categoryplotsindex],1)
 #listOfHistoListsDataForCategories=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots[:categoryplotsindex],1)
-#lllForCategories=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots[:categoryplotsindex],errorSystnames)
+#lllForCategories=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots[:categoryplotsindex],errorSystNames)
 
 #listOfcustomBinLabels=[]
 
@@ -855,7 +855,7 @@ exit(0)
 #categoryplotsindex=3
 #listOfHistoListsForCategoriesNL=createHistoLists_fromSuperHistoFile(outputpath,samples,plots[:categoryplotsindex],1)
 #listOfHistoListsDataForCategoriesNL=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots[:categoryplotsindex],1)
-#lllForCategoriesNL=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots[:categoryplotsindex],errorSystnames)
+#lllForCategoriesNL=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots[:categoryplotsindex],errorSystNames)
 
 #listOfcustomBinLabels=[]
 
