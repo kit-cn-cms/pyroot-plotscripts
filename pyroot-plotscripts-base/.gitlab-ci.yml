@@ -8,6 +8,7 @@ variables:
 
 
 before_script:
+    - echo "Gitlab User " ${GITLAB_USER_ID}
     - export CI_HOME=${CI_PROJECT_DIR}
     - export SCRAM_ARCH="slc6_amd64_gcc530"
     - export CMSSW_VERSION="CMSSW_8_0_26_patch2"
@@ -23,13 +24,15 @@ plot_LimitsSpring17v3:
     tags:
         - naf
         - ssh
-        - naf6
     stage: produceHistosDataCards
-    script: 
+    script:
+        - echo "Gitlab User " ${GITLAB_USER_ID}
         - set -x 
         - cd $CI_HOME
         - python plot_LimitsSpring17v3.py
         - set +x
+    when: manual
+    allow_failure: false
     artifacts:     
         paths:       
             - $CI_HOME/limits_Spring17v8/*.pdf
