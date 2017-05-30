@@ -7,7 +7,7 @@ sys.path.insert(0, 'limittools')
 from limittools import renameHistos
 from scriptgenerator import *
 
-name='controlplotsSpringV10'
+name='controlplotsSpringV11'
 
 # if one wants to plot blinded: True (default: False)
 plotBlinded = False
@@ -677,7 +677,7 @@ if len(sys.argv) == 1 :                      #if some option is given old system
     print "does syst file exist?", os.path.exists(outputpath[:-4]+'_syst.root')
     renameHistos(outputpath,outputpath[:-4]+'_syst.root',allsystnames,False)
 lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,errorSystnames)
-#lllNoPS=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,errorSystnamesNoPS)
+lllNoPS=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,errorSystnamesNoPS)
 
 
 labels=[plot.label for plot in plots]
@@ -688,108 +688,108 @@ lolT=transposeLOL(listOfHistoLists)
 if len(sys.argv) == 1 :
     DrawParallel(plots,name,os.path.realpath(__file__))
 if len(sys.argv) > 1 :
-  #plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name,[[lll,3354,ROOT.kBlack,True],[lllNoPS,3345,ROOT.kSpring,True]],False,labels,True,plotBlinded)
-  plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name,[[lll,3354,ROOT.kBlack,True]],False,labels,True,plotBlinded)
+  plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name,[[lll,3354,ROOT.kBlack,True],[lllNoPS,3345,ROOT.kSpring+10,True]],False,labels,True,plotBlinded)
+  #plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name,[[lll,3354,ROOT.kBlack,True]],False,labels,True,plotBlinded)
 
 if len(sys.argv) == 1 :
   
   
   for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
 
-  makeEventyields=False
+    makeEventyields=False
 
-  if "JT" in hld[0].GetName():
-    makeEventyields=True
-    for h in hld+hl:
-      for i,cat in enumerate(categoriesJT):
-        h.GetXaxis().SetBinLabel(i+1,cat[1])
-    tablepath=("/".join((outputpath.split('/'))[:-1]))+"/"+name+"_yieldsJTstatOnly"
+    if "JT" in hld[0].GetName():
+      makeEventyields=True
+      for h in hld+hl:
+	for i,cat in enumerate(categoriesJT):
+	  h.GetXaxis().SetBinLabel(i+1,cat[1])
+      tablepath=("/".join((outputpath.split('/'))[:-1]))+"/"+name+"_yieldsJTstatOnly"
 
-  # make an event yield table
-  if makeEventyields:
-    eventYields(hld,hl,samples,tablepath)
+    # make an event yield table
+    if makeEventyields:
+      eventYields(hld,hl,samples,tablepath)
 
 
-  ## make table with errors
-  totrateunc=0.0
-  sw=0
-  sints=0
-  for s,h in zip(samples[1:],listOfHistoLists[0][1:]):
-    print s, s.unc_up, h.Integral()
-    sw+=s.unc_up*h.Integral()
-    sints+=h.Integral()
-    print sw, s
-  totrateunc=sw/float(sints)
-  print "new rate unc", totrateunc
-  print samples
-  moresamples=samples+[Sample('Total bkg',ROOT.kAzure+2,ttbarpathS,mcweightAll,'totalBackground',systs_all_samples,samDict=sampleDict,up=totrateunc)]
-  print moresamples
+    ## make table with errors
+    totrateunc=0.0
+    sw=0
+    sints=0
+    for s,h in zip(samples[1:],listOfHistoLists[0][1:]):
+      print s, s.unc_up, h.Integral()
+      sw+=s.unc_up*h.Integral()
+      sints+=h.Integral()
+      print sw, s
+    totrateunc=sw/float(sints)
+    print "new rate unc", totrateunc
+    print samples
+    moresamples=samples+[Sample('Total bkg',ROOT.kAzure+2,ttbarpathS,mcweightAll,'totalBackground',systs_all_samples,samDict=sampleDict,up=totrateunc)]
+    print moresamples
 
-  listOfHistoListsWerror=[]
-  print "new errors"
-  print listOfHistoLists
-  print ""
-  print lll
-  addedBackgrounds=listOfHistoLists[0][1].Clone()
-  addedBackgrounds.SetName("totalBackground_JT")
-  addedBackgrounds.SetTitle("totalBackground_JT")
-  print addedBackgrounds, addedBackgrounds.Integral()
+    listOfHistoListsWerror=[]
+    print "new errors"
+    print listOfHistoLists
+    print ""
+    print lll
+    addedBackgrounds=listOfHistoLists[0][1].Clone()
+    addedBackgrounds.SetName("totalBackground_JT")
+    addedBackgrounds.SetTitle("totalBackground_JT")
+    print addedBackgrounds, addedBackgrounds.Integral()
 
-  print listOfHistoLists[0][2:]
-  for ih in listOfHistoLists[0][2:]:
-    print "adding ", ih, ih.Integral()
-    addedBackgrounds.Add(ih)
-    print addedBackgrounds.Integral()
-    
-  addedBackgroundErrors=[]
-  print "bkg errors"
-  print lll[0][1]
-  print lll[0][2]
-
-  for ierr, err in enumerate(lll[0][1]):
-    addedBackgroundErrors.append(err.Clone())
-    print "doing ", addedBackgroundErrors[-1], addedBackgroundErrors[-1].Integral()
-    for ibh, bh in enumerate(lll[0][2:]):
-      print "adding ", bh[ierr], bh[ierr].Integral(),  addedBackgroundErrors[-1].Integral()
-      addedBackgroundErrors[-1].Add(bh[ierr])
-      print addedBackgroundErrors[-1].Integral()
+    print listOfHistoLists[0][2:]
+    for ih in listOfHistoLists[0][2:]:
+      print "adding ", ih, ih.Integral()
+      addedBackgrounds.Add(ih)
+      print addedBackgrounds.Integral()
       
+    addedBackgroundErrors=[]
+    print "bkg errors"
+    print lll[0][1]
+    print lll[0][2]
 
-  print addedBackgroundErrors
-  listOfHistoLists[0].append(addedBackgrounds)
-  lll[0].append(addedBackgroundErrors)
+    for ierr, err in enumerate(lll[0][1]):
+      addedBackgroundErrors.append(err.Clone())
+      print "doing ", addedBackgroundErrors[-1], addedBackgroundErrors[-1].Integral()
+      for ibh, bh in enumerate(lll[0][2:]):
+	print "adding ", bh[ierr], bh[ierr].Integral(),  addedBackgroundErrors[-1].Integral()
+	addedBackgroundErrors[-1].Add(bh[ierr])
+	print addedBackgroundErrors[-1].Integral()
+	
+
+    print addedBackgroundErrors
+    listOfHistoLists[0].append(addedBackgrounds)
+    lll[0].append(addedBackgroundErrors)
 
 
 
-  for hl, ell in zip(listOfHistoLists, lll):
-    thisplothistolist=[]
-    for h, ehl, s in zip(hl, ell,moresamples):
-      print "creating error bands for ", h
-      print ehl
-      print s
-      thiserrorgraph=createErrorbands([[ehl]],[s],True)
-      print thiserrorgraph
-      assert h.GetNbinsX()==thiserrorgraph[0].GetN()
-      print "old ", h.GetBinError(1)
-      hwe=h.Clone()
-      print "clone ", hwe.GetBinError(1)
-      for ieb in range(hwe.GetNbinsX()):
-	print hwe.GetBinContent(ieb+1)
-	testx=ROOT.Double(0.0)
-	testy=ROOT.Double(0.0)
-	thiserrorgraph[0].GetPoint(ieb,testx,testy)
-	print ieb, testx, testy
-	print "old error", hwe.GetBinError(ieb+1)
-	print thiserrorgraph[0].GetErrorYhigh(ieb), thiserrorgraph[0].GetErrorYlow(ieb)
-	newerror=max(thiserrorgraph[0].GetErrorYhigh(ieb),thiserrorgraph[0].GetErrorYlow(ieb))
-	print newerror
-	hwe.SetBinError(ieb+1,newerror)
-      thisplothistolist.append(hwe)
-      #raw_input()
-    listOfHistoListsWerror.append(thisplothistolist)  
-  print listOfHistoListsWerror
+    for hl, ell in zip(listOfHistoLists, lll):
+      thisplothistolist=[]
+      for h, ehl, s in zip(hl, ell,moresamples):
+	print "creating error bands for ", h
+	print ehl
+	print s
+	thiserrorgraph=createErrorbands([[ehl]],[s],True)
+	print thiserrorgraph
+	assert h.GetNbinsX()==thiserrorgraph[0].GetN()
+	print "old ", h.GetBinError(1)
+	hwe=h.Clone()
+	print "clone ", hwe.GetBinError(1)
+	for ieb in range(hwe.GetNbinsX()):
+	  print hwe.GetBinContent(ieb+1)
+	  testx=ROOT.Double(0.0)
+	  testy=ROOT.Double(0.0)
+	  thiserrorgraph[0].GetPoint(ieb,testx,testy)
+	  print ieb, testx, testy
+	  print "old error", hwe.GetBinError(ieb+1)
+	  print thiserrorgraph[0].GetErrorYhigh(ieb), thiserrorgraph[0].GetErrorYlow(ieb)
+	  newerror=max(thiserrorgraph[0].GetErrorYhigh(ieb),thiserrorgraph[0].GetErrorYlow(ieb))
+	  print newerror
+	  hwe.SetBinError(ieb+1,newerror)
+	thisplothistolist.append(hwe)
+	#raw_input()
+      listOfHistoListsWerror.append(thisplothistolist)  
+    print listOfHistoListsWerror
 
-  print "printing with error"
+    print "printing with error"
 
   for hld,hl in zip(listOfHistoListsData,listOfHistoListsWerror):
 
