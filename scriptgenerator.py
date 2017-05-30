@@ -3366,6 +3366,61 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   f.write(script)
   f.close()
 
+def DrawParallel(ListOfPlots,name,PathToSelf):
+    ListofScripts=[]
+    workdir=os.getcwd()+'/workdir/'+name+'/DrawScripts/'
+    # create output folders
+    print 'creating output folders'
+    scriptsfolder=workdir
+    if not os.path.exists(scriptsfolder):
+      os.makedirs(scriptsfolder)
+
+    print "Creating Scripts for Parallel Drawing"
+    for iPlot, Plot in enumerate(ListOfPlots):
+        ListofScripts.append(createSingleDrawScript(iPlot,Plot,PathToSelf,scriptsfolder))
+
+    print "Submitting ", len(ListofScripts), " DrawScripts"
+    # print ListofScripts
+    # jobids=submitToNAF(["DrawScripts/DrawParallel0.sh"])
+    jobids=submitToNAF(ListofScripts)
+    do_qstat(jobids)
+
+
+def createSingleDrawScript(iPlot,Plot,PathToSelf,scriptsfolder):
+  # print "still needs to be implemented"
+  cmsswpath=os.environ['CMSSW_BASE']
+  script="#!/bin/bash \n"
+  if cmsswpath!='':
+    script+="export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch \n"
+    script+="source $VO_CMS_SW_DIR/cmsset_default.sh \n"
+    script+="export SCRAM_ARCH="+os.environ['SCRAM_ARCH']+"\n"
+    script+='export OUTFILENAME="'+"plot" +str(iPlot)+'"\n'
+    script+='cd '+cmsswpath+'/src\neval `scram runtime -sh`\n'
+    script+='cd - \n'
+  # script+='export NUMBEROFPLOT ='+str(iPlot)+'\n'
+  script+='python '+PathToSelf+" "+str(iPlot)+' noPlotParallel\n'
+  # script+="mv *.pdf " +os.getcwd()+"/plot"+str(iPlot)+".pdf\n"
+
+
+  scriptname=scriptsfolder+'DrawParallel'+str(iPlot)+'.sh'
+
+  # path = os.getcwd()+"/DrawScripts" 
+  # if not os.path.exists(path):
+  #   os.makedirs(path)
+  # os.chdir(path)
+  
+  f=open(scriptname,'w')
+  f.write(script)
+  f.close()
+  st = os.stat(scriptname)
+  os.chmod(scriptname, st.st_mode | stat.S_IEXEC)
+  os.chdir(os.path.dirname(PathToSelf))
+
+  # PathToShellScript=path+scriptname
+  # return PathToShellScript
+  # return "DrawScripts/"+scriptname
+  return scriptname
+
 
 def createScript(scriptname,programpath,processname,filenames,outfilename,maxevents,skipevents,cmsswpath,suffix):
   script="#!/bin/bash \n"
@@ -3457,9 +3512,9 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
   LoadedTreeInformation={}
   if treejsonfile!="":
     print "Loading file with tree event information"
-    with open(treejsonfile,"r") as jsonfile:
-      jsonstring=list(jsonfile)[0]
-      LoadedTreeInformation=json.loads(jsonstring)
+    jsonfile=open(treejsonfile,"r")
+    jsonstring=list(jsonfile)[0]
+    LoadedTreeInformation=json.loads(jsonstring)
   for s in samples:
     print 'creating scripts for',s.name,'from',s.path
     ntotal_events=0
@@ -3710,16 +3765,16 @@ def renameHistosParallel(infname,sysnames,prune=False):
     thish=outfile.Get(thisname)
     newname=thisname
     do=True
-    if do and "PSscaleUp" in thisname and "Q2scale" in thisname and thisname[-2:]=="Up":
-      tmp=thisname
-      tmp=tmp.replace('_CMS_ttH_PSscaleUp','')
-      print 'stripped',tmp
-      newname=tmp.replace('Q2scale','CombinedScale')
+    #if do and "PSscaleUp" in thisname and "Q2scale" in thisname and thisname[-2:]=="Up":
+      #tmp=thisname
+      #tmp=tmp.replace('_CMS_ttH_PSscaleUp','')
+      #print 'stripped',tmp
+      #newname=tmp.replace('Q2scale','CombinedScale')
 
-    if "PSscaleDown" in thisname and "Q2scale" in thisname and thisname[-4:]=="Down":
-      tmp=thisname
-      tmp=tmp.replace('_CMS_ttH_PSscaleDown','')
-      newname=tmp.replace('Q2scale','CombinedScale')
+    #if "PSscaleDown" in thisname and "Q2scale" in thisname and thisname[-4:]=="Down":
+      #tmp=thisname
+      #tmp=tmp.replace('_CMS_ttH_PSscaleDown','')
+      #newname=tmp.replace('Q2scale','CombinedScale')
 
     if "dummy" in thisname:
       continue
@@ -3730,7 +3785,7 @@ def renameHistosParallel(infname,sysnames,prune=False):
 	newname+=sys
 	nsysts+=1
 	
-    if "JES" in thisname or "JER" in thisname:
+    if "JES" in thisname or "JER" in thisname or "_PS_fsr" in thisname or "_PS_isr" in thisname or "_PS_hdamp" in thisname or "CMS_ue" in thisname:
       if nsysts>2:
 	print nsysts, " systs: removing ", thisname
 	outfile.Delete(thisname)
@@ -3761,29 +3816,29 @@ def renameHistosParallel(infname,sysnames,prune=False):
 	continue
     
     #add ttbar type to systematics name for PS scale
-    if "CMS_ttH_PSscaleUp" in newname or "CMS_ttH_PSscaleDown" in newname:
+    #if "CMS_ttH_PSscaleUp" in newname or "CMS_ttH_PSscaleDown" in newname:
       
-      ttbartype=""
-      if "ttbarOther"==thisname.split("_",1)[0]:
-	ttbartype="ttbarOther"
-      elif "ttbarPlusB"==thisname.split("_",1)[0] :
-	ttbartype="ttbarPlusB"
-      elif "ttbarPlusBBbar"==thisname.split("_",1)[0] :
-	ttbartype="ttbarPlusBBbar"
-      elif "ttbarPlusCCbar"==thisname.split("_",1)[0] :
-	ttbartype="ttbarPlusCCbar"
-      elif "ttbarPlus2B"==thisname.split("_",1)[0] :
-	ttbartype="ttbarPlus2B"
-      else:
-	print "wrong syst: removing histogram", thisname
-	continue
+      #ttbartype=""
+      #if "ttbarOther"==thisname.split("_",1)[0]:
+	#ttbartype="ttbarOther"
+      #elif "ttbarPlusB"==thisname.split("_",1)[0] :
+	#ttbartype="ttbarPlusB"
+      #elif "ttbarPlusBBbar"==thisname.split("_",1)[0] :
+	#ttbartype="ttbarPlusBBbar"
+      #elif "ttbarPlusCCbar"==thisname.split("_",1)[0] :
+	#ttbartype="ttbarPlusCCbar"
+      #elif "ttbarPlus2B"==thisname.split("_",1)[0] :
+	#ttbartype="ttbarPlus2B"
+      #else:
+	#print "wrong syst: removing histogram", thisname
+	#continue
       
-      if "CMS_ttH_PSscaleUp" in newname:
-	newname=newname.replace("CMS_ttH_PSscaleUp","CMS_ttH_PSscale_"+ttbartype+"Up")
-      elif "CMS_ttH_PSscaleDown" in newname:
-	newname=newname.replace("CMS_ttH_PSscaleDown","CMS_ttH_PSscale_"+ttbartype+"Down")
-      else:
-	print "wrong syst: removing histogram", thisname
+      #if "CMS_ttH_PSscaleUp" in newname:
+	#newname=newname.replace("CMS_ttH_PSscaleUp","CMS_ttH_PSscale_"+ttbartype+"Up")
+      #elif "CMS_ttH_PSscaleDown" in newname:
+	#newname=newname.replace("CMS_ttH_PSscaleDown","CMS_ttH_PSscale_"+ttbartype+"Down")
+      #else:
+	#print "wrong syst: removing histogram", thisname
 
     if newname!=thisname:
       print "changed ", thisname, " to ", newname  
