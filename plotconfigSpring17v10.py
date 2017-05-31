@@ -303,8 +303,8 @@ errorSystNamesNoPS=[
   "","",
 ]
 
-mcWeightAll='35.922'
-mcWeight='35.922*2.0'
+mcWeightAll='35.91823'
+mcWeight='35.91823*2.0'
 
 
 mcTriggerWeight='((1.0)*(internalEleTriggerWeight*internalMuTriggerWeight)*((N_TightElectrons==1 && Triggered_HLT_Ele27_eta2p1_WPTight_Gsf_vX==1)||(N_TightMuons==1 && (Triggered_HLT_IsoMu24_vX==1 || Triggered_HLT_IsoTkMu24_vX==1))))'
@@ -511,7 +511,7 @@ assert len(errorSystNames)==len(weightSystNames+otherSystNames+PSSystNames)
 # samples
 # input path 
 #path_Matthias="/nfs/dust/cms/user/matsch/ntuples/Spring17/v3"
-path_data="/nfs/dust/cms/user/mwassmer/ntuples/data_new"
+path_data="/nfs/dust/cms/user/mwassmer/ntuples/data_json"
 path_minorBackgrounds="/nfs/dust/cms/user/mwassmer/ntuples/minor_backgrounds"
 path_karim="/nfs/dust/cms/user/kelmorab/trees_Spring17_v4/"
 

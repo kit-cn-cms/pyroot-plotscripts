@@ -12,7 +12,7 @@ from plotconfigSpring17v10 import *
 from limittools import renameHistos
 from scriptgenerator import *
 
-name='controlplotsSpringV10'
+name='controlplotsSpringV12'
 
 # if one wants to plot blinded: True (default: False)
 plotBlinded = False
