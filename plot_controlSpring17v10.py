@@ -56,7 +56,7 @@ samples=samplesControlPlots
 samples_data=samplesDataControlPlots
 systsamples=[]
 for sample in samples:
-  for sysname,sysfilename in zip(otherSystNamess,otherSystFileNames):
+  for sysname,sysfilename in zip(otherSystNames,otherSystFileNames):
     thisnewsel=sample.selection
     systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),thisnewsel,sample.nick+sysname,samDict=sampleDict))
 
@@ -72,7 +72,7 @@ for sample in samples[1:6]: # only for ttbar samples
 
 
 allsamples=samples+systsamples
-allsystnames=weightSystNames+otherSystNamess+PSSystNames
+allsystnames=weightSystNames+otherSystNames+PSSystNames
 
 # book plots
 plotlabel="1 lepton, #geq 4 jets, #geq 2 b-tags"
@@ -666,10 +666,10 @@ if doDrawParallel and  len(sys.argv) > 1 :
 print plots
 
 #print name,2000000,plots,samples+samples_data,[''],['1.'],weightSystNames, systWeights
-#outputpath=plotParallel(name,1000000,plots,samples+samples_data+systsamples,[''],['1.'],weightSystNames, systWeights,additionalvariables,[],"",otherSystNamess)
+#outputpath=plotParallel(name,1000000,plots,samples+samples_data+systsamples,[''],['1.'],weightSystNames, systWeights,additionalvariables,[],"",otherSystNames)
 
 if doDrawParallel==False or len(sys.argv) == 1 :                      #if some option is given plotParallelStep will be skipped
-    outputpath=plotParallel(name,5000000,plots,samples+samples_data+systsamples,[''],['1.'],weightSystNames, systWeights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/pyroot-plotscripts/treejson28052017.json",otherSystNamess+PSSystNames)
+    outputpath=plotParallel(name,5000000,plots,samples+samples_data+systsamples,[''],['1.'],weightSystNames, systWeights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/pyroot-plotscripts/treejson28052017.json",otherSystNames+PSSystNames)
 else:
     workdir=os.getcwd()+'/workdir/'+name
     outputpath=workdir+'/output.root'
