@@ -973,16 +973,22 @@ def createHistoLists_fromSuperHistoFile(path,samples,plots,rebin=1,catnames=[""]
     return listOfHistoLists
 
 def createLLL_fromSuperHistoFileSyst(path,samples,plots,systnames=[""]):
+    theclock=ROOT.TStopwatch()
+    theclock.Start()
     f=ROOT.TFile(path, "readonly")
 #    print path
+    theobjectlist=[]
+    #dostore=False
     keyList = f.GetKeyNames()
     lll=[]
     for plot in plots:
         ll=[]
-        print "creating histolist for plot ", plot.name
+        print "creating LLL error histolist for plot ", plot.name
         for sample in samples:
             nominal_key=sample.nick+'_'+plot.name+systnames[0]
             nominal=f.Get(nominal_key)
+            #if dostore:
+	      #theobjectlist.append(nominal)
 #            print sample.name
             #print "shapes ", sample.shape_unc
             l=[]
@@ -995,6 +1001,8 @@ def createLLL_fromSuperHistoFileSyst(path,samples,plots,systnames=[""]):
                     l.append(nominal.Clone(key))
                     continue
                 o=f.Get(key)
+                #if dostore:
+		  #theobjectlist.append(o)
                 if isinstance(o,ROOT.TH1) and not isinstance(o,ROOT.TH2):
 #		    print "using right one for", key
                     l.append(o.Clone())
@@ -1002,9 +1010,10 @@ def createLLL_fromSuperHistoFileSyst(path,samples,plots,systnames=[""]):
   #                  print syst,'not used for',sample.name
             ll.append(l)
         lll.append(ll)
+    print "creating the LLL took ", theclock.RealTime()
     return lll
 
-def createErrorbands(lll,samples,DoRateSysts=True):
+def createErrorbands(lll,samples,DoRateSysts=True,verbosity=0):
     print "creating errorbands"
     if DoRateSysts:
       print "using ratesysts"
@@ -1015,7 +1024,8 @@ def createErrorbands(lll,samples,DoRateSysts=True):
         llT=transposeLOL(ll)
         #print llT
         nominal=llT[0][0].Clone()
-        #print "addresses ", llT[0][0], nominal
+        if verbosity>=0:
+          print "Creating error band for  ", nominal.GetName()
         for h in llT[0][1:]:
             nominal.Add(h)
             #print h
@@ -1027,8 +1037,9 @@ def createErrorbands(lll,samples,DoRateSysts=True):
             syst=l[0].Clone()
             for h in l[1:]:
                 syst.Add(h)
-                print "adding to errorband"
-                print h, h.Integral(), nominal.Integral()
+                if verbosity>=1:
+		  print "adding to errorband"
+		  print h, h.Integral(), nominal.Integral()
             systs.append(syst)
         assert len(samples)==len(llT[0])
         for isample,sample in enumerate(samples): # for all normalization unc
@@ -1072,9 +1083,9 @@ def createErrorbands(lll,samples,DoRateSysts=True):
             ups=systs[0::2]
             downs=systs[1::2]
             for up,down in zip(ups,downs):
-	        print "up/down name ", up.GetName(), down.GetName()
-
-	        print "up/down diff ",  up.GetBinContent(ibin+1)-n, down.GetBinContent(ibin+1)-n
+	        if verbosity>=1:
+	          print "up/down name ", up.GetName(), down.GetName()
+	          print "up/down diff ",  up.GetBinContent(ibin+1)-n, down.GetBinContent(ibin+1)-n
                 u_=up.GetBinContent(ibin+1)-n
                 d_=down.GetBinContent(ibin+1)-n
                 #print u_,d_
@@ -1099,8 +1110,9 @@ def createErrorbands(lll,samples,DoRateSysts=True):
 
                 uperrors[ibin]=ROOT.TMath.Sqrt(uperrors[ibin]*uperrors[ibin]+u*u)
                 downerrors[ibin]=ROOT.TMath.Sqrt(downerrors[ibin]*downerrors[ibin]+d*d)
-                print u,d
-                print "up/down errors ", uperrors[ibin],downerrors[ibin]
+                if verbosity>=1:
+                  print u,d
+                  print "up/down errors ", uperrors[ibin],downerrors[ibin]
 
         graph=ROOT.TGraphAsymmErrors(nominal)
         for i in range(len(uperrors)):
@@ -1614,7 +1626,7 @@ def getDataGraph(listOfHistosData,nunblinded):
     return data
     # TODO: proper y-errors
 
-def getDataGraphBlind(listOfHistosData,nunblinded):
+def getDataGraphBlind(listOfHistosData,nunblinded,verbosity=0):
     print "blind after point ", nunblinded
     if len(listOfHistosData)>0:
         datahisto=listOfHistosData[0].Clone()
@@ -1635,7 +1647,8 @@ def getDataGraphBlind(listOfHistosData,nunblinded):
 
       data.SetPointEYlow(i, N-L);
       data.SetPointEYhigh(i, U-N);
-      print i,  N-L, U-N
+      if verbosity>=2:
+        print i,  N-L, U-N
 
     data.SetMarkerStyle(20)
     data.SetMarkerSize(1.3)
@@ -1647,9 +1660,11 @@ def getDataGraphBlind(listOfHistosData,nunblinded):
     x, y = ROOT.Double(0), ROOT.Double(0)
     for i in range(data.GetN()):
       data.GetPoint(i,x,y)
-      print datahisto, x,y
-    print data.GetN()
-    print datahisto.GetNbinsX()
+      if verbosity>=2:
+        print datahisto, x,y
+    if verbosity>=2:
+      print data.GetN()
+      print datahisto.GetNbinsX()
     x, y = ROOT.Double(0), ROOT.Double(0)
     for i in range(data.GetN()):
         #data.SetPointEXlow(i,0)
@@ -1665,13 +1680,16 @@ def getDataGraphBlind(listOfHistosData,nunblinded):
             print "remove ", data.RemovePoint(nunblinded), data.GetN()
             j+=1
     x, y = ROOT.Double(0), ROOT.Double(0)
-    print "done removing"
+    if verbosity>=2:
+      print "done removing"
     for i in range(data.GetN()):
       data.GetPoint(i,x,y)
-      print datahisto, x,y
+      if verbosity>=2:
+        print datahisto, x,y
       data.SetPointEXlow(i,0)
       data.SetPointEXhigh(i,0)
-    print data.GetN()
+    if verbosity>=2:
+      print data.GetN()
     return data,blind_band
     # TODO: proper y-errors
 
@@ -2309,7 +2327,7 @@ def plotDataMCan(listOfHistoListsData,listOfHistoLists,samples,listOfhistosOnTop
     writeObjects(canvases,name)
 
 
-def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,factor,name,listOflll,logscale=False,label='',ratio=True,blinded=False):
+def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,factor,name,listOflll,logscale=False,label='',ratio=True,blinded=False,verbosity=0):
 ################################################
 
 
@@ -2425,7 +2443,8 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
 
         listOfRatioErrorGraphs=[]
         graphcounter=0
-        print "doing ratio error graph"
+        if verbosity>=2:
+          print "doing ratio error graph"
         for errorgraph,thisFillStyle,ThisFillColor in errorgraphList:
 	  ratioerrorgraph=ROOT.TGraphAsymmErrors(errorgraph.GetN())
 	  #print ratioerrorgraph
@@ -2436,11 +2455,13 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
 	      ratioerrorgraph.SetPoint(i,x, 1.0)
 	      relErrUp=0.0
 	      relErrDown=0.0
-	      print x,y,errorgraph.GetErrorYhigh(i),errorgraph.GetErrorYlow(i)
+	      if verbosity>=2:
+	        print x,y,errorgraph.GetErrorYhigh(i),errorgraph.GetErrorYlow(i)
 	      if y>0.0:
 		  relErrUp=errorgraph.GetErrorYhigh(i)/y
 		  relErrDown=errorgraph.GetErrorYlow(i)/y
-		  print relErrUp,relErrDown
+		  if verbosity>=2:
+		    print relErrUp,relErrDown
 	      ratioerrorgraph.SetPointError(i, errorgraph.GetErrorXlow(i),errorgraph.GetErrorXhigh(i), relErrDown, relErrUp)
 
 
