@@ -176,9 +176,9 @@ def fillHisto(histo,var,weight,OnlyFirst=False):
   text= '        if(('+weight+')!=0){\n'
   text+='          h_'+histo+'->Fill(fmin(h_'+histo+'->GetXaxis()->GetXmax()-1e-6,fmax(h_'+histo+'->GetXaxis()->GetXmin()+1e-6,'+var+')),'+weight+');\n'
   if OnlyFirst:
-    text+='         break;}'
+    text+='         break;}\n'
   else:
-    text+='         }'
+    text+='         }\n'
   return text
 
 
@@ -187,9 +187,9 @@ def fillTwoDimHisto(histo,var1,var2,weight,OnlyFirst=False):
   text+='          h_'+histo+'->Fill(fmin(h_'+histo+'->GetXaxis()->GetXmax()-1e-6,fmax(h_'+histo+'->GetXaxis()->GetXmin()+1e-6,'+var1+')),fmin(h_'+histo+'->GetYaxis()->GetXmax()-1e-6,fmax(h_'+histo+'->GetYaxis()->GetXmin()+1e-6,'+var2+')),'+weight+');\n'
   
   if OnlyFirst:
-    text+= '         break;}'
+    text+= '         break;}\n'
   else:
-    text+= '         }'
+    text+= '         }\n'
   return text
 
 
