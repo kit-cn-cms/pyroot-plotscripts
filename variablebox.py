@@ -361,6 +361,20 @@ class Variables:
 	#print "starting loop from the beginning"
 	variableCounter=-1
       if len(sortedVariableList)>0:
+	if collections.Counter(zip(*sortedVariableList)[0])==collections.Counter(zip(*rawVariableList)[0]):
+	  if len(rawVariableList)!=len(sortedVariableList):
+	    print "PROBLEM: lists have different lengths"
+	    print rawVariableList
+	    print sortedVariableList
+	    exit(0)
+	  # this will get the element with the most entries in the list and also how often it appears. If there are more than one it does not matter her
+	  MaxOcc, numMaxOcc=collections.Counter(zip(*sortedVariableList)[0]).most_common(1)[0]
+	  if numMaxOcc!=1:
+	    print "PROBLEM: sorted list contains the same entry multiple times"
+	    print MaxOcc, numMaxOcc
+	    exit(0)
+	  allVariablesHandled=True
+          continue
 	if name in zip(*sortedVariableList)[0]:
 	  ##already have this variable
 	  continue
@@ -382,19 +396,6 @@ class Variables:
 	    alldependenciesresovled=False
       if alldependenciesresovled==True:
 	sortedVariableList.append([name,var])
-      if collections.Counter(zip(*sortedVariableList)[0])==collections.Counter(zip(*rawVariableList)[0]):
-	if len(rawVariableList)!=len(sortedVariableList):
-	  print "PROBLEM: lists have different lengths"
-	  print rawVariableList
-	  print sortedVariableList
-	  exit(0)
-	# this will get the element with the most entries in the list and also how often it appears. If there are more than one it does not matter her
-	MaxOcc, numMaxOcc=collections.Counter(zip(*sortedVariableList)[0]).most_common(1)[0]
-	if numMaxOcc!=1:
-	  print "PROBLEM: sorted list contains the same entry multiple times"
-	  print MaxOcc, numMaxOcc
-	  exit(0)
-	allVariablesHandled=True
 	
 	
     # now write the code for each variable
