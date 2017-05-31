@@ -160,12 +160,15 @@ def renameHistosOLD(infname,outfname,sysnames,prune=True):
   infile.Close()    
 
 def renameHistos(infname,outfname,sysnames,prune=True,Epsilon=0.0):
+  theclock=ROOT.TStopwatch()
+  theclock.Start()  
   print sysnames
   cmd="cp -v "+infname+" "+outfname
   call(cmd,shell=True)
   infile=ROOT.TFile(outfname,"UPDATE")
 
   keylist=infile.GetListOfKeys()
+  theobjectlist=[]
   
   counter=0
   nplots=len(keylist)
@@ -272,6 +275,7 @@ def renameHistos(infname,outfname,sysnames,prune=True,Epsilon=0.0):
     if prune:
       nbins=thish.GetNbinsX()
       newhist=thish.Clone()
+      theobjectlist.append(newhist)
       for ibin in range(nbins):
         if newhist.GetBinContent(ibin+1)<=0.0:
           print "negative or zero bins in ", newhist
@@ -293,6 +297,7 @@ def renameHistos(infname,outfname,sysnames,prune=True,Epsilon=0.0):
       infile.Delete(thisname)
   
   infile.Close()
+  print "The renaming took ", theclock.RealTime()
   
 def mergeHistFiles(infname1,infname2,categoriesToTakeFrom2,outfname):
   infile1=ROOT.TFile(infname1,"READ")
