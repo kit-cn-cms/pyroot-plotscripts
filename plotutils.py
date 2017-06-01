@@ -200,6 +200,7 @@ def setupHisto(histo,color,yTitle=None,filled=False):
     else:
         histo.SetLineColor(color)
         histo.SetLineWidth(2)
+        histo.SetFillColor(0)
 
 # creates a canvas either with or without ratiopad
 def getCanvas(name,ratiopad=False):
@@ -2375,7 +2376,9 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         for histo,sample in zip(listOfHistos,samples):
             yTitle='Events'
             setupHisto(histo,sample.color,yTitle,True)
-
+            
+            if factor<-1 and ot.GetName()==histo.GetName(): ## case if you stack the ontop histogram to the stackplot but do not want it in the integral
+	      continue
             if factor < 0:
               integralfactor+=histo.Integral()
 
