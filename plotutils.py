@@ -2092,7 +2092,7 @@ def writeLOLAndOneOnTop(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,f
         for histo,sample in zip(listOfHistos,samples):
 
             yTitle='Events expected for 12.9 fb^{-1} @ 13 TeV' 
-#            yTitle='Events'
+#           yTitle='Events'
             setupHisto(histo,sample.color,yTitle,stack) 
             
             if factor < 0:
@@ -3976,5 +3976,3 @@ def addLOLTtoLOLT(ListOfHistoLists1,ListOfHistoLists2, c1=1.0, c2=1.0):
       for  HistoList2 in ListOfHistoLists2:
         for Histo1, Histo2, in zip(HistoList1,HistoList2):
             Histo1.Add(Histo2,c2)
-            
-            
