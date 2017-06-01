@@ -1948,7 +1948,7 @@ float LeptonSFHelper::GetMuonSF(  float muonPt , float muonEta , int syst , std:
 
 void LeptonSFHelper::SetElectronHistos( ){
 
-   std::string IDinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/feb160317/ele_ID_SF.root";
+   std::string IDinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/feb160317/eleIDCutBasedWPTight.root";
   std::string TRIGGERinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/feb160317/ele_TriggerSF_Run2016All_v1.root";
   std::string ISOinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/feb160317/ele_Reco_EGM2D.root"; // DANGERZONE: no iso SF yet??
   std::string GFSinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/feb160317/ele_Reco_EGM2D.root";
