@@ -1816,7 +1816,7 @@ float LeptonSFHelper::GetElectronSF(  float electronPt , float electronEta , int
 }
 
 float LeptonSFHelper::GetMuonSF(  float muonPt , float muonEta , int syst , std::string type  ){
-if ( muonPt == 0.0 ){ return 1.0; }
+  if ( muonPt == 0.0 ){ return 1.0; }
 
   int thisBin=0;
 
@@ -2771,21 +2771,21 @@ def startLoop():
     }
    
     if(N_TightElectrons==1){
-      internalEleTriggerWeight=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,0,"Trigger");
-      internalEleTriggerWeightUp=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,1,"Trigger");
-      internalEleTriggerWeightDown=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,-1,"Trigger");
+      internalEleTriggerWeight=internalLeptonSFHelper->GetElectronSF(electronPt,electronEta,0,"Trigger");
+      internalEleTriggerWeightUp=internalLeptonSFHelper->GetElectronSF(electronPt,electronEta,1,"Trigger");
+      internalEleTriggerWeightDown=internalLeptonSFHelper->GetElectronSF(electronPt,electronEta,-1,"Trigger");
       
-      internalEleIDWeight=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,0,"ID");
-      internalEleIDWeightUp=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,1,"ID");
-      internalEleIDWeightDown=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,-1,"ID");
+      internalEleIDWeight=internalLeptonSFHelper->GetElectronSF(electronPt,electronEta,0,"ID");
+      internalEleIDWeightUp=internalLeptonSFHelper->GetElectronSF(electronPt,electronEta,1,"ID");
+      internalEleIDWeightDown=internalLeptonSFHelper->GetElectronSF(electronPt,electronEta,-1,"ID");
       
-      internalEleIsoWeight=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,0,"Iso");
-      internalEleIsoWeightUp=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,1,"Iso");
-      internalEleIsoWeightDown=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,-1,"Iso");
+      internalEleIsoWeight=internalLeptonSFHelper->GetElectronSF(electronPt,electronEta,0,"Iso");
+      internalEleIsoWeightUp=internalLeptonSFHelper->GetElectronSF(electronPt,electronEta,1,"Iso");
+      internalEleIsoWeightDown=internalLeptonSFHelper->GetElectronSF(electronPt,electronEta,-1,"Iso");
       
-      internalEleGFSWeight=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,0,"GFS");
-      internalEleGFSWeightUp=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,1,"GFS");
-      internalEleGFSWeightDown=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,-1,"GFS");
+      internalEleGFSWeight=internalLeptonSFHelper->GetElectronSF(electronPt,electronEta,0,"GFS");
+      internalEleGFSWeightUp=internalLeptonSFHelper->GetElectronSF(electronPt,electronEta,1,"GFS");
+      internalEleGFSWeightDown=internalLeptonSFHelper->GetElectronSF(electronPt,electronEta,-1,"GFS");
     }
    
    
