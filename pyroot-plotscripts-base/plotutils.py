@@ -975,6 +975,7 @@ def createHistoLists_fromSuperHistoFile(path,samples,plots,rebin=1,catnames=[""]
 def createLLL_fromSuperHistoFileSyst(path,samples,plots,systnames=[""]):
     theclock=ROOT.TStopwatch()
     theclock.Start()
+    verbosity=0
     f=ROOT.TFile(path, "readonly")
 #    print path
     theobjectlist=[]
@@ -997,7 +998,8 @@ def createLLL_fromSuperHistoFileSyst(path,samples,plots,systnames=[""]):
                 key=sample.nick+'_'+plot.name+syst
                 #print key
                 if not syst in sample.shape_unc:
-		    print "using nominal for ", key
+		  if verbosity>=2:
+		      print "using nominal for ", key
                     l.append(nominal.Clone(key))
                     continue
                 o=f.Get(key)

@@ -1948,10 +1948,10 @@ float LeptonSFHelper::GetMuonSF(  float muonPt , float muonEta , int syst , std:
 
 void LeptonSFHelper::SetElectronHistos( ){
 
-   std::string IDinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/feb160317/eleIDCutBasedWPTight.root";
-  std::string TRIGGERinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/feb160317/ele_TriggerSF_Run2016All_v1.root";
-  std::string ISOinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/feb160317/ele_Reco_EGM2D.root"; // DANGERZONE: no iso SF yet??
-  std::string GFSinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/feb160317/ele_Reco_EGM2D.root";
+   std::string IDinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/june012017/eleIDCutBasedWPTight.root";
+  std::string TRIGGERinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/june012017/ele_TriggerSF_Run2016All_v1.root";
+  std::string ISOinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/june012017/ele_Reco_EGM2D.root"; // DANGERZONE: no iso SF yet??
+  std::string GFSinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/june012017/ele_Reco_EGM2D.root";
 
   TFile *f_IDSF = new TFile(std::string(IDinputFile).c_str(),"READ");
   TFile *f_TRIGGERSF = new TFile(std::string(TRIGGERinputFile).c_str(),"READ");
@@ -1967,17 +1967,17 @@ void LeptonSFHelper::SetElectronHistos( ){
 
 void LeptonSFHelper::SetMuonHistos( ){
 
-  std::string IDinputFileBtoF = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/feb160317/mu_ID_EfficienciesAndSF_BCDEF.root";
-  std::string IDinputFileGtoH = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/feb160317/mu_ID_EfficienciesAndSF_GH.root";
+  std::string IDinputFileBtoF = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/june012017/mu_ID_EfficienciesAndSF_BCDEF.root";
+  std::string IDinputFileGtoH = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/june012017/mu_ID_EfficienciesAndSF_GH.root";
 
-  std::string TRIGGERinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/feb160317/mu_TRIGGER_BtoF.root";
-  std::string TRIGGERinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/feb160317/mu_TRIGGER_GtoH.root";
+  std::string TRIGGERinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/june012017/mu_TRIGGER_BtoF.root";
+  std::string TRIGGERinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/june012017/mu_TRIGGER_GtoH.root";
 
-  std::string ISOinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/feb160317/mu_ISO_EfficienciesAndSF_BCDEF.root";
-  std::string ISOinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/feb160317/mu_ISO_EfficienciesAndSF_GH.root";
+  std::string ISOinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/june012017/mu_ISO_EfficienciesAndSF_BCDEF.root";
+  std::string ISOinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/june012017/mu_ISO_EfficienciesAndSF_GH.root";
   
-  std::string HIPinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/feb160317/HIP_BCDEF_histos.root";
-  std::string HIPinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/feb160317/HIP_GH_histos.root";
+  std::string HIPinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/june012017/HIP_BCDEF_histos.root";
+  std::string HIPinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/june012017/HIP_GH_histos.root";
 
 
   TFile *f_IDSFBtoF = new TFile(std::string(IDinputFileBtoF).c_str(),"READ");
@@ -3461,6 +3461,8 @@ def askYesNo(question):
 
 
 def submitToNAF(scripts):
+  submitclock=ROOT.TStopwatch()
+  submitclock.Start()
   jobids=[]
   logdir = os.getcwd()+"/logs"
   if not os.path.exists(logdir):
@@ -3477,7 +3479,9 @@ def submitToNAF(scripts):
         print "this job's ID is", jobid
         jobids.append(jobid)
         break
-
+  
+  submittime=submitclock.RealTime()
+  print "submitted ", len(jobids), " in ", submittime
   return jobids
 
 
@@ -3738,8 +3742,12 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
 
   # hadd outputs
   print 'hadd output'
+  haddclock=ROOT.TStopwatch()
+  haddclock.Start()
   subprocess.call(['hadd', outputpath]+outputs)
   print 'done'
+  haddtime=haddclock.RealTime()
+  print "hadding took ", haddtime
   return  outputpath
 
 
