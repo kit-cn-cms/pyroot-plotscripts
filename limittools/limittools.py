@@ -159,9 +159,11 @@ def renameHistosOLD(infname,outfname,sysnames,prune=True):
   outfile.Close()
   infile.Close()    
 
-def renameHistos(infname,outfname,sysnames,prune=True,Epsilon=0.0):
+def renameHistos(infname,outfname,sysnames,checkBins=True,prune=True,Epsilon=0.0):
   theclock=ROOT.TStopwatch()
-  theclock.Start()  
+  theclock.Start()
+  subclock=ROOT.TStopwatch()
+  subclock.Start()
   print sysnames
   cmd="cp -v "+infname+" "+outfname
   call(cmd,shell=True)
@@ -169,122 +171,66 @@ def renameHistos(infname,outfname,sysnames,prune=True,Epsilon=0.0):
 
   keylist=infile.GetListOfKeys()
   theobjectlist=[]
+  listOfKeyNames=[]
+  for ikey, key in enumerate(keylist):
+    listOfKeyNames.append(key.GetName())
   
   counter=0
   nplots=len(keylist)
-  for key in keylist:
+  for ikey, key in enumerate(listOfKeyNames):
     histchanged=False
     counter+=1
-    if counter%100==0:
+    printstep=1000
+    if counter%printstep==0:
       print "renamed ", counter, "/",nplots
-    #print key.GetName()
-    thisname=key.GetName()
-    thish=infile.Get(thisname)
+      subtime=subclock.RealTime()
+      print "time for ", printstep, " : ", subtime
+      subclock.Start()
+    
+    thisname=key
+    thish=None
+    #theobjectlist.append(thish)
     newname=thisname
     do=True
-    #print thisname
-    #if do and "PSscaleUp" in thisname and "Q2scale" in thisname and thisname[-2:]=="Up":
-      ##print thish
-##     print thisname
-      ##ttbarOther_CMS_ttH_PSscaleUp_BDT_ljets_j4_t4_low_CMS_ttH_Q2scale_ttbarPlusBUp
-      #tmp=thisname
-      #tmp=tmp.replace('_CMS_ttH_PSscaleUp','')
-      #print 'stripped',tmp
-##      raw_input()
-      #newname=tmp.replace('Q2scale','CombinedScale')
-      ##print newname
-      ##raw_input()
 
-    #if "PSscaleDown" in thisname and "Q2scale" in thisname and thisname[-4:]=="Down":
-  ##    print thisname
-      ##ttbarOther_CMS_ttH_PSscaleUp_BDT_ljets_j4_t4_low_CMS_ttH_Q2scale_ttbarPlusBUp
-      #tmp=thisname
-      #tmp=tmp.replace('_CMS_ttH_PSscaleDown','')
-   ##   print 'stripped',tmp
-     ## raw_input()
-      #newname=tmp.replace('Q2scale','CombinedScale')
-    ##  print newname
-      ##raw_input()
-
+    # dont need the dummy histograms
     if "dummy" in thisname:
+      if prune:
+	print "Deleting ", thisname+";1"
+	infile.Delete(thisname+";1")
       continue
+    
     nsysts=0
     for sys in sysnames:
       if sys in newname:
         newname=newname.replace(sys,"")
         newname+=sys
         nsysts+=1
-        
+    
+    # do not need histograms with more than two systs
     if nsysts>2:
-      #print "skipping", thisname
+      if prune:
+	print "Deleting ", thisname+";1"
+	infile.Delete(thisname+";1")
       continue
     
-    #filter histograms for systs not belonging to the samples 
-    #for now until we have NNPDF syst for other samples
-    if prune:
-      if "CMS_ttH_NNPDF" in thisname:
-        if thisname.split("_",1)[0]+"_" not in ["ttbarPlus2B_","ttbarPlusB_","ttbarPlusBBbar_","ttbarPlusCCbar_","ttbarOther_"]:
-          print "wrong syst: removing histogram", thisname
-          continue
-      if "CMS_ttH_Q2scale_ttbarOther" in thisname and "ttbarOther"!=thisname.split("_",1)[0]:
-        print "wrong syst: removing histogram", thisname
-        continue
-      if ("CMS_ttH_Q2scale_ttbarPlusBUp" in thisname or "CMS_ttH_Q2scale_ttbarPlusBDown" in thisname ) and "ttbarPlusB"!=thisname.split("_",1)[0] :
-        print "wrong syst: removing histogram", thisname
-        continue
-      if "CMS_ttH_Q2scale_ttbarPlusBBbar" in thisname and "ttbarPlusBBbar"!=thisname.split("_",1)[0] :
-        print "wrong syst: removing histogram", thisname
-        continue
-      if "CMS_ttH_Q2scale_ttbarPlusCCbar" in thisname and "ttbarPlusCCbar"!=thisname.split("_",1)[0] :
-        print "wrong syst: removing histogram", thisname
-        continue
-      if "CMS_ttH_Q2scale_ttbarPlus2B" in thisname and "ttbarPlus2B"!=thisname.split("_",1)[0] :
-        print "wrong syst: removing histogram", thisname
-        continue
-    
-#add ttbar type to systematics name for PS scale
-    #if "CMS_ttH_PSscaleUp" in newname or "CMS_ttH_PSscaleDown" in newname:
-      
-      #ttbartype=""
-      #if "ttbarOther"==thisname.split("_",1)[0]:
-        #ttbartype="ttbarOther"
-      #elif "ttbarPlusB"==thisname.split("_",1)[0] :
-        #ttbartype="ttbarPlusB"
-      #elif "ttbarPlusBBbar"==thisname.split("_",1)[0] :
-        #ttbartype="ttbarPlusBBbar"
-      #elif "ttbarPlusCCbar"==thisname.split("_",1)[0] :
-        #ttbartype="ttbarPlusCCbar"
-      #elif "ttbarPlus2B"==thisname.split("_",1)[0] :
-        #ttbartype="ttbarPlus2B"
-      #else:
-        #print "wrong syst: removing histogram", thisname
-        #continue
-      
-      #if "CMS_ttH_PSscaleUp" in newname:
-        #newname=newname.replace("CMS_ttH_PSscaleUp","CMS_ttH_PSscale_"+ttbartype+"Up")
-      #elif "CMS_ttH_PSscaleDown" in newname:
-        #newname=newname.replace("CMS_ttH_PSscaleDown","CMS_ttH_PSscale_"+ttbartype+"Down")
-      #else:
-        #print "wrong syst: removing histogram", thisname
-
-
-    #if nsysts ==1 and thish.Integral()<0.0:
-      #print "nominal histogram has negativ integral"
-        #print thish, thish.Integral()
     newhist=""
-    if prune:
+    
+    # only load histogram if it is really needed
+    if checkBins or (newname!=thisname):
+      thish=infile.Get(thisname)
+
+    if checkBins:
       nbins=thish.GetNbinsX()
       newhist=thish.Clone()
       theobjectlist.append(newhist)
       for ibin in range(nbins):
         if newhist.GetBinContent(ibin+1)<=0.0:
           print "negative or zero bins in ", newhist
-          print "setting bin ", ibin+1, "from", newhist.GetBinContent(ibin+1), "+-", newhist.GetBinError(ibin+1), "to ", Epsilon, "+-", math.sqrt(Epsilon)
+          #print "setting bin ", ibin+1, "from", newhist.GetBinContent(ibin+1), "+-", newhist.GetBinError(ibin+1), "to ", Epsilon, "+-", math.sqrt(Epsilon)
           newhist.SetBinContent(ibin+1,Epsilon)
           newhist.SetBinError(ibin+1,ROOT.TMath.Sqrt(Epsilon))
           histchanged=True
-  #if "125" in newname:
-    #newname=newname.replace("125","")
     if newname!=thisname:      
       print "changed ", thisname, " to ", newname
       thish.SetName(newname)
@@ -293,8 +239,8 @@ def renameHistos(infname,outfname,sysnames,prune=True,Epsilon=0.0):
     if histchanged:
       print "histogram changed", thisname, newname
       newhist.SetName(newname)
-      newhist.Write()
-      infile.Delete(thisname)
+      newhist.Write("",ROOT.TObject.kOverwrite)
+      #infile.Delete(thisname)
   
   infile.Close()
   print "The renaming took ", theclock.RealTime()

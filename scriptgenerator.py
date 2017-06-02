@@ -3484,6 +3484,30 @@ def submitToNAF(scripts):
   print "submitted ", len(jobids), " in ", submittime
   return jobids
 
+def submitArrayToNAF(scripts):
+  submitclock=ROOT.TStopwatch()
+  submitclock.Start()
+  jobids=[]
+  logdir = os.getcwd()+"/logs"
+  if not os.path.exists(logdir):
+    os.makedirs(logdir)
+  for script in scripts:
+    print 'submitting',script
+    command=['qsub', '-cwd', '-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=2000M', '-l', 's_vmem=2000M' ,'-o', logdir, '-e', logdir, script]
+    a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
+    output = a.communicate()[0]
+    jobidstring = output.split()
+    for jid in jobidstring:
+      if jid.isdigit():
+        jobid=int(jid)
+        print "this job's ID is", jobid
+        jobids.append(jobid)
+        break
+  
+  submittime=submitclock.RealTime()
+  print "submitted ", len(jobids), " in ", submittime
+  return jobids
+
 
 def do_qstat(jobids):
   allfinished=False
@@ -3766,6 +3790,8 @@ filename=os.getenv("OUTFILENAME")
 
 def renameHistosParallel(infname,sysnames,prune=False):
   cmd="cp -v "+infname+" "+infname.replace(".root","_original.root")
+  theclock=ROOT.TStopwatch()
+  theclock.Start()
   call(cmd,shell=True)
   print sysnames
   #infile=ROOT.TFile(infname,"READ")
@@ -3806,26 +3832,26 @@ def renameHistosParallel(infname,sysnames,prune=False):
     	
     #filter histograms for systs not belonging to the samples 
     #for now until we have NNPDF syst for other samples
-    if prune:
-      if "CMS_ttH_NNPDF" in thisname:
-	if thisname.split("_",1)[0]+"_" not in ["ttbarPlus2B_","ttbarPlusB_","ttbarPlusBBbar_","ttbarPlusCCbar_","ttbarOther_"]:
-	  print "wrong syst: removing histogram", thisname
-	  continue
-      if "CMS_ttH_Q2scale_ttbarOther" in thisname and "ttbarOther"!=thisname.split("_",1)[0]:
-	print "wrong syst: removing histogram", thisname
-	continue
-      if ("CMS_ttH_Q2scale_ttbarPlusBUp" in thisname or "CMS_ttH_Q2scale_ttbarPlusBDown" in thisname ) and "ttbarPlusB"!=thisname.split("_",1)[0] :
-	print "wrong syst: removing histogram", thisname
-	continue
-      if "CMS_ttH_Q2scale_ttbarPlusBBbar" in thisname and "ttbarPlusBBbar"!=thisname.split("_",1)[0] :
-	print "wrong syst: removing histogram", thisname
-	continue
-      if "CMS_ttH_Q2scale_ttbarPlusCCbar" in thisname and "ttbarPlusCCbar"!=thisname.split("_",1)[0] :
-	print "wrong syst: removing histogram", thisname
-	continue
-      if "CMS_ttH_Q2scale_ttbarPlus2B" in thisname and "ttbarPlus2B"!=thisname.split("_",1)[0] :
-	print "wrong syst: removing histogram", thisname
-	continue
+    #if prune:
+      #if "CMS_ttH_NNPDF" in thisname:
+	#if thisname.split("_",1)[0]+"_" not in ["ttbarPlus2B_","ttbarPlusB_","ttbarPlusBBbar_","ttbarPlusCCbar_","ttbarOther_"]:
+	  #print "wrong syst: removing histogram", thisname
+	  #continue
+      #if "CMS_ttH_Q2scale_ttbarOther" in thisname and "ttbarOther"!=thisname.split("_",1)[0]:
+	#print "wrong syst: removing histogram", thisname
+	#continue
+      #if ("CMS_ttH_Q2scale_ttbarPlusBUp" in thisname or "CMS_ttH_Q2scale_ttbarPlusBDown" in thisname ) and "ttbarPlusB"!=thisname.split("_",1)[0] :
+	#print "wrong syst: removing histogram", thisname
+	#continue
+      #if "CMS_ttH_Q2scale_ttbarPlusBBbar" in thisname and "ttbarPlusBBbar"!=thisname.split("_",1)[0] :
+	#print "wrong syst: removing histogram", thisname
+	#continue
+      #if "CMS_ttH_Q2scale_ttbarPlusCCbar" in thisname and "ttbarPlusCCbar"!=thisname.split("_",1)[0] :
+	#print "wrong syst: removing histogram", thisname
+	#continue
+      #if "CMS_ttH_Q2scale_ttbarPlus2B" in thisname and "ttbarPlus2B"!=thisname.split("_",1)[0] :
+	#print "wrong syst: removing histogram", thisname
+	#continue
     
     #add ttbar type to systematics name for PS scale
     #if "CMS_ttH_PSscaleUp" in newname or "CMS_ttH_PSscaleDown" in newname:
@@ -3861,6 +3887,7 @@ def renameHistosParallel(infname,sysnames,prune=False):
   
   outfile.Close()
   #infile.Close()    
+  print "The renaming took ", theclock.RealTime()
   
 renameHistosParallel(filename,systematics,False) 
   
