@@ -1970,8 +1970,8 @@ void LeptonSFHelper::SetMuonHistos( ){
   std::string IDinputFileBtoF = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/june012017/mu_ID_EfficienciesAndSF_BCDEF.root";
   std::string IDinputFileGtoH = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/june012017/mu_ID_EfficienciesAndSF_GH.root";
 
-  std::string TRIGGERinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/june012017/mu_trigger_BtoF.root";
-  std::string TRIGGERinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/june012017/mu_Period4_GtoH.root";
+  std::string TRIGGERinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/june012017/mu_trigger_EfficienciesAndSF_RunBtoF.root";
+  std::string TRIGGERinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/june012017/mu_trigger_EfficienciesAndSF_Period4.root";
 
   std::string ISOinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/june012017/mu_ISO_EfficienciesAndSF_BCDEF.root";
   std::string ISOinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/june012017/mu_ISO_EfficienciesAndSF_GH.root";
