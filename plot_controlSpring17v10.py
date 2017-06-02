@@ -769,7 +769,7 @@ listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data
 if doDrawParallel==False or len(sys.argv) == 1 :                      #if some option is given old systematic histo file will be used      
   if not os.path.exists(outputpath[:-4]+'_syst.root') or not askYesNo('reuse systematic histofile?'):
     print "does syst file exist?", os.path.exists(outputpath[:-4]+'_syst.root')
-    renameHistos(outputpath,outputpath[:-4]+'_syst.root',allsystnames,False)
+    renameHistos(outputpath,outputpath[:-4]+'_syst.root',allsystnames,False,False)
 lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,errorSystNames)
 lllNoPS=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,errorSystNamesNoPS)
 
