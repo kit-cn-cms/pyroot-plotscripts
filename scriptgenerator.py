@@ -3382,7 +3382,9 @@ def DrawParallel(ListOfPlots,name,PathToSelf):
     print "Submitting ", len(ListofScripts), " DrawScripts"
     # print ListofScripts
     # jobids=submitToNAF(["DrawScripts/DrawParallel0.sh"])
-    jobids=submitToNAF(ListofScripts)
+    #jobids=submitToNAF(ListofScripts)
+    jobids=submitArrayToNAF(ListofScripts,"DrawPara")
+    print jobids
     do_qstat(jobids)
 
 
@@ -3484,31 +3486,53 @@ def submitToNAF(scripts):
   print "submitted ", len(jobids), " in ", submittime
   return jobids
 
-def submitArrayToNAF(scripts):
+def submitArrayToNAF(scripts,arrayname=""):
   submitclock=ROOT.TStopwatch()
   submitclock.Start()
   jobids=[]
   logdir = os.getcwd()+"/logs"
   if not os.path.exists(logdir):
     os.makedirs(logdir)
-  for script in scripts:
-    print 'submitting',script
-    command=['qsub', '-cwd', '-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=2000M', '-l', 's_vmem=2000M' ,'-o', logdir, '-e', logdir, script]
-    a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
-    output = a.communicate()[0]
-    jobidstring = output.split()
-    for jid in jobidstring:
-      if jid.isdigit():
-        jobid=int(jid)
-        print "this job's ID is", jobid
-        jobids.append(jobid)
-        break
+  # get nscripts
+  nscripts=len(scripts)
+  tasknumberstring='1-'+str(nscripts)
   
+  #create arrayscript to be run on the birds. Depinding on $SGE_TASK_ID the script will call a different plot/run script to actually run
+  basepathtoscripts=scripts[0].rsplit("/",1)[0]
+  print basepathtoscripts
+  arrayscriptpath=basepathtoscripts+"/ats_"+arrayname+".sh"
+  arrayscriptcode="#!/bin/bash \n"
+  arrayscriptcode+="subtasklist=(\n"
+  for scr in scripts:
+    arrayscriptcode+=scr+" \n"
+  arrayscriptcode+=")\n"
+  arrayscriptcode+="thescript=${subtasklist[$SGE_TASK_ID-1]}\n"
+  arrayscriptcode+="thescriptbasename=`basename ${subtasklist[$SGE_TASK_ID-1]}`\n"
+  arrayscriptcode+="echo \"${thescript}\n"
+  arrayscriptcode+="echo \"${thescriptbasename}\n"
+  arrayscriptcode+=". $thescript 1>>"+logdir+"/${thescriptbasename}.o$JOB_ID.$SGE_TASK_ID 2>>"+logdir+"/${thescriptbasename}.e$JOB_ID.$SGE_TASK_ID\n"
+  arrayscriptfile=open(arrayscriptpath,"w")
+  arrayscriptfile.write(arrayscriptcode)
+  arrayscriptfile.close()
+  st = os.stat(arrayscriptpath)
+  os.chmod(arrayscriptpath, st.st_mode | stat.S_IEXEC)
+  
+  print 'submitting',arrayscriptpath
+  #command=['qsub', '-cwd','-terse','-t',tasknumberstring,'-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=2000M', '-l', 's_vmem=2000M' ,'-o', logdir+'/dev/null', '-e', logdir+'/dev/null', arrayscriptpath]
+  command=['qsub', '-cwd','-terse','-t',tasknumberstring,'-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=2000M', '-l', 's_vmem=2000M' ,'-o', '/dev/null', '-e', '/dev/null', arrayscriptpath]
+  a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
+  output = a.communicate()[0]
+  jobidstring = output
+  if len(jobidstring)<2:
+    print "something did not work with submitting the array job"
+    exit(0)
+  jobidstring=jobidstring.split(".")[0]
+  print "the jobID", jobidstring
+  jobidint=int(jobidstring)
   submittime=submitclock.RealTime()
   print "submitted ", len(jobids), " in ", submittime
-  return jobids
-
-
+  return [jobidint]
+  
 def do_qstat(jobids):
   allfinished=False
   while not allfinished:
@@ -3529,6 +3553,7 @@ def do_qstat(jobids):
     if nrunning>0:
       print nrunning,'jobs running'
     else:
+      print "all jobs are finished"
       allfinished=True
 
 
@@ -3744,7 +3769,8 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   #exit(0)
   # submit run scripts
   print 'submitting scripts'
-  jobids=submitToNAF(scripts)
+  #jobids=submitToNAF(scripts)
+  jobids=submitArrayToNAF(scripts, "PlotPara")
   do_qstat(jobids)
 
   # check outputs
@@ -3756,6 +3782,8 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
     print 'the following jobs failed'
     for j in failed_jobs:
       print j
+    if len(failed_jobs)>=0.8*len(scripts):
+      print "!!!!!\n More Than 80 percent of your jobs failed. Check:\n A) Your code (and logfiles) \n B) The status of the batch stytem e.g. http://bird.desy.de/status/day.html\n !!!!!"
     print 'resubmitting'
     jobids=submitToNAF(failed_jobs)
     do_qstat(jobids)
@@ -3798,9 +3826,15 @@ def renameHistosParallel(infname,sysnames,prune=False):
   outfile=ROOT.TFile(infname,"UPDATE")
 
   keylist=outfile.GetListOfKeys()
-  for key in keylist:
-    thisname=key.GetName()
-    thish=outfile.Get(thisname)
+  theobjectlist=[]
+  listOfKeyNames=[]
+  for ikey, key in enumerate(keylist):
+    listOfKeyNames.append(key.GetName())
+  
+  for ikey, key in enumerate(listOfKeyNames):
+    thisname=key
+    #thish=outfile.Get(thisname)
+    thish=None
     newname=thisname
     do=True
     #if do and "PSscaleUp" in thisname and "Q2scale" in thisname and thisname[-2:]=="Up":
@@ -3825,6 +3859,8 @@ def renameHistosParallel(infname,sysnames,prune=False):
 	
     if "JES" in thisname or "JER" in thisname or "_PS_fsr" in thisname or "_PS_isr" in thisname or "_PS_hdamp" in thisname or "CMS_ue" in thisname:
       if nsysts>2:
+        thish=outfile.Get(thisname)
+        theobjectlist.append(thish)
 	print nsysts, " systs: removing ", thisname
 	outfile.Delete(thisname)
 	outfile.Delete(thisname+";1")
@@ -3880,6 +3916,8 @@ def renameHistosParallel(infname,sysnames,prune=False):
 
     if newname!=thisname:
       print "changed ", thisname, " to ", newname  
+      thish=outfile.Get(thisname)
+      theobjectlist.append(thish)
       thish.SetName(newname)
       #outfile.cd()
       thish.Write()
