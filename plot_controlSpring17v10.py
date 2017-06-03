@@ -5,12 +5,14 @@ import sys
 import os
 sys.path.append('pyroot-plotscripts-base')
 sys.path.append('pyroot-plotscripts-base/limittools')
-
-doDrawParallel=True
-
 from plotconfigSpring17v10 import *
 from limittools import renameHistos
 from scriptgenerator import *
+
+MainClock=ROOT.TStopwatch()
+MainClock.Start()
+
+doDrawParallel=True
 
 name='controlplotsSpringV13'
 
@@ -764,29 +766,32 @@ else:
     outputpath=workdir+'/output.root'
 
 # plot dataMC comparison
-listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
-listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots,1)
 if doDrawParallel==False or len(sys.argv) == 1 :                      #if some option is given old systematic histo file will be used      
   if not os.path.exists(outputpath[:-4]+'_syst.root') or not askYesNo('reuse systematic histofile?'):
     print "does syst file exist?", os.path.exists(outputpath[:-4]+'_syst.root')
     renameHistos(outputpath,outputpath[:-4]+'_syst.root',allsystnames,False,False)
-lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,errorSystNames)
-lllNoPS=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,errorSystNamesNoPS)
-
-
-labels=[plot.label for plot in plots]
-lolT=transposeLOL(listOfHistoLists)
+if doDrawParallel==False or len(sys.argv) > 1 :
+  listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
+  listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots,1)
+  lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,errorSystNames)
+  lllNoPS=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,errorSystNamesNoPS)
 
 # if there is no argument then the DrawParallel will be started
 # This runs the script with an argument and only the selected plot will be plotted
 if doDrawParallel==True and len(sys.argv) == 1 :
-    DrawParallel(plots,name,os.path.realpath(__file__))
+  DrawParallel(plots,name,os.path.realpath(__file__))
 if doDrawParallel==False or len(sys.argv) > 1 :
+  labels=[plot.label for plot in plots]
+  lolT=transposeLOL(listOfHistoLists)
+
   plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name,[[lll,3354,ROOT.kBlack,True],[lllNoPS,3345,ROOT.kSpring+10,True]],False,labels,True,plotBlinded)
   #plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-1,name,[[lll,3354,ROOT.kBlack,True]],False,labels,True,plotBlinded)
 
 if doDrawParallel==False or len(sys.argv) == 1 :
-  
+  plots=[plots[0]]
+  listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
+  listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,plots,1)
+  lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[1:],plots,errorSystNames)
   
   for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
 
@@ -902,7 +907,7 @@ if doDrawParallel==False or len(sys.argv) == 1 :
       #eventYieldsNew(hld,hl,moresamples,tablepath)
 
 
-
+print "TOTAL Elapsed time since beginning of plotscript", MainClock.RealTime()
 exit(0)
 
 ## make log plots

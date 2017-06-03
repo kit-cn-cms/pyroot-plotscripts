@@ -159,7 +159,7 @@ def renameHistosOLD(infname,outfname,sysnames,prune=True):
   outfile.Close()
   infile.Close()    
 
-def renameHistos(infname,outfname,sysnames,checkBins=True,prune=True,Epsilon=0.0):
+def renameHistos(infname,outfname,sysnames,checkBins=False,prune=True,Epsilon=0.0):
   theclock=ROOT.TStopwatch()
   theclock.Start()
   subclock=ROOT.TStopwatch()
