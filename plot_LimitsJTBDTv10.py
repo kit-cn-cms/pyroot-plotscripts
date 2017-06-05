@@ -13,6 +13,12 @@ from limittools import calcLimits
 from limittools import replaceQ2scale
 from plotconfigSpring17v10 import *
 
+MainClock=ROOT.TStopwatch()
+MainClock.Start()
+
+doDrawParallel=True
+
+
 # output name
 name='limits_JTBDT_Spring17v10'
 
@@ -81,12 +87,10 @@ assert(len(nhistobins)==len(discrs))
 # get input for plotting function
 bins= [c[0] for c in categories]
 binlabels= [c[1] for c in categories]
-samples=samplesLimits
 allsystnames=weightSystNames+otherSystNames+PSSystNames
 
 # samples
-samples=samplesControlPlots
-samples_data=samplesDataControlPlots
+samples=samplesLimits
 systsamples=[]
 for sample in samples:
   for sysname,sysfilename in zip(otherSystNames,otherSystFileNames):
@@ -104,7 +108,7 @@ for sample in samples[1:6]: # only for ttbar samples
     systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace(ttbarPathS,path_additionalSamples+"/ttbar_"+sysfilename+"/*nominal*.root"),thisnewsel,sample.nick+sysname,samDict=sampleDict))
   
 allsamples=samples+systsamples
-samplesdata=samplesDataControlPlots
+samples_data=samplesDataControlPlots
 
 # define plots
 bdts=[]
@@ -114,49 +118,55 @@ for discr,b,bl,nb,minx,maxx in zip(discrs,bins,binlabels,nhistobins,minxvals,max
   bdts.append(Plot(ROOT.TH1F("finaldiscr_"+bl,"final discriminator ("+bl+")",nb,minx,maxx),discr,b))
 
 print bdts
-# plot everthing
-outputpath=plotParallel(name,5000000,bdts,allsamples+samplesdata,[''],['1.'],weightSystNames,systWeights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/pyroot-plotscripts/treejson28052017.json",otherSystNames+PSSystNames)
+
+
+# belongs to DrawParallel
+if doDrawParallel and  len(sys.argv) > 1 :
+    plots=[plots[int(sys.argv[1])]]
+print plots
 
 if not os.path.exists(name):
   os.makedirs(name)
 
-# rename output histos and save in one file
-renameHistos(outputpath,name+'/'+name+'_limitInput.root',allsystnames)
-#replaceQ2scale( os.getcwd()+'/'+name+'/'+name+'_limitInput.root')
+# plot everthing
 
-print samples
-# add real/pseudo data
-addPseudoData(name+'/'+name+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
-#addRealData(name+'/'+name+'_limitInput.root',[s.nick for s in samplesDataControlPlots],binlabels,discrname)
+if doDrawParallel==False or len(sys.argv) == 1 :                      #if some option is given plotParallelStep will be skipped
+    outputpath=plotParallel(name,5000000,plots,samples+samples_data+systsamples,[''],['1.'],weightSystNames, systWeights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/pyroot-plotscripts/treejson28052017.json",otherSystNames+PSSystNames)
+else:
+    workdir=os.getcwd()+'/workdir/'+name
+    outputpath=workdir+'/output.root'
 
-listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,bdts)
-lolT=transposeLOL(listOfHistoLists)
-writeLOLAndOneOnTop(transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-1,name+'/'+name+'_controlplots')
-writeListOfHistoListsAN(transposeLOL([lolT[0]]+lolT[9:]),[samples[0]]+samples[9:],"",name+'/'+name+'_shapes',True,False,False,'histo',False,True,False)
+if doDrawParallel==False or len(sys.argv) == 1 :                      #if some option is given old systematic histo file will be used      
+  if not os.path.exists(outputpath[:-4]+'_syst.root') or not askYesNo('reuse systematic histofile?'):
+    print "does syst file exist?", os.path.exists(outputpath[:-4]+'_syst.root')
+    # rename output histos and save in one file
+    renameHistos(outputpath,name+'/'+name+'_limitInput.root',allsystnames,True,True)
+    addPseudoData(name+'/'+name+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)    
+    #addRealData(name+'/'+name+'_limitInput.root',[s.nick for s in samplesDataControlPlots],binlabels,discrname)
+if doDrawParallel==False or len(sys.argv) > 1 :
+    listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,bdts)
+    lolT=transposeLOL(listOfHistoLists)
+    writeLOLAndOneOnTop(transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-1,name+'/'+name+'_controlplots')
+    writeListOfHistoListsAN(transposeLOL([lolT[0]]+lolT[9:]),[samples[0]]+samples[9:],"",name+'/'+name+'_shapes',True,False,False,'histo',False,True,False)
 
 # NO UNBLINDED PLOTS FOR NOW !!!
 #plotdiscriminants
 #labels=[plot.label for plot in bdts]
 #listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,bdts,1)
-#listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samplesdata,bdts,1)
+#listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,bdts,1)
 #if not os.path.exists(outputpath[:-4]+'_syst.root') or not askYesNo('reuse systematic histofile?'):
     #renameHistos(outputpath,outputpath[:-4]+'_syst.root',allsystnames,False)
 #lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[9:],bdts,errorSystnames)
 #plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-1,name+'/'+name+'_Blinded',[[lll,3354,ROOT.kBlack,True]],False,labels,True,True)
 
 #listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,bdts,1)
-#listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samplesdata,bdts,1)
+#listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,bdts,1)
 #lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[9:],bdts,errorSystnames)
 #plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-1,name+'/'+name+'_Unblinded',[[lll,3354,ROOT.kBlack,True]],False,labels,True,False)
 
-
-# make datacards
-#TODO
-# 1. Implement small Epsilon case
-# 2. Implement consisted Bin-by-Bin uncertainties
-makeDatacards(name+'/'+name+'_limitInput.root',name+'/'+name+'_datacard',binlabels,doHdecay=True,discrname='finaldiscr',datacardmaker='mk_datacard_JESTest13TeV')
-
-# calculate limits
-#if askYesNo('Calculate limits?'):
-  #limit=calcLimits(name+'/'+name+'_datacard',binlabels)
-  #limit.dump()
+if doDrawParallel==False or len(sys.argv) == 1 :                      #if some option is given old systematic histo file will be used      
+    # make datacards
+    #TODO
+    # 1. Implement small Epsilon case
+    # 2. Implement consisted Bin-by-Bin uncertainties
+    makeDatacards(name+'/'+name+'_limitInput.root',name+'/'+name+'_datacard',binlabels,doHdecay=True,discrname='finaldiscr',datacardmaker='mk_datacard_JESTest13TeV')
