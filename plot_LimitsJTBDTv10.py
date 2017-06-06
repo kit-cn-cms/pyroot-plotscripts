@@ -16,7 +16,7 @@ from plotconfigSpring17v10 import *
 MainClock=ROOT.TStopwatch()
 MainClock.Start()
 
-doDrawParallel=True
+doDrawParallel=False
 
 
 # output name
@@ -98,7 +98,7 @@ for sample in samples:
     systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),thisnewsel,sample.nick+sysname,samDict=sampleDict))
 
 # add Parton shower variation samples
-for sample in samples[1:6]: # only for ttbar samples
+for sample in samples[9:14]: # only for ttbar samples
   for sysname,sysfilename in zip(PSSystNames,PSSystFileNames):
     thisoldsel=sample.selection
     thisnewsel=sample.selection.replace(ttbarMCWeight,"*1.0").replace(mcWeight+evenSel,mcWeightAll)
@@ -142,10 +142,10 @@ else:
     outputpath=workdir+'/output.root'
 
 if doDrawParallel==False or len(sys.argv) == 1 :                      #if some option is given old systematic histo file will be used      
-  if not os.path.exists(outputpath[:-4]+'_syst.root') or not askYesNo('reuse systematic histofile?'):
-    print "does syst file exist?", os.path.exists(outputpath[:-4]+'_syst.root')
     # rename output histos and save in one file
-    renameHistos(outputpath,name+'/'+name+'_limitInput.root',allsystnames,True,True)
+    if not os.path.exists(name+'/'+name+'_limitInput.root') or not askYesNo('reuse renamed histofile?'):
+      print "does syst file exist?", os.path.exists(name+'/'+name+'_limitInput.root')
+      renameHistos(outputpath,name+'/'+name+'_limitInput.root',allsystnames,True,False)
     addPseudoData(name+'/'+name+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)    
     #addRealData(name+'/'+name+'_limitInput.root',[s.nick for s in samplesDataControlPlots],binlabels,discrname)
 
@@ -155,6 +155,7 @@ if doDrawParallel==False or len(sys.argv) > 1 :
     writeLOLAndOneOnTop(transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-1,name+'/'+name+'_controlplots')
     writeListOfHistoListsAN(transposeLOL([lolT[0]]+lolT[9:]),[samples[0]]+samples[9:],"",name+'/'+name+'_shapes',True,False,False,'histo',False,True,False)
 
+exit(0)
 
 if doDrawParallel==False or len(sys.argv) == 1 :
   listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,bdtsHighNBins)    

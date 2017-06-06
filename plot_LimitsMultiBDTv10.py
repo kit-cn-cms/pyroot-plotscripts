@@ -126,7 +126,7 @@ for sample in samples:
     systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),thisnewsel,sample.nick+sysname,samDict=sampleDict))
 
 # add Parton shower variation samples
-for sample in samples[1:6]: # only for ttbar samples
+for sample in samples[9:14]: # only for ttbar samples
   for sysname,sysfilename in zip(PSSystNames,PSSystFileNames):
     thisoldsel=sample.selection
     thisnewsel=sample.selection.replace(ttbarMCWeight,"*1.0").replace(mcWeight+evenSel,mcWeightAll)
@@ -170,10 +170,10 @@ else:
     outputpath=workdir+'/output.root'
 
 if doDrawParallel==False or len(sys.argv) == 1 :                      #if some option is given old systematic histo file will be used      
-  if not os.path.exists(outputpath[:-4]+'_syst.root') or not askYesNo('reuse systematic histofile?'):
-    print "does syst file exist?", os.path.exists(outputpath[:-4]+'_syst.root')
     # rename output histos and save in one file
-    renameHistos(outputpath,name+'/'+name+'_limitInput.root',allsystnames,True,True)
+    if not os.path.exists(name+'/'+name+'_limitInput.root') or not askYesNo('reuse renamed histofile?'):
+      print "does syst file exist?", os.path.exists(name+'/'+name+'_limitInput.root')
+      renameHistos(outputpath,name+'/'+name+'_limitInput.root',allsystnames,True,False)
     addPseudoData(name+'/'+name+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)    
     #addRealData(name+'/'+name+'_limitInput.root',[s.nick for s in samplesDataControlPlots],binlabels,discrname)
 

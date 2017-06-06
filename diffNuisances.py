@@ -296,6 +296,7 @@ if options.plotfile:
     fout.WriteTObject(canvas)
 
     canvas_nuis = ROOT.TCanvas("nuisancs", "nuisances", 900, 600)
+    canvas_nuis.SetBottomMargin(canvas_nuis.GetBottomMargin()*1.9)
     hist_fit_e_s = hist_fit_s.Clone("errors_s")
     hist_fit_e_b = hist_fit_b.Clone("errors_b")
     gr_fit_s = getGraph(hist_fit_s,-0.1)

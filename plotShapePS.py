@@ -8,29 +8,31 @@ ROOT.gStyle.SetOptStat(0)
 infname=sys.argv[1]
 print "init"
 
-#acats=["ljets_j4_t4","ljets_j5_tge4","ljets_jge6_t3","ljets_jge6_tge4","ljets_j5_t3","ljets_j4_t3"]
+acats=["ljets_j4_t4","ljets_j5_tge4","ljets_jge6_t3","ljets_jge6_tge4","ljets_j5_t3","ljets_j4_t3","ljets_jge6_t2"]
 #acats=["ljets_j5_t3","ljets_j4_t3"]
-acats=["ljets_j5_t3"]
+#acats=["ljets_j5_t3"]
 
 cats=[]
 for c in acats:
-  cats.append(c+"_high")
-  cats.append(c+"_low")
+  #cats.append(c+"_high")
+  #cats.append(c+"_low")
+  cats.append(c)
 
 print "ok"
 #procs=["ttH","ttbarOther","ttbarPlusCCbar","ttbarPlusB","ttbarPlus2B","ttbarPlusBBbar",]
-systs=['CMS_ttH_Q2scale_ttbarOther', 'CMS_ttH_Q2scale_ttbarPlusB', 'CMS_ttH_Q2scale_ttbarPlus2B', 'CMS_ttH_Q2scale_ttbarPlusBBbar', 'CMS_ttH_Q2scale_ttbarPlusCCbar', 'CMS_ttH_CSVLF', 'CMS_ttH_CSVHF', 'CMS_ttH_CSVHFStats1', 'CMS_ttH_CSVLFStats1', 'CMS_ttH_CSVHFStats2', 'CMS_ttH_CSVLFStats2', 'CMS_ttH_CSVCErr1', 'CMS_ttH_CSVCErr2', 'CMS_scale_j', 'CMS_ttH_PU', 'CMS_res_j', 'CMS_ttH_eff_mu', 'CMS_ttH_eff_el', 'CMS_ttH_ljets_Trig_mu', 'CMS_ttH_ljets_Trig_el', 'CMS_ttH_PSscale_ttbarOther', 'CMS_ttH_PSscale_ttbarPlusB', 'CMS_ttH_PSscale_ttbarPlus2B', 'CMS_ttH_PSscale_ttbarPlusBBbar', 'CMS_ttH_PSscale_ttbarPlusCCbar']
+#systs=['CMS_ttH_Q2scale_ttbarOther', 'CMS_ttH_Q2scale_ttbarPlusB', 'CMS_ttH_Q2scale_ttbarPlus2B', 'CMS_ttH_Q2scale_ttbarPlusBBbar', 'CMS_ttH_Q2scale_ttbarPlusCCbar', 'CMS_ttH_CSVLF', 'CMS_ttH_CSVHF', 'CMS_ttH_CSVHFStats1', 'CMS_ttH_CSVLFStats1', 'CMS_ttH_CSVHFStats2', 'CMS_ttH_CSVLFStats2', 'CMS_ttH_CSVCErr1', 'CMS_ttH_CSVCErr2', 'CMS_scale_j', 'CMS_ttH_PU', 'CMS_res_j', 'CMS_ttH_eff_mu', 'CMS_ttH_eff_el', 'CMS_ttH_ljets_Trig_mu', 'CMS_ttH_ljets_Trig_el', 'CMS_ttH_PSscale_ttbarOther', 'CMS_ttH_PSscale_ttbarPlusB', 'CMS_ttH_PSscale_ttbarPlus2B', 'CMS_ttH_PSscale_ttbarPlusBBbar', 'CMS_ttH_PSscale_ttbarPlusCCbar']
 #systs=["CMS_ttH_PSscale_ttbarOther","CMS_ttH_PSscale_ttbarPlusB","CMS_ttH_PSscale_ttbarPlus2B","CMS_ttH_PSscale_ttbarPlusBBbar","CMS_ttH_PSscale_ttbarPlusCCbar"]
+systs=["CMS_ttH_FSR","CMS_ttH_ISR","CMS_ttH_hdamp","CMS_ttH_ue"]
 
-procs="ttH_hbb ttH_hcc ttH_hww ttH_hzz ttH_htt ttH_hgg ttH_hgluglu ttH_hzg ttbarOther ttbarPlusB ttbarPlus2B ttbarPlusBBbar ttbarPlusCCbar singlet wjets zjets ttbarW ttbarZ diboson".split(" ")
-#procs="ttbarOther ttbarPlusB ttbarPlus2B ttbarPlusBBbar ttbarPlusCCbar".split(" ")
+#procs="ttH_hbb ttH_hcc ttH_hww ttH_hzz ttH_htt ttH_hgg ttH_hgluglu ttH_hzg ttbarOther ttbarPlusB ttbarPlus2B ttbarPlusBBbar ttbarPlusCCbar singlet wjets zjets ttbarW ttbarZ diboson".split(" ")
+procs="ttbarOther ttbarPlusB ttbarPlus2B ttbarPlusBBbar ttbarPlusCCbar".split(" ")
 print procs
 
 inf=ROOT.TFile(infname,"READ")
 
 name="allshapes"
-if not os.path.exists(name+"Shapes"):
-    os.makedirs(name+"Shapes")
+if not os.path.exists(name+"SystShapes"):
+    os.makedirs(name+"SystShapes")
     
 buff=ROOT.TCanvas("buff","buff",800,600)
 buff.Print(name+'.pdf[')
@@ -89,8 +91,8 @@ for c in cats:
 	legend.Draw()
 
         canvas.Print(name+'.pdf')
-	canvas.SaveAs(name+"Shapes/"+p+"_"+discname+"_"+c+"_"+s+".png")
-	canvas.SaveAs(name+"Shapes/"+p+"_"+discname+"_"+c+"_"+s+".pdf")
+	canvas.SaveAs(name+"SystShapes/"+p+"_"+discname+"_"+c+"_"+s+".png")
+	canvas.SaveAs(name+"SystShapes/"+p+"_"+discname+"_"+c+"_"+s+".pdf")
 	ratioc=ROOT.TCanvas(p+"_"+discname+"_"+c+"_"+s,p+"_"+discname+"_"+c+"_"+s,800,300)
 	nomr=nom.Clone()
 	nomr.Divide(nom)
@@ -103,8 +105,8 @@ for c in cats:
 	upr.Draw("samehistoE")
 	downr.Draw("samehistoE")
 	ratioc.SetTitle(nom.GetTitle())
-	ratioc.SaveAs(name+"Shapes/Ratio_"+p+"_"+discname+"_"+c+"_"+s+".png")
-	ratioc.SaveAs(name+"Shapes/Ratio_"+p+"_"+discname+"_"+c+"_"+s+".pdf")
+	ratioc.SaveAs(name+"SystShapes/Ratio_"+p+"_"+discname+"_"+c+"_"+s+".png")
+	ratioc.SaveAs(name+"SystShapes/Ratio_"+p+"_"+discname+"_"+c+"_"+s+".pdf")
 	counter+=1
 buff.Print(name+'.pdf]')
 	
