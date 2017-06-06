@@ -226,18 +226,18 @@ def renameHistos(infname,outfname,sysnames,checkBins=False,prune=True,Epsilon=0.
       theobjectlist.append(newhist)
       for ibin in range(nbins):
         if newhist.GetBinContent(ibin+1)<=0.0:
-          print "negative or zero bins in ", newhist
+          #print "negative or zero bins in ", newhist
           #print "setting bin ", ibin+1, "from", newhist.GetBinContent(ibin+1), "+-", newhist.GetBinError(ibin+1), "to ", Epsilon, "+-", math.sqrt(Epsilon)
           newhist.SetBinContent(ibin+1,Epsilon)
           newhist.SetBinError(ibin+1,ROOT.TMath.Sqrt(Epsilon))
           histchanged=True
     if newname!=thisname:      
-      print "changed ", thisname, " to ", newname
+      #print "changed ", thisname, " to ", newname
       thish.SetName(newname)
       #infile.cd()
       thish.Write()
     if histchanged:
-      print "histogram changed", thisname, newname
+      #print "histogram changed", thisname, newname
       newhist.SetName(newname)
       newhist.Write("",ROOT.TObject.kOverwrite)
       #infile.Delete(thisname)

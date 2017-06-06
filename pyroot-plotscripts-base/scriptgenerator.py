@@ -3857,7 +3857,7 @@ def renameHistosParallel(infname,sysnames,prune=False):
 	newname+=sys
 	nsysts+=1
 	
-    if "JES" in thisname or "JER" in thisname or "_ttH_scaleFSR" in thisname or "_ttH_scaleISR" in thisname or "_ttH_hdamp" in thisname or "ttH_ue" in thisname or (("CMS_scale_" in thisname or "CMS_res_" in thisname) and ("_jUp" in thisname or "_jDown" in thisname)) :
+    if "JES" in thisname or "JER" in thisname or "_ttH_scaleFSR" in thisname or "_ttH_scaleISR" in thisname or "_ttH_FSR" in thisname or "_ttH_ISR" in thisname or "_ttH_hdamp" in thisname or "ttH_ue" in thisname or (("CMS_scale_" in thisname or "CMS_res_" in thisname) and ("_jUp" in thisname or "_jDown" in thisname)) :
       if nsysts>2:
         thish=outfile.Get(thisname)
         theobjectlist.append(thish)
