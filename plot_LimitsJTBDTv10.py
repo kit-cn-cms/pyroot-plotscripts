@@ -155,7 +155,7 @@ if doDrawParallel==False or len(sys.argv) > 1 :
     writeLOLAndOneOnTop(transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-1,name+'/'+name+'_controlplots')
     writeListOfHistoListsAN(transposeLOL([lolT[0]]+lolT[9:]),[samples[0]]+samples[9:],"",name+'/'+name+'_shapes',True,False,False,'histo',False,True,False)
 
-exit(0)
+#exit(0)
 
 if doDrawParallel==False or len(sys.argv) == 1 :
   listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,bdtsHighNBins)    
