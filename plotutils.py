@@ -2503,12 +2503,14 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
 
 ################################################
     options='histo'
+    
     if isinstance(label, basestring):
         labeltexts=len(listOfHistoListsData)*[label]
     else:
         labeltexts=label
     canvases=[]
     objects=[]   
+    histosforcombine=[]
     i=0
 #    print len(listOfHistoLists)
     # for every plot, look at all samples
@@ -2526,6 +2528,12 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
       listOfErrorGraphColors.append(lll[2])
       print ''
       print 'listOfErrorGraphLists[0]  ',listOfErrorGraphLists[0]
+      
+    for ll in lll[0]:
+      for l in ll:
+          for hl in l:
+            histosforcombine.append(hl)
+      
     for igraph in range(len(listOfErrorGraphLists[0])):
       thisgraphs=[]
       for iband in range(len(listOfErrorGraphLists)):
@@ -2555,6 +2563,10 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         # mover over/underflow
         for h in listOfHistos:
             moveOverFlow(h)
+            histosforcombine.append(h)
+            
+        for hdata in listOfHistosData:
+            histosforcombine.append(hdata)
         #stack
         stackedListOfHistos=stackHistoList(listOfHistos)
         objects.append(stackedListOfHistos)
@@ -2614,6 +2626,7 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         if blinded:
             blind.Draw('same2')
         objects.append(blind)
+        #objects.append(data)
         
         
         listOfRatioErrorGraphs=[]
@@ -2772,10 +2785,11 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         #raw_input()
 
     
-    
+    print histosforcombine
 #    print len(canvases)
     printCanvases(canvases,name)
     writeObjects(canvases,name)
+    writeObjects(histosforcombine,name+'_combinehistos')
 ###################################################    
 
 
@@ -4219,19 +4233,19 @@ def multiplyListofHistoswithfactors(listofHistos,factorlist):
   
   
 def normalizeBKGtoData(listofHistoBackground,listofHistoBackgroundincludingsysts ,HistoData):
-    print listofHistoBackground
-    print HistoData
+    #print listofHistoBackground
+    #print HistoData
     IntegralBKG=0
     ratio=1
     for histoBKG in listofHistoBackground:
         IntegralBKG+=histoBKG.Integral()
     ratio=HistoData.Integral()/IntegralBKG
-    print 'ratio ',ratio
+    #print 'ratio ',ratio
     for histoBKGsystlist in listofHistoBackgroundincludingsysts:
         for histoBKGsyst in histoBKGsystlist:
-            print histoBKGsyst,'  bevor ratio applied', histoBKGsyst.Integral()
+            #print histoBKGsyst,'  bevor ratio applied', histoBKGsyst.Integral()
             histoBKGsyst.Scale(ratio)
-            print  histoBKGsyst,'  after ratio applied', histoBKGsyst.Integral()
+            #print  histoBKGsyst,'  after ratio applied', histoBKGsyst.Integral()
     
 def subtract_histos(histo1,histo2):
     histo1.Add(histo2,-1.0)
@@ -4319,9 +4333,10 @@ def ABBackgroundEstimationCalculationABCDNormAndPlotsWithSystematics(loldata,lll
     
     subtract_llls(transposeLOL([transposeLOL(llldatacopyABCD)[DataSampleNames.index(DatasampleNick)]]),transposeLOL([transposeLOL(lllBackgroundWithweightsyscopyABCD)[BackgroundSampleNames.index('ttbar')]]))   
     
-    
-    dividellls(llldatacopyABCD, plotnames.index(CatB_sideband), plotnames.index(CatD_sideband),False,llldatacopyABCD[plotnames.index(CatD_sideband)][DataSampleNames.index(DatasampleNick)][weightsystnames.index(SBSSF_nick+'_nominal')].GetNbinsX())
-    multiplyllls(llldatacopyABCD, plotnames.index(CatB_sideband),plotnames.index(CatC_sideband),False,llldatacopyABCD[plotnames.index(CatC_sideband)][DataSampleNames.index(DatasampleNick)][weightsystnames.index(SBSSF_nick+'_nominal')].GetNbinsX())
+    rebintoonebinllls(llldatacopyABCD)
+
+    dividellls(llldatacopyABCD, plotnames.index(CatB_sideband), plotnames.index(CatD_sideband),False)
+    multiplyllls(llldatacopyABCD, plotnames.index(CatB_sideband),plotnames.index(CatC_sideband),False)
     #dividellls(lllBackgroundWithweightsyscopyABCD, weightsystnames.index(CatB_sideband), weightsystnames.index(CatD_sideband),False,lllBackgroundWithweightsyscopyABCD[plotnames.index(CatD_sideband)][DataSampleNames.index(DatasampleNick)][weightsystnames.index(SBSSF_nick+'_nominal')].GetNbinsX())
     #multiplyllls(lllBackgroundWithweightsyscopyABCD, weightsystnames.index(CatB_sideband),weightsystnames.index(CatC_sideband),False,lllBackgroundWithweightsyscopyABCD[plotnames.index(CatC_sideband)][DataSampleNames.index(DatasampleNick)][weightsystnames.index(SBSSF_nick+'_nominal')].GetNbinsX())
     
@@ -4334,15 +4349,22 @@ def ABBackgroundEstimationCalculationABCDNormAndPlotsWithSystematics(loldata,lll
     
     
     #subtract_histos(loldatacopy[plotnames.index(PlotNameSignal)][DataSampleNames.index(DatasampleNick)],lolBackgroundcopy[plotnames.index(PlotNameSignal)][BackgroundSampleNames.index('ttbar')])   
+    print llldatacopy[plotnames.index(PlotNameSideband)][DataSampleNames.index(DatasampleNick)][weightsystnames.index(SBSSF_nick+'_nominal')], 'Integral ', llldatacopy[plotnames.index(PlotNameSideband)][DataSampleNames.index(DatasampleNick)][weightsystnames.index(SBSSF_nick+'_nominal')].Integral()
+    print lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)][BackgroundSampleNames.index(QCDSample)][weightsystnames.index(SBSSF_nick+'_nominal')], ' Integral ', lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)][BackgroundSampleNames.index(QCDSample)][weightsystnames.index(SBSSF_nick+'_nominal')].Integral()
     
-    normalizeBKGtoData([llldatacopy[plotnames.index(PlotNameSideband)][DataSampleNames.index(DatasampleNick)][weightsystnames.index(SBSSF_nick+'_nominal')]],transposeLOL(lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)]),lllBackgroundWithweightsyscopyABCD[plotnames.index(CatB_sideband)][DataSampleNames.index(DatasampleNick)][weightsystnames.index(SBSSF_nick+'_nominal')])
+    print llldatacopyABCD[plotnames.index(CatB_sideband)][DataSampleNames.index(DatasampleNick)][weightsystnames.index('_ABCD_nominal')], 'Integral ', llldatacopyABCD[plotnames.index(CatB_sideband)][DataSampleNames.index(DatasampleNick)][weightsystnames.index('_ABCD_nominal')].Integral()
     
+    
+    
+    normalizeBKGtoData([llldatacopy[plotnames.index(PlotNameSideband)][DataSampleNames.index(DatasampleNick)][weightsystnames.index(SBSSF_nick+'_nominal')]],transposeLOL(lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)]),llldatacopyABCD[plotnames.index(CatB_sideband)][DataSampleNames.index(DatasampleNick)][weightsystnames.index('_ABCD_nominal')])
+    
+    print lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)][BackgroundSampleNames.index(QCDSample)][weightsystnames.index(SBSSF_nick+'_nominal')], ' Integral ', lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)][BackgroundSampleNames.index(QCDSample)][weightsystnames.index(SBSSF_nick+'_nominal')].Integral()
      
-    #QCDlist=[transposeLOL(transposeLOL(lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)])[weightsystnames.index(SBSSF_nick+'_nominal'):weightsystnames.index(SBSSF_nick+'_systdown')+1])[BackgroundSampleNames.index(QCDSample)]+transposeLOL(transposeLOL(lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)])[weightsystnames.index(SBSSF_nick+'GeneratorDiff_systup'):weightsystnames.index(SBSSF_nick+'GeneratorDiff_systdown')+1])[BackgroundSampleNames.index(QCDSample)]]
+    QCDlist=[transposeLOL(transposeLOL(lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)])[weightsystnames.index(SBSSF_nick+'_nominal'):weightsystnames.index(SBSSF_nick+'_systdown')+1])[BackgroundSampleNames.index(QCDSample)]+transposeLOL(transposeLOL(lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)])[weightsystnames.index(SBSSF_nick+'GeneratorDiff_systup'):weightsystnames.index(SBSSF_nick+'GeneratorDiff_systdown')+1])[BackgroundSampleNames.index(QCDSample)]]
     
-    #ttbarlist=[transposeLOL(transposeLOL(lllBackgroundNoweightsys[plotnames.index(PlotNameSignal)])[weightsystnames.index('_no'+'_nominal'):weightsystnames.index('_no'+'_systdown')+1])[BackgroundSampleNames.index('ttbar')]+transposeLOL(transposeLOL(lllBackgroundNoweightsys[plotnames.index(PlotNameSignal)])[weightsystnames.index('_no'+'_systup'):weightsystnames.index('_no'+'_systdown')+1])[BackgroundSampleNames.index('ttbar')]]
+    ttbarlist=[transposeLOL(transposeLOL(lllBackgroundNoweightsys[plotnames.index(PlotNameSignal)])[weightsystnames.index('_no'+'_nominal'):weightsystnames.index('_no'+'_systdown')+1])[BackgroundSampleNames.index('ttbar')]+transposeLOL(transposeLOL(lllBackgroundNoweightsys[plotnames.index(PlotNameSignal)])[weightsystnames.index('_no'+'_systup'):weightsystnames.index('_no'+'_systdown')+1])[BackgroundSampleNames.index('ttbar')]]
     
-    #SClist=[transposeLOL(transposeLOL(lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)])[weightsystnames.index(SBSSF_nick+'_nominal'):weightsystnames.index(SBSSF_nick+'_systdown')+1])[BackgroundSampleNames.index(SCNick)]+transposeLOL(transposeLOL(lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)])[weightsystnames.index(SBSSF_nick+'GeneratorDiff_systup'):weightsystnames.index(SBSSF_nick+'GeneratorDiff_systdown')+1])[BackgroundSampleNames.index(SCNick)]]
+    SClist=[transposeLOL(transposeLOL(lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)])[weightsystnames.index(SBSSF_nick+'_nominal'):weightsystnames.index(SBSSF_nick+'_systdown')+1])[BackgroundSampleNames.index(SCNick)]+transposeLOL(transposeLOL(lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)])[weightsystnames.index(SBSSF_nick+'GeneratorDiff_systup'):weightsystnames.index(SBSSF_nick+'GeneratorDiff_systdown')+1])[BackgroundSampleNames.index(SCNick)]]
 
 
     if(useGeneratorDiff):
@@ -4393,6 +4415,9 @@ def ABCDBackgroundEstimationCalculationAndPlotsWithSystematics(loldata,llldata,l
     dividellls(lllBackgroundWithweightsyscopyABCD, plotnames.index(CatB_sideband), plotnames.index(CatD_sideband),False)
     multiplyllls(lllBackgroundWithweightsyscopyABCD, plotnames.index(CatB_sideband),plotnames.index(CatC_sideband),False)    
     
+    llldatacopyABCD_SConly=copy.deepcopy(llldatacopyABCD)
+    subtract_llls(transposeLOL([transposeLOL(llldatacopyABCD_SConly)[DataSampleNames.index(DatasampleNick)]]),transposeLOL([transposeLOL(lllBackgroundWithweightsyscopyABCD)[BackgroundSampleNames.index(QCDSample)]]))
+    
     #divideHistos(loldatacopyABCD, plotnames.index(CatB_sideband+'_ABCD_systup'), plotnames.index(CatD_sideband+'_ABCD_systup'),False)
     #multiplyHistos(loldatacopyABCD, plotnames.index(CatB_sideband+'_ABCD_systup'),plotnames.index(CatC_sideband+'_ABCD_systup'),False)
     #divideHistos(lolBackgroundcopyABCD, plotnames.index(CatB_sideband+'_ABCD_systup'), plotnames.index(CatD_sideband+'_ABCD_systup'),False)
@@ -4408,7 +4433,7 @@ def ABCDBackgroundEstimationCalculationAndPlotsWithSystematics(loldata,llldata,l
    
     Data=[transposeLOL([loldataT[DataSampleNames.index(DatasampleNick)]])[plotnames.index(PlotNameSignal)]]
    
-    Backgrounds=transposeLOL([[lllBackgroundWithweightsyscopyABCD[plotnames.index(CatB_sideband)][BackgroundSampleNames.index(SCNick)][weightsystnames.index('_ABCD_nominal')]]]+[[lllBackgroundWithweightsyscopyABCD[plotnames.index(CatB_sideband)][BackgroundSampleNames.index(QCDSample)][weightsystnames.index('_ABCD_nominal')]]]+[transposeLOL([lolBackgroundT[BackgroundSampleNames.index("ttbar")]])[plotnames.index(PlotNameSignal)]])
+    Backgrounds=transposeLOL([[llldatacopyABCD_SConly[plotnames.index(CatB_sideband)][DataSampleNames.index(DatasampleNick)][weightsystnames.index('_ABCD_nominal')]]]+[[lllBackgroundWithweightsyscopyABCD[plotnames.index(CatB_sideband)][BackgroundSampleNames.index(QCDSample)][weightsystnames.index('_ABCD_nominal')]]]+[transposeLOL([lolBackgroundT[BackgroundSampleNames.index("ttbar")]])[plotnames.index(PlotNameSignal)]])
     
     Backgroundsamples=[BackgroundSamples[BackgroundSampleNames.index(SCNick)]]+[BackgroundSamples[BackgroundSampleNames.index(QCDSample)]]+[BackgroundSamples[BackgroundSampleNames.index('ttbar')]]
     OTSignal=transposeLOL([lolSignalT[SignalSampleNames.index(SignalsampleNick)]])[plotnames.index(PlotNameSignal)]
@@ -4416,13 +4441,19 @@ def ABCDBackgroundEstimationCalculationAndPlotsWithSystematics(loldata,llldata,l
 
     QCDlist=[transposeLOL(transposeLOL(lllBackgroundWithweightsyscopyABCD[plotnames.index(CatB_sideband)])[weightsystnames.index('_ABCD_nominal'):weightsystnames.index('_ABCD_systdown')+1])[BackgroundSampleNames.index(QCDSample)]]
     ttbarlist=[transposeLOL(transposeLOL(lllBackgroundNoweightsys[plotnames.index(PlotNameSignal)])[weightsystnames.index('_no'+'_nominal'):weightsystnames.index('_no'+'_systdown')+1])[BackgroundSampleNames.index('ttbar')]]
-    SClist=[transposeLOL(transposeLOL(lllBackgroundWithweightsyscopyABCD[plotnames.index(CatB_sideband)])[weightsystnames.index('_ABCD_nominal'):weightsystnames.index('_ABCD_systdown')+1])[BackgroundSampleNames.index(SCNick)]]  
+    SClist=[transposeLOL(transposeLOL(llldatacopyABCD_SConly[plotnames.index(CatB_sideband)])[weightsystnames.index('_ABCD_nominal'):weightsystnames.index('_ABCD_systdown')+1])[DataSampleNames.index(DatasampleNick)]]  
         
     plotDataMCanWsyst(Data,Backgrounds,Backgroundsamples,OTSignal,SignalSamples,1,name+DatasampleNick+QCDSample,[[[SClist+QCDlist+ttbarlist],3354,ROOT.kBlack,True]],False,'ABCD_test',True,False, False, True)
 
 
-
-
+def rebintoonebinllls(lll):
+    for ll in lll:
+        for l in ll:
+            for histo in l:
+                histo.Rebin(histo.GetNbinsX())
+            
+            
+            
 def dividellls(lll, numeratorPlot, denumeratorPlot, normalizefirst=False,rebin=1,option=''):
     for i in range(len(lll[numeratorPlot])):
         for j in range(len(lll[numeratorPlot][i])):

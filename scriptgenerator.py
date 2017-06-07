@@ -112,7 +112,7 @@ def initTwoDimHistoWithProcessNameAndSuffix(name,nbinsX=10,xminX=0,xmaxX=0,nbins
 def fillHistoSyst(name,varname,weight,systnames,systweights,OnlyFirst=False):
   text='      float weight_'+name+'='+weight+';\n'
   for sn,sw in zip(systnames,systweights):
-    text+=fillHisto(name+sn,varname,'('+sw+')*(weight_'+name+')',OnlyFirst)
+    text+=fillHisto(name,sn,varname,'('+sw+')*(weight_'+name+')',OnlyFirst)
   return text
 
 
@@ -172,11 +172,13 @@ def endCat():
   return '    }\n    // end of category\n\n'
 
 
-def fillHisto(histo,var,weight,OnlyFirst=False):
+def fillHisto(histoname, sn,var,weight,OnlyFirst=False):
   text= '        if(('+weight+')!=0){\n'
-  text+='          h_'+histo+'->Fill(fmin(h_'+histo+'->GetXaxis()->GetXmax()-1e-6,fmax(h_'+histo+'->GetXaxis()->GetXmin()+1e-6,'+var+')),'+weight+');\n'
+  text+='          h_'+histoname+sn+'->Fill(fmin(h_'+histoname+sn+'->GetXaxis()->GetXmax()-1e-6,fmax(h_'+histoname+sn+'->GetXaxis()->GetXmin()+1e-6,'+var+')),'+weight+');\n'
   if OnlyFirst:
-    text+='         break;}\n'
+    #text+='         break;}\n'
+    #text+='         std::cout<<"filled '+var+'= "<<'+var+'<<" into '+histo+' "<<h_'+histo+'<<" with weight "<<'+weight+'<<endl;   break;}\n'
+    text+='         std::cout<<"filled '+var+'= "<<'+var+'<<" into '+histoname+sn+' "<<h_'+histoname+sn+'<<" with weight "<<'+weight+'<<endl;   '+histoname+'_foundfirst=true;}\n'
   else:
     text+='         }\n'
   return text
@@ -400,8 +402,10 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
         pwi=variables.getArrayEntries(pw,"i")
         #script+=checkLoopsize(size_of_loop)
         #script+="{\n"
+        script+="    bool "+histoname+"_foundfirst=false; \n"
         script+=varLoop("i",size_of_loop)                    
         script+="{\n"
+        script+="      if("+histoname+"_foundfirst) break;\n"
         arrayselection=variables.checkArrayLengths(','.join([ex,pw]))
         weight='('+arrayselection+')*('+pwi+')*Weight_XS*categoryweight*sampleweight'
         print histoname
