@@ -47,6 +47,6 @@ Quick blinded expected limits:
      * You need git 1.9:    module load git/1.9
      * Enter the plotscript directory
      * git fetch pyroot-subtree
-     * git pull -s recursive -X patience pyroot-subtree master
+     * cd pyroot-plotscripts-base ; git pull -s recursive -X patience pyroot-subtree master
      * git subtree push --prefix=pyroot-plotscripts-base/ pyroot-subtree master
   * The upstream repository uses a CI part to make sure that functionality is not broken.
