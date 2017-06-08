@@ -129,16 +129,16 @@ plots=[
 
     
     # Plots for Z_Prime_M - right plotselection - Only First Element
-    Plot(ROOT.TH1F("ABCD_CatA_Zprime_M_first" ,"m(Z') in GeV, CatA " ,50,0,5000),"Zprimes_ABCD_M[0]",    plotselection_ABCD_general_0 + " && " + plotselection_tau32_0 + "&&" + plotselection_B_CSV_0 + "&& " + plotselection_W_MSD_0  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD_CatB_Zprime_M_first" ,"m(Z') in GeV, CatB " ,50,0,5000),"Zprimes_ABCD_M[0]",    plotselection_ABCD_general_0 + " && " + plotselection_tau32_anti_0 + "&&" + plotselection_B_CSV_0 + "&& " + plotselection_W_MSD_0  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD_CatC_Zprime_M_first" ,"m(Z') in GeV, CatC " ,50,0,5000),"Zprimes_ABCD_M[0]",    plotselection_ABCD_general_0 + " && " + plotselection_tau32_0 + "&&" + plotselection_B_CSV_anti_0 + "&& " + plotselection_W_MSD_0  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD_CatD_Zprime_M_first" ,"m(Z') in GeV, CatD " ,50,0,5000),"Zprimes_ABCD_M[0]",    plotselection_ABCD_general_0 + " && " + plotselection_tau32_anti_0 + "&&" + plotselection_B_CSV_anti_0 + "&& " + plotselection_W_MSD_0  ,"1 btag"),
+    Plot(ROOT.TH1F("ABCD_CatA_Zprime_M_first" ,"m(Z') in GeV, CatA " ,25,0,5000),"Zprimes_ABCD_M[0]",    plotselection_ABCD_general_0 + " && " + plotselection_tau32_0 + "&&" + plotselection_B_CSV_0 + "&& " + plotselection_W_MSD_0  ,"1 btag"),
+    Plot(ROOT.TH1F("ABCD_CatB_Zprime_M_first" ,"m(Z') in GeV, CatB " ,25,0,5000),"Zprimes_ABCD_M[0]",    plotselection_ABCD_general_0 + " && " + plotselection_tau32_anti_0 + "&&" + plotselection_B_CSV_0 + "&& " + plotselection_W_MSD_0  ,"1 btag"),
+    Plot(ROOT.TH1F("ABCD_CatC_Zprime_M_first" ,"m(Z') in GeV, CatC " ,25,0,5000),"Zprimes_ABCD_M[0]",    plotselection_ABCD_general_0 + " && " + plotselection_tau32_0 + "&&" + plotselection_B_CSV_anti_0 + "&& " + plotselection_W_MSD_0  ,"1 btag"),
+    Plot(ROOT.TH1F("ABCD_CatD_Zprime_M_first" ,"m(Z') in GeV, CatD " ,25,0,5000),"Zprimes_ABCD_M[0]",    plotselection_ABCD_general_0 + " && " + plotselection_tau32_anti_0 + "&&" + plotselection_B_CSV_anti_0 + "&& " + plotselection_W_MSD_0  ,"1 btag"),
 
 
-    Plot(ROOT.TH1F("ABCD_CatE_Zprime_M_first" ,"m(Z') in GeV, CatE " ,50,0,5000),"Zprimes_ABCD_M[0]",    plotselection_ABCD_general_0 + " && " + plotselection_tau32_0 + "&&" + plotselection_B_CSV_0 + "&& " + plotselection_W_MSD_anti_0  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD_CatF_Zprime_M_first" ,"m(Z') in GeV, CatF " ,50,0,5000),"Zprimes_ABCD_M[0]",    plotselection_ABCD_general_0 + " && " + plotselection_tau32_anti_0 + "&&" + plotselection_B_CSV_0 + "&& " + plotselection_W_MSD_anti_0  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD_CatG_Zprime_M_first" ,"m(Z') in GeV, CatG " ,50,0,5000),"Zprimes_ABCD_M[0]",    plotselection_ABCD_general_0 + " && " + plotselection_tau32_0  + "&&" + plotselection_B_CSV_anti_0 + "&& " + plotselection_W_MSD_anti_0  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD_CatH_Zprime_M_first" ,"m(Z') in GeV, CatH " ,50,0,5000),"Zprimes_ABCD_M[0]",    plotselection_ABCD_general_0 + " && " + plotselection_tau32_anti_0 + "&&" + plotselection_B_CSV_anti_0 + "&& " + plotselection_W_MSD_anti_0  ,"1 btag"),
+    Plot(ROOT.TH1F("ABCD_CatE_Zprime_M_first" ,"m(Z') in GeV, CatE " ,25,0,5000),"Zprimes_ABCD_M[0]",    plotselection_ABCD_general_0 + " && " + plotselection_tau32_0 + "&&" + plotselection_B_CSV_0 + "&& " + plotselection_W_MSD_anti_0  ,"1 btag"),
+    Plot(ROOT.TH1F("ABCD_CatF_Zprime_M_first" ,"m(Z') in GeV, CatF " ,25,0,5000),"Zprimes_ABCD_M[0]",    plotselection_ABCD_general_0 + " && " + plotselection_tau32_anti_0 + "&&" + plotselection_B_CSV_0 + "&& " + plotselection_W_MSD_anti_0  ,"1 btag"),
+    Plot(ROOT.TH1F("ABCD_CatG_Zprime_M_first" ,"m(Z') in GeV, CatG " ,25,0,5000),"Zprimes_ABCD_M[0]",    plotselection_ABCD_general_0 + " && " + plotselection_tau32_0  + "&&" + plotselection_B_CSV_anti_0 + "&& " + plotselection_W_MSD_anti_0  ,"1 btag"),
+    Plot(ROOT.TH1F("ABCD_CatH_Zprime_M_first" ,"m(Z') in GeV, CatH " ,25,0,5000),"Zprimes_ABCD_M[0]",    plotselection_ABCD_general_0 + " && " + plotselection_tau32_anti_0 + "&&" + plotselection_B_CSV_anti_0 + "&& " + plotselection_W_MSD_anti_0  ,"1 btag"),
 
 
     
