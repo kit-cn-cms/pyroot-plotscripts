@@ -134,7 +134,7 @@ if not os.path.exists(name):
 # plot everthing
 
 if doDrawParallel==False or len(sys.argv) == 1 :                      #if some option is given plotParallelStep will be skipped
-    outputpath=plotParallel(name,5000000,plots+bdtsHighNBins,samples+samples_data+systsamples,[''],['1.'],weightSystNames, systWeights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/pyroot-plotscripts/treejson28052017.json",otherSystNames+PSSystNames)
+    outputpath=plotParallel(name,5000000,plots+bdtsHighNBins,samples+samples_data+systsamples,[''],['1.'],weightSystNames, systWeights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/pyroot-plotscripts/treejson08062017.json",otherSystNames+PSSystNames)
 else:
     workdir=os.getcwd()+'/workdir/'+name
     outputpath=workdir+'/output.root'
