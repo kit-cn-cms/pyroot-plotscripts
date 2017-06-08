@@ -1,5 +1,6 @@
 import sys
 import os
+import ROOT
 sys.path.append('pyroot-plotscripts-base')
 sys.path.append('pyroot-plotscripts-base/limittools')
 
@@ -36,17 +37,24 @@ categories_=[
 ]
 
 categories=[]
-#categories=categories_
-bdtcuts=[-0.2,-0.2,0.2,0.26,0.17,0.26,0.1,0.12,0.13]
-#for cat,bdt in zip(categories_,bdtcuts):
-  #if cat[1] in ["ljets_jge6_tge4","ljets_j5_tge4","ljets_j4_t4","ljets_jge6_t3","ljets_j5_t3","ljets_j4_t3"]:
-    #categories.append(('('+cat[0]+')*(finalbdt_'+cat[1]+'>'+str(bdt)+')',cat[1]+'_high') )
-    #categories.append(('('+cat[0]+')*(finalbdt_'+cat[1]+'<='+str(bdt)+')',cat[1]+'_low') )
-  #else:
-    #categories.append(cat)
+nhistobins= [  20,20, 	20,   10,    20,    10,   20,   20,   10 ]
+minxvals=   [ 200, 200, -0.75,  -0.8, -0.8,   -0.8, -0.8, -0.8,   -0.8]
+maxxvals=   [800,800,    0.8,  0.75,   0.8,    0.7,  0.8,  0.8,    0.7]
+print len(nhistobins)
+print len(minxvals)
+print len(maxxvals)
+
+discrs =    ['finalbdt_ljets_j4_t2','finalbdt_ljets_j5_t2','finalbdt_ljets_j4_t3', 'finalbdt_ljets_j4_t4', 'finalbdt_ljets_j5_t3', 'finalbdt_ljets_j5_tge4', 'finalbdt_ljets_jge6_t2', 'finalbdt_ljets_jge6_t3', 'finalbdt_ljets_jge6_tge4']
+
+discrname='finaldiscr'
+
+assert(len(nhistobins)==len(maxxvals))
+assert(len(nhistobins)==len(minxvals))
+assert(len(nhistobins)==len(categories))
+assert(len(nhistobins)==len(discrs))
 
 # add unsplit categories
-for cat,bdt in zip(categories_,bdtcuts):
+for cat in categories_:
   categories.append(cat)
 
 print categories
@@ -73,16 +81,6 @@ additionalvariables=[
                       "Weight_CSV","Weight_CSVLFup","Weight_CSVLFdown","Weight_CSVHFup","Weight_CSVHFdown","Weight_CSVHFStats1up","Weight_CSVHFStats1down","Weight_CSVLFStats1up","Weight_CSVLFStats1down","Weight_CSVHFStats2up","Weight_CSVHFStats2down","Weight_CSVLFStats2up","Weight_CSVLFStats2down","Weight_CSVCErr1up","Weight_CSVCErr1down","Weight_CSVCErr2up","Weight_CSVCErr2down",
 ]
 
-nhistobins= [  20,20, 	20,   10,    20,    10,   20,   20,   10 ]
-minxvals=   [ 200, 200, -0.75,  -0.8, -0.8,   -0.8, -0.8, -0.8,   -0.8]
-maxxvals=   [800,800,    0.8,  0.75,   0.8,    0.7,  0.8,  0.8,    0.7]
-
-discrs =    ['finalbdt_ljets_j4_t2','finalbdt_ljets_j5_t2','finalbdt_ljets_j4_t3', 'finalbdt_ljets_j4_t4', 'finalbdt_ljets_j5_t3', 'finalbdt_ljets_j5_tge4', 'finalbdt_ljets_jge6_t2', 'finalbdt_ljets_jge6_t3', 'finalbdt_ljets_jge6_tge4']
-discrname='finaldiscr'
-assert(len(nhistobins)==len(maxxvals))
-assert(len(nhistobins)==len(minxvals))
-assert(len(nhistobins)==len(categories))
-assert(len(nhistobins)==len(discrs))
 
 # get input for plotting function
 bins= [c[0] for c in categories]
@@ -192,7 +190,6 @@ if doDrawParallel==False or len(sys.argv) == 1 :
 if doDrawParallel==False or len(sys.argv) == 1 :                      #if some option is given old systematic histo file will be used      
     # make datacards
     #TODO
-    # 1. Implement small Epsilon case
     # 2. Implement consisted Bin-by-Bin uncertainties
     makeDatacards(name+'/'+name+'_limitInput.root',name+'/'+name+'_datacard',binlabels,doHdecay=True,discrname='finaldiscr',datacardmaker='mk_datacard_JESTest13TeV')
 

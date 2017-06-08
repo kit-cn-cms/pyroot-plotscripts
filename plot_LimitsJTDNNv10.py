@@ -1,5 +1,6 @@
 import sys
 import os
+import ROOT
 sys.path.append('pyroot-plotscripts-base')
 sys.path.append('pyroot-plotscripts-base/limittools')
 
@@ -16,8 +17,7 @@ from plotconfigSpring17v10 import *
 MainClock=ROOT.TStopwatch()
 MainClock.Start()
 
-doDrawParallel=True
-
+doDrawParallel=False
 
 # output name
 name='limits_JTDNN_Spring17v10'
@@ -38,9 +38,9 @@ categories_=[
 # Need to remove the other node. Do not know what happens if the datacardmaker tries to use empty histograms
 categories=[]
 
-nhistobins= [  20,20, 	10,   10,    10,    10,   20,   10,   10 ]
-minxvals=   [ 200, 200, 0.16,  0.16, 0.16,   0.16, 0.16, 0.16,   0.16]
-maxxvals=   [800,800,    0.45,  0.55,   0.55,    0.55,  0.45,  0.55,    0.6]
+nhistobins= [  20,20, 	20,   10,    20,    10,   20,   20,   10 ]
+minxvals=   [ 200, 200, 0.16,  0.16, 0.16,   0.16, -0.8, 0.16,   0.16]
+maxxvals=   [800,800,    0.45,  0.55,   0.55,    0.55,  0.8,  0.55,    0.6]
 print len(nhistobins)
 print len(minxvals)
 print len(maxxvals)
@@ -64,7 +64,7 @@ additionalvariables=[
                       'dummybdt_ljets_j4_t4:='+bdtweightpath+'/weights_Final_44_'+bdtset+'.xml',
                       'dummybdt_ljets_j5_t3:='+bdtweightpath+'/weights_Final_53_'+bdtset+'.xml',
                       'dummybdt_ljets_j5_tge4:='+bdtweightpath+'/weights_Final_54_'+bdtset+'.xml',
-                      'dummybdt_ljets_jge6_t2:='+bdtweightpath+'/weights_Final_62_'+bdtset+'.xml',
+                      'finalbdt_ljets_jge6_t2:='+bdtweightpath+'/weights_Final_62_'+bdtset+'.xml',
                       'dummybdt_ljets_jge6_t3:='+bdtweightpath+'/weights_Final_63_'+bdtset+'.xml',
                       'dummybdt_ljets_jge6_tge4:='+bdtweightpath+'/weights_Final_64_'+bdtset+'.xml',
                       'finalbdt_ljets_j4_tge3:=((N_Jets==4&&N_BTagsM==3)*dummybdt_ljets_j4_t3 + (N_Jets==4&&N_BTagsM==4)*dummybdt_ljets_j4_t4)',
@@ -78,7 +78,7 @@ additionalvariables=[
 
 
 discrs =    ['finalbdt_ljets_j4_t2','finalbdt_ljets_j5_t2',
-	     'aachen_Out_ttH','aachen_Out_ttH','aachen_Out_ttH','aachen_Out_ttH','aachen_Out_ttH','aachen_Out_ttH','aachen_Out_ttH',
+	     'aachen_Out_ttH','aachen_Out_ttH','aachen_Out_ttH','aachen_Out_ttH','finalbdt_ljets_jge6_t2','aachen_Out_ttH','aachen_Out_ttH',
 	     ]
 discrname='finaldiscr'
 assert(len(nhistobins)==len(maxxvals))
@@ -89,7 +89,6 @@ assert(len(nhistobins)==len(discrs))
 # get input for plotting function
 bins= [c[0] for c in categories]
 binlabels= [c[1] for c in categories]
-samples=samplesLimits
 allsystnames=weightSystNames+otherSystNames+PSSystNames
 
 # samples
