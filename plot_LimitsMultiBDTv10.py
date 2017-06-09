@@ -67,6 +67,13 @@ print len(nhistobins)
 print len(minxvals)
 print len(maxxvals)
 
+# add unsplit categories
+for cat in categories_:
+  categories.append(cat)
+
+print categories
+
+
 discrs =    ['finalbdt_ljets_j4_t2','finalbdt_ljets_j5_t2','finalbdt_ljets_jge6_t2',
 	     'finalbdt_ljets_j4_tge3','finalbdt_ljets_j5_tge3','finalbdt_ljets_jge6_tge3',
 	     'finalbdt_ljets_j4_tge3','finalbdt_ljets_j5_tge3','finalbdt_ljets_jge6_tge3',
@@ -82,11 +89,6 @@ assert(len(nhistobins)==len(categories))
 assert(len(nhistobins)==len(discrs))
 
 
-# add unsplit categories
-for cat in categories_:
-  categories.append(cat)
-
-print categories
 
 # define MEM discriminator variable
 memexp='(memDBp>0.0)*(memDBp_sig/(memDBp_sig+0.15*memDBp_bkg))+(memDBp<0.0)*(0.01)'
