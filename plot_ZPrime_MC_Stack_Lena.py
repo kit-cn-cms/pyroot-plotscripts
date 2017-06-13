@@ -48,7 +48,7 @@ plotselection_B_CSV = "  Bottoms_ABCD_CSV > 0.8   "
 plotselection_W_tau21 = " Ws_ABCD_t21 < 0.6 "
 
 
-
+#N_AK4_bottom_tag_candidates > 0.0
 
 
 
@@ -211,6 +211,36 @@ plots=[
 
 
 
+
+    #doing only first element
+    #beta (tau21)
+
+    Plot(ROOT.TH1F("ABCD_CatA_Zprime_M_beta_first_nobottom" ,"m(Z') in GeV, CatA " ,50,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && " + "N_AK4_bottom_tag_candidates > 0" + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21, "1 btag"),
+    Plot(ROOT.TH1F("ABCD_CatB_Zprime_M_beta_first_nobottom" ,"m(Z') in GeV, CatB " ,50,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && " + "N_AK4_bottom_tag_candidates > 0" + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21 + "&&" +plotselection_sideband ,"1 btag"),
+    Plot(ROOT.TH1F("ABCD_CatC_Zprime_M_beta_first_nobottom" ,"m(Z') in GeV, CatC " ,50,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && " + "N_AK4_bottom_tag_candidates > 0" + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21 + "&&" +plotselection_sideband ,"1 btag"),
+    Plot(ROOT.TH1F("ABCD_CatD_Zprime_M_beta_first_nobottom" ,"m(Z') in GeV, CatD " ,50,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && " + "N_AK4_bottom_tag_candidates > 0" + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21 + "&&" +plotselection_sideband ,"1 btag"),
+
+
+    Plot(ROOT.TH1F("ABCD_CatE_Zprime_M_beta_first_nobottom" ,"m(Z') in GeV, CatE " ,50,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && " + "N_AK4_bottom_tag_candidates > 0" + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti + "&&" +plotselection_sideband ,"1 btag"),
+    Plot(ROOT.TH1F("ABCD_CatF_Zprime_M_beta_first_nobottom" ,"m(Z') in GeV, CatF " ,50,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && " + "N_AK4_bottom_tag_candidates > 0" + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti + "&&" +plotselection_sideband ,"1 btag"),
+    Plot(ROOT.TH1F("ABCD_CatG_Zprime_M_beta_first_nobottom" ,"m(Z') in GeV, CatG " ,50,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && " + "N_AK4_bottom_tag_candidates > 0" + " && " + plotselection_tau32  + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti + "&&" +plotselection_sideband ,"1 btag"),
+    Plot(ROOT.TH1F("ABCD_CatH_Zprime_M_beta_first_nobottom" ,"m(Z') in GeV, CatH " ,50,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && " + "N_AK4_bottom_tag_candidates > 0" + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti + "&&" +plotselection_sideband ,"1 btag") ,
+
+
+    #only first element
+    #W_msd as third variable
+
+    Plot(ROOT.TH1F("ABCD_CatA_Zprime_M_first_nobottom" ,"m(Z') in GeV, CatA " ,50,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && " + "N_AK4_bottom_tag_candidates > 0" + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21, "1 btag"),
+    Plot(ROOT.TH1F("ABCD_CatB_Zprime_M_first_nobottom" ,"m(Z') in GeV, CatB " ,50,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && " + "N_AK4_bottom_tag_candidates > 0" + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21 + "&&" +plotselection_sideband ,"1 btag"),
+    Plot(ROOT.TH1F("ABCD_CatC_Zprime_M_first_nobottom" ,"m(Z') in GeV, CatC " ,50,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && " + "N_AK4_bottom_tag_candidates > 0" + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  + "&&" +plotselection_sideband,"1 btag"),
+    Plot(ROOT.TH1F("ABCD_CatD_Zprime_M_first_nobottom" ,"m(Z') in GeV, CatD " ,50,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && " + "N_AK4_bottom_tag_candidates > 0" + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21 + "&&" +plotselection_sideband ,"1 btag"),
+
+
+    Plot(ROOT.TH1F("ABCD_CatE_Zprime_M_first_nobottom" ,"m(Z') in GeV, CatE " ,50,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && " + "N_AK4_bottom_tag_candidates > 0" + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti + "&&" +plotselection_sideband ,"1 btag"),
+    Plot(ROOT.TH1F("ABCD_CatF_Zprime_M_first_nobottom" ,"m(Z') in GeV, CatF " ,50,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && " + "N_AK4_bottom_tag_candidates > 0" + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti + "&&" +plotselection_sideband ,"1 btag"),
+    Plot(ROOT.TH1F("ABCD_CatG_Zprime_M_first_nobottom" ,"m(Z') in GeV, CatG " ,50,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && " + "N_AK4_bottom_tag_candidates > 0" + " && " + plotselection_tau32  + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti + "&&" +plotselection_sideband ,"1 btag"),
+    Plot(ROOT.TH1F("ABCD_CatH_Zprime_M_first_nobottom" ,"m(Z') in GeV, CatH " ,50,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && " + "N_AK4_bottom_tag_candidates > 0" + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti + "&&" +plotselection_sideband ,"1 btag")
+
 ]
 
 CatAList=["ABCD_CatA_Zprime_M" , "ABCD_CatA_Zprime_M_beta", "ABCD_CatA_Zprime_M_beta_first", "ABCD_CatA_Zprime_M_first"]
@@ -221,7 +251,7 @@ for i in plots:
 
 
 OnlyFirstList=len(plots)*[False]
-OnlyFirstList[plotnames.index("ABCD_CatA_Zprime_M_beta_first"):plotnames.index('ABCD_CatH_Zprime_M_first') +1 ] = len(OnlyFirstList[plotnames.index("ABCD_CatA_Zprime_M_beta_first"):plotnames.index('ABCD_CatH_Zprime_M_first') + 1 ] ) * [True]
+OnlyFirstList[plotnames.index("ABCD_CatA_Zprime_M_beta_first"):plotnames.index('ABCD_CatH_Zprime_M_first_nobottom') +1 ] = len(OnlyFirstList[plotnames.index("ABCD_CatA_Zprime_M_beta_first"):plotnames.index('ABCD_CatH_Zprime_M_first_nobottom') + 1 ] ) * [True]
 
 print OnlyFirstList, 'This is the boolean List for only first elements'
 

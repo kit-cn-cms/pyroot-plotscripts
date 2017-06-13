@@ -1176,7 +1176,8 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
     else:
         labeltexts=label
     canvases=[]
-    objects=[]   
+    objects=[]
+    histosforfile=[]
     i=0
     print labeltexts
     for listOfHistos, labeltext in zip(listOfHistoLists, labeltexts):
@@ -1187,7 +1188,8 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
             yTitle='Events'
             if normalize:
                 yTitle='normalized'
-            setupHisto(histo,sample.color,yTitle,stack)        
+            setupHisto(histo,sample.color,yTitle,stack)  
+            histosforfile.append(histo)
         stattests2D=None
         if isinstance(listOfHistos[0], ROOT.TH2):
             print "drawing 2D"
@@ -1286,6 +1288,7 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
         
     printCanvases(canvases,name)
     writeObjects(canvases,name)
+    writeObjects(histosforfile,name+'_histos')
     stattestoutfile=open("stattests_"+name+".txt","w")
     for stst in listofallstattests:
       stattestoutfile.write(' '.join(stst)+'\n')
