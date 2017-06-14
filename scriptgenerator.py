@@ -3366,7 +3366,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   f.write(script)
   f.close()
 
-def DrawParallel(ListOfPlots,name,PathToSelf):
+def DrawParallel(ListOfPlots,name,PathToSelf,opts=None):
     ListofScripts=[]
     workdir=os.getcwd()+'/workdir/'+name+'/DrawScripts/'
     # create output folders
@@ -3377,7 +3377,7 @@ def DrawParallel(ListOfPlots,name,PathToSelf):
 
     print "Creating Scripts for Parallel Drawing"
     for iPlot, Plot in enumerate(ListOfPlots):
-        ListofScripts.append(createSingleDrawScript(iPlot,Plot,PathToSelf,scriptsfolder))
+        ListofScripts.append(createSingleDrawScript(iPlot,Plot,PathToSelf,scriptsfolder,opts=None))
 
     print "Submitting ", len(ListofScripts), " DrawScripts"
     # print ListofScripts
@@ -3388,7 +3388,7 @@ def DrawParallel(ListOfPlots,name,PathToSelf):
     do_qstat(jobids)
 
 
-def createSingleDrawScript(iPlot,Plot,PathToSelf,scriptsfolder):
+def createSingleDrawScript(iPlot,Plot,PathToSelf,scriptsfolder,opts=None):
   # print "still needs to be implemented"
   cmsswpath=os.environ['CMSSW_BASE']
   script="#!/bin/bash \n"
@@ -3399,8 +3399,14 @@ def createSingleDrawScript(iPlot,Plot,PathToSelf,scriptsfolder):
     script+='export OUTFILENAME="'+"plot" +str(iPlot)+'"\n'
     script+='cd '+cmsswpath+'/src\neval `scram runtime -sh`\n'
     script+='cd - \n'
-  # script+='export NUMBEROFPLOT ='+str(iPlot)+'\n'
-  script+='python '+PathToSelf+" "+str(iPlot)+' noPlotParallel\n'
+  # Parse commandline options if available to script  
+  commandLineOptions = ''
+  for opt, arg in opts:
+    if arg != None:
+      commandLineOptions = commandLineOptions + ' ' + opt + '=' + arg
+    else:
+      commandLineOptions = commandLineOptions + ' ' + opt
+  script+='python '+PathToSelf+" -p "+str(iPlot)+ ' ' + commandLineOptions + ' noPlotParallel\n'
   # script+="mv *.pdf " +os.getcwd()+"/plot"+str(iPlot)+".pdf\n"
 
 
