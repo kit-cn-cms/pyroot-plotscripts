@@ -3401,11 +3401,12 @@ def createSingleDrawScript(iPlot,Plot,PathToSelf,scriptsfolder,opts=None):
     script+='cd - \n'
   # Parse commandline options if available to script  
   commandLineOptions = ''
-  for opt, arg in opts:
-    if arg != None:
-      commandLineOptions = commandLineOptions + ' ' + opt + '=' + arg
-    else:
-      commandLineOptions = commandLineOptions + ' ' + opt
+  if opts != None:
+    for opt, arg in opts:
+        if arg != None:
+        commandLineOptions = commandLineOptions + ' ' + opt + '=' + arg
+        else:
+        commandLineOptions = commandLineOptions + ' ' + opt
   script+='python '+PathToSelf+" -p "+str(iPlot)+ ' ' + commandLineOptions + ' noPlotParallel\n'
   # script+="mv *.pdf " +os.getcwd()+"/plot"+str(iPlot)+".pdf\n"
 
