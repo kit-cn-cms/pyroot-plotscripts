@@ -3377,7 +3377,7 @@ def DrawParallel(ListOfPlots,name,PathToSelf,opts=None):
 
     print "Creating Scripts for Parallel Drawing"
     for iPlot, Plot in enumerate(ListOfPlots):
-        ListofScripts.append(createSingleDrawScript(iPlot,Plot,PathToSelf,scriptsfolder,opts=None))
+      ListofScripts.append(createSingleDrawScript(iPlot,Plot,PathToSelf,scriptsfolder,opts=None))
 
     print "Submitting ", len(ListofScripts), " DrawScripts"
     # print ListofScripts
@@ -3403,9 +3403,9 @@ def createSingleDrawScript(iPlot,Plot,PathToSelf,scriptsfolder,opts=None):
   commandLineOptions = ''
   if opts != None:
     for opt, arg in opts:
-        if arg != None:
+      if arg != None:
         commandLineOptions = commandLineOptions + ' ' + opt + '=' + arg
-        else:
+      else:
         commandLineOptions = commandLineOptions + ' ' + opt
   script+='python '+PathToSelf+" -p "+str(iPlot)+ ' ' + commandLineOptions + ' noPlotParallel\n'
   # script+="mv *.pdf " +os.getcwd()+"/plot"+str(iPlot)+".pdf\n"
