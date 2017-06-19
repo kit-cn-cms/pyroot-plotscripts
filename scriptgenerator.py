@@ -12,7 +12,8 @@ import plotutils
 
 ROOT.gROOT.SetBatch(True)
 
-def getHead():
+
+def getHead1():
   return """
 #include "TChain.h"
 #include "TBranch.h"
@@ -26,12 +27,19 @@ def getHead():
 #include <vector>
 #include <algorithm>
 #include "TMVA/Reader.h"
-
 using namespace std;
+"""
 
+def getHead2():
+  return """
 void plot(){
   TH1F::SetDefaultSumw2();
-  
+ 
+"""
+
+
+def getHead3():
+  return """
   // open files
   TChain* chain = new TChain("MVATree");
   char* filenames = getenv ("FILENAMES");
@@ -46,20 +54,29 @@ void plot(){
   
   int DoWeights=1;
   
+  //if(processname=="SingleEl" || processname=="SingleMu"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
   if(processname=="SingleEl" || processname=="SingleMu"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
-
   string buf;
   stringstream ss(filenames); 
   while (ss >> buf){
     chain->Add(buf.c_str());
   }
   chain->SetBranchStatus("*",0);
-
   TFile* outfile=new TFile(outfilename,"RECREATE");    
-
   // initialize variables from tree
 """
 
+def loadaddobjects(additionalobjectsfromaddtionalrootfile):
+    returnscript="""   """
+    
+    for objectcode in additionalobjectsfromaddtionalrootfile:
+        returnscript+=objectcode
+    return returnscript
+
+def closeaddfiles():
+    return """
+  SFfile->Close();
+"""
 
 def initHisto(name,nbins,xmin=0,xmax=0,title_=''):
   if title_=='':
@@ -183,20 +200,24 @@ def checkLoopsize(size_of_Loop):
   return 
 
 
-def getFoot():
+
+def getFoot1():
   return """
+  outfile->cd();
   outfile->Write();
+"""
+   
+def getFoot2():
+  return """
   outfile->Close();
   std::ofstream f_nevents((string(outfilename)+".cutflow.txt").c_str());
   f_nevents << "0" << " : " << "all" << " : " << eventsAnalyzed << " : " << sumOfWeights <<endl;
   f_nevents.close();
 }
-
 int main(){
   plot();
-}
-"""
-                         
+}    
+"""                     
 
 def compileProgram(scriptname):
   p = subprocess.Popen(['root-config', '--cflags', '--libs'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -204,8 +225,8 @@ def compileProgram(scriptname):
   cmd= ['g++']+out[:-1].split(' ')+['-lTMVA']+[scriptname+'.cc','-o',scriptname]
   subprocess.call(cmd)
 
-
-def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],allsystweights=["1"],additionalvariables=[], OnlyFirstList_=None):
+def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],allsystweights=["1"],additionalvariables=[], additionalfunctions=[], additionalobjectsfromaddtionalrootfile=[],OnlyFirstList_=None):
+#def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],allsystweights=["1"],additionalvariables=[], OnlyFirstList_=None):
   #Set default Value for OnlyFirstList
   if OnlyFirstList_ == None:
     OnlyFirstList = len(plots)*[False]
@@ -215,8 +236,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 
   # collect variables
   # list varibles that should not be written to the program automatically
-  vetolist=['processname','DoWeights','TMath']
-  
+  vetolist=['processname','DoWeights','TMath','cout','for','int', 'if', 'cout', ';','<','i','i++','*=', 'temp','testea', 'anti_btag + 2', 'float','anti_loose_btag(Sideband_top_withbtag_anti_Topfirst_Bottoms_CSVv2,N_Sideband_top_withbtag_anti_Topfirst_Bottoms)','anti_loose_btag(Sideband_bottom_anti_Topfirst_Bottoms_CSVv2,N_Sideband_bottom_anti_Topfirst_Bottoms)' ]+['QCDMadgraph_Graph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M','QCDMadgraph_Graph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt','QCDMadgraph_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M','QCDMadgraph_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt','QCDPythia8_Graph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M','QCDPythia8_Graph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt','QCDPythia8_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M','QCDPythia8_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt','true', 'abs(', 'abs']+['abs( QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M)','abs( QCDPythia8_SF_SB_bottom_anti_Signal_Tops_Pt-QCDMadgraph_SF_SB_bottom_anti_Signal_Tops_Pt)']+['bbarportionweight(N_AK4_bottom_tag_candidates)','bbarportionweight(N_AK4_bottom_tag_candidates)']+['IsnoSignal_notopbtag(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)','IsnoSignal_withtopbtag(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)'] #+['bportionweightup','bportionweightdown']#+['bportionweightup','bportionweightdown']
   # initialize variables object
   variables = variablebox.Variables(vetolist)
   
@@ -240,6 +260,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   
   # get additional variables
   if len(additionalvariables)>0:
+    print 'looking for additionalvariables ',len(additionalvariables), '   ', additionalvariables
     variables.initVarsFromExprList(additionalvariables,tree)
   
   # get systematic weight variables
@@ -269,12 +290,23 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   
     variables.initVarsFromExpr(plot.selection,tree)
   
-  
-  
+  print variables
   # write program
   # start writing program
   script=""
-  script+=getHead()
+  script+=getHead1()
+  
+  # initialize additional functions
+  for f in additionalfunctions:
+    script+=(f+";\n")
+  
+  script+=getHead2()
+  # open additional objects from different root files
+  script+=loadaddobjects(additionalobjectsfromaddtionalrootfile)
+  
+  script+=getHead3()  
+  
+  
   
   # initialize all variables 
   script+=variables.initVarsProgram()
@@ -422,7 +454,9 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   script+=endLoop()
   
   # get program footer
-  script+=getFoot()
+  script+=getFoot1()
+  script+=closeaddfiles()
+  script+=getFoot2()
   
   # write program text to file
   f=open(scriptname+'.cc','w')
@@ -600,8 +634,8 @@ def check_jobs(scripts,outputs,nentries):
       failed_jobs.append(script)
   return failed_jobs
 
-
-def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[], OnlyFirstList=None):
+def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],additionalfunctions=[],additionalobjectsfromaddtionalrootfile=[], OnlyFirstList=None):
+#def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[], OnlyFirstList=None):
   workdir=os.getcwd()+'/workdir/'+name
   outputpath=workdir+'/output.root'
   
@@ -627,7 +661,8 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   
   # create c++ program
   print 'creating c++ program'
-  createProgram(programpath,plots,samples,catnames,catselections,systnames,systweights,additionalvariables, OnlyFirstList)
+  createProgram(programpath,plots,samples,catnames,catselections,systnames,systweights,additionalvariables,additionalfunctions,additionalobjectsfromaddtionalrootfile,OnlyFirstList)
+  #createProgram(programpath,plots,samples,catnames,catselections,systnames,systweights,additionalvariables, OnlyFirstList)
   if not os.path.exists(programpath+'.cc'):
     print 'could not create c++ program'
     sys.exit()
