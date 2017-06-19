@@ -210,16 +210,29 @@ systweightsGeneartorDiffPythia8tantiTopPtWithtopbtag=[
 weightsystnamesABCD=[
                     #"",
                     "_ABCD_nominal",
-                    "_ABCD_systup",
-                    "_ABCD_systdown",
+                    "_ABCD_notopbtag_systup",
+                    "_ABCD_notopbtag_systdown",
+                    "_ABCD_withtopbtag_systup",
+                    "_ABCD_withtopbtag_systdown",   
+                    "_ABCD2corrE_notopbtag_systup",
+                    "_ABCD2corrE_notopbtag_systdown",
+                    "_ABCD2corrE_withtopbtag_systup",
+                    "_ABCD2corrE_withtopbtag_systdown",                     
+
 ]
 
 systweightsABCD=[
                     #"nom:=1",
                     "ABCD_nominal:=1",
-                    "ABCD_systup:=1.05",
-                    "ABCD_systdown:=0.95",                    
-]
+                    "ABCD_notopbtag_systup:=1.03",
+                    "ABCD_notopbtag_systdown:=0.97",
+                    "ABCD_withtopbtag_systup:=1.15",
+                    "ABCD_withtopbtag_systdown:=0.85",
+                    "ABCD2corrE_notopbtag_systup:=1.01",
+                    "ABCD2corrE_notopbtag_systdown:=0.99",
+                    "ABCD2corrE_withtopbtag_systup:=1.08",
+                    "ABCD2corrE_withtopbtag_systdown:=0.92", ]
+
 
 allweightsystnames=weigthsystnamesbasic+weightsystnamesMadgraphbantiZprimeM+weightsystnamesPythia8bantiZprimeM+weightsystnamesMadgraphtantiTopPt+weightsystnamesPythia8tantiTopPt+weightsystnamesGeneratorDiffMadgraphbantiZprimeM+weightsystnamesGeneratorDiffPythia8bantiZprimeM+weightsystnamesGeneratorDiffMadgraphtantiTopPt+weightsystnamesGeneratorDiffPythia8tantiTopPt+weightsystnamesMadgraphbantiZprimeMWithtopbtag+weightsystnamesPythia8bantiZprimeMWithtopbtag+weightsystnamesGeneratorDiffMadgraphbantiZprimeMWithtopbtag+weightsystnamesGeneratorDiffPythia8bantiZprimeMWithtopbtag+weightsystnamesMadgraphtantiTopPtWithtopbtag+weightsystnamesPythia8tantiTopPtWithtopbtag+weightsystnamesGeneratorDiffMadgraphtantiTopPtWithtopbtag+weightsystnamesGeneratorDiffPythia8tantiTopPtWithtopbtag+weightsystnamesABCD
 #allweightsystnames=weightsystnamesABCD

@@ -38,32 +38,58 @@ plotselection2="(N_packedPatJetsAK8PFCHSSoftDrop>=2 && packedPatJetsAK8PFCHSSoft
 
 
 #Own Plotselections for ABCD-method
-plotselection_ABCD_general=  plotselection2 + "&& Zprimes_ABCD_M>0   &&    Ws_ABCD_t21 <  0.6    &&    100 < Tops_ABCD_MSD     &&    Tops_ABCD_MSD  < 210   "
-plotselection_ABCD_general_beta =  plotselection2 + "&& Zprimes_ABCD_M>0   &&    70 < Ws_ABCD_MSD  &&   Ws_ABCD_MSD < 100     &&    100 < Tops_ABCD_MSD     &&    Tops_ABCD_MSD  < 210   "
 
-plotselection_tau32 = " Tops_ABCD_t32 < 0.65   "
-plotselection_W_MSD =  " 70 < Ws_ABCD_MSD  &&   Ws_ABCD_MSD < 100 "
-plotselection_B_CSV = "  Bottoms_ABCD_CSV > 0.8   "
+plotselection_tau32 = " Tops_ABCD_t32 < 0.86   "
+plotselection_W_MSD =  " (70 < Ws_ABCD_MSD  &&   Ws_ABCD_MSD < 100) "
+plotselection_B_CSV = "  Bottoms_ABCD_CSV > 0.8  "
 plotselection_W_tau21 = " Ws_ABCD_t21 < 0.6 "
+plotselection_t_MSD = " (105 < Tops_ABCD_MSD && Tops_ABCD_MSD < 210) "
 plotselection_topsubjetCSVv2 = " Tops_ABCD_maxsubjetCSVv2 > 0.8 "
 
+
+
+
+plotselection_tau32_0 = " Tops_ABCD_t32[0] < 0.86   "
+plotselection_W_MSD_0 =  " (70 < Ws_ABCD_MSD[0]  &&   Ws_ABCD_MSD[0] < 100) "
+plotselection_B_CSV_0 = "  Bottoms_ABCD_CSV[0] > 0.8   "
+plotselection_W_tau21_0 = " Ws_ABCD_t21[0] < 0.6  "
+
 plotselection_tau32_anti=" Tops_ABCD_t32 > 0.86   "
-plotselection_W_MSD_anti =  " 70 > Ws_ABCD_MSD  ||   Ws_ABCD_MSD > 100 "
-plotselection_B_CSV_anti = "  Bottoms_ABCD_CSV < 0.46 "
+plotselection_W_MSD_anti =  " (70 > Ws_ABCD_MSD  ||   Ws_ABCD_MSD > 100) "
+plotselection_B_CSV_anti = "  Bottoms_ABCD_CSV < 0.8   "
 plotselection_W_tau21_anti = " Ws_ABCD_t21 > 0.6 "
+plotselection_t_MSD_anti = " (105 > Tops_ABCD_MSD || Tops_ABCD_MSD > 210) "
 plotselection_topsubjetCSVv2_anti = " Tops_ABCD_maxsubjetCSVv2 < 0.8 "
 
+plotselection_tau32_anti_0 =" Tops_ABCD_t32[0] > 0.86   "
+plotselection_W_MSD_anti_0 =  " (70 > Ws_ABCD_MSD[0]  ||   Ws_ABCD_MSD[0] > 100) "
+plotselection_B_CSV_anti_0 = "  Bottoms_ABCD_CSV[0] < 0.8   "
+plotselection_W_tau21_anti_0 = " Ws_ABCD_t21[0]  > 0.6 "
 
-plotselection_sideband = "Signal_Topfirst_Zprime_M < 0"
-plotselection_sideband_withtopbtag = "Signal_Topfirst_Zprime_M < 0"
+
+
+
+plotselection_W_MSD_one_sided =  " (70 < Ws_ABCD_MSD && Ws_ABCD_MSD < 100)"
+plotselection_W_MSD_one_sided_anti =  " (70 > Ws_ABCD_MSD && Ws_ABCD_MSD < 100)"
+
+
+plotselection_ABCD_general=  plotselection2 + "&& Zprimes_ABCD_M>0   &&    Ws_ABCD_t21 <  0.6    &&    100 < Tops_ABCD_MSD     &&    Tops_ABCD_MSD  < 210  "
+plotselection_ABCD_general_beta =  plotselection2 + "&& Zprimes_ABCD_M>0   &&    70 < Ws_ABCD_MSD  &&   Ws_ABCD_MSD < 100     &&    100 < Tops_ABCD_MSD     &&    Tops_ABCD_MSD  < 210   "
+plotselection_ABCD_general_beta2 =  plotselection2 + "&& Zprimes_ABCD_M>0   &&    70 < Ws_ABCD_MSD  &&   Ws_ABCD_MSD < 100     &&     Tops_ABCD_t32 < 0.86   "
+plotselection_ABCD_general_0 =  plotselection2 + "&& Zprimes_ABCD_M[0]>0   &&    Ws_ABCD_t21[0] >  0.6    &&    100 < Tops_ABCD_MSD[0]     &&    Tops_ABCD_MSD[0]  < 210   "
+plotselection_ABCD_general_beta_0 =   plotselection2 + "&& Zprimes_ABCD_M[0]>0   &&    70 < Ws_ABCD_MSD[0]  &&   Ws_ABCD_MSD[0] < 100     &&    100 < Tops_ABCD_MSD[0]     &&    Tops_ABCD_MSD[0]  < 210   "
+
+plotselection_ABCD_general_alt_notopbtag =  plotselection2 + " && Zprimes_ABCD_masscorrnotopbtag_M>0 && 70 < Ws_ABCD_masscorrnotopbtag_MSD && Ws_ABCD_masscorrnotopbtag_MSD < 100 && Tops_ABCD_masscorrnotopbtag_t32<0.86 "
+plotselection_ABCD_general_alt_withtopbtag =  plotselection2 + " && Zprimes_ABCD_masscorrwithtopbtag_M>0 && 70 < Ws_ABCD_masscorrwithtopbtag_MSD && Ws_ABCD_masscorrwithtopbtag_MSD < 100 && Tops_ABCD_masscorrwithtopbtag_t32<0.86 "
+
 
 
 
 plots=[
 
-        Plot(ROOT.TH1F("Signal_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Signal_Topfirst_Zprime_M",plotselection2+"&&Signal_Topfirst_Zprime_M>0 && Signal_withtopbtag_Topfirst_Zprime_M<0","1 btag"),
+        Plot(ROOT.TH1F("Signal_Topfirst_Zprime_M" ,"m(Z') in GeV",25,0,5000),"Signal_Topfirst_Zprime_M",plotselection2+"&&Signal_Topfirst_Zprime_M>0 && Signal_withtopbtag_Topfirst_Zprime_M<0","1 btag"),
         Plot(ROOT.TH1F("Signal_Topfirst_Zprime_Pt" ,"p_{T}(Z') in GeV",50,0,1000),"Signal_Topfirst_Zprime_Pt",plotselection2+"&&Signal_Topfirst_Zprime_M>0 && Signal_withtopbtag_Topfirst_Zprime_M<0","1 btag"),
-        Plot(ROOT.TH1F("Signal_Topfirst_Tprime_M" ,"m(T') in GeV",50,0,5000),"Signal_Topfirst_Tprime_M",plotselection2+"&&Signal_Topfirst_Zprime_M>0 && Signal_withtopbtag_Topfirst_Zprime_M<0","1 btag"),
+        Plot(ROOT.TH1F("Signal_Topfirst_Tprime_M" ,"m(T') in GeV",25,0,5000),"Signal_Topfirst_Tprime_M",plotselection2+"&&Signal_Topfirst_Zprime_M>0 && Signal_withtopbtag_Topfirst_Zprime_M<0","1 btag"),
         Plot(ROOT.TH1F("Signal_Topfirst_Tprime_Pt" ,"p_{T}(T') in GeV",50,0,1000),"Signal_Topfirst_Tprime_Pt",plotselection2+"&&Signal_Topfirst_Zprime_M>0 && Signal_withtopbtag_Topfirst_Zprime_M<0","1 btag"),
         Plot(ROOT.TH1F("Signal_Topfirst_Tops_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Signal_Topfirst_Tops_Pt[0]",plotselection2+"&&N_Signal_Topfirst_Tops>0 && Signal_withtopbtag_Topfirst_Zprime_M<0","1 btag"),
         Plot(ROOT.TH1F("Signal_Topfirst_Tops_Eta" ,"eta(t)",60,-3,3),"Signal_Topfirst_Tops_Eta[0]",plotselection2+"&&Signal_Topfirst_Zprime_M>0 && Signal_withtopbtag_Topfirst_Zprime_M<0","1 btag"),
@@ -77,9 +103,9 @@ plots=[
         Plot(ROOT.TH1F("Signal_Topfirst_Bottoms_Eta" ,"eta(b)",60,-3,3),"Signal_Topfirst_Bottoms_Eta[0]",plotselection2+"&&Signal_Topfirst_Zprime_M>0 && Signal_withtopbtag_Topfirst_Zprime_M<0","1 btag"),
         Plot(ROOT.TH1F("Signal_Topfirst_Bottoms_CSVv2" ,"CSVv2",40,-1,1),"Signal_Topfirst_Bottoms_CSVv2[0]",plotselection2+"&&Signal_Topfirst_Bottoms_CSVv2>-1 && Signal_withtopbtag_Topfirst_Zprime_M<0","1 btag"),
 
-        Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"&&Sideband_bottom_anti_Topfirst_Zprime_M>0 && anti_btag==1 && Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M<0","1 anti-btag"),
+        Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Zprime_M" ,"m(Z') in GeV",25,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"&&Sideband_bottom_anti_Topfirst_Zprime_M>0 && anti_btag==1 && Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M<0","1 anti-btag"),
         Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Zprime_Pt" ,"p_{T}(Z') in GeV, anti-btag",50,0,1000),"Sideband_bottom_anti_Topfirst_Zprime_Pt",plotselection2+"&&Sideband_bottom_anti_Topfirst_Zprime_Pt>0 && anti_btag==1 && Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M<0","1 anti-btag"),
-        Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Tprime_M" ,"m(T') in GeV, anti-btag",50,0,5000),"Sideband_bottom_anti_Topfirst_Tprime_M",plotselection2+"&&Sideband_bottom_anti_Topfirst_Tprime_M>0 && anti_btag==1 && Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M<0","1 anti-btag"),
+        Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Tprime_M" ,"m(T') in GeV, anti-btag",25,0,5000),"Sideband_bottom_anti_Topfirst_Tprime_M",plotselection2+"&&Sideband_bottom_anti_Topfirst_Tprime_M>0 && anti_btag==1 && Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M<0","1 anti-btag"),
         Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Tprime_Pt" ,"p_{T}(T') in GeV, anti-btag",50,0,1000),"Sideband_bottom_anti_Topfirst_Tprime_Pt",plotselection2+"&&Sideband_bottom_anti_Topfirst_Tprime_Pt>0 && anti_btag==1 && Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M<0","1 anti-btag"),
         Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Tops_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_bottom_anti_Topfirst_Tops_Pt[0]",plotselection2+"&&Sideband_bottom_anti_Topfirst_Tops_Pt[0]>0 && anti_btag==1 && Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M<0","1 btag"),
         Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Tops_Eta" ,"eta(t), anti-btag",60,-3,3),"Sideband_bottom_anti_Topfirst_Tops_Eta[0]",plotselection2+" && anti_btag==1 && Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M<0","1 btag"),
@@ -93,9 +119,9 @@ plots=[
         Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Bottoms_Eta" ,"eta(b), anti-btag",60,-3,3),"Sideband_bottom_anti_Topfirst_Bottoms_Eta[0]",plotselection2+" && anti_btag==1 && Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M<0","1 btag"),
         Plot(ROOT.TH1F("Sideband_bottom_anti_Topfirst_Bottoms_CSVv2" ,"CSVv2, anti-btag",40,-1,1),"Sideband_bottom_anti_Topfirst_Bottoms_CSVv2[0]",plotselection2+"&&Sideband_bottom_anti_Topfirst_Bottoms_CSVv2[0]>-1 && anti_btag==1 && Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M<0","1 btag"),
 
-        #Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Zprime_M" ,"m(Z') in GeV, anti-Wtag",50,0,5000),"Sideband_W_anti_Topfirst_Zprime_M",plotselection2+"&&Sideband_W_anti_Topfirst_Zprime_M>0","1 anti-Wtag"),
+        #Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Zprime_M" ,"m(Z') in GeV, anti-Wtag",25,0,5000),"Sideband_W_anti_Topfirst_Zprime_M",plotselection2+"&&Sideband_W_anti_Topfirst_Zprime_M>0","1 anti-Wtag"),
         #Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Zprime_Pt" ,"p_{T}(Z') in GeV, anti-Wtag",50,0,1000),"Sideband_W_anti_Topfirst_Zprime_Pt",plotselection2+"&&Sideband_W_anti_Topfirst_Zprime_Pt>0","1 anti-Wtag"),
-        #Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Tprime_M" ,"m(T') in GeV, anti-Wtag",50,0,5000),"Sideband_W_anti_Topfirst_Tprime_M",plotselection2+"&&Sideband_W_anti_Topfirst_Tprime_M>0","1 anti-Wtag"),
+        #Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Tprime_M" ,"m(T') in GeV, anti-Wtag",25,0,5000),"Sideband_W_anti_Topfirst_Tprime_M",plotselection2+"&&Sideband_W_anti_Topfirst_Tprime_M>0","1 anti-Wtag"),
         #Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Tprime_Pt" ,"p_{T}(T') in GeV, anti-Wtag",50,0,1000),"Sideband_W_anti_Topfirst_Tprime_Pt",plotselection2+"&&Sideband_W_anti_Topfirst_Tprime_Pt>0","1 anti-Wtag"),
         #Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Tops_Pt" ,"p_{T}(t) in GeV, anti-Wtag",50,0,2000),"Sideband_W_anti_Topfirst_Tops_Pt[0]",plotselection2+"&&Sideband_W_anti_Topfirst_Tops_Pt[0]>0","1 anti-Wtag"),
         #Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Tops_Eta" ,"eta(t), anti-Wtag",60,-3,3),"Sideband_W_anti_Topfirst_Tops_Eta[0]",plotselection2+"","1 anti-Wtag"),
@@ -109,9 +135,9 @@ plots=[
         #Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Bottoms_Eta" ,"eta(b), anti-Wtag",60,-3,3),"Sideband_W_anti_Topfirst_Bottoms_Eta[0]",plotselection2+"","1 anti-Wtag"),
         #Plot(ROOT.TH1F("Sideband_W_anti_Topfirst_Bottoms_CSVv2" ,"CSVv2, anti-Wtag",40,-1,1),"Sideband_W_anti_Topfirst_Bottoms_CSVv2[0]",plotselection2+"&&Sideband_W_anti_Topfirst_Bottoms_CSVv2[0]>-1","1 btag"),
         
-        Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_top_anti_Topfirst_Zprime_M",plotselection2+"&&Sideband_top_anti_Topfirst_Zprime_M>0","1 anti-ttag"),
+        Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Zprime_M" ,"m(Z') in GeV",25,0,5000),"Sideband_top_anti_Topfirst_Zprime_M",plotselection2+"&&Sideband_top_anti_Topfirst_Zprime_M>0","1 anti-ttag"),
         Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Zprime_Pt" ,"p_{T}(Z') in GeV, anti-ttag",50,0,1000),"Sideband_top_anti_Topfirst_Zprime_Pt",plotselection2+"&&Sideband_top_anti_Topfirst_Zprime_M>0","1 anti-ttag"),
-        Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Tprime_M" ,"m(T') in GeV, anti-ttag",50,0,5000),"Sideband_top_anti_Topfirst_Tprime_M",plotselection2+"&&Sideband_top_anti_Topfirst_Zprime_M>0","1 anti-ttag"),
+        Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Tprime_M" ,"m(T') in GeV, anti-ttag",25,0,5000),"Sideband_top_anti_Topfirst_Tprime_M",plotselection2+"&&Sideband_top_anti_Topfirst_Zprime_M>0","1 anti-ttag"),
         Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Tprime_Pt" ,"p_{T}(T') in GeV, anti-ttag",50,0,1000),"Sideband_top_anti_Topfirst_Tprime_Pt",plotselection2+"&&Sideband_top_anti_Topfirst_Zprime_M>0","1 anti-ttag"),
         Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Tops_Pt" ,"p_{T}(t) in GeV, anti-ttag",50,0,2000),"Sideband_top_anti_Topfirst_Tops_Pt[0]",plotselection2+"&&Sideband_top_anti_Topfirst_Tops_Pt[0]>0","1 anti-ttag"),
         Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Tops_Eta" ,"eta(t), anti-ttag",60,-3,3),"Sideband_top_anti_Topfirst_Tops_Eta[0]",plotselection2+"","1 anti-ttag"),
@@ -125,9 +151,9 @@ plots=[
         Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Bottoms_Eta" ,"eta(b), anti-ttag",60,-3,3),"Sideband_top_anti_Topfirst_Bottoms_Eta[0]",plotselection2+"","1 anti-ttag"),        
         Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Bottoms_CSVv2" ,"CSVv2, anti-ttag",40,-1,1),"Sideband_top_anti_Topfirst_Bottoms_CSVv2[0]",plotselection2+"&&Sideband_top_anti_Topfirst_Bottoms_CSVv2[0]>-1","1 btag"),
         
-        #Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_top_anti_MCtopmass_Topfirst_Zprime_M",plotselection2+"&&Sideband_top_anti_MCtopmass_Topfirst_Zprime_M>0","1 anti-ttag"),
+        #Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Zprime_M" ,"m(Z') in GeV",25,0,5000),"Sideband_top_anti_MCtopmass_Topfirst_Zprime_M",plotselection2+"&&Sideband_top_anti_MCtopmass_Topfirst_Zprime_M>0","1 anti-ttag"),
         #Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Zprime_Pt" ,"p_{T}(Z') in GeV, anti-ttag",50,0,1000),"Sideband_top_anti_MCtopmass_Topfirst_Zprime_Pt",plotselection2+"&&Sideband_top_anti_MCtopmass_Topfirst_Zprime_M>0","1 anti-ttag"),
-        #Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Tprime_M" ,"m(T') in GeV, anti-ttag",50,0,5000),"Sideband_top_anti_MCtopmass_Topfirst_Tprime_M",plotselection2+"&&Sideband_top_anti_MCtopmass_Topfirst_Zprime_M>0","1 anti-ttag"),
+        #Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Tprime_M" ,"m(T') in GeV, anti-ttag",25,0,5000),"Sideband_top_anti_MCtopmass_Topfirst_Tprime_M",plotselection2+"&&Sideband_top_anti_MCtopmass_Topfirst_Zprime_M>0","1 anti-ttag"),
         #Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Tprime_Pt" ,"p_{T}(T') in GeV, anti-ttag",50,0,1000),"Sideband_top_anti_MCtopmass_Topfirst_Tprime_Pt",plotselection2+"&&Sideband_top_anti_MCtopmass_Topfirst_Zprime_M>0","1 anti-ttag"),
         #Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Tops_Pt" ,"p_{T}(t) in GeV, anti-ttag",50,0,2000),"Sideband_top_anti_MCtopmass_Topfirst_Tops_Pt[0]",plotselection2+"&&Sideband_top_anti_MCtopmass_Topfirst_Tops_Pt[0]>0","1 anti-ttag"),
         #Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Tops_Eta" ,"eta(t), anti-ttag",60,-3,3),"Sideband_top_anti_MCtopmass_Topfirst_Tops_Eta[0]",plotselection2+"","1 anti-ttag"),
@@ -142,7 +168,7 @@ plots=[
         #Plot(ROOT.TH1F("Sideband_top_anti_Topfirst_Bottoms_CSVv2" ,"CSVv2, anti-ttag",40,-1,1),"Sideband_top_anti_MCtopmass_Topfirst_Bottoms_CSVv2[0]",plotselection2+"&&Sideband_top_anti_MCtopmass_Topfirst_Bottoms_CSVv2[0]>-1","1 btag"),
         
         
-        #Plot(ROOT.TH1F("SB_SF_bottom_anti_Zprime_M" ,"m(Z') in GeV, signal-anti-ttag ratio",50,0,5000),"Signal_Topfirst_Zprime_M",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
+        #Plot(ROOT.TH1F("SB_SF_bottom_anti_Zprime_M" ,"m(Z') in GeV, signal-anti-ttag ratio",25,0,5000),"Signal_Topfirst_Zprime_M",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
         #Plot(ROOT.TH1F("SB_SF_bottom_anti_Tops_Pt" ,"p_{T}(t) in GeV, signal-anti-ttag ratio",50,0,2000),"Signal_Topfirst_Tops_Pt[0]",plotselection2+"&&Signal_Topfirst_Tops_Pt[0]>0","1 btag"),
         #Plot(ROOT.TH1F("SB_SF_bottom_anti_Tops_MSD" ,"m_{SD}(t) in GeV, signal-anti-ttag ratio",60,0,300),"Signal_Topfirst_Tops_MSD[0]",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
         #Plot(ROOT.TH1F("SB_SF_bottom_anti_Tops_t32" ,"tau_{32}(t), signal-anti-ttag ratio",20,0,1),"Signal_Topfirst_Tops_t32[0]",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
@@ -151,7 +177,7 @@ plots=[
         #Plot(ROOT.TH1F("SB_SF_bottom_anti_Ws_t21" ,"tau_{21}(W), signal-anti-ttag ratio",20,0,1),"Signal_Topfirst_Ws_t21[0]",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
         #Plot(ROOT.TH1F("SB_SF_bottom_anti_Bottoms_Pt" ,"p_{T}(b) in GeV, signal-anti-ttag ratio",50,0,2000),"Signal_Topfirst_Bottoms_Pt[0]",plotselection2+"&&Signal_Topfirst_Bottoms_Pt[0]>0","1 btag"),
 
-        #Plot(ROOT.TH1F("SB_SF_W_anti_Zprime_M" ,"m(Z') in GeV, signal-anti-Wtag ratio",50,0,5000),"Signal_Topfirst_Zprime_M",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
+        #Plot(ROOT.TH1F("SB_SF_W_anti_Zprime_M" ,"m(Z') in GeV, signal-anti-Wtag ratio",25,0,5000),"Signal_Topfirst_Zprime_M",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
         #Plot(ROOT.TH1F("SB_SF_W_anti_Tops_Pt" ,"p_{T}(t) in GeV, signal-anti-Wtag ratio",50,0,2000),"Signal_Topfirst_Tops_Pt[0]",plotselection2+"&&Signal_Topfirst_Tops_Pt[0]>0","1 btag"),
         #Plot(ROOT.TH1F("SB_SF_W_anti_Tops_MSD" ,"m_{SD}(t) in GeV, signal-anti-Wtag ratio",60,0,300),"Signal_Topfirst_Tops_MSD[0]",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
         #Plot(ROOT.TH1F("SB_SF_W_anti_Tops_t32" ,"tau_{32}(t), signal-anti-Wtag ratio",20,0,1),"Signal_Topfirst_Tops_t32[0]",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
@@ -159,7 +185,7 @@ plots=[
         #Plot(ROOT.TH1F("SB_SF_W_anti_Bottoms_Pt" ,"p_{T}(b) in GeV, signal-anti-Wtag ratio",50,0,2000),"Signal_Topfirst_Bottoms_Pt[0]",plotselection2+"&&Signal_Topfirst_Bottoms_Pt[0]>0","1 btag"),
         #Plot(ROOT.TH1F("SB_SF_W_anti_Bottoms_CSVv2" ,"CSVv2, signal-anti-Wtag ratio",40,-1,1),"Signal_Topfirst_Bottoms_CSVv2[0]",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
         
-        #Plot(ROOT.TH1F("SB_SF_top_anti_Zprime_M" ,"m(Z') in GeV, signal-anti-btag ratio",50,0,5000),"Signal_Topfirst_Zprime_M",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
+        #Plot(ROOT.TH1F("SB_SF_top_anti_Zprime_M" ,"m(Z') in GeV, signal-anti-btag ratio",25,0,5000),"Signal_Topfirst_Zprime_M",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
         #Plot(ROOT.TH1F("SB_SF_top_anti_Tops_Pt" ,"p_{T}(t) in GeV, signal-anti-btag ratio",50,0,2000),"Signal_Topfirst_Tops_Pt[0]",plotselection2+"&&Signal_Topfirst_Tops_Pt[0]>0","1 btag"),
         #Plot(ROOT.TH1F("SB_SF_top_anti_Ws_Pt" ,"p_{T}(W) in GeV, signal-anti-btag ratio",50,0,2000),"Signal_Topfirst_Ws_Pt[0]",plotselection2+"&&Signal_Topfirst_Ws_Pt[0]>0","1 btag"),
         #Plot(ROOT.TH1F("SB_SF_top_anti_Ws_MSD" ,"m_{SD}(W) in GeV, signal-anti-btag ratio",60,0,300),"Signal_Topfirst_Ws_MSD[0]",plotselection2+"&&Signal_Topfirst_Zprime_M>0","1 btag"),
@@ -171,59 +197,59 @@ plots=[
 
 
 
-        #Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_bottom_anti_Topfirst_Zprime_M>0 && QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M>0 && anti_btag==1)","1 btag"),
+        #Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M" ,"m(Z') in GeV",25,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_bottom_anti_Topfirst_Zprime_M>0 && QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M>0 && anti_btag==1)","1 btag"),
         #Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_bottom_anti_Topfirst_Tops_Pt[0]",plotselection2+"*(Sideband_bottom_anti_Topfirst_Tops_Pt[0]>0 && QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt>0 && anti_btag==1)","1 btag"),
-        #Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_bottom_anti_Topfirst_Zprime_M>0 && QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt>0 && anti_btag==1)","1 btag"),
+        #Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",25,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_bottom_anti_Topfirst_Zprime_M>0 && QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt>0 && anti_btag==1)","1 btag"),
 
         #Plot(ROOT.TH1F("Signal_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_top_anti_Topfirst_Tops_Pt[0]",plotselection2+"*(Sideband_top_anti_Topfirst_Tops_Pt[0]>0 && QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt>0)","1 btag"),
-        #Plot(ROOT.TH1F("Signal_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_top_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_top_anti_Topfirst_Zprime_M>0 && QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt>0)","1 btag"),
+        #Plot(ROOT.TH1F("Signal_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",25,0,5000),"Sideband_top_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_top_anti_Topfirst_Zprime_M>0 && QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt>0)","1 btag"),
 
-        #Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDPythia8ZprimeM_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_bottom_anti_Topfirst_Zprime_M>0 && QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M>0 && anti_btag==1)","1 btag"),        
+        #Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDPythia8ZprimeM_Topfirst_Zprime_M" ,"m(Z') in GeV",25,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_bottom_anti_Topfirst_Zprime_M>0 && QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M>0 && anti_btag==1)","1 btag"),        
         #Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_bottom_anti_Topfirst_Tops_Pt[0]",plotselection2+"*(Sideband_bottom_anti_Topfirst_Tops_Pt[0]>0 && QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt>0  && anti_btag==1)","1 btag"),
-        #Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_bottom_anti_Topfirst_Zprime_M>0 && QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt>0  && anti_btag==1)","1 btag"),
+        #Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",25,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_bottom_anti_Topfirst_Zprime_M>0 && QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt>0  && anti_btag==1)","1 btag"),
                
         #Plot(ROOT.TH1F("Signal_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_top_anti_Topfirst_Tops_Pt[0]",plotselection2+"*(Sideband_top_anti_Topfirst_Tops_Pt[0]>0 && QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt>0)","1 btag"),
-        #Plot(ROOT.TH1F("Signal_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_top_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_top_anti_Topfirst_Zprime_M>0 && QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt>0)","1 btag"),
+        #Plot(ROOT.TH1F("Signal_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",25,0,5000),"Sideband_top_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_top_anti_Topfirst_Zprime_M>0 && QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt>0)","1 btag"),
         #Plot(ROOT.TH1F("Signal_SB_PredictiontantiQCDPythia8_Topfirst_W_Pt" ,"p_{T}(W) in GeV",50,0,2000),"Sideband_top_anti_Topfirst_Ws_Pt[0]",plotselection2+"*( Sideband_top_anti_Topfirst_Ws_Pt[0]>0 && QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Ws_Pt>0)","1 btag"),
 
 
 
 
 
-        Plot(ROOT.TH1F("Signal_withtopbtag_Topfirst_Zprime_M" ,"m(Z') in GeV, topbtag",50,0,5000),"Signal_withtopbtag_Topfirst_Zprime_M",plotselection2+"&&Signal_withtopbtag_Topfirst_Zprime_M>0","2 btags"),
+        Plot(ROOT.TH1F("Signal_withtopbtag_Topfirst_Zprime_M" ,"m(Z') in GeV, topbtag",25,0,5000),"Signal_withtopbtag_Topfirst_Zprime_M",plotselection2+"&&Signal_withtopbtag_Topfirst_Zprime_M>0","2 btags"),
         #Plot(ROOT.TH1F("Signal_withtopbtag_Topfirst_Tops_Pt" ,"p_{T}(t) in GeV, withtopbtag",50,0,2000),"Signal_withtopbtag_Topfirst_Tops_Pt[0]",plotselection2+"&&Signal_withtopbtag_Topfirst_Tops_Pt[0]>0","2 btag"),
         #Plot(ROOT.TH1F("Signal_withtopbtag_Topfirst_Ws_Pt" ,"p_{T}(W) in GeV, withtopbtag",50,0,2000),"Signal_withtopbtag_Topfirst_Ws_Pt[0]",plotselection2+"&&Signal_withtopbtag_Topfirst_Ws_Pt[0]>0","2 btag"),
         
-        Plot(ROOT.TH1F("Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M" ,"m(Z') in GeV, topbtag",50,0,5000),"Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M",plotselection2+"&&Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M>0 && anti_btag_withtopbtag==1","1 anti-btag, 1 topbtag"),
+        Plot(ROOT.TH1F("Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M" ,"m(Z') in GeV, topbtag",25,0,5000),"Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M",plotselection2+"&&Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M>0 && anti_btag_withtopbtag==1","1 anti-btag, 1 topbtag"),
         #Plot(ROOT.TH1F("Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt" ,"p_{T}(t) in GeV, withtopbtag and anti-btag",50,0,2000),"Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt[0]",plotselection2+"&&Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt[0]>0 && anti_btag_withtopbtag==1","1 anti-btag, 1 topbtag"),
 
-        Plot(ROOT.TH1F("Sideband_top_withbtag_anti_Topfirst_Zprime_M" ,"m(Z') in GeV, topbtag",50,0,5000),"Sideband_top_withbtag_anti_Topfirst_Zprime_M",plotselection2+"&&Sideband_top_withbtag_anti_Topfirst_Zprime_M>0","1 anti-ttag withb"),
-        #Plot(ROOT.TH1F("Sideband_top_withbtag_anti_Topfirst_Zprime_M" ,"m(Z') in GeV, topbtag",50,0,5000),"Sideband_top_withbtag_anti_MCtopmass_Topfirst_Zprime_M",plotselection2+"&&Sideband_top_withbtag_anti_MCtopmass_Topfirst_Zprime_M>0","1 anti-ttag withb"),
+        Plot(ROOT.TH1F("Sideband_top_withbtag_anti_Topfirst_Zprime_M" ,"m(Z') in GeV, topbtag",25,0,5000),"Sideband_top_withbtag_anti_Topfirst_Zprime_M",plotselection2+"&&Sideband_top_withbtag_anti_Topfirst_Zprime_M>0","1 anti-ttag withb"),
+        #Plot(ROOT.TH1F("Sideband_top_withbtag_anti_Topfirst_Zprime_M" ,"m(Z') in GeV, topbtag",25,0,5000),"Sideband_top_withbtag_anti_MCtopmass_Topfirst_Zprime_M",plotselection2+"&&Sideband_top_withbtag_anti_MCtopmass_Topfirst_Zprime_M>0","1 anti-ttag withb"),
         #Plot(ROOT.TH1F("Sideband_top_withbtag_anti_Topfirst_Tops_Pt" ,"p_{T}(t) in GeV, withtopbtag anti-ttag",50,0,2000),"Sideband_top_withbtag_anti_Topfirst_Tops_Pt[0]",plotselection2+"&&Sideband_top_withbtag_anti_Topfirst_Tops_Pt[0]>0","1 anti-ttag withb"),
         #Plot(ROOT.TH1F("Sideband_top_withbtag_anti_Topfirst_Ws_Pt" ,"p_{T}(W) in GeV, withtopbtag anti-ttag",50,0,2000),"Sideband_top_withbtag_anti_Topfirst_Ws_Pt[0]",plotselection2+"&&Sideband_top_withbtag_anti_Topfirst_Ws_Pt[0]>0","1 anti-ttag withb"),
 
-        #Plot(ROOT.TH1F("SB_SF_withtopbtag_bottom_anti_Zprime_M" ,"m(Z') in GeV, withtopbtag",50,0,5000),"Signal_withtopbtag_Topfirst_Zprime_M",plotselection2+"&&Signal_withtopbtag_Topfirst_Zprime_M>0","2 btags"),
+        #Plot(ROOT.TH1F("SB_SF_withtopbtag_bottom_anti_Zprime_M" ,"m(Z') in GeV, withtopbtag",25,0,5000),"Signal_withtopbtag_Topfirst_Zprime_M",plotselection2+"&&Signal_withtopbtag_Topfirst_Zprime_M>0","2 btags"),
         #Plot(ROOT.TH1F("SB_SF_withtopbtag_bottom_anti_Tops_Pt" ,"m(Z') in GeV, withtopbtag",50,0,2000),"Signal_withtopbtag_Topfirst_Tops_Pt[0]",plotselection2+"&&Signal_withtopbtag_Topfirst_Tops_Pt[0]>0","2 btags"),
         #Plot(ROOT.TH1F("SB_SF_withtopbtag_top_anti_Tops_Pt" ,"p_{T}(t) in GeV, withtopbtag",50,0,2000),"Signal_withtopbtag_Topfirst_Tops_Pt[0]",plotselection2+"&&Signal_withtopbtag_Topfirst_Tops_Pt[0]>0","2 btag"),
         #Plot(ROOT.TH1F("SB_SF_withtopbtag_top_anti_Ws_Pt" ,"p_{T}(W) in GeV, withtopbtag",50,0,2000),"Signal_withtopbtag_Topfirst_Ws_Pt[0]",plotselection2+"&&Signal_withtopbtag_Topfirst_Ws_Pt[0]>0","2 btag"),
 
 
 
-        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M>0 && QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M>0 && anti_btag_withtopbtag==1)","1 btag"),
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M" ,"m(Z') in GeV",25,0,5000),"Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M>0 && QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M>0 && anti_btag_withtopbtag==1)","1 btag"),
         #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt[0]",plotselection2+"*(Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt[0]>0 && QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt>0 && anti_btag_withtopbtag==1)","1 btag"),
-        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M>0 && QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt>0 && anti_btag_withtopbtag==1)","1 btag"),
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",25,0,5000),"Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M>0 && QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt>0 && anti_btag_withtopbtag==1)","1 btag"),
 
         #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_top_withbtag_anti_Topfirst_Tops_Pt[0]",plotselection2+"*(Sideband_top_withbtag_anti_Topfirst_Tops_Pt[0]>0 && QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt>0)","1 btag"),
-        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_top_withbtag_anti_Topfirst_Zprime_M",plotselection2+"*(QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt>0 && Sideband_top_withbtag_anti_Topfirst_Zprime_M>0)","1 btag"),
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",25,0,5000),"Sideband_top_withbtag_anti_Topfirst_Zprime_M",plotselection2+"*(QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt>0 && Sideband_top_withbtag_anti_Topfirst_Zprime_M>0)","1 btag"),
         #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictiontantiQCDMadgraph_Topfirst_W_Pt" ,"p_{T}(W) in GeV",50,0,2000),"Sideband_top_withbtag_anti_Topfirst_Ws_Pt[0]",plotselection2+"*( Sideband_top_withbtag_anti_Topfirst_Ws_Pt[0]>0 && QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt>0)","1 btag"),
 
 
-        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDPythia8ZprimeM_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M>0 && anti_btag_withtopbtag==1 && QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M>0)","1 btag"),        
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDPythia8ZprimeM_Topfirst_Zprime_M" ,"m(Z') in GeV",25,0,5000),"Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M>0 && anti_btag_withtopbtag==1 && QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M>0)","1 btag"),        
         #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt[0]",plotselection2+"*(Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt[0]>0 && anti_btag_withtopbtag==1 && QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt>0)","1 btag"),
-        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M>0 && anti_btag_withtopbtag==1 && QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt>0)","1 btag"),
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",25,0,5000),"Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M>0 && anti_btag_withtopbtag==1 && QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt>0)","1 btag"),
                
         #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_top_withbtag_anti_Topfirst_Tops_Pt[0]",plotselection2+"*(Sideband_top_withbtag_anti_Topfirst_Tops_Pt[0]>0 && QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt>0)","1 btag"),
-        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_top_withbtag_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_top_withbtag_anti_Topfirst_Zprime_M>0 && QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt>0)","1 btag"),
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",25,0,5000),"Sideband_top_withbtag_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_top_withbtag_anti_Topfirst_Zprime_M>0 && QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt>0)","1 btag"),
         #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictiontantiQCDPythia8_Topfirst_W_Pt" ,"p_{T}(W) in GeV",50,0,2000),"Sideband_top_withbtag_anti_Topfirst_Ws_Pt[0]",plotselection2+"*( Sideband_top_withbtag_anti_Topfirst_Ws_Pt[0]>0 && QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt>0)","1 btag"),
 
 
@@ -278,40 +304,40 @@ plots=[
         #TwoDimPlot(ROOT.TH2F("ABCD_top_MSD_vs_Bottom_CSV_v2" ,"m_{SD}(t) VS CSV_v2(b)",30,0,300,20,0,1),"Tops_ABCD_MSD","Bottoms_ABCD_CSV",plotselection2+"&&Tops_ABCD_MSD>0&&Bottoms_ABCD_CSV>0","1 btag"),
         #TwoDimPlot(ROOT.TH2F("ABCD_W_MSD_vs_W_tau21" ,"m_{SD}(W) VS tau_{21}(W)",30,0,300,20,0,1),"Ws_ABCD_MSD","Ws_ABCD_t21",plotselection2+"&&Ws_ABCD_MSD>0&&Ws_ABCD_t21>0","1 btag"),
         #TwoDimPlot(ROOT.TH2F("ABCD_W_MSD_vs_Bottom_CSV_v2" ,"m_{SD}(W) VS CSV_v2(b)",30,0,300,20,0,1),"Ws_ABCD_MSD","Bottoms_ABCD_CSV",plotselection2+"&&Ws_ABCD_MSD>0&&Bottoms_ABCD_CSV>0","1 btag"),
-        #TwoDimPlot(ROOT.TH2F("Signal_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M_VS_Sideband_bottom_anti_Topfirst_Zprime_M" ,"",50,-1,2,50,0,5000),"QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M","Sideband_bottom_anti_Topfirst_Zprime_M","","1 btag"),
+        #TwoDimPlot(ROOT.TH2F("Signal_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M_VS_Sideband_bottom_anti_Topfirst_Zprime_M" ,"",50,-1,2,25,0,5000),"QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M","Sideband_bottom_anti_Topfirst_Zprime_M","","1 btag"),
 
 
 
 
-        #Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_bottom_anti_Topfirst_Zprime_M>0 && QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M>0 && anti_btag==1)"+"* QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M","1 btag"),
+        #Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M" ,"m(Z') in GeV",25,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_bottom_anti_Topfirst_Zprime_M>0 && QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M>0 && anti_btag==1)"+"* QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M","1 btag"),
         #Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_bottom_anti_Topfirst_Tops_Pt[0]",plotselection2+"*(Sideband_bottom_anti_Topfirst_Tops_Pt[0]>0 && QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt>0 && anti_btag==1)"+"* QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt","1 btag"),
-        #Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_bottom_anti_Topfirst_Zprime_M>0 && QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt>0 && anti_btag==1)"+"* QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt","1 btag"),
+        #Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",25,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_bottom_anti_Topfirst_Zprime_M>0 && QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt>0 && anti_btag==1)"+"* QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt","1 btag"),
 
         #Plot(ROOT.TH1F("Signal_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_top_anti_Topfirst_Tops_Pt[0]",plotselection2+"*(Sideband_top_anti_Topfirst_Tops_Pt[0]>0 && QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt>0)"+"* QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt","1 btag"),
-        #Plot(ROOT.TH1F("Signal_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_top_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_top_anti_Topfirst_Zprime_M>0 && QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt>0)"+"* QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt","1 btag"),
+        #Plot(ROOT.TH1F("Signal_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",25,0,5000),"Sideband_top_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_top_anti_Topfirst_Zprime_M>0 && QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt>0)"+"* QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt","1 btag"),
         ##Plot(ROOT.TH1F("Signal_SB_PredictiontantiQCDMadgraph_Topfirst_W_Pt" ,"p_{T}(W) in GeV",50,0,2000),"Sideband_top_anti_Topfirst_Ws_Pt[0]",plotselection2+"*( Sideband_top_anti_Topfirst_Ws_Pt[0]>0 && QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt>0)"+"* QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt","1 btag"),
 
         Plot(ROOT.TH1F("QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,3),"QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M",plotselection2+"*(QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M>0)","1 btag"),
         Plot(ROOT.TH1F("QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt" ,"pT(t) in GeV",50,0,3),"QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt",plotselection2+"*(QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt>0)","1 btag"),
 
-        #Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDPythia8ZprimeM_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_bottom_anti_Topfirst_Zprime_M>0 && QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M>0 && anti_btag==1)"+"* QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M","1 btag"),        
+        #Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDPythia8ZprimeM_Topfirst_Zprime_M" ,"m(Z') in GeV",25,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_bottom_anti_Topfirst_Zprime_M>0 && QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M>0 && anti_btag==1)"+"* QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M","1 btag"),        
         #Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_bottom_anti_Topfirst_Tops_Pt[0]",plotselection2+"*(Sideband_bottom_anti_Topfirst_Tops_Pt[0]>0 && QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt>0  && anti_btag==1)"+"* QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt","1 btag"),
-        #Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_bottom_anti_Topfirst_Zprime_M>0 && QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt>0  && anti_btag==1)"+"* QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt","1 btag"),
+        #Plot(ROOT.TH1F("Signal_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",25,0,5000),"Sideband_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_bottom_anti_Topfirst_Zprime_M>0 && QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt>0  && anti_btag==1)"+"* QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt","1 btag"),
                
         #Plot(ROOT.TH1F("Signal_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_top_anti_Topfirst_Tops_Pt[0]",plotselection2+"*(Sideband_top_anti_Topfirst_Tops_Pt[0]>0 && QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt>0)"+"* QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt","1 btag"),
-        #Plot(ROOT.TH1F("Signal_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_top_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_top_anti_Topfirst_Zprime_M>0 && QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt>0)"+"* QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt","1 btag"),
+        #Plot(ROOT.TH1F("Signal_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",25,0,5000),"Sideband_top_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_top_anti_Topfirst_Zprime_M>0 && QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt>0)"+"* QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt","1 btag"),
         #Plot(ROOT.TH1F("Signal_SB_PredictiontantiQCDPythia8_Topfirst_W_Pt" ,"p_{T}(W) in GeV",50,0,2000),"Sideband_top_anti_Topfirst_Ws_Pt[0]",plotselection2+"*( Sideband_top_anti_Topfirst_Ws_Pt[0]>0 && QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Ws_Pt>0)"+"* QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Ws_Pt","1 btag"),
 
         Plot(ROOT.TH1F("QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,3),"QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M",plotselection2+"*(QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M>0 && anti_btag==1)","1 btag"),
         Plot(ROOT.TH1F("QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt" ,"pT(t) in GeV",50,0,3),"QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt",plotselection2+"*(QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt>0 && anti_btag==1)","1 btag"),
 
 
-        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M>0 && QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M>0 && anti_btag_withtopbtag==1)"+"* QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M","1 btag"),
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDMadgraphZprimeM_Topfirst_Zprime_M" ,"m(Z') in GeV",25,0,5000),"Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M>0 && QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M>0 && anti_btag_withtopbtag==1)"+"* QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M","1 btag"),
         #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt[0]",plotselection2+"*(Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt[0]>0 && QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt>0 && anti_btag_withtopbtag==1)"+"* QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt * ","1 btag"),
-        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M>0 && QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt>0 && anti_btag_withtopbtag==1)"+"* QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt","1 btag"),
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDMadgraphTopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",25,0,5000),"Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M>0 && QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt>0 && anti_btag_withtopbtag==1)"+"* QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt","1 btag"),
 
         #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_top_withbtag_anti_Topfirst_Tops_Pt[0]",plotselection2+"*(Sideband_top_withbtag_anti_Topfirst_Tops_Pt[0]>0 && QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt>0)"+"* QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt","1 btag"),
-        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_top_withbtag_anti_Topfirst_Zprime_M",plotselection2+"*(QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt[0]>0 && Sideband_top_withbtag_anti_Topfirst_Zprime_M>0)"+"* QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt","1 btag"),
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictiontantiQCDMadgraphTopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",25,0,5000),"Sideband_top_withbtag_anti_Topfirst_Zprime_M",plotselection2+"*(QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt[0]>0 && Sideband_top_withbtag_anti_Topfirst_Zprime_M>0)"+"* QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt","1 btag"),
         #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictiontantiQCDMadgraph_Topfirst_W_Pt" ,"p_{T}(W) in GeV",50,0,2000),"Sideband_top_withbtag_anti_Topfirst_Ws_Pt[0]",plotselection2+"*( Sideband_top_withbtag_anti_Topfirst_Ws_Pt[0]>0 && QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt>0)"+"* QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt","1 btag"),
 
 
@@ -320,12 +346,12 @@ plots=[
         #Plot(ROOT.TH1F("QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt" ,"m(Z') in GeV",50,0,3),"QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt",plotselection2+"*(QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt>0)","1 btag"),
 
 
-        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDPythia8ZprimeM_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M>0 && anti_btag_withtopbtag==1 && QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M>0)"+"* QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M","1 btag"),        
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDPythia8ZprimeM_Topfirst_Zprime_M" ,"m(Z') in GeV",25,0,5000),"Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M>0 && anti_btag_withtopbtag==1 && QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M>0)"+"* QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M","1 btag"),        
         #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt[0]",plotselection2+"*(Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt[0]>0 && anti_btag_withtopbtag==1 && QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt>0)"+"* QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt","1 btag"),
-        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M>0 && anti_btag_withtopbtag==1 && QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt>0)"+"* QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt","1 btag"),
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictionbantiQCDPythia8TopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",25,0,5000),"Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M>0 && anti_btag_withtopbtag==1 && QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt>0)"+"* QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt","1 btag"),
                
         #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Top_Pt" ,"p_{T}(t) in GeV",50,0,2000),"Sideband_top_withbtag_anti_Topfirst_Tops_Pt[0]",plotselection2+"*(Sideband_top_withbtag_anti_Topfirst_Tops_Pt[0]>0 && QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt>0)"+"* QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt","1 btag"),
-        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,5000),"Sideband_top_withbtag_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_top_withbtag_anti_Topfirst_Zprime_M>0 && QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt>0)"+"* QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt","1 btag"),
+        #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictiontantiQCDPythia8TopPt_Topfirst_Zprime_M" ,"m(Z') in GeV",25,0,5000),"Sideband_top_withbtag_anti_Topfirst_Zprime_M",plotselection2+"*(Sideband_top_withbtag_anti_Topfirst_Zprime_M>0 && QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt>0)"+"* QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt","1 btag"),
         #Plot(ROOT.TH1F("Signal_withtopbtag_SB_PredictiontantiQCDPythia8_Topfirst_W_Pt" ,"p_{T}(W) in GeV",50,0,2000),"Sideband_top_withbtag_anti_Topfirst_Ws_Pt[0]",plotselection2+"*( Sideband_top_withbtag_anti_Topfirst_Ws_Pt[0]>0 && QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt>0)"+"* QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt","1 btag"),
 
         #Plot(ROOT.TH1F("QCDPythia8_SF_SB_bottom_anti_Signal_withtopbtag_Topfirst_Zprime_M" ,"m(Z') in GeV",50,0,3),"QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M",plotselection2+"*(QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M>0)","1 btag"),
@@ -338,29 +364,48 @@ plots=[
     #doing only first element
     #beta (tau21)
 
-        Plot(ROOT.TH1F("ABCD_CatA_Zprime_M_beta_first" ,"m(Z') in GeV, CatA " ,50,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21, "1 btag"),
-        Plot(ROOT.TH1F("ABCD_CatB_Zprime_M_beta_first" ,"m(Z') in GeV, CatB " ,50,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21 + "&&" +plotselection_sideband ,"1 btag"),
-        Plot(ROOT.TH1F("ABCD_CatC_Zprime_M_beta_first" ,"m(Z') in GeV, CatC " ,50,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21 + "&&" +plotselection_sideband ,"1 btag"),
-        Plot(ROOT.TH1F("ABCD_CatD_Zprime_M_beta_first" ,"m(Z') in GeV, CatD " ,50,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21 + "&&" +plotselection_sideband ,"1 btag"),
+        Plot(ROOT.TH1F("ABCD_notopbtag_CatA_Zprime_M_beta_first" ,"m(Z') in GeV, CatA " ,25,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && "  + plotselection_topsubjetCSVv2_anti + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21, "1 btag"),
+        Plot(ROOT.TH1F("ABCD_notopbtag_CatB_Zprime_M_beta_first" ,"m(Z') in GeV, CatB " ,25,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && "  + plotselection_topsubjetCSVv2_anti + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21 + "&&" + "IsnoSignalnotopbtag" ,"1 btag"),
+        Plot(ROOT.TH1F("ABCD_notopbtag_CatC_Zprime_M_beta_first" ,"m(Z') in GeV, CatC " ,25,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && "  + plotselection_topsubjetCSVv2_anti + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21 + "&&" + "IsnoSignalnotopbtag" ,"1 btag"),
+        Plot(ROOT.TH1F("ABCD_notopbtag_CatD_Zprime_M_beta_first" ,"m(Z') in GeV, CatD " ,25,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && "  + plotselection_topsubjetCSVv2_anti + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21 + "&&" + "IsnoSignalnotopbtag" ,"1 btag"),
+        
+        Plot(ROOT.TH1F("ABCD_notopbtag_CatE_Zprime_M_beta_first" ,"m(Z') in GeV, CatE " ,25,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && "  + plotselection_topsubjetCSVv2_anti + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti + "&&" + "IsnoSignalnotopbtag" ,"2 btag"),
+        Plot(ROOT.TH1F("ABCD_notopbtag_CatF_Zprime_M_beta_first" ,"m(Z') in GeV, CatF " ,25,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && "  + plotselection_topsubjetCSVv2_anti + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti + "&&" + "IsnoSignalnotopbtag" ,"2 btag"),
+        Plot(ROOT.TH1F("ABCD_notopbtag_CatG_Zprime_M_beta_first" ,"m(Z') in GeV, CatG " ,25,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && "  + plotselection_topsubjetCSVv2_anti + " && " + plotselection_tau32  + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti + "&&" + "IsnoSignalnotopbtag" ,"2 btag"),
+        Plot(ROOT.TH1F("ABCD_notopbtag_CatH_Zprime_M_beta_first" ,"m(Z') in GeV, CatH " ,25,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && "  + plotselection_topsubjetCSVv2_anti + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti + "&&" + "IsnoSignalnotopbtag" ,"2 btag") ,
+
+        Plot(ROOT.TH1F("ABCD_withtopbtag_CatA_Zprime_M_beta_first" ,"m(Z') in GeV, CatA " ,25,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && "  + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21, "2 btag"),
+        Plot(ROOT.TH1F("ABCD_withtopbtag_CatB_Zprime_M_beta_first" ,"m(Z') in GeV, CatB " ,25,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && "  + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21 + "&&" + "IsnoSignalwithtopbtag" ,"2 btag"),
+        Plot(ROOT.TH1F("ABCD_withtopbtag_CatC_Zprime_M_beta_first" ,"m(Z') in GeV, CatC " ,25,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && "  + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21 + "&&" + "IsnoSignalwithtopbtag" ,"2 btag"),
+        Plot(ROOT.TH1F("ABCD_withtopbtag_CatD_Zprime_M_beta_first" ,"m(Z') in GeV, CatD " ,25,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && "  + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21 + "&&" + "IsnoSignalwithtopbtag" ,"2 btag"),
+
+        Plot(ROOT.TH1F("ABCD_withtopbtag_CatE_Zprime_M_beta_first" ,"m(Z') in GeV, CatE " ,25,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && "  + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti + "&&" + "IsnoSignalwithtopbtag" ,"2 btag"),
+        Plot(ROOT.TH1F("ABCD_withtopbtag_CatF_Zprime_M_beta_first" ,"m(Z') in GeV, CatF " ,25,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && "  + plotselection_topsubjetCSVv2+ " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti + "&&" + "IsnoSignalwithtopbtag" ,"2 btag"),
+        Plot(ROOT.TH1F("ABCD_withtopbtag_CatG_Zprime_M_beta_first" ,"m(Z') in GeV, CatG " ,25,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && "  + plotselection_topsubjetCSVv2+ " && " + plotselection_tau32  + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti + "&&" + "IsnoSignalwithtopbtag" ,"2 btag"),
+        Plot(ROOT.TH1F("ABCD_withtopbtag_CatH_Zprime_M_beta_first" ,"m(Z') in GeV, CatH " ,25,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && "  + plotselection_topsubjetCSVv2+ " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti + "&&" + "IsnoSignalwithtopbtag" ,"2 btag") ,
 
 
-        Plot(ROOT.TH1F("ABCD_CatE_Zprime_M_beta_first" ,"m(Z') in GeV, CatE " ,50,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti + "&&" +plotselection_sideband ,"1 btag"),
-        Plot(ROOT.TH1F("ABCD_CatF_Zprime_M_beta_first" ,"m(Z') in GeV, CatF " ,50,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti + "&&" +plotselection_sideband ,"1 btag"),
-        Plot(ROOT.TH1F("ABCD_CatG_Zprime_M_beta_first" ,"m(Z') in GeV, CatG " ,50,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && " + plotselection_tau32  + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti + "&&" +plotselection_sideband ,"1 btag"),
-        Plot(ROOT.TH1F("ABCD_CatH_Zprime_M_beta_first" ,"m(Z') in GeV, CatH " ,50,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti + "&&" +plotselection_sideband ,"1 btag") ,
+        Plot(ROOT.TH1F("ABCD2_notopbtag_CatA_Zprime_M_beta_first" ,"m(Z') in GeV, CatA " ,25,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta2 + " && " + plotselection_t_MSD + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21, "1 btag"),
+        Plot(ROOT.TH1F("ABCD2_notopbtag_CatB_Zprime_M_beta_first" ,"m(Z') in GeV, CatB " ,25,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta2 + " && " + plotselection_t_MSD_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21 + "&&" + "IsnoSignalnotopbtag" ,"1 btag"),
+        Plot(ROOT.TH1F("ABCD2_notopbtag_CatC_Zprime_M_beta_first" ,"m(Z') in GeV, CatC " ,25,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta2 + " && " + plotselection_t_MSD + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21 + "&&" + "IsnoSignalnotopbtag" ,"1 btag"),
+        Plot(ROOT.TH1F("ABCD2_notopbtag_CatD_Zprime_M_beta_first" ,"m(Z') in GeV, CatD " ,25,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta2 + " && " + plotselection_t_MSD_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21 + "&&" + "IsnoSignalnotopbtag" ,"1 btag"),
+
+        Plot(ROOT.TH1F("ABCD2_notopbtag_CatE_Zprime_M_beta_first" ,"m(Z') in GeV, CatE " ,25,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta2 + " && " + plotselection_t_MSD + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti + "&&" + "IsnoSignalnotopbtag" ,"1 btag"),
+        Plot(ROOT.TH1F("ABCD2_notopbtag_CatF_Zprime_M_beta_first" ,"m(Z') in GeV, CatF " ,25,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta2 + " && " + plotselection_t_MSD_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti + "&&" + "IsnoSignalnotopbtag" ,"1 btag"),
+        Plot(ROOT.TH1F("ABCD2_notopbtag_CatG_Zprime_M_beta_first" ,"m(Z') in GeV, CatG " ,25,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta2 + " && " + plotselection_t_MSD  + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti + "&&" + "IsnoSignalnotopbtag" ,"1 btag"),
+        Plot(ROOT.TH1F("ABCD2_notopbtag_CatH_Zprime_M_beta_first" ,"m(Z') in GeV, CatH " ,25,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta2 + " && " + plotselection_t_MSD_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti + "&&" + "IsnoSignalnotopbtag" ,"1 btag") ,
+
+        Plot(ROOT.TH1F("ABCD2_withtopbtag_CatA_Zprime_M_beta_first" ,"m(Z') in GeV, CatA " ,25,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta2 + " && "  + plotselection_topsubjetCSVv2 + " && " + plotselection_t_MSD + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21, "2 btag"),
+        Plot(ROOT.TH1F("ABCD2_withtopbtag_CatB_Zprime_M_beta_first" ,"m(Z') in GeV, CatB " ,25,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta2 + " && "  + plotselection_topsubjetCSVv2 + " && " + plotselection_t_MSD_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21 + "&&" + "IsnoSignalwithtopbtag" ,"2 btag"),
+        Plot(ROOT.TH1F("ABCD2_withtopbtag_CatC_Zprime_M_beta_first" ,"m(Z') in GeV, CatC " ,25,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta2 + " && "  + plotselection_topsubjetCSVv2 + " && " + plotselection_t_MSD + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21 + "&&" + "IsnoSignalwithtopbtag" ,"2 btag"),
+        Plot(ROOT.TH1F("ABCD2_withtopbtag_CatD_Zprime_M_beta_first" ,"m(Z') in GeV, CatD " ,25,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta2 + " && "  + plotselection_topsubjetCSVv2 + " && " + plotselection_t_MSD_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21 + "&&" + "IsnoSignalwithtopbtag" ,"2 btag"),
+
+        Plot(ROOT.TH1F("ABCD2_withtopbtag_CatE_Zprime_M_beta_first" ,"m(Z') in GeV, CatE " ,25,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta2 + " && "  + plotselection_topsubjetCSVv2_anti + " && " + plotselection_t_MSD + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti + "&&" + "IsnoSignalwithtopbtag" ,"2 btag"),
+        Plot(ROOT.TH1F("ABCD2_withtopbtag_CatF_Zprime_M_beta_first" ,"m(Z') in GeV, CatF " ,25,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta2 + " && "  + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_t_MSD_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti + "&&" + "IsnoSignalwithtopbtag" ,"2 btag"),
+        Plot(ROOT.TH1F("ABCD2_withtopbtag_CatG_Zprime_M_beta_first" ,"m(Z') in GeV, CatG " ,25,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta2 + " && "  + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_t_MSD  + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti + "&&" + "IsnoSignalwithtopbtag" ,"2 btag"),
+        Plot(ROOT.TH1F("ABCD2_withtopbtag_CatH_Zprime_M_beta_first" ,"m(Z') in GeV, CatH " ,25,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta2 + " && "  + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_t_MSD_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti + "&&" + "IsnoSignalwithtopbtag" ,"2 btag") ,
 
 
-
-        Plot(ROOT.TH1F("ABCD_withtopbtag_CatA_Zprime_M_beta_first" ,"m(Z') in GeV, CatA " ,50,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && "  + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21, "1 btag"),
-        Plot(ROOT.TH1F("ABCD_withtopbtag_CatB_Zprime_M_beta_first" ,"m(Z') in GeV, CatB " ,50,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && "  + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21 + "&&" +plotselection_sideband ,"1 btag"),
-        Plot(ROOT.TH1F("ABCD_withtopbtag_CatC_Zprime_M_beta_first" ,"m(Z') in GeV, CatC " ,50,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && "  + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21 + "&&" +plotselection_sideband ,"1 btag"),
-        Plot(ROOT.TH1F("ABCD_withtopbtag_CatD_Zprime_M_beta_first" ,"m(Z') in GeV, CatD " ,50,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && "  + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21 + "&&" +plotselection_sideband ,"1 btag"),
-
-
-        Plot(ROOT.TH1F("ABCD_withtopbtag_CatE_Zprime_M_beta_first" ,"m(Z') in GeV, CatE " ,50,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && "  + plotselection_topsubjetCSVv2_anti + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti + "&&" +plotselection_sideband ,"1 btag"),
-        Plot(ROOT.TH1F("ABCD_withtopbtag_CatF_Zprime_M_beta_first" ,"m(Z') in GeV, CatF " ,50,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && "  + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti + "&&" +plotselection_sideband ,"1 btag"),
-        Plot(ROOT.TH1F("ABCD_withtopbtag_CatG_Zprime_M_beta_first" ,"m(Z') in GeV, CatG " ,50,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && "  + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32  + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti + "&&" +plotselection_sideband ,"1 btag"),
-        Plot(ROOT.TH1F("ABCD_withtopbtag_CatH_Zprime_M_beta_first" ,"m(Z') in GeV, CatH " ,50,0,5000),"Zprimes_ABCD_M",    plotselection_ABCD_general_beta + " && "  + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti + "&&" +plotselection_sideband ,"1 btag") ,
 ]
 
 
@@ -372,7 +417,7 @@ for i in plots:
     plotnames.append(i.name)
 
 OnlyFirstList=len(plots)*[False]
-OnlyFirstList[plotnames.index("ABCD_CatA_Zprime_M_beta_first"):plotnames.index('ABCD_withtopbtag_CatH_Zprime_M_beta_first') +1 ] = len(OnlyFirstList[plotnames.index("ABCD_CatA_Zprime_M_beta_first"):plotnames.index('ABCD_withtopbtag_CatH_Zprime_M_beta_first') + 1 ] ) * [True]
+OnlyFirstList[plotnames.index("ABCD_notopbtag_CatA_Zprime_M_beta_first"):plotnames.index('ABCD2_withtopbtag_CatH_Zprime_M_beta_first') +1 ] = len(OnlyFirstList[plotnames.index("ABCD_notopbtag_CatA_Zprime_M_beta_first"):plotnames.index('ABCD2_withtopbtag_CatH_Zprime_M_beta_first') + 1 ] ) * [True]
 
 print OnlyFirstList, 'This is the boolean List for only first elements'
 
