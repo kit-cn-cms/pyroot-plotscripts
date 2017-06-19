@@ -142,13 +142,16 @@ else:
     workdir=os.getcwd()+'/workdir/'+name
     outputpath=workdir+'/output.root'
 
+didBinningOptimization=False
 #optimize the binnin
 if doDrawParallel==False or len(sys.argv) == 1 :                      #if some option is given old systematic histo file will be used      
-    optimizeBinning(outputpath,name+'/'+name+'_optBinning.root',name+'/'+name+'_BinningConfig.txt', signalsamples=[samples[0]], backgroundsamples=samples[9:],additionalSamples=samples[1:9], plots=plots, systnames=weightSystNames+otherSystNames+PSSystNames, minBkgPerBin=2.0, optMode="SoverB",considerStatUnc=False, maxBins=20, minBins=2,verbosity=2)
-
+    if askYesNo("optimized the histogram binning"):
+      optimizeBinning(outputpath,name+'/'+name+'_optBinning.root',name+'/'+name+'_BinningConfig.txt', signalsamples=[samples[0]], backgroundsamples=samples[9:],additionalSamples=samples[1:9], plots=plots, systnames=weightSystNames+otherSystNames+PSSystNames, minBkgPerBin=2.0, optMode="SoverB",considerStatUnc=False, maxBins=20, minBins=2,verbosity=2)
+      didBinningOptimization=True
+      
 if doDrawParallel==False or len(sys.argv) == 1 :                      #if some option is given old systematic histo file will be used      
     # rename output histos and save in one file
-    if not os.path.exists(name+'/'+name+'_limitInput.root') or not askYesNo('reuse renamed histofile?'):
+    if not os.path.exists(name+'/'+name+'_limitInput.root') or not askYesNo('reuse renamed histofile?') or didBinningOptimization==True:
       print "does syst file exist?", os.path.exists(name+'/'+name+'_limitInput.root')
       renameHistos(name+'/'+name+'_optBinning.root',name+'/'+name+'_limitInput.root',allsystnames,True,False)
     addPseudoData(name+'/'+name+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)    

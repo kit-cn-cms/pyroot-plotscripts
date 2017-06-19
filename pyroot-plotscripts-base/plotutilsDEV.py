@@ -1201,6 +1201,7 @@ def optimizeBinning(infname,outfname,binningSaveFile="",signalsamples=[], backgr
       theSignalClone=None
       theBkgClone=None
       #add signal samples
+      print "getting ", signalsamples[0].nick+'_'+plot.name
       s0=infile.Get(signalsamples[0].nick+'_'+plot.name)
       theobjectlist.append(s0)
       theSignalClone=s0.Clone('signalClone_'+signalsamples[0].nick+'_'+plot.name)
@@ -1625,6 +1626,7 @@ def writeListOfROCs(graphs,names,colors,filename,printInts=True,logscale=False,r
         graph.SetMarkerStyle(20)
     l.Draw('same')
     printCanvases([c],filename)
+    printCanvasesPNG([c],filename)
     writeObjects([c],filename)
 
 
