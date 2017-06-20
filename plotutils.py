@@ -3174,7 +3174,10 @@ def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='d
     
     
 def fitFunctionToHistogrammwitherrorband(histo, fitoption="[0]+[1]*log(x)+[2]*log(x)*log(x)",autoXrange=False):
-    xmax=histo.GetNbinsX()*histo.GetBinWidth(histo.GetNbinsX())
+    xmax=0.0
+    for i in range(histo.GetNbinsX()):
+        xmax+=histo.GetBinWidth(i)
+    #xmax=histo.GetNbinsX()*histo.GetBinWidth(histo.GetNbinsX())
     xmin=0.0
     ROOT.gStyle.SetOptFit(1111)
     if autoXrange:
@@ -4019,7 +4022,35 @@ def scalCatAclosurewithCatEclosure(histo1, histo2):
     
     
     
-#def rebintovarbins(lol):
-    #for l in lol:
-        #for histo in l:
-            #histo=histo.Rebin(20,histo.GetName(),)
+def rebintovarbins(lol):
+    lolreturn=[]
+    for l in lol:
+        lreturn=[]
+        for histo in l:
+            if 'Tprime_M_' in histo.GetName():
+                print 'Nbins histo before TprimeM ', histo.GetNbinsX()
+                xbins= array.array('d',[0,500,550,600,650,700,750,800,850,900,950,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2500])
+                historeturn=histo.Rebin(len(xbins)-1,histo.GetName(),xbins)
+                print 'Nbins histo after TprimeM ', historeturn.GetNbinsX()
+                lreturn.append(historeturn)
+            elif 'Zprime_M_' in histo.GetName():
+                print 'Nbins histo before ZprimeM ', histo.GetNbinsX()
+                xbins= array.array('d',[0,1000,1100,1200,1300,1400,1500,1650,1800,1850,2000,2200,2400,2500,2750,3000,3250,3500,3750,4000,4500,5000])
+                historeturn=histo.Rebin(len(xbins)-1,histo.GetName(),xbins)
+                print 'Nbins histo after ZprimeM ', historeturn.GetNbinsX()
+                lreturn.append(historeturn)
+            else:
+                lreturn.append(histo)
+        lolreturn.append(lreturn)
+    return lolreturn
+    #raw_input()
+
+def chekcNbins(lol):
+    for l in lol:
+        for histo in l:
+            if 'Tprime_M_' in histo.GetName():
+                print 'Nbins histo after TprimeM ', histo.GetNbinsX(),'  ', histo
+            if 'Zprime_M_' in histo.GetName():
+                print 'Nbins histo after ZprimeM ', histo.GetNbinsX(),'  ', histo
+    #raw_input()
+
