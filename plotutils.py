@@ -2801,7 +2801,7 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
 #    print len(canvases)
     printCanvases(canvases,name)
     writeObjects(canvases,name)
-    writeObjects(histosforcombine,name+'_combinehistos')
+    writeObjects(histosforcombine,name+'_'+label+'_combinehistos')
 ###################################################    
 
 
@@ -4412,7 +4412,7 @@ def ABCDBackgroundEstimationCalculationAndPlotsWithSystematics(loldata,llldata,l
     if 'with' in CatA_sideband:
         category='_withtopbtag'
     if 'inclusive' in CatA_sideband:
-        category='_notopbtag'
+        category='_inclusive'
 
     loldataT=transposeLOL(loldata)
     lolBackgroundT=transposeLOL(lolBackground) 
@@ -4449,7 +4449,7 @@ def ABCDBackgroundEstimationCalculationAndPlotsWithSystematics(loldata,llldata,l
     SClist=[transposeLOL([transposeLOL(llldatacopyABCD_SConly[plotnames.index(CatB_sideband+'_Zprime_M')])[weightsystnames.index('_ABCD_nominal')]]+transposeLOL(llldatacopyABCD_SConly[plotnames.index(CatB_sideband+'_Zprime_M')])[weightsystnames.index('_ABCD'+category+'_ZprimeM'+'_systup'):weightsystnames.index('_ABCD'+category+'_ZprimeM'+'_systdown')+1])[DataSampleNames.index(DatasampleNick)]]  
 
     
-    plotDataMCanWsyst(Data,Backgrounds,Backgroundsamples,OTSignal,SignalSamples,1,name+category+DatasampleNick+QCDSample,[[[SClist+QCDlist+ttbarlist],3354,ROOT.kBlack,True]],False,'ABCD'+category+'_ZprimeM',True,False, False, True)
+    plotDataMCanWsyst(Data,Backgrounds,Backgroundsamples,OTSignal,SignalSamples,1,name+category+'_'+DatasampleNick+QCDSample,[[[SClist+QCDlist+ttbarlist],3354,ROOT.kBlack,True]],False,'ABCD'+category+'_ZprimeM',True,False, False, True)
     
     
     
@@ -4484,12 +4484,21 @@ def ABCDBackgroundEstimationCalculationAndPlotsWithSystematics(loldata,llldata,l
 
 
 
-def ABCD2corrEBackgroundEstimationCalculationAndPlotsWithSystematics(loldata,llldata,lolBackground,lllBackgroundWithweightsys,lllBackgroundNoweightsys,lolSignal,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames, SignalSampleNames, plotnames,weightsystnames,DatasampleNick,SCNick,SignalsampleNick,CatA_sideband, CatB_sideband, CatC_sideband, CatD_sideband,CatE_sideband, CatF_sideband, CatG_sideband, CatH_sideband,QCDSample, name):
+def ABCDcorrEBackgroundEstimationCalculationAndPlotsWithSystematics(loldata,llldata,lolBackground,lllBackgroundWithweightsys,lllBackgroundNoweightsys,lolSignal,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames, SignalSampleNames, plotnames,weightsystnames,DatasampleNick,SCNick,SignalsampleNick,CatA_sideband, CatB_sideband, CatC_sideband, CatD_sideband,CatE_sideband, CatF_sideband, CatG_sideband, CatH_sideband,QCDSample, name):
+    
+    ABCDversion=''
+    if 'ABCD' in name:
+        ABCDversion='ABCD'
+    if 'ABCD2' in name:
+        ABCDversion='ABCD2'
+        
     category='_notopbtag'
     if 'with' in CatA_sideband:
         category='_withtopbtag'
     if 'inclusive' in CatA_sideband:
         category='_notopbtag'
+        
+        
 
     loldataT=transposeLOL(loldata)
     lolBackgroundT=transposeLOL(lolBackground) 
@@ -4531,12 +4540,12 @@ def ABCD2corrEBackgroundEstimationCalculationAndPlotsWithSystematics(loldata,lll
     SignalSamples=SignalSamples[SignalSampleNames.index(SignalsampleNick)]
 
 
-    QCDlist=[transposeLOL([transposeLOL(lllBackgroundWithweightsyscopyABCD[plotnames.index(CatB_sideband+'_Zprime_M')])[weightsystnames.index('_ABCD_nominal')]]+transposeLOL(lllBackgroundWithweightsyscopyABCD[plotnames.index(CatB_sideband+'_Zprime_M')])[weightsystnames.index('_ABCD2corrE'+category+'_ZprimeM'+'_systup'):weightsystnames.index('_ABCD2corrE'+category+'_ZprimeM'+'_systdown')+1])[BackgroundSampleNames.index(QCDSample)]]
+    QCDlist=[transposeLOL([transposeLOL(lllBackgroundWithweightsyscopyABCD[plotnames.index(CatB_sideband+'_Zprime_M')])[weightsystnames.index('_ABCD_nominal')]]+transposeLOL(lllBackgroundWithweightsyscopyABCD[plotnames.index(CatB_sideband+'_Zprime_M')])[weightsystnames.index('_'+ABCDversion+'corrE'+category+'_ZprimeM'+'_systup'):weightsystnames.index('_'+ABCDversion+'corrE'+category+'_ZprimeM'+'_systdown')+1])[BackgroundSampleNames.index(QCDSample)]]
     ttbarlist=[transposeLOL(transposeLOL(lllBackgroundNoweightsys[plotnames.index(CatA_sideband+'_Zprime_M')])[weightsystnames.index('_no'+'_nominal'):weightsystnames.index('_no'+'_systdown')+1])[BackgroundSampleNames.index('ttbar')]]
-    SClist=[transposeLOL([transposeLOL(llldatacopyABCD_SConly[plotnames.index(CatB_sideband+'_Zprime_M')])[weightsystnames.index('_ABCD_nominal')]]+transposeLOL(llldatacopyABCD_SConly[plotnames.index(CatB_sideband+'_Zprime_M')])[weightsystnames.index('_ABCD2corrE'+category+'_ZprimeM'+'_systup'):weightsystnames.index('_ABCD2corrE'+category+'_ZprimeM'+'_systdown')+1])[DataSampleNames.index(DatasampleNick)]]  
+    SClist=[transposeLOL([transposeLOL(llldatacopyABCD_SConly[plotnames.index(CatB_sideband+'_Zprime_M')])[weightsystnames.index('_ABCD_nominal')]]+transposeLOL(llldatacopyABCD_SConly[plotnames.index(CatB_sideband+'_Zprime_M')])[weightsystnames.index('_'+ABCDversion+'corrE'+category+'_ZprimeM'+'_systup'):weightsystnames.index('_'+ABCDversion+'corrE'+category+'_ZprimeM'+'_systdown')+1])[DataSampleNames.index(DatasampleNick)]]  
 
     
-    plotDataMCanWsyst(Data,Backgrounds,Backgroundsamples,OTSignalZprime,SignalSamples,1,name+category+DatasampleNick+QCDSample,[[[SClist+QCDlist+ttbarlist],3354,ROOT.kBlack,True]],False,'ABCD2corrE'+category+'_ZprimeM',True,False, False, True)
+    plotDataMCanWsyst(Data,Backgrounds,Backgroundsamples,OTSignalZprime,SignalSamples,1,name+category+DatasampleNick+QCDSample,[[[SClist+QCDlist+ttbarlist],3354,ROOT.kBlack,True]],False,ABCDversion+'corrE'+category+'_ZprimeM',True,False, False, True)
     
     
     
@@ -4569,12 +4578,12 @@ def ABCD2corrEBackgroundEstimationCalculationAndPlotsWithSystematics(loldata,lll
     #SignalSamples=SignalSamples[SignalSampleNames.index(SignalsampleNick)]
 
 
-    QCDlist=[transposeLOL([transposeLOL(lllBackgroundWithweightsyscopyABCD[plotnames.index(CatB_sideband+'_Tprime_M')])[weightsystnames.index('_ABCD_nominal')]]+transposeLOL(lllBackgroundWithweightsyscopyABCD[plotnames.index(CatB_sideband+'_Tprime_M')])[weightsystnames.index('_ABCD2corrE'+category+'_TprimeM'+'_systup'):weightsystnames.index('_ABCD2corrE'+category+'_TprimeM'+'_systdown')+1])[BackgroundSampleNames.index(QCDSample)]]
+    QCDlist=[transposeLOL([transposeLOL(lllBackgroundWithweightsyscopyABCD[plotnames.index(CatB_sideband+'_Tprime_M')])[weightsystnames.index('_ABCD_nominal')]]+transposeLOL(lllBackgroundWithweightsyscopyABCD[plotnames.index(CatB_sideband+'_Tprime_M')])[weightsystnames.index('_'+ABCDversion+'corrE'+category+'_TprimeM'+'_systup'):weightsystnames.index('_'+ABCDversion+'corrE'+category+'_TprimeM'+'_systdown')+1])[BackgroundSampleNames.index(QCDSample)]]
     ttbarlist=[transposeLOL(transposeLOL(lllBackgroundNoweightsys[plotnames.index(CatA_sideband+'_Tprime_M')])[weightsystnames.index('_no'+'_nominal'):weightsystnames.index('_no'+'_systdown')+1])[BackgroundSampleNames.index('ttbar')]]
-    SClist=[transposeLOL([transposeLOL(llldatacopyABCD_SConly[plotnames.index(CatB_sideband+'_Tprime_M')])[weightsystnames.index('_ABCD_nominal')]]+transposeLOL(llldatacopyABCD_SConly[plotnames.index(CatB_sideband+'_Tprime_M')])[weightsystnames.index('_ABCD2corrE'+category+'_TprimeM'+'_systup'):weightsystnames.index('_ABCD2corrE'+category+'_TprimeM'+'_systdown')+1])[DataSampleNames.index(DatasampleNick)]]  
+    SClist=[transposeLOL([transposeLOL(llldatacopyABCD_SConly[plotnames.index(CatB_sideband+'_Tprime_M')])[weightsystnames.index('_ABCD_nominal')]]+transposeLOL(llldatacopyABCD_SConly[plotnames.index(CatB_sideband+'_Tprime_M')])[weightsystnames.index('_'+ABCDversion+'corrE'+category+'_TprimeM'+'_systup'):weightsystnames.index('_'+ABCDversion+'corrE'+category+'_TprimeM'+'_systdown')+1])[DataSampleNames.index(DatasampleNick)]]  
 
     
-    plotDataMCanWsyst(Data,Backgrounds,Backgroundsamples,OTSignalTprime,SignalSamples,1,name+category+DatasampleNick+QCDSample,[[[SClist+QCDlist+ttbarlist],3354,ROOT.kBlack,True]],False,'ABCD2corrE'+category+'_TprimeM',True,False, False, True)    
+    plotDataMCanWsyst(Data,Backgrounds,Backgroundsamples,OTSignalTprime,SignalSamples,1,name+category+DatasampleNick+QCDSample,[[[SClist+QCDlist+ttbarlist],3354,ROOT.kBlack,True]],False,ABCDversion+'corrE'+category+'_TprimeM',True,False, False, True)    
     print category
     print QCDlist
     print ttbarlist
@@ -4623,3 +4632,60 @@ def multiplyllls(lll, ProduktPlot1, ProduktPlot2, normalizefirst=False,rebin=1,o
             lll[ProduktPlot1][i][j]=produkt1   
 
 
+def rebintovarbinsLL(lll):
+    lllreturn=[]
+    for ll in lll:
+        llreturn=[]
+        for l in ll:
+            lreturn=[]
+            for histo in l:
+                if 'Tprime_M_' in histo.GetName():
+                    print 'Nbins histo before TprimeM ', histo.GetNbinsX()
+                    xbins= array.array('d',[0,500,550,600,650,700,750,800,850,900,950,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2500])
+                    historeturn=histo.Rebin(len(xbins)-1,histo.GetName(),xbins)
+                    print 'Nbins histo after TprimeM ', historeturn.GetNbinsX()
+                    lreturn.append(historeturn)
+                elif 'Zprime_M_' in histo.GetName():
+                    print 'Nbins histo before ZprimeM ', histo.GetNbinsX()
+                    xbins= array.array('d',[0,1000,1100,1200,1300,1400,1500,1650,1800,1850,2000,2200,2400,2500,2750,3000,3250,3500,3750,4000,4500,5000])
+                    historeturn=histo.Rebin(len(xbins)-1,histo.GetName(),xbins)
+                    print 'Nbins histo after ZprimeM ', historeturn.GetNbinsX()
+                    lreturn.append(historeturn)
+                else:
+                    lreturn.append(histo)
+            llreturn.append(lreturn)
+        lllreturn.append(llreturn)
+    return lllreturn
+    #raw_input()
+
+def rebintovarbinsLOL(lol):
+    lolreturn=[]
+    for l in lol:
+        lreturn=[]
+        for histo in l:
+            if 'Tprime_M_' in histo.GetName():
+                print 'Nbins histo before TprimeM ', histo.GetNbinsX()
+                xbins= array.array('d',[0,500,550,600,650,700,750,800,850,900,950,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2500])
+                historeturn=histo.Rebin(len(xbins)-1,histo.GetName(),xbins)
+                print 'Nbins histo after TprimeM ', historeturn.GetNbinsX()
+                lreturn.append(historeturn)
+            elif 'Zprime_M_' in histo.GetName():
+                print 'Nbins histo before ZprimeM ', histo.GetNbinsX()
+                xbins= array.array('d',[0,1000,1100,1200,1300,1400,1500,1650,1800,1850,2000,2200,2400,2500,2750,3000,3250,3500,3750,4000,4500,5000])
+                historeturn=histo.Rebin(len(xbins)-1,histo.GetName(),xbins)
+                print 'Nbins histo after ZprimeM ', historeturn.GetNbinsX()
+                lreturn.append(historeturn)
+            else:
+                lreturn.append(histo)
+        lolreturn.append(lreturn)
+    return lolreturn
+    #raw_input()
+
+def chekcNbins(lol):
+    for l in lol:
+        for histo in l:
+            if 'Tprime_M_' in histo.GetName():
+                print 'Nbins histo after TprimeM ', histo.GetNbinsX(),'  ', histo
+            if 'Zprime_M_' in histo.GetName():
+                print 'Nbins histo after ZprimeM ', histo.GetNbinsX(),'  ', histo
+#raw_input()
