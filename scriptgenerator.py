@@ -54,9 +54,11 @@ def getHead3():
   float sumOfWeights=0;
   
   int DoWeights=1;
+  int DoMCDataWeights=0;
   
   //if(processname=="SingleEl" || processname=="SingleMu"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
   if(processname=="SingleEl" || processname=="SingleMu"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
+  if(processname=="ttbar" || processname=="t#bar{t} + jets"){DoMCDataWeights=1; std::cout<<"is ttbar, use MCDataSF nominal weihgts"<<std::endl;}
 
   string buf;
   stringstream ss(filenames); 
@@ -135,8 +137,184 @@ def startLoop():
     
     chain->GetEntry(iEntry); 
     
+
+    TString currentfilename="";
+    currentfilename = chain->GetCurrentFile()->GetName();   
+    int hasTrigger=0;
+    if(currentfilename.Index("withTrigger")!=-1){hasTrigger=1;}
     eventsAnalyzed++;
     sumOfWeights+=Weight;
+
+    
+
+  // DANGERZONE
+  // Only Works for SL events at the moment
+  // Lepton SFs 
+     double muonPt=0.0;
+     double muonEta=0.0;
+     double electronEta=0.0;
+     double electronPt=0.0;
+    if(N_TightMuons==1){muonPt=Muon_Pt[0]; muonEta=Muon_Eta[0];}
+    else{muonPt=0.0; muonEta=0.0;}
+    if(N_TightElectrons==1){electronPt=Electron_Pt[0]; electronEta=Electron_Eta[0];}
+    else{electronPt=0.0; electronEta=0.0;}
+   
+    float internalEleTriggerWeight=1.0;
+    float internalEleTriggerWeightUp=1.0;
+    float internalEleTriggerWeightDown=1.0;
+    float internalEleIDWeight=1.0;
+    float internalEleIDWeightUp=1.0;
+    float internalEleIDWeightDown=1.0;
+    float internalEleIsoWeight=1.0;
+    float internalEleIsoWeightUp=1.0;
+    float internalEleIsoWeightDown=1.0;
+    float internalEleGFSWeight=1.0;
+    float internalEleGFSWeightUp=1.0;
+    float internalEleGFSWeightDown=1.0;
+    
+    float internalMuTriggerWeight=1.0;
+    float internalMuTriggerWeightUp=1.0;
+    float internalMuTriggerWeightDown=1.0;
+    float internalMuIDWeight=1.0;
+    float internalMuIDWeightUp=1.0;
+    float internalMuIDWeightDown=1.0;
+    float internalMuIsoWeight=1.0;
+    float internalMuIsoWeightUp=1.0;
+    float internalMuIsoWeightDown=1.0;
+    float internalMuHIPWeight=1.0;
+    float internalMuHIPWeightUp=1.0;
+    float internalMuHIPWeightDown=1.0;
+   
+    if(N_TightMuons==1){
+      internalMuTriggerWeight=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,0,"Trigger");
+      internalMuTriggerWeightUp=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,1,"Trigger");
+      internalMuTriggerWeightDown=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,-1,"Trigger");
+      
+      internalMuIDWeight=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,0,"ID");
+      internalMuIDWeightUp=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,1,"ID");
+      internalMuIDWeightDown=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,-1,"ID");
+      
+      internalMuIsoWeight=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,0,"Iso");
+      internalMuIsoWeightUp=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,1,"Iso");
+      internalMuIsoWeightDown=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,-1,"Iso");
+      
+      internalMuHIPWeight=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,0,"HIP");
+      internalMuHIPWeightUp=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,1,"HIP");
+      internalMuHIPWeightDown=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,-1,"HIP");
+    }
+   
+    if(N_TightElectrons==1){
+      internalEleTriggerWeight=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,0,"Trigger");
+      internalEleTriggerWeightUp=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,1,"Trigger");
+      internalEleTriggerWeightDown=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,-1,"Trigger");
+      
+      internalEleIDWeight=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,0,"ID");
+      internalEleIDWeightUp=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,1,"ID");
+      internalEleIDWeightDown=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,-1,"ID");
+      
+      internalEleIsoWeight=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,0,"Iso");
+      internalEleIsoWeightUp=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,1,"Iso");
+      internalEleIsoWeightDown=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,-1,"Iso");
+      
+      internalEleGFSWeight=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,0,"GFS");
+      internalEleGFSWeightUp=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,1,"GFS");
+      internalEleGFSWeightDown=internalLeptonSFHelper->GetElectronSF(muonPt,muonEta,-1,"GFS");
+    }
+   
+   
+  std::vector<double> jetPts;    
+  std::vector<double> jetEtas;    
+  std::vector<double> jetPhis; 
+  std::vector<double> jetMasses;
+  std::vector<double> jetEnergies; 
+  std::vector<double> jetCSVs;    
+  std::vector<int> jetFlavors;    
+    
+  for(int ijet =0; ijet<N_Jets; ijet++){
+	jetPts.push_back(Jet_Pt[ijet]);
+	jetEtas.push_back(Jet_Eta[ijet]);
+	jetCSVs.push_back(Jet_CSV[ijet]);
+	jetFlavors.push_back(Jet_Flav[ijet]);
+	jetMasses.push_back(Jet_M[ijet]);
+	jetPhis.push_back(Jet_Phi[ijet]);
+	jetEnergies.push_back(Jet_E[ijet]);
+  }
+  
+  double primlepPt;    
+  double primlepEta;    
+  double primlepPhi; 
+  double primlepM;
+  double primlepE; 
+  
+  primlepPt=Evt_Pt_PrimaryLepton;
+  primlepE=Evt_E_PrimaryLepton;
+  primlepPhi=Evt_Phi_PrimaryLepton;
+  primlepEta=Evt_Eta_PrimaryLepton;
+  primlepM=Evt_M_PrimaryLepton;
+  
+  float internalCSVweight=1.0;
+  float internalCSVweight_CSVHFUp=1.0;
+  float internalCSVweight_CSVHFDown=1.0;
+  float internalCSVweight_CSVLFUp=1.0;
+  float internalCSVweight_CSVLFDown=1.0;
+  float internalCSVweight_CSVLFStats1Up=1.0;
+  float internalCSVweight_CSVLFStats1Down=1.0;
+  float internalCSVweight_CSVLFStats2Up=1.0;
+  float internalCSVweight_CSVLFStats2Down=1.0;
+  float internalCSVweight_CSVHFStats1Up=1.0;
+  float internalCSVweight_CSVHFStats1Down=1.0;
+  float internalCSVweight_CSVHFStats2Up=1.0;
+  float internalCSVweight_CSVHFStats2Down=1.0;
+  float internalCSVweight_CSVCErr1Up=1.0;
+  float internalCSVweight_CSVCErr1Down=1.0;
+  float internalCSVweight_CSVCErr2Up=1.0;
+  float internalCSVweight_CSVCErr2Down=1.0;  
+  
+  double tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF;
+  
+  internalCSVweight=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,internalSystName,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF);
+  internalCSVweight_CSVHFUp=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,11,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVHFDown=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,12,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVLFUp=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,9,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVLFDown=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,10,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  
+  internalCSVweight_CSVLFStats1Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,17,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVLFStats1Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,18,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVLFStats2Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,19,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVLFStats2Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,20,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  
+  internalCSVweight_CSVHFStats1Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,13,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVHFStats1Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,14,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVHFStats2Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,15,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVHFStats2Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,16,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  
+  internalCSVweight_CSVCErr1Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,21,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVCErr1Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,22,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVCErr2Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,23,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVCErr2Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,24,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  
+  /*
+  if(internalCSVweight!=Weight_CSV){std::cout<<"internalCSVweight "<<internalCSVweight<<" "<<Weight_CSV<<std::endl;}
+  if(internalCSVweight_CSVHFUp!=Weight_CSVHFup){std::cout<<"internalCSVweight_CSVHFUp "<<internalCSVweight_CSVHFUp<<" "<<Weight_CSVHFup<<std::endl;}
+  if(internalCSVweight_CSVHFDown!=Weight_CSVHFdown){std::cout<<"internalCSVweight_CSVHFDown "<<internalCSVweight_CSVHFDown<<" "<<Weight_CSVHFdown<<std::endl;}
+  if(internalCSVweight_CSVLFUp!=Weight_CSVLFup){std::cout<<"internalCSVweight_CSVLFUp "<<internalCSVweight_CSVLFUp<<" "<<Weight_CSVLFup<<std::endl;}
+ if(internalCSVweight_CSVLFDown!=Weight_CSVLFdown){ std::cout<<"internalCSVweight_CSVLFDown "<<internalCSVweight_CSVLFDown<<" "<<Weight_CSVLFdown<<std::endl;}
+  
+ if(internalCSVweight_CSVLFStats1Up!=Weight_CSVLFStats1up){ std::cout<<"internalCSVweight_CSVLFStats1Up "<<internalCSVweight_CSVLFStats1Up<<" "<<Weight_CSVLFStats1up<<std::endl;}
+ if(internalCSVweight_CSVLFStats1Down!=Weight_CSVLFStats1down){ std::cout<<"internalCSVweight_CSVLFStats1Down "<<internalCSVweight_CSVLFStats1Down<<" "<<Weight_CSVLFStats1down<<std::endl;}
+ if(internalCSVweight_CSVLFStats2Up!=Weight_CSVLFStats2up){ std::cout<<"internalCSVweight_CSVLFStats2Up "<<internalCSVweight_CSVLFStats2Up<<" "<<Weight_CSVLFStats2up<<std::endl;}
+ if(internalCSVweight_CSVLFStats2Down!=Weight_CSVLFStats2down){ std::cout<<"internalCSVweight_CSVLFStats2Down "<<internalCSVweight_CSVLFStats2Down<<" "<<Weight_CSVLFStats2down<<std::endl;}
+  
+ if(internalCSVweight_CSVHFStats1Up!=Weight_CSVHFStats1up){ std::cout<<"internalCSVweight_CSVHFStats1Up "<<internalCSVweight_CSVHFStats1Up<<" "<<Weight_CSVHFStats1up<<std::endl;}
+ if(internalCSVweight_CSVHFStats1Down!=Weight_CSVHFStats1down){ std::cout<<"internalCSVweight_CSVHFStats1Down "<<internalCSVweight_CSVHFStats1Down<<" "<<Weight_CSVHFStats1down<<std::endl;}
+ if(internalCSVweight_CSVHFStats2Up!=Weight_CSVHFStats2up){ std::cout<<"internalCSVweight_CSVHFStats2Up "<<internalCSVweight_CSVHFStats2Up<<" "<<Weight_CSVHFStats2up<<std::endl;}
+ if(internalCSVweight_CSVHFStats2Down!=Weight_CSVHFStats2down){ std::cout<<"internalCSVweight_CSVHFStats2Down "<<internalCSVweight_CSVHFStats2Down<<" "<<Weight_CSVHFStats2down<<std::endl;}
+  
+ if(internalCSVweight_CSVCErr1Up!=Weight_CSVCErr1up){ std::cout<<"internalCSVweight_CSVCErr1Up "<<internalCSVweight_CSVCErr1Up<<" "<<Weight_CSVCErr1up<<std::endl;}
+ if(internalCSVweight_CSVCErr1Down!=Weight_CSVCErr1down){ std::cout<<"internalCSVweight_CSVCErr1Down "<<internalCSVweight_CSVCErr1Down<<" "<<Weight_CSVCErr1down<<std::endl;}
+ if(internalCSVweight_CSVCErr2Up!=Weight_CSVCErr2up){ std::cout<<"internalCSVweight_CSVCErr2Up "<<internalCSVweight_CSVCErr2Up<<" "<<Weight_CSVCErr2up<<std::endl;}
+ if(internalCSVweight_CSVCErr2Down!=Weight_CSVCErr2down){ std::cout<<"internalCSVweight_CSVCErr2Down "<<internalCSVweight_CSVCErr2Down<<" "<<Weight_CSVCErr2down<<std::endl;}
+ */    
     
 """
 
@@ -213,6 +391,8 @@ def getFoot1():
   outfile->cd();
   outfile->Write();
 
+
+
 """
    
 def getFoot2():
@@ -247,7 +427,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   
   # collect variables
   # list varibles that should not be written to the program automatically
-  vetolist=['processname','DoWeights','TMath','cout','for','int', 'if', 'cout', ';','<','i','i++','*=', 'temp','testea', 'anti_btag + 2', 'float','anti_loose_btag(Sideband_top_withbtag_anti_Topfirst_Bottoms_CSVv2,N_Sideband_top_withbtag_anti_Topfirst_Bottoms)','anti_loose_btag(Sideband_bottom_anti_Topfirst_Bottoms_CSVv2,N_Sideband_bottom_anti_Topfirst_Bottoms)' ]+['QCDMadgraph_Graph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M','QCDMadgraph_Graph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt','QCDMadgraph_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M','QCDMadgraph_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt','QCDPythia8_Graph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M','QCDPythia8_Graph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt','QCDPythia8_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M','QCDPythia8_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt','true', 'abs(', 'abs']+['abs( QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M)','abs( QCDPythia8_SF_SB_bottom_anti_Signal_Tops_Pt-QCDMadgraph_SF_SB_bottom_anti_Signal_Tops_Pt)']+['bbarportionweight(N_AK4_bottom_tag_candidates)','bbarportionweight(N_AK4_bottom_tag_candidates)']+['IsnoSignal_notopbtag(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)','IsnoSignal_withtopbtag(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)'] #+['bportionweightup','bportionweightdown']#+['bportionweightup','bportionweightdown']  
+  vetolist=['processname','DoWeights','TMath','cout','for','int', 'if', 'cout', ';','<','i','i++','*=', 'temp','testea', 'anti_btag + 2', 'float','anti_loose_btag(Sideband_top_withbtag_anti_Topfirst_Bottoms_CSVv2,N_Sideband_top_withbtag_anti_Topfirst_Bottoms)','anti_loose_btag(Sideband_bottom_anti_Topfirst_Bottoms_CSVv2,N_Sideband_bottom_anti_Topfirst_Bottoms)' ]+['QCDMadgraph_Graph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M','QCDMadgraph_Graph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt','QCDMadgraph_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M','QCDMadgraph_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt','QCDPythia8_Graph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M','QCDPythia8_Graph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt','QCDPythia8_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M','QCDPythia8_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt','true', 'abs(', 'abs']+['abs( QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M)','abs( QCDPythia8_SF_SB_bottom_anti_Signal_Tops_Pt-QCDMadgraph_SF_SB_bottom_anti_Signal_Tops_Pt)']+['bbarportionweight(N_AK4_bottom_tag_candidates)','bbarportionweight(N_AK4_bottom_tag_candidates)']+['IsnoSignal_notopbtag(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)','IsnoSignal_withtopbtag(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)','IsnoSignal_inclusive(Zprimes_ABCD_M, Tprimes_ABCD_M, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)'] #+['bportionweightup','bportionweightdown']#+['bportionweightup','bportionweightdown']  
   # initialize variables object
   variables = variablebox.Variables(vetolist)
   

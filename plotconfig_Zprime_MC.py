@@ -5,12 +5,14 @@ from plotutils import *
 
 weigthsystnamesbasic=[
                     "_no_nominal",
-                    "_no_systup","_no_systdown",
+                    "_no_systup",
+                    "_no_systdown",
 ]
 systweightsbasic=[
                     "no_nominal:=1.0",
-                    "no_systup:=1.0","no_systdown:=1.0",
-    
+                    "no_systup:=1.0",
+                    "no_systdown:=1.0",
+  
 ]
     
     
@@ -210,39 +212,106 @@ systweightsGeneartorDiffPythia8tantiTopPtWithtopbtag=[
 weightsystnamesABCD=[
                     #"",
                     "_ABCD_nominal",
-                    "_ABCD_notopbtag_systup",
-                    "_ABCD_notopbtag_systdown",
-                    "_ABCD_withtopbtag_systup",
-                    "_ABCD_withtopbtag_systdown",   
-                    "_ABCD2corrE_notopbtag_systup",
-                    "_ABCD2corrE_notopbtag_systdown",
-                    "_ABCD2corrE_withtopbtag_systup",
-                    "_ABCD2corrE_withtopbtag_systdown",                     
-
+                    "_ABCD_notopbtag_ZprimeM_systup",
+                    "_ABCD_notopbtag_ZprimeM_systdown",
+                    "_ABCD_withtopbtag_ZprimeM_systup",
+                    "_ABCD_withtopbtag_ZprimeM_systdown",
+                    "_ABCD_notopbtag_TprimeM_systup",
+                    "_ABCD_notopbtag_TprimeM_systdown",
+                    "_ABCD_withtopbtag_TprimeM_systup",
+                    "_ABCD_withtopbtag_TprimeM_systdown",
+                    "_ABCD2corrE_notopbtag_ZprimeM_systup",
+                    "_ABCD2corrE_notopbtag_ZprimeM_systdown",
+                    "_ABCD2corrE_withtopbtag_ZprimeM_systup",
+                    "_ABCD2corrE_withtopbtag_ZprimeM_systdown",    
+                    "_ABCD2corrE_notopbtag_TprimeM_systup",
+                    "_ABCD2corrE_notopbtag_TprimeM_systdown",
+                    "_ABCD2corrE_withtopbtag_TprimeM_systup",
+                    "_ABCD2corrE_withtopbtag_TprimeM_systdown",      
 ]
 
 systweightsABCD=[
                     #"nom:=1",
                     "ABCD_nominal:=1",
-                    "ABCD_notopbtag_systup:=1.03",
-                    "ABCD_notopbtag_systdown:=0.97",
-                    "ABCD_withtopbtag_systup:=1.15",
-                    "ABCD_withtopbtag_systdown:=0.85",
-                    "ABCD2corrE_notopbtag_systup:=1.01",
-                    "ABCD2corrE_notopbtag_systdown:=0.99",
-                    "ABCD2corrE_withtopbtag_systup:=1.08",
-                    "ABCD2corrE_withtopbtag_systdown:=0.92", ]
+                    #"ABCD_notopbtag_ZprimeM_systup:=pow(1+0.03,1.0/3.0)",
+                    #"ABCD_notopbtag_ZprimeM_systdown:=pow(1-0.03,1.0/3.0)",
+                    #"ABCD_withtopbtag_ZprimeM_systup:=pow(1+0.15,1.0/3.0)",
+                    #"ABCD_withtopbtag_ZprimeM_systdown:=pow(1-0.15,1.0/3.0)",
+                    #"ABCD_notopbtag_TprimeM_systup:=pow(1+0.03,1.0/3.0)",
+                    #"ABCD_notopbtag_TprimeM_systdown:=pow(1-0.03,1.0/3.0)",
+                    #"ABCD_withtopbtag_TprimeM_systup:=pow(1+0.15,1.0/3.0)",
+                    #"ABCD_withtopbtag_TprimeM_systdown:=pow(1-0.15,1.0/3.0)",
+
+                    #"ABCD2corrE_notopbtag_ZprimeM_systup:=pow(1+0.01,1.0/7.0)",
+                    #"ABCD2corrE_notopbtag_ZprimeM_systdown:=pow(1-0.01,1.0/7.0)",
+                    #"ABCD2corrE_withtopbtag_ZprimeM_systup:=pow(1+0.08,1.0/7.0)",
+                    #"ABCD2corrE_withtopbtag_ZprimeM_systdown:=pow(1-0.08,1.0/7.0)",
+                    #"ABCD2corrE_notopbtag_TprimeM_systup:=pow(1+0.01,1.0/7.0)",
+                    #"ABCD2corrE_notopbtag_TprimeM_systdown:=pow(1-0.01,1.0/7.0)",
+                    #"ABCD2corrE_withtopbtag_TprimeM_systup:=pow(1+0.1,1.0/7.0)",
+                    #"ABCD2corrE_withtopbtag_TprimeM_systdown:=pow(1-0.1,1.0/7.0)", 
+                    
+                    "ABCD_notopbtag_ZprimeM_systup:=1+0.03*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
+                    "ABCD_notopbtag_ZprimeM_systdown:=1-0.03*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
+                    "ABCD_withtopbtag_ZprimeM_systup:=1+0.15*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
+                    "ABCD_withtopbtag_ZprimeM_systdown:=1-0.15*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
+                    "ABCD_notopbtag_TprimeM_systup:=1+0.03*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
+                    "ABCD_notopbtag_TprimeM_systdown:=1-0.03*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
+                    "ABCD_withtopbtag_TprimeM_systup:=1+0.15*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
+                    "ABCD_withtopbtag_TprimeM_systdown:=1-0.15*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
+
+                    "ABCD2corrE_notopbtag_ZprimeM_systup:=1+0.06*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
+                    "ABCD2corrE_notopbtag_ZprimeM_systdown:=1-0.06*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
+                    "ABCD2corrE_withtopbtag_ZprimeM_systup:=1+0.1*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
+                    "ABCD2corrE_withtopbtag_ZprimeM_systdown:=1-0.1*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
+                    "ABCD2corrE_notopbtag_TprimeM_systup:=1+0.06*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
+                    "ABCD2corrE_notopbtag_TprimeM_systdown:=1-0.06*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
+                    "ABCD2corrE_withtopbtag_TprimeM_systup:=1+0.1*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
+                    "ABCD2corrE_withtopbtag_TprimeM_systdown:=1-0.1*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",  
+]
+
+weigthsystnamesMCSFs=[
+                    "_CSV_MCSF_nominal",
+                    "_CSV_MCSF_systup",
+                    "_CSV_MCSF_systdown",   
+                    "_t21_MCSF_nominal",
+                    "_t21_MCSF_systup",
+                    "_t21_MCSF_systdown", 
+                    "_t32_MCSF_notopbtag_nominal",
+                    "_t32_MCSF_notopbtag_systup",
+                    "_t32_MCSF_notopbtag_systdown", 
+                    "_t32_MCSF_withtopbtag_nominal",
+                    "_t32_MCSF_withtopbtag_systup",
+                    "_t32_MCSF_withtopbtag_systdown", 
+                    
+]
+
+systweightnamesMCSFs=[
+                    "CSV_MCSF_nominal:=(1)*DoMCDataWeights",
+                    "CSV_MCSF_systup:=(1*(1+1.15))*DoMCDataWeights",
+                    "CSV_MCSF_systdown:=(1*(1-1.15))*DoMCDataWeights",  
+                    "t21_MCSF_nominal:=(1.10)*DoMCDataWeights",
+                    "t21_MCSF_systup:=(1.10*(1+0.12))*DoMCDataWeights",
+                    "t21_MCSF_systdown:=(1.10*(1-0.12))*DoMCDataWeights",
+                    "t32_MCSF_notopbtag_nominal:=(1.06)*DoMCDataWeights",
+                    "t32_MCSF_notopbtag_systup:=(1.06*(1+0.08))*DoMCDataWeights",
+                    "t32_MCSF_notopbtag_systdown:=(1.06*(1-0.04))*DoMCDataWeights",
+                    "t32_MCSF_withtopbtag_nominal:=(1.05)*DoMCDataWeights",
+                    "t32_MCSF_withtopbtag_systup:=(1.05*(1+0.11))*DoMCDataWeights",
+                    "t32_MCSF_withtopbtag_systdown:=(1.05*(1-0.05))*DoMCDataWeights",
+                    
+]
 
 
-allweightsystnames=weigthsystnamesbasic+weightsystnamesMadgraphbantiZprimeM+weightsystnamesPythia8bantiZprimeM+weightsystnamesMadgraphtantiTopPt+weightsystnamesPythia8tantiTopPt+weightsystnamesGeneratorDiffMadgraphbantiZprimeM+weightsystnamesGeneratorDiffPythia8bantiZprimeM+weightsystnamesGeneratorDiffMadgraphtantiTopPt+weightsystnamesGeneratorDiffPythia8tantiTopPt+weightsystnamesMadgraphbantiZprimeMWithtopbtag+weightsystnamesPythia8bantiZprimeMWithtopbtag+weightsystnamesGeneratorDiffMadgraphbantiZprimeMWithtopbtag+weightsystnamesGeneratorDiffPythia8bantiZprimeMWithtopbtag+weightsystnamesMadgraphtantiTopPtWithtopbtag+weightsystnamesPythia8tantiTopPtWithtopbtag+weightsystnamesGeneratorDiffMadgraphtantiTopPtWithtopbtag+weightsystnamesGeneratorDiffPythia8tantiTopPtWithtopbtag+weightsystnamesABCD
+allweightsystnames=weigthsystnamesbasic+weightsystnamesMadgraphbantiZprimeM+weightsystnamesPythia8bantiZprimeM+weightsystnamesMadgraphtantiTopPt+weightsystnamesPythia8tantiTopPt+weightsystnamesGeneratorDiffMadgraphbantiZprimeM+weightsystnamesGeneratorDiffPythia8bantiZprimeM+weightsystnamesGeneratorDiffMadgraphtantiTopPt+weightsystnamesGeneratorDiffPythia8tantiTopPt+weightsystnamesMadgraphbantiZprimeMWithtopbtag+weightsystnamesPythia8bantiZprimeMWithtopbtag+weightsystnamesGeneratorDiffMadgraphbantiZprimeMWithtopbtag+weightsystnamesGeneratorDiffPythia8bantiZprimeMWithtopbtag+weightsystnamesMadgraphtantiTopPtWithtopbtag+weightsystnamesPythia8tantiTopPtWithtopbtag+weightsystnamesGeneratorDiffMadgraphtantiTopPtWithtopbtag+weightsystnamesGeneratorDiffPythia8tantiTopPtWithtopbtag+weightsystnamesABCD+weigthsystnamesMCSFs
 #allweightsystnames=weightsystnamesABCD
 
-allsystweights=systweightsbasic+systweightsMadgraphbantiZprimeM+systweightsPythia8bantiZprimeM+systweightsMadgraphtantiTopPt+systweightsPythia8tantiTopPt+systweightsGeneartorDiffMadgraphbantiZprimeM+systweightsGeneartorDiffPythia8bantiZprimeM+systweightsGeneartorDiffMadgraphtantiTopPt+systweightsGeneartorDiffPythia8tantiTopPt+systweightsMadgraphbantiZprimeMWithtopbtag+systweightsPythia8bantiZprimeMWithtopbtag+systweightsGeneartorDiffMadgraphbantiZprimeMWithtopbtag+systweightsGeneartorDiffPythia8bantiZprimeMWithtopbtag+systweightsMadgraphtantiTopPtWithtopbtag+systweightsPythia8tantiTopPtWithtopbtag+systweightsGeneartorDiffMadgraphtantiTopPtWithtopbtag+systweightsGeneartorDiffPythia8tantiTopPtWithtopbtag+systweightsABCD
+allsystweights=systweightsbasic+systweightsMadgraphbantiZprimeM+systweightsPythia8bantiZprimeM+systweightsMadgraphtantiTopPt+systweightsPythia8tantiTopPt+systweightsGeneartorDiffMadgraphbantiZprimeM+systweightsGeneartorDiffPythia8bantiZprimeM+systweightsGeneartorDiffMadgraphtantiTopPt+systweightsGeneartorDiffPythia8tantiTopPt+systweightsMadgraphbantiZprimeMWithtopbtag+systweightsPythia8bantiZprimeMWithtopbtag+systweightsGeneartorDiffMadgraphbantiZprimeMWithtopbtag+systweightsGeneartorDiffPythia8bantiZprimeMWithtopbtag+systweightsMadgraphtantiTopPtWithtopbtag+systweightsPythia8tantiTopPtWithtopbtag+systweightsGeneartorDiffMadgraphtantiTopPtWithtopbtag+systweightsGeneartorDiffPythia8tantiTopPtWithtopbtag+systweightsABCD+systweightnamesMCSFs
 #allsystweights=systweightsABCD
 
-ABweightsystnames=weigthsystnamesbasic+weightsystnamesMadgraphbantiZprimeM+weightsystnamesPythia8bantiZprimeM+weightsystnamesMadgraphtantiTopPt+weightsystnamesPythia8tantiTopPt+weightsystnamesGeneratorDiffMadgraphbantiZprimeM+weightsystnamesGeneratorDiffPythia8bantiZprimeM+weightsystnamesGeneratorDiffMadgraphtantiTopPt+weightsystnamesGeneratorDiffPythia8tantiTopPt+weightsystnamesMadgraphbantiZprimeMWithtopbtag+weightsystnamesPythia8bantiZprimeMWithtopbtag+weightsystnamesGeneratorDiffMadgraphbantiZprimeMWithtopbtag+weightsystnamesGeneratorDiffPythia8bantiZprimeMWithtopbtag+weightsystnamesMadgraphtantiTopPtWithtopbtag+weightsystnamesPythia8tantiTopPtWithtopbtag+weightsystnamesGeneratorDiffMadgraphtantiTopPtWithtopbtag+weightsystnamesGeneratorDiffPythia8tantiTopPtWithtopbtag
+ABweightsystnames=weigthsystnamesbasic+weightsystnamesMadgraphbantiZprimeM+weightsystnamesPythia8bantiZprimeM+weightsystnamesMadgraphtantiTopPt+weightsystnamesPythia8tantiTopPt+weightsystnamesGeneratorDiffMadgraphbantiZprimeM+weightsystnamesGeneratorDiffPythia8bantiZprimeM+weightsystnamesGeneratorDiffMadgraphtantiTopPt+weightsystnamesGeneratorDiffPythia8tantiTopPt+weightsystnamesMadgraphbantiZprimeMWithtopbtag+weightsystnamesPythia8bantiZprimeMWithtopbtag+weightsystnamesGeneratorDiffMadgraphbantiZprimeMWithtopbtag+weightsystnamesGeneratorDiffPythia8bantiZprimeMWithtopbtag+weightsystnamesMadgraphtantiTopPtWithtopbtag+weightsystnamesPythia8tantiTopPtWithtopbtag+weightsystnamesGeneratorDiffMadgraphtantiTopPtWithtopbtag+weightsystnamesGeneratorDiffPythia8tantiTopPtWithtopbtag+weigthsystnamesMCSFs
 
-ABsystweights=systweightsbasic+systweightsMadgraphbantiZprimeM+systweightsPythia8bantiZprimeM+systweightsMadgraphtantiTopPt+systweightsPythia8tantiTopPt+systweightsGeneartorDiffMadgraphbantiZprimeM+systweightsGeneartorDiffPythia8bantiZprimeM+systweightsGeneartorDiffMadgraphtantiTopPt+systweightsGeneartorDiffPythia8tantiTopPt+systweightsMadgraphbantiZprimeMWithtopbtag+systweightsPythia8bantiZprimeMWithtopbtag+systweightsGeneartorDiffMadgraphbantiZprimeMWithtopbtag+systweightsGeneartorDiffPythia8bantiZprimeMWithtopbtag+systweightsMadgraphtantiTopPtWithtopbtag+systweightsPythia8tantiTopPtWithtopbtag+systweightsGeneartorDiffMadgraphtantiTopPtWithtopbtag+systweightsGeneartorDiffPythia8tantiTopPtWithtopbtag
+ABsystweights=systweightsbasic+systweightsMadgraphbantiZprimeM+systweightsPythia8bantiZprimeM+systweightsMadgraphtantiTopPt+systweightsPythia8tantiTopPt+systweightsGeneartorDiffMadgraphbantiZprimeM+systweightsGeneartorDiffPythia8bantiZprimeM+systweightsGeneartorDiffMadgraphtantiTopPt+systweightsGeneartorDiffPythia8tantiTopPt+systweightsMadgraphbantiZprimeMWithtopbtag+systweightsPythia8bantiZprimeMWithtopbtag+systweightsGeneartorDiffMadgraphbantiZprimeMWithtopbtag+systweightsGeneartorDiffPythia8bantiZprimeMWithtopbtag+systweightsMadgraphtantiTopPtWithtopbtag+systweightsPythia8tantiTopPtWithtopbtag+systweightsGeneartorDiffMadgraphtantiTopPtWithtopbtag+systweightsGeneartorDiffPythia8tantiTopPtWithtopbtag+systweightnamesMCSFs
         
 
 # names of the systematics (proper names needed e.g. for combination)
@@ -293,15 +362,15 @@ path_80x="/nfs/dust/cms/user/skudella/processed_MC/flat_trees_new/"
 
 
 SignalSamples=[
-                    Sample('Z->tWb, m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=900',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Zprime_1500_900_nominal_Tree.root',mcweight+'/138.07','Zprime1500900',allweightsystnames),
-                    Sample('Z->tWb, m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1200',ROOT.kCyan,path_80x+'Signal_Zprime/Zprime_2000_1200_LH_nominal_Tree.root',mcweight+'/86.28','Zprime20001200',allweightsystnames),
-                    Sample('Z->tWb, m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1200',ROOT.kRed,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/37.6','Zprime25001200',allweightsystnames) ,     
+                    Sample('Z->tWb, m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=900',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Zprime_1500_900_nominal_Tree.root',mcweight+'/138.07*0.3','Zprime1500900',allweightsystnames),
+                    Sample('Z->tWb, m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1200',ROOT.kCyan,path_80x+'Signal_Zprime/Zprime_2000_1200_LH_nominal_Tree.root',mcweight+'/86.28*0.3','Zprime20001200',allweightsystnames),
+                    Sample('Z->tWb, m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1200',ROOT.kRed,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/37.6*0.3','Zprime25001200',allweightsystnames) ,     
 ]
 
 BackgroundSamples=[
                     Sample('QCDMadgraph',ROOT.kOrange-3,path_80x+'BKG_QCD/MC_QCD_H*nominal*.root',mcweight,'QCDMadgraph',allweightsystnames),
                     Sample('t#bar{t} + jets',ROOT.kBlue,path_80x+'BKG_TTbar/*nominal*.root',mcweight,'ttbar',allweightsystnames) , 
-                    Sample('Signal Contamination (1pb), m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1200',ROOT.kRed-3,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/37.6','SC_Zprime25001200_1pb',allweightsystnames) ,  
+                    Sample('Signal Contamination (1pb), m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1200',ROOT.kRed-3,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/37.6*0.3','SC_Zprime25001200_1pb',allweightsystnames) ,  
                     Sample('Signal Contamination none',ROOT.kRed-3,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/100000','SC_none',allweightsystnames) ,  
                     Sample('QCDPythia8',ROOT.kGreen+2,path_80x+'BKG_QCD/MC_QCD_P*nominal*Tree*.root',mcweight,'QCDPythia8',allweightsystnames),
 
@@ -309,10 +378,10 @@ BackgroundSamples=[
 
 
 DataSamples=[
-                    Sample('Data = Background with (1pb), m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1200',ROOT.kBlack+2,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/37.6','BKG_Zprime25001200_1pb',allweightsystnames),     
+                    Sample('Data = Background with (1pb), m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1200',ROOT.kBlack+2,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/37.6*0.3','BKG_Zprime25001200_1pb',allweightsystnames),     
                     Sample('Data = Background with signal',ROOT.kBlack+2,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/100000.0','DATA_BKG',allweightsystnames) ,     
-                    #Sample('Data = Background with (1pb), m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1200',ROOT.kBlack,path_80x+'Signal_Zprime/Zprime_2000_1200_LH_nominal_Tree.root',mcweight+'/86.28','BKG_Zprime20001200_1pb') ,     
-                    #Sample('Data = Background with (1pb), m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=900',ROOT.kBlack,path_80x+'Signal_Zprime/Zprime_1500_900_nominal_Tree.root',mcweight+'/138.07','BKG_Zprime1500900_1pb') ,     
+                    #Sample('Data = Background with (1pb), m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1200',ROOT.kBlack,path_80x+'Signal_Zprime/Zprime_2000_1200_LH_nominal_Tree.root',mcweight+'/86.28*0.3','BKG_Zprime20001200_1pb') ,     
+                    #Sample('Data = Background with (1pb), m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=900',ROOT.kBlack,path_80x+'Signal_Zprime/Zprime_1500_900_nominal_Tree.root',mcweight+'/138.07*0.3','BKG_Zprime1500900_1pb') ,     
 
 ]
 
