@@ -3675,6 +3675,33 @@ def check_jobs(scripts,outputs,nentries):
       failed_jobs.append(script)
   return failed_jobs
 
+""" Helper function to submit NAF jobs"""
+def helperSubmitNAFJobs(scripts,outputs,nentries):
+  # submit run scripts
+  print 'submitting scripts'
+  #jobids=submitToNAF(scripts)
+  jobids=submitArrayToNAF(scripts, "PlotPara")
+  do_qstat(jobids)
+
+  # check outputs
+  print 'checking outputs'
+  failed_jobs=check_jobs(scripts,outputs,nentries)
+  retries=0
+  while retries<=3 and len(failed_jobs)>0:
+    retries+=1
+    print 'the following jobs failed'
+    for j in failed_jobs:
+      print j
+    if len(failed_jobs)>=0.8*len(scripts):
+      print "!!!!!\n More Than 80 percent of your jobs failed. Check:\n A) Your code (and logfiles) \n B) The status of the batch stytem e.g. http://bird.desy.de/status/day.html\n !!!!!"
+    print 'resubmitting'
+    jobids=submitToNAF(failed_jobs)
+    do_qstat(jobids)
+    failed_jobs=check_jobs(scripts,outputs,nentries)
+  if retries>=10:
+    print 'could not submit jobs'
+    sys.exit()  
+
 # the dataBases should be defined as follows e.g. [[memDB,path],[blrDB,path]]
 def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],dataBases=[],treeInformationJsonFile="",otherSystnames=[],doAachenDNN=False,cirun=False):
   cmsswpath=os.environ['CMSSW_BASE']
@@ -3734,7 +3761,7 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   createProgram(programpath,plots,samples,catnames,catselections,systnames,systweights,additionalvariables, dataBases,doAachenDNN)
   if not os.path.exists(programpath+'.cc'):
     print 'could not create c++ program'
-    sys.exit()
+    sys.exit(-1)
   # check if the code changed
   codeWasChanged=True
   if alreadyWritten:
@@ -3751,7 +3778,7 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
     subprocess.call(cmd,shell=True)
   if not os.path.exists(programpath):
     print 'could not compile c++ program'
-    sys.exit()
+    sys.exit(-1)
     
   #create script to rename histograms
   createRenameScript(programpath,systnames+otherSystnames)
@@ -3766,45 +3793,36 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
     os.makedirs(plotspath)
   if not os.path.exists(workdir):
     print 'could not create workdirs'
-    sys.exit()
+    sys.exit(-1)
 
   # create run scripts
   print 'creating run scripts'
   scripts,outputs,nentries=get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,programpath,cmsswpath,treeInformationJsonFile,cirun)
   
-  #DANGERZONE
-  #exit(0)
-  # submit run scripts
-  print 'submitting scripts'
-  #jobids=submitToNAF(scripts)
-  jobids=submitArrayToNAF(scripts, "PlotPara")
-  do_qstat(jobids)
+  #DANGERZONE Submit jobs
+  helperSubmitNAFJobs(scripts,outputs,nentries)
 
-  # check outputs
-  print 'checking outputs'
-  failed_jobs=check_jobs(scripts,outputs,nentries)
-  retries=0
-  while retries<=3 and len(failed_jobs)>0:
-    retries+=1
-    print 'the following jobs failed'
-    for j in failed_jobs:
-      print j
-    if len(failed_jobs)>=0.8*len(scripts):
-      print "!!!!!\n More Than 80 percent of your jobs failed. Check:\n A) Your code (and logfiles) \n B) The status of the batch stytem e.g. http://bird.desy.de/status/day.html\n !!!!!"
-    print 'resubmitting'
-    jobids=submitToNAF(failed_jobs)
-    do_qstat(jobids)
-    failed_jobs=check_jobs(scripts,outputs,nentries)
-  if retries>=10:
-    print 'could not submit jobs'
-    sys.exit()
 
   # hadd outputs
-  print 'hadd output'
+  # Check if hadd output worked, otherwise resubmit jobs a second time
+  haddResubmit = False
+  print 'hadd output starting'
   haddclock=ROOT.TStopwatch()
   haddclock.Start()
-  subprocess.call(['hadd', outputpath]+outputs)
-  print 'done'
+  try:
+    subprocess.check_output(['hadd', outputpath]+outputs,stderr=subprocess.STDOUT)
+    print 'hadd output worked ', ('in the first place.' if not haddResubmit else 'in the second place.')
+  except subprocess.CalledProcessError, e:
+    if not haddResubmit:
+        print 'Hadd failed with the following error in the first place:\n \n', e.output
+        print '\n Resubmitting job script and then redoing hadd a second time.'
+        haddResubmit = True
+        helperSubmitNAFJobs(scripts,outputs,nentries)
+        subprocess.check_output(['hadd', outputpath]+outputs,stderr=subprocess.STDOUT)
+    else:
+        print "Hadd failed a second time with the following error, stopping program: \n \n", e.output
+        sys.exit(-1)
+  
   haddtime=haddclock.RealTime()
   print "hadding took ", haddtime
   return  outputpath
