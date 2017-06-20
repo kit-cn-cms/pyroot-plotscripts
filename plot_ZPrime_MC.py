@@ -528,10 +528,10 @@ listOfHistoListsBackground=createHistoLists_fromSuperHistoFile(outputpath,Backgr
 listOfHistoListsDataMadgraph=createHistoLists_fromSuperHistoFile(outputpath,DataSamples,plots,1)
 listOfHistoListsDataPythia=createHistoLists_fromSuperHistoFile(outputpath,DataSamples,plots,1)
 
-listOfHistoListsSignal=rebintovarbins(listOfHistoListsSignal)
-listOfHistoListsBackground=rebintovarbins(listOfHistoListsBackground)
-listOfHistoListsDataMadgraph=rebintovarbins(listOfHistoListsDataMadgraph)
-listOfHistoListsDataPythia=rebintovarbins(listOfHistoListsDataPythia)
+listOfHistoListsSignal=rebintovarbinsLOL(listOfHistoListsSignal)
+listOfHistoListsBackground=rebintovarbinsLOL(listOfHistoListsBackground)
+listOfHistoListsDataMadgraph=rebintovarbinsLOL(listOfHistoListsDataMadgraph)
+listOfHistoListsDataPythia=rebintovarbinsLOL(listOfHistoListsDataPythia)
 
 
 addLOLtoLOL(listOfHistoListsDataMadgraph,transposeLOL([transposeLOL(listOfHistoListsBackground)[BackgroundSampleNames.index("QCDMadgraph")]]+[transposeLOL(listOfHistoListsBackground)[BackgroundSampleNames.index("ttbar")]]))
@@ -544,11 +544,16 @@ addLOLtoLOL(listOfHistoListsDataPythia,transposeLOL([transposeLOL(listOfHistoLis
 
 lllBackgroundnosyst=createLLL_fromSuperHistoFileSyst(outputpath,BackgroundSamples,plots,weigthsystnamesbasic)
 
-
-
 lllBackground=createLLL_fromSuperHistoFileSyst(outputpath,BackgroundSamples,plots,allweightsystnames)
 lllData_Madgraph=createLLL_fromSuperHistoFileSyst(outputpath,DataSamples,plots,allweightsystnames)
 lllData_Pythia=createLLL_fromSuperHistoFileSyst(outputpath,DataSamples,plots,allweightsystnames)
+
+lllBackgroundnosyst=rebintovarbinsLL(lllBackgroundnosyst)
+lllBackground=rebintovarbinsLL(lllBackground)
+lllData_Madgraph=rebintovarbinsLL(lllData_Madgraph)
+lllData_Pythia=rebintovarbinsLL(lllData_Pythia)
+
+
 
 #lllBackground=createLLL_fromSuperHistoFileSyst(outputpath,BackgroundSamples,plots,ABweightsystnames)
 #lllData_Madgraph=createLLL_fromSuperHistoFileSyst(outputpath,DataSamples,plots,ABweightsystnames)
