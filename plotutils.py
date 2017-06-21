@@ -4027,17 +4027,24 @@ def rebintovarbins(lol):
     for l in lol:
         lreturn=[]
         for histo in l:
+            binwidth=histo.GetBinWidth(0)
             if 'Tprime_M_' in histo.GetName():
                 print 'Nbins histo before TprimeM ', histo.GetNbinsX()
                 xbins= array.array('d',[0,500,550,600,650,700,750,800,850,900,950,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500])
                 historeturn=histo.Rebin(len(xbins)-1,histo.GetName(),xbins)
+                for i in range(historeturn.GetNbinsX()):
+                    historeturn.SetBinContent(i,(historeturn.GetBinContent(i)*binwidth/(historeturn.GetBinWidth(i))))
+                    historeturn.SetBinError(i,(historeturn.GetBinError(i)*binwidth/(historeturn.GetBinWidth(i))))
                 print 'Nbins histo after TprimeM ', historeturn.GetNbinsX()
                 lreturn.append(historeturn)
             elif 'Zprime_M_' in histo.GetName():
                 print 'Nbins histo before ZprimeM ', histo.GetNbinsX()
                 xbins= array.array('d',[0,1000,1100,1200,1300,1400,1500,1650,1800,2000,2200,2400,2600,2800,3000,3250,3500,3750,4000,4500,5000])
                 historeturn=histo.Rebin(len(xbins)-1,histo.GetName(),xbins)
-                print 'Nbins histo after ZprimeM ', historeturn.GetNbinsX()
+                for i in range(historeturn.GetNbinsX()):
+                    historeturn.SetBinContent(i,(historeturn.GetBinContent(i)*binwidth/(historeturn.GetBinWidth(i))))
+                    historeturn.SetBinError(i,(historeturn.GetBinError(i)*binwidth/(historeturn.GetBinWidth(i))))
+                    print 'Nbins histo after ZprimeM ', historeturn.GetNbinsX()
                 lreturn.append(historeturn)
             else:
                 lreturn.append(histo)
