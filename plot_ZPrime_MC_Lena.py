@@ -4,6 +4,7 @@
 
 from plotconfig_Zprime_MC_Lena import *
 from plot_additional_Zprime_MC_Lena import *
+from plot_cuts_ZPrime_MC_Lena import *
 sys.path.insert(0, 'limittools')
 from limittools import renameHistos
 import copy
@@ -30,68 +31,68 @@ SignalSampleNames=['Zprime1500900',  'Zprime20001200',  'Zprime25001200']
 
 
 
-# book plots
-plotlabel="Wbt, #geq 3 jets, #geq 1 b-tags"
-plotlabelboosted="#splitline{Wbt, #geq 3 jets, #geq 1 b-tags}{#geq 1 AK8 jet p_{T} > 400 GeV, #geq 1 AK8 jet p_{T} > 200 GeV, #geq 1 AK4 jet p_{T} > 100 GeV}"
-plotselection1="Evt_HT>850"
-plotselection2="N_packedPatJetsAK8PFCHSSoftDrop>=2 && packedPatJetsAK8PFCHSSoftDrop_Pt[0]>400 && packedPatJetsAK8PFCHSSoftDrop_Pt[1]>200 && Evt_HT>850 "
+## book plots
+#plotlabel="Wbt, #geq 3 jets, #geq 1 b-tags"
+#plotlabelboosted="#splitline{Wbt, #geq 3 jets, #geq 1 b-tags}{#geq 1 AK8 jet p_{T} > 400 GeV, #geq 1 AK8 jet p_{T} > 200 GeV, #geq 1 AK4 jet p_{T} > 100 GeV}"
+#plotselection1="Evt_HT>850"
+#plotselection2="N_packedPatJetsAK8PFCHSSoftDrop>=2 && packedPatJetsAK8PFCHSSoftDrop_Pt[0]>400 && packedPatJetsAK8PFCHSSoftDrop_Pt[1]>200 && Evt_HT>850 "
 
 
 
-#Own Plotselections for ABCD-method
+##Own Plotselections for ABCD-method
 
 #plotselection_tau32 = " Tops_ABCD_t32 < 0.86   "
-plotselection_tau32 = " Tops_ABCD_t32 < 0.67   "
-plotselection_W_MSD =  " (70 < Ws_ABCD_MSD  &&   Ws_ABCD_MSD < 100) "
-plotselection_B_CSV = "  Bottoms_ABCD_CSV > 0.8  "
+##plotselection_tau32 = " Tops_ABCD_t32 < 0.67   "
+#plotselection_W_MSD =  " (70 < Ws_ABCD_MSD  &&   Ws_ABCD_MSD < 100) "
+#plotselection_B_CSV = "  Bottoms_ABCD_CSV > 0.8  "
 #plotselection_W_tau21 = " Ws_ABCD_t21 < 0.6 "
-plotselection_W_tau21 = " Ws_ABCD_t21 < 0.45"
-plotselection_t_MSD = " (105 < Tops_ABCD_MSD && Tops_ABCD_MSD < 210) "
-plotselection_topsubjetCSVv2 = " Tops_ABCD_maxsubjetCSVv2 > 0.8 "
+##plotselection_W_tau21 = " Ws_ABCD_t21 < 0.45"
+#plotselection_t_MSD = " (105 < Tops_ABCD_MSD && Tops_ABCD_MSD < 210) "
+#plotselection_topsubjetCSVv2 = " Tops_ABCD_maxsubjetCSVv2 > 0.8 "
 
 
 
 
 #plotselection_tau32_0 = " Tops_ABCD_t32[0] < 0.86   "
-plotselection_tau32_0 = " Tops_ABCD_t32[0] < 0.67   "
-plotselection_W_MSD_0 =  " (70 < Ws_ABCD_MSD[0]  &&   Ws_ABCD_MSD[0] < 100) "
-plotselection_B_CSV_0 = "  Bottoms_ABCD_CSV[0] > 0.8   "
+##plotselection_tau32_0 = " Tops_ABCD_t32[0] < 0.67   "
+#plotselection_W_MSD_0 =  " (70 < Ws_ABCD_MSD[0]  &&   Ws_ABCD_MSD[0] < 100) "
+#plotselection_B_CSV_0 = "  Bottoms_ABCD_CSV[0] > 0.8   "
 #plotselection_W_tau21_0 = " Ws_ABCD_t21[0] < 0.6  "
-plotselection_W_tau21_0 = " Ws_ABCD_t21[0] < 0.45  "
+##plotselection_W_tau21_0 = " Ws_ABCD_t21[0] < 0.45  "
 
-plotselection_tau32_anti=" Tops_ABCD_t32 > 0.86   "
-plotselection_W_MSD_anti =  " (70 > Ws_ABCD_MSD  ||   Ws_ABCD_MSD > 100) "
-plotselection_B_CSV_anti = "  Bottoms_ABCD_CSV < 0.8   "
-plotselection_W_tau21_anti = " Ws_ABCD_t21 > 0.6 "
-plotselection_t_MSD_anti = " (105 > Tops_ABCD_MSD || Tops_ABCD_MSD > 210) "
-plotselection_topsubjetCSVv2_anti = " Tops_ABCD_maxsubjetCSVv2 < 0.8 "
+#plotselection_tau32_anti=" Tops_ABCD_t32 > 0.86   "
+#plotselection_W_MSD_anti =  " (70 > Ws_ABCD_MSD  ||   Ws_ABCD_MSD > 100) "
+#plotselection_B_CSV_anti = "  Bottoms_ABCD_CSV < 0.8   "
+#plotselection_W_tau21_anti = " Ws_ABCD_t21 > 0.6 "
+#plotselection_t_MSD_anti = " (105 > Tops_ABCD_MSD || Tops_ABCD_MSD > 210) "
+#plotselection_topsubjetCSVv2_anti = " Tops_ABCD_maxsubjetCSVv2 < 0.8 "
 
-plotselection_tau32_anti_0 =" Tops_ABCD_t32[0] > 0.86   "
-plotselection_W_MSD_anti_0 =  " (70 > Ws_ABCD_MSD[0]  ||   Ws_ABCD_MSD[0] > 100) "
-plotselection_B_CSV_anti_0 = "  Bottoms_ABCD_CSV[0] < 0.8   "
-plotselection_W_tau21_anti_0 = " Ws_ABCD_t21[0]  > 0.6 "
-
-
-
-
-plotselection_W_MSD_one_sided =  " (70 < Ws_ABCD_MSD && Ws_ABCD_MSD < 100)"
-plotselection_W_MSD_one_sided_anti =  " (70 > Ws_ABCD_MSD && Ws_ABCD_MSD < 100)"
+#plotselection_tau32_anti_0 =" Tops_ABCD_t32[0] > 0.86   "
+#plotselection_W_MSD_anti_0 =  " (70 > Ws_ABCD_MSD[0]  ||   Ws_ABCD_MSD[0] > 100) "
+#plotselection_B_CSV_anti_0 = "  Bottoms_ABCD_CSV[0] < 0.8   "
+#plotselection_W_tau21_anti_0 = " Ws_ABCD_t21[0]  > 0.6 "
 
 
 
 
-plotselection_sideband = "Signal_Topfirst_Zprime_M < 0"
-plotselection_sideband_withtopbtag = "Signal_withtopbtag_Topfirst_Zprime_M < 0"
+#plotselection_W_MSD_one_sided =  " (70 < Ws_ABCD_MSD && Ws_ABCD_MSD < 100)"
+#plotselection_W_MSD_one_sided_anti =  " (70 > Ws_ABCD_MSD && Ws_ABCD_MSD < 100)"
 
 
-plotselection_ABCD_general=  plotselection2 + "&& Zprimes_ABCD_M>0   &&    Ws_ABCD_t21 <  0.6    &&    100 < Tops_ABCD_MSD     &&    Tops_ABCD_MSD  < 210  "
-plotselection_ABCD_general_beta =  plotselection2 + "&& Zprimes_ABCD_M>0   &&    70 < Ws_ABCD_MSD  &&   Ws_ABCD_MSD < 100     &&    100 < Tops_ABCD_MSD     &&    Tops_ABCD_MSD  < 210   "
-plotselection_ABCD_general_beta2 =  plotselection2 + "&& Zprimes_ABCD_M>0   &&    70 < Ws_ABCD_MSD  &&   Ws_ABCD_MSD < 100     &&     Tops_ABCD_t32 < 0.86   "
-plotselection_ABCD_general_0 =  plotselection2 + "&& Zprimes_ABCD_M[0]>0   &&    Ws_ABCD_t21[0] >  0.6    &&    100 < Tops_ABCD_MSD[0]     &&    Tops_ABCD_MSD[0]  < 210   "
-plotselection_ABCD_general_beta_0 =   plotselection2 + "&& Zprimes_ABCD_M[0]>0   &&    70 < Ws_ABCD_MSD[0]  &&   Ws_ABCD_MSD[0] < 100     &&    100 < Tops_ABCD_MSD[0]     &&    Tops_ABCD_MSD[0]  < 210   "
 
-plotselection_ABCD_general_alt_notopbtag =  plotselection2 + " && Zprimes_ABCD_masscorrnotopbtag_M>0 && 70 < Ws_ABCD_masscorrnotopbtag_MSD && Ws_ABCD_masscorrnotopbtag_MSD < 100 && Tops_ABCD_masscorrnotopbtag_t32<0.86 "
-plotselection_ABCD_general_alt_withtopbtag =  plotselection2 + " && Zprimes_ABCD_masscorrwithtopbtag_M>0 && 70 < Ws_ABCD_masscorrwithtopbtag_MSD && Ws_ABCD_masscorrwithtopbtag_MSD < 100 && Tops_ABCD_masscorrwithtopbtag_t32<0.86 "
+
+#plotselection_sideband = "Signal_Topfirst_Zprime_M < 0"
+#plotselection_sideband_withtopbtag = "Signal_withtopbtag_Topfirst_Zprime_M < 0"
+
+
+#plotselection_ABCD_general=  plotselection2 + "&& Zprimes_ABCD_M>0   &&    Ws_ABCD_t21 <  0.6    &&    100 < Tops_ABCD_MSD     &&    Tops_ABCD_MSD  < 210  "
+#plotselection_ABCD_general_beta =  plotselection2 + "&& Zprimes_ABCD_M>0   &&    70 < Ws_ABCD_MSD  &&   Ws_ABCD_MSD < 100     &&    100 < Tops_ABCD_MSD     &&    Tops_ABCD_MSD  < 210   "
+#plotselection_ABCD_general_beta2 =  plotselection2 + "&& Zprimes_ABCD_M>0   &&    70 < Ws_ABCD_MSD  &&   Ws_ABCD_MSD < 100     &&     Tops_ABCD_t32 < 0.86   "
+#plotselection_ABCD_general_0 =  plotselection2 + "&& Zprimes_ABCD_M[0]>0   &&    Ws_ABCD_t21[0] >  0.6    &&    100 < Tops_ABCD_MSD[0]     &&    Tops_ABCD_MSD[0]  < 210   "
+#plotselection_ABCD_general_beta_0 =   plotselection2 + "&& Zprimes_ABCD_M[0]>0   &&    70 < Ws_ABCD_MSD[0]  &&   Ws_ABCD_MSD[0] < 100     &&    100 < Tops_ABCD_MSD[0]     &&    Tops_ABCD_MSD[0]  < 210   "
+
+#plotselection_ABCD_general_alt_notopbtag =  plotselection2 + " && Zprimes_ABCD_masscorrnotopbtag_M>0 && 70 < Ws_ABCD_masscorrnotopbtag_MSD && Ws_ABCD_masscorrnotopbtag_MSD < 100 && Tops_ABCD_masscorrnotopbtag_t32<0.86 "
+#plotselection_ABCD_general_alt_withtopbtag =  plotselection2 + " && Zprimes_ABCD_masscorrwithtopbtag_M>0 && 70 < Ws_ABCD_masscorrwithtopbtag_MSD && Ws_ABCD_masscorrwithtopbtag_MSD < 100 && Tops_ABCD_masscorrwithtopbtag_t32<0.86 "
 
 
 
@@ -680,10 +681,10 @@ divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNam
 
 #print listOfHistoListsABCD[plotnames.index("ABCD_notopbtag_CatA_Zprime_M_beta_first")][BackgroundSampleNames.index('QCD_HT')], '   integral ', listOfHistoListsABCD[plotnames.index("ABCD_notopbtag_CatA_Zprime_M_beta_first")][BackgroundSampleNames.index('QCD_HT')].Integral()
 #writeListOfHistoLists([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_notopbtag_CatA_Zprime_M_beta_first')]],BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], 'label','fuck',normalize=False,stack=False,logscale=False,options='histo',statTest=False, sepaTest=False,ratio=False,DoProfile=False)
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_notopbtag_CatA_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_ratioABoverCD_pol0", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_notopbtag_CatE_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_ratioEFoverGH_pol0", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_notopbtag_CatA_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_ratioABoverCD_pol1", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_notopbtag_CatE_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_ratioEFoverGH_pol1", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
 divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_notopbtag_CatA_Zprime_M_beta_first"), plotnames.index("ABCD_notopbtag_CatE_Zprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_notopbtag_CatA_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_ratioABoverCD_pol0_corrE", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_notopbtag_CatA_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_ratioABoverCD_pol1_corrE", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
 
 
 
@@ -695,10 +696,10 @@ divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNam
 divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_withtopbtag_CatG_Zprime_M_beta_first"), plotnames.index("ABCD_withtopbtag_CatH_Zprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
 divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_withtopbtag_CatE_Zprime_M_beta_first"), plotnames.index("ABCD_withtopbtag_CatG_Zprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
 
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtag_CatA_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_withtopbtag_ratioABoverCD_pol0", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtag_CatE_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_withtopbtag_ratioEFoverGH_pol0", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtag_CatA_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_withtopbtag_ratioABoverCD_pol1", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtag_CatE_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_withtopbtag_ratioEFoverGH_pol1", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
 divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_withtopbtag_CatA_Zprime_M_beta_first"), plotnames.index("ABCD_withtopbtag_CatE_Zprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtag_CatA_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_withtopbtag_ratioABoverCD_pol0_corrE", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtag_CatA_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_withtopbtag_ratioABoverCD_pol1_corrE", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
 
 
 divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_inclusive_CatA_Zprime_M_beta_first"), plotnames.index("ABCD_inclusive_CatB_Zprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
@@ -709,10 +710,10 @@ divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNam
 divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_inclusive_CatG_Zprime_M_beta_first"), plotnames.index("ABCD_inclusive_CatH_Zprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
 divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_inclusive_CatE_Zprime_M_beta_first"), plotnames.index("ABCD_inclusive_CatG_Zprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
 
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_inclusive_CatA_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_inclusive_ratioABoverCD_pol0", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_inclusive_CatE_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_inclusive_ratioEFoverGH_pol0", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_inclusive_CatA_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_inclusive_ratioABoverCD_pol1", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_inclusive_CatE_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_inclusive_ratioEFoverGH_pol1", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
 divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_inclusive_CatA_Zprime_M_beta_first"), plotnames.index("ABCD_inclusive_CatE_Zprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_inclusive_CatA_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_inclusive_ratioABoverCD_pol0_corrE", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_inclusive_CatA_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_inclusive_ratioABoverCD_pol1_corrE", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
 
 
 
@@ -729,10 +730,10 @@ divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNam
 
 
 ListOfIntegralLists=GetIntegralLOL( transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index("ABCD_notopbtag2_CatA_Zprime_M_beta_first"):plotnames.index("ABCD_notopbtag2_CatH_Zprime_M_beta_first")+1]) 
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_notopbtag2_CatA_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_notopbtag2_ratioABoverCD_pol0", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_notopbtag2_CatE_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_notopbtag2_ratioEFoverGH_pol0", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_notopbtag2_CatA_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_notopbtag2_ratioABoverCD_pol1", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_notopbtag2_CatE_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_notopbtag2_ratioEFoverGH_pol1", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
 divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_notopbtag2_CatA_Zprime_M_beta_first"), plotnames.index("ABCD_notopbtag2_CatE_Zprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_notopbtag2_CatA_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_notopbtag2_ratioABoverCD_pol0_corrE", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_notopbtag2_CatA_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_notopbtag2_ratioABoverCD_pol1_corrE", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
 
 
 
@@ -746,10 +747,10 @@ divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNam
 
 
 ListOfIntegralLists=GetIntegralLOL( transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index("ABCD_withtopbtag2_CatA_Zprime_M_beta_first"):plotnames.index("ABCD_withtopbtag2_CatH_Zprime_M_beta_first")+1]) 
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtag2_CatA_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_withtopbtag2_ratioABoverCD_pol0", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtag2_CatE_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_withtopbtag2_ratioEFoverGH_pol0", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtag2_CatA_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_withtopbtag2_ratioABoverCD_pol1", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtag2_CatE_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_withtopbtag2_ratioEFoverGH_pol1", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
 divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_withtopbtag2_CatA_Zprime_M_beta_first"), plotnames.index("ABCD_withtopbtag2_CatE_Zprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtag2_CatA_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_withtopbtag2_ratioABoverCD_pol0_corrE", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtag2_CatA_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_withtopbtag2_ratioABoverCD_pol1_corrE", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
 
 
 divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD2_inclusive_CatA_Zprime_M_beta_first"), plotnames.index("ABCD2_inclusive_CatB_Zprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
@@ -762,10 +763,10 @@ divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNam
 
 
 ListOfIntegralLists=GetIntegralLOL( transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index("ABCD2_inclusive_CatA_Zprime_M_beta_first"):plotnames.index("ABCD2_inclusive_CatH_Zprime_M_beta_first")+1]) 
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD2_inclusive_CatA_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD2_inclusive_ratioABoverCD_pol0", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD2_inclusive_CatE_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD2_inclusive_ratioEFoverGH_pol0", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD2_inclusive_CatA_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD2_"+topWP+"WP_inclusive_ratioABoverCD_pol1", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD2_inclusive_CatE_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD2_"+topWP+"WP_inclusive_ratioEFoverGH_pol1", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
 divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD2_inclusive_CatA_Zprime_M_beta_first"), plotnames.index("ABCD2_inclusive_CatE_Zprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD2_inclusive_CatA_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD2_inclusive_ratioABoverCD_pol0_corrE", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD2_inclusive_CatA_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD2_"+topWP+"WP_inclusive_ratioABoverCD_pol1_corrE", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
 
 
 ####Tprime
@@ -785,10 +786,10 @@ divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNam
 
 #print listOfHistoListsABCD[plotnames.index("ABCD_notopbtag_CatA_Tprime_M_beta_first")][BackgroundSampleNames.index('QCD_HT')], '   integral ', listOfHistoListsABCD[plotnames.index("ABCD_notopbtag_CatA_Tprime_M_beta_first")][BackgroundSampleNames.index('QCD_HT')].Integral()
 #writeListOfHistoLists([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_notopbtag_CatA_Tprime_M_beta_first')]],BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], 'label','fuck',normalize=False,stack=False,logscale=False,options='histo',statTest=False, sepaTest=False,ratio=False,DoProfile=False)
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_notopbtag_CatA_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_ratioABoverCD_pol0", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_notopbtag_CatE_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_ratioEFoverGH_pol0", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_notopbtag_CatA_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_ratioABoverCD_pol1", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_notopbtag_CatE_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_ratioEFoverGH_pol1", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
 divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_notopbtag_CatA_Tprime_M_beta_first"), plotnames.index("ABCD_notopbtag_CatE_Tprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_notopbtag_CatA_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_ratioABoverCD_pol0_corrE", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_notopbtag_CatA_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_ratioABoverCD_pol1_corrE", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
 
 
 
@@ -800,10 +801,10 @@ divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNam
 divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_withtopbtag_CatG_Tprime_M_beta_first"), plotnames.index("ABCD_withtopbtag_CatH_Tprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
 divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_withtopbtag_CatE_Tprime_M_beta_first"), plotnames.index("ABCD_withtopbtag_CatG_Tprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
 
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtag_CatA_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_withtopbtag_ratioABoverCD_pol0", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtag_CatE_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_withtopbtag_ratioEFoverGH_pol0", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtag_CatA_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_withtopbtag_ratioABoverCD_pol1", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtag_CatE_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_withtopbtag_ratioEFoverGH_pol1", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
 divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_withtopbtag_CatA_Tprime_M_beta_first"), plotnames.index("ABCD_withtopbtag_CatE_Tprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtag_CatA_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_withtopbtag_ratioABoverCD_pol0_corrE", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtag_CatA_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_withtopbtag_ratioABoverCD_pol1_corrE", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
 
 
 divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_inclusive_CatA_Tprime_M_beta_first"), plotnames.index("ABCD_inclusive_CatB_Tprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
@@ -814,10 +815,10 @@ divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNam
 divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_inclusive_CatG_Tprime_M_beta_first"), plotnames.index("ABCD_inclusive_CatH_Tprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
 divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_inclusive_CatE_Tprime_M_beta_first"), plotnames.index("ABCD_inclusive_CatG_Tprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
 
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_inclusive_CatA_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_inclusive_ratioABoverCD_pol0", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_inclusive_CatE_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_inclusive_ratioEFoverGH_pol0", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_inclusive_CatA_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_inclusive_ratioABoverCD_pol1", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_inclusive_CatE_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_inclusive_ratioEFoverGH_pol1", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
 divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_inclusive_CatA_Tprime_M_beta_first"), plotnames.index("ABCD_inclusive_CatE_Tprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_inclusive_CatA_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_inclusive_ratioABoverCD_pol0_corrE", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_inclusive_CatA_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_inclusive_ratioABoverCD_pol1_corrE", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
 
 
 
@@ -834,10 +835,10 @@ divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNam
 
 
 ListOfIntegralLists=GetIntegralLOL( transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index("ABCD_notopbtag2_CatA_Tprime_M_beta_first"):plotnames.index("ABCD_notopbtag2_CatH_Tprime_M_beta_first")+1]) 
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_notopbtag2_CatA_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_notopbtag2_ratioABoverCD_pol0", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_notopbtag2_CatE_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_notopbtag2_ratioEFoverGH_pol0", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_notopbtag2_CatA_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_notopbtag2_ratioABoverCD_pol1", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_notopbtag2_CatE_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_notopbtag2_ratioEFoverGH_pol1", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
 divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_notopbtag2_CatA_Tprime_M_beta_first"), plotnames.index("ABCD_notopbtag2_CatE_Tprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_notopbtag2_CatA_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_notopbtag2_ratioABoverCD_pol0_corrE", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_notopbtag2_CatA_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_notopbtag2_ratioABoverCD_pol1_corrE", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
 
 
 
@@ -851,10 +852,10 @@ divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNam
 
 
 ListOfIntegralLists=GetIntegralLOL( transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index("ABCD_withtopbtag2_CatA_Tprime_M_beta_first"):plotnames.index("ABCD_withtopbtag2_CatH_Tprime_M_beta_first")+1]) 
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtag2_CatA_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_withtopbtag2_ratioABoverCD_pol0", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtag2_CatE_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_withtopbtag2_ratioEFoverGH_pol0", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtag2_CatA_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_withtopbtag2_ratioABoverCD_pol1", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtag2_CatE_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_withtopbtag2_ratioEFoverGH_pol1", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
 divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_withtopbtag2_CatA_Tprime_M_beta_first"), plotnames.index("ABCD_withtopbtag2_CatE_Tprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtag2_CatA_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_withtopbtag2_ratioABoverCD_pol0_corrE", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtag2_CatA_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_withtopbtag2_ratioABoverCD_pol1_corrE", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
 
 
 divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD2_inclusive_CatA_Tprime_M_beta_first"), plotnames.index("ABCD2_inclusive_CatB_Tprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
@@ -867,10 +868,10 @@ divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNam
 
 
 ListOfIntegralLists=GetIntegralLOL( transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index("ABCD2_inclusive_CatA_Tprime_M_beta_first"):plotnames.index("ABCD2_inclusive_CatH_Tprime_M_beta_first")+1]) 
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD2_inclusive_CatA_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD2_inclusive_ratioABoverCD_pol0", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD2_inclusive_CatE_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD2_inclusive_ratioEFoverGH_pol0", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD2_inclusive_CatA_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD2_"+topWP+"WP_inclusive_ratioABoverCD_pol1", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD2_inclusive_CatE_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD2_"+topWP+"WP_inclusive_ratioEFoverGH_pol1", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
 divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD2_inclusive_CatA_Tprime_M_beta_first"), plotnames.index("ABCD2_inclusive_CatE_Tprime_M_beta_first"), normalizefirst=False,rebin=1,option='')
-writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD2_inclusive_CatA_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD2_inclusive_ratioABoverCD_pol0_corrE", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
+writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD2_inclusive_CatA_Tprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD2_"+topWP+"WP_inclusive_ratioABoverCD_pol1_corrE", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
 
 
 
@@ -894,12 +895,12 @@ writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[Back
 
 ##print listOfHistoListsABCD[plotnames.index("ABCD_withtopbtagalt_CatA_Zprime_M_beta_first")][BackgroundSampleNames.index('QCD_HT')], '   integral ', listOfHistoListsABCD[plotnames.index("ABCD_withtopbtagalt_CatA_Zprime_M_beta_first")][BackgroundSampleNames.index('QCD_HT')].Integral()
 ##writeListOfHistoLists([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtagalt_CatA_Zprime_M_beta_first')]],BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], 'label','fuck',normalize=False,stack=False,logscale=False,options='histo',statTest=False, sepaTest=False,ratio=False,DoProfile=False)
-#writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_notopbtag_CatA_Zprime_M_beta_first_bottomcontribno')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_bottomcontribno_ratioABoverCD_pol0", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
-#writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_notopbtag_CatE_Zprime_M_beta_first_bottomcontribno')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_bottomcontribno_ratioEFoverGH_pol0", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
-##writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtagalt_CatA_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_withtopbtagalt_shaperatioAB_over_shaperatioCD", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
-##writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtagalt_CatE_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforEFGH_shaperatioEG_over_shaperatioFH", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
+#writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_notopbtag_CatA_Zprime_M_beta_first_bottomcontribno')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_bottomcontribno_ratioABoverCD_pol1", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
+#writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_notopbtag_CatE_Zprime_M_beta_first_bottomcontribno')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_bottomcontribno_ratioEFoverGH_pol1", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
+##writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtagalt_CatA_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_withtopbtagalt_shaperatioAB_over_shaperatioCD", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
+##writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtagalt_CatE_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforEFGH_shaperatioEG_over_shaperatioFH", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
 ##divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_notopbtag_CatA_Zprime_M_beta_first_bottomcontribno"), plotnames.index("ABCD_notopbtag_CatE_Zprime_M_beta_first_bottomcontribno"), normalizefirst=False,rebin=1,option='')
-##writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_notopbtag_CatA_Zprime_M_beta_first_bottomcontribno')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_bottomcontribno_ratioABoverCD_pol0_Ecorr", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
+##writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_notopbtag_CatA_Zprime_M_beta_first_bottomcontribno')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_bottomcontribno_ratioABoverCD_pol1_Ecorr", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
 
 
 
@@ -919,12 +920,12 @@ writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[Back
 
 ##print listOfHistoListsABCD[plotnames.index("ABCD_withtopbtagalt_CatA_Zprime_M_beta_first")][BackgroundSampleNames.index('QCD_HT')], '   integral ', listOfHistoListsABCD[plotnames.index("ABCD_withtopbtagalt_CatA_Zprime_M_beta_first")][BackgroundSampleNames.index('QCD_HT')].Integral()
 ##writeListOfHistoLists([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtagalt_CatA_Zprime_M_beta_first')]],BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], 'label','fuck',normalize=False,stack=False,logscale=False,options='histo',statTest=False, sepaTest=False,ratio=False,DoProfile=False)
-#writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtag_CatA_Zprime_M_beta_first_bottomcontribno')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_withtopbtag_bottomcontribno_ratioABoverCD_pol0", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
-#writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtag_CatE_Zprime_M_beta_first_bottomcontribno')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_withtopbtag_bottomcontribno_ratioEFoverGH_pol0", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
-##writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtagalt_CatA_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_withtopbtagalt_shaperatioAB_over_shaperatioCD", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
-##writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtagalt_CatE_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforEFGH_shaperatioEG_over_shaperatioFH", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
+#writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtag_CatA_Zprime_M_beta_first_bottomcontribno')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_withtopbtag_bottomcontribno_ratioABoverCD_pol1", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
+#writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtag_CatE_Zprime_M_beta_first_bottomcontribno')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_withtopbtag_bottomcontribno_ratioEFoverGH_pol1", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
+##writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtagalt_CatA_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_withtopbtagalt_shaperatioAB_over_shaperatioCD", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
+##writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtagalt_CatE_Zprime_M_beta_first')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforEFGH_shaperatioEG_over_shaperatioFH", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
 ##divideHistos(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1]), plotnames.index("ABCD_withtopbtag_CatA_Zprime_M_beta_first_bottomcontribno"), plotnames.index("ABCD_withtopbtag_CatE_Zprime_M_beta_first_bottomcontribno"), normalizefirst=False,rebin=1,option='')
-##writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtag_CatA_Zprime_M_beta_first_bottomcontribno')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_withtopbtag_bottomcontribno_ratioEFoverGH_pol0_Ecorr", rebin=1, fitoption='pol0', labels=None, autoXrange=True)
+##writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_withtopbtag_CatA_Zprime_M_beta_first_bottomcontribno')]], BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], name="checkforABCD_"+topWP+"WP_withtopbtag_bottomcontribno_ratioEFoverGH_pol1_Ecorr", rebin=1, fitoption='pol1', labels=None, autoXrange=True)
 
 
 
@@ -1092,8 +1093,8 @@ writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[Back
         ##HistoList[0].Divide(HistoList[1])
         ##ListOfPureRatioPlots.append( [HistoList[0] ]  )
     ### writeHistoListwithXYErrors(ListOfPureRatioPlots, [ WASamples[0] ], "RatioPlotFit_pol2_"+SignalSampleName, 1, "pol2", WASignalSamplePlotNameList, True)
-    ##writeHistoListwithXYErrors(ListOfPureRatioPlots, [ WASamples[0] ], "RatioPlotFit_pol0_"+SignalSampleName, 1, "pol0", WASignalSamplePlotNameList, True)
-    ### writeHistoListwithXYErrors(ListOfPureRatioPlots, [ WASamples[0] ], "RatioPlotFit_pol0_"+SignalSampleName, 1, "pol0", WASignalSamplePlotNameList, True)
+    ##writeHistoListwithXYErrors(ListOfPureRatioPlots, [ WASamples[0] ], "RatioPlotFit_pol1_"+SignalSampleName, 1, "pol1", WASignalSamplePlotNameList, True)
+    ### writeHistoListwithXYErrors(ListOfPureRatioPlots, [ WASamples[0] ], "RatioPlotFit_pol1_"+SignalSampleName, 1, "pol1", WASignalSamplePlotNameList, True)
 
 
 ### Ratio Plot with Errors, A/B - Signal over Background, without Signalcontamination
@@ -1101,9 +1102,9 @@ writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[Back
 #for histoList in RatioPlotList:
     #histoList[0].Divide(histoList[1])
     #ListOfPureRatioPlots.append( [histoList[0] ])
-#writeHistoListwithXYErrors(ListOfPureRatioPlots, [ WASamples[0] ], "RatioPlotFit_pol0_Background", 1, "pol0", WASLnames2, True)
+#writeHistoListwithXYErrors(ListOfPureRatioPlots, [ WASamples[0] ], "RatioPlotFit_pol1_Background", 1, "pol1", WASLnames2, True)
 ## writeHistoListwithXYErrors(ListOfPureRatioPlots, [ WASamples[0] ], "RatioPlotFit_pol2_Background", 1, "pol2", WASLnames2, True)
-## writeHistoListwithXYErrors(ListOfPureRatioPlots, [ WASamples[0] ], "RatioPlotFit_pol0_Background", 1, "pol0", WASLnames2, True)
+## writeHistoListwithXYErrors(ListOfPureRatioPlots, [ WASamples[0] ], "RatioPlotFit_pol1_Background", 1, "pol1", WASLnames2, True)
 
 
 
@@ -1153,4 +1154,4 @@ writeHistoListwithXYErrors([transposeLOL(transposeLOL(listOfHistoListsABCD)[Back
 #Integrallist_after_multiplication.tex
 #Rekonstruktion von Kategoie A und E in "RatioPlotList"
 #Signalkontamination in "RatioPlotListComb"+SignalSampleName
-#Fehlerbaender in "RatioPlotFit_pol0_Background"
+#Fehlerbaender in "RatioPlotFit_pol1_Background"
