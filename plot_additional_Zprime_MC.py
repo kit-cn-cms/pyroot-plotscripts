@@ -1,4 +1,4 @@
-from plot_cuts_Zprime import *
+from plot_cuts_ZPrime_MC import *
 
 
 additionalfunctions=[

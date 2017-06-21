@@ -2,7 +2,7 @@ import sys
 import os
 from scriptgenerator import *
 from plotutils import *
-from plot_cuts_Zprime import *
+from plot_cuts_ZPrime_MC import *
 
 weigthsystnamesbasic=[
                     "",
