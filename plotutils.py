@@ -4655,8 +4655,8 @@ def rebintovarbinsLL(lll):
                     lreturn.append(histo)
             llreturn.append(lreturn)
         lllreturn.append(llreturn)
-    return lllreturn
     #raw_input()
+    return lllreturn
 
 def rebintovarbinsLOL(lol):
     lolreturn=[]
@@ -4678,8 +4678,8 @@ def rebintovarbinsLOL(lol):
             else:
                 lreturn.append(histo)
         lolreturn.append(lreturn)
-    return lolreturn
     #raw_input()
+    return lolreturn
 
 def chekcNbins(lol):
     for l in lol:

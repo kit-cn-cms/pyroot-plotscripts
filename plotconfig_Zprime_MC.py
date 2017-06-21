@@ -264,79 +264,117 @@ weightsystnamesABCD=[
                     "_ABCD2corrE_notopbtag_TprimeM_systdown",
                     "_ABCD2corrE_withtopbtag_TprimeM_systup",
                     "_ABCD2corrE_withtopbtag_TprimeM_systdown",      
+
+
 ]
 
 systweightsABCD=[
                     #"nom:=1",
-                    "ABCD_nominal:=1",
-                    #"ABCD_notopbtag_ZprimeM_systup:=pow(1+0.03,1.0/3.0)",
-                    #"ABCD_notopbtag_ZprimeM_systdown:=pow(1-0.03,1.0/3.0)",
-                    #"ABCD_withtopbtag_ZprimeM_systup:=pow(1+0.15,1.0/3.0)",
-                    #"ABCD_withtopbtag_ZprimeM_systdown:=pow(1-0.15,1.0/3.0)",
-                    #"ABCD_notopbtag_TprimeM_systup:=pow(1+0.03,1.0/3.0)",
-                    #"ABCD_notopbtag_TprimeM_systdown:=pow(1-0.03,1.0/3.0)",
-                    #"ABCD_withtopbtag_TprimeM_systup:=pow(1+0.15,1.0/3.0)",
-                    #"ABCD_withtopbtag_TprimeM_systdown:=pow(1-0.15,1.0/3.0)",
+                    "ABCD_nominal:= 1",
+                    "ABCD_inclusive_ZprimeM_systup:= pow(1+0.06,1.0/3.0)",
+                    "ABCD_inclusive_ZprimeM_systdown:= pow(1-0.06,1.0/3.0)",
+                    "ABCD_notopbtag_ZprimeM_systup:= pow(1+0.08,1.0/3.0)",
+                    "ABCD_notopbtag_ZprimeM_systdown:= pow(1-0.08,1.0/3.0)",
+                    "ABCD_withtopbtag_ZprimeM_systup:= pow(1+0.35,1.0/3.0)",
+                    "ABCD_withtopbtag_ZprimeM_systdown:= pow(1-0.35,1.0/3.0)",
+                    "ABCD_inclusive_TprimeM_systup:= pow(1+0.06,1.0/3.0)",
+                    "ABCD_inclusive_TprimeM_systdown:= pow(1-0.06,1.0/3.0)",
+                    "ABCD_notopbtag_TprimeM_systup:= pow(1+0.08,1.0/3.0)",
+                    "ABCD_notopbtag_TprimeM_systdown:= pow(1-0.08,1.0/3.0)",
+                    "ABCD_withtopbtag_TprimeM_systup:= pow(1+0.6,1.0/3.0)",
+                    "ABCD_withtopbtag_TprimeM_systdown:= pow(1-0.6,1.0/3.0)",
 
-                    #"ABCD2corrE_notopbtag_ZprimeM_systup:=pow(1+0.01,1.0/7.0)",
-                    #"ABCD2corrE_notopbtag_ZprimeM_systdown:=pow(1-0.01,1.0/7.0)",
-                    #"ABCD2corrE_withtopbtag_ZprimeM_systup:=pow(1+0.08,1.0/7.0)",
-                    #"ABCD2corrE_withtopbtag_ZprimeM_systdown:=pow(1-0.08,1.0/7.0)",
-                    #"ABCD2corrE_notopbtag_TprimeM_systup:=pow(1+0.01,1.0/7.0)",
-                    #"ABCD2corrE_notopbtag_TprimeM_systdown:=pow(1-0.01,1.0/7.0)",
-                    #"ABCD2corrE_withtopbtag_TprimeM_systup:=pow(1+0.1,1.0/7.0)",
-                    #"ABCD2corrE_withtopbtag_TprimeM_systdown:=pow(1-0.1,1.0/7.0)", 
-                    "ABCD_inclusive_ZprimeM_systup:=1+0.06*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
-                    "ABCD_inclusive_ZprimeM_systdown:=1-0.06*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",  
-                    "ABCD_notopbtag_ZprimeM_systup:=1+0.08*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    "ABCD_notopbtag_ZprimeM_systdown:=1-0.08*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    "ABCD_withtopbtag_ZprimeM_systup:=1+0.35*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
-                    "ABCD_withtopbtag_ZprimeM_systdown:=1-0.35*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
-                    "ABCD_inclusive_TprimeM_systup:=1+0.06*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
-                    "ABCD_inclusive_TprimeM_systdown:=1-0.06*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")", 
-                    "ABCD_notopbtag_TprimeM_systup:=1+0.08*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    "ABCD_notopbtag_TprimeM_systdown:=1-0.08*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    "ABCD_withtopbtag_TprimeM_systup:=1+0.6*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
-                    "ABCD_withtopbtag_TprimeM_systdown:=1-0.6*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
+                    "ABCDcorrE_inclusive_ZprimeM_systup:= pow(1+0.005,1.0/7.0)",
+                    "ABCDcorrE_inclusive_ZprimeM_systdown:= pow(1-0.005,1.0/7.0)",
+                    "ABCDcorrE_notopbtag_ZprimeM_systup:= pow(1+0.005,1.0/7.0)",
+                    "ABCDcorrE_notopbtag_ZprimeM_systdown:= pow(1-0.005,1.0/7.0)",
+                    "ABCDcorrE_withtopbtag_ZprimeM_systup:= pow(1+0.06,1.0/7.0)",
+                    "ABCDcorrE_withtopbtag_ZprimeM_systdown:= pow(1-0.06,1.0/7.0)",
+                    "ABCDcorrE_inclusive_TprimeM_systup:= pow(1+0.005,1.0/7.0)",
+                    "ABCDcorrE_inclusive_TprimeM_systdown:= pow(1-0.005,1.0/7.0)",
+                    "ABCDcorrE_notopbtag_TprimeM_systup:= pow(1+0.02,1.0/7.0)",
+                    "ABCDcorrE_notopbtag_TprimeM_systdown:= pow(1-0.02,1.0/7.0)",
+                    "ABCDcorrE_withtopbtag_TprimeM_systup:= pow(1+0.8,1.0/7.0)",
+                    "ABCDcorrE_withtopbtag_TprimeM_systdown:= pow(1-0.8,1.0/7.0)",
+                    
+                    "ABCD2_inclusive_ZprimeM_systup:= pow(1+0.06,1.0/3.0)",
+                    "ABCD2_inclusive_ZprimeM_systdown:= pow(1-0.06,1.0/3.0)",
+                    "ABCD2_notopbtag_ZprimeM_systup:= pow(1+0.10,1.0/3.0)",
+                    "ABCD2_notopbtag_ZprimeM_systdown:= pow(1-0.10,1.0/3.0)",
+                    "ABCD2_withtopbtag_ZprimeM_systup:= pow(1+0.02,1.0/3.0)",
+                    "ABCD2_withtopbtag_ZprimeM_systdown:= pow(1-0.02,1.0/3.0)",
+                    "ABCD2_inclusive_TprimeM_systup:= pow(1+0.06,1.0/3.0)",
+                    "ABCD2_inclusive_TprimeM_systdown:= pow(1-0.06,1.0/3.0)",
+                    "ABCD2_notopbtag_TprimeM_systup:= pow(1+0.12,1.0/3.0)",
+                    "ABCD2_notopbtag_TprimeM_systdown:= pow(1-0.12,1.0/3.0)",
+                    "ABCD2_withtopbtag_TprimeM_systup:= pow(1+0.01,1.0/3.0)",
+                    "ABCD2_withtopbtag_TprimeM_systdown:= pow(1-0.01,1.0/3.0)",
+                                        
+                    "ABCD2corrE_inclusive_ZprimeM_systup:= pow(1+0.08,1.0/7.0)",
+                    "ABCD2corrE_inclusive_ZprimeM_systdown:= pow(1-0.08,1.0/7.0)",
+                    "ABCD2corrE_notopbtag_ZprimeM_systup:= pow(1+0.05,1.0/7.0)",
+                    "ABCD2corrE_notopbtag_ZprimeM_systdown:= pow(1-0.05,1.0/7.0)",
+                    "ABCD2corrE_withtopbtag_ZprimeM_systup:= pow(1+0.05,1.0/7.0)",
+                    "ABCD2corrE_withtopbtag_ZprimeM_systdown:= pow(1-0.05,1.0/7.0)",
+                    "ABCD2corrE_inclusive_TprimeM_systup:= pow(1+0.08,1.0/7.0)",
+                    "ABCD2corrE_inclusive_TprimeM_systdown:= pow(1-0.08,1.0/7.0)",
+                    "ABCD2corrE_notopbtag_TprimeM_systup:= pow(1+0.05,1.0/7.0)",
+                    "ABCD2corrE_notopbtag_TprimeM_systdown:= pow(1-0.05,1.0/7.0)",
+                    "ABCD2corrE_withtopbtag_TprimeM_systup:= pow(1+0.02,1.0/7.0)",
+                    "ABCD2corrE_withtopbtag_TprimeM_systdown:= pow(1-0.02,1.0/7.0)",
+                    
+                    
+                    #"ABCD_inclusive_ZprimeM_systup:= 1+0.06*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
+                    #"ABCD_inclusive_ZprimeM_systdown:= 1-0.06*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",  
+                    #"ABCD_notopbtag_ZprimeM_systup:= 1+0.08*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
+                    #"ABCD_notopbtag_ZprimeM_systdown:= 1-0.08*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
+                    #"ABCD_withtopbtag_ZprimeM_systup:= 1+0.35*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
+                    #"ABCD_withtopbtag_ZprimeM_systdown:= 1-0.35*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
+                    #"ABCD_inclusive_TprimeM_systup:= 1+0.06*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
+                    #"ABCD_inclusive_TprimeM_systdown:= 1-0.06*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")", 
+                    #"ABCD_notopbtag_TprimeM_systup:= 1+0.08*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
+                    #"ABCD_notopbtag_TprimeM_systdown:= 1-0.08*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
+                    #"ABCD_withtopbtag_TprimeM_systup:= 1+0.6*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
+                    #"ABCD_withtopbtag_TprimeM_systdown:= 1-0.6*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
 
-                    "ABCDcorrE_inclusive_ZprimeM_systup:=1+0.005*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
-                    "ABCDcorrE_inclusive_ZprimeM_systdown:=1-0.005*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
-                    "ABCDcorrE_notopbtag_ZprimeM_systup:=1+0.005*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    "ABCDcorrE_notopbtag_ZprimeM_systdown:=1-0.005*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    "ABCDcorrE_withtopbtag_ZprimeM_systup:=1+0.6*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
-                    "ABCDcorrE_withtopbtag_ZprimeM_systdown:=1-0.6*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
-                    "ABCDcorrE_inclusive_TprimeM_systup:=1+0.005*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
-                    "ABCDcorrE_inclusive_TprimeM_systdown:=1-0.005*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
-                    "ABCDcorrE_notopbtag_TprimeM_systup:=1+0.02*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    "ABCDcorrE_notopbtag_TprimeM_systdown:=1-0.02*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    "ABCDcorrE_withtopbtag_TprimeM_systup:=1+0.8*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
-                    "ABCDcorrE_withtopbtag_TprimeM_systdown:=1-0.8*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",  
+                    #"ABCDcorrE_inclusive_ZprimeM_systup:= 1+0.005*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
+                    #"ABCDcorrE_inclusive_ZprimeM_systdown:= 1-0.005*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
+                    #"ABCDcorrE_notopbtag_ZprimeM_systup:= 1+0.005*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
+                    #"ABCDcorrE_notopbtag_ZprimeM_systdown:= 1-0.005*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
+                    #"ABCDcorrE_withtopbtag_ZprimeM_systup:= 1+0.6*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
+                    #"ABCDcorrE_withtopbtag_ZprimeM_systdown:= 1-0.6*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
+                    #"ABCDcorrE_inclusive_TprimeM_systup:= 1+0.005*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
+                    #"ABCDcorrE_inclusive_TprimeM_systdown:= 1-0.005*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
+                    #"ABCDcorrE_notopbtag_TprimeM_systup:=1+0.02*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
+                    #"ABCDcorrE_notopbtag_TprimeM_systdown:=1-0.02*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
+                    #"ABCDcorrE_withtopbtag_TprimeM_systup:=1+0.8*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
+                    #"ABCDcorrE_withtopbtag_TprimeM_systdown:=1-0.8*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",  
 
-                    "ABCD2_inclusive_ZprimeM_systup:=1+0.06*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
-                    "ABCD2_inclusive_ZprimeM_systdown:=1-0.06*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",  
-                    "ABCD2_notopbtag_ZprimeM_systup:=1+0.10*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    "ABCD2_notopbtag_ZprimeM_systdown:=1-0.10*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    "ABCD2_withtopbtag_ZprimeM_systup:=1+0.02*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
-                    "ABCD2_withtopbtag_ZprimeM_systdown:=1-0.02*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
-                    "ABCD2_inclusive_TprimeM_systup:=1+0.06*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
-                    "ABCD2_inclusive_TprimeM_systdown:=1-0.06*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")", 
-                    "ABCD2_notopbtag_TprimeM_systup:=1+0.12*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    "ABCD2_notopbtag_TprimeM_systdown:=1-0.12*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    "ABCD2_withtopbtag_TprimeM_systup:=1+0.01*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
-                    "ABCD2_withtopbtag_TprimeM_systdown:=1-0.01*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
+                    #"ABCD2_inclusive_ZprimeM_systup:=1+0.06*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
+                    #"ABCD2_inclusive_ZprimeM_systdown:=1-0.06*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",  
+                    #"ABCD2_notopbtag_ZprimeM_systup:=1+0.10*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
+                    #"ABCD2_notopbtag_ZprimeM_systdown:=1-0.10*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
+                    #"ABCD2_withtopbtag_ZprimeM_systup:=1+0.02*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
+                    #"ABCD2_withtopbtag_ZprimeM_systdown:=1-0.02*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
+                    #"ABCD2_inclusive_TprimeM_systup:=1+0.06*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
+                    #"ABCD2_inclusive_TprimeM_systdown:=1-0.06*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")", 
+                    #"ABCD2_notopbtag_TprimeM_systup:=1+0.12*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
+                    #"ABCD2_notopbtag_TprimeM_systdown:=1-0.12*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
+                    #"ABCD2_withtopbtag_TprimeM_systup:=1+0.01*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
+                    #"ABCD2_withtopbtag_TprimeM_systdown:=1-0.01*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
 
-                    "ABCD2corrE_inclusive_ZprimeM_systup:=1+0.08*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
-                    "ABCD2corrE_inclusive_ZprimeM_systdown:=1-0.08*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
-                    "ABCD2corrE_notopbtag_ZprimeM_systup:=1+0.05*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    "ABCD2corrE_notopbtag_ZprimeM_systdown:=1-0.05*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    "ABCD2corrE_withtopbtag_ZprimeM_systup:=1+0.05*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
-                    "ABCD2corrE_withtopbtag_ZprimeM_systdown:=1-0.05*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
-                    "ABCD2corrE_inclusive_TprimeM_systup:=1+0.08*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
-                    "ABCD2corrE_inclusive_TprimeM_systdown:=1-0.08*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
-                    "ABCD2corrE_notopbtag_TprimeM_systup:=1+0.05*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    "ABCD2corrE_notopbtag_TprimeM_systdown:=1-0.05*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    "ABCD2corrE_withtopbtag_TprimeM_systup:=1+0.02*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
-                    "ABCD2corrE_withtopbtag_TprimeM_systdown:=1-0.02*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",  
+                    #"ABCD2corrE_inclusive_ZprimeM_systup:=1+0.08*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
+                    #"ABCD2corrE_inclusive_ZprimeM_systdown:=1-0.08*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
+                    #"ABCD2corrE_notopbtag_ZprimeM_systup:=1+0.05*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
+                    #"ABCD2corrE_notopbtag_ZprimeM_systdown:=1-0.05*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
+                    #"ABCD2corrE_withtopbtag_ZprimeM_systup:=1+0.05*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
+                    #"ABCD2corrE_withtopbtag_ZprimeM_systdown:=1-0.05*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
+                    #"ABCD2corrE_inclusive_TprimeM_systup:=1+0.08*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
+                    #"ABCD2corrE_inclusive_TprimeM_systdown:=1-0.08*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
+                    #"ABCD2corrE_notopbtag_TprimeM_systup:=1+0.05*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
+                    #"ABCD2corrE_notopbtag_TprimeM_systdown:=1-0.05*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
+                    #"ABCD2corrE_withtopbtag_TprimeM_systup:=1+0.02*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
+                    #"ABCD2corrE_withtopbtag_TprimeM_systdown:=1-0.02*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",  
 ]
 
 weigthsystnamesMCSFs=[
@@ -372,16 +410,19 @@ systweightnamesMCSFs=[
 ]
 
 
-allweightsystnames=weigthsystnamesbasic+weightsystnamesMadgraphbantiZprimeM+weightsystnamesPythia8bantiZprimeM+weightsystnamesMadgraphtantiTopPt+weightsystnamesPythia8tantiTopPt+weightsystnamesGeneratorDiffMadgraphbantiZprimeM+weightsystnamesGeneratorDiffPythia8bantiZprimeM+weightsystnamesGeneratorDiffMadgraphtantiTopPt+weightsystnamesGeneratorDiffPythia8tantiTopPt+weightsystnamesMadgraphbantiZprimeMWithtopbtag+weightsystnamesPythia8bantiZprimeMWithtopbtag+weightsystnamesGeneratorDiffMadgraphbantiZprimeMWithtopbtag+weightsystnamesGeneratorDiffPythia8bantiZprimeMWithtopbtag+weightsystnamesMadgraphtantiTopPtWithtopbtag+weightsystnamesPythia8tantiTopPtWithtopbtag+weightsystnamesGeneratorDiffMadgraphtantiTopPtWithtopbtag+weightsystnamesGeneratorDiffPythia8tantiTopPtWithtopbtag+weightsystnamesABCD+weigthsystnamesMCSFs
-#allweightsystnames=weightsystnamesABCD
+#allweightsystnames=weigthsystnamesbasic+weightsystnamesMadgraphbantiZprimeM+weightsystnamesPythia8bantiZprimeM+weightsystnamesMadgraphtantiTopPt+weightsystnamesPythia8tantiTopPt+weightsystnamesGeneratorDiffMadgraphbantiZprimeM+weightsystnamesGeneratorDiffPythia8bantiZprimeM+weightsystnamesGeneratorDiffMadgraphtantiTopPt+weightsystnamesGeneratorDiffPythia8tantiTopPt+weightsystnamesMadgraphbantiZprimeMWithtopbtag+weightsystnamesPythia8bantiZprimeMWithtopbtag+weightsystnamesGeneratorDiffMadgraphbantiZprimeMWithtopbtag+weightsystnamesGeneratorDiffPythia8bantiZprimeMWithtopbtag+weightsystnamesMadgraphtantiTopPtWithtopbtag+weightsystnamesPythia8tantiTopPtWithtopbtag+weightsystnamesGeneratorDiffMadgraphtantiTopPtWithtopbtag+weightsystnamesGeneratorDiffPythia8tantiTopPtWithtopbtag+weightsystnamesABCD+weigthsystnamesMCSFs
+##allweightsystnames=weightsystnamesABCD
 
-allsystweights=systweightsbasic+systweightsMadgraphbantiZprimeM+systweightsPythia8bantiZprimeM+systweightsMadgraphtantiTopPt+systweightsPythia8tantiTopPt+systweightsGeneartorDiffMadgraphbantiZprimeM+systweightsGeneartorDiffPythia8bantiZprimeM+systweightsGeneartorDiffMadgraphtantiTopPt+systweightsGeneartorDiffPythia8tantiTopPt+systweightsMadgraphbantiZprimeMWithtopbtag+systweightsPythia8bantiZprimeMWithtopbtag+systweightsGeneartorDiffMadgraphbantiZprimeMWithtopbtag+systweightsGeneartorDiffPythia8bantiZprimeMWithtopbtag+systweightsMadgraphtantiTopPtWithtopbtag+systweightsPythia8tantiTopPtWithtopbtag+systweightsGeneartorDiffMadgraphtantiTopPtWithtopbtag+systweightsGeneartorDiffPythia8tantiTopPtWithtopbtag+systweightsABCD+systweightnamesMCSFs
-#allsystweights=systweightsABCD
+#allsystweights=systweightsbasic+systweightsMadgraphbantiZprimeM+systweightsPythia8bantiZprimeM+systweightsMadgraphtantiTopPt+systweightsPythia8tantiTopPt+systweightsGeneartorDiffMadgraphbantiZprimeM+systweightsGeneartorDiffPythia8bantiZprimeM+systweightsGeneartorDiffMadgraphtantiTopPt+systweightsGeneartorDiffPythia8tantiTopPt+systweightsMadgraphbantiZprimeMWithtopbtag+systweightsPythia8bantiZprimeMWithtopbtag+systweightsGeneartorDiffMadgraphbantiZprimeMWithtopbtag+systweightsGeneartorDiffPythia8bantiZprimeMWithtopbtag+systweightsMadgraphtantiTopPtWithtopbtag+systweightsPythia8tantiTopPtWithtopbtag+systweightsGeneartorDiffMadgraphtantiTopPtWithtopbtag+systweightsGeneartorDiffPythia8tantiTopPtWithtopbtag+systweightsABCD+systweightnamesMCSFs
+##allsystweights=systweightsABCD
 
-ABweightsystnames=weigthsystnamesbasic+weightsystnamesMadgraphbantiZprimeM+weightsystnamesPythia8bantiZprimeM+weightsystnamesMadgraphtantiTopPt+weightsystnamesPythia8tantiTopPt+weightsystnamesGeneratorDiffMadgraphbantiZprimeM+weightsystnamesGeneratorDiffPythia8bantiZprimeM+weightsystnamesGeneratorDiffMadgraphtantiTopPt+weightsystnamesGeneratorDiffPythia8tantiTopPt+weightsystnamesMadgraphbantiZprimeMWithtopbtag+weightsystnamesPythia8bantiZprimeMWithtopbtag+weightsystnamesGeneratorDiffMadgraphbantiZprimeMWithtopbtag+weightsystnamesGeneratorDiffPythia8bantiZprimeMWithtopbtag+weightsystnamesMadgraphtantiTopPtWithtopbtag+weightsystnamesPythia8tantiTopPtWithtopbtag+weightsystnamesGeneratorDiffMadgraphtantiTopPtWithtopbtag+weightsystnamesGeneratorDiffPythia8tantiTopPtWithtopbtag+weigthsystnamesMCSFs
+#ABweightsystnames=weigthsystnamesbasic+weightsystnamesMadgraphbantiZprimeM+weightsystnamesPythia8bantiZprimeM+weightsystnamesMadgraphtantiTopPt+weightsystnamesPythia8tantiTopPt+weightsystnamesGeneratorDiffMadgraphbantiZprimeM+weightsystnamesGeneratorDiffPythia8bantiZprimeM+weightsystnamesGeneratorDiffMadgraphtantiTopPt+weightsystnamesGeneratorDiffPythia8tantiTopPt+weightsystnamesMadgraphbantiZprimeMWithtopbtag+weightsystnamesPythia8bantiZprimeMWithtopbtag+weightsystnamesGeneratorDiffMadgraphbantiZprimeMWithtopbtag+weightsystnamesGeneratorDiffPythia8bantiZprimeMWithtopbtag+weightsystnamesMadgraphtantiTopPtWithtopbtag+weightsystnamesPythia8tantiTopPtWithtopbtag+weightsystnamesGeneratorDiffMadgraphtantiTopPtWithtopbtag+weightsystnamesGeneratorDiffPythia8tantiTopPtWithtopbtag+weigthsystnamesMCSFs
 
-ABsystweights=systweightsbasic+systweightsMadgraphbantiZprimeM+systweightsPythia8bantiZprimeM+systweightsMadgraphtantiTopPt+systweightsPythia8tantiTopPt+systweightsGeneartorDiffMadgraphbantiZprimeM+systweightsGeneartorDiffPythia8bantiZprimeM+systweightsGeneartorDiffMadgraphtantiTopPt+systweightsGeneartorDiffPythia8tantiTopPt+systweightsMadgraphbantiZprimeMWithtopbtag+systweightsPythia8bantiZprimeMWithtopbtag+systweightsGeneartorDiffMadgraphbantiZprimeMWithtopbtag+systweightsGeneartorDiffPythia8bantiZprimeMWithtopbtag+systweightsMadgraphtantiTopPtWithtopbtag+systweightsPythia8tantiTopPtWithtopbtag+systweightsGeneartorDiffMadgraphtantiTopPtWithtopbtag+systweightsGeneartorDiffPythia8tantiTopPtWithtopbtag+systweightnamesMCSFs
-        
+#ABsystweights=systweightsbasic+systweightsMadgraphbantiZprimeM+systweightsPythia8bantiZprimeM+systweightsMadgraphtantiTopPt+systweightsPythia8tantiTopPt+systweightsGeneartorDiffMadgraphbantiZprimeM+systweightsGeneartorDiffPythia8bantiZprimeM+systweightsGeneartorDiffMadgraphtantiTopPt+systweightsGeneartorDiffPythia8tantiTopPt+systweightsMadgraphbantiZprimeMWithtopbtag+systweightsPythia8bantiZprimeMWithtopbtag+systweightsGeneartorDiffMadgraphbantiZprimeMWithtopbtag+systweightsGeneartorDiffPythia8bantiZprimeMWithtopbtag+systweightsMadgraphtantiTopPtWithtopbtag+systweightsPythia8tantiTopPtWithtopbtag+systweightsGeneartorDiffMadgraphtantiTopPtWithtopbtag+systweightsGeneartorDiffPythia8tantiTopPtWithtopbtag+systweightnamesMCSFs
+     
+allweightsystnames=weigthsystnamesbasic+weightsystnamesABCD
+
+allsystweights=systweightsbasic+systweightsABCD
 
 # names of the systematics (proper names needed e.g. for combination)
 mcweight='37.8'
