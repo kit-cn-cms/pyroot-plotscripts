@@ -4,11 +4,13 @@ from scriptgenerator import *
 from plotutils import *
 
 weigthsystnamesbasic=[
+                    "",
                     "_no_nominal",
                     "_no_systup",
                     "_no_systdown",
 ]
 systweightsbasic=[
+                    "nom:=1",
                     "no_nominal:=1.0",
                     "no_systup:=1.0",
                     "no_systdown:=1.0",
@@ -17,14 +19,14 @@ systweightsbasic=[
     
     
 weightsystnamesMadgraphbantiZprimeM=[
-                    "",
+                    #"",
                     "_ABMadgraphbantiZprimeM_nominal",
                     "_ABMadgraphbantiZprimeM_systup",
                     "_ABMadgraphbantiZprimeM_systdown",
 ] 
 
 systweightsMadgraphbantiZprimeM=[
-                    "nom:=1",
+                    #"nom:=1",
                     #"ABMadgraphbantiZprimeM_nominal:=2",
                     "ABMadgraphbantiZprimeM_nominal:=QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M",
                     ##"ABMadgraphbantiZprimeM_nominal:=2*(DoWeights==1)+(DoWeights==0)*1.0",

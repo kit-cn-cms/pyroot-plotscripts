@@ -523,7 +523,6 @@ outputpath=plotParallel(name,2000000,plots,SignalSamples+BackgroundSamples+DataS
 #listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
 
 listOfHistoListsSignal=createHistoLists_fromSuperHistoFile(outputpath,SignalSamples,plots,1)
-
 listOfHistoListsBackground=createHistoLists_fromSuperHistoFile(outputpath,BackgroundSamples,plots,1)
 listOfHistoListsDataMadgraph=createHistoLists_fromSuperHistoFile(outputpath,DataSamples,plots,1)
 listOfHistoListsDataPythia=createHistoLists_fromSuperHistoFile(outputpath,DataSamples,plots,1)
@@ -533,6 +532,9 @@ listOfHistoListsBackground=rebintovarbinsLOL(listOfHistoListsBackground)
 listOfHistoListsDataMadgraph=rebintovarbinsLOL(listOfHistoListsDataMadgraph)
 listOfHistoListsDataPythia=rebintovarbinsLOL(listOfHistoListsDataPythia)
 
+print listOfHistoListsSignal
+print 'fuckyeah'
+raw_input()
 
 addLOLtoLOL(listOfHistoListsDataMadgraph,transposeLOL([transposeLOL(listOfHistoListsBackground)[BackgroundSampleNames.index("QCDMadgraph")]]+[transposeLOL(listOfHistoListsBackground)[BackgroundSampleNames.index("ttbar")]]))
 addLOLtoLOL(listOfHistoListsDataPythia,transposeLOL([transposeLOL(listOfHistoListsBackground)[BackgroundSampleNames.index("QCDPythia8")]]+[transposeLOL(listOfHistoListsBackground)[BackgroundSampleNames.index("ttbar")]]))
