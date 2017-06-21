@@ -4029,13 +4029,13 @@ def rebintovarbins(lol):
         for histo in l:
             if 'Tprime_M_' in histo.GetName():
                 print 'Nbins histo before TprimeM ', histo.GetNbinsX()
-                xbins= array.array('d',[0,500,550,600,650,700,750,800,850,900,950,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2500])
+                xbins= array.array('d',[0,500,550,600,650,700,750,800,850,900,950,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500])
                 historeturn=histo.Rebin(len(xbins)-1,histo.GetName(),xbins)
                 print 'Nbins histo after TprimeM ', historeturn.GetNbinsX()
                 lreturn.append(historeturn)
             elif 'Zprime_M_' in histo.GetName():
                 print 'Nbins histo before ZprimeM ', histo.GetNbinsX()
-                xbins= array.array('d',[0,1000,1100,1200,1300,1400,1500,1650,1800,1850,2000,2200,2400,2500,2750,3000,3250,3500,3750,4000,4500,5000])
+                xbins= array.array('d',[0,1000,1100,1200,1300,1400,1500,1650,1800,2000,2200,2400,2600,2800,3000,3250,3500,3750,4000,4500,5000])
                 historeturn=histo.Rebin(len(xbins)-1,histo.GetName(),xbins)
                 print 'Nbins histo after ZprimeM ', historeturn.GetNbinsX()
                 lreturn.append(historeturn)
