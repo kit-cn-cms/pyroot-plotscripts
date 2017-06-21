@@ -26,67 +26,67 @@ name='Zprime_MC'
 
 
 
-# book plots
-plotlabel="Wbt, #geq 3 jets, #geq 1 b-tags"
-plotlabelboosted="#splitline{Wbt, #geq 3 jets, #geq 1 b-tags}{#geq 1 AK8 jet p_{T} > 400 GeV, #geq 1 AK8 jet p_{T} > 200 GeV, #geq 1 AK4 jet p_{T} > 100 GeV}"
-#plotselection="N_packedPatJetsAK8PFCHSSoftDrop>=2&&packedPatJetsAK8PFCHSSoftDrop_Pt[0]>400&&packedPatJetsAK8PFCHSSoftDrop_Pt[1]>200&&Evt_HT>850"
-plotselection1="Evt_HT>850"
-plotselection3="Evt_HT>1000"
-#plotselection1=""
-plotselection2="(N_packedPatJetsAK8PFCHSSoftDrop>=2 && packedPatJetsAK8PFCHSSoftDrop_Pt[0]>400 && packedPatJetsAK8PFCHSSoftDrop_Pt[1]>200 && Evt_HT>850) "
+## book plots
+#plotlabel="Wbt, #geq 3 jets, #geq 1 b-tags"
+#plotlabelboosted="#splitline{Wbt, #geq 3 jets, #geq 1 b-tags}{#geq 1 AK8 jet p_{T} > 400 GeV, #geq 1 AK8 jet p_{T} > 200 GeV, #geq 1 AK4 jet p_{T} > 100 GeV}"
+##plotselection="N_packedPatJetsAK8PFCHSSoftDrop>=2&&packedPatJetsAK8PFCHSSoftDrop_Pt[0]>400&&packedPatJetsAK8PFCHSSoftDrop_Pt[1]>200&&Evt_HT>850"
+#plotselection1="Evt_HT>850"
+#plotselection3="Evt_HT>1000"
+##plotselection1=""
+#plotselection2="(N_packedPatJetsAK8PFCHSSoftDrop>=2 && packedPatJetsAK8PFCHSSoftDrop_Pt[0]>400 && packedPatJetsAK8PFCHSSoftDrop_Pt[1]>200 && Evt_HT>850) "
 
 
 
 
 
-#Own Plotselections for ABCD-method
+##Own Plotselections for ABCD-method
 
-#plotselection_tau32 = " Tops_ABCD_t32 < 0.67   "
-plotselection_tau32 = " Tops_ABCD_t32 < 0.86   "
-plotselection_W_MSD =  " (70 < Ws_ABCD_MSD  &&   Ws_ABCD_MSD < 100) "
-plotselection_B_CSV = "  Bottoms_ABCD_CSV > 0.8  "
-#plotselection_W_tau21 = " Ws_ABCD_t21 < 0.45 "
-plotselection_W_tau21 = " Ws_ABCD_t21 < 0.6 "
-plotselection_t_MSD = " (105 < Tops_ABCD_MSD && Tops_ABCD_MSD < 210) "
-plotselection_topsubjetCSVv2 = " Tops_ABCD_maxsubjetCSVv2 > 0.8 "
-
-
-
-
-plotselection_tau32_0 = " Tops_ABCD_t32[0] < 0.86   "
-#plotselection_tau32_0 = " Tops_ABCD_t32[0] < 0.67   "
-plotselection_W_MSD_0 =  " (70 < Ws_ABCD_MSD[0]  &&   Ws_ABCD_MSD[0] < 100) "
-#plotselection_B_CSV_0 = "  Bottoms_ABCD_CSV[0] > 0.8   "
-plotselection_W_tau21_0 = " Ws_ABCD_t21[0] < 0.6  "
-plotselection_W_tau21_0 = " Ws_ABCD_t21[0] < 0.45  "
-
-plotselection_tau32_anti=" Tops_ABCD_t32 > 0.86   "
-plotselection_W_MSD_anti =  " (70 > Ws_ABCD_MSD  ||   Ws_ABCD_MSD > 100) "
-plotselection_B_CSV_anti = "  Bottoms_ABCD_CSV < 0.46   "
-plotselection_W_tau21_anti = " Ws_ABCD_t21 > 0.6 "
-plotselection_t_MSD_anti = " (105 > Tops_ABCD_MSD || Tops_ABCD_MSD > 210) "
-plotselection_topsubjetCSVv2_anti = " Tops_ABCD_maxsubjetCSVv2 < 0.8 "
-
-plotselection_tau32_anti_0 =" Tops_ABCD_t32[0] > 0.86   "
-plotselection_W_MSD_anti_0 =  " (70 > Ws_ABCD_MSD[0]  ||   Ws_ABCD_MSD[0] > 100) "
-plotselection_B_CSV_anti_0 = "  Bottoms_ABCD_CSV[0] < 0.46   "
-plotselection_W_tau21_anti_0 = " Ws_ABCD_t21[0]  > 0.6 "
+##plotselection_tau32 = " Tops_ABCD_t32 < 0.67   "
+#plotselection_tau32 = " Tops_ABCD_t32 < 0.86   "
+#plotselection_W_MSD =  " (70 < Ws_ABCD_MSD  &&   Ws_ABCD_MSD < 100) "
+#plotselection_B_CSV = "  Bottoms_ABCD_CSV > 0.8  "
+##plotselection_W_tau21 = " Ws_ABCD_t21 < 0.45 "
+#plotselection_W_tau21 = " Ws_ABCD_t21 < 0.6 "
+#plotselection_t_MSD = " (105 < Tops_ABCD_MSD && Tops_ABCD_MSD < 210) "
+#plotselection_topsubjetCSVv2 = " Tops_ABCD_maxsubjetCSVv2 > 0.8 "
 
 
 
 
-plotselection_W_MSD_one_sided =  " (70 < Ws_ABCD_MSD && Ws_ABCD_MSD < 100)"
-plotselection_W_MSD_one_sided_anti =  " (70 > Ws_ABCD_MSD && Ws_ABCD_MSD < 100)"
+#plotselection_tau32_0 = " Tops_ABCD_t32[0] < 0.86   "
+##plotselection_tau32_0 = " Tops_ABCD_t32[0] < 0.67   "
+#plotselection_W_MSD_0 =  " (70 < Ws_ABCD_MSD[0]  &&   Ws_ABCD_MSD[0] < 100) "
+##plotselection_B_CSV_0 = "  Bottoms_ABCD_CSV[0] > 0.8   "
+#plotselection_W_tau21_0 = " Ws_ABCD_t21[0] < 0.6  "
+#plotselection_W_tau21_0 = " Ws_ABCD_t21[0] < 0.45  "
+
+#plotselection_tau32_anti=" Tops_ABCD_t32 > 0.86   "
+#plotselection_W_MSD_anti =  " (70 > Ws_ABCD_MSD  ||   Ws_ABCD_MSD > 100) "
+#plotselection_B_CSV_anti = "  Bottoms_ABCD_CSV < 0.46   "
+#plotselection_W_tau21_anti = " Ws_ABCD_t21 > 0.6 "
+#plotselection_t_MSD_anti = " (105 > Tops_ABCD_MSD || Tops_ABCD_MSD > 210) "
+#plotselection_topsubjetCSVv2_anti = " Tops_ABCD_maxsubjetCSVv2 < 0.8 "
+
+#plotselection_tau32_anti_0 =" Tops_ABCD_t32[0] > 0.86   "
+#plotselection_W_MSD_anti_0 =  " (70 > Ws_ABCD_MSD[0]  ||   Ws_ABCD_MSD[0] > 100) "
+#plotselection_B_CSV_anti_0 = "  Bottoms_ABCD_CSV[0] < 0.46   "
+#plotselection_W_tau21_anti_0 = " Ws_ABCD_t21[0]  > 0.6 "
 
 
-plotselection_ABCD_general=  plotselection2 + "&& Zprimes_ABCD_M>0   &&    Ws_ABCD_t21 <  0.6    &&    100 < Tops_ABCD_MSD     &&    Tops_ABCD_MSD  < 210  "
-plotselection_ABCD_general_beta =  plotselection2 + "&& Zprimes_ABCD_M>0   &&    70 < Ws_ABCD_MSD  &&   Ws_ABCD_MSD < 100     &&    100 < Tops_ABCD_MSD     &&    Tops_ABCD_MSD  < 210   "
-plotselection_ABCD_general_beta2 =  plotselection2 + "&& Zprimes_ABCD_M>0   &&    70 < Ws_ABCD_MSD  &&   Ws_ABCD_MSD < 100     &&     Tops_ABCD_t32 < 0.86   "
-plotselection_ABCD_general_0 =  plotselection2 + "&& Zprimes_ABCD_M[0]>0   &&    Ws_ABCD_t21[0] >  0.6    &&    100 < Tops_ABCD_MSD[0]     &&    Tops_ABCD_MSD[0]  < 210   "
-plotselection_ABCD_general_beta_0 =   plotselection2 + "&& Zprimes_ABCD_M[0]>0   &&    70 < Ws_ABCD_MSD[0]  &&   Ws_ABCD_MSD[0] < 100     &&    100 < Tops_ABCD_MSD[0]     &&    Tops_ABCD_MSD[0]  < 210   "
 
-plotselection_ABCD_general_alt_notopbtag =  plotselection2 + " && Zprimes_ABCD_masscorrnotopbtag_M>0 && 70 < Ws_ABCD_masscorrnotopbtag_MSD && Ws_ABCD_masscorrnotopbtag_MSD < 100 && Tops_ABCD_masscorrnotopbtag_t32<0.86 "
-plotselection_ABCD_general_alt_withtopbtag =  plotselection2 + " && Zprimes_ABCD_masscorrwithtopbtag_M>0 && 70 < Ws_ABCD_masscorrwithtopbtag_MSD && Ws_ABCD_masscorrwithtopbtag_MSD < 100 && Tops_ABCD_masscorrwithtopbtag_t32<0.86 "
+
+#plotselection_W_MSD_one_sided =  " (70 < Ws_ABCD_MSD && Ws_ABCD_MSD < 100)"
+#plotselection_W_MSD_one_sided_anti =  " (70 > Ws_ABCD_MSD && Ws_ABCD_MSD < 100)"
+
+
+#plotselection_ABCD_general=  plotselection2 + "&& Zprimes_ABCD_M>0   &&    Ws_ABCD_t21 <  0.6    &&    100 < Tops_ABCD_MSD     &&    Tops_ABCD_MSD  < 210  "
+#plotselection_ABCD_general_beta =  plotselection2 + "&& Zprimes_ABCD_M>0   &&    70 < Ws_ABCD_MSD  &&   Ws_ABCD_MSD < 100     &&    100 < Tops_ABCD_MSD     &&    Tops_ABCD_MSD  < 210   "
+#plotselection_ABCD_general_beta2 =  plotselection2 + "&& Zprimes_ABCD_M>0   &&    70 < Ws_ABCD_MSD  &&   Ws_ABCD_MSD < 100     &&     Tops_ABCD_t32 < 0.86   "
+#plotselection_ABCD_general_0 =  plotselection2 + "&& Zprimes_ABCD_M[0]>0   &&    Ws_ABCD_t21[0] >  0.6    &&    100 < Tops_ABCD_MSD[0]     &&    Tops_ABCD_MSD[0]  < 210   "
+#plotselection_ABCD_general_beta_0 =   plotselection2 + "&& Zprimes_ABCD_M[0]>0   &&    70 < Ws_ABCD_MSD[0]  &&   Ws_ABCD_MSD[0] < 100     &&    100 < Tops_ABCD_MSD[0]     &&    Tops_ABCD_MSD[0]  < 210   "
+
+#plotselection_ABCD_general_alt_notopbtag =  plotselection2 + " && Zprimes_ABCD_masscorrnotopbtag_M>0 && 70 < Ws_ABCD_masscorrnotopbtag_MSD && Ws_ABCD_masscorrnotopbtag_MSD < 100 && Tops_ABCD_masscorrnotopbtag_t32<0.86 "
+#plotselection_ABCD_general_alt_withtopbtag =  plotselection2 + " && Zprimes_ABCD_masscorrwithtopbtag_M>0 && 70 < Ws_ABCD_masscorrwithtopbtag_MSD && Ws_ABCD_masscorrwithtopbtag_MSD < 100 && Tops_ABCD_masscorrwithtopbtag_t32<0.86 "
 
 
 
