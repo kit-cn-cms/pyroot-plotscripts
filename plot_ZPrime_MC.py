@@ -4,6 +4,8 @@
 
 from plotconfig_Zprime_MC import *
 from plot_additional_Zprime_MC import *
+from plot_cuts_Zprime import *
+
 sys.path.insert(0, 'limittools')
 from limittools import renameHistos
 import copy
