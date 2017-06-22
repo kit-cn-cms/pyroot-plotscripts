@@ -271,7 +271,8 @@ weightsystnamesABCD=[
 
 ]
 
-systweightsABCD=[
+if topWP=='looose':
+    systweightsABCD=[
                     #"nom:=1",
                     
                     
@@ -437,7 +438,72 @@ systweightsABCD=[
                     #"ABCD2corrE_notopbtag_TprimeM_systdown:=1-0.05*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
                     #"ABCD2corrE_withtopbtag_TprimeM_systup:=1+0.02*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
                     #"ABCD2corrE_withtopbtag_TprimeM_systdown:=1-0.02*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",  
-]
+    ]
+
+if topWP=='medium':
+    systweightsABCD=[
+                    #"nom:=1",
+                    
+                    
+########medium working points                    
+                    
+                    "ABCD_nominal:= 1",
+                    "ABCD_inclusive_ZprimeM_systup:= pow(1+0.06,1.0/3.0)",
+                    "ABCD_inclusive_ZprimeM_systdown:= pow(1-0.06,1.0/3.0)",
+                    "ABCD_notopbtag_ZprimeM_systup:= pow(1+0.07,1.0/3.0)",
+                    "ABCD_notopbtag_ZprimeM_systdown:= pow(1-0.07,1.0/3.0)",
+                    "ABCD_withtopbtag_ZprimeM_systup:= pow(1+0.63,1.0/3.0)",
+                    "ABCD_withtopbtag_ZprimeM_systdown:= pow(1-0.63,1.0/3.0)",
+                    "ABCD_inclusive_TprimeM_systup:= pow(1+0.06,1.0/3.0)",
+                    "ABCD_inclusive_TprimeM_systdown:= pow(1-0.06,1.0/3.0)",
+                    "ABCD_notopbtag_TprimeM_systup:= pow(1+0.07,1.0/3.0)",
+                    "ABCD_notopbtag_TprimeM_systdown:= pow(1-0.07,1.0/3.0)",
+                    "ABCD_withtopbtag_TprimeM_systup:= pow(1+0.5,1.0/3.0)",
+                    "ABCD_withtopbtag_TprimeM_systdown:= pow(1-0.5,1.0/3.0)",
+
+                    "ABCDcorrE_inclusive_ZprimeM_systup:= pow(1+0.06,1.0/7.0)",
+                    "ABCDcorrE_inclusive_ZprimeM_systdown:= pow(1-0.06,1.0/7.0)",
+                    "ABCDcorrE_notopbtag_ZprimeM_systup:= pow(1+0.06,1.0/7.0)",
+                    "ABCDcorrE_notopbtag_ZprimeM_systdown:= pow(1-0.06,1.0/7.0)",
+                    "ABCDcorrE_withtopbtag_ZprimeM_systup:= pow(1+0.5,1.0/7.0)",
+                    "ABCDcorrE_withtopbtag_ZprimeM_systdown:= pow(1-0.5,1.0/7.0)",
+                    "ABCDcorrE_inclusive_TprimeM_systup:= pow(1+0.07,1.0/7.0)",
+                    "ABCDcorrE_inclusive_TprimeM_systdown:= pow(1-0.07,1.0/7.0)",
+                    "ABCDcorrE_notopbtag_TprimeM_systup:= pow(1+0.06,1.0/7.0)",
+                    "ABCDcorrE_notopbtag_TprimeM_systdown:= pow(1-0.06,1.0/7.0)",
+                    "ABCDcorrE_withtopbtag_TprimeM_systup:= pow(1+0.67,1.0/7.0)",
+                    "ABCDcorrE_withtopbtag_TprimeM_systdown:= pow(1-0.67,1.0/7.0)",
+                    
+                    "ABCD2_inclusive_ZprimeM_systup:= pow(1+0.07,1.0/3.0)",
+                    "ABCD2_inclusive_ZprimeM_systdown:= pow(1-0.07,1.0/3.0)",
+                    "ABCD2_notopbtag_ZprimeM_systup:= pow(1+0.09,1.0/3.0)",
+                    "ABCD2_notopbtag_ZprimeM_systdown:= pow(1-0.09,1.0/3.0)",
+                    "ABCD2_withtopbtag_ZprimeM_systup:= pow(1+0.01,1.0/3.0)",
+                    "ABCD2_withtopbtag_ZprimeM_systdown:= pow(1-0.01,1.0/3.0)",
+                    "ABCD2_inclusive_TprimeM_systup:= pow(1+0.06,1.0/3.0)",
+                    "ABCD2_inclusive_TprimeM_systdown:= pow(1-0.06,1.0/3.0)",
+                    "ABCD2_notopbtag_TprimeM_systup:= pow(1+0.08,1.0/3.0)",
+                    "ABCD2_notopbtag_TprimeM_systdown:= pow(1-0.08,1.0/3.0)",
+                    "ABCD2_withtopbtag_TprimeM_systup:= pow(1+0.02,1.0/3.0)",
+                    "ABCD2_withtopbtag_TprimeM_systdown:= pow(1-0.02,1.0/3.0)",
+                                        
+                    "ABCD2corrE_inclusive_ZprimeM_systup:= pow(1+0.05,1.0/7.0)",
+                    "ABCD2corrE_inclusive_ZprimeM_systdown:= pow(1-0.05,1.0/7.0)",
+                    "ABCD2corrE_notopbtag_ZprimeM_systup:= pow(1+0.05,1.0/7.0)",
+                    "ABCD2corrE_notopbtag_ZprimeM_systdown:= pow(1-0.05,1.0/7.0)",
+                    "ABCD2corrE_withtopbtag_ZprimeM_systup:= pow(1+0.03,1.0/7.0)",
+                    "ABCD2corrE_withtopbtag_ZprimeM_systdown:= pow(1-0.03,1.0/7.0)",
+                    "ABCD2corrE_inclusive_TprimeM_systup:= pow(1+0.03,1.0/7.0)",
+                    "ABCD2corrE_inclusive_TprimeM_systdown:= pow(1-0.03,1.0/7.0)",
+                    "ABCD2corrE_notopbtag_TprimeM_systup:= pow(1+0.05,1.0/7.0)",
+                    "ABCD2corrE_notopbtag_TprimeM_systdown:= pow(1-0.05,1.0/7.0)",
+                    "ABCD2corrE_withtopbtag_TprimeM_systup:= pow(1+0.05,1.0/7.0)",
+                    "ABCD2corrE_withtopbtag_TprimeM_systdown:= pow(1-0.05,1.0/7.0)",
+                    
+
+    ]
+
+
 
 weigthsystnamesMCSFs=[
                     "_CSV_MCSF_nominal",

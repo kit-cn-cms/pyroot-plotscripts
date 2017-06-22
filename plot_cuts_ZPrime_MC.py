@@ -4,8 +4,8 @@ plotlabelboosted="#splitline{Wbt, #geq 3 jets, #geq 1 b-tags}{#geq 1 AK8 jet p_{
 plotselection1="Evt_HT>850"
 plotselection2="N_packedPatJetsAK8PFCHSSoftDrop>=2 && packedPatJetsAK8PFCHSSoftDrop_Pt[0]>400 && packedPatJetsAK8PFCHSSoftDrop_Pt[1]>200 && Evt_HT>850 "
 
-topWP='loose'
-WWP='loose'
+topWP='medium'
+WWP='medium'
 bottomWP=''
 
     

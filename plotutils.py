@@ -4446,7 +4446,9 @@ def ABCDBackgroundEstimationCalculationAndPlotsWithSystematics(loldata,llldata,l
 
 
     QCDlist=[transposeLOL([transposeLOL(lllBackgroundWithweightsyscopyABCD[plotnames.index(CatB_sideband+'_Zprime_M')])[weightsystnames.index('_ABCD_nominal')]]+transposeLOL(lllBackgroundWithweightsyscopyABCD[plotnames.index(CatB_sideband+'_Zprime_M')])[weightsystnames.index('_ABCD'+category+'_ZprimeM'+'_systup'):weightsystnames.index('_ABCD'+category+'_ZprimeM'+'_systdown')+1])[BackgroundSampleNames.index(QCDSample)]]
+    
     ttbarlist=[transposeLOL(transposeLOL(lllBackgroundNoweightsys[plotnames.index(CatA_sideband+'_Zprime_M')])[weightsystnames.index('_no'+'_nominal'):weightsystnames.index('_no'+'_systdown')+1])[BackgroundSampleNames.index('ttbar')]]
+    
     SClist=[transposeLOL([transposeLOL(llldatacopyABCD_SConly[plotnames.index(CatB_sideband+'_Zprime_M')])[weightsystnames.index('_ABCD_nominal')]]+transposeLOL(llldatacopyABCD_SConly[plotnames.index(CatB_sideband+'_Zprime_M')])[weightsystnames.index('_ABCD'+category+'_ZprimeM'+'_systup'):weightsystnames.index('_ABCD'+category+'_ZprimeM'+'_systdown')+1])[DataSampleNames.index(DatasampleNick)]]  
 
     
@@ -4497,7 +4499,7 @@ def ABCDcorrEBackgroundEstimationCalculationAndPlotsWithSystematics(loldata,llld
     if 'with' in CatA_sideband:
         category='_withtopbtag'
     if 'inclusive' in CatA_sideband:
-        category='_notopbtag'
+        category='_inclusive'
         
         
 
@@ -4642,23 +4644,29 @@ def rebintovarbinsLL(lll):
             lreturn=[]
             for histo in l:
                 #print histo.GetName()
-                if 'Tprime_M' in histo.GetName():
+                if 'Tprime_M_' in histo.GetName():
                     #print 'Nbins histo before TprimeM ', histo.GetNbinsX()
-                    xbins= array.array('d',[0,500,550,600,650,700,750,800,850,900,950,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2500])
+                    xbins= array.array('d',[0,500,550,600,650,700,750,800,850,900,950,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500])
                     historeturn=histo.Rebin(len(xbins)-1,histo.GetName(),xbins)
+                    for i in range(historeturn.GetNbinsX()):
+                        historeturn.SetBinContent(i,(historeturn.GetBinContent(i)*binwidth/(historeturn.GetBinWidth(i))))
+                        historeturn.SetBinError(i,(historeturn.GetBinError(i)*binwidth/(historeturn.GetBinWidth(i))))
                     #print 'Nbins histo after TprimeM ', historeturn.GetNbinsX()
                     lreturn.append(historeturn)
                 elif 'Zprime_M' in histo.GetName():
                     #print 'Nbins histo before ZprimeM ', histo.GetNbinsX()
-                    xbins= array.array('d',[0,1000,1100,1200,1300,1400,1500,1650,1800,1850,2000,2200,2400,2500,2750,3000,3250,3500,3750,4000,4500,5000])
+                    xbins= array.array('d',[0,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3250,3500,3750,4000,4500,5000])
                     historeturn=histo.Rebin(len(xbins)-1,histo.GetName(),xbins)
-                    #print 'Nbins histo after ZprimeM ', historeturn.GetNbinsX()
+                    for i in range(historeturn.GetNbinsX()):
+                        historeturn.SetBinContent(i,(historeturn.GetBinContent(i)*binwidth/(historeturn.GetBinWidth(i))))
+                        historeturn.SetBinError(i,(historeturn.GetBinError(i)*binwidth/(historeturn.GetBinWidth(i))))
+                        #print 'Nbins histo after ZprimeM ', historeturn.GetNbinsX()
                     lreturn.append(historeturn)
                 else:
                     lreturn.append(histo)
             llreturn.append(lreturn)
         lllreturn.append(llreturn)
-    raw_input
+    #raw_input
     return lllreturn
 
 def rebintovarbinsLOL(lol):
@@ -4668,17 +4676,24 @@ def rebintovarbinsLOL(lol):
         lreturn=[]
         for histo in l:
             print histo.GetName()
-            if 'Tprime_M' in histo.GetName():
+            binwidth=histo.GetBinWidth(0)
+            if 'Tprime_M_' in histo.GetName():
                 #print 'Nbins histo before TprimeM ', histo.GetNbinsX()
-                xbins= array.array('d',[0,500,550,600,650,700,750,800,850,900,950,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2500])
+                xbins= array.array('d',[0,500,550,600,650,700,750,800,850,900,950,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500])
                 historeturn=histo.Rebin(len(xbins)-1,histo.GetName(),xbins)
+                for i in range(historeturn.GetNbinsX()):
+                    historeturn.SetBinContent(i,(historeturn.GetBinContent(i)*binwidth/(historeturn.GetBinWidth(i))))
+                    historeturn.SetBinError(i,(historeturn.GetBinError(i)*binwidth/(historeturn.GetBinWidth(i))))
                 #print 'Nbins histo after TprimeM ', historeturn.GetNbinsX()
                 lreturn.append(historeturn)
             elif 'Zprime_M' in histo.GetName():
                 #print 'Nbins histo before ZprimeM ', histo.GetNbinsX()
-                xbins= array.array('d',[0,1000,1100,1200,1300,1400,1500,1650,1800,1850,2000,2200,2400,2500,2750,3000,3250,3500,3750,4000,4500,5000])
+                xbins= array.array('d',[0,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3250,3500,3750,4000,4500,5000])
                 historeturn=histo.Rebin(len(xbins)-1,histo.GetName(),xbins)
-                #print 'Nbins histo after ZprimeM ', historeturn.GetNbinsX()
+                for i in range(historeturn.GetNbinsX()):
+                    historeturn.SetBinContent(i,(historeturn.GetBinContent(i)*binwidth/(historeturn.GetBinWidth(i))))
+                    historeturn.SetBinError(i,(historeturn.GetBinError(i)*binwidth/(historeturn.GetBinWidth(i))))
+                    #print 'Nbins histo after ZprimeM ', historeturn.GetNbinsX()
                 lreturn.append(historeturn)
             else:
                 lreturn.append(histo)
