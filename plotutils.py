@@ -2941,6 +2941,7 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
     writeObjects(canvases,name)
     writeObjects(objects,name)
 
+
 def divideHistos(listOfHistoLists, numeratorPlot, denumeratorPlot, normalizefirst=False,rebin=1,option=''):
     dividedHistoList=[]
     print 'numerator ',numeratorPlot
@@ -2950,6 +2951,7 @@ def divideHistos(listOfHistoLists, numeratorPlot, denumeratorPlot, normalizefirs
     #print len(listOfHistoLists[numeratorPlot])
     
     for i in range(len(listOfHistoLists[numeratorPlot])):
+        if (isinstance(listOfHistoLists[numeratorPlot][i],ROOT.TH1) and not isinstance(listOfHistoLists[numeratorPlot][i],ROOT.TH2)) and (isinstance(listOfHistoLists[denumeratorPlot][i],ROOT.TH1) and not isinstance(listOfHistoLists[denumeratorPlot][i],ROOT.TH2)):
             #numerator=listOfHistoLists[numeratorPlot][i].Clone()
             #denumerator=listOfHistoLists[denumeratorPlot][i].Clone()
             listOfHistoLists[numeratorPlot][i].Rebin(rebin)
@@ -2977,11 +2979,58 @@ def divideHistos(listOfHistoLists, numeratorPlot, denumeratorPlot, normalizefirs
             #print 'x after divide ahhhh',x, '     x Integral= ', x.Integral()
             print 'numerator after divide ', listOfHistoLists[numeratorPlot][i], '     numerator Integral= ', listOfHistoLists[numeratorPlot][i].Integral()
             print 'denumerator after divide ', listOfHistoLists[denumeratorPlot][i], '      denumerator Integral= ',listOfHistoLists[denumeratorPlot][i].Integral()
+        else:
+            print 'not TH1. Use other function'
         #print 'divide? ', listofHistoLists
         #self.append(x)
     #self.append(dividedHistoList)
     #print len(self)
     #return listofHistoLists
+
+
+def divideHistos2D(listOfHistoLists, numeratorPlot, denumeratorPlot, normalizefirst=False,option=''):
+    dividedHistoList=[]
+    print 'numerator ',numeratorPlot
+    print 'denumerator ',denumeratorPlot
+    print 'lol[numerator] ',listOfHistoLists[numeratorPlot]
+    print 'lol[denumerator] ',listOfHistoLists[denumeratorPlot]
+    #print len(listOfHistoLists[numeratorPlot])
+    
+    for i in range(len(listOfHistoLists[numeratorPlot])):
+        if (isinstance(listOfHistoLists[numeratorPlot][i],ROOT.TH2)) and (isinstance(listOfHistoLists[denumeratorPlot][i],ROOT.TH2)):
+            #numerator=listOfHistoLists[numeratorPlot][i].Clone()
+            #denumerator=listOfHistoLists[denumeratorPlot][i].Clone()
+            if normalizefirst: #######check if integral>0
+                #listOfHistoLists[numeratorPlot][i].Scale(1./listOfHistoLists[numeratorPlot][i].Integral(0,listOfHistoLists[numeratorPlot][i].GetNbinsX()-1),"width")
+                #listOfHistoLists[denumeratorPlot][i].Scale(1./listOfHistoLists[denumeratorPlot][i].Integral(0,listOfHistoLists[denumeratorPlot][i].GetNbinsX()-1),"width")
+                listOfHistoLists[numeratorPlot][i].Scale(1./listOfHistoLists[numeratorPlot][i].Integral())
+                listOfHistoLists[denumeratorPlot][i].Scale(1./listOfHistoLists[denumeratorPlot][i].Integral())
+            #x=numerator.Clone()
+            
+            print 'numerator before divide ',listOfHistoLists[numeratorPlot][i], '     numerator Integral= ', listOfHistoLists[numeratorPlot][i].Integral(), '    bing contents'
+            #for ibin in range (listOfHistoLists[numeratorPlot][i].GetNbinsX()+1):
+                #print 'bincontent before', listOfHistoLists[numeratorPlot][i].GetBinContent(ibin), listOfHistoLists[denumeratorPlot][i].GetBinContent(ibin)
+            print 'denumerator before divide ',listOfHistoLists[denumeratorPlot][i], '      denumerator Integral= ',listOfHistoLists[denumeratorPlot][i].Integral()
+            #listOfHistoLists[numeratorPlot][i].Divide(listOfHistoLists[numeratorPlot][i], listOfHistoLists[denumeratorPlot][i],1.0,1.0,option)
+            listOfHistoLists[numeratorPlot][i].Divide(listOfHistoLists[numeratorPlot][i],listOfHistoLists[denumeratorPlot][i],1.0,1.0,option)
+            print 'numerator after divide temp1',listOfHistoLists[numeratorPlot][i], '     numerator Integral= ', listOfHistoLists[numeratorPlot][i].Integral()
+            print 'denumerator after divide temp1',listOfHistoLists[denumeratorPlot][i], '     denumerator Integral= ', listOfHistoLists[denumeratorPlot][i].Integral()
+            ##for ibin in range (listOfHistoLists[numeratorPlot][i].GetNbinsX()+1):
+                #print 'bincontent after', listOfHistoLists[numeratorPlot][i].GetBinContent(ibin), listOfHistoLists[denumeratorPlot][i].GetBinContent(ibin)
+            #listOfHistoLists[numeratorPlot][i][i]=listOfHistoLists[numeratorPlot][i]   
+            print 'numerator after divide temp2',listOfHistoLists[numeratorPlot][i], '     numerator Integral= ', listOfHistoLists[numeratorPlot][i].Integral()
+            print 'denumerator after divide temp2',listOfHistoLists[denumeratorPlot][i], '     denumerator Integral= ', listOfHistoLists[denumeratorPlot][i].Integral()
+            #print 'x after divide ahhhh',x, '     x Integral= ', x.Integral()
+            print 'numerator after divide ', listOfHistoLists[numeratorPlot][i], '     numerator Integral= ', listOfHistoLists[numeratorPlot][i].Integral()
+            print 'denumerator after divide ', listOfHistoLists[denumeratorPlot][i], '      denumerator Integral= ',listOfHistoLists[denumeratorPlot][i].Integral()
+        else:
+            print 'not TH2. Use other function'
+            #print 'divide? ', listofHistoLists
+        #self.append(x)
+    #self.append(dividedHistoList)
+    #print len(self)
+    #return listofHistoLists
+
 
 #SubIndex: Use not all elements of The HistoList of the second summand but only a Special One( The one with SubIndex)
 def addHistos(listOfHistoLists, summand1Plot, summand2Plot,  weight=1. , UseSubIndex=False, SubIndex=0 , normalizefirst=False,rebin=1,option=''):
@@ -4032,7 +4081,7 @@ def rebintovarbinsLL(lll):
             for histo in l:
                 #print histo.GetName()
                 binwidth=histo.GetBinWidth(0)
-                if 'Tprime_M' in histo.GetName():
+                if (('Tprime_M' in histo.GetName()) and (not (isinstance(histo,ROOT.TH2)))):
                     #print 'Nbins histo before TprimeM ', histo.GetNbinsX()
                     xbins= array.array('d',[0,500,550,600,650,700,750,800,850,900,950,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500])
                     historeturn=histo.Rebin(len(xbins)-1,histo.GetName(),xbins)
@@ -4041,7 +4090,7 @@ def rebintovarbinsLL(lll):
                         historeturn.SetBinError(i,(historeturn.GetBinError(i)*binwidth/(historeturn.GetBinWidth(i))))
                     #print 'Nbins histo after TprimeM ', historeturn.GetNbinsX()
                     lreturn.append(historeturn)
-                elif 'Zprime_M' in histo.GetName():
+                elif (('Zprime_M' in histo.GetName()) and (not (isinstance(histo,ROOT.TH2)))):
                     #print 'Nbins histo before ZprimeM ', histo.GetNbinsX()
                     xbins= array.array('d',[0,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3250,3500,3750,4000,4500,5000])
                     historeturn=histo.Rebin(len(xbins)-1,histo.GetName(),xbins)
@@ -4064,7 +4113,7 @@ def rebintovarbinsLOL(lol):
         lreturn=[]
         for histo in l:
             #print histo.GetName()
-            if (('Tprime_M' in histo.GetName()) and not (isinstance(histo,ROOT.TH1))):
+            if (('Tprime_M' in histo.GetName()) and (not (isinstance(histo,ROOT.TH2)))):
                 print 'Nbins histo before TprimeM ', histo.GetNbinsX(),'  ' ,histo
                 binwidth=histo.GetBinWidth(0)
                 print binwidth
@@ -4075,7 +4124,7 @@ def rebintovarbinsLOL(lol):
                     historeturn.SetBinError(i,(historeturn.GetBinError(i)*binwidth/(historeturn.GetBinWidth(i))))
                 print 'Nbins histo after TprimeM ', historeturn.GetNbinsX()
                 lreturn.append(historeturn)
-            elif (('Zprime_M' in histo.GetName()) and not (isinstance(histo,ROOT.TH1))):
+            elif (('Zprime_M' in histo.GetName()) and (not (isinstance(histo,ROOT.TH2)))):
                 print isinstance(histo,ROOT.TH1)
             
                 print 'Nbins histo before ZprimeM ', histo.GetNbinsX(),'  ' ,histo
@@ -4097,9 +4146,24 @@ def rebintovarbinsLOL(lol):
 def chekcNbins(lol):
     for l in lol:
         for histo in l:
-            if 'Tprime_M_' in histo.GetName():
+            if (('Tprime_M' in histo.GetName()) and (not (isinstance(histo,ROOT.TH1)))):
                 print 'Nbins histo after TprimeM ', histo.GetNbinsX(),'  ', histo
-            if 'Zprime_M_' in histo.GetName():
+            if (('Zprime_M' in histo.GetName()) and (not (isinstance(histo,ROOT.TH1)))):
                 print 'Nbins histo after ZprimeM ', histo.GetNbinsX(),'  ', histo
-#raw_input()
+    raw_input()
+    
+    
+#def ABCDclosure1D(lol,plotnames,samples,CatA,CatB,CatC,CatD, CatE,CatF,CatG,CatH,normalizefirst=False,rebin=1,option='',fit='pol1'):
+    #divideHistos(lol), plotnames.index(CatA), plotnames.index(CatB), normalizefirst,rebin,option)
+    #divideHistos(lol), plotnames.index(CatC), plotnames.index(CatD), normalizefirst,rebin,option)
+    #divideHistos(lol), CatA, plotnames.index(CatC), False,1,option)
 
+    #divideHistos(lol), plotnames.index(CatE), plotnames.index(CatF), normalizefirst=False,rebin=1,option)
+    #divideHistos(lol), plotnames.index(CatG), plotnames.index(CatH), normalizefirst=False,rebin=1,option)
+    #divideHistos(lol), plotnames.index(CatE), plotnames.index(CatG), False,1,option)
+
+
+    #writeHistoListwithXYErrors(lol)[plotnames.index(CatA)]], samples, name="check0forABCD_"+topWP+"WP_ratioABoverCD_"+fit, rebin=1, fitoption=fit, labels=None, autoXrange=True)
+    #writeHistoListwithXYErrors([lol)[plotnames.index(CatE)]], samples, name="check0forABCD_"+topWP+"WP_ratioEFoverGH_"+fit, rebin=1, fitoption=fit, labels=None, autoXrange=True)
+    #divideHistos(lol), CatA, plotnames.index(CatE), False,1,option)
+    #writeHistoListwithXYErrors([lol)[plotnames.index(CatA)]], samples, name="check0forABCD_"+topWP+"WP_ratioABoverCD_"+fit+"_corrE", rebin=1, fitoption=fit, labels=None, autoXrange=True)

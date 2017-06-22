@@ -12,7 +12,6 @@ import plotutils
 
 ROOT.gROOT.SetBatch(True)
 
-
 def getHead1():
   return """
 #include "TChain.h"
@@ -53,9 +52,11 @@ def getHead3():
   float sumOfWeights=0;
   
   int DoWeights=1;
+  int DoMCDataWeights=0;
   
   //if(processname=="SingleEl" || processname=="SingleMu"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
   if(processname=="SingleEl" || processname=="SingleMu"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
+  if(processname=="ttbar" || processname=="t#bar{t} + jets"){DoMCDataWeights=1; std::cout<<"is ttbar, use MCDataSF nominal weihgts"<<std::endl;}
   string buf;
   stringstream ss(filenames); 
   while (ss >> buf){
@@ -104,17 +105,17 @@ def initTwoDimHistoWithProcessNameAndSuffix(name,nbinsX=10,xminX=0,xmaxX=0,nbins
   return '  TH2F* h_'+name+'=new TH2F((processname+"_'+name+'"+suffix).c_str(),"'+title+'",'+str(nbinsX)+','+str(xminX)+','+str(xmaxX)+','+str(nbinsY)+','+str(xminY)+','+str(xmaxY)+');\n'
 
 
-def fillHistoSyst(name,varname,weight,systnames,systweights, OnlyFirst=False):
+def fillHistoSyst(name,varname,weight,systnames,systweights,OnlyFirst=False):
   text='      float weight_'+name+'='+weight+';\n'
   for sn,sw in zip(systnames,systweights):
-    text+=fillHisto(name+sn,varname,'('+sw+')*(weight_'+name+')', OnlyFirst)
+    text+=fillHisto(name,sn,varname,'('+sw+')*(weight_'+name+')',OnlyFirst)
   return text
 
 
-def fillTwoDimHistoSyst(name,varname1,varname2,weight,systnames,systweights, OnlyFirst=False):
+def fillTwoDimHistoSyst(name,varname1,varname2,weight,systnames,systweights,OnlyFirst=False):
   text='      float weight_'+name+'='+weight+';\n'
   for sn,sw in zip(systnames,systweights):
-    text+=fillTwoDimHisto(name+sn,varname1,varname2,'('+sw+')*(weight_'+name+')', OnlyFirst)
+    text+=fillTwoDimHisto(name+sn,varname1,varname2,'('+sw+')*(weight_'+name+')',OnlyFirst)
   return text
 
 
@@ -167,23 +168,27 @@ def endCat():
   return '    }\n    // end of category\n\n'
 
 
-def fillHisto(histo,var,weight, OnlyFirst=False):
+def fillHisto(histoname, sn,var,weight,OnlyFirst=False):
   text= '        if(('+weight+')!=0){\n'
-  text+='          h_'+histo+'->Fill(fmin(h_'+histo+'->GetXaxis()->GetXmax()-1e-6,fmax(h_'+histo+'->GetXaxis()->GetXmin()+1e-6,'+var+')),'+weight+');\n'
+  text+='          h_'+histoname+sn+'->Fill(fmin(h_'+histoname+sn+'->GetXaxis()->GetXmax()-1e-6,fmax(h_'+histoname+sn+'->GetXaxis()->GetXmin()+1e-6,'+var+')),'+weight+');\n'
   if OnlyFirst:
-    text+='         break;}'
+    #text+='         break;}\n'
+    #text+='         std::cout<<"filled '+var+'= "<<'+var+'<<" into '+histo+' "<<h_'+histo+'<<" with weight "<<'+weight+'<<endl;   break;}\n'
+    #text+='         std::cout<<"filled '+var+'= "<<'+var+'<<" into '+histoname+sn+' "<<h_'+histoname+sn+'<<" with weight "<<'+weight+'<<endl;   '+histoname+'_foundfirst=true;}\n'
+    text+='         '+histoname+'_foundfirst=true;}\n'
   else:
-    text+='         }'
+    text+='         }\n'
   return text
 
 
-def fillTwoDimHisto(histo,var1,var2,weight, OnlyFirst=False):
-  text= '        if(('+weight+')!=0){\n'
+def fillTwoDimHisto(histo,var1,var2,weight,OnlyFirst=False):
+  text= '        if(('+weight+')!=0)\n'
   text+='          h_'+histo+'->Fill(fmin(h_'+histo+'->GetXaxis()->GetXmax()-1e-6,fmax(h_'+histo+'->GetXaxis()->GetXmin()+1e-6,'+var1+')),fmin(h_'+histo+'->GetYaxis()->GetXmax()-1e-6,fmax(h_'+histo+'->GetYaxis()->GetXmin()+1e-6,'+var2+')),'+weight+');\n'
+  
   if OnlyFirst:
-    text+= '         break;}'
+    text+= '         break;}\n'
   else:
-    text+= '         }'
+    text+= '         }\n'
   return text
 
 
@@ -198,7 +203,6 @@ def varLoop(i,n):
 
 def checkLoopsize(size_of_Loop):
   return 
-
 
 
 def getFoot1():
@@ -217,7 +221,7 @@ def getFoot2():
 int main(){
   plot();
 }    
-"""                     
+"""   
 
 def compileProgram(scriptname):
   p = subprocess.Popen(['root-config', '--cflags', '--libs'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -225,18 +229,19 @@ def compileProgram(scriptname):
   cmd= ['g++']+out[:-1].split(' ')+['-lTMVA']+[scriptname+'.cc','-o',scriptname]
   subprocess.call(cmd)
 
+
 def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],allsystweights=["1"],additionalvariables=[], additionalfunctions=[], additionalobjectsfromaddtionalrootfile=[],OnlyFirstList_=None):
-#def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],allsystweights=["1"],additionalvariables=[], OnlyFirstList_=None):
+  
   #Set default Value for OnlyFirstList
   if OnlyFirstList_ == None:
     OnlyFirstList = len(plots)*[False]
   else:
     OnlyFirstList = OnlyFirstList_
-
-
+  
+  
   # collect variables
   # list varibles that should not be written to the program automatically
-  vetolist=['processname','DoWeights','TMath','cout','for','int', 'if', 'cout', ';','<','i','i++','*=', 'temp','testea', 'anti_btag + 2', 'float','anti_loose_btag(Sideband_top_withbtag_anti_Topfirst_Bottoms_CSVv2,N_Sideband_top_withbtag_anti_Topfirst_Bottoms)','anti_loose_btag(Sideband_bottom_anti_Topfirst_Bottoms_CSVv2,N_Sideband_bottom_anti_Topfirst_Bottoms)' ]+['QCDMadgraph_Graph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M','QCDMadgraph_Graph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt','QCDMadgraph_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M','QCDMadgraph_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt','QCDPythia8_Graph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M','QCDPythia8_Graph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt','QCDPythia8_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M','QCDPythia8_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt','true', 'abs(', 'abs']+['abs( QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M)','abs( QCDPythia8_SF_SB_bottom_anti_Signal_Tops_Pt-QCDMadgraph_SF_SB_bottom_anti_Signal_Tops_Pt)']+['bbarportionweight(N_AK4_bottom_tag_candidates)','bbarportionweight(N_AK4_bottom_tag_candidates)']+['IsnoSignal_notopbtag(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)','IsnoSignal_withtopbtag(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)'] #+['bportionweightup','bportionweightdown']#+['bportionweightup','bportionweightdown']
+  vetolist=['processname','DoWeights','TMath','cout','for','int', 'if', 'cout', ';','<','i','i++','*=', 'temp','testea', 'anti_btag + 2', 'float','anti_loose_btag(Sideband_top_withbtag_anti_Topfirst_Bottoms_CSVv2,N_Sideband_top_withbtag_anti_Topfirst_Bottoms)','anti_loose_btag(Sideband_bottom_anti_Topfirst_Bottoms_CSVv2,N_Sideband_bottom_anti_Topfirst_Bottoms)' ]+['QCDMadgraph_Graph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M','QCDMadgraph_Graph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt','QCDMadgraph_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M','QCDMadgraph_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt','QCDPythia8_Graph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M','QCDPythia8_Graph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt','QCDPythia8_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M','QCDPythia8_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt','true', 'abs(', 'abs']+['abs( QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M)','abs( QCDPythia8_SF_SB_bottom_anti_Signal_Tops_Pt-QCDMadgraph_SF_SB_bottom_anti_Signal_Tops_Pt)']+['bbarportionweight(N_AK4_bottom_tag_candidates)','bbarportionweight(N_AK4_bottom_tag_candidates)']+['IsnoSignal_notopbtag(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)','IsnoSignal_withtopbtag(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)','IsnoSignal_inclusive(Zprimes_ABCD_M, Tprimes_ABCD_M, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)']+['pow(',')',',']+['pow(1+0.06,1.0/3.0','pow(1-0.06,1.0/3.0)','pow(1+0.08,1.0/3.0)','pow(1-0.08,1.0/3.0)','pow(1+0.35,1.0/3.0)','pow(1-0.35,1.0/3.0)','pow(1+0.06,1.0/3.0)','pow(1-0.06,1.0/3.0)','pow(1+0.08,1.0/3.0)','pow(1-0.08,1.0/3.0)','pow(1+0.6,1.0/3.0)','pow(1-0.6,1.0/3.0)','pow(1+0.005,1.0/7.0)','pow(1-0.005,1.0/7.0)','pow(1+0.06,1.0/7.0)','pow(1-0.06,1.0/7.0)','pow(1+0.02,1.0/7.0)','pow(1-0.02,1.0/7.0)','pow(1+0.8,1.0/7.0)','pow(1-0.8,1.0/7.0)','pow(1-0.06,1.0/3.0)','pow(1+0.10,1.0/3.0)','pow(1-0.10,1.0/3.0)','pow(1+0.02,1.0/3.0)','pow(1-0.02,1.0/3.0)','pow(1+0.12,1.0/3.0)','pow(1-0.12,1.0/3.0)','pow(1+0.01,1.0/3.0)','pow(1-0.01,1.0/3.0)','pow(1+0.08,1.0/7.0)','pow(1-0.08,1.0/7.0)','pow(1+0.05,1.0/7.0)','pow(1-0.05,1.0/7.0)','pow(1+0.02,1.0/7.0)','pow(1-0.02,1.0/7.0)']+['ABCD_Category(','const','const*']+['"CatA_withtopbtag"','"CatB_withtopbtag"','"CatC_withtopbtag"','"CatD_withtopbtag"','"CatE_withtopbtag"','"CatF_withtopbtag"','"CatG_withtopbtag"','"CatH_withtopbtag"'+'"CatA_notopbtag"','"CatB_notopbtag"','"CatC_notopbtag"','"CatD_notopbtag"','"CatE_notopbtag"','"CatF_notopbtag"','"CatG_notopbtag"','"CatH_notopbtag"','"CatA_inclusive"','"CatB_inclusive"','"CatC_inclusive"','"CatD_inclusive"','"CatE_inclusive"','"CatF_inclusive"','"CatG_inclusive"','"CatH_inclusive"']+['CatA_withtopbtag','CatB_withtopbtag','CatC_withtopbtag','CatD_withtopbtag','CatE_withtopbtag','CatF_withtopbtag','CatG_withtopbtag','CatH_withtopbtag'+'CatA_notopbtag','CatB_notopbtag','CatC_notopbtag','CatD_notopbtag','CatE_notopbtag','CatF_notopbtag','CatG_notopbtag','CatH_notopbtag','CatA_inclusive','CatB_inclusive','CatC_inclusive','CatD_inclusive','CatE_inclusive','CatF_inclusive','CatG_inclusive','CatH_inclusive']+['1.0*( ABCD_Category( Zprimes_ABCD_M,  Tprimes_ABCD_M,  Tops_ABCD_maxsubjetCSVv2,  Ws_ABCD_MSD,  Tops_ABCD_MSD,  Tops_ABCD_t32,  Bottoms_ABCD_CSV,  Ws_ABCD_t21, N_Zprime_ABCD)=="CatA_withtopbtag")','1.0*( ABCD_Category( Zprimes_ABCD_M,  Tprimes_ABCD_M,  Tops_ABCD_maxsubjetCSVv2,  Ws_ABCD_MSD,  Tops_ABCD_MSD,  Tops_ABCD_t32,  Bottoms_ABCD_CSV,  Ws_ABCD_t21, N_Zprime_ABCD)=="CatH_withtopbtag")'] #+['bportionweightup','bportionweightdown']#+['bportionweightup','bportionweightdown']  
   # initialize variables object
   variables = variablebox.Variables(vetolist)
   
@@ -260,7 +265,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   
   # get additional variables
   if len(additionalvariables)>0:
-    print 'looking for additionalvariables ',len(additionalvariables), '   ', additionalvariables
+    print 'looking for additionalvariables ',len(additionalvariables)
     variables.initVarsFromExprList(additionalvariables,tree)
   
   # get systematic weight variables
@@ -290,6 +295,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   
     variables.initVarsFromExpr(plot.selection,tree)
   
+  
   print variables
   # write program
   # start writing program
@@ -304,16 +310,16 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   # open additional objects from different root files
   script+=loadaddobjects(additionalobjectsfromaddtionalrootfile)
   
-  script+=getHead3()  
-  
-  
-  
+  script+=getHead3()
+    
   # initialize all variables 
   script+=variables.initVarsProgram()
   script+=variables.initBranchAddressesProgram()
 
   # initialize TMVA Readers
   script+=variables.setupTMVAReadersProgram()
+  
+
   
   # initialize histograms in all categories and for all systematics
   for c in catnames:
@@ -371,12 +377,14 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
       
       # get size of array
       size_of_loop=None
+      print 'SIZE OF LOOP', size_of_loop
       for v in variablenames_without_index:
         if not v in variables.variables:
           continue
         if variables.variables[v].arraylength != None:
           assert size_of_loop == None or size_of_loop == variables.variables[v].arraylength
           size_of_loop=variables.variables[v].arraylength
+        print 'SIZE OF LOOP', size_of_loop
       
       histoname=cn+n
       script+="\n"
@@ -387,8 +395,10 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
         pwi=variables.getArrayEntries(pw,"i")
         #script+=checkLoopsize(size_of_loop)
         #script+="{\n"
+        script+="    bool "+histoname+"_foundfirst=false; \n"
         script+=varLoop("i",size_of_loop)                    
         script+="{\n"
+        script+="      if("+histoname+"_foundfirst) break;\n"
         arrayselection=variables.checkArrayLengths(','.join([ex,pw]))
         weight='('+arrayselection+')*('+pwi+')*Weight_XS*categoryweight*sampleweight'
         print histoname
@@ -396,7 +406,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
         print weight
         script+=fillHistoSyst(histoname,exi,weight,systnames,systweights, OnlyFirst)
         script+="      }\n"
-        script+="      }\n"
+        script+="    }\n"
       else:
         arrayselection=variables.checkArrayLengths(','.join([ex,pw]))
         weight='('+arrayselection+')*('+pw+')*Weight_XS*categoryweight*sampleweight'
@@ -405,7 +415,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
     # plot two dimensional plots
     for plot, OnlyFirst in zip(plots, OnlyFirstList):
         if not isinstance(plot,plotutils.TwoDimPlot):
-          continue
+            continue
         
         n=plot.histo.GetName()
         exX=plot.variable1
@@ -440,8 +450,8 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
           arrayselection=variables.checkArrayLengths(','.join([exX,exY,pw]))
           weight='('+arrayselection+')*('+pwi+')*Weight_XS*categoryweight*sampleweight'
           script+=fillTwoDimHistoSyst(histoname,exiX,exiY,weight,systnames,systweights, OnlyFirst)
-          script+="      }\n"
-          script+="      }\n"
+          #script+="      }\n"
+          script+="    }\n"
         else:
           arrayselection=variables.checkArrayLengths(','.join([exX,exY,pw]))
           weight='('+arrayselection+')*('+pw+')*Weight_XS*categoryweight*sampleweight'
@@ -504,7 +514,7 @@ def submitToNAF(scripts):
   for script in scripts:
     print 'submitting',script
     #print 'I am here: ', os.getcwd()
-    command=['qsub', '-cwd', '-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=2500M', '-l', 's_vmem=2500M' ,'-o', os.getcwd()+'/logs/$JOB_NAME.o$JOB_ID', '-e', os.getcwd()+'/logs/$JOB_NAME.e$JOB_ID', script]
+    command=['qsub', '-cwd', '-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=3000M', '-l', 's_vmem=2500M' ,'-o', os.getcwd()+'/logs/$JOB_NAME.o$JOB_ID', '-e', os.getcwd()+'/logs/$JOB_NAME.e$JOB_ID', script]
     a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
     output = a.communicate()[0]
     jobidstring = output.split()
@@ -634,8 +644,8 @@ def check_jobs(scripts,outputs,nentries):
       failed_jobs.append(script)
   return failed_jobs
 
+
 def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],additionalfunctions=[],additionalobjectsfromaddtionalrootfile=[], OnlyFirstList=None):
-#def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[], OnlyFirstList=None):
   workdir=os.getcwd()+'/workdir/'+name
   outputpath=workdir+'/output.root'
   
@@ -662,7 +672,6 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   # create c++ program
   print 'creating c++ program'
   createProgram(programpath,plots,samples,catnames,catselections,systnames,systweights,additionalvariables,additionalfunctions,additionalobjectsfromaddtionalrootfile,OnlyFirstList)
-  #createProgram(programpath,plots,samples,catnames,catselections,systnames,systweights,additionalvariables, OnlyFirstList)
   if not os.path.exists(programpath+'.cc'):
     print 'could not create c++ program'
     sys.exit()
@@ -714,4 +723,4 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   print 'hadd output'
   subprocess.call(['hadd', outputpath]+outputs)
   print 'done'
-  return  outputpath
+  return outputpath
