@@ -4644,6 +4644,7 @@ def rebintovarbinsLL(lll):
             lreturn=[]
             for histo in l:
                 #print histo.GetName()
+                binwidth=histo.GetBinWidth(0)
                 if 'Tprime_M_' in histo.GetName():
                     #print 'Nbins histo before TprimeM ', histo.GetNbinsX()
                     xbins= array.array('d',[0,500,550,600,650,700,750,800,850,900,950,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500])
@@ -4675,7 +4676,7 @@ def rebintovarbinsLOL(lol):
     for l in lol:
         lreturn=[]
         for histo in l:
-            print histo.GetName()
+            #print histo.GetName()
             binwidth=histo.GetBinWidth(0)
             if 'Tprime_M_' in histo.GetName():
                 #print 'Nbins histo before TprimeM ', histo.GetNbinsX()
