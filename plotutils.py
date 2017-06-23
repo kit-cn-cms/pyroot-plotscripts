@@ -3387,7 +3387,10 @@ def divideHistos(listOfHistoLists, numeratorPlot, denumeratorPlot, normalizefirs
     if len(listOfHistoLists[numeratorPlot])==1:
         numerator=listOfHistoLists[numeratorPlot][0].Clone()
         denumerator=listOfHistoLists[denumeratorPlot][0].Clone()
-        listofratios.append((listOfHistoLists[numeratorPlot][0])/(listOfHistoLists[denumeratorPlot][0]))
+        if (listOfHistoLists[numeratorPlot][0].Integral()>0) and (listOfHistoLists[denumeratorPlot][0].Integral()>0):
+                listofratios.append((listOfHistoLists[numeratorPlot][0].Integral())/(listOfHistoLists[denumeratorPlot][0].Integral()))
+        else :
+                listofratios.append(0)
         numerator.Rebin(rebin)
         denumerator.Rebin(rebin)
         if normalizefirst: 
@@ -3409,7 +3412,10 @@ def divideHistos(listOfHistoLists, numeratorPlot, denumeratorPlot, normalizefirs
         for i in range(len(listOfHistoLists[numeratorPlot])):
             numerator=listOfHistoLists[numeratorPlot][i].Clone()
             denumerator=listOfHistoLists[denumeratorPlot][i].Clone()
-            listofratios.append((listOfHistoLists[numeratorPlot][i].Integral())/(listOfHistoLists[denumeratorPlot][i].Integral()))
+            if (listOfHistoLists[numeratorPlot][i].Integral()>0) and (listOfHistoLists[denumeratorPlot][i].Integral()>0):
+                listofratios.append((listOfHistoLists[numeratorPlot][i].Integral())/(listOfHistoLists[denumeratorPlot][i].Integral()))
+            else :
+                listofratios.append(0)
             numerator.Rebin(rebin)
             denumerator.Rebin(rebin)
             if normalizefirst: #######check if integral>0
@@ -3493,7 +3499,10 @@ def multiplyHistos(listOfHistoLists, Factor1Plot, Factor2Plot, normalizefirst=Fa
         #for h in listOfHisto:
             #h.Sumw2()
     
-def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='define name', rebin=1, fitoption='pol2'):
+  
+def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='define name', rebin=1, fitoption='pol2', labels=None, autoXrange=False):
+    if labels==None:
+        labels = len(listOfHistoListsToPlot)*['Singal-BKG-Shape-Ratio']
     canvases=[]
     ratio=False
     objects=[] 
@@ -3501,14 +3510,21 @@ def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='d
     ListofTgraphsforFile=[]
     #ListofTgraphNamsforFile=[]
     #ROOT.gStyle.SetOptFit()
-    for listOfHistos in listOfHistoListsToPlot:
-                
+    for listOfHistos, label in zip(listOfHistoListsToPlot, labels):                 
         for histo,sample in zip(listOfHistos, sampleListToPlot):
             yTitle='Ratio'
             histo.Rebin(rebin)
-            print histo.GetName()
+            error = ROOT.Double(0)
+            nonemptybins=0
+            for i in range(histo.GetNbinsX()+1):
+                #print i
+                #print histo.GetBinContent(i)
+                if histo.GetBinContent(i)>0:
+                    nonemptybins+=1
+            #print histo.GetName(), ' Integral=', histo.IntegralAndError(0,histo.GetNbinsX(),error,""),'+-',error, '  Nbins=', histo.GetNbinsX(), '  nonemptybins=', nonemptybins, ' Int/nonemtybins=',  (histo.IntegralAndError(0,histo.GetNbinsX(),error,""))/float(nonemptybins),'+-',error/float(nonemptybins)
+             
             data=ROOT.TGraphAsymmErrors(histo)
-            fit=fitFunctionToHistogrammwitherrorband(histo,fitoption,True)
+            fit=fitFunctionToHistogrammwitherrorband(histo,fitoption, autoXrange)   
             #fit=fitFunctionToHistogrammwitherrorband(histo,"[0]+([1]*log(x-[3])+[2]*log(x-[4])*log(x-[4]))")
             #fit=fitFunctionToHistogrammwitherrorband(histo,"[0]+([1]*log(x)+[2]*log(x)*log(x))*erf(x-[3]/[4])")
             canvas=getCanvas(data.GetName(),ratio)
@@ -3521,6 +3537,8 @@ def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='d
             fit[0].SetName('Graph_'+histo.GetName())
             #fit[0].ConfidenceIntervals()
             ROOT.gStyle.SetOptFit(1111)
+            data.GetYaxis().SetRangeUser(0,2)
+            fit[0].GetYaxis().SetRangeUser(0,2)
             #data.GetYaxis().SetRangeUser(0,2)
             #data.SetOptFit(1111)
             #canvas.Update()
@@ -3534,7 +3552,8 @@ def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='d
             #canvas.Update()
             
             l=getLegend()
-            l.AddEntryZprime(data,'Singal-BKG-Shape-Ratio','P')
+            l.AddEntryZprime(data,label ,'P') 
+            #l.AddEntryZprime(data,'Singal-BKG-Shape-Ratio','P')
             l.AddEntryZprime(fit[0],"fit",'L')
             l.Draw('same')
             
@@ -3552,7 +3571,7 @@ def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='d
     writeObjects(canvases,name)
     writeObjects(ListofTgraphsforFile,name+'_Graphs')
     #writeTGraphstoextraFile(ListofTgraphsforFile,ListofTgraphNamsforFile,'SB_transferfunctions')
-    
+
     
 def fitFunctionToHistogrammwitherrorband(histo, fitoption="[0]+[1]*log(x)+[2]*log(x)*log(x)",autoXrange=False):
     xmax=histo.GetNbinsX()*histo.GetBinWidth(histo.GetNbinsX())
@@ -4686,7 +4705,7 @@ def rebintovarbinsLOL(lol):
                 for i in range(0,historeturn.GetNbinsX()):
                     historeturn.SetBinContent(i,(historeturn.GetBinContent(i)*binwidth/(historeturn.GetBinWidth(i))))
                     historeturn.SetBinError(i,(historeturn.GetBinError(i)*binwidth/(historeturn.GetBinWidth(i))))
-                print 'Nbins histo after TprimeM ', historeturn.GetNbinsX()
+                print 'Nbins histo after TprimeM ', historeturn.GetNbinsX(), ' ',historeturn,'  Integral:', historeturn.Integral()
                 lreturn.append(historeturn)
             elif (('Zprime_M' in histo.GetName()) and (not (isinstance(histo,ROOT.TH2)))):
                 #print isinstance(histo,ROOT.TH1)
@@ -4699,12 +4718,12 @@ def rebintovarbinsLOL(lol):
                 for i in range(0,historeturn.GetNbinsX()):
                     historeturn.SetBinContent(i,(historeturn.GetBinContent(i)*binwidth/(historeturn.GetBinWidth(i))))
                     historeturn.SetBinError(i,(historeturn.GetBinError(i)*binwidth/(historeturn.GetBinWidth(i))))
-                print 'Nbins histo after ZprimeM ', historeturn.GetNbinsX()
+                print 'Nbins histo after ZprimeM ', historeturn.GetNbinsX(), ' ',historeturn,'  Integral:', historeturn.Integral()
                 lreturn.append(historeturn)
             else:
                 lreturn.append(histo)
         lolreturn.append(lreturn)
-    #raw_input
+    raw_input
     return lolreturn
 
 def chekcNbins(lol):
@@ -4731,4 +4750,482 @@ def chekcNbins(lol):
     #writeHistoListwithXYErrors(lol)[plotnames.index(CatA)]], samples, name="check0forABCD_"+topWP+"WP_ratioABoverCD_"+fit, rebin=1, fitoption=fit, labels=None, autoXrange=True)
     #writeHistoListwithXYErrors([lol)[plotnames.index(CatE)]], samples, name="check0forABCD_"+topWP+"WP_ratioEFoverGH_"+fit, rebin=1, fitoption=fit, labels=None, autoXrange=True)
     #divideHistos(lol), CatA, plotnames.index(CatE), False,1,option)
-#writeHistoListwithXYErrors([lol)[plotnames.index(CatA)]], samples, name="check0forABCD_"+topWP+"WP_ratioABoverCD_"+fit+"_corrE", rebin=1, fitoption=fit, labels=None, autoXrange=True)
+
+
+
+def GetListOfCorrelationLists(listOfHistoLists, DoSpear):
+    ListOfCorrelationLists = []
+    ListOfSpearCorrelationLists = []
+    ListOfPValueLists = []
+    ListOfPlotNameLists=[]
+    ListOfNDFs=[]
+    for HistoList in listOfHistoLists:
+        CorrelationList = []
+        SpearCorrelationList = []
+        PlotNameList=[]
+        PValueList =[]
+        NDFs=[]
+        # print "iterate over LOL"
+        for Histo in HistoList:
+            # print "iterate over L"
+            a = Histo.GetCorrelationFactor()
+            b = Histo.GetName()
+            if DoSpear:
+                c=  GetSpearCorrelationFactor(Histo)
+            else: c="Spear Correlation Coefficient not activated."
+            d, df= GetPValueHisto(Histo)
+            CorrelationList.append(a)
+            PlotNameList.append(b)
+            SpearCorrelationList.append(c)
+            PValueList.append(d)
+            NDFs.append(df)
+            # print "Correlation of Histogram: " , a
+        ListOfCorrelationLists.append(CorrelationList)
+        ListOfPlotNameLists.append(PlotNameList)
+        ListOfSpearCorrelationLists.append(SpearCorrelationList)
+        ListOfPValueLists.append(PValueList)
+        ListOfNDFs.append(NDFs)
+    return ListOfCorrelationLists, ListOfPlotNameLists, ListOfSpearCorrelationLists, ListOfPValueLists, ListOfNDFs
+
+
+#Write CorrelationFactors of ListOfHistoLists to Textfile
+def writeCorrLOL(listOfHistoLists, FileName="Correlationfactors.txt", PlotNames="", SampleNames = None, DoSpear=False ):
+    with open(FileName, "w") as corrFile:
+        CorrLOL, PlotNamesLOL, SpearLOL, PValueLOL, NDFLOL = GetListOfCorrelationLists(listOfHistoLists, DoSpear)
+        print PValueLOL
+        # print CorrLOL, PlotNamesLOL
+        if PlotNames != "":
+            if SampleNames == None:
+                SampleNames = len(listOfHistoLists[0])*[""]
+                
+            for CorrL, PlotName, SpearL, PValueL, NDFs in zip(CorrLOL, PlotNames, SpearLOL, PValueLOL, NDFLOL):
+                corrFile.write("----------------------------\n")
+                corrFile.write(PlotName+"\n")
+                for Corr, SampleName, Spear, PValue, NDF in zip(CorrL, SampleNames, SpearL, PValueL, NDFs):
+                    corrFile.write(str(Corr)+"\t"+SampleName + "\tPearson \n")
+                    corrFile.write(str(PValue)+"\t"+SampleName + "\tPValue \n")
+                    corrFile.write(str(NDF) +"\t"+ SampleName+ "\t Number of Degrees of Freedom\n")
+                    if DoSpear:
+                        corrFile.write(str(Spear) + "\t"+SampleName + "\tSpearman \n")
+
+                    
+        else:
+            for CorrL,NameL, SpearL, PValueL in zip( CorrLOL, PlotNamesLOL, SpearLOL, PValueLOL ):
+                corrFile.write("----------------------------------------\n")
+                for Corr, Name, Spear, PValue in zip(CorrL, NameL, SpearL, PValueL):
+                    corrFile.write(str(Corr)+"\t\t"+Name + "\tPearson \n")
+                    corrFile.write(str(PValue)+"\t\t"+Name + "\tPearson \n")
+                    if DoSpear:
+                        corrFile.write(str(Spear)+"\t\t"+Name + "\tSpearman \n")
+
+
+
+
+
+
+
+
+
+#Functions to get the Spearman CorrelationFactor
+
+
+#Get Temporary List of X an Y that can be ranked afterwards
+def GetXYBins(Histo2D):
+    X=[]
+    Y=[]
+    nx = Histo2D.GetNbinsX()
+    ny = Histo2D.GetNbinsY()
+    print "Entries of the Histogram", Histo2D.GetEntries()
+
+    for x in range(nx+2):
+        x_tmp = 0
+        for y in range(ny+2):
+            x_tmp += int(Histo2D.GetBinContent(x,y))
+        # print "x_tmp", x_tmp
+        for i in range(x_tmp):
+            X.append(x)
+
+            
+    #Sort y, so that x-Entry at position i belongs to y-Entry at position i
+    Y = []
+    x_tmp = -1
+    for x in X:
+        if x == x_tmp:
+            continue
+        x_tmp = x
+        for y in range(ny+2):
+            
+            Y += int(Histo2D.GetBinContent(x,y) ) * [y]
+        
+    
+    # print "unranked", X, Y    
+    return X,Y
+
+
+
+#return to old sortation (as X was sorted before)
+def unsorted(X_modified_sorted, X_):
+    X = X_
+    X_modified_unsorted= len(X)*['not changed yet']
+    
+    for i in range( len(X) ):
+        index_tmp = X.index(  min( X ) )
+        X_modified_unsorted[index_tmp] = X_modified_sorted[i]
+        X[index_tmp] = max(X)+1
+    return X_modified_unsorted
+    
+
+
+#Rank a given array
+def RankArray(X_):
+    X=X_
+    X_sorted = sorted(X)
+    X_ranked = []
+    last = X_sorted[0]
+    X_Bool_MoreThanLast = []
+    
+    for element in X_sorted[1:]:
+        if element > last:
+            X_Bool_MoreThanLast.append(True)
+        else:
+            X_Bool_MoreThanLast.append(False)
+        last = element
+
+    size = 1
+    i = 1
+    for MoreThanLast in X_Bool_MoreThanLast:
+        if MoreThanLast:
+            X_ranked += size*[i - (size - 1)/2. ]
+            size = 1
+        else:
+            size += 1
+        i += 1
+        
+    X_ranked += size*[ i- (size-1)/ 2. ]
+    X_ranked = unsorted(X_ranked, X) #return to old sortation
+    return X_ranked
+
+
+
+
+def GetSpearCorrelationFactor(Histo_, Smaller=True):
+
+    Histo = Histo_.Clone()
+    if Smaller:
+        Histo.Scale(200/Histo.Integral())
+    
+    X_tmp, Y_tmp = GetXYBins(Histo)
+    X_ranked=RankArray(X_tmp)
+    Y_ranked=RankArray(Y_tmp)
+
+    
+    histo_rank = ROOT.TH2F("histo_rank", "Histogram of ranked variables", 15 , 0.95*min(X_ranked), 1.05*max(X_ranked), 15 , 0.95*min(Y_ranked), 1.05*max(Y_ranked) )
+    for i in range(len( X_ranked ) ):
+        histo_rank.Fill( X_ranked[i], Y_ranked[i] )
+        
+    mycanv = ROOT.TCanvas("mycanv", "mycanv", 800, 600)
+    histo_rank.Draw("colz")
+    mycanv.SaveAs("ABCD/"+Histo.GetName()+"_ranked.png")
+    SpearCorr = histo_rank.GetCorrelationFactor()
+    return SpearCorr
+
+
+
+#def closuretest(listOfHistos, listOfHistosPrediction, listOfHistosPrediction_systup, listOfHistosPrediction_systdown,samples, label,name,normalize=True,stack=False,logscale=False,options='histo',statTest=False, sepaTest=False,ratio=False):
+    ##if DoProfile and not isinstance(listOfHistoLists[0][0], ROOT.TH2):
+      ##print "need 2D plots for Profile Histograms"
+      ##DoProfile=False
+    #listofallstattests=[]
+    #if isinstance(label, basestring):
+        #labeltexts=len(listOfHistoLists)*[label]
+##        print "bla"
+    #else:
+        #labeltexts=label
+    #canvases=[]
+    #objects=[]   
+    #i=0
+    #print labeltexts
+        #listofthisstattests=[listOfHistos[0].GetTitle()]
+        #i+=1
+        #for histo, histoPrediction,histoPrediction_systup,histoPrediction_systdown,sample in zip(listOfHistos,listOfHistosPrediction,listOfHistosPrediction_systup,listOfHistosPrediction_systdown,samples):
+            #print labeltext
+            #yTitle='Events'
+            #if normalize:
+                #yTitle='normalized'
+            #setupHisto(histo,sample.color,yTitle,stack)        
+        #stattests2D=None
+        #c=drawHistosOnCanvas([histoPrediction]+[histoPrediction_systup]+[histoPrediction_systdown]+[histo],normalize,stack,logscale,options,ratio,DoProfile)
+
+        #if not isinstance(c, list):
+            #c.SetName('c_'+listOfHistos[0].GetName())
+            #l=getLegend2()
+            #for h,sample in zip(listOfHistos,samples):
+                #loption='L'
+                #if stack:
+                    #loption='F'            
+                #l.AddEntry4545(h,sample.name,loption)
+            #canvases.append(c)
+            #l.Draw('same')
+            #objects.append(l)
+        #elif options == "colz":
+            #for i in range(len(listOfHistos)):
+                #c[i].SetName('c_'+listOfHistos[i].GetName()) #wrong! What name should be set?
+
+            #if DoProfile:
+                #c[-2].SetName('c_'+c[-2].GetName())
+                #lx = getLegend2()
+                #for px,  sample in zip(profilesx,  samples):
+                    #lx.AddEntry4545( px.GetName() , sample.name, "L" )
+                #lx.Draw("same")
+                #objects.append(lx)
+                
+                #c[-1].SetName('c_'+c[-1].GetName())
+                #ly = getLegend2()
+                #for  py, sample in zip( profilesy, samples):
+                    #ly.AddEntry4545( py.GetName() , sample.name, "L" )
+                #ly.Draw("same")
+                #objects.append(ly)
+            #canvases+=c
+        #else:
+            #canvases+=c
+        
+        #if statTest:
+            #if not isinstance(listOfHistos[0],ROOT.TH2):
+                #tests=getStatTestsList(listOfHistos[0],listOfHistos[1:],"UW")
+                #tests.Draw()
+                #listofthisstattests.append(tests.GetTitle())
+                #objects.append(tests)
+        #if sepaTest:
+            #stests=getSepaTests(listOfHistos[0],listOfHistos[1])
+            #stests.Draw()
+            #objects.append(stests)
+        #if stattests2D!=None:
+            ## stattests2D.Draw()
+            #objects.append(stattests2D)
+            #listofthisstattests.append(stattests2D.GetTitle())
+        ## cms = ROOT.TLatex(0.2, 0.96, 'CMS private work'  );
+        ## cms.SetTextFont(42)
+        ## cms.SetTextSize(0.05)
+        ## cms.SetNDC()
+        ## cms.Draw()
+        ## print cms
+        ## objects.append(cms)
+
+        #if not isinstance(c, list):
+            #cms = ROOT.TLatex(0.2, 0.96, 'CMS preliminary,  37.8 fb^{-1},  #sqrt{s} = 13 TeV'  );
+            #cms.SetTextFont(42)
+            #cms.SetTextSize(0.05)
+            #cms.SetNDC()
+            #cms.Draw()
+            #objects.append(cms)
+
+            #label = ROOT.TLatex(0.2, 0.9, labeltext);
+            #label.SetTextFont(42)
+            #label.SetTextSize(0.04)
+            #label.SetNDC()
+            #label.Draw()
+            #objects.append(label)
+            #listofallstattests.append(listofthisstattests)
+        ## else:
+        ##     for can, sam in zip(c,samples):
+        ##         labeltext = sam.name
+        ##         label = ROOT.TLatex(0.2, 0.96, labeltext);
+        ##         label.SetTextFont(42)
+        ##         label.SetTextSize(0.04)
+        ##         label.SetNDC()
+        ##         label.Draw()
+        ##         objects.append(label)
+        ##     listofallstattests.append(listofthisstattests)
+
+        
+    #printCanvases(canvases,name)
+    #writeObjects(canvases,name)
+    #stattestoutfile=open("stattests_"+name+".txt","w")
+    #for stst in listofallstattests:
+      #stattestoutfile.write(' '.join(stst)+'\n')
+    #stattestoutfile.close()  
+
+
+
+
+
+
+
+
+
+
+
+#Is Correlation smaller than rho 0 -- probability Hypothesis is _what_ ?
+#r CorrelationCoefficient, p, probability hypothesis is true, rho0 - hyothesis
+def GetPValue(r, df, rho0=0):
+    #Get t Wert
+    T =abs( (math.atanh(r) - math.atanh(rho0) - r/df )/(1/math.sqrt(df)) )
+    #Get Propability, rho0 is true
+    return 2*(1 - ROOT.TMath.StudentI(T , df) )
+
+def GetPValueHisto(Histo, rho0 = 0):
+    r = Histo.GetCorrelationFactor()
+    df = Histo.GetEntries()
+    return GetPValue(r, df , rho0), df
+
+
+
+
+
+def GetIntegralLOL( ListOfHistoLists ):
+    print ListOfHistoLists
+    ListOfIntegralLists = []
+    for HistoList in ListOfHistoLists:
+        IntegralList = []
+        for Histo in HistoList:
+            #IntegralList.append( Histo.IntegralAndError() )
+            IntegralList.append( Histo.Integral() )
+            error = ROOT.Double(0)
+            if not isinstance(Histo,ROOT.TH2):
+                #print error
+                #print Histo, '  ', Histo.IntegralAndError(0,Histo.GetNbinsX(),error,"",)
+                print Histo, ' Integral=', Histo.IntegralAndError(0,Histo.GetNbinsX(),error,""),'+-',error
+        ListOfIntegralLists.append( IntegralList )
+    return ListOfIntegralLists
+
+
+
+
+def writeIntegralLOLinTEX( ListOfHistoLists, filename = "IntegralList.tex", samplenames_ = None ):
+
+    if samplenames_ == None:
+        samplenames = len(ListOfHistoLists[0])*[""]
+    else:
+        samplenames = samplenames_
+
+
+    with open( filename , "w") as IntFile:
+        IntFile.write( " %% List of Integrals of Histograms created in plotutils.py \n \\begin{tabular}{cc} \n \\toprule \n \\textbf{Integral} & \\textbf{Sample} \\\\ \n" )
+        for HistoList in ListOfHistoLists:
+            IntFile.write( "\\midrule \n " + str( HistoList[0].GetName()  )+ " & \\\\ \n " )
+            for Histo, sample in zip( HistoList, samplenames ):
+                IntFile.write( "\\tablenum{" +  str( Histo.Integral() ) + "}  & " + sample + "  \\\\ \n " )
+                #IntFile.write( "\\tablenum{" +  str( Histo.IntegralAndError(0,GetNbinsX()-1) ) + "}  & " + sample + "  \\\\ \n " )
+        IntFile.write( "\\bottomrule \n \\end{tabular} " )
+
+
+
+
+
+#Transposes specific Indices Example: transposeLOLextended( list,  [ [1, 3], [2, 4] ] ) converts     list = [ [a1, a2], [b1, b2], [c1, c2], [d1, d2] ]     to      [ [a1, c1] , [a2, c2], [b1, d1], [b2, d2] ]
+def transposeLOLextended( ListOfHistoList,  IndexListOfLists ):
+    Transposed = []
+
+    for IndexList in IndexListOfLists:
+        tmpList=[]
+        for Index in IndexList:
+            tmpList.append( ListOfHistoList[Index] )
+        Transposed += transposeLOL( tmpList )
+        print "Warning in Function transposeLOLextended(): If used with writeListOfHistoLists, not all elements are appended to pdf file. Spepearate PDF and JPG are created."
+    return Transposed
+
+
+
+
+def ReconstructWithABCD(ListOfHistoLists, PlotnameCatA, plotnames):
+    if(PlotnameCatA[8] != "A" ):
+        print "Error in Function ReconstructWithABCD(): This Plot is not Category A"
+        return
+
+    stringlist=list(PlotnameCatA)
+    stringlist[8]="B"
+    PlotnameCatB="".join(stringlist)
+    stringlist[8]="C"
+    PlotnameCatC="".join(stringlist)
+    stringlist[8]="D"
+    PlotnameCatD="".join(stringlist)
+    stringlist[8]="E"
+    PlotnameCatE="".join(stringlist)
+    stringlist[8]="F"
+    PlotnameCatF="".join(stringlist)
+    stringlist[8]="G"
+    PlotnameCatG="".join(stringlist)
+    stringlist[8]="H"
+    PlotnameCatH="".join(stringlist)
+
+    multiplyHistos(ListOfHistoLists, plotnames.index(PlotnameCatB) , plotnames.index(PlotnameCatC))
+    divideHistos(ListOfHistoLists, plotnames.index(PlotnameCatB), plotnames.index(PlotnameCatD) )
+
+    multiplyHistos(ListOfHistoLists, plotnames.index(PlotnameCatF) , plotnames.index(PlotnameCatG))
+    divideHistos(ListOfHistoLists, plotnames.index(PlotnameCatF), plotnames.index(PlotnameCatH) )
+
+
+def CloneListOfHistoLists(ListOfHistoLists):
+    ClonedListOfHistoLists=[]
+    for HistoList in ListOfHistoLists:
+        ClonedHistoList=[]
+        for Histo in HistoList:
+            ClonedHistoList.append( Histo.Clone() )
+        ClonedListOfHistoLists.append(ClonedHistoList)
+    return ClonedListOfHistoLists
+
+
+#Function designed to compare Entrys in Signal and BackgroundRegion, Only Use with transposed ListOfHistoLists
+def compareEntriesInBackgroundAndSignalRegion( TransposedListsOfHistoLists, filename="set_filename.txt"):
+    with open(filename, "w") as filecontent:
+        filecontent.write("#List of Integrals in Signal and Background, constructed with function compareEntriesInBackgroundAndSignalRegion() in plotutils.py \n #NameOfHistogram;\tIntegral in Signalregion;\tIntegral in BackgroundRegion;\tRatio\n")
+
+
+        #Loop over ListOfHistoLists and calculation of Integrals (Only for ABCD)
+        for HistoList in TransposedListsOfHistoLists:
+            for CurrentIndex,Histo in enumerate(HistoList):
+                # filecontent.write("BUGFIX" + str(Histo.GetName()[8]) + "    " +str(Histo.GetName() + "\n") )
+                if Histo.GetName()[22] == "A" or Histo.GetName()[23] == "A":
+                    IntegralInSignalRegion=Histo.Integral()
+                    IntegralInBackgroundRegion=0
+                    for i in range(CurrentIndex+1,CurrentIndex+4):
+                        IntegralInBackgroundRegion += HistoList[i].Integral()
+                    filecontent.write(str(Histo.GetName()) + ";\t" + str(IntegralInSignalRegion) + ";\t" + str(IntegralInBackgroundRegion) + ";\t" + str( IntegralInSignalRegion / IntegralInBackgroundRegion)+ "\n" )
+
+#InputHistoList should contain all Histograms that shold be in the same stack Plot
+def stackPlotABCD(ListOfHistoList, name, optionlist=None , stacklist=None, colorlist=None, labellist=None, titlelist=None, Fill=True):
+
+    if optionlist==None:
+        optionlist = len(ListOfHistoList)*["histo"]
+    if stacklist==None:
+        stacklist = len(ListOfHistoList)*[True]
+    if colorlist == None:
+        colorlist = len(ListOfHistoList)*[kBlack]
+        Fill=False
+    if labellist == None:
+        labellist = len(ListOfHistoList)*[" "]
+    if titlelist == None:
+        titlelist = len(ListOfHistoList)*[" "]
+    # yTitle = "Not Set Yet"
+
+    canvases=[]
+    objects = []
+
+
+    for HistoList,  yTitle in zip(ListOfHistoList, titlelist):
+        for Histo, color, option, stack in zip(HistoList, colorlist, optionlist, stacklist):
+            setupHisto(Histo,color,yTitle, stack)
+
+        c=drawHistosOnCanvas(HistoList, normalize=True, stack=True, options_=option)
+        c.cd(1)
+        l=getLegend()
+        for Histo, label in zip(HistoList, labellist):
+            l.AddEntryZprime(Histo, label, 'L') #For Filld, Option propably "F"
+            l.Draw("same")
+        canvases.append(c)
+
+    printCanvases(canvases,name)
+    writeObjects(canvases,name)
+
+def addLOLTtoLOLT(ListOfHistoLists1,ListOfHistoLists2, c1=1.0, c2=1.0):
+    for HistoList1 in ListOfHistoLists1:
+      for  HistoList2 in ListOfHistoLists2:
+        for Histo1, Histo2, in zip(HistoList1,HistoList2):
+            Histo1.Add(Histo2,c2)
+
+
+def scalCatAclosurewithCatEclosure(histo1, histo2):
+    #histo1.Scale(histo2.Integral()/(histo1.Integral()))
+    histo1.Scale(histo2.Integral())
+    
+

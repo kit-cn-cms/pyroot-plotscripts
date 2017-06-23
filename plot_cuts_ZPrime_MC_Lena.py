@@ -5,7 +5,7 @@ plotselection1="Evt_HT>850"
 plotselection2="N_packedPatJetsAK8PFCHSSoftDrop>=2 && packedPatJetsAK8PFCHSSoftDrop_Pt[0]>400 && packedPatJetsAK8PFCHSSoftDrop_Pt[1]>200 && Evt_HT>850 "
 
 
-topWP='medium'
+topWP='loose'
 WWP='loose'
 bottomWP=''
 WPs='topWP'+topWP+'_WWP'+WWP

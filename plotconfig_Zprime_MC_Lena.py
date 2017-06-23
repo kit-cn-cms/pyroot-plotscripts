@@ -92,4 +92,4 @@ for i in BackgroundSamples:
     BackgroundSampleNames.append(i.nick)
 DataSampleNames=[]
 for i in DataSamples:
-DataSampleNames.append(i.nick)
+    DataSampleNames.append(i.nick)
