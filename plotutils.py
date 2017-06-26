@@ -4114,7 +4114,7 @@ def rebintovarbinsLOL(lol):
         for histo in l:
             #print histo.GetName()
             if (('Tprime_M' in histo.GetName()) and (not (isinstance(histo,ROOT.TH2)))):
-                print 'Nbins histo before TprimeM ', histo.GetNbinsX(),'  ' ,histo
+                print 'Nbins histo before TprimeM ', histo.GetNbinsX(),'  ' ,histo, '  ', histo.Integral()
                 binwidth=histo.GetBinWidth(0)
                 print binwidth
                 xbins= array.array('d',[0,500,550,600,650,700,750,800,850,900,950,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500])
@@ -4127,7 +4127,7 @@ def rebintovarbinsLOL(lol):
             elif (('Zprime_M' in histo.GetName()) and (not (isinstance(histo,ROOT.TH2)))):
                 print isinstance(histo,ROOT.TH1)
             
-                print 'Nbins histo before ZprimeM ', histo.GetNbinsX(),'  ' ,histo
+                print 'Nbins histo before ZprimeM ', histo.GetNbinsX(),'  ' ,histo, '  ', histo.Integral()
                 binwidth=histo.GetBinWidth(0)
                 print binwidth
                 xbins= array.array('d',[0,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3250,3500,3750,4000,4500,5000])
@@ -4137,6 +4137,25 @@ def rebintovarbinsLOL(lol):
                     historeturn.SetBinError(i,(historeturn.GetBinError(i)*binwidth/(historeturn.GetBinWidth(i))))
                 print 'Nbins histo after ZprimeM ', historeturn.GetNbinsX()
                 lreturn.append(historeturn)
+            elif (('Zprime_M' in histo.GetName()) and ('Tprime_M' in histo.GetName()) and (isinstance(histo,ROOT.TH2))):
+                Zprimebins= array.array('d',[0,1000,1200,1400,1700,2000,2500,3000,3600,4300,5000])
+                Tprimebins= array.array('d',[0,500,600,700,850,1000,1200,1250,1500,1800,2100,2500])
+                binwidthX=histo.GetXaxis().GetBinWidth(0)
+                binwidthY=histo.GetYaxis().GetBinWidth(0)
+                historeturn=TH2F(histo.GetName(),histo.GetName(),len(Tprimebins)-1,Tprimebins,len(Zprimebins)-1,Zprimebins)
+                for i in range(0,historeturn.GetNbinsX()*historeturn*GetNbinsY()):
+                    ibincontent=0.0
+                    ibinerror=0.0
+                    for j in range(0,histo.GetNbinsX()*histo*GetNbinsY()):
+                        if (histo.GetXaxis().GetBinCenter(j)>historeturn.GetXaxis().GetBinLowEdge(i)) and (histo.GetYaxis().GetBinCenter(j)>historeturn.GetYaxis().GetBinLowEdge(i)):
+                            ibincontent+=histo.GetBinContent(j)
+                            ibinerror+=histo.GetBinError(j)
+                    ibincontent=ibincontent*(binwidthX*binwidthY)/(historeturn.GetXaxis().GetBinWidth(i)*historeturn.GetYaxis().GetBinWidth(i))
+                    ibinerror=ibinerror*(binwidthX*binwidthY)/(historeturn.GetXaxis().GetBinWidth(i)*historeturn.GetYaxis().GetBinWidth(i))
+                    
+                    historeturn.SetBinContent(i,ibincontent)
+                    historeturn.GetBinError(i,ibinerror)
+                    
             else:
                 lreturn.append(histo)
         lolreturn.append(lreturn)
@@ -4153,17 +4172,27 @@ def chekcNbins(lol):
     raw_input()
     
     
-#def ABCDclosure1D(lol,plotnames,samples,CatA,CatB,CatC,CatD, CatE,CatF,CatG,CatH,normalizefirst=False,rebin=1,option='',fit='pol1'):
-    #divideHistos(lol), plotnames.index(CatA), plotnames.index(CatB), normalizefirst,rebin,option)
-    #divideHistos(lol), plotnames.index(CatC), plotnames.index(CatD), normalizefirst,rebin,option)
-    #divideHistos(lol), CatA, plotnames.index(CatC), False,1,option)
+def ABCDclosure1D(lol,plotnames,samples,CatA,CatB,CatC,CatD, CatE,CatF,CatG,CatH,normalizefirst=False,rebin=1,option='',fit='pol1'):
+    
+    lolclone=lol.deepcopy()
+    divideHistos(lolclone, plotnames.index(CatA), plotnames.index(CatB), normalizefirst,rebin,option)
+    divideHistos(lolclone, plotnames.index(CatC), plotnames.index(CatD), normalizefirst,rebin,option)
+    divideHistos(lol, CatA, plotnames.index(CatC), False,1,option)
 
-    #divideHistos(lol), plotnames.index(CatE), plotnames.index(CatF), normalizefirst=False,rebin=1,option)
-    #divideHistos(lol), plotnames.index(CatG), plotnames.index(CatH), normalizefirst=False,rebin=1,option)
-    #divideHistos(lol), plotnames.index(CatE), plotnames.index(CatG), False,1,option)
+    divideHistos(lolclone, plotnames.index(CatE), plotnames.index(CatF), normalizefirst=False,rebin=1,option)
+    divideHistos(lolclone, plotnames.index(CatG), plotnames.index(CatH), normalizefirst=False,rebin=1,option)
+    divideHistos(lolclone, plotnames.index(CatE), plotnames.index(CatG), False,1,option)
 
+    writeHistoListwithXYErrors([lolclone[plotnames.index(CatA)]], samples, name="check0forABCD_"+topWP+"WP_ratioABoverCD_"+fit, rebin=1, fitoption=fit, labels=None, autoXrange=True)
+    writeHistoListwithXYErrors([lolclone[plotnames.index(CatE)]], samples, name="check0forABCD_"+topWP+"WP_ratioEFoverGH_"+fit, rebin=1, fitoption=fit, labels=None, autoXrange=True)
+    divideHistos(lolclone), CatA, plotnames.index(CatE), False,1,option)
+    writeHistoListwithXYErrors([lolclone[plotnames.index(CatA)]], samples, name="check0forABCD_"+topWP+"WP_ratioABoverCD_"+fit+"_corrE", rebin=1, fitoption=fit, labels=None, autoXrange=True)
 
-    #writeHistoListwithXYErrors(lol)[plotnames.index(CatA)]], samples, name="check0forABCD_"+topWP+"WP_ratioABoverCD_"+fit, rebin=1, fitoption=fit, labels=None, autoXrange=True)
-    #writeHistoListwithXYErrors([lol)[plotnames.index(CatE)]], samples, name="check0forABCD_"+topWP+"WP_ratioEFoverGH_"+fit, rebin=1, fitoption=fit, labels=None, autoXrange=True)
-    #divideHistos(lol), CatA, plotnames.index(CatE), False,1,option)
-    #writeHistoListwithXYErrors([lol)[plotnames.index(CatA)]], samples, name="check0forABCD_"+topWP+"WP_ratioABoverCD_"+fit+"_corrE", rebin=1, fitoption=fit, labels=None, autoXrange=True)
+    lolclone2=lol.deepcopy()
+    divideHistos(lolclone2, plotnames.index(CatC), plotnames.index(CatD), normalizefirst,rebin,option)
+    multiplyHistos(lolclone2, plotnames.index(CatB), plotnames.index(CatC), normalizefirst,rebin,option)
+
+    divideHistos(lolclone2, plotnames.index(CatG), plotnames.index(CatH), normalizefirst,rebin,option)
+    multiplyHistos(lolclone2, plotnames.index(CatF), plotnames.index(CatG), normalizefirst,rebin,option)
+
+    writeListOfHistoLists(lolclone2,samples, '', name="check0forABCD_"+topWP+"WP_ratioABoverCD_"+fit,normalize,False,False,options='histo',False, False,True,False)

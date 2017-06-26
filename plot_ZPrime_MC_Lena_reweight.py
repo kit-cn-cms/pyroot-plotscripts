@@ -12,8 +12,6 @@ import copy
 #ABCDeventhandling='oncefirst'
 #ABCDeventhandling='reweight'
 
-ABCDeventhandling=''
-
 name='Zprime_MC_Lena_'+ABCDeventhandling+'_'+WPs
 SampleNames=['ttbar' , 'QCD_HT', 'QCD_Pt' ]
 SignalSampleNames=['Zprime1500900',  'Zprime20001200',  'Zprime25001200']
@@ -247,7 +245,7 @@ plots=[
     #doing only first element
     #beta (tau21)
     # no topsubbtag
-    Plot(ROOT.TH1F("ABCD_notopbtag_CatA_Zprime_M_beta_first" ,"m(Z') in GeV, CatA " ,100,0,5000),"Zprimes_ABCD_M", "ABCD_CatID==ABCD_CatA_notopbtag" + " && " +    plotselection_ABCD_general_beta + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21, "1 btag"),
+    Plot(ROOT.TH1F("ABCD_notopbtag_CatA_Zprime_M_beta_first" ,"m(Z') in GeV, CatA " ,100,0,5000),"Zprimes_ABCD_M", "ABCD_CatID==ABCD_CatA_notopbtag" + " && " + plotselection_ABCD_general_beta + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21, "1 btag"),
     Plot(ROOT.TH1F("ABCD_notopbtag_CatB_Zprime_M_beta_first" ,"m(Z') in GeV, CatB " ,100,0,5000),"Zprimes_ABCD_M", "ABCD_CatID==ABCD_CatB_notopbtag" + " && " +    plotselection_ABCD_general_beta + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21 + "&&" +"IsnoSignalnotopbtag" ,"1 btag"),
     Plot(ROOT.TH1F("ABCD_notopbtag_CatC_Zprime_M_beta_first" ,"m(Z') in GeV, CatC " ,100,0,5000),"Zprimes_ABCD_M", "ABCD_CatID==ABCD_CatC_notopbtag" + " && " +    plotselection_ABCD_general_beta + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32 + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21 + "&&" +"IsnoSignalnotopbtag" ,"1 btag"),
     Plot(ROOT.TH1F("ABCD_notopbtag_CatD_Zprime_M_beta_first" ,"m(Z') in GeV, CatD " ,100,0,5000),"Zprimes_ABCD_M", "ABCD_CatID==ABCD_CatD_notopbtag" + " && " +    plotselection_ABCD_general_beta + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21 + "&&" +"IsnoSignalnotopbtag" ,"1 btag"),
@@ -606,14 +604,10 @@ for i in plots:
 
 
 OnlyFirstList=len(plots)*[False]
-#print 'length of OnlyFirstList=', len(OnlyFirstList), ' length of plots=', len(plots)
-OnlyFirstList[plotnames.index("ABCD_notopbtag_CatA_Zprime_M_beta_first"):plotnames.index('Withtopbtag_W_t21') +1 ] = len(OnlyFirstList[plotnames.index("ABCD_notopbtag_CatA_Zprime_M_beta_first"):plotnames.index('Withtopbtag_W_t21') + 1 ] ) * [True]
+OnlyFirstList[plotnames.index("ABCD_notopbtag_top_tau32_vs_top_MSD"):plotnames.index('Withtopbtag_W_t21') +1 ] = len(OnlyFirstList[plotnames.index("ABCD_notopbtag_CatA_Zprime_M_beta_first"):plotnames.index('Withtopbtag_W_t21') + 1 ] ) * [True]
 
 print OnlyFirstList, 'This is the boolean List for only first elements'
 
-#print 'length of OnlyFirstList=', len(OnlyFirstList), ' length of plots=', len(plots)
-assert len(OnlyFirstList)==len(plots)
-#raw_input()
 
 
 
@@ -652,11 +646,10 @@ labels=[plot.label for plot in plots]
 
 #writeListOfHistoLists(transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('Notopbtag_Top_MSD'):plotnames.index('Withtopbtag_W_t21')+1],BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], 'label','MSDs_QCD',True)
 #writeListOfHistoLists([transposeLOL(transposeLOL(listOfHistoListsABCD)[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1])[plotnames.index('ABCD_notopbtag_CatA_Zprime_M_beta_first')]],BackgroundSamples[BackgroundSampleNames.index('QCD_HT'):BackgroundSampleNames.index('QCD_PT')+1], 'label','MSDs_QCD ')
-print listOfHistoListsABCD
+
 
 
 lolABCD_rebinned=rebintovarbinsLOL(listOfHistoListsABCD)
-print lolABCD_rebinned
 listOfHistoListsABCD=lolABCD_rebinned
 chekcNbins(listOfHistoListsABCD)
 
