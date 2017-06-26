@@ -48,16 +48,16 @@ discrs =    ['finalbdt_ljets_j4_t2','finalbdt_ljets_j5_t2','finalbdt_ljets_j4_t3
 
 discrname='finaldiscr'
 
-assert(len(nhistobins)==len(maxxvals))
-assert(len(nhistobins)==len(minxvals))
-assert(len(nhistobins)==len(categories))
-assert(len(nhistobins)==len(discrs))
 
 # add unsplit categories
 for cat in categories_:
   categories.append(cat)
 
 print categories
+assert(len(nhistobins)==len(maxxvals))
+assert(len(nhistobins)==len(minxvals))
+assert(len(nhistobins)==len(categories))
+assert(len(nhistobins)==len(discrs))
 
 # define MEM discriminator variable
 memexp='(memDBp>0.0)*(memDBp_sig/(memDBp_sig+0.15*memDBp_bkg))+(memDBp<0.0)*(0.01)'
