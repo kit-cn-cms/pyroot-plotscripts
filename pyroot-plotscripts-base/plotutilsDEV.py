@@ -1279,7 +1279,66 @@ def optimizeBinning(infname,outfname,binningSaveFile="",signalsamples=[], backgr
       outfile.Close()
         
     print "done witht the binning optimization"          
-        
+
+def rebinFromBinList(infname,outfname,ListOfBinLists=[],plots=[],signalsamples=[], backgroundsamples=[],additionalSamples=[],systnames=[""],verbosity=0):
+  if len(plots)!=len(ListOfBinLists):
+    print "need binning information for all plots. Quitting!"
+    exit(0)
+    
+  theclock=ROOT.TStopwatch()
+  theclock.Start()
+  theobjectlist=[] # dummy list to keep destructors from being called
+  ROOT.gDirectory.cd('PyROOT:/')
+  infile=ROOT.TFile(infname,"READONLY")
+  if outfname!="":
+    outfile=ROOT.TFile(outfname,"RECREATE")  
+
+  for iplot, plot in enumerate(plots):
+     print "doing the rebinning for plot ", plot.name
+     for sample in signalsamples+backgroundsamples+additionalSamples:
+	for syst in systnames:
+	  ROOT.gDirectory.cd('PyROOT:/')
+	  key=sample.nick+'_'+plot.name+syst
+	  if verbosity>=2:
+	    print "at ", key
+	  thisHistoPreRebinning=infile.Get(key)
+	  if thisHistoPreRebinning==None:
+	    continue
+	  thisHistoPreRebinning.SetDirectory(0)
+	  theobjectlist.append(thisHistoPreRebinning)
+	  outfile.cd()
+	  thisHistoPostRebinning=None
+	  thisPlotsBinList=ListOfBinLists[iplot]
+	  nNewBins=len(thisPlotsBinList)
+	  newMin=0.5
+	  newMax=nNewBins+0.5
+	  nOldBins=thisHistoPreRebinning.GetNbinsX()
+	  if isinstance(thisHistoPreRebinning,ROOT.TH1D):
+	      thisHistoPostRebinning=ROOT.TH1D(thisHistoPreRebinning.GetName(),thisHistoPreRebinning.GetTitle(),nNewBins,newMin,newMax)
+	  elif isinstance(thisHistoPreRebinning,ROOT.TH1F):
+	      thisHistoPostRebinning=ROOT.TH1F(thisHistoPreRebinning.GetName(),thisHistoPreRebinning.GetTitle(),nNewBins,newMin,newMax)
+	  else:
+	      print "not a supported histogram type", thisHistoPreRebinning
+	  for ibin in range(nOldBins):
+	    newBinIdx=-1
+	    for inb, nb in enumerate(thisPlotsBinList):
+	      if ibin in nb:
+		newBinIdx=inb+1
+	    if newBinIdx==-1:
+	      print "could not find where to put bin ", ibin
+	      print "will put it in the first bin"
+	      newBinIdx=1
+	    thisHistoPostRebinning.SetBinContent(newBinIdx, thisHistoPostRebinning.GetBinContent(newBinIdx)+thisHistoPreRebinning.GetBinContent(ibin))
+	    # add errors
+	    newbinerror=ROOT.TMath.Sqrt(thisHistoPostRebinning.GetBinError(newBinIdx)*thisHistoPostRebinning.GetBinError(newBinIdx) + thisHistoPreRebinning.GetBinError(ibin)*thisHistoPreRebinning.GetBinError(ibin))
+	    thisHistoPostRebinning.SetBinError(newBinIdx, newbinerror)
+          outfile.cd()
+	  thisHistoPostRebinning.Write("",ROOT.TObject.kOverwrite)
+  print "done with the rebinning"
+  if outfname!="":
+    outfile.Close()
+    
+   
 def createLLL_fromSuperHistoFileSyst(path,samples,plots,systnames=[""]):
     theclock=ROOT.TStopwatch()
     theclock.Start()
