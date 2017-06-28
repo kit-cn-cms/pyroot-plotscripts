@@ -2745,8 +2745,8 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         emptyHisto=listOfHistos[0].Clone()
         print emptyHisto.GetName()
         emptyHisto.SetFillStyle(0)
-        #line.GetYaxis().SetRangeUser(0.5,1.6)
-        line.GetYaxis().SetRangeUser(0.0,2.0)
+        line.GetYaxis().SetRangeUser(0.5,1.6)
+        #line.GetYaxis().SetRangeUser(0.0,2.0)
         if autoscaleRatioYAxis:
             line.GetYaxis().SetRangeUser(ratiominimum-0.2,ratiomaximum+0.2)
         line.GetXaxis().SetRangeUser(listOfHistos[0].GetXaxis().GetXmin(),listOfHistos[0].GetXaxis().GetXmax())
@@ -4354,6 +4354,13 @@ def ABBackgroundEstimationCalculationAndPlotsWithSystematics(loldata,llldata,lol
 
 def ABBackgroundEstimationCalculationABCDNormAndPlotsWithSystematics(loldata,llldata,lolBackground,lllBackgroundWithweightsys,lllBackgroundNoweightsys,lolSignal,DataSamples,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames, SignalSampleNames, plotnames,weightsystnames,DatasampleNick,SCNick,SignalsampleNick,SBSSF_nick,PlotNameSignal,PlotNameSideband, CatB_sideband, CatC_sideband, CatD_sideband,QCDSample, name, useGeneratorDiff=False):
 
+    
+    ABCDversion=''
+    if 'ABCD' in name:
+        ABCDversion='ABCD'
+    if 'ABCD2' in name:
+        ABCDversion='ABCD2'
+
     category='_notopbtag'
     if 'with' in PlotNameSignal:
         category='_withtopbtag'
@@ -4405,22 +4412,22 @@ def ABBackgroundEstimationCalculationABCDNormAndPlotsWithSystematics(loldata,lll
 
     if(useGeneratorDiff):
         
-        QCDlist=[transposeLOL(transposeLOL(lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)])[weightsystnames.index(SBSSF_nick+'_nominal'):weightsystnames.index(SBSSF_nick+'_systdown')+1])[BackgroundSampleNames.index(QCDSample)]+transposeLOL(transposeLOL(lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)])[weightsystnames.index(SBSSF_nick+'GeneratorDiff_systup'):weightsystnames.index(SBSSF_nick+'GeneratorDiff_systdown')+1])[BackgroundSampleNames.index(QCDSample)]+transposeLOL(transposeLOL(lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)])[weightsystnames.index('_ABCD'+category+'_ZprimeM'+'_systup'):weightsystnames.index('_ABCD'+category+'_ZprimeM'+'_systdown')+1])[BackgroundSampleNames.index(QCDSample)]]
+        QCDlist=[transposeLOL(transposeLOL(lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)])[weightsystnames.index(SBSSF_nick+'_nominal'):weightsystnames.index(SBSSF_nick+'_systdown')+1])[BackgroundSampleNames.index(QCDSample)]+transposeLOL(transposeLOL(lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)])[weightsystnames.index(SBSSF_nick+'GeneratorDiff_systup'):weightsystnames.index(SBSSF_nick+'GeneratorDiff_systdown')+1])[BackgroundSampleNames.index(QCDSample)]+transposeLOL(transposeLOL(lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)])[weightsystnames.index('_'+ABCDversion+category+'_ZprimeM'+'_systup'):weightsystnames.index('_'+ABCDversion+category+'_ZprimeM'+'_systdown')+1])[BackgroundSampleNames.index(QCDSample)]]
     
         ttbarlist=[transposeLOL(transposeLOL(lllBackgroundNoweightsys[plotnames.index(PlotNameSignal)])[weightsystnames.index('_no'+'_nominal'):weightsystnames.index('_no'+'_systdown')+1])[BackgroundSampleNames.index('ttbar')]+transposeLOL(transposeLOL(lllBackgroundNoweightsys[plotnames.index(PlotNameSignal)])[weightsystnames.index('_no'+'_systup'):weightsystnames.index('_no'+'_systdown')+1])[BackgroundSampleNames.index('ttbar')]]
     
-        SClist=[transposeLOL(transposeLOL(lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)])[weightsystnames.index(SBSSF_nick+'_nominal'):weightsystnames.index(SBSSF_nick+'_systdown')+1])[BackgroundSampleNames.index(SCNick)]+transposeLOL(transposeLOL(lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)])[weightsystnames.index(SBSSF_nick+'GeneratorDiff_systup'):weightsystnames.index(SBSSF_nick+'GeneratorDiff_systdown')+1])[BackgroundSampleNames.index(SCNick)]+transposeLOL(transposeLOL(lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)])[weightsystnames.index('_ABCD'+category+'_ZprimeM'+'_systup'):weightsystnames.index('_ABCD'+category+'_ZprimeM'+'_systdown')+1])[BackgroundSampleNames.index(SCNick)]]
+        SClist=[transposeLOL(transposeLOL(lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)])[weightsystnames.index(SBSSF_nick+'_nominal'):weightsystnames.index(SBSSF_nick+'_systdown')+1])[BackgroundSampleNames.index(SCNick)]+transposeLOL(transposeLOL(lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)])[weightsystnames.index(SBSSF_nick+'GeneratorDiff_systup'):weightsystnames.index(SBSSF_nick+'GeneratorDiff_systdown')+1])[BackgroundSampleNames.index(SCNick)]+transposeLOL(transposeLOL(lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)])[weightsystnames.index('_'+ABCDversion+category+'_ZprimeM'+'_systup'):weightsystnames.index('_'+ABCDversion+category+'_ZprimeM'+'_systdown')+1])[BackgroundSampleNames.index(SCNick)]]
     
         plotDataMCanWsyst([transposeLOL([loldataT[DataSampleNames.index(DatasampleNick)]])[plotnames.index(PlotNameSignal)]],transposeLOL([[lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)][BackgroundSampleNames.index(SCNick)][weightsystnames.index(SBSSF_nick+'_nominal')]]]+[[lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)][BackgroundSampleNames.index(QCDSample)][weightsystnames.index(SBSSF_nick+'_nominal')]]]+[transposeLOL([lolBackgroundT[BackgroundSampleNames.index("ttbar")]])[plotnames.index(PlotNameSignal)]]),[BackgroundSamples[BackgroundSampleNames.index(SCNick)]]+[BackgroundSamples[BackgroundSampleNames.index(QCDSample)]]+[BackgroundSamples[BackgroundSampleNames.index('ttbar')]],transposeLOL([lolSignalT[SignalSampleNames.index(SignalsampleNick)]])[plotnames.index(PlotNameSignal)],SignalSamples[SignalSampleNames.index(SignalsampleNick)],1,name+DatasampleNick+QCDSample,[[[SClist+QCDlist+ttbarlist],3354,ROOT.kBlack,True]],False,SBSSF_nick+'+GeneratorDiff',True,False, False, True)
         print 'used generator differences'
         
     else:
         
-        QCDlist=[transposeLOL(transposeLOL(lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)])[weightsystnames.index(SBSSF_nick+'_nominal'):weightsystnames.index(SBSSF_nick+'_systdown')+1])[BackgroundSampleNames.index(QCDSample)]+transposeLOL(transposeLOL(lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)])[weightsystnames.index('_ABCD'+category+'_ZprimeM'+'_systup'):weightsystnames.index('_ABCD'+category+'_ZprimeM'+'_systdown')+1])[BackgroundSampleNames.index(QCDSample)]]
+        QCDlist=[transposeLOL(transposeLOL(lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)])[weightsystnames.index(SBSSF_nick+'_nominal'):weightsystnames.index(SBSSF_nick+'_systdown')+1])[BackgroundSampleNames.index(QCDSample)]+transposeLOL(transposeLOL(lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)])[weightsystnames.index('_'+ABCDversion+category+'_ZprimeM'+'_systup'):weightsystnames.index('_'+ABCDversion+category+'_ZprimeM'+'_systdown')+1])[BackgroundSampleNames.index(QCDSample)]]
     
         ttbarlist=[transposeLOL(transposeLOL(lllBackgroundNoweightsys[plotnames.index(PlotNameSignal)])[weightsystnames.index('_no'+'_nominal'):weightsystnames.index('_no'+'_systdown')+1])[BackgroundSampleNames.index('ttbar')]]
     
-        SClist=[transposeLOL(transposeLOL(lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)])[weightsystnames.index(SBSSF_nick+'_nominal'):weightsystnames.index(SBSSF_nick+'_systdown')+1])[BackgroundSampleNames.index(SCNick)]+transposeLOL(transposeLOL(lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)])[weightsystnames.index('_ABCD'+category+'_ZprimeM'+'_systup'):weightsystnames.index('_ABCD'+category+'_ZprimeM'+'_systdown')+1])[BackgroundSampleNames.index(SCNick)]]
+        SClist=[transposeLOL(transposeLOL(lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)])[weightsystnames.index(SBSSF_nick+'_nominal'):weightsystnames.index(SBSSF_nick+'_systdown')+1])[BackgroundSampleNames.index(SCNick)]+transposeLOL(transposeLOL(lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)])[weightsystnames.index('_'+ABCDversion+category+'_ZprimeM'+'_systup'):weightsystnames.index('_'+ABCDversion+category+'_ZprimeM'+'_systdown')+1])[BackgroundSampleNames.index(SCNick)]]
         
         plotDataMCanWsyst([transposeLOL([loldataT[DataSampleNames.index(DatasampleNick)]])[plotnames.index(PlotNameSignal)]],transposeLOL([[lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)][BackgroundSampleNames.index(SCNick)][weightsystnames.index(SBSSF_nick+'_nominal')]]]+[[lllBackgroundWithweightsyscopy[plotnames.index(PlotNameSideband)][BackgroundSampleNames.index(QCDSample)][weightsystnames.index(SBSSF_nick+'_nominal')]]]+[transposeLOL([lolBackgroundT[BackgroundSampleNames.index("ttbar")]])[plotnames.index(PlotNameSignal)]]),[BackgroundSamples[BackgroundSampleNames.index(SCNick)]]+[BackgroundSamples[BackgroundSampleNames.index(QCDSample)]]+[BackgroundSamples[BackgroundSampleNames.index('ttbar')]],transposeLOL([lolSignalT[SignalSampleNames.index(SignalsampleNick)]])[plotnames.index(PlotNameSignal)],SignalSamples[SignalSampleNames.index(SignalsampleNick)],1,name+DatasampleNick+QCDSample,[[[SClist+QCDlist+ttbarlist],3354,ROOT.kBlack,True]],False,SBSSF_nick,True,False, False, True)
 
@@ -4433,6 +4440,13 @@ def ABCDBackgroundEstimationCalculationAndPlotsWithSystematics(loldata,llldata,l
         category='_withtopbtag'
     if 'inclusive' in CatA_sideband:
         category='_inclusive'
+    
+    ABCDversion=''
+    if 'ABCD' in name:
+        ABCDversion='ABCD'
+    if 'ABCD2' in name:
+        ABCDversion='ABCD2'
+        
 
     loldataT=transposeLOL(loldata)
     lolBackgroundT=transposeLOL(lolBackground) 
@@ -4464,11 +4478,11 @@ def ABCDBackgroundEstimationCalculationAndPlotsWithSystematics(loldata,llldata,l
     SignalSamples=SignalSamples[SignalSampleNames.index(SignalsampleNick)]
 
 
-    QCDlist=[transposeLOL([transposeLOL(lllBackgroundWithweightsyscopyABCD[plotnames.index(CatB_sideband+'_Zprime_M')])[weightsystnames.index('_ABCD_nominal')]]+transposeLOL(lllBackgroundWithweightsyscopyABCD[plotnames.index(CatB_sideband+'_Zprime_M')])[weightsystnames.index('_ABCD'+category+'_ZprimeM'+'_systup'):weightsystnames.index('_ABCD'+category+'_ZprimeM'+'_systdown')+1])[BackgroundSampleNames.index(QCDSample)]]
+    QCDlist=[transposeLOL([transposeLOL(lllBackgroundWithweightsyscopyABCD[plotnames.index(CatB_sideband+'_Zprime_M')])[weightsystnames.index('_ABCD_nominal')]]+transposeLOL(lllBackgroundWithweightsyscopyABCD[plotnames.index(CatB_sideband+'_Zprime_M')])[weightsystnames.index('_'+ABCDversion+category+'_ZprimeM'+'_systup'):weightsystnames.index('_'+ABCDversion+category+'_ZprimeM'+'_systdown')+1])[BackgroundSampleNames.index(QCDSample)]]
     
     ttbarlist=[transposeLOL(transposeLOL(lllBackgroundNoweightsys[plotnames.index(CatA_sideband+'_Zprime_M')])[weightsystnames.index('_no'+'_nominal'):weightsystnames.index('_no'+'_systdown')+1])[BackgroundSampleNames.index('ttbar')]]
     
-    SClist=[transposeLOL([transposeLOL(llldatacopyABCD_SConly[plotnames.index(CatB_sideband+'_Zprime_M')])[weightsystnames.index('_ABCD_nominal')]]+transposeLOL(llldatacopyABCD_SConly[plotnames.index(CatB_sideband+'_Zprime_M')])[weightsystnames.index('_ABCD'+category+'_ZprimeM'+'_systup'):weightsystnames.index('_ABCD'+category+'_ZprimeM'+'_systdown')+1])[DataSampleNames.index(DatasampleNick)]]  
+    SClist=[transposeLOL([transposeLOL(llldatacopyABCD_SConly[plotnames.index(CatB_sideband+'_Zprime_M')])[weightsystnames.index('_ABCD_nominal')]]+transposeLOL(llldatacopyABCD_SConly[plotnames.index(CatB_sideband+'_Zprime_M')])[weightsystnames.index('_'+ABCDversion+category+'_ZprimeM'+'_systup'):weightsystnames.index('_'+ABCDversion+category+'_ZprimeM'+'_systdown')+1])[DataSampleNames.index(DatasampleNick)]]  
 
     
     plotDataMCanWsyst(Data,Backgrounds,Backgroundsamples,OTSignal,SignalSamples,1,name+category+'_'+DatasampleNick+QCDSample,[[[SClist+QCDlist+ttbarlist],3354,ROOT.kBlack,True]],False,'ABCD'+category+'_ZprimeM',True,False, False, True)
@@ -4492,9 +4506,9 @@ def ABCDBackgroundEstimationCalculationAndPlotsWithSystematics(loldata,llldata,l
     #SignalSamples=SignalSamples[SignalSampleNames.index(SignalsampleNick)]
 
 
-    QCDlist=[transposeLOL([transposeLOL(lllBackgroundWithweightsyscopyABCD[plotnames.index(CatB_sideband+'_Tprime_M')])[weightsystnames.index('_ABCD_nominal')]]+transposeLOL(lllBackgroundWithweightsyscopyABCD[plotnames.index(CatB_sideband+'_Tprime_M')])[weightsystnames.index('_ABCD'+category+'_TprimeM'+'_systup'):weightsystnames.index('_ABCD'+category+'_TprimeM'+'_systdown')+1])[BackgroundSampleNames.index(QCDSample)]]
+    QCDlist=[transposeLOL([transposeLOL(lllBackgroundWithweightsyscopyABCD[plotnames.index(CatB_sideband+'_Tprime_M')])[weightsystnames.index('_ABCD_nominal')]]+transposeLOL(lllBackgroundWithweightsyscopyABCD[plotnames.index(CatB_sideband+'_Tprime_M')])[weightsystnames.index('_'+ABCDversion+category+'_TprimeM'+'_systup'):weightsystnames.index('_'+ABCDversion+category+'_TprimeM'+'_systdown')+1])[BackgroundSampleNames.index(QCDSample)]]
     ttbarlist=[transposeLOL(transposeLOL(lllBackgroundNoweightsys[plotnames.index(CatA_sideband+'_Tprime_M')])[weightsystnames.index('_no'+'_nominal'):weightsystnames.index('_no'+'_systdown')+1])[BackgroundSampleNames.index('ttbar')]]
-    SClist=[transposeLOL([transposeLOL(llldatacopyABCD_SConly[plotnames.index(CatB_sideband+'_Tprime_M')])[weightsystnames.index('_ABCD_nominal')]]+transposeLOL(llldatacopyABCD_SConly[plotnames.index(CatB_sideband+'_Tprime_M')])[weightsystnames.index('_ABCD'+category+'_TprimeM'+'_systup'):weightsystnames.index('_ABCD'+category+'_TprimeM'+'_systdown')+1])[DataSampleNames.index(DatasampleNick)]]  
+    SClist=[transposeLOL([transposeLOL(llldatacopyABCD_SConly[plotnames.index(CatB_sideband+'_Tprime_M')])[weightsystnames.index('_ABCD_nominal')]]+transposeLOL(llldatacopyABCD_SConly[plotnames.index(CatB_sideband+'_Tprime_M')])[weightsystnames.index('_'+ABCDversion+category+'_TprimeM'+'_systup'):weightsystnames.index('_'+ABCDversion+category+'_TprimeM'+'_systdown')+1])[DataSampleNames.index(DatasampleNick)]]  
 
     
     plotDataMCanWsyst(Data,Backgrounds,Backgroundsamples,OTSignal,SignalSamples,1,name+category+'_'+DatasampleNick+QCDSample,[[[SClist+QCDlist+ttbarlist],3354,ROOT.kBlack,True]],False,'ABCD'+category+'_TprimeM',True,False, False, True)    
@@ -4654,7 +4668,7 @@ def multiplyllls(lll, ProduktPlot1, ProduktPlot2, normalizefirst=False,rebin=1,o
             lll[ProduktPlot1][i][j]=produkt1   
 
 
-def rebintovarbinsLL(lll):
+def rebintovarbinsLLL(lll, treatMCasData=False, setstatto0=False):
     lllreturn=[]
     #raw_input
     for ll in lll:
@@ -4666,21 +4680,54 @@ def rebintovarbinsLL(lll):
                 binwidth=histo.GetBinWidth(0)
                 if (('Tprime_M' in histo.GetName()) and (not (isinstance(histo,ROOT.TH2)))):
                     #print 'Nbins histo before TprimeM ', histo.GetNbinsX()
-                    xbins= array.array('d',[0,500,550,600,650,700,750,800,850,900,950,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500])
-                    historeturn=histo.Rebin(len(xbins)-1,histo.GetName(),xbins)
+                    xbins= array.array('d',[0,250,450,500,550,600,650,700,750,800,850,900,950,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500])
+                    #xbins= array.array('d',[0,250,450,500,550,600,650,700,750,800,850,900,950,1000,1050,1100,1150,1200,1250,1300,1350,1400,1450,1500,1550,1600,1650,1700,1750,1800,1850,1900,1950,2000,2100,2200,2300,2400,2500])
+                    #historeturn=histo.Rebin(len(xbins)-1,histo.GetName(),xbins)
+                    historeturn=ROOT.TH1F(histo.GetName(),histo.GetTitle(),len(xbins)-1,xbins)
+                    binwidthX=histo.GetXaxis().GetBinWidth(0)
                     for i in range(historeturn.GetNbinsX()):
-                        historeturn.SetBinContent(i,(historeturn.GetBinContent(i)*binwidth/(historeturn.GetBinWidth(i))))
-                        historeturn.SetBinError(i,(historeturn.GetBinError(i)*binwidth/(historeturn.GetBinWidth(i))))
-                    #print 'Nbins histo after TprimeM ', historeturn.GetNbinsX()
+                        ibincontent=0
+                        ibinerror=0
+                        for j in range(histo.GetNbinsX()):
+                            if(histo.GetXaxis().GetBinCenter(j)>historeturn.GetXaxis().GetBinLowEdge(i) and histo.GetXaxis().GetBinCenter(j)<(historeturn.GetXaxis().GetBinLowEdge(i)+historeturn.GetXaxis().GetBinWidth(i))):
+                                ibincontent+=histo.GetBinContent(j)
+                                if treatMCasData:
+                                    ibinerror=math.sqrt(ibinerror*ibinerror + histo.GetBinContent(j))
+                                else:
+                                    ibinerror=math.sqrt(ibinerror*ibinerror + histo.GetBinError(j)*histo.GetBinError(j))
+                                if setstatto0:
+                                    ibinerror=0
+                        ibincontent=ibincontent*(binwidthX)/(historeturn.GetXaxis().GetBinWidth(i))
+                        ibinerror=ibinerror*(binwidthX)/(historeturn.GetXaxis().GetBinWidth(i))
+                    
+                        historeturn.SetBinContent(i,ibincontent)
+                        historeturn.SetBinError(i,ibinerror)
+                    print 'Nbins histo after TprimeM ', historeturn.GetNbinsX()
                     lreturn.append(historeturn)
                 elif (('Zprime_M' in histo.GetName()) and (not (isinstance(histo,ROOT.TH2)))):
                     #print 'Nbins histo before ZprimeM ', histo.GetNbinsX()
-                    xbins= array.array('d',[0,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3250,3500,3750,4000,4500,5000])
-                    historeturn=histo.Rebin(len(xbins)-1,histo.GetName(),xbins)
+                    xbins= array.array('d',[0,500,900,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3250,3500,3750,4000,4500,5000])
+                    #xbins= array.array('d',[0,500,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200,2300,2400,2500,2600,2700,2800,2900,3000,3100,3200,3300,3400,3500,3600,3700,3800,3900,4000,4200,4500,5000])
+                    historeturn=ROOT.TH1F(histo.GetName(),histo.GetTitle(),len(xbins)-1,xbins)
+                    binwidthX=histo.GetXaxis().GetBinWidth(0)
                     for i in range(historeturn.GetNbinsX()):
-                        historeturn.SetBinContent(i,(historeturn.GetBinContent(i)*binwidth/(historeturn.GetBinWidth(i))))
-                        historeturn.SetBinError(i,(historeturn.GetBinError(i)*binwidth/(historeturn.GetBinWidth(i))))
-                        #print 'Nbins histo after ZprimeM ', historeturn.GetNbinsX()
+                        ibincontent=0
+                        ibinerror=0
+                        for j in range(histo.GetNbinsX()):
+                            if(histo.GetXaxis().GetBinCenter(j)>historeturn.GetXaxis().GetBinLowEdge(i) and histo.GetXaxis().GetBinCenter(j)<(historeturn.GetXaxis().GetBinLowEdge(i)+historeturn.GetXaxis().GetBinWidth(i))):
+                                ibincontent+=histo.GetBinContent(j)
+                                if treatMCasData:
+                                    ibinerror=math.sqrt(ibinerror*ibinerror + histo.GetBinContent(j))
+                                else:
+                                    ibinerror=math.sqrt(ibinerror*ibinerror + histo.GetBinError(j)*histo.GetBinError(j))
+                                if setstatto0:
+                                    ibinerror=0                                    
+                        ibincontent=ibincontent*(binwidthX)/(historeturn.GetXaxis().GetBinWidth(i))
+                        ibinerror=ibinerror*(binwidthX)/(historeturn.GetXaxis().GetBinWidth(i))
+                    
+                        historeturn.SetBinContent(i,ibincontent)
+                        historeturn.SetBinError(i,ibinerror)
+                    print 'Nbins histo after ZprimeM ', historeturn.GetNbinsX()
                     lreturn.append(historeturn)
                 else:
                     lreturn.append(histo)
@@ -4689,7 +4736,7 @@ def rebintovarbinsLL(lll):
     #raw_input
     return lllreturn
 
-def rebintovarbinsLOL(lol):
+def rebintovarbinsLOL(lol, treatMCasData=False, setstatto0=False):
     lolreturn=[]
     #raw_input
     for l in lol:
@@ -4697,33 +4744,84 @@ def rebintovarbinsLOL(lol):
         for histo in l:
             #print histo.GetName()
             if (('Tprime_M' in histo.GetName()) and (not (isinstance(histo,ROOT.TH2)))):
-                #print 'Nbins histo before TprimeM ', histo.GetNbinsX(),'  ' ,histo
-                binwidth=histo.GetBinWidth(0)
-                #print binwidth
-                xbins= array.array('d',[0,500,550,600,650,700,750,800,850,900,950,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500])
-                historeturn=histo.Rebin(len(xbins)-1,histo.GetName(),xbins)
-                for i in range(0,historeturn.GetNbinsX()):
-                    historeturn.SetBinContent(i,(historeturn.GetBinContent(i)*binwidth/(historeturn.GetBinWidth(i))))
-                    historeturn.SetBinError(i,(historeturn.GetBinError(i)*binwidth/(historeturn.GetBinWidth(i))))
-                print 'Nbins histo after TprimeM ', historeturn.GetNbinsX(), ' ',historeturn,'  Integral:', historeturn.Integral()
+                #print 'Nbins histo before TprimeM ', histo.GetNbinsX()
+                xbins= array.array('d',[0,250,450,500,550,600,650,700,750,800,850,900,950,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500])
+                #xbins= array.array('d',[0,250,450,500,550,600,650,700,750,800,850,900,950,1000,1050,1100,1150,1200,1250,1300,1350,1400,1450,1500,1550,1600,1650,1700,1750,1800,1850,1900,1950,2000,2100,2200,2300,2400,2500])                
+                #historeturn=histo.Rebin(len(xbins)-1,histo.GetName(),xbins)
+                historeturn=ROOT.TH1F(histo.GetName(),histo.GetTitle(),len(xbins)-1,xbins)
+                binwidthX=histo.GetXaxis().GetBinWidth(0)
+                for i in range(historeturn.GetNbinsX()):
+                    ibincontent=0
+                    ibinerror=0
+                    for j in range(histo.GetNbinsX()):
+                        if(histo.GetXaxis().GetBinCenter(j)>historeturn.GetXaxis().GetBinLowEdge(i) and histo.GetXaxis().GetBinCenter(j)<(historeturn.GetXaxis().GetBinLowEdge(i)+historeturn.GetXaxis().GetBinWidth(i))):
+                                ibincontent+=histo.GetBinContent(j)
+                                if treatMCasData:
+                                    ibinerror=math.sqrt(ibinerror*ibinerror + histo.GetBinContent(j))
+                                else:
+                                    ibinerror=math.sqrt(ibinerror*ibinerror + histo.GetBinError(j)*histo.GetBinError(j))
+                                if setstatto0:
+                                    ibinerror=0                                    
+                    ibincontent=ibincontent*(binwidthX)/(historeturn.GetXaxis().GetBinWidth(i))
+                    ibinerror=ibinerror*(binwidthX)/(historeturn.GetXaxis().GetBinWidth(i))
+                
+                    historeturn.SetBinContent(i,ibincontent)
+                    historeturn.SetBinError(i,ibinerror)
+                print 'Nbins histo after TprimeM ', historeturn.GetNbinsX()
                 lreturn.append(historeturn)
             elif (('Zprime_M' in histo.GetName()) and (not (isinstance(histo,ROOT.TH2)))):
-                #print isinstance(histo,ROOT.TH1)
-            
-                #print 'Nbins histo before ZprimeM ', histo.GetNbinsX(),'  ' ,histo
-                binwidth=histo.GetBinWidth(0)
-                #print binwidth
-                xbins= array.array('d',[0,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3250,3500,3750,4000,4500,5000])
-                historeturn=histo.Rebin(len(xbins)-1,histo.GetName(),xbins)
-                for i in range(0,historeturn.GetNbinsX()):
-                    historeturn.SetBinContent(i,(historeturn.GetBinContent(i)*binwidth/(historeturn.GetBinWidth(i))))
-                    historeturn.SetBinError(i,(historeturn.GetBinError(i)*binwidth/(historeturn.GetBinWidth(i))))
-                print 'Nbins histo after ZprimeM ', historeturn.GetNbinsX(), ' ',historeturn,'  Integral:', historeturn.Integral()
+                #print 'Nbins histo before ZprimeM ', histo.GetNbinsX()
+                xbins= array.array('d',[0,500,900,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3250,3500,3750,4000,4500,5000])
+                #xbins= array.array('d',[0,500,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200,2300,2400,2500,2600,2700,2800,2900,3000,3100,3200,3300,3400,3500,3600,3700,3800,3900,4000,4200,4500,5000])                
+                historeturn=ROOT.TH1F(histo.GetName(),histo.GetTitle(),len(xbins)-1,xbins)
+                binwidthX=histo.GetXaxis().GetBinWidth(0)
+                for i in range(historeturn.GetNbinsX()):
+                    ibincontent=0
+                    ibinerror=0
+                    for j in range(histo.GetNbinsX()):
+                        if(histo.GetXaxis().GetBinCenter(j)>historeturn.GetXaxis().GetBinLowEdge(i) and histo.GetXaxis().GetBinCenter(j)<(historeturn.GetXaxis().GetBinLowEdge(i)+historeturn.GetXaxis().GetBinWidth(i))):
+                                ibincontent+=histo.GetBinContent(j)
+                                if treatMCasData:
+                                    ibinerror=math.sqrt(ibinerror*ibinerror + histo.GetBinContent(j))
+                                else:
+                                    ibinerror=math.sqrt(ibinerror*ibinerror + histo.GetBinError(j)*histo.GetBinError(j))
+                                if setstatto0:
+                                    ibinerror=0                                    
+                    ibincontent=ibincontent*(binwidthX)/(historeturn.GetXaxis().GetBinWidth(i))
+                    ibinerror=ibinerror*(binwidthX)/(historeturn.GetXaxis().GetBinWidth(i))
+                    
+                    historeturn.SetBinContent(i,ibincontent)
+                    historeturn.SetBinError(i,ibinerror)
+                print 'Nbins histo after ZprimeM ', historeturn.GetNbinsX()
                 lreturn.append(historeturn)
+            elif (('Zprime_M' in histo.GetName()) and ('Tprime_M' in histo.GetName()) and (isinstance(histo,ROOT.TH2))):
+                Zprimebins= array.array('d',[0,1000,1200,1400,1700,2000,2500,3000,3600,4300,5000])
+                Tprimebins= array.array('d',[0,500,600,700,850,1000,1200,1250,1500,1800,2100,2500])
+                binwidthX=histo.GetXaxis().GetBinWidth(0)
+                binwidthY=histo.GetYaxis().GetBinWidth(0)
+                historeturn=TH2F(histo.GetName(),histo.GetName(),len(Tprimebins)-1,Tprimebins,len(Zprimebins)-1,Zprimebins)
+                for i in range(0,historeturn.GetNbinsX()*historeturn*GetNbinsY()):
+                    ibincontent=0.0
+                    ibinerror=0.0
+                    for j in range(0,histo.GetNbinsX()*histo*GetNbinsY()):
+                        if (histo.GetXaxis().GetBinCenter(j)>historeturn.GetXaxis().GetBinLowEdge(i) and histo.GetXaxis().GetBinCenter(j)<(historeturn.GetXaxis().GetBinLowEdge(i)+historeturn.GetXaxis().GetBinWidth(i)) and histo.GetYaxis().GetBinCenter(j)>historeturn.GetYaxis().GetBinLowEdge(i) and histo.GetYaxis().GetBinCenter(j)<(historeturn.GetYaxis().GetBinLowEdge(i)+historeturn.GetYaxis().GetBinWidth(i))):
+                                ibincontent+=histo.GetBinContent(j)
+                                if treatMCasData:
+                                    ibinerror=math.sqrt(ibinerror*ibinerror + histo.GetBinContent(j))
+                                else:
+                                    ibinerror=math.sqrt(ibinerror*ibinerror + histo.GetBinError(j)*histo.GetBinError(j))
+                                if setstatto0:
+                                    ibinerror=0                                    
+                    ibincontent=ibincontent*(binwidthX*binwidthY)/(historeturn.GetXaxis().GetBinWidth(i)*historeturn.GetYaxis().GetBinWidth(i))
+                    ibinerror=ibinerror*(binwidthX*binwidthY)/(historeturn.GetXaxis().GetBinWidth(i)*historeturn.GetYaxis().GetBinWidth(i))
+                    
+                    historeturn.SetBinContent(i,ibincontent)
+                    historeturn.SetBinError(i,ibinerror)
+                    
             else:
                 lreturn.append(histo)
         lolreturn.append(lreturn)
-    raw_input
+    #raw_input
     return lolreturn
 
 def chekcNbins(lol):
@@ -5228,4 +5326,3 @@ def scalCatAclosurewithCatEclosure(histo1, histo2):
     #histo1.Scale(histo2.Integral()/(histo1.Integral()))
     histo1.Scale(histo2.Integral())
     
-

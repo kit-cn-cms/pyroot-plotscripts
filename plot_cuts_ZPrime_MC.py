@@ -4,11 +4,11 @@ plotlabelboosted="#splitline{Wbt, #geq 3 jets, #geq 1 b-tags}{#geq 1 AK8 jet p_{
 plotselection1="Evt_HT>850"
 plotselection2="N_packedPatJetsAK8PFCHSSoftDrop>=2 && packedPatJetsAK8PFCHSSoftDrop_Pt[0]>400 && packedPatJetsAK8PFCHSSoftDrop_Pt[1]>200 && Evt_HT>850 "
 
-topWP='medium'
+topWP='loose'
 WWP=topWP
 bottomWP=''
+WPs='tWP'+topWP+'WWP'+WWP
 
-    
 #Own Plotselections for ABCD-method
 if topWP=='loose':
     plotselection_tau32 = " Tops_ABCD_t32 < 0.86   "

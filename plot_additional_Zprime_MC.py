@@ -128,25 +128,7 @@ bool IsnoSignal_inclusive(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD
     return res;
 }
 """ ,
-     """
-std::vector<float> bbarportionweight(int const N){
-    std::vector<float> res;
-    
-    if(N>0){
-        res.push_back(1.0);
-        res.push_back(1.5);
-        res.push_back(0.5);
-        res.push_back(0.0);
-    } else {
-        res.push_back(1.0);
-        res.push_back(1.0);
-        res.push_back(1.0);
-        res.push_back(1.0);
-    };
-    return res;
-}
-  
-    """,
+
 
 """
 int ABCD_Category(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
@@ -517,6 +499,8 @@ additionalvariables=[
                         'ABCD2_CatE_notopbtag:=13',
                         'ABCD2_CatF_notopbtag:=14',
                         'ABCD2_CatG_notopbtag:=15',
-                        'ABCD2_CatH_notopbtag:=16',                        
+                        'ABCD2_CatH_notopbtag:=16',         
+                        
+                        
 
 ]
