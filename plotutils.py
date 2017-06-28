@@ -4179,14 +4179,14 @@ def ABCDclosure1D(lol,plotnames,samples,CatA,CatB,CatC,CatD, CatE,CatF,CatG,CatH
     divideHistos(lolclone, plotnames.index(CatC), plotnames.index(CatD), normalizefirst,rebin,option)
     divideHistos(lol, CatA, plotnames.index(CatC), False,1,option)
 
-    divideHistos(lolclone, plotnames.index(CatE), plotnames.index(CatF), normalizefirst=False,rebin=1,option)
-    divideHistos(lolclone, plotnames.index(CatG), plotnames.index(CatH), normalizefirst=False,rebin=1,option)
+    divideHistos(lolclone, plotnames.index(CatE), plotnames.index(CatF), normalizefirst,rebin,option)
+    divideHistos(lolclone, plotnames.index(CatG), plotnames.index(CatH), normalizefirst,rebin,option)
     divideHistos(lolclone, plotnames.index(CatE), plotnames.index(CatG), False,1,option)
 
-    writeHistoListwithXYErrors([lolclone[plotnames.index(CatA)]], samples, name="check0forABCD_"+topWP+"WP_ratioABoverCD_"+fit, rebin=1, fitoption=fit, labels=None, autoXrange=True)
-    writeHistoListwithXYErrors([lolclone[plotnames.index(CatE)]], samples, name="check0forABCD_"+topWP+"WP_ratioEFoverGH_"+fit, rebin=1, fitoption=fit, labels=None, autoXrange=True)
-    divideHistos(lolclone), CatA, plotnames.index(CatE), False,1,option)
-    writeHistoListwithXYErrors([lolclone[plotnames.index(CatA)]], samples, name="check0forABCD_"+topWP+"WP_ratioABoverCD_"+fit+"_corrE", rebin=1, fitoption=fit, labels=None, autoXrange=True)
+    writeHistoListwithXYErrors([lolclone[plotnames.index(CatA)]], samples, "checkforABCD_"+topWP+"WP_ratioABoverCD_"+fit, 1, fit, None, True)
+    writeHistoListwithXYErrors([lolclone[plotnames.index(CatE)]], samples, "checkforABCD_"+topWP+"WP_ratioEFoverGH_"+fit, 1, fit, None, True)
+    divideHistos(lolclone, CatA, plotnames.index(CatE), False,1,option)
+    writeHistoListwithXYErrors([lolclone[plotnames.index(CatA)]], samples, "checkforABCD_"+topWP+"WP_ratioABoverCD_"+fit+"_corrE", 1, fit, None, True)
 
     lolclone2=lol.deepcopy()
     divideHistos(lolclone2, plotnames.index(CatC), plotnames.index(CatD), normalizefirst,rebin,option)
@@ -4195,4 +4195,4 @@ def ABCDclosure1D(lol,plotnames,samples,CatA,CatB,CatC,CatD, CatE,CatF,CatG,CatH
     divideHistos(lolclone2, plotnames.index(CatG), plotnames.index(CatH), normalizefirst,rebin,option)
     multiplyHistos(lolclone2, plotnames.index(CatF), plotnames.index(CatG), normalizefirst,rebin,option)
 
-    writeListOfHistoLists(lolclone2,samples, '', name="check0forABCD_"+topWP+"WP_ratioABoverCD_"+fit,normalize,False,False,options='histo',False, False,True,False)
+    writeListOfHistoLists(lolclone2,samples, '', "checkforABCD_"+topWP+"WP_ratioABoverCD_"+fit,normalize,False,False,'histo',False, False,True,False)
