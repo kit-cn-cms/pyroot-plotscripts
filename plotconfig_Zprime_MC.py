@@ -519,8 +519,11 @@ if topWP=='medium' and WWP=='loose' and bottomWP=='medium':
 
 weigthsystnamesMCSFs=[
                     "_CSV_MCSF_nominal",
-                    "_CSV_MCSF_systup",
-                    "_CSV_MCSF_systdown",   
+                    "_CSV_MCSF_CSVLF_systup",
+                    "_CSV_MCSF_CSVLF_systdown",
+                    "_CSV_MCSF_CSVHF_systup",
+                    "_CSV_MCSF_CSVHF_systdown",   
+                    
                     "_t21_MCSF_nominal",
                     "_t21_MCSF_systup",
                     "_t21_MCSF_systdown", 
@@ -534,18 +537,34 @@ weigthsystnamesMCSFs=[
 ]
 
 systweightnamesMCSFs=[
-                    "CSV_MCSF_nominal:=(1)*DoMCDataWeights",
-                    "CSV_MCSF_systup:=(1*(1+1.15))*DoMCDataWeights",
-                    "CSV_MCSF_systdown:=(1*(1-1.15))*DoMCDataWeights",  
-                    "t21_MCSF_nominal:=(1.10)*DoMCDataWeights",
-                    "t21_MCSF_systup:=(1.10*(1+0.12))*DoMCDataWeights",
-                    "t21_MCSF_systdown:=(1.10*(1-0.12))*DoMCDataWeights",
-                    "t32_MCSF_notopbtag_nominal:=(1.06)*DoMCDataWeights",
-                    "t32_MCSF_notopbtag_systup:=(1.06*(1+0.08))*DoMCDataWeights",
-                    "t32_MCSF_notopbtag_systdown:=(1.06*(1-0.04))*DoMCDataWeights",
-                    "t32_MCSF_withtopbtag_nominal:=(1.05)*DoMCDataWeights",
-                    "t32_MCSF_withtopbtag_systup:=(1.05*(1+0.11))*DoMCDataWeights",
-                    "t32_MCSF_withtopbtag_systdown:=(1.05*(1-0.05))*DoMCDataWeights",
+                    "CSV_MCSF_nominal:=(internalCSVweight)*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",
+                    "CSV_MCSF_CSVLF_systup:=(internalCSVweight_CSVLFUp*internalCSVweight)*DoMCDataWeights+(DoMCDataWeights==0)*1.0",
+                    "CSV_MCSF_CSVLF_systdown:=(internalCSVweight_CSVLFDown*internalCSVweight)*DoMCDataWeights+(DoMCDataWeights==0)*1.0", 
+                    "CSV_MCSF_CSVHF_systup:=(internalCSVweight_CSVHFUp*internalCSVweight)*DoMCDataWeights+(DoMCDataWeights==0)*1.0",
+                    "CSV_MCSF_CSVHF_systdown:=(internalCSVweight_CSVHFDown*internalCSVweight)*DoMCDataWeights+(DoMCDataWeights==0)*1.0",
+                    
+                    "t21_MCSF_nominal:=(1)*DoMCDataWeights+(DoMCDataWeights==0)*1.0",
+                    "t21_MCSF_systup:=(1.10*(1+0.12))*DoMCDataWeights+(DoMCDataWeights==0)*1.0",
+                    "t21_MCSF_systdown:=(1.10*(1-0.12))*DoMCDataWeights+(DoMCDataWeights==0)*1.0",
+                    "t32_MCSF_notopbtag_nominal:=(1.06)*DoMCDataWeights+(DoMCDataWeights==0)*1.0",
+                    "t32_MCSF_notopbtag_systup:=(1.06*(1+0.08))*DoMCDataWeights+(DoMCDataWeights==0)*1.0",
+                    "t32_MCSF_notopbtag_systdown:=(1.06*(1-0.04))*DoMCDataWeights+(DoMCDataWeights==0)*1.0",
+                    "t32_MCSF_withtopbtag_nominal:=(1.05)*DoMCDataWeights+(DoMCDataWeights==0)*1.0",
+                    "t32_MCSF_withtopbtag_systup:=(1.05*(1+0.11))*DoMCDataWeights+(DoMCDataWeights==0)*1.0",
+                    "t32_MCSF_withtopbtag_systdown:=(1.05*(1-0.05))*DoMCDataWeights+(DoMCDataWeights==0)*1.0",
+                    
+                    #"CSV_MCSF_nominal:=(1)*(DoMCDataWeights==1)",
+                    #"CSV_MCSF_systup:=(1*(1+1.15))*DoMCDataWeights",
+                    #"CSV_MCSF_systdown:=(1*(1-1.15))*DoMCDataWeights",  
+                    #"t21_MCSF_nominal:=(1.10)*DoMCDataWeights",
+                    #"t21_MCSF_systup:=(1.10*(1+0.12))*DoMCDataWeights",
+                    #"t21_MCSF_systdown:=(1.10*(1-0.12))*DoMCDataWeights",
+                    #"t32_MCSF_notopbtag_nominal:=(1.06)*DoMCDataWeights",
+                    #"t32_MCSF_notopbtag_systup:=(1.06*(1+0.08))*DoMCDataWeights",
+                    #"t32_MCSF_notopbtag_systdown:=(1.06*(1-0.04))*DoMCDataWeights",
+                    #"t32_MCSF_withtopbtag_nominal:=(1.05)*DoMCDataWeights",
+                    #"t32_MCSF_withtopbtag_systup:=(1.05*(1+0.11))*DoMCDataWeights",
+                    #"t32_MCSF_withtopbtag_systdown:=(1.05*(1-0.05))*DoMCDataWeights",
                     
 ]
 
@@ -612,7 +631,7 @@ path_80x="/nfs/dust/cms/user/skudella/processed_MC/flat_trees_new/"
 
 
 SignalSamples=[
-                    Sample('Z->tWb, m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=900',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Zprime_1500_900_nominal_Tree.root',mcweight+'/138.07*0.3','Zprime1500900',allweightsystnames),
+                    Sample('Z->tWb, m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=1200',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Zprime_1500_900_nominal_Tree.root',mcweight+'/138.07*0.3','Zprime1500900',allweightsystnames),
                     Sample('Z->tWb, m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1200',ROOT.kCyan,path_80x+'Signal_Zprime/Zprime_2000_1200_LH_nominal_Tree.root',mcweight+'/86.28*0.3','Zprime20001200',allweightsystnames),
                     Sample('Z->tWb, m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1200',ROOT.kRed,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/37.6*0.3','Zprime25001200',allweightsystnames) ,     
 ]
@@ -620,7 +639,9 @@ SignalSamples=[
 BackgroundSamples=[
                     Sample('QCDMadgraph',ROOT.kOrange-3,path_80x+'BKG_QCD/MC_QCD_H*nominal*.root',mcweight,'QCDMadgraph',allweightsystnames),
                     Sample('t#bar{t} + jets',ROOT.kBlue,path_80x+'BKG_TTbar/*nominal*.root',mcweight,'ttbar',allweightsystnames) , 
-                    Sample('Signal Contamination (1pb), m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1200',ROOT.kRed-3,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/37.6*0.3','SC_Zprime25001200_0.3pb',allweightsystnames) ,  
+                    Sample('Signal Contamination (8.6pb), m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=1200',ROOT.kMagenta-3,path_80x+'Signal_Zprime/Zprime_1500_1200_nominal_Tree.root',mcweight+'/99.03*8.6','SC_Zprime15001200_8_6pb',allweightsystnames) ,  
+                    Sample('Signal Contamination (0.3pb), m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1200',ROOT.kCyan-3,path_80x+'Signal_Zprime/Zprime_2000_1200_LH_nominal_Tree.root',mcweight+'/86.28*0.3','SC_Zprime20001200_0_3pb',allweightsystnames) ,  
+                    Sample('Signal Contamination (0.3pb), m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1200',ROOT.kRed-3,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/37.6*0.3','SC_Zprime25001200_0_3pb',allweightsystnames) ,  
                     Sample('Signal Contamination none',ROOT.kRed-3,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/100000','SC_none',allweightsystnames) ,  
                     Sample('QCDPythia8',ROOT.kGreen+2,path_80x+'BKG_QCD/MC_QCD_P*nominal*Tree*.root',mcweight,'QCDPythia8',allweightsystnames),
 
@@ -628,7 +649,9 @@ BackgroundSamples=[
 
 
 DataSamples=[
-                    Sample('Data = Background with (1pb), m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1200',ROOT.kBlack+2,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/37.6*0.3','BKG_Zprime25001200_0.3pb',allweightsystnames),     
+                    Sample('Data = Background with (8.6pb), m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=1200',ROOT.kBlack+2,path_80x+'Signal_Zprime/Zprime_1500_1200_nominal_Tree.root',mcweight+'/99.03*8.6','BKG_Zprime15001200_8_6pb',allweightsystnames),     
+                    Sample('Data = Background with (0.3pb), m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1200',ROOT.kBlack+2,path_80x+'Signal_Zprime/Zprime_2000_1200_LH_nominal_Tree.root',mcweight+'/86.28*0.3','BKG_Zprime20001200_0_3pb',allweightsystnames),     
+                    Sample('Data = Background with (0.3pb), m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1200',ROOT.kBlack+2,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/37.6*0.3','BKG_Zprime25001200_0_3pb',allweightsystnames),     
                     Sample('Data = Background with signal',ROOT.kBlack+2,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/100000.0','DATA_BKG',allweightsystnames) ,     
                     #Sample('Data = Background with (1pb), m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1200',ROOT.kBlack,path_80x+'Signal_Zprime/Zprime_2000_1200_LH_nominal_Tree.root',mcweight+'/86.28*0.3','BKG_Zprime20001200_1pb') ,     
                     #Sample('Data = Background with (1pb), m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=900',ROOT.kBlack,path_80x+'Signal_Zprime/Zprime_1500_900_nominal_Tree.root',mcweight+'/138.07*0.3','BKG_Zprime1500900_1pb') ,     

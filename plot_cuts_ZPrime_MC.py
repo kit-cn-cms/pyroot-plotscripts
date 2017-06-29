@@ -1,10 +1,10 @@
 # book plots
 plotlabel="Wbt, #geq 3 jets, #geq 1 b-tags"
 plotlabelboosted="#splitline{Wbt, #geq 3 jets, #geq 1 b-tags}{#geq 1 AK8 jet p_{T} > 400 GeV, #geq 1 AK8 jet p_{T} > 200 GeV, #geq 1 AK4 jet p_{T} > 100 GeV}"
-plotselection1="Evt_HT>850"
+plotselection1="Evt_HT>1000"
 plotselection2="N_packedPatJetsAK8PFCHSSoftDrop>=2 && packedPatJetsAK8PFCHSSoftDrop_Pt[0]>400 && packedPatJetsAK8PFCHSSoftDrop_Pt[1]>200 && Evt_HT>850 "
 
-topWP='medium'
+topWP='loose'
 WWP='loose'
 bottomWP='medium'
 
@@ -70,9 +70,12 @@ plotselection_B_CSV_anti_0 = "  Bottoms_ABCD_CSV[0] < 0.46   "
 plotselection_t_MSD = " (105 < Tops_ABCD_MSD && Tops_ABCD_MSD < 210) "
 plotselection_t_MSD_i = " (105 < Tops_ABCD_MSD[i] && Tops_ABCD_MSD[i] < 210) "
 plotselection_t_MSD_0 = " (105 < Tops_ABCD_MSD[0] && Tops_ABCD_MSD[0] < 210) "
-plotselection_t_MSD_anti = " (105 > Tops_ABCD_MSD || Tops_ABCD_MSD > 210) "
-plotselection_t_MSD_anti_i = " (105 > Tops_ABCD_MSD[i] || Tops_ABCD_MSD[i] > 210) "
-plotselection_t_MSD_anti_0 = " (105 > Tops_ABCD_MSD[0] || Tops_ABCD_MSD[0] > 210) "
+#plotselection_t_MSD_anti = " (105 > Tops_ABCD_MSD || Tops_ABCD_MSD > 210) "
+#plotselection_t_MSD_anti_i = " (105 > Tops_ABCD_MSD[i] || Tops_ABCD_MSD[i] > 210) "
+#plotselection_t_MSD_anti_0 = " (105 > Tops_ABCD_MSD[0] || Tops_ABCD_MSD[0] > 210) "
+plotselection_t_MSD_anti = " (75 > Tops_ABCD_MSD || Tops_ABCD_MSD > 250) "
+plotselection_t_MSD_anti_i = " (75 > Tops_ABCD_MSD[i] || Tops_ABCD_MSD[i] > 250) "
+plotselection_t_MSD_anti_0 = " (75 > Tops_ABCD_MSD[0] || Tops_ABCD_MSD[0] > 250) "
 
 
 plotselection_topsubjetCSVv2 = " Tops_ABCD_maxsubjetCSVv2 > 0.8 "
