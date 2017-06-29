@@ -34,6 +34,14 @@ def getHead2():
   return """
 void plot(){
   TH1F::SetDefaultSumw2();
+
+/*
+  std::string csvHFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/csv_rwt_fit_hf_v2_final_2017_3_29test.root";
+  std::string csvLFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/csv_rwt_fit_lf_v2_final_2017_3_29test.root";
+  
+
+  CSVHelper* internalCSVHelper= new CSVHelper(csvHFfile,csvLFfile, 5);
+*/
  
 
 """
@@ -137,9 +145,76 @@ def startLoop():
     
     chain->GetEntry(iEntry); 
     
-
+    TString currentfilename="";
+    currentfilename = chain->GetCurrentFile()->GetName();   
+    int hasTrigger=0;
+    if(currentfilename.Index("withTrigger")!=-1){hasTrigger=1;};
     eventsAnalyzed++;
     sumOfWeights+=Weight;
+
+  // DANGERZONE
+
+/*  
+  std::vector<double> jetPts;    
+  std::vector<double> jetEtas;    
+  std::vector<double> jetPhis; 
+  std::vector<double> jetMasses;
+  std::vector<double> jetEnergies; 
+  std::vector<double> jetCSVs;    
+  std::vector<int> jetFlavors;    
+    
+  for(int ijet =0; ijet<N_Jets; ijet++){
+	jetPts.push_back(Jet_Pt[ijet]);
+	jetEtas.push_back(Jet_Eta[ijet]);
+	jetCSVs.push_back(Jet_CSV[ijet]);
+	jetFlavors.push_back(Jet_Flav[ijet]);
+	jetMasses.push_back(Jet_M[ijet]);
+	jetPhis.push_back(Jet_Phi[ijet]);
+	jetEnergies.push_back(Jet_E[ijet]);
+  }
+  
+  float internalCSVweight=1.0;
+  float internalCSVweight_CSVHFUp=1.0;
+  float internalCSVweight_CSVHFDown=1.0;
+  float internalCSVweight_CSVLFUp=1.0;
+  float internalCSVweight_CSVLFDown=1.0;
+  float internalCSVweight_CSVLFStats1Up=1.0;
+  float internalCSVweight_CSVLFStats1Down=1.0;
+  float internalCSVweight_CSVLFStats2Up=1.0;
+  float internalCSVweight_CSVLFStats2Down=1.0;
+  float internalCSVweight_CSVHFStats1Up=1.0;
+  float internalCSVweight_CSVHFStats1Down=1.0;
+  float internalCSVweight_CSVHFStats2Up=1.0;
+  float internalCSVweight_CSVHFStats2Down=1.0;
+  float internalCSVweight_CSVCErr1Up=1.0;
+  float internalCSVweight_CSVCErr1Down=1.0;
+  float internalCSVweight_CSVCErr2Up=1.0;
+  float internalCSVweight_CSVCErr2Down=1.0;  
+  
+  double tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF;
+  
+  internalCSVweight=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,internalSystName,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF);
+  internalCSVweight_CSVHFUp=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,11,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVHFDown=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,12,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVLFUp=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,9,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVLFDown=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,10,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  
+  internalCSVweight_CSVLFStats1Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,17,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVLFStats1Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,18,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVLFStats2Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,19,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVLFStats2Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,20,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  
+  internalCSVweight_CSVHFStats1Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,13,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVHFStats1Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,14,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVHFStats2Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,15,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVHFStats2Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,16,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  
+  internalCSVweight_CSVCErr1Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,21,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVCErr1Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,22,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVCErr2Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,23,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVCErr2Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,24,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  */
+
 
     
 """
