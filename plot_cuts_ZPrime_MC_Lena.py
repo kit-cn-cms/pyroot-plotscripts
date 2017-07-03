@@ -1,10 +1,10 @@
 # book plots
 plotlabel="Wbt, #geq 3 jets, #geq 1 b-tags"
 plotlabelboosted="#splitline{Wbt, #geq 3 jets, #geq 1 b-tags}{#geq 1 AK8 jet p_{T} > 400 GeV, #geq 1 AK8 jet p_{T} > 200 GeV, #geq 1 AK4 jet p_{T} > 100 GeV}"
-plotselection1="Evt_HT>850"
-plotselection2="N_packedPatJetsAK8PFCHSSoftDrop>=2 && packedPatJetsAK8PFCHSSoftDrop_Pt[0]>400 && packedPatJetsAK8PFCHSSoftDrop_Pt[1]>200 && Evt_HT>850 "
+plotselection1="Evt_HT>1000"
+plotselection2="N_packedPatJetsAK8PFCHSSoftDrop>=2 && packedPatJetsAK8PFCHSSoftDrop_Pt[0]>400 && packedPatJetsAK8PFCHSSoftDrop_Pt[1]>200 && Evt_HT>1000 "
 
-topWP='medium'
+topWP='loose'
 WWP='loose'
 bottomWP='medium'
 
@@ -97,13 +97,23 @@ plotselection_sideband_withtopbtag = "Signal_withtopbtag_Topfirst_Zprime_M < 0"
 
 
 #plotselection_ABCD_general=  plotselection2 + "&& Zprimes_ABCD_M>0   &&    Ws_ABCD_t21 <  0.6    &&    105 < Tops_ABCD_MSD     &&    Tops_ABCD_MSD  < 210  "
-plotselection_ABCD_general_beta =  plotselection2 + "&& Zprimes_ABCD_M>0   &&    65 < Ws_ABCD_MSD  &&   Ws_ABCD_MSD < 105     &&    105 < Tops_ABCD_MSD     &&    Tops_ABCD_MSD  < 210   "
-plotselection_ABCD_general_beta2 =  plotselection2 + "&& Zprimes_ABCD_M>0   &&    65 < Ws_ABCD_MSD  &&   Ws_ABCD_MSD < 105     && "+ plotselection_tau32
-#plotselection_ABCD_general_i =  plotselection2 + "&& Zprimes_ABCD_M[i]>0   &&    Ws_ABCD_t21[i] >  0.6    &&    105 < Tops_ABCD_MSD[i]     &&    Tops_ABCD_MSD[i]  < 210   "
-plotselection_ABCD_general_beta_i =   "Zprimes_ABCD_M[i]>0   &&    65 < Ws_ABCD_MSD[i]  &&   Ws_ABCD_MSD[i] < 105     &&    105 < Tops_ABCD_MSD[i]     &&    Tops_ABCD_MSD[i]  < 210   "
-plotselection_ABCD_general_beta2_i =  "Zprimes_ABCD_M[i]>0   &&    65 < Ws_ABCD_MSD[i]  &&   Ws_ABCD_MSD[i] < 105     && "+ plotselection_tau32_i
-plotselection_ABCD_general_beta_0 =   "Zprimes_ABCD_M[0]>0   &&    65 < Ws_ABCD_MSD[0]  &&   Ws_ABCD_MSD[0] < 105     &&    105 < Tops_ABCD_MSD[0]     &&    Tops_ABCD_MSD[0]  < 210   "
-plotselection_ABCD_general_beta2_0 =  "Zprimes_ABCD_M[0]>0   &&    65 < Ws_ABCD_MSD[0]  &&   Ws_ABCD_MSD[0] < 105     && "+ plotselection_tau32_0
+plotselection_ABCD_general_beta =  plotselection2 + "&& Zprimes_ABCD_M>0   &&  " + plotselection_W_MSD + " && " + plotselection_t_MSD
+plotselection_ABCD_general_beta_0 =  plotselection2 + "&& Zprimes_ABCD_M[0]>0   &&  " + plotselection_W_MSD_0 + " && " + plotselection_t_MSD_0
+plotselection_ABCD_general_beta_i =  plotselection2 + "&& Zprimes_ABCD_M[i]>0   &&  " + plotselection_W_MSD_i + " && " + plotselection_t_MSD_i
+
+plotselection_ABCD_general_beta2 =  plotselection2 + "&& Zprimes_ABCD_M>0   &&  " + plotselection_W_MSD + " && " + plotselection_tau32
+plotselection_ABCD_general_beta2_0 =  plotselection2 + "&& Zprimes_ABCD_M[0]>0   &&  " + plotselection_W_MSD_0 + " && " + plotselection_tau32_0
+plotselection_ABCD_general_beta2_i =  plotselection2 + "&& Zprimes_ABCD_M[i]>0   &&  " + plotselection_W_MSD_i + " && " + plotselection_tau32_i
+
+plotselection_ABCD_general_beta3 =  plotselection2 + "&& Zprimes_ABCD_M>0   &&  " + plotselection_t_MSD + " && " + plotselection_tau32
+plotselection_ABCD_general_beta3_0 =  plotselection2 + "&& Zprimes_ABCD_M[0]>0   &&  " + plotselection_t_MSD_0 + " && " + plotselection_tau32_0
+plotselection_ABCD_general_beta3_i =  plotselection2 + "&& Zprimes_ABCD_M[i]>0   &&  " + plotselection_t_MSD_i + " && " + plotselection_tau32_i
+
+##plotselection_ABCD_general_i =  plotselection2 + "&& Zprimes_ABCD_M[i]>0   &&    Ws_ABCD_t21[i] >  0.6    &&    105 < Tops_ABCD_MSD[i]     &&    Tops_ABCD_MSD[i]  < 210   "
+#plotselection_ABCD_general_beta_i =   "Zprimes_ABCD_M[i]>0   &&    65 < Ws_ABCD_MSD[i]  &&   Ws_ABCD_MSD[i] < 105     &&    105 < Tops_ABCD_MSD[i]     &&    Tops_ABCD_MSD[i]  < 210   "
+#plotselection_ABCD_general_beta2_i =  "Zprimes_ABCD_M[i]>0   &&    65 < Ws_ABCD_MSD[i]  &&   Ws_ABCD_MSD[i] < 105     && "+ plotselection_tau32_i
+#plotselection_ABCD_general_beta_0 =   "Zprimes_ABCD_M[0]>0   &&    65 < Ws_ABCD_MSD[0]  &&   Ws_ABCD_MSD[0] < 105     &&    105 < Tops_ABCD_MSD[0]     &&    Tops_ABCD_MSD[0]  < 210   "
+#plotselection_ABCD_general_beta2_0 =  "Zprimes_ABCD_M[0]>0   &&    65 < Ws_ABCD_MSD[0]  &&   Ws_ABCD_MSD[0] < 105     && "+ plotselection_tau32_0
 
 
 plotselection_ABCD_general_alt_notopbtag =  plotselection2 + " && Zprimes_ABCD_masscorrnotopbtag_M>0 && 65 < Ws_ABCD_masscorrnotopbtag_MSD && Ws_ABCD_masscorrnotopbtag_MSD < 105 && Tops_ABCD_masscorrnotopbtag_t32<0.86 "
