@@ -2871,3 +2871,230 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
 #    print len(canvases)
     printCanvases(canvases,name)
     writeObjects(canvases,name)
+    
+def plotRefWsystandOthers(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,name,listOflll,logscale=False,label='',ratio=True,blinded=False):
+################################################
+    listOfhistosOnTop_=[listOfhistosOnTop[i][0] for i in range(len(listOfhistosOnTop))]
+    listOfRatioHistoLists=[]
+    for ot,listOfHistos in zip(listOfhistosOnTop_,listOfHistoLists):
+        RatioHistoLists=[]
+        for histo in listOfHistos:
+            histo_tmp=histo.Clone()
+            histo_tmp.Divide(ot)
+            RatioHistoLists.append(histo_tmp)
+        listOfRatioHistoLists.append(RatioHistoLists)
+################################################
+    options=''
+    if isinstance(label, basestring):
+        labeltexts=len(listOfhistosOnTop)*[label]
+    else:
+        labeltexts=label
+    canvases=[]
+    objects=[]
+#    print len(listOfHistoLists)
+    # for every plot, look at all samples
+    listOfErrorGraphs=[]
+    listOfErrorGraphStyles=[]
+    listOfErrorGraphColors=[]
+
+    listOfErrorGraphLists=[]
+    #lll=[listOflistOflist of histograms, FillStyle, FillColor, DoRateSysts]
+    for lll in listOflll:
+      listOfErrorGraphLists.append(createErrorbands(lll[0],[sampleOnTop],lll[3]))
+      #print listOfErrorGraphLists[-1]
+      #raw_input()
+      listOfErrorGraphStyles.append(lll[1])
+      listOfErrorGraphColors.append(lll[2])
+    for igraph in range(len(listOfErrorGraphLists[0])):
+      thisgraphs=[]
+      for iband in range(len(listOfErrorGraphLists)):
+	thisgraphs.append([listOfErrorGraphLists[iband][igraph],listOfErrorGraphStyles[iband],listOfErrorGraphColors[iband]])
+      listOfErrorGraphs.append(thisgraphs)
+    
+    i=0
+    # loop over the variables wh are supposed to be plotted (jet 1 pt, Njets , lep1 eta , ... )
+    for ot,listOfHistos,labeltext,errorgraphList,listOfRatioHistos in zip(listOfhistosOnTop_,listOfHistoLists,labeltexts,listOfErrorGraphs,listOfRatioHistoLists):
+        i+=1
+        
+        # setup histo style
+        # loop over samples and the histograms of the plotted variable for each sample
+        for histo,histo_ratio,sample in zip(listOfHistos,listOfRatioHistos,samples):
+            yTitle='Events'
+            setupHisto(histo,sample.color,yTitle,False)
+            setupHisto(histo_ratio,sample.color,"x/nom.",False)
+            histo_ratio.GetYaxis().SetTitleFont(42)
+            histo_ratio.GetYaxis().CenterTitle()
+            histo_ratio.GetYaxis().SetTitleOffset(0.5)
+            histo_ratio.GetYaxis().SetTitleSize(0.1)
+            histo_ratio.GetYaxis().SetLabelSize(0.08)
+            histo_ratio.GetXaxis().SetTitleFont(42)
+            histo_ratio.GetXaxis().SetTitleOffset(1.0)
+            histo_ratio.GetXaxis().SetTitleSize(0.1)
+            histo_ratio.GetXaxis().SetLabelSize(0.1)
+
+        # mover over/underflow
+        for h in listOfHistos:
+            moveOverFlow(h)
+            
+        # find maximum bin value of all samples for the considered variable to know how large the y axis scale has to be
+        yMax=1e-9
+        yMax_=1e-9
+        for h,h_ in zip(listOfHistos,listOfRatioHistos):
+            yMax=max(h.GetBinContent(h.GetMaximumBin()),yMax)
+            yMax_=max(h_.GetBinContent(h_.GetMaximumBin()),yMax_)
+            
+        #create first canvas: if ratio true then a canvas with ratio pad, if false then without
+        canvas=getCanvas(listOfHistos[0].GetName(),ratio)
+        canvas.cd(1)
+        
+        #set y-scale on first histo / ratiohisto for later
+        h=listOfHistos[0]
+        h_=listOfRatioHistos[0]
+        if logscale:
+            h.GetYaxis().SetRangeUser(yMax/10000,yMax*10)
+            canvas.cd(1).SetLogy()
+        else:
+            h.GetYaxis().SetRangeUser(0,yMax*1.8)
+            h_.GetYaxis().SetRangeUser(0.5,yMax_*1.2)
+        option='histo'
+        option+=options
+        #print h.GetName()
+        #h.GetXaxis().SetBinLabel(1,"test")
+        #draw remaining
+        for h,h_,i in zip(listOfHistos,listOfRatioHistos,range(len(listOfHistos))):
+            if i==0:
+                canvas.cd(1)
+                h.DrawCopy(option)
+                canvas.cd(2)
+                h_.DrawCopy()
+            else:
+                canvas.cd(1)
+                h.DrawCopy(option+'same')
+                canvas.cd(2)
+                h_.DrawCopy('same')
+        line = ot.Clone()
+        line.Divide(ot)
+        for i in range(line.GetNbinsX()+2):
+            line.SetBinContent(i,1)
+            line.SetBinError(i,0)
+        line.SetLineColor(ROOT.kBlack)
+        line.DrawCopy('same')
+        canvas.cd(1)
+        h.DrawCopy('axissame')
+        canvas.cd(2)
+        h_.DrawCopy('axissame')
+        
+        # plot sample on top
+        canvas.cd(1)
+        otc=ot.Clone()
+        setupHisto(otc,sampleOnTop.color,'',False)
+        otc.SetBinContent(1,otc.GetBinContent(0)+otc.GetBinContent(1));
+        otc.SetBinContent(otc.GetNbinsX(),otc.GetBinContent(otc.GetNbinsX()+1)+otc.GetBinContent(otc.GetNbinsX()));
+        otc.SetBinError(1,ROOT.TMath.Sqrt(ROOT.TMath.Power(otc.GetBinError(0),2)+ROOT.TMath.Power(otc.GetBinError(1),2)));
+        otc.SetBinError(otc.GetNbinsX(),ROOT.TMath.Sqrt(ROOT.TMath.Power(otc.GetBinError(otc.GetNbinsX()+1),2)+ROOT.TMath.Power(otc.GetBinError(otc.GetNbinsX()),2)));
+        otc.SetLineWidth(2)
+        
+        otc.Draw('histosame')
+  
+
+        # from error graphs calculate ratio error graphs
+        listOfRatioErrorGraphs=[]
+        #graphcounter=0
+        print "doing ratio error graph"
+        for errorgraph,thisFillStyle,ThisFillColor in errorgraphList:
+	  ratioerrorgraph=ROOT.TGraphAsymmErrors(errorgraph.GetN())
+	  #print ratioerrorgraph
+	  #raw_input()
+	  x, y = ROOT.Double(0), ROOT.Double(0)
+	  for i in range(errorgraph.GetN()):
+	      errorgraph.GetPoint(i,x,y)
+	      ratioerrorgraph.SetPoint(i,x, 1.0)
+	      relErrUp=0.0
+	      relErrDown=0.0
+	      print x,y,errorgraph.GetErrorYhigh(i),errorgraph.GetErrorYlow(i)
+	      if y>0.0:
+		  relErrUp=errorgraph.GetErrorYhigh(i)/y
+		  relErrDown=errorgraph.GetErrorYlow(i)/y
+		  print relErrUp,relErrDown
+	      ratioerrorgraph.SetPointError(i, errorgraph.GetErrorXlow(i),errorgraph.GetErrorXhigh(i), relErrDown, relErrUp)
+
+
+	  errorgraph.SetFillStyle(thisFillStyle)
+	  errorgraph.SetLineColor(ThisFillColor)
+	  errorgraph.SetFillColor(ThisFillColor)
+	  ratioerrorgraph.SetFillStyle(thisFillStyle)
+	  ratioerrorgraph.SetLineColor(ThisFillColor)
+	  ratioerrorgraph.SetFillColor(ThisFillColor)
+  #        ratioerrorgraph.SetFillStyle(1001)
+  #        ratioerrorgraph.SetLineColor(ROOT.kBlack)
+  #        ratioerrorgraph.SetFillColor(ROOT.kGreen)
+
+	  #if graphcounter==0:
+	    #errorgraph.Draw("2")
+	  #else:
+	  errorgraph.Draw("same2")
+	  #graphcounter+=1
+
+	  objects.append(errorgraph)
+	  objects.append(ratioerrorgraph)
+	  listOfRatioErrorGraphs.append(ratioerrorgraph)
+	  #print objects
+	  #raw_input()
+
+        l1=getLegendL()
+        l2=getLegendR()
+        i=0
+        for h,sample in zip(listOfHistos,samples):
+            i+=1
+            if i%2==1:
+                l1.AddEntry22(h,sample.name,'L')
+            if i%2==0:
+                l2.AddEntry22(h,sample.name,'L')
+        l2.AddEntry22(otc,sampleOnTop.name,'L')
+        
+        l1.Draw('same')
+        l2.Draw('same')
+        objects.append(l1)
+        objects.append(l2)
+        objects.append(otc)
+
+        #draw the lumi text on the canvas
+        CMS_lumi.lumi_13TeV = "36.0 fb^{-1}"
+        CMS_lumi.writeExtraText = 1
+        #CMS_lumi.extraText = "Preliminary"
+        CMS_lumi.extraText = ""
+        CMS_lumi.cmsText=""
+
+        CMS_lumi.lumi_sqrtS = "13 TeV" # used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
+
+        CMS_lumi.cmsTextSize = 0.55
+        CMS_lumi.cmsTextOffset = 0.49
+        CMS_lumi.lumiTextSize = 0.43
+        CMS_lumi.lumiTextOffset = 0.61
+
+        CMS_lumi.relPosX = 0.15
+
+        CMS_lumi.hOffset = 0.05
+
+        iPeriod=4   # 13TeV
+        iPos=0     # CMS inside frame
+
+        CMS_lumi.CMS_lumi(canvas, iPeriod, iPos)
+
+        label = ROOT.TLatex(0.18, 0.89, labeltext);
+        label.SetTextFont(42)
+        label.SetTextSize(0.035)
+        label.SetNDC()
+        label.Draw()
+        objects.append(label)
+
+        canvas.cd(2)
+
+        for ratioerrorgraph in listOfRatioErrorGraphs:
+          ratioerrorgraph.Draw("same2")
+          
+#       
+        canvases.append(canvas)
+   
+    printCanvases(canvases,name)
+    writeObjects(canvases,name)
