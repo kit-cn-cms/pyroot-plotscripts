@@ -2007,51 +2007,413 @@ void LeptonSFHelper::SetMuonHistos( ){
 
 }
 
-// hacked in CSV helper
+// Systematics enum from MiniAODHelper. Needed for the CSV helper (date 26.06.2017)
+
+class Systematics {
+public:
+  enum Type {
+    NA,
+
+    // total JEC uncertainties
+    JESup,			
+    JESdown,			
+
+    // individual JEC uncertainties up
+    JESAbsoluteStatup,
+    JESAbsoluteScaleup,
+    JESAbsoluteFlavMapup,
+    JESAbsoluteMPFBiasup,
+    JESFragmentationup,
+    JESSinglePionECALup,
+    JESSinglePionHCALup,
+    JESFlavorQCDup,
+    JESTimePtEtaup,
+    JESRelativeJEREC1up,
+    JESRelativeJEREC2up,
+    JESRelativeJERHFup,
+    JESRelativePtBBup,
+    JESRelativePtEC1up,
+    JESRelativePtEC2up,
+    JESRelativePtHFup,
+    JESRelativeBalup,
+    JESRelativeFSRup,
+    JESRelativeStatFSRup,
+    JESRelativeStatECup,
+    JESRelativeStatHFup,
+    JESPileUpDataMCup,
+    JESPileUpPtRefup,
+    JESPileUpPtBBup,
+    JESPileUpPtEC1up,
+    JESPileUpPtEC2up,
+    JESPileUpPtHFup,
+    JESPileUpMuZeroup,
+    JESPileUpEnvelopeup,
+    JESSubTotalPileUpup,
+    JESSubTotalRelativeup,
+    JESSubTotalPtup,
+    JESSubTotalScaleup,
+    JESSubTotalAbsoluteup,
+    JESSubTotalMCup,
+    JESTotalup,
+    JESTotalNoFlavorup,
+    JESTotalNoTimeup,
+    JESTotalNoFlavorNoTimeup,
+    JESFlavorZJetup,
+    JESFlavorPhotonJetup,
+    JESFlavorPureGluonup,
+    JESFlavorPureQuarkup,
+    JESFlavorPureCharmup,
+    JESFlavorPureBottomup,
+    JESTimeRunBCDup,
+    JESTimeRunEFup,
+    JESTimeRunGup,
+    JESTimeRunHup,
+    JESCorrelationGroupMPFInSituup,
+    JESCorrelationGroupIntercalibrationup,
+    JESCorrelationGroupbJESup,
+    JESCorrelationGroupFlavorup,
+    JESCorrelationGroupUncorrelatedup,
+    
+    // individual JEC uncertainties down
+    JESAbsoluteStatdown,
+    JESAbsoluteScaledown,
+    JESAbsoluteFlavMapdown,
+    JESAbsoluteMPFBiasdown,
+    JESFragmentationdown,
+    JESSinglePionECALdown,
+    JESSinglePionHCALdown,
+    JESFlavorQCDdown,
+    JESTimePtEtadown,
+    JESRelativeJEREC1down,
+    JESRelativeJEREC2down,
+    JESRelativeJERHFdown,
+    JESRelativePtBBdown,
+    JESRelativePtEC1down,
+    JESRelativePtEC2down,
+    JESRelativePtHFdown,
+    JESRelativeBaldown,
+    JESRelativeFSRdown,
+    JESRelativeStatFSRdown,
+    JESRelativeStatECdown,
+    JESRelativeStatHFdown,
+    JESPileUpDataMCdown,
+    JESPileUpPtRefdown,
+    JESPileUpPtBBdown,
+    JESPileUpPtEC1down,
+    JESPileUpPtEC2down,
+    JESPileUpPtHFdown,
+    JESPileUpMuZerodown,
+    JESPileUpEnvelopedown,
+    JESSubTotalPileUpdown,
+    JESSubTotalRelativedown,
+    JESSubTotalPtdown,
+    JESSubTotalScaledown,
+    JESSubTotalAbsolutedown,
+    JESSubTotalMCdown,
+    JESTotaldown,
+    JESTotalNoFlavordown,
+    JESTotalNoTimedown,
+    JESTotalNoFlavorNoTimedown,
+    JESFlavorZJetdown,
+    JESFlavorPhotonJetdown,
+    JESFlavorPureGluondown,
+    JESFlavorPureQuarkdown,
+    JESFlavorPureCharmdown,
+    JESFlavorPureBottomdown,
+    JESTimeRunBCDdown,
+    JESTimeRunEFdown,
+    JESTimeRunGdown,
+    JESTimeRunHdown,
+    JESCorrelationGroupMPFInSitudown,
+    JESCorrelationGroupIntercalibrationdown,
+    JESCorrelationGroupbJESdown,
+    JESCorrelationGroupFlavordown,
+    JESCorrelationGroupUncorrelateddown,
+    
+    // JER uncertainty
+    JERup,			
+    JERdown,
+
+    hfSFup,
+    hfSFdown,
+    lfSFdown,
+    lfSFup,
+
+    TESup,
+    TESdown,
+
+    CSVLFup,
+    CSVLFdown,
+    CSVHFup,
+    CSVHFdown,
+    CSVHFStats1up,
+    CSVHFStats1down,
+    CSVLFStats1up,
+    CSVLFStats1down,
+    CSVHFStats2up,
+    CSVHFStats2down,
+    CSVLFStats2up,
+    CSVLFStats2down,
+    CSVCErr1up,
+    CSVCErr1down,
+    CSVCErr2up,
+    CSVCErr2down 
+  };
+
+  // convert between string and int representation
+  static Type get(const std::string& name);
+  static std::string toString(const Type type);
+
+  // true if type is one of the JEC-related uncertainties and up
+  static bool isJECUncertaintyUp(const Type type);
+
+  // true if type is one of the JEC-related uncertainties and down
+  static bool isJECUncertaintyDown(const Type type);
+
+  // true if type is one of the JEC-related uncertainties
+  static bool isJECUncertainty(const Type type);
+
+  // return the label that is used by JetCorrectorParametersCollection
+  // to label the uncertainty type. See also:
+  // https://cmssdt.cern.ch/SDT/doxygen/CMSSW_8_0_23/doc/html/dc/d33/classJetCorrectorParametersCollection.html#afb3d4c6fd711ca23d89e0625a22dc483 for a list of in principle valid labels. Whether the uncertainty
+  static std::string GetJECUncertaintyLabel(const Type type);
+
+  static std::vector<Systematics::Type> getTypeVector();
+
+
+private:
+  static std::map<Type,std::string> typeStringMap_;
+  static std::map<std::string,Type> stringTypeMap_;
+  static std::map<Type,std::string> typeLabelMap_;
+
+  static void init();
+  static bool isInit();
+  static void add(Systematics::Type typeUp, Systematics::Type typeDn, const std::string& name, const std::string& label);
+};
+
+std::map<Systematics::Type,std::string> Systematics::typeStringMap_ = std::map<Systematics::Type,std::string>();
+std::map<std::string,Systematics::Type> Systematics::stringTypeMap_ = std::map<std::string,Systematics::Type>();
+std::map<Systematics::Type,std::string> Systematics::typeLabelMap_  = std::map<Systematics::Type,std::string>();
+
+
+void Systematics::init() {
+  add( JESup,JESdown,"JES","Uncertainty");
+  add( JERup,JERdown,"JER","JER");
+  add( JESAbsoluteStatup,        JESAbsoluteStatdown,        "JESAbsoluteStat",          "AbsoluteStat"        );             
+  add( JESAbsoluteScaleup,       JESAbsoluteScaledown,       "JESAbsoluteScale",         "AbsoluteScale"       );             
+  add( JESAbsoluteFlavMapup,     JESAbsoluteFlavMapdown,     "JESAbsoluteFlavMap",       "AbsoluteFlavMap"     );                             
+  add( JESAbsoluteMPFBiasup,     JESAbsoluteMPFBiasdown,     "JESAbsoluteMPFBias",       "AbsoluteMPFBias"     );                             
+  add( JESFragmentationup,       JESFragmentationdown,       "JESFragmentation",         "Fragmentation"       );             
+  add( JESSinglePionECALup,      JESSinglePionECALdown,      "JESSinglePionECAL",        "SinglePionECAL"      );                             
+  add( JESSinglePionHCALup,      JESSinglePionHCALdown,      "JESSinglePionHCAL",        "SinglePionHCAL"      );                             
+  add( JESFlavorQCDup,           JESFlavorQCDdown,           "JESFlavorQCD",             "FlavorQCD"           );                        
+  add( JESTimePtEtaup,           JESTimePtEtadown,           "JESTimePtEta",             "TimePtEta"           );                        
+  add( JESRelativeJEREC1up,      JESRelativeJEREC1down,      "JESRelativeJEREC1",        "RelativeJEREC1"      );                             
+  add( JESRelativeJEREC2up,      JESRelativeJEREC2down,      "JESRelativeJEREC2",        "RelativeJEREC2"      );                             
+  add( JESRelativeJERHFup,       JESRelativeJERHFdown,       "JESRelativeJERHF",         "RelativeJERHF"       );             
+  add( JESRelativePtBBup,        JESRelativePtBBdown,        "JESRelativePtBB",          "RelativePtBB"        );             
+  add( JESRelativePtEC1up,       JESRelativePtEC1down,       "JESRelativePtEC1",         "RelativePtEC1"       );             
+  add( JESRelativePtEC2up,       JESRelativePtEC2down,       "JESRelativePtEC2",         "RelativePtEC2"       );             
+  add( JESRelativePtHFup,        JESRelativePtHFdown,        "JESRelativePtHF",          "RelativePtHF"        );             
+  add( JESRelativeBalup,         JESRelativeBaldown,         "JESRelativeBal",           "RelativeBal"         );                        
+  add( JESRelativeFSRup,         JESRelativeFSRdown,         "JESRelativeFSR",           "RelativeFSR"         );                        
+  add( JESRelativeStatFSRup,     JESRelativeStatFSRdown,     "JESRelativeStatFSR",       "RelativeStatFSR"     );                             
+  add( JESRelativeStatECup,      JESRelativeStatECdown,      "JESRelativeStatEC",        "RelativeStatEC"      );                             
+  add( JESRelativeStatHFup,      JESRelativeStatHFdown,      "JESRelativeStatHF",        "RelativeStatHF"      );                             
+  add( JESPileUpDataMCup,        JESPileUpDataMCdown,        "JESPileUpDataMC",          "PileUpDataMC"        );             
+  add( JESPileUpPtRefup,         JESPileUpPtRefdown,         "JESPileUpPtRef",           "PileUpPtRef"         );                        
+  add( JESPileUpPtBBup,          JESPileUpPtBBdown,          "JESPileUpPtBB",            "PileUpPtBB"          );                        
+  add( JESPileUpPtEC1up,         JESPileUpPtEC1down,         "JESPileUpPtEC1",           "PileUpPtEC1"         );                        
+  add( JESPileUpPtEC2up,         JESPileUpPtEC2down,         "JESPileUpPtEC2",           "PileUpPtEC2"         );                        
+  add( JESPileUpPtHFup,          JESPileUpPtHFdown,          "JESPileUpPtHF",            "PileUpPtHF"          );                        
+  add( JESPileUpMuZeroup,        JESPileUpMuZerodown,        "JESPileUpMuZero",          "PileUpMuZero"        );             
+  add( JESPileUpEnvelopeup,      JESPileUpEnvelopedown,      "JESPileUpEnvelope",        "PileUpEnvelope"      );                             
+  add( JESSubTotalPileUpup,      JESSubTotalPileUpdown,      "JESSubTotalPileUp",        "SubTotalPileUp"      );                             
+  add( JESSubTotalRelativeup,    JESSubTotalRelativedown,    "JESSubTotalRelative",      "SubTotalRelative"    );                             
+  add( JESSubTotalPtup,          JESSubTotalPtdown,          "JESSubTotalPt",            "SubTotalPt"          );                        
+  add( JESSubTotalScaleup,       JESSubTotalScaledown,       "JESSubTotalScale",         "SubTotalScale"       );             
+  add( JESSubTotalAbsoluteup,    JESSubTotalAbsolutedown,    "JESSubTotalAbsolute",      "SubTotalAbsolute"    );                             
+  add( JESSubTotalMCup,          JESSubTotalMCdown,          "JESSubTotalMC",            "SubTotalMC"          );                        
+  add( JESTotalup,               JESTotaldown,               "JESTotal",                 "Total"               );                 
+  add( JESTotalNoFlavorup,       JESTotalNoFlavordown,       "JESTotalNoFlavor",         "TotalNoFlavor"       );             
+  add( JESTotalNoTimeup,         JESTotalNoTimedown,         "JESTotalNoTime",           "TotalNoTime"         );                        
+  add( JESTotalNoFlavorNoTimeup, JESTotalNoFlavorNoTimedown, "JESTotalNoFlavorNoTime",   "TotalNoFlavorNoTime" );                    
+  add( JESFlavorZJetup,          JESFlavorZJetdown,          "JESFlavorZJet",            "FlavorZJet"          );                        
+  add( JESFlavorPhotonJetup,     JESFlavorPhotonJetdown,     "JESFlavorPhotonJet",       "FlavorPhotonJet"     );                             
+  add( JESFlavorPureGluonup,     JESFlavorPureGluondown,     "JESFlavorPureGluon",       "FlavorPureGluon"     );                             
+  add( JESFlavorPureQuarkup,     JESFlavorPureQuarkdown,     "JESFlavorPureQuark",       "FlavorPureQuark"     );                             
+  add( JESFlavorPureCharmup,     JESFlavorPureCharmdown,     "JESFlavorPureCharm",       "FlavorPureCharm"     );                             
+  add( JESFlavorPureBottomup,    JESFlavorPureBottomdown,    "JESFlavorPureBottom",      "FlavorPureBottom"    );                             
+  add( JESTimeRunBCDup,          JESTimeRunBCDdown,          "JESTimeRunBCD",            "TimeRunBCD"          );                  
+  add( JESTimeRunEFup,           JESTimeRunEFdown,           "JESTimeRunEF",             "TimeRunEF"           );                        
+  add( JESTimeRunGup,            JESTimeRunGdown,            "JESTimeRunG",              "TimeRunG"            );                                 
+  add( JESTimeRunHup,            JESTimeRunHdown,            "JESTimeRunH",              "TimeRunH"            );   
+  add( CSVLFup,                  CSVLFdown,                  "LF",                    "LF"                  );
+  add( CSVHFup,                  CSVHFdown,                  "HF",                    "HF"                  );
+  add( CSVLFStats1up,            CSVLFStats1down,            "Stats1",              "LFStats1"            );
+  add( CSVHFStats1up,            CSVHFStats1down,            "Stats1",              "HFStats1"            );
+  add( CSVLFStats2up,            CSVLFStats2down,            "Stats2",              "LFStats2"            );
+  add( CSVHFStats2up,            CSVHFStats2down,            "Stats2",              "HFStats2"            );
+  add( CSVCErr1up,               CSVCErr1down,               "cErr1",                 "CErr1"               );
+  add( CSVCErr2up,               CSVCErr2down,               "cErr2",                 "CErr2"               );
+}
+
+bool Systematics::isInit() {
+  return typeStringMap_.size()>1;
+}
+
+void Systematics::add(Systematics::Type typeUp, Systematics::Type typeDn, const std::string& name, const std::string& label) {
+  typeStringMap_[typeUp] = name+"up";
+  typeStringMap_[typeDn] = name+"down";
+  stringTypeMap_[name+"up"] = typeUp;
+  stringTypeMap_[name+"down"] = typeDn;
+  typeLabelMap_[typeUp] = label;
+  typeLabelMap_[typeDn] = label;
+}
+
+// added method to get a vector of all systematics
+std::vector<Systematics::Type> Systematics::getTypeVector() {
+  if( !isInit() ) init();
+  std::vector<Systematics::Type> outvector;
+  outvector.push_back(NA);
+  for(auto it : typeStringMap_ ){
+    std::cout<<it.first<<" "<<it.second<<std::endl;
+    outvector.push_back(it.first);
+    }
+  return outvector;
+}
+
+Systematics::Type Systematics::get(const std::string& name) {
+  if( name == "" ) return NA;
+
+  if( !isInit() ) init();
+
+  std::map<std::string,Systematics::Type>::const_iterator it = stringTypeMap_.find(name);
+  if( it == stringTypeMap_.end() ) {
+    std::cout << "ERROR: No uncertainty with name " << name << " will use nominal "<<std::endl;
+    return Systematics::NA;
+  } else {
+    return it->second;
+  }
+}
+
+std::string Systematics::toString(const Type type) {
+  if( type == NA ) return "";
+
+  if( !isInit() ) init();
+
+  std::map<Systematics::Type,std::string>::const_iterator it = typeStringMap_.find(type);
+  if( it == typeStringMap_.end() ) {
+    std::cout << "ERROR: No uncertainty with name " << type << " will use nominal "<<std::endl;
+    return "";
+  } else {
+    return it->second;
+  }
+}
+
+bool Systematics::isJECUncertaintyUp(const Type type) {
+  const std::string str = toString(type);
+  return str.find("JES")==0 && str.find("up")==str.size()-2;
+}
+
+bool Systematics::isJECUncertaintyDown(const Type type) {
+  const std::string str = toString(type);
+  return str.find("JES")==0 && str.find("down") == str.size()-4;
+}
+
+bool Systematics::isJECUncertainty(const Type type) {
+  return isJECUncertaintyUp(type) || isJECUncertaintyDown(type);
+}
+
+std::string Systematics::GetJECUncertaintyLabel(const Type type) {
+  if( !isInit() ) init();
+  std::map<Systematics::Type,std::string>::const_iterator it = typeLabelMap_.find(type);
+  if( it == typeLabelMap_.end() ) {
+    return "";
+  } else {
+    return it->second;
+  }
+}
+
+// hacked in CSV helper . Factorized JES. (date 26.06.2017)
 class CSVHelper
 {
-  public:
-    // nHFptBins specifies how many of these pt bins are used:
-    // (jetPt >= 19.99 && jetPt < 30), (jetPt >= 30 && jetPt < 40), (jetPt >= 40 && jetPt < 60), 
-    // (jetPt >= 60 && jetPt < 100), (jetPt >= 100 && jetPt < 160), (jetPt >= 160 && jetPt < 10000).
-    // If nHFptBins < 6, the last on is inclusive (eg jetPt >=100 && jetPt < 10000 for nHFptBins=5).
-    // The SFs from data have 5 bins, the pseudo data scale factors 6 bins.
-    CSVHelper();
-  CSVHelper(const std::string& hf, const std::string& lf, const int nHFptBins=6);
+public:
+  // nHFptBins specifies how many of these pt bins are used:
+  // (jetPt >= 19.99 && jetPt < 30), (jetPt >= 30 && jetPt < 40), (jetPt >= 40 && jetPt < 60), 
+  // (jetPt >= 60 && jetPt < 100), (jetPt >= 100 && jetPt < 160), (jetPt >= 160 && jetPt < 10000).
+  // If nHFptBins < 6, the last on is inclusive (eg jetPt >=100 && jetPt < 10000 for nHFptBins=5).
+  // The SFs from data have 5 bins, the pseudo data scale factors 6 bins.
+    
+  // standard constructor
+  CSVHelper();
+  // another constructor
+  CSVHelper(const std::string& hf, const std::string& lf, const int& nHFptBins=5,const int& nLFptBins=4,const int& nLFetaBins=3,const std::vector<Systematics::Type>& jecsysts = std::vector<Systematics::Type>(1,Systematics::NA));
+  // destructor
   ~CSVHelper();
-
-  void init(const std::string& hf, const std::string& lf, const int nHFptBins);
-
+  // function to set up the needed stuff
+  void init(const std::string& hf, const std::string& lf, const int& nHFptBins,const int& nLFptBins,const int& nLFetaBins,const std::vector<Systematics::Type>& jecsysts);
+  // function to get the csv weight
   double getCSVWeight(const std::vector<double>& jetPts,
 		      const std::vector<double>& jetEtas,
 		      const std::vector<double>& jetCSVs,
 		      const std::vector<int>& jetFlavors,
-		      const int iSys,
+		      const Systematics::Type syst,
 		      double &csvWgtHF,
 		      double &csvWgtLF,
 		      double &csvWgtCF) const;
+
+  // If there is no SF for a jet because it is out of acceptance
+  // of SF, an SF of 1 is used for this jet. Intended when running
+  // on MC with a more inclusive selection.
+  // USE WITH CARE!
   void allowJetsOutOfBinning(const bool allow) { allowJetsOutOfBinning_ = allow; }
 
-  private:
-    bool isInit_;
-    int nHFptBins_;
-    bool allowJetsOutOfBinning_;
 
-    std::vector< std::vector<TH1*> > h_csv_wgt_hf;
-    std::vector< std::vector<TH1*> > c_csv_wgt_hf;
-    std::vector< std::vector< std::vector<TH1*> > > h_csv_wgt_lf;
+private:
+  bool isInit_;
+  int nHFptBins_;//number of pt bins in hf(including c flavour) histograms
+  int nLFptBins_;//number of pt bins in lf histograms
+  int nLFetaBins_;//number of eta bins in lf histograms
+  bool allowJetsOutOfBinning_;
 
-    void fillCSVHistos(TFile *fileHF, TFile *fileLF);
-    TH1* readHistogram(TFile* file, const TString& name) const;
+  std::vector< std::vector<TH1*> > h_csv_wgt_hf;//vector to store pointers to the needed hf histograms
+  std::vector< std::vector<TH1*> > c_csv_wgt_hf;//vector to store pointers to the needed c flavour histograms
+  std::vector< std::vector< std::vector<TH1*> > > h_csv_wgt_lf;//vector to store pointers to the needed lf histograms
+  // vector for the csv systematics
+  std::vector<Systematics::Type> csvsysts = {   
+                                                Systematics::CSVLFup,
+                                                Systematics::CSVLFdown,
+                                                Systematics::CSVHFup,
+                                                Systematics::CSVHFdown,
+                                                Systematics::CSVHFStats1up,
+                                                Systematics::CSVHFStats1down,
+                                                Systematics::CSVLFStats1up,
+                                                Systematics::CSVLFStats1down,
+                                                Systematics::CSVHFStats2up,
+                                                Systematics::CSVHFStats2down,
+                                                Systematics::CSVLFStats2up,
+                                                Systematics::CSVLFStats2down,
+                                                Systematics::CSVCErr1up,
+                                                Systematics::CSVCErr1down,
+                                                Systematics::CSVCErr2up,
+                                                Systematics::CSVCErr2down
+                                            };
+  // vector for all desired systematics -> csv+jec systematics  
+  std::vector<Systematics::Type> systs;
+  // function to get the histograms from the provided root files
+  void fillCSVHistos(TFile *fileHF, TFile *fileLF, const std::vector<Systematics::Type>& systs);
+  // function which reads the desired histogram from the provided root file
+  TH1* readHistogram(TFile* file, const TString& name) const;
 };
 
 CSVHelper::CSVHelper()
-  : isInit_(false), nHFptBins_(0), allowJetsOutOfBinning_(false) {}
+  : isInit_(false), nHFptBins_(0),nLFptBins_(0),nLFetaBins_(0), allowJetsOutOfBinning_(false) {}
 
 
-CSVHelper::CSVHelper(const std::string& hf, const std::string& lf, const int nHFptBins)
-  : isInit_(false), nHFptBins_(0), allowJetsOutOfBinning_(false) {
-  init(hf,lf,nHFptBins);
+CSVHelper::CSVHelper(const std::string& hf, const std::string& lf, const int& nHFptBins,const int& nLFptBins,const int& nLFetaBins, const std::vector<Systematics::Type>& jecsysts)
+  : isInit_(false), nHFptBins_(0),nLFptBins_(0),nLFetaBins_(0), allowJetsOutOfBinning_(false) {
+  init(hf,lf,nHFptBins,nLFptBins,nLFetaBins,jecsysts);
 }
 
 
@@ -2076,17 +2438,27 @@ CSVHelper::~CSVHelper() {
 }
 
 
-void CSVHelper::init(const std::string& hf, const std::string& lf, const int nHFptBins) {
-  std::cout << "Initializing b-tag scale factors"<< "  HF : " << hf << " (" << nHFptBins << " pt bins)"<< "  LF : " << lf << std::endl;
+void CSVHelper::init(const std::string& hf, const std::string& lf, const int& nHFptBins,const int& nLFptBins,const int& nLFetaBins,const std::vector<Systematics::Type>& jecsysts) {
+  std::cout << "Initializing b-tag scale factors" <<  std::endl;
+  std::cout<< "  HF : " << hf << " (" << nHFptBins << " pt bins)" <<  std::endl;
+  std::cout<< "  LF : " << lf << " (" << nLFptBins << " pt bins)"  <<  std::endl;
+  std::cout<< "  LF : " << lf << " (" << nLFetaBins << " eta bins)" <<  std::endl;
 
   nHFptBins_ = nHFptBins;
-
+  nLFptBins_ = nLFptBins;
+  nLFetaBins_ = nLFetaBins;
+  
+  //combine the vector with the csv systematics and the jec systematics into one vector
+  systs.reserve(csvsysts.size()+jecsysts.size());
+  systs.insert(systs.end(),jecsysts.begin(),jecsysts.end());
+  systs.insert(systs.end(),csvsysts.begin(),csvsysts.end());
+  
   const std::string inputFileHF = hf.size() > 0 ? hf : "data/csv_rwt_hf_IT_FlatSF.root";
   const std::string inputFileLF = lf.size() > 0 ? lf : "data/csv_rwt_lf_IT_FlatSF.root";
 
-  TFile *f_CSVwgt_HF = new TFile(inputFileHF.c_str());
-  TFile *f_CSVwgt_LF = new TFile(inputFileLF.c_str());
-  fillCSVHistos(f_CSVwgt_HF, f_CSVwgt_LF);
+  TFile *f_CSVwgt_HF = new TFile(std::string(inputFileHF).c_str());
+  TFile *f_CSVwgt_LF = new TFile(std::string(inputFileLF).c_str());
+  fillCSVHistos(f_CSVwgt_HF, f_CSVwgt_LF,systs);
   f_CSVwgt_HF->Close();
   f_CSVwgt_LF->Close();
   delete f_CSVwgt_HF;
@@ -2095,88 +2467,60 @@ void CSVHelper::init(const std::string& hf, const std::string& lf, const int nHF
   isInit_ = true;
 }
 
+
+
 // fill the histograms (done once)
 void
-CSVHelper::fillCSVHistos(TFile *fileHF, TFile *fileLF)
+CSVHelper::fillCSVHistos(TFile *fileHF, TFile *fileLF, const std::vector<Systematics::Type>& systs)
 {
-  const size_t nSys = 9;
-  const size_t nPt = 6;
-  const size_t nEta = 3;
-  h_csv_wgt_hf = std::vector< std::vector<TH1*> >(nSys,std::vector<TH1*>(nPt,NULL));
-  c_csv_wgt_hf = std::vector< std::vector<TH1*> >(nSys,std::vector<TH1*>(nPt,NULL));
-  h_csv_wgt_lf = std::vector< std::vector< std::vector<TH1*> > >(nSys,std::vector< std::vector<TH1*> >(nPt,std::vector<TH1*>(nEta,NULL)));
-
-  // CSV reweighting /// only care about the nominal ones
+  const size_t nSys = systs.size();//purity,stats1,stats2 with up/down + jec systs including nominal variation
+  h_csv_wgt_hf = std::vector< std::vector<TH1*> >(nSys,std::vector<TH1*>(nHFptBins_,NULL));
+  c_csv_wgt_hf = std::vector< std::vector<TH1*> >(nSys,std::vector<TH1*>(nHFptBins_,NULL));
+  h_csv_wgt_lf = std::vector< std::vector< std::vector<TH1*> > >(nSys,std::vector< std::vector<TH1*> >(nLFptBins_,std::vector<TH1*>(nLFetaBins_,NULL)));
+  TString syst_csv_suffix = "final";
+  // loop over all the available systematics
   for (size_t iSys = 0; iSys < nSys; iSys++) {
-    TString syst_csv_suffix_hf = "final";
-    TString syst_csv_suffix_c = "final";
-    TString syst_csv_suffix_lf = "final";
-
-    switch (iSys) {
-    case 0:
-      // this is the nominal case
-      break;
-    case 1:
-      // JESUp
-      syst_csv_suffix_hf = "final_JESUp";
-      syst_csv_suffix_lf = "final_JESUp";
-      syst_csv_suffix_c = "final_cErr1Up";
-      break;
-    case 2:
-      // JESDown
-      syst_csv_suffix_hf = "final_JESDown";
-      syst_csv_suffix_lf = "final_JESDown";
-      syst_csv_suffix_c = "final_cErr1Down";
-      break;
-    case 3:
-      // purity up
-      syst_csv_suffix_hf = "final_LFUp";
-      syst_csv_suffix_lf = "final_HFUp";
-      syst_csv_suffix_c = "final_cErr2Up";
-      break;
-    case 4:
-      // purity down
-      syst_csv_suffix_hf = "final_LFDown";
-      syst_csv_suffix_lf = "final_HFDown";
-      syst_csv_suffix_c = "final_cErr2Down";
-      break;
-    case 5:
-      // stats1 up
-      syst_csv_suffix_hf = "final_Stats1Up";
-      syst_csv_suffix_lf = "final_Stats1Up";
-      break;
-    case 6:
-      // stats1 down
-      syst_csv_suffix_hf = "final_Stats1Down";
-      syst_csv_suffix_lf = "final_Stats1Down";
-      break;
-    case 7:
-      // stats2 up
-      syst_csv_suffix_hf = "final_Stats2Up";
-      syst_csv_suffix_lf = "final_Stats2Up";
-      break;
-    case 8:
-      // stats2 down
-      syst_csv_suffix_hf = "final_Stats2Down";
-      syst_csv_suffix_lf = "final_Stats2Down";
-      break;
-    }
+    // some string cosmetics to search for the correct histogram in the root files  
+    TString systematic = Systematics::toString(systs[iSys]);
+    systematic.ReplaceAll("up","Up");
+    systematic.ReplaceAll("down","Down");
+    systematic.ReplaceAll("CSV","");
+    if(systematic!="") {systematic="_"+systematic;}
+    //std::cout << "adding histograms for systematic " << systematic << std::endl;
     
+    // loop over all pt bins of the different jet flavours
     for (int iPt = 0; iPt < nHFptBins_; iPt++) {
-      const TString name = Form("csv_ratio_Pt%i_Eta0_%s", iPt, syst_csv_suffix_hf.Data());
-      h_csv_wgt_hf.at(iSys).at(iPt) = readHistogram(fileHF,name);
+        TString name = Form("csv_ratio_Pt%i_Eta0_%s", iPt, (syst_csv_suffix+systematic).Data());
+        // only read the histogram if it exits in the root file
+        if(fileHF->GetListOfKeys()->Contains(name)) {
+            h_csv_wgt_hf.at(iSys).at(iPt) = readHistogram(fileHF,name);
+            //std::cout << "added " << name << std::endl;
+        }
+        else {
+            h_csv_wgt_hf.at(iSys).at(iPt) = readHistogram(fileHF,name.ReplaceAll(systematic,""));
+        }
     }
-    if (iSys < 5) {
-      for (int iPt = 0; iPt < nHFptBins_; iPt++) {
-	const TString name = Form("c_csv_ratio_Pt%i_Eta0_%s", iPt, syst_csv_suffix_c.Data());
-	c_csv_wgt_hf.at(iSys).at(iPt) = readHistogram(fileHF,name);
-      }
-    }    
-    for (int iPt = 0; iPt < 4; iPt++) {
-      for (int iEta = 0; iEta < 3; iEta++) {
-	const TString name = Form("csv_ratio_Pt%i_Eta%i_%s", iPt, iEta, syst_csv_suffix_lf.Data());
-	h_csv_wgt_lf.at(iSys).at(iPt).at(iEta) = readHistogram(fileLF,name);
-      }
+    for (int iPt = 0; iPt < nHFptBins_; iPt++) {
+        TString name = Form("c_csv_ratio_Pt%i_Eta0_%s", iPt, (syst_csv_suffix+systematic).Data());
+        if(fileHF->GetListOfKeys()->Contains(name)) {
+            c_csv_wgt_hf.at(iSys).at(iPt) = readHistogram(fileHF,name);
+            //std::cout << "added " << name << std::endl;
+        }
+        else {
+            c_csv_wgt_hf.at(iSys).at(iPt) = readHistogram(fileHF,name.ReplaceAll(systematic,""));
+        }
+    }
+    for (int iPt = 0; iPt < nLFptBins_; iPt++) {
+        for (int iEta = 0; iEta < nLFetaBins_; iEta++) {
+            TString name = Form("csv_ratio_Pt%i_Eta%i_%s", iPt, iEta, (syst_csv_suffix+systematic).Data());
+            if(fileLF->GetListOfKeys()->Contains(name)) {
+                h_csv_wgt_lf.at(iSys).at(iPt).at(iEta) = readHistogram(fileLF,name);
+                //std::cout << "added " << name << std::endl;
+            }
+            else {
+                h_csv_wgt_lf.at(iSys).at(iPt).at(iEta) = readHistogram(fileLF,name.ReplaceAll(systematic,""));
+            }
+        }
     }
   }
 }
@@ -2186,19 +2530,20 @@ TH1* CSVHelper::readHistogram(TFile* file, const TString& name) const {
   TH1* h = NULL;
   file->GetObject(name,h);
   if( h==NULL ) {
-    std::cout<<"CSVHelper: DID not find histograms"<<std::endl;
+      std::cout<< "Could not find CSV SF histogram '" << name  << " in file " << file->GetName() << std::endl;
   }
   h->SetDirectory(0);
   
   return h;
 }
 
+
 double
 CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
 			const std::vector<double>& jetEtas,
 			const std::vector<double>& jetCSVs,
 			const std::vector<int>& jetFlavors,
-			const int iSys,
+			const Systematics::Type syst,
 			double &csvWgtHF,
 			double &csvWgtLF,
 			double &csvWgtCF) const
@@ -2206,92 +2551,16 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
   if( !isInit_ ) {
     std::cout<<"CSVHelper: Not initualized"<<std::endl;
   }
-
-  int iSysHF = 0;
-  switch (iSys) {
-  case 7:
-    iSysHF = 1;
-    break; // JESUp
-  case 8:
-    iSysHF = 2;
-    break; // JESDown
-  case 9:
-    iSysHF = 3;
-    break; // LFUp
-  case 10:
-    iSysHF = 4;
-    break; // LFDown
-  case 13:
-    iSysHF = 5;
-    break; // Stats1Up
-  case 14:
-    iSysHF = 6;
-    break; // Stats1Down
-  case 15:
-    iSysHF = 7;
-    break; // Stats2Up
-  case 16:
-    iSysHF = 8;
-    break; // Stats2Down
-  default:
-    iSysHF = 0;
-    break; // NoSys
-  }
+  // search for the position of the desired systematic in the systs vector
+  const int iSys = std::find(systs.begin(),systs.end(),syst)-systs.begin();
   
-  int iSysC = 0;
-  switch (iSys) {
-  case 21:
-    iSysC = 1;
-    break;
-  case 22:
-    iSysC = 2;
-    break;
-  case 23:
-    iSysC = 3;
-    break;
-  case 24:
-    iSysC = 4;
-    break;
-  default:
-    iSysC = 0;
-    break;
-  }
-  
-  int iSysLF = 0;
-  switch (iSys) {
-  case 7:
-    iSysLF = 1;
-    break; // JESUp
-  case 8:
-    iSysLF = 2;
-    break; // JESDown
-  case 11:
-    iSysLF = 3;
-    break; // HFUp
-  case 12:
-    iSysLF = 4;
-    break; // HFDown
-  case 17:
-    iSysLF = 5;
-    break; // Stats1Up
-  case 18:
-    iSysLF = 6;
-    break; // Stats1Down
-  case 19:
-    iSysLF = 7;
-    break; // Stats2Up
-  case 20:
-    iSysLF = 8;
-    break; // Stats2Down
-  default:
-    iSysLF = 0;
-    break; // NoSys
-  }
-
+  //std::cout << "Systematic index " << iSys << std::endl;
+  // initialize the weight for the different jet flavours with 1
   double csvWgthf = 1.;
   double csvWgtC = 1.;
   double csvWgtlf = 1.;
   
+  // loop over all jets in the event and calculate the final weight by multiplying the single jet scale factors
   for (size_t iJet = 0; iJet < jetPts.size(); iJet++) {
     const double csv = jetCSVs.at(iJet);
     const double jetPt = jetPts.at(iJet);
@@ -2300,6 +2569,7 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
 
     int iPt = -1;
     int iEta = -1;
+    // pt binning for heavy flavour jets
     if(abs(flavor)>3) {
         if (jetPt >= 19.99 && jetPt < 30)
             iPt = 0;
@@ -2314,6 +2584,7 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
         else if (jetPt >= 160)
             iPt = 5;
     }
+    // pt binning for light flavour jets
     else {
         if (jetPt >= 19.99 && jetPt < 30)
             iPt = 0;
@@ -2328,7 +2599,7 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
         else if (jetPt >= 160)
             iPt = 5;
     }
-    
+    // light flavour jets also have eta bins
     if (jetAbsEta >= 0 && jetAbsEta < 0.8)
       iEta = 0;
     else if (jetAbsEta >= 0.8 && jetAbsEta < 1.6)
@@ -2338,34 +2609,44 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
     
     if (iPt < 0 || iEta < 0) {
       if( allowJetsOutOfBinning_ ) continue;
+      std::cout << "couldn't find Pt, Eta bins for this b-flavor jet, jetPt = " << jetPt << ", jetAbsEta = " << jetAbsEta<<std::endl;
+      exit(0);
     }
     
+    //std::cout << "program is in front of calculating the csv weights " << std::endl;
+    // b flavour jet
     if (abs(flavor) == 5) {
+        //std::cout << "b flavor jet " << std::endl;
       // RESET iPt to maximum pt bin (only 5 bins for new SFs)
       if(iPt>=nHFptBins_){
 	iPt=nHFptBins_-1;
       }
-      const int useCSVBin = (csv >= 0.) ? h_csv_wgt_hf.at(iSysHF).at(iPt)->FindBin(csv) : 1;
-      const double iCSVWgtHF = h_csv_wgt_hf.at(iSysHF).at(iPt)->GetBinContent(useCSVBin);
-      if (iCSVWgtHF != 0)
-	csvWgthf *= iCSVWgtHF;
-      
-    } else if (abs(flavor) == 4) {
+      if(h_csv_wgt_hf.at(iSys).at(iPt)) {
+        const int useCSVBin = (csv >= 0.) ? h_csv_wgt_hf.at(iSys).at(iPt)->FindBin(csv) : 1;
+        const double iCSVWgtHF = h_csv_wgt_hf.at(iSys).at(iPt)->GetBinContent(useCSVBin);
+        if (iCSVWgtHF != 0) csvWgthf *= iCSVWgtHF;
+      }
+    } // c flavour jet
+    else if (abs(flavor) == 4) {
+        //std::cout << "c flavor jet " << std::endl;
       // RESET iPt to maximum pt bin (only 5 bins for new SFs)
       if(iPt>=nHFptBins_){
 	iPt=nHFptBins_-1;
       }
-      const int useCSVBin = (csv >= 0.) ? c_csv_wgt_hf.at(iSysC).at(iPt)->FindBin(csv) : 1;
-      const double iCSVWgtC = c_csv_wgt_hf.at(iSysC).at(iPt)->GetBinContent(useCSVBin);
-      if (iCSVWgtC != 0)
-	csvWgtC *= iCSVWgtC;
-    } else {
-      if (iPt >= 3)
-	iPt = 3; /// [30-40], [40-60] and [60-10000] only 3 Pt bins for lf
-      const int useCSVBin = (csv >= 0.) ? h_csv_wgt_lf.at(iSysLF).at(iPt).at(iEta)->FindBin(csv) : 1;
-      const double iCSVWgtLF = h_csv_wgt_lf.at(iSysLF).at(iPt).at(iEta)->GetBinContent(useCSVBin);
-      if (iCSVWgtLF != 0)
-	csvWgtlf *= iCSVWgtLF;
+      if(c_csv_wgt_hf.at(iSys).at(iPt)) {
+        const int useCSVBin = (csv >= 0.) ? c_csv_wgt_hf.at(iSys).at(iPt)->FindBin(csv) : 1;
+        const double iCSVWgtC = c_csv_wgt_hf.at(iSys).at(iPt)->GetBinContent(useCSVBin);
+        if (iCSVWgtC != 0) csvWgtC *= iCSVWgtC;
+      }
+    } // light flavour jet
+    else {
+        //std::cout << "light flavor jet " << std::endl;
+      if (iPt >= nLFptBins_) iPt = nLFptBins_-1; /// [30-40], [40-60] and [60-10000] only 3 Pt bins for lf
+      if(h_csv_wgt_lf.at(iSys).at(iPt).at(iEta)) {
+        const int useCSVBin = (csv >= 0.) ? h_csv_wgt_lf.at(iSys).at(iPt).at(iEta)->FindBin(csv) : 1;
+        const double iCSVWgtLF = h_csv_wgt_lf.at(iSys).at(iPt).at(iEta)->GetBinContent(useCSVBin);
+        if (iCSVWgtLF != 0) csvWgtlf *= iCSVWgtLF;
+      }
     }
   }
 
@@ -2382,10 +2663,14 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
 void plot(){
   TH1F::SetDefaultSumw2();
 
-  std::string csvHFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/csv_rwt_fit_hf_v2_final_2017_3_29test.root";
-  std::string csvLFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/csv_rwt_fit_lf_v2_final_2017_3_29test.root";
+  // create vector of systematics
+  std::vector<Systematics::Type> v_SystTypes = Systematics::getTypeVector();
+  //for(auto itsyst : v_SystTypes){std::cout<< " Know :" << itsyst << std::endl;}
+
+  std::string csvHFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/factorized_jes/csv_rwt_fit_hf_v2_final_2017_6_7_all.root";
+  std::string csvLFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/factorized_jes/csv_rwt_fit_lf_v2_final_2017_6_7_all.root";
   
-  CSVHelper* internalCSVHelper= new CSVHelper(csvHFfile,csvLFfile, 5);
+  CSVHelper* internalCSVHelper= new CSVHelper(csvHFfile,csvLFfile, 5,4,3,v_SystTypes);
   LeptonSFHelper* internalLeptonSFHelper= new LeptonSFHelper();
 
   // open files
@@ -2417,24 +2702,21 @@ std::cout<<"processname" <<processname<<std::endl;
   std::map<TString, std::map<TString, long>> sampleDataBaseFoundEvents;
   std::map<TString, std::map<TString, long>> sampleDataBaseLostEvents;
     
-  int internalSystName=0;
+  Systematics::Type internalSystType=Systematics::NA;
   
   string buf;
   stringstream ss(filenames); 
   while (ss >> buf){
     chain->Add(buf.c_str());
-    if (buf.find("JESDOWN")!=string::npos){internalSystName=8;}
-    if (buf.find("JESUP")!=string::npos){internalSystName=7;}
-    if (buf.find("JERDOWN")!=string::npos){internalSystName=0;}
-    if (buf.find("JERUP")!=string::npos){internalSystName=0;}
-    std::cout<<"internal sys for CSV "<<internalSystName<<std::endl;
     TString thisfilename = buf.c_str();
     TString originalfilename=buf.c_str();
     std::cout<<"file "<<buf.c_str()<<" "<<thisfilename<<std::endl; // karim debug 
     // cut of directories
     thisfilename.Replace(0,thisfilename.Last('/')+1,"");
-    //cut if trailing tree and root
+    //cut of trailing tree and root
     thisfilename.Replace(thisfilename.Last('_'),thisfilename.Length(),"");
+    // copy the string for figuring out internalSystType
+    TString filenameforSytType=TString(thisfilename);
     //remove number
     int lastUnderscore=thisfilename.Last('_');
     thisfilename.Replace(thisfilename.Last('_'),1,"");
@@ -2465,6 +2747,14 @@ std::cout<<"processname" <<processname<<std::endl;
       sampleDataBaseFoundEvents["jt64"][thisfilename]=0;
       sampleDataBaseLostEvents["jt64"][thisfilename]=0;
     }
+  
+  // now figure out internalSystType
+  filenameforSytType.Replace(0,filenameforSytType.Last('_')+1,"");
+  // nominal is the empty string here
+  if(filenameforSytType=="nominal"){filenameforSytType="";}
+  internalSystType = Systematics::get(filenameforSytType.Data());
+  std::cout<<"internal systematic filename, int and typename"<<filenameforSytType<<" "<<internalSystType<<" "<<Systematics::toString(internalSystType)<<std::endl;
+  if(filenameforSytType!=TString(Systematics::toString(internalSystType))){std::cout<<"ERROR could not recover systematic from enum"<<std::endl; exit(0);}
   }
   std::cout<<"relevant db samplenames"<<std::endl;
   for(unsigned int isn=0; isn<databaseRelevantFilenames.size();isn++){
@@ -2839,49 +3129,27 @@ def startLoop():
   
   double tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF;
   
-  internalCSVweight=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,internalSystName,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF);
-  internalCSVweight_CSVHFUp=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,11,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
-  internalCSVweight_CSVHFDown=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,12,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
-  internalCSVweight_CSVLFUp=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,9,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
-  internalCSVweight_CSVLFDown=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,10,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,internalSystType,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF);
+  internalCSVweight_CSVHFUp=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVHFup,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVHFDown=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVHFdown,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVLFUp=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVLFup,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVLFDown=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVLFdown,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
   
-  internalCSVweight_CSVLFStats1Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,17,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
-  internalCSVweight_CSVLFStats1Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,18,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
-  internalCSVweight_CSVLFStats2Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,19,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
-  internalCSVweight_CSVLFStats2Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,20,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVLFStats1Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVLFStats1up,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVLFStats1Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVLFStats1down,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVLFStats2Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVLFStats2up,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVLFStats2Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVLFStats2down,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
   
-  internalCSVweight_CSVHFStats1Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,13,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
-  internalCSVweight_CSVHFStats1Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,14,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
-  internalCSVweight_CSVHFStats2Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,15,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
-  internalCSVweight_CSVHFStats2Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,16,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVHFStats1Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVHFStats1up,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVHFStats1Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVHFStats1down,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVHFStats2Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVHFStats2up,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVHFStats2Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVHFStats2down,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
   
-  internalCSVweight_CSVCErr1Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,21,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
-  internalCSVweight_CSVCErr1Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,22,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
-  internalCSVweight_CSVCErr2Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,23,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
-  internalCSVweight_CSVCErr2Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,24,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVCErr1Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVCErr1up,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVCErr1Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVCErr1down,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVCErr2Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVCErr2up,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVCErr2Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVCErr2down,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
   
-  /*
-  if(internalCSVweight!=Weight_CSV){std::cout<<"internalCSVweight "<<internalCSVweight<<" "<<Weight_CSV<<std::endl;}
-  if(internalCSVweight_CSVHFUp!=Weight_CSVHFup){std::cout<<"internalCSVweight_CSVHFUp "<<internalCSVweight_CSVHFUp<<" "<<Weight_CSVHFup<<std::endl;}
-  if(internalCSVweight_CSVHFDown!=Weight_CSVHFdown){std::cout<<"internalCSVweight_CSVHFDown "<<internalCSVweight_CSVHFDown<<" "<<Weight_CSVHFdown<<std::endl;}
-  if(internalCSVweight_CSVLFUp!=Weight_CSVLFup){std::cout<<"internalCSVweight_CSVLFUp "<<internalCSVweight_CSVLFUp<<" "<<Weight_CSVLFup<<std::endl;}
- if(internalCSVweight_CSVLFDown!=Weight_CSVLFdown){ std::cout<<"internalCSVweight_CSVLFDown "<<internalCSVweight_CSVLFDown<<" "<<Weight_CSVLFdown<<std::endl;}
-  
- if(internalCSVweight_CSVLFStats1Up!=Weight_CSVLFStats1up){ std::cout<<"internalCSVweight_CSVLFStats1Up "<<internalCSVweight_CSVLFStats1Up<<" "<<Weight_CSVLFStats1up<<std::endl;}
- if(internalCSVweight_CSVLFStats1Down!=Weight_CSVLFStats1down){ std::cout<<"internalCSVweight_CSVLFStats1Down "<<internalCSVweight_CSVLFStats1Down<<" "<<Weight_CSVLFStats1down<<std::endl;}
- if(internalCSVweight_CSVLFStats2Up!=Weight_CSVLFStats2up){ std::cout<<"internalCSVweight_CSVLFStats2Up "<<internalCSVweight_CSVLFStats2Up<<" "<<Weight_CSVLFStats2up<<std::endl;}
- if(internalCSVweight_CSVLFStats2Down!=Weight_CSVLFStats2down){ std::cout<<"internalCSVweight_CSVLFStats2Down "<<internalCSVweight_CSVLFStats2Down<<" "<<Weight_CSVLFStats2down<<std::endl;}
-  
- if(internalCSVweight_CSVHFStats1Up!=Weight_CSVHFStats1up){ std::cout<<"internalCSVweight_CSVHFStats1Up "<<internalCSVweight_CSVHFStats1Up<<" "<<Weight_CSVHFStats1up<<std::endl;}
- if(internalCSVweight_CSVHFStats1Down!=Weight_CSVHFStats1down){ std::cout<<"internalCSVweight_CSVHFStats1Down "<<internalCSVweight_CSVHFStats1Down<<" "<<Weight_CSVHFStats1down<<std::endl;}
- if(internalCSVweight_CSVHFStats2Up!=Weight_CSVHFStats2up){ std::cout<<"internalCSVweight_CSVHFStats2Up "<<internalCSVweight_CSVHFStats2Up<<" "<<Weight_CSVHFStats2up<<std::endl;}
- if(internalCSVweight_CSVHFStats2Down!=Weight_CSVHFStats2down){ std::cout<<"internalCSVweight_CSVHFStats2Down "<<internalCSVweight_CSVHFStats2Down<<" "<<Weight_CSVHFStats2down<<std::endl;}
-  
- if(internalCSVweight_CSVCErr1Up!=Weight_CSVCErr1up){ std::cout<<"internalCSVweight_CSVCErr1Up "<<internalCSVweight_CSVCErr1Up<<" "<<Weight_CSVCErr1up<<std::endl;}
- if(internalCSVweight_CSVCErr1Down!=Weight_CSVCErr1down){ std::cout<<"internalCSVweight_CSVCErr1Down "<<internalCSVweight_CSVCErr1Down<<" "<<Weight_CSVCErr1down<<std::endl;}
- if(internalCSVweight_CSVCErr2Up!=Weight_CSVCErr2up){ std::cout<<"internalCSVweight_CSVCErr2Up "<<internalCSVweight_CSVCErr2Up<<" "<<Weight_CSVCErr2up<<std::endl;}
- if(internalCSVweight_CSVCErr2Down!=Weight_CSVCErr2down){ std::cout<<"internalCSVweight_CSVCErr2Down "<<internalCSVweight_CSVCErr2Down<<" "<<Weight_CSVCErr2down<<std::endl;}
- */
  
  // variables for Aachen DNNs
  double aachen_Out_ttH=-2.0;
