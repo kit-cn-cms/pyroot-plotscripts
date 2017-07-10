@@ -580,9 +580,38 @@ if topWP=='medium' and WWP=='loose' and bottomWP=='medium':
     ]
 
 weigthsystnamesMCSFs=[
-                    "_CSV_MCSF_nominal",
-                    "_CSV_MCSF_systup",
-                    "_CSV_MCSF_systdown",   
+                    #"_CSV_MCSF_nominal",
+                    #"_CSV_MCSF_systup",
+                    #"_CSV_MCSF_systdown",
+                    #"_CSV_MCSF_nominal",
+                    "_MCSF_nominal",
+                    
+                    "_MCSF_CSVLFUp",
+                    "_MCSF_CSVLFDown",
+                    "_MCSF_CSVHFUp",
+                    "_MCSF_CSVHFDown",
+                    "_MCSF_CSVHFStats1Up",
+                    "_MCSF_CSVHFStats1Down",
+                    "_MCSF_CSVLFStats1Up",
+                    "_MCSF_CSVLFStats1Down",
+                    "_MCSF_CSVHFStats2Up",
+                    "_MCSF_CSVHFStats2Down",
+                    "_MCSF_CSVLFStats2Up",
+                    "_MCSF_CSVLFStats2Down",
+                    "_MCSF_CSVCErr1Up",
+                    "_MCSF_CSVCErr1Down",
+                    "_MCSF_CSVCErr2Up",
+                    "_MCSF_CSVCErr2Down",
+
+                    "_MCSF_PUUp",
+                    "_MCSF_PUDown",
+
+                    "_MCSF_JESup",
+                    "_MCSF_JESdown",
+                    "_MCSF_JERup",
+                    "_MCSF_JERdown",
+                   
+                    
                     "_t21_MCSF_nominal",
                     "_t21_MCSF_systup",
                     "_t21_MCSF_systdown", 
@@ -596,18 +625,47 @@ weigthsystnamesMCSFs=[
 ]
 
 systweightnamesMCSFs=[
-                    "CSV_MCSF_nominal:=(1)*DoMCDataWeights",
-                    "CSV_MCSF_systup:=(1*(1+1.15))*DoMCDataWeights",
-                    "CSV_MCSF_systdown:=(1*(1-1.15))*DoMCDataWeights",  
-                    "t21_MCSF_nominal:=(1.10)*DoMCDataWeights",
-                    "t21_MCSF_systup:=(1.10*(1+0.12))*DoMCDataWeights",
-                    "t21_MCSF_systdown:=(1.10*(1-0.12))*DoMCDataWeights",
-                    "t32_MCSF_notopbtag_nominal:=(1.06)*DoMCDataWeights",
-                    "t32_MCSF_notopbtag_systup:=(1.06*(1+0.08))*DoMCDataWeights",
-                    "t32_MCSF_notopbtag_systdown:=(1.06*(1-0.04))*DoMCDataWeights",
-                    "t32_MCSF_withtopbtag_nominal:=(1.05)*DoMCDataWeights",
-                    "t32_MCSF_withtopbtag_systup:=(1.05*(1+0.11))*DoMCDataWeights",
-                    "t32_MCSF_withtopbtag_systdown:=(1.05*(1-0.05))*DoMCDataWeights",
+                    #"CSV_MCSF_nominal:=(1)*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",
+                    #"CSV_MCSF_systup:=(1*(1+1.15))*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",
+                    #"CSV_MCSF_systdown:=(1*(1-1.15))*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0", 
+                    
+                    "MCSF_nominal:=(1.0)*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",
+                    
+                    "MCSF_CSVLFUp:=(1.0)*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",
+                    "MCSF_CSVLFDown:=(1.0)*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",
+                    "MCSF_CSVHFUp:=(1.0)*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",
+                    "MCSF_CSVHFDown:=(1.0)*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",
+                    "MCSF_CSVHFStats1Up:=(1.0)*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",
+                    "MCSF_CSVHFStats1Down:=(1.0)*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",
+                    "MCSF_CSVLFStats1Up:=(1.0)*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",
+                    "MCSF_CSVLFStats1Down:=(1.0)*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",
+                    "MCSF_CSVHFStats2Up:=(1.0)*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",
+                    "MCSF_CSVHFStats2Down:=(1.0)*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",
+                    "MCSF_CSVLFStats2Up:=(1.0)*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",
+                    "MCSF_CSVLFStats2Down:=(1.0)*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",
+                    "MCSF_CSVCErr1Up:=(1.0)*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",
+                    "MCSF_CSVCErr1Down:=(1.0)*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",
+                    "MCSF_CSVCErr2Up:=(1.0)*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",
+                    "MCSF_CSVCErr2Down:=(1.0)*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",
+
+                    "MCSF_PUUp:=(1.0)*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",
+                    "MCSF_PUDown:=(1.0)*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",
+
+                    "MCSF_JESup:=(1.0)*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",
+                    "MCSF_JESdown:=(1.0)*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",
+                    "MCSF_JERup:=(1.0)*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",
+                    "MCSF_JERdown:=(1.0)*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",                    
+                    
+                    
+                    "t21_MCSF_nominal:=(1.10)*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",
+                    "t21_MCSF_systup:=(1.10*(1+0.12))*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",
+                    "t21_MCSF_systdown:=(1.10*(1-0.12))*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",
+                    "t32_MCSF_notopbtag_nominal:=(1.06)*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",
+                    "t32_MCSF_notopbtag_systup:=(1.06*(1+0.08))*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",
+                    "t32_MCSF_notopbtag_systdown:=(1.06*(1-0.04))*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",
+                    "t32_MCSF_withtopbtag_nominal:=(1.05)*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",
+                    "t32_MCSF_withtopbtag_systup:=(1.05*(1+0.11))*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",
+                    "t32_MCSF_withtopbtag_systdown:=(1.05*(1-0.05))*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",
                     
 ]
 
