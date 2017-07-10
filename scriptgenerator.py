@@ -12,10 +12,11 @@ import plotutils
 import glob
 import json
 import filecmp
+import imp 
 
 ROOT.gROOT.SetBatch(True)
 
-def getHead(dataBases,doAachenDNN):
+def getHead(dataBases,addCodeInterfaces=[]):
   
   retstr="""
 #include "TChain.h"
@@ -34,16 +35,9 @@ def getHead(dataBases,doAachenDNN):
 #include <map>
 #include "TStopwatch.h"
 """
-  if doAachenDNN:
-    retstr+="""
-#include "TVector.h" 
-#include <iterator>
-#include "Python.h"
-#include "TMatrixDSym.h"
-#include "TMatrixDSymEigen.h"
-#include "TVectorD.h"
-"""
-
+  for addCodeInt in addCodeInterfaces:
+    retstr+=addCodeInt.getIncludeLines()
+  
   if dataBases!=[]:
     retstr+="""
 #include "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase/MEMDataBase/interface/MEMDataBase.h"
@@ -54,1619 +48,8 @@ def getHead(dataBases,doAachenDNN):
 using namespace std;
 """
 
-  if doAachenDNN:
-    retstr+="""
-// hacked DNN Classifier of RWTH from commit 
-// https://gitlab.cern.ch/ttH/CommonClassifier/commit/91f1d2f81291ce6ee3a168e3778c0b9c806e7f2b
-
-//first the common BDTVariable class
-
-typedef std::map<std::string, std::string> mparams;
-typedef std::vector< TLorentzVector > vecTLorentzVector;
-typedef std::vector<std::vector<double> > vvdouble;
-typedef std::vector<std::vector<std::string> > vvstring;
-typedef std::vector<std::vector<int> > vvint;
-typedef std::vector<std::string> vstring;
-typedef std::vector<double> vdouble;
-typedef std::vector<int> vint;
-
-const TLorentzVector makeVectorE(double pt, double eta, double phi, double energy)
-{
-    TLorentzVector lv;
-    lv.SetPtEtaPhiE(pt, eta, phi, energy);
-    return lv;
-}
-
-const TLorentzVector makeVectorM(double pt, double eta, double phi, double mass)
-{
-    TLorentzVector lv;
-    lv.SetPtEtaPhiM(pt, eta, phi, mass);
-    return lv;
-}
-
-class CommonBDTvars{
-
-	// === Functions === //
-	public: 
-		// Constructor(s) and destructor
-		CommonBDTvars();
-		virtual ~CommonBDTvars();
-		
-
-
-	//Algorithms 
-   
-		void getSp(TLorentzVector lepton, TLorentzVector met, vecTLorentzVector jets, double &aplanarity, double &sphericity);
-		void getFox(vecTLorentzVector jets, double &h0, double &h1, double &h2, double &h3, double &h4);
-		double getBestHiggsMass(TLorentzVector lepton, TLorentzVector met, vecTLorentzVector jets, vdouble btag, double &minChi, double &dRbb, TLorentzVector &bjet1, TLorentzVector &bjet2, vecTLorentzVector loose_jets, vdouble loose_btag);
-   
-    
-	
-	
-		void convert_jets_to_TLVs(vvdouble jets, vecTLorentzVector &vect_of_jet_TLVs);
-		void vect_of_tagged_TLVs(vvdouble jets, vdouble jetCSV, vecTLorentzVector &vect_of_btag_TLVs);
-		double get_jet_jet_etamax (vvdouble jets);
-		double get_jet_tag_etamax (vvdouble jets, vdouble jetCSV);
-		double get_tag_tag_etamax (vvdouble jets, vdouble jetCSV);
-		
-		
-		
-		
-		double study_tops_bb_syst (double MET, double METphi, TLorentzVector &metv, TLorentzVector lepton, vvdouble jets, vdouble csv, double &minChi, double &chi2lepW, double &chi2leptop, double &chi2hadW, double &chi2hadtop, double &mass_lepW, double &mass_leptop, double &mass_hadW, double &mass_hadtop, double &dRbb, double &testquant1, double &testquant2, double &testquant3, double &testquant4, double &testquant5, double &testquant6, double &testquant7, TLorentzVector &b1, TLorentzVector &b2);
-		double getBestHiggsMass2(TLorentzVector lepton, TLorentzVector &met, vecTLorentzVector jets, vdouble btag, double &minChi, double &dRbb, TLorentzVector &bjet1, TLorentzVector &bjet2, double &chi2lepW, double &chi2leptop, double &chi2hadW, double &chi2hadtop, double &mass_lepW, double &mass_leptop, double &mass_hadW, double &mass_hadtop, TLorentzVector &toplep, TLorentzVector &tophad);
-		double get_median_bb_mass(vvdouble jets, vdouble jetCSV);
-		double pt_E_ratio_jets(vvdouble jets);
-		
-		double JetDelta_EtaAvgEta(vvdouble jet_vect_TLV, vdouble jet_CSV, std::string JetorTag, std::string JetorTag_Avg );
-
-	
-	private:
-
-		// Parameter management
-	private:
-  
-		// Old functions
-	public:
-
-	protected:
-	
-	double CSVLwp, CSVMwp, CSVTwp;
-
-	private:
-
-
-	// === Variables === //
-	public:
-
-	protected:
-
-	private:
-
-}; // End of class prototype
-
-CommonBDTvars::CommonBDTvars(){
-
-
-  // twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideBTagging#Preliminary_working_or_operating
-  // Preliminary working (or operating) points for CSVv2+IVF
-  CSVLwp = 0.5426; // 10.1716% DUSG mistag efficiency
-  CSVMwp = 0.8484; // 1.0623% DUSG mistag efficiency
-  CSVTwp = 0.9535; // 0.1144% DUSG mistag efficiency
-
-
-}
-
-
-CommonBDTvars::~CommonBDTvars(){
-
-}
-
-
-/*
-
-Get These Variables
-
-double	sphericity;
-double	aplanarity;
-*/
-
-
-void CommonBDTvars::getSp(TLorentzVector lepton, TLorentzVector met, vecTLorentzVector jets, double &aplanarity, double &sphericity) {
-	//
-	// Aplanarity and sphericity
-	//
-
-	int nJets = int(jets.size());
-
-	double mxx = lepton.Px()*lepton.Px() + met.Px()*met.Px();
-	double myy = lepton.Py()*lepton.Py() + met.Py()*met.Py();
-	double mzz = lepton.Pz()*lepton.Pz() + met.Pz()*met.Pz();
-	double mxy = lepton.Px()*lepton.Py() + met.Px()*met.Py();
-	double mxz = lepton.Px()*lepton.Pz() + met.Px()*met.Pz();
-	double myz = lepton.Py()*lepton.Pz() + met.Py()*met.Pz();
-
-	for (int i=0; i<nJets; i++) {
-		mxx += jets[i].Px()*jets[i].Px();
-		myy += jets[i].Py()*jets[i].Py();
-		mzz += jets[i].Pz()*jets[i].Pz();
-		mxy += jets[i].Px()*jets[i].Py();
-		mxz += jets[i].Px()*jets[i].Pz();
-		myz += jets[i].Py()*jets[i].Pz();		
-	}
-	double sum = mxx + myy + mzz;
-	mxx /= sum;
-	myy /= sum;
-	mzz /= sum;
-	mxy /= sum;
-	mxz /= sum;
-	myz /= sum;
-
-	TMatrix tensor(3,3);
-	tensor(0,0) = mxx;
-	tensor(1,1) = myy;
-	tensor(2,2) = mzz;
-	tensor(0,1) = mxy;
-	tensor(1,0) = mxy;
-	tensor(0,2) = mxz;
-	tensor(2,0) = mxz;
-	tensor(1,2) = myz;
-	tensor(2,1) = myz;
-	TVector eigenval(3);
-	tensor.EigenVectors(eigenval);
-
-	sphericity = 3.0*(eigenval(1)+eigenval(2))/2.0;
-	aplanarity = 3.0*eigenval(2)/2.0;
-
-	return;
-}
-
-/*
-
-Get These Variables
-
-double	h0;
-double	h1;
-double	h2;
-double	h3;
-*/
-
-void CommonBDTvars::getFox(vecTLorentzVector jets, double &h0, double &h1, double &h2, double &h3, double &h4) {
-	
-
-	int visObjects = int(jets.size());
-
-	double eVis = 0.0;
-	for (int i=0; i<visObjects; i++) {
-		eVis += jets[i].E();
-	}
-
-	h0 = 0.0;
-	h1 = 0.0;
-	h2 = 0.0;
-	h3 = 0.0;
-	h4 = 0.0;
-	for (int i=0; i<visObjects-1; i++) {
-		for (int j=i+1; j<visObjects; j++) {
-			double costh = cos(jets[i].Angle(jets[j].Vect()));
-			double p0 = 1.0;
-			double p1 = costh;
-			double p2 = 0.5*(3.0*costh*costh - 1.0);
-			double p3 = 0.5*(5.0*costh*costh*costh - 3.0*costh);
-			double p4 = 0.125*(35.0*costh*costh*costh*costh - 30.0*costh*costh + 3.0);
-			double pipj = jets[i].P()*jets[j].P();
-			h0 += (pipj/(eVis*eVis))*p0;
-			h1 += (pipj/(eVis*eVis))*p1;
-			h2 += (pipj/(eVis*eVis))*p2;
-			h3 += (pipj/(eVis*eVis))*p3;
-			h4 += (pipj/(eVis*eVis))*p4;
-		}
-	}
-
-	return;
-}
-
-
-
-/*
-
-Get These Variables
-
-double	best_higgs_mass;	
-double	dRbb;
-*/
-
-double CommonBDTvars::getBestHiggsMass(TLorentzVector lepton, TLorentzVector met, vecTLorentzVector jets, vdouble btag, double &minChi, double &dRbb, TLorentzVector &bjet1, TLorentzVector &bjet2, vecTLorentzVector loose_jets, vdouble loose_btag)
-{
-
-  if( jets.size()<6 && loose_jets.size()>0 ){
-    jets.push_back( loose_jets[0] );
-    btag.push_back( loose_btag[0] );
-  }
-
-  int nJets = int(jets.size());
-
-  double chi_top_lep=10000;
-  double chi_top_had=10000;
-  //double chi_W_lep=10000; //isn't really used
-  double chi_W_had=10000;
-
-  minChi = 1000000;
-  dRbb = 1000000;
-  const double btagCut = CSVMwp;
-  double W_mass = 80.0;
-  double top_mass = 172.5;
-  //double H_mass=120.0;
-
-  // updated 8/22/2012 from J. Timcheck
-  //sigma's from >=6j >=4t, muon, no imaginary neutrino pz ttH
-  double sigma_hadW   = 12.77;
-  double sigma_hadTop = 18.9;
-  double sigma_lepTop = 32.91;
-
-  // //sigma's from >=6j >=4t, muon, no imaginary neutrino pz ttH
-  // double sigma_hadW   = 12.59;
-  // double sigma_hadTop = 19.9;
-  // double sigma_lepTop = 39.05;
-
-  //sigma's from >=6j >=4t, muon, no imaginary neutrino pz ttJets
-  /*double sigma_hadW		= 12.72,
-    sigma_hadTop	= 18.12,
-    sigma_lepTop	= 38.72;
-  */
-
-  double metPz[2];
-  double chi=999999;
-
-  //stuff to find:
-  double higgs_mass_high_energy=0;
-
-  int nBtags = 0;
-  for(int i=0;i<nJets;i++){
-    if(btag[i]>btagCut) nBtags++;
-  }
-
-  int nUntags = nJets-nBtags;
-
-  double lowest_btag = 99.;
-  double second_lowest_btag = 999.;
-  int ind_lowest_btag = 999;
-  int ind_second_lowest_btag = 999;
-
-  if( nJets>=6 && nBtags>=4 ){
-    if( nUntags<2 ){
-      for(int i=0;i<nJets;i++){
-	if( btag[i]<lowest_btag ){
-	  second_lowest_btag = lowest_btag;
-	  ind_second_lowest_btag = ind_lowest_btag;
-
-	  lowest_btag = btag[i];
-	  ind_lowest_btag = i;
-	}
-	else if( btag[i]<second_lowest_btag ){
-	  second_lowest_btag = btag[i];
-	  ind_second_lowest_btag = i;
-	}
-      }
-    }
-  }
-
-
-  //Handle 6j3t.
-  int ind_promoted_btag = 999;
-
-  if( nJets>=6 && nBtags==3 ){
-    for(int i=0;i<nJets;i++){
-      int rank = 0;
-      for(int j=0;j<nJets;j++){
-	if( btag[j] > btag[i] ){
-	  rank++;
-	}
-      }
-      if( rank == 3 ) ind_promoted_btag = i;
-    }
-  }
-
-  // First get the neutrino z
-  double energyLep = lepton.E();
-  double a = (W_mass*W_mass/(2.0*energyLep)) + (lepton.Px()*met.Px() + lepton.Py()*met.Py())/energyLep;
-  double radical = (2.0*lepton.Pz()*a/energyLep)*(2.0*lepton.Pz()*a/energyLep);
-  radical = radical - 4.0*(1.0 - (lepton.Pz()/energyLep)*(lepton.Pz()/energyLep))*(met.Px()*met.Px() + met.Py()*met.Py()- a*a);
-  if (radical < 0.0) radical = 0.0;
-  metPz[0] = (lepton.Pz()*a/energyLep) + 0.5*sqrt(radical);
-  metPz[0] = metPz[0] / (1.0 - (lepton.Pz()/energyLep)*(lepton.Pz()/energyLep));
-  metPz[1] = (lepton.Pz()*a/energyLep) - 0.5*sqrt(radical);
-  metPz[1] = metPz[1] / (1.0 - (lepton.Pz()/energyLep)*(lepton.Pz()/energyLep));
-
-
-  // Loop over all jets, both Pz, calcaulte chi-square
-  TLorentzVector metNew;
-  for( int ipznu=0; ipznu<2; ipznu++ ){
-    metNew.SetXYZM(met.Px(),met.Py(),metPz[ipznu],0.0); //neutrino has mass 0
-    //with b-tag info
-    if( (nJets>=6 && nBtags>=4) || (nJets>=6 && nBtags==3) ){
-      vecTLorentzVector not_b_tagged,b_tagged;
-      //fill not_b_tagged and b_tagged
-      for( int i=0;i<nJets;i++ ){
-	if( (btag[i]>btagCut && i!=ind_second_lowest_btag && i!=ind_lowest_btag) || (i==ind_promoted_btag) ) b_tagged.push_back(jets[i]);
-	else not_b_tagged.push_back(jets[i]);
-      }
-      //first make possible t_lep's with b-tagged jets (includes making W_lep)
-      for( int i=0; i<int(b_tagged.size()); i++ ){
-	TLorentzVector W_lep=metNew+lepton; //used for histogram drawing only
-	TLorentzVector top_lep=metNew+lepton+b_tagged.at(i);
-	chi_top_lep=pow((top_lep.M()-top_mass)/sigma_lepTop,2);
-	//next make possible W_had's with not b-tagged jets
-	for( int j=0; j<int(not_b_tagged.size()); j++ ){
-	  for( int k=0; k<int(not_b_tagged.size()); k++ ){
-	    if( j!=k ){
-	      TLorentzVector W_had=not_b_tagged.at(j)+not_b_tagged.at(k);
-	      chi_W_had=pow((W_had.M()-W_mass)/sigma_hadW,2);
-	      //now make possible top_had's (using the W_had + some b-tagged jet)
-	      for( int l=0; l<int(b_tagged.size()); l++ ){
-		if( l!=i ){
-		  TLorentzVector top_had=W_had+b_tagged.at(l);
-		  chi_top_had=pow((top_had.M()-top_mass)/sigma_hadTop,2);
-		  chi=chi_top_lep+chi_W_had+chi_top_had;
-		  //accept the lowest chi
-		  if( chi<minChi ){
-		    minChi=chi;
-		    //pick the other two b's that have the highest et (energy in transverse plane) as higgs mass constituents
-		    TLorentzVector H2;
-		    int numH2Constituents=0;
-		    TLorentzVector bBest[2];
-		    for( int m=0; m<int(b_tagged.size()); m++ ){
-		      if( m!=i && m!=l && numH2Constituents<2 ){
-			bBest[numH2Constituents] = b_tagged.at(m);
-			numH2Constituents++;
-			H2+=b_tagged.at(m);
-		      }
-		    }
-		    dRbb = bBest[0].DeltaR( bBest[1] );
-		    higgs_mass_high_energy=H2.M();
-		    bjet1 = bBest[0];
-		    bjet2 = bBest[1];
-		  }
-		}
-	      }
-	    }
-	  }
-	}
-      }
-    }
-  }
-  return higgs_mass_high_energy;
-}
-
-
-
-
-// Some of this may seem redundant ( why not just feed TLVs into these functions instead of turning TLVs into vvdoubles and then converting vvdoubles to TLVs)
-// This is because we dont save the jets as TLVs when we loop over them in TreeMaker. 
-// They are saved as vvjets and most of these functions were used in treeReader where it was reading in vvjets from TreeMaker Trees
-
-
-
-
-void CommonBDTvars::convert_jets_to_TLVs(vvdouble jets, vecTLorentzVector &vect_of_jet_TLVs)
-{
-	TLorentzVector jet;	
-	int nJets = jets.size();
-	
-	for(int i=0;i<nJets;i++)
-	{
-		jet.SetPxPyPzE(jets[i][0],jets[i][1],jets[i][2],jets[i][3]);
-		vect_of_jet_TLVs.push_back(jet);
-	}
-}
-
-void CommonBDTvars::vect_of_tagged_TLVs(vvdouble jets, vdouble jetCSV, vecTLorentzVector &vect_of_btag_TLVs)
-{
-	TLorentzVector tagged_jet;
-	
-	int nJets = jets.size();
-	double btagCut = CSVMwp;
-	
-	for(int i=0;i<nJets;i++)
-	{
-		if (jetCSV[i]>btagCut)
-		{
-		
-			tagged_jet.SetPxPyPzE(jets[i][0],jets[i][1],jets[i][2],jets[i][3]);
-			vect_of_btag_TLVs.push_back(tagged_jet);
-		}
-	}
-}
-
-
-
-
-double CommonBDTvars::get_jet_jet_etamax (vvdouble jets)
-{
-	vecTLorentzVector thejets;
-	convert_jets_to_TLVs(jets, thejets);
-	
-	int count=0;
-	double avgval=0.;
-	
-	for (int i=0; i<int(thejets.size()); i++){
-	
-				avgval += abs(thejets[i].Eta());
-				count++;
-	}
-	
-	avgval /= count;
-	
-	double deta = 0.;
-	double etamax=-1.;
-	
-	for (int k=0; k<int(thejets.size()); k++)
-	{
-		deta = abs(abs(thejets[k].Eta())-avgval);
-		
-		if(deta>etamax)etamax = deta;
-		
-	}
-
-	return etamax;
-}
-
-
-double CommonBDTvars::get_jet_tag_etamax (vvdouble jets, vdouble jetCSV)
-{
-
-
-	vecTLorentzVector thejets;
-	convert_jets_to_TLVs(jets, thejets);
-	
-	int count=0;
-	double avgval=0.;
-	
-	for (int i=0; i<int(thejets.size()); i++)
-	{
-				
-				avgval += abs(thejets[i].Eta());
-				count++;
-				
-	}
-	
-	avgval /= count;
-	
-	double deta = 0.;
-	double etamax=0.;
-	
-	
-	vecTLorentzVector thetags;
-	vect_of_tagged_TLVs(jets, jetCSV, thetags);
-	
-	
-	for (int k=0; k<int(thetags.size()); k++)
-	{
-		 deta = abs(abs(thetags[k].Eta())-avgval);
-		
-		if(deta>etamax)etamax=deta;
-		
-		
-		
-	}
-
-	return etamax;
-}
-
-
-double CommonBDTvars::get_tag_tag_etamax (vvdouble jets, vdouble jetCSV)
-{
-
-//std::cout<<"tag_tag_etamax: ";
-
-	vecTLorentzVector thetags;
-	vect_of_tagged_TLVs(jets, jetCSV, thetags);
-		
-	int count=0;
-	double avgval=0.;
-	
-	for (int i=0; i<int(thetags.size()); i++)
-	{
-	  
-				
-				avgval += abs(thetags[i].Eta());
-				count++;
-				
-				
-				//std::cout<<abs(thetags[i].Eta())<<" "<<avgval<<" | ";
-		
-	}
-	
-	avgval /= count;
-	
-	
-	//cout<<avgval<<" ||| ";
-	
-	double deta = 0.;
-	double etamax=0.;
-	
-	
-	for (int k=0; k<int(thetags.size()); k++)
-	{
-		deta = abs(abs(thetags[k].Eta())-avgval);
-		
-		if(deta>etamax)etamax=deta;
-		
-		//std::cout<<deta<<" "<<etamax<<" | ";
-		
-	}
-	
-	
-	//std::cout<<" ||| "<<etamax<<"               "<<count<<endl;
-
-	return etamax;
-	
-	
-}
-
-
-double CommonBDTvars::study_tops_bb_syst (double MET, double METphi, TLorentzVector &metv, TLorentzVector lepton, vvdouble jets, vdouble csv, double &minChi, double &chi2lepW, double &chi2leptop, double &chi2hadW, double &chi2hadtop, double &mass_lepW, double &mass_leptop, double &mass_hadW, double &mass_hadtop, double &dRbb, double &testquant1, double &testquant2, double &testquant3, double &testquant4, double &testquant5, double &testquant6, double &testquant7, TLorentzVector &b1, TLorentzVector &b2)
-{
-	// cout<< "in study_tops_bb_syst" << endl;
-	
-	double pi = 3.14;
-	
-	metv.SetPtEtaPhiE(MET,0.,METphi,MET);
-	
-	// cout<< metv.Pt() << endl;
-	
-	//TLorentzVector lepton;
-	
-	
-	//lepton.SetPxPyPzE(lep[0],lep[1],lep[2],lep[3]);
-	
-	// cout<< lepton.Pt() << endl;
-	
-	vecTLorentzVector jet_TLVs;	
-	
-	
-	convert_jets_to_TLVs(jets, jet_TLVs);
-	
-	
-	// cout<< jet_TLVs[0].Pt() << endl;
-		
-	//double minChi;
-	//double dRbb;
-	TLorentzVector bjet1;
-	TLorentzVector bjet2;
-	TLorentzVector leptop;
-	TLorentzVector hadtop;
-	
-	// cout<< "before bhm" << endl;
-	
-	double bhm = getBestHiggsMass2(lepton, metv, jet_TLVs, csv, minChi, dRbb, bjet1, bjet2, chi2lepW, chi2leptop, chi2hadW, chi2hadtop, mass_lepW, mass_leptop, mass_hadW, mass_hadtop, leptop, hadtop); // Jon T. version 2
-
-	
-	b1 = bjet1;
-	b2 = bjet2;
-	
-	TLorentzVector bsyst = bjet1+bjet2;
-	TLorentzVector topsyst = leptop+hadtop;
-	
-	double dphihad = bsyst.DeltaPhi(hadtop);
-	double dphilep = bsyst.DeltaPhi(leptop);
-	
-	
-	testquant1 = bsyst.Eta() - leptop.Eta();	
-	
-	// cout<< testquant1 << endl;
-	
-	testquant2 = bsyst.Eta() - hadtop.Eta();
-	
-	// cout<< testquant2 << endl;
-	
-	testquant3 = fabs((dphilep - pi)*(dphilep + pi)) + pow(dphihad,2);
-	testquant3 = sqrt(testquant3 / (2.0*pow(pi,2)));		
-	
-	// cout<< testquant3 << endl;
-	
-	testquant4 = bsyst.Eta();
-	
-	// cout<< testquant4 << endl;
-	
-	testquant5 = (hadtop.Eta() + leptop.Eta())/2;
-	
-	// cout<< testquant5 << endl;
-		
-	testquant6 = sqrt(abs((bsyst.Eta() - leptop.Eta())*(bsyst.Eta() - hadtop.Eta())));
-	
-	// cout<< testquant6 << endl;
-	
-	testquant7 = bsyst.Angle(topsyst.Vect());
-	
-	// cout<< testquant7 << endl;
-	
-	return bhm;
-}
-
-
-double CommonBDTvars::getBestHiggsMass2(TLorentzVector lepton, TLorentzVector &met, vecTLorentzVector jets, vdouble btag, double &minChi, double &dRbb, TLorentzVector &bjet1, TLorentzVector &bjet2, double &chi2lepW, double &chi2leptop, double &chi2hadW, double &chi2hadtop, double &mass_lepW, double &mass_leptop, double &mass_hadW, double &mass_hadtop, TLorentzVector &toplep, TLorentzVector &tophad)
-{
-
-  int nJets = int(jets.size());
-  double pfmet_px=met.Px(), pfmet_py=met.Py();
-  double chi_top_lep=10000;
-  double chi_top_had=10000;
-  //double chi_W_lep=10000; //isn't really used
-  double chi_W_had=10000;
-
-  minChi = 1000000;
-  dRbb = 1000000;
-  double btagCut = CSVMwp;
-  double W_mass = 80.0;
-  double top_mass = 172.5;
-  //double H_mass=120.0;
-
-  // updated 8/22/2012 from J. Timcheck
-  //sigma's from >=6j >=4t, muon, no imaginary neutrino pz ttH
-  double sigma_hadW   = 12.77;
-  double sigma_hadTop = 18.9;
-  //double sigma_lepTop = 32.91;
-  double sigma_lepTop = 18.9;
-
-  // //sigma's from >=6j >=4t, muon, no imaginary neutrino pz ttH
-  // double sigma_hadW   = 12.59;
-  // double sigma_hadTop = 19.9;
-  // double sigma_lepTop = 39.05;
-
-  //sigma's from >=6j >=4t, muon, no imaginary neutrino pz ttJets
-  /*double sigma_hadW		= 12.72,
-    sigma_hadTop	= 18.12,
-    sigma_lepTop	= 38.72;
-  */
-  
-  /// more initializitions
-  
-  bjet1.SetPxPyPzE(1.,1.,1.,2.);
-  bjet2.SetPxPyPzE(1.,1.,1.,2.);
-//  chi2lepW = 0.;
-//  chi2leptop = 0.;
-//  chi2hadtop = 0.;
-  mass_lepW = 0.;
-  mass_leptop = 0.;
-  mass_hadW = 0.;
-  mass_hadtop = 0.;
-  toplep.SetPxPyPzE(1.,1.,1.,2.);
-  tophad.SetPxPyPzE(1.,1.,1.,2.);
-  
-  
-  double metPz[2];
-  double chi=999999;
-
-  //stuff to find:
-  double higgs_mass_high_energy=0;
-
-  int nBtags = 0;
-  for(int i=0;i<nJets;i++){
-    if(btag[i]>btagCut) nBtags++;
-  }
-
-  int nUntags = nJets-nBtags;
-
-  double lowest_btag = 99.;
-  double second_lowest_btag = 999.;
-  int ind_lowest_btag = 999;
-  int ind_second_lowest_btag = 999;
-
-  vdouble btag_sorted = btag;
-  //int ind_fourth_highest = 999;
-
-  if( nJets>=6 && nBtags>=4 ){
-    
-    if( nUntags<2 ){
-      for(int i=0;i<nJets;i++){
-	if( btag[i]<lowest_btag ){
-	  second_lowest_btag = lowest_btag;
-	  ind_second_lowest_btag = ind_lowest_btag;
-
-	  lowest_btag = btag[i];
-	  ind_lowest_btag = i;
-	}
-	else if( btag[i]<second_lowest_btag ){
-	  second_lowest_btag = btag[i];
-	  ind_second_lowest_btag = i;
-	}
-      }
-    }
-    /*
-    if( nBtags==3 )
-    {
-	sort(btag_sorted.begin(),btag_sorted.end());
-	double fourth_highest_csv = btag_sorted[nJets-4];
-	
-	for (int f=0; f<nJets; f++)
-	{
-		if (btag[f]==fourth_highest_csv) ind_fourth_highest = f;
-	}
-
-    }
-    */
-  }
-
-    //Handle 6j3t.
-  int ind_promoted_btag = 999;
-
-  if( nJets>=6 && nBtags==3 ){
-    for(int i=0;i<nJets;i++){
-      int rank = 0;
-      for(int j=0;j<nJets;j++){
-	if( btag[j] > btag[i] ){
-	  rank++;
-	}
-      }
-      if( rank == 3 ) ind_promoted_btag = i;
-    }
-  }
-
-
-  // First get the neutrino z
-  double energyLep = lepton.E();
-  double a = (W_mass*W_mass/(2.0*energyLep)) + (lepton.Px()*met.Px() + lepton.Py()*met.Py())/energyLep;
-  double radical = (2.0*lepton.Pz()*a/energyLep)*(2.0*lepton.Pz()*a/energyLep);
-  radical = radical - 4.0*(1.0 - (lepton.Pz()/energyLep)*(lepton.Pz()/energyLep))*(met.Px()*met.Px() + met.Py()*met.Py()- a*a);
-  
-  bool imaginary = false;
-
-if (radical < 0.0)
-{
-	imaginary=true;
-}
-if(imaginary)
-{
-	radical=-1.0;
-	double value=.001;
-	while(true)
-	{
-		met.SetPxPyPzE(pfmet_px,pfmet_py,0.0,sqrt(pow(pfmet_px,2)+pow(pfmet_py,2))); //neutrino mass 0, pt = sqrt(px^2+py^2)
-//			energyLep = lepton.E();
-		a = (W_mass*W_mass/(2.0*energyLep)) + (lepton.Px()*met.Px() + lepton.Py()*met.Py())/energyLep;
-		radical = (2.0*lepton.Pz()*a/energyLep)*(2.0*lepton.Pz()*a/energyLep);
-		radical = radical - 4.0*(1.0 - (lepton.Pz()/energyLep)*(lepton.Pz()/energyLep))*(met.Px()*met.Px() + met.Py()*met.Py()- a*a);
-		if(radical>=0)
-			break;
-		pfmet_px-=pfmet_px*value;
-		pfmet_py-=pfmet_py*value;
-	}
-}
-
-
-  metPz[0] = (lepton.Pz()*a/energyLep) + 0.5*sqrt(radical);
-  metPz[0] = metPz[0] / (1.0 - (lepton.Pz()/energyLep)*(lepton.Pz()/energyLep));
-  metPz[1] = (lepton.Pz()*a/energyLep) - 0.5*sqrt(radical);
-  metPz[1] = metPz[1] / (1.0 - (lepton.Pz()/energyLep)*(lepton.Pz()/energyLep));
-
-
-
-  // Loop over all jets, both Pz, calcaulte chi-square
-  TLorentzVector metNew;
-  for( int ipznu=0; ipznu<2; ipznu++ ){
-    metNew.SetXYZM(met.Px(),met.Py(),metPz[ipznu],0.0); //neutrino has mass 0
-    //with b-tag info
-    if(( nJets>=6 && nBtags>=4 )||( nJets>=6 && nBtags==3 )){
-      vecTLorentzVector not_b_tagged,b_tagged;
-      //fill not_b_tagged and b_tagged
-      for( int i=0;i<nJets;i++ ){
-      
-        //if (nBtags>=4)
-	//{
-		if( (btag[i]>btagCut && i!=ind_second_lowest_btag && i!=ind_lowest_btag) || (i==ind_promoted_btag) ) b_tagged.push_back(jets[i]);
-		else not_b_tagged.push_back(jets[i]);
-	//}
-	/*
-	if (nBtags==3)
-	{
-      		if( btag[i]>btagCut || i==ind_fourth_highest) b_tagged.push_back(jets[i]);
-		else not_b_tagged.push_back(jets[i]);
-      	}
- 	*/
-      
-      }
-      //first make possible t_lep's with b-tagged jets (includes making W_lep)
-      for( int i=0; i<int(b_tagged.size()); i++ ){
-	TLorentzVector W_lep=metNew+lepton; //used for histogram drawing only
-	TLorentzVector top_lep=metNew+lepton+b_tagged.at(i);
-	chi_top_lep=pow((top_lep.M()-top_mass)/sigma_lepTop,2);
-	//next make possible W_had's with not b-tagged jets
-	for( int j=0; j<int(not_b_tagged.size()); j++ ){
-	  for( int k=0; k<int(not_b_tagged.size()); k++ ){
-	    if( j!=k ){
-	      TLorentzVector W_had=not_b_tagged.at(j)+not_b_tagged.at(k);
-	      chi_W_had=pow((W_had.M()-W_mass)/sigma_hadW,2);
-	      //now make possible top_had's (using the W_had + some b-tagged jet)
-	      for( int l=0; l<int(b_tagged.size()); l++ ){
-		if( l!=i ){
-		  TLorentzVector top_had=W_had+b_tagged.at(l);
-		  chi_top_had=pow((top_had.M()-top_mass)/sigma_hadTop,2);
-		  chi=chi_top_lep+chi_W_had+chi_top_had;
-		  //accept the lowest chi
-		  if( chi<minChi ){
-		    minChi=chi;
-		    //pick the other two b's that have the highest et (energy in transverse plane) as higgs mass constituents
-		    TLorentzVector H2;
-		    int numH2Constituents=0;
-		    
-		    TLorentzVector bBest[2];
-		    
-		    for( int m=0; m<int(b_tagged.size()); m++ ){
-		      if( m!=i && m!=l && numH2Constituents<2 ){
-			bBest[numH2Constituents] = b_tagged.at(m);
-			numH2Constituents++;
-			H2+=b_tagged.at(m);
-		      }
-		    }
-		    dRbb = bBest[0].DeltaR( bBest[1] );
-		    higgs_mass_high_energy=H2.M();
-		    bjet1 = bBest[0];
-		    bjet2 = bBest[1];
-		    
-		    mass_lepW = W_mass;
-		    mass_leptop = top_lep.M();
-		    mass_hadW = W_had.M();
-		    mass_hadtop = top_had.M();
-		    toplep = top_lep;
-		    tophad = top_had;
-		  }
-		}
-	      }
-	    }
-	  }
-	}
-      }
-    }
-  }
-  
-chi2lepW = 0.;
-chi2leptop = chi_top_lep;
-chi2hadtop = chi_top_had;
-chi2hadW = chi_W_had;
-
-
-
-  
-  return higgs_mass_high_energy;
-
-}
-
-
-double CommonBDTvars::get_median_bb_mass(vvdouble jets, vdouble jetCSV)
-{
-	
-	
-	
-	// all btags
-	vecTLorentzVector all_btags;
-	TLorentzVector bb;
-
-	vect_of_tagged_TLVs(jets, jetCSV, all_btags);
-
-	int bbcount = 0;
-	vector<double> median_vect;
-	double median_mass = 0.;
-	
-
-	for (int asdf=0; asdf<int(all_btags.size()-1); asdf++)
-	{
-	  for (int j=asdf+1; j<int(all_btags.size()); j++)
-		{	
-
-			bb = all_btags[asdf]+all_btags[j];
-
-			median_vect.push_back(bb.M());
-
-			bbcount++;
-
-		}
-	}
-
-
-
-	double vectpos = (double)median_vect.size();
-	
-	if(vectpos!=0){
-
-	 	vectpos = floor(vectpos/2)-1; // all these are even -> gets lower one
-
-	 	sort(median_vect.begin(),median_vect.end());
-
-		median_mass = median_vect[vectpos+1]; // gets upper one
-	
-	}
-	
-	
-	
-
-	return median_mass;
-
-}
-
-
-
-double CommonBDTvars::pt_E_ratio_jets(vvdouble jets)
-{
-	double ratio = 0.;
-	double ptsum = 0.;
-	double Esum = 0.;
-	
-	vecTLorentzVector jetvect;
-	convert_jets_to_TLVs(jets,jetvect);
-	
-	for (int i=0; i<int(jetvect.size()); i++)
-	{
-		ptsum += jetvect[i].Pt();
-		Esum += jetvect[i].E();
-	}
-	
-	ratio = ptsum / Esum;
-	
-	return ratio;
-}
-
-
-double CommonBDTvars::JetDelta_EtaAvgEta(vvdouble jet_vect_TLV, vdouble jet_CSV, std::string JetorTag, std::string JetorTag_Avg )
-{
-
-//if(JetorTag == "Tag" && JetorTag_Avg =="Tag")std::cout<<"JetDelta_TagTag: ";
-	double sumJetEta = 0;
-	double sumTagEta = 0;
-	double cntJetEta = 0;
-	double cntTagEta = 0;
-	
-	
-	for( int iJet=0; iJet<int(jet_vect_TLV.size()); iJet++ ){
-	  TLorentzVector myJet;
-	  myJet.SetPxPyPzE( jet_vect_TLV[iJet][0], jet_vect_TLV[iJet][1], jet_vect_TLV[iJet][2], jet_vect_TLV[iJet][3] );
-	  double myCSV = jet_CSV[iJet];
-	  sumJetEta += abs(myJet.Eta());
-	  cntJetEta += 1.;
-	  
-	  
-	  
-	  
-
-	  if( myCSV>CSVMwp ){
-	    sumTagEta += abs(myJet.Eta());
-	    cntTagEta += 1.;
-	   // if(JetorTag == "Tag" && JetorTag_Avg == "Tag")std::cout<<abs(myJet.Eta())<<" "<<sumTagEta<<" | ";
-	  }
-  	}
-	
-	double aveJetEta = ( cntJetEta>0 ) ? sumJetEta/cntJetEta : -999;
-	double aveTagEta = ( cntTagEta>0 ) ? sumTagEta/cntTagEta : -999;
-
-	double maxDEta_jet_aveJetEta = -1;
-	double maxDEta_tag_aveJetEta = -1;
-	double maxDEta_tag_aveTagEta = -1;
-	double maxDEta_jet_aveTagEta = -1;
-	
-	//if(JetorTag == "Tag" && JetorTag_Avg == "Tag")std::cout<<aveTagEta<<" || ";
-
-	for( int iJet=0; iJet<int(jet_vect_TLV.size()); iJet++ ){
-	  TLorentzVector myJet;
-	  myJet.SetPxPyPzE( jet_vect_TLV[iJet][0], jet_vect_TLV[iJet][1], jet_vect_TLV[iJet][2], jet_vect_TLV[iJet][3] );
-
-	  double myCSV = jet_CSV[iJet];
-	  double myJetEta = abs(myJet.Eta());
-
-	  maxDEta_jet_aveJetEta = std::max( maxDEta_jet_aveJetEta, fabs(myJetEta - aveJetEta) );
-	  maxDEta_jet_aveTagEta = std::max( maxDEta_jet_aveTagEta, fabs(myJetEta - aveTagEta) );
-	  if( myCSV>CSVMwp ){
-	    maxDEta_tag_aveJetEta = std::max( maxDEta_tag_aveJetEta, fabs(myJetEta - aveJetEta) );
-	    maxDEta_tag_aveTagEta = std::max( maxDEta_tag_aveTagEta, fabs(myJetEta - aveTagEta) );
-	   // if(JetorTag == "Tag" && JetorTag_Avg == "Tag")std::cout<<fabs(myJetEta - aveTagEta)<<" "<<maxDEta_tag_aveTagEta<<" | ";
-	  }
-	}
-	
-	double returnVal = -1;
-	
-	if(JetorTag == "Jet" && JetorTag_Avg == "Jet")returnVal = maxDEta_jet_aveJetEta;
-	if(JetorTag == "Tag" && JetorTag_Avg == "Jet")returnVal = maxDEta_tag_aveJetEta;
-	if(JetorTag == "Tag" && JetorTag_Avg == "Tag")returnVal = maxDEta_tag_aveTagEta;
-	if(JetorTag == "Jet" && JetorTag_Avg == "Tag")returnVal = maxDEta_jet_aveTagEta;
-	
-	//if(JetorTag == "Tag" && JetorTag_Avg == "Tag")std::cout<<" ||| "<<returnVal<<"            "<<cntTagEta<<endl;
-	
-	return returnVal;
-	
-	
-}
-
-
-class DNNOutput
-{
-public:
-    std::vector<double> values;
-
-    DNNOutput(double ttH, double ttbb, double ttb, double tt2b, double ttcc, double ttlf,
-        double other)
-    {
-        values.push_back(ttH);
-        values.push_back(ttbb);
-        values.push_back(ttb);
-        values.push_back(tt2b);
-        values.push_back(ttcc);
-        values.push_back(ttlf);
-        values.push_back(other);
-    }
-
-    DNNOutput()
-        : DNNOutput(0., 0., 0., 0., 0., 0., 0.)
-    {
-        reset();
-    }
-
-    ~DNNOutput()
-    {
-    }
-
-    void reset();
-
-    inline double ttH() const
-    {
-        return values[0];
-    }
-
-    inline double ttbb() const
-    {
-        return values[1];
-    }
-
-    inline double ttb() const
-    {
-        return values[2];
-    }
-
-    inline double tt2b() const
-    {
-        return values[3];
-    }
-
-    inline double ttcc() const
-    {
-        return values[4];
-    }
-
-    inline double ttlf() const
-    {
-        return values[5];
-    }
-
-    inline double other() const
-    {
-        return values[6];
-    }
-
-    inline size_t mostProbableClass() const
-    {
-        return distance(values.begin(), max_element(values.begin(), values.end()));
-    }
-};
-
-class DNNVariables
-{
-public:
-    double getHt(const std::vector<const TLorentzVector*>& lvecs) const;
-
-    void getMinMaxDR(const std::vector<const TLorentzVector*>& lvecs, double& minDR,
-        double& maxDR) const;
-
-    void getMinMaxDR(const std::vector<const TLorentzVector*>& lvecs, const TLorentzVector* lvec,
-        double& minDR, double& maxDR) const;
-
-    double getCentrality(const std::vector<const TLorentzVector*>& lvecs) const;
-
-    void getSphericalEigenValues(const std::vector<const TLorentzVector*>& lvecs, double& ev1,
-        double& ev2, double& ev3) const;
-};
-
-class DNNClassifierBase
-{
-public:
-    double csvCut;
-
-    DNNClassifierBase(std::string version);
-
-    virtual ~DNNClassifierBase();
-
-    static void pyInitialize();
-    static void pyFinalize();
-    static void pyExcept(PyObject* pyObj, const std::string& msg);
-
-protected:
-    string version_;
-    string inputName_;
-    string outputName_;
-    string dropoutName_;
-    PyObject* pyContext_;
-    PyObject* pyEval_;
-    DNNVariables dnnVars_;
-};
-
-class DNNClassifier_SL : public DNNClassifierBase
-{
-public:
-    DNNClassifier_SL(std::string version = "v4");
-
-    ~DNNClassifier_SL();
-
-    void evaluate(const std::vector<TLorentzVector>& jets, const std::vector<double>& jetCSVs,
-        const TLorentzVector& lepton, const TLorentzVector& met, DNNOutput& dnnOutput);
-
-    DNNOutput evaluate(const std::vector<TLorentzVector>& jets, const std::vector<double>& jetCSVs,
-        const TLorentzVector& lepton, const TLorentzVector& met);
-
-    void fillFeatures_(PyObject* pyEvalArgs, const std::vector<TLorentzVector>& jets,
-        const std::vector<double>& jetCSVs, const TLorentzVector& lepton,
-        const TLorentzVector& met);
-
-private:
-    size_t nFeatures4_;
-    size_t nFeatures5_;
-    size_t nFeatures6_;
-    PyObject* pyEvalArgs4_;
-    PyObject* pyEvalArgs5_;
-    PyObject* pyEvalArgs6_;
-    CommonBDTvars bdtVars_;
-};
-
-
-
-//DANGERZONE
-// HERE you need to add escapes to get the correct print out
-// python evaluation script
-// python evaluation script
-static string evalScript = \"\\
-import sys, numpy as np\\n\\
-td, inputs, outputs, dropouts = None, [], [], []\\n\\
-def setup(python_path, model_files, input_name, output_name, dropout_name):\\n\\
-    global td, inputs, outputs, dropouts\\n\\
-    sys.path.insert(0, python_path)\\n\\
-    import tfdeploy as td\\n\\
-    for model_file in model_files:\\n\\
-        model = td.Model(model_file)\\n\\
-        inputs.append(model.get(input_name))\\n\\
-        outputs.append(model.get(output_name))\\n\\
-        dropouts.append(model.get(dropout_name))\\n\\
-def eval(m, *values):\\n\\
-    return list(outputs[m].eval({inputs[m]: [np.array(values).astype(np.float32)], dropouts[m]: 1.})[0])\\n\\
-\";
-
-
-/*
- * DNN Classifier.
- * Please note that this classifier actually outputs 7 discriminator values simultaneously.They can
- * be interpreted as a classification probability as they sum up to 1. Classes (order is important):
- * ttH, ttbb, ttb, tt2b, ttcc, ttlf, other
- */
-
-void DNNOutput::reset()
-{
-    for (size_t i = 0; i < 7; i++)
-    {
-        values[i] = -2.;
-    }
-}
-
-DNNClassifierBase::DNNClassifierBase(std::string version)
-    : csvCut(0.8484)
-    , version_(version)
-    , inputName_("inp")
-    , outputName_("outp")
-    , dropoutName_("keep_prob")
-    , pyContext_(0)
-    , pyEval_(0)
-{
-}
-
-DNNClassifierBase::~DNNClassifierBase()
-{
-    // cleanup python objects
-    if (pyEval_) Py_DECREF(pyEval_);
-    if (pyContext_) Py_DECREF(pyContext_);
-}
-
-void DNNClassifierBase::pyInitialize()
-{
-    PyEval_InitThreads();
-    Py_Initialize();
-}
-
-void DNNClassifierBase::pyFinalize()
-{
-    Py_Finalize();
-}
-
-void DNNClassifierBase::pyExcept(PyObject* pyObj, const std::string& msg)
-{
-    if (pyObj == NULL)
-    {
-        if (PyErr_Occurred() != NULL)
-        {
-            PyErr_PrintEx(0);
-        }
-        throw runtime_error("a python error occured: " + msg);
-    }
-}
-
-DNNClassifier_SL::DNNClassifier_SL(std::string version)
-    : DNNClassifierBase(version)
-    , nFeatures4_(0)
-    , nFeatures5_(0)
-    , nFeatures6_(0)
-    , pyEvalArgs4_(0)
-    , pyEvalArgs5_(0)
-    , pyEvalArgs6_(0)
-{
-    // set feature numbers based in the version
-    if (version_ == "v2")
-    {
-        nFeatures4_ = 39;
-        nFeatures5_ = 44;
-        nFeatures6_ = 49;
-    }
-    else if (version_ == "v3")
-    {
-        nFeatures4_ = 30;
-        nFeatures5_ = 34;
-        nFeatures6_ = 38;
-    }
-    else if (version_ == "v4")
-    {
-        nFeatures4_ = 30;
-        nFeatures5_ = 34;
-        nFeatures6_ = 38;
-    }
-    else
-    {
-        throw std::runtime_error("unknown version: " + version_);
-    }
-
-    // determine some local paths
-    std::string cmsswBase = std::string(getenv("CMSSW_BASE"));
-    std::string tfdeployBase = cmsswBase + "/python/TTH/CommonClassifier";
-    std::string modelsBase = cmsswBase + "/src/TTH/CommonClassifier/data/dnnmodels_SL_" + version_;
-    std::string modelFile4 = modelsBase + "/model_4j.pkl";
-    std::string modelFile5 = modelsBase + "/model_5j.pkl";
-    std::string modelFile6 = modelsBase + "/model_6j.pkl";
-
-    // initialize the python main object, load the script
-    PyObject* pyMainModule = PyImport_AddModule("__main__");
-
-    PyObject* pyMainDict = PyModule_GetDict(pyMainModule);
-    pyContext_ = PyDict_Copy(pyMainDict);
-
-    PyRun_String(evalScript.c_str(), Py_file_input, pyContext_, pyContext_);
-
-    // load the tfdeploy models
-    PyObject* pySetup = PyDict_GetItemString(pyContext_, "setup");
-    PyObject* pyModelFiles = PyTuple_New(3);
-    PyTuple_SetItem(pyModelFiles, 0, PyString_FromString(modelFile4.c_str()));
-    PyTuple_SetItem(pyModelFiles, 1, PyString_FromString(modelFile5.c_str()));
-    PyTuple_SetItem(pyModelFiles, 2, PyString_FromString(modelFile6.c_str()));
-    PyObject* pyArgs = PyTuple_New(5);
-    PyTuple_SetItem(pyArgs, 0, PyString_FromString(tfdeployBase.c_str()));
-    PyTuple_SetItem(pyArgs, 1, pyModelFiles);
-    PyTuple_SetItem(pyArgs, 2, PyString_FromString(inputName_.c_str()));
-    PyTuple_SetItem(pyArgs, 3, PyString_FromString(outputName_.c_str()));
-    PyTuple_SetItem(pyArgs, 4, PyString_FromString(dropoutName_.c_str()));
-
-    PyObject* pyResult = PyObject_CallObject(pySetup, pyArgs);
-    pyExcept(pyResult, "could not load tfdeploy models");
-
-    // store the evaluation function and prepare args
-    // the "+ 1" is due to the model number being the first argument in the eval function
-    pyEval_ = PyDict_GetItemString(pyContext_, "eval");
-    pyEvalArgs4_ = PyTuple_New(nFeatures4_ + 1);
-    pyEvalArgs5_ = PyTuple_New(nFeatures5_ + 1);
-    pyEvalArgs6_ = PyTuple_New(nFeatures6_ + 1);
-}
-
-DNNClassifier_SL::~DNNClassifier_SL()
-{
-    // cleanup python objects
-    if (pyEvalArgs4_) Py_DECREF(pyEvalArgs4_);
-    if (pyEvalArgs5_) Py_DECREF(pyEvalArgs5_);
-    if (pyEvalArgs6_) Py_DECREF(pyEvalArgs6_);
-}
-
-void DNNClassifier_SL::evaluate(const std::vector<TLorentzVector>& jets,
-    const std::vector<double>& jetCSVs, const TLorentzVector& lepton, const TLorentzVector& met,
-    DNNOutput& dnnOutput)
-{
-    dnnOutput.reset();
-
-    size_t nJets = jets.size();
-    size_t modelNum;
-    PyObject* pyEvalArgs = NULL;
-    if (nJets < 4)
-    {
-        // no DNN classifier existing for < 4 jets
-        return;
-    }
-    else if (nJets == 4)
-    {
-        pyEvalArgs = pyEvalArgs4_;
-        modelNum = 0;
-    }
-    else if (nJets == 5)
-    {
-        pyEvalArgs = pyEvalArgs5_;
-        modelNum = 1;
-    }
-    else
-    {
-        pyEvalArgs = pyEvalArgs6_;
-        modelNum = 2;
-    }
-
-    // modelNum is at pos 0
-    PyTuple_SetItem(pyEvalArgs, 0, PyInt_FromSize_t(modelNum));
-
-    // fill features into the py tuple
-    fillFeatures_(pyEvalArgs, jets, jetCSVs, lepton, met);
-
-    // evaluate
-    PyObject* pyList = PyObject_CallObject(pyEval_, pyEvalArgs);
-    pyExcept(pyList, "could not evaluate models");
-
-    // fill the dnnOutput
-    dnnOutput.values.resize(7);
-    // v2 has the "other" category, v3 and v4 don't
-    bool hasOther = version_ == "v2";
-    for (size_t i = 0; i < (hasOther ? 7 : 6); i++)
-    {
-        dnnOutput.values[i] = PyFloat_AsDouble(PyList_GetItem(pyList, i));
-    }
-    if (!hasOther)
-    {
-        dnnOutput.values[6] = 0.0;
-    }
-
-    Py_DECREF(pyList);
-}
-
-DNNOutput DNNClassifier_SL::evaluate(const std::vector<TLorentzVector>& jets,
-    const std::vector<double>& jetCSVs, const TLorentzVector& lepton, const TLorentzVector& met)
-{
-    DNNOutput dnnOutput;
-    evaluate(jets, jetCSVs, lepton, met, dnnOutput);
-    return dnnOutput;
-}
-
-void DNNClassifier_SL::fillFeatures_(PyObject* pyEvalArgs, const std::vector<TLorentzVector>& jets,
-    const std::vector<double>& jetCSVs, const TLorentzVector& lepton, const TLorentzVector& met)
-{
-    size_t idx = 1;
-
-    // low-level jet features: pt, eta, phi, mass, csv
-    for (size_t i = 0; i < min(jets.size(), (size_t)6); i++)
-    {
-        PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(jets[i].Pt()));
-        PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(jets[i].Eta()));
-        PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(jets[i].Phi()));
-        if (version_ == "v2")
-        {
-            PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(jets[i].Mag()));
-        }
-        PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(jetCSVs[i]));
-    }
-
-    // low-level lepton features: pt, eta, phi, mass
-    PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(lepton.Pt()));
-    PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(lepton.Eta()));
-    PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(lepton.Phi()));
-    if (version_ == "v2")
-    {
-        PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(lepton.Mag()));
-
-        // low-level met features: pt, phi
-        PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(met.Pt()));
-        PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(met.Phi()));
-    }
-
-    // split jets into b jets and light jets
-    // store pointers to avoid performance drawbacks due to vector copying
-    std::vector<const TLorentzVector*> allJets;
-    std::vector<const TLorentzVector*> bJets;
-    std::vector<double> bCSVs;
-    std::vector<const TLorentzVector*> lJets;
-    std::vector<double> lCSVs;
-    for (size_t i = 0; i < jets.size(); i++)
-    {
-        allJets.push_back(&jets[i]);
-        if (jetCSVs[i] >= csvCut)
-        {
-            bJets.push_back(&jets[i]);
-            bCSVs.push_back(jetCSVs[i]);
-        }
-        else
-        {
-            lJets.push_back(&jets[i]);
-            lCSVs.push_back(jetCSVs[i]);
-        }
-    }
-
-    // Ht
-    PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(dnnVars_.getHt(allJets)));
-
-    // min and max dR between jets
-    double minDRJets, maxDRJets;
-    dnnVars_.getMinMaxDR(allJets, minDRJets, maxDRJets);
-    PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(minDRJets));
-    PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(maxDRJets));
-
-    // min and max dR between light jets
-    if (version_ == "v2")
-    {
-        double minDRLJets, maxDRLJets;
-        dnnVars_.getMinMaxDR(lJets, minDRLJets, maxDRLJets);
-        PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(minDRLJets));
-        PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(maxDRLJets));
-    }
-
-    // min and max dR between b jets
-    double minDRBJets, maxDRBJets;
-    dnnVars_.getMinMaxDR(bJets, minDRBJets, maxDRBJets);
-    PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(minDRBJets));
-    PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(maxDRBJets));
-
-    // min and max dR between b jets and the lepton
-    double minDRBJetsLep, maxDRBJetsLep;
-    dnnVars_.getMinMaxDR(bJets, &lepton, minDRBJetsLep, maxDRBJetsLep);
-    if (version_ == "v2" || version_ == "v3")
-    {
-        PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(minDRBJetsLep));
-        PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(maxDRBJetsLep));
-    }
-
-    // jet centrality
-    PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(dnnVars_.getCentrality(allJets)));
-
-    // jet aplanarity, sphericity and transverse sphericity
-    double ev1, ev2, ev3;
-    dnnVars_.getSphericalEigenValues(allJets, ev1, ev2, ev3);
-    PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(3. / 2. * ev3));
-    PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(3. / 2. * (ev2 + ev3)));
-    double tSphericity = ev2 == 0 ? 0 : (2. * ev2 / (ev1 + ev2));
-    PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(tSphericity));
-
-    if (version_ == "v4")
-    {
-        PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(minDRBJetsLep));
-        PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(maxDRBJetsLep));
-    }
-
-    // Fox-Wolfram moments
-    // disabled for the moment, see https://gitlab.cern.ch/ttH/CommonClassifier/issues/1
-    // double fw1, fw2, fw3, fw4, fw5;
-    // bdtVars_.getFox(jets, fw1, fw2, fw3, fw4, fw5);
-    // PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(fw1));
-    // PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(fw2));
-    // PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(fw3));
-    // PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(fw4));
-    // PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(fw5));
-}
-
-
-double DNNVariables::getHt(const std::vector<const TLorentzVector*>& lvecs) const
-{
-    double ht = 0;
-    for (size_t i = 0; i < lvecs.size(); i++)
-    {
-        ht += lvecs[i]->Pt();
-    }
-    return ht;
-}
-
-void DNNVariables::getMinMaxDR(
-    const std::vector<const TLorentzVector*>& lvecs, double& minDR, double& maxDR) const
-{
-    maxDR = lvecs.size() == 0 ? -1 : 0.;
-    minDR = lvecs.size() == 0 ? -1 : 100.;
-    if (lvecs.size() >= 2)
-    {
-        for (size_t i = 0; i < lvecs.size() - 1; i++)
-        {
-            for (size_t j = i + 1; j < lvecs.size(); j++)
-            {
-                double dR = lvecs[i]->DeltaR(*lvecs[j]);
-                if (dR > maxDR)
-                {
-                    maxDR = dR;
-                }
-                if (dR < minDR)
-                {
-                    minDR = dR;
-                }
-            }
-        }
-    }
-}
-
-void DNNVariables::getMinMaxDR(const std::vector<const TLorentzVector*>& lvecs,
-    const TLorentzVector* lvec, double& minDR, double& maxDR) const
-{
-    maxDR = lvecs.size() == 0 ? -1 : 0.;
-    minDR = lvecs.size() == 0 ? -1 : 100.;
-    for (size_t i = 0; i < lvecs.size(); i++)
-    {
-        double dR = lvecs[i]->DeltaR(*lvec);
-        if (dR > maxDR)
-        {
-            maxDR = dR;
-        }
-        if (dR < minDR)
-        {
-            minDR = dR;
-        }
-    }
-}
-
-double DNNVariables::getCentrality(const std::vector<const TLorentzVector*>& lvecs) const
-{
-    double sumPt = 0.;
-    double sumP = 0.;
-    for (size_t i = 0; i < lvecs.size(); i++)
-    {
-        sumPt += lvecs[i]->Pt();
-        sumP += lvecs[i]->P();
-    }
-    return sumPt / sumP;
-}
-
-void DNNVariables::getSphericalEigenValues(
-    const std::vector<const TLorentzVector*>& lvecs, double& ev1, double& ev2, double& ev3) const
-{
-    TMatrixDSym momentumMatrix(3);
-    double p2Sum = 0.;
-
-    for (size_t i = 0; i < lvecs.size(); i++)
-    {
-        double px = lvecs[i]->Px();
-        double py = lvecs[i]->Py();
-        double pz = lvecs[i]->Pz();
-
-        // fill the matrix
-        momentumMatrix(0, 0) += px * px;
-        momentumMatrix(0, 1) += px * py;
-        momentumMatrix(0, 2) += px * pz;
-        momentumMatrix(1, 0) += py * px;
-        momentumMatrix(1, 1) += py * py;
-        momentumMatrix(1, 2) += py * pz;
-        momentumMatrix(2, 0) += pz * px;
-        momentumMatrix(2, 1) += pz * py;
-        momentumMatrix(2, 2) += pz * pz;
-
-        // add 3 momentum squared to sum
-        p2Sum += px * px + py * py + pz * pz;
-    }
-
-    // normalize each element by p2Sum
-    if (p2Sum != 0.)
-    {
-        for (size_t i = 0; i < 3; i++)
-        {
-            for (size_t j = 0; j < 3; j++)
-            {
-                momentumMatrix(i, j) = momentumMatrix(i, j) / p2Sum;
-            }
-        }
-    }
-
-    // calculatate eigen values via eigen vectors
-    TMatrixDSymEigen eig(momentumMatrix);
-    TVectorD ev = eig.GetEigenValues();
-
-    // some checks due to limited precision of TVectorD
-    ev1 = fabs(ev[0]) < 0.00000000000001 ? 0 : ev[0];
-    ev2 = fabs(ev[1]) < 0.00000000000001 ? 0 : ev[1];
-    ev3 = fabs(ev[2]) < 0.00000000000001 ? 0 : ev[2];
-}
-
-"""
+  for addCodeInt in addCodeInterfaces:
+    retstr+=addCodeInt.getAdditionalFunctionDefinitionLines()
   
 
   retstr+="""
@@ -2682,8 +1065,8 @@ void plot(){
   int maxevents = atoi(getenv ("MAXEVENTS"));
   int skipevents = atoi(getenv ("SKIPEVENTS"));
 
-std::cout<<"processname" <<processname<<std::endl;
-    std::cout<<"suffix" <<suffix<<std::endl;
+  std::cout<<"processname" <<processname<<std::endl;
+  std::cout<<"suffix" <<suffix<<std::endl;
 
   std::vector<TString> databaseRelevantFilenames;
 
@@ -2933,14 +1316,6 @@ def readOutDataBase(thisDataBase=[]):
   # add those functions in the appropriate places ->CHECK
   # need to update the linked database code to the most current one. Also maybe create extra branch or handle the headers differently -> CHECK
 
-def initDNNs():
-  rstr="""
-  DNNClassifierBase::pyInitialize();
-  DNNClassifier_SL dnn("v4");
-"""
-  return rstr
-
-
 
 
 def initHisto(name,nbins,xmin=0,xmax=0,title_=''):
@@ -3151,106 +1526,10 @@ def startLoop():
   internalCSVweight_CSVCErr2Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVCErr2down,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
   
  
- // variables for Aachen DNNs
- double aachen_Out_ttH=-2.0;
- double aachen_Out_ttbarOther=-2.0;
- double aachen_Out_ttbarCC=-2.0;
- double aachen_Out_ttbarBB=-2.0;
- double aachen_Out_ttbarB=-2.0;
- double aachen_Out_ttbar2B=-2.0;
- double aachen_Out_other=-2.0;
  
- 
- int aachen_pred_class=-2;
-
  
 """
 
-def EvaluateAachenDNNs():
-  rstr="""
-
-  // first construct the needed lorentzvectors
-  std::vector<TLorentzVector> dnnInJets;
-  std::vector<double> dnnInCSVs;
-  TLorentzVector dnnInMET;
-  TLorentzVector dnnInLepton;
-
-  // DANGERZONE
-  // It looks like the MET is not actually used in v4 of SL DNNs
-  dnnInMET= makeVectorE(0.0,0.0,0.0,0.0);
-  dnnInLepton = makeVectorE(primlepPt,primlepEta,primlepPhi,primlepE);
-  int firstNJets=min(N_Jets,6);
-  for(int ijet=0; ijet<firstNJets; ijet++){
-    dnnInCSVs.push_back(jetCSVs[ijet]);
-    dnnInJets.push_back(makeVectorE(jetPts[ijet],jetEtas[ijet],jetPhis[ijet],jetEnergies[ijet]));
-    }
-  
-  DNNOutput aachenoutput;
-  aachenoutput=dnn.evaluate(dnnInJets,dnnInCSVs,dnnInLepton,dnnInMET);
-  
-  aachen_Out_ttH=aachenoutput.ttH();
-  aachen_Out_ttbarOther=aachenoutput.ttlf();
-  aachen_Out_ttbarBB=aachenoutput.ttbb();
-  aachen_Out_ttbarB=aachenoutput.ttb();
-  aachen_Out_ttbar2B=aachenoutput.tt2b();
-  aachen_Out_ttbarCC=aachenoutput.ttcc();
-  aachen_Out_other=aachenoutput.other();
-  
-  aachen_pred_class=aachenoutput.mostProbableClass();
-  // classes are 
-  // 0 = ttH 
-  // 1 = ttbb 
-  // 2 = ttb 
-  // 3 = tt2b 
-  // 4 = ttcc 
-  // 5 = ttlf
-  // 6 = other
-  
-  bool printstuff=0;
-  if(printstuff){
-    cout<<"-----DNN-----"<<std::endl;
-    cout<<"ttH node "<<aachen_Out_ttH<<std::endl;
-    cout<<"ttbarOther node "<<aachen_Out_ttbarOther<<std::endl;
-    cout<<"ttbarCC node "<<aachen_Out_ttbarCC<<std::endl;
-    cout<<"ttbarBB node "<<aachen_Out_ttbarBB<<std::endl;
-    cout<<"ttbarB node "<<aachen_Out_ttbarB<<std::endl;
-    cout<<"ttbar2B node "<<aachen_Out_ttbar2B<<std::endl;
-    cout<<"other node "<<aachen_Out_other<<std::endl;
-    cout<<"predicted class "<<aachen_pred_class<<std::endl;
-    }
-  
-"""
-
-  return rstr
-
-def testAachenDNN():
-  rstr="""
-  std::vector<TLorentzVector> testdnnjets = {
-        makeVectorM(104.253659103, -0.73279517889, -3.07644724846, 15.8214708715),
-        makeVectorM(93.7207496495, -1.09075820446, -0.518474698067, 11.1629637015),
-        makeVectorM(82.3087599786, -0.29058226943, 0.934316039085, 12.3491756063),
-        makeVectorM(71.0101406197, -0.311807841063, -0.00518677430227, 17.680727362),
-        makeVectorM(48.2224599416, -0.770735502243, 0.56352609396, 7.37671529065),
-        makeVectorM(46.0958273368, -0.883650183678, 1.04447424412, 5.60050991848)
-    };
-    std::vector<double> testdnnjetCSVs = {
-        0.597419083118, 0.759489059448, 0.635843455791, 0.603073060513, 0.999078631401, 0.988624215126
-    };
-
-    TLorentzVector testdnnlepton = makeVectorM(54.6405308843, -1.68255746365, -2.53192830086, 0.0313574418471);
-    TLorentzVector testdnnmet = makeVectorM(0.0, 0.0, 0.0, 0.0); // dummy
-
-    // evaluate
-    DNNOutput aachentestdnnoutput = dnn.evaluate(testdnnjets, testdnnjetCSVs, testdnnlepton, testdnnmet);
-    std::vector<double> targetOutputsfordnntest = { 0.51680371, 0.25959021, 0.07142095, 0.07112622, 0.05624627, 0.02481263, 0.0};
-    std::cout<<"doing DNN unit test"<<std::endl;
-    std::cout<<"No error printout means it worked"<<std::endl;
-    for (size_t i = 0; i < targetOutputsfordnntest.size(); ++i)
-    {
-        assert(fabs(targetOutputsfordnntest[i] - aachentestdnnoutput.values[i]) < 0.000001 && "The DNN output for 6 jet events is incorrect");
-    }
-"""
-  return rstr
 
 def encodeSampleSelection(samples,variables):
   text=''
@@ -3305,7 +1584,7 @@ def varLoop(i,n):
   return '      for(uint '+str(i)+'=0; '+str(i)+'<'+str(n)+'; '+str(i)+'++)'
 
 
-def getFoot(doAachenDNN):
+def getFoot(addCodeInterfaces):
   rstr= """
   outfile->Write();
   outfile->Close();
@@ -3337,10 +1616,10 @@ def getFoot(doAachenDNN):
     }
   }
 """
-  if doAachenDNN:
-   rstr+="""
-     DNNClassifierBase::pyFinalize();
-"""
+  
+  for addCodeInt in addCodeInterfaces:
+    rstr+=addCodeInt.getCleanUpLines()
+
 
   rstr+="""
   
@@ -3353,24 +1632,33 @@ int main(){
 """
   return rstr
 
-def compileProgram(scriptname,usesDataBases,doAachenDNN):
+def compileProgram(scriptname,usesDataBases,addCodeInterfaces):
   p = subprocess.Popen(['root-config', '--cflags', '--libs'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
   out, err = p.communicate()
-  if doAachenDNN:
-    ppyc = subprocess.Popen(['python-config', '--cflags'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    outpyc, errpyc = ppyc.communicate()
-    ppyl = subprocess.Popen(['python-config', '--ldflags'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    outpyl, errpyl = ppyl.communicate()
-    print "communicated"
-    # get library path for python
-    print outpyc
-    pythonincludepath=outpyc.split(" ")[0]
-    pythonlibrarypath=pythonincludepath.replace("-I","-L").replace("include/python2.7","lib")
+  dnnfiles=[]
+  for addCodeInt in addCodeInterfaces:
+    if addCodeInt.usesPythonLibraries:
+      ppyc = subprocess.Popen(['python-config', '--cflags'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      outpyc, errpyc = ppyc.communicate()
+      ppyl = subprocess.Popen(['python-config', '--ldflags'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      outpyl, errpyl = ppyl.communicate()
+      print "communicated"
+      # get library path for python
+      print outpyc
+      pythonincludepath=outpyc.split(" ")[0]
+      pythonlibrarypath=pythonincludepath.replace("-I","-L").replace("include/python2.7","lib")
+      dnnfiles=outpyc[:-1].replace("\n"," ").split(' ')+[pythonlibrarypath]+outpyl[:-1].replace("\n"," ").split(' ')
+      break
+    
+  for addCodeInt in addCodeInterfaces:
+    if addCodeInt.includeString!="":
+      dnnfiles+=addCodeInt.includeString.split(" ")
+    if addCodeInt.libraryString!="":
+      dnnfiles+=addCodeInt.libraryString.split(" ")
+      
+  print dnnfiles
   
   memDBccfiles=[]
-  dnnfiles=[]
-  if doAachenDNN:
-    dnnfiles=outpyc[:-1].replace("\n"," ").split(' ')+[pythonlibrarypath]+outpyl[:-1].replace("\n"," ").split(' ')
   if usesDataBases:
     memDBccfiles=glob.glob('/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase/MEMDataBase/src/*.cc') 
     #TODO update the dataBases code
@@ -3382,7 +1670,7 @@ def compileProgram(scriptname,usesDataBases,doAachenDNN):
   subprocess.call(cmd)
 
 
-def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],allsystweights=["1"],additionalvariables=[],dataBases=[],doAachenDNN=False):
+def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],allsystweights=["1"],additionalvariables=[],dataBases=[],addCodeInterfaces=[]):
 
   # collect variables
   # list varibles that should not be written to the program automatically
@@ -3396,8 +1684,10 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 	    "internalMuIDWeight","internalMuIDWeightUp","internalMuIDWeightDown",
 	    "internalMuIsoWeight","internalMuIsoWeightUp","internalMuIsoWeightDown",
 	    "internalMuHIPWeight","internalMuHIPWeightUp","internalMuHIPWeightDown",
-	    "aachen_Out_other","aachen_Out_ttbar2B","aachen_Out_ttbarB","aachen_Out_ttbarBB","aachen_Out_ttbarCC","aachen_Out_ttbarOther","aachen_Out_ttH","aachen_pred_class",
 ]
+  for addCodeInt in addCodeInterfaces:
+    vetolist+=addCodeInt.getExternalyCallableVariables()
+    
   for db in dataBases:
     vetolist.append(db[0]+"p")
     vetolist.append(db[0]+"p_sig")
@@ -3469,12 +1759,13 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   # write program
   # start writing program
   script=""
-  script+=getHead(dataBases,doAachenDNN)
+  script+=getHead(dataBases,addCodeInterfaces)
   
   for db in dataBases:
     script+=InitDataBase(db)
-  if doAachenDNN:
-    script+=initDNNs()
+  for addCodeInt in addCodeInterfaces:
+    script+=addCodeInt.getBeforeLoopLines()
+    
   # initialize all variables
   script+=variables.initVarsProgram()
   script+=variables.initBranchAddressesProgram()
@@ -3507,6 +1798,8 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 
   # start event loop
   script+=startLoop()
+  for addCodeInt in addCodeInterfaces:
+    script+=addCodeInt.getVariableInitInsideEventLoopLinesq()
   
   script+='    float sampleweight=1;\n'
   script+=encodeSampleSelection(samples,variables)
@@ -3514,8 +1807,8 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
     script+=readOutDataBase(db)  
   script+="\n"
   
-  if doAachenDNN:
-    script+=EvaluateAachenDNNs()
+  for addCodeInt in addCodeInterfaces:
+    script+=addCodeInt.getEventLoopCodeLines()
     script+="\n"
 
   # calculate varibles and get TMVA outputs
@@ -3621,13 +1914,13 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   # finish loop
   script+=endLoop()
   
-  if doAachenDNN:
+  for addCodeInt in addCodeInterfaces:
     script+="\n"
-    script+=testAachenDNN()
+    script+=addCodeInt.getTestCallLines()
     script+="\n"
   
   # get program footer
-  script+=getFoot(doAachenDNN)
+  script+=getFoot(addCodeInterfaces)
 
   # write program text to file
   f=open(scriptname+'.cc','w')
@@ -3937,23 +2230,30 @@ def check_jobs(scripts,outputs,nentries):
   return failed_jobs
 
 # the dataBases should be defined as follows e.g. [[memDB,path],[blrDB,path]]
-def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],dataBases=[],treeInformationJsonFile="",otherSystnames=[],doAachenDNN=False,cirun=False):
+def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],dataBases=[],treeInformationJsonFile="",otherSystnames=[],addCodeInterfacePaths=[],cirun=False):
   cmsswpath=os.environ['CMSSW_BASE']
   if not "CMSSW" in cmsswpath:
     print "you need CMSSW for this to work. Exiting!"
     exit(0)
   cmsswversion=os.environ['CMSSW_VERSION']
   splitcmsswversion=cmsswversion.split("_")
-  if doAachenDNN and not int(splitcmsswversion[1])>=8:
-    print "You need at least CMSSW 8_0_26_patch2 for the DNNs from Aachen. Exiting!"
-    exit(0)
-  if doAachenDNN:
-    commonclassifierexists=os.path.exists(cmsswpath+"/src/TTH/CommonClassifier")
-    if not commonclassifierexists:
-      print "You need the common classifier package with the dnns and tf installed. Exiting!"
-      exit(0)
+  #if doAachenDNN and not int(splitcmsswversion[1])>=8:
+    #print "You need at least CMSSW 8_0_26_patch2 for the DNNs from Aachen. Exiting!"
+    #exit(0)
+  #if doAachenDNN:
+    #commonclassifierexists=os.path.exists(cmsswpath+"/src/TTH/CommonClassifier")
+    #if not commonclassifierexists:
+      #print "You need the common classifier package with the dnns and tf installed. Exiting!"
+      #exit(0)
   workdir=os.getcwd()+'/workdir/'+name
   outputpath=workdir+'/output.root'
+
+  addCodeInterfaces=[]
+  for acp in addCodeInterfacePaths:
+    print "loading module", acp
+    newCodeInterfaceModule=imp.load_source("newACI",acp)
+    import newACI
+    addCodeInterfaces.append(newACI.theInterface())
 
   usesDataBases=False
   if dataBases!=[]:
@@ -3992,7 +2292,7 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
     cmd='cp -v '+programpath+'.cc'+' '+programpath+'.ccBackup'
     subprocess.call(cmd,shell=True)
   print 'creating c++ program'
-  createProgram(programpath,plots,samples,catnames,catselections,systnames,systweights,additionalvariables, dataBases,doAachenDNN)
+  createProgram(programpath,plots,samples,catnames,catselections,systnames,systweights,additionalvariables, dataBases,addCodeInterfaces)
   if not os.path.exists(programpath+'.cc'):
     print 'could not create c++ program'
     sys.exit()
@@ -4005,7 +2305,7 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   if codeWasChanged:
     print "c++ codes differ"
     print 'compiling c++ program'
-    compileProgram(programpath, usesDataBases,doAachenDNN)
+    compileProgram(programpath, usesDataBases,addCodeInterfaces)
   else:
     print 'c++ program already existing !!!! Check if this is reasonable!!!'
     cmd = 'cp -v '+programpath+'Backup'+' '+programpath
