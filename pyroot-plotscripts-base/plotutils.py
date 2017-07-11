@@ -957,7 +957,7 @@ def createHistoLists_fromSuperHistoFile(path,samples,plots,rebin=1,catnames=[""]
             for plot in plots:
                 key=sample.nick+'_'+c+plot.name
                 #print key
-#                print key, sample.nick, c, plot.name
+                print key, sample.nick, c, plot.name
                 o=f.Get(key)
                 #print o
                 if isinstance(o,ROOT.TH1) and not isinstance(o,ROOT.TH2):
@@ -2911,11 +2911,18 @@ def plotRefWsystandOthers(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop
 	thisgraphs.append([listOfErrorGraphLists[iband][igraph],listOfErrorGraphStyles[iband],listOfErrorGraphColors[iband]])
       listOfErrorGraphs.append(thisgraphs)
     
-    i=0
+    print listOfhistosOnTop_
+    print listOfHistoLists
+    print labeltexts
+    print listOfErrorGraphs
+    print listOfRatioHistoLists
+    iplot=0
     # loop over the variables wh are supposed to be plotted (jet 1 pt, Njets , lep1 eta , ... )
     for ot,listOfHistos,labeltext,errorgraphList,listOfRatioHistos in zip(listOfhistosOnTop_,listOfHistoLists,labeltexts,listOfErrorGraphs,listOfRatioHistoLists):
-        i+=1
-        
+        iplot+=1
+        print ""
+        print "histo loop", iplot
+        print ot,listOfHistos,labeltext,errorgraphList,listOfRatioHistos
         # setup histo style
         # loop over samples and the histograms of the plotted variable for each sample
         for histo,histo_ratio,sample in zip(listOfHistos,listOfRatioHistos,samples):
@@ -2961,8 +2968,8 @@ def plotRefWsystandOthers(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop
         #print h.GetName()
         #h.GetXaxis().SetBinLabel(1,"test")
         #draw remaining
-        for h,h_,i in zip(listOfHistos,listOfRatioHistos,range(len(listOfHistos))):
-            if i==0:
+        for h,h_,isc in zip(listOfHistos,listOfRatioHistos,range(len(listOfHistos))):
+            if isc==0:
                 canvas.cd(1)
                 h.DrawCopy(option)
                 canvas.cd(2)
@@ -2974,9 +2981,9 @@ def plotRefWsystandOthers(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop
                 h_.DrawCopy('same')
         line = ot.Clone()
         line.Divide(ot)
-        for i in range(line.GetNbinsX()+2):
-            line.SetBinContent(i,1)
-            line.SetBinError(i,0)
+        for icb in range(line.GetNbinsX()+2):
+            line.SetBinContent(icb,1)
+            line.SetBinError(icb,0)
         line.SetLineColor(ROOT.kBlack)
         line.DrawCopy('same')
         canvas.cd(1)
@@ -3006,17 +3013,17 @@ def plotRefWsystandOthers(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop
 	  #print ratioerrorgraph
 	  #raw_input()
 	  x, y = ROOT.Double(0), ROOT.Double(0)
-	  for i in range(errorgraph.GetN()):
-	      errorgraph.GetPoint(i,x,y)
-	      ratioerrorgraph.SetPoint(i,x, 1.0)
+	  for igc in range(errorgraph.GetN()):
+	      errorgraph.GetPoint(igc,x,y)
+	      ratioerrorgraph.SetPoint(igc,x, 1.0)
 	      relErrUp=0.0
 	      relErrDown=0.0
-	      print x,y,errorgraph.GetErrorYhigh(i),errorgraph.GetErrorYlow(i)
+	      print x,y,errorgraph.GetErrorYhigh(igc),errorgraph.GetErrorYlow(igc)
 	      if y>0.0:
-		  relErrUp=errorgraph.GetErrorYhigh(i)/y
-		  relErrDown=errorgraph.GetErrorYlow(i)/y
+		  relErrUp=errorgraph.GetErrorYhigh(igc)/y
+		  relErrDown=errorgraph.GetErrorYlow(igc)/y
 		  print relErrUp,relErrDown
-	      ratioerrorgraph.SetPointError(i, errorgraph.GetErrorXlow(i),errorgraph.GetErrorXhigh(i), relErrDown, relErrUp)
+	      ratioerrorgraph.SetPointError(igc, errorgraph.GetErrorXlow(igc),errorgraph.GetErrorXhigh(igc), relErrDown, relErrUp)
 
 
 	  errorgraph.SetFillStyle(thisFillStyle)
@@ -3043,12 +3050,12 @@ def plotRefWsystandOthers(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop
 
         l1=getLegendL()
         l2=getLegendR()
-        i=0
+        ilc=0
         for h,sample in zip(listOfHistos,samples):
-            i+=1
-            if i%2==1:
+            ilc+=1
+            if ilc%2==1:
                 l1.AddEntry22(h,sample.name,'L')
-            if i%2==0:
+            if ilc%2==0:
                 l2.AddEntry22(h,sample.name,'L')
         l2.AddEntry22(otc,sampleOnTop.name,'L')
         
@@ -3095,6 +3102,6 @@ def plotRefWsystandOthers(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop
           
 #       
         canvases.append(canvas)
-   
+        print canvases   
     printCanvases(canvases,name)
     writeObjects(canvases,name)
