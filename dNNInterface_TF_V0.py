@@ -61,6 +61,8 @@ const TLorentzVector makeVectorM(double pt, double eta, double phi, double mass)
 """
     return retstr
   
+  # now the stuff before the event loop
+  
   # here you write the code which shgould be inserted before the main event loop
   def getBeforeLoopLines(self):
     rstr="""
