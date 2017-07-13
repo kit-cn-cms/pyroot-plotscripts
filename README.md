@@ -13,8 +13,8 @@ git subtree add —-prefix=pyroot-plotscripts-base/ pyroot-subtree master
 ```
 * If you would like to push changes to the upstream repo / this repository use the following command on the derived repository:
 ```
-git subtree pull  --prefix=pyroot-plotscripts/pyroot-plotscripts-base pyroot-subtree master
-git subtree push -d  --prefix=pyroot-plotscripts/pyroot-plotscripts-base/ pyroot-subtree master
+git subtree pull  --prefix=pyroot-plotscripts-base pyroot-subtree master
+git subtree push -d  --prefix=pyroot-plotscripts-base/ pyroot-subtree master
 ```
 
 
