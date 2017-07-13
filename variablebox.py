@@ -391,6 +391,9 @@ class Variables:
       alldependenciesresovled=True
       for dvar in zip(*rawVariableList)[0]:
 	if dvar in var.expression:
+          if len(sortedVariableList)==0:
+	    alldependenciesresovled=False
+	    continue
 	  if dvar not in zip(*sortedVariableList)[0]:
 	    # the needed variable was not added to the sorted list yet
 	    alldependenciesresovled=False
