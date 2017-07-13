@@ -1,3 +1,4 @@
+# comment 
 import sys
 import os
 import subprocess
@@ -12,10 +13,11 @@ import plotutils
 import glob
 import json
 import filecmp
+import imp 
 
 ROOT.gROOT.SetBatch(True)
 
-def getHead(dataBases,doAachenDNN):
+def getHead(dataBases,addCodeInterfaces=[]):
   
   retstr="""
 #include "TChain.h"
@@ -34,16 +36,9 @@ def getHead(dataBases,doAachenDNN):
 #include <map>
 #include "TStopwatch.h"
 """
-  if doAachenDNN:
-    retstr+="""
-#include "TVector.h" 
-#include <iterator>
-#include "Python.h"
-#include "TMatrixDSym.h"
-#include "TMatrixDSymEigen.h"
-#include "TVectorD.h"
-"""
-
+  for addCodeInt in addCodeInterfaces:
+    retstr+=addCodeInt.getIncludeLines()
+  
   if dataBases!=[]:
     retstr+="""
 #include "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase/MEMDataBase/interface/MEMDataBase.h"
@@ -54,1619 +49,8 @@ def getHead(dataBases,doAachenDNN):
 using namespace std;
 """
 
-  if doAachenDNN:
-    retstr+="""
-// hacked DNN Classifier of RWTH from commit 
-// https://gitlab.cern.ch/ttH/CommonClassifier/commit/91f1d2f81291ce6ee3a168e3778c0b9c806e7f2b
-
-//first the common BDTVariable class
-
-typedef std::map<std::string, std::string> mparams;
-typedef std::vector< TLorentzVector > vecTLorentzVector;
-typedef std::vector<std::vector<double> > vvdouble;
-typedef std::vector<std::vector<std::string> > vvstring;
-typedef std::vector<std::vector<int> > vvint;
-typedef std::vector<std::string> vstring;
-typedef std::vector<double> vdouble;
-typedef std::vector<int> vint;
-
-const TLorentzVector makeVectorE(double pt, double eta, double phi, double energy)
-{
-    TLorentzVector lv;
-    lv.SetPtEtaPhiE(pt, eta, phi, energy);
-    return lv;
-}
-
-const TLorentzVector makeVectorM(double pt, double eta, double phi, double mass)
-{
-    TLorentzVector lv;
-    lv.SetPtEtaPhiM(pt, eta, phi, mass);
-    return lv;
-}
-
-class CommonBDTvars{
-
-	// === Functions === //
-	public: 
-		// Constructor(s) and destructor
-		CommonBDTvars();
-		virtual ~CommonBDTvars();
-		
-
-
-	//Algorithms 
-   
-		void getSp(TLorentzVector lepton, TLorentzVector met, vecTLorentzVector jets, double &aplanarity, double &sphericity);
-		void getFox(vecTLorentzVector jets, double &h0, double &h1, double &h2, double &h3, double &h4);
-		double getBestHiggsMass(TLorentzVector lepton, TLorentzVector met, vecTLorentzVector jets, vdouble btag, double &minChi, double &dRbb, TLorentzVector &bjet1, TLorentzVector &bjet2, vecTLorentzVector loose_jets, vdouble loose_btag);
-   
-    
-	
-	
-		void convert_jets_to_TLVs(vvdouble jets, vecTLorentzVector &vect_of_jet_TLVs);
-		void vect_of_tagged_TLVs(vvdouble jets, vdouble jetCSV, vecTLorentzVector &vect_of_btag_TLVs);
-		double get_jet_jet_etamax (vvdouble jets);
-		double get_jet_tag_etamax (vvdouble jets, vdouble jetCSV);
-		double get_tag_tag_etamax (vvdouble jets, vdouble jetCSV);
-		
-		
-		
-		
-		double study_tops_bb_syst (double MET, double METphi, TLorentzVector &metv, TLorentzVector lepton, vvdouble jets, vdouble csv, double &minChi, double &chi2lepW, double &chi2leptop, double &chi2hadW, double &chi2hadtop, double &mass_lepW, double &mass_leptop, double &mass_hadW, double &mass_hadtop, double &dRbb, double &testquant1, double &testquant2, double &testquant3, double &testquant4, double &testquant5, double &testquant6, double &testquant7, TLorentzVector &b1, TLorentzVector &b2);
-		double getBestHiggsMass2(TLorentzVector lepton, TLorentzVector &met, vecTLorentzVector jets, vdouble btag, double &minChi, double &dRbb, TLorentzVector &bjet1, TLorentzVector &bjet2, double &chi2lepW, double &chi2leptop, double &chi2hadW, double &chi2hadtop, double &mass_lepW, double &mass_leptop, double &mass_hadW, double &mass_hadtop, TLorentzVector &toplep, TLorentzVector &tophad);
-		double get_median_bb_mass(vvdouble jets, vdouble jetCSV);
-		double pt_E_ratio_jets(vvdouble jets);
-		
-		double JetDelta_EtaAvgEta(vvdouble jet_vect_TLV, vdouble jet_CSV, std::string JetorTag, std::string JetorTag_Avg );
-
-	
-	private:
-
-		// Parameter management
-	private:
-  
-		// Old functions
-	public:
-
-	protected:
-	
-	double CSVLwp, CSVMwp, CSVTwp;
-
-	private:
-
-
-	// === Variables === //
-	public:
-
-	protected:
-
-	private:
-
-}; // End of class prototype
-
-CommonBDTvars::CommonBDTvars(){
-
-
-  // twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideBTagging#Preliminary_working_or_operating
-  // Preliminary working (or operating) points for CSVv2+IVF
-  CSVLwp = 0.5426; // 10.1716% DUSG mistag efficiency
-  CSVMwp = 0.8484; // 1.0623% DUSG mistag efficiency
-  CSVTwp = 0.9535; // 0.1144% DUSG mistag efficiency
-
-
-}
-
-
-CommonBDTvars::~CommonBDTvars(){
-
-}
-
-
-/*
-
-Get These Variables
-
-double	sphericity;
-double	aplanarity;
-*/
-
-
-void CommonBDTvars::getSp(TLorentzVector lepton, TLorentzVector met, vecTLorentzVector jets, double &aplanarity, double &sphericity) {
-	//
-	// Aplanarity and sphericity
-	//
-
-	int nJets = int(jets.size());
-
-	double mxx = lepton.Px()*lepton.Px() + met.Px()*met.Px();
-	double myy = lepton.Py()*lepton.Py() + met.Py()*met.Py();
-	double mzz = lepton.Pz()*lepton.Pz() + met.Pz()*met.Pz();
-	double mxy = lepton.Px()*lepton.Py() + met.Px()*met.Py();
-	double mxz = lepton.Px()*lepton.Pz() + met.Px()*met.Pz();
-	double myz = lepton.Py()*lepton.Pz() + met.Py()*met.Pz();
-
-	for (int i=0; i<nJets; i++) {
-		mxx += jets[i].Px()*jets[i].Px();
-		myy += jets[i].Py()*jets[i].Py();
-		mzz += jets[i].Pz()*jets[i].Pz();
-		mxy += jets[i].Px()*jets[i].Py();
-		mxz += jets[i].Px()*jets[i].Pz();
-		myz += jets[i].Py()*jets[i].Pz();		
-	}
-	double sum = mxx + myy + mzz;
-	mxx /= sum;
-	myy /= sum;
-	mzz /= sum;
-	mxy /= sum;
-	mxz /= sum;
-	myz /= sum;
-
-	TMatrix tensor(3,3);
-	tensor(0,0) = mxx;
-	tensor(1,1) = myy;
-	tensor(2,2) = mzz;
-	tensor(0,1) = mxy;
-	tensor(1,0) = mxy;
-	tensor(0,2) = mxz;
-	tensor(2,0) = mxz;
-	tensor(1,2) = myz;
-	tensor(2,1) = myz;
-	TVector eigenval(3);
-	tensor.EigenVectors(eigenval);
-
-	sphericity = 3.0*(eigenval(1)+eigenval(2))/2.0;
-	aplanarity = 3.0*eigenval(2)/2.0;
-
-	return;
-}
-
-/*
-
-Get These Variables
-
-double	h0;
-double	h1;
-double	h2;
-double	h3;
-*/
-
-void CommonBDTvars::getFox(vecTLorentzVector jets, double &h0, double &h1, double &h2, double &h3, double &h4) {
-	
-
-	int visObjects = int(jets.size());
-
-	double eVis = 0.0;
-	for (int i=0; i<visObjects; i++) {
-		eVis += jets[i].E();
-	}
-
-	h0 = 0.0;
-	h1 = 0.0;
-	h2 = 0.0;
-	h3 = 0.0;
-	h4 = 0.0;
-	for (int i=0; i<visObjects-1; i++) {
-		for (int j=i+1; j<visObjects; j++) {
-			double costh = cos(jets[i].Angle(jets[j].Vect()));
-			double p0 = 1.0;
-			double p1 = costh;
-			double p2 = 0.5*(3.0*costh*costh - 1.0);
-			double p3 = 0.5*(5.0*costh*costh*costh - 3.0*costh);
-			double p4 = 0.125*(35.0*costh*costh*costh*costh - 30.0*costh*costh + 3.0);
-			double pipj = jets[i].P()*jets[j].P();
-			h0 += (pipj/(eVis*eVis))*p0;
-			h1 += (pipj/(eVis*eVis))*p1;
-			h2 += (pipj/(eVis*eVis))*p2;
-			h3 += (pipj/(eVis*eVis))*p3;
-			h4 += (pipj/(eVis*eVis))*p4;
-		}
-	}
-
-	return;
-}
-
-
-
-/*
-
-Get These Variables
-
-double	best_higgs_mass;	
-double	dRbb;
-*/
-
-double CommonBDTvars::getBestHiggsMass(TLorentzVector lepton, TLorentzVector met, vecTLorentzVector jets, vdouble btag, double &minChi, double &dRbb, TLorentzVector &bjet1, TLorentzVector &bjet2, vecTLorentzVector loose_jets, vdouble loose_btag)
-{
-
-  if( jets.size()<6 && loose_jets.size()>0 ){
-    jets.push_back( loose_jets[0] );
-    btag.push_back( loose_btag[0] );
-  }
-
-  int nJets = int(jets.size());
-
-  double chi_top_lep=10000;
-  double chi_top_had=10000;
-  //double chi_W_lep=10000; //isn't really used
-  double chi_W_had=10000;
-
-  minChi = 1000000;
-  dRbb = 1000000;
-  const double btagCut = CSVMwp;
-  double W_mass = 80.0;
-  double top_mass = 172.5;
-  //double H_mass=120.0;
-
-  // updated 8/22/2012 from J. Timcheck
-  //sigma's from >=6j >=4t, muon, no imaginary neutrino pz ttH
-  double sigma_hadW   = 12.77;
-  double sigma_hadTop = 18.9;
-  double sigma_lepTop = 32.91;
-
-  // //sigma's from >=6j >=4t, muon, no imaginary neutrino pz ttH
-  // double sigma_hadW   = 12.59;
-  // double sigma_hadTop = 19.9;
-  // double sigma_lepTop = 39.05;
-
-  //sigma's from >=6j >=4t, muon, no imaginary neutrino pz ttJets
-  /*double sigma_hadW		= 12.72,
-    sigma_hadTop	= 18.12,
-    sigma_lepTop	= 38.72;
-  */
-
-  double metPz[2];
-  double chi=999999;
-
-  //stuff to find:
-  double higgs_mass_high_energy=0;
-
-  int nBtags = 0;
-  for(int i=0;i<nJets;i++){
-    if(btag[i]>btagCut) nBtags++;
-  }
-
-  int nUntags = nJets-nBtags;
-
-  double lowest_btag = 99.;
-  double second_lowest_btag = 999.;
-  int ind_lowest_btag = 999;
-  int ind_second_lowest_btag = 999;
-
-  if( nJets>=6 && nBtags>=4 ){
-    if( nUntags<2 ){
-      for(int i=0;i<nJets;i++){
-	if( btag[i]<lowest_btag ){
-	  second_lowest_btag = lowest_btag;
-	  ind_second_lowest_btag = ind_lowest_btag;
-
-	  lowest_btag = btag[i];
-	  ind_lowest_btag = i;
-	}
-	else if( btag[i]<second_lowest_btag ){
-	  second_lowest_btag = btag[i];
-	  ind_second_lowest_btag = i;
-	}
-      }
-    }
-  }
-
-
-  //Handle 6j3t.
-  int ind_promoted_btag = 999;
-
-  if( nJets>=6 && nBtags==3 ){
-    for(int i=0;i<nJets;i++){
-      int rank = 0;
-      for(int j=0;j<nJets;j++){
-	if( btag[j] > btag[i] ){
-	  rank++;
-	}
-      }
-      if( rank == 3 ) ind_promoted_btag = i;
-    }
-  }
-
-  // First get the neutrino z
-  double energyLep = lepton.E();
-  double a = (W_mass*W_mass/(2.0*energyLep)) + (lepton.Px()*met.Px() + lepton.Py()*met.Py())/energyLep;
-  double radical = (2.0*lepton.Pz()*a/energyLep)*(2.0*lepton.Pz()*a/energyLep);
-  radical = radical - 4.0*(1.0 - (lepton.Pz()/energyLep)*(lepton.Pz()/energyLep))*(met.Px()*met.Px() + met.Py()*met.Py()- a*a);
-  if (radical < 0.0) radical = 0.0;
-  metPz[0] = (lepton.Pz()*a/energyLep) + 0.5*sqrt(radical);
-  metPz[0] = metPz[0] / (1.0 - (lepton.Pz()/energyLep)*(lepton.Pz()/energyLep));
-  metPz[1] = (lepton.Pz()*a/energyLep) - 0.5*sqrt(radical);
-  metPz[1] = metPz[1] / (1.0 - (lepton.Pz()/energyLep)*(lepton.Pz()/energyLep));
-
-
-  // Loop over all jets, both Pz, calcaulte chi-square
-  TLorentzVector metNew;
-  for( int ipznu=0; ipznu<2; ipznu++ ){
-    metNew.SetXYZM(met.Px(),met.Py(),metPz[ipznu],0.0); //neutrino has mass 0
-    //with b-tag info
-    if( (nJets>=6 && nBtags>=4) || (nJets>=6 && nBtags==3) ){
-      vecTLorentzVector not_b_tagged,b_tagged;
-      //fill not_b_tagged and b_tagged
-      for( int i=0;i<nJets;i++ ){
-	if( (btag[i]>btagCut && i!=ind_second_lowest_btag && i!=ind_lowest_btag) || (i==ind_promoted_btag) ) b_tagged.push_back(jets[i]);
-	else not_b_tagged.push_back(jets[i]);
-      }
-      //first make possible t_lep's with b-tagged jets (includes making W_lep)
-      for( int i=0; i<int(b_tagged.size()); i++ ){
-	TLorentzVector W_lep=metNew+lepton; //used for histogram drawing only
-	TLorentzVector top_lep=metNew+lepton+b_tagged.at(i);
-	chi_top_lep=pow((top_lep.M()-top_mass)/sigma_lepTop,2);
-	//next make possible W_had's with not b-tagged jets
-	for( int j=0; j<int(not_b_tagged.size()); j++ ){
-	  for( int k=0; k<int(not_b_tagged.size()); k++ ){
-	    if( j!=k ){
-	      TLorentzVector W_had=not_b_tagged.at(j)+not_b_tagged.at(k);
-	      chi_W_had=pow((W_had.M()-W_mass)/sigma_hadW,2);
-	      //now make possible top_had's (using the W_had + some b-tagged jet)
-	      for( int l=0; l<int(b_tagged.size()); l++ ){
-		if( l!=i ){
-		  TLorentzVector top_had=W_had+b_tagged.at(l);
-		  chi_top_had=pow((top_had.M()-top_mass)/sigma_hadTop,2);
-		  chi=chi_top_lep+chi_W_had+chi_top_had;
-		  //accept the lowest chi
-		  if( chi<minChi ){
-		    minChi=chi;
-		    //pick the other two b's that have the highest et (energy in transverse plane) as higgs mass constituents
-		    TLorentzVector H2;
-		    int numH2Constituents=0;
-		    TLorentzVector bBest[2];
-		    for( int m=0; m<int(b_tagged.size()); m++ ){
-		      if( m!=i && m!=l && numH2Constituents<2 ){
-			bBest[numH2Constituents] = b_tagged.at(m);
-			numH2Constituents++;
-			H2+=b_tagged.at(m);
-		      }
-		    }
-		    dRbb = bBest[0].DeltaR( bBest[1] );
-		    higgs_mass_high_energy=H2.M();
-		    bjet1 = bBest[0];
-		    bjet2 = bBest[1];
-		  }
-		}
-	      }
-	    }
-	  }
-	}
-      }
-    }
-  }
-  return higgs_mass_high_energy;
-}
-
-
-
-
-// Some of this may seem redundant ( why not just feed TLVs into these functions instead of turning TLVs into vvdoubles and then converting vvdoubles to TLVs)
-// This is because we dont save the jets as TLVs when we loop over them in TreeMaker. 
-// They are saved as vvjets and most of these functions were used in treeReader where it was reading in vvjets from TreeMaker Trees
-
-
-
-
-void CommonBDTvars::convert_jets_to_TLVs(vvdouble jets, vecTLorentzVector &vect_of_jet_TLVs)
-{
-	TLorentzVector jet;	
-	int nJets = jets.size();
-	
-	for(int i=0;i<nJets;i++)
-	{
-		jet.SetPxPyPzE(jets[i][0],jets[i][1],jets[i][2],jets[i][3]);
-		vect_of_jet_TLVs.push_back(jet);
-	}
-}
-
-void CommonBDTvars::vect_of_tagged_TLVs(vvdouble jets, vdouble jetCSV, vecTLorentzVector &vect_of_btag_TLVs)
-{
-	TLorentzVector tagged_jet;
-	
-	int nJets = jets.size();
-	double btagCut = CSVMwp;
-	
-	for(int i=0;i<nJets;i++)
-	{
-		if (jetCSV[i]>btagCut)
-		{
-		
-			tagged_jet.SetPxPyPzE(jets[i][0],jets[i][1],jets[i][2],jets[i][3]);
-			vect_of_btag_TLVs.push_back(tagged_jet);
-		}
-	}
-}
-
-
-
-
-double CommonBDTvars::get_jet_jet_etamax (vvdouble jets)
-{
-	vecTLorentzVector thejets;
-	convert_jets_to_TLVs(jets, thejets);
-	
-	int count=0;
-	double avgval=0.;
-	
-	for (int i=0; i<int(thejets.size()); i++){
-	
-				avgval += abs(thejets[i].Eta());
-				count++;
-	}
-	
-	avgval /= count;
-	
-	double deta = 0.;
-	double etamax=-1.;
-	
-	for (int k=0; k<int(thejets.size()); k++)
-	{
-		deta = abs(abs(thejets[k].Eta())-avgval);
-		
-		if(deta>etamax)etamax = deta;
-		
-	}
-
-	return etamax;
-}
-
-
-double CommonBDTvars::get_jet_tag_etamax (vvdouble jets, vdouble jetCSV)
-{
-
-
-	vecTLorentzVector thejets;
-	convert_jets_to_TLVs(jets, thejets);
-	
-	int count=0;
-	double avgval=0.;
-	
-	for (int i=0; i<int(thejets.size()); i++)
-	{
-				
-				avgval += abs(thejets[i].Eta());
-				count++;
-				
-	}
-	
-	avgval /= count;
-	
-	double deta = 0.;
-	double etamax=0.;
-	
-	
-	vecTLorentzVector thetags;
-	vect_of_tagged_TLVs(jets, jetCSV, thetags);
-	
-	
-	for (int k=0; k<int(thetags.size()); k++)
-	{
-		 deta = abs(abs(thetags[k].Eta())-avgval);
-		
-		if(deta>etamax)etamax=deta;
-		
-		
-		
-	}
-
-	return etamax;
-}
-
-
-double CommonBDTvars::get_tag_tag_etamax (vvdouble jets, vdouble jetCSV)
-{
-
-//std::cout<<"tag_tag_etamax: ";
-
-	vecTLorentzVector thetags;
-	vect_of_tagged_TLVs(jets, jetCSV, thetags);
-		
-	int count=0;
-	double avgval=0.;
-	
-	for (int i=0; i<int(thetags.size()); i++)
-	{
-	  
-				
-				avgval += abs(thetags[i].Eta());
-				count++;
-				
-				
-				//std::cout<<abs(thetags[i].Eta())<<" "<<avgval<<" | ";
-		
-	}
-	
-	avgval /= count;
-	
-	
-	//cout<<avgval<<" ||| ";
-	
-	double deta = 0.;
-	double etamax=0.;
-	
-	
-	for (int k=0; k<int(thetags.size()); k++)
-	{
-		deta = abs(abs(thetags[k].Eta())-avgval);
-		
-		if(deta>etamax)etamax=deta;
-		
-		//std::cout<<deta<<" "<<etamax<<" | ";
-		
-	}
-	
-	
-	//std::cout<<" ||| "<<etamax<<"               "<<count<<endl;
-
-	return etamax;
-	
-	
-}
-
-
-double CommonBDTvars::study_tops_bb_syst (double MET, double METphi, TLorentzVector &metv, TLorentzVector lepton, vvdouble jets, vdouble csv, double &minChi, double &chi2lepW, double &chi2leptop, double &chi2hadW, double &chi2hadtop, double &mass_lepW, double &mass_leptop, double &mass_hadW, double &mass_hadtop, double &dRbb, double &testquant1, double &testquant2, double &testquant3, double &testquant4, double &testquant5, double &testquant6, double &testquant7, TLorentzVector &b1, TLorentzVector &b2)
-{
-	// cout<< "in study_tops_bb_syst" << endl;
-	
-	double pi = 3.14;
-	
-	metv.SetPtEtaPhiE(MET,0.,METphi,MET);
-	
-	// cout<< metv.Pt() << endl;
-	
-	//TLorentzVector lepton;
-	
-	
-	//lepton.SetPxPyPzE(lep[0],lep[1],lep[2],lep[3]);
-	
-	// cout<< lepton.Pt() << endl;
-	
-	vecTLorentzVector jet_TLVs;	
-	
-	
-	convert_jets_to_TLVs(jets, jet_TLVs);
-	
-	
-	// cout<< jet_TLVs[0].Pt() << endl;
-		
-	//double minChi;
-	//double dRbb;
-	TLorentzVector bjet1;
-	TLorentzVector bjet2;
-	TLorentzVector leptop;
-	TLorentzVector hadtop;
-	
-	// cout<< "before bhm" << endl;
-	
-	double bhm = getBestHiggsMass2(lepton, metv, jet_TLVs, csv, minChi, dRbb, bjet1, bjet2, chi2lepW, chi2leptop, chi2hadW, chi2hadtop, mass_lepW, mass_leptop, mass_hadW, mass_hadtop, leptop, hadtop); // Jon T. version 2
-
-	
-	b1 = bjet1;
-	b2 = bjet2;
-	
-	TLorentzVector bsyst = bjet1+bjet2;
-	TLorentzVector topsyst = leptop+hadtop;
-	
-	double dphihad = bsyst.DeltaPhi(hadtop);
-	double dphilep = bsyst.DeltaPhi(leptop);
-	
-	
-	testquant1 = bsyst.Eta() - leptop.Eta();	
-	
-	// cout<< testquant1 << endl;
-	
-	testquant2 = bsyst.Eta() - hadtop.Eta();
-	
-	// cout<< testquant2 << endl;
-	
-	testquant3 = fabs((dphilep - pi)*(dphilep + pi)) + pow(dphihad,2);
-	testquant3 = sqrt(testquant3 / (2.0*pow(pi,2)));		
-	
-	// cout<< testquant3 << endl;
-	
-	testquant4 = bsyst.Eta();
-	
-	// cout<< testquant4 << endl;
-	
-	testquant5 = (hadtop.Eta() + leptop.Eta())/2;
-	
-	// cout<< testquant5 << endl;
-		
-	testquant6 = sqrt(abs((bsyst.Eta() - leptop.Eta())*(bsyst.Eta() - hadtop.Eta())));
-	
-	// cout<< testquant6 << endl;
-	
-	testquant7 = bsyst.Angle(topsyst.Vect());
-	
-	// cout<< testquant7 << endl;
-	
-	return bhm;
-}
-
-
-double CommonBDTvars::getBestHiggsMass2(TLorentzVector lepton, TLorentzVector &met, vecTLorentzVector jets, vdouble btag, double &minChi, double &dRbb, TLorentzVector &bjet1, TLorentzVector &bjet2, double &chi2lepW, double &chi2leptop, double &chi2hadW, double &chi2hadtop, double &mass_lepW, double &mass_leptop, double &mass_hadW, double &mass_hadtop, TLorentzVector &toplep, TLorentzVector &tophad)
-{
-
-  int nJets = int(jets.size());
-  double pfmet_px=met.Px(), pfmet_py=met.Py();
-  double chi_top_lep=10000;
-  double chi_top_had=10000;
-  //double chi_W_lep=10000; //isn't really used
-  double chi_W_had=10000;
-
-  minChi = 1000000;
-  dRbb = 1000000;
-  double btagCut = CSVMwp;
-  double W_mass = 80.0;
-  double top_mass = 172.5;
-  //double H_mass=120.0;
-
-  // updated 8/22/2012 from J. Timcheck
-  //sigma's from >=6j >=4t, muon, no imaginary neutrino pz ttH
-  double sigma_hadW   = 12.77;
-  double sigma_hadTop = 18.9;
-  //double sigma_lepTop = 32.91;
-  double sigma_lepTop = 18.9;
-
-  // //sigma's from >=6j >=4t, muon, no imaginary neutrino pz ttH
-  // double sigma_hadW   = 12.59;
-  // double sigma_hadTop = 19.9;
-  // double sigma_lepTop = 39.05;
-
-  //sigma's from >=6j >=4t, muon, no imaginary neutrino pz ttJets
-  /*double sigma_hadW		= 12.72,
-    sigma_hadTop	= 18.12,
-    sigma_lepTop	= 38.72;
-  */
-  
-  /// more initializitions
-  
-  bjet1.SetPxPyPzE(1.,1.,1.,2.);
-  bjet2.SetPxPyPzE(1.,1.,1.,2.);
-//  chi2lepW = 0.;
-//  chi2leptop = 0.;
-//  chi2hadtop = 0.;
-  mass_lepW = 0.;
-  mass_leptop = 0.;
-  mass_hadW = 0.;
-  mass_hadtop = 0.;
-  toplep.SetPxPyPzE(1.,1.,1.,2.);
-  tophad.SetPxPyPzE(1.,1.,1.,2.);
-  
-  
-  double metPz[2];
-  double chi=999999;
-
-  //stuff to find:
-  double higgs_mass_high_energy=0;
-
-  int nBtags = 0;
-  for(int i=0;i<nJets;i++){
-    if(btag[i]>btagCut) nBtags++;
-  }
-
-  int nUntags = nJets-nBtags;
-
-  double lowest_btag = 99.;
-  double second_lowest_btag = 999.;
-  int ind_lowest_btag = 999;
-  int ind_second_lowest_btag = 999;
-
-  vdouble btag_sorted = btag;
-  //int ind_fourth_highest = 999;
-
-  if( nJets>=6 && nBtags>=4 ){
-    
-    if( nUntags<2 ){
-      for(int i=0;i<nJets;i++){
-	if( btag[i]<lowest_btag ){
-	  second_lowest_btag = lowest_btag;
-	  ind_second_lowest_btag = ind_lowest_btag;
-
-	  lowest_btag = btag[i];
-	  ind_lowest_btag = i;
-	}
-	else if( btag[i]<second_lowest_btag ){
-	  second_lowest_btag = btag[i];
-	  ind_second_lowest_btag = i;
-	}
-      }
-    }
-    /*
-    if( nBtags==3 )
-    {
-	sort(btag_sorted.begin(),btag_sorted.end());
-	double fourth_highest_csv = btag_sorted[nJets-4];
-	
-	for (int f=0; f<nJets; f++)
-	{
-		if (btag[f]==fourth_highest_csv) ind_fourth_highest = f;
-	}
-
-    }
-    */
-  }
-
-    //Handle 6j3t.
-  int ind_promoted_btag = 999;
-
-  if( nJets>=6 && nBtags==3 ){
-    for(int i=0;i<nJets;i++){
-      int rank = 0;
-      for(int j=0;j<nJets;j++){
-	if( btag[j] > btag[i] ){
-	  rank++;
-	}
-      }
-      if( rank == 3 ) ind_promoted_btag = i;
-    }
-  }
-
-
-  // First get the neutrino z
-  double energyLep = lepton.E();
-  double a = (W_mass*W_mass/(2.0*energyLep)) + (lepton.Px()*met.Px() + lepton.Py()*met.Py())/energyLep;
-  double radical = (2.0*lepton.Pz()*a/energyLep)*(2.0*lepton.Pz()*a/energyLep);
-  radical = radical - 4.0*(1.0 - (lepton.Pz()/energyLep)*(lepton.Pz()/energyLep))*(met.Px()*met.Px() + met.Py()*met.Py()- a*a);
-  
-  bool imaginary = false;
-
-if (radical < 0.0)
-{
-	imaginary=true;
-}
-if(imaginary)
-{
-	radical=-1.0;
-	double value=.001;
-	while(true)
-	{
-		met.SetPxPyPzE(pfmet_px,pfmet_py,0.0,sqrt(pow(pfmet_px,2)+pow(pfmet_py,2))); //neutrino mass 0, pt = sqrt(px^2+py^2)
-//			energyLep = lepton.E();
-		a = (W_mass*W_mass/(2.0*energyLep)) + (lepton.Px()*met.Px() + lepton.Py()*met.Py())/energyLep;
-		radical = (2.0*lepton.Pz()*a/energyLep)*(2.0*lepton.Pz()*a/energyLep);
-		radical = radical - 4.0*(1.0 - (lepton.Pz()/energyLep)*(lepton.Pz()/energyLep))*(met.Px()*met.Px() + met.Py()*met.Py()- a*a);
-		if(radical>=0)
-			break;
-		pfmet_px-=pfmet_px*value;
-		pfmet_py-=pfmet_py*value;
-	}
-}
-
-
-  metPz[0] = (lepton.Pz()*a/energyLep) + 0.5*sqrt(radical);
-  metPz[0] = metPz[0] / (1.0 - (lepton.Pz()/energyLep)*(lepton.Pz()/energyLep));
-  metPz[1] = (lepton.Pz()*a/energyLep) - 0.5*sqrt(radical);
-  metPz[1] = metPz[1] / (1.0 - (lepton.Pz()/energyLep)*(lepton.Pz()/energyLep));
-
-
-
-  // Loop over all jets, both Pz, calcaulte chi-square
-  TLorentzVector metNew;
-  for( int ipznu=0; ipznu<2; ipznu++ ){
-    metNew.SetXYZM(met.Px(),met.Py(),metPz[ipznu],0.0); //neutrino has mass 0
-    //with b-tag info
-    if(( nJets>=6 && nBtags>=4 )||( nJets>=6 && nBtags==3 )){
-      vecTLorentzVector not_b_tagged,b_tagged;
-      //fill not_b_tagged and b_tagged
-      for( int i=0;i<nJets;i++ ){
-      
-        //if (nBtags>=4)
-	//{
-		if( (btag[i]>btagCut && i!=ind_second_lowest_btag && i!=ind_lowest_btag) || (i==ind_promoted_btag) ) b_tagged.push_back(jets[i]);
-		else not_b_tagged.push_back(jets[i]);
-	//}
-	/*
-	if (nBtags==3)
-	{
-      		if( btag[i]>btagCut || i==ind_fourth_highest) b_tagged.push_back(jets[i]);
-		else not_b_tagged.push_back(jets[i]);
-      	}
- 	*/
-      
-      }
-      //first make possible t_lep's with b-tagged jets (includes making W_lep)
-      for( int i=0; i<int(b_tagged.size()); i++ ){
-	TLorentzVector W_lep=metNew+lepton; //used for histogram drawing only
-	TLorentzVector top_lep=metNew+lepton+b_tagged.at(i);
-	chi_top_lep=pow((top_lep.M()-top_mass)/sigma_lepTop,2);
-	//next make possible W_had's with not b-tagged jets
-	for( int j=0; j<int(not_b_tagged.size()); j++ ){
-	  for( int k=0; k<int(not_b_tagged.size()); k++ ){
-	    if( j!=k ){
-	      TLorentzVector W_had=not_b_tagged.at(j)+not_b_tagged.at(k);
-	      chi_W_had=pow((W_had.M()-W_mass)/sigma_hadW,2);
-	      //now make possible top_had's (using the W_had + some b-tagged jet)
-	      for( int l=0; l<int(b_tagged.size()); l++ ){
-		if( l!=i ){
-		  TLorentzVector top_had=W_had+b_tagged.at(l);
-		  chi_top_had=pow((top_had.M()-top_mass)/sigma_hadTop,2);
-		  chi=chi_top_lep+chi_W_had+chi_top_had;
-		  //accept the lowest chi
-		  if( chi<minChi ){
-		    minChi=chi;
-		    //pick the other two b's that have the highest et (energy in transverse plane) as higgs mass constituents
-		    TLorentzVector H2;
-		    int numH2Constituents=0;
-		    
-		    TLorentzVector bBest[2];
-		    
-		    for( int m=0; m<int(b_tagged.size()); m++ ){
-		      if( m!=i && m!=l && numH2Constituents<2 ){
-			bBest[numH2Constituents] = b_tagged.at(m);
-			numH2Constituents++;
-			H2+=b_tagged.at(m);
-		      }
-		    }
-		    dRbb = bBest[0].DeltaR( bBest[1] );
-		    higgs_mass_high_energy=H2.M();
-		    bjet1 = bBest[0];
-		    bjet2 = bBest[1];
-		    
-		    mass_lepW = W_mass;
-		    mass_leptop = top_lep.M();
-		    mass_hadW = W_had.M();
-		    mass_hadtop = top_had.M();
-		    toplep = top_lep;
-		    tophad = top_had;
-		  }
-		}
-	      }
-	    }
-	  }
-	}
-      }
-    }
-  }
-  
-chi2lepW = 0.;
-chi2leptop = chi_top_lep;
-chi2hadtop = chi_top_had;
-chi2hadW = chi_W_had;
-
-
-
-  
-  return higgs_mass_high_energy;
-
-}
-
-
-double CommonBDTvars::get_median_bb_mass(vvdouble jets, vdouble jetCSV)
-{
-	
-	
-	
-	// all btags
-	vecTLorentzVector all_btags;
-	TLorentzVector bb;
-
-	vect_of_tagged_TLVs(jets, jetCSV, all_btags);
-
-	int bbcount = 0;
-	vector<double> median_vect;
-	double median_mass = 0.;
-	
-
-	for (int asdf=0; asdf<int(all_btags.size()-1); asdf++)
-	{
-	  for (int j=asdf+1; j<int(all_btags.size()); j++)
-		{	
-
-			bb = all_btags[asdf]+all_btags[j];
-
-			median_vect.push_back(bb.M());
-
-			bbcount++;
-
-		}
-	}
-
-
-
-	double vectpos = (double)median_vect.size();
-	
-	if(vectpos!=0){
-
-	 	vectpos = floor(vectpos/2)-1; // all these are even -> gets lower one
-
-	 	sort(median_vect.begin(),median_vect.end());
-
-		median_mass = median_vect[vectpos+1]; // gets upper one
-	
-	}
-	
-	
-	
-
-	return median_mass;
-
-}
-
-
-
-double CommonBDTvars::pt_E_ratio_jets(vvdouble jets)
-{
-	double ratio = 0.;
-	double ptsum = 0.;
-	double Esum = 0.;
-	
-	vecTLorentzVector jetvect;
-	convert_jets_to_TLVs(jets,jetvect);
-	
-	for (int i=0; i<int(jetvect.size()); i++)
-	{
-		ptsum += jetvect[i].Pt();
-		Esum += jetvect[i].E();
-	}
-	
-	ratio = ptsum / Esum;
-	
-	return ratio;
-}
-
-
-double CommonBDTvars::JetDelta_EtaAvgEta(vvdouble jet_vect_TLV, vdouble jet_CSV, std::string JetorTag, std::string JetorTag_Avg )
-{
-
-//if(JetorTag == "Tag" && JetorTag_Avg =="Tag")std::cout<<"JetDelta_TagTag: ";
-	double sumJetEta = 0;
-	double sumTagEta = 0;
-	double cntJetEta = 0;
-	double cntTagEta = 0;
-	
-	
-	for( int iJet=0; iJet<int(jet_vect_TLV.size()); iJet++ ){
-	  TLorentzVector myJet;
-	  myJet.SetPxPyPzE( jet_vect_TLV[iJet][0], jet_vect_TLV[iJet][1], jet_vect_TLV[iJet][2], jet_vect_TLV[iJet][3] );
-	  double myCSV = jet_CSV[iJet];
-	  sumJetEta += abs(myJet.Eta());
-	  cntJetEta += 1.;
-	  
-	  
-	  
-	  
-
-	  if( myCSV>CSVMwp ){
-	    sumTagEta += abs(myJet.Eta());
-	    cntTagEta += 1.;
-	   // if(JetorTag == "Tag" && JetorTag_Avg == "Tag")std::cout<<abs(myJet.Eta())<<" "<<sumTagEta<<" | ";
-	  }
-  	}
-	
-	double aveJetEta = ( cntJetEta>0 ) ? sumJetEta/cntJetEta : -999;
-	double aveTagEta = ( cntTagEta>0 ) ? sumTagEta/cntTagEta : -999;
-
-	double maxDEta_jet_aveJetEta = -1;
-	double maxDEta_tag_aveJetEta = -1;
-	double maxDEta_tag_aveTagEta = -1;
-	double maxDEta_jet_aveTagEta = -1;
-	
-	//if(JetorTag == "Tag" && JetorTag_Avg == "Tag")std::cout<<aveTagEta<<" || ";
-
-	for( int iJet=0; iJet<int(jet_vect_TLV.size()); iJet++ ){
-	  TLorentzVector myJet;
-	  myJet.SetPxPyPzE( jet_vect_TLV[iJet][0], jet_vect_TLV[iJet][1], jet_vect_TLV[iJet][2], jet_vect_TLV[iJet][3] );
-
-	  double myCSV = jet_CSV[iJet];
-	  double myJetEta = abs(myJet.Eta());
-
-	  maxDEta_jet_aveJetEta = std::max( maxDEta_jet_aveJetEta, fabs(myJetEta - aveJetEta) );
-	  maxDEta_jet_aveTagEta = std::max( maxDEta_jet_aveTagEta, fabs(myJetEta - aveTagEta) );
-	  if( myCSV>CSVMwp ){
-	    maxDEta_tag_aveJetEta = std::max( maxDEta_tag_aveJetEta, fabs(myJetEta - aveJetEta) );
-	    maxDEta_tag_aveTagEta = std::max( maxDEta_tag_aveTagEta, fabs(myJetEta - aveTagEta) );
-	   // if(JetorTag == "Tag" && JetorTag_Avg == "Tag")std::cout<<fabs(myJetEta - aveTagEta)<<" "<<maxDEta_tag_aveTagEta<<" | ";
-	  }
-	}
-	
-	double returnVal = -1;
-	
-	if(JetorTag == "Jet" && JetorTag_Avg == "Jet")returnVal = maxDEta_jet_aveJetEta;
-	if(JetorTag == "Tag" && JetorTag_Avg == "Jet")returnVal = maxDEta_tag_aveJetEta;
-	if(JetorTag == "Tag" && JetorTag_Avg == "Tag")returnVal = maxDEta_tag_aveTagEta;
-	if(JetorTag == "Jet" && JetorTag_Avg == "Tag")returnVal = maxDEta_jet_aveTagEta;
-	
-	//if(JetorTag == "Tag" && JetorTag_Avg == "Tag")std::cout<<" ||| "<<returnVal<<"            "<<cntTagEta<<endl;
-	
-	return returnVal;
-	
-	
-}
-
-
-class DNNOutput
-{
-public:
-    std::vector<double> values;
-
-    DNNOutput(double ttH, double ttbb, double ttb, double tt2b, double ttcc, double ttlf,
-        double other)
-    {
-        values.push_back(ttH);
-        values.push_back(ttbb);
-        values.push_back(ttb);
-        values.push_back(tt2b);
-        values.push_back(ttcc);
-        values.push_back(ttlf);
-        values.push_back(other);
-    }
-
-    DNNOutput()
-        : DNNOutput(0., 0., 0., 0., 0., 0., 0.)
-    {
-        reset();
-    }
-
-    ~DNNOutput()
-    {
-    }
-
-    void reset();
-
-    inline double ttH() const
-    {
-        return values[0];
-    }
-
-    inline double ttbb() const
-    {
-        return values[1];
-    }
-
-    inline double ttb() const
-    {
-        return values[2];
-    }
-
-    inline double tt2b() const
-    {
-        return values[3];
-    }
-
-    inline double ttcc() const
-    {
-        return values[4];
-    }
-
-    inline double ttlf() const
-    {
-        return values[5];
-    }
-
-    inline double other() const
-    {
-        return values[6];
-    }
-
-    inline size_t mostProbableClass() const
-    {
-        return distance(values.begin(), max_element(values.begin(), values.end()));
-    }
-};
-
-class DNNVariables
-{
-public:
-    double getHt(const std::vector<const TLorentzVector*>& lvecs) const;
-
-    void getMinMaxDR(const std::vector<const TLorentzVector*>& lvecs, double& minDR,
-        double& maxDR) const;
-
-    void getMinMaxDR(const std::vector<const TLorentzVector*>& lvecs, const TLorentzVector* lvec,
-        double& minDR, double& maxDR) const;
-
-    double getCentrality(const std::vector<const TLorentzVector*>& lvecs) const;
-
-    void getSphericalEigenValues(const std::vector<const TLorentzVector*>& lvecs, double& ev1,
-        double& ev2, double& ev3) const;
-};
-
-class DNNClassifierBase
-{
-public:
-    double csvCut;
-
-    DNNClassifierBase(std::string version);
-
-    virtual ~DNNClassifierBase();
-
-    static void pyInitialize();
-    static void pyFinalize();
-    static void pyExcept(PyObject* pyObj, const std::string& msg);
-
-protected:
-    string version_;
-    string inputName_;
-    string outputName_;
-    string dropoutName_;
-    PyObject* pyContext_;
-    PyObject* pyEval_;
-    DNNVariables dnnVars_;
-};
-
-class DNNClassifier_SL : public DNNClassifierBase
-{
-public:
-    DNNClassifier_SL(std::string version = "v4");
-
-    ~DNNClassifier_SL();
-
-    void evaluate(const std::vector<TLorentzVector>& jets, const std::vector<double>& jetCSVs,
-        const TLorentzVector& lepton, const TLorentzVector& met, DNNOutput& dnnOutput);
-
-    DNNOutput evaluate(const std::vector<TLorentzVector>& jets, const std::vector<double>& jetCSVs,
-        const TLorentzVector& lepton, const TLorentzVector& met);
-
-    void fillFeatures_(PyObject* pyEvalArgs, const std::vector<TLorentzVector>& jets,
-        const std::vector<double>& jetCSVs, const TLorentzVector& lepton,
-        const TLorentzVector& met);
-
-private:
-    size_t nFeatures4_;
-    size_t nFeatures5_;
-    size_t nFeatures6_;
-    PyObject* pyEvalArgs4_;
-    PyObject* pyEvalArgs5_;
-    PyObject* pyEvalArgs6_;
-    CommonBDTvars bdtVars_;
-};
-
-
-
-//DANGERZONE
-// HERE you need to add escapes to get the correct print out
-// python evaluation script
-// python evaluation script
-static string evalScript = \"\\
-import sys, numpy as np\\n\\
-td, inputs, outputs, dropouts = None, [], [], []\\n\\
-def setup(python_path, model_files, input_name, output_name, dropout_name):\\n\\
-    global td, inputs, outputs, dropouts\\n\\
-    sys.path.insert(0, python_path)\\n\\
-    import tfdeploy as td\\n\\
-    for model_file in model_files:\\n\\
-        model = td.Model(model_file)\\n\\
-        inputs.append(model.get(input_name))\\n\\
-        outputs.append(model.get(output_name))\\n\\
-        dropouts.append(model.get(dropout_name))\\n\\
-def eval(m, *values):\\n\\
-    return list(outputs[m].eval({inputs[m]: [np.array(values).astype(np.float32)], dropouts[m]: 1.})[0])\\n\\
-\";
-
-
-/*
- * DNN Classifier.
- * Please note that this classifier actually outputs 7 discriminator values simultaneously.They can
- * be interpreted as a classification probability as they sum up to 1. Classes (order is important):
- * ttH, ttbb, ttb, tt2b, ttcc, ttlf, other
- */
-
-void DNNOutput::reset()
-{
-    for (size_t i = 0; i < 7; i++)
-    {
-        values[i] = -2.;
-    }
-}
-
-DNNClassifierBase::DNNClassifierBase(std::string version)
-    : csvCut(0.8484)
-    , version_(version)
-    , inputName_("inp")
-    , outputName_("outp")
-    , dropoutName_("keep_prob")
-    , pyContext_(0)
-    , pyEval_(0)
-{
-}
-
-DNNClassifierBase::~DNNClassifierBase()
-{
-    // cleanup python objects
-    if (pyEval_) Py_DECREF(pyEval_);
-    if (pyContext_) Py_DECREF(pyContext_);
-}
-
-void DNNClassifierBase::pyInitialize()
-{
-    PyEval_InitThreads();
-    Py_Initialize();
-}
-
-void DNNClassifierBase::pyFinalize()
-{
-    Py_Finalize();
-}
-
-void DNNClassifierBase::pyExcept(PyObject* pyObj, const std::string& msg)
-{
-    if (pyObj == NULL)
-    {
-        if (PyErr_Occurred() != NULL)
-        {
-            PyErr_PrintEx(0);
-        }
-        throw runtime_error("a python error occured: " + msg);
-    }
-}
-
-DNNClassifier_SL::DNNClassifier_SL(std::string version)
-    : DNNClassifierBase(version)
-    , nFeatures4_(0)
-    , nFeatures5_(0)
-    , nFeatures6_(0)
-    , pyEvalArgs4_(0)
-    , pyEvalArgs5_(0)
-    , pyEvalArgs6_(0)
-{
-    // set feature numbers based in the version
-    if (version_ == "v2")
-    {
-        nFeatures4_ = 39;
-        nFeatures5_ = 44;
-        nFeatures6_ = 49;
-    }
-    else if (version_ == "v3")
-    {
-        nFeatures4_ = 30;
-        nFeatures5_ = 34;
-        nFeatures6_ = 38;
-    }
-    else if (version_ == "v4")
-    {
-        nFeatures4_ = 30;
-        nFeatures5_ = 34;
-        nFeatures6_ = 38;
-    }
-    else
-    {
-        throw std::runtime_error("unknown version: " + version_);
-    }
-
-    // determine some local paths
-    std::string cmsswBase = std::string(getenv("CMSSW_BASE"));
-    std::string tfdeployBase = cmsswBase + "/python/TTH/CommonClassifier";
-    std::string modelsBase = cmsswBase + "/src/TTH/CommonClassifier/data/dnnmodels_SL_" + version_;
-    std::string modelFile4 = modelsBase + "/model_4j.pkl";
-    std::string modelFile5 = modelsBase + "/model_5j.pkl";
-    std::string modelFile6 = modelsBase + "/model_6j.pkl";
-
-    // initialize the python main object, load the script
-    PyObject* pyMainModule = PyImport_AddModule("__main__");
-
-    PyObject* pyMainDict = PyModule_GetDict(pyMainModule);
-    pyContext_ = PyDict_Copy(pyMainDict);
-
-    PyRun_String(evalScript.c_str(), Py_file_input, pyContext_, pyContext_);
-
-    // load the tfdeploy models
-    PyObject* pySetup = PyDict_GetItemString(pyContext_, "setup");
-    PyObject* pyModelFiles = PyTuple_New(3);
-    PyTuple_SetItem(pyModelFiles, 0, PyString_FromString(modelFile4.c_str()));
-    PyTuple_SetItem(pyModelFiles, 1, PyString_FromString(modelFile5.c_str()));
-    PyTuple_SetItem(pyModelFiles, 2, PyString_FromString(modelFile6.c_str()));
-    PyObject* pyArgs = PyTuple_New(5);
-    PyTuple_SetItem(pyArgs, 0, PyString_FromString(tfdeployBase.c_str()));
-    PyTuple_SetItem(pyArgs, 1, pyModelFiles);
-    PyTuple_SetItem(pyArgs, 2, PyString_FromString(inputName_.c_str()));
-    PyTuple_SetItem(pyArgs, 3, PyString_FromString(outputName_.c_str()));
-    PyTuple_SetItem(pyArgs, 4, PyString_FromString(dropoutName_.c_str()));
-
-    PyObject* pyResult = PyObject_CallObject(pySetup, pyArgs);
-    pyExcept(pyResult, "could not load tfdeploy models");
-
-    // store the evaluation function and prepare args
-    // the "+ 1" is due to the model number being the first argument in the eval function
-    pyEval_ = PyDict_GetItemString(pyContext_, "eval");
-    pyEvalArgs4_ = PyTuple_New(nFeatures4_ + 1);
-    pyEvalArgs5_ = PyTuple_New(nFeatures5_ + 1);
-    pyEvalArgs6_ = PyTuple_New(nFeatures6_ + 1);
-}
-
-DNNClassifier_SL::~DNNClassifier_SL()
-{
-    // cleanup python objects
-    if (pyEvalArgs4_) Py_DECREF(pyEvalArgs4_);
-    if (pyEvalArgs5_) Py_DECREF(pyEvalArgs5_);
-    if (pyEvalArgs6_) Py_DECREF(pyEvalArgs6_);
-}
-
-void DNNClassifier_SL::evaluate(const std::vector<TLorentzVector>& jets,
-    const std::vector<double>& jetCSVs, const TLorentzVector& lepton, const TLorentzVector& met,
-    DNNOutput& dnnOutput)
-{
-    dnnOutput.reset();
-
-    size_t nJets = jets.size();
-    size_t modelNum;
-    PyObject* pyEvalArgs = NULL;
-    if (nJets < 4)
-    {
-        // no DNN classifier existing for < 4 jets
-        return;
-    }
-    else if (nJets == 4)
-    {
-        pyEvalArgs = pyEvalArgs4_;
-        modelNum = 0;
-    }
-    else if (nJets == 5)
-    {
-        pyEvalArgs = pyEvalArgs5_;
-        modelNum = 1;
-    }
-    else
-    {
-        pyEvalArgs = pyEvalArgs6_;
-        modelNum = 2;
-    }
-
-    // modelNum is at pos 0
-    PyTuple_SetItem(pyEvalArgs, 0, PyInt_FromSize_t(modelNum));
-
-    // fill features into the py tuple
-    fillFeatures_(pyEvalArgs, jets, jetCSVs, lepton, met);
-
-    // evaluate
-    PyObject* pyList = PyObject_CallObject(pyEval_, pyEvalArgs);
-    pyExcept(pyList, "could not evaluate models");
-
-    // fill the dnnOutput
-    dnnOutput.values.resize(7);
-    // v2 has the "other" category, v3 and v4 don't
-    bool hasOther = version_ == "v2";
-    for (size_t i = 0; i < (hasOther ? 7 : 6); i++)
-    {
-        dnnOutput.values[i] = PyFloat_AsDouble(PyList_GetItem(pyList, i));
-    }
-    if (!hasOther)
-    {
-        dnnOutput.values[6] = 0.0;
-    }
-
-    Py_DECREF(pyList);
-}
-
-DNNOutput DNNClassifier_SL::evaluate(const std::vector<TLorentzVector>& jets,
-    const std::vector<double>& jetCSVs, const TLorentzVector& lepton, const TLorentzVector& met)
-{
-    DNNOutput dnnOutput;
-    evaluate(jets, jetCSVs, lepton, met, dnnOutput);
-    return dnnOutput;
-}
-
-void DNNClassifier_SL::fillFeatures_(PyObject* pyEvalArgs, const std::vector<TLorentzVector>& jets,
-    const std::vector<double>& jetCSVs, const TLorentzVector& lepton, const TLorentzVector& met)
-{
-    size_t idx = 1;
-
-    // low-level jet features: pt, eta, phi, mass, csv
-    for (size_t i = 0; i < min(jets.size(), (size_t)6); i++)
-    {
-        PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(jets[i].Pt()));
-        PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(jets[i].Eta()));
-        PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(jets[i].Phi()));
-        if (version_ == "v2")
-        {
-            PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(jets[i].Mag()));
-        }
-        PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(jetCSVs[i]));
-    }
-
-    // low-level lepton features: pt, eta, phi, mass
-    PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(lepton.Pt()));
-    PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(lepton.Eta()));
-    PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(lepton.Phi()));
-    if (version_ == "v2")
-    {
-        PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(lepton.Mag()));
-
-        // low-level met features: pt, phi
-        PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(met.Pt()));
-        PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(met.Phi()));
-    }
-
-    // split jets into b jets and light jets
-    // store pointers to avoid performance drawbacks due to vector copying
-    std::vector<const TLorentzVector*> allJets;
-    std::vector<const TLorentzVector*> bJets;
-    std::vector<double> bCSVs;
-    std::vector<const TLorentzVector*> lJets;
-    std::vector<double> lCSVs;
-    for (size_t i = 0; i < jets.size(); i++)
-    {
-        allJets.push_back(&jets[i]);
-        if (jetCSVs[i] >= csvCut)
-        {
-            bJets.push_back(&jets[i]);
-            bCSVs.push_back(jetCSVs[i]);
-        }
-        else
-        {
-            lJets.push_back(&jets[i]);
-            lCSVs.push_back(jetCSVs[i]);
-        }
-    }
-
-    // Ht
-    PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(dnnVars_.getHt(allJets)));
-
-    // min and max dR between jets
-    double minDRJets, maxDRJets;
-    dnnVars_.getMinMaxDR(allJets, minDRJets, maxDRJets);
-    PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(minDRJets));
-    PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(maxDRJets));
-
-    // min and max dR between light jets
-    if (version_ == "v2")
-    {
-        double minDRLJets, maxDRLJets;
-        dnnVars_.getMinMaxDR(lJets, minDRLJets, maxDRLJets);
-        PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(minDRLJets));
-        PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(maxDRLJets));
-    }
-
-    // min and max dR between b jets
-    double minDRBJets, maxDRBJets;
-    dnnVars_.getMinMaxDR(bJets, minDRBJets, maxDRBJets);
-    PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(minDRBJets));
-    PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(maxDRBJets));
-
-    // min and max dR between b jets and the lepton
-    double minDRBJetsLep, maxDRBJetsLep;
-    dnnVars_.getMinMaxDR(bJets, &lepton, minDRBJetsLep, maxDRBJetsLep);
-    if (version_ == "v2" || version_ == "v3")
-    {
-        PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(minDRBJetsLep));
-        PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(maxDRBJetsLep));
-    }
-
-    // jet centrality
-    PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(dnnVars_.getCentrality(allJets)));
-
-    // jet aplanarity, sphericity and transverse sphericity
-    double ev1, ev2, ev3;
-    dnnVars_.getSphericalEigenValues(allJets, ev1, ev2, ev3);
-    PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(3. / 2. * ev3));
-    PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(3. / 2. * (ev2 + ev3)));
-    double tSphericity = ev2 == 0 ? 0 : (2. * ev2 / (ev1 + ev2));
-    PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(tSphericity));
-
-    if (version_ == "v4")
-    {
-        PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(minDRBJetsLep));
-        PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(maxDRBJetsLep));
-    }
-
-    // Fox-Wolfram moments
-    // disabled for the moment, see https://gitlab.cern.ch/ttH/CommonClassifier/issues/1
-    // double fw1, fw2, fw3, fw4, fw5;
-    // bdtVars_.getFox(jets, fw1, fw2, fw3, fw4, fw5);
-    // PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(fw1));
-    // PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(fw2));
-    // PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(fw3));
-    // PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(fw4));
-    // PyTuple_SetItem(pyEvalArgs, idx++, PyFloat_FromDouble(fw5));
-}
-
-
-double DNNVariables::getHt(const std::vector<const TLorentzVector*>& lvecs) const
-{
-    double ht = 0;
-    for (size_t i = 0; i < lvecs.size(); i++)
-    {
-        ht += lvecs[i]->Pt();
-    }
-    return ht;
-}
-
-void DNNVariables::getMinMaxDR(
-    const std::vector<const TLorentzVector*>& lvecs, double& minDR, double& maxDR) const
-{
-    maxDR = lvecs.size() == 0 ? -1 : 0.;
-    minDR = lvecs.size() == 0 ? -1 : 100.;
-    if (lvecs.size() >= 2)
-    {
-        for (size_t i = 0; i < lvecs.size() - 1; i++)
-        {
-            for (size_t j = i + 1; j < lvecs.size(); j++)
-            {
-                double dR = lvecs[i]->DeltaR(*lvecs[j]);
-                if (dR > maxDR)
-                {
-                    maxDR = dR;
-                }
-                if (dR < minDR)
-                {
-                    minDR = dR;
-                }
-            }
-        }
-    }
-}
-
-void DNNVariables::getMinMaxDR(const std::vector<const TLorentzVector*>& lvecs,
-    const TLorentzVector* lvec, double& minDR, double& maxDR) const
-{
-    maxDR = lvecs.size() == 0 ? -1 : 0.;
-    minDR = lvecs.size() == 0 ? -1 : 100.;
-    for (size_t i = 0; i < lvecs.size(); i++)
-    {
-        double dR = lvecs[i]->DeltaR(*lvec);
-        if (dR > maxDR)
-        {
-            maxDR = dR;
-        }
-        if (dR < minDR)
-        {
-            minDR = dR;
-        }
-    }
-}
-
-double DNNVariables::getCentrality(const std::vector<const TLorentzVector*>& lvecs) const
-{
-    double sumPt = 0.;
-    double sumP = 0.;
-    for (size_t i = 0; i < lvecs.size(); i++)
-    {
-        sumPt += lvecs[i]->Pt();
-        sumP += lvecs[i]->P();
-    }
-    return sumPt / sumP;
-}
-
-void DNNVariables::getSphericalEigenValues(
-    const std::vector<const TLorentzVector*>& lvecs, double& ev1, double& ev2, double& ev3) const
-{
-    TMatrixDSym momentumMatrix(3);
-    double p2Sum = 0.;
-
-    for (size_t i = 0; i < lvecs.size(); i++)
-    {
-        double px = lvecs[i]->Px();
-        double py = lvecs[i]->Py();
-        double pz = lvecs[i]->Pz();
-
-        // fill the matrix
-        momentumMatrix(0, 0) += px * px;
-        momentumMatrix(0, 1) += px * py;
-        momentumMatrix(0, 2) += px * pz;
-        momentumMatrix(1, 0) += py * px;
-        momentumMatrix(1, 1) += py * py;
-        momentumMatrix(1, 2) += py * pz;
-        momentumMatrix(2, 0) += pz * px;
-        momentumMatrix(2, 1) += pz * py;
-        momentumMatrix(2, 2) += pz * pz;
-
-        // add 3 momentum squared to sum
-        p2Sum += px * px + py * py + pz * pz;
-    }
-
-    // normalize each element by p2Sum
-    if (p2Sum != 0.)
-    {
-        for (size_t i = 0; i < 3; i++)
-        {
-            for (size_t j = 0; j < 3; j++)
-            {
-                momentumMatrix(i, j) = momentumMatrix(i, j) / p2Sum;
-            }
-        }
-    }
-
-    // calculatate eigen values via eigen vectors
-    TMatrixDSymEigen eig(momentumMatrix);
-    TVectorD ev = eig.GetEigenValues();
-
-    // some checks due to limited precision of TVectorD
-    ev1 = fabs(ev[0]) < 0.00000000000001 ? 0 : ev[0];
-    ev2 = fabs(ev[1]) < 0.00000000000001 ? 0 : ev[1];
-    ev3 = fabs(ev[2]) < 0.00000000000001 ? 0 : ev[2];
-}
-
-"""
+  for addCodeInt in addCodeInterfaces:
+    retstr+=addCodeInt.getAdditionalFunctionDefinitionLines()
   
 
   retstr+="""
@@ -2007,51 +391,413 @@ void LeptonSFHelper::SetMuonHistos( ){
 
 }
 
-// hacked in CSV helper
+// Systematics enum from MiniAODHelper. Needed for the CSV helper (date 26.06.2017)
+
+class Systematics {
+public:
+  enum Type {
+    NA,
+
+    // total JEC uncertainties
+    JESup,			
+    JESdown,			
+
+    // individual JEC uncertainties up
+    JESAbsoluteStatup,
+    JESAbsoluteScaleup,
+    JESAbsoluteFlavMapup,
+    JESAbsoluteMPFBiasup,
+    JESFragmentationup,
+    JESSinglePionECALup,
+    JESSinglePionHCALup,
+    JESFlavorQCDup,
+    JESTimePtEtaup,
+    JESRelativeJEREC1up,
+    JESRelativeJEREC2up,
+    JESRelativeJERHFup,
+    JESRelativePtBBup,
+    JESRelativePtEC1up,
+    JESRelativePtEC2up,
+    JESRelativePtHFup,
+    JESRelativeBalup,
+    JESRelativeFSRup,
+    JESRelativeStatFSRup,
+    JESRelativeStatECup,
+    JESRelativeStatHFup,
+    JESPileUpDataMCup,
+    JESPileUpPtRefup,
+    JESPileUpPtBBup,
+    JESPileUpPtEC1up,
+    JESPileUpPtEC2up,
+    JESPileUpPtHFup,
+    JESPileUpMuZeroup,
+    JESPileUpEnvelopeup,
+    JESSubTotalPileUpup,
+    JESSubTotalRelativeup,
+    JESSubTotalPtup,
+    JESSubTotalScaleup,
+    JESSubTotalAbsoluteup,
+    JESSubTotalMCup,
+    JESTotalup,
+    JESTotalNoFlavorup,
+    JESTotalNoTimeup,
+    JESTotalNoFlavorNoTimeup,
+    JESFlavorZJetup,
+    JESFlavorPhotonJetup,
+    JESFlavorPureGluonup,
+    JESFlavorPureQuarkup,
+    JESFlavorPureCharmup,
+    JESFlavorPureBottomup,
+    JESTimeRunBCDup,
+    JESTimeRunEFup,
+    JESTimeRunGup,
+    JESTimeRunHup,
+    JESCorrelationGroupMPFInSituup,
+    JESCorrelationGroupIntercalibrationup,
+    JESCorrelationGroupbJESup,
+    JESCorrelationGroupFlavorup,
+    JESCorrelationGroupUncorrelatedup,
+    
+    // individual JEC uncertainties down
+    JESAbsoluteStatdown,
+    JESAbsoluteScaledown,
+    JESAbsoluteFlavMapdown,
+    JESAbsoluteMPFBiasdown,
+    JESFragmentationdown,
+    JESSinglePionECALdown,
+    JESSinglePionHCALdown,
+    JESFlavorQCDdown,
+    JESTimePtEtadown,
+    JESRelativeJEREC1down,
+    JESRelativeJEREC2down,
+    JESRelativeJERHFdown,
+    JESRelativePtBBdown,
+    JESRelativePtEC1down,
+    JESRelativePtEC2down,
+    JESRelativePtHFdown,
+    JESRelativeBaldown,
+    JESRelativeFSRdown,
+    JESRelativeStatFSRdown,
+    JESRelativeStatECdown,
+    JESRelativeStatHFdown,
+    JESPileUpDataMCdown,
+    JESPileUpPtRefdown,
+    JESPileUpPtBBdown,
+    JESPileUpPtEC1down,
+    JESPileUpPtEC2down,
+    JESPileUpPtHFdown,
+    JESPileUpMuZerodown,
+    JESPileUpEnvelopedown,
+    JESSubTotalPileUpdown,
+    JESSubTotalRelativedown,
+    JESSubTotalPtdown,
+    JESSubTotalScaledown,
+    JESSubTotalAbsolutedown,
+    JESSubTotalMCdown,
+    JESTotaldown,
+    JESTotalNoFlavordown,
+    JESTotalNoTimedown,
+    JESTotalNoFlavorNoTimedown,
+    JESFlavorZJetdown,
+    JESFlavorPhotonJetdown,
+    JESFlavorPureGluondown,
+    JESFlavorPureQuarkdown,
+    JESFlavorPureCharmdown,
+    JESFlavorPureBottomdown,
+    JESTimeRunBCDdown,
+    JESTimeRunEFdown,
+    JESTimeRunGdown,
+    JESTimeRunHdown,
+    JESCorrelationGroupMPFInSitudown,
+    JESCorrelationGroupIntercalibrationdown,
+    JESCorrelationGroupbJESdown,
+    JESCorrelationGroupFlavordown,
+    JESCorrelationGroupUncorrelateddown,
+    
+    // JER uncertainty
+    JERup,			
+    JERdown,
+
+    hfSFup,
+    hfSFdown,
+    lfSFdown,
+    lfSFup,
+
+    TESup,
+    TESdown,
+
+    CSVLFup,
+    CSVLFdown,
+    CSVHFup,
+    CSVHFdown,
+    CSVHFStats1up,
+    CSVHFStats1down,
+    CSVLFStats1up,
+    CSVLFStats1down,
+    CSVHFStats2up,
+    CSVHFStats2down,
+    CSVLFStats2up,
+    CSVLFStats2down,
+    CSVCErr1up,
+    CSVCErr1down,
+    CSVCErr2up,
+    CSVCErr2down 
+  };
+
+  // convert between string and int representation
+  static Type get(const std::string& name);
+  static std::string toString(const Type type);
+
+  // true if type is one of the JEC-related uncertainties and up
+  static bool isJECUncertaintyUp(const Type type);
+
+  // true if type is one of the JEC-related uncertainties and down
+  static bool isJECUncertaintyDown(const Type type);
+
+  // true if type is one of the JEC-related uncertainties
+  static bool isJECUncertainty(const Type type);
+
+  // return the label that is used by JetCorrectorParametersCollection
+  // to label the uncertainty type. See also:
+  // https://cmssdt.cern.ch/SDT/doxygen/CMSSW_8_0_23/doc/html/dc/d33/classJetCorrectorParametersCollection.html#afb3d4c6fd711ca23d89e0625a22dc483 for a list of in principle valid labels. Whether the uncertainty
+  static std::string GetJECUncertaintyLabel(const Type type);
+
+  static std::vector<Systematics::Type> getTypeVector();
+
+
+private:
+  static std::map<Type,std::string> typeStringMap_;
+  static std::map<std::string,Type> stringTypeMap_;
+  static std::map<Type,std::string> typeLabelMap_;
+
+  static void init();
+  static bool isInit();
+  static void add(Systematics::Type typeUp, Systematics::Type typeDn, const std::string& name, const std::string& label);
+};
+
+std::map<Systematics::Type,std::string> Systematics::typeStringMap_ = std::map<Systematics::Type,std::string>();
+std::map<std::string,Systematics::Type> Systematics::stringTypeMap_ = std::map<std::string,Systematics::Type>();
+std::map<Systematics::Type,std::string> Systematics::typeLabelMap_  = std::map<Systematics::Type,std::string>();
+
+
+void Systematics::init() {
+  add( JESup,JESdown,"JES","Uncertainty");
+  add( JERup,JERdown,"JER","JER");
+  add( JESAbsoluteStatup,        JESAbsoluteStatdown,        "JESAbsoluteStat",          "AbsoluteStat"        );             
+  add( JESAbsoluteScaleup,       JESAbsoluteScaledown,       "JESAbsoluteScale",         "AbsoluteScale"       );             
+  add( JESAbsoluteFlavMapup,     JESAbsoluteFlavMapdown,     "JESAbsoluteFlavMap",       "AbsoluteFlavMap"     );                             
+  add( JESAbsoluteMPFBiasup,     JESAbsoluteMPFBiasdown,     "JESAbsoluteMPFBias",       "AbsoluteMPFBias"     );                             
+  add( JESFragmentationup,       JESFragmentationdown,       "JESFragmentation",         "Fragmentation"       );             
+  add( JESSinglePionECALup,      JESSinglePionECALdown,      "JESSinglePionECAL",        "SinglePionECAL"      );                             
+  add( JESSinglePionHCALup,      JESSinglePionHCALdown,      "JESSinglePionHCAL",        "SinglePionHCAL"      );                             
+  add( JESFlavorQCDup,           JESFlavorQCDdown,           "JESFlavorQCD",             "FlavorQCD"           );                        
+  add( JESTimePtEtaup,           JESTimePtEtadown,           "JESTimePtEta",             "TimePtEta"           );                        
+  add( JESRelativeJEREC1up,      JESRelativeJEREC1down,      "JESRelativeJEREC1",        "RelativeJEREC1"      );                             
+  add( JESRelativeJEREC2up,      JESRelativeJEREC2down,      "JESRelativeJEREC2",        "RelativeJEREC2"      );                             
+  add( JESRelativeJERHFup,       JESRelativeJERHFdown,       "JESRelativeJERHF",         "RelativeJERHF"       );             
+  add( JESRelativePtBBup,        JESRelativePtBBdown,        "JESRelativePtBB",          "RelativePtBB"        );             
+  add( JESRelativePtEC1up,       JESRelativePtEC1down,       "JESRelativePtEC1",         "RelativePtEC1"       );             
+  add( JESRelativePtEC2up,       JESRelativePtEC2down,       "JESRelativePtEC2",         "RelativePtEC2"       );             
+  add( JESRelativePtHFup,        JESRelativePtHFdown,        "JESRelativePtHF",          "RelativePtHF"        );             
+  add( JESRelativeBalup,         JESRelativeBaldown,         "JESRelativeBal",           "RelativeBal"         );                        
+  add( JESRelativeFSRup,         JESRelativeFSRdown,         "JESRelativeFSR",           "RelativeFSR"         );                        
+  add( JESRelativeStatFSRup,     JESRelativeStatFSRdown,     "JESRelativeStatFSR",       "RelativeStatFSR"     );                             
+  add( JESRelativeStatECup,      JESRelativeStatECdown,      "JESRelativeStatEC",        "RelativeStatEC"      );                             
+  add( JESRelativeStatHFup,      JESRelativeStatHFdown,      "JESRelativeStatHF",        "RelativeStatHF"      );                             
+  add( JESPileUpDataMCup,        JESPileUpDataMCdown,        "JESPileUpDataMC",          "PileUpDataMC"        );             
+  add( JESPileUpPtRefup,         JESPileUpPtRefdown,         "JESPileUpPtRef",           "PileUpPtRef"         );                        
+  add( JESPileUpPtBBup,          JESPileUpPtBBdown,          "JESPileUpPtBB",            "PileUpPtBB"          );                        
+  add( JESPileUpPtEC1up,         JESPileUpPtEC1down,         "JESPileUpPtEC1",           "PileUpPtEC1"         );                        
+  add( JESPileUpPtEC2up,         JESPileUpPtEC2down,         "JESPileUpPtEC2",           "PileUpPtEC2"         );                        
+  add( JESPileUpPtHFup,          JESPileUpPtHFdown,          "JESPileUpPtHF",            "PileUpPtHF"          );                        
+  add( JESPileUpMuZeroup,        JESPileUpMuZerodown,        "JESPileUpMuZero",          "PileUpMuZero"        );             
+  add( JESPileUpEnvelopeup,      JESPileUpEnvelopedown,      "JESPileUpEnvelope",        "PileUpEnvelope"      );                             
+  add( JESSubTotalPileUpup,      JESSubTotalPileUpdown,      "JESSubTotalPileUp",        "SubTotalPileUp"      );                             
+  add( JESSubTotalRelativeup,    JESSubTotalRelativedown,    "JESSubTotalRelative",      "SubTotalRelative"    );                             
+  add( JESSubTotalPtup,          JESSubTotalPtdown,          "JESSubTotalPt",            "SubTotalPt"          );                        
+  add( JESSubTotalScaleup,       JESSubTotalScaledown,       "JESSubTotalScale",         "SubTotalScale"       );             
+  add( JESSubTotalAbsoluteup,    JESSubTotalAbsolutedown,    "JESSubTotalAbsolute",      "SubTotalAbsolute"    );                             
+  add( JESSubTotalMCup,          JESSubTotalMCdown,          "JESSubTotalMC",            "SubTotalMC"          );                        
+  add( JESTotalup,               JESTotaldown,               "JESTotal",                 "Total"               );                 
+  add( JESTotalNoFlavorup,       JESTotalNoFlavordown,       "JESTotalNoFlavor",         "TotalNoFlavor"       );             
+  add( JESTotalNoTimeup,         JESTotalNoTimedown,         "JESTotalNoTime",           "TotalNoTime"         );                        
+  add( JESTotalNoFlavorNoTimeup, JESTotalNoFlavorNoTimedown, "JESTotalNoFlavorNoTime",   "TotalNoFlavorNoTime" );                    
+  add( JESFlavorZJetup,          JESFlavorZJetdown,          "JESFlavorZJet",            "FlavorZJet"          );                        
+  add( JESFlavorPhotonJetup,     JESFlavorPhotonJetdown,     "JESFlavorPhotonJet",       "FlavorPhotonJet"     );                             
+  add( JESFlavorPureGluonup,     JESFlavorPureGluondown,     "JESFlavorPureGluon",       "FlavorPureGluon"     );                             
+  add( JESFlavorPureQuarkup,     JESFlavorPureQuarkdown,     "JESFlavorPureQuark",       "FlavorPureQuark"     );                             
+  add( JESFlavorPureCharmup,     JESFlavorPureCharmdown,     "JESFlavorPureCharm",       "FlavorPureCharm"     );                             
+  add( JESFlavorPureBottomup,    JESFlavorPureBottomdown,    "JESFlavorPureBottom",      "FlavorPureBottom"    );                             
+  add( JESTimeRunBCDup,          JESTimeRunBCDdown,          "JESTimeRunBCD",            "TimeRunBCD"          );                  
+  add( JESTimeRunEFup,           JESTimeRunEFdown,           "JESTimeRunEF",             "TimeRunEF"           );                        
+  add( JESTimeRunGup,            JESTimeRunGdown,            "JESTimeRunG",              "TimeRunG"            );                                 
+  add( JESTimeRunHup,            JESTimeRunHdown,            "JESTimeRunH",              "TimeRunH"            );   
+  add( CSVLFup,                  CSVLFdown,                  "LF",                    "LF"                  );
+  add( CSVHFup,                  CSVHFdown,                  "HF",                    "HF"                  );
+  add( CSVLFStats1up,            CSVLFStats1down,            "Stats1",              "LFStats1"            );
+  add( CSVHFStats1up,            CSVHFStats1down,            "Stats1",              "HFStats1"            );
+  add( CSVLFStats2up,            CSVLFStats2down,            "Stats2",              "LFStats2"            );
+  add( CSVHFStats2up,            CSVHFStats2down,            "Stats2",              "HFStats2"            );
+  add( CSVCErr1up,               CSVCErr1down,               "cErr1",                 "CErr1"               );
+  add( CSVCErr2up,               CSVCErr2down,               "cErr2",                 "CErr2"               );
+}
+
+bool Systematics::isInit() {
+  return typeStringMap_.size()>1;
+}
+
+void Systematics::add(Systematics::Type typeUp, Systematics::Type typeDn, const std::string& name, const std::string& label) {
+  typeStringMap_[typeUp] = name+"up";
+  typeStringMap_[typeDn] = name+"down";
+  stringTypeMap_[name+"up"] = typeUp;
+  stringTypeMap_[name+"down"] = typeDn;
+  typeLabelMap_[typeUp] = label;
+  typeLabelMap_[typeDn] = label;
+}
+
+// added method to get a vector of all systematics
+std::vector<Systematics::Type> Systematics::getTypeVector() {
+  if( !isInit() ) init();
+  std::vector<Systematics::Type> outvector;
+  outvector.push_back(NA);
+  for(auto it : typeStringMap_ ){
+    std::cout<<it.first<<" "<<it.second<<std::endl;
+    outvector.push_back(it.first);
+    }
+  return outvector;
+}
+
+Systematics::Type Systematics::get(const std::string& name) {
+  if( name == "" ) return NA;
+
+  if( !isInit() ) init();
+
+  std::map<std::string,Systematics::Type>::const_iterator it = stringTypeMap_.find(name);
+  if( it == stringTypeMap_.end() ) {
+    std::cout << "ERROR: No uncertainty with name " << name << " will use nominal "<<std::endl;
+    return Systematics::NA;
+  } else {
+    return it->second;
+  }
+}
+
+std::string Systematics::toString(const Type type) {
+  if( type == NA ) return "";
+
+  if( !isInit() ) init();
+
+  std::map<Systematics::Type,std::string>::const_iterator it = typeStringMap_.find(type);
+  if( it == typeStringMap_.end() ) {
+    std::cout << "ERROR: No uncertainty with name " << type << " will use nominal "<<std::endl;
+    return "";
+  } else {
+    return it->second;
+  }
+}
+
+bool Systematics::isJECUncertaintyUp(const Type type) {
+  const std::string str = toString(type);
+  return str.find("JES")==0 && str.find("up")==str.size()-2;
+}
+
+bool Systematics::isJECUncertaintyDown(const Type type) {
+  const std::string str = toString(type);
+  return str.find("JES")==0 && str.find("down") == str.size()-4;
+}
+
+bool Systematics::isJECUncertainty(const Type type) {
+  return isJECUncertaintyUp(type) || isJECUncertaintyDown(type);
+}
+
+std::string Systematics::GetJECUncertaintyLabel(const Type type) {
+  if( !isInit() ) init();
+  std::map<Systematics::Type,std::string>::const_iterator it = typeLabelMap_.find(type);
+  if( it == typeLabelMap_.end() ) {
+    return "";
+  } else {
+    return it->second;
+  }
+}
+
+// hacked in CSV helper . Factorized JES. (date 26.06.2017)
 class CSVHelper
 {
-  public:
-    // nHFptBins specifies how many of these pt bins are used:
-    // (jetPt >= 19.99 && jetPt < 30), (jetPt >= 30 && jetPt < 40), (jetPt >= 40 && jetPt < 60), 
-    // (jetPt >= 60 && jetPt < 100), (jetPt >= 100 && jetPt < 160), (jetPt >= 160 && jetPt < 10000).
-    // If nHFptBins < 6, the last on is inclusive (eg jetPt >=100 && jetPt < 10000 for nHFptBins=5).
-    // The SFs from data have 5 bins, the pseudo data scale factors 6 bins.
-    CSVHelper();
-  CSVHelper(const std::string& hf, const std::string& lf, const int nHFptBins=6);
+public:
+  // nHFptBins specifies how many of these pt bins are used:
+  // (jetPt >= 19.99 && jetPt < 30), (jetPt >= 30 && jetPt < 40), (jetPt >= 40 && jetPt < 60), 
+  // (jetPt >= 60 && jetPt < 100), (jetPt >= 100 && jetPt < 160), (jetPt >= 160 && jetPt < 10000).
+  // If nHFptBins < 6, the last on is inclusive (eg jetPt >=100 && jetPt < 10000 for nHFptBins=5).
+  // The SFs from data have 5 bins, the pseudo data scale factors 6 bins.
+    
+  // standard constructor
+  CSVHelper();
+  // another constructor
+  CSVHelper(const std::string& hf, const std::string& lf, const int& nHFptBins=5,const int& nLFptBins=4,const int& nLFetaBins=3,const std::vector<Systematics::Type>& jecsysts = std::vector<Systematics::Type>(1,Systematics::NA));
+  // destructor
   ~CSVHelper();
-
-  void init(const std::string& hf, const std::string& lf, const int nHFptBins);
-
+  // function to set up the needed stuff
+  void init(const std::string& hf, const std::string& lf, const int& nHFptBins,const int& nLFptBins,const int& nLFetaBins,const std::vector<Systematics::Type>& jecsysts);
+  // function to get the csv weight
   double getCSVWeight(const std::vector<double>& jetPts,
 		      const std::vector<double>& jetEtas,
 		      const std::vector<double>& jetCSVs,
 		      const std::vector<int>& jetFlavors,
-		      const int iSys,
+		      const Systematics::Type syst,
 		      double &csvWgtHF,
 		      double &csvWgtLF,
 		      double &csvWgtCF) const;
+
+  // If there is no SF for a jet because it is out of acceptance
+  // of SF, an SF of 1 is used for this jet. Intended when running
+  // on MC with a more inclusive selection.
+  // USE WITH CARE!
   void allowJetsOutOfBinning(const bool allow) { allowJetsOutOfBinning_ = allow; }
 
-  private:
-    bool isInit_;
-    int nHFptBins_;
-    bool allowJetsOutOfBinning_;
 
-    std::vector< std::vector<TH1*> > h_csv_wgt_hf;
-    std::vector< std::vector<TH1*> > c_csv_wgt_hf;
-    std::vector< std::vector< std::vector<TH1*> > > h_csv_wgt_lf;
+private:
+  bool isInit_;
+  int nHFptBins_;//number of pt bins in hf(including c flavour) histograms
+  int nLFptBins_;//number of pt bins in lf histograms
+  int nLFetaBins_;//number of eta bins in lf histograms
+  bool allowJetsOutOfBinning_;
 
-    void fillCSVHistos(TFile *fileHF, TFile *fileLF);
-    TH1* readHistogram(TFile* file, const TString& name) const;
+  std::vector< std::vector<TH1*> > h_csv_wgt_hf;//vector to store pointers to the needed hf histograms
+  std::vector< std::vector<TH1*> > c_csv_wgt_hf;//vector to store pointers to the needed c flavour histograms
+  std::vector< std::vector< std::vector<TH1*> > > h_csv_wgt_lf;//vector to store pointers to the needed lf histograms
+  // vector for the csv systematics
+  std::vector<Systematics::Type> csvsysts = {   
+                                                Systematics::CSVLFup,
+                                                Systematics::CSVLFdown,
+                                                Systematics::CSVHFup,
+                                                Systematics::CSVHFdown,
+                                                Systematics::CSVHFStats1up,
+                                                Systematics::CSVHFStats1down,
+                                                Systematics::CSVLFStats1up,
+                                                Systematics::CSVLFStats1down,
+                                                Systematics::CSVHFStats2up,
+                                                Systematics::CSVHFStats2down,
+                                                Systematics::CSVLFStats2up,
+                                                Systematics::CSVLFStats2down,
+                                                Systematics::CSVCErr1up,
+                                                Systematics::CSVCErr1down,
+                                                Systematics::CSVCErr2up,
+                                                Systematics::CSVCErr2down
+                                            };
+  // vector for all desired systematics -> csv+jec systematics  
+  std::vector<Systematics::Type> systs;
+  // function to get the histograms from the provided root files
+  void fillCSVHistos(TFile *fileHF, TFile *fileLF, const std::vector<Systematics::Type>& systs);
+  // function which reads the desired histogram from the provided root file
+  TH1* readHistogram(TFile* file, const TString& name) const;
 };
 
 CSVHelper::CSVHelper()
-  : isInit_(false), nHFptBins_(0), allowJetsOutOfBinning_(false) {}
+  : isInit_(false), nHFptBins_(0),nLFptBins_(0),nLFetaBins_(0), allowJetsOutOfBinning_(false) {}
 
 
-CSVHelper::CSVHelper(const std::string& hf, const std::string& lf, const int nHFptBins)
-  : isInit_(false), nHFptBins_(0), allowJetsOutOfBinning_(false) {
-  init(hf,lf,nHFptBins);
+CSVHelper::CSVHelper(const std::string& hf, const std::string& lf, const int& nHFptBins,const int& nLFptBins,const int& nLFetaBins, const std::vector<Systematics::Type>& jecsysts)
+  : isInit_(false), nHFptBins_(0),nLFptBins_(0),nLFetaBins_(0), allowJetsOutOfBinning_(false) {
+  init(hf,lf,nHFptBins,nLFptBins,nLFetaBins,jecsysts);
 }
 
 
@@ -2076,17 +822,27 @@ CSVHelper::~CSVHelper() {
 }
 
 
-void CSVHelper::init(const std::string& hf, const std::string& lf, const int nHFptBins) {
-  std::cout << "Initializing b-tag scale factors"<< "  HF : " << hf << " (" << nHFptBins << " pt bins)"<< "  LF : " << lf << std::endl;
+void CSVHelper::init(const std::string& hf, const std::string& lf, const int& nHFptBins,const int& nLFptBins,const int& nLFetaBins,const std::vector<Systematics::Type>& jecsysts) {
+  std::cout << "Initializing b-tag scale factors" <<  std::endl;
+  std::cout<< "  HF : " << hf << " (" << nHFptBins << " pt bins)" <<  std::endl;
+  std::cout<< "  LF : " << lf << " (" << nLFptBins << " pt bins)"  <<  std::endl;
+  std::cout<< "  LF : " << lf << " (" << nLFetaBins << " eta bins)" <<  std::endl;
 
   nHFptBins_ = nHFptBins;
-
+  nLFptBins_ = nLFptBins;
+  nLFetaBins_ = nLFetaBins;
+  
+  //combine the vector with the csv systematics and the jec systematics into one vector
+  systs.reserve(csvsysts.size()+jecsysts.size());
+  systs.insert(systs.end(),jecsysts.begin(),jecsysts.end());
+  systs.insert(systs.end(),csvsysts.begin(),csvsysts.end());
+  
   const std::string inputFileHF = hf.size() > 0 ? hf : "data/csv_rwt_hf_IT_FlatSF.root";
   const std::string inputFileLF = lf.size() > 0 ? lf : "data/csv_rwt_lf_IT_FlatSF.root";
 
-  TFile *f_CSVwgt_HF = new TFile(inputFileHF.c_str());
-  TFile *f_CSVwgt_LF = new TFile(inputFileLF.c_str());
-  fillCSVHistos(f_CSVwgt_HF, f_CSVwgt_LF);
+  TFile *f_CSVwgt_HF = new TFile(std::string(inputFileHF).c_str());
+  TFile *f_CSVwgt_LF = new TFile(std::string(inputFileLF).c_str());
+  fillCSVHistos(f_CSVwgt_HF, f_CSVwgt_LF,systs);
   f_CSVwgt_HF->Close();
   f_CSVwgt_LF->Close();
   delete f_CSVwgt_HF;
@@ -2095,88 +851,60 @@ void CSVHelper::init(const std::string& hf, const std::string& lf, const int nHF
   isInit_ = true;
 }
 
+
+
 // fill the histograms (done once)
 void
-CSVHelper::fillCSVHistos(TFile *fileHF, TFile *fileLF)
+CSVHelper::fillCSVHistos(TFile *fileHF, TFile *fileLF, const std::vector<Systematics::Type>& systs)
 {
-  const size_t nSys = 9;
-  const size_t nPt = 6;
-  const size_t nEta = 3;
-  h_csv_wgt_hf = std::vector< std::vector<TH1*> >(nSys,std::vector<TH1*>(nPt,NULL));
-  c_csv_wgt_hf = std::vector< std::vector<TH1*> >(nSys,std::vector<TH1*>(nPt,NULL));
-  h_csv_wgt_lf = std::vector< std::vector< std::vector<TH1*> > >(nSys,std::vector< std::vector<TH1*> >(nPt,std::vector<TH1*>(nEta,NULL)));
-
-  // CSV reweighting /// only care about the nominal ones
+  const size_t nSys = systs.size();//purity,stats1,stats2 with up/down + jec systs including nominal variation
+  h_csv_wgt_hf = std::vector< std::vector<TH1*> >(nSys,std::vector<TH1*>(nHFptBins_,NULL));
+  c_csv_wgt_hf = std::vector< std::vector<TH1*> >(nSys,std::vector<TH1*>(nHFptBins_,NULL));
+  h_csv_wgt_lf = std::vector< std::vector< std::vector<TH1*> > >(nSys,std::vector< std::vector<TH1*> >(nLFptBins_,std::vector<TH1*>(nLFetaBins_,NULL)));
+  TString syst_csv_suffix = "final";
+  // loop over all the available systematics
   for (size_t iSys = 0; iSys < nSys; iSys++) {
-    TString syst_csv_suffix_hf = "final";
-    TString syst_csv_suffix_c = "final";
-    TString syst_csv_suffix_lf = "final";
-
-    switch (iSys) {
-    case 0:
-      // this is the nominal case
-      break;
-    case 1:
-      // JESUp
-      syst_csv_suffix_hf = "final_JESUp";
-      syst_csv_suffix_lf = "final_JESUp";
-      syst_csv_suffix_c = "final_cErr1Up";
-      break;
-    case 2:
-      // JESDown
-      syst_csv_suffix_hf = "final_JESDown";
-      syst_csv_suffix_lf = "final_JESDown";
-      syst_csv_suffix_c = "final_cErr1Down";
-      break;
-    case 3:
-      // purity up
-      syst_csv_suffix_hf = "final_LFUp";
-      syst_csv_suffix_lf = "final_HFUp";
-      syst_csv_suffix_c = "final_cErr2Up";
-      break;
-    case 4:
-      // purity down
-      syst_csv_suffix_hf = "final_LFDown";
-      syst_csv_suffix_lf = "final_HFDown";
-      syst_csv_suffix_c = "final_cErr2Down";
-      break;
-    case 5:
-      // stats1 up
-      syst_csv_suffix_hf = "final_Stats1Up";
-      syst_csv_suffix_lf = "final_Stats1Up";
-      break;
-    case 6:
-      // stats1 down
-      syst_csv_suffix_hf = "final_Stats1Down";
-      syst_csv_suffix_lf = "final_Stats1Down";
-      break;
-    case 7:
-      // stats2 up
-      syst_csv_suffix_hf = "final_Stats2Up";
-      syst_csv_suffix_lf = "final_Stats2Up";
-      break;
-    case 8:
-      // stats2 down
-      syst_csv_suffix_hf = "final_Stats2Down";
-      syst_csv_suffix_lf = "final_Stats2Down";
-      break;
-    }
+    // some string cosmetics to search for the correct histogram in the root files  
+    TString systematic = Systematics::toString(systs[iSys]);
+    systematic.ReplaceAll("up","Up");
+    systematic.ReplaceAll("down","Down");
+    systematic.ReplaceAll("CSV","");
+    if(systematic!="") {systematic="_"+systematic;}
+    //std::cout << "adding histograms for systematic " << systematic << std::endl;
     
+    // loop over all pt bins of the different jet flavours
     for (int iPt = 0; iPt < nHFptBins_; iPt++) {
-      const TString name = Form("csv_ratio_Pt%i_Eta0_%s", iPt, syst_csv_suffix_hf.Data());
-      h_csv_wgt_hf.at(iSys).at(iPt) = readHistogram(fileHF,name);
+        TString name = Form("csv_ratio_Pt%i_Eta0_%s", iPt, (syst_csv_suffix+systematic).Data());
+        // only read the histogram if it exits in the root file
+        if(fileHF->GetListOfKeys()->Contains(name)) {
+            h_csv_wgt_hf.at(iSys).at(iPt) = readHistogram(fileHF,name);
+            //std::cout << "added " << name << std::endl;
+        }
+        else {
+            h_csv_wgt_hf.at(iSys).at(iPt) = readHistogram(fileHF,name.ReplaceAll(systematic,""));
+        }
     }
-    if (iSys < 5) {
-      for (int iPt = 0; iPt < nHFptBins_; iPt++) {
-	const TString name = Form("c_csv_ratio_Pt%i_Eta0_%s", iPt, syst_csv_suffix_c.Data());
-	c_csv_wgt_hf.at(iSys).at(iPt) = readHistogram(fileHF,name);
-      }
-    }    
-    for (int iPt = 0; iPt < 4; iPt++) {
-      for (int iEta = 0; iEta < 3; iEta++) {
-	const TString name = Form("csv_ratio_Pt%i_Eta%i_%s", iPt, iEta, syst_csv_suffix_lf.Data());
-	h_csv_wgt_lf.at(iSys).at(iPt).at(iEta) = readHistogram(fileLF,name);
-      }
+    for (int iPt = 0; iPt < nHFptBins_; iPt++) {
+        TString name = Form("c_csv_ratio_Pt%i_Eta0_%s", iPt, (syst_csv_suffix+systematic).Data());
+        if(fileHF->GetListOfKeys()->Contains(name)) {
+            c_csv_wgt_hf.at(iSys).at(iPt) = readHistogram(fileHF,name);
+            //std::cout << "added " << name << std::endl;
+        }
+        else {
+            c_csv_wgt_hf.at(iSys).at(iPt) = readHistogram(fileHF,name.ReplaceAll(systematic,""));
+        }
+    }
+    for (int iPt = 0; iPt < nLFptBins_; iPt++) {
+        for (int iEta = 0; iEta < nLFetaBins_; iEta++) {
+            TString name = Form("csv_ratio_Pt%i_Eta%i_%s", iPt, iEta, (syst_csv_suffix+systematic).Data());
+            if(fileLF->GetListOfKeys()->Contains(name)) {
+                h_csv_wgt_lf.at(iSys).at(iPt).at(iEta) = readHistogram(fileLF,name);
+                //std::cout << "added " << name << std::endl;
+            }
+            else {
+                h_csv_wgt_lf.at(iSys).at(iPt).at(iEta) = readHistogram(fileLF,name.ReplaceAll(systematic,""));
+            }
+        }
     }
   }
 }
@@ -2186,19 +914,20 @@ TH1* CSVHelper::readHistogram(TFile* file, const TString& name) const {
   TH1* h = NULL;
   file->GetObject(name,h);
   if( h==NULL ) {
-    std::cout<<"CSVHelper: DID not find histograms"<<std::endl;
+      std::cout<< "Could not find CSV SF histogram '" << name  << " in file " << file->GetName() << std::endl;
   }
   h->SetDirectory(0);
   
   return h;
 }
 
+
 double
 CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
 			const std::vector<double>& jetEtas,
 			const std::vector<double>& jetCSVs,
 			const std::vector<int>& jetFlavors,
-			const int iSys,
+			const Systematics::Type syst,
 			double &csvWgtHF,
 			double &csvWgtLF,
 			double &csvWgtCF) const
@@ -2206,92 +935,16 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
   if( !isInit_ ) {
     std::cout<<"CSVHelper: Not initualized"<<std::endl;
   }
-
-  int iSysHF = 0;
-  switch (iSys) {
-  case 7:
-    iSysHF = 1;
-    break; // JESUp
-  case 8:
-    iSysHF = 2;
-    break; // JESDown
-  case 9:
-    iSysHF = 3;
-    break; // LFUp
-  case 10:
-    iSysHF = 4;
-    break; // LFDown
-  case 13:
-    iSysHF = 5;
-    break; // Stats1Up
-  case 14:
-    iSysHF = 6;
-    break; // Stats1Down
-  case 15:
-    iSysHF = 7;
-    break; // Stats2Up
-  case 16:
-    iSysHF = 8;
-    break; // Stats2Down
-  default:
-    iSysHF = 0;
-    break; // NoSys
-  }
+  // search for the position of the desired systematic in the systs vector
+  const int iSys = std::find(systs.begin(),systs.end(),syst)-systs.begin();
   
-  int iSysC = 0;
-  switch (iSys) {
-  case 21:
-    iSysC = 1;
-    break;
-  case 22:
-    iSysC = 2;
-    break;
-  case 23:
-    iSysC = 3;
-    break;
-  case 24:
-    iSysC = 4;
-    break;
-  default:
-    iSysC = 0;
-    break;
-  }
-  
-  int iSysLF = 0;
-  switch (iSys) {
-  case 7:
-    iSysLF = 1;
-    break; // JESUp
-  case 8:
-    iSysLF = 2;
-    break; // JESDown
-  case 11:
-    iSysLF = 3;
-    break; // HFUp
-  case 12:
-    iSysLF = 4;
-    break; // HFDown
-  case 17:
-    iSysLF = 5;
-    break; // Stats1Up
-  case 18:
-    iSysLF = 6;
-    break; // Stats1Down
-  case 19:
-    iSysLF = 7;
-    break; // Stats2Up
-  case 20:
-    iSysLF = 8;
-    break; // Stats2Down
-  default:
-    iSysLF = 0;
-    break; // NoSys
-  }
-
+  //std::cout << "Systematic index " << iSys << std::endl;
+  // initialize the weight for the different jet flavours with 1
   double csvWgthf = 1.;
   double csvWgtC = 1.;
   double csvWgtlf = 1.;
   
+  // loop over all jets in the event and calculate the final weight by multiplying the single jet scale factors
   for (size_t iJet = 0; iJet < jetPts.size(); iJet++) {
     const double csv = jetCSVs.at(iJet);
     const double jetPt = jetPts.at(iJet);
@@ -2300,6 +953,7 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
 
     int iPt = -1;
     int iEta = -1;
+    // pt binning for heavy flavour jets
     if(abs(flavor)>3) {
         if (jetPt >= 19.99 && jetPt < 30)
             iPt = 0;
@@ -2314,6 +968,7 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
         else if (jetPt >= 160)
             iPt = 5;
     }
+    // pt binning for light flavour jets
     else {
         if (jetPt >= 19.99 && jetPt < 30)
             iPt = 0;
@@ -2328,7 +983,7 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
         else if (jetPt >= 160)
             iPt = 5;
     }
-    
+    // light flavour jets also have eta bins
     if (jetAbsEta >= 0 && jetAbsEta < 0.8)
       iEta = 0;
     else if (jetAbsEta >= 0.8 && jetAbsEta < 1.6)
@@ -2338,34 +993,44 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
     
     if (iPt < 0 || iEta < 0) {
       if( allowJetsOutOfBinning_ ) continue;
+      std::cout << "couldn't find Pt, Eta bins for this b-flavor jet, jetPt = " << jetPt << ", jetAbsEta = " << jetAbsEta<<std::endl;
+      exit(0);
     }
     
+    //std::cout << "program is in front of calculating the csv weights " << std::endl;
+    // b flavour jet
     if (abs(flavor) == 5) {
+        //std::cout << "b flavor jet " << std::endl;
       // RESET iPt to maximum pt bin (only 5 bins for new SFs)
       if(iPt>=nHFptBins_){
 	iPt=nHFptBins_-1;
       }
-      const int useCSVBin = (csv >= 0.) ? h_csv_wgt_hf.at(iSysHF).at(iPt)->FindBin(csv) : 1;
-      const double iCSVWgtHF = h_csv_wgt_hf.at(iSysHF).at(iPt)->GetBinContent(useCSVBin);
-      if (iCSVWgtHF != 0)
-	csvWgthf *= iCSVWgtHF;
-      
-    } else if (abs(flavor) == 4) {
+      if(h_csv_wgt_hf.at(iSys).at(iPt)) {
+        const int useCSVBin = (csv >= 0.) ? h_csv_wgt_hf.at(iSys).at(iPt)->FindBin(csv) : 1;
+        const double iCSVWgtHF = h_csv_wgt_hf.at(iSys).at(iPt)->GetBinContent(useCSVBin);
+        if (iCSVWgtHF != 0) csvWgthf *= iCSVWgtHF;
+      }
+    } // c flavour jet
+    else if (abs(flavor) == 4) {
+        //std::cout << "c flavor jet " << std::endl;
       // RESET iPt to maximum pt bin (only 5 bins for new SFs)
       if(iPt>=nHFptBins_){
 	iPt=nHFptBins_-1;
       }
-      const int useCSVBin = (csv >= 0.) ? c_csv_wgt_hf.at(iSysC).at(iPt)->FindBin(csv) : 1;
-      const double iCSVWgtC = c_csv_wgt_hf.at(iSysC).at(iPt)->GetBinContent(useCSVBin);
-      if (iCSVWgtC != 0)
-	csvWgtC *= iCSVWgtC;
-    } else {
-      if (iPt >= 3)
-	iPt = 3; /// [30-40], [40-60] and [60-10000] only 3 Pt bins for lf
-      const int useCSVBin = (csv >= 0.) ? h_csv_wgt_lf.at(iSysLF).at(iPt).at(iEta)->FindBin(csv) : 1;
-      const double iCSVWgtLF = h_csv_wgt_lf.at(iSysLF).at(iPt).at(iEta)->GetBinContent(useCSVBin);
-      if (iCSVWgtLF != 0)
-	csvWgtlf *= iCSVWgtLF;
+      if(c_csv_wgt_hf.at(iSys).at(iPt)) {
+        const int useCSVBin = (csv >= 0.) ? c_csv_wgt_hf.at(iSys).at(iPt)->FindBin(csv) : 1;
+        const double iCSVWgtC = c_csv_wgt_hf.at(iSys).at(iPt)->GetBinContent(useCSVBin);
+        if (iCSVWgtC != 0) csvWgtC *= iCSVWgtC;
+      }
+    } // light flavour jet
+    else {
+        //std::cout << "light flavor jet " << std::endl;
+      if (iPt >= nLFptBins_) iPt = nLFptBins_-1; /// [30-40], [40-60] and [60-10000] only 3 Pt bins for lf
+      if(h_csv_wgt_lf.at(iSys).at(iPt).at(iEta)) {
+        const int useCSVBin = (csv >= 0.) ? h_csv_wgt_lf.at(iSys).at(iPt).at(iEta)->FindBin(csv) : 1;
+        const double iCSVWgtLF = h_csv_wgt_lf.at(iSys).at(iPt).at(iEta)->GetBinContent(useCSVBin);
+        if (iCSVWgtLF != 0) csvWgtlf *= iCSVWgtLF;
+      }
     }
   }
 
@@ -2382,10 +1047,14 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
 void plot(){
   TH1F::SetDefaultSumw2();
 
-  std::string csvHFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/csv_rwt_fit_hf_v2_final_2017_3_29test.root";
-  std::string csvLFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/csv_rwt_fit_lf_v2_final_2017_3_29test.root";
+  // create vector of systematics
+  std::vector<Systematics::Type> v_SystTypes = Systematics::getTypeVector();
+  //for(auto itsyst : v_SystTypes){std::cout<< " Know :" << itsyst << std::endl;}
+
+  std::string csvHFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/factorized_jes/csv_rwt_fit_hf_v2_final_2017_6_7_all.root";
+  std::string csvLFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/factorized_jes/csv_rwt_fit_lf_v2_final_2017_6_7_all.root";
   
-  CSVHelper* internalCSVHelper= new CSVHelper(csvHFfile,csvLFfile, 5);
+  CSVHelper* internalCSVHelper= new CSVHelper(csvHFfile,csvLFfile, 5,4,3,v_SystTypes);
   LeptonSFHelper* internalLeptonSFHelper= new LeptonSFHelper();
 
   // open files
@@ -2397,8 +1066,8 @@ void plot(){
   int maxevents = atoi(getenv ("MAXEVENTS"));
   int skipevents = atoi(getenv ("SKIPEVENTS"));
 
-std::cout<<"processname" <<processname<<std::endl;
-    std::cout<<"suffix" <<suffix<<std::endl;
+  std::cout<<"processname" <<processname<<std::endl;
+  std::cout<<"suffix" <<suffix<<std::endl;
 
   std::vector<TString> databaseRelevantFilenames;
 
@@ -2417,24 +1086,21 @@ std::cout<<"processname" <<processname<<std::endl;
   std::map<TString, std::map<TString, long>> sampleDataBaseFoundEvents;
   std::map<TString, std::map<TString, long>> sampleDataBaseLostEvents;
     
-  int internalSystName=0;
+  Systematics::Type internalSystType=Systematics::NA;
   
   string buf;
   stringstream ss(filenames); 
   while (ss >> buf){
     chain->Add(buf.c_str());
-    if (buf.find("JESDOWN")!=string::npos){internalSystName=8;}
-    if (buf.find("JESUP")!=string::npos){internalSystName=7;}
-    if (buf.find("JERDOWN")!=string::npos){internalSystName=0;}
-    if (buf.find("JERUP")!=string::npos){internalSystName=0;}
-    std::cout<<"internal sys for CSV "<<internalSystName<<std::endl;
     TString thisfilename = buf.c_str();
     TString originalfilename=buf.c_str();
     std::cout<<"file "<<buf.c_str()<<" "<<thisfilename<<std::endl; // karim debug 
     // cut of directories
     thisfilename.Replace(0,thisfilename.Last('/')+1,"");
-    //cut if trailing tree and root
+    //cut of trailing tree and root
     thisfilename.Replace(thisfilename.Last('_'),thisfilename.Length(),"");
+    // copy the string for figuring out internalSystType
+    TString filenameforSytType=TString(thisfilename);
     //remove number
     int lastUnderscore=thisfilename.Last('_');
     thisfilename.Replace(thisfilename.Last('_'),1,"");
@@ -2465,6 +1131,14 @@ std::cout<<"processname" <<processname<<std::endl;
       sampleDataBaseFoundEvents["jt64"][thisfilename]=0;
       sampleDataBaseLostEvents["jt64"][thisfilename]=0;
     }
+  
+  // now figure out internalSystType
+  filenameforSytType.Replace(0,filenameforSytType.Last('_')+1,"");
+  // nominal is the empty string here
+  if(filenameforSytType=="nominal"){filenameforSytType="";}
+  internalSystType = Systematics::get(filenameforSytType.Data());
+  std::cout<<"internal systematic filename, int and typename"<<filenameforSytType<<" "<<internalSystType<<" "<<Systematics::toString(internalSystType)<<std::endl;
+  if(filenameforSytType!=TString(Systematics::toString(internalSystType))){std::cout<<"ERROR could not recover systematic from enum"<<std::endl; exit(0);}
   }
   std::cout<<"relevant db samplenames"<<std::endl;
   for(unsigned int isn=0; isn<databaseRelevantFilenames.size();isn++){
@@ -2642,14 +1316,6 @@ def readOutDataBase(thisDataBase=[]):
   # need to set those variables to initalized ones -> CHECK
   # add those functions in the appropriate places ->CHECK
   # need to update the linked database code to the most current one. Also maybe create extra branch or handle the headers differently -> CHECK
-
-def initDNNs():
-  rstr="""
-  DNNClassifierBase::pyInitialize();
-  DNNClassifier_SL dnn("v4");
-"""
-  return rstr
-
 
 
 
@@ -2839,150 +1505,32 @@ def startLoop():
   
   double tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF;
   
-  internalCSVweight=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,internalSystName,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF);
-  internalCSVweight_CSVHFUp=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,11,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
-  internalCSVweight_CSVHFDown=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,12,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
-  internalCSVweight_CSVLFUp=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,9,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
-  internalCSVweight_CSVLFDown=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,10,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,internalSystType,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF);
+  internalCSVweight_CSVHFUp=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVHFup,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVHFDown=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVHFdown,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVLFUp=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVLFup,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVLFDown=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVLFdown,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
   
-  internalCSVweight_CSVLFStats1Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,17,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
-  internalCSVweight_CSVLFStats1Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,18,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
-  internalCSVweight_CSVLFStats2Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,19,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
-  internalCSVweight_CSVLFStats2Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,20,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVLFStats1Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVLFStats1up,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVLFStats1Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVLFStats1down,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVLFStats2Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVLFStats2up,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVLFStats2Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVLFStats2down,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
   
-  internalCSVweight_CSVHFStats1Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,13,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
-  internalCSVweight_CSVHFStats1Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,14,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
-  internalCSVweight_CSVHFStats2Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,15,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
-  internalCSVweight_CSVHFStats2Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,16,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVHFStats1Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVHFStats1up,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVHFStats1Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVHFStats1down,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVHFStats2Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVHFStats2up,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVHFStats2Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVHFStats2down,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
   
-  internalCSVweight_CSVCErr1Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,21,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
-  internalCSVweight_CSVCErr1Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,22,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
-  internalCSVweight_CSVCErr2Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,23,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
-  internalCSVweight_CSVCErr2Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,24,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVCErr1Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVCErr1up,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVCErr1Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVCErr1down,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVCErr2Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVCErr2up,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVCErr2Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVCErr2down,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
   
-  /*
-  if(internalCSVweight!=Weight_CSV){std::cout<<"internalCSVweight "<<internalCSVweight<<" "<<Weight_CSV<<std::endl;}
-  if(internalCSVweight_CSVHFUp!=Weight_CSVHFup){std::cout<<"internalCSVweight_CSVHFUp "<<internalCSVweight_CSVHFUp<<" "<<Weight_CSVHFup<<std::endl;}
-  if(internalCSVweight_CSVHFDown!=Weight_CSVHFdown){std::cout<<"internalCSVweight_CSVHFDown "<<internalCSVweight_CSVHFDown<<" "<<Weight_CSVHFdown<<std::endl;}
-  if(internalCSVweight_CSVLFUp!=Weight_CSVLFup){std::cout<<"internalCSVweight_CSVLFUp "<<internalCSVweight_CSVLFUp<<" "<<Weight_CSVLFup<<std::endl;}
- if(internalCSVweight_CSVLFDown!=Weight_CSVLFdown){ std::cout<<"internalCSVweight_CSVLFDown "<<internalCSVweight_CSVLFDown<<" "<<Weight_CSVLFdown<<std::endl;}
-  
- if(internalCSVweight_CSVLFStats1Up!=Weight_CSVLFStats1up){ std::cout<<"internalCSVweight_CSVLFStats1Up "<<internalCSVweight_CSVLFStats1Up<<" "<<Weight_CSVLFStats1up<<std::endl;}
- if(internalCSVweight_CSVLFStats1Down!=Weight_CSVLFStats1down){ std::cout<<"internalCSVweight_CSVLFStats1Down "<<internalCSVweight_CSVLFStats1Down<<" "<<Weight_CSVLFStats1down<<std::endl;}
- if(internalCSVweight_CSVLFStats2Up!=Weight_CSVLFStats2up){ std::cout<<"internalCSVweight_CSVLFStats2Up "<<internalCSVweight_CSVLFStats2Up<<" "<<Weight_CSVLFStats2up<<std::endl;}
- if(internalCSVweight_CSVLFStats2Down!=Weight_CSVLFStats2down){ std::cout<<"internalCSVweight_CSVLFStats2Down "<<internalCSVweight_CSVLFStats2Down<<" "<<Weight_CSVLFStats2down<<std::endl;}
-  
- if(internalCSVweight_CSVHFStats1Up!=Weight_CSVHFStats1up){ std::cout<<"internalCSVweight_CSVHFStats1Up "<<internalCSVweight_CSVHFStats1Up<<" "<<Weight_CSVHFStats1up<<std::endl;}
- if(internalCSVweight_CSVHFStats1Down!=Weight_CSVHFStats1down){ std::cout<<"internalCSVweight_CSVHFStats1Down "<<internalCSVweight_CSVHFStats1Down<<" "<<Weight_CSVHFStats1down<<std::endl;}
- if(internalCSVweight_CSVHFStats2Up!=Weight_CSVHFStats2up){ std::cout<<"internalCSVweight_CSVHFStats2Up "<<internalCSVweight_CSVHFStats2Up<<" "<<Weight_CSVHFStats2up<<std::endl;}
- if(internalCSVweight_CSVHFStats2Down!=Weight_CSVHFStats2down){ std::cout<<"internalCSVweight_CSVHFStats2Down "<<internalCSVweight_CSVHFStats2Down<<" "<<Weight_CSVHFStats2down<<std::endl;}
-  
- if(internalCSVweight_CSVCErr1Up!=Weight_CSVCErr1up){ std::cout<<"internalCSVweight_CSVCErr1Up "<<internalCSVweight_CSVCErr1Up<<" "<<Weight_CSVCErr1up<<std::endl;}
- if(internalCSVweight_CSVCErr1Down!=Weight_CSVCErr1down){ std::cout<<"internalCSVweight_CSVCErr1Down "<<internalCSVweight_CSVCErr1Down<<" "<<Weight_CSVCErr1down<<std::endl;}
- if(internalCSVweight_CSVCErr2Up!=Weight_CSVCErr2up){ std::cout<<"internalCSVweight_CSVCErr2Up "<<internalCSVweight_CSVCErr2Up<<" "<<Weight_CSVCErr2up<<std::endl;}
- if(internalCSVweight_CSVCErr2Down!=Weight_CSVCErr2down){ std::cout<<"internalCSVweight_CSVCErr2Down "<<internalCSVweight_CSVCErr2Down<<" "<<Weight_CSVCErr2down<<std::endl;}
- */
- 
- // variables for Aachen DNNs
- double aachen_Out_ttH=-2.0;
- double aachen_Out_ttbarOther=-2.0;
- double aachen_Out_ttbarCC=-2.0;
- double aachen_Out_ttbarBB=-2.0;
- double aachen_Out_ttbarB=-2.0;
- double aachen_Out_ttbar2B=-2.0;
- double aachen_Out_other=-2.0;
  
  
- int aachen_pred_class=-2;
-
  
 """
 
-def EvaluateAachenDNNs():
-  rstr="""
-
-  // first construct the needed lorentzvectors
-  std::vector<TLorentzVector> dnnInJets;
-  std::vector<double> dnnInCSVs;
-  TLorentzVector dnnInMET;
-  TLorentzVector dnnInLepton;
-
-  // DANGERZONE
-  // It looks like the MET is not actually used in v4 of SL DNNs
-  dnnInMET= makeVectorE(0.0,0.0,0.0,0.0);
-  dnnInLepton = makeVectorE(primlepPt,primlepEta,primlepPhi,primlepE);
-  int firstNJets=min(N_Jets,6);
-  for(int ijet=0; ijet<firstNJets; ijet++){
-    dnnInCSVs.push_back(jetCSVs[ijet]);
-    dnnInJets.push_back(makeVectorE(jetPts[ijet],jetEtas[ijet],jetPhis[ijet],jetEnergies[ijet]));
-    }
-  
-  DNNOutput aachenoutput;
-  aachenoutput=dnn.evaluate(dnnInJets,dnnInCSVs,dnnInLepton,dnnInMET);
-  
-  aachen_Out_ttH=aachenoutput.ttH();
-  aachen_Out_ttbarOther=aachenoutput.ttlf();
-  aachen_Out_ttbarBB=aachenoutput.ttbb();
-  aachen_Out_ttbarB=aachenoutput.ttb();
-  aachen_Out_ttbar2B=aachenoutput.tt2b();
-  aachen_Out_ttbarCC=aachenoutput.ttcc();
-  aachen_Out_other=aachenoutput.other();
-  
-  aachen_pred_class=aachenoutput.mostProbableClass();
-  // classes are 
-  // 0 = ttH 
-  // 1 = ttbb 
-  // 2 = ttb 
-  // 3 = tt2b 
-  // 4 = ttcc 
-  // 5 = ttlf
-  // 6 = other
-  
-  bool printstuff=0;
-  if(printstuff){
-    cout<<"-----DNN-----"<<std::endl;
-    cout<<"ttH node "<<aachen_Out_ttH<<std::endl;
-    cout<<"ttbarOther node "<<aachen_Out_ttbarOther<<std::endl;
-    cout<<"ttbarCC node "<<aachen_Out_ttbarCC<<std::endl;
-    cout<<"ttbarBB node "<<aachen_Out_ttbarBB<<std::endl;
-    cout<<"ttbarB node "<<aachen_Out_ttbarB<<std::endl;
-    cout<<"ttbar2B node "<<aachen_Out_ttbar2B<<std::endl;
-    cout<<"other node "<<aachen_Out_other<<std::endl;
-    cout<<"predicted class "<<aachen_pred_class<<std::endl;
-    }
-  
-"""
-
-  return rstr
-
-def testAachenDNN():
-  rstr="""
-  std::vector<TLorentzVector> testdnnjets = {
-        makeVectorM(104.253659103, -0.73279517889, -3.07644724846, 15.8214708715),
-        makeVectorM(93.7207496495, -1.09075820446, -0.518474698067, 11.1629637015),
-        makeVectorM(82.3087599786, -0.29058226943, 0.934316039085, 12.3491756063),
-        makeVectorM(71.0101406197, -0.311807841063, -0.00518677430227, 17.680727362),
-        makeVectorM(48.2224599416, -0.770735502243, 0.56352609396, 7.37671529065),
-        makeVectorM(46.0958273368, -0.883650183678, 1.04447424412, 5.60050991848)
-    };
-    std::vector<double> testdnnjetCSVs = {
-        0.597419083118, 0.759489059448, 0.635843455791, 0.603073060513, 0.999078631401, 0.988624215126
-    };
-
-    TLorentzVector testdnnlepton = makeVectorM(54.6405308843, -1.68255746365, -2.53192830086, 0.0313574418471);
-    TLorentzVector testdnnmet = makeVectorM(0.0, 0.0, 0.0, 0.0); // dummy
-
-    // evaluate
-    DNNOutput aachentestdnnoutput = dnn.evaluate(testdnnjets, testdnnjetCSVs, testdnnlepton, testdnnmet);
-    std::vector<double> targetOutputsfordnntest = { 0.51680371, 0.25959021, 0.07142095, 0.07112622, 0.05624627, 0.02481263, 0.0};
-    std::cout<<"doing DNN unit test"<<std::endl;
-    std::cout<<"No error printout means it worked"<<std::endl;
-    for (size_t i = 0; i < targetOutputsfordnntest.size(); ++i)
-    {
-        assert(fabs(targetOutputsfordnntest[i] - aachentestdnnoutput.values[i]) < 0.000001 && "The DNN output for 6 jet events is incorrect");
-    }
-"""
-  return rstr
 
 def encodeSampleSelection(samples,variables):
   text=''
@@ -3037,7 +1585,7 @@ def varLoop(i,n):
   return '      for(uint '+str(i)+'=0; '+str(i)+'<'+str(n)+'; '+str(i)+'++)'
 
 
-def getFoot(doAachenDNN):
+def getFoot(addCodeInterfaces):
   rstr= """
   outfile->Write();
   outfile->Close();
@@ -3069,10 +1617,10 @@ def getFoot(doAachenDNN):
     }
   }
 """
-  if doAachenDNN:
-   rstr+="""
-     DNNClassifierBase::pyFinalize();
-"""
+  
+  for addCodeInt in addCodeInterfaces:
+    rstr+=addCodeInt.getCleanUpLines()
+
 
   rstr+="""
   
@@ -3085,24 +1633,33 @@ int main(){
 """
   return rstr
 
-def compileProgram(scriptname,usesDataBases,doAachenDNN):
+def compileProgram(scriptname,usesDataBases,addCodeInterfaces):
   p = subprocess.Popen(['root-config', '--cflags', '--libs'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
   out, err = p.communicate()
-  if doAachenDNN:
-    ppyc = subprocess.Popen(['python-config', '--cflags'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    outpyc, errpyc = ppyc.communicate()
-    ppyl = subprocess.Popen(['python-config', '--ldflags'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    outpyl, errpyl = ppyl.communicate()
-    print "communicated"
-    # get library path for python
-    print outpyc
-    pythonincludepath=outpyc.split(" ")[0]
-    pythonlibrarypath=pythonincludepath.replace("-I","-L").replace("include/python2.7","lib")
+  dnnfiles=[]
+  for addCodeInt in addCodeInterfaces:
+    if addCodeInt.usesPythonLibraries:
+      ppyc = subprocess.Popen(['python-config', '--cflags'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      outpyc, errpyc = ppyc.communicate()
+      ppyl = subprocess.Popen(['python-config', '--ldflags'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      outpyl, errpyl = ppyl.communicate()
+      print "communicated"
+      # get library path for python
+      print outpyc
+      pythonincludepath=outpyc.split(" ")[0]
+      pythonlibrarypath=pythonincludepath.replace("-I","-L").replace("include/python2.7","lib")
+      dnnfiles=outpyc[:-1].replace("\n"," ").split(' ')+[pythonlibrarypath]+outpyl[:-1].replace("\n"," ").split(' ')
+      break
+    
+  for addCodeInt in addCodeInterfaces:
+    if addCodeInt.includeString!="":
+      dnnfiles+=addCodeInt.includeString.split(" ")
+    if addCodeInt.libraryString!="":
+      dnnfiles+=addCodeInt.libraryString.split(" ")
+      
+  print dnnfiles
   
   memDBccfiles=[]
-  dnnfiles=[]
-  if doAachenDNN:
-    dnnfiles=outpyc[:-1].replace("\n"," ").split(' ')+[pythonlibrarypath]+outpyl[:-1].replace("\n"," ").split(' ')
   if usesDataBases:
     memDBccfiles=glob.glob('/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase/MEMDataBase/src/*.cc') 
     #TODO update the dataBases code
@@ -3114,7 +1671,7 @@ def compileProgram(scriptname,usesDataBases,doAachenDNN):
   subprocess.call(cmd)
 
 
-def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],allsystweights=["1"],additionalvariables=[],dataBases=[],doAachenDNN=False):
+def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],allsystweights=["1"],additionalvariables=[],dataBases=[],addCodeInterfaces=[]):
 
   # collect variables
   # list varibles that should not be written to the program automatically
@@ -3128,8 +1685,10 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 	    "internalMuIDWeight","internalMuIDWeightUp","internalMuIDWeightDown",
 	    "internalMuIsoWeight","internalMuIsoWeightUp","internalMuIsoWeightDown",
 	    "internalMuHIPWeight","internalMuHIPWeightUp","internalMuHIPWeightDown",
-	    "aachen_Out_other","aachen_Out_ttbar2B","aachen_Out_ttbarB","aachen_Out_ttbarBB","aachen_Out_ttbarCC","aachen_Out_ttbarOther","aachen_Out_ttH","aachen_pred_class",
 ]
+  for addCodeInt in addCodeInterfaces:
+    vetolist+=addCodeInt.getExternalyCallableVariables()
+    
   for db in dataBases:
     vetolist.append(db[0]+"p")
     vetolist.append(db[0]+"p_sig")
@@ -3201,12 +1760,13 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   # write program
   # start writing program
   script=""
-  script+=getHead(dataBases,doAachenDNN)
+  script+=getHead(dataBases,addCodeInterfaces)
   
   for db in dataBases:
     script+=InitDataBase(db)
-  if doAachenDNN:
-    script+=initDNNs()
+  for addCodeInt in addCodeInterfaces:
+    script+=addCodeInt.getBeforeLoopLines()
+    
   # initialize all variables
   script+=variables.initVarsProgram()
   script+=variables.initBranchAddressesProgram()
@@ -3239,6 +1799,8 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 
   # start event loop
   script+=startLoop()
+  for addCodeInt in addCodeInterfaces:
+    script+=addCodeInt.getVariableInitInsideEventLoopLinesq()
   
   script+='    float sampleweight=1;\n'
   script+=encodeSampleSelection(samples,variables)
@@ -3246,8 +1808,8 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
     script+=readOutDataBase(db)  
   script+="\n"
   
-  if doAachenDNN:
-    script+=EvaluateAachenDNNs()
+  for addCodeInt in addCodeInterfaces:
+    script+=addCodeInt.getEventLoopCodeLines()
     script+="\n"
 
   # calculate varibles and get TMVA outputs
@@ -3353,20 +1915,20 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   # finish loop
   script+=endLoop()
   
-  if doAachenDNN:
+  for addCodeInt in addCodeInterfaces:
     script+="\n"
-    script+=testAachenDNN()
+    script+=addCodeInt.getTestCallLines()
     script+="\n"
   
   # get program footer
-  script+=getFoot(doAachenDNN)
+  script+=getFoot(addCodeInterfaces)
 
   # write program text to file
   f=open(scriptname+'.cc','w')
   f.write(script)
   f.close()
 
-def DrawParallel(ListOfPlots,name,PathToSelf):
+def DrawParallel(ListOfPlots,name,PathToSelf,opts=None):
     ListofScripts=[]
     workdir=os.getcwd()+'/workdir/'+name+'/DrawScripts/'
     # create output folders
@@ -3377,7 +1939,7 @@ def DrawParallel(ListOfPlots,name,PathToSelf):
 
     print "Creating Scripts for Parallel Drawing"
     for iPlot, Plot in enumerate(ListOfPlots):
-        ListofScripts.append(createSingleDrawScript(iPlot,Plot,PathToSelf,scriptsfolder))
+      ListofScripts.append(createSingleDrawScript(iPlot,Plot,PathToSelf,scriptsfolder,opts=None))
 
     print "Submitting ", len(ListofScripts), " DrawScripts"
     # print ListofScripts
@@ -3388,7 +1950,7 @@ def DrawParallel(ListOfPlots,name,PathToSelf):
     do_qstat(jobids)
 
 
-def createSingleDrawScript(iPlot,Plot,PathToSelf,scriptsfolder):
+def createSingleDrawScript(iPlot,Plot,PathToSelf,scriptsfolder,opts=None):
   # print "still needs to be implemented"
   cmsswpath=os.environ['CMSSW_BASE']
   script="#!/bin/bash \n"
@@ -3399,8 +1961,15 @@ def createSingleDrawScript(iPlot,Plot,PathToSelf,scriptsfolder):
     script+='export OUTFILENAME="'+"plot" +str(iPlot)+'"\n'
     script+='cd '+cmsswpath+'/src\neval `scram runtime -sh`\n'
     script+='cd - \n'
-  # script+='export NUMBEROFPLOT ='+str(iPlot)+'\n'
-  script+='python '+PathToSelf+" "+str(iPlot)+' noPlotParallel\n'
+  # Parse commandline options if available to script  
+  commandLineOptions = ''
+  if opts != None:
+    for opt, arg in opts:
+      if arg != None:
+        commandLineOptions = commandLineOptions + ' ' + opt + '=' + arg
+      else:
+        commandLineOptions = commandLineOptions + ' ' + opt
+  script+='python '+PathToSelf+" -p "+str(iPlot)+ ' ' + commandLineOptions + ' noPlotParallel\n'
   # script+="mv *.pdf " +os.getcwd()+"/plot"+str(iPlot)+".pdf\n"
 
 
@@ -3668,24 +2237,58 @@ def check_jobs(scripts,outputs,nentries):
       failed_jobs.append(script)
   return failed_jobs
 
+""" Helper function to submit NAF jobs"""
+def helperSubmitNAFJobs(scripts,outputs,nentries):
+  # submit run scripts
+  print 'submitting scripts'
+  #jobids=submitToNAF(scripts)
+  jobids=submitArrayToNAF(scripts, "PlotPara")
+  do_qstat(jobids)
+
+  # check outputs
+  print 'checking outputs'
+  failed_jobs=check_jobs(scripts,outputs,nentries)
+  retries=0
+  while retries<=3 and len(failed_jobs)>0:
+    retries+=1
+    print 'the following jobs failed'
+    for j in failed_jobs:
+      print j
+    if len(failed_jobs)>=0.8*len(scripts):
+      print "!!!!!\n More Than 80 percent of your jobs failed. Check:\n A) Your code (and logfiles) \n B) The status of the batch stytem e.g. http://bird.desy.de/status/day.html\n !!!!!"
+    print 'resubmitting'
+    jobids=submitToNAF(failed_jobs)
+    do_qstat(jobids)
+    failed_jobs=check_jobs(scripts,outputs,nentries)
+  if retries>=10:
+    print 'could not submit jobs'
+    sys.exit()  
+
 # the dataBases should be defined as follows e.g. [[memDB,path],[blrDB,path]]
-def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],dataBases=[],treeInformationJsonFile="",otherSystnames=[],doAachenDNN=False,cirun=False):
+def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],dataBases=[],treeInformationJsonFile="",otherSystnames=[],addCodeInterfacePaths=[],cirun=False):
   cmsswpath=os.environ['CMSSW_BASE']
   if not "CMSSW" in cmsswpath:
     print "you need CMSSW for this to work. Exiting!"
     exit(0)
   cmsswversion=os.environ['CMSSW_VERSION']
   splitcmsswversion=cmsswversion.split("_")
-  if doAachenDNN and not int(splitcmsswversion[1])>=8:
-    print "You need at least CMSSW 8_0_26_patch2 for the DNNs from Aachen. Exiting!"
-    exit(0)
-  if doAachenDNN:
-    commonclassifierexists=os.path.exists(cmsswpath+"/src/TTH/CommonClassifier")
-    if not commonclassifierexists:
-      print "You need the common classifier package with the dnns and tf installed. Exiting!"
-      exit(0)
+  #if doAachenDNN and not int(splitcmsswversion[1])>=8:
+    #print "You need at least CMSSW 8_0_26_patch2 for the DNNs from Aachen. Exiting!"
+    #exit(0)
+  #if doAachenDNN:
+    #commonclassifierexists=os.path.exists(cmsswpath+"/src/TTH/CommonClassifier")
+    #if not commonclassifierexists:
+      #print "You need the common classifier package with the dnns and tf installed. Exiting!"
+      #exit(0)
   workdir=os.getcwd()+'/workdir/'+name
   outputpath=workdir+'/output.root'
+
+  addCodeInterfaces=[]
+  for acp in addCodeInterfacePaths:
+    print "loading module", acp
+    newCodeInterfaceModule=imp.load_source("newACI",acp)
+    import newACI
+    addCodeInterfaces.append(newACI.theInterface())
 
   usesDataBases=False
   if dataBases!=[]:
@@ -3724,10 +2327,10 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
     cmd='cp -v '+programpath+'.cc'+' '+programpath+'.ccBackup'
     subprocess.call(cmd,shell=True)
   print 'creating c++ program'
-  createProgram(programpath,plots,samples,catnames,catselections,systnames,systweights,additionalvariables, dataBases,doAachenDNN)
+  createProgram(programpath,plots,samples,catnames,catselections,systnames,systweights,additionalvariables, dataBases,addCodeInterfaces)
   if not os.path.exists(programpath+'.cc'):
     print 'could not create c++ program'
-    sys.exit()
+    sys.exit(-1)
   # check if the code changed
   codeWasChanged=True
   if alreadyWritten:
@@ -3737,14 +2340,14 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   if codeWasChanged:
     print "c++ codes differ"
     print 'compiling c++ program'
-    compileProgram(programpath, usesDataBases,doAachenDNN)
+    compileProgram(programpath, usesDataBases,addCodeInterfaces)
   else:
     print 'c++ program already existing !!!! Check if this is reasonable!!!'
     cmd = 'cp -v '+programpath+'Backup'+' '+programpath
     subprocess.call(cmd,shell=True)
   if not os.path.exists(programpath):
     print 'could not compile c++ program'
-    sys.exit()
+    sys.exit(-1)
     
   #create script to rename histograms
   createRenameScript(programpath,systnames+otherSystnames)
@@ -3759,45 +2362,36 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
     os.makedirs(plotspath)
   if not os.path.exists(workdir):
     print 'could not create workdirs'
-    sys.exit()
+    sys.exit(-1)
 
   # create run scripts
   print 'creating run scripts'
   scripts,outputs,nentries=get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,programpath,cmsswpath,treeInformationJsonFile,cirun)
   
-  #DANGERZONE
-  #exit(0)
-  # submit run scripts
-  print 'submitting scripts'
-  #jobids=submitToNAF(scripts)
-  jobids=submitArrayToNAF(scripts, "PlotPara")
-  do_qstat(jobids)
+  #DANGERZONE Submit jobs
+  helperSubmitNAFJobs(scripts,outputs,nentries)
 
-  # check outputs
-  print 'checking outputs'
-  failed_jobs=check_jobs(scripts,outputs,nentries)
-  retries=0
-  while retries<=3 and len(failed_jobs)>0:
-    retries+=1
-    print 'the following jobs failed'
-    for j in failed_jobs:
-      print j
-    if len(failed_jobs)>=0.8*len(scripts):
-      print "!!!!!\n More Than 80 percent of your jobs failed. Check:\n A) Your code (and logfiles) \n B) The status of the batch stytem e.g. http://bird.desy.de/status/day.html\n !!!!!"
-    print 'resubmitting'
-    jobids=submitToNAF(failed_jobs)
-    do_qstat(jobids)
-    failed_jobs=check_jobs(scripts,outputs,nentries)
-  if retries>=10:
-    print 'could not submit jobs'
-    sys.exit()
 
   # hadd outputs
-  print 'hadd output'
+  # Check if hadd output worked, otherwise resubmit jobs a second time
+  haddResubmit = False
+  print 'hadd output starting'
   haddclock=ROOT.TStopwatch()
   haddclock.Start()
-  subprocess.call(['hadd', outputpath]+outputs)
-  print 'done'
+  try:
+    subprocess.check_output(['hadd', outputpath]+outputs,stderr=subprocess.STDOUT)
+    print 'hadd output worked ', ('in the first place.' if not haddResubmit else 'in the second place.')
+  except subprocess.CalledProcessError, e:
+    if not haddResubmit:
+        print 'Hadd failed with the following error in the first place:\n \n', e.output
+        print '\n Resubmitting job script and then redoing hadd a second time.'
+        haddResubmit = True
+        helperSubmitNAFJobs(scripts,outputs,nentries)
+        subprocess.check_output(['hadd', outputpath]+outputs,stderr=subprocess.STDOUT)
+    else:
+        print "Hadd failed a second time with the following error, stopping program: \n \n", e.output
+        sys.exit(-1)
+  
   haddtime=haddclock.RealTime()
   print "hadding took ", haddtime
   return  outputpath
