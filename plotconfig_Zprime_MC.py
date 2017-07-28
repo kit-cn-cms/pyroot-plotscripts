@@ -29,10 +29,10 @@ weightsystnamesMadgraphbantiZprimeM=[
 systweightsMadgraphbantiZprimeM=[
                     #"nom:=1",
                     #"ABMadgraphbantiZprimeM_nominal:=2",
-                    "ABMadgraphbantiZprimeM_nominal:=QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M",
+                    "ABMadgraphbantiZprimeM_nominal:=QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
                     ##"ABMadgraphbantiZprimeM_nominal:=2*(DoWeights==1)+(DoWeights==0)*1.0",
-                    "ABMadgraphbantiZprimeM_systup:=(QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M+QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M_systup)",
-                    "ABMadgraphbantiZprimeM_systdown:=(QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M_systdown)",
+                    "ABMadgraphbantiZprimeM_systup:=(QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M+QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M_systup)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABMadgraphbantiZprimeM_systdown:=(QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M_systdown)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 ]
 
 
@@ -43,9 +43,9 @@ weightsystnamesPythia8bantiZprimeM=[
 ] 
 
 systweightsPythia8bantiZprimeM=[
-                    "ABPythiabantiZprimeM_nominal:=QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M",
-                    "ABPythiabantiZprimeM_systup:=(QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M+QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M_systup)",
-                    "ABPythiabantiZprimeM_systdown:=(QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M-QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M_systdown)",
+                    "ABPythiabantiZprimeM_nominal:=QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABPythiabantiZprimeM_systup:=(QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M+QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M_systup)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABPythiabantiZprimeM_systdown:=(QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M-QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M_systdown)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 ]
  
 weightsystnamesGeneratorDiffMadgraphbantiZprimeM=[
@@ -54,8 +54,8 @@ weightsystnamesGeneratorDiffMadgraphbantiZprimeM=[
 ]
 
 systweightsGeneartorDiffMadgraphbantiZprimeM=[
-                    "ABMadgraphbantiZprimeMGeneratorDiff_systup:=(QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M+ abs( QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M))",
-                    "ABMadgraphbantiZprimeMGeneratorDiff_systdown:=(QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M- abs( QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M))",
+                    "ABMadgraphbantiZprimeMGeneratorDiff_systup:=(QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M+ abs( QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABMadgraphbantiZprimeMGeneratorDiff_systdown:=(QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M- abs( QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 ]
  
 weightsystnamesGeneratorDiffPythia8bantiZprimeM=[
@@ -64,8 +64,8 @@ weightsystnamesGeneratorDiffPythia8bantiZprimeM=[
 ]
 
 systweightsGeneartorDiffPythia8bantiZprimeM=[
-                    "ABPythiabantiZprimeMGeneratorDiff_systup:=(QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M+ abs( QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M))",
-                    "ABPythiabantiZprimeMGeneratorDiff_systdown:=(QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M- abs( QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M))",
+                    "ABPythiabantiZprimeMGeneratorDiff_systup:=(QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M+ abs( QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABPythiabantiZprimeMGeneratorDiff_systdown:=(QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M- abs( QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 ]
     
  
@@ -76,9 +76,9 @@ weightsystnamesMadgraphtantiTopPt=[
 ] 
 
 systweightsMadgraphtantiTopPt=[
-                    "ABMadgraphtantiTopPt_nominal:=QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt",
-                    "ABMadgraphtantiTopPt_systup:=(QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt+QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt_systup)",
-                    "ABMadgraphtantiTopPt_systdown:=(QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt_systdown)",
+                    "ABMadgraphtantiTopPt_nominal:=QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABMadgraphtantiTopPt_systup:=(QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt+QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt_systup)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABMadgraphtantiTopPt_systdown:=(QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt_systdown)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 ]
 
 
@@ -89,9 +89,9 @@ weightsystnamesPythia8tantiTopPt=[
 ] 
 
 systweightsPythia8tantiTopPt=[
-                    "ABPythiatantiTopPt_nominal:=QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt",
-                    "ABPythiatantiTopPt_systup:=(QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt + QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt_systup)",
-                    "ABPythiatantiTopPt_systdown:=(QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt - QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt_systdown)",
+                    "ABPythiatantiTopPt_nominal:=QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABPythiatantiTopPt_systup:=(QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt + QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt_systup)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABPythiatantiTopPt_systdown:=(QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt - QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt_systdown)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 ]
 
 weightsystnamesGeneratorDiffMadgraphtantiTopPt=[
@@ -100,8 +100,8 @@ weightsystnamesGeneratorDiffMadgraphtantiTopPt=[
 ]
 
 systweightsGeneartorDiffMadgraphtantiTopPt=[
-                    "ABMadgraphtantiTopPtGeneratorDiff_systup:=(QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt + abs( QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt))",
-                    "ABMadgraphtantiTopPtGeneratorDiff_systdown:=(QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt - abs( QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt))",
+                    "ABMadgraphtantiTopPtGeneratorDiff_systup:=(QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt + abs( QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABMadgraphtantiTopPtGeneratorDiff_systdown:=(QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt - abs( QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 ]
  
 weightsystnamesGeneratorDiffPythia8tantiTopPt=[
@@ -110,8 +110,8 @@ weightsystnamesGeneratorDiffPythia8tantiTopPt=[
 ]
 
 systweightsGeneartorDiffPythia8tantiTopPt=[
-                    "ABPythiatantiTopPtGeneratorDiff_systup:=(QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt+ abs( QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt))",
-                    "ABPythiatantiTopPtGeneratorDiff_systdown:=(QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt- abs( QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt))",
+                    "ABPythiatantiTopPtGeneratorDiff_systup:=(QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt+ abs( QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABPythiatantiTopPtGeneratorDiff_systdown:=(QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt- abs( QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 ]
 
 
@@ -127,10 +127,10 @@ weightsystnamesMadgraphbantiZprimeMWithtopbtag=[
 ] 
 systweightsMadgraphbantiZprimeMWithtopbtag=[
                     #"ABMadgraphbantiZprimeMWithtopbtag_nominal:=2",
-                    "ABMadgraphbantiZprimeMWithtopbtag_nominal:=QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M",
+                    "ABMadgraphbantiZprimeMWithtopbtag_nominal:=QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
                     ##"ABMadgraphbantiZprimeMWithtopbtag_nominal:=2*(DoWeights==1)+(DoWeights==0)*1.0",
-                    "ABMadgraphbantiZprimeMWithtopbtag_systup:=(QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M+QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M_systup)",
-                    "ABMadgraphbantiZprimeMWithtopbtag_systdown:=(QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M_systdown)",
+                    "ABMadgraphbantiZprimeMWithtopbtag_systup:=(QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M+QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M_systup)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABMadgraphbantiZprimeMWithtopbtag_systdown:=(QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M_systdown)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 ]
 
 
@@ -140,9 +140,9 @@ weightsystnamesPythia8bantiZprimeMWithtopbtag=[
                     "_ABPythiabantiZprimeMWithtopbtag_systdown",
 ] 
 systweightsPythia8bantiZprimeMWithtopbtag=[
-                    "ABPythiabantiZprimeMWithtopbtag_nominal:=QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M",
-                    "ABPythiabantiZprimeMWithtopbtag_systup:=(QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M+QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M_systup)",
-                    "ABPythiabantiZprimeMWithtopbtag_systdown:=(QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M-QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M_systdown)",
+                    "ABPythiabantiZprimeMWithtopbtag_nominal:=QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABPythiabantiZprimeMWithtopbtag_systup:=(QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M+QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M_systup)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABPythiabantiZprimeMWithtopbtag_systdown:=(QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M-QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M_systdown)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 ]
  
 weightsystnamesGeneratorDiffMadgraphbantiZprimeMWithtopbtag=[
@@ -151,8 +151,8 @@ weightsystnamesGeneratorDiffMadgraphbantiZprimeMWithtopbtag=[
 ]
 
 systweightsGeneartorDiffMadgraphbantiZprimeMWithtopbtag=[
-                    "ABMadgraphbantiZprimeMWithtopbtagGeneratorDiff_systup:=(QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M+ abs( QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M))",
-                    "ABMadgraphbantiZprimeMWithtopbtagGeneratorDiff_systdown:=(QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M- abs( QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M))",
+                    "ABMadgraphbantiZprimeMWithtopbtagGeneratorDiff_systup:=(QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M+ abs( QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABMadgraphbantiZprimeMWithtopbtagGeneratorDiff_systdown:=(QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M- abs( QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 ]
  
 weightsystnamesGeneratorDiffPythia8bantiZprimeMWithtopbtag=[
@@ -161,8 +161,8 @@ weightsystnamesGeneratorDiffPythia8bantiZprimeMWithtopbtag=[
 ]
 
 systweightsGeneartorDiffPythia8bantiZprimeMWithtopbtag=[
-                    "ABPythiabantiZprimeMWithtopbtagGeneratorDiff_systup:=(QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M+ abs( QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M))",
-                    "ABPythiabantiZprimeMWithtopbtagGeneratorDiff_systdown:=(QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M- abs( QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M))",
+                    "ABPythiabantiZprimeMWithtopbtagGeneratorDiff_systup:=(QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M+ abs( QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABPythiabantiZprimeMWithtopbtagGeneratorDiff_systdown:=(QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M- abs( QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 ]
     
  
@@ -173,9 +173,9 @@ weightsystnamesMadgraphtantiTopPtWithtopbtag=[
 ] 
 
 systweightsMadgraphtantiTopPtWithtopbtag=[
-                    "ABMadgraphtantiTopPtWithtopbtag_nominal:=QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt",
-                    "ABMadgraphtantiTopPtWithtopbtag_systup:=(QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt+QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt_systup)",
-                    "ABMadgraphtantiTopPtWithtopbtag_systdown:=(QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt_systdown)",
+                    "ABMadgraphtantiTopPtWithtopbtag_nominal:=QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABMadgraphtantiTopPtWithtopbtag_systup:=(QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt+QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt_systup)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABMadgraphtantiTopPtWithtopbtag_systdown:=(QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt_systdown)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 ]
 
 
@@ -186,9 +186,9 @@ weightsystnamesPythia8tantiTopPtWithtopbtag=[
 ] 
 
 systweightsPythia8tantiTopPtWithtopbtag=[
-                    "ABPythiatantiTopPtWithtopbtag_nominal:=QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt",
-                    "ABPythiatantiTopPtWithtopbtag_systup:=(QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt + QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt_systup)",
-                    "ABPythiatantiTopPtWithtopbtag_systdown:=(QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt - QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt_systdown)",
+                    "ABPythiatantiTopPtWithtopbtag_nominal:=QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABPythiatantiTopPtWithtopbtag_systup:=(QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt + QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt_systup)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABPythiatantiTopPtWithtopbtag_systdown:=(QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt - QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt_systdown)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 ]
 
 weightsystnamesGeneratorDiffMadgraphtantiTopPtWithtopbtag=[
@@ -197,8 +197,8 @@ weightsystnamesGeneratorDiffMadgraphtantiTopPtWithtopbtag=[
 ]
 
 systweightsGeneartorDiffMadgraphtantiTopPtWithtopbtag=[
-                    "ABMadgraphtantiTopPtWithtopbtagGeneratorDiff_systup:=(QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt + abs( QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt))",
-                    "ABMadgraphtantiTopPtWithtopbtagGeneratorDiff_systdown:=(QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt - abs( QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt))",
+                    "ABMadgraphtantiTopPtWithtopbtagGeneratorDiff_systup:=(QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt + abs( QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABMadgraphtantiTopPtWithtopbtagGeneratorDiff_systdown:=(QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt - abs( QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 ]
  
 weightsystnamesGeneratorDiffPythia8tantiTopPtWithtopbtag=[
@@ -207,8 +207,8 @@ weightsystnamesGeneratorDiffPythia8tantiTopPtWithtopbtag=[
 ]
 
 systweightsGeneartorDiffPythia8tantiTopPtWithtopbtag=[
-                    "ABPythiatantiTopPtWithtopbtagGeneratorDiff_systup:=(QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt+ abs( QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt))",
-                    "ABPythiatantiTopPtWithtopbtagGeneratorDiff_systdown:=(QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt- abs( QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt))",
+                    "ABPythiatantiTopPtWithtopbtagGeneratorDiff_systup:=(QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt+ abs( QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABPythiatantiTopPtWithtopbtagGeneratorDiff_systdown:=(QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt- abs( QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 ]
 
 if topWP=='loose' and WWP=='loose' and bottomWP=='medium':
@@ -346,60 +346,60 @@ if topWP=='loose' and WWP=='loose' and bottomWP=='medium':
  
 
 ###########loose working points
-                    "ABCD_inclusive_ZprimeM_systup:= pow(1+0.024348,1.0/1.0)",
-                    "ABCD_inclusive_ZprimeM_systdown:= pow(1-0.024348,1.0/1.0)",
-                    "ABCD_notopbtag_ZprimeM_systup:= pow(1+0.018073,1.0/1.0)",
-                    "ABCD_notopbtag_ZprimeM_systdown:= pow(1-0.018073,1.0/1.0)",
-                    "ABCD_withtopbtag_ZprimeM_systup:= pow(1+0.144325,1.0/1.0)",
-                    "ABCD_withtopbtag_ZprimeM_systdown:= pow(1-0.144325,1.0/1.0)",
-                    "ABCD_inclusive_TprimeM_systup:= pow(1+0.027596,1.0/1.0)",
-                    "ABCD_inclusive_TprimeM_systdown:= pow(1-0.027596,1.0/1.0)",
-                    "ABCD_notopbtag_TprimeM_systup:= pow(1+0.021271,1.0/1.0)",
-                    "ABCD_notopbtag_TprimeM_systdown:= pow(1-0.021271,1.0/1.0)",
-                    "ABCD_withtopbtag_TprimeM_systup:= pow(1+0.259112,1.0/1.0)",
-                    "ABCD_withtopbtag_TprimeM_systdown:= pow(1-0.259112,1.0/1.0)",
+                    "ABCD_inclusive_ZprimeM_systup:= (pow(1+0.024348,1.0/1.0))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD_inclusive_ZprimeM_systdown:= pow(1-0.024348,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD_notopbtag_ZprimeM_systup:= pow(1+0.018073,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD_notopbtag_ZprimeM_systdown:= pow(1-0.018073,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD_withtopbtag_ZprimeM_systup:= pow(1+0.144325,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD_withtopbtag_ZprimeM_systdown:= pow(1-0.144325,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD_inclusive_TprimeM_systup:= pow(1+0.027596,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD_inclusive_TprimeM_systdown:= pow(1-0.027596,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD_notopbtag_TprimeM_systup:= pow(1+0.021271,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD_notopbtag_TprimeM_systdown:= pow(1-0.021271,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD_withtopbtag_TprimeM_systup:= pow(1+0.259112,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD_withtopbtag_TprimeM_systdown:= pow(1-0.259112,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 
-                    #"ABCDcorrE_inclusive_ZprimeM_systup:= pow(1+0.015,1.0/1.0)",
-                    #"ABCDcorrE_inclusive_ZprimeM_systdown:= pow(1-0.015,1.0/1.0)",
-                    #"ABCDcorrE_notopbtag_ZprimeM_systup:= pow(1+0.02,1.0/1.0)",
-                    #"ABCDcorrE_notopbtag_ZprimeM_systdown:= pow(1-0.02,1.0/1.0)",
-                    #"ABCDcorrE_withtopbtag_ZprimeM_systup:= pow(1+0.3,1.0/1.0)",
-                    #"ABCDcorrE_withtopbtag_ZprimeM_systdown:= pow(1-0.3,1.0/1.0)",
-                    #"ABCDcorrE_inclusive_TprimeM_systup:= pow(1+0.005,1.0/1.0)",
-                    #"ABCDcorrE_inclusive_TprimeM_systdown:= pow(1-0.005,1.0/1.0)",
-                    #"ABCDcorrE_notopbtag_TprimeM_systup:= pow(1+0.02,1.0/1.0)",
-                    #"ABCDcorrE_notopbtag_TprimeM_systdown:= pow(1-0.02,1.0/1.0)",
-                    #"ABCDcorrE_withtopbtag_TprimeM_systup:= pow(1+0.6,1.0/1.0)",
-                    #"ABCDcorrE_withtopbtag_TprimeM_systdown:= pow(1-0.6,1.0/1.0)",
+                    #"ABCDcorrE_inclusive_ZprimeM_systup:= pow(1+0.015,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    #"ABCDcorrE_inclusive_ZprimeM_systdown:= pow(1-0.015,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    #"ABCDcorrE_notopbtag_ZprimeM_systup:= pow(1+0.02,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    #"ABCDcorrE_notopbtag_ZprimeM_systdown:= pow(1-0.02,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    #"ABCDcorrE_withtopbtag_ZprimeM_systup:= pow(1+0.3,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    #"ABCDcorrE_withtopbtag_ZprimeM_systdown:= pow(1-0.3,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    #"ABCDcorrE_inclusive_TprimeM_systup:= pow(1+0.005,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    #"ABCDcorrE_inclusive_TprimeM_systdown:= pow(1-0.005,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    #"ABCDcorrE_notopbtag_TprimeM_systup:= pow(1+0.02,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    #"ABCDcorrE_notopbtag_TprimeM_systdown:= pow(1-0.02,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    #"ABCDcorrE_withtopbtag_TprimeM_systup:= pow(1+0.6,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    #"ABCDcorrE_withtopbtag_TprimeM_systdown:= pow(1-0.6,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
                     
-                    "ABCD2_inclusive_ZprimeM_systup:= pow(1+0.01874,1.0/1.0)",
-                    "ABCD2_inclusive_ZprimeM_systdown:= pow(1-0.01874,1.0/1.0)",
-                    "ABCD2_notopbtag_ZprimeM_systup:= pow(1+0.01194,1.0/1.0)",
-                    "ABCD2_notopbtag_ZprimeM_systdown:= pow(1-0.01194,1.0/1.0)",
-                    "ABCD2_withtopbtag_ZprimeM_systup:= pow(1+0.063702,1.0/1.0)",
-                    "ABCD2_withtopbtag_ZprimeM_systdown:= pow(1-0.063702,1.0/1.0)",
-                    "ABCD2_inclusive_TprimeM_systup:= pow(1+0.01731,1.0/1.0)",
-                    "ABCD2_inclusive_TprimeM_systdown:= pow(1-0.01731,1.0/1.0)",
-                    "ABCD2_notopbtag_TprimeM_systup:= pow(1+0.01194,1.0/1.0)",
-                    "ABCD2_notopbtag_TprimeM_systdown:= pow(1-0.01194,1.0/1.0)",
-                    "ABCD2_withtopbtag_TprimeM_systup:= pow(1+0.082416,1.0/1.0)",
-                    "ABCD2_withtopbtag_TprimeM_systdown:= pow(1-0.082416,1.0/1.0)",
+                    "ABCD2_inclusive_ZprimeM_systup:= pow(1+0.01874,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD2_inclusive_ZprimeM_systdown:= pow(1-0.01874,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD2_notopbtag_ZprimeM_systup:= pow(1+0.01194,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD2_notopbtag_ZprimeM_systdown:= pow(1-0.01194,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD2_withtopbtag_ZprimeM_systup:= pow(1+0.063702,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD2_withtopbtag_ZprimeM_systdown:= pow(1-0.063702,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD2_inclusive_TprimeM_systup:= pow(1+0.01731,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD2_inclusive_TprimeM_systdown:= pow(1-0.01731,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD2_notopbtag_TprimeM_systup:= pow(1+0.01194,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD2_notopbtag_TprimeM_systdown:= pow(1-0.01194,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD2_withtopbtag_TprimeM_systup:= pow(1+0.082416,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD2_withtopbtag_TprimeM_systdown:= pow(1-0.082416,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
                                         
-                    #"ABCD2corrE_inclusive_ZprimeM_systup:= pow(1+0.015,1.0/1.0)",
-                    #"ABCD2corrE_inclusive_ZprimeM_systdown:= pow(1-0.015,1.0/1.0)",
-                    #"ABCD2corrE_notopbtag_ZprimeM_systup:= pow(1+0.025,1.0/1.0)",
-                    #"ABCD2corrE_notopbtag_ZprimeM_systdown:= pow(1-0.025,1.0/1.0)",
-                    #"ABCD2corrE_withtopbtag_ZprimeM_systup:= pow(1+0.02,1.0/1.0)",
-                    #"ABCD2corrE_withtopbtag_ZprimeM_systdown:= pow(1-0.02,1.0/1.0)",
-                    #"ABCD2corrE_inclusive_TprimeM_systup:= pow(1+0.01,1.0/1.0)",
-                    #"ABCD2corrE_inclusive_TprimeM_systdown:= pow(1-0.01,1.0/1.0)",
-                    #"ABCD2corrE_notopbtag_TprimeM_systup:= pow(1+0.025,1.0/1.0)",
-                    #"ABCD2corrE_notopbtag_TprimeM_systdown:= pow(1-0.025,1.0/1.0)",
-                    #"ABCD2corrE_withtopbtag_TprimeM_systup:= pow(1+0.005,1.0/1.0)",
-                    #"ABCD2corrE_withtopbtag_TprimeM_systdown:= pow(1-0.005,1.0/1.0)",
+                    #"ABCD2corrE_inclusive_ZprimeM_systup:= pow(1+0.015,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    #"ABCD2corrE_inclusive_ZprimeM_systdown:= pow(1-0.015,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    #"ABCD2corrE_notopbtag_ZprimeM_systup:= pow(1+0.025,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    #"ABCD2corrE_notopbtag_ZprimeM_systdown:= pow(1-0.025,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    #"ABCD2corrE_withtopbtag_ZprimeM_systup:= pow(1+0.02,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    #"ABCD2corrE_withtopbtag_ZprimeM_systdown:= pow(1-0.02,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    #"ABCD2corrE_inclusive_TprimeM_systup:= pow(1+0.01,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    #"ABCD2corrE_inclusive_TprimeM_systdown:= pow(1-0.01,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    #"ABCD2corrE_notopbtag_TprimeM_systup:= pow(1+0.025,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    #"ABCD2corrE_notopbtag_TprimeM_systdown:= pow(1-0.025,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    #"ABCD2corrE_withtopbtag_TprimeM_systup:= pow(1+0.005,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    #"ABCD2corrE_withtopbtag_TprimeM_systdown:= pow(1-0.005,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
                                         
 ################otherstuff
-                    #"ABCD_inclusive_ZprimeM_systup:= 1+0.06*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
+                    #"ABCD_inclusive_ZprimeM_systup:= (1+0.06*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
                     #"ABCD_inclusive_ZprimeM_systdown:= 1-0.06*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",  
                     #"ABCD_notopbtag_ZprimeM_systup:= 1+0.08*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
                     #"ABCD_notopbtag_ZprimeM_systdown:= 1-0.08*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
@@ -460,18 +460,18 @@ if topWP=='medium' and WWP=='loose' and bottomWP=='medium':
 ########medium working points                    
                     
                     "ABCD_nominal:= 1",
-                    "ABCD_inclusive_ZprimeM_systup:= pow(1+0.034415,1.0/1.0)",
-                    "ABCD_inclusive_ZprimeM_systdown:= pow(1-0.034415,1.0/1.0)",
-                    "ABCD_notopbtag_ZprimeM_systup:= pow(1+0.055765,1.0/1.0)",
-                    "ABCD_notopbtag_ZprimeM_systdown:= pow(1-0.055765,1.0/1.0)",
-                    "ABCD_withtopbtag_ZprimeM_systup:= pow(1+0.225113,1.0/1.0)",
-                    "ABCD_withtopbtag_ZprimeM_systdown:= pow(1-0.225113,1.0/1.0)",
-                    "ABCD_inclusive_TprimeM_systup:= pow(1+0.03774,1.0/1.0)",
-                    "ABCD_inclusive_TprimeM_systdown:= pow(1-0.03774,1.0/1.0)",
-                    "ABCD_notopbtag_TprimeM_systup:= pow(1+0.0338929,1.0/1.0)",
-                    "ABCD_notopbtag_TprimeM_systdown:= pow(1-0.0338929,1.0/1.0)",
-                    "ABCD_withtopbtag_TprimeM_systup:= pow(1+0.271008,1.0/1.0)",
-                    "ABCD_withtopbtag_TprimeM_systdown:= pow(1-0.271008,1.0/1.0)",
+                    "ABCD_inclusive_ZprimeM_systup:= pow(1+0.034415,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD_inclusive_ZprimeM_systdown:= pow(1-0.034415,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD_notopbtag_ZprimeM_systup:= pow(1+0.055765,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD_notopbtag_ZprimeM_systdown:= pow(1-0.055765,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD_withtopbtag_ZprimeM_systup:= pow(1+0.225113,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD_withtopbtag_ZprimeM_systdown:= pow(1-0.225113,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD_inclusive_TprimeM_systup:= pow(1+0.03774,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD_inclusive_TprimeM_systdown:= pow(1-0.03774,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD_notopbtag_TprimeM_systup:= pow(1+0.0338929,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD_notopbtag_TprimeM_systdown:= pow(1-0.0338929,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD_withtopbtag_TprimeM_systup:= pow(1+0.271008,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD_withtopbtag_TprimeM_systdown:= pow(1-0.271008,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 
                     #"ABCDcorrE_inclusive_ZprimeM_systup:= pow(1+0.06,1.0/7.0)",
                     #"ABCDcorrE_inclusive_ZprimeM_systdown:= pow(1-0.06,1.0/7.0)",
@@ -486,18 +486,18 @@ if topWP=='medium' and WWP=='loose' and bottomWP=='medium':
                     #"ABCDcorrE_withtopbtag_TprimeM_systup:= pow(1+0.67,1.0/7.0)",
                     #"ABCDcorrE_withtopbtag_TprimeM_systdown:= pow(1-0.67,1.0/7.0)",
                     
-                    "ABCD2_inclusive_ZprimeM_systup:= pow(1+0.05428,1.0/1.0)",
-                    "ABCD2_inclusive_ZprimeM_systdown:= pow(1-0.05428,1.0/1.0)",
-                    "ABCD2_notopbtag_ZprimeM_systup:= pow(1+0.056178,1.0/1.0)",
-                    "ABCD2_notopbtag_ZprimeM_systdown:= pow(1-0.056178,1.0/1.0)",
-                    "ABCD2_withtopbtag_ZprimeM_systup:= pow(1+0.185563,1.0/1.0)",
-                    "ABCD2_withtopbtag_ZprimeM_systdown:= pow(1-0.185563,1.0/1.0)",
-                    "ABCD2_inclusive_TprimeM_systup:= pow(1+0.042944,1.0/1.0)",
-                    "ABCD2_inclusive_TprimeM_systdown:= pow(1-0.042944,1.0/1.0)",
-                    "ABCD2_notopbtag_TprimeM_systup:= pow(1+0.046409,1.0/1.0)",
-                    "ABCD2_notopbtag_TprimeM_systdown:= pow(1-0.046409,1.0/1.0)",
-                    "ABCD2_withtopbtag_TprimeM_systup:= pow(1+0.183169,1.0/1.0)",
-                    "ABCD2_withtopbtag_TprimeM_systdown:= pow(1-0.183169,1.0/1.0)",
+                    "ABCD2_inclusive_ZprimeM_systup:= pow(1+0.05428,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD2_inclusive_ZprimeM_systdown:= pow(1-0.05428,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD2_notopbtag_ZprimeM_systup:= pow(1+0.056178,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD2_notopbtag_ZprimeM_systdown:= pow(1-0.056178,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD2_withtopbtag_ZprimeM_systup:= pow(1+0.185563,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD2_withtopbtag_ZprimeM_systdown:= pow(1-0.185563,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD2_inclusive_TprimeM_systup:= pow(1+0.042944,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD2_inclusive_TprimeM_systdown:= pow(1-0.042944,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD2_notopbtag_TprimeM_systup:= pow(1+0.046409,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD2_notopbtag_TprimeM_systdown:= pow(1-0.046409,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD2_withtopbtag_TprimeM_systup:= pow(1+0.183169,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD2_withtopbtag_TprimeM_systdown:= pow(1-0.183169,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
                                         
                     #"ABCD2corrE_inclusive_ZprimeM_systup:= pow(1+0.05,1.0/7.0)",
                     #"ABCD2corrE_inclusive_ZprimeM_systdown:= pow(1-0.05,1.0/7.0)",
@@ -518,56 +518,218 @@ if topWP=='medium' and WWP=='loose' and bottomWP=='medium':
 
 
 weigthsystnamesMCSFs=[
-                    "_CSV_MCSF_nominal",
-                    "_CSV_MCSF_CSVLF_systup",
-                    "_CSV_MCSF_CSVLF_systdown",
-                    "_CSV_MCSF_CSVHF_systup",
-                    "_CSV_MCSF_CSVHF_systdown",   
+                    #"_CSV_MCSF_nominal",
+                    #"_CSV_MCSF_systup",
+                    #"_CSV_MCSF_systdown",
+                    #"_CSV_MCSF_nominal",
                     
-                    "_t21_MCSF_nominal",
-                    "_t21_MCSF_systup",
-                    "_t21_MCSF_systdown", 
-                    "_t32_MCSF_notopbtag_nominal",
-                    "_t32_MCSF_notopbtag_systup",
-                    "_t32_MCSF_notopbtag_systdown", 
-                    "_t32_MCSF_withtopbtag_nominal",
-                    "_t32_MCSF_withtopbtag_systup",
-                    "_t32_MCSF_withtopbtag_systdown", 
+                    "_ABCD1_MCSF_nominal",
+                    
+                    "_ABCD1_MCSF_CSVLFUp",
+                    "_ABCD1_MCSF_CSVLFDown",
+                    "_ABCD1_MCSF_CSVHFUp",
+                    "_ABCD1_MCSF_CSVHFDown",
+                    "_ABCD1_MCSF_CSVHFStats1Up",
+                    "_ABCD1_MCSF_CSVHFStats1Down",
+                    "_ABCD1_MCSF_CSVLFStats1Up",
+                    "_ABCD1_MCSF_CSVLFStats1Down",
+                    "_ABCD1_MCSF_CSVHFStats2Up",
+                    "_ABCD1_MCSF_CSVHFStats2Down",
+                    "_ABCD1_MCSF_CSVLFStats2Up",
+                    "_ABCD1_MCSF_CSVLFStats2Down",
+                    "_ABCD1_MCSF_CSVCErr1Up",
+                    "_ABCD1_MCSF_CSVCErr1Down",
+                    "_ABCD1_MCSF_CSVCErr2Up",
+                    "_ABCD1_MCSF_CSVCErr2Down",
+                    "_ABCD1_MCSF_toptagUp",
+                    "_ABCD1_MCSF_toptagDown",
+                    "_ABCD1_MCSF_WtagUp",
+                    "_ABCD1_MCSF_WtagDown",
+                    "_ABCD1_MCSF_PUUp",
+                    "_ABCD1_MCSF_PUDown",
+                    "_ABCD1_MCSF_PDFUp",
+                    "_ABCD1_MCSF_PDFDown",  
+                    "_ABCD1_MCSF_LumiUp",
+                    "_ABCD1_MCSF_LumiDown",
+                    "_ABCD1_MCSF_renfac_envUp",
+                    "_ABCD1_MCSF_renfac_envDown",
+                    "_ABCD1_ttbarXSUp",
+                    "_ABCD1_ttbarXSDown",
+                    
+                    "_ABCD1_MCSF_renfacUp",
+                    "_ABCD1_MCSF_renfacDown",
+                    "_ABCD1_MCSF_renUp",
+                    "_ABCD1_MCSF_renDown",
+                    "_ABCD1_MCSF_facUp",
+                    "_ABCD1_MCSF_facDown",
+                    
+                    
+                    "_ABCD2_MCSF_nominal",
+                    
+                    "_ABCD2_MCSF_CSVLFUp",
+                    "_ABCD2_MCSF_CSVLFDown",
+                    "_ABCD2_MCSF_CSVHFUp",
+                    "_ABCD2_MCSF_CSVHFDown",
+                    "_ABCD2_MCSF_CSVHFStats1Up",
+                    "_ABCD2_MCSF_CSVHFStats1Down",
+                    "_ABCD2_MCSF_CSVLFStats1Up",
+                    "_ABCD2_MCSF_CSVLFStats1Down",
+                    "_ABCD2_MCSF_CSVHFStats2Up",
+                    "_ABCD2_MCSF_CSVHFStats2Down",
+                    "_ABCD2_MCSF_CSVLFStats2Up",
+                    "_ABCD2_MCSF_CSVLFStats2Down",
+                    "_ABCD2_MCSF_CSVCErr1Up",
+                    "_ABCD2_MCSF_CSVCErr1Down",
+                    "_ABCD2_MCSF_CSVCErr2Up",
+                    "_ABCD2_MCSF_CSVCErr2Down",
+                    "_ABCD2_MCSF_toptagUp",
+                    "_ABCD2_MCSF_toptagDown",
+                    "_ABCD2_MCSF_WtagUp",
+                    "_ABCD2_MCSF_WtagDown",
+                    "_ABCD2_MCSF_PUUp",
+                    "_ABCD2_MCSF_PUDown",
+                    "_ABCD2_MCSF_PDFUp",
+                    "_ABCD2_MCSF_PDFDown",  
+                    "_ABCD2_MCSF_LumiUp",
+                    "_ABCD2_MCSF_LumiDown",
+                    "_ABCD2_MCSF_renfac_envUp",
+                    "_ABCD2_MCSF_renfac_envDown",
+                    "_ABCD2_ttbarXSUp",
+                    "_ABCD2_ttbarXSDown",
+                    
+                    "_ABCD2_MCSF_renfacUp",
+                    "_ABCD2_MCSF_renfacDown",
+                    "_ABCD2_MCSF_renUp",
+                    "_ABCD2_MCSF_renDown",
+                    "_ABCD2_MCSF_facUp",
+                    "_ABCD2_MCSF_facDown",
+                    
                     
 ]
 
 systweightnamesMCSFs=[
-                    "CSV_MCSF_nominal:=(internalCSVweight)*(DoMCDataWeights==1)+(DoMCDataWeights==0)*1.0",
-                    "CSV_MCSF_CSVLF_systup:=(internalCSVweight_CSVLFUp*internalCSVweight)*DoMCDataWeights+(DoMCDataWeights==0)*1.0",
-                    "CSV_MCSF_CSVLF_systdown:=(internalCSVweight_CSVLFDown*internalCSVweight)*DoMCDataWeights+(DoMCDataWeights==0)*1.0", 
-                    "CSV_MCSF_CSVHF_systup:=(internalCSVweight_CSVHFUp*internalCSVweight)*DoMCDataWeights+(DoMCDataWeights==0)*1.0",
-                    "CSV_MCSF_CSVHF_systdown:=(internalCSVweight_CSVHFDown*internalCSVweight)*DoMCDataWeights+(DoMCDataWeights==0)*1.0",
+                    #"CSV_MCSF_nominal:=(1)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    #"CSV_MCSF_systup:=(1*(1+1.15))*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    #"CSV_MCSF_systdown:=(1*(1-1.15))*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0", 
                     
-                    "t21_MCSF_nominal:=(1)*DoMCDataWeights+(DoMCDataWeights==0)*1.0",
-                    "t21_MCSF_systup:=(1.10*(1+0.12))*DoMCDataWeights+(DoMCDataWeights==0)*1.0",
-                    "t21_MCSF_systdown:=(1.10*(1-0.12))*DoMCDataWeights+(DoMCDataWeights==0)*1.0",
-                    "t32_MCSF_notopbtag_nominal:=(1.06)*DoMCDataWeights+(DoMCDataWeights==0)*1.0",
-                    "t32_MCSF_notopbtag_systup:=(1.06*(1+0.08))*DoMCDataWeights+(DoMCDataWeights==0)*1.0",
-                    "t32_MCSF_notopbtag_systdown:=(1.06*(1-0.04))*DoMCDataWeights+(DoMCDataWeights==0)*1.0",
-                    "t32_MCSF_withtopbtag_nominal:=(1.05)*DoMCDataWeights+(DoMCDataWeights==0)*1.0",
-                    "t32_MCSF_withtopbtag_systup:=(1.05*(1+0.11))*DoMCDataWeights+(DoMCDataWeights==0)*1.0",
-                    "t32_MCSF_withtopbtag_systdown:=(1.05*(1-0.05))*DoMCDataWeights+(DoMCDataWeights==0)*1.0",
+                    "ABCD1_MCSF_nominal:=(MCSF_Weight_ABCD1)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
                     
-                    #"CSV_MCSF_nominal:=(1)*(DoMCDataWeights==1)",
-                    #"CSV_MCSF_systup:=(1*(1+1.15))*DoMCDataWeights",
-                    #"CSV_MCSF_systdown:=(1*(1-1.15))*DoMCDataWeights",  
-                    #"t21_MCSF_nominal:=(1.10)*DoMCDataWeights",
-                    #"t21_MCSF_systup:=(1.10*(1+0.12))*DoMCDataWeights",
-                    #"t21_MCSF_systdown:=(1.10*(1-0.12))*DoMCDataWeights",
-                    #"t32_MCSF_notopbtag_nominal:=(1.06)*DoMCDataWeights",
-                    #"t32_MCSF_notopbtag_systup:=(1.06*(1+0.08))*DoMCDataWeights",
-                    #"t32_MCSF_notopbtag_systdown:=(1.06*(1-0.04))*DoMCDataWeights",
-                    #"t32_MCSF_withtopbtag_nominal:=(1.05)*DoMCDataWeights",
-                    #"t32_MCSF_withtopbtag_systup:=(1.05*(1+0.11))*DoMCDataWeights",
-                    #"t32_MCSF_withtopbtag_systdown:=(1.05*(1-0.05))*DoMCDataWeights",
+                    "ABCD1_MCSF_CSVLFUp:=(MCSF_Weight_ABCD1/ABCD1_WeightCSVnominal*ABCD1_WeightCSVLFup)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD1_MCSF_CSVLFDown:=(MCSF_Weight_ABCD1/ABCD1_WeightCSVnominal*ABCD1_WeightCSVLFdown)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD1_MCSF_CSVHFUp:=(MCSF_Weight_ABCD1/ABCD1_WeightCSVnominal*ABCD1_WeightCSVHFup)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD1_MCSF_CSVHFDown:=(MCSF_Weight_ABCD1/ABCD1_WeightCSVnominal*ABCD1_WeightCSVHFdown)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD1_MCSF_CSVHFStats1Up:=(MCSF_Weight_ABCD1/ABCD1_WeightCSVnominal*ABCD1_WeightCSVHFStats1up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD1_MCSF_CSVHFStats1Down:=(MCSF_Weight_ABCD1/ABCD1_WeightCSVnominal*ABCD1_WeightCSVHFStats1down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD1_MCSF_CSVLFStats1Up:=(MCSF_Weight_ABCD1/ABCD1_WeightCSVnominal*ABCD1_WeightCSVLFStats1up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD1_MCSF_CSVLFStats1Down:=(MCSF_Weight_ABCD1/ABCD1_WeightCSVnominal*ABCD1_WeightCSVLFStats1down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD1_MCSF_CSVHFStats2Up:=(MCSF_Weight_ABCD1/ABCD1_WeightCSVnominal*ABCD1_WeightCSVHFStats2up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD1_MCSF_CSVHFStats2Down:=(MCSF_Weight_ABCD1/ABCD1_WeightCSVnominal*ABCD1_WeightCSVHFStats2down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD1_MCSF_CSVLFStats2Up:=(MCSF_Weight_ABCD1/ABCD1_WeightCSVnominal*ABCD1_WeightCSVLFStats2up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD1_MCSF_CSVLFStats2Down:=(MCSF_Weight_ABCD1/ABCD1_WeightCSVnominal*ABCD1_WeightCSVLFStats2down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD1_MCSF_CSVCErr1Up:=(MCSF_Weight_ABCD1/ABCD1_WeightCSVnominal*ABCD1_WeightCSVCErr1up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD1_MCSF_CSVCErr1Down:=(MCSF_Weight_ABCD1/ABCD1_WeightCSVnominal*ABCD1_WeightCSVCErr1down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD1_MCSF_CSVCErr2Up:=(MCSF_Weight_ABCD1/ABCD1_WeightCSVnominal*ABCD1_WeightCSVCErr2up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD1_MCSF_CSVCErr2Down:=(MCSF_Weight_ABCD1/ABCD1_WeightCSVnominal*ABCD1_WeightCSVCErr2down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD1_MCSF_toptagUp:=(MCSF_Weight_ABCD1/ABCD1_toptagweightnominal*ABCD1_toptagweightup)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD1_MCSF_toptagDown:=(MCSF_Weight_ABCD1/ABCD1_toptagweightnominal*ABCD1_toptagweightdown)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD1_MCSF_WtagUp:=(MCSF_Weight_ABCD1/ABCD1_Wtagweightnominal*ABCD1_Wtagweightup)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD1_MCSF_WtagDown:=(MCSF_Weight_ABCD1/ABCD1_Wtagweightnominal*ABCD1_Wtagweightdown)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",      
+                    
+                    "ABCD1_MCSF_PUUp:=(MCSF_Weight_ABCD1/Weight_pu69p2*Weight_pu69p2Up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD1_MCSF_PUDown:=(MCSF_Weight_ABCD1/Weight_pu69p2*Weight_pu69p2Down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0", 
+                    "ABCD1_MCSF_PDFUp:=(MCSF_Weight_ABCD1/PDF_RMSMean*PDF_RMSUp)*(DoWeights*DoMCDataWeights_ttbaronly==1)+(DoWeights*DoMCDataWeights_ttbaronly==0)*1.0",
+                    "ABCD1_MCSF_PDFDown:=(MCSF_Weight_ABCD1/PDF_RMSMean*PDF_RMSDown)*(DoWeights*DoMCDataWeights_ttbaronly==1)+(DoWeights*DoMCDataWeights_ttbaronly==0)*1.0",
+                    "ABCD1_MCSF_LumiUp:=(MCSF_Weight_ABCD1*(1.0+0.025))*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD1_MCSF_LumiDown:=(MCSF_Weight_ABCD1*(1.0-0.025))*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0", 
+
+                    "ABCD1_MCSF_renfac_envUp:=(MCSF_Weight_ABCD1*MCSF_RenFac_envelopeUp)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD1_MCSF_renfac_envDown:=(MCSF_Weight_ABCD1*MCSF_RenFac_envelopeDown)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD1_ttbarXSUp:=(MCSF_Weight_ABCD1*(1.0+0.05))*(DoWeights*DoMCDataWeights_ttbaronly==1)+(DoWeights*DoMCDataWeights_ttbaronly==0)*1.0",
+                    "ABCD1_ttbarXSDown:=(MCSF_Weight_ABCD1*(1.0-0.05))*(DoWeights*DoMCDataWeights_ttbaronly==1)+(DoWeights*DoMCDataWeights_ttbaronly==0)*1.0",
+                 
+                 
+                    "ABCD1_MCSF_renfacUp:=(Weight_scale_variation_muR2p0_muF2p0)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD1_MCSF_renfacDown:=(Weight_scale_variation_muR0p5_muF0p5)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD1_MCSF_renUp:=(Weight_scale_variation_muR2p0_muF1p0)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD1_MCSF_renDown:=(Weight_scale_variation_muR0p5_muF1p0)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD1_MCSF_facUp:=(Weight_scale_variation_muR1p0_muF2p0)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD1_MCSF_facDown:=(Weight_scale_variation_muR1p0_muF0p5)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0", 
+                    
+                    
+                    "ABCD2_MCSF_nominal:=(MCSF_Weight_ABCD2)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    
+                    "ABCD2_MCSF_CSVLFUp:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVLFup)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD2_MCSF_CSVLFDown:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVLFdown)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD2_MCSF_CSVHFUp:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVHFup)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD2_MCSF_CSVHFDown:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVHFdown)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD2_MCSF_CSVHFStats1Up:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVHFStats1up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD2_MCSF_CSVHFStats1Down:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVHFStats1down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD2_MCSF_CSVLFStats1Up:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVLFStats1up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD2_MCSF_CSVLFStats1Down:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVLFStats1down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD2_MCSF_CSVHFStats2Up:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVHFStats2up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD2_MCSF_CSVHFStats2Down:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVHFStats2down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD2_MCSF_CSVLFStats2Up:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVLFStats2up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD2_MCSF_CSVLFStats2Down:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVLFStats2down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD2_MCSF_CSVCErr1Up:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVCErr1up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD2_MCSF_CSVCErr1Down:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVCErr1down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD2_MCSF_CSVCErr2Up:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVCErr2up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD2_MCSF_CSVCErr2Down:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVCErr2down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD2_MCSF_toptagUp:=(MCSF_Weight_ABCD2/ABCD2_toptagweightnominal*ABCD2_toptagweightup)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD2_MCSF_toptagDown:=(MCSF_Weight_ABCD2/ABCD2_toptagweightnominal*ABCD2_toptagweightdown)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD2_MCSF_WtagUp:=(MCSF_Weight_ABCD2/ABCD2_Wtagweightnominal*ABCD2_Wtagweightup)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD2_MCSF_WtagDown:=(MCSF_Weight_ABCD2/ABCD2_Wtagweightnominal*ABCD2_Wtagweightdown)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    
+                    "ABCD2_MCSF_PUUp:=(MCSF_Weight_ABCD2/Weight_pu69p2*Weight_pu69p2Up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD2_MCSF_PUDown:=(MCSF_Weight_ABCD2/Weight_pu69p2*Weight_pu69p2Down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0", 
+                    "ABCD2_MCSF_PDFUp:=(MCSF_Weight_ABCD2/PDF_RMSMean*PDF_RMSUp)*(DoWeights*DoMCDataWeights_ttbaronly==1)+(DoWeights*DoMCDataWeights_ttbaronly==0)*1.0",
+                    "ABCD2_MCSF_PDFDown:=(MCSF_Weight_ABCD2/PDF_RMSMean*PDF_RMSDown)*(DoWeights*DoMCDataWeights_ttbaronly==1)+(DoWeights*DoMCDataWeights_ttbaronly==0)*1.0",
+                    "ABCD2_MCSF_LumiUp:=(MCSF_Weight_ABCD2*(1.0+0.025))*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD2_MCSF_LumiDown:=(MCSF_Weight_ABCD2*(1.0-0.025))*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",                  
+
+                    "ABCD2_MCSF_renfac_envUp:=(MCSF_Weight_ABCD2*MCSF_RenFac_envelopeUp)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD2_MCSF_renfac_envDown:=(MCSF_Weight_ABCD2*MCSF_RenFac_envelopeDown)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD2_ttbarXSUp:=(MCSF_Weight_ABCD2*(1.0+0.05))*(DoWeights*DoMCDataWeights_ttbaronly==1)+(DoWeights*DoMCDataWeights_ttbaronly==0)*1.0",
+                    "ABCD2_ttbarXSDown:=(MCSF_Weight_ABCD2*(1.0-0.05))*(DoWeights*DoMCDataWeights_ttbaronly==1)+(DoWeights*DoMCDataWeights_ttbaronly==0)*1.0",
+              
+              
+                    "ABCD2_MCSF_renfacUp:=(Weight_scale_variation_muR2p0_muF2p0)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD2_MCSF_renfacDown:=(Weight_scale_variation_muR0p5_muF0p5)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD2_MCSF_renUp:=(Weight_scale_variation_muR2p0_muF1p0)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD2_MCSF_renDown:=(Weight_scale_variation_muR0p5_muF1p0)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD2_MCSF_facUp:=(Weight_scale_variation_muR1p0_muF2p0)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "ABCD2_MCSF_facDown:=(Weight_scale_variation_muR1p0_muF0p5)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",            
+                    
                     
 ]
 
+for i in range(0,100):
+
+
+    #weigthsystnamesMCSFs.append("_MCSF_PDF"+str(i)+"Up")
+    #weigthsystnamesMCSFs.append("_MCSF_PDF"+str(i)+"Down")
+    #systweightnamesMCSFs.append("MCSF_PDF"+str(i)+"Up:=(Weight_nnpdf30_lo_as_0130_0 + abs(Weight_nnpdf30_lo_as_0130_0 - Weight_nnpdf30_lo_as_0130_0"+str(i)+"))*(DoWeights*DoMCDataWeights_ttbaronly==1)+(DoWeights*DoMCDataWeights_ttbaronly==0)*1.0")
+    #systweightnamesMCSFs.append("MCSF_PDF"+str(i)+"Down:=(Weight_nnpdf30_lo_as_0130_0 - abs(Weight_nnpdf30_lo_as_0130_0 - Weight_nnpdf30_lo_as_0130_0"+str(i)+"))*(DoWeights*DoMCDataWeights_ttbaronly==1)+(DoWeights*DoMCDataWeights_ttbaronly==0)*1.0")
+    weigthsystnamesMCSFs.append("_MCSF_PDF"+str(i))
+    systweightnamesMCSFs.append("MCSF_PDF"+str(i)+":=(Weight_nnpdf30_lo_as_0130_"+str(i)+")*(DoWeights*DoMCDataWeights_ttbaronly==1)+(DoWeights*DoMCDataWeights_ttbaronly==0)*1.0")
+    print 'weigthsystnamesMCSFs= ',len(weigthsystnamesMCSFs), '  systweightnamesMCSFs=',len(systweightnamesMCSFs)
+    
+
+assert len(weigthsystnamesMCSFs)==len(systweightnamesMCSFs)
+
+
+otherSystNames=[
+    "_JERup","_JERdown",
+    "_JESup","_JESdown",
+
+]
+
+otherSystFileNames=[
+    "JERup","JERdown",
+    "JESup","JESdown",
+
+]
+
+assert len(otherSystNames)==len(otherSystFileNames)
 
 #allweightsystnames=weigthsystnamesbasic+weightsystnamesMadgraphbantiZprimeM+weightsystnamesPythia8bantiZprimeM+weightsystnamesMadgraphtantiTopPt+weightsystnamesPythia8tantiTopPt+weightsystnamesGeneratorDiffMadgraphbantiZprimeM+weightsystnamesGeneratorDiffPythia8bantiZprimeM+weightsystnamesGeneratorDiffMadgraphtantiTopPt+weightsystnamesGeneratorDiffPythia8tantiTopPt+weightsystnamesMadgraphbantiZprimeMWithtopbtag+weightsystnamesPythia8bantiZprimeMWithtopbtag+weightsystnamesGeneratorDiffMadgraphbantiZprimeMWithtopbtag+weightsystnamesGeneratorDiffPythia8bantiZprimeMWithtopbtag+weightsystnamesMadgraphtantiTopPtWithtopbtag+weightsystnamesPythia8tantiTopPtWithtopbtag+weightsystnamesGeneratorDiffMadgraphtantiTopPtWithtopbtag+weightsystnamesGeneratorDiffPythia8tantiTopPtWithtopbtag+weightsystnamesABCD+weigthsystnamesMCSFs
 ##allweightsystnames=weightsystnamesABCD
@@ -579,12 +741,17 @@ systweightnamesMCSFs=[
 
 #ABsystweights=systweightsbasic+systweightsMadgraphbantiZprimeM+systweightsPythia8bantiZprimeM+systweightsMadgraphtantiTopPt+systweightsPythia8tantiTopPt+systweightsGeneartorDiffMadgraphbantiZprimeM+systweightsGeneartorDiffPythia8bantiZprimeM+systweightsGeneartorDiffMadgraphtantiTopPt+systweightsGeneartorDiffPythia8tantiTopPt+systweightsMadgraphbantiZprimeMWithtopbtag+systweightsPythia8bantiZprimeMWithtopbtag+systweightsGeneartorDiffMadgraphbantiZprimeMWithtopbtag+systweightsGeneartorDiffPythia8bantiZprimeMWithtopbtag+systweightsMadgraphtantiTopPtWithtopbtag+systweightsPythia8tantiTopPtWithtopbtag+systweightsGeneartorDiffMadgraphtantiTopPtWithtopbtag+systweightsGeneartorDiffPythia8tantiTopPtWithtopbtag+systweightnamesMCSFs
      
-allweightsystnames=weigthsystnamesbasic+weightsystnamesABCD
+allweightsystnames=weigthsystnamesMCSFs+weightsystnamesABCD
 
-allsystweights=systweightsbasic+systweightsABCD
+allsystweights=systweightnamesMCSFs+systweightsABCD
 
 # names of the systematics (proper names needed e.g. for combination)
 mcweight='37.8'
+
+ttbarXS=831.76 
+rateunc_ttbarXS_up=math.sqrt(19.77*19.77 + 35.06*35.06)
+rateunc_ttbarXS_down=math.sqrt(29.20*29.20 + 35.06*35.06)
+
 
 sfs="Weight_ElectronSFID*Weight_ElectronSFTrigger*Weight_ElectronSFIso*Weight_MuonSFID*Weight_MuonSFTrigger*Weight_MuonSFIso"
 usualweights="(1*Weight_PU*((Weight>0)-(Weight<0)))*Weight_ElectronSFID*Weight_ElectronSFTrigger*Weight_ElectronSFIso*Weight_MuonSFID*Weight_MuonSFTrigger*Weight_MuonSFIso"
@@ -594,6 +761,11 @@ usualweights="(1*Weight_PU*((Weight>0)-(Weight<0)))*Weight_ElectronSFID*Weight_E
 # input path 
 path_80x="/nfs/dust/cms/user/skudella/processed_MC/flat_trees_new/"
 #path_80x="/nfs/dust/cms/user/skudella/processed_MC/flat_trees_old/"
+
+
+sampleDict=SampleDictionary()
+sampleDict.doPrintout()
+
 
 # MC samples (name, color, path to files,weight,nickname_without_special_characters,systematics)                       
 #samples=[ 
@@ -631,28 +803,28 @@ path_80x="/nfs/dust/cms/user/skudella/processed_MC/flat_trees_new/"
 
 
 SignalSamples=[
-                    Sample('Z->tWb, m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=1200',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Zprime_1500_900_nominal_Tree.root',mcweight+'/138.07*0.3','Zprime1500900',allweightsystnames),
-                    Sample('Z->tWb, m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1200',ROOT.kCyan,path_80x+'Signal_Zprime/Zprime_2000_1200_LH_nominal_Tree.root',mcweight+'/86.28*0.3','Zprime20001200',allweightsystnames),
-                    Sample('Z->tWb, m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1200',ROOT.kRed,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/37.6*0.3','Zprime25001200',allweightsystnames) ,     
+                    Sample('Z->tWb, m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=1200',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Zprime_1500_900_nominal_Tree.root',mcweight+'/138.07*0.3','Zprime1500900',allweightsystnames,samDict=sampleDict),
+                    Sample('Z->tWb, m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1200',ROOT.kCyan,path_80x+'Signal_Zprime/Zprime_2000_1200_LH_nominal_Tree.root',mcweight+'/86.28*0.3','Zprime20001200',allweightsystnames,samDict=sampleDict),
+                    Sample('Z->tWb, m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1200',ROOT.kRed,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/37.6*0.3','Zprime25001200',allweightsystnames,samDict=sampleDict),     
 ]
 
 BackgroundSamples=[
-                    Sample('QCDMadgraph',ROOT.kOrange-3,path_80x+'BKG_QCD/MC_QCD_H*nominal*.root',mcweight,'QCDMadgraph',allweightsystnames),
-                    Sample('t#bar{t} + jets',ROOT.kBlue,path_80x+'BKG_TTbar/*nominal*.root',mcweight,'ttbar',allweightsystnames) , 
-                    Sample('Signal Contamination (8.6pb), m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=1200',ROOT.kMagenta-3,path_80x+'Signal_Zprime/Zprime_1500_1200_nominal_Tree.root',mcweight+'/99.03*8.6','SC_Zprime15001200_8_6pb',allweightsystnames) ,  
-                    Sample('Signal Contamination (0.3pb), m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1200',ROOT.kCyan-3,path_80x+'Signal_Zprime/Zprime_2000_1200_LH_nominal_Tree.root',mcweight+'/86.28*0.3','SC_Zprime20001200_0_3pb',allweightsystnames) ,  
-                    Sample('Signal Contamination (0.3pb), m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1200',ROOT.kRed-3,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/37.6*0.3','SC_Zprime25001200_0_3pb',allweightsystnames) ,  
-                    Sample('Signal Contamination none',ROOT.kRed-3,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/100000','SC_none',allweightsystnames) ,  
-                    Sample('QCDPythia8',ROOT.kGreen+2,path_80x+'BKG_QCD/MC_QCD_P*nominal*Tree*.root',mcweight,'QCDPythia8',allweightsystnames),
+                    Sample('QCDMadgraph',ROOT.kOrange-3,path_80x+'BKG_QCD/MC_QCD_H*nominal*.root',mcweight,'QCDMadgraph',allweightsystnames,samDict=sampleDict),
+                    Sample('t#bar{t} + jets',ROOT.kBlue,path_80x+'BKG_TTbar/*nominal*.root',mcweight,'ttbar',allweightsystnames,samDict=sampleDict), 
+                    Sample('Signal Contamination (8.6pb), m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=1200',ROOT.kMagenta-3,path_80x+'Signal_Zprime/Zprime_1500_1200_nominal_Tree.root',mcweight+'/99.03*8.6','SC_Zprime15001200_8_6pb',allweightsystnames,samDict=sampleDict),  
+                    Sample('Signal Contamination (0.3pb), m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1200',ROOT.kCyan-3,path_80x+'Signal_Zprime/Zprime_2000_1200_LH_nominal_Tree.root',mcweight+'/86.28*0.3','SC_Zprime20001200_0_3pb',allweightsystnames,samDict=sampleDict),  
+                    Sample('Signal Contamination (0.3pb), m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1200',ROOT.kRed-3,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/37.6*0.3','SC_Zprime25001200_0_3pb',allweightsystnames,samDict=sampleDict),  
+                    Sample('Signal Contamination none',ROOT.kRed-3,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/100000','SC_none',allweightsystnames,samDict=sampleDict),  
+                    Sample('QCDPythia8',ROOT.kGreen+2,path_80x+'BKG_QCD/MC_QCD_P*nominal*Tree*.root',mcweight,'QCDPythia8',allweightsystnames,samDict=sampleDict),
 
 ]
 
 
 DataSamples=[
-                    Sample('Data = Background with (8.6pb), m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=1200',ROOT.kBlack+2,path_80x+'Signal_Zprime/Zprime_1500_1200_nominal_Tree.root',mcweight+'/99.03*8.6','BKG_Zprime15001200_8_6pb',allweightsystnames),     
-                    Sample('Data = Background with (0.3pb), m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1200',ROOT.kBlack+2,path_80x+'Signal_Zprime/Zprime_2000_1200_LH_nominal_Tree.root',mcweight+'/86.28*0.3','BKG_Zprime20001200_0_3pb',allweightsystnames),     
-                    Sample('Data = Background with (0.3pb), m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1200',ROOT.kBlack+2,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/37.6*0.3','BKG_Zprime25001200_0_3pb',allweightsystnames),     
-                    Sample('Data = Background with signal',ROOT.kBlack+2,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/100000.0','DATA_BKG',allweightsystnames) ,     
+                    Sample('Data = Background with (8.6pb), m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=1200',ROOT.kBlack+2,path_80x+'Signal_Zprime/Zprime_1500_1200_nominal_Tree.root',mcweight+'/99.03*8.6','BKG_Zprime15001200_8_6pb',allweightsystnames,samDict=sampleDict),     
+                    Sample('Data = Background with (0.3pb), m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1200',ROOT.kBlack+2,path_80x+'Signal_Zprime/Zprime_2000_1200_LH_nominal_Tree.root',mcweight+'/86.28*0.3','BKG_Zprime20001200_0_3pb',allweightsystnames,samDict=sampleDict),     
+                    Sample('Data = Background with (0.3pb), m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1200',ROOT.kBlack+2,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/37.6*0.3','BKG_Zprime25001200_0_3pb',allweightsystnames,samDict=sampleDict),     
+                    Sample('Data = Background with signal',ROOT.kBlack+2,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/100000.0','DATA_BKG',allweightsystnames,samDict=sampleDict) ,     
                     #Sample('Data = Background with (1pb), m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1200',ROOT.kBlack,path_80x+'Signal_Zprime/Zprime_2000_1200_LH_nominal_Tree.root',mcweight+'/86.28*0.3','BKG_Zprime20001200_1pb') ,     
                     #Sample('Data = Background with (1pb), m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=900',ROOT.kBlack,path_80x+'Signal_Zprime/Zprime_1500_900_nominal_Tree.root',mcweight+'/138.07*0.3','BKG_Zprime1500900_1pb') ,     
 
