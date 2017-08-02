@@ -76,15 +76,19 @@ class Variable():
     isarray=self.arraylength!=None
     if isarray:
       if t=='F':
-        text='  float* '+var+' = new float[100];\n'
+        text='  float* '+var+' = new float[100];'
+        for i in range(0,100):
+          text+='\nfloatMap["' + var + '_' + str(i) + '"]=' + var + '[' + str(i) + ']' + ';'
       elif t=='I':
-        text='  int* '+var+' = new int[100];\n'
+        text='  int* '+var+' = new int[100];'
+        for i in range(0,100):
+          text+='\nintMap["' + var + '_' + str(i) + '"]=' + var + '[' + str(i) + ']' + ';'
       else: "UNKNOWN TYPE",t
     else:
       if t=='F':
-        text='  float '+var+' = -999;\n'
+        text='  float '+var+' = -999;\nfloatMap["' + var + '"]=' + var + ';'
       elif t=='I':
-        text='  int '+var+' = -999;\n'
+        text='  int '+var+' = -999;\nintMap["' + var + '"]=' + var + ';'
       else: "UNKNOWN TYPE",t
     return text
 
@@ -302,7 +306,7 @@ class Variables:
 
   # Program: Initialize all variables
   def initVarsProgram(self):
-    text=""
+    text="std::map<std::string, float> floatMap;\nstd::map<std::string, int> intMap;\n\n"
     for name,var in self.variables.iteritems():
       text+=var.initVarProgram()
     text+='\n'
