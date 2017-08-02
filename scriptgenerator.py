@@ -1666,9 +1666,15 @@ def compileProgram(scriptname,usesDataBases,addCodeInterfaces):
   cmd= ['g++']+out[:-1].replace("\n"," ").split(' ')+dnnfiles+['-lTMVA']+memDBccfiles+[scriptname+'.cc','-o',scriptname]
   print cmd
   print ""
-  print " ".join(cmd)
+  cmdstring = " ".join(cmd)
+  print cmdstring
   print ""
-  subprocess.call(cmd)
+  try:
+    print subprocess.check_output([cmdstring],stderr=subprocess.STDOUT,shell=True)
+  except subprocess.CalledProcessError, e:
+    print "Compile command:\n", e.cmd
+    print "Compile failed with error:\n", e.output
+
 
 
 def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],allsystweights=["1"],additionalvariables=[],dataBases=[],addCodeInterfaces=[]):
