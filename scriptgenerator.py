@@ -1800,7 +1800,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   # start event loop
   script+=startLoop()
   for addCodeInt in addCodeInterfaces:
-    script+=addCodeInt.getVariableInitInsideEventLoopLinesq()
+    script+=addCodeInt.getVariableInitInsideEventLoopLines()
   
   script+='    float sampleweight=1;\n'
   script+=encodeSampleSelection(samples,variables)
