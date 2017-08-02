@@ -1667,8 +1667,8 @@ def compileProgram(scriptname,usesDataBases,addCodeInterfaces):
   print ""
   print " ".join(cmd)
   print ""
-  subprocess.call(cmd)
-
+  cmdstring=" ".join(cmd)
+  subprocess.call([cmdstring],shell=True)
 
 def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],allsystweights=["1"],additionalvariables=[],dataBases=[],addCodeInterfaces=[]):
 
