@@ -11,7 +11,7 @@ class theInterface:
     # path to include in the search for header files. This is probably the src CMSSW directory where you installed the CommonClassifier
     self.includeString="-I/nfs/dust/cms/user/mharrend/gitlab-ci/CMSSW_8_0_26_patch2/src"
     # precompiled library path and libraries to be included
-    self.libraryString="-L/nfs/dust/cms/user/mharrend/gitlab-ci/CMSSW_8_0_26_patch2/lib/slc6_amd64_gcc530 -lDNNBase -lDNNTensorflow "
+    self.libraryString="-L/nfs/dust/cms/user/mharrend/gitlab-ci/CMSSW_8_0_26_patch2/lib/slc6_amd64_gcc530 -lDNNBase -lDNNTensorflow"
     # if the following is true, the g++ compiler will also link the python libraries. You probably need this if you use Tensorflow
     self.usesPythonLibraries=True
 
