@@ -14,6 +14,14 @@ class theInterface:
     self.libraryString="-L/nfs/dust/cms/user/mharrend/gitlab-ci/CMSSW_8_0_26_patch2/lib/slc6_amd64_gcc530 -lDNNBase -lDNNTensorflow"
     # if the following is true, the g++ compiler will also link the python libraries. You probably need this if you use Tensorflow
     self.usesPythonLibraries=True
+    
+    # Full path to the folder containing the  Tensorflow model, the code assumes that the inputVariables.txt and the outputLables.txt file are in the subfolder model_properties.
+    self.modelFolderPath = "/nfs/dust/cms/user/mharrend/doktorarbeit/tensorflowModels/multiclass_ttlight_ttcc_ttb_tt2b_ttbb_ttH/model"
+    # Name of the Tensorflow model
+    self.modelName = "multiclass_ttlight_ttcc_ttb_tt2b_ttbb_ttH.ckpt"
+    
+    
+    
 
   # This is a list of variables which should be visible for the plotscript.
   # You also need to define them in the getVariableInitLines method
@@ -82,19 +90,23 @@ std::vector<std::string> readinNumberOfVariables(std::string variableListLocatio
   
   # here you write the code which shgould be inserted before the main event loop
   def getBeforeLoopLines(self):
-    rstr="""
+    rstr='''
     
-    std::string dataDir = "/nfs/dust/cms/user/mharrend/doktorarbeit/tensorflowModels/multiclass_ttlight_ttcc_ttb_tt2b_ttbb_ttH";
-    std::string modelLoc = dataDir + "/model/multiclass_ttlight_ttcc_ttb_tt2b_ttbb_ttH.ckpt";
+    std::string dataDir = "''' + self.modelFolderPath + '''";\n'''
+    
+    rstr += '''
+    std::string modelLoc = dataDir + "/''' + self.modelName + '''";\n'''
+    
+    rstr += """
     std::cout << "Will use the tfModelUser model: " << modelLoc << std::endl;
 
     // Read in input variable list
-    std::string inputvariableListLoc = dataDir + "/inputVariables.txt";
+    std::string inputvariableListLoc = dataDir + "/model_properties/inputVariables.txt";
     std::cout << "Will use the tfModelUser input variable list: " << inputvariableListLoc << std::endl;
     std::vector<std::string> inputvariableList = readinNumberOfVariables(inputvariableListLoc);
     
     // Read in output label list
-    std::string outputLabelListLoc = dataDir + "/outputLabels.txt";
+    std::string outputLabelListLoc = dataDir + "/model_properties/outputLabels.txt";
     std::cout << "Will use the tfModelUser output label list: " << outputLabelListLoc << std::endl;
     std::vector<std::string> outputLabelList = readinNumberOfVariables(outputLabelListLoc);
     
