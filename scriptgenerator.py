@@ -14,6 +14,7 @@ import glob
 import json
 import filecmp
 import imp 
+import types
 
 ROOT.gROOT.SetBatch(True)
 
@@ -2290,11 +2291,18 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   outputpath=workdir+'/output.root'
 
   addCodeInterfaces=[]
+  codeInterfaceCounter = 0
   for acp in addCodeInterfacePaths:
-    print "loading module", acp
-    newCodeInterfaceModule=imp.load_source("newACI",acp)
-    import newACI
-    addCodeInterfaces.append(newACI.theInterface())
+    codeInterfaceCounter += 1
+    if isinstance(acp, basestring):
+        addModuleName = "addModule" + str(codeInterfaceCounter)
+        print "loading module", acp, "as ", addModuleName " module."
+        addCodeInterfaces.append(imp.load_source(addModuleName,acp).theInterface())
+    elif isinstance(acp, types.InstanceType):
+        print "appending class object initiated by user: ", acp
+        addCodeInterfaces.append(acp)
+    else:
+        print "Unknown additional code interface type: ", acp
 
   usesDataBases=False
   if dataBases!=[]:
