@@ -81,7 +81,7 @@ std::vector<std::string> readinNumberOfVariables(std::string variableListLocatio
     std::cout << "Will use the tfModelUser model: " << modelLoc << std::endl;
 
     // Read in input variable list
-    std::string inputvariableListLoc = dataDir + "/inputvariables.txt";
+    std::string inputvariableListLoc = dataDir + "/inputVariables.txt";
     std::cout << "Will use the tfModelUser input variable list: " << inputvariableListLoc << std::endl;
     std::vector<std::string> inputvariableList = readinNumberOfVariables(inputvariableListLoc);
     
