@@ -34,6 +34,7 @@ class theInterface:
 #include <fstream>
 #include <string>
 #include <vector>
+#include <exception> 
 
 #include "DNN/Tensorflow/interface/tfModelUser.h"
 """
@@ -52,19 +53,26 @@ std::vector<std::string> readinNumberOfVariables(std::string variableListLocatio
     // Reading in variables
     std::string tempVariable;
     std::ifstream variableListFile;
-    variableListFile.open(variableListLocation);
-    if (variableListFile.is_open()) {
+    variableListFile.exceptions ( std::ifstream::failbit | std::ifstream::badbit );
+    try {
+        variableListFile.open(variableListLocation);
         while (!variableListFile.eof()) {
             getline(variableListFile,tempVariable);
             variableList.push_back(tempVariable);
         }
+        variableListFile.close();
     }
+    catch (std::ifstream::failure e) {
+        std::cerr << "Exception opening/reading/closing file: " << variableListLocation << std::endl << "Error message was: " << std::endl <<  e.what() << std::endl;
+    }
+
     variableListFile.close();
     // Remove last empyt entry
     variableList.pop_back();
 
     for(const auto &i: variableList)
 	std::cout << "VariableList: " << i << std::endl;
+    std::cout << "Variable list contains " << variableList.size() << " entries." << std::endl;
 
     return variableList;
 }
