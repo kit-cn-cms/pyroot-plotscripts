@@ -2296,7 +2296,7 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
     codeInterfaceCounter += 1
     if isinstance(acp, basestring):
         addModuleName = "addModule" + str(codeInterfaceCounter)
-        print "loading module", acp, "as ", addModuleName " module."
+        print "loading module", acp, "as ", addModuleName, " module."
         addCodeInterfaces.append(imp.load_source(addModuleName,acp).theInterface())
     elif isinstance(acp, types.InstanceType):
         print "appending class object initiated by user: ", acp
