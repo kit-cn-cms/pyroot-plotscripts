@@ -20,8 +20,12 @@ class theInterface:
     # Name of the Tensorflow model
     self.modelName = "multiclass_ttlight_ttcc_ttb_tt2b_ttbb_ttH.ckpt"
     
-    
-    
+  
+  def setModelFolderPath(self, folderString):
+    self.modelFolderPath = str(folderString)
+
+  def setModelName(self, nameString):
+    self.modelName = str(nameString)    
 
   # This is a list of variables which should be visible for the plotscript.
   # You also need to define them in the getVariableInitLines method
