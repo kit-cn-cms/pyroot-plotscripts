@@ -484,7 +484,7 @@ std::vector<std::string> readinNumberOfVariables(std::string variableListLocatio
     // compare vectors for unit test
     std::cout << "Doing NNFlowInterface unit test" << std::endl;
     std::cout << "No error printout means unit test succeeded." << std::endl;
-    for (int i = 0; i < outputValuesReturnVec.size(); i++)
+    for (unsigned int i = 0; i < outputValuesReturnVec.size(); i++)
     {
         std::cout << "Output Value: " << outputValuesReturnVec[i] << std::endl;
         assert(fabs(outputValuesReturnVec[i] - outputValuesVec[i]) < 0.00001 && "The unit test for the NNFlowInterface did not succeed.");
