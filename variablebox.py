@@ -306,7 +306,7 @@ class Variables:
 
   # Program: Initialize all variables
   def initVarsProgram(self):
-    text="std::map<std::string, float*> floatMap;\nstd::map<std::string, int*> intMap;\n\n"
+    text="std::map<std::string, float> floatMap;\nstd::map<std::string, int> intMap;\n\n"
     for name,var in self.variables.iteritems():
       text+=var.initVarProgram()
     text+='\n'
