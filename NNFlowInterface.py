@@ -77,7 +77,9 @@ std::vector<std::string> readinNumberOfVariables(std::string variableListLocatio
         variableListFile.close();
     }
     catch (std::ifstream::failure e) {
-        std::cerr << "Exception opening/reading/closing file: " << variableListLocation << std::endl << "Error message was: " << std::endl <<  e.what() << std::endl;
+        // Failbit exception can occur also at last line, handle it.
+        if( !variableListFile.eof() ) 
+            std::cerr << "Exception opening/reading/closing file: " << variableListLocation << std::endl << "Error message was: " << std::endl <<  e.what() << std::endl;
     }
 
     variableListFile.close();
@@ -397,7 +399,7 @@ std::vector<std::string> readinNumberOfVariables(std::string variableListLocatio
       inputValues.push_back(intMap[variableName]);
     }
     else {
-      std::cerr << "NNFlowInterface: Inputvariable was not found in maps." << std::endl;
+      std::cerr << "NNFlowInterface: Inputvariable " << variableName <<  " was not found in maps." << std::endl;
     }
   }  
   
