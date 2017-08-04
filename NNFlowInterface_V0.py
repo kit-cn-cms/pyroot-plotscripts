@@ -396,8 +396,8 @@ std::vector<std::string> readinNumberOfVariables(std::string variableListLocatio
   tf_ttbb=outputValuesReturnVec[4];
   tf_ttH=outputValuesReturnVec[5];
   
-  bool printstuff=1;
-  if(printstuff){
+  bool printOutput=1;
+  if(printOutput){
     std::cout << "-----NNFlowInterface-----" << std::endl;
     std::cout <<"tf ttlight node " << tf_ttlight << std::endl;
     std::cout <<"tf ttcc node " << tf_ttcc << std::endl;
@@ -406,6 +406,14 @@ std::vector<std::string> readinNumberOfVariables(std::string variableListLocatio
     std::cout <<"tf ttbb node " << tf_ttbb << std::endl;
     std::cout <<"tf ttH node " << tf_ttH << std::endl;
     }
+
+  bool printInput=1;
+  if(printInput) {
+    std::cout <<"Input values " << std::endl;
+    for (auto inputValue: inputValues) {
+        std::cout << inputValue << ", " ;
+    }
+  }
   
 """
 
