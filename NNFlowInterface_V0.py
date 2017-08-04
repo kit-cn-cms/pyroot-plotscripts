@@ -42,7 +42,7 @@ class theInterface:
   
   # Here you define any additional functions you will need
   def getAdditionalFunctionDefinitionLines(self):
-    retstr="""
+    retstr='''
 
 // Function opens file with variable list and returns std::vector<std::string> of variables
 std::vector<std::string> readinNumberOfVariables(std::string variableListLocation)
@@ -76,7 +76,7 @@ std::vector<std::string> readinNumberOfVariables(std::string variableListLocatio
     return variableList;
 }
 
-"""
+'''
     return retstr
   
   # here you write the code which shgould be inserted before the main event loop
