@@ -86,9 +86,9 @@ class Variable():
       else: "UNKNOWN TYPE",t
     else:
       if t=='F':
-        text='  float '+var+' = -999;\nfloatMap["' + var + '"]=' + var + ';'
+        text='\nfloat '+var+' = -999;\nfloatMap["' + var + '"]=' + var + ';'
       elif t=='I':
-        text='  int '+var+' = -999;\nintMap["' + var + '"]=' + var + ';'
+        text='\nint '+var+' = -999;\nintMap["' + var + '"]=' + var + ';'
       else: "UNKNOWN TYPE",t
     return text
 
