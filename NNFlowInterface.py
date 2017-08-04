@@ -71,7 +71,7 @@ std::vector<std::string> readinNumberOfVariables(std::string variableListLocatio
         while (!variableListFile.eof()) {
             getline(variableListFile,tempVariable);
             // Only save variable if it is not an empty line or whitespace line
-            if (!tempVariable.empty() and tempVariable.find_first_not_of(" \t\n\v\f\r") != std::string::npos)
+            if (!tempVariable.empty() and tempVariable.find_first_not_of(" \\t\\n\\v\\f\\r") != std::string::npos)
                 variableList.push_back(tempVariable);
         }
         variableListFile.close();
