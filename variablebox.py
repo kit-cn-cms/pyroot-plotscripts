@@ -78,17 +78,17 @@ class Variable():
       if t=='F':
         text='  float* '+var+' = new float[100];'
         for i in range(0,100):
-          text+='\nfloatMap["' + var + '_' + str(i) + '"]=' + var + '[' + str(i) + ']' + ';'
+          text+='\nfloatMap["' + var + '_' + str(i) + '"]=' + &var + '[' + str(i) + ']' + ';'
       elif t=='I':
         text='  int* '+var+' = new int[100];'
         for i in range(0,100):
-          text+='\nintMap["' + var + '_' + str(i) + '"]=' + var + '[' + str(i) + ']' + ';'
+          text+='\nintMap["' + var + '_' + str(i) + '"]=' + &var + '[' + str(i) + ']' + ';'
       else: "UNKNOWN TYPE",t
     else:
       if t=='F':
-        text='\nfloat '+var+' = -999;\nfloatMap["' + var + '"]=' + var + ';'
+        text='\nfloat '+var+' = -999;\nfloatMap["' + var + '"]=' + &var + ';'
       elif t=='I':
-        text='\nint '+var+' = -999;\nintMap["' + var + '"]=' + var + ';'
+        text='\nint '+var+' = -999;\nintMap["' + var + '"]=' + &var + ';'
       else: "UNKNOWN TYPE",t
     return text
 
@@ -306,7 +306,7 @@ class Variables:
 
   # Program: Initialize all variables
   def initVarsProgram(self):
-    text="std::map<std::string, float> floatMap;\nstd::map<std::string, int> intMap;\n\n"
+    text="std::map<std::string, float*> floatMap;\nstd::map<std::string, int*> intMap;\n\n"
     for name,var in self.variables.iteritems():
       text+=var.initVarProgram()
     text+='\n'
