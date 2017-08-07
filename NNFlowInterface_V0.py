@@ -117,6 +117,9 @@ std::vector<std::string> readinNumberOfVariables(std::string variableListLocatio
  double tf_tt2b=-2.0;
  double tf_ttbb=-2.0;
  double tf_ttH=-2.0;
+ 
+ if(!(N_Jets>=6 && N_BTagsM>=2)) continue;
+ 
  """
     return rstr
   
