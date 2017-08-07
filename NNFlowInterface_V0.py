@@ -23,7 +23,8 @@ class theInterface:
 	    "tf_ttb",
 	    "tf_tt2b",
 	    "tf_ttbb",
-	    "tf_ttH"
+	    "tf_ttH",
+	    "tf_class"
 	    ]
     
   # Write here the code with the include statements
@@ -117,6 +118,7 @@ std::vector<std::string> readinNumberOfVariables(std::string variableListLocatio
  double tf_tt2b=-2.0;
  double tf_ttbb=-2.0;
  double tf_ttH=-2.0;
+ int tf_class=-2;
  
  if(!(N_Jets>=6 && N_BTagsM>=2)) continue;
  
@@ -398,15 +400,27 @@ std::vector<std::string> readinNumberOfVariables(std::string variableListLocatio
   tf_ttbb = outputValuesReturnVec[4];
   tf_ttH = outputValuesReturnVec[5];
   
+  // Check which class has largest outputValue and set tf_class variable accordingly
+  int currentIndexOfOutputValuesReturnVec = 0;
+  float tempLargestOutputValue = -2.0;
+  for (auto outputValue: outputValuesReturnVec) {
+    currentIndexOfOutputValuesReturnVec++;
+    if(outputValue > tempLargestOutputValue) {
+      tempLargestOutputValue = outputValue;
+      tf_class = currentIndexOfOutputValuesReturnVec;
+    }
+  }
+  
   bool printOutput=1;
   if(printOutput){
     std::cout << "-----NNFlowInterface-----" << std::endl;
-    std::cout <<"tf ttlight node " << tf_ttlight << std::endl;
-    std::cout <<"tf ttcc node " << tf_ttcc << std::endl;
-    std::cout <<"tf ttb node " << tf_ttb << std::endl;
-    std::cout <<"tf tt2b node " << tf_tt2b << std::endl;
-    std::cout <<"tf ttbb node " << tf_ttbb << std::endl;
-    std::cout <<"tf ttH node " << tf_ttH << std::endl;
+    std::cout << "tf ttlight node " << tf_ttlight << std::endl;
+    std::cout << "tf ttcc node " << tf_ttcc << std::endl;
+    std::cout << "tf ttb node " << tf_ttb << std::endl;
+    std::cout << "tf tt2b node " << tf_tt2b << std::endl;
+    std::cout << "tf ttbb node " << tf_ttbb << std::endl;
+    std::cout << "tf ttH node " << tf_ttH << std::endl;
+    std::cout << "tf class " << tf_class << std::endl;
     }
 
   bool printInput=1;

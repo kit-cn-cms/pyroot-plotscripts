@@ -2047,7 +2047,7 @@ def submitToNAF(scripts):
     os.makedirs(logdir)
   for script in scripts:
     print 'submitting',script
-    command=['qsub', '-cwd', '-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=3800M', '-l', 's_vmem=3800M' ,'-o', logdir, '-e', logdir, script]
+    command=['qsub', '-cwd', '-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=5800M', '-l', 's_vmem=5800M' ,'-o', logdir, '-e', logdir, script]
     a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
     output = a.communicate()[0]
     jobidstring = output.split()
@@ -2095,7 +2095,7 @@ def submitArrayToNAF(scripts,arrayname=""):
   
   print 'submitting',arrayscriptpath
   #command=['qsub', '-cwd','-terse','-t',tasknumberstring,'-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=2000M', '-l', 's_vmem=2000M' ,'-o', logdir+'/dev/null', '-e', logdir+'/dev/null', arrayscriptpath]
-  command=['qsub', '-cwd','-terse','-t',tasknumberstring,'-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=3800M', '-l', 's_vmem=3800M' ,'-o', '/dev/null', '-e', '/dev/null', arrayscriptpath]
+  command=['qsub', '-cwd','-terse','-t',tasknumberstring,'-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=5800M', '-l', 's_vmem=5800M' ,'-o', '/dev/null', '-e', '/dev/null', arrayscriptpath]
   a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
   output = a.communicate()[0]
   jobidstring = output
