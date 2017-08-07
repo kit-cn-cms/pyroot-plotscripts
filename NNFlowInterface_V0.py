@@ -494,7 +494,7 @@ std::vector<std::string> readinNumberOfVariables(std::string variableListLocatio
     std::vector<float> outputValuesReturnVec = modelUser.evalModel(eventVec);
 
     // compare vectors for unit test
-    std::cout << "Doing NNFlowInterface unit test" << std::endl;
+    std::cout << std::endl << std::endl << "Doing NNFlowInterface unit test" << std::endl;
     std::cout << "No error printout means unit test succeeded." << std::endl;
     for (unsigned int i = 0; i < outputValuesReturnVec.size(); i++)
     {
