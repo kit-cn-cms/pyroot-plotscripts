@@ -387,14 +387,13 @@ std::vector<std::string> readinNumberOfVariables(std::string variableListLocatio
   }  
   
   // Evaluate the output for an event
-  std::vector<float> outputValuesReturnVec;
-  outputValuesReturnVec = modelUser.evalModel(inputValues);
-  tf_ttlight=outputValuesReturnVec[0];
-  tf_ttcc=outputValuesReturnVec[1];
-  tf_ttb=outputValuesReturnVec[2];
-  tf_tt2b=outputValuesReturnVec[3];
-  tf_ttbb=outputValuesReturnVec[4];
-  tf_ttH=outputValuesReturnVec[5];
+  std::vector<float> outputValuesReturnVec = modelUser.evalModel(inputValues);
+  tf_ttlight = outputValuesReturnVec[0];
+  tf_ttcc = outputValuesReturnVec[1];
+  tf_ttb = outputValuesReturnVec[2];
+  tf_tt2b = outputValuesReturnVec[3];
+  tf_ttbb = outputValuesReturnVec[4];
+  tf_ttH = outputValuesReturnVec[5];
   
   bool printOutput=1;
   if(printOutput){

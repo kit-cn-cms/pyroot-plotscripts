@@ -78,11 +78,11 @@ class Variable():
       if t=='F':
         text='  float* '+var+' = new float[100];'
         for i in range(0,100):
-          text+='\nfloatMap["' + var + '_' + str(i) + '"] = &' + var + '[' + str(i) + ']' + ';'
+          text+='\nfloatMap["' + var + '_' + str(i+1) + '"] = &' + var + '[' + str(i) + ']' + ';'
       elif t=='I':
         text='  int* '+var+' = new int[100];'
         for i in range(0,100):
-          text+='\nintMap["' + var + '_' + str(i) + '"] = &' + var + '[' + str(i) + ']' + ';'
+          text+='\nintMap["' + var + '_' + str(i+1) + '"] = &' + var + '[' + str(i) + ']' + ';'
       else: "UNKNOWN TYPE",t
     else:
       if t=='F':
