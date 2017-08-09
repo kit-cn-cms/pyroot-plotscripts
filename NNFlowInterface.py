@@ -4,10 +4,13 @@
 # There are several methods which you will need to update for your own classifier 
 # Then use the interface by passing THIS file path to the plotparallel function
 
+import sys
 
 class theInterface:
   
   def __init__(self):
+    """Init function sets same default path and variables, which can modified by setter functions"""
+    
     # path to include in the search for header files. This is probably the src CMSSW directory where you installed the CommonClassifier
     self.includeString="-I/nfs/dust/cms/user/mharrend/gitlab-ci/CMSSW_8_0_26_patch2/src"
     # precompiled library path and libraries to be included
@@ -19,83 +22,168 @@ class theInterface:
     self.modelFolderPath = "/nfs/dust/cms/user/mharrend/doktorarbeit/tensorflowModels/multiclass_ttlight_ttcc_ttb_tt2b_ttbb_ttH/model"
     # Name of the Tensorflow model
     self.modelName = "multiclass_ttlight_ttcc_ttb_tt2b_ttbb_ttH.ckpt"
+   
+    # Print out debug output if true
+    self.debugOutput = False
+   
+    ## internal variables
+    # List contains input variables
+    self.inputVariablesList = []
+    # List contains output labels names and additional tf_class variable
+    self.outputLabelsList = []
     
+    # List contains information about preselection
+    self.preselectionList = []
+    
+    # Lists contain information for unit test
+    self.unitTestInputValuesList = []
+    self.unitTestOutputValuesList = []
+    
+    
+    # Make sure, update function gets called before interface is used by using a dedicated bool variable
+    self.updateFunctionCalled = False
+    
+    
+  def update(self):
+    """ Function updates class object, necessary to update e.g. self.inputvariablesList list """
+    self.updateFunctionCalled = True
+    
+    # Update / read input variable list, the assumption is that the file is located under self.modelFolderPath/model_properties/inputVariables.txt
+    inputVariablesListLoc = self.modelFolderPath + '/model_properties/inputVariables.txt'
+    if(self.debugOutput)
+      print "Update function: Start reading input variables list file: ", inputVariablesListLoc
+    self.inputVariablesList = readListFromFile(inputVariablesListLoc)
+    
+    # Update / read output labels list, the assumption is that the file is located under self.modelFolderPath/model_properties/outputLabels.txt
+    outputLabelsListLoc = self.modelFolderPath + '/model_properties/outputLabels.txt'
+    if(self.debugOutput)
+      print "Update function: Start reading output labels list file: ", outputLabelsListLoc
+    self.outputLabelList = readListFromFile(outputLabelsListLoc)
+    # Add tf_class variable to list
+    self.outputLabelList.append('tf_class')
+  
+    # Update / read preselection list, the assumption is that the file is located under self.modelFolderPath/model_properties/preselection.txt
+    preselectionListLoc = self.modelFolderPath + '/model_properties/preselection.txt'
+    if(self.debugOutput)
+      print "Update function: Start reading preselection list file: ", preselectionListLoc
+    self.preselectionList = readListFromFile(preselectionListLoc)
+  
+    # Update / read unitTest input values list, the assumption is that the file is located under self.modelFolderPath/model_properties/unitTestInputValues.txt
+    unitTestInputValuesListLoc = self.modelFolderPath + '/model_properties/unitTestInputValues.txt'
+    if(self.debugOutput)
+      print "Update function: Start reading unitTest input values list file: ", unitTestInputValuesListLoc
+    self.unitTestInputValuesList = readListFromFile(unitTestInputValuesListLoc)
+  
+    # Update / read unitTest output values list, the assumption is that the file is located under self.modelFolderPath/model_properties/unitTestOutputValues.txt
+    unitTestOutputValuesListLoc = self.modelFolderPath + '/model_properties/unitTestOutputValues.txt'
+    if(self.debugOutput)
+      print "Update function: Start reading unitTest output values list file: ", unitTestOutputValuesListLoc
+    self.unitTestOutputValuesList = readListFromFile(unitTestOutputValuesListLoc)
+  
+  ## Setter functions
   
   def setModelFolderPath(self, folderString):
     self.modelFolderPath = str(folderString)
+    print "Set model folder path to: ", self.modelFolderPath
 
   def setModelName(self, nameString):
-    self.modelName = str(nameString)    
+    self.modelName = str(nameString)
+    print "Set model name to: ", self.modelName
+    
+  def setIncludeString(self, includeString):
+    self.includeString = str(includeString)
+    print "Set include string to: ", self.includeString
+    
+  def setLibraryString(self, libraryString):
+    self.libraryString = str(libraryString)
+    print "Set library string to: ", self.libraryString
 
-  # This is a list of variables which should be visible for the plotscript.
-  # You also need to define them in the getVariableInitLines method
+  def setDebugOutput(self, activateDebugOutput):
+    self.debugOutput = bool(activateDebugOutput)
+    print "Set debug output to: ", self.debugOutput
+
+
+  ## Helper functions
+
+  def readListFromFile(self, fileLocation):
+    """Helper function reads a list with e.g. input variable names or output node name from a file
+    Returns: String list
+    """
+    tempList = []
+    
+    try:
+      with open(fileLocation, 'r') as file:
+        fileContent = file.read().splitlines()
+        
+    except IOError:
+      print "Could not read file:", fileLocation
+      sys.exit()
+  
+    for singleContent in fileContent:
+      # Make sure that lines does not only consists of whitespace or line break characters
+      if(not bool(not singleContent or singleContent.isspace())):
+        tempList.append(singleContent)
+    
+    if(self.debugOutput):
+      print "\n readListFromFile function read file: ", fileLocation
+      print "List obtained from file:\n", tempList
+    
+    return tempList
+  
+
+  
+  
+  ## Interface functions
+ 
   def getExternalyCallableVariables(self):
-    return ["tf_ttlight",
-	    "tf_ttcc",
-	    "tf_ttb",
-	    "tf_tt2b",
-	    "tf_ttbb",
-	    "tf_ttH"
-	    ]
+    """This is a list of variables which should be visible for the plotscript.
+    You also need to define them in the getVariableInitLines method
+    """
     
-  # Write here the code with the include statements
-  # DNN header is relative to CMSSW BASE
+    if(!self.updateFunctionCalled)
+      self.update()
+    
+    return self.outputLabelsList
+    
+  
   def getIncludeLines(self):
-    retstr="""
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <vector>
-#include <exception> 
-
-#include "DNN/Tensorflow/interface/tfModelUser.h"
-"""
-    return retstr
-  
-  # Here you define any additional functions you will need
-  def getAdditionalFunctionDefinitionLines(self):
-    retstr='''
-
-// Function opens file with variable list and returns std::vector<std::string> of variables
-std::vector<std::string> readinNumberOfVariables(std::string variableListLocation)
-{
-    // Define string vector
-    std::vector<std::string> variableList;
+    """Write here the code with the include statements
+    DNN header is relative to CMSSW BASE
+    """
     
-    // Reading in variables
-    std::string tempVariable;
-    std::ifstream variableListFile;
-    variableListFile.exceptions ( std::ifstream::failbit | std::ifstream::badbit );
-    try {
-        variableListFile.open(variableListLocation);
-        while (!variableListFile.eof()) {
-            getline(variableListFile,tempVariable);
-            // Only save variable if it is not an empty line or whitespace line
-            if (!tempVariable.empty() and tempVariable.find_first_not_of(" \\t\\n\\v\\f\\r") != std::string::npos)
-                variableList.push_back(tempVariable);
-        }
-        variableListFile.close();
-    }
-    catch (std::ifstream::failure e) {
-        // Failbit exception can occur also at last line, handle it.
-        if( !variableListFile.eof() ) 
-            std::cerr << "Exception opening/reading/closing file: " << variableListLocation << std::endl << "Error message was: " << std::endl <<  e.what() << std::endl;
-    }
+    if(!self.updateFunctionCalled)
+      self.update()
+    
+    retstr="""
+    #include <iostream>
+    #include <fstream>
+    #include <string>
+    #include <vector>
+    #include <exception> 
 
-    variableListFile.close();
-
-    for(const auto &i: variableList)
-	std::cout << "VariableList: " << i << std::endl;
-    std::cout << "Variable list contains " << variableList.size() << " entries." << std::endl;
-
-    return variableList;
-}
-
-'''
+    #include "DNN/Tensorflow/interface/tfModelUser.h"
+    """
+    
     return retstr
   
-  # here you write the code which shgould be inserted before the main event loop
+  
+  def getAdditionalFunctionDefinitionLines(self):
+    """ Here you define any additional functions you will need"""
+    
+    if(!self.updateFunctionCalled)
+      self.update()
+    
+    # NNFlowInterface does not need any additional functions :-)
+    retstr=''
+    return retstr
+  
+  
   def getBeforeLoopLines(self):
+    """ Here you write the code which shgould be inserted before the main event loop"""
+    
+    if(!self.updateFunctionCalled)
+      self.update()
+    
     rstr='''
     
     std::string dataDir = "''' + self.modelFolderPath + '''";\n'''
@@ -106,302 +194,82 @@ std::vector<std::string> readinNumberOfVariables(std::string variableListLocatio
     rstr += """
     std::cout << "Will use the tfModelUser model: " << modelLoc << std::endl;
 
-    // Read in input variable list
-    std::string inputvariableListLoc = dataDir + "/model_properties/inputVariables.txt";
-    std::cout << "Will use the tfModelUser input variable list: " << inputvariableListLoc << std::endl;
-    std::vector<std::string> inputvariableList = readinNumberOfVariables(inputvariableListLoc);
+    // Number of input variables and output labels\n
+    """
     
-    // Read in output label list
-    std::string outputLabelListLoc = dataDir + "/model_properties/outputLabels.txt";
-    std::cout << "Will use the tfModelUser output label list: " << outputLabelListLoc << std::endl;
-    std::vector<std::string> outputLabelList = readinNumberOfVariables(outputLabelListLoc);
+    rstr += '''int numberOfInputVariables = ''' + int(len(self.inputVariablesList)) + ''';'''
+    rstr += '''int numberOfOutputLabels = ''' + int(len(self.outputLabelsList)) + ''';'''
+    
+    rstr += '''
+    std::cout << "Number of input variables: " << numberOfInputVariables << std::endl;
+    std::cout << "Number of output labels: " << numberOfOutputLabels << std::endl;
     
     // load and initialize the model
-    dnn::tf::tfModelUser modelUser(modelLoc, inputvariableList, outputLabelList);
-
+    dnn::tf::tfModelUser modelUser(modelLoc, numberOfInputVariables, numberOfOutputLabels);
+    '''
     
-
-"""
     return rstr
 
-  # initialize variables INSIDE event loop
+  
   def getVariableInitInsideEventLoopLines(self):
-    rstr="""
-    // output node variables
- double tf_ttlight=-2.0;
- double tf_ttcc=-2.0;
- double tf_ttb=-2.0;
- double tf_tt2b=-2.0;
- double tf_ttbb=-2.0;
- double tf_ttH=-2.0;
- """
+    """ Initialize variables INSIDE event loop"""
+    
+    if(!self.updateFunctionCalled)
+      self.update()
+    
+    rstr='''
+    // output node variables\n
+    '''
+    
+    for(outputLabel in outputLabelList):
+      # Handle tf_class variable which is an integer
+      if(outputLabel == 'tf_class'):
+        rstr += '''int tf_class = -2;\n'''
+      else:
+        rstr += '''double ''' + outputLabel + ''';\n'''
+ 
+    # Add preselection string to speed up plotting
+    if(len(self.preselectionList) > 0):
+      rstr += '''\nNNFlowInterface preselection\n'''
+      for(preselection in preselectionList):
+        rstr += '''\nif(!''' + preselection + ''') continue;\n'''
+ 
     return rstr
   
-  # Code that call the Classifier and fills the needed variables
-  # This is also inside of the event loop
+  
   def getEventLoopCodeLines(self):
-    rstr="""
+    """ Code that call the Classifier and fills the needed variables
+    This is also inside of the event loop
+    """
+    
+    if(!self.updateFunctionCalled)
+      self.update()
+    
+    rstr='''
 
-  // String vector contains names of all input variables pushed into input values vector
-  std::vector<std::string> inputNames = {  
-    "BDT_common5_input_Mlb",
-    "BDT_common5_input_all_sum_pt_with_met",
-    "BDT_common5_input_aplanarity",
-    "BDT_common5_input_avg_dr_tagged_jets",
-    "BDT_common5_input_best_higgs_mass",
-    "BDT_common5_input_closest_tagged_dijet_mass",
-    "BDT_common5_input_cos_theta_blep_bhad",
-    "BDT_common5_input_cos_theta_l_bhad",
-    "BDT_common5_input_dEta_fn",
-    "BDT_common5_input_delta_eta_blep_bhad",
-    "BDT_common5_input_delta_eta_l_bhad",
-    "BDT_common5_input_delta_phi_blep_bhad",
-    "BDT_common5_input_delta_phi_l_bhad",
-    "BDT_common5_input_dr_between_lep_and_closest_jet",
-    "BDT_common5_input_h0",
-    "BDT_common5_input_h1",
-    "BDT_common5_input_h2",
-    "BDT_common5_input_h3",
-    "BDT_common5_input_invariant_mass_of_everything",
-    "BDT_common5_input_lowest_btag",
-    "BDT_common5_input_pt_all_jets_over_E_all_jets",
-    "BDT_common5_input_sphericity",
-    "BDT_common5_input_tagged_dijet_mass_closest_to_125",
-    "Evt_CSV_Average",
-    "Evt_CSV_Average_Tagged",
-    "Evt_CSV_Dev",
-    "Evt_CSV_Dev_Tagged",
-    "Evt_CSV_Min",
-    "Evt_CSV_Min_Tagged",
-    "Evt_Deta_JetsAverage",
-    "Evt_Deta_TaggedJetsAverage",
-    "Evt_Deta_UntaggedJetsAverage",
-    "Evt_Dr_JetsAverage",
-    "Evt_Dr_MinDeltaRJets",
-    "Evt_Dr_MinDeltaRLeptonJet",
-    "Evt_Dr_MinDeltaRLeptonTaggedJet",
-    "Evt_Dr_MinDeltaRTaggedJets",
-    "Evt_Dr_MinDeltaRUntaggedJets",
-    "Evt_Dr_UntaggedJetsAverage",
-    "Evt_E_PrimaryLepton",
-    "Evt_Eta_JetsAverage",
-    "Evt_Eta_PrimaryLepton",
-    "Evt_Eta_TaggedJetsAverage",
-    "Evt_Eta_UntaggedJetsAverage",
-    "Evt_HT",
-    "Evt_HT_Jets",
-    "Evt_JetPtOverJetE",
-    "Evt_Jet_MaxDeta_Jets",
-    "Evt_M2_JetsAverage",
-    "Evt_M2_TaggedJetsAverage",
-    "Evt_M2_UntaggedJetsAverage",
-    "Evt_M3",
-    "Evt_MHT",
-    "Evt_M_JetsAverage",
-    "Evt_M_MedianTaggedJets",
-    "Evt_M_MinDeltaRJets",
-    "Evt_M_MinDeltaRLeptonJet",
-    "Evt_M_MinDeltaRLeptonTaggedJet",
-    "Evt_M_MinDeltaRTaggedJets",
-    "Evt_M_MinDeltaRUntaggedJets",
-    "Evt_M_PrimaryLepton",
-    "Evt_M_TaggedJetsAverage",
-    "Evt_M_TaggedJetsClosestTo125",
-    "Evt_M_Total",
-    "Evt_M_UntaggedJetsAverage",
-    "Evt_Phi_MET",
-    "Evt_Phi_PrimaryLepton",
-    "Evt_Pt_MET",
-    "Evt_Pt_MinDeltaRJets",
-    "Evt_Pt_MinDeltaRTaggedJets",
-    "Evt_Pt_MinDeltaRUntaggedJets",
-    "Evt_Pt_PrimaryLepton",
-    "Evt_TaggedJet_MaxDeta_Jets",
-    "Evt_TaggedJet_MaxDeta_TaggedJets",
-    "Evt_blr_ETH",
-    "Evt_blr_ETH_transformed",
-    "HadTop_B_LepTop_B_DR",
-    "HadTop_B_LepTop_DR",
-    "HadTop_B_LepTop_W1_DR",
-    "HadTop_B_LepTop_W2_DR",
-    "HadTop_B_LepTop_W_DR",
-    "HadTop_LepTop_B_DR",
-    "HadTop_LepTop_DR",
-    "HadTop_LepTop_W1_DR",
-    "HadTop_LepTop_W2_DR",
-    "HadTop_LepTop_W_DR",
-    "HadTop_W1_LepTop_B_DR",
-    "HadTop_W1_LepTop_DR",
-    "HadTop_W1_LepTop_W1_DR",
-    "HadTop_W1_LepTop_W2_DR",
-    "HadTop_W1_LepTop_W_DR",
-    "HadTop_W2_LepTop_B_DR",
-    "HadTop_W2_LepTop_DR",
-    "HadTop_W2_LepTop_W1_DR",
-    "HadTop_W2_LepTop_W2_DR",
-    "HadTop_W2_LepTop_W_DR",
-    "HadTop_W_LepTop_B_DR",
-    "HadTop_W_LepTop_DR",
-    "HadTop_W_LepTop_W1_DR",
-    "HadTop_W_LepTop_W2_DR",
-    "HadTop_W_LepTop_W_DR",
-    "Reco_Deta_Fn_best_TTBBLikelihood",
-    "Reco_Deta_Fn_best_TTBBLikelihoodTimesME",
-    "Reco_Deta_TopHad_BB_best_TTBBLikelihood",
-    "Reco_Deta_TopHad_BB_best_TTBBLikelihoodTimesME",
-    "Reco_Deta_TopLep_BB_best_TTBBLikelihood",
-    "Reco_Deta_TopLep_BB_best_TTBBLikelihoodTimesME",
-    "Reco_Dr_BB_best_TTLikelihood",
-    "Reco_Dr_BB_best_TTLikelihood_comb",
-    "Reco_Higgs_M_best_TTLikelihood",
-    "Reco_Higgs_M_best_TTLikelihood_comb",
-    "Reco_LikelihoodRatio_best_Likelihood",
-    "Reco_LikelihoodRatio_best_LikelihoodTimesME",
-    "Reco_LikelihoodRatio_best_TTLikelihood",
-    "Reco_LikelihoodRatio_best_TTLikelihood_comb",
-    "Reco_LikelihoodTimesMERatio_best_Likelihood",
-    "Reco_LikelihoodTimesMERatio_best_LikelihoodTimesME",
-    "Reco_LikelihoodTimesMERatio_best_TTLikelihood",
-    "Reco_LikelihoodTimesMERatio_best_TTLikelihood_comb",
-    "Reco_LikelihoodTimesMERatio_off_best_Likelihood",
-    "Reco_LikelihoodTimesMERatio_off_best_LikelihoodTimesME",
-    "Reco_LikelihoodTimesMERatio_off_best_TTLikelihood",
-    "Reco_LikelihoodTimesMERatio_off_best_TTLikelihood_comb",
-    "Reco_MERatio_best_Likelihood",
-    "Reco_MERatio_best_LikelihoodTimesME",
-    "Reco_MERatio_best_TTLikelihood",
-    "Reco_MERatio_best_TTLikelihood_comb",
-    "Reco_MERatio_off_best_Likelihood",
-    "Reco_MERatio_off_best_LikelihoodTimesME",
-    "Reco_MERatio_off_best_TTLikelihood",
-    "Reco_MERatio_off_best_TTLikelihood_comb",
-    "Reco_Sum_LikelihoodRatio",
-    "Reco_Sum_LikelihoodTimesMERatio",
-    "Reco_Sum_MERatio",
-    "Reco_Sum_TTBBLikelihood",
-    "Reco_Sum_TTBBLikelihoodTimesME",
-    "Reco_Sum_TTBBME",
-    "Reco_Sum_TTHBBME",
-    "Reco_Sum_TTHLikelihood",
-    "Reco_Sum_TTHLikelihoodTimesME",
-    "Reco_TTBBLikelihoodTimesME_best_TTBBLikelihood",
-    "Reco_TTBBLikelihoodTimesME_best_TTBBLikelihoodTimesME",
-    "Reco_TTBBLikelihoodTimesME_best_TTLikelihood",
-    "Reco_TTBBLikelihoodTimesME_best_TTLikelihood_comb",
-    "Reco_TTBBLikelihoodTimesME_off_best_TTBBLikelihood",
-    "Reco_TTBBLikelihoodTimesME_off_best_TTBBLikelihoodTimesME",
-    "Reco_TTBBLikelihoodTimesME_off_best_TTLikelihood",
-    "Reco_TTBBLikelihoodTimesME_off_best_TTLikelihood_comb",
-    "Reco_TTBBLikelihood_best_TTBBLikelihood",
-    "Reco_TTBBLikelihood_best_TTBBLikelihoodTimesME",
-    "Reco_TTBBLikelihood_best_TTLikelihood",
-    "Reco_TTBBLikelihood_best_TTLikelihood_comb",
-    "Reco_TTBBME_best_TTBBLikelihood",
-    "Reco_TTBBME_best_TTBBLikelihoodTimesME",
-    "Reco_TTBBME_best_TTLikelihood",
-    "Reco_TTBBME_best_TTLikelihood_comb",
-    "Reco_TTBBME_off_best_TTBBLikelihood",
-    "Reco_TTBBME_off_best_TTBBLikelihoodTimesME",
-    "Reco_TTBBME_off_best_TTLikelihood",
-    "Reco_TTBBME_off_best_TTLikelihood_comb",
-    "Reco_TTHBBME_best_TTHLikelihood",
-    "Reco_TTHBBME_best_TTHLikelihoodTimesME",
-    "Reco_TTHBBME_best_TTLikelihood",
-    "Reco_TTHBBME_best_TTLikelihood_comb",
-    "Reco_TTHLikelihoodTimesME_best_TTHLikelihood",
-    "Reco_TTHLikelihoodTimesME_best_TTHLikelihoodTimesME",
-    "Reco_TTHLikelihoodTimesME_best_TTLikelihood",
-    "Reco_TTHLikelihoodTimesME_best_TTLikelihood_comb",
-    "Reco_TTHLikelihood_best_TTHLikelihood",
-    "Reco_TTHLikelihood_best_TTHLikelihoodTimesME",
-    "Reco_TTHLikelihood_best_TTLikelihood",
-    "Reco_TTHLikelihood_best_TTLikelihood_comb",
-    "N_BTagsL",
-    "N_BTagsM",
-    "N_BTagsT",
-    "N_Jets",
-    "N_LooseElectrons",
-    "N_LooseJets",
-    "N_LooseMuons",
-    "N_PrimaryVertices",
-    "N_TightElectrons",
-    "N_TightMuons",
-    "N_additionalTaggedJets",
-    "N_additionalUntaggedJets",
-    "LooseLepton_E_1",
-    "LooseLepton_Eta_1",
-    "LooseLepton_M_1",
-    "LooseLepton_Phi_1",
-    "LooseLepton_Pt_1",
-    "CSV_1",
-    "CSV_2",
-    "CSV_3",
-    "CSV_4",
-    "CSV_5",
-    "CSV_6",
-    "Jet_CSV_1",
-    "Jet_CSV_2",
-    "Jet_CSV_3",
-    "Jet_CSV_4",
-    "Jet_CSV_5",
-    "Jet_CSV_6",
-    "Jet_Charge_1",
-    "Jet_Charge_2",
-    "Jet_Charge_3",
-    "Jet_Charge_4",
-    "Jet_Charge_5",
-    "Jet_Charge_6",
-    "Jet_E_1",
-    "Jet_E_2",
-    "Jet_E_3",
-    "Jet_E_4",
-    "Jet_E_5",
-    "Jet_E_6",
-    "Jet_Eta_1",
-    "Jet_Eta_2",
-    "Jet_Eta_3",
-    "Jet_Eta_4",
-    "Jet_Eta_5",
-    "Jet_Eta_6",
-    "Jet_M_1",
-    "Jet_M_2",
-    "Jet_M_3",
-    "Jet_M_4",
-    "Jet_M_5",
-    "Jet_M_6",
-    "Jet_Phi_1",
-    "Jet_Phi_2",
-    "Jet_Phi_3",
-    "Jet_Phi_4",
-    "Jet_Phi_5",
-    "Jet_Phi_6",
-    "Jet_Pt_1",
-    "Jet_Pt_2",
-    "Jet_Pt_3",
-    "Jet_Pt_4",
-    "Jet_Pt_5",
-    "Jet_Pt_6",
-    "Jet_PileUpMVA_1",
-    "Jet_PileUpMVA_2",
-    "Jet_PileUpMVA_3",
-    "Jet_PileUpMVA_4",
-    "Jet_PileUpMVA_5",
-    "Jet_PileUpMVA_6"
-  };
+    // String vector contains names of all input variables pushed into input values vector
+    std::vector<std::string> inputNames = {
+    '''
+  
+    for(inputVariable in self.inputVariablesList):
+      rstr += '''"''' + inputVariable + '''",\n'''
+  
+    rstr= '''
+    };
 
-  // Construct float vector containing input values of a single event
-  std::vector<float> inputValues;
-  for(auto variableName: inputNames) {
-    if(floatMap.find(variableName) != floatMap.end()) {
-      inputValues.push_back(floatMap[variableName]);
-    }
-    else if(intMap.find(variableName) != intMap.end()) {
-      inputValues.push_back(intMap[variableName]);
-    }
-    else {
-      std::cerr << "NNFlowInterface: Inputvariable " << variableName <<  " was not found in maps." << std::endl;
-    }
-  }  
+    // Construct float vector containing input values of a single event
+    std::vector<float> inputValues;
+    for(auto variableName: inputNames) {
+      if(floatMap.find(variableName) != floatMap.end()) {
+        inputValues.push_back(floatMap[variableName]);
+      }
+      else if(intMap.find(variableName) != intMap.end()) {
+        inputValues.push_back(intMap[variableName]);
+      }
+      else {
+        std::cerr << "NNFlowInterface: Inputvariable " << variableName <<  " was not found in maps." << std::endl;
+      }
+    }  
   
   // Evaluate the output for an event
   std::vector<float> outputValuesReturnVec;
@@ -424,12 +292,18 @@ std::vector<std::string> readinNumberOfVariables(std::string variableListLocatio
     std::cout <<"tf ttH node " << tf_ttH << std::endl;
     }
   
-"""
+  '''
 
     return rstr
 
-  # Here is code calling a test function to see wether the calling works as it should
+  
   def getTestCallLines(self):
+    """ Here is code calling a test function to see wether the calling works as it should"""
+    
+    if(!self.updateFunctionCalled)
+      self.update()
+    
+    
     rstr="""
     std::vector<float> eventVec = {
   75.3191833496, 449.89855957, 0.0750138610601, 3.22019815445,
@@ -511,9 +385,16 @@ std::vector<std::string> readinNumberOfVariables(std::string variableListLocatio
 """
     return rstr
   
-  # call need desctructors here and other cleanup things
-  # Will be run after event loop
+  
   def getCleanUpLines(self):
+    """ Call need desctructors here and other cleanup things
+    
+    Will be run after event loop
+    """
+    
+    if(!self.updateFunctionCalled)
+      self.update()
+    
     rstr="""
    """
     return rstr
