@@ -177,6 +177,7 @@ class Variables:
     # find all words not followed by ( (these are functions)
     variablescandidates = re.findall(r"\w+\b(?!\()", expr)
     variables=[]
+    print variablescandidates
     for v in variablescandidates:
       if v[0].isalpha() or v[0]=='_':
         variables.append(v)
@@ -270,7 +271,7 @@ class Variables:
         #print expression
 
 
-      print "creatubg variable", expression
+      print "creating variable", expression
       self.variables[name]=Variable(name,expression,vartype,arraylength)
       self.variables[name].initVar(tree,self)
 
