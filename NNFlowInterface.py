@@ -247,7 +247,7 @@ class theInterface:
     # Add preselection string to speed up plotting
     if(len(self.preselectionList) > 0):
       rstr += '''\nNNFlowInterface preselection\n'''
-      for preselection in preselectionList:
+      for preselection in self.preselectionList:
         rstr += '''\nif(!''' + preselection + ''') continue;\n'''
  
     return rstr
