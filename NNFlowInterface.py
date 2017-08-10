@@ -171,6 +171,8 @@ class theInterface:
       self.update()
     
     retstr="""
+    //NNFlowInterface requirements
+    
     #include <iostream>
     #include <fstream>
     #include <string>
@@ -201,6 +203,7 @@ class theInterface:
       self.update()
     
     rstr='''
+    //NNFlowInterface
     
     std::string dataDir = "''' + self.modelFolderPath + '''";\n'''
     
@@ -234,7 +237,8 @@ class theInterface:
       self.update()
     
     rstr='''
-    // output node variables\n
+    // NNFlowInterface
+    // Output node variables\n
     '''
     
     for outputLabel in self.outputLabelsList:
@@ -242,11 +246,11 @@ class theInterface:
       if(outputLabel == 'tf_class'):
         rstr += '''int tf_class = -2;\n'''
       else:
-        rstr += '''double ''' + outputLabel + ''';\n'''
+        rstr += '''double ''' + outputLabel + ''' = -2;\n'''
  
     # Add preselection string to speed up plotting
     if(len(self.preselectionList) > 0):
-      rstr += '''\nNNFlowInterface preselection\n'''
+      rstr += '''\n //NNFlowInterface preselection\n'''
       for preselection in self.preselectionList:
         rstr += '''\nif(!''' + preselection + ''') continue;\n'''
  
@@ -263,6 +267,7 @@ class theInterface:
     
     rstr='''
 
+    // NNFlowInterface
     // String vector contains names of all input variables pushed into input values vector
     std::vector<std::string> inputNames = {
     '''
