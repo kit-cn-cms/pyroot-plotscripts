@@ -213,8 +213,8 @@ class theInterface:
     // Number of input variables and output labels\n
     """
     
-    rstr += '''int numberOfInputVariables = ''' + int(len(self.inputVariablesList)) + ''';'''
-    rstr += '''int numberOfOutputLabels = ''' + int(len(self.outputLabelsList)) + ''';'''
+    rstr += '''int numberOfInputVariables = ''' + str(int(len(self.inputVariablesList))) + ''';'''
+    rstr += '''int numberOfOutputLabels = ''' + str(int(len(self.outputLabelsList))) + ''';'''
     
     rstr += '''
     std::cout << "Number of input variables: " << numberOfInputVariables << std::endl;
