@@ -56,9 +56,9 @@ class theInterface:
     outputLabelsListLoc = self.modelFolderPath + '/model_properties/outputLabels.txt'
     if self.debugOutput:
       print "Update function: Start reading output labels list file: ", outputLabelsListLoc
-    self.outputLabelsLists = self.readListFromFile(outputLabelsListLoc)
+    self.outputLabelsList = self.readListFromFile(outputLabelsListLoc)
     # Add tf_class variable to list
-    self.outputLabelsLists.append('tf_class')
+    self.outputLabelsList.append('tf_class')
   
     # Update / read preselection list, the assumption is that the file is located under self.modelFolderPath/model_properties/preselection.txt
     preselectionListLoc = self.modelFolderPath + '/model_properties/preselection.txt'
