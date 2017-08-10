@@ -57,6 +57,13 @@ class theInterface:
     if self.debugOutput:
       print "Update function: Start reading output labels list file: ", outputLabelsListLoc
     self.outputLabelsList = self.readListFromFile(outputLabelsListLoc)
+    # Add tf in front of output label list entries 
+    for outputLabelNumber, outputLabel in enumerate(self.outputLabelsList):
+      if (not outputLabel.startswith('tf_')):
+        self.outputLabelsList[outputLabelNumber] = 'tf_' + self.outputLabelsList[outputLabelNumber]
+    if self.debugOutput:
+      print "Update function: Output labels list: ", outputLabelsList
+    
     # Add tf_class variable to list
     self.outputLabelsList.append('tf_class')
   
