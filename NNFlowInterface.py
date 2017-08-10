@@ -62,7 +62,7 @@ class theInterface:
       if (not outputLabel.startswith('tf_')):
         self.outputLabelsList[outputLabelNumber] = 'tf_' + self.outputLabelsList[outputLabelNumber]
     if self.debugOutput:
-      print "Update function: Output labels list: ", outputLabelsList
+      print "Update function: Output labels list: ", self.outputLabelsList
     
     # Add tf_class variable to list
     self.outputLabelsList.append('tf_class')
