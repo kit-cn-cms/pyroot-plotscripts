@@ -151,6 +151,7 @@ class theInterface:
     if(not self.updateFunctionCalled):
       self.update()
     
+    print "Get external callable variables: ", self.outputLabelsList
     return self.outputLabelsList
     
   
