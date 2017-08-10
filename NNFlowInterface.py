@@ -325,11 +325,12 @@ class theInterface:
       for (auto inputValue: inputValues) {
         std::cout << inputValue << ", " ;
       }
+      std::cout << std::endl;
       
       '''
       
       for outputLabel in self.outputLabelsList:
-        rstr += '''std::cout << "''' + outputLabel +  '''" << ''' + outputLabel + '''<< std::endl;\n'''
+        rstr += '''std::cout << "''' + outputLabel +  ''' " << ''' + outputLabel + '''<< std::endl;\n'''
 
     return rstr
 
