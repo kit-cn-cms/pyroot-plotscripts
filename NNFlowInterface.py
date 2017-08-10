@@ -4,6 +4,10 @@
 # There are several methods which you will need to update for your own classifier 
 # Then use the interface by passing THIS file path to the plotparallel function
 
+from __future__ import print_function
+import functools
+print = functools.partial(print, flush=True)
+
 class theInterface:
   
   def __init__(self):
@@ -56,9 +60,9 @@ class theInterface:
     outputLabelsListLoc = self.modelFolderPath + '/model_properties/outputLabels.txt'
     if(self.debugOutput):
       print "Update function: Start reading output labels list file: ", outputLabelsListLoc
-    self.outputLabelList = self.readListFromFile(outputLabelsListLoc)
+    self.outputLabelsLists = self.readListFromFile(outputLabelsListLoc)
     # Add tf_class variable to list
-    self.outputLabelList.append('tf_class')
+    self.outputLabelsLists.append('tf_class')
   
     # Update / read preselection list, the assumption is that the file is located under self.modelFolderPath/model_properties/preselection.txt
     preselectionListLoc = self.modelFolderPath + '/model_properties/preselection.txt'
@@ -230,7 +234,7 @@ class theInterface:
     // output node variables\n
     '''
     
-    for outputLabel in outputLabelList:
+    for outputLabel in self.outputLabelsList:
       # Handle tf_class variable which is an integer
       if(outputLabel == 'tf_class'):
         rstr += '''int tf_class = -2;\n'''
