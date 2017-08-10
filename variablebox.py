@@ -177,7 +177,6 @@ class Variables:
     # find all words not followed by ( (these are functions)
     variablescandidates = re.findall(r"\w+\b(?!\()", expr)
     variables=[]
-    print variablescandidates
     for v in variablescandidates:
       if v[0].isalpha() or v[0]=='_':
         variables.append(v)
@@ -266,10 +265,28 @@ class Variables:
     if not name in self.variables and not name in self.vetolist:
 
       if not ".xml" in expression and not hasattr(tree,expression):
-        print 'init vasr for ', expression
-        self.initVarsFromExpr(expression,tree)
-        #print expression
-
+        # Handle vector sub variables which have names like Jet_E_1, so that vector variable Jet_E is included instead
+        # If not vector like variable is found assume it is a forumal expression and recursive call initVarsFromExpr
+        bool foundVectorLikeVariable = False
+        if "_" in expression:
+          expressionPart1, expressionPart2 = expression.rsplit('_', 1)
+          if hasattr(tree, expressionPart1) and expressionPart2.isdigit():
+            foundVectorLikeVariable = True
+            print 'Found vector like variable: ', expression, ' which was converted to: ', expressionPart1
+            # Make sure vector variable is not already included
+            if not expressionPart1 in self.variables and not expressionPart1 in self.vetolist:
+              print "creating variable", expressionPart1
+              self.variables[expressionPart1]=Variable(expressionPart1,expressionPart1,vartype,arraylength)
+              self.variables[expressionPart1].initVar(tree,self)
+              return
+            else:
+              print "Variable exists already: ", expressionPart1, " do nothing."
+              return
+        
+        # Handle formular expression by recursive function which splits formular based on brackets
+        if (not foundVectorLikeVariable):  
+          print 'init vasr for ', expression
+          self.initVarsFromExpr(expression,tree)
 
       print "creating variable", expression
       self.variables[name]=Variable(name,expression,vartype,arraylength)
@@ -295,7 +312,7 @@ class Variables:
       variablenames=self.varsIn(expr)
       #print variablenames
       for name in variablenames:
-	#print name
+        #print name
         self.initVar(tree,name,name,'F')
 
 
