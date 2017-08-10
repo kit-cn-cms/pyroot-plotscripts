@@ -310,7 +310,7 @@ class theInterface:
         
         '''
       else:
-        rstr += outputLabel + ''' =  outputValuesReturnVec[''' + outputLabelNumber + '''];\n'''
+        rstr += outputLabel + ''' =  outputValuesReturnVec[''' + str(outputLabelNumber) + '''];\n'''
   
        
     if self.debugOutput:
