@@ -267,7 +267,7 @@ class Variables:
       if not ".xml" in expression and not hasattr(tree,expression):
         # Handle vector sub variables which have names like Jet_E_1, so that vector variable Jet_E is included instead
         # If not vector like variable is found assume it is a forumal expression and recursive call initVarsFromExpr
-        bool foundVectorLikeVariable = False
+        foundVectorLikeVariable = False
         if "_" in expression:
           expressionPart1, expressionPart2 = expression.rsplit('_', 1)
           if hasattr(tree, expressionPart1) and expressionPart2.isdigit():
