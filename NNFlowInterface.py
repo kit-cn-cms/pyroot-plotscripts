@@ -4,10 +4,6 @@
 # There are several methods which you will need to update for your own classifier 
 # Then use the interface by passing THIS file path to the plotparallel function
 
-from __future__ import print_function
-import functools
-print = functools.partial(print, flush=True)
-
 class theInterface:
   
   def __init__(self):
@@ -52,13 +48,13 @@ class theInterface:
     
     # Update / read input variable list, the assumption is that the file is located under self.modelFolderPath/model_properties/inputVariables.txt
     inputVariablesListLoc = self.modelFolderPath + '/model_properties/inputVariables.txt'
-    if(self.debugOutput):
+    if self.debugOutput:
       print "Update function: Start reading input variables list file: ", inputVariablesListLoc
     self.inputVariablesList = self.readListFromFile(inputVariablesListLoc)
     
     # Update / read output labels list, the assumption is that the file is located under self.modelFolderPath/model_properties/outputLabels.txt
     outputLabelsListLoc = self.modelFolderPath + '/model_properties/outputLabels.txt'
-    if(self.debugOutput):
+    if self.debugOutput:
       print "Update function: Start reading output labels list file: ", outputLabelsListLoc
     self.outputLabelsLists = self.readListFromFile(outputLabelsListLoc)
     # Add tf_class variable to list
@@ -66,19 +62,19 @@ class theInterface:
   
     # Update / read preselection list, the assumption is that the file is located under self.modelFolderPath/model_properties/preselection.txt
     preselectionListLoc = self.modelFolderPath + '/model_properties/preselection.txt'
-    if(self.debugOutput):
+    if self.debugOutput:
       print "Update function: Start reading preselection list file: ", preselectionListLoc
     self.preselectionList = self.readListFromFile(preselectionListLoc)
   
     # Update / read unitTest input values list, the assumption is that the file is located under self.modelFolderPath/model_properties/unitTestInputValues.txt
     unitTestInputValuesListLoc = self.modelFolderPath + '/model_properties/unitTestInputValues.txt'
-    if(self.debugOutput):
+    if self.debugOutput:
       print "Update function: Start reading unitTest input values list file: ", unitTestInputValuesListLoc
     self.unitTestInputValuesList = self.readListFromFile(unitTestInputValuesListLoc)
   
     # Update / read unitTest output values list, the assumption is that the file is located under self.modelFolderPath/model_properties/unitTestOutputValues.txt
     unitTestOutputValuesListLoc = self.modelFolderPath + '/model_properties/unitTestOutputValues.txt'
-    if(self.debugOutput):
+    if self.debugOutput:
       print "Update function: Start reading unitTest output values list file: ", unitTestOutputValuesListLoc
     self.unitTestOutputValuesList = self.readListFromFile(unitTestOutputValuesListLoc)
   
@@ -126,7 +122,7 @@ class theInterface:
       if(not bool(not singleContent or singleContent.isspace())):
         tempList.append(singleContent)
     
-    if(self.debugOutput):
+    if self.debugOutput:
       print "\n readListFromFile function read file: ", fileLocation
       print "List obtained from file:\n", tempList
     
@@ -310,7 +306,7 @@ class theInterface:
         rstr += outputLabel + ''' =  outputValuesReturnVec[''' + outputLabelNumber + '''];\n'''
   
        
-    if(self.debugOutput):
+    if self.debugOutput:
       rstr += '''
       std::cout << "-----NNFlowInterface debug output-----" << std::endl;
       std::cout <<"Input values " << std::endl;
