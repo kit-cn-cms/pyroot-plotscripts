@@ -282,10 +282,10 @@ class theInterface:
     std::vector<float> inputValues;
     for(auto variableName: inputNames) {
       if(floatMap.find(variableName) != floatMap.end()) {
-        inputValues.push_back(floatMap[variableName]);
+        inputValues.push_back(*floatMap[variableName]);
       }
       else if(intMap.find(variableName) != intMap.end()) {
-        inputValues.push_back(intMap[variableName]);
+        inputValues.push_back(*intMap[variableName]);
       }
       else {
         std::cerr << "NNFlowInterface: Inputvariable " << variableName <<  " was not found in maps." << std::endl;
