@@ -1,7 +1,15 @@
 import sys
 import os
-from scriptgeneratorMEMDBCSV import *
+
+# First path is needed if run by pyroot-plotscripts-base repo
+sys.path.append('limittools')
+# These two paths are needed if run by ttbb repos
+sys.path.append('pyroot-plotscripts-base')
+sys.path.append('pyroot-plotscripts-base/limittools')
+
+from scriptgenerator import *
 from plotutils import *
+
 
 sel_singleel="(N_LooseMuons==0 && N_TightElectrons==1 && Triggered_HLT_Ele27_eta2p1_WPTight_Gsf_vX==1)*(N_Jets>=4 && N_BTagsM>=2)" # need to veto muon events in electron dataset to avoid double countung
 sel_singlemu="(N_LooseElectrons==0 && (N_TightMuons==1 && (Triggered_HLT_IsoMu24_vX==1 || Triggered_HLT_IsoTkMu24_vX==1)))*(N_Jets>=4 && N_BTagsM>=2)" # and vice versa...
