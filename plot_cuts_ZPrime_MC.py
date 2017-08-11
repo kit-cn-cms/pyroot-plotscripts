@@ -191,13 +191,13 @@ plotselection_sideband_withtopbtag = "Signal_withtopbtag_Topfirst_Zprime_M < 0"
 
 
 #plotselection_ABCD_general=  plotselection2 + "&& Zprimes_ABCD_M>0   &&    Ws_ABCD_t21 <  0.6    &&    105 < Tops_ABCD_MSD     &&    Tops_ABCD_MSD  < 210  "
-plotselection_ABCD_general_beta =  plotselection2 + "&& Zprimes_ABCD_M>0   &&    65 < Ws_ABCD_MSD  &&   Ws_ABCD_MSD < 105     &&    105 < Tops_ABCD_MSD     &&    Tops_ABCD_MSD  < 210   "
-plotselection_ABCD_general_beta2 =  plotselection2 + "&& Zprimes_ABCD_M>0   &&    65 < Ws_ABCD_MSD  &&   Ws_ABCD_MSD < 105     && "+ plotselection_tau32
+plotselection_ABCD1_general =  plotselection2 + "&& Zprimes_ABCD_M>0   &&    65 < Ws_ABCD_MSD  &&   Ws_ABCD_MSD < 105     &&    105 < Tops_ABCD_MSD     &&    Tops_ABCD_MSD  < 210  &&  Bottoms_ABCD_CSV>=0"
+plotselection_ABCD2_general =  plotselection2 + "&& Zprimes_ABCD_M>0   &&    65 < Ws_ABCD_MSD  &&   Ws_ABCD_MSD < 105  &&  Bottoms_ABCD_CSV>=0     && "+ plotselection_tau32
 #plotselection_ABCD_general_i =  plotselection2 + "&& Zprimes_ABCD_M[i]>0   &&    Ws_ABCD_t21[i] >  0.6    &&    105 < Tops_ABCD_MSD[i]     &&    Tops_ABCD_MSD[i]  < 210   "
-plotselection_ABCD_general_beta_i =   "Zprimes_ABCD_M[i]>0   &&    65 < Ws_ABCD_MSD[i]  &&   Ws_ABCD_MSD[i] < 105     &&    105 < Tops_ABCD_MSD[i]     &&    Tops_ABCD_MSD[i]  < 210   "
-plotselection_ABCD_general_beta2_i =  "Zprimes_ABCD_M[i]>0   &&    65 < Ws_ABCD_MSD[i]  &&   Ws_ABCD_MSD[i] < 105     && "+ plotselection_tau32_i
-plotselection_ABCD_general_beta_0 =   "Zprimes_ABCD_M[0]>0   &&    65 < Ws_ABCD_MSD[0]  &&   Ws_ABCD_MSD[0] < 105     &&    105 < Tops_ABCD_MSD[0]     &&    Tops_ABCD_MSD[0]  < 210   "
-plotselection_ABCD_general_beta2_0 =  "Zprimes_ABCD_M[0]>0   &&    65 < Ws_ABCD_MSD[0]  &&   Ws_ABCD_MSD[0] < 105     && "+ plotselection_tau32_0
+plotselection_ABCD1_general_i =   "Zprimes_ABCD_M[i]>0   &&    65 < Ws_ABCD_MSD[i]  &&   Ws_ABCD_MSD[i] < 105     &&    105 < Tops_ABCD_MSD[i]     &&    Tops_ABCD_MSD[i]  < 210   &&  Bottoms_ABCD_CSV[i]>=0  "
+plotselection_ABCD2_general_i =  "Zprimes_ABCD_M[i]>0   &&    65 < Ws_ABCD_MSD[i]  &&   Ws_ABCD_MSD[i] < 105   &&  Bottoms_ABCD_CSV[i]>=0    && "+ plotselection_tau32_i
+plotselection_ABCD1_general_0 =   "Zprimes_ABCD_M[0]>0   &&    65 < Ws_ABCD_MSD[0]  &&   Ws_ABCD_MSD[0] < 105     &&    105 < Tops_ABCD_MSD[0]     &&    Tops_ABCD_MSD[0]  < 210   &&  Bottoms_ABCD_CSV[0]>=0  "
+plotselection_ABCD2_general_0 =  "Zprimes_ABCD_M[0]>0   &&    65 < Ws_ABCD_MSD[0]  &&   Ws_ABCD_MSD[0] < 105    &&  Bottoms_ABCD_CSV[0]>0   && "+ plotselection_tau32_0
 
 
 plotselection_ABCD_general_alt_notopbtag =  plotselection2 + " && Zprimes_ABCD_masscorrnotopbtag_M>0 && 65 < Ws_ABCD_masscorrnotopbtag_MSD && Ws_ABCD_masscorrnotopbtag_MSD < 105 && Tops_ABCD_masscorrnotopbtag_t32<0.86 "

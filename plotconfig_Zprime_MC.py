@@ -4,20 +4,6 @@ from scriptgenerator import *
 from plotutils import *
 from plot_cuts_ZPrime_MC import *
 
-weigthsystnamesbasic=[
-                    "",
-                    "_no_nominal",
-                    "_no_systup",
-                    "_no_systdown",
-]
-systweightsbasic=[
-                    "nom:=1",
-                    "no_nominal:=1.0",
-                    "no_systup:=1.0",
-                    "no_systdown:=1.0",
-  
-]
-    
     
 weightsystnamesMadgraphbantiZprimeM=[
                     #"",
@@ -216,20 +202,20 @@ if topWP=='loose' and WWP=='loose' and bottomWP=='medium':
 
     weightsystnamesABCD=[
                     #"",
-                    "_ABCD_nominal",
+                    #"_ABCD1_nominal",
                     
-                    "_ABCD_inclusive_ZprimeM_systup",
-                    "_ABCD_inclusive_ZprimeM_systdown",
-                    "_ABCD_notopbtag_ZprimeM_systup",
-                    "_ABCD_notopbtag_ZprimeM_systdown",
-                    "_ABCD_withtopbtag_ZprimeM_systup",
-                    "_ABCD_withtopbtag_ZprimeM_systdown",
-                    "_ABCD_inclusive_TprimeM_systup",
-                    "_ABCD_inclusive_TprimeM_systdown",
-                    "_ABCD_notopbtag_TprimeM_systup",
-                    "_ABCD_notopbtag_TprimeM_systdown",
-                    "_ABCD_withtopbtag_TprimeM_systup",
-                    "_ABCD_withtopbtag_TprimeM_systdown",
+                    "_ABCD1_inclusive_ZprimeM_systup",
+                    "_ABCD1_inclusive_ZprimeM_systdown",
+                    "_ABCD1_notopbtag_ZprimeM_systup",
+                    "_ABCD1_notopbtag_ZprimeM_systdown",
+                    "_ABCD1_withtopbtag_ZprimeM_systup",
+                    "_ABCD1_withtopbtag_ZprimeM_systdown",
+                    "_ABCD1_inclusive_TprimeM_systup",
+                    "_ABCD1_inclusive_TprimeM_systdown",
+                    "_ABCD1_notopbtag_TprimeM_systup",
+                    "_ABCD1_notopbtag_TprimeM_systdown",
+                    "_ABCD1_withtopbtag_TprimeM_systup",
+                    "_ABCD1_withtopbtag_TprimeM_systdown",
                     
                     #"_ABCDcorrE_inclusive_ZprimeM_systup",
                     #"_ABCDcorrE_inclusive_ZprimeM_systdown",
@@ -275,20 +261,20 @@ if topWP=='loose' and WWP=='loose' and bottomWP=='medium':
 else:
     weightsystnamesABCD=[
                     #"",
-                    "_ABCD_nominal",
+                    #"_ABCD1_nominal",
                     
-                    "_ABCD_inclusive_ZprimeM_systup",
-                    "_ABCD_inclusive_ZprimeM_systdown",
-                    "_ABCD_notopbtag_ZprimeM_systup",
-                    "_ABCD_notopbtag_ZprimeM_systdown",
-                    "_ABCD_withtopbtag_ZprimeM_systup",
-                    "_ABCD_withtopbtag_ZprimeM_systdown",
-                    "_ABCD_inclusive_TprimeM_systup",
-                    "_ABCD_inclusive_TprimeM_systdown",
-                    "_ABCD_notopbtag_TprimeM_systup",
-                    "_ABCD_notopbtag_TprimeM_systdown",
-                    "_ABCD_withtopbtag_TprimeM_systup",
-                    "_ABCD_withtopbtag_TprimeM_systdown",
+                    "_ABCD1_inclusive_ZprimeM_systup",
+                    "_ABCD1_inclusive_ZprimeM_systdown",
+                    "_ABCD1_notopbtag_ZprimeM_systup",
+                    "_ABCD1_notopbtag_ZprimeM_systdown",
+                    "_ABCD1_withtopbtag_ZprimeM_systup",
+                    "_ABCD1_withtopbtag_ZprimeM_systdown",
+                    "_ABCD1_inclusive_TprimeM_systup",
+                    "_ABCD1_inclusive_TprimeM_systdown",
+                    "_ABCD1_notopbtag_TprimeM_systup",
+                    "_ABCD1_notopbtag_TprimeM_systdown",
+                    "_ABCD1_withtopbtag_TprimeM_systup",
+                    "_ABCD1_withtopbtag_TprimeM_systdown",
                     
                     #"_ABCDcorrE_inclusive_ZprimeM_systup",
                     #"_ABCDcorrE_inclusive_ZprimeM_systdown",
@@ -342,22 +328,22 @@ if topWP=='loose' and WWP=='loose' and bottomWP=='medium':
                     
 #########medium working points                    
                     
-                    "ABCD_nominal:= 1",
+                    #"ABCD1_nominal:= 1",
  
 
 ###########loose working points
-                    "ABCD_inclusive_ZprimeM_systup:= (pow(1+0.024348,1.0/1.0))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD_inclusive_ZprimeM_systdown:= pow(1-0.024348,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD_notopbtag_ZprimeM_systup:= pow(1+0.018073,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD_notopbtag_ZprimeM_systdown:= pow(1-0.018073,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD_withtopbtag_ZprimeM_systup:= pow(1+0.144325,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD_withtopbtag_ZprimeM_systdown:= pow(1-0.144325,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD_inclusive_TprimeM_systup:= pow(1+0.027596,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD_inclusive_TprimeM_systdown:= pow(1-0.027596,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD_notopbtag_TprimeM_systup:= pow(1+0.021271,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD_notopbtag_TprimeM_systdown:= pow(1-0.021271,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD_withtopbtag_TprimeM_systup:= pow(1+0.259112,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD_withtopbtag_TprimeM_systdown:= pow(1-0.259112,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD1_inclusive_ZprimeM_systup:= (pow(1+0.024348,1.0/1.0))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD1_inclusive_ZprimeM_systdown:= pow(1-0.024348,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD1_notopbtag_ZprimeM_systup:= pow(1+0.018073,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD1_notopbtag_ZprimeM_systdown:= pow(1-0.018073,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD1_withtopbtag_ZprimeM_systup:= pow(1+0.144325,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD1_withtopbtag_ZprimeM_systdown:= pow(1-0.144325,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD1_inclusive_TprimeM_systup:= pow(1+0.027596,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD1_inclusive_TprimeM_systdown:= pow(1-0.027596,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD1_notopbtag_TprimeM_systup:= pow(1+0.021271,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD1_notopbtag_TprimeM_systdown:= pow(1-0.021271,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD1_withtopbtag_TprimeM_systup:= pow(1+0.259112,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD1_withtopbtag_TprimeM_systdown:= pow(1-0.259112,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 
                     #"ABCDcorrE_inclusive_ZprimeM_systup:= pow(1+0.015,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
                     #"ABCDcorrE_inclusive_ZprimeM_systdown:= pow(1-0.015,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
@@ -399,18 +385,18 @@ if topWP=='loose' and WWP=='loose' and bottomWP=='medium':
                     #"ABCD2corrE_withtopbtag_TprimeM_systdown:= pow(1-0.005,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
                                         
 ################otherstuff
-                    #"ABCD_inclusive_ZprimeM_systup:= (1+0.06*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    #"ABCD_inclusive_ZprimeM_systdown:= 1-0.06*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",  
-                    #"ABCD_notopbtag_ZprimeM_systup:= 1+0.08*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    #"ABCD_notopbtag_ZprimeM_systdown:= 1-0.08*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    #"ABCD_withtopbtag_ZprimeM_systup:= 1+0.35*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
-                    #"ABCD_withtopbtag_ZprimeM_systdown:= 1-0.35*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
-                    #"ABCD_inclusive_TprimeM_systup:= 1+0.06*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
-                    #"ABCD_inclusive_TprimeM_systdown:= 1-0.06*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")", 
-                    #"ABCD_notopbtag_TprimeM_systup:= 1+0.08*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    #"ABCD_notopbtag_TprimeM_systdown:= 1-0.08*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    #"ABCD_withtopbtag_TprimeM_systup:= 1+0.6*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
-                    #"ABCD_withtopbtag_TprimeM_systdown:= 1-0.6*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
+                    #"ABCD1_inclusive_ZprimeM_systup:= (1+0.06*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    #"ABCD1_inclusive_ZprimeM_systdown:= 1-0.06*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",  
+                    #"ABCD1_notopbtag_ZprimeM_systup:= 1+0.08*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
+                    #"ABCD1_notopbtag_ZprimeM_systdown:= 1-0.08*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
+                    #"ABCD1_withtopbtag_ZprimeM_systup:= 1+0.35*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
+                    #"ABCD1_withtopbtag_ZprimeM_systdown:= 1-0.35*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
+                    #"ABCD1_inclusive_TprimeM_systup:= 1+0.06*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
+                    #"ABCD1_inclusive_TprimeM_systdown:= 1-0.06*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")", 
+                    #"ABCD1_notopbtag_TprimeM_systup:= 1+0.08*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
+                    #"ABCD1_notopbtag_TprimeM_systdown:= 1-0.08*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
+                    #"ABCD1_withtopbtag_TprimeM_systup:= 1+0.6*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
+                    #"ABCD1_withtopbtag_TprimeM_systdown:= 1-0.6*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
 
                     #"ABCDcorrE_inclusive_ZprimeM_systup:= 1+0.005*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
                     #"ABCDcorrE_inclusive_ZprimeM_systdown:= 1-0.005*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
@@ -459,19 +445,19 @@ if topWP=='medium' and WWP=='loose' and bottomWP=='medium':
                     
 ########medium working points                    
                     
-                    "ABCD_nominal:= 1",
-                    "ABCD_inclusive_ZprimeM_systup:= pow(1+0.034415,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD_inclusive_ZprimeM_systdown:= pow(1-0.034415,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD_notopbtag_ZprimeM_systup:= pow(1+0.055765,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD_notopbtag_ZprimeM_systdown:= pow(1-0.055765,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD_withtopbtag_ZprimeM_systup:= pow(1+0.225113,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD_withtopbtag_ZprimeM_systdown:= pow(1-0.225113,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD_inclusive_TprimeM_systup:= pow(1+0.03774,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD_inclusive_TprimeM_systdown:= pow(1-0.03774,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD_notopbtag_TprimeM_systup:= pow(1+0.0338929,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD_notopbtag_TprimeM_systdown:= pow(1-0.0338929,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD_withtopbtag_TprimeM_systup:= pow(1+0.271008,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD_withtopbtag_TprimeM_systdown:= pow(1-0.271008,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    #"ABCD1_nominal:= 1",
+                    "ABCD1_inclusive_ZprimeM_systup:= pow(1+0.034415,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD1_inclusive_ZprimeM_systdown:= pow(1-0.034415,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD1_notopbtag_ZprimeM_systup:= pow(1+0.055765,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD1_notopbtag_ZprimeM_systdown:= pow(1-0.055765,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD1_withtopbtag_ZprimeM_systup:= pow(1+0.225113,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD1_withtopbtag_ZprimeM_systdown:= pow(1-0.225113,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD1_inclusive_TprimeM_systup:= pow(1+0.03774,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD1_inclusive_TprimeM_systdown:= pow(1-0.03774,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD1_notopbtag_TprimeM_systup:= pow(1+0.0338929,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD1_notopbtag_TprimeM_systdown:= pow(1-0.0338929,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD1_withtopbtag_TprimeM_systup:= pow(1+0.271008,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABCD1_withtopbtag_TprimeM_systdown:= pow(1-0.271008,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 
                     #"ABCDcorrE_inclusive_ZprimeM_systup:= pow(1+0.06,1.0/7.0)",
                     #"ABCDcorrE_inclusive_ZprimeM_systdown:= pow(1-0.06,1.0/7.0)",
@@ -522,6 +508,8 @@ weigthsystnamesMCSFs=[
                     #"_CSV_MCSF_systup",
                     #"_CSV_MCSF_systdown",
                     #"_CSV_MCSF_nominal",
+                    
+                    "",
                     
                     "_ABCD1_MCSF_nominal",
                     
@@ -611,6 +599,8 @@ systweightnamesMCSFs=[
                     #"CSV_MCSF_nominal:=(1)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
                     #"CSV_MCSF_systup:=(1*(1+1.15))*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
                     #"CSV_MCSF_systdown:=(1*(1-1.15))*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0", 
+                    
+                    "nom:=1.0",
                     
                     "ABCD1_MCSF_nominal:=(MCSF_Weight_ABCD1)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
                     
@@ -702,16 +692,16 @@ systweightnamesMCSFs=[
                     
 ]
 
-for i in range(0,100):
+#for i in range(0,100):
 
 
-    #weigthsystnamesMCSFs.append("_MCSF_PDF"+str(i)+"Up")
-    #weigthsystnamesMCSFs.append("_MCSF_PDF"+str(i)+"Down")
-    #systweightnamesMCSFs.append("MCSF_PDF"+str(i)+"Up:=(Weight_nnpdf30_lo_as_0130_0 + abs(Weight_nnpdf30_lo_as_0130_0 - Weight_nnpdf30_lo_as_0130_0"+str(i)+"))*(DoWeights*DoMCDataWeights_ttbaronly==1)+(DoWeights*DoMCDataWeights_ttbaronly==0)*1.0")
-    #systweightnamesMCSFs.append("MCSF_PDF"+str(i)+"Down:=(Weight_nnpdf30_lo_as_0130_0 - abs(Weight_nnpdf30_lo_as_0130_0 - Weight_nnpdf30_lo_as_0130_0"+str(i)+"))*(DoWeights*DoMCDataWeights_ttbaronly==1)+(DoWeights*DoMCDataWeights_ttbaronly==0)*1.0")
-    weigthsystnamesMCSFs.append("_MCSF_PDF"+str(i))
-    systweightnamesMCSFs.append("MCSF_PDF"+str(i)+":=(Weight_nnpdf30_lo_as_0130_"+str(i)+")*(DoWeights*DoMCDataWeights_ttbaronly==1)+(DoWeights*DoMCDataWeights_ttbaronly==0)*1.0")
-    print 'weigthsystnamesMCSFs= ',len(weigthsystnamesMCSFs), '  systweightnamesMCSFs=',len(systweightnamesMCSFs)
+    ##weigthsystnamesMCSFs.append("_MCSF_PDF"+str(i)+"Up")
+    ##weigthsystnamesMCSFs.append("_MCSF_PDF"+str(i)+"Down")
+    ##systweightnamesMCSFs.append("MCSF_PDF"+str(i)+"Up:=(Weight_nnpdf30_lo_as_0130_0 + abs(Weight_nnpdf30_lo_as_0130_0 - Weight_nnpdf30_lo_as_0130_0"+str(i)+"))*(DoWeights*DoMCDataWeights_ttbaronly==1)+(DoWeights*DoMCDataWeights_ttbaronly==0)*1.0")
+    ##systweightnamesMCSFs.append("MCSF_PDF"+str(i)+"Down:=(Weight_nnpdf30_lo_as_0130_0 - abs(Weight_nnpdf30_lo_as_0130_0 - Weight_nnpdf30_lo_as_0130_0"+str(i)+"))*(DoWeights*DoMCDataWeights_ttbaronly==1)+(DoWeights*DoMCDataWeights_ttbaronly==0)*1.0")
+    #weigthsystnamesMCSFs.append("_MCSF_PDF"+str(i))
+    #systweightnamesMCSFs.append("MCSF_PDF"+str(i)+":=(Weight_nnpdf30_lo_as_0130_"+str(i)+")*(DoWeights*DoMCDataWeights_ttbaronly==1)+(DoWeights*DoMCDataWeights_ttbaronly==0)*1.0")
+    #print 'weigthsystnamesMCSFs= ',len(weigthsystnamesMCSFs), '  systweightnamesMCSFs=',len(systweightnamesMCSFs)
     
 
 assert len(weigthsystnamesMCSFs)==len(systweightnamesMCSFs)
@@ -726,7 +716,13 @@ otherSystNames=[
 otherSystFileNames=[
     "JERup","JERdown",
     "JESup","JESdown",
+]
 
+JECsystnames=[
+    "_ABCD1_MCSF_nominal_JERup","_ABCD1_MCSF_nominal_JERdown",
+    "_ABCD1_MCSF_nominal_JESup","_ABCD1_MCSF_nominal_JESdown",
+    "_ABCD2_MCSF_nominal_JERup","_ABCD2_MCSF_nominal_JERdown",
+    "_ABCD2_MCSF_nominal_JESup","_ABCD2_MCSF_nominal_JESdown",
 ]
 
 assert len(otherSystNames)==len(otherSystFileNames)
@@ -763,9 +759,6 @@ path_80x="/nfs/dust/cms/user/skudella/processed_MC/flat_trees_new/"
 #path_80x="/nfs/dust/cms/user/skudella/processed_MC/flat_trees_old/"
 
 
-sampleDict=SampleDictionary()
-sampleDict.doPrintout()
-
 
 # MC samples (name, color, path to files,weight,nickname_without_special_characters,systematics)                       
 #samples=[ 
@@ -791,7 +784,7 @@ sampleDict.doPrintout()
                     ##Sample('t#bar{t} + jets',ROOT.kBlue,path_80x+'BKG_TTbar/MC_TTbar_nominal_Tree_1.root',mcweight,'ttbar') ,     
                     #Sample('t#bar{t} + jets',ROOT.kBlue,path_80x+'BKG_TTbar/*nominal*.root',mcweight,'ttbar') ,     
                     ##Sample('Single Top',ROOT.kMagenta,path_80x+'/st*/*nominal*.root',mcweightAll,'SingleTop',systs_all_samples) , 
-                    ##Sample('V+jets',ROOT.kGreen-3,path_80x+'/??ets*/*nominal*.root',mcweightAll,'Vjets',systs_all_samples) , 
+                    ##Sample('V+jets',ROOT.kGreen-3,path_80x+'/??ets*/*nominal*.root',mcweightAll,'Vjets',systs_all_samples) , s
                     ##Sample('t#bar{t}+V',ROOT.kBlue-10,path_80x+'/tt?_*/*nominal*.root',mcweightAll,'ttV',systs_all_samples),         
                     ##Sample('Diboson',ROOT.kAzure+2,path_80x+'/??/*nominal*.root',mcweightAll,'Diboson',systs_all_samples) , 
                     ##Sample('QCD',ROOT.kYellow ,path_80x+'/QCD*/*nominal*root',mcweight,'QCD') , 
@@ -803,28 +796,29 @@ sampleDict.doPrintout()
 
 
 SignalSamples=[
-                    Sample('Z->tWb, m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=1200',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Zprime_1500_900_nominal_Tree.root',mcweight+'/138.07*0.3','Zprime1500900',allweightsystnames,samDict=sampleDict),
-                    Sample('Z->tWb, m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1200',ROOT.kCyan,path_80x+'Signal_Zprime/Zprime_2000_1200_LH_nominal_Tree.root',mcweight+'/86.28*0.3','Zprime20001200',allweightsystnames,samDict=sampleDict),
-                    Sample('Z->tWb, m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1200',ROOT.kRed,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/37.6*0.3','Zprime25001200',allweightsystnames,samDict=sampleDict),     
+                    #Sample('Z->tWb, m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=1200',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Zprime_1500_900_nominal_Tree.root',mcweight+'/138.07*0.3','Zprime1500900',allweightsystnames),
+                    Sample('Z->tWb, m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=1200',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Zprime_1500_1200_nominal_Tree.root',mcweight+'/99.03*8.6','Zprime15001200',allweightsystnames),
+                    Sample('Z->tWb, m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1200',ROOT.kCyan,path_80x+'Signal_Zprime/Zprime_2000_1200_LH_nominal_Tree.root',mcweight+'/86.28*0.3','Zprime20001200',allweightsystnames),
+                    Sample('Z->tWb, m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1200',ROOT.kRed,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/37.6*0.3','Zprime25001200',allweightsystnames),     
 ]
 
 BackgroundSamples=[
-                    Sample('QCDMadgraph',ROOT.kOrange-3,path_80x+'BKG_QCD/MC_QCD_H*nominal*.root',mcweight,'QCDMadgraph',allweightsystnames,samDict=sampleDict),
-                    Sample('t#bar{t} + jets',ROOT.kBlue,path_80x+'BKG_TTbar/*nominal*.root',mcweight,'ttbar',allweightsystnames,samDict=sampleDict), 
-                    Sample('Signal Contamination (8.6pb), m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=1200',ROOT.kMagenta-3,path_80x+'Signal_Zprime/Zprime_1500_1200_nominal_Tree.root',mcweight+'/99.03*8.6','SC_Zprime15001200_8_6pb',allweightsystnames,samDict=sampleDict),  
-                    Sample('Signal Contamination (0.3pb), m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1200',ROOT.kCyan-3,path_80x+'Signal_Zprime/Zprime_2000_1200_LH_nominal_Tree.root',mcweight+'/86.28*0.3','SC_Zprime20001200_0_3pb',allweightsystnames,samDict=sampleDict),  
-                    Sample('Signal Contamination (0.3pb), m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1200',ROOT.kRed-3,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/37.6*0.3','SC_Zprime25001200_0_3pb',allweightsystnames,samDict=sampleDict),  
-                    Sample('Signal Contamination none',ROOT.kRed-3,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/100000','SC_none',allweightsystnames,samDict=sampleDict),  
-                    Sample('QCDPythia8',ROOT.kGreen+2,path_80x+'BKG_QCD/MC_QCD_P*nominal*Tree*.root',mcweight,'QCDPythia8',allweightsystnames,samDict=sampleDict),
+                    Sample('t#bar{t} + jets',ROOT.kBlue,path_80x+'BKG_TTbar/*nominal*.root',mcweight,'ttbar',allweightsystnames), 
+                    Sample('QCDMadgraph',ROOT.kOrange-3,path_80x+'BKG_QCD/MC_QCD_H*nominal*.root',mcweight,'QCDMadgraph',allweightsystnames),
+                    Sample('Signal Contamination (8.6pb), m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=1200',ROOT.kMagenta-3,path_80x+'Signal_Zprime/Zprime_1500_1200_nominal_Tree.root',mcweight+'/99.03*8.6','SC_Zprime15001200_8_6pb',allweightsystnames),  
+                    Sample('Signal Contamination (0.3pb), m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1200',ROOT.kCyan-3,path_80x+'Signal_Zprime/Zprime_2000_1200_LH_nominal_Tree.root',mcweight+'/86.28*0.3','SC_Zprime20001200_0_3pb',allweightsystnames),  
+                    Sample('Signal Contamination (0.3pb), m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1200',ROOT.kRed-3,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/37.6*0.3','SC_Zprime25001200_0_3pb',allweightsystnames),  
+                    Sample('Signal Contamination none',ROOT.kRed-3,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/100000','SC_none',allweightsystnames),  
+                    Sample('QCDPythia8',ROOT.kGreen+2,path_80x+'BKG_QCD/MC_QCD_P*nominal*Tree*.root',mcweight,'QCDPythia8',allweightsystnames),
 
 ]
 
 
 DataSamples=[
-                    Sample('Data = Background with (8.6pb), m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=1200',ROOT.kBlack+2,path_80x+'Signal_Zprime/Zprime_1500_1200_nominal_Tree.root',mcweight+'/99.03*8.6','BKG_Zprime15001200_8_6pb',allweightsystnames,samDict=sampleDict),     
-                    Sample('Data = Background with (0.3pb), m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1200',ROOT.kBlack+2,path_80x+'Signal_Zprime/Zprime_2000_1200_LH_nominal_Tree.root',mcweight+'/86.28*0.3','BKG_Zprime20001200_0_3pb',allweightsystnames,samDict=sampleDict),     
-                    Sample('Data = Background with (0.3pb), m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1200',ROOT.kBlack+2,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/37.6*0.3','BKG_Zprime25001200_0_3pb',allweightsystnames,samDict=sampleDict),     
-                    Sample('Data = Background with signal',ROOT.kBlack+2,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/100000.0','DATA_BKG',allweightsystnames,samDict=sampleDict) ,     
+                    Sample('Data = Background with (8.6pb), m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=1200',ROOT.kBlack+2,path_80x+'Signal_Zprime/Zprime_1500_1200_nominal_Tree.root',mcweight+'/99.03*8.6','DATA_Zprime15001200_8_6pb',allweightsystnames),     
+                    Sample('Data = Background with (0.3pb), m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1200',ROOT.kBlack+2,path_80x+'Signal_Zprime/Zprime_2000_1200_LH_nominal_Tree.root',mcweight+'/86.28*0.3','DATA_Zprime20001200_0_3pb',allweightsystnames),     
+                    Sample('Data = Background with (0.3pb), m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1200',ROOT.kBlack+2,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/37.6*0.3','DATA_Zprime25001200_0_3pb',allweightsystnames),     
+                    Sample('Data = Background with signal',ROOT.kBlack+2,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/100000.0','DATA_noSignal',allweightsystnames) ,     
                     #Sample('Data = Background with (1pb), m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1200',ROOT.kBlack,path_80x+'Signal_Zprime/Zprime_2000_1200_LH_nominal_Tree.root',mcweight+'/86.28*0.3','BKG_Zprime20001200_1pb') ,     
                     #Sample('Data = Background with (1pb), m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=900',ROOT.kBlack,path_80x+'Signal_Zprime/Zprime_1500_900_nominal_Tree.root',mcweight+'/138.07*0.3','BKG_Zprime1500900_1pb') ,     
 
@@ -843,5 +837,82 @@ for i in BackgroundSamples:
 DataSampleNames=[]
 for i in DataSamples:
     DataSampleNames.append(i.nick)
-    
- 
+  
+samples=SignalSamples+BackgroundSamples+DataSamples
+
+samplenames=SignalSampleNames+BackgroundSampleNames+DataSampleNames
+
+
+#for sample,samplename in zip(samples,samplenames):
+ #if (( 'QCDMadgraph' not in samplename ) and ( 'QCDPythia8' not in samplename )):   
+  #for sysname,sysfilename in zip(otherSystNames,otherSystFileNames):
+    #thisnewsel=sample.selection
+    #systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),thisnewsel,sample.nick+sysname))
+
+#for sample,samplename in zip(SignalSamples,SignalSampleNames):
+ #if (( 'QCDMadgraph' not in samplename ) and ( 'QCDPythia8' not in samplename )):   
+  #for sysname,sysfilename in zip(otherSystNames,otherSystFileNames):
+    #thisnewsel=sample.selection
+    #SignalSamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),thisnewsel,sample.nick+sysname))
+    #SignalSampleNames.append(sample.nick+sysname)
+    #print 'with JEC ', sample.path
+
+ #else:
+  #for sysname,sysfilename in zip(otherSystNames,otherSystFileNames):
+    #thisnewsel=sample.selection
+    #SignalSamples.append(Sample(sample.name+sysname,sample.color,sample.path,thisnewsel,sample.nick+sysname))
+    #SignalSampleNames.append(sample.nick+sysname)     
+    #print 'no JEC ', sample.path
+
+
+
+#for sample,samplename in zip(BackgroundSamples,BackgroundSampleNames):
+ #if (( 'QCDMadgraph' not in samplename ) and ( 'QCDPythia8' not in samplename )):   
+  #for sysname,sysfilename in zip(otherSystNames,otherSystFileNames):
+    #thisnewsel=sample.selection
+    #BackgroundSamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),thisnewsel,sample.nick+sysname))
+    #BackgroundSampleNames.append(sample.nick+sysname)
+    #print 'with JEC ', sample.path
+
+ #else:
+  #for sysname,sysfilename in zip(otherSystNames,otherSystFileNames):
+    #thisnewsel=sample.selection
+    #BackgroundSamples.append(Sample(sample.name+sysname,sample.color,sample.path,thisnewsel,sample.nick+sysname))
+    #BackgroundSampleNames.append(sample.nick+sysname)   
+    #print 'no JEC ', sample.path
+
+
+
+#for sample,samplename in zip(DataSamples,DataSampleNames):
+ #if (( 'QCDMadgraph' not in samplename ) and ( 'QCDPythia8' not in samplename ) and ( 'BKG' not in samplename ) and ( 'DATA' not in samplename ) ):   
+  #for sysname,sysfilename in zip(otherSystNames,otherSystFileNames):
+    #thisnewsel=sample.selection
+    #DataSamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),thisnewsel,sample.nick+sysname))
+    #DataSampleNames.append(sample.nick+sysname)
+    #print 'with JEC ', sample.path
+
+ #else:
+  #for sysname,sysfilename in zip(otherSystNames,otherSystFileNames):
+    #thisnewsel=sample.selection
+    #DataSamples.append(Sample(sample.name+sysname,sample.color,sample.path,thisnewsel,sample.nick+sysname))
+    #DataSampleNames.append(sample.nick+sysname)  
+    #print 'no JEC ', sample.path
+
+
+systsamples=[]
+for sample,samplename in zip(samples,samplenames):
+ if (( 'QCDMadgraph' not in samplename ) and ( 'QCDPythia8' not in samplename ) and ( 'BKG' not in samplename ) and ( 'DATA' not in samplename ) ):   
+  for sysname,sysfilename in zip(otherSystNames,otherSystFileNames):
+    thisnewsel=sample.selection
+    systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),thisnewsel,sample.nick+sysname))
+    #DataSampleNames.append(sample.nick+sysname)
+    print 'with JEC ', sample.path
+
+ else:
+  for sysname,sysfilename in zip(otherSystNames,otherSystFileNames):
+    thisnewsel=sample.selection
+    systsamples.append(Sample(sample.name+sysname,sample.color,sample.path,thisnewsel,sample.nick+sysname))
+    #DataSampleNames.append(sample.nick+sysname)  
+    print 'no JEC ', sample.path
+
+

@@ -1,17 +1,24 @@
 from plot_cuts_ZPrime_MC import *
 
-stringforPDFs="float Weight_nnpdf30_lo_as_0130_0"
-stringforPDFs1="Weight_nnpdf30_lo_as_0130_0"
+stringforPDFs="float Weight_pdf_variation_260001"
+stringforPDFs1="Weight_pdf_variation_260001"
 stringforPDFs2="""
-PDFweights.push_back(Weight_nnpdf30_lo_as_0130_0);
+PDFweights.push_back(Weight_pdf_variation_260001);
 """
 
-for i in range(1,100):
-
-    stringforPDFs=stringforPDFs+(", float Weight_nnpdf30_lo_as_0130_"+str(i))
-    stringforPDFs1=stringforPDFs1+(", Weight_nnpdf30_lo_as_0130_"+str(i))
-    stringforPDFs2=stringforPDFs2+("PDFweights.push_back(Weight_nnpdf30_lo_as_0130_"+str(i)+");")
-
+for i in range(2,101):
+    if i<10:
+        istring="00"+str(i)
+    if i>9 and i<100:
+        istring="0"+str(i)
+    if i>99:
+        istring=""+str(i)
+    #stringforPDFs=stringforPDFs+(", float Weight_nnpdf30_lo_as_0130_"+str(i))
+    #stringforPDFs1=stringforPDFs1+(", Weight_nnpdf30_lo_as_0130_"+str(i))
+    #stringforPDFs2=stringforPDFs2+("PDFweights.push_back(Weight_nnpdf30_lo_as_0130_"+str(i)+");")
+    stringforPDFs=stringforPDFs+(", float Weight_pdf_variation_260"+istring)
+    stringforPDFs1=stringforPDFs1+(", Weight_pdf_variation_260"+istring)
+    stringforPDFs2=stringforPDFs2+("PDFweights.push_back(Weight_pdf_variation_260"+istring+");")
 #print stringforPDFs
 
 additionalfunctions=[
@@ -88,7 +95,7 @@ std::vector<float> interpolateSFandSFerrors(TGraphErrors const& SF_Function, flo
                 i_x=i;
             }
         }
-        std::cout<<"i_x=  "<<i_x<<endl;
+        //std::cout<<"i_x=  "<<i_x<<endl;
         //if(i_x==0 || i_x==SF_Function.GetN() || (SF_Function.GetX()[i_x]-x_value)==0){
             //res.push_back(SF_Function.GetY()[i_x]);
             //res.push_back(SF_Function.GetErrorYhigh(i_x));
@@ -109,7 +116,7 @@ std::vector<float> interpolateSFandSFerrors(TGraphErrors const& SF_Function, flo
     
         return res;    
     }
-    std::cout<<"xvalue: "<<x_value<<"  SF"<<res[0]<<endl;
+    //std::cout<<"xvalue: "<<x_value<<"  SF"<<res[0]<<endl;
 }
 """,
 """
@@ -168,10 +175,10 @@ bool IsnoSignal_inclusive(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD
 }
 """ ,
 """
-int ABCD_Category(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
+int ABCD1_Category(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
     int res=0;
     for (int i=0; i<N_Zprime_ABCD; i++){
-        if ("""+ plotselection_ABCD_general_beta_i +"""){
+        if ("""+ plotselection_ABCD1_general_i +"""){
             if("""+ plotselection_topsubjetCSVv2_i +"""){
                 if("""+ plotselection_W_tau21_i +"""){
                     if("""+ plotselection_B_CSV_i + """){
@@ -272,7 +279,7 @@ int ABCD_Category(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, floa
 int ABCD2_Category(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
     int res=0;
     for (int i=0; i<N_Zprime_ABCD; i++){
-        if ("""+ plotselection_ABCD_general_beta2_i +"""){
+        if ("""+ plotselection_ABCD2_general_i +"""){
             if("""+ plotselection_topsubjetCSVv2_i +"""){
                 if("""+ plotselection_W_tau21_i +"""){
                     if("""+ plotselection_B_CSV_i + """){
@@ -397,7 +404,7 @@ std::vector<float> CSV_weights_ABCD1(float const* Zprimes_ABCD_M, float const* T
     float bpt=0.0;
 
     for (int i=0; i<N_Zprime_ABCD; i++){
-        if ("""+ plotselection_ABCD_general_beta_i +"""){         
+        if ("""+ plotselection_ABCD1_general_i +""" && Bottoms_ABCD_WeightCSVnominal[i]>(-0.5)){         
             CSVnominal *= Bottoms_ABCD_WeightCSVnominal[i];
             CSVLFup *= Bottoms_ABCD_WeightCSVLFup[i];
             CSVLFdown *= Bottoms_ABCD_WeightCSVLFdown[i];
@@ -470,7 +477,7 @@ std::vector<float> CSV_weights_ABCD2(float const* Zprimes_ABCD_M, float const* T
     float bpt=0.0;
 
     for (int i=0; i<N_Zprime_ABCD; i++){
-        if ("""+ plotselection_ABCD_general_beta2_i +"""){         
+        if ("""+ plotselection_ABCD2_general_i +""" && Bottoms_ABCD_WeightCSVnominal[i]>(-0.5)){         
             CSVnominal *= Bottoms_ABCD_WeightCSVnominal[i];
             CSVLFup *= Bottoms_ABCD_WeightCSVLFup[i];
             CSVLFdown *= Bottoms_ABCD_WeightCSVLFdown[i];
@@ -550,7 +557,7 @@ std::vector<float> toptag_weights_ABCD1(float const* Zprimes_ABCD_M, float const
     float SF_top_tau32anti_MSDanti_ntb_down=""" + MCSF_topntb_t32_MSD_down + """;
     
     for (int i=0; i<N_Zprime_ABCD; i++){
-        if ("""+ plotselection_ABCD_general_beta_i + """){
+        if ("""+ plotselection_ABCD1_general_i + """){
             if(""" + plotselection_topsubjetCSVv2_i + """){
                 if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_i + """){
                     toptagnominal *= SF_top_tau32_MSD_wtb;
@@ -644,7 +651,7 @@ std::vector<float> toptag_weights_ABCD2(float const* Zprimes_ABCD_M, float const
     
     
     for (int i=0; i<N_Zprime_ABCD; i++){
-        if ("""+ plotselection_ABCD_general_beta_i + """){
+        if (""" + plotselection_ABCD1_general_i + """){
             if(""" + plotselection_topsubjetCSVv2_i + """){
                 if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_i + """){
                     toptagnominal *= SF_top_tau32_MSD_wtb;
@@ -724,7 +731,7 @@ std::vector<float> Wtag_weights_ABCD1(float const* Zprimes_ABCD_M, float const* 
     float SF_W_tau21anti_MSDanti_down=""" + MCSF_W_t21_MSD_down + """;
 
     for (int i=0; i<N_Zprime_ABCD; i++){
-        if ("""+ plotselection_ABCD_general_beta_i + """){
+        if ("""+ plotselection_ABCD1_general_i + """){
            
                 if(""" + plotselection_W_tau21_i + """ && """ + plotselection_W_MSD_i + """){
                     Wtagnominal *= SF_W_tau21_MSD;
@@ -782,7 +789,7 @@ std::vector<float> Wtag_weights_ABCD2(float const* Zprimes_ABCD_M, float const* 
     float SF_W_tau21anti_MSDanti_down=""" + MCSF_W_t21_MSD_down + """;
 
     for (int i=0; i<N_Zprime_ABCD; i++){
-        if ("""+ plotselection_ABCD_general_beta2_i + """){
+        if ("""+ plotselection_ABCD2_general_i + """){
                 if(""" + plotselection_W_tau21_i + """ && """ + plotselection_W_MSD_i + """){
                     Wtagnominal *= SF_W_tau21_MSD;
                     Wtagup *= (SF_W_tau21_MSD + SF_W_tau21_MSD_up);
@@ -990,26 +997,26 @@ additionalvariables=[
                         'IsnoSignalinclusive:=IsnoSignal_inclusive(Zprimes_ABCD_M, Tprimes_ABCD_M, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)',
                         "N_Zprime_ABCD","Zprimes_ABCD_M","Tprimes_ABCD_M","Tops_ABCD_maxsubjetCSVv2","Ws_ABCD_MSD","Tops_ABCD_MSD","Tops_ABCD_t32","Bottoms_ABCD_CSV","Ws_ABCD_t21",
                         
-                        'ABCD_CatID:=1.0 * ABCD_Category(Zprimes_ABCD_M,   Tprimes_ABCD_M,   Tops_ABCD_maxsubjetCSVv2,   Ws_ABCD_MSD,   Tops_ABCD_MSD,   Tops_ABCD_t32,   Bottoms_ABCD_CSV,   Ws_ABCD_t21, N_Zprime_ABCD)',
+                        'ABCD1_CatID:=1.0 * ABCD1_Category(Zprimes_ABCD_M,   Tprimes_ABCD_M,   Tops_ABCD_maxsubjetCSVv2,   Ws_ABCD_MSD,   Tops_ABCD_MSD,   Tops_ABCD_t32,   Bottoms_ABCD_CSV,   Ws_ABCD_t21, N_Zprime_ABCD)',
                         'ABCD2_CatID:=1.0* ABCD2_Category(Zprimes_ABCD_M,   Tprimes_ABCD_M,   Tops_ABCD_maxsubjetCSVv2,   Ws_ABCD_MSD,   Tops_ABCD_MSD,   Tops_ABCD_t32,   Bottoms_ABCD_CSV,   Ws_ABCD_t21, N_Zprime_ABCD)',
                         
-                        'ABCD_CatA_withtopbtag:=1',
-                        'ABCD_CatB_withtopbtag:=2',
-                        'ABCD_CatC_withtopbtag:=3',
-                        'ABCD_CatD_withtopbtag:=4',
-                        'ABCD_CatE_withtopbtag:=5',
-                        'ABCD_CatF_withtopbtag:=6',
-                        'ABCD_CatG_withtopbtag:=7',
-                        'ABCD_CatH_withtopbtag:=8',
+                        'ABCD1_CatA_withtopbtag:=1',
+                        'ABCD1_CatB_withtopbtag:=2',
+                        'ABCD1_CatC_withtopbtag:=3',
+                        'ABCD1_CatD_withtopbtag:=4',
+                        'ABCD1_CatE_withtopbtag:=5',
+                        'ABCD1_CatF_withtopbtag:=6',
+                        'ABCD1_CatG_withtopbtag:=7',
+                        'ABCD1_CatH_withtopbtag:=8',
                         
-                        'ABCD_CatA_notopbtag:=9',
-                        'ABCD_CatB_notopbtag:=10',
-                        'ABCD_CatC_notopbtag:=11',
-                        'ABCD_CatD_notopbtag:=12',
-                        'ABCD_CatE_notopbtag:=13',
-                        'ABCD_CatF_notopbtag:=14',
-                        'ABCD_CatG_notopbtag:=15',
-                        'ABCD_CatH_notopbtag:=16',
+                        'ABCD1_CatA_notopbtag:=9',
+                        'ABCD1_CatB_notopbtag:=10',
+                        'ABCD1_CatC_notopbtag:=11',
+                        'ABCD1_CatD_notopbtag:=12',
+                        'ABCD1_CatE_notopbtag:=13',
+                        'ABCD1_CatF_notopbtag:=14',
+                        'ABCD1_CatG_notopbtag:=15',
+                        'ABCD1_CatH_notopbtag:=16',
                         
                         'ABCD2_CatA_withtopbtag:=1',
                         'ABCD2_CatB_withtopbtag:=2',
@@ -1088,8 +1095,8 @@ additionalvariables=[
                         'PDF_RMSUp:=PDF_RMS('+ stringforPDFs1 +')[1]',
                         'PDF_RMSDown:=PDF_RMS('+ stringforPDFs1 +')[2]',
                         
-                        'MCSF_Weight_ABCD1:=ABCD1_toptagweightnominal*ABCD1_Wtagweightnominal*ABCD1_WeightCSVnominal*PDF_RMSMean*Weight_pu69p2',
-                        'MCSF_Weight_ABCD2:=ABCD2_toptagweightnominal*ABCD2_Wtagweightnominal*ABCD2_WeightCSVnominal*PDF_RMSMean*Weight_pu69p2',
+                        'MCSF_Weight_ABCD1:=ABCD1_toptagweightnominal*ABCD1_Wtagweightnominal*ABCD1_WeightCSVnominal*Weight_pu69p2*PDF_RMSMean',
+                        'MCSF_Weight_ABCD2:=ABCD2_toptagweightnominal*ABCD2_Wtagweightnominal*ABCD2_WeightCSVnominal*Weight_pu69p2*PDF_RMSMean',
                         
 
                         #'internalCSVweight:=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,internalSystName,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)',

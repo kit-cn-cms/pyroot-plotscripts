@@ -589,6 +589,8 @@ def createScript(scriptname,programpath,processname,filenames,outfilename,lastev
   script+='export FIRSTEVENT="'+str(firstevent)+'"\n'
   script+='export SUFFIX="'+suffix+'"\n'
   script+=programpath+'\n'
+  #DANGERZONE
+  script+='python '+programpath+'_rename.py\n'
   f=open(scriptname,'w')
   f.write(script)
   f.close()
@@ -746,7 +748,7 @@ def check_jobs(scripts,outputs,nentries):
   return failed_jobs
 
 
-def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],additionalfunctions=[],additionalobjectsfromaddtionalrootfile=[], OnlyFirstList=None):
+def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],additionalfunctions=[],additionalobjectsfromaddtionalrootfile=[], OnlyFirstList=None,otherSystnames=[]):
   workdir=os.getcwd()+'/workdir/'+name
   outputpath=workdir+'/output.root'
   
@@ -781,6 +783,11 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   if not os.path.exists(programpath):
     print 'could not compile c++ program'
     sys.exit()
+    
+  #create script to rename histograms
+  createRenameScript(programpath,systnames+otherSystnames)
+  
+  
   
   # create output folders
   print 'creating output folders'
@@ -825,3 +832,140 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   subprocess.call(['hadd', outputpath]+outputs)
   print 'done'
   return  outputpath
+
+
+
+def createRenameScript(scriptname,systematics):
+  header= """
+import ROOT
+import sys
+import os
+from subprocess import call
+filename=os.getenv("OUTFILENAME")
+"""
+  
+  body="""
+def renameHistosParallel(infname,sysnames,prune=False):
+  cmd="cp -v "+infname+" "+infname.replace(".root","_original.root")
+  theclock=ROOT.TStopwatch()
+  theclock.Start()
+  call(cmd,shell=True)
+  print sysnames
+  #infile=ROOT.TFile(infname,"READ")
+  outfile=ROOT.TFile(infname,"UPDATE")
+  keylist=outfile.GetListOfKeys()
+  theobjectlist=[]
+  listOfKeyNames=[]
+  for ikey, key in enumerate(keylist):
+    listOfKeyNames.append(key.GetName())
+  
+  for ikey, key in enumerate(listOfKeyNames):
+    thisname=key
+    #thish=outfile.Get(thisname)
+    thish=None
+    newname=thisname
+    do=True
+    #if do and "PSscaleUp" in thisname and "Q2scale" in thisname and thisname[-2:]=="Up":
+      #tmp=thisname
+      #tmp=tmp.replace('_CMS_ttH_PSscaleUp','')
+      #print 'stripped',tmp
+      #newname=tmp.replace('Q2scale','CombinedScale')
+    #if "PSscaleDown" in thisname and "Q2scale" in thisname and thisname[-4:]=="Down":
+      #tmp=thisname
+      #tmp=tmp.replace('_CMS_ttH_PSscaleDown','')
+      #newname=tmp.replace('Q2scale','CombinedScale')
+    if "dummy" in thisname:
+      continue
+      
+    nsysts=0
+    nominalfound=False
+    for sys in sysnames:
+      if sys in newname:
+	newname=newname.replace(sys,"")
+	newname+=sys
+	nsysts+=1
+      if 'nominal' in newname:
+        nominalfound=True
+	
+    if "JES" in thisname or "JER" in thisname or "_ttH_scaleFSR" in thisname or "_ttH_scaleISR" in thisname or "_ttH_FSR" in thisname or "_ttH_ISR" in thisname or "_ttH_hdamp" in thisname or "ttH_ue" in thisname or (("CMS_scale_" in thisname or "CMS_res_" in thisname) and ("_jUp" in thisname or "_jDown" in thisname)) :
+      if nsysts>2 and (not nominalfound):
+        thish=outfile.Get(thisname)
+        theobjectlist.append(thish)
+	print nsysts, " systs: removing ", thisname
+	outfile.Delete(thisname)
+	outfile.Delete(thisname+";1")
+	continue
+    	
+    #filter histograms for systs not belonging to the samples 
+    #for now until we have NNPDF syst for other samples
+    #if prune:
+      #if "CMS_ttH_NNPDF" in thisname:
+	#if thisname.split("_",1)[0]+"_" not in ["ttbarPlus2B_","ttbarPlusB_","ttbarPlusBBbar_","ttbarPlusCCbar_","ttbarOther_"]:
+	  #print "wrong syst: removing histogram", thisname
+	  #continue
+      #if "CMS_ttH_Q2scale_ttbarOther" in thisname and "ttbarOther"!=thisname.split("_",1)[0]:
+	#print "wrong syst: removing histogram", thisname
+	#continue
+      #if ("CMS_ttH_Q2scale_ttbarPlusBUp" in thisname or "CMS_ttH_Q2scale_ttbarPlusBDown" in thisname ) and "ttbarPlusB"!=thisname.split("_",1)[0] :
+	#print "wrong syst: removing histogram", thisname
+	#continue
+      #if "CMS_ttH_Q2scale_ttbarPlusBBbar" in thisname and "ttbarPlusBBbar"!=thisname.split("_",1)[0] :
+	#print "wrong syst: removing histogram", thisname
+	#continue
+      #if "CMS_ttH_Q2scale_ttbarPlusCCbar" in thisname and "ttbarPlusCCbar"!=thisname.split("_",1)[0] :
+	#print "wrong syst: removing histogram", thisname
+	#continue
+      #if "CMS_ttH_Q2scale_ttbarPlus2B" in thisname and "ttbarPlus2B"!=thisname.split("_",1)[0] :
+	#print "wrong syst: removing histogram", thisname
+	#continue
+    
+    #add ttbar type to systematics name for PS scale
+    #if "CMS_ttH_PSscaleUp" in newname or "CMS_ttH_PSscaleDown" in newname:
+      
+      #ttbartype=""
+      #if "ttbarOther"==thisname.split("_",1)[0]:
+	#ttbartype="ttbarOther"
+      #elif "ttbarPlusB"==thisname.split("_",1)[0] :
+	#ttbartype="ttbarPlusB"
+      #elif "ttbarPlusBBbar"==thisname.split("_",1)[0] :
+	#ttbartype="ttbarPlusBBbar"
+      #elif "ttbarPlusCCbar"==thisname.split("_",1)[0] :
+	#ttbartype="ttbarPlusCCbar"
+      #elif "ttbarPlus2B"==thisname.split("_",1)[0] :
+	#ttbartype="ttbarPlus2B"
+      #else:
+	#print "wrong syst: removing histogram", thisname
+	#continue
+      
+      #if "CMS_ttH_PSscaleUp" in newname:
+	#newname=newname.replace("CMS_ttH_PSscaleUp","CMS_ttH_PSscale_"+ttbartype+"Up")
+      #elif "CMS_ttH_PSscaleDown" in newname:
+	#newname=newname.replace("CMS_ttH_PSscaleDown","CMS_ttH_PSscale_"+ttbartype+"Down")
+      #else:
+	#print "wrong syst: removing histogram", thisname
+    if newname!=thisname:
+      print "changed ", thisname, " to ", newname  
+      thish=outfile.Get(thisname)
+      theobjectlist.append(thish)
+      thish.SetName(newname)
+      #outfile.cd()
+      thish.Write()
+      outfile.Delete(thisname+";1")
+  
+  outfile.Close()
+  #infile.Close()    
+  print "The renaming took ", theclock.RealTime()
+  
+renameHistosParallel(filename,systematics,False) 
+  
+  """
+  
+  script=header
+  script+="systematics="+str(systematics)+"\n"
+  script+=body
+  
+  scrfile=open(scriptname+"_rename.py","w")
+  scrfile.write(script)
+  scrfile.close()
+    
+    
