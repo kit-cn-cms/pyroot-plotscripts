@@ -1670,6 +1670,7 @@ def compileProgram(scriptname,usesDataBases,addCodeInterfaces):
   cmdstring = " ".join(cmd)
   print cmdstring
   print ""
+<<<<<<< HEAD
   try:
     print subprocess.check_output([cmdstring],stderr=subprocess.STDOUT,shell=True)
   except subprocess.CalledProcessError, e:
@@ -1677,6 +1678,10 @@ def compileProgram(scriptname,usesDataBases,addCodeInterfaces):
     print "Compile failed with error:\n", e.output
 
 
+=======
+  cmdstring=" ".join(cmd)
+  subprocess.call([cmdstring],shell=True)
+>>>>>>> 366354be2abb6e8a2d0a68d4d3679ad31f802ea2
 
 def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],allsystweights=["1"],additionalvariables=[],dataBases=[],addCodeInterfaces=[]):
 

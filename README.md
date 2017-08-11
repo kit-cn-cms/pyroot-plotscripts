@@ -9,11 +9,14 @@
 * Use the following commands to add the current repository as a subfolder to another repository:
 ```
 git remote add pyroot-subtree ssh://git@gitlab.cern.ch:7999/kit-cn-cms/pyroot-plotscripts-base.git
+
+# Note: Following line is only needed if pyroot-plotscripts-base folder exists not already
 git subtree add —-prefix=pyroot-plotscripts-base/ pyroot-subtree master
 ```
 * If you would like to push changes to the upstream repo / this repository use the following command on the derived repository:
 ```
-git subtree push
+git subtree pull  --prefix=pyroot-plotscripts-base pyroot-subtree master
+git subtree push -d  --prefix=pyroot-plotscripts-base/ pyroot-subtree master
 ```
 
 
