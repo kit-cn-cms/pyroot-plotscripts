@@ -37,6 +37,12 @@ class theInterface:
     self.unitTestInputValuesList = []
     self.unitTestOutputValuesList = []
     
+    # String can contain code for additional output classification
+    self.additionalOutputClassificationCode = ''
+    # String list stores names of additional output classifiers. Name must contain tf_ in the beginning
+    self.additionalOutputClassifiers = []
+    # Make sure, that additionalOutputClassification is possible and then activate it, see update function
+    self.additionalOutputClassificationActivated = False
     
     # Make sure, update function gets called before interface is used by using a dedicated bool variable
     self.updateFunctionCalled = False
@@ -66,6 +72,20 @@ class theInterface:
     
     # Add tf_class variable to list
     self.outputLabelsList.append('tf_class')
+    
+    # Check if additionalOutputClassification is required and possible then activate it
+    # Note: All additional output classifier names must begin with tf_
+    if(self.additionalOutputClassificationCode and self.additionalOutputClassificationCode.strip() and len(self.additionalOutputClassifiers) > 0):
+      self.additionalOutputClassificationActivated = True
+      print "Execution of additional output classifiers will be activated if all add. output classifiers are named tf_XXX.\n Check for errors below.\n"
+      for additionalOutputClassifier in self.additionalOutputClassifiers:
+        if(additionalOutputClassifier.startswith('tf_')):
+          self.outputLabelsList.append(additionalOutputClassifier)
+        else:
+          print "Additional output classifier: ", additionalOutputClassifier, " does not start with tf_.\n Execution of additional output classifier code is deactivated.\n Make sure all add. output classifiers start with tf_.\n"
+          self.additionalOutputClassificationActivated = False
+      if(self.additionalOutputClassificationActivated):
+        print "Execution of additional output classifiers is activated."
   
     # Update / read preselection list, the assumption is that the file is located under self.modelFolderPath/model_properties/preselection.txt
     preselectionListLoc = self.modelFolderPath + '/model_properties/preselection.txt'
@@ -107,6 +127,17 @@ class theInterface:
     self.debugOutput = bool(activateDebugOutput)
     print "Set debug output to: ", self.debugOutput
 
+  def setAdditionalOutputClassificationCode(self, codeString):
+    self.additionalOutputClassificationCode = str(codeString)
+    print "Set additional output classification code to: ", self.additionalOutputClassificationCode
+    
+  def setAdditionalOutputClassifiers(self, listWithStringNamesOfAdditionalOutputClassifiers):
+    # Check if list contains only strings
+    if any(isinstance(item, str) for item in listWithStringNamesOfAdditionalOutputClassifiers):
+      self.additionalOutputClassifiers = listWithStringNamesOfAdditionalOutputClassifiers
+      print "Set list with additional output classifiers to: ", self.additionalOutputClassifiers
+    else:
+      print "Presented list with additional output classifiers contains entries which are not strings.\n List with additional output classifiers was not set."
 
   ## Helper functions
 
@@ -217,7 +248,14 @@ class theInterface:
     """
     
     rstr += '''int numberOfInputVariables = ''' + str(int(len(self.inputVariablesList))) + ''';'''
-    rstr += '''int numberOfOutputLabels = ''' + str(int(len(self.outputLabelsList))) + ''';'''
+    
+    
+    if(self.additionalOutputClassificationActivated): 
+      # Reduce numberOfOutputLabels by one for additional tf_class label and maybe further additional output labels
+      rstr += '''int numberOfOutputLabels = ''' + str(int(len(self.outputLabelsList) -1 -len(self.additionalOutputClassifiers) )) + ''';'''
+    else:
+      # Reduce by one for tf_class
+      rstr += '''int numberOfOutputLabels = ''' + str(int(len(self.outputLabelsList) -1 )) + ''';'''
     
     rstr += '''
     std::cout << "Number of input variables: " << numberOfInputVariables << std::endl;
@@ -298,8 +336,11 @@ class theInterface:
     
     '''
     
-    # Add tf output label variables handling and handling of tf_class
+    # Add tf output label variables handling and handling of tf_class and also handling of additional output classifiers
+    # Make sure code for additional output classifiers gets added only once
+    codeForAdditionalOutputAlreadyAdded = False
     for outputLabelNumber, outputLabel in enumerate(self.outputLabelsList):
+      # handling of tf_class
       if(outputLabel == 'tf_class'):
         rstr += '''
         // Check which class has largest outputValue and set tf_class variable accordingly
@@ -314,6 +355,17 @@ class theInterface:
         }
         
         '''
+      # handling of additional output classifiers
+      elif(outputLabel in self.additionalOutputClassifiers and self.additionalOutputClassificationActivated):  
+        # Check if additional output classifier code was already added
+        if not codeForAdditionalOutputAlreadyAdded:
+          rstr += '''// Found additional output classifier: ''' + outputLabel + ''', additional code will be added now.\n
+          '''
+          rstr += self.additionalOutputClassificationCode
+          codeForAdditionalOutputAlreadyAdded = True
+        else:
+          rstr += '''// Found additional output classifier: ''' + outputLabel + ''', but additional code was already added, not adding again.\n'''
+      # handling of common NN output labels
       else:
         rstr += outputLabel + ''' =  outputValuesReturnVec[''' + str(outputLabelNumber) + '''];\n'''
   
@@ -370,7 +422,7 @@ class theInterface:
     // compare vectors for unit test
     std::cout << "Compare NNFlowInterface unit test result with known output" << std::endl;
     std::cout << "No error printout means unit test succeeded." << std::endl;
-    for (unsigned int i = 0; i < outputValuesReturnVec.size(); i++)
+    for (unsigned int i = 0; i < outputValuesVec.size(); i++)
     {
         std::cout << "Calculated output Value: " << outputValuesReturnVec[i] << ", known output value: " << outputValuesVec[i]  << std::endl;
         assert(fabs(outputValuesReturnVec[i] - outputValuesVec[i]) < 0.00001 && "The unit test for the NNFlowInterface did not succeed.");
