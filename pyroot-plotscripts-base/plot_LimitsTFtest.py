@@ -4,7 +4,7 @@ import ROOT
 sys.path.append('pyroot-plotscripts-base')
 sys.path.append('pyroot-plotscripts-base/limittools')
 
-from scriptgeneratorTFmodel import *
+from scriptgenerator import *
 from plotutils import *
 from limittools import renameHistos
 from limittools import addPseudoData

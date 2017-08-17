@@ -44,9 +44,26 @@ Quick blinded expected limits:
   * BUT: Major changes should be pushed upstream via git subtree push (you can also do this after collecting some changes to the core code).
   * To do this do as follows:
      * Do NOT cmsenv/source CMSSW
-     * You need git 1.9:    module load git/1.9
+     * You need git 1.9:    module load git/1.9 or even consider to install Git 2.13
      * Enter the plotscript directory
-     * git fetch pyroot-subtree
-     * cd pyroot-plotscripts-base ; git pull -s recursive -X patience pyroot-subtree master
+     * git subtree pull  --prefix=pyroot-plotscripts-base pyroot-subtree master
      * git subtree push --prefix=pyroot-plotscripts-base/ pyroot-subtree master
   * The upstream repository uses a CI part to make sure that functionality is not broken.
+  
+  ## Installation of Git 2.13
+  1. Download the source code
+  ```wget https://www.kernel.org/pub/software/scm/git/git-2.13.3.tar.xz```
+  2. Unpack the tar file
+  ``` tar xvf git-2.13.3.tar.xz```
+  3. Configure and make git
+  ```cd git-2.13.3
+  mkdir ../git-install
+  ./configure --prefix=$PWD/../git-install
+  make -j 12
+  make -j 12 install
+  ```
+  4. Make and install git subtree package
+  ``` cd contrib/subtree
+  make -j 12
+  make -j 12 install
+  ```
