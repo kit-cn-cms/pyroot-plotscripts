@@ -1,7 +1,6 @@
 import sys
 import getopt
 import os
-import ast
 
 
 class Analysis:
@@ -123,7 +122,7 @@ class Analysis:
     if os.path.isfile('additionalPlotVariablesMap.py'):
       print 'Found additionalPlotVariablesMap.py file. Will try to open it now.'
       with open('additionalPlotVariablesMap.py') as mapFile:
-        additionalPlotVariablesDictFromFile = ast.literal_eval(mapFile.read())
+        additionalPlotVariablesDictFromFile = eval(mapFile.read())
       if not additionalPlotVariablesDictFromFile:
         print "Could not read map from additionalPlotVariablesMap.py file or file is empty.\n Will update existing one and stop further execution."
         stopFurtherExecution = True
