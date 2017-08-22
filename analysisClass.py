@@ -101,7 +101,7 @@ class Analysis:
   
   
   ## Getter functions
-  def getAdditionalPlotVariables(self, discriminators, preselections):
+  def getAdditionalPlotVariables(self, discriminators, preselections, binLabels):
     """Function creates plot list for additional (input) variables
     Function checks if additionalPlotVariablesMap.py file exists. 
     If yes, then it will try to use it for determination of the amount of bins and the bin range of the plots. In case some variable cannot be mapped, the variable will be added to existing file and user will get warned.
@@ -110,10 +110,10 @@ class Analysis:
     
     # Create dictionary for discriminators and preselections using additionalPlotVariables
     additionalPlotVariablesDictFromClass = {}
-    for discr, preselection in zip(discriminators, preselections):
+    for discr, preselection, binLabel in zip(discriminators, preselections, binLabels):
       for additionalPlotVariable in self.additionalPlotVariables:
         tmpVarName = discr + '_' + additionalPlotVariable
-        additionalPlotVariablesDictFromClass[tmpVarName] = 'Plot(ROOT.TH1F(' + tmpVarName + ''', "add. var. (''' + tmpVarName +  ''')", 10, 0, 150),''' + additionalPlotVariable + ',' + preselection + ',' + tmpVarName + '))'
+        additionalPlotVariablesDictFromClass[tmpVarName] = '''Plot(ROOT.TH1F("''' + tmpVarName + '''", "add. var. (''' + tmpVarName +  ''')", 10, 0, 150),""''' + additionalPlotVariable + '''","''' + preselection + '''",""''' + binLabel + '''"))'''
     
     # Stop further execution if dict file did not exist, map could not be read or variable could not be mapped.
     stopFurtherExecution = False
@@ -146,14 +146,14 @@ class Analysis:
       stopFurtherExecution = True
       
     # Write dictionary to file
-    with open('file.txt', 'w') as mapFile:
+    with open('additionalPlotVariablesMap.py', 'w') as mapFile:
       mapFile.write('{\n')
       for variableName, plotStyle in additionalPlotVariablesDictFromClass.iteritems():
         mapFile.write('''"''' + variableName + '''": ''' + plotStyle + ',\n')
       mapFile.write('}')
     
     if stopFurtherExecution:
-      sys.exit('Stoping execution since mapping for additional variable plotting was not successful.\n Check the file additionalPlotVariablesMap.py and adjust it accordingly.')
+      sys.exit('Stopping execution since mapping for additional variable plotting was not successful.\n Check the file additionalPlotVariablesMap.py and adjust it accordingly.')
     
     return additionalPlotVariablesDictFromClass
       
