@@ -152,8 +152,8 @@ class Analysis:
     with open('additionalPlotVariablesMap.py', 'w') as mapFile:
       mapFile.write('{\n')
       # sort dict
-      for variableName, plotStyle in sorted(additionalPlotVariablesDictFromClass, key=sortByUsingLastPart).iteritems():
-        mapFile.write("""'""" + variableName + """': '""" + plotStyle + """',\n""")
+      for variableKey in sorted(additionalPlotVariablesDictFromClass.iterkeys(), key=sortByUsingLastPart):
+        mapFile.write("""'""" + variableKey + """': '""" + additionalPlotVariablesDictFromClass[variableKey] + """',\n""")
       mapFile.write('}')
     
     if stopFurtherExecution and not alwaysExecute:
