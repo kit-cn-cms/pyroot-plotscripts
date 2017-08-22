@@ -148,7 +148,7 @@ class Analysis:
     # Write dictionary to file
     with open('file.txt', 'w') as mapFile:
       mapFile.write('{\n')
-      for variableName, plotStyle in additionalPlotVariablesDictFromClass.iterkeys():
+      for variableName, plotStyle in additionalPlotVariablesDictFromClass.iteritems():
         mapFile.write('''"''' + variableName + '''": ''' + plotStyle + ',\n')
       mapFile.write('}')
     
