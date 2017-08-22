@@ -145,10 +145,15 @@ class Analysis:
       print 'Did not found additionalPlotVariablesMap.py file. Will create one and stop further execution.'
       stopFurtherExecution = True
       
+    # Dedicated sort function, so that writen out dict is sorted  
+    def sortByUsingLastPart(elem):
+      elem.rsplit('_')[-1]
+      
     # Write dictionary to file
     with open('additionalPlotVariablesMap.py', 'w') as mapFile:
       mapFile.write('{\n')
-      for variableName, plotStyle in additionalPlotVariablesDictFromClass.iteritems():
+      # sort dict
+      for variableName, plotStyle in sorted(additionalPlotVariablesDictFromClass, key=sortByUsingLastPart).iteritems():
         mapFile.write('''"''' + variableName + '''": ''' + plotStyle + ',\n')
       mapFile.write('}')
     
