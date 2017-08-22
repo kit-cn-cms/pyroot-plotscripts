@@ -146,7 +146,7 @@ class Analysis:
       
     # Dedicated sort function, so that writen out dict is sorted  
     def sortByUsingLastPart(elem):
-      elem.rsplit('_')[-1]
+      return elem.rsplit('_')[-1]
       
     # Write dictionary to file
     with open('additionalPlotVariablesMap.py', 'w') as mapFile:
