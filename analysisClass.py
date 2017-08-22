@@ -153,7 +153,7 @@ class Analysis:
       mapFile.write('{\n')
       # sort dict
       for variableName, plotStyle in sorted(additionalPlotVariablesDictFromClass, key=sortByUsingLastPart).iteritems():
-        mapFile.write('''"''' + variableName + '''": ''' + plotStyle + ',\n')
+        mapFile.write("""'""" + variableName + """': '""" + plotStyle + """',\n""")
       mapFile.write('}')
     
     if stopFurtherExecution and not alwaysExecute:
