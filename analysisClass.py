@@ -143,7 +143,7 @@ class Analysis:
       # In map file additionalPlotVariable is the key while in class fullVarName
       mapFileKey = additionalPlotVariablesDictFromClass[classKey][0]
       if not mapFileKey in additionalPlotVariablesDictFromFile:
-        missingKeysInFile.append(mapFileKey)
+        missingKeysInFile.add(mapFileKey)
       # otherwise replace internal key/value pair with external one
       else:
         # retrieve full value list
