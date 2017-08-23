@@ -185,9 +185,10 @@ class Analysis:
     returnList = []
     for classKey in additionalPlotVariablesDictFromClass.keys():
       currList = additionalPlotVariablesDictFromClass[classKey]
+      print "Current list:\n", currList
       # Construct full var name, currList: additionalPlotVariable, numberOfBins, binLowerEdge, binUpperEdge, discr, preselection, binLabel
       fullVarName = currList[4] + '_' + currList[6] + '_' + currList[0]
-      plotString = '''Plot(ROOT.TH1F("''' + fullVarName + '''", "add. var. (''' + fullVarName +  ''')",''' + currList[1] + ',' + currList[2] + ',' + currList[3] + '''),"''' + currList[0] + '''","''' + currList[5] + '''","''' + currList[6] + '''"))'''
+      plotString = '''Plot(ROOT.TH1F("''' + fullVarName + '''", "add. var. (''' + fullVarName +  ''')",''' + str(currList[1]) + ',' + str(currList[2]) + ',' + str(currList[3]) + '''),"''' + currList[0] + '''","''' + currList[5] + '''","''' + currList[6] + '''"))'''
       returnList.append(plotString)
       
     return returnList
