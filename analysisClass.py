@@ -130,38 +130,40 @@ class Analysis:
       if not additionalPlotVariablesDictFromFile:
         print "Could not read map from additionalPlotVariablesMap.py file or file is empty.\n Will update existing one and stop further execution."
         stopFurtherExecution = True
-      else:
-        print "Comparing map from additionalPlotVariablesMap.py file with internal map of additional plot variables.\n Checking if keys from internal map contained in map from file."
-        missingKeysInFile = []
-        for classKey in additionalPlotVariablesDictFromClass.keys():
-          # Check for missing additionalPlotVariable description in map file
-          # In map file additionalPlotVariable is the key while in class fullVarName
-          mapFileKey = additionalPlotVariablesDictFromClass[classKey][0]
-          if not mapFileKey in additionalPlotVariablesDictFromFile:
-            missingKeysInFile.append(mapFileKey)
-          # otherwise replace internal key/value pair with external one
-          else:
-            # retrieve full value list
-            tmpList = additionalPlotVariablesDictFromClass[classKey]
-            # and replace content with stored content
-            # numberOfBins replacement
-            tmpList[1] = additionalPlotVariablesDictFromFile[mapFileKey][0]
-            # binLowerEdge replacement
-            tmpList[2] = additionalPlotVariablesDictFromFile[mapFileKey][1]
-            # binUpperEdge replacement
-            tmpList[3] = additionalPlotVariablesDictFromFile[mapFileKey][2]
-            additionalPlotVariablesDictFromClass[classKey] = tmpList
-        if missingKeysInFile:
-          print "Found keys missing in map from file and required for plotting additional variables:\n", missingKeysInFile, "\n Will add keys to map file using default values.\n Afterwards will stop further execution."
-          # Add missing keys to mapFile dictionary
-          for missingKey in missingKeysInFile:
-            additionalPlotVariablesDictFromFile[missingKey] = [10,0,150]
-          stopFurtherExecution = True
-      
     else:
       print 'Did not found additionalPlotVariablesMap.py file. Will create one and stop further execution.'
       stopFurtherExecution = True
       
+      
+    # Compare internal map with map from file and add additional keys if necessary
+    print "Comparing map from additionalPlotVariablesMap.py file (or empty dict) with internal map of additional plot variables.\n If necessary, adding keys from internal map to map file."
+    missingKeysInFile = []
+    for classKey in additionalPlotVariablesDictFromClass.keys():
+      # Check for missing additionalPlotVariable description in map file
+      # In map file additionalPlotVariable is the key while in class fullVarName
+      mapFileKey = additionalPlotVariablesDictFromClass[classKey][0]
+      if not mapFileKey in additionalPlotVariablesDictFromFile:
+        missingKeysInFile.append(mapFileKey)
+      # otherwise replace internal key/value pair with external one
+      else:
+        # retrieve full value list
+        tmpList = additionalPlotVariablesDictFromClass[classKey]
+        # and replace content with stored content
+        # numberOfBins replacement
+        tmpList[1] = additionalPlotVariablesDictFromFile[mapFileKey][0]
+        # binLowerEdge replacement
+        tmpList[2] = additionalPlotVariablesDictFromFile[mapFileKey][1]
+        # binUpperEdge replacement
+        tmpList[3] = additionalPlotVariablesDictFromFile[mapFileKey][2]
+        additionalPlotVariablesDictFromClass[classKey] = tmpList
+    if missingKeysInFile:
+      print "Found keys missing in map from file and required for plotting additional variables:\n", missingKeysInFile, "\n Will add keys to map file using default values.\n Afterwards will stop further execution."
+      # Add missing keys to mapFile dictionary
+      for missingKey in missingKeysInFile:
+        additionalPlotVariablesDictFromFile[missingKey] = [10,0,150]
+      stopFurtherExecution = True
+    
+          
     # Dedicated sort function, so that writen out dict is sorted  
     def sortByUsingLastPart(elem):
       return elem.rsplit('_')[-1]
