@@ -1854,7 +1854,6 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 
       histoname=cn+n
       script+="\n"
-      print "\nex: ", ex, " size_of_loop ", size_of_loop
       if size_of_loop!=None:
         exi=variables.getArrayEntries(ex,"i")
         pwi=variables.getArrayEntries(pw,"i")
@@ -1868,6 +1867,14 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
         script+=fillHistoSyst(histoname,exi,weight,systnames,systweights)
         script+="      }\n"
       else:
+        # Handle vector sub variables which have names like Jet_E_1, so that the variable Jet_E[1] is included instead
+        if not ".xml" in ex and not hasattr(tree,ex):
+          if "_" in expression:
+            expressionPart1, expressionPart2 = expression.rsplit('_', 1)
+            if hasattr(tree, expressionPart1) and expressionPart2.isdigit():
+              ex = expressionPart1 + '[' + expressionPart2 + ']' 
+              print 'Found vector sub variable: ', expression, ' which was converted to: ', ex
+        
         arrayselection=variables.checkArrayLengths(','.join([ex,pw]))
         weight='('+arrayselection+')*('+pw+')*Weight_XS*categoryweight*sampleweight'
         script+=fillHistoSyst(histoname,ex,weight,systnames,systweights)
