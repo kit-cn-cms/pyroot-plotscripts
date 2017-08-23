@@ -155,7 +155,9 @@ class Analysis:
         tmpList[2] = additionalPlotVariablesDictFromFile[mapFileKey][1]
         # binUpperEdge replacement
         tmpList[3] = additionalPlotVariablesDictFromFile[mapFileKey][2]
+        print "tmpList: \n", tmpList
         additionalPlotVariablesDictFromClass[classKey] = tmpList
+        print "additionalPlotVariablesDictFromClass[classKey]: \n", additionalPlotVariablesDictFromClass[classKey]
     if missingKeysInFile:
       print "Found keys missing in map from file and required for plotting additional variables:\n", missingKeysInFile, "\n Will add keys to map file using default values.\n Afterwards will stop further execution."
       # Add missing keys to mapFile dictionary
@@ -175,7 +177,7 @@ class Analysis:
       for mapFileKey in sorted(additionalPlotVariablesDictFromFile.iterkeys(), key=sortByUsingLastPart):
         # list contains numberOfBins, binLowerEdge, binUpperEdge
         tmpList = additionalPlotVariablesDictFromFile[mapFileKey]
-        mapFile.write("""'""" + mapFileKey + """': '[ """ + str(tmpList[0]) + ', ' + str(tmpList[1]) + ', ' + str(tmpList[2])  + """]',\n""")
+        mapFile.write("""'""" + mapFileKey + """': [ """ + str(tmpList[0]) + ', ' + str(tmpList[1]) + ', ' + str(tmpList[2])  + """ ],\n""")
       mapFile.write('}')
     
     if stopFurtherExecution and not alwaysExecute:
@@ -185,7 +187,6 @@ class Analysis:
     returnList = []
     for classKey in additionalPlotVariablesDictFromClass.keys():
       currList = additionalPlotVariablesDictFromClass[classKey]
-      print "Current list:\n", currList
       # Construct full var name, currList: additionalPlotVariable, numberOfBins, binLowerEdge, binUpperEdge, discr, preselection, binLabel
       fullVarName = currList[4] + '_' + currList[6] + '_' + currList[0]
       plotString = '''Plot(ROOT.TH1F("''' + fullVarName + '''", "add. var. (''' + fullVarName +  ''')",''' + str(currList[1]) + ',' + str(currList[2]) + ',' + str(currList[3]) + '''),"''' + currList[0] + '''","''' + currList[5] + '''","''' + currList[6] + '''"))'''
