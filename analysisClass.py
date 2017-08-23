@@ -155,9 +155,7 @@ class Analysis:
         tmpList[2] = additionalPlotVariablesDictFromFile[mapFileKey][1]
         # binUpperEdge replacement
         tmpList[3] = additionalPlotVariablesDictFromFile[mapFileKey][2]
-        print "tmpList: \n", tmpList
         additionalPlotVariablesDictFromClass[classKey] = tmpList
-        print "additionalPlotVariablesDictFromClass[classKey]: \n", additionalPlotVariablesDictFromClass[classKey]
     if missingKeysInFile:
       print "Found keys missing in map from file and required for plotting additional variables:\n", missingKeysInFile, "\n Will add keys to map file using default values.\n Afterwards will stop further execution."
       # Add missing keys to mapFile dictionary
@@ -189,7 +187,7 @@ class Analysis:
       currList = additionalPlotVariablesDictFromClass[classKey]
       # Construct full var name, currList: additionalPlotVariable, numberOfBins, binLowerEdge, binUpperEdge, discr, preselection, binLabel
       fullVarName = currList[4] + '_' + currList[6] + '_' + currList[0]
-      plotString = '''Plot(ROOT.TH1F("''' + fullVarName + '''", "add. var. (''' + fullVarName +  ''')",''' + str(currList[1]) + ',' + str(currList[2]) + ',' + str(currList[3]) + '''),"''' + currList[0] + '''","''' + currList[5] + '''","''' + currList[6] + '''"))'''
+      plotString = '''Plot(ROOT.TH1F("''' + fullVarName + '''", "add. var. (''' + fullVarName +  ''')",''' + str(currList[1]) + ',' + str(currList[2]) + ',' + str(currList[3]) + '''),"''' + currList[0] + '''","''' + currList[5] + '''","''' + currList[6] + '''")'''
       returnList.append(plotString)
       
     return returnList
