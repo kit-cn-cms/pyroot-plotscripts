@@ -116,13 +116,7 @@ class Analysis:
       for additionalPlotVariable in self.additionalPlotVariables:
         # Use fullVarName as key in class dict while additionalPlotVariable is key in map file
         fullVarName = discr + '_' + binLabel + '_' + additionalPlotVariable
-        additionalPlotVariablesDictFromClass[fullVarName] = [additionalPlotVariable, numberOfBins, binLowerEdge, binUpperEdge, discr, preselection, binLabel]
-        
-        
-        
-        
-        
-        '''Plot(ROOT.TH1F("''' + fullVarName + '''", "add. var. (''' + fullVarName +  ''')", 10, 0, 150),"''' + additionalPlotVariable + '''","''' + preselection + '''","''' + binLabel + '''"))'''
+        additionalPlotVariablesDictFromClass[fullVarName] = [additionalPlotVariable, 10, 0, 150, discr, preselection, binLabel]
     
     # Stop further execution if dict file did not exist, map could not be read or variable could not be mapped.
     stopFurtherExecution = False
