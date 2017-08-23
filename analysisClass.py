@@ -173,7 +173,9 @@ class Analysis:
       mapFile.write('{\n')
       # sort dict and write entry for each additionalPlotVariable in file
       for mapFileKey in sorted(additionalPlotVariablesDictFromFile.iterkeys(), key=sortByUsingLastPart):
-        mapFile.write("""'""" + mapFileKey + """': '""" + additionalPlotVariablesDictFromFile[mapFileKey]  + """',\n""")
+        # list contains numberOfBins, binLowerEdge, binUpperEdge
+        tmpList = additionalPlotVariablesDictFromFile[mapFileKey]
+        mapFile.write("""'""" + mapFileKey + """': '[ """ + tmpList[0] + ', ' + tmpList[1] + ', ' + tmpList[2]  + """]',\n""")
       mapFile.write('}')
     
     if stopFurtherExecution and not alwaysExecute:
