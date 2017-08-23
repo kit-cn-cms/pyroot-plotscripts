@@ -1854,6 +1854,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 
       histoname=cn+n
       script+="\n"
+      print "\nex: ", ex, " size_of_loop ", size_of_loop
       if size_of_loop!=None:
         exi=variables.getArrayEntries(ex,"i")
         pwi=variables.getArrayEntries(pw,"i")
