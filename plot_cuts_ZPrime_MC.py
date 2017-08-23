@@ -10,6 +10,9 @@ bottomWP='medium'
 
 WPs='tWP'+topWP+'WWP'+WWP+'bWP'+bottomWP
     
+    
+ABCDversion='ABCD2'  
+
 #Own Plotselections for ABCD-method
 if topWP=='loose':
     plotselection_tau32 = " Tops_ABCD_t32 < 0.86   "

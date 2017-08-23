@@ -8,8 +8,8 @@ from plot_cuts_ZPrime_MC import *
 weightsystnamesMadgraphbantiZprimeM=[
                     #"",
                     "_ABMadgraphbantiZprimeM_nominal",
-                    "_ABMadgraphbantiZprimeM_systup",
-                    "_ABMadgraphbantiZprimeM_systdown",
+                    "_ABMadgraphbantiZprimeM_systUp",
+                    "_ABMadgraphbantiZprimeM_systDown",
 ] 
 
 systweightsMadgraphbantiZprimeM=[
@@ -17,87 +17,87 @@ systweightsMadgraphbantiZprimeM=[
                     #"ABMadgraphbantiZprimeM_nominal:=2",
                     "ABMadgraphbantiZprimeM_nominal:=QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
                     ##"ABMadgraphbantiZprimeM_nominal:=2*(DoWeights==1)+(DoWeights==0)*1.0",
-                    "ABMadgraphbantiZprimeM_systup:=(QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M+QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M_systup)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABMadgraphbantiZprimeM_systdown:=(QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M_systdown)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABMadgraphbantiZprimeM_systUp:=(QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M+QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M_systUp)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABMadgraphbantiZprimeM_systDown:=(QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M_systDown)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 ]
 
 
 weightsystnamesPythia8bantiZprimeM=[
                     "_ABPythiabantiZprimeM_nominal",
-                    "_ABPythiabantiZprimeM_systup",
-                    "_ABPythiabantiZprimeM_systdown",
+                    "_ABPythiabantiZprimeM_systUp",
+                    "_ABPythiabantiZprimeM_systDown",
 ] 
 
 systweightsPythia8bantiZprimeM=[
                     "ABPythiabantiZprimeM_nominal:=QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABPythiabantiZprimeM_systup:=(QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M+QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M_systup)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABPythiabantiZprimeM_systdown:=(QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M-QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M_systdown)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABPythiabantiZprimeM_systUp:=(QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M+QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M_systUp)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABPythiabantiZprimeM_systDown:=(QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M-QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M_systDown)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 ]
  
 weightsystnamesGeneratorDiffMadgraphbantiZprimeM=[
-                    "_ABMadgraphbantiZprimeMGeneratorDiff_systup",
-                    "_ABMadgraphbantiZprimeMGeneratorDiff_systdown",
+                    "_ABMadgraphbantiZprimeMGeneratorDiff_systUp",
+                    "_ABMadgraphbantiZprimeMGeneratorDiff_systDown",
 ]
 
 systweightsGeneartorDiffMadgraphbantiZprimeM=[
-                    "ABMadgraphbantiZprimeMGeneratorDiff_systup:=(QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M+ abs( QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABMadgraphbantiZprimeMGeneratorDiff_systdown:=(QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M- abs( QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABMadgraphbantiZprimeMGeneratorDiff_systUp:=(QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M+ abs( QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABMadgraphbantiZprimeMGeneratorDiff_systDown:=(QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M- abs( QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 ]
  
 weightsystnamesGeneratorDiffPythia8bantiZprimeM=[
-                    "_ABPythiabantiZprimeMGeneratorDiff_systup",
-                    "_ABPythiabantiZprimeMGeneratorDiff_systdown",
+                    "_ABPythiabantiZprimeMGeneratorDiff_systUp",
+                    "_ABPythiabantiZprimeMGeneratorDiff_systDown",
 ]
 
 systweightsGeneartorDiffPythia8bantiZprimeM=[
-                    "ABPythiabantiZprimeMGeneratorDiff_systup:=(QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M+ abs( QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABPythiabantiZprimeMGeneratorDiff_systdown:=(QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M- abs( QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABPythiabantiZprimeMGeneratorDiff_systUp:=(QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M+ abs( QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABPythiabantiZprimeMGeneratorDiff_systDown:=(QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M- abs( QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 ]
     
  
 weightsystnamesMadgraphtantiTopPt=[
                     "_ABMadgraphtantiTopPt_nominal",
-                    "_ABMadgraphtantiTopPt_systup",
-                    "_ABMadgraphtantiTopPt_systdown",
+                    "_ABMadgraphtantiTopPt_systUp",
+                    "_ABMadgraphtantiTopPt_systDown",
 ] 
 
 systweightsMadgraphtantiTopPt=[
                     "ABMadgraphtantiTopPt_nominal:=QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABMadgraphtantiTopPt_systup:=(QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt+QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt_systup)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABMadgraphtantiTopPt_systdown:=(QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt_systdown)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABMadgraphtantiTopPt_systUp:=(QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt+QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt_systUp)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABMadgraphtantiTopPt_systDown:=(QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt_systDown)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 ]
 
 
 weightsystnamesPythia8tantiTopPt=[
                     "_ABPythiatantiTopPt_nominal",
-                    "_ABPythiatantiTopPt_systup",
-                    "_ABPythiatantiTopPt_systdown",
+                    "_ABPythiatantiTopPt_systUp",
+                    "_ABPythiatantiTopPt_systDown",
 ] 
 
 systweightsPythia8tantiTopPt=[
                     "ABPythiatantiTopPt_nominal:=QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABPythiatantiTopPt_systup:=(QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt + QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt_systup)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABPythiatantiTopPt_systdown:=(QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt - QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt_systdown)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABPythiatantiTopPt_systUp:=(QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt + QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt_systUp)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABPythiatantiTopPt_systDown:=(QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt - QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt_systDown)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 ]
 
 weightsystnamesGeneratorDiffMadgraphtantiTopPt=[
-                    "_ABMadgraphtantiTopPtGeneratorDiff_systup",
-                    "_ABMadgraphtantiTopPtGeneratorDiff_systdown",
+                    "_ABMadgraphtantiTopPtGeneratorDiff_systUp",
+                    "_ABMadgraphtantiTopPtGeneratorDiff_systDown",
 ]
 
 systweightsGeneartorDiffMadgraphtantiTopPt=[
-                    "ABMadgraphtantiTopPtGeneratorDiff_systup:=(QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt + abs( QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABMadgraphtantiTopPtGeneratorDiff_systdown:=(QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt - abs( QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABMadgraphtantiTopPtGeneratorDiff_systUp:=(QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt + abs( QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABMadgraphtantiTopPtGeneratorDiff_systDown:=(QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt - abs( QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 ]
  
 weightsystnamesGeneratorDiffPythia8tantiTopPt=[
-                    "_ABPythiatantiTopPtGeneratorDiff_systup",
-                    "_ABPythiatantiTopPtGeneratorDiff_systdown",
+                    "_ABPythiatantiTopPtGeneratorDiff_systUp",
+                    "_ABPythiatantiTopPtGeneratorDiff_systDown",
 ]
 
 systweightsGeneartorDiffPythia8tantiTopPt=[
-                    "ABPythiatantiTopPtGeneratorDiff_systup:=(QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt+ abs( QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABPythiatantiTopPtGeneratorDiff_systdown:=(QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt- abs( QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABPythiatantiTopPtGeneratorDiff_systUp:=(QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt+ abs( QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABPythiatantiTopPtGeneratorDiff_systDown:=(QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt- abs( QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 ]
 
 
@@ -108,589 +108,427 @@ systweightsGeneartorDiffPythia8tantiTopPt=[
     
 weightsystnamesMadgraphbantiZprimeMWithtopbtag=[
                     "_ABMadgraphbantiZprimeMWithtopbtag_nominal",
-                    "_ABMadgraphbantiZprimeMWithtopbtag_systup",
-                    "_ABMadgraphbantiZprimeMWithtopbtag_systdown",
+                    "_ABMadgraphbantiZprimeMWithtopbtag_systUp",
+                    "_ABMadgraphbantiZprimeMWithtopbtag_systDown",
 ] 
 systweightsMadgraphbantiZprimeMWithtopbtag=[
                     #"ABMadgraphbantiZprimeMWithtopbtag_nominal:=2",
                     "ABMadgraphbantiZprimeMWithtopbtag_nominal:=QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
                     ##"ABMadgraphbantiZprimeMWithtopbtag_nominal:=2*(DoWeights==1)+(DoWeights==0)*1.0",
-                    "ABMadgraphbantiZprimeMWithtopbtag_systup:=(QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M+QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M_systup)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABMadgraphbantiZprimeMWithtopbtag_systdown:=(QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M_systdown)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABMadgraphbantiZprimeMWithtopbtag_systUp:=(QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M+QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M_systUp)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABMadgraphbantiZprimeMWithtopbtag_systDown:=(QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M_systDown)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 ]
 
 
 weightsystnamesPythia8bantiZprimeMWithtopbtag=[
                     "_ABPythiabantiZprimeMWithtopbtag_nominal",
-                    "_ABPythiabantiZprimeMWithtopbtag_systup",
-                    "_ABPythiabantiZprimeMWithtopbtag_systdown",
+                    "_ABPythiabantiZprimeMWithtopbtag_systUp",
+                    "_ABPythiabantiZprimeMWithtopbtag_systDown",
 ] 
 systweightsPythia8bantiZprimeMWithtopbtag=[
                     "ABPythiabantiZprimeMWithtopbtag_nominal:=QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABPythiabantiZprimeMWithtopbtag_systup:=(QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M+QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M_systup)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABPythiabantiZprimeMWithtopbtag_systdown:=(QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M-QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M_systdown)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABPythiabantiZprimeMWithtopbtag_systUp:=(QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M+QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M_systUp)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABPythiabantiZprimeMWithtopbtag_systDown:=(QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M-QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M_systDown)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 ]
  
 weightsystnamesGeneratorDiffMadgraphbantiZprimeMWithtopbtag=[
-                    "_ABMadgraphbantiZprimeMWithtopbtagGeneratorDiff_systup",
-                    "_ABMadgraphbantiZprimeMWithtopbtagGeneratorDiff_systdown",
+                    "_ABMadgraphbantiZprimeMWithtopbtagGeneratorDiff_systUp",
+                    "_ABMadgraphbantiZprimeMWithtopbtagGeneratorDiff_systDown",
 ]
 
 systweightsGeneartorDiffMadgraphbantiZprimeMWithtopbtag=[
-                    "ABMadgraphbantiZprimeMWithtopbtagGeneratorDiff_systup:=(QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M+ abs( QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABMadgraphbantiZprimeMWithtopbtagGeneratorDiff_systdown:=(QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M- abs( QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABMadgraphbantiZprimeMWithtopbtagGeneratorDiff_systUp:=(QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M+ abs( QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABMadgraphbantiZprimeMWithtopbtagGeneratorDiff_systDown:=(QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M- abs( QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 ]
  
 weightsystnamesGeneratorDiffPythia8bantiZprimeMWithtopbtag=[
-                    "_ABPythiabantiZprimeMWithtopbtagGeneratorDiff_systup",
-                    "_ABPythiabantiZprimeMWithtopbtagGeneratorDiff_systdown",
+                    "_ABPythiabantiZprimeMWithtopbtagGeneratorDiff_systUp",
+                    "_ABPythiabantiZprimeMWithtopbtagGeneratorDiff_systDown",
 ]
 
 systweightsGeneartorDiffPythia8bantiZprimeMWithtopbtag=[
-                    "ABPythiabantiZprimeMWithtopbtagGeneratorDiff_systup:=(QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M+ abs( QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABPythiabantiZprimeMWithtopbtagGeneratorDiff_systdown:=(QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M- abs( QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABPythiabantiZprimeMWithtopbtagGeneratorDiff_systUp:=(QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M+ abs( QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABPythiabantiZprimeMWithtopbtagGeneratorDiff_systDown:=(QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M- abs( QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 ]
     
  
 weightsystnamesMadgraphtantiTopPtWithtopbtag=[
                     "_ABMadgraphtantiTopPtWithtopbtag_nominal",
-                    "_ABMadgraphtantiTopPtWithtopbtag_systup",
-                    "_ABMadgraphtantiTopPtWithtopbtag_systdown",
+                    "_ABMadgraphtantiTopPtWithtopbtag_systUp",
+                    "_ABMadgraphtantiTopPtWithtopbtag_systDown",
 ] 
 
 systweightsMadgraphtantiTopPtWithtopbtag=[
                     "ABMadgraphtantiTopPtWithtopbtag_nominal:=QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABMadgraphtantiTopPtWithtopbtag_systup:=(QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt+QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt_systup)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABMadgraphtantiTopPtWithtopbtag_systdown:=(QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt_systdown)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABMadgraphtantiTopPtWithtopbtag_systUp:=(QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt+QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt_systUp)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABMadgraphtantiTopPtWithtopbtag_systDown:=(QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt_systDown)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 ]
 
 
 weightsystnamesPythia8tantiTopPtWithtopbtag=[
                     "_ABPythiatantiTopPtWithtopbtag_nominal",
-                    "_ABPythiatantiTopPtWithtopbtag_systup",
-                    "_ABPythiatantiTopPtWithtopbtag_systdown",
+                    "_ABPythiatantiTopPtWithtopbtag_systUp",
+                    "_ABPythiatantiTopPtWithtopbtag_systDown",
 ] 
 
 systweightsPythia8tantiTopPtWithtopbtag=[
                     "ABPythiatantiTopPtWithtopbtag_nominal:=QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABPythiatantiTopPtWithtopbtag_systup:=(QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt + QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt_systup)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABPythiatantiTopPtWithtopbtag_systdown:=(QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt - QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt_systdown)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABPythiatantiTopPtWithtopbtag_systUp:=(QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt + QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt_systUp)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABPythiatantiTopPtWithtopbtag_systDown:=(QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt - QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt_systDown)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 ]
 
 weightsystnamesGeneratorDiffMadgraphtantiTopPtWithtopbtag=[
-                    "_ABMadgraphtantiTopPtWithtopbtagGeneratorDiff_systup",
-                    "_ABMadgraphtantiTopPtWithtopbtagGeneratorDiff_systdown",
+                    "_ABMadgraphtantiTopPtWithtopbtagGeneratorDiff_systUp",
+                    "_ABMadgraphtantiTopPtWithtopbtagGeneratorDiff_systDown",
 ]
 
 systweightsGeneartorDiffMadgraphtantiTopPtWithtopbtag=[
-                    "ABMadgraphtantiTopPtWithtopbtagGeneratorDiff_systup:=(QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt + abs( QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABMadgraphtantiTopPtWithtopbtagGeneratorDiff_systdown:=(QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt - abs( QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABMadgraphtantiTopPtWithtopbtagGeneratorDiff_systUp:=(QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt + abs( QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABMadgraphtantiTopPtWithtopbtagGeneratorDiff_systDown:=(QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt - abs( QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 ]
  
 weightsystnamesGeneratorDiffPythia8tantiTopPtWithtopbtag=[
-                    "_ABPythiatantiTopPtWithtopbtagGeneratorDiff_systup",
-                    "_ABPythiatantiTopPtWithtopbtagGeneratorDiff_systdown",
+                    "_ABPythiatantiTopPtWithtopbtagGeneratorDiff_systUp",
+                    "_ABPythiatantiTopPtWithtopbtagGeneratorDiff_systDown",
 ]
 
 systweightsGeneartorDiffPythia8tantiTopPtWithtopbtag=[
-                    "ABPythiatantiTopPtWithtopbtagGeneratorDiff_systup:=(QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt+ abs( QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABPythiatantiTopPtWithtopbtagGeneratorDiff_systdown:=(QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt- abs( QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABPythiatantiTopPtWithtopbtagGeneratorDiff_systUp:=(QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt+ abs( QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
+                    "ABPythiatantiTopPtWithtopbtagGeneratorDiff_systDown:=(QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt- abs( QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt-QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
 ]
 
 if topWP=='loose' and WWP=='loose' and bottomWP=='medium':
 
-
+  if ABCDversion is 'ABCD1':
     weightsystnamesABCD=[
                     #"",
                     #"_ABCD1_nominal",
                     
-                    "_ABCD1_inclusive_ZprimeM_systup",
-                    "_ABCD1_inclusive_ZprimeM_systdown",
-                    "_ABCD1_notopbtag_ZprimeM_systup",
-                    "_ABCD1_notopbtag_ZprimeM_systdown",
-                    "_ABCD1_withtopbtag_ZprimeM_systup",
-                    "_ABCD1_withtopbtag_ZprimeM_systdown",
-                    "_ABCD1_inclusive_TprimeM_systup",
-                    "_ABCD1_inclusive_TprimeM_systdown",
-                    "_ABCD1_notopbtag_TprimeM_systup",
-                    "_ABCD1_notopbtag_TprimeM_systdown",
-                    "_ABCD1_withtopbtag_TprimeM_systup",
-                    "_ABCD1_withtopbtag_TprimeM_systdown",
-                    
-                    #"_ABCDcorrE_inclusive_ZprimeM_systup",
-                    #"_ABCDcorrE_inclusive_ZprimeM_systdown",
-                    #"_ABCDcorrE_notopbtag_ZprimeM_systup",
-                    #"_ABCDcorrE_notopbtag_ZprimeM_systdown",
-                    #"_ABCDcorrE_withtopbtag_ZprimeM_systup",
-                    #"_ABCDcorrE_withtopbtag_ZprimeM_systdown",
-                    #"_ABCDcorrE_inclusive_TprimeM_systup",
-                    #"_ABCDcorrE_inclusive_TprimeM_systdown",
-                    #"_ABCDcorrE_notopbtag_TprimeM_systup",
-                    #"_ABCDcorrE_notopbtag_TprimeM_systdown",
-                    #"_ABCDcorrE_withtopbtag_TprimeM_systup",
-                    #"_ABCDcorrE_withtopbtag_TprimeM_systdown",
-                    
-                    "_ABCD2_inclusive_ZprimeM_systup",
-                    "_ABCD2_inclusive_ZprimeM_systdown",
-                    "_ABCD2_notopbtag_ZprimeM_systup",
-                    "_ABCD2_notopbtag_ZprimeM_systdown",
-                    "_ABCD2_withtopbtag_ZprimeM_systup",
-                    "_ABCD2_withtopbtag_ZprimeM_systdown",
-                    "_ABCD2_inclusive_TprimeM_systup",
-                    "_ABCD2_inclusive_TprimeM_systdown",
-                    "_ABCD2_notopbtag_TprimeM_systup",
-                    "_ABCD2_notopbtag_TprimeM_systdown",
-                    "_ABCD2_withtopbtag_TprimeM_systup",
-                    "_ABCD2_withtopbtag_TprimeM_systdown",
-
-                    #"_ABCD2corrE_inclusive_ZprimeM_systup",
-                    #"_ABCD2corrE_inclusive_ZprimeM_systdown",
-                    #"_ABCD2corrE_notopbtag_ZprimeM_systup",
-                    #"_ABCD2corrE_notopbtag_ZprimeM_systdown",
-                    #"_ABCD2corrE_withtopbtag_ZprimeM_systup",
-                    #"_ABCD2corrE_withtopbtag_ZprimeM_systdown",
-                    #"_ABCD2corrE_inclusive_TprimeM_systup",
-                    #"_ABCD2corrE_inclusive_TprimeM_systdown",
-                    #"_ABCD2corrE_notopbtag_TprimeM_systup",
-                    #"_ABCD2corrE_notopbtag_TprimeM_systdown",
-                    #"_ABCD2corrE_withtopbtag_TprimeM_systup",
-                    #"_ABCD2corrE_withtopbtag_TprimeM_systdown",      
-
-
-]
-else:
+                    "_ABCD1_inclusive_ZprimeM_systUp",
+                    "_ABCD1_inclusive_ZprimeM_systDown",
+                    "_ABCD1_notopbtag_ZprimeM_systUp",
+                    "_ABCD1_notopbtag_ZprimeM_systDown",
+                    "_ABCD1_withtopbtag_ZprimeM_systUp",
+                    "_ABCD1_withtopbtag_ZprimeM_systDown",
+                    "_ABCD1_inclusive_TprimeM_systUp",
+                    "_ABCD1_inclusive_TprimeM_systDown",
+                    "_ABCD1_notopbtag_TprimeM_systUp",
+                    "_ABCD1_notopbtag_TprimeM_systDown",
+                    "_ABCD1_withtopbtag_TprimeM_systUp",
+                    "_ABCD1_withtopbtag_TprimeM_systDown",
+    ]                    
+  elif ABCDversion is 'ABCD2':            
     weightsystnamesABCD=[
-                    #"",
-                    #"_ABCD1_nominal",
-                    
-                    "_ABCD1_inclusive_ZprimeM_systup",
-                    "_ABCD1_inclusive_ZprimeM_systdown",
-                    "_ABCD1_notopbtag_ZprimeM_systup",
-                    "_ABCD1_notopbtag_ZprimeM_systdown",
-                    "_ABCD1_withtopbtag_ZprimeM_systup",
-                    "_ABCD1_withtopbtag_ZprimeM_systdown",
-                    "_ABCD1_inclusive_TprimeM_systup",
-                    "_ABCD1_inclusive_TprimeM_systdown",
-                    "_ABCD1_notopbtag_TprimeM_systup",
-                    "_ABCD1_notopbtag_TprimeM_systdown",
-                    "_ABCD1_withtopbtag_TprimeM_systup",
-                    "_ABCD1_withtopbtag_TprimeM_systdown",
-                    
-                    #"_ABCDcorrE_inclusive_ZprimeM_systup",
-                    #"_ABCDcorrE_inclusive_ZprimeM_systdown",
-                    #"_ABCDcorrE_notopbtag_ZprimeM_systup",
-                    #"_ABCDcorrE_notopbtag_ZprimeM_systdown",
-                    #"_ABCDcorrE_withtopbtag_ZprimeM_systup",
-                    #"_ABCDcorrE_withtopbtag_ZprimeM_systdown",
-                    #"_ABCDcorrE_inclusive_TprimeM_systup",
-                    #"_ABCDcorrE_inclusive_TprimeM_systdown",
-                    #"_ABCDcorrE_notopbtag_TprimeM_systup",
-                    #"_ABCDcorrE_notopbtag_TprimeM_systdown",
-                    #"_ABCDcorrE_withtopbtag_TprimeM_systup",
-                    #"_ABCDcorrE_withtopbtag_TprimeM_systdown",
-                    
-                    "_ABCD2_inclusive_ZprimeM_systup",
-                    "_ABCD2_inclusive_ZprimeM_systdown",
-                    "_ABCD2_notopbtag_ZprimeM_systup",
-                    "_ABCD2_notopbtag_ZprimeM_systdown",
-                    "_ABCD2_withtopbtag_ZprimeM_systup",
-                    "_ABCD2_withtopbtag_ZprimeM_systdown",
-                    "_ABCD2_inclusive_TprimeM_systup",
-                    "_ABCD2_inclusive_TprimeM_systdown",
-                    "_ABCD2_notopbtag_TprimeM_systup",
-                    "_ABCD2_notopbtag_TprimeM_systdown",
-                    "_ABCD2_withtopbtag_TprimeM_systup",
-                    "_ABCD2_withtopbtag_TprimeM_systdown",
+                    "_ABCD2_inclusive_ZprimeM_systUp",
+                    "_ABCD2_inclusive_ZprimeM_systDown",
+                    "_ABCD2_notopbtag_ZprimeM_systUp",
+                    "_ABCD2_notopbtag_ZprimeM_systDown",
+                    "_ABCD2_withtopbtag_ZprimeM_systUp",
+                    "_ABCD2_withtopbtag_ZprimeM_systDown",
+                    "_ABCD2_inclusive_TprimeM_systUp",
+                    "_ABCD2_inclusive_TprimeM_systDown",
+                    "_ABCD2_notopbtag_TprimeM_systUp",
+                    "_ABCD2_notopbtag_TprimeM_systDown",
+                    "_ABCD2_withtopbtag_TprimeM_systUp",
+                    "_ABCD2_withtopbtag_TprimeM_systDown",
+    ]     
+  elif ABCDversion is 'ABCD3':            
+    weightsystnamesABCD=[
+                    "_ABCD3_inclusive_ZprimeM_systUp",
+                    "_ABCD3_inclusive_ZprimeM_systDown",
+                    "_ABCD3_notopbtag_ZprimeM_systUp",
+                    "_ABCD3_notopbtag_ZprimeM_systDown",
+                    "_ABCD3_withtopbtag_ZprimeM_systUp",
+                    "_ABCD3_withtopbtag_ZprimeM_systDown",
+                    "_ABCD3_inclusive_TprimeM_systUp",
+                    "_ABCD3_inclusive_TprimeM_systDown",
+                    "_ABCD3_notopbtag_TprimeM_systUp",
+                    "_ABCD3_notopbtag_TprimeM_systDown",
+                    "_ABCD3_withtopbtag_TprimeM_systUp",
+                    "_ABCD3_withtopbtag_TprimeM_systDown",  
+    ]
+  elif ABCDversion is 'ABCD5':            
+    weightsystnamesABCD=[
+                    "_ABCD5_inclusive_ZprimeM_systUp",
+                    "_ABCD5_inclusive_ZprimeM_systDown",
+                    "_ABCD5_notopbtag_ZprimeM_systUp",
+                    "_ABCD5_notopbtag_ZprimeM_systDown",
+                    "_ABCD5_withtopbtag_ZprimeM_systUp",
+                    "_ABCD5_withtopbtag_ZprimeM_systDown",
+                    "_ABCD5_inclusive_TprimeM_systUp",
+                    "_ABCD5_inclusive_TprimeM_systDown",
+                    "_ABCD5_notopbtag_TprimeM_systUp",
+                    "_ABCD5_notopbtag_TprimeM_systDown",
+                    "_ABCD5_withtopbtag_TprimeM_systUp",
+                    "_ABCD5_withtopbtag_TprimeM_systDown", 
 
-                    #"_ABCD2corrE_inclusive_ZprimeM_systup",
-                    #"_ABCD2corrE_inclusive_ZprimeM_systdown",
-                    #"_ABCD2corrE_notopbtag_ZprimeM_systup",
-                    #"_ABCD2corrE_notopbtag_ZprimeM_systdown",
-                    #"_ABCD2corrE_withtopbtag_ZprimeM_systup",
-                    #"_ABCD2corrE_withtopbtag_ZprimeM_systdown",
-                    #"_ABCD2corrE_inclusive_TprimeM_systup",
-                    #"_ABCD2corrE_inclusive_TprimeM_systdown",
-                    #"_ABCD2corrE_notopbtag_TprimeM_systup",
-                    #"_ABCD2corrE_notopbtag_TprimeM_systdown",
-                    #"_ABCD2corrE_withtopbtag_TprimeM_systup",
-                    #"_ABCD2corrE_withtopbtag_TprimeM_systdown",      
+    ]
+    
 
-
-]    
     
     
     
 if topWP=='loose' and WWP=='loose' and bottomWP=='medium':
     
-      systweightsABCD=[
                     #"nom:=1",
                     
-                    
-#########medium working points                    
-                    
-                    #"ABCD1_nominal:= 1",
- 
-
-###########loose working points
-                    "ABCD1_inclusive_ZprimeM_systup:= (pow(1+0.024348,1.0/1.0))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD1_inclusive_ZprimeM_systdown:= pow(1-0.024348,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD1_notopbtag_ZprimeM_systup:= pow(1+0.018073,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD1_notopbtag_ZprimeM_systdown:= pow(1-0.018073,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD1_withtopbtag_ZprimeM_systup:= pow(1+0.144325,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD1_withtopbtag_ZprimeM_systdown:= pow(1-0.144325,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD1_inclusive_TprimeM_systup:= pow(1+0.027596,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD1_inclusive_TprimeM_systdown:= pow(1-0.027596,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD1_notopbtag_TprimeM_systup:= pow(1+0.021271,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD1_notopbtag_TprimeM_systdown:= pow(1-0.021271,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD1_withtopbtag_TprimeM_systup:= pow(1+0.259112,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD1_withtopbtag_TprimeM_systdown:= pow(1-0.259112,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-
-                    #"ABCDcorrE_inclusive_ZprimeM_systup:= pow(1+0.015,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    #"ABCDcorrE_inclusive_ZprimeM_systdown:= pow(1-0.015,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    #"ABCDcorrE_notopbtag_ZprimeM_systup:= pow(1+0.02,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    #"ABCDcorrE_notopbtag_ZprimeM_systdown:= pow(1-0.02,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    #"ABCDcorrE_withtopbtag_ZprimeM_systup:= pow(1+0.3,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    #"ABCDcorrE_withtopbtag_ZprimeM_systdown:= pow(1-0.3,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    #"ABCDcorrE_inclusive_TprimeM_systup:= pow(1+0.005,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    #"ABCDcorrE_inclusive_TprimeM_systdown:= pow(1-0.005,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    #"ABCDcorrE_notopbtag_TprimeM_systup:= pow(1+0.02,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    #"ABCDcorrE_notopbtag_TprimeM_systdown:= pow(1-0.02,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    #"ABCDcorrE_withtopbtag_TprimeM_systup:= pow(1+0.6,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    #"ABCDcorrE_withtopbtag_TprimeM_systdown:= pow(1-0.6,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    
-                    "ABCD2_inclusive_ZprimeM_systup:= pow(1+0.01874,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD2_inclusive_ZprimeM_systdown:= pow(1-0.01874,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD2_notopbtag_ZprimeM_systup:= pow(1+0.01194,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD2_notopbtag_ZprimeM_systdown:= pow(1-0.01194,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD2_withtopbtag_ZprimeM_systup:= pow(1+0.063702,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD2_withtopbtag_ZprimeM_systdown:= pow(1-0.063702,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD2_inclusive_TprimeM_systup:= pow(1+0.01731,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD2_inclusive_TprimeM_systdown:= pow(1-0.01731,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD2_notopbtag_TprimeM_systup:= pow(1+0.01194,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD2_notopbtag_TprimeM_systdown:= pow(1-0.01194,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD2_withtopbtag_TprimeM_systup:= pow(1+0.082416,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD2_withtopbtag_TprimeM_systdown:= pow(1-0.082416,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                                        
-                    #"ABCD2corrE_inclusive_ZprimeM_systup:= pow(1+0.015,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    #"ABCD2corrE_inclusive_ZprimeM_systdown:= pow(1-0.015,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    #"ABCD2corrE_notopbtag_ZprimeM_systup:= pow(1+0.025,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    #"ABCD2corrE_notopbtag_ZprimeM_systdown:= pow(1-0.025,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    #"ABCD2corrE_withtopbtag_ZprimeM_systup:= pow(1+0.02,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    #"ABCD2corrE_withtopbtag_ZprimeM_systdown:= pow(1-0.02,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    #"ABCD2corrE_inclusive_TprimeM_systup:= pow(1+0.01,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    #"ABCD2corrE_inclusive_TprimeM_systdown:= pow(1-0.01,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    #"ABCD2corrE_notopbtag_TprimeM_systup:= pow(1+0.025,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    #"ABCD2corrE_notopbtag_TprimeM_systdown:= pow(1-0.025,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    #"ABCD2corrE_withtopbtag_TprimeM_systup:= pow(1+0.005,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    #"ABCD2corrE_withtopbtag_TprimeM_systdown:= pow(1-0.005,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                                        
-################otherstuff
-                    #"ABCD1_inclusive_ZprimeM_systup:= (1+0.06*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"))*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    #"ABCD1_inclusive_ZprimeM_systdown:= 1-0.06*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",  
-                    #"ABCD1_notopbtag_ZprimeM_systup:= 1+0.08*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    #"ABCD1_notopbtag_ZprimeM_systdown:= 1-0.08*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    #"ABCD1_withtopbtag_ZprimeM_systup:= 1+0.35*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
-                    #"ABCD1_withtopbtag_ZprimeM_systdown:= 1-0.35*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
-                    #"ABCD1_inclusive_TprimeM_systup:= 1+0.06*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
-                    #"ABCD1_inclusive_TprimeM_systdown:= 1-0.06*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")", 
-                    #"ABCD1_notopbtag_TprimeM_systup:= 1+0.08*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    #"ABCD1_notopbtag_TprimeM_systdown:= 1-0.08*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    #"ABCD1_withtopbtag_TprimeM_systup:= 1+0.6*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
-                    #"ABCD1_withtopbtag_TprimeM_systdown:= 1-0.6*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
-
-                    #"ABCDcorrE_inclusive_ZprimeM_systup:= 1+0.005*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
-                    #"ABCDcorrE_inclusive_ZprimeM_systdown:= 1-0.005*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
-                    #"ABCDcorrE_notopbtag_ZprimeM_systup:= 1+0.005*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    #"ABCDcorrE_notopbtag_ZprimeM_systdown:= 1-0.005*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    #"ABCDcorrE_withtopbtag_ZprimeM_systup:= 1+0.6*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
-                    #"ABCDcorrE_withtopbtag_ZprimeM_systdown:= 1-0.6*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
-                    #"ABCDcorrE_inclusive_TprimeM_systup:= 1+0.005*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
-                    #"ABCDcorrE_inclusive_TprimeM_systdown:= 1-0.005*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
-                    #"ABCDcorrE_notopbtag_TprimeM_systup:=1+0.02*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    #"ABCDcorrE_notopbtag_TprimeM_systdown:=1-0.02*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    #"ABCDcorrE_withtopbtag_TprimeM_systup:=1+0.8*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
-                    #"ABCDcorrE_withtopbtag_TprimeM_systdown:=1-0.8*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",  
-
-                    #"ABCD2_inclusive_ZprimeM_systup:=1+0.06*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
-                    #"ABCD2_inclusive_ZprimeM_systdown:=1-0.06*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",  
-                    #"ABCD2_notopbtag_ZprimeM_systup:=1+0.10*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    #"ABCD2_notopbtag_ZprimeM_systdown:=1-0.10*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    #"ABCD2_withtopbtag_ZprimeM_systup:=1+0.02*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
-                    #"ABCD2_withtopbtag_ZprimeM_systdown:=1-0.02*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
-                    #"ABCD2_inclusive_TprimeM_systup:=1+0.06*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
-                    #"ABCD2_inclusive_TprimeM_systdown:=1-0.06*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")", 
-                    #"ABCD2_notopbtag_TprimeM_systup:=1+0.12*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    #"ABCD2_notopbtag_TprimeM_systdown:=1-0.12*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    #"ABCD2_withtopbtag_TprimeM_systup:=1+0.01*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
-                    #"ABCD2_withtopbtag_TprimeM_systdown:=1-0.01*("+plotselection_tau32_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
-
-                    #"ABCD2corrE_inclusive_ZprimeM_systup:=1+0.08*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
-                    #"ABCD2corrE_inclusive_ZprimeM_systdown:=1-0.08*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
-                    #"ABCD2corrE_notopbtag_ZprimeM_systup:=1+0.05*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    #"ABCD2corrE_notopbtag_ZprimeM_systdown:=1-0.05*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    #"ABCD2corrE_withtopbtag_ZprimeM_systup:=1+0.05*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
-                    #"ABCD2corrE_withtopbtag_ZprimeM_systdown:=1-0.05*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
-                    #"ABCD2corrE_inclusive_TprimeM_systup:=1+0.08*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
-                    #"ABCD2corrE_inclusive_TprimeM_systdown:=1-0.08*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+")",
-                    #"ABCD2corrE_notopbtag_TprimeM_systup:=1+0.05*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    #"ABCD2corrE_notopbtag_TprimeM_systdown:=1-0.05*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2_anti+")",
-                    #"ABCD2corrE_withtopbtag_TprimeM_systup:=1+0.02*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",
-                    #"ABCD2corrE_withtopbtag_TprimeM_systdown:=1-0.02*("+plotselection_t_MSD_anti+"&&"+plotselection_B_CSV+"&&"+plotselection_W_tau21+"&&"+plotselection_topsubjetCSVv2+")",  
-    ]
-
-if topWP=='medium' and WWP=='loose' and bottomWP=='medium':
-    systweightsABCD=[
-                    #"nom:=1",
-                    
-                    
-########medium working points                    
-                    
-                    #"ABCD1_nominal:= 1",
-                    "ABCD1_inclusive_ZprimeM_systup:= pow(1+0.034415,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD1_inclusive_ZprimeM_systdown:= pow(1-0.034415,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD1_notopbtag_ZprimeM_systup:= pow(1+0.055765,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD1_notopbtag_ZprimeM_systdown:= pow(1-0.055765,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD1_withtopbtag_ZprimeM_systup:= pow(1+0.225113,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD1_withtopbtag_ZprimeM_systdown:= pow(1-0.225113,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD1_inclusive_TprimeM_systup:= pow(1+0.03774,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD1_inclusive_TprimeM_systdown:= pow(1-0.03774,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD1_notopbtag_TprimeM_systup:= pow(1+0.0338929,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD1_notopbtag_TprimeM_systdown:= pow(1-0.0338929,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD1_withtopbtag_TprimeM_systup:= pow(1+0.271008,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD1_withtopbtag_TprimeM_systdown:= pow(1-0.271008,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-
-                    #"ABCDcorrE_inclusive_ZprimeM_systup:= pow(1+0.06,1.0/7.0)",
-                    #"ABCDcorrE_inclusive_ZprimeM_systdown:= pow(1-0.06,1.0/7.0)",
-                    #"ABCDcorrE_notopbtag_ZprimeM_systup:= pow(1+0.06,1.0/7.0)",
-                    #"ABCDcorrE_notopbtag_ZprimeM_systdown:= pow(1-0.06,1.0/7.0)",
-                    #"ABCDcorrE_withtopbtag_ZprimeM_systup:= pow(1+0.5,1.0/7.0)",
-                    #"ABCDcorrE_withtopbtag_ZprimeM_systdown:= pow(1-0.5,1.0/7.0)",
-                    #"ABCDcorrE_inclusive_TprimeM_systup:= pow(1+0.07,1.0/7.0)",
-                    #"ABCDcorrE_inclusive_TprimeM_systdown:= pow(1-0.07,1.0/7.0)",
-                    #"ABCDcorrE_notopbtag_TprimeM_systup:= pow(1+0.06,1.0/7.0)",
-                    #"ABCDcorrE_notopbtag_TprimeM_systdown:= pow(1-0.06,1.0/7.0)",
-                    #"ABCDcorrE_withtopbtag_TprimeM_systup:= pow(1+0.67,1.0/7.0)",
-                    #"ABCDcorrE_withtopbtag_TprimeM_systdown:= pow(1-0.67,1.0/7.0)",
-                    
-                    "ABCD2_inclusive_ZprimeM_systup:= pow(1+0.05428,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD2_inclusive_ZprimeM_systdown:= pow(1-0.05428,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD2_notopbtag_ZprimeM_systup:= pow(1+0.056178,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD2_notopbtag_ZprimeM_systdown:= pow(1-0.056178,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD2_withtopbtag_ZprimeM_systup:= pow(1+0.185563,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD2_withtopbtag_ZprimeM_systdown:= pow(1-0.185563,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD2_inclusive_TprimeM_systup:= pow(1+0.042944,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD2_inclusive_TprimeM_systdown:= pow(1-0.042944,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD2_notopbtag_TprimeM_systup:= pow(1+0.046409,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD2_notopbtag_TprimeM_systdown:= pow(1-0.046409,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD2_withtopbtag_TprimeM_systup:= pow(1+0.183169,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                    "ABCD2_withtopbtag_TprimeM_systdown:= pow(1-0.183169,1.0/1.0)*(DoABCDsyst==1)+1*(DoABCDsyst==0)",
-                                        
-                    #"ABCD2corrE_inclusive_ZprimeM_systup:= pow(1+0.05,1.0/7.0)",
-                    #"ABCD2corrE_inclusive_ZprimeM_systdown:= pow(1-0.05,1.0/7.0)",
-                    #"ABCD2corrE_notopbtag_ZprimeM_systup:= pow(1+0.05,1.0/7.0)",
-                    #"ABCD2corrE_notopbtag_ZprimeM_systdown:= pow(1-0.05,1.0/7.0)",
-                    #"ABCD2corrE_withtopbtag_ZprimeM_systup:= pow(1+0.03,1.0/7.0)",
-                    #"ABCD2corrE_withtopbtag_ZprimeM_systdown:= pow(1-0.03,1.0/7.0)",
-                    #"ABCD2corrE_inclusive_TprimeM_systup:= pow(1+0.03,1.0/7.0)",
-                    #"ABCD2corrE_inclusive_TprimeM_systdown:= pow(1-0.03,1.0/7.0)",
-                    #"ABCD2corrE_notopbtag_TprimeM_systup:= pow(1+0.05,1.0/7.0)",
-                    #"ABCD2corrE_notopbtag_TprimeM_systdown:= pow(1-0.05,1.0/7.0)",
-                    #"ABCD2corrE_withtopbtag_TprimeM_systup:= pow(1+0.05,1.0/7.0)",
-                    #"ABCD2corrE_withtopbtag_TprimeM_systdown:= pow(1-0.05,1.0/7.0)",
-                    
-
-    ]
+    if ABCDversion is 'ABCD1': 
+        systweightsABCD=[
+                    "ABCD1_inclusive_ZprimeM_systUp:= (pow(1+0.024348,1.0/1.0))*(DoABCDsyst==1)+MCSF_Weight_ABCD1*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD1_inclusive_ZprimeM_systDown:= pow(1-0.024348,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD1*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD1_notopbtag_ZprimeM_systUp:= pow(1+0.018073,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD1*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD1_notopbtag_ZprimeM_systDown:= pow(1-0.018073,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD1*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD1_withtopbtag_ZprimeM_systUp:= pow(1+0.144325,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD1*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD1_withtopbtag_ZprimeM_systDown:= pow(1-0.144325,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD1*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD1_inclusive_TprimeM_systUp:= pow(1+0.027596,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD1*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD1_inclusive_TprimeM_systDown:= pow(1-0.027596,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD1*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD1_notopbtag_TprimeM_systUp:= pow(1+0.021271,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD1*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD1_notopbtag_TprimeM_systDown:= pow(1-0.021271,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD1*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD1_withtopbtag_TprimeM_systUp:= pow(1+0.259112,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD1*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD1_withtopbtag_TprimeM_systDown:= pow(1-0.259112,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD1*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+        ]
+    elif ABCDversion is 'ABCD2': 
+        systweightsABCD=[
+                    "ABCD2_inclusive_ZprimeM_systUp:= pow(1+0.01874,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD2*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD2_inclusive_ZprimeM_systDown:= pow(1-0.01874,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD2*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD2_notopbtag_ZprimeM_systUp:= pow(1+0.01194,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD2*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD2_notopbtag_ZprimeM_systDown:= pow(1-0.01194,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD2*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD2_withtopbtag_ZprimeM_systUp:= pow(1+0.063702,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD2*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD2_withtopbtag_ZprimeM_systDown:= pow(1-0.063702,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD2*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD2_inclusive_TprimeM_systUp:= pow(1+0.01731,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD2*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD2_inclusive_TprimeM_systDown:= pow(1-0.01731,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD2*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD2_notopbtag_TprimeM_systUp:= pow(1+0.01194,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD2*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD2_notopbtag_TprimeM_systDown:= pow(1-0.01194,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD2*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD2_withtopbtag_TprimeM_systUp:= pow(1+0.082416,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD2*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD2_withtopbtag_TprimeM_systDown:= pow(1-0.082416,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD2*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                     
+        ]
+    elif ABCDversion is 'ABCD3': 
+        systweightsABCD=[
+                    "ABCD3_inclusive_ZprimeM_systUp:= pow(1+0.019232,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD3*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD3_inclusive_ZprimeM_systDown:= pow(1-0.019232,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD3*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD3_notopbtag_ZprimeM_systUp:= pow(1+0.01551,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD3*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD3_notopbtag_ZprimeM_systDown:= pow(1-0.01551,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD3*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD3_withtopbtag_ZprimeM_systUp:= pow(1+0.066,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD3*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD3_withtopbtag_ZprimeM_systDown:= pow(1-0.066,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD3*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD3_inclusive_TprimeM_systUp:= pow(1+0.01731,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD3*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD3_inclusive_TprimeM_systDown:= pow(1-0.01731,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD3*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD3_notopbtag_TprimeM_systUp:= pow(1+0.01194,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD3*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD3_notopbtag_TprimeM_systDown:= pow(1-0.01194,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD3*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD3_withtopbtag_TprimeM_systUp:= pow(1+0.082416,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD3*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD3_withtopbtag_TprimeM_systDown:= pow(1-0.082416,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD3*(DoMCDataWeights==1)*(DoABCDsyst==0)",          
+          
+        ]
+    elif ABCDversion is 'ABCD5': 
+        systweightsABCD=[ 
+                    "ABCD5_inclusive_ZprimeM_systUp:= pow(1+0.03681,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD5*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD5_inclusive_ZprimeM_systDown:= pow(1-0.03681,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD5*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD5_notopbtag_ZprimeM_systUp:= pow(1+0.03509,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD5*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD5_notopbtag_ZprimeM_systDown:= pow(1-0.03509,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD5*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD5_withtopbtag_ZprimeM_systUp:= pow(1+0.021591,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD5*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD5_withtopbtag_ZprimeM_systDown:= pow(1-0.021591,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD5*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD5_inclusive_TprimeM_systUp:= pow(1+0.01731,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD5*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD5_inclusive_TprimeM_systDown:= pow(1-0.01731,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD5*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD5_notopbtag_TprimeM_systUp:= pow(1+0.01194,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD5*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD5_notopbtag_TprimeM_systDown:= pow(1-0.01194,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD5*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD5_withtopbtag_TprimeM_systUp:= pow(1+0.082416,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD5*(DoMCDataWeights==1)*(DoABCDsyst==0)",
+                    "ABCD5_withtopbtag_TprimeM_systDown:= pow(1-0.082416,1.0/1.0)*(DoABCDsyst==1)+MCSF_Weight_ABCD5*(DoMCDataWeights==1)*(DoABCDsyst==0)",        ]
 
 
 
-weigthsystnamesMCSFs=[
-                    #"_CSV_MCSF_nominal",
-                    #"_CSV_MCSF_systup",
-                    #"_CSV_MCSF_systdown",
-                    #"_CSV_MCSF_nominal",
+    weigthsystnamesMCSFs=[
+                    #"_CSV_nominal",
+                    #"_CSV_MCSF_systUp",
+                    #"_CSV_MCSF_systDown",
+                    #"_CSV_nominal",
                     
                     "",
                     
-                    "_ABCD1_MCSF_nominal",
+                    "_" + ABCDversion + "_nominal",
                     
-                    "_ABCD1_MCSF_CSVLFUp",
-                    "_ABCD1_MCSF_CSVLFDown",
-                    "_ABCD1_MCSF_CSVHFUp",
-                    "_ABCD1_MCSF_CSVHFDown",
-                    "_ABCD1_MCSF_CSVHFStats1Up",
-                    "_ABCD1_MCSF_CSVHFStats1Down",
-                    "_ABCD1_MCSF_CSVLFStats1Up",
-                    "_ABCD1_MCSF_CSVLFStats1Down",
-                    "_ABCD1_MCSF_CSVHFStats2Up",
-                    "_ABCD1_MCSF_CSVHFStats2Down",
-                    "_ABCD1_MCSF_CSVLFStats2Up",
-                    "_ABCD1_MCSF_CSVLFStats2Down",
-                    "_ABCD1_MCSF_CSVCErr1Up",
-                    "_ABCD1_MCSF_CSVCErr1Down",
-                    "_ABCD1_MCSF_CSVCErr2Up",
-                    "_ABCD1_MCSF_CSVCErr2Down",
-                    "_ABCD1_MCSF_toptagUp",
-                    "_ABCD1_MCSF_toptagDown",
-                    "_ABCD1_MCSF_WtagUp",
-                    "_ABCD1_MCSF_WtagDown",
-                    "_ABCD1_MCSF_PUUp",
-                    "_ABCD1_MCSF_PUDown",
-                    "_ABCD1_MCSF_PDFUp",
-                    "_ABCD1_MCSF_PDFDown",  
-                    "_ABCD1_MCSF_LumiUp",
-                    "_ABCD1_MCSF_LumiDown",
-                    "_ABCD1_MCSF_renfac_envUp",
-                    "_ABCD1_MCSF_renfac_envDown",
-                    "_ABCD1_ttbarXSUp",
-                    "_ABCD1_ttbarXSDown",
+                    "_" + ABCDversion + "_MCSF_CSVLFUp",
+                    "_" + ABCDversion + "_MCSF_CSVLFDown",
+                    "_" + ABCDversion + "_MCSF_CSVHFUp",
+                    "_" + ABCDversion + "_MCSF_CSVHFDown",
+                    "_" + ABCDversion + "_MCSF_CSVHFStats1Up",
+                    "_" + ABCDversion + "_MCSF_CSVHFStats1Down",
+                    "_" + ABCDversion + "_MCSF_CSVLFStats1Up",
+                    "_" + ABCDversion + "_MCSF_CSVLFStats1Down",
+                    "_" + ABCDversion + "_MCSF_CSVHFStats2Up",
+                    "_" + ABCDversion + "_MCSF_CSVHFStats2Down",
+                    "_" + ABCDversion + "_MCSF_CSVLFStats2Up",
+                    "_" + ABCDversion + "_MCSF_CSVLFStats2Down",
+                    "_" + ABCDversion + "_MCSF_CSVCErr1Up",
+                    "_" + ABCDversion + "_MCSF_CSVCErr1Down",
+                    "_" + ABCDversion + "_MCSF_CSVCErr2Up",
+                    "_" + ABCDversion + "_MCSF_CSVCErr2Down",
+                    "_" + ABCDversion + "_MCSF_toptagUp",
+                    "_" + ABCDversion + "_MCSF_toptagDown",
+                    "_" + ABCDversion + "_MCSF_WtagUp",
+                    "_" + ABCDversion + "_MCSF_WtagDown",
+                    "_" + ABCDversion + "_MCSF_PUUp",
+                    "_" + ABCDversion + "_MCSF_PUDown",
+                    "_" + ABCDversion + "_MCSF_PDFUp",
+                    "_" + ABCDversion + "_MCSF_PDFDown",  
+                    "_" + ABCDversion + "_MCSF_LumiUp",
+                    "_" + ABCDversion + "_MCSF_LumiDown",
+                    "_" + ABCDversion + "_MCSF_renfac_envUp",
+                    "_" + ABCDversion + "_MCSF_renfac_envDown",
+                    "_" + ABCDversion + "_ttbarXSUp",
+                    "_" + ABCDversion + "_ttbarXSDown",
                     
-                    "_ABCD1_MCSF_renfacUp",
-                    "_ABCD1_MCSF_renfacDown",
-                    "_ABCD1_MCSF_renUp",
-                    "_ABCD1_MCSF_renDown",
-                    "_ABCD1_MCSF_facUp",
-                    "_ABCD1_MCSF_facDown",
+                    "_" + ABCDversion + "_MCSF_renfacUp",
+                    "_" + ABCDversion + "_MCSF_renfacDown",
+                    "_" + ABCDversion + "_MCSF_renUp",
+                    "_" + ABCDversion + "_MCSF_renDown",
+                    "_" + ABCDversion + "_MCSF_facUp",
+                    "_" + ABCDversion + "_MCSF_facDown",
+    ]
+          
+    #weigthsystnamesMCSFs=[
+                    #"_ABCD2_nominal",
+                    
+                    #"_ABCD2_MCSF_CSVLFUp",
+                    #"_ABCD2_MCSF_CSVLFDown",
+                    #"_ABCD2_MCSF_CSVHFUp",
+                    #"_ABCD2_MCSF_CSVHFDown",
+                    #"_ABCD2_MCSF_CSVHFStats1Up",
+                    #"_ABCD2_MCSF_CSVHFStats1Down",
+                    #"_ABCD2_MCSF_CSVLFStats1Up",
+                    #"_ABCD2_MCSF_CSVLFStats1Down",
+                    #"_ABCD2_MCSF_CSVHFStats2Up",
+                    #"_ABCD2_MCSF_CSVHFStats2Down",
+                    #"_ABCD2_MCSF_CSVLFStats2Up",
+                    #"_ABCD2_MCSF_CSVLFStats2Down",
+                    #"_ABCD2_MCSF_CSVCErr1Up",
+                    #"_ABCD2_MCSF_CSVCErr1Down",
+                    #"_ABCD2_MCSF_CSVCErr2Up",
+                    #"_ABCD2_MCSF_CSVCErr2Down",
+                    #"_ABCD2_MCSF_toptagUp",
+                    #"_ABCD2_MCSF_toptagDown",
+                    #"_ABCD2_MCSF_WtagUp",
+                    #"_ABCD2_MCSF_WtagDown",
+                    #"_ABCD2_MCSF_PUUp",
+                    #"_ABCD2_MCSF_PUDown",
+                    #"_ABCD2_MCSF_PDFUp",
+                    #"_ABCD2_MCSF_PDFDown",  
+                    #"_ABCD2_MCSF_LumiUp",
+                    #"_ABCD2_MCSF_LumiDown",
+                    #"_ABCD2_MCSF_renfac_envUp",
+                    #"_ABCD2_MCSF_renfac_envDown",
+                    #"_ABCD2_ttbarXSUp",
+                    #"_ABCD2_ttbarXSDown",
+                    
+                    #"_ABCD2_MCSF_renfacUp",
+                    #"_ABCD2_MCSF_renfacDown",
+                    #"_ABCD2_MCSF_renUp",
+                    #"_ABCD2_MCSF_renDown",
+                    #"_ABCD2_MCSF_facUp",
+                    #"_ABCD2_MCSF_facDown",
                     
                     
-                    "_ABCD2_MCSF_nominal",
-                    
-                    "_ABCD2_MCSF_CSVLFUp",
-                    "_ABCD2_MCSF_CSVLFDown",
-                    "_ABCD2_MCSF_CSVHFUp",
-                    "_ABCD2_MCSF_CSVHFDown",
-                    "_ABCD2_MCSF_CSVHFStats1Up",
-                    "_ABCD2_MCSF_CSVHFStats1Down",
-                    "_ABCD2_MCSF_CSVLFStats1Up",
-                    "_ABCD2_MCSF_CSVLFStats1Down",
-                    "_ABCD2_MCSF_CSVHFStats2Up",
-                    "_ABCD2_MCSF_CSVHFStats2Down",
-                    "_ABCD2_MCSF_CSVLFStats2Up",
-                    "_ABCD2_MCSF_CSVLFStats2Down",
-                    "_ABCD2_MCSF_CSVCErr1Up",
-                    "_ABCD2_MCSF_CSVCErr1Down",
-                    "_ABCD2_MCSF_CSVCErr2Up",
-                    "_ABCD2_MCSF_CSVCErr2Down",
-                    "_ABCD2_MCSF_toptagUp",
-                    "_ABCD2_MCSF_toptagDown",
-                    "_ABCD2_MCSF_WtagUp",
-                    "_ABCD2_MCSF_WtagDown",
-                    "_ABCD2_MCSF_PUUp",
-                    "_ABCD2_MCSF_PUDown",
-                    "_ABCD2_MCSF_PDFUp",
-                    "_ABCD2_MCSF_PDFDown",  
-                    "_ABCD2_MCSF_LumiUp",
-                    "_ABCD2_MCSF_LumiDown",
-                    "_ABCD2_MCSF_renfac_envUp",
-                    "_ABCD2_MCSF_renfac_envDown",
-                    "_ABCD2_ttbarXSUp",
-                    "_ABCD2_ttbarXSDown",
-                    
-                    "_ABCD2_MCSF_renfacUp",
-                    "_ABCD2_MCSF_renfacDown",
-                    "_ABCD2_MCSF_renUp",
-                    "_ABCD2_MCSF_renDown",
-                    "_ABCD2_MCSF_facUp",
-                    "_ABCD2_MCSF_facDown",
-                    
-                    
-]
+    #]
+    
+    
 
-systweightnamesMCSFs=[
-                    #"CSV_MCSF_nominal:=(1)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    #"CSV_MCSF_systup:=(1*(1+1.15))*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    #"CSV_MCSF_systdown:=(1*(1-1.15))*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0", 
+    systweightnamesMCSFs=[
+                    #"CSV_nominal:=(1)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    #"CSV_MCSF_systUp:=(1*(1+1.15))*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    #"CSV_MCSF_systDown:=(1*(1-1.15))*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0", 
                     
                     "nom:=1.0",
                     
-                    "ABCD1_MCSF_nominal:=(MCSF_Weight_ABCD1)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "" + ABCDversion + "_nominal:=(MCSF_Weight_" + ABCDversion + ")*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
                     
-                    "ABCD1_MCSF_CSVLFUp:=(MCSF_Weight_ABCD1/ABCD1_WeightCSVnominal*ABCD1_WeightCSVLFup)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD1_MCSF_CSVLFDown:=(MCSF_Weight_ABCD1/ABCD1_WeightCSVnominal*ABCD1_WeightCSVLFdown)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD1_MCSF_CSVHFUp:=(MCSF_Weight_ABCD1/ABCD1_WeightCSVnominal*ABCD1_WeightCSVHFup)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD1_MCSF_CSVHFDown:=(MCSF_Weight_ABCD1/ABCD1_WeightCSVnominal*ABCD1_WeightCSVHFdown)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD1_MCSF_CSVHFStats1Up:=(MCSF_Weight_ABCD1/ABCD1_WeightCSVnominal*ABCD1_WeightCSVHFStats1up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD1_MCSF_CSVHFStats1Down:=(MCSF_Weight_ABCD1/ABCD1_WeightCSVnominal*ABCD1_WeightCSVHFStats1down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD1_MCSF_CSVLFStats1Up:=(MCSF_Weight_ABCD1/ABCD1_WeightCSVnominal*ABCD1_WeightCSVLFStats1up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD1_MCSF_CSVLFStats1Down:=(MCSF_Weight_ABCD1/ABCD1_WeightCSVnominal*ABCD1_WeightCSVLFStats1down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD1_MCSF_CSVHFStats2Up:=(MCSF_Weight_ABCD1/ABCD1_WeightCSVnominal*ABCD1_WeightCSVHFStats2up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD1_MCSF_CSVHFStats2Down:=(MCSF_Weight_ABCD1/ABCD1_WeightCSVnominal*ABCD1_WeightCSVHFStats2down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD1_MCSF_CSVLFStats2Up:=(MCSF_Weight_ABCD1/ABCD1_WeightCSVnominal*ABCD1_WeightCSVLFStats2up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD1_MCSF_CSVLFStats2Down:=(MCSF_Weight_ABCD1/ABCD1_WeightCSVnominal*ABCD1_WeightCSVLFStats2down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD1_MCSF_CSVCErr1Up:=(MCSF_Weight_ABCD1/ABCD1_WeightCSVnominal*ABCD1_WeightCSVCErr1up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD1_MCSF_CSVCErr1Down:=(MCSF_Weight_ABCD1/ABCD1_WeightCSVnominal*ABCD1_WeightCSVCErr1down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD1_MCSF_CSVCErr2Up:=(MCSF_Weight_ABCD1/ABCD1_WeightCSVnominal*ABCD1_WeightCSVCErr2up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD1_MCSF_CSVCErr2Down:=(MCSF_Weight_ABCD1/ABCD1_WeightCSVnominal*ABCD1_WeightCSVCErr2down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD1_MCSF_toptagUp:=(MCSF_Weight_ABCD1/ABCD1_toptagweightnominal*ABCD1_toptagweightup)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD1_MCSF_toptagDown:=(MCSF_Weight_ABCD1/ABCD1_toptagweightnominal*ABCD1_toptagweightdown)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD1_MCSF_WtagUp:=(MCSF_Weight_ABCD1/ABCD1_Wtagweightnominal*ABCD1_Wtagweightup)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD1_MCSF_WtagDown:=(MCSF_Weight_ABCD1/ABCD1_Wtagweightnominal*ABCD1_Wtagweightdown)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",      
+                    "" + ABCDversion + "_MCSF_CSVLFUp:=(MCSF_Weight_" + ABCDversion + "/" + ABCDversion + "_WeightCSVnominal*" + ABCDversion + "_WeightCSVLFUp)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "" + ABCDversion + "_MCSF_CSVLFDown:=(MCSF_Weight_" + ABCDversion + "/" + ABCDversion + "_WeightCSVnominal*" + ABCDversion + "_WeightCSVLFDown)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "" + ABCDversion + "_MCSF_CSVHFUp:=(MCSF_Weight_" + ABCDversion + "/" + ABCDversion + "_WeightCSVnominal*" + ABCDversion + "_WeightCSVHFUp)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "" + ABCDversion + "_MCSF_CSVHFDown:=(MCSF_Weight_" + ABCDversion + "/" + ABCDversion + "_WeightCSVnominal*" + ABCDversion + "_WeightCSVHFDown)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "" + ABCDversion + "_MCSF_CSVHFStats1Up:=(MCSF_Weight_" + ABCDversion + "/" + ABCDversion + "_WeightCSVnominal*" + ABCDversion + "_WeightCSVHFStats1Up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "" + ABCDversion + "_MCSF_CSVHFStats1Down:=(MCSF_Weight_" + ABCDversion + "/" + ABCDversion + "_WeightCSVnominal*" + ABCDversion + "_WeightCSVHFStats1Down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "" + ABCDversion + "_MCSF_CSVLFStats1Up:=(MCSF_Weight_" + ABCDversion + "/" + ABCDversion + "_WeightCSVnominal*" + ABCDversion + "_WeightCSVLFStats1Up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "" + ABCDversion + "_MCSF_CSVLFStats1Down:=(MCSF_Weight_" + ABCDversion + "/" + ABCDversion + "_WeightCSVnominal*" + ABCDversion + "_WeightCSVLFStats1Down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "" + ABCDversion + "_MCSF_CSVHFStats2Up:=(MCSF_Weight_" + ABCDversion + "/" + ABCDversion + "_WeightCSVnominal*" + ABCDversion + "_WeightCSVHFStats2Up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "" + ABCDversion + "_MCSF_CSVHFStats2Down:=(MCSF_Weight_" + ABCDversion + "/" + ABCDversion + "_WeightCSVnominal*" + ABCDversion + "_WeightCSVHFStats2Down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "" + ABCDversion + "_MCSF_CSVLFStats2Up:=(MCSF_Weight_" + ABCDversion + "/" + ABCDversion + "_WeightCSVnominal*" + ABCDversion + "_WeightCSVLFStats2Up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "" + ABCDversion + "_MCSF_CSVLFStats2Down:=(MCSF_Weight_" + ABCDversion + "/" + ABCDversion + "_WeightCSVnominal*" + ABCDversion + "_WeightCSVLFStats2Down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "" + ABCDversion + "_MCSF_CSVCErr1Up:=(MCSF_Weight_" + ABCDversion + "/" + ABCDversion + "_WeightCSVnominal*" + ABCDversion + "_WeightCSVCErr1Up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "" + ABCDversion + "_MCSF_CSVCErr1Down:=(MCSF_Weight_" + ABCDversion + "/" + ABCDversion + "_WeightCSVnominal*" + ABCDversion + "_WeightCSVCErr1Down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "" + ABCDversion + "_MCSF_CSVCErr2Up:=(MCSF_Weight_" + ABCDversion + "/" + ABCDversion + "_WeightCSVnominal*" + ABCDversion + "_WeightCSVCErr2Up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "" + ABCDversion + "_MCSF_CSVCErr2Down:=(MCSF_Weight_" + ABCDversion + "/" + ABCDversion + "_WeightCSVnominal*" + ABCDversion + "_WeightCSVCErr2Down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "" + ABCDversion + "_MCSF_toptagUp:=(MCSF_Weight_" + ABCDversion + "/" + ABCDversion + "_toptagweightnominal*" + ABCDversion + "_toptagweightUp)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "" + ABCDversion + "_MCSF_toptagDown:=(MCSF_Weight_" + ABCDversion + "/" + ABCDversion + "_toptagweightnominal*" + ABCDversion + "_toptagweightDown)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "" + ABCDversion + "_MCSF_WtagUp:=(MCSF_Weight_" + ABCDversion + "/" + ABCDversion + "_Wtagweightnominal*" + ABCDversion + "_WtagweightUp)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "" + ABCDversion + "_MCSF_WtagDown:=(MCSF_Weight_" + ABCDversion + "/" + ABCDversion + "_Wtagweightnominal*" + ABCDversion + "_WtagweightDown)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",      
                     
-                    "ABCD1_MCSF_PUUp:=(MCSF_Weight_ABCD1/Weight_pu69p2*Weight_pu69p2Up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD1_MCSF_PUDown:=(MCSF_Weight_ABCD1/Weight_pu69p2*Weight_pu69p2Down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0", 
-                    "ABCD1_MCSF_PDFUp:=(MCSF_Weight_ABCD1/PDF_RMSMean*PDF_RMSUp)*(DoWeights*DoMCDataWeights_ttbaronly==1)+(DoWeights*DoMCDataWeights_ttbaronly==0)*1.0",
-                    "ABCD1_MCSF_PDFDown:=(MCSF_Weight_ABCD1/PDF_RMSMean*PDF_RMSDown)*(DoWeights*DoMCDataWeights_ttbaronly==1)+(DoWeights*DoMCDataWeights_ttbaronly==0)*1.0",
-                    "ABCD1_MCSF_LumiUp:=(MCSF_Weight_ABCD1*(1.0+0.025))*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD1_MCSF_LumiDown:=(MCSF_Weight_ABCD1*(1.0-0.025))*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0", 
+                    "" + ABCDversion + "_MCSF_PUUp:=(MCSF_Weight_" + ABCDversion + "/Weight_pu69p2*Weight_pu69p2Up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "" + ABCDversion + "_MCSF_PUDown:=(MCSF_Weight_" + ABCDversion + "/Weight_pu69p2*Weight_pu69p2Down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0", 
+                    "" + ABCDversion + "_MCSF_PDFUp:=(MCSF_Weight_" + ABCDversion + "/PDF_RMSMean*PDF_RMSUp)*(DoWeights*DoMCDataWeights_ttbaronly==1)+(DoWeights*DoMCDataWeights_ttbaronly==0)*1.0",
+                    "" + ABCDversion + "_MCSF_PDFDown:=(MCSF_Weight_" + ABCDversion + "/PDF_RMSMean*PDF_RMSDown)*(DoWeights*DoMCDataWeights_ttbaronly==1)+(DoWeights*DoMCDataWeights_ttbaronly==0)*1.0",
+                    "" + ABCDversion + "_MCSF_LumiUp:=(MCSF_Weight_" + ABCDversion + "*(1.0+0.025))*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "" + ABCDversion + "_MCSF_LumiDown:=(MCSF_Weight_" + ABCDversion + "*(1.0-0.025))*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0", 
 
-                    "ABCD1_MCSF_renfac_envUp:=(MCSF_Weight_ABCD1*MCSF_RenFac_envelopeUp)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD1_MCSF_renfac_envDown:=(MCSF_Weight_ABCD1*MCSF_RenFac_envelopeDown)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD1_ttbarXSUp:=(MCSF_Weight_ABCD1*(1.0+0.05))*(DoWeights*DoMCDataWeights_ttbaronly==1)+(DoWeights*DoMCDataWeights_ttbaronly==0)*1.0",
-                    "ABCD1_ttbarXSDown:=(MCSF_Weight_ABCD1*(1.0-0.05))*(DoWeights*DoMCDataWeights_ttbaronly==1)+(DoWeights*DoMCDataWeights_ttbaronly==0)*1.0",
+                    "" + ABCDversion + "_MCSF_renfac_envUp:=(MCSF_Weight_" + ABCDversion + "*MCSF_RenFac_envelopeUp)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "" + ABCDversion + "_MCSF_renfac_envDown:=(MCSF_Weight_" + ABCDversion + "*MCSF_RenFac_envelopeDown)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "" + ABCDversion + "_ttbarXSUp:=(MCSF_Weight_" + ABCDversion + "*(1.0+0.05))*(DoWeights*DoMCDataWeights_ttbaronly==1)+(DoWeights*DoMCDataWeights_ttbaronly==0)*1.0",
+                    "" + ABCDversion + "_ttbarXSDown:=(MCSF_Weight_" + ABCDversion + "*(1.0-0.05))*(DoWeights*DoMCDataWeights_ttbaronly==1)+(DoWeights*DoMCDataWeights_ttbaronly==0)*1.0",
                  
                  
-                    "ABCD1_MCSF_renfacUp:=(Weight_scale_variation_muR2p0_muF2p0)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD1_MCSF_renfacDown:=(Weight_scale_variation_muR0p5_muF0p5)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD1_MCSF_renUp:=(Weight_scale_variation_muR2p0_muF1p0)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD1_MCSF_renDown:=(Weight_scale_variation_muR0p5_muF1p0)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD1_MCSF_facUp:=(Weight_scale_variation_muR1p0_muF2p0)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD1_MCSF_facDown:=(Weight_scale_variation_muR1p0_muF0p5)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0", 
+                    "" + ABCDversion + "_MCSF_renfacUp:=(Weight_scale_variation_muR2p0_muF2p0)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "" + ABCDversion + "_MCSF_renfacDown:=(Weight_scale_variation_muR0p5_muF0p5)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "" + ABCDversion + "_MCSF_renUp:=(Weight_scale_variation_muR2p0_muF1p0)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "" + ABCDversion + "_MCSF_renDown:=(Weight_scale_variation_muR0p5_muF1p0)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "" + ABCDversion + "_MCSF_facUp:=(Weight_scale_variation_muR1p0_muF2p0)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "" + ABCDversion + "_MCSF_facDown:=(Weight_scale_variation_muR1p0_muF0p5)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0", 
                     
+    ]
                     
-                    "ABCD2_MCSF_nominal:=(MCSF_Weight_ABCD2)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+    #systweightnamesMCSFs=[
+                    #"ABCD2_nominal:=(MCSF_Weight_ABCD2)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
                     
-                    "ABCD2_MCSF_CSVLFUp:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVLFup)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD2_MCSF_CSVLFDown:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVLFdown)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD2_MCSF_CSVHFUp:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVHFup)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD2_MCSF_CSVHFDown:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVHFdown)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD2_MCSF_CSVHFStats1Up:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVHFStats1up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD2_MCSF_CSVHFStats1Down:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVHFStats1down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD2_MCSF_CSVLFStats1Up:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVLFStats1up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD2_MCSF_CSVLFStats1Down:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVLFStats1down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD2_MCSF_CSVHFStats2Up:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVHFStats2up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD2_MCSF_CSVHFStats2Down:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVHFStats2down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD2_MCSF_CSVLFStats2Up:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVLFStats2up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD2_MCSF_CSVLFStats2Down:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVLFStats2down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD2_MCSF_CSVCErr1Up:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVCErr1up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD2_MCSF_CSVCErr1Down:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVCErr1down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD2_MCSF_CSVCErr2Up:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVCErr2up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD2_MCSF_CSVCErr2Down:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVCErr2down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD2_MCSF_toptagUp:=(MCSF_Weight_ABCD2/ABCD2_toptagweightnominal*ABCD2_toptagweightup)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD2_MCSF_toptagDown:=(MCSF_Weight_ABCD2/ABCD2_toptagweightnominal*ABCD2_toptagweightdown)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD2_MCSF_WtagUp:=(MCSF_Weight_ABCD2/ABCD2_Wtagweightnominal*ABCD2_Wtagweightup)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD2_MCSF_WtagDown:=(MCSF_Weight_ABCD2/ABCD2_Wtagweightnominal*ABCD2_Wtagweightdown)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    #"ABCD2_MCSF_CSVLFUp:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVLFUp)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    #"ABCD2_MCSF_CSVLFDown:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVLFDown)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    #"ABCD2_MCSF_CSVHFUp:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVHFUp)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    #"ABCD2_MCSF_CSVHFDown:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVHFDown)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    #"ABCD2_MCSF_CSVHFStats1Up:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVHFStats1Up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    #"ABCD2_MCSF_CSVHFStats1Down:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVHFStats1Down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    #"ABCD2_MCSF_CSVLFStats1Up:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVLFStats1Up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    #"ABCD2_MCSF_CSVLFStats1Down:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVLFStats1Down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    #"ABCD2_MCSF_CSVHFStats2Up:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVHFStats2Up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    #"ABCD2_MCSF_CSVHFStats2Down:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVHFStats2Down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    #"ABCD2_MCSF_CSVLFStats2Up:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVLFStats2Up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    #"ABCD2_MCSF_CSVLFStats2Down:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVLFStats2Down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    #"ABCD2_MCSF_CSVCErr1Up:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVCErr1Up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    #"ABCD2_MCSF_CSVCErr1Down:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVCErr1Down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    #"ABCD2_MCSF_CSVCErr2Up:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVCErr2Up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    #"ABCD2_MCSF_CSVCErr2Down:=(MCSF_Weight_ABCD2/ABCD2_WeightCSVnominal*ABCD2_WeightCSVCErr2Down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    #"ABCD2_MCSF_toptagUp:=(MCSF_Weight_ABCD2/ABCD2_toptagweightnominal*ABCD2_toptagweightUp)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    #"ABCD2_MCSF_toptagDown:=(MCSF_Weight_ABCD2/ABCD2_toptagweightnominal*ABCD2_toptagweightDown)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    #"ABCD2_MCSF_WtagUp:=(MCSF_Weight_ABCD2/ABCD2_Wtagweightnominal*ABCD2_WtagweightUp)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    #"ABCD2_MCSF_WtagDown:=(MCSF_Weight_ABCD2/ABCD2_Wtagweightnominal*ABCD2_WtagweightDown)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
                     
-                    "ABCD2_MCSF_PUUp:=(MCSF_Weight_ABCD2/Weight_pu69p2*Weight_pu69p2Up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD2_MCSF_PUDown:=(MCSF_Weight_ABCD2/Weight_pu69p2*Weight_pu69p2Down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0", 
-                    "ABCD2_MCSF_PDFUp:=(MCSF_Weight_ABCD2/PDF_RMSMean*PDF_RMSUp)*(DoWeights*DoMCDataWeights_ttbaronly==1)+(DoWeights*DoMCDataWeights_ttbaronly==0)*1.0",
-                    "ABCD2_MCSF_PDFDown:=(MCSF_Weight_ABCD2/PDF_RMSMean*PDF_RMSDown)*(DoWeights*DoMCDataWeights_ttbaronly==1)+(DoWeights*DoMCDataWeights_ttbaronly==0)*1.0",
-                    "ABCD2_MCSF_LumiUp:=(MCSF_Weight_ABCD2*(1.0+0.025))*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD2_MCSF_LumiDown:=(MCSF_Weight_ABCD2*(1.0-0.025))*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",                  
+                    #"ABCD2_MCSF_PUUp:=(MCSF_Weight_ABCD2/Weight_pu69p2*Weight_pu69p2Up)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    #"ABCD2_MCSF_PUDown:=(MCSF_Weight_ABCD2/Weight_pu69p2*Weight_pu69p2Down)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0", 
+                    #"ABCD2_MCSF_PDFUp:=(MCSF_Weight_ABCD2/PDF_RMSMean*PDF_RMSUp)*(DoWeights*DoMCDataWeights_ttbaronly==1)+(DoWeights*DoMCDataWeights_ttbaronly==0)*1.0",
+                    #"ABCD2_MCSF_PDFDown:=(MCSF_Weight_ABCD2/PDF_RMSMean*PDF_RMSDown)*(DoWeights*DoMCDataWeights_ttbaronly==1)+(DoWeights*DoMCDataWeights_ttbaronly==0)*1.0",
+                    #"ABCD2_MCSF_LumiUp:=(MCSF_Weight_ABCD2*(1.0+0.025))*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    #"ABCD2_MCSF_LumiDown:=(MCSF_Weight_ABCD2*(1.0-0.025))*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",                  
 
-                    "ABCD2_MCSF_renfac_envUp:=(MCSF_Weight_ABCD2*MCSF_RenFac_envelopeUp)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD2_MCSF_renfac_envDown:=(MCSF_Weight_ABCD2*MCSF_RenFac_envelopeDown)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD2_ttbarXSUp:=(MCSF_Weight_ABCD2*(1.0+0.05))*(DoWeights*DoMCDataWeights_ttbaronly==1)+(DoWeights*DoMCDataWeights_ttbaronly==0)*1.0",
-                    "ABCD2_ttbarXSDown:=(MCSF_Weight_ABCD2*(1.0-0.05))*(DoWeights*DoMCDataWeights_ttbaronly==1)+(DoWeights*DoMCDataWeights_ttbaronly==0)*1.0",
+                    #"ABCD2_MCSF_renfac_envUp:=(MCSF_Weight_ABCD2*MCSF_RenFac_envelopeUp)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    #"ABCD2_MCSF_renfac_envDown:=(MCSF_Weight_ABCD2*MCSF_RenFac_envelopeDown)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    #"ABCD2_ttbarXSUp:=(MCSF_Weight_ABCD2*(1.0+0.05))*(DoWeights*DoMCDataWeights_ttbaronly==1)+(DoWeights*DoMCDataWeights_ttbaronly==0)*1.0",
+                    #"ABCD2_ttbarXSDown:=(MCSF_Weight_ABCD2*(1.0-0.05))*(DoWeights*DoMCDataWeights_ttbaronly==1)+(DoWeights*DoMCDataWeights_ttbaronly==0)*1.0",
               
               
-                    "ABCD2_MCSF_renfacUp:=(Weight_scale_variation_muR2p0_muF2p0)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD2_MCSF_renfacDown:=(Weight_scale_variation_muR0p5_muF0p5)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD2_MCSF_renUp:=(Weight_scale_variation_muR2p0_muF1p0)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD2_MCSF_renDown:=(Weight_scale_variation_muR0p5_muF1p0)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD2_MCSF_facUp:=(Weight_scale_variation_muR1p0_muF2p0)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "ABCD2_MCSF_facDown:=(Weight_scale_variation_muR1p0_muF0p5)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",            
+                    #"ABCD2_MCSF_renfacUp:=(Weight_scale_variation_muR2p0_muF2p0)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    #"ABCD2_MCSF_renfacDown:=(Weight_scale_variation_muR0p5_muF0p5)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    #"ABCD2_MCSF_renUp:=(Weight_scale_variation_muR2p0_muF1p0)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    #"ABCD2_MCSF_renDown:=(Weight_scale_variation_muR0p5_muF1p0)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    #"ABCD2_MCSF_facUp:=(Weight_scale_variation_muR1p0_muF2p0)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    #"ABCD2_MCSF_facDown:=(Weight_scale_variation_muR1p0_muF0p5)*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",            
                     
                     
-]
+    #]
 
 #for i in range(0,100):
 
@@ -708,8 +546,10 @@ assert len(weigthsystnamesMCSFs)==len(systweightnamesMCSFs)
 
 
 otherSystNames=[
-    "_JERup","_JERdown",
-    "_JESup","_JESdown",
+    "_JERUp","_JERDown",
+    "_JESUp","_JESDown",
+
+
 
 ]
 
@@ -719,10 +559,9 @@ otherSystFileNames=[
 ]
 
 JECsystnames=[
-    "_ABCD1_MCSF_nominal_JERup","_ABCD1_MCSF_nominal_JERdown",
-    "_ABCD1_MCSF_nominal_JESup","_ABCD1_MCSF_nominal_JESdown",
-    "_ABCD2_MCSF_nominal_JERup","_ABCD2_MCSF_nominal_JERdown",
-    "_ABCD2_MCSF_nominal_JESup","_ABCD2_MCSF_nominal_JESdown",
+    "_" + ABCDversion + "_nominal_JERUp","_" + ABCDversion + "_nominal_JERDown",
+    "_" + ABCDversion + "_nominal_JESUp","_" + ABCDversion + "_nominal_JESDown",
+
 ]
 
 assert len(otherSystNames)==len(otherSystFileNames)
@@ -745,8 +584,8 @@ allsystweights=systweightnamesMCSFs+systweightsABCD
 mcweight='37.8'
 
 ttbarXS=831.76 
-rateunc_ttbarXS_up=math.sqrt(19.77*19.77 + 35.06*35.06)
-rateunc_ttbarXS_down=math.sqrt(29.20*29.20 + 35.06*35.06)
+rateunc_ttbarXS_Up=math.sqrt(19.77*19.77 + 35.06*35.06)
+rateunc_ttbarXS_Down=math.sqrt(29.20*29.20 + 35.06*35.06)
 
 
 sfs="Weight_ElectronSFID*Weight_ElectronSFTrigger*Weight_ElectronSFIso*Weight_MuonSFID*Weight_MuonSFTrigger*Weight_MuonSFIso"
@@ -797,17 +636,130 @@ path_80x="/nfs/dust/cms/user/skudella/processed_MC/flat_trees_new/"
 
 SignalSamples=[
                     #Sample('Z->tWb, m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=1200',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Zprime_1500_900_nominal_Tree.root',mcweight+'/138.07*0.3','Zprime1500900',allweightsystnames),
-                    Sample('Z->tWb, m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=1200',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Zprime_1500_1200_nominal_Tree.root',mcweight+'/99.03*8.6','Zprime15001200',allweightsystnames),
-                    Sample('Z->tWb, m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1200',ROOT.kCyan,path_80x+'Signal_Zprime/Zprime_2000_1200_LH_nominal_Tree.root',mcweight+'/86.28*0.3','Zprime20001200',allweightsystnames),
-                    Sample('Z->tWb, m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1200',ROOT.kRed,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/37.6*0.3','Zprime25001200',allweightsystnames),     
+                    Sample('Z->tWb, m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=1200',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Zprime_1500_1200_nominal_Tree.root',mcweight+'/99.03*8.6','SigZprime15001200',allweightsystnames),
+                    Sample('Z->tWb, m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1200',ROOT.kCyan,path_80x+'Signal_Zprime/Zprime_2000_1200_LH_nominal_Tree.root',mcweight+'/86.28*0.27','SigZprime20001200',allweightsystnames),
+                    Sample('Z->tWb, m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1200',ROOT.kRed,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/37.6*0.33','SigZprime25001200',allweightsystnames), 
+                    
+                    Sample('Z->tWb, m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=700',ROOT.kMagenta-7,path_80x+'Signal_Zprime/Zprime_1500_700_nominal_Tree.root',mcweight+'/95.06*0.80','SigZprime1500700',allweightsystnames),
+                    Sample('Z->tWb, m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=900',ROOT.kMagenta,path_80x+'Signal_Zprime/Zprime_1500_900_nominal_Tree.root',mcweight+'/138.07*1.5','SigZprime1500900',allweightsystnames),
+                    Sample('Z->tWb, m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=900',ROOT.kCyan+3,path_80x+'Signal_Zprime/Zprime_2000_900_nominal_Tree.root',mcweight+'/55.83*0.21','SigZprime2000900',allweightsystnames),
+                    Sample('Z->tWb, m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1500',ROOT.kCyan-6,path_80x+'Signal_Zprime/Zprime_2000_1500_nominal_Tree.root',mcweight+'/83.47*0.90','SigZprime20001500',allweightsystnames),
+                    Sample('Z->tWb, m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1500',ROOT.kRed-7,path_80x+'Signal_Zprime/Zprime_2500_1500_nominal_Tree.root',mcweight+'/53.9*0.29','SigZprime25001500',allweightsystnames),
+
+                    Sample('Gstar->tWb, m(Gstar_{Nar})=1500, m(Tp_{Nar})=800',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Nar_1500_800_nominal_Tree.root',mcweight+'/1.447','SigGstar1500800Nar',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Nar})=1500, m(Tp_{Nar})=1000',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Nar_1500_1000_nominal_Tree.root',mcweight+'/1.447','SigGstar15001000Nar',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Nar})=1500, m(Tp_{Nar})=1300',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Nar_1500_1300_nominal_Tree.root',mcweight+'/1.447','SigGstar15001300Nar',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Nar})=2000, m(Tp_{Nar})=1000',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Nar_2000_1000_nominal_Tree.root',mcweight+'/1.447','SigGstar20001000Nar',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Nar})=2000, m(Tp_{Nar})=1300',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Nar_2000_1300_nominal_Tree.root',mcweight+'/1.447','SigGstar20001300Nar',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Nar})=2000, m(Tp_{Nar})=1500',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Nar_2000_1500_nominal_Tree.root',mcweight+'/1.447','SigGstar20001500Nar',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Nar})=2500, m(Tp_{Nar})=1300',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Nar_2500_1300_nominal_Tree.root',mcweight+'/1.447','SigGstar25001300Nar',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Nar})=2500, m(Tp_{Nar})=1500',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Nar_2500_1500_nominal_Tree.root',mcweight+'/1.447','SigGstar25001500Nar',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Nar})=2500, m(Tp_{Nar})=1800',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Nar_2500_1800_nominal_Tree.root',mcweight+'/1.447','SigGstar25001800Nar',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Nar})=3000, m(Tp_{Nar})=1500',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Nar_3000_1500_nominal_Tree.root',mcweight+'/1.447','SigGstar30001500Nar',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Nar})=3000, m(Tp_{Nar})=1800',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Nar_3000_1800_nominal_Tree.root',mcweight+'/1.447','SigGstar30001800Nar',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Nar})=3000, m(Tp_{Nar})=2100',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Nar_3000_2100_nominal_Tree.root',mcweight+'/1.447','SigGstar30002100Nar',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Nar})=3500, m(Tp_{Nar})=1800',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Nar_3500_1800_nominal_Tree.root',mcweight+'/1.447','SigGstar35001800Nar',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Nar})=3500, m(Tp_{Nar})=2100',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Nar_3500_2100_nominal_Tree.root',mcweight+'/1.447','SigGstar35002100Nar',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Nar})=3500, m(Tp_{Nar})=2500',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Nar_3500_2500_nominal_Tree.root',mcweight+'/1.447','SigGstar35002500Nar',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Nar})=4000, m(Tp_{Nar})=2100',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Nar_4000_2100_nominal_Tree.root',mcweight+'/1.447','SigGstar40002100Nar',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Nar})=4000, m(Tp_{Nar})=2500',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Nar_4000_2500_nominal_Tree.root',mcweight+'/1.447','SigGstar40002500Nar',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Nar})=4000, m(Tp_{Nar})=3000',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Nar_4000_3000_nominal_Tree.root',mcweight+'/1.447','SigGstar40003000Nar',allweightsystnames),
+
+
+                    Sample('Gstar->tWb, m(Gstar_{Wid})=1500, m(Tp_{Nar})=800',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Wid_1500_800_nominal_Tree.root',mcweight+'/1.447','SigGstar1500800Wid',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Wid})=1500, m(Tp_{Nar})=1000',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Wid_1500_1000_nominal_Tree.root',mcweight+'/1.447','SigGstar15001000Wid',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Wid})=1500, m(Tp_{Nar})=1300',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Wid_1500_1300_nominal_Tree.root',mcweight+'/1.447','SigGstar15001300Wid',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Wid})=2000, m(Tp_{Nar})=1000',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Wid_2000_1000_nominal_Tree.root',mcweight+'/1.447','SigGstar20001000Wid',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Wid})=2000, m(Tp_{Nar})=1300',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Wid_2000_1300_nominal_Tree.root',mcweight+'/1.447','SigGstar20001300Wid',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Wid})=2000, m(Tp_{Nar})=1500',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Wid_2000_1500_nominal_Tree.root',mcweight+'/1.447','SigGstar20001500Wid',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Wid})=2500, m(Tp_{Nar})=1300',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Wid_2500_1300_nominal_Tree.root',mcweight+'/1.447','SigGstar25001300Wid',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Wid})=2500, m(Tp_{Nar})=1500',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Wid_2500_1500_nominal_Tree.root',mcweight+'/1.447','SigGstar25001500Wid',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Wid})=2500, m(Tp_{Nar})=1800',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Wid_2500_1800_nominal_Tree.root',mcweight+'/1.447','SigGstar25001800Wid',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Wid})=3000, m(Tp_{Nar})=1500',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Wid_3000_1500_nominal_Tree.root',mcweight+'/1.447','SigGstar30001500Wid',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Wid})=3000, m(Tp_{Nar})=1800',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Wid_3000_1800_nominal_Tree.root',mcweight+'/1.447','SigGstar30001800Wid',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Wid})=3000, m(Tp_{Nar})=2100',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Wid_3000_2100_nominal_Tree.root',mcweight+'/1.447','SigGstar30002100Wid',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Wid})=3500, m(Tp_{Nar})=1800',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Wid_3500_1800_nominal_Tree.root',mcweight+'/1.447','SigGstar35001800Wid',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Wid})=3500, m(Tp_{Nar})=2100',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Wid_3500_2100_nominal_Tree.root',mcweight+'/1.447','SigGstar35002100Wid',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Wid})=3500, m(Tp_{Nar})=2500',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Wid_3500_2500_nominal_Tree.root',mcweight+'/1.447','SigGstar35002500Wid',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Wid})=4000, m(Tp_{Nar})=2100',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Wid_4000_2100_nominal_Tree.root',mcweight+'/1.447','SigGstar40002100Wid',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Wid})=4000, m(Tp_{Nar})=2500',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Wid_4000_2500_nominal_Tree.root',mcweight+'/1.447','SigGstar40002500Wid',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Wid})=4000, m(Tp_{Nar})=3000',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Wid_4000_3000_nominal_Tree.root',mcweight+'/1.447','SigGstar40003000Wid',allweightsystnames),
+                    
+                    Sample('Gstar->tWb, m(Gstar_{Nar})=1750, m(Tp_{Nar})=1300',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Nar_1750_1300_nominal_Tree.root',mcweight+'/1.447','SigGstar17501300Nar',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Nar})=2250, m(Tp_{Nar})=1300',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Nar_2250_1300_nominal_Tree.root',mcweight+'/1.447','SigGstar22501300Nar',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Nar})=2250, m(Tp_{Nar})=1500',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Nar_2250_1500_nominal_Tree.root',mcweight+'/1.447','SigGstar22501500Nar',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Nar})=2750, m(Tp_{Nar})=1500',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Nar_2750_1500_nominal_Tree.root',mcweight+'/1.447','SigGstar27501500Nar',allweightsystnames),
+                    
+                    Sample('Gstar->tWb, m(Gstar_{Wid})=1750, m(Tp_{Nar})=1300',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Wid_1750_1300_nominal_Tree.root',mcweight+'/1.447','SigGstar17501300Wid',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Wid})=2250, m(Tp_{Nar})=1300',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Wid_2250_1300_nominal_Tree.root',mcweight+'/1.447','SigGstar22501300Wid',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Wid})=2250, m(Tp_{Nar})=1500',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Wid_2250_1500_nominal_Tree.root',mcweight+'/1.447','SigGstar22501500Wid',allweightsystnames),
+                    Sample('Gstar->tWb, m(Gstar_{Wid})=2750, m(Tp_{Nar})=1500',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Gstar_Wid_2750_1500_nominal_Tree.root',mcweight+'/1.447','SigGstar27501500Wid',allweightsystnames),
+
 ]
 
 BackgroundSamples=[
                     Sample('t#bar{t} + jets',ROOT.kBlue,path_80x+'BKG_TTbar/*nominal*.root',mcweight,'ttbar',allweightsystnames), 
                     Sample('QCDMadgraph',ROOT.kOrange-3,path_80x+'BKG_QCD/MC_QCD_H*nominal*.root',mcweight,'QCDMadgraph',allweightsystnames),
+                    
                     Sample('Signal Contamination (8.6pb), m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=1200',ROOT.kMagenta-3,path_80x+'Signal_Zprime/Zprime_1500_1200_nominal_Tree.root',mcweight+'/99.03*8.6','SC_Zprime15001200_8_6pb',allweightsystnames),  
                     Sample('Signal Contamination (0.3pb), m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1200',ROOT.kCyan-3,path_80x+'Signal_Zprime/Zprime_2000_1200_LH_nominal_Tree.root',mcweight+'/86.28*0.3','SC_Zprime20001200_0_3pb',allweightsystnames),  
                     Sample('Signal Contamination (0.3pb), m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1200',ROOT.kRed-3,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/37.6*0.3','SC_Zprime25001200_0_3pb',allweightsystnames),  
+                    
+                    Sample('Signal Contamination (0.8pb), m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=700',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Zprime_1500_700_nominal_Tree.root',mcweight+'/95.06*0.80','SC_Zprime1500700_0_8pb',allweightsystnames),  
+                    Sample('Signal Contamination (1.5pb), m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=900',ROOT.kMagenta-8,path_80x+'Signal_Zprime/Zprime_1500_900_nominal_Tree.root',mcweight+'/138.07*1.5','SC_Zprime1500900_1_5pb',allweightsystnames),  
+                    Sample('Signal Contamination (0.21pb), m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=900',ROOT.kCyan+1,path_80x+'Signal_Zprime/Zprime_2000_900_nominal_Tree.root',mcweight+'/55.83*0.21','SC_Zprime2000900_0_21pb',allweightsystnames),  
+                    Sample('Signal Contamination (0.9pb), m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1500',ROOT.kCyan-7,path_80x+'Signal_Zprime/Zprime_2000_1500_nominal_Tree.root',mcweight+'/83.47*0.90','SC_Zprime20001500_0_9pb',allweightsystnames),  
+                    Sample('Signal Contamination (0.29pb), m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1500',ROOT.kRed-2,path_80x+'Signal_Zprime/Zprime_2500_1500_nominal_Tree.root',mcweight+'/53.9*0.29','SC_Zprime25001500_0_29pb',allweightsystnames),  
+                    
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Nar})=1500, m(Tp_{Nar})=800',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Nar_1500_800_nominal_Tree.root',mcweight+'/1.447','SC_Gstar1500800Nar_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Nar})=1500, m(Tp_{Nar})=1000',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Nar_1500_1000_nominal_Tree.root',mcweight+'/1.447','SC_Gstar15001000Nar_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Nar})=1500, m(Tp_{Nar})=1300',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Nar_1500_1300_nominal_Tree.root',mcweight+'/1.447','SC_Gstar15001300Nar_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Nar})=2000, m(Tp_{Nar})=1000',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Nar_2000_1000_nominal_Tree.root',mcweight+'/1.447','SC_Gstar20001000Nar_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Nar})=2000, m(Tp_{Nar})=1300',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Nar_2000_1300_nominal_Tree.root',mcweight+'/1.447','SC_Gstar20001300Nar_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Nar})=2000, m(Tp_{Nar})=1500',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Nar_2000_1500_nominal_Tree.root',mcweight+'/1.447','SC_Gstar20001500Nar_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Nar})=2500, m(Tp_{Nar})=1300',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Nar_2500_1300_nominal_Tree.root',mcweight+'/1.447','SC_Gstar25001300Nar_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Nar})=2500, m(Tp_{Nar})=1500',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Nar_2500_1500_nominal_Tree.root',mcweight+'/1.447','SC_Gstar25001500Nar_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Nar})=2500, m(Tp_{Nar})=1800',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Nar_2500_1800_nominal_Tree.root',mcweight+'/1.447','SC_Gstar25001800Nar_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Nar})=3000, m(Tp_{Nar})=1500',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Nar_3000_1500_nominal_Tree.root',mcweight+'/1.447','SC_Gstar30001500Nar_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Nar})=3000, m(Tp_{Nar})=1800',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Nar_3000_1800_nominal_Tree.root',mcweight+'/1.447','SC_Gstar30001800Nar_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Nar})=3000, m(Tp_{Nar})=2100',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Nar_3000_2100_nominal_Tree.root',mcweight+'/1.447','SC_Gstar30002100Nar_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Nar})=3500, m(Tp_{Nar})=1800',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Nar_3500_1800_nominal_Tree.root',mcweight+'/1.447','SC_Gstar35001800Nar_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Nar})=3500, m(Tp_{Nar})=2100',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Nar_3500_2100_nominal_Tree.root',mcweight+'/1.447','SC_Gstar35002100Nar_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Nar})=3500, m(Tp_{Nar})=2500',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Nar_3500_2500_nominal_Tree.root',mcweight+'/1.447','SC_Gstar35002500Nar_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Nar})=4000, m(Tp_{Nar})=2100',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Nar_4000_2100_nominal_Tree.root',mcweight+'/1.447','SC_Gstar40002100Nar_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Nar})=4000, m(Tp_{Nar})=2500',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Nar_4000_2500_nominal_Tree.root',mcweight+'/1.447','SC_Gstar40002500Nar_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Nar})=4000, m(Tp_{Nar})=3000',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Nar_4000_3000_nominal_Tree.root',mcweight+'/1.447','SC_Gstar40003000Nar_1_4pb',allweightsystnames),
+
+
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Wid})=1500, m(Tp_{Nar})=800',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Wid_1500_800_nominal_Tree.root',mcweight+'/1.447','SC_Gstar1500800Wid_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Wid})=1500, m(Tp_{Nar})=1000',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Wid_1500_1000_nominal_Tree.root',mcweight+'/1.447','SC_Gstar15001000Wid_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Wid})=1500, m(Tp_{Nar})=1300',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Wid_1500_1300_nominal_Tree.root',mcweight+'/1.447','SC_Gstar15001300Wid_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Wid})=2000, m(Tp_{Nar})=1000',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Wid_2000_1000_nominal_Tree.root',mcweight+'/1.447','SC_Gstar20001000Wid_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Wid})=2000, m(Tp_{Nar})=1300',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Wid_2000_1300_nominal_Tree.root',mcweight+'/1.447','SC_Gstar20001300Wid_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Wid})=2000, m(Tp_{Nar})=1500',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Wid_2000_1500_nominal_Tree.root',mcweight+'/1.447','SC_Gstar20001500Wid_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Wid})=2500, m(Tp_{Nar})=1300',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Wid_2500_1300_nominal_Tree.root',mcweight+'/1.447','SC_Gstar25001300Wid_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Wid})=2500, m(Tp_{Nar})=1500',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Wid_2500_1500_nominal_Tree.root',mcweight+'/1.447','SC_Gstar25001500Wid_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Wid})=2500, m(Tp_{Nar})=1800',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Wid_2500_1800_nominal_Tree.root',mcweight+'/1.447','SC_Gstar25001800Wid_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Wid})=3000, m(Tp_{Nar})=1500',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Wid_3000_1500_nominal_Tree.root',mcweight+'/1.447','SC_Gstar30001500Wid_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Wid})=3000, m(Tp_{Nar})=1800',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Wid_3000_1800_nominal_Tree.root',mcweight+'/1.447','SC_Gstar30001800Wid_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Wid})=3000, m(Tp_{Nar})=2100',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Wid_3000_2100_nominal_Tree.root',mcweight+'/1.447','SC_Gstar30002100Wid_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Wid})=3500, m(Tp_{Nar})=1800',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Wid_3500_1800_nominal_Tree.root',mcweight+'/1.447','SC_Gstar35001800Wid_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Wid})=3500, m(Tp_{Nar})=2100',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Wid_3500_2100_nominal_Tree.root',mcweight+'/1.447','SC_Gstar35002100Wid_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Wid})=3500, m(Tp_{Nar})=2500',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Wid_3500_2500_nominal_Tree.root',mcweight+'/1.447','SC_Gstar35002500Wid_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Wid})=4000, m(Tp_{Nar})=2100',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Wid_4000_2100_nominal_Tree.root',mcweight+'/1.447','SC_Gstar40002100Wid_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Wid})=4000, m(Tp_{Nar})=2500',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Wid_4000_2500_nominal_Tree.root',mcweight+'/1.447','SC_Gstar40002500Wid_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Wid})=4000, m(Tp_{Nar})=3000',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Wid_4000_3000_nominal_Tree.root',mcweight+'/1.447','SC_Gstar40003000Wid_1_4pb',allweightsystnames),
+                    
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Nar})=1750, m(Tp_{Nar})=1300',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Nar_1750_1300_nominal_Tree.root',mcweight+'/1.447','SC_Gstar17501300Nar_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Nar})=2250, m(Tp_{Nar})=1300',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Nar_2250_1300_nominal_Tree.root',mcweight+'/1.447','SC_Gstar22501300Nar_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Nar})=2250, m(Tp_{Nar})=1500',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Nar_2250_1500_nominal_Tree.root',mcweight+'/1.447','SC_Gstar22501500Nar_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Nar})=2750, m(Tp_{Nar})=1500',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Nar_2750_1500_nominal_Tree.root',mcweight+'/1.447','SC_Gstar27501500Nar_1_4pb',allweightsystnames),
+                    
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Wid})=1750, m(Tp_{Nar})=1300',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Wid_1750_1300_nominal_Tree.root',mcweight+'/1.447','SC_Gstar17501300Wid_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Wid})=2250, m(Tp_{Nar})=1300',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Wid_2250_1300_nominal_Tree.root',mcweight+'/1.447','SC_Gstar22501300Wid_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Wid})=2250, m(Tp_{Nar})=1500',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Wid_2250_1500_nominal_Tree.root',mcweight+'/1.447','SC_Gstar22501500Wid_1_4pb',allweightsystnames),
+                    Sample('Signal Contamination (1.4pb), m(Gstar_{Wid})=2750, m(Tp_{Nar})=1500',ROOT.kMagenta-5,path_80x+'Signal_Zprime/Gstar_Wid_2750_1500_nominal_Tree.root',mcweight+'/1.447','SC_Gstar27501500Wid_1_4pb',allweightsystnames),                    
+                    
                     Sample('Signal Contamination none',ROOT.kRed-3,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/100000','SC_none',allweightsystnames),  
                     Sample('QCDPythia8',ROOT.kGreen+2,path_80x+'BKG_QCD/MC_QCD_P*nominal*Tree*.root',mcweight,'QCDPythia8',allweightsystnames),
 
@@ -817,8 +769,67 @@ BackgroundSamples=[
 DataSamples=[
                     Sample('Data = Background with (8.6pb), m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=1200',ROOT.kBlack+2,path_80x+'Signal_Zprime/Zprime_1500_1200_nominal_Tree.root',mcweight+'/99.03*8.6','DATA_Zprime15001200_8_6pb',allweightsystnames),     
                     Sample('Data = Background with (0.3pb), m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1200',ROOT.kBlack+2,path_80x+'Signal_Zprime/Zprime_2000_1200_LH_nominal_Tree.root',mcweight+'/86.28*0.3','DATA_Zprime20001200_0_3pb',allweightsystnames),     
-                    Sample('Data = Background with (0.3pb), m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1200',ROOT.kBlack+2,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/37.6*0.3','DATA_Zprime25001200_0_3pb',allweightsystnames),     
-                    Sample('Data = Background with signal',ROOT.kBlack+2,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/100000.0','DATA_noSignal',allweightsystnames) ,     
+                    Sample('Data = Background with (0.3pb), m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1200',ROOT.kBlack+2,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/37.6*0.3','DATA_Zprime25001200_0_3pb',allweightsystnames),    
+                    
+                    Sample('Data = Background with (8.6pb), m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=700',ROOT.kBlack+2,path_80x+'Signal_Zprime/Zprime_1500_700_nominal_Tree.root',mcweight+'/95.06*0.80','DATA_Zprime1500700_0_8pb',allweightsystnames),  
+                    Sample('Data = Background with (1.5pb), m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=900',ROOT.kBlack+2,path_80x+'Signal_Zprime/Zprime_1500_900_nominal_Tree.root',mcweight+'/138.07*1.5','DATA_Zprime1500900_1_5pb',allweightsystnames),  
+                    Sample('Data = Background with (0.21pb), m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=900',ROOT.kBlack+2,path_80x+'Signal_Zprime/Zprime_2000_900_nominal_Tree.root',mcweight+'/55.83*0.21','DATA_Zprime2000900_0_21pb',allweightsystnames),  
+                    Sample('Data = Background with (0.9pb), m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1500',ROOT.kBlack+2,path_80x+'Signal_Zprime/Zprime_2000_1500_nominal_Tree.root',mcweight+'/83.47*0.90','DATA_Zprime20001500_0_9pb',allweightsystnames),  
+                    Sample('Data = Background with (0.29pb), m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1500',ROOT.kBlack+2,path_80x+'Signal_Zprime/Zprime_2500_1500_nominal_Tree.root',mcweight+'/53.9*0.29','DATA_Zprime25001500_0_29pb',allweightsystnames),  
+                    
+
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Nar})=1500, m(Tp_{Nar})=800',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Nar_1500_800_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar1500800Nar_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Nar})=1500, m(Tp_{Nar})=1000',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Nar_1500_1000_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar15001000Nar_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Nar})=1500, m(Tp_{Nar})=1300',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Nar_1500_1300_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar15001300Nar_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Nar})=2000, m(Tp_{Nar})=1000',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Nar_2000_1000_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar20001000Nar_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Nar})=2000, m(Tp_{Nar})=1300',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Nar_2000_1300_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar20001300Nar_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Nar})=2000, m(Tp_{Nar})=1500',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Nar_2000_1500_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar20001500Nar_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Nar})=2500, m(Tp_{Nar})=1300',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Nar_2500_1300_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar25001300Nar_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Nar})=2500, m(Tp_{Nar})=1500',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Nar_2500_1500_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar25001500Nar_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Nar})=2500, m(Tp_{Nar})=1800',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Nar_2500_1800_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar25001800Nar_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Nar})=3000, m(Tp_{Nar})=1500',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Nar_3000_1500_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar30001500Nar_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Nar})=3000, m(Tp_{Nar})=1800',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Nar_3000_1800_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar30001800Nar_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Nar})=3000, m(Tp_{Nar})=2100',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Nar_3000_2100_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar30002100Nar_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Nar})=3500, m(Tp_{Nar})=1800',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Nar_3500_1800_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar35001800Nar_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Nar})=3500, m(Tp_{Nar})=2100',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Nar_3500_2100_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar35002100Nar_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Nar})=3500, m(Tp_{Nar})=2500',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Nar_3500_2500_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar35002500Nar_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Nar})=4000, m(Tp_{Nar})=2100',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Nar_4000_2100_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar40002100Nar_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Nar})=4000, m(Tp_{Nar})=2500',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Nar_4000_2500_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar40002500Nar_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Nar})=4000, m(Tp_{Nar})=3000',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Nar_4000_3000_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar40003000Nar_1_4pb',allweightsystnames),
+
+
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Wid})=1500, m(Tp_{Nar})=800',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Wid_1500_800_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar1500800Wid_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Wid})=1500, m(Tp_{Nar})=1000',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Wid_1500_1000_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar15001000Wid_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Wid})=1500, m(Tp_{Nar})=1300',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Wid_1500_1300_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar15001300Wid_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Wid})=2000, m(Tp_{Nar})=1000',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Wid_2000_1000_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar20001000Wid_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Wid})=2000, m(Tp_{Nar})=1300',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Wid_2000_1300_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar20001300Wid_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Wid})=2000, m(Tp_{Nar})=1500',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Wid_2000_1500_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar20001500Wid_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Wid})=2500, m(Tp_{Nar})=1300',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Wid_2500_1300_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar25001300Wid_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Wid})=2500, m(Tp_{Nar})=1500',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Wid_2500_1500_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar25001500Wid_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Wid})=2500, m(Tp_{Nar})=1800',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Wid_2500_1800_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar25001800Wid_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Wid})=3000, m(Tp_{Nar})=1500',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Wid_3000_1500_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar30001500Wid_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Wid})=3000, m(Tp_{Nar})=1800',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Wid_3000_1800_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar30001800Wid_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Wid})=3000, m(Tp_{Nar})=2100',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Wid_3000_2100_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar30002100Wid_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Wid})=3500, m(Tp_{Nar})=1800',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Wid_3500_1800_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar35001800Wid_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Wid})=3500, m(Tp_{Nar})=2100',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Wid_3500_2100_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar35002100Wid_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Wid})=3500, m(Tp_{Nar})=2500',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Wid_3500_2500_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar35002500Wid_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Wid})=4000, m(Tp_{Nar})=2100',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Wid_4000_2100_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar40002100Wid_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Wid})=4000, m(Tp_{Nar})=2500',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Wid_4000_2500_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar40002500Wid_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Wid})=4000, m(Tp_{Nar})=3000',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Wid_4000_3000_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar40003000Wid_1_4pb',allweightsystnames),
+                    
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Nar})=1750, m(Tp_{Nar})=1300',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Nar_1750_1300_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar17501300Nar_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Nar})=2250, m(Tp_{Nar})=1300',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Nar_2250_1300_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar22501300Nar_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Nar})=2250, m(Tp_{Nar})=1500',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Nar_2250_1500_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar22501500Nar_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Nar})=2750, m(Tp_{Nar})=1500',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Nar_2750_1500_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar27501500Nar_1_4pb',allweightsystnames),
+                    
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Wid})=1750, m(Tp_{Nar})=1300',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Wid_1750_1300_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar17501300Wid_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Wid})=2250, m(Tp_{Nar})=1300',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Wid_2250_1300_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar22501300Wid_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Wid})=2250, m(Tp_{Nar})=1500',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Wid_2250_1500_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar22501500Wid_1_4pb',allweightsystnames),
+                    Sample('Data = Background with (1.4pb), m(Gstar_{Wid})=2750, m(Tp_{Nar})=1500',ROOT.kBlack+2,path_80x+'Signal_Zprime/Gstar_Wid_2750_1500_nominal_Tree.root',mcweight+'/1.447','DATA_Gstar27501500Wid_1_4pb',allweightsystnames),
+                   
+                   
+                   
+                    Sample('Data = Background with no signal',ROOT.kBlack+2,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight+'/100000.0','DATA_noSignal',allweightsystnames) ,     
                     #Sample('Data = Background with (1pb), m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1200',ROOT.kBlack,path_80x+'Signal_Zprime/Zprime_2000_1200_LH_nominal_Tree.root',mcweight+'/86.28*0.3','BKG_Zprime20001200_1pb') ,     
                     #Sample('Data = Background with (1pb), m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=900',ROOT.kBlack,path_80x+'Signal_Zprime/Zprime_1500_900_nominal_Tree.root',mcweight+'/138.07*0.3','BKG_Zprime1500900_1pb') ,     
 

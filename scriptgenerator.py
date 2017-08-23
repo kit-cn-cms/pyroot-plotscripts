@@ -15,6 +15,7 @@ ROOT.gROOT.SetBatch(True)
 def getHead1():
   return """
 #include "TChain.h"
+#include "TString.h"
 #include "TBranch.h"
 #include "TLorentzVector.h"
 #include "TFile.h"
@@ -54,6 +55,7 @@ def getHead3():
   char* filenames = getenv ("FILENAMES");
   char* outfilename = getenv ("OUTFILENAME");
   string processname = string(getenv ("PROCESSNAME"));
+  TString procname (processname);
   string suffix = string(getenv ("SUFFIX"));
   int lastevent = atoi(getenv ("LASTEVENT"));
   int firstevent = atoi(getenv ("FIRSTEVENT"));
@@ -63,15 +65,28 @@ def getHead3():
   
   int DoWeights=1;
   int DoABCDsyst=0;
-  int DoMCDataWeights=0;
+  int DoMCDataWeights=1;
   int DoMCDataWeights_ttbaronly=0;
   
+  TString DATAstr ("DATA");
+  TString ttbarstr ("ttbar");
+  TString QCDstr ("QCD");
+  TString SCstr ("SC");
+  TString Sigstr ("Sig");
+  
+  
   //if(processname=="SingleEl" || processname=="SingleMu"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
-  if(processname=="SingleEl" || processname=="SingleMu"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
-  if(processname=="Data" || processname=="data" || processname=="QCDMadgraph" || processname=="QCDPythia8"){DoWeights=0; std::cout<<"is data or QCD, dont use nominal weihgts"<<std::endl;}
-  if(processname=="QCDMadgraph" || processname=="QCDPythia8"){DoABCDsyst=1; std::cout<<"is QCD, use ABCD systematics"<<std::endl;}
-  if(processname=="ttbar" || processname=="t#bar{t} + jets" || processname=="Signal" || processname=="SC"){DoMCDataWeights=1; std::cout<<"is ttbar or signal, use MCDataSF nominal weihgts"<<std::endl;}
-  if(processname=="ttbar" || processname=="t#bar{t} + jets"){DoMCDataWeights_ttbaronly=1; std::cout<<"is ttbar, use MCDataSF nominal weihgts"<<std::endl;}
+  //if(processname=="SingleEl" || processname=="SingleMu"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
+  //if(processname=="Data" || processname=="data" || processname=="QCDMadgraph" || processname=="QCDPythia8" || procname.Contains("")){DoWeights=0;DoMCDataWeights=0 std::cout<<"is data or QCD, dont use nominal weihgts"<<std::endl;}
+  //if(processname=="QCDMadgraph" || processname=="QCDPythia8"){DoABCDsyst=1; DoMCDataWeights=0; std::cout<<"is QCD, use ABCD systematics"<<std::endl;}
+  //if(processname=="ttbar" || "ttbar_JESup" || "ttbar_JESup" || "ttbar_JERup" || "ttbar_JERup" || processname=="t#bar{t} + jets" || processname=="Signal" || processname=="SC"){DoMCDataWeights=1; std::cout<<"is ttbar or signal, use MCDataSF nominal weihgts"<<std::endl;}
+  //if(processname=="ttbar" || "ttbar_JESup" || "ttbar_JESup" || "ttbar_JERup" || "ttbar_JERup" || processname=="t#bar{t} + jets"){DoMCDataWeights_ttbaronly=1; std::cout<<"is ttbar, use MCDataSF nominal weihgts"<<std::endl;}
+
+  if(bool(procname.Contains(DATAstr))){DoABCDsyst=1; DoWeights=0; DoMCDataWeights=0; std::cout<<"is data or QCD, dont use nominal weihgts"<<std::endl;}
+  if(bool(procname.Contains(QCDstr))){DoABCDsyst=1; DoMCDataWeights=0; std::cout<<"is QCD, use ABCD systematics"<<std::endl;}
+  if(bool(procname.Contains(ttbarstr)) || bool(procname.Contains(SCstr)) || bool(procname.Contains(Sigstr))){DoMCDataWeights=1; std::cout<<"is ttbar or signal, use MCDataSF nominal weihgts"<<std::endl;}
+  if(bool(procname.Contains(ttbarstr))){DoMCDataWeights_ttbaronly=1; std::cout<<"is ttbar, use MCDataSF nominal weihgts"<<std::endl;}
+
 
   string buf;
   stringstream ss(filenames); 

@@ -14,6 +14,7 @@ import copy
 ABCDeventhandling='oncefirst'
 
 name='Zprime_MC_'+ABCDeventhandling+'_'+WPs
+#name='Zprime_MC_'+ABCDversion+'_'+WPs
 
 # definition of categories
 
@@ -99,40 +100,40 @@ plots=[
    
 
 
-    #doing only first element
-    #beta (tau21)
-    # no topsubbtag
-    Plot(ROOT.TH1F("ABCD1_notopbtag_CatA_Zprime_M" ,"m(Z') in GeV, CatA " ,100,0,5000),"Zprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatA_notopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21, "1 btag"),
-    Plot(ROOT.TH1F("ABCD1_notopbtag_CatB_Zprime_M" ,"m(Z') in GeV, CatB " ,100,0,5000),"Zprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatB_notopbtag" + " && " +    plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD1_notopbtag_CatC_Zprime_M" ,"m(Z') in GeV, CatC " ,100,0,5000),"Zprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatC_notopbtag" + " && " +    plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32 + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD1_notopbtag_CatD_Zprime_M" ,"m(Z') in GeV, CatD " ,100,0,5000),"Zprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatD_notopbtag" + " && " +    plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"1 btag"),
+    ##doing only first element
+    ##beta (tau21)
+    ## no topsubbtag
+    #Plot(ROOT.TH1F("ABCD1_notopbtag_CatA_Zprime_M" ,"m(Z') in GeV, CatA " ,100,0,5000),"Zprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatA_notopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21, "1 btag"),
+    #Plot(ROOT.TH1F("ABCD1_notopbtag_CatB_Zprime_M" ,"m(Z') in GeV, CatB " ,100,0,5000),"Zprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatB_notopbtag" + " && " +    plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21  ,"1 btag"),
+    #Plot(ROOT.TH1F("ABCD1_notopbtag_CatC_Zprime_M" ,"m(Z') in GeV, CatC " ,100,0,5000),"Zprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatC_notopbtag" + " && " +    plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32 + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"1 btag"),
+    #Plot(ROOT.TH1F("ABCD1_notopbtag_CatD_Zprime_M" ,"m(Z') in GeV, CatD " ,100,0,5000),"Zprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatD_notopbtag" + " && " +    plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"1 btag"),
 
-    Plot(ROOT.TH1F("ABCD1_notopbtag_CatE_Zprime_M" ,"m(Z') in GeV, CatE " ,100,0,5000),"Zprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatE_notopbtag" + " && " +    plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD1_notopbtag_CatF_Zprime_M" ,"m(Z') in GeV, CatF " ,100,0,5000),"Zprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatF_notopbtag" + " && " +    plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD1_notopbtag_CatG_Zprime_M" ,"m(Z') in GeV, CatG " ,100,0,5000),"Zprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatG_notopbtag" + " && " +    plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32  + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD1_notopbtag_CatH_Zprime_M" ,"m(Z') in GeV, CatH " ,100,0,5000),"Zprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatH_notopbtag" + " && " +    plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"1 btag") ,
+    #Plot(ROOT.TH1F("ABCD1_notopbtag_CatE_Zprime_M" ,"m(Z') in GeV, CatE " ,100,0,5000),"Zprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatE_notopbtag" + " && " +    plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
+    #Plot(ROOT.TH1F("ABCD1_notopbtag_CatF_Zprime_M" ,"m(Z') in GeV, CatF " ,100,0,5000),"Zprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatF_notopbtag" + " && " +    plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
+    #Plot(ROOT.TH1F("ABCD1_notopbtag_CatG_Zprime_M" ,"m(Z') in GeV, CatG " ,100,0,5000),"Zprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatG_notopbtag" + " && " +    plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32  + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
+    #Plot(ROOT.TH1F("ABCD1_notopbtag_CatH_Zprime_M" ,"m(Z') in GeV, CatH " ,100,0,5000),"Zprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatH_notopbtag" + " && " +    plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"1 btag") ,
     
-    # with topsubbtag
-    Plot(ROOT.TH1F("ABCD1_withtopbtag_CatA_Zprime_M" ,"m(Z') in GeV, CatA " ,100,0,5000),"Zprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatA_withtopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21, "2 btag"),
-    Plot(ROOT.TH1F("ABCD1_withtopbtag_CatB_Zprime_M" ,"m(Z') in GeV, CatB " ,100,0,5000),"Zprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatB_withtopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21  ,"2 btag"),
-    Plot(ROOT.TH1F("ABCD1_withtopbtag_CatC_Zprime_M" ,"m(Z') in GeV, CatC " ,100,0,5000),"Zprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatC_withtopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"2 btag"),
-    Plot(ROOT.TH1F("ABCD1_withtopbtag_CatD_Zprime_M" ,"m(Z') in GeV, CatD " ,100,0,5000),"Zprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatD_withtopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"2 btag"),
+    ## with topsubbtag
+    #Plot(ROOT.TH1F("ABCD1_withtopbtag_CatA_Zprime_M" ,"m(Z') in GeV, CatA " ,100,0,5000),"Zprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatA_withtopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21, "2 btag"),
+    #Plot(ROOT.TH1F("ABCD1_withtopbtag_CatB_Zprime_M" ,"m(Z') in GeV, CatB " ,100,0,5000),"Zprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatB_withtopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21  ,"2 btag"),
+    #Plot(ROOT.TH1F("ABCD1_withtopbtag_CatC_Zprime_M" ,"m(Z') in GeV, CatC " ,100,0,5000),"Zprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatC_withtopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"2 btag"),
+    #Plot(ROOT.TH1F("ABCD1_withtopbtag_CatD_Zprime_M" ,"m(Z') in GeV, CatD " ,100,0,5000),"Zprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatD_withtopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"2 btag"),
 
-    Plot(ROOT.TH1F("ABCD1_withtopbtag_CatE_Zprime_M" ,"m(Z') in GeV, CatE " ,100,0,5000),"Zprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatE_withtopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"2 btag"),
-    Plot(ROOT.TH1F("ABCD1_withtopbtag_CatF_Zprime_M" ,"m(Z') in GeV, CatF " ,100,0,5000),"Zprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatF_withtopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"2 btag"),
-    Plot(ROOT.TH1F("ABCD1_withtopbtag_CatG_Zprime_M" ,"m(Z') in GeV, CatG " ,100,0,5000),"Zprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatG_withtopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32  + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"2 btag"),
-    Plot(ROOT.TH1F("ABCD1_withtopbtag_CatH_Zprime_M" ,"m(Z') in GeV, CatH " ,100,0,5000),"Zprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatH_withtopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"2 btag") ,
+    #Plot(ROOT.TH1F("ABCD1_withtopbtag_CatE_Zprime_M" ,"m(Z') in GeV, CatE " ,100,0,5000),"Zprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatE_withtopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"2 btag"),
+    #Plot(ROOT.TH1F("ABCD1_withtopbtag_CatF_Zprime_M" ,"m(Z') in GeV, CatF " ,100,0,5000),"Zprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatF_withtopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"2 btag"),
+    #Plot(ROOT.TH1F("ABCD1_withtopbtag_CatG_Zprime_M" ,"m(Z') in GeV, CatG " ,100,0,5000),"Zprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatG_withtopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32  + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"2 btag"),
+    #Plot(ROOT.TH1F("ABCD1_withtopbtag_CatH_Zprime_M" ,"m(Z') in GeV, CatH " ,100,0,5000),"Zprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatH_withtopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"2 btag") ,
     
-    #inclusive
-    Plot(ROOT.TH1F("ABCD1_inclusive_CatA_Zprime_M" ,"m(Z') in GeV, CatA " ,100,0,5000),"Zprimes_ABCD_M", "((ABCD1_CatID==ABCD1_CatA_withtopbtag) || ABCD1_CatID==ABCD1_CatA_notopbtag)" + " && " + plotselection_ABCD1_general + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21, "1 btag"),
-    Plot(ROOT.TH1F("ABCD1_inclusive_CatB_Zprime_M" ,"m(Z') in GeV, CatB " ,100,0,5000),"Zprimes_ABCD_M", "((ABCD1_CatID==ABCD1_CatB_withtopbtag) || ABCD1_CatID==ABCD1_CatB_notopbtag)" + " && " + plotselection_ABCD1_general + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD1_inclusive_CatC_Zprime_M" ,"m(Z') in GeV, CatC " ,100,0,5000),"Zprimes_ABCD_M", "((ABCD1_CatID==ABCD1_CatC_withtopbtag) || ABCD1_CatID==ABCD1_CatC_notopbtag)" + " && " + plotselection_ABCD1_general + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD1_inclusive_CatD_Zprime_M" ,"m(Z') in GeV, CatD " ,100,0,5000),"Zprimes_ABCD_M", "((ABCD1_CatID==ABCD1_CatD_withtopbtag) || ABCD1_CatID==ABCD1_CatD_notopbtag)" + " && " + plotselection_ABCD1_general + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"1 btag"),
+    ##inclusive
+    #Plot(ROOT.TH1F("ABCD1_inclusive_CatA_Zprime_M" ,"m(Z') in GeV, CatA " ,100,0,5000),"Zprimes_ABCD_M", "((ABCD1_CatID==ABCD1_CatA_withtopbtag) || ABCD1_CatID==ABCD1_CatA_notopbtag)" + " && " + plotselection_ABCD1_general + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21, "1 btag"),
+    #Plot(ROOT.TH1F("ABCD1_inclusive_CatB_Zprime_M" ,"m(Z') in GeV, CatB " ,100,0,5000),"Zprimes_ABCD_M", "((ABCD1_CatID==ABCD1_CatB_withtopbtag) || ABCD1_CatID==ABCD1_CatB_notopbtag)" + " && " + plotselection_ABCD1_general + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21  ,"1 btag"),
+    #Plot(ROOT.TH1F("ABCD1_inclusive_CatC_Zprime_M" ,"m(Z') in GeV, CatC " ,100,0,5000),"Zprimes_ABCD_M", "((ABCD1_CatID==ABCD1_CatC_withtopbtag) || ABCD1_CatID==ABCD1_CatC_notopbtag)" + " && " + plotselection_ABCD1_general + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"1 btag"),
+    #Plot(ROOT.TH1F("ABCD1_inclusive_CatD_Zprime_M" ,"m(Z') in GeV, CatD " ,100,0,5000),"Zprimes_ABCD_M", "((ABCD1_CatID==ABCD1_CatD_withtopbtag) || ABCD1_CatID==ABCD1_CatD_notopbtag)" + " && " + plotselection_ABCD1_general + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"1 btag"),
 
-    Plot(ROOT.TH1F("ABCD1_inclusive_CatE_Zprime_M" ,"m(Z') in GeV, CatE " ,100,0,5000),"Zprimes_ABCD_M", "((ABCD1_CatID==ABCD1_CatE_withtopbtag) || ABCD1_CatID==ABCD1_CatE_notopbtag)" + " && " + plotselection_ABCD1_general + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD1_inclusive_CatF_Zprime_M" ,"m(Z') in GeV, CatF " ,100,0,5000),"Zprimes_ABCD_M", "((ABCD1_CatID==ABCD1_CatF_withtopbtag) || ABCD1_CatID==ABCD1_CatF_notopbtag)" + " && " + plotselection_ABCD1_general + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD1_inclusive_CatG_Zprime_M" ,"m(Z') in GeV, CatG " ,100,0,5000),"Zprimes_ABCD_M", "((ABCD1_CatID==ABCD1_CatG_withtopbtag) || ABCD1_CatID==ABCD1_CatG_notopbtag)" + " && " + plotselection_ABCD1_general + " && " + plotselection_tau32  + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD1_inclusive_CatH_Zprime_M" ,"m(Z') in GeV, CatH " ,100,0,5000),"Zprimes_ABCD_M", "((ABCD1_CatID==ABCD1_CatH_withtopbtag) || ABCD1_CatID==ABCD1_CatH_notopbtag)" + " && " + plotselection_ABCD1_general + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"1 btag") ,
+    #Plot(ROOT.TH1F("ABCD1_inclusive_CatE_Zprime_M" ,"m(Z') in GeV, CatE " ,100,0,5000),"Zprimes_ABCD_M", "((ABCD1_CatID==ABCD1_CatE_withtopbtag) || ABCD1_CatID==ABCD1_CatE_notopbtag)" + " && " + plotselection_ABCD1_general + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
+    #Plot(ROOT.TH1F("ABCD1_inclusive_CatF_Zprime_M" ,"m(Z') in GeV, CatF " ,100,0,5000),"Zprimes_ABCD_M", "((ABCD1_CatID==ABCD1_CatF_withtopbtag) || ABCD1_CatID==ABCD1_CatF_notopbtag)" + " && " + plotselection_ABCD1_general + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
+    #Plot(ROOT.TH1F("ABCD1_inclusive_CatG_Zprime_M" ,"m(Z') in GeV, CatG " ,100,0,5000),"Zprimes_ABCD_M", "((ABCD1_CatID==ABCD1_CatG_withtopbtag) || ABCD1_CatID==ABCD1_CatG_notopbtag)" + " && " + plotselection_ABCD1_general + " && " + plotselection_tau32  + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
+    #Plot(ROOT.TH1F("ABCD1_inclusive_CatH_Zprime_M" ,"m(Z') in GeV, CatH " ,100,0,5000),"Zprimes_ABCD_M", "((ABCD1_CatID==ABCD1_CatH_withtopbtag) || ABCD1_CatID==ABCD1_CatH_notopbtag)" + " && " + plotselection_ABCD1_general + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"1 btag") ,
 
 
 
@@ -149,7 +150,7 @@ plots=[
     Plot(ROOT.TH1F("ABCD2_notopbtag_CatG_Zprime_M" ,"m(Z') in GeV, CatG " ,100,0,5000),"Zprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatG_notopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2_anti + " && " + plotselection_t_MSD  + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
     Plot(ROOT.TH1F("ABCD2_notopbtag_CatH_Zprime_M" ,"m(Z') in GeV, CatH " ,100,0,5000),"Zprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatH_notopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2_anti + " && " + plotselection_t_MSD_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"1 btag") ,
 
-    # withtopsubbtag
+    #withtopsubbtag
     Plot(ROOT.TH1F("ABCD2_withtopbtag_CatA_Zprime_M" ,"m(Z') in GeV, CatA " ,100,0,5000),"Zprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatA_withtopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_t_MSD + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21, "2 btag"),
     Plot(ROOT.TH1F("ABCD2_withtopbtag_CatB_Zprime_M" ,"m(Z') in GeV, CatB " ,100,0,5000),"Zprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatB_withtopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_t_MSD_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21  ,"2 btag"),
     Plot(ROOT.TH1F("ABCD2_withtopbtag_CatC_Zprime_M" ,"m(Z') in GeV, CatC " ,100,0,5000),"Zprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatC_withtopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_t_MSD + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"2 btag"),
@@ -171,73 +172,73 @@ plots=[
     Plot(ROOT.TH1F("ABCD2_inclusive_CatG_Zprime_M" ,"m(Z') in GeV, CatG " ,100,0,5000),"Zprimes_ABCD_M", "((ABCD2_CatID==ABCD2_CatG_withtopbtag) || ABCD2_CatID==ABCD2_CatG_notopbtag)" + " && " + plotselection_ABCD2_general + " && " + plotselection_t_MSD  + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
     Plot(ROOT.TH1F("ABCD2_inclusive_CatH_Zprime_M" ,"m(Z') in GeV, CatH " ,100,0,5000),"Zprimes_ABCD_M", "((ABCD2_CatID==ABCD2_CatH_withtopbtag) || ABCD2_CatID==ABCD2_CatH_notopbtag)" + " && " + plotselection_ABCD2_general + " && " + plotselection_t_MSD_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"1 btag") ,
 
-#Tprime
-    # no topsubbtag
-    Plot(ROOT.TH1F("ABCD1_notopbtag_CatA_Tprime_M" ,"m(Z') in GeV, CatA " ,60,0,3000),"Tprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatA_notopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21, "1 btag"),
-    Plot(ROOT.TH1F("ABCD1_notopbtag_CatB_Tprime_M" ,"m(Z') in GeV, CatB " ,60,0,3000),"Tprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatB_notopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD1_notopbtag_CatC_Tprime_M" ,"m(Z') in GeV, CatC " ,60,0,3000),"Tprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatC_notopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32 + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD1_notopbtag_CatD_Tprime_M" ,"m(Z') in GeV, CatD " ,60,0,3000),"Tprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatD_notopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"1 btag"),
+##Tprime
+    ## no topsubbtag
+    #Plot(ROOT.TH1F("ABCD1_notopbtag_CatA_Tprime_M" ,"m(Z') in GeV, CatA " ,60,0,3000),"Tprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatA_notopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21, "1 btag"),
+    #Plot(ROOT.TH1F("ABCD1_notopbtag_CatB_Tprime_M" ,"m(Z') in GeV, CatB " ,60,0,3000),"Tprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatB_notopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21  ,"1 btag"),
+    #Plot(ROOT.TH1F("ABCD1_notopbtag_CatC_Tprime_M" ,"m(Z') in GeV, CatC " ,60,0,3000),"Tprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatC_notopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32 + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"1 btag"),
+    #Plot(ROOT.TH1F("ABCD1_notopbtag_CatD_Tprime_M" ,"m(Z') in GeV, CatD " ,60,0,3000),"Tprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatD_notopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"1 btag"),
 
-    Plot(ROOT.TH1F("ABCD1_notopbtag_CatE_Tprime_M" ,"m(Z') in GeV, CatE " ,60,0,3000),"Tprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatE_notopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD1_notopbtag_CatF_Tprime_M" ,"m(Z') in GeV, CatF " ,60,0,3000),"Tprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatF_notopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD1_notopbtag_CatG_Tprime_M" ,"m(Z') in GeV, CatG " ,60,0,3000),"Tprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatG_notopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32  + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD1_notopbtag_CatH_Tprime_M" ,"m(Z') in GeV, CatH " ,60,0,3000),"Tprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatH_notopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti ,"1 btag") ,
+    #Plot(ROOT.TH1F("ABCD1_notopbtag_CatE_Tprime_M" ,"m(Z') in GeV, CatE " ,60,0,3000),"Tprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatE_notopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
+    #Plot(ROOT.TH1F("ABCD1_notopbtag_CatF_Tprime_M" ,"m(Z') in GeV, CatF " ,60,0,3000),"Tprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatF_notopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
+    #Plot(ROOT.TH1F("ABCD1_notopbtag_CatG_Tprime_M" ,"m(Z') in GeV, CatG " ,60,0,3000),"Tprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatG_notopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32  + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
+    #Plot(ROOT.TH1F("ABCD1_notopbtag_CatH_Tprime_M" ,"m(Z') in GeV, CatH " ,60,0,3000),"Tprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatH_notopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti ,"1 btag") ,
     
-    # with topsubbtag
-    Plot(ROOT.TH1F("ABCD1_withtopbtag_CatA_Tprime_M" ,"m(Z') in GeV, CatA " ,60,0,3000),"Tprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatA_withtopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21, "2 btag"),
-    Plot(ROOT.TH1F("ABCD1_withtopbtag_CatB_Tprime_M" ,"m(Z') in GeV, CatB " ,60,0,3000),"Tprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatB_withtopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21  ,"2 btag"),
-    Plot(ROOT.TH1F("ABCD1_withtopbtag_CatC_Tprime_M" ,"m(Z') in GeV, CatC " ,60,0,3000),"Tprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatC_withtopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"2 btag"),
-    Plot(ROOT.TH1F("ABCD1_withtopbtag_CatD_Tprime_M" ,"m(Z') in GeV, CatD " ,60,0,3000),"Tprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatD_withtopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"2 btag"),
+    ## with topsubbtag
+    #Plot(ROOT.TH1F("ABCD1_withtopbtag_CatA_Tprime_M" ,"m(Z') in GeV, CatA " ,60,0,3000),"Tprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatA_withtopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21, "2 btag"),
+    #Plot(ROOT.TH1F("ABCD1_withtopbtag_CatB_Tprime_M" ,"m(Z') in GeV, CatB " ,60,0,3000),"Tprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatB_withtopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21  ,"2 btag"),
+    #Plot(ROOT.TH1F("ABCD1_withtopbtag_CatC_Tprime_M" ,"m(Z') in GeV, CatC " ,60,0,3000),"Tprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatC_withtopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"2 btag"),
+    #Plot(ROOT.TH1F("ABCD1_withtopbtag_CatD_Tprime_M" ,"m(Z') in GeV, CatD " ,60,0,3000),"Tprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatD_withtopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"2 btag"),
 
-    Plot(ROOT.TH1F("ABCD1_withtopbtag_CatE_Tprime_M" ,"m(Z') in GeV, CatE " ,60,0,3000),"Tprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatE_withtopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"2 btag"),
-    Plot(ROOT.TH1F("ABCD1_withtopbtag_CatF_Tprime_M" ,"m(Z') in GeV, CatF " ,60,0,3000),"Tprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatF_withtopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"2 btag"),
-    Plot(ROOT.TH1F("ABCD1_withtopbtag_CatG_Tprime_M" ,"m(Z') in GeV, CatG " ,60,0,3000),"Tprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatG_withtopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32  + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"2 btag"),
-    Plot(ROOT.TH1F("ABCD1_withtopbtag_CatH_Tprime_M" ,"m(Z') in GeV, CatH " ,60,0,3000),"Tprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatH_withtopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"2 btag") ,
+    #Plot(ROOT.TH1F("ABCD1_withtopbtag_CatE_Tprime_M" ,"m(Z') in GeV, CatE " ,60,0,3000),"Tprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatE_withtopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"2 btag"),
+    #Plot(ROOT.TH1F("ABCD1_withtopbtag_CatF_Tprime_M" ,"m(Z') in GeV, CatF " ,60,0,3000),"Tprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatF_withtopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"2 btag"),
+    #Plot(ROOT.TH1F("ABCD1_withtopbtag_CatG_Tprime_M" ,"m(Z') in GeV, CatG " ,60,0,3000),"Tprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatG_withtopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32  + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"2 btag"),
+    #Plot(ROOT.TH1F("ABCD1_withtopbtag_CatH_Tprime_M" ,"m(Z') in GeV, CatH " ,60,0,3000),"Tprimes_ABCD_M", "ABCD1_CatID==ABCD1_CatH_withtopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"2 btag") ,
 
-    #inclusive
-    Plot(ROOT.TH1F("ABCD1_inclusive_CatA_Tprime_M" ,"m(Z') in GeV, CatA " ,60,0,3000),"Tprimes_ABCD_M", "((ABCD1_CatID==ABCD1_CatA_withtopbtag) || ABCD1_CatID==ABCD1_CatA_notopbtag)" + " && " + plotselection_ABCD1_general + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21, "1 btag"),
-    Plot(ROOT.TH1F("ABCD1_inclusive_CatB_Tprime_M" ,"m(Z') in GeV, CatB " ,60,0,3000),"Tprimes_ABCD_M", "((ABCD1_CatID==ABCD1_CatB_withtopbtag) || ABCD1_CatID==ABCD1_CatB_notopbtag)" + " && " + plotselection_ABCD1_general + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD1_inclusive_CatC_Tprime_M" ,"m(Z') in GeV, CatC " ,60,0,3000),"Tprimes_ABCD_M", "((ABCD1_CatID==ABCD1_CatC_withtopbtag) || ABCD1_CatID==ABCD1_CatC_notopbtag)" + " && " + plotselection_ABCD1_general + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD1_inclusive_CatD_Tprime_M" ,"m(Z') in GeV, CatD " ,60,0,3000),"Tprimes_ABCD_M", "((ABCD1_CatID==ABCD1_CatD_withtopbtag) || ABCD1_CatID==ABCD1_CatD_notopbtag)" + " && " + plotselection_ABCD1_general + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"1 btag"),
+    ##inclusive
+    #Plot(ROOT.TH1F("ABCD1_inclusive_CatA_Tprime_M" ,"m(Z') in GeV, CatA " ,60,0,3000),"Tprimes_ABCD_M", "((ABCD1_CatID==ABCD1_CatA_withtopbtag) || ABCD1_CatID==ABCD1_CatA_notopbtag)" + " && " + plotselection_ABCD1_general + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21, "1 btag"),
+    #Plot(ROOT.TH1F("ABCD1_inclusive_CatB_Tprime_M" ,"m(Z') in GeV, CatB " ,60,0,3000),"Tprimes_ABCD_M", "((ABCD1_CatID==ABCD1_CatB_withtopbtag) || ABCD1_CatID==ABCD1_CatB_notopbtag)" + " && " + plotselection_ABCD1_general + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21  ,"1 btag"),
+    #Plot(ROOT.TH1F("ABCD1_inclusive_CatC_Tprime_M" ,"m(Z') in GeV, CatC " ,60,0,3000),"Tprimes_ABCD_M", "((ABCD1_CatID==ABCD1_CatC_withtopbtag) || ABCD1_CatID==ABCD1_CatC_notopbtag)" + " && " + plotselection_ABCD1_general + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"1 btag"),
+    #Plot(ROOT.TH1F("ABCD1_inclusive_CatD_Tprime_M" ,"m(Z') in GeV, CatD " ,60,0,3000),"Tprimes_ABCD_M", "((ABCD1_CatID==ABCD1_CatD_withtopbtag) || ABCD1_CatID==ABCD1_CatD_notopbtag)" + " && " + plotselection_ABCD1_general + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"1 btag"),
 
-    Plot(ROOT.TH1F("ABCD1_inclusive_CatE_Tprime_M" ,"m(Z') in GeV, CatE " ,60,0,3000),"Tprimes_ABCD_M", "((ABCD1_CatID==ABCD1_CatE_withtopbtag) || ABCD1_CatID==ABCD1_CatE_notopbtag)" + " && " + plotselection_ABCD1_general + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD1_inclusive_CatF_Tprime_M" ,"m(Z') in GeV, CatF " ,60,0,3000),"Tprimes_ABCD_M", "((ABCD1_CatID==ABCD1_CatF_withtopbtag) || ABCD1_CatID==ABCD1_CatF_notopbtag)" + " && " + plotselection_ABCD1_general + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD1_inclusive_CatG_Tprime_M" ,"m(Z') in GeV, CatG " ,60,0,3000),"Tprimes_ABCD_M", "((ABCD1_CatID==ABCD1_CatG_withtopbtag) || ABCD1_CatID==ABCD1_CatG_notopbtag)" + " && " + plotselection_ABCD1_general + " && " + plotselection_tau32  + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD1_inclusive_CatH_Tprime_M" ,"m(Z') in GeV, CatH " ,60,0,3000),"Tprimes_ABCD_M", "((ABCD1_CatID==ABCD1_CatH_withtopbtag) || ABCD1_CatID==ABCD1_CatH_notopbtag)" + " && " + plotselection_ABCD1_general + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"1 btag") ,
+    #Plot(ROOT.TH1F("ABCD1_inclusive_CatE_Tprime_M" ,"m(Z') in GeV, CatE " ,60,0,3000),"Tprimes_ABCD_M", "((ABCD1_CatID==ABCD1_CatE_withtopbtag) || ABCD1_CatID==ABCD1_CatE_notopbtag)" + " && " + plotselection_ABCD1_general + " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
+    #Plot(ROOT.TH1F("ABCD1_inclusive_CatF_Tprime_M" ,"m(Z') in GeV, CatF " ,60,0,3000),"Tprimes_ABCD_M", "((ABCD1_CatID==ABCD1_CatF_withtopbtag) || ABCD1_CatID==ABCD1_CatF_notopbtag)" + " && " + plotselection_ABCD1_general + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
+    #Plot(ROOT.TH1F("ABCD1_inclusive_CatG_Tprime_M" ,"m(Z') in GeV, CatG " ,60,0,3000),"Tprimes_ABCD_M", "((ABCD1_CatID==ABCD1_CatG_withtopbtag) || ABCD1_CatID==ABCD1_CatG_notopbtag)" + " && " + plotselection_ABCD1_general + " && " + plotselection_tau32  + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
+    #Plot(ROOT.TH1F("ABCD1_inclusive_CatH_Tprime_M" ,"m(Z') in GeV, CatH " ,60,0,3000),"Tprimes_ABCD_M", "((ABCD1_CatID==ABCD1_CatH_withtopbtag) || ABCD1_CatID==ABCD1_CatH_notopbtag)" + " && " + plotselection_ABCD1_general + " && " + plotselection_tau32_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"1 btag") ,
 
-#ABCD2
-    #with topbtag
-    Plot(ROOT.TH1F("ABCD2_notopbtag_CatA_Tprime_M" ,"m(Z') in GeV, CatA " ,60,0,3000),"Tprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatA_notopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2_anti + " && " + plotselection_t_MSD + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21, "1 btag"),
-    Plot(ROOT.TH1F("ABCD2_notopbtag_CatB_Tprime_M" ,"m(Z') in GeV, CatB " ,60,0,3000),"Tprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatB_notopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2_anti + " && " + plotselection_t_MSD_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD2_notopbtag_CatC_Tprime_M" ,"m(Z') in GeV, CatC " ,60,0,3000),"Tprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatC_notopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2_anti + " && " + plotselection_t_MSD + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD2_notopbtag_CatD_Tprime_M" ,"m(Z') in GeV, CatD " ,60,0,3000),"Tprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatD_notopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2_anti + " && " + plotselection_t_MSD_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"1 btag"),
+##ABCD2
+    ##with topbtag
+    #Plot(ROOT.TH1F("ABCD2_notopbtag_CatA_Tprime_M" ,"m(Z') in GeV, CatA " ,60,0,3000),"Tprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatA_notopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2_anti + " && " + plotselection_t_MSD + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21, "1 btag"),
+    #Plot(ROOT.TH1F("ABCD2_notopbtag_CatB_Tprime_M" ,"m(Z') in GeV, CatB " ,60,0,3000),"Tprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatB_notopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2_anti + " && " + plotselection_t_MSD_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21  ,"1 btag"),
+    #Plot(ROOT.TH1F("ABCD2_notopbtag_CatC_Tprime_M" ,"m(Z') in GeV, CatC " ,60,0,3000),"Tprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatC_notopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2_anti + " && " + plotselection_t_MSD + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"1 btag"),
+    #Plot(ROOT.TH1F("ABCD2_notopbtag_CatD_Tprime_M" ,"m(Z') in GeV, CatD " ,60,0,3000),"Tprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatD_notopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2_anti + " && " + plotselection_t_MSD_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"1 btag"),
 
-    Plot(ROOT.TH1F("ABCD2_notopbtag_CatE_Tprime_M" ,"m(Z') in GeV, CatE " ,60,0,3000),"Tprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatE_notopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2_anti + " && " + plotselection_t_MSD + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD2_notopbtag_CatF_Tprime_M" ,"m(Z') in GeV, CatF " ,60,0,3000),"Tprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatF_notopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2_anti + " && " + plotselection_t_MSD_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD2_notopbtag_CatG_Tprime_M" ,"m(Z') in GeV, CatG " ,60,0,3000),"Tprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatG_notopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2_anti + " && " + plotselection_t_MSD  + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD2_notopbtag_CatH_Tprime_M" ,"m(Z') in GeV, CatH " ,60,0,3000),"Tprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatH_notopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2_anti + " && " + plotselection_t_MSD_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"1 btag") ,
+    #Plot(ROOT.TH1F("ABCD2_notopbtag_CatE_Tprime_M" ,"m(Z') in GeV, CatE " ,60,0,3000),"Tprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatE_notopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2_anti + " && " + plotselection_t_MSD + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
+    #Plot(ROOT.TH1F("ABCD2_notopbtag_CatF_Tprime_M" ,"m(Z') in GeV, CatF " ,60,0,3000),"Tprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatF_notopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2_anti + " && " + plotselection_t_MSD_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
+    #Plot(ROOT.TH1F("ABCD2_notopbtag_CatG_Tprime_M" ,"m(Z') in GeV, CatG " ,60,0,3000),"Tprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatG_notopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2_anti + " && " + plotselection_t_MSD  + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
+    #Plot(ROOT.TH1F("ABCD2_notopbtag_CatH_Tprime_M" ,"m(Z') in GeV, CatH " ,60,0,3000),"Tprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatH_notopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2_anti + " && " + plotselection_t_MSD_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"1 btag") ,
 
-    #no topbtag
-    Plot(ROOT.TH1F("ABCD2_withtopbtag_CatA_Tprime_M" ,"m(Z') in GeV, CatA " ,60,0,3000),"Tprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatA_withtopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_t_MSD + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21, "2 btag"),
-    Plot(ROOT.TH1F("ABCD2_withtopbtag_CatB_Tprime_M" ,"m(Z') in GeV, CatB " ,60,0,3000),"Tprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatB_withtopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_t_MSD_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21  ,"2 btag"),
-    Plot(ROOT.TH1F("ABCD2_withtopbtag_CatC_Tprime_M" ,"m(Z') in GeV, CatC " ,60,0,3000),"Tprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatC_withtopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_t_MSD + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"2 btag"),
-    Plot(ROOT.TH1F("ABCD2_withtopbtag_CatD_Tprime_M" ,"m(Z') in GeV, CatD " ,60,0,3000),"Tprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatD_withtopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_t_MSD_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"2 btag"),
+    ##no topbtag
+    #Plot(ROOT.TH1F("ABCD2_withtopbtag_CatA_Tprime_M" ,"m(Z') in GeV, CatA " ,60,0,3000),"Tprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatA_withtopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_t_MSD + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21, "2 btag"),
+    #Plot(ROOT.TH1F("ABCD2_withtopbtag_CatB_Tprime_M" ,"m(Z') in GeV, CatB " ,60,0,3000),"Tprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatB_withtopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_t_MSD_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21  ,"2 btag"),
+    #Plot(ROOT.TH1F("ABCD2_withtopbtag_CatC_Tprime_M" ,"m(Z') in GeV, CatC " ,60,0,3000),"Tprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatC_withtopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_t_MSD + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"2 btag"),
+    #Plot(ROOT.TH1F("ABCD2_withtopbtag_CatD_Tprime_M" ,"m(Z') in GeV, CatD " ,60,0,3000),"Tprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatD_withtopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_t_MSD_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"2 btag"),
 
-    Plot(ROOT.TH1F("ABCD2_withtopbtag_CatE_Tprime_M" ,"m(Z') in GeV, CatE " ,60,0,3000),"Tprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatE_withtopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_t_MSD + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"2 btag"),
-    Plot(ROOT.TH1F("ABCD2_withtopbtag_CatF_Tprime_M" ,"m(Z') in GeV, CatF " ,60,0,3000),"Tprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatF_withtopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_t_MSD_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"2 btag"),
-    Plot(ROOT.TH1F("ABCD2_withtopbtag_CatG_Tprime_M" ,"m(Z') in GeV, CatG " ,60,0,3000),"Tprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatG_withtopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_t_MSD  + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"2 btag"),
-    Plot(ROOT.TH1F("ABCD2_withtopbtag_CatH_Tprime_M" ,"m(Z') in GeV, CatH " ,60,0,3000),"Tprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatH_withtopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_t_MSD_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"2 btag") ,
+    #Plot(ROOT.TH1F("ABCD2_withtopbtag_CatE_Tprime_M" ,"m(Z') in GeV, CatE " ,60,0,3000),"Tprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatE_withtopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_t_MSD + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"2 btag"),
+    #Plot(ROOT.TH1F("ABCD2_withtopbtag_CatF_Tprime_M" ,"m(Z') in GeV, CatF " ,60,0,3000),"Tprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatF_withtopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_t_MSD_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"2 btag"),
+    #Plot(ROOT.TH1F("ABCD2_withtopbtag_CatG_Tprime_M" ,"m(Z') in GeV, CatG " ,60,0,3000),"Tprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatG_withtopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_t_MSD  + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"2 btag"),
+    #Plot(ROOT.TH1F("ABCD2_withtopbtag_CatH_Tprime_M" ,"m(Z') in GeV, CatH " ,60,0,3000),"Tprimes_ABCD_M", "ABCD2_CatID==ABCD2_CatH_withtopbtag" + " && " + plotselection_ABCD2_general + " && " + plotselection_topsubjetCSVv2 + " && " + plotselection_t_MSD_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"2 btag") ,
 
-    #inclusive
-    Plot(ROOT.TH1F("ABCD2_inclusive_CatA_Tprime_M" ,"m(Z') in GeV, CatA " ,60,0,3000),"Tprimes_ABCD_M", "((ABCD2_CatID==ABCD2_CatA_withtopbtag) || ABCD2_CatID==ABCD2_CatA_notopbtag)" + " && " + plotselection_ABCD2_general + " && " + plotselection_t_MSD + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21, "1 btag"),
-    Plot(ROOT.TH1F("ABCD2_inclusive_CatB_Tprime_M" ,"m(Z') in GeV, CatB " ,60,0,3000),"Tprimes_ABCD_M", "((ABCD2_CatID==ABCD2_CatB_withtopbtag) || ABCD2_CatID==ABCD2_CatB_notopbtag)" + " && " + plotselection_ABCD2_general + " && " + plotselection_t_MSD_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD2_inclusive_CatC_Tprime_M" ,"m(Z') in GeV, CatC " ,60,0,3000),"Tprimes_ABCD_M", "((ABCD2_CatID==ABCD2_CatC_withtopbtag) || ABCD2_CatID==ABCD2_CatC_notopbtag)" + " && " + plotselection_ABCD2_general + " && " + plotselection_t_MSD + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD2_inclusive_CatD_Tprime_M" ,"m(Z') in GeV, CatD " ,60,0,3000),"Tprimes_ABCD_M", "((ABCD2_CatID==ABCD2_CatD_withtopbtag) || ABCD2_CatID==ABCD2_CatD_notopbtag)" + " && " + plotselection_ABCD2_general + " && " + plotselection_t_MSD_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"1 btag"),
+    ##inclusive
+    #Plot(ROOT.TH1F("ABCD2_inclusive_CatA_Tprime_M" ,"m(Z') in GeV, CatA " ,60,0,3000),"Tprimes_ABCD_M", "((ABCD2_CatID==ABCD2_CatA_withtopbtag) || ABCD2_CatID==ABCD2_CatA_notopbtag)" + " && " + plotselection_ABCD2_general + " && " + plotselection_t_MSD + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21, "1 btag"),
+    #Plot(ROOT.TH1F("ABCD2_inclusive_CatB_Tprime_M" ,"m(Z') in GeV, CatB " ,60,0,3000),"Tprimes_ABCD_M", "((ABCD2_CatID==ABCD2_CatB_withtopbtag) || ABCD2_CatID==ABCD2_CatB_notopbtag)" + " && " + plotselection_ABCD2_general + " && " + plotselection_t_MSD_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21  ,"1 btag"),
+    #Plot(ROOT.TH1F("ABCD2_inclusive_CatC_Tprime_M" ,"m(Z') in GeV, CatC " ,60,0,3000),"Tprimes_ABCD_M", "((ABCD2_CatID==ABCD2_CatC_withtopbtag) || ABCD2_CatID==ABCD2_CatC_notopbtag)" + " && " + plotselection_ABCD2_general + " && " + plotselection_t_MSD + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"1 btag"),
+    #Plot(ROOT.TH1F("ABCD2_inclusive_CatD_Tprime_M" ,"m(Z') in GeV, CatD " ,60,0,3000),"Tprimes_ABCD_M", "((ABCD2_CatID==ABCD2_CatD_withtopbtag) || ABCD2_CatID==ABCD2_CatD_notopbtag)" + " && " + plotselection_ABCD2_general + " && " + plotselection_t_MSD_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21  ,"1 btag"),
 
-    Plot(ROOT.TH1F("ABCD2_inclusive_CatE_Tprime_M" ,"m(Z') in GeV, CatE " ,60,0,3000),"Tprimes_ABCD_M", "((ABCD2_CatID==ABCD2_CatE_withtopbtag) || ABCD2_CatID==ABCD2_CatE_notopbtag)" + " && " + plotselection_ABCD2_general + " && " + plotselection_t_MSD + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD2_inclusive_CatF_Tprime_M" ,"m(Z') in GeV, CatF " ,60,0,3000),"Tprimes_ABCD_M", "((ABCD2_CatID==ABCD2_CatF_withtopbtag) || ABCD2_CatID==ABCD2_CatF_notopbtag)" + " && " + plotselection_ABCD2_general + " && " + plotselection_t_MSD_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD2_inclusive_CatG_Tprime_M" ,"m(Z') in GeV, CatG " ,60,0,3000),"Tprimes_ABCD_M", "((ABCD2_CatID==ABCD2_CatG_withtopbtag) || ABCD2_CatID==ABCD2_CatG_notopbtag)" + " && " + plotselection_ABCD2_general + " && " + plotselection_t_MSD  + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
-    Plot(ROOT.TH1F("ABCD2_inclusive_CatH_Tprime_M" ,"m(Z') in GeV, CatH " ,60,0,3000),"Tprimes_ABCD_M", "((ABCD2_CatID==ABCD2_CatH_withtopbtag) || ABCD2_CatID==ABCD2_CatH_notopbtag)" + " && " + plotselection_ABCD2_general + " && " + plotselection_t_MSD_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"1 btag") ,
+    #Plot(ROOT.TH1F("ABCD2_inclusive_CatE_Tprime_M" ,"m(Z') in GeV, CatE " ,60,0,3000),"Tprimes_ABCD_M", "((ABCD2_CatID==ABCD2_CatE_withtopbtag) || ABCD2_CatID==ABCD2_CatE_notopbtag)" + " && " + plotselection_ABCD2_general + " && " + plotselection_t_MSD + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
+    #Plot(ROOT.TH1F("ABCD2_inclusive_CatF_Tprime_M" ,"m(Z') in GeV, CatF " ,60,0,3000),"Tprimes_ABCD_M", "((ABCD2_CatID==ABCD2_CatF_withtopbtag) || ABCD2_CatID==ABCD2_CatF_notopbtag)" + " && " + plotselection_ABCD2_general + " && " + plotselection_t_MSD_anti + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
+    #Plot(ROOT.TH1F("ABCD2_inclusive_CatG_Tprime_M" ,"m(Z') in GeV, CatG " ,60,0,3000),"Tprimes_ABCD_M", "((ABCD2_CatID==ABCD2_CatG_withtopbtag) || ABCD2_CatID==ABCD2_CatG_notopbtag)" + " && " + plotselection_ABCD2_general + " && " + plotselection_t_MSD  + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"1 btag"),
+    #Plot(ROOT.TH1F("ABCD2_inclusive_CatH_Tprime_M" ,"m(Z') in GeV, CatH " ,60,0,3000),"Tprimes_ABCD_M", "((ABCD2_CatID==ABCD2_CatH_withtopbtag) || ABCD2_CatID==ABCD2_CatH_notopbtag)" + " && " + plotselection_ABCD2_general + " && " + plotselection_t_MSD_anti + "&&" + plotselection_B_CSV_anti + "&& " + plotselection_W_tau21_anti  ,"1 btag") ,
 
 
     #Plot(ROOT.TH1F("MCSF_Weight_ABCD1_CatA" ,"m(Z') in GeV, CatA " ,100,0,1000),"MCSF_Weight_ABCD1", "ABCD1_CatID==ABCD1_CatA_notopbtag" + " && " + plotselection_ABCD1_general + " && " + plotselection_topsubjetCSVv2_anti+ " && " + plotselection_tau32 + "&&" + plotselection_B_CSV + "&& " + plotselection_W_tau21, "1 btag"),
@@ -263,7 +264,8 @@ for i in plots:
     plotnames.append(i.name)
 
 OnlyFirstList=len(plots)*[False]
-OnlyFirstList[plotnames.index("ABCD1_notopbtag_CatA_Zprime_M"):plotnames.index('ABCD2_inclusive_CatH_Tprime_M') +1 ] = len(OnlyFirstList[plotnames.index("ABCD1_notopbtag_CatA_Zprime_M"):plotnames.index('ABCD2_inclusive_CatH_Tprime_M') + 1 ] ) * [True]
+#OnlyFirstList[plotnames.index("ABCD1_notopbtag_CatA_Zprime_M"):plotnames.index('ABCD2_inclusive_CatH_Tprime_M') +1 ] = len(OnlyFirstList[plotnames.index("ABCD1_notopbtag_CatA_Zprime_M"):plotnames.index('ABCD2_inclusive_CatH_Tprime_M') + 1 ] ) * [True]
+OnlyFirstList[plotnames.index("ABCD2_notopbtag_CatA_Zprime_M"):plotnames.index('ABCD2_inclusive_CatH_Zprime_M') +1 ] = len(OnlyFirstList[plotnames.index("ABCD2_notopbtag_CatA_Zprime_M"):plotnames.index('ABCD2_inclusive_CatH_Zprime_M') + 1 ] ) * [True]
 
 print OnlyFirstList, 'This is the boolean List for only first elements'
 
@@ -276,7 +278,7 @@ print OnlyFirstList, 'This is the boolean List for only first elements'
 
 
 
-outputpath=plotParallel(name,2000000,plots,BackgroundSamples+SignalSamples+DataSamples+systsamples,[""],["1"],allweightsystnames,allsystweights,additionalvariables,additionalfunctions,additionalobjectsfromaddtionalrootfile,OnlyFirstList,otherSystNames)
+outputpath=plotParallel(name,2000000,plots,SignalSamples+BackgroundSamples+DataSamples+systsamples,[""],["1"],allweightsystnames,allsystweights,additionalvariables,additionalfunctions,additionalobjectsfromaddtionalrootfile,OnlyFirstList,otherSystNames)
 
 # plot dataMC comparison
 #listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
@@ -284,50 +286,57 @@ outputpath=plotParallel(name,2000000,plots,BackgroundSamples+SignalSamples+DataS
 
 rebinnedHistosExist=False
 rebinnedHistoPath=os.getcwd()+'/workdir/'+name+'/output_rebinned.root'
+rebinnedandaddedHistoPath=os.getcwd()+'/workdir/'+name+'/output_rebinned_added.root'
 
 allweightsystnames=allweightsystnames+JECsystnames
 print allweightsystnames
 if not os.path.isfile(rebinnedHistoPath):
 
-    listOfHistoListsSignal=createHistoLists_fromSuperHistoFile(outputpath,SignalSamples,plots,1)
-    listOfHistoListsBackground=createHistoLists_fromSuperHistoFile(outputpath,BackgroundSamples,plots,1)
-    listOfHistoListsDataMadgraph=createHistoLists_fromSuperHistoFile(outputpath,DataSamples,plots,1)
-    listOfHistoListsDataPythia=createHistoLists_fromSuperHistoFile(outputpath,DataSamples,plots,1)
+    #listOfHistoListsSignal=createHistoLists_fromSuperHistoFile(outputpath,SignalSamples,plots,1)
+    #listOfHistoListsBackground=createHistoLists_fromSuperHistoFile(outputpath,BackgroundSamples,plots,1)
+    #listOfHistoListsDataMadgraph=createHistoLists_fromSuperHistoFile(outputpath,DataSamples,plots,1)
+    #listOfHistoListsDataPythia=createHistoLists_fromSuperHistoFile(outputpath,DataSamples,plots,1)
 
-    listOfHistoListsSignal=rebintovarbinsLOL(listOfHistoListsSignal,name,False,True,False)
-    listOfHistoListsBackground=rebintovarbinsLOL(listOfHistoListsBackground,name,False,True,False)
-    listOfHistoListsDataMadgraph=rebintovarbinsLOL(listOfHistoListsDataMadgraph,name,False,True,False)
-    listOfHistoListsDataPythia=rebintovarbinsLOL(listOfHistoListsDataPythia,name,False,True,False)
+    #listOfHistoListsSignal=rebintovarbinsLOL(listOfHistoListsSignal,name,False,True,False)
+    #listOfHistoListsBackground=rebintovarbinsLOL(listOfHistoListsBackground,name,False,True,False)
+    #listOfHistoListsDataMadgraph=rebintovarbinsLOL(listOfHistoListsDataMadgraph,name,False,True,False)
+    #listOfHistoListsDataPythia=rebintovarbinsLOL(listOfHistoListsDataPythia,name,False,True,False)
 
     lllSignal=createLLL_fromSuperHistoFileSyst(outputpath,SignalSamples,plots,allweightsystnames)
     lllBackground=createLLL_fromSuperHistoFileSyst(outputpath,BackgroundSamples,plots,allweightsystnames)
     lllData_Madgraph=createLLL_fromSuperHistoFileSyst(outputpath,DataSamples,plots,allweightsystnames)
-    lllData_Pythia=createLLL_fromSuperHistoFileSyst(outputpath,DataSamples,plots,allweightsystnames)
+    #lllData_Pythia=createLLL_fromSuperHistoFileSyst(outputpath,DataSamples,plots,allweightsystnames)
 
-    lllSignal=rebintovarbinsLLL(lllSignal,name,True,True,False)
-    lllBackground=rebintovarbinsLLL(lllBackground,name,True,True,False)
-    lllData_Madgraph=rebintovarbinsLLL(lllData_Madgraph,name,True,True,False)
-    lllData_Pythia=rebintovarbinsLLL(lllData_Pythia,name,False,True,False)
-
+    lllSignal=rebintovarbinsLLL(lllSignal,name,True,False,False,True)
+    lllBackground=rebintovarbinsLLL(lllBackground,name,True,False,False,True)
+    lllData_Madgraph=rebintovarbinsLLL(lllData_Madgraph,name,True,False,False,True)
+    #lllData_Pythia=rebintovarbinsLLL(lllData_Pythia,name,False,True,False)
+    addLLLtoLLL(lllData_Madgraph,transposeLOL([transposeLOL(lllBackground)[BackgroundSampleNames.index("QCDMadgraph")]]+[transposeLOL(lllBackground)[BackgroundSampleNames.index("ttbar")]]),name,False,allweightsystnames,True)
 
 else:
+  if not os.path.isfile(rebinnedandaddedHistoPath):
 
-    listOfHistoListsSignal=createHistoLists_fromSuperHistoFile(rebinnedHistoPath,SignalSamples,plots,1)
-    listOfHistoListsBackground=createHistoLists_fromSuperHistoFile(rebinnedHistoPath,BackgroundSamples,plots,1)
-    listOfHistoListsDataMadgraph=createHistoLists_fromSuperHistoFile(rebinnedHistoPath,DataSamples,plots,1)
-    listOfHistoListsDataPythia=createHistoLists_fromSuperHistoFile(rebinnedHistoPath,DataSamples,plots,1)
+    #listOfHistoListsSignal=createHistoLists_fromSuperHistoFile(rebinnedHistoPath,SignalSamples,plots,1)
+    #listOfHistoListsBackground=createHistoLists_fromSuperHistoFile(rebinnedHistoPath,BackgroundSamples,plots,1)
+    #listOfHistoListsDataMadgraph=createHistoLists_fromSuperHistoFile(rebinnedHistoPath,DataSamples,plots,1)
+    #listOfHistoListsDataPythia=createHistoLists_fromSuperHistoFile(rebinnedHistoPath,DataSamples,plots,1)
 
     lllSignal=createLLL_fromSuperHistoFileSyst(rebinnedHistoPath,SignalSamples,plots,allweightsystnames)
     lllBackground=createLLL_fromSuperHistoFileSyst(rebinnedHistoPath,BackgroundSamples,plots,allweightsystnames)
-    lllData_Madgraph=createLLL_fromSuperHistoFileSyst(rebinnedHistoPath,DataSamples,plots,allweightsystnames)
-    lllData_Pythia=createLLL_fromSuperHistoFileSyst(rebinnedHistoPath,DataSamples,plots,allweightsystnames)
+    lllData_Madgraph=createLLL_fromSuperHistoFileSyst(rebinnedHistoPath,DataSamples,plots,allweightsystnames) 
+    addLLLtoLLL(lllData_Madgraph,transposeLOL([transposeLOL(lllBackground)[BackgroundSampleNames.index("QCDMadgraph")]]+[transposeLOL(lllBackground)[BackgroundSampleNames.index("ttbar")]]),name,False,allweightsystnames,True)
+    #lllData_Pythia=createLLL_fromSuperHistoFileSyst(rebinnedHistoPath,DataSamples,plots,allweightsystnames)
+  else:
+    lllSignal=createLLL_fromSuperHistoFileSyst(rebinnedandaddedHistoPath,SignalSamples,plots,allweightsystnames)
+    lllBackground=createLLL_fromSuperHistoFileSyst(rebinnedandaddedHistoPath,BackgroundSamples,plots,allweightsystnames)
+    lllData_Madgraph=createLLL_fromSuperHistoFileSyst(rebinnedandaddedHistoPath,DataSamples,plots,allweightsystnames) 
 
 
-addLOLtoLOL(listOfHistoListsDataMadgraph,transposeLOL([transposeLOL(listOfHistoListsBackground)[BackgroundSampleNames.index("QCDMadgraph")]]+[transposeLOL(listOfHistoListsBackground)[BackgroundSampleNames.index("ttbar")]]))
-addLOLtoLOL(listOfHistoListsDataPythia,transposeLOL([transposeLOL(listOfHistoListsBackground)[BackgroundSampleNames.index("QCDPythia8")]]+[transposeLOL(listOfHistoListsBackground)[BackgroundSampleNames.index("ttbar")]]))
+#addLOLtoLOL(listOfHistoListsDataMadgraph,transposeLOL([transposeLOL(listOfHistoListsBackground)[BackgroundSampleNames.index("QCDMadgraph")]]+[transposeLOL(listOfHistoListsBackground)[BackgroundSampleNames.index("ttbar")]]))
+#addLOLtoLOL(listOfHistoListsDataPythia,transposeLOL([transposeLOL(listOfHistoListsBackground)[BackgroundSampleNames.index("QCDPythia8")]]+[transposeLOL(listOfHistoListsBackground)[BackgroundSampleNames.index("ttbar")]]))
 
-addLLLtoLLL(lllData_Madgraph,transposeLOL([transposeLOL(lllBackground)[BackgroundSampleNames.index("QCDMadgraph")]]+[transposeLOL(lllBackground)[BackgroundSampleNames.index("ttbar")]]),True,allweightsystnames)
-addLLLtoLLL(lllData_Pythia,transposeLOL([transposeLOL(lllBackground)[BackgroundSampleNames.index("QCDPythia8")]]+[transposeLOL(lllBackground)[BackgroundSampleNames.index("ttbar")]]),True,allweightsystnames)
+#addLLLtoLLL(lllData_Madgraph,transposeLOL([transposeLOL(lllBackground)[BackgroundSampleNames.index("QCDMadgraph")]]+[transposeLOL(lllBackground)[BackgroundSampleNames.index("ttbar")]]),True,allweightsystnames)
+#addLLLtoLLL(lllData_Pythia,transposeLOL([transposeLOL(lllBackground)[BackgroundSampleNames.index("QCDPythia8")]]+[transposeLOL(lllBackground)[BackgroundSampleNames.index("ttbar")]]),True,allweightsystnames)
 
 
 #################################################################Transosed LOL ######################
@@ -335,10 +344,10 @@ addLLLtoLLL(lllData_Pythia,transposeLOL([transposeLOL(lllBackground)[BackgroundS
 #dummylist=[[]]
 labels=[plot.label for plot in plots]
 #lolT=transposeLOL(listOfHistoLists)
-lolSignalT=transposeLOL(listOfHistoListsSignal)
-lolBackgroundT=transposeLOL(listOfHistoListsBackground)
-lolDataMadgraphT=transposeLOL(listOfHistoListsDataMadgraph)
-lolDataPythiaT=transposeLOL(listOfHistoListsDataPythia)
+#lolSignalT=transposeLOL(listOfHistoListsSignal)
+#lolBackgroundT=transposeLOL(listOfHistoListsBackground)
+#lolDataMadgraphT=transposeLOL(listOfHistoListsDataMadgraph)
+#lolDataPythiaT=transposeLOL(listOfHistoListsDataPythia)
 
 
 ######### create Envelope for renorm and factorization ##############
@@ -600,7 +609,8 @@ lolDataPythiaT=transposeLOL(listOfHistoListsDataPythia)
 
 for dataname, signalname, SC_name in zip(DataSampleNames,SignalSampleNames+[SignalSampleNames[0]],BackgroundSampleNames[BackgroundSampleNames.index('SC_Zprime15001200_8_6pb'):BackgroundSampleNames.index('SC_none')+1]):
     for QCDname in ['QCDMadgraph','QCDPythia8']:
-        for ABCDversion in ['ABCD1','ABCD2']:
+        #for ABCDversion in ['ABCD1','ABCD2']:
+        for ABCDversion in [ABCDversion]:
             for Category in ['notopbtag','withtopbtag','inclusive']:
           
 ################Final with ABCD only ###################
@@ -608,5 +618,5 @@ for dataname, signalname, SC_name in zip(DataSampleNames,SignalSampleNames+[Sign
               if QCDname is 'QCDMadgraph':
                 ABCDBackgroundEstimationCalculationAndPlotsWithSystematics(lllData_Madgraph,lllBackground,lllSignal,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames, SignalSampleNames, plotnames,allweightsystnames,dataname,SC_name,signalname,ABCDversion+'_'+Category+'_CatA', ABCDversion+'_'+Category+'_CatB', ABCDversion+'_'+Category+'_CatC', ABCDversion+'_'+Category+'_CatD',QCDname, 'fancy_'+ABCDversion+'_'+ABCDeventhandling+'_'+WPs)
                 
-              if QCDname is 'QCDPythia8':
-                ABCDBackgroundEstimationCalculationAndPlotsWithSystematics(lllData_Pythia,lllBackground,lllSignal,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames, SignalSampleNames, plotnames,allweightsystnames,dataname,SC_name,signalname,ABCDversion+'_'+Category+'_CatA', ABCDversion+'_'+Category+'_CatB', ABCDversion+'_'+Category+'_CatC', ABCDversion+'_'+Category+'_CatD',QCDname, 'fancy_'+ABCDversion+'_'+ABCDeventhandling+'_'+WPs)
+              #if QCDname is 'QCDPythia8':
+                #ABCDBackgroundEstimationCalculationAndPlotsWithSystematics(lllData_Pythia,lllBackground,lllSignal,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames, SignalSampleNames, plotnames,allweightsystnames,dataname,SC_name,signalname,ABCDversion+'_'+Category+'_CatA', ABCDversion+'_'+Category+'_CatB', ABCDversion+'_'+Category+'_CatC', ABCDversion+'_'+Category+'_CatD',QCDname, 'fancy_'+ABCDversion+'_'+ABCDeventhandling+'_'+WPs)
