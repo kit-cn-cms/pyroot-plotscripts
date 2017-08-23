@@ -175,7 +175,7 @@ class Analysis:
       for mapFileKey in sorted(additionalPlotVariablesDictFromFile.iterkeys(), key=sortByUsingLastPart):
         # list contains numberOfBins, binLowerEdge, binUpperEdge
         tmpList = additionalPlotVariablesDictFromFile[mapFileKey]
-        mapFile.write("""'""" + mapFileKey + """': '[ """ + tmpList[0] + ', ' + tmpList[1] + ', ' + tmpList[2]  + """]',\n""")
+        mapFile.write("""'""" + mapFileKey + """': '[ """ + str(tmpList[0]) + ', ' + str(tmpList[1]) + ', ' + str(tmpList[2])  + """]',\n""")
       mapFile.write('}')
     
     if stopFurtherExecution and not alwaysExecute:
