@@ -1870,10 +1870,11 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
         # Handle vector sub variables which have names like Jet_E_1, so that the variable Jet_E[1] is included instead
         if not ".xml" in ex and not hasattr(tree,ex):
           if "_" in ex:
+            exOld = ex
             expressionPart1, expressionPart2 = ex.rsplit('_', 1)
             if hasattr(tree, expressionPart1) and expressionPart2.isdigit():
               ex = expressionPart1 + '[' + expressionPart2 + ']' 
-              print 'Found vector sub variable: ', ex, ' which was converted to: ', ex
+              print 'Found vector sub variable: ', exOld, ' which was converted to: ', ex
         
         arrayselection=variables.checkArrayLengths(','.join([ex,pw]))
         weight='('+arrayselection+')*('+pw+')*Weight_XS*categoryweight*sampleweight'
