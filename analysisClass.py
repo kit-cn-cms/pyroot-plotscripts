@@ -137,7 +137,7 @@ class Analysis:
       
     # Compare internal map with map from file and add additional keys if necessary
     print "Comparing map from additionalPlotVariablesMap.py file (or empty dict) with internal map of additional plot variables.\n If necessary, adding keys from internal map to map file."
-    missingKeysInFile = Set()
+    missingKeysInFile = set()
     for classKey in additionalPlotVariablesDictFromClass.keys():
       # Check for missing additionalPlotVariable description in map file
       # In map file additionalPlotVariable is the key while in class fullVarName
