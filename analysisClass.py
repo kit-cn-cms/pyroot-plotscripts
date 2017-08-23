@@ -111,7 +111,7 @@ class Analysis:
     additionalPlotVariablesDictFromClass = {}
     for discr, preselection, binLabel in zip(discriminators, preselections, binLabels):
       for additionalPlotVariable in self.additionalPlotVariables:
-        tmpVarName = discr + '_' + additionalPlotVariable
+        tmpVarName = discr + '_' + binLabel + '_' + additionalPlotVariable
         additionalPlotVariablesDictFromClass[tmpVarName] = '''Plot(ROOT.TH1F("''' + tmpVarName + '''", "add. var. (''' + tmpVarName +  ''')", 10, 0, 150),"''' + additionalPlotVariable + '''","''' + preselection + '''","''' + binLabel + '''"))'''
     
     # Stop further execution if dict file did not exist, map could not be read or variable could not be mapped.
