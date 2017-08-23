@@ -105,14 +105,24 @@ class Analysis:
     Function checks if additionalPlotVariablesMap.py file exists. 
     If yes, then it will try to use it for determination of the amount of bins and the bin range of the plots. In case some variable cannot be mapped, the variable will be added to existing file and user will get warned.
     If no, then it will construct such a dict and stop the further execution.
+    
+    mapFile is a dict with additionalPlotVariable as key and numberOfBins, binLowerEdge, binUpperEdge as values contained in list
     """
     
     # Create dictionary for discriminators and preselections using additionalPlotVariables
+    # Dictionary contains  additionalPlotVariable, numberOfBins, binLowerEdge, binUpperEdge ,discr, preselection, binLabel,       
     additionalPlotVariablesDictFromClass = {}
     for discr, preselection, binLabel in zip(discriminators, preselections, binLabels):
       for additionalPlotVariable in self.additionalPlotVariables:
-        tmpVarName = discr + '_' + binLabel + '_' + additionalPlotVariable
-        additionalPlotVariablesDictFromClass[tmpVarName] = '''Plot(ROOT.TH1F("''' + tmpVarName + '''", "add. var. (''' + tmpVarName +  ''')", 10, 0, 150),"''' + additionalPlotVariable + '''","''' + preselection + '''","''' + binLabel + '''"))'''
+        # Use fullVarName as key in class dict while additionalPlotVariable is key in map file
+        fullVarName = discr + '_' + binLabel + '_' + additionalPlotVariable
+        additionalPlotVariablesDictFromClass[fullVarName] = [additionalPlotVariable, numberOfBins, binLowerEdge, binUpperEdge, discr, preselection, binLabel]
+        
+        
+        
+        
+        
+        '''Plot(ROOT.TH1F("''' + fullVarName + '''", "add. var. (''' + fullVarName +  ''')", 10, 0, 150),"''' + additionalPlotVariable + '''","''' + preselection + '''","''' + binLabel + '''"))'''
     
     # Stop further execution if dict file did not exist, map could not be read or variable could not be mapped.
     stopFurtherExecution = False
@@ -129,15 +139,29 @@ class Analysis:
       else:
         print "Comparing map from additionalPlotVariablesMap.py file with internal map of additional plot variables.\n Checking if keys from internal map contained in map from file."
         missingKeysInFile = []
-        for key in additionalPlotVariablesDictFromClass.keys():
-          # Check for missing key
-          if not key in additionalPlotVariablesDictFromFile:
-            missingKeysInFile.append(key)
+        for classKey in additionalPlotVariablesDictFromClass.keys():
+          # Check for missing additionalPlotVariable description in map file
+          # In map file additionalPlotVariable is the key while in class fullVarName
+          mapFileKey = additionalPlotVariablesDictFromClass[classKey][0]
+          if not mapFileKey in additionalPlotVariablesDictFromFile:
+            missingKeysInFile.append(mapFileKey)
           # otherwise replace internal key/value pair with external one
           else:
-            additionalPlotVariablesDictFromClass[key] = additionalPlotVariablesDictFromFile[key]
-        if differenceInKeys:
-          print "Found keys missing in map from file and required for plotting additional variables:\n", differenceInKeys, "\n Will stop further execution."
+            # retrieve full value list
+            tmpList = additionalPlotVariablesDictFromClass[classKey]
+            # and replace content with stored content
+            # numberOfBins replacement
+            tmpList[1] = additionalPlotVariablesDictFromFile[mapFileKey][0]
+            # binLowerEdge replacement
+            tmpList[2] = additionalPlotVariablesDictFromFile[mapFileKey][1]
+            # binUpperEdge replacement
+            tmpList[3] = additionalPlotVariablesDictFromFile[mapFileKey][2]
+            additionalPlotVariablesDictFromClass[classKey] = tmpList
+        if missingKeysInFile:
+          print "Found keys missing in map from file and required for plotting additional variables:\n", missingKeysInFile, "\n Will add keys to map file using default values.\n Afterwards will stop further execution."
+          # Add missing keys to mapFile dictionary
+          for missingKey in missingKeysInFile:
+            additionalPlotVariablesDictFromFile[missingKey] = [10,0,150]
           stopFurtherExecution = True
       
     else:
@@ -151,15 +175,24 @@ class Analysis:
     # Write dictionary to file
     with open('additionalPlotVariablesMap.py', 'w') as mapFile:
       mapFile.write('{\n')
-      # sort dict
-      for variableKey in sorted(additionalPlotVariablesDictFromClass.iterkeys(), key=sortByUsingLastPart):
-        mapFile.write("""'""" + variableKey + """': '""" + additionalPlotVariablesDictFromClass[variableKey] + """',\n""")
+      # sort dict and write entry for each additionalPlotVariable in file
+      for mapFileKey in sorted(additionalPlotVariablesDictFromFile.iterkeys(), key=sortByUsingLastPart):
+        mapFile.write("""'""" + mapFileKey + """': '""" + additionalPlotVariablesDictFromFile[mapFileKey]  + """',\n""")
       mapFile.write('}')
     
     if stopFurtherExecution and not alwaysExecute:
       sys.exit('Stopping execution since mapping for additional variable plotting was not successful.\n Check the file additionalPlotVariablesMap.py and adjust it accordingly.')
     
-    return additionalPlotVariablesDictFromClass
+    # construct list containing all additionalPlotVariables
+    returnList = []
+    for classKey in additionalPlotVariablesDictFromClass.keys():
+      currList = additionalPlotVariablesDictFromClass[classKey]
+      # Construct full var name, currList: additionalPlotVariable, numberOfBins, binLowerEdge, binUpperEdge, discr, preselection, binLabel
+      fullVarName = currList[4] + '_' + currList[6] + '_' + currList[0]
+      plotString = '''Plot(ROOT.TH1F("''' + fullVarName + '''", "add. var. (''' + fullVarName +  ''')",''' + currList[1] + ',' + currList[2] + ',' + currList[3] + '''),"''' + currList[0] + '''","''' + currList[5] + '''","''' + currList[6] + '''"))'''
+      returnList.append(plotString)
+      
+    return returnList
       
     
 
