@@ -1044,18 +1044,6 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
   return csvWgtTotal;
 }
 
-
-// helper function to fill plots more efficiently
-void helperFillHisto(const std::vector<std::vector<string>>& paramVec)
-{
-  for (const auto &singleParams: paramVec)
-  // singleParams: histo, var, weight
-  {
-    if((singleParams.weight)!=0)
-      singleParams.histo->Fill(fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,singleParams.var)),singleParams.weight);
-  }
-}
-
 // Helper struct to fill plots more efficiently
 struct structHelpFillHisto{
   TH1* histo = NULL;
@@ -1064,13 +1052,13 @@ struct structHelpFillHisto{
 };
 
 // helper function to fill plots more efficiently
-void helperFillTwoDimHisto(const std::vector<std::vector<string>>& paramVec)
+void helperFillHisto(const std::vector<structHelpFillHisto>& paramVec)
 {
   for (const auto &singleParams: paramVec)
-  // singleParams: histo, var1, var2, weight
+  // singleParams: histo, var, weight
   {
     if((singleParams.weight)!=0)
-      singleParams.histo->Fill(fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,singleParams.var1)),fmin(singleParams[0]->GetXaxis()->GetXmax()-1e-6,fmax(singleParams[0]->GetXaxis()->GetXmin()+1e-6,singleParams.var2)),singleParams.weight);
+      singleParams.histo->Fill(fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,singleParams.var)),singleParams.weight);
   }
 }
 
@@ -1082,7 +1070,16 @@ struct structHelpFillTwoDimHisto{
   double weight = 0;
 };
 
-
+// helper function to fill plots more efficiently
+void helperFillTwoDimHisto(const std::vector<structHelpFillTwoDimHisto>& paramVec)
+{
+  for (const auto &singleParams: paramVec)
+  // singleParams: histo, var1, var2, weight
+  {
+    if((singleParams.weight)!=0)
+      singleParams.histo->Fill(fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,singleParams.var1)),fmin(singleParams[0]->GetXaxis()->GetXmax()-1e-6,fmax(singleParams[0]->GetXaxis()->GetXmin()+1e-6,singleParams.var2)),singleParams.weight);
+  }
+}
 
 void plot(){
   TH1F::SetDefaultSumw2();
