@@ -1066,7 +1066,7 @@ void helperFillHisto(const std::vector<structHelpFillHisto>& paramVec)
 // Helper struct to fill plots more efficiently
 // Until GCC 4.9 struct cannot have init values if one wants to initialize it with bracket lists
 struct structHelpFillTwoDimHisto{
-  TH1* histo;
+  TH2* histo;
   double var1;
   double var2;
   double weight;
