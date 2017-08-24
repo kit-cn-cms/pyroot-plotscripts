@@ -211,7 +211,7 @@ float LeptonSFHelper::GetMuonSF(  float muonPt , float muonEta , int syst , std:
     searchPt=TMath::Min( muonPt , muonMaxPtHigh );// if muonpt > 499 use last bin
   }
   float nomval = 0;
-  float error = 0;
+  //float error = 0;
   float upval = 0;
   float downval= 0;
   float nomvalBtoF = 0;
@@ -1079,7 +1079,7 @@ void helperFillTwoDimHisto(const std::vector<structHelpFillTwoDimHisto>& paramVe
   // singleParams: histo, var1, var2, weight
   {
     if((singleParams.weight)!=0)
-      singleParams.histo->Fill(fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,singleParams.var1)),fmin(singleParams[0]->GetXaxis()->GetXmax()-1e-6,fmax(singleParams[0]->GetXaxis()->GetXmin()+1e-6,singleParams.var2)),singleParams.weight);
+      singleParams.histo->Fill(fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,singleParams.var1)),fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,singleParams.var2)),singleParams.weight);
   }
 }
 
