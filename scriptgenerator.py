@@ -1045,10 +1045,11 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
 }
 
 // Helper struct to fill plots more efficiently
+// Until GCC 4.9 struct cannot have init values if one wants to initialize it with bracket lists
 struct structHelpFillHisto{
-  TH1* histo = NULL;
-  double var = -2;
-  double weight = 0;
+  TH1* histo;
+  double var;
+  double weight;
 };
 
 // helper function to fill plots more efficiently
@@ -1063,11 +1064,12 @@ void helperFillHisto(const std::vector<structHelpFillHisto>& paramVec)
 }
 
 // Helper struct to fill plots more efficiently
+// Until GCC 4.9 struct cannot have init values if one wants to initialize it with bracket lists
 struct structHelpFillTwoDimHisto{
-  TH1* histo = NULL;
-  double var1 = -2;
-  double var2 = -2;
-  double weight = 0;
+  TH1* histo;
+  double var1;
+  double var2;
+  double weight;
 };
 
 // helper function to fill plots more efficiently
@@ -1387,7 +1389,7 @@ def fillHistoSyst(name,varname,weight,systnames,systweights):
   # Write all individual systnames and systweights in nested vector to use together with function allowing variadic vector size -> speed-up of compilation and less code lines
   text+='     std::vector<structHelpFillHisto> helpWeightVec_' + name + ' = {'
   for sn,sw in zip(systnames,systweights):
-    text+='       { ' + 'h_'+name+sn + ', ' + varname + ', ' + '('+sw+')*(weight_'+name+')' + '},\n'
+    text+='       { ' + 'h_'+name+sn + ', ' + varname + ', ' + '('+sw+')*(weight_'+name+')' + '},'
   # finish vector
   text+='     };\n'
   # call helper fill histo function which is defined in the beginning
@@ -1399,7 +1401,7 @@ def fillTwoDimHistoSyst(name,varname1,varname2,weight,systnames,systweights):
   # Write all individual systnames and systweights in nested vector to use together with function allowing variadic vector size -> speed-up of compilation and less code lines
   text+='     std::vector<structHelpFillTwoDimHisto> helpWeightVec_' + name + ' = {'
   for sn,sw in zip(systnames,systweights):
-    text+='       { ' + 'h_'+name+sn + ', ' + varname1 + ', ' + varname2 + ', ' + '('+sw+')*(weight_'+name+')' + '},\n'
+    text+='       { ' + 'h_'+name+sn + ', ' + varname1 + ', ' + varname2 + ', ' + '('+sw+')*(weight_'+name+')' + '},'
   # finish vector
   text+='     };\n'
   # call helper fill histo function which is defined in the beginning
@@ -1710,7 +1712,9 @@ def compileProgram(scriptname,usesDataBases,addCodeInterfaces):
   if usesDataBases:
     memDBccfiles=glob.glob('/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase/MEMDataBase/src/*.cc') 
     #TODO update the dataBases code
-  cmd= ['g++']+out[:-1].replace("\n"," ").split(' ')+dnnfiles+['-lTMVA']+memDBccfiles+[scriptname+'.cc','-o',scriptname]
+  # improve ram usage and reduce garbage of g++ compiler
+  improveRAM = '--param ggc-min-expand=100 --param ggc-min-heapsize=2400000'
+  cmd= ['g++']+[improveRAM]+out[:-1].replace("\n"," ").split(' ')+dnnfiles+['-lTMVA']+memDBccfiles+[scriptname+'.cc','-o',scriptname]
   print cmd
   print ""
   cmdstring = " ".join(cmd)
