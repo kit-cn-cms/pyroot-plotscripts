@@ -1051,10 +1051,17 @@ void helperFillHisto(const std::vector<std::vector<string>>& paramVec)
   for (const auto &singleParams: paramVec)
   // singleParams: histo, var, weight
   {
-    if((singleParams[2])!=0)
-      singleParams[0]->Fill(fmin(singleParams[0]->GetXaxis()->GetXmax()-1e-6,fmax(singleParams[0]->GetXaxis()->GetXmin()+1e-6,singleParams[1])),singleParams[2]);
+    if((singleParams.weight)!=0)
+      singleParams.histo->Fill(fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,singleParams.var)),singleParams.weight);
   }
 }
+
+// Helper struct to fill plots more efficiently
+struct structHelpFillHisto{
+  TH1* histo = NULL;
+  double var = -2;
+  double weight = 0;
+};
 
 // helper function to fill plots more efficiently
 void helperFillTwoDimHisto(const std::vector<std::vector<string>>& paramVec)
@@ -1062,10 +1069,19 @@ void helperFillTwoDimHisto(const std::vector<std::vector<string>>& paramVec)
   for (const auto &singleParams: paramVec)
   // singleParams: histo, var1, var2, weight
   {
-    if((singleParams[3])!=0)
-      singleParams[0]->Fill(fmin(singleParams[0]->GetXaxis()->GetXmax()-1e-6,fmax(singleParams[0]->GetXaxis()->GetXmin()+1e-6,singleParams[1])),fmin(singleParams[0]->GetXaxis()->GetXmax()-1e-6,fmax(singleParams[0]->GetXaxis()->GetXmin()+1e-6,singleParams[2])),singleParams[3]);
+    if((singleParams.weight)!=0)
+      singleParams.histo->Fill(fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,singleParams.var1)),fmin(singleParams[0]->GetXaxis()->GetXmax()-1e-6,fmax(singleParams[0]->GetXaxis()->GetXmin()+1e-6,singleParams.var2)),singleParams.weight);
   }
 }
+
+// Helper struct to fill plots more efficiently
+struct structHelpFillTwoDimHisto{
+  TH1* histo = NULL;
+  double var1 = -2;
+  double var2 = -2;
+  double weight = 0;
+};
+
 
 
 void plot(){
@@ -1372,9 +1388,9 @@ def initTwoDimHistoWithProcessNameAndSuffix(name,nbinsX=10,xminX=0,xmaxX=0,nbins
 def fillHistoSyst(name,varname,weight,systnames,systweights):
   text='      float weight_'+name+'='+weight+';\n'
   # Write all individual systnames and systweights in nested vector to use together with function allowing variadic vector size -> speed-up of compilation and less code lines
-  text+='     std::vector<std::vector<string>> helpWeightVec_' + name + ' = {\n'
+  text+='     std::vector<structHelpFillHisto> helpWeightVec_' + name + ' = {'
   for sn,sw in zip(systnames,systweights):
-    text+='       { ' + 'h_'+name+sn + ', ' + varname + ', ' + '('+sw+')*(weight_'+name+')' + '},'
+    text+='       { ' + 'h_'+name+sn + ', ' + varname + ', ' + '('+sw+')*(weight_'+name+')' + '},\n'
   # finish vector
   text+='     };\n'
   # call helper fill histo function which is defined in the beginning
@@ -1384,9 +1400,9 @@ def fillHistoSyst(name,varname,weight,systnames,systweights):
 def fillTwoDimHistoSyst(name,varname1,varname2,weight,systnames,systweights):
   text='      float weight_'+name+'='+weight+';\n'
   # Write all individual systnames and systweights in nested vector to use together with function allowing variadic vector size -> speed-up of compilation and less code lines
-  text+='     std::vector<std::vector<string>> helpWeightVec_' + name + ' = {\n'
+  text+='     std::vector<structHelpFillTwoDimHisto> helpWeightVec_' + name + ' = {'
   for sn,sw in zip(systnames,systweights):
-    text+='       { ' + 'h_'+name+sn + ', ' + varname1 + ', ' + varname2 + ', ' + '('+sw+')*(weight_'+name+')' + '},'
+    text+='       { ' + 'h_'+name+sn + ', ' + varname1 + ', ' + varname2 + ', ' + '('+sw+')*(weight_'+name+')' + '},\n'
   # finish vector
   text+='     };\n'
   # call helper fill histo function which is defined in the beginning
