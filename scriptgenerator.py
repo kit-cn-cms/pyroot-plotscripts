@@ -1045,6 +1045,29 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
 }
 
 
+// helper function to fill plots more efficiently
+void helperFillHisto(const std::vector<std::vector<string>>& paramVec)
+{
+  for (const auto &singleParams: paramVec)
+  // singleParams: histo, var, weight
+  {
+    if((singleParams[2])!=0)
+      singleParams[0]->Fill(fmin(singleParams[0]->GetXaxis()->GetXmax()-1e-6,fmax(singleParams[0]->GetXaxis()->GetXmin()+1e-6,singleParams[1])),singleParams[2]);
+  }
+}
+
+// helper function to fill plots more efficiently
+void helperFillTwoDimHisto(const std::vector<std::vector<string>>& paramVec)
+{
+  for (const auto &singleParams: paramVec)
+  // singleParams: histo, var1, var2, weight
+  {
+    if((singleParams[3])!=0)
+      singleParams[0]->Fill(fmin(singleParams[0]->GetXaxis()->GetXmax()-1e-6,fmax(singleParams[0]->GetXaxis()->GetXmin()+1e-6,singleParams[1])),fmin(singleParams[0]->GetXaxis()->GetXmax()-1e-6,fmax(singleParams[0]->GetXaxis()->GetXmin()+1e-6,singleParams[2])),singleParams[3]);
+  }
+}
+
+
 void plot(){
   TH1F::SetDefaultSumw2();
 
@@ -1348,17 +1371,27 @@ def initTwoDimHistoWithProcessNameAndSuffix(name,nbinsX=10,xminX=0,xmaxX=0,nbins
 
 def fillHistoSyst(name,varname,weight,systnames,systweights):
   text='      float weight_'+name+'='+weight+';\n'
+  # Write all individual systnames and systweights in nested vector to use together with function allowing variadic vector size -> speed-up of compilation and less code lines
+  text+='     std::vector<std::vector<string>> helpWeightVec_' + name + ' = {\n'
   for sn,sw in zip(systnames,systweights):
-    text+=fillHisto(name+sn,varname,'('+sw+')*(weight_'+name+')')
+    text+='       { ' + 'h_'+name+sn + ', ' + varname + ', ' + '('+sw+')*(weight_'+name+')' + '},'
+  # finish vector
+  text+='     };\n'
+  # call helper fill histo function which is defined in the beginning
+  text+='     helperFillHisto(helpWeightVec_' + name + ');\n' 
   return text
-
 
 def fillTwoDimHistoSyst(name,varname1,varname2,weight,systnames,systweights):
   text='      float weight_'+name+'='+weight+';\n'
+  # Write all individual systnames and systweights in nested vector to use together with function allowing variadic vector size -> speed-up of compilation and less code lines
+  text+='     std::vector<std::vector<string>> helpWeightVec_' + name + ' = {\n'
   for sn,sw in zip(systnames,systweights):
-    text+=fillTwoDimHisto(name+sn,varname1,varname2,'('+sw+')*(weight_'+name+')')
+    text+='       { ' + 'h_'+name+sn + ', ' + varname1 + ', ' + varname2 + ', ' + '('+sw+')*(weight_'+name+')' + '},'
+  # finish vector
+  text+='     };\n'
+  # call helper fill histo function which is defined in the beginning
+  text+='     helperFillTwoDimHisto(helpWeightVec_' + name + ');\n' 
   return text
-
 
 def startLoop():
   return """
@@ -1563,13 +1596,13 @@ def startCat(catweight,variables):
 def endCat():
   return '    }\n    // end of category\n\n'
 
-
+# DEPRECATED: can be removed in the future
 def fillHisto(histo,var,weight):
   text= '        if(('+weight+')!=0)\n'
   text+='          h_'+histo+'->Fill(fmin(h_'+histo+'->GetXaxis()->GetXmax()-1e-6,fmax(h_'+histo+'->GetXaxis()->GetXmin()+1e-6,'+var+')),'+weight+');\n'
   return text
 
-
+# DEPRECATED: can be removed in the future
 def fillTwoDimHisto(histo,var1,var2,weight):
   text= '        if(('+weight+')!=0)\n'
   text+='          h_'+histo+'->Fill(fmin(h_'+histo+'->GetXaxis()->GetXmax()-1e-6,fmax(h_'+histo+'->GetXaxis()->GetXmin()+1e-6,'+var1+')),fmin(h_'+histo+'->GetYaxis()->GetXmax()-1e-6,fmax(h_'+histo+'->GetYaxis()->GetXmin()+1e-6,'+var2+')),'+weight+');\n'
