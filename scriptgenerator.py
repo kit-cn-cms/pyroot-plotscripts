@@ -1714,7 +1714,9 @@ def compileProgram(scriptname,usesDataBases,addCodeInterfaces):
     #TODO update the dataBases code
   # improve ram usage and reduce garbage of g++ compiler
   improveRAM = '--param ggc-min-expand=100 --param ggc-min-heapsize=2400000'
-  cmd= ['g++']+[improveRAM]+out[:-1].replace("\n"," ").split(' ')+dnnfiles+['-lTMVA']+memDBccfiles+[scriptname+'.cc','-o',scriptname]
+  # if python cflags are used -O3 optimization is set, resulting in long compilation times, set it back to default -O0
+  resetCompilerOpt = '-O0'
+  cmd= ['g++']+[improveRAM]+out[:-1].replace("\n"," ").split(' ')+dnnfiles+['-lTMVA']+memDBccfiles+[resetCompilerOpt]+[scriptname+'.cc','-o',scriptname]
   print cmd
   print ""
   cmdstring = " ".join(cmd)
