@@ -1389,7 +1389,7 @@ def fillHistoSyst(name,varname,weight,systnames,systweights):
   # Write all individual systnames and systweights in nested vector to use together with function allowing variadic vector size -> speed-up of compilation and less code lines
   text+='     std::vector<structHelpFillHisto> helpWeightVec_' + name + ' = {'
   for sn,sw in zip(systnames,systweights):
-    text+='       { ' + 'h_'+name+sn + ', ' + varname + ', ' + '('+sw+')*(weight_'+name+')' + '},'
+    text+='       { ' + 'h_'+name+sn + ', double(' + varname + '), ' + '('+sw+')*(weight_'+name+')' + '},'
   # finish vector
   text+='     };\n'
   # call helper fill histo function which is defined in the beginning
