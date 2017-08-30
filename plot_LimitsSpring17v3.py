@@ -1,5 +1,8 @@
 import sys
 import os
+# First path is needed if run by pyroot-plotscripts-base repo
+sys.path.append('limittools')
+# These two paths are needed if run by ttbb repos
 sys.path.append('pyroot-plotscripts-base')
 sys.path.append('pyroot-plotscripts-base/limittools')
 
