@@ -17,7 +17,7 @@ before_script:
     - scram b -j 12
     - cd $CI_HOME
 
-plot_LimitsSpring17v3:
+plot_LimitsSpring17v3_modified:
     tags:
         - naf
         - ssh
@@ -26,7 +26,7 @@ plot_LimitsSpring17v3:
         - echo "Gitlab User " ${GITLAB_USER_ID}
         - set -x 
         - cd $CI_HOME
-        - python plot_LimitsSpring17v3.py
+        - python plot_LimitsSpring17v3_modified.py
         - echo "Store outputs on webpage"
         - mkdir -p ~/www/pyroot-plotscripts-base/${CI_PIPELINE_ID}
         - cp $CI_HOME/limits_Spring17v8/*.pdf ~/www/pyroot-plotscripts-base/${CI_PIPELINE_ID}/

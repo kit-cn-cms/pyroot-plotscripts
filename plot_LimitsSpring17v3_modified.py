@@ -14,7 +14,7 @@ from limittools import addRealData
 from limittools import makeDatacards
 from limittools import calcLimits
 from limittools import replaceQ2scale
-from plotconfigSpring17v3 import *
+from plotconfigSpring17v10 import *
 
 # output name
 name='limits_Spring17v8'
