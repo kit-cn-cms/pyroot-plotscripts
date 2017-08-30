@@ -1,5 +1,7 @@
 # pyroot-plotscripts-base
 
+[![build status of master repo: ](https://gitlab.cern.ch/kit-cn-cms/pyroot-plotscripts-base/badges/master/build.svg)](https://gitlab.cern.ch/kit-cn-cms/pyroot-plotscripts-base/commits/master)
+
 * Repository containing the base parts of the pyroot plot scripts. 
 * Repositories which make use of the pyroot plotscripts should use the git subtree module to derive the base part from this repository.
 * More information about git subtree module: https://medium.com/@v/git-subtrees-a-tutorial-6ff568381844
