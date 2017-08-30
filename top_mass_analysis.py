@@ -15,22 +15,26 @@ bdtweightpath="/nfs/dust/cms/user/kelmorab/Spring17BDTWeights/"
 bdtset="Spring17v1"
 
 # internal names of the samples
-names_samples = ["ttbar_mtop1665","ttbar_mtop1695","ttbar_mtop1715","ttbar_mtop1735","ttbar_mtop1755","ttbar_mtop1785","ttbar_color_reco"]
+#names_samples = ["ttbar_mtop1665","ttbar_mtop1695","ttbar_mtop1715","ttbar_mtop1735","ttbar_mtop1755","ttbar_mtop1785"]
+names_samples = ["ttbar_mtop1715","ttbar_mtop1735"]
 
 # names for the legend
-nicks_samples = ["t#bar{t} m_{t}=166.5","t#bar{t} m_{t}=169.5","t#bar{t} m_{t}=171.5","t#bar{t} m_{t}=173.5","t#bar{t} m_{t}=175.5","t#bar{t} m_{t}=178.5","t#bar{t} color reco"]
+#nicks_samples = ["t#bar{t} m_{t}=166.5","t#bar{t} m_{t}=169.5","t#bar{t} m_{t}=171.5","t#bar{t} m_{t}=173.5","t#bar{t} m_{t}=175.5","t#bar{t} m_{t}=178.5"]
+nicks_samples = ["t#bar{t} m_{t}=171.5","t#bar{t} m_{t}=173.5"]
 
 # colors for the samples
-colors_samples= [ROOT.kRed,ROOT.kBlue,ROOT.kGreen,ROOT.kCyan,ROOT.kOrange,ROOT.kMagenta,ROOT.kViolet+2]
+#colors_samples= [ROOT.kRed,ROOT.kBlue,ROOT.kGreen,ROOT.kCyan,ROOT.kOrange,ROOT.kMagenta]
+colors_samples= [ROOT.kRed,ROOT.kBlue]
 
 # weights for the samples
-weights_samples= ["1.18133776614","1.08624210759/Weight_XS*0.014207776","1.0278242413","0.973053941949","0.921669872276","0.850422955127","1.0"]
+#weights_samples= ["1.18133776614","1.08624210759/Weight_XS*0.014207776","1.0278242413","0.973053941949","0.921669872276","0.850422955127"]
+weights_samples= ["1.0278242413","0.973053941949"]
 
 # define the samples with variated top masses with the Sample class
-samples = [Sample(nicks_samples[i],colors_samples[i],path_samples+names_samples[i]+"/*nominal*.root",weights_samples[i]+"*"+mcweightAll,names_samples[i],[""],0,None,"",-1,'MVATree') for i in range(len(names_samples))]
+samples = [Sample(nicks_samples[i],colors_samples[i],path_samples+names_samples[i]+"/*nominal*.root",weights_samples[i]+"*"+mcWeightAll,names_samples[i],[""],0,None,"",-1,'MVATree') for i in range(len(names_samples))]
 
 # define the reference samples with the Sample Class
-sample_ttbar_nom = [Sample("t#bar{t} m_{t}=172.5",ROOT.kBlack,path_ttbar_nom+"ttbar_incl/*nominal*.root",mcweightAll,"ttbar_nom",weightsystnames+othersystnames,0,None,"",-1,'MVATree')]
+sample_ttbar_nom = [Sample("t#bar{t} m_{t}=172.5",ROOT.kBlack,path_ttbar_nom+"ttbar_incl/*nominal*.root",mcWeightAll,"ttbar_nom",[""],0,None,"",-1,'MVATree')]
 
 # book some variables which are no in the tree in the first place
 additionalvariables=[ 'finalbdt_ljets_j4_t3:='+bdtweightpath+'/weights_Final_43_'+bdtset+'.xml',
@@ -47,7 +51,6 @@ additionalvariables=[ 'finalbdt_ljets_j4_t3:='+bdtweightpath+'/weights_Final_43_
 
 # definition of categories
 categoriesJT=[
-              ("(N_Jets>=4&&N_BTagsM>=2)","4j2t",""),
               ("(N_Jets>=6&&N_BTagsM==2)","6j2t",""),
               ("(N_Jets==4&&N_BTagsM==3)","4j3t",""),
               ("(N_Jets==5&&N_BTagsM==3)","5j3t",""),
@@ -58,9 +61,9 @@ categoriesJT=[
 ]
 
 # parameters for the bdt output histograms
-nhistobins= [  20,20, 	10,   10,    10,    10,   20,   10,   10 ]
-minxvals=   [ 200, 200, -0.75,  -0.8, -0.8,   -0.8, -0.8, -0.8,   -0.8]
-maxxvals=   [800,800,    0.8,  0.75,   0.8,    0.7,  0.8,  0.8,    0.7]
+nhistobins= [  20, 20, 	20,   20,    20,    20,20 ]
+minxvals=   [ -1., -1., -1.,  -1., -1.,   -1.,-1.]
+maxxvals=   [1,1, 1, 1, 1, 1, 1]
 discrs =    ['finalbdt_ljets_j4_t3', 'finalbdt_ljets_j4_t4', 'finalbdt_ljets_j5_t3', 'finalbdt_ljets_j5_tge4', 'finalbdt_ljets_jge6_t2', 'finalbdt_ljets_jge6_t3', 'finalbdt_ljets_jge6_tge4']
 bdts=[]
 bins= [c[0] for c in categoriesJT]
@@ -81,7 +84,7 @@ for i,cat in enumerate(categoriesJT):
     catstringJT+=("+"+str(i+1)+"*"+cat[0])
     
 systsamples=[]    
-for sysname,sysfilename in zip(othersystnames,othersystfilenames):
+for sysname,sysfilename in zip(otherSystNames,otherSystFileNames):
     systsamples.append(Sample(sample_ttbar_nom[0].name+sysname,sample_ttbar_nom[0].color,sample_ttbar_nom[0].path.replace("nominal",sysfilename),sample_ttbar_nom[0].selection,sample_ttbar_nom[0].nick+sysname))
    
 # define the plots with some selection    
@@ -641,21 +644,21 @@ plots64=[
     Plot(ROOT.TH1F(plotprefix+"Evt_blr_ETH_transformed","Evt_blr_ETH_transformed",20,-10.0,10.0),"Evt_blr_ETH_transformed",plotselection,plotlabel),
 ]
 # combine all plots in one list
-plots=plots_inclusive+plots64+plots63+plots62+plots54+plots53+plots44+plots43+bdts
+plots=bdts+plots_inclusive+plots64+plots63+plots62+plots54+plots53+plots44+plots43
 
 
 #print samples
 #print plots
 
 #outputpath = plotParallel(name,100000,plots,samples)
-outputpath=plotParallel(name,1000000,plots,sample_ttbar_nom+samples+systsamples,[''],['1.'],weightsystnames,systweights,additionalvariables,[],"/nfs/dust/cms/user/mwassmer/pyroot-plotscripts/treejson.json",othersystnames) 
+outputpath=plotParallel(name,1000000,plots,sample_ttbar_nom+samples,[''],['1.'],[""],["1."],additionalvariables,[],"/nfs/dust/cms/user/mwassmer/pyroot-plotscripts/treejson.json",[]) 
 
 listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
 listOfHistoLists_ot=createHistoLists_fromSuperHistoFile(outputpath,sample_ttbar_nom,plots,1)
 
-renameHistos(outputpath,outputpath[:-4]+'_syst.root',weightsystnames+othersystnames,False)
+renameHistos(outputpath,outputpath[:-4]+'_syst.root',[""],False)
 
-lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',sample_ttbar_nom,plots,weightsystnames+othersystnames)
+lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',sample_ttbar_nom,plots,[""])
 
 #print listOfHistoLists_ot
 #print "--------------------------"
