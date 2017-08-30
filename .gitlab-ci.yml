@@ -29,8 +29,8 @@ plot_LimitsSpring17v3_modified:
         - python plot_LimitsSpring17v3_modified.py
         - echo "Store outputs on webpage"
         - mkdir -p ~/www/pyroot-plotscripts-base/${CI_COMMIT_REF_NAME}/${CI_PIPELINE_ID}
-        - cp $CI_HOME/limits_Spring17v8/*.pdf ~/www/pyroot-plotscripts-base/${CI_COMMIT_REF_NAME}/${CI_PIPELINE_ID}/
-        - cp $CI_HOME/limits_Spring17v8/limits_Spring17v8_shapes/*.pdf ~/www/pyroot-plotscripts-base/${CI_COMMIT_REF_NAME}/${CI_PIPELINE_ID}/
-        - cp $CI_HOME/limits_Spring17v8/limits_Spring17v8_controlplots/*.pdf ~/www/pyroot-plotscripts-base/${CI_COMMIT_REF_NAME}/${CI_PIPELINE_ID}/
+        - cp $CI_HOME/limits_Spring17v8/*.pdf ~/www/pyroot-plotscripts-base/${CI_COMMIT_REF_SLUG}/${CI_PIPELINE_ID}/
+        - cp $CI_HOME/limits_Spring17v8/limits_Spring17v8_shapes/*.pdf ~/www/pyroot-plotscripts-base/${CI_COMMIT_REF_SLUG}/${CI_PIPELINE_ID}/
+        - cp $CI_HOME/limits_Spring17v8/limits_Spring17v8_controlplots/*.pdf ~/www/pyroot-plotscripts-base/${CI_COMMIT_REF_SLUG}/${CI_PIPELINE_ID}/
 
         
