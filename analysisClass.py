@@ -45,6 +45,8 @@ class Analysis:
     
     # list containing additional (input) variables which one would likes to plot in addition to discriminator variables
     self.additionalPlotVariables = []
+    # Deactivate checkBins in renameHistos if additionalPlotVariables are used
+    self.checkBins = True
     
     # Overwrite default settings from commandline
     self.opts = None
@@ -190,10 +192,18 @@ class Analysis:
       plotString = '''Plot(ROOT.TH1F("''' + fullVarName + '''", "add. var. (''' + fullVarName +  ''')",''' + str(currList[1]) + ',' + str(currList[2]) + ',' + str(currList[3]) + '''),"''' + currList[0] + '''","''' + currList[5] + '''","''' + currList[6] + '''")'''
       returnList.append(plotString)
       
+    # Set variable to deactivate checkBins functionality in renameHistos, because otherwise it will take a long time.
+    self.checkBins = False
+    print "Set checkBins variable to false. Make sure, this variable is used in renameHistos."
+      
     return returnList
       
-    
-
+  
+  def getCheckBins(self):
+    """ Return value of checkBins variable
+    Variable can be used in renameHistos function of limittools.py to reduce time for renaming histograms.
+    """
+    return self.checkBins
   
   ## Setter functions
   def setPlotNumber(self,arg):
