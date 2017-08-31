@@ -223,11 +223,11 @@ class Analysis:
     
   def getOptimzedRebinning(self):
     """Return which rebinning algorithm was activated """
-      if self.optimizedRebinning:
-        print "optimizedRebinning set to: ", self.optimizedRebinning
-        return self.optimizedRebinning
-      else:
-        sys.exit('Stopping execution since no optimizedRebinning algorithm was chosen, but it was activated.')
+    if self.optimizedRebinning:
+      print "optimizedRebinning set to: ", self.optimizedRebinning
+      return self.optimizedRebinning
+    else:
+      sys.exit('Stopping execution since no optimizedRebinning algorithm was chosen, but it was activated.')
   
   ## Setter functions
   def setPlotNumber(self,arg):
