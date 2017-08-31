@@ -681,9 +681,11 @@ def printCanvasesPNG(canvases,name):
 
 # writes canvases to root file
 def writeObjects(objects,name):
-    outfile=ROOT.TFile(name+'.root','recreate')
-    for o in objects:
-        o.Write()
+  if not os.path.exists('rootfiles'):
+    os.makedirs('rootfiles')
+  for o in objects:
+    outfile=ROOT.TFile('rootfiles/' + name + '_' + o + '.root','recreate')
+    o.Write()
     outfile.Close()
 
 # returns the next decent round number (like 2, 2.5, 5, 10)
