@@ -48,6 +48,9 @@ class Analysis:
     # Deactivate checkBins in renameHistos if additionalPlotVariables are used
     self.checkBins = True
     
+    # Choose if one would like to activate an optimizing binning algorithm
+    self.optimizedRebinning = ''
+    
     # Overwrite default settings from commandline
     self.opts = None
     self.opts = self.evaluateCommandlineArgs(argv)
@@ -64,7 +67,7 @@ class Analysis:
     for opt, arg in opts:
       print 'opt: ', opt, ' arg: ', arg, ' found.'
       if opt in ('-h', '--help'):
-        print '[scriptname].py -p <plotnumber> --doPlotParallel= --doDrawParallel= --plotBlinded= --makeEventYields= --makeDataCards= --makeSimplePlots= --makeMCControlPlots= --additionalPlotVariables='
+        print '[scriptname].py -p <plotnumber> --doPlotParallel= --doDrawParallel= --plotBlinded= --makeEventYields= --makeDataCards= --makeSimplePlots= --makeMCControlPlots= --additionalPlotVariables= --optimizedRebinning='
         sys.exit()
       elif opt in ("-p","--plotNumber"):
         self.setPlotNumber(arg)
@@ -93,6 +96,10 @@ class Analysis:
       elif opt in ("--additionalPlotVariables"):
         self.setAdditionalPlotVariables(arg)
         print "Set additionalPlotVariables option to: ", arg
+      elif opt in ("--optimizedRebinning"):
+        self.setOptimizedRebinning(arg)
+        print "Set optimizedRebinning option to: ", arg  
+      
       
         
       return opts
@@ -205,6 +212,23 @@ class Analysis:
     """
     return self.checkBins
   
+  def getActivatedOptimizedRebinning(self):
+    """Return true if optimized rebinning was activated """
+    if self.optimizedRebinning:
+      print "optimizedRebinning is activated."
+      return true
+    else:
+      print "optimizedRebinning is deactivated."
+      return false
+    
+  def getOptimzedRebinning(self):
+    """Return which rebinning algorithm was activated """
+      if self.optimizedRebinning:
+        print "optimizedRebinning set to: ", self.optimizedRebinning
+        return self.optimizedRebinning
+      else:
+        sys.exit('Stopping execution since no optimizedRebinning algorithm was chosen, but it was activated.')
+  
   ## Setter functions
   def setPlotNumber(self,arg):
     self.plotNumber = int(arg)
@@ -237,3 +261,6 @@ class Analysis:
       print self.additionalPlotVariables
     else:
       print "Could not activate additional plot variables since argument is not a list."
+      
+  def setOptimizedRebinning(self,arg):
+    self.optimizedRebinning = arg
