@@ -55,17 +55,30 @@ class Analysis:
     # Should be placed here after default variable initialization and before commandline initialization
     if signalProcess == 'ttbb':
       self.signalProcess = 'ttbb'
-      from plotconfigttbbSpring17v10 import *
+      self.plotConfig = 'plotconfigttbbSpring17v10'
+      # Store lower and upper end of samples in plotconfig
+      self.backgroundSamplesLower = 
+      self.backgroundSamplesUpper = 
+      self.signalSamplesLower =
+      self.signalSamplesUpper = 
+      self.ttbarSamplesLower = 0
+      self.ttbarSamplesUpper = 5
       print 'ttbb was chosen as signal process.'
     elif signalProcess == 'ttH' or signalProcess == 'tth':
       self.signalProcess = 'ttH'
       self.plotBlinded = True
-      from plotconfigSpring17v10 import *
+      self.plotConfig = 'plotconfigSpring17v10'
+      # Store lower and upper end of samples in plotconfig
+      self.backgroundSamplesLower = 
+      self.backgroundSamplesUpper = 
+      self.signalSamplesLower =
+      self.signalSamplesUpper = 
+      self.ttbarSamplesLower = 9
+      self.ttbarSamplesUpper = 14
       print 'ttH was chosen as signal process. plotBlinded was set to True.'
     else:
       print 'Could not find chosen signal process: ', signalProcess, ' program will exit now.'
       sys.exit('Unknown chosen signal process.')
-    
     
     
     # Overwrite default settings from commandline
@@ -271,6 +284,20 @@ class Analysis:
       return 'mk_datacard_JESTest13TeV'
     else:
       print "Warning: No dataCardMaker for signal process: ", self.signalProcess, ' found.'
+  
+  def getPlotConfig(self):
+    """Return name of plotconfig"""
+    return self.plotConfig
+  
+  def getTtbarSamplesLower(self):
+    """Return position of ttbar samples in samples list, lower bound"""
+    return self.ttbarSamplesLower
+  
+  def getTtbarSamplesUpper(self):
+    """Return position of ttbar samples in samples list, upper bound"""
+    return self.ttbarSamplesUpper
+  
+  
   
   ## Setter functions
   def setPlotNumber(self,arg):
