@@ -124,7 +124,7 @@ class Analysis:
 
   # Helper functions
   
-  def printChosenOptions():
+  def printChosenOptions(self):
     print "Print out of options set via analysis class:"
     print "Option PlotNumber: ", analysis.plotNumber
     print "Option doPlotParallel: ", analysis.doPlotParallel
