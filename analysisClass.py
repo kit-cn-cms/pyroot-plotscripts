@@ -126,16 +126,16 @@ class Analysis:
   
   def printChosenOptions(self):
     print "Print out of options set via analysis class:"
-    print "Option PlotNumber: ", analysis.plotNumber
-    print "Option doPlotParallel: ", analysis.doPlotParallel
-    print "Option doDrawParallel: ", analysis.doDrawParallel
-    print "Option PlotBlinded: ", analysis.plotBlinded
-    print "Option makeEventYields: ", analysis.makeEventYields
-    print "Option makeDataCards: ", analysis.makeDataCards
-    print "Option makeSimplePlots: ", analysis.makeSimplePlots
-    print "Option makeMCControlPlots: ", analysis.makeMCControlPlots
-    print "Option additionalPlotVariables: ", analysis.additionalPlotVariables
-    print "Option optimizedRebinning: ", analysis.optimizedRebinning
+    print "Option PlotNumber: ", self.plotNumber
+    print "Option doPlotParallel: ", self.doPlotParallel
+    print "Option doDrawParallel: ", self.doDrawParallel
+    print "Option PlotBlinded: ", self.plotBlinded
+    print "Option makeEventYields: ", self.makeEventYields
+    print "Option makeDataCards: ", self.makeDataCards
+    print "Option makeSimplePlots: ", self.makeSimplePlots
+    print "Option makeMCControlPlots: ", self.makeMCControlPlots
+    print "Option additionalPlotVariables: ", self.additionalPlotVariables
+    print "Option optimizedRebinning: ", self.optimizedRebinning
   
   
   ## Getter functions
