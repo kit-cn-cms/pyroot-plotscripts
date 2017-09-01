@@ -10,7 +10,7 @@ class Analysis:
     """Default constructor"""
     return self.__init__(self,"defaultanalysisname")
   
-  def __init__(self, name,argv=list(),rootFilePath=''):
+  def __init__(self, name,argv=list(),rootFilePath='', signalProcess='ttbb'):
     self.name = str(name)
     if not os.path.exists(name):
       print "Making dir."
@@ -18,7 +18,7 @@ class Analysis:
     self.rootFilePath=str(rootFilePath)
     if self.rootFilePath == '':
       self.rootFilePath = name+'/'+name+'_limitInput.root'
-    
+        
     # Default settings
     #doPlotParallel or otherwise use old root file
     self.doPlotParallel=False
@@ -50,6 +50,23 @@ class Analysis:
     
     # Choose if one would like to activate an optimizing binning algorithm
     self.optimizedRebinning = ''
+    
+    #Check if ttbb or ttH is set as a signalProcess
+    # Should be placed here after default variable initialization and before commandline initialization
+    if signalProcess == 'ttbb':
+      self.signalProcess = 'ttbb'
+      from plotconfigttbbSpring17v10 import *
+      print 'ttbb was chosen as signal process.'
+    elif signalProcess == 'ttH' or signalProcess == 'tth':
+      self.signalProcess = 'ttH'
+      self.plotBlinded = True
+      from plotconfigSpring17v10 import *
+      print 'ttH was chosen as signal process. plotBlinded was set to True.'
+    else:
+      print 'Could not find chosen signal process: ', signalProcess, ' program will exit now.'
+      sys.exit('Unknown chosen signal process.')
+    
+    
     
     # Overwrite default settings from commandline
     self.opts = None
@@ -106,6 +123,19 @@ class Analysis:
 
 
   # Helper functions
+  
+  def printChosenOptions():
+    print "Print out of options set via analysis class:"
+    print "Option PlotNumber: ", analysis.plotNumber
+    print "Option doPlotParallel: ", analysis.doPlotParallel
+    print "Option doDrawParallel: ", analysis.doDrawParallel
+    print "Option PlotBlinded: ", analysis.plotBlinded
+    print "Option makeEventYields: ", analysis.makeEventYields
+    print "Option makeDataCards: ", analysis.makeDataCards
+    print "Option makeSimplePlots: ", analysis.makeSimplePlots
+    print "Option makeMCControlPlots: ", analysis.makeMCControlPlots
+    print "Option additionalPlotVariables: ", analysis.additionalPlotVariables
+    print "Option optimizedRebinning: ", analysis.optimizedRebinning
   
   
   ## Getter functions
@@ -228,6 +258,19 @@ class Analysis:
       return self.optimizedRebinning
     else:
       sys.exit('Stopping execution since no optimizedRebinning algorithm was chosen, but it was activated.')
+      
+  def getSignalProcess(self):
+    """Return which signal process was set."""
+    return self.signalProcess
+  
+  def getDataCardMaker(self):
+    """Return dataCardMaker depending on signal process """
+    if self.signalProcess == 'ttbb':
+      return 'mk_datacard_ttbbanalyse'
+    elif self.signalProcess == 'ttH':
+      return 'mk_datacard_JESTest13TeV'
+    else:
+      print "Warning: No dataCardMaker for signal process: ", self.signalProcess, ' found.'
   
   ## Setter functions
   def setPlotNumber(self,arg):
