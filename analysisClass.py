@@ -219,7 +219,7 @@ class Analysis:
       return true
     else:
       print "optimizedRebinning is deactivated."
-      return false
+      return False
     
   def getOptimzedRebinning(self):
     """Return which rebinning algorithm was activated """
