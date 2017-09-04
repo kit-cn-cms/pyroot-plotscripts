@@ -684,7 +684,7 @@ def writeObjects(objects,name):
   if not os.path.exists('rootfiles'):
     os.makedirs('rootfiles')
   for o in objects:
-    outfile=ROOT.TFile('rootfiles/' + name + '_' + o + '.root','recreate')
+    outfile=ROOT.TFile('rootfiles/' + name + '_' + o.GetName() + '.root','recreate')
     o.Write()
     outfile.Close()
 
