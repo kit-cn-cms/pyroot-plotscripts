@@ -1455,7 +1455,7 @@ def writeHead(f,columns):
     f.write('\\hline\n')
     for entryNumber, entry in enumerate(columns[:-1]):
         if (entry and entry.strip()):
-          f.write('Bin' + entryNumber + ' &')
+          f.write('Bin' + str(entryNumber) + ' &')
         else: 
           f.write(entry+' &')
     f.write(columns[-1]+' \\\\ \n')
