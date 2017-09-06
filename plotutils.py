@@ -9,6 +9,8 @@ import scriptgenerator
 import re
 import xml.etree.ElementTree as ET
 import CMS_lumi
+from copy import deepcopy
+import array
 
 ROOT.gStyle.SetPaintTextFormat("4.2f");
 ROOT.gROOT.SetBatch(True)
