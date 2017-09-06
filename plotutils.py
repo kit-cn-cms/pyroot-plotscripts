@@ -2083,7 +2083,12 @@ def writeLOLAndOneOnTop(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,f
               integralfactor+=histo.Integral()
 
         if factor < 0:
-          integralfactor=integralfactor/ot.Integral()
+          # Check if on top histogram integral is not null, since it will give a zero division error
+          if ot.Integral() != 0:
+            integralfactor=integralfactor/ot.Integral()
+          else:
+            integralfactor=integralfactor
+            print "Warning: On top histogram ", ot.GetName(), " has integral 0 which would lead to zero division error."
 
         c=drawHistosOnCanvas(listOfHistos,normalize,stack,logscale,options)
         #c.SetName('c'+str(i))
