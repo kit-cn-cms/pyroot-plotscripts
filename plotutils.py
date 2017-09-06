@@ -395,7 +395,13 @@ def drawHistosOnCanvas(listOfHistos_,normalize=True,stack=False,logscale=False,o
         if normalize:
             integral0=listOfHistos[0].Integral()
             for h in listOfHistos:
+              # Check if integral is not null, since it will give a zero division error
+              if integral0 != 0:
                 h.Scale(1./integral0)
+              else:
+                h.Scale(1.)
+                print "Warning: integral0  variable of histogram ", listOfHistos[0].GetName() ," has value 0 which would lead to zero division error."
+                
 
 
     canvas.cd(1)
@@ -513,7 +519,12 @@ def drawHistosOnCanvas2D(listOfHistos_,normalize=True,stack=False,logscale=False
         if normalize:
             integral0=listOfHistos[0].Integral()
             for h in listOfHistos:
+              # Check if integral is not null, since it will give a zero division error
+              if integral0 != 0:
                 h.Scale(1./integral0)
+              else:
+                h.Scale(1.)
+                print "Warning: integral0  variable of histogram ", listOfHistos[0].GetName() ," has value 0 which would lead to zero division error."
 
 
     canvas.cd(1)
@@ -604,7 +615,12 @@ def drawHistosOnCanvasAN(listOfHistos_,normalize=True,stack=False,logscale=False
         if normalize:
             integral0=listOfHistos[0].Integral()
             for h in listOfHistos:
+              # Check if integral is not null, since it will give a zero division error
+              if integral0 != 0:
                 h.Scale(1./integral0)
+              else:
+                h.Scale(1.)
+                print "Warning: integral0  variable of histogram ", listOfHistos[0].GetName() ," has value 0 which would lead to zero division error."
 
 
     canvas.cd(1)
@@ -1586,7 +1602,12 @@ def stackHistoList(listOfHistos_,normalize=False):
     if normalize:
         integral0=listOfHistos[0].Integral()
         for h in listOfHistos:
+          # Check if integral is not null, since it will give a zero division error
+          if integral0 != 0:
             h.Scale(1./integral0)
+          else:
+            h.Scale(1.)
+            print "Warning: integral0  variable of histogram ", listOfHistos[0].GetName() ," has value 0 which would lead to zero division error."
     return listOfHistos
 
 
@@ -2211,7 +2232,12 @@ def plotDataMCan(listOfHistoListsData,listOfHistoLists,samples,listOfhistosOnTop
               integralfactor+=histo.Integral()
 
         if factor < 0:
-          integralfactor=integralfactor/ot.Integral()
+          # Check if on top histogram integral is not null, since it will give a zero division error
+          if ot.Integral() != 0:
+            integralfactor=integralfactor/ot.Integral()
+          else:
+            integralfactor=integralfactor
+            print "Warning: On top histogram ", ot.GetName(), " has integral 0 which would lead to zero division error."
 
         #
         # mover over/underflow
@@ -2395,7 +2421,12 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
               integralfactor+=histo.Integral()
 
         if factor < 0:
-          integralfactor=integralfactor/ot.Integral()
+          # Check if on top histogram integral is not null, since it will give a zero division error
+          if ot.Integral() != 0:
+            integralfactor=integralfactor/ot.Integral()
+          else:
+            integralfactor=integralfactor
+            print "Warning: On top histogram ", ot.GetName(), " has integral 0 which would lead to zero division error."
 
         #
         # mover over/underflow
@@ -2670,7 +2701,12 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
               integralfactor+=histo.Integral()
 
         if factor < 0:
-          integralfactor=integralfactor/ot.Integral()
+          # Check if on top histogram integral is not null, since it will give a zero division error
+          if ot.Integral() != 0:
+            integralfactor=integralfactor/ot.Integral()
+          else:
+            integralfactor=integralfactor
+            print "Warning: On top histogram ", ot.GetName(), " has integral 0 which would lead to zero division error."
 
         #
         # mover over/underflow
