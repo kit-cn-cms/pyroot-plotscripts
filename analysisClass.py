@@ -251,7 +251,7 @@ class Analysis:
     """Return true if optimized rebinning was activated """
     if self.optimizedRebinning:
       print "optimizedRebinning is activated."
-      return true
+      return True
     else:
       print "optimizedRebinning is deactivated."
       return False
