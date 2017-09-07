@@ -92,6 +92,7 @@ class theInterface:
     if self.debugOutput:
       print "Update function: Start reading preselection list file: ", preselectionListLoc
     self.preselectionList = self.readListFromFile(preselectionListLoc)
+    print "Warning: Will use the following preselection for all events: ", self.preselectionList
   
     # Update / read unitTest input values list, the assumption is that the file is located under self.modelFolderPath/model_properties/unitTestInputValues.txt
     unitTestInputValuesListLoc = self.modelFolderPath + '/model_properties/unitTestInputValues.txt'
