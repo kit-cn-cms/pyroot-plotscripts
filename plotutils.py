@@ -1453,12 +1453,14 @@ def writeHead(f,columns):
         f.write('c')
     f.write('}\n')
     f.write('\\hline\n')
-    for entryNumber, entry in enumerate(columns[:-1]):
-        if (entry and entry.strip()):
+    for entryNumber, entry in enumerate(columns):
+        if entryNumber == 0:
+          f.write('Sample &')
+        # Check if last entry and add line endings  
+        elif entryNumber +1 == len(columns):
+          f.write('Bin' + str(entryNumber) + ' \\\\ \n')
+        else:
           f.write('Bin' + str(entryNumber) + ' &')
-        else: 
-          f.write(entry+' &')
-    f.write(columns[-1]+' \\\\ \n')
     f.write('\\hline\n')
 
 
