@@ -1,5 +1,178 @@
 from plot_cuts_ZPrime_MC import *
 
+
+
+if ABCDversion is 'ABCD1':
+    generalselection=plotselection_ABCD1_general
+    generalselection_0=plotselection_ABCD1_general_0
+    generalselection_i=plotselection_ABCD1_general_i
+    cut1=plotselection_W_tau21
+    cut1_0=plotselection_W_tau21_0
+    cut1_i=plotselection_W_tau21_i
+    cut2=plotselection_B_CSV
+    cut2_0=plotselection_B_CSV_0
+    cut2_i=plotselection_B_CSV_i
+    cut3=plotselection_tau32
+    cut3_0=plotselection_tau32_0
+    cut3_i=plotselection_tau32_i
+
+    cut1_anti=plotselection_W_tau21_anti
+    cut1_anti_0=plotselection_W_tau21_anti_0
+    cut1_anti_i=plotselection_W_tau21_anti_i
+    cut2_anti=plotselection_B_CSV_anti
+    cut2_anti_0=plotselection_B_CSV_anti_0
+    cut2_anti_i=plotselection_B_CSV_anti_i
+    cut3_anti=plotselection_tau32_anti
+    cut3_anti_0=plotselection_tau32_anti_0
+    cut3_anti_i=plotselection_tau32_anti_i
+    
+    
+if ABCDversion is 'ABCD2':
+    generalselection=plotselection_ABCD2_general
+    generalselection_0=plotselection_ABCD2_general_0
+    generalselection_i=plotselection_ABCD2_general_i
+    cut1=plotselection_W_tau21
+    cut1_0=plotselection_W_tau21_0
+    cut1_i=plotselection_W_tau21_i
+    cut2=plotselection_B_CSV
+    cut2_0=plotselection_B_CSV_0
+    cut2_i=plotselection_B_CSV_i
+    cut3=plotselection_t_MSD
+    cut3_0=plotselection_t_MSD_0
+    cut3_i=plotselection_t_MSD_i 
+
+    cut1_anti=plotselection_W_tau21_anti
+    cut1_anti_0=plotselection_W_tau21_anti_0
+    cut1_anti_i=plotselection_W_tau21_anti_i
+    cut2_anti=plotselection_B_CSV_anti
+    cut2_anti_0=plotselection_B_CSV_anti_0
+    cut2_anti_i=plotselection_B_CSV_anti_i
+    cut3_anti=plotselection_t_MSD_anti
+    cut3_anti_0=plotselection_t_MSD_anti_0
+    cut3_anti_i=plotselection_t_MSD_anti_i 
+    
+    
+if ABCDversion is 'ABCD3':
+    generalselection=plotselection_ABCD3_general
+    generalselection_0=plotselection_ABCD3_general_0
+    generalselection_i=plotselection_ABCD3_general_i
+    cut1=plotselection_W_tau21
+    cut1_0=plotselection_W_tau21_0
+    cut1_i=plotselection_W_tau21_i
+    cut2=plotselection_B_CSV
+    cut2_0=plotselection_B_CSV_0
+    cut2_i=plotselection_B_CSV_i
+    cut3=plotselection_W_MSD
+    cut3_0=plotselection_W_MSD_0
+    cut3_i=plotselection_W_MSD_i    
+
+    cut1_anti=plotselection_W_tau21_anti
+    cut1_anti_0=plotselection_W_tau21_anti_0
+    cut1_anti_i=plotselection_W_tau21_anti_i
+    cut2_anti=plotselection_B_CSV_anti
+    cut2_anti_0=plotselection_B_CSV_anti_0
+    cut2_anti_i=plotselection_B_CSV_anti_i
+    cut3_anti=plotselection_W_MSD_anti
+    cut3_anti_0=plotselection_W_MSD_anti_0
+    cut3_anti_i=plotselection_W_MSD_anti_i
+    
+if ABCDversion is 'ABCD4':
+    generalselection=plotselection_ABCD4_general
+    generalselection_0=plotselection_ABCD4_general_0
+    generalselection_i=plotselection_ABCD4_general_i
+    cut1=plotselection_W_MSD
+    cut1_0=plotselection_W_MSD_0
+    cut1_i=plotselection_W_MSD_i
+    cut2=plotselection_B_CSV
+    cut2_0=plotselection_B_CSV_0
+    cut2_i=plotselection_B_CSV_i
+    cut3=plotselection_TprimeMass
+    cut3_0=plotselection_TprimeMass_0
+    cut3_i=plotselection_TprimeMass_i
+    
+    cut1_anti=plotselection_W_MSD_anti
+    cut1_anti_0=plotselection_W_MSD_anti_0
+    cut1_anti_i=plotselection_W_MSD_anti_i
+    cut2_anti=plotselection_B_CSV_anti
+    cut2_anti_0=plotselection_B_CSV_anti_0
+    cut2_anti_i=plotselection_B_CSV_anti_i
+    cut3_anti=plotselection_TprimeMass_anti
+    cut3_anti_0=plotselection_TprimeMass_anti_0
+    cut3_anti_i=plotselection_TprimeMass_anti_i
+    
+if ABCDversion is 'ABCD5':
+    generalselection=plotselection_ABCD5_general
+    generalselection_0=plotselection_ABCD5_general_0
+    generalselection_i=plotselection_ABCD5_general_i
+    cut1=plotselection_W_MSD
+    cut1_0=plotselection_W_MSD_0
+    cut1_i=plotselection_W_MSD_i
+    cut2=plotselection_B_CSV
+    cut2_0=plotselection_B_CSV_0
+    cut2_i=plotselection_B_CSV_i
+    cut3=plotselection_W_tau21
+    cut3_0=plotselection_W_tau21_0
+    cut3_i=plotselection_W_tau21_i
+   
+    cut1_anti=plotselection_W_MSD_anti
+    cut1_anti_0=plotselection_W_MSD_anti_0
+    cut1_anti_i=plotselection_W_MSD_anti_i
+    cut2_anti=plotselection_B_CSV_anti
+    cut2_anti_0=plotselection_B_CSV_anti_0
+    cut2_anti_i=plotselection_B_CSV_anti_i
+    cut3_anti=plotselection_W_tau21_anti
+    cut3_anti_0=plotselection_W_tau21_anti_0
+    cut3_anti_i=plotselection_W_tau21_anti_i
+    
+if ABCDversion is 'ABCD6':
+    generalselection=plotselection_ABCD6_general
+    generalselection_0=plotselection_ABCD6_general_0
+    generalselection_i=plotselection_ABCD6_general_i
+    cut1=plotselection_B_CSV
+    cut1_0=plotselection_B_CSV_0
+    cut1_i=plotselection_B_CSV_i
+    cut2=plotselection_W_tau21
+    cut2_0=plotselection_W_tau21_0
+    cut2_i=plotselection_W_tau21_i
+    cut3=plotselection_t_MSD
+    cut3_0=plotselection_t_MSD_0
+    cut3_i=plotselection_t_MSD_i
+  
+    cut1_anti=plotselection_B_CSV_anti
+    cut1_anti_0=plotselection_B_CSV_anti_0
+    cut1_anti_i=plotselection_B_CSV_anti_i
+    cut2_anti=plotselection_W_tau21_anti
+    cut2_anti_0=plotselection_W_tau21_anti_0
+    cut2_anti_i=plotselection_W_tau21_anti_i
+    cut3_anti=plotselection_t_MSD_anti
+    cut3_anti_0=plotselection_t_MSD_anti_0
+    cut3_anti_i=plotselection_t_MSD_anti_i
+    
+if ABCDversion is 'ABCD7':
+    generalselection=plotselection_ABCD7_general
+    generalselection_0=plotselection_ABCD7_general_0
+    generalselection_i=plotselection_ABCD7_general_i
+    cut1=plotselection_B_CSV
+    cut1_0=plotselection_B_CSV_0
+    cut1_i=plotselection_B_CSV_i
+    cut2=plotselection_t_MSD
+    cut2_0=plotselection_t_MSD_0
+    cut2_i=plotselection_t_MSD_i
+    cut3=plotselection_W_MSD
+    cut3_0=plotselection_W_MSD_0
+    cut3_i=plotselection_W_MSD_i
+
+    cut1_anti=plotselection_B_CSV_anti
+    cut1_anti_0=plotselection_B_CSV_anti_0
+    cut1_anti_i=plotselection_B_CSV_anti_i
+    cut2_anti=plotselection_t_MSD_anti
+    cut2_anti_0=plotselection_t_MSD_anti_0
+    cut2_anti_i=plotselection_t_MSD_anti_i
+    cut3_anti=plotselection_W_MSD_anti
+    cut3_anti_0=plotselection_W_MSD_anti_0
+    cut3_anti_i=plotselection_W_MSD_anti_i
+
+
 #stringforPDFs="float Weight_pdf_variation_260001"
 #stringforPDFs1="Weight_pdf_variation_260001"
 #stringforPDFs2="""
@@ -182,197 +355,299 @@ bool IsnoSignal_inclusive(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD
     return res;
 }
 """ ,
+#"""
+#int ABCD1_Category(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
+    #int res=0;
+    #for (int i=0; i<N_Zprime_ABCD; i++){
+        #if ("""+ plotselection_ABCD1_general_i +"""){
+            #if("""+ plotselection_topsubjetCSVv2_i +"""){
+                #if("""+ plotselection_W_tau21_i +"""){
+                    #if("""+ plotselection_B_CSV_i + """){
+                        #if(""" + plotselection_tau32_i + """){
+                            #res=1;
+                            #break;
+                        #}
+                        #if(""" + plotselection_tau32_anti_i + """){
+                            #res=2;
+                            #break;
+                        #}
+                    #}
+                    #if("""+ plotselection_B_CSV_anti_i + """){
+                        #if(""" + plotselection_tau32_i + """){
+                            #res=3;
+                            #break;
+                        #}
+                        #if(""" + plotselection_tau32_anti_i + """){
+                            #res=4;
+                            #break;
+                        #}
+                    #}                
+                #}
+                #if("""+ plotselection_W_tau21_anti_i +"""){
+                    #if("""+ plotselection_B_CSV_i + """){
+                        #if(""" + plotselection_tau32_i + """){
+                            #res=5;
+                            #break;
+                        #}
+                        #if(""" + plotselection_tau32_anti_i + """){
+                            #res=6;
+                            #break;
+                        #}
+                    #}
+                    #if("""+ plotselection_B_CSV_anti_i + """){
+                        #if(""" + plotselection_tau32_i + """){
+                            #res=7;
+                            #break;
+                        #}
+                        #if(""" + plotselection_tau32_anti_i + """){
+                            #res=8;
+                            #break;
+                        #}
+                    #}                
+                #}
+            #} else {
+                #if("""+ plotselection_W_tau21_i +"""){
+                    #if("""+ plotselection_B_CSV_i + """){
+                        #if(""" + plotselection_tau32_i + """){
+                            #res=9;
+                            #break;
+                        #}
+                        #if(""" + plotselection_tau32_anti_i + """){
+                            #res=10;
+                            #break;
+                        #}
+                    #}
+                    #if("""+ plotselection_B_CSV_anti_i + """){
+                        #if(""" + plotselection_tau32_i + """){
+                            #res=11;
+                            #break;
+                        #}
+                        #if(""" + plotselection_tau32_anti_i + """){
+                            #res=12;
+                            #break;
+                        #}
+                    #}                
+                #}
+                #if("""+ plotselection_W_tau21_anti_i +"""){
+                    #if("""+ plotselection_B_CSV_i + """){
+                        #if(""" + plotselection_tau32_i + """){
+                            #res=13;
+                            #break;
+                        #}
+                        #if(""" + plotselection_tau32_anti_i + """){
+                            #res=14;
+                            #break;
+                        #}
+                    #}
+                    #if("""+ plotselection_B_CSV_anti_i + """){
+                        #if(""" + plotselection_tau32_i + """){
+                            #res=15;
+                            #break;
+                        #}
+                        #if(""" + plotselection_tau32_anti_i + """){
+                            #res=16;
+                            #break;
+                        #}
+                    #}                
+                #}
+            #}
+        #}
+    #}
+    #return res;
+#}
+#""",
+#"""
+#int ABCD2_Category(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
+    #int res=0;
+    #for (int i=0; i<N_Zprime_ABCD; i++){
+        #if ("""+ plotselection_ABCD2_general_i +"""){
+            #if("""+ plotselection_topsubjetCSVv2_i +"""){
+                #if("""+ plotselection_W_tau21_i +"""){
+                    #if("""+ plotselection_B_CSV_i + """){
+                        #if(""" + plotselection_t_MSD_i + """){
+                            #res=1;
+                            #break;
+                        #}
+                        #if(""" + plotselection_t_MSD_anti_i + """){
+                            #res=2;
+                            #break;
+                        #}
+                    #}
+                    #if("""+ plotselection_B_CSV_anti_i + """){
+                        #if(""" + plotselection_t_MSD_i + """){
+                            #res=3;
+                            #break;
+                        #}
+                        #if(""" + plotselection_t_MSD_anti_i + """){
+                            #res=4;
+                            #break;
+                        #}
+                    #}                
+                #}
+                #if("""+ plotselection_W_tau21_anti_i +"""){
+                    #if("""+ plotselection_B_CSV_i + """){
+                        #if(""" + plotselection_t_MSD_i + """){
+                            #res=5;
+                            #break;
+                        #}
+                        #if(""" + plotselection_t_MSD_anti_i + """){
+                            #res=6;
+                            #break;
+                        #}
+                    #}
+                    #if("""+ plotselection_B_CSV_anti_i + """){
+                        #if(""" + plotselection_t_MSD_i + """){
+                            #res=7;
+                            #break;
+                        #}
+                        #if(""" + plotselection_t_MSD_anti_i + """){
+                            #res=8;
+                            #break;
+                        #}
+                    #}                
+                #}
+            #} else {
+                #if("""+ plotselection_W_tau21_i +"""){
+                    #if("""+ plotselection_B_CSV_i + """){
+                        #if(""" + plotselection_t_MSD_i + """){
+                            #res=9;
+                            #break;
+                        #}
+                        #if(""" + plotselection_t_MSD_anti_i + """){
+                            #res=10;
+                            #break;
+                        #}
+                    #}
+                    #if("""+ plotselection_B_CSV_anti_i + """){
+                        #if(""" + plotselection_t_MSD_i + """){
+                            #res=11;
+                            #break;
+                        #}
+                        #if(""" + plotselection_t_MSD_anti_i + """){
+                            #res=12;
+                            #break;
+                        #}
+                    #}                
+                #}
+                #if("""+ plotselection_W_tau21_anti_i +"""){
+                    #if("""+ plotselection_B_CSV_i + """){
+                        #if(""" + plotselection_t_MSD_i + """){
+                            #res=13;
+                            #break;
+                        #}
+                        #if(""" + plotselection_t_MSD_anti_i + """){
+                            #res=14;
+                            #break;
+                        #}
+                    #}
+                    #if("""+ plotselection_B_CSV_anti_i + """){
+                        #if(""" + plotselection_t_MSD_i + """){
+                            #res=15;
+                            #break;
+                        #}
+                        #if(""" + plotselection_t_MSD_anti_i + """){
+                            #res=16;
+                            #break;
+                        #}
+                    #}                
+                #}
+            #}
+        #}
+    #}
+    #return res;
+#}
+#""",
+
 """
-int ABCD1_Category(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
+int ABCD_Category(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
     int res=0;
     for (int i=0; i<N_Zprime_ABCD; i++){
-        if ("""+ plotselection_ABCD1_general_i +"""){
+        if ("""+ generalselection_i +"""){
             if("""+ plotselection_topsubjetCSVv2_i +"""){
-                if("""+ plotselection_W_tau21_i +"""){
-                    if("""+ plotselection_B_CSV_i + """){
-                        if(""" + plotselection_tau32_i + """){
+                if("""+ cut1_i +"""){
+                    if("""+ cut2_i + """){
+                        if(""" + cut3_i + """){
                             res=1;
                             break;
                         }
-                        if(""" + plotselection_tau32_anti_i + """){
+                        if(""" + cut3_anti_i + """){
                             res=2;
                             break;
                         }
                     }
-                    if("""+ plotselection_B_CSV_anti_i + """){
-                        if(""" + plotselection_tau32_i + """){
+                    if("""+ cut2_anti_i + """){
+                        if(""" + cut3_i + """){
                             res=3;
                             break;
                         }
-                        if(""" + plotselection_tau32_anti_i + """){
+                        if(""" + cut3_anti_i + """){
                             res=4;
                             break;
                         }
                     }                
                 }
-                if("""+ plotselection_W_tau21_anti_i +"""){
-                    if("""+ plotselection_B_CSV_i + """){
-                        if(""" + plotselection_tau32_i + """){
+                if("""+ cut1_anti_i +"""){
+                    if("""+ cut2_i + """){
+                        if(""" + cut3_i + """){
                             res=5;
                             break;
                         }
-                        if(""" + plotselection_tau32_anti_i + """){
+                        if(""" + cut3_anti_i + """){
                             res=6;
                             break;
                         }
                     }
-                    if("""+ plotselection_B_CSV_anti_i + """){
-                        if(""" + plotselection_tau32_i + """){
+                    if("""+ cut2_anti_i + """){
+                        if(""" + cut3_i + """){
                             res=7;
                             break;
                         }
-                        if(""" + plotselection_tau32_anti_i + """){
+                        if(""" + cut3_anti_i + """){
                             res=8;
                             break;
                         }
                     }                
                 }
             } else {
-                if("""+ plotselection_W_tau21_i +"""){
-                    if("""+ plotselection_B_CSV_i + """){
-                        if(""" + plotselection_tau32_i + """){
+                if("""+ cut1_i +"""){
+                    if("""+ cut2_i + """){
+                        if(""" + cut3_i + """){
                             res=9;
                             break;
                         }
-                        if(""" + plotselection_tau32_anti_i + """){
+                        if(""" + cut3_anti_i + """){
                             res=10;
                             break;
                         }
                     }
-                    if("""+ plotselection_B_CSV_anti_i + """){
-                        if(""" + plotselection_tau32_i + """){
+                    if("""+ cut2_anti_i + """){
+                        if(""" + cut3_i + """){
                             res=11;
                             break;
                         }
-                        if(""" + plotselection_tau32_anti_i + """){
+                        if(""" + cut3_anti_i + """){
                             res=12;
                             break;
                         }
                     }                
                 }
-                if("""+ plotselection_W_tau21_anti_i +"""){
-                    if("""+ plotselection_B_CSV_i + """){
-                        if(""" + plotselection_tau32_i + """){
+                if("""+ cut1_anti_i +"""){
+                    if("""+ cut2_i + """){
+                        if(""" + cut3_i + """){
                             res=13;
                             break;
                         }
-                        if(""" + plotselection_tau32_anti_i + """){
+                        if(""" + cut3_anti_i + """){
                             res=14;
                             break;
                         }
                     }
-                    if("""+ plotselection_B_CSV_anti_i + """){
-                        if(""" + plotselection_tau32_i + """){
+                    if("""+ cut2_anti_i + """){
+                        if(""" + cut3_i + """){
                             res=15;
                             break;
                         }
-                        if(""" + plotselection_tau32_anti_i + """){
-                            res=16;
-                            break;
-                        }
-                    }                
-                }
-            }
-        }
-    }
-    return res;
-}
-""",
-"""
-int ABCD2_Category(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
-    int res=0;
-    for (int i=0; i<N_Zprime_ABCD; i++){
-        if ("""+ plotselection_ABCD2_general_i +"""){
-            if("""+ plotselection_topsubjetCSVv2_i +"""){
-                if("""+ plotselection_W_tau21_i +"""){
-                    if("""+ plotselection_B_CSV_i + """){
-                        if(""" + plotselection_t_MSD_i + """){
-                            res=1;
-                            break;
-                        }
-                        if(""" + plotselection_t_MSD_anti_i + """){
-                            res=2;
-                            break;
-                        }
-                    }
-                    if("""+ plotselection_B_CSV_anti_i + """){
-                        if(""" + plotselection_t_MSD_i + """){
-                            res=3;
-                            break;
-                        }
-                        if(""" + plotselection_t_MSD_anti_i + """){
-                            res=4;
-                            break;
-                        }
-                    }                
-                }
-                if("""+ plotselection_W_tau21_anti_i +"""){
-                    if("""+ plotselection_B_CSV_i + """){
-                        if(""" + plotselection_t_MSD_i + """){
-                            res=5;
-                            break;
-                        }
-                        if(""" + plotselection_t_MSD_anti_i + """){
-                            res=6;
-                            break;
-                        }
-                    }
-                    if("""+ plotselection_B_CSV_anti_i + """){
-                        if(""" + plotselection_t_MSD_i + """){
-                            res=7;
-                            break;
-                        }
-                        if(""" + plotselection_t_MSD_anti_i + """){
-                            res=8;
-                            break;
-                        }
-                    }                
-                }
-            } else {
-                if("""+ plotselection_W_tau21_i +"""){
-                    if("""+ plotselection_B_CSV_i + """){
-                        if(""" + plotselection_t_MSD_i + """){
-                            res=9;
-                            break;
-                        }
-                        if(""" + plotselection_t_MSD_anti_i + """){
-                            res=10;
-                            break;
-                        }
-                    }
-                    if("""+ plotselection_B_CSV_anti_i + """){
-                        if(""" + plotselection_t_MSD_i + """){
-                            res=11;
-                            break;
-                        }
-                        if(""" + plotselection_t_MSD_anti_i + """){
-                            res=12;
-                            break;
-                        }
-                    }                
-                }
-                if("""+ plotselection_W_tau21_anti_i +"""){
-                    if("""+ plotselection_B_CSV_i + """){
-                        if(""" + plotselection_t_MSD_i + """){
-                            res=13;
-                            break;
-                        }
-                        if(""" + plotselection_t_MSD_anti_i + """){
-                            res=14;
-                            break;
-                        }
-                    }
-                    if("""+ plotselection_B_CSV_anti_i + """){
-                        if(""" + plotselection_t_MSD_i + """){
-                            res=15;
-                            break;
-                        }
-                        if(""" + plotselection_t_MSD_anti_i + """){
+                        if(""" + cut3_anti_i + """){
                             res=16;
                             break;
                         }
@@ -385,8 +660,192 @@ int ABCD2_Category(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, flo
 }
 """,
 
+#"""
+#std::vector<float> CSV_weights_ABCD1(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD, float const* Bottoms_ABCD_WeightCSVnominal, float const* Bottoms_ABCD_WeightCSVLFup, float const* Bottoms_ABCD_WeightCSVLFdown, float const* Bottoms_ABCD_WeightCSVHFup, float const* Bottoms_ABCD_WeightCSVHFdown, float const* Bottoms_ABCD_WeightCSVHFStats1up, float const* Bottoms_ABCD_WeightCSVHFStats1down, float const* Bottoms_ABCD_WeightCSVLFStats1up, float const* Bottoms_ABCD_WeightCSVLFStats1down, float const* Bottoms_ABCD_WeightCSVHFStats2up, float const* Bottoms_ABCD_WeightCSVHFStats2down, float const* Bottoms_ABCD_WeightCSVLFStats2up, float const* Bottoms_ABCD_WeightCSVLFStats2down, float const* Bottoms_ABCD_WeightCSVCErr1up, float const* Bottoms_ABCD_WeightCSVCErr1down, float const* Bottoms_ABCD_WeightCSVCErr2up, float const* Bottoms_ABCD_WeightCSVCErr2down, float const* Topsubjets_ABCD_WeightCSVnominal, float const* Topsubjets_ABCD_WeightCSVLFup, float const* Topsubjets_ABCD_WeightCSVLFdown, float const* Topsubjets_ABCD_WeightCSVHFup, float const* Topsubjets_ABCD_WeightCSVHFdown, float const* Topsubjets_ABCD_WeightCSVHFStats1up, float const* Topsubjets_ABCD_WeightCSVHFStats1down, float const* Topsubjets_ABCD_WeightCSVLFStats1up, float const* Topsubjets_ABCD_WeightCSVLFStats1down, float const* Topsubjets_ABCD_WeightCSVHFStats2up, float const* Topsubjets_ABCD_WeightCSVHFStats2down, float const* Topsubjets_ABCD_WeightCSVLFStats2up, float const* Topsubjets_ABCD_WeightCSVLFStats2down, float const* Topsubjets_ABCD_WeightCSVCErr1up, float const* Topsubjets_ABCD_WeightCSVCErr1down, float const* Topsubjets_ABCD_WeightCSVCErr2up, float const* Topsubjets_ABCD_WeightCSVCErr2down  ){
+    #std::vector<float> weights;
+    
+    #float CSVnominal=1.0;
+    #float CSVLFup=1.0;
+    #float CSVLFdown=1.0;
+    #float CSVHFup=1.0;
+    #float CSVHFdown=1.0;
+    #float CSVHFStats1up=1.0;
+    #float CSVHFStats1down=1.0;
+    #float CSVLFStats1up=1.0;
+    #float CSVLFStats1down=1.0;
+    #float CSVHFStats2up=1.0;
+    #float CSVHFStats2down=1.0;
+    #float CSVLFStats2up=1.0;
+    #float CSVLFStats2down=1.0;
+    #float CSVCErr1up=1.0;
+    #float CSVCErr1down=1.0;
+    #float CSVCErr2up=1.0;
+    #float CSVCErr2down=1.0;
+
+    #float tpt=0.0;
+    #float Wpt=0.0;
+    #float bpt=0.0;
+
+    #for (int i=0; i<N_Zprime_ABCD; i++){
+        #if ("""+ plotselection_ABCD1_general_i +""" && Bottoms_ABCD_WeightCSVnominal[i]>(-0.5)){         
+            #CSVnominal *= Bottoms_ABCD_WeightCSVnominal[i];
+            #CSVLFup *= Bottoms_ABCD_WeightCSVLFup[i];
+            #CSVLFdown *= Bottoms_ABCD_WeightCSVLFdown[i];
+            #CSVHFup *= Bottoms_ABCD_WeightCSVHFup[i];
+            #CSVHFdown *= Bottoms_ABCD_WeightCSVHFdown[i];
+            #CSVHFStats1up *= Bottoms_ABCD_WeightCSVHFStats1up[i];
+            #CSVHFStats1down *= Bottoms_ABCD_WeightCSVHFStats1down[i];
+            #CSVLFStats1up *= Bottoms_ABCD_WeightCSVLFStats1up[i];
+            #CSVLFStats1down *= Bottoms_ABCD_WeightCSVLFStats1down[i];
+            #CSVHFStats2up *= Bottoms_ABCD_WeightCSVHFStats2up[i];
+            #CSVHFStats2down *= Bottoms_ABCD_WeightCSVHFStats2down[i];
+            #CSVLFStats2up *= Bottoms_ABCD_WeightCSVLFStats2up[i];
+            #CSVLFStats2down *= Bottoms_ABCD_WeightCSVLFStats2down[i];
+            #CSVCErr1down *= Bottoms_ABCD_WeightCSVCErr1up[i];
+            #CSVCErr1down *= Bottoms_ABCD_WeightCSVCErr1down[i];
+            #CSVCErr2up *= Bottoms_ABCD_WeightCSVCErr2up[i];
+            #CSVCErr2down *= Bottoms_ABCD_WeightCSVCErr2down[i];
+            
+            #CSVnominal *= Topsubjets_ABCD_WeightCSVnominal[i];
+            #CSVLFup *= Topsubjets_ABCD_WeightCSVLFup[i];
+            #CSVLFdown *= Topsubjets_ABCD_WeightCSVLFdown[i];
+            #CSVHFup *= Topsubjets_ABCD_WeightCSVHFup[i];
+            #CSVHFdown *= Topsubjets_ABCD_WeightCSVHFdown[i];
+            #CSVHFStats1up *= Topsubjets_ABCD_WeightCSVHFStats1up[i];
+            #CSVHFStats1down *= Topsubjets_ABCD_WeightCSVHFStats1down[i];
+            #CSVLFStats1up *= Topsubjets_ABCD_WeightCSVLFStats1up[i];
+            #CSVLFStats1down *= Topsubjets_ABCD_WeightCSVLFStats1down[i];
+            #CSVHFStats2up *= Topsubjets_ABCD_WeightCSVHFStats2up[i];
+            #CSVHFStats2down *= Topsubjets_ABCD_WeightCSVHFStats2down[i];
+            #CSVLFStats2up *= Topsubjets_ABCD_WeightCSVLFStats2up[i];
+            #CSVLFStats2down *= Topsubjets_ABCD_WeightCSVLFStats2down[i];
+            #CSVCErr1down *= Topsubjets_ABCD_WeightCSVCErr1up[i];
+            #CSVCErr1down *= Topsubjets_ABCD_WeightCSVCErr1down[i];
+            #CSVCErr2up *= Topsubjets_ABCD_WeightCSVCErr2up[i];
+            #CSVCErr2down *= Topsubjets_ABCD_WeightCSVCErr2down[i];
+            
+            #break;
+        #}
+    #};
+    
+    #weights.push_back(CSVnominal);
+    #weights.push_back(CSVLFup);
+    #weights.push_back(CSVLFdown);
+    #weights.push_back(CSVHFup);
+    #weights.push_back(CSVHFdown);
+    #weights.push_back(CSVHFStats1up);
+    #weights.push_back(CSVHFStats1down);
+    #weights.push_back(CSVLFStats1up);
+    #weights.push_back(CSVLFStats1down);
+    #weights.push_back(CSVHFStats2up);
+    #weights.push_back(CSVHFStats2down);
+    #weights.push_back(CSVLFStats2up);
+    #weights.push_back(CSVLFStats2down);
+    #weights.push_back(CSVCErr1up);
+    #weights.push_back(CSVCErr1down);
+    #weights.push_back(CSVCErr2up);
+    #weights.push_back(CSVCErr2down);    
+    
+    #return weights;
+#}
+
+#"""
+#,
+
+#"""
+#std::vector<float> CSV_weights_ABCD2(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD, float const* Bottoms_ABCD_WeightCSVnominal, float const* Bottoms_ABCD_WeightCSVLFup, float const* Bottoms_ABCD_WeightCSVLFdown, float const* Bottoms_ABCD_WeightCSVHFup, float const* Bottoms_ABCD_WeightCSVHFdown, float const* Bottoms_ABCD_WeightCSVHFStats1up, float const* Bottoms_ABCD_WeightCSVHFStats1down, float const* Bottoms_ABCD_WeightCSVLFStats1up, float const* Bottoms_ABCD_WeightCSVLFStats1down, float const* Bottoms_ABCD_WeightCSVHFStats2up, float const* Bottoms_ABCD_WeightCSVHFStats2down, float const* Bottoms_ABCD_WeightCSVLFStats2up, float const* Bottoms_ABCD_WeightCSVLFStats2down, float const* Bottoms_ABCD_WeightCSVCErr1up, float const* Bottoms_ABCD_WeightCSVCErr1down, float const* Bottoms_ABCD_WeightCSVCErr2up, float const* Bottoms_ABCD_WeightCSVCErr2down, float const* Topsubjets_ABCD_WeightCSVnominal, float const* Topsubjets_ABCD_WeightCSVLFup, float const* Topsubjets_ABCD_WeightCSVLFdown, float const* Topsubjets_ABCD_WeightCSVHFup, float const* Topsubjets_ABCD_WeightCSVHFdown, float const* Topsubjets_ABCD_WeightCSVHFStats1up, float const* Topsubjets_ABCD_WeightCSVHFStats1down, float const* Topsubjets_ABCD_WeightCSVLFStats1up, float const* Topsubjets_ABCD_WeightCSVLFStats1down, float const* Topsubjets_ABCD_WeightCSVHFStats2up, float const* Topsubjets_ABCD_WeightCSVHFStats2down, float const* Topsubjets_ABCD_WeightCSVLFStats2up, float const* Topsubjets_ABCD_WeightCSVLFStats2down, float const* Topsubjets_ABCD_WeightCSVCErr1up, float const* Topsubjets_ABCD_WeightCSVCErr1down, float const* Topsubjets_ABCD_WeightCSVCErr2up, float const* Topsubjets_ABCD_WeightCSVCErr2down  ){
+    #std::vector<float> weights;
+    
+    #float CSVnominal=1.0;
+    #float CSVLFup=1.0;
+    #float CSVLFdown=1.0;
+    #float CSVHFup=1.0;
+    #float CSVHFdown=1.0;
+    #float CSVHFStats1up=1.0;
+    #float CSVHFStats1down=1.0;
+    #float CSVLFStats1up=1.0;
+    #float CSVLFStats1down=1.0;
+    #float CSVHFStats2up=1.0;
+    #float CSVHFStats2down=1.0;
+    #float CSVLFStats2up=1.0;
+    #float CSVLFStats2down=1.0;
+    #float CSVCErr1up=1.0;
+    #float CSVCErr1down=1.0;
+    #float CSVCErr2up=1.0;
+    #float CSVCErr2down=1.0;
+
+    #float tpt=0.0;
+    #float Wpt=0.0;
+    #float bpt=0.0;
+
+    #for (int i=0; i<N_Zprime_ABCD; i++){
+        #if ("""+ plotselection_ABCD2_general_i +""" && Bottoms_ABCD_WeightCSVnominal[i]>(-0.5)){         
+            #CSVnominal *= Bottoms_ABCD_WeightCSVnominal[i];
+            #CSVLFup *= Bottoms_ABCD_WeightCSVLFup[i];
+            #CSVLFdown *= Bottoms_ABCD_WeightCSVLFdown[i];
+            #CSVHFup *= Bottoms_ABCD_WeightCSVHFup[i];
+            #CSVHFdown *= Bottoms_ABCD_WeightCSVHFdown[i];
+            #CSVHFStats1up *= Bottoms_ABCD_WeightCSVHFStats1up[i];
+            #CSVHFStats1down *= Bottoms_ABCD_WeightCSVHFStats1down[i];
+            #CSVLFStats1up *= Bottoms_ABCD_WeightCSVLFStats1up[i];
+            #CSVLFStats1down *= Bottoms_ABCD_WeightCSVLFStats1down[i];
+            #CSVHFStats2up *= Bottoms_ABCD_WeightCSVHFStats2up[i];
+            #CSVHFStats2down *= Bottoms_ABCD_WeightCSVHFStats2down[i];
+            #CSVLFStats2up *= Bottoms_ABCD_WeightCSVLFStats2up[i];
+            #CSVLFStats2down *= Bottoms_ABCD_WeightCSVLFStats2down[i];
+            #CSVCErr1down *= Bottoms_ABCD_WeightCSVCErr1up[i];
+            #CSVCErr1down *= Bottoms_ABCD_WeightCSVCErr1down[i];
+            #CSVCErr2up *= Bottoms_ABCD_WeightCSVCErr2up[i];
+            #CSVCErr2down *= Bottoms_ABCD_WeightCSVCErr2down[i];
+            
+            #CSVnominal *= Topsubjets_ABCD_WeightCSVnominal[i];
+            #CSVLFup *= Topsubjets_ABCD_WeightCSVLFup[i];
+            #CSVLFdown *= Topsubjets_ABCD_WeightCSVLFdown[i];
+            #CSVHFup *= Topsubjets_ABCD_WeightCSVHFup[i];
+            #CSVHFdown *= Topsubjets_ABCD_WeightCSVHFdown[i];
+            #CSVHFStats1up *= Topsubjets_ABCD_WeightCSVHFStats1up[i];
+            #CSVHFStats1down *= Topsubjets_ABCD_WeightCSVHFStats1down[i];
+            #CSVLFStats1up *= Topsubjets_ABCD_WeightCSVLFStats1up[i];
+            #CSVLFStats1down *= Topsubjets_ABCD_WeightCSVLFStats1down[i];
+            #CSVHFStats2up *= Topsubjets_ABCD_WeightCSVHFStats2up[i];
+            #CSVHFStats2down *= Topsubjets_ABCD_WeightCSVHFStats2down[i];
+            #CSVLFStats2up *= Topsubjets_ABCD_WeightCSVLFStats2up[i];
+            #CSVLFStats2down *= Topsubjets_ABCD_WeightCSVLFStats2down[i];
+            #CSVCErr1down *= Topsubjets_ABCD_WeightCSVCErr1up[i];
+            #CSVCErr1down *= Topsubjets_ABCD_WeightCSVCErr1down[i];
+            #CSVCErr2up *= Topsubjets_ABCD_WeightCSVCErr2up[i];
+            #CSVCErr2down *= Topsubjets_ABCD_WeightCSVCErr2down[i];
+                        
+            #break;
+        #}
+    #};
+    
+    #weights.push_back(CSVnominal);
+    #weights.push_back(CSVLFup);
+    #weights.push_back(CSVLFdown);
+    #weights.push_back(CSVHFup);
+    #weights.push_back(CSVHFdown);
+    #weights.push_back(CSVHFStats1up);
+    #weights.push_back(CSVHFStats1down);
+    #weights.push_back(CSVLFStats1up);
+    #weights.push_back(CSVLFStats1down);
+    #weights.push_back(CSVHFStats2up);
+    #weights.push_back(CSVHFStats2down);
+    #weights.push_back(CSVLFStats2up);
+    #weights.push_back(CSVLFStats2down);
+    #weights.push_back(CSVCErr1up);
+    #weights.push_back(CSVCErr1down);
+    #weights.push_back(CSVCErr2up);
+    #weights.push_back(CSVCErr2down);    
+    
+    #return weights;
+#}
+
+#"""
+#,
+
 """
-std::vector<float> CSV_weights_ABCD1(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD, float const* Bottoms_ABCD_WeightCSVnominal, float const* Bottoms_ABCD_WeightCSVLFup, float const* Bottoms_ABCD_WeightCSVLFdown, float const* Bottoms_ABCD_WeightCSVHFup, float const* Bottoms_ABCD_WeightCSVHFdown, float const* Bottoms_ABCD_WeightCSVHFStats1up, float const* Bottoms_ABCD_WeightCSVHFStats1down, float const* Bottoms_ABCD_WeightCSVLFStats1up, float const* Bottoms_ABCD_WeightCSVLFStats1down, float const* Bottoms_ABCD_WeightCSVHFStats2up, float const* Bottoms_ABCD_WeightCSVHFStats2down, float const* Bottoms_ABCD_WeightCSVLFStats2up, float const* Bottoms_ABCD_WeightCSVLFStats2down, float const* Bottoms_ABCD_WeightCSVCErr1up, float const* Bottoms_ABCD_WeightCSVCErr1down, float const* Bottoms_ABCD_WeightCSVCErr2up, float const* Bottoms_ABCD_WeightCSVCErr2down, float const* Topsubjets_ABCD_WeightCSVnominal, float const* Topsubjets_ABCD_WeightCSVLFup, float const* Topsubjets_ABCD_WeightCSVLFdown, float const* Topsubjets_ABCD_WeightCSVHFup, float const* Topsubjets_ABCD_WeightCSVHFdown, float const* Topsubjets_ABCD_WeightCSVHFStats1up, float const* Topsubjets_ABCD_WeightCSVHFStats1down, float const* Topsubjets_ABCD_WeightCSVLFStats1up, float const* Topsubjets_ABCD_WeightCSVLFStats1down, float const* Topsubjets_ABCD_WeightCSVHFStats2up, float const* Topsubjets_ABCD_WeightCSVHFStats2down, float const* Topsubjets_ABCD_WeightCSVLFStats2up, float const* Topsubjets_ABCD_WeightCSVLFStats2down, float const* Topsubjets_ABCD_WeightCSVCErr1up, float const* Topsubjets_ABCD_WeightCSVCErr1down, float const* Topsubjets_ABCD_WeightCSVCErr2up, float const* Topsubjets_ABCD_WeightCSVCErr2down  ){
+std::vector<float> CSV_weights_""" + ABCDversion + """(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD, float const* Bottoms_ABCD_WeightCSVnominal, float const* Bottoms_ABCD_WeightCSVLFup, float const* Bottoms_ABCD_WeightCSVLFdown, float const* Bottoms_ABCD_WeightCSVHFup, float const* Bottoms_ABCD_WeightCSVHFdown, float const* Bottoms_ABCD_WeightCSVHFStats1up, float const* Bottoms_ABCD_WeightCSVHFStats1down, float const* Bottoms_ABCD_WeightCSVLFStats1up, float const* Bottoms_ABCD_WeightCSVLFStats1down, float const* Bottoms_ABCD_WeightCSVHFStats2up, float const* Bottoms_ABCD_WeightCSVHFStats2down, float const* Bottoms_ABCD_WeightCSVLFStats2up, float const* Bottoms_ABCD_WeightCSVLFStats2down, float const* Bottoms_ABCD_WeightCSVCErr1up, float const* Bottoms_ABCD_WeightCSVCErr1down, float const* Bottoms_ABCD_WeightCSVCErr2up, float const* Bottoms_ABCD_WeightCSVCErr2down, float const* Topsubjets_ABCD_WeightCSVnominal, float const* Topsubjets_ABCD_WeightCSVLFup, float const* Topsubjets_ABCD_WeightCSVLFdown, float const* Topsubjets_ABCD_WeightCSVHFup, float const* Topsubjets_ABCD_WeightCSVHFdown, float const* Topsubjets_ABCD_WeightCSVHFStats1up, float const* Topsubjets_ABCD_WeightCSVHFStats1down, float const* Topsubjets_ABCD_WeightCSVLFStats1up, float const* Topsubjets_ABCD_WeightCSVLFStats1down, float const* Topsubjets_ABCD_WeightCSVHFStats2up, float const* Topsubjets_ABCD_WeightCSVHFStats2down, float const* Topsubjets_ABCD_WeightCSVLFStats2up, float const* Topsubjets_ABCD_WeightCSVLFStats2down, float const* Topsubjets_ABCD_WeightCSVCErr1up, float const* Topsubjets_ABCD_WeightCSVCErr1down, float const* Topsubjets_ABCD_WeightCSVCErr2up, float const* Topsubjets_ABCD_WeightCSVCErr2down  ){
     std::vector<float> weights;
     
     float CSVnominal=1.0;
@@ -412,99 +871,7 @@ std::vector<float> CSV_weights_ABCD1(float const* Zprimes_ABCD_M, float const* T
     float bpt=0.0;
 
     for (int i=0; i<N_Zprime_ABCD; i++){
-        if ("""+ plotselection_ABCD1_general_i +""" && Bottoms_ABCD_WeightCSVnominal[i]>(-0.5)){         
-            CSVnominal *= Bottoms_ABCD_WeightCSVnominal[i];
-            CSVLFup *= Bottoms_ABCD_WeightCSVLFup[i];
-            CSVLFdown *= Bottoms_ABCD_WeightCSVLFdown[i];
-            CSVHFup *= Bottoms_ABCD_WeightCSVHFup[i];
-            CSVHFdown *= Bottoms_ABCD_WeightCSVHFdown[i];
-            CSVHFStats1up *= Bottoms_ABCD_WeightCSVHFStats1up[i];
-            CSVHFStats1down *= Bottoms_ABCD_WeightCSVHFStats1down[i];
-            CSVLFStats1up *= Bottoms_ABCD_WeightCSVLFStats1up[i];
-            CSVLFStats1down *= Bottoms_ABCD_WeightCSVLFStats1down[i];
-            CSVHFStats2up *= Bottoms_ABCD_WeightCSVHFStats2up[i];
-            CSVHFStats2down *= Bottoms_ABCD_WeightCSVHFStats2down[i];
-            CSVLFStats2up *= Bottoms_ABCD_WeightCSVLFStats2up[i];
-            CSVLFStats2down *= Bottoms_ABCD_WeightCSVLFStats2down[i];
-            CSVCErr1down *= Bottoms_ABCD_WeightCSVCErr1up[i];
-            CSVCErr1down *= Bottoms_ABCD_WeightCSVCErr1down[i];
-            CSVCErr2up *= Bottoms_ABCD_WeightCSVCErr2up[i];
-            CSVCErr2down *= Bottoms_ABCD_WeightCSVCErr2down[i];
-            
-            CSVnominal *= Topsubjets_ABCD_WeightCSVnominal[i];
-            CSVLFup *= Topsubjets_ABCD_WeightCSVLFup[i];
-            CSVLFdown *= Topsubjets_ABCD_WeightCSVLFdown[i];
-            CSVHFup *= Topsubjets_ABCD_WeightCSVHFup[i];
-            CSVHFdown *= Topsubjets_ABCD_WeightCSVHFdown[i];
-            CSVHFStats1up *= Topsubjets_ABCD_WeightCSVHFStats1up[i];
-            CSVHFStats1down *= Topsubjets_ABCD_WeightCSVHFStats1down[i];
-            CSVLFStats1up *= Topsubjets_ABCD_WeightCSVLFStats1up[i];
-            CSVLFStats1down *= Topsubjets_ABCD_WeightCSVLFStats1down[i];
-            CSVHFStats2up *= Topsubjets_ABCD_WeightCSVHFStats2up[i];
-            CSVHFStats2down *= Topsubjets_ABCD_WeightCSVHFStats2down[i];
-            CSVLFStats2up *= Topsubjets_ABCD_WeightCSVLFStats2up[i];
-            CSVLFStats2down *= Topsubjets_ABCD_WeightCSVLFStats2down[i];
-            CSVCErr1down *= Topsubjets_ABCD_WeightCSVCErr1up[i];
-            CSVCErr1down *= Topsubjets_ABCD_WeightCSVCErr1down[i];
-            CSVCErr2up *= Topsubjets_ABCD_WeightCSVCErr2up[i];
-            CSVCErr2down *= Topsubjets_ABCD_WeightCSVCErr2down[i];
-            
-            break;
-        }
-    };
-    
-    weights.push_back(CSVnominal);
-    weights.push_back(CSVLFup);
-    weights.push_back(CSVLFdown);
-    weights.push_back(CSVHFup);
-    weights.push_back(CSVHFdown);
-    weights.push_back(CSVHFStats1up);
-    weights.push_back(CSVHFStats1down);
-    weights.push_back(CSVLFStats1up);
-    weights.push_back(CSVLFStats1down);
-    weights.push_back(CSVHFStats2up);
-    weights.push_back(CSVHFStats2down);
-    weights.push_back(CSVLFStats2up);
-    weights.push_back(CSVLFStats2down);
-    weights.push_back(CSVCErr1up);
-    weights.push_back(CSVCErr1down);
-    weights.push_back(CSVCErr2up);
-    weights.push_back(CSVCErr2down);    
-    
-    return weights;
-}
-
-"""
-,
-
-"""
-std::vector<float> CSV_weights_ABCD2(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD, float const* Bottoms_ABCD_WeightCSVnominal, float const* Bottoms_ABCD_WeightCSVLFup, float const* Bottoms_ABCD_WeightCSVLFdown, float const* Bottoms_ABCD_WeightCSVHFup, float const* Bottoms_ABCD_WeightCSVHFdown, float const* Bottoms_ABCD_WeightCSVHFStats1up, float const* Bottoms_ABCD_WeightCSVHFStats1down, float const* Bottoms_ABCD_WeightCSVLFStats1up, float const* Bottoms_ABCD_WeightCSVLFStats1down, float const* Bottoms_ABCD_WeightCSVHFStats2up, float const* Bottoms_ABCD_WeightCSVHFStats2down, float const* Bottoms_ABCD_WeightCSVLFStats2up, float const* Bottoms_ABCD_WeightCSVLFStats2down, float const* Bottoms_ABCD_WeightCSVCErr1up, float const* Bottoms_ABCD_WeightCSVCErr1down, float const* Bottoms_ABCD_WeightCSVCErr2up, float const* Bottoms_ABCD_WeightCSVCErr2down, float const* Topsubjets_ABCD_WeightCSVnominal, float const* Topsubjets_ABCD_WeightCSVLFup, float const* Topsubjets_ABCD_WeightCSVLFdown, float const* Topsubjets_ABCD_WeightCSVHFup, float const* Topsubjets_ABCD_WeightCSVHFdown, float const* Topsubjets_ABCD_WeightCSVHFStats1up, float const* Topsubjets_ABCD_WeightCSVHFStats1down, float const* Topsubjets_ABCD_WeightCSVLFStats1up, float const* Topsubjets_ABCD_WeightCSVLFStats1down, float const* Topsubjets_ABCD_WeightCSVHFStats2up, float const* Topsubjets_ABCD_WeightCSVHFStats2down, float const* Topsubjets_ABCD_WeightCSVLFStats2up, float const* Topsubjets_ABCD_WeightCSVLFStats2down, float const* Topsubjets_ABCD_WeightCSVCErr1up, float const* Topsubjets_ABCD_WeightCSVCErr1down, float const* Topsubjets_ABCD_WeightCSVCErr2up, float const* Topsubjets_ABCD_WeightCSVCErr2down  ){
-    std::vector<float> weights;
-    
-    float CSVnominal=1.0;
-    float CSVLFup=1.0;
-    float CSVLFdown=1.0;
-    float CSVHFup=1.0;
-    float CSVHFdown=1.0;
-    float CSVHFStats1up=1.0;
-    float CSVHFStats1down=1.0;
-    float CSVLFStats1up=1.0;
-    float CSVLFStats1down=1.0;
-    float CSVHFStats2up=1.0;
-    float CSVHFStats2down=1.0;
-    float CSVLFStats2up=1.0;
-    float CSVLFStats2down=1.0;
-    float CSVCErr1up=1.0;
-    float CSVCErr1down=1.0;
-    float CSVCErr2up=1.0;
-    float CSVCErr2down=1.0;
-
-    float tpt=0.0;
-    float Wpt=0.0;
-    float bpt=0.0;
-
-    for (int i=0; i<N_Zprime_ABCD; i++){
-        if ("""+ plotselection_ABCD2_general_i +""" && Bottoms_ABCD_WeightCSVnominal[i]>(-0.5)){         
+        if ("""+ generalselection_i +""" && Bottoms_ABCD_WeightCSVnominal[i]>(-0.5)){         
             CSVnominal *= Bottoms_ABCD_WeightCSVnominal[i];
             CSVLFup *= Bottoms_ABCD_WeightCSVLFup[i];
             CSVLFdown *= Bottoms_ABCD_WeightCSVLFdown[i];
@@ -568,8 +935,196 @@ std::vector<float> CSV_weights_ABCD2(float const* Zprimes_ABCD_M, float const* T
 
 """
 ,
+
+#"""
+#std::vector<float> toptag_weights_ABCD1(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
+    #std::vector<float> weights;
+    
+    #float toptagnominal=1.0;
+    #float toptagup=1.0;
+    #float toptagdown=1.0;
+
+    #float SF_top_tau32_MSD_wtb=""" + MCSF_topwtb_t32_MSD + """;
+    #float SF_top_tau32_MSD_wtb_up=""" + MCSF_topwtb_t32_MSD_up + """;
+    #float SF_top_tau32_MSD_wtb_down=""" + MCSF_topwtb_t32_MSD_down + """;
+    #float SF_top_tau32_MSDanti_wtb=""" + MCSF_topwtb_t32_MSD_down + """;
+    #float SF_top_tau32_MSDanti_wtb_up=""" + MCSF_topwtb_t32_MSD_up + """;
+    #float SF_top_tau32_MSDanti_wtb_down=""" + MCSF_topwtb_t32_MSD_down + """;
+    #float SF_top_tau32anti_MSD_wtb=""" + MCSF_topwtb_t32_MSD + """;
+    #float SF_top_tau32anti_MSD_wtb_up=""" + MCSF_topwtb_t32_MSD_up + """;
+    #float SF_top_tau32anti_MSD_wtb_down=""" + MCSF_topwtb_t32_MSD_down + """;
+    #float SF_top_tau32anti_MSDanti_wtb=""" + MCSF_topwtb_t32_MSD + """;
+    #float SF_top_tau32anti_MSDanti_wtb_up=""" + MCSF_topwtb_t32_MSD_up + """;
+    #float SF_top_tau32anti_MSDanti_wtb_down=""" + MCSF_topwtb_t32_MSD_down + """;
+    
+    #float SF_top_tau32_MSD_ntb=""" + MCSF_topntb_t32_MSD + """;
+    #float SF_top_tau32_MSD_ntb_up=""" + MCSF_topntb_t32_MSD_up + """;
+    #float SF_top_tau32_MSD_ntb_down=""" + MCSF_topntb_t32_MSD_down + """;
+    #float SF_top_tau32_MSDanti_ntb=""" + MCSF_topntb_t32_MSD + """;
+    #float SF_top_tau32_MSDanti_ntb_up=""" + MCSF_topntb_t32_MSD_up + """;
+    #float SF_top_tau32_MSDanti_ntb_down=""" + MCSF_topntb_t32_MSD_down + """;
+    #float SF_top_tau32anti_MSD_ntb=""" + MCSF_topntb_t32_MSD + """;
+    #float SF_top_tau32anti_MSD_ntb_up=""" + MCSF_topntb_t32_MSD_up + """;
+    #float SF_top_tau32anti_MSD_ntb_down=""" + MCSF_topntb_t32_MSD_down + """;
+    #float SF_top_tau32anti_MSDanti_ntb=""" + MCSF_topntb_t32_MSD + """;
+    #float SF_top_tau32anti_MSDanti_ntb_up=""" + MCSF_topntb_t32_MSD_up + """;
+    #float SF_top_tau32anti_MSDanti_ntb_down=""" + MCSF_topntb_t32_MSD_down + """;
+    
+    #for (int i=0; i<N_Zprime_ABCD; i++){
+        #if ("""+ plotselection_ABCD1_general_i + """){
+            #if(""" + plotselection_topsubjetCSVv2_i + """){
+                #if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_i + """){
+                    #toptagnominal *= SF_top_tau32_MSD_wtb;
+                    #toptagup *= (SF_top_tau32_MSD_wtb + SF_top_tau32_MSD_wtb_up);
+                    #toptagdown *= (SF_top_tau32_MSD_wtb - SF_top_tau32_MSD_wtb_down);
+                #}
+                #if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_i + """){
+                    #toptagnominal *= SF_top_tau32anti_MSD_wtb;
+                    #toptagup *= (SF_top_tau32anti_MSD_wtb + SF_top_tau32anti_MSD_wtb_up);
+                    #toptagdown *= (SF_top_tau32anti_MSD_wtb - SF_top_tau32anti_MSD_wtb_down);
+                #}
+                #if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_anti_i + """){
+                    #toptagnominal *= SF_top_tau32_MSDanti_wtb;
+                    #toptagup *= (SF_top_tau32_MSDanti_wtb + SF_top_tau32_MSDanti_wtb_up);
+                    #toptagdown *= (SF_top_tau32_MSDanti_wtb - SF_top_tau32_MSDanti_wtb_down);
+                #}
+                #if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_anti_i + """){
+                    #toptagnominal *= SF_top_tau32anti_MSDanti_wtb;
+                    #toptagup *= (SF_top_tau32anti_MSDanti_wtb + SF_top_tau32anti_MSDanti_wtb_up);
+                    #toptagdown *= (SF_top_tau32anti_MSDanti_wtb - SF_top_tau32anti_MSDanti_wtb_down);
+                #}
+            #} else {
+                #if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_i + """){
+                    #toptagnominal *= SF_top_tau32_MSD_ntb;
+                    #toptagup *= (SF_top_tau32_MSD_ntb + SF_top_tau32_MSD_ntb_up);
+                    #toptagdown *= (SF_top_tau32_MSD_ntb - SF_top_tau32_MSD_ntb_down);
+                #}
+                #if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_i + """){
+                    #toptagnominal *= SF_top_tau32anti_MSD_ntb;
+                    #toptagup *= (SF_top_tau32anti_MSD_ntb + SF_top_tau32anti_MSD_ntb_up);
+                    #toptagdown *= (SF_top_tau32anti_MSD_ntb - SF_top_tau32anti_MSD_ntb_down);
+                #}
+                #if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_anti_i + """){
+                    #toptagnominal *= SF_top_tau32_MSDanti_ntb;
+                    #toptagup *= (SF_top_tau32_MSDanti_ntb + SF_top_tau32_MSDanti_ntb_up);
+                    #toptagdown *= (SF_top_tau32_MSDanti_ntb - SF_top_tau32_MSDanti_ntb_down);
+                #}
+                #if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_anti_i + """){
+                    #toptagnominal *= SF_top_tau32anti_MSDanti_ntb;
+                    #toptagup *= (SF_top_tau32anti_MSDanti_ntb + SF_top_tau32anti_MSDanti_ntb_up);
+                    #toptagdown *= (SF_top_tau32anti_MSDanti_ntb - SF_top_tau32anti_MSDanti_ntb_down);
+                #}
+            #}
+            #break;
+        #}
+    #}
+    
+    #weights.push_back(toptagnominal);
+    #weights.push_back(toptagup);
+    #weights.push_back(toptagdown);
+   
+    
+    #return weights;
+#}
+
+#"""
+#,
+#"""
+#std::vector<float> toptag_weights_ABCD2(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
+    #std::vector<float> weights;
+    
+    #float toptagnominal=1.0;
+    #float toptagup=1.0;
+    #float toptagdown=1.0;
+
+    #float SF_top_tau32_MSD_wtb=""" + MCSF_topwtb_t32_MSD + """;
+    #float SF_top_tau32_MSD_wtb_up=""" + MCSF_topwtb_t32_MSD_up + """;
+    #float SF_top_tau32_MSD_wtb_down=""" + MCSF_topwtb_t32_MSD_down + """;
+    #float SF_top_tau32_MSDanti_wtb=""" + MCSF_topwtb_t32_MSD_down + """;
+    #float SF_top_tau32_MSDanti_wtb_up=""" + MCSF_topwtb_t32_MSD_up + """;
+    #float SF_top_tau32_MSDanti_wtb_down=""" + MCSF_topwtb_t32_MSD_down + """;
+    #float SF_top_tau32anti_MSD_wtb=""" + MCSF_topwtb_t32_MSD + """;
+    #float SF_top_tau32anti_MSD_wtb_up=""" + MCSF_topwtb_t32_MSD_up + """;
+    #float SF_top_tau32anti_MSD_wtb_down=""" + MCSF_topwtb_t32_MSD_down + """;
+    #float SF_top_tau32anti_MSDanti_wtb=""" + MCSF_topwtb_t32_MSD + """;
+    #float SF_top_tau32anti_MSDanti_wtb_up=""" + MCSF_topwtb_t32_MSD_up + """;
+    #float SF_top_tau32anti_MSDanti_wtb_down=""" + MCSF_topwtb_t32_MSD_down + """;
+    
+    #float SF_top_tau32_MSD_ntb=""" + MCSF_topntb_t32_MSD + """;
+    #float SF_top_tau32_MSD_ntb_up=""" + MCSF_topntb_t32_MSD_up + """;
+    #float SF_top_tau32_MSD_ntb_down=""" + MCSF_topntb_t32_MSD_down + """;
+    #float SF_top_tau32_MSDanti_ntb=""" + MCSF_topntb_t32_MSD + """;
+    #float SF_top_tau32_MSDanti_ntb_up=""" + MCSF_topntb_t32_MSD_up + """;
+    #float SF_top_tau32_MSDanti_ntb_down=""" + MCSF_topntb_t32_MSD_down + """;
+    #float SF_top_tau32anti_MSD_ntb=""" + MCSF_topntb_t32_MSD + """;
+    #float SF_top_tau32anti_MSD_ntb_up=""" + MCSF_topntb_t32_MSD_up + """;
+    #float SF_top_tau32anti_MSD_ntb_down=""" + MCSF_topntb_t32_MSD_down + """;
+    #float SF_top_tau32anti_MSDanti_ntb=""" + MCSF_topntb_t32_MSD + """;
+    #float SF_top_tau32anti_MSDanti_ntb_up=""" + MCSF_topntb_t32_MSD_up + """;
+    #float SF_top_tau32anti_MSDanti_ntb_down=""" + MCSF_topntb_t32_MSD_down + """;
+    
+    
+    #for (int i=0; i<N_Zprime_ABCD; i++){
+        #if (""" + plotselection_ABCD1_general_i + """){
+            #if(""" + plotselection_topsubjetCSVv2_i + """){
+                #if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_i + """){
+                    #toptagnominal *= SF_top_tau32_MSD_wtb;
+                    #toptagup *= (SF_top_tau32_MSD_wtb + SF_top_tau32_MSD_wtb_up);
+                    #toptagdown *= (SF_top_tau32_MSD_wtb - SF_top_tau32_MSD_wtb_down);
+                #}
+                #if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_i + """){
+                    #toptagnominal *= SF_top_tau32anti_MSD_wtb;
+                    #toptagup *= (SF_top_tau32anti_MSD_wtb + SF_top_tau32anti_MSD_wtb_up);
+                    #toptagdown *= (SF_top_tau32anti_MSD_wtb - SF_top_tau32anti_MSD_wtb_down);
+                #}
+                #if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_anti_i + """){
+                    #toptagnominal *= SF_top_tau32_MSDanti_wtb;
+                    #toptagup *= (SF_top_tau32_MSDanti_wtb + SF_top_tau32_MSDanti_wtb_up);
+                    #toptagdown *= (SF_top_tau32_MSDanti_wtb - SF_top_tau32_MSDanti_wtb_down);
+                #}
+                #if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_anti_i + """){
+                    #toptagnominal *= SF_top_tau32anti_MSDanti_wtb;
+                    #toptagup *= (SF_top_tau32anti_MSDanti_wtb + SF_top_tau32anti_MSDanti_wtb_up);
+                    #toptagdown *= (SF_top_tau32anti_MSDanti_wtb - SF_top_tau32anti_MSDanti_wtb_down);
+                #}
+            #} else {
+                #if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_i + """){
+                    #toptagnominal *= SF_top_tau32_MSD_ntb;
+                    #toptagup *= (SF_top_tau32_MSD_ntb + SF_top_tau32_MSD_ntb_up);
+                    #toptagdown *= (SF_top_tau32_MSD_ntb - SF_top_tau32_MSD_ntb_down);
+                #}
+                #if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_i + """){
+                    #toptagnominal *= SF_top_tau32anti_MSD_ntb;
+                    #toptagup *= (SF_top_tau32anti_MSD_ntb + SF_top_tau32anti_MSD_ntb_up);
+                    #toptagdown *= (SF_top_tau32anti_MSD_ntb - SF_top_tau32anti_MSD_ntb_down);
+                #}
+                #if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_anti_i + """){
+                    #toptagnominal *= SF_top_tau32_MSDanti_ntb;
+                    #toptagup *= (SF_top_tau32_MSDanti_ntb + SF_top_tau32_MSDanti_ntb_up);
+                    #toptagdown *= (SF_top_tau32_MSDanti_ntb - SF_top_tau32_MSDanti_ntb_down);
+                #}
+                #if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_anti_i + """){
+                    #toptagnominal *= SF_top_tau32anti_MSDanti_ntb;
+                    #toptagup *= (SF_top_tau32anti_MSDanti_ntb + SF_top_tau32anti_MSDanti_ntb_up);
+                    #toptagdown *= (SF_top_tau32anti_MSDanti_ntb - SF_top_tau32anti_MSDanti_ntb_down);
+                #}
+            #}
+            #break;
+        #}
+    #}
+    
+    #weights.push_back(toptagnominal);
+    #weights.push_back(toptagup);
+    #weights.push_back(toptagdown);
+   
+    
+    #return weights;
+#}
+
+#"""
+#,
 """
-std::vector<float> toptag_weights_ABCD1(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
+std::vector<float> toptag_weights_""" + ABCDversion + """(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
     std::vector<float> weights;
     
     float toptagnominal=1.0;
@@ -602,8 +1157,9 @@ std::vector<float> toptag_weights_ABCD1(float const* Zprimes_ABCD_M, float const
     float SF_top_tau32anti_MSDanti_ntb_up=""" + MCSF_topntb_t32_MSD_up + """;
     float SF_top_tau32anti_MSDanti_ntb_down=""" + MCSF_topntb_t32_MSD_down + """;
     
+    
     for (int i=0; i<N_Zprime_ABCD; i++){
-        if ("""+ plotselection_ABCD1_general_i + """){
+        if (""" + generalselection_i + """){
             if(""" + plotselection_topsubjetCSVv2_i + """){
                 if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_i + """){
                     toptagnominal *= SF_top_tau32_MSD_wtb;
@@ -660,161 +1216,124 @@ std::vector<float> toptag_weights_ABCD1(float const* Zprimes_ABCD_M, float const
 }
 
 """
-,
-"""
-std::vector<float> toptag_weights_ABCD2(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
-    std::vector<float> weights;
+#,
+#"""
+#std::vector<float> Wtag_weights_ABCD1(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
+    #std::vector<float> weights;
     
-    float toptagnominal=1.0;
-    float toptagup=1.0;
-    float toptagdown=1.0;
+    #float Wtagnominal=1.0;
+    #float Wtagup=1.0;
+    #float Wtagdown=1.0;
 
-    float SF_top_tau32_MSD_wtb=""" + MCSF_topwtb_t32_MSD + """;
-    float SF_top_tau32_MSD_wtb_up=""" + MCSF_topwtb_t32_MSD_up + """;
-    float SF_top_tau32_MSD_wtb_down=""" + MCSF_topwtb_t32_MSD_down + """;
-    float SF_top_tau32_MSDanti_wtb=""" + MCSF_topwtb_t32_MSD_down + """;
-    float SF_top_tau32_MSDanti_wtb_up=""" + MCSF_topwtb_t32_MSD_up + """;
-    float SF_top_tau32_MSDanti_wtb_down=""" + MCSF_topwtb_t32_MSD_down + """;
-    float SF_top_tau32anti_MSD_wtb=""" + MCSF_topwtb_t32_MSD + """;
-    float SF_top_tau32anti_MSD_wtb_up=""" + MCSF_topwtb_t32_MSD_up + """;
-    float SF_top_tau32anti_MSD_wtb_down=""" + MCSF_topwtb_t32_MSD_down + """;
-    float SF_top_tau32anti_MSDanti_wtb=""" + MCSF_topwtb_t32_MSD + """;
-    float SF_top_tau32anti_MSDanti_wtb_up=""" + MCSF_topwtb_t32_MSD_up + """;
-    float SF_top_tau32anti_MSDanti_wtb_down=""" + MCSF_topwtb_t32_MSD_down + """;
-    
-    float SF_top_tau32_MSD_ntb=""" + MCSF_topntb_t32_MSD + """;
-    float SF_top_tau32_MSD_ntb_up=""" + MCSF_topntb_t32_MSD_up + """;
-    float SF_top_tau32_MSD_ntb_down=""" + MCSF_topntb_t32_MSD_down + """;
-    float SF_top_tau32_MSDanti_ntb=""" + MCSF_topntb_t32_MSD + """;
-    float SF_top_tau32_MSDanti_ntb_up=""" + MCSF_topntb_t32_MSD_up + """;
-    float SF_top_tau32_MSDanti_ntb_down=""" + MCSF_topntb_t32_MSD_down + """;
-    float SF_top_tau32anti_MSD_ntb=""" + MCSF_topntb_t32_MSD + """;
-    float SF_top_tau32anti_MSD_ntb_up=""" + MCSF_topntb_t32_MSD_up + """;
-    float SF_top_tau32anti_MSD_ntb_down=""" + MCSF_topntb_t32_MSD_down + """;
-    float SF_top_tau32anti_MSDanti_ntb=""" + MCSF_topntb_t32_MSD + """;
-    float SF_top_tau32anti_MSDanti_ntb_up=""" + MCSF_topntb_t32_MSD_up + """;
-    float SF_top_tau32anti_MSDanti_ntb_down=""" + MCSF_topntb_t32_MSD_down + """;
-    
-    
-    for (int i=0; i<N_Zprime_ABCD; i++){
-        if (""" + plotselection_ABCD1_general_i + """){
-            if(""" + plotselection_topsubjetCSVv2_i + """){
-                if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_i + """){
-                    toptagnominal *= SF_top_tau32_MSD_wtb;
-                    toptagup *= (SF_top_tau32_MSD_wtb + SF_top_tau32_MSD_wtb_up);
-                    toptagdown *= (SF_top_tau32_MSD_wtb - SF_top_tau32_MSD_wtb_down);
-                }
-                if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_i + """){
-                    toptagnominal *= SF_top_tau32anti_MSD_wtb;
-                    toptagup *= (SF_top_tau32anti_MSD_wtb + SF_top_tau32anti_MSD_wtb_up);
-                    toptagdown *= (SF_top_tau32anti_MSD_wtb - SF_top_tau32anti_MSD_wtb_down);
-                }
-                if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_anti_i + """){
-                    toptagnominal *= SF_top_tau32_MSDanti_wtb;
-                    toptagup *= (SF_top_tau32_MSDanti_wtb + SF_top_tau32_MSDanti_wtb_up);
-                    toptagdown *= (SF_top_tau32_MSDanti_wtb - SF_top_tau32_MSDanti_wtb_down);
-                }
-                if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_anti_i + """){
-                    toptagnominal *= SF_top_tau32anti_MSDanti_wtb;
-                    toptagup *= (SF_top_tau32anti_MSDanti_wtb + SF_top_tau32anti_MSDanti_wtb_up);
-                    toptagdown *= (SF_top_tau32anti_MSDanti_wtb - SF_top_tau32anti_MSDanti_wtb_down);
-                }
-            } else {
-                if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_i + """){
-                    toptagnominal *= SF_top_tau32_MSD_ntb;
-                    toptagup *= (SF_top_tau32_MSD_ntb + SF_top_tau32_MSD_ntb_up);
-                    toptagdown *= (SF_top_tau32_MSD_ntb - SF_top_tau32_MSD_ntb_down);
-                }
-                if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_i + """){
-                    toptagnominal *= SF_top_tau32anti_MSD_ntb;
-                    toptagup *= (SF_top_tau32anti_MSD_ntb + SF_top_tau32anti_MSD_ntb_up);
-                    toptagdown *= (SF_top_tau32anti_MSD_ntb - SF_top_tau32anti_MSD_ntb_down);
-                }
-                if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_anti_i + """){
-                    toptagnominal *= SF_top_tau32_MSDanti_ntb;
-                    toptagup *= (SF_top_tau32_MSDanti_ntb + SF_top_tau32_MSDanti_ntb_up);
-                    toptagdown *= (SF_top_tau32_MSDanti_ntb - SF_top_tau32_MSDanti_ntb_down);
-                }
-                if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_anti_i + """){
-                    toptagnominal *= SF_top_tau32anti_MSDanti_ntb;
-                    toptagup *= (SF_top_tau32anti_MSDanti_ntb + SF_top_tau32anti_MSDanti_ntb_up);
-                    toptagdown *= (SF_top_tau32anti_MSDanti_ntb - SF_top_tau32anti_MSDanti_ntb_down);
-                }
-            }
-            break;
-        }
-    }
-    
-    weights.push_back(toptagnominal);
-    weights.push_back(toptagup);
-    weights.push_back(toptagdown);
-   
-    
-    return weights;
-}
+    #float SF_W_tau21_MSD=""" + MCSF_W_t21_MSD + """;
+    #float SF_W_tau21_MSD_up=""" + MCSF_W_t21_MSD_up + """;
+    #float SF_W_tau21_MSD_down=""" + MCSF_W_t21_MSD_down + """;
+    #float SF_W_tau21_MSDanti=""" + MCSF_W_t21_MSD + """;
+    #float SF_W_tau21_MSDanti_up=""" + MCSF_W_t21_MSD_up + """;
+    #float SF_W_tau21_MSDanti_down=""" + MCSF_W_t21_MSD_down + """;
+    #float SF_W_tau21anti_MSD=""" + MCSF_W_t21_MSD + """;
+    #float SF_W_tau21anti_MSD_up=""" + MCSF_W_t21_MSD_up + """;
+    #float SF_W_tau21anti_MSD_down=""" + MCSF_W_t21_MSD_down + """;
+    #float SF_W_tau21anti_MSDanti=""" + MCSF_W_t21_MSD + """;
+    #float SF_W_tau21anti_MSDanti_up=""" + MCSF_W_t21_MSD_up + """;
+    #float SF_W_tau21anti_MSDanti_down=""" + MCSF_W_t21_MSD_down + """;
 
-"""
-,
-"""
-std::vector<float> Wtag_weights_ABCD1(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
-    std::vector<float> weights;
-    
-    float Wtagnominal=1.0;
-    float Wtagup=1.0;
-    float Wtagdown=1.0;
-
-    float SF_W_tau21_MSD=""" + MCSF_W_t21_MSD + """;
-    float SF_W_tau21_MSD_up=""" + MCSF_W_t21_MSD_up + """;
-    float SF_W_tau21_MSD_down=""" + MCSF_W_t21_MSD_down + """;
-    float SF_W_tau21_MSDanti=""" + MCSF_W_t21_MSD + """;
-    float SF_W_tau21_MSDanti_up=""" + MCSF_W_t21_MSD_up + """;
-    float SF_W_tau21_MSDanti_down=""" + MCSF_W_t21_MSD_down + """;
-    float SF_W_tau21anti_MSD=""" + MCSF_W_t21_MSD + """;
-    float SF_W_tau21anti_MSD_up=""" + MCSF_W_t21_MSD_up + """;
-    float SF_W_tau21anti_MSD_down=""" + MCSF_W_t21_MSD_down + """;
-    float SF_W_tau21anti_MSDanti=""" + MCSF_W_t21_MSD + """;
-    float SF_W_tau21anti_MSDanti_up=""" + MCSF_W_t21_MSD_up + """;
-    float SF_W_tau21anti_MSDanti_down=""" + MCSF_W_t21_MSD_down + """;
-
-    for (int i=0; i<N_Zprime_ABCD; i++){
-        if ("""+ plotselection_ABCD1_general_i + """){
+    #for (int i=0; i<N_Zprime_ABCD; i++){
+        #if ("""+ plotselection_ABCD1_general_i + """){
            
-                if(""" + plotselection_W_tau21_i + """ && """ + plotselection_W_MSD_i + """){
-                    Wtagnominal *= SF_W_tau21_MSD;
-                    Wtagup *= (SF_W_tau21_MSD + SF_W_tau21_MSD_up);
-                    Wtagdown *= (SF_W_tau21_MSD - SF_W_tau21_MSD_down);
-                }
-                if(""" + plotselection_W_tau21_anti_i + """ && """ + plotselection_W_MSD_i + """){
-                    Wtagnominal *= SF_W_tau21anti_MSD;
-                    Wtagup *= (SF_W_tau21anti_MSD + SF_W_tau21anti_MSD_up);
-                    Wtagdown *= (SF_W_tau21anti_MSD - SF_W_tau21anti_MSD_down);
-                }
-                if(""" + plotselection_W_tau21_i + """ && """ + plotselection_W_MSD_anti_i + """){
-                    Wtagnominal *= SF_W_tau21_MSDanti;
-                    Wtagup *= (SF_W_tau21_MSDanti + SF_W_tau21_MSDanti_up);
-                    Wtagdown *= (SF_W_tau21_MSDanti - SF_W_tau21_MSDanti_down);
-                }
-                if(""" + plotselection_W_tau21_anti_i + """ && """ + plotselection_W_MSD_anti_i + """){
-                    Wtagnominal *= SF_W_tau21anti_MSDanti;
-                    Wtagup *= (SF_W_tau21anti_MSDanti + SF_W_tau21anti_MSDanti_up);
-                    Wtagdown *= (SF_W_tau21anti_MSDanti - SF_W_tau21anti_MSDanti_down);
-                }        
-                break;
-        }
-    }
+                #if(""" + plotselection_W_tau21_i + """ && """ + plotselection_W_MSD_i + """){
+                    #Wtagnominal *= SF_W_tau21_MSD;
+                    #Wtagup *= (SF_W_tau21_MSD + SF_W_tau21_MSD_up);
+                    #Wtagdown *= (SF_W_tau21_MSD - SF_W_tau21_MSD_down);
+                #}
+                #if(""" + plotselection_W_tau21_anti_i + """ && """ + plotselection_W_MSD_i + """){
+                    #Wtagnominal *= SF_W_tau21anti_MSD;
+                    #Wtagup *= (SF_W_tau21anti_MSD + SF_W_tau21anti_MSD_up);
+                    #Wtagdown *= (SF_W_tau21anti_MSD - SF_W_tau21anti_MSD_down);
+                #}
+                #if(""" + plotselection_W_tau21_i + """ && """ + plotselection_W_MSD_anti_i + """){
+                    #Wtagnominal *= SF_W_tau21_MSDanti;
+                    #Wtagup *= (SF_W_tau21_MSDanti + SF_W_tau21_MSDanti_up);
+                    #Wtagdown *= (SF_W_tau21_MSDanti - SF_W_tau21_MSDanti_down);
+                #}
+                #if(""" + plotselection_W_tau21_anti_i + """ && """ + plotselection_W_MSD_anti_i + """){
+                    #Wtagnominal *= SF_W_tau21anti_MSDanti;
+                    #Wtagup *= (SF_W_tau21anti_MSDanti + SF_W_tau21anti_MSDanti_up);
+                    #Wtagdown *= (SF_W_tau21anti_MSDanti - SF_W_tau21anti_MSDanti_down);
+                #}        
+                #break;
+        #}
+    #}
     
-    weights.push_back(Wtagnominal);
-    weights.push_back(Wtagup);
-    weights.push_back(Wtagdown);
+    #weights.push_back(Wtagnominal);
+    #weights.push_back(Wtagup);
+    #weights.push_back(Wtagdown);
    
     
-    return weights;
-}
+    #return weights;
+#}
 
-"""
+#"""
+#,
+#"""
+#std::vector<float> Wtag_weights_ABCD2(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
+    #std::vector<float> weights;
+    
+    #float Wtagnominal=1.0;
+    #float Wtagup=1.0;
+    #float Wtagdown=1.0;
+
+    #float SF_W_tau21_MSD=""" + MCSF_W_t21_MSD + """;
+    #float SF_W_tau21_MSD_up=""" + MCSF_W_t21_MSD_up + """;
+    #float SF_W_tau21_MSD_down=""" + MCSF_W_t21_MSD_down + """;
+    #float SF_W_tau21_MSDanti=""" + MCSF_W_t21_MSD + """;
+    #float SF_W_tau21_MSDanti_up=""" + MCSF_W_t21_MSD_up + """;
+    #float SF_W_tau21_MSDanti_down=""" + MCSF_W_t21_MSD_down + """;
+    #float SF_W_tau21anti_MSD=""" + MCSF_W_t21_MSD + """;
+    #float SF_W_tau21anti_MSD_up=""" + MCSF_W_t21_MSD_up + """;
+    #float SF_W_tau21anti_MSD_down=""" + MCSF_W_t21_MSD_down + """;
+    #float SF_W_tau21anti_MSDanti=""" + MCSF_W_t21_MSD + """;
+    #float SF_W_tau21anti_MSDanti_up=""" + MCSF_W_t21_MSD_up + """;
+    #float SF_W_tau21anti_MSDanti_down=""" + MCSF_W_t21_MSD_down + """;
+
+    #for (int i=0; i<N_Zprime_ABCD; i++){
+        #if ("""+ plotselection_ABCD2_general_i + """){
+                #if(""" + plotselection_W_tau21_i + """ && """ + plotselection_W_MSD_i + """){
+                    #Wtagnominal *= SF_W_tau21_MSD;
+                    #Wtagup *= (SF_W_tau21_MSD + SF_W_tau21_MSD_up);
+                    #Wtagup *= (SF_W_tau21_MSD - SF_W_tau21_MSD_down);
+                #}
+                #if(""" + plotselection_W_tau21_anti_i + """ && """ + plotselection_W_MSD_i + """){
+                    #Wtagnominal *= SF_W_tau21anti_MSD;
+                    #Wtagup *= (SF_W_tau21anti_MSD + SF_W_tau21anti_MSD_up);
+                    #Wtagup *= (SF_W_tau21anti_MSD - SF_W_tau21anti_MSD_down);
+                #}
+                #if(""" + plotselection_W_tau21_i + """ && """ + plotselection_W_MSD_anti_i + """){
+                    #Wtagnominal *= SF_W_tau21_MSDanti;
+                    #Wtagup *= (SF_W_tau21_MSDanti + SF_W_tau21_MSDanti_up);
+                    #Wtagup *= (SF_W_tau21_MSDanti - SF_W_tau21_MSDanti_down);
+                #}
+                #if(""" + plotselection_W_tau21_anti_i + """ && """ + plotselection_W_MSD_i + """){
+                    #Wtagnominal *= SF_W_tau21anti_MSDanti;
+                    #Wtagup *= (SF_W_tau21anti_MSDanti + SF_W_tau21anti_MSDanti_up);
+                    #Wtagup *= (SF_W_tau21anti_MSDanti - SF_W_tau21anti_MSDanti_down);
+                #}        
+                #break;
+        #}
+    #}
+    
+    #weights.push_back(Wtagnominal);
+    #weights.push_back(Wtagup);
+    #weights.push_back(Wtagdown);
+   
+    
+    #return weights;
+#}
+
+#"""
 ,
 """
-std::vector<float> Wtag_weights_ABCD2(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
+std::vector<float> Wtag_weights_""" + ABCDversion + """(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
     std::vector<float> weights;
     
     float Wtagnominal=1.0;
@@ -835,7 +1354,7 @@ std::vector<float> Wtag_weights_ABCD2(float const* Zprimes_ABCD_M, float const* 
     float SF_W_tau21anti_MSDanti_down=""" + MCSF_W_t21_MSD_down + """;
 
     for (int i=0; i<N_Zprime_ABCD; i++){
-        if ("""+ plotselection_ABCD2_general_i + """){
+        if ("""+ generalselection_i + """){
                 if(""" + plotselection_W_tau21_i + """ && """ + plotselection_W_MSD_i + """){
                     Wtagnominal *= SF_W_tau21_MSD;
                     Wtagup *= (SF_W_tau21_MSD + SF_W_tau21_MSD_up);
@@ -919,18 +1438,18 @@ std::vector<float> RenFacEnv(float muR20_muF20, float muR05_muF05, float muR10_m
     return res;
 }
 """
-,
-"""
-std::vector<float> ABCDsyst1(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
+#,
+#"""
+#std::vector<float> ABCDsyst1(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
 
-}
-"""
-,
-"""
-std::vector<float> ABCDsyst2(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
+#}
+#"""
+#,
+#"""
+#std::vector<float> ABCDsyst2(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
 
-}
-"""
+#}
+#"""
     ]
 
 
@@ -1053,96 +1572,122 @@ additionalvariables=[
                         'IsnoSignalinclusive:=IsnoSignal_inclusive(Zprimes_ABCD_M, Tprimes_ABCD_M, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)',
                         "N_Zprime_ABCD","Zprimes_ABCD_M","Tprimes_ABCD_M","Tops_ABCD_maxsubjetCSVv2","Ws_ABCD_MSD","Tops_ABCD_MSD","Tops_ABCD_t32","Bottoms_ABCD_CSV","Ws_ABCD_t21",
                         
-                        'ABCD1_CatID:=1.0 * ABCD1_Category(Zprimes_ABCD_M,   Tprimes_ABCD_M,   Tops_ABCD_maxsubjetCSVv2,   Ws_ABCD_MSD,   Tops_ABCD_MSD,   Tops_ABCD_t32,   Bottoms_ABCD_CSV,   Ws_ABCD_t21, N_Zprime_ABCD)',
-                        'ABCD2_CatID:=1.0* ABCD2_Category(Zprimes_ABCD_M,   Tprimes_ABCD_M,   Tops_ABCD_maxsubjetCSVv2,   Ws_ABCD_MSD,   Tops_ABCD_MSD,   Tops_ABCD_t32,   Bottoms_ABCD_CSV,   Ws_ABCD_t21, N_Zprime_ABCD)',
+                        'ABCD_CatID:=1.0 * ABCD_Category(Zprimes_ABCD_M,   Tprimes_ABCD_M,   Tops_ABCD_maxsubjetCSVv2,   Ws_ABCD_MSD,   Tops_ABCD_MSD,   Tops_ABCD_t32,   Bottoms_ABCD_CSV,   Ws_ABCD_t21, N_Zprime_ABCD)',
+                        #'ABCD_CatID:=1.0 * ABCD2_Category(Zprimes_ABCD_M,   Tprimes_ABCD_M,   Tops_ABCD_maxsubjetCSVv2,   Ws_ABCD_MSD,   Tops_ABCD_MSD,   Tops_ABCD_t32,   Bottoms_ABCD_CSV,   Ws_ABCD_t21, N_Zprime_ABCD)',
                         
-                        'ABCD1_CatA_withtopbtag:=1',
-                        'ABCD1_CatB_withtopbtag:=2',
-                        'ABCD1_CatC_withtopbtag:=3',
-                        'ABCD1_CatD_withtopbtag:=4',
-                        'ABCD1_CatE_withtopbtag:=5',
-                        'ABCD1_CatF_withtopbtag:=6',
-                        'ABCD1_CatG_withtopbtag:=7',
-                        'ABCD1_CatH_withtopbtag:=8',
+                        'ABCD_CatA_withtopbtag:=1',
+                        'ABCD_CatB_withtopbtag:=2',
+                        'ABCD_CatC_withtopbtag:=3',
+                        'ABCD_CatD_withtopbtag:=4',
+                        'ABCD_CatE_withtopbtag:=5',
+                        'ABCD_CatF_withtopbtag:=6',
+                        'ABCD_CatG_withtopbtag:=7',
+                        'ABCD_CatH_withtopbtag:=8',
                         
-                        'ABCD1_CatA_notopbtag:=9',
-                        'ABCD1_CatB_notopbtag:=10',
-                        'ABCD1_CatC_notopbtag:=11',
-                        'ABCD1_CatD_notopbtag:=12',
-                        'ABCD1_CatE_notopbtag:=13',
-                        'ABCD1_CatF_notopbtag:=14',
-                        'ABCD1_CatG_notopbtag:=15',
-                        'ABCD1_CatH_notopbtag:=16',
+                        'ABCD_CatA_notopbtag:=9',
+                        'ABCD_CatB_notopbtag:=10',
+                        'ABCD_CatC_notopbtag:=11',
+                        'ABCD_CatD_notopbtag:=12',
+                        'ABCD_CatE_notopbtag:=13',
+                        'ABCD_CatF_notopbtag:=14',
+                        'ABCD_CatG_notopbtag:=15',
+                        'ABCD_CatH_notopbtag:=16',
                         
-                        'ABCD2_CatA_withtopbtag:=1',
-                        'ABCD2_CatB_withtopbtag:=2',
-                        'ABCD2_CatC_withtopbtag:=3',
-                        'ABCD2_CatD_withtopbtag:=4',
-                        'ABCD2_CatE_withtopbtag:=5',
-                        'ABCD2_CatF_withtopbtag:=6',
-                        'ABCD2_CatG_withtopbtag:=7',
-                        'ABCD2_CatH_withtopbtag:=8',
+                        #'ABCD2_CatA_withtopbtag:=1',
+                        #'ABCD2_CatB_withtopbtag:=2',
+                        #'ABCD2_CatC_withtopbtag:=3',
+                        #'ABCD2_CatD_withtopbtag:=4',
+                        #'ABCD2_CatE_withtopbtag:=5',
+                        #'ABCD2_CatF_withtopbtag:=6',
+                        #'ABCD2_CatG_withtopbtag:=7',
+                        #'ABCD2_CatH_withtopbtag:=8',
                         
-                        'ABCD2_CatA_notopbtag:=9',
-                        'ABCD2_CatB_notopbtag:=10',
-                        'ABCD2_CatC_notopbtag:=11',
-                        'ABCD2_CatD_notopbtag:=12',
-                        'ABCD2_CatE_notopbtag:=13',
-                        'ABCD2_CatF_notopbtag:=14',
-                        'ABCD2_CatG_notopbtag:=15',
-                        'ABCD2_CatH_notopbtag:=16',         
+                        #'ABCD2_CatA_notopbtag:=9',
+                        #'ABCD2_CatB_notopbtag:=10',
+                        #'ABCD2_CatC_notopbtag:=11',
+                        #'ABCD2_CatD_notopbtag:=12',
+                        #'ABCD2_CatE_notopbtag:=13',
+                        #'ABCD2_CatF_notopbtag:=14',
+                        #'ABCD2_CatG_notopbtag:=15',
+                        #'ABCD2_CatH_notopbtag:=16',         
                         
                         
-                        'ABCD1_WeightCSVnominal:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[0]',
-                        'ABCD1_WeightCSVLFUp:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[1]',
-                        'ABCD1_WeightCSVLFDown:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[2]',
-                        'ABCD1_WeightCSVHFUp:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[3]',
-                        'ABCD1_WeightCSVHFDown:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[4]',
-                        'ABCD1_WeightCSVHFStats1Up:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[5]',
-                        'ABCD1_WeightCSVHFStats1Down:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[6]',
-                        'ABCD1_WeightCSVLFStats1Up:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[7]',
-                        'ABCD1_WeightCSVLFStats1Down:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[8]',
-                        'ABCD1_WeightCSVHFStats2Up:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[9]',
-                        'ABCD1_WeightCSVHFStats2Down:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[10]',
-                        'ABCD1_WeightCSVLFStats2Up:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[11]',
-                        'ABCD1_WeightCSVLFStats2Down:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[12]',
-                        'ABCD1_WeightCSVCErr1Up:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[13]',
-                        'ABCD1_WeightCSVCErr1Down:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[14]',
-                        'ABCD1_WeightCSVCErr2Up:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[15]',
-                        'ABCD1_WeightCSVCErr2Down:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[16]',
+                        #'ABCD1_WeightCSVnominal:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[0]',
+                        #'ABCD1_WeightCSVLFUp:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[1]',
+                        #'ABCD1_WeightCSVLFDown:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[2]',
+                        #'ABCD1_WeightCSVHFUp:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[3]',
+                        #'ABCD1_WeightCSVHFDown:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[4]',
+                        #'ABCD1_WeightCSVHFStats1Up:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[5]',
+                        #'ABCD1_WeightCSVHFStats1Down:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[6]',
+                        #'ABCD1_WeightCSVLFStats1Up:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[7]',
+                        #'ABCD1_WeightCSVLFStats1Down:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[8]',
+                        #'ABCD1_WeightCSVHFStats2Up:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[9]',
+                        #'ABCD1_WeightCSVHFStats2Down:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[10]',
+                        #'ABCD1_WeightCSVLFStats2Up:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[11]',
+                        #'ABCD1_WeightCSVLFStats2Down:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[12]',
+                        #'ABCD1_WeightCSVCErr1Up:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[13]',
+                        #'ABCD1_WeightCSVCErr1Down:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[14]',
+                        #'ABCD1_WeightCSVCErr2Up:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[15]',
+                        #'ABCD1_WeightCSVCErr2Down:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[16]',
 
-                        'ABCD2_WeightCSVnominal:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[0]',
-                        'ABCD2_WeightCSVLFUp:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[1]',
-                        'ABCD2_WeightCSVLFDown:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[2]',
-                        'ABCD2_WeightCSVHFUp:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[3]',
-                        'ABCD2_WeightCSVHFDown:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[4]',
-                        'ABCD2_WeightCSVHFStats1Up:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[5]',
-                        'ABCD2_WeightCSVHFStats1Down:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[6]',
-                        'ABCD2_WeightCSVLFStats1Up:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[7]',
-                        'ABCD2_WeightCSVLFStats1Down:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[8]',
-                        'ABCD2_WeightCSVHFStats2Up:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[9]',
-                        'ABCD2_WeightCSVHFStats2Down:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[10]',
-                        'ABCD2_WeightCSVLFStats2Up:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[11]',
-                        'ABCD2_WeightCSVLFStats2Down:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[12]',
-                        'ABCD2_WeightCSVCErr1Up:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[13]',
-                        'ABCD2_WeightCSVCErr1Down:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[14]',
-                        'ABCD2_WeightCSVCErr2Up:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[15]',
-                        'ABCD2_WeightCSVCErr2Down:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[16]',
+                        #'ABCD2_WeightCSVnominal:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[0]',
+                        #'ABCD2_WeightCSVLFUp:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[1]',
+                        #'ABCD2_WeightCSVLFDown:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[2]',
+                        #'ABCD2_WeightCSVHFUp:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[3]',
+                        #'ABCD2_WeightCSVHFDown:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[4]',
+                        #'ABCD2_WeightCSVHFStats1Up:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[5]',
+                        #'ABCD2_WeightCSVHFStats1Down:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[6]',
+                        #'ABCD2_WeightCSVLFStats1Up:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[7]',
+                        #'ABCD2_WeightCSVLFStats1Down:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[8]',
+                        #'ABCD2_WeightCSVHFStats2Up:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[9]',
+                        #'ABCD2_WeightCSVHFStats2Down:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[10]',
+                        #'ABCD2_WeightCSVLFStats2Up:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[11]',
+                        #'ABCD2_WeightCSVLFStats2Down:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[12]',
+                        #'ABCD2_WeightCSVCErr1Up:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[13]',
+                        #'ABCD2_WeightCSVCErr1Down:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[14]',
+                        #'ABCD2_WeightCSVCErr2Up:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[15]',
+                        #'ABCD2_WeightCSVCErr2Down:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[16]',
+                    
+
+                        '' + ABCDversion + '_WeightCSVnominal:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[0]',
+                        '' + ABCDversion + '_WeightCSVLFUp:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[1]',
+                        '' + ABCDversion + '_WeightCSVLFDown:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[2]',
+                        '' + ABCDversion + '_WeightCSVHFUp:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[3]',
+                        '' + ABCDversion + '_WeightCSVHFDown:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[4]',
+                        '' + ABCDversion + '_WeightCSVHFStats1Up:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[5]',
+                        '' + ABCDversion + '_WeightCSVHFStats1Down:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[6]',
+                        '' + ABCDversion + '_WeightCSVLFStats1Up:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[7]',
+                        '' + ABCDversion + '_WeightCSVLFStats1Down:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[8]',
+                        '' + ABCDversion + '_WeightCSVHFStats2Up:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[9]',
+                        '' + ABCDversion + '_WeightCSVHFStats2Down:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[10]',
+                        '' + ABCDversion + '_WeightCSVLFStats2Up:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[11]',
+                        '' + ABCDversion + '_WeightCSVLFStats2Down:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[12]',
+                        '' + ABCDversion + '_WeightCSVCErr1Up:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[13]',
+                        '' + ABCDversion + '_WeightCSVCErr1Down:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[14]',
+                        '' + ABCDversion + '_WeightCSVCErr2Up:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[15]',
+                        '' + ABCDversion + '_WeightCSVCErr2Down:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[16]',
                         
-                        
-                        'ABCD1_Wtagweightnominal:=(Wtag_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[0]',
-                        'ABCD1_WtagweightUp:=(Wtag_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[1]',
-                        'ABCD1_WtagweightDown:=(Wtag_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[2]',
-                        'ABCD1_toptagweightnominal:=(toptag_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[0]',
-                        'ABCD1_toptagweightUp:=(toptag_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[1]',
-                        'ABCD1_toptagweightDown:=(toptag_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[2]',
+                        #'ABCD1_Wtagweightnominal:=(Wtag_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[0]',
+                        #'ABCD1_WtagweightUp:=(Wtag_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[1]',
+                        #'ABCD1_WtagweightDown:=(Wtag_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[2]',
+                        #'ABCD1_toptagweightnominal:=(toptag_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[0]',
+                        #'ABCD1_toptagweightUp:=(toptag_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[1]',
+                        #'ABCD1_toptagweightDown:=(toptag_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[2]',
  
-                        'ABCD2_Wtagweightnominal:=(Wtag_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[0]',
-                        'ABCD2_WtagweightUp:=(Wtag_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[1]',
-                        'ABCD2_WtagweightDown:=(Wtag_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[2]',
-                        'ABCD2_toptagweightnominal:=(toptag_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[0]',
-                        'ABCD2_toptagweightUp:=(toptag_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[1]',
-                        'ABCD2_toptagweightDown:=(toptag_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[2]',
+                        #'ABCD2_Wtagweightnominal:=(Wtag_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[0]',
+                        #'ABCD2_WtagweightUp:=(Wtag_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[1]',
+                        #'ABCD2_WtagweightDown:=(Wtag_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[2]',
+                        #'ABCD2_toptagweightnominal:=(toptag_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[0]',
+                        #'ABCD2_toptagweightUp:=(toptag_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[1]',
+                        #'ABCD2_toptagweightDown:=(toptag_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[2]',
+                        
+                        ABCDversion + '_Wtagweightnominal:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[0]',
+                        ABCDversion + '_WtagweightUp:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[1]',
+                        ABCDversion + '_WtagweightDown:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[2]',
+                        ABCDversion + '_toptagweightnominal:=(toptag_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[0]',
+                        ABCDversion + '_toptagweightUp:=(toptag_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[1]',
+                        ABCDversion + '_toptagweightDown:=(toptag_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[2]',
+ 
  
                         'MCSF_RenFac_envelopeUp:=(RenFacEnv(Weight_scale_variation_muR2p0_muF2p0, Weight_scale_variation_muR0p5_muF0p5, Weight_scale_variation_muR1p0_muF2p0 , Weight_scale_variation_muR1p0_muF0p5, Weight_scale_variation_muR2p0_muF1p0, Weight_scale_variation_muR0p5_muF1p0))[0]',
                         'MCSF_RenFac_envelopeDown:=(RenFacEnv(Weight_scale_variation_muR2p0_muF2p0, Weight_scale_variation_muR0p5_muF0p5, Weight_scale_variation_muR1p0_muF2p0 , Weight_scale_variation_muR1p0_muF0p5, Weight_scale_variation_muR2p0_muF1p0, Weight_scale_variation_muR0p5_muF1p0))[1]',
@@ -1151,10 +1696,10 @@ additionalvariables=[
                         'PDF_RMSUp:=PDF_RMS('+ stringforPDFs1 +')[1]',
                         'PDF_RMSDown:=PDF_RMS('+ stringforPDFs1 +')[2]',
                         
-                        'MCSF_Weight_ABCD1:=ABCD1_toptagweightnominal*ABCD1_Wtagweightnominal*ABCD1_WeightCSVnominal*Weight_pu69p2*PDF_RMSMean',
-                        'MCSF_Weight_ABCD2:=ABCD2_toptagweightnominal*ABCD2_Wtagweightnominal*ABCD2_WeightCSVnominal*Weight_pu69p2*PDF_RMSMean',
+                        #'MCSF_Weight_ABCD1:=ABCD1_toptagweightnominal*ABCD1_Wtagweightnominal*ABCD1_WeightCSVnominal*Weight_pu69p2*PDF_RMSMean',
+                        #'MCSF_Weight_ABCD2:=ABCD2_toptagweightnominal*ABCD2_Wtagweightnominal*ABCD2_WeightCSVnominal*Weight_pu69p2*PDF_RMSMean',
+                        'MCSF_Weight_' + ABCDversion + ':=' + ABCDversion + '_toptagweightnominal*' + ABCDversion + '_Wtagweightnominal*' + ABCDversion + '_WeightCSVnominal*Weight_pu69p2*PDF_RMSMean',
                         
-
                         #'internalCSVweight:=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,internalSystName,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)',
                         #'internalCSVweight_CSVHFUp:=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,11,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight',
                         #'internalCSVweight_CSVHFDown:=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,12,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight',
