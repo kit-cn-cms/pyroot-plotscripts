@@ -1925,7 +1925,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
             exOld = ex
             expressionPart1, expressionPart2 = ex.rsplit('_', 1)
             if hasattr(tree, expressionPart1) and expressionPart2.isdigit():
-              ex = expressionPart1 + '[' + expressionPart2 + ']' 
+              ex = expressionPart1 + '[' + str(int(expressionPart2) -1) + ']' 
               print 'Found vector sub variable: ', exOld, ' which was converted to: ', ex
         
         arrayselection=variables.checkArrayLengths(','.join([ex,pw]))
