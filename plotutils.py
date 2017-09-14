@@ -1498,7 +1498,7 @@ def turn1dHistosToTable(histos,samples,outfile,witherror=True):
     out=open(outfile+".tex","w")
     out.write( '\\documentclass{article}\n')
 
-    paperwidth = histos[0].GetNbinsX()*2.2 + 7
+    paperwidth = histos[0].GetNbinsX()*2.2 + 10
     out.write( '\\usepackage[paperwidth=' + str(paperwidth) + 'cm, paperheight=23cm, top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}\n')
 
     out.write( '\\begin{document}\n')
