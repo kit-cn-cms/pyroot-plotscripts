@@ -1,5 +1,6 @@
 import ROOT
 import math
+import numpy as np
 from itertools import product
 from collections import namedtuple
 import glob
@@ -3154,7 +3155,56 @@ def plotRefWsystandOthers(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop
     
     
 def getOptimizedBinEdges(signalHisto, bkgHisto,optMode="SoverB", minBkgPerBin=2.0, maxBins=100,minBins=1, considerStatUnc=False,verbosity=0):
-  
+
+  if signalHisto.GetNbinsX()!=bkgHisto.GetNbinsX():
+    print "ERROR: getOptimizedBinEdges: signal and background histograms have different binnings!"
+    exit(0)
+  if minBins>maxBins:
+    print "you want minbins > maxBins"
+    exit(0)
+
+
+  if optMode=="equalBinWidth":
+    nBinsOriginal = signalHisto.GetNbinsX()
+
+    binLowEdgesOriginal = [signalHisto.GetBinLowEdge(i) for i in range(1, nBinsOriginal+2)]
+
+    bkgBinContentsOriginal = [                               bkgHisto.GetBinContent(i) for i in range(1, nBinsOriginal+1)]
+    sumBinContentsOriginal = [signalHisto.GetBinContent(i) + bkgHisto.GetBinContent(i) for i in range(1, nBinsOriginal+1)]
+
+    minBorderBin = next((i                               for i, x in enumerate(         sumBinContentsOriginal)  if x>0))
+    maxBorderBin = next((len(sumBinContentsOriginal)-1-i for i, x in enumerate(reversed(sumBinContentsOriginal)) if x>0))
+
+    borderBins = np.linspace(minBorderBin, maxBorderBin+1, minBins+1, endpoint=True, dtype=np.int)
+
+    for i in range(minBins):
+      bkgBinContents = [sum(bkgBinContentsOriginal[borderBins[j]:borderBins[j+1]]) for j in range(minBins)]
+      if bkgBinContents[i] >= minBkgPerBin:
+        firstEqualWidthBinLeft = i
+        break
+
+      while bkgBinContents[i] < minBkgPerBin:
+        borderBins[i+1] += 1
+        bkgBinContents = [sum(bkgBinContentsOriginal[borderBins[j]:borderBins[j+1]]) for j in range(minBins)]
+
+      borderBins = np.concatenate([borderBins[:i+1], np.linspace(borderBins[i+1], maxBorderBin+1, minBins-i, endpoint=True, dtype=np.int)])
+
+    for i in reversed(range(minBins)):
+      bkgBinContents = [sum(bkgBinContentsOriginal[borderBins[j]:borderBins[j+1]]) for j in range(minBins)]
+      if bkgBinContents[i] >= minBkgPerBin:
+        break
+
+      while bkgBinContents[i] < minBkgPerBin:
+        borderBins[i] -= 1
+        bkgBinContents = [sum(bkgBinContentsOriginal[borderBins[j]:borderBins[j+1]]) for j in range(minBins)]
+
+      borderBins = np.concatenate([borderBins[:firstEqualWidthBinLeft], np.linspace(borderBins[firstEqualWidthBinLeft], borderBins[i], i-firstEqualWidthBinLeft, endpoint=False, dtype=np.int), borderBins[i:]])
+
+    listOfBinLowEdges = [binLowEdgesOriginal[i] for i in borderBins]
+
+    return listOfBinLowEdges
+
+
   def getSoverB(S,B):
     if B>0:
       return S/float(B)
@@ -3208,12 +3258,6 @@ def getOptimizedBinEdges(signalHisto, bkgHisto,optMode="SoverB", minBkgPerBin=2.
   theArray=[]
   
   nBinsOriginal=signalHisto.GetNbinsX()
-  if signalHisto.GetNbinsX()!=bkgHisto.GetNbinsX():
-    print "ERROR: getOptimizedBinEdges: signal and background histograms have different binnings!"
-    exit(0)
-  if minBins>maxBins:
-    print "you want minbins > maxBins"
-    exit(0)
     
   for ibin in range(nBinsOriginal+2): # ibin=0=underflow; ibin+1=last bin; bin nBinsOriginal+2 = overflow
     if verbosity>=2:
