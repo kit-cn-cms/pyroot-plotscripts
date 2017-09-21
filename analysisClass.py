@@ -18,7 +18,6 @@ class Analysis:
     self.rootFilePath=str(rootFilePath)
     if self.rootFilePath == '':
       self.rootFilePath = name+'/'+name+'_limitInput.root'
-        
     # Default settings
     #doPlotParallel or otherwise use old root file
     self.doPlotParallel=False
@@ -45,6 +44,7 @@ class Analysis:
     
     # list containing additional (input) variables which one would likes to plot in addition to discriminator variables
     self.additionalPlotVariables = []
+
     # Deactivate checkBins in renameHistos if additionalPlotVariables are used
     self.checkBins = True
     
@@ -71,7 +71,6 @@ class Analysis:
     else:
       print 'Could not find chosen signal process: ', signalProcess, ' program will exit now.'
       sys.exit('Unknown chosen signal process.')
-    
     
     # Overwrite default settings from commandline
     self.opts = None
@@ -122,8 +121,6 @@ class Analysis:
         self.setOptimizedRebinning(arg)
         print "Set optimizedRebinning option to: ", arg  
       
-      
-        
       return opts
 
 
