@@ -1,9 +1,12 @@
 import sys
 import os
+# First path is needed if run by pyroot-plotscripts-base repo
+sys.path.append('limittools')
+# These two paths are needed if run by ttbb repos
 sys.path.append('pyroot-plotscripts-base')
 sys.path.append('pyroot-plotscripts-base/limittools')
 
-from scriptgeneratorMEMDBCSV import *
+from scriptgenerator import *
 from plotutils import *
 from limittools import renameHistos
 from limittools import addPseudoData
@@ -11,7 +14,7 @@ from limittools import addRealData
 from limittools import makeDatacards
 from limittools import calcLimits
 from limittools import replaceQ2scale
-from plotconfigSpring17v3 import *
+from plotconfigSpring17v10 import *
 
 # output name
 name='limits_Spring17v8'
@@ -82,17 +85,17 @@ assert(len(nhistobins)==len(discrs))
 bins= [c[0] for c in categories]
 binlabels= [c[1] for c in categories]
 samples=samplesLimits
-allsystnames=weightsystnames+othersystnames
+allsystnames=weightSystNames+otherSystNames
 
 # adapt weights for exlusive samples
 systsamples=[]
 for sample in samples:
-  for sysname,sysfilename in zip(othersystnames,othersystfilenames):
+  for sysname,sysfilename in zip(otherSystNames,otherSystFileNames):
     thisnewsel=sample.selection
     systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),thisnewsel,sample.nick+sysname,samDict=sampleDict))
   
 allsamples=samples+systsamples
-samplesdata=samples_data_controlplots
+samplesdata=samplesDataControlPlots
 
 # define plots
 bdts=[]
@@ -103,7 +106,7 @@ for discr,b,bl,nb,minx,maxx in zip(discrs,bins,binlabels,nhistobins,minxvals,max
 
 print bdts
 # plot everthing
-outputpath=plotParallel(name,2000000,bdts,allsamples+samplesdata,[''],['1.'],weightsystnames,systweights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/pyroot-plotscripts/treejson_Spring17v2_moreBKGs.json",othersystnames,cirun=True)
+outputpath=plotParallel(name,2000000,bdts,allsamples+samplesdata,[''],['1.'],weightSystNames,systWeights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/pyroot-plotscripts/treejson_Spring17v2_moreBKGs.json",otherSystNames,cirun=True)
 
 if not os.path.exists(name):
   os.makedirs(name)

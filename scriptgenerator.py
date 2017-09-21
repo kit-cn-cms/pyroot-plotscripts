@@ -1,3 +1,4 @@
+# comment 
 import sys
 import os
 import subprocess
@@ -13,6 +14,7 @@ import glob
 import json
 import filecmp
 import imp 
+import types
 
 ROOT.gROOT.SetBatch(True)
 
@@ -209,7 +211,7 @@ float LeptonSFHelper::GetMuonSF(  float muonPt , float muonEta , int syst , std:
     searchPt=TMath::Min( muonPt , muonMaxPtHigh );// if muonpt > 499 use last bin
   }
   float nomval = 0;
-  float error = 0;
+  //float error = 0;
   float upval = 0;
   float downval= 0;
   float nomvalBtoF = 0;
@@ -893,6 +895,7 @@ CSVHelper::fillCSVHistos(TFile *fileHF, TFile *fileLF, const std::vector<Systema
             c_csv_wgt_hf.at(iSys).at(iPt) = readHistogram(fileHF,name.ReplaceAll(systematic,""));
         }
     }
+
     for (int iPt = 0; iPt < nLFptBins_; iPt++) {
         for (int iEta = 0; iEta < nLFetaBins_; iEta++) {
             TString name = Form("csv_ratio_Pt%i_Eta%i_%s", iPt, iEta, (syst_csv_suffix+systematic).Data());
@@ -1042,6 +1045,44 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
   return csvWgtTotal;
 }
 
+// Helper struct to fill plots more efficiently
+// Until GCC 4.9 struct cannot have init values if one wants to initialize it with bracket lists
+struct structHelpFillHisto{
+  TH1* histo;
+  double var;
+  double weight;
+};
+
+// helper function to fill plots more efficiently
+void helperFillHisto(const std::vector<structHelpFillHisto>& paramVec)
+{
+  for (const auto &singleParams: paramVec)
+  // singleParams: histo, var, weight
+  {
+    if((singleParams.weight)!=0)
+      singleParams.histo->Fill(fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,singleParams.var)),singleParams.weight);
+  }
+}
+
+// Helper struct to fill plots more efficiently
+// Until GCC 4.9 struct cannot have init values if one wants to initialize it with bracket lists
+struct structHelpFillTwoDimHisto{
+  TH2* histo;
+  double var1;
+  double var2;
+  double weight;
+};
+
+// helper function to fill plots more efficiently
+void helperFillTwoDimHisto(const std::vector<structHelpFillTwoDimHisto>& paramVec)
+{
+  for (const auto &singleParams: paramVec)
+  // singleParams: histo, var1, var2, weight
+  {
+    if((singleParams.weight)!=0)
+      singleParams.histo->Fill(fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,singleParams.var1)),fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,singleParams.var2)),singleParams.weight);
+  }
+}
 
 void plot(){
   TH1F::SetDefaultSumw2();
@@ -1346,17 +1387,27 @@ def initTwoDimHistoWithProcessNameAndSuffix(name,nbinsX=10,xminX=0,xmaxX=0,nbins
 
 def fillHistoSyst(name,varname,weight,systnames,systweights):
   text='      float weight_'+name+'='+weight+';\n'
+  # Write all individual systnames and systweights in nested vector to use together with function allowing variadic vector size -> speed-up of compilation and less code lines
+  text+='     std::vector<structHelpFillHisto> helpWeightVec_' + name + ' = {'
   for sn,sw in zip(systnames,systweights):
-    text+=fillHisto(name+sn,varname,'('+sw+')*(weight_'+name+')')
+    text+='       { ' + 'h_'+name+sn + ', double(' + varname + '), ' + '('+sw+')*(weight_'+name+')' + '},'
+  # finish vector
+  text+='     };\n'
+  # call helper fill histo function which is defined in the beginning
+  text+='     helperFillHisto(helpWeightVec_' + name + ');\n' 
   return text
-
 
 def fillTwoDimHistoSyst(name,varname1,varname2,weight,systnames,systweights):
   text='      float weight_'+name+'='+weight+';\n'
+  # Write all individual systnames and systweights in nested vector to use together with function allowing variadic vector size -> speed-up of compilation and less code lines
+  text+='     std::vector<structHelpFillTwoDimHisto> helpWeightVec_' + name + ' = {'
   for sn,sw in zip(systnames,systweights):
-    text+=fillTwoDimHisto(name+sn,varname1,varname2,'('+sw+')*(weight_'+name+')')
+    text+='       { ' + 'h_'+name+sn + ', ' + varname1 + ', ' + varname2 + ', ' + '('+sw+')*(weight_'+name+')' + '},'
+  # finish vector
+  text+='     };\n'
+  # call helper fill histo function which is defined in the beginning
+  text+='     helperFillTwoDimHisto(helpWeightVec_' + name + ');\n' 
   return text
-
 
 def startLoop():
   return """
@@ -1561,13 +1612,13 @@ def startCat(catweight,variables):
 def endCat():
   return '    }\n    // end of category\n\n'
 
-
+# DEPRECATED: can be removed in the future
 def fillHisto(histo,var,weight):
   text= '        if(('+weight+')!=0)\n'
   text+='          h_'+histo+'->Fill(fmin(h_'+histo+'->GetXaxis()->GetXmax()-1e-6,fmax(h_'+histo+'->GetXaxis()->GetXmin()+1e-6,'+var+')),'+weight+');\n'
   return text
 
-
+# DEPRECATED: can be removed in the future
 def fillTwoDimHisto(histo,var1,var2,weight):
   text= '        if(('+weight+')!=0)\n'
   text+='          h_'+histo+'->Fill(fmin(h_'+histo+'->GetXaxis()->GetXmax()-1e-6,fmax(h_'+histo+'->GetXaxis()->GetXmin()+1e-6,'+var1+')),fmin(h_'+histo+'->GetYaxis()->GetXmax()-1e-6,fmax(h_'+histo+'->GetYaxis()->GetXmin()+1e-6,'+var2+')),'+weight+');\n'
@@ -1662,13 +1713,22 @@ def compileProgram(scriptname,usesDataBases,addCodeInterfaces):
   if usesDataBases:
     memDBccfiles=glob.glob('/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase/MEMDataBase/src/*.cc') 
     #TODO update the dataBases code
-  cmd= ['g++']+out[:-1].replace("\n"," ").split(' ')+dnnfiles+['-lTMVA']+memDBccfiles+[scriptname+'.cc','-o',scriptname]
+  # improve ram usage and reduce garbage of g++ compiler
+  improveRAM = '--param ggc-min-expand=100 --param ggc-min-heapsize=2400000'
+  # if python cflags are used -O3 optimization is set, resulting in long compilation times, set it back to default -O0
+  resetCompilerOpt = '-O0'
+  cmd= ['g++']+[improveRAM]+out[:-1].replace("\n"," ").split(' ')+dnnfiles+['-lTMVA']+memDBccfiles+[resetCompilerOpt]+[scriptname+'.cc','-o',scriptname]
   print cmd
   print ""
-  print " ".join(cmd)
+  cmdstring = " ".join(cmd)
+  print cmdstring
   print ""
-  cmdstring=" ".join(cmd)
-  subprocess.call([cmdstring],shell=True)
+  try:
+    print subprocess.check_output([cmdstring],stderr=subprocess.STDOUT,shell=True)
+  except subprocess.CalledProcessError, e:
+    print "Compile command:\n", e.cmd
+    print "Compile failed with error:\n", e.output
+
 
 def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],allsystweights=["1"],additionalvariables=[],dataBases=[],addCodeInterfaces=[]):
 
@@ -1860,6 +1920,15 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
         script+=fillHistoSyst(histoname,exi,weight,systnames,systweights)
         script+="      }\n"
       else:
+        # Handle vector sub variables which have names like Jet_E_1, so that the variable Jet_E[1] is included instead
+        if not ".xml" in ex and not hasattr(tree,ex):
+          if "_" in ex:
+            exOld = ex
+            expressionPart1, expressionPart2 = ex.rsplit('_', 1)
+            if hasattr(tree, expressionPart1) and expressionPart2.isdigit():
+              ex = expressionPart1 + '[' + str(int(expressionPart2) -1) + ']' 
+              print 'Found vector sub variable: ', exOld, ' which was converted to: ', ex
+        
         arrayselection=variables.checkArrayLengths(','.join([ex,pw]))
         weight='('+arrayselection+')*('+pw+')*Weight_XS*categoryweight*sampleweight'
         script+=fillHistoSyst(histoname,ex,weight,systnames,systweights)
@@ -2032,7 +2101,7 @@ def submitToNAF(scripts):
     os.makedirs(logdir)
   for script in scripts:
     print 'submitting',script
-    command=['qsub', '-cwd', '-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=2000M', '-l', 's_vmem=2000M' ,'-o', logdir, '-e', logdir, script]
+    command=['qsub', '-cwd', '-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=5800M', '-l', 's_vmem=5800M' ,'-o', logdir, '-e', logdir, script]
     a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
     output = a.communicate()[0]
     jobidstring = output.split()
@@ -2080,7 +2149,7 @@ def submitArrayToNAF(scripts,arrayname=""):
   
   print 'submitting',arrayscriptpath
   #command=['qsub', '-cwd','-terse','-t',tasknumberstring,'-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=2000M', '-l', 's_vmem=2000M' ,'-o', logdir+'/dev/null', '-e', logdir+'/dev/null', arrayscriptpath]
-  command=['qsub', '-cwd','-terse','-t',tasknumberstring,'-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=2000M', '-l', 's_vmem=2000M' ,'-o', '/dev/null', '-e', '/dev/null', arrayscriptpath]
+  command=['qsub', '-cwd','-terse','-t',tasknumberstring,'-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=5800M', '-l', 's_vmem=5800M' ,'-o', '/dev/null', '-e', '/dev/null', arrayscriptpath]
   a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
   output = a.communicate()[0]
   jobidstring = output
@@ -2249,11 +2318,19 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   outputpath=workdir+'/output.root'
 
   addCodeInterfaces=[]
+
+  codeInterfaceCounter = 0
   for acp in addCodeInterfacePaths:
-    print "loading module", acp
-    newCodeInterfaceModule=imp.load_source("newACI",acp)
-    import newACI
-    addCodeInterfaces.append(newACI.theInterface())
+    codeInterfaceCounter += 1
+    if isinstance(acp, basestring):
+        addModuleName = "addModule" + str(codeInterfaceCounter)
+        print "loading module", acp, "as ", addModuleName, " module."
+        addCodeInterfaces.append(imp.load_source(addModuleName,acp).theInterface())
+    elif isinstance(acp, types.InstanceType):
+        print "appending class object initiated by user: ", acp
+        addCodeInterfaces.append(acp)
+    else:
+        print "Unknown additional code interface type: ", acp
 
   usesDataBases=False
   if dataBases!=[]:
