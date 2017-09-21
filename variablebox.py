@@ -76,15 +76,19 @@ class Variable():
     isarray=self.arraylength!=None
     if isarray:
       if t=='F':
-        text='  float* '+var+' = new float[100];\n'
+        text='  float* '+var+' = new float[100];'
+        for i in range(0,100):
+          text+='\nfloatMap["' + var + '_' + str(i+1) + '"] = &' + var + '[' + str(i) + ']' + ';'
       elif t=='I':
-        text='  int* '+var+' = new int[100];\n'
+        text='  int* '+var+' = new int[100];'
+        for i in range(0,100):
+          text+='\nintMap["' + var + '_' + str(i+1) + '"] = &' + var + '[' + str(i) + ']' + ';'
       else: "UNKNOWN TYPE",t
     else:
       if t=='F':
-        text='  float '+var+' = -999;\n'
+        text='\nfloat '+var+' = -999;\nfloatMap["' + var + '"] = &' + var + ';'
       elif t=='I':
-        text='  int '+var+' = -999;\n'
+        text='\nint '+var+' = -999;\nintMap["' + var + '"] = &' + var + ';'
       else: "UNKNOWN TYPE",t
     return text
 
@@ -261,12 +265,30 @@ class Variables:
     if not name in self.variables and not name in self.vetolist:
 
       if not ".xml" in expression and not hasattr(tree,expression):
-        print 'init vasr for ', expression
-        self.initVarsFromExpr(expression,tree)
-        #print expression
+        # Handle vector sub variables which have names like Jet_E_1, so that vector variable Jet_E is included instead
+        # If not vector like variable is found assume it is a forumal expression and recursive call initVarsFromExpr
+        foundVectorLikeVariable = False
+        if "_" in expression:
+          expressionPart1, expressionPart2 = expression.rsplit('_', 1)
+          if hasattr(tree, expressionPart1) and expressionPart2.isdigit():
+            foundVectorLikeVariable = True
+            print 'Found vector like variable: ', expression, ' which was converted to: ', expressionPart1
+            # Make sure vector variable is not already included
+            if not expressionPart1 in self.variables and not expressionPart1 in self.vetolist:
+              print "creating variable", expressionPart1
+              self.variables[expressionPart1]=Variable(expressionPart1,expressionPart1,vartype,arraylength)
+              self.variables[expressionPart1].initVar(tree,self)
+              return
+            else:
+              print "Variable exists already: ", expressionPart1, " do nothing."
+              return
+        
+        # Handle formular expression by recursive function which splits formular based on brackets
+        if (not foundVectorLikeVariable):  
+          print 'init vasr for ', expression
+          self.initVarsFromExpr(expression,tree)
 
-
-      print "creatubg variable", expression
+      print "creating variable", expression
       self.variables[name]=Variable(name,expression,vartype,arraylength)
       self.variables[name].initVar(tree,self)
 
@@ -290,7 +312,7 @@ class Variables:
       variablenames=self.varsIn(expr)
       #print variablenames
       for name in variablenames:
-	#print name
+        #print name
         self.initVar(tree,name,name,'F')
 
 
@@ -302,7 +324,7 @@ class Variables:
 
   # Program: Initialize all variables
   def initVarsProgram(self):
-    text=""
+    text="std::map<std::string, float*> floatMap;\nstd::map<std::string, int*> intMap;\n\n"
     for name,var in self.variables.iteritems():
       text+=var.initVarProgram()
     text+='\n'
