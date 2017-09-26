@@ -2214,11 +2214,11 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
     for fn in s.files:
       events_in_file=0
       if LoadedTreeInformation!={} and fn in LoadedTreeInformation:
-	#print "using tree event information"
+	print "using tree event information"
 	events_in_file=LoadedTreeInformation[fn]
       else:
-	#print "did not find this sample in the json file yet"
-	#print "will add it"
+	print "did not find this sample in the json file yet"
+	print "will add it"
         f=ROOT.TFile(fn)
         t=f.Get('MVATree')
         events_in_file=t.GetEntries()
