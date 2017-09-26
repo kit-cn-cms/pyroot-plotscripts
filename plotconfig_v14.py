@@ -518,8 +518,8 @@ sampleDict.doPrintout()
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
 samplesDataControlPlots=[
-                    Sample('SingleMu',ROOT.kBlack,path_data+'/SingleMuon*/*nominal*.root',sel_singlemu,'SingleMu',samDict=sampleDict),
-                    Sample('SingleEl',ROOT.kBlack,path_data+'/SingleElectron*/*nominal*.root',sel_singleel,'SingleEl',samDict=sampleDict)
+                    Sample('SingleMu',ROOT.kBlack,path_karim+'/SingleMuon*/*nominal*.root',sel_singlemu,'SingleMu',samDict=sampleDict),
+                    Sample('SingleEl',ROOT.kBlack,path_karim+'/SingleElectron*/*nominal*.root',sel_singleel,'SingleEl',samDict=sampleDict)
 ]
 
 ## DANGERZONE 
