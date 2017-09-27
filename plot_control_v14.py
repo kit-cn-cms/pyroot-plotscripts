@@ -123,13 +123,6 @@ def main(argv):
 
 
 
-
-    assert(len(nhistobins)==len(maxxvals))
-    assert(len(nhistobins)==len(minxvals))
-    assert(len(nhistobins)==len(categories))
-    assert(len(nhistobins)==len(discrs))
-
-
     # book plots
     plotlabel="1 lepton, #geq 4 jets, #geq 2 b-tags"
     plotlabelboosted="#splitline{1 lepton, #geq 4 jets, #geq 2 b-tags}{#geq 1 C/A 1.5 jet p_{T} > 200 GeV}"
@@ -843,7 +836,7 @@ def main(argv):
     if analysis.doDrawParallel==False or analysis.plotNumber == None :
         if not os.path.exists(analysis.rootFilePath):
             print "Doing plotParallel step since root file was not found."
-            outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[],"",otherSystNames+PSSystNames,cirun=False)
+            outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_v5_27092017.json",otherSystNames+PSSystNames,cirun=False)
             # Allow start of an improved rebinning algorithm
             if analysis.getActivatedOptimizedRebinning():
               if analysis.getSignalProcess() == 'ttbb':
