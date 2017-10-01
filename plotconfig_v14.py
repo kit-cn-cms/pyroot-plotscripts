@@ -510,6 +510,7 @@ path_michael="/nfs/dust/cms/user/mwassmer/ntuples/august17"
 path_qcd_samples = "/nfs/dust/cms/user/mwassmer/ntuples/QCD_Estimation"
 path_karim="/nfs/dust/cms/user/kelmorab/trees_Spring17_v5"
 ttbarPathS=path_karim+'/ttbar_incl/*nominal*.root'+';'+path_karim+'/ttbar_excl_SL/*nominal*.root'+';'+path_michael+'/ttbar_excl_DL_0/*nominal*.root'
+iso_inverted_paths=path_qcd_samples+'/Single*/*nominal*.root'+';'+path_qcd_samples+'/ttbar_excl_SL_0/*nominal*.root'+';'+path_qcd_samples+'/ttbar_excl_DL_0/*nominal*.root'+';'+path_qcd_samples+'/WJets-HT-*/*nominal*.root'+';'+path_qcd_samples+'/Zjets*/*nominal*.root'+';'+path_qcd_samples+'/??_0/*nominal*.root'+';'+path_qcd_samples+'/ttHbb*/*nominal*.root'+';'+path_qcd_samples+'/ttHnonbb*/*nominal*.root'+';'+path_qcd_samples+'/tt?_*/*nominal*.root'+';'+path_qcd_samples+'/st*/*nominal*.root'
 
 
 
@@ -559,7 +560,7 @@ samplesControlPlots=[
                     Sample('V+jets',ROOT.kGreen-3,path_karim+'/*ets*/*nominal*.root',mcWeightAll+sel_MET,'Vjets',systsAllSamples,samDict=sampleDict) , 
                     Sample('t#bar{t}+V',ROOT.kBlue-10,path_karim+'/tt?_*/*nominal*.root',mcWeightAll+sel_MET,'ttV',systsAllSamples,samDict=sampleDict),         
                     Sample('Diboson',ROOT.kAzure+2,path_karim+'/??_pythia_*/*nominal*.root',mcWeightAll+sel_MET,'diboson',systsAllSamples,samDict=sampleDict) , 
-#                    Sample('QCD',ROOT.kYellow ,path_80x+'/QCD*/*nominal*root',mcWeight,'QCD') , 
+                    #Sample('QCD',ROOT.kYellow ,iso_inverted_paths,'1.'+sel_MET+'*internalQCDweight'+'*(((Weight_XS==1.0)*1.0)+((Weight_XS!=1.0)*(-1.0)*35.91823))','QCD')  
 ]
 
 #print "limit samples"
@@ -616,21 +617,20 @@ samplesLimits=[
 ###                    Sample('QCD',ROOT.kYellow ,path_80x+'/QCD*/*nominal*root',mcWeightAll,'QCD',samDict=sampleDict) , 
 #]
 
-mc_samples_iso_inverted=[
-                    Sample('t#bar{t}H_iso_inv',ROOT.kBlue+1,path_qcd_samples+'/ttH*/*nominal*.root',mcWeightAll+sel_MET+'*internalQCDweight','ttH_iso_inv',systsAllSamples,samDict=sampleDict) ,     
-#                    Sample('t#bar{t}',ROOT.kRed+1,path_80x+'/ttbar/*nominal*.root',mcWeight,'ttbar',systsAllSamples) ,     
-                    Sample('t#bar{t}+lf_iso_inv',ROOT.kRed-7,path_qcd_samples+'/ttbar_excl_*_0/*nominal*.root',mcWeightAll+sel_MET+ttbarMCWeight+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)*internalQCDweight','ttbarOther_iso_inv',systsAllSamples+systsTtbar+systs_tt_lf,samDict=sampleDict),
-                    Sample('t#bar{t}+c#bar{c}_iso_inv',ROOT.kRed+1,path_qcd_samples+'/ttbar_excl_*_0/*nominal*.root',mcWeightAll+sel_MET+ttbarMCWeight+'*(GenEvt_I_TTPlusCC==1)*internalQCDweight','ttbarPlusCCbar_iso_inv',systsAllSamples+systsTtbar+systs_tt_cc,samDict=sampleDict),
-                    Sample('t#bar{t}+b_iso_inv',ROOT.kRed-2,path_qcd_samples+'/ttbar_excl_*_0/*nominal*.root',mcWeightAll+sel_MET+ttbarMCWeight+'*(GenEvt_I_TTPlusBB==1)*internalQCDweight','ttbarPlusB_iso_inv',systsAllSamples+systsTtbar+systs_tt_b,samDict=sampleDict),
-                    Sample('t#bar{t}+2b_iso_inv',ROOT.kRed+2,path_qcd_samples+'/ttbar_excl_*_0/*nominal*.root',mcWeightAll+sel_MET+ttbarMCWeight+'*(GenEvt_I_TTPlusBB==2)*internalQCDweight','ttbarPlus2B_iso_inv',systsAllSamples+systsTtbar+systs_tt_2b,samDict=sampleDict),
-                    Sample('t#bar{t}+b#bar{b}_iso_inv',ROOT.kRed+3,path_qcd_samples+'/ttbar_excl_*_0/*nominal*.root',mcWeightAll+sel_MET+ttbarMCWeight+'*(GenEvt_I_TTPlusBB==3)*internalQCDweight','ttbarPlusBBbar_iso_inv',systsAllSamples+systsTtbar+systs_tt_bb,samDict=sampleDict),  
-                    Sample('Single Top_iso_inv',ROOT.kMagenta,path_qcd_samples+'/st*/*nominal*.root',mcWeightAll+sel_MET+'*internalQCDweight','SingleTop_iso_inv',systsAllSamples,samDict=sampleDict) , 
-                    Sample('V+jets_iso_inv',ROOT.kGreen-3,path_qcd_samples+'/*ets*/*nominal*.root',mcWeightAll+sel_MET+'*internalQCDweight','Vjets_iso_inv',systsAllSamples,samDict=sampleDict) , 
-                    Sample('t#bar{t}+V_iso_inv',ROOT.kBlue-10,path_qcd_samples+'/tt?_*/*nominal*.root',mcWeightAll+sel_MET+'*internalQCDweight','ttV_iso_inv',systsAllSamples,samDict=sampleDict),         
-                    Sample('Diboson_iso_inv',ROOT.kAzure+2,path_qcd_samples+'/??_0/*nominal*.root',mcWeightAll+sel_MET+'*internalQCDweight','diboson_iso_inv',systsAllSamples,samDict=sampleDict)                                          
-]
+#~ mc_samples_iso_inverted=[
+                    #~ Sample('t#bar{t}H_iso_inv',ROOT.kBlue+1,path_qcd_samples+'/ttH*/*nominal*.root',mcWeightAll+sel_MET+'*internalQCDweight','ttH_iso_inv',systsAllSamples,samDict=sampleDict) ,     
+                    #~ Sample('t#bar{t}+lf_iso_inv',ROOT.kRed-7,path_qcd_samples+'/ttbar_excl_*_0/*nominal*.root',mcWeightAll+sel_MET+ttbarMCWeight+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)*internalQCDweight','ttbarOther_iso_inv',systsAllSamples+systsTtbar+systs_tt_lf,samDict=sampleDict),
+                    #~ Sample('t#bar{t}+c#bar{c}_iso_inv',ROOT.kRed+1,path_qcd_samples+'/ttbar_excl_*_0/*nominal*.root',mcWeightAll+sel_MET+ttbarMCWeight+'*(GenEvt_I_TTPlusCC==1)*internalQCDweight','ttbarPlusCCbar_iso_inv',systsAllSamples+systsTtbar+systs_tt_cc,samDict=sampleDict),
+                    #~ Sample('t#bar{t}+b_iso_inv',ROOT.kRed-2,path_qcd_samples+'/ttbar_excl_*_0/*nominal*.root',mcWeightAll+sel_MET+ttbarMCWeight+'*(GenEvt_I_TTPlusBB==1)*internalQCDweight','ttbarPlusB_iso_inv',systsAllSamples+systsTtbar+systs_tt_b,samDict=sampleDict),
+                    #~ Sample('t#bar{t}+2b_iso_inv',ROOT.kRed+2,path_qcd_samples+'/ttbar_excl_*_0/*nominal*.root',mcWeightAll+sel_MET+ttbarMCWeight+'*(GenEvt_I_TTPlusBB==2)*internalQCDweight','ttbarPlus2B_iso_inv',systsAllSamples+systsTtbar+systs_tt_2b,samDict=sampleDict),
+                    #~ Sample('t#bar{t}+b#bar{b}_iso_inv',ROOT.kRed+3,path_qcd_samples+'/ttbar_excl_*_0/*nominal*.root',mcWeightAll+sel_MET+ttbarMCWeight+'*(GenEvt_I_TTPlusBB==3)*internalQCDweight','ttbarPlusBBbar_iso_inv',systsAllSamples+systsTtbar+systs_tt_bb,samDict=sampleDict),  
+                    #~ Sample('Single Top_iso_inv',ROOT.kMagenta,path_qcd_samples+'/st*/*nominal*.root',mcWeightAll+sel_MET+'*internalQCDweight','SingleTop_iso_inv',systsAllSamples,samDict=sampleDict) , 
+                    #~ Sample('V+jets_iso_inv',ROOT.kGreen-3,path_qcd_samples+'/*ets*/*nominal*.root',mcWeightAll+sel_MET+'*internalQCDweight','Vjets_iso_inv',systsAllSamples,samDict=sampleDict) , 
+                    #~ Sample('t#bar{t}+V_iso_inv',ROOT.kBlue-10,path_qcd_samples+'/tt?_*/*nominal*.root',mcWeightAll+sel_MET+'*internalQCDweight','ttV_iso_inv',systsAllSamples,samDict=sampleDict),         
+                    #~ Sample('Diboson_iso_inv',ROOT.kAzure+2,path_qcd_samples+'/??_0/*nominal*.root',mcWeightAll+sel_MET+'*internalQCDweight','diboson_iso_inv',systsAllSamples,samDict=sampleDict)                                          
+#~ ]
 
-data_samples_iso_inverted=[
-					Sample('SingleMu_iso_inv',ROOT.kBlack,path_qcd_samples+'/SingleMuon*/*nominal*.root',sel_singlemu+sel_MET+'*internalQCDweight','SingleMu_iso_inv',samDict=sampleDict),
-					Sample('SingleEl_iso_inv',ROOT.kBlack,path_qcd_samples+'/SingleElectron*/*nominal*.root',sel_singleel+sel_MET+'*internalQCDweight','SingleEl_iso_inv',samDict=sampleDict)
-]
+#~ data_samples_iso_inverted=[
+					#~ Sample('SingleMu_iso_inv',ROOT.kBlack,path_qcd_samples+'/SingleMuon*/*nominal*.root',sel_singlemu+sel_MET+'*internalQCDweight','SingleMu_iso_inv',samDict=sampleDict),
+					#~ Sample('SingleEl_iso_inv',ROOT.kBlack,path_qcd_samples+'/SingleElectron*/*nominal*.root',sel_singleel+sel_MET+'*internalQCDweight','SingleEl_iso_inv',samDict=sampleDict)
+#~ ]
