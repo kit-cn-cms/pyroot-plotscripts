@@ -63,7 +63,7 @@ class Analysis:
     elif signalProcess == 'ttH' or signalProcess == 'tth':
       self.signalProcess = 'ttH'
       self.plotBlinded = True
-      self.plotConfig = 'plotconfigSpring17v10'
+      self.plotConfig = 'plotconfig_v14'
       # Store lower and upper end of samples in plotconfig
       self.ttbarSamplesLower = 9
       self.ttbarSamplesUpper = 14
