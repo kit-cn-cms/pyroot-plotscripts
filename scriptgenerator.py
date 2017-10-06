@@ -2344,7 +2344,7 @@ def submitArrayToNAF(scripts,arrayname=""):
   st = os.stat(arrayscriptpath)
   os.chmod(arrayscriptpath, st.st_mode | stat.S_IEXEC)
   
-  exit(0)
+  #exit(0)
   print 'submitting',arrayscriptpath
   #command=['qsub', '-cwd','-terse','-t',tasknumberstring,'-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=2000M', '-l', 's_vmem=2000M' ,'-o', logdir+'/dev/null', '-e', logdir+'/dev/null', arrayscriptpath]
   command=['qsub', '-cwd','-terse','-t',tasknumberstring,'-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=5800M', '-l', 's_vmem=5800M' ,'-o', '/dev/null', '-e', '/dev/null', arrayscriptpath]
