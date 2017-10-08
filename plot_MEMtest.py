@@ -69,7 +69,7 @@ def main(argv):
     discrname='finaldiscr'
     # define MEM discriminator variable
     #memexp='(memDBp>0.0)*(memDBp_sig/(memDBp_sig+0.15*memDBp_bkg))+(memDBp<0.0)*(0.01)'
-    memexp='(memDBp>0.0)*(memDBp)+(memDBp<=0.0)*(0.01)'
+    memexp='(memDBp>0.0)*(memDBp)+(memDBp<=0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # define BDT output variables
     bdtweightpath="/nfs/dust/cms/user/kelmorab/Spring17BDTWeights/"
