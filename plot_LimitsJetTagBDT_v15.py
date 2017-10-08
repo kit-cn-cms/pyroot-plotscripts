@@ -26,14 +26,16 @@ from plotconfig_v14 import *
 def main(argv):
 
     # Create analysis object with output name
-    name='limits_JTBDT_v14'
+    name='limits_JTBDT_v15'
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/latest/ttbb-cutbased-analysis_limitInput.root')
     analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/Sep17/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/output20170626-reference/workdir/ttbb-cutbased-analysis/output_limitInput.root')
 
     analysis.plotBlinded=True
     analysis.makeSimplePlots=True
-    analysis.makeMCControlPlots=False
+    analysis.makeMCControlPlots=True
+    analysis.makeDatacards=True
+    analysis.additionalPlotVariables=False
 
     # Make sure proper plotconfig is loaded for either ttbb or ttH
     print "We will import the following plotconfig: ", analysis.getPlotConfig()
@@ -111,12 +113,26 @@ def main(argv):
                   ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4",""),
                   ("(N_Jets>=6&&N_BTagsM==2)","ljets_jge6_t2",""),
                   ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3",""),
-                  ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4","")
+                  ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4",""),
+                  ("(N_Jets==4&&N_BTagsM==3)","ljets_j4_t3_MEMONLY",""),
+                  ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4_MEMONLY",""),
+                  ("(N_Jets==5&&N_BTagsM==3)","ljets_j5_t3_MEMONLY",""),
+                  ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4_MEMONLY",""),
+                  ("(N_Jets>=6&&N_BTagsM==2)","ljets_jge6_t2_MEMONLY",""),
+                  ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_MEMONLY",""),
+                  ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4_MEMONLY","")
+                  
     ]
 
 
     categories=[]
 
+    bdtcuts=[-0.2,-0.2,0.2,0.22,0.17,0.22,0.05,0.17,0.17]+[-0.2,-0.2,-0.2,-0.2,-0.2,-0.2,-0.2]
+    for cat,bdt in zip(categorienames_,bdtcuts):
+      if cat[1] in ["ljets_jge6_tge4","ljets_j5_tge4","ljets_j4_t4","ljets_jge6_t3","ljets_j5_t3","ljets_j4_t3"]:
+        categories.append(('('+cat[0]+')*(finalbdt_'+cat[1]+'>'+str(bdt)+')',cat[1]+'_high') )
+        categories.append(('('+cat[0]+')*(finalbdt_'+cat[1]+'<='+str(bdt)+')',cat[1]+'_low') )
+     
 
     # add unsplit categories
     for cat in categorienames_:
@@ -124,10 +140,10 @@ def main(argv):
 
     print categories
 
-    nhistobins= [  20,20, 	20,   10,    20,    10,   20,   20,   10 ]
-    minxvals=   [ 200, 200, -0.75,  -0.8, -0.8,   -0.8, -0.8, -0.8,   -0.8]
-    maxxvals=   [800,800,    0.8,  0.75,   0.8,    0.7,  0.8,  0.8,    0.7]
-    discrs =    ['finalbdt_ljets_j4_t2','finalbdt_ljets_j5_t2','finalbdt_ljets_j4_t3', 'finalbdt_ljets_j4_t4', 'finalbdt_ljets_j5_t3', 'finalbdt_ljets_j5_tge4', 'finalbdt_ljets_jge6_t2', 'finalbdt_ljets_jge6_t3', 'finalbdt_ljets_jge6_tge4']
+    nhistobins= [ 	10, 10,     5,5,         10,10,    5,5,         10,10,   5,5 ]+[  20,20, 	20,   10,    20,    10,   20,   20,   10 ]+[  20,   10,    20,    10,   20,   20,   10 ]
+    minxvals=   [ 0, 0,  	    0,0,         0,0       ,0,0 ,       0,0,0,0,]+[ 200, 200, -0.8,  -0.8, -0.8,   -0.8,         -0.6, -0.9,   -0.8]+[ -1,  0, -1,   0, -1, 0,   0]
+    maxxvals=   [  0.9, 0.9,  0.8,0.8,   0.95,0.95,    0.9,0.9 ,   0.9,   0.9,0.9,   0.9]+[800,800,    0.8,  0.7,   0.8,    0.8,  0.7,  0.8,    0.8]+[7, 0.9,   7,    0.9,  7,  0.9,    0.9]
+    discrs =    [memexp, memexp, memexp, memexp,memexp, memexp,memexp, memexp,  memexp, memexp,memexp, memexp]+['finalbdt_ljets_j4_t2','finalbdt_ljets_j5_t2','finalbdt_ljets_j4_t3', 'finalbdt_ljets_j4_t4', 'finalbdt_ljets_j5_t3', 'finalbdt_ljets_j5_tge4', 'finalbdt_ljets_jge6_t2', 'finalbdt_ljets_jge6_t3', 'finalbdt_ljets_jge6_tge4']+[  'Evt_blr_ETH_transformed',   memexp,    'Evt_blr_ETH_transformed',    memexp,   'Evt_blr_ETH_transformed',   memexp,   memexp ]
 
 
 
@@ -186,7 +202,7 @@ def main(argv):
     if analysis.doDrawParallel==False or analysis.plotNumber == None :
         if not os.path.exists(analysis.rootFilePath):
             print "Doing plotParallel step since root file was not found."
-            outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_v5_27092017.json",otherSystNames+PSSystNames,cirun=False)
+            outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_v5_08102017.json",otherSystNames+PSSystNames,cirun=False)
             # Allow start of an improved rebinning algorithm
             if analysis.getActivatedOptimizedRebinning():
               if analysis.getSignalProcess() == 'ttbb':
@@ -266,13 +282,13 @@ def main(argv):
         #plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[0:]),samples[0:],lolT[0],samples[0],-2,name,[[lll,3354,ROOT.kBlack,True]],False,labels,True,analysis.plotBlinded)
 
 
-    # Make yield table
-    if (analysis.doDrawParallel==False or analysis.plotNumber != None) and analysis.makeEventYields==True :
-        print "Making yield table."
-        for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
-            hldName = hld[0].GetName()
-            tablepath=("/".join((outputpath.split('/'))[:-1]))+"/"+name+hldName+"_yields"
-            eventYields(hld,hl,samples,tablepath)
+    # Make MC Control plots
+    if (analysis.doDrawParallel==False or analysis.plotNumber != None) and analysis.makeMCControlPlots==True :
+        print "Making MC Control plots"
+        print "skipping"
+        lll=createLLL_fromSuperHistoFileSyst(outputpath[:-5]+'_limitInput.root',samples[0:],discriminatorPlots,errorSystNames)
+        labels=[plot.label for plot in discriminatorPlots]
+        plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[0:]),samples[0:],lolT[0],samples[0],-2,name,[[lll,3354,ROOT.kBlack,True]],False,labels,True,analysis.plotBlinded)
 
 
 
