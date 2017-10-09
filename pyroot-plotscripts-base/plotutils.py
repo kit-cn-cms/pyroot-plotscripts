@@ -2470,7 +2470,7 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         nok=99999
         if blinded:
             for ibin in range(stackedListOfHistos[0].GetNbinsX()):
-                if otc.GetBinContent(ibin)>0 and stackedListOfHistos[0].GetBinContent(ibin)/otc.GetBinContent(ibin)<1000000:
+                if otc.GetBinContent(ibin)>0 and stackedListOfHistos[0].GetBinContent(ibin)/otc.GetBinContent(ibin)<100:
                     nok=ibin-1
                     break
         data,blind=getDataGraphBlind(listOfHistosData,nok)
