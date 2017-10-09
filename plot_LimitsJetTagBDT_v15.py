@@ -68,7 +68,7 @@ def main(argv):
     # Name of final discriminator, should not contain underscore
     discrname='finaldiscr'
     # define MEM discriminator variable
-    memexp='(memDBp>0.0)*(memDBp_sig/(memDBp_sig+0.15*memDBp_bkg))+(memDBp<0.0)*(0.01)'
+    memexp='(memDBp>0.0)*(memDBp)+(memDBp<=0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # define BDT output variables
     bdtweightpath="/nfs/dust/cms/user/kelmorab/Spring17BDTWeights/"
@@ -120,11 +120,8 @@ def main(argv):
                   ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4_MEMONLY",""),
                   ("(N_Jets>=6&&N_BTagsM==2)","ljets_jge6_t2_MEMONLY",""),
                   ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_MEMONLY",""),
-                  ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4_MEMONLY","")
-                  
+                  ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4_MEMONLY","")             
     ]
-
-
     categories=[]
 
     bdtcuts=[-0.2,-0.2,0.2,0.22,0.17,0.22,0.05,0.17,0.17]+[-0.2,-0.2,-0.2,-0.2,-0.2,-0.2,-0.2]
@@ -140,9 +137,9 @@ def main(argv):
 
     print categories
 
-    nhistobins= [ 	10, 10,     5,5,         10,10,    5,5,         10,10,   5,5 ]+[  20,20, 	20,   10,    20,    10,   20,   20,   10 ]+[  20,   10,    20,    10,   20,   20,   10 ]
-    minxvals=   [ 0, 0,  	    0,0,         0,0       ,0,0 ,       0,0,0,0,]+[ 200, 200, -0.8,  -0.8, -0.8,   -0.8,         -0.6, -0.9,   -0.8]+[ -1,  0, -1,   0, -1, 0,   0]
-    maxxvals=   [  0.9, 0.9,  0.8,0.8,   0.95,0.95,    0.9,0.9 ,   0.9,   0.9,0.9,   0.9]+[800,800,    0.8,  0.7,   0.8,    0.8,  0.7,  0.8,    0.8]+[7, 0.9,   7,    0.9,  7,  0.9,    0.9]
+    nhistobins= [ 	10, 10,     8,10,         10,10,    5,5,         15,20,   8,10 ]+[  20,20, 	20,   12,    20,    12,   20,   20,   12 ]+[  20,   10,    20,    12,   20,   20,   12 ]
+    minxvals=   [ 0, 0,  	    0,0,         0,0       ,0,0 ,       0,0,0,0,]+[ 200, 200, -0.8,  -0.8, -0.8,   -0.8,         -0.6, -0.9,   -0.8]+[ -1,  0.05, -0.5,   0.1, -2, 0,   0.1]
+    maxxvals=   [  0.9, 0.9,  0.8,0.8,   0.95,0.95,    0.9,0.9 ,   0.9,   0.9,0.9,   0.9]+[800,800,    0.75,  0.7,   0.75,    0.8,  0.7,  0.8,    0.8]+[7, 1.0,   7,    1.0,  4,  1.0,    1.0]
     discrs =    [memexp, memexp, memexp, memexp,memexp, memexp,memexp, memexp,  memexp, memexp,memexp, memexp]+['finalbdt_ljets_j4_t2','finalbdt_ljets_j5_t2','finalbdt_ljets_j4_t3', 'finalbdt_ljets_j4_t4', 'finalbdt_ljets_j5_t3', 'finalbdt_ljets_j5_tge4', 'finalbdt_ljets_jge6_t2', 'finalbdt_ljets_jge6_t3', 'finalbdt_ljets_jge6_tge4']+[  'Evt_blr_ETH_transformed',   memexp,    'Evt_blr_ETH_transformed',    memexp,   'Evt_blr_ETH_transformed',   memexp,   memexp ]
 
 
