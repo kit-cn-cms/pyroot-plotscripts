@@ -1604,7 +1604,9 @@ def startLoop():
       Evt_Lumi=Evt_Lumi_INT;
       Evt_Run=Evt_Run_INT;
       }
-      
+    
+    //PLACEHOLDERFORCASTLINES
+    
     //std::cout<<Evt_ID<<std::endl;
     TString currentfilename="";
     currentfilename = chain->GetCurrentFile()->GetName();   
@@ -2039,7 +2041,8 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
     script+=addCodeInt.getBeforeLoopLines()
     
   # initialize all variables
-  script+=variables.initVarsProgram()
+  initStub, castStub=variables.initVarsProgram()
+  script+=initStub
   script+=variables.initBranchAddressesProgram()
 
   # initialize TMVA Readers
@@ -2069,7 +2072,11 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
           script+=initHistoWithProcessNameAndSuffix(c+n+s,nb,mn,mx,t)
 
   # start event loop
-  script+=startLoop()
+  startLoopStub=startLoop()
+  if castStub!="":
+    startLoopStub.replace("//PLACEHOLDERFORCASTLINES", castStub)
+  script+=startLoopStub
+    
   for addCodeInt in addCodeInterfaces:
     script+=addCodeInt.getVariableInitInsideEventLoopLines()
   
