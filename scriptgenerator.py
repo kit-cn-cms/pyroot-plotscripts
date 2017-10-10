@@ -1264,6 +1264,8 @@ void plot(){
   float sumOfWeights=0;
 
   int DoWeights=1;
+  int electron_data=0;
+  int muon_data=0;
 
   //initialize Trigger Helper
 
@@ -1613,6 +1615,25 @@ def startLoop():
     eventsAnalyzed++;
     sumOfWeights+=Weight;
 
+	// Do weighting correctly if data driven QCD sample is used: use the weights for MC part and not for Data part
+	if(processname=='QCD') {
+		if(currentfilename.Contains('SingleElectron')){
+			DoWeights=0;
+			electron_data=1;
+			muon_data=0;
+		} 
+		else if(currentfilename.Contains('SingleMuon')) {
+			DoWeights=0;
+			muon_data=1;
+			electron_data=0;
+		}
+		else {
+			DoWeights=1;
+			muon_data=0;
+			electron_data=0;
+		}
+	}
+
 
   // DANGERZONE
   // Only Works for SL events at the moment
@@ -1935,7 +1956,8 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 	    "internalMuIDWeight","internalMuIDWeightUp","internalMuIDWeightDown",
 	    "internalMuIsoWeight","internalMuIsoWeightUp","internalMuIsoWeightDown",
 	    "internalMuHIPWeight","internalMuHIPWeightUp","internalMuHIPWeightDown",
-	    "internalQCDweight","internalQCDweightup","internalQCDweightdown"
+	    "internalQCDweight","internalQCDweightup","internalQCDweightdown",
+	    "electron_data","muon_data"
 ]
   for addCodeInt in addCodeInterfaces:
     vetolist+=addCodeInt.getExternalyCallableVariables()
