@@ -113,9 +113,11 @@ class Variable():
     if isarray:
       text+='  chain->SetBranchAddress("'+self.name+'",'+self.name+');\n'
     else:
-      text+='  chain->SetBranchAddress("'+self.name+'",&'+self.name+');\n'
+      if self.vartype=='I' or self.vartype=='L':
+        text+='  chain->SetBranchAddress("'+self.name+'",&'+self.name+'LONGDUMMY);\n'
+      else:
+        text+='  chain->SetBranchAddress("'+self.name+'",&'+self.name+');\n'
     return text
-
 
   # initialize TMVA Reader
   def initReaderProgram(self):
