@@ -2042,6 +2042,8 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
     
   # initialize all variables
   initStub, castStub=variables.initVarsProgram()
+  #print initStub
+  #print castStub
   script+=initStub
   script+=variables.initBranchAddressesProgram()
 
@@ -2074,7 +2076,8 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   # start event loop
   startLoopStub=startLoop()
   if castStub!="":
-    startLoopStub.replace("//PLACEHOLDERFORCASTLINES", castStub)
+    #print castStub
+    startLoopStub=startLoopStub.replace("//PLACEHOLDERFORCASTLINES", castStub)
   script+=startLoopStub
     
   for addCodeInt in addCodeInterfaces:
