@@ -1303,7 +1303,7 @@ void plot(){
     TString filenameforSytType=TString(thisfilename);
     // remove syst name in case of JES or JER. Not needed in current database format
     //std::cout<<thisfilename<<std::endl;
-    if(thisfilename.Contains('JES')==1 or thisfilename.Contains('JER')==1 or thisfilename.Contains('nominal')==1){
+    if(thisfilename.Contains("JES")==1 or thisfilename.Contains("JER")==1 or thisfilename.Contains("nominal")==1){
       thisfilename.Replace(thisfilename.Last('_'),thisfilename.Length()-1,"");
       }
     //std::cout<<thisfilename<<std::endl;
@@ -1362,7 +1362,7 @@ void plot(){
   TString vecNameForDataBase="mem_p";
   if(globalFileNameForSystType!=""){
     TString vecNameForDataBaseBuffer=globalFileNameForSystType;
-    if(globalFileNameForSystType.Contains('JES')==1){vecNameForDataBaseBuffer.Replace(0,3,"");}
+    if(globalFileNameForSystType.Contains("JES")==1){vecNameForDataBaseBuffer.Replace(0,3,"");}
     vecNameForDataBase="mem_"+vecNameForDataBaseBuffer+"_p";
     }
   std::vector<TString> vec_memStrings;
@@ -1621,13 +1621,13 @@ def startLoop():
     sumOfWeights+=Weight;
 
 	// Do weighting correctly if data driven QCD sample is used: use the weights for MC part and not for Data part
-	if(processname=='QCD') {
-		if(currentfilename.Contains('SingleElectron')){
+	if(processname=="QCD") {
+		if(currentfilename.Contains("SingleElectron")){
 			DoWeights=0;
 			electron_data=1;
 			muon_data=0;
 		} 
-		else if(currentfilename.Contains('SingleMuon')) {
+		else if(currentfilename.Contains("SingleMuon")) {
 			DoWeights=0;
 			muon_data=1;
 			electron_data=0;
