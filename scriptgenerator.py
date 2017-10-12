@@ -1397,19 +1397,19 @@ void plot(){
   
   // figure out what kind of branch this is
   bool evtIDisIntBranch=1;
-  TBranch* evtBranch=chain->GetBranch("Evt_ID");
-  TString branchNameString=TString(evtBranch->GetTitle());
-  if(branchNameString.Contains("/L")){
-    evtIDisIntBranch=0;
+  //TBranch* evtBranch=chain->GetBranch("Evt_ID");
+  //TString branchNameString=TString(evtBranch->GetTitle());
+  //if(branchNameString.Contains("/L")){
+  //  evtIDisIntBranch=0;
     chain->SetBranchAddress("Evt_ID",&Evt_ID);
     chain->SetBranchAddress("Evt_Run",&Evt_Run);
     chain->SetBranchAddress("Evt_Lumi",&Evt_Lumi);
-  }
-  else{
-  chain->SetBranchAddress("Evt_ID",&Evt_ID_INT);
-  chain->SetBranchAddress("Evt_Run",&Evt_Run_INT);
-  chain->SetBranchAddress("Evt_Lumi",&Evt_Lumi_INT);
-}
+  //}
+  //else{
+  //chain->SetBranchAddress("Evt_ID",&Evt_ID_INT);
+  //chain->SetBranchAddress("Evt_Run",&Evt_Run_INT);
+  //chain->SetBranchAddress("Evt_Lumi",&Evt_Lumi_INT);
+//}
   
 
 
@@ -1498,9 +1498,9 @@ def readOutDataBase(thisDataBase=[]):
   rstr+="    }\n"
   rstr+="  }// end db loop \n"
   rstr+="    if(nfoundresults!=1){\n"
-  rstr+="    //std::cout<<\"WARNING found not exaclty one result \"<<nfoundresults<<\" \"<<currentRelevantSampleName<<\" \"<<Evt_ID<<\" \"<<N_Jets<<\" \"<<N_BTagsM<<std::endl;\n"
+  rstr+="    std::cout<<\"WARNING found not exaclty one result \"<<nfoundresults<<\" \"<<currentRelevantSampleName<<\" \"<<Evt_ID<<\" \"<<N_Jets<<\" \"<<N_BTagsM<<std::endl;\n"
   rstr+="    if(N_BTagsM>=3){\n"
-  rstr+="      //std::cout<<\"VETO this event\"<<\" \"<<currentRelevantSampleName<<\" \"<<Evt_ID<<\" \"<<N_Jets<<\" \"<<N_BTagsM<<std::endl;\n"
+  rstr+="      std::cout<<\"VETO this event\"<<\" \"<<currentRelevantSampleName<<\" \"<<Evt_ID<<\" \"<<N_Jets<<\" \"<<N_BTagsM<<std::endl;\n"
   rstr+="      //std::cout<<\"RedoThisEvent\"<<\" \"<<currentRelevantSampleName<<\" \"<<currentfilename<<\" \"<<Evt_Run<<\" \"<<Evt_Lumi<<\" \"<<Evt_ID<<std::endl;\n"
   rstr+="      "+thisDataBaseName+"FoundResult=0;\n"
   rstr+="      nEventsVetoed+=1;\n"
@@ -1599,15 +1599,20 @@ def startLoop():
     if(iEntry%10000==0) cout << "analyzing event " << iEntry << endl;
 
     chain->GetEntry(iEntry);
-    if(evtIDisIntBranch==1){
-      Evt_ID=Evt_ID_INT;
-      Evt_Lumi=Evt_Lumi_INT;
-      Evt_Run=Evt_Run_INT;
-      }
+//    if(evtIDisIntBranch==1){
+//      Evt_ID=Evt_ID_INT;
+//      Evt_Lumi=Evt_Lumi_INT;
+//      Evt_Run=Evt_Run_INT;
+//      }
     
     //PLACEHOLDERFORCASTLINES
     
-    //std::cout<<Evt_ID<<std::endl;
+    
+//     std::cout<<"Evt_ID "<<Evt_ID <<" "<<Int_t(Evt_ID)<<" "<<std::endl;
+     if(Evt_ID!=Int_t(Evt_ID)){std::cout<<"PROBLEM"<<"Evt_ID "<<Evt_ID <<" "<<Int_t(Evt_ID)<<std::endl;}
+//    std::cout<<"NJEts "<<N_Jets<<" "<<N_JetsLONGDUMMY<<std::endl;
+//    std::cout<<"NBtagsM "<<N_BTagsM<<" "<<N_BTagsMLONGDUMMY<<std::endl;
+
     TString currentfilename="";
     currentfilename = chain->GetCurrentFile()->GetName();   
     int hasTrigger=0;
@@ -2668,7 +2673,7 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   # create run scripts
   print 'creating run scripts'
   scripts,outputs,nentries=get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,programpath,cmsswpath,treeInformationJsonFile,cirun)
-  
+  #exit(0)  
   #DANGERZONE Submit jobs
   helperSubmitNAFJobs(scripts,outputs,nentries)
 
