@@ -34,7 +34,7 @@ def main(argv):
     analysis.plotBlinded=True
     analysis.makeSimplePlots=True
     analysis.makeMCControlPlots=True
-    analysis.makeDatacards=True
+    analysis.makeDataCards=True
     analysis.additionalPlotVariables=False
 
     # Make sure proper plotconfig is loaded for either ttbb or ttH
@@ -283,9 +283,9 @@ def main(argv):
     if (analysis.doDrawParallel==False or analysis.plotNumber != None) and analysis.makeMCControlPlots==True :
         print "Making MC Control plots"
         print "skipping"
-        lll=createLLL_fromSuperHistoFileSyst(outputpath[:-5]+'_limitInput.root',samples[0:],discriminatorPlots,errorSystNamesNoPS)
+        lll=createLLL_fromSuperHistoFileSyst(outputpath,samples[0:],discriminatorPlots,errorSystNamesNoPS)
         labels=[plot.label for plot in discriminatorPlots]
-        plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-2,name,[[lll,3354,ROOT.kBlack,True]],False,labels,True,analysis.plotBlinded)
+        plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[0:]),samples[0:],lolT[0],samples[0],-2,name,[[lll,3354,ROOT.kBlack,True]],False,labels,True,analysis.plotBlinded)
 
 
 
