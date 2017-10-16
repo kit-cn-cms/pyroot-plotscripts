@@ -26,7 +26,7 @@ from plotconfig_v14 import *
 def main(argv):
 
     # Create analysis object with output name
-    name='limits_JetTagBDT_v15'
+    name='limits_JetTagBDT_v16'
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/latest/ttbb-cutbased-analysis_limitInput.root')
     analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/Sep17/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/output20170626-reference/workdir/ttbb-cutbased-analysis/output_limitInput.root')
@@ -120,11 +120,13 @@ def main(argv):
                   ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4_MEMONLY",""),
                   ("(N_Jets>=6&&N_BTagsM==2)","ljets_jge6_t2_MEMONLY",""),
                   ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_MEMONLY",""),
-                  ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4_MEMONLY","")             
+                  ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4_MEMONLY","")
+                  ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_BLR",""),
+                  
     ]
     categories=[]
 
-    bdtcuts=[-0.2,-0.2,0.2,0.22,0.17,0.22,0.05,0.17,0.17]+[-0.2,-0.2,-0.2,-0.2,-0.2,-0.2,-0.2]
+    bdtcuts=[-0.2,-0.2,0.2,0.22,0.17,0.22,0.05,0.17,0.17]+[-0.2,-0.2,-0.2,-0.2,-0.2,-0.2,-0.2]+[-0.2]
     for cat,bdt in zip(categorienames_,bdtcuts):
       if cat[1] in ["ljets_jge6_tge4","ljets_j5_tge4","ljets_j4_t4","ljets_jge6_t3","ljets_j5_t3","ljets_j4_t3"]:
         categories.append(('('+cat[0]+')*(finalbdt_'+cat[1]+'>'+str(bdt)+')',cat[1]+'_high') )
@@ -136,11 +138,11 @@ def main(argv):
         categories.append(cat)
 
     print categories
-
-    nhistobins= [ 	10, 10,     8,10,         10,10,    5,5,         15,20,   8,10 ]+[  20,20, 	20,   12,    20,    12,   20,   20,   12 ]+[  20,   10,    20,    12,   20,   20,   12 ]
-    minxvals=   [ 0, 0,  	    0,0,         0,0       ,0,0 ,       0,0,0,0,]+[ 200, 200, -0.8,  -0.8, -0.8,   -0.8,         -0.6, -0.9,   -0.8]+[ -1,  0.05, -0.5,   0.1, -2, 0,   0.1]
-    maxxvals=   [  0.9, 0.9,  0.8,0.8,   0.95,0.95,    0.9,0.9 ,   0.9,   0.9,0.9,   0.9]+[800,800,    0.75,  0.7,   0.75,    0.8,  0.7,  0.8,    0.8]+[7, 1.0,   7,    1.0,  4,  1.0,    1.0]
-    discrs =    [memexp, memexp, memexp, memexp,memexp, memexp,memexp, memexp,  memexp, memexp,memexp, memexp]+['finalbdt_ljets_j4_t2','finalbdt_ljets_j5_t2','finalbdt_ljets_j4_t3', 'finalbdt_ljets_j4_t4', 'finalbdt_ljets_j5_t3', 'finalbdt_ljets_j5_tge4', 'finalbdt_ljets_jge6_t2', 'finalbdt_ljets_jge6_t3', 'finalbdt_ljets_jge6_tge4']+[  'Evt_blr_ETH_transformed',   memexp,    'Evt_blr_ETH_transformed',    memexp,   'Evt_blr_ETH_transformed',   memexp,   memexp ]
+    # first 2D, then BDT only, then MEM only, then 63BLR, 
+    nhistobins= [ 	10, 10,     8,10,         10,10,    5,5,         15,20,   8,10 ]+[  20,20, 	20,   12,    20,    12,   20,   20,   12 ]+[  20,   10,    20,    12,   20,   20,   12 ]+[20]
+    minxvals=   [ 0, 0,  	    0,0,         0,0       ,0,0 ,       0,0,0,0,]+[ 200, 200, -0.8,  -0.8, -0.8,   -0.8,         -0.6, -0.9,   -0.8]+[ -1,  0.05, -0.5,   0.1, -2, 0,   0.1]+[0.5]
+    maxxvals=   [  0.9, 0.9,  0.8,0.8,   0.95,0.95,    0.9,0.9 ,   0.9,   0.9,0.9,   0.9]+[800,800,    0.75,  0.7,   0.75,    0.8,  0.7,  0.8,    0.8]+[7, 1.0,   7,    1.0,  4,  1.0,    1.0]+[8.0]
+    discrs =    [memexp, memexp, memexp, memexp,memexp, memexp,memexp, memexp,  memexp, memexp,memexp, memexp]+['finalbdt_ljets_j4_t2','finalbdt_ljets_j5_t2','finalbdt_ljets_j4_t3', 'finalbdt_ljets_j4_t4', 'finalbdt_ljets_j5_t3', 'finalbdt_ljets_j5_tge4', 'finalbdt_ljets_jge6_t2', 'finalbdt_ljets_jge6_t3', 'finalbdt_ljets_jge6_tge4']+[  'Evt_blr_ETH_transformed',   memexp,    'Evt_blr_ETH_transformed',    memexp,   'Evt_blr_ETH_transformed',   memexp,   memexp ]+['Evt_blr_ETH_transformed']
 
 
 
