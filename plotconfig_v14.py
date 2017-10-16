@@ -507,7 +507,7 @@ assert len(errorSystNames)==len(weightSystNames+otherSystNames+PSSystNames)
 path_additionalSamples="/nfs/dust/cms/user/kelmorab/trees_Spring17_v5_additional"
 #path_data="/nfs/dust/cms/user/mwassmer/ntuples/data_json"
 path_michael="/nfs/dust/cms/user/mwassmer/ntuples/august17"
-path_qcd_samples = "/nfs/dust/cms/user/mwassmer/ntuples/QCD_Estimation"
+path_qcd_samples = "/nfs/dust/cms/user/mwassmer/ntuples/QCD_Estimation_alternative"
 path_karim="/nfs/dust/cms/user/kelmorab/trees_Spring17_v5"
 ttbarPathS=path_karim+'/ttbar_incl/*nominal*.root'+';'+path_karim+'/ttbar_excl_SL/*nominal*.root'+';'+path_michael+'/ttbar_excl_DL_0/*nominal*.root'
 iso_inverted_paths=path_qcd_samples+'/Single*/*nominal*.root'+';'+path_qcd_samples+'/ttbar_excl_SL_0/*nominal*.root'+';'+path_qcd_samples+'/ttbar_excl_DL_0/*nominal*.root'+';'+path_qcd_samples+'/WJets-HT-*/*nominal*.root'+';'+path_qcd_samples+'/Zjets*/*nominal*.root'+';'+path_qcd_samples+'/??_0/*nominal*.root'+';'+path_qcd_samples+'/ttHbb*/*nominal*.root'+';'+path_qcd_samples+'/ttHnonbb*/*nominal*.root'+';'+path_qcd_samples+'/tt?_*/*nominal*.root'+';'+path_qcd_samples+'/st*/*nominal*.root'
@@ -587,7 +587,7 @@ samplesLimits=[
                     Sample('t#bar{t}+W',ROOT.kBlue-10,path_karim+'/ttW_*/*nominal*.root',mcWeightAll+sel_MET,'ttbarW',systsAllSamples,samDict=sampleDict),
                     Sample('t#bar{t}+Z',ROOT.kBlue-6,path_karim+'/ttZ_*/*nominal*.root',mcWeightAll+sel_MET,'ttbarZ',systsAllSamples,samDict=sampleDict),
                     Sample('Diboson',ROOT.kAzure+2,path_karim+'/??_pythia_*/*nominal*.root',mcWeightAll+sel_MET,'diboson',systsAllSamples,samDict=sampleDict) , 
-                    #Sample('QCD',ROOT.kYellow ,iso_inverted_paths,'1.'+sel_MET+'*internalQCDweight'+'*(((Weight_XS==1.0)*1.0)+((Weight_XS!=1.0)*(-1.0)*35.91823))','QCD')  
+                    #Sample('QCD',ROOT.kYellow,iso_inverted_paths,'1.'+sel_MET+'*internalQCDweight'+'*(((Weight_XS==1.0)*1.0*((electron_data*'+sel_singleel+')+(muon_data*'+sel_singlemu+')))+((Weight_XS!=1.0)*(-1.0)*35.9 1823))','QCD',weightSystNames)  
 ]
 
 #print "shape samples"

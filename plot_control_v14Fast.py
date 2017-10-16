@@ -917,7 +917,7 @@ def main(argv):
         print "skipping"
         lll=createLLL_fromSuperHistoFileSyst(outputpath[:-5]+'_syst.root',samples[0:],discriminatorPlots,errorSystNames)
         labels=[plot.label for plot in discriminatorPlots]
-        plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[0:]),samples[0:],lolT[0],samples[0],-2,name,[[lll,3354,ROOT.kBlack,True]],False,labels,True,analysis.plotBlinded)
+        plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-2,name,[[lll,3354,ROOT.kBlack,True]],False,labels,True,analysis.plotBlinded)
 
 
     # Make yield table
