@@ -1,6 +1,5 @@
 import ROOT
 import math
-import numpy as np
 from itertools import product
 from collections import namedtuple
 import glob
@@ -396,13 +395,7 @@ def drawHistosOnCanvas(listOfHistos_,normalize=True,stack=False,logscale=False,o
         if normalize:
             integral0=listOfHistos[0].Integral()
             for h in listOfHistos:
-              # Check if integral is not null, since it will give a zero division error
-              if integral0 != 0:
                 h.Scale(1./integral0)
-              else:
-                h.Scale(1.)
-                print "Warning: integral0  variable of histogram ", listOfHistos[0].GetName() ," has value 0 which would lead to zero division error."
-                
 
 
     canvas.cd(1)
@@ -520,12 +513,7 @@ def drawHistosOnCanvas2D(listOfHistos_,normalize=True,stack=False,logscale=False
         if normalize:
             integral0=listOfHistos[0].Integral()
             for h in listOfHistos:
-              # Check if integral is not null, since it will give a zero division error
-              if integral0 != 0:
                 h.Scale(1./integral0)
-              else:
-                h.Scale(1.)
-                print "Warning: integral0  variable of histogram ", listOfHistos[0].GetName() ," has value 0 which would lead to zero division error."
 
 
     canvas.cd(1)
@@ -616,12 +604,7 @@ def drawHistosOnCanvasAN(listOfHistos_,normalize=True,stack=False,logscale=False
         if normalize:
             integral0=listOfHistos[0].Integral()
             for h in listOfHistos:
-              # Check if integral is not null, since it will give a zero division error
-              if integral0 != 0:
                 h.Scale(1./integral0)
-              else:
-                h.Scale(1.)
-                print "Warning: integral0  variable of histogram ", listOfHistos[0].GetName() ," has value 0 which would lead to zero division error."
 
 
     canvas.cd(1)
@@ -700,11 +683,9 @@ def printCanvasesPNG(canvases,name):
 
 # writes canvases to root file
 def writeObjects(objects,name):
-  if not os.path.exists('rootfiles'):
-    os.makedirs('rootfiles')
-  for o in objects:
-    outfile=ROOT.TFile('rootfiles/' + name + '_' + o.GetName() + '.root','recreate')
-    o.Write()
+    outfile=ROOT.TFile(name+'.root','recreate')
+    for o in objects:
+        o.Write()
     outfile.Close()
 
 # returns the next decent round number (like 2, 2.5, 5, 10)
@@ -978,7 +959,7 @@ def createHistoLists_fromSuperHistoFile(path,samples,plots,rebin=1,catnames=[""]
             for plot in plots:
                 key=sample.nick+'_'+c+plot.name
                 #print key
-                print key, sample.nick, c, plot.name
+#                print key, sample.nick, c, plot.name
                 o=f.Get(key)
                 #print o
                 if isinstance(o,ROOT.TH1) and not isinstance(o,ROOT.TH2):
@@ -994,6 +975,370 @@ def createHistoLists_fromSuperHistoFile(path,samples,plots,rebin=1,catnames=[""]
     listOfHistoLists=transposeLOL(listOfHistoListsT)
     return listOfHistoLists
 
+def getOptimizedBinEdges(signalHisto, bkgHisto,optMode="SoverB", minBkgPerBin=2.0, maxBins=100,minBins=1, considerStatUnc=False,verbosity=0):
+  
+    def getSoverB(S,B):
+      if B>0:
+	return S/float(B)
+      elif S>0:
+	return 99999.9
+      else:
+	return 0.0
+      
+    def getSignificance(S,B):
+      if (S+B)>0:
+	return S/ROOT.TMath.Sqrt(S+B)
+      elif S>0:
+	return 99999.9
+      else:
+	return 0.0
+      
+    def mergeBins(bin1,bin2, pointerToFoM, verbosity=0):
+      # array has form [[bincontentsSignal,binErrorsSignal,bincontentsBackgound,binErrorsBackground, binlowedges, binwidths,FigureOfMerit,lookAt]]
+      retbin=[ bin1[0]+bin2[0],  # combine bin contents for signal
+	       float(ROOT.TMath.Sqrt(bin1[1]*bin1[1]+bin2[1]*bin2[1])), # combine stat uncertainties for signal 
+               bin1[2]+bin2[2],  # combine bin contents for bkg
+	       float(ROOT.TMath.Sqrt(bin1[3]*bin1[3]+bin2[3]*bin2[3])), # combine stat uncertainties for bkg
+               min(bin1[4],bin2[4]), # low edge of both bins
+               bin1[5]+bin2[5],  # combine bin width
+               getFom(bin1[0]+bin2[0], bin1[2]+bin2[2]),
+               1.0 # reset is already good flag
+               ]
+      if verbosity>=3:
+	print "combined bins ", bin1, bin2
+	print "to ", retbin
+      return retbin
+    
+    getFom=None
+    if optMode=="SoverB":
+      getFom=getSoverB
+    elif optMode=="Significance":
+      getFom=getSignificance
+    else:
+      print "unknown optimization mode"
+      exit(0)
+    
+    if considerStatUnc:
+      print "Considering statistical uncertainty not yet implemented! Ignoring your wishes for now!"
+    
+    #verbosity=2
+    
+    # TODO Think about including systematic shapes so that underfluctuations are covered by binning
+    
+    # get array representing the histograms
+    # array has form [[bincontentsSignal,binErrorsSignal,bincontentsBackgound,binErrorsBackground, binlowedges, binwidths,FigureOfMerit, lookAt]]
+    theArray=[]
+    
+    nBinsOriginal=signalHisto.GetNbinsX()
+    if signalHisto.GetNbinsX()!=bkgHisto.GetNbinsX():
+      print "ERROR: getOptimizedBinEdges: signal and background histograms have different binnings!"
+      exit(0)
+    if minBins>maxBins:
+      print "you want minbins > maxBins"
+      exit(0)
+      
+    for ibin in range(nBinsOriginal+2): # ibin=0=underflow; ibin+1=last bin; bin nBinsOriginal+2 = overflow
+      if verbosity>=2:
+	print "reading signal ", signalHisto.GetName()
+	print "iBin, Content", ibin, signalHisto.GetBinContent(ibin)
+        print "reading background ", bkgHisto.GetName()
+	print "iBin, Content", ibin, bkgHisto.GetBinContent(ibin)
+      theArray.append([signalHisto.GetBinContent(ibin), signalHisto.GetBinError(ibin), bkgHisto.GetBinContent(ibin), bkgHisto.GetBinError(ibin), signalHisto.GetBinLowEdge(ibin), signalHisto.GetBinWidth(ibin), getFom(signalHisto.GetBinContent(ibin),bkgHisto.GetBinContent(ibin)), 1])
+    
+    # make deep copy of original binning
+    sarraycopy=deepcopy(theArray)
+    
+    # now cluster the bins together to get at least minimal background events into each bin
+    clusteringDone=False
+    nbins=len(theArray)
+    if verbosity>=2:
+      print "array before any merging"
+      print theArray
+    niterations=0
+    while clusteringDone==False:
+      niterations+=1
+      nbins=len(theArray)
+      if verbosity>=2:
+	print "Current nbins after iteration ", niterations, " : ", nbins
+      if len(theArray)<=minBins:
+	if verbosity>=2:
+	  print "reached minimal number of bins", minBins
+	  break
+      # find bin with highest Figure
+      imax=zip(*theArray)[6].index(max(zip(*theArray)[6]))
+      # in case there are multiple bins with highest FoM start from the rightmost one 
+      if zip(*theArray)[6].count(max(zip(*theArray)[6]))>1:	
+        imax=len(theArray)-1-list(reversed(zip(*theArray)[6])).index(max(zip(*theArray)[6]))
+      print "considering bin", imax, theArray[imax]
+      # enough bkg?
+      hasMinBkg=theArray[imax][2]>minBkgPerBin
+      # large enough to allow for downfluctuation?
+      canDownFluctuate=((theArray[imax][2]+theArray[imax][0])-(theArray[imax][1]+theArray[imax][3]))>=0.0
+      # if we want to allow down fluctuation lets assume that we just do not have enought bkg in the bin
+      if considerStatUnc==True and canDownFluctuate==False:
+	hasMinBkg=False
+      # would merging with neighbouring bin increase FoM?
+      mergeRightIncreasesFoM=0
+      mergeLeftIncreasesFoM=0
+      hypotheticalBinLeft=[]
+      hypotheticalBinRight=[]
+      if imax!=0: # not the leftmost bin (underflow)
+	hypotheticalBinLeft=mergeBins(theArray[imax-1],theArray[imax],getFom,verbosity)
+	mergeLeftIncreasesFoM=hypotheticalBinLeft[6]-getFom(theArray[imax][0],theArray[imax][2])
+      if imax!=nbins-1: # not the rightmost bin (overflow)
+	hypotheticalBinRight=mergeBins(theArray[imax+1],theArray[imax],getFom,verbosity)
+	mergeRightIncreasesFoM=hypotheticalBinRight[6]-getFom(theArray[imax][0],theArray[imax][2])
+      
+      if hasMinBkg and (mergeLeftIncreasesFoM<=0 and mergeRightIncreasesFoM<=0):
+	# enough bkg in bin and no increase of FoM by merging
+	# nothing to do then
+	# Set FoM to -1
+	theArray[imax][6]=-1
+	if verbosity>=2:
+	  print "bin does not need to be merged at the moment", imax, theArray[imax]
+      else:
+	# we either need more bkg or the merge increases the FoM
+	if verbosity>=2:
+	  print "merging bin ", imax, theArray[imax]
+	  print "with"
+	if (mergeRightIncreasesFoM>=mergeLeftIncreasesFoM and imax!=nbins-1) or (imax==0):
+	  # right merge is better or left merge not possible
+	  if verbosity>=2:
+	    print "right bin", theArray[imax+1]
+	    print "resulting bin", hypotheticalBinRight
+	  del theArray[imax+1]
+	  del theArray[imax]
+	  theArray.insert(imax,hypotheticalBinRight)
+	elif (mergeLeftIncreasesFoM>mergeRightIncreasesFoM and imax!=0) or (imax==nbins-1):
+        # left merge is better or right merge not possible
+	  if verbosity>=2:
+	    print "left bin", theArray[imax-1]
+	    print "resulting bin", hypotheticalBinLeft
+	  del theArray[imax]
+	  del theArray[imax-1]
+	  theArray.insert(imax-1,hypotheticalBinLeft)
+	
+      # if all bins have been sufficiently merged all should have FoMs of -1
+      if max(zip(*theArray)[6])==-1:
+	clusteringDone=True
+	break
+    if verbosity>=2:
+      print "First merging done. Checking the number of bins"
+    # now we check if we have to many bins
+    doReduceBins=False
+    if len(theArray)>maxBins:
+      doReduceBins=True
+      if verbosity>=2:
+	print "We now still have to many bins. Will merge bins with bad ", optMode
+    else:
+      if verbosity>=2:
+	print "number of bins below maximum"
+    
+    # reset FoM entries
+    nbins=len(theArray)
+    for ibin in range(nbins):
+      theArray[ibin][6]=getFom(theArray[ibin][0],theArray[ibin][2])
+    # now we look for the bins with the worst FoM and merge those 
+    while doReduceBins and len(theArray)>=maxBins:
+      nbins=len(theArray)
+      if verbosity>=2:
+	print "Current nbins after iteration ", niterations, " : ", nbins
+      imin=zip(*theArray)[6].index(min(zip(*theArray)[6]))
+      if verbosity>=2:
+	print "considering bin", imin, theArray[imin]
+      FoMLeft=None
+      FoMRight=None
+      if imin!=0: # not the leftmost bin (underflow)
+	FoMLeft=theArray[imin-1][6]	
+      if imin!=nbins-1: # not the rightmost bin (overflow)
+	FoMRight=theArray[imin+1][6]
+      if FoMLeft!=None and FoMRight!=None:
+	if FoMLeft<=FoMRight:
+	  newbin=mergeBins(theArray[imin],theArray[imin-1],getFom, verbosity)
+	  del theArray[imin]
+	  del theArray[imin-1]
+	  theArray.insert(imin-1, newbin)
+	else:
+	  newbin=mergeBins(theArray[imin],theArray[imin+1],getFom, verbosity)
+	  del theArray[imin+1]
+	  del theArray[imin]
+	  theArray.insert(imin,newbin)
+      elif FoMRight!=None:
+	  newbin=mergeBins(theArray[imin],theArray[imin+1],getFom, verbosity)
+	  del theArray[imin+1]
+	  del theArray[imin]
+	  theArray.insert(imin,newbin)
+      elif FoMLeft!=None:
+	  newbin=mergeBins(theArray[imin],theArray[imin-1],getFom, verbosity)
+	  del theArray[imin]
+	  del theArray[imin-1]
+	  theArray.insert(imin-1, newbin)
+    # now we are done
+    if verbosity>=2:
+      print "array after all merges"
+      print theArray
+    #extract binning information  
+    listOfBinLowEdges=list(zip(*theArray)[4])
+    listOfBinWidths=zip(*theArray)[5]
+    listOfBinLowEdges.append(listOfBinLowEdges[-1]+listOfBinWidths[-1])
+    return listOfBinLowEdges
+				 
+
+def optimizeBinning(infname,outfname,binningSaveFile="",signalsamples=[], backgroundsamples=[],additionalSamples=[],plots=[],systnames=[""],minBkgPerBin=2.0,optMode="SoverB",doTheRebinning=True,considerStatUnc=False,maxBins=100,minBins=1,verbosity=0):
+    if len(signalsamples)==0 or len(backgroundsamples)==0:
+      print "You called optimizeBinning without any samples. Not Reasonable. Sad!."
+      exit(0)
+    theclock=ROOT.TStopwatch()
+    theclock.Start()
+    theobjectlist=[] # dummy list to keep destructors from being called
+    ROOT.gDirectory.cd('PyROOT:/')
+    infile=ROOT.TFile(infname,"READONLY")
+    if outfname!="":
+      outfile=ROOT.TFile(outfname,"RECREATE")  
+        
+    # loop over plots
+    for plot in plots:
+      theSignalClone=None
+      theBkgClone=None
+      #add signal samples
+      print "getting ", signalsamples[0].nick+'_'+plot.name
+      s0=infile.Get(signalsamples[0].nick+'_'+plot.name)
+      theobjectlist.append(s0)
+      theSignalClone=s0.Clone('signalClone_'+signalsamples[0].nick+'_'+plot.name)
+      for ss in signalsamples[1:]:
+	sx=infile.Get(ss.nick+'_'+plot.name)
+	theobjectlist.append(sx)
+	theSignalClone.Add(sx)
+      #add background samples
+      b0=infile.Get(backgroundsamples[0].nick+'_'+plot.name)
+      theobjectlist.append(b0)
+      theBkgClone=b0.Clone('backgroundClone_'+backgroundsamples[0].nick+'_'+plot.name)
+      for bs in backgroundsamples[1:]:
+        bx=infile.Get(bs.nick+'_'+plot.name)
+        theobjectlist.append(bx)
+	theBkgClone.Add(bx)
+      if theSignalClone==None or theBkgClone==None:
+        print "no histograms found for this:"
+        print plot.name
+        exit(0)
+      theSignalClone.SetDirectory(0)
+      theBkgClone.SetDirectory(0)
+      theoptimizedBinEdges=getOptimizedBinEdges(theSignalClone, theBkgClone,optMode, minBkgPerBin, maxBins,minBins, considerStatUnc,verbosity)
+      theBinEdgeArray=array.array("f",theoptimizedBinEdges)
+      print "optimized bin edges for ", plot.name
+      print theoptimizedBinEdges
+      if binningSaveFile!="":
+	binninTextFile=open(binningSaveFile,"a")
+	binninTextFile.write(plot.name+" : "+str(theoptimizedBinEdges)+"\n")
+        binninTextFile.close()
+      if doTheRebinning and outfname!="":
+	print "doing the rebinning for plot ", plot.name
+        for sample in signalsamples+backgroundsamples+additionalSamples:
+	  for syst in systnames:
+	    ROOT.gDirectory.cd('PyROOT:/')
+            key=sample.nick+'_'+plot.name+syst
+            if verbosity>=2:
+	      print "at ", key
+            thisHistoPreRebinning=infile.Get(key)
+            if thisHistoPreRebinning==None:
+	      continue
+	    thisHistoPreRebinning.SetDirectory(0)
+	    theobjectlist.append(thisHistoPreRebinning)
+	    outfile.cd()
+	    thisHistoPostRebinning=None
+	    if isinstance(thisHistoPreRebinning,ROOT.TH1D):
+	      thisHistoPostRebinning=ROOT.TH1D(thisHistoPreRebinning.GetName(),thisHistoPreRebinning.GetTitle(),len(theoptimizedBinEdges)-1,theBinEdgeArray)
+	    elif isinstance(thisHistoPreRebinning,ROOT.TH1F):
+	      thisHistoPostRebinning=ROOT.TH1F(thisHistoPreRebinning.GetName(),thisHistoPreRebinning.GetTitle(),len(theoptimizedBinEdges)-1,theBinEdgeArray)
+	    else:
+	      print "not a supported histogram type", thisHistoPreRebinning
+	      continue
+	    theobjectlist.append(thisHistoPostRebinning)
+	    thisHistoPostRebinning.SetDirectory(0)
+	    thisHistoPostRebinning.SetLineColor(thisHistoPreRebinning.GetLineColor())
+	    thisHistoPostRebinning.SetFillColor(thisHistoPreRebinning.GetFillColor())
+	    # now do the rebinning
+	    nbinsPre=thisHistoPreRebinning.GetNbinsX()
+	    for ibin in range(nbinsPre+2):
+	      # find new bin
+	      oldbincenter=thisHistoPreRebinning.GetBinCenter(ibin)
+	      newbin=thisHistoPostRebinning.FindBin(oldbincenter)
+	      # add bin contents
+	      thisHistoPostRebinning.SetBinContent(newbin, thisHistoPostRebinning.GetBinContent(newbin)+thisHistoPreRebinning.GetBinContent(ibin))
+	      # add errors
+	      newbinerror=ROOT.TMath.Sqrt(thisHistoPostRebinning.GetBinError(newbin)*thisHistoPostRebinning.GetBinError(newbin) + thisHistoPreRebinning.GetBinError(ibin)*thisHistoPreRebinning.GetBinError(ibin))
+	      thisHistoPostRebinning.SetBinError(newbin, newbinerror)
+	    # now save in outfile
+	    outfile.cd()
+	    thisHistoPostRebinning.Write("",ROOT.TObject.kOverwrite)
+	print "done with the rebinning"
+	
+      else:
+	print "Could not do the rebinning because no outfile was specified"
+    if outfname!="":
+      outfile.Close()
+        
+    print "done witht the binning optimization"          
+
+def rebinFromBinList(infname,outfname,ListOfBinLists=[],plots=[],signalsamples=[], backgroundsamples=[],additionalSamples=[],systnames=[""],verbosity=0):
+  if len(plots)!=len(ListOfBinLists):
+    print "need binning information for all plots. Quitting!"
+    exit(0)
+    
+  theclock=ROOT.TStopwatch()
+  theclock.Start()
+  theobjectlist=[] # dummy list to keep destructors from being called
+  ROOT.gDirectory.cd('PyROOT:/')
+  infile=ROOT.TFile(infname,"READONLY")
+  if outfname!="":
+    outfile=ROOT.TFile(outfname,"RECREATE")  
+
+  for iplot, plot in enumerate(plots):
+     print "doing the rebinning for plot ", plot.name
+     for sample in signalsamples+backgroundsamples+additionalSamples:
+	for syst in systnames:
+	  ROOT.gDirectory.cd('PyROOT:/')
+	  key=sample.nick+'_'+plot.name+syst
+	  if verbosity>=2:
+	    print "at ", key
+	  thisHistoPreRebinning=infile.Get(key)
+	  if thisHistoPreRebinning==None:
+	    continue
+	  thisHistoPreRebinning.SetDirectory(0)
+	  theobjectlist.append(thisHistoPreRebinning)
+	  outfile.cd()
+	  thisHistoPostRebinning=None
+	  thisPlotsBinList=ListOfBinLists[iplot]
+	  nNewBins=len(thisPlotsBinList)
+	  newMin=0.5
+	  newMax=nNewBins+0.5
+	  nOldBins=thisHistoPreRebinning.GetNbinsX()
+	  if isinstance(thisHistoPreRebinning,ROOT.TH1D):
+	      thisHistoPostRebinning=ROOT.TH1D(thisHistoPreRebinning.GetName(),thisHistoPreRebinning.GetTitle(),nNewBins,newMin,newMax)
+	  elif isinstance(thisHistoPreRebinning,ROOT.TH1F):
+	      thisHistoPostRebinning=ROOT.TH1F(thisHistoPreRebinning.GetName(),thisHistoPreRebinning.GetTitle(),nNewBins,newMin,newMax)
+	  else:
+	      print "not a supported histogram type", thisHistoPreRebinning
+	  for ibin in range(nOldBins):
+	    newBinIdx=-1
+	    for inb, nb in enumerate(thisPlotsBinList):
+	      if ibin in nb:
+		newBinIdx=inb+1
+	    if newBinIdx==-1:
+	      print "could not find where to put bin ", ibin
+	      print "will put it in the first bin"
+	      newBinIdx=1
+	    thisHistoPostRebinning.SetBinContent(newBinIdx, thisHistoPostRebinning.GetBinContent(newBinIdx)+thisHistoPreRebinning.GetBinContent(ibin))
+	    # add errors
+	    newbinerror=ROOT.TMath.Sqrt(thisHistoPostRebinning.GetBinError(newBinIdx)*thisHistoPostRebinning.GetBinError(newBinIdx) + thisHistoPreRebinning.GetBinError(ibin)*thisHistoPreRebinning.GetBinError(ibin))
+	    thisHistoPostRebinning.SetBinError(newBinIdx, newbinerror)
+          outfile.cd()
+	  thisHistoPostRebinning.Write("",ROOT.TObject.kOverwrite)
+  print "done with the rebinning"
+  if outfname!="":
+    outfile.Close()
+    
+   
 def createLLL_fromSuperHistoFileSyst(path,samples,plots,systnames=[""]):
     theclock=ROOT.TStopwatch()
     theclock.Start()
@@ -1340,6 +1685,7 @@ def writeListOfROCs(graphs,names,colors,filename,printInts=True,logscale=False,r
         graph.SetMarkerStyle(20)
     l.Draw('same')
     printCanvases([c],filename)
+    printCanvasesPNG([c],filename)
     writeObjects([c],filename)
 
 
@@ -1454,14 +1800,9 @@ def writeHead(f,columns):
         f.write('c')
     f.write('}\n')
     f.write('\\hline\n')
-    for entryNumber, entry in enumerate(columns):
-        if entryNumber == 0:
-          f.write('Sample &')
-        # Check if last entry and add line endings  
-        elif entryNumber +1 == len(columns):
-          f.write('Bin' + str(entryNumber) + ' \\\\ \n')
-        else:
-          f.write('Bin' + str(entryNumber) + ' &')
+    for entry in columns[:-1]:
+        f.write(entry+' &')
+    f.write(columns[-1]+' \\\\ \n')
     f.write('\\hline\n')
 
 
@@ -1497,11 +1838,8 @@ def turn1dHistoToRow(h,witherror=True,rounding="3dig"):
 
 def turn1dHistosToTable(histos,samples,outfile,witherror=True):
     out=open(outfile+".tex","w")
-    out.write( '\\documentclass{article}\n')
-
-    paperwidth = histos[0].GetNbinsX()*2.2 + 10
-    out.write( '\\usepackage[paperwidth=' + str(paperwidth) + 'cm, paperheight=23cm, top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}\n')
-
+    out.write( '\\documentclass[landscape]{article}\n')
+    out.write( '\\usepackage[landscape]{geometry}\n')
     out.write( '\\begin{document}\n')
     out.write( '\\thispagestyle{empty}\n')
     out.write( '\\footnotesize\n')
@@ -1608,12 +1946,7 @@ def stackHistoList(listOfHistos_,normalize=False):
     if normalize:
         integral0=listOfHistos[0].Integral()
         for h in listOfHistos:
-          # Check if integral is not null, since it will give a zero division error
-          if integral0 != 0:
             h.Scale(1./integral0)
-          else:
-            h.Scale(1.)
-            print "Warning: integral0  variable of histogram ", listOfHistos[0].GetName() ," has value 0 which would lead to zero division error."
     return listOfHistos
 
 
@@ -2110,12 +2443,7 @@ def writeLOLAndOneOnTop(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,f
               integralfactor+=histo.Integral()
 
         if factor < 0:
-          # Check if on top histogram integral is not null, since it will give a zero division error
-          if ot.Integral() != 0:
-            integralfactor=integralfactor/ot.Integral()
-          else:
-            integralfactor=integralfactor
-            print "Warning: On top histogram ", ot.GetName(), " has integral 0 which would lead to zero division error."
+          integralfactor=integralfactor/ot.Integral()
 
         c=drawHistosOnCanvas(listOfHistos,normalize,stack,logscale,options)
         #c.SetName('c'+str(i))
@@ -2238,12 +2566,7 @@ def plotDataMCan(listOfHistoListsData,listOfHistoLists,samples,listOfhistosOnTop
               integralfactor+=histo.Integral()
 
         if factor < 0:
-          # Check if on top histogram integral is not null, since it will give a zero division error
-          if ot.Integral() != 0:
-            integralfactor=integralfactor/ot.Integral()
-          else:
-            integralfactor=integralfactor
-            print "Warning: On top histogram ", ot.GetName(), " has integral 0 which would lead to zero division error."
+          integralfactor=integralfactor/ot.Integral()
 
         #
         # mover over/underflow
@@ -2427,12 +2750,7 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
               integralfactor+=histo.Integral()
 
         if factor < 0:
-          # Check if on top histogram integral is not null, since it will give a zero division error
-          if ot.Integral() != 0:
-            integralfactor=integralfactor/ot.Integral()
-          else:
-            integralfactor=integralfactor
-            print "Warning: On top histogram ", ot.GetName(), " has integral 0 which would lead to zero division error."
+          integralfactor=integralfactor/ot.Integral()
 
         #
         # mover over/underflow
@@ -2707,12 +3025,7 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
               integralfactor+=histo.Integral()
 
         if factor < 0:
-          # Check if on top histogram integral is not null, since it will give a zero division error
-          if ot.Integral() != 0:
-            integralfactor=integralfactor/ot.Integral()
-          else:
-            integralfactor=integralfactor
-            print "Warning: On top histogram ", ot.GetName(), " has integral 0 which would lead to zero division error."
+          integralfactor=integralfactor/ot.Integral()
 
         #
         # mover over/underflow
@@ -2925,584 +3238,3 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
 #    print len(canvases)
     printCanvases(canvases,name)
     writeObjects(canvases,name)
-    
-def plotRefWsystandOthers(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,name,listOflll,logscale=False,label='',ratio=True,blinded=False):
-################################################
-    listOfhistosOnTop_=[listOfhistosOnTop[i][0] for i in range(len(listOfhistosOnTop))]
-    listOfRatioHistoLists=[]
-    for ot,listOfHistos in zip(listOfhistosOnTop_,listOfHistoLists):
-        RatioHistoLists=[]
-        for histo in listOfHistos:
-            histo_tmp=histo.Clone()
-            histo_tmp.Divide(ot)
-            RatioHistoLists.append(histo_tmp)
-        listOfRatioHistoLists.append(RatioHistoLists)
-################################################
-    options=''
-    if isinstance(label, basestring):
-        labeltexts=len(listOfhistosOnTop)*[label]
-    else:
-        labeltexts=label
-    canvases=[]
-    objects=[]
-#    print len(listOfHistoLists)
-    # for every plot, look at all samples
-    listOfErrorGraphs=[]
-    listOfErrorGraphStyles=[]
-    listOfErrorGraphColors=[]
-
-    listOfErrorGraphLists=[]
-    #lll=[listOflistOflist of histograms, FillStyle, FillColor, DoRateSysts]
-    for lll in listOflll:
-      listOfErrorGraphLists.append(createErrorbands(lll[0],[sampleOnTop],lll[3]))
-      #print listOfErrorGraphLists[-1]
-      #raw_input()
-      listOfErrorGraphStyles.append(lll[1])
-      listOfErrorGraphColors.append(lll[2])
-    for igraph in range(len(listOfErrorGraphLists[0])):
-      thisgraphs=[]
-      for iband in range(len(listOfErrorGraphLists)):
-	thisgraphs.append([listOfErrorGraphLists[iband][igraph],listOfErrorGraphStyles[iband],listOfErrorGraphColors[iband]])
-      listOfErrorGraphs.append(thisgraphs)
-    
-
-    iplot=0
-    # loop over the variables wh are supposed to be plotted (jet 1 pt, Njets , lep1 eta , ... )
-    for ot,listOfHistos,labeltext,errorgraphList,listOfRatioHistos in zip(listOfhistosOnTop_,listOfHistoLists,labeltexts,listOfErrorGraphs,listOfRatioHistoLists):
-        iplot+=1
-        
-        # setup histo style
-        # loop over samples and the histograms of the plotted variable for each sample
-        for histo,histo_ratio,sample in zip(listOfHistos,listOfRatioHistos,samples):
-            yTitle='Events'
-            setupHisto(histo,sample.color,yTitle,False)
-            setupHisto(histo_ratio,sample.color,"x/nom.",False)
-            histo_ratio.GetYaxis().SetTitleFont(42)
-            histo_ratio.GetYaxis().CenterTitle()
-            histo_ratio.GetYaxis().SetTitleOffset(0.5)
-            histo_ratio.GetYaxis().SetTitleSize(0.1)
-            histo_ratio.GetYaxis().SetLabelSize(0.08)
-            histo_ratio.GetXaxis().SetTitleFont(42)
-            histo_ratio.GetXaxis().SetTitleOffset(1.0)
-            histo_ratio.GetXaxis().SetTitleSize(0.1)
-            histo_ratio.GetXaxis().SetLabelSize(0.1)
-
-        # mover over/underflow
-        for h in listOfHistos:
-            moveOverFlow(h)
-            
-        # find maximum bin value of all samples for the considered variable to know how large the y axis scale has to be
-        yMax=1e-9
-        yMax_=1e-9
-        for h,h_ in zip(listOfHistos,listOfRatioHistos):
-            yMax=max(h.GetBinContent(h.GetMaximumBin()),yMax)
-            yMax_=max(h_.GetBinContent(h_.GetMaximumBin()),yMax_)
-            
-        #create first canvas: if ratio true then a canvas with ratio pad, if false then without
-        canvas=getCanvas(listOfHistos[0].GetName(),ratio)
-        canvas.cd(1)
-        
-        #set y-scale on first histo / ratiohisto for later
-        h=listOfHistos[0]
-        h_=listOfRatioHistos[0]
-        if logscale:
-            h.GetYaxis().SetRangeUser(yMax/10000,yMax*10)
-            canvas.cd(1).SetLogy()
-        else:
-            h.GetYaxis().SetRangeUser(0,yMax*1.8)
-            h_.GetYaxis().SetRangeUser(0.5,yMax_*1.2)
-        option='histo'
-        option+=options
-        #print h.GetName()
-        #h.GetXaxis().SetBinLabel(1,"test")
-        #draw remaining
-        for h,h_,isc in zip(listOfHistos,listOfRatioHistos,range(len(listOfHistos))):
-            if isc==0:
-                canvas.cd(1)
-                h.DrawCopy(option)
-                canvas.cd(2)
-                h_.DrawCopy()
-            else:
-                canvas.cd(1)
-                h.DrawCopy(option+'same')
-                canvas.cd(2)
-                h_.DrawCopy('same')
-        line = ot.Clone()
-        line.Divide(ot)
-        for icb in range(line.GetNbinsX()+2):
-            line.SetBinContent(icb,1)
-            line.SetBinError(icb,0)
-
-        line.SetLineColor(ROOT.kBlack)
-        line.DrawCopy('same')
-        canvas.cd(1)
-        h.DrawCopy('axissame')
-        canvas.cd(2)
-        h_.DrawCopy('axissame')
-        
-        # plot sample on top
-        canvas.cd(1)
-        otc=ot.Clone()
-        setupHisto(otc,sampleOnTop.color,'',False)
-        otc.SetBinContent(1,otc.GetBinContent(0)+otc.GetBinContent(1));
-        otc.SetBinContent(otc.GetNbinsX(),otc.GetBinContent(otc.GetNbinsX()+1)+otc.GetBinContent(otc.GetNbinsX()));
-        otc.SetBinError(1,ROOT.TMath.Sqrt(ROOT.TMath.Power(otc.GetBinError(0),2)+ROOT.TMath.Power(otc.GetBinError(1),2)));
-        otc.SetBinError(otc.GetNbinsX(),ROOT.TMath.Sqrt(ROOT.TMath.Power(otc.GetBinError(otc.GetNbinsX()+1),2)+ROOT.TMath.Power(otc.GetBinError(otc.GetNbinsX()),2)));
-        otc.SetLineWidth(2)
-        
-        otc.Draw('histosame')
-  
-
-        # from error graphs calculate ratio error graphs
-        listOfRatioErrorGraphs=[]
-        #graphcounter=0
-        print "doing ratio error graph"
-        for errorgraph,thisFillStyle,ThisFillColor in errorgraphList:
-	  ratioerrorgraph=ROOT.TGraphAsymmErrors(errorgraph.GetN())
-	  #print ratioerrorgraph
-	  #raw_input()
-	  x, y = ROOT.Double(0), ROOT.Double(0)
-	  for igc in range(errorgraph.GetN()):
-	      errorgraph.GetPoint(igc,x,y)
-	      ratioerrorgraph.SetPoint(igc,x, 1.0)
-	      relErrUp=0.0
-	      relErrDown=0.0
-	      print x,y,errorgraph.GetErrorYhigh(igc),errorgraph.GetErrorYlow(igc)
-	      if y>0.0:
-		  relErrUp=errorgraph.GetErrorYhigh(igc)/y
-		  relErrDown=errorgraph.GetErrorYlow(igc)/y
-		  print relErrUp,relErrDown
-	      ratioerrorgraph.SetPointError(igc, errorgraph.GetErrorXlow(igc),errorgraph.GetErrorXhigh(igc), relErrDown, relErrUp)
-
-	  errorgraph.SetFillStyle(thisFillStyle)
-	  errorgraph.SetLineColor(ThisFillColor)
-	  errorgraph.SetFillColor(ThisFillColor)
-	  ratioerrorgraph.SetFillStyle(thisFillStyle)
-	  ratioerrorgraph.SetLineColor(ThisFillColor)
-	  ratioerrorgraph.SetFillColor(ThisFillColor)
-  #        ratioerrorgraph.SetFillStyle(1001)
-  #        ratioerrorgraph.SetLineColor(ROOT.kBlack)
-  #        ratioerrorgraph.SetFillColor(ROOT.kGreen)
-
-	  #if graphcounter==0:
-	    #errorgraph.Draw("2")
-	  #else:
-	  errorgraph.Draw("same2")
-	  #graphcounter+=1
-
-	  objects.append(errorgraph)
-	  objects.append(ratioerrorgraph)
-	  listOfRatioErrorGraphs.append(ratioerrorgraph)
-	  #print objects
-	  #raw_input()
-
-        l1=getLegendL()
-        l2=getLegendR()
-        ilc=0
-        for h,sample in zip(listOfHistos,samples):
-            ilc+=1
-            if ilc%2==1:
-                l1.AddEntry22(h,sample.name,'L')
-            if ilc%2==0:
-
-                l2.AddEntry22(h,sample.name,'L')
-        l2.AddEntry22(otc,sampleOnTop.name,'L')
-        
-        l1.Draw('same')
-        l2.Draw('same')
-        objects.append(l1)
-        objects.append(l2)
-        objects.append(otc)
-
-        #draw the lumi text on the canvas
-        CMS_lumi.lumi_13TeV = "36.0 fb^{-1}"
-        CMS_lumi.writeExtraText = 1
-        #CMS_lumi.extraText = "Preliminary"
-        CMS_lumi.extraText = ""
-        CMS_lumi.cmsText=""
-
-        CMS_lumi.lumi_sqrtS = "13 TeV" # used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
-
-        CMS_lumi.cmsTextSize = 0.55
-        CMS_lumi.cmsTextOffset = 0.49
-        CMS_lumi.lumiTextSize = 0.43
-        CMS_lumi.lumiTextOffset = 0.61
-
-        CMS_lumi.relPosX = 0.15
-
-        CMS_lumi.hOffset = 0.05
-
-        iPeriod=4   # 13TeV
-        iPos=0     # CMS inside frame
-
-        CMS_lumi.CMS_lumi(canvas, iPeriod, iPos)
-
-        label = ROOT.TLatex(0.18, 0.89, labeltext);
-        label.SetTextFont(42)
-        label.SetTextSize(0.035)
-        label.SetNDC()
-        label.Draw()
-        objects.append(label)
-
-        canvas.cd(2)
-
-        for ratioerrorgraph in listOfRatioErrorGraphs:
-          ratioerrorgraph.Draw("same2")
-          
-#       
-        canvases.append(canvas)
-   
-    printCanvases(canvases,name)
-    writeObjects(canvases,name)
-    
-    
-def getOptimizedBinEdges(signalHisto, bkgHisto,optMode="SoverB", minBkgPerBin=2.0, maxBins=100,minBins=1, considerStatUnc=False,verbosity=0):
-
-  if signalHisto.GetNbinsX()!=bkgHisto.GetNbinsX():
-    print "ERROR: getOptimizedBinEdges: signal and background histograms have different binnings!"
-    exit(0)
-  if minBins>maxBins:
-    print "you want minbins > maxBins"
-    exit(0)
-
-
-  if optMode=="equalBinWidth":
-    nBinsOriginal = signalHisto.GetNbinsX()
-
-    binLowEdgesOriginal = [signalHisto.GetBinLowEdge(i) for i in range(1, nBinsOriginal+2)]
-
-    bkgBinContentsOriginal = [                               bkgHisto.GetBinContent(i) for i in range(1, nBinsOriginal+1)]
-    sumBinContentsOriginal = [signalHisto.GetBinContent(i) + bkgHisto.GetBinContent(i) for i in range(1, nBinsOriginal+1)]
-
-    minBorderBin = next((i                               for i, x in enumerate(         sumBinContentsOriginal)  if x>0))
-    maxBorderBin = next((len(sumBinContentsOriginal)-1-i for i, x in enumerate(reversed(sumBinContentsOriginal)) if x>0))
-
-    borderBins = np.linspace(minBorderBin, maxBorderBin+1, minBins+1, endpoint=True, dtype=np.int)
-
-    for i in range(minBins):
-      bkgBinContents = [sum(bkgBinContentsOriginal[borderBins[j]:borderBins[j+1]]) for j in range(minBins)]
-      if bkgBinContents[i] >= minBkgPerBin:
-        firstEqualWidthBinLeft = i
-        break
-
-      while bkgBinContents[i] < minBkgPerBin:
-        borderBins[i+1] += 1
-        bkgBinContents = [sum(bkgBinContentsOriginal[borderBins[j]:borderBins[j+1]]) for j in range(minBins)]
-
-      borderBins = np.concatenate([borderBins[:i+1], np.linspace(borderBins[i+1], maxBorderBin+1, minBins-i, endpoint=True, dtype=np.int)])
-
-    for i in reversed(range(minBins)):
-      bkgBinContents = [sum(bkgBinContentsOriginal[borderBins[j]:borderBins[j+1]]) for j in range(minBins)]
-      if bkgBinContents[i] >= minBkgPerBin:
-        break
-
-      while bkgBinContents[i] < minBkgPerBin:
-        borderBins[i] -= 1
-        bkgBinContents = [sum(bkgBinContentsOriginal[borderBins[j]:borderBins[j+1]]) for j in range(minBins)]
-
-      borderBins = np.concatenate([borderBins[:firstEqualWidthBinLeft], np.linspace(borderBins[firstEqualWidthBinLeft], borderBins[i], i-firstEqualWidthBinLeft, endpoint=False, dtype=np.int), borderBins[i:]])
-
-    listOfBinLowEdges = [binLowEdgesOriginal[i] for i in borderBins]
-
-    return listOfBinLowEdges
-
-
-  def getSoverB(S,B):
-    if B>0:
-      return S/float(B)
-    elif S>0:
-      return 99999.9
-    else:
-      return 0.0
-    
-  def getSignificance(S,B):
-    if (S+B)>0:
-      return S/ROOT.TMath.Sqrt(S+B)
-    elif S>0:
-      return 99999.9
-    else:
-      return 0.0
-    
-  def mergeBins(bin1,bin2, pointerToFoM, verbosity=0):
-    # array has form [[bincontentsSignal,binErrorsSignal,bincontentsBackgound,binErrorsBackground, binlowedges, binwidths,FigureOfMerit,lookAt]]
-    retbin=[ bin1[0]+bin2[0],  # combine bin contents for signal
-          float(ROOT.TMath.Sqrt(bin1[1]*bin1[1]+bin2[1]*bin2[1])), # combine stat uncertainties for signal 
-              bin1[2]+bin2[2],  # combine bin contents for bkg
-          float(ROOT.TMath.Sqrt(bin1[3]*bin1[3]+bin2[3]*bin2[3])), # combine stat uncertainties for bkg
-              min(bin1[4],bin2[4]), # low edge of both bins
-              bin1[5]+bin2[5],  # combine bin width
-              getFom(bin1[0]+bin2[0], bin1[2]+bin2[2]),
-              1.0 # reset is already good flag
-              ]
-    if verbosity>=3:
-      print "combined bins ", bin1, bin2
-      print "to ", retbin
-    return retbin
-  
-  getFom=None
-  if optMode=="SoverB":
-    getFom=getSoverB
-  elif optMode=="Significance":
-    getFom=getSignificance
-  else:
-    print "unknown optimization mode"
-    exit(0)
-  
-  if considerStatUnc:
-    print "Considering statistical uncertainty not yet implemented! Ignoring your wishes for now!"
-  
-  #verbosity=2
-  
-  # TODO Think about including systematic shapes so that underfluctuations are covered by binning
-  
-  # get array representing the histograms
-  # array has form [[bincontentsSignal,binErrorsSignal,bincontentsBackgound,binErrorsBackground, binlowedges, binwidths,FigureOfMerit, lookAt]]
-  theArray=[]
-  
-  nBinsOriginal=signalHisto.GetNbinsX()
-    
-  for ibin in range(nBinsOriginal+2): # ibin=0=underflow; ibin+1=last bin; bin nBinsOriginal+2 = overflow
-    if verbosity>=2:
-      print "reading signal ", signalHisto.GetName()
-      print "iBin, Content", ibin, signalHisto.GetBinContent(ibin)
-      print "reading background ", bkgHisto.GetName()
-      print "iBin, Content", ibin, bkgHisto.GetBinContent(ibin)
-    theArray.append([signalHisto.GetBinContent(ibin), signalHisto.GetBinError(ibin), bkgHisto.GetBinContent(ibin), bkgHisto.GetBinError(ibin), signalHisto.GetBinLowEdge(ibin), signalHisto.GetBinWidth(ibin), getFom(signalHisto.GetBinContent(ibin),bkgHisto.GetBinContent(ibin)), 1])
-  
-  # make deep copy of original binning
-  sarraycopy=deepcopy(theArray)
-  
-  # now cluster the bins together to get at least minimal background events into each bin
-  clusteringDone=False
-  nbins=len(theArray)
-  if verbosity>=2:
-    print "array before any merging"
-    print theArray
-  niterations=0
-  while clusteringDone==False:
-    niterations+=1
-    nbins=len(theArray)
-    if verbosity>=2:
-      print "Current nbins after iteration ", niterations, " : ", nbins
-    if len(theArray)<=minBins:
-      if verbosity>=2:
-        print "reached minimal number of bins", minBins
-        break
-    # find bin with highest Figure
-    imax=zip(*theArray)[6].index(max(zip(*theArray)[6]))
-    # in case there are multiple bins with highest FoM start from the rightmost one 
-    if zip(*theArray)[6].count(max(zip(*theArray)[6]))>1:	
-      imax=len(theArray)-1-list(reversed(zip(*theArray)[6])).index(max(zip(*theArray)[6]))
-    print "considering bin", imax, theArray[imax]
-    # enough bkg?
-    hasMinBkg=theArray[imax][2]>minBkgPerBin
-    # large enough to allow for downfluctuation?
-    canDownFluctuate=((theArray[imax][2]+theArray[imax][0])-(theArray[imax][1]+theArray[imax][3]))>=0.0
-    # if we want to allow down fluctuation lets assume that we just do not have enought bkg in the bin
-    if considerStatUnc==True and canDownFluctuate==False:
-      hasMinBkg=False
-    # would merging with neighbouring bin increase FoM?
-    mergeRightIncreasesFoM=0
-    mergeLeftIncreasesFoM=0
-    hypotheticalBinLeft=[]
-    hypotheticalBinRight=[]
-    if imax!=0: # not the leftmost bin (underflow)
-      hypotheticalBinLeft=mergeBins(theArray[imax-1],theArray[imax],getFom,verbosity)
-      mergeLeftIncreasesFoM=hypotheticalBinLeft[6]-getFom(theArray[imax][0],theArray[imax][2])
-    if imax!=nbins-1: # not the rightmost bin (overflow)
-      hypotheticalBinRight=mergeBins(theArray[imax+1],theArray[imax],getFom,verbosity)
-      mergeRightIncreasesFoM=hypotheticalBinRight[6]-getFom(theArray[imax][0],theArray[imax][2])
-    
-    if hasMinBkg and (mergeLeftIncreasesFoM<=0 and mergeRightIncreasesFoM<=0):
-    # enough bkg in bin and no increase of FoM by merging
-    # nothing to do then
-    # Set FoM to -1
-      theArray[imax][6]=-1
-      if verbosity>=2:
-        print "bin does not need to be merged at the moment", imax, theArray[imax]
-    else:
-      # we either need more bkg or the merge increases the FoM
-      if verbosity>=2:
-        print "merging bin ", imax, theArray[imax]
-        print "with"
-      if (mergeRightIncreasesFoM>=mergeLeftIncreasesFoM and imax!=nbins-1) or (imax==0):
-        # right merge is better or left merge not possible
-        if verbosity>=2:
-          print "right bin", theArray[imax+1]
-          print "resulting bin", hypotheticalBinRight
-        del theArray[imax+1]
-        del theArray[imax]
-        theArray.insert(imax,hypotheticalBinRight)
-      elif (mergeLeftIncreasesFoM>mergeRightIncreasesFoM and imax!=0) or (imax==nbins-1):
-        # left merge is better or right merge not possible
-        if verbosity>=2:
-          print "left bin", theArray[imax-1]
-          print "resulting bin", hypotheticalBinLeft
-        del theArray[imax]
-        del theArray[imax-1]
-        theArray.insert(imax-1,hypotheticalBinLeft)
-  
-    # if all bins have been sufficiently merged all should have FoMs of -1
-    if max(zip(*theArray)[6])==-1:
-      clusteringDone=True
-      break
-  if verbosity>=2:
-    print "First merging done. Checking the number of bins"
-  # now we check if we have to many bins
-  doReduceBins=False
-  if len(theArray)>maxBins:
-    doReduceBins=True
-    if verbosity>=2:
-      print "We now still have to many bins. Will merge bins with bad ", optMode
-  else:
-    if verbosity>=2:
-      print "number of bins below maximum"
-  
-  # reset FoM entries
-  nbins=len(theArray)
-  for ibin in range(nbins):
-    theArray[ibin][6]=getFom(theArray[ibin][0],theArray[ibin][2])
-  # now we look for the bins with the worst FoM and merge those 
-  while doReduceBins and len(theArray)>=maxBins:
-    nbins=len(theArray)
-    if verbosity>=2:
-      print "Current nbins after iteration ", niterations, " : ", nbins
-    imin=zip(*theArray)[6].index(min(zip(*theArray)[6]))
-    if verbosity>=2:
-      print "considering bin", imin, theArray[imin]
-    FoMLeft=None
-    FoMRight=None
-    if imin!=0: # not the leftmost bin (underflow)
-      FoMLeft=theArray[imin-1][6]	
-    if imin!=nbins-1: # not the rightmost bin (overflow)
-      FoMRight=theArray[imin+1][6]
-    if FoMLeft!=None and FoMRight!=None:
-      if FoMLeft<=FoMRight:
-        newbin=mergeBins(theArray[imin],theArray[imin-1],getFom, verbosity)
-        del theArray[imin]
-        del theArray[imin-1]
-        theArray.insert(imin-1, newbin)
-      else:
-        newbin=mergeBins(theArray[imin],theArray[imin+1],getFom, verbosity)
-        del theArray[imin+1]
-        del theArray[imin]
-        theArray.insert(imin,newbin)
-    elif FoMRight!=None:
-      newbin=mergeBins(theArray[imin],theArray[imin+1],getFom, verbosity)
-      del theArray[imin+1]
-      del theArray[imin]
-      theArray.insert(imin,newbin)
-    elif FoMLeft!=None:
-      newbin=mergeBins(theArray[imin],theArray[imin-1],getFom, verbosity)
-      del theArray[imin]
-      del theArray[imin-1]
-      theArray.insert(imin-1, newbin)
-  # now we are done
-  if verbosity>=2:
-    print "array after all merges"
-    print theArray
-  #extract binning information  
-  listOfBinLowEdges=list(zip(*theArray)[4])
-  listOfBinWidths=zip(*theArray)[5]
-  listOfBinLowEdges.append(listOfBinLowEdges[-1]+listOfBinWidths[-1])
-  return listOfBinLowEdges
-				 
-
-def optimizeBinning(infname,signalsamples=[], backgroundsamples=[],additionalSamples=[],plots=[],systnames=[""],minBkgPerBin=2.0,optMode="SoverB",doTheRebinning=True,considerStatUnc=False,maxBins=100,minBins=1,verbosity=0):
-  if len(signalsamples)==0 or len(backgroundsamples)==0:
-    print "You called optimizeBinning without any samples. Not Reasonable. Sad!."
-    exit(0)
-  
-  # copy existing ROOT file as a backup we will write stuff into the existing file name
-  os.system('cp '+ infname + ' ' + infname[:-5] + '_preRebinning.root')
-  
-      
-  theclock=ROOT.TStopwatch()
-  theclock.Start()
-  theobjectlist=[] # dummy list to keep destructors from being called
-  ROOT.gDirectory.cd('PyROOT:/')
-  
-  infile=ROOT.TFile(infname[:-5] + '_preRebinning.root',"READONLY")
-  outfile=ROOT.TFile(infname,"RECREATE")  
-      
-  # loop over plots
-  for plot in plots:
-    theSignalClone=None
-    theBkgClone=None
-    #add signal samples
-    print "getting ", signalsamples[0].nick+'_'+plot.name
-    s0=infile.Get(signalsamples[0].nick+'_'+plot.name)
-    theobjectlist.append(s0)
-    theSignalClone=s0.Clone('signalClone_'+signalsamples[0].nick+'_'+plot.name)
-    for ss in signalsamples[1:]:
-      sx=infile.Get(ss.nick+'_'+plot.name)
-      theobjectlist.append(sx)
-      theSignalClone.Add(sx)
-    #add background samples
-    b0=infile.Get(backgroundsamples[0].nick+'_'+plot.name)
-    theobjectlist.append(b0)
-    theBkgClone=b0.Clone('backgroundClone_'+backgroundsamples[0].nick+'_'+plot.name)
-    for bs in backgroundsamples[1:]:
-      bx=infile.Get(bs.nick+'_'+plot.name)
-      theobjectlist.append(bx)
-      theBkgClone.Add(bx)
-    if theSignalClone==None or theBkgClone==None:
-      print "no histograms found for this:"
-      print plot.name
-      exit(0)
-    theSignalClone.SetDirectory(0)
-    theBkgClone.SetDirectory(0)
-    theoptimizedBinEdges=getOptimizedBinEdges(theSignalClone, theBkgClone,optMode, minBkgPerBin, maxBins,minBins, considerStatUnc,verbosity)
-    theBinEdgeArray=array.array("f",theoptimizedBinEdges)
-    print "optimized bin edges for ", plot.name
-    print theoptimizedBinEdges
-    binninTextFile=open(infname[:-5]+'_binning.txt',"a")
-    binninTextFile.write(plot.name+" : "+str(theoptimizedBinEdges)+"\n")
-    binninTextFile.close()
-    
-    print "doing the rebinning for plot ", plot.name
-    for sample in signalsamples+backgroundsamples+additionalSamples:
-      for syst in systnames:
-        ROOT.gDirectory.cd('PyROOT:/')
-        key=sample.nick+'_'+plot.name+syst
-        if verbosity>=2:
-          print "at ", key
-        thisHistoPreRebinning=infile.Get(key)
-        if thisHistoPreRebinning==None:
-          continue
-        thisHistoPreRebinning.SetDirectory(0)
-        theobjectlist.append(thisHistoPreRebinning)
-        outfile.cd()
-        thisHistoPostRebinning=None
-        if isinstance(thisHistoPreRebinning,ROOT.TH1D):
-          thisHistoPostRebinning=ROOT.TH1D(thisHistoPreRebinning.GetName(),thisHistoPreRebinning.GetTitle(),len(theoptimizedBinEdges)-1,theBinEdgeArray)
-        elif isinstance(thisHistoPreRebinning,ROOT.TH1F):
-          thisHistoPostRebinning=ROOT.TH1F(thisHistoPreRebinning.GetName(),thisHistoPreRebinning.GetTitle(),len(theoptimizedBinEdges)-1,theBinEdgeArray)
-        else:
-          print "not a supported histogram type", thisHistoPreRebinning
-          continue
-        theobjectlist.append(thisHistoPostRebinning)
-        thisHistoPostRebinning.SetDirectory(0)
-        thisHistoPostRebinning.SetLineColor(thisHistoPreRebinning.GetLineColor())
-        thisHistoPostRebinning.SetFillColor(thisHistoPreRebinning.GetFillColor())
-        # now do the rebinning
-        nbinsPre=thisHistoPreRebinning.GetNbinsX()
-        for ibin in range(nbinsPre+2):
-          # find new bin
-          oldbincenter=thisHistoPreRebinning.GetBinCenter(ibin)
-          newbin=thisHistoPostRebinning.FindBin(oldbincenter)
-          # add bin contents
-          thisHistoPostRebinning.SetBinContent(newbin, thisHistoPostRebinning.GetBinContent(newbin)+thisHistoPreRebinning.GetBinContent(ibin))
-          # add errors
-          newbinerror=ROOT.TMath.Sqrt(thisHistoPostRebinning.GetBinError(newbin)*thisHistoPostRebinning.GetBinError(newbin) + thisHistoPreRebinning.GetBinError(ibin)*thisHistoPreRebinning.GetBinError(ibin))
-          thisHistoPostRebinning.SetBinError(newbin, newbinerror)
-        # now save in outfile
-        outfile.cd()
-        thisHistoPostRebinning.Write("",ROOT.TObject.kOverwrite)
-    print "done with the rebinning for plot", plot.name
-  
-  
-  outfile.Close()
-      
-  print "done witht the binning optimization"          
-

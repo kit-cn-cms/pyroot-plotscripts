@@ -1,4 +1,3 @@
-# comment 
 import sys
 import os
 import subprocess
@@ -14,7 +13,6 @@ import glob
 import json
 import filecmp
 import imp 
-import types
 
 ROOT.gROOT.SetBatch(True)
 
@@ -211,7 +209,7 @@ float LeptonSFHelper::GetMuonSF(  float muonPt , float muonEta , int syst , std:
     searchPt=TMath::Min( muonPt , muonMaxPtHigh );// if muonpt > 499 use last bin
   }
   float nomval = 0;
-  //float error = 0;
+  float error = 0;
   float upval = 0;
   float downval= 0;
   float nomvalBtoF = 0;
@@ -895,7 +893,6 @@ CSVHelper::fillCSVHistos(TFile *fileHF, TFile *fileLF, const std::vector<Systema
             c_csv_wgt_hf.at(iSys).at(iPt) = readHistogram(fileHF,name.ReplaceAll(systematic,""));
         }
     }
-
     for (int iPt = 0; iPt < nLFptBins_; iPt++) {
         for (int iEta = 0; iEta < nLFetaBins_; iEta++) {
             TString name = Form("csv_ratio_Pt%i_Eta%i_%s", iPt, iEta, (syst_csv_suffix+systematic).Data());
@@ -1045,44 +1042,6 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
   return csvWgtTotal;
 }
 
-// Helper struct to fill plots more efficiently
-// Until GCC 4.9 struct cannot have init values if one wants to initialize it with bracket lists
-struct structHelpFillHisto{
-  TH1* histo;
-  double var;
-  double weight;
-};
-
-// helper function to fill plots more efficiently
-void helperFillHisto(const std::vector<structHelpFillHisto>& paramVec)
-{
-  for (const auto &singleParams: paramVec)
-  // singleParams: histo, var, weight
-  {
-    if((singleParams.weight)!=0)
-      singleParams.histo->Fill(fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,singleParams.var)),singleParams.weight);
-  }
-}
-
-// Helper struct to fill plots more efficiently
-// Until GCC 4.9 struct cannot have init values if one wants to initialize it with bracket lists
-struct structHelpFillTwoDimHisto{
-  TH2* histo;
-  double var1;
-  double var2;
-  double weight;
-};
-
-// helper function to fill plots more efficiently
-void helperFillTwoDimHisto(const std::vector<structHelpFillTwoDimHisto>& paramVec)
-{
-  for (const auto &singleParams: paramVec)
-  // singleParams: histo, var1, var2, weight
-  {
-    if((singleParams.weight)!=0)
-      singleParams.histo->Fill(fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,singleParams.var1)),fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,singleParams.var2)),singleParams.weight);
-  }
-}
 
 void plot(){
   TH1F::SetDefaultSumw2();
@@ -1387,27 +1346,17 @@ def initTwoDimHistoWithProcessNameAndSuffix(name,nbinsX=10,xminX=0,xmaxX=0,nbins
 
 def fillHistoSyst(name,varname,weight,systnames,systweights):
   text='      float weight_'+name+'='+weight+';\n'
-  # Write all individual systnames and systweights in nested vector to use together with function allowing variadic vector size -> speed-up of compilation and less code lines
-  text+='     std::vector<structHelpFillHisto> helpWeightVec_' + name + ' = {'
   for sn,sw in zip(systnames,systweights):
-    text+='       { ' + 'h_'+name+sn + ', double(' + varname + '), ' + '('+sw+')*(weight_'+name+')' + '},'
-  # finish vector
-  text+='     };\n'
-  # call helper fill histo function which is defined in the beginning
-  text+='     helperFillHisto(helpWeightVec_' + name + ');\n' 
+    text+=fillHisto(name+sn,varname,'('+sw+')*(weight_'+name+')')
   return text
+
 
 def fillTwoDimHistoSyst(name,varname1,varname2,weight,systnames,systweights):
   text='      float weight_'+name+'='+weight+';\n'
-  # Write all individual systnames and systweights in nested vector to use together with function allowing variadic vector size -> speed-up of compilation and less code lines
-  text+='     std::vector<structHelpFillTwoDimHisto> helpWeightVec_' + name + ' = {'
   for sn,sw in zip(systnames,systweights):
-    text+='       { ' + 'h_'+name+sn + ', ' + varname1 + ', ' + varname2 + ', ' + '('+sw+')*(weight_'+name+')' + '},'
-  # finish vector
-  text+='     };\n'
-  # call helper fill histo function which is defined in the beginning
-  text+='     helperFillTwoDimHisto(helpWeightVec_' + name + ');\n' 
+    text+=fillTwoDimHisto(name+sn,varname1,varname2,'('+sw+')*(weight_'+name+')')
   return text
+
 
 def startLoop():
   return """
@@ -1612,13 +1561,13 @@ def startCat(catweight,variables):
 def endCat():
   return '    }\n    // end of category\n\n'
 
-# DEPRECATED: can be removed in the future
+
 def fillHisto(histo,var,weight):
   text= '        if(('+weight+')!=0)\n'
   text+='          h_'+histo+'->Fill(fmin(h_'+histo+'->GetXaxis()->GetXmax()-1e-6,fmax(h_'+histo+'->GetXaxis()->GetXmin()+1e-6,'+var+')),'+weight+');\n'
   return text
 
-# DEPRECATED: can be removed in the future
+
 def fillTwoDimHisto(histo,var1,var2,weight):
   text= '        if(('+weight+')!=0)\n'
   text+='          h_'+histo+'->Fill(fmin(h_'+histo+'->GetXaxis()->GetXmax()-1e-6,fmax(h_'+histo+'->GetXaxis()->GetXmin()+1e-6,'+var1+')),fmin(h_'+histo+'->GetYaxis()->GetXmax()-1e-6,fmax(h_'+histo+'->GetYaxis()->GetXmin()+1e-6,'+var2+')),'+weight+');\n'
@@ -1713,21 +1662,12 @@ def compileProgram(scriptname,usesDataBases,addCodeInterfaces):
   if usesDataBases:
     memDBccfiles=glob.glob('/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase/MEMDataBase/src/*.cc') 
     #TODO update the dataBases code
-  # improve ram usage and reduce garbage of g++ compiler
-  improveRAM = '--param ggc-min-expand=100 --param ggc-min-heapsize=2400000'
-  # if python cflags are used -O3 optimization is set, resulting in long compilation times, set it back to default -O0
-  resetCompilerOpt = '-O0'
-  cmd= ['g++']+[improveRAM]+out[:-1].replace("\n"," ").split(' ')+dnnfiles+['-lTMVA']+memDBccfiles+[resetCompilerOpt]+[scriptname+'.cc','-o',scriptname]
+  cmd= ['g++']+out[:-1].replace("\n"," ").split(' ')+dnnfiles+['-lTMVA']+memDBccfiles+[scriptname+'.cc','-o',scriptname]
   print cmd
   print ""
-  cmdstring = " ".join(cmd)
-  print cmdstring
+  print " ".join(cmd)
   print ""
-  try:
-    print subprocess.check_output([cmdstring],stderr=subprocess.STDOUT,shell=True)
-  except subprocess.CalledProcessError, e:
-    print "Compile command:\n", e.cmd
-    print "Compile failed with error:\n", e.output
+  subprocess.call(cmd)
 
 
 def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],allsystweights=["1"],additionalvariables=[],dataBases=[],addCodeInterfaces=[]):
@@ -1859,7 +1799,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   # start event loop
   script+=startLoop()
   for addCodeInt in addCodeInterfaces:
-    script+=addCodeInt.getVariableInitInsideEventLoopLines()
+    script+=addCodeInt.getVariableInitInsideEventLoopLinesq()
   
   script+='    float sampleweight=1;\n'
   script+=encodeSampleSelection(samples,variables)
@@ -1920,15 +1860,6 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
         script+=fillHistoSyst(histoname,exi,weight,systnames,systweights)
         script+="      }\n"
       else:
-        # Handle vector sub variables which have names like Jet_E_1, so that the variable Jet_E[1] is included instead
-        if not ".xml" in ex and not hasattr(tree,ex):
-          if "_" in ex:
-            exOld = ex
-            expressionPart1, expressionPart2 = ex.rsplit('_', 1)
-            if hasattr(tree, expressionPart1) and expressionPart2.isdigit():
-              ex = expressionPart1 + '[' + str(int(expressionPart2) -1) + ']' 
-              print 'Found vector sub variable: ', exOld, ' which was converted to: ', ex
-        
         arrayselection=variables.checkArrayLengths(','.join([ex,pw]))
         weight='('+arrayselection+')*('+pw+')*Weight_XS*categoryweight*sampleweight'
         script+=fillHistoSyst(histoname,ex,weight,systnames,systweights)
@@ -1996,7 +1927,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   f.write(script)
   f.close()
 
-def DrawParallel(ListOfPlots,name,PathToSelf,opts=None):
+def DrawParallel(ListOfPlots,name,PathToSelf):
     ListofScripts=[]
     workdir=os.getcwd()+'/workdir/'+name+'/DrawScripts/'
     # create output folders
@@ -2007,7 +1938,7 @@ def DrawParallel(ListOfPlots,name,PathToSelf,opts=None):
 
     print "Creating Scripts for Parallel Drawing"
     for iPlot, Plot in enumerate(ListOfPlots):
-        ListofScripts.append(createSingleDrawScript(iPlot,Plot,PathToSelf,scriptsfolder,opts=None))
+        ListofScripts.append(createSingleDrawScript(iPlot,Plot,PathToSelf,scriptsfolder))
 
     print "Submitting ", len(ListofScripts), " DrawScripts"
     # print ListofScripts
@@ -2018,7 +1949,7 @@ def DrawParallel(ListOfPlots,name,PathToSelf,opts=None):
     do_qstat(jobids)
 
 
-def createSingleDrawScript(iPlot,Plot,PathToSelf,scriptsfolder,opts=None):
+def createSingleDrawScript(iPlot,Plot,PathToSelf,scriptsfolder):
   # print "still needs to be implemented"
   cmsswpath=os.environ['CMSSW_BASE']
   script="#!/bin/bash \n"
@@ -2029,15 +1960,8 @@ def createSingleDrawScript(iPlot,Plot,PathToSelf,scriptsfolder,opts=None):
     script+='export OUTFILENAME="'+"plot" +str(iPlot)+'"\n'
     script+='cd '+cmsswpath+'/src\neval `scram runtime -sh`\n'
     script+='cd - \n'
-  # Parse commandline options if available to script  
-  commandLineOptions = ''
-  if opts != None:
-    for opt, arg in opts:
-      if arg != None:
-        commandLineOptions = commandLineOptions + ' ' + opt + '=' + arg
-      else:
-        commandLineOptions = commandLineOptions + ' ' + opt
-  script+='python '+PathToSelf+" -p "+str(iPlot)+ ' ' + commandLineOptions + ' noPlotParallel\n'
+  # script+='export NUMBEROFPLOT ='+str(iPlot)+'\n'
+  script+='python '+PathToSelf+" "+str(iPlot)+' noPlotParallel\n'
   # script+="mv *.pdf " +os.getcwd()+"/plot"+str(iPlot)+".pdf\n"
 
 
@@ -2108,7 +2032,7 @@ def submitToNAF(scripts):
     os.makedirs(logdir)
   for script in scripts:
     print 'submitting',script
-    command=['qsub', '-cwd', '-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=5800M', '-l', 's_vmem=5800M' ,'-o', logdir, '-e', logdir, script]
+    command=['qsub', '-cwd', '-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=2000M', '-l', 's_vmem=2000M' ,'-o', logdir, '-e', logdir, script]
     a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
     output = a.communicate()[0]
     jobidstring = output.split()
@@ -2156,7 +2080,7 @@ def submitArrayToNAF(scripts,arrayname=""):
   
   print 'submitting',arrayscriptpath
   #command=['qsub', '-cwd','-terse','-t',tasknumberstring,'-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=2000M', '-l', 's_vmem=2000M' ,'-o', logdir+'/dev/null', '-e', logdir+'/dev/null', arrayscriptpath]
-  command=['qsub', '-cwd','-terse','-t',tasknumberstring,'-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=5800M', '-l', 's_vmem=5800M' ,'-o', '/dev/null', '-e', '/dev/null', arrayscriptpath]
+  command=['qsub', '-cwd','-terse','-t',tasknumberstring,'-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=2000M', '-l', 's_vmem=2000M' ,'-o', '/dev/null', '-e', '/dev/null', arrayscriptpath]
   a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
   output = a.communicate()[0]
   jobidstring = output
@@ -2305,35 +2229,6 @@ def check_jobs(scripts,outputs,nentries):
       failed_jobs.append(script)
   return failed_jobs
 
-
-""" Helper function to submit NAF jobs"""
-def helperSubmitNAFJobs(scripts,outputs,nentries):
-  # submit run scripts
-  print 'submitting scripts'
-  #jobids=submitToNAF(scripts)
-  jobids=submitArrayToNAF(scripts, "PlotPara")
-  do_qstat(jobids)
-
-  # check outputs
-  print 'checking outputs'
-  failed_jobs=check_jobs(scripts,outputs,nentries)
-  retries=0
-  while retries<=3 and len(failed_jobs)>0:
-    retries+=1
-    print 'the following jobs failed'
-    for j in failed_jobs:
-      print j
-    if len(failed_jobs)>=0.8*len(scripts):
-      print "!!!!!\n More Than 80 percent of your jobs failed. Check:\n A) Your code (and logfiles) \n B) The status of the batch stytem e.g. http://bird.desy.de/status/day.html\n !!!!!"
-    print 'resubmitting'
-    jobids=submitToNAF(failed_jobs)
-    do_qstat(jobids)
-    failed_jobs=check_jobs(scripts,outputs,nentries)
-  if retries>=10:
-    print 'could not submit jobs'
-    sys.exit()  
-
-
 # the dataBases should be defined as follows e.g. [[memDB,path],[blrDB,path]]
 def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],dataBases=[],treeInformationJsonFile="",otherSystnames=[],addCodeInterfacePaths=[],cirun=False):
   cmsswpath=os.environ['CMSSW_BASE']
@@ -2354,19 +2249,11 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   outputpath=workdir+'/output.root'
 
   addCodeInterfaces=[]
-
-  codeInterfaceCounter = 0
   for acp in addCodeInterfacePaths:
-    codeInterfaceCounter += 1
-    if isinstance(acp, basestring):
-        addModuleName = "addModule" + str(codeInterfaceCounter)
-        print "loading module", acp, "as ", addModuleName, " module."
-        addCodeInterfaces.append(imp.load_source(addModuleName,acp).theInterface())
-    elif isinstance(acp, types.InstanceType):
-        print "appending class object initiated by user: ", acp
-        addCodeInterfaces.append(acp)
-    else:
-        print "Unknown additional code interface type: ", acp
+    print "loading module", acp
+    newCodeInterfaceModule=imp.load_source("newACI",acp)
+    import newACI
+    addCodeInterfaces.append(newACI.theInterface())
 
   usesDataBases=False
   if dataBases!=[]:
@@ -2408,7 +2295,7 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   createProgram(programpath,plots,samples,catnames,catselections,systnames,systweights,additionalvariables, dataBases,addCodeInterfaces)
   if not os.path.exists(programpath+'.cc'):
     print 'could not create c++ program'
-    sys.exit(-1)
+    sys.exit()
   # check if the code changed
   codeWasChanged=True
   if alreadyWritten:
@@ -2425,7 +2312,7 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
     subprocess.call(cmd,shell=True)
   if not os.path.exists(programpath):
     print 'could not compile c++ program'
-    sys.exit(-1)
+    sys.exit()
     
   #create script to rename histograms
   createRenameScript(programpath,systnames+otherSystnames)
@@ -2440,51 +2327,49 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
     os.makedirs(plotspath)
   if not os.path.exists(workdir):
     print 'could not create workdirs'
-    sys.exit(-1)
+    sys.exit()
 
   # create run scripts
   print 'creating run scripts'
   scripts,outputs,nentries=get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,programpath,cmsswpath,treeInformationJsonFile,cirun)
   
-  #DANGERZONE Submit jobs
-  helperSubmitNAFJobs(scripts,outputs,nentries)
+  #DANGERZONE
+  #exit(0)
+  # submit run scripts
+  print 'submitting scripts'
+  #jobids=submitToNAF(scripts)
+  jobids=submitArrayToNAF(scripts, "PlotPara")
+  do_qstat(jobids)
 
+  # check outputs
+  print 'checking outputs'
+  failed_jobs=check_jobs(scripts,outputs,nentries)
+  retries=0
+  while retries<=3 and len(failed_jobs)>0:
+    retries+=1
+    print 'the following jobs failed'
+    for j in failed_jobs:
+      print j
+    if len(failed_jobs)>=0.8*len(scripts):
+      print "!!!!!\n More Than 80 percent of your jobs failed. Check:\n A) Your code (and logfiles) \n B) The status of the batch stytem e.g. http://bird.desy.de/status/day.html\n !!!!!"
+    print 'resubmitting'
+    jobids=submitToNAF(failed_jobs)
+    do_qstat(jobids)
+    failed_jobs=check_jobs(scripts,outputs,nentries)
+  if retries>=10:
+    print 'could not submit jobs'
+    sys.exit()
 
   # hadd outputs
-  # Check if hadd output worked, otherwise resubmit jobs a second time
-  haddResubmit = False
-  print 'hadd output starting'
+  print 'hadd output'
   haddclock=ROOT.TStopwatch()
   haddclock.Start()
-  try:
-    subprocess.check_output(['hadd', outputpath]+outputs,stderr=subprocess.STDOUT)
-    print 'hadd output worked ', ('in the first place.' if not haddResubmit else 'in the second place.')
-  except subprocess.CalledProcessError, e:
-    if not haddResubmit:
-        print 'Hadd failed with the following error in the first place:\n \n', e.output
-        print '\n Resubmitting job script and then redoing hadd a second time.'
-        haddResubmit = True
-        helperSubmitNAFJobs(scripts,outputs,nentries)
-        subprocess.check_output(['hadd', outputpath]+outputs,stderr=subprocess.STDOUT)
-    else:
-        print "Hadd failed a second time with the following error, stopping program: \n \n", e.output
-        sys.exit(-1)
-  
+  subprocess.call(['hadd', outputpath]+outputs)
+  print 'done'
   haddtime=haddclock.RealTime()
   print "hadding took ", haddtime
   return  outputpath
 
-
-def haddFilesFromWildCard(outname="",inwildcard=""):
-  infiles=glob.glob(inwildcard)
-  print 'hadd from wildcard'
-  haddclock=ROOT.TStopwatch()
-  haddclock.Start()
-  subprocess.call(['hadd', outname]+infiles)
-  print 'done'
-  haddtime=haddclock.RealTime()
-  print "hadding took ", haddtime
-  return  outname
 
 def createRenameScript(scriptname,systematics):
   header= """
