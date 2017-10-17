@@ -77,10 +77,11 @@ def main(argv):
                          "Jet_Eta", "Muon_Eta", "Electron_Eta",
                          "Jet_CSV", "Jet_Flav", "N_Jets", "Jet_E", "Jet_Phi", "Jet_M",
                          "Evt_Pt_PrimaryLepton","Evt_E_PrimaryLepton","Evt_M_PrimaryLepton","Evt_Phi_PrimaryLepton","Evt_Eta_PrimaryLepton",
+                         "Evt_Phi_MET","Evt_Pt_MET",
                          "Weight_CSV","Weight_CSVLFup","Weight_CSVLFdown","Weight_CSVHFup","Weight_CSVHFdown","Weight_CSVHFStats1up","Weight_CSVHFStats1down",
                          "Weight_CSVLFStats1up","Weight_CSVLFStats1down","Weight_CSVHFStats2up","Weight_CSVHFStats2down","Weight_CSVLFStats2up","Weight_CSVLFStats2down",
-                         "Weight_CSVCErr1up","Weight_CSVCErr1down","Weight_CSVCErr2up","Weight_CSVCErr2down",
-
+                         "Weight_CSVCErr1up","Weight_CSVCErr1down","Weight_CSVCErr2up","Weight_CSVCErr2down","Evt_blr_ETH","Evt_blr_ETH_transformed",
+                         
              			 'finalbdt_ljets_j4_t2:=Evt_HT_Jets',
              			 'finalbdt_ljets_j5_t2:=Evt_HT_Jets',
                          'finalbdt_ljets_j4_t3:='+bdtweightpath+'/weights_Final_43_'+bdtset+'.xml',
@@ -791,7 +792,18 @@ def main(argv):
         Plot(ROOT.TH1F(plotprefix+"Reco_TTBBLikelihoodTimesME_off_best_TTLikelihood_comb","Reco_TTBBLikelihoodTimesME_off_best_TTLikelihood_comb",20,-0.1,1),"Reco_TTBBLikelihoodTimesME_off_best_TTLikelihood_comb",plotselection,plotlabel),
     ]
 
-    plots+=plotsAdditional+plots64+plots63+plots62+plots54+plots53+plots44+plots43+plots42+plots52
+    plotprefix="dnn_"
+    plotsDNNcontrol=[
+        Plot(ROOT.TH1F(plotprefix+"43_ttHnode","DNN ttH node",20,0,1),"aachen_Out_ttH","((N_Jets>=4&&N_BTagsM==3))","1 lepton, #geq4jets, 3 b-tags"),
+        Plot(ROOT.TH1F(plotprefix+"43_ttbbnode","DNN ttbb node",20,0,1),"aachen_Out_ttbarBB","((N_Jets>=4&&N_BTagsM==3))","1 lepton, #geq4jets, 3 b-tags"),
+        Plot(ROOT.TH1F(plotprefix+"43_tt2bnode","DNN tt2b node",20,0,1),"aachen_Out_ttbar2B","((N_Jets>=4&&N_BTagsM==3))","1 lepton, #geq4jets, 3 b-tags"),
+        Plot(ROOT.TH1F(plotprefix+"43_ttbnode","DNN ttb node",20,0,1),"aachen_Out_ttbarB","((N_Jets>=4&&N_BTagsM==3))","1 lepton, #geq4jets, 3 b-tags"),
+        Plot(ROOT.TH1F(plotprefix+"43_ttlfnode","DNN ttlf node",20,0,1),"aachen_Out_ttbarOther","((N_Jets>=4&&N_BTagsM==3))","1 lepton, #geq4jets, 3 b-tags"),
+        Plot(ROOT.TH1F(plotprefix+"43_ttccnode","DNN ttcc node",20,0,1),"aachen_Out_ttbarCC","((N_Jets>=4&&N_BTagsM==3))","1 lepton, #geq4jets, 3 b-tags"),
+    ]
+
+    #plots+=plotsAdditional+plots64+plots63+plots62+plots54+plots53+plots44+plots43+plots42+plots52+plotsDNNcontrol
+    plots+=plotsAdditional+plots64+plotsDNNcontrol
     discriminatorPlots=plots
     
     systsamples=[]
@@ -818,7 +830,7 @@ def main(argv):
           continue
         for sysname,sysreplacestring in zip(QCDSystNames,QCDSystReplacementStrings):
           thisnewsel=sample.selection.replace("internalQCDweight",sysreplacestring)
-          systsample.sappend(Sample(sample.name+sysname,sample.color,sample.path,thisnewsel,sample.nick+sysname,samDict=sampleDict))
+          systsamples.append(Sample(sample.name+sysname,sample.color,sample.path,thisnewsel,sample.nick+sysname,samDict=sampleDict))
     
     
     allsamples=samples+systsamples
@@ -847,7 +859,7 @@ def main(argv):
     if analysis.doDrawParallel==False or analysis.plotNumber == None :
         if not os.path.exists(analysis.rootFilePath):
             print "Doing plotParallel step since root file was not found."
-            outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_v5_08102017.json",otherSystNames+PSSystNames+QCDSystNames,cirun=False)
+            outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_v5_08102017.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_V6.py"],cirun=False)
             # Allow start of an improved rebinning algorithm
             if analysis.getActivatedOptimizedRebinning():
               if analysis.getSignalProcess() == 'ttbb':
@@ -925,8 +937,9 @@ def main(argv):
         print "Making MC Control plots"
         print "skipping"
         lll=createLLL_fromSuperHistoFileSyst(outputpath,samples[1:],discriminatorPlots,errorSystNamesNoPS)
+        lllnoQCD=createLLL_fromSuperHistoFileSyst(outputpath,samples[1:],discriminatorPlots,errorSystNamesNoPSNoQCD)
         labels=[plot.label for plot in discriminatorPlots]
-        plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-2,name,[[lll,3354,ROOT.kBlack,True]],False,labels,True,analysis.plotBlinded)
+        plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-2,name,[[lll,3354,ROOT.kBlack,True],[lll,3345,ROOT.kSpring-3,True]],False,labels,True,analysis.plotBlinded)
 
     # Make yield table
     if (analysis.doDrawParallel==False or analysis.plotNumber != None) and analysis.makeEventYields==True :
