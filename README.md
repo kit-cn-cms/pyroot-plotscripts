@@ -40,7 +40,7 @@ Quick blinded expected limits:
   * To get the newest versions of the code from this repository do :
      * git remote add pyroot-subtree https://gitlab.cern.ch/kit-cn-cms/pyroot-plotscripts-base
      * git fetch pyroot-subtree
-     * git pull -s recursive -X -s patience pyroot-subtree master
+     * git subtree pull  --prefix=pyroot-plotscripts-base pyroot-subtree master
   * BUT: Major changes should be pushed upstream via git subtree push (you can also do this after collecting some changes to the core code).
   * To do this do as follows:
      * Do NOT cmsenv/source CMSSW
