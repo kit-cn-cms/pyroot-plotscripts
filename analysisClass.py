@@ -55,7 +55,7 @@ class Analysis:
     # Should be placed here after default variable initialization and before commandline initialization
     if signalProcess == 'ttbb':
       self.signalProcess = 'ttbb'
-      self.plotConfig = 'plotconfigttbbSpring17v10'
+      self.plotConfig = 'plotconfigttbbSpring17v14'
       # Store lower and upper end of samples in plotconfig
       self.ttbarSamplesLower = 0
       self.ttbarSamplesUpper = 5
