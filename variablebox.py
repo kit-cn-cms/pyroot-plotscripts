@@ -74,23 +74,36 @@ class Variable():
     var=self.name
     t=self.vartype
     isarray=self.arraylength!=None
+    castText=""
     if isarray:
       if t=='F':
         text='  float* '+var+' = new float[100];'
         for i in range(0,100):
           text+='\nfloatMap["' + var + '_' + str(i+1) + '"] = &' + var + '[' + str(i) + ']' + ';'
       elif t=='I':
-        text='  int* '+var+' = new int[100];'
+        text='  Long64_t* '+var+' = new Long64_t[100];'
         for i in range(0,100):
           text+='\nintMap["' + var + '_' + str(i+1) + '"] = &' + var + '[' + str(i) + ']' + ';'
+      elif t=='L':
+        text='  Long64_t* '+var+' = new Long64_t[100];'
+        for i in range(0,100):
+          text+='\nlongMap["' + var + '_' + str(i+1) + '"] = &' + var + '[' + str(i) + ']' + ';'    
       else: "UNKNOWN TYPE",t
     else:
       if t=='F':
         text='\nfloat '+var+' = -999;\nfloatMap["' + var + '"] = &' + var + ';'
-      elif t=='I':
-        text='\nint '+var+' = -999;\nintMap["' + var + '"] = &' + var + ';'
+      #DANGERZONE
+      # Needed hack because of mixing of Int and Long ntuples
+      # Avoid in the future
+      # Not working for array ints. But i dont think that there are any anywhere
+      elif (t=='I' or t=='L'):
+        text='\nLong64_t '+var+'LONGDUMMY = -999;\nlongMap["' + var + 'LONGDUMMY"] = &' + var + 'LONGDUMMY;'
+        text+='\nInt_t '+var+' = -999;\nintMap["' + var + '"] = &' + var + ';'        
+        castText='\n'+var+' = Int_t('+var + 'LONGDUMMY);'
+      #elif t=='L':
+        #text='\nLong64_t '+var+' = -999;\nlongMap["' + var + '"] = &' + var + ';'
       else: "UNKNOWN TYPE",t
-    return text
+    return text, castText
 
 
   # setup branch address
@@ -100,9 +113,11 @@ class Variable():
     if isarray:
       text+='  chain->SetBranchAddress("'+self.name+'",'+self.name+');\n'
     else:
-      text+='  chain->SetBranchAddress("'+self.name+'",&'+self.name+');\n'
+      if self.vartype=='I' or self.vartype=='L':
+        text+='  chain->SetBranchAddress("'+self.name+'",&'+self.name+'LONGDUMMY);\n'
+      else:
+        text+='  chain->SetBranchAddress("'+self.name+'",&'+self.name+');\n'
     return text
-
 
   # initialize TMVA Reader
   def initReaderProgram(self):
@@ -324,11 +339,15 @@ class Variables:
 
   # Program: Initialize all variables
   def initVarsProgram(self):
-    text="std::map<std::string, float*> floatMap;\nstd::map<std::string, int*> intMap;\n\n"
+    castText=""
+    text="std::map<std::string, float*> floatMap;\nstd::map<std::string, Int_t*> intMap;\nstd::map<std::string, Long64_t*> longMap;\n\n"
     for name,var in self.variables.iteritems():
-      text+=var.initVarProgram()
+      stubInit, stubCast = var.initVarProgram()
+      text+=stubInit
+      castText+=stubCast
     text+='\n'
-    return text
+    castText+='\n'
+    return text, castText
 
 
   # Program: Setup all branch addresses

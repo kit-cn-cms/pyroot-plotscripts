@@ -36,13 +36,15 @@ def getHead(dataBases,addCodeInterfaces=[]):
 #include <algorithm>
 #include <map>
 #include "TStopwatch.h"
+#include <TString.h>
+#include <TH2D.h>
 """
   for addCodeInt in addCodeInterfaces:
     retstr+=addCodeInt.getIncludeLines()
   
   if dataBases!=[]:
     retstr+="""
-#include "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase/MEMDataBase/interface/MEMDataBase.h"
+#include "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBaseSpring17/MEMDataBase/MEMDataBase/interface/MEMDataBase.h"
 """
 
   retstr+="""
@@ -1045,6 +1047,151 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
   return csvWgtTotal;
 }
 
+// QCD Helper to retrieve scale factor for QCD Estimation with iso inverted ntuples
+
+class QCDHelper
+{
+	public:
+		// see the definition/implementation file for a description of the functions 
+		QCDHelper(TString path_to_sf_file_);
+		~QCDHelper();
+		double GetScaleFactor(int n_jets, int n_btags, int n_isoinverted_electrons, int n_isoinverted_muons);
+		double GetScaleFactorError(int n_jets, int n_btags, int n_isoinverted_electrons, int n_isoinverted_muons);
+		double GetScaleFactorErrorUp(int n_jets, int n_btags, int n_isoinverted_electrons, int n_isoinverted_muons);
+		double GetScaleFactorErrorDown(int n_jets, int n_btags, int n_isoinverted_electrons, int n_isoinverted_muons);
+		void Reset();
+		void LoadFile(TString path_to_sf_file_);
+			
+	private:
+		// pointer for the root file containing the desired histograms
+		TFile* scalefactor_file = 0;
+		// path to the root file
+		TString path_to_sf_file = "";
+		// histograms containing the scale factors for electron and muon channel separately
+		TH2D* Mu_SF = 0;
+		TH2D* El_SF = 0;
+		// flag if the file and the histograms were read properly
+		bool initialized = false;
+};
+
+QCDHelper::QCDHelper(TString path_to_sf_file_)
+{
+	// just the constructor which loads a root file containing the histograms with the scale factors using the LoadFile function
+	LoadFile(path_to_sf_file_);
+}
+
+void QCDHelper::LoadFile(TString path_to_sf_file_)
+{
+	// this function loads the file given by a string and initializes the 2 needed histograms if the file was loaded correctly
+	path_to_sf_file = path_to_sf_file_;
+	if(path_to_sf_file!="")
+	{
+		scalefactor_file = TFile::Open(path_to_sf_file);
+	}
+	if(scalefactor_file)
+	{
+		El_SF = (TH2D*)scalefactor_file->Get("El_FakeSF");
+		Mu_SF = (TH2D*)scalefactor_file->Get("Mu_FakeSF");
+		initialized = true;
+	}
+}
+
+void QCDHelper::Reset()
+{
+	// resets all member data
+	scalefactor_file = 0;
+	path_to_sf_file = "";
+	Mu_SF = 0;
+	El_SF = 0;
+	initialized = false;
+}
+
+double QCDHelper::GetScaleFactor(int n_jets, int n_btags, int n_isoinverted_electrons, int n_isoinverted_muons)
+{
+	// this function gets the scale factor for a event dependent on the number of jets,btags and the lepton flavor
+	if(!initialized) return 0.;
+	int bin = -1;
+	double sf = 0.;
+	int N_jets = n_jets>6 ? 6 : n_jets;
+	int N_btags = n_btags>4 ? 4 : n_btags;
+	if(n_isoinverted_electrons==1&&n_isoinverted_muons==0) 
+	{
+		bin = El_SF->GetBin(N_jets+1,N_btags+1);
+		sf = El_SF->GetBinContent(bin);
+		// the values in the file are not correct for electron 6j4b category and have to be set manually
+		if(N_jets>=6&&N_btags>=4)
+		{
+			sf = 1.8;
+		}
+	}
+	else if(n_isoinverted_electrons==0&&n_isoinverted_muons==1)
+	{
+		bin = Mu_SF->GetBin(N_jets+1,N_btags+1);
+		sf = Mu_SF->GetBinContent(bin);
+	}
+	else 
+	{
+		return 0.;
+	}
+	return sf<0. ? 0. : sf;
+}
+
+double QCDHelper::GetScaleFactorError(int n_jets, int n_btags, int n_isoinverted_electrons, int n_isoinverted_muons)
+{
+	// this function gets the error on the scale factor for a event dependent on the number of jets,btags and the lepton flavor
+	if(!initialized) return 0.;
+	int bin = -1;
+	double sf_err = 0.;
+	int N_jets = n_jets>6 ? 6 : n_jets;
+	int N_btags = n_btags>4 ? 4 : n_btags;
+	if(n_isoinverted_electrons==1&&n_isoinverted_muons==0) 
+	{
+		bin = El_SF->GetBin(N_jets+1,N_btags+1);
+		sf_err = El_SF->GetBinError(bin);
+		// the values in the file are not correct for electron 6j4b category and have to be set manually
+		if(N_jets>=6&&N_btags>=4)
+		{
+			sf_err = 2.0;
+		}
+	}
+	else if(n_isoinverted_electrons==0&&n_isoinverted_muons==1)
+	{
+		bin = Mu_SF->GetBin(N_jets+1,N_btags+1);
+		sf_err = Mu_SF->GetBinError(bin);
+	}
+	else 
+	{
+		return 0.;
+	}
+	return sf_err<0. ? 0. : sf_err;
+}
+
+double QCDHelper::GetScaleFactorErrorUp(int n_jets, int n_btags, int n_isoinverted_electrons, int n_isoinverted_muons)
+{
+	// gets the scale factor + error
+	if(!initialized) return 0.;
+	double sf = GetScaleFactor(n_jets,n_btags,n_isoinverted_electrons,n_isoinverted_muons);
+	double sf_err = GetScaleFactorError(n_jets,n_btags,n_isoinverted_electrons,n_isoinverted_muons);
+	return sf+sf_err <0. ? 0. : sf+sf_err;
+}
+
+double QCDHelper::GetScaleFactorErrorDown(int n_jets, int n_btags, int n_isoinverted_electrons, int n_isoinverted_muons)
+{
+	// gets the scale factor - error
+	if(!initialized) return 0.;
+	double sf = GetScaleFactor(n_jets,n_btags,n_isoinverted_electrons,n_isoinverted_muons);
+	double sf_err = GetScaleFactorError(n_jets,n_btags,n_isoinverted_electrons,n_isoinverted_muons);
+	return sf-sf_err <0. ? 0. : sf-sf_err;
+}
+
+QCDHelper::~QCDHelper()
+{
+	// destructor which closes the file if it was loaded in the first place
+	if(initialized) scalefactor_file->Close();
+}
+
+
+
 // Helper struct to fill plots more efficiently
 // Until GCC 4.9 struct cannot have init values if one wants to initialize it with bracket lists
 struct structHelpFillHisto{
@@ -1093,9 +1240,11 @@ void plot(){
 
   std::string csvHFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/factorized_jes/csv_rwt_fit_hf_v2_final_2017_6_7_all.root";
   std::string csvLFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/factorized_jes/csv_rwt_fit_lf_v2_final_2017_6_7_all.root";
+  TString qcd_file = "/nfs/dust/cms/user/mwassmer/QCD_Estimation_September17/QCD_Estimation/QCD_Estimation_FakeScaleFactor_nominal.root";
   
   CSVHelper* internalCSVHelper= new CSVHelper(csvHFfile,csvLFfile, 5,4,3,v_SystTypes);
   LeptonSFHelper* internalLeptonSFHelper= new LeptonSFHelper();
+  QCDHelper* internalQCDHelper = new QCDHelper(qcd_file);
 
   // open files
   TChain* chain = new TChain("MVATree");
@@ -1115,6 +1264,8 @@ void plot(){
   float sumOfWeights=0;
 
   int DoWeights=1;
+  int electron_data=0;
+  int muon_data=0;
 
   //initialize Trigger Helper
 
@@ -1125,8 +1276,17 @@ void plot(){
   std::map<TString, TString> sampleDataBaseIdentifiers;
   std::map<TString, std::map<TString, long>> sampleDataBaseFoundEvents;
   std::map<TString, std::map<TString, long>> sampleDataBaseLostEvents;
-    
+  std::map<TString, TString> sampleTranslationMapCPP ;
+
+  // vector to hold the jes uncertainty names
+  std::vector<TString> SystListForDataBase;
+  
+  
   Systematics::Type internalSystType=Systematics::NA;
+  
+  // DANGERZONE
+  // This will not work if mixing multiple systematics in one job!!
+  TString globalFileNameForSystType="";
   
   string buf;
   stringstream ss(filenames); 
@@ -1134,24 +1294,42 @@ void plot(){
     chain->Add(buf.c_str());
     TString thisfilename = buf.c_str();
     TString originalfilename=buf.c_str();
-    std::cout<<"file "<<buf.c_str()<<" "<<thisfilename<<std::endl; // karim debug 
+    //std::cout<<"file "<<buf.c_str()<<" "<<thisfilename<<std::endl; // karim debug 
     // cut of directories
     thisfilename.Replace(0,thisfilename.Last('/')+1,"");
     //cut of trailing tree and root
     thisfilename.Replace(thisfilename.Last('_'),thisfilename.Length(),"");
     // copy the string for figuring out internalSystType
     TString filenameforSytType=TString(thisfilename);
+    // remove syst name in case of JES or JER. Not needed in current database format
+    //std::cout<<thisfilename<<std::endl;
+    if(thisfilename.Contains("JES")==1 or thisfilename.Contains("JER")==1 or thisfilename.Contains("nominal")==1){
+      thisfilename.Replace(thisfilename.Last('_'),thisfilename.Length()-1,"");
+      }
+    //std::cout<<thisfilename<<std::endl;
     //remove number
     int lastUnderscore=thisfilename.Last('_');
-    thisfilename.Replace(thisfilename.Last('_'),1,"");
-    thisfilename.Replace(thisfilename.Last('_'),lastUnderscore-thisfilename.Last('_'),"");
+    //thisfilename.Replace(thisfilename.Last('_'),1,"");
+    //thisfilename.Replace(thisfilename.Last('_'),lastUnderscore-thisfilename.Last('_'),"");
+    thisfilename.Replace(thisfilename.Last('_'),thisfilename.Length(),"");
     //remove remaining underscores
     while(thisfilename.Last('_')>=0){ thisfilename.Replace(thisfilename.Last('_'),1,"");}
     std::cout<<" relevant database name "<<thisfilename<<std::endl;
     sampleDataBaseIdentifiers[originalfilename]=thisfilename;
     //check if already in vectr
-    if(! (std::find(databaseRelevantFilenames.begin(),databaseRelevantFilenames.end(),thisfilename)!=databaseRelevantFilenames.end()  )){
-      databaseRelevantFilenames.push_back(thisfilename.Copy());
+    TString translatedFileNameForDataBase;
+    """
+  jsonfileWithSampleTranslation=open('/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBaseSpring17/MEMDataBase/MEMDataBase/test/sampleNameMap.json',"r")
+  jsonstringWithSampleTranslation=jsonfileWithSampleTranslation.read()
+  sampleTranslationMapPython=json.loads(jsonstringWithSampleTranslation)
+  for transSample in sampleTranslationMapPython:
+    retstr+="sampleTranslationMapCPP[TString(\""+transSample+"\")]=TString(\""+sampleTranslationMapPython[transSample]+"\");\n"
+  
+  retstr+="""
+  
+    translatedFileNameForDataBase=sampleTranslationMapCPP[thisfilename];
+    if(! (std::find(databaseRelevantFilenames.begin(),databaseRelevantFilenames.end(),translatedFileNameForDataBase)!=databaseRelevantFilenames.end()  )){
+      databaseRelevantFilenames.push_back(translatedFileNameForDataBase.Copy());
       //sampleDataBaseFoundEvents["jt42"][thisfilename]=0;
       //sampleDataBaseLostEvents["jt42"][thisfilename]=0;
       //sampleDataBaseFoundEvents["jt52"][thisfilename]=0;
@@ -1177,9 +1355,19 @@ void plot(){
   // nominal is the empty string here
   if(filenameforSytType=="nominal"){filenameforSytType="";}
   internalSystType = Systematics::get(filenameforSytType.Data());
-  std::cout<<"internal systematic filename, int and typename"<<filenameforSytType<<" "<<internalSystType<<" "<<Systematics::toString(internalSystType)<<std::endl;
+  std::cout<<"internal systematic filename, int and typename "<<filenameforSytType<<" "<<internalSystType<<" "<<Systematics::toString(internalSystType)<<std::endl;
   if(filenameforSytType!=TString(Systematics::toString(internalSystType))){std::cout<<"ERROR could not recover systematic from enum"<<std::endl; exit(0);}
+  globalFileNameForSystType=filenameforSytType;
   }
+  TString vecNameForDataBase="mem_p";
+  if(globalFileNameForSystType!=""){
+    TString vecNameForDataBaseBuffer=globalFileNameForSystType;
+    if(globalFileNameForSystType.Contains("JES")==1){vecNameForDataBaseBuffer.Replace(0,3,"");}
+    vecNameForDataBase="mem_"+vecNameForDataBaseBuffer+"_p";
+    }
+  std::vector<TString> vec_memStrings;
+  vec_memStrings.push_back(vecNameForDataBase);
+  
   std::cout<<"relevant db samplenames"<<std::endl;
   for(unsigned int isn=0; isn<databaseRelevantFilenames.size();isn++){
     std::cout<<databaseRelevantFilenames.at(isn)<<std::endl;
@@ -1195,18 +1383,33 @@ void plot(){
   
   
   int nEventsVetoed=0;
-  int Evt_ID;
-  int Evt_Run;
-  int Evt_Lumi;
+  Long64_t Evt_ID;
+  Long64_t Evt_Run;
+  Long64_t Evt_Lumi;
   
+  Int_t Evt_ID_INT;
+  Int_t Evt_Run_INT;
+  Int_t Evt_Lumi_INT;
+
   chain->SetBranchStatus("Evt_ID",1);
   chain->SetBranchStatus("Evt_Run",1);
   chain->SetBranchStatus("Evt_Lumi",1);
   
-  chain->SetBranchAddress("Evt_ID",&Evt_ID);
-  chain->SetBranchAddress("Evt_Run",&Evt_Run);
-  chain->SetBranchAddress("Evt_Lumi",&Evt_Lumi);
-
+  // figure out what kind of branch this is
+  bool evtIDisIntBranch=1;
+  //TBranch* evtBranch=chain->GetBranch("Evt_ID");
+  //TString branchNameString=TString(evtBranch->GetTitle());
+  //if(branchNameString.Contains("/L")){
+  //  evtIDisIntBranch=0;
+    chain->SetBranchAddress("Evt_ID",&Evt_ID);
+    chain->SetBranchAddress("Evt_Run",&Evt_Run);
+    chain->SetBranchAddress("Evt_Lumi",&Evt_Lumi);
+  //}
+  //else{
+  //chain->SetBranchAddress("Evt_ID",&Evt_ID_INT);
+  //chain->SetBranchAddress("Evt_Run",&Evt_Run_INT);
+  //chain->SetBranchAddress("Evt_Lumi",&Evt_Lumi_INT);
+//}
   
 
 
@@ -1225,7 +1428,7 @@ def InitDataBase(thisDataBase=[]):
   
   rstr+="  std::vector<MEMDataBase*> "+thisDataBaseName+"DB; \n"
   rstr+="  for(unsigned int isn=0; isn<databaseRelevantFilenames.size();isn++){ \n"
-  rstr+="  "+thisDataBaseName+"DB.push_back(new MEMDataBase(\""+thisDataBasePath+"\"));"+"\n"
+  rstr+="  "+thisDataBaseName+"DB.push_back(new MEMDataBase(\""+thisDataBasePath+"\",vec_memStrings));"+"\n"
   rstr+="  "+thisDataBaseName+"DB.back()->AddSample(databaseRelevantFilenames.at(isn),databaseRelevantFilenames.at(isn)+\"_index.txt\");\n"
   rstr+="  "+thisDataBaseName+"DB.back()->PrintStructure();\n"
   rstr+="  std::cout<<\"loaded database for \"<<databaseRelevantFilenames.at(isn)<<std::endl;\n"
@@ -1237,7 +1440,7 @@ def InitDataBase(thisDataBase=[]):
   rstr+="  double "+thisDataBaseName+"p_err_bkg=-99.9;\n"
   rstr+="  double "+thisDataBaseName+"n_perm_sig=-99.9;\n"
   rstr+="  double "+thisDataBaseName+"n_perm_bkg=-99.9;\n"
-  rstr+="  DataBaseMEMResult* "+thisDataBaseName+"DummyResultPointer= new DataBaseMEMResult();\n"
+  rstr+="  DataBaseMEMResult* "+thisDataBaseName+"DummyResultPointer= new DataBaseMEMResult(vec_memStrings);\n"
   rstr+="  int "+thisDataBaseName+"FoundResult = 1;\n"
   
   return rstr
@@ -1252,7 +1455,7 @@ def readOutDataBase(thisDataBase=[]):
     //std::cout<<std::endl<<"run lumi event "<<Evt_Run<<" "<<Evt_Lumi<<" "<<Evt_ID<<std::endl;
   """
   
-  rstr+="  "+thisDataBaseName+"p="+thisDataBaseName+"DummyResultPointer->p;\n"
+  rstr+="  "+thisDataBaseName+"p="+thisDataBaseName+"DummyResultPointer->p_vec[0];\n"
   rstr+="  "+thisDataBaseName+"p_sig="+thisDataBaseName+"DummyResultPointer->p_sig;\n"
   rstr+="  "+thisDataBaseName+"p_bkg="+thisDataBaseName+"DummyResultPointer->p_bkg;\n"
   rstr+="  "+thisDataBaseName+"p_err_sig="+thisDataBaseName+"DummyResultPointer->p_err_sig;\n"
@@ -1261,23 +1464,9 @@ def readOutDataBase(thisDataBase=[]):
   rstr+="  "+thisDataBaseName+"n_perm_bkg="+thisDataBaseName+"DummyResultPointer->n_perm_bkg;\n"
   
   rstr+="""
-    //get name of current file so that the correct db can be read
-    // already done in this version due to trigger stuff
-    //TString currentfilename="";
-    //currentfilename = chain->GetCurrentFile()->GetName();    
-    //std::cout<<"current fileanme for this event "<<currentfilename<<std::endl; // karim debug 
-    // cut of directories
-    //currentfilename.Replace(0,currentfilename.Last('/')+1,"");
-    //cut if trailing tree and root
-    //currentfilename.Replace(currentfilename.Last('_'),currentfilename.Length(),"");
-    //remove number
-    //int lastUnderscore=currentfilename.Last('_');
-    //currentfilename.Replace(currentfilename.Last('_'),1,"");
-    //currentfilename.Replace(currentfilename.Last('_'),lastUnderscore-currentfilename.Last('_'),"");
-    //remove remaining underscores
-    //while(currentfilename.Last('_')>=0){ currentfilename.Replace(currentfilename.Last('_'),1,"");}
     TString currentRelevantSampleName=sampleDataBaseIdentifiers[currentfilename];
-    //std::cout<<" relevant database name "<<currentRelevantSampleName<<std::endl;
+    TString translatedCurrentRelevantSampleName=sampleTranslationMapCPP[currentRelevantSampleName];
+    //std::cout<<currentfilename<<" "<<currentRelevantSampleName<<" "<<translatedCurrentRelevantSampleName<<std::endl;
   """
   
   rstr+=" // loop over subsamples of this database\n"
@@ -1287,17 +1476,17 @@ def readOutDataBase(thisDataBase=[]):
   rstr+="  databaseWatch->Start(); \n"
   
   rstr+="  for(unsigned int isn=0; isn<"+thisDataBaseName+"DB.size();isn++){ \n"
-  rstr+="    if(databaseRelevantFilenames.at(isn)==currentRelevantSampleName){;\n"
+  rstr+="    if(databaseRelevantFilenames.at(isn)==translatedCurrentRelevantSampleName){;\n"
   rstr+="         DataBaseMEMResult "+thisDataBaseName+"Result = "+thisDataBaseName+"DB.at(isn)->GetMEMResult(databaseRelevantFilenames.at(isn),Evt_Run,Evt_Lumi,Evt_ID);\n"
 
   #rstr+="        std::cout<<\" p p_sig p_bkg p_err_sig p_err_bkg n_perm_sig n_perm_bkg \"<<"+thisDataBaseName+"p<<\" \"<<"+thisDataBaseName+"p_sig<<\"   \"<<"+thisDataBaseName+"p_bkg<<\" \"<<"+thisDataBaseName+"p_err_sig<<\" \"<<"+thisDataBaseName+"p_err_bkg<<\" \"<<"+thisDataBaseName+"n_perm_sig<<\" \"<<"+thisDataBaseName+"n_perm_bkg<<\" \"<<std::endl;\n"
   
   rstr+="        // check if the event was found using the default values. If any event was found the return values should be different and the resuilt will be replaced\n"
   #rstr+="        if(("+thisDataBaseName+"Result.p != "+thisDataBaseName+"DummyResultPointer->p) or ("+thisDataBaseName+"Result.p_sig != "+thisDataBaseName+"DummyResultPointer->p_sig) or ("+thisDataBaseName+"Result.p_bkg != "+thisDataBaseName+"DummyResultPointer->p_bkg) or ("+thisDataBaseName+"Result.p_err_sig != "+thisDataBaseName+"DummyResultPointer->p_err_sig) or ("+thisDataBaseName+"Result.p_err_bkg != "+thisDataBaseName+"DummyResultPointer->p_err_bkg) or ("+thisDataBaseName+"Result.n_perm_sig != "+thisDataBaseName+"DummyResultPointer->n_perm_sig) or ("+thisDataBaseName+"Result.n_perm_bkg != "+thisDataBaseName+"DummyResultPointer->n_perm_bkg)){\n"
-  rstr+="        if(("+thisDataBaseName+"Result.p != -99)){\n"
+  rstr+="        if(("+thisDataBaseName+"Result.p_vec[0] != -99)){\n"
   rstr+="        nfoundresults+=1;"
 
-  rstr+="      "+thisDataBaseName+"p="+thisDataBaseName+"Result.p;\n"
+  rstr+="      "+thisDataBaseName+"p="+thisDataBaseName+"Result.p_vec[0];\n"
   rstr+="      "+thisDataBaseName+"p_sig="+thisDataBaseName+"Result.p_sig;\n"
   rstr+="      "+thisDataBaseName+"p_bkg="+thisDataBaseName+"Result.p_bkg;\n"
   rstr+="      "+thisDataBaseName+"p_err_sig="+thisDataBaseName+"Result.p_err_sig;\n"
@@ -1309,10 +1498,10 @@ def readOutDataBase(thisDataBase=[]):
   rstr+="    }\n"
   rstr+="  }// end db loop \n"
   rstr+="    if(nfoundresults!=1){\n"
-  rstr+="    //std::cout<<\"WARNING found not exaclty one result \"<<nfoundresults<<\" \"<<currentRelevantSampleName<<\" \"<<Evt_ID<<\" \"<<N_Jets<<\" \"<<N_BTagsM<<std::endl;\n"
+  rstr+="    std::cout<<\"WARNING found not exaclty one result \"<<nfoundresults<<\" \"<<currentRelevantSampleName<<\" \"<<Evt_ID<<\" \"<<N_Jets<<\" \"<<N_BTagsM<<std::endl;\n"
   rstr+="    if(N_BTagsM>=3){\n"
   rstr+="      std::cout<<\"VETO this event\"<<\" \"<<currentRelevantSampleName<<\" \"<<Evt_ID<<\" \"<<N_Jets<<\" \"<<N_BTagsM<<std::endl;\n"
-  rstr+="      std::cout<<\"RedoThisEvent\"<<\" \"<<currentRelevantSampleName<<\" \"<<currentfilename<<\" \"<<Evt_Run<<\" \"<<Evt_Lumi<<\" \"<<Evt_ID<<std::endl;\n"
+  rstr+="      //std::cout<<\"RedoThisEvent\"<<\" \"<<currentRelevantSampleName<<\" \"<<currentfilename<<\" \"<<Evt_Run<<\" \"<<Evt_Lumi<<\" \"<<Evt_ID<<std::endl;\n"
   rstr+="      "+thisDataBaseName+"FoundResult=0;\n"
   rstr+="      nEventsVetoed+=1;\n"
   rstr+="""
@@ -1335,7 +1524,7 @@ def readOutDataBase(thisDataBase=[]):
 	       else if(N_Jets>=6 && N_BTagsM==3){sampleDataBaseFoundEvents["jt63"][currentRelevantSampleName]+=1;}  
 	       else if(N_Jets>=6 && N_BTagsM>=4){sampleDataBaseFoundEvents["jt64"][currentRelevantSampleName]+=1;}  
       """  
-  #rstr+="  std::cout<<\"FOUNDEVENT\"<<\" \"<<currentRelevantSampleName<<\" \"<<Evt_ID<<\" \"<<N_Jets<<\" \"<<N_BTagsM<<std::endl;\n"
+  rstr+="  //std::cout<<\"FOUNDEVENT\"<<\" \"<<currentRelevantSampleName<<\" \"<<Evt_ID<<\" \"<<N_Jets<<\" \"<<N_BTagsM<<std::endl;\n"
   rstr+=" }\n"
   rstr+="  databaseWatch->Stop(); memTime+=databaseWatch->RealTime();\n"
   if skipNonExistingEvent:
@@ -1344,20 +1533,10 @@ def readOutDataBase(thisDataBase=[]):
   #if skipNonExistingEvent:
     #rstr+="  if("+thisDataBaseName+"FoundResult==0 and N_BTagsM>=3){ std::cout<<\"skipping\"<<std::endl; continue; }\n"
   
-  #rstr+="  std::cout<<\"FINAL p p_sig p_bkg p_err_sig p_err_bkg n_perm_sig n_perm_bkg \"<<"+thisDataBaseName+"p<<\" \"<<"+thisDataBaseName+"p_sig<<\" \"<<"+thisDataBaseName+"p_bkg<<\" \"<<"+thisDataBaseName+"p_err_sig<<\" \"<<"+thisDataBaseName+"p_err_bkg<<\" \"<<"+thisDataBaseName+"n_perm_sig<<\" \"<<"+thisDataBaseName+"n_perm_bkg<<\" \"<<std::endl;\n"
+  rstr+="  //std::cout<<\"FINAL p p_sig p_bkg p_err_sig p_err_bkg n_perm_sig n_perm_bkg \"<<"+thisDataBaseName+"p<<\" \"<<"+thisDataBaseName+"p_sig<<\" \"<<"+thisDataBaseName+"p_bkg<<\" \"<<"+thisDataBaseName+"p_err_sig<<\" \"<<"+thisDataBaseName+"p_err_bkg<<\" \"<<"+thisDataBaseName+"n_perm_sig<<\" \"<<"+thisDataBaseName+"n_perm_bkg<<\" \"<<std::endl;\n"
   
   return rstr
   
-  
-  # Todo write this function that loops over the vector and books the databases and creates the variables ->CHECK
-  # write a function that creates the event lumi and run variales and sets the branches  ->CHECK
-  # write a function that reads every database. In case of the vector check every one for the -2 return values ->CHECK
-  # need to change those return values for blr from -2 to -100 or something -> CHECK?
-  # need to set those variables to initalized ones -> CHECK
-  # add those functions in the appropriate places ->CHECK
-  # need to update the linked database code to the most current one. Also maybe create extra branch or handle the headers differently -> CHECK
-
-
 
 def initHisto(name,nbins,xmin=0,xmax=0,title_=''):
   if title_=='':
@@ -1420,6 +1599,19 @@ def startLoop():
     if(iEntry%10000==0) cout << "analyzing event " << iEntry << endl;
 
     chain->GetEntry(iEntry);
+//    if(evtIDisIntBranch==1){
+//      Evt_ID=Evt_ID_INT;
+//      Evt_Lumi=Evt_Lumi_INT;
+//      Evt_Run=Evt_Run_INT;
+//      }
+    
+    //PLACEHOLDERFORCASTLINES
+    
+    
+//     std::cout<<"Evt_ID "<<Evt_ID <<" "<<Int_t(Evt_ID)<<" "<<std::endl;
+     if(Evt_ID!=Int_t(Evt_ID)){std::cout<<"PROBLEM"<<"Evt_ID "<<Evt_ID <<" "<<Int_t(Evt_ID)<<std::endl;}
+//    std::cout<<"NJEts "<<N_Jets<<" "<<N_JetsLONGDUMMY<<std::endl;
+//    std::cout<<"NBtagsM "<<N_BTagsM<<" "<<N_BTagsMLONGDUMMY<<std::endl;
 
     TString currentfilename="";
     currentfilename = chain->GetCurrentFile()->GetName();   
@@ -1427,6 +1619,25 @@ def startLoop():
     if(currentfilename.Index("withTrigger")!=-1){hasTrigger=1;}
     eventsAnalyzed++;
     sumOfWeights+=Weight;
+
+	// Do weighting correctly if data driven QCD sample is used: use the weights for MC part and not for Data part
+	if(processname=="QCD") {
+		if(currentfilename.Contains("SingleElectron")){
+			DoWeights=0;
+			electron_data=1;
+			muon_data=0;
+		} 
+		else if(currentfilename.Contains("SingleMuon")) {
+			DoWeights=0;
+			muon_data=1;
+			electron_data=0;
+		}
+		else {
+			DoWeights=1;
+			muon_data=0;
+			electron_data=0;
+		}
+	}
 
 
   // DANGERZONE
@@ -1553,6 +1764,10 @@ def startLoop():
   float internalCSVweight_CSVCErr2Up=1.0;
   float internalCSVweight_CSVCErr2Down=1.0;  
   
+  float internalQCDweight = 0.0;
+  float internalQCDweightup = 0.0;
+  float internalQCDweightdown = 0.0;
+  
   double tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF;
   
   internalCSVweight=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,internalSystType,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF);
@@ -1576,7 +1791,9 @@ def startLoop():
   internalCSVweight_CSVCErr2Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVCErr2up,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
   internalCSVweight_CSVCErr2Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVCErr2down,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
   
- 
+  internalQCDweight=internalQCDHelper->GetScaleFactor(N_Jets,N_BTagsM,N_TightElectrons,N_TightMuons);
+  internalQCDweightup=internalQCDHelper->GetScaleFactorErrorUp(N_Jets,N_BTagsM,N_TightElectrons,N_TightMuons);
+  internalQCDweightdown=internalQCDHelper->GetScaleFactorErrorDown(N_Jets,N_BTagsM,N_TightElectrons,N_TightMuons);
  
  
 """
@@ -1711,7 +1928,7 @@ def compileProgram(scriptname,usesDataBases,addCodeInterfaces):
   
   memDBccfiles=[]
   if usesDataBases:
-    memDBccfiles=glob.glob('/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase/MEMDataBase/src/*.cc') 
+    memDBccfiles=glob.glob('/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBaseSpring17/MEMDataBase/MEMDataBase/src/*.cc') 
     #TODO update the dataBases code
   # improve ram usage and reduce garbage of g++ compiler
   improveRAM = '--param ggc-min-expand=100 --param ggc-min-heapsize=2400000'
@@ -1744,6 +1961,8 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 	    "internalMuIDWeight","internalMuIDWeightUp","internalMuIDWeightDown",
 	    "internalMuIsoWeight","internalMuIsoWeightUp","internalMuIsoWeightDown",
 	    "internalMuHIPWeight","internalMuHIPWeightUp","internalMuHIPWeightDown",
+	    "internalQCDweight","internalQCDweightup","internalQCDweightdown",
+	    "electron_data","muon_data"
 ]
   for addCodeInt in addCodeInterfaces:
     vetolist+=addCodeInt.getExternalyCallableVariables()
@@ -1827,7 +2046,10 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
     script+=addCodeInt.getBeforeLoopLines()
     
   # initialize all variables
-  script+=variables.initVarsProgram()
+  initStub, castStub=variables.initVarsProgram()
+  #print initStub
+  #print castStub
+  script+=initStub
   script+=variables.initBranchAddressesProgram()
 
   # initialize TMVA Readers
@@ -1857,7 +2079,12 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
           script+=initHistoWithProcessNameAndSuffix(c+n+s,nb,mn,mx,t)
 
   # start event loop
-  script+=startLoop()
+  startLoopStub=startLoop()
+  if castStub!="":
+    #print castStub
+    startLoopStub=startLoopStub.replace("//PLACEHOLDERFORCASTLINES", castStub)
+  script+=startLoopStub
+    
   for addCodeInt in addCodeInterfaces:
     script+=addCodeInt.getVariableInitInsideEventLoopLines()
   
@@ -2154,6 +2381,7 @@ def submitArrayToNAF(scripts,arrayname=""):
   st = os.stat(arrayscriptpath)
   os.chmod(arrayscriptpath, st.st_mode | stat.S_IEXEC)
   
+  #exit(0)
   print 'submitting',arrayscriptpath
   #command=['qsub', '-cwd','-terse','-t',tasknumberstring,'-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=2000M', '-l', 's_vmem=2000M' ,'-o', logdir+'/dev/null', '-e', logdir+'/dev/null', arrayscriptpath]
   command=['qsub', '-cwd','-terse','-t',tasknumberstring,'-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=5800M', '-l', 's_vmem=5800M' ,'-o', '/dev/null', '-e', '/dev/null', arrayscriptpath]
@@ -2445,7 +2673,6 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   # create run scripts
   print 'creating run scripts'
   scripts,outputs,nentries=get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,programpath,cmsswpath,treeInformationJsonFile,cirun)
-  
   #DANGERZONE Submit jobs
   helperSubmitNAFJobs(scripts,outputs,nentries)
 
