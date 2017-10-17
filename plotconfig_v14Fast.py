@@ -508,7 +508,7 @@ path_additionalSamples="/nfs/dust/cms/user/kelmorab/trees_Spring17_v5_additional
 #path_data="/nfs/dust/cms/user/mwassmer/ntuples/data_json"
 path_michael="/nfs/dust/cms/user/mwassmer/ntuples/august17"
 path_qcd_samples = "/nfs/dust/cms/user/mwassmer/ntuples/QCD_Estimation_alternative"
-path_karim="/nfs/dust/cms/user/kelmorab/trees_Spring17_v5"
+#path_karim="/nfs/dust/cms/user/kelmorab/trees_Spring17_v5"
 ttbarPathS=path_karim+'/ttbar_incl/*nominal*.root'+';'+path_karim+'/ttbar_excl_SL/*nominal*.root'+';'+path_michael+'/ttbar_excl_DL_0/*nominal*.root'
 iso_inverted_paths=path_qcd_samples+'/Single*/*nominal*.root'+';'+path_qcd_samples+'/ttbar_excl_SL_0/*nominal*.root'+';'+path_qcd_samples+'/ttbar_excl_DL_0/*nominal*.root'+';'+path_qcd_samples+'/WJets-HT-*/*nominal*.root'+';'+path_qcd_samples+'/Zjets*/*nominal*.root'+';'+path_qcd_samples+'/??_0/*nominal*.root'+';'+path_qcd_samples+'/ttHbb*/*nominal*.root'+';'+path_qcd_samples+'/ttHnonbb*/*nominal*.root'+';'+path_qcd_samples+'/tt?_*/*nominal*.root'+';'+path_qcd_samples+'/st*/*nominal*.root'
 
