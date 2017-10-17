@@ -2381,6 +2381,8 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
 
 
 ################################################
+
+
     options='histo'
     if isinstance(label, basestring):
         labeltexts=len(listOfHistoListsData)*[label]
@@ -2494,7 +2496,7 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
             #blind.Draw('same2')
         #objects.append(blind)
 
-
+        BinningErrorFile=open(name+"/binningWarnings_"+ot.GetName()+".txt","w")
         listOfRatioErrorGraphs=[]
         graphcounter=0
         if verbosity>=2:
@@ -2509,8 +2511,13 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
 	      ratioerrorgraph.SetPoint(i,x, 1.0)
 	      relErrUp=0.0
 	      relErrDown=0.0
+	      #check if bincontent-error becomes negative and if that is the case print it to the log file
+	      if (y-abs(errorgraph.GetErrorYlow(i)))<0:
+                print "WARNING: Stack - Error is negative in "+ot.GetName()+" "+str(i)+" with values "+str(y)+" "+str(errorgraph.GetErrorYlow())+" \n"
+                BinningErrorFile.write("WARNING: Stack - Error is negative in "+ot.GetName()+" "+str(i)+" with values "+str(y)+" "+str(errorgraph.GetErrorYlow())+" \n")
 	      if verbosity>=2:
 	        print x,y,errorgraph.GetErrorYhigh(i),errorgraph.GetErrorYlow(i)
+	        
 	      if y>0.0:
 		  relErrUp=errorgraph.GetErrorYhigh(i)/y
 		  relErrDown=errorgraph.GetErrorYlow(i)/y
@@ -2651,6 +2658,7 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
 
         #print labeltext
         #raw_input()
+        BinningErrorFile.close()
 
 
 
