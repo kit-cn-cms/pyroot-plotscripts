@@ -174,7 +174,15 @@ def main(argv):
             print "selection ", thisnewsel
             print "instead of ", thisoldsel
             systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace(ttbarPathS,path_additionalSamples+"/ttbar_"+sysfilename+"/*nominal*.root"),thisnewsel,sample.nick+sysname,samDict=sampleDict))
-
+    
+    # add QCD sytematic for QCD sample
+    for sample in samples:
+        if sample.name!='QCD':
+          continue
+        for sysname,sysreplacestring in zip(QCDSystNames,QCDSystReplacementStrings):
+          thisnewsel=sample.selection.replace("internalQCDweight",sysreplacestring)
+          systsample.sappend(Sample(sample.name+sysname,sample.color,sample.path,thisnewsel,sample.nick+sysname,samDict=sampleDict))
+    
     allsamples=samples+systsamples
     allsystnames=weightSystNames+otherSystNames+PSSystNames
 

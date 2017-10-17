@@ -218,6 +218,8 @@ errorSystNames=[
   #"_CMS_ttH_ISRUp","_CMS_ttH_ISRDown",
   #"_CMS_ttH_hdampUp","_CMS_ttH_hdampDown",
   #"_CMS_ttH_ueUp","_CMS_ttH_ueDown",
+    "_CMS_ttH_QCDScaleFactorUp","_CMS_ttH_QCDScaleFactorDown",
+
 ]
 
 errorSystNamesNoPS=[
@@ -300,6 +302,8 @@ errorSystNamesNoPS=[
   #"","",
   #"","",
   #"","",
+    "_CMS_ttH_QCDScaleFactorUp","_CMS_ttH_QCDScaleFactorDown",
+
 ]
 
 mcWeightAll='35.91823'
@@ -498,8 +502,14 @@ PSSystFileNames=[
   #"ue_up","ue_down",
 ]
   
+QCDSystNames=[
+  "_CMS_ttH_QCDScaleFactorUp","_CMS_ttH_QCDScaleFactorDown",
+  ]
+QCDSystReplacementStrings=[
+  "internalQCDweightup","internalQCDweightdown",
+  ]
 
-assert len(errorSystNames)==len(weightSystNames+otherSystNames+PSSystNames)
+assert len(errorSystNames)==len(weightSystNames+otherSystNames+PSSystNames+QCDSystNames)
 
 # samples
 # input path 
@@ -560,7 +570,7 @@ samplesControlPlots=[
                     Sample('V+jets',ROOT.kGreen-3,path_karim+'/*ets*/*nominal*.root',mcWeightAll+sel_MET,'Vjets',systsAllSamples,samDict=sampleDict) , 
                     Sample('t#bar{t}+V',ROOT.kBlue-10,path_karim+'/tt?_*/*nominal*.root',mcWeightAll+sel_MET,'ttV',systsAllSamples,samDict=sampleDict),         
                     Sample('Diboson',ROOT.kAzure+2,path_karim+'/??_pythia_*/*nominal*.root',mcWeightAll+sel_MET,'diboson',systsAllSamples,samDict=sampleDict) , 
-#Sample('QCD',ROOT.kYellow,iso_inverted_paths,'1.'+sel_MET+'*internalQCDweight'+'*(((Weight_XS==1.0)*1.0*((electron_data*'+sel_singleel+')+(muon_data*'+sel_singlemu+')))+((Weight_XS!=1.0)*(-1.0)*35.91823))','QCD',weightSystNames)  
+                    Sample('QCD',ROOT.kYellow,iso_inverted_paths,'1.'+sel_MET+'*internalQCDweight'+'*(((Weight_XS==1.0)*1.0*((electron_data*'+sel_singleel+')+(muon_data*'+sel_singlemu+')))+((Weight_XS!=1.0)*(-1.0)*35.91823))','QCD',weightSystNames+QCDSystNames,samDict=sampleDict),  
 ]
 
 #print "limit samples"
@@ -587,7 +597,7 @@ samplesLimits=[
                     Sample('t#bar{t}+W',ROOT.kBlue-10,path_karim+'/ttW_*/*nominal*.root',mcWeightAll+sel_MET,'ttbarW',systsAllSamples,samDict=sampleDict),
                     Sample('t#bar{t}+Z',ROOT.kBlue-6,path_karim+'/ttZ_*/*nominal*.root',mcWeightAll+sel_MET,'ttbarZ',systsAllSamples,samDict=sampleDict),
                     Sample('Diboson',ROOT.kAzure+2,path_karim+'/??_pythia_*/*nominal*.root',mcWeightAll+sel_MET,'diboson',systsAllSamples,samDict=sampleDict) , 
-#Sample('QCD',ROOT.kYellow,iso_inverted_paths,'1.'+sel_MET+'*internalQCDweight'+'*(((Weight_XS==1.0)*1.0*((electron_data*'+sel_singleel+')+(muon_data*'+sel_singlemu+')))+((Weight_XS!=1.0)*(-1.0)*35.91823))','QCD',weightSystNames)  
+                    Sample('QCD',ROOT.kYellow,iso_inverted_paths,'1.'+sel_MET+'*internalQCDweight'+'*(((Weight_XS==1.0)*1.0*((electron_data*'+sel_singleel+')+(muon_data*'+sel_singlemu+')))+((Weight_XS!=1.0)*(-1.0)*35.91823))','QCD',weightSystNames+QCDSystNames,samDict=sampleDict),  
 ]
 
 #print "shape samples"

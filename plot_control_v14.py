@@ -26,7 +26,7 @@ from plotconfig_v14 import *
 def main(argv):
 
     # Create analysis object with output name
-    name='controlplots_v14'
+    name='controlplots_v16'
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/latest/ttbb-cutbased-analysis_limitInput.root')
     analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/Sep17/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/output20170626-reference/workdir/ttbb-cutbased-analysis/output_limitInput.root')
@@ -811,7 +811,15 @@ def main(argv):
             print "selection ", thisnewsel
             print "instead of ", thisoldsel
             systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace(ttbarPathS,path_additionalSamples+"/ttbar_"+sysfilename+"/*nominal*.root"),thisnewsel,sample.nick+sysname,samDict=sampleDict))
-
+    
+        # add QCD sytematic for QCD sample
+    for sample in samples:
+        if sample.name!='QCD':
+          continue
+        for sysname,sysreplacestring in zip(QCDSystNames,QCDSystReplacementStrings):
+          thisnewsel=sample.selection.replace("internalQCDweight",sysreplacestring)
+          systsample.sappend(Sample(sample.name+sysname,sample.color,sample.path,thisnewsel,sample.nick+sysname,samDict=sampleDict))
+    
     allsamples=samples+systsamples
     allsystnames=weightSystNames+otherSystNames+PSSystNames
 
