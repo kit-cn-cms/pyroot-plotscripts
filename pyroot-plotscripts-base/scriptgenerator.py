@@ -2673,7 +2673,6 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   # create run scripts
   print 'creating run scripts'
   scripts,outputs,nentries=get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,programpath,cmsswpath,treeInformationJsonFile,cirun)
-  #exit(0)  
   #DANGERZONE Submit jobs
   helperSubmitNAFJobs(scripts,outputs,nentries)
 
