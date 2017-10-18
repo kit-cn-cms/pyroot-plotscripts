@@ -802,8 +802,8 @@ def main(argv):
         Plot(ROOT.TH1F(plotprefix+"43_ttccnode","DNN ttcc node",20,0,1),"aachen_Out_ttbarCC","((N_Jets>=4&&N_BTagsM==3))","1 lepton, #geq4jets, 3 b-tags"),
     ]
 
-    #plots+=plotsAdditional+plots64+plots63+plots62+plots54+plots53+plots44+plots43+plots42+plots52+plotsDNNcontrol
-    plots+=plotsAdditional+plots64+plotsDNNcontrol
+    plots+=plotsAdditional+plots64+plots63+plots62+plots54+plots53+plots44+plots43+plots42+plots52+plotsDNNcontrol
+    #plots+=plotsAdditional+plots64+plotsDNNcontrol
     discriminatorPlots=plots
     
     systsamples=[]
