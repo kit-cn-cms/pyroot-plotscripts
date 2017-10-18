@@ -185,7 +185,7 @@ def main(argv):
                   ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4_MEMONLY",""),
                   ("(N_Jets>=6&&N_BTagsM==2)","ljets_jge6_t2_BLR",""),
                   ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_MEMONLY",""),
-                  ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4_MEMONLY","")
+                  ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4_MEMONLY",""),
                   ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_BLR",""),
     ]
     discrs_JTMEM=[  'Evt_blr_ETH_transformed',   memexp,    'Evt_blr_ETH_transformed',    memexp,   'Evt_blr_ETH_transformed',   memexp,   memexp , 'Evt_blr_ETH_transformed']

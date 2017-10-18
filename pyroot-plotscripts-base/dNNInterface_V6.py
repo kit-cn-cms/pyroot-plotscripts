@@ -120,7 +120,7 @@ const TLorentzVector makeVectorM(double pt, double eta, double phi, double mass)
   // 5 = ttlf
   // 6 = other
 
-  bool printstuff=1;
+  bool printstuff=0;
   if(printstuff){
     cout<<"-----DNN-----"<<std::endl;
     cout<<"ttH node "<<aachen_Out_ttH<<std::endl;
