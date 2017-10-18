@@ -1621,7 +1621,7 @@ def startLoop():
     sumOfWeights+=Weight;
 
 	// Do weighting correctly if data driven QCD sample is used: use the weights for MC part and not for Data part
-	if(processname=="QCD") {
+	if(processname=="QCD" or processname=="QCD_CMS_ttH_QCDScaleFactorUp" or processname=="QCD_CMS_ttH_QCDScaleFactorDown") {
 		if(currentfilename.Contains("SingleElectron")){
 			DoWeights=0;
 			electron_data=1;
