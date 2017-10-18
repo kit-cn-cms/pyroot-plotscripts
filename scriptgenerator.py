@@ -1940,6 +1940,9 @@ def compileProgram(scriptname,usesDataBases,addCodeInterfaces):
   cmdstring = " ".join(cmd)
   print cmdstring
   print ""
+  compileOutFile=open(scriptname+'_gccCommand.txt',"w")
+  compileOutFile.write(cmdstring)
+  compileOutFile.close()
   try:
     print subprocess.check_output([cmdstring],stderr=subprocess.STDOUT,shell=True)
   except subprocess.CalledProcessError, e:
