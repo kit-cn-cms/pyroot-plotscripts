@@ -2518,8 +2518,8 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
 	      relErrDown=0.0
 	      #check if bincontent-error becomes negative and if that is the case print it to the log file
 	      if (y-abs(errorgraph.GetErrorYlow(i)))<0:
-                print "WARNING: Stack - Error is negative in "+ot.GetName()+" "+str(i)+" with values "+str(y)+" "+str(errorgraph.GetErrorYlow())+" \n"
-                BinningErrorFile.write("WARNING: Stack - Error is negative in "+ot.GetName()+" "+str(i)+" with values "+str(y)+" "+str(errorgraph.GetErrorYlow())+" \n")
+                print "WARNING: Stack - Error is negative in "+ot.GetName()+" "+str(i)+" with values "+str(y)+" "+str(errorgraph.GetErrorYlow(i))+" \n"
+                BinningErrorFile.write("WARNING: Stack - Error is negative in "+ot.GetName()+" "+str(i)+" with values "+str(y)+" "+str(errorgraph.GetErrorYlow(i))+" \n")
 	      if verbosity>=2:
 	        print x,y,errorgraph.GetErrorYhigh(i),errorgraph.GetErrorYlow(i)
 	        
