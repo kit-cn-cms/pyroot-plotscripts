@@ -12,6 +12,7 @@ import xml.etree.ElementTree as ET
 import CMS_lumi
 from copy import deepcopy
 import array
+from string import join
 
 ROOT.gStyle.SetPaintTextFormat("4.2f");
 ROOT.gROOT.SetBatch(True)
@@ -702,6 +703,10 @@ def printCanvasesPNG(canvases,name):
 def writeObjects(objects,name):
   if not os.path.exists('rootfiles'):
     os.makedirs('rootfiles')
+    # Check if one has to create a subfolder
+    if len(name.rsplit('/')) > 1:
+      # Create subfolder rootfiles/dir1/dir2 if name is dir1/dir2/test.root
+      os.makedirs('rootfiles/'+ join(name.rsplit("/")[:-1],'/'))
   for o in objects:
     outfile=ROOT.TFile('rootfiles/' + name + '_' + o.GetName() + '.root','recreate')
     o.Write()
