@@ -55,6 +55,7 @@ memexp='(memDBp>0.0)*(memDBp_sig/(memDBp_sig+0.15*memDBp_bkg))+(memDBp<0.0)*(0.0
 bdtweightpath="/nfs/dust/cms/user/kelmorab/Spring17BDTWeights/"
 bdtset="Spring17v1"
 additionalvariables=[
+                         "Muon_Pt_BeForeRC","Electron_Pt_BeforeRun2Calibration","Electron_Eta_Supercluster",
 			'finalbdt_ljets_j4_t2:=Evt_HT_Jets',
 			'finalbdt_ljets_j5_t2:=Evt_HT_Jets',
                       'finalbdt_ljets_j4_t3:='+bdtweightpath+'/weights_Final_43_'+bdtset+'.xml',
