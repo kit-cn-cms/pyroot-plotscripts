@@ -38,6 +38,8 @@ def getHead(dataBases,addCodeInterfaces=[]):
 #include "TStopwatch.h"
 #include <TString.h>
 #include <TH2D.h>
+#include "TGraphAsymmErrors.h"
+
 """
   for addCodeInt in addCodeInterfaces:
     retstr+=addCodeInt.getIncludeLines()
@@ -69,26 +71,47 @@ class LeptonSFHelper {
 
   float GetElectronSF(  float electronPt , float electronEta , int syst , std::string type  );
   float GetMuonSF(  float muonPt , float muonEta , int syst , std::string type  );
-  
+  float GetElectronElectronSF( float electronEta1, float electronEta2, int syst , std::string type);
+  float GetMuonMuonSF( float muonEta1, float muonEta2, int syst , std::string type);
+  float GetElectronMuonSF( float electronEta, float muonEta, int syst , std::string type);
+  void  ChangeMuIsoHistos(bool is_DL);
+
  private:
 
   void SetElectronHistos( );
   void SetMuonHistos( );
+  void SetElectronElectronHistos( );
+  void SetMuonMuonHistos( );
+  void SetElectronMuonHistos( );
+  int findPoint(TGraphAsymmErrors& graph,float& x_);
+  float getValue(TGraphAsymmErrors& graph,float& x_,int syst);
 
-  TH2F *h_ele_ID_abseta_pt_ratio;
+  TH2F *h_ele_ID_abseta_pt_ratioGtoH;
+  TH2F *h_ele_ID_abseta_pt_ratioBtoF;
+
   TH2F *h_ele_TRIGGER_abseta_pt_ratio;
   TH2F *h_ele_ISO_abseta_pt_ratio;
   TH2F *h_ele_GFS_abseta_pt_ratio;
 
+  TH2F *h_mu_ID_abseta_pt_ratio;
+  TH1D *h_mu_HIP_eta_ratio;
+  TH2F *h_mu_TRIGGER_abseta_pt;
+  TH2F *h_mu_ISO_abseta_pt_ratio;
+  
     TH2F *h_mu_ID_abseta_pt_ratioBtoF;
-  TH1D *h_mu_HIP_eta_ratioBtoF;
+  TGraphAsymmErrors *h_mu_HIP_eta_ratioBtoF;
   TH2F *h_mu_TRIGGER_abseta_ptBtoF;
   TH2F *h_mu_ISO_abseta_pt_ratioBtoF;
 
-    TH2F *h_mu_ID_abseta_pt_ratioGtoH;
-  TH1D *h_mu_HIP_eta_ratioGtoH;
+  TH2F *h_mu_ID_abseta_pt_ratioGtoH;
+  TGraphAsymmErrors *h_mu_HIP_eta_ratioGtoH;
   TH2F *h_mu_TRIGGER_abseta_ptGtoH;
   TH2F *h_mu_ISO_abseta_pt_ratioGtoH;
+
+  
+  TH2F *h_ele_ele_TRIGGER_abseta_abseta;
+  TH2F *h_mu_mu_TRIGGER_abseta_abseta;
+  TH2F *h_ele_mu_TRIGGER_abseta_abseta;
 
   float electronMaxPt;
   float electronMaxPtHigh;
@@ -97,18 +120,23 @@ class LeptonSFHelper {
   float muonMaxPtHigh;
   float ljets_mu_BtoF_lumi;
   float ljets_mu_GtoH_lumi;
-  
+  float ljets_ele_BtoF_lumi;
+  float ljets_ele_GtoH_lumi;  
 
 };
 
+//PUBLIC
 LeptonSFHelper::LeptonSFHelper( ){
 
   //std::cout << "Initializing Lepton scale factors" << std::endl;
 
   SetElectronHistos( );
   SetMuonHistos( );
-  
- electronMaxPt = 150.0;
+  SetElectronElectronHistos( );
+  SetMuonMuonHistos( );
+  SetElectronMuonHistos( );
+
+  electronMaxPt = 150.0;
   electronMaxPtHigh= 201.0;
   electronMaxPtHigher=499.0;
   muonMaxPt = 119.0;
@@ -116,7 +144,8 @@ LeptonSFHelper::LeptonSFHelper( ){
   
   ljets_mu_BtoF_lumi=19691.782;
   ljets_mu_GtoH_lumi=16226.452;
-
+  ljets_ele_BtoF_lumi=19691.782;
+  ljets_ele_GtoH_lumi=16226.452;
 
 }
 
@@ -140,16 +169,33 @@ float LeptonSFHelper::GetElectronSF(  float electronPt , float electronEta , int
   float error = 0;
   float upval = 0;
   float downval= 0;
+  float nomvalBtoF = 0;
+  float errorBtoF = 0;
+  float upvalBtoF = 0;
+  float downvalBtoF= 0;
+  float nomvalGtoH = 0;
+  float errorGtoH = 0;
+  float upvalGtoH = 0;
+  float downvalGtoH= 0;
 
 
   if ( type == "ID" ){
 
-    thisBin = h_ele_ID_abseta_pt_ratio->FindBin( searchEta , searchPt );
-    nomval=h_ele_ID_abseta_pt_ratio->GetBinContent( thisBin );
-    error=h_ele_ID_abseta_pt_ratio->GetBinError( thisBin );
+    thisBin = h_ele_ID_abseta_pt_ratioBtoF->FindBin( searchEta , searchPt );
+    nomvalBtoF=h_ele_ID_abseta_pt_ratioBtoF->GetBinContent( thisBin );
+    errorBtoF=h_ele_ID_abseta_pt_ratioBtoF->GetBinError( thisBin );
+    upvalBtoF=nomvalBtoF+errorBtoF;
+    downvalBtoF=nomvalBtoF-errorBtoF;
 
-    upval=nomval+error;
-    downval=nomval-error;
+    thisBin = h_ele_ID_abseta_pt_ratioGtoH->FindBin( searchEta , searchPt );
+    nomvalGtoH=h_ele_ID_abseta_pt_ratioGtoH->GetBinContent( thisBin );
+    errorGtoH=h_ele_ID_abseta_pt_ratioGtoH->GetBinError( thisBin );
+    upvalGtoH=nomvalGtoH+errorGtoH;
+    downvalGtoH=nomvalGtoH-errorGtoH;
+    
+    nomval=(ljets_ele_BtoF_lumi*nomvalBtoF + ljets_ele_GtoH_lumi * nomvalGtoH)/(ljets_ele_BtoF_lumi+ljets_ele_GtoH_lumi);
+    upval=(ljets_ele_BtoF_lumi*upvalBtoF + ljets_ele_GtoH_lumi * upvalGtoH)/(ljets_ele_BtoF_lumi+ljets_ele_GtoH_lumi);
+    downval=(ljets_ele_BtoF_lumi*downvalBtoF + ljets_ele_GtoH_lumi * downvalGtoH)/(ljets_ele_BtoF_lumi+ljets_ele_GtoH_lumi);
 
   }
   else if ( type == "Trigger" ){
@@ -213,7 +259,7 @@ float LeptonSFHelper::GetMuonSF(  float muonPt , float muonEta , int syst , std:
     searchPt=TMath::Min( muonPt , muonMaxPtHigh );// if muonpt > 499 use last bin
   }
   float nomval = 0;
-  //float error = 0;
+  float error = 0;
   float upval = 0;
   float downval= 0;
   float nomvalBtoF = 0;
@@ -295,17 +341,17 @@ float LeptonSFHelper::GetMuonSF(  float muonPt , float muonEta , int syst , std:
 
   else if ( type == "HIP" ){
 
-    thisBin = h_mu_HIP_eta_ratioBtoF->FindBin( searchEta );
-    nomvalBtoF=h_mu_HIP_eta_ratioBtoF->GetBinContent( thisBin );
-    errorBtoF=h_mu_HIP_eta_ratioBtoF->GetBinError( thisBin );
-    upvalBtoF=( nomvalBtoF+errorBtoF );
-    downvalBtoF=( nomvalBtoF-errorBtoF );
+    //thisBin = findPoint(h_mu_HIP_eta_ratioBtoF,searchEta );
+    nomvalBtoF=getValue(*h_mu_HIP_eta_ratioBtoF,searchEta,0);
+    //errorBtoF=h_mu_HIP_eta_ratioBtoF->GetBinError( thisBin );
+    upvalBtoF=getValue(*h_mu_HIP_eta_ratioBtoF,searchEta,1);
+    downvalBtoF=getValue(*h_mu_HIP_eta_ratioBtoF,searchEta,-1);
     
-    thisBin = h_mu_HIP_eta_ratioGtoH->FindBin( searchEta );
-    nomvalGtoH=h_mu_HIP_eta_ratioGtoH->GetBinContent( thisBin );
-    errorGtoH=h_mu_HIP_eta_ratioGtoH->GetBinError( thisBin );
-    upvalGtoH=( nomvalGtoH+errorGtoH );
-    downvalGtoH=( nomvalGtoH-errorGtoH );
+    //thisBin = h_mu_HIP_eta_ratioGtoH->FindBin( searchEta );
+    nomvalGtoH=getValue(*h_mu_HIP_eta_ratioGtoH,searchEta,0);
+    //errorGtoH=h_mu_HIP_eta_ratioGtoH->GetBinError( thisBin );
+    upvalGtoH=getValue(*h_mu_HIP_eta_ratioGtoH,searchEta,1);
+    downvalGtoH=getValue(*h_mu_HIP_eta_ratioGtoH,searchEta,-1);
     
     nomval=(ljets_mu_BtoF_lumi*nomvalBtoF + ljets_mu_GtoH_lumi * nomvalGtoH)/(ljets_mu_BtoF_lumi+ljets_mu_GtoH_lumi);
     upval=(ljets_mu_BtoF_lumi*upvalBtoF + ljets_mu_GtoH_lumi * upvalGtoH)/(ljets_mu_BtoF_lumi+ljets_mu_GtoH_lumi);
@@ -332,20 +378,90 @@ float LeptonSFHelper::GetMuonSF(  float muonPt , float muonEta , int syst , std:
 
 
 }
+float LeptonSFHelper::GetElectronElectronSF(  float electronEta1 , float electronEta2 , int syst , std::string type  ) {
+
+  int thisBin=0;
+
+  float searchEta1=fabs(electronEta1);
+  float searchEta2=fabs(electronEta2);
+
+  float nomval = 0;
+  if ( type == "Trigger" ){
+
+    thisBin = h_ele_ele_TRIGGER_abseta_abseta->FindBin( searchEta1 , searchEta2 );
+    nomval = h_ele_ele_TRIGGER_abseta_abseta->GetBinContent( thisBin );
+
+  }
+  return nomval;
+}
+float LeptonSFHelper::GetMuonMuonSF(  float muonEta1 , float muonEta2 , int syst , std::string type  ) {
+  int thisBin=0;
+
+  float searchEta1=fabs(muonEta1);
+  float searchEta2=fabs(muonEta2);
+
+  float nomval = 0;
+  if ( type == "Trigger" ){
+
+    thisBin = h_mu_mu_TRIGGER_abseta_abseta->FindBin( searchEta1 , searchEta2 );
+    nomval = h_mu_mu_TRIGGER_abseta_abseta->GetBinContent( thisBin );
+
+  }
+  return nomval;
+}
+float LeptonSFHelper::GetElectronMuonSF(  float electronEta , float muonEta , int syst , std::string type  ) {
+  int thisBin=0;
+
+  float searchEta1=fabs(electronEta);
+  float searchEta2=fabs(muonEta);
+
+  float nomval = 0;
+  if ( type == "Trigger" ){
+
+    thisBin = h_ele_mu_TRIGGER_abseta_abseta->FindBin( searchEta1 , searchEta2 );
+    nomval= h_ele_mu_TRIGGER_abseta_abseta->GetBinContent( thisBin );
+
+  }
+  return nomval;
+}
+
+void LeptonSFHelper::ChangeMuIsoHistos(bool is_DL) {
+    std::string ISOinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/mu_ISO_EfficienciesAndSF_BCDEF.root";
+    std::string ISOinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/mu_ISO_EfficienciesAndSF_GH.root";
+    TFile *f_ISOSFBtoF = new TFile(std::string(ISOinputFileBtoF).c_str(),"READ");
+    TFile *f_ISOSFGtoH = new TFile(std::string(ISOinputFileGtoH).c_str(),"READ");
+    if(is_DL) {
+        h_mu_ISO_abseta_pt_ratioBtoF=(TH2F*)f_ISOSFBtoF->Get("LooseISO_TightID_pt_eta/pt_abseta_ratio");
+        h_mu_ISO_abseta_pt_ratioGtoH=(TH2F*)f_ISOSFGtoH->Get("LooseISO_TightID_pt_eta/pt_abseta_ratio");
+    }
+    else {
+        h_mu_ISO_abseta_pt_ratioBtoF=(TH2F*)f_ISOSFBtoF->Get("TightISO_TightID_pt_eta/pt_abseta_ratio");
+        h_mu_ISO_abseta_pt_ratioGtoH=(TH2F*)f_ISOSFGtoH->Get("TightISO_TightID_pt_eta/pt_abseta_ratio");
+    }
+    delete f_ISOSFBtoF;
+    delete f_ISOSFGtoH;
+}
+
+//PRIVATE
 
 void LeptonSFHelper::SetElectronHistos( ){
 
-   std::string IDinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/june012017/eleIDCutBasedWPTight.root";
-  std::string TRIGGERinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/june012017/ele_TriggerSF_Run2016All_v1.root";
-  std::string ISOinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/june012017/ele_Reco_EGM2D.root"; // DANGERZONE: no iso SF yet??
-  std::string GFSinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/june012017/ele_Reco_EGM2D.root";
+  std::string IDinputFileBtoF = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/ele_ID_SF_tight_BCDEF.root";
+  std::string IDinputFileGtoH = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/ele_ID_SF_tight_GH.root";
 
-  TFile *f_IDSF = new TFile(std::string(IDinputFile).c_str(),"READ");
+  std::string TRIGGERinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/ele_TriggerSF_Run2016All_v1.root";
+  std::string ISOinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/ele_Reco_EGM2D.root"; // DANGERZONE: no iso SF yet??
+  std::string GFSinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/ele_Reco_EGM2D.root";
+
+  TFile *f_IDSFBtoF = new TFile(std::string(IDinputFileBtoF).c_str(),"READ");
+  TFile *f_IDSFGtoH = new TFile(std::string(IDinputFileGtoH).c_str(),"READ");
+  
   TFile *f_TRIGGERSF = new TFile(std::string(TRIGGERinputFile).c_str(),"READ");
   TFile *f_ISOSF = new TFile(std::string(ISOinputFile).c_str(),"READ");
   TFile *f_GFSSF = new TFile(std::string(GFSinputFile).c_str(),"READ");
 
-  h_ele_ID_abseta_pt_ratio = (TH2F*)f_IDSF->Get("EGamma_SF2D");
+  h_ele_ID_abseta_pt_ratioGtoH=(TH2F*)f_IDSFGtoH->Get("EGamma_SF2D");
+  h_ele_ID_abseta_pt_ratioBtoF=(TH2F*)f_IDSFBtoF->Get("EGamma_SF2D");
   h_ele_TRIGGER_abseta_pt_ratio = (TH2F*)f_TRIGGERSF->Get("Ele27_WPTight_Gsf");
   h_ele_ISO_abseta_pt_ratio = (TH2F*)f_ISOSF->Get("EGamma_SF2D");
   h_ele_GFS_abseta_pt_ratio = (TH2F*)f_GFSSF->Get("EGamma_SF2D");
@@ -354,17 +470,17 @@ void LeptonSFHelper::SetElectronHistos( ){
 
 void LeptonSFHelper::SetMuonHistos( ){
 
-  std::string IDinputFileBtoF = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/june012017/mu_ID_EfficienciesAndSF_BCDEF.root";
-  std::string IDinputFileGtoH = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/june012017/mu_ID_EfficienciesAndSF_GH.root";
+  std::string IDinputFileBtoF = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/mu_ID_EfficienciesAndSF_BCDEF.root";
+  std::string IDinputFileGtoH = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/mu_ID_EfficienciesAndSF_GH.root";
 
-  std::string TRIGGERinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/june012017/mu_trigger_EfficienciesAndSF_RunBtoF.root";
-  std::string TRIGGERinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/june012017/mu_trigger_EfficienciesAndSF_Period4.root";
+  std::string TRIGGERinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/mu_TRIGGER_BtoF.root";
+  std::string TRIGGERinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/mu_TRIGGER_GtoH.root";
 
-  std::string ISOinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/june012017/mu_ISO_EfficienciesAndSF_BCDEF.root";
-  std::string ISOinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/june012017/mu_ISO_EfficienciesAndSF_GH.root";
+  std::string ISOinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/mu_ISO_EfficienciesAndSF_BCDEF.root";
+  std::string ISOinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/mu_ISO_EfficienciesAndSF_GH.root";
   
-  std::string HIPinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/june012017/HIP_BCDEF_histos.root";
-  std::string HIPinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/leptonsSF220517/june012017/HIP_GH_histos.root";
+  std::string HIPinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/HIP_BCDEF.root";
+  std::string HIPinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/HIP_GH.root";
 
 
   TFile *f_IDSFBtoF = new TFile(std::string(IDinputFileBtoF).c_str(),"READ");
@@ -383,8 +499,8 @@ void LeptonSFHelper::SetMuonHistos( ){
   h_mu_ID_abseta_pt_ratioBtoF = (TH2F*)f_IDSFBtoF->Get("MC_NUM_TightID_DEN_genTracks_PAR_pt_eta/pt_abseta_ratio");
   h_mu_ID_abseta_pt_ratioGtoH = (TH2F*)f_IDSFGtoH->Get("MC_NUM_TightID_DEN_genTracks_PAR_pt_eta/pt_abseta_ratio");
 
-  h_mu_HIP_eta_ratioBtoF = (TH1D*)f_HIPSFBtoF->Get("ratio_eff_aeta_dr030e030_corr");
-  h_mu_HIP_eta_ratioGtoH = (TH1D*)f_HIPSFGtoH->Get("ratio_eff_aeta_dr030e030_corr");
+  h_mu_HIP_eta_ratioBtoF = (TGraphAsymmErrors*)f_HIPSFBtoF->Get("ratio_eff_aeta_dr030e030_corr");
+  h_mu_HIP_eta_ratioGtoH = (TGraphAsymmErrors*)f_HIPSFGtoH->Get("ratio_eff_aeta_dr030e030_corr");
 
   h_mu_TRIGGER_abseta_ptBtoF= (TH2F*)f_TRIGGERSFBtoF->Get("IsoMu24_OR_IsoTkMu24_PtEtaBins/pt_abseta_ratio");
   h_mu_TRIGGER_abseta_ptGtoH= (TH2F*)f_TRIGGERSFGtoH->Get("IsoMu24_OR_IsoTkMu24_PtEtaBins/pt_abseta_ratio");
@@ -392,6 +508,56 @@ void LeptonSFHelper::SetMuonHistos( ){
   h_mu_ISO_abseta_pt_ratioBtoF = (TH2F*)f_ISOSFBtoF->Get("TightISO_TightID_pt_eta/pt_abseta_ratio");
   h_mu_ISO_abseta_pt_ratioGtoH = (TH2F*)f_ISOSFGtoH->Get("TightISO_TightID_pt_eta/pt_abseta_ratio");
 
+}
+
+void LeptonSFHelper::SetElectronElectronHistos( ){
+  std::string TRIGGERinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/triggerSummary_ee_ReReco2016_ttH.root";
+
+  TFile *f_TRIGGERSF = new TFile(std::string(TRIGGERinputFile).c_str(),"READ");
+
+  h_ele_ele_TRIGGER_abseta_abseta = (TH2F*)f_TRIGGERSF->Get("scalefactor_eta2d_with_syst");
+}
+
+void LeptonSFHelper::SetMuonMuonHistos( ){
+  std::string TRIGGERinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/triggerSummary_mumu_ReReco2016_ttH.root";
+
+  TFile *f_TRIGGERSF = new TFile(std::string(TRIGGERinputFile).c_str(),"READ");
+
+  h_mu_mu_TRIGGER_abseta_abseta = (TH2F*)f_TRIGGERSF->Get("scalefactor_eta2d_with_syst");
+}
+
+void LeptonSFHelper::SetElectronMuonHistos( ){
+  std::string TRIGGERinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/triggerSummary_emu_ReReco2016_ttH.root";
+
+  TFile *f_TRIGGERSF = new TFile(std::string(TRIGGERinputFile).c_str(),"READ");
+
+  h_ele_mu_TRIGGER_abseta_abseta = (TH2F*)f_TRIGGERSF->Get("scalefactor_eta2d_with_syst");
+}
+
+int LeptonSFHelper::findPoint(TGraphAsymmErrors& graph,float& x_) {
+    double x=0.;
+    double y=0.;
+    for(int i=0;i<graph.GetN();i++) {
+        graph.GetPoint(i,x,y);
+        double l=0.;
+        double r=0.;
+        l = x-graph.GetErrorXlow(i);
+        r = x+graph.GetErrorXhigh(i);
+        if((l<=x_) && (x_<r)) {return i;}
+    }
+    return -1;
+}
+
+float LeptonSFHelper::getValue(TGraphAsymmErrors& graph,float& x_,int syst) {
+    int i = findPoint(graph,x_);
+    if(i<0) {std::cerr << "x-value " << x_ << " cannot be assigned to a valid point" << std::endl;}
+    double x=0.;
+    double y=0.;
+    graph.GetPoint(i,x,y);
+    float y_=y;
+    if(syst==1) {return y_+graph.GetErrorYhigh(i);}
+    else if(syst==-1) {return y_-graph.GetErrorYlow(i);}
+    else {return y_;}
 }
 
 // Systematics enum from MiniAODHelper. Needed for the CSV helper (date 26.06.2017)
@@ -1638,8 +1804,7 @@ def startLoop():
 			electron_data=0;
 		}
 	}
-
-
+  
   // DANGERZONE
   // Only Works for SL events at the moment
   // Lepton SFs 
@@ -1647,12 +1812,20 @@ def startLoop():
      double muonEta=0.0;
      double electronEta=0.0;
      double electronPt=0.0;
-
-    if(N_TightMuons==1){muonPt=Muon_Pt[0]; muonEta=Muon_Eta[0];}
-    else{muonPt=0.0; muonEta=0.0;}
-    if(N_TightElectrons==1){electronPt=Electron_Pt[0]; electronEta=Electron_Eta[0];}
-    else{electronPt=0.0; electronEta=0.0;}
-   
+    
+    if(chain->GetBranch("Electron_Pt_BeforeRun2Calibration") && chain->GetBranch("Electron_Eta_Supercluster") && chain->GetBranch("Muon_Pt_BeForeRC")){
+      #std::cout<<"using superclister and stuff"<<std::endl;
+      if(N_TightMuons==1){muonPt=Muon_Pt_BeForeRC[0]; muonEta=Muon_Eta[0];}
+      else{muonPt=0.0; muonEta=0.0;}
+      if(N_TightElectrons==1){electronPt=Electron_Pt_BeforeRun2Calibration[0]; electronEta=Electron_Eta_Supercluster[0];}
+      else{electronPt=0.0; electronEta=0.0;}
+    }
+    else{
+      if(N_TightMuons==1){muonPt=Muon_Pt[0]; muonEta=Muon_Eta[0];}
+      else{muonPt=0.0; muonEta=0.0;}
+      if(N_TightElectrons==1){electronPt=Electron_Pt[0]; electronEta=Electron_Eta[0];}
+      else{electronPt=0.0; electronEta=0.0;}
+    }
     float internalEleTriggerWeight=1.0;
     float internalEleTriggerWeightUp=1.0;
     float internalEleTriggerWeightDown=1.0;
@@ -1795,6 +1968,25 @@ def startLoop():
   internalQCDweightup=internalQCDHelper->GetScaleFactorErrorUp(N_Jets,N_BTagsM,N_TightElectrons,N_TightMuons);
   internalQCDweightdown=internalQCDHelper->GetScaleFactorErrorDown(N_Jets,N_BTagsM,N_TightElectrons,N_TightMuons);
  
+  // print stuff for synchronizing
+  bool printSyncStuff=0;
+  //
+  if(printSyncStuff){
+    std::cout<<"event "<<Evt_ID<<std::endl;
+    std::cout<<"n Jets "<<N_Jets<<std::endl;
+    std::cout<<"m BTags "<<N_BTagsM<<std::endl;
+    
+    std::cout<<"XS weight "<<Weight_XS<<std::endl;
+    std::cout<<"PU weight "<<Weight_pu69p2<<std::endl;
+    std::cout<<"ele ID weight (both) "<<internalEleIDWeight<<std::endl;
+    std::cout<<"ele Reco weight (both) "<<internalEleGFSWeight<<std::endl;
+    std::cout<<"ele trigger weight "<<internalEleTriggerWeight<<std::endl;
+    std::cout<<"mu ID weight (both) "<<internalMuIDWeight<<std::endl;
+    std::cout<<"mu Tracking weight (both) "<<internalMuHIPWeight<<std::endl;
+    std::cout<<"mu ISO weight (both) "<<internalMuIsoWeight<<std::endl;
+    std::cout<<"mu trigger weight "<<internalMuTriggerWeight<<std::endl;
+    std::cout<<"CSV weight "<<internalCSVweight<<std::endl;
+ }   
  
 """
 
@@ -2677,6 +2869,7 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   print 'creating run scripts'
   scripts,outputs,nentries=get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,programpath,cmsswpath,treeInformationJsonFile,cirun)
   #DANGERZONE Submit jobs
+  #exit(0)
   helperSubmitNAFJobs(scripts,outputs,nentries)
 
 
