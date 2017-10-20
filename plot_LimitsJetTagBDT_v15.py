@@ -77,6 +77,7 @@ def main(argv):
     # define additional variables necessary for selection in plotparallel
     additionalvariables=["Jet_Pt", "Muon_Pt", "Electron_Pt",
                          "Jet_Eta", "Muon_Eta", "Electron_Eta",
+                         "Muon_Pt_BeForeRC","Electron_Pt_BeforeRun2Calibration","Electron_Eta_Supercluster",
                          "Jet_CSV", "Jet_Flav", "N_Jets", "Jet_E", "Jet_Phi", "Jet_M",
                          "Evt_Pt_PrimaryLepton","Evt_E_PrimaryLepton","Evt_M_PrimaryLepton","Evt_Phi_PrimaryLepton","Evt_Eta_PrimaryLepton",
                          "Evt_Phi_MET","Evt_Pt_MET",
@@ -93,10 +94,10 @@ def main(argv):
                          'finalbdt_ljets_jge6_t2:='+bdtweightpath+'/weights_Final_62_'+bdtset+'.xml',
                          'finalbdt_ljets_jge6_t3:='+bdtweightpath+'/weights_Final_63_'+bdtset+'.xml',
                          'finalbdt_ljets_jge6_tge4:='+bdtweightpath+'/weights_Final_64_'+bdtset+'.xml',
-                         'alternativebdt_ljets_jge6_tge4:='+bdtweightpath+'/weights_Final_64_'+bdtset+'.xml',
-                         'alternativebdt_ljets_jge6_t3:='+bdtweightpath+'/weights_Final_63_'+bdtset+'.xml',
-                         'alternativebdt_ljets_j5_tge4:='+bdtweightpath+'/weights_Final_54_'+bdtset+'.xml',
-                         'alternativebdt_ljets_j4_t4:='+bdtweightpath+'/weights_Final_44_'+bdtset+'.xml',
+                         'alternativebdt_ljets_jge6_tge4:='+bdtweightpath+'/weights_Final_64_'+alternativebdtset+'.xml',
+                         'alternativebdt_ljets_jge6_t3:='+bdtweightpath+'/weights_Final_63_'+alternativebdtset+'.xml',
+                         'alternativebdt_ljets_j5_tge4:='+bdtweightpath+'/weights_Final_54_'+alternativebdtset+'.xml',
+                         'alternativebdt_ljets_j4_t4:='+bdtweightpath+'/weights_Final_44_'+alternativebdtset+'.xml',
                          
                          ]
     # append variables needed by NNFlow Interface
@@ -123,7 +124,7 @@ def main(argv):
                   ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4",""),
                   ]
     discrs_JTBDT=['finalbdt_ljets_j4_t2','finalbdt_ljets_j5_t2','finalbdt_ljets_j4_t3', 'finalbdt_ljets_j4_t4', 'finalbdt_ljets_j5_t3', 'finalbdt_ljets_j5_tge4', 'finalbdt_ljets_jge6_t2', 'finalbdt_ljets_jge6_t3', 'finalbdt_ljets_jge6_tge4']
-    nhistobins_JTBDT = [  20,20,      20,   12,    20,    16,   25,   25,   16 ]
+    nhistobins_JTBDT = [  20,20,      20,   12,    25,    16,   25,   25,   16 ]
     minxvals_JTBDT =   [ 200, 200, -0.8,  -0.8, -0.8,   -0.9,         -0.6, -0.8,   -0.8]
     maxxvals_JTBDT =   [800,800,    0.75,  0.7,   0.7,    0.8,  0.7,  0.75,    0.8]
     discrs+=discrs_JTBDT
@@ -146,9 +147,9 @@ def main(argv):
         categories.append(('('+cat[0]+')*(finalbdt_'+cat[1]+'>'+str(bdt)+')',cat[1]+'_high') )
         categories.append(('('+cat[0]+')*(finalbdt_'+cat[1]+'<='+str(bdt)+')',cat[1]+'_low') )
     discrs_JT2D=[memexp, memexp, memexp, memexp,memexp, memexp,memexp, memexp]
-    nhistobins_JT2D = [10,12, 6,10, 20,20,   10,10 ]
+    nhistobins_JT2D = [10,12, 7,10, 25,25,   12,15 ]
     minxvals_JT2D =   [ 0.05, 0.05,0.1,0.1,0,0,0.05,0]
-    maxxvals_JT2D =   [0.9, 0.9,0.9,0.9,0.95,0.95,0.95,0.9]
+    maxxvals_JT2D =   [1.0, 1.0,1.0,1.0,1.0,1.0,1.0,1.0]
     discrs+=discrs_JT2D
     nhistobins+=nhistobins_JT2D
     minxvals+=minxvals_JT2D
@@ -169,14 +170,31 @@ def main(argv):
         categories.append(('('+cat[0]+')*(alternativebdt_'+cat[1]+'>'+str(bdt)+')',cat[1]+'_ttbbOpt_high') )
         categories.append(('('+cat[0]+')*(alternativebdt_'+cat[1]+'<='+str(bdt)+')',cat[1]+'_ttbbOpt_low') )
     discrs_JT2DOPTIMIZED=[memexp, memexp, memexp, memexp,memexp, memexp,memexp, memexp]
-    nhistobins_JT2DOPTIMIZED = [10,12, 6,10, 20,20,   10,10 ]
+    nhistobins_JT2DOPTIMIZED = [10,12, 7,10, 25,25,   12,15 ]
     minxvals_JT2DOPTIMIZED =   [ 0.05, 0.05,0.1,0.1,0,0,0.05,0]
-    maxxvals_JT2DOPTIMIZED =   [0.9, 0.9,0.9,0.9,0.95,0.95,0.95,0.9]
+    maxxvals_JT2DOPTIMIZED =   [1.0, 1.0,1.0,1.0,1.0,1.0,1.0,1.0]
     discrs+=discrs_JT2DOPTIMIZED
     nhistobins+=nhistobins_JT2DOPTIMIZED
     minxvals+=minxvals_JT2DOPTIMIZED
     maxxvals+=maxxvals_JT2DOPTIMIZED
     categories+=categorienames_JT2DOPTIMIZED
+
+# BDT only but with the ttbb optimized BDTs
+    categorienames_JTBDTOPTIMIZED=[
+                  ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4_ttbbOpt",""),
+                  ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4_ttbbOpt",""),
+                  ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_ttbbOpt",""),
+                  ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4_ttbbOpt",""),
+                  ]
+    discrs_JTBDTOPTIMIZED=['alternativebdt_ljets_j4_t4',  'alternativebdt_ljets_j5_tge4',  'alternativebdt_ljets_jge6_t3', 'alternativebdt_ljets_jge6_tge4']
+    nhistobins_JTBDTOPTIMIZED = [  12,      16,     25,   16 ]
+    minxvals_JTBDTOPTIMIZED =   [ -0.8,   -0.9,  -0.8,   -0.8]
+    maxxvals_JTBDTOPTIMIZED =   [0.7,     0.8,   0.75,    0.8]
+    discrs+=discrs_JTBDTOPTIMIZED
+    nhistobins+=nhistobins_JTBDTOPTIMIZED
+    minxvals+=minxvals_JTBDTOPTIMIZED
+    maxxvals+=maxxvals_JTBDTOPTIMIZED
+    categories+=categorienames_JTBDTOPTIMIZED
 
     # jet tag categories for Mem only and blr
     categorienames_JTMEM=[                  
@@ -190,9 +208,9 @@ def main(argv):
                   ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_BLR",""),
     ]
     discrs_JTMEM=[  'Evt_blr_ETH_transformed',   memexp,    'Evt_blr_ETH_transformed',    memexp,   'Evt_blr_ETH_transformed',   memexp,   memexp , 'Evt_blr_ETH_transformed']
-    nhistobins_JTMEM = [  20,   12,    20,    16,   25,   25,   16, 25 ]
+    nhistobins_JTMEM = [  20,   12,    20,    18,   25,   25,   16, 25 ]
     minxvals_JTMEM =   [ -1,  0.05, 0.0,   0.1, -3, 0,   0.1, 0.5]
-    maxxvals_JTMEM =   [6, 0.9,   6.5,    0.95,  4,  1.0,    0.9, 7.0]
+    maxxvals_JTMEM =   [6, 0.9,   6.5,    1.0,  4,  1.0,    0.9, 7.0]
     discrs+=discrs_JTMEM
     nhistobins+=nhistobins_JTMEM
     minxvals+=minxvals_JTMEM
@@ -233,9 +251,9 @@ def main(argv):
              'aachen_Out_ttbarCC','aachen_Out_ttbarCC','aachen_Out_ttbarCC',
              'aachen_Out_ttbarOther','aachen_Out_ttbarOther','aachen_Out_ttbarOther',
              ]
-    nhistobins_MultiDNN= [   7,   7,    7,   7,   7,    7,   7,   7,    7,   7,   7,    7,   7,   7,    7,   7,   7,    7,]
-    minxvals_MultiDNN=   [ 0.16,  0.16, 0.17, 0.16,  0.16, 0.16, 0.18,  0.18, 0.18, 0.16,  0.16, 0.16, 0.17,  0.17, 0.18, 0.17,  0.17, 0.19,]
-    maxxvals_MultiDNN=   [0.6,  0.6, 0.65,    0.6,  0.6, 0.6,    0.35,  0.32, 0.35,    0.45,  0.5, 0.55,    0.35,  0.24, 0.25,    0.5,  0.4, 0.45,]
+    nhistobins_MultiDNN= [   7,   10,    12,   7,   7,    12,   7,   7,    7,   8,   7,    7,   7,   7,    7,   7,   7,    4,]
+    minxvals_MultiDNN=   [ 0.2,  0.16, 0.17, 0.16,  0.16, 0.16, 0.2,  0.2, 0.18, 0.2,  0.16, 0.16, 0.17,  0.17, 0.21, 0.17,  0.17, 0.19,]
+    maxxvals_MultiDNN=   [0.6,  0.6, 0.7,    0.6,  0.6, 0.7,    0.4,  0.4, 0.35,    0.55,  0.5, 0.55,    0.35,  0.4, 0.3,    0.5,  0.4, 0.3,]
     discrs+=discrs_MultiDNN
     nhistobins+=nhistobins_MultiDNN
     minxvals+=minxvals_MultiDNN
@@ -324,7 +342,7 @@ def main(argv):
               #  renameHistos(outputpath,renamedPath,allsystnames,analysis.getCheckBins(),False)
               print "renamed file already exists"
             else:
-              renameHistos(outputpath,renamedPath,allsystnames,analysis.getCheckBins(),False)
+              renameHistos(outputpath,renamedPath,allsystnames,True,False)
             #renameHistos(outputpath,outputpath[:-5]+'_limitInput.root',allsystnames,analysis.getCheckBins(),False)
             #addRealData(outputpath[:-5]+'_limitInput.root',[s.nick for s in samplesDataControlPlots],binlabels,discrname)
             addPseudoData(outputpath[:-5]+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
