@@ -41,6 +41,7 @@ class Limitresult:
    
 
 def renameHistos(infname,outfname,sysnames,checkBins=False,prune=True,Epsilon=0.0):
+  print "RenameHistosStep: checking bins set to ", checkBins
   theclock=ROOT.TStopwatch()
   theclock.Start()
   subclock=ROOT.TStopwatch()
