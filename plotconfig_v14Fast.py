@@ -222,7 +222,7 @@ errorSystNamesNoPS=[
   #"","",
   #"","",
     "_CMS_ttH_QCDScaleFactorUp","_CMS_ttH_QCDScaleFactorDown",
-
+    
 ]
 
 
@@ -307,7 +307,7 @@ errorSystNamesNoPSNoQCD=[
   #"","",
   #"","",
     "","",
-
+    
 ]
 
 mcWeightAll='35.91823'
@@ -374,6 +374,44 @@ systWeights=[
 		    
 		    "dummyWeightPileUpUp:="+"(1*Weight_pu69p2Up*((Weight>0)-(Weight<0)))"+"*"+sfs+"*"+mcTriggerWeight+"*internalCSVweight*(DoWeights==1)+(DoWeights==0)*1.0",
 		    "dummyWeightPileUpDown:="+"(1*Weight_pu69p2Down*((Weight>0)-(Weight<0)))"+"*"+sfs+"*"+mcTriggerWeight+"*internalCSVweight*(DoWeights==1)+(DoWeights==0)*1.0",    
+]
+
+Q2SystWeights= [
+
+		"dummyWeight_CMS_ttH_Q2_muR_Down_muF_Nom:=(("+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*internalNormFactor_Weight_scale_variation_muR_0p5_muF_1p0*Weight_scale_variation_muR_0p5_muF_1p0)*(DoWeights==1)+(DoWeights==0)*1.0)",
+		"dummyWeight_CMS_ttH_Q2_muR_Up_muF_Nom:=(("+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*internalNormFactor_Weight_scale_variation_muR_2p0_muF_1p0*Weight_scale_variation_muR_2p0_muF_1p0)*(DoWeights==1)+(DoWeights==0)*1.0)",
+		"dummyWeight_CMS_ttH_Q2_muR_Nom_muF_Down:=(("+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*internalNormFactor_Weight_scale_variation_muR_1p0_muF_0p5*Weight_scale_variation_muR_1p0_muF_0p5)*(DoWeights==1)+(DoWeights==0)*1.0)",
+		"dummyWeight_CMS_ttH_Q2_muR_Nom_muF_Up:=(("+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*internalNormFactor_Weight_scale_variation_muR_1p0_muF_2p0*Weight_scale_variation_muR_1p0_muF_2p0)*(DoWeights==1)+(DoWeights==0)*1.0)",
+		"dummyWeight_CMS_ttH_Q2_muR_Down_muF_Down:=(("+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*internalNormFactor_Weight_scale_variation_muR_0p5_muF_0p5*Weight_scale_variation_muR_0p5_muF_0p5)*(DoWeights==1)+(DoWeights==0)*1.0)",
+		"dummyWeight_CMS_ttH_Q2_muR_Up_muF_Up:=(("+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*internalNormFactor_Weight_scale_variation_muR_2p0_muF_2p0*Weight_scale_variation_muR_2p0_muF_2p0)*(DoWeights==1)+(DoWeights==0)*1.0)",
+		"dummyWeight_CMS_ttH_Q2_muR_Up_muF_Down:=(("+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*internalNormFactor_Weight_scale_variation_muR_2p0_muF_0p5*Weight_scale_variation_muR_2p0_muF_0p5)*(DoWeights==1)+(DoWeights==0)*1.0)",		
+		"dummyWeight_CMS_ttH_Q2_muR_Down_muF_Up:=(("+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*internalNormFactor_Weight_scale_variation_muR_0p5_muF_2p0*Weight_scale_variation_muR_0p5_muF_2p0)*(DoWeights==1)+(DoWeights==0)*1.0)"
+]
+
+Q2SystNames= [
+
+		"_CMS_ttH_Q2_muR_Down_muF_Nom",
+		"_CMS_ttH_Q2_muR_Up_muF_Nom",
+		"_CMS_ttH_Q2_muR_Nom_muF_Down",
+		"_CMS_ttH_Q2_muR_Nom_muF_Up",
+		"_CMS_ttH_Q2_muR_Down_muF_Down",
+		"_CMS_ttH_Q2_muR_Up_muF_Up",
+		"_CMS_ttH_Q2_muR_Up_muF_Down",
+		"_CMS_ttH_Q2_muR_Down_muF_Up"
+]
+
+PDFSystWeights= [
+
+		"dummyWeight_CMS_ttH_PDF_Up:=("+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*internalPDFweightUp*(DoWeights==1)+(DoWeights==0)*1.0)",
+		"dummyWeight_CMS_ttH_PDF_Down:=("+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*internalPDFweightDown*(DoWeights==1)+(DoWeights==0)*1.0)"
+		
+]
+
+PDFSystNames= [
+
+		"_CMS_ttH_PDF_Up",
+		"_CMS_ttH_PDF_Down"
+
 ]
 
 assert len(systWeights)==len(weightSystNames)

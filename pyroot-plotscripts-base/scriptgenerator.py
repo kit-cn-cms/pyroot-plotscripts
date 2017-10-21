@@ -15,6 +15,7 @@ import json
 import filecmp
 import imp 
 import types
+import csv
 
 ROOT.gROOT.SetBatch(True)
 
@@ -38,6 +39,7 @@ def getHead(dataBases,addCodeInterfaces=[]):
 #include "TStopwatch.h"
 #include <TString.h>
 #include <TH2D.h>
+#include "LHAPDF/LHAPDF.h"
 """
   for addCodeInt in addCodeInterfaces:
     retstr+=addCodeInt.getIncludeLines()
@@ -1290,6 +1292,7 @@ void plot(){
   
   string buf;
   stringstream ss(filenames); 
+  TString samplename_in_database="";
   while (ss >> buf){
     chain->Add(buf.c_str());
     TString thisfilename = buf.c_str();
@@ -1328,6 +1331,7 @@ void plot(){
   retstr+="""
   
     translatedFileNameForDataBase=sampleTranslationMapCPP[thisfilename];
+    samplename_in_database=translatedFileNameForDataBase;
     if(! (std::find(databaseRelevantFilenames.begin(),databaseRelevantFilenames.end(),translatedFileNameForDataBase)!=databaseRelevantFilenames.end()  )){
       databaseRelevantFilenames.push_back(translatedFileNameForDataBase.Copy());
       //sampleDataBaseFoundEvents["jt42"][thisfilename]=0;
@@ -1768,6 +1772,9 @@ def startLoop():
   float internalQCDweightup = 0.0;
   float internalQCDweightdown = 0.0;
   
+  float internalPDFweightUp = 0.0;
+  float internalPDFweightDown = 0.0;
+  
   double tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF;
   
   internalCSVweight=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,internalSystType,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF);
@@ -1794,7 +1801,7 @@ def startLoop():
   internalQCDweight=internalQCDHelper->GetScaleFactor(N_Jets,N_BTagsM,N_TightElectrons,N_TightMuons);
   internalQCDweightup=internalQCDHelper->GetScaleFactorErrorUp(N_Jets,N_BTagsM,N_TightElectrons,N_TightMuons);
   internalQCDweightdown=internalQCDHelper->GetScaleFactorErrorDown(N_Jets,N_BTagsM,N_TightElectrons,N_TightMuons);
- 
+  
  
 """
 
@@ -1926,6 +1933,8 @@ def compileProgram(scriptname,usesDataBases,addCodeInterfaces):
       
   print dnnfiles
   
+  lhapdf=[' `/cvmfs/cms.cern.ch/slc6_amd64_gcc530/external/lhapdf/6.1.6-ikhhed2/bin/lhapdf-config --cflags --ldflags`']
+  
   memDBccfiles=[]
   if usesDataBases:
     memDBccfiles=glob.glob('/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBaseSpring17/MEMDataBase/MEMDataBase/src/*.cc') 
@@ -1934,7 +1943,7 @@ def compileProgram(scriptname,usesDataBases,addCodeInterfaces):
   improveRAM = '--param ggc-min-expand=100 --param ggc-min-heapsize=2400000'
   # if python cflags are used -O3 optimization is set, resulting in long compilation times, set it back to default -O0
   resetCompilerOpt = '-O0'
-  cmd= ['g++']+[improveRAM]+out[:-1].replace("\n"," ").split(' ')+dnnfiles+['-lTMVA']+memDBccfiles+[resetCompilerOpt]+[scriptname+'.cc','-o',scriptname]
+  cmd= ['g++']+[improveRAM]+out[:-1].replace("\n"," ").split(' ')+dnnfiles+lhapdf+['-lTMVA']+memDBccfiles+[resetCompilerOpt]+[scriptname+'.cc','-o',scriptname]
   print cmd
   print ""
   cmdstring = " ".join(cmd)
@@ -1962,8 +1971,14 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 	    "internalMuIsoWeight","internalMuIsoWeightUp","internalMuIsoWeightDown",
 	    "internalMuHIPWeight","internalMuHIPWeightUp","internalMuHIPWeightDown",
 	    "internalQCDweight","internalQCDweightup","internalQCDweightdown",
-	    "electron_data","muon_data"
+	    "electron_data","muon_data",
+	    "internalPDFweightUp","internalPDFweightDown",
 ]
+
+  csv_file=os.getcwd()+"/rate_factors_onlyinternal_powhegpythia.csv"
+
+  vetolist+=GetMEPDFVetoList(csv_file)
+
   for addCodeInt in addCodeInterfaces:
     vetolist+=addCodeInt.getExternalyCallableVariables()
     
@@ -2039,6 +2054,9 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   # start writing program
   script=""
   script+=getHead(dataBases,addCodeInterfaces)
+  script+=DeclareMEPDFNormFactors(csv_file)
+  script+=AddMEandPDFNormalizationsMap(csv_file)
+  script+=RelateMEPDFMapToNormFactor(csv_file)
   
   for db in dataBases:
     script+=InitDataBase(db)
@@ -2084,6 +2102,9 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
     #print castStub
     startLoopStub=startLoopStub.replace("//PLACEHOLDERFORCASTLINES", castStub)
   script+=startLoopStub
+  
+  script+=PutPDFWeightsinVector(csv_file)
+  script+=UseLHAPDF()
     
   for addCodeInt in addCodeInterfaces:
     script+=addCodeInt.getVariableInitInsideEventLoopLines()
@@ -2850,5 +2871,80 @@ renameHistosParallel(filename,systematics,False)
   scrfile.close()
     
     
-    
+def ReadMEandPDFNormalizations(csv_file):
+	mydict={}
+	with open(csv_file) as csvfile:
+		reader = csv.DictReader(csvfile)
+		for row in reader:
+			name_array=row['name'].split("/")
+			sample_name_modified = name_array[1].replace("_","").replace("-","")
+			initial_weight_name = row['weight']
+			factor=row['factor']
+			mydict[(sample_name_modified,initial_weight_name)]=factor
+	return mydict
+	
+def AddMEandPDFNormalizationsMap(csv_file):
+	mydict=ReadMEandPDFNormalizations(csv_file)
+	code='std::map<TString,float> MEPDF_Norm_Map;\n'
+	for key in mydict:
+		code+='MEPDF_Norm_Map["'+key[0]+'_'+key[1]+'"]='+mydict[key]+';\n'
+	return code
+	
+def GetMEPDFadditionalVariablesList(csv_file):
+	mydict=ReadMEandPDFNormalizations(csv_file)
+	seen = set()
+	weight_vars_list=[]
+	for key in mydict:
+		if not key[1] in seen:
+			seen.add(key[1])
+			weight_vars_list.append(key[1])
+	return weight_vars_list
+
+def RelateMEPDFMapToNormFactor(csv_file):
+	weight_list=GetMEPDFadditionalVariablesList(csv_file)
+	code=''
+	for weight in weight_list:
+		code+='internalNormFactor_'+weight+'='+'MEPDF_Norm_Map['+'samplename_in_database'+'+"_'+weight+'"];\n'
+	return code
+	
+	
+def GetMEPDFVetoList(csv_file):
+	weight_list=GetMEPDFadditionalVariablesList(csv_file)
+	weight_veto_list=[]
+	for weight in weight_list:
+		weight_veto_list.append('internalNormFactor_'+weight)
+	return weight_veto_list
+	
+	
+def DeclareMEPDFNormFactors(csv_file):
+	code=''
+	weight_list=GetMEPDFadditionalVariablesList(csv_file)
+	for weight in weight_list:
+		code+='float internalNormFactor_'+weight+'=0.0;\n'
+	return code
+	
+def GetPDFadditionalVariablesList(csv_file):
+	weight_list=GetMEPDFadditionalVariablesList(csv_file)
+	pdf_weight_list=[]
+	for weight in weight_list:
+		if "pdf" in weight:
+			pdf_weight_list.append(weight)
+	return pdf_weight_list
+	
+def PutPDFWeightsinVector(csv_file):
+	pdf_weights=GetPDFadditionalVariablesList(csv_file)
+	code='std::vector<double> pdf_weights;\n'
+	code+='pdf_weights.push_back(1.);\n'
+	for weight in pdf_weights:
+		code+='pdf_weights.push_back(internalNormFactor_'+weight+'*'+weight+');\n'
+	return code
+	
+def UseLHAPDF():
+    code=''
+    code+='LHAPDF::PDFSet pdfSet("NNPDF30_nlo_as_0118");\n'
+    code+='const LHAPDF::PDFUncertainty pdfUnc = pdfSet.uncertainty(pdf_weights, 68.);\n'
+    code+='internalPDFweightUp   = pdfUnc.central + pdfUnc.errplus;\n'
+    code+='internalPDFweightDown = pdfUnc.central - pdfUnc.errminus;\n'
+    return code
+
     

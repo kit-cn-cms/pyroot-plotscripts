@@ -92,6 +92,9 @@ def main(argv):
                          'finalbdt_ljets_jge6_t3:='+bdtweightpath+'/weights_Final_63_'+bdtset+'.xml',
                          'finalbdt_ljets_jge6_tge4:='+bdtweightpath+'/weights_Final_64_'+bdtset+'.xml',
                          ]
+                         
+    additionalvariables+=GetMEPDFadditionalVariablesList(os.getcwd()+"/rate_factors_onlyinternal_powhegpythia.csv")
+    
     # append variables needed by NNFlow Interface
     #additionalvariables.extend(NNFlowInterface.getAdditionalVariablesList())
     print "Debug output: Print additional variables list: ", additionalvariables
