@@ -75,6 +75,7 @@ def main(argv):
     # define additional variables necessary for selection in plotparallel
     additionalvariables=["Jet_Pt", "Muon_Pt", "Electron_Pt",
                          "Jet_Eta", "Muon_Eta", "Electron_Eta",
+                         "Muon_Pt_BeForeRC","Electron_Pt_BeforeRun2Calibration","Electron_Eta_Supercluster",
                          "Jet_CSV", "Jet_Flav", "N_Jets", "Jet_E", "Jet_Phi", "Jet_M",
                          "Evt_Pt_PrimaryLepton","Evt_E_PrimaryLepton","Evt_M_PrimaryLepton","Evt_Phi_PrimaryLepton","Evt_Eta_PrimaryLepton",
                          "Evt_Phi_MET","Evt_Pt_MET",
