@@ -9,7 +9,7 @@ for f in files:
   outlist=[]
   for line in inlist:
     if "number of nuisance parameters" in line:
-      line="kmax * number of nuisance parameters\n"
+      line="kmax * #number of nuisance parameters\n"
     if "CMS_ttH_FSR" in line or "CMS_ttH_ISR" in line or "CMS_ttH_ue" in line or "CMS_ttH_hdamp" in line:
       continue
     outlist.append(line)
