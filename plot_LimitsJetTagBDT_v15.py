@@ -126,7 +126,7 @@ def main(argv):
     discrs_JTBDT=['finalbdt_ljets_j4_t2','finalbdt_ljets_j5_t2','finalbdt_ljets_j4_t3', 'finalbdt_ljets_j4_t4', 'finalbdt_ljets_j5_t3', 'finalbdt_ljets_j5_tge4', 'finalbdt_ljets_jge6_t2', 'finalbdt_ljets_jge6_t3', 'finalbdt_ljets_jge6_tge4']
     nhistobins_JTBDT = [  20,20,      20,   12,    25,    16,   25,   25,   16 ]
     minxvals_JTBDT =   [ 200, 200, -0.8,  -0.8, -0.8,   -0.9,         -0.6, -0.8,   -0.8]
-    maxxvals_JTBDT =   [800,800,    0.75,  0.7,   0.7,    0.8,  0.7,  0.75,    0.8]
+    maxxvals_JTBDT =   [800,800,    0.75,  0.7,   0.7,    0.8,  0.7,  0.75,    0.76]
     discrs+=discrs_JTBDT
     nhistobins+=nhistobins_JTBDT
     minxvals+=minxvals_JTBDT
@@ -147,9 +147,9 @@ def main(argv):
         categories.append(('('+cat[0]+')*(finalbdt_'+cat[1]+'>'+str(bdt)+')',cat[1]+'_high') )
         categories.append(('('+cat[0]+')*(finalbdt_'+cat[1]+'<='+str(bdt)+')',cat[1]+'_low') )
     discrs_JT2D=[memexp, memexp, memexp, memexp,memexp, memexp,memexp, memexp]
-    nhistobins_JT2D = [10,12, 7,10, 25,25,   12,15 ]
+    nhistobins_JT2D = [10,12, 8,10, 25,25,   12,15 ]
     minxvals_JT2D =   [ 0.05, 0.05,0.1,0.1,0,0,0.05,0]
-    maxxvals_JT2D =   [1.0, 1.0,1.0,1.0,1.0,1.0,1.0,1.0]
+    maxxvals_JT2D =   [1.0, 0.9,1.0,0.95,1.0,1.0,1.0,1.0]
     discrs+=discrs_JT2D
     nhistobins+=nhistobins_JT2D
     minxvals+=minxvals_JT2D
@@ -170,9 +170,9 @@ def main(argv):
         categories.append(('('+cat[0]+')*(alternativebdt_'+cat[1]+'>'+str(bdt)+')',cat[1]+'_ttbbOpt_high') )
         categories.append(('('+cat[0]+')*(alternativebdt_'+cat[1]+'<='+str(bdt)+')',cat[1]+'_ttbbOpt_low') )
     discrs_JT2DOPTIMIZED=[memexp, memexp, memexp, memexp,memexp, memexp,memexp, memexp]
-    nhistobins_JT2DOPTIMIZED = [10,12, 7,10, 25,25,   12,15 ]
+    nhistobins_JT2DOPTIMIZED = [10,12, 8,10, 25,25,   12,15 ]
     minxvals_JT2DOPTIMIZED =   [ 0.05, 0.05,0.1,0.1,0,0,0.05,0]
-    maxxvals_JT2DOPTIMIZED =   [1.0, 1.0,1.0,1.0,1.0,1.0,1.0,1.0]
+    maxxvals_JT2DOPTIMIZED =   [0.95, 0.9,1.0,1.0,1.0,1.0,1.0,1.0]
     discrs+=discrs_JT2DOPTIMIZED
     nhistobins+=nhistobins_JT2DOPTIMIZED
     minxvals+=minxvals_JT2DOPTIMIZED
@@ -188,8 +188,8 @@ def main(argv):
                   ]
     discrs_JTBDTOPTIMIZED=['alternativebdt_ljets_j4_t4',  'alternativebdt_ljets_j5_tge4',  'alternativebdt_ljets_jge6_t3', 'alternativebdt_ljets_jge6_tge4']
     nhistobins_JTBDTOPTIMIZED = [  12,      16,     25,   16 ]
-    minxvals_JTBDTOPTIMIZED =   [ -0.8,   -0.9,  -0.8,   -0.8]
-    maxxvals_JTBDTOPTIMIZED =   [0.7,     0.8,   0.75,    0.8]
+    minxvals_JTBDTOPTIMIZED =   [ -0.8,   -0.65,  -0.65,   -0.7]
+    maxxvals_JTBDTOPTIMIZED =   [0.6,     0.65,   0.65,    0.8]
     discrs+=discrs_JTBDTOPTIMIZED
     nhistobins+=nhistobins_JTBDTOPTIMIZED
     minxvals+=minxvals_JTBDTOPTIMIZED
@@ -252,8 +252,8 @@ def main(argv):
              'aachen_Out_ttbarOther','aachen_Out_ttbarOther','aachen_Out_ttbarOther',
              ]
     nhistobins_MultiDNN= [   7,   10,    12,   7,   7,    12,   7,   7,    7,   8,   7,    7,   7,   7,    7,   7,   7,    4,]
-    minxvals_MultiDNN=   [ 0.2,  0.16, 0.17, 0.16,  0.16, 0.16, 0.2,  0.2, 0.18, 0.2,  0.16, 0.16, 0.17,  0.17, 0.21, 0.17,  0.17, 0.19,]
-    maxxvals_MultiDNN=   [0.6,  0.6, 0.7,    0.6,  0.6, 0.7,    0.4,  0.4, 0.35,    0.55,  0.5, 0.55,    0.35,  0.4, 0.3,    0.5,  0.4, 0.3,]
+    minxvals_MultiDNN=   [ 0.2,  0.16, 0.17, 0.16,  0.16, 0.18, 0.2,  0.2, 0.18, 0.2,  0.16, 0.16, 0.17,  0.17, 0.21, 0.17,  0.17, 0.19,]
+    maxxvals_MultiDNN=   [0.6,  0.6, 0.7,    0.6,  0.6, 0.7,    0.4,  0.4, 0.35,    0.55,  0.5, 0.55,    0.35,  0.35, 0.3,    0.5,  0.4, 0.3,]
     discrs+=discrs_MultiDNN
     nhistobins+=nhistobins_MultiDNN
     minxvals+=minxvals_MultiDNN
