@@ -1528,7 +1528,9 @@ void plot(){
   std::cout<<"internal systematic filename, int and typename "<<filenameforSytType<<" "<<internalSystType<<" "<<Systematics::toString(internalSystType)<<std::endl;
   if(filenameforSytType!=TString(Systematics::toString(internalSystType))){std::cout<<"ERROR could not recover systematic from enum"<<std::endl; exit(0);}
   globalFileNameForSystType=filenameforSytType;
-  }
+  }// end loop of filename parsing
+  
+  
   TString vecNameForDataBase="mem_p";
   if(globalFileNameForSystType!=""){
     TString vecNameForDataBaseBuffer=globalFileNameForSystType;
@@ -2252,7 +2254,6 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   script+=getHead(dataBases,addCodeInterfaces)
   script+=DeclareMEPDFNormFactors(csv_file)
   script+=AddMEandPDFNormalizationsMap(csv_file)
-  script+=RelateMEPDFMapToNormFactor(csv_file)
   
   for db in dataBases:
     script+=InitDataBase(db)
@@ -2298,7 +2299,8 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
     #print castStub
     startLoopStub=startLoopStub.replace("//PLACEHOLDERFORCASTLINES", castStub)
   script+=startLoopStub
-  
+  script+=ResetMEPDFNormFactors(csv_file)
+  script+=RelateMEPDFMapToNormFactor(csv_file)
   script+=PutPDFWeightsinVector(csv_file)
   script+=UseLHAPDF()
     
@@ -2780,7 +2782,7 @@ def helperSubmitNAFJobs(scripts,outputs,nentries):
 
 
 # the dataBases should be defined as follows e.g. [[memDB,path],[blrDB,path]]
-def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],dataBases=[],treeInformationJsonFile="",otherSystnames=[],addCodeInterfacePaths=[],cirun=False):
+def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],dataBases=[],treeInformationJsonFile="",otherSystnames=[],addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False):
   cmsswpath=os.environ['CMSSW_BASE']
   if not "CMSSW" in cmsswpath:
     print "you need CMSSW for this to work. Exiting!"
@@ -2891,7 +2893,8 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   print 'creating run scripts'
   scripts,outputs,nentries=get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,programpath,cmsswpath,treeInformationJsonFile,cirun)
   #DANGERZONE Submit jobs
-  #exit(0)
+  if StopAfterCompileStep==True:
+    exit(0)
   helperSubmitNAFJobs(scripts,outputs,nentries)
 
 
@@ -3100,8 +3103,17 @@ def GetMEPDFadditionalVariablesList(csv_file):
 def RelateMEPDFMapToNormFactor(csv_file):
 	weight_list=GetMEPDFadditionalVariablesList(csv_file)
 	code=''
+	code+="""
+    TString currentRelevantSampleNameForMEPDF=sampleDataBaseIdentifiers[currentfilename];
+    TString translatedCurrentRelevantSampleNameForMEPDF=sampleTranslationMapCPP[currentRelevantSampleNameForMEPDF];
+    //std::cout<<"MEPDF relation "<<currentfilename<<" "<<currentRelevantSampleNameForMEPDF<<" "<<translatedCurrentRelevantSampleNameForMEPDF<<std::endl;
+  """
+	code+='if(MEPDF_Norm_Map.find('+'translatedCurrentRelevantSampleNameForMEPDF'+'+"_'+weight_list[0]+'")!=MEPDF_Norm_Map.end()){;\n'
 	for weight in weight_list:
-		code+='internalNormFactor_'+weight+'='+'MEPDF_Norm_Map['+'samplename_in_database'+'+"_'+weight+'"];\n'
+		code+='internalNormFactor_'+weight+'='+'MEPDF_Norm_Map['+'translatedCurrentRelevantSampleNameForMEPDF'+'+"_'+weight+'"];\n'
+	code+='}\n'
+	code+='//else{std::cout<<"did not find pdf weights in map "<<translatedCurrentRelevantSampleNameForMEPDF<<std::endl;}\n'
+	code+='//std::cout<<"first internal pdf weight "<<'+'translatedCurrentRelevantSampleNameForMEPDF'+'+"_'+weight_list[0]+'" <<" "<< internalNormFactor_'+weight_list[0]+'<<std::endl;\n'
 	return code
 	
 	
@@ -3119,7 +3131,12 @@ def DeclareMEPDFNormFactors(csv_file):
 	for weight in weight_list:
 		code+='float internalNormFactor_'+weight+'=0.0;\n'
 	return code
-	
+def ResetMEPDFNormFactors(csv_file):
+        code=''
+        weight_list=GetMEPDFadditionalVariablesList(csv_file)
+        for weight in weight_list:
+                code+='internalNormFactor_'+weight+'=0.0;\n'
+        return code	
 def GetPDFadditionalVariablesList(csv_file):
 	weight_list=GetMEPDFadditionalVariablesList(csv_file)
 	pdf_weight_list=[]
@@ -3142,6 +3159,7 @@ def UseLHAPDF():
     code+='const LHAPDF::PDFUncertainty pdfUnc = pdfSet.uncertainty(pdf_weights, 68.);\n'
     code+='internalPDFweightUp   = pdfUnc.central + pdfUnc.errplus;\n'
     code+='internalPDFweightDown = pdfUnc.central - pdfUnc.errminus;\n'
+    code+='//std::cout<<"result pdf weights: central, down, up "<<pdfUnc.central<<" "<<internalPDFweightDown<< " "<<internalPDFweightUp<<std::endl;\n'
     return code
 
     
