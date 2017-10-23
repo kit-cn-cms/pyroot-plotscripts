@@ -7,6 +7,8 @@ import imp
 import importlib
 import inspect
 import ROOT
+# First path is needed if run by pyroot-plotscripts-base repo
+sys.path.append('limittools')
 sys.path.append('pyroot-plotscripts-base')
 sys.path.append('pyroot-plotscripts-base/limittools')
 
