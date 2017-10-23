@@ -26,7 +26,7 @@ from plotconfig_v14 import *
 def main(argv):
 
     # Create analysis object with output name
-    name='limits_JetTagBDT_v16'
+    name='limits_JetTagBDT_v17'
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/latest/ttbb-cutbased-analysis_limitInput.root')
     analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/Sep17/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/output20170626-reference/workdir/ttbb-cutbased-analysis/output_limitInput.root')
@@ -98,8 +98,8 @@ def main(argv):
                          'alternativebdt_ljets_jge6_t3:='+bdtweightpath+'/weights_Final_63_'+alternativebdtset+'.xml',
                          'alternativebdt_ljets_j5_tge4:='+bdtweightpath+'/weights_Final_54_'+alternativebdtset+'.xml',
                          'alternativebdt_ljets_j4_t4:='+bdtweightpath+'/weights_Final_44_'+alternativebdtset+'.xml',
-                         
                          ]
+    additionalvariables+=GetMEPDFadditionalVariablesList(os.getcwd()+"/rate_factors_onlyinternal_powhegpythia.csv")
     # append variables needed by NNFlow Interface
     #additionalvariables.extend(NNFlowInterface.getAdditionalVariablesList())
     print "Debug output: Print additional variables list: ", additionalvariables
@@ -323,7 +323,7 @@ def main(argv):
     if analysis.doDrawParallel==False or analysis.plotNumber == None :
         if not os.path.exists(analysis.rootFilePath):
             print "Doing plotParallel step since root file was not found."
-            outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_v5_08102017.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_V6.py"],cirun=False)
+            outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_v5_08102017.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_V6.py"],cirun=False,StopAfterCompileStep=True)
             # Allow start of an improved rebinning algorithm
             if analysis.getActivatedOptimizedRebinning():
               if analysis.getSignalProcess() == 'ttbb':
@@ -394,20 +394,12 @@ def main(argv):
         writeLOLAndOneOnTop(transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-1,name+'/'+name+'_controlplots')
         writeListOfHistoListsAN(transposeLOL([lolT[0]]+lolT[9:]),[samples[0]]+samples[9:],"",name+'/'+name+'_shapes',True,False,False,'histo',False,True,False)
 
-    # Make MC Control plots
-    if (analysis.doDrawParallel==False or analysis.plotNumber != None) and analysis.makeMCControlPlots==True :
-        print "Making MC Control plots"
-        print "skipping"
-        #lll=createLLL_fromSuperHistoFileSyst(outputpath[:-5]+'_limitInput.root',samples[0:],discriminatorPlots,errorSystNames)
-        #labels=[plot.label for plot in discriminatorPlots]
-        #plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[0:]),samples[0:],lolT[0],samples[0],-2,name,[[lll,3354,ROOT.kBlack,True]],False,labels,True,analysis.plotBlinded)
-
 
     # Make MC Control plots
     if (analysis.doDrawParallel==False or analysis.plotNumber != None) and analysis.makeMCControlPlots==True :
         print "Making MC Control plots"
         print "skipping"
-        lll=createLLL_fromSuperHistoFileSyst(outputpath,samples[9:],discriminatorPlots,errorSystNamesNoPS)
+        lll=createLLL_fromSuperHistoFileSyst(outputpath,samples[9:],discriminatorPlots,errorSystNamesNoPSNoQCD)
         labels=[plot.label for plot in discriminatorPlots]
         plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-2,name,[[lll,3354,ROOT.kBlack,True]],False,labels,True,analysis.plotBlinded)
 
