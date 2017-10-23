@@ -26,11 +26,11 @@ plot_LimitsSpring17v3_modified:
         - echo "Gitlab User " ${GITLAB_USER_ID}
         - set -x 
         - cd $CI_HOME
-        - python plot_LimitsSpring17v3_modified.py
+        - python plot_LimitsJetTagBDT_v15.py
         - echo "Store outputs on webpage"
         - mkdir -p ~/www/pyroot-plotscripts-base/${CI_COMMIT_REF_NAME}/${CI_PIPELINE_ID}
-        - cp $CI_HOME/limits_Spring17v8/*.pdf ~/www/pyroot-plotscripts-base/${CI_COMMIT_REF_SLUG}/${CI_PIPELINE_ID}/
-        - cp $CI_HOME/limits_Spring17v8/limits_Spring17v8_shapes/*.pdf ~/www/pyroot-plotscripts-base/${CI_COMMIT_REF_SLUG}/${CI_PIPELINE_ID}/
-        - cp $CI_HOME/limits_Spring17v8/limits_Spring17v8_controlplots/*.pdf ~/www/pyroot-plotscripts-base/${CI_COMMIT_REF_SLUG}/${CI_PIPELINE_ID}/
+        - cp $CI_HOME/limits_JetTagBDT_v16/*.pdf ~/www/pyroot-plotscripts-base/${CI_COMMIT_REF_SLUG}/${CI_PIPELINE_ID}/
+        - cp $CI_HOME/limits_JetTagBDT_v16/limits_JetTagBDT_v16/*.pdf ~/www/pyroot-plotscripts-base/${CI_COMMIT_REF_SLUG}/${CI_PIPELINE_ID}/
+        - cp $CI_HOME/limits_JetTagBDT_v16/limits_JetTagBDT_v16/*.pdf ~/www/pyroot-plotscripts-base/${CI_COMMIT_REF_SLUG}/${CI_PIPELINE_ID}/
 
         
