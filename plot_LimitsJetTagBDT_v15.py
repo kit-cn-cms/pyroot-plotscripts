@@ -219,48 +219,7 @@ def main(argv):
     maxxvals+=maxxvals_JTMEM
     categories+=categorienames_JTMEM
 
-    # DNN classes DNN outputs
-    categorienames_MultiDNN=[
-              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==0)","ljets_j4_tge3_ttHnode",""),
-              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==0)","ljets_j5_tge3_ttHnode",""),             
-              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==0)","ljets_jge6_tge3_ttHnode",""),
-
-              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==1)","ljets_j4_tge3_ttbbnode",""),
-              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==1)","ljets_j5_tge3_ttbbnode",""),             
-              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==1)","ljets_jge6_tge3_ttbbnode",""),
-
-              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==2)","ljets_j4_tge3_ttbnode",""),
-              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==2)","ljets_j5_tge3_ttbnode",""),             
-              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==2)","ljets_jge6_tge3_ttbnode",""),
-
-              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==3)","ljets_j4_tge3_tt2bnode",""),
-              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==3)","ljets_j5_tge3_tt2bnode",""),             
-              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==3)","ljets_jge6_tge3_tt2bnode",""),
-
-              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==4)","ljets_j4_tge3_ttccnode",""),
-              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==4)","ljets_j5_tge3_ttccnode",""),             
-              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==4)","ljets_jge6_tge3_ttccnode",""),
-
-              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==5)","ljets_j4_tge3_ttlfnode",""),
-              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==5)","ljets_j5_tge3_ttlfnode",""),             
-              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==5)","ljets_jge6_tge3_ttlfnode",""),
-              ]
-    discrs_MultiDNN=[
-             'aachen_Out_ttH','aachen_Out_ttH','aachen_Out_ttH',
-             'aachen_Out_ttbarBB','aachen_Out_ttbarBB','aachen_Out_ttbarBB',
-             'aachen_Out_ttbarB','aachen_Out_ttbarB','aachen_Out_ttbarB',
-             'aachen_Out_ttbar2B','aachen_Out_ttbar2B','aachen_Out_ttbar2B',
-             'aachen_Out_ttbarCC','aachen_Out_ttbarCC','aachen_Out_ttbarCC',
-             'aachen_Out_ttbarOther','aachen_Out_ttbarOther','aachen_Out_ttbarOther',
-             ]
-    nhistobins_MultiDNN= [   7,   10,    12,   7,   7,    12,   7,   7,    7,   8,   7,    7,   7,   7,    7,   7,   7,    4,]
-    minxvals_MultiDNN=   [ 0.2,  0.16, 0.17, 0.16,  0.16, 0.16, 0.2,  0.2, 0.18, 0.2,  0.16, 0.16, 0.17,  0.17, 0.21, 0.17,  0.17, 0.19,]
-    maxxvals_MultiDNN=   [0.6,  0.6, 0.7,    0.6,  0.6, 0.7,    0.4,  0.4, 0.35,    0.55,  0.5, 0.55,    0.35,  0.4, 0.3,    0.5,  0.4, 0.3,]
-    discrs+=discrs_MultiDNN
-    nhistobins+=nhistobins_MultiDNN
-    minxvals+=minxvals_MultiDNN
-    maxxvals+=maxxvals_MultiDNN
-    categories+=categorienames_MultiDNN
+    
 
     assert(len(nhistobins)==len(maxxvals))
     assert(len(nhistobins)==len(minxvals))
@@ -325,7 +284,7 @@ def main(argv):
     if analysis.doDrawParallel==False or analysis.plotNumber == None :
         if not os.path.exists(analysis.rootFilePath):
             print "Doing plotParallel step since root file was not found."
-            outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_v5_08102017.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=["dNNInterface_V6.py"],cirun=True)
+            outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_v5_08102017.json",otherSystNames+PSSystNames+QCDSystNames,cirun=True)
             # Allow start of an improved rebinning algorithm
             if analysis.getActivatedOptimizedRebinning():
               if analysis.getSignalProcess() == 'ttbb':
