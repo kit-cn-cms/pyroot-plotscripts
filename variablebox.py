@@ -110,6 +110,7 @@ class Variable():
   def initBranchAddressProgram(self):
     isarray=self.arraylength!=None
     text=''
+    #text+='if(chain->GetBranch("'+self.name+'")){\n'
     if isarray:
       text+='  chain->SetBranchAddress("'+self.name+'",'+self.name+');\n'
     else:
@@ -117,6 +118,7 @@ class Variable():
         text+='  chain->SetBranchAddress("'+self.name+'",&'+self.name+'LONGDUMMY);\n'
       else:
         text+='  chain->SetBranchAddress("'+self.name+'",&'+self.name+');\n'
+    #text+='}\n'
     return text
 
   # initialize TMVA Reader
@@ -279,7 +281,7 @@ class Variables:
    # print self.vetolist
     if not name in self.variables and not name in self.vetolist:
 
-      if not ".xml" in expression and not hasattr(tree,expression):
+      if not ".xml" in expression and not hasattr(tree,expression) and not "Weight_" in name:
         # Handle vector sub variables which have names like Jet_E_1, so that vector variable Jet_E is included instead
         # If not vector like variable is found assume it is a forumal expression and recursive call initVarsFromExpr
         foundVectorLikeVariable = False

@@ -129,9 +129,6 @@ def main(argv):
     maxxvals+=maxxvals_JTBDT
     categories+=categorienames_JTBDT
     
-   
-
-    
 
     assert(len(nhistobins)==len(maxxvals))
     assert(len(nhistobins)==len(minxvals))
