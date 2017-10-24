@@ -115,109 +115,21 @@ def main(argv):
     
     # jet tag categories for BDTs
     categorienames_JTBDT=[
-                  ("(N_Jets==4&&N_BTagsM==2)","ljets_j4_t2",""),
-                  ("(N_Jets==5&&N_BTagsM==2)","ljets_j5_t2",""),
-                  ("(N_Jets==4&&N_BTagsM==3)","ljets_j4_t3",""),
-                  ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4",""),
-                  ("(N_Jets==5&&N_BTagsM==3)","ljets_j5_t3",""),
-                  ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4",""),
                   ("(N_Jets>=6&&N_BTagsM==2)","ljets_jge6_t2",""),
                   ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3",""),
                   ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4",""),
                   ]
-    discrs_JTBDT=['finalbdt_ljets_j4_t2','finalbdt_ljets_j5_t2','finalbdt_ljets_j4_t3', 'finalbdt_ljets_j4_t4', 'finalbdt_ljets_j5_t3', 'finalbdt_ljets_j5_tge4', 'finalbdt_ljets_jge6_t2', 'finalbdt_ljets_jge6_t3', 'finalbdt_ljets_jge6_tge4']
-    nhistobins_JTBDT = [  20,20,      20,   12,    25,    16,   25,   25,   16 ]
-    minxvals_JTBDT =   [ 200, 200, -0.8,  -0.8, -0.8,   -0.9,         -0.6, -0.8,   -0.8]
-    maxxvals_JTBDT =   [800,800,    0.75,  0.7,   0.7,    0.8,  0.7,  0.75,    0.8]
+    discrs_JTBDT=['finalbdt_ljets_jge6_t2', 'finalbdt_ljets_jge6_t3', 'finalbdt_ljets_jge6_tge4']
+    nhistobins_JTBDT = [   25,    25,     16]
+    minxvals_JTBDT =   [ -0.6,  -0.8,   -0.8]
+    maxxvals_JTBDT =   [  0.7,  0.75,    0.8]
     discrs+=discrs_JTBDT
     nhistobins+=nhistobins_JTBDT
     minxvals+=minxvals_JTBDT
     maxxvals+=maxxvals_JTBDT
     categories+=categorienames_JTBDT
     
-    # 2D analysis split at ttH median of BDTs
-    unsplitcategorienames_JT2D=[
-                  ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4",""),
-                  ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4",""),
-                  ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3",""),
-                  ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4",""),
-                  ]
-    bdtcuts=[-0.2,-0.2,0.2,0.22,0.17,0.22,0.05,0.17,0.17]
-    categorienames_JT2D=[]
-    for cat,bdt in zip(unsplitcategorienames_JT2D,bdtcuts):
-      if cat[1] in ["ljets_jge6_tge4","ljets_j5_tge4","ljets_j4_t4","ljets_jge6_t3"]:
-        categories.append(('('+cat[0]+')*(finalbdt_'+cat[1]+'>'+str(bdt)+')',cat[1]+'_high') )
-        categories.append(('('+cat[0]+')*(finalbdt_'+cat[1]+'<='+str(bdt)+')',cat[1]+'_low') )
-    discrs_JT2D=[memexp, memexp, memexp, memexp,memexp, memexp,memexp, memexp]
-    nhistobins_JT2D = [10,12, 7,10, 25,25,   12,15 ]
-    minxvals_JT2D =   [ 0.05, 0.05,0.1,0.1,0,0,0.05,0]
-    maxxvals_JT2D =   [1.0, 1.0,1.0,1.0,1.0,1.0,1.0,1.0]
-    discrs+=discrs_JT2D
-    nhistobins+=nhistobins_JT2D
-    minxvals+=minxvals_JT2D
-    maxxvals+=maxxvals_JT2D
-    categories+=categorienames_JT2D
-
-    # 2D analysis split at ttH median of BDTs OPTIMIZED FOR ttbb vs rest
-    unsplitcategorienames_JT2DOPTIMIZED=[
-                  ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4",""),
-                  ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4",""),
-                  ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3",""),
-                  ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4",""),
-                  ]
-    bdtcuts=[-0.2,-0.2,0.2,0.22,0.17,0.22,0.05,0.17,0.17]
-    categorienames_JT2DOPTIMIZED=[]
-    for cat,bdt in zip(unsplitcategorienames_JT2DOPTIMIZED,bdtcuts):
-      if cat[1] in ["ljets_jge6_tge4","ljets_j5_tge4","ljets_j4_t4","ljets_jge6_t3"]:
-        categories.append(('('+cat[0]+')*(alternativebdt_'+cat[1]+'>'+str(bdt)+')',cat[1]+'_ttbbOpt_high') )
-        categories.append(('('+cat[0]+')*(alternativebdt_'+cat[1]+'<='+str(bdt)+')',cat[1]+'_ttbbOpt_low') )
-    discrs_JT2DOPTIMIZED=[memexp, memexp, memexp, memexp,memexp, memexp,memexp, memexp]
-    nhistobins_JT2DOPTIMIZED = [10,12, 7,10, 25,25,   12,15 ]
-    minxvals_JT2DOPTIMIZED =   [ 0.05, 0.05,0.1,0.1,0,0,0.05,0]
-    maxxvals_JT2DOPTIMIZED =   [1.0, 1.0,1.0,1.0,1.0,1.0,1.0,1.0]
-    discrs+=discrs_JT2DOPTIMIZED
-    nhistobins+=nhistobins_JT2DOPTIMIZED
-    minxvals+=minxvals_JT2DOPTIMIZED
-    maxxvals+=maxxvals_JT2DOPTIMIZED
-    categories+=categorienames_JT2DOPTIMIZED
-
-# BDT only but with the ttbb optimized BDTs
-    categorienames_JTBDTOPTIMIZED=[
-                  ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4_ttbbOpt",""),
-                  ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4_ttbbOpt",""),
-                  ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_ttbbOpt",""),
-                  ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4_ttbbOpt",""),
-                  ]
-    discrs_JTBDTOPTIMIZED=['alternativebdt_ljets_j4_t4',  'alternativebdt_ljets_j5_tge4',  'alternativebdt_ljets_jge6_t3', 'alternativebdt_ljets_jge6_tge4']
-    nhistobins_JTBDTOPTIMIZED = [  12,      16,     25,   16 ]
-    minxvals_JTBDTOPTIMIZED =   [ -0.8,   -0.9,  -0.8,   -0.8]
-    maxxvals_JTBDTOPTIMIZED =   [0.7,     0.8,   0.75,    0.8]
-    discrs+=discrs_JTBDTOPTIMIZED
-    nhistobins+=nhistobins_JTBDTOPTIMIZED
-    minxvals+=minxvals_JTBDTOPTIMIZED
-    maxxvals+=maxxvals_JTBDTOPTIMIZED
-    categories+=categorienames_JTBDTOPTIMIZED
-
-    # jet tag categories for Mem only and blr
-    categorienames_JTMEM=[                  
-                  ("(N_Jets==4&&N_BTagsM==3)","ljets_j4_t3_BLR",""),
-                  ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4_MEMONLY",""),
-                  ("(N_Jets==5&&N_BTagsM==3)","ljets_j5_t3_BLR",""),
-                  ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4_MEMONLY",""),
-                  ("(N_Jets>=6&&N_BTagsM==2)","ljets_jge6_t2_BLR",""),
-                  ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_MEMONLY",""),
-                  ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4_MEMONLY",""),
-                  ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_BLR",""),
-    ]
-    discrs_JTMEM=[  'Evt_blr_ETH_transformed',   memexp,    'Evt_blr_ETH_transformed',    memexp,   'Evt_blr_ETH_transformed',   memexp,   memexp , 'Evt_blr_ETH_transformed']
-    nhistobins_JTMEM = [  20,   12,    20,    18,   25,   25,   16, 25 ]
-    minxvals_JTMEM =   [ -1,  0.05, 0.0,   0.1, -3, 0,   0.1, 0.5]
-    maxxvals_JTMEM =   [6, 0.9,   6.5,    1.0,  4,  1.0,    0.9, 7.0]
-    discrs+=discrs_JTMEM
-    nhistobins+=nhistobins_JTMEM
-    minxvals+=minxvals_JTMEM
-    maxxvals+=maxxvals_JTMEM
-    categories+=categorienames_JTMEM
+   
 
     
 
