@@ -7,6 +7,7 @@ import imp
 import importlib
 import inspect
 import ROOT
+sys.path.apppend('limittools')
 sys.path.append('pyroot-plotscripts-base')
 sys.path.append('pyroot-plotscripts-base/limittools')
 
@@ -20,13 +21,14 @@ from limittools import calcLimits
 from limittools import replaceQ2scale
 
 from analysisClass import *
-from plotconfig_v14 import *
+# DANGERZONE. This breaks the datacards
+from plotconfig_v14Fast import *
 
 
 def main(argv):
 
     # Create analysis object with output name
-    name='limits_JetTagBDT_v16'
+    name='limits_JetTagBDT_v17'
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/latest/ttbb-cutbased-analysis_limitInput.root')
     analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/Sep17/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/output20170626-reference/workdir/ttbb-cutbased-analysis/output_limitInput.root')
@@ -38,7 +40,7 @@ def main(argv):
     analysis.additionalPlotVariables=False
 
     # Make sure proper plotconfig is loaded for either ttbb or ttH
-    print "We will import the following plotconfig: ", analysis.getPlotConfig()
+    #print "We will import the following plotconfig: ", analysis.getPlotConfig()
     # make sure plotconfig gets imported into global namespace
     #globals().update(importlib.import_module(analysis.getPlotConfig()).__dict__)
 
@@ -98,8 +100,8 @@ def main(argv):
                          'alternativebdt_ljets_jge6_t3:='+bdtweightpath+'/weights_Final_63_'+alternativebdtset+'.xml',
                          'alternativebdt_ljets_j5_tge4:='+bdtweightpath+'/weights_Final_54_'+alternativebdtset+'.xml',
                          'alternativebdt_ljets_j4_t4:='+bdtweightpath+'/weights_Final_44_'+alternativebdtset+'.xml',
-                         
                          ]
+    additionalvariables+=GetMEPDFadditionalVariablesList(os.getcwd()+"/rate_factors_onlyinternal_powhegpythia.csv")
     # append variables needed by NNFlow Interface
     #additionalvariables.extend(NNFlowInterface.getAdditionalVariablesList())
     print "Debug output: Print additional variables list: ", additionalvariables
@@ -126,139 +128,13 @@ def main(argv):
     discrs_JTBDT=['finalbdt_ljets_j4_t2','finalbdt_ljets_j5_t2','finalbdt_ljets_j4_t3', 'finalbdt_ljets_j4_t4', 'finalbdt_ljets_j5_t3', 'finalbdt_ljets_j5_tge4', 'finalbdt_ljets_jge6_t2', 'finalbdt_ljets_jge6_t3', 'finalbdt_ljets_jge6_tge4']
     nhistobins_JTBDT = [  20,20,      20,   12,    25,    16,   25,   25,   16 ]
     minxvals_JTBDT =   [ 200, 200, -0.8,  -0.8, -0.8,   -0.9,         -0.6, -0.8,   -0.8]
-    maxxvals_JTBDT =   [800,800,    0.75,  0.7,   0.7,    0.8,  0.7,  0.75,    0.8]
+    maxxvals_JTBDT =   [800,800,    0.75,  0.7,   0.7,    0.8,  0.7,  0.75,    0.76]
     discrs+=discrs_JTBDT
     nhistobins+=nhistobins_JTBDT
     minxvals+=minxvals_JTBDT
     maxxvals+=maxxvals_JTBDT
     categories+=categorienames_JTBDT
     
-    # 2D analysis split at ttH median of BDTs
-    unsplitcategorienames_JT2D=[
-                  ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4",""),
-                  ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4",""),
-                  ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3",""),
-                  ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4",""),
-                  ]
-    bdtcuts=[-0.2,-0.2,0.2,0.22,0.17,0.22,0.05,0.17,0.17]
-    categorienames_JT2D=[]
-    for cat,bdt in zip(unsplitcategorienames_JT2D,bdtcuts):
-      if cat[1] in ["ljets_jge6_tge4","ljets_j5_tge4","ljets_j4_t4","ljets_jge6_t3"]:
-        categories.append(('('+cat[0]+')*(finalbdt_'+cat[1]+'>'+str(bdt)+')',cat[1]+'_high') )
-        categories.append(('('+cat[0]+')*(finalbdt_'+cat[1]+'<='+str(bdt)+')',cat[1]+'_low') )
-    discrs_JT2D=[memexp, memexp, memexp, memexp,memexp, memexp,memexp, memexp]
-    nhistobins_JT2D = [10,12, 7,10, 25,25,   12,15 ]
-    minxvals_JT2D =   [ 0.05, 0.05,0.1,0.1,0,0,0.05,0]
-    maxxvals_JT2D =   [1.0, 1.0,1.0,1.0,1.0,1.0,1.0,1.0]
-    discrs+=discrs_JT2D
-    nhistobins+=nhistobins_JT2D
-    minxvals+=minxvals_JT2D
-    maxxvals+=maxxvals_JT2D
-    categories+=categorienames_JT2D
-
-    # 2D analysis split at ttH median of BDTs OPTIMIZED FOR ttbb vs rest
-    unsplitcategorienames_JT2DOPTIMIZED=[
-                  ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4",""),
-                  ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4",""),
-                  ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3",""),
-                  ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4",""),
-                  ]
-    bdtcuts=[-0.2,-0.2,0.2,0.22,0.17,0.22,0.05,0.17,0.17]
-    categorienames_JT2DOPTIMIZED=[]
-    for cat,bdt in zip(unsplitcategorienames_JT2DOPTIMIZED,bdtcuts):
-      if cat[1] in ["ljets_jge6_tge4","ljets_j5_tge4","ljets_j4_t4","ljets_jge6_t3"]:
-        categories.append(('('+cat[0]+')*(alternativebdt_'+cat[1]+'>'+str(bdt)+')',cat[1]+'_ttbbOpt_high') )
-        categories.append(('('+cat[0]+')*(alternativebdt_'+cat[1]+'<='+str(bdt)+')',cat[1]+'_ttbbOpt_low') )
-    discrs_JT2DOPTIMIZED=[memexp, memexp, memexp, memexp,memexp, memexp,memexp, memexp]
-    nhistobins_JT2DOPTIMIZED = [10,12, 7,10, 25,25,   12,15 ]
-    minxvals_JT2DOPTIMIZED =   [ 0.05, 0.05,0.1,0.1,0,0,0.05,0]
-    maxxvals_JT2DOPTIMIZED =   [1.0, 1.0,1.0,1.0,1.0,1.0,1.0,1.0]
-    discrs+=discrs_JT2DOPTIMIZED
-    nhistobins+=nhistobins_JT2DOPTIMIZED
-    minxvals+=minxvals_JT2DOPTIMIZED
-    maxxvals+=maxxvals_JT2DOPTIMIZED
-    categories+=categorienames_JT2DOPTIMIZED
-
-# BDT only but with the ttbb optimized BDTs
-    categorienames_JTBDTOPTIMIZED=[
-                  ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4_ttbbOpt",""),
-                  ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4_ttbbOpt",""),
-                  ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_ttbbOpt",""),
-                  ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4_ttbbOpt",""),
-                  ]
-    discrs_JTBDTOPTIMIZED=['alternativebdt_ljets_j4_t4',  'alternativebdt_ljets_j5_tge4',  'alternativebdt_ljets_jge6_t3', 'alternativebdt_ljets_jge6_tge4']
-    nhistobins_JTBDTOPTIMIZED = [  12,      16,     25,   16 ]
-    minxvals_JTBDTOPTIMIZED =   [ -0.8,   -0.9,  -0.8,   -0.8]
-    maxxvals_JTBDTOPTIMIZED =   [0.7,     0.8,   0.75,    0.8]
-    discrs+=discrs_JTBDTOPTIMIZED
-    nhistobins+=nhistobins_JTBDTOPTIMIZED
-    minxvals+=minxvals_JTBDTOPTIMIZED
-    maxxvals+=maxxvals_JTBDTOPTIMIZED
-    categories+=categorienames_JTBDTOPTIMIZED
-
-    # jet tag categories for Mem only and blr
-    categorienames_JTMEM=[                  
-                  ("(N_Jets==4&&N_BTagsM==3)","ljets_j4_t3_BLR",""),
-                  ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4_MEMONLY",""),
-                  ("(N_Jets==5&&N_BTagsM==3)","ljets_j5_t3_BLR",""),
-                  ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4_MEMONLY",""),
-                  ("(N_Jets>=6&&N_BTagsM==2)","ljets_jge6_t2_BLR",""),
-                  ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_MEMONLY",""),
-                  ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4_MEMONLY",""),
-                  ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_BLR",""),
-    ]
-    discrs_JTMEM=[  'Evt_blr_ETH_transformed',   memexp,    'Evt_blr_ETH_transformed',    memexp,   'Evt_blr_ETH_transformed',   memexp,   memexp , 'Evt_blr_ETH_transformed']
-    nhistobins_JTMEM = [  20,   12,    20,    18,   25,   25,   16, 25 ]
-    minxvals_JTMEM =   [ -1,  0.05, 0.0,   0.1, -3, 0,   0.1, 0.5]
-    maxxvals_JTMEM =   [6, 0.9,   6.5,    1.0,  4,  1.0,    0.9, 7.0]
-    discrs+=discrs_JTMEM
-    nhistobins+=nhistobins_JTMEM
-    minxvals+=minxvals_JTMEM
-    maxxvals+=maxxvals_JTMEM
-    categories+=categorienames_JTMEM
-
-    # DNN classes DNN outputs
-    categorienames_MultiDNN=[
-              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==0)","ljets_j4_tge3_ttHnode",""),
-              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==0)","ljets_j5_tge3_ttHnode",""),             
-              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==0)","ljets_jge6_tge3_ttHnode",""),
-
-              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==1)","ljets_j4_tge3_ttbbnode",""),
-              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==1)","ljets_j5_tge3_ttbbnode",""),             
-              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==1)","ljets_jge6_tge3_ttbbnode",""),
-
-              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==2)","ljets_j4_tge3_ttbnode",""),
-              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==2)","ljets_j5_tge3_ttbnode",""),             
-              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==2)","ljets_jge6_tge3_ttbnode",""),
-
-              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==3)","ljets_j4_tge3_tt2bnode",""),
-              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==3)","ljets_j5_tge3_tt2bnode",""),             
-              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==3)","ljets_jge6_tge3_tt2bnode",""),
-
-              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==4)","ljets_j4_tge3_ttccnode",""),
-              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==4)","ljets_j5_tge3_ttccnode",""),             
-              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==4)","ljets_jge6_tge3_ttccnode",""),
-
-              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==5)","ljets_j4_tge3_ttlfnode",""),
-              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==5)","ljets_j5_tge3_ttlfnode",""),             
-              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==5)","ljets_jge6_tge3_ttlfnode",""),
-              ]
-    discrs_MultiDNN=[
-             'aachen_Out_ttH','aachen_Out_ttH','aachen_Out_ttH',
-             'aachen_Out_ttbarBB','aachen_Out_ttbarBB','aachen_Out_ttbarBB',
-             'aachen_Out_ttbarB','aachen_Out_ttbarB','aachen_Out_ttbarB',
-             'aachen_Out_ttbar2B','aachen_Out_ttbar2B','aachen_Out_ttbar2B',
-             'aachen_Out_ttbarCC','aachen_Out_ttbarCC','aachen_Out_ttbarCC',
-             'aachen_Out_ttbarOther','aachen_Out_ttbarOther','aachen_Out_ttbarOther',
-             ]
-    nhistobins_MultiDNN= [   7,   10,    12,   7,   7,    12,   7,   7,    7,   8,   7,    7,   7,   7,    7,   7,   7,    4,]
-    minxvals_MultiDNN=   [ 0.2,  0.16, 0.17, 0.16,  0.16, 0.16, 0.2,  0.2, 0.18, 0.2,  0.16, 0.16, 0.17,  0.17, 0.21, 0.17,  0.17, 0.19,]
-    maxxvals_MultiDNN=   [0.6,  0.6, 0.7,    0.6,  0.6, 0.7,    0.4,  0.4, 0.35,    0.55,  0.5, 0.55,    0.35,  0.4, 0.3,    0.5,  0.4, 0.3,]
-    discrs+=discrs_MultiDNN
-    nhistobins+=nhistobins_MultiDNN
-    minxvals+=minxvals_MultiDNN
-    maxxvals+=maxxvals_MultiDNN
-    categories+=categorienames_MultiDNN
 
     assert(len(nhistobins)==len(maxxvals))
     assert(len(nhistobins)==len(minxvals))
@@ -323,7 +199,7 @@ def main(argv):
     if analysis.doDrawParallel==False or analysis.plotNumber == None :
         if not os.path.exists(analysis.rootFilePath):
             print "Doing plotParallel step since root file was not found."
-            outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_v5_08102017.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_V6.py"],cirun=False)
+            outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_v5_08102017.json",otherSystNames+PSSystNames+QCDSystNames,cirun=False,StopAfterCompileStep=False)
             # Allow start of an improved rebinning algorithm
             if analysis.getActivatedOptimizedRebinning():
               if analysis.getSignalProcess() == 'ttbb':
@@ -394,20 +270,12 @@ def main(argv):
         writeLOLAndOneOnTop(transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-1,name+'/'+name+'_controlplots')
         writeListOfHistoListsAN(transposeLOL([lolT[0]]+lolT[9:]),[samples[0]]+samples[9:],"",name+'/'+name+'_shapes',True,False,False,'histo',False,True,False)
 
-    # Make MC Control plots
-    if (analysis.doDrawParallel==False or analysis.plotNumber != None) and analysis.makeMCControlPlots==True :
-        print "Making MC Control plots"
-        print "skipping"
-        #lll=createLLL_fromSuperHistoFileSyst(outputpath[:-5]+'_limitInput.root',samples[0:],discriminatorPlots,errorSystNames)
-        #labels=[plot.label for plot in discriminatorPlots]
-        #plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[0:]),samples[0:],lolT[0],samples[0],-2,name,[[lll,3354,ROOT.kBlack,True]],False,labels,True,analysis.plotBlinded)
-
 
     # Make MC Control plots
     if (analysis.doDrawParallel==False or analysis.plotNumber != None) and analysis.makeMCControlPlots==True :
         print "Making MC Control plots"
         print "skipping"
-        lll=createLLL_fromSuperHistoFileSyst(outputpath,samples[9:],discriminatorPlots,errorSystNamesNoPS)
+        lll=createLLL_fromSuperHistoFileSyst(outputpath,samples[9:],discriminatorPlots,errorSystNamesNoPSNoQCD)
         labels=[plot.label for plot in discriminatorPlots]
         plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-2,name,[[lll,3354,ROOT.kBlack,True]],False,labels,True,analysis.plotBlinded)
 
