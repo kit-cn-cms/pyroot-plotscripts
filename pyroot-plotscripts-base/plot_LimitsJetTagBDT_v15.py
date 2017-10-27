@@ -156,7 +156,10 @@ def main(argv):
     ## WARNING: Adjust Slice for samples if changing ttbar contributions
 
     # add Parton shower variation samples
-    for sample in samples[analysis.getTtbarSamplesLower() : analysis.getTtbarSamplesUpper()]: # only for ttbar samples
+    #for sample in samples[analysis.getTtbarSamplesLower() : analysis.getTtbarSamplesUpper()]: # only for ttbar samples
+    for sample in samples:
+        if sample.nick not in ['ttbarOther', 'ttbarPlusCCbar','ttbarPlusBBbar','ttbarPlusB','ttbarPlus2B']:
+          continue
         for sysname,sysfilename in zip(PSSystNames,PSSystFileNames):
             thisoldsel=sample.selection
             thisnewsel=sample.selection.replace(ttbarMCWeight,"*1.0").replace(mcWeight+evenSel,mcWeightAll)

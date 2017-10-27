@@ -280,7 +280,10 @@ def main(argv):
     ## WARNING: Adjust Slice for samples if changing ttbar contributions
 
     # add Parton shower variation samples
-    for sample in samples[analysis.getTtbarSamplesLower() : analysis.getTtbarSamplesUpper()]: # only for ttbar samples
+    #for sample in samples[analysis.getTtbarSamplesLower() : analysis.getTtbarSamplesUpper()]: # only for ttbar samples
+    for sample in samples:
+        if sample.nick not in ['ttbarOther', 'ttbarPlusCCbar','ttbarPlusBBbar','ttbarPlusB','ttbarPlus2B']:
+          continue
         for sysname,sysfilename in zip(PSSystNames,PSSystFileNames):
             thisoldsel=sample.selection
             thisnewsel=sample.selection.replace(ttbarMCWeight,"*1.0").replace(mcWeight+evenSel,mcWeightAll)
@@ -323,7 +326,7 @@ def main(argv):
     if analysis.doDrawParallel==False or analysis.plotNumber == None :
         if not os.path.exists(analysis.rootFilePath):
             print "Doing plotParallel step since root file was not found."
-            outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_v5_08102017.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_V6.py"],cirun=False,StopAfterCompileStep=False)
+            outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_v5_08102017.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_V6.py"],cirun=False,StopAfterCompileStep=True)
             # Allow start of an improved rebinning algorithm
             if analysis.getActivatedOptimizedRebinning():
               if analysis.getSignalProcess() == 'ttbb':

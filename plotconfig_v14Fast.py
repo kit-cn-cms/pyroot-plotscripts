@@ -441,7 +441,7 @@ otherSystNames=[
                     ##"_CMS_ttH_PSscaleUp",
                     ##"_CMS_ttH_PSscaleDown"
     "_CMS_scale_jUp","_CMS_scale_jDown",
-    #"_CMS_res_jUp","_CMS_res_jDown",
+    "_CMS_res_jUp","_CMS_res_jDown",
     #"_CMS_scale_AbsoluteStat_jUp","_CMS_scale_AbsoluteStat_jDown",
     #"_CMS_scale_AbsoluteScale_jUp","_CMS_scale_AbsoluteScale_jDown",
     ##"_CMS_scale_AbsoluteFlavMap_jUp","_CMS_scale_AbsoluteFlavMap_jDown",
