@@ -1367,6 +1367,10 @@ class ttbarsysthelper
         float GetISRScaleFactorDown(int& ttbar_subprocess,int& njets);
         float GetFSRScaleFactorUp(int& ttbar_subprocess,int& njets);
         float GetFSRScaleFactorDown(int& ttbar_subprocess,int& njets);
+        float GetHDAMPScaleFactorUp(int& ttbar_subprocess,int& njets);
+        float GetHDAMPScaleFactorDown(int& ttbar_subprocess,int& njets);
+        float GetUEScaleFactorUp(int& ttbar_subprocess,int& njets);
+        float GetUEScaleFactorDown(int& ttbar_subprocess,int& njets);
         int GetTtbarSubProcess(int& GenEvt_I_TTPlusCC,int& GenEvt_I_TTPlusBB);
     
     private:
@@ -1375,6 +1379,11 @@ class ttbarsysthelper
         std::map<std::pair<int,int>,float> ISRDown;
         std::map<std::pair<int,int>,float> FSRUp;
         std::map<std::pair<int,int>,float> FSRDown;
+        std::map<std::pair<int,int>,float> HDAMPUp;
+        std::map<std::pair<int,int>,float> HDAMPDown;
+        std::map<std::pair<int,int>,float> UEUp;
+        std::map<std::pair<int,int>,float> UEDown;
+        
 };
 
 ttbarsysthelper::ttbarsysthelper()
@@ -1396,6 +1405,7 @@ ttbarsysthelper::ttbarsysthelper()
     ISRUp[std::pair<int,int>(4,4)] = 0.976;
     ISRUp[std::pair<int,int>(4,5)] = 1.02;
     ISRUp[std::pair<int,int>(4,6)] = 1.074;
+    
     ISRDown[std::pair<int,int>(0,4)] = 1.006;
     ISRDown[std::pair<int,int>(0,5)] = 0.969;
     ISRDown[std::pair<int,int>(0,6)] = 0.929;
@@ -1411,6 +1421,7 @@ ttbarsysthelper::ttbarsysthelper()
     ISRDown[std::pair<int,int>(4,4)] = 0.967;
     ISRDown[std::pair<int,int>(4,5)] = 0.948;
     ISRDown[std::pair<int,int>(4,6)] = 0.888;
+    
     FSRUp[std::pair<int,int>(0,4)] = 0.817;
     FSRUp[std::pair<int,int>(0,5)] = 0.765;
     FSRUp[std::pair<int,int>(0,6)] = 0.75;
@@ -1426,6 +1437,7 @@ ttbarsysthelper::ttbarsysthelper()
     FSRUp[std::pair<int,int>(4,4)] = 1.024;
     FSRUp[std::pair<int,int>(4,5)] = 1.019;
     FSRUp[std::pair<int,int>(4,6)] = 1.06;
+    
     FSRDown[std::pair<int,int>(0,4)] = 1.029;
     FSRDown[std::pair<int,int>(0,5)] = 1.052;
     FSRDown[std::pair<int,int>(0,6)] = 1.073;
@@ -1441,6 +1453,70 @@ ttbarsysthelper::ttbarsysthelper()
     FSRDown[std::pair<int,int>(4,4)] = 0.841;
     FSRDown[std::pair<int,int>(4,5)] = 0.871;
     FSRDown[std::pair<int,int>(4,6)] = 0.853;
+    
+    HDAMPUp[std::pair<int,int>(0,4)] = 0.994;
+    HDAMPUp[std::pair<int,int>(0,5)] = 0.992;
+    HDAMPUp[std::pair<int,int>(0,6)] = 1.029;
+    HDAMPUp[std::pair<int,int>(1,4)] = 1.013;
+    HDAMPUp[std::pair<int,int>(1,5)] = 1.013;
+    HDAMPUp[std::pair<int,int>(1,6)] = 1.042;
+    HDAMPUp[std::pair<int,int>(2,4)] = 1.016;
+    HDAMPUp[std::pair<int,int>(2,5)] = 1.034;
+    HDAMPUp[std::pair<int,int>(2,6)] = 1.046;
+    HDAMPUp[std::pair<int,int>(3,4)] = 0.976;
+    HDAMPUp[std::pair<int,int>(3,5)] = 1.023;
+    HDAMPUp[std::pair<int,int>(3,6)] = 1.07;
+    HDAMPUp[std::pair<int,int>(4,4)] = 1.038;
+    HDAMPUp[std::pair<int,int>(4,5)] = 0.982;
+    HDAMPUp[std::pair<int,int>(4,6)] = 1.041;
+    
+    HDAMPDown[std::pair<int,int>(0,4)] = 1.006;
+    HDAMPDown[std::pair<int,int>(0,5)] = 0.971;
+    HDAMPDown[std::pair<int,int>(0,6)] = 0.935;
+    HDAMPDown[std::pair<int,int>(1,4)] = 0.965;
+    HDAMPDown[std::pair<int,int>(1,5)] = 0.97;
+    HDAMPDown[std::pair<int,int>(1,6)] = 0.932;
+    HDAMPDown[std::pair<int,int>(2,4)] = 0.978;
+    HDAMPDown[std::pair<int,int>(2,5)] = 0.949;
+    HDAMPDown[std::pair<int,int>(2,6)] = 0.919;
+    HDAMPDown[std::pair<int,int>(3,4)] = 0.922;
+    HDAMPDown[std::pair<int,int>(3,5)] = 0.917;
+    HDAMPDown[std::pair<int,int>(3,6)] = 0.942;
+    HDAMPDown[std::pair<int,int>(4,4)] = 0.938;
+    HDAMPDown[std::pair<int,int>(4,5)] = 0.927;
+    HDAMPDown[std::pair<int,int>(4,6)] = 0.918;
+    
+    UEUp[std::pair<int,int>(0,4)] = 0.994;
+    UEUp[std::pair<int,int>(0,5)] = 0.989;
+    UEUp[std::pair<int,int>(0,6)] = 0.997;
+    UEUp[std::pair<int,int>(1,4)] = 0.987;
+    UEUp[std::pair<int,int>(1,5)] = 0.987;
+    UEUp[std::pair<int,int>(1,6)] = 0.995;
+    UEUp[std::pair<int,int>(2,4)] = 1.016;
+    UEUp[std::pair<int,int>(2,5)] = 1.016;
+    UEUp[std::pair<int,int>(2,6)] = 1.01;
+    UEUp[std::pair<int,int>(3,4)] = 0.976;
+    UEUp[std::pair<int,int>(3,5)] = 1.023;
+    UEUp[std::pair<int,int>(3,6)] = 1.013;
+    UEUp[std::pair<int,int>(4,4)] = 1.024;
+    UEUp[std::pair<int,int>(4,5)] = 0.98;
+    UEUp[std::pair<int,int>(4,6)] = 0.99;
+    
+    UEDown[std::pair<int,int>(0,4)] = 1.006;
+    UEDown[std::pair<int,int>(0,5)] = 0.992;
+    UEDown[std::pair<int,int>(0,6)] = 0.997;
+    UEDown[std::pair<int,int>(1,4)] = 0.974;
+    UEDown[std::pair<int,int>(1,5)] = 0.987;
+    UEDown[std::pair<int,int>(1,6)] = 0.983;
+    UEDown[std::pair<int,int>(2,4)] = 1.017;
+    UEDown[std::pair<int,int>(2,5)] = 0.984;
+    UEDown[std::pair<int,int>(2,6)] = 0.988;
+    UEDown[std::pair<int,int>(3,4)] = 1.024;
+    UEDown[std::pair<int,int>(3,5)] = 1.023;
+    UEDown[std::pair<int,int>(3,6)] = 0.987;
+    UEDown[std::pair<int,int>(4,4)] = 1.024;
+    UEDown[std::pair<int,int>(4,5)] = 0.981;
+    UEDown[std::pair<int,int>(4,6)] = 0.99;
 }
 
 
@@ -1465,6 +1541,22 @@ float ttbarsysthelper::GetFSRScaleFactorUp(int& ttbar_subprocess,int& njets)
 float ttbarsysthelper::GetFSRScaleFactorDown(int& ttbar_subprocess,int& njets)
 {
     return njets<6 ? FSRDown[std::pair<int,int>(ttbar_subprocess,njets)] : FSRDown[std::pair<int,int>(ttbar_subprocess,6)];
+}
+float ttbarsysthelper::GetHDAMPScaleFactorUp(int& ttbar_subprocess,int& njets)
+{
+    return njets<6 ? HDAMPUp[std::pair<int,int>(ttbar_subprocess,njets)] : HDAMPUp[std::pair<int,int>(ttbar_subprocess,6)];
+}
+float ttbarsysthelper::GetHDAMPScaleFactorDown(int& ttbar_subprocess,int& njets)
+{
+    return njets<6 ? HDAMPDown[std::pair<int,int>(ttbar_subprocess,njets)] : HDAMPDown[std::pair<int,int>(ttbar_subprocess,6)];
+}
+float ttbarsysthelper::GetUEScaleFactorUp(int& ttbar_subprocess,int& njets)
+{
+    return njets<6 ? UEUp[std::pair<int,int>(ttbar_subprocess,njets)] : UEUp[std::pair<int,int>(ttbar_subprocess,6)];
+}
+float ttbarsysthelper::GetUEScaleFactorDown(int& ttbar_subprocess,int& njets)
+{
+    return njets<6 ? UEDown[std::pair<int,int>(ttbar_subprocess,njets)] : UEDown[std::pair<int,int>(ttbar_subprocess,6)];
 }
 
 int ttbarsysthelper::GetTtbarSubProcess(int& GenEvt_I_TTPlusCC,int& GenEvt_I_TTPlusBB)
@@ -2096,6 +2188,10 @@ def startLoop():
   float internalISRweightdown = 0.0;
   float internalFSRweightup = 0.0;
   float internalFSRweightdown = 0.0;
+  float internalHDAMPweightup = 0.0;
+  float internalHDAMPweightdown = 0.0;
+  float internalUEweightup = 0.0;
+  float internalUEweightdown = 0.0;
   
   double tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF;
   
@@ -2129,6 +2225,10 @@ def startLoop():
   internalISRweightdown = internalttbarsysthelper->GetISRScaleFactorDown(ttbar_subprocess,N_Jets);
   internalFSRweightup = internalttbarsysthelper->GetFSRScaleFactorUp(ttbar_subprocess,N_Jets);
   internalFSRweightdown = internalttbarsysthelper->GetFSRScaleFactorDown(ttbar_subprocess,N_Jets);
+  internalHDAMPweightup = internalttbarsysthelper->GetHDAMPScaleFactorUp(ttbar_subprocess,N_Jets);
+  internalHDAMPweightdown = internalttbarsysthelper->GetHDAMPScaleFactorDown(ttbar_subprocess,N_Jets);
+  internalUEweightup = internalttbarsysthelper->GetUEScaleFactorUp(ttbar_subprocess,N_Jets);
+  internalUEweightdown = internalttbarsysthelper->GetUEScaleFactorDown(ttbar_subprocess,N_Jets);
   
   
 
@@ -2326,7 +2426,8 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 	    "internalQCDweight","internalQCDweightup","internalQCDweightdown",
 	    "electron_data","muon_data",
 	    "internalPDFweightUp","internalPDFweightDown",
-	    "internalISRweightdown","internalISRweightup","internalFSRweightdown","internalFSRweightup"
+	    "internalISRweightdown","internalISRweightup","internalFSRweightdown","internalFSRweightup",
+        "internalHDAMPweightdown","internalHDAMPweightup","internalUEweightdown","internalUEweightup"
 ]
 
   csv_file=os.getcwd()+"/rate_factors_onlyinternal_powhegpythia.csv"
