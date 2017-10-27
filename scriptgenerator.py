@@ -1358,6 +1358,147 @@ QCDHelper::~QCDHelper()
 	if(initialized) scalefactor_file->Close();
 }
 
+class ttbarsysthelper
+{
+    public:
+        ttbarsysthelper();
+        ~ttbarsysthelper();
+        float GetISRScaleFactorUp(int& ttbar_subprocess,int& njets);
+        float GetISRScaleFactorDown(int& ttbar_subprocess,int& njets);
+        float GetFSRScaleFactorUp(int& ttbar_subprocess,int& njets);
+        float GetFSRScaleFactorDown(int& ttbar_subprocess,int& njets);
+        int GetTtbarSubProcess(int& GenEvt_I_TTPlusCC,int& GenEvt_I_TTPlusBB);
+    
+    private:
+        // int is number of jets and float the corresponding scale factor
+        std::map<std::pair<int,int>,float> ISRUp;
+        std::map<std::pair<int,int>,float> ISRDown;
+        std::map<std::pair<int,int>,float> FSRUp;
+        std::map<std::pair<int,int>,float> FSRDown;
+};
+
+ttbarsysthelper::ttbarsysthelper()
+{
+    // first number in pair: 0->ttlf,1->ttcc,2->ttb,3->tt2b,4->ttbb
+    // second number in pair: njets
+    ISRUp[std::pair<int,int>(0,4)] = 0.987;
+    ISRUp[std::pair<int,int>(0,5)] = 0.984;
+    ISRUp[std::pair<int,int>(0,6)] = 1.062;
+    ISRUp[std::pair<int,int>(1,4)] = 0.986;
+    ISRUp[std::pair<int,int>(1,5)] = 0.987;
+    ISRUp[std::pair<int,int>(1,6)] = 1.078;
+    ISRUp[std::pair<int,int>(2,4)] = 0.984;
+    ISRUp[std::pair<int,int>(2,5)] = 1.025;
+    ISRUp[std::pair<int,int>(2,6)] = 1.09;
+    ISRUp[std::pair<int,int>(3,4)] = 0.932;
+    ISRUp[std::pair<int,int>(3,5)] = 1.025;
+    ISRUp[std::pair<int,int>(3,6)] = 1.055;
+    ISRUp[std::pair<int,int>(4,4)] = 0.976;
+    ISRUp[std::pair<int,int>(4,5)] = 1.02;
+    ISRUp[std::pair<int,int>(4,6)] = 1.074;
+    ISRDown[std::pair<int,int>(0,4)] = 1.006;
+    ISRDown[std::pair<int,int>(0,5)] = 0.969;
+    ISRDown[std::pair<int,int>(0,6)] = 0.929;
+    ISRDown[std::pair<int,int>(1,4)] = 0.969;
+    ISRDown[std::pair<int,int>(1,5)] = 0.958;
+    ISRDown[std::pair<int,int>(1,6)] = 0.91;
+    ISRDown[std::pair<int,int>(2,4)] = 0.982;
+    ISRDown[std::pair<int,int>(2,5)] = 0.973;
+    ISRDown[std::pair<int,int>(2,6)] = 0.902;
+    ISRDown[std::pair<int,int>(3,4)] = 0.976;
+    ISRDown[std::pair<int,int>(3,5)] = 1.023;
+    ISRDown[std::pair<int,int>(3,6)] = 0.936;
+    ISRDown[std::pair<int,int>(4,4)] = 0.967;
+    ISRDown[std::pair<int,int>(4,5)] = 0.948;
+    ISRDown[std::pair<int,int>(4,6)] = 0.888;
+    FSRUp[std::pair<int,int>(0,4)] = 0.817;
+    FSRUp[std::pair<int,int>(0,5)] = 0.765;
+    FSRUp[std::pair<int,int>(0,6)] = 0.75;
+    FSRUp[std::pair<int,int>(1,4)] = 1.061;
+    FSRUp[std::pair<int,int>(1,5)] = 0.987;
+    FSRUp[std::pair<int,int>(1,6)] = 1.023;
+    FSRUp[std::pair<int,int>(2,4)] = 1.018;
+    FSRUp[std::pair<int,int>(2,5)] = 0.948;
+    FSRUp[std::pair<int,int>(2,6)] = 0.99;
+    FSRUp[std::pair<int,int>(3,4)] = 1.067;
+    FSRUp[std::pair<int,int>(3,5)] = 1.031;
+    FSRUp[std::pair<int,int>(3,6)] = 1.067;
+    FSRUp[std::pair<int,int>(4,4)] = 1.024;
+    FSRUp[std::pair<int,int>(4,5)] = 1.019;
+    FSRUp[std::pair<int,int>(4,6)] = 1.06;
+    FSRDown[std::pair<int,int>(0,4)] = 1.029;
+    FSRDown[std::pair<int,int>(0,5)] = 1.052;
+    FSRDown[std::pair<int,int>(0,6)] = 1.073;
+    FSRDown[std::pair<int,int>(1,4)] = 0.858;
+    FSRDown[std::pair<int,int>(1,5)] = 0.885;
+    FSRDown[std::pair<int,int>(1,6)] = 0.846;
+    FSRDown[std::pair<int,int>(2,4)] = 0.906;
+    FSRDown[std::pair<int,int>(2,5)] = 0.908;
+    FSRDown[std::pair<int,int>(2,6)] = 0.893;
+    FSRDown[std::pair<int,int>(3,4)] = 0.795;
+    FSRDown[std::pair<int,int>(3,5)] = 0.865;
+    FSRDown[std::pair<int,int>(3,6)] = 0.844;
+    FSRDown[std::pair<int,int>(4,4)] = 0.841;
+    FSRDown[std::pair<int,int>(4,5)] = 0.871;
+    FSRDown[std::pair<int,int>(4,6)] = 0.853;
+}
+
+
+
+ttbarsysthelper::~ttbarsysthelper()
+{
+    // nothing to do here
+}
+
+float ttbarsysthelper::GetISRScaleFactorUp(int& ttbar_subprocess,int& njets)
+{
+    return njets<6 ? ISRUp[std::pair<int,int>(ttbar_subprocess,njets)] : ISRUp[std::pair<int,int>(ttbar_subprocess,6)];
+}
+float ttbarsysthelper::GetISRScaleFactorDown(int& ttbar_subprocess,int& njets)
+{
+    return njets<6 ? ISRDown[std::pair<int,int>(ttbar_subprocess,njets)] : ISRDown[std::pair<int,int>(ttbar_subprocess,6)];
+}
+float ttbarsysthelper::GetFSRScaleFactorUp(int& ttbar_subprocess,int& njets)
+{
+    return njets<6 ? FSRUp[std::pair<int,int>(ttbar_subprocess,njets)] : FSRUp[std::pair<int,int>(ttbar_subprocess,6)];
+}
+float ttbarsysthelper::GetFSRScaleFactorDown(int& ttbar_subprocess,int& njets)
+{
+    return njets<6 ? FSRDown[std::pair<int,int>(ttbar_subprocess,njets)] : FSRDown[std::pair<int,int>(ttbar_subprocess,6)];
+}
+
+int ttbarsysthelper::GetTtbarSubProcess(int& GenEvt_I_TTPlusCC,int& GenEvt_I_TTPlusBB)
+{
+    // translate the flags available in the ntuples to the flag needed above for the ttbar subprocesses
+    int i;
+    if(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0) 
+    {
+        i=0;
+    }
+    else if(GenEvt_I_TTPlusCC==1)
+    {
+        i=1;
+    }
+    else if(GenEvt_I_TTPlusBB==1)
+    {
+        i=2;
+    }
+    else if(GenEvt_I_TTPlusBB==2)
+    {
+        i=3;
+    }
+    else if(GenEvt_I_TTPlusBB==3)
+    {
+        i=4;
+    }
+    else
+    {
+        std::cout << "!!! Error something went wrong during ttbar subprocess classification !!!" << std::endl;
+        i=-1;
+    }
+    return i;
+}
+
 
 
 // Helper struct to fill plots more efficiently
@@ -1413,6 +1554,7 @@ void plot(){
   CSVHelper* internalCSVHelper= new CSVHelper(csvHFfile,csvLFfile, 5,4,3,v_SystTypes);
   LeptonSFHelper* internalLeptonSFHelper= new LeptonSFHelper();
   QCDHelper* internalQCDHelper = new QCDHelper(qcd_file);
+  ttbarsysthelper* internalttbarsysthelper = new ttbarsysthelper;
 
   // open files
   TChain* chain = new TChain("MVATree");
@@ -1950,6 +2092,11 @@ def startLoop():
   float internalPDFweightUp = 0.0;
   float internalPDFweightDown = 0.0;
   
+  float internalISRweightup = 0.0;
+  float internalISRweightdown = 0.0;
+  float internalFSRweightup = 0.0;
+  float internalFSRweightdown = 0.0;
+  
   double tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF;
   
   internalCSVweight=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,internalSystType,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF);
@@ -1976,6 +2123,14 @@ def startLoop():
   internalQCDweight=internalQCDHelper->GetScaleFactor(N_Jets,N_BTagsM,N_TightElectrons,N_TightMuons);
   internalQCDweightup=internalQCDHelper->GetScaleFactorErrorUp(N_Jets,N_BTagsM,N_TightElectrons,N_TightMuons);
   internalQCDweightdown=internalQCDHelper->GetScaleFactorErrorDown(N_Jets,N_BTagsM,N_TightElectrons,N_TightMuons);
+  
+  int ttbar_subprocess = internalttbarsysthelper->GetTtbarSubProcess(GenEvt_I_TTPlusCC,GenEvt_I_TTPlusBB);
+  internalISRweightup = internalttbarsysthelper->GetISRScaleFactorUp(ttbar_subprocess,N_Jets);
+  internalISRweightdown = internalttbarsysthelper->GetISRScaleFactorDown(ttbar_subprocess,N_Jets);
+  internalFSRweightup = internalttbarsysthelper->GetFSRScaleFactorUp(ttbar_subprocess,N_Jets);
+  internalFSRweightdown = internalttbarsysthelper->GetFSRScaleFactorDown(ttbar_subprocess,N_Jets);
+  
+  
 
  
   // print stuff for synchronizing
@@ -2171,6 +2326,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 	    "internalQCDweight","internalQCDweightup","internalQCDweightdown",
 	    "electron_data","muon_data",
 	    "internalPDFweightUp","internalPDFweightDown",
+	    "internalISRweightdown","internalISRweightup","internalFSRweightdown","internalFSRweightup"
 ]
 
   csv_file=os.getcwd()+"/rate_factors_onlyinternal_powhegpythia.csv"
