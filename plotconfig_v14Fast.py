@@ -138,11 +138,6 @@ systsTtbar= [
 #systs_tt_bb=[ "_CMS_ttH_Q2scale_ttbarPlusBBbarUp","_CMS_ttH_Q2scale_ttbarPlusBBbarDown"]
 #systs_tt_cc=[ "_CMS_ttH_Q2scale_ttbarPlusCCbarUp","_CMS_ttH_Q2scale_ttbarPlusCCbarDown"]
 
-systs_tt_lf=[]
-systs_tt_b=[]
-systs_tt_2b=[]
-systs_tt_bb=[]
-systs_tt_cc=[]
 
 
 
@@ -428,8 +423,39 @@ PDFSystNames= [
 
 ]
 
-systWeights+=Q2SystWeights+PDFSystWeights
-weightSystNames+=Q2SystNames+PDFSystNames
+systs_tt_lf=["_CMS_ttH_FSR_ttbarOtherUp","_CMS_ttH_FSR_ttbarOtherDown","_CMS_ttH_ISR_ttbarOtherUp","_CMS_ttH_ISR_ttbarOtherDown"]
+systs_tt_lf_weights=["dummyWeight_CMS_ttH_FSR_ttbarOtherUp:=("+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*internalFSRweightup*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0))*(DoWeights==1)+(DoWeights==0)*1.0",
+					 "dummyWeight_CMS_ttH_FSR_ttbarOtherDown:=("+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*internalFSRweightdown*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0))*(DoWeights==1)+(DoWeights==0)*1.0",
+					 "dummyWeight_CMS_ttH_ISR_ttbarOtherUp:=("+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*internalISRweightup*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0))*(DoWeights==1)+(DoWeights==0)*1.0",
+					 "dummyWeight_CMS_ttH_ISR_ttbarOtherDown:=("+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*internalISRweightdown*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0))*(DoWeights==1)+(DoWeights==0)*1.0"
+					]
+systs_tt_b=["_CMS_ttH_FSR_ttbarPlusBUp","_CMS_ttH_FSR_ttbarPlusBDown","_CMS_ttH_ISR_ttbarPlusBUp","_CMS_ttH_ISR_ttbarPlusBDown"]
+systs_tt_b_weights=["dummyWeight_CMS_ttH_FSR_ttbarPlusBUp:=("+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*internalFSRweightup*(GenEvt_I_TTPlusBB==1))*(DoWeights==1)+(DoWeights==0)*1.0",
+					"dummyWeight_CMS_ttH_FSR_ttbarPlusBDown:=("+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*internalFSRweightdown*(GenEvt_I_TTPlusBB==1))*(DoWeights==1)+(DoWeights==0)*1.0",
+					"dummyWeight_CMS_ttH_ISR_ttbarPlusBUp:=("+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*internalISRweightup*(GenEvt_I_TTPlusBB==1))*(DoWeights==1)+(DoWeights==0)*1.0",
+					"dummyWeight_CMS_ttH_ISR_ttbarPlusBDown:=("+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*internalISRweightdown*(GenEvt_I_TTPlusBB==1))*(DoWeights==1)+(DoWeights==0)*1.0"
+					]
+systs_tt_2b=["_CMS_ttH_FSR_ttbarPlus2BUp","_CMS_ttH_FSR_ttbarPlus2BDown","_CMS_ttH_ISR_ttbarPlus2BUp","_CMS_ttH_ISR_ttbarPlus2BDown"]
+systs_tt_2b_weights=["dummyWeight_CMS_ttH_FSR_ttbarPlus2BUp:=("+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*internalFSRweightup*(GenEvt_I_TTPlusBB==2))*(DoWeights==1)+(DoWeights==0)*1.0",
+					 "dummyWeight_CMS_ttH_FSR_ttbarPlus2BDown:=("+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*internalFSRweightdown*(GenEvt_I_TTPlusBB==2))*(DoWeights==1)+(DoWeights==0)*1.0",
+					 "dummyWeight_CMS_ttH_ISR_ttbarPlus2BUp:=("+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*internalISRweightup*(GenEvt_I_TTPlusBB==2))*(DoWeights==1)+(DoWeights==0)*1.0",
+					 "dummyWeight_CMS_ttH_ISR_ttbarPlus2BDown:=("+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*internalISRweightdown*(GenEvt_I_TTPlusBB==2))*(DoWeights==1)+(DoWeights==0)*1.0"
+					]
+systs_tt_bb=["_CMS_ttH_FSR_ttbarPlusBBUp","_CMS_ttH_FSR_ttbarPlusBBDown","_CMS_ttH_ISR_ttbarPlusBBUp","_CMS_ttH_ISR_ttbarPlusBBDown"]
+systs_tt_bb_weights=["dummyWeight_CMS_ttH_FSR_ttbarPlusBBUp:=("+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*internalFSRweightup*(GenEvt_I_TTPlusBB==3))*(DoWeights==1)+(DoWeights==0)*1.0",
+					 "dummyWeight_CMS_ttH_FSR_ttbarPlusBBDown:=("+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*internalFSRweightdown*(GenEvt_I_TTPlusBB==3))*(DoWeights==1)+(DoWeights==0)*1.0",
+					 "dummyWeight_CMS_ttH_ISR_ttbarPlusBBUp:=("+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*internalISRweightup*(GenEvt_I_TTPlusBB==3))*(DoWeights==1)+(DoWeights==0)*1.0",
+					 "dummyWeight_CMS_ttH_ISR_ttbarPlusBBDown:=("+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*internalISRweightdown*(GenEvt_I_TTPlusBB==3))*(DoWeights==1)+(DoWeights==0)*1.0"
+					]
+systs_tt_cc=["_CMS_ttH_FSR_ttbarPlusCCUp","_CMS_ttH_FSR_ttbarPlusCCDown","_CMS_ttH_ISR_ttbarPlusCCUp","_CMS_ttH_ISR_ttbarPlusCCDown"]
+systs_tt_cc_weights=["dummyWeight_CMS_ttH_FSR_ttbarPlusCCUp:=("+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*internalFSRweightup*(GenEvt_I_TTPlusCC==1))*(DoWeights==1)+(DoWeights==0)*1.0",
+					 "dummyWeight_CMS_ttH_FSR_ttbarPlusCCDown:=("+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*internalFSRweightdown*(GenEvt_I_TTPlusCC==1))*(DoWeights==1)+(DoWeights==0)*1.0",
+					 "dummyWeight_CMS_ttH_ISR_ttbarPlusCCUp:=("+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*internalISRweightup*(GenEvt_I_TTPlusCC==1))*(DoWeights==1)+(DoWeights==0)*1.0",
+					 "dummyWeight_CMS_ttH_ISR_ttbarPlusCCDown:=("+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*internalISRweightdown*(GenEvt_I_TTPlusCC==1))*(DoWeights==1)+(DoWeights==0)*1.0"
+					]
+
+systWeights+=Q2SystWeights+PDFSystWeights+systs_tt_lf_weights+systs_tt_b_weights+systs_tt_2b_weights+systs_tt_bb_weights+systs_tt_cc_weights
+weightSystNames+=Q2SystNames+PDFSystNames+systs_tt_lf+systs_tt_b+systs_tt_2b+systs_tt_bb+systs_tt_cc
 
 assert len(systWeights)==len(weightSystNames)
 
