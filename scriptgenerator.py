@@ -1554,7 +1554,7 @@ void plot(){
   CSVHelper* internalCSVHelper= new CSVHelper(csvHFfile,csvLFfile, 5,4,3,v_SystTypes);
   LeptonSFHelper* internalLeptonSFHelper= new LeptonSFHelper();
   QCDHelper* internalQCDHelper = new QCDHelper(qcd_file);
-  ttbarsysthelper* internalttbarsysthelper = new ttbarsysthelper;
+  ttbarsysthelper* internalttbarsysthelper = new ttbarsysthelper();
 
   // open files
   TChain* chain = new TChain("MVATree");
