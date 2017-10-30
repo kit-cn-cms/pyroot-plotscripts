@@ -1301,7 +1301,7 @@ double QCDHelper::GetScaleFactor(int n_jets, int n_btags, int n_isoinverted_elec
 	{
 		return 0.;
 	}
-	return sf<0. ? 0. : sf;
+	return sf<=0. ? 0.001 : sf;
 }
 
 double QCDHelper::GetScaleFactorError(int n_jets, int n_btags, int n_isoinverted_electrons, int n_isoinverted_muons)
@@ -1340,7 +1340,7 @@ double QCDHelper::GetScaleFactorErrorUp(int n_jets, int n_btags, int n_isoinvert
 	if(!initialized) return 0.;
 	double sf = GetScaleFactor(n_jets,n_btags,n_isoinverted_electrons,n_isoinverted_muons);
 	double sf_err = GetScaleFactorError(n_jets,n_btags,n_isoinverted_electrons,n_isoinverted_muons);
-	return sf+sf_err <0. ? 0. : sf+sf_err;
+	return sf+sf_err <=0. ? 0.002 : sf+sf_err;
 }
 
 double QCDHelper::GetScaleFactorErrorDown(int n_jets, int n_btags, int n_isoinverted_electrons, int n_isoinverted_muons)
@@ -1349,7 +1349,7 @@ double QCDHelper::GetScaleFactorErrorDown(int n_jets, int n_btags, int n_isoinve
 	if(!initialized) return 0.;
 	double sf = GetScaleFactor(n_jets,n_btags,n_isoinverted_electrons,n_isoinverted_muons);
 	double sf_err = GetScaleFactorError(n_jets,n_btags,n_isoinverted_electrons,n_isoinverted_muons);
-	return sf-sf_err <0. ? 0. : sf-sf_err;
+	return sf-sf_err <=0. ? 0.0005 : sf-sf_err;
 }
 
 QCDHelper::~QCDHelper()
@@ -1391,18 +1391,18 @@ ttbarsysthelper::ttbarsysthelper()
     // first number in pair: 0->ttlf,1->ttcc,2->ttb,3->tt2b,4->ttbb
     // second number in pair: njets
     ISRUp[std::pair<int,int>(0,4)] = 0.987;
-    ISRUp[std::pair<int,int>(0,5)] = 0.984;
+    ISRUp[std::pair<int,int>(0,5)] = 1.007;
     ISRUp[std::pair<int,int>(0,6)] = 1.062;
-    ISRUp[std::pair<int,int>(1,4)] = 0.986;
-    ISRUp[std::pair<int,int>(1,5)] = 0.987;
+    ISRUp[std::pair<int,int>(1,4)] = 1.013;
+    ISRUp[std::pair<int,int>(1,5)] = 1.013;
     ISRUp[std::pair<int,int>(1,6)] = 1.078;
-    ISRUp[std::pair<int,int>(2,4)] = 0.984;
+    ISRUp[std::pair<int,int>(2,4)] = 1.016;
     ISRUp[std::pair<int,int>(2,5)] = 1.025;
     ISRUp[std::pair<int,int>(2,6)] = 1.09;
     ISRUp[std::pair<int,int>(3,4)] = 0.932;
     ISRUp[std::pair<int,int>(3,5)] = 1.025;
     ISRUp[std::pair<int,int>(3,6)] = 1.055;
-    ISRUp[std::pair<int,int>(4,4)] = 0.976;
+    ISRUp[std::pair<int,int>(4,4)] = 1.024;
     ISRUp[std::pair<int,int>(4,5)] = 1.02;
     ISRUp[std::pair<int,int>(4,6)] = 1.074;
     
@@ -1415,8 +1415,8 @@ ttbarsysthelper::ttbarsysthelper()
     ISRDown[std::pair<int,int>(2,4)] = 0.982;
     ISRDown[std::pair<int,int>(2,5)] = 0.973;
     ISRDown[std::pair<int,int>(2,6)] = 0.902;
-    ISRDown[std::pair<int,int>(3,4)] = 0.976;
-    ISRDown[std::pair<int,int>(3,5)] = 1.023;
+    ISRDown[std::pair<int,int>(3,4)] = 1.024;
+    ISRDown[std::pair<int,int>(3,5)] = 0.977;
     ISRDown[std::pair<int,int>(3,6)] = 0.936;
     ISRDown[std::pair<int,int>(4,4)] = 0.967;
     ISRDown[std::pair<int,int>(4,5)] = 0.948;
@@ -1426,11 +1426,11 @@ ttbarsysthelper::ttbarsysthelper()
     FSRUp[std::pair<int,int>(0,5)] = 0.765;
     FSRUp[std::pair<int,int>(0,6)] = 0.75;
     FSRUp[std::pair<int,int>(1,4)] = 1.061;
-    FSRUp[std::pair<int,int>(1,5)] = 0.987;
+    FSRUp[std::pair<int,int>(1,5)] = 1.013;
     FSRUp[std::pair<int,int>(1,6)] = 1.023;
     FSRUp[std::pair<int,int>(2,4)] = 1.018;
-    FSRUp[std::pair<int,int>(2,5)] = 0.948;
-    FSRUp[std::pair<int,int>(2,6)] = 0.99;
+    FSRUp[std::pair<int,int>(2,5)] = 1.015;
+    FSRUp[std::pair<int,int>(2,6)] = 1.01;
     FSRUp[std::pair<int,int>(3,4)] = 1.067;
     FSRUp[std::pair<int,int>(3,5)] = 1.031;
     FSRUp[std::pair<int,int>(3,6)] = 1.067;
@@ -1455,7 +1455,7 @@ ttbarsysthelper::ttbarsysthelper()
     FSRDown[std::pair<int,int>(4,6)] = 0.853;
     
     HDAMPUp[std::pair<int,int>(0,4)] = 0.994;
-    HDAMPUp[std::pair<int,int>(0,5)] = 0.992;
+    HDAMPUp[std::pair<int,int>(0,5)] = 1.008;
     HDAMPUp[std::pair<int,int>(0,6)] = 1.029;
     HDAMPUp[std::pair<int,int>(1,4)] = 1.013;
     HDAMPUp[std::pair<int,int>(1,5)] = 1.013;
@@ -1463,11 +1463,11 @@ ttbarsysthelper::ttbarsysthelper()
     HDAMPUp[std::pair<int,int>(2,4)] = 1.016;
     HDAMPUp[std::pair<int,int>(2,5)] = 1.034;
     HDAMPUp[std::pair<int,int>(2,6)] = 1.046;
-    HDAMPUp[std::pair<int,int>(3,4)] = 0.976;
+    HDAMPUp[std::pair<int,int>(3,4)] = 1.024;
     HDAMPUp[std::pair<int,int>(3,5)] = 1.023;
     HDAMPUp[std::pair<int,int>(3,6)] = 1.07;
     HDAMPUp[std::pair<int,int>(4,4)] = 1.038;
-    HDAMPUp[std::pair<int,int>(4,5)] = 0.982;
+    HDAMPUp[std::pair<int,int>(4,5)] = 1.018;
     HDAMPUp[std::pair<int,int>(4,6)] = 1.041;
     
     HDAMPDown[std::pair<int,int>(0,4)] = 1.006;
@@ -1488,22 +1488,22 @@ ttbarsysthelper::ttbarsysthelper()
     
     UEUp[std::pair<int,int>(0,4)] = 0.994;
     UEUp[std::pair<int,int>(0,5)] = 0.989;
-    UEUp[std::pair<int,int>(0,6)] = 0.997;
-    UEUp[std::pair<int,int>(1,4)] = 0.987;
-    UEUp[std::pair<int,int>(1,5)] = 0.987;
-    UEUp[std::pair<int,int>(1,6)] = 0.995;
-    UEUp[std::pair<int,int>(2,4)] = 1.016;
+    UEUp[std::pair<int,int>(0,6)] = 1.003;
+    UEUp[std::pair<int,int>(1,4)] = 1.013;
+    UEUp[std::pair<int,int>(1,5)] = 1.013;
+    UEUp[std::pair<int,int>(1,6)] = 1.005;
+    UEUp[std::pair<int,int>(2,4)] = 0.984;
     UEUp[std::pair<int,int>(2,5)] = 1.016;
     UEUp[std::pair<int,int>(2,6)] = 1.01;
     UEUp[std::pair<int,int>(3,4)] = 0.976;
-    UEUp[std::pair<int,int>(3,5)] = 1.023;
+    UEUp[std::pair<int,int>(3,5)] = 0.977;
     UEUp[std::pair<int,int>(3,6)] = 1.013;
-    UEUp[std::pair<int,int>(4,4)] = 1.024;
+    UEUp[std::pair<int,int>(4,4)] = 0.976;
     UEUp[std::pair<int,int>(4,5)] = 0.98;
-    UEUp[std::pair<int,int>(4,6)] = 0.99;
+    UEUp[std::pair<int,int>(4,6)] = 1.01;
     
     UEDown[std::pair<int,int>(0,4)] = 1.006;
-    UEDown[std::pair<int,int>(0,5)] = 0.992;
+    UEDown[std::pair<int,int>(0,5)] = 1.008;
     UEDown[std::pair<int,int>(0,6)] = 0.997;
     UEDown[std::pair<int,int>(1,4)] = 0.974;
     UEDown[std::pair<int,int>(1,5)] = 0.987;
@@ -1515,7 +1515,7 @@ ttbarsysthelper::ttbarsysthelper()
     UEDown[std::pair<int,int>(3,5)] = 1.023;
     UEDown[std::pair<int,int>(3,6)] = 0.987;
     UEDown[std::pair<int,int>(4,4)] = 1.024;
-    UEDown[std::pair<int,int>(4,5)] = 0.981;
+    UEDown[std::pair<int,int>(4,5)] = 1.019;
     UEDown[std::pair<int,int>(4,6)] = 0.99;
 }
 
