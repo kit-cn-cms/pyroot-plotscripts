@@ -41,6 +41,7 @@ def getHead(dataBases,addCodeInterfaces=[]):
 #include <TH2D.h>
 #include "LHAPDF/LHAPDF.h"
 #include "TGraphAsymmErrors.h"
+#include "TStopwatch.h"
 
 """
   for addCodeInt in addCodeInterfaces:
@@ -1718,7 +1719,9 @@ void plot(){
     //remove remaining underscores
     while(thisfilename.Last('_')>=0){ thisfilename.Replace(thisfilename.Last('_'),1,"");}
     std::cout<<" relevant database name "<<thisfilename<<std::endl;
-    sampleDataBaseIdentifiers[originalfilename]=thisfilename;
+        
+   sampleDataBaseIdentifiers[originalfilename]=thisfilename;
+    
     //check if already in vectr
     TString translatedFileNameForDataBase;
     """
@@ -1731,6 +1734,9 @@ void plot(){
   retstr+="""
   
     translatedFileNameForDataBase=sampleTranslationMapCPP[thisfilename];
+    if(processname=="QCD" or processname=="QCD_CMS_ttH_QCDScaleFactorUp" or processname=="QCD_CMS_ttH_QCDScaleFactorDown"){
+      translatedFileNameForDataBase+="QCD";
+      }
     samplename_in_database=translatedFileNameForDataBase;
     if(! (std::find(databaseRelevantFilenames.begin(),databaseRelevantFilenames.end(),translatedFileNameForDataBase)!=databaseRelevantFilenames.end()  )){
       databaseRelevantFilenames.push_back(translatedFileNameForDataBase.Copy());
@@ -1817,8 +1823,29 @@ void plot(){
   //chain->SetBranchAddress("Evt_Lumi",&Evt_Lumi_INT);
 //}
   
+  // some timers 
+  double totalTime=0;
+  double totalTimeGetEntry=0;
+  double totalTimeFillHistograms=0;
+  double totalTimeReadDataBase=0;
+  double totalTimeEvalDNN=0;
+  double totalTimeEvalWeightsAndBDT=0;
+  double totalTimeSampleWeight=0;
+  double totalTimeCalculateSFs=0;
+  double totalTimeMapping=0;
+  
+  TStopwatch* timerGetEntry=new TStopwatch();
+  TStopwatch* timerFillHistograms=new TStopwatch();
+  TStopwatch* timerReadDataBase=new TStopwatch();
+  TStopwatch* timerEvalDNN=new TStopwatch();
+  TStopwatch* timerEvalWeightsAndBDT=new TStopwatch();
+  TStopwatch* timerSampleWeight=new TStopwatch();
+  TStopwatch* timerCalculateSFs=new TStopwatch();
+  TStopwatch* timerTotal=new TStopwatch();
+  TStopwatch* timerMapping=new TStopwatch();
+  
 
-
+ 
   // initialize variables from tree
 """
   return retstr
@@ -1872,13 +1899,16 @@ def readOutDataBase(thisDataBase=[]):
   rstr+="""
     TString currentRelevantSampleName=sampleDataBaseIdentifiers[currentfilename];
     TString translatedCurrentRelevantSampleName=sampleTranslationMapCPP[currentRelevantSampleName];
+    if(processname=="QCD" or processname=="QCD_CMS_ttH_QCDScaleFactorUp" or processname=="QCD_CMS_ttH_QCDScaleFactorDown"){
+      translatedCurrentRelevantSampleName+="QCD";
+      }
     //std::cout<<currentfilename<<" "<<currentRelevantSampleName<<" "<<translatedCurrentRelevantSampleName<<std::endl;
   """
   
   rstr+=" // loop over subsamples of this database\n"
   rstr+="    int nfoundresults=0;\n"
   
-  rstr+="  if(N_BTagsM>=3){ \n"
+  rstr+="  if((N_BTagsM>=3 && N_Jets>=6) || (N_BTagsM>=4 && (N_Jets==4 || N_Jets==5))){ \n"
   rstr+="  databaseWatch->Start(); \n"
   
   rstr+="  for(unsigned int isn=0; isn<"+thisDataBaseName+"DB.size();isn++){ \n"
@@ -1940,7 +1970,6 @@ def readOutDataBase(thisDataBase=[]):
     #rstr+="  if("+thisDataBaseName+"FoundResult==0 and N_BTagsM>=3){ std::cout<<\"skipping\"<<std::endl; continue; }\n"
   
   rstr+="  //std::cout<<\"FINAL p p_sig p_bkg p_err_sig p_err_bkg n_perm_sig n_perm_bkg \"<<"+thisDataBaseName+"p<<\" \"<<"+thisDataBaseName+"p_sig<<\" \"<<"+thisDataBaseName+"p_bkg<<\" \"<<"+thisDataBaseName+"p_err_sig<<\" \"<<"+thisDataBaseName+"p_err_bkg<<\" \"<<"+thisDataBaseName+"n_perm_sig<<\" \"<<"+thisDataBaseName+"n_perm_bkg<<\" \"<<std::endl;\n"
-  
   return rstr
   
 
@@ -1996,6 +2025,7 @@ def fillTwoDimHistoSyst(name,varname1,varname2,weight,systnames,systweights):
 
 def startLoop():
   return """
+  timerTotal->Start();
   // loop over all events
   long nentries = chain->GetEntries();
   cout << "total number of events: " << nentries << endl;
@@ -2003,7 +2033,8 @@ def startLoop():
   for (long iEntry=skipevents;iEntry<nentries;iEntry++) {
     if(iEntry==maxevents) break;
     if(iEntry%10000==0) cout << "analyzing event " << iEntry << endl;
-
+    
+    timerGetEntry->Start();
     chain->GetEntry(iEntry);
 //    if(evtIDisIntBranch==1){
 //      Evt_ID=Evt_ID_INT;
@@ -2066,6 +2097,10 @@ def startLoop():
       if(N_TightElectrons==1){electronPt=Electron_Pt[0]; electronEta=Electron_Eta[0];}
       else{electronPt=0.0; electronEta=0.0;}
     }
+    
+    totalTimeGetEntry+=timerGetEntry->RealTime();
+    timerCalculateSFs->Start();
+    
     float internalEleTriggerWeight=1.0;
     float internalEleTriggerWeightUp=1.0;
     float internalEleTriggerWeightDown=1.0;
@@ -2181,6 +2216,7 @@ def startLoop():
   float internalQCDweightup = 0.0;
   float internalQCDweightdown = 0.0;
   
+  float internalPDFweight = 0.0;
   float internalPDFweightUp = 0.0;
   float internalPDFweightDown = 0.0;
   
@@ -2230,7 +2266,7 @@ def startLoop():
   internalUEweightup = internalttbarsysthelper->GetUEScaleFactorUp(ttbar_subprocess,N_Jets);
   internalUEweightdown = internalttbarsysthelper->GetUEScaleFactorDown(ttbar_subprocess,N_Jets);
   
-  
+  totalTimeCalculateSFs+=timerCalculateSFs->RealTime();
 
  
   // print stuff for synchronizing
@@ -2302,6 +2338,7 @@ def fillTwoDimHisto(histo,var1,var2,weight):
 def endLoop():
   return """
   }\n // end of event loop
+  totalTime+=timerTotal->RealTime();
 """
 
 
@@ -2348,6 +2385,16 @@ def getFoot(addCodeInterfaces):
 
   rstr+="""
   
+  std::cout<<"time getting event: "<<totalTimeGetEntry<<std::endl;
+  std::cout<<"time calculating SFs: "<<totalTimeCalculateSFs<<std::endl;
+  std::cout<<"time reading DBs: "<<totalTimeReadDataBase<<std::endl;
+  std::cout<<"time Eval DNN: "<<totalTimeEvalDNN<<std::endl;
+  std::cout<<"time Eval weights and BDTs: "<<totalTimeEvalWeightsAndBDT<<std::endl;
+  std::cout<<"time for sampel weight: "<<totalTimeSampleWeight<<std::endl;
+  std::cout<<"time filling histos: "<<totalTimeFillHistograms<<std::endl;
+  std::cout<<"time mapping values: "<<totalTimeMapping<<std::endl;
+  std::cout<<"time spent in event loop: "<<totalTime<<std::endl;
+
   
 }
 
@@ -2400,7 +2447,7 @@ def compileProgram(scriptname,usesDataBases,addCodeInterfaces):
   print cmdstring
   print ""
   compileOutFile=open(scriptname+'_gccCommand.txt',"w")
-  compileOutFile.write(cmdstring)
+  compileOutFile.write(cmdstring+"\n")
   compileOutFile.close()
   try:
     print subprocess.check_output([cmdstring],stderr=subprocess.STDOUT,shell=True)
@@ -2425,7 +2472,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 	    "internalMuHIPWeight","internalMuHIPWeightUp","internalMuHIPWeightDown",
 	    "internalQCDweight","internalQCDweightup","internalQCDweightdown",
 	    "electron_data","muon_data",
-	    "internalPDFweightUp","internalPDFweightDown",
+	    "internalPDFweightUp","internalPDFweightDown","internalPDFweight",
 	    "internalISRweightdown","internalISRweightup","internalFSRweightdown","internalFSRweightup",
         "internalHDAMPweightdown","internalHDAMPweightup","internalUEweightdown","internalUEweightup"
 ]
@@ -2556,27 +2603,41 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
     #print castStub
     startLoopStub=startLoopStub.replace("//PLACEHOLDERFORCASTLINES", castStub)
   script+=startLoopStub
+  script+="   timerMapping->Start();\n"
   script+=ResetMEPDFNormFactors(csv_file)
   script+=RelateMEPDFMapToNormFactor(csv_file)
   script+=PutPDFWeightsinVector(csv_file)
   script+=UseLHAPDF()
-    
+  script+="   totalTimeMapping+=timerMapping->RealTime();\n"
+
+  script+="   timerEvalDNN->Start();\n"
   for addCodeInt in addCodeInterfaces:
     script+=addCodeInt.getVariableInitInsideEventLoopLines()
-  
+  script+="   totalTimeEvalDNN+=timerEvalDNN->RealTime();\n"
+
+  script+="   timerSampleWeight->Start();\n"
   script+='    float sampleweight=1;\n'
   script+=encodeSampleSelection(samples,variables)
+  script+="   totalTimeSampleWeight+=timerSampleWeight->RealTime();\n"
+  
+  script+="   timerReadDataBase->Start();\n"
   for db in dataBases:
     script+=readOutDataBase(db)  
   script+="\n"
+  script+="   totalTimeReadDataBase+=timerReadDataBase->RealTime();\n"
   
+  script+="   timerEvalDNN->Start();\n"
   for addCodeInt in addCodeInterfaces:
     script+=addCodeInt.getEventLoopCodeLines()
     script+="\n"
+  script+="   totalTimeEvalDNN+=timerEvalDNN->RealTime();\n"
 
+  script+="   timerEvalWeightsAndBDT->Start();\n"
   # calculate varibles and get TMVA outputs
   script+=variables.calculateVarsProgram()
-
+  script+="   totalTimeEvalWeightsAndBDT+=timerEvalWeightsAndBDT->RealTime();\n"
+  
+  script+="   timerFillHistograms->Start();\n"
   # start plotting
   for cn,cs in zip(catnames,catselections):
 
@@ -2682,7 +2743,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 
     # finish category
     script+=endCat()
-
+  script+="   totalTimeFillHistograms+=timerFillHistograms->RealTime();\n"
   # finish loop
   script+=endLoop()
   
@@ -2887,7 +2948,7 @@ def do_qstat(jobids):
       for jid in words:
         if jid.isdigit():
           jobid=int(jid)
-          if jobid in jobids:
+          if jobid in jobids and not " dr " in line:
            nrunning+=1
           break
 
@@ -3416,6 +3477,7 @@ def UseLHAPDF():
     code+='const LHAPDF::PDFUncertainty pdfUnc = pdfSet.uncertainty(pdf_weights, 68.);\n'
     code+='internalPDFweightUp   = pdfUnc.central + pdfUnc.errplus;\n'
     code+='internalPDFweightDown = pdfUnc.central - pdfUnc.errminus;\n'
+    code+='internalPDFweight = pdfUnc.central;\n'
     code+='//std::cout<<"result pdf weights: central, down, up "<<pdfUnc.central<<" "<<internalPDFweightDown<< " "<<internalPDFweightUp<<std::endl;\n'
     return code
 
