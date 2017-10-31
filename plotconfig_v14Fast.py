@@ -421,7 +421,6 @@ PDFSystNames= [
 
 ]
 
-<<<<<<< HEAD
 systs_tt_lf=["_CMS_ttH_FSR_ttbarOtherUp","_CMS_ttH_FSR_ttbarOtherDown","_CMS_ttH_ISR_ttbarOtherUp","_CMS_ttH_ISR_ttbarOtherDown","_CMS_ttH_hdamp_ttbarOtherUp","_CMS_ttH_hdamp_ttbarOtherDown","_CMS_ttH_ue_ttbarOtherUp","_CMS_ttH_ue_ttbarOtherDown"]
 systs_tt_lf_weights=[
                     "dummyWeight_CMS_ttH_FSR_ttbarOtherUp:=("+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*internalFSRweightup*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0))*(DoWeights==1)+(DoWeights==0)*1.0",
