@@ -54,7 +54,7 @@ const TLorentzVector makeVectorM(double pt, double eta, double phi, double mass)
   def getBeforeLoopLines(self):
     rstr="""
   DNNClassifierBase::pyInitialize();
-  DNNClassifier_SL dnn("v6a");
+  DNNClassifier_SL dnn("v6b");
 """
     return rstr
 
