@@ -87,6 +87,18 @@ def main(argv):
                          "Weight_CSVLFStats1up","Weight_CSVLFStats1down","Weight_CSVHFStats2up","Weight_CSVHFStats2down","Weight_CSVLFStats2up","Weight_CSVLFStats2down",
                          "Weight_CSVCErr1up","Weight_CSVCErr1down","Weight_CSVCErr2up","Weight_CSVCErr2down","Evt_blr_ETH","Evt_blr_ETH_transformed",
 
+                         'conditionFor_finalbdt_ljets_j4_t3:=(N_Jets==4 && N_BTagsM==3)',
+                         'conditionFor_finalbdt_ljets_j4_t4:=(N_Jets==4 && N_BTagsM==4)',
+                         'conditionFor_finalbdt_ljets_j5_t3:=(N_Jets==5 && N_BTagsM==3)',
+                         'conditionFor_finalbdt_ljets_j5_tge4:=(N_Jets==5 && N_BTagsM>=4)',
+                         'conditionFor_finalbdt_ljets_jge6_t2:=(N_Jets>=6 && N_BTagsM==2)',
+                         'conditionFor_finalbdt_ljets_jge6_t3:=(N_Jets>=6 && N_BTagsM==3)',
+                         'conditionFor_finalbdt_ljets_jge6_tge4:=(N_Jets>=6 && N_BTagsM>=4)',
+                         'conditionFor_alternativebdt_ljets_jge6_tge4:=(N_Jets>=6 && N_BTagsM>=4)',
+                         'conditionFor_alternativebdt_ljets_jge6_t3:=(N_Jets>=6 && N_BTagsM==3)',
+                         'conditionFor_alternativebdt_ljets_j5_tge4:=(N_Jets==5 && N_BTagsM>=4)',
+                         'conditionFor_alternativebdt_ljets_j4_t4:=(N_Jets==4 && N_BTagsM==4)',
+                         
              			 'finalbdt_ljets_j4_t2:=Evt_HT_Jets',
              			 'finalbdt_ljets_j5_t2:=Evt_HT_Jets',
                          'finalbdt_ljets_j4_t3:='+bdtweightpath+'/weights_Final_43_'+bdtset+'.xml',
