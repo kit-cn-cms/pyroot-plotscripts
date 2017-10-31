@@ -8,7 +8,10 @@ ROOT.gStyle.SetOptStat(0)
 infname=sys.argv[1]
 print "init"
 
-acats=["ljets_j4_t4","ljets_j5_tge4","ljets_jge6_t3","ljets_jge6_tge4","ljets_j5_t3","ljets_j4_t3","ljets_jge6_t2"]
+#acats=["ljets_j4_t4","ljets_j5_tge4","ljets_jge6_t3","ljets_jge6_tge4","ljets_j5_t3","ljets_j4_t3","ljets_jge6_t2"]
+
+acats=["ljets_jge6_t3","ljets_jge6_tge4"]
+acats+=["ljets_jge6_tge4_low","ljets_jge6_tge4_high","ljets_jge6_tge4_MEMONLY","ljets_jge6_t3_low","ljets_jge6_t3_high","ljets_jge6_t3_MEMONLY","ljets_jge6_tge3_tt2bnode","ljets_jge6_tge3_ttbbnode","ljets_jge6_tge3_ttbnode","ljets_jge6_tge3_ttccnode","ljets_jge6_tge3_ttlfnode","ljets_jge6_tge3_ttHnode"]
 #acats=["ljets_j5_t3","ljets_j4_t3"]
 #acats=["ljets_j5_t3"]
 
@@ -22,10 +25,10 @@ print "ok"
 #procs=["ttH","ttbarOther","ttbarPlusCCbar","ttbarPlusB","ttbarPlus2B","ttbarPlusBBbar",]
 #systs=['CMS_ttH_Q2scale_ttbarOther', 'CMS_ttH_Q2scale_ttbarPlusB', 'CMS_ttH_Q2scale_ttbarPlus2B', 'CMS_ttH_Q2scale_ttbarPlusBBbar', 'CMS_ttH_Q2scale_ttbarPlusCCbar', 'CMS_ttH_CSVLF', 'CMS_ttH_CSVHF', 'CMS_ttH_CSVHFStats1', 'CMS_ttH_CSVLFStats1', 'CMS_ttH_CSVHFStats2', 'CMS_ttH_CSVLFStats2', 'CMS_ttH_CSVCErr1', 'CMS_ttH_CSVCErr2', 'CMS_scale_j', 'CMS_ttH_PU', 'CMS_res_j', 'CMS_ttH_eff_mu', 'CMS_ttH_eff_el', 'CMS_ttH_ljets_Trig_mu', 'CMS_ttH_ljets_Trig_el', 'CMS_ttH_PSscale_ttbarOther', 'CMS_ttH_PSscale_ttbarPlusB', 'CMS_ttH_PSscale_ttbarPlus2B', 'CMS_ttH_PSscale_ttbarPlusBBbar', 'CMS_ttH_PSscale_ttbarPlusCCbar']
 #systs=["CMS_ttH_PSscale_ttbarOther","CMS_ttH_PSscale_ttbarPlusB","CMS_ttH_PSscale_ttbarPlus2B","CMS_ttH_PSscale_ttbarPlusBBbar","CMS_ttH_PSscale_ttbarPlusCCbar"]
-systs=["CMS_ttH_FSR","CMS_ttH_ISR","CMS_ttH_hdamp","CMS_ttH_ue"]
+systs=["CMS_ttH_PDF","CMS_ttH_scaleMuF","CMS_ttH_scaleMuR","CMS_scale_FlavorQCD_j","CMS_scale_RelativeFSR_j"]
 
 #procs="ttH_hbb ttH_hcc ttH_hww ttH_hzz ttH_htt ttH_hgg ttH_hgluglu ttH_hzg ttbarOther ttbarPlusB ttbarPlus2B ttbarPlusBBbar ttbarPlusCCbar singlet wjets zjets ttbarW ttbarZ diboson".split(" ")
-procs="ttbarOther ttbarPlusB ttbarPlus2B ttbarPlusBBbar ttbarPlusCCbar".split(" ")
+procs="ttH ttbarOther ttbarPlusB ttbarPlus2B ttbarPlusBBbar ttbarPlusCCbar ttbarIncl".split(" ")
 print procs
 
 inf=ROOT.TFile(infname,"READ")
@@ -45,12 +48,27 @@ for c in cats:
   else:
     discname="inputVar"
   for p in procs:
-    firstnom=inf.Get(p+"_"+discname+"_"+c)
+    if p=="ttbarIncl":
+      firstnom=inf.Get("ttbarOther"+"_"+discname+"_"+c)
+      for subp in "ttbarPlusB ttbarPlus2B ttbarPlusBBbar ttbarPlusCCbar".split(" "):
+        subnom=inf.Get(subp+"_"+discname+"_"+c)
+        firstnom.Add(subnom)
+    else:
+      firstnom=inf.Get(p+"_"+discname+"_"+c)
     for s in systs:
       nom=firstnom.Clone()
       print p+"_"+discname+"_"+c+"_"+s
-      up=inf.Get(p+"_"+discname+"_"+c+"_"+s+"Up")
-      down=inf.Get(p+"_"+discname+"_"+c+"_"+s+"Down")
+      if p=="ttbarIncl":
+        up=inf.Get("ttbarOther"+"_"+discname+"_"+c+"_"+s+"Up")
+        down=inf.Get("ttbarOther"+"_"+discname+"_"+c+"_"+s+"Down")
+        for subp in "ttbarPlusB ttbarPlus2B ttbarPlusBBbar ttbarPlusCCbar".split(" "):
+          subup=inf.Get(subp+"_"+discname+"_"+c+"_"+s+"Up")
+          subdown=inf.Get(subp+"_"+discname+"_"+c+"_"+s+"Down")
+          up.Add(subup)
+          down.Add(subdown)
+      else:
+        up=inf.Get(p+"_"+discname+"_"+c+"_"+s+"Up")
+        down=inf.Get(p+"_"+discname+"_"+c+"_"+s+"Down")
       #print down, up
       if up!=None and down!=None:
 	up.SetLineColor(ROOT.kRed)
