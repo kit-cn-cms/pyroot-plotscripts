@@ -139,8 +139,6 @@ systsTtbar= [
 #systs_tt_cc=[ "_CMS_ttH_Q2scale_ttbarPlusCCbarUp","_CMS_ttH_Q2scale_ttbarPlusCCbarDown"]
 
 
-
-
 errorSystNamesNoPS=[
                     "",
                    "_CMS_ttH_CSVLFUp","_CMS_ttH_CSVLFDown","_CMS_ttH_CSVHFUp","_CMS_ttH_CSVHFDown",
@@ -423,6 +421,7 @@ PDFSystNames= [
 
 ]
 
+<<<<<<< HEAD
 systs_tt_lf=["_CMS_ttH_FSR_ttbarOtherUp","_CMS_ttH_FSR_ttbarOtherDown","_CMS_ttH_ISR_ttbarOtherUp","_CMS_ttH_ISR_ttbarOtherDown","_CMS_ttH_hdamp_ttbarOtherUp","_CMS_ttH_hdamp_ttbarOtherDown","_CMS_ttH_ue_ttbarOtherUp","_CMS_ttH_ue_ttbarOtherDown"]
 systs_tt_lf_weights=[
                     "dummyWeight_CMS_ttH_FSR_ttbarOtherUp:=("+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*internalFSRweightup*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0))*(DoWeights==1)+(DoWeights==0)*1.0",
@@ -492,7 +491,6 @@ otherSystNames=[
                     ##"_CMS_ttH_PSscaleUp",
                     ##"_CMS_ttH_PSscaleDown"
     "_CMS_scale_jUp","_CMS_scale_jDown",
-    "_CMS_res_jUp","_CMS_res_jDown",
     #"_CMS_scale_AbsoluteStat_jUp","_CMS_scale_AbsoluteStat_jDown",
     #"_CMS_scale_AbsoluteScale_jUp","_CMS_scale_AbsoluteScale_jDown",
     ##"_CMS_scale_AbsoluteFlavMap_jUp","_CMS_scale_AbsoluteFlavMap_jDown",
