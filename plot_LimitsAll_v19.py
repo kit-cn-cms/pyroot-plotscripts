@@ -26,7 +26,7 @@ from plotconfig_v14 import *
 def main(argv):
 
     # Create analysis object with output name
-    name='limits_JetTagBDT_v19'
+    name='limits_All_v19'
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/latest/ttbb-cutbased-analysis_limitInput.root')
     analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/Sep17/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/output20170626-reference/workdir/ttbb-cutbased-analysis/output_limitInput.root')
@@ -84,7 +84,7 @@ def main(argv):
                          "Weight_CSV","Weight_CSVLFup","Weight_CSVLFdown","Weight_CSVHFup","Weight_CSVHFdown","Weight_CSVHFStats1up","Weight_CSVHFStats1down",
                          "Weight_CSVLFStats1up","Weight_CSVLFStats1down","Weight_CSVHFStats2up","Weight_CSVHFStats2down","Weight_CSVLFStats2up","Weight_CSVLFStats2down",
                          "Weight_CSVCErr1up","Weight_CSVCErr1down","Weight_CSVCErr2up","Weight_CSVCErr2down","Evt_blr_ETH","Evt_blr_ETH_transformed",
-                         
+
                          'conditionFor_finalbdt_ljets_j4_t3:=(N_Jets==4 && N_BTagsM==3)',
                          'conditionFor_finalbdt_ljets_j4_t4:=(N_Jets==4 && N_BTagsM==4)',
                          'conditionFor_finalbdt_ljets_j5_t3:=(N_Jets==5 && N_BTagsM==3)',
@@ -145,132 +145,132 @@ def main(argv):
     maxxvals+=maxxvals_JTBDT
     categories+=categorienames_JTBDT
     
-    ## 2D analysis split at ttH median of BDTs
-    #unsplitcategorienames_JT2D=[
-                  #("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4",""),
-                  #("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4",""),
-                  #("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3",""),
-                  #("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4",""),
-                  #]
-    #bdtcuts=[-0.2,-0.2,0.2,0.22,0.17,0.22,0.05,0.17,0.17]
-    #categorienames_JT2D=[]
-    #for cat,bdt in zip(unsplitcategorienames_JT2D,bdtcuts):
-      #if cat[1] in ["ljets_jge6_tge4","ljets_j5_tge4","ljets_j4_t4","ljets_jge6_t3"]:
-        #categories.append(('('+cat[0]+')*(finalbdt_'+cat[1]+'>'+str(bdt)+')',cat[1]+'_high') )
-        #categories.append(('('+cat[0]+')*(finalbdt_'+cat[1]+'<='+str(bdt)+')',cat[1]+'_low') )
-    #discrs_JT2D=[memexp, memexp, memexp, memexp,memexp, memexp,memexp, memexp]
-    #nhistobins_JT2D = [10,12, 8,10, 25,25,   12,15 ]
-    #minxvals_JT2D =   [ 0.05, 0.05,0.1,0.1,0,0,0.05,0]
-    #maxxvals_JT2D =   [1.0, 0.9,1.0,0.95,1.0,1.0,1.0,1.0]
-    #discrs+=discrs_JT2D
-    #nhistobins+=nhistobins_JT2D
-    #minxvals+=minxvals_JT2D
-    #maxxvals+=maxxvals_JT2D
-    #categories+=categorienames_JT2D
+    # 2D analysis split at ttH median of BDTs
+    unsplitcategorienames_JT2D=[
+                  ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4",""),
+                  ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4",""),
+                  ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3",""),
+                  ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4",""),
+                  ]
+    bdtcuts=[-0.2,-0.2,0.2,0.22,0.17,0.22,0.05,0.17,0.17]
+    categorienames_JT2D=[]
+    for cat,bdt in zip(unsplitcategorienames_JT2D,bdtcuts):
+      if cat[1] in ["ljets_jge6_tge4","ljets_j5_tge4","ljets_j4_t4","ljets_jge6_t3"]:
+        categories.append(('('+cat[0]+')*(finalbdt_'+cat[1]+'>'+str(bdt)+')',cat[1]+'_high') )
+        categories.append(('('+cat[0]+')*(finalbdt_'+cat[1]+'<='+str(bdt)+')',cat[1]+'_low') )
+    discrs_JT2D=[memexp, memexp, memexp, memexp,memexp, memexp,memexp, memexp]
+    nhistobins_JT2D = [10,12, 8,10, 25,25,   12,15 ]
+    minxvals_JT2D =   [ 0.05, 0.05,0.1,0.1,0,0,0.05,0]
+    maxxvals_JT2D =   [1.0, 0.9,1.0,0.95,1.0,1.0,1.0,1.0]
+    discrs+=discrs_JT2D
+    nhistobins+=nhistobins_JT2D
+    minxvals+=minxvals_JT2D
+    maxxvals+=maxxvals_JT2D
+    categories+=categorienames_JT2D
 
-    ## 2D analysis split at ttH median of BDTs OPTIMIZED FOR ttbb vs rest
-    #unsplitcategorienames_JT2DOPTIMIZED=[
-                  #("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4",""),
-                  #("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4",""),
-                  #("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3",""),
-                  #("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4",""),
-                  #]
-    #bdtcuts=[-0.2,-0.2,0.2,0.22,0.17,0.22,0.05,0.17,0.17]
-    #categorienames_JT2DOPTIMIZED=[]
-    #for cat,bdt in zip(unsplitcategorienames_JT2DOPTIMIZED,bdtcuts):
-      #if cat[1] in ["ljets_jge6_tge4","ljets_j5_tge4","ljets_j4_t4","ljets_jge6_t3"]:
-        #categories.append(('('+cat[0]+')*(alternativebdt_'+cat[1]+'>'+str(bdt)+')',cat[1]+'_ttbbOpt_high') )
-        #categories.append(('('+cat[0]+')*(alternativebdt_'+cat[1]+'<='+str(bdt)+')',cat[1]+'_ttbbOpt_low') )
-    #discrs_JT2DOPTIMIZED=[memexp, memexp, memexp, memexp,memexp, memexp,memexp, memexp]
-    #nhistobins_JT2DOPTIMIZED = [10,12, 8,10, 25,25,   12,15 ]
-    #minxvals_JT2DOPTIMIZED =   [ 0.05, 0.05,0.1,0.1,0,0,0.05,0]
-    #maxxvals_JT2DOPTIMIZED =   [0.95, 0.9,1.0,1.0,1.0,1.0,1.0,1.0]
-    #discrs+=discrs_JT2DOPTIMIZED
-    #nhistobins+=nhistobins_JT2DOPTIMIZED
-    #minxvals+=minxvals_JT2DOPTIMIZED
-    #maxxvals+=maxxvals_JT2DOPTIMIZED
-    #categories+=categorienames_JT2DOPTIMIZED
+    # 2D analysis split at ttH median of BDTs OPTIMIZED FOR ttbb vs rest
+    unsplitcategorienames_JT2DOPTIMIZED=[
+                  ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4",""),
+                  ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4",""),
+                  ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3",""),
+                  ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4",""),
+                  ]
+    bdtcuts=[-0.2,-0.2,0.2,0.22,0.17,0.22,0.05,0.17,0.17]
+    categorienames_JT2DOPTIMIZED=[]
+    for cat,bdt in zip(unsplitcategorienames_JT2DOPTIMIZED,bdtcuts):
+      if cat[1] in ["ljets_jge6_tge4","ljets_j5_tge4","ljets_j4_t4","ljets_jge6_t3"]:
+        categories.append(('('+cat[0]+')*(alternativebdt_'+cat[1]+'>'+str(bdt)+')',cat[1]+'_ttbbOpt_high') )
+        categories.append(('('+cat[0]+')*(alternativebdt_'+cat[1]+'<='+str(bdt)+')',cat[1]+'_ttbbOpt_low') )
+    discrs_JT2DOPTIMIZED=[memexp, memexp, memexp, memexp,memexp, memexp,memexp, memexp]
+    nhistobins_JT2DOPTIMIZED = [10,12, 8,10, 25,25,   12,15 ]
+    minxvals_JT2DOPTIMIZED =   [ 0.05, 0.05,0.1,0.1,0,0,0.05,0]
+    maxxvals_JT2DOPTIMIZED =   [0.95, 0.9,1.0,1.0,1.0,1.0,1.0,1.0]
+    discrs+=discrs_JT2DOPTIMIZED
+    nhistobins+=nhistobins_JT2DOPTIMIZED
+    minxvals+=minxvals_JT2DOPTIMIZED
+    maxxvals+=maxxvals_JT2DOPTIMIZED
+    categories+=categorienames_JT2DOPTIMIZED
 
-## BDT only but with the ttbb optimized BDTs
-    #categorienames_JTBDTOPTIMIZED=[
-                  #("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4_ttbbOpt",""),
-                  #("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4_ttbbOpt",""),
-                  #("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_ttbbOpt",""),
-                  #("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4_ttbbOpt",""),
-                  #]
-    #discrs_JTBDTOPTIMIZED=['alternativebdt_ljets_j4_t4',  'alternativebdt_ljets_j5_tge4',  'alternativebdt_ljets_jge6_t3', 'alternativebdt_ljets_jge6_tge4']
-    #nhistobins_JTBDTOPTIMIZED = [  12,      16,     25,   16 ]
-    #minxvals_JTBDTOPTIMIZED =   [ -0.8,   -0.65,  -0.65,   -0.7]
-    #maxxvals_JTBDTOPTIMIZED =   [0.6,     0.65,   0.65,    0.8]
-    #discrs+=discrs_JTBDTOPTIMIZED
-    #nhistobins+=nhistobins_JTBDTOPTIMIZED
-    #minxvals+=minxvals_JTBDTOPTIMIZED
-    #maxxvals+=maxxvals_JTBDTOPTIMIZED
-    #categories+=categorienames_JTBDTOPTIMIZED
+# BDT only but with the ttbb optimized BDTs
+    categorienames_JTBDTOPTIMIZED=[
+                  ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4_ttbbOpt",""),
+                  ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4_ttbbOpt",""),
+                  ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_ttbbOpt",""),
+                  ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4_ttbbOpt",""),
+                  ]
+    discrs_JTBDTOPTIMIZED=['alternativebdt_ljets_j4_t4',  'alternativebdt_ljets_j5_tge4',  'alternativebdt_ljets_jge6_t3', 'alternativebdt_ljets_jge6_tge4']
+    nhistobins_JTBDTOPTIMIZED = [  12,      16,     25,   16 ]
+    minxvals_JTBDTOPTIMIZED =   [ -0.8,   -0.65,  -0.65,   -0.7]
+    maxxvals_JTBDTOPTIMIZED =   [0.6,     0.65,   0.65,    0.8]
+    discrs+=discrs_JTBDTOPTIMIZED
+    nhistobins+=nhistobins_JTBDTOPTIMIZED
+    minxvals+=minxvals_JTBDTOPTIMIZED
+    maxxvals+=maxxvals_JTBDTOPTIMIZED
+    categories+=categorienames_JTBDTOPTIMIZED
 
-    ## jet tag categories for Mem only and blr
-    #categorienames_JTMEM=[                  
-                  #("(N_Jets==4&&N_BTagsM==3)","ljets_j4_t3_BLR",""),
-                  #("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4_MEMONLY",""),
-                  #("(N_Jets==5&&N_BTagsM==3)","ljets_j5_t3_BLR",""),
-                  #("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4_MEMONLY",""),
-                  #("(N_Jets>=6&&N_BTagsM==2)","ljets_jge6_t2_BLR",""),
-                  #("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_MEMONLY",""),
-                  #("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4_MEMONLY",""),
-                  #("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_BLR",""),
-    #]
-    #discrs_JTMEM=[  'Evt_blr_ETH_transformed',   memexp,    'Evt_blr_ETH_transformed',    memexp,   'Evt_blr_ETH_transformed',   memexp,   memexp , 'Evt_blr_ETH_transformed']
-    #nhistobins_JTMEM = [  20,   12,    20,    18,   25,   25,   16, 25 ]
-    #minxvals_JTMEM =   [ -1,  0.05, 0.0,   0.1, -3, 0,   0.1, 0.5]
-    #maxxvals_JTMEM =   [6, 0.9,   6.5,    1.0,  4,  1.0,    0.9, 7.0]
-    #discrs+=discrs_JTMEM
-    #nhistobins+=nhistobins_JTMEM
-    #minxvals+=minxvals_JTMEM
-    #maxxvals+=maxxvals_JTMEM
-    #categories+=categorienames_JTMEM
+    # jet tag categories for Mem only and blr
+    categorienames_JTMEM=[                  
+                  ("(N_Jets==4&&N_BTagsM==3)","ljets_j4_t3_BLR",""),
+                  ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4_MEMONLY",""),
+                  ("(N_Jets==5&&N_BTagsM==3)","ljets_j5_t3_BLR",""),
+                  ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4_MEMONLY",""),
+                  ("(N_Jets>=6&&N_BTagsM==2)","ljets_jge6_t2_BLR",""),
+                  ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_MEMONLY",""),
+                  ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4_MEMONLY",""),
+                  ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_BLR",""),
+    ]
+    discrs_JTMEM=[  'Evt_blr_ETH_transformed',   memexp,    'Evt_blr_ETH_transformed',    memexp,   'Evt_blr_ETH_transformed',   memexp,   memexp , 'Evt_blr_ETH_transformed']
+    nhistobins_JTMEM = [  20,   12,    20,    18,   25,   25,   16, 25 ]
+    minxvals_JTMEM =   [ -1,  0.05, 0.0,   0.1, -3, 0,   0.1, 0.5]
+    maxxvals_JTMEM =   [6, 0.9,   6.5,    1.0,  4,  1.0,    0.9, 7.0]
+    discrs+=discrs_JTMEM
+    nhistobins+=nhistobins_JTMEM
+    minxvals+=minxvals_JTMEM
+    maxxvals+=maxxvals_JTMEM
+    categories+=categorienames_JTMEM
 
-    ## DNN classes DNN outputs
-    #categorienames_MultiDNN=[
-              #("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==0)","ljets_j4_tge3_ttHnode",""),
-              #("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==0)","ljets_j5_tge3_ttHnode",""),             
-              #("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==0)","ljets_jge6_tge3_ttHnode",""),
+    # DNN classes DNN outputs
+    categorienames_MultiDNN=[
+              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==0)","ljets_j4_tge3_ttHnode",""),
+              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==0)","ljets_j5_tge3_ttHnode",""),             
+              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==0)","ljets_jge6_tge3_ttHnode",""),
 
-              #("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==1)","ljets_j4_tge3_ttbbnode",""),
-              #("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==1)","ljets_j5_tge3_ttbbnode",""),             
-              #("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==1)","ljets_jge6_tge3_ttbbnode",""),
+              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==1)","ljets_j4_tge3_ttbbnode",""),
+              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==1)","ljets_j5_tge3_ttbbnode",""),             
+              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==1)","ljets_jge6_tge3_ttbbnode",""),
 
-              #("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==2)","ljets_j4_tge3_ttbnode",""),
-              #("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==2)","ljets_j5_tge3_ttbnode",""),             
-              #("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==2)","ljets_jge6_tge3_ttbnode",""),
+              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==2)","ljets_j4_tge3_ttbnode",""),
+              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==2)","ljets_j5_tge3_ttbnode",""),             
+              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==2)","ljets_jge6_tge3_ttbnode",""),
 
-              #("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==3)","ljets_j4_tge3_tt2bnode",""),
-              #("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==3)","ljets_j5_tge3_tt2bnode",""),             
-              #("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==3)","ljets_jge6_tge3_tt2bnode",""),
+              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==3)","ljets_j4_tge3_tt2bnode",""),
+              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==3)","ljets_j5_tge3_tt2bnode",""),             
+              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==3)","ljets_jge6_tge3_tt2bnode",""),
 
-              #("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==4)","ljets_j4_tge3_ttccnode",""),
-              #("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==4)","ljets_j5_tge3_ttccnode",""),             
-              #("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==4)","ljets_jge6_tge3_ttccnode",""),
+              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==4)","ljets_j4_tge3_ttccnode",""),
+              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==4)","ljets_j5_tge3_ttccnode",""),             
+              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==4)","ljets_jge6_tge3_ttccnode",""),
 
-              #("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==5)","ljets_j4_tge3_ttlfnode",""),
-              #("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==5)","ljets_j5_tge3_ttlfnode",""),             
-              #("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==5)","ljets_jge6_tge3_ttlfnode",""),
-              #]
-    #discrs_MultiDNN=[
-             #'aachen_Out_ttH','aachen_Out_ttH','aachen_Out_ttH',
-             #'aachen_Out_ttbarBB','aachen_Out_ttbarBB','aachen_Out_ttbarBB',
-             #'aachen_Out_ttbarB','aachen_Out_ttbarB','aachen_Out_ttbarB',
-             #'aachen_Out_ttbar2B','aachen_Out_ttbar2B','aachen_Out_ttbar2B',
-             #'aachen_Out_ttbarCC','aachen_Out_ttbarCC','aachen_Out_ttbarCC',
-             #'aachen_Out_ttbarOther','aachen_Out_ttbarOther','aachen_Out_ttbarOther',
-             #]
-    #nhistobins_MultiDNN= [   7,   10,    12,   7,   7,    12,   7,   7,    7,   8,   7,    7,   7,   7,    7,   7,   7,    4,]
-    #minxvals_MultiDNN=   [ 0.2,  0.16, 0.17, 0.16,  0.16, 0.18, 0.2,  0.2, 0.18, 0.2,  0.16, 0.16, 0.17,  0.17, 0.21, 0.17,  0.17, 0.19,]
-    #maxxvals_MultiDNN=   [0.6,  0.6, 0.7,    0.6,  0.6, 0.7,    0.4,  0.4, 0.35,    0.55,  0.5, 0.55,    0.35,  0.35, 0.3,    0.5,  0.4, 0.3,]
-    #discrs+=discrs_MultiDNN
-    #nhistobins+=nhistobins_MultiDNN
-    #minxvals+=minxvals_MultiDNN
-    #maxxvals+=maxxvals_MultiDNN
-    #categories+=categorienames_MultiDNN
+              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==5)","ljets_j4_tge3_ttlfnode",""),
+              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==5)","ljets_j5_tge3_ttlfnode",""),             
+              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==5)","ljets_jge6_tge3_ttlfnode",""),
+              ]
+    discrs_MultiDNN=[
+             'aachen_Out_ttH','aachen_Out_ttH','aachen_Out_ttH',
+             'aachen_Out_ttbarBB','aachen_Out_ttbarBB','aachen_Out_ttbarBB',
+             'aachen_Out_ttbarB','aachen_Out_ttbarB','aachen_Out_ttbarB',
+             'aachen_Out_ttbar2B','aachen_Out_ttbar2B','aachen_Out_ttbar2B',
+             'aachen_Out_ttbarCC','aachen_Out_ttbarCC','aachen_Out_ttbarCC',
+             'aachen_Out_ttbarOther','aachen_Out_ttbarOther','aachen_Out_ttbarOther',
+             ]
+    nhistobins_MultiDNN= [   7,   10,    12,   7,   7,    12,   7,   7,    7,   8,   7,    7,   7,   7,    7,   7,   7,    4,]
+    minxvals_MultiDNN=   [ 0.2,  0.16, 0.17, 0.16,  0.16, 0.18, 0.2,  0.2, 0.18, 0.2,  0.16, 0.16, 0.17,  0.17, 0.21, 0.17,  0.17, 0.19,]
+    maxxvals_MultiDNN=   [0.6,  0.6, 0.7,    0.6,  0.6, 0.7,    0.4,  0.4, 0.35,    0.55,  0.5, 0.55,    0.35,  0.35, 0.3,    0.5,  0.4, 0.3,]
+    discrs+=discrs_MultiDNN
+    nhistobins+=nhistobins_MultiDNN
+    minxvals+=minxvals_MultiDNN
+    maxxvals+=maxxvals_MultiDNN
+    categories+=categorienames_MultiDNN
 
     assert(len(nhistobins)==len(maxxvals))
     assert(len(nhistobins)==len(minxvals))
@@ -338,7 +338,7 @@ def main(argv):
     if analysis.doDrawParallel==False or analysis.plotNumber == None :
         if not os.path.exists(analysis.rootFilePath):
             print "Doing plotParallel step since root file was not found."
-            outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_v5_08102017.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False)
+            outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_v5_08102017.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_V6.py"],cirun=False,StopAfterCompileStep=False)
             # Allow start of an improved rebinning algorithm
             if analysis.getActivatedOptimizedRebinning():
               if analysis.getSignalProcess() == 'ttbb':
