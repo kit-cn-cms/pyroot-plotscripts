@@ -2598,6 +2598,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
           script+=initHistoWithProcessNameAndSuffix(c+n+s,nb,mn,mx,t)
 
   # start event loop
+  script+=DefineLHAPDF()
   startLoopStub=startLoop()
   if castStub!="":
     #print castStub
@@ -3470,10 +3471,13 @@ def PutPDFWeightsinVector(csv_file):
 	for weight in pdf_weights:
 		code+='pdf_weights.push_back(internalNormFactor_'+weight+'*'+weight+');\n'
 	return code
-	
+def DefineLHAPDF():
+    code='LHAPDF::PDFSet pdfSet("NNPDF30_nlo_as_0118");\n'
+    return code
+
 def UseLHAPDF():
     code=''
-    code+='LHAPDF::PDFSet pdfSet("NNPDF30_nlo_as_0118");\n'
+    #code+='LHAPDF::PDFSet pdfSet("NNPDF30_nlo_as_0118");\n'
     code+='const LHAPDF::PDFUncertainty pdfUnc = pdfSet.uncertainty(pdf_weights, 68.);\n'
     code+='internalPDFweightUp   = pdfUnc.central + pdfUnc.errplus;\n'
     code+='internalPDFweightDown = pdfUnc.central - pdfUnc.errminus;\n'
