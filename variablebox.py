@@ -442,11 +442,23 @@ class Variables:
 	    alldependenciesresovled=False
       if alldependenciesresovled==True:
 	sortedVariableList.append([name,var])
-	
-	
+
+    conditionVariableList=[]	
+    for name,var in sortedVariableList:
+      if "conditionFor" in name:
+        conditionVariableList.append([name,var])
+    
     # now write the code for each variable
     for name,var in sortedVariableList:
       print "writing code for ", var.name
+      # check for conditional evaluation
+      hasCondition=False
+      for condname, condvar in conditionVariableList:
+        if name in condname:
+          hasCondition=True
+          text+='if('+condvar.expression+'){\n'
       text+=var.calculateVarProgram()
+      if hasCondition:
+        text+='}\n'
     text+='\n'
     return text
