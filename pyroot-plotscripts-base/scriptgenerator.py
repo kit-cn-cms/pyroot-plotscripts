@@ -2477,7 +2477,8 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
         "internalHDAMPweightdown","internalHDAMPweightup","internalUEweightdown","internalUEweightup"
 ]
 
-  csv_file=os.getcwd()+"/rate_factors_onlyinternal_powhegpythia.csv"
+  #csv_file=os.getcwd()+"/rate_factors_onlyinternal_powhegpythia.csv"
+  csv_file="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv"
 
   vetolist+=GetMEPDFVetoList(csv_file)
 
