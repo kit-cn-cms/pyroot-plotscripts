@@ -189,7 +189,7 @@ def main(argv):
           systsamples.append(Sample(sample.name+sysname,sample.color,sample.path,thisnewsel,sample.nick+sysname,samDict=sampleDict))
     
     allsamples=samples+systsamples
-    allsystnames=weightSystNames+otherSystNames+PSSystNames
+    allsystnames=weightSystNames+otherSystNames+PSSystNames+QCDSystNames
 
 
     # define plots
