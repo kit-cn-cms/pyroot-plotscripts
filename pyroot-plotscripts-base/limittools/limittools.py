@@ -99,21 +99,37 @@ def renameHistos(infname,outfname,sysnames,checkBins=False,prune=True,Epsilon=0.
     newhist=""
     
     # only load histogram if it is really needed
-    if checkBins or (newname!=thisname):
+    if checkBins or (newname!=thisname) or "QCD_" in thisname:
       thish=infile.Get(thisname)
 
-    if checkBins:
-      if thish.GetMinimum()<Epsilon:
+    if checkBins or "QCD_" in thisname:
+      if "QCD_" in thisname:
         nbins=thish.GetNbinsX()
         newhist=thish.Clone()
         theobjectlist.append(newhist)
+        QCDEpsilon=0.001
+        if "QCDScaleFactorDown" in thisname:
+          QCDEpsilon=QCDEpsilon*0.5
         for ibin in range(nbins):
           if newhist.GetBinContent(ibin+1)<=0.0:
             #print "negative or zero bins in ", newhist
             #print "setting bin ", ibin+1, "from", newhist.GetBinContent(ibin+1), "+-", newhist.GetBinError(ibin+1), "to ", Epsilon, "+-", math.sqrt(Epsilon)
-            newhist.SetBinContent(ibin+1,Epsilon)
-            newhist.SetBinError(ibin+1,ROOT.TMath.Sqrt(Epsilon))
+            newhist.SetBinContent(ibin+1,QCDEpsilon)
+            newhist.SetBinError(ibin+1,ROOT.TMath.Sqrt(QCDEpsilon))
             histchanged=True
+      
+      else:
+        if thish.GetMinimum()<Epsilon:
+          nbins=thish.GetNbinsX()
+          newhist=thish.Clone()
+          theobjectlist.append(newhist)
+          for ibin in range(nbins):
+            if newhist.GetBinContent(ibin+1)<=0.0:
+              #print "negative or zero bins in ", newhist
+              #print "setting bin ", ibin+1, "from", newhist.GetBinContent(ibin+1), "+-", newhist.GetBinError(ibin+1), "to ", Epsilon, "+-", math.sqrt(Epsilon)
+              newhist.SetBinContent(ibin+1,Epsilon)
+              newhist.SetBinError(ibin+1,ROOT.TMath.Sqrt(Epsilon))
+              histchanged=True
     if newname!=thisname:      
       #print "changed ", thisname, " to ", newname
       thish.SetName(newname)
