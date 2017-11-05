@@ -960,10 +960,10 @@ def main(argv):
     if (analysis.doDrawParallel==False or analysis.plotNumber != None) and analysis.makeMCControlPlots==True :
         print "Making MC Control plots"
         print "skipping"
-        lll=createLLL_fromSuperHistoFileSyst(outputpath,samples[1:],discriminatorPlots,errorSystNamesNoPS)
-        lllnoQCD=createLLL_fromSuperHistoFileSyst(outputpath,samples[1:],discriminatorPlots,errorSystNamesNoPSNoQCD)
+        lll=createLLL_fromSuperHistoFileSyst(outputpath,samples[1:],discriminatorPlots,errorSystNamesNoQCD)
+        #lllnoQCD=createLLL_fromSuperHistoFileSyst(outputpath,samples[1:],discriminatorPlots,errorSystNamesNoPSNoQCD)
         labels=[plot.label for plot in discriminatorPlots]
-        plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-2,name,[[lll,3354,ROOT.kBlack,True],[lll,3345,ROOT.kSpring-3,True]],False,labels,True,analysis.plotBlinded)
+        plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-2,name,[[lll,3354,ROOT.kBlack,True]],False,labels,True,analysis.plotBlinded)
 
     # Make yield table
     if (analysis.doDrawParallel==False or analysis.plotNumber != None) and analysis.makeEventYields==True :

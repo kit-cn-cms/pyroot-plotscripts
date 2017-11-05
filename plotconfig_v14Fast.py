@@ -30,7 +30,7 @@ weightSystNames=[
                    "_CMS_btag_lfUp","_CMS_btag_lfDown","_CMS_btag_hfUp","_CMS_btag_hfDown",
                    "_CMS_btag_hfstats1Up","_CMS_btag_hfstats1Down","_CMS_btag_lfstats1Up","_CMS_btag_lfstats1Down",
                    "_CMS_btag_hfstats2Up","_CMS_btag_hfstats2Down","_CMS_btag_lfstats2Up","_CMS_btag_lfstats2Down",
-                   "_CMS_btag_cstats1Up","_CMS_btag_cstats1Down","_CMS_btag_cstats2Up","_CMS_btag_cstats2Down",
+                   "_CMS_btag_cferr1Up","_CMS_btag_cferr1Down","_CMS_btag_cferr2Up","_CMS_btag_cferr2Down",
 ###                    "_CMS_ttHbb_TopPtUp","_CMS_ttHbb_TopPtDown",
                     ##"_CMS_ttHbb_Q2scale_ttbarOtherUp","_CMS_ttHbb_Q2scale_ttbarOtherDown",
                     ##"_CMS_ttHbb_Q2scale_ttbarPlusBUp","_CMS_ttHbb_Q2scale_ttbarPlusBDown",
@@ -54,7 +54,7 @@ systsAllSamples=[
                    "_CMS_btag_lfUp","_CMS_btag_lfDown","_CMS_btag_hfUp","_CMS_btag_hfDown",
                    "_CMS_btag_hfstats1Up","_CMS_btag_hfstats1Down","_CMS_btag_lfstats1Up","_CMS_btag_lfstats1Down",
                    "_CMS_btag_hfstats2Up","_CMS_btag_hfstats2Down","_CMS_btag_lfstats2Up","_CMS_btag_lfstats2Down",
-                   "_CMS_btag_cstats1Up","_CMS_btag_cstats1Down","_CMS_btag_cstats2Up","_CMS_btag_cstats2Down",
+                   "_CMS_btag_cferr1Up","_CMS_btag_cferr1Down","_CMS_btag_cferr2Up","_CMS_btag_cferr2Down",
                   "_CMS_effTrigger_eUp","_CMS_effTrigger_eDown",  
                    "_CMS_effTrigger_mUp","_CMS_effTrigger_mDown",  
                     #"_CMS_ttHbb_ljets_TrigUp","_CMS_ttHbb_ljets_TrigDown",
@@ -412,7 +412,7 @@ errorSystNamesNoPS=[
                    "_CMS_btag_lfUp","_CMS_btag_lfDown","_CMS_btag_hfUp","_CMS_btag_hfDown",
                    "_CMS_btag_hfstats1Up","_CMS_btag_hfstats1Down","_CMS_btag_lfstats1Up","_CMS_btag_lfstats1Down",
                    "_CMS_btag_hfstats2Up","_CMS_btag_hfstats2Down","_CMS_btag_lfstats2Up","_CMS_btag_lfstats2Down",
-                   "_CMS_btag_cstats1Up","_CMS_btag_cstats1Down","_CMS_btag_cstats2Up","_CMS_btag_cstats2Down",
+                   "_CMS_btag_cferr1Up","_CMS_btag_cferr1Down","_CMS_btag_cferr2Up","_CMS_btag_cferr2Down",
 ##                    "_CMS_ttHbb_TopPtUp","_CMS_ttHbb_TopPtDown",
                     ##"_CMS_ttHbb_Q2scale_ttbarOtherUp","_CMS_ttHbb_Q2scale_ttbarOtherDown",
                     ##"_CMS_ttHbb_Q2scale_ttbarPlusBUp","_CMS_ttHbb_Q2scale_ttbarPlusBDown",
@@ -494,12 +494,12 @@ errorSystNamesNoPS=[
 ]+systs_tt_all
 
 
-errorSystNamesNoPSNoQCD=[
+errorSystNamesNoQCD=[
                     "",
                    "_CMS_btag_lfUp","_CMS_btag_lfDown","_CMS_btag_hfUp","_CMS_btag_hfDown",
                    "_CMS_btag_hfstats1Up","_CMS_btag_hfstats1Down","_CMS_btag_lfstats1Up","_CMS_btag_lfstats1Down",
                    "_CMS_btag_hfstats2Up","_CMS_btag_hfstats2Down","_CMS_btag_lfstats2Up","_CMS_btag_lfstats2Down",
-                   "_CMS_btag_cstats1Up","_CMS_btag_cstats1Down","_CMS_btag_cstats2Up","_CMS_btag_cstats2Down",
+                   "_CMS_btag_cferr1Up","_CMS_btag_cferr1Down","_CMS_btag_cferr2Up","_CMS_btag_cferr2Down",
 ##                    "_CMS_ttHbb_TopPtUp","_CMS_ttHbb_TopPtDown",
                     ##"_CMS_ttHbb_Q2scale_ttbarOtherUp","_CMS_ttHbb_Q2scale_ttbarOtherDown",
                     ##"_CMS_ttHbb_Q2scale_ttbarPlusBUp","_CMS_ttHbb_Q2scale_ttbarPlusBDown",
