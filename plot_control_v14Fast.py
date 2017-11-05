@@ -26,7 +26,7 @@ from plotconfig_v14Fast import *
 def main(argv):
 
     # Create analysis object with output name
-    name='controlplots_v19Fast'
+    name='controlplots_v21Fast'
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/latest/ttbb-cutbased-analysis_limitInput.root')
     analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/Sep17/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/output20170626-reference/workdir/ttbb-cutbased-analysis/output_limitInput.root')
@@ -36,6 +36,7 @@ def main(argv):
     analysis.makeMCControlPlots=True
     analysis.makeDatacards=False
     analysis.checkBins=False
+    analysis.makeEventYields=True
 
     # Make sure proper plotconfig is loaded for either ttbb or ttH
     #print "We will import the following plotconfig: ", analysis.getPlotConfig()
@@ -881,7 +882,8 @@ def main(argv):
     if analysis.doDrawParallel==False or analysis.plotNumber == None :
         if not os.path.exists(analysis.rootFilePath):
             print "Doing plotParallel step since root file was not found."
-            outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_v5_08102017.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False)
+            outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_FAST.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_V6.py"],cirun=False,StopAfterCompileStep=False)
+
             # Allow start of an improved rebinning algorithm
             if analysis.getActivatedOptimizedRebinning():
               if analysis.getSignalProcess() == 'ttbb':
@@ -901,7 +903,7 @@ def main(argv):
               #  renameHistos(outputpath,renamedPath,allsystnames,analysis.getCheckBins(),False)
               print "renamed file already exists"
             else:
-              renameHistos(outputpath,renamedPath,allsystnames,analysis.getCheckBins(),False)
+              renameHistos(outputpath,renamedPath,allsystnames,False,False)
             
 #            addRealData(renamedPath,[s.nick for s in samples_data],binlabels,discrname)
             #addPseudoData(outputpath[:-5]+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
