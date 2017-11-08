@@ -13,6 +13,7 @@ linesLJ=[]
 for line in injsonfileLJ:
   linesLJ.append(line)
 jsonLJ=json.loads(linesLJ[0])
+outname=sys.argv[2]
 
 def limits_ljets():
     
@@ -46,7 +47,7 @@ def limits_ljets():
     c.RedrawAxis()    
     c.Modified()
     c.Update()
-    c.SaveAs( "lj/bdt_limits_per_category_ljets.pdf" )
+    c.SaveAs( outname+".pdf" )
 
 
 

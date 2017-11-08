@@ -26,7 +26,7 @@ from plotconfig_v14 import *
 def main(argv):
 
     # Create analysis object with output name
-    name='limits_All_v21'
+    name='limits_All_v22'
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/latest/ttbb-cutbased-analysis_limitInput.root')
     analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/Sep17/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/output20170626-reference/workdir/ttbb-cutbased-analysis/output_limitInput.root')
@@ -254,6 +254,13 @@ def main(argv):
               ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==5)","ljets_j4_tge3_ttlfnode",""),
               ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==5)","ljets_j5_tge3_ttlfnode",""),             
               ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==5)","ljets_jge6_tge3_ttlfnode",""),
+
+              ("(N_Jets>=6&&N_BTagsM>=2&&aachen_pred_class==0)","ljets_jge6_tge2_ttHnode",""),
+              ("(N_Jets>=6&&N_BTagsM>=2&&aachen_pred_class==1)","ljets_jge6_tge2_ttbbnode",""),
+              ("(N_Jets>=6&&N_BTagsM>=2&&aachen_pred_class==2)","ljets_jge6_tge2_ttbnode",""),
+              ("(N_Jets>=6&&N_BTagsM>=2&&aachen_pred_class==3)","ljets_jge6_tge2_tt2bnode",""),
+              ("(N_Jets>=6&&N_BTagsM>=2&&aachen_pred_class==4)","ljets_jge6_tge2_ttccnode",""),
+              ("(N_Jets>=6&&N_BTagsM>=2&&aachen_pred_class==5)","ljets_jge6_tge2_ttlfnode",""),
               ]
     discrs_MultiDNN=[
              'aachen_Out_ttH','aachen_Out_ttH','aachen_Out_ttH',
@@ -263,9 +270,20 @@ def main(argv):
              'aachen_Out_ttbarCC','aachen_Out_ttbarCC','aachen_Out_ttbarCC',
              'aachen_Out_ttbarOther','aachen_Out_ttbarOther','aachen_Out_ttbarOther',
              ]
+    discrs_MultiDNN+=[
+               'aachen_Out_ttH',
+             'aachen_Out_ttbarBB',
+             'aachen_Out_ttbarB',
+             'aachen_Out_ttbar2B',
+             'aachen_Out_ttbarCC',
+             'aachen_Out_ttbarOther',
+               ]
     nhistobins_MultiDNN= [   7,   10,    12,   7,   7,    12,   7,   7,    7,   8,   7,    7,   7,   7,    7,   7,   7,    4,]
     minxvals_MultiDNN=   [ 0.2,  0.16, 0.17, 0.16,  0.16, 0.18, 0.2,  0.2, 0.18, 0.2,  0.16, 0.16, 0.17,  0.17, 0.21, 0.17,  0.17, 0.19,]
     maxxvals_MultiDNN=   [0.6,  0.6, 0.7,    0.6,  0.6, 0.7,    0.4,  0.4, 0.35,    0.55,  0.5, 0.55,    0.35,  0.35, 0.3,    0.5,  0.4, 0.3,]
+    nhistobins_MultiDNN+=[12,12,7,7,7,7]
+    minxvals_MultiDNN+=[0.17,0.18,0.18,0.16,0.21,0.19]
+    maxxvals_MultiDNN+=[0.7,0.7,0.35,0.55,0.3,0.3]
     discrs+=discrs_MultiDNN
     nhistobins+=nhistobins_MultiDNN
     minxvals+=minxvals_MultiDNN
