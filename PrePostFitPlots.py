@@ -1,7 +1,6 @@
 import ROOT
 import sys
 import os
-import math
 
 color_dict = {}
 color_dict["ttbarOther"]=ROOT.kRed-7
@@ -337,90 +336,6 @@ def GetCatLabel(cat,prepostfitflag):
     label.SetNDC()
     return label
 
-# returns a stacked background prediction, the data, the error band of the background prediction and a legend for !!! PREFIT !!! 
-"""
-def GetStackedBackgroundHisto(categories_processes_histos_dict,category):
-    # create legend
-    legend = GetLegend()
-    
-    # create stack
-    stack = ROOT.THStack(category,category)
-    
-    # get dictionary process->histo dictionary for category
-    processes_histos_dict = categories_processes_histos_dict[category]
-    #print processes_histos_dict
-    
-    ColorizeHistograms(processes_histos_dict)
-    
-    # get total background prediction
-    background = processes_histos_dict["total_background"]
-    
-    # get data histogram
-    data = GetDataHistogram(processes_histos_dict["data"])
-    
-    # sort histograms in cateogory depending on their integral (first with largest integral, last with smallest) -> to get smallest contributions in the stack plot on top of it
-    sorted_processes_histos_list = sorted(processes_histos_dict.items(),key=lambda x: x[1].Integral(),reverse=False)
-    #print sorted_processes_histos_list
-    
-    # add background histogram to the stackplot
-    for process in sorted_processes_histos_list:
-        # avoid all total histograms, data and signal processes for background only
-        if not "total" in process[0] and not "data" in process[0] and not "ttH" in process[0]:
-            stack.Add(process[1])
-            legend.AddEntry(process[1],process[0],"f")
-
-    # from total background prediction histogram in mlfit file, get the error band
-    error_graph = GetErrorGraph(background)
-    
-    # everything should be in the plots 
-    stack.SetMaximum(error_graph.GetHistogram().GetMaximum()*1.0)
-    
-    # calculate the ratio between background only prediction and data
-    ratio_background_data = GetRatioHisto(data,background)
-    
-    return  stack,legend,error_graph,data,ratio_background_data
-
-def GetStackedSignalBackgroundHisto(categories_processes_histos_dict,category):
-    # create legend
-    legend = GetLegend()
-    
-    # create stack
-    stack = ROOT.THStack(category,category)
-    
-    # get dictionary process->histo dictionary for category
-    processes_histos_dict = categories_processes_histos_dict[category]
-    #print processes_histos_dict
-    
-    ColorizeHistograms(processes_histos_dict)
-    
-    # get total background prediction
-    background = processes_histos_dict["total"]
-    
-    # get data histogram
-    data = GetDataHistogram(processes_histos_dict["data"])
-    
-    # sort histograms in cateogory depending on their integral (first with largest integral, last with smallest) -> to get smallest contributions in the stack plot on top of it
-    sorted_processes_histos_list = sorted(processes_histos_dict.items(),key=lambda x: x[1].Integral(),reverse=False)
-    #print sorted_processes_histos_list
-    
-    # add background histogram to the stackplot
-    for process in sorted_processes_histos_list:
-        # avoid all total histograms, data and signal processes for background only
-        if not "total" in process[0] and not "data" in process[0]:
-            stack.Add(process[1])
-            legend.AddEntry(process[1],process[0],"f")
-
-    # from total background prediction histogram in mlfit file, get the error band
-    error_graph = GetErrorGraph(background)
-    
-    # everything should be in the plots 
-    stack.SetMaximum(error_graph.GetHistogram().GetMaximum()*1.0)
-    
-    # calculate the ratio between background only prediction and data
-    ratio_background_data = GetRatioHisto(data,background)
-    
-    return  stack,legend,error_graph,data,ratio_background_data
-"""
 
 def GetPlots(categories_processes_histos_dict,category,prepostfitflag):
     # create legend
@@ -492,105 +407,7 @@ def GetPlots(categories_processes_histos_dict,category,prepostfitflag):
     
     return  stack,legend,error_graph,data,ratio_background_data,signal,ratio_error_graph
 
-"""
-def PlotPreFit(fitfile_):
-    
-    fitfile = ROOT.TFile.Open(fitfile_,"READ")
-    
-    prefit_dir = "shapes_prefit"
-    
-    categories_processes_histos_dict = GetHistos(fitfile,prefit_dir)
-    
-    channels = GetChannels(GetDirectory(fitfile,prefit_dir))
-    
-    for channel in channels:
-    
-        canvas = GetCanvas("prefit"+channel)
-        
-        stacked_background,legend_background,error_band,data,ratio_background_data = GetPlots(categories_processes_histos_dict,channel,prefit_dir)
-        
-        canvas.cd(1)
-        
-        stacked_background.Draw("hist")
-        # unfortunately this has to be done after a first Draw() because only then the axis objects are created ... ROOT ...
-        stacked_background.GetYaxis().SetLabelFont(43)
-        stacked_background.GetYaxis().SetLabelSize(18)
-        stacked_background.GetYaxis().SetTitle("Entries")
-        stacked_background.GetYaxis().SetTitleOffset(2.0)
-        stacked_background.GetYaxis().SetTitleFont(43)
-        stacked_background.GetYaxis().SetTitleSize(18)
-        
-        stacked_background.Draw("hist")
-        
-        data.Draw("histPEX0same")
-        
-        error_band.Draw("2same")
-        
-        legend_background.Draw("same")
-        
-        canvas.cd(2)
-        #ratio_background_data.GetXaxis().SetRange(1,background_tot.GetMinimumBin()-1)
-        
-        ratio_background_data.Draw("AP2")
-        ratio_line = ROOT.TLine(0,1,ratio_background_data.GetN(),1)
-        ratio_line.SetLineStyle(2)
-        ratio_line.Draw("same")
-        
-        canvas.Print("Prefit"+channel+".pdf")
-    
-    fitfile.Close()
-    
-    return 0
 
-def PlotPostFit(fitfile_):
-    
-    fitfile = ROOT.TFile.Open(fitfile_,"READ")
-    
-    postfit_dir = "shapes_fit_s"
-    
-    categories_processes_histos_dict = GetHistos(fitfile,postfit_dir)
-    
-    channels = GetChannels(GetDirectory(fitfile,postfit_dir))
-    
-    for channel in channels:
-        
-        canvas = GetCanvas("postfit"+channel)
-        
-        stacked_background,legend_background,error_band,data,ratio_background_data = GetPlots(categories_processes_histos_dict,channel,postfit_dir)
-        
-        canvas.cd(1)
-        
-        stacked_background.Draw("hist")
-        # unfortunately this has to be done after a first Draw() because only then the axis objects are created ... ROOT ...
-        stacked_background.GetYaxis().SetLabelFont(43)
-        stacked_background.GetYaxis().SetLabelSize(18)
-        stacked_background.GetYaxis().SetTitle("Entries")
-        stacked_background.GetYaxis().SetTitleOffset(2.0)
-        stacked_background.GetYaxis().SetTitleFont(43)
-        stacked_background.GetYaxis().SetTitleSize(18)
-        
-        stacked_background.Draw("hist")
-        
-        data.Draw("histPEX0same")
-        
-        error_band.Draw("2same")
-        
-        legend_background.Draw("same")
-        
-        canvas.cd(2)
-        #ratio_background_data.GetXaxis().SetRange(1,background_tot.GetMinimumBin()-1)
-        
-        ratio_background_data.Draw("AP2")
-        ratio_line = ROOT.TLine(0,1,ratio_background_data.GetN(),1)
-        ratio_line.SetLineStyle(2)
-        ratio_line.Draw("same")
-        
-        canvas.Print("Postfit"+channel+".pdf")
-    
-    fitfile.Close()
-    
-    return 0
-"""
 def Plot(fitfile_,ch_cat_dict_,prepostfitflag):
     
     fitfile = ROOT.TFile.Open(fitfile_,"READ")
@@ -685,15 +502,18 @@ def main(fitfile_,datacard_):
     print datacard_
     ch_cat_dict = ReadDatacard(datacard_)
     
+    # plot prefit
     Plot(fitfile_,ch_cat_dict,"shapes_prefit")
     
-    #Plot(fitfile_,ch_cat_dict,"shapes_fit_s")
-    
-    #Plot(fitfile_,ch_cat_dict,"shapes_fit_b")
+    # plot post fit after s+b fit
+    Plot(fitfile_,ch_cat_dict,"shapes_fit_s")
+
+    # plot post fit after b-only fit
+    Plot(fitfile_,ch_cat_dict,"shapes_fit_b")
 
 
 if __name__ == "__main__":
     main(sys.argv[1],sys.argv[2])
         
 
-
+# usage: python PrePostFitPlots.py mlfitfile.root corresponding_datacard.txt
