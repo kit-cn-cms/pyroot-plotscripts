@@ -2964,6 +2964,7 @@ def do_qstat(jobids):
 def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,programpath,cmsswpath,treejsonfile="",cirun=False):
   scripts=[]
   outputs=[]
+  samplewiseoutputs={}
   nentries=[]
   SaveTreeInforamtion={}
   LoadedTreeInformation={}
@@ -2974,6 +2975,7 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
       LoadedTreeInformation=json.loads(jsonstring)
   for s in samples:
     print 'creating scripts for',s.name,'from',s.path
+    samplewiseoutputs[s.nick]=[]
     ntotal_events=0
     njob=0
     events_in_files=0
@@ -3002,6 +3004,7 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
           createScript(scriptname,programpath,processname,filenames,outfilename,maxevents,skipevents,cmsswpath,'')
           scripts.append(scriptname)
           outputs.append(outfilename)
+          samplewiseoutputs[s.nick].append(outfilename)
           nentries.append(events_in_file)
           ntotal_events+=events_in_file
 
@@ -3019,6 +3022,7 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
           createScript(scriptname,programpath,processname,filenames,outfilename,events_in_files,skipevents,cmsswpath,'')
           scripts.append(scriptname)
           outputs.append(outfilename)
+          samplewiseoutputs[s.nick].append(outfilename)
           nentries.append(events_in_files)
           ntotal_events+=events_in_files
           files_to_submit=[]
@@ -3039,6 +3043,7 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
       createScript(scriptname,programpath,processname,filenames,outfilename,events_in_files,skipevents,cmsswpath,'')
       scripts.append(scriptname)
       outputs.append(outfilename)
+      samplewiseoutputs[s.nick].append(outfilename)
       nentries.append(events_in_files)
       ntotal_events+=events_in_files
       files_to_submit=[]
@@ -3052,7 +3057,7 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
     jsonfile.write(treejson)
     jsonfile.close()
     print "Saved information about events in trees to ", scriptsfolder+'/'+"treejson.json"
-  return scripts,outputs,nentries
+  return scripts,outputs,nentries,samplewiseoutputs
 
 
 def check_jobs(scripts,outputs,nentries):
@@ -3102,7 +3107,7 @@ def helperSubmitNAFJobs(scripts,outputs,nentries):
 
 
 # the dataBases should be defined as follows e.g. [[memDB,path],[blrDB,path]]
-def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],dataBases=[],treeInformationJsonFile="",otherSystnames=[],addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False):
+def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],dataBases=[],treeInformationJsonFile="",otherSystnames=[],addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False,haddParallel=False):
   cmsswpath=os.environ['CMSSW_BASE']
   if not "CMSSW" in cmsswpath:
     print "you need CMSSW for this to work. Exiting!"
@@ -3148,7 +3153,17 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
     os.makedirs(workdir)
   else:
     if askYesNo('plot existing histograms?'):
-      return outputpath
+      if haddParallel==True:
+        allthefiles=glob.glob(workdir+"/HaddOutputs/*.root")
+        allfilteredfiles=[]
+        for f in allthefiles:
+          if not "_renamed_" in f:
+            allfilteredfiles.append(f)
+        oldoutput=outputpath
+        outputpath=[oldoutput]+allfilteredfiles
+        return outputpath
+      else:
+        return outputpath
     workdirold=workdir+datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     os.rename(workdir,workdirold)
     os.makedirs(workdir)
@@ -3211,11 +3226,13 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
 
   # create run scripts
   print 'creating run scripts'
-  scripts,outputs,nentries=get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,programpath,cmsswpath,treeInformationJsonFile,cirun)
+  scripts,outputs,nentries,samplewiseoutputs=get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,programpath,cmsswpath,treeInformationJsonFile,cirun)
   #DANGERZONE Submit jobs
   if StopAfterCompileStep==True:
     exit(0)
   helperSubmitNAFJobs(scripts,outputs,nentries)
+  #raw_input()
+  #raw_input()
 
 
   # hadd outputs
@@ -3224,24 +3241,94 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   print 'hadd output starting'
   haddclock=ROOT.TStopwatch()
   haddclock.Start()
-  try:
-    subprocess.check_output(['hadd', outputpath]+outputs,stderr=subprocess.STDOUT)
-    print 'hadd output worked ', ('in the first place.' if not haddResubmit else 'in the second place.')
-  except subprocess.CalledProcessError, e:
-    if not haddResubmit:
-        print 'Hadd failed with the following error in the first place:\n \n', e.output
-        print '\n Resubmitting job script and then redoing hadd a second time.'
-        haddResubmit = True
-        helperSubmitNAFJobs(scripts,outputs,nentries)
-        subprocess.check_output(['hadd', outputpath]+outputs,stderr=subprocess.STDOUT)
-    else:
-        print "Hadd failed a second time with the following error, stopping program: \n \n", e.output
-        sys.exit(-1)
+  if haddParallel==False:
+    try:
+      subprocess.check_output(['hadd', outputpath]+outputs,stderr=subprocess.STDOUT)
+      print 'hadd output worked ', ('in the first place.' if not haddResubmit else 'in the second place.')
+    except subprocess.CalledProcessError, e:
+      if not haddResubmit:
+          print 'Hadd failed with the following error in the first place:\n \n', e.output
+          print '\n Resubmitting job script and then redoing hadd a second time.'
+          haddResubmit = True
+          helperSubmitNAFJobs(scripts,outputs,nentries)
+          subprocess.check_output(['hadd', outputpath]+outputs,stderr=subprocess.STDOUT)
+      else:
+          print "Hadd failed a second time with the following error, stopping program: \n \n", e.output
+          sys.exit(-1)
   
+  else:
+    resultingfiles=doParaHadding(name,samplewiseoutputs)
+    oldoutput=outputpath
+    outputpath=[oldoutput]+resultingfiles
   haddtime=haddclock.RealTime()
   print "hadding took ", haddtime
   return  outputpath
 
+
+def doParaHadding(name,inmap={}):
+  script= """
+import ROOT
+import sys
+import os
+import subprocess 
+outfname=sys.argv[1]
+outlogname=sys.argv[2]
+infiles=sys.argv[3:]
+cmd='hadd '+outfname+' '+' '.join(infiles)
+worked=False
+try:
+    subprocess.check_output(cmd,shell=True,stderr=subprocess.STDOUT)
+    worked=True
+except subprocess.CalledProcessError, e:
+    worked=False
+
+outlog=open(outlogname,"w")
+if worked==True:
+  outlog.write("OK")
+else:
+  outlog.write("ERROR")
+outlog.close()
+"""
+  scriptfilename=os.getcwd()+'/workdir/'+name+'/haddScript.py'
+  scriptfile=open(scriptfilename,"w")
+  scriptfile.write(script)
+  scriptfile.close()
+
+  listOfOutScripts=[]
+  listOfOutFiles=[]
+  
+  scriptfolder=os.getcwd()+'/workdir/'+name+'/HaddScripts/'
+  outputfolder=os.getcwd()+'/workdir/'+name+'/HaddOutputs/'
+  if not os.path.exists(scriptfolder):
+    os.makedirs(scriptfolder)
+  if not os.path.exists(outputfolder):
+    os.makedirs(outputfolder)
+  cmsswpath=os.environ['CMSSW_BASE']
+  if not "CMSSW" in cmsswpath:
+    print "you need CMSSW for this to work. Exiting!"
+    exit(0)
+  for sample in inmap:
+    print sample
+    scriptname=scriptfolder+'haddscript_'+sample+'.sh'
+    script="#!/bin/bash \n"
+    if cmsswpath!='':
+      script+="export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch \n"
+      script+="source $VO_CMS_SW_DIR/cmsset_default.sh \n"
+      script+="export SCRAM_ARCH="+os.environ['SCRAM_ARCH']+"\n"
+      script+='cd '+cmsswpath+'/src\neval `scram runtime -sh`\n'
+      script+='cd - \n'
+    script+='python '+scriptfilename+' '+outputfolder+'/'+sample+'_hadded.root'+' '+outputfolder+'/'+sample+'_hadded.log'+' '+' '.join(inmap[sample])+'\n'
+    f=open(scriptname,'w')
+    f.write(script)
+    f.close()
+    st = os.stat(scriptname)
+    os.chmod(scriptname, st.st_mode | stat.S_IEXEC)
+    listOfOutFiles.append(outputfolder+'/'+sample+'_hadded.root')
+    listOfOutScripts.append(scriptname)
+  
+  jobids=submitArrayToNAF(listOfOutScripts, "haddPara")
+  do_qstat(jobids)
+  return listOfOutFiles
 
 def haddFilesFromWildCard(outname="",inwildcard=""):
   infiles=glob.glob(inwildcard)
@@ -3308,7 +3395,7 @@ def renameHistosParallel(infname,sysnames,prune=False):
 	newname+=sys
 	nsysts+=1
 	
-    if "JES" in thisname or "JER" in thisname or "_ttHbb_scaleFSR" in thisname or "_ttHbb_scaleISR" in thisname or "_ttHbb_FSR" in thisname or "_ttHbb_ISR" in thisname or "_ttHbb_HDAMP" in thisname or "ttHbb_UE" in thisname or (("CMS_scale" in thisname or "CMS_res_" in thisname) and ("_jUp" in thisname or "_jDown" in thisname)) or "_CMS_ttH_QCDScaleFactor" in thisname :
+    if "JES" in thisname or "JER" in thisname or "_ttHbb_scaleFSR" in thisname or "_ttHbb_scaleISR" in thisname or "_ttHbb_FSR" in thisname or "_ttHbb_ISR" in thisname or "_ttHbb_HDAMP" in thisname or "ttHbb_UE" in thisname or (("CMS_scale" in thisname or "CMS_res_" in thisname) and ("_jUp" in thisname or "_jDown" in thisname)) or "_CMS_ttH_QCDScaleFactor" in thisname or "_CMS_ttHbbFROMTREES" in thisname:
       if nsysts>2:
         thish=outfile.Get(thisname)
         theobjectlist.append(thish)
