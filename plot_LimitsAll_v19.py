@@ -16,6 +16,7 @@ from limittools import renameHistos
 from limittools import addPseudoData
 from limittools import addRealData
 from limittools import makeDatacards
+from limittools import makeDatacardsParallel
 from limittools import calcLimits
 from limittools import replaceQ2scale
 
@@ -168,28 +169,28 @@ def main(argv):
     maxxvals+=maxxvals_JT2D
     categories+=categorienames_JT2D
 
-    # 2D analysis split at ttH median of BDTs OPTIMIZED FOR ttbb vs rest
-    unsplitcategorienames_JT2DOPTIMIZED=[
-                  ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4",""),
-                  ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4",""),
-                  ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3",""),
-                  ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4",""),
-                  ]
-    bdtcuts=[-0.2,-0.2,0.2,0.22,0.17,0.22,0.05,0.17,0.17]
-    categorienames_JT2DOPTIMIZED=[]
-    for cat,bdt in zip(unsplitcategorienames_JT2DOPTIMIZED,bdtcuts):
-      if cat[1] in ["ljets_jge6_tge4","ljets_j5_tge4","ljets_j4_t4","ljets_jge6_t3"]:
-        categories.append(('('+cat[0]+')*(alternativebdt_'+cat[1]+'>'+str(bdt)+')',cat[1]+'_ttbbOpt_high') )
-        categories.append(('('+cat[0]+')*(alternativebdt_'+cat[1]+'<='+str(bdt)+')',cat[1]+'_ttbbOpt_low') )
-    discrs_JT2DOPTIMIZED=[memexp, memexp, memexp, memexp,memexp, memexp,memexp, memexp]
-    nhistobins_JT2DOPTIMIZED = [10,12, 8,10, 25,25,   12,15 ]
-    minxvals_JT2DOPTIMIZED =   [ 0.05, 0.05,0.1,0.1,0,0,0.05,0]
-    maxxvals_JT2DOPTIMIZED =   [0.95, 0.9,1.0,1.0,1.0,1.0,1.0,1.0]
-    discrs+=discrs_JT2DOPTIMIZED
-    nhistobins+=nhistobins_JT2DOPTIMIZED
-    minxvals+=minxvals_JT2DOPTIMIZED
-    maxxvals+=maxxvals_JT2DOPTIMIZED
-    categories+=categorienames_JT2DOPTIMIZED
+    ## 2D analysis split at ttH median of BDTs OPTIMIZED FOR ttbb vs rest
+    #unsplitcategorienames_JT2DOPTIMIZED=[
+                  #("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4",""),
+                  #("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4",""),
+                  #("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3",""),
+                  #("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4",""),
+                  #]
+    #bdtcuts=[-0.2,-0.2,0.2,0.22,0.17,0.22,0.05,0.17,0.17]
+    #categorienames_JT2DOPTIMIZED=[]
+    #for cat,bdt in zip(unsplitcategorienames_JT2DOPTIMIZED,bdtcuts):
+      #if cat[1] in ["ljets_jge6_tge4","ljets_j5_tge4","ljets_j4_t4","ljets_jge6_t3"]:
+        #categories.append(('('+cat[0]+')*(alternativebdt_'+cat[1]+'>'+str(bdt)+')',cat[1]+'_ttbbOpt_high') )
+        #categories.append(('('+cat[0]+')*(alternativebdt_'+cat[1]+'<='+str(bdt)+')',cat[1]+'_ttbbOpt_low') )
+    #discrs_JT2DOPTIMIZED=[memexp, memexp, memexp, memexp,memexp, memexp,memexp, memexp]
+    #nhistobins_JT2DOPTIMIZED = [10,12, 8,10, 25,25,   12,15 ]
+    #minxvals_JT2DOPTIMIZED =   [ 0.05, 0.05,0.1,0.1,0,0,0.05,0]
+    #maxxvals_JT2DOPTIMIZED =   [0.95, 0.9,1.0,1.0,1.0,1.0,1.0,1.0]
+    #discrs+=discrs_JT2DOPTIMIZED
+    #nhistobins+=nhistobins_JT2DOPTIMIZED
+    #minxvals+=minxvals_JT2DOPTIMIZED
+    #maxxvals+=maxxvals_JT2DOPTIMIZED
+    #categories+=categorienames_JT2DOPTIMIZED
 
 # BDT only but with the ttbb optimized BDTs
     categorienames_JTBDTOPTIMIZED=[
@@ -356,8 +357,12 @@ def main(argv):
     if analysis.doDrawParallel==False or analysis.plotNumber == None :
         if not os.path.exists(analysis.rootFilePath):
             print "Doing plotParallel step since root file was not found."
-            outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_latestAndGreatest.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_V6.py"],cirun=False,StopAfterCompileStep=False)
+            THEoutputpath=plotParallel(name,500000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_latestAndGreatest.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_V6.py"],cirun=False,StopAfterCompileStep=False,haddParallel=True)
             # Allow start of an improved rebinning algorithm
+            if type(THEoutputpath)==str:
+              outputpath=THEoutputpath
+            else:
+              outputpath=THEoutputpath[0]
             if analysis.getActivatedOptimizedRebinning():
               if analysis.getSignalProcess() == 'ttbb':
                 # samples[0:2]: tt+bb, tt+b, tt+2b as signal for S over b normalization
@@ -375,7 +380,10 @@ def main(argv):
               #  renameHistos(outputpath,renamedPath,allsystnames,analysis.getCheckBins(),False)
               print "renamed file already exists"
             else:
-              renameHistos(outputpath,renamedPath,allsystnames,True,False)
+              if type(THEoutputpath)==str:
+                renameHistos(outputpath,renamedPath,allsystnames,True,False)
+              else:
+                renameHistos(THEoutputpath[1:],renamedPath,allsystnames,True,False)
             #renameHistos(outputpath,outputpath[:-5]+'_limitInput.root',allsystnames,analysis.getCheckBins(),False)
             #addRealData(outputpath[:-5]+'_limitInput.root',[s.nick for s in samplesDataControlPlots],binlabels,discrname)
             addPseudoData(outputpath[:-5]+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
@@ -392,14 +400,15 @@ def main(argv):
             outputpath=workdir+'/output.root'
         else:
             outputpath=analysis.rootFilePath[:-16]+'.root'
-
+            
+            
     # make datacards
     if (analysis.doDrawParallel==False or analysis.plotNumber == None) and analysis.makeDataCards == True :
         #TODO
         # 1. Implement small Epsilon case
         # 2. Implement consisted Bin-by-Bin uncertainties
         print "Making Data cards."
-        makeDatacards(outputpath,name+'/'+name+'_datacard',binlabels,doHdecay=True,discrname=discrname,datacardmaker=analysis.getDataCardMaker())
+        makeDatacardsParallel(outputpath,name+'/'+name+'_datacard',binlabels,doHdecay=True,discrname=discrname,datacardmaker="mk_datacard_JESTest13TeVPara")
 
 
     # Invoke drawParallel step

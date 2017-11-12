@@ -2,7 +2,83 @@ import ROOT
 import sys
 import os
 import math
+import subprocess
+import time
+import datetime
+import stat
 from subprocess import call
+import glob
+
+def submitArrayToNAF(scripts,arrayname=""):
+  submitclock=ROOT.TStopwatch()
+  submitclock.Start()
+  jobids=[]
+  logdir = os.getcwd()+"/logs"
+  if not os.path.exists(logdir):
+    os.makedirs(logdir)
+  # get nscripts
+  nscripts=len(scripts)
+  tasknumberstring='1-'+str(nscripts)
+  
+  #create arrayscript to be run on the birds. Depinding on $SGE_TASK_ID the script will call a different plot/run script to actually run
+  basepathtoscripts=scripts[0].rsplit("/",1)[0]
+  print basepathtoscripts
+  arrayscriptpath=basepathtoscripts+"/ats_"+arrayname+".sh"
+  arrayscriptcode="#!/bin/bash \n"
+  arrayscriptcode+="subtasklist=(\n"
+  for scr in scripts:
+    arrayscriptcode+=scr+" \n"
+  arrayscriptcode+=")\n"
+  arrayscriptcode+="thescript=${subtasklist[$SGE_TASK_ID-1]}\n"
+  arrayscriptcode+="thescriptbasename=`basename ${subtasklist[$SGE_TASK_ID-1]}`\n"
+  arrayscriptcode+="echo \"${thescript}\n"
+  arrayscriptcode+="echo \"${thescriptbasename}\n"
+  arrayscriptcode+=". $thescript 1>>"+logdir+"/${thescriptbasename}.o$JOB_ID.$SGE_TASK_ID 2>>"+logdir+"/${thescriptbasename}.e$JOB_ID.$SGE_TASK_ID\n"
+  arrayscriptfile=open(arrayscriptpath,"w")
+  arrayscriptfile.write(arrayscriptcode)
+  arrayscriptfile.close()
+  st = os.stat(arrayscriptpath)
+  os.chmod(arrayscriptpath, st.st_mode | stat.S_IEXEC)
+  
+  #exit(0)
+  print 'submitting',arrayscriptpath
+  #command=['qsub', '-cwd','-terse','-t',tasknumberstring,'-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=2000M', '-l', 's_vmem=2000M' ,'-o', logdir+'/dev/null', '-e', logdir+'/dev/null', arrayscriptpath]
+  command=['qsub', '-cwd','-terse','-t',tasknumberstring,'-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=5800M', '-l', 's_vmem=5800M' ,'-o', '/dev/null', '-e', '/dev/null', arrayscriptpath]
+  a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
+  output = a.communicate()[0]
+  jobidstring = output
+  if len(jobidstring)<2:
+    print "something did not work with submitting the array job"
+    exit(0)
+  jobidstring=jobidstring.split(".")[0]
+  print "the jobID", jobidstring
+  jobidint=int(jobidstring)
+  submittime=submitclock.RealTime()
+  print "submitted ", len(jobids), " in ", submittime
+  return [jobidint]
+
+def do_qstat(jobids):
+  allfinished=False
+  while not allfinished:
+    time.sleep(10)
+    a = subprocess.Popen(['qstat'], stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
+    qstat=a.communicate()[0]
+    lines=qstat.split('\n')
+    nrunning=0
+    for line in lines:
+      words=line.split()
+      for jid in words:
+        if jid.isdigit():
+          jobid=int(jid)
+          if jobid in jobids and not " dr " in line:
+           nrunning+=1
+          break
+
+    if nrunning>0:
+      print nrunning,'jobs running'
+    else:
+      print "all jobs are finished"
+      allfinished=True
 
 
 class Limitresult:
@@ -39,8 +115,74 @@ class Limitresult:
       print catalias[cat]+':',round(limit*10.)/10.,'^{+'+str(round((limit_up-limit)*10)/10.)+'}_{'+str(round((limit_down-limit)*10)/10.)+'}','^{+'+str(round((limit_2up-limit)*10)/10.)+'}_{'+str(round((limit_2down-limit)*10)/10.)+'}'
 
    
-
 def renameHistos(infname,outfname,sysnames,checkBins=False,prune=True,Epsilon=0.0):
+  if type(infname)==str:
+    renameHistosActual(infname,outfname,sysnames,checkBins,prune,Epsilon)
+  else:
+    print "doing parallel renaming and hadding "
+    theclock=ROOT.TStopwatch()
+    theclock.Start()
+    # create python script
+    pyscriptname=outfname.rsplit("/",1)[0]+"/pythonParallelRenameScript.py"
+    renamescriptdir= outfname.rsplit("/",1)[0]+"/renameScripts"
+    if not os.path.exists(renamescriptdir):
+      os.makedirs(renamescriptdir)
+    print "creating renamescript here", pyscriptname
+    script="""
+import ROOT
+import sys
+import os
+sys.path.append('pyroot-plotscripts-base')
+sys.path.append('pyroot-plotscripts-base/limittools')
+import limittoolsTest
+
+infname=sys.argv[1]
+outfname=sys.argv[2]
+checkBins=int(sys.argv[3])
+prune=int(sys.argv[4])
+Epsilon=float(sys.argv[5])
+sysnames=[]
+if len(sys.argv)>6:
+  sysnames=sys.argv[6:]
+limittoolsTest.renameHistosActual(infname,outfname,sysnames,checkBins,prune,Epsilon)
+print "done"
+    """    
+    scriptfile=open(pyscriptname,"w")
+    scriptfile.write(script)
+    scriptfile.close()
+    
+    outnamelist=[]
+    renamescriptlist=[]
+    # now create the shell scripts
+    for inn,nn in enumerate(infname):
+      thisoutname=outfname.replace(".root","_"+str(inn)+".root")
+      outnamelist.append(thisoutname)
+      scriptname=renamescriptdir+'/rename_'+str(inn)+'.sh'
+      renamescriptlist.append(scriptname)
+      script="#!/bin/bash \n"
+      cmsswpath=os.environ['CMSSW_BASE']
+      if cmsswpath!='':
+        script+="export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch \n"
+        script+="source $VO_CMS_SW_DIR/cmsset_default.sh \n"
+        script+="export SCRAM_ARCH="+os.environ['SCRAM_ARCH']+"\n"
+        script+='cd '+cmsswpath+'/src\neval `scram runtime -sh`\n'
+        script+='cd - \n'
+      script+='python '+pyscriptname+' '+nn+' '+thisoutname+' '+str(int(checkBins))+' '+str(int(prune))+' '+str(float(Epsilon))+' '+' '.join(sysnames)+'\n'
+      f=open(scriptname,'w')
+      f.write(script)
+      f.close()
+      st = os.stat(scriptname)
+      os.chmod(scriptname, st.st_mode | stat.S_IEXEC)
+    # now submit jobs to submitArrayToNAF
+    jobids=submitArrayToNAF(renamescriptlist,arrayname="renaming")
+    do_qstat(jobids)
+    # finally hadd the renamed scripts
+    cmd="hadd "+outfname+" "+" ".join(outnamelist)
+    subprocess.call(cmd,shell=True)
+    print "The parallel renaming took ", theclock.RealTime()
+
+    
+def renameHistosActual(infname,outfname,sysnames,checkBins=False,prune=True,Epsilon=0.0):
   print "RenameHistosStep: checking bins set to ", checkBins
   theclock=ROOT.TStopwatch()
   theclock.Start()
@@ -323,6 +465,43 @@ def makeDatacards(filename,outname,categories=None,doHdecay=True,discrname='fina
     #cardscript.write('mk_datacard_ttbb13TeV '+' -d '+' finaldiscr '+' -c '+c+' -o '+outname+'_'+c+'.txt '+filename+"\n")
     cardscript.write(datacardmaker+' -d '+' '+discrname+' '+' -c '+c+' -o '+outname+'_'+c+'_hdecay.txt '+filename+"\n")
   cardscript.close()
+  
+def makeDatacardsParallel(filename,outname,categories=None,doHdecay=True,discrname='finaldiscr',datacardmaker='mk_datacard_hdecay13TeVPara'):
+  parascripts=[]
+  bbbrootfiles=[]
+  cmsswpath=os.environ['CMSSW_BASE']
+  datacardscriptfolder=filename.rsplit("/",1)[0]+'/cardmakingscripts/'
+  if not os.path.exists(datacardscriptfolder):
+    os.makedirs(datacardscriptfolder)
+    
+  for c in categories:
+    scriptname=datacardscriptfolder+'/cardmaker_'+outname.rsplit("/",1)[-1]+'_'+c+'.sh'
+    script="#!/bin/bash \n"
+    if cmsswpath!='':
+      script+="export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch \n"
+      script+="source $VO_CMS_SW_DIR/cmsset_default.sh \n"
+      script+="export SCRAM_ARCH="+os.environ['SCRAM_ARCH']+"\n"
+      script+='cd '+cmsswpath+'/src\neval `scram runtime -sh`\n'
+      script+='cd - \n'
+    script+=datacardmaker+' -d '+' '+discrname+' '+' -c '+c+' -o '+outname+'_'+c+'_hdecay.txt '+filename+'\n'
+    f=open(scriptname,'w')
+    f.write(script)
+    f.close()
+    st = os.stat(scriptname)
+    os.chmod(scriptname, st.st_mode | stat.S_IEXEC)
+    parascripts.append(scriptname)
+    bbbrootfiles.append(filename.replace(".root","BBB_"+c+".root"))
+  
+  jobids=submitArrayToNAF(parascripts,arrayname="cardmaking")
+  do_qstat(jobids)
+  # now hadd the bbb to the inital root file
+  print "adding root files with BBB to other histos"
+  cmd='mv '+filename+' '+filename.replace(".root","backup.root")
+  subprocess.call(cmd,shell=True)
+  cmd='hadd '+filename+' '+filename.replace(".root","backup.root")+' '+' '.join(bbbrootfiles)
+  subprocess.call(cmd,shell=True)
+
+  print "done creating datacards"    
   
 def readLimit(fn='higgsCombineTest.Asymptotic.mH125.root'):
   f=ROOT.TFile(fn)
