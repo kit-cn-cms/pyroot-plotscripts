@@ -65,7 +65,7 @@ nuis_p_i=0
 myprefitsize=0
 for i in range(fpf_s.getSize()):
   name=fpf_s.at(i).GetName()
-  if "BDTbin" in name:
+  if "BDTbin" in name or "prop_bin" in name:
     print "skipping MCstat"
   else:
     myprefitsize+=1
@@ -81,7 +81,7 @@ for i in range(fpf_s.getSize()):
     nuis_s = fpf_s.at(i)
     name   = nuis_s.GetName();
 #    print name
-    if "BDTbin" in name:
+    if "BDTbin" in name or "prop_bin" in name:
       print "skipping ", name
       continue
     nuis_b = fpf_b.find(name)

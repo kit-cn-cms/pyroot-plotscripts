@@ -11,6 +11,7 @@ def create_script(cmsswpath,outputDir,workdir,card):
     script+='source $VO_CMS_SW_DIR/cmsset_default.sh\n'
     script+='cd '+cmsswpath+'/src\neval `scram runtime -sh`\n'
     script+='cd '+workdir+'\n'
+    script+='ulimit -s unlimited \n'
     script+='text2workspace.py '+card+'\n'
     filename='scripts/'+'t2w'+'_'+card.replace('.txt','')+'.sh'
     f=open(filename,'w')

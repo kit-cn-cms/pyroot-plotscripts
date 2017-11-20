@@ -1,5 +1,6 @@
 import sys
 import glob
+from namingMaps import *
 
 outfile=open("table.tex","w")
 indirs=sys.argv[1:]
@@ -7,44 +8,19 @@ indirs=sys.argv[1:]
 
 # careful here
 # names should not be substrings of other names
-nameMap={
-"ljets_jge6_tge4_hdecay": "L+J #geq 6 jets, #geq 4 b-tags",
-"ljets_jge6_tge4_low_hdecay": "L+J #geq 6 jets, #geq 4 b-tags low BDT",
-"ljets_jge6_tge4_high_hdecay": "L+J #geq 6 jets, #geq 4 b-tags high BDT",
-"ljets_jge6_t3_hdecay": "L+J #geq 6 jets, 3 b-tags",
-"ljets_jge6_t3_low_hdecay": "L+J #geq 6 jets, 3 b-tags low BDT",
-"ljets_jge6_t3_high_hdecay": "L+J #geq 6 jets, 3 b-tags high  BDT",
-"ljets_j5_tge4_hdecay": "L+J 5 jets, #geq 4 b-tags",
-"ljets_j5_tge4_low_hdecay": "L+J 5 jets, #geq 4 b-tags low BDT",
-"ljets_j5_tge4_high_hdecay": "L+J 5 jets, #geq 4 b-tags high BDT",
-"ljets_j4_t4_hdecay": "L+J 4 jets, 4 b-tags",
-"ljets_j4_t4_low_hdecay": "L+J 4 jets, 4 b-tags low BDT",
-"ljets_j4_t4_high_hdecay": "L+J 4 jets, 4 b-tags high BDT",
-"ljets_j5_t3_hdecay": "L+J 4 jets, 3 b-tags",
-"ljets_j4_t3_hdecay": "L+J 5 jets, 3 b-tags",
-"ljets_jge6_t2_hdecay": "L+J #geq 6 jets, 2 b-tags",
-"dl_3j3t": "DL 3 jets, 3 b-tags ",
-"dl_ge4j3_both": "DL #geq 4 jets, 3 b-tags",
-"dl_ge4j3t_high": "DL #geq 4 jets, 3 b-tags high BDT",
-"dl_ge4j3t_low": "DL #geq 4 jets, 3 b-tags low BDT",
-"dl_ge4jge4t_both": "DL #geq 4 jets, #geq 4 b-tags",
-"dl_ge4jge4t_high": "DL #geq 4 jets, #geq 4 b-tags high BDT",
-"dl_ge4jge4t_low": "DL #geq 4 jets, #geq 4 b-tags low BDT",
-"DL_BDTonly": "DL BDT-only",
-"DL_2D": "DL 2D",
-"SL_BDTonly": "L+J BDT-only",
-"SL_2D": "L+J 2D",
-"combined_2D": "DL+L+J combined 2D",
-"combined_BDTonly": "DL+L+J combined BDT-only",
-}
 
 resultlines=[]
 for dirName in indirs:
   #get name
-  transCatName=dirName
-  for cat in nameMap:
-    if cat in dirName:
-      transCatName=nameMap[cat]
+  cutdirname=""
+  if "/" in dirName:
+    cutdirname=dirName.split("/")[-1].replace("work_","").replace(prefix,"")
+  else:
+    cutdirname=dirName.replace("work_","").replace(prefix,"")
+  transCatName=cutdirname  
+  if cutdirname in nameMap:
+      transCatName=nameMap[cutdirname]
+  print dirName, transCatName
   outline=transCatName.replace("#geq","$\\geq$")+" & "
   #read limit 
   limit=99.9

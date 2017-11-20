@@ -1,48 +1,40 @@
 import numpy as np
-import json
-import sys
 from ROOT import TH2F, TCanvas, gStyle, TLatex, TAxis, TLine, TGraphErrors, TGraphAsymmErrors, TLegend, kGreen, kYellow, gPad, gROOT
 gROOT.SetBatch(True)
 
-lumi = "35.9" # in 1/fb
+lumi = "11.4-12.9" # in 1/fb
 fontsize = 0.04
 
-injsonfilenameLJ=sys.argv[1]
-injsonfileLJ=open(injsonfilenameLJ,"r")
-linesLJ=[]
-for line in injsonfileLJ:
-  linesLJ.append(line)
-jsonLJ=json.loads(linesLJ[0])
-outname=sys.argv[2]
-print jsonLJ
-
 def limits_ljets():
-  
-    nchannels = int(len(jsonLJ["cat_names"]))
-    cat_namesBuffer=jsonLJ["cat_names"]
-    obsbuffer=jsonLJ["obs"]
-    expectbuffer=jsonLJ["expected"]
-    u1buffer=jsonLJ["upper1sig"]
-    u2buffer=jsonLJ["upper2sig"]
-    d1buffer=jsonLJ["lower1sig"]
-    d2buffer=jsonLJ["lower2sig"]
-    obs=np.array(obsbuffer)
-    expect=np.array(expectbuffer)
-    cat_names=np.array(cat_namesBuffer)
-    cat_namesBuffer2=[]
-    for ic, c in enumerate(cat_names):
-      cat_namesBuffer2.append(cat_names[ic]+" : #mu < "+str(round(expect[ic],2)))
-      print cat_names[ic]+" : #mu < "+str(round(expect[ic],2))
-    cat_names=np.array(cat_namesBuffer2)  
-    print cat_names
-    upper1sig=np.array(u1buffer)
-    upper2sig=np.array(u2buffer)
-    lower1sig=np.array(d1buffer)
-    lower2sig=np.array(d2buffer)
+
+    nchannels = 13
+    
+    #['ttH_hbb_13TeV_dl_3j3t', 'ttH_hbb_13TeV_dl_ge4j3t_low', 'ttH_hbb_13TeV_dl_ge4j3t_high', 'ttH_hbb_13TeV_dl_ge4jge4t_low', 'ttH_hbb_13TeV_dl_ge4jge4t_high', 'inputs2DV12_datacard_ljets_jge6_t3_low_hdecay', 'inputs2DV12_datacard_ljets_jge6_t3_high_hdecay', 'inputs2DV12_datacard_ljets_j4_t4_low_hdecay', 'inputs2DV12_datacard_ljets_j4_t4_high_hdecay', 'inputs2DV12_datacard_ljets_j5_tge4_low_hdecay', 'inputs2DV12_datacard_ljets_j5_tge4_high_hdecay', 'inputs2DV12_datacard_ljets_jge6_tge4_low_hdecay', 'inputs2DV12_datacard_ljets_jge6_tge4_high_hdecay', 'all']
+
+    myn= ['DL 3 jets, 3 b-tags','DL #geq 4 jets, 3 b-tags low BDT','DL #geq 4 jets, 3 b-tags high BDT','DL #geq 4 jets, #geq 4 b-tags low BDT','DL #geq 4 jets, #geq 4 b-tags high BDT','L+J #geq 6 jets, 3 b-tags low BDT','L+J #geq 6 jets, 3 b-tags high BDT','L+J 4 jets, #geq 4 b-tags low BDT','L+J 4 jets, #geq 4 b-tags high BDT', 'L+J 5 jets, #geq 4 b-tags low BDT','L+J 5 jets, #geq 4 b-tags high BDT', 'L+J #geq 6 jets, #geq 4 b-tags low BDT','L+J #geq 6 jets, #geq 4 b-tags high BDT', 'all combined']
     
 
-    xmin = 0.5
-    xmax = 300
+    nchannels=len(myn)
+
+
+
+    #cat_names    = np.array( ['4 jets, 2 b-tags','5 jets, 2 b-tags', '#geq 6 jets, 2 b-tags', '4 jets, 3 b-tags','4 jets, 3 b-tags', '4 jets, #geq 4 b-tags', '4 jets, #geq 4 b-tags', '5 jets, 3 b-tags','5 jets, 3 b-tags', '5 jets, #geq 4 b-tags', '5 jets, #geq 4 b-tags', '#geq 6 jets, 3 b-tags', '#geq 6 jets, 3 b-tags', '#geq 6 jets, #geq 4 b-tags', '#geq 6 jets, #geq 4 b-tags', 'lepton+jets combined'] )
+    #['sl2DBDTMEMsplitTTH_datacard_ljets_j4_t2_hdecay', 'sl2DBDTMEMsplitTTH_datacard_ljets_j5_t2_hdecay', 'sl2DBDTMEMsplitTTH_datacard_ljets_jge6_t2_hdecay', 'sl2DBDTMEMsplitTTH_datacard_ljets_j4_t3_low_hdecay', 'sl2DBDTMEMsplitTTH_datacard_ljets_j4_t3_high_hdecay', 'sl2DBDTMEMsplitTTH_datacard_ljets_j5_t3_low_hdecay', 'sl2DBDTMEMsplitTTH_datacard_ljets_j5_t3_high_hdecay', 'sl2DBDTMEMsplitTTH_datacard_ljets_jge6_t3_low_hdecay', 'sl2DBDTMEMsplitTTH_datacard_ljets_jge6_t3_high_hdecay', 'sl2DBDTMEMsplitTTH_datacard_ljets_j4_t4_low_hdecay', 'sl2DBDTMEMsplitTTH_datacard_ljets_j4_t4_high_hdecay', 'sl2DBDTMEMsplitTTH_datacard_ljets_j5_tge4_low_hdecay', 'sl2DBDTMEMsplitTTH_datacard_ljets_j5_tge4_high_hdecay', 'sl2DBDTMEMsplitTTH_datacard_ljets_jge6_tge4_low_hdecay', 'sl2DBDTMEMsplitTTH_datacard_ljets_jge6_tge4_high_hdecay', 'sl2DBDTMEMsplitTTH_datacard_hdecay']
+
+    
+    cat_names    = np.array( ['DL 3 jets, 3 b-tags','DL #geq 4 jets, 3 b-tags low BDT','DL #geq 4 jets, 3 b-tags high BDT','DL #geq 4 jets, #geq 4 b-tags low BDT','DL #geq 4 jets, #geq 4 b-tags high BDT','L+J #geq 6 jets, 3 b-tags low BDT','L+J #geq 6 jets, 3 b-tags high BDT','L+J 4 jets, #geq 4 b-tags low BDT','L+J 4 jets, #geq 4 b-tags high BDT', 'L+J 5 jets, #geq 4 b-tags low BDT','L+J 5 jets, #geq 4 b-tags high BDT', 'L+J #geq 6 jets, #geq 4 b-tags low BDT','L+J #geq 6 jets, #geq 4 b-tags high BDT', 'all combined'] )
+    
+    
+    obs    = np.array( [0.0]*nchannels )
+    expect    = np.array( [25.8125, 19.3125, 7.28125, 13.3125, 5.046875, 19.6875, 8.25, 47.625, 13.6875, 16.5625, 6.046875, 9.65625, 4.203125, 1.6953125])
+    upper1sig    = np.array( [13.0669975281, 8.54483032227, 3.33768844604, 7.48205184937, 2.83650541306, 8.86770057678, 3.58444881439, 22.2107315063, 6.49251556396, 7.59216690063, 2.91647529602, 4.73429775238, 2.11098337173, 0.763607501984] )
+    lower1sig    = np.array([8.08511543274, 5.88987636566, 2.2131729126, 4.38715744019, 1.66320610046, 5.7795381546, 2.4066696167, 14.2698402405, 4.03475952148, 4.92242622375, 1.85689353943, 3.07202148438, 1.28554582596, 0.510189771652])
+    upper2sig    = np.array( [31.171169281, 19.7590179443, 7.70355224609, 18.4020824432, 6.97637653351, 20.2426223755, 8.39886856079, 52.6733627319, 15.2869510651, 17.9326248169, 7.00279903412, 11.1093921661, 5.01607227325, 1.78524398804])
+    lower2sig    = np.array([12.8558349609, 9.54309082031, 3.54107666016, 6.89025878906, 2.61215209961, 9.30541992188, 3.8994140625, 22.9753417969, 6.49621582031, 7.92541503906, 2.95257568359, 4.88470458984, 2.04409790039, 0.811233520508])
+
+
+    xmin = 0.9
+    xmax = 200
 
     c,h = draw_canvas_histo( nchannels, xmin, xmax, "95% CL limit on #mu = #sigma/#sigma_{SM} at m_{H} = 125 GeV", cat_names )
     c.SetLogx()
@@ -54,8 +46,8 @@ def limits_ljets():
     c.RedrawAxis()    
     c.Modified()
     c.Update()
-    c.SaveAs( outname+".pdf" )
-    c.SaveAs( outname+".png" )
+    c.SaveAs( "lj/2D_limits_per_category_ljets.pdf" )
+
 
 
 def limits_dil():
@@ -70,7 +62,7 @@ def limits_dil():
     upper2sig    = np.array( [122.89089999999999, 64.1284, 37.8989, 12.1876, 19.0792, 8.457299999999998] )
     lower2sig    = np.array( [54.9396, 24.9773, 18.26, 5.27, 6.6106, 3.7533000000000003] )
     
-    xmin = 0.5
+    xmin = 0.9
     xmax = 200
 
     c,h = draw_canvas_histo( nchannels, xmin, xmax, "95% CL limit on #mu = #sigma/#sigma_{SM} at m_{H} = 125 GeV", cat_names )
@@ -90,7 +82,7 @@ def limits_dil():
 def draw_limits_per_category( nchannels, xmin, xmax, obs, expect, upper1sig, lower1sig, upper2sig, lower2sig ):
 
     channel = np.array( [ nchannels - 1.5 - float(i) for i in range( 0, nchannels ) ] )
-    ey      = np.array( [0.494]*nchannels )
+    ey      = np.full( nchannels, 0.494 )
     zero    = np.zeros( nchannels )
 
     gexpect1sig = TGraphAsymmErrors( nchannels, expect, channel, lower1sig, upper1sig, ey, ey )
@@ -125,7 +117,7 @@ def draw_limits_per_category( nchannels, xmin, xmax, obs, expect, upper1sig, low
     l.DrawLine( xmin, 0, xmax, 0 )
 
     # legend
-    leg = TLegend(0.75, 0.75, 0.95, 0.9 )
+    leg = TLegend( 0.32, 0.73, 0.55, 0.9 )
     leg.SetFillColor( 4000 )
     leg.AddEntry( gexpect1sig, "Expected #pm1#sigma", "FL" )
     leg.AddEntry( gexpect2sig, "Expected #pm2#sigma", "FL" )
@@ -145,26 +137,18 @@ def draw_canvas_histo( nchannels, xmin, xmax, title, cat_names ):
     h.SetXTitle( title )
 
     yaxis = h.GetYaxis()
-    yaxis.SetLabelSize( fontsize*.8 )
+    yaxis.SetLabelSize( fontsize )
 
     for ibin in range( 0, nchannels ):
         yaxis.SetBinLabel( nchannels-ibin, cat_names[ibin] )
 
 
-    tCMS = TLatex();
-    tCMS.SetNDC()
-    tCMS.SetTextFont( 42 )
-    tCMS.SetTextSize( fontsize )
-    tCMS.SetTextAlign( 11 )
-    tCMS.DrawLatex( 0.30, 0.91, "CMS")
-
-    tLumi = TLatex();
-    tLumi.SetNDC()
-    tLumi.SetTextFont( 42 )
-    tLumi.SetTextSize( fontsize )
-    tLumi.SetTextAlign( 11 )
-    tLumi.DrawLatex( 0.70, 0.91, lumi + " fb^{-1}, #sqrt{s} = 13 TeV" )
-
+    t = TLatex();
+    t.SetNDC()
+    t.SetTextFont( 42 )
+    t.SetTextSize( fontsize )
+    t.SetTextAlign( 11 )
+    t.DrawLatex( 0.40, 0.91, "CMS preliminary, " + lumi + " fb^{-1}, #sqrt{s} = 13 TeV"  )
 
     return c,h
 
