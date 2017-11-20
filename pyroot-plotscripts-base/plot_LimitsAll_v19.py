@@ -16,6 +16,7 @@ from limittools import renameHistos
 from limittools import addPseudoData
 from limittools import addRealData
 from limittools import makeDatacards
+# UPDATE
 from limittools import makeDatacardsParallel
 from limittools import calcLimits
 from limittools import replaceQ2scale
@@ -358,7 +359,9 @@ def main(argv):
     if analysis.doDrawParallel==False or analysis.plotNumber == None :
         if not os.path.exists(analysis.rootFilePath):
             print "Doing plotParallel step since root file was not found."
-            THEoutputpath=outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_latestAndGreatest.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_V6.py"],cirun=False,StopAfterCompileStep=False,haddParallel=True)
+            #UPDATE
+            THEoutputpath=outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_latestAndGreatest.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_V6.py"],cirun=True,StopAfterCompileStep=False,haddParallel=True)
+            #UPDATE
             if type(THEoutputpath)==str:
               outputpath=THEoutputpath
             else:
@@ -373,6 +376,7 @@ def main(argv):
               else:
                 print 'Warning: Could not find signal process.'
 
+            # UPDATE
             # hadd histo files before renaming. The histograms are actually already renamed. But the checkbins thingy will not have been done yet.
             print "hadding from wildcard"
             haddFilesFromWildCard(outputpath,outputpath[:-11]+"/HaddOutputs/*.root")
@@ -383,6 +387,7 @@ def main(argv):
               #  renameHistos(outputpath,renamedPath,allsystnames,analysis.getCheckBins(),False)
               print "renamed file already exists"
             else:
+              #UPDATE
               if type(THEoutputpath)==str:
                 renameHistos(outputpath,renamedPath,allsystnames,True,False)
               else:
@@ -411,6 +416,7 @@ def main(argv):
         # 1. Implement small Epsilon case
         # 2. Implement consisted Bin-by-Bin uncertainties
         print "Making Data cards."
+        #UPDATE
         makeDatacardsParallel(outputpath,name+'/'+name+'_datacard',binlabels,doHdecay=True,discrname=discrname,datacardmaker="mk_datacard_JESTest13TeVPara")
 
 
