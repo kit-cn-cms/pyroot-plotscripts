@@ -16,6 +16,7 @@ from limittools import renameHistos
 from limittools import addPseudoData
 from limittools import addRealData
 from limittools import makeDatacards
+#UPDATE
 from limittools import makeDatacardsParallel
 from limittools import calcLimits
 from limittools import replaceQ2scale
@@ -889,7 +890,9 @@ def main(argv):
     if analysis.doDrawParallel==False or analysis.plotNumber == None :
         if not os.path.exists(analysis.rootFilePath):
             print "Doing plotParallel step since root file was not found."
+            #UPDATE
             THEoutputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_FAST.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False,haddParallel=True)
+            #UPDATE
             if type(THEoutputpath)==str:
               outputpath=THEoutputpath
             else:
@@ -914,6 +917,7 @@ def main(argv):
               #  renameHistos(outputpath,renamedPath,allsystnames,analysis.getCheckBins(),False)
               print "renamed file already exists"
             else:
+              #UPDATE
               if type(THEoutputpath)==str:
                 renameHistos(outputpath,renamedPath,allsystnames,False,False)
               else:
