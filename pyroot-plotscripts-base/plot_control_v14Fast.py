@@ -9,6 +9,7 @@ import inspect
 import ROOT
 sys.path.append('pyroot-plotscripts-base')
 sys.path.append('pyroot-plotscripts-base/limittools')
+sys.path.append('limittools')
 
 from scriptgenerator import *
 from plotutils import *
