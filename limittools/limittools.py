@@ -134,7 +134,8 @@ import sys
 import os
 sys.path.append('pyroot-plotscripts-base')
 sys.path.append('pyroot-plotscripts-base/limittools')
-import limittoolsTest
+sys.path.append('limittools')
+import limittools
 
 infname=sys.argv[1]
 outfname=sys.argv[2]
@@ -144,7 +145,7 @@ Epsilon=float(sys.argv[5])
 sysnames=[]
 if len(sys.argv)>6:
   sysnames=sys.argv[6:]
-limittoolsTest.renameHistosActual(infname,outfname,sysnames,checkBins,prune,Epsilon)
+limittools.renameHistosActual(infname,outfname,sysnames,checkBins,prune,Epsilon)
 print "done"
     """    
     scriptfile=open(pyscriptname,"w")
