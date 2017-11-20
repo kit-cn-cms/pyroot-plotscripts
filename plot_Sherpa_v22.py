@@ -16,18 +16,17 @@ from limittools import renameHistos
 from limittools import addPseudoData
 from limittools import addRealData
 from limittools import makeDatacards
-from limittools import makeDatacardsParallel
 from limittools import calcLimits
 from limittools import replaceQ2scale
 
 from analysisClass import *
-from plotconfig_v14Fast import *
+from plotconfigSherpa_v14 import *
 
 
 def main(argv):
 
     # Create analysis object with output name
-    name='controlplots_BDTinputs_v24Fast'
+    name='controlplots_Sherpa_v24Fast'
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/latest/ttbb-cutbased-analysis_limitInput.root')
     analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/Sep17/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/output20170626-reference/workdir/ttbb-cutbased-analysis/output_limitInput.root')
@@ -74,7 +73,8 @@ def main(argv):
 
     # define BDT output variables
     bdtweightpath="/nfs/dust/cms/user/kelmorab/Spring17BDTWeights/"
-    bdtset="Spring17v1"
+    bdtset="Spring17v2"
+    alternativebdtset="Spring17v3_ttbb"
     # define additional variables necessary for selection in plotparallel
     additionalvariables=["Jet_Pt", "Muon_Pt", "Electron_Pt",
                          "Jet_Eta", "Muon_Eta", "Electron_Eta",
@@ -86,7 +86,7 @@ def main(argv):
                          "Weight_CSVLFStats1up","Weight_CSVLFStats1down","Weight_CSVHFStats2up","Weight_CSVHFStats2down","Weight_CSVLFStats2up","Weight_CSVLFStats2down",
                          "Weight_CSVCErr1up","Weight_CSVCErr1down","Weight_CSVCErr2up","Weight_CSVCErr2down","Evt_blr_ETH","Evt_blr_ETH_transformed",
                          "GenEvt_I_TTPlusBB","GenEvt_I_TTPlusCC",
-                         
+
                          'conditionFor_finalbdt_ljets_j4_t3:=(N_Jets==4 && N_BTagsM==3)',
                          'conditionFor_finalbdt_ljets_j4_t4:=(N_Jets==4 && N_BTagsM==4)',
                          'conditionFor_finalbdt_ljets_j5_t3:=(N_Jets==5 && N_BTagsM==3)',
@@ -98,7 +98,7 @@ def main(argv):
                          'conditionFor_alternativebdt_ljets_jge6_t3:=(N_Jets>=6 && N_BTagsM==3)',
                          'conditionFor_alternativebdt_ljets_j5_tge4:=(N_Jets==5 && N_BTagsM>=4)',
                          'conditionFor_alternativebdt_ljets_j4_t4:=(N_Jets==4 && N_BTagsM==4)',
-                         
+
              			 'finalbdt_ljets_j4_t2:=Evt_HT_Jets',
              			 'finalbdt_ljets_j5_t2:=Evt_HT_Jets',
                          'finalbdt_ljets_j4_t3:='+bdtweightpath+'/weights_Final_43_'+bdtset+'.xml',
@@ -108,14 +108,56 @@ def main(argv):
                          'finalbdt_ljets_jge6_t2:='+bdtweightpath+'/weights_Final_62_'+bdtset+'.xml',
                          'finalbdt_ljets_jge6_t3:='+bdtweightpath+'/weights_Final_63_'+bdtset+'.xml',
                          'finalbdt_ljets_jge6_tge4:='+bdtweightpath+'/weights_Final_64_'+bdtset+'.xml',
+                         'alternativebdt_ljets_jge6_tge4:='+bdtweightpath+'/weights_Final_64_'+alternativebdtset+'.xml',
+                         'alternativebdt_ljets_jge6_t3:='+bdtweightpath+'/weights_Final_63_'+alternativebdtset+'.xml',
+                         'alternativebdt_ljets_j5_tge4:='+bdtweightpath+'/weights_Final_54_'+alternativebdtset+'.xml',
+                         'alternativebdt_ljets_j4_t4:='+bdtweightpath+'/weights_Final_44_'+alternativebdtset+'.xml',
                          ]
-                         
     additionalvariables+=GetMEPDFadditionalVariablesList("/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv")
-    
     # append variables needed by NNFlow Interface
     #additionalvariables.extend(NNFlowInterface.getAdditionalVariablesList())
     print "Debug output: Print additional variables list: ", additionalvariables
 
+    
+    # prepare discriminators
+    categories=[]
+    nhistobins=[]
+    minxvals=[]
+    maxxvals=[]
+    discrs =[]
+    
+    # jet tag categories for BDTs
+    categorienames_JTBDT=[
+                  ("(N_Jets==4&&N_BTagsM==2)","ljets_j4_t2",""),
+                  ("(N_Jets==5&&N_BTagsM==2)","ljets_j5_t2",""),
+                  ("(N_Jets==4&&N_BTagsM==3)","ljets_j4_t3",""),
+                  ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4",""),
+                  ("(N_Jets==5&&N_BTagsM==3)","ljets_j5_t3",""),
+                  ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4",""),
+                  ("(N_Jets>=6&&N_BTagsM==2)","ljets_jge6_t2",""),
+                  ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3",""),
+                  ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4",""),
+                  ]
+    discrs_JTBDT=['finalbdt_ljets_j4_t2','finalbdt_ljets_j5_t2','finalbdt_ljets_j4_t3', 'finalbdt_ljets_j4_t4', 'finalbdt_ljets_j5_t3', 'finalbdt_ljets_j5_tge4', 'finalbdt_ljets_jge6_t2', 'finalbdt_ljets_jge6_t3', 'finalbdt_ljets_jge6_tge4']
+    nhistobins_JTBDT = [  20,20,      20,   12,    25,    16,   25,   25,   16 ]
+    minxvals_JTBDT =   [ 200, 200, -0.8,  -0.8, -0.8,   -0.9,         -0.6, -0.8,   -0.8]
+    maxxvals_JTBDT =   [800,800,    0.75,  0.7,   0.7,    0.8,  0.7,  0.75,    0.76]
+    discrs+=discrs_JTBDT
+    nhistobins+=nhistobins_JTBDT
+    minxvals+=minxvals_JTBDT
+    maxxvals+=maxxvals_JTBDT
+    categories+=categorienames_JTBDT
+    
+    # get input for plotting function
+    plotPreselections= [c[0] for c in categories]
+    binlabels= [c[1] for c in categories]
+    
+    # define plots
+    discriminatorPlots=[]
+    print len(discrs),len(plotPreselections),len(binlabels),len(nhistobins),len(minxvals),len(maxxvals),
+    print len(zip(discrs,plotPreselections,binlabels,nhistobins,minxvals,maxxvals))
+    for discr,b,bl,nb,minx,maxx in zip(discrs,plotPreselections,binlabels,nhistobins,minxvals,maxxvals):
+        discriminatorPlots.append(Plot(ROOT.TH1F(discrname+"_"+bl,"final discriminator ("+bl+")",nb,minx,maxx),discr,b,bl))
 
         # selections
 
@@ -130,7 +172,7 @@ def main(argv):
                   ("(N_Jets>=6&&N_BTagsM>=4)","6j4t","")
     ]
 
-
+    
     # selections for categories
     categoriesJTsel="("+categoriesJT[0][0]
     for cat in categoriesJT[1:]:
@@ -143,38 +185,43 @@ def main(argv):
     for i,cat in enumerate(categoriesJT):
         catstringJT+=("+"+str(i+1)+"*"+cat[0])
 
-
+    
 
     # book plots
     plotlabel="1 lepton, #geq 4 jets, #geq 2 b-tags"
     plotlabelboosted="#splitline{1 lepton, #geq 4 jets, #geq 2 b-tags}{#geq 1 C/A 1.5 jet p_{T} > 200 GeV}"
     plotselection="(N_Jets>=4&&N_BTagsM>=2)"
     plots=[
-        #Plot(ROOT.TH1F("JT" ,"jet-tag categories",len(categoriesJT),0.5,0.5+len(categoriesJT)),catstringJT,categoriesJTsel,"1 lepton"),
+        Plot(ROOT.TH1F("JT" ,"jet-tag categories",len(categoriesJT),0.5,0.5+len(categoriesJT)),catstringJT,categoriesJTsel,"1 lepton"),
         #Plot(ROOT.TH1F("BCAT" ,"jet-tag + boosted categories",len(categoriesJTB),0.5,0.5+len(categoriesJTB)),catstringJTB,categoriesJTBsel,"1 lepton"),
-        #Plot(ROOT.TH1F("N_Jets","Number of ak4 jets",7,3.5,10.5),"N_Jets",plotselection,plotlabel),
-        #Plot(ROOT.TH1F("N_BTagsM","Number of b-tags",4,1.5,5.5),"N_BTagsM",plotselection,plotlabel),
-        #Plot(ROOT.TH1F("CSV0","B-tag of leading jet",22,-.1,1),"Jet_CSV[0]",plotselection,plotlabel),
-        #Plot(ROOT.TH1F("CSV1","B-tag of second jet",22,-.1,1),"Jet_CSV[1]",plotselection,plotlabel),
-        #Plot(ROOT.TH1F("CSV","B-tag of all jets",22,-.1,1),"Jet_CSV",plotselection,plotlabel),
+        Plot(ROOT.TH1F("N_Jets","Number of ak4 jets",7,3.5,10.5),"N_Jets",plotselection,plotlabel),
+        Plot(ROOT.TH1F("N_BTagsM","Number of b-tags",4,1.5,5.5),"N_BTagsM",plotselection,plotlabel),
+        Plot(ROOT.TH1F("CSV0","B-tag of leading jet",22,-.1,1),"Jet_CSV[0]",plotselection,plotlabel),
+        Plot(ROOT.TH1F("CSV1","B-tag of second jet",22,-.1,1),"Jet_CSV[1]",plotselection,plotlabel),
+        Plot(ROOT.TH1F("CSV","B-tag of all jets",22,-.1,1),"Jet_CSV",plotselection,plotlabel),
         
-        #Plot(ROOT.TH1F("eta1","#eta of leading jet",50,-2.5,2.5),"Jet_Eta[0]",plotselection,plotlabel),
-        #Plot(ROOT.TH1F("eta2","#eta of second jet",50,-2.5,2.5),"Jet_Eta[1]",plotselection,plotlabel),
-        #Plot(ROOT.TH1F("phij1","#phi of leading jet",64,-3.2,3.2),"Jet_Phi[0]",plotselection,plotlabel),
-        #Plot(ROOT.TH1F("phij2","#phi of second jet",64,-3.2,3.2),"Jet_Phi[1]",plotselection,plotlabel),
-        #Plot(ROOT.TH1F("Evt_HT_Jets","Sum p_{T} jets",75,0,1500),"Evt_HT_Jets",plotselection,plotlabel),
-        #Plot(ROOT.TH1F("ptalljets","p_{T} of all jets",60,0,300),"Jet_Pt",plotselection,plotlabel),
-        #Plot(ROOT.TH1F("etaalljets","#eta of all jets",60,-2.5,2.5),"Jet_Eta",plotselection,plotlabel),
-        #Plot(ROOT.TH1F("pumvaalljets","PU MVA of all jets",60,0,1.0),"Jet_PileUpMVA",plotselection,plotlabel),
-        #Plot(ROOT.TH1F("puidalljets","PU MVA of all jets",60,0,1.0),"Jet_PileUpID",plotselection,plotlabel),
+        Plot(ROOT.TH1F("eta1","#eta of leading jet",50,-2.5,2.5),"Jet_Eta[0]",plotselection,plotlabel),
+        Plot(ROOT.TH1F("eta2","#eta of second jet",50,-2.5,2.5),"Jet_Eta[1]",plotselection,plotlabel),
+        Plot(ROOT.TH1F("phij1","#phi of leading jet",64,-3.2,3.2),"Jet_Phi[0]",plotselection,plotlabel),
+        Plot(ROOT.TH1F("phij2","#phi of second jet",64,-3.2,3.2),"Jet_Phi[1]",plotselection,plotlabel),
+        Plot(ROOT.TH1F("Evt_HT_Jets","Sum p_{T} jets",75,0,1500),"Evt_HT_Jets",plotselection,plotlabel),
+        Plot(ROOT.TH1F("ptalljets","p_{T} of all jets",60,0,300),"Jet_Pt",plotselection,plotlabel),
+        Plot(ROOT.TH1F("etaalljets","#eta of all jets",60,-2.5,2.5),"Jet_Eta",plotselection,plotlabel),
+        Plot(ROOT.TH1F("phialljets","#phi of all jets",64,-3.2,3.2),"Jet_Phi",plotselection,plotlabel),
+        Plot(ROOT.TH1F("pumvaalljets","PU MVA of all jets",60,0,1.0),"Jet_PileUpMVA",plotselection,plotlabel),
+        Plot(ROOT.TH1F("puidalljets","PU MVA of all jets",60,0,1.0),"Jet_PileUpID",plotselection,plotlabel),
         
-        #Plot(ROOT.TH1F("csvalljets","csv of all jets",44,-.1,1),"Jet_CSV",plotselection,plotlabel),
-        #Plot(ROOT.TH1F("leppt","lepton p_{T}",50,0,200),"LooseLepton_Pt[0]",plotselection,plotlabel),
-        #Plot(ROOT.TH1F("lepeta","lepton #eta",50,-2.5,2.5),"LooseLepton_Eta[0]",plotselection,plotlabel),
-        #Plot(ROOT.TH1F("elleppt","electron p_{T}",50,0,200),"Electron_Pt[0]",'Electron_Pt[0]>10',plotlabel),
-        #Plot(ROOT.TH1F("ellepeta","electron #eta",50,-2.5,2.5),"Electron_Eta[0]",'Electron_Pt[0]>10',plotlabel),
-        #Plot(ROOT.TH1F("muleppt","muon p_{T}",50,0,200),"Muon_Pt[0]",'Muon_Pt[0]>10',plotlabel),
-        #Plot(ROOT.TH1F("mulepeta","muon #eta",50,-2.5,2.5),"Muon_Eta[0]",'Muon_Pt[0]>10',plotlabel),
+        Plot(ROOT.TH1F("csvalljets","csv of all jets",44,-.1,1),"Jet_CSV",plotselection,plotlabel),
+        Plot(ROOT.TH1F("leppt","lepton p_{T}",50,0,200),"LooseLepton_Pt[0]",plotselection,plotlabel),
+        Plot(ROOT.TH1F("lepeta","lepton #eta",50,-2.5,2.5),"LooseLepton_Eta[0]",plotselection,plotlabel),
+        Plot(ROOT.TH1F("lepphi","lepton #phi",50,-3.2,3.2),"LooseLepton_Phi[0]",plotselection,plotlabel),
+
+        Plot(ROOT.TH1F("elleppt","electron p_{T}",50,0,200),"Electron_Pt[0]",'Electron_Pt[0]>10',plotlabel),
+        Plot(ROOT.TH1F("ellepeta","electron #eta",50,-2.5,2.5),"Electron_Eta[0]",'Electron_Pt[0]>10',plotlabel),
+        Plot(ROOT.TH1F("muleppt","muon p_{T}",50,0,200),"Muon_Pt[0]",'Muon_Pt[0]>10',plotlabel),
+        Plot(ROOT.TH1F("mulepeta","muon #eta",50,-2.5,2.5),"Muon_Eta[0]",'Muon_Pt[0]>10',plotlabel),
+        Plot(ROOT.TH1F("ellepphi","electron #phi",50,-3.2,3.2),"Electron_Phi[0]",'Electron_Pt[0]>10',plotlabel),
+        Plot(ROOT.TH1F("mulepphi","muon #phi",50,-3.2,3.2),"Muon_Phi[0]",'Muon_Pt[0]>10',plotlabel),
     ]
     
     plotsAdditional=[
@@ -201,10 +248,10 @@ def main(argv):
         Plot(ROOT.TH1F("pt4","p_{T} of fourth jet",60,0,300),"Jet_Pt[3]",plotselection,plotlabel),
         Plot(ROOT.TH1F("pt5","p_{T} of fifth jet",40,0,200),"Jet_Pt[4]",plotselection,plotlabel),
         Plot(ROOT.TH1F("pt6","p_{T} of sixth jet",40,0,200),"Jet_Pt[5]",plotselection,plotlabel),
-        #Plot(ROOT.TH1F("pt2tagged","p_{T} of second b-tagged jet",50,0,500),"TaggedJet_Pt[1]",plotselection,plotlabel),
-        #Plot(ROOT.TH1F("pt1tagged","p_{T} of leading b-tagged jet",50,0,500),"TaggedJet_Pt[0]",plotselection,plotlabel),
-        #Plot(ROOT.TH1F("pt3tagged","p_{T} of third b-tagged jet",40,0,400),"TaggedJet_Pt[2]",plotselection,plotlabel),
-        #Plot(ROOT.TH1F("pt4tagged","p_{T} of fourth b-tagged jet",60,0,300),"TaggedJet_Pt[3]",plotselection,plotlabel),
+        #Plot(ROOT.TH1F("pt2tagged","p_{T} of second tagged jet",50,0,500),"TaggedJet_Pt[1]",plotselection,plotlabel),
+        #Plot(ROOT.TH1F("pt1tagged","p_{T} of leading tagged jet",50,0,500),"TaggedJet_Pt[0]",plotselection,plotlabel),
+        #Plot(ROOT.TH1F("pt3tagged","p_{T} of third tagged jet",40,0,400),"TaggedJet_Pt[2]",plotselection,plotlabel),
+        #Plot(ROOT.TH1F("pt4tagged","p_{T} of fourth tagged jet",60,0,300),"TaggedJet_Pt[3]",plotselection,plotlabel),
 
         #Plot(ROOT.TH1F("Prescale_HLT_Ele27_eta2p1_WPTight_Gsf_vX","Prescale_HLT_Ele27_eta2p1_WPTight_Gsf_vX",50,0,2.0),"Prescale_HLT_Ele27_eta2p1_WPTight_Gsf_vX",plotselection,plotlabel),
         #Plot(ROOT.TH1F("Prescale_HLT_IsoMu22_vX","Prescale_HLT_IsoMu22_vX",50,0,2.0),"Prescale_HLT_IsoMu22_vX",plotselection,plotlabel),
@@ -217,9 +264,9 @@ def main(argv):
         Plot(ROOT.TH1F("N_PrimaryVertices","Reconstructed primary vertices",26,-.5,25.5),"N_PrimaryVertices",plotselection,plotlabel),
         Plot(ROOT.TH1F("blrAll","B-tagging likelihood ratio",44,-6,10),"TMath::Log(Evt_blr_ETH/(1-Evt_blr_ETH))",plotselection,plotlabel),
         Plot(ROOT.TH1F("Evt_M_MinDeltaRJets","dijet mass of closest jets",30,0.,150),"Evt_M_MinDeltaRJets",plotselection,plotlabel),
-        Plot(ROOT.TH1F("Evt_M_MinDeltaRTaggedJets","mass of closest b-tagged jets",45,0.,450),"Evt_M_MinDeltaRTaggedJets",plotselection,plotlabel),
-        Plot(ROOT.TH1F("Evt_Dr_MinDeltaRJets","#Delta R of closest jets",50,0.,5.0),"Evt_Dr_MinDeltaRJets",plotselection,plotlabel),
-        Plot(ROOT.TH1F("Evt_Dr_MinDeltaRTaggedJets","#Delta R of closest b-tagged jets",50,0.,5.0),"Evt_Dr_MinDeltaRTaggedJets",plotselection,plotlabel),
+        Plot(ROOT.TH1F("Evt_M_MinDeltaRTaggedJets","mass of closest tagged jets",45,0.,450),"Evt_M_MinDeltaRTaggedJets",plotselection,plotlabel),
+        Plot(ROOT.TH1F("Evt_Dr_MinDeltaRJets","#Delta R of closest jets",50,0.,3.1),"Evt_Dr_MinDeltaRJets",plotselection,plotlabel),
+        Plot(ROOT.TH1F("Evt_Dr_MinDeltaRTaggedJets","#Delta R of closest tagged jets",50,0.,5.0),"Evt_Dr_MinDeltaRTaggedJets",plotselection,plotlabel),
         Plot(ROOT.TH1F("Evt_Jet_MaxDeta_Jets","max #Delta #eta (jet,jet)",50,0.,5.0),"Evt_Jet_MaxDeta_Jets",plotselection,plotlabel),
         Plot(ROOT.TH1F("Evt_TaggedJet_MaxDeta_Jets","max #Delta #eta (tag,jet)",50,0.,5.0),"Evt_TaggedJet_MaxDeta_Jets",plotselection,plotlabel),
         Plot(ROOT.TH1F("Evt_TaggedJet_MaxDeta_TaggedJets","max #Delta #eta (tag,tag)",60,0.,6.0),"Evt_TaggedJet_MaxDeta_TaggedJets",plotselection,plotlabel),
@@ -227,10 +274,10 @@ def main(argv):
         #Plot(ROOT.TH1F("Evt_H2","Evt_H2",60,-0.2,0.4),"Evt_H2",plotselection,plotlabel),
         #Plot(ROOT.TH1F("Evt_H3","Evt_H3",50,-0.05,1.05),"Evt_H3",plotselection,plotlabel),
         #Plot(ROOT.TH1F("Evt_H4","Evt_H4",50,-0.15,0.35),"Evt_H4",plotselection,plotlabel),
-        #Plot(ROOT.TH1F("Sphericity","Sphericity",50,0,1),"Evt_Sphericity",plotselection,plotlabel),
-        #Plot(ROOT.TH1F("Aplanarity","Aplanarity",50,0,0.5),"Evt_Aplanarity",plotselection,plotlabel),
+        Plot(ROOT.TH1F("Sphericity","Sphericity",50,0,1),"Evt_Sphericity",plotselection,plotlabel),
+        Plot(ROOT.TH1F("Aplanarity","Aplanarity",50,0,0.5),"Evt_Aplanarity",plotselection,plotlabel),
         Plot(ROOT.TH1F("Evt_Deta_UntaggedJetsAverage","avg. #Delta #eta of untagged jets",50,0.,4.5),"Evt_Deta_UntaggedJetsAverage",plotselection,plotlabel),
-        Plot(ROOT.TH1F("Evt_Deta_TaggedJetsAverage","avg. #Delta #eta of b-tagged jets",50,0.,4.5),"Evt_Deta_TaggedJetsAverage",plotselection,plotlabel),
+        Plot(ROOT.TH1F("Evt_Deta_TaggedJetsAverage","avg. #Delta #eta of tagged jets",50,0.,4.5),"Evt_Deta_TaggedJetsAverage",plotselection,plotlabel),
         
         #Plot(ROOT.TH1F("Reco_Sum_LikelihoodRatio","Reco_Sum_LikelihoodRatio",50,-0.1,1),"Reco_Sum_LikelihoodRatio",plotselection,plotlabel),
         #Plot(ROOT.TH1F("Reco_Sum_LikelihoodTimesMERatio","Reco_Sum_LikelihoodTimesMERatio",50,-0.1,1),"Reco_Sum_LikelihoodTimesMERatio",plotselection,plotlabel),
@@ -826,10 +873,10 @@ def main(argv):
         #Plot(ROOT.TH1F(plotprefix+"43_ttccnode","DNN ttcc node",20,0,1),"aachen_Out_ttbarCC","((N_Jets>=4&&N_BTagsM==3))","1 lepton, #geq4jets, 3 b-tags"),
     #]
 
-    #plots+=plotsAdditional
+    plots+=plotsAdditional
     plots+=plots64+plots63+plots62+plots54+plots53+plots44+plots43+plots42+plots52
     #plots+=plotsAdditional+plots64+plotsDNNcontrol
-    discriminatorPlots=plots
+    discriminatorPlots+=plots
     
     systsamples=[]
     for sample in samples:
@@ -887,8 +934,8 @@ def main(argv):
     if analysis.doDrawParallel==False or analysis.plotNumber == None :
         if not os.path.exists(analysis.rootFilePath):
             print "Doing plotParallel step since root file was not found."
-            #outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_FAST.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_V6.py"],cirun=False,StopAfterCompileStep=False)
-            THEoutputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_FAST.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False,haddParallel=True)
+            THEoutputpath=plotParallel(name,500000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_latestAndGreatest.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False,haddParallel=True)
+            # Allow start of an improved rebinning algorithm
             if type(THEoutputpath)==str:
               outputpath=THEoutputpath
             else:
@@ -914,13 +961,12 @@ def main(argv):
               print "renamed file already exists"
             else:
               if type(THEoutputpath)==str:
-                renameHistos(outputpath,renamedPath,allsystnames,False,False)
+                renameHistos(outputpath,renamedPath,allsystnames,True,False)
               else:
-                renameHistos(THEoutputpath[1:],renamedPath,allsystnames,False,False)
-                
-#            addRealData(renamedPath,[s.nick for s in samples_data],binlabels,discrname)
-            #addPseudoData(outputpath[:-5]+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
-            #outputpath=outputpath[:-5]+'_limitInput.root'
+                renameHistos(THEoutputpath[1:],renamedPath,allsystnames,True,False)
+            #renameHistos(outputpath,outputpath[:-5]+'_limitInput.root',allsystnames,analysis.getCheckBins(),False)
+            #addRealData(outputpath[:-5]+'_limitInput.root',[s.nick for s in samplesDataControlPlots],binlabels,discrname)
+            addPseudoData(outputpath[:-5]+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
             outputpath=outputpath[:-5]+'_limitInput.root'
         else:
             print "Not doing plotParallel step since root file was found."
@@ -934,64 +980,64 @@ def main(argv):
             outputpath=workdir+'/output.root'
         else:
             outputpath=analysis.rootFilePath[:-16]+'.root'
-
+            
     ## make datacards
     #if (analysis.doDrawParallel==False or analysis.plotNumber == None) and analysis.makeDataCards == True :
         ##TODO
         ## 1. Implement small Epsilon case
         ## 2. Implement consisted Bin-by-Bin uncertainties
         #print "Making Data cards."
-        #makeDatacardsParallel(outputpath,name+'/'+name+'_datacard',binlabels,doHdecay=True,discrname=discrname,datacardmaker="mk_datacard_JESTest13TeVPara")
+        #makeDatacards(outputpath,name+'/'+name+'_datacard',binlabels,doHdecay=True,discrname=discrname,datacardmaker=analysis.getDataCardMaker())
 
 
-    # Invoke drawParallel step
-    if analysis.doDrawParallel==True and analysis.plotNumber == None :
-        # Hand over opts to keep commandline options
-        print 'Starting DrawParallel'
-        DrawParallel(discriminatorPlots,name,os.path.realpath(inspect.getsourcefile(lambda:0)),analysis.opts)
+    ## Invoke drawParallel step
+    #if analysis.doDrawParallel==True and analysis.plotNumber == None :
+        ## Hand over opts to keep commandline options
+        #print 'Starting DrawParallel'
+        #DrawParallel(discriminatorPlots,name,os.path.realpath(inspect.getsourcefile(lambda:0)),analysis.opts)
 
-    # belongs to DrawParallel
-    if analysis.doDrawParallel==True and analysis.plotNumber != None :
-        discriminatorPlots=[discriminatorPlots[int(analysis.plotNumber)]]
+    ## belongs to DrawParallel
+    #if analysis.doDrawParallel==True and analysis.plotNumber != None :
+        #discriminatorPlots=[discriminatorPlots[int(analysis.plotNumber)]]
 
 
 
-    # Lists needed later, produce them only if needed, so check if subsequent step comes
-    if (analysis.doDrawParallel==False or analysis.plotNumber != None) and (analysis.makeSimplePlots==True or analysis.makeMCControlPlots==True or analysis.makeEventYields==True):
-        print 'Create lists needed later'
-        listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,discriminatorPlots,1)
-        lolT=transposeLOL(listOfHistoLists)
-        listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,discriminatorPlots,1)
+    ## Lists needed later, produce them only if needed, so check if subsequent step comes
+    #if (analysis.doDrawParallel==False or analysis.plotNumber != None) and (analysis.makeSimplePlots==True or analysis.makeMCControlPlots==True or analysis.makeEventYields==True):
+        #print 'Create lists needed later'
+        #listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,discriminatorPlots,1)
+        #lolT=transposeLOL(listOfHistoLists)
+        #listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,discriminatorPlots,1)
 
-    # plot simple MC plots
-    if (analysis.doDrawParallel==False or analysis.plotNumber != None) and analysis.makeSimplePlots==True :
-        print "Making simple MC plots."
-        writeLOLAndOneOnTop(transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-1,name+'/'+name+'_controlplots')
-        writeListOfHistoListsAN(transposeLOL([lolT[0]]+lolT[9:]),[samples[0]]+samples[9:],"",name+'/'+name+'_shapes',True,False,False,'histo',False,True,False)
+    ## plot simple MC plots
+    #if (analysis.doDrawParallel==False or analysis.plotNumber != None) and analysis.makeSimplePlots==True :
+        #print "Making simple MC plots."
+        #writeLOLAndOneOnTop(transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-1,name+'/'+name+'_controlplots')
+        #writeListOfHistoListsAN(transposeLOL([lolT[0]]+lolT[9:]),[samples[0]]+samples[9:],"",name+'/'+name+'_shapes',True,False,False,'histo',False,True,False)
 
-    # Make MC Control plots
-    if (analysis.doDrawParallel==False or analysis.plotNumber != None) and analysis.makeMCControlPlots==True :
-        print "Making MC Control plots"
-        print "skipping"
-        lll=createLLL_fromSuperHistoFileSyst(outputpath,samples[1:],discriminatorPlots,errorSystNamesNoQCD)
-        #lllnoQCD=createLLL_fromSuperHistoFileSyst(outputpath,samples[1:],discriminatorPlots,errorSystNamesNoPSNoQCD)
-        labels=[plot.label for plot in discriminatorPlots]
-        plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-2,name,[[lll,3354,ROOT.kBlack,True]],False,labels,True,analysis.plotBlinded)
+    ## Make MC Control plots
+    #if (analysis.doDrawParallel==False or analysis.plotNumber != None) and analysis.makeMCControlPlots==True :
+        #print "Making MC Control plots"
+        #print "skipping"
+        #lll=createLLL_fromSuperHistoFileSyst(outputpath,samples[1:],discriminatorPlots,errorSystNamesNoQCD)
+        ##lllnoQCD=createLLL_fromSuperHistoFileSyst(outputpath,samples[1:],discriminatorPlots,errorSystNamesNoPSNoQCD)
+        #labels=[plot.label for plot in discriminatorPlots]
+        #plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-2,name,[[lll,3354,ROOT.kBlack,True]],False,labels,True,analysis.plotBlinded)
 
-    # Make yield table
-    if (analysis.doDrawParallel==False or analysis.plotNumber != None) and analysis.makeEventYields==True :
-        print "Making yield table."
-        print "Will do only some plots"
-        for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
-          if not "JT" in hld[0].GetName():
-            continue
-          else:
-            hldName = hld[0].GetName()
-            for h in hld+hl:
-              for i,cat in enumerate(categoriesJT):
-                h.GetXaxis().SetBinLabel(i+1,cat[1])
-            tablepath=("/".join((outputpath.split('/'))[:-1]))+"/"+name+hldName+"_yields"
-            eventYields(hld,hl,samples,tablepath)
+    ## Make yield table
+    #if (analysis.doDrawParallel==False or analysis.plotNumber != None) and analysis.makeEventYields==True :
+        #print "Making yield table."
+        #print "Will do only some plots"
+        #for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
+          #if not "JT" in hld[0].GetName():
+            #continue
+          #else:
+            #hldName = hld[0].GetName()
+            #for h in hld+hl:
+              #for i,cat in enumerate(categoriesJT):
+                #h.GetXaxis().SetBinLabel(i+1,cat[1])
+            #tablepath=("/".join((outputpath.split('/'))[:-1]))+"/"+name+hldName+"_yields"
+            #eventYields(hld,hl,samples,tablepath)
 
 
 

@@ -681,6 +681,16 @@ samplesDataControlPlots=[
 # => weight DL 831.76*0.105*1000/87201480.805 = 0.001001529
 # => weight SL = 364.31088*1000/185930638.8770223 = 0.00195939
 
+# Now for the ttbb sherpa sample:
+# the weighted number of events here is 20.924893208852154 with >=4j >=2t und ttbb definition without the GenValue
+# the weighted number of events here is 3675937.4093933105 with >=4j >=2t und ttbb definition with the GenValue
+# the number in powheg = 10897.337975859642 for 35.918 fb
+# to get the same yield we have to multiply the ttbb sherpa weights with 10897.337975859642/35.918/20.924893208852154 = 14.499232841620643
+# and 
+# 10897.337975859642/35.918/3675937.4093933105 = 8.253538214386172e-05
+specialSherpaWeight='*14.49923'
+specialSherpaWeightWithGenValue='*0.000082535*abs(Weight_GenValue)'
+
 
 
 ttbarMCWeight='*((0.001958064*(N_GenTopHad==1 && N_GenTopLep==1)+0.001001529*(N_GenTopLep==2 && N_GenTopHad==0)+0.01077*(N_GenTopHad==2 && N_GenTopLep==0))/Weight_XS)'

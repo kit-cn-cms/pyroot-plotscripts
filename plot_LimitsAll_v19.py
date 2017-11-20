@@ -27,7 +27,7 @@ from plotconfig_v14 import *
 def main(argv):
 
     # Create analysis object with output name
-    name='limits_All_v22'
+    name='limits_All_v23'
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/latest/ttbb-cutbased-analysis_limitInput.root')
     analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/Sep17/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/output20170626-reference/workdir/ttbb-cutbased-analysis/output_limitInput.root')
@@ -97,6 +97,7 @@ def main(argv):
                          'conditionFor_alternativebdt_ljets_jge6_t3:=(N_Jets>=6 && N_BTagsM==3)',
                          'conditionFor_alternativebdt_ljets_j5_tge4:=(N_Jets==5 && N_BTagsM>=4)',
                          'conditionFor_alternativebdt_ljets_j4_t4:=(N_Jets==4 && N_BTagsM==4)',
+                         "GenEvt_I_TTPlusBB","GenEvt_I_TTPlusCC",
 
              			 'finalbdt_ljets_j4_t2:=Evt_HT_Jets',
              			 'finalbdt_ljets_j5_t2:=Evt_HT_Jets',
@@ -357,8 +358,7 @@ def main(argv):
     if analysis.doDrawParallel==False or analysis.plotNumber == None :
         if not os.path.exists(analysis.rootFilePath):
             print "Doing plotParallel step since root file was not found."
-            THEoutputpath=plotParallel(name,500000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_latestAndGreatest.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_V6.py"],cirun=False,StopAfterCompileStep=False,haddParallel=True)
-            # Allow start of an improved rebinning algorithm
+            THEoutputpath=outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_latestAndGreatest.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_V6.py"],cirun=False,StopAfterCompileStep=False,haddParallel=True)
             if type(THEoutputpath)==str:
               outputpath=THEoutputpath
             else:
@@ -373,6 +373,9 @@ def main(argv):
               else:
                 print 'Warning: Could not find signal process.'
 
+            # hadd histo files before renaming. The histograms are actually already renamed. But the checkbins thingy will not have been done yet.
+            print "hadding from wildcard"
+            haddFilesFromWildCard(outputpath,outputpath[:-11]+"/HaddOutputs/*.root")
             # Deactivate check bins functionality in renameHistos if additional plot variables are added via analysis class
             renamedPath=outputpath[:-5]+'_limitInput.root'
             if os.path.exists(renamedPath):
@@ -384,9 +387,9 @@ def main(argv):
                 renameHistos(outputpath,renamedPath,allsystnames,True,False)
               else:
                 renameHistos(THEoutputpath[1:],renamedPath,allsystnames,True,False)
-            #renameHistos(outputpath,outputpath[:-5]+'_limitInput.root',allsystnames,analysis.getCheckBins(),False)
-            #addRealData(outputpath[:-5]+'_limitInput.root',[s.nick for s in samplesDataControlPlots],binlabels,discrname)
-            addPseudoData(outputpath[:-5]+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
+#            addRealData(renamedPath,[s.nick for s in samples_data],binlabels,discrname)
+            #addPseudoData(outputpath[:-5]+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
+            #outputpath=outputpath[:-5]+'_limitInput.root'
             outputpath=outputpath[:-5]+'_limitInput.root'
         else:
             print "Not doing plotParallel step since root file was found."

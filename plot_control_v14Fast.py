@@ -16,6 +16,7 @@ from limittools import renameHistos
 from limittools import addPseudoData
 from limittools import addRealData
 from limittools import makeDatacards
+from limittools import makeDatacardsParallel
 from limittools import calcLimits
 from limittools import replaceQ2scale
 
@@ -26,7 +27,7 @@ from plotconfig_v14Fast import *
 def main(argv):
 
     # Create analysis object with output name
-    name='controlplots_v21Fast'
+    name='controlplots_v24Fast'
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/latest/ttbb-cutbased-analysis_limitInput.root')
     analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/Sep17/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/output20170626-reference/workdir/ttbb-cutbased-analysis/output_limitInput.root')
@@ -164,16 +165,21 @@ def main(argv):
         Plot(ROOT.TH1F("Evt_HT_Jets","Sum p_{T} jets",75,0,1500),"Evt_HT_Jets",plotselection,plotlabel),
         Plot(ROOT.TH1F("ptalljets","p_{T} of all jets",60,0,300),"Jet_Pt",plotselection,plotlabel),
         Plot(ROOT.TH1F("etaalljets","#eta of all jets",60,-2.5,2.5),"Jet_Eta",plotselection,plotlabel),
+        Plot(ROOT.TH1F("phialljets","#phi of all jets",64,-3.2,3.2),"Jet_Phi",plotselection,plotlabel),
         Plot(ROOT.TH1F("pumvaalljets","PU MVA of all jets",60,0,1.0),"Jet_PileUpMVA",plotselection,plotlabel),
         Plot(ROOT.TH1F("puidalljets","PU MVA of all jets",60,0,1.0),"Jet_PileUpID",plotselection,plotlabel),
         
         Plot(ROOT.TH1F("csvalljets","csv of all jets",44,-.1,1),"Jet_CSV",plotselection,plotlabel),
         Plot(ROOT.TH1F("leppt","lepton p_{T}",50,0,200),"LooseLepton_Pt[0]",plotselection,plotlabel),
         Plot(ROOT.TH1F("lepeta","lepton #eta",50,-2.5,2.5),"LooseLepton_Eta[0]",plotselection,plotlabel),
+        Plot(ROOT.TH1F("lepphi","lepton #phi",50,-3.2,3.2),"LooseLepton_Phi[0]",plotselection,plotlabel),
+
         Plot(ROOT.TH1F("elleppt","electron p_{T}",50,0,200),"Electron_Pt[0]",'Electron_Pt[0]>10',plotlabel),
         Plot(ROOT.TH1F("ellepeta","electron #eta",50,-2.5,2.5),"Electron_Eta[0]",'Electron_Pt[0]>10',plotlabel),
         Plot(ROOT.TH1F("muleppt","muon p_{T}",50,0,200),"Muon_Pt[0]",'Muon_Pt[0]>10',plotlabel),
         Plot(ROOT.TH1F("mulepeta","muon #eta",50,-2.5,2.5),"Muon_Eta[0]",'Muon_Pt[0]>10',plotlabel),
+        Plot(ROOT.TH1F("ellepphi","electron #phi",50,-3.2,3.2),"Electron_Phi[0]",'Electron_Pt[0]>10',plotlabel),
+        Plot(ROOT.TH1F("mulepphi","muon #phi",50,-3.2,3.2),"Muon_Phi[0]",'Muon_Pt[0]>10',plotlabel),
     ]
     
     plotsAdditional=[
@@ -882,9 +888,11 @@ def main(argv):
     if analysis.doDrawParallel==False or analysis.plotNumber == None :
         if not os.path.exists(analysis.rootFilePath):
             print "Doing plotParallel step since root file was not found."
-            outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_FAST.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_V6.py"],cirun=False,StopAfterCompileStep=False)
-
-            # Allow start of an improved rebinning algorithm
+            THEoutputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_FAST.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False,haddParallel=True)
+            if type(THEoutputpath)==str:
+              outputpath=THEoutputpath
+            else:
+              outputpath=THEoutputpath[0]
             if analysis.getActivatedOptimizedRebinning():
               if analysis.getSignalProcess() == 'ttbb':
                 # samples[0:2]: tt+bb, tt+b, tt+2b as signal for S over b normalization
@@ -894,21 +902,27 @@ def main(argv):
                 optimizeBinning(outputpath,signalsamples=[samples[0]], backgroundsamples=samples[9:],additionalSamples=samples[1:9]+samples_data, plots=discriminatorPlots, systnames=allsystnames, minBkgPerBin=2.0, optMode=analysis.getOptimzedRebinning(),considerStatUnc=False, maxBins=20, minBins=2,verbosity=2)
               else:
                 print 'Warning: Could not find signal process.'
-
+            
+            # hadd histo files before renaming. The histograms are actually already renamed. But the checkbins thingy will not have been done yet.
+            print "hadding from wildcard"
+            haddFilesFromWildCard(outputpath,outputpath[:-11]+"/HaddOutputs/*.root")
             # Deactivate check bins functionality in renameHistos if additional plot variables are added via analysis class
-            #renameHistos(outputpath,outputpath[:-5]+'_limitInput.root',allsystnames,analysis.getCheckBins(),False)
-            renamedPath=outputpath[:-5]+'_syst.root'
+            renamedPath=outputpath[:-5]+'_limitInput.root'
             if os.path.exists(renamedPath):
               #if askYesNo('renamedFileExists. Repeat renaming?'):
               #  renameHistos(outputpath,renamedPath,allsystnames,analysis.getCheckBins(),False)
               print "renamed file already exists"
             else:
-              renameHistos(outputpath,renamedPath,allsystnames,False,False)
-            
+              if type(THEoutputpath)==str:
+                renameHistos(outputpath,renamedPath,allsystnames,False,False)
+              else:
+                renameHistos(THEoutputpath[1:],renamedPath,allsystnames,False,False)
+                
+                
 #            addRealData(renamedPath,[s.nick for s in samples_data],binlabels,discrname)
             #addPseudoData(outputpath[:-5]+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
             #outputpath=outputpath[:-5]+'_limitInput.root'
-            outputpath=outputpath[:-5]+'_syst.root'
+            outputpath=outputpath[:-5]+'_limitInput.root'
         else:
             print "Not doing plotParallel step since root file was found."
             outputpath=analysis.rootFilePath
@@ -928,7 +942,7 @@ def main(argv):
         ## 1. Implement small Epsilon case
         ## 2. Implement consisted Bin-by-Bin uncertainties
         #print "Making Data cards."
-        #makeDatacards(outputpath,name+'/'+name+'_datacard',binlabels,doHdecay=True,discrname=discrname,datacardmaker=analysis.getDataCardMaker())
+        #makeDatacardsParallel(outputpath,name+'/'+name+'_datacard',binlabels,doHdecay=True,discrname=discrname,datacardmaker="mk_datacard_JESTest13TeVPara")
 
 
     # Invoke drawParallel step
