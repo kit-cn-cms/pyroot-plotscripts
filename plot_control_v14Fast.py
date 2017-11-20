@@ -74,7 +74,8 @@ def main(argv):
 
     # define BDT output variables
     bdtweightpath="/nfs/dust/cms/user/kelmorab/Spring17BDTWeights/"
-    bdtset="Spring17v1"
+    bdtset="Spring17v2"
+    alternativebdtset="Spring17v3_ttbb"
     # define additional variables necessary for selection in plotparallel
     additionalvariables=["Jet_Pt", "Muon_Pt", "Electron_Pt",
                          "Jet_Eta", "Muon_Eta", "Electron_Eta",

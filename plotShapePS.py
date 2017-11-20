@@ -6,14 +6,18 @@ ROOT.gROOT.SetBatch(True)
 ROOT.gStyle.SetOptStat(0)
 
 infname=sys.argv[1]
+outname=sys.argv[2]
 print "init"
 
 #acats=["ljets_j4_t4","ljets_j5_tge4","ljets_jge6_t3","ljets_jge6_tge4","ljets_j5_t3","ljets_j4_t3","ljets_jge6_t2"]
 
-acats=["ljets_jge6_t3","ljets_jge6_tge4"]
-acats+=["ljets_jge6_tge4_low","ljets_jge6_tge4_high","ljets_jge6_tge4_MEMONLY","ljets_jge6_t3_low","ljets_jge6_t3_high","ljets_jge6_t3_MEMONLY","ljets_jge6_tge3_tt2bnode","ljets_jge6_tge3_ttbbnode","ljets_jge6_tge3_ttbnode","ljets_jge6_tge3_ttccnode","ljets_jge6_tge3_ttlfnode","ljets_jge6_tge3_ttHnode"]
+acats=["ljets_jge6_t3","ljets_jge6_tge4","ljets_j4_t4","ljets_j5_tge4"]
+#acats+=["ljets_jge6_tge4_low","ljets_jge6_tge4_high","ljets_jge6_tge4_MEMONLY","ljets_jge6_t3_low","ljets_jge6_t3_high","ljets_jge6_t3_MEMONLY","ljets_jge6_tge3_tt2bnode","ljets_jge6_tge3_ttbbnode","ljets_jge6_tge3_ttbnode","ljets_jge6_tge3_ttccnode","ljets_jge6_tge3_ttlfnode","ljets_jge6_tge3_ttHnode"]
+acats+=["ljets_jge6_tge4_low","ljets_jge6_tge4_high","ljets_jge6_t3_low","ljets_jge6_t3_high","ljets_j4_t4_high","ljets_j5_tge4_high","ljets_j4_t4_high","ljets_j5_tge4_high"]
 #acats=["ljets_j5_t3","ljets_j4_t3"]
 #acats=["ljets_j5_t3"]
+
+doKStest=True
 
 cats=[]
 for c in acats:
@@ -22,10 +26,8 @@ for c in acats:
   cats.append(c)
 
 print "ok"
-#procs=["ttH","ttbarOther","ttbarPlusCCbar","ttbarPlusB","ttbarPlus2B","ttbarPlusBBbar",]
-#systs=['CMS_ttH_Q2scale_ttbarOther', 'CMS_ttH_Q2scale_ttbarPlusB', 'CMS_ttH_Q2scale_ttbarPlus2B', 'CMS_ttH_Q2scale_ttbarPlusBBbar', 'CMS_ttH_Q2scale_ttbarPlusCCbar', 'CMS_ttH_CSVLF', 'CMS_ttH_CSVHF', 'CMS_ttH_CSVHFStats1', 'CMS_ttH_CSVLFStats1', 'CMS_ttH_CSVHFStats2', 'CMS_ttH_CSVLFStats2', 'CMS_ttH_CSVCErr1', 'CMS_ttH_CSVCErr2', 'CMS_scale_j', 'CMS_ttH_PU', 'CMS_res_j', 'CMS_ttH_eff_mu', 'CMS_ttH_eff_el', 'CMS_ttH_ljets_Trig_mu', 'CMS_ttH_ljets_Trig_el', 'CMS_ttH_PSscale_ttbarOther', 'CMS_ttH_PSscale_ttbarPlusB', 'CMS_ttH_PSscale_ttbarPlus2B', 'CMS_ttH_PSscale_ttbarPlusBBbar', 'CMS_ttH_PSscale_ttbarPlusCCbar']
-#systs=["CMS_ttH_PSscale_ttbarOther","CMS_ttH_PSscale_ttbarPlusB","CMS_ttH_PSscale_ttbarPlus2B","CMS_ttH_PSscale_ttbarPlusBBbar","CMS_ttH_PSscale_ttbarPlusCCbar"]
-systs=["CMS_ttH_PDF","CMS_ttH_scaleMuF","CMS_ttH_scaleMuR","CMS_scale_FlavorQCD_j","CMS_scale_RelativeFSR_j"]
+#systs=['CMS_ttHbb_FSR', 'CMS_ttHbb_ISR', 'CMS_ttHbb_HDAMP', 'CMS_ttHbb_UE','CMS_ttHbbFROMTREES_FSR', 'CMS_ttHbbFROMTREES_ISR', 'CMS_ttHbbFROMTREES_HDAMP', 'CMS_ttHbbFROMTREES_UE']
+systs=['CMS_ttHbb_PDF', 'CMS_ttHbb_scaleMuF', 'CMS_ttHbb_scaleMuR']
 
 #procs="ttH_hbb ttH_hcc ttH_hww ttH_hzz ttH_htt ttH_hgg ttH_hgluglu ttH_hzg ttbarOther ttbarPlusB ttbarPlus2B ttbarPlusBBbar ttbarPlusCCbar singlet wjets zjets ttbarW ttbarZ diboson".split(" ")
 procs="ttH ttbarOther ttbarPlusB ttbarPlus2B ttbarPlusBBbar ttbarPlusCCbar ttbarIncl".split(" ")
@@ -33,7 +35,7 @@ print procs
 
 inf=ROOT.TFile(infname,"READ")
 
-name="allshapes"
+name=outname
 if not os.path.exists(name+"SystShapes"):
     os.makedirs(name+"SystShapes")
     
@@ -74,7 +76,7 @@ for c in cats:
 	up.SetLineColor(ROOT.kRed)
 	up.SetTitle("up")
 	down.SetTitle("down")
-	down.SetLineColor(ROOT.kGreen)
+	down.SetLineColor(ROOT.kCyan)
 	canvas=ROOT.TCanvas(p+"_"+discname+"_"+c+"_"+s,p+"_"+discname+"_"+c+"_"+s,800,600)
 	maxval=max(nom.GetMaximum(), max(up.GetMaximum(),down.GetMaximum()))
 	nom.SetMaximum(1.5*maxval)
@@ -82,6 +84,9 @@ for c in cats:
 	nom.SetTitle(c+"_"+p+" "+s)
 	up.Draw("histoSameE")
 	down.Draw("histoSameE")
+	if doKStest:
+          ksUp=nom.KolmogorovTest(up)
+          ksDown=nom.KolmogorovTest(down)
 	integNom=nom.Integral()
 	integDown=down.Integral()
 	integUp=up.Integral()
@@ -103,9 +108,14 @@ for c in cats:
 	legend.SetTextFont(42);
 	legend.SetTextSize(0.03);
 	legend.SetFillStyle(0);	
-	legend.AddEntry(nom,c+"_"+p+" (%.2f)" % integNom,"l")
-	legend.AddEntry(up,c+"_"+p+" Up"+" (%.2f, %.2f" % (integUp,fracUp) +")","l")
-	legend.AddEntry(down,c+"_"+p+" Down"+" (%.2f, %.2f" % (integDown,fracDown) +")","l")
+	if doKStest:
+	  legend.AddEntry(nom,c+"_"+p+" (%.2f)" % integNom,"l")
+          legend.AddEntry(up,c+"_"+p+" Up"+" (%.2f, %.2f), KS-prob. %.2f" % (integUp,fracUp,ksUp) +"","l")
+          legend.AddEntry(down,c+"_"+p+" Down"+" (%.2f, %.2f), KS-prob. %.2f" % (integDown,fracDown,ksDown) +"","l")
+	else:
+          legend.AddEntry(nom,c+"_"+p+" (%.2f)" % integNom,"l")
+          legend.AddEntry(up,c+"_"+p+" Up"+" (%.2f, %.2f" % (integUp,fracUp) +")","l")
+          legend.AddEntry(down,c+"_"+p+" Down"+" (%.2f, %.2f" % (integDown,fracDown) +")","l")
 	legend.Draw()
 
         canvas.Print(name+'.pdf')
