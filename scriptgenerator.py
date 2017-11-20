@@ -3333,9 +3333,12 @@ outlog.close()
 def haddFilesFromWildCard(outname="",inwildcard=""):
   infiles=glob.glob(inwildcard)
   print 'hadd from wildcard'
+  print outname, inwildcard
   haddclock=ROOT.TStopwatch()
   haddclock.Start()
-  subprocess.call(['hadd', outname]+infiles)
+  cmd='hadd'+' '+outname+' '+' '.join(infiles)
+  print cmd
+  subprocess.call(cmd,shell=True)
   print 'done'
   haddtime=haddclock.RealTime()
   print "hadding took ", haddtime
