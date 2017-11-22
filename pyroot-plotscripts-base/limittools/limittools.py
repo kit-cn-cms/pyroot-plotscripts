@@ -80,6 +80,41 @@ def do_qstat(jobids):
       print "all jobs are finished"
       allfinished=True
 
+def haddFiles(outname="",infiles=[]):
+  print 'hadd from filelist'
+  haddclock=ROOT.TStopwatch()
+  haddclock.Start()
+  nfilesPerHadd=100
+  if len(infiles)<nfilesPerHadd:
+    cmd='hadd'+' '+outname+' '+' '.join(infiles)
+    print cmd
+    subprocess.call(cmd,shell=True)
+  else:
+    parts=[]
+    subpartfiles=[]
+    totalsubpartfiles=[]
+    for iinf, inf in enumerate(infiles):
+      subpartfiles.append(inf)
+      totalsubpartfiles.append(inf)
+      if iinf%(nfilesPerHadd-1)==0 or inf==infiles[-1]:
+        partname=outname.replace(".root","_part_"+str(len(parts))+".root")
+        parts.append(partname)
+        cmd='hadd'+' '+partname+' '+' '.join(subpartfiles)
+        print cmd
+        subprocess.call(cmd,shell=True)
+        subpartfiles=[]
+    if len(totalsubpartfiles)!=len(infiles):
+      print "OHOHOH HADDINGFROMFILES missed or used some files twice!!!"
+      exit(1)
+    # now add the parts
+    cmd='hadd'+' '+outname+' '+' '.join(parts)
+    print cmd
+    subprocess.call(cmd,shell=True)
+    
+  print 'done'
+  haddtime=haddclock.RealTime()
+  print "hadding took ", haddtime
+  return  outname
 
 class Limitresult:
   def __init__(self,combined,combined_up,combined_down,combined_2up,combined_2down,cats,catlimits,catlimits_up,catlimits_down,catlimits_2up,catlimits_2down):
@@ -178,8 +213,9 @@ print "done"
     jobids=submitArrayToNAF(renamescriptlist,arrayname="renaming")
     do_qstat(jobids)
     # finally hadd the renamed scripts
-    cmd="hadd "+outfname+" "+" ".join(outnamelist)
-    subprocess.call(cmd,shell=True)
+    haddFiles(outfname,outnamelist)
+    #cmd="hadd "+outfname+" "+" ".join(outnamelist)
+    #subprocess.call(cmd,shell=True)
     print "The parallel renaming took ", theclock.RealTime()
 
     

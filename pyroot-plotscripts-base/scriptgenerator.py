@@ -2827,7 +2827,10 @@ def createSingleDrawScript(iPlot,Plot,PathToSelf,scriptsfolder,opts=None):
   return scriptname
 
 
-def createScript(scriptname,programpath,processname,filenames,outfilename,maxevents,skipevents,cmsswpath,suffix):
+def createScript(scriptname,programpath,processname,filenames,outfilename,maxevents,skipevents,cmsswpath,suffix,cirun=False):
+  if cirun:
+    if maxevents<100:
+      maxevents=100
   script="#!/bin/bash \n"
   if cmsswpath!='':
     script+="export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch \n"
@@ -3001,7 +3004,7 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
           processname=s.nick
           filenames=fn
           outfilename=plotspath+s.nick+'_'+str(njob)+'.root'
-          createScript(scriptname,programpath,processname,filenames,outfilename,maxevents,skipevents,cmsswpath,'')
+          createScript(scriptname,programpath,processname,filenames,outfilename,maxevents,skipevents,cmsswpath,'',cirun)
           scripts.append(scriptname)
           outputs.append(outfilename)
           samplewiseoutputs[s.nick].append(outfilename)
@@ -3019,7 +3022,7 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
           processname=s.nick
           filenames=' '.join(files_to_submit)
           outfilename=plotspath+s.nick+'_'+str(njob)+'.root'
-          createScript(scriptname,programpath,processname,filenames,outfilename,events_in_files,skipevents,cmsswpath,'')
+          createScript(scriptname,programpath,processname,filenames,outfilename,events_in_files,skipevents,cmsswpath,'',cirun)
           scripts.append(scriptname)
           outputs.append(outfilename)
           samplewiseoutputs[s.nick].append(outfilename)
@@ -3040,7 +3043,7 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
       processname=s.nick
       filenames=' '.join(files_to_submit)
       outfilename=plotspath+s.nick+'_'+str(njob)+'.root'
-      createScript(scriptname,programpath,processname,filenames,outfilename,events_in_files,skipevents,cmsswpath,'')
+      createScript(scriptname,programpath,processname,filenames,outfilename,events_in_files,skipevents,cmsswpath,'',cirun)
       scripts.append(scriptname)
       outputs.append(outfilename)
       samplewiseoutputs[s.nick].append(outfilename)
@@ -3336,9 +3339,33 @@ def haddFilesFromWildCard(outname="",inwildcard=""):
   print outname, inwildcard
   haddclock=ROOT.TStopwatch()
   haddclock.Start()
-  cmd='hadd'+' '+outname+' '+' '.join(infiles)
-  print cmd
-  subprocess.call(cmd,shell=True)
+  nfilesPerHadd=100
+  if len(infiles)<nfilesPerHadd:
+    cmd='hadd'+' '+outname+' '+' '.join(infiles)
+    print cmd
+    subprocess.call(cmd,shell=True)
+  else:
+    parts=[]
+    subpartfiles=[]
+    totalsubpartfiles=[]
+    for iinf, inf in enumerate(infiles):
+      subpartfiles.append(inf)
+      totalsubpartfiles.append(inf)
+      if iinf%(nfilesPerHadd-1)==0 or inf==infiles[-1]:
+        partname=outname.replace(".root","_part_"+str(len(parts))+".root")
+        parts.append(partname)
+        cmd='hadd'+' '+partname+' '+' '.join(subpartfiles)
+        print cmd
+        subprocess.call(cmd,shell=True)
+        subpartfiles=[]
+    if len(totalsubpartfiles)!=len(infiles):
+      print "OHOHOH HADDINGFROMWILDCARD missed or used some files twice!!!"
+      exit(1)
+    # now add the parts
+    cmd='hadd'+' '+outname+' '+' '.join(parts)
+    print cmd
+    subprocess.call(cmd,shell=True)
+    
   print 'done'
   haddtime=haddclock.RealTime()
   print "hadding took ", haddtime
