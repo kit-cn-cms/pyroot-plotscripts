@@ -9,29 +9,17 @@ for f in files:
   inlist=list(theFile)
   theFile.close()
   outlist=[]
-  anyToggled=False
-  for line in inlist:
-    for unc in listOfUncertaintiesToToggle:
-      if unc in line:
-        if "#" in line:
-          anyToggled=True
-          
   for line in inlist:
     newline=line
     if "number of nuisance parameters" in line:
       newline="kmax * #number of nuisance parameters\n"
+    lineContainsUncToRemove=False
     for unc in listOfUncertaintiesToToggle:
       if unc in line:
         if "#" in line:
           newline=line.replace("#","")
         else:
-          #anyToggled
-          if anyToggled==False:
-            if not "ttbar" in line:
-              newline="#"+line 
-          else:
-            #print line
-            newline="#"+line 
+          newline="#"+line 
     outlist.append(newline)
   theFile=open(f,"w")
   for line in outlist:
