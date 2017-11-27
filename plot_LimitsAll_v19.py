@@ -27,9 +27,11 @@ from plotconfig_v14 import *
 def main(argv):
 
     # Create analysis object with output name
-    name='limits_All_v23'
+    name='limits_All_v24'
+    anaRootPath=os.getcwd()+'/workdir/'+name+'/output_limitInput.root'
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/latest/ttbb-cutbased-analysis_limitInput.root')
-    analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/Sep17/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
+    #analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/Sep17/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
+    analysis=Analysis(name,argv,anaRootPath, signalProcess='ttH')
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/output20170626-reference/workdir/ttbb-cutbased-analysis/output_limitInput.root')
 
     analysis.plotBlinded=True
@@ -194,21 +196,21 @@ def main(argv):
     #categories+=categorienames_JT2DOPTIMIZED
 
 # BDT only but with the ttbb optimized BDTs
-    categorienames_JTBDTOPTIMIZED=[
-                  ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4_ttbbOpt",""),
-                  ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4_ttbbOpt",""),
-                  ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_ttbbOpt",""),
-                  ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4_ttbbOpt",""),
-                  ]
-    discrs_JTBDTOPTIMIZED=['alternativebdt_ljets_j4_t4',  'alternativebdt_ljets_j5_tge4',  'alternativebdt_ljets_jge6_t3', 'alternativebdt_ljets_jge6_tge4']
-    nhistobins_JTBDTOPTIMIZED = [  12,      16,     25,   16 ]
-    minxvals_JTBDTOPTIMIZED =   [ -0.8,   -0.65,  -0.65,   -0.7]
-    maxxvals_JTBDTOPTIMIZED =   [0.6,     0.65,   0.65,    0.8]
-    discrs+=discrs_JTBDTOPTIMIZED
-    nhistobins+=nhistobins_JTBDTOPTIMIZED
-    minxvals+=minxvals_JTBDTOPTIMIZED
-    maxxvals+=maxxvals_JTBDTOPTIMIZED
-    categories+=categorienames_JTBDTOPTIMIZED
+    #categorienames_JTBDTOPTIMIZED=[
+                  #("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4_ttbbOpt",""),
+                  #("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4_ttbbOpt",""),
+                  #("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_ttbbOpt",""),
+                  #("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4_ttbbOpt",""),
+                  #]
+    #discrs_JTBDTOPTIMIZED=['alternativebdt_ljets_j4_t4',  'alternativebdt_ljets_j5_tge4',  'alternativebdt_ljets_jge6_t3', 'alternativebdt_ljets_jge6_tge4']
+    #nhistobins_JTBDTOPTIMIZED = [  12,      16,     25,   16 ]
+    #minxvals_JTBDTOPTIMIZED =   [ -0.8,   -0.65,  -0.65,   -0.7]
+    #maxxvals_JTBDTOPTIMIZED =   [0.6,     0.65,   0.65,    0.8]
+    #discrs+=discrs_JTBDTOPTIMIZED
+    #nhistobins+=nhistobins_JTBDTOPTIMIZED
+    #minxvals+=minxvals_JTBDTOPTIMIZED
+    #maxxvals+=maxxvals_JTBDTOPTIMIZED
+    #categories+=categorienames_JTBDTOPTIMIZED
 
     # jet tag categories for Mem only and blr
     categorienames_JTMEM=[                  
@@ -356,8 +358,8 @@ def main(argv):
     # plot everything, except during drawParallel step
     # Create file for data cards
     if analysis.doDrawParallel==False or analysis.plotNumber == None :
-        if not os.path.exists(analysis.rootFilePath):
-            print "Doing plotParallel step since root file was not found."
+        #if not os.path.exists(analysis.rootFilePath):
+            #print "Doing plotParallel step since root file was not found."
             THEoutputpath=outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_latestAndGreatest.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_V6.py"],cirun=False,StopAfterCompileStep=False,haddParallel=True)
             if type(THEoutputpath)==str:
               outputpath=THEoutputpath
@@ -391,10 +393,10 @@ def main(argv):
             #addPseudoData(outputpath[:-5]+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
             #outputpath=outputpath[:-5]+'_limitInput.root'
             outputpath=outputpath[:-5]+'_limitInput.root'
-        else:
-            print "Not doing plotParallel step since root file was found."
-            outputpath=analysis.rootFilePath
-        print "outputpath: ", outputpath
+        #else:
+            #print "Not doing plotParallel step since root file was found."
+            #outputpath=analysis.rootFilePath
+        #print "outputpath: ", outputpath
     else:
         # Warning This time output path refers only to output.root
         # ToDo: Fix usage of output path and output limit path
@@ -410,6 +412,7 @@ def main(argv):
         #TODO
         # 1. Implement small Epsilon case
         # 2. Implement consisted Bin-by-Bin uncertainties
+        addRealData(outputpath,[s.nick for s in samples_data],binlabels,discrname)
         print "Making Data cards."
         makeDatacardsParallel(outputpath,name+'/'+name+'_datacard',binlabels,doHdecay=True,discrname=discrname,datacardmaker="mk_datacard_JESTest13TeVPara")
 
