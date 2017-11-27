@@ -11,7 +11,7 @@ print "init"
 
 #acats=["ljets_j4_t4","ljets_j5_tge4","ljets_jge6_t3","ljets_jge6_tge4","ljets_j5_t3","ljets_j4_t3","ljets_jge6_t2"]
 
-acats=["ljets_jge6_t3","ljets_jge6_tge4","ljets_j4_t4","ljets_j5_tge4"]
+acats=["ljets_jge6_t3","ljets_jge6_tge4","ljets_j4_t4","ljets_j5_tge4","ljets_j5_t3","ljets_j4_t3"]
 #acats+=["ljets_jge6_tge4_low","ljets_jge6_tge4_high","ljets_jge6_tge4_MEMONLY","ljets_jge6_t3_low","ljets_jge6_t3_high","ljets_jge6_t3_MEMONLY","ljets_jge6_tge3_tt2bnode","ljets_jge6_tge3_ttbbnode","ljets_jge6_tge3_ttbnode","ljets_jge6_tge3_ttccnode","ljets_jge6_tge3_ttlfnode","ljets_jge6_tge3_ttHnode"]
 acats+=["ljets_jge6_tge4_low","ljets_jge6_tge4_high","ljets_jge6_t3_low","ljets_jge6_t3_high","ljets_j4_t4_high","ljets_j5_tge4_high","ljets_j4_t4_high","ljets_j5_tge4_high"]
 #acats=["ljets_j5_t3","ljets_j4_t3"]
@@ -27,7 +27,8 @@ for c in acats:
 
 print "ok"
 #systs=['CMS_ttHbb_FSR', 'CMS_ttHbb_ISR', 'CMS_ttHbb_HDAMP', 'CMS_ttHbb_UE','CMS_ttHbbFROMTREES_FSR', 'CMS_ttHbbFROMTREES_ISR', 'CMS_ttHbbFROMTREES_HDAMP', 'CMS_ttHbbFROMTREES_UE']
-systs=['CMS_ttHbb_PDF', 'CMS_ttHbb_scaleMuF', 'CMS_ttHbb_scaleMuR']
+#systs=['CMS_ttHbb_PDF', 'CMS_ttHbb_scaleMuF', 'CMS_ttHbb_scaleMuR']
+systs=['CMS_ttHbb_PU']
 
 #procs="ttH_hbb ttH_hcc ttH_hww ttH_hzz ttH_htt ttH_hgg ttH_hgluglu ttH_hzg ttbarOther ttbarPlusB ttbarPlus2B ttbarPlusBBbar ttbarPlusCCbar singlet wjets zjets ttbarW ttbarZ diboson".split(" ")
 procs="ttH ttbarOther ttbarPlusB ttbarPlus2B ttbarPlusBBbar ttbarPlusCCbar ttbarIncl".split(" ")

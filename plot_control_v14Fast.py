@@ -9,6 +9,7 @@ import inspect
 import ROOT
 sys.path.append('pyroot-plotscripts-base')
 sys.path.append('pyroot-plotscripts-base/limittools')
+sys.path.append('limittools')
 
 from scriptgenerator import *
 from plotutils import *
@@ -16,6 +17,7 @@ from limittools import renameHistos
 from limittools import addPseudoData
 from limittools import addRealData
 from limittools import makeDatacards
+#UPDATE
 from limittools import makeDatacardsParallel
 from limittools import calcLimits
 from limittools import replaceQ2scale
@@ -887,9 +889,11 @@ def main(argv):
     # plot everything, except during drawParallel step
     # Create file for data cards
     if analysis.doDrawParallel==False or analysis.plotNumber == None :
-        if not os.path.exists(analysis.rootFilePath):
-            print "Doing plotParallel step since root file was not found."
+        #if not os.path.exists(analysis.rootFilePath):
+            #print "Doing plotParallel step since root file was not found."
+            #UPDATE
             THEoutputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_FAST.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False,haddParallel=True)
+            #UPDATE
             if type(THEoutputpath)==str:
               outputpath=THEoutputpath
             else:
@@ -914,6 +918,7 @@ def main(argv):
               #  renameHistos(outputpath,renamedPath,allsystnames,analysis.getCheckBins(),False)
               print "renamed file already exists"
             else:
+              #UPDATE
               if type(THEoutputpath)==str:
                 renameHistos(outputpath,renamedPath,allsystnames,False,False)
               else:
@@ -924,10 +929,10 @@ def main(argv):
             #addPseudoData(outputpath[:-5]+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
             #outputpath=outputpath[:-5]+'_limitInput.root'
             outputpath=outputpath[:-5]+'_limitInput.root'
-        else:
-            print "Not doing plotParallel step since root file was found."
-            outputpath=analysis.rootFilePath
-        print "outputpath: ", outputpath
+        #else:
+            #print "Not doing plotParallel step since root file was found."
+            #outputpath=analysis.rootFilePath
+        #print "outputpath: ", outputpath
     else:
         # Warning This time output path refers only to output.root
         # ToDo: Fix usage of output path and output limit path
