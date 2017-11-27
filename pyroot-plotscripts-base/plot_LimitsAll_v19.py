@@ -1,5 +1,4 @@
 #!/usr/bin/python2
-# blub 
 
 import sys
 import getopt
@@ -10,7 +9,6 @@ import inspect
 import ROOT
 sys.path.append('pyroot-plotscripts-base')
 sys.path.append('pyroot-plotscripts-base/limittools')
-sys.path.append('limittools')
 
 from scriptgenerator import *
 from plotutils import *
@@ -18,7 +16,7 @@ from limittools import renameHistos
 from limittools import addPseudoData
 from limittools import addRealData
 from limittools import makeDatacards
-# UPDATE
+#UDPATE
 from limittools import makeDatacardsParallel
 from limittools import calcLimits
 from limittools import replaceQ2scale
@@ -30,9 +28,11 @@ from plotconfig_v14 import *
 def main(argv):
 
     # Create analysis object with output name
-    name='limits_All_v23'
+    name='limits_All_v24'
+    anaRootPath=os.getcwd()+'/workdir/'+name+'/output_limitInput.root'
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/latest/ttbb-cutbased-analysis_limitInput.root')
-    analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/Sep17/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
+    #analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/Sep17/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
+    analysis=Analysis(name,argv,anaRootPath, signalProcess='ttH')
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/output20170626-reference/workdir/ttbb-cutbased-analysis/output_limitInput.root')
 
     analysis.plotBlinded=True
@@ -196,6 +196,104 @@ def main(argv):
     #maxxvals+=maxxvals_JT2DOPTIMIZED
     #categories+=categorienames_JT2DOPTIMIZED
 
+# BDT only but with the ttbb optimized BDTs
+    #categorienames_JTBDTOPTIMIZED=[
+                  #("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4_ttbbOpt",""),
+                  #("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4_ttbbOpt",""),
+                  #("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_ttbbOpt",""),
+                  #("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4_ttbbOpt",""),
+                  #]
+    #discrs_JTBDTOPTIMIZED=['alternativebdt_ljets_j4_t4',  'alternativebdt_ljets_j5_tge4',  'alternativebdt_ljets_jge6_t3', 'alternativebdt_ljets_jge6_tge4']
+    #nhistobins_JTBDTOPTIMIZED = [  12,      16,     25,   16 ]
+    #minxvals_JTBDTOPTIMIZED =   [ -0.8,   -0.65,  -0.65,   -0.7]
+    #maxxvals_JTBDTOPTIMIZED =   [0.6,     0.65,   0.65,    0.8]
+    #discrs+=discrs_JTBDTOPTIMIZED
+    #nhistobins+=nhistobins_JTBDTOPTIMIZED
+    #minxvals+=minxvals_JTBDTOPTIMIZED
+    #maxxvals+=maxxvals_JTBDTOPTIMIZED
+    #categories+=categorienames_JTBDTOPTIMIZED
+
+    # jet tag categories for Mem only and blr
+    categorienames_JTMEM=[                  
+                  ("(N_Jets==4&&N_BTagsM==3)","ljets_j4_t3_BLR",""),
+                  ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4_MEMONLY",""),
+                  ("(N_Jets==5&&N_BTagsM==3)","ljets_j5_t3_BLR",""),
+                  ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4_MEMONLY",""),
+                  ("(N_Jets>=6&&N_BTagsM==2)","ljets_jge6_t2_BLR",""),
+                  ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_MEMONLY",""),
+                  ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4_MEMONLY",""),
+                  ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_BLR",""),
+    ]
+    discrs_JTMEM=[  'Evt_blr_ETH_transformed',   memexp,    'Evt_blr_ETH_transformed',    memexp,   'Evt_blr_ETH_transformed',   memexp,   memexp , 'Evt_blr_ETH_transformed']
+    nhistobins_JTMEM = [  20,   12,    20,    18,   25,   25,   16, 25 ]
+    minxvals_JTMEM =   [ -1,  0.05, 0.0,   0.1, -3, 0,   0.1, 0.5]
+    maxxvals_JTMEM =   [6, 0.9,   6.5,    1.0,  4,  1.0,    0.9, 7.0]
+    discrs+=discrs_JTMEM
+    nhistobins+=nhistobins_JTMEM
+    minxvals+=minxvals_JTMEM
+    maxxvals+=maxxvals_JTMEM
+    categories+=categorienames_JTMEM
+
+    # DNN classes DNN outputs
+    categorienames_MultiDNN=[
+              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==0)","ljets_j4_tge3_ttHnode",""),
+              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==0)","ljets_j5_tge3_ttHnode",""),             
+              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==0)","ljets_jge6_tge3_ttHnode",""),
+
+              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==1)","ljets_j4_tge3_ttbbnode",""),
+              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==1)","ljets_j5_tge3_ttbbnode",""),             
+              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==1)","ljets_jge6_tge3_ttbbnode",""),
+
+              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==2)","ljets_j4_tge3_ttbnode",""),
+              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==2)","ljets_j5_tge3_ttbnode",""),             
+              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==2)","ljets_jge6_tge3_ttbnode",""),
+
+              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==3)","ljets_j4_tge3_tt2bnode",""),
+              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==3)","ljets_j5_tge3_tt2bnode",""),             
+              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==3)","ljets_jge6_tge3_tt2bnode",""),
+
+              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==4)","ljets_j4_tge3_ttccnode",""),
+              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==4)","ljets_j5_tge3_ttccnode",""),             
+              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==4)","ljets_jge6_tge3_ttccnode",""),
+
+              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==5)","ljets_j4_tge3_ttlfnode",""),
+              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==5)","ljets_j5_tge3_ttlfnode",""),             
+              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==5)","ljets_jge6_tge3_ttlfnode",""),
+
+              ("(N_Jets>=6&&N_BTagsM>=2&&aachen_pred_class==0)","ljets_jge6_tge2_ttHnode",""),
+              ("(N_Jets>=6&&N_BTagsM>=2&&aachen_pred_class==1)","ljets_jge6_tge2_ttbbnode",""),
+              ("(N_Jets>=6&&N_BTagsM>=2&&aachen_pred_class==2)","ljets_jge6_tge2_ttbnode",""),
+              ("(N_Jets>=6&&N_BTagsM>=2&&aachen_pred_class==3)","ljets_jge6_tge2_tt2bnode",""),
+              ("(N_Jets>=6&&N_BTagsM>=2&&aachen_pred_class==4)","ljets_jge6_tge2_ttccnode",""),
+              ("(N_Jets>=6&&N_BTagsM>=2&&aachen_pred_class==5)","ljets_jge6_tge2_ttlfnode",""),
+              ]
+    discrs_MultiDNN=[
+             'aachen_Out_ttH','aachen_Out_ttH','aachen_Out_ttH',
+             'aachen_Out_ttbarBB','aachen_Out_ttbarBB','aachen_Out_ttbarBB',
+             'aachen_Out_ttbarB','aachen_Out_ttbarB','aachen_Out_ttbarB',
+             'aachen_Out_ttbar2B','aachen_Out_ttbar2B','aachen_Out_ttbar2B',
+             'aachen_Out_ttbarCC','aachen_Out_ttbarCC','aachen_Out_ttbarCC',
+             'aachen_Out_ttbarOther','aachen_Out_ttbarOther','aachen_Out_ttbarOther',
+             ]
+    discrs_MultiDNN+=[
+               'aachen_Out_ttH',
+             'aachen_Out_ttbarBB',
+             'aachen_Out_ttbarB',
+             'aachen_Out_ttbar2B',
+             'aachen_Out_ttbarCC',
+             'aachen_Out_ttbarOther',
+               ]
+    nhistobins_MultiDNN= [   7,   10,    12,   7,   7,    12,   7,   7,    7,   8,   7,    7,   7,   7,    7,   7,   7,    4,]
+    minxvals_MultiDNN=   [ 0.2,  0.16, 0.17, 0.16,  0.16, 0.18, 0.2,  0.2, 0.18, 0.2,  0.16, 0.16, 0.17,  0.17, 0.21, 0.17,  0.17, 0.19,]
+    maxxvals_MultiDNN=   [0.6,  0.6, 0.7,    0.6,  0.6, 0.7,    0.4,  0.4, 0.35,    0.55,  0.5, 0.55,    0.35,  0.35, 0.3,    0.5,  0.4, 0.3,]
+    nhistobins_MultiDNN+=[12,12,7,7,7,7]
+    minxvals_MultiDNN+=[0.17,0.18,0.18,0.16,0.21,0.19]
+    maxxvals_MultiDNN+=[0.7,0.7,0.35,0.55,0.3,0.3]
+    discrs+=discrs_MultiDNN
+    nhistobins+=nhistobins_MultiDNN
+    minxvals+=minxvals_MultiDNN
+    maxxvals+=maxxvals_MultiDNN
+    categories+=categorienames_MultiDNN
 
     assert(len(nhistobins)==len(maxxvals))
     assert(len(nhistobins)==len(minxvals))
@@ -261,11 +359,10 @@ def main(argv):
     # plot everything, except during drawParallel step
     # Create file for data cards
     if analysis.doDrawParallel==False or analysis.plotNumber == None :
-        if not os.path.exists(analysis.rootFilePath):
-            print "Doing plotParallel step since root file was not found."
+        #if not os.path.exists(analysis.rootFilePath):
+            #print "Doing plotParallel step since root file was not found."
             #UPDATE
-            THEoutputpath=outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_latestAndGreatest.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=[],cirun=True,StopAfterCompileStep=False,haddParallel=True)
-            #UPDATE
+            THEoutputpath=outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_latestAndGreatest.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_V6.py"],cirun=True,StopAfterCompileStep=False,haddParallel=True)
             if type(THEoutputpath)==str:
               outputpath=THEoutputpath
             else:
@@ -279,8 +376,8 @@ def main(argv):
                 optimizeBinning(outputpath,signalsamples=[samples[0]], backgroundsamples=samples[9:],additionalSamples=samples[1:9]+samples_data, plots=discriminatorPlots, systnames=allsystnames, minBkgPerBin=2.0, optMode=analysis.getOptimzedRebinning(),considerStatUnc=False, maxBins=20, minBins=2,verbosity=2)
               else:
                 print 'Warning: Could not find signal process.'
-
-            # UPDATE
+            
+            #UPDATE
             # hadd histo files before renaming. The histograms are actually already renamed. But the checkbins thingy will not have been done yet.
             print "hadding from wildcard"
             haddFilesFromWildCard(outputpath,outputpath[:-11]+"/HaddOutputs/*.root")
@@ -296,14 +393,14 @@ def main(argv):
                 renameHistos(outputpath,renamedPath,allsystnames,True,False)
               else:
                 renameHistos(THEoutputpath[1:],renamedPath,allsystnames,True,False)
-#            addRealData(renamedPath,[s.nick for s in samples_data],binlabels,discrname)
-            #addPseudoData(outputpath[:-5]+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
+            #addRealData(renamedPath,[s.nick for s in samples_data],binlabels,discrname)
+            addPseudoData(outputpath[:-5]+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
             #outputpath=outputpath[:-5]+'_limitInput.root'
             outputpath=outputpath[:-5]+'_limitInput.root'
-        else:
-            print "Not doing plotParallel step since root file was found."
-            outputpath=analysis.rootFilePath
-        print "outputpath: ", outputpath
+        #else:
+            #print "Not doing plotParallel step since root file was found."
+            #outputpath=analysis.rootFilePath
+        #print "outputpath: ", outputpath
     else:
         # Warning This time output path refers only to output.root
         # ToDo: Fix usage of output path and output limit path
@@ -319,8 +416,8 @@ def main(argv):
         #TODO
         # 1. Implement small Epsilon case
         # 2. Implement consisted Bin-by-Bin uncertainties
+        #addRealData(outputpath,[s.nick for s in samples_data],binlabels,discrname)
         print "Making Data cards."
-        #UPDATE
         makeDatacardsParallel(outputpath,name+'/'+name+'_datacard',binlabels,doHdecay=True,discrname=discrname,datacardmaker="mk_datacard_JESTest13TeVPara")
 
 
