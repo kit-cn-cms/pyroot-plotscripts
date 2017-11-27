@@ -1,4 +1,5 @@
 #!/usr/bin/python2
+# blub 
 
 import sys
 import getopt
