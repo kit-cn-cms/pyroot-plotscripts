@@ -24,7 +24,7 @@ from limittools import calcLimits
 from limittools import replaceQ2scale
 
 from analysisClass import *
-from plotconfig_v14 import *
+from plotconfig_v14Fast import *
 
 
 def main(argv):
@@ -236,66 +236,66 @@ def main(argv):
     maxxvals+=maxxvals_JTMEM
     categories+=categorienames_JTMEM
 
-    # DNN classes DNN outputs
-    categorienames_MultiDNN=[
-              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==0)","ljets_j4_tge3_ttHnode",""),
-              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==0)","ljets_j5_tge3_ttHnode",""),             
-              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==0)","ljets_jge6_tge3_ttHnode",""),
+    ## DNN classes DNN outputs
+    #categorienames_MultiDNN=[
+              #("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==0)","ljets_j4_tge3_ttHnode",""),
+              #("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==0)","ljets_j5_tge3_ttHnode",""),             
+              #("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==0)","ljets_jge6_tge3_ttHnode",""),
 
-              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==1)","ljets_j4_tge3_ttbbnode",""),
-              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==1)","ljets_j5_tge3_ttbbnode",""),             
-              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==1)","ljets_jge6_tge3_ttbbnode",""),
+              #("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==1)","ljets_j4_tge3_ttbbnode",""),
+              #("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==1)","ljets_j5_tge3_ttbbnode",""),             
+              #("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==1)","ljets_jge6_tge3_ttbbnode",""),
 
-              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==2)","ljets_j4_tge3_ttbnode",""),
-              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==2)","ljets_j5_tge3_ttbnode",""),             
-              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==2)","ljets_jge6_tge3_ttbnode",""),
+              #("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==2)","ljets_j4_tge3_ttbnode",""),
+              #("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==2)","ljets_j5_tge3_ttbnode",""),             
+              #("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==2)","ljets_jge6_tge3_ttbnode",""),
 
-              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==3)","ljets_j4_tge3_tt2bnode",""),
-              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==3)","ljets_j5_tge3_tt2bnode",""),             
-              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==3)","ljets_jge6_tge3_tt2bnode",""),
+              #("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==3)","ljets_j4_tge3_tt2bnode",""),
+              #("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==3)","ljets_j5_tge3_tt2bnode",""),             
+              #("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==3)","ljets_jge6_tge3_tt2bnode",""),
 
-              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==4)","ljets_j4_tge3_ttccnode",""),
-              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==4)","ljets_j5_tge3_ttccnode",""),             
-              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==4)","ljets_jge6_tge3_ttccnode",""),
+              #("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==4)","ljets_j4_tge3_ttccnode",""),
+              #("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==4)","ljets_j5_tge3_ttccnode",""),             
+              #("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==4)","ljets_jge6_tge3_ttccnode",""),
 
-              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==5)","ljets_j4_tge3_ttlfnode",""),
-              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==5)","ljets_j5_tge3_ttlfnode",""),             
-              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==5)","ljets_jge6_tge3_ttlfnode",""),
+              #("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==5)","ljets_j4_tge3_ttlfnode",""),
+              #("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==5)","ljets_j5_tge3_ttlfnode",""),             
+              #("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==5)","ljets_jge6_tge3_ttlfnode",""),
 
-              ("(N_Jets>=6&&N_BTagsM>=2&&aachen_pred_class==0)","ljets_jge6_tge2_ttHnode",""),
-              ("(N_Jets>=6&&N_BTagsM>=2&&aachen_pred_class==1)","ljets_jge6_tge2_ttbbnode",""),
-              ("(N_Jets>=6&&N_BTagsM>=2&&aachen_pred_class==2)","ljets_jge6_tge2_ttbnode",""),
-              ("(N_Jets>=6&&N_BTagsM>=2&&aachen_pred_class==3)","ljets_jge6_tge2_tt2bnode",""),
-              ("(N_Jets>=6&&N_BTagsM>=2&&aachen_pred_class==4)","ljets_jge6_tge2_ttccnode",""),
-              ("(N_Jets>=6&&N_BTagsM>=2&&aachen_pred_class==5)","ljets_jge6_tge2_ttlfnode",""),
-              ]
-    discrs_MultiDNN=[
-             'aachen_Out_ttH','aachen_Out_ttH','aachen_Out_ttH',
-             'aachen_Out_ttbarBB','aachen_Out_ttbarBB','aachen_Out_ttbarBB',
-             'aachen_Out_ttbarB','aachen_Out_ttbarB','aachen_Out_ttbarB',
-             'aachen_Out_ttbar2B','aachen_Out_ttbar2B','aachen_Out_ttbar2B',
-             'aachen_Out_ttbarCC','aachen_Out_ttbarCC','aachen_Out_ttbarCC',
-             'aachen_Out_ttbarOther','aachen_Out_ttbarOther','aachen_Out_ttbarOther',
-             ]
-    discrs_MultiDNN+=[
-               'aachen_Out_ttH',
-             'aachen_Out_ttbarBB',
-             'aachen_Out_ttbarB',
-             'aachen_Out_ttbar2B',
-             'aachen_Out_ttbarCC',
-             'aachen_Out_ttbarOther',
-               ]
-    nhistobins_MultiDNN= [   7,   10,    12,   7,   7,    12,   7,   7,    7,   8,   7,    7,   7,   7,    7,   7,   7,    4,]
-    minxvals_MultiDNN=   [ 0.2,  0.16, 0.17, 0.16,  0.16, 0.18, 0.2,  0.2, 0.18, 0.2,  0.16, 0.16, 0.17,  0.17, 0.21, 0.17,  0.17, 0.19,]
-    maxxvals_MultiDNN=   [0.6,  0.6, 0.7,    0.6,  0.6, 0.7,    0.4,  0.4, 0.35,    0.55,  0.5, 0.55,    0.35,  0.35, 0.3,    0.5,  0.4, 0.3,]
-    nhistobins_MultiDNN+=[12,12,7,7,7,7]
-    minxvals_MultiDNN+=[0.17,0.18,0.18,0.16,0.21,0.19]
-    maxxvals_MultiDNN+=[0.7,0.7,0.35,0.55,0.3,0.3]
-    discrs+=discrs_MultiDNN
-    nhistobins+=nhistobins_MultiDNN
-    minxvals+=minxvals_MultiDNN
-    maxxvals+=maxxvals_MultiDNN
-    categories+=categorienames_MultiDNN
+              #("(N_Jets>=6&&N_BTagsM>=2&&aachen_pred_class==0)","ljets_jge6_tge2_ttHnode",""),
+              #("(N_Jets>=6&&N_BTagsM>=2&&aachen_pred_class==1)","ljets_jge6_tge2_ttbbnode",""),
+              #("(N_Jets>=6&&N_BTagsM>=2&&aachen_pred_class==2)","ljets_jge6_tge2_ttbnode",""),
+              #("(N_Jets>=6&&N_BTagsM>=2&&aachen_pred_class==3)","ljets_jge6_tge2_tt2bnode",""),
+              #("(N_Jets>=6&&N_BTagsM>=2&&aachen_pred_class==4)","ljets_jge6_tge2_ttccnode",""),
+              #("(N_Jets>=6&&N_BTagsM>=2&&aachen_pred_class==5)","ljets_jge6_tge2_ttlfnode",""),
+              #]
+    #discrs_MultiDNN=[
+             #'aachen_Out_ttH','aachen_Out_ttH','aachen_Out_ttH',
+             #'aachen_Out_ttbarBB','aachen_Out_ttbarBB','aachen_Out_ttbarBB',
+             #'aachen_Out_ttbarB','aachen_Out_ttbarB','aachen_Out_ttbarB',
+             #'aachen_Out_ttbar2B','aachen_Out_ttbar2B','aachen_Out_ttbar2B',
+             #'aachen_Out_ttbarCC','aachen_Out_ttbarCC','aachen_Out_ttbarCC',
+             #'aachen_Out_ttbarOther','aachen_Out_ttbarOther','aachen_Out_ttbarOther',
+             #]
+    #discrs_MultiDNN+=[
+               #'aachen_Out_ttH',
+             #'aachen_Out_ttbarBB',
+             #'aachen_Out_ttbarB',
+             #'aachen_Out_ttbar2B',
+             #'aachen_Out_ttbarCC',
+             #'aachen_Out_ttbarOther',
+               #]
+    #nhistobins_MultiDNN= [   7,   10,    12,   7,   7,    12,   7,   7,    7,   8,   7,    7,   7,   7,    7,   7,   7,    4,]
+    #minxvals_MultiDNN=   [ 0.2,  0.16, 0.17, 0.16,  0.16, 0.18, 0.2,  0.2, 0.18, 0.2,  0.16, 0.16, 0.17,  0.17, 0.21, 0.17,  0.17, 0.19,]
+    #maxxvals_MultiDNN=   [0.6,  0.6, 0.7,    0.6,  0.6, 0.7,    0.4,  0.4, 0.35,    0.55,  0.5, 0.55,    0.35,  0.35, 0.3,    0.5,  0.4, 0.3,]
+    #nhistobins_MultiDNN+=[12,12,7,7,7,7]
+    #minxvals_MultiDNN+=[0.17,0.18,0.18,0.16,0.21,0.19]
+    #maxxvals_MultiDNN+=[0.7,0.7,0.35,0.55,0.3,0.3]
+    #discrs+=discrs_MultiDNN
+    #nhistobins+=nhistobins_MultiDNN
+    #minxvals+=minxvals_MultiDNN
+    #maxxvals+=maxxvals_MultiDNN
+    #categories+=categorienames_MultiDNN
 
     assert(len(nhistobins)==len(maxxvals))
     assert(len(nhistobins)==len(minxvals))
@@ -364,7 +364,7 @@ def main(argv):
         #if not os.path.exists(analysis.rootFilePath):
             #print "Doing plotParallel step since root file was not found."
             #UPDATE
-            THEoutputpath=outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_latestAndGreatest.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_V6.py"],cirun=True,StopAfterCompileStep=False,haddParallel=True)
+            THEoutputpath=outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_latestAndGreatest.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=[],cirun=True,StopAfterCompileStep=False,haddParallel=True)
             if type(THEoutputpath)==str:
               outputpath=THEoutputpath
             else:
