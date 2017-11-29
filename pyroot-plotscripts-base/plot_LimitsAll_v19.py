@@ -1,4 +1,5 @@
 #!/usr/bin/python2
+# blub 
 
 import sys
 import getopt
@@ -17,21 +18,23 @@ from limittools import renameHistos
 from limittools import addPseudoData
 from limittools import addRealData
 from limittools import makeDatacards
-# UPDATE
+#UDPATE
 from limittools import makeDatacardsParallel
 from limittools import calcLimits
 from limittools import replaceQ2scale
 
 from analysisClass import *
-from plotconfig_v14 import *
+from plotconfig_v14Fast import *
 
 
 def main(argv):
 
     # Create analysis object with output name
-    name='limits_All_v23'
+    name='limits_All_v24'
+    anaRootPath=os.getcwd()+'/workdir/'+name+'/output_limitInput.root'
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/latest/ttbb-cutbased-analysis_limitInput.root')
-    analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/Sep17/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
+    #analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/Sep17/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
+    analysis=Analysis(name,argv,anaRootPath, signalProcess='ttH')
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/output20170626-reference/workdir/ttbb-cutbased-analysis/output_limitInput.root')
 
     analysis.plotBlinded=True
@@ -358,11 +361,10 @@ def main(argv):
     # plot everything, except during drawParallel step
     # Create file for data cards
     if analysis.doDrawParallel==False or analysis.plotNumber == None :
-        if not os.path.exists(analysis.rootFilePath):
-            print "Doing plotParallel step since root file was not found."
+        #if not os.path.exists(analysis.rootFilePath):
+            #print "Doing plotParallel step since root file was not found."
             #UPDATE
             THEoutputpath=outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_latestAndGreatest.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=[],cirun=True,StopAfterCompileStep=False,haddParallel=True)
-            #UPDATE
             if type(THEoutputpath)==str:
               outputpath=THEoutputpath
             else:
@@ -376,8 +378,8 @@ def main(argv):
                 optimizeBinning(outputpath,signalsamples=[samples[0]], backgroundsamples=samples[9:],additionalSamples=samples[1:9]+samples_data, plots=discriminatorPlots, systnames=allsystnames, minBkgPerBin=2.0, optMode=analysis.getOptimzedRebinning(),considerStatUnc=False, maxBins=20, minBins=2,verbosity=2)
               else:
                 print 'Warning: Could not find signal process.'
-
-            # UPDATE
+            
+            #UPDATE
             # hadd histo files before renaming. The histograms are actually already renamed. But the checkbins thingy will not have been done yet.
             print "hadding from wildcard"
             haddFilesFromWildCard(outputpath,outputpath[:-11]+"/HaddOutputs/*.root")
@@ -393,14 +395,14 @@ def main(argv):
                 renameHistos(outputpath,renamedPath,allsystnames,True,False)
               else:
                 renameHistos(THEoutputpath[1:],renamedPath,allsystnames,True,False)
-#            addRealData(renamedPath,[s.nick for s in samples_data],binlabels,discrname)
-            #addPseudoData(outputpath[:-5]+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
+            #addRealData(renamedPath,[s.nick for s in samples_data],binlabels,discrname)
+            addPseudoData(outputpath[:-5]+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
             #outputpath=outputpath[:-5]+'_limitInput.root'
             outputpath=outputpath[:-5]+'_limitInput.root'
-        else:
-            print "Not doing plotParallel step since root file was found."
-            outputpath=analysis.rootFilePath
-        print "outputpath: ", outputpath
+        #else:
+            #print "Not doing plotParallel step since root file was found."
+            #outputpath=analysis.rootFilePath
+        #print "outputpath: ", outputpath
     else:
         # Warning This time output path refers only to output.root
         # ToDo: Fix usage of output path and output limit path
@@ -416,8 +418,8 @@ def main(argv):
         #TODO
         # 1. Implement small Epsilon case
         # 2. Implement consisted Bin-by-Bin uncertainties
+        #addRealData(outputpath,[s.nick for s in samples_data],binlabels,discrname)
         print "Making Data cards."
-        #UPDATE
         makeDatacardsParallel(outputpath,name+'/'+name+'_datacard',binlabels,doHdecay=True,discrname=discrname,datacardmaker="mk_datacard_JESTest13TeVPara")
 
 
