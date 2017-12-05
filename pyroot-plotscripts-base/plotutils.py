@@ -2441,6 +2441,8 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         line.GetYaxis().SetNdivisions( 503 );
         line.GetYaxis().SetTitleOffset( 0.5 );
         line.GetXaxis().SetNdivisions( 510 );
+        if "N_BTagsM" in otc.GetName():
+          line.GetXaxis().SetNdivisions( 505 );
         line.GetXaxis().SetTickLength( line.GetXaxis().GetTickLength() * 2.0 );
         line.GetYaxis().SetTickLength( line.GetYaxis().GetTickLength() * 1.65 );
 

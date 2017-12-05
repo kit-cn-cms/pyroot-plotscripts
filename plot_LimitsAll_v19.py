@@ -27,7 +27,7 @@ from plotconfig_v14 import *
 def main(argv):
 
     # Create analysis object with output name
-    name='limits_All_v25'
+    name='limits_All_v26'
     anaRootPath=os.getcwd()+'/workdir/'+name+'/output_limitInput.root'
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/latest/ttbb-cutbased-analysis_limitInput.root')
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/Sep17/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
