@@ -264,32 +264,32 @@ print "done"
     nJobsDone=0
     nTries=0
     while len(listOfJobsToSubmit)>0 or len(listOfJobOutFilesToGetFromSubmit)>0 or nJobsDone!=len(outnamelist):
-    nTries+=1
-    if nTries>=4:
-      print "renaming did not work after 4 tries. ABORTING"
-      exit(1)
-    if firstTry:
-      jobids=submitArrayToNAF(listOfJobsToSubmit, arrayname="renaming")
-      do_qstat(jobids)
-      firstTry=False      
-    else:
-      jobids=submitToNAF(listOfJobsToSubmit)
-      do_qstat(jobids)
-    # check if each hadd worked
-    listOfJobsToSubmit=[]
-    listOfJobOutFilesToGetFromSubmit=[]
-    nJobsDone=0
-    for j, js in  zip(outnamelist,renamescriptlist):
-      isOk=True
-      if os.path.exists(j):
-          isOk=True
+      nTries+=1
+      if nTries>=4:
+        print "renaming did not work after 4 tries. ABORTING"
+        exit(1)
+      if firstTry:
+        jobids=submitArrayToNAF(listOfJobsToSubmit, arrayname="renaming")
+        do_qstat(jobids)
+        firstTry=False      
       else:
-        isOk=False
-      if isOk:
-        nJobsDone+=1
-      else:
-        listOfJobsToSubmit.append(js)
-        listOfJobOutFilesToGetFromSubmit.append(j)
+        jobids=submitToNAF(listOfJobsToSubmit)
+        do_qstat(jobids)
+      # check if each hadd worked
+      listOfJobsToSubmit=[]
+      listOfJobOutFilesToGetFromSubmit=[]
+      nJobsDone=0
+      for j, js in  zip(outnamelist,renamescriptlist):
+        isOk=True
+        if os.path.exists(j):
+            isOk=True
+        else:
+          isOk=False
+        if isOk:
+          nJobsDone+=1
+        else:
+          listOfJobsToSubmit.append(js)
+          listOfJobOutFilesToGetFromSubmit.append(j)
     
     # finally hadd the renamed scripts
     doTotalNumberOfHistosNeedsToRemainTheSame=True
