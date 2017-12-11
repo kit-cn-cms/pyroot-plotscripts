@@ -278,11 +278,11 @@ def renameHistosActual(infname,outfname,sysnames,checkBins=False,prune=True,Epsi
     newhist=""
     
     # only load histogram if it is really needed
-    if checkBins or (newname!=thisname) or "QCD_" in thisname:
+    if checkBins or (newname!=thisname) or thisname.startswith("QCD_"):
       thish=infile.Get(thisname)
 
-    if checkBins or "QCD_" in thisname:
-      if "QCD_" in thisname:
+    if checkBins or thisname.startswith("QCD_"):
+      if thisname.startswith("QCD_"):
         nbins=thish.GetNbinsX()
         newhist=thish.Clone()
         theobjectlist.append(newhist)
