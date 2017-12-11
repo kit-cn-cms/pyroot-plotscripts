@@ -8,7 +8,9 @@ from plotutils import *
 
 sel_singleel="(N_LooseMuons==0 && N_TightElectrons==1 && Triggered_HLT_Ele27_eta2p1_WPTight_Gsf_vX==1)*(N_Jets>=4 && N_BTagsM>=2)" # need to veto muon events in electron dataset to avoid double countung
 sel_singlemu="(N_LooseElectrons==0 && (N_TightMuons==1 && (Triggered_HLT_IsoMu24_vX==1 || Triggered_HLT_IsoTkMu24_vX==1)))*(N_Jets>=4 && N_BTagsM>=2)" # and vice versa...
+#sel_MET="*(Evt_Pt_MET>20.)"
 sel_MET="*(Evt_Pt_MET>20.)"
+
 # hcc is uu dd ss cc with ids 1 2 3 4
 hccSel='*((abs(GenHiggs_DecProd1_PDGID)==1 && abs(GenHiggs_DecProd2_PDGID)==1) || (abs(GenHiggs_DecProd1_PDGID)==2 && abs(GenHiggs_DecProd2_PDGID)==2) || (abs(GenHiggs_DecProd1_PDGID)==3 && abs(GenHiggs_DecProd2_PDGID)==3) || (abs(GenHiggs_DecProd1_PDGID)==4 && abs(GenHiggs_DecProd2_PDGID)==4) )'
 # htt is mumu tautau with ids 13 15
@@ -756,13 +758,13 @@ samplesLimits=[
                     Sample('t#bar{t}H',ROOT.kBlue+1,path_karim+'/ttH*/*nominal*.root',mcWeight+evenSel+sel_MET+corrFactor_posneg_ttHbb+corrFactor_posneg_ttHnonbb+evenWeight_ttH,'ttH',systsAllSamples,samDict=sampleDict) ,     
 #                    Sample('t#bar{t}',ROOT.kRed+1,path_80x+'/ttbar/*nominal*.root',mcWeight+evenSel,'ttbar',samDict=sampleDict) ,     
                     Sample('t#bar{t}H, H to b#bar{b}',ROOT.kBlue+1,path_karim+'/ttHbb/*nominal*.root','1.0*'+mcWeight+evenSel+sel_MET+corrFactor_posneg_ttHbb+evenWeight_ttH_hbb,'ttH_hbb',systsAllSamples,samDict=sampleDict) ,  
-                    Sample('t#bar{t}H, H to c#bar{c}',ROOT.kBlue+1,path_karim+'/ttHnonbb/*nominal*.root','1.0*'+mcWeight+evenSel+hccSel+sel_MET+corrFactor_posneg_ttHnonbb+evenWeight_ttH_hcc,'ttH_hcc',systsAllSamples,samDict=sampleDict) ,  
-                    Sample('t#bar{t}H, H to #tau#tau',ROOT.kBlue+1,path_karim+'/ttHnonbb/*nominal*.root','1.0*'+mcWeight+evenSel+httSel+sel_MET+corrFactor_posneg_ttHnonbb+evenWeight_ttH_htt,'ttH_htt',systsAllSamples,samDict=sampleDict) ,  
-                    Sample('t#bar{t}H, H to #gamma#gamma',ROOT.kBlue+1,path_karim+'/ttHnonbb/*nominal*.root','1.0*'+mcWeight+evenSel+hggSel+sel_MET+corrFactor_posneg_ttHnonbb+evenWeight_ttH_hgg,'ttH_hgg',systsAllSamples,samDict=sampleDict) ,  
-                    Sample('t#bar{t}H, H to gluglu',ROOT.kBlue+1,path_karim+'/ttHnonbb/*nominal*.root','1.0*'+mcWeight+evenSel+hglugluSel+sel_MET+corrFactor_posneg_ttHnonbb+evenWeight_ttH_hgluglu,'ttH_hgluglu',systsAllSamples,samDict=sampleDict) ,  
-                    Sample('t#bar{t}H, H to WW',ROOT.kBlue+1,path_karim+'/ttHnonbb/*nominal*.root','1.0*'+mcWeight+evenSel+hwwSel+sel_MET+corrFactor_posneg_ttHnonbb+evenWeight_ttH_hww,'ttH_hww',systsAllSamples,samDict=sampleDict) ,  
-                    Sample('t#bar{t}H, H to ZZ',ROOT.kBlue+1,path_karim+'/ttHnonbb/*nominal*.root','1.0*'+mcWeight+evenSel+hzzSel+sel_MET+corrFactor_posneg_ttHnonbb+evenWeight_ttH_hzz,'ttH_hzz',systsAllSamples,samDict=sampleDict) ,  
-                    Sample('t#bar{t}H, H to #gamma Z',ROOT.kBlue+1,path_karim+'/ttHnonbb/*nominal*.root','1.0*'+mcWeight+evenSel+hzgSel+sel_MET+corrFactor_posneg_ttHnonbb+evenWeight_ttH_hzg,'ttH_hzg',systsAllSamples,samDict=sampleDict) ,
+                    Sample('t#bar{t}H, H to c#bar{c}',ROOT.kBlue+1,path_karim+'/ttHnonbb/*nominal*.root','1.0*'+mcWeightAll+hccSel+sel_MET+corrFactor_posneg_ttHnonbb,'ttH_hcc',systsAllSamples,samDict=sampleDict) ,  
+                    Sample('t#bar{t}H, H to #tau#tau',ROOT.kBlue+1,path_karim+'/ttHnonbb/*nominal*.root','1.0*'+mcWeightAll+httSel+sel_MET+corrFactor_posneg_ttHnonbb,'ttH_htt',systsAllSamples,samDict=sampleDict) ,  
+                    Sample('t#bar{t}H, H to #gamma#gamma',ROOT.kBlue+1,path_karim+'/ttHnonbb/*nominal*.root','1.0*'+mcWeightAll+hggSel+sel_MET+corrFactor_posneg_ttHnonbb,'ttH_hgg',systsAllSamples,samDict=sampleDict) ,  
+                    Sample('t#bar{t}H, H to gluglu',ROOT.kBlue+1,path_karim+'/ttHnonbb/*nominal*.root','1.0*'+mcWeightAll+hglugluSel+sel_MET+corrFactor_posneg_ttHnonbb,'ttH_hgluglu',systsAllSamples,samDict=sampleDict) ,  
+                    Sample('t#bar{t}H, H to WW',ROOT.kBlue+1,path_karim+'/ttHnonbb/*nominal*.root','1.0*'+mcWeightAll+hwwSel+sel_MET+corrFactor_posneg_ttHnonbb,'ttH_hww',systsAllSamples,samDict=sampleDict) ,  
+                    Sample('t#bar{t}H, H to ZZ',ROOT.kBlue+1,path_karim+'/ttHnonbb/*nominal*.root','1.0*'+mcWeightAll+hzzSel+sel_MET+corrFactor_posneg_ttHnonbb,'ttH_hzz',systsAllSamples,samDict=sampleDict) ,  
+                    Sample('t#bar{t}H, H to #gamma Z',ROOT.kBlue+1,path_karim+'/ttHnonbb/*nominal*.root','1.0*'+mcWeightAll+hzgSel+sel_MET+corrFactor_posneg_ttHnonbb,'ttH_hzg',systsAllSamples,samDict=sampleDict) ,
                     
                     Sample('t#bar{t}+lf',ROOT.kRed-7,ttbarPathS,mcWeight+evenSel+ttbarMCWeight+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)'+sel_MET+evenWeight_ttbarOther,'ttbarOther',systsAllSamples+systsTtbar+systs_tt_lf,samDict=sampleDict),
                     Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,ttbarPathS,mcWeight+evenSel+ttbarMCWeight+'*(GenEvt_I_TTPlusCC==1)'+sel_MET+evenWeight_ttbarPlusCCbar,'ttbarPlusCCbar',systsAllSamples+systsTtbar+systs_tt_cc,samDict=sampleDict),
