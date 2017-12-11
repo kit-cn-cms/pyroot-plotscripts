@@ -1038,8 +1038,6 @@ CSVHelper::fillCSVHistos(TFile *fileHF, TFile *fileLF, const std::vector<Systema
   for (size_t iSys = 0; iSys < nSys; iSys++) {
     // some string cosmetics to search for the correct histogram in the root files  
     TString systematic = Systematics::toString(systs[iSys]);
-    TString systematic_original = systematic;
-    
     systematic.ReplaceAll("up","Up");
     systematic.ReplaceAll("down","Down");
     systematic.ReplaceAll("CSV","");
@@ -1050,17 +1048,12 @@ CSVHelper::fillCSVHistos(TFile *fileHF, TFile *fileLF, const std::vector<Systema
     }
     if(systematic!="") {systematic="_"+systematic;}
     
-    if(systematic_original.Contains("HFStats")){
-        systematic_original.ReplaceAll("HFStats","LFStats");
-    }
-    else if(systematic_original.Contains("LFStats")){
-        systematic_original.ReplaceAll("LFStats","HFStats");
-    }
+    
     // loop over all pt bins of the different jet flavours
     for (int iPt = 0; iPt < nHFptBins_; iPt++) {
         TString name = Form("csv_ratio_Pt%i_Eta0_%s", iPt, (syst_csv_suffix+systematic).Data());
         // only read the histogram if it exits in the root file
-        if(fileHF->GetListOfKeys()->Contains(name) && !(systematic_original.Contains("HF"))) {
+        if(fileHF->GetListOfKeys()->Contains(name) && !(TString(Systematics::toString(systs[iSys])).Contains("HF"))) {
             h_csv_wgt_hf.at(iSys).at(iPt) = readHistogram(fileHF,name);
             std::cout << "added " << name << " from HF file" << std::endl;
         }
@@ -1081,7 +1074,7 @@ CSVHelper::fillCSVHistos(TFile *fileHF, TFile *fileLF, const std::vector<Systema
     for (int iPt = 0; iPt < nLFptBins_; iPt++) {
         for (int iEta = 0; iEta < nLFetaBins_; iEta++) {
             TString name = Form("csv_ratio_Pt%i_Eta%i_%s", iPt, iEta, (syst_csv_suffix+systematic).Data());
-            if(fileLF->GetListOfKeys()->Contains(name) && !(systematic_original.Contains("LF"))) {
+            if(fileLF->GetListOfKeys()->Contains(name) && !(TString(Systematics::toString(systs[iSys])).Contains("LF"))) {
                 h_csv_wgt_lf.at(iSys).at(iPt).at(iEta) = readHistogram(fileLF,name);
                 std::cout << "added " << name << " from LF file" << std::endl;
             }
@@ -2069,7 +2062,7 @@ def startLoop():
     sumOfWeights+=Weight;
 
 	// Do weighting correctly if data driven QCD sample is used: use the weights for MC part and not for Data part
-	if(processname=="QCD" or processname=="QCD_CMS_ttH_QCDScaleFactorUp" or processname=="QCD_CMS_ttH_QCDScaleFactorDown") {
+	#if(processname=="QCD" or processname=="QCD_CMS_ttH_QCDScaleFactorUp" or processname=="QCD_CMS_ttH_QCDScaleFactorDown") {
 		if(currentfilename.Contains("SingleElectron")){
 			DoWeights=0;
 			electron_data=1;
@@ -3115,6 +3108,9 @@ def helperSubmitNAFJobs(scripts,outputs,nentries):
     jobids=submitToNAF(failed_jobs)
     do_qstat(jobids)
     failed_jobs=check_jobs(scripts,outputs,nentries)
+  if retries>=4 or len(failed_jobs)>=1:
+    print 'Multiple problems with failing jobs after resubmitting'
+    sys.exit()  
   if retries>=10:
     print 'could not submit jobs'
     sys.exit()  
@@ -3340,17 +3336,66 @@ outlog.close()
     listOfOutFiles.append(outputfolder+'/'+sample+'_hadded.root')
     listOfOutScripts.append(scriptname)
   
-  jobids=submitArrayToNAF(listOfOutScripts, "haddPara")
-  do_qstat(jobids)
+  firstTry=True
+  listOfJobsToSubmit=listOfOutScripts
+  listOfJobOutFilesToGetFromSubmit=listOfOutFiles
+  nJobsDone=0
+  nTries=0
+  while len(listOfJobsToSubmit)>0 or len(listOfJobOutFilesToGetFromSubmit)>0 or nJobsDone!=len(listOfOutFiles):
+    nTries+=1
+    if nTries>=4:
+      print "hadding did not work after 4 tries. ABORTING"
+      exit(1)
+    if firstTry:
+      jobids=submitArrayToNAF(listOfJobsToSubmit, "haddPara")
+      do_qstat(jobids)
+      firstTry=False      
+    else:
+      jobids=submitToNAF(listOfJobsToSubmit)
+      do_qstat(jobids)
+    # check if each hadd worked
+    listOfJobsToSubmit=[]
+    listOfJobOutFilesToGetFromSubmit=[]
+    nJobsDone=0
+    for j, js in  zip(listOfOutFiles,listOfOutScripts):
+      isOk=True
+      if os.path.exists(j):
+        jf=open(j.replace(".root",",log"),"r")
+        jflist=list(jf)
+        jf.close()
+        if len(jflist)==1:
+          if jflist[0]!="OK":
+            isOk=False
+        else:
+          isOk=False
+      else:
+        isOk=False
+      if isOk:
+        nJobsDone+=1
+      else:
+        listOfJobsToSubmit.append(js)
+        listOfJobOutFilesToGetFromSubmit.append(j)
   return listOfOutFiles
 
-def haddFilesFromWildCard(outname="",inwildcard=""):
+def haddFilesFromWildCard(outname="",inwildcard="",totalNumberOfHistosNeedsToRemainTheSame=False):
   infiles=glob.glob(inwildcard)
   print 'hadd from wildcard'
   print outname, inwildcard
   haddclock=ROOT.TStopwatch()
   haddclock.Start()
   nfilesPerHadd=100
+  nHistosBefore=0
+  nHistosAfter=0
+  if totalNumberOfHistosNeedsToRemainTheSame:
+    # count number if histos before hadding
+    print "counting histos BEFORE hadding from wildcard"
+    nHistos=0
+    for inf in infiles:
+      theInf=ROOT.TFile(inf,"READ")
+      keylist=theInf.GetListOfKeys()
+      nHistos+=len(keylist)
+      theInf.Close()
+    nHistosBefore=nHistos  
   if len(infiles)<nfilesPerHadd:
     cmd='hadd'+' '+outname+' '+' '.join(infiles)
     print cmd
@@ -3376,7 +3421,20 @@ def haddFilesFromWildCard(outname="",inwildcard=""):
     cmd='hadd'+' '+outname+' '+' '.join(parts)
     print cmd
     subprocess.call(cmd,shell=True)
-    
+  
+  if totalNumberOfHistosNeedsToRemainTheSame:
+    # count number if histos before hadding
+    print "counting histos AFTER hadding from wildcard"
+    nHistos=0
+    for inf in [outname]:
+      theInf=ROOT.TFile(inf,"READ")
+      keylist=theInf.GetListOfKeys()
+      nHistos+=len(keylist)
+      theInf.Close()
+    nHistosAfter=nHistos
+    if nHistosAfter!=nHistosBefore:
+      print "haddFilesFromWildCard did not lead to the same number of histograms before and after the hadding!!!!"
+      exit(1)
   print 'done'
   haddtime=haddclock.RealTime()
   print "hadding took ", haddtime
@@ -3416,16 +3474,6 @@ def renameHistosParallel(infname,sysnames,prune=False):
     thish=None
     newname=thisname
     do=True
-    #if do and "PSscaleUp" in thisname and "Q2scale" in thisname and thisname[-2:]=="Up":
-      #tmp=thisname
-      #tmp=tmp.replace('_CMS_ttH_PSscaleUp','')
-      #print 'stripped',tmp
-      #newname=tmp.replace('Q2scale','CombinedScale')
-
-    #if "PSscaleDown" in thisname and "Q2scale" in thisname and thisname[-4:]=="Down":
-      #tmp=thisname
-      #tmp=tmp.replace('_CMS_ttH_PSscaleDown','')
-      #newname=tmp.replace('Q2scale','CombinedScale')
 
     if "dummy" in thisname:
       continue
@@ -3444,54 +3492,6 @@ def renameHistosParallel(infname,sysnames,prune=False):
 	outfile.Delete(thisname)
 	outfile.Delete(thisname+";1")
 	continue
-    	
-    #filter histograms for systs not belonging to the samples 
-    #for now until we have NNPDF syst for other samples
-    #if prune:
-      #if "CMS_ttH_NNPDF" in thisname:
-	#if thisname.split("_",1)[0]+"_" not in ["ttbarPlus2B_","ttbarPlusB_","ttbarPlusBBbar_","ttbarPlusCCbar_","ttbarOther_"]:
-	  #print "wrong syst: removing histogram", thisname
-	  #continue
-      #if "CMS_ttH_Q2scale_ttbarOther" in thisname and "ttbarOther"!=thisname.split("_",1)[0]:
-	#print "wrong syst: removing histogram", thisname
-	#continue
-      #if ("CMS_ttH_Q2scale_ttbarPlusBUp" in thisname or "CMS_ttH_Q2scale_ttbarPlusBDown" in thisname ) and "ttbarPlusB"!=thisname.split("_",1)[0] :
-	#print "wrong syst: removing histogram", thisname
-	#continue
-      #if "CMS_ttH_Q2scale_ttbarPlusBBbar" in thisname and "ttbarPlusBBbar"!=thisname.split("_",1)[0] :
-	#print "wrong syst: removing histogram", thisname
-	#continue
-      #if "CMS_ttH_Q2scale_ttbarPlusCCbar" in thisname and "ttbarPlusCCbar"!=thisname.split("_",1)[0] :
-	#print "wrong syst: removing histogram", thisname
-	#continue
-      #if "CMS_ttH_Q2scale_ttbarPlus2B" in thisname and "ttbarPlus2B"!=thisname.split("_",1)[0] :
-	#print "wrong syst: removing histogram", thisname
-	#continue
-    
-    #add ttbar type to systematics name for PS scale
-    #if "CMS_ttH_PSscaleUp" in newname or "CMS_ttH_PSscaleDown" in newname:
-      
-      #ttbartype=""
-      #if "ttbarOther"==thisname.split("_",1)[0]:
-	#ttbartype="ttbarOther"
-      #elif "ttbarPlusB"==thisname.split("_",1)[0] :
-	#ttbartype="ttbarPlusB"
-      #elif "ttbarPlusBBbar"==thisname.split("_",1)[0] :
-	#ttbartype="ttbarPlusBBbar"
-      #elif "ttbarPlusCCbar"==thisname.split("_",1)[0] :
-	#ttbartype="ttbarPlusCCbar"
-      #elif "ttbarPlus2B"==thisname.split("_",1)[0] :
-	#ttbartype="ttbarPlus2B"
-      #else:
-	#print "wrong syst: removing histogram", thisname
-	#continue
-      
-      #if "CMS_ttH_PSscaleUp" in newname:
-	#newname=newname.replace("CMS_ttH_PSscaleUp","CMS_ttH_PSscale_"+ttbartype+"Up")
-      #elif "CMS_ttH_PSscaleDown" in newname:
-	#newname=newname.replace("CMS_ttH_PSscaleDown","CMS_ttH_PSscale_"+ttbartype+"Down")
-      #else:
-	#print "wrong syst: removing histogram", thisname
 
     if newname!=thisname:
       print "changed ", thisname, " to ", newname  
