@@ -2380,11 +2380,11 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         objects.append(otc)
 
         #draw the lumi text on the canvas
-        CMS_lumi.lumi_13TeV = "36.0 fb^{-1}"
+        CMS_lumi.lumi_13TeV = "35.9 fb^{-1}"
         CMS_lumi.writeExtraText = 1
         #CMS_lumi.extraText = "Preliminary"
         CMS_lumi.extraText = ""
-        CMS_lumi.cmsText=""
+        CMS_lumi.cmsText="CMS"
 
         CMS_lumi.lumi_sqrtS = "13 TeV" # used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
 
@@ -2671,7 +2671,7 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
         CMS_lumi.writeExtraText = 1
         #CMS_lumi.extraText = "Preliminary"
         CMS_lumi.extraText = ""
-        CMS_lumi.cmsText=""
+        CMS_lumi.cmsText="CMS"
 
         CMS_lumi.lumi_sqrtS = "13 TeV" # used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
 
