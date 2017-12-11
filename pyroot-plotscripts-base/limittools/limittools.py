@@ -9,6 +9,30 @@ import stat
 from subprocess import call
 import glob
 
+def submitToNAF(scripts):
+  submitclock=ROOT.TStopwatch()
+  submitclock.Start()
+  jobids=[]
+  logdir = os.getcwd()+"/logs"
+  if not os.path.exists(logdir):
+    os.makedirs(logdir)
+  for script in scripts:
+    print 'submitting',script
+    command=['qsub', '-cwd', '-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=5800M', '-l', 's_vmem=5800M' ,'-o', logdir, '-e', logdir, script]
+    a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
+    output = a.communicate()[0]
+    jobidstring = output.split()
+    for jid in jobidstring:
+      if jid.isdigit():
+        jobid=int(jid)
+        print "this job's ID is", jobid
+        jobids.append(jobid)
+        break
+  
+  submittime=submitclock.RealTime()
+  print "submitted ", len(jobids), " in ", submittime
+  return jobids
+
 def submitArrayToNAF(scripts,arrayname=""):
   submitclock=ROOT.TStopwatch()
   submitclock.Start()
@@ -80,11 +104,23 @@ def do_qstat(jobids):
       print "all jobs are finished"
       allfinished=True
 
-def haddFiles(outname="",infiles=[]):
+def haddFiles(outname="",infiles=[],totalNumberOfHistosNeedsToRemainTheSame=False):
   print 'hadd from filelist'
   haddclock=ROOT.TStopwatch()
   haddclock.Start()
   nfilesPerHadd=100
+  nHistosBefore=0
+  nHistosAfter=0
+  if totalNumberOfHistosNeedsToRemainTheSame:
+    # count number if histos before hadding
+    print "counting histos BEFORE hadding from wildcard"
+    nHistos=0
+    for inf in infiles:
+      theInf=ROOT.TFile(inf,"READ")
+      keylist=theInf.GetListOfKeys()
+      nHistos+=len(keylist)
+      theInf.Close()
+    nHistosBefore=nHistos  
   if len(infiles)<nfilesPerHadd:
     cmd='hadd'+' '+outname+' '+' '.join(infiles)
     print cmd
@@ -110,7 +146,19 @@ def haddFiles(outname="",infiles=[]):
     cmd='hadd'+' '+outname+' '+' '.join(parts)
     print cmd
     subprocess.call(cmd,shell=True)
-    
+  if totalNumberOfHistosNeedsToRemainTheSame:
+    # count number if histos before hadding
+    print "counting histos AFTER hadding from wildcard"
+    nHistos=0
+    for inf in [outname]:
+      theInf=ROOT.TFile(inf,"READ")
+      keylist=theInf.GetListOfKeys()
+      nHistos+=len(keylist)
+      theInf.Close()
+    nHistosAfter=nHistos
+    if nHistosAfter!=nHistosBefore:
+      print "haddFilesFromWildCard did not lead to the same number of histograms before and after the hadding!!!!"
+      exit(1)    
   print 'done'
   haddtime=haddclock.RealTime()
   print "hadding took ", haddtime
@@ -210,10 +258,44 @@ print "done"
       st = os.stat(scriptname)
       os.chmod(scriptname, st.st_mode | stat.S_IEXEC)
     # now submit jobs to submitArrayToNAF
-    jobids=submitArrayToNAF(renamescriptlist,arrayname="renaming")
-    do_qstat(jobids)
+    firstTry=True
+    listOfJobsToSubmit=renamescriptlist
+    listOfJobOutFilesToGetFromSubmit=outnamelist
+    nJobsDone=0
+    nTries=0
+    while len(listOfJobsToSubmit)>0 or len(listOfJobOutFilesToGetFromSubmit)>0 or nJobsDone!=len(outnamelist):
+    nTries+=1
+    if nTries>=4:
+      print "renaming did not work after 4 tries. ABORTING"
+      exit(1)
+    if firstTry:
+      jobids=submitArrayToNAF(listOfJobsToSubmit, arrayname="renaming")
+      do_qstat(jobids)
+      firstTry=False      
+    else:
+      jobids=submitToNAF(listOfJobsToSubmit)
+      do_qstat(jobids)
+    # check if each hadd worked
+    listOfJobsToSubmit=[]
+    listOfJobOutFilesToGetFromSubmit=[]
+    nJobsDone=0
+    for j, js in  zip(outnamelist,renamescriptlist):
+      isOk=True
+      if os.path.exists(j):
+          isOk=True
+      else:
+        isOk=False
+      if isOk:
+        nJobsDone+=1
+      else:
+        listOfJobsToSubmit.append(js)
+        listOfJobOutFilesToGetFromSubmit.append(j)
+    
     # finally hadd the renamed scripts
-    haddFiles(outfname,outnamelist)
+    doTotalNumberOfHistosNeedsToRemainTheSame=True
+    if prune:
+      doTotalNumberOfHistosNeedsToRemainTheSame=False
+    haddFiles(outfname,outnamelist,totalNumberOfHistosNeedsToRemainTheSame=doTotalNumberOfHistosNeedsToRemainTheSame)
     #cmd="hadd "+outfname+" "+" ".join(outnamelist)
     #subprocess.call(cmd,shell=True)
     print "The parallel renaming took ", theclock.RealTime()
