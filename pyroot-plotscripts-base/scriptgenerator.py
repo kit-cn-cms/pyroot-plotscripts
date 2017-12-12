@@ -3360,7 +3360,7 @@ outlog.close()
     for j, js in  zip(listOfOutFiles,listOfOutScripts):
       isOk=True
       if os.path.exists(j):
-        jf=open(j.replace(".root",",log"),"r")
+        jf=open(j.replace(".root",".log"),"r")
         jflist=list(jf)
         jf.close()
         if len(jflist)==1:
