@@ -5,7 +5,7 @@ from plotutils import *
 
 
 # names of the systematics (proper names needed e.g. for combination)
-mcweight='37.8'
+mcweight='35.9'
 
 sfs="Weight_ElectronSFID*Weight_ElectronSFTrigger*Weight_ElectronSFIso*Weight_MuonSFID*Weight_MuonSFTrigger*Weight_MuonSFIso"
 usualweights="(1*Weight_PU*((Weight>0)-(Weight<0)))*Weight_ElectronSFID*Weight_ElectronSFTrigger*Weight_ElectronSFIso*Weight_MuonSFID*Weight_MuonSFTrigger*Weight_MuonSFIso"
@@ -51,26 +51,41 @@ samples=[
 
 
 SignalSamples=[
-                    Sample('Z->tWb, m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=700',ROOT.kMagenta,path_80x+'Signal_Zprime/Zprime_1500_700_nominal_Tree.root',mcweight,'Zprime1500700') ,
-                    Sample('Z->tWb, m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=900',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Zprime_1500_900_nominal_Tree.root',mcweight,'Zprime1500900'),
-                    Sample('Z->tWb, m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=1200',ROOT.kMagenta-9,path_80x+'Signal_Zprime/Zprime_1500_1200_nominal_Tree.root',mcweight,'Zprime15001200') ,
-                    Sample('Z->tWb, m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1200',ROOT.kCyan,path_80x+'Signal_Zprime/Zprime_2000_1200_LH_nominal_Tree.root',mcweight,'Zprime20001200'),
-                    Sample('Z->tWb, m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1500',ROOT.kCyan+3,path_80x+'Signal_Zprime/Zprime_2000_1500_nominal_Tree.root',mcweight,'Zprime20001500') ,
-                    Sample('Z->tWb, m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1200',ROOT.kRed,path_80x+'Signal_Zprime/Zprime_2500_1200_nominal_Tree.root',mcweight ,'Zprime25001200') ,
+                    Sample('Z->tWb, m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=700',ROOT.kMagenta,path_80x+'Signal_Zprime/Zprime*ToWB*1500*700*nominal*Tree.root',mcweight,'Zprime1500700_tWb') ,
+                    Sample('Z->tWb, m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=900',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Zprime*ToWB*1500*900*nominal*Tree.root',mcweight,'Zprime1500900_tWb'),
+                    Sample('Z->tWb, m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=1200',ROOT.kMagenta-9,path_80x+'Signal_Zprime/Zprime*ToWB*1500*1200*nominal*Tree.root',mcweight,'Zprime15001200_tWb') ,
+                    Sample('Z->tWb, m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1200',ROOT.kCyan,path_80x+'Signal_Zprime/Zprime*ToWB*2000*1200*LH*nominal*Tree.root',mcweight,'Zprime20001200_tWb'),
+                    Sample('Z->tWb, m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1500',ROOT.kCyan+3,path_80x+'Signal_Zprime/Zprime*ToWB*2000*1500*nominal*Tree.root',mcweight,'Zprime20001500_tWb') ,
+                    Sample('Z->tWb, m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1200',ROOT.kRed,path_80x+'Signal_Zprime/Zprime*ToWB*2500*1200*nominal*Tree.root',mcweight ,'Zprime25001200_tWb') ,
+
+                    Sample('Z->ttZ, m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=700',ROOT.kMagenta,path_80x+'Signal_Zprime/Zprime*ToZT*1500*700*nominal*Tree.root',mcweight,'Zprime1500700_ttZ') ,
+                    Sample('Z->ttZ, m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=900',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Zprime*ToZT*1500*900*nominal*Tree.root',mcweight,'Zprime1500900_ttZ'),
+                    Sample('Z->ttZ, m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=1200',ROOT.kMagenta-9,path_80x+'Signal_Zprime/Zprime*ToZT*1500*1200*nominal*Tree.root',mcweight,'Zprime15001200_ttZ') ,
+                    Sample('Z->ttZ, m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1200',ROOT.kCyan,path_80x+'Signal_Zprime/Zprime*ToZT*2000*1200*LH*nominal*Tree.root',mcweight,'Zprime20001200_ttZ'),
+                    Sample('Z->ttZ, m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1500',ROOT.kCyan+3,path_80x+'Signal_Zprime/Zprime*ToZT*2000*1500*nominal*Tree.root',mcweight,'Zprime20001500_ttZ') ,
+                    Sample('Z->ttZ, m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1200',ROOT.kRed,path_80x+'Signal_Zprime/Zprime*ToZT*2500*1200*nominal*Tree.root',mcweight ,'Zprime25001200_ttZ') ,
+
+                    Sample('Z->ttH, m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=700',ROOT.kMagenta,path_80x+'Signal_Zprime/Zprime*ToHT*1500*700*nominal*Tree.root',mcweight,'Zprime1500700_ttH') ,
+                    Sample('Z->ttH, m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=900',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Zprime*ToHT*1500*900*nominal*Tree.root',mcweight,'Zprime1500900_ttH'),
+                    Sample('Z->ttH, m(Zp_{Nar})=1500, m(Tp_{Nar,LH})=1200',ROOT.kPink-7,path_80x+'Signal_Zprime/Zprime*ToHT*1500*1200*nominal*Tree.root',mcweight,'Zprime15001200_ttH') ,
+                    Sample('Z->ttH, m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1200',ROOT.kCyan,path_80x+'Signal_Zprime/Zprime*ToHT*2000*1200*LH*nominal*Tree.root',mcweight,'Zprime20001200_ttH'),
+                    Sample('Z->ttH, m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1500',ROOT.kCyan+3,path_80x+'Signal_Zprime/Zprime*ToHT*2000*1500*nominal*Tree.root',mcweight,'Zprime20001500_ttH') ,
+                    Sample('Z->ttH, m(Zp_{Nar})=2500, m(Tp_{Nar,LH})=1200',ROOT.kGreen+1,path_80x+'Signal_Zprime/Zprime*ToHT*2500*1200*nominal*Tree.root',mcweight ,'Zprime25001200_ttH') ,
+                    Sample('Signal',ROOT.kGreen+1,path_80x+'Signal_Zprime/Zprime*ToWB*nominal*Tree.root',mcweight ,'ZprimeAll') ,
 
 
 ]
 
 BackgroundSamples=[
                     Sample('t#bar{t} + jets',ROOT.kBlue,path_80x+'BKG_TTbar/*nominal*.root',mcweight,'ttbar') ,
-                    Sample('QCD_HT',ROOT.kOrange-3,path_80x+'BKG_QCD/MC_QCD_H*nominal*Tree*.root',mcweight,'QCD_HT'),
-                    Sample('QCD_Pt',ROOT.kGreen,path_80x+'BKG_QCD/MC_QCD_P*nominal*Tree*.root',mcweight,'QCD_PT'),
+                    Sample('QCD from MC',ROOT.kOrange-3,path_80x+'BKG_QCD/*QCD_H*nominal*Tree*.root',mcweight,'QCD_HT'),
+                    #Sample('QCD_Pt',ROOT.kGreen,path_80x+'BKG_QCD/MC_QCD_P*nominal*Tree*.root',mcweight,'QCD_PT'),
                     #Sample('QCD_comb',ROOT.kGreen,path_80x+'BKG_QCD/MC_QCD*nominal*Tree*.root',mcweight,'QCD_comb'),
 ]
 
 
 DataSamples=[
-                    #Sample('MC_BKG_DATA',ROOT.kAzure,path_80x+'BKG*/*nominal*.root',mcweight,'MC_BKG_DATA'),
+                    #Sample('DATA_2016',ROOT.kBlack,path_80x+'DATA*/*nominal*.root',mcweight,'MC_BKG_DATA'),
 
 ]
 
@@ -98,3 +113,4 @@ for i in BackgroundSamples:
 DataSampleNames=[]
 for i in DataSamples:
     DataSampleNames.append(i.nick)
+print "ladida ", SignalSampleNames

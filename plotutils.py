@@ -159,10 +159,10 @@ def setupHisto(histo,color,yTitle=None,filled=False):
       if histo.GetYaxis().GetTitle()=="" and "VS" in histo.GetTitle() :
 	histo.GetYaxis().SetTitle(histo.GetTitle().split("VS",1)[1])
       histo.SetTitle('')
-    histo.GetYaxis().SetTitleOffset(1.3)
-    histo.GetXaxis().SetTitleOffset(1.2)
-    histo.GetYaxis().SetTitleSize(0.05)
-    histo.GetXaxis().SetTitleSize(0.05)
+    histo.GetYaxis().SetTitleOffset(1.0)
+    histo.GetXaxis().SetTitleOffset(1.0)
+    histo.GetYaxis().SetTitleSize(0.07)
+    histo.GetXaxis().SetTitleSize(0.07)
     histo.GetYaxis().SetLabelSize(0.05)
     histo.GetXaxis().SetLabelSize(0.05)
     histo.SetMarkerColor(color)
@@ -269,11 +269,22 @@ def getLegendR():
 
 
 def getLegend2(): 
+    #legend=ROOT.TLegend()
+    #legend.SetX1NDC(0.5)
+    #legend.SetX2NDC(0.95)
+    #legend.SetY1NDC(0.80)
+    #legend.SetY2NDC(0.90)
+    #legend.SetBorderSize(0);
+    #legend.SetLineStyle(0);
+    #legend.SetTextFont(42);
+    #legend.SetTextSize(0.05);
+    ##legend.SetTextSize(0.03);
+    #legend.SetFillStyle(0);
     legend=ROOT.TLegend()
-    legend.SetX1NDC(0.85)
-    legend.SetX2NDC(0.99)
-    legend.SetY1NDC(0.92)
-    legend.SetY2NDC(0.93)
+    legend.SetX1NDC(0.76)
+    legend.SetX2NDC(0.93)
+    legend.SetY1NDC(0.9)
+    legend.SetY2NDC(0.91)
     legend.SetBorderSize(0);
     legend.SetLineStyle(0);
     legend.SetTextFont(42);
@@ -344,18 +355,20 @@ def getSepaTests2(hs,h1):
     return tests
 
 
+
 # draws a list of histos on a canvas and returns canvas
-def drawHistosOnCanvas(listOfHistos_,normalize=True,stack=False,logscale=False,options_='histo',ratio=False,DoProfile=False):
+def drawHistosOnCanvas(listOfHistos_,normalize=False,stack=False,logscale=False,options_='histo',ratio=False,DoProfile=False):
     listOfHistos=[h.Clone(h.GetName()+'_drawclone') for h in listOfHistos_]
     canvas=getCanvas(listOfHistos[0].GetName(),ratio)        
     #prepare drawing
 
     # mover over/underflow
     for h in listOfHistos:
-        h.SetBinContent(1,h.GetBinContent(0)+h.GetBinContent(1));
-        h.SetBinContent(h.GetNbinsX(),h.GetBinContent(h.GetNbinsX()+1)+h.GetBinContent(h.GetNbinsX()));
-        h.SetBinError(1,ROOT.TMath.Sqrt(ROOT.TMath.Power(h.GetBinError(0),2)+ROOT.TMath.Power(h.GetBinError(1),2)));
-        h.SetBinError(h.GetNbinsX(),ROOT.TMath.Sqrt(ROOT.TMath.Power(h.GetBinError(h.GetNbinsX()+1),2)+ROOT.TMath.Power(h.GetBinError(h.GetNbinsX()),2)));
+        if isinstance(h,ROOT.TH1):
+            h.SetBinContent(1,h.GetBinContent(0)+h.GetBinContent(1));
+            h.SetBinContent(h.GetNbinsX(),h.GetBinContent(h.GetNbinsX()+1)+h.GetBinContent(h.GetNbinsX()));
+            h.SetBinError(1,ROOT.TMath.Sqrt(ROOT.TMath.Power(h.GetBinError(0),2)+ROOT.TMath.Power(h.GetBinError(1),2)));
+            h.SetBinError(h.GetNbinsX(),ROOT.TMath.Sqrt(ROOT.TMath.Power(h.GetBinError(h.GetNbinsX()+1),2)+ROOT.TMath.Power(h.GetBinError(h.GetNbinsX()),2)));
 
     if normalize and not stack:
         for h in listOfHistos:
@@ -374,26 +387,46 @@ def drawHistosOnCanvas(listOfHistos_,normalize=True,stack=False,logscale=False,o
     canvas.cd(1)
     yMax=1e-9
     yMinMax=1000.
-    for h in listOfHistos:
-        yMax=max(h.GetBinContent(h.GetMaximumBin()),yMax)
-        if h.GetBinContent(h.GetMaximumBin())>0:
-            yMinMax=min(h.GetBinContent(h.GetMaximumBin()),yMinMax)
+    if isinstance(h,ROOT.TGraphAsymmErrors):
+        yMax=1.0
+        yMinMax=0.0
+    else:
+        for h in listOfHistos:
+            yMax=max(h.GetBinContent(h.GetMaximumBin()),yMax)
+            if h.GetBinContent(h.GetMaximumBin())>0:
+                yMinMax=min(h.GetBinContent(h.GetMaximumBin()),yMinMax)
     #draw first
+    
     h=listOfHistos[0]
+    if isinstance(h,ROOT.TGraphAsymmErrors):
+        firsthisto=ROOT.TH1F(h.GetHistogram())
+    else:
+        firsthisto=copy.deepcopy(h)
     if logscale:
-        h.GetYaxis().SetRangeUser(yMinMax/10000,yMax*10)
+        firsthisto.GetYaxis().SetRangeUser(yMinMax/10000,yMax*10)
         canvas.SetLogy()
     else:
-        h.GetYaxis().SetRangeUser(0,yMax*1.5)
-    option='histo'
-    option+=options_
-    h.DrawCopy(option)
+        firsthisto.GetYaxis().SetRangeUser(0,yMax*1.5)
+
+    firsthisto.DrawCopy("histo")
     #draw remaining
-    for h in listOfHistos[1:]:
-        h.DrawCopy(option+'same')
-    h.DrawCopy('axissame')
-    
-    #h.DrawCopy('axissame')
+
+    if isinstance(listOfHistos[0],ROOT.TGraphAsymmErrors):
+        option='samePZ'
+        #option+=options_
+        #h1.Draw(option)
+        #h1.Print()
+        for hs in listOfHistos:
+            hs.Draw(option)
+            print "drawing"
+        #h.Draw('axissame')
+    else:
+        option='histo'
+        option+=options_
+        h.DrawCopy(option)
+        for hs in listOfHistos[1:]:
+            hs.DrawCopy(option+'same')
+        h.DrawCopy('axissame')    #h.DrawCopy('axissame')
     if ratio:
         canvas.cd(2)
         line=listOfHistos[0].Clone()
@@ -416,6 +449,8 @@ def drawHistosOnCanvas(listOfHistos_,normalize=True,stack=False,logscale=False,o
             ratio.Divide(listOfHistos[0])
             ratio.DrawCopy('sameP')
         canvas.cd(1)
+    canvas.Update()
+    canvas.SaveAs('testkarim.png')    
     return canvas
 
 def drawHistosOnCanvas2D(listOfHistos_,normalize=True,stack=False,logscale=False,options_='',ratio=False,DoProfile=False,statTest=False, samples=None):
@@ -1005,17 +1040,25 @@ def createHistoLists_fromSuperHistoFile(path,samples,plots,rebin=1,catnames=[""]
                 o=f.Get(key)
                 #print o
                 if isinstance(o,ROOT.TH1) and not isinstance(o,ROOT.TH2): 
-                    o.Rebin(rebin)
+                    if rebin !=1:
+                        o.Rebin(rebin)
                     histoList.append(o.Clone())
-#                    print "ok", histoList[-1], len(histoList)
+                    #print "ok", histoList[-1], len(histoList)
                 if DoTwoDim and isinstance(o,ROOT.TH2):
-		    #print "2D"
+		    #print "2D"		    
 		    histoList.append(o.Clone())
+                    #print "ok", histoList[-1], len(histoList)
+
 	#raw_input()
 
         listOfHistoListsT.append(histoList)
-    listOfHistoLists=transposeLOL(listOfHistoListsT)
-    return listOfHistoLists
+    #print     listOfHistoListsT
+    #raw_input()
+    #listOfHistoLists=transposeLOL(listOfHistoListsT)
+    ACSADASD=transposeLOL(listOfHistoListsT)
+    #print "karims debug", ACSADASD
+    #raw_input()
+    return ACSADASD
 
 def createLLL_fromSuperHistoFileSyst(path,samples,plots,systnames=[""]):
     f=ROOT.TFile(path, "readonly")
@@ -1187,10 +1230,12 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
         i+=1
         for histo,sample in zip(listOfHistos,samples):
             print labeltext
-            yTitle='Events'
+            
+            yTitle='Events/50 GeV'
             if normalize:
                 yTitle='normalized'
             setupHisto(histo,sample.color,yTitle,stack)  
+            histo.SetLineWidth(4)
             histosforfile.append(histo)
         stattests2D=None
         if isinstance(listOfHistos[0], ROOT.TH2):
@@ -1262,7 +1307,8 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
         # objects.append(cms)
 
         if not isinstance(c, list):
-            cms = ROOT.TLatex(0.2, 0.96, 'CMS preliminary,  37.8 fb^{-1},  #sqrt{s} = 13 TeV'  );
+            #cms = ROOT.TLatex(0.2, 0.96, 'CMS private work,  37.8 fb^{-1},  #sqrt{s} = 13 TeV'  );
+            cms = ROOT.TLatex(0.2, 0.96, 'CMS private work, #sqrt{s} = 13 TeV'  );
             cms.SetTextFont(42)
             cms.SetTextSize(0.05)
             cms.SetNDC()
@@ -1342,7 +1388,7 @@ def writeListOfHistoListsAN(listOfHistoLists,samples, label,name,normalize=True,
 #        print cms
 #        objects.append(cms)
 
-        cms = ROOT.TLatex(0.2, 0.96, 'CMS preliminary,  37.8 fb^{-1},  #sqrt{s} = 13 TeV'  );         cms.SetTextFont(42)
+        cms = ROOT.TLatex(0.2, 0.96, 'CMS private work,  35.9 fb^{-1},  #sqrt{s} = 13 TeV'  );         cms.SetTextFont(42)
         cms.SetTextSize(0.05)
         cms.SetNDC()
         cms.Draw()
@@ -2351,9 +2397,9 @@ def plotDataMCan(listOfHistoListsData,listOfHistoLists,samples,listOfhistosOnTop
         objects.append(otc)
 
         #draw the lumi text on the canvas
-        CMS_lumi.lumi_13TeV = "37.8 fb^{-1}"
+        CMS_lumi.lumi_13TeV = "35.9 fb^{-1}"
         CMS_lumi.writeExtraText = 1
-        CMS_lumi.extraText = "Preliminary"
+        CMS_lumi.extraText = "private work"
         CMS_lumi.lumi_sqrtS = "13 TeV" # used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
 
         CMS_lumi.cmsTextSize = 0.55
@@ -2594,9 +2640,9 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         objects.append(otc)
         
         #draw the lumi text on the canvas
-        CMS_lumi.lumi_13TeV = "37.8 fb^{-1}" 
+        CMS_lumi.lumi_13TeV = "35.9 fb^{-1}" 
         CMS_lumi.writeExtraText = 1
-        CMS_lumi.extraText = "Preliminary"
+        CMS_lumi.extraText = "private work"
         CMS_lumi.lumi_sqrtS = "13 TeV" # used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
 
         CMS_lumi.cmsTextSize = 0.55
@@ -2856,9 +2902,9 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
         objects.append(otc)
 
         #draw the lumi text on the canvas
-        CMS_lumi.lumi_13TeV = "37.8 fb^{-1}" 
+        CMS_lumi.lumi_13TeV = "35.9 fb^{-1}" 
         CMS_lumi.writeExtraText = 1
-        CMS_lumi.extraText = "Preliminary"
+        CMS_lumi.extraText = "private work"
         CMS_lumi.lumi_sqrtS = "13 TeV" # used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
 
         CMS_lumi.cmsTextSize = 0.55
@@ -2988,6 +3034,7 @@ def divideHistos(listOfHistoLists, numeratorPlot, denumeratorPlot, normalizefirs
     #self.append(dividedHistoList)
     #print len(self)
     #return listofHistoLists
+
 
 
 def divideHistos2D(listOfHistoLists, numeratorPlot, denumeratorPlot, normalizefirst=False,option=''):
@@ -3161,6 +3208,7 @@ def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='d
     ListofTgraphsforFile=[]
     #ListofTgraphNamsforFile=[]
     #ROOT.gStyle.SetOptFit()
+    #print listOfHistoListsToPlot, "    ", labels
     for listOfHistos, label in zip(listOfHistoListsToPlot, labels):                 
         for histo,sample in zip(listOfHistos, sampleListToPlot):
             yTitle='Ratio'
@@ -3183,14 +3231,41 @@ def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='d
             if logscale:
                 canvas.SetLogy()
                 canvas.SetLogx()
-            fit[0].SetFillColor(ROOT.kRed)
-            fit[0].SetLineColor(ROOT.kBlue)
+            if 'DATA' in  histo.GetName():
+                fit[0].SetFillColor(ROOT.kGreen-10)
+                fit[0].SetLineColor(ROOT.kBlack)
+            else:
+                fit[0].SetFillColor(ROOT.kGreen-10)
+                fit[0].SetLineColor(ROOT.kBlue)
             fit[0].SetName('Graph_'+histo.GetName())
             #fit[0].ConfidenceIntervals()
             ROOT.gStyle.SetOptFit(1111)
             data.GetYaxis().SetRangeUser(0,2)
             fit[0].GetYaxis().SetRangeUser(0,2)
-            #data.GetYaxis().SetRangeUser(0,2)
+            #print "testing ", histo.GetName()
+            if 'CatA' in histo.GetName():
+                fit[0].GetXaxis().SetTitle("m(Z') in GeV")
+                data.GetXaxis().SetTitle("m(Z') in GeV")
+                fit[0].GetYaxis().SetTitle("AD/BC")
+                data.GetYaxis().SetTitle("AD/BC")
+                fit[0].SetTitle("")
+                data.SetTitle("")
+            if 'CatE' in histo.GetName():
+                fit[0].GetXaxis().SetTitle("m(Z') in GeV")
+                data.GetXaxis().SetTitle("m(Z') in GeV")
+                fit[0].GetYaxis().SetTitle("EH/FG")
+                data.GetYaxis().SetTitle("EH/FGC")
+                fit[0].SetTitle("")
+                data.SetTitle("")
+            fit[0].GetXaxis().SetTitleSize(0.07)
+            data.GetXaxis().SetTitleSize(0.07)
+            fit[0].GetYaxis().SetTitleSize(0.07)
+            data.GetYaxis().SetTitleSize(0.07)
+            fit[0].GetXaxis().SetTitleSize(0.07)
+            data.GetXaxis().SetTitleSize(0.07)
+            fit[0].SetLineWidth(2)
+            data.SetLineWidth(2)
+                #data.GetYaxis().SetRangeUser(0,2)
             #data.SetOptFit(1111)
             #canvas.Update()
             fit[0].Draw('A3')
@@ -3216,20 +3291,22 @@ def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='d
             #objects.append(graph)
             ListofTgraphsforFile.append(fit[0])
             #ListofTgraphNamsforFile.append()
-            print 'here its ok'
+            #print 'here its ok'
             
     printCanvases(canvases,name)
     writeObjects(canvases,name)
     writeObjects(ListofTgraphsforFile,name+'_Graphs')
     #writeTGraphstoextraFile(ListofTgraphsforFile,ListofTgraphNamsforFile,'SB_transferfunctions')
-    
+    return fit[1]
     
 def fitFunctionToHistogrammwitherrorband(histo, fitoption="[0]+[1]*log(x)+[2]*log(x)*log(x)",autoXrange=False):
-    xmax=0.0
+    
+    xmax=(histo.GetBinCenter(1)-histo.GetBinWidth(1))
+    
     for i in range(histo.GetNbinsX()):
         xmax+=histo.GetBinWidth(i)
     #xmax=histo.GetNbinsX()*histo.GetBinWidth(histo.GetNbinsX())
-    xmin=0.0
+    xmin=(histo.GetBinCenter(1)-histo.GetBinWidth(1))
     ROOT.gStyle.SetOptFit(1111)
     if autoXrange:
         for ibin in range(0,histo.GetNbinsX()):
@@ -3243,7 +3320,14 @@ def fitFunctionToHistogrammwitherrorband(histo, fitoption="[0]+[1]*log(x)+[2]*lo
         
     print 'xmin=',xmin,'   xmax=',xmax
     fitfunction=ROOT.TF1("fit",fitoption,xmin,xmax)
-    print 'here its ok aswell1'
+    #print 'here its ok aswell1'
+    if(fitoption=="pol0"):
+        fitfunction.SetParameter(0,1.0)
+        
+    if(fitoption=="pol1"):
+        fitfunction.SetParameter(0,1.0)
+        fitfunction.SetParameter(1,0.0)
+        
     if(fitoption=="[0]+([1]*log(x-[3])+[2]*log(x-[3])*log(x-[3]))"):
         fitfunction.SetParameter(0,-1.0)
         fitfunction.SetParameter(1,1.0)
@@ -3301,12 +3385,7 @@ def fitFunctionToHistogrammwitherrorband(histo, fitoption="[0]+[1]*log(x)+[2]*lo
     #fitfunction.SetParameter(3,100.0)
     #fitfunction.SetParameter(4,1.0)
 
-    if(fitoption=="pol1"):
-        fitfunction.SetParameter(0,1.0)
-        fitfunction.SetParameter(1, 1.0)
 
-    if(fitoption=="pol0"):
-        fitfunction.SetParameter(0, 1.0)
 
     fitgraphwitherrorband=ROOT.TGraphErrors(1000)
     for ibingraph in range(1000):
@@ -3314,9 +3393,38 @@ def fitFunctionToHistogrammwitherrorband(histo, fitoption="[0]+[1]*log(x)+[2]*lo
         fitgraphwitherrorband.SetPoint(ibingraph,xmin+(ibingraph+1)*(xmax-xmin)/1000.0,fitfunction.Eval(xmin+(ibingraph+1)*(xmax-xmin)/1000.0))
         fitgraphwitherrorband.SetPointError(ibingraph,0.5,0.5)    
     
+
+    #graph=ROOT.TGraph(histo)
+    #for i in range(0,graph.GetN()):
+        #print graph.GetY()[i], " X point"
+        #if graph.GetY()[i] is 0 or graph.GetY()[i]<0 :
+            #print graph.GetY()[i], " remove point"
+            #graph.RemovePoint(i)
+    #for i in range(0,graph.GetN()):
+        #print graph.GetY()[i], " check"    
     #res=histo.Fit(fitfunction,'S0M')
-    res=histo.Fit(fitfunction,'S0M')
-    fit=histo.GetFunction("fit")
+        
+    xs=[]
+    ys=[]
+    exs=[]
+    eys=[]
+    
+    for i in range(0,histo.GetNbinsX()):
+      #print i, "   ", histo.GetBinCenter(i)
+      if histo.GetBinContent(i)>0 and histo.GetBinCenter(i)>=0:
+        xs.append(histo.GetBinCenter(i))
+        ys.append(histo.GetBinContent(i))
+        exs.append(histo.GetBinWidth(i)/2.0)
+        eys.append(histo.GetBinError(i))
+    #print len(xs),"  ",xs,"  ",ys,"  ",exs,"  ",eys
+    x=array.array('f',xs)
+    y=array.array('f',ys)
+    ex=array.array('f',exs)
+    ey=array.array('f',eys)
+    graph=ROOT.TGraphErrors(len(xs),x,y,ex,ey)
+    
+    res=graph.Fit(fitfunction,'S0M')
+    fit=graph.GetFunction("fit")
     if int(res)>=0:
     #if not res.IsEmpty():
         print 'Successfully fitted to histogramm ', histo.GetName()
@@ -3722,7 +3830,9 @@ def unsorted(X_modified_sorted, X_):
 #Rank a given array
 def RankArray(X_):
     X=X_
+    print X_
     X_sorted = sorted(X)
+    print X_sorted
     X_ranked = []
     last = X_sorted[0]
     X_Bool_MoreThanLast = []
@@ -4073,9 +4183,10 @@ def scalCatAclosurewithCatEclosure(histo1, histo2):
     
 
 
-def rebintovarbinsLL(lll):
+def rebintovarbinsLLL(lll, writeRebinnedHistostoFile=False, treatMCasData=False, setstatto0=False, forcombine=False):
     lllreturn=[]
     #raw_input
+    objects=[]
     for ll in lll:
         llreturn=[]
         for l in ll:
@@ -4085,60 +4196,148 @@ def rebintovarbinsLL(lll):
                 binwidth=histo.GetBinWidth(0)
                 if (('Tprime_M' in histo.GetName()) and (not (isinstance(histo,ROOT.TH2)))):
                     #print 'Nbins histo before TprimeM ', histo.GetNbinsX()
-                    xbins= array.array('d',[0,500,550,600,650,700,750,800,850,900,950,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500])
-                    historeturn=histo.Rebin(len(xbins)-1,histo.GetName(),xbins)
+                    xbins= array.array('d',[0,250,450,500,550,600,650,700,750,800,850,900,950,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500])
+                    #xbins= array.array('d',[0,250,450,500,550,600,650,700,750,800,850,900,950,1000,1050,1100,1150,1200,1250,1300,1350,1400,1450,1500,1550,1600,1650,1700,1750,1800,1850,1900,1950,2000,2100,2200,2300,2400,2500])
+                    #historeturn=histo.Rebin(len(xbins)-1,histo.GetName(),xbins)
+                    historeturn=ROOT.TH1F(histo.GetName(),histo.GetTitle(),len(xbins)-1,xbins)
+                    binwidthX=histo.GetXaxis().GetBinWidth(0)
                     for i in range(historeturn.GetNbinsX()):
-                        historeturn.SetBinContent(i,(historeturn.GetBinContent(i)*binwidth/(historeturn.GetBinWidth(i))))
-                        historeturn.SetBinError(i,(historeturn.GetBinError(i)*binwidth/(historeturn.GetBinWidth(i))))
-                    #print 'Nbins histo after TprimeM ', historeturn.GetNbinsX()
+                        ibincontent=0
+                        ibinerror=0
+                        for j in range(histo.GetNbinsX()):
+                            if(histo.GetXaxis().GetBinCenter(j)>historeturn.GetXaxis().GetBinLowEdge(i) and histo.GetXaxis().GetBinCenter(j)<(historeturn.GetXaxis().GetBinLowEdge(i)+historeturn.GetXaxis().GetBinWidth(i))):
+                                if histo.GetBinContent(j)>=0:
+                                    ibincontent+=histo.GetBinContent(j)
+                                if treatMCasData and (('QCDMadgraph' in histo.GetName()) or ('QCDPythia8' in histo.GetName()) or ('BKG' in histo.GetName()) or ('DATA' in histo.GetName())):
+                                    if histo.GetBinContent(j)>=0:
+                                        ibinerror=math.sqrt(ibinerror*ibinerror + histo.GetBinContent(j))
+                                else:
+                                    if histo.GetBinContent(j)>=0:
+                                        ibinerror=math.sqrt(ibinerror*ibinerror + histo.GetBinError(j)*histo.GetBinError(j))
+                                if setstatto0:
+                                    ibinerror=0
+                        if not forcombine:            
+                            ibincontent=ibincontent*(binwidthX)/(historeturn.GetXaxis().GetBinWidth(i))
+                            ibinerror=ibinerror*(binwidthX)/(historeturn.GetXaxis().GetBinWidth(i))
+                    
+                        historeturn.SetBinContent(i,ibincontent)
+                        historeturn.SetBinError(i,ibinerror)
+                    print 'Nbins histo after TprimeM ', historeturn.GetNbinsX()
                     lreturn.append(historeturn)
+                    objects.append(historeturn)
                 elif (('Zprime_M' in histo.GetName()) and (not (isinstance(histo,ROOT.TH2)))):
                     #print 'Nbins histo before ZprimeM ', histo.GetNbinsX()
-                    xbins= array.array('d',[0,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3250,3500,3750,4000,4500,5000])
-                    historeturn=histo.Rebin(len(xbins)-1,histo.GetName(),xbins)
+                    xbins= array.array('d',[0,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3500,5000,5050])
+                    #xbins= array.array('d',[0,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,5000])
+                    #xbins= array.array('d',[0,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3500,4000,5000])
+                    #xbins= array.array('d',[0,500,900,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3250,3500,3750,4000,4500,5000])
+                    
+                    #xbins= array.array('d',[0,500,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200,2300,2400,2500,2600,2700,2800,2900,3000,3100,3200,3300,3400,3500,3600,3700,3800,3900,4000,4200,4500,5000])
+                    historeturn=ROOT.TH1F(histo.GetName(),histo.GetTitle(),len(xbins)-1,xbins)
+                    binwidthX=histo.GetXaxis().GetBinWidth(0)
                     for i in range(historeturn.GetNbinsX()):
-                        historeturn.SetBinContent(i,(historeturn.GetBinContent(i)*binwidth/(historeturn.GetBinWidth(i))))
-                        historeturn.SetBinError(i,(historeturn.GetBinError(i)*binwidth/(historeturn.GetBinWidth(i))))
-                        #print 'Nbins histo after ZprimeM ', historeturn.GetNbinsX()
+                        ibincontent=0
+                        ibinerror=0
+                        for j in range(histo.GetNbinsX()):
+                            if(histo.GetXaxis().GetBinCenter(j)>historeturn.GetXaxis().GetBinLowEdge(i) and histo.GetXaxis().GetBinCenter(j)<(historeturn.GetXaxis().GetBinLowEdge(i)+historeturn.GetXaxis().GetBinWidth(i))):
+                                if histo.GetBinContent(j)>=0:
+                                    ibincontent+=histo.GetBinContent(j)                                
+                                if treatMCasData and (('QCDMadgraph' in histo.GetName()) or ('QCDPythia8' in histo.GetName()) or ('BKG' in histo.GetName()) or ('DATA' in histo.GetName())):
+                                    if histo.GetBinContent(j)>=0:
+                                        ibinerror=math.sqrt(ibinerror*ibinerror + histo.GetBinContent(j))
+                                else:
+                                    if histo.GetBinContent(j)>=0:
+                                        ibinerror=math.sqrt(ibinerror*ibinerror + histo.GetBinError(j)*histo.GetBinError(j))
+                                if setstatto0:
+                                    ibinerror=0    
+                        if not forcombine:            
+                            ibincontent=ibincontent*(binwidthX)/(historeturn.GetXaxis().GetBinWidth(i))
+                            ibinerror=ibinerror*(binwidthX)/(historeturn.GetXaxis().GetBinWidth(i))
+                    
+                        historeturn.SetBinContent(i,ibincontent)
+                        historeturn.SetBinError(i,ibinerror)
+                        #print historeturn.GetBinCenter(i)
+                    print 'Nbins histo after ZprimeM ', historeturn.GetNbinsX()
                     lreturn.append(historeturn)
+                    objects.append(historeturn)
                 else:
                     lreturn.append(histo)
+                    objects.append(historeturn)
             llreturn.append(lreturn)
         lllreturn.append(llreturn)
     #raw_input
+    #if writeRebinnedHistostoFile:
+        #writeRebinnedObjects(objects,'workdir/'+name+'/output_rebinned')
+        #print objects, "  written to file ", 'workdir/'+name+'/output_rebinned.root'
+    
     return lllreturn
 
-def rebintovarbinsLOL(lol):
+def rebintovarbinsLOL(lol,writeRebinnedHistostoFile=False, treatMCasData=False, setstatto0=False,forcombine=False):
     lolreturn=[]
     #raw_input
+    objects=[]
     for l in lol:
         lreturn=[]
         for histo in l:
             #print histo.GetName()
             if (('Tprime_M' in histo.GetName()) and (not (isinstance(histo,ROOT.TH2)))):
-                print 'Nbins histo before TprimeM ', histo.GetNbinsX(),'  ' ,histo, '  ', histo.Integral()
-                binwidth=histo.GetBinWidth(0)
-                print binwidth
-                xbins= array.array('d',[0,500,550,600,650,700,750,800,850,900,950,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500])
-                historeturn=histo.Rebin(len(xbins)-1,histo.GetName(),xbins)
-                for i in range(0,historeturn.GetNbinsX()):
-                    historeturn.SetBinContent(i,(historeturn.GetBinContent(i)*binwidth/(historeturn.GetBinWidth(i))))
-                    historeturn.SetBinError(i,(historeturn.GetBinError(i)*binwidth/(historeturn.GetBinWidth(i))))
+                #print 'Nbins histo before TprimeM ', histo.GetNbinsX()
+                xbins= array.array('d',[0,250,450,500,550,600,650,700,750,800,850,900,950,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500])
+                #xbins= array.array('d',[0,250,450,500,550,600,650,700,750,800,850,900,950,1000,1050,1100,1150,1200,1250,1300,1350,1400,1450,1500,1550,1600,1650,1700,1750,1800,1850,1900,1950,2000,2100,2200,2300,2400,2500])                
+                #historeturn=histo.Rebin(len(xbins)-1,histo.GetName(),xbins)
+                historeturn=ROOT.TH1F(histo.GetName(),histo.GetTitle(),len(xbins)-1,xbins)
+                binwidthX=histo.GetXaxis().GetBinWidth(0)
+                for i in range(historeturn.GetNbinsX()):
+                    ibincontent=0
+                    ibinerror=0
+                    for j in range(histo.GetNbinsX()):
+                        if(histo.GetXaxis().GetBinCenter(j)>historeturn.GetXaxis().GetBinLowEdge(i) and histo.GetXaxis().GetBinCenter(j)<(historeturn.GetXaxis().GetBinLowEdge(i)+historeturn.GetXaxis().GetBinWidth(i))):
+                                ibincontent+=histo.GetBinContent(j)
+                                if treatMCasData and (('QCDMadgraph' in histo.GetName()) or ('QCDPythia8' in histo.GetName()) or ('BKG' in histo.GetName()) or ('DATA' in histo.GetName())):
+                                    ibinerror=math.sqrt(ibinerror*ibinerror + histo.GetBinContent(j))
+                                else:
+                                    ibinerror=math.sqrt(ibinerror*ibinerror + histo.GetBinError(j)*histo.GetBinError(j))
+                                if setstatto0:
+                                    ibinerror=0                                    
+                    if not forcombine:
+                        ibincontent=ibincontent*(binwidthX)/(historeturn.GetXaxis().GetBinWidth(i))
+                        ibinerror=ibinerror*(binwidthX)/(historeturn.GetXaxis().GetBinWidth(i))
+                
+                    historeturn.SetBinContent(i,ibincontent)
+                    historeturn.SetBinError(i,ibinerror)
                 print 'Nbins histo after TprimeM ', historeturn.GetNbinsX()
                 lreturn.append(historeturn)
+                objects.append(historeturn)
             elif (('Zprime_M' in histo.GetName()) and (not (isinstance(histo,ROOT.TH2)))):
-                print isinstance(histo,ROOT.TH1)
-            
-                print 'Nbins histo before ZprimeM ', histo.GetNbinsX(),'  ' ,histo, '  ', histo.Integral()
-                binwidth=histo.GetBinWidth(0)
-                print binwidth
-                xbins= array.array('d',[0,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3250,3500,3750,4000,4500,5000])
-                historeturn=histo.Rebin(len(xbins)-1,histo.GetName(),xbins)
-                for i in range(0,historeturn.GetNbinsX()):
-                    historeturn.SetBinContent(i,(historeturn.GetBinContent(i)*binwidth/(historeturn.GetBinWidth(i))))
-                    historeturn.SetBinError(i,(historeturn.GetBinError(i)*binwidth/(historeturn.GetBinWidth(i))))
+                #print 'Nbins histo before ZprimeM ', histo.GetNbinsX()
+                xbins= array.array('d',[0,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3500,5000,5050])
+                #xbins= array.array('d',[0,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,5000])
+                #xbins= array.array('d',[0,500,900,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3250,3500,3750,4000,4500,5000])
+                #xbins= array.array('d',[0,500,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200,2300,2400,2500,2600,2700,2800,2900,3000,3100,3200,3300,3400,3500,3600,3700,3800,3900,4000,4200,4500,5000])                
+                historeturn=ROOT.TH1F(histo.GetName(),histo.GetTitle(),len(xbins)-1,xbins)
+                binwidthX=histo.GetXaxis().GetBinWidth(0)
+                for i in range(historeturn.GetNbinsX()):
+                    ibincontent=0
+                    ibinerror=0
+                    for j in range(histo.GetNbinsX()):
+                        if(histo.GetXaxis().GetBinCenter(j)>historeturn.GetXaxis().GetBinLowEdge(i) and histo.GetXaxis().GetBinCenter(j)<(historeturn.GetXaxis().GetBinLowEdge(i)+historeturn.GetXaxis().GetBinWidth(i))):
+                                ibincontent+=histo.GetBinContent(j)
+                                if treatMCasData and (('QCDMadgraph' in histo.GetName()) or ('QCDPythia8' in histo.GetName()) or ('BKG' in histo.GetName()) or ('DATA' in histo.GetName())):
+                                    ibinerror=math.sqrt(ibinerror*ibinerror + histo.GetBinContent(j))
+                                else:
+                                    ibinerror=math.sqrt(ibinerror*ibinerror + histo.GetBinError(j)*histo.GetBinError(j))
+                                if setstatto0:
+                                    ibinerror=0                                    
+                    if not forcombine:
+                        ibincontent=ibincontent*(binwidthX)/(historeturn.GetXaxis().GetBinWidth(i))
+                        ibinerror=ibinerror*(binwidthX)/(historeturn.GetXaxis().GetBinWidth(i))
+                    
+                    historeturn.SetBinContent(i,ibincontent)
+                    historeturn.SetBinError(i,ibinerror)
+                    #print historeturn.GetBinCenter(i)
                 print 'Nbins histo after ZprimeM ', historeturn.GetNbinsX()
                 lreturn.append(historeturn)
+                objects.append(historeturn)
             elif (('Zprime_M' in histo.GetName()) and ('Tprime_M' in histo.GetName()) and (isinstance(histo,ROOT.TH2))):
                 Zprimebins= array.array('d',[0,1000,1200,1400,1700,2000,2500,3000,3600,4300,5000])
                 Tprimebins= array.array('d',[0,500,600,700,850,1000,1200,1250,1500,1800,2100,2500])
@@ -4149,19 +4348,30 @@ def rebintovarbinsLOL(lol):
                     ibincontent=0.0
                     ibinerror=0.0
                     for j in range(0,histo.GetNbinsX()*histo*GetNbinsY()):
-                        if (histo.GetXaxis().GetBinCenter(j)>historeturn.GetXaxis().GetBinLowEdge(i)) and (histo.GetYaxis().GetBinCenter(j)>historeturn.GetYaxis().GetBinLowEdge(i)):
-                            ibincontent+=histo.GetBinContent(j)
-                            ibinerror+=histo.GetBinError(j)
-                    ibincontent=ibincontent*(binwidthX*binwidthY)/(historeturn.GetXaxis().GetBinWidth(i)*historeturn.GetYaxis().GetBinWidth(i))
-                    ibinerror=ibinerror*(binwidthX*binwidthY)/(historeturn.GetXaxis().GetBinWidth(i)*historeturn.GetYaxis().GetBinWidth(i))
+                        if (histo.GetXaxis().GetBinCenter(j)>historeturn.GetXaxis().GetBinLowEdge(i) and histo.GetXaxis().GetBinCenter(j)<(historeturn.GetXaxis().GetBinLowEdge(i)+historeturn.GetXaxis().GetBinWidth(i)) and histo.GetYaxis().GetBinCenter(j)>historeturn.GetYaxis().GetBinLowEdge(i) and histo.GetYaxis().GetBinCenter(j)<(historeturn.GetYaxis().GetBinLowEdge(i)+historeturn.GetYaxis().GetBinWidth(i))):
+                                ibincontent+=histo.GetBinContent(j)
+                                if treatMCasData and (('QCDMadgraph' in histo.GetName()) or ('QCDPythia8' in histo.GetName()) or ('BKG' in histo.GetName()) or ('DATA' in histo.GetName())):
+                                    ibinerror=math.sqrt(ibinerror*ibinerror + histo.GetBinContent(j))
+                                else:
+                                    ibinerror=math.sqrt(ibinerror*ibinerror + histo.GetBinError(j)*histo.GetBinError(j))
+                                if setstatto0:
+                                    ibinerror=0       
+                                    
+                    if not forcombine:
+                        ibincontent=ibincontent*(binwidthX*binwidthY)/(historeturn.GetXaxis().GetBinWidth(i)*historeturn.GetYaxis().GetBinWidth(i))
+                        ibinerror=ibinerror*(binwidthX*binwidthY)/(historeturn.GetXaxis().GetBinWidth(i)*historeturn.GetYaxis().GetBinWidth(i))
                     
                     historeturn.SetBinContent(i,ibincontent)
-                    historeturn.GetBinError(i,ibinerror)
+                    historeturn.SetBinError(i,ibinerror)
                     
             else:
                 lreturn.append(histo)
+                objects.append(histo)
         lolreturn.append(lreturn)
     #raw_input
+    #if writeRebinnedHistostoFile:
+        #writeObjects(objects,'workdir/'+name+'/output_rebinned')
+    
     return lolreturn
 
 def chekcNbins(lol):
@@ -4174,26 +4384,192 @@ def chekcNbins(lol):
     raw_input()
     
     
-def ABCDclosure1D(lol,plotnames,samples,CatA,CatB,CatC,CatD, CatE,CatF,CatG,CatH,normalizefirst=False,rebin=1,option='',name='nameneeded'):
+    
+def ABCDclosure1D(lol,plotnames,samples,CatA,CatB,CatC,CatD, CatE,CatF,CatG,CatH,normalizefirst=False,rebin=1,option='',name='nameneeded',isdata=False):
     lolclone=copy.deepcopy(lol)
-    divideHistos(lolclone, plotnames.index(CatA), plotnames.index(CatB), normalizefirst,rebin,option)
-    divideHistos(lolclone, plotnames.index(CatC), plotnames.index(CatD), normalizefirst,rebin,option)
-    divideHistos(lolclone, plotnames.index(CatA), plotnames.index(CatC), False,1,option)
+    lolclone2=copy.deepcopy(lol)
+    lolclone3=copy.deepcopy(lol)
+    if not isdata:
+        divideHistos(lolclone, plotnames.index(CatA), plotnames.index(CatB), normalizefirst,2,option)
+        divideHistos(lolclone, plotnames.index(CatC), plotnames.index(CatD), normalizefirst,2,option)
+        divideHistos(lolclone, plotnames.index(CatA), plotnames.index(CatC), False,1,option)
 
-    divideHistos(lolclone, plotnames.index(CatE), plotnames.index(CatF), normalizefirst,rebin,option)
-    divideHistos(lolclone, plotnames.index(CatG), plotnames.index(CatH), normalizefirst,rebin,option)
+    divideHistos(lolclone, plotnames.index(CatE), plotnames.index(CatF), normalizefirst,2,option)
+    divideHistos(lolclone, plotnames.index(CatG), plotnames.index(CatH), normalizefirst,2,option)
     divideHistos(lolclone, plotnames.index(CatE), plotnames.index(CatG), False,1,option)
     fit='pol0'
-    writeHistoListwithXYErrors([lolclone[plotnames.index(CatA)]], samples,name+'_'+'ratioABoverCD'+'_'+fit, 1, fit, None, True)
-    writeHistoListwithXYErrors([lolclone[plotnames.index(CatE)]], samples,name+'_'+'ratioEFoverGH'+'_'+fit, 1, fit, None, True)
+    print "rate"
+    if not isdata:
+        writeHistoListwithXYErrors([lolclone[plotnames.index(CatA)]], samples,name+'_'+'ratioABoverCD'+'_'+fit, 1, fit, ['Closure','Closure'], False)
+    writeHistoListwithXYErrors([lolclone[plotnames.index(CatE)]], samples,name+'_'+'ratioEFoverGH'+'_'+fit, 1, fit,['Closure','Closure'], False)
     fit='pol1'
-    writeHistoListwithXYErrors([lolclone[plotnames.index(CatA)]], samples,name+'_'+'ratioABoverCD'+'_'+fit, 1, fit, None, True)
-    writeHistoListwithXYErrors([lolclone[plotnames.index(CatE)]], samples,name+'_'+'ratioEFoverGH'+'_'+fit, 1, fit, None, True)
-    
-    divideHistos(lolclone, plotnames.index(CatA), plotnames.index(CatE), False,1,option)
-    
-    fit='pol0'
-    writeHistoListwithXYErrors([lolclone[plotnames.index(CatA)]], samples,name+'_'+'ratioABoverCD'+'_'+fit+'_corrE', 1, fit, None, True)
-    fit='pol1'
-    writeHistoListwithXYErrors([lolclone[plotnames.index(CatA)]], samples,name+'_'+'ratioABoverCD'+'_'+fit+'_corrE', 1, fit, None, True)
+    if not isdata:
+        writeHistoListwithXYErrors([lolclone[plotnames.index(CatA)]], samples,name+'_'+'ratioABoverCD'+'_'+fit, 1, fit, ['Closure','Closure'], False)
+    writeHistoListwithXYErrors([lolclone[plotnames.index(CatE)]], samples,name+'_'+'ratioEFoverGH'+'_'+fit, 1, fit, ['Closure','Closure'], False)
    
+
+    print "calculating shape uncertainty"
+    if not isdata:
+        divideHistos(lolclone2, plotnames.index(CatA), plotnames.index(CatB), True,2,option)
+        divideHistos(lolclone2, plotnames.index(CatC), plotnames.index(CatD), True,2,option)
+        divideHistos(lolclone2, plotnames.index(CatA), plotnames.index(CatC), False,1,option)
+
+    divideHistos(lolclone2, plotnames.index(CatE), plotnames.index(CatF), True,2,option)
+    divideHistos(lolclone2, plotnames.index(CatG), plotnames.index(CatH), True,2,option)
+    divideHistos(lolclone2, plotnames.index(CatE), plotnames.index(CatG), False,1,option)
+    
+    fit='pol1'
+    if not isdata:
+        writeHistoListwithXYErrors([lolclone2[plotnames.index(CatA)]], samples,name+'_'+'shapeABoverCD'+'_'+fit, 1, fit, ['Closure','Closure'], False)
+    writeHistoListwithXYErrors([lolclone2[plotnames.index(CatE)]], samples,name+'_'+'shapeEFoverGH'+'_'+fit, 1, fit, ['Closure','Closure'], False)
+    
+    
+def subtract_llls(lll1,lll2):
+    for ll1,ll2 in zip(lll1,lll2):
+        for l1, l2 in zip(ll1,ll2):
+            for histo1, histo2 in zip(l1,l2):
+                histo1.Add(histo2,-1.0)
+def subtract_lols(ll1,ll2):
+        for l1, l2 in zip(ll1,ll2):
+            for histo1, histo2 in zip(l1,l2):
+                histo1.Add(histo2,-1.0)
+
+
+
+def ABCDclosure1D_new(lol,plotnames,samples,CatA,CatB,CatC,CatD, CatE,CatF,CatG,CatH,normalizefirst=False,rebin=1,option='',name='nameneeded',isdata=False):
+    lolclone=copy.deepcopy(lol)
+    lolclone2=copy.deepcopy(lol)
+    lolclone3=copy.deepcopy(lol)
+    if not isdata:
+        lolclone3[plotnames.index(CatA)][0].Rebin(lolclone3[plotnames.index(CatA)][0].GetNbinsX()) 
+        lolclone3[plotnames.index(CatB)][0].Rebin(lolclone3[plotnames.index(CatB)][0].GetNbinsX()) 
+        lolclone3[plotnames.index(CatC)][0].Rebin(lolclone3[plotnames.index(CatC)][0].GetNbinsX()) 
+        lolclone3[plotnames.index(CatD)][0].Rebin(lolclone3[plotnames.index(CatD)][0].GetNbinsX()) 
+    lolclone3[plotnames.index(CatE)][0].Rebin(lolclone3[plotnames.index(CatE)][0].GetNbinsX()) 
+    lolclone3[plotnames.index(CatF)][0].Rebin(lolclone3[plotnames.index(CatF)][0].GetNbinsX()) 
+    lolclone3[plotnames.index(CatG)][0].Rebin(lolclone3[plotnames.index(CatG)][0].GetNbinsX()) 
+    lolclone3[plotnames.index(CatH)][0].Rebin(lolclone3[plotnames.index(CatH)][0].GetNbinsX()) 
+    #print " GetNbinsX", lolclone3[plotnames.index(CatA)][0].GetNbinsX(), " integral ",lolclone3[plotnames.index(CatA)][0].Integral()
+    if not isdata:
+        ABCDrate=abs(1.0-lolclone3[plotnames.index(CatA)][0].Integral()*lolclone3[plotnames.index(CatD)][0].Integral()/(lolclone3[plotnames.index(CatB)][0].Integral()*lolclone3[plotnames.index(CatC)][0].Integral()))
+        #print "rate uncertainty  ", lolclone[plotnames.index(CatA)][0]," =",ABCDrate
+        divideHistos(lolclone, plotnames.index(CatA), plotnames.index(CatB), normalizefirst,1,option)
+        divideHistos(lolclone, plotnames.index(CatC), plotnames.index(CatD), normalizefirst,1,option)
+        divideHistos(lolclone, plotnames.index(CatA), plotnames.index(CatC), False,1,option)
+    #EFGHrate=abs(1.0-lolclone3[plotnames.index(CatE)][0].Integral()*lolclone3[plotnames.index(CatH)][0].Integral()/(lolclone3[plotnames.index(CatF)][0].Integral()*lolclone3[plotnames.index(CatG)][0].Integral()))
+    #print "rate uncertainty  ", lolclone3[plotnames.index(CatE)][0]," =",EFGHrate
+    divideHistos(lolclone, plotnames.index(CatE), plotnames.index(CatF), normalizefirst,1,option)
+    divideHistos(lolclone, plotnames.index(CatG), plotnames.index(CatH), normalizefirst,1,option)
+    divideHistos(lolclone, plotnames.index(CatE), plotnames.index(CatG), False,1,option)
+    fit='pol0'
+    if not isdata:
+        #print "rate uncertainty  ", lolclone[plotnames.index(CatA)][0]," =",ABCDrate
+        fit0resABCD=writeHistoListwithXYErrors([lolclone[plotnames.index(CatA)]], samples,name+'_'+'ratioABoverCD'+'_'+fit, 1, fit, ['Closure','Closure'], False)
+    #print "rate uncertainty  ", lolclone[plotnames.index(CatE)][0]," =",EFGHrate
+    fit0resEFGH=writeHistoListwithXYErrors([lolclone[plotnames.index(CatE)]], samples,name+'_'+'ratioEFoverGH'+'_'+fit, 1, fit,['Closure','Closure'], False)
+    fit='pol1'
+    if not isdata:
+        #print "rate uncertainty  ", lolclone[plotnames.index(CatA)][0]," =",ABCDrate
+        writeHistoListwithXYErrors([lolclone[plotnames.index(CatA)]], samples,name+'_'+'ratioABoverCD'+'_'+fit, 1, fit, ['Closure','Closure'], False)
+    #print "rate uncertainty  ", lolclone[plotnames.index(CatE)][0]," =",EFGHrate
+    writeHistoListwithXYErrors([lolclone[plotnames.index(CatE)]], samples,name+'_'+'ratioEFoverGH'+'_'+fit, 1, fit, ['Closure','Closure'], False)
+    
+
+
+    print "calculating shape uncertainty"
+    if not isdata:
+        print "paramter0",fit0resABCD.Parameters()[0]
+        lolclone[plotnames.index(CatA)][0].Scale(1.0/fit0resABCD.Parameters()[0])
+        #divideHistos(lolclone2, plotnames.index(CatA), plotnames.index(CatB), True,1,option)
+        #divideHistos(lolclone2, plotnames.index(CatC), plotnames.index(CatD), True,1,option)
+        #divideHistos(lolclone2, plotnames.index(CatA), plotnames.index(CatC), False,1,option)
+    print "paramter0",fit0resEFGH.Parameters()[0]
+    lolclone[plotnames.index(CatE)][0].Scale(1.0/fit0resEFGH.Parameters()[0])
+    #divideHistos(lolclone2, plotnames.index(CatE), plotnames.index(CatF), True,1,option)
+    #divideHistos(lolclone2, plotnames.index(CatG), plotnames.index(CatH), True,1,option)
+    #divideHistos(lolclone2, plotnames.index(CatE), plotnames.index(CatG), False,1,option)
+    
+    fit='pol1'
+    if not isdata:
+        ABCDrate=abs(1-fit0resABCD.Parameters()[0])
+        print "rate uncertainty  ", lolclone[plotnames.index(CatA)][0]," =",ABCDrate
+        fitresABCD=writeHistoListwithXYErrors([lolclone[plotnames.index(CatA)]], samples,name+'_'+'shapeABoverCD'+'_'+fit, 1, fit, ['Closure','Closure'], False)
+    EFGHrate=abs(1-fit0resEFGH.Parameters()[0])
+    print "rate uncertainty  ", lolclone[plotnames.index(CatE)][0]," =",EFGHrate
+    fitresEFGH=writeHistoListwithXYErrors([lolclone[plotnames.index(CatE)]], samples,name+'_'+'shapeEFoverGH'+'_'+fit, 1, fit, ['Closure','Closure'], False)
+    
+    #if not isdata:
+        #print "paramter0",fitresABCD.Parameters()[0]
+        #print "paramter1",fitresABCD.Parameters()[1]
+        #checkhisto=copy.deepcopy(lolclone[plotnames.index(CatA)][0])
+        #checkhisto2=copy.deepcopy(lolclone[plotnames.index(CatA)][0])
+        
+        #par0=fitresABCD.Parameters()[0]
+        #par1=fitresABCD.Parameters()[1]
+        
+        #for i in range(checkhisto.GetNbinsX()):
+            #if lolclone[plotnames.index(CatE)][0][i] !=0:
+                #checkhisto.SetBinContent(i,1+(1-(par0+par1*(checkhisto.GetBinCenter(i)))))
+                #checkhisto2.SetBinContent(i,1-(1-(par0+par1*(checkhisto.GetBinCenter(i)))))
+            #else:
+                #checkhisto.SetBinContent(i,0)
+                #checkhisto2.SetBinContent(i,0)
+            #checkhisto.SetBinError(i,0)
+            #checkhisto2.SetBinError(i,0)
+
+        #print "Comparing MC ABCD with MC EFGH results in propability=", max(checkhisto.Chi2Test(lolclone[plotnames.index(CatE)][0],"P"),checkhisto2.Chi2Test(lolclone[plotnames.index(CatE)][0],"P"))
+        #if "with" in lolclone[plotnames.index(CatE)][0].GetName():
+            #par0=1.01372
+            #par1=-1.4237e-05
+        #else:
+            #par0=0.959813
+            #par1=1.7573e-05
+        
+        #for i in range(checkhisto.GetNbinsX()):
+            #if lolclone[plotnames.index(CatE)][0][i] !=0:
+                #checkhisto.SetBinContent(i,1+(1-(par0+par1*(checkhisto.GetBinCenter(i)))))
+                #checkhisto2.SetBinContent(i,1-(1-(par0+par1*(checkhisto.GetBinCenter(i)))))
+            #else:
+                #checkhisto.SetBinContent(i,0)
+                #checkhisto2.SetBinContent(i,0)
+            #checkhisto.SetBinError(i,0)
+            #checkhisto2.SetBinError(i,0)
+
+        #print "Comparing data EFGH with MC EFGH results in propability=", max(checkhisto.Chi2Test(lolclone[plotnames.index(CatE)][0],"P"),checkhisto2.Chi2Test(lolclone[plotnames.index(CatE)][0],"P"))
+        
+        
+        #for i in range(checkhisto.GetNbinsX()):
+            #if lolclone[plotnames.index(CatA)][0][i] !=0:
+                #checkhisto.SetBinContent(i,1+(1-(par0+par1*(checkhisto.GetBinCenter(i)))))
+                #checkhisto2.SetBinContent(i,1-(1-(par0+par1*(checkhisto.GetBinCenter(i)))))
+            #else:
+                #checkhisto.SetBinContent(i,0)
+                #checkhisto2.SetBinContent(i,0)
+            #checkhisto.SetBinError(i,0)
+            #checkhisto2.SetBinError(i,0)
+
+        #print "Comparing data EFGH with MC ABCD results in propability=", max(checkhisto.Chi2Test(lolclone[plotnames.index(CatA)][0],"P"),checkhisto2.Chi2Test(lolclone[plotnames.index(CatA)][0],"P"))
+    if not isdata:
+        print "Comparing MC ABCD with MC EFGH results in propability= ", lolclone[plotnames.index(CatA)][0].Chi2Test(lolclone[plotnames.index(CatE)][0],"P")
+    
+def efficiencies(listOfHistoListsToPlot,sampleListToPlot,numerator_index_list, denumerator_index_list,name='define name',labels=None):
+    if labels==None:
+        labels = len(listOfHistoListsToPlot)*['Trigger efficiency']
+    ll=[]            
+    #print len(numerator_index_list), "  ", len(denumerator_index_list), "  ", len(listOfHistoListsToPlot)
+    #print numerator_index_list, "  ", denumerator_index_list
+    for numeratorPlot,denumeratorPlot in zip(numerator_index_list,denumerator_index_list):
+        l=[]
+        #print numeratorPlot, "   ", listOfHistoListsToPlot
+        for i in range(len(listOfHistoListsToPlot[numeratorPlot])):
+            #eff=ROOT.TGraphAsymmErrors(listOfHistoListsToPlot[numeratorPlot][i])
+            eff=copy.deepcopy(listOfHistoListsToPlot[numeratorPlot][i])
+            #print "here", eff.GetN(), "    ", listOfHistoListsToPlot[numeratorPlot][i].GetNbinsX(), "   ", listOfHistoListsToPlot[denumeratorPlot][i].GetNbinsX(), "   ", listOfHistoListsToPlot[numeratorPlot][i].Integral(), " /  ", listOfHistoListsToPlot[denumeratorPlot][i].Integral()
+            #eff.Divide(listOfHistoListsToPlot[numeratorPlot][i],listOfHistoListsToPlot[denumeratorPlot][i],"cp")
+            eff.Divide(listOfHistoListsToPlot[denumeratorPlot][i])
+            #test=eff.GetHistogram()
+            print "here again", eff.Integral()
+            l.append(eff)
+        ll.append(l)
+
+    return ll
