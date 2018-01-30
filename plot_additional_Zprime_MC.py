@@ -27,6 +27,8 @@ if ABCDversion is 'ABCD1':
     cut3_anti_i=plotselection_tau32_anti_i
     
     
+    
+    
 if ABCDversion is 'ABCD2':
     generalselection=plotselection_ABCD2_general
     generalselection_0=plotselection_ABCD2_general_0
@@ -124,6 +126,41 @@ if ABCDversion is 'ABCD5':
     cut3_anti_0=plotselection_W_tau21_anti_0
     cut3_anti_i=plotselection_W_tau21_anti_i
     
+    if radi=='CHSSoftDrop':
+        if WZwindow and fullWMSD:
+            if old:
+                Zprime_withtopbtag_systrate=0.026335429083
+                Zprime_withtopbtag_systshape_m=-0.000014237
+                Zprime_withtopbtag_systshape_c=1.01372
+                Zprime_notopbtag_systrate=0.025035741394
+                Zprime_notopbtag_systshape_m=-0.0000563142
+                Zprime_notopbtag_systshape_c=1.10324
+                            
+            else:
+                Zprime_withtopbtag_systrate=0.0437729147047
+                Zprime_withtopbtag_systshape_m=-0.00000748147
+                Zprime_withtopbtag_systshape_c=0.959254
+                Zprime_notopbtag_systrate=0.0416820871399
+                Zprime_notopbtag_systshape_m=-0.0000748556
+                Zprime_notopbtag_systshape_c=1.111
+            
+    if radi=='CHSPruning':
+        if (not WZwindow) and fullWMSD:
+            if old:
+                Zprime_withtopbtag_systrate=0.0615567929662
+                Zprime_withtopbtag_systshape_m=0.0000820445
+                Zprime_withtopbtag_systshape_c=0.815448
+                Zprime_notopbtag_systrate=0.0237731064005
+                Zprime_notopbtag_systshape_m=-0.000079382
+                Zprime_notopbtag_systshape_c=1.14017
+            else:
+                Zprime_withtopbtag_systrate=0.0351573391572
+                Zprime_withtopbtag_systshape_m=-6.02946e-05
+                Zprime_withtopbtag_systshape_c=1.10373
+                Zprime_notopbtag_systrate=0.0349000297823
+                Zprime_notopbtag_systshape_m=-6.51334e-05
+                Zprime_notopbtag_systshape_c=1.11245
+        
 if ABCDversion is 'ABCD6':
     generalselection=plotselection_ABCD6_general
     generalselection_0=plotselection_ABCD6_general_0
@@ -319,249 +356,12 @@ std::vector<float> bbarportionweight(int const N){
 }
   
 """,
-"""
-bool IsnoSignal_notopbtag(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
-    bool res=true;
-    for (int i=0; i<N_Zprime_ABCD; i++){
-        if (Zprimes_ABCD_M[i]>0 && Tprimes_ABCD_M[i]>500 && Tops_ABCD_maxsubjetCSVv2[i]<0.8 && 70<Ws_ABCD_MSD[i] && Ws_ABCD_MSD[i]<100 && Ws_ABCD_t21[i]<0.6 && 105<Tops_ABCD_MSD[i] && Tops_ABCD_MSD[i]<220 && Tops_ABCD_t32[i]<0.86 && Bottoms_ABCD_CSV[i]>0.8){
-            res=false;
-            break;
-        }
-    }
-    return res;
-}
-""",
-"""
-bool IsnoSignal_withtopbtag(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
-    bool res=true;
-    for (int i=0; i<N_Zprime_ABCD; i++){
-        if (Zprimes_ABCD_M[i]>0 && Tprimes_ABCD_M[i]>500 && Tops_ABCD_maxsubjetCSVv2[i]>0.8 && 70<Ws_ABCD_MSD[i] && Ws_ABCD_MSD[i]<100 && Ws_ABCD_t21[i]<0.6 && 105<Tops_ABCD_MSD[i] && Tops_ABCD_MSD[i]<220 && Tops_ABCD_t32[i]<0.86 && Bottoms_ABCD_CSV[i]>0.8){
-            res=false;
-            break;
-        }
-    }
-    return res;
-}
-""",
-"""
-bool IsnoSignal_inclusive(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
-    bool res=true;
-    for (int i=0; i<N_Zprime_ABCD; i++){
-        if (Zprimes_ABCD_M[i]>0 && Tprimes_ABCD_M[i]>500 && 70<Ws_ABCD_MSD[i] && Ws_ABCD_MSD[i]<100 && Ws_ABCD_t21[i]<0.6 && 105<Tops_ABCD_MSD[i] && Tops_ABCD_MSD[i]<220 && Tops_ABCD_t32[i]<0.86 && Bottoms_ABCD_CSV[i]>0.8){
-            res=false;
-            break;
-        }
-    }
-    return res;
-}
-""" ,
-#"""
-#int ABCD1_Category(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
-    #int res=0;
-    #for (int i=0; i<N_Zprime_ABCD; i++){
-        #if ("""+ plotselection_ABCD1_general_i +"""){
-            #if("""+ plotselection_topsubjetCSVv2_i +"""){
-                #if("""+ plotselection_W_tau21_i +"""){
-                    #if("""+ plotselection_B_CSV_i + """){
-                        #if(""" + plotselection_tau32_i + """){
-                            #res=1;
-                            #break;
-                        #}
-                        #if(""" + plotselection_tau32_anti_i + """){
-                            #res=2;
-                            #break;
-                        #}
-                    #}
-                    #if("""+ plotselection_B_CSV_anti_i + """){
-                        #if(""" + plotselection_tau32_i + """){
-                            #res=3;
-                            #break;
-                        #}
-                        #if(""" + plotselection_tau32_anti_i + """){
-                            #res=4;
-                            #break;
-                        #}
-                    #}                
-                #}
-                #if("""+ plotselection_W_tau21_anti_i +"""){
-                    #if("""+ plotselection_B_CSV_i + """){
-                        #if(""" + plotselection_tau32_i + """){
-                            #res=5;
-                            #break;
-                        #}
-                        #if(""" + plotselection_tau32_anti_i + """){
-                            #res=6;
-                            #break;
-                        #}
-                    #}
-                    #if("""+ plotselection_B_CSV_anti_i + """){
-                        #if(""" + plotselection_tau32_i + """){
-                            #res=7;
-                            #break;
-                        #}
-                        #if(""" + plotselection_tau32_anti_i + """){
-                            #res=8;
-                            #break;
-                        #}
-                    #}                
-                #}
-            #} else {
-                #if("""+ plotselection_W_tau21_i +"""){
-                    #if("""+ plotselection_B_CSV_i + """){
-                        #if(""" + plotselection_tau32_i + """){
-                            #res=9;
-                            #break;
-                        #}
-                        #if(""" + plotselection_tau32_anti_i + """){
-                            #res=10;
-                            #break;
-                        #}
-                    #}
-                    #if("""+ plotselection_B_CSV_anti_i + """){
-                        #if(""" + plotselection_tau32_i + """){
-                            #res=11;
-                            #break;
-                        #}
-                        #if(""" + plotselection_tau32_anti_i + """){
-                            #res=12;
-                            #break;
-                        #}
-                    #}                
-                #}
-                #if("""+ plotselection_W_tau21_anti_i +"""){
-                    #if("""+ plotselection_B_CSV_i + """){
-                        #if(""" + plotselection_tau32_i + """){
-                            #res=13;
-                            #break;
-                        #}
-                        #if(""" + plotselection_tau32_anti_i + """){
-                            #res=14;
-                            #break;
-                        #}
-                    #}
-                    #if("""+ plotselection_B_CSV_anti_i + """){
-                        #if(""" + plotselection_tau32_i + """){
-                            #res=15;
-                            #break;
-                        #}
-                        #if(""" + plotselection_tau32_anti_i + """){
-                            #res=16;
-                            #break;
-                        #}
-                    #}                
-                #}
-            #}
-        #}
-    #}
-    #return res;
-#}
-#""",
-#"""
-#int ABCD2_Category(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
-    #int res=0;
-    #for (int i=0; i<N_Zprime_ABCD; i++){
-        #if ("""+ plotselection_ABCD2_general_i +"""){
-            #if("""+ plotselection_topsubjetCSVv2_i +"""){
-                #if("""+ plotselection_W_tau21_i +"""){
-                    #if("""+ plotselection_B_CSV_i + """){
-                        #if(""" + plotselection_t_MSD_i + """){
-                            #res=1;
-                            #break;
-                        #}
-                        #if(""" + plotselection_t_MSD_anti_i + """){
-                            #res=2;
-                            #break;
-                        #}
-                    #}
-                    #if("""+ plotselection_B_CSV_anti_i + """){
-                        #if(""" + plotselection_t_MSD_i + """){
-                            #res=3;
-                            #break;
-                        #}
-                        #if(""" + plotselection_t_MSD_anti_i + """){
-                            #res=4;
-                            #break;
-                        #}
-                    #}                
-                #}
-                #if("""+ plotselection_W_tau21_anti_i +"""){
-                    #if("""+ plotselection_B_CSV_i + """){
-                        #if(""" + plotselection_t_MSD_i + """){
-                            #res=5;
-                            #break;
-                        #}
-                        #if(""" + plotselection_t_MSD_anti_i + """){
-                            #res=6;
-                            #break;
-                        #}
-                    #}
-                    #if("""+ plotselection_B_CSV_anti_i + """){
-                        #if(""" + plotselection_t_MSD_i + """){
-                            #res=7;
-                            #break;
-                        #}
-                        #if(""" + plotselection_t_MSD_anti_i + """){
-                            #res=8;
-                            #break;
-                        #}
-                    #}                
-                #}
-            #} else {
-                #if("""+ plotselection_W_tau21_i +"""){
-                    #if("""+ plotselection_B_CSV_i + """){
-                        #if(""" + plotselection_t_MSD_i + """){
-                            #res=9;
-                            #break;
-                        #}
-                        #if(""" + plotselection_t_MSD_anti_i + """){
-                            #res=10;
-                            #break;
-                        #}
-                    #}
-                    #if("""+ plotselection_B_CSV_anti_i + """){
-                        #if(""" + plotselection_t_MSD_i + """){
-                            #res=11;
-                            #break;
-                        #}
-                        #if(""" + plotselection_t_MSD_anti_i + """){
-                            #res=12;
-                            #break;
-                        #}
-                    #}                
-                #}
-                #if("""+ plotselection_W_tau21_anti_i +"""){
-                    #if("""+ plotselection_B_CSV_i + """){
-                        #if(""" + plotselection_t_MSD_i + """){
-                            #res=13;
-                            #break;
-                        #}
-                        #if(""" + plotselection_t_MSD_anti_i + """){
-                            #res=14;
-                            #break;
-                        #}
-                    #}
-                    #if("""+ plotselection_B_CSV_anti_i + """){
-                        #if(""" + plotselection_t_MSD_i + """){
-                            #res=15;
-                            #break;
-                        #}
-                        #if(""" + plotselection_t_MSD_anti_i + """){
-                            #res=16;
-                            #break;
-                        #}
-                    #}                
-                #}
-            #}
-        #}
-    #}
-    #return res;
-#}
-#""",
 
 """
-int ABCD_Category(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
+int ABCD_Category(float const* Zprimes_ABCD""" +  radi + """_M, float const* Tprimes_ABCD""" +  radi + """_M, float const* Tops_ABCD""" +  radi + """_maxsubjetCSVv2, float const* Ws_ABCD""" +  radi + """_MSD, float const* Ws_ABCD""" +  radi + """_corrL2L3, float const* Tops_ABCD""" +  radi + """_MSD, float const* Tops_ABCD""" +  radi + """_corrL2L3, float const* Tops_ABCD""" +  radi + """_t32, float const* Bottoms_ABCD""" +  radi + """_CSV, float const* Ws_ABCD""" +  radi + """_t21, float const* Ws_ABCD""" + radi + """_Pt, float const* Tops_ABCD""" + radi + """_Pt, float const* Bottoms_ABCD""" + radi + """_Pt, float Evt_HT_Jets, int N_Zprime_ABCD""" + radi + """, float N_Jets, float N_packedPatJetsAK8PF""" +  radi + """){
+
     int res=0;
-    for (int i=0; i<N_Zprime_ABCD; i++){
+    for (int i=0; i<N_Zprime_ABCD""" +  radi + """; i++){
         if ("""+ generalselection_i +"""){
             if("""+ plotselection_topsubjetCSVv2_i +"""){
                 if("""+ cut1_i +"""){
@@ -597,6 +397,7 @@ int ABCD_Category(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, floa
                             break;
                         }
                     }
+        
                     if("""+ cut2_anti_i + """){
                         if(""" + cut3_i + """){
                             res=7;
@@ -660,192 +461,10 @@ int ABCD_Category(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, floa
 }
 """,
 
-#"""
-#std::vector<float> CSV_weights_ABCD1(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD, float const* Bottoms_ABCD_WeightCSVnominal, float const* Bottoms_ABCD_WeightCSVLFup, float const* Bottoms_ABCD_WeightCSVLFdown, float const* Bottoms_ABCD_WeightCSVHFup, float const* Bottoms_ABCD_WeightCSVHFdown, float const* Bottoms_ABCD_WeightCSVHFStats1up, float const* Bottoms_ABCD_WeightCSVHFStats1down, float const* Bottoms_ABCD_WeightCSVLFStats1up, float const* Bottoms_ABCD_WeightCSVLFStats1down, float const* Bottoms_ABCD_WeightCSVHFStats2up, float const* Bottoms_ABCD_WeightCSVHFStats2down, float const* Bottoms_ABCD_WeightCSVLFStats2up, float const* Bottoms_ABCD_WeightCSVLFStats2down, float const* Bottoms_ABCD_WeightCSVCErr1up, float const* Bottoms_ABCD_WeightCSVCErr1down, float const* Bottoms_ABCD_WeightCSVCErr2up, float const* Bottoms_ABCD_WeightCSVCErr2down, float const* Topsubjets_ABCD_WeightCSVnominal, float const* Topsubjets_ABCD_WeightCSVLFup, float const* Topsubjets_ABCD_WeightCSVLFdown, float const* Topsubjets_ABCD_WeightCSVHFup, float const* Topsubjets_ABCD_WeightCSVHFdown, float const* Topsubjets_ABCD_WeightCSVHFStats1up, float const* Topsubjets_ABCD_WeightCSVHFStats1down, float const* Topsubjets_ABCD_WeightCSVLFStats1up, float const* Topsubjets_ABCD_WeightCSVLFStats1down, float const* Topsubjets_ABCD_WeightCSVHFStats2up, float const* Topsubjets_ABCD_WeightCSVHFStats2down, float const* Topsubjets_ABCD_WeightCSVLFStats2up, float const* Topsubjets_ABCD_WeightCSVLFStats2down, float const* Topsubjets_ABCD_WeightCSVCErr1up, float const* Topsubjets_ABCD_WeightCSVCErr1down, float const* Topsubjets_ABCD_WeightCSVCErr2up, float const* Topsubjets_ABCD_WeightCSVCErr2down  ){
-    #std::vector<float> weights;
-    
-    #float CSVnominal=1.0;
-    #float CSVLFup=1.0;
-    #float CSVLFdown=1.0;
-    #float CSVHFup=1.0;
-    #float CSVHFdown=1.0;
-    #float CSVHFStats1up=1.0;
-    #float CSVHFStats1down=1.0;
-    #float CSVLFStats1up=1.0;
-    #float CSVLFStats1down=1.0;
-    #float CSVHFStats2up=1.0;
-    #float CSVHFStats2down=1.0;
-    #float CSVLFStats2up=1.0;
-    #float CSVLFStats2down=1.0;
-    #float CSVCErr1up=1.0;
-    #float CSVCErr1down=1.0;
-    #float CSVCErr2up=1.0;
-    #float CSVCErr2down=1.0;
 
-    #float tpt=0.0;
-    #float Wpt=0.0;
-    #float bpt=0.0;
-
-    #for (int i=0; i<N_Zprime_ABCD; i++){
-        #if ("""+ plotselection_ABCD1_general_i +""" && Bottoms_ABCD_WeightCSVnominal[i]>(-0.5)){         
-            #CSVnominal *= Bottoms_ABCD_WeightCSVnominal[i];
-            #CSVLFup *= Bottoms_ABCD_WeightCSVLFup[i];
-            #CSVLFdown *= Bottoms_ABCD_WeightCSVLFdown[i];
-            #CSVHFup *= Bottoms_ABCD_WeightCSVHFup[i];
-            #CSVHFdown *= Bottoms_ABCD_WeightCSVHFdown[i];
-            #CSVHFStats1up *= Bottoms_ABCD_WeightCSVHFStats1up[i];
-            #CSVHFStats1down *= Bottoms_ABCD_WeightCSVHFStats1down[i];
-            #CSVLFStats1up *= Bottoms_ABCD_WeightCSVLFStats1up[i];
-            #CSVLFStats1down *= Bottoms_ABCD_WeightCSVLFStats1down[i];
-            #CSVHFStats2up *= Bottoms_ABCD_WeightCSVHFStats2up[i];
-            #CSVHFStats2down *= Bottoms_ABCD_WeightCSVHFStats2down[i];
-            #CSVLFStats2up *= Bottoms_ABCD_WeightCSVLFStats2up[i];
-            #CSVLFStats2down *= Bottoms_ABCD_WeightCSVLFStats2down[i];
-            #CSVCErr1down *= Bottoms_ABCD_WeightCSVCErr1up[i];
-            #CSVCErr1down *= Bottoms_ABCD_WeightCSVCErr1down[i];
-            #CSVCErr2up *= Bottoms_ABCD_WeightCSVCErr2up[i];
-            #CSVCErr2down *= Bottoms_ABCD_WeightCSVCErr2down[i];
-            
-            #CSVnominal *= Topsubjets_ABCD_WeightCSVnominal[i];
-            #CSVLFup *= Topsubjets_ABCD_WeightCSVLFup[i];
-            #CSVLFdown *= Topsubjets_ABCD_WeightCSVLFdown[i];
-            #CSVHFup *= Topsubjets_ABCD_WeightCSVHFup[i];
-            #CSVHFdown *= Topsubjets_ABCD_WeightCSVHFdown[i];
-            #CSVHFStats1up *= Topsubjets_ABCD_WeightCSVHFStats1up[i];
-            #CSVHFStats1down *= Topsubjets_ABCD_WeightCSVHFStats1down[i];
-            #CSVLFStats1up *= Topsubjets_ABCD_WeightCSVLFStats1up[i];
-            #CSVLFStats1down *= Topsubjets_ABCD_WeightCSVLFStats1down[i];
-            #CSVHFStats2up *= Topsubjets_ABCD_WeightCSVHFStats2up[i];
-            #CSVHFStats2down *= Topsubjets_ABCD_WeightCSVHFStats2down[i];
-            #CSVLFStats2up *= Topsubjets_ABCD_WeightCSVLFStats2up[i];
-            #CSVLFStats2down *= Topsubjets_ABCD_WeightCSVLFStats2down[i];
-            #CSVCErr1down *= Topsubjets_ABCD_WeightCSVCErr1up[i];
-            #CSVCErr1down *= Topsubjets_ABCD_WeightCSVCErr1down[i];
-            #CSVCErr2up *= Topsubjets_ABCD_WeightCSVCErr2up[i];
-            #CSVCErr2down *= Topsubjets_ABCD_WeightCSVCErr2down[i];
-            
-            #break;
-        #}
-    #};
-    
-    #weights.push_back(CSVnominal);
-    #weights.push_back(CSVLFup);
-    #weights.push_back(CSVLFdown);
-    #weights.push_back(CSVHFup);
-    #weights.push_back(CSVHFdown);
-    #weights.push_back(CSVHFStats1up);
-    #weights.push_back(CSVHFStats1down);
-    #weights.push_back(CSVLFStats1up);
-    #weights.push_back(CSVLFStats1down);
-    #weights.push_back(CSVHFStats2up);
-    #weights.push_back(CSVHFStats2down);
-    #weights.push_back(CSVLFStats2up);
-    #weights.push_back(CSVLFStats2down);
-    #weights.push_back(CSVCErr1up);
-    #weights.push_back(CSVCErr1down);
-    #weights.push_back(CSVCErr2up);
-    #weights.push_back(CSVCErr2down);    
-    
-    #return weights;
-#}
-
-#"""
-#,
-
-#"""
-#std::vector<float> CSV_weights_ABCD2(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD, float const* Bottoms_ABCD_WeightCSVnominal, float const* Bottoms_ABCD_WeightCSVLFup, float const* Bottoms_ABCD_WeightCSVLFdown, float const* Bottoms_ABCD_WeightCSVHFup, float const* Bottoms_ABCD_WeightCSVHFdown, float const* Bottoms_ABCD_WeightCSVHFStats1up, float const* Bottoms_ABCD_WeightCSVHFStats1down, float const* Bottoms_ABCD_WeightCSVLFStats1up, float const* Bottoms_ABCD_WeightCSVLFStats1down, float const* Bottoms_ABCD_WeightCSVHFStats2up, float const* Bottoms_ABCD_WeightCSVHFStats2down, float const* Bottoms_ABCD_WeightCSVLFStats2up, float const* Bottoms_ABCD_WeightCSVLFStats2down, float const* Bottoms_ABCD_WeightCSVCErr1up, float const* Bottoms_ABCD_WeightCSVCErr1down, float const* Bottoms_ABCD_WeightCSVCErr2up, float const* Bottoms_ABCD_WeightCSVCErr2down, float const* Topsubjets_ABCD_WeightCSVnominal, float const* Topsubjets_ABCD_WeightCSVLFup, float const* Topsubjets_ABCD_WeightCSVLFdown, float const* Topsubjets_ABCD_WeightCSVHFup, float const* Topsubjets_ABCD_WeightCSVHFdown, float const* Topsubjets_ABCD_WeightCSVHFStats1up, float const* Topsubjets_ABCD_WeightCSVHFStats1down, float const* Topsubjets_ABCD_WeightCSVLFStats1up, float const* Topsubjets_ABCD_WeightCSVLFStats1down, float const* Topsubjets_ABCD_WeightCSVHFStats2up, float const* Topsubjets_ABCD_WeightCSVHFStats2down, float const* Topsubjets_ABCD_WeightCSVLFStats2up, float const* Topsubjets_ABCD_WeightCSVLFStats2down, float const* Topsubjets_ABCD_WeightCSVCErr1up, float const* Topsubjets_ABCD_WeightCSVCErr1down, float const* Topsubjets_ABCD_WeightCSVCErr2up, float const* Topsubjets_ABCD_WeightCSVCErr2down  ){
-    #std::vector<float> weights;
-    
-    #float CSVnominal=1.0;
-    #float CSVLFup=1.0;
-    #float CSVLFdown=1.0;
-    #float CSVHFup=1.0;
-    #float CSVHFdown=1.0;
-    #float CSVHFStats1up=1.0;
-    #float CSVHFStats1down=1.0;
-    #float CSVLFStats1up=1.0;
-    #float CSVLFStats1down=1.0;
-    #float CSVHFStats2up=1.0;
-    #float CSVHFStats2down=1.0;
-    #float CSVLFStats2up=1.0;
-    #float CSVLFStats2down=1.0;
-    #float CSVCErr1up=1.0;
-    #float CSVCErr1down=1.0;
-    #float CSVCErr2up=1.0;
-    #float CSVCErr2down=1.0;
-
-    #float tpt=0.0;
-    #float Wpt=0.0;
-    #float bpt=0.0;
-
-    #for (int i=0; i<N_Zprime_ABCD; i++){
-        #if ("""+ plotselection_ABCD2_general_i +""" && Bottoms_ABCD_WeightCSVnominal[i]>(-0.5)){         
-            #CSVnominal *= Bottoms_ABCD_WeightCSVnominal[i];
-            #CSVLFup *= Bottoms_ABCD_WeightCSVLFup[i];
-            #CSVLFdown *= Bottoms_ABCD_WeightCSVLFdown[i];
-            #CSVHFup *= Bottoms_ABCD_WeightCSVHFup[i];
-            #CSVHFdown *= Bottoms_ABCD_WeightCSVHFdown[i];
-            #CSVHFStats1up *= Bottoms_ABCD_WeightCSVHFStats1up[i];
-            #CSVHFStats1down *= Bottoms_ABCD_WeightCSVHFStats1down[i];
-            #CSVLFStats1up *= Bottoms_ABCD_WeightCSVLFStats1up[i];
-            #CSVLFStats1down *= Bottoms_ABCD_WeightCSVLFStats1down[i];
-            #CSVHFStats2up *= Bottoms_ABCD_WeightCSVHFStats2up[i];
-            #CSVHFStats2down *= Bottoms_ABCD_WeightCSVHFStats2down[i];
-            #CSVLFStats2up *= Bottoms_ABCD_WeightCSVLFStats2up[i];
-            #CSVLFStats2down *= Bottoms_ABCD_WeightCSVLFStats2down[i];
-            #CSVCErr1down *= Bottoms_ABCD_WeightCSVCErr1up[i];
-            #CSVCErr1down *= Bottoms_ABCD_WeightCSVCErr1down[i];
-            #CSVCErr2up *= Bottoms_ABCD_WeightCSVCErr2up[i];
-            #CSVCErr2down *= Bottoms_ABCD_WeightCSVCErr2down[i];
-            
-            #CSVnominal *= Topsubjets_ABCD_WeightCSVnominal[i];
-            #CSVLFup *= Topsubjets_ABCD_WeightCSVLFup[i];
-            #CSVLFdown *= Topsubjets_ABCD_WeightCSVLFdown[i];
-            #CSVHFup *= Topsubjets_ABCD_WeightCSVHFup[i];
-            #CSVHFdown *= Topsubjets_ABCD_WeightCSVHFdown[i];
-            #CSVHFStats1up *= Topsubjets_ABCD_WeightCSVHFStats1up[i];
-            #CSVHFStats1down *= Topsubjets_ABCD_WeightCSVHFStats1down[i];
-            #CSVLFStats1up *= Topsubjets_ABCD_WeightCSVLFStats1up[i];
-            #CSVLFStats1down *= Topsubjets_ABCD_WeightCSVLFStats1down[i];
-            #CSVHFStats2up *= Topsubjets_ABCD_WeightCSVHFStats2up[i];
-            #CSVHFStats2down *= Topsubjets_ABCD_WeightCSVHFStats2down[i];
-            #CSVLFStats2up *= Topsubjets_ABCD_WeightCSVLFStats2up[i];
-            #CSVLFStats2down *= Topsubjets_ABCD_WeightCSVLFStats2down[i];
-            #CSVCErr1down *= Topsubjets_ABCD_WeightCSVCErr1up[i];
-            #CSVCErr1down *= Topsubjets_ABCD_WeightCSVCErr1down[i];
-            #CSVCErr2up *= Topsubjets_ABCD_WeightCSVCErr2up[i];
-            #CSVCErr2down *= Topsubjets_ABCD_WeightCSVCErr2down[i];
-                        
-            #break;
-        #}
-    #};
-    
-    #weights.push_back(CSVnominal);
-    #weights.push_back(CSVLFup);
-    #weights.push_back(CSVLFdown);
-    #weights.push_back(CSVHFup);
-    #weights.push_back(CSVHFdown);
-    #weights.push_back(CSVHFStats1up);
-    #weights.push_back(CSVHFStats1down);
-    #weights.push_back(CSVLFStats1up);
-    #weights.push_back(CSVLFStats1down);
-    #weights.push_back(CSVHFStats2up);
-    #weights.push_back(CSVHFStats2down);
-    #weights.push_back(CSVLFStats2up);
-    #weights.push_back(CSVLFStats2down);
-    #weights.push_back(CSVCErr1up);
-    #weights.push_back(CSVCErr1down);
-    #weights.push_back(CSVCErr2up);
-    #weights.push_back(CSVCErr2down);    
-    
-    #return weights;
-#}
-
-#"""
-#,
 
 """
-std::vector<float> CSV_weights_""" + ABCDversion + """(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD, float const* Bottoms_ABCD_WeightCSVnominal, float const* Bottoms_ABCD_WeightCSVLFup, float const* Bottoms_ABCD_WeightCSVLFdown, float const* Bottoms_ABCD_WeightCSVHFup, float const* Bottoms_ABCD_WeightCSVHFdown, float const* Bottoms_ABCD_WeightCSVHFStats1up, float const* Bottoms_ABCD_WeightCSVHFStats1down, float const* Bottoms_ABCD_WeightCSVLFStats1up, float const* Bottoms_ABCD_WeightCSVLFStats1down, float const* Bottoms_ABCD_WeightCSVHFStats2up, float const* Bottoms_ABCD_WeightCSVHFStats2down, float const* Bottoms_ABCD_WeightCSVLFStats2up, float const* Bottoms_ABCD_WeightCSVLFStats2down, float const* Bottoms_ABCD_WeightCSVCErr1up, float const* Bottoms_ABCD_WeightCSVCErr1down, float const* Bottoms_ABCD_WeightCSVCErr2up, float const* Bottoms_ABCD_WeightCSVCErr2down, float const* Topsubjets_ABCD_WeightCSVnominal, float const* Topsubjets_ABCD_WeightCSVLFup, float const* Topsubjets_ABCD_WeightCSVLFdown, float const* Topsubjets_ABCD_WeightCSVHFup, float const* Topsubjets_ABCD_WeightCSVHFdown, float const* Topsubjets_ABCD_WeightCSVHFStats1up, float const* Topsubjets_ABCD_WeightCSVHFStats1down, float const* Topsubjets_ABCD_WeightCSVLFStats1up, float const* Topsubjets_ABCD_WeightCSVLFStats1down, float const* Topsubjets_ABCD_WeightCSVHFStats2up, float const* Topsubjets_ABCD_WeightCSVHFStats2down, float const* Topsubjets_ABCD_WeightCSVLFStats2up, float const* Topsubjets_ABCD_WeightCSVLFStats2down, float const* Topsubjets_ABCD_WeightCSVCErr1up, float const* Topsubjets_ABCD_WeightCSVCErr1down, float const* Topsubjets_ABCD_WeightCSVCErr2up, float const* Topsubjets_ABCD_WeightCSVCErr2down  ){
+std::vector<float> CSV_weights_""" + ABCDversion + """(float const* Zprimes_ABCD""" + radi + """_M, float const* Tprimes_ABCD""" + radi + """_M, float const* Tops_ABCD""" + radi + """_maxsubjetCSVv2, float const* Ws_ABCD""" + radi + """_MSD, float const* Ws_ABCD""" + radi + """_corrL2L3, float const* Tops_ABCD""" + radi + """_MSD, float const* Tops_ABCD""" + radi + """_corrL2L3, float const* Tops_ABCD""" + radi + """_t32, float const* Bottoms_ABCD""" + radi + """_CSV, float const* Ws_ABCD""" + radi + """_t21, float const* Ws_ABCD""" + radi + """_Pt, float const* Tops_ABCD""" + radi + """_Pt, float const* Bottoms_ABCD""" + radi + """_Pt, float Evt_HT_Jets, int N_Zprime_ABCD""" + radi + """, float N_Jets, float N_packedPatJetsAK8PF""" +  radi + """, float const* Bottoms_ABCD""" + radi + """_WeightCSVnominal, float const* Bottoms_ABCD""" + radi + """_WeightCSVLFup, float const* Bottoms_ABCD""" + radi + """_WeightCSVLFdown, float const* Bottoms_ABCD""" + radi + """_WeightCSVHFup, float const* Bottoms_ABCD""" + radi + """_WeightCSVHFdown, float const* Bottoms_ABCD""" + radi + """_WeightCSVHFStats1up, float const* Bottoms_ABCD""" + radi + """_WeightCSVHFStats1down, float const* Bottoms_ABCD""" + radi + """_WeightCSVLFStats1up, float const* Bottoms_ABCD""" + radi + """_WeightCSVLFStats1down, float const* Bottoms_ABCD""" + radi + """_WeightCSVHFStats2up, float const* Bottoms_ABCD""" + radi + """_WeightCSVHFStats2down, float const* Bottoms_ABCD""" + radi + """_WeightCSVLFStats2up, float const* Bottoms_ABCD""" + radi + """_WeightCSVLFStats2down, float const* Bottoms_ABCD""" + radi + """_WeightCSVCErr1up, float const* Bottoms_ABCD""" + radi + """_WeightCSVCErr1down, float const* Bottoms_ABCD""" + radi + """_WeightCSVCErr2up, float const* Bottoms_ABCD""" + radi + """_WeightCSVCErr2down, float const* Topsubjets_ABCD""" + radi + """_WeightCSVnominal, float const* Topsubjets_ABCD""" + radi + """_WeightCSVLFup, float const* Topsubjets_ABCD""" + radi + """_WeightCSVLFdown, float const* Topsubjets_ABCD""" + radi + """_WeightCSVHFup, float const* Topsubjets_ABCD""" + radi + """_WeightCSVHFdown, float const* Topsubjets_ABCD""" + radi + """_WeightCSVHFStats1up, float const* Topsubjets_ABCD""" + radi + """_WeightCSVHFStats1down, float const* Topsubjets_ABCD""" + radi + """_WeightCSVLFStats1up, float const* Topsubjets_ABCD""" + radi + """_WeightCSVLFStats1down, float const* Topsubjets_ABCD""" + radi + """_WeightCSVHFStats2up, float const* Topsubjets_ABCD""" + radi + """_WeightCSVHFStats2down, float const* Topsubjets_ABCD""" + radi + """_WeightCSVLFStats2up, float const* Topsubjets_ABCD""" + radi + """_WeightCSVLFStats2down, float const* Topsubjets_ABCD""" + radi + """_WeightCSVCErr1up, float const* Topsubjets_ABCD""" + radi + """_WeightCSVCErr1down, float const* Topsubjets_ABCD""" + radi + """_WeightCSVCErr2up, float const* Topsubjets_ABCD""" + radi + """_WeightCSVCErr2down  ){
     std::vector<float> weights;
     
     float CSVnominal=1.0;
@@ -870,44 +489,111 @@ std::vector<float> CSV_weights_""" + ABCDversion + """(float const* Zprimes_ABCD
     float Wpt=0.0;
     float bpt=0.0;
 
-    for (int i=0; i<N_Zprime_ABCD; i++){
-        if ("""+ generalselection_i +""" && Bottoms_ABCD_WeightCSVnominal[i]>(-0.5)){         
-            CSVnominal *= Bottoms_ABCD_WeightCSVnominal[i];
-            CSVLFup *= Bottoms_ABCD_WeightCSVLFup[i];
-            CSVLFdown *= Bottoms_ABCD_WeightCSVLFdown[i];
-            CSVHFup *= Bottoms_ABCD_WeightCSVHFup[i];
-            CSVHFdown *= Bottoms_ABCD_WeightCSVHFdown[i];
-            CSVHFStats1up *= Bottoms_ABCD_WeightCSVHFStats1up[i];
-            CSVHFStats1down *= Bottoms_ABCD_WeightCSVHFStats1down[i];
-            CSVLFStats1up *= Bottoms_ABCD_WeightCSVLFStats1up[i];
-            CSVLFStats1down *= Bottoms_ABCD_WeightCSVLFStats1down[i];
-            CSVHFStats2up *= Bottoms_ABCD_WeightCSVHFStats2up[i];
-            CSVHFStats2down *= Bottoms_ABCD_WeightCSVHFStats2down[i];
-            CSVLFStats2up *= Bottoms_ABCD_WeightCSVLFStats2up[i];
-            CSVLFStats2down *= Bottoms_ABCD_WeightCSVLFStats2down[i];
-            CSVCErr1down *= Bottoms_ABCD_WeightCSVCErr1up[i];
-            CSVCErr1down *= Bottoms_ABCD_WeightCSVCErr1down[i];
-            CSVCErr2up *= Bottoms_ABCD_WeightCSVCErr2up[i];
-            CSVCErr2down *= Bottoms_ABCD_WeightCSVCErr2down[i];
+    for (int i=0; i<N_Zprime_ABCD""" + radi + """; i++){
+        if ("""+ generalselection_i +""" && Bottoms_ABCD""" + radi + """_WeightCSVnominal[i]>=0 && Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]>=0){   
+            if (Bottoms_ABCD""" + radi + """_WeightCSVnominal[i]>=0 && Bottoms_ABCD""" + radi + """_WeightCSVnominal[i]<=1000){
+                CSVnominal *= Bottoms_ABCD""" + radi + """_WeightCSVnominal[i];
+            }
+            if (Bottoms_ABCD""" + radi + """_WeightCSVLFup[i]>=0 && Bottoms_ABCD""" + radi + """_WeightCSVLFup[i]<=1000){
+                CSVLFup *= Bottoms_ABCD""" + radi + """_WeightCSVLFup[i];
+            }
+            if (Bottoms_ABCD""" + radi + """_WeightCSVLFdown[i]>=0 && Bottoms_ABCD""" + radi + """_WeightCSVLFdown[i]<=1000){
+                CSVLFdown *= Bottoms_ABCD""" + radi + """_WeightCSVLFdown[i];
+            }
+            if (Bottoms_ABCD""" + radi + """_WeightCSVHFup[i]>=0 && Bottoms_ABCD""" + radi + """_WeightCSVHFup[i]<=1000){
+                CSVHFup *= Bottoms_ABCD""" + radi + """_WeightCSVHFup[i];
+            }
+            if (Bottoms_ABCD""" + radi + """_WeightCSVHFdown[i]>=0 && Bottoms_ABCD""" + radi + """_WeightCSVHFdown[i]<=1000){
+                CSVHFdown *= Bottoms_ABCD""" + radi + """_WeightCSVHFdown[i];
+            }
+            if (Bottoms_ABCD""" + radi + """_WeightCSVHFStats1up[i]>=0 && Bottoms_ABCD""" + radi + """_WeightCSVHFStats1up[i]<=1000){
+                CSVHFStats1up *= Bottoms_ABCD""" + radi + """_WeightCSVHFStats1up[i];
+            }
+            if (Bottoms_ABCD""" + radi + """_WeightCSVHFStats1down[i]>=0 && Bottoms_ABCD""" + radi + """_WeightCSVHFStats1down[i]<=1000){
+                CSVHFStats1down *= Bottoms_ABCD""" + radi + """_WeightCSVHFStats1down[i];
+            }
+            if (Bottoms_ABCD""" + radi + """_WeightCSVLFStats1up[i]>=0 && Bottoms_ABCD""" + radi + """_WeightCSVLFStats1up[i]<=1000){
+                CSVLFStats1up *= Bottoms_ABCD""" + radi + """_WeightCSVLFStats1up[i];
+            }
+            if (Bottoms_ABCD""" + radi + """_WeightCSVLFStats1down[i]>=0 && Bottoms_ABCD""" + radi + """_WeightCSVLFStats1down[i]<=1000){
+                CSVLFStats1down *= Bottoms_ABCD""" + radi + """_WeightCSVLFStats1down[i];
+            }
+            if (Bottoms_ABCD""" + radi + """_WeightCSVHFStats2up[i]>=0 && Bottoms_ABCD""" + radi + """_WeightCSVHFStats2up[i]<=1000){
+                CSVHFStats2up *= Bottoms_ABCD""" + radi + """_WeightCSVHFStats2up[i];
+            }
+            if (Bottoms_ABCD""" + radi + """_WeightCSVHFStats2down[i]>=0 && Bottoms_ABCD""" + radi + """_WeightCSVHFStats2down[i]<=1000){
+                CSVHFStats2down *= Bottoms_ABCD""" + radi + """_WeightCSVHFStats2down[i];
+            }
+            if (Bottoms_ABCD""" + radi + """_WeightCSVLFStats2up[i]>=0 && Bottoms_ABCD""" + radi + """_WeightCSVLFStats2up[i]<=1000){
+                CSVLFStats2up *= Bottoms_ABCD""" + radi + """_WeightCSVLFStats2up[i];
+            }
+            if (Bottoms_ABCD""" + radi + """_WeightCSVLFStats2down[i]>=0 && Bottoms_ABCD""" + radi + """_WeightCSVLFStats2down[i]<=1000){
+                CSVLFStats2down *= Bottoms_ABCD""" + radi + """_WeightCSVLFStats2down[i];
+            }
+            if (Bottoms_ABCD""" + radi + """_WeightCSVCErr1up[i]>=0 && Bottoms_ABCD""" + radi + """_WeightCSVCErr1up[i]<=1000){
+                CSVCErr1down *= Bottoms_ABCD""" + radi + """_WeightCSVCErr1up[i];
+            }
+            if (Bottoms_ABCD""" + radi + """_WeightCSVCErr1down[i]>=0 && Bottoms_ABCD""" + radi + """_WeightCSVCErr1down[i]<=1000){
+                CSVCErr1down *= Bottoms_ABCD""" + radi + """_WeightCSVCErr1down[i];
+            }
+            if (Bottoms_ABCD""" + radi + """_WeightCSVCErr2up[i]>=0 && Bottoms_ABCD""" + radi + """_WeightCSVCErr2up[i]<=1000){
+                CSVCErr2up *= Bottoms_ABCD""" + radi + """_WeightCSVCErr2up[i];
+            }
+            if (Bottoms_ABCD""" + radi + """_WeightCSVCErr2down[i]>=0 && Bottoms_ABCD""" + radi + """_WeightCSVCErr2down[i]<=1000){
+                CSVCErr2down *= Bottoms_ABCD""" + radi + """_WeightCSVCErr2down[i];
+            }
             
-            CSVnominal *= Topsubjets_ABCD_WeightCSVnominal[i];
-            CSVLFup *= Topsubjets_ABCD_WeightCSVLFup[i];
-            CSVLFdown *= Topsubjets_ABCD_WeightCSVLFdown[i];
-            CSVHFup *= Topsubjets_ABCD_WeightCSVHFup[i];
-            CSVHFdown *= Topsubjets_ABCD_WeightCSVHFdown[i];
-            CSVHFStats1up *= Topsubjets_ABCD_WeightCSVHFStats1up[i];
-            CSVHFStats1down *= Topsubjets_ABCD_WeightCSVHFStats1down[i];
-            CSVLFStats1up *= Topsubjets_ABCD_WeightCSVLFStats1up[i];
-            CSVLFStats1down *= Topsubjets_ABCD_WeightCSVLFStats1down[i];
-            CSVHFStats2up *= Topsubjets_ABCD_WeightCSVHFStats2up[i];
-            CSVHFStats2down *= Topsubjets_ABCD_WeightCSVHFStats2down[i];
-            CSVLFStats2up *= Topsubjets_ABCD_WeightCSVLFStats2up[i];
-            CSVLFStats2down *= Topsubjets_ABCD_WeightCSVLFStats2down[i];
-            CSVCErr1down *= Topsubjets_ABCD_WeightCSVCErr1up[i];
-            CSVCErr1down *= Topsubjets_ABCD_WeightCSVCErr1down[i];
-            CSVCErr2up *= Topsubjets_ABCD_WeightCSVCErr2up[i];
-            CSVCErr2down *= Topsubjets_ABCD_WeightCSVCErr2down[i];
-                        
+            if (Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]>=0 && Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]<=1000){
+                CSVnominal *= Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i];
+            }
+            if (Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]>=0 && Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]<=1000){
+                CSVLFup *= Topsubjets_ABCD""" + radi + """_WeightCSVLFup[i];
+            }
+            if (Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]>=0 && Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]<=1000){
+                CSVLFdown *= Topsubjets_ABCD""" + radi + """_WeightCSVLFdown[i];
+            }
+            if (Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]>=0 && Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]<=1000){
+                CSVHFup *= Topsubjets_ABCD""" + radi + """_WeightCSVHFup[i];
+            }
+            if (Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]>=0 && Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]<=1000){
+                CSVHFdown *= Topsubjets_ABCD""" + radi + """_WeightCSVHFdown[i];
+            }
+            if (Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]>=0 && Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]<=1000){
+                CSVHFStats1up *= Topsubjets_ABCD""" + radi + """_WeightCSVHFStats1up[i];
+            }
+            if (Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]>=0 && Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]<=1000){
+                CSVHFStats1down *= Topsubjets_ABCD""" + radi + """_WeightCSVHFStats1down[i];
+            }
+            if (Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]>=0 && Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]<=1000){
+                CSVLFStats1up *= Topsubjets_ABCD""" + radi + """_WeightCSVLFStats1up[i];
+            }
+            if (Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]>=0 && Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]<=1000){
+                CSVLFStats1down *= Topsubjets_ABCD""" + radi + """_WeightCSVLFStats1down[i];
+            }
+            if (Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]>=0 && Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]<=1000){
+                CSVHFStats2up *= Topsubjets_ABCD""" + radi + """_WeightCSVHFStats2up[i];
+            }
+            if (Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]>=0 && Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]<=1000){
+                CSVHFStats2down *= Topsubjets_ABCD""" + radi + """_WeightCSVHFStats2down[i];
+            }
+            if (Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]>=0 && Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]<=1000){
+                CSVLFStats2up *= Topsubjets_ABCD""" + radi + """_WeightCSVLFStats2up[i];
+            }
+            if (Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]>=0 && Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]<=1000){
+                CSVLFStats2down *= Topsubjets_ABCD""" + radi + """_WeightCSVLFStats2down[i];
+            }
+            if (Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]>=0 && Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]<=1000){
+                CSVCErr1down *= Topsubjets_ABCD""" + radi + """_WeightCSVCErr1up[i];
+            }
+            if (Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]>=0 && Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]<=1000){
+                CSVCErr1down *= Topsubjets_ABCD""" + radi + """_WeightCSVCErr1down[i];
+            }
+            if (Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]>=0 && Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]<=1000){
+                CSVCErr2up *= Topsubjets_ABCD""" + radi + """_WeightCSVCErr2up[i];
+            }
+            if (Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]>=0 && Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]<=1000){
+                CSVCErr2down *= Topsubjets_ABCD""" + radi + """_WeightCSVCErr2down[i];
+            }
             break;
         }
     };
@@ -936,271 +622,89 @@ std::vector<float> CSV_weights_""" + ABCDversion + """(float const* Zprimes_ABCD
 """
 ,
 
-#"""
-#std::vector<float> toptag_weights_ABCD1(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
-    #std::vector<float> weights;
-    
-    #float toptagnominal=1.0;
-    #float toptagup=1.0;
-    #float toptagdown=1.0;
-
-    #float SF_top_tau32_MSD_wtb=""" + MCSF_topwtb_t32_MSD + """;
-    #float SF_top_tau32_MSD_wtb_up=""" + MCSF_topwtb_t32_MSD_up + """;
-    #float SF_top_tau32_MSD_wtb_down=""" + MCSF_topwtb_t32_MSD_down + """;
-    #float SF_top_tau32_MSDanti_wtb=""" + MCSF_topwtb_t32_MSD_down + """;
-    #float SF_top_tau32_MSDanti_wtb_up=""" + MCSF_topwtb_t32_MSD_up + """;
-    #float SF_top_tau32_MSDanti_wtb_down=""" + MCSF_topwtb_t32_MSD_down + """;
-    #float SF_top_tau32anti_MSD_wtb=""" + MCSF_topwtb_t32_MSD + """;
-    #float SF_top_tau32anti_MSD_wtb_up=""" + MCSF_topwtb_t32_MSD_up + """;
-    #float SF_top_tau32anti_MSD_wtb_down=""" + MCSF_topwtb_t32_MSD_down + """;
-    #float SF_top_tau32anti_MSDanti_wtb=""" + MCSF_topwtb_t32_MSD + """;
-    #float SF_top_tau32anti_MSDanti_wtb_up=""" + MCSF_topwtb_t32_MSD_up + """;
-    #float SF_top_tau32anti_MSDanti_wtb_down=""" + MCSF_topwtb_t32_MSD_down + """;
-    
-    #float SF_top_tau32_MSD_ntb=""" + MCSF_topntb_t32_MSD + """;
-    #float SF_top_tau32_MSD_ntb_up=""" + MCSF_topntb_t32_MSD_up + """;
-    #float SF_top_tau32_MSD_ntb_down=""" + MCSF_topntb_t32_MSD_down + """;
-    #float SF_top_tau32_MSDanti_ntb=""" + MCSF_topntb_t32_MSD + """;
-    #float SF_top_tau32_MSDanti_ntb_up=""" + MCSF_topntb_t32_MSD_up + """;
-    #float SF_top_tau32_MSDanti_ntb_down=""" + MCSF_topntb_t32_MSD_down + """;
-    #float SF_top_tau32anti_MSD_ntb=""" + MCSF_topntb_t32_MSD + """;
-    #float SF_top_tau32anti_MSD_ntb_up=""" + MCSF_topntb_t32_MSD_up + """;
-    #float SF_top_tau32anti_MSD_ntb_down=""" + MCSF_topntb_t32_MSD_down + """;
-    #float SF_top_tau32anti_MSDanti_ntb=""" + MCSF_topntb_t32_MSD + """;
-    #float SF_top_tau32anti_MSDanti_ntb_up=""" + MCSF_topntb_t32_MSD_up + """;
-    #float SF_top_tau32anti_MSDanti_ntb_down=""" + MCSF_topntb_t32_MSD_down + """;
-    
-    #for (int i=0; i<N_Zprime_ABCD; i++){
-        #if ("""+ plotselection_ABCD1_general_i + """){
-            #if(""" + plotselection_topsubjetCSVv2_i + """){
-                #if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_i + """){
-                    #toptagnominal *= SF_top_tau32_MSD_wtb;
-                    #toptagup *= (SF_top_tau32_MSD_wtb + SF_top_tau32_MSD_wtb_up);
-                    #toptagdown *= (SF_top_tau32_MSD_wtb - SF_top_tau32_MSD_wtb_down);
-                #}
-                #if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_i + """){
-                    #toptagnominal *= SF_top_tau32anti_MSD_wtb;
-                    #toptagup *= (SF_top_tau32anti_MSD_wtb + SF_top_tau32anti_MSD_wtb_up);
-                    #toptagdown *= (SF_top_tau32anti_MSD_wtb - SF_top_tau32anti_MSD_wtb_down);
-                #}
-                #if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_anti_i + """){
-                    #toptagnominal *= SF_top_tau32_MSDanti_wtb;
-                    #toptagup *= (SF_top_tau32_MSDanti_wtb + SF_top_tau32_MSDanti_wtb_up);
-                    #toptagdown *= (SF_top_tau32_MSDanti_wtb - SF_top_tau32_MSDanti_wtb_down);
-                #}
-                #if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_anti_i + """){
-                    #toptagnominal *= SF_top_tau32anti_MSDanti_wtb;
-                    #toptagup *= (SF_top_tau32anti_MSDanti_wtb + SF_top_tau32anti_MSDanti_wtb_up);
-                    #toptagdown *= (SF_top_tau32anti_MSDanti_wtb - SF_top_tau32anti_MSDanti_wtb_down);
-                #}
-            #} else {
-                #if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_i + """){
-                    #toptagnominal *= SF_top_tau32_MSD_ntb;
-                    #toptagup *= (SF_top_tau32_MSD_ntb + SF_top_tau32_MSD_ntb_up);
-                    #toptagdown *= (SF_top_tau32_MSD_ntb - SF_top_tau32_MSD_ntb_down);
-                #}
-                #if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_i + """){
-                    #toptagnominal *= SF_top_tau32anti_MSD_ntb;
-                    #toptagup *= (SF_top_tau32anti_MSD_ntb + SF_top_tau32anti_MSD_ntb_up);
-                    #toptagdown *= (SF_top_tau32anti_MSD_ntb - SF_top_tau32anti_MSD_ntb_down);
-                #}
-                #if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_anti_i + """){
-                    #toptagnominal *= SF_top_tau32_MSDanti_ntb;
-                    #toptagup *= (SF_top_tau32_MSDanti_ntb + SF_top_tau32_MSDanti_ntb_up);
-                    #toptagdown *= (SF_top_tau32_MSDanti_ntb - SF_top_tau32_MSDanti_ntb_down);
-                #}
-                #if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_anti_i + """){
-                    #toptagnominal *= SF_top_tau32anti_MSDanti_ntb;
-                    #toptagup *= (SF_top_tau32anti_MSDanti_ntb + SF_top_tau32anti_MSDanti_ntb_up);
-                    #toptagdown *= (SF_top_tau32anti_MSDanti_ntb - SF_top_tau32anti_MSDanti_ntb_down);
-                #}
-            #}
-            #break;
-        #}
-    #}
-    
-    #weights.push_back(toptagnominal);
-    #weights.push_back(toptagup);
-    #weights.push_back(toptagdown);
-   
-    
-    #return weights;
-#}
-
-#"""
-#,
-#"""
-#std::vector<float> toptag_weights_ABCD2(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
-    #std::vector<float> weights;
-    
-    #float toptagnominal=1.0;
-    #float toptagup=1.0;
-    #float toptagdown=1.0;
-
-    #float SF_top_tau32_MSD_wtb=""" + MCSF_topwtb_t32_MSD + """;
-    #float SF_top_tau32_MSD_wtb_up=""" + MCSF_topwtb_t32_MSD_up + """;
-    #float SF_top_tau32_MSD_wtb_down=""" + MCSF_topwtb_t32_MSD_down + """;
-    #float SF_top_tau32_MSDanti_wtb=""" + MCSF_topwtb_t32_MSD_down + """;
-    #float SF_top_tau32_MSDanti_wtb_up=""" + MCSF_topwtb_t32_MSD_up + """;
-    #float SF_top_tau32_MSDanti_wtb_down=""" + MCSF_topwtb_t32_MSD_down + """;
-    #float SF_top_tau32anti_MSD_wtb=""" + MCSF_topwtb_t32_MSD + """;
-    #float SF_top_tau32anti_MSD_wtb_up=""" + MCSF_topwtb_t32_MSD_up + """;
-    #float SF_top_tau32anti_MSD_wtb_down=""" + MCSF_topwtb_t32_MSD_down + """;
-    #float SF_top_tau32anti_MSDanti_wtb=""" + MCSF_topwtb_t32_MSD + """;
-    #float SF_top_tau32anti_MSDanti_wtb_up=""" + MCSF_topwtb_t32_MSD_up + """;
-    #float SF_top_tau32anti_MSDanti_wtb_down=""" + MCSF_topwtb_t32_MSD_down + """;
-    
-    #float SF_top_tau32_MSD_ntb=""" + MCSF_topntb_t32_MSD + """;
-    #float SF_top_tau32_MSD_ntb_up=""" + MCSF_topntb_t32_MSD_up + """;
-    #float SF_top_tau32_MSD_ntb_down=""" + MCSF_topntb_t32_MSD_down + """;
-    #float SF_top_tau32_MSDanti_ntb=""" + MCSF_topntb_t32_MSD + """;
-    #float SF_top_tau32_MSDanti_ntb_up=""" + MCSF_topntb_t32_MSD_up + """;
-    #float SF_top_tau32_MSDanti_ntb_down=""" + MCSF_topntb_t32_MSD_down + """;
-    #float SF_top_tau32anti_MSD_ntb=""" + MCSF_topntb_t32_MSD + """;
-    #float SF_top_tau32anti_MSD_ntb_up=""" + MCSF_topntb_t32_MSD_up + """;
-    #float SF_top_tau32anti_MSD_ntb_down=""" + MCSF_topntb_t32_MSD_down + """;
-    #float SF_top_tau32anti_MSDanti_ntb=""" + MCSF_topntb_t32_MSD + """;
-    #float SF_top_tau32anti_MSDanti_ntb_up=""" + MCSF_topntb_t32_MSD_up + """;
-    #float SF_top_tau32anti_MSDanti_ntb_down=""" + MCSF_topntb_t32_MSD_down + """;
-    
-    
-    #for (int i=0; i<N_Zprime_ABCD; i++){
-        #if (""" + plotselection_ABCD1_general_i + """){
-            #if(""" + plotselection_topsubjetCSVv2_i + """){
-                #if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_i + """){
-                    #toptagnominal *= SF_top_tau32_MSD_wtb;
-                    #toptagup *= (SF_top_tau32_MSD_wtb + SF_top_tau32_MSD_wtb_up);
-                    #toptagdown *= (SF_top_tau32_MSD_wtb - SF_top_tau32_MSD_wtb_down);
-                #}
-                #if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_i + """){
-                    #toptagnominal *= SF_top_tau32anti_MSD_wtb;
-                    #toptagup *= (SF_top_tau32anti_MSD_wtb + SF_top_tau32anti_MSD_wtb_up);
-                    #toptagdown *= (SF_top_tau32anti_MSD_wtb - SF_top_tau32anti_MSD_wtb_down);
-                #}
-                #if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_anti_i + """){
-                    #toptagnominal *= SF_top_tau32_MSDanti_wtb;
-                    #toptagup *= (SF_top_tau32_MSDanti_wtb + SF_top_tau32_MSDanti_wtb_up);
-                    #toptagdown *= (SF_top_tau32_MSDanti_wtb - SF_top_tau32_MSDanti_wtb_down);
-                #}
-                #if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_anti_i + """){
-                    #toptagnominal *= SF_top_tau32anti_MSDanti_wtb;
-                    #toptagup *= (SF_top_tau32anti_MSDanti_wtb + SF_top_tau32anti_MSDanti_wtb_up);
-                    #toptagdown *= (SF_top_tau32anti_MSDanti_wtb - SF_top_tau32anti_MSDanti_wtb_down);
-                #}
-            #} else {
-                #if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_i + """){
-                    #toptagnominal *= SF_top_tau32_MSD_ntb;
-                    #toptagup *= (SF_top_tau32_MSD_ntb + SF_top_tau32_MSD_ntb_up);
-                    #toptagdown *= (SF_top_tau32_MSD_ntb - SF_top_tau32_MSD_ntb_down);
-                #}
-                #if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_i + """){
-                    #toptagnominal *= SF_top_tau32anti_MSD_ntb;
-                    #toptagup *= (SF_top_tau32anti_MSD_ntb + SF_top_tau32anti_MSD_ntb_up);
-                    #toptagdown *= (SF_top_tau32anti_MSD_ntb - SF_top_tau32anti_MSD_ntb_down);
-                #}
-                #if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_anti_i + """){
-                    #toptagnominal *= SF_top_tau32_MSDanti_ntb;
-                    #toptagup *= (SF_top_tau32_MSDanti_ntb + SF_top_tau32_MSDanti_ntb_up);
-                    #toptagdown *= (SF_top_tau32_MSDanti_ntb - SF_top_tau32_MSDanti_ntb_down);
-                #}
-                #if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_anti_i + """){
-                    #toptagnominal *= SF_top_tau32anti_MSDanti_ntb;
-                    #toptagup *= (SF_top_tau32anti_MSDanti_ntb + SF_top_tau32anti_MSDanti_ntb_up);
-                    #toptagdown *= (SF_top_tau32anti_MSDanti_ntb - SF_top_tau32anti_MSDanti_ntb_down);
-                #}
-            #}
-            #break;
-        #}
-    #}
-    
-    #weights.push_back(toptagnominal);
-    #weights.push_back(toptagup);
-    #weights.push_back(toptagdown);
-   
-    
-    #return weights;
-#}
-
-#"""
-#,
 """
-std::vector<float> toptag_weights_""" + ABCDversion + """(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
+std::vector<float> toptag_weights_""" + ABCDversion + """(float const* Zprimes_ABCD""" + radi + """_M, float const* Tprimes_ABCD""" + radi + """_M, float const* Tops_ABCD""" + radi + """_maxsubjetCSVv2, float const* Ws_ABCD""" + radi + """_MSD, float const* Ws_ABCD""" + radi + """_corrL2L3, float const* Tops_ABCD""" + radi + """_MSD, float const* Tops_ABCD""" + radi + """_corrL2L3, float const* Tops_ABCD""" + radi + """_t32, float const* Bottoms_ABCD""" + radi + """_CSV, float const* Ws_ABCD""" + radi + """_t21, float const* Ws_ABCD""" + radi + """_Pt, float const* Tops_ABCD""" + radi + """_Pt, float const* Bottoms_ABCD""" + radi + """_Pt, float Evt_HT_Jets, int N_Zprime_ABCD""" + radi + """, float N_Jets, float N_packedPatJetsAK8PF""" +  radi + """, float const* Tops_ABCD""" + radi + """_real, float const* Tops_ABCD""" + radi + """_matcheddecays){
     std::vector<float> weights;
     
     float toptagnominal=1.0;
     float toptagup=1.0;
     float toptagdown=1.0;
-
-    float SF_top_tau32_MSD_wtb=""" + MCSF_topwtb_t32_MSD + """;
-    float SF_top_tau32_MSD_wtb_up=""" + MCSF_topwtb_t32_MSD_up + """;
-    float SF_top_tau32_MSD_wtb_down=""" + MCSF_topwtb_t32_MSD_down + """;
-    float SF_top_tau32_MSDanti_wtb=""" + MCSF_topwtb_t32_MSD_down + """;
-    float SF_top_tau32_MSDanti_wtb_up=""" + MCSF_topwtb_t32_MSD_up + """;
-    float SF_top_tau32_MSDanti_wtb_down=""" + MCSF_topwtb_t32_MSD_down + """;
-    float SF_top_tau32anti_MSD_wtb=""" + MCSF_topwtb_t32_MSD + """;
-    float SF_top_tau32anti_MSD_wtb_up=""" + MCSF_topwtb_t32_MSD_up + """;
-    float SF_top_tau32anti_MSD_wtb_down=""" + MCSF_topwtb_t32_MSD_down + """;
-    float SF_top_tau32anti_MSDanti_wtb=""" + MCSF_topwtb_t32_MSD + """;
-    float SF_top_tau32anti_MSDanti_wtb_up=""" + MCSF_topwtb_t32_MSD_up + """;
-    float SF_top_tau32anti_MSDanti_wtb_down=""" + MCSF_topwtb_t32_MSD_down + """;
     
-    float SF_top_tau32_MSD_ntb=""" + MCSF_topntb_t32_MSD + """;
-    float SF_top_tau32_MSD_ntb_up=""" + MCSF_topntb_t32_MSD_up + """;
-    float SF_top_tau32_MSD_ntb_down=""" + MCSF_topntb_t32_MSD_down + """;
-    float SF_top_tau32_MSDanti_ntb=""" + MCSF_topntb_t32_MSD + """;
-    float SF_top_tau32_MSDanti_ntb_up=""" + MCSF_topntb_t32_MSD_up + """;
-    float SF_top_tau32_MSDanti_ntb_down=""" + MCSF_topntb_t32_MSD_down + """;
-    float SF_top_tau32anti_MSD_ntb=""" + MCSF_topntb_t32_MSD + """;
-    float SF_top_tau32anti_MSD_ntb_up=""" + MCSF_topntb_t32_MSD_up + """;
-    float SF_top_tau32anti_MSD_ntb_down=""" + MCSF_topntb_t32_MSD_down + """;
-    float SF_top_tau32anti_MSDanti_ntb=""" + MCSF_topntb_t32_MSD + """;
-    float SF_top_tau32anti_MSDanti_ntb_up=""" + MCSF_topntb_t32_MSD_up + """;
-    float SF_top_tau32anti_MSDanti_ntb_down=""" + MCSF_topntb_t32_MSD_down + """;
+    float topmisstagnominal=1.0;
+    float topmisstagup=1.0;
+    float topmisstagdown=1.0;
+    
+    float SF_top_tau32_MSD_=""" + MCSF_top_t32_MSD + """;
+    float SF_top_tau32_MSD_up=""" + MCSF_top_t32_MSD_up + """;
+    float SF_top_tau32_MSD_down=""" + MCSF_top_t32_MSD_down + """;
+    float SF_top_tau32_MSDanti_=""" + MCSF_top_t32_MSD_down + """;
+    float SF_top_tau32_MSDanti_up=""" + MCSF_top_t32_MSD_up + """;
+    float SF_top_tau32_MSDanti_down=""" + MCSF_top_t32_MSD_down + """;
+    float SF_top_tau32anti_MSD_=""" + MCSF_top_t32_MSD + """;
+    float SF_top_tau32anti_MSD_up=""" + MCSF_top_t32_MSD_up + """;
+    float SF_top_tau32anti_MSD_down=""" + MCSF_top_t32_MSD_down + """;
+    float SF_top_tau32anti_MSDanti_=""" + MCSF_top_t32_MSD + """;
+    float SF_top_tau32anti_MSDanti_up=""" + MCSF_top_t32_MSD_up + """;
+    float SF_top_tau32anti_MSDanti_down=""" + MCSF_top_t32_MSD_down + """;
+    
+    float SF_topmiss_tau32_MSD_=""" + MCSF_topmiss_t32_MSD + """;
+    float SF_topmiss_tau32_MSD_up=""" + MCSF_topmiss_t32_MSD_up + """;
+    float SF_topmiss_tau32_MSD_down=""" + MCSF_topmiss_t32_MSD_down + """;
+    float SF_topmiss_tau32_MSDanti_=""" + MCSF_topmiss_t32_MSDanti + """;
+    float SF_topmiss_tau32_MSDanti_up=""" + MCSF_topmiss_t32_MSDanti_up + """;
+    float SF_topmiss_tau32_MSDanti_down=""" + MCSF_topmiss_t32_MSDanti_down + """;
+    float SF_topmiss_tau32anti_MSD_=""" + MCSF_topmiss_t32anti_MSD + """;
+    float SF_topmiss_tau32anti_MSD_up=""" + MCSF_topmiss_t32anti_MSD_up + """;
+    float SF_topmiss_tau32anti_MSD_down=""" + MCSF_topmiss_t32anti_MSD_down + """;
+    float SF_topmiss_tau32anti_MSDanti_=""" + MCSF_topmiss_t32anti_MSDanti + """;
+    float SF_topmiss_tau32anti_MSDanti_up=""" + MCSF_topmiss_t32anti_MSDanti_up + """;
+    float SF_topmiss_tau32anti_MSDanti_down=""" + MCSF_topmiss_t32anti_MSDanti_down + """;
     
     
-    for (int i=0; i<N_Zprime_ABCD; i++){
+    for (int i=0; i<N_Zprime_ABCD""" + radi + """; i++){
         if (""" + generalselection_i + """){
-            if(""" + plotselection_topsubjetCSVv2_i + """){
+            if(Tops_ABCD""" + radi + """_real[i]==1 && Tops_ABCD""" + radi + """_matcheddecays[i]>2){
+            //if(Tops_ABCD""" + radi + """_real[i]==1){
                 if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_i + """){
-                    toptagnominal *= SF_top_tau32_MSD_wtb;
-                    toptagup *= (SF_top_tau32_MSD_wtb + SF_top_tau32_MSD_wtb_up);
-                    toptagdown *= (SF_top_tau32_MSD_wtb - SF_top_tau32_MSD_wtb_down);
+                    toptagnominal *= SF_top_tau32_MSD_;
+                    toptagup *= (SF_top_tau32_MSD_ + SF_top_tau32_MSD_up);
+                    toptagdown *= (SF_top_tau32_MSD_ - SF_top_tau32_MSD_down);
                 }
                 if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_i + """){
-                    toptagnominal *= SF_top_tau32anti_MSD_wtb;
-                    toptagup *= (SF_top_tau32anti_MSD_wtb + SF_top_tau32anti_MSD_wtb_up);
-                    toptagdown *= (SF_top_tau32anti_MSD_wtb - SF_top_tau32anti_MSD_wtb_down);
+                    toptagnominal *= SF_top_tau32anti_MSD_;
+                    toptagup *= (SF_top_tau32anti_MSD_ + SF_top_tau32anti_MSD_up);
+                    toptagdown *= (SF_top_tau32anti_MSD_ - SF_top_tau32anti_MSD_down);
                 }
                 if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_anti_i + """){
-                    toptagnominal *= SF_top_tau32_MSDanti_wtb;
-                    toptagup *= (SF_top_tau32_MSDanti_wtb + SF_top_tau32_MSDanti_wtb_up);
-                    toptagdown *= (SF_top_tau32_MSDanti_wtb - SF_top_tau32_MSDanti_wtb_down);
+                    toptagnominal *= SF_top_tau32_MSDanti_;
+                    toptagup *= (SF_top_tau32_MSDanti_ + SF_top_tau32_MSDanti_up);
+                    toptagdown *= (SF_top_tau32_MSDanti_ - SF_top_tau32_MSDanti_down);
                 }
                 if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_anti_i + """){
-                    toptagnominal *= SF_top_tau32anti_MSDanti_wtb;
-                    toptagup *= (SF_top_tau32anti_MSDanti_wtb + SF_top_tau32anti_MSDanti_wtb_up);
-                    toptagdown *= (SF_top_tau32anti_MSDanti_wtb - SF_top_tau32anti_MSDanti_wtb_down);
+                    toptagnominal *= SF_top_tau32anti_MSDanti_;
+                    toptagup *= (SF_top_tau32anti_MSDanti_ + SF_top_tau32anti_MSDanti_up);
+                    toptagdown *= (SF_top_tau32anti_MSDanti_ - SF_top_tau32anti_MSDanti_down);
                 }
             } else {
                 if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_i + """){
-                    toptagnominal *= SF_top_tau32_MSD_ntb;
-                    toptagup *= (SF_top_tau32_MSD_ntb + SF_top_tau32_MSD_ntb_up);
-                    toptagdown *= (SF_top_tau32_MSD_ntb - SF_top_tau32_MSD_ntb_down);
+                    topmisstagnominal *= SF_topmiss_tau32_MSD_;
+                    topmisstagup *= (SF_topmiss_tau32_MSD_ + SF_topmiss_tau32_MSD_up);
+                    topmisstagdown *= (SF_topmiss_tau32_MSD_ - SF_topmiss_tau32_MSD_down);
                 }
                 if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_i + """){
-                    toptagnominal *= SF_top_tau32anti_MSD_ntb;
-                    toptagup *= (SF_top_tau32anti_MSD_ntb + SF_top_tau32anti_MSD_ntb_up);
-                    toptagdown *= (SF_top_tau32anti_MSD_ntb - SF_top_tau32anti_MSD_ntb_down);
+                    topmisstagnominal *= SF_topmiss_tau32anti_MSD_;
+                    topmisstagup *= (SF_topmiss_tau32anti_MSD_ + SF_topmiss_tau32anti_MSD_up);
+                    topmisstagdown *= (SF_topmiss_tau32anti_MSD_ - SF_topmiss_tau32anti_MSD_down);
                 }
                 if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_anti_i + """){
-                    toptagnominal *= SF_top_tau32_MSDanti_ntb;
-                    toptagup *= (SF_top_tau32_MSDanti_ntb + SF_top_tau32_MSDanti_ntb_up);
-                    toptagdown *= (SF_top_tau32_MSDanti_ntb - SF_top_tau32_MSDanti_ntb_down);
+                    topmisstagnominal *= SF_topmiss_tau32_MSDanti_;
+                    topmisstagup *= (SF_topmiss_tau32_MSDanti_ + SF_topmiss_tau32_MSDanti_up);
+                    topmisstagdown *= (SF_topmiss_tau32_MSDanti_ - SF_topmiss_tau32_MSDanti_down);
                 }
                 if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_anti_i + """){
-                    toptagnominal *= SF_top_tau32anti_MSDanti_ntb;
-                    toptagup *= (SF_top_tau32anti_MSDanti_ntb + SF_top_tau32anti_MSDanti_ntb_up);
-                    toptagdown *= (SF_top_tau32anti_MSDanti_ntb - SF_top_tau32anti_MSDanti_ntb_down);
+                    topmisstagnominal *= SF_topmiss_tau32anti_MSDanti_;
+                    topmisstagup *= (SF_topmiss_tau32anti_MSDanti_ + SF_topmiss_tau32anti_MSDanti_up);
+                    topmisstagdown *= (SF_topmiss_tau32anti_MSDanti_ - SF_topmiss_tau32anti_MSDanti_down);
                 }
             }
             break;
@@ -1210,179 +714,129 @@ std::vector<float> toptag_weights_""" + ABCDversion + """(float const* Zprimes_A
     weights.push_back(toptagnominal);
     weights.push_back(toptagup);
     weights.push_back(toptagdown);
+    weights.push_back(topmisstagnominal);
+    weights.push_back(topmisstagup);
+    weights.push_back(topmisstagdown);
    
-    
+        
     return weights;
 }
 
 """
-#,
-#"""
-#std::vector<float> Wtag_weights_ABCD1(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
-    #std::vector<float> weights;
-    
-    #float Wtagnominal=1.0;
-    #float Wtagup=1.0;
-    #float Wtagdown=1.0;
-
-    #float SF_W_tau21_MSD=""" + MCSF_W_t21_MSD + """;
-    #float SF_W_tau21_MSD_up=""" + MCSF_W_t21_MSD_up + """;
-    #float SF_W_tau21_MSD_down=""" + MCSF_W_t21_MSD_down + """;
-    #float SF_W_tau21_MSDanti=""" + MCSF_W_t21_MSD + """;
-    #float SF_W_tau21_MSDanti_up=""" + MCSF_W_t21_MSD_up + """;
-    #float SF_W_tau21_MSDanti_down=""" + MCSF_W_t21_MSD_down + """;
-    #float SF_W_tau21anti_MSD=""" + MCSF_W_t21_MSD + """;
-    #float SF_W_tau21anti_MSD_up=""" + MCSF_W_t21_MSD_up + """;
-    #float SF_W_tau21anti_MSD_down=""" + MCSF_W_t21_MSD_down + """;
-    #float SF_W_tau21anti_MSDanti=""" + MCSF_W_t21_MSD + """;
-    #float SF_W_tau21anti_MSDanti_up=""" + MCSF_W_t21_MSD_up + """;
-    #float SF_W_tau21anti_MSDanti_down=""" + MCSF_W_t21_MSD_down + """;
-
-    #for (int i=0; i<N_Zprime_ABCD; i++){
-        #if ("""+ plotselection_ABCD1_general_i + """){
-           
-                #if(""" + plotselection_W_tau21_i + """ && """ + plotselection_W_MSD_i + """){
-                    #Wtagnominal *= SF_W_tau21_MSD;
-                    #Wtagup *= (SF_W_tau21_MSD + SF_W_tau21_MSD_up);
-                    #Wtagdown *= (SF_W_tau21_MSD - SF_W_tau21_MSD_down);
-                #}
-                #if(""" + plotselection_W_tau21_anti_i + """ && """ + plotselection_W_MSD_i + """){
-                    #Wtagnominal *= SF_W_tau21anti_MSD;
-                    #Wtagup *= (SF_W_tau21anti_MSD + SF_W_tau21anti_MSD_up);
-                    #Wtagdown *= (SF_W_tau21anti_MSD - SF_W_tau21anti_MSD_down);
-                #}
-                #if(""" + plotselection_W_tau21_i + """ && """ + plotselection_W_MSD_anti_i + """){
-                    #Wtagnominal *= SF_W_tau21_MSDanti;
-                    #Wtagup *= (SF_W_tau21_MSDanti + SF_W_tau21_MSDanti_up);
-                    #Wtagdown *= (SF_W_tau21_MSDanti - SF_W_tau21_MSDanti_down);
-                #}
-                #if(""" + plotselection_W_tau21_anti_i + """ && """ + plotselection_W_MSD_anti_i + """){
-                    #Wtagnominal *= SF_W_tau21anti_MSDanti;
-                    #Wtagup *= (SF_W_tau21anti_MSDanti + SF_W_tau21anti_MSDanti_up);
-                    #Wtagdown *= (SF_W_tau21anti_MSDanti - SF_W_tau21anti_MSDanti_down);
-                #}        
-                #break;
-        #}
-    #}
-    
-    #weights.push_back(Wtagnominal);
-    #weights.push_back(Wtagup);
-    #weights.push_back(Wtagdown);
-   
-    
-    #return weights;
-#}
-
-#"""
-#,
-#"""
-#std::vector<float> Wtag_weights_ABCD2(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
-    #std::vector<float> weights;
-    
-    #float Wtagnominal=1.0;
-    #float Wtagup=1.0;
-    #float Wtagdown=1.0;
-
-    #float SF_W_tau21_MSD=""" + MCSF_W_t21_MSD + """;
-    #float SF_W_tau21_MSD_up=""" + MCSF_W_t21_MSD_up + """;
-    #float SF_W_tau21_MSD_down=""" + MCSF_W_t21_MSD_down + """;
-    #float SF_W_tau21_MSDanti=""" + MCSF_W_t21_MSD + """;
-    #float SF_W_tau21_MSDanti_up=""" + MCSF_W_t21_MSD_up + """;
-    #float SF_W_tau21_MSDanti_down=""" + MCSF_W_t21_MSD_down + """;
-    #float SF_W_tau21anti_MSD=""" + MCSF_W_t21_MSD + """;
-    #float SF_W_tau21anti_MSD_up=""" + MCSF_W_t21_MSD_up + """;
-    #float SF_W_tau21anti_MSD_down=""" + MCSF_W_t21_MSD_down + """;
-    #float SF_W_tau21anti_MSDanti=""" + MCSF_W_t21_MSD + """;
-    #float SF_W_tau21anti_MSDanti_up=""" + MCSF_W_t21_MSD_up + """;
-    #float SF_W_tau21anti_MSDanti_down=""" + MCSF_W_t21_MSD_down + """;
-
-    #for (int i=0; i<N_Zprime_ABCD; i++){
-        #if ("""+ plotselection_ABCD2_general_i + """){
-                #if(""" + plotselection_W_tau21_i + """ && """ + plotselection_W_MSD_i + """){
-                    #Wtagnominal *= SF_W_tau21_MSD;
-                    #Wtagup *= (SF_W_tau21_MSD + SF_W_tau21_MSD_up);
-                    #Wtagup *= (SF_W_tau21_MSD - SF_W_tau21_MSD_down);
-                #}
-                #if(""" + plotselection_W_tau21_anti_i + """ && """ + plotselection_W_MSD_i + """){
-                    #Wtagnominal *= SF_W_tau21anti_MSD;
-                    #Wtagup *= (SF_W_tau21anti_MSD + SF_W_tau21anti_MSD_up);
-                    #Wtagup *= (SF_W_tau21anti_MSD - SF_W_tau21anti_MSD_down);
-                #}
-                #if(""" + plotselection_W_tau21_i + """ && """ + plotselection_W_MSD_anti_i + """){
-                    #Wtagnominal *= SF_W_tau21_MSDanti;
-                    #Wtagup *= (SF_W_tau21_MSDanti + SF_W_tau21_MSDanti_up);
-                    #Wtagup *= (SF_W_tau21_MSDanti - SF_W_tau21_MSDanti_down);
-                #}
-                #if(""" + plotselection_W_tau21_anti_i + """ && """ + plotselection_W_MSD_i + """){
-                    #Wtagnominal *= SF_W_tau21anti_MSDanti;
-                    #Wtagup *= (SF_W_tau21anti_MSDanti + SF_W_tau21anti_MSDanti_up);
-                    #Wtagup *= (SF_W_tau21anti_MSDanti - SF_W_tau21anti_MSDanti_down);
-                #}        
-                #break;
-        #}
-    #}
-    
-    #weights.push_back(Wtagnominal);
-    #weights.push_back(Wtagup);
-    #weights.push_back(Wtagdown);
-   
-    
-    #return weights;
-#}
-
-#"""
 ,
 """
-std::vector<float> Wtag_weights_""" + ABCDversion + """(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
+std::vector<float> Wtag_weights_""" + ABCDversion + """(float const* Zprimes_ABCD""" + radi + """_M, float const* Tprimes_ABCD""" + radi + """_M, float const* Tops_ABCD""" + radi + """_maxsubjetCSVv2, float const* Ws_ABCD""" + radi + """_MSD, float const* Ws_ABCD""" + radi + """_corrL2L3, float const* Tops_ABCD""" + radi + """_MSD, float const* Tops_ABCD""" + radi + """_corrL2L3, float const* Tops_ABCD""" + radi + """_t32, float const* Bottoms_ABCD""" + radi + """_CSV, float const* Ws_ABCD""" + radi + """_t21, float const* Ws_ABCD""" + radi + """_Pt, float const* Tops_ABCD""" + radi + """_Pt, float const* Bottoms_ABCD""" + radi + """_Pt, float Evt_HT_Jets, int N_Zprime_ABCD""" + radi + """, float N_Jets, float N_packedPatJetsAK8PF""" +  radi + """, float const* Ws_ABCD""" + radi + """_real, float const* Ws_ABCD""" + radi + """_matcheddecays){
     std::vector<float> weights;
     
-    float Wtagnominal=1.0;
-    float Wtagup=1.0;
-    float Wtagdown=1.0;
+    float Wtag_tag_t21_nominal=1.0;
+    float Wtag_tag_t21_up=1.0;
+    float Wtag_tag_t21_down=1.0;
 
+    float Wtag_tag_t21anti_nominal=1.0;
+    float Wtag_tag_t21anti_up=1.0;
+    float Wtag_tag_t21anti_down=1.0;
+    
+    float Wtag_mistag_t21_nominal=1.0;
+    float Wtag_mistag_t21_up=1.0;
+    float Wtag_mistag_t21_down=1.0;
+    
+    float Wtag_mistag_t21anti_nominal=1.0;
+    float Wtag_mistag_t21anti_up=1.0;
+    float Wtag_mistag_t21anti_down=1.0;
+
+
+    
     float SF_W_tau21_MSD=""" + MCSF_W_t21_MSD + """;
     float SF_W_tau21_MSD_up=""" + MCSF_W_t21_MSD_up + """;
     float SF_W_tau21_MSD_down=""" + MCSF_W_t21_MSD_down + """;
-    float SF_W_tau21_MSDanti=""" + MCSF_W_t21_MSD + """;
-    float SF_W_tau21_MSDanti_up=""" + MCSF_W_t21_MSD_up + """;
-    float SF_W_tau21_MSDanti_down=""" + MCSF_W_t21_MSD_down + """;
-    float SF_W_tau21anti_MSD=""" + MCSF_W_t21_MSD + """;
-    float SF_W_tau21anti_MSD_up=""" + MCSF_W_t21_MSD_up + """;
-    float SF_W_tau21anti_MSD_down=""" + MCSF_W_t21_MSD_down + """;
-    float SF_W_tau21anti_MSDanti=""" + MCSF_W_t21_MSD + """;
-    float SF_W_tau21anti_MSDanti_up=""" + MCSF_W_t21_MSD_up + """;
-    float SF_W_tau21anti_MSDanti_down=""" + MCSF_W_t21_MSD_down + """;
+    float SF_W_tau21_MSDanti=""" + MCSF_W_t21_MSDanti + """;
+    float SF_W_tau21_MSDanti_up=""" + MCSF_W_t21_MSDanti_up + """;
+    float SF_W_tau21_MSDanti_down=""" + MCSF_W_t21_MSDanti_down + """;
+    float SF_W_tau21anti_MSD=""" + MCSF_W_t21anti_MSD + """;
+    float SF_W_tau21anti_MSD_up=""" + MCSF_W_t21anti_MSD_up + """;
+    float SF_W_tau21anti_MSD_down=""" + MCSF_W_t21anti_MSD_down + """;
+    float SF_W_tau21anti_MSDanti=""" + MCSF_W_t21anti_MSDanti + """;
+    float SF_W_tau21anti_MSDanti_up=""" + MCSF_W_t21anti_MSDanti_up + """;
+    float SF_W_tau21anti_MSDanti_down=""" + MCSF_W_t21anti_MSDanti_down + """;
+    
+    float SF_Wmiss_tau21_MSD=""" + MCSF_Wmiss_t21_MSD + """;
+    float SF_Wmiss_tau21_MSD_up=""" + MCSF_Wmiss_t21_MSD_up + """;
+    float SF_Wmiss_tau21_MSD_down=""" + MCSF_Wmiss_t21_MSD_down + """;
+    float SF_Wmiss_tau21_MSDanti=""" + MCSF_Wmiss_t21_MSDanti + """;
+    float SF_Wmiss_tau21_MSDanti_up=""" + MCSF_Wmiss_t21_MSDanti_up + """;
+    float SF_Wmiss_tau21_MSDanti_down=""" + MCSF_Wmiss_t21_MSDanti_down + """;
+    float SF_Wmiss_tau21anti_MSD=""" + MCSF_Wmiss_t21anti_MSD + """;
+    float SF_Wmiss_tau21anti_MSD_up=""" + MCSF_Wmiss_t21anti_MSD_up + """;
+    float SF_Wmiss_tau21anti_MSD_down=""" + MCSF_Wmiss_t21anti_MSD_down + """;
+    float SF_Wmiss_tau21anti_MSDanti=""" + MCSF_Wmiss_t21anti_MSDanti + """;
+    float SF_Wmiss_tau21anti_MSDanti_up=""" + MCSF_Wmiss_t21anti_MSDanti_up + """;
+    float SF_Wmiss_tau21anti_MSDanti_down=""" + MCSF_Wmiss_t21anti_MSDanti_down + """;    
+    
 
-    for (int i=0; i<N_Zprime_ABCD; i++){
-        if ("""+ generalselection_i + """){
+    for (int i=0; i<N_Zprime_ABCD""" + radi + """; i++){
+        if ("""+ generalselection_i + """ ){
+            if(Ws_ABCD""" + radi + """_real[i]==1){
+            //if(Ws_ABCD""" + radi + """_real[i]==1 && Ws_ABCD""" + radi + """_matcheddecays[i]>1){
                 if(""" + plotselection_W_tau21_i + """ && """ + plotselection_W_MSD_i + """){
-                    Wtagnominal *= SF_W_tau21_MSD;
-                    Wtagup *= (SF_W_tau21_MSD + SF_W_tau21_MSD_up);
-                    Wtagup *= (SF_W_tau21_MSD - SF_W_tau21_MSD_down);
+                    Wtag_tag_t21_nominal *= SF_W_tau21_MSD;
+                    Wtag_tag_t21_up *= (SF_W_tau21_MSD + SF_W_tau21_MSD_up);
+                    Wtag_tag_t21_down *= (SF_W_tau21_MSD - SF_W_tau21_MSD_down);
                 }
                 if(""" + plotselection_W_tau21_anti_i + """ && """ + plotselection_W_MSD_i + """){
-                    Wtagnominal *= SF_W_tau21anti_MSD;
-                    Wtagup *= (SF_W_tau21anti_MSD + SF_W_tau21anti_MSD_up);
-                    Wtagup *= (SF_W_tau21anti_MSD - SF_W_tau21anti_MSD_down);
+                    Wtag_tag_t21anti_nominal *= SF_W_tau21anti_MSD;
+                    Wtag_tag_t21anti_up *= (SF_W_tau21anti_MSD + SF_W_tau21anti_MSD_up);
+                    Wtag_tag_t21anti_down *= (SF_W_tau21anti_MSD - SF_W_tau21anti_MSD_down);
                 }
                 if(""" + plotselection_W_tau21_i + """ && """ + plotselection_W_MSD_anti_i + """){
-                    Wtagnominal *= SF_W_tau21_MSDanti;
-                    Wtagup *= (SF_W_tau21_MSDanti + SF_W_tau21_MSDanti_up);
-                    Wtagup *= (SF_W_tau21_MSDanti - SF_W_tau21_MSDanti_down);
+                    Wtag_tag_t21_nominal *= SF_W_tau21_MSDanti;
+                    Wtag_tag_t21_up *= (SF_W_tau21_MSDanti + SF_W_tau21_MSDanti_up);
+                    Wtag_tag_t21_down *= (SF_W_tau21_MSDanti - SF_W_tau21_MSDanti_down);
                 }
                 if(""" + plotselection_W_tau21_anti_i + """ && """ + plotselection_W_MSD_i + """){
-                    Wtagnominal *= SF_W_tau21anti_MSDanti;
-                    Wtagup *= (SF_W_tau21anti_MSDanti + SF_W_tau21anti_MSDanti_up);
-                    Wtagup *= (SF_W_tau21anti_MSDanti - SF_W_tau21anti_MSDanti_down);
-                }        
-                break;
+                    Wtag_tag_t21anti_nominal *= SF_W_tau21anti_MSDanti;
+                    Wtag_tag_t21anti_up *= (SF_W_tau21anti_MSDanti + SF_W_tau21anti_MSDanti_up);
+                    Wtag_tag_t21anti_down *= (SF_W_tau21anti_MSDanti - SF_W_tau21anti_MSDanti_down);
+                }
+            }
+            else{
+                if(""" + plotselection_W_tau21_i + """ && """ + plotselection_W_MSD_i + """){
+                    Wtag_mistag_t21_nominal *= SF_W_tau21_MSD;
+                    Wtag_mistag_t21_up *= (SF_W_tau21_MSD + SF_W_tau21_MSD_up);
+                    Wtag_mistag_t21_down *= (SF_W_tau21_MSD - SF_W_tau21_MSD_down);
+                }
+                if(""" + plotselection_W_tau21_anti_i + """ && """ + plotselection_W_MSD_i + """){
+                    Wtag_mistag_t21anti_nominal *= SF_W_tau21anti_MSD;
+                    Wtag_mistag_t21anti_up *= (SF_W_tau21anti_MSD + SF_W_tau21anti_MSD_up);
+                    Wtag_mistag_t21anti_down *= (SF_W_tau21anti_MSD - SF_W_tau21anti_MSD_down);
+                }
+                if(""" + plotselection_W_tau21_i + """ && """ + plotselection_W_MSD_anti_i + """){
+                    Wtag_mistag_t21_nominal *= SF_W_tau21_MSDanti;
+                    Wtag_mistag_t21_up *= (SF_W_tau21_MSDanti + SF_W_tau21_MSDanti_up);
+                    Wtag_mistag_t21_down *= (SF_W_tau21_MSDanti - SF_W_tau21_MSDanti_down);
+                }
+                if(""" + plotselection_W_tau21_anti_i + """ && """ + plotselection_W_MSD_i + """){
+                    Wtag_mistag_t21anti_nominal *= SF_W_tau21anti_MSDanti;
+                    Wtag_mistag_t21anti_up *= (SF_W_tau21anti_MSDanti + SF_W_tau21anti_MSDanti_up);
+                    Wtag_mistag_t21anti_down *= (SF_W_tau21anti_MSDanti - SF_W_tau21anti_MSDanti_down);
+                }   
+            }
+            break;
         }
     }
     
-    weights.push_back(Wtagnominal);
-    weights.push_back(Wtagup);
-    weights.push_back(Wtagdown);
-   
+    weights.push_back(Wtag_tag_t21_nominal);
+    weights.push_back(Wtag_tag_t21_up);
+    weights.push_back(Wtag_tag_t21_down);
+    weights.push_back(Wtag_tag_t21anti_nominal);
+    weights.push_back(Wtag_tag_t21anti_up);
+    weights.push_back(Wtag_tag_t21anti_down);
+    weights.push_back(Wtag_mistag_t21_nominal);
+    weights.push_back(Wtag_mistag_t21_up);
+    weights.push_back(Wtag_mistag_t21_down);
+    weights.push_back(Wtag_mistag_t21anti_nominal);
+    weights.push_back(Wtag_mistag_t21anti_up);
+    weights.push_back(Wtag_mistag_t21anti_down); 
+    
     
     return weights;
 }
@@ -1395,42 +849,42 @@ std::vector<float> RenFacEnv(float muR20_muF20, float muR05_muF05, float muR10_m
     float envUp=1.0;
     float envDown=1.0;
     
-    if (muR20_muF20>envUp){
-        envUp=muR20_muF20;
-    }
-    if (muR20_muF20<envDown){
-        envDown=muR20_muF20;
-    }
-    if (muR05_muF05>envUp){
-        envUp=muR05_muF05;
-    }
-    if (muR05_muF05<envDown){
-        envDown=muR05_muF05;
-    }
-    if (muR10_muF20>envUp){
-        envUp=muR10_muF20;
-    }
-    if (muR10_muF20<envDown){
-        envDown=muR10_muF20;
-    }
-    if (muR10_muF05>envUp){
-        envUp=muR10_muF05;
-    }
-    if (muR10_muF05<envDown){
-        envDown=muR10_muF05;
-    }
-    if (muR20_muF10>envUp){
-        envUp=muR20_muF10;
-    }
-    if (muR20_muF10<envDown){
-        envDown=muR20_muF10;
-    }
-    if (muR05_muF10>envUp){
-        envUp=muR05_muF10;
-    }
-    if (muR05_muF10<envDown){
-        envDown=muR05_muF10;
-    }
+        if (muR20_muF20>envUp){
+            envUp=muR20_muF20;
+        }
+        if (muR20_muF20<envDown){
+            envDown=muR20_muF20;
+        }
+        if (muR05_muF05>envUp){
+            envUp=muR05_muF05;
+        }
+        if (muR05_muF05<envDown){
+            envDown=muR05_muF05;
+        }
+        if (muR10_muF20>envUp){
+            envUp=muR10_muF20;
+        }
+        if (muR10_muF20<envDown){
+            envDown=muR10_muF20;
+        }
+        if (muR10_muF05>envUp){
+            envUp=muR10_muF05;
+        }
+        if (muR10_muF05<envDown){
+            envDown=muR10_muF05;
+        }
+        if (muR20_muF10>envUp){
+            envUp=muR20_muF10;
+        }
+        if (muR20_muF10<envDown){
+            envDown=muR20_muF10;
+        }
+        if (muR05_muF10>envUp){
+            envUp=muR05_muF10;
+        }
+        if (muR05_muF10<envDown){
+            envDown=muR05_muF10;
+        }
 
     res.push_back(envUp);
     res.push_back(envDown);
@@ -1438,19 +892,141 @@ std::vector<float> RenFacEnv(float muR20_muF20, float muR05_muF05, float muR10_m
     return res;
 }
 """
-#,
-#"""
-#std::vector<float> ABCDsyst1(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
 
-#}
-#"""
-#,
-#"""
-#std::vector<float> ABCDsyst2(float const* Zprimes_ABCD_M, float const* Tprimes_ABCD_M, float const* Tops_ABCD_maxsubjetCSVv2, float const* Ws_ABCD_MSD, float const* Tops_ABCD_MSD, float const* Tops_ABCD_t32, float const* Bottoms_ABCD_CSV, float const* Ws_ABCD_t21,int N_Zprime_ABCD){
+"""
+std::vector<float> ABCD_syts(float const* Zprimes_ABCD""" +  radi + """_M, float const* Tprimes_ABCD""" +  radi + """_M, float const* Tops_ABCD""" +  radi + """_maxsubjetCSVv2, float const* Ws_ABCD""" +  radi + """_MSD, float const* Ws_ABCD""" +  radi + """_corrL2L3, float const* Tops_ABCD""" +  radi + """_MSD, float const* Tops_ABCD""" +  radi + """_corrL2L3, float const* Tops_ABCD""" +  radi + """_t32, float const* Bottoms_ABCD""" +  radi + """_CSV, float const* Ws_ABCD""" +  radi + """_t21, float const* Ws_ABCD""" + radi + """_Pt, float const* Tops_ABCD""" + radi + """_Pt, float const* Bottoms_ABCD""" + radi + """_Pt, float Evt_HT_Jets, int N_Zprime_ABCD""" + radi + """, float N_Jets, float N_packedPatJetsAK8PF""" +  radi + """){
+    std::vector<float> res;
+    float ABCD_rateUp=1.0;
+    float ABCD_rateDown=1.0;
+    float ABCD_shapeUp=1.0;
+    float ABCD_shapeDown=1.0;
+    
+    for (int i=0; i<N_Zprime_ABCD""" + radi + """; i++){
+        if ("""+ generalselection_i +"""){
+            if("""+ plotselection_topsubjetCSVv2_i +"""){
+                ABCD_rateUp=(1.0 + (""" + str(Zprime_withtopbtag_systrate) + """));
+                ABCD_rateDown=(1.0 - (""" + str(Zprime_withtopbtag_systrate) + """));
+                ABCD_shapeUp=(1.0+(((Zprimes_ABCD""" +  radi + """_M[i]) * (""" + str(Zprime_withtopbtag_systshape_m) + """) + (""" + str(Zprime_withtopbtag_systshape_c) + """))-1.0));
+                ABCD_shapeDown=(1.0-(((Zprimes_ABCD""" +  radi + """_M[i]) * (""" + str(Zprime_withtopbtag_systshape_m) + """) + (""" + str(Zprime_withtopbtag_systshape_c) + """))-1.0));
+            } else {
+                ABCD_rateUp=(1.0 + (""" + str(Zprime_notopbtag_systrate) + """));
+                ABCD_rateDown=(1.0 - (""" + str(Zprime_notopbtag_systrate) + """));
+                //ABCD_shapeUp=(((Zprimes_ABCD""" +  radi + """_M[i]) * (""" + str(Zprime_notopbtag_systshape_m) + """) + (""" + str(Zprime_notopbtag_systshape_c) + """)));
+                //ABCD_shapeDown=(-((Zprimes_ABCD""" +  radi + """_M[i]) * (""" + str(Zprime_notopbtag_systshape_m) + """) + (""" + str(Zprime_notopbtag_systshape_c) + """)));
+                ABCD_shapeUp=(1.0+(((Zprimes_ABCD""" +  radi + """_M[i]) * (""" + str(Zprime_notopbtag_systshape_m) + """) + (""" + str(Zprime_notopbtag_systshape_c) + """))-1.0));
+                ABCD_shapeDown=(1.0-(((Zprimes_ABCD""" +  radi + """_M[i]) * (""" + str(Zprime_notopbtag_systshape_m) + """) + (""" + str(Zprime_notopbtag_systshape_c) + """))-1.0));
+            };
+        break;
+        };
+    }
+    res.push_back(ABCD_rateUp);
+    res.push_back(ABCD_rateDown);
+    res.push_back(ABCD_shapeUp);
+    res.push_back(ABCD_shapeDown);
+    
+    return res;
+}
+""",
 
-#}
-#"""
-    ]
+
+"""
+std::vector<float> CSV_weights_all(float const* Zprimes_ABCD""" + radi + """_M, float const* Tprimes_ABCD""" + radi + """_M, float const* Tops_ABCD""" + radi + """_maxsubjetCSVv2, float const* Ws_ABCD""" + radi + """_MSD, float const* Ws_ABCD""" + radi + """_corrL2L3, float const* Tops_ABCD""" + radi + """_MSD, float const* Tops_ABCD""" + radi + """_corrL2L3, float const* Tops_ABCD""" + radi + """_t32, float const* Bottoms_ABCD""" + radi + """_CSV, float const* Ws_ABCD""" + radi + """_t21, float const* Ws_ABCD""" + radi + """_Pt, float const* Tops_ABCD""" + radi + """_Pt, float const* Bottoms_ABCD""" + radi + """_Pt, float Evt_HT_Jets, int N_Zprime_ABCD""" + radi + """, float N_Jets, float N_packedPatJetsAK8PF""" +  radi + """, float const* Bottoms_ABCD""" + radi + """_WeightCSVnominal, float const* Bottoms_ABCD""" + radi + """_WeightCSVLFup, float const* Bottoms_ABCD""" + radi + """_WeightCSVLFdown, float const* Bottoms_ABCD""" + radi + """_WeightCSVHFup, float const* Bottoms_ABCD""" + radi + """_WeightCSVHFdown, float const* Bottoms_ABCD""" + radi + """_WeightCSVHFStats1up, float const* Bottoms_ABCD""" + radi + """_WeightCSVHFStats1down, float const* Bottoms_ABCD""" + radi + """_WeightCSVLFStats1up, float const* Bottoms_ABCD""" + radi + """_WeightCSVLFStats1down, float const* Bottoms_ABCD""" + radi + """_WeightCSVHFStats2up, float const* Bottoms_ABCD""" + radi + """_WeightCSVHFStats2down, float const* Bottoms_ABCD""" + radi + """_WeightCSVLFStats2up, float const* Bottoms_ABCD""" + radi + """_WeightCSVLFStats2down, float const* Bottoms_ABCD""" + radi + """_WeightCSVCErr1up, float const* Bottoms_ABCD""" + radi + """_WeightCSVCErr1down, float const* Bottoms_ABCD""" + radi + """_WeightCSVCErr2up, float const* Bottoms_ABCD""" + radi + """_WeightCSVCErr2down, float const* Topsubjets_ABCD""" + radi + """_WeightCSVnominal, float const* Topsubjets_ABCD""" + radi + """_WeightCSVLFup, float const* Topsubjets_ABCD""" + radi + """_WeightCSVLFdown, float const* Topsubjets_ABCD""" + radi + """_WeightCSVHFup, float const* Topsubjets_ABCD""" + radi + """_WeightCSVHFdown, float const* Topsubjets_ABCD""" + radi + """_WeightCSVHFStats1up, float const* Topsubjets_ABCD""" + radi + """_WeightCSVHFStats1down, float const* Topsubjets_ABCD""" + radi + """_WeightCSVLFStats1up, float const* Topsubjets_ABCD""" + radi + """_WeightCSVLFStats1down, float const* Topsubjets_ABCD""" + radi + """_WeightCSVHFStats2up, float const* Topsubjets_ABCD""" + radi + """_WeightCSVHFStats2down, float const* Topsubjets_ABCD""" + radi + """_WeightCSVLFStats2up, float const* Topsubjets_ABCD""" + radi + """_WeightCSVLFStats2down, float const* Topsubjets_ABCD""" + radi + """_WeightCSVCErr1up, float const* Topsubjets_ABCD""" + radi + """_WeightCSVCErr1down, float const* Topsubjets_ABCD""" + radi + """_WeightCSVCErr2up, float const* Topsubjets_ABCD""" + radi + """_WeightCSVCErr2down  ){
+    std::vector<float> weights;
+    
+    float CSVnominal=1.0;
+    float CSVLFup=1.0;
+    float CSVLFdown=1.0;
+    float CSVHFup=1.0;
+    float CSVHFdown=1.0;
+    float CSVHFStats1up=1.0;
+    float CSVHFStats1down=1.0;
+    float CSVLFStats1up=1.0;
+    float CSVLFStats1down=1.0;
+    float CSVHFStats2up=1.0;
+    float CSVHFStats2down=1.0;
+    float CSVLFStats2up=1.0;
+    float CSVLFStats2down=1.0;
+    float CSVCErr1up=1.0;
+    float CSVCErr1down=1.0;
+    float CSVCErr2up=1.0;
+    float CSVCErr2down=1.0;
+
+    float tpt=0.0;
+    float Wpt=0.0;
+    float bpt=0.0;
+
+    for (int i=0; i<N_Zprime_ABCD""" + radi + """; i++){
+        if ( Evt_HT_Jets>1000 && Bottoms_ABCD""" + radi + """_WeightCSVnominal[i]>(-0.5)){         
+            CSVnominal *= Bottoms_ABCD""" + radi + """_WeightCSVnominal[i];
+            CSVLFup *= Bottoms_ABCD""" + radi + """_WeightCSVLFup[i];
+            CSVLFdown *= Bottoms_ABCD""" + radi + """_WeightCSVLFdown[i];
+            CSVHFup *= Bottoms_ABCD""" + radi + """_WeightCSVHFup[i];
+            CSVHFdown *= Bottoms_ABCD""" + radi + """_WeightCSVHFdown[i];
+            CSVHFStats1up *= Bottoms_ABCD""" + radi + """_WeightCSVHFStats1up[i];
+            CSVHFStats1down *= Bottoms_ABCD""" + radi + """_WeightCSVHFStats1down[i];
+            CSVLFStats1up *= Bottoms_ABCD""" + radi + """_WeightCSVLFStats1up[i];
+            CSVLFStats1down *= Bottoms_ABCD""" + radi + """_WeightCSVLFStats1down[i];
+            CSVHFStats2up *= Bottoms_ABCD""" + radi + """_WeightCSVHFStats2up[i];
+            CSVHFStats2down *= Bottoms_ABCD""" + radi + """_WeightCSVHFStats2down[i];
+            CSVLFStats2up *= Bottoms_ABCD""" + radi + """_WeightCSVLFStats2up[i];
+            CSVLFStats2down *= Bottoms_ABCD""" + radi + """_WeightCSVLFStats2down[i];
+            CSVCErr1down *= Bottoms_ABCD""" + radi + """_WeightCSVCErr1up[i];
+            CSVCErr1down *= Bottoms_ABCD""" + radi + """_WeightCSVCErr1down[i];
+            CSVCErr2up *= Bottoms_ABCD""" + radi + """_WeightCSVCErr2up[i];
+            CSVCErr2down *= Bottoms_ABCD""" + radi + """_WeightCSVCErr2down[i];
+            
+            CSVnominal *= Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i];
+            CSVLFup *= Topsubjets_ABCD""" + radi + """_WeightCSVLFup[i];
+            CSVLFdown *= Topsubjets_ABCD""" + radi + """_WeightCSVLFdown[i];
+            CSVHFup *= Topsubjets_ABCD""" + radi + """_WeightCSVHFup[i];
+            CSVHFdown *= Topsubjets_ABCD""" + radi + """_WeightCSVHFdown[i];
+            CSVHFStats1up *= Topsubjets_ABCD""" + radi + """_WeightCSVHFStats1up[i];
+            CSVHFStats1down *= Topsubjets_ABCD""" + radi + """_WeightCSVHFStats1down[i];
+            CSVLFStats1up *= Topsubjets_ABCD""" + radi + """_WeightCSVLFStats1up[i];
+            CSVLFStats1down *= Topsubjets_ABCD""" + radi + """_WeightCSVLFStats1down[i];
+            CSVHFStats2up *= Topsubjets_ABCD""" + radi + """_WeightCSVHFStats2up[i];
+            CSVHFStats2down *= Topsubjets_ABCD""" + radi + """_WeightCSVHFStats2down[i];
+            CSVLFStats2up *= Topsubjets_ABCD""" + radi + """_WeightCSVLFStats2up[i];
+            CSVLFStats2down *= Topsubjets_ABCD""" + radi + """_WeightCSVLFStats2down[i];
+            CSVCErr1down *= Topsubjets_ABCD""" + radi + """_WeightCSVCErr1up[i];
+            CSVCErr1down *= Topsubjets_ABCD""" + radi + """_WeightCSVCErr1down[i];
+            CSVCErr2up *= Topsubjets_ABCD""" + radi + """_WeightCSVCErr2up[i];
+            CSVCErr2down *= Topsubjets_ABCD""" + radi + """_WeightCSVCErr2down[i];
+                        
+        }
+    };
+    
+    weights.push_back(CSVnominal);
+    weights.push_back(CSVLFup);
+    weights.push_back(CSVLFdown);
+    weights.push_back(CSVHFup);
+    weights.push_back(CSVHFdown);
+    weights.push_back(CSVHFStats1up);
+    weights.push_back(CSVHFStats1down);
+    weights.push_back(CSVLFStats1up);
+    weights.push_back(CSVLFStats1down);
+    weights.push_back(CSVHFStats2up);
+    weights.push_back(CSVHFStats2down);
+    weights.push_back(CSVLFStats2up);
+    weights.push_back(CSVLFStats2down);
+    weights.push_back(CSVCErr1up);
+    weights.push_back(CSVCErr1down);
+    weights.push_back(CSVCErr2up);
+    weights.push_back(CSVCErr2down);    
+    
+    return weights;
+}
+
+"""
+,
+"""float triggerresult(int Triggered_HLT_PFHT800_vX, int Triggered_HLT_PFHT900_vX, int Triggered_HLT_PFJet450_vX, float Prescale_HLT_PFHT800_vX, float Prescale_HLT_PFHT900_vX,float Prescale_HLT_PFJet450_vX){
+    int result=0;
+    if(Triggered_HLT_PFHT800_vX==1 || Triggered_HLT_PFHT900_vX==1 || Triggered_HLT_PFJet450_vX){result=1.0;}; //run H has damaged PFHT900 GeV
+    return result;
+}
+"""
+
+]
 
 
 
@@ -1567,13 +1143,15 @@ additionalvariables=[
 			'bportionno:=(bbarportionweight(N_AK4_bottom_tag_candidates))[3]',
 			'bportionnorm:=(bbarportionweight(N_AK4_bottom_tag_candidates))[0]',
 			"N_AK4_bottom_tag_candidates",
-			'IsnoSignalnotopbtag:=IsnoSignal_notopbtag(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)',
-			'IsnoSignalwithtopbtag:=IsnoSignal_withtopbtag(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)',
-                        'IsnoSignalinclusive:=IsnoSignal_inclusive(Zprimes_ABCD_M, Tprimes_ABCD_M, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)',
-                        "N_Zprime_ABCD","Zprimes_ABCD_M","Tprimes_ABCD_M","Tops_ABCD_maxsubjetCSVv2","Ws_ABCD_MSD","Tops_ABCD_MSD","Tops_ABCD_t32","Bottoms_ABCD_CSV","Ws_ABCD_t21",
                         
-                        'ABCD_CatID:=1.0 * ABCD_Category(Zprimes_ABCD_M,   Tprimes_ABCD_M,   Tops_ABCD_maxsubjetCSVv2,   Ws_ABCD_MSD,   Tops_ABCD_MSD,   Tops_ABCD_t32,   Bottoms_ABCD_CSV,   Ws_ABCD_t21, N_Zprime_ABCD)',
-                        #'ABCD_CatID:=1.0 * ABCD2_Category(Zprimes_ABCD_M,   Tprimes_ABCD_M,   Tops_ABCD_maxsubjetCSVv2,   Ws_ABCD_MSD,   Tops_ABCD_MSD,   Tops_ABCD_t32,   Bottoms_ABCD_CSV,   Ws_ABCD_t21, N_Zprime_ABCD)',
+                        
+                        'ABCD_CatID:=1.0 * ABCD_Category(Zprimes_ABCD' + radi + '_M,   Tprimes_ABCD' + radi + '_M,   Tops_ABCD' + radi + '_maxsubjetCSVv2,   Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3,   Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3,   Tops_ABCD' + radi + '_t32,   Bottoms_ABCD' + radi + '_CSV,   Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ')',
+                        
+                        'ABCD_rate_systUp:=ABCD_syts( Zprimes_ABCD' +  radi + '_M,  Tprimes_ABCD' +  radi + '_M,  Tops_ABCD' +  radi + '_maxsubjetCSVv2,  Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3,  Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3,  Tops_ABCD' +  radi + '_t32,  Bottoms_ABCD' +  radi + '_CSV,  Ws_ABCD' +  radi + '_t21,  Ws_ABCD' + radi + '_Pt,  Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt,  Evt_HT_Jets,  N_Zprime_ABCD' + radi + ',  N_Jets,  N_packedPatJetsAK8PF' +  radi + ')[0]',
+                        'ABCD_rate_systDown:=ABCD_syts( Zprimes_ABCD' +  radi + '_M,  Tprimes_ABCD' +  radi + '_M,  Tops_ABCD' +  radi + '_maxsubjetCSVv2,  Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3,  Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3,  Tops_ABCD' +  radi + '_t32,  Bottoms_ABCD' +  radi + '_CSV,  Ws_ABCD' +  radi + '_t21,  Ws_ABCD' + radi + '_Pt,  Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt,  Evt_HT_Jets,  N_Zprime_ABCD' + radi + ',  N_Jets,  N_packedPatJetsAK8PF' +  radi + ')[1]',
+                        
+                        'ABCD_shape_systUp:=ABCD_syts( Zprimes_ABCD' +  radi + '_M,  Tprimes_ABCD' +  radi + '_M,  Tops_ABCD' +  radi + '_maxsubjetCSVv2,  Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3,  Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3,  Tops_ABCD' +  radi + '_t32,  Bottoms_ABCD' +  radi + '_CSV,  Ws_ABCD' +  radi + '_t21,  Ws_ABCD' + radi + '_Pt,  Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt,  Evt_HT_Jets,  N_Zprime_ABCD' + radi + ',  N_Jets,  N_packedPatJetsAK8PF' +  radi + ')[2]',
+                        'ABCD_shape_systDown:=ABCD_syts( Zprimes_ABCD' +  radi + '_M,  Tprimes_ABCD' +  radi + '_M,  Tops_ABCD' +  radi + '_maxsubjetCSVv2,  Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3,  Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3,  Tops_ABCD' +  radi + '_t32,  Bottoms_ABCD' +  radi + '_CSV,  Ws_ABCD' +  radi + '_t21,  Ws_ABCD' + radi + '_Pt,  Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt,  Evt_HT_Jets,  N_Zprime_ABCD' + radi + ',  N_Jets,  N_packedPatJetsAK8PF' +  radi + ')[3]',                         
                         
                         'ABCD_CatA_withtopbtag:=1',
                         'ABCD_CatB_withtopbtag:=2',
@@ -1593,100 +1171,67 @@ additionalvariables=[
                         'ABCD_CatG_notopbtag:=15',
                         'ABCD_CatH_notopbtag:=16',
                         
-                        #'ABCD2_CatA_withtopbtag:=1',
-                        #'ABCD2_CatB_withtopbtag:=2',
-                        #'ABCD2_CatC_withtopbtag:=3',
-                        #'ABCD2_CatD_withtopbtag:=4',
-                        #'ABCD2_CatE_withtopbtag:=5',
-                        #'ABCD2_CatF_withtopbtag:=6',
-                        #'ABCD2_CatG_withtopbtag:=7',
-                        #'ABCD2_CatH_withtopbtag:=8',
                         
-                        #'ABCD2_CatA_notopbtag:=9',
-                        #'ABCD2_CatB_notopbtag:=10',
-                        #'ABCD2_CatC_notopbtag:=11',
-                        #'ABCD2_CatD_notopbtag:=12',
-                        #'ABCD2_CatE_notopbtag:=13',
-                        #'ABCD2_CatF_notopbtag:=14',
-                        #'ABCD2_CatG_notopbtag:=15',
-                        #'ABCD2_CatH_notopbtag:=16',         
-                        
-                        
-                        #'ABCD1_WeightCSVnominal:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[0]',
-                        #'ABCD1_WeightCSVLFUp:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[1]',
-                        #'ABCD1_WeightCSVLFDown:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[2]',
-                        #'ABCD1_WeightCSVHFUp:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[3]',
-                        #'ABCD1_WeightCSVHFDown:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[4]',
-                        #'ABCD1_WeightCSVHFStats1Up:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[5]',
-                        #'ABCD1_WeightCSVHFStats1Down:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[6]',
-                        #'ABCD1_WeightCSVLFStats1Up:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[7]',
-                        #'ABCD1_WeightCSVLFStats1Down:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[8]',
-                        #'ABCD1_WeightCSVHFStats2Up:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[9]',
-                        #'ABCD1_WeightCSVHFStats2Down:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[10]',
-                        #'ABCD1_WeightCSVLFStats2Up:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[11]',
-                        #'ABCD1_WeightCSVLFStats2Down:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[12]',
-                        #'ABCD1_WeightCSVCErr1Up:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[13]',
-                        #'ABCD1_WeightCSVCErr1Down:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[14]',
-                        #'ABCD1_WeightCSVCErr2Up:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[15]',
-                        #'ABCD1_WeightCSVCErr2Down:=(CSV_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[16]',
+             
 
-                        #'ABCD2_WeightCSVnominal:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[0]',
-                        #'ABCD2_WeightCSVLFUp:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[1]',
-                        #'ABCD2_WeightCSVLFDown:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[2]',
-                        #'ABCD2_WeightCSVHFUp:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[3]',
-                        #'ABCD2_WeightCSVHFDown:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[4]',
-                        #'ABCD2_WeightCSVHFStats1Up:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[5]',
-                        #'ABCD2_WeightCSVHFStats1Down:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[6]',
-                        #'ABCD2_WeightCSVLFStats1Up:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[7]',
-                        #'ABCD2_WeightCSVLFStats1Down:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[8]',
-                        #'ABCD2_WeightCSVHFStats2Up:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[9]',
-                        #'ABCD2_WeightCSVHFStats2Down:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[10]',
-                        #'ABCD2_WeightCSVLFStats2Up:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[11]',
-                        #'ABCD2_WeightCSVLFStats2Down:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[12]',
-                        #'ABCD2_WeightCSVCErr1Up:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[13]',
-                        #'ABCD2_WeightCSVCErr1Down:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[14]',
-                        #'ABCD2_WeightCSVCErr2Up:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[15]',
-                        #'ABCD2_WeightCSVCErr2Down:=(CSV_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[16]',
-                    
+                        '' + ABCDversion + '_WeightCSVnominal:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ',Bottoms_ABCD' + radi + '_WeightCSVnominal, Bottoms_ABCD' + radi + '_WeightCSVLFup, Bottoms_ABCD' + radi + '_WeightCSVLFdown, Bottoms_ABCD' + radi + '_WeightCSVHFup, Bottoms_ABCD' + radi + '_WeightCSVHFdown, Bottoms_ABCD' + radi + '_WeightCSVHFStats1up, Bottoms_ABCD' + radi + '_WeightCSVHFStats1down, Bottoms_ABCD' + radi + '_WeightCSVLFStats1up, Bottoms_ABCD' + radi + '_WeightCSVLFStats1down, Bottoms_ABCD' + radi + '_WeightCSVHFStats2up, Bottoms_ABCD' + radi + '_WeightCSVHFStats2down, Bottoms_ABCD' + radi + '_WeightCSVLFStats2up, Bottoms_ABCD' + radi + '_WeightCSVLFStats2down, Bottoms_ABCD' + radi + '_WeightCSVCErr1up, Bottoms_ABCD' + radi + '_WeightCSVCErr1down, Bottoms_ABCD' + radi + '_WeightCSVCErr2up, Bottoms_ABCD' + radi + '_WeightCSVCErr2down, Topsubjets_ABCD' + radi + '_WeightCSVnominal, Topsubjets_ABCD' + radi + '_WeightCSVLFup, Topsubjets_ABCD' + radi + '_WeightCSVLFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFup, Topsubjets_ABCD' + radi + '_WeightCSVHFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVCErr1up, Topsubjets_ABCD' + radi + '_WeightCSVCErr1down, Topsubjets_ABCD' + radi + '_WeightCSVCErr2up, Topsubjets_ABCD' + radi + '_WeightCSVCErr2down  ))[0]',
 
-                        '' + ABCDversion + '_WeightCSVnominal:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[0]',
-                        '' + ABCDversion + '_WeightCSVLFUp:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[1]',
-                        '' + ABCDversion + '_WeightCSVLFDown:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[2]',
-                        '' + ABCDversion + '_WeightCSVHFUp:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[3]',
-                        '' + ABCDversion + '_WeightCSVHFDown:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[4]',
-                        '' + ABCDversion + '_WeightCSVHFStats1Up:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[5]',
-                        '' + ABCDversion + '_WeightCSVHFStats1Down:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[6]',
-                        '' + ABCDversion + '_WeightCSVLFStats1Up:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[7]',
-                        '' + ABCDversion + '_WeightCSVLFStats1Down:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[8]',
-                        '' + ABCDversion + '_WeightCSVHFStats2Up:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[9]',
-                        '' + ABCDversion + '_WeightCSVHFStats2Down:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[10]',
-                        '' + ABCDversion + '_WeightCSVLFStats2Up:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[11]',
-                        '' + ABCDversion + '_WeightCSVLFStats2Down:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[12]',
-                        '' + ABCDversion + '_WeightCSVCErr1Up:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[13]',
-                        '' + ABCDversion + '_WeightCSVCErr1Down:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[14]',
-                        '' + ABCDversion + '_WeightCSVCErr2Up:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[15]',
-                        '' + ABCDversion + '_WeightCSVCErr2Down:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD,Bottoms_ABCD_WeightCSVnominal, Bottoms_ABCD_WeightCSVLFup, Bottoms_ABCD_WeightCSVLFdown, Bottoms_ABCD_WeightCSVHFup, Bottoms_ABCD_WeightCSVHFdown, Bottoms_ABCD_WeightCSVHFStats1up, Bottoms_ABCD_WeightCSVHFStats1down, Bottoms_ABCD_WeightCSVLFStats1up, Bottoms_ABCD_WeightCSVLFStats1down, Bottoms_ABCD_WeightCSVHFStats2up, Bottoms_ABCD_WeightCSVHFStats2down, Bottoms_ABCD_WeightCSVLFStats2up, Bottoms_ABCD_WeightCSVLFStats2down, Bottoms_ABCD_WeightCSVCErr1up, Bottoms_ABCD_WeightCSVCErr1down, Bottoms_ABCD_WeightCSVCErr2up, Bottoms_ABCD_WeightCSVCErr2down, Topsubjets_ABCD_WeightCSVnominal, Topsubjets_ABCD_WeightCSVLFup, Topsubjets_ABCD_WeightCSVLFdown, Topsubjets_ABCD_WeightCSVHFup, Topsubjets_ABCD_WeightCSVHFdown, Topsubjets_ABCD_WeightCSVHFStats1up, Topsubjets_ABCD_WeightCSVHFStats1down, Topsubjets_ABCD_WeightCSVLFStats1up, Topsubjets_ABCD_WeightCSVLFStats1down, Topsubjets_ABCD_WeightCSVHFStats2up, Topsubjets_ABCD_WeightCSVHFStats2down, Topsubjets_ABCD_WeightCSVLFStats2up, Topsubjets_ABCD_WeightCSVLFStats2down, Topsubjets_ABCD_WeightCSVCErr1up, Topsubjets_ABCD_WeightCSVCErr1down, Topsubjets_ABCD_WeightCSVCErr2up, Topsubjets_ABCD_WeightCSVCErr2down  ))[16]',
+                        '' + ABCDversion + '_WeightCSVLFUp:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ',Bottoms_ABCD' + radi + '_WeightCSVnominal, Bottoms_ABCD' + radi + '_WeightCSVLFup, Bottoms_ABCD' + radi + '_WeightCSVLFdown, Bottoms_ABCD' + radi + '_WeightCSVHFup, Bottoms_ABCD' + radi + '_WeightCSVHFdown, Bottoms_ABCD' + radi + '_WeightCSVHFStats1up, Bottoms_ABCD' + radi + '_WeightCSVHFStats1down, Bottoms_ABCD' + radi + '_WeightCSVLFStats1up, Bottoms_ABCD' + radi + '_WeightCSVLFStats1down, Bottoms_ABCD' + radi + '_WeightCSVHFStats2up, Bottoms_ABCD' + radi + '_WeightCSVHFStats2down, Bottoms_ABCD' + radi + '_WeightCSVLFStats2up, Bottoms_ABCD' + radi + '_WeightCSVLFStats2down, Bottoms_ABCD' + radi + '_WeightCSVCErr1up, Bottoms_ABCD' + radi + '_WeightCSVCErr1down, Bottoms_ABCD' + radi + '_WeightCSVCErr2up, Bottoms_ABCD' + radi + '_WeightCSVCErr2down, Topsubjets_ABCD' + radi + '_WeightCSVnominal, Topsubjets_ABCD' + radi + '_WeightCSVLFup, Topsubjets_ABCD' + radi + '_WeightCSVLFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFup, Topsubjets_ABCD' + radi + '_WeightCSVHFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVCErr1up, Topsubjets_ABCD' + radi + '_WeightCSVCErr1down, Topsubjets_ABCD' + radi + '_WeightCSVCErr2up, Topsubjets_ABCD' + radi + '_WeightCSVCErr2down  ))[1]',
+                        '' + ABCDversion + '_WeightCSVLFDown:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ',Bottoms_ABCD' + radi + '_WeightCSVnominal, Bottoms_ABCD' + radi + '_WeightCSVLFup, Bottoms_ABCD' + radi + '_WeightCSVLFdown, Bottoms_ABCD' + radi + '_WeightCSVHFup, Bottoms_ABCD' + radi + '_WeightCSVHFdown, Bottoms_ABCD' + radi + '_WeightCSVHFStats1up, Bottoms_ABCD' + radi + '_WeightCSVHFStats1down, Bottoms_ABCD' + radi + '_WeightCSVLFStats1up, Bottoms_ABCD' + radi + '_WeightCSVLFStats1down, Bottoms_ABCD' + radi + '_WeightCSVHFStats2up, Bottoms_ABCD' + radi + '_WeightCSVHFStats2down, Bottoms_ABCD' + radi + '_WeightCSVLFStats2up, Bottoms_ABCD' + radi + '_WeightCSVLFStats2down, Bottoms_ABCD' + radi + '_WeightCSVCErr1up, Bottoms_ABCD' + radi + '_WeightCSVCErr1down, Bottoms_ABCD' + radi + '_WeightCSVCErr2up, Bottoms_ABCD' + radi + '_WeightCSVCErr2down, Topsubjets_ABCD' + radi + '_WeightCSVnominal, Topsubjets_ABCD' + radi + '_WeightCSVLFup, Topsubjets_ABCD' + radi + '_WeightCSVLFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFup, Topsubjets_ABCD' + radi + '_WeightCSVHFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVCErr1up, Topsubjets_ABCD' + radi + '_WeightCSVCErr1down, Topsubjets_ABCD' + radi + '_WeightCSVCErr2up, Topsubjets_ABCD' + radi + '_WeightCSVCErr2down  ))[2]',
+                        '' + ABCDversion + '_WeightCSVHFUp:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ',Bottoms_ABCD' + radi + '_WeightCSVnominal, Bottoms_ABCD' + radi + '_WeightCSVLFup, Bottoms_ABCD' + radi + '_WeightCSVLFdown, Bottoms_ABCD' + radi + '_WeightCSVHFup, Bottoms_ABCD' + radi + '_WeightCSVHFdown, Bottoms_ABCD' + radi + '_WeightCSVHFStats1up, Bottoms_ABCD' + radi + '_WeightCSVHFStats1down, Bottoms_ABCD' + radi + '_WeightCSVLFStats1up, Bottoms_ABCD' + radi + '_WeightCSVLFStats1down, Bottoms_ABCD' + radi + '_WeightCSVHFStats2up, Bottoms_ABCD' + radi + '_WeightCSVHFStats2down, Bottoms_ABCD' + radi + '_WeightCSVLFStats2up, Bottoms_ABCD' + radi + '_WeightCSVLFStats2down, Bottoms_ABCD' + radi + '_WeightCSVCErr1up, Bottoms_ABCD' + radi + '_WeightCSVCErr1down, Bottoms_ABCD' + radi + '_WeightCSVCErr2up, Bottoms_ABCD' + radi + '_WeightCSVCErr2down, Topsubjets_ABCD' + radi + '_WeightCSVnominal, Topsubjets_ABCD' + radi + '_WeightCSVLFup, Topsubjets_ABCD' + radi + '_WeightCSVLFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFup, Topsubjets_ABCD' + radi + '_WeightCSVHFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVCErr1up, Topsubjets_ABCD' + radi + '_WeightCSVCErr1down, Topsubjets_ABCD' + radi + '_WeightCSVCErr2up, Topsubjets_ABCD' + radi + '_WeightCSVCErr2down  ))[3]',
+                        '' + ABCDversion + '_WeightCSVHFDown:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ',Bottoms_ABCD' + radi + '_WeightCSVnominal, Bottoms_ABCD' + radi + '_WeightCSVLFup, Bottoms_ABCD' + radi + '_WeightCSVLFdown, Bottoms_ABCD' + radi + '_WeightCSVHFup, Bottoms_ABCD' + radi + '_WeightCSVHFdown, Bottoms_ABCD' + radi + '_WeightCSVHFStats1up, Bottoms_ABCD' + radi + '_WeightCSVHFStats1down, Bottoms_ABCD' + radi + '_WeightCSVLFStats1up, Bottoms_ABCD' + radi + '_WeightCSVLFStats1down, Bottoms_ABCD' + radi + '_WeightCSVHFStats2up, Bottoms_ABCD' + radi + '_WeightCSVHFStats2down, Bottoms_ABCD' + radi + '_WeightCSVLFStats2up, Bottoms_ABCD' + radi + '_WeightCSVLFStats2down, Bottoms_ABCD' + radi + '_WeightCSVCErr1up, Bottoms_ABCD' + radi + '_WeightCSVCErr1down, Bottoms_ABCD' + radi + '_WeightCSVCErr2up, Bottoms_ABCD' + radi + '_WeightCSVCErr2down, Topsubjets_ABCD' + radi + '_WeightCSVnominal, Topsubjets_ABCD' + radi + '_WeightCSVLFup, Topsubjets_ABCD' + radi + '_WeightCSVLFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFup, Topsubjets_ABCD' + radi + '_WeightCSVHFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVCErr1up, Topsubjets_ABCD' + radi + '_WeightCSVCErr1down, Topsubjets_ABCD' + radi + '_WeightCSVCErr2up, Topsubjets_ABCD' + radi + '_WeightCSVCErr2down  ))[4]',
+                        '' + ABCDversion + '_WeightCSVHFStats1Up:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ',Bottoms_ABCD' + radi + '_WeightCSVnominal, Bottoms_ABCD' + radi + '_WeightCSVLFup, Bottoms_ABCD' + radi + '_WeightCSVLFdown, Bottoms_ABCD' + radi + '_WeightCSVHFup, Bottoms_ABCD' + radi + '_WeightCSVHFdown, Bottoms_ABCD' + radi + '_WeightCSVHFStats1up, Bottoms_ABCD' + radi + '_WeightCSVHFStats1down, Bottoms_ABCD' + radi + '_WeightCSVLFStats1up, Bottoms_ABCD' + radi + '_WeightCSVLFStats1down, Bottoms_ABCD' + radi + '_WeightCSVHFStats2up, Bottoms_ABCD' + radi + '_WeightCSVHFStats2down, Bottoms_ABCD' + radi + '_WeightCSVLFStats2up, Bottoms_ABCD' + radi + '_WeightCSVLFStats2down, Bottoms_ABCD' + radi + '_WeightCSVCErr1up, Bottoms_ABCD' + radi + '_WeightCSVCErr1down, Bottoms_ABCD' + radi + '_WeightCSVCErr2up, Bottoms_ABCD' + radi + '_WeightCSVCErr2down, Topsubjets_ABCD' + radi + '_WeightCSVnominal, Topsubjets_ABCD' + radi + '_WeightCSVLFup, Topsubjets_ABCD' + radi + '_WeightCSVLFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFup, Topsubjets_ABCD' + radi + '_WeightCSVHFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVCErr1up, Topsubjets_ABCD' + radi + '_WeightCSVCErr1down, Topsubjets_ABCD' + radi + '_WeightCSVCErr2up, Topsubjets_ABCD' + radi + '_WeightCSVCErr2down  ))[5]',
+                        '' + ABCDversion + '_WeightCSVHFStats1Down:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ',Bottoms_ABCD' + radi + '_WeightCSVnominal, Bottoms_ABCD' + radi + '_WeightCSVLFup, Bottoms_ABCD' + radi + '_WeightCSVLFdown, Bottoms_ABCD' + radi + '_WeightCSVHFup, Bottoms_ABCD' + radi + '_WeightCSVHFdown, Bottoms_ABCD' + radi + '_WeightCSVHFStats1up, Bottoms_ABCD' + radi + '_WeightCSVHFStats1down, Bottoms_ABCD' + radi + '_WeightCSVLFStats1up, Bottoms_ABCD' + radi + '_WeightCSVLFStats1down, Bottoms_ABCD' + radi + '_WeightCSVHFStats2up, Bottoms_ABCD' + radi + '_WeightCSVHFStats2down, Bottoms_ABCD' + radi + '_WeightCSVLFStats2up, Bottoms_ABCD' + radi + '_WeightCSVLFStats2down, Bottoms_ABCD' + radi + '_WeightCSVCErr1up, Bottoms_ABCD' + radi + '_WeightCSVCErr1down, Bottoms_ABCD' + radi + '_WeightCSVCErr2up, Bottoms_ABCD' + radi + '_WeightCSVCErr2down, Topsubjets_ABCD' + radi + '_WeightCSVnominal, Topsubjets_ABCD' + radi + '_WeightCSVLFup, Topsubjets_ABCD' + radi + '_WeightCSVLFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFup, Topsubjets_ABCD' + radi + '_WeightCSVHFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVCErr1up, Topsubjets_ABCD' + radi + '_WeightCSVCErr1down, Topsubjets_ABCD' + radi + '_WeightCSVCErr2up, Topsubjets_ABCD' + radi + '_WeightCSVCErr2down  ))[6]',
+                        '' + ABCDversion + '_WeightCSVLFStats1Up:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ',Bottoms_ABCD' + radi + '_WeightCSVnominal, Bottoms_ABCD' + radi + '_WeightCSVLFup, Bottoms_ABCD' + radi + '_WeightCSVLFdown, Bottoms_ABCD' + radi + '_WeightCSVHFup, Bottoms_ABCD' + radi + '_WeightCSVHFdown, Bottoms_ABCD' + radi + '_WeightCSVHFStats1up, Bottoms_ABCD' + radi + '_WeightCSVHFStats1down, Bottoms_ABCD' + radi + '_WeightCSVLFStats1up, Bottoms_ABCD' + radi + '_WeightCSVLFStats1down, Bottoms_ABCD' + radi + '_WeightCSVHFStats2up, Bottoms_ABCD' + radi + '_WeightCSVHFStats2down, Bottoms_ABCD' + radi + '_WeightCSVLFStats2up, Bottoms_ABCD' + radi + '_WeightCSVLFStats2down, Bottoms_ABCD' + radi + '_WeightCSVCErr1up, Bottoms_ABCD' + radi + '_WeightCSVCErr1down, Bottoms_ABCD' + radi + '_WeightCSVCErr2up, Bottoms_ABCD' + radi + '_WeightCSVCErr2down, Topsubjets_ABCD' + radi + '_WeightCSVnominal, Topsubjets_ABCD' + radi + '_WeightCSVLFup, Topsubjets_ABCD' + radi + '_WeightCSVLFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFup, Topsubjets_ABCD' + radi + '_WeightCSVHFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVCErr1up, Topsubjets_ABCD' + radi + '_WeightCSVCErr1down, Topsubjets_ABCD' + radi + '_WeightCSVCErr2up, Topsubjets_ABCD' + radi + '_WeightCSVCErr2down  ))[7]',
+                        '' + ABCDversion + '_WeightCSVLFStats1Down:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ',Bottoms_ABCD' + radi + '_WeightCSVnominal, Bottoms_ABCD' + radi + '_WeightCSVLFup, Bottoms_ABCD' + radi + '_WeightCSVLFdown, Bottoms_ABCD' + radi + '_WeightCSVHFup, Bottoms_ABCD' + radi + '_WeightCSVHFdown, Bottoms_ABCD' + radi + '_WeightCSVHFStats1up, Bottoms_ABCD' + radi + '_WeightCSVHFStats1down, Bottoms_ABCD' + radi + '_WeightCSVLFStats1up, Bottoms_ABCD' + radi + '_WeightCSVLFStats1down, Bottoms_ABCD' + radi + '_WeightCSVHFStats2up, Bottoms_ABCD' + radi + '_WeightCSVHFStats2down, Bottoms_ABCD' + radi + '_WeightCSVLFStats2up, Bottoms_ABCD' + radi + '_WeightCSVLFStats2down, Bottoms_ABCD' + radi + '_WeightCSVCErr1up, Bottoms_ABCD' + radi + '_WeightCSVCErr1down, Bottoms_ABCD' + radi + '_WeightCSVCErr2up, Bottoms_ABCD' + radi + '_WeightCSVCErr2down, Topsubjets_ABCD' + radi + '_WeightCSVnominal, Topsubjets_ABCD' + radi + '_WeightCSVLFup, Topsubjets_ABCD' + radi + '_WeightCSVLFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFup, Topsubjets_ABCD' + radi + '_WeightCSVHFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVCErr1up, Topsubjets_ABCD' + radi + '_WeightCSVCErr1down, Topsubjets_ABCD' + radi + '_WeightCSVCErr2up, Topsubjets_ABCD' + radi + '_WeightCSVCErr2down  ))[8]',
+                        '' + ABCDversion + '_WeightCSVHFStats2Up:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ',Bottoms_ABCD' + radi + '_WeightCSVnominal, Bottoms_ABCD' + radi + '_WeightCSVLFup, Bottoms_ABCD' + radi + '_WeightCSVLFdown, Bottoms_ABCD' + radi + '_WeightCSVHFup, Bottoms_ABCD' + radi + '_WeightCSVHFdown, Bottoms_ABCD' + radi + '_WeightCSVHFStats1up, Bottoms_ABCD' + radi + '_WeightCSVHFStats1down, Bottoms_ABCD' + radi + '_WeightCSVLFStats1up, Bottoms_ABCD' + radi + '_WeightCSVLFStats1down, Bottoms_ABCD' + radi + '_WeightCSVHFStats2up, Bottoms_ABCD' + radi + '_WeightCSVHFStats2down, Bottoms_ABCD' + radi + '_WeightCSVLFStats2up, Bottoms_ABCD' + radi + '_WeightCSVLFStats2down, Bottoms_ABCD' + radi + '_WeightCSVCErr1up, Bottoms_ABCD' + radi + '_WeightCSVCErr1down, Bottoms_ABCD' + radi + '_WeightCSVCErr2up, Bottoms_ABCD' + radi + '_WeightCSVCErr2down, Topsubjets_ABCD' + radi + '_WeightCSVnominal, Topsubjets_ABCD' + radi + '_WeightCSVLFup, Topsubjets_ABCD' + radi + '_WeightCSVLFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFup, Topsubjets_ABCD' + radi + '_WeightCSVHFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVCErr1up, Topsubjets_ABCD' + radi + '_WeightCSVCErr1down, Topsubjets_ABCD' + radi + '_WeightCSVCErr2up, Topsubjets_ABCD' + radi + '_WeightCSVCErr2down  ))[9]',
+                        '' + ABCDversion + '_WeightCSVHFStats2Down:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ',Bottoms_ABCD' + radi + '_WeightCSVnominal, Bottoms_ABCD' + radi + '_WeightCSVLFup, Bottoms_ABCD' + radi + '_WeightCSVLFdown, Bottoms_ABCD' + radi + '_WeightCSVHFup, Bottoms_ABCD' + radi + '_WeightCSVHFdown, Bottoms_ABCD' + radi + '_WeightCSVHFStats1up, Bottoms_ABCD' + radi + '_WeightCSVHFStats1down, Bottoms_ABCD' + radi + '_WeightCSVLFStats1up, Bottoms_ABCD' + radi + '_WeightCSVLFStats1down, Bottoms_ABCD' + radi + '_WeightCSVHFStats2up, Bottoms_ABCD' + radi + '_WeightCSVHFStats2down, Bottoms_ABCD' + radi + '_WeightCSVLFStats2up, Bottoms_ABCD' + radi + '_WeightCSVLFStats2down, Bottoms_ABCD' + radi + '_WeightCSVCErr1up, Bottoms_ABCD' + radi + '_WeightCSVCErr1down, Bottoms_ABCD' + radi + '_WeightCSVCErr2up, Bottoms_ABCD' + radi + '_WeightCSVCErr2down, Topsubjets_ABCD' + radi + '_WeightCSVnominal, Topsubjets_ABCD' + radi + '_WeightCSVLFup, Topsubjets_ABCD' + radi + '_WeightCSVLFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFup, Topsubjets_ABCD' + radi + '_WeightCSVHFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVCErr1up, Topsubjets_ABCD' + radi + '_WeightCSVCErr1down, Topsubjets_ABCD' + radi + '_WeightCSVCErr2up, Topsubjets_ABCD' + radi + '_WeightCSVCErr2down  ))[10]',
+                        '' + ABCDversion + '_WeightCSVLFStats2Up:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ',Bottoms_ABCD' + radi + '_WeightCSVnominal, Bottoms_ABCD' + radi + '_WeightCSVLFup, Bottoms_ABCD' + radi + '_WeightCSVLFdown, Bottoms_ABCD' + radi + '_WeightCSVHFup, Bottoms_ABCD' + radi + '_WeightCSVHFdown, Bottoms_ABCD' + radi + '_WeightCSVHFStats1up, Bottoms_ABCD' + radi + '_WeightCSVHFStats1down, Bottoms_ABCD' + radi + '_WeightCSVLFStats1up, Bottoms_ABCD' + radi + '_WeightCSVLFStats1down, Bottoms_ABCD' + radi + '_WeightCSVHFStats2up, Bottoms_ABCD' + radi + '_WeightCSVHFStats2down, Bottoms_ABCD' + radi + '_WeightCSVLFStats2up, Bottoms_ABCD' + radi + '_WeightCSVLFStats2down, Bottoms_ABCD' + radi + '_WeightCSVCErr1up, Bottoms_ABCD' + radi + '_WeightCSVCErr1down, Bottoms_ABCD' + radi + '_WeightCSVCErr2up, Bottoms_ABCD' + radi + '_WeightCSVCErr2down, Topsubjets_ABCD' + radi + '_WeightCSVnominal, Topsubjets_ABCD' + radi + '_WeightCSVLFup, Topsubjets_ABCD' + radi + '_WeightCSVLFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFup, Topsubjets_ABCD' + radi + '_WeightCSVHFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVCErr1up, Topsubjets_ABCD' + radi + '_WeightCSVCErr1down, Topsubjets_ABCD' + radi + '_WeightCSVCErr2up, Topsubjets_ABCD' + radi + '_WeightCSVCErr2down  ))[11]',
+                        '' + ABCDversion + '_WeightCSVLFStats2Down:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ',Bottoms_ABCD' + radi + '_WeightCSVnominal, Bottoms_ABCD' + radi + '_WeightCSVLFup, Bottoms_ABCD' + radi + '_WeightCSVLFdown, Bottoms_ABCD' + radi + '_WeightCSVHFup, Bottoms_ABCD' + radi + '_WeightCSVHFdown, Bottoms_ABCD' + radi + '_WeightCSVHFStats1up, Bottoms_ABCD' + radi + '_WeightCSVHFStats1down, Bottoms_ABCD' + radi + '_WeightCSVLFStats1up, Bottoms_ABCD' + radi + '_WeightCSVLFStats1down, Bottoms_ABCD' + radi + '_WeightCSVHFStats2up, Bottoms_ABCD' + radi + '_WeightCSVHFStats2down, Bottoms_ABCD' + radi + '_WeightCSVLFStats2up, Bottoms_ABCD' + radi + '_WeightCSVLFStats2down, Bottoms_ABCD' + radi + '_WeightCSVCErr1up, Bottoms_ABCD' + radi + '_WeightCSVCErr1down, Bottoms_ABCD' + radi + '_WeightCSVCErr2up, Bottoms_ABCD' + radi + '_WeightCSVCErr2down, Topsubjets_ABCD' + radi + '_WeightCSVnominal, Topsubjets_ABCD' + radi + '_WeightCSVLFup, Topsubjets_ABCD' + radi + '_WeightCSVLFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFup, Topsubjets_ABCD' + radi + '_WeightCSVHFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVCErr1up, Topsubjets_ABCD' + radi + '_WeightCSVCErr1down, Topsubjets_ABCD' + radi + '_WeightCSVCErr2up, Topsubjets_ABCD' + radi + '_WeightCSVCErr2down  ))[12]',
+                        '' + ABCDversion + '_WeightCSVCErr1Up:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ',Bottoms_ABCD' + radi + '_WeightCSVnominal, Bottoms_ABCD' + radi + '_WeightCSVLFup, Bottoms_ABCD' + radi + '_WeightCSVLFdown, Bottoms_ABCD' + radi + '_WeightCSVHFup, Bottoms_ABCD' + radi + '_WeightCSVHFdown, Bottoms_ABCD' + radi + '_WeightCSVHFStats1up, Bottoms_ABCD' + radi + '_WeightCSVHFStats1down, Bottoms_ABCD' + radi + '_WeightCSVLFStats1up, Bottoms_ABCD' + radi + '_WeightCSVLFStats1down, Bottoms_ABCD' + radi + '_WeightCSVHFStats2up, Bottoms_ABCD' + radi + '_WeightCSVHFStats2down, Bottoms_ABCD' + radi + '_WeightCSVLFStats2up, Bottoms_ABCD' + radi + '_WeightCSVLFStats2down, Bottoms_ABCD' + radi + '_WeightCSVCErr1up, Bottoms_ABCD' + radi + '_WeightCSVCErr1down, Bottoms_ABCD' + radi + '_WeightCSVCErr2up, Bottoms_ABCD' + radi + '_WeightCSVCErr2down, Topsubjets_ABCD' + radi + '_WeightCSVnominal, Topsubjets_ABCD' + radi + '_WeightCSVLFup, Topsubjets_ABCD' + radi + '_WeightCSVLFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFup, Topsubjets_ABCD' + radi + '_WeightCSVHFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVCErr1up, Topsubjets_ABCD' + radi + '_WeightCSVCErr1down, Topsubjets_ABCD' + radi + '_WeightCSVCErr2up, Topsubjets_ABCD' + radi + '_WeightCSVCErr2down  ))[13]',
+                        '' + ABCDversion + '_WeightCSVCErr1Down:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ',Bottoms_ABCD' + radi + '_WeightCSVnominal, Bottoms_ABCD' + radi + '_WeightCSVLFup, Bottoms_ABCD' + radi + '_WeightCSVLFdown, Bottoms_ABCD' + radi + '_WeightCSVHFup, Bottoms_ABCD' + radi + '_WeightCSVHFdown, Bottoms_ABCD' + radi + '_WeightCSVHFStats1up, Bottoms_ABCD' + radi + '_WeightCSVHFStats1down, Bottoms_ABCD' + radi + '_WeightCSVLFStats1up, Bottoms_ABCD' + radi + '_WeightCSVLFStats1down, Bottoms_ABCD' + radi + '_WeightCSVHFStats2up, Bottoms_ABCD' + radi + '_WeightCSVHFStats2down, Bottoms_ABCD' + radi + '_WeightCSVLFStats2up, Bottoms_ABCD' + radi + '_WeightCSVLFStats2down, Bottoms_ABCD' + radi + '_WeightCSVCErr1up, Bottoms_ABCD' + radi + '_WeightCSVCErr1down, Bottoms_ABCD' + radi + '_WeightCSVCErr2up, Bottoms_ABCD' + radi + '_WeightCSVCErr2down, Topsubjets_ABCD' + radi + '_WeightCSVnominal, Topsubjets_ABCD' + radi + '_WeightCSVLFup, Topsubjets_ABCD' + radi + '_WeightCSVLFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFup, Topsubjets_ABCD' + radi + '_WeightCSVHFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVCErr1up, Topsubjets_ABCD' + radi + '_WeightCSVCErr1down, Topsubjets_ABCD' + radi + '_WeightCSVCErr2up, Topsubjets_ABCD' + radi + '_WeightCSVCErr2down  ))[14]',
+                        '' + ABCDversion + '_WeightCSVCErr2Up:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ',Bottoms_ABCD' + radi + '_WeightCSVnominal, Bottoms_ABCD' + radi + '_WeightCSVLFup, Bottoms_ABCD' + radi + '_WeightCSVLFdown, Bottoms_ABCD' + radi + '_WeightCSVHFup, Bottoms_ABCD' + radi + '_WeightCSVHFdown, Bottoms_ABCD' + radi + '_WeightCSVHFStats1up, Bottoms_ABCD' + radi + '_WeightCSVHFStats1down, Bottoms_ABCD' + radi + '_WeightCSVLFStats1up, Bottoms_ABCD' + radi + '_WeightCSVLFStats1down, Bottoms_ABCD' + radi + '_WeightCSVHFStats2up, Bottoms_ABCD' + radi + '_WeightCSVHFStats2down, Bottoms_ABCD' + radi + '_WeightCSVLFStats2up, Bottoms_ABCD' + radi + '_WeightCSVLFStats2down, Bottoms_ABCD' + radi + '_WeightCSVCErr1up, Bottoms_ABCD' + radi + '_WeightCSVCErr1down, Bottoms_ABCD' + radi + '_WeightCSVCErr2up, Bottoms_ABCD' + radi + '_WeightCSVCErr2down, Topsubjets_ABCD' + radi + '_WeightCSVnominal, Topsubjets_ABCD' + radi + '_WeightCSVLFup, Topsubjets_ABCD' + radi + '_WeightCSVLFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFup, Topsubjets_ABCD' + radi + '_WeightCSVHFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVCErr1up, Topsubjets_ABCD' + radi + '_WeightCSVCErr1down, Topsubjets_ABCD' + radi + '_WeightCSVCErr2up, Topsubjets_ABCD' + radi + '_WeightCSVCErr2down  ))[15]',
+                        '' + ABCDversion + '_WeightCSVCErr2Down:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ',Bottoms_ABCD' + radi + '_WeightCSVnominal, Bottoms_ABCD' + radi + '_WeightCSVLFup, Bottoms_ABCD' + radi + '_WeightCSVLFdown, Bottoms_ABCD' + radi + '_WeightCSVHFup, Bottoms_ABCD' + radi + '_WeightCSVHFdown, Bottoms_ABCD' + radi + '_WeightCSVHFStats1up, Bottoms_ABCD' + radi + '_WeightCSVHFStats1down, Bottoms_ABCD' + radi + '_WeightCSVLFStats1up, Bottoms_ABCD' + radi + '_WeightCSVLFStats1down, Bottoms_ABCD' + radi + '_WeightCSVHFStats2up, Bottoms_ABCD' + radi + '_WeightCSVHFStats2down, Bottoms_ABCD' + radi + '_WeightCSVLFStats2up, Bottoms_ABCD' + radi + '_WeightCSVLFStats2down, Bottoms_ABCD' + radi + '_WeightCSVCErr1up, Bottoms_ABCD' + radi + '_WeightCSVCErr1down, Bottoms_ABCD' + radi + '_WeightCSVCErr2up, Bottoms_ABCD' + radi + '_WeightCSVCErr2down, Topsubjets_ABCD' + radi + '_WeightCSVnominal, Topsubjets_ABCD' + radi + '_WeightCSVLFup, Topsubjets_ABCD' + radi + '_WeightCSVLFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFup, Topsubjets_ABCD' + radi + '_WeightCSVHFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVCErr1up, Topsubjets_ABCD' + radi + '_WeightCSVCErr1down, Topsubjets_ABCD' + radi + '_WeightCSVCErr2up, Topsubjets_ABCD' + radi + '_WeightCSVCErr2down  ))[16]',
                         
-                        #'ABCD1_Wtagweightnominal:=(Wtag_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[0]',
-                        #'ABCD1_WtagweightUp:=(Wtag_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[1]',
-                        #'ABCD1_WtagweightDown:=(Wtag_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[2]',
-                        #'ABCD1_toptagweightnominal:=(toptag_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[0]',
-                        #'ABCD1_toptagweightUp:=(toptag_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[1]',
-                        #'ABCD1_toptagweightDown:=(toptag_weights_ABCD1(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[2]',
+                        #'ABCD1_Wtagweightnominal:=(Wtag_weights_ABCD' + radi + '1(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + '))[0]',
+                        #'ABCD1_WtagweightUp:=(Wtag_weights_ABCD' + radi + '1(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + '))[1]',
+                        #'ABCD1_WtagweightDown:=(Wtag_weights_ABCD' + radi + '1(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + '))[2]',
+                        #'ABCD1_toptagweightnominal:=(toptag_weights_ABCD' + radi + '1(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + '))[0]',
+                        #'ABCD1_toptagweightUp:=(toptag_weights_ABCD' + radi + '1(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + '))[1]',
+                        #'ABCD1_toptagweightDown:=(toptag_weights_ABCD' + radi + '1(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + '))[2]',
  
-                        #'ABCD2_Wtagweightnominal:=(Wtag_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[0]',
-                        #'ABCD2_WtagweightUp:=(Wtag_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[1]',
-                        #'ABCD2_WtagweightDown:=(Wtag_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[2]',
-                        #'ABCD2_toptagweightnominal:=(toptag_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[0]',
-                        #'ABCD2_toptagweightUp:=(toptag_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[1]',
-                        #'ABCD2_toptagweightDown:=(toptag_weights_ABCD2(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[2]',
+                        #'ABCD2_Wtagweightnominal:=(Wtag_weights_ABCD' + radi + '2(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + '))[0]',
+                        #'ABCD2_WtagweightUp:=(Wtag_weights_ABCD' + radi + '2(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + '))[1]',
+                        #'ABCD2_WtagweightDown:=(Wtag_weights_ABCD' + radi + '2(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + '))[2]',
+                        #'ABCD2_toptagweightnominal:=(toptag_weights_ABCD' + radi + '2(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + '))[0]',
+                        #'ABCD2_toptagweightUp:=(toptag_weights_ABCD' + radi + '2(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + '))[1]',
+                        #'ABCD2_toptagweightDown:=(toptag_weights_ABCD' + radi + '2(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + '))[2]',
                         
-                        ABCDversion + '_Wtagweightnominal:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[0]',
-                        ABCDversion + '_WtagweightUp:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[1]',
-                        ABCDversion + '_WtagweightDown:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[2]',
-                        ABCDversion + '_toptagweightnominal:=(toptag_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[0]',
-                        ABCDversion + '_toptagweightUp:=(toptag_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[1]',
-                        ABCDversion + '_toptagweightDown:=(toptag_weights_' + ABCDversion + '(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD))[2]',
+                        ABCDversion + '_Wtag_tag_t21_weightnominal:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[0]',
+                        ABCDversion + '_Wtag_tag_t21_weightUp:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[1]',
+                        ABCDversion + '_Wtag_tag_t21_weightDown:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[2]',
+                        
+                        ABCDversion + '_Wtag_tag_t21anti_weightnominal:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[3]',
+                        ABCDversion + '_Wtag_tag_t21anti_weightUp:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[4]',
+                        ABCDversion + '_Wtag_tag_t21anti_weightDown:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[5]',
+                                                
+                        ABCDversion + '_Wtag_mistag_t21_weightnominal:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[6]',
+                        ABCDversion + '_Wtag_mistag_t21_weightUp:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[7]',
+                        ABCDversion + '_Wtag_mistag_t21_weightDown:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[8]',
+                                                
+                        ABCDversion + '_Wtag_mistag_t21anti_weightnominal:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[9]',
+                        ABCDversion + '_Wtag_mistag_t21anti_weightUp:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[10]',
+                        ABCDversion + '_Wtag_mistag_t21anti_weightDown:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[11]',
+                        
+                        
+                        ABCDversion + '_toptagweightnominal:=(toptag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Tops_ABCD' + radi + '_real, Tops_ABCD' + radi + '_matcheddecays))[0]',
+                        ABCDversion + '_toptagweightUp:=(toptag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Tops_ABCD' + radi + '_real, Tops_ABCD' + radi + '_matcheddecays))[1]',
+                        ABCDversion + '_toptagweightDown:=(toptag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Tops_ABCD' + radi + '_real, Tops_ABCD' + radi + '_matcheddecays))[2]',
+                        ABCDversion + '_topmisstagweightnominal:=(toptag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Tops_ABCD' + radi + '_real, Tops_ABCD' + radi + '_matcheddecays))[3]',
+                        ABCDversion + '_topmisstagweightUp:=(toptag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Tops_ABCD' + radi + '_real, Tops_ABCD' + radi + '_matcheddecays))[4]',
+                        ABCDversion + '_topmisstagweightDown:=(toptag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Tops_ABCD' + radi + '_real, Tops_ABCD' + radi + '_matcheddecays))[5]',
+  
+ 
  
  
                         'MCSF_RenFac_envelopeUp:=(RenFacEnv(Weight_scale_variation_muR2p0_muF2p0, Weight_scale_variation_muR0p5_muF0p5, Weight_scale_variation_muR1p0_muF2p0 , Weight_scale_variation_muR1p0_muF0p5, Weight_scale_variation_muR2p0_muF1p0, Weight_scale_variation_muR0p5_muF1p0))[0]',
@@ -1696,14 +1241,12 @@ additionalvariables=[
                         'PDF_RMSUp:=PDF_RMS('+ stringforPDFs1 +')[1]',
                         'PDF_RMSDown:=PDF_RMS('+ stringforPDFs1 +')[2]',
                         
-                        #'MCSF_Weight_ABCD1:=ABCD1_toptagweightnominal*ABCD1_Wtagweightnominal*ABCD1_WeightCSVnominal*Weight_pu69p2*PDF_RMSMean',
+                        #'MCSF_Weight_ABCD' + radi + '1:=ABCD1_toptagweightnominal*ABCD1_Wtagweightnominal*ABCD1_WeightCSVnominal*Weight_pu69p2*PDF_RMSMean',
                         #'MCSF_Weight_ABCD2:=ABCD2_toptagweightnominal*ABCD2_Wtagweightnominal*ABCD2_WeightCSVnominal*Weight_pu69p2*PDF_RMSMean',
-                        'MCSF_Weight_' + ABCDversion + ':=' + ABCDversion + '_toptagweightnominal*' + ABCDversion + '_Wtagweightnominal*' + ABCDversion + '_WeightCSVnominal*Weight_pu69p2*PDF_RMSMean',
+                        'MCSF_Weight_' + ABCDversion + ':=' + ABCDversion + '_toptagweightnominal*' + ABCDversion + '_topmisstagweightnominal*' + ABCDversion + '_WeightCSVnominal*Weight_pu69p2*PDF_RMSMean*' + ABCDversion + '_Wtag_tag_t21_weightnominal*' + ABCDversion + '_Wtag_tag_t21anti_weightnominal*' + ABCDversion + '_Wtag_mistag_t21_weightnominal*' + ABCDversion + '_Wtag_mistag_t21anti_weightnominal' ,
                         
-                        #'internalCSVweight:=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,internalSystName,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)',
-                        #'internalCSVweight_CSVHFUp:=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,11,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight',
-                        #'internalCSVweight_CSVHFDown:=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,12,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight',
-                        #'internalCSVweight_CSVLFUp:=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,9,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight',
-                        #'internalCSVweight_CSVLFDown:=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,10,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight',                        
+                        
+                        'triggered:=triggerresult(Triggered_HLT_PFHT800_vX, Triggered_HLT_PFHT900_vX, Triggered_HLT_PFJet450_vX, Prescale_HLT_PFHT800_vX, Prescale_HLT_PFHT900_vX, Prescale_HLT_PFJet450_vX)',
 
 ]
+

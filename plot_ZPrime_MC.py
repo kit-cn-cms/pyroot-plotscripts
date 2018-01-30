@@ -32,11 +32,11 @@ name='Zprime_MC_'+ABCDeventhandling+'_'+WPs
 ## book plots
 #plotlabel="Wbt, #geq 3 jets, #geq 1 b-tags"
 #plotlabelboosted="#splitline{Wbt, #geq 3 jets, #geq 1 b-tags}{#geq 1 AK8 jet p_{T} > 400 GeV, #geq 1 AK8 jet p_{T} > 200 GeV, #geq 1 AK4 jet p_{T} > 100 GeV}"
-##plotselection="N_packedPatJetsAK8PFCHSSoftDrop>=2&&packedPatJetsAK8PFCHSSoftDrop_Pt[0]>400&&packedPatJetsAK8PFCHSSoftDrop_Pt[1]>200&&Evt_HT>850"
-#plotselection1="Evt_HT>850"
-#plotselection3="Evt_HT>1000"
+##plotselection="N_packedPatJetsAK8PFCHSSoftDrop>=2&&packedPatJetsAK8PFCHSSoftDrop_Pt[0]>400&&packedPatJetsAK8PFCHSSoftDrop_Pt[1]>200&&Evt_HT_Jets>850"
+#plotselection1="Evt_HT_Jets>850"
+#plotselection3="Evt_HT_Jets>1000"
 ##plotselection1=""
-#plotselection2="(N_packedPatJetsAK8PFCHSSoftDrop>=2 && packedPatJetsAK8PFCHSSoftDrop_Pt[0]>400 && packedPatJetsAK8PFCHSSoftDrop_Pt[1]>200 && Evt_HT>850) "
+#plotselection2="(N_packedPatJetsAK8PFCHSSoftDrop>=2 && packedPatJetsAK8PFCHSSoftDrop_Pt[0]>400 && packedPatJetsAK8PFCHSSoftDrop_Pt[1]>200 && Evt_HT_Jets>850) "
 
 
 
@@ -277,7 +277,7 @@ plots=[
         #Plot(ROOT.TH1F("Jet_3_Pt" ,"p_{T}(AK4_3) in GeV",50,0,1000),"Jet_Pt[2]",plotselection1+"&&Jet_Pt[2]>0",""),
         #Plot(ROOT.TH1F("Jet_4_Pt" ,"p_{T}(AK4_4) in GeV",50,0,1000),"Jet_Pt[3]",plotselection1+"&&Jet_Pt[3]>0",""),
         
-        #Plot(ROOT.TH1F("Evt_HT" ,"Evt_HT",60,0,3000),"Evt_HT",plotselection3+"",""),
+        #Plot(ROOT.TH1F("Evt_HT_Jets" ,"Evt_HT_Jets",60,0,3000),"Evt_HT_Jets",plotselection3+"",""),
         #Plot(ROOT.TH1F("Evt_HT_Jets" ,"Evt_HT_Jets",60,0,3000),"Evt_HT_Jets",plotselection3+"",""),
         
         #Plot(ROOT.TH1F("Jet_GenJet_Pt" ,"Jet_GenJet_Pt",40,0,2000),"Jet_GenJet_Pt",plotselection1+"",""),
