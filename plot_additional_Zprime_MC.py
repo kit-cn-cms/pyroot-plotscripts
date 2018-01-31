@@ -732,19 +732,6 @@ std::vector<float> Wtag_weights_""" + ABCDversion + """(float const* Zprimes_ABC
     float Wtag_tag_t21_up=1.0;
     float Wtag_tag_t21_down=1.0;
 
-    float Wtag_tag_t21anti_nominal=1.0;
-    float Wtag_tag_t21anti_up=1.0;
-    float Wtag_tag_t21anti_down=1.0;
-    
-    float Wtag_mistag_t21_nominal=1.0;
-    float Wtag_mistag_t21_up=1.0;
-    float Wtag_mistag_t21_down=1.0;
-    
-    float Wtag_mistag_t21anti_nominal=1.0;
-    float Wtag_mistag_t21anti_up=1.0;
-    float Wtag_mistag_t21anti_down=1.0;
-
-
     
     float SF_W_tau21_MSD=""" + MCSF_W_t21_MSD + """;
     float SF_W_tau21_MSD_up=""" + MCSF_W_t21_MSD_up + """;
@@ -775,17 +762,15 @@ std::vector<float> Wtag_weights_""" + ABCDversion + """(float const* Zprimes_ABC
 
     for (int i=0; i<N_Zprime_ABCD""" + radi + """; i++){
         if ("""+ generalselection_i + """ ){
-            if(Ws_ABCD""" + radi + """_real[i]==1){
-            //if(Ws_ABCD""" + radi + """_real[i]==1 && Ws_ABCD""" + radi + """_matcheddecays[i]>1){
                 if(""" + plotselection_W_tau21_i + """ && """ + plotselection_W_MSD_i + """){
                     Wtag_tag_t21_nominal *= SF_W_tau21_MSD;
                     Wtag_tag_t21_up *= (SF_W_tau21_MSD + SF_W_tau21_MSD_up);
                     Wtag_tag_t21_down *= (SF_W_tau21_MSD - SF_W_tau21_MSD_down);
                 }
                 if(""" + plotselection_W_tau21_anti_i + """ && """ + plotselection_W_MSD_i + """){
-                    Wtag_tag_t21anti_nominal *= SF_W_tau21anti_MSD;
-                    Wtag_tag_t21anti_up *= (SF_W_tau21anti_MSD + SF_W_tau21anti_MSD_up);
-                    Wtag_tag_t21anti_down *= (SF_W_tau21anti_MSD - SF_W_tau21anti_MSD_down);
+                    Wtag_tag_t21_nominal *= SF_W_tau21anti_MSD;
+                    Wtag_tag_t21_up *= (SF_W_tau21anti_MSD + SF_W_tau21anti_MSD_down);
+                    Wtag_tag_t21_down *= (SF_W_tau21anti_MSD - SF_W_tau21anti_MSD_up);
                 }
                 if(""" + plotselection_W_tau21_i + """ && """ + plotselection_W_MSD_anti_i + """){
                     Wtag_tag_t21_nominal *= SF_W_tau21_MSDanti;
@@ -793,33 +778,11 @@ std::vector<float> Wtag_weights_""" + ABCDversion + """(float const* Zprimes_ABC
                     Wtag_tag_t21_down *= (SF_W_tau21_MSDanti - SF_W_tau21_MSDanti_down);
                 }
                 if(""" + plotselection_W_tau21_anti_i + """ && """ + plotselection_W_MSD_i + """){
-                    Wtag_tag_t21anti_nominal *= SF_W_tau21anti_MSDanti;
-                    Wtag_tag_t21anti_up *= (SF_W_tau21anti_MSDanti + SF_W_tau21anti_MSDanti_up);
-                    Wtag_tag_t21anti_down *= (SF_W_tau21anti_MSDanti - SF_W_tau21anti_MSDanti_down);
+                    Wtag_tag_t21_nominal *= SF_W_tau21anti_MSDanti;
+                    Wtag_tag_t21_up *= (SF_W_tau21anti_MSDanti + SF_W_tau21anti_MSDanti_down);
+                    Wtag_tag_t21_down *= (SF_W_tau21anti_MSDanti - SF_W_tau21anti_MSDanti_up);
                 }
-            }
-            else{
-                if(""" + plotselection_W_tau21_i + """ && """ + plotselection_W_MSD_i + """){
-                    Wtag_mistag_t21_nominal *= SF_W_tau21_MSD;
-                    Wtag_mistag_t21_up *= (SF_W_tau21_MSD + SF_W_tau21_MSD_up);
-                    Wtag_mistag_t21_down *= (SF_W_tau21_MSD - SF_W_tau21_MSD_down);
-                }
-                if(""" + plotselection_W_tau21_anti_i + """ && """ + plotselection_W_MSD_i + """){
-                    Wtag_mistag_t21anti_nominal *= SF_W_tau21anti_MSD;
-                    Wtag_mistag_t21anti_up *= (SF_W_tau21anti_MSD + SF_W_tau21anti_MSD_up);
-                    Wtag_mistag_t21anti_down *= (SF_W_tau21anti_MSD - SF_W_tau21anti_MSD_down);
-                }
-                if(""" + plotselection_W_tau21_i + """ && """ + plotselection_W_MSD_anti_i + """){
-                    Wtag_mistag_t21_nominal *= SF_W_tau21_MSDanti;
-                    Wtag_mistag_t21_up *= (SF_W_tau21_MSDanti + SF_W_tau21_MSDanti_up);
-                    Wtag_mistag_t21_down *= (SF_W_tau21_MSDanti - SF_W_tau21_MSDanti_down);
-                }
-                if(""" + plotselection_W_tau21_anti_i + """ && """ + plotselection_W_MSD_i + """){
-                    Wtag_mistag_t21anti_nominal *= SF_W_tau21anti_MSDanti;
-                    Wtag_mistag_t21anti_up *= (SF_W_tau21anti_MSDanti + SF_W_tau21anti_MSDanti_up);
-                    Wtag_mistag_t21anti_down *= (SF_W_tau21anti_MSDanti - SF_W_tau21anti_MSDanti_down);
-                }   
-            }
+
             break;
         }
     }
@@ -827,15 +790,6 @@ std::vector<float> Wtag_weights_""" + ABCDversion + """(float const* Zprimes_ABC
     weights.push_back(Wtag_tag_t21_nominal);
     weights.push_back(Wtag_tag_t21_up);
     weights.push_back(Wtag_tag_t21_down);
-    weights.push_back(Wtag_tag_t21anti_nominal);
-    weights.push_back(Wtag_tag_t21anti_up);
-    weights.push_back(Wtag_tag_t21anti_down);
-    weights.push_back(Wtag_mistag_t21_nominal);
-    weights.push_back(Wtag_mistag_t21_up);
-    weights.push_back(Wtag_mistag_t21_down);
-    weights.push_back(Wtag_mistag_t21anti_nominal);
-    weights.push_back(Wtag_mistag_t21anti_up);
-    weights.push_back(Wtag_mistag_t21anti_down); 
     
     
     return weights;
@@ -1211,17 +1165,17 @@ additionalvariables=[
                         ABCDversion + '_Wtag_tag_t21_weightUp:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[1]',
                         ABCDversion + '_Wtag_tag_t21_weightDown:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[2]',
                         
-                        ABCDversion + '_Wtag_tag_t21anti_weightnominal:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[3]',
-                        ABCDversion + '_Wtag_tag_t21anti_weightUp:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[4]',
-                        ABCDversion + '_Wtag_tag_t21anti_weightDown:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[5]',
+                        #ABCDversion + '_Wtag_tag_t21anti_weightnominal:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[3]',
+                        #ABCDversion + '_Wtag_tag_t21anti_weightUp:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[4]',
+                        #ABCDversion + '_Wtag_tag_t21anti_weightDown:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[5]',
                                                 
-                        ABCDversion + '_Wtag_mistag_t21_weightnominal:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[6]',
-                        ABCDversion + '_Wtag_mistag_t21_weightUp:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[7]',
-                        ABCDversion + '_Wtag_mistag_t21_weightDown:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[8]',
+                        #ABCDversion + '_Wtag_mistag_t21_weightnominal:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[6]',
+                        #ABCDversion + '_Wtag_mistag_t21_weightUp:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[7]',
+                        #ABCDversion + '_Wtag_mistag_t21_weightDown:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[8]',
                                                 
-                        ABCDversion + '_Wtag_mistag_t21anti_weightnominal:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[9]',
-                        ABCDversion + '_Wtag_mistag_t21anti_weightUp:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[10]',
-                        ABCDversion + '_Wtag_mistag_t21anti_weightDown:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[11]',
+                        #ABCDversion + '_Wtag_mistag_t21anti_weightnominal:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[9]',
+                        #ABCDversion + '_Wtag_mistag_t21anti_weightUp:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[10]',
+                        #ABCDversion + '_Wtag_mistag_t21anti_weightDown:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[11]',
                         
                         
                         ABCDversion + '_toptagweightnominal:=(toptag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Tops_ABCD' + radi + '_real, Tops_ABCD' + radi + '_matcheddecays))[0]',
