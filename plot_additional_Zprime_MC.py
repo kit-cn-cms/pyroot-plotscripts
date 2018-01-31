@@ -728,9 +728,9 @@ std::vector<float> toptag_weights_""" + ABCDversion + """(float const* Zprimes_A
 std::vector<float> Wtag_weights_""" + ABCDversion + """(float const* Zprimes_ABCD""" + radi + """_M, float const* Tprimes_ABCD""" + radi + """_M, float const* Tops_ABCD""" + radi + """_maxsubjetCSVv2, float const* Ws_ABCD""" + radi + """_MSD, float const* Ws_ABCD""" + radi + """_corrL2L3, float const* Tops_ABCD""" + radi + """_MSD, float const* Tops_ABCD""" + radi + """_corrL2L3, float const* Tops_ABCD""" + radi + """_t32, float const* Bottoms_ABCD""" + radi + """_CSV, float const* Ws_ABCD""" + radi + """_t21, float const* Ws_ABCD""" + radi + """_Pt, float const* Tops_ABCD""" + radi + """_Pt, float const* Bottoms_ABCD""" + radi + """_Pt, float Evt_HT_Jets, int N_Zprime_ABCD""" + radi + """, float N_Jets, float N_packedPatJetsAK8PF""" +  radi + """, float const* Ws_ABCD""" + radi + """_real, float const* Ws_ABCD""" + radi + """_matcheddecays){
     std::vector<float> weights;
     
-    float Wtag_tag_t21_nominal=1.0;
-    float Wtag_tag_t21_up=1.0;
-    float Wtag_tag_t21_down=1.0;
+    float Wtag_tag_nominal=1.0;
+    float Wtag_tag_up=1.0;
+    float Wtag_tag_down=1.0;
 
     
     float SF_W_tau21_MSD=""" + MCSF_W_t21_MSD + """;
@@ -763,33 +763,33 @@ std::vector<float> Wtag_weights_""" + ABCDversion + """(float const* Zprimes_ABC
     for (int i=0; i<N_Zprime_ABCD""" + radi + """; i++){
         if ("""+ generalselection_i + """ ){
                 if(""" + plotselection_W_tau21_i + """ && """ + plotselection_W_MSD_i + """){
-                    Wtag_tag_t21_nominal *= SF_W_tau21_MSD;
-                    Wtag_tag_t21_up *= (SF_W_tau21_MSD + SF_W_tau21_MSD_up);
-                    Wtag_tag_t21_down *= (SF_W_tau21_MSD - SF_W_tau21_MSD_down);
+                    Wtag_tag_nominal *= SF_W_tau21_MSD;
+                    Wtag_tag_up *= (SF_W_tau21_MSD + SF_W_tau21_MSD_up);
+                    Wtag_tag_down *= (SF_W_tau21_MSD - SF_W_tau21_MSD_down);
                 }
                 if(""" + plotselection_W_tau21_anti_i + """ && """ + plotselection_W_MSD_i + """){
-                    Wtag_tag_t21_nominal *= SF_W_tau21anti_MSD;
-                    Wtag_tag_t21_up *= (SF_W_tau21anti_MSD + SF_W_tau21anti_MSD_down);
-                    Wtag_tag_t21_down *= (SF_W_tau21anti_MSD - SF_W_tau21anti_MSD_up);
+                    Wtag_tag_nominal *= SF_W_tau21anti_MSD;
+                    Wtag_tag_up *= (SF_W_tau21anti_MSD + SF_W_tau21anti_MSD_down);
+                    Wtag_tag_down *= (SF_W_tau21anti_MSD - SF_W_tau21anti_MSD_up);
                 }
                 if(""" + plotselection_W_tau21_i + """ && """ + plotselection_W_MSD_anti_i + """){
-                    Wtag_tag_t21_nominal *= SF_W_tau21_MSDanti;
-                    Wtag_tag_t21_up *= (SF_W_tau21_MSDanti + SF_W_tau21_MSDanti_up);
-                    Wtag_tag_t21_down *= (SF_W_tau21_MSDanti - SF_W_tau21_MSDanti_down);
+                    Wtag_tag_nominal *= SF_W_tau21_MSDanti;
+                    Wtag_tag_up *= (SF_W_tau21_MSDanti + SF_W_tau21_MSDanti_up);
+                    Wtag_tag_down *= (SF_W_tau21_MSDanti - SF_W_tau21_MSDanti_down);
                 }
                 if(""" + plotselection_W_tau21_anti_i + """ && """ + plotselection_W_MSD_i + """){
-                    Wtag_tag_t21_nominal *= SF_W_tau21anti_MSDanti;
-                    Wtag_tag_t21_up *= (SF_W_tau21anti_MSDanti + SF_W_tau21anti_MSDanti_down);
-                    Wtag_tag_t21_down *= (SF_W_tau21anti_MSDanti - SF_W_tau21anti_MSDanti_up);
+                    Wtag_tag_nominal *= SF_W_tau21anti_MSDanti;
+                    Wtag_tag_up *= (SF_W_tau21anti_MSDanti + SF_W_tau21anti_MSDanti_down);
+                    Wtag_tag_down *= (SF_W_tau21anti_MSDanti - SF_W_tau21anti_MSDanti_up);
                 }
 
             break;
         }
     }
     
-    weights.push_back(Wtag_tag_t21_nominal);
-    weights.push_back(Wtag_tag_t21_up);
-    weights.push_back(Wtag_tag_t21_down);
+    weights.push_back(Wtag_tag_nominal);
+    weights.push_back(Wtag_tag_up);
+    weights.push_back(Wtag_tag_down);
     
     
     return weights;
@@ -1161,9 +1161,9 @@ additionalvariables=[
                         #'ABCD2_toptagweightUp:=(toptag_weights_ABCD' + radi + '2(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + '))[1]',
                         #'ABCD2_toptagweightDown:=(toptag_weights_ABCD' + radi + '2(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + '))[2]',
                         
-                        ABCDversion + '_Wtag_tag_t21_weightnominal:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[0]',
-                        ABCDversion + '_Wtag_tag_t21_weightUp:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[1]',
-                        ABCDversion + '_Wtag_tag_t21_weightDown:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[2]',
+                        ABCDversion + '_Wtag_tag_weightnominal:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[0]',
+                        ABCDversion + '_Wtag_tag_weightUp:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[1]',
+                        ABCDversion + '_Wtag_tag_weightDown:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[2]',
                         
                         #ABCDversion + '_Wtag_tag_t21anti_weightnominal:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[3]',
                         #ABCDversion + '_Wtag_tag_t21anti_weightUp:=(Wtag_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Ws_ABCD' + radi + '_real, Ws_ABCD' + radi + '_matcheddecays))[4]',
@@ -1197,7 +1197,7 @@ additionalvariables=[
                         
                         #'MCSF_Weight_ABCD' + radi + '1:=ABCD1_toptagweightnominal*ABCD1_Wtagweightnominal*ABCD1_WeightCSVnominal*Weight_pu69p2*PDF_RMSMean',
                         #'MCSF_Weight_ABCD2:=ABCD2_toptagweightnominal*ABCD2_Wtagweightnominal*ABCD2_WeightCSVnominal*Weight_pu69p2*PDF_RMSMean',
-                        'MCSF_Weight_' + ABCDversion + ':=' + ABCDversion + '_toptagweightnominal*' + ABCDversion + '_topmisstagweightnominal*' + ABCDversion + '_WeightCSVnominal*Weight_pu69p2*PDF_RMSMean*' + ABCDversion + '_Wtag_tag_t21_weightnominal*' + ABCDversion + '_Wtag_tag_t21anti_weightnominal*' + ABCDversion + '_Wtag_mistag_t21_weightnominal*' + ABCDversion + '_Wtag_mistag_t21anti_weightnominal' ,
+                        'MCSF_Weight_' + ABCDversion + ':=' + ABCDversion + '_toptagweightnominal*' + ABCDversion + '_topmisstagweightnominal*' + ABCDversion + '_WeightCSVnominal*Weight_pu69p2*PDF_RMSMean*' + ABCDversion + '_Wtag_tag_weightnominal',
                         
                         
                         'triggered:=triggerresult(Triggered_HLT_PFHT800_vX, Triggered_HLT_PFHT900_vX, Triggered_HLT_PFJet450_vX, Prescale_HLT_PFHT800_vX, Prescale_HLT_PFHT900_vX, Prescale_HLT_PFJet450_vX)',
