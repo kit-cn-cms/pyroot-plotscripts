@@ -68,18 +68,18 @@ else:
     #plotselection_EvtHT_0="Evt_HT_Jets>(0.75*Zprimes_ABCD" +  radi + "_M[0]) && Evt_HT_Jets<(1.25*Zprimes_ABCD" +  radi + "_M[0])"
 
 if not MSDgap:
-	plotselection2=plotselection1 + " && (40 < Ws_ABCD"+radi+"_MSD  &&   Ws_ABCD"+radi+"_MSD < 130) " + " && (40 < Tops_ABCD"+radi+"_MSD * Tops_ABCD"+radi+"_corrL2L3 &&   Tops_ABCD"+radi+"_MSD * Tops_ABCD"+radi+"_corrL2L3< 300) "
-	plotselection2_i=plotselection1_i + " && (40 < Ws_ABCD"+radi+"_MSD[i]*Ws_ABCD"+radi+"_corrL2L3[i]  &&   Ws_ABCD"+radi+"_MSD[i]*Ws_ABCD"+radi+"_corrL2L3[i] < 130) " + " && (40 < Tops_ABCD"+radi+"_MSD[i] * Tops_ABCD"+radi+"_corrL2L3[i] &&   Tops_ABCD"+radi+"_MSD[i] * Tops_ABCD"+radi+"_corrL2L3[i]< 300) "
-	plotselection2_0=plotselection1_0 + " && (40 < Ws_ABCD"+radi+"_MSD[0]*Ws_ABCD"+radi+"_corrL2L3[0]  &&   Ws_ABCD"+radi+"_MSD[0]*Ws_ABCD"+radi+"_corrL2L3[0] < 130) " + " && (40 < Tops_ABCD"+radi+"_MSD[0] * Tops_ABCD"+radi+"_corrL2L3[0] &&   Tops_ABCD"+radi+"_MSD[0] * Tops_ABCD"+radi+"_corrL2L3[0]< 300) "
+	plotselection2=plotselection1 + " && (40 < Ws_ABCD"+radi+"_MSD  &&   Ws_ABCD"+radi+"_MSD < 130) " + " && (40 < Tops_ABCD"+radi+"_MSD  &&   Tops_ABCD"+radi+"_MSD < 300) "
+	plotselection2_i=plotselection1_i + " && (40 < Ws_ABCD"+radi+"_MSD[i]*Ws_ABCD"+radi+"_corrL2L3[i]  &&   Ws_ABCD"+radi+"_MSD[i]*Ws_ABCD"+radi+"_corrL2L3[i] < 130) " + " && (40 < Tops_ABCD"+radi+"_MSD[i] &&   Tops_ABCD"+radi+"_MSD[i]< 300) "
+	plotselection2_0=plotselection1_0 + " && (40 < Ws_ABCD"+radi+"_MSD[0]*Ws_ABCD"+radi+"_corrL2L3[0]  &&   Ws_ABCD"+radi+"_MSD[0]*Ws_ABCD"+radi+"_corrL2L3[0] < 130) " + " && (40 < Tops_ABCD"+radi+"_MSD[0] &&   Tops_ABCD"+radi+"_MSD[0]< 300) "
 else:
-	plotselection2=plotselection1 + " && (40 < Ws_ABCD"+radi+"_MSD  &&   Ws_ABCD"+radi+"_MSD < 500) " + " && (40 < Tops_ABCD"+radi+"_MSD * Tops_ABCD"+radi+"_corrL2L3 &&   Tops_ABCD"+radi+"_MSD * Tops_ABCD"+radi+"_corrL2L3< 500) "
-        plotselection2_i=plotselection1_i + " && (40 < Ws_ABCD"+radi+"_MSD[i]*Ws_ABCD"+radi+"_corrL2L3[i]  &&   Ws_ABCD"+radi+"_MSD[i]*Ws_ABCD"+radi+"_corrL2L3[i] < 500) " + " && (40 < Tops_ABCD"+radi+"_MSD[i] * Tops_ABCD"+radi+"_corrL2L3[i] &&   Tops_ABCD"+radi+"_MSD[i] * Tops_ABCD"+radi+"_corrL2L3[i]< 500) "
-        plotselection2_0=plotselection1_0 + " && (40 < Ws_ABCD"+radi+"_MSD[0]*Ws_ABCD"+radi+"_corrL2L3[0]  &&   Ws_ABCD"+radi+"_MSD[0]*Ws_ABCD"+radi+"_corrL2L3[0] < 500) " + " && (40 < Tops_ABCD"+radi+"_MSD[0] * Tops_ABCD"+radi+"_corrL2L3[0] &&   Tops_ABCD"+radi+"_MSD[0] * Tops_ABCD"+radi+"_corrL2L3[0]< 500) "
+	plotselection2=plotselection1 + " && (40 < Ws_ABCD"+radi+"_MSD  &&   Ws_ABCD"+radi+"_MSD < 500) " + " && (40 < Tops_ABCD"+radi+"_MSD  &&   Tops_ABCD"+radi+"_MSD < 500) "
+        plotselection2_i=plotselection1_i + " && (40 < Ws_ABCD"+radi+"_MSD[i]*Ws_ABCD"+radi+"_corrL2L3[i]  &&   Ws_ABCD"+radi+"_MSD[i]*Ws_ABCD"+radi+"_corrL2L3[i] < 500) " + " && (40 < Tops_ABCD"+radi+"_MSD[i] &&   Tops_ABCD"+radi+"_MSD[i]< 500) "
+        plotselection2_0=plotselection1_0 + " && (40 < Ws_ABCD"+radi+"_MSD[0]*Ws_ABCD"+radi+"_corrL2L3[0]  &&   Ws_ABCD"+radi+"_MSD[0]*Ws_ABCD"+radi+"_corrL2L3[0] < 500) " + " && (40 < Tops_ABCD"+radi+"_MSD[0] &&   Tops_ABCD"+radi+"_MSD[0]< 500) "
 
 if fullWMSD:
-        plotselection2=plotselection1 + " && (40 < Ws_ABCD"+radi+"_MSD  &&   Ws_ABCD"+radi+"_MSD < 500) " + " && (40 < Tops_ABCD"+radi+"_MSD * Tops_ABCD"+radi+"_corrL2L3 &&   Tops_ABCD"+radi+"_MSD * Tops_ABCD"+radi+"_corrL2L3< 500) "
-        plotselection2_i=plotselection1_i + " && (40 < Ws_ABCD"+radi+"_MSD[i]*Ws_ABCD"+radi+"_corrL2L3[i]  &&   Ws_ABCD"+radi+"_MSD[i]*Ws_ABCD"+radi+"_corrL2L3[i] < 500) " + " && (40 < Tops_ABCD"+radi+"_MSD[i] * Tops_ABCD"+radi+"_corrL2L3[i] &&   Tops_ABCD"+radi+"_MSD[i] * Tops_ABCD"+radi+"_corrL2L3[i]< 500) "
-        plotselection2_0=plotselection1_0 + " && (40 < Ws_ABCD"+radi+"_MSD[0]*Ws_ABCD"+radi+"_corrL2L3[0]  &&   Ws_ABCD"+radi+"_MSD[0]*Ws_ABCD"+radi+"_corrL2L3[0] < 500) " + " && (40 < Tops_ABCD"+radi+"_MSD[0] * Tops_ABCD"+radi+"_corrL2L3[0] &&   Tops_ABCD"+radi+"_MSD[0] * Tops_ABCD"+radi+"_corrL2L3[0]< 500) "
+        plotselection2=plotselection1 + " && (40 < Ws_ABCD"+radi+"_MSD  &&   Ws_ABCD"+radi+"_MSD < 500) " + " && (40 < Tops_ABCD"+radi+"_MSD  &&   Tops_ABCD"+radi+"_MSD < 500) "
+        plotselection2_i=plotselection1_i + " && (40 < Ws_ABCD"+radi+"_MSD[i]*Ws_ABCD"+radi+"_corrL2L3[i]  &&   Ws_ABCD"+radi+"_MSD[i]*Ws_ABCD"+radi+"_corrL2L3[i] < 500) " + " && (40 < Tops_ABCD"+radi+"_MSD[i] &&   Tops_ABCD"+radi+"_MSD[i]< 500) "
+        plotselection2_0=plotselection1_0 + " && (40 < Ws_ABCD"+radi+"_MSD[0]*Ws_ABCD"+radi+"_corrL2L3[0]  &&   Ws_ABCD"+radi+"_MSD[0]*Ws_ABCD"+radi+"_corrL2L3[0] < 500) " + " && (40 < Tops_ABCD"+radi+"_MSD[0] &&   Tops_ABCD"+radi+"_MSD[0]< 500) "
 
 
 plotselection3=plotselection1 + "&&" + "N_packedPatJetsAK8PFCHSSoftDrop>=2 && packedPatJetsAK8PFCHSSoftDrop_Pt[0]>400 && packedPatJetsAK8PFCHSSoftDrop_Pt[1]>200"
@@ -361,28 +361,28 @@ else:
 
 
 if WZwindow or MSDgap:
-	plotselection_t_MSD = " (150 < Tops_ABCD"+radi+"_MSD * Tops_ABCD"+radi+"_corrL2L3&& Tops_ABCD"+radi+"_MSD * Tops_ABCD"+radi+"_corrL2L3< 240) "
-	plotselection_t_MSD_i = " (150 < Tops_ABCD"+radi+"_MSD[i] * Tops_ABCD"+radi+"_corrL2L3[i]&& Tops_ABCD"+radi+"_MSD[i] * Tops_ABCD"+radi+"_corrL2L3[i]< 240) "
-	plotselection_t_MSD_0 = " (150 < Tops_ABCD"+radi+"_MSD[0] * Tops_ABCD"+radi+"_corrL2L3[0]&& Tops_ABCD"+radi+"_MSD[0] * Tops_ABCD"+radi+"_corrL2L3[0]< 240) "
-        plotselection_t_MSD_anti = " (150 > Tops_ABCD"+radi+"_MSD * Tops_ABCD"+radi+"_corrL2L3|| Tops_ABCD"+radi+"_MSD * Tops_ABCD"+radi+"_corrL2L3> 240) "
-        plotselection_t_MSD_anti_i = " (150 > Tops_ABCD"+radi+"_MSD[i] * Tops_ABCD"+radi+"_corrL2L3[i]|| Tops_ABCD"+radi+"_MSD[i] * Tops_ABCD"+radi+"_corrL2L3[i]> 240) "
-        plotselection_t_MSD_anti_0 = " (150 > Tops_ABCD"+radi+"_MSD[0] * Tops_ABCD"+radi+"_corrL2L3[0]|| Tops_ABCD"+radi+"_MSD[0] * Tops_ABCD"+radi+"_corrL2L3[0]> 240) "
+	plotselection_t_MSD = " (150 < Tops_ABCD"+radi+"_MSD && Tops_ABCD"+radi+"_MSD < 240) "
+	plotselection_t_MSD_i = " (150 < Tops_ABCD"+radi+"_MSD[i]&& Tops_ABCD"+radi+"_MSD[i]< 240) "
+	plotselection_t_MSD_0 = " (150 < Tops_ABCD"+radi+"_MSD[0]&& Tops_ABCD"+radi+"_MSD[0]< 240) "
+        plotselection_t_MSD_anti = " (150 > Tops_ABCD"+radi+"_MSD || Tops_ABCD"+radi+"_MSD > 240) "
+        plotselection_t_MSD_anti_i = " (150 > Tops_ABCD"+radi+"_MSD[i]|| Tops_ABCD"+radi+"_MSD[i]> 240) "
+        plotselection_t_MSD_anti_0 = " (150 > Tops_ABCD"+radi+"_MSD[0]|| Tops_ABCD"+radi+"_MSD[0]> 240) "
 
 else:	
-	plotselection_t_MSD = " (105 < Tops_ABCD"+radi+"_MSD * Tops_ABCD"+radi+"_corrL2L3&& Tops_ABCD"+radi+"_MSD * Tops_ABCD"+radi+"_corrL2L3< 210) "
-        plotselection_t_MSD_i = " (105 < Tops_ABCD"+radi+"_MSD[i] * Tops_ABCD"+radi+"_corrL2L3[i]&& Tops_ABCD"+radi+"_MSD[i] * Tops_ABCD"+radi+"_corrL2L3[i]< 210) "
-        plotselection_t_MSD_0 = " (105 < Tops_ABCD"+radi+"_MSD[0] * Tops_ABCD"+radi+"_corrL2L3[0]&& Tops_ABCD"+radi+"_MSD[0] * Tops_ABCD"+radi+"_corrL2L3[0]< 210) "
-	plotselection_t_MSD_anti = " (105 > Tops_ABCD"+radi+"_MSD * Tops_ABCD"+radi+"_corrL2L3|| Tops_ABCD"+radi+"_MSD * Tops_ABCD"+radi+"_corrL2L3> 210) "
-	plotselection_t_MSD_anti_i = " (105 > Tops_ABCD"+radi+"_MSD[i] * Tops_ABCD"+radi+"_corrL2L3[i]|| Tops_ABCD"+radi+"_MSD[i] * Tops_ABCD"+radi+"_corrL2L3[i]> 210) "
-	plotselection_t_MSD_anti_0 = " (105 > Tops_ABCD"+radi+"_MSD[0] * Tops_ABCD"+radi+"_corrL2L3[0]|| Tops_ABCD"+radi+"_MSD[0] * Tops_ABCD"+radi+"_corrL2L3[0]> 210) "
+	plotselection_t_MSD = " (105 < Tops_ABCD"+radi+"_MSD && Tops_ABCD"+radi+"_MSD < 210) "
+        plotselection_t_MSD_i = " (105 < Tops_ABCD"+radi+"_MSD[i]&& Tops_ABCD"+radi+"_MSD[i]< 210) "
+        plotselection_t_MSD_0 = " (105 < Tops_ABCD"+radi+"_MSD[0]&& Tops_ABCD"+radi+"_MSD[0]< 210) "
+	plotselection_t_MSD_anti = " (105 > Tops_ABCD"+radi+"_MSD || Tops_ABCD"+radi+"_MSD > 210) "
+	plotselection_t_MSD_anti_i = " (105 > Tops_ABCD"+radi+"_MSD[i]|| Tops_ABCD"+radi+"_MSD[i]> 210) "
+	plotselection_t_MSD_anti_0 = " (105 > Tops_ABCD"+radi+"_MSD[0]|| Tops_ABCD"+radi+"_MSD[0]> 210) "
 
 
-plotselection_t_MSD = " (105 < Tops_ABCD"+radi+"_MSD * Tops_ABCD"+radi+"_corrL2L3&& Tops_ABCD"+radi+"_MSD * Tops_ABCD"+radi+"_corrL2L3< 210) "
-plotselection_t_MSD_i = " (105 < Tops_ABCD"+radi+"_MSD[i] * Tops_ABCD"+radi+"_corrL2L3[i]&& Tops_ABCD"+radi+"_MSD[i] * Tops_ABCD"+radi+"_corrL2L3[i]< 210) "
-plotselection_t_MSD_0 = " (105 < Tops_ABCD"+radi+"_MSD[0] * Tops_ABCD"+radi+"_corrL2L3[0]&& Tops_ABCD"+radi+"_MSD[0] * Tops_ABCD"+radi+"_corrL2L3[0]< 210) "
-plotselection_t_MSD_anti = " (105 > Tops_ABCD"+radi+"_MSD * Tops_ABCD"+radi+"_corrL2L3|| Tops_ABCD"+radi+"_MSD * Tops_ABCD"+radi+"_corrL2L3> 210) "
-plotselection_t_MSD_anti_i = " (105 > Tops_ABCD"+radi+"_MSD[i] * Tops_ABCD"+radi+"_corrL2L3[i]|| Tops_ABCD"+radi+"_MSD[i] * Tops_ABCD"+radi+"_corrL2L3[i]> 210) "
-plotselection_t_MSD_anti_0 = " (105 > Tops_ABCD"+radi+"_MSD[0] * Tops_ABCD"+radi+"_corrL2L3[0]|| Tops_ABCD"+radi+"_MSD[0] * Tops_ABCD"+radi+"_corrL2L3[0]> 210) "
+plotselection_t_MSD = " (105 < Tops_ABCD"+radi+"_MSD && Tops_ABCD"+radi+"_MSD < 210) "
+plotselection_t_MSD_i = " (105 < Tops_ABCD"+radi+"_MSD[i]&& Tops_ABCD"+radi+"_MSD[i]< 210) "
+plotselection_t_MSD_0 = " (105 < Tops_ABCD"+radi+"_MSD[0]&& Tops_ABCD"+radi+"_MSD[0]< 210) "
+plotselection_t_MSD_anti = " (105 > Tops_ABCD"+radi+"_MSD || Tops_ABCD"+radi+"_MSD > 210) "
+plotselection_t_MSD_anti_i = " (105 > Tops_ABCD"+radi+"_MSD[i]|| Tops_ABCD"+radi+"_MSD[i]> 210) "
+plotselection_t_MSD_anti_0 = " (105 > Tops_ABCD"+radi+"_MSD[0]|| Tops_ABCD"+radi+"_MSD[0]> 210) "
 
 
 plotselection_topsubjetCSVv2 = " Tops_ABCD"+radi+"_maxsubjetCSVv2 > 0.8 "
