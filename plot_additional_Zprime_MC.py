@@ -663,8 +663,8 @@ std::vector<float> toptag_weights_""" + ABCDversion + """(float const* Zprimes_A
     
     for (int i=0; i<N_Zprime_ABCD""" + radi + """; i++){
         if (""" + generalselection_i + """){
-            if(Tops_ABCD""" + radi + """_real[i]==1 && Tops_ABCD""" + radi + """_matcheddecays[i]>2){
-            //if(Tops_ABCD""" + radi + """_real[i]==1){
+            //if(Tops_ABCD""" + radi + """_real[i]==1 && Tops_ABCD""" + radi + """_matcheddecays[i]>2){
+            if(Tops_ABCD""" + radi + """_real[i]==1){
                 if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_i + """){
                     toptagnominal *= SF_top_tau32_MSD_;
                     toptagup *= (SF_top_tau32_MSD_ + SF_top_tau32_MSD_up);
