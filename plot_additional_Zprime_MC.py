@@ -746,18 +746,18 @@ std::vector<float> Wtag_weights_""" + ABCDversion + """(float const* Zprimes_ABC
     float SF_W_tau21anti_MSDanti_up=""" + MCSF_W_t21anti_MSDanti_up + """;
     float SF_W_tau21anti_MSDanti_down=""" + MCSF_W_t21anti_MSDanti_down + """;
     
-    float SF_Wmiss_tau21_MSD=""" + MCSF_Wmiss_t21_MSD + """;
-    float SF_Wmiss_tau21_MSD_up=""" + MCSF_Wmiss_t21_MSD_up + """;
-    float SF_Wmiss_tau21_MSD_down=""" + MCSF_Wmiss_t21_MSD_down + """;
-    float SF_Wmiss_tau21_MSDanti=""" + MCSF_Wmiss_t21_MSDanti + """;
-    float SF_Wmiss_tau21_MSDanti_up=""" + MCSF_Wmiss_t21_MSDanti_up + """;
-    float SF_Wmiss_tau21_MSDanti_down=""" + MCSF_Wmiss_t21_MSDanti_down + """;
-    float SF_Wmiss_tau21anti_MSD=""" + MCSF_Wmiss_t21anti_MSD + """;
-    float SF_Wmiss_tau21anti_MSD_up=""" + MCSF_Wmiss_t21anti_MSD_up + """;
-    float SF_Wmiss_tau21anti_MSD_down=""" + MCSF_Wmiss_t21anti_MSD_down + """;
-    float SF_Wmiss_tau21anti_MSDanti=""" + MCSF_Wmiss_t21anti_MSDanti + """;
-    float SF_Wmiss_tau21anti_MSDanti_up=""" + MCSF_Wmiss_t21anti_MSDanti_up + """;
-    float SF_Wmiss_tau21anti_MSDanti_down=""" + MCSF_Wmiss_t21anti_MSDanti_down + """;    
+    //float SF_Wmiss_tau21_MSD=""" + MCSF_Wmiss_t21_MSD + """;
+    //float SF_Wmiss_tau21_MSD_up=""" + MCSF_Wmiss_t21_MSD_up + """;
+    //float SF_Wmiss_tau21_MSD_down=""" + MCSF_Wmiss_t21_MSD_down + """;
+    //float SF_Wmiss_tau21_MSDanti=""" + MCSF_Wmiss_t21_MSDanti + """;
+    //float SF_Wmiss_tau21_MSDanti_up=""" + MCSF_Wmiss_t21_MSDanti_up + """;
+    //float SF_Wmiss_tau21_MSDanti_down=""" + MCSF_Wmiss_t21_MSDanti_down + """;
+    //float SF_Wmiss_tau21anti_MSD=""" + MCSF_Wmiss_t21anti_MSD + """;
+    //float SF_Wmiss_tau21anti_MSD_up=""" + MCSF_Wmiss_t21anti_MSD_up + """;
+    //float SF_Wmiss_tau21anti_MSD_down=""" + MCSF_Wmiss_t21anti_MSD_down + """;
+    //float SF_Wmiss_tau21anti_MSDanti=""" + MCSF_Wmiss_t21anti_MSDanti + """;
+    //float SF_Wmiss_tau21anti_MSDanti_up=""" + MCSF_Wmiss_t21anti_MSDanti_up + """;
+    //float SF_Wmiss_tau21anti_MSDanti_down=""" + MCSF_Wmiss_t21anti_MSDanti_down + """;    
     
 
     for (int i=0; i<N_Zprime_ABCD""" + radi + """; i++){
