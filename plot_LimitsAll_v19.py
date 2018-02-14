@@ -27,7 +27,7 @@ from plotconfig_v14 import *
 def main(argv):
 
     # Create analysis object with output name
-    name='limits_All_v26'
+    name='limits_All_v28'
     anaRootPath=os.getcwd()+'/workdir/'+name+'/output_limitInput.root'
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/latest/ttbb-cutbased-analysis_limitInput.root')
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/Sep17/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
@@ -114,6 +114,7 @@ def main(argv):
                          'alternativebdt_ljets_jge6_t3:='+bdtweightpath+'/weights_Final_63_'+alternativebdtset+'.xml',
                          'alternativebdt_ljets_j5_tge4:='+bdtweightpath+'/weights_Final_54_'+alternativebdtset+'.xml',
                          'alternativebdt_ljets_j4_t4:='+bdtweightpath+'/weights_Final_44_'+alternativebdtset+'.xml',
+                         'hardestJetPt:=Jet_Pt[0]',
                          ]
     additionalvariables+=GetMEPDFadditionalVariablesList("/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv")
     # append variables needed by NNFlow Interface
@@ -293,6 +294,20 @@ def main(argv):
     minxvals+=minxvals_MultiDNN
     maxxvals+=maxxvals_MultiDNN
     categories+=categorienames_MultiDNN
+    
+    categorienames_JT_control=[
+                  ("(N_Jets==4&&N_BTagsM==3)","ljets_j4_t3_hardestJetPt",""),
+                  ]
+    discrs_JT_control=['hardestJetPt']
+    nhistobins_JT_control = [10]
+    minxvals_JT_control =   [ 30]
+    maxxvals_JT_control =   [280]
+    discrs+=discrs_JT_control
+    nhistobins+=nhistobins_JT_control
+    minxvals+=minxvals_JT_control
+    maxxvals+=maxxvals_JT_control
+    categories+=categorienames_JT_control
+    
 
     assert(len(nhistobins)==len(maxxvals))
     assert(len(nhistobins)==len(minxvals))
@@ -377,7 +392,7 @@ def main(argv):
 
             # hadd histo files before renaming. The histograms are actually already renamed. But the checkbins thingy will not have been done yet.
             print "hadding from wildcard"
-            haddFilesFromWildCard(outputpath,outputpath[:-11]+"/HaddOutputs/*.root")
+            haddFilesFromWildCard(outputpath,outputpath[:-11]+"/HaddOutputs/*.root",totalNumberOfHistosNeedsToRemainTheSame=True)
             # Deactivate check bins functionality in renameHistos if additional plot variables are added via analysis class
             renamedPath=outputpath[:-5]+'_limitInput.root'
             if os.path.exists(renamedPath):
@@ -386,9 +401,9 @@ def main(argv):
               print "renamed file already exists"
             else:
               if type(THEoutputpath)==str:
-                renameHistos(outputpath,renamedPath,allsystnames,True,False)
+                renameHistos(outputpath,renamedPath,allsystnames,checkBins=True,prune=False,Epsilon=0.0)
               else:
-                renameHistos(THEoutputpath[1:],renamedPath,allsystnames,True,False)
+                renameHistos(THEoutputpath[1:],renamedPath,allsystnames,checkBins=True,prune=False,Epsilon=0.0)
             addRealData(renamedPath,[s.nick for s in samples_data],binlabels,discrname)
             #addPseudoData(outputpath[:-5]+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
             #outputpath=outputpath[:-5]+'_limitInput.root'
