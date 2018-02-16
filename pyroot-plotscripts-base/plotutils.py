@@ -350,7 +350,8 @@ def getSepaTests(h1,h2):
     pair=h1,h2
     roc=getROC(*pair)
     rocint=roc.Integral()+0.5
-    tests = ROOT.TLatex(0.2, 0.81, 'ROC integral: '+str(round(rocint,3)));
+    tests = ROOT.TLatex(0.2, 0.81, 'ROC Integral: '+str(round(rocint,3)));
+    #tests = ROOT.TLatex(0.2, 0.81, 'ROC integral: '+str(round(rocint,3)));
     tests.SetTextFont(42);
     tests.SetTextSize(0.035);
     tests.SetNDC()
@@ -1270,7 +1271,7 @@ def writeListOfHistoListsAN(listOfHistoLists,samples, label,name,normalize=True,
 #            print labeltext
             yTitle='Events'
             if normalize:
-                yTitle='normalized'
+                yTitle='Normiert'
             setupHisto(histo,sample.color,yTitle,stack)
         c=drawHistosOnCanvas(listOfHistos,normalize,stack,logscale,options,ratio)
         c.SetName(listOfHistos[0].GetName())
@@ -1365,11 +1366,14 @@ def writeListOfROCs(graphs,names,colors,filename,printInts=True,logscale=False,r
         else:
             graph.Draw('L')
         setupHisto(graph,color)
-        graph.GetXaxis().SetTitle('Signal efficiency')
+        #graph.GetXaxis().SetTitle('Signal efficiency')
+        graph.GetXaxis().SetTitle('Signaleffizienz')
         if rej:
-             graph.GetYaxis().SetTitle('Background rejection')
+             #graph.GetYaxis().SetTitle('Background rejection')
+             graph.GetYaxis().SetTitle('Untergrundunterdrueckung')
         else:
-            graph.GetYaxis().SetTitle('Background efficiency')
+            #graph.GetYaxis().SetTitle('Background efficiency')
+            graph.GetYaxis().SetTitle('Untergrund Effizienz')
         graph.SetMarkerStyle(20)
     legend.Draw('same')
     

@@ -73,7 +73,7 @@ def main(argv):
     plotlabel="1 lepton, #geq 4 jets, #geq 2 b-tags"
     # selection for this set of plots
     plotselection="(N_Jets>=4&&N_BTagsM>=2)"
-    plots=[
+    discriminatorPlots=[
         # plot of N_Jets
         Plot(ROOT.TH1F("N_Jets","Number of jets",7,3.5,10.5),"N_Jets",plotselection,plotlabel),
         # plot of B-tag variables
@@ -85,16 +85,14 @@ def main(argv):
         Plot(ROOT.TH1F("CSV_ge0p5","B-tag of all jets for events with more than 5 jets",22,-.1,1),"Jet_CSV",plotselection+"*(N_Jets>5)",plotlabel),
         
         
+        # Fox Wolfram plots for this selection
+        # implement your variables here like
+        # Plot(ROOT.TH1F("INTERNALNAME","AXIS TITLE",N-Bins,MINX,MAXX),"BRANCHNAME_OR_VARIABLEEYPRESSION",SELECTION,LABEL)
+        Plot(ROOT.TH1F("H0_O","H_{0}^{O}",100,-0.2,1),"Evt_H0_O",plotselection,plotlabel),
+
         
     ]
-    # Fox Wolfram plots for this selection
-    plots_Variables_4j2t=[
-       Plot(ROOT.TH1F("H0_O","H_{0}^{O}",100,-0.2,1),"Evt_H0_O",plotselection,plotlabel),
     
-    ]
-    
-
-    discriminatorPlots=plots+plots_Variables_4j2t
 
     #actual sample to use
     allsamples=samples
@@ -182,7 +180,7 @@ def main(argv):
         writeListOfHistoListsAN(transposeLOL(lolT),samples,labels,name+'/'+name+'_shapes',True,False,False,'histo',False,True,False)
      
     if analysis.doDrawParallel==True and analysis.plotNumber == None and makeROCPlots==True:
-      print "makign ROCs"
+      print "making ROCs"
       # get relevant histos from file
       # create a list of lists of plots (the ones defined above) for whcih the ROCs will be drawn together on a canvas
       # for example here we want to create a canvas comparing plots 2,3 and 4  and another cnavase comparing plots 1,2 and 3
