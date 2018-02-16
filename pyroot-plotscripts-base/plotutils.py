@@ -1389,7 +1389,7 @@ def writeListOfROCs(graphs,names,colors,filename,printInts=True,logscale=False,r
 
     CMS_lumi.cmsTextSize = 0.7
     CMS_lumi.cmsTextOffset = 0.49
-    CMS_lumi.lumiTextSize = 0.43
+    CMS_lumi.lumiTextSize = 0.5
     CMS_lumi.lumiTextOffset = 0.2
 
     CMS_lumi.relPosX = 0.1
