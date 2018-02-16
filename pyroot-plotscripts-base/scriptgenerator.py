@@ -1655,10 +1655,10 @@ void plot(){
   std::string csvLFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/factorized_jes/csv_rwt_fit_lf_v2_final_2017_6_7_all.root";
   TString qcd_file = "/nfs/dust/cms/user/mwassmer/QCD_Estimation_September17/QCD_Estimation/QCD_Estimation_FakeScaleFactor_nominal.root";
   
-  CSVHelper* internalCSVHelper= new CSVHelper(csvHFfile,csvLFfile, 5,4,3,v_SystTypes);
-  LeptonSFHelper* internalLeptonSFHelper= new LeptonSFHelper();
-  QCDHelper* internalQCDHelper = new QCDHelper(qcd_file);
-  ttbarsysthelper* internalttbarsysthelper = new ttbarsysthelper();
+  //CSVHelper* internalCSVHelper= new CSVHelper(csvHFfile,csvLFfile, 5,4,3,v_SystTypes);
+  //LeptonSFHelper* internalLeptonSFHelper= new LeptonSFHelper();
+  //QCDHelper* internalQCDHelper = new QCDHelper(qcd_file);
+  //ttbarsysthelper* internalttbarsysthelper = new ttbarsysthelper();
 
   // open files
   TChain* chain = new TChain("MVATree");
@@ -2066,7 +2066,7 @@ def startLoop():
     int hasTrigger=0;
     if(currentfilename.Index("withTrigger")!=-1){hasTrigger=1;}
     eventsAnalyzed++;
-    sumOfWeights+=Weight;
+    //sumOfWeights+=Weight;
 
 	// Do weighting correctly if data driven QCD sample is used: use the weights for MC part and not for Data part
 	if(processname=="QCD" or processname=="QCD_CMS_ttH_QCDScaleFactorUp" or processname=="QCD_CMS_ttH_QCDScaleFactorDown") {
@@ -2095,23 +2095,10 @@ def startLoop():
      double electronEta=0.0;
      double electronPt=0.0;
     
-    if(chain->GetBranch("Electron_Pt_BeforeRun2Calibration") && chain->GetBranch("Electron_Eta_Supercluster") && chain->GetBranch("Muon_Pt_BeForeRC")){
-      //std::cout<<"using superclister and stuff"<<std::endl;
-      if(N_TightMuons==1){muonPt=Muon_Pt_BeForeRC[0]; muonEta=Muon_Eta[0];}
-      else{muonPt=0.0; muonEta=0.0;}
-      if(N_TightElectrons==1){electronPt=Electron_Pt_BeforeRun2Calibration[0]; electronEta=Electron_Eta_Supercluster[0];}
-      else{electronPt=0.0; electronEta=0.0;}
-    }
-    else{
-      if(N_TightMuons==1){muonPt=Muon_Pt[0]; muonEta=Muon_Eta[0];}
-      else{muonPt=0.0; muonEta=0.0;}
-      if(N_TightElectrons==1){electronPt=Electron_Pt[0]; electronEta=Electron_Eta[0];}
-      else{electronPt=0.0; electronEta=0.0;}
-    }
-    
     totalTimeGetEntry+=timerGetEntry->RealTime();
     timerCalculateSFs->Start();
     
+    /*
     float internalEleTriggerWeight=1.0;
     float internalEleTriggerWeightUp=1.0;
     float internalEleTriggerWeightDown=1.0;
@@ -2138,41 +2125,6 @@ def startLoop():
     float internalMuHIPWeightUp=1.0;
     float internalMuHIPWeightDown=1.0;
    
-    if(N_TightMuons==1){
-      internalMuTriggerWeight=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,0,"Trigger");
-      internalMuTriggerWeightUp=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,1,"Trigger");
-      internalMuTriggerWeightDown=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,-1,"Trigger");
-      
-      internalMuIDWeight=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,0,"ID");
-      internalMuIDWeightUp=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,1,"ID");
-      internalMuIDWeightDown=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,-1,"ID");
-      
-      internalMuIsoWeight=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,0,"Iso");
-      internalMuIsoWeightUp=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,1,"Iso");
-      internalMuIsoWeightDown=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,-1,"Iso");
-      
-      internalMuHIPWeight=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,0,"HIP");
-      internalMuHIPWeightUp=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,1,"HIP");
-      internalMuHIPWeightDown=internalLeptonSFHelper->GetMuonSF(muonPt,muonEta,-1,"HIP");
-    }
-   
-    if(N_TightElectrons==1){
-      internalEleTriggerWeight=internalLeptonSFHelper->GetElectronSF(electronPt,electronEta,0,"Trigger");
-      internalEleTriggerWeightUp=internalLeptonSFHelper->GetElectronSF(electronPt,electronEta,1,"Trigger");
-      internalEleTriggerWeightDown=internalLeptonSFHelper->GetElectronSF(electronPt,electronEta,-1,"Trigger");
-      
-      internalEleIDWeight=internalLeptonSFHelper->GetElectronSF(electronPt,electronEta,0,"ID");
-      internalEleIDWeightUp=internalLeptonSFHelper->GetElectronSF(electronPt,electronEta,1,"ID");
-      internalEleIDWeightDown=internalLeptonSFHelper->GetElectronSF(electronPt,electronEta,-1,"ID");
-      
-      internalEleIsoWeight=internalLeptonSFHelper->GetElectronSF(electronPt,electronEta,0,"Iso");
-      internalEleIsoWeightUp=internalLeptonSFHelper->GetElectronSF(electronPt,electronEta,1,"Iso");
-      internalEleIsoWeightDown=internalLeptonSFHelper->GetElectronSF(electronPt,electronEta,-1,"Iso");
-      
-      internalEleGFSWeight=internalLeptonSFHelper->GetElectronSF(electronPt,electronEta,0,"GFS");
-      internalEleGFSWeightUp=internalLeptonSFHelper->GetElectronSF(electronPt,electronEta,1,"GFS");
-      internalEleGFSWeightDown=internalLeptonSFHelper->GetElectronSF(electronPt,electronEta,-1,"GFS");
-    }
    
    
   std::vector<double> jetPts;    
@@ -2262,20 +2214,7 @@ def startLoop():
   internalCSVweight_CSVCErr1Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVCErr1down,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
   internalCSVweight_CSVCErr2Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVCErr2up,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
   internalCSVweight_CSVCErr2Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVCErr2down,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
-  
-  internalQCDweight=internalQCDHelper->GetScaleFactor(N_Jets,N_BTagsM,N_TightElectrons,N_TightMuons);
-  internalQCDweightup=internalQCDHelper->GetScaleFactorErrorUp(N_Jets,N_BTagsM,N_TightElectrons,N_TightMuons);
-  internalQCDweightdown=internalQCDHelper->GetScaleFactorErrorDown(N_Jets,N_BTagsM,N_TightElectrons,N_TightMuons);
-  
-  int ttbar_subprocess = internalttbarsysthelper->GetTtbarSubProcess(GenEvt_I_TTPlusCC,GenEvt_I_TTPlusBB);
-  internalISRweightup = internalttbarsysthelper->GetISRScaleFactorUp(ttbar_subprocess,N_Jets);
-  internalISRweightdown = internalttbarsysthelper->GetISRScaleFactorDown(ttbar_subprocess,N_Jets);
-  internalFSRweightup = internalttbarsysthelper->GetFSRScaleFactorUp(ttbar_subprocess,N_Jets);
-  internalFSRweightdown = internalttbarsysthelper->GetFSRScaleFactorDown(ttbar_subprocess,N_Jets);
-  internalHDAMPweightup = internalttbarsysthelper->GetHDAMPScaleFactorUp(ttbar_subprocess,N_Jets);
-  internalHDAMPweightdown = internalttbarsysthelper->GetHDAMPScaleFactorDown(ttbar_subprocess,N_Jets);
-  internalUEweightup = internalttbarsysthelper->GetUEScaleFactorUp(ttbar_subprocess,N_Jets);
-  internalUEweightdown = internalttbarsysthelper->GetUEScaleFactorDown(ttbar_subprocess,N_Jets);
+  */
   
   totalTimeCalculateSFs+=timerCalculateSFs->RealTime();
 
@@ -2288,16 +2227,6 @@ def startLoop():
     std::cout<<"n Jets "<<N_Jets<<std::endl;
     std::cout<<"m BTags "<<N_BTagsM<<std::endl;
     
-    std::cout<<"XS weight "<<Weight_XS<<std::endl;
-    std::cout<<"PU weight "<<Weight_pu69p2<<std::endl;
-    std::cout<<"ele ID weight (both) "<<internalEleIDWeight<<std::endl;
-    std::cout<<"ele Reco weight (both) "<<internalEleGFSWeight<<std::endl;
-    std::cout<<"ele trigger weight "<<internalEleTriggerWeight<<std::endl;
-    std::cout<<"mu ID weight (both) "<<internalMuIDWeight<<std::endl;
-    std::cout<<"mu Tracking weight (both) "<<internalMuHIPWeight<<std::endl;
-    std::cout<<"mu ISO weight (both) "<<internalMuIsoWeight<<std::endl;
-    std::cout<<"mu trigger weight "<<internalMuTriggerWeight<<std::endl;
-    std::cout<<"CSV weight "<<internalCSVweight<<std::endl;
  }   
  
 """
@@ -2527,7 +2456,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
       break
 
   # get standard variables
-  standardvars=['Weight','Weight_CSV','Weight_XS']
+  standardvars=[]
   variables.initVarsFromExprList(standardvars,tree)
 
   # get additional variables
@@ -2610,17 +2539,17 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
           script+=initHistoWithProcessNameAndSuffix(c+n+s,nb,mn,mx,t)
 
   # start event loop
-  script+=DefineLHAPDF()
+  #script+=DefineLHAPDF()
   startLoopStub=startLoop()
   if castStub!="":
     #print castStub
     startLoopStub=startLoopStub.replace("//PLACEHOLDERFORCASTLINES", castStub)
   script+=startLoopStub
   script+="   timerMapping->Start();\n"
-  script+=ResetMEPDFNormFactors(csv_file)
-  script+=RelateMEPDFMapToNormFactor(csv_file)
-  script+=PutPDFWeightsinVector(csv_file)
-  script+=UseLHAPDF()
+  #script+=ResetMEPDFNormFactors(csv_file)
+  #script+=RelateMEPDFMapToNormFactor(csv_file)
+  #script+=PutPDFWeightsinVector(csv_file)
+  #script+=UseLHAPDF()
   script+="   totalTimeMapping+=timerMapping->RealTime();\n"
 
   script+="   timerEvalDNN->Start();\n"
@@ -2690,7 +2619,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
         script+=varLoop("i",size_of_loop)
         script+="{\n"
         arrayselection=variables.checkArrayLengths(','.join([ex,pw]))
-        weight='('+arrayselection+')*('+pwi+')*Weight_XS*categoryweight*sampleweight'
+        weight='('+arrayselection+')*('+pwi+')*1.0*categoryweight*sampleweight'
         print histoname
         print exi
         print weight
@@ -2707,7 +2636,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
               print 'Found vector sub variable: ', exOld, ' which was converted to: ', ex
         
         arrayselection=variables.checkArrayLengths(','.join([ex,pw]))
-        weight='('+arrayselection+')*('+pw+')*Weight_XS*categoryweight*sampleweight'
+        weight='('+arrayselection+')*('+pw+')*1.0*categoryweight*sampleweight'
         script+=fillHistoSyst(histoname,ex,weight,systnames,systweights)
 
     # plot two dimensional plots
@@ -2746,12 +2675,12 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
           script+=varLoop("i",size_of_loop)
           script+="{\n"
           arrayselection=variables.checkArrayLengths(','.join([exX,exY,pw]))
-          weight='('+arrayselection+')*('+pwi+')*Weight_XS*categoryweight*sampleweight'
+          weight='('+arrayselection+')*('+pwi+')*1.0*categoryweight*sampleweight'
           script+=fillTwoDimHistoSyst(histoname,exiX,exiY,weight,systnames,systweights)
           script+="      }\n"
         else:
           arrayselection=variables.checkArrayLengths(','.join([ex,pw]),variables)
-          weight='('+arrayselection+')*('+pw+')*Weight_XS*categoryweight*sampleweight'
+          weight='('+arrayselection+')*('+pw+')*1.0*categoryweight*sampleweight'
           script+=fillTwoDimHistoSyst(histoname,exX,exY,weight,systnames,systweights)
 
     # finish category

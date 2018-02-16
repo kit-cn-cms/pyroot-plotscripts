@@ -218,7 +218,7 @@ def getCanvas(name,ratiopad=False):
         c.cd(1).SetTopMargin(0.07);
         c.cd(2).SetBottomMargin(0.4);
         c.cd(1).SetRightMargin(0.05);
-        c.cd(1).SetLeftMargin(0.15);
+        c.cd(1).SetLeftMargin(0.13);
         c.cd(2).SetRightMargin(0.05);
         c.cd(2).SetLeftMargin(0.15);
         c.cd(2).SetTicks(1,1)
@@ -261,8 +261,8 @@ def getLegend():
     legend=ROOT.TLegend()
     legend.SetX1NDC(0.85)
     legend.SetX2NDC(0.95)
-    legend.SetY1NDC(0.92)
-    legend.SetY2NDC(0.93)
+    legend.SetY1NDC(0.87)
+    legend.SetY2NDC(0.89)
     legend.SetBorderSize(0);
     legend.SetLineStyle(0);
     legend.SetTextFont(42);
@@ -350,9 +350,9 @@ def getSepaTests(h1,h2):
     pair=h1,h2
     roc=getROC(*pair)
     rocint=roc.Integral()+0.5
-    tests = ROOT.TLatex(0.2, 0.9, 'ROC integral: '+str(round(rocint,3)));
+    tests = ROOT.TLatex(0.2, 0.81, 'ROC integral: '+str(round(rocint,3)));
     tests.SetTextFont(42);
-    tests.SetTextSize(0.05);
+    tests.SetTextSize(0.035);
     tests.SetNDC()
     return tests
 
@@ -687,7 +687,7 @@ def printCanvases(canvases,name):
     if not os.path.exists(name):
         os.makedirs(name)
     for c in canvases:
-        c.Print(name+'/'+("_".join(((c.GetName()).split('_'))[1:]))+".pdf")
+        c.SaveAs(name+'/'+("_".join(((c.GetName()).split('_'))[1:]))+".pdf")
         c.SaveAs(name+'/'+("_".join(((c.GetName()).split('_'))[1:]))+".png")
 
 
@@ -1166,92 +1166,92 @@ def plotsForSelections_cross_Histos(selections,selectionnames,histos,variables):
     return plots
 
 # gets a list of histogramlist and creates a plot for every list
-def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,stack=False,logscale=False,options='histo',statTest=False, sepaTest=False,ratio=False,DoProfile=False):
-    #if DoProfile and not isinstance(listOfHistoLists[0][0], ROOT.TH2):
-      #print "need 2D plots for Profile Histograms"
-      #DoProfile=False
-    listofallstattests=[]
-    if isinstance(label, basestring):
-        labeltexts=len(listOfHistoLists)*[label]
-#        print "bla"
-    else:
-        labeltexts=label
-    canvases=[]
-    objects=[]
-    i=0
-#    print labeltexts
-    for listOfHistos, labeltext in zip(listOfHistoLists, labeltexts):
-        listofthisstattests=[listOfHistos[0].GetTitle()]
-        i+=1
-        for histo,sample in zip(listOfHistos,samples):
-#            print labeltext
-            yTitle='Events'
-            if normalize:
-                yTitle='normalized'
-            setupHisto(histo,sample.color,yTitle,stack)
-        stattests2D=None
-        if isinstance(listOfHistos[0], ROOT.TH2):
-	  print "drawing 2D"
-	  if not (options=='COLZ' or options=='colz' or options==''):
-	    currentoption=''
-	  else:
-	    currentoption=options
-	  c, stattests2D=drawHistosOnCanvas2D(listOfHistos,normalize,stack,logscale,currentoption,ratio,DoProfile,statTest)
-	else:
-          c=drawHistosOnCanvas(listOfHistos,normalize,stack,logscale,options,ratio,DoProfile)
-        c.SetName('c_'+listOfHistos[0].GetName())
-        l=getLegend2()
-        for h,sample in zip(listOfHistos,samples):
-            loption='L'
-            if stack:
-                loption='F'
-            l.AddEntry4545(h,sample.name,loption)
-        canvases.append(c)
-        l.Draw('same')
-        objects.append(l)
-        if statTest:
-	   if not isinstance(listOfHistos[0],ROOT.TH2):
-            tests=getStatTestsList(listOfHistos[0],listOfHistos[1:],"UW")
-            tests.Draw()
-            listofthisstattests.append(tests.GetTitle())
-            objects.append(tests)
-        if sepaTest:
-            stests=getSepaTests(listOfHistos[0],listOfHistos[1])
-            stests.Draw()
-            objects.append(stests)
-        if stattests2D!=None:
-#	  stattests2D.Draw()
-	  objects.append(stattests2D)
-	  listofthisstattests.append(stattests2D.GetTitle())
-#        cms = ROOT.TLatex(0.2, 0.96, 'CMS private work'  );
-#        cms.SetTextFont(42)
-#        cms.SetTextSize(0.05)
-#        cms.SetNDC()
-#        cms.Draw()
-#        print cms
-#        objects.append(cms)
+#def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,stack=False,logscale=False,options='histo',statTest=False, sepaTest=False,ratio=False,DoProfile=False):
+    ##if DoProfile and not isinstance(listOfHistoLists[0][0], ROOT.TH2):
+      ##print "need 2D plots for Profile Histograms"
+      ##DoProfile=False
+    #listofallstattests=[]
+    #if isinstance(label, basestring):
+        #labeltexts=len(listOfHistoLists)*[label]
+##        print "bla"
+    #else:
+        #labeltexts=label
+    #canvases=[]
+    #objects=[]
+    #i=0
+##    print labeltexts
+    #for listOfHistos, labeltext in zip(listOfHistoLists, labeltexts):
+        #listofthisstattests=[listOfHistos[0].GetTitle()]
+        #i+=1
+        #for histo,sample in zip(listOfHistos,samples):
+##            print labeltext
+            #yTitle='Events'
+            #if normalize:
+                #yTitle='normalized'
+            #setupHisto(histo,sample.color,yTitle,stack)
+        #stattests2D=None
+        #if isinstance(listOfHistos[0], ROOT.TH2):
+	  #print "drawing 2D"
+	  #if not (options=='COLZ' or options=='colz' or options==''):
+	    #currentoption=''
+	  #else:
+	    #currentoption=options
+	  #c, stattests2D=drawHistosOnCanvas2D(listOfHistos,normalize,stack,logscale,currentoption,ratio,DoProfile,statTest)
+	#else:
+          #c=drawHistosOnCanvas(listOfHistos,normalize,stack,logscale,options,ratio,DoProfile)
+        #c.SetName('c_'+listOfHistos[0].GetName())
+        #l=getLegend2()
+        #for h,sample in zip(listOfHistos,samples):
+            #loption='L'
+            #if stack:
+                #loption='F'
+            #l.AddEntry4545(h,sample.name,loption)
+        #canvases.append(c)
+        #l.Draw('same')
+        #objects.append(l)
+        #if statTest:
+	   #if not isinstance(listOfHistos[0],ROOT.TH2):
+            #tests=getStatTestsList(listOfHistos[0],listOfHistos[1:],"UW")
+            #tests.Draw()
+            #listofthisstattests.append(tests.GetTitle())
+            #objects.append(tests)
+        #if sepaTest:
+            #stests=getSepaTests(listOfHistos[0],listOfHistos[1])
+            #stests.Draw()
+            #objects.append(stests)
+        #if stattests2D!=None:
+##	  stattests2D.Draw()
+	  #objects.append(stattests2D)
+	  #listofthisstattests.append(stattests2D.GetTitle())
+##        cms = ROOT.TLatex(0.2, 0.96, 'CMS private work'  );
+##        cms.SetTextFont(42)
+##        cms.SetTextSize(0.05)
+##        cms.SetNDC()
+##        cms.Draw()
+##        print cms
+##        objects.append(cms)
 
-        cms = ROOT.TLatex(0.2, 0.96, 'CMS preliminary,  36.0 fb^{-1},  #sqrt{s} = 13 TeV'  );
-        cms.SetTextFont(42)
-        cms.SetTextSize(0.05)
-        cms.SetNDC()
-        cms.Draw()
-        objects.append(cms)
+        #cms = ROOT.TLatex(0.2, 0.96, 'CMS preliminary,  36.0 fb^{-1},  #sqrt{s} = 13 TeV'  );
+        #cms.SetTextFont(42)
+        #cms.SetTextSize(0.05)
+        #cms.SetNDC()
+        #cms.Draw()
+        #objects.append(cms)
 
-        label = ROOT.TLatex(0.2, 0.9, labeltext);
-        label.SetTextFont(42)
-        label.SetTextSize(0.04)
-        label.SetNDC()
-        label.Draw()
-        objects.append(label)
-        listofallstattests.append(listofthisstattests)
+        #label = ROOT.TLatex(0.2, 0.9, labeltext);
+        #label.SetTextFont(42)
+        #label.SetTextSize(0.04)
+        #label.SetNDC()
+        #label.Draw()
+        #objects.append(label)
+        #listofallstattests.append(listofthisstattests)
 
-    printCanvasesPNG(canvases,name)
-    writeObjects(canvases,name)
-    stattestoutfile=open("stattests_"+name+".txt","w")
-    for stst in listofallstattests:
-      stattestoutfile.write(' '.join(stst)+'\n')
-    stattestoutfile.close()
+    #printCanvasesPNG(canvases,name)
+    #writeObjects(canvases,name)
+    #stattestoutfile=open("stattests_"+name+".txt","w")
+    #for stst in listofallstattests:
+      #stattestoutfile.write(' '.join(stst)+'\n')
+    #stattestoutfile.close()
 
 
 def writeListOfHistoListsAN(listOfHistoLists,samples, label,name,normalize=True,stack=False,logscale=False,options='histo',statTest=False, sepaTest=False,ratio=False):
@@ -1299,16 +1299,33 @@ def writeListOfHistoListsAN(listOfHistoLists,samples, label,name,normalize=True,
 #        print cms
 #        objects.append(cms)
 
-        cms = ROOT.TLatex(0.2, 0.96, 'CMS preliminary,  36.0 fb^{-1},  #sqrt{s} = 13 TeV'  );
-        cms.SetTextFont(42)
-        cms.SetTextSize(0.05)
-        cms.SetNDC()
-        cms.Draw()
-        objects.append(cms)
+        #draw the lumi text on the canvas
+        #CMS_lumi.lumi_13TeV = "35.9 fb^{-1}"
+        CMS_lumi.lumi_13TeV = ""
+        CMS_lumi.writeExtraText = 1
+        #CMS_lumi.extraText = "Preliminary"
+        CMS_lumi.extraText = "private work"
+        CMS_lumi.cmsText="CMS"
 
-        label = ROOT.TLatex(0.2, 0.86, labeltext);
+        CMS_lumi.lumi_sqrtS = "13 TeV" # used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
+
+        CMS_lumi.cmsTextSize = 0.7
+        CMS_lumi.cmsTextOffset = 0.49
+        CMS_lumi.lumiTextSize = 0.5
+        CMS_lumi.lumiTextOffset = 0.2
+
+        CMS_lumi.relPosX = 0.1
+
+        CMS_lumi.hOffset = -0.08
+
+        iPeriod=4   # 13TeV
+        iPos=0     # CMS inside frame
+
+        CMS_lumi.CMS_lumi(c, iPeriod, iPos)
+
+        label = ROOT.TLatex(0.2, 0.87, labeltext);
         label.SetTextFont(42)
-        label.SetTextSize(0.05)
+        label.SetTextSize(0.035)
         label.SetNDC()
         label.Draw()
         objects.append(label)
@@ -1321,16 +1338,27 @@ def writeListOfHistoListsAN(listOfHistoLists,samples, label,name,normalize=True,
 
 def writeListOfROCs(graphs,names,colors,filename,printInts=True,logscale=False,rej=True):
     c=getCanvas('ROC')
+    objects=[]
     if logscale:
         c.SetLogy()
-    l=getLegend()
+    legend=ROOT.TLegend()
+    legend.SetX1NDC(0.85)
+    legend.SetX2NDC(0.95)
+    legend.SetY1NDC(0.87)
+    legend.SetY2NDC(0.89)
+    legend.SetBorderSize(0);
+    legend.SetLineStyle(0);
+    legend.SetTextFont(42);
+    legend.SetTextSize(0.04);
+    legend.SetFillStyle(0);
+    
     first=True
     for graph,name,color in zip(graphs,names,colors):
         integral=graph.Integral()+0.5
         if printInts:
-	  l.AddEntry2(graph,name+" ("+str(round(integral,2))+")")
+	  legend.AddEntry2(graph,name+" ("+str(round(integral,3))+")")
 	else:
-	  l.AddEntry2(graph,name)
+	  legend.AddEntry2(graph,name)
         if first:
             graph.Draw('AL')
             first=False
@@ -1343,9 +1371,53 @@ def writeListOfROCs(graphs,names,colors,filename,printInts=True,logscale=False,r
         else:
             graph.GetYaxis().SetTitle('Background efficiency')
         graph.SetMarkerStyle(20)
-    l.Draw('same')
-    printCanvases([c],filename)
-    writeObjects([c],filename)
+    legend.Draw('same')
+    
+    #draw the lumi text on the canvas
+    #CMS_lumi.lumi_13TeV = "35.9 fb^{-1}"
+    CMS_lumi.lumi_13TeV = ""
+    CMS_lumi.writeExtraText = 1
+    #CMS_lumi.extraText = "Preliminary"
+    CMS_lumi.extraText = "private work"
+    CMS_lumi.cmsText="CMS"
+
+    CMS_lumi.lumi_sqrtS = "13 TeV" # used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
+
+    CMS_lumi.cmsTextSize = 0.7
+    CMS_lumi.cmsTextOffset = 0.49
+    CMS_lumi.lumiTextSize = 0.43
+    CMS_lumi.lumiTextOffset = 0.2
+
+    CMS_lumi.relPosX = 0.1
+
+    CMS_lumi.hOffset = -0.08
+
+    iPeriod=4   # 13TeV
+    iPos=0     # CMS inside frame
+
+    CMS_lumi.CMS_lumi(c, iPeriod, iPos)
+
+
+
+    #label = ROOT.TLatex(0.18, 0.89, labeltext);
+    #label.SetTextFont(42)
+    #label.SetTextSize(0.035)
+    #label.SetNDC()
+    #label.Draw()
+    #objects.append(label)
+    print "saving roc"
+    folderName=filename
+    if "/" in folderName:
+      folderName=folderName.rsplit("/",1)[0]
+      print folderName
+
+    if not os.path.exists(folderName):
+      os.makedirs(folderName)  
+    c.SaveAs(filename+".pdf")
+    c.SaveAs(filename+".png")
+
+    #printCanvases([c],filename)
+    #writeObjects([c],filename)
 
 
 #from lists of background and signalhistos one signal and one background histo are created

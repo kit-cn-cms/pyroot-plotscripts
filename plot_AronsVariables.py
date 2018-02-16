@@ -23,7 +23,7 @@ from limittools import calcLimits
 from limittools import replaceQ2scale
 
 from analysisClass import *
-from plotconfig_v14Fast import *
+from plotconfig_AronsVariables import *
 
 
 def main(argv):
@@ -40,6 +40,8 @@ def main(argv):
     analysis.makeDatacards=False
     analysis.checkBins=False
     analysis.makeEventYields=False
+    makeROCPlots=True
+    
 
     analysis.printChosenOptions()
 
@@ -48,16 +50,13 @@ def main(argv):
     samples=samplesControlPlots
 
     # define BDT output variables
-    bdtweightpath="/nfs/dust/cms/user/kelmorab/Spring17BDTWeights/"
-    bdtset="Spring17v2"
-    alternativebdtset="Spring17v3_ttbb"
     # define additional variables necessary for selection in plotparallel
     additionalvariables=["Jet_Pt", "Muon_Pt", "Electron_Pt",
                          "Jet_Eta", "Muon_Eta", "Electron_Eta",
                          "Jet_CSV", "Jet_Flav", "N_Jets", "Jet_E", "Jet_Phi", "Jet_M",
                          "Evt_Pt_PrimaryLepton","Evt_E_PrimaryLepton","Evt_M_PrimaryLepton","Evt_Phi_PrimaryLepton","Evt_Eta_PrimaryLepton",
                          "Evt_Phi_MET","Evt_Pt_MET",
-                         
+
                          "GenEvt_I_TTPlusBB","GenEvt_I_TTPlusCC",
                          
                          ]
@@ -83,12 +82,19 @@ def main(argv):
         Plot(ROOT.TH1F("CSV1","B-tag of second jet",22,-.1,1),"Jet_CSV[1]",plotselection,plotlabel),
         Plot(ROOT.TH1F("CSV","B-tag of all jets",22,-.1,1),"Jet_CSV",plotselection,plotlabel),
         
-        Plot(ROOT.TH1F("CSV_ge0p5","B-tag of all jets for events with more than 5 jets",22,-.1,1),"Jet_CSV",plotselection*"*(N_Jets>5)",plotlabel),
+        Plot(ROOT.TH1F("CSV_ge0p5","B-tag of all jets for events with more than 5 jets",22,-.1,1),"Jet_CSV",plotselection+"*(N_Jets>5)",plotlabel),
         
+        
+        
+    ]
+    # Fox Wolfram plots for this selection
+    plots_Variables_4j2t=[
+       Plot(ROOT.TH1F("H0_O","H_{0}^{O}",100,-0.2,1),"Evt_H0_O",plotselection,plotlabel),
+    
     ]
     
 
-    discriminatorPlots=plots
+    discriminatorPlots=plots+plots_Variables_4j2t
 
     #actual sample to use
     allsamples=samples
@@ -100,7 +106,7 @@ def main(argv):
     if analysis.doDrawParallel==False or analysis.plotNumber == None :
         #if not os.path.exists(analysis.rootFilePath):
             # create the histograms
-            THEoutputpath=plotParallel(name,500000,discriminatorPlots,samples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[],"",[],addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False,haddParallel=True)
+            THEoutputpath=plotParallel(name,50000,discriminatorPlots,samples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[],"",[],addCodeInterfacePaths=[],cirun=True,StopAfterCompileStep=False,haddParallel=True)
             #UPDATE
             if type(THEoutputpath)==str:
               outputpath=THEoutputpath
@@ -117,21 +123,13 @@ def main(argv):
               #  renameHistos(outputpath,renamedPath,allsystnames,analysis.getCheckBins(),False)
               print "renamed file already exists"
             else:
-              #UPDATE
               if type(THEoutputpath)==str:
                 renameHistos(outputpath,renamedPath,allsystnames,False,False)
               else:
                 renameHistos(THEoutputpath[1:],renamedPath,allsystnames,False,False)
-                
-                
-#            addRealData(renamedPath,[s.nick for s in samples_data],binlabels,discrname)
-            #addPseudoData(outputpath[:-5]+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
-            #outputpath=outputpath[:-5]+'_limitInput.root'
+        
             outputpath=outputpath[:-5]+'_limitInput.root'
-        #else:
-            #print "Not doing plotParallel step since root file was found."
-            #outputpath=analysis.rootFilePath
-        #print "outputpath: ", outputpath
+
     else:
         # Warning This time output path refers only to output.root
         # ToDo: Fix usage of output path and output limit path
@@ -141,65 +139,78 @@ def main(argv):
         else:
             outputpath=analysis.rootFilePath[:-16]+'.root'
 
-    ## make datacards
-    #if (analysis.doDrawParallel==False or analysis.plotNumber == None) and analysis.makeDataCards == True :
-        ##TODO
-        ## 1. Implement small Epsilon case
-        ## 2. Implement consisted Bin-by-Bin uncertainties
-        #print "Making Data cards."
-        #makeDatacardsParallel(outputpath,name+'/'+name+'_datacard',binlabels,doHdecay=True,discrname=discrname,datacardmaker="mk_datacard_JESTest13TeVPara")
-
-
+    # Now draw the histograms
     # Invoke drawParallel step
-    if analysis.doDrawParallel==True and analysis.plotNumber == None :
-        # Hand over opts to keep commandline options
-        print 'Starting DrawParallel'
-        DrawParallel(discriminatorPlots,name,os.path.realpath(inspect.getsourcefile(lambda:0)),analysis.opts)
+    #if analysis.doDrawParallel==True and analysis.plotNumber == None :
+        ## Hand over opts to keep commandline options
+        #print 'Starting DrawParallel'
+        #DrawParallel(discriminatorPlots,name,os.path.realpath(inspect.getsourcefile(lambda:0)),analysis.opts)
 
-    # belongs to DrawParallel
-    if analysis.doDrawParallel==True and analysis.plotNumber != None :
-        discriminatorPlots=[discriminatorPlots[int(analysis.plotNumber)]]
+    ## belongs to DrawParallel
+    #if analysis.doDrawParallel==True and analysis.plotNumber != None :
+        #discriminatorPlots=[discriminatorPlots[int(analysis.plotNumber)]]
+    
+    ## Lists needed later, produce them only if needed, so check if subsequent step comes
+    #if (analysis.doDrawParallel==False or analysis.plotNumber != None) and (analysis.makeSimplePlots==True or analysis.makeMCControlPlots==True or analysis.makeEventYields==True):
+        #print 'Create lists needed later'
+        #listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,discriminatorPlots,1)
+        #lolT=transposeLOL(listOfHistoLists)
+        #print listOfHistoLists
 
-
-
+    ## This is the function call to the actual draw function
+    ## plot simple MC plots
+    #if (analysis.doDrawParallel==False or analysis.plotNumber != None) and analysis.makeSimplePlots==True :
+        #print "Making simple MC plots."
+        ##writeLOLAndOneOnTop(transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-1,name+'/'+name+'_controlplots')
+        #writeListOfHistoListsAN(transposeLOL(lolT),samples,"",name+'/'+name+'_shapes',True,False,False,'histo',False,True,False)
+    
     # Lists needed later, produce them only if needed, so check if subsequent step comes
-    if (analysis.doDrawParallel==False or analysis.plotNumber != None) and (analysis.makeSimplePlots==True or analysis.makeMCControlPlots==True or analysis.makeEventYields==True):
+    if (analysis.doDrawParallel==True and analysis.plotNumber == None) and (analysis.makeSimplePlots==True or analysis.makeMCControlPlots==True or analysis.makeEventYields==True):
         print 'Create lists needed later'
         listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,discriminatorPlots,1)
         lolT=transposeLOL(listOfHistoLists)
-        listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,discriminatorPlots,1)
+        print listOfHistoLists
 
+    # This is the function call to the actual draw function
     # plot simple MC plots
-    if (analysis.doDrawParallel==False or analysis.plotNumber != None) and analysis.makeSimplePlots==True :
+    if (analysis.doDrawParallel==True and analysis.plotNumber == None) and analysis.makeSimplePlots==True :
         print "Making simple MC plots."
-        writeLOLAndOneOnTop(transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-1,name+'/'+name+'_controlplots')
-        writeListOfHistoListsAN(transposeLOL([lolT[0]]+lolT[9:]),[samples[0]]+samples[9:],"",name+'/'+name+'_shapes',True,False,False,'histo',False,True,False)
-
-    # Make MC Control plots
-    if (analysis.doDrawParallel==False or analysis.plotNumber != None) and analysis.makeMCControlPlots==True :
-        print "Making MC Control plots"
-        print "skipping"
-        lll=createLLL_fromSuperHistoFileSyst(outputpath,samples[1:],discriminatorPlots,errorSystNamesNoQCD)
-        #lllnoQCD=createLLL_fromSuperHistoFileSyst(outputpath,samples[1:],discriminatorPlots,errorSystNamesNoPSNoQCD)
-        labels=[plot.label for plot in discriminatorPlots]
-        plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],15,name,[[lll,3354,ROOT.kBlack,True]],False,labels,True,analysis.plotBlinded)
-        plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],15,name+'_LOG_',[[lll,3354,ROOT.kBlack,True]],True,labels,True,analysis.plotBlinded)
-
-    # Make yield table
-    if (analysis.doDrawParallel==False or analysis.plotNumber != None) and analysis.makeEventYields==True :
-        print "Making yield table."
-        print "Will do only some plots"
-        for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
-          if not "JT" in hld[0].GetName():
-            continue
-          else:
-            hldName = hld[0].GetName()
-            for h in hld+hl:
-              for i,cat in enumerate(categoriesJT):
-                h.GetXaxis().SetBinLabel(i+1,cat[1])
-            tablepath=("/".join((outputpath.split('/'))[:-1]))+"/"+name+hldName+"_yields"
-            eventYields(hld,hl,samples,tablepath)
-
+        #writeLOLAndOneOnTop(transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-1,name+'/'+name+'_controlplots')
+        labels=[]
+        for plot in discriminatorPlots:
+          labels.append(plot.label)
+        writeListOfHistoListsAN(transposeLOL(lolT),samples,labels,name+'/'+name+'_shapes',True,False,False,'histo',False,True,False)
+     
+    if analysis.doDrawParallel==True and analysis.plotNumber == None and makeROCPlots==True:
+      print "makign ROCs"
+      # get relevant histos from file
+      # create a list of lists of plots (the ones defined above) for whcih the ROCs will be drawn together on a canvas
+      # for example here we want to create a canvas comparing plots 2,3 and 4  and another cnavase comparing plots 1,2 and 3
+      listOfListOfPlotsForROCs=[
+        [discriminatorPlots[3],discriminatorPlots[4],discriminatorPlots[2]],
+        [discriminatorPlots[1],discriminatorPlots[2],discriminatorPlots[3]],
+        ]
+      for iROC, listOfRelevantPlots in enumerate(listOfListOfPlotsForROCs):
+        print iROC, listOfRelevantPlots
+        listOfHistoListsForROCs=createHistoLists_fromSuperHistoFile(outputpath,samples,listOfRelevantPlots,1)
+        rocs=[]
+        names_=[]
+        colors_=[]
+        print listOfHistoListsForROCs
+        # loop over variables
+        iCol=0
+        for plot, histoTuple in zip(listOfRelevantPlots, listOfHistoListsForROCs):
+          iCol+=1
+          # skip color 10 becuase it is white
+          if iCol==10:
+            iCol+=1
+          # get ROC curve
+          rocs.append(getROC(histoTuple[0], histoTuple[1],rej=True))
+          # print ROCs on canvas
+          names_.append(plot.histo.GetTitle())
+          colors_.append(iCol)
+        writeListOfROCs(graphs=rocs,names=names_,colors=colors_,filename=name+'/'+name+'_ROCs/'+name+'_roc_'+str(iROC),printInts=True,logscale=False,rej=True)
+   
 
 
 if __name__ == "__main__":
