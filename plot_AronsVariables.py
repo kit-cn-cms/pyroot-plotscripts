@@ -104,7 +104,7 @@ def main(argv):
     if analysis.doDrawParallel==False or analysis.plotNumber == None :
         #if not os.path.exists(analysis.rootFilePath):
             # create the histograms
-            THEoutputpath=plotParallel(name,50000,discriminatorPlots,samples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[],"",[],addCodeInterfacePaths=[],cirun=True,StopAfterCompileStep=False,haddParallel=True)
+            THEoutputpath=plotParallel(name,50000,discriminatorPlots,samples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[],"",[],addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False,haddParallel=True)
             #UPDATE
             if type(THEoutputpath)==str:
               outputpath=THEoutputpath
