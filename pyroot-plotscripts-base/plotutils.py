@@ -43,12 +43,13 @@ class SampleDictionary:
     print self.samplemap
 
 class Sample:
-    def __init__(self,name, color=ROOT.kBlack, path='', selection='',nick='',listOfShapes=[],up=0,down=None,samDict="",checknevents=-1,treename='MVATree'):
+    def __init__(self,name, color=ROOT.kBlack, path='', selection='',nick='',listOfShapes=[],up=0,down=None,samDict="",filterFile="NONE",checknevents=-1,treename='MVATree'):
         self.name=name
         self.color=color
         self.path=path
         self.selection=selection
         self.files=[]
+        self.filterFile=filterFile
         subpaths=path.split(";")
         # allow globbing samples from different paths
         if samDict!="":
