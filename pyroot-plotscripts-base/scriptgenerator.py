@@ -17,6 +17,7 @@ import imp
 import types
 import csv
 
+
 ROOT.gROOT.SetBatch(True)
 
 def getHead(dataBases,addCodeInterfaces=[]):
@@ -42,6 +43,7 @@ def getHead(dataBases,addCodeInterfaces=[]):
 #include "LHAPDF/LHAPDF.h"
 #include "TGraphAsymmErrors.h"
 #include "TStopwatch.h"
+#include <tuple>
 
 """
   for addCodeInt in addCodeInterfaces:
@@ -62,9 +64,85 @@ using namespace std;
   
 
   retstr+="""
+
+// Event filter to be used with CSV files
+
+class EventFilter {
+
+  public:
+    EventFilter(std::string filename);
+    ~EventFilter();
+    bool KeepEvent(Long64_t Evt_Run, Long64_t Evt_Lumi, Long64_t Evt_ID);
+    int GetNFiltered();
+    
+  private:
+    std::vector<long> vec_run;
+  std::vector<long> vec_lumi;
+  std::vector<long> vec_evt;
+  int listLength;
+  int nEventsFiltered;
+  
+  
+    };
+    
+EventFilter::EventFilter( std::string filename){
+  
+  listLength=0;
+  nEventsFiltered=0;
+  
+  std::ifstream eventList(filename);
+  TString dump="";
+  char comma;
+  
+  int count=0;
+  bool readline=true;
+  bool readTitle=false;
+  long run;
+  long lumi;
+  long evt;
+  
+  if(filename!="" and filename!="NONE"){
+    std::cout<<"reading Event list to be filtered"<<std::endl;
+    
+    eventList>>dump; eventList>>dump;
+    while (eventList>>run>>comma>>lumi>>comma>>evt)
+    {
+      count++;
+      std::cout<<count<<std::endl;
+      std::cout<<comma<<std::endl;
+      std::cout<<run<<" "<<lumi<<" "<<evt<<std::endl;
+      vec_run.push_back(run);
+      vec_lumi.push_back(lumi);
+      vec_evt.push_back(evt);
+    }
+    
+    eventList.close();
+    std::cout<<"done reading the event filter list"<<std::endl;
+    std::cout<<vec_run.size()<<" "<<vec_lumi.size()<<" "<<vec_evt.size()<<" "<<std::endl;
+    listLength=vec_run.size();
+  }
+  
+}
+
+bool EventFilter::KeepEvent(Long64_t Evt_Run, Long64_t Evt_Lumi, Long64_t Evt_ID){
+  bool eventToBeKept=true;
+  for(int i=0; i<listLength; i++){
+    if(vec_run.at(i)==Evt_Run and vec_lumi.at(i)==Evt_Lumi and vec_evt.at(i)==Evt_ID){
+      eventToBeKept=false;
+      break;
+    }
+  }
+  if(eventToBeKept==false){nEventsFiltered++;}
+  return eventToBeKept;
+  
+}
+
+int EventFilter::GetNFiltered(){
+  return nEventsFiltered;
+}
+
   
 //hacked Lepton SF Helper from MiniAODHelper
-
 
 class LeptonSFHelper {
 
@@ -1668,11 +1746,15 @@ void plot(){
   string suffix = string(getenv ("SUFFIX"));
   int maxevents = atoi(getenv ("MAXEVENTS"));
   int skipevents = atoi(getenv ("SKIPEVENTS"));
+  string eventFilterFile = string(getenv("EVENTFILTERFILE"));
 
   std::cout<<"processname" <<processname<<std::endl;
   std::cout<<"suffix" <<suffix<<std::endl;
 
   std::vector<TString> databaseRelevantFilenames;
+
+  // create event filter class
+  EventFilter* evtFilter = new EventFilter(eventFilterFile);
 
   int eventsAnalyzed=0;
   float sumOfWeights=0;
@@ -2067,6 +2149,13 @@ def startLoop():
     if(currentfilename.Index("withTrigger")!=-1){hasTrigger=1;}
     eventsAnalyzed++;
     sumOfWeights+=Weight;
+    
+    // skip events in the filter list
+    if(evtFilter->KeepEvent(Evt_Run,Evt_Lumi,Evt_ID)==false){
+      std::cout<<"skipping event "<<Evt_Run<<" "<<Evt_Lumi<<" "<<Evt_ID<<std::endl;
+      continue;
+      }
+    
 
 	// Do weighting correctly if data driven QCD sample is used: use the weights for MC part and not for Data part
 	if(processname=="QCD" or processname=="QCD_CMS_ttH_QCDScaleFactorUp" or processname=="QCD_CMS_ttH_QCDScaleFactorDown") {
@@ -2350,6 +2439,7 @@ def endLoop():
   return """
   }\n // end of event loop
   totalTime+=timerTotal->RealTime();
+  std::cout<<"skipped a total of "<<evtFilter->GetNFiltered()<<std::endl;
 """
 
 
@@ -2838,7 +2928,7 @@ def createSingleDrawScript(iPlot,Plot,PathToSelf,scriptsfolder,opts=None):
   return scriptname
 
 
-def createScript(scriptname,programpath,processname,filenames,outfilename,maxevents,skipevents,cmsswpath,suffix,cirun=False):
+def createScript(scriptname,programpath,processname,filenames,outfilename,maxevents,skipevents,cmsswpath,suffix,cirun=False,filterFile="NONE"):
   if cirun:
     if maxevents<100:
       maxevents=100
@@ -2855,6 +2945,7 @@ def createScript(scriptname,programpath,processname,filenames,outfilename,maxeve
   script+='export MAXEVENTS="'+str(maxevents)+'"\n'
   script+='export SKIPEVENTS="'+str(skipevents)+'"\n'
   script+='export SUFFIX="'+suffix+'"\n'
+  script+='export EVENTFILTERFILE="'+str(filterFile)+'"\n'  
   script+=programpath+'\n'
   #DANGERZONE
   script+='python '+programpath+'_rename.py\n'
@@ -2993,6 +3084,7 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
     ntotal_events=0
     njob=0
     events_in_files=0
+    filterFile=s.filterFile
     files_to_submit=[]
     for fn in s.files:
       events_in_file=0
@@ -3015,7 +3107,7 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
           processname=s.nick
           filenames=fn
           outfilename=plotspath+s.nick+'_'+str(njob)+'.root'
-          createScript(scriptname,programpath,processname,filenames,outfilename,maxevents,skipevents,cmsswpath,'',cirun)
+          createScript(scriptname,programpath,processname,filenames,outfilename,maxevents,skipevents,cmsswpath,'',cirun,filterFile)
           scripts.append(scriptname)
           outputs.append(outfilename)
           samplewiseoutputs[s.nick].append(outfilename)
@@ -3033,7 +3125,7 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
           processname=s.nick
           filenames=' '.join(files_to_submit)
           outfilename=plotspath+s.nick+'_'+str(njob)+'.root'
-          createScript(scriptname,programpath,processname,filenames,outfilename,events_in_files,skipevents,cmsswpath,'',cirun)
+          createScript(scriptname,programpath,processname,filenames,outfilename,events_in_files,skipevents,cmsswpath,'',cirun,filterFile)
           scripts.append(scriptname)
           outputs.append(outfilename)
           samplewiseoutputs[s.nick].append(outfilename)
@@ -3054,7 +3146,7 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
       processname=s.nick
       filenames=' '.join(files_to_submit)
       outfilename=plotspath+s.nick+'_'+str(njob)+'.root'
-      createScript(scriptname,programpath,processname,filenames,outfilename,events_in_files,skipevents,cmsswpath,'',cirun)
+      createScript(scriptname,programpath,processname,filenames,outfilename,events_in_files,skipevents,cmsswpath,'',cirun,filterFile)
       scripts.append(scriptname)
       outputs.append(outfilename)
       samplewiseoutputs[s.nick].append(outfilename)
