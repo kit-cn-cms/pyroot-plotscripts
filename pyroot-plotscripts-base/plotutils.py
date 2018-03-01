@@ -272,27 +272,27 @@ def getLegend():
 
 def getLegendL():
     legend=ROOT.TLegend()
-    legend.SetX1NDC(0.6)
-    legend.SetX2NDC(0.76)
+    legend.SetX1NDC(0.35)
+    legend.SetX2NDC(0.61)
     legend.SetY1NDC(0.9)
     legend.SetY2NDC(0.91)
     legend.SetBorderSize(0);
     legend.SetLineStyle(0);
     legend.SetTextFont(42);
-    legend.SetTextSize(0.04);
+    legend.SetTextSize(0.03);
     legend.SetFillStyle(0);
     return legend
 
 def getLegendR():
     legend=ROOT.TLegend()
-    legend.SetX1NDC(0.76)
-    legend.SetX2NDC(0.93)
+    legend.SetX1NDC(0.66)
+    legend.SetX2NDC(0.83)
     legend.SetY1NDC(0.9)
     legend.SetY2NDC(0.91)
     legend.SetBorderSize(0);
     legend.SetLineStyle(0);
     legend.SetTextFont(42);
-    legend.SetTextSize(0.04);
+    legend.SetTextSize(0.03);
     legend.SetFillStyle(0);
     return legend
 

@@ -281,7 +281,7 @@ class Variables:
    # print self.vetolist
     if not name in self.variables and not name in self.vetolist:
 
-      if not ".xml" in expression and not hasattr(tree,expression) and not "Weight_" in name:
+      if not ".xml" in expression and not hasattr(tree,expression) and not "Weight_" in name and not "Evt_" in name:
         # Handle vector sub variables which have names like Jet_E_1, so that vector variable Jet_E is included instead
         # If not vector like variable is found assume it is a forumal expression and recursive call initVarsFromExpr
         foundVectorLikeVariable = False
