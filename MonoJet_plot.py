@@ -42,8 +42,10 @@ plots_inclusive=[
         Plot(ROOT.TH1F(plotprefix+"Evt_Pt_MET","MET_Pt",30,250.,1150.),"Evt_Pt_MET",plotselection_inclusive,plotlabel_inclusive),
         Plot(ROOT.TH1F(plotprefix+"Evt_Pt_GenMET","GenMET_Pt",50,0.,1500.),"Evt_Pt_GenMET",plotselection_inclusive,plotlabel_inclusive),
         Plot(ROOT.TH1F(plotprefix+"Evt_Phi_MET","MET #phi",20,-3.2,3.2),"Evt_Phi_MET",plotselection_inclusive,plotlabel_inclusive),
-        Plot(ROOT.TH1F(plotprefix+"Jet_Pt","Jet Pt",20,0.,500.),"Jet_Pt",plotselection_inclusive,plotlabel_inclusive)
-        
+        Plot(ROOT.TH1F(plotprefix+"Jet_Pt","Jet Pt",20,0.,500.),"Jet_Pt",plotselection_inclusive,plotlabel_inclusive),
+        Plot(ROOT.TH1F(plotprefix+"Jet_Pt_0","Jet Pt [0]",20,0.,500.),"Jet_Pt[0]",plotselection_inclusive,plotlabel_inclusive),
+        Plot(ROOT.TH1F(plotprefix+"Jet_Phi","Jet Phi ",20,-3.2,3.2),"Jet_Phi",plotselection_inclusive,plotlabel_inclusive),
+        Plot(ROOT.TH1F(plotprefix+"Jet_Phi_0","Jet Phi [0]",20,-3.2,3.2),"Jet_Phi[0]",plotselection_inclusive,plotlabel_inclusive),
     ]
 
 plotselection_MET300 = "Evt_Pt_MET>300."
