@@ -91,8 +91,8 @@ samples_background = [
                         Sample('Diboson',ROOT.kYellow-8,path_ntuples+'/??/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'Diboson',weightSystNames,samDict=sampleDict),
                         Sample('Single Top',ROOT.kYellow-1,path_ntuples+'/st*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'singletop',weightSystNames,samDict=sampleDict),
                         Sample('t#bar{t}',ROOT.kYellow+2,path_ntuples+'/TT_Tune*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'ttbar',weightSystNames,samDict=sampleDict),
+                        Sample('Z(ll)+jets',ROOT.kYellow+4,path_ntuples+'/DYJetsToLL*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'Z_ll_jets',weightSystNames,samDict=sampleDict),
                         Sample('QCD',ROOT.kYellow-4,path_ntuples+'/QCD*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'QCD',weightSystNames,samDict=sampleDict),
-                        Sample('Z(ll)+jets',ROOT.kYellow+4,path_ntuples+'/DYJetsToLL*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'Z_ll_jets',weightSystNames,samDict=sampleDict)
                         ]
 
 samples_signal = [
