@@ -33,8 +33,14 @@ systWeights=[   "NomWeight:="+common_weight+"*(DoWeights==1)+(DoWeights==0)*1.0"
                 "dummyWeight_CSVCErr2up:="+common_weight+"*Weight_CSVCErr2up*(DoWeights==1)+(DoWeights==0)*1.0",
                 "dummyWeight_CSVCErr2down:="+common_weight+"*Weight_CSVCErr2down*(DoWeights==1)+(DoWeights==0)*1.0"
                 ]
-otherSystNames=[]
-otherSystFileNames=[]
+otherSystNames=[
+                    "_CMS_scale_jUp","_CMS_scale_jDown",
+                    "_CMS_res_jUp","_CMS_res_jDown"
+    ]
+otherSystFileNames=[
+                        "JESup","JESdown",
+                        "JERup","JERdown"
+    ]
 
 MCWeight='35.91823'
 
@@ -77,22 +83,22 @@ samples_data = [
         ]
 
 samples_background = [
-                        Sample('Z(#nu#nu)+jets p_{T,Z}=50-100',ROOT.kBlue,path_ntuples+'/DYJetsToNuNu_PtZ-50To100*/*nominal*.root',"1.*3*0.971"+"*"+MCWeight+sel_MET,'Z_nunu_jets_e',weightSystNames,samDict=sampleDict),
-                        Sample('Z(#nu#nu)+jets p_{T,Z}=100-250',ROOT.kBlue+2,path_ntuples+'/DYJetsToNuNu_PtZ-100To250*/*nominal*.root',"1.*3*0.971"+"*"+MCWeight+sel_MET,'Z_nunu_jets_a',weightSystNames,samDict=sampleDict),
-                        Sample('Z(#nu#nu)+jets p_{T,Z}=250-400',ROOT.kBlue-2,path_ntuples+'/DYJetsToNuNu_PtZ-250To400*/*nominal*.root',"1.*3*0.971"+"*"+MCWeight+sel_MET,'Z_nunu_jets_b',weightSystNames,samDict=sampleDict),
-                        Sample('Z(#nu#nu)+jets p_{T,Z}=400-650',ROOT.kBlue+6,path_ntuples+'/DYJetsToNuNu_PtZ-400To650*/*nominal*.root',"1.*3*0.971"+"*"+MCWeight+sel_MET,'Z_nunu_jets_c',weightSystNames,samDict=sampleDict),
-                        Sample('Z(#nu#nu)+jets p_{T,Z}=650-Inf',ROOT.kBlue+8,path_ntuples+'/DYJetsToNuNu_PtZ-650ToInf*/*nominal*.root',"1.*3*0.971"+"*"+MCWeight+sel_MET,'Z_nunu_jets_d',weightSystNames,samDict=sampleDict),
+                        Sample('Z(#nu#nu)+jets p_{T,Z}=50-100',ROOT.kBlue,path_ntuples+'/DYJetsToNuNu_PtZ-50To100*/*nominal*.root',"1.*3*0.971"+"*"+MCWeight+sel_MET,'Z_nunu_jets_e',weightSystNames+otherSystNames,samDict=sampleDict),
+                        Sample('Z(#nu#nu)+jets p_{T,Z}=100-250',ROOT.kBlue+2,path_ntuples+'/DYJetsToNuNu_PtZ-100To250*/*nominal*.root',"1.*3*0.971"+"*"+MCWeight+sel_MET,'Z_nunu_jets_a',weightSystNames+otherSystNames,samDict=sampleDict),
+                        Sample('Z(#nu#nu)+jets p_{T,Z}=250-400',ROOT.kBlue-2,path_ntuples+'/DYJetsToNuNu_PtZ-250To400*/*nominal*.root',"1.*3*0.971"+"*"+MCWeight+sel_MET,'Z_nunu_jets_b',weightSystNames+otherSystNames,samDict=sampleDict),
+                        Sample('Z(#nu#nu)+jets p_{T,Z}=400-650',ROOT.kBlue+6,path_ntuples+'/DYJetsToNuNu_PtZ-400To650*/*nominal*.root',"1.*3*0.971"+"*"+MCWeight+sel_MET,'Z_nunu_jets_c',weightSystNames+otherSystNames,samDict=sampleDict),
+                        Sample('Z(#nu#nu)+jets p_{T,Z}=650-Inf',ROOT.kBlue+8,path_ntuples+'/DYJetsToNuNu_PtZ-650ToInf*/*nominal*.root',"1.*3*0.971"+"*"+MCWeight+sel_MET,'Z_nunu_jets_d',weightSystNames+otherSystNames,samDict=sampleDict),
 
-                        Sample('W(l#nu)+jets P_{T,W}=100-250',ROOT.kGreen-7,path_ntuples+'/WJetsToLNu_Pt-100To250*/*nominal*.root',"1.*"+MCWeight+sel_MET,'W_lnu_jets_a',weightSystNames,samDict=sampleDict),
-                        Sample('W(l#nu)+jets p_{T,W}=250-400',ROOT.kGreen-6,path_ntuples+'/WJetsToLNu_Pt-250To400*/*nominal*.root',"1.*"+MCWeight+sel_MET,'W_lnu_jets_b',weightSystNames,samDict=sampleDict),
-                        Sample('W(l#nu)+jets p_{T,W}=400-600',ROOT.kGreen-5,path_ntuples+'/WJetsToLNu_Pt-400To600*/*nominal*.root',"1.*"+MCWeight+sel_MET,'W_lnu_jets_c',weightSystNames,samDict=sampleDict),
-                        Sample('W(l#nu)+jets p_{T,W}=600-Inf',ROOT.kGreen-4,path_ntuples+'/WJetsToLNu_Pt-600ToInf*/*nominal*.root',"1.*"+MCWeight+sel_MET,'W_lnu_jets_d',weightSystNames,samDict=sampleDict),
+                        Sample('W(l#nu)+jets P_{T,W}=100-250',ROOT.kGreen-7,path_ntuples+'/WJetsToLNu_Pt-100To250*/*nominal*.root',"1.*"+MCWeight+sel_MET,'W_lnu_jets_a',weightSystNames+otherSystNames,samDict=sampleDict),
+                        Sample('W(l#nu)+jets p_{T,W}=250-400',ROOT.kGreen-6,path_ntuples+'/WJetsToLNu_Pt-250To400*/*nominal*.root',"1.*"+MCWeight+sel_MET,'W_lnu_jets_b',weightSystNames+otherSystNames,samDict=sampleDict),
+                        Sample('W(l#nu)+jets p_{T,W}=400-600',ROOT.kGreen-5,path_ntuples+'/WJetsToLNu_Pt-400To600*/*nominal*.root',"1.*"+MCWeight+sel_MET,'W_lnu_jets_c',weightSystNames+otherSystNames,samDict=sampleDict),
+                        Sample('W(l#nu)+jets p_{T,W}=600-Inf',ROOT.kGreen-4,path_ntuples+'/WJetsToLNu_Pt-600ToInf*/*nominal*.root',"1.*"+MCWeight+sel_MET,'W_lnu_jets_d',weightSystNames+otherSystNames,samDict=sampleDict),
                         
-                        Sample('Diboson',ROOT.kYellow-8,path_ntuples+'/??/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'Diboson',weightSystNames,samDict=sampleDict),
-                        Sample('Single Top',ROOT.kYellow-1,path_ntuples+'/st*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'singletop',weightSystNames,samDict=sampleDict),
-                        Sample('t#bar{t}',ROOT.kYellow+2,path_ntuples+'/TT_Tune*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'ttbar',weightSystNames,samDict=sampleDict),
-                        Sample('Z(ll)+jets',ROOT.kYellow+4,path_ntuples+'/DYJetsToLL*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'Z_ll_jets',weightSystNames,samDict=sampleDict),
-                        Sample('QCD',ROOT.kYellow-4,path_ntuples+'/QCD*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'QCD',weightSystNames,samDict=sampleDict),
+                        Sample('Diboson',ROOT.kYellow-8,path_ntuples+'/??/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'Diboson',weightSystNames+otherSystNames,samDict=sampleDict),
+                        Sample('Single Top',ROOT.kYellow-1,path_ntuples+'/st*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'singletop',weightSystNames+otherSystNames,samDict=sampleDict),
+                        Sample('t#bar{t}',ROOT.kYellow+2,path_ntuples+'/TT_Tune*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'ttbar',weightSystNames+otherSystNames,samDict=sampleDict),
+                        Sample('Z(ll)+jets',ROOT.kYellow+4,path_ntuples+'/DYJetsToLL*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'Z_ll_jets',weightSystNames+otherSystNames,samDict=sampleDict),
+                        Sample('QCD',ROOT.kYellow-4,path_ntuples+'/QCD*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'QCD',weightSystNames+otherSystNames,samDict=sampleDict),
                         ]
 
 samples_signal = [
