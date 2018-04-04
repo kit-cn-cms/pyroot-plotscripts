@@ -99,6 +99,7 @@ samples_background = [
                         Sample('t#bar{t}',ROOT.kYellow+2,path_ntuples+'/TT_Tune*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'ttbar',weightSystNames+otherSystNames,samDict=sampleDict),
                         Sample('Z(ll)+jets',ROOT.kYellow+4,path_ntuples+'/DYJetsToLL*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'Z_ll_jets',weightSystNames+otherSystNames,samDict=sampleDict),
                         Sample('QCD',ROOT.kYellow-4,path_ntuples+'/QCD*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'QCD',weightSystNames+otherSystNames,samDict=sampleDict),
+                        Sample('#gamma +jets',ROOT.kYellow-5,path_ntuples+'/GJets*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'gamma_jets',weightSystNames+otherSystNames,samDict=sampleDict)
                         ]
 
 samples_signal = [
