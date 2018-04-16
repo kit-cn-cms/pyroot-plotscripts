@@ -234,7 +234,7 @@ def main(argv):
     if analysis.doDrawParallel==False or analysis.plotNumber == None :
         #if not os.path.exists(analysis.rootFilePath):
             #print "Doing plotParallel step since root file was not found."
-            THEoutputpath=plotParallel(name,5000000,discriminatorPlots,samples+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[],"",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False,haddParallel=True,MEPDFCSVFile="")
+            THEoutputpath=plotParallel(name,5000000,discriminatorPlots,samples+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/forLea/treejson_16040218_BDTnewntuples.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False,haddParallel=True,MEPDFCSVFile="")
             if type(THEoutputpath)==str:
               outputpath=THEoutputpath
             else:
