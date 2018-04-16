@@ -43,7 +43,7 @@ class SampleDictionary:
     print self.samplemap
 
 class Sample:
-    def __init__(self,name, color=ROOT.kBlack, path='', selection='',nick='',listOfShapes=[],up=0,down=None,samDict="",filterFile="NONE",checknevents=-1,treename='MVATree'):
+    def __init__(self,name, color=ROOT.kBlack, path='', selection='',nick='',listOfShapes=[],up=0,down=None,samDict="",readTrees=True,filterFile="NONE",checknevents=-1,treename='MVATree'):
         self.name=name
         self.color=color
         self.path=path
@@ -52,25 +52,26 @@ class Sample:
         self.filterFile=filterFile
         subpaths=path.split(";")
         # allow globbing samples from different paths
-        if samDict!="":
-	  if not samDict.hasKey(self.path):  
-	    print "globbing files for", name, self.path
-	    for sp in subpaths:
-	      self.files+=glob.glob(sp)
-	      if sp!='' and len(self.files)==0:
-		print name
-		print 'no files found at',sp
-	    samDict.addToMap(path,self.files)
-	  else:
-	    print "map already knows this sample", self.path
-	    self.files=samDict.getFiles(path)
-	else:
-          print "empty map: globbing files for", name, self.path
-	  for sp in subpaths:
-	      self.files+=glob.glob(sp)
-	      if sp!='' and len(self.files)==0:
-		print name
-		print 'no files found at',sp
+        if readTrees==True:
+          if samDict!="":
+            if not samDict.hasKey(self.path):  
+              print "globbing files for", name, self.path
+              for sp in subpaths:
+                self.files+=glob.glob(sp)
+                if sp!='' and len(self.files)==0:
+                  print name
+                  print 'no files found at',sp
+              samDict.addToMap(path,self.files)
+            else:
+              print "map already knows this sample", self.path
+              self.files=samDict.getFiles(path)
+          else:
+            print "empty map: globbing files for", name, self.path
+            for sp in subpaths:
+                self.files+=glob.glob(sp)
+                if sp!='' and len(self.files)==0:
+                  print name
+                  print 'no files found at',sp
 	  
         if nick=='':
             self.nick=name
