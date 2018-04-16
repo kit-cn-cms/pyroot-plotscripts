@@ -78,6 +78,7 @@ def main(argv):
     # define additional variables necessary for selection in plotparallel
     additionalvariables=["Jet_Pt", "Muon_Pt", "Electron_Pt",
                          "Jet_Eta", "Muon_Eta", "Electron_Eta",
+                         "N_TightMuons","N_TightElectrons","N_LooseMuons","N_LooseMuons",
                          "Muon_Pt_BeForeRC","Electron_Pt_BeforeRun2Calibration","Electron_Eta_Supercluster",
                          "Jet_CSV", "Jet_Flav", "N_Jets", "Jet_E", "Jet_Phi", "Jet_M",
                          "Evt_Pt_PrimaryLepton","Evt_E_PrimaryLepton","Evt_M_PrimaryLepton","Evt_Phi_PrimaryLepton","Evt_Eta_PrimaryLepton",
@@ -123,6 +124,8 @@ def main(argv):
 
                          'hardestJetPt:=Jet_Pt[0]',
                          ]
+    
+    MEPDFCSVFile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv"
     #additionalvariables+=GetMEPDFadditionalVariablesList("/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv")
     ### append variables needed by NNFlow Interface
     ###additionalvariables.extend(NNFlowInterface.getAdditionalVariablesList())
@@ -231,7 +234,7 @@ def main(argv):
     if analysis.doDrawParallel==False or analysis.plotNumber == None :
         #if not os.path.exists(analysis.rootFilePath):
             #print "Doing plotParallel step since root file was not found."
-            THEoutputpath=plotParallel(name,5000000,discriminatorPlots,samples+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[],"",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False,haddParallel=True)
+            THEoutputpath=plotParallel(name,5000000,discriminatorPlots,samples+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[],"",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False,haddParallel=True,MEPDFCSVFile="")
             if type(THEoutputpath)==str:
               outputpath=THEoutputpath
             else:
