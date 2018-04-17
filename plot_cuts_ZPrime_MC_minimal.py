@@ -458,12 +458,9 @@ if WZwindow:
 	
 
 else:
-   #plotselection_W_MSD =  " (65 < Ws_ABCD"+radi+"_MSD * Ws_ABCD"+radi+"_corrL2L3  &&   Ws_ABCD"+radi+"_MSD * Ws_ABCD"+radi+"_corrL2L3 < 105) "
-   #plotselection_W_MSD_i =  " (65 < Ws_ABCD"+radi+"_MSD[i] * Ws_ABCD"+radi+"_corrL2L3[i]  &&   Ws_ABCD"+radi+"_MSD[i] * Ws_ABCD"+radi+"_corrL2L3[i] < 105) "
-   #plotselection_W_MSD_0 =  " (65 < Ws_ABCD"+radi+"_MSD[0] * Ws_ABCD"+radi+"_corrL2L3[0]  &&   Ws_ABCD"+radi+"_MSD[0] * Ws_ABCD"+radi+"_corrL2L3[0] < 105) "
-   plotselection_W_MSD =  " (40 < Ws_ABCD"+radi+"_MSD * Ws_ABCD"+radi+"_corrL2L3  &&   Ws_ABCD"+radi+"_MSD * Ws_ABCD"+radi+"_corrL2L3 < 500) "
-   plotselection_W_MSD_i =  " (40 < Ws_ABCD"+radi+"_MSD[i] * Ws_ABCD"+radi+"_corrL2L3[i]  &&   Ws_ABCD"+radi+"_MSD[i] * Ws_ABCD"+radi+"_corrL2L3[i] < 500) "
-   plotselection_W_MSD_0 =  " (40 < Ws_ABCD"+radi+"_MSD[0] * Ws_ABCD"+radi+"_corrL2L3[0]  &&   Ws_ABCD"+radi+"_MSD[0] * Ws_ABCD"+radi+"_corrL2L3[0] < 500) "
+   plotselection_W_MSD =  " (65 < Ws_ABCD"+radi+"_MSD * Ws_ABCD"+radi+"_corrL2L3  &&   Ws_ABCD"+radi+"_MSD * Ws_ABCD"+radi+"_corrL2L3 < 105) "
+   plotselection_W_MSD_i =  " (65 < Ws_ABCD"+radi+"_MSD[i] * Ws_ABCD"+radi+"_corrL2L3[i]  &&   Ws_ABCD"+radi+"_MSD[i] * Ws_ABCD"+radi+"_corrL2L3[i] < 105) "
+   plotselection_W_MSD_0 =  " (65 < Ws_ABCD"+radi+"_MSD[0] * Ws_ABCD"+radi+"_corrL2L3[0]  &&   Ws_ABCD"+radi+"_MSD[0] * Ws_ABCD"+radi+"_corrL2L3[0] < 105) "
    if not MSDgap:
         plotselection_W_MSD_anti =  " (65 > Ws_ABCD"+radi+"_MSD * Ws_ABCD"+radi+"_corrL2L3  ||   Ws_ABCD"+radi+"_MSD * Ws_ABCD"+radi+"_corrL2L3 > 105) "
         plotselection_W_MSD_anti_i =  " (65 > Ws_ABCD"+radi+"_MSD[i] * Ws_ABCD"+radi+"_corrL2L3[i]  ||   Ws_ABCD"+radi+"_MSD[i] * Ws_ABCD"+radi+"_corrL2L3[i] > 105) "
@@ -475,13 +472,9 @@ else:
 
 
 
-#plotselection_t_MSD = " (105 < Tops_ABCD"+radi+"_MSD && Tops_ABCD"+radi+"_MSD < 210) "
-#plotselection_t_MSD_i = " (105 < Tops_ABCD"+radi+"_MSD[i] && Tops_ABCD"+radi+"_MSD[i] < 210) "
-#plotselection_t_MSD_0 = " (105 < Tops_ABCD"+radi+"_MSD[0] && Tops_ABCD"+radi+"_MSD[0] < 210) "
-
-plotselection_t_MSD = " (60 < Tops_ABCD"+radi+"_MSD && Tops_ABCD"+radi+"_MSD < 500) "
-plotselection_t_MSD_i = " (60 < Tops_ABCD"+radi+"_MSD[i] && Tops_ABCD"+radi+"_MSD[i] < 500) "
-plotselection_t_MSD_0 = " (60 < Tops_ABCD"+radi+"_MSD[0] && Tops_ABCD"+radi+"_MSD[0] < 500) "
+plotselection_t_MSD = " (105 < Tops_ABCD"+radi+"_MSD && Tops_ABCD"+radi+"_MSD < 210) "
+plotselection_t_MSD_i = " (105 < Tops_ABCD"+radi+"_MSD[i] && Tops_ABCD"+radi+"_MSD[i] < 210) "
+plotselection_t_MSD_0 = " (105 < Tops_ABCD"+radi+"_MSD[0] && Tops_ABCD"+radi+"_MSD[0] < 210) "
 if not toponsided:
     plotselection_t_MSD_anti = " (105 > Tops_ABCD"+radi+"_MSD || Tops_ABCD"+radi+"_MSD > 210) "
     plotselection_t_MSD_anti_i = " (105 > Tops_ABCD"+radi+"_MSD[i] || Tops_ABCD"+radi+"_MSD[i] > 210) "

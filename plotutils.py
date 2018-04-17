@@ -901,6 +901,27 @@ def AddEntryZprime( self, histo, label, option='L'):
     self.AddEntry(histo, label, option)
 ROOT.TLegend.AddEntryZprime = AddEntryZprime
 
+def AddEntryZprimeLarge( self, histo, label, option='L'):
+    self.SetY1NDC(self.GetY1NDC()-0.15)
+    width=self.GetX2NDC()-self.GetX1NDC()
+    ts=self.GetTextSize()*2
+    neglen = 0
+    sscripts = re.findall("_{.+?}|\^{.+?}",label)
+    for s in sscripts:
+	neglen = neglen + 3
+    symbols = re.findall("#[a-zA-Z]+",label)
+    for symbol in symbols:
+	neglen = neglen + len(symbol)-1
+	#print neglen
+    #newwidth=max((len(label)-neglen)*0.015*0.05/ts+0.1,width)
+    newwidth=max((len(label)-neglen)*0.35*ts+0.1,width)
+    #print 'old width ',width
+    self.SetX1NDC(self.GetX2NDC()-newwidth)
+    self.AddEntry(histo, label, option)
+ROOT.TLegend.AddEntryZprimeLarge = AddEntryZprimeLarge
+
+
+
 def AddEntry22( self, histo, label, option='L'):
     self.SetY1NDC(self.GetY1NDC()-0.045)
     width=self.GetX2NDC()-self.GetX1NDC()
@@ -3198,7 +3219,7 @@ def divideHistos(listOfHistoLists, numeratorPlot, denumeratorPlot, normalizefirs
         #for h in listOfHisto:
             #h.Sumw2()
     
-def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='define name', rebin=1, fitoption='pol2', labels=None, autoXrange=False):
+def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='define name', rebin=1, fitoption='pol2',parameter_set=0.0, labels=None, autoXrange=False):
     if labels==None:
         labels = len(listOfHistoListsToPlot)*['Singal-BKG-Shape-Ratio']
     canvases=[]
@@ -3223,7 +3244,7 @@ def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='d
             print histo.GetName(), ' Integral=', histo.IntegralAndError(0,histo.GetNbinsX(),error,""),'+-',error, '  Nbins=', histo.GetNbinsX(), '  nonemptybins=', nonemptybins, ' Int/nonemtybins=',  (histo.IntegralAndError(0,histo.GetNbinsX(),error,""))/float(nonemptybins),'+-',error/float(nonemptybins)
              
             data=ROOT.TGraphAsymmErrors(histo)
-            fit=fitFunctionToHistogrammwitherrorband(histo,fitoption, autoXrange)   
+            fit=fitFunctionToHistogrammwitherrorband(histo,fitoption,parameter_set, autoXrange)   
             #fit=fitFunctionToHistogrammwitherrorband(histo,"[0]+([1]*log(x-[3])+[2]*log(x-[4])*log(x-[4]))")
             #fit=fitFunctionToHistogrammwitherrorband(histo,"[0]+([1]*log(x)+[2]*log(x)*log(x))*erf(x-[3]/[4])")
             canvas=getCanvas(data.GetName(),ratio)
@@ -3278,9 +3299,11 @@ def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='d
             #canvas.Update()
             
             l=getLegend()
-            l.AddEntryZprime(data,label ,'P') 
+            label='fit propability='+str(round(fit[1].Prob(),3))
+            l.AddEntryZprimeLarge(data,label ,'P') 
             #l.AddEntryZprime(data,'Singal-BKG-Shape-Ratio','P')
             l.AddEntryZprime(fit[0],"fit",'L')
+            l.SetTextSize(0.04)
             l.Draw('same')
             
             #canvas.Update()
@@ -3299,7 +3322,7 @@ def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='d
     #writeTGraphstoextraFile(ListofTgraphsforFile,ListofTgraphNamsforFile,'SB_transferfunctions')
     return fit[1]
     
-def fitFunctionToHistogrammwitherrorband(histo, fitoption="[0]+[1]*log(x)+[2]*log(x)*log(x)",autoXrange=False):
+def fitFunctionToHistogrammwitherrorband(histo, fitoption="[0]+[1]*log(x)+[2]*log(x)*log(x)",parameter_set=0.0,autoXrange=False):
     
     xmax=(histo.GetBinCenter(1)-histo.GetBinWidth(1))
     
@@ -3372,10 +3395,18 @@ def fitFunctionToHistogrammwitherrorband(histo, fitoption="[0]+[1]*log(x)+[2]*lo
         fitfunction.SetParameter(2,0.0)
         #fitfunction.SetParameter(3,400.0)        
         #fitfunction.SetParameter(4,400.0)        
-        #fitfunction.SetParameter(5,400.0)        
+        #fitfunction.SetParameter(5,400.0)  2396      
         
-        
-        
+    if(fitoption=="[0]*(x-[2])+[1]+1.0"):
+        fitfunction.SetParameter(0,0.0)
+        fitfunction.SetParameter(1,0.0)  
+        fitfunction.SetParameter(2,parameter_set)  
+        fitfunction.FixParameter(2,parameter_set)  
+                        
+    if(fitoption=="[0]*(x-1769.85929256)+1.0+[1]"):
+        fitfunction.SetParameter(0,0.0)
+        fitfunction.SetParameter(1,0.0)
+                
     if(fitoption=="pol2"):
         fitfunction.SetParameter(0,1.0)
         fitfunction.SetParameter(1,0.0)
@@ -3415,6 +3446,7 @@ def fitFunctionToHistogrammwitherrorband(histo, fitoption="[0]+[1]*log(x)+[2]*lo
         xs.append(histo.GetBinCenter(i))
         ys.append(histo.GetBinContent(i))
         exs.append(histo.GetBinWidth(i)/2.0)
+        #exs.append(0.0)
         eys.append(histo.GetBinError(i))
     #print len(xs),"  ",xs,"  ",ys,"  ",exs,"  ",eys
     x=array.array('f',xs)
@@ -3423,8 +3455,13 @@ def fitFunctionToHistogrammwitherrorband(histo, fitoption="[0]+[1]*log(x)+[2]*lo
     ey=array.array('f',eys)
     graph=ROOT.TGraphErrors(len(xs),x,y,ex,ey)
     
-    res=graph.Fit(fitfunction,'S0M')
+    res=graph.Fit(fitfunction,'S0EMB')
     fit=graph.GetFunction("fit")
+   
+    
+    #res=histo.Fit(fitfunction,'S0EMB')
+    #fit=histo.GetFunction("fit")
+        
     if int(res)>=0:
     #if not res.IsEmpty():
         print 'Successfully fitted to histogramm ', histo.GetName()
@@ -4227,7 +4264,7 @@ def rebintovarbinsLLL(lll, writeRebinnedHistostoFile=False, treatMCasData=False,
                     objects.append(historeturn)
                 elif (('Zprime_M' in histo.GetName()) and (not (isinstance(histo,ROOT.TH2)))):
                     #print 'Nbins histo before ZprimeM ', histo.GetNbinsX()
-                    xbins= array.array('d',[0,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3500,5000,5050])
+                    xbins= array.array('d',[1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3500,5000,5050])
                     #xbins= array.array('d',[0,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,5000])
                     #xbins= array.array('d',[0,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3500,4000,5000])
                     #xbins= array.array('d',[0,500,900,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3250,3500,3750,4000,4500,5000])
@@ -4235,10 +4272,10 @@ def rebintovarbinsLLL(lll, writeRebinnedHistostoFile=False, treatMCasData=False,
                     #xbins= array.array('d',[0,500,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200,2300,2400,2500,2600,2700,2800,2900,3000,3100,3200,3300,3400,3500,3600,3700,3800,3900,4000,4200,4500,5000])
                     historeturn=ROOT.TH1F(histo.GetName(),histo.GetTitle(),len(xbins)-1,xbins)
                     binwidthX=histo.GetXaxis().GetBinWidth(0)
-                    for i in range(historeturn.GetNbinsX()):
+                    for i in range(historeturn.GetNbinsX()+1):
                         ibincontent=0
                         ibinerror=0
-                        for j in range(histo.GetNbinsX()):
+                        for j in range(histo.GetNbinsX()+1):
                             if(histo.GetXaxis().GetBinCenter(j)>historeturn.GetXaxis().GetBinLowEdge(i) and histo.GetXaxis().GetBinCenter(j)<(historeturn.GetXaxis().GetBinLowEdge(i)+historeturn.GetXaxis().GetBinWidth(i))):
                                 if histo.GetBinContent(j)>=0:
                                     ibincontent+=histo.GetBinContent(j)                                
@@ -4310,16 +4347,16 @@ def rebintovarbinsLOL(lol,writeRebinnedHistostoFile=False, treatMCasData=False, 
                 objects.append(historeturn)
             elif (('Zprime_M' in histo.GetName()) and (not (isinstance(histo,ROOT.TH2)))):
                 #print 'Nbins histo before ZprimeM ', histo.GetNbinsX()
-                xbins= array.array('d',[0,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3500,5000,5050])
+                xbins= array.array('d',[1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3500,5000,5050])
                 #xbins= array.array('d',[0,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,5000])
                 #xbins= array.array('d',[0,500,900,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3250,3500,3750,4000,4500,5000])
                 #xbins= array.array('d',[0,500,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200,2300,2400,2500,2600,2700,2800,2900,3000,3100,3200,3300,3400,3500,3600,3700,3800,3900,4000,4200,4500,5000])                
                 historeturn=ROOT.TH1F(histo.GetName(),histo.GetTitle(),len(xbins)-1,xbins)
                 binwidthX=histo.GetXaxis().GetBinWidth(0)
-                for i in range(historeturn.GetNbinsX()):
+                for i in range(historeturn.GetNbinsX()+1):
                     ibincontent=0
                     ibinerror=0
-                    for j in range(histo.GetNbinsX()):
+                    for j in range(histo.GetNbinsX()+1):
                         if(histo.GetXaxis().GetBinCenter(j)>historeturn.GetXaxis().GetBinLowEdge(i) and histo.GetXaxis().GetBinCenter(j)<(historeturn.GetXaxis().GetBinLowEdge(i)+historeturn.GetXaxis().GetBinWidth(i))):
                                 ibincontent+=histo.GetBinContent(j)
                                 if treatMCasData and (('QCDMadgraph' in histo.GetName()) or ('QCDPythia8' in histo.GetName()) or ('BKG' in histo.GetName()) or ('DATA' in histo.GetName())):
@@ -4381,7 +4418,7 @@ def chekcNbins(lol):
                 print 'Nbins histo after TprimeM ', histo.GetNbinsX(),'  ', histo
             if (('Zprime_M' in histo.GetName()) and (not (isinstance(histo,ROOT.TH1)))):
                 print 'Nbins histo after ZprimeM ', histo.GetNbinsX(),'  ', histo
-    raw_input()
+    #raw_input()
     
     
     
@@ -4437,9 +4474,22 @@ def subtract_lols(ll1,ll2):
 
 
 def ABCDclosure1D_new(lol,plotnames,samples,CatA,CatB,CatC,CatD, CatE,CatF,CatG,CatH,normalizefirst=False,rebin=1,option='',name='nameneeded',isdata=False):
+    
     lolclone=copy.deepcopy(lol)
     lolclone2=copy.deepcopy(lol)
     lolclone3=copy.deepcopy(lol)
+    
+    x0=0.0
+    for i in range(lolclone3[plotnames.index(CatE)][0].GetNbinsX()):
+        if lolclone3[plotnames.index(CatE)][0].GetBinCenter(i)>0:
+            x0=x0+lolclone3[plotnames.index(CatE)][0].GetBinCenter(i)
+                                               
+    x0=x0/(float(lolclone3[plotnames.index(CatE)][0].GetNbinsX()))
+    print x0
+    #raw_input()
+    
+    
+    
     if not isdata:
         lolclone3[plotnames.index(CatA)][0].Rebin(lolclone3[plotnames.index(CatA)][0].GetNbinsX()) 
         lolclone3[plotnames.index(CatB)][0].Rebin(lolclone3[plotnames.index(CatB)][0].GetNbinsX()) 
@@ -4461,6 +4511,10 @@ def ABCDclosure1D_new(lol,plotnames,samples,CatA,CatB,CatC,CatD, CatE,CatF,CatG,
     divideHistos(lolclone, plotnames.index(CatE), plotnames.index(CatF), normalizefirst,1,option)
     divideHistos(lolclone, plotnames.index(CatG), plotnames.index(CatH), normalizefirst,1,option)
     divideHistos(lolclone, plotnames.index(CatE), plotnames.index(CatG), False,1,option)
+    
+    objects=[lolclone[plotnames.index(CatA)][0],lolclone[plotnames.index(CatE)][0]]
+    writeObjects(objects,os.getcwd()+'/closure_files/'+name)
+    
     fit='pol0'
     if not isdata:
         #print "rate uncertainty  ", lolclone[plotnames.index(CatA)][0]," =",ABCDrate
@@ -4469,35 +4523,58 @@ def ABCDclosure1D_new(lol,plotnames,samples,CatA,CatB,CatC,CatD, CatE,CatF,CatG,
     fit0resEFGH=writeHistoListwithXYErrors([lolclone[plotnames.index(CatE)]], samples,name+'_'+'ratioEFoverGH'+'_'+fit, 1, fit,['Closure','Closure'], False)
     fit='pol1'
     if not isdata:
+        #'[0](x-1856.0)+1.0+[1]'
         #print "rate uncertainty  ", lolclone[plotnames.index(CatA)][0]," =",ABCDrate
         writeHistoListwithXYErrors([lolclone[plotnames.index(CatA)]], samples,name+'_'+'ratioABoverCD'+'_'+fit, 1, fit, ['Closure','Closure'], False)
+        #writeHistoListwithXYErrors([lolclone[plotnames.index(CatA)]], samples,name+'_'+'ratioABoverCD'+'_'+fit, 1, fit, ['Closure','Closure'], False)
     #print "rate uncertainty  ", lolclone[plotnames.index(CatE)][0]," =",EFGHrate
     writeHistoListwithXYErrors([lolclone[plotnames.index(CatE)]], samples,name+'_'+'ratioEFoverGH'+'_'+fit, 1, fit, ['Closure','Closure'], False)
     
+    
+    
+    
+    #writeListOfHistoListsToFile(lolclone,samples,name+'_'+'ratioABoverCD'+'_'+fit)
+    
+    #dummyhisto=copy.deepcopy(lolclone3[plotnames.index(CatA)][0])
+    #print dummyhisto.GetNbinsX()
+    #for i in range(dummyhisto.GetNbinsX()):
+        #dummyhisto.SetBinContent(i,1.0)
+        #dummyhisto.SetBinError(i,0.0)
+        #print "bin", i, "    ", dummyhisto.GetBinContent(i), "    ", dummyhisto.GetBinError(i)
+        
+    #print "Comparing ABCD with y=1 ", lolclone[plotnames.index(CatA)][0].Chi2Test(dummyhisto,"WWP")    
+    #print "Comparing EFGH with y=1 ", lolclone[plotnames.index(CatE)][0].Chi2Test(dummyhisto,"WWP")    
+    #raw_input()
 
 
     print "calculating shape uncertainty"
     if not isdata:
         print "paramter0",fit0resABCD.Parameters()[0]
-        lolclone[plotnames.index(CatA)][0].Scale(1.0/fit0resABCD.Parameters()[0])
+        for i in range(lolclone[plotnames.index(CatA)][0].GetNbinsX()):
+            if lolclone[plotnames.index(CatA)][0].GetBinContent(i)>0:
+                lolclone[plotnames.index(CatA)][0].SetBinContent(i,lolclone[plotnames.index(CatA)][0].GetBinContent(i)+(1-fit0resABCD.Parameters()[0]))
+            
+        #lolclone[plotnames.index(CatA)][0].Scale(1.0/fit0resABCD.Parameters()[0])
         #divideHistos(lolclone2, plotnames.index(CatA), plotnames.index(CatB), True,1,option)
         #divideHistos(lolclone2, plotnames.index(CatC), plotnames.index(CatD), True,1,option)
         #divideHistos(lolclone2, plotnames.index(CatA), plotnames.index(CatC), False,1,option)
     print "paramter0",fit0resEFGH.Parameters()[0]
-    lolclone[plotnames.index(CatE)][0].Scale(1.0/fit0resEFGH.Parameters()[0])
-    #divideHistos(lolclone2, plotnames.index(CatE), plotnames.index(CatF), True,1,option)
-    #divideHistos(lolclone2, plotnames.index(CatG), plotnames.index(CatH), True,1,option)
-    #divideHistos(lolclone2, plotnames.index(CatE), plotnames.index(CatG), False,1,option)
     
-    fit='pol1'
+    for i in range(lolclone[plotnames.index(CatE)][0].GetNbinsX()):
+        if lolclone[plotnames.index(CatE)][0].GetBinContent(i)>0:
+            lolclone[plotnames.index(CatE)][0].SetBinContent(i,lolclone[plotnames.index(CatE)][0].GetBinContent(i)+(1-fit0resABCD.Parameters()[0]))
+    
+    #lolclone[plotnames.index(CatE)][0].Scale(1.0/fit0resEFGH.Parameters()[0])
+    
+    fit='[0](x-[1])'
     if not isdata:
         ABCDrate=abs(1-fit0resABCD.Parameters()[0])
         print "rate uncertainty  ", lolclone[plotnames.index(CatA)][0]," =",ABCDrate
-        fitresABCD=writeHistoListwithXYErrors([lolclone[plotnames.index(CatA)]], samples,name+'_'+'shapeABoverCD'+'_'+fit, 1, fit, ['Closure','Closure'], False)
+        fitresABCD=writeHistoListwithXYErrors([lolclone[plotnames.index(CatA)]], samples,name+'_'+'shapeABoverCD'+'_pol1', 1, fit, ['Closure','Closure'], False)
     EFGHrate=abs(1-fit0resEFGH.Parameters()[0])
     print "rate uncertainty  ", lolclone[plotnames.index(CatE)][0]," =",EFGHrate
-    fitresEFGH=writeHistoListwithXYErrors([lolclone[plotnames.index(CatE)]], samples,name+'_'+'shapeEFoverGH'+'_'+fit, 1, fit, ['Closure','Closure'], False)
-    
+    fitresEFGH=writeHistoListwithXYErrors([lolclone[plotnames.index(CatE)]], samples,name+'_'+'shapeEFoverGH'+'_pol1', 1, fit, ['Closure','Closure'], False)
+    writeListOfHistoListsToFile(lolclone,samples,name+'_'+'ratioEFoverGH'+'_'+fit)
     #if not isdata:
         #print "paramter0",fitresABCD.Parameters()[0]
         #print "paramter1",fitresABCD.Parameters()[1]
@@ -4551,6 +4628,244 @@ def ABCDclosure1D_new(lol,plotnames,samples,CatA,CatB,CatC,CatD, CatE,CatF,CatG,
         #print "Comparing data EFGH with MC ABCD results in propability=", max(checkhisto.Chi2Test(lolclone[plotnames.index(CatA)][0],"P"),checkhisto2.Chi2Test(lolclone[plotnames.index(CatA)][0],"P"))
     if not isdata:
         print "Comparing MC ABCD with MC EFGH results in propability= ", lolclone[plotnames.index(CatA)][0].Chi2Test(lolclone[plotnames.index(CatE)][0],"P")
+
+
+
+def ABCDclosure1D_final(lol,plotnames,samples,CatA,CatB,CatC,CatD, CatE,CatF,CatG,CatH,normalizefirst=False,rebin=1,option='',name='nameneeded',isdata=False):
+    
+    lolclone=copy.deepcopy(lol)
+    lolclone2=copy.deepcopy(lol)
+    lolclone3=copy.deepcopy(lol)
+    
+    #x0=0.0
+    #x02=0.0
+    #x03=0.0
+    #x0_wi=0.0
+    #x02_wi=0.0
+    #x03_wi=0.0
+    #for i in range(lolclone3[plotnames.index(CatE)][0].GetNbinsX()):
+        #if lolclone3[plotnames.index(CatE)][0].GetBinCenter(i)>1000 and lolclone3[plotnames.index(CatE)][0].GetBinCenter(i)<5000:
+            #x0=x0+lolclone3[plotnames.index(CatE)][0].GetBinCenter(i)
+            #x0_wi=x0_wi+1
+            #x02=x02+lolclone3[plotnames.index(CatE)][0].GetBinCenter(i)/((lolclone3[plotnames.index(CatE)][0].GetBinWidth(i)/2.0)*(lolclone3[plotnames.index(CatE)][0].GetBinWidth(i)/2.0))
+            #x02_wi=x02_wi+1.0/((lolclone3[plotnames.index(CatE)][0].GetBinWidth(i)/2.0)*(lolclone3[plotnames.index(CatE)][0].GetBinWidth(i)/2.0))
+            #x03=x03+lolclone3[plotnames.index(CatE)][0].GetBinCenter(i)/((lolclone3[plotnames.index(CatE)][0].GetBinError(i))*(lolclone3[plotnames.index(CatE)][0].GetBinError(i)))
+            #x03_wi=x03_wi+1.0/(lolclone3[plotnames.index(CatE)][0].GetBinError(i)*lolclone3[plotnames.index(CatE)][0].GetBinError(i))
+            
+    #x0=x0/(float(x0_wi))
+    #x02=x02/(float(x02_wi))
+    #x03=x03/(float(x03_wi))
+    
+    #print x0
+    #print x02
+    #print x03
+    
+    #raw_input()
+    
+    
+    
+    if not isdata:
+        lolclone3[plotnames.index(CatA)][0].Rebin(lolclone3[plotnames.index(CatA)][0].GetNbinsX()) 
+        lolclone3[plotnames.index(CatB)][0].Rebin(lolclone3[plotnames.index(CatB)][0].GetNbinsX()) 
+        lolclone3[plotnames.index(CatC)][0].Rebin(lolclone3[plotnames.index(CatC)][0].GetNbinsX()) 
+        lolclone3[plotnames.index(CatD)][0].Rebin(lolclone3[plotnames.index(CatD)][0].GetNbinsX()) 
+    lolclone3[plotnames.index(CatE)][0].Rebin(lolclone3[plotnames.index(CatE)][0].GetNbinsX()) 
+    lolclone3[plotnames.index(CatF)][0].Rebin(lolclone3[plotnames.index(CatF)][0].GetNbinsX()) 
+    lolclone3[plotnames.index(CatG)][0].Rebin(lolclone3[plotnames.index(CatG)][0].GetNbinsX()) 
+    lolclone3[plotnames.index(CatH)][0].Rebin(lolclone3[plotnames.index(CatH)][0].GetNbinsX()) 
+    
+    
+ 
+    
+    #print " GetNbinsX", lolclone3[plotnames.index(CatA)][0].GetNbinsX(), " integral ",lolclone3[plotnames.index(CatA)][0].Integral()
+    if not isdata:
+        ABCDrate=abs(1.0-lolclone3[plotnames.index(CatA)][0].Integral()*lolclone3[plotnames.index(CatD)][0].Integral()/(lolclone3[plotnames.index(CatB)][0].Integral()*lolclone3[plotnames.index(CatC)][0].Integral()))
+        #print "rate uncertainty  ", lolclone[plotnames.index(CatA)][0]," =",ABCDrate
+        divideHistos(lolclone, plotnames.index(CatA), plotnames.index(CatB), normalizefirst,1,option)
+        divideHistos(lolclone, plotnames.index(CatC), plotnames.index(CatD), normalizefirst,1,option)
+        divideHistos(lolclone, plotnames.index(CatA), plotnames.index(CatC), False,1,option)
+    #EFGHrate=abs(1.0-lolclone3[plotnames.index(CatE)][0].Integral()*lolclone3[plotnames.index(CatH)][0].Integral()/(lolclone3[plotnames.index(CatF)][0].Integral()*lolclone3[plotnames.index(CatG)][0].Integral()))
+    #print "rate uncertainty  ", lolclone3[plotnames.index(CatE)][0]," =",EFGHrate
+    divideHistos(lolclone, plotnames.index(CatE), plotnames.index(CatF), normalizefirst,1,option)
+    divideHistos(lolclone, plotnames.index(CatG), plotnames.index(CatH), normalizefirst,1,option)
+    divideHistos(lolclone, plotnames.index(CatE), plotnames.index(CatG), False,1,option)
+    
+    x0=0.0
+    x02=0.0
+    x03=0.0
+    x0_wi=0
+    x02_wi=0.0
+    x03_wi=0.0
+    for i in range(lolclone[plotnames.index(CatE)][0].GetNbinsX()):
+        print lolclone[plotnames.index(CatE)][0].GetBinContent(i)
+        if lolclone[plotnames.index(CatE)][0].GetBinContent(i)>0:
+            x0=x0+lolclone[plotnames.index(CatE)][0].GetBinCenter(i)
+            print x0
+            x0_wi=x0_wi+1
+            print x0_wi
+            x02=x02+lolclone[plotnames.index(CatE)][0].GetBinCenter(i)/((lolclone[plotnames.index(CatE)][0].GetBinWidth(i)/2.0)*(lolclone[plotnames.index(CatE)][0].GetBinWidth(i)/2.0))
+            x02_wi=x02_wi+1.0/((lolclone[plotnames.index(CatE)][0].GetBinWidth(i)/2.0)*(lolclone[plotnames.index(CatE)][0].GetBinWidth(i)/2.0))
+            x03=x03+lolclone[plotnames.index(CatE)][0].GetBinCenter(i)/((lolclone[plotnames.index(CatE)][0].GetBinError(i))*(lolclone[plotnames.index(CatE)][0].GetBinError(i)))
+            x03_wi=x03_wi+1.0/(lolclone[plotnames.index(CatE)][0].GetBinError(i)*lolclone[plotnames.index(CatE)][0].GetBinError(i))
+            
+    x0=x0/(float(x0_wi))
+    x02=x02/(float(x02_wi))
+    x03=x03/(float(x03_wi))
+    
+    print x0
+    print x02
+    print x03       
+    
+    
+    objects=[]
+    if not isdata:
+        objects.append(lolclone[plotnames.index(CatA)][0])
+    objects.append(lolclone[plotnames.index(CatE)][0])
+    writeObjects(objects,os.getcwd()+'/closure_files/'+name)
+    
+    #fit='pol0'
+    #if not isdata:
+        ##print "rate uncertainty  ", lolclone[plotnames.index(CatA)][0]," =",ABCDrate
+        #fit0resABCD=writeHistoListwithXYErrors([lolclone[plotnames.index(CatA)]], samples,name+'_'+'ratioABoverCD'+'_'+fit, 1, fit, ['Closure','Closure'], False)
+    ##print "rate uncertainty  ", lolclone[plotnames.index(CatE)][0]," =",EFGHrate
+    #fit0resEFGH=writeHistoListwithXYErrors([lolclone[plotnames.index(CatE)]], samples,name+'_'+'ratioEFoverGH'+'_'+fit, 1, fit,['Closure','Closure'], False)
+    fit='pol1'
+    if not isdata:
+        x0ABCD=0.0
+        x0widABCD=0.0
+        x0ABCD2=0.0
+        x0widABCD2=0.0
+        for i in range(lolclone[plotnames.index(CatA)][0].GetNbinsX()):
+            if lolclone[plotnames.index(CatE)][0].GetBinContent(i)>0:
+                x0ABCD=x0ABCD+lolclone[plotnames.index(CatA)][0].GetBinCenter(i)/((lolclone[plotnames.index(CatA)][0].GetBinError(i))*(lolclone[plotnames.index(CatA)][0].GetBinError(i)))
+                x0ABCD2=x0ABCD2+lol[plotnames.index(CatA)][0].GetBinCenter(i)/(1.0/lol[plotnames.index(CatA)][0].GetBinContent(i)+1.0/lol[plotnames.index(CatB)][0].GetBinContent(i)+1.0/lol[plotnames.index(CatC)][0].GetBinContent(i)+1.0/lol[plotnames.index(CatD)][0].GetBinContent(i))
+            #x0widABCD=x0widABCD+1.0/((lolclone[plotnames.index(CatA)][0].GetBinError(i))*(lolclone[plotnames.index(CatA)][0].GetBinError(i))+(lolclone[plotnames.index(CatA)][0].GetBinWidth(i)/2.0)*(lolclone[plotnames.index(CatA)][0].GetBinWidth(i)/2.0))
+                x0widABCD=x0widABCD+1.0/((lolclone[plotnames.index(CatA)][0].GetBinError(i))*(lolclone[plotnames.index(CatA)][0].GetBinError(i)))
+                x0widABCD2=x0widABCD2+1.0/(1.0/lol[plotnames.index(CatA)][0].GetBinContent(i)+1.0/lol[plotnames.index(CatB)][0].GetBinContent(i)+1.0/lol[plotnames.index(CatC)][0].GetBinContent(i)+1.0/lol[plotnames.index(CatD)][0].GetBinContent(i))
+        x0ABCD=x0ABCD/x0widABCD
+        x0ABCD2=x0ABCD2/x0widABCD2
+        #'[0](x-1856.0)+1.0+[1]'[0]*(x-[2])+[1]+1.0
+        #print "rate uncertainty  ", lolclone[plotnames.index(CatA)][0]," =",ABCDrate
+        ABCDfitres=writeHistoListwithXYErrors([lolclone[plotnames.index(CatA)]], samples,name+'_'+'ratioABoverCD'+'_pol0', 1, 'pol0',x0ABCD, ['Closure','Closure'], False)
+        print "x0ABCD",x0ABCD
+        print "x0ABCD2",x0ABCD2
+        ABCDfitres=writeHistoListwithXYErrors([lolclone[plotnames.index(CatA)]], samples,name+'_'+'ratioABoverCD'+'_'+fit, 1, '[0]*(x-[2])+[1]+1.0',x0ABCD, ['Closure','Closure'], False)
+        #writeHistoListwithXYErrors([lolclone[plotnames.index(CatA)]], samples,name+'_'+'ratioABoverCD'+'_'+fit, 1, fit, ['Closure','Closure'], False)
+    #print "rate uncertainty  ", lolclone[plotnames.index(CatE)][0]," =",EFGHrate
+    
+    x0EFGH=0.0
+    x0widEFGH=0.0
+    for i in range(lolclone[plotnames.index(CatE)][0].GetNbinsX()):
+        if lolclone[plotnames.index(CatE)][0].GetBinContent(i)>0:
+            x0EFGH=x0EFGH+lolclone[plotnames.index(CatE)][0].GetBinCenter(i)/((lolclone[plotnames.index(CatE)][0].GetBinError(i))*(lolclone[plotnames.index(CatE)][0].GetBinError(i)))
+            x0widEFGH=x0widEFGH+1.0/((lolclone[plotnames.index(CatE)][0].GetBinError(i))*(lolclone[plotnames.index(CatE)][0].GetBinError(i)))    
+    
+    x0EFGH=x0EFGH/x0widEFGH
+    print "x0EFGH",x0EFGH
+    EFGHfitres=writeHistoListwithXYErrors([lolclone[plotnames.index(CatE)]], samples,name+'_'+'ratioEFoverGH'+'_pol0', 1, 'pol0',x0EFGH, ['Closure','Closure'], False)
+    EFGHfitres=writeHistoListwithXYErrors([lolclone[plotnames.index(CatE)]], samples,name+'_'+'ratioEFoverGH'+'_'+fit, 1, '[0]*(x-[2])+[1]+1.0',x0EFGH, ['Closure','Closure'], False)
+    
+    script="""
+    """
+    
+    if not isdata:
+        script=script+"""
+rate uncertainty ABCD:"""+str(abs(ABCDfitres.Parameters()[1]))+"""
+shape uncertainty ABCD:"""+str(abs(ABCDfitres.Parameters()[0]))+"""
+"""
+        #print "rate uncertainty ABCD:", ABCDfitres.Parameters()[1]
+        #print "shape uncertaintiy ABCD:", ABCDfitres.Parameters()[0]
+        
+    script=script+"""
+rate uncertainty EFGH:"""+str(abs(EFGHfitres.Parameters()[1]))+"""
+shape uncertainty EFGH:"""+str(abs(EFGHfitres.Parameters()[0]))+"""
+"""    
+#print "rate uncertainty EFGH:",  EFGHfitres.Parameters()[1]
+    #print "shape uncertaintiy EFGH:",     EFGHfitres.Parameters()[0]
+    print script
+    o=open("fit_resutls_closures/"+name+".txt",'w')
+    o.write(script)
+    #print "calculating shape uncertainty"
+    #if not isdata:
+        #print "paramter0",fit0resABCD.Parameters()[0]
+        #for i in range(lolclone[plotnames.index(CatA)][0].GetNbinsX()):
+            #if lolclone[plotnames.index(CatA)][0].GetBinContent(i)>0:
+                #lolclone[plotnames.index(CatA)][0].SetBinContent(i,lolclone[plotnames.index(CatA)][0].GetBinContent(i)+(1-fit0resABCD.Parameters()[0]))
+            
+        ##lolclone[plotnames.index(CatA)][0].Scale(1.0/fit0resABCD.Parameters()[0])
+        ##divideHistos(lolclone2, plotnames.index(CatA), plotnames.index(CatB), True,1,option)
+        ##divideHistos(lolclone2, plotnames.index(CatC), plotnames.index(CatD), True,1,option)
+        ##divideHistos(lolclone2, plotnames.index(CatA), plotnames.index(CatC), False,1,option)
+    #print "paramter0",fit0resEFGH.Parameters()[0]
+    
+    #for i in range(lolclone[plotnames.index(CatE)][0].GetNbinsX()):
+        #if lolclone[plotnames.index(CatE)][0].GetBinContent(i)>0:
+            #lolclone[plotnames.index(CatE)][0].SetBinContent(i,lolclone[plotnames.index(CatE)][0].GetBinContent(i)+(1-fit0resABCD.Parameters()[0]))
+    
+    ##lolclone[plotnames.index(CatE)][0].Scale(1.0/fit0resEFGH.Parameters()[0])
+    
+    #fit='[0](x-[1])'
+    #if not isdata:
+        #ABCDrate=abs(1-fit0resABCD.Parameters()[0])
+        #print "rate uncertainty  ", lolclone[plotnames.index(CatA)][0]," =",ABCDrate
+        #fitresABCD=writeHistoListwithXYErrors([lolclone[plotnames.index(CatA)]], samples,name+'_'+'shapeABoverCD'+'_pol1', 1, fit, ['Closure','Closure'], False)
+    #EFGHrate=abs(1-fit0resEFGH.Parameters()[0])
+    #print "rate uncertainty  ", lolclone[plotnames.index(CatE)][0]," =",EFGHrate
+    #fitresEFGH=writeHistoListwithXYErrors([lolclone[plotnames.index(CatE)]], samples,name+'_'+'shapeEFoverGH'+'_pol1', 1, fit, ['Closure','Closure'], False)
+    #writeListOfHistoListsToFile(lolclone,samples,name+'_'+'ratioEFoverGH'+'_'+fit)
+    ##if not isdata:
+        ##print "paramter0",fitresABCD.Parameters()[0]
+        ##print "paramter1",fitresABCD.Parameters()[1]
+        ##checkhisto=copy.deepcopy(lolclone[plotnames.index(CatA)][0])
+        ##checkhisto2=copy.deepcopy(lolclone[plotnames.index(CatA)][0])
+        
+        ##par0=fitresABCD.Parameters()[0]
+        ##par1=fitresABCD.Parameters()[1]
+        
+        ##for i in range(checkhisto.GetNbinsX()):
+            ##if lolclone[plotnames.index(CatE)][0][i] !=0:
+                ##checkhisto.SetBinContent(i,1+(1-(par0+par1*(checkhisto.GetBinCenter(i)))))
+                ##checkhisto2.SetBinContent(i,1-(1-(par0+par1*(checkhisto.GetBinCenter(i)))))
+            ##else:
+                ##checkhisto.SetBinContent(i,0)
+                ##checkhisto2.SetBinContent(i,0)
+            ##checkhisto.SetBinError(i,0)
+            ##checkhisto2.SetBinError(i,0)
+
+        ##print "Comparing MC ABCD with MC EFGH results in propability=", max(checkhisto.Chi2Test(lolclone[plotnames.index(CatE)][0],"P"),checkhisto2.Chi2Test(lolclone[plotnames.index(CatE)][0],"P"))
+        ##if "with" in lolclone[plotnames.index(CatE)][0].GetName():
+            ##par0=1.01372
+            ##par1=-1.4237e-05
+        ##else:
+            ##par0=0.959813
+            ##par1=1.7573e-05
+        
+        ##for i in range(checkhisto.GetNbinsX()):
+            ##if lolclone[plotnames.index(CatE)][0][i] !=0:
+                ##checkhisto.SetBinContent(i,1+(1-(par0+par1*(checkhisto.GetBinCenter(i)))))
+                ##checkhisto2.SetBinContent(i,1-(1-(par0+par1*(checkhisto.GetBinCenter(i)))))
+            ##else:
+                ##checkhisto.SetBinContent(i,0)
+                ##checkhisto2.SetBinContent(i,0)
+            ##checkhisto.SetBinError(i,0)
+            ##checkhisto2.SetBinError(i,0)
+
+        ##print "Comparing data EFGH with MC EFGH results in propability=", max(checkhisto.Chi2Test(lolclone[plotnames.index(CatE)][0],"P"),checkhisto2.Chi2Test(lolclone[plotnames.index(CatE)][0],"P"))
+        
+        
+        ##for i in range(checkhisto.GetNbinsX()):
+            ##if lolclone[plotnames.index(CatA)][0][i] !=0:
+                ##checkhisto.SetBinContent(i,1+(1-(par0+par1*(checkhisto.GetBinCenter(i)))))
+                ##checkhisto2.SetBinContent(i,1-(1-(par0+par1*(checkhisto.GetBinCenter(i)))))
+            ##else:
+                ##checkhisto.SetBinContent(i,0)
+                ##checkhisto2.SetBinContent(i,0)
+            ##checkhisto.SetBinError(i,0)
+            ##checkhisto2.SetBinError(i,0)
+
+        ##print "Comparing data EFGH with MC ABCD results in propability=", max(checkhisto.Chi2Test(lolclone[plotnames.index(CatA)][0],"P"),checkhisto2.Chi2Test(lolclone[plotnames.index(CatA)][0],"P"))
+    #if not isdata:
+        #print "Comparing MC ABCD with MC EFGH results in propability= ", lolclone[plotnames.index(CatA)][0].Chi2Test(lolclone[plotnames.index(CatE)][0],"P")
     
 def efficiencies(listOfHistoListsToPlot,sampleListToPlot,numerator_index_list, denumerator_index_list,name='define name',labels=None):
     if labels==None:
