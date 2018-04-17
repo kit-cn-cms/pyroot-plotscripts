@@ -67,13 +67,37 @@ def getHead3():
   int DoABCDsyst=0;
   int DoMCDataWeights=1;
   int DoMCDataWeights_ttbaronly=0;
+  int DoMCDataWeights_ST_tW=0;
+  int DoMCDataWeights_ST_t=0;
+  int DoMCDataWeights_ST_s=0;
+  int murmuf1500=0;
+  int murmuf1750=0;
+  int murmuf2000=0;
+  int murmuf2250=0;
+  int murmuf2500=0;
+  int murmuf2750=0;
+  int murmuf3000=0;
+  int murmuf3500=0;
+  int murmuf4000=0;
   
   TString DATAstr ("DATA");
   TString ttbarstr ("ttbar");
+  TString ST_tWstr ("ST_tW");
+  TString ST_tstr ("ST_t");
+  TString ST_sstr ("ST_s");
+  TString STstr ("ST");
   TString QCDstr ("QCD");
   TString SCstr ("SC");
   TString Sigstr ("Sig");
-  
+  TString Sigstr ("rime1500");
+  TString Sigstr ("rime1750");
+  TString Sigstr ("rime2000");
+  TString Sigstr ("rime2250");
+  TString Sigstr ("rime2500");
+  TString Sigstr ("rime2750");
+  TString Sigstr ("rime3000");
+  TString Sigstr ("rime3500");
+  TString Sigstr ("rime4000");  
   
   //if(processname=="SingleEl" || processname=="SingleMu"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
   //if(processname=="SingleEl" || processname=="SingleMu"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
@@ -84,9 +108,25 @@ def getHead3():
 
   if(bool(procname.Contains(DATAstr))){DoABCDsyst=1; DoWeights=0; DoMCDataWeights=0; std::cout<<"is data or QCD, dont use nominal weihgts"<<std::endl;}
   if(bool(procname.Contains(QCDstr))){DoABCDsyst=1; DoMCDataWeights=0; std::cout<<"is QCD, use ABCD systematics"<<std::endl;}
-  if(bool(procname.Contains(ttbarstr)) || bool(procname.Contains(SCstr)) || bool(procname.Contains(Sigstr))){DoMCDataWeights=1; std::cout<<"is ttbar or signal, use MCDataSF nominal weihgts"<<std::endl;}
+  if(bool(procname.Contains(ttbarstr)) || bool(procname.Contains(SCstr)) || bool(procname.Contains(Sigstr))|| bool(procname.Contains(STstr))){DoMCDataWeights=1; std::cout<<"is ttbar or signal, use MCDataSF nominal weihgts"<<std::endl;}
   if(bool(procname.Contains(ttbarstr))){DoMCDataWeights_ttbaronly=1; std::cout<<"is ttbar, use MCDataSF nominal weihgts"<<std::endl;}
-
+  if(bool(procname.Contains(SCstr)) || bool(procname.Contains(Sigstr))|| bool(procname.Contains(STstr))){DoMCDataWeights_ttbaronly=0; std::cout<<"is ttbar, use MCDataSF nominal weihgts"<<std::endl;}
+  
+  
+  if(bool(procname.Contains(ST_tWstr))){DoMCDataWeights_ST_tW=1;}
+  if(bool(procname.Contains(ST_tstr))){DoMCDataWeights_ST_t=1;}
+  if(bool(procname.Contains(ST_sstr))){DoMCDataWeights_ST_s=1;}
+  
+  if(bool(procname.Contains(rime1500))){murmuf1500=1;}
+  if(bool(procname.Contains(rime1750))){murmuf1750=1;}
+  if(bool(procname.Contains(rime2000))){murmuf2000=1;}
+  if(bool(procname.Contains(rime2250))){murmuf2250=1;}
+  if(bool(procname.Contains(rime2500))){murmuf2500=1;}
+  if(bool(procname.Contains(rime2750))){murmuf2750=1;}
+  if(bool(procname.Contains(rime3000))){murmuf3000=1;}
+  if(bool(procname.Contains(rime3500))){murmuf3500=1;}
+  if(bool(procname.Contains(rime4000))){murmuf4000=1;}
+  
 
   string buf;
   stringstream ss(filenames); 
@@ -109,7 +149,7 @@ def loadaddobjects(additionalobjectsfromaddtionalrootfile):
 
 def closeaddfiles():
     return """
-  SFfile->Close();
+  //SFfile->Close();
 
 """
 
@@ -353,9 +393,12 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   
   
   
-  vetolist=['DoWeights','DoABCDsyst','DoMCDataWeights','DoMCDataWeights_ttbaronly']
+  vetolist=['DoWeights','DoABCDsyst','DoMCDataWeights','DoMCDataWeights_ttbaronly','murmuf1500','murmuf1750','murmuf2000','murmuf2250','murmuf2500','murmuf2750','murmuf3000','murmuf3500','murmuf4000']
   vetolist=vetolist+['processname','DoWeights','TMath','cout','for','int', 'if', 'cout', ';','<','i','i++','*=', 'temp','testea', 'anti_btag + 2', 'float','anti_loose_btag(Sideband_top_withbtag_anti_Topfirst_Bottoms_CSVv2,N_Sideband_top_withbtag_anti_Topfirst_Bottoms)','anti_loose_btag(Sideband_bottom_anti_Topfirst_Bottoms_CSVv2,N_Sideband_bottom_anti_Topfirst_Bottoms)' ]+['QCDMadgraph_Graph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M','QCDMadgraph_Graph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt','QCDMadgraph_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M','QCDMadgraph_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt','QCDPythia8_Graph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M','QCDPythia8_Graph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt','QCDPythia8_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M','QCDPythia8_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt','true', 'abs(', 'abs']+['abs( QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M)','abs( QCDPythia8_SF_SB_bottom_anti_Signal_Tops_Pt-QCDMadgraph_SF_SB_bottom_anti_Signal_Tops_Pt)']+['bbarportionweight(N_AK4_bottom_tag_candidates)','bbarportionweight(N_AK4_bottom_tag_candidates)']+['IsnoSignal_notopbtag(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)','IsnoSignal_withtopbtag(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)','IsnoSignal_inclusive(Zprimes_ABCD_M, Tprimes_ABCD_M, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)']+['pow(',')',',']+['pow(1+0.06,1.0/3.0','pow(1-0.06,1.0/3.0)','pow(1+0.08,1.0/3.0)','pow(1-0.08,1.0/3.0)','pow(1+0.35,1.0/3.0)','pow(1-0.35,1.0/3.0)','pow(1+0.06,1.0/3.0)','pow(1-0.06,1.0/3.0)','pow(1+0.08,1.0/3.0)','pow(1-0.08,1.0/3.0)','pow(1+0.6,1.0/3.0)','pow(1-0.6,1.0/3.0)','pow(1+0.005,1.0/7.0)','pow(1-0.005,1.0/7.0)','pow(1+0.06,1.0/7.0)','pow(1-0.06,1.0/7.0)','pow(1+0.02,1.0/7.0)','pow(1-0.02,1.0/7.0)','pow(1+0.8,1.0/7.0)','pow(1-0.8,1.0/7.0)','pow(1-0.06,1.0/3.0)','pow(1+0.10,1.0/3.0)','pow(1-0.10,1.0/3.0)','pow(1+0.02,1.0/3.0)','pow(1-0.02,1.0/3.0)','pow(1+0.12,1.0/3.0)','pow(1-0.12,1.0/3.0)','pow(1+0.01,1.0/3.0)','pow(1-0.01,1.0/3.0)','pow(1+0.08,1.0/7.0)','pow(1-0.08,1.0/7.0)','pow(1+0.05,1.0/7.0)','pow(1-0.05,1.0/7.0)','pow(1+0.02,1.0/7.0)','pow(1-0.02,1.0/7.0)']+['ABCD_Category(','const','const*']
   vetolist=vetolist+['"CatA_withtopbtag"','"CatB_withtopbtag"','"CatC_withtopbtag"','"CatD_withtopbtag"','"CatE_withtopbtag"','"CatF_withtopbtag"','"CatG_withtopbtag"','"CatH_withtopbtag"'+'"CatA_notopbtag"','"CatB_notopbtag"','"CatC_notopbtag"','"CatD_notopbtag"','"CatE_notopbtag"','"CatF_notopbtag"','"CatG_notopbtag"','"CatH_notopbtag"','"CatA_inclusive"','"CatB_inclusive"','"CatC_inclusive"','"CatD_inclusive"','"CatE_inclusive"','"CatF_inclusive"','"CatG_inclusive"','"CatH_inclusive"']+['CatA_withtopbtag','CatB_withtopbtag','CatC_withtopbtag','CatD_withtopbtag','CatE_withtopbtag','CatF_withtopbtag','CatG_withtopbtag','CatH_withtopbtag'+'CatA_notopbtag','CatB_notopbtag','CatC_notopbtag','CatD_notopbtag','CatE_notopbtag','CatF_notopbtag','CatG_notopbtag','CatH_notopbtag','CatA_inclusive','CatB_inclusive','CatC_inclusive','CatD_inclusive','CatE_inclusive','CatF_inclusive','CatG_inclusive','CatH_inclusive']+['1.0*( ABCD_Category( Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)=="CatA_withtopbtag")','1.0*( ABCD_Category( Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)=="CatH_withtopbtag")'] #+['bportionweightup','bportionweightdown']#+['bportionweightup','bportionweightdown']  
+
+  for i in range(1,100):
+      vetolist=vetolist+["Weight_pdf_refac_"+str(i)]
 
   # initialize variables object
   variables = variablebox.Variables(vetolist)
@@ -515,7 +558,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
         script+="{\n"
         script+="      if("+histoname+"_foundfirst) break;\n"
         arrayselection=variables.checkArrayLengths(','.join([ex,pw]))
-        weight='('+arrayselection+')*('+pwi+')*Weight_XS*categoryweight*sampleweight'
+        weight='('+arrayselection+')*('+pwi+')*Weight*categoryweight*sampleweight'
         print histoname
         print exi
         print weight
@@ -525,7 +568,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
       else:
         script+="      if(true){\n"  
         arrayselection=variables.checkArrayLengths(','.join([ex,pw]))
-        weight='('+arrayselection+')*('+pw+')*Weight_XS*categoryweight*sampleweight'
+        weight='('+arrayselection+')*('+pw+')*Weight*categoryweight*sampleweight'
         script+=fillHistoSyst(histoname,ex,weight,systnames,systweights)
         script+="    }\n"
     # plot two dimensional plots
@@ -564,14 +607,14 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
           script+=varLoop("i",size_of_loop)                    
           script+="{\n"
           arrayselection=variables.checkArrayLengths(','.join([exX,exY,pw]))
-          weight='('+arrayselection+')*('+pwi+')*Weight_XS*categoryweight*sampleweight'
+          weight='('+arrayselection+')*('+pwi+')*Weight*categoryweight*sampleweight'
           script+=fillTwoDimHistoSyst(histoname,exiX,exiY,weight,systnames,systweights, OnlyFirst)
           #script+="      }\n"
           script+="    }\n"
         else:
           script+="      if(true){\n"  
           arrayselection=variables.checkArrayLengths(','.join([exX,exY,pw]))
-          weight='('+arrayselection+')*('+pw+')*Weight_XS*categoryweight*sampleweight'
+          weight='('+arrayselection+')*('+pw+')*Weight*categoryweight*sampleweight'
           script+=fillTwoDimHistoSyst(histoname,exX,exY,weight,systnames,systweights)
     
     # finish category

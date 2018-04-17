@@ -148,19 +148,50 @@ if ABCDversion is 'ABCD5':
         if (not WZwindow) and fullWMSD:
             if old:
                 Zprime_withtopbtag_systrate=0.0615567929662
-                Zprime_withtopbtag_systshape_m=0.0000820445
+                Zprime_withtopbtag_systshape_m=0.00014254936429
                 Zprime_withtopbtag_systshape_c=0.815448
                 Zprime_notopbtag_systrate=0.0237731064005
                 Zprime_notopbtag_systshape_m=-0.000079382
                 Zprime_notopbtag_systshape_c=1.14017
             else:
-                Zprime_withtopbtag_systrate=0.0351573391572
-                Zprime_withtopbtag_systshape_m=-6.02946e-05
-                Zprime_withtopbtag_systshape_c=1.10373
-                Zprime_notopbtag_systrate=0.0349000297823
-                Zprime_notopbtag_systshape_m=-6.51334e-05
-                Zprime_notopbtag_systshape_c=1.11245
-        
+                #Zprime_withtopbtag_systrate=0.0631991257386
+                #Zprime_withtopbtag_systshape_m=0.00014254936429
+                #Zprime_withtopbtag_systshape_c=1.12496
+                #Zprime_notopbtag_systrate=0.049580483332 
+                #Zprime_notopbtag_systshape_m=1.80738901046e-05
+                #Zprime_notopbtag_systshape_c=1.09896
+              if bottomWP=='medium':
+                  if topWP=='loose':
+                    Zprime_withtopbtag_systrate=0.0736834218346
+                    Zprime_withtopbtag_systshape_m=0.000157325109262
+                    Zprime_withtopbtag_systshape_c=1.12496
+                    Zprime_notopbtag_systrate=0.0428972485948 
+                    Zprime_notopbtag_systshape_m=6.92106626942e-05
+                    Zprime_notopbtag_systshape_c=1.09896                  
+                  if topWP=='medium':
+                    Zprime_withtopbtag_systrate=0.0556968382142
+                    Zprime_withtopbtag_systshape_m=4.83210624517e-05
+                    Zprime_withtopbtag_systshape_c=1.12496
+                    Zprime_notopbtag_systrate=0.107405141995 
+                    Zprime_notopbtag_systshape_m=0.000162216814803
+                    Zprime_notopbtag_systshape_c=1.09896                       
+              else:
+                  if topWP=='loose':
+                    Zprime_withtopbtag_systrate=0.0662402661262
+                    Zprime_withtopbtag_systshape_m=4.92325674899e-05
+                    Zprime_withtopbtag_systshape_c=1.12496
+                    Zprime_notopbtag_systrate=0.0677149795161
+                    Zprime_notopbtag_systshape_m=3.54398759094e-05
+                    Zprime_notopbtag_systshape_c=1.09896                
+                  if topWP=='medium':
+                    Zprime_withtopbtag_systrate=0.0711833960603
+                    Zprime_withtopbtag_systshape_m=2.10852089666e-06
+                    Zprime_withtopbtag_systshape_c=1.12496
+                    Zprime_notopbtag_systrate=0.0756599436301 
+                    Zprime_notopbtag_systshape_m=1.89854920597e-05
+                    Zprime_notopbtag_systshape_c=1.09896                     
+
+                
 if ABCDversion is 'ABCD6':
     generalselection=plotselection_ABCD6_general
     generalselection_0=plotselection_ABCD6_general_0
@@ -215,11 +246,29 @@ if ABCDversion is 'ABCD7':
 #stringforPDFs2="""
 #PDFweights.push_back(Weight_pdf_variation_260001);
 #"""
+
+pdf_normweightsttbar=[1.0285403928,0.990114159298,0.988584387133,1.01889332059,1.05237299927,0.990719379875,1.00301419012,0.989663113443,0.991213672507,1.01552978649,1.02919060016,0.993578383217,0.986258507017,0.989247880748,0.982315499527,0.990532531623,0.966543378558,0.984182264085,1.00121033535,0.98135925712,1.00565177648,1.0294786568,0.975096957768,1.02173090511,1.00232509869,1.01187842359,0.963790618158,0.993565976416,0.984103730765,0.994145810228,1.01694070493,1.019344479,1.01172956295,1.02709298741,0.962844423667,0.997843355474,0.980248409009,1.00381417816,1.01965674945,1.01152287811,1.00897608998,1.00672764538,1.02184748569,1.0104982065,1.01090950727,1.01372748795,0.997178341661,0.996356071703,0.991194332369,1.00457633422,1.00963244698,1.0099716397,1.00881927905,0.993733091322,1.00809331987,0.991929935383,0.990390359819,1.0093097003,0.986283737755,1.00761916317,1.00164630037,1.00108546959,1.00139198427,0.989844800211,0.990147536673,1.00950490752,0.960738336277,1.00176385194,1.0083175853,1.00345779683,1.01894242063,1.00451400139,1.01758593874,0.990464886279,1.00042586582,1.0414231102,1.02063812865,0.98302683342,1.00573007249,1.00645654393,1.00834027486,1.01479418482,0.978745112178,1.00152348867,0.999542226965,0.99713256733,0.987922642322,0.989194765429,0.976009425862,1.00978848378,1.00540542912,1.00768618879,0.988494121995,0.992451445508,0.982438151277,0.993567630021,0.996536555276,1.00522587406,0.979009767484,0.974661266971]
+
 stringforPDFs="float Weight_pdf_1"
 stringforPDFs1="Weight_pdf_1"
 stringforPDFs2="""
 PDFweights.push_back(Weight_pdf_1);
 """
+stringforPDFs_new="float Weight_pdf_new_1"
+stringforPDFs1_new="Weight_pdf_new_1"
+stringforPDFs2_new="""
+PDFweights_new.push_back(Weight_pdf_new_1);
+"""
+
+stringforPDFs_refac="float Weight_pdf_refac_1"
+stringforPDFs1_refac="Weight_pdf_refac_1"
+stringforPDFs2_refac="""
+PDFweights_refac.push_back(Weight_pdf_refac_1);
+"""
+stringforPDFs3_refac="""
+float Weight_pdf_refac_1="""+str(pdf_normweightsttbar[0])+"""*(DoMCDataWeights_ttbaronly==1)+1.0*(DoMCDataWeights_ttbaronly==0);
+"""
+
 
 for i in range(2,100):
     #if i<10:
@@ -237,30 +286,48 @@ for i in range(2,100):
     istring=str(i)
     stringforPDFs=stringforPDFs+(", float Weight_pdf_"+istring)
     stringforPDFs1=stringforPDFs1+(", Weight_pdf_"+istring)
-    stringforPDFs2=stringforPDFs2+("PDFweights.push_back(Weight_pdf_"+istring+");")#print stringforPDFs
+    stringforPDFs2=stringforPDFs2+("PDFweights.push_back(Weight_pdf_"+istring+");")
+    stringforPDFs_new=stringforPDFs_new+(", float Weight_pdf_new_"+istring)
+    stringforPDFs1_new=stringforPDFs1_new+(", Weight_pdf_new_"+istring)
+    stringforPDFs2_new=stringforPDFs2_new+("PDFweights_new.push_back(Weight_pdf_new_"+istring+");")    #print stringforPDFs
+
+    stringforPDFs_refac=stringforPDFs_refac+(", float Weight_pdf_refac_"+istring)
+    stringforPDFs1_refac=stringforPDFs1_refac+(", Weight_pdf_refac_"+istring)
+    stringforPDFs2_refac=stringforPDFs2_refac+("PDFweights_refac.push_back(Weight_pdf_refac_"+istring+");")    #print stringforPDFs
+    stringforPDFs3_refac=stringforPDFs3_refac+("float Weight_pdf_refac_"+istring+"="+str(pdf_normweightsttbar[i-1])+"*(DoMCDataWeights_ttbaronly==1)+1.0*(DoMCDataWeights_ttbaronly==0);")    #print stringforPDFs
+
 
 additionalfunctions=[
                         #'float temp=1',
                         #for(int i; i<N_Sideband_top_withbtag_anti_Topfirst_Bottoms;i++){temp*=(Sideband_top_withbtag_anti_Topfirst_Bottoms_CSVv2[i]<0.46);};',
                         ##"float anti_loose_btag(const float* bottomCSVs, int sizeofarray){"+"\n"+"   float anti_tag=1;"+"\n"+"      for (int i=0;  i<sizeofarray;i++){"+"\n"+"        if (bottomCSVs[i]>0.46){"+"\n"+"        anti_tag=0;"+"\n"+"      }"+"\n"+"      }"+"\n"+"    return anti_tag;"+"}",
                         
-                        
+
 """
-std::vector<float> PDF_RMS(""" + stringforPDFs + """){
+   
+
+std::vector<float> PDF_RMS(""" + stringforPDFs+""", """+stringforPDFs_new+ """,bool DoMCDataWeights_ttbaronly){
     std::vector<float> PDFweights;
+    std::vector<float> PDFweights_new;
+    std::vector<float> PDFweights_refac;
     std::vector<float> res;
     float RMSmean=0.0;
     float RMSerror=0.0;
-   
+    """+stringforPDFs3_refac+"""
     """+stringforPDFs2+"""
+    """+stringforPDFs2_new+"""
+    """+stringforPDFs2_refac+"""
+    
+    
     for(int i=0; i<PDFweights.size(); i++){
-        RMSmean+=PDFweights[i]*PDFweights[i];
+        RMSmean+=PDFweights[i]*PDFweights[i]*PDFweights_new[i]*PDFweights_new[i]*PDFweights_refac[i]*PDFweights_refac[i];
     }
     RMSmean=sqrt(RMSmean/float(PDFweights.size()));
     for(int i=0; i<PDFweights.size(); i++){
-        RMSerror+=(RMSmean-PDFweights[i])*(RMSmean-PDFweights[i]);      
+        RMSerror+=(RMSmean-PDFweights[i]*PDFweights_new[i]*PDFweights_refac[i])*(RMSmean-PDFweights[i]*PDFweights_new[i]*PDFweights_refac[i]);      
     }
     RMSerror=sqrt(RMSerror/float(PDFweights.size()));
+    if (RMSmean>3.0 || RMSmean<0.0 || RMSerror>3.0 || RMSerror<0.0){ RMSmean=1.0; RMSerror=1.0; };
     res.push_back(RMSmean);
     res.push_back(RMSmean+RMSerror);
     res.push_back(RMSmean-RMSerror);
@@ -764,23 +831,23 @@ std::vector<float> Wtag_weights_""" + ABCDversion + """(float const* Zprimes_ABC
         if ("""+ generalselection_i + """ ){
                 if(""" + plotselection_W_tau21_i + """ && """ + plotselection_W_MSD_i + """){
                     Wtag_tag_nominal *= SF_W_tau21_MSD;
-                    Wtag_tag_up *= (SF_W_tau21_MSD + SF_W_tau21_MSD_up);
-                    Wtag_tag_down *= (SF_W_tau21_MSD - SF_W_tau21_MSD_down);
+                    Wtag_tag_up *= ((SF_W_tau21_MSD + SF_W_tau21_MSD_up)+0.041*log(Ws_ABCD""" + radi + """_Pt[i]/200.0));
+                    Wtag_tag_down *= ((SF_W_tau21_MSD - SF_W_tau21_MSD_down)-0.041*log(Ws_ABCD""" + radi + """_Pt[i]/200.0));
                 }
                 if(""" + plotselection_W_tau21_anti_i + """ && """ + plotselection_W_MSD_i + """){
                     Wtag_tag_nominal *= SF_W_tau21anti_MSD;
-                    Wtag_tag_up *= (SF_W_tau21anti_MSD + SF_W_tau21anti_MSD_down);
-                    Wtag_tag_down *= (SF_W_tau21anti_MSD - SF_W_tau21anti_MSD_up);
+                    Wtag_tag_up *= ((SF_W_tau21anti_MSD + SF_W_tau21anti_MSD_down)+0.054*log(Ws_ABCD""" + radi + """_Pt[i]/200.0));
+                    Wtag_tag_down *= ((SF_W_tau21anti_MSD - SF_W_tau21anti_MSD_up)+0.054*log(Ws_ABCD""" + radi + """_Pt[i]/200.0));
                 }
                 if(""" + plotselection_W_tau21_i + """ && """ + plotselection_W_MSD_anti_i + """){
                     Wtag_tag_nominal *= SF_W_tau21_MSDanti;
-                    Wtag_tag_up *= (SF_W_tau21_MSDanti + SF_W_tau21_MSDanti_up);
-                    Wtag_tag_down *= (SF_W_tau21_MSDanti - SF_W_tau21_MSDanti_down);
+                    Wtag_tag_up *= ((SF_W_tau21_MSDanti + SF_W_tau21_MSDanti_up)+0.041*log(Ws_ABCD""" + radi + """_Pt[i]/200.0));
+                    Wtag_tag_down *= ((SF_W_tau21_MSDanti - SF_W_tau21_MSDanti_down)+0.041*log(Ws_ABCD""" + radi + """_Pt[i]/200.0));
                 }
                 if(""" + plotselection_W_tau21_anti_i + """ && """ + plotselection_W_MSD_i + """){
                     Wtag_tag_nominal *= SF_W_tau21anti_MSDanti;
-                    Wtag_tag_up *= (SF_W_tau21anti_MSDanti + SF_W_tau21anti_MSDanti_down);
-                    Wtag_tag_down *= (SF_W_tau21anti_MSDanti - SF_W_tau21anti_MSDanti_up);
+                    Wtag_tag_up *= ((SF_W_tau21anti_MSDanti + SF_W_tau21anti_MSDanti_down)+0.054*log(Ws_ABCD""" + radi + """_Pt[i]/200.0));
+                    Wtag_tag_down *= ((SF_W_tau21anti_MSDanti - SF_W_tau21anti_MSDanti_up)+0.054*log(Ws_ABCD""" + radi + """_Pt[i]/200.0));
                 }
 
             break;
@@ -798,46 +865,46 @@ std::vector<float> Wtag_weights_""" + ABCDversion + """(float const* Zprimes_ABC
 """,
 
 """
-std::vector<float> RenFacEnv(float muR20_muF20, float muR05_muF05, float muR10_muF20 , float muR10_muF05, float muR20_muF10, float muR05_muF10){
+std::vector<float> RenFacEnv(float muR20_muF20, float muR05_muF05, float muR10_muF20 , float muR10_muF05, float muR20_muF10, float muR05_muF10, bool DoMCDataWeights_ttbaronly){
     std::vector<float> res;
     float envUp=1.0;
     float envDown=1.0;
     
         if (muR20_muF20>envUp){
-            envUp=muR20_muF20;
+            envUp=muR20_muF20*(1.29465480107*(DoMCDataWeights_ttbaronly==1)+1*(DoMCDataWeights_ttbaronly==0));
         }
         if (muR20_muF20<envDown){
-            envDown=muR20_muF20;
+            envDown=muR20_muF20*(1.29465480107*(DoMCDataWeights_ttbaronly==1)+1*(DoMCDataWeights_ttbaronly==0));
         }
         if (muR05_muF05>envUp){
-            envUp=muR05_muF05;
+            envUp=muR05_muF05*(0.755423761535*(DoMCDataWeights_ttbaronly==1)+1*(DoMCDataWeights_ttbaronly==0));
         }
         if (muR05_muF05<envDown){
-            envDown=muR05_muF05;
+            envDown=muR05_muF05*(0.755423761535*(DoMCDataWeights_ttbaronly==1)+1*(DoMCDataWeights_ttbaronly==0));
         }
         if (muR10_muF20>envUp){
-            envUp=muR10_muF20;
+            envUp=muR10_muF20*(1.07529312329*(DoMCDataWeights_ttbaronly==1)+1*(DoMCDataWeights_ttbaronly==0));
         }
         if (muR10_muF20<envDown){
-            envDown=muR10_muF20;
+            envDown=muR10_muF20*(1.07529312329*(DoMCDataWeights_ttbaronly==1)+1*(DoMCDataWeights_ttbaronly==0));
         }
         if (muR10_muF05>envUp){
-            envUp=muR10_muF05;
+            envUp=muR10_muF05*(0.926990626083*(DoMCDataWeights_ttbaronly==1)+1*(DoMCDataWeights_ttbaronly==0));
         }
         if (muR10_muF05<envDown){
-            envDown=muR10_muF05;
+            envDown=muR10_muF05*(0.926990626083*(DoMCDataWeights_ttbaronly==1)+1*(DoMCDataWeights_ttbaronly==0));
         }
         if (muR20_muF10>envUp){
-            envUp=muR20_muF10;
+            envUp=muR20_muF10*(1.12267866063*(DoMCDataWeights_ttbaronly==1)+1*(DoMCDataWeights_ttbaronly==0));
         }
         if (muR20_muF10<envDown){
-            envDown=muR20_muF10;
+            envDown=muR20_muF10*(1.12267866063*(DoMCDataWeights_ttbaronly==1)+1*(DoMCDataWeights_ttbaronly==0));
         }
         if (muR05_muF10>envUp){
-            envUp=muR05_muF10;
+            envUp=muR05_muF10*(0.814903279727*(DoMCDataWeights_ttbaronly==1)+1*(DoMCDataWeights_ttbaronly==0));
         }
         if (muR05_muF10<envDown){
-            envDown=muR05_muF10;
+            envDown=muR05_muF10*(0.814903279727*(DoMCDataWeights_ttbaronly==1)+1*(DoMCDataWeights_ttbaronly==0));
         }
 
     res.push_back(envUp);
@@ -860,15 +927,15 @@ std::vector<float> ABCD_syts(float const* Zprimes_ABCD""" +  radi + """_M, float
             if("""+ plotselection_topsubjetCSVv2_i +"""){
                 ABCD_rateUp=(1.0 + (""" + str(Zprime_withtopbtag_systrate) + """));
                 ABCD_rateDown=(1.0 - (""" + str(Zprime_withtopbtag_systrate) + """));
-                ABCD_shapeUp=(1.0+(((Zprimes_ABCD""" +  radi + """_M[i]) * (""" + str(Zprime_withtopbtag_systshape_m) + """) + (""" + str(Zprime_withtopbtag_systshape_c) + """))-1.0));
-                ABCD_shapeDown=(1.0-(((Zprimes_ABCD""" +  radi + """_M[i]) * (""" + str(Zprime_withtopbtag_systshape_m) + """) + (""" + str(Zprime_withtopbtag_systshape_c) + """))-1.0));
+                ABCD_shapeUp=(1.0+(Zprimes_ABCD""" +  radi + """_M[i]-1970.0) * (""" + str(Zprime_withtopbtag_systshape_m) + """));
+                ABCD_shapeDown=(1.0-(Zprimes_ABCD""" +  radi + """_M[i]-1970.0) * (""" + str(Zprime_withtopbtag_systshape_m) + """));
             } else {
                 ABCD_rateUp=(1.0 + (""" + str(Zprime_notopbtag_systrate) + """));
                 ABCD_rateDown=(1.0 - (""" + str(Zprime_notopbtag_systrate) + """));
                 //ABCD_shapeUp=(((Zprimes_ABCD""" +  radi + """_M[i]) * (""" + str(Zprime_notopbtag_systshape_m) + """) + (""" + str(Zprime_notopbtag_systshape_c) + """)));
                 //ABCD_shapeDown=(-((Zprimes_ABCD""" +  radi + """_M[i]) * (""" + str(Zprime_notopbtag_systshape_m) + """) + (""" + str(Zprime_notopbtag_systshape_c) + """)));
-                ABCD_shapeUp=(1.0+(((Zprimes_ABCD""" +  radi + """_M[i]) * (""" + str(Zprime_notopbtag_systshape_m) + """) + (""" + str(Zprime_notopbtag_systshape_c) + """))-1.0));
-                ABCD_shapeDown=(1.0-(((Zprimes_ABCD""" +  radi + """_M[i]) * (""" + str(Zprime_notopbtag_systshape_m) + """) + (""" + str(Zprime_notopbtag_systshape_c) + """))-1.0));
+                ABCD_shapeUp=(1.0+(Zprimes_ABCD""" +  radi + """_M[i]-2000.0) * (""" + str(Zprime_notopbtag_systshape_m) + """));
+                ABCD_shapeDown=(1.0-(Zprimes_ABCD""" +  radi + """_M[i]-2000.0) * (""" + str(Zprime_notopbtag_systshape_m) + """));
             };
         break;
         };
@@ -1188,12 +1255,12 @@ additionalvariables=[
  
  
  
-                        'MCSF_RenFac_envelopeUp:=(RenFacEnv(Weight_scale_variation_muR2p0_muF2p0, Weight_scale_variation_muR0p5_muF0p5, Weight_scale_variation_muR1p0_muF2p0 , Weight_scale_variation_muR1p0_muF0p5, Weight_scale_variation_muR2p0_muF1p0, Weight_scale_variation_muR0p5_muF1p0))[0]',
-                        'MCSF_RenFac_envelopeDown:=(RenFacEnv(Weight_scale_variation_muR2p0_muF2p0, Weight_scale_variation_muR0p5_muF0p5, Weight_scale_variation_muR1p0_muF2p0 , Weight_scale_variation_muR1p0_muF0p5, Weight_scale_variation_muR2p0_muF1p0, Weight_scale_variation_muR0p5_muF1p0))[1]',
+                        'MCSF_RenFac_envelopeUp:=(RenFacEnv(Weight_scale_variation_muR2p0_muF2p0, Weight_scale_variation_muR0p5_muF0p5, Weight_scale_variation_muR1p0_muF2p0 , Weight_scale_variation_muR1p0_muF0p5, Weight_scale_variation_muR2p0_muF1p0, Weight_scale_variation_muR0p5_muF1p0,DoMCDataWeights_ttbaronly))[0]',
+                        'MCSF_RenFac_envelopeDown:=(RenFacEnv(Weight_scale_variation_muR2p0_muF2p0, Weight_scale_variation_muR0p5_muF0p5, Weight_scale_variation_muR1p0_muF2p0 , Weight_scale_variation_muR1p0_muF0p5, Weight_scale_variation_muR2p0_muF1p0, Weight_scale_variation_muR0p5_muF1p0,DoMCDataWeights_ttbaronly))[1]',
                                                #'N_Jets', 'Jet_Pt','Jet_Eta','Jet_CSV','Jet_Flav','Jet_M','Jet_Phi','Jet_E',
-                        'PDF_RMSMean:=PDF_RMS('+ stringforPDFs1 +')[0]',
-                        'PDF_RMSUp:=PDF_RMS('+ stringforPDFs1 +')[1]',
-                        'PDF_RMSDown:=PDF_RMS('+ stringforPDFs1 +')[2]',
+                        'PDF_RMSMean:=PDF_RMS('+ stringforPDFs1+', '+stringforPDFs1_new +',DoMCDataWeights_ttbaronly)[0]',
+                        'PDF_RMSUp:=PDF_RMS('+ stringforPDFs1+', '+stringforPDFs1_new+',DoMCDataWeights_ttbaronly)[1]',
+                        'PDF_RMSDown:=PDF_RMS('+ stringforPDFs1+', '+stringforPDFs1_new+',DoMCDataWeights_ttbaronly)[2]',
                         
                         #'MCSF_Weight_ABCD' + radi + '1:=ABCD1_toptagweightnominal*ABCD1_Wtagweightnominal*ABCD1_WeightCSVnominal*Weight_pu69p2*PDF_RMSMean',
                         #'MCSF_Weight_ABCD2:=ABCD2_toptagweightnominal*ABCD2_Wtagweightnominal*ABCD2_WeightCSVnominal*Weight_pu69p2*PDF_RMSMean',

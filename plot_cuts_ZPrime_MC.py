@@ -27,12 +27,18 @@ MSDgap=False
 fullWMSD=True
 csvgap=False
 
+#topSJWP='loose'
+topSJWP='medium'
+
 topWP='loose'
+#topWP='medium'
 WWP='medium'
 #WWP='loose'
 bottomWP='medium'
+#bottomWP='loose'
 
-WPs='tWP'+topWP+'WWP'+WWP+'bWP'+bottomWP
+WPs='tWP'+topWP+'tSJWP'+topSJWP+'WWP'+WWP+'bWP'+bottomWP
+
 if not csvgap:
     WPs=WPs+"nogap"
 if masscorrection:
@@ -306,10 +312,17 @@ if WWP=='medium':
             
         
 if bottomWP=='medium':
-    plotselection_B_CSV = "  Bottoms_ABCD"+radi+"_CSV > 0.8  "    
-    plotselection_B_CSV_i = "  Bottoms_ABCD"+radi+"_CSV[i] > 0.8   "
-    plotselection_B_CSV_0 = "  Bottoms_ABCD"+radi+"_CSV[0] > 0.8   " 
-
+    plotselection_B_CSV = "  Bottoms_ABCD"+radi+"_CSV > 0.8484  "    
+    plotselection_B_CSV_i = "  Bottoms_ABCD"+radi+"_CSV[i] > 0.8484   "
+    plotselection_B_CSV_0 = "  Bottoms_ABCD"+radi+"_CSV[0] > 0.8484   " 
+    
+        
+if bottomWP=='loose':
+    plotselection_B_CSV = "  Bottoms_ABCD"+radi+"_CSV > 0.5426  "    
+    plotselection_B_CSV_i = "  Bottoms_ABCD"+radi+"_CSV[i] > 0.5426   "
+    plotselection_B_CSV_0 = "  Bottoms_ABCD"+radi+"_CSV[0] > 0.5426   " 
+    
+    
 if bottomWP=='tight':
     plotselection_B_CSV = "  Bottoms_ABCD"+radi+"_CSV > 0.935  "    
     plotselection_B_CSV_i = "  Bottoms_ABCD"+radi+"_CSV[i] > 0.935   "
@@ -350,17 +363,20 @@ else:
         plotselection_W_MSD_anti_0 =  " (65 > Ws_ABCD"+radi+"_MSD[0]*Ws_ABCD"+radi+"_corrL2L3[0]  ||   Ws_ABCD"+radi+"_MSD[0]*Ws_ABCD"+radi+"_corrL2L3[0] > 150) "
 
 if csvgap:
-   plotselection_B_CSV_anti = "  Bottoms_ABCD"+radi+"_CSV < 0.46   "
-   plotselection_B_CSV_anti_i = "  Bottoms_ABCD"+radi+"_CSV[i] < 0.46   "
-   plotselection_B_CSV_anti_0 = "  Bottoms_ABCD"+radi+"_CSV[0] < 0.46   "
+   plotselection_B_CSV_anti = "  Bottoms_ABCD"+radi+"_CSV < 0.5426   "
+   plotselection_B_CSV_anti_i = "  Bottoms_ABCD"+radi+"_CSV[i] < 0.5426   "
+   plotselection_B_CSV_anti_0 = "  Bottoms_ABCD"+radi+"_CSV[0] < 0.5426   "
 
 else:
-   plotselection_B_CSV_anti = "  Bottoms_ABCD"+radi+"_CSV < 0.8   "
-   plotselection_B_CSV_anti_i = "  Bottoms_ABCD"+radi+"_CSV[i] < 0.8   "
-   plotselection_B_CSV_anti_0 = "  Bottoms_ABCD"+radi+"_CSV[0] < 0.8   "
-
-
-if WZwindow or MSDgap:
+ if bottomWP=='medium':   
+   plotselection_B_CSV_anti = "  Bottoms_ABCD"+radi+"_CSV < 0.8484   "
+   plotselection_B_CSV_anti_i = "  Bottoms_ABCD"+radi+"_CSV[i] < 0.8484   "
+   plotselection_B_CSV_anti_0 = "  Bottoms_ABCD"+radi+"_CSV[0] < 0.8484   "
+ if bottomWP=='loose':   
+   plotselection_B_CSV_anti = "  Bottoms_ABCD"+radi+"_CSV < 0.5426   "
+   plotselection_B_CSV_anti_i = "  Bottoms_ABCD"+radi+"_CSV[i] < 0.5426   "
+   plotselection_B_CSV_anti_0 = "  Bottoms_ABCD"+radi+"_CSV[0] < 0.5426   "
+if WZwindow:
 	plotselection_t_MSD = " (150 < Tops_ABCD"+radi+"_MSD && Tops_ABCD"+radi+"_MSD < 240) "
 	plotselection_t_MSD_i = " (150 < Tops_ABCD"+radi+"_MSD[i]&& Tops_ABCD"+radi+"_MSD[i]< 240) "
 	plotselection_t_MSD_0 = " (150 < Tops_ABCD"+radi+"_MSD[0]&& Tops_ABCD"+radi+"_MSD[0]< 240) "
@@ -384,14 +400,26 @@ plotselection_t_MSD_anti = " (105 > Tops_ABCD"+radi+"_MSD || Tops_ABCD"+radi+"_M
 plotselection_t_MSD_anti_i = " (105 > Tops_ABCD"+radi+"_MSD[i]|| Tops_ABCD"+radi+"_MSD[i]> 210) "
 plotselection_t_MSD_anti_0 = " (105 > Tops_ABCD"+radi+"_MSD[0]|| Tops_ABCD"+radi+"_MSD[0]> 210) "
 
+if topSJWP=='medium':
+    
+    
+    plotselection_topsubjetCSVv2 = " Tops_ABCD"+radi+"_maxsubjetCSVv2 > 0.8484 "
+    plotselection_topsubjetCSVv2_i = " Tops_ABCD"+radi+"_maxsubjetCSVv2[i] > 0.8484 "
+    plotselection_topsubjetCSVv2_0 = " Tops_ABCD"+radi+"_maxsubjetCSVv2[0] > 0.8484 "
 
-plotselection_topsubjetCSVv2 = " Tops_ABCD"+radi+"_maxsubjetCSVv2 > 0.8 "
-plotselection_topsubjetCSVv2_i = " Tops_ABCD"+radi+"_maxsubjetCSVv2[i] > 0.8 "
-plotselection_topsubjetCSVv2_0 = " Tops_ABCD"+radi+"_maxsubjetCSVv2[0] > 0.8 "
+    plotselection_topsubjetCSVv2_anti = " Tops_ABCD"+radi+"_maxsubjetCSVv2 < 0.8484 "
+    plotselection_topsubjetCSVv2_anti_i = " Tops_ABCD"+radi+"_maxsubjetCSVv2[i] < 0.8484 "
+    plotselection_topsubjetCSVv2_anti_0 = " Tops_ABCD"+radi+"_maxsubjetCSVv2[0] < 0.8484 "
+else:
 
-plotselection_topsubjetCSVv2_anti = " Tops_ABCD"+radi+"_maxsubjetCSVv2 < 0.8 "
-plotselection_topsubjetCSVv2_anti_i = " Tops_ABCD"+radi+"_maxsubjetCSVv2[i] < 0.8 "
-plotselection_topsubjetCSVv2_anti_0 = " Tops_ABCD"+radi+"_maxsubjetCSVv2[0] < 0.8 "
+    
+    plotselection_topsubjetCSVv2 = " Tops_ABCD"+radi+"_maxsubjetCSVv2 > 0.5426 "
+    plotselection_topsubjetCSVv2_i = " Tops_ABCD"+radi+"_maxsubjetCSVv2[i] > 0.5426 "
+    plotselection_topsubjetCSVv2_0 = " Tops_ABCD"+radi+"_maxsubjetCSVv2[0] > 0.5426 "
+
+    plotselection_topsubjetCSVv2_anti = " Tops_ABCD"+radi+"_maxsubjetCSVv2 < 0.5426 "
+    plotselection_topsubjetCSVv2_anti_i = " Tops_ABCD"+radi+"_maxsubjetCSVv2[i] < 0.5426 "
+    plotselection_topsubjetCSVv2_anti_0 = " Tops_ABCD"+radi+"_maxsubjetCSVv2[0] < 0.5426 "
 
 plotselection_TprimeMass = " Tprimes_ABCD"+radi+"_M>500 "
 plotselection_TprimeMass_i = " Tprimes_ABCD"+radi+"_M[i]>500 "
