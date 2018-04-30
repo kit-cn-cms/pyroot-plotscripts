@@ -1451,7 +1451,7 @@ void plot(){
 
   //initialize Trigger Helper
 
-  if(processname=="MET" || processname=="MET"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
+  if(processname=="MET" || processname=="data_obs"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
 
 
   // read in samples to add to chain and get relevant names for the database
