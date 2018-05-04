@@ -3112,38 +3112,6 @@ def check_jobs(scripts,outputs,nentries):
       failed_jobs.append(script)
   return failed_jobs
 
-
-""" Helper function to submit NAF jobs"""
-def helperSubmitNAFJobs(scripts,outputs,nentries):
-  # submit run scripts
-  print 'submitting scripts'
-  #jobids=submitToNAF(scripts)
-  jobids=submitArrayToNAF(scripts, "PlotPara")
-  do_qstat(jobids)
-
-  # check outputs
-  print 'checking outputs'
-  failed_jobs=check_jobs(scripts,outputs,nentries)
-  retries=0
-  while retries<=3 and len(failed_jobs)>0:
-    retries+=1
-    print 'the following jobs failed'
-    for j in failed_jobs:
-      print j
-    if len(failed_jobs)>=0.8*len(scripts):
-      print "!!!!!\n More Than 80 percent of your jobs failed. Check:\n A) Your code (and logfiles) \n B) The status of the batch stytem e.g. http://bird.desy.de/status/day.html\n !!!!!"
-    print 'resubmitting'
-    jobids=submitToNAF(failed_jobs)
-    do_qstat(jobids)
-    failed_jobs=check_jobs(scripts,outputs,nentries)
-  if retries>=4 or len(failed_jobs)>=1:
-    print 'Multiple problems with failing jobs after resubmitting'
-    sys.exit()  
-  if retries>=10:
-    print 'could not submit jobs'
-    sys.exit()  
-
-
 # the dataBases should be defined as follows e.g. [[memDB,path],[blrDB,path]]
 def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],dataBases=[],treeInformationJsonFile="",otherSystnames=[],addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False,haddParallel=False):
   cmsswpath=os.environ['CMSSW_BASE']
