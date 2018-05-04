@@ -17,7 +17,75 @@ import types
 import csv
 
 
+def writeSubmitCode(script, logdir, isArray = False, nscripts = 0):
+  '''
+  write the code for condor_submit file
+
+  script: path to .sh-script that should be executed
+  logdir: path to directory of logs
+  isArray: set True if script is an array script
+  nscripts: number of scripts in the array script. Only needed if isArray=True
+  '''
+  submitPath = script[:-3]+".sub"
+  submitScript = script.split("/")[-1][:-3]
+
+  submitCode="universe = vanilla\n"
+  submitCode+="should_transfer_files = IF_NEEDED\n"
+  submitCode+="executable = /bin/bash\n"
+  submitCode+="arguments = " + script + "\n"
+  submitCode+="initialdir = "+os.getcwd()+"\n"
+  submitCode+="notification = Never\n"
+  submitCode+="priority = 0\n"
+  submitCode+="request_memory = 5800M\n"
+
+  if isArray:
+    submitCode+="error = "+logdir+"/"+submitScript+".$(Cluster)_$(ProcId).err\n"
+    submitCode+="output = "+logdir+"/"+submitScript+".$(Cluster)_$(ProcId).out\n"
+    #submitCode+="log = "+logdir+"/"+submitScript+".$(Cluster)_$(ProcId).log\n"
+    submitCode+="Queue Environment From (\n"
+    for taskID in range(nscripts):
+      submitCode+="\"SGE_TASK_ID="+str(taskID)+"\"\n"
+    submitCode+=")"
+  else:
+    submitCode+="error = "+logdir+"/"+submitScript+".$(Cluster).err\n"
+    submitCode+="output = "+logdir+"/"+submitScript+".$(Cluster).out\n"
+    #submitCode+="log = "+logdir+"/"+submitScript+".$(Cluster).log\n"
+    submitCode+="queue"
+
+  submitFile = open(submitPath, "w")
+  submitFile.write(submitCode)
+  submitFile.close()
+
+  return submitPath
+
+
+
+def condorSubmit(submitPath):
+  '''
+  submit generated script to NAF and read out jobID
+  submitPath: path to .sub-file
+  '''
+  submitCommand = "condor_submit -terse " + submitPath
+  process = subprocess.Popen(submitCommand.split(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, stdin=subprocess.PIPE)
+  output = process.communicate()[0]
+
+  # extracting jobID
+  try:
+    jobID = int(output.split(".")[0])
+  except:
+    print("something went wrong with calling the condir_submit command, submission of jobs was not successful")
+    print("DEBUG: jobidstring (= communicate()[0]): " + output)
+    exit(0)
+  print("JobID = " + jobID)
+  return jobID
+
+
+
 def submitToNAF(scripts):
+  '''
+  submit list of scripts to NAF
+  scripts: list of .sh-scripts to be submitted
+  '''
   submitclock=ROOT.TStopwatch()
   submitclock.Start()
   jobids=[]
@@ -26,43 +94,26 @@ def submitToNAF(scripts):
     os.makedirs(logdir)
   for script in scripts:
     
-    # create submitfile for condor_submit
-    submitPath=script[:-3]+".sub"
-    submitScript = script.split("/")[-1][:-3]
-    submitCode="universe = vanilla\n"
-    submitCode+="should_transfer_files = IF_NEEDED\n"
-    submitCode+="executable = /bin/bash\n"
-    submitCode+="arguments = " + script + "\n"
-    submitCode+="initialdir = "+os.getcwd()+"\n"
-    submitCode+="error = "+logdir+"/"+submitScript+".$(Cluster).err\n"
-    submitCode+="output = "+logdir+"/"+submitScript+".$(Cluster).out\n"
-    submitCode+="log = "+logdir+"/"+submitScript+".$(Cluster).log\n"
-    submitCode+="notification = Never\n"
-    submitCode+="priority = 0\n"
-    submitCode+="request_memory = 5800M\n"
-    submitCode+="queue"
+    # generating code for condor_submit
+    submitPath = writeSubmitCode(script, logdir)
 
-    submitFile = open(submitPath,"w")
-    submitFile.write(submitCode)
-    submitFile.close()
- 
+    # submitting script 
     print 'submitting',script
-    command = "condor_submit -terse " + submitPath
-    a = subprocess.Popen(command.split(), stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
-    output = a.communicate()[0]
-    print "jobidstring: ", output
-    try:
-      jobID = int(output.split(".")[0])
-    except:
-      print "something went wrong with calling the condir_submit command, submission of jobs was not successful"
-      exit(0)
-    print "JobID: ", jobID
+    jobID = condorSubmit(submitPath)
+
   submittime=submitclock.RealTime()
   print "submitted ", len(jobids), " in ", submittime
   return jobids
 
 
+
 def submitArrayToNAF(scripts,arrayName=""):
+  '''
+  submit scripts to NAF as array job
+  scripts: list of scripts to be submitted
+  arrayName: name of the outputarray
+  '''
+
   submitclock=ROOT.TStopwatch()
   submitclock.Start()
   jobids=[]
@@ -72,7 +123,6 @@ def submitArrayToNAF(scripts,arrayName=""):
     os.makedirs(logdir)
   # get nscripts
   nscripts=len(scripts)
-  tasknumberstring='0-'+str(nscripts-1)+':1'
 
   # create arrayscript to be run on the birds. Depinding on $SGE_TASK_ID the script will call a different plot/run script to actually run
   # $SGE_TASK_ID still exists in HTCondor system
@@ -92,46 +142,26 @@ def submitArrayToNAF(scripts,arrayName=""):
   arrayFile.close()
   st = os.stat(arrayPath)
   os.chmod(arrayPath, st.st_mode | stat.S_IEXEC)
+ 
+  # generating code for condor_submit 
+  submitPath = writeSubmitCode(arrayPath,logdir, isArray=True, nscripts)
 
-  #create a submitfile for condor_submit
-  submitPath=scriptPath+"/submitFile_"+arrayName+".sub"
-  submitCode="universe = vanilla\n"
-  submitCode+="should_transfer_files = IF_NEEDED\n"
-  submitCode+="executable = /bin/bash\n"
-  submitCode+="arguments = "+arrayPath+"\n"
-  submitCode+="initialdir = "+os.getcwd()+"\n"  
-  submitCode+="error = "+logdir+"/ats_"+arrayName+".$(Cluster)_$(ProcId).err\n"
-  submitCode+="output = "+logdir+"/ats_"+arrayName+".$(Cluster)_$(ProcId).out\n"
-  submitCode+="log = "+logdir+"/ats_"+arrayName+".$(Cluster)_$(ProcId).log\n"
-  submitCode+="notification = Never\n"
-  submitCode+="priority = 0\n"
-  submitCode+="request_memory = 5800M\n"
-  submitCode+="Queue Environment From (\n"
-  for taskID in range(nscripts):
-    submitCode+="\"SGE_TASK_ID="+str(taskID)+"\"\n"
-  submitCode+=")"
-  
-  submitFile = open(submitPath,"w")
-  submitFile.write(submitCode)
-  submitFile.close()
+  # submitting script
+  print('submitting '+ submitPath)
+  jobID = condorSubmit(submitPath)
 
-  print 'submitting',arrayPath
-  command = "condor_submit -terse " + submitPath
-  command = command.split()
-  a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
-  output = a.communicate()[0] # communicate return = (output, errorsteam)
-  print "jobidstring: ", output
-  try: 
-    jobID = int(output.split(".")[0])
-  except:
-    print "something went wrong with calling the condir_submit command, submission of jobs was not successful"
-    exit(0)
-  print "jobID: ", jobID
   submittime=submitclock.RealTime()
   print "submitted ", len(jobids), " in ", submittime
   return [jobID]
 
+
+
 def do_qstat(jobids):
+  '''
+  monitoring of array jobs via condor_q function. Loops condor_q output until all scripts have been terminated
+  TODO: what about jobs in 'hold'? not yet considered
+  jobids: ID of jobs to be monitored
+  '''
   allfinished=False
   print "checking job status in condor_q ..."
   while not allfinished:
@@ -182,10 +212,16 @@ def helperSubmitNAFJobs(scripts,outputs,nentries):
     sys.exit()
 
 def check_jobs(scripts,outputs,nentries):
+  '''
+  check if jobs have terminated successfully. criterion: generated .root.cutflow.txt files with fitting entries
+  '''
   failed_jobs=[]
+  noCutflow = 0
+  wrongEntry = 0
   for script,o,n in zip(scripts,outputs,nentries):
     if not os.path.exists(o+'.cutflow.txt'):
       failed_jobs.append(script)
+      noCutflow += 1
       continue
     f=open(o+'.cutflow.txt')
     processed_entries=-1
@@ -196,5 +232,8 @@ def check_jobs(scripts,outputs,nentries):
         break
     if n!=processed_entries:
       failed_jobs.append(script)
+      wrongEntry += 1
+  print("jobs without cutflow file: " + str(noCutflow))
+  print("jobs with wrong entry in cutflow file: " + str(wrongEntry))
   return failed_jobs
 
