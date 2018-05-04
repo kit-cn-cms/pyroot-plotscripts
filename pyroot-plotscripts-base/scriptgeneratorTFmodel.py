@@ -2115,24 +2115,6 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
     print "Saved information about events in trees to ", scriptsfolder+'/'+"treejson.json"
   return scripts,outputs,nentries
 
-
-def check_jobs(scripts,outputs,nentries):
-  failed_jobs=[]
-  for script,o,n in zip(scripts,outputs,nentries):
-    if not os.path.exists(o+'.cutflow.txt'):
-      failed_jobs.append(script)
-      continue
-    f=open(o+'.cutflow.txt')
-    processed_entries=-1
-    for line in f:
-      s=line.split(' : ')
-      if len(s)>2 and 'all' in s[1]:
-        processed_entries=int(s[2])
-        break
-    if n!=processed_entries:
-      failed_jobs.append(script)
-  return failed_jobs
-
 # the dataBases should be defined as follows e.g. [[memDB,path],[blrDB,path]]
 def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],dataBases=[],treeInformationJsonFile="",otherSystnames=[],addCodeInterfacePaths=[],cirun=False):
   cmsswpath=os.environ['CMSSW_BASE']
