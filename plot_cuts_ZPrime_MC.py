@@ -29,6 +29,7 @@ csvgap=False
 
 #topSJWP='loose'
 topSJWP='medium'
+#topSJWP='custom'
 
 topWP='loose'
 #topWP='medium'
@@ -286,13 +287,13 @@ if WWP=='medium':
 
             MCSF_W_t21_MSD_up = " 0.12 "
             MCSF_W_t21anti_MSD_up = " 0.10 "
-            MCSF_W_t21_MSDanti_up = " 0.24 "
-            MCSF_W_t21anti_MSDanti_up = " 0.20 "
+            MCSF_W_t21_MSDanti_up = " 0.12 "
+            MCSF_W_t21anti_MSDanti_up = " 0.10 "
 
             MCSF_W_t21_MSD_down = " 0.12 "
             MCSF_W_t21anti_MSD_down = " 0.10 "
-            MCSF_W_t21_MSDanti_down = " 0.24 "
-            MCSF_W_t21anti_MSDanti_down = " 0.20 "
+            MCSF_W_t21_MSDanti_down = " 0.12 "
+            MCSF_W_t21anti_MSDanti_down = " 0.10 "
             
             MCSF_Wmiss_t21_MSD = " 1.0 "
             MCSF_Wmiss_t21anti_MSD = " 1.0 "
@@ -301,13 +302,13 @@ if WWP=='medium':
 
             MCSF_Wmiss_t21_MSD_up = " 0.12 "
             MCSF_Wmiss_t21anti_MSD_up = " 0.10 "
-            MCSF_Wmiss_t21_MSDanti_up = " 0.24 "
-            MCSF_Wmiss_t21anti_MSDanti_up = " 0.20 "
+            MCSF_Wmiss_t21_MSDanti_up = " 0.12 "
+            MCSF_Wmiss_t21anti_MSDanti_up = " 0.10 "
 
             MCSF_Wmiss_t21_MSD_down = " 0.12 "
             MCSF_Wmiss_t21anti_MSD_down = " 0.10 "
-            MCSF_Wmiss_t21_MSDanti_down = " 0.24 "
-            MCSF_Wmiss_t21anti_MSDanti_down = " 0.20 "               
+            MCSF_Wmiss_t21_MSDanti_down = " 0.12 "
+            MCSF_Wmiss_t21anti_MSDanti_down = " 0.10 "               
             
             
         
@@ -410,6 +411,16 @@ if topSJWP=='medium':
     plotselection_topsubjetCSVv2_anti = " Tops_ABCD"+radi+"_maxsubjetCSVv2 < 0.8484 "
     plotselection_topsubjetCSVv2_anti_i = " Tops_ABCD"+radi+"_maxsubjetCSVv2[i] < 0.8484 "
     plotselection_topsubjetCSVv2_anti_0 = " Tops_ABCD"+radi+"_maxsubjetCSVv2[0] < 0.8484 "
+    
+elif topSJWP=='custom':
+    
+    plotselection_topsubjetCSVv2 = " Tops_ABCD"+radi+"_maxsubjetCSVv2 > 0.75 "
+    plotselection_topsubjetCSVv2_i = " Tops_ABCD"+radi+"_maxsubjetCSVv2[i] > 0.75 "
+    plotselection_topsubjetCSVv2_0 = " Tops_ABCD"+radi+"_maxsubjetCSVv2[0] > 0.75 "
+
+    plotselection_topsubjetCSVv2_anti = " Tops_ABCD"+radi+"_maxsubjetCSVv2 < 0.75 "
+    plotselection_topsubjetCSVv2_anti_i = " Tops_ABCD"+radi+"_maxsubjetCSVv2[i] < 0.75 "
+    plotselection_topsubjetCSVv2_anti_0 = " Tops_ABCD"+radi+"_maxsubjetCSVv2[0] < 0.75 "        
 else:
 
     

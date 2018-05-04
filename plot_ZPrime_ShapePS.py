@@ -2,6 +2,8 @@ import ROOT
 import sys
 import os
 from array import array 
+from plot_additional_Zprime_MC import *
+
 ROOT.gROOT.SetBatch(True)
 ROOT.gStyle.SetOptStat(0)
 
@@ -26,16 +28,16 @@ print "ok"
 
 systs=[]
 
-for sys in ["MCSF_renfac_env","MCSF_CSVLF","MCSF_CSVHF","MCSF_CSVHFStats1","MCSF_CSVLFStats1","MCSF_CSVHFStats2","MCSF_CSVLFStats2","MCSF_CSVCErr1","MCSF_CSVCErr2","MCSF_toptag","MCSF_Wtag","MCSF_PU","MCSF_PDF","MCSF_Lumi","MCSF_Trigger","ttbarXS","nominal_JES","nominal_JER","ABCD_shape","ABCD_rate"]:
+#for sys in ["MCSF_renfac_env","MCSF_CSVLF","MCSF_CSVHF","MCSF_CSVHFStats1","MCSF_CSVLFStats1","MCSF_CSVHFStats2","MCSF_CSVLFStats2","MCSF_CSVCErr1","MCSF_CSVCErr2","MCSF_toptag","MCSF_Wtag","MCSF_PU","MCSF_PDF","MCSF_Lumi","MCSF_Trigger","ttbarXS","nominal_JES","nominal_JER","ABCD_shape","ABCD_rate"]:
 #for sys in ["nominal_JES","nominal_JER"]:
-#for sys in ["ABCD_shape","ABCD_rate"]:
+for sys in ["ABCD_shape","ABCD_rate"]:
     systs.append(sys)
     
 
 #procs="ttH_hbb ttH_hcc ttH_hww ttH_hzz ttH_htt ttH_hgg ttH_hgluglu ttH_hzg ttbarOther ttbarPlusB ttbarPlus2B ttbarPlusBBbar ttbarPlusCCbar singlet wjets zjets ttbarW ttbarZ diboson".split(" ")
-procs="SigZprime15001200_tWb SigZprime20001200_tWb SigZprime25001200_tWb SigZprime15001200_ttZ SigZprime20001200_ttZ SigZprime25001200_ttZ SigZprime15001200_ttH SigZprime20001200_ttH SigZprime25001200_ttH ttbar QCDMadgraph".split(" ")
+#procs="SigZprime15001200_tWb SigZprime20001200_tWb SigZprime25001200_tWb SigZprime15001200_ttZ SigZprime20001200_ttZ SigZprime25001200_ttZ SigZprime15001200_ttH SigZprime20001200_ttH SigZprime25001200_ttH ttbar QCDMadgraph".split(" ")
 #procs="ttbar".split(" ")
-#procs="QCDMadgraph".split(" ")
+procs="QCDMadgraph".split(" ")
 print procs
 
 inf=ROOT.TFile(infname,"READ")
@@ -47,6 +49,10 @@ if not os.path.exists(name+"SystShapes"):
 buff=ROOT.TCanvas("buff","buff",800,600)
 buff.Print(name+'.pdf[')
 
+
+
+
+
 counter=0
 for c in cats:
   print c
@@ -54,10 +60,94 @@ for c in cats:
   for p in procs:
     firstnom=inf.Get(p+"_"+ABCDversion+"_"+c+"_"+ABCDversion+"_nominal")
     for s in systs:
-      nom=firstnom.Clone()
-      print p+"_"+ABCDversion+"_"+c+"_"+ABCDversion+"_"+s
-      up=inf.Get(p+"_"+ABCDversion+"_"+c+"_"+ABCDversion+"_"+s+"Up")
-      down=inf.Get(p+"_"+ABCDversion+"_"+c+"_"+ABCDversion+"_"+s+"Down")
+        
+      if ("ABCD_shape" in s) or ("ABCD_rate" in s):
+        if ("withtopbtag" in c): 
+            RegA=inf.Get(p+"_"+ABCDversion+"_withtopbtag_CatA_Zprime_M_"+ABCDversion+"_nominal").Clone()
+            RegB=inf.Get(p+"_"+ABCDversion+"_withtopbtag_CatB_Zprime_M_"+ABCDversion+"_nominal").Clone()
+            RegC=inf.Get(p+"_"+ABCDversion+"_withtopbtag_CatC_Zprime_M_"+ABCDversion+"_nominal").Clone()
+            RegD=inf.Get(p+"_"+ABCDversion+"_withtopbtag_CatD_Zprime_M_"+ABCDversion+"_nominal").Clone()
+            firstnom=RegB.Clone()
+            firstnom.Multiply(RegC)
+            firstnom.Divide(RegD)
+            ##upRegB=inf.Get(p+"_"+ABCDversion+"_withtopbtag_CatB_Zprime_M_"+ABCDversion+"_"+s+"Up")
+            ##upRegC=inf.Get(p+"_"+ABCDversion+"_withtopbtag_CatC_Zprime_M_"+ABCDversion+"_"+s+"Up")
+            ##upRegD=inf.Get(p+"_"+ABCDversion+"_withtopbtag_CatD_Zprime_M_"+ABCDversion+"_"+s+"Up")
+            ##downRegB=inf.Get(p+"_"+ABCDversion+"_withtopbtag_CatB_Zprime_M_"+ABCDversion+"_"+s+"Down")
+            ##downRegC=inf.Get(p+"_"+ABCDversion+"_withtopbtag_CatC_Zprime_M_"+ABCDversion+"_"+s+"Down")
+            ##downRegD=inf.Get(p+"_"+ABCDversion+"_withtopbtag_CatD_Zprime_M_"+ABCDversion+"_"+s+"Down")            
+            ##upRegB.Multiply(upRegC)
+            ##upRegB.Divide(upRegD)
+            ##downRegB.Multiply(downRegC)
+            ##downRegB.Divide(downRegD)
+            
+                        
+        elif("notopbtag" in c):   
+            RegA=inf.Get(p+"_"+ABCDversion+"_notopbtag_CatA_Zprime_M_"+ABCDversion+"_nominal").Clone()
+            RegB=inf.Get(p+"_"+ABCDversion+"_notopbtag_CatB_Zprime_M_"+ABCDversion+"_nominal").Clone()
+            RegC=inf.Get(p+"_"+ABCDversion+"_notopbtag_CatC_Zprime_M_"+ABCDversion+"_nominal").Clone()
+            RegD=inf.Get(p+"_"+ABCDversion+"_notopbtag_CatD_Zprime_M_"+ABCDversion+"_nominal").Clone()
+            firstnom=RegB.Clone()
+            firstnom.Multiply(RegC)
+            firstnom.Divide(RegD)
+            
+            ##upRegB=inf.Get(p+"_"+ABCDversion+"_notopbtag_CatB_Zprime_M_"+ABCDversion+"_"+s+"Up")
+            ##upRegC=inf.Get(p+"_"+ABCDversion+"_notopbtag_CatC_Zprime_M_"+ABCDversion+"_"+s+"Up")
+            ##upRegD=inf.Get(p+"_"+ABCDversion+"_notopbtag_CatD_Zprime_M_"+ABCDversion+"_"+s+"Up")
+            ##downRegB=inf.Get(p+"_"+ABCDversion+"_notopbtag_CatB_Zprime_M_"+ABCDversion+"_"+s+"Down")
+            ##downRegC=inf.Get(p+"_"+ABCDversion+"_notopbtag_CatC_Zprime_M_"+ABCDversion+"_"+s+"Down")
+            ##downRegD=inf.Get(p+"_"+ABCDversion+"_notopbtag_CatD_Zprime_M_"+ABCDversion+"_"+s+"Down")            
+            ##upRegB.Multiply(upRegC)
+            ##upRegB.Divide(upRegD)
+            ##downRegB.Multiply(downRegC)
+            ##downRegB.Divide(downRegD)       
+            
+        
+        if ("ABCD_rate" in s):
+            nom=firstnom.Clone()
+            up=firstnom.Clone()
+            down=firstnom.Clone()
+            up.Scale(1.0+Zprime_withtopbtag_systrate)
+            down.Scale(1.0-Zprime_withtopbtag_systrate)
+        if ("ABCD_shape" in s):
+            x0ABCD=0.0
+            x0widABCD=0.0
+            for i in range(firstnom.GetNbinsX()):
+              if(RegA.GetBinContent(i)>0 and RegB.GetBinContent(i)>0 and RegC.GetBinContent(i)>0 and RegD.GetBinContent(i)>0):
+                print "regA: ",RegA.GetBinContent(i),"regB: ",RegB.GetBinContent(i),"regC: ",RegC.GetBinContent(i),"regD: ",RegD.GetBinContent(i)
+                #print RegA.GetBinContent(i)*RegD.GetBinContent(i))/(RegB.GetBinContent(i)*RegC.GetBinContent(i))
+                x0ABCD=x0ABCD+RegA.GetBinCenter(i)*1.0/(1.0/float(RegA.GetBinContent(i))+1.0/float(RegB.GetBinContent(i))+1.0/float(RegC.GetBinContent(i))+1.0/float(RegD.GetBinContent(i)))
+                print "xotempo", x0ABCD
+                x0widABCD=x0widABCD+1.0/(1.0/float(RegA.GetBinContent(i))+1.0/float(RegB.GetBinContent(i))+1.0/float(RegC.GetBinContent(i))+1.0/float(RegD.GetBinContent(i)))
+            print "x0ABCD   ",x0ABCD,  "x0widABCD   ",x0widABCD 
+            x0ABCD=x0ABCD/x0widABCD
+            print "x0ABCD   ",x0ABCD
+            raw_input()
+            f1=ROOT.TF1("fit","[0]*(x-"+str(x0ABCD)+")+1.0",1000,5050)
+            f2=ROOT.TF1("fit","-[0]*(x-"+str(x0ABCD)+")+1.0",1000,5050)
+            if ("withtopbtag" in c): 
+                f1.SetParameter(0,Zprime_withtopbtag_systshape_m)
+                f2.SetParameter(0,Zprime_withtopbtag_systshape_m)
+            if ("notopbtag" in c): 
+                f1.SetParameter(0,Zprime_notopbtag_systshape_m)
+                f2.SetParameter(0,Zprime_notopbtag_systshape_m)
+            #f1.SetParameter(0,Zprime_withtopbtag_systshape_m)
+            #f1.SetParameter(1,0.0)  
+            #f1.SetParameter(2,2000.0)  
+            #f1.FixParameter(2,2000.0)
+            #f2.SetParameter(2,2000.0)  
+            #f2.FixParameter(2,2000.0)
+            
+            nom=firstnom.Clone()
+            up=firstnom.Clone()
+            down=firstnom.Clone()
+            up.Multiply(f1,1.0)
+            down.Multiply(f2,1.0)
+      else:  
+        nom=firstnom.Clone()
+        print p+"_"+ABCDversion+"_"+c+"_"+ABCDversion+"_"+s
+        up=inf.Get(p+"_"+ABCDversion+"_"+c+"_"+ABCDversion+"_"+s+"Up")
+        down=inf.Get(p+"_"+ABCDversion+"_"+c+"_"+ABCDversion+"_"+s+"Down")
       #nom.Rebin(2)
       #up.Rebin(2)
       #down.Rebin(2)

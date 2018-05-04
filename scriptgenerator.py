@@ -79,6 +79,15 @@ def getHead3():
   int murmuf3000=0;
   int murmuf3500=0;
   int murmuf4000=0;
+  int murmufGstar1500=0;
+  int murmufGstar1750=0;
+  int murmufGstar2000=0;
+  int murmufGstar2250=0;
+  int murmufGstar2500=0;
+  int murmufGstar2750=0;
+  int murmufGstar3000=0;
+  int murmufGstar3500=0;
+  int murmufGstar4000=0;  
   
   TString DATAstr ("DATA");
   TString ttbarstr ("ttbar");
@@ -89,15 +98,27 @@ def getHead3():
   TString QCDstr ("QCD");
   TString SCstr ("SC");
   TString Sigstr ("Sig");
-  TString Sigstr ("rime1500");
-  TString Sigstr ("rime1750");
-  TString Sigstr ("rime2000");
-  TString Sigstr ("rime2250");
-  TString Sigstr ("rime2500");
-  TString Sigstr ("rime2750");
-  TString Sigstr ("rime3000");
-  TString Sigstr ("rime3500");
-  TString Sigstr ("rime4000");  
+  
+  TString Sigstr1500 ("Zprime1500");
+  TString Sigstr1750 ("Zprime1750");
+  TString Sigstr2000 ("Zprime2000");
+  TString Sigstr2250 ("Zprime2250");
+  TString Sigstr2500 ("Zprime2500");
+  TString Sigstr2750 ("Zprime2750");
+  TString Sigstr3000 ("Zprime3000");
+  TString Sigstr3500 ("Zprime3500");
+  TString Sigstr4000 ("Zprime4000");  
+  
+  TString SigGstarstr1500 ("Gstar1500");
+  TString SigGstarstr1750 ("Gstar1750");
+  TString SigGstarstr2000 ("Gstar2000");
+  TString SigGstarstr2250 ("Gstar2250");
+  TString SigGstarstr2500 ("Gstar2500");
+  TString SigGstarstr2750 ("Gstar2750");
+  TString SigGstarstr3000 ("Gstar3000");
+  TString SigGstarstr3500 ("Gstar3500");
+  TString SigGstarstr4000 ("Gstar4000");    
+  
   
   //if(processname=="SingleEl" || processname=="SingleMu"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
   //if(processname=="SingleEl" || processname=="SingleMu"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
@@ -117,16 +138,25 @@ def getHead3():
   if(bool(procname.Contains(ST_tstr))){DoMCDataWeights_ST_t=1;}
   if(bool(procname.Contains(ST_sstr))){DoMCDataWeights_ST_s=1;}
   
-  if(bool(procname.Contains(rime1500))){murmuf1500=1;}
-  if(bool(procname.Contains(rime1750))){murmuf1750=1;}
-  if(bool(procname.Contains(rime2000))){murmuf2000=1;}
-  if(bool(procname.Contains(rime2250))){murmuf2250=1;}
-  if(bool(procname.Contains(rime2500))){murmuf2500=1;}
-  if(bool(procname.Contains(rime2750))){murmuf2750=1;}
-  if(bool(procname.Contains(rime3000))){murmuf3000=1;}
-  if(bool(procname.Contains(rime3500))){murmuf3500=1;}
-  if(bool(procname.Contains(rime4000))){murmuf4000=1;}
+  if(bool(procname.Contains(Sigstr1500))){murmuf1500=1;}
+  if(bool(procname.Contains(Sigstr1750))){murmuf1750=1;}
+  if(bool(procname.Contains(Sigstr2000))){murmuf2000=1;}
+  if(bool(procname.Contains(Sigstr2250))){murmuf2250=1;}
+  if(bool(procname.Contains(Sigstr2500))){murmuf2500=1;}
+  if(bool(procname.Contains(Sigstr2750))){murmuf2750=1;}
+  if(bool(procname.Contains(Sigstr3000))){murmuf3000=1;}
+  if(bool(procname.Contains(Sigstr3500))){murmuf3500=1;}
+  if(bool(procname.Contains(Sigstr4000))){murmuf4000=1;}
   
+  if(bool(procname.Contains(SigGstarstr1500))){murmufGstar1500=1;}
+  if(bool(procname.Contains(SigGstarstr1750))){murmufGstar1750=1;}
+  if(bool(procname.Contains(SigGstarstr2000))){murmufGstar2000=1;}
+  if(bool(procname.Contains(SigGstarstr2250))){murmufGstar2250=1;}
+  if(bool(procname.Contains(SigGstarstr2500))){murmufGstar2500=1;}
+  if(bool(procname.Contains(SigGstarstr2750))){murmufGstar2750=1;}
+  if(bool(procname.Contains(SigGstarstr3000))){murmufGstar3000=1;}
+  if(bool(procname.Contains(SigGstarstr3500))){murmufGstar3500=1;}
+  if(bool(procname.Contains(SigGstarstr4000))){murmufGstar4000=1;}  
 
   string buf;
   stringstream ss(filenames); 
@@ -393,7 +423,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   
   
   
-  vetolist=['DoWeights','DoABCDsyst','DoMCDataWeights','DoMCDataWeights_ttbaronly','murmuf1500','murmuf1750','murmuf2000','murmuf2250','murmuf2500','murmuf2750','murmuf3000','murmuf3500','murmuf4000']
+  vetolist=['DoWeights','DoABCDsyst','DoMCDataWeights','DoMCDataWeights_ttbaronly','DoMCDataWeights_ST_tW','DoMCDataWeights_ST_t','DoMCDataWeights_ST_s','murmuf1500','murmuf1750','murmuf2000','murmuf2250','murmuf2500','murmuf2750','murmuf3000','murmuf3500','murmuf4000','murmufGstar1500','murmufGstar1750','murmufGstar2000','murmufGstar2250','murmufGstar2500','murmufGstar2750','murmufGstar3000','murmufGstar3500','murmufGstar4000']
   vetolist=vetolist+['processname','DoWeights','TMath','cout','for','int', 'if', 'cout', ';','<','i','i++','*=', 'temp','testea', 'anti_btag + 2', 'float','anti_loose_btag(Sideband_top_withbtag_anti_Topfirst_Bottoms_CSVv2,N_Sideband_top_withbtag_anti_Topfirst_Bottoms)','anti_loose_btag(Sideband_bottom_anti_Topfirst_Bottoms_CSVv2,N_Sideband_bottom_anti_Topfirst_Bottoms)' ]+['QCDMadgraph_Graph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M','QCDMadgraph_Graph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt','QCDMadgraph_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M','QCDMadgraph_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt','QCDPythia8_Graph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M','QCDPythia8_Graph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt','QCDPythia8_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M','QCDPythia8_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt','true', 'abs(', 'abs']+['abs( QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M)','abs( QCDPythia8_SF_SB_bottom_anti_Signal_Tops_Pt-QCDMadgraph_SF_SB_bottom_anti_Signal_Tops_Pt)']+['bbarportionweight(N_AK4_bottom_tag_candidates)','bbarportionweight(N_AK4_bottom_tag_candidates)']+['IsnoSignal_notopbtag(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)','IsnoSignal_withtopbtag(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)','IsnoSignal_inclusive(Zprimes_ABCD_M, Tprimes_ABCD_M, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)']+['pow(',')',',']+['pow(1+0.06,1.0/3.0','pow(1-0.06,1.0/3.0)','pow(1+0.08,1.0/3.0)','pow(1-0.08,1.0/3.0)','pow(1+0.35,1.0/3.0)','pow(1-0.35,1.0/3.0)','pow(1+0.06,1.0/3.0)','pow(1-0.06,1.0/3.0)','pow(1+0.08,1.0/3.0)','pow(1-0.08,1.0/3.0)','pow(1+0.6,1.0/3.0)','pow(1-0.6,1.0/3.0)','pow(1+0.005,1.0/7.0)','pow(1-0.005,1.0/7.0)','pow(1+0.06,1.0/7.0)','pow(1-0.06,1.0/7.0)','pow(1+0.02,1.0/7.0)','pow(1-0.02,1.0/7.0)','pow(1+0.8,1.0/7.0)','pow(1-0.8,1.0/7.0)','pow(1-0.06,1.0/3.0)','pow(1+0.10,1.0/3.0)','pow(1-0.10,1.0/3.0)','pow(1+0.02,1.0/3.0)','pow(1-0.02,1.0/3.0)','pow(1+0.12,1.0/3.0)','pow(1-0.12,1.0/3.0)','pow(1+0.01,1.0/3.0)','pow(1-0.01,1.0/3.0)','pow(1+0.08,1.0/7.0)','pow(1-0.08,1.0/7.0)','pow(1+0.05,1.0/7.0)','pow(1-0.05,1.0/7.0)','pow(1+0.02,1.0/7.0)','pow(1-0.02,1.0/7.0)']+['ABCD_Category(','const','const*']
   vetolist=vetolist+['"CatA_withtopbtag"','"CatB_withtopbtag"','"CatC_withtopbtag"','"CatD_withtopbtag"','"CatE_withtopbtag"','"CatF_withtopbtag"','"CatG_withtopbtag"','"CatH_withtopbtag"'+'"CatA_notopbtag"','"CatB_notopbtag"','"CatC_notopbtag"','"CatD_notopbtag"','"CatE_notopbtag"','"CatF_notopbtag"','"CatG_notopbtag"','"CatH_notopbtag"','"CatA_inclusive"','"CatB_inclusive"','"CatC_inclusive"','"CatD_inclusive"','"CatE_inclusive"','"CatF_inclusive"','"CatG_inclusive"','"CatH_inclusive"']+['CatA_withtopbtag','CatB_withtopbtag','CatC_withtopbtag','CatD_withtopbtag','CatE_withtopbtag','CatF_withtopbtag','CatG_withtopbtag','CatH_withtopbtag'+'CatA_notopbtag','CatB_notopbtag','CatC_notopbtag','CatD_notopbtag','CatE_notopbtag','CatF_notopbtag','CatG_notopbtag','CatH_notopbtag','CatA_inclusive','CatB_inclusive','CatC_inclusive','CatD_inclusive','CatE_inclusive','CatF_inclusive','CatG_inclusive','CatH_inclusive']+['1.0*( ABCD_Category( Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)=="CatA_withtopbtag")','1.0*( ABCD_Category( Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)=="CatH_withtopbtag")'] #+['bportionweightup','bportionweightdown']#+['bportionweightup','bportionweightdown']  
 

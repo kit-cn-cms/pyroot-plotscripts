@@ -628,6 +628,7 @@ if doABCD:
                         for ABCD_syst,ABCD_syst_name in zip([False,True],['Rateonly','RateAndShape']):
                         #for ABCD_syst,ABCD_syst_name in zip([True],['RateAndShape']):
                             ABCDBackgroundEstimationCalculationAndPlotsWithSystematics(lllData_Madgraph,lllBackground,lllSignal,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames, SignalSampleNames, plotnames,allweightsystnames,dataname,SC_name,signalname,ABCDversion+'_'+Category+'_CatA', ABCDversion+'_'+Category+'_CatB', ABCDversion+'_'+Category+'_CatC', ABCDversion+'_'+Category+'_CatD',QCDname, ABCDversion+'/fancy_'+ABCDversion+'_'+ABCDeventhandling+'_'+WPs+'_'+ABCD_syst_name,ABCD_syst)
+print "signal efficiency in %"
 
 for l1,l2,l3,signame in zip(lllSignal[plotnames.index(ABCDversion + "_withtopbtag_CatA_Zprime_eff")],lllSignal[plotnames.index(ABCDversion + "_notopbtag_CatA_Zprime_eff")],lllSignal[plotnames.index("N_Gen_ZPrimes")], SignalSampleNames):
-    print signame, " 2 b-tag:", l1[allweightsystnames.index('_'+ABCDversion+'_nominal')].Integral()/l3[allweightsystnames.index('_'+ABCDversion+'_nominal')].Integral() ,"   1 b-tag:", l2[allweightsystnames.index('_'+ABCDversion+'_nominal')].Integral()/l3[allweightsystnames.index('_'+ABCDversion+'_nominal')].Integral()
+    print signame, " 2 b-tag:", l1[allweightsystnames.index('_'+ABCDversion+'_nominal')].Integral()/l3[allweightsystnames.index('_'+ABCDversion+'_nominal')].Integral()*100.0 ,"   1 b-tag:", l2[allweightsystnames.index('_'+ABCDversion+'_nominal')].Integral()/l3[allweightsystnames.index('_'+ABCDversion+'_nominal')].Integral()*100.0

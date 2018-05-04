@@ -16,11 +16,98 @@ from ROOT import TMath
 from ROOT import TF1
 # from ROOT import gStyle
 import array
+import glob
 
 ROOT.gStyle.SetPaintTextFormat("4.2f");
 ROOT.gStyle.SetOptFit(1111);
 ROOT.gStyle.SetOptStat(0000);
 ROOT.gROOT.SetBatch(False)
+
+#class SampleDictionary:
+  #def __init__(self):
+    #self.samplemap={}
+    
+  #def addToMap(self,path,files):
+    #if not self.samplemap.has_key(path):
+      #self.samplemap[path]=files
+    #else:
+      #print "already have this key", path
+  
+  #def hasKey(self,path):
+    #if self.samplemap.has_key(path):
+      #return True
+  
+  #def getFiles(self,path):
+    #if self.samplemap.has_key(path):
+      #return self.samplemap[path]
+    #else:
+      #print "key not in sample dictionary"
+      #return []
+  
+  #def doPrintout(self):
+    #print self.samplemap
+
+#class Sample:
+    #def __init__(self,name, color=ROOT.kBlack, path='', selection='',nick='',listOfShapes=[],up=0,down=None,samDict="",checknevents=-1,treename='MVATree'):
+        #self.name=name
+        #self.color=color
+        #self.path=path
+        #self.selection=selection
+        #self.files=[]
+        #subpaths=path.split(";")
+        ## allow globbing samples from different paths
+        #if samDict!="":
+	  #if not samDict.hasKey(self.path):  
+	    #print "globbing files for", name, self.path
+	    #for sp in subpaths:
+	      #self.files+=glob.glob(sp)
+	      #if sp!='' and len(self.files)==0:
+		#print name
+		#print 'no files found at',sp
+	    #samDict.addToMap(path,self.files)
+	  #else:
+	    #print "map already knows this sample", self.path
+	    #self.files=samDict.getFiles(path)
+	#else:
+          #print "empty map: globbing files for", name, self.path
+	  #for sp in subpaths:
+	      #self.files+=glob.glob(sp)
+	      #if sp!='' and len(self.files)==0:
+		#print name
+		#print 'no files found at',sp
+	  
+        #if nick=='':
+            #self.nick=name
+        #else:
+            #self.nick=nick
+        #self.shape_unc=listOfShapes
+        #self.unc_up=up
+        #self.unc_down=up
+        #if down!=None:
+            #self.unc_down=down
+
+
+
+    #def checkNevents():
+        #if checknevents>0:
+            #nevents=0
+            #for fn in self.files:
+                #f=ROOT.TFile(fn)
+                #t=f.Get('MVATree')
+                #nevents+=t.GetEntries()
+            #if nevents != checknevents:
+                #print 'wrong number of events in',self.name,':',nevents,'!=',checknevents
+                #if not askYesNoQuestion('cancel?'): sys.exit()
+
+
+
+    #def GetTree(self,treename='MVATree'):
+        #chain=ROOT.TChain(treename)
+        #for f in self.files:
+            #chain.Add(f)
+        #return chain
+        
+        
 
 class SampleDictionary:
   def __init__(self):
@@ -45,35 +132,37 @@ class SampleDictionary:
   
   def doPrintout(self):
     print self.samplemap
-
+        
 class Sample:
-    def __init__(self,name, color=ROOT.kBlack, path='', selection='',nick='',listOfShapes=[],up=0,down=None,samDict="",checknevents=-1,treename='MVATree'):
+    def __init__(self,name, color=ROOT.kBlack, path='', selection='',nick='',listOfShapes=[],up=0,down=None,samDict="",readTrees=True,filterFile="NONE",checknevents=-1,treename='MVATree'):
         self.name=name
         self.color=color
         self.path=path
         self.selection=selection
         self.files=[]
+        self.filterFile=filterFile
         subpaths=path.split(";")
         # allow globbing samples from different paths
-        if samDict!="":
-	  if not samDict.hasKey(self.path):  
-	    print "globbing files for", name, self.path
-	    for sp in subpaths:
-	      self.files+=glob.glob(sp)
-	      if sp!='' and len(self.files)==0:
-		print name
-		print 'no files found at',sp
-	    samDict.addToMap(path,self.files)
-	  else:
-	    print "map already knows this sample", self.path
-	    self.files=samDict.getFiles(path)
-	else:
-          print "empty map: globbing files for", name, self.path
-	  for sp in subpaths:
-	      self.files+=glob.glob(sp)
-	      if sp!='' and len(self.files)==0:
-		print name
-		print 'no files found at',sp
+        if readTrees==True:
+          if samDict!="":
+            if not samDict.hasKey(self.path):  
+              print "globbing files for", name, self.path
+              for sp in subpaths:
+                self.files+=glob.glob(sp)
+                if sp!='' and len(self.files)==0:
+                  print name
+                  print 'no files found at',sp
+              samDict.addToMap(path,self.files)
+            else:
+              print "map already knows this sample", self.path
+              self.files=samDict.getFiles(path)
+          else:
+            print "empty map: globbing files for", name, self.path
+            for sp in subpaths:
+                self.files+=glob.glob(sp)
+                if sp!='' and len(self.files)==0:
+                  print name
+                  print 'no files found at',sp
 	  
         if nick=='':
             self.nick=name
@@ -84,7 +173,6 @@ class Sample:
         self.unc_down=up
         if down!=None:
             self.unc_down=down
-
 
 
     def checkNevents():
@@ -105,6 +193,7 @@ class Sample:
         for f in self.files:
             chain.Add(f)
         return chain
+
 
 
 class Plot:
@@ -5195,6 +5284,7 @@ def rebintovarbinsLLL(lll,name, writeRebinnedHistostoFile=False, treatMCasData=F
                 elif (('Zprime_M' in histo.GetName()) and (not (isinstance(histo,ROOT.TH2)))):
                     #print 'Nbins histo before ZprimeM ', histo.GetNbinsX()
                     #xbins= array.array('d',[1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,4000])
+                    #xbins= array.array('d',[1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,5000,5050])
                     xbins= array.array('d',[1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3500,5000,5050])
                     #xbins= array.array('d',[0,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,5000])
                     #xbins= array.array('d',[0,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3500,4000,5000])
@@ -5279,6 +5369,7 @@ def rebintovarbinsLOL(lol,name, writeRebinnedHistostoFile=False, treatMCasData=F
             elif (('Zprime_M' in histo.GetName()) and (not (isinstance(histo,ROOT.TH2)))):
                 #print 'Nbins histo before ZprimeM ', histo.GetNbinsX()
                 #xbins= array.array('d',[1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,4000])
+                #xbins= array.array('d',[1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,5000,5050])
                 xbins= array.array('d',[1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3500,5000,5050])
                 #xbins= array.array('d',[0,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,5000])
                 #xbins= array.array('d',[0,500,900,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3250,3500,3750,4000,4500,5000])

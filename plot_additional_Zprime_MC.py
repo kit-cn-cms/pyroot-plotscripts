@@ -162,12 +162,19 @@ if ABCDversion is 'ABCD5':
                 #Zprime_notopbtag_systshape_c=1.09896
               if bottomWP=='medium':
                   if topWP=='loose':
-                    Zprime_withtopbtag_systrate=0.0736834218346
-                    Zprime_withtopbtag_systshape_m=0.000157325109262
+                    #Zprime_withtopbtag_systrate=0.0736834218346
+                    #Zprime_withtopbtag_systshape_m=0.000157325109262
+                    #Zprime_withtopbtag_systshape_c=1.12496
+                    #Zprime_notopbtag_systrate=0.0428972485948 
+                    #Zprime_notopbtag_systshape_m=6.92106626942e-05
+                    #Zprime_notopbtag_systshape_c=1.09896      
+                    
+                    Zprime_withtopbtag_systrate=0.100533388233
+                    Zprime_withtopbtag_systshape_m=0.0001950250116
                     Zprime_withtopbtag_systshape_c=1.12496
-                    Zprime_notopbtag_systrate=0.0428972485948 
-                    Zprime_notopbtag_systshape_m=6.92106626942e-05
-                    Zprime_notopbtag_systshape_c=1.09896                  
+                    Zprime_notopbtag_systrate=0.0485657524616 
+                    Zprime_notopbtag_systshape_m=7.03893690402e-05
+                    Zprime_notopbtag_systshape_c=1.09896                        
                   if topWP=='medium':
                     Zprime_withtopbtag_systrate=0.0556968382142
                     Zprime_withtopbtag_systshape_m=4.83210624517e-05
@@ -833,21 +840,25 @@ std::vector<float> Wtag_weights_""" + ABCDversion + """(float const* Zprimes_ABC
                     Wtag_tag_nominal *= SF_W_tau21_MSD;
                     Wtag_tag_up *= ((SF_W_tau21_MSD + SF_W_tau21_MSD_up)+0.041*log(Ws_ABCD""" + radi + """_Pt[i]/200.0));
                     Wtag_tag_down *= ((SF_W_tau21_MSD - SF_W_tau21_MSD_down)-0.041*log(Ws_ABCD""" + radi + """_Pt[i]/200.0));
+                    break;
                 }
                 if(""" + plotselection_W_tau21_anti_i + """ && """ + plotselection_W_MSD_i + """){
                     Wtag_tag_nominal *= SF_W_tau21anti_MSD;
-                    Wtag_tag_up *= ((SF_W_tau21anti_MSD + SF_W_tau21anti_MSD_down)+0.054*log(Ws_ABCD""" + radi + """_Pt[i]/200.0));
-                    Wtag_tag_down *= ((SF_W_tau21anti_MSD - SF_W_tau21anti_MSD_up)+0.054*log(Ws_ABCD""" + radi + """_Pt[i]/200.0));
+                    Wtag_tag_up *= ((SF_W_tau21anti_MSD - SF_W_tau21anti_MSD_up)-0.054*log(Ws_ABCD""" + radi + """_Pt[i]/200.0));
+                    Wtag_tag_down *= ((SF_W_tau21anti_MSD + SF_W_tau21anti_MSD_down)+0.054*log(Ws_ABCD""" + radi + """_Pt[i]/200.0));
+                    break;
                 }
                 if(""" + plotselection_W_tau21_i + """ && """ + plotselection_W_MSD_anti_i + """){
                     Wtag_tag_nominal *= SF_W_tau21_MSDanti;
                     Wtag_tag_up *= ((SF_W_tau21_MSDanti + SF_W_tau21_MSDanti_up)+0.041*log(Ws_ABCD""" + radi + """_Pt[i]/200.0));
-                    Wtag_tag_down *= ((SF_W_tau21_MSDanti - SF_W_tau21_MSDanti_down)+0.041*log(Ws_ABCD""" + radi + """_Pt[i]/200.0));
+                    Wtag_tag_down *= ((SF_W_tau21_MSDanti - SF_W_tau21_MSDanti_down)-0.041*log(Ws_ABCD""" + radi + """_Pt[i]/200.0));
+                    break;
                 }
-                if(""" + plotselection_W_tau21_anti_i + """ && """ + plotselection_W_MSD_i + """){
+                if(""" + plotselection_W_tau21_anti_i + """ && """ + plotselection_W_MSD_anti_i + """){
                     Wtag_tag_nominal *= SF_W_tau21anti_MSDanti;
-                    Wtag_tag_up *= ((SF_W_tau21anti_MSDanti + SF_W_tau21anti_MSDanti_down)+0.054*log(Ws_ABCD""" + radi + """_Pt[i]/200.0));
-                    Wtag_tag_down *= ((SF_W_tau21anti_MSDanti - SF_W_tau21anti_MSDanti_up)+0.054*log(Ws_ABCD""" + radi + """_Pt[i]/200.0));
+                    Wtag_tag_up *= ((SF_W_tau21anti_MSDanti - SF_W_tau21anti_MSDanti_up)-0.054*log(Ws_ABCD""" + radi + """_Pt[i]/200.0));
+                    Wtag_tag_down *= ((SF_W_tau21anti_MSDanti + SF_W_tau21anti_MSDanti_down)+0.054*log(Ws_ABCD""" + radi + """_Pt[i]/200.0));
+                    break;
                 }
 
             break;
