@@ -3,7 +3,7 @@ from array import array
 from subprocess import call
 import time as timer
 import sys
-
+import nafSubmit
 datacard= sys.argv[1]
 currentPath = sys.path[0]
 
@@ -59,7 +59,8 @@ runfile=open("runAll.sh","w")
 runfile.write("#!/bin/bash\n")
 
 for job in listOfJobs:
-  runfile.write("qsub -l h=bird* -hard -l os=sld6 -l h_vmem=4000M -l s_vmem=4000M -l cvmfs -cwd -S /bin/bash -o "+currentPath+"/logs/\$JOB_NAME.o\$JOB_ID -e logs/\$JOB_NAME.e\$JOB_ID -q 'default.q' "+str(job)+"\n")
+  submitPath = nafSubmit.writeSubmitCode( currentPath + "/" + job, currentPath + "/logs")
+  runfile.write("condor_submit -terse " + submitPath + "\n")
 runfile.close()
 
 # after all jobs are finished do
