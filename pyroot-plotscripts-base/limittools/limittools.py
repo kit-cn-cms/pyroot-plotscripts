@@ -10,29 +10,6 @@ from subprocess import call
 from nafSubmit import *
 import glob
 
-def do_qstat(jobids):
-  allfinished=False
-  while not allfinished:
-    time.sleep(10)
-    a = subprocess.Popen(['qstat'], stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
-    qstat=a.communicate()[0]
-    lines=qstat.split('\n')
-    nrunning=0
-    for line in lines:
-      words=line.split()
-      for jid in words:
-        if jid.isdigit():
-          jobid=int(jid)
-          if jobid in jobids and not " dr " in line:
-           nrunning+=1
-          break
-
-    if nrunning>0:
-      print nrunning,'jobs running'
-    else:
-      print "all jobs are finished"
-      allfinished=True
-
 def haddFiles(outname="",infiles=[],totalNumberOfHistosNeedsToRemainTheSame=False):
   print 'hadd from filelist'
   haddclock=ROOT.TStopwatch()
