@@ -2971,54 +2971,6 @@ def askYesNo(question):
     print "Please respond with 'yes' or 'no'"
     return askYesNo(question)
 
-def submitArrayToNAF(scripts,arrayname=""):
-  submitclock=ROOT.TStopwatch()
-  submitclock.Start()
-  jobids=[]
-  logdir = os.getcwd()+"/logs"
-  if not os.path.exists(logdir):
-    os.makedirs(logdir)
-  # get nscripts
-  nscripts=len(scripts)
-  tasknumberstring='1-'+str(nscripts)
-  
-  #create arrayscript to be run on the birds. Depinding on $SGE_TASK_ID the script will call a different plot/run script to actually run
-  basepathtoscripts=scripts[0].rsplit("/",1)[0]
-  print basepathtoscripts
-  arrayscriptpath=basepathtoscripts+"/ats_"+arrayname+".sh"
-  arrayscriptcode="#!/bin/bash \n"
-  arrayscriptcode+="subtasklist=(\n"
-  for scr in scripts:
-    arrayscriptcode+=scr+" \n"
-  arrayscriptcode+=")\n"
-  arrayscriptcode+="thescript=${subtasklist[$SGE_TASK_ID-1]}\n"
-  arrayscriptcode+="thescriptbasename=`basename ${subtasklist[$SGE_TASK_ID-1]}`\n"
-  arrayscriptcode+="echo \"${thescript}\n"
-  arrayscriptcode+="echo \"${thescriptbasename}\n"
-  arrayscriptcode+=". $thescript 1>>"+logdir+"/${thescriptbasename}.o$JOB_ID.$SGE_TASK_ID 2>>"+logdir+"/${thescriptbasename}.e$JOB_ID.$SGE_TASK_ID\n"
-  arrayscriptfile=open(arrayscriptpath,"w")
-  arrayscriptfile.write(arrayscriptcode)
-  arrayscriptfile.close()
-  st = os.stat(arrayscriptpath)
-  os.chmod(arrayscriptpath, st.st_mode | stat.S_IEXEC)
-  
-  #exit(0)
-  print 'submitting',arrayscriptpath
-  #command=['qsub', '-cwd','-terse','-t',tasknumberstring,'-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=2000M', '-l', 's_vmem=2000M' ,'-o', logdir+'/dev/null', '-e', logdir+'/dev/null', arrayscriptpath]
-  command=['qsub', '-cwd','-terse','-t',tasknumberstring,'-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=5800M', '-l', 's_vmem=5800M' ,'-o', '/dev/null', '-e', '/dev/null', arrayscriptpath]
-  a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
-  output = a.communicate()[0]
-  jobidstring = output
-  if len(jobidstring)<2:
-    print "something did not work with submitting the array job"
-    exit(0)
-  jobidstring=jobidstring.split(".")[0]
-  print "the jobID", jobidstring
-  jobidint=int(jobidstring)
-  submittime=submitclock.RealTime()
-  print "submitted ", len(jobids), " in ", submittime
-  return [jobidint]
-  
 def do_qstat(jobids):
   allfinished=False
   while not allfinished:
