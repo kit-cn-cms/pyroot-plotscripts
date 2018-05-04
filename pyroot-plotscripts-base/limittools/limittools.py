@@ -7,31 +7,8 @@ import time
 import datetime
 import stat
 from subprocess import call
+from nafSubmit import *
 import glob
-
-def submitToNAF(scripts):
-  submitclock=ROOT.TStopwatch()
-  submitclock.Start()
-  jobids=[]
-  logdir = os.getcwd()+"/logs"
-  if not os.path.exists(logdir):
-    os.makedirs(logdir)
-  for script in scripts:
-    print 'submitting',script
-    command=['qsub', '-cwd', '-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=5800M', '-l', 's_vmem=5800M' ,'-o', logdir, '-e', logdir, script]
-    a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
-    output = a.communicate()[0]
-    jobidstring = output.split()
-    for jid in jobidstring:
-      if jid.isdigit():
-        jobid=int(jid)
-        print "this job's ID is", jobid
-        jobids.append(jobid)
-        break
-  
-  submittime=submitclock.RealTime()
-  print "submitted ", len(jobids), " in ", submittime
-  return jobids
 
 def submitArrayToNAF(scripts,arrayname=""):
   submitclock=ROOT.TStopwatch()
