@@ -7,8 +7,6 @@ import stat
 import re
 import ROOT
 import xml.etree.ElementTree as ET
-import variablebox
-import plotutils
 import glob
 import json
 import filecmp
@@ -76,7 +74,7 @@ def condorSubmit(submitPath):
     print("something went wrong with calling the condir_submit command, submission of jobs was not successful")
     print("DEBUG: jobidstring (= communicate()[0]): " + output)
     exit(0)
-  print("JobID = " + jobID)
+  print("JobID = " + str(jobID))
   return jobID
 
 
@@ -144,7 +142,7 @@ def submitArrayToNAF(scripts,arrayName=""):
   os.chmod(arrayPath, st.st_mode | stat.S_IEXEC)
  
   # generating code for condor_submit 
-  submitPath = writeSubmitCode(arrayPath,logdir, isArray=True, nscripts)
+  submitPath = writeSubmitCode(arrayPath,logdir, isArray=True, nscripts=nscripts)
 
   # submitting script
   print('submitting '+ submitPath)
@@ -165,7 +163,7 @@ def do_qstat(jobids):
   allfinished=False
   print "checking job status in condor_q ..."
   while not allfinished:
-    time.sleep(20)
+    time.sleep(5)
     a = subprocess.Popen(['condor_q'], stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
     qstat=a.communicate()[0]
     lines=qstat.split('\n')
@@ -210,6 +208,7 @@ def helperSubmitNAFJobs(scripts,outputs,nentries):
   if retries>=10:
     print 'could not submit jobs'
     sys.exit()
+  return True
 
 def check_jobs(scripts,outputs,nentries):
   '''
