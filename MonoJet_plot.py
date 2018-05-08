@@ -35,7 +35,7 @@ additionalvariables+=GetMEPDFadditionalVariablesList("/nfs/dust/cms/user/kelmora
 
 
 plotselection_inclusive = "1.*DeltaPhi_Jet_MET[0]>1."
-plotlabel_inclusive = "inclusive"
+plotlabel_inclusive = "#slash{E}_{T}>250 GeV"
 plotprefix = "incl"
 plots_inclusive=[
     
@@ -56,7 +56,7 @@ plots_inclusive=[
     ]
 
 plotselection_MET300 = "(Evt_Pt_MET>300.)*(DeltaPhi_Jet_MET[0]>1.)"
-plotlabel_MET300 = "MET>300"
+plotlabel_MET300 = "#slash{E}_{T}>300 GeV"
 plotprefix = "MET300"
 plots_MET300=[
     
@@ -77,7 +77,7 @@ plots_MET300=[
     ]
 
 plotselection_MET400 = "(Evt_Pt_MET>400.)*(DeltaPhi_Jet_MET[0]>1.)"
-plotlabel_MET400 = "MET>400"
+plotlabel_MET400 = "#slash{E}_{T}>400 GeV"
 plotprefix = "MET400"
 plots_MET400=[
     
@@ -98,7 +98,7 @@ plots_MET400=[
     ]
 
 plotselection_MET500 = "(Evt_Pt_MET>500.)*(DeltaPhi_Jet_MET[0]>1.)"
-plotlabel_MET500 = "MET>500"
+plotlabel_MET500 = "#slash{E}_{T}>500 GeV"
 plotprefix = "MET500"
 plots_MET500=[
     
@@ -119,7 +119,7 @@ plots_MET500=[
     ]
 
 plotselection_MET600 = "(Evt_Pt_MET>600.)*(DeltaPhi_Jet_MET[0]>1.)"
-plotlabel_MET600 = "MET>600"
+plotlabel_MET600 = "#slash{E}_{T}>600 GeV"
 plotprefix = "MET600"
 plots_MET600=[
     
