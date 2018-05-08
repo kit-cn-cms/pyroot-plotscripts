@@ -67,6 +67,7 @@ def condorSubmit(submitPath):
   process = subprocess.Popen(submitCommand.split(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, stdin=subprocess.PIPE)
   output = process.communicate()[0]
 
+  print("debug print output",output)
   # extracting jobID
   try:
     jobID = int(output.split(".")[0])
@@ -98,7 +99,7 @@ def submitToNAF(scripts):
     # submitting script 
     print 'submitting',script
     jobID = condorSubmit(submitPath)
-
+    jobids += [jobID]
   submittime=submitclock.RealTime()
   print "submitted ", len(jobids), " in ", submittime
   return jobids
@@ -162,9 +163,14 @@ def do_qstat(jobids):
   '''
   allfinished=False
   print "checking job status in condor_q ..."
+  command = ["condor_q"]
+  if jobids:
+    command += jobids  
+    command = [str(c) for c in command]
+  print "command",command
   while not allfinished:
     time.sleep(5)
-    a = subprocess.Popen(['condor_q'], stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
+    a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
     qstat=a.communicate()[0]
     lines=qstat.split('\n')
     nrunning=0
