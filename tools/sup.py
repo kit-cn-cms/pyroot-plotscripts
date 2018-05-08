@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # submits all *.sh files to cluster, either all scripts in a folder or just a list of files
-# usage: ./sup.py -f path/to/scripts [script_pattern]
+# usage: ./sup.py -f path/to/scripts [script_pattern] (for folder submits)
 # or ./sup.py arbitrary number of filesnames
 import os
 import sys
@@ -43,8 +43,9 @@ for f in files:
         break
     
     print "writing submit script for condor_submit"
+    filedirectory = "/".join(f.split("/")[:-1])
     filename = f.split("/")[-1][:-3]
-    submitscriptname = "submit_"+filename+".sub"
+    submitscriptname = filedirectory + "/submit_"+filename+".sub"
     print "submitscriptname:", submitscriptname
     
     submitscriptcode = "universe = vanilla\n"
