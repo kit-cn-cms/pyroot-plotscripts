@@ -40,7 +40,6 @@ if len(failed_jobs) == 0:
 else:
     print("sup.py test with folder not successfull")
 
-'''
 # helperSubmitNAFJobs:
 print("-"*50 + "\ntesting helperSubmitNAFJobs\n")
 scripts = [base + "/scripts/test1_helper.sh", base + "/scripts/test2_helper.sh"]
@@ -81,4 +80,3 @@ if len(failed_jobs) == 0:
     print("submitToNAF test successfull")
 else:
     print("something went wrong with submitToNAF...")
-'''
