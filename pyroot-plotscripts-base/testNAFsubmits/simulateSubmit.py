@@ -10,6 +10,7 @@ os.system("rm -r scripts/*.sub")
 
 base = os.getcwd()
 
+'''
 # sup.py list of scripts
 print("-"*50 + "\ntesting sup.py with multiple scripts\n")
 scripts = [base + "/scripts/test1_sup.sh", base + "/scripts/test2_sup.sh"]
@@ -51,7 +52,7 @@ if success:
     print("helperSubmitNAFJobs test successfull")
 else:
     print("helperSubmitNAFJobs test not successfull")
-
+'''
 # submitArrayToNAF:
 print("-"*50 + "\ntesting submitArrayToNAF\n")
 scripts = [base + "/scripts/test1_array.sh", base + "/scripts/test2_array.sh"]
@@ -60,8 +61,9 @@ nentries = [3,4]
 arrayName = "testArray"
 
 jobidlist = nafSubmit.submitArrayToNAF(scripts, arrayName)
-nafSubmit.do_qstat(jobidlist)
-failed_jobs = nafSubmit.check_jobs(scripts,outputs,nentries)
+jobidlist2 = nafSubmit.submitArrayToNAF(scripts, arrayName, holdIDs = jobidlist)
+nafSubmit.do_qstat(jobidlist+jobidlist2)
+failed_jobs = nafSubmit.checkJobs(scripts,outputs,nentries)
 if len(failed_jobs)==0:
     print("submitArrayToNAF test successfull")
 else:
@@ -74,8 +76,9 @@ outputs = [base + "/scripts/test1_single.root", base + "/scripts/test2_single.ro
 nentries = [5,6]
 
 jobids = nafSubmit.submitToNAF(scripts)
-nafSubmit.do_qstat(jobids)
-failed_jobs = nafSubmit.check_jobs(scripts,outputs,nentries)
+jobids2 = nafSubmit.submitToNAF(scripts, holdIDs = jobids)
+nafSubmit.do_qstat(jobids+jobids2)
+failed_jobs = nafSubmit.checkJobs(scripts,outputs,nentries)
 if len(failed_jobs) == 0:
     print("submitToNAF test successfull")
 else:
