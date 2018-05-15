@@ -7,7 +7,7 @@ import ROOT
 import csv
 
 
-def writeSubmitCode(script, logdir, isArray = False, nScripts = 0):
+def writeSubmitCode(script, logdir, hold = False, isArray = False, nScripts = 0):
   '''
   write the code for condor_submit file
 
@@ -28,6 +28,8 @@ def writeSubmitCode(script, logdir, isArray = False, nScripts = 0):
   submitCode+="priority = 0\n"
   submitCode+="request_memory = 5800M\n"
   #submitCode+="request_disk = 5800M\n"
+  if hold:
+    submitCode+="hold = True\n"
 
   if isArray:
     submitCode+="error = "+logdir+"/"+submitScript+".$(Cluster)_$(ProcId).err\n"
@@ -49,6 +51,29 @@ def writeSubmitCode(script, logdir, isArray = False, nScripts = 0):
 
   return submitPath
 
+def writeArrayCode(scripts, arrayName):
+  '''
+
+  '''
+  scriptPath=scripts[0].rsplit("/",1)[0]
+  arrayPath=scriptPath+"/ats_"+arrayName+".sh"
+  print "basepath to scripts:", scriptPath
+
+  arrayCode="#!/bin/bash \n"
+  arrayCode+="subtasklist=(\n"
+  for scr in scripts:
+    arrayCode+=scr+" \n"
+  arrayCode+=")\n"
+  arrayCode+="thescript=${subtasklist[$SGE_TASK_ID]}\n"
+  arrayCode+="echo \"${thescript}\"\n"
+  arrayCode+=". $thescript"
+
+  arrayFile=open(arrayPath,"w")
+  arrayFile.write(arrayCode)
+  arrayFile.close()
+  st = os.stat(arrayPath)
+  os.chmod(arrayPath, st.st_mode | stat.S_IEXEC)
+  return arrayPath
 
 def condorSubmit(submitPath):
   '''
@@ -71,11 +96,29 @@ def condorSubmit(submitPath):
   print("JobID = " + str(jobID))
   return jobID
 
+def setupRelease(oldJIDs, newJIDs):
+    releasePath = "release"
+    for ID in newJIDs:
+        releasePath += "_"+str(ID)
+    releasePath +=".py"
 
-def submitToNAF(scripts):
+    releaseCode = "from nafSubmit import do_qstat\n"
+    releaseCode += "import os\n"
+    releaseCode += "do_qstat("+str(oldJIDs)+")\n"
+    releaseCode += "os.system('condor_release"
+    for ID in newJIDs:
+        releaseCode += " "+str(ID)
+    releaseCode += "')\n"
+
+    with open(releasePath, "w") as releaseFile:
+        releaseFile.write(releaseCode)
+    os.system("python "+releasePath+" > /dev/null && rm "+releasePath+" &")
+
+def submitToNAF(scripts, holdIDs = None):
   '''
   submit list of scripts to NAF
   scripts: list of .sh-scripts to be submitted
+  holdIDs: list of jobIDs that need to be finished before queueing the new scripts
 
   returns jobIDs as list of integers
   '''
@@ -88,7 +131,8 @@ def submitToNAF(scripts):
 
   for script in scripts:    
     # generating code for condor_submit
-    submitPath = writeSubmitCode(script, logdir)
+    hold = True if holdIDs else False
+    submitPath = writeSubmitCode(script, logdir, hold)
 
     # submitting script 
     print 'submitting',script
@@ -97,14 +141,18 @@ def submitToNAF(scripts):
 
   submittime=submitclock.RealTime()
   print "submitted ", len(jobIDs), " in ", submittime
+
+  if hold:
+    setupRelease(holdIDs, jobIDs)
   return jobIDs
 
 
-def submitArrayToNAF(scripts,arrayName=""):
+def submitArrayToNAF(scripts,arrayName="",holdIDs=None):
   '''
   submit scripts to NAF as array job
   scripts: list of scripts to be submitted
   arrayName: name of the outputarray
+  holdIDs: list of jobIDs that need to be finished before queueing the new script
 
   returns jobID as integer in list
   '''
@@ -116,37 +164,21 @@ def submitArrayToNAF(scripts,arrayName=""):
     os.makedirs(logdir)
   # get nScripts
   nScripts=len(scripts)
-
-  # create arrayscript to be run on the birds. Depending on $SGE_TASK_ID the script will call a different plot/run script to actually run
-  # $SGE_TASK_ID still exists in HTCondor system
-  scriptPath=scripts[0].rsplit("/",1)[0]
-  arrayPath=scriptPath+"/ats_"+arrayName+".sh"
-  print "basepath to scripts:", scriptPath
-
-  arrayCode="#!/bin/bash \n"
-  arrayCode+="subtasklist=(\n"
-  for scr in scripts:
-    arrayCode+=scr+" \n"
-  arrayCode+=")\n"
-  arrayCode+="thescript=${subtasklist[$SGE_TASK_ID]}\n"
-  arrayCode+="echo \"${thescript}\"\n"
-  arrayCode+=". $thescript"
-
-  arrayFile=open(arrayPath,"w")
-  arrayFile.write(arrayCode)
-  arrayFile.close()
-  st = os.stat(arrayPath)
-  os.chmod(arrayPath, st.st_mode | stat.S_IEXEC)
- 
+  
+  # generate code for array script
+  arrayPath = writeArrayCode(scripts, arrayName)
   # generating code for condor_submit 
-  submitPath = writeSubmitCode(arrayPath,logdir, isArray=True, nScripts=nScripts)
+  hold = True if holdIDs else False
+  submitPath = writeSubmitCode(arrayPath, logdir, hold = hold, isArray=True, nScripts=nScripts)
 
   # submitting script
   print('submitting '+ submitPath)
   jobID = condorSubmit(submitPath)
 
   submittime=submitclock.RealTime()
-  print "submitted 1 array script in ", submittime
+  print "submitted the array script in ", submittime
+  if hold:
+    setupRelease(holdIDs, [jobID])
   return [jobID]
 
 
@@ -176,14 +208,14 @@ def do_qstat(jobIDs = False):
         states = joblist.split(",")
         jobsRunning = int(states[3].split()[0])
         jobsIdle =  int(states[2].split()[0])
-        print(str(jobsRunning) + " jobs running, " + str(jobsIdle) + " jobs idling")
-        nrunning = jobsRunning + jobsIdle
+        jobsHeld = int(states[4].split()[0])
+        print(str(jobsRunning) + " jobs running, " + str(jobsIdle) + " jobs idling, " + str(jobsHeld) + "jobs held.")
+        nrunning = jobsRunning + jobsIdle + jobsHeld
 
     if nrunning == 0:
       print "all jobs are finished"
       allfinished=True
 
-""" Helper function to submit NAF jobs"""
 def helperSubmitNAFJobs(scripts,outputs,nEntries):
   '''
   wrapper for submitting PlotPara scripts to NAF
