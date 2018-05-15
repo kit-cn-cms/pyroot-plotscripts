@@ -209,7 +209,7 @@ def do_qstat(jobIDs = False):
         jobsRunning = int(states[3].split()[0])
         jobsIdle =  int(states[2].split()[0])
         jobsHeld = int(states[4].split()[0])
-        print(str(jobsRunning) + " jobs running, " + str(jobsIdle) + " jobs idling, " + str(jobsHeld) + "jobs held.")
+        print(str(jobsRunning) + " jobs running, " + str(jobsIdle) + " jobs idling, " + str(jobsHeld) + " jobs held.")
         nrunning = jobsRunning + jobsIdle + jobsHeld
 
     if nrunning == 0:
