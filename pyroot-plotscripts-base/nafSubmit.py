@@ -60,7 +60,7 @@ def writeArrayCode(scripts, arrayName):
   returns: path to array script
   '''
   scriptPath=scripts[0].rsplit("/",1)[0]
-  arrayPath=scriptPath+"/ats_"+arrayName+".sh"
+  arrayscriptpath=scriptPath+"/ats_"+arrayName+".sh"
   print "basepath to scripts:", scriptPath
 
   arrayCode="#!/bin/bash \n"
@@ -72,12 +72,12 @@ def writeArrayCode(scripts, arrayName):
   arrayCode+="echo \"${thescript}\"\n"
   arrayCode+=". $thescript"
 
-  arrayFile=open(arrayPath,"w")
+  arrayFile=open(arrayscriptpath,"w")
   arrayFile.write(arrayCode)
   arrayFile.close()
-  st = os.stat(arrayPath)
-  os.chmod(arrayPath, st.st_mode | stat.S_IEXEC)
-  return arrayPath
+  st = os.stat(arrayscriptpath)
+  os.chmod(arrayscriptpath, st.st_mode | stat.S_IEXEC)
+  return arrayscriptpath
 
 def condorSubmit(submitPath):
   '''
@@ -98,6 +98,7 @@ def condorSubmit(submitPath):
     print("DEBUG: jobIDstring (= communicate()[0]): " + output)
     exit(0)
   print("JobID = " + str(jobID))
+  os.system("rm "+submitPath) # option to remove the created submit-scripts
   return jobID
 
 def setupRelease(oldJIDs, newJIDs):
@@ -106,33 +107,46 @@ def setupRelease(oldJIDs, newJIDs):
     oldJIDs: list of jobs that need to be finished before new jobs are queued up in batch system
     newJIDs: list of jobs that wait on old jobs to be finished before being queued up in batch system
 
-    returns nothing
-    WIP: at the moment this start a python script in the background monitoring the submitted jobs 
-            this can lead to complications when e.g. terminating the console
-            thus this needs to be made foolproof by e.g. submitting the release script to batch itself
+    returns ID of release job
     '''
-    releasePath = "release"
+    releasePath = os.getcwd()+"/release"
     for ID in newJIDs:
         releasePath += "_"+str(ID)
-    releasePath +=".py"
+    releaseShellPath = releasePath +".sh"
+    releasePath +=".sh"
     
     basedir = os.path.dirname(os.path.realpath(__file__))
 
-    releaseCode = "import sys\n"
-    #releaseCode += "basedir = '"+basedir+"'\n"
-    #releaseCode += "if not basedir in sys.path:\n"
-    #releaseCode += "\tsys.path.append(basedir)\n"
+    releaseCode = "#!/bin/bash\n"
+    releaseCode += "export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch\n"
+    releaseCode += "source $VO_CMS_SW_DIR/cmsset_default.sh\n"
+    releaseCode += "cd /nfs/dust/cms/user/kelmorab/combineCMSSW/CMSSW_8_1_0/src\n"
+    releaseCode += "eval `scram runtime -sh`\n"
+    releaseCode += "cd "+os.getcwd()+"\n"
+    releaseCode += "script=\"\n"
+    releaseCode += "import sys\n"
+    releaseCode += "basedir = '"+basedir+"'\n"
+    releaseCode += "if not basedir in sys.path:\n"
+    releaseCode += "\tsys.path.append(basedir)\n"
     releaseCode += "from nafSubmit import do_qstat\n"
     releaseCode += "import os\n"
     releaseCode += "do_qstat("+str(oldJIDs)+")\n"
-    releaseCode += "os.system('condor_release"
+    releaseCode += "os.system('condor_release -name bird-htc-sched02.desy.de"
     for ID in newJIDs:
         releaseCode += " "+str(ID)
     releaseCode += "')\n"
+    releaseCode += "\"\n"
+    releaseCode += "python -c \"$script\"\n"
+    releaseCode += "rm -- \"$0\"\n"
 
     with open(releasePath, "w") as releaseFile:
         releaseFile.write(releaseCode)
-    os.system("python "+releasePath+" > /dev/null && rm "+releasePath+" &")
+    st = os.stat(releasePath)
+    os.chmod(releasePath, st.st_mode | stat.S_IEXEC)
+    releaseID = submitToNAF([releasePath])
+    os.system("rm "+releasePath[:-3]+".sub")
+    return releaseID
+    #os.system("python "+releasePath+" > /dev/null && rm "+releasePath+" &")
 
 def submitToNAF(scripts, holdIDs = None):
   '''
@@ -149,9 +163,9 @@ def submitToNAF(scripts, holdIDs = None):
   if not os.path.exists(logdir):
     os.makedirs(logdir)
 
+  hold = True if holdIDs else False
   for script in scripts:    
     # generating code for condor_submit
-    hold = True if holdIDs else False
     submitPath = writeSubmitCode(script, logdir, hold)
 
     # submitting script 
@@ -163,9 +177,11 @@ def submitToNAF(scripts, holdIDs = None):
   print "submitted ", len(jobIDs), " in ", submittime
 
   if hold:
-    setupRelease(holdIDs, jobIDs)
-  return jobIDs
+    print("the scripts were submitted in hold state - creating release script")
+    releaseID = setupRelease(holdIDs, jobIDs)
+    jobIDs += releaseID
 
+  return jobIDs
 
 def submitArrayToNAF(scripts,arrayName="",holdIDs=None):
   '''
@@ -186,27 +202,28 @@ def submitArrayToNAF(scripts,arrayName="",holdIDs=None):
   nScripts=len(scripts)
   
   # generate code for array script
-  arrayPath = writeArrayCode(scripts, arrayName)
+  arrayscriptpath = writeArrayCode(scripts, arrayName)
   # generating code for condor_submit 
   hold = True if holdIDs else False
-  submitPath = writeSubmitCode(arrayPath, logdir, hold = hold, isArray=True, nScripts=nScripts)
+  submitPath = writeSubmitCode(arrayscriptpath, logdir, hold = hold, isArray=True, nScripts=nScripts)
 
   # submitting script
   print('submitting '+ submitPath)
-  jobID = condorSubmit(submitPath)
-
+  jobIDs = [condorSubmit(submitPath)]
+  
   submittime=submitclock.RealTime()
-  print "submitted the array script in ", submittime
+  print "submitted", len(jobIDs), "scrips in", submittime
+  
   if hold:
-    setupRelease(holdIDs, [jobID])
-  return [jobID]
+    print("the script was submitted in hold state - creating release script")
+    releaseID = setupRelease(holdIDs, jobIDs)
+    jobIDs += releaseID
 
-
+  return jobIDs
 
 def do_qstat(jobIDs = False):
   '''
-  monitoring of array jobs via condor_q function. Loops condor_q output until all scripts have been terminated
-  TODO: what about jobs in 'hold'? not yet considered
+  monitoring of jobs via condor_q function. Loops condor_q output until all scripts have been terminated
   jobIDs: ID of jobs to be monitored (if no argument is given, all jobs of the current NAF user are monitored)
   '''
   allfinished=False
