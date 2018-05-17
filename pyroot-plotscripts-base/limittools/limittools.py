@@ -7,6 +7,8 @@ import time
 import datetime
 import stat
 from subprocess import call
+dirpath = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(dirpath+"/../")
 from nafSubmit import *
 import glob
 
