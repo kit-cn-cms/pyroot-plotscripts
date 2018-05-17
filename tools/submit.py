@@ -1,8 +1,5 @@
 #"/usr/bin/env python
 # use this script to submit all *.sh files to the cluster
-# usage:
-# python submit.py -f path/to/script/folder [patterns]
-# python submit.py filename1 filename2 ...
 import sys
 import os
 import re
@@ -12,7 +9,7 @@ from subprocess import call
 if len(sys.argv) < 2:
     sys.exit("need at least one argument, try --help")
 if "--help" in sys.argv or "-h" in sys.argv:
-    print("this script is used to submit shell files to the cluster")
+    print("this script is used to submit shell scripts to the cluster")
     print("it can only be used on HTC clusters")
     print("at the moment (May 2018) these are 'naf-cms11.desy.de' and 'naf-cms12.desy.de'")
     print("-"*70)
@@ -28,6 +25,7 @@ if "--help" in sys.argv or "-h" in sys.argv:
     print("\tpython submit-py -a desired/array/name.sh -f path/to/folder 'pattern'")
     sys.exit()
 
+# checking array flag
 if "-a" in sys.argv:
     index = sys.argv.index("-a")
     arrayName = sys.argv[index+1]
@@ -35,6 +33,7 @@ if "-a" in sys.argv:
 else:
     arraySubmit = False
 
+# checking folder flag
 if "-f" in sys.argv:
     index = sys.argv.index("-f")
     filepath = sys.argv[index+1]+"/"
@@ -96,6 +95,7 @@ def writeSubmitCode(script, isArray, nTasks):
     
     return submitPath
 
+# function to write array script code
 def writeArrayScript(files):
     arrayCode = "#!/bin/bash\n"
     arrayCode += "#ARRAYMETA: ntasks "+str(len(files))+"\n"
@@ -112,13 +112,14 @@ def writeArrayScript(files):
 
     return arrayName
 
-# submitting files
+
+# _main_ submitting files
 if arraySubmit:
-    print("writing array script")
+    print("writing array script "+arrayName)
     arrayName = writeArrayScript(files)
-    print("writing submit script")
+    print("writing submit script for "+arrayName)
     submitName = writeSubmitCode(arrayName, True, len(files))
-    print("submitting script")
+    print("submitting script "+submitName)
     command = "condor_submit "+submitName
     call(command.split())
     sys.exit()
@@ -126,10 +127,8 @@ if arraySubmit:
 for f in files:
     # check if script is an array script
     isArray, nTasks = checkArray(f)
-    
     print("writing submit script for "+f)
     submitName = writeSubmitCode(f, isArray, nTasks)
-
     print("submitting script "+submitName)
     command = "condor_submit "+submitName
     call(command.split())    

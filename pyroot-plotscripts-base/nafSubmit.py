@@ -53,7 +53,11 @@ def writeSubmitCode(script, logdir, hold = False, isArray = False, nScripts = 0)
 
 def writeArrayCode(scripts, arrayName):
   '''
-
+  writing code for array script
+  scripts: list of scripts to be concatenated as array
+  arrayName: name of array script
+  
+  returns: path to array script
   '''
   scriptPath=scripts[0].rsplit("/",1)[0]
   arrayPath=scriptPath+"/ats_"+arrayName+".sh"
@@ -97,12 +101,28 @@ def condorSubmit(submitPath):
   return jobID
 
 def setupRelease(oldJIDs, newJIDs):
+    '''
+    writes and executes code to monitor the running of jobs. releases new jobs when old ones are finished
+    oldJIDs: list of jobs that need to be finished before new jobs are queued up in batch system
+    newJIDs: list of jobs that wait on old jobs to be finished before being queued up in batch system
+
+    returns nothing
+    WIP: at the moment this start a python script in the background monitoring the submitted jobs 
+            this can lead to complications when e.g. terminating the console
+            thus this needs to be made foolproof by e.g. submitting the release script to batch itself
+    '''
     releasePath = "release"
     for ID in newJIDs:
         releasePath += "_"+str(ID)
     releasePath +=".py"
+    
+    basedir = os.path.dirname(os.path.realpath(__file__))
 
-    releaseCode = "from nafSubmit import do_qstat\n"
+    releaseCode = "import sys\n"
+    #releaseCode += "basedir = '"+basedir+"'\n"
+    #releaseCode += "if not basedir in sys.path:\n"
+    #releaseCode += "\tsys.path.append(basedir)\n"
+    releaseCode += "from nafSubmit import do_qstat\n"
     releaseCode += "import os\n"
     releaseCode += "do_qstat("+str(oldJIDs)+")\n"
     releaseCode += "os.system('condor_release"
