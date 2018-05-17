@@ -2380,7 +2380,7 @@ def startLoop():
     std::cout<<"m BTags "<<N_BTagsM<<std::endl;
     
     std::cout<<"XS weight "<<Weight_XS<<std::endl;
-    std::cout<<"PU weight "<<Weight_pu69p2<<std::endl;
+    //std::cout<<"PU weight "<<Weight_pu69p2<<std::endl;
     std::cout<<"ele ID weight (both) "<<internalEleIDWeight<<std::endl;
     std::cout<<"ele Reco weight (both) "<<internalEleGFSWeight<<std::endl;
     std::cout<<"ele trigger weight "<<internalEleTriggerWeight<<std::endl;
@@ -2559,7 +2559,7 @@ def compileProgram(scriptname,usesDataBases,addCodeInterfaces):
     print "Compile failed with error:\n", e.output
 
 
-def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],allsystweights=["1"],additionalvariables=[],dataBases=[],addCodeInterfaces=[]):
+def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],allsystweights=["1"],additionalvariables=[],dataBases=[],addCodeInterfaces=[],MEPDFCSVFile=""):
 
   # collect variables
   # list varibles that should not be written to the program automatically
@@ -2581,9 +2581,10 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 ]
 
   #csv_file=os.getcwd()+"/rate_factors_onlyinternal_powhegpythia.csv"
-  csv_file="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv"
+  csv_file=MEPDFCSVFile
 
-  vetolist+=GetMEPDFVetoList(csv_file)
+  if MEPDFCSVFile!="":
+    vetolist+=GetMEPDFVetoList(csv_file)
 
   for addCodeInt in addCodeInterfaces:
     vetolist+=addCodeInt.getExternalyCallableVariables()
@@ -2660,8 +2661,9 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   # start writing program
   script=""
   script+=getHead(dataBases,addCodeInterfaces)
-  script+=DeclareMEPDFNormFactors(csv_file)
-  script+=AddMEandPDFNormalizationsMap(csv_file)
+  if MEPDFCSVFile!="":
+    script+=DeclareMEPDFNormFactors(csv_file)
+    script+=AddMEandPDFNormalizationsMap(csv_file)
   
   for db in dataBases:
     script+=InitDataBase(db)
@@ -2709,10 +2711,11 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
     startLoopStub=startLoopStub.replace("//PLACEHOLDERFORCASTLINES", castStub)
   script+=startLoopStub
   script+="   timerMapping->Start();\n"
-  script+=ResetMEPDFNormFactors(csv_file)
-  script+=RelateMEPDFMapToNormFactor(csv_file)
-  script+=PutPDFWeightsinVector(csv_file)
-  script+=UseLHAPDF()
+  if MEPDFCSVFile!="":
+    script+=ResetMEPDFNormFactors(csv_file)
+    script+=RelateMEPDFMapToNormFactor(csv_file)
+    script+=PutPDFWeightsinVector(csv_file)
+    script+=UseLHAPDF()
   script+="   totalTimeMapping+=timerMapping->RealTime();\n"
 
   script+="   timerEvalDNN->Start();\n"
@@ -3218,7 +3221,7 @@ def helperSubmitNAFJobs(scripts,outputs,nentries):
 
 
 # the dataBases should be defined as follows e.g. [[memDB,path],[blrDB,path]]
-def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],dataBases=[],treeInformationJsonFile="",otherSystnames=[],addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False,haddParallel=False):
+def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],dataBases=[],treeInformationJsonFile="",otherSystnames=[],addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False,haddParallel=False,MEPDFCSVFile=""):
   cmsswpath=os.environ['CMSSW_BASE']
   if not "CMSSW" in cmsswpath:
     print "you need CMSSW for this to work. Exiting!"
@@ -3298,7 +3301,7 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
     cmd='cp -v '+programpath+'.cc'+' '+programpath+'.ccBackup'
     subprocess.call(cmd,shell=True)
   print 'creating c++ program'
-  createProgram(programpath,plots,samples,catnames,catselections,systnames,systweights,additionalvariables, dataBases,addCodeInterfaces)
+  createProgram(programpath,plots,samples,catnames,catselections,systnames,systweights,additionalvariables, dataBases,addCodeInterfaces,MEPDFCSVFile)
   if not os.path.exists(programpath+'.cc'):
     print 'could not create c++ program'
     sys.exit(-1)
