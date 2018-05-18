@@ -1,4 +1,4 @@
-*.root
+*.root*
 *.pdf
 *.png
 workdir/*
@@ -6,3 +6,4 @@ workdir/*
 *.log
 *.aux
 *.nav
+*.sub
