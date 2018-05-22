@@ -16,6 +16,7 @@ import filecmp
 import imp 
 import types
 import csv
+from nafSubmit import *
 
 ROOT.gROOT.SetBatch(True)
 
@@ -42,6 +43,7 @@ def getHead(dataBases,addCodeInterfaces=[]):
 #include "LHAPDF/LHAPDF.h"
 #include "TGraphAsymmErrors.h"
 #include "TStopwatch.h"
+#include <tuple>
 
 """
   for addCodeInt in addCodeInterfaces:
@@ -62,9 +64,85 @@ using namespace std;
   
 
   retstr+="""
+
+// Event filter to be used with CSV files
+
+class EventFilter {
+
+  public:
+    EventFilter(std::string filename);
+    ~EventFilter();
+    bool KeepEvent(Long64_t Evt_Run, Long64_t Evt_Lumi, Long64_t Evt_ID);
+    int GetNFiltered();
+    
+  private:
+    std::vector<long> vec_run;
+  std::vector<long> vec_lumi;
+  std::vector<long> vec_evt;
+  int listLength;
+  int nEventsFiltered;
+  
+  
+    };
+    
+EventFilter::EventFilter( std::string filename){
+  
+  listLength=0;
+  nEventsFiltered=0;
+  
+  std::ifstream eventList(filename);
+  TString dump="";
+  char comma;
+  
+  int count=0;
+  bool readline=true;
+  bool readTitle=false;
+  long run;
+  long lumi;
+  long evt;
+  
+  if(filename!="" and filename!="NONE"){
+    std::cout<<"reading Event list to be filtered"<<std::endl;
+    
+    eventList>>dump; eventList>>dump;
+    while (eventList>>run>>comma>>lumi>>comma>>evt)
+    {
+      count++;
+      std::cout<<count<<std::endl;
+      std::cout<<comma<<std::endl;
+      std::cout<<run<<" "<<lumi<<" "<<evt<<std::endl;
+      vec_run.push_back(run);
+      vec_lumi.push_back(lumi);
+      vec_evt.push_back(evt);
+    }
+    
+    eventList.close();
+    std::cout<<"done reading the event filter list"<<std::endl;
+    std::cout<<vec_run.size()<<" "<<vec_lumi.size()<<" "<<vec_evt.size()<<" "<<std::endl;
+    listLength=vec_run.size();
+  }
+  
+}
+
+bool EventFilter::KeepEvent(Long64_t Evt_Run, Long64_t Evt_Lumi, Long64_t Evt_ID){
+  bool eventToBeKept=true;
+  for(int i=0; i<listLength; i++){
+    if(vec_run.at(i)==Evt_Run and vec_lumi.at(i)==Evt_Lumi and vec_evt.at(i)==Evt_ID){
+      eventToBeKept=false;
+      break;
+    }
+  }
+  if(eventToBeKept==false){nEventsFiltered++;}
+  return eventToBeKept;
+  
+}
+
+int EventFilter::GetNFiltered(){
+  return nEventsFiltered;
+}
+
   
 //hacked Lepton SF Helper from MiniAODHelper
-
 
 class LeptonSFHelper {
 
@@ -1436,11 +1514,15 @@ void plot(){
   string suffix = string(getenv ("SUFFIX"));
   int maxevents = atoi(getenv ("MAXEVENTS"));
   int skipevents = atoi(getenv ("SKIPEVENTS"));
+  string eventFilterFile = string(getenv("EVENTFILTERFILE"));
 
   std::cout<<"processname" <<processname<<std::endl;
   std::cout<<"suffix" <<suffix<<std::endl;
 
   std::vector<TString> databaseRelevantFilenames;
+
+  // create event filter class
+  EventFilter* evtFilter = new EventFilter(eventFilterFile);
 
   int eventsAnalyzed=0;
   float sumOfWeights=0;
@@ -1452,6 +1534,7 @@ void plot(){
   //initialize Trigger Helper
 
   if(processname=="MET" || processname=="data_obs"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
+
 
 
   // read in samples to add to chain and get relevant names for the database
@@ -1835,6 +1918,13 @@ def startLoop():
     if(currentfilename.Index("withTrigger")!=-1){hasTrigger=1;}
     eventsAnalyzed++;
     sumOfWeights+=Weight;
+    
+    // skip events in the filter list
+    if(evtFilter->KeepEvent(Evt_Run,Evt_Lumi,Evt_ID)==false){
+      std::cout<<"skipping event "<<Evt_Run<<" "<<Evt_Lumi<<" "<<Evt_ID<<std::endl;
+      continue;
+      }
+    
 
 	// Do weighting correctly if data driven QCD sample is used: use the weights for MC part and not for Data part
 	if(processname=="QCD" or processname=="QCD_CMS_ttH_QCDScaleFactorUp" or processname=="QCD_CMS_ttH_QCDScaleFactorDown") {
@@ -2110,6 +2200,7 @@ def endLoop():
   return """
   }\n // end of event loop
   totalTime+=timerTotal->RealTime();
+  std::cout<<"skipped a total of "<<evtFilter->GetNFiltered()<<std::endl;
 """
 
 
@@ -2598,7 +2689,7 @@ def createSingleDrawScript(iPlot,Plot,PathToSelf,scriptsfolder,opts=None):
   return scriptname
 
 
-def createScript(scriptname,programpath,processname,filenames,outfilename,maxevents,skipevents,cmsswpath,suffix,cirun=False):
+def createScript(scriptname,programpath,processname,filenames,outfilename,maxevents,skipevents,cmsswpath,suffix,cirun=False,filterFile="NONE"):
   if cirun:
     if maxevents<100:
       maxevents=100
@@ -2615,6 +2706,7 @@ def createScript(scriptname,programpath,processname,filenames,outfilename,maxeve
   script+='export MAXEVENTS="'+str(maxevents)+'"\n'
   script+='export SKIPEVENTS="'+str(skipevents)+'"\n'
   script+='export SUFFIX="'+suffix+'"\n'
+  script+='export EVENTFILTERFILE="'+str(filterFile)+'"\n'  
   script+=programpath+'\n'
   #DANGERZONE
   script+='python '+programpath+'_rename.py\n'
@@ -2638,103 +2730,6 @@ def askYesNo(question):
     print "Please respond with 'yes' or 'no'"
     return askYesNo(question)
 
-
-def submitToNAF(scripts):
-  submitclock=ROOT.TStopwatch()
-  submitclock.Start()
-  jobids=[]
-  logdir = os.getcwd()+"/logs"
-  if not os.path.exists(logdir):
-    os.makedirs(logdir)
-  for script in scripts:
-    print 'submitting',script
-    command=['qsub', '-cwd', '-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=5800M', '-l', 's_vmem=5800M' ,'-o', logdir, '-e', logdir, script]
-    a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
-    output = a.communicate()[0]
-    jobidstring = output.split()
-    for jid in jobidstring:
-      if jid.isdigit():
-        jobid=int(jid)
-        print "this job's ID is", jobid
-        jobids.append(jobid)
-        break
-  
-  submittime=submitclock.RealTime()
-  print "submitted ", len(jobids), " in ", submittime
-  return jobids
-
-def submitArrayToNAF(scripts,arrayname=""):
-  submitclock=ROOT.TStopwatch()
-  submitclock.Start()
-  jobids=[]
-  logdir = os.getcwd()+"/logs"
-  if not os.path.exists(logdir):
-    os.makedirs(logdir)
-  # get nscripts
-  nscripts=len(scripts)
-  tasknumberstring='1-'+str(nscripts)
-  
-  #create arrayscript to be run on the birds. Depinding on $SGE_TASK_ID the script will call a different plot/run script to actually run
-  basepathtoscripts=scripts[0].rsplit("/",1)[0]
-  print basepathtoscripts
-  arrayscriptpath=basepathtoscripts+"/ats_"+arrayname+".sh"
-  arrayscriptcode="#!/bin/bash \n"
-  arrayscriptcode+="subtasklist=(\n"
-  for scr in scripts:
-    arrayscriptcode+=scr+" \n"
-  arrayscriptcode+=")\n"
-  arrayscriptcode+="thescript=${subtasklist[$SGE_TASK_ID-1]}\n"
-  arrayscriptcode+="thescriptbasename=`basename ${subtasklist[$SGE_TASK_ID-1]}`\n"
-  arrayscriptcode+="echo \"${thescript}\n"
-  arrayscriptcode+="echo \"${thescriptbasename}\n"
-  arrayscriptcode+=". $thescript 1>>"+logdir+"/${thescriptbasename}.o$JOB_ID.$SGE_TASK_ID 2>>"+logdir+"/${thescriptbasename}.e$JOB_ID.$SGE_TASK_ID\n"
-  arrayscriptfile=open(arrayscriptpath,"w")
-  arrayscriptfile.write(arrayscriptcode)
-  arrayscriptfile.close()
-  st = os.stat(arrayscriptpath)
-  os.chmod(arrayscriptpath, st.st_mode | stat.S_IEXEC)
-  
-  #exit(0)
-  print 'submitting',arrayscriptpath
-  #command=['qsub', '-cwd','-terse','-t',tasknumberstring,'-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=2000M', '-l', 's_vmem=2000M' ,'-o', logdir+'/dev/null', '-e', logdir+'/dev/null', arrayscriptpath]
-  command=['qsub', '-cwd','-terse','-t',tasknumberstring,'-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=5800M', '-l', 's_vmem=5800M' ,'-o', '/dev/null', '-e', '/dev/null', arrayscriptpath]
-  a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
-  output = a.communicate()[0]
-  jobidstring = output
-  if len(jobidstring)<2:
-    print "something did not work with submitting the array job"
-    exit(0)
-  jobidstring=jobidstring.split(".")[0]
-  print "the jobID", jobidstring
-  jobidint=int(jobidstring)
-  submittime=submitclock.RealTime()
-  print "submitted ", len(jobids), " in ", submittime
-  return [jobidint]
-  
-def do_qstat(jobids):
-  allfinished=False
-  while not allfinished:
-    time.sleep(10)
-    a = subprocess.Popen(['qstat'], stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
-    qstat=a.communicate()[0]
-    lines=qstat.split('\n')
-    nrunning=0
-    for line in lines:
-      words=line.split()
-      for jid in words:
-        if jid.isdigit():
-          jobid=int(jid)
-          if jobid in jobids and not " dr " in line:
-           nrunning+=1
-          break
-
-    if nrunning>0:
-      print nrunning,'jobs running'
-    else:
-      print "all jobs are finished"
-      allfinished=True
-
-
 def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,programpath,cmsswpath,treejsonfile="",cirun=False):
   scripts=[]
   outputs=[]
@@ -2753,6 +2748,7 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
     ntotal_events=0
     njob=0
     events_in_files=0
+    filterFile=s.filterFile
     files_to_submit=[]
     for fn in s.files:
       events_in_file=0
@@ -2775,7 +2771,7 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
           processname=s.nick
           filenames=fn
           outfilename=plotspath+s.nick+'_'+str(njob)+'.root'
-          createScript(scriptname,programpath,processname,filenames,outfilename,maxevents,skipevents,cmsswpath,'',cirun)
+          createScript(scriptname,programpath,processname,filenames,outfilename,maxevents,skipevents,cmsswpath,'',cirun,filterFile)
           scripts.append(scriptname)
           outputs.append(outfilename)
           samplewiseoutputs[s.nick].append(outfilename)
@@ -2793,7 +2789,7 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
           processname=s.nick
           filenames=' '.join(files_to_submit)
           outfilename=plotspath+s.nick+'_'+str(njob)+'.root'
-          createScript(scriptname,programpath,processname,filenames,outfilename,events_in_files,skipevents,cmsswpath,'',cirun)
+          createScript(scriptname,programpath,processname,filenames,outfilename,events_in_files,skipevents,cmsswpath,'',cirun,filterFile)
           scripts.append(scriptname)
           outputs.append(outfilename)
           samplewiseoutputs[s.nick].append(outfilename)
@@ -2814,7 +2810,7 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
       processname=s.nick
       filenames=' '.join(files_to_submit)
       outfilename=plotspath+s.nick+'_'+str(njob)+'.root'
-      createScript(scriptname,programpath,processname,filenames,outfilename,events_in_files,skipevents,cmsswpath,'',cirun)
+      createScript(scriptname,programpath,processname,filenames,outfilename,events_in_files,skipevents,cmsswpath,'',cirun,filterFile)
       scripts.append(scriptname)
       outputs.append(outfilename)
       samplewiseoutputs[s.nick].append(outfilename)
@@ -2832,56 +2828,6 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
     jsonfile.close()
     print "Saved information about events in trees to ", scriptsfolder+'/'+"treejson.json"
   return scripts,outputs,nentries,samplewiseoutputs
-
-
-def check_jobs(scripts,outputs,nentries):
-  failed_jobs=[]
-  for script,o,n in zip(scripts,outputs,nentries):
-    if not os.path.exists(o+'.cutflow.txt'):
-      failed_jobs.append(script)
-      continue
-    f=open(o+'.cutflow.txt')
-    processed_entries=-1
-    for line in f:
-      s=line.split(' : ')
-      if len(s)>2 and 'all' in s[1]:
-        processed_entries=int(s[2])
-        break
-    if n!=processed_entries:
-      failed_jobs.append(script)
-  return failed_jobs
-
-
-""" Helper function to submit NAF jobs"""
-def helperSubmitNAFJobs(scripts,outputs,nentries):
-  # submit run scripts
-  print 'submitting scripts'
-  #jobids=submitToNAF(scripts)
-  jobids=submitArrayToNAF(scripts, "PlotPara")
-  do_qstat(jobids)
-
-  # check outputs
-  print 'checking outputs'
-  failed_jobs=check_jobs(scripts,outputs,nentries)
-  retries=0
-  while retries<=3 and len(failed_jobs)>0:
-    retries+=1
-    print 'the following jobs failed'
-    for j in failed_jobs:
-      print j
-    if len(failed_jobs)>=0.8*len(scripts):
-      print "!!!!!\n More Than 80 percent of your jobs failed. Check:\n A) Your code (and logfiles) \n B) The status of the batch stytem e.g. http://bird.desy.de/status/day.html\n !!!!!"
-    print 'resubmitting'
-    jobids=submitToNAF(failed_jobs)
-    do_qstat(jobids)
-    failed_jobs=check_jobs(scripts,outputs,nentries)
-  if retries>=4 or len(failed_jobs)>=1:
-    print 'Multiple problems with failing jobs after resubmitting'
-    sys.exit()  
-  if retries>=10:
-    print 'could not submit jobs'
-    sys.exit()  
-
 
 # the dataBases should be defined as follows e.g. [[memDB,path],[blrDB,path]]
 def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],dataBases=[],treeInformationJsonFile="",otherSystnames=[],addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False,haddParallel=False):
