@@ -58,13 +58,26 @@ for icalc, calc in enumerate(listofCalcs):
     listOfJobs.append(jobname)
 
 
+arrayPath = nafSubmit.writeArrayCode( [currentPath + "/" + job for job in listOfJobs], "runAll")
+submitPath = nafSubmit.writeSubmitCode( arrayPath, currentPath+"/logs/", isArray = True, nScripts = len(listOfJobs) )
+
+# immediately submits generated script if you want
+# jobID = nafSubmit.condorSubmit(submitPath)
+
+# otherwise, there should be two files present now: 
+#       runAll.sh which is an array-script file for all jobs in listOfJobs
+#       runAll.sub which is the submit scrpit to submit runAll.sh to the batch system
+#       use it like 'condor_submit runAll.sub' (nafSubmit.condorSubmit(submitPath) does the same)
+# you can also use the generated runAll.sh file with the 'submit.py' script located in tools/
+
+'''
 runfile=open("runAll.sh","w")
 runfile.write("#!/bin/bash\n")
-
 for job in listOfJobs:
-  submitPath = nafSubmit.writeSubmitCode( currentPath + "/" + job, currentPath + "/logs")
+  submitPath = nafSubmit.writeArrayCode( currentPath + "/" + job, currentPath + "/logs")
   runfile.write("condor_submit -terse " + submitPath + "\n")
 runfile.close()
+'''
 
 # after all jobs are finished do
 # hadd the single output files to mygrid.root
