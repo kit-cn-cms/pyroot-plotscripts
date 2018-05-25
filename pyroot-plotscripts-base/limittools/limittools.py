@@ -123,9 +123,10 @@ def renameHistos(infname,outfname,sysnames,checkBins=False,prune=True,Epsilon=0.
 import ROOT
 import sys
 import os
-sys.path.append('pyroot-plotscripts-base')
-sys.path.append('pyroot-plotscripts-base/limittools')
-sys.path.append('limittools')
+"""
+    script+="sys.path.append('"+os.getcwd()+"/pyroot-plotscripts-base')\n"
+    script+="sys.path.append('"+os.getcwd()+"/pyroot-plotscripts-base/limittools')\n"
+    script+="""
 import limittools
 
 infname=sys.argv[1]
