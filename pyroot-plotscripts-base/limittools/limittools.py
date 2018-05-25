@@ -177,7 +177,7 @@ print "done"
         print "renaming did not work after 4 tries. ABORTING"
         exit(1)
       if firstTry:
-        jobids=submitArrayToNAF(listOfJobsToSubmit, arrayname="renaming")
+        jobids=submitArrayToNAF(listOfJobsToSubmit, arrayName="renaming")
         do_qstat(jobids)
         firstTry=False      
       else:
@@ -519,7 +519,7 @@ def makeDatacardsParallel(filename,outname,categories=None,doHdecay=True,discrna
     parascripts.append(scriptname)
     bbbrootfiles.append(filename.replace(".root","BBB_"+c+".root"))
   
-  jobids=submitArrayToNAF(parascripts,arrayname="cardmaking")
+  jobids=submitArrayToNAF(parascripts,arrayName="cardmaking")
   do_qstat(jobids)
   # now hadd the bbb to the inital root file
   print "adding root files with BBB to other histos"
