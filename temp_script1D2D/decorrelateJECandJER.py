@@ -3,7 +3,20 @@ import ROOT
 ROOT.gDirectory.cd('PyROOT:/')
 ROOT.gROOT.SetBatch(True)
 
-cats=["ljets_j4_t2","ljets_j5_t2","ljets_j4_t3","ljets_j4_t4","ljets_j5_t3","ljets_j5_tge4","ljets_jge6_t2","ljets_jge6_t3","ljets_jge6_tge4",]
+#DISCLAIMER due to the merge of script1D and script2D this file need the flag '1D' or '2D' as first argument to decide whether it is executed as 1D or 2D
+dim = sys.argv[1]
+if not dim=="1D" or dim=="2D":
+    sys.exit("choose '1D' or '2D' as first argument - everything else is unchanged")
+
+if dim == "1D":
+    cats=["ljets_j4_t2","ljets_j5_t2","ljets_j4_t3","ljets_j4_t4","ljets_j5_t3","ljets_j5_tge4","ljets_jge6_t2","ljets_jge6_t3","ljets_jge6_tge4",]
+elif dim == "2D":
+    singlecats=["ljets_j4_t3","ljets_j4_t4","ljets_j5_t3","ljets_j5_tge4","ljets_jge6_t3","ljets_jge6_tge4",]
+    cats=["ljets_j4_t2","ljets_j5_t2","ljets_jge6_t2"]
+    for c in singlecats:
+        cats.append(c+"_high")
+        cats.append(c+"_low")
+
 procs=['ttH','ttH_hbb', 'ttH_hcc', 'ttH_hww', 'ttH_hzz', 'ttH_htt', 'ttH_hgg', 'ttH_hgluglu', 'ttH_hzg', 'ttbarOther', 'ttbarPlusB', 'ttbarPlus2B', 'ttbarPlusBBbar', 'ttbarPlusCCbar', 'singlet', 'wjets', 'zjets', 'ttbarW', 'ttbarZ', 'diboson']
 
 #print procs
@@ -18,7 +31,7 @@ datacardsysts=["CMS_scale_j","CMS_res_j"]
 
 disc="_finaldiscr_"
 
-infiles=sys.argv[1:]
+infiles=sys.argv[2:]
 
 for inf in infiles:
   if ".root" in inf:
@@ -63,7 +76,13 @@ for inf in infiles:
 	      newline=sl[0].replace("CMS_","CMS_"+g[0]+"_")+" "+sl[1]
 	      for im,m in enumerate(sl[2:]):
 		if infprocs[im] in g[1]:
-		  newline+=" "+"1"
+          if dim == "1D":
+		    newline+=" "+"1"
+          elif dim == "2D":
+            if m=="-":
+              newline+=" "+"-"
+            else:
+              newline+=" "+"1"
 		else:
 		  newline+=" "+"-"
 	      newline+="\n"
@@ -72,12 +91,3 @@ for inf in infiles:
 	      
       else:
 	outf.write(line)
-
-
-
-
-
-
-
-
-
