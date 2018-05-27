@@ -5,9 +5,19 @@ from subprocess import call
 infilename=sys.argv[1]
 infile=open(infilename,"r")
 indclist=list(infile)
-reflimit=4.172
 
+#DISCLAIMER there was anothe file in pyroot-plotscripts-base/limittools/removeSysts called makecards
+#that file was merged with this one, the only differences were the systs list and the variable reflimit --->
+'''
+reflimit=4.29688
+systs=["lumi_13TeV","QCDscale_ttH","QCDscale_ttbar","QCDscale_singlet","pdf_gg","pdf_qqbar","pdf_qg","QCDscale_V","QCDscale_VV","CMS_ttH_CSVLF","CMS_ttH_CSVHF","CMS_ttH_CSVHFStats1","CMS_ttH_CSVHFStats2",
+"CMS_ttH_CSVLFStats1","CMS_ttH_CSVLFStats2","CMS_ttH_CSVCErr1","CMS_ttH_CSVCErr2","CMS_scale_j","CMS_ttH_QCDscale_ttbarPlusB","CMS_ttH_QCDscale_ttbarPlus2B","CMS_ttH_QCDscale_ttbarPlusBBbar",
+"CMS_ttH_QCDscale_ttbarPlusCCbar","CMS_ttH_Q2scale_ttbarOther","CMS_ttH_Q2scale_ttbarPlusB","CMS_ttH_Q2scale_ttbarPlus2B","CMS_ttH_Q2scale_ttbarPlusBBbar","CMS_ttH_Q2scale_ttbarPlusCCbar","CMS_ttH_NNPDF","binbybin"]
+'''
+reflimit=4.172
 systs=['CMS_res_j', 'CMS_scale_j', 'CMS_ttH_CSVCErr1', 'CMS_ttH_CSVCErr2', 'CMS_ttH_CSVHF', 'CMS_ttH_CSVHFStats1', 'CMS_ttH_CSVHFStats2', 'CMS_ttH_CSVLF', 'CMS_ttH_CSVLFStats1', 'CMS_ttH_CSVLFStats2', 'CMS_ttH_PSscale_ttbarOther', 'CMS_ttH_PSscale_ttbarPlus2B', 'CMS_ttH_PSscale_ttbarPlusB', 'CMS_ttH_PSscale_ttbarPlusBBbar', 'CMS_ttH_PSscale_ttbarPlusCCbar', 'CMS_ttH_PU', 'CMS_ttH_Q2scale_ttbarOther', 'CMS_ttH_Q2scale_ttbarPlus2B', 'CMS_ttH_Q2scale_ttbarPlusB', 'CMS_ttH_Q2scale_ttbarPlusBBbar', 'CMS_ttH_Q2scale_ttbarPlusCCbar', 'CMS_ttH_QCDscale_ttbarPlus2B', 'CMS_ttH_QCDscale_ttbarPlusB', 'CMS_ttH_QCDscale_ttbarPlusBBbar', 'CMS_ttH_QCDscale_ttbarPlusCCbar', 'CMS_ttH_eff_el', 'CMS_ttH_eff_mu', 'CMS_ttH_ljets_Trig_el', 'CMS_ttH_ljets_Trig_mu', 'QCDscale_V', 'QCDscale_VV', 'QCDscale_singlet', 'QCDscale_ttH', 'QCDscale_ttbar', 'lumi_13TeV', 'pdf_gg', 'pdf_gg_ttH', 'pdf_qg', 'pdf_qqbar',"binbybin"]
+#DISCLAIMER <----
+
 resultlist=[]
 improvementlist=[]
 
