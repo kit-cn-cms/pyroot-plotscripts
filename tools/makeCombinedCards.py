@@ -8,6 +8,8 @@ inprefix=sys.argv[1]
 # figure out stuff
 
 outcards={}
+#DISCLAIMER there was another file wher inputCards was different
+#           the other version was saved in namingMaps as inputCards_v2
 for incard in inputCards:
   for combCard in inputCards[incard]:
     if combCard in outcards:
