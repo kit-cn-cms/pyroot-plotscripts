@@ -3,6 +3,7 @@ import sys
 incard=sys.argv[1]
 skipBinByBin=True
 onlyLnN=False
+#DISCLAIMER onlyshapes=False in 1D+2D scripts folder
 onlyShapes=True
 infile=open(incard)
 inlist=list(infile)
