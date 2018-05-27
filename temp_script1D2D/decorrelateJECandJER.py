@@ -3,12 +3,12 @@ import ROOT
 ROOT.gDirectory.cd('PyROOT:/')
 ROOT.gROOT.SetBatch(True)
 
-#DISCLAIMER due to the merge of script1D and script2D this file need the flag '1D' or '2D' as first argument to decide whether it is executed as 1D or 2D
+#DISCLAIMER due to the merge of script1D and script2D this file need the flag '1D', '2D' or 'Split' as first argument to decide whether it is executed as 1D or 2D or as the decorrelateSplitJECandJER.py
 dim = sys.argv[1]
-if not dim=="1D" or dim=="2D":
-    sys.exit("choose '1D' or '2D' as first argument - everything else is unchanged")
+if not dim=="1D" or dim=="2D" or dim=="Split":
+    sys.exit("choose '1D', '2D' or 'Split' as first argument - everything else is unchanged")
 
-if dim == "1D":
+if dim == "1D" or dim == "Split":
     cats=["ljets_j4_t2","ljets_j5_t2","ljets_j4_t3","ljets_j4_t4","ljets_j5_t3","ljets_j5_tge4","ljets_jge6_t2","ljets_jge6_t3","ljets_jge6_tge4",]
 elif dim == "2D":
     singlecats=["ljets_j4_t3","ljets_j4_t4","ljets_j5_t3","ljets_j5_tge4","ljets_jge6_t3","ljets_jge6_tge4",]
@@ -26,8 +26,12 @@ groups=[["LF",['ttH_hww', 'ttH_hzz', 'ttH_htt', 'ttH_hgg', 'ttH_hgluglu', 'ttH_h
 	 ["HF",['ttH','ttH_hbb','ttbarPlusB', 'ttbarPlus2B', 'ttbarPlusBBbar']]
 	 ]
 
-systs=["CMS_scale_jUp","CMS_scale_jDown","CMS_res_jUp","CMS_res_jDown"]
-datacardsysts=["CMS_scale_j","CMS_res_j"]
+if dim == "1D" or dim == "2D":
+    systs=["CMS_scale_jUp","CMS_scale_jDown","CMS_res_jUp","CMS_res_jDown"]
+    datacardsysts=["CMS_scale_j","CMS_res_j"]
+elif dim == "Split":
+    systs=["CMS_shape_scale_jUp","CMS_shape_scale_jDown","CMS_shape_res_jUp","CMS_shape_res_jDown","CMS_rate_scale_jUp","CMS_rate_scale_jDown","CMS_rate_res_jUp","CMS_rate_res_jDown"]
+    datacardsysts=["CMS_shape_scale_j","CMS_shape_res_j","CMS_rate_scale_j","CMS_rate_res_j"]
 
 disc="_finaldiscr_"
 
@@ -76,7 +80,7 @@ for inf in infiles:
 	      newline=sl[0].replace("CMS_","CMS_"+g[0]+"_")+" "+sl[1]
 	      for im,m in enumerate(sl[2:]):
 		if infprocs[im] in g[1]:
-          if dim == "1D":
+          if dim == "1D" or dim == "Split":
 		    newline+=" "+"1"
           elif dim == "2D":
             if m=="-":
