@@ -64,11 +64,11 @@ nuis_p_i=0
 # Also make histograms for pull distributions:
 myprefitsize=0
 for i in range(fpf_s.getSize()):
-  name=fpf_s.at(i).GetName()
-  if "BDTbin" in name or "prop_bin" in name:
-    print "skipping MCstat"
-  else:
-    myprefitsize+=1
+    name=fpf_s.at(i).GetName()
+    if "BDTbin" in name or "prop_bin" in name:
+        print "skipping MCstat"
+    else:
+        myprefitsize+=1
 
 print myprefitsize
 hist_fit_b  = ROOT.TH1F("prefit_fit_b"   ,"B-only fit Nuisances;;#theta ",myprefitsize,0,myprefitsize)
@@ -82,8 +82,8 @@ for i in range(fpf_s.getSize()):
     name   = nuis_s.GetName();
 #    print name
     if "BDTbin" in name or "prop_bin" in name:
-      print "skipping ", name
-      continue
+        print "skipping ", name
+        continue
     nuis_b = fpf_b.find(name)
     nuis_p = prefit.find(name)
 
