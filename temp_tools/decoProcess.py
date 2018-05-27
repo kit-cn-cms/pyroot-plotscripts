@@ -1,3 +1,4 @@
+#OPEN: what does this script do?
 import sys
 import ROOT
 ROOT.gDirectory.cd('PyROOT:/')
