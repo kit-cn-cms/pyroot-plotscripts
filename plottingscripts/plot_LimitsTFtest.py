@@ -1,8 +1,8 @@
 import sys
 import os
 import ROOT
-sys.path.append('pyroot-plotscripts-base')
-sys.path.append('pyroot-plotscripts-base/limittools')
+sys.path.append('../pyroot-plotscripts-base')
+sys.path.append('../pyroot-plotscripts-base/limittools')
 
 from scriptgenerator import *
 from plotutils import *
@@ -12,7 +12,7 @@ from limittools import addRealData
 from limittools import makeDatacards
 from limittools import calcLimits
 from limittools import replaceQ2scale
-from plotconfigTFtest import *
+from configs.plotconfigTFtest import *
 
 MainClock=ROOT.TStopwatch()
 MainClock.Start()
