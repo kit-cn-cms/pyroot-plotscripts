@@ -1,9 +1,12 @@
 import numpy as np
 from array import array
 import ROOT
-import CMS_lumi
-import json
 import sys
+import json
+
+sys.path.append('../pyroot-plotscripts-base')
+import CMS_lumi
+
 ROOT.gROOT.SetBatch(True)
 
 

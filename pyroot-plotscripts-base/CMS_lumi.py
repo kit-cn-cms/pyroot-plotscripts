@@ -110,7 +110,7 @@ def CMS_lumi(pad,  iPeriod,  iPosX ):
         latex.SetTextAlign(11) 
         latex.SetTextSize(cmsTextSize*t)    
         latex.DrawLatex(l+0.08,1-t+lumiTextOffset*t,cmsText)
-  
+        #latex.DrawLatex(l,1-t+lumiTextOffset*t,cmsText)
     pad.cd()
 
     posX_ = 0
@@ -150,7 +150,6 @@ def CMS_lumi(pad,  iPeriod,  iPosX ):
                 latex.DrawLatex(posX_, posY_- relExtraDY*cmsTextSize*t, extraText)
     elif( writeExtraText ):
         if( iPosX==0):
-	    #print "HErE2"
             posX_ =   l + 0.08 + relPosX*(1-l-r)
             posY_ =   1-t+lumiTextOffset*t
 
