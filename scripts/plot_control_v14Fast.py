@@ -154,8 +154,12 @@ def main(argv):
     plots=[
         Plot(ROOT.TH1F("JT" ,"jet-tag categories",len(categoriesJT),0.5,0.5+len(categoriesJT)),catstringJT,categoriesJTsel,"1 lepton"),
         #Plot(ROOT.TH1F("BCAT" ,"jet-tag + boosted categories",len(categoriesJTB),0.5,0.5+len(categoriesJTB)),catstringJTB,categoriesJTBsel,"1 lepton"),
+        #DISCLAIMER the following two lines have changed --->
         Plot(ROOT.TH1F("N_Jets","Number of jets",7,3.5,10.5),"N_Jets",plotselection,plotlabel),
         Plot(ROOT.TH1F("N_BTagsM","Number of b-tagged jets",4,1.5,5.5),"N_BTagsM",plotselection,plotlabel),
+        #Plot(ROOT.TH1F("N_Jets","Number of ak4 jets",7,3.5,10.5),"N_Jets",plotselection,plotlabel),
+        #Plot(ROOT.TH1F("N_BTagsM","Number of b-tags",4,1.5,5.5),"N_BTagsM",plotselection,plotlabel),
+        #DISCLAIMER <----
         Plot(ROOT.TH1F("CSV0","B-tag of leading jet",22,-.1,1),"Jet_CSV[0]",plotselection,plotlabel),
         Plot(ROOT.TH1F("CSV1","B-tag of second jet",22,-.1,1),"Jet_CSV[1]",plotselection,plotlabel),
         Plot(ROOT.TH1F("CSV","B-tag of all jets",22,-.1,1),"Jet_CSV",plotselection,plotlabel),
@@ -281,6 +285,7 @@ def main(argv):
     plotselection=categoriesJT[1][0]
     plotprefix="s43_"
     plots43=[
+        #DISCLAIMER if the line is commented via a single # the line was not commented in the other file ---->
         #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_Evt_CSV_Average","BDT_common5_input_Evt_CSV_Average",30,0.6,1.0),"BDT_common5_input_Evt_CSV_Average",plotselection,plotlabel),
         #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_Evt_Deta_JetsAverage","BDT_common5_input_Evt_Deta_JetsAverage",30,0.0,3.4),"BDT_common5_input_Evt_Deta_JetsAverage",plotselection,plotlabel),
         Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_HT","HT",30,0.0,1000.0),"BDT_common5_input_HT",plotselection,plotlabel),
@@ -342,7 +347,7 @@ def main(argv):
         ###Plot(ROOT.TH1F(plotprefix+"Evt_Pt_PrimaryLepton","Evt_Pt_PrimaryLepton",30,0.0,400.0),"Evt_Pt_PrimaryLepton",plotselection,plotlabel),    
         ##Plot(ROOT.TH1F(plotprefix+"Evt_blr_ETH","Evt_blr_ETH",30,0.0,1.1),"Evt_blr_ETH",plotselection,plotlabel),
         #Plot(ROOT.TH1F(plotprefix+"Evt_blr_ETH_transformed","Evt_blr_ETH_transformed",30,-10.0,10.0),"Evt_blr_ETH_transformed",plotselection,plotlabel),
-        
+        #DISCLAIMER <---
         
         #Plot(ROOT.TH1F(plotprefix+"Reco_Sum_LikelihoodRatio","Reco_Sum_LikelihoodRatio",50,-0.1,1),"Reco_Sum_LikelihoodRatio",plotselection,plotlabel),
         #Plot(ROOT.TH1F(plotprefix+"Reco_Sum_LikelihoodTimesMERatio","Reco_Sum_LikelihoodTimesMERatio",50,-0.1,1),"Reco_Sum_LikelihoodTimesMERatio",plotselection,plotlabel),
@@ -362,6 +367,7 @@ def main(argv):
     plotprefix="s44_"
     # weights_Final_44_MEMBDTv2.xml
     plots44=[
+        #DISCLAIMER if the line is commented via a single # the line was not commented in the other file ---->
         #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_Evt_CSV_Average","BDT_common5_input_Evt_CSV_Average",20,0.6,1.0),"BDT_common5_input_Evt_CSV_Average",plotselection,plotlabel),
         Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_Evt_Deta_JetsAverage","avg. #Delta #eta betw. jets",20,0.0,2.7),"BDT_common5_input_Evt_Deta_JetsAverage",plotselection,plotlabel),
         #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_blr_transformed","BDT_common5_input_blr_transformed",20,-10.0,10.0),"BDT_common5_input_blr_transformed",plotselection,plotlabel),
@@ -425,7 +431,8 @@ def main(argv):
         ###Plot(ROOT.TH1F(plotprefix+"Evt_Pt_PrimaryLepton","Evt_Pt_PrimaryLepton",20,0.0,400.0),"Evt_Pt_PrimaryLepton",plotselection,plotlabel),    
         ##Plot(ROOT.TH1F(plotprefix+"Evt_blr_ETH","Evt_blr_ETH",20,0.0,1.1),"Evt_blr_ETH",plotselection,plotlabel),
         Plot(ROOT.TH1F(plotprefix+"Evt_blr_ETH_transformed","b-tag likelihood",20,3.5,10.0),"Evt_blr_ETH_transformed",plotselection,plotlabel),
-        
+        #DISCLAIMER <-----        
+
         #Plot(ROOT.TH1F(plotprefix+"Reco_Sum_LikelihoodRatio","Reco_Sum_LikelihoodRatio",20,-0.1,1),"Reco_Sum_LikelihoodRatio",plotselection,plotlabel),
         #Plot(ROOT.TH1F(plotprefix+"Reco_Sum_LikelihoodTimesMERatio","Reco_Sum_LikelihoodTimesMERatio",20,-0.1,1),"Reco_Sum_LikelihoodTimesMERatio",plotselection,plotlabel),
         #Plot(ROOT.TH1F(plotprefix+"Reco_TTBBME_best_TTLikelihood_comb","Reco_TTBBME_best_TTLikelihood_comb",20,-0.1,1),"Reco_TTBBME_best_TTLikelihood_comb",plotselection,plotlabel),
@@ -443,6 +450,7 @@ def main(argv):
     plotselection=categoriesJT[2][0]
     plotprefix="s53_"
     plots53=[
+        #DISCLAIMER if the line is commented via a single # the line was not commented in the other file ---->
         #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_Evt_CSV_Average","BDT_common5_input_Evt_CSV_Average",30,0.6,1.0),"BDT_common5_input_Evt_CSV_Average",plotselection,plotlabel),
         #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_Evt_Deta_JetsAverage","BDT_common5_input_Evt_Deta_JetsAverage",30,0.0,3.4),"BDT_common5_input_Evt_Deta_JetsAverage",plotselection,plotlabel),
         #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_HT","BDT_common5_input_HT",30,0.0,1000.0),"BDT_common5_input_HT",plotselection,plotlabel),
@@ -504,7 +512,8 @@ def main(argv):
         ###Plot(ROOT.TH1F(plotprefix+"Evt_Pt_PrimaryLepton","Evt_Pt_PrimaryLepton",30,0.0,400.0),"Evt_Pt_PrimaryLepton",plotselection,plotlabel),    
         ###Plot(ROOT.TH1F(plotprefix+"Evt_blr_ETH","Evt_blr_ETH",30,0.0,1.1),"Evt_blr_ETH",plotselection,plotlabel),
         #Plot(ROOT.TH1F(plotprefix+"Evt_blr_ETH_transformed","Evt_blr_ETH_transformed",30,-10.0,10.0),"Evt_blr_ETH_transformed",plotselection,plotlabel),
-        
+        #DISCLAIMER <-----    
+    
         #Plot(ROOT.TH1F(plotprefix+"Reco_Sum_LikelihoodRatio","Reco_Sum_LikelihoodRatio",30,-0.1,1),"Reco_Sum_LikelihoodRatio",plotselection,plotlabel),
         #Plot(ROOT.TH1F(plotprefix+"Reco_Sum_LikelihoodTimesMERatio","Reco_Sum_LikelihoodTimesMERatio",30,-0.1,1),"Reco_Sum_LikelihoodTimesMERatio",plotselection,plotlabel),
         #Plot(ROOT.TH1F(plotprefix+"Reco_TTBBME_best_TTLikelihood_comb","Reco_TTBBME_best_TTLikelihood_comb",30,-0.1,1),"Reco_TTBBME_best_TTLikelihood_comb",plotselection,plotlabel),
@@ -522,6 +531,7 @@ def main(argv):
     plotselection=categoriesJT[5][0]
     plotprefix="s54_"
     plots54=[
+        #DISCLAIMER if the line is commented via a single # the line was not commented in the other file ---->
         #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_Evt_CSV_Average","BDT_common5_input_Evt_CSV_Average",20,0.6,1.0),"BDT_common5_input_Evt_CSV_Average",plotselection,plotlabel),
         Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_Evt_Deta_JetsAverage","avg. #Delta #eta betw. jets",20,0.0,2.5),"BDT_common5_input_Evt_Deta_JetsAverage",plotselection,plotlabel),
        #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_blr_transformed","BDT_common5_input_blr_transformed",20,-10.0,10.0),"BDT_common5_input_blr_transformed",plotselection,plotlabel),
@@ -585,7 +595,8 @@ def main(argv):
         ###Plot(ROOT.TH1F(plotprefix+"Evt_Pt_PrimaryLepton","Evt_Pt_PrimaryLepton",20,0.0,400.0),"Evt_Pt_PrimaryLepton",plotselection,plotlabel),    
         ###Plot(ROOT.TH1F(plotprefix+"Evt_blr_ETH","Evt_blr_ETH",20,0.0,1.1),"Evt_blr_ETH",plotselection,plotlabel),
         Plot(ROOT.TH1F(plotprefix+"Evt_blr_ETH_transformed","b-tag likelihood",20,3,10.0),"Evt_blr_ETH_transformed",plotselection,plotlabel),
-        
+        #DISCLAIMER <------
+
         #Plot(ROOT.TH1F(plotprefix+"Reco_Sum_LikelihoodRatio","Reco_Sum_LikelihoodRatio",20,-0.1,1),"Reco_Sum_LikelihoodRatio",plotselection,plotlabel),
         #Plot(ROOT.TH1F(plotprefix+"Reco_Sum_LikelihoodTimesMERatio","Reco_Sum_LikelihoodTimesMERatio",20,-0.1,1),"Reco_Sum_LikelihoodTimesMERatio",plotselection,plotlabel),
         #Plot(ROOT.TH1F(plotprefix+"Reco_TTBBME_best_TTLikelihood_comb","Reco_TTBBME_best_TTLikelihood_comb",20,-0.1,1),"Reco_TTBBME_best_TTLikelihood_comb",plotselection,plotlabel),
@@ -603,6 +614,7 @@ def main(argv):
     plotselection=categoriesJT[0][0]
     plotprefix="s62_"
     plots62=[
+        #DISCLAIMER if the line is commented via a single # the line was not commented in the other file ---->
         #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_Evt_CSV_Average","BDT_common5_input_Evt_CSV_Average",30,0.6,1.0),"BDT_common5_input_Evt_CSV_Average",plotselection,plotlabel),
         #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_Evt_Deta_JetsAverage","BDT_common5_input_Evt_Deta_JetsAverage",30,0.0,3.4),"BDT_common5_input_Evt_Deta_JetsAverage",plotselection,plotlabel),
         #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_HT","BDT_common5_input_HT",30,0.0,1000.0),"BDT_common5_input_HT",plotselection,plotlabel),
@@ -664,6 +676,7 @@ def main(argv):
         ####Plot(ROOT.TH1F(plotprefix+"Evt_Pt_PrimaryLepton","Evt_Pt_PrimaryLepton",30,0.0,400.0),"Evt_Pt_PrimaryLepton",plotselection,plotlabel),    
         ####Plot(ROOT.TH1F(plotprefix+"Evt_blr_ETH","Evt_blr_ETH",30,0.0,1.1),"Evt_blr_ETH",plotselection,plotlabel),
         #Plot(ROOT.TH1F(plotprefix+"Evt_blr_ETH_transformed","Evt_blr_ETH_transformed",30,-5.0,5.0),"Evt_blr_ETH_transformed",plotselection,plotlabel),
+        #DISCLAIMER <----
     ]
 
 
@@ -671,6 +684,7 @@ def main(argv):
     plotselection=categoriesJT[3][0]
     plotprefix="s63_"
     plots63=[
+        #DISCLAIMER if the line is commented via a single # the line was not commented in the other file ---->
         #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_Evt_CSV_Average","BDT_common5_input_Evt_CSV_Average",30,0.6,1.0),"BDT_common5_input_Evt_CSV_Average",plotselection,plotlabel),
         #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_Evt_Deta_JetsAverage","BDT_common5_input_Evt_Deta_JetsAverage",30,0.0,3.4),"BDT_common5_input_Evt_Deta_JetsAverage",plotselection,plotlabel),
         Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_HT","HT",30,200.0,1000.0),"BDT_common5_input_HT",plotselection,plotlabel),
@@ -732,7 +746,8 @@ def main(argv):
         ##Plot(ROOT.TH1F(plotprefix+"Evt_Pt_PrimaryLepton","Evt_Pt_PrimaryLepton",30,0.0,400.0),"Evt_Pt_PrimaryLepton",plotselection,plotlabel),    
         ###Plot(ROOT.TH1F(plotprefix+"Evt_blr_ETH","Evt_blr_ETH",30,0.0,1.1),"Evt_blr_ETH",plotselection,plotlabel),
         #Plot(ROOT.TH1F(plotprefix+"Evt_blr_ETH_transformed","Evt_blr_ETH_transformed",30,-1.0,6.0),"Evt_blr_ETH_transformed",plotselection,plotlabel),
-        
+        #DISCLAIMER <-----        
+
         #Plot(ROOT.TH1F(plotprefix+"Reco_Sum_LikelihoodRatio","Reco_Sum_LikelihoodRatio",30,-0.1,1),"Reco_Sum_LikelihoodRatio",plotselection,plotlabel),
         #Plot(ROOT.TH1F(plotprefix+"Reco_Sum_LikelihoodTimesMERatio","Reco_Sum_LikelihoodTimesMERatio",30,-0.1,1),"Reco_Sum_LikelihoodTimesMERatio",plotselection,plotlabel),
         #Plot(ROOT.TH1F(plotprefix+"Reco_TTBBME_best_TTLikelihood_comb","Reco_TTBBME_best_TTLikelihood_comb",30,-0.1,1),"Reco_TTBBME_best_TTLikelihood_comb",plotselection,plotlabel),
@@ -749,6 +764,7 @@ def main(argv):
     plotselection=categoriesJT[6][0]
     plotprefix="s64_"
     plots64=[
+        #DISCLAIMER if the line is commented via a single # the line was not commented in the other file ---->
         #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_Evt_CSV_Average","BDT_common5_input_Evt_CSV_Average",20,0.6,1.0),"BDT_common5_input_Evt_CSV_Average",plotselection,plotlabel),
         Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_Evt_Deta_JetsAverage","avg. #Delta #eta betw. jets",20,0.1,2.5),"BDT_common5_input_Evt_Deta_JetsAverage",plotselection,plotlabel),
         #Plot(ROOT.TH1F(plotprefix+"BDT_common5_input_HT","BDT_common5_input_HT",20,0.0,1000.0),"BDT_common5_input_HT",plotselection,plotlabel),
@@ -810,7 +826,8 @@ def main(argv):
         ##Plot(ROOT.TH1F(plotprefix+"Evt_Pt_PrimaryLepton","Evt_Pt_PrimaryLepton",20,0.0,400.0),"Evt_Pt_PrimaryLepton",plotselection,plotlabel),    
         ##Plot(ROOT.TH1F(plotprefix+"Evt_blr_ETH","Evt_blr_ETH",20,0.0,1.1),"Evt_blr_ETH",plotselection,plotlabel),
         Plot(ROOT.TH1F(plotprefix+"Evt_blr_ETH_transformed","b-tag likelihood",20,3,12.0),"Evt_blr_ETH_transformed",plotselection,plotlabel),
-        
+        #DISCLAIMER <-----    
+    
         #Plot(ROOT.TH1F(plotprefix+"Reco_Sum_LikelihoodRatio","Reco_Sum_LikelihoodRatio",20,-0.1,1),"Reco_Sum_LikelihoodRatio",plotselection,plotlabel),
         #Plot(ROOT.TH1F(plotprefix+"Reco_Sum_LikelihoodTimesMERatio","Reco_Sum_LikelihoodTimesMERatio",20,-0.1,1),"Reco_Sum_LikelihoodTimesMERatio",plotselection,plotlabel),
         #Plot(ROOT.TH1F(plotprefix+"Reco_TTBBME_best_TTLikelihood_comb","Reco_TTBBME_best_TTLikelihood_comb",20,-0.1,1),"Reco_TTBBME_best_TTLikelihood_comb",plotselection,plotlabel),
@@ -833,8 +850,11 @@ def main(argv):
         #Plot(ROOT.TH1F(plotprefix+"43_ttccnode","DNN ttcc node",20,0,1),"aachen_Out_ttbarCC","((N_Jets>=4&&N_BTagsM==3))","1 lepton, #geq4jets, 3 b-tags"),
     #]
 
+    #DISCLAIMER in the other file these first line was uncommented and the second was commented
     #plots+=plotsAdditional
     plots+=plotsAdditional+plots64+plots63+plots62+plots54+plots53+plots44+plots43+plots42+plots52
+    #DISCLAIMER <----
+
     #plots+=plotsAdditional+plots64+plotsDNNcontrol
     discriminatorPlots=plots
     
@@ -986,8 +1006,12 @@ def main(argv):
         lll=createLLL_fromSuperHistoFileSyst(outputpath,samples[1:],discriminatorPlots,errorSystNamesNoQCD)
         #lllnoQCD=createLLL_fromSuperHistoFileSyst(outputpath,samples[1:],discriminatorPlots,errorSystNamesNoPSNoQCD)
         labels=[plot.label for plot in discriminatorPlots]
+        #DISCLAIMER in the other file the follwing two lines were different --->
         plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],15,name,[[lll,3354,ROOT.kBlack,True]],False,labels,True,analysis.plotBlinded)
         plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],15,name+'_LOG_',[[lll,3354,ROOT.kBlack,True]],True,labels,True,analysis.plotBlinded)
+        #plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-2,name,[[lll,3354,ROOT.kBlack,True]],False,labels,True,analysis.plotBlinded)
+        #plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[1:]),samples[1:],lolT[0],samples[0],-2,name+'_LOG_',[[lll,3354,ROOT.kBlack,True]],True,labels,True,analysis.plotBlinded)
+        #DISCLAIMER <----
 
     # Make yield table
     if (analysis.doDrawParallel==False or analysis.plotNumber != None) and analysis.makeEventYields==True :
