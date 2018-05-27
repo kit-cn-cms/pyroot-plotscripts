@@ -9,7 +9,10 @@ infname=sys.argv[1]
 inf=ROOT.TFile(infname,"READ")
 #outf=ROOT.TFile(outname,"RECREATE")
 
+#DISCLAIMER merge with testShapes ---->
+# systs=['CMS_ttH_Q2scale_ttbarOther', 'CMS_ttH_Q2scale_ttbarPlusB', 'CMS_ttH_Q2scale_ttbarPlus2B', 'CMS_ttH_Q2scale_ttbarPlusBBbar', 'CMS_ttH_Q2scale_ttbarPlusCCbar', 'CMS_ttH_CSVLF', 'CMS_ttH_CSVHF', 'CMS_ttH_CSVHFStats1', 'CMS_ttH_CSVLFStats1', 'CMS_ttH_CSVHFStats2', 'CMS_ttH_CSVLFStats2', 'CMS_ttH_CSVCErr1', 'CMS_ttH_CSVCErr2', 'CMS_scale_j', 'CMS_ttH_PU', 'CMS_res_j', 'CMS_ttH_eff_mu', 'CMS_ttH_eff_el', 'CMS_ttH_ljets_Trig_mu', 'CMS_ttH_ljets_Trig_el']
 systs=['lumi_13TeV', 'QCDscale_ttH', 'QCDscale_ttbar', 'QCDscale_singlet', 'pdf_gg_ttH', 'pdf_gg', 'pdf_qqbar', 'pdf_qg', 'QCDscale_V', 'QCDscale_VV', 'CMS_ttH_Q2scale_ttbarOther', 'CMS_ttH_Q2scale_ttbarPlusB', 'CMS_ttH_Q2scale_ttbarPlus2B', 'CMS_ttH_Q2scale_ttbarPlusBBbar', 'CMS_ttH_Q2scale_ttbarPlusCCbar', 'CMS_ttH_CSVLF', 'CMS_ttH_CSVHF', 'CMS_ttH_CSVHFStats1', 'CMS_ttH_CSVLFStats1', 'CMS_ttH_CSVHFStats2', 'CMS_ttH_CSVLFStats2', 'CMS_ttH_CSVCErr1', 'CMS_ttH_CSVCErr2', 'CMS_rate_scale_j', 'CMS_shape_scale_j', 'CMS_ttH_QCDscale_ttbarPlusB', 'CMS_ttH_QCDscale_ttbarPlus2B', 'CMS_ttH_QCDscale_ttbarPlusBBbar', 'CMS_ttH_QCDscale_ttbarPlusCCbar', 'CMS_ttH_PU', 'CMS_rate_res_j', 'CMS_shape_res_j', 'CMS_ttH_eff_mu', 'CMS_ttH_eff_el', 'CMS_ttH_ljets_Trig_mu', 'CMS_ttH_ljets_Trig_el']
+#DISCLAIMER <------
 
 #systs=['CMS_ttH_eff_mu', ]
 
@@ -39,15 +42,20 @@ for s in systs:
 	  #print "DID not find histograms for ", p+disc+c+"_"+s
 	  a=2
       else:
-	  #print c, p, s, hnom.Integral(), hup.Integral(), hdown.Integral()
+        #DISCLAIMER merge with testShapes, the following lines were not commented ---->
+	    #print c, p, s, hnom.Integral(), hup.Integral(), hdown.Integral()
+
 	  #if ( hnom.Integral()-hup.Integral() > 0 and hnom.Integral()-hdown.Integral()>0) or ( hnom.Integral()-hup.Integral() < 0 and hnom.Integral()-hdown.Integral()<0):
 	    #print "WARNGING"
-	   nbins=hnom.GetNbinsX()
-	   for ib in range(nbins):
-	     ibin=ib+1
-	     if ( hnom.GetBinContent(ibin)-hup.GetBinContent(ibin) > 0 and hnom.GetBinContent(ibin)-hdown.GetBinContent(ibin)>0) or ( hnom.GetBinContent(ibin)-hup.GetBinContent(ibin) < 0 and hnom.GetBinContent(ibin)-hdown.GetBinContent(ibin)<0):
-	       print c, p, s
-	       
+        #DISCLAIMER <----
+
+        #DISCLAIMER merge with testShapes, the following lines were not in testShapes ---->
+	    nbins=hnom.GetNbinsX()
+	    for ib in range(nbins):
+	      ibin=ib+1
+	      if ( hnom.GetBinContent(ibin)-hup.GetBinContent(ibin) > 0 and hnom.GetBinContent(ibin)-hdown.GetBinContent(ibin)>0) or ( hnom.GetBinContent(ibin)-hup.GetBinContent(ibin) < 0 and hnom.GetBinContent(ibin)-hdown.GetBinContent(ibin)<0):
+	        print c, p, s
+	    #DISCLAIMER <----
 	    
 	  #if hnom.Integral()<=0 and (hup.Integral()>0 or hdown.Integral()>0):
 	    #print "WARNING nominal is zero but shapes are not ", c, p, s, iBin, hup.Integral(), hdown.Integral()
