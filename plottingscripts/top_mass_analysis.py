@@ -1,3 +1,6 @@
+import sys
+sys.path.append("../pyroot-plotscripts-base")
+sys.path.append("../pyroot-plotscripts-base/limittools")
 from top_mass_analysis_systs import *
 #sys.path.insert(0, 'limittools')
 from limittools import renameHistos

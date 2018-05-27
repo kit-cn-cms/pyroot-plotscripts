@@ -1,3 +1,4 @@
+#OPEN: what does this script do?
 infile=open("results.txt","r")
 inlist=list(infile)
 
