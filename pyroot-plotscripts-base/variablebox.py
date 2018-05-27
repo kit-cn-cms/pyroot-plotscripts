@@ -4,7 +4,7 @@ import ROOT
 import xml.etree.ElementTree as ET
 import collections
 
-class Variable():
+class Variable:
   def __init__(self,name,expression='',vartype='F',arraylength=None):
     self.name=name
     self.vartype=vartype
