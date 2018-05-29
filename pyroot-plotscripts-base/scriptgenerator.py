@@ -209,7 +209,7 @@ class LeptonSFHelper {
 //PUBLIC
 LeptonSFHelper::LeptonSFHelper( ){
 
-  //std::cout << "InitialiWing Lepton scale factors" << std::endl;
+  //std::cout << "Initializing Lepton scale factors" << std::endl;
 
   SetElectronHistos( );
   SetMuonHistos( );
@@ -293,7 +293,7 @@ float LeptonSFHelper::GetElectronSF(  float electronPt , float electronEta , int
     thisBin = h_ele_ISO_abseta_pt_ratio->FindBin( searchEta , searchPt );
     nomval=h_ele_ISO_abseta_pt_ratio->GetBinContent( thisBin );
     error=h_ele_ISO_abseta_pt_ratio->GetBinError( thisBin );
-    upval=nomval+error;  //DANGERWONE need to add pT depnednet 1% uncertainty
+    upval=nomval+error;  //DANGERZONE need to add pT depnednet 1% uncertainty
     downval=nomval-error;
     if(electronPt<20 || electronPt>80) {
         upval=upval*( 1.0+sqrt(0.01*0.01) );
@@ -531,7 +531,7 @@ void LeptonSFHelper::SetElectronHistos( ){
   std::string IDinputFileGtoH = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/ele_ID_SF_tight_GH.root";
 
   std::string TRIGGERinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/ele_TriggerSF_Run2016All_v1.root";
-  std::string ISOinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/ele_Reco_EGM2D.root"; // DANGERWONE: no iso SF yet??
+  std::string ISOinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/ele_Reco_EGM2D.root"; // DANGERZONE: no iso SF yet??
   std::string GFSinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/ele_Reco_EGM2D.root";
 
   TFile *f_IDSFBtoF = new TFile(std::string(IDinputFileBtoF).c_str(),"READ");
@@ -680,7 +680,7 @@ public:
     JESPileUpPtEC1up,
     JESPileUpPtEC2up,
     JESPileUpPtHFup,
-    JESPileUpMuWeroup,
+    JESPileUpMuZeroup,
     JESPileUpEnvelopeup,
     JESSubTotalPileUpup,
     JESSubTotalRelativeup,
@@ -692,7 +692,7 @@ public:
     JESTotalNoFlavorup,
     JESTotalNoTimeup,
     JESTotalNoFlavorNoTimeup,
-    JESFlavorWJetup,
+    JESFlavorZJetup,
     JESFlavorPhotonJetup,
     JESFlavorPureGluonup,
     JESFlavorPureQuarkup,
@@ -736,7 +736,7 @@ public:
     JESPileUpPtEC1down,
     JESPileUpPtEC2down,
     JESPileUpPtHFdown,
-    JESPileUpMuWerodown,
+    JESPileUpMuZerodown,
     JESPileUpEnvelopedown,
     JESSubTotalPileUpdown,
     JESSubTotalRelativedown,
@@ -748,7 +748,7 @@ public:
     JESTotalNoFlavordown,
     JESTotalNoTimedown,
     JESTotalNoFlavorNoTimedown,
-    JESFlavorWJetdown,
+    JESFlavorZJetdown,
     JESFlavorPhotonJetdown,
     JESFlavorPureGluondown,
     JESFlavorPureQuarkdown,
@@ -860,7 +860,7 @@ void Systematics::init() {
   add( JESPileUpPtEC1up,         JESPileUpPtEC1down,         "JESPileUpPtEC1",           "PileUpPtEC1"         );                        
   add( JESPileUpPtEC2up,         JESPileUpPtEC2down,         "JESPileUpPtEC2",           "PileUpPtEC2"         );                        
   add( JESPileUpPtHFup,          JESPileUpPtHFdown,          "JESPileUpPtHF",            "PileUpPtHF"          );                        
-  add( JESPileUpMuWeroup,        JESPileUpMuWerodown,        "JESPileUpMuWero",          "PileUpMuWero"        );             
+  add( JESPileUpMuZeroup,        JESPileUpMuZerodown,        "JESPileUpMuZero",          "PileUpMuWero"        );             
   add( JESPileUpEnvelopeup,      JESPileUpEnvelopedown,      "JESPileUpEnvelope",        "PileUpEnvelope"      );                             
   add( JESSubTotalPileUpup,      JESSubTotalPileUpdown,      "JESSubTotalPileUp",        "SubTotalPileUp"      );                             
   add( JESSubTotalRelativeup,    JESSubTotalRelativedown,    "JESSubTotalRelative",      "SubTotalRelative"    );                             
@@ -872,7 +872,7 @@ void Systematics::init() {
   add( JESTotalNoFlavorup,       JESTotalNoFlavordown,       "JESTotalNoFlavor",         "TotalNoFlavor"       );             
   add( JESTotalNoTimeup,         JESTotalNoTimedown,         "JESTotalNoTime",           "TotalNoTime"         );                        
   add( JESTotalNoFlavorNoTimeup, JESTotalNoFlavorNoTimedown, "JESTotalNoFlavorNoTime",   "TotalNoFlavorNoTime" );                    
-  add( JESFlavorWJetup,          JESFlavorWJetdown,          "JESFlavorWJet",            "FlavorWJet"          );                        
+  add( JESFlavorZJetup,          JESFlavorZJetdown,          "JESFlavorZJet",            "FlavorZJet"          );                        
   add( JESFlavorPhotonJetup,     JESFlavorPhotonJetdown,     "JESFlavorPhotonJet",       "FlavorPhotonJet"     );                             
   add( JESFlavorPureGluonup,     JESFlavorPureGluondown,     "JESFlavorPureGluon",       "FlavorPureGluon"     );                             
   add( JESFlavorPureQuarkup,     JESFlavorPureQuarkdown,     "JESFlavorPureQuark",       "FlavorPureQuark"     );                             
@@ -1073,7 +1073,7 @@ CSVHelper::~CSVHelper() {
 
 
 void CSVHelper::init(const std::string& hf, const std::string& lf, const int& nHFptBins,const int& nLFptBins,const int& nLFetaBins,const std::vector<Systematics::Type>& jecsysts) {
-  std::cout << "InitialiWing b-tag scale factors" <<  std::endl;
+  std::cout << "Initializing b-tag scale factors" <<  std::endl;
   std::cout<< "  HF : " << hf << " (" << nHFptBins << " pt bins)" <<  std::endl;
   std::cout<< "  LF : " << lf << " (" << nLFptBins << " pt bins)"  <<  std::endl;
   std::cout<< "  LF : " << lf << " (" << nLFetaBins << " eta bins)" <<  std::endl;
@@ -1195,7 +1195,7 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
 			double &csvWgtCF) const
 {
   if( !isInit_ ) {
-    std::cout<<"CSVHelper: Not initualiWed"<<std::endl;
+    std::cout<<"CSVHelper: Not initualized"<<std::endl;
   }
   // search for the position of the desired systematic in the systs vector
   const int iSys = std::find(systs.begin(),systs.end(),syst)-systs.begin();
@@ -2516,7 +2516,7 @@ def startLoop():
   totalTimeCalculateSFs+=timerCalculateSFs->RealTime();
 
  
-  // print stuff for synchroniWing
+  // print stuff for synchronizing
   bool printSyncStuff=0;
   //
   if(printSyncStuff){
@@ -2686,7 +2686,7 @@ def compileProgram(scriptname,usesDataBases,addCodeInterfaces):
     #TODO update the dataBases code
   # improve ram usage and reduce garbage of g++ compiler
   improveRAM = '--param ggc-min-expand=100 --param ggc-min-heapsize=2400000'
-  # if python cflags are used -O3 optimiWation is set, resulting in long compilation times, set it back to default -O0
+  # if python cflags are used -O3 optimization is set, resulting in long compilation times, set it back to default -O0
   resetCompilerOpt = '-O0'
   cmd= ['g++']+[improveRAM]+out[:-1].replace("\n"," ").split(' ')+dnnfiles+lhapdf+['-lTMVA']+memDBccfiles+[resetCompilerOpt]+[scriptname+'.cc','-o',scriptname]
   print cmd
@@ -2826,7 +2826,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   script=""
   script+=getHead(dataBases,addCodeInterfaces)
   script+=DeclareMEPDFNormFactors(csv_file)
-  script+=AddMEandPDFNormaliWationsMap(csv_file)
+  script+=AddMEandPDFNormalizationsMap(csv_file)
   
   for db in dataBases:
     script+=InitDataBase(db)
@@ -3114,7 +3114,7 @@ def createScript(scriptname,programpath,processname,filenames,outfilename,maxeve
   script+='export SUFFIX="'+suffix+'"\n'
   script+='export EVENTFILTERFILE="'+str(filterFile)+'"\n'  
   script+=programpath+'\n'
-  #DANGERWONE
+  #DANGERZONE
   script+='python '+programpath+'_rename.py\n'
   f=open(scriptname,'w')
   f.write(script)
@@ -3638,7 +3638,7 @@ renameHistosParallel(filename,systematics,False)
   scrfile.close()
     
     
-def ReadMEandPDFNormaliWations(csv_file):
+def ReadMEandPDFNormalizations(csv_file):
 	mydict={}
 	with open(csv_file) as csvfile:
 		reader = csv.DictReader(csvfile)
@@ -3650,15 +3650,15 @@ def ReadMEandPDFNormaliWations(csv_file):
 			mydict[(sample_name_modified,initial_weight_name)]=factor
 	return mydict
 	
-def AddMEandPDFNormaliWationsMap(csv_file):
-	mydict=ReadMEandPDFNormaliWations(csv_file)
+def AddMEandPDFNormalizationsMap(csv_file):
+	mydict=ReadMEandPDFNormalizations(csv_file)
 	code='std::map<TString,float> MEPDF_Norm_Map;\n'
 	for key in mydict:
 		code+='MEPDF_Norm_Map["'+key[0]+'_'+key[1]+'"]='+mydict[key]+';\n'
 	return code
 	
 def GetMEPDFadditionalVariablesList(csv_file):
-	mydict=ReadMEandPDFNormaliWations(csv_file)
+	mydict=ReadMEandPDFNormalizations(csv_file)
 	seen = set()
 	weight_vars_list=[]
 	for key in mydict:
