@@ -3,8 +3,8 @@ from array import array
 import ROOT
 import sys
 import json
-filedir = os.path.dirname(__file__)
-sys.path.append('../pyroot-plotscripts-base')
+filedir = os.path.dirname(os.path.realpath(__file__))
+sys.path.append('../util')
 import CMS_lumi
 
 ROOT.gROOT.SetBatch(True)

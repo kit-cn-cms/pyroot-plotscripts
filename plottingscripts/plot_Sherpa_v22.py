@@ -7,9 +7,9 @@ import imp
 import importlib
 import inspect
 import ROOT
-filedir = os.path.dirname(__file__)
-sys.path.append(filedir+'/../pyroot-plotscripts-base')
-sys.path.append(filedir+'/../pyroot-plotscripts-base/limittools')
+filedir = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(filedir+'/../util')
+
 
 from scriptgenerator import *
 from plotutils import *
@@ -48,7 +48,7 @@ def main(argv):
 
     ## NNFlow interface
     # Create and configure NNFlow interface
-    # NNFlowInterfacePath=os.getcwd()+'/pyroot-plotscripts-base/NNFlowInterface.py'
+    # NNFlowInterfacePath=os.getcwd()+'../util/dNNInterfaces/NNFlowInterface.py'
     # NNFlowInterface = imp.load_source("NNFlowInterface",NNFlowInterfacePath).theInterface()
     # NNFlowInterface.setDebugOutput(True)
     # NNFlowInterface.setModelFolderPath('/nfs/dust/cms/user/mharrend/doktorarbeit/tensorflowModels/neural_network_v3/multiclass_ttlight_ttcc_ttb_tt2b_ttbb_ttH_top_20/model')

@@ -1,9 +1,9 @@
 import sys
 import os
 import ROOT
-filedir = os.path.dirname(__file__)
-sys.path.append(filedir+'/../pyroot-plotscripts-base')
-sys.path.append(filedir+'/../pyroot-plotscripts-base/limittools')
+filedir = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(filedir+'/../util')
+
 
 from scriptgenerator import *
 from plotutils import *
@@ -166,7 +166,7 @@ if not os.path.exists(name):
 # plot everthing
 
 if doDrawParallel==False or len(sys.argv) == 1 :                      #if some option is given plotParallelStep will be skipped
-    outputpath=plotParallel(name,5000000,plots+bdtsHighNBins,samples+samples_data+systsamples,[''],['1.'],weightSystNames, systWeights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/pyroot-plotscripts/treejson08062017.json",otherSystNames+PSSystNames,["/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/pyroot-plotscripts/pyroot-plotscripts-base/dNNInterface_TF_V0.py"])
+    outputpath=plotParallel(name,5000000,plots+bdtsHighNBins,samples+samples_data+systsamples,[''],['1.'],weightSystNames, systWeights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/pyroot-plotscripts/treejson08062017.json",otherSystNames+PSSystNames,["/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/pyroot-plotscripts/../util/dNNInterfaces/dNNInterface_TF_V0.py"])
 else:
     workdir=os.getcwd()+'/workdir/'+name
     outputpath=workdir+'/output.root'

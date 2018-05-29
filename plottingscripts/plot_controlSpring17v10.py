@@ -3,9 +3,9 @@
 ##############
 import sys
 import os
-filedir = os.path.dirname(__file__)
-sys.path.append(filedir+'/../pyroot-plotscripts-base')
-sys.path.append(filedir+'/../pyroot-plotscripts-base/limittools')
+filedir = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(filedir+'/../util')
+
 
 from configs.plotconfigSpring17v10 import *
 from limittools import renameHistos
@@ -781,7 +781,7 @@ if doDrawParallel==False or len(sys.argv) > 1 :
 # if there is no argument then the DrawParallel will be started
 # This runs the script with an argument and only the selected plot will be plotted
 if doDrawParallel==True and len(sys.argv) == 1 :
-  DrawParallel(plots,name,os.path.realpath(__file__))
+  DrawParallel(plots,name,os.path.realpath(os.path.realpath(__file__)))
 if doDrawParallel==False or len(sys.argv) > 1 :
   labels=[plot.label for plot in plots]
   lolT=transposeLOL(listOfHistoLists)
