@@ -5,14 +5,9 @@ filedir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(filedir+'/../util')
 
 
-from scriptgenerator import *
-from plotutils import *
-from limittools import renameHistos
-from limittools import addPseudoData
-from limittools import addRealData
-from limittools import makeDatacards
-from limittools import calcLimits
-from limittools import replaceQ2scale
+import scriptgenerator
+import plotutils
+import limittools
 from configs.plotconfigTFtest import *
 
 MainClock=ROOT.TStopwatch()
@@ -125,7 +120,7 @@ systsamples=[]
 for sample in samples:
   for sysname,sysfilename in zip(otherSystNames,otherSystFileNames):
     thisnewsel=sample.selection
-    systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),thisnewsel,sample.nick+sysname,samDict=sampleDict))
+    systsamples.append(plotutils.Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),thisnewsel,sample.nick+sysname,samDict=sampleDict))
 
 # add Parton shower variation samples
 for sample in samples[9:14]: # only for ttbar samples
@@ -135,7 +130,7 @@ for sample in samples[9:14]: # only for ttbar samples
     print "adding sample for ", sysname
     print "selection ", thisnewsel
     print "instead of ", thisoldsel
-    systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace(ttbarPathS,path_additionalSamples+"/ttbar_"+sysfilename+"/*nominal*.root"),thisnewsel,sample.nick+sysname,samDict=sampleDict))
+    systsamples.append(plotutils.Sample(sample.name+sysname,sample.color,sample.path.replace(ttbarPathS,path_additionalSamples+"/ttbar_"+sysfilename+"/*nominal*.root"),thisnewsel,sample.nick+sysname,samDict=sampleDict))
   
 allsamples=samples+systsamples
 samples_data=samplesDataControlPlots
@@ -145,14 +140,14 @@ bdts=[]
 print len(discrs),len(bins),len(binlabels),len(nhistobins),len(minxvals),len(maxxvals),
 print len(zip(discrs,bins,binlabels,nhistobins,minxvals,maxxvals))
 for discr,b,bl,nb,minx,maxx in zip(discrs,bins,binlabels,nhistobins,minxvals,maxxvals):
-  bdts.append(Plot(ROOT.TH1F("finaldiscr_"+bl,"final discriminator ("+bl+")",nb,minx,maxx),discr,b))
+  bdts.append(plotutils.Plot(ROOT.TH1F("finaldiscr_"+bl,"final discriminator ("+bl+")",nb,minx,maxx),discr,b))
 
 print bdts
 plots=bdts
 
 bdtsHighNBins=[]
 for discr,b,bl,nb,minx,maxx in zip(discrs,bins,binlabels,nhistobins,minxvals,maxxvals):
-  bdtsHighNBins.append(Plot(ROOT.TH1F("HIGHBIN_finaldiscr_"+bl,"HIGHBIN final discriminator ("+bl+")",500,minx,maxx),discr,b))
+  bdtsHighNBins.append(plotutils.Plot(ROOT.TH1F("HIGHBIN_finaldiscr_"+bl,"HIGHBIN final discriminator ("+bl+")",500,minx,maxx),discr,b))
 
 
 # belongs to DrawParallel
@@ -166,28 +161,28 @@ if not os.path.exists(name):
 # plot everthing
 
 if doDrawParallel==False or len(sys.argv) == 1 :                      #if some option is given plotParallelStep will be skipped
-    outputpath=plotParallel(name,5000000,plots+bdtsHighNBins,samples+samples_data+systsamples,[''],['1.'],weightSystNames, systWeights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/pyroot-plotscripts/treejson08062017.json",otherSystNames+PSSystNames,["/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/pyroot-plotscripts/../util/dNNInterfaces/dNNInterface_TF_V0.py"])
+    outputpath=scriptgenerator.plotParallel(name,5000000,plots+bdtsHighNBins,samples+samples_data+systsamples,[''],['1.'],weightSystNames, systWeights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/pyroot-plotscripts/treejson08062017.json",otherSystNames+PSSystNames,["/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/pyroot-plotscripts/../util/dNNInterfaces/dNNInterface_TF_V0.py"])
 else:
     workdir=os.getcwd()+'/workdir/'+name
     outputpath=workdir+'/output.root'
 
 if doDrawParallel==False or len(sys.argv) == 1 :                      #if some option is given old systematic histo file will be used      
     # rename output histos and save in one file
-    if not os.path.exists(name+'/'+name+'_limitInput.root') or not askYesNo('reuse renamed histofile?'):
+    if not os.path.exists(name+'/'+name+'_limitInput.root') or not scriptgenerator.askYesNo('reuse renamed histofile?'):
       print "does syst file exist?", os.path.exists(name+'/'+name+'_limitInput.root')
-      renameHistos(outputpath,name+'/'+name+'_limitInput.root',allsystnames,True,False)
-    addPseudoData(name+'/'+name+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)    
-    #addRealData(name+'/'+name+'_limitInput.root',[s.nick for s in samplesDataControlPlots],binlabels,discrname)
+      limittools.renameHistos(outputpath,name+'/'+name+'_limitInput.root',allsystnames,True,False)
+    limittools.addPseudoData(name+'/'+name+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)    
+    #limittools.addRealData(name+'/'+name+'_limitInput.root',[s.nick for s in samplesDataControlPlots],binlabels,discrname)
 
 if doDrawParallel==False or len(sys.argv) > 1 :
-    listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots)    
-    lolT=transposeLOL(listOfHistoLists)
-    writeLOLAndOneOnTop(transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-1,name+'/'+name+'_controlplots')
-    writeListOfHistoListsAN(transposeLOL([lolT[0]]+lolT[9:]),[samples[0]]+samples[9:],"",name+'/'+name+'_shapes',True,False,False,'histo',False,True,False)
+    listOfHistoLists=plotutils.createHistoLists_fromSuperHistoFile(outputpath,samples,plots)    
+    lolT=plotutils.transposeLOL(listOfHistoLists)
+    plotutils.writeLOLAndOneOnTop(plotutils.transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-1,name+'/'+name+'_controlplots')
+    plotutils.writeListOfHistoListsAN(plotutils.transposeLOL([lolT[0]]+lolT[9:]),[samples[0]]+samples[9:],"",name+'/'+name+'_shapes',True,False,False,'histo',False,True,False)
 
 
 if doDrawParallel==False or len(sys.argv) == 1 :
-  listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,bdtsHighNBins)    
+  listOfHistoLists=plotutils.createHistoLists_fromSuperHistoFile(outputpath,samples,bdtsHighNBins)    
   for icat, cat in enumerate(categories):
     ttHHisto=listOfHistoLists[icat][0]
     ttHColor=samples[0].color
@@ -196,34 +191,34 @@ if doDrawParallel==False or len(sys.argv) == 1 :
     rocNames=[]
     rocColors=[]
     for sample, histo in zip(samples[9:],listOfHistoLists[icat][9:]):
-      rocGraphs.append(getROC(ttHHisto,histo))
+      rocGraphs.append(plotutils.getROC(ttHHisto,histo))
       #rocGraphs[-1].SetColor(sample.color)
       rocNames.append(sample.name)
       rocColors.append(sample.color)
-    writeListOfROCs(rocGraphs,rocNames,rocColors,name+'/'+name+'_ROC_'+cat[1])
+    plotutils.writeListOfROCs(rocGraphs,rocNames,rocColors,name+'/'+name+'_ROC_'+cat[1])
 
 
 # NO UNBLINDED PLOTS FOR NOW !!!
 #plotdiscriminants
 #labels=[plot.label for plot in bdts]
-#listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,bdts,1)
-#listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,bdts,1)
-#if not os.path.exists(outputpath[:-4]+'_syst.root') or not askYesNo('reuse systematic histofile?'):
-    #renameHistos(outputpath,outputpath[:-4]+'_syst.root',allsystnames,False)
-#lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[9:],bdts,errorSystnames)
-#plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-1,name+'/'+name+'_Blinded',[[lll,3354,ROOT.kBlack,True]],False,labels,True,True)
+#listOfHistoLists=plotutils.createHistoLists_fromSuperHistoFile(outputpath,samples,bdts,1)
+#listOfHistoListsData=plotutils.createHistoLists_fromSuperHistoFile(outputpath,samples_data,bdts,1)
+#if not os.path.exists(outputpath[:-4]+'_syst.root') or not scriptgenerator.askYesNo('reuse systematic histofile?'):
+    #limittools.renameHistos(outputpath,outputpath[:-4]+'_syst.root',allsystnames,False)
+#lll=plotutils.createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[9:],bdts,errorSystnames)
+#plotutils.plotDataMCanWsyst(listOfHistoListsData,plotutils.transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-1,name+'/'+name+'_Blinded',[[lll,3354,ROOT.kBlack,True]],False,labels,True,True)
 
-#listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,bdts,1)
-#listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,bdts,1)
-#lll=createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[9:],bdts,errorSystnames)
-#plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-1,name+'/'+name+'_Unblinded',[[lll,3354,ROOT.kBlack,True]],False,labels,True,False)
+#listOfHistoLists=plotutils.createHistoLists_fromSuperHistoFile(outputpath,samples,bdts,1)
+#listOfHistoListsData=plotutils.createHistoLists_fromSuperHistoFile(outputpath,samples_data,bdts,1)
+#lll=plotutils.createLLL_fromSuperHistoFileSyst(outputpath[:-4]+'_syst.root',samples[9:],bdts,errorSystnames)
+#plotutils.plotDataMCanWsyst(listOfHistoListsData,plotutils.transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-1,name+'/'+name+'_Unblinded',[[lll,3354,ROOT.kBlack,True]],False,labels,True,False)
 
 if doDrawParallel==False or len(sys.argv) == 1 :                      #if some option is given old systematic histo file will be used      
     # make datacards
     #TODO
     # 1. Implement small Epsilon case
     # 2. Implement consisted Bin-by-Bin uncertainties
-    makeDatacards(name+'/'+name+'_limitInput.root',name+'/'+name+'_datacard',binlabels,doHdecay=True,discrname='finaldiscr',datacardmaker='mk_datacard_JESTest13TeV')
+    limittools.makeDatacards(name+'/'+name+'_limitInput.root',name+'/'+name+'_datacard',binlabels,doHdecay=True,discrname='finaldiscr',datacardmaker='mk_datacard_JESTest13TeV')
 
 
 print "TOTAL Elapsed time since beginning of plotscript", MainClock.RealTime()

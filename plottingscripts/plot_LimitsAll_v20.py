@@ -11,17 +11,11 @@ filedir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(filedir+'/../util')
 
 
-from scriptgenerator import *
-from plotutils import *
-from limittools import renameHistos
-from limittools import addPseudoData
-from limittools import addRealData
-from limittools import makeDatacards
-from limittools import makeDatacardsParallel
-from limittools import calcLimits
-from limittools import replaceQ2scale
+import scriptgenerator
+import plotutils
+import limittools
 
-from analysisClass import *
+import analysisClass
 from configs.plotconfig_v14 import *
 
 
@@ -30,10 +24,10 @@ def main(argv):
     # Create analysis object with output name
     name='limits_All_v30'
     anaRootPath=os.getcwd()+'/workdir/'+name+'/output_limitInput.root'
-    #analysis=Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/latest/ttbb-cutbased-analysis_limitInput.root')
-    #analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/Sep17/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
-    analysis=Analysis(name,argv,anaRootPath, signalProcess='ttH')
-    #analysis=Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/output20170626-reference/workdir/ttbb-cutbased-analysis/output_limitInput.root')
+    #analysis=analysisClass.Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/latest/ttbb-cutbased-analysis_limitInput.root')
+    #analysis=analysisClass.Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/Sep17/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
+    analysis=analysisClass.Analysis(name,argv,anaRootPath, signalProcess='ttH')
+    #analysis=analysisClass.Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/output20170626-reference/workdir/ttbb-cutbased-analysis/output_limitInput.root')
 
     analysis.plotBlinded=True
     analysis.makeSimplePlots=True
@@ -117,7 +111,7 @@ def main(argv):
                          'alternativebdt_ljets_j4_t4:='+bdtweightpath+'/weights_Final_44_'+alternativebdtset+'.xml',
                          'hardestJetPt:=Jet_Pt[0]',
                          ]
-    additionalvariables+=GetMEPDFadditionalVariablesList("/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv")
+    additionalvariables+=scriptgenerator.GetMEPDFadditionalVariablesList("/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv")
     # append variables needed by NNFlow Interface
     #additionalvariables.extend(NNFlowInterface.getAdditionalVariablesList())
     print "Debug output: Print additional variables list: ", additionalvariables
@@ -326,7 +320,7 @@ def main(argv):
     for sample in samples:
         for sysname,sysfilename in zip(otherSystNames,otherSystFileNames):
             thisnewsel=sample.selection
-            systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),thisnewsel,sample.nick+sysname,samDict=sampleDict))
+            systsamples.append(plotutils.Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),thisnewsel,sample.nick+sysname,samDict=sampleDict))
 
     ## WARNING: Adjust Slice for samples if changing ttbar contributions
 
@@ -341,7 +335,7 @@ def main(argv):
             print "adding sample for ", sysname
             print "selection ", thisnewsel
             print "instead of ", thisoldsel
-            systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace(ttbarPathS,path_additionalSamples+"/ttbar_"+sysfilename+"/*nominal*.root"),thisnewsel,sample.nick+sysname,samDict=sampleDict))
+            systsamples.append(plotutils.Sample(sample.name+sysname,sample.color,sample.path.replace(ttbarPathS,path_additionalSamples+"/ttbar_"+sysfilename+"/*nominal*.root"),thisnewsel,sample.nick+sysname,samDict=sampleDict))
     
     # add QCD sytematic for QCD sample
     for sample in samples:
@@ -349,7 +343,7 @@ def main(argv):
           continue
         for sysname,sysreplacestring in zip(QCDSystNames,QCDSystReplacementStrings):
           thisnewsel=sample.selection.replace("internalQCDweight",sysreplacestring)
-          systsamples.append(Sample(sample.name+sysname,sample.color,sample.path,thisnewsel,sample.nick+sysname,samDict=sampleDict))
+          systsamples.append(plotutils.Sample(sample.name+sysname,sample.color,sample.path,thisnewsel,sample.nick+sysname,samDict=sampleDict))
     
     allsamples=samples+systsamples
     allsystnames=weightSystNames+otherSystNames+PSSystNames+QCDSystNames
@@ -360,7 +354,7 @@ def main(argv):
     print len(discrs),len(plotPreselections),len(binlabels),len(nhistobins),len(minxvals),len(maxxvals),
     print len(zip(discrs,plotPreselections,binlabels,nhistobins,minxvals,maxxvals))
     for discr,b,bl,nb,minx,maxx in zip(discrs,plotPreselections,binlabels,nhistobins,minxvals,maxxvals):
-        discriminatorPlots.append(Plot(ROOT.TH1F(discrname+"_"+bl,"final discriminator ("+bl+")",nb,minx,maxx),discr,b,bl))
+        discriminatorPlots.append(plotutils.Plot(ROOT.TH1F(discrname+"_"+bl,"final discriminator ("+bl+")",nb,minx,maxx),discr,b,bl))
 
 
     # Check if additional (input) variables should be plotted and if necessary add them here to the discriminatorPlots
@@ -377,7 +371,7 @@ def main(argv):
     if analysis.doDrawParallel==False or analysis.plotNumber == None :
         #if not os.path.exists(analysis.rootFilePath):
             #print "Doing plotParallel step since root file was not found."
-            THEoutputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_latestAndGreatest.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=["../util/dNNInterfaces/dNNInterface_V6.py"],cirun=False,StopAfterCompileStep=False,haddParallel=True)
+            THEoutputpath=scriptgenerator.plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_latestAndGreatest.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=["../util/dNNInterfaces/dNNInterface_V6.py"],cirun=False,StopAfterCompileStep=False,haddParallel=True)
             if type(THEoutputpath)==str:
               outputpath=THEoutputpath
             else:
@@ -385,29 +379,29 @@ def main(argv):
             if analysis.getActivatedOptimizedRebinning():
               if analysis.getSignalProcess() == 'ttbb':
                 # samples[0:2]: tt+bb, tt+b, tt+2b as signal for S over b normalization
-                optimizeBinning(outputpath,signalsamples=[samples[0:3]], backgroundsamples=samples[3:],additionalSamples=samples_data, plots=discriminatorPlots, systnames=allsystnames, minBkgPerBin=2.0, optMode=analysis.getOptimzedRebinning(),considerStatUnc=False, maxBins=20, minBins=2,verbosity=2)
+                plotutils.optimizeBinning(outputpath,signalsamples=[samples[0:3]], backgroundsamples=samples[3:],additionalSamples=samples_data, plots=discriminatorPlots, systnames=allsystnames, minBkgPerBin=2.0, optMode=analysis.getOptimzedRebinning(),considerStatUnc=False, maxBins=20, minBins=2,verbosity=2)
               elif analysis.getSignalProcess() == 'ttH':
                 # samples: ttH as signal. ttH_bb, ttH_XX as additional samples together with data. Rest: background samples
-                optimizeBinning(outputpath,signalsamples=[samples[0]], backgroundsamples=samples[9:],additionalSamples=samples[1:9]+samples_data, plots=discriminatorPlots, systnames=allsystnames, minBkgPerBin=2.0, optMode=analysis.getOptimzedRebinning(),considerStatUnc=False, maxBins=20, minBins=2,verbosity=2)
+                plotutils.optimizeBinning(outputpath,signalsamples=[samples[0]], backgroundsamples=samples[9:],additionalSamples=samples[1:9]+samples_data, plots=discriminatorPlots, systnames=allsystnames, minBkgPerBin=2.0, optMode=analysis.getOptimzedRebinning(),considerStatUnc=False, maxBins=20, minBins=2,verbosity=2)
               else:
                 print 'Warning: Could not find signal process.'
 
             # hadd histo files before renaming. The histograms are actually already renamed. But the checkbins thingy will not have been done yet.
             print "hadding from wildcard"
-            haddFilesFromWildCard(outputpath,outputpath[:-11]+"/HaddOutputs/*.root",totalNumberOfHistosNeedsToRemainTheSame=True)
+            scriptgenerator.haddFilesFromWildCard(outputpath,outputpath[:-11]+"/HaddOutputs/*.root",totalNumberOfHistosNeedsToRemainTheSame=True)
             # Deactivate check bins functionality in renameHistos if additional plot variables are added via analysis class
             renamedPath=outputpath[:-5]+'_limitInput.root'
             if os.path.exists(renamedPath):
-              #if askYesNo('renamedFileExists. Repeat renaming?'):
-              #  renameHistos(outputpath,renamedPath,allsystnames,analysis.getCheckBins(),False)
+              #if scriptgenerator.askYesNo('renamedFileExists. Repeat renaming?'):
+              #  limittools.renameHistos(outputpath,renamedPath,allsystnames,analysis.getCheckBins(),False)
               print "renamed file already exists"
             else:
               if type(THEoutputpath)==str:
-                renameHistos(outputpath,renamedPath,allsystnames,checkBins=True,prune=False,Epsilon=0.0)
+                limittools.renameHistos(outputpath,renamedPath,allsystnames,checkBins=True,prune=False,Epsilon=0.0)
               else:
-                renameHistos(THEoutputpath[1:],renamedPath,allsystnames,checkBins=True,prune=False,Epsilon=0.0)
-            addRealData(renamedPath,[s.nick for s in samples_data],binlabels,discrname)
-            #addPseudoData(outputpath[:-5]+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
+                limittools.renameHistos(THEoutputpath[1:],renamedPath,allsystnames,checkBins=True,prune=False,Epsilon=0.0)
+            limittools.addRealData(renamedPath,[s.nick for s in samples_data],binlabels,discrname)
+            #limittools.addPseudoData(outputpath[:-5]+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
             #outputpath=outputpath[:-5]+'_limitInput.root'
             outputpath=outputpath[:-5]+'_limitInput.root'
         #else:
@@ -429,16 +423,16 @@ def main(argv):
         #TODO
         # 1. Implement small Epsilon case
         # 2. Implement consisted Bin-by-Bin uncertainties
-        #addRealData(outputpath,[s.nick for s in samples_data],binlabels,discrname)
+        #limittools.addRealData(outputpath,[s.nick for s in samples_data],binlabels,discrname)
         print "Making Data cards."
-        makeDatacardsParallel(outputpath,name+'/'+name+'_datacard',binlabels,doHdecay=True,discrname=discrname,datacardmaker="mk_datacard_JESTest13TeVPara")
+        limittools.makeDatacardsParallel(outputpath,name+'/'+name+'_datacard',binlabels,doHdecay=True,discrname=discrname,datacardmaker="mk_datacard_JESTest13TeVPara")
 
 
     # Invoke drawParallel step
     if analysis.doDrawParallel==True and analysis.plotNumber == None :
         # Hand over opts to keep commandline options
         print 'Starting DrawParallel'
-        DrawParallel(discriminatorPlots,name,os.path.realpath(inspect.getsourcefile(lambda:0)),analysis.opts)
+        scriptgenerator.DrawParallel(discriminatorPlots,name,os.path.realpath(inspect.getsourcefile(lambda:0)),analysis.opts)
 
     # belongs to DrawParallel
     if analysis.doDrawParallel==True and analysis.plotNumber != None :
@@ -449,24 +443,24 @@ def main(argv):
     # Lists needed later, produce them only if needed, so check if subsequent step comes
     if (analysis.doDrawParallel==False or analysis.plotNumber != None) and (analysis.makeSimplePlots==True or analysis.makeMCControlPlots==True or analysis.makeEventYields==True):
         print 'Create lists needed later'
-        listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,discriminatorPlots,1)
-        lolT=transposeLOL(listOfHistoLists)
-        listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,discriminatorPlots,1)
+        listOfHistoLists=plotutils.createHistoLists_fromSuperHistoFile(outputpath,samples,discriminatorPlots,1)
+        lolT=plotutils.transposeLOL(listOfHistoLists)
+        listOfHistoListsData=plotutils.createHistoLists_fromSuperHistoFile(outputpath,samples_data,discriminatorPlots,1)
 
     # plot simple MC plots
     if (analysis.doDrawParallel==False or analysis.plotNumber != None) and analysis.makeSimplePlots==True :
         print "Making simple MC plots."
-        writeLOLAndOneOnTop(transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-1,name+'/'+name+'_controlplots')
-        writeListOfHistoListsAN(transposeLOL([lolT[0]]+lolT[9:]),[samples[0]]+samples[9:],"",name+'/'+name+'_shapes',True,False,False,'histo',False,True,False)
+        plotutils.writeLOLAndOneOnTop(plotutils.transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-1,name+'/'+name+'_controlplots')
+        plotutils.writeListOfHistoListsAN(plotutils.transposeLOL([lolT[0]]+lolT[9:]),[samples[0]]+samples[9:],"",name+'/'+name+'_shapes',True,False,False,'histo',False,True,False)
 
 
     # Make MC Control plots
     if (analysis.doDrawParallel==False or analysis.plotNumber != None) and analysis.makeMCControlPlots==True :
         print "Making MC Control plots"
         print "skipping"
-        lll=createLLL_fromSuperHistoFileSyst(outputpath,samples[9:],discriminatorPlots,errorSystNamesNoQCD)
+        lll=plotutils.createLLL_fromSuperHistoFileSyst(outputpath,samples[9:],discriminatorPlots,errorSystNamesNoQCD)
         labels=[plot.label for plot in discriminatorPlots]
-        plotDataMCanWsyst(listOfHistoListsData,transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-2,name,[[lll,3354,ROOT.kBlack,True]],False,labels,True,analysis.plotBlinded)
+        plotutils.plotDataMCanWsyst(listOfHistoListsData,plotutils.transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-2,name,[[lll,3354,ROOT.kBlack,True]],False,labels,True,analysis.plotBlinded)
 
 
 
