@@ -2580,7 +2580,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
         "internalHDAMPweightdown","internalHDAMPweightup","internalUEweightdown","internalUEweightup"
 ]
 
-  #csv_file=os.getcwd()+"/rate_factors_onlyinternal_powhegpythia.csv"
+  #csv_file=os.getcwd()+"../txtfiles/rate_factors_onlyinternal_powhegpythia.csv"
   csv_file=MEPDFCSVFile
 
   if MEPDFCSVFile!="":
