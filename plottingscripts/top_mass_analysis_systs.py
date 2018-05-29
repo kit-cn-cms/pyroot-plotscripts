@@ -1,8 +1,8 @@
 import sys
 import os
-filedir = os.path.dirname(__file__)
-sys.path.append(filedir+'/../pyroot-plotscripts-base')
-sys.path.append(filedir+'/../pyroot-plotscripts-base/limittools')
+filedir = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(filedir+'/../util')
+
 
 from scriptgenerator import *
 from plotutils import *
