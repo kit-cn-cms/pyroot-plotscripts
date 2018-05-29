@@ -17,7 +17,7 @@ weightSystNames=["",
 
 common_weight= "1.0*Weight_GEN_nom*Weight_CSV*Weight_pu69p2"
 
-systWeights=[   "NomWeight:="+common_weight+"*(DoWeights==1)+(DoWeights==0)*1.0",
+systWeights=[   "NomWeight:="+common_weight+"*(DoWbosonReweighting==1)*internalWbosonWeight_nominal+(DoWbosonReweighting==0)*1.0+(DoZbosonReweighting==1)*internalZbosonWeight_nominal+(DoZbosonReweighting==0)*1.0+(DoWeights==1)+(DoWeights==0)*1.0",
                 "dummyWeight_CSVLFup:="+common_weight+"*Weight_CSVLFup*(DoWeights==1)+(DoWeights==0)*1.0",
                 "dummyWeight_CSVLFdown:="+common_weight+"*Weight_CSVLFdown*(DoWeights==1)+(DoWeights==0)*1.0",
                 "dummyWeight_CSVHFup:="+common_weight+"*Weight_CSVHFup*(DoWeights==1)+(DoWeights==0)*1.0",
@@ -49,10 +49,67 @@ otherSystFileNames=[
                         "JESup","JESdown",
                         "JERup","JERdown"
     ]
+WBosonSystNames=[
+       "_WbosonWeight_QCD1Up","_WbosonWeight_QCD1Down",
+       "_WbosonWeight_QCD2Up","_WbosonWeight_QCD2Down",
+       "_WbosonWeight_QCD3Up","_WbosonWeight_QCD3Down",
+       "_WbosonWeight_EW1Up","_WbosonWeight_EW1Down",
+       "_WbosonWeight_EW2Up","_WbosonWeight_EW2Down",
+       "_WbosonWeight_EW3Up","_WbosonWeight_EW3Down",
+       "_WbosonWeight_MixedUp","_WbosonWeight_MixedDown",
+]
+WBosonWeights=[
+       "dummyWeight_WBoson_QCD1Up:="+common_weight+"*(DoWbosonReweighting==1)*internalWbosonWeight_QCD1Up+(DoWbosonReweighting==0)*1.0+(DoWbosonReweighting==1)*internalZbosonWeight_nominal+(DoWbosonReweighting==0)*1.0+(DoWeights==1)+(DoWeights==0)*1.0",
+       "dummyWeight_WBoson_QCD1Down:="+common_weight+"*(DoWbosonReweighting==1)*internalWbosonWeight_QCD1Down+(DoWbosonReweighting==0)*1.0+(DoWbosonReweighting==1)*internalZbosonWeight_nominal+(DoWbosonReweighting==0)*1.0+(DoWeights==1)+(DoWeights==0)*1.0",
+       "dummyWeight_WBoson_QCD2Up:="+common_weight+"*(DoWbosonReweighting==1)*internalWbosonWeight_QCD2Up+(DoWbosonReweighting==0)*1.0+(DoWbosonReweighting==1)*internalZbosonWeight_nominal+(DoWbosonReweighting==0)*1.0+(DoWeights==1)+(DoWeights==0)*1.0",
+       "dummyWeight_WBoson_QCD2Down:="+common_weight+"*(DoWbosonReweighting==1)*internalWbosonWeight_QCD2Down+(DoWbosonReweighting==0)*1.0+(DoWbosonReweighting==1)*internalZbosonWeight_nominal+(DoWbosonReweighting==0)*1.0+(DoWeights==1)+(DoWeights==0)*1.0",
+       "dummyWeight_WBoson_QCD3Up:="+common_weight+"*(DoWbosonReweighting==1)*internalWbosonWeight_QCD3Up+(DoWbosonReweighting==0)*1.0+(DoWbosonReweighting==1)*internalZbosonWeight_nominal+(DoWbosonReweighting==0)*1.0+(DoWeights==1)+(DoWeights==0)*1.0",
+       "dummyWeight_WBoson_QCD3Down:="+common_weight+"*(DoWbosonReweighting==1)*internalWbosonWeight_QCD3Down+(DoWbosonReweighting==0)*1.0+(DoWbosonReweighting==1)*internalZbosonWeight_nominal+(DoWbosonReweighting==0)*1.0+(DoWeights==1)+(DoWeights==0)*1.0",
+
+       "dummyWeight_WBoson_EW1Up:="+common_weight+"*(DoWbosonReweighting==1)*internalWbosonWeight_EW1Up+(DoWbosonReweighting==0)*1.0+(DoWbosonReweighting==1)*internalZbosonWeight_nominal+(DoWbosonReweighting==0)*1.0+(DoWeights==1)+(DoWeights==0)*1.0",
+       "dummyWeight_WBoson_EW1Down:="+common_weight+"*(DoWbosonReweighting==1)*internalWbosonWeight_EW1Down+(DoWbosonReweighting==0)*1.0+(DoWbosonReweighting==1)*internalZbosonWeight_nominal+(DoWbosonReweighting==0)*1.0+(DoWeights==1)+(DoWeights==0)*1.0",
+       "dummyWeight_WBoson_EW2Up:="+common_weight+"*(DoWbosonReweighting==1)*internalWbosonWeight_EW2Up+(DoWbosonReweighting==0)*1.0+(DoWbosonReweighting==1)*internalZbosonWeight_nominal+(DoWbosonReweighting==0)*1.0+(DoWeights==1)+(DoWeights==0)*1.0",
+       "dummyWeight_WBoson_EW2Down:="+common_weight+"*(DoWbosonReweighting==1)*internalWbosonWeight_EW2Down+(DoWbosonReweighting==0)*1.0+(DoWbosonReweighting==1)*internalZbosonWeight_nominal+(DoWbosonReweighting==0)*1.0+(DoWeights==1)+(DoWeights==0)*1.0",
+       "dummyWeight_WBoson_EW3Up:="+common_weight+"*(DoWbosonReweighting==1)*internalWbosonWeight_EW3Up+(DoWbosonReweighting==0)*1.0+(DoWbosonReweighting==1)*internalZbosonWeight_nominal+(DoWbosonReweighting==0)*1.0+(DoWeights==1)+(DoWeights==0)*1.0",
+       "dummyWeight_WBoson_EW3Down:="+common_weight+"*(DoWbosonReweighting==1)*internalWbosonWeight_EW3Down+(DoWbosonReweighting==0)*1.0+(DoWbosonReweighting==1)*internalZbosonWeight_nominal+(DoWbosonReweighting==0)*1.0+(DoWeights==1)+(DoWeights==0)*1.0",
+
+       "dummyWeight_WBoson_MixedUp:="+common_weight+"*(DoWbosonReweighting==1)*internalWbosonWeight_MixedUp+(DoWbosonReweighting==0)*1.0+(DoWbosonReweighting==1)*internalZbosonWeight_nominal+(DoWbosonReweighting==0)*1.0+(DoWeights==1)+(DoWeights==0)*1.0",
+       "dummyWeight_WBoson_MixedDown:="+common_weight+"*(DoWbosonReweighting==1)*internalWbosonWeight_MixedDown+(DoWbosonReweighting==0)*1.0+(DoWbosonReweighting==1)*internalZbosonWeight_nominal+(DoWbosonReweighting==0)*1.0+(DoWeights==1)+(DoWeights==0)*1.0",
+]
+
+ZBosonSystNames=[
+      "_ZbosonWeight_QCD1Up","_ZbosonWeight_QCD1Down",
+      "_ZbosonWeight_QCD2Up","_ZbosonWeight_QCD2Down",
+      "_ZbosonWeight_QCD3Up","_ZbosonWeight_QCD3Down",
+      "_ZbosonWeight_EZ1Up","_ZbosonWeight_EZ1Down",
+      "_ZbosonWeight_EZ2Up","_ZbosonWeight_EZ2Down",
+      "_ZbosonWeight_EZ3Up","_ZbosonWeight_EZ3Down",
+      "_ZbosonWeight_MixedUp","_ZbosonWeight_MixedDown",
+]
+
+ZBosonWeights=[
+       "dummyWeight_Zboson_QCD1Up:="+common_weight+"*(DoZbosonReweighting==1)*internalZbosonWeight_QCD1Up+(DoZbosonReweighting==0)*1.0+(DoZbosonReweighting==1)*internalZbosonWeight_nominal+(DoZbosonReweighting==0)*1.0+(DoWeights==1)+(DoWeights==0)*1.0",
+       "dummyWeight_Zboson_QCD1Down:="+common_weight+"*(DoZbosonReweighting==1)*internalZbosonWeight_QCD1Down+(DoZbosonReweighting==0)*1.0+(DoZbosonReweighting==1)*internalZbosonWeight_nominal+(DoZbosonReweighting==0)*1.0+(DoWeights==1)+(DoWeights==0)*1.0",
+       "dummyWeight_Zboson_QCD2Up:="+common_weight+"*(DoZbosonReweighting==1)*internalZbosonWeight_QCD2Up+(DoZbosonReweighting==0)*1.0+(DoZbosonReweighting==1)*internalZbosonWeight_nominal+(DoZbosonReweighting==0)*1.0+(DoWeights==1)+(DoWeights==0)*1.0",
+       "dummyWeight_Zboson_QCD2Down:="+common_weight+"*(DoZbosonReweighting==1)*internalZbosonWeight_QCD2Down+(DoZbosonReweighting==0)*1.0+(DoZbosonReweighting==1)*internalZbosonWeight_nominal+(DoZbosonReweighting==0)*1.0+(DoWeights==1)+(DoWeights==0)*1.0",
+       "dummyWeight_Zboson_QCD3Up:="+common_weight+"*(DoZbosonReweighting==1)*internalZbosonWeight_QCD3Up+(DoZbosonReweighting==0)*1.0+(DoZbosonReweighting==1)*internalZbosonWeight_nominal+(DoZbosonReweighting==0)*1.0+(DoWeights==1)+(DoWeights==0)*1.0",
+       "dummyWeight_Zboson_QCD3Down:="+common_weight+"*(DoZbosonReweighting==1)*internalZbosonWeight_QCD3Down+(DoZbosonReweighting==0)*1.0+(DoZbosonReweighting==1)*internalZbosonWeight_nominal+(DoZbosonReweighting==0)*1.0+(DoWeights==1)+(DoWeights==0)*1.0",
+
+       "dummyWeight_Zboson_EW1Up:="+common_weight+"*(DoZbosonReweighting==1)*internalZbosonWeight_EW1Up+(DoZbosonReweighting==0)*1.0+(DoZbosonReweighting==1)*internalZbosonWeight_nominal+(DoZbosonReweighting==0)*1.0+(DoWeights==1)+(DoWeights==0)*1.0",
+       "dummyWeight_Zboson_EW1Down:="+common_weight+"*(DoZbosonReweighting==1)*internalZbosonWeight_EW1Down+(DoZbosonReweighting==0)*1.0+(DoZbosonReweighting==1)*internalZbosonWeight_nominal+(DoZbosonReweighting==0)*1.0+(DoWeights==1)+(DoWeights==0)*1.0",
+       "dummyWeight_Zboson_EW2Up:="+common_weight+"*(DoZbosonReweighting==1)*internalZbosonWeight_EW2Up+(DoZbosonReweighting==0)*1.0+(DoZbosonReweighting==1)*internalZbosonWeight_nominal+(DoZbosonReweighting==0)*1.0+(DoWeights==1)+(DoWeights==0)*1.0",
+       "dummyWeight_Zboson_EW2Down:="+common_weight+"*(DoZbosonReweighting==1)*internalZbosonWeight_EW2Down+(DoZbosonReweighting==0)*1.0+(DoZbosonReweighting==1)*internalZbosonWeight_nominal+(DoZbosonReweighting==0)*1.0+(DoWeights==1)+(DoWeights==0)*1.0",
+       "dummyWeight_Zboson_EW3Up:="+common_weight+"*(DoZbosonReweighting==1)*internalZbosonWeight_EW3Up+(DoZbosonReweighting==0)*1.0+(DoZbosonReweighting==1)*internalZbosonWeight_nominal+(DoZbosonReweighting==0)*1.0+(DoWeights==1)+(DoWeights==0)*1.0",
+       "dummyWeight_Zboson_EW3Down:="+common_weight+"*(DoZbosonReweighting==1)*internalZbosonWeight_EW3Down+(DoZbosonReweighting==0)*1.0+(DoZbosonReweighting==1)*internalZbosonWeight_nominal+(DoZbosonReweighting==0)*1.0+(DoWeights==1)+(DoWeights==0)*1.0",
+
+       "dummyWeight_Zboson_MixedUp:="+common_weight+"*(DoZbosonReweighting==1)*internalZbosonWeight_MixedUp+(DoZbosonReweighting==0)*1.0+(DoZbosonReweighting==1)*internalZbosonWeight_nominal+(DoZbosonReweighting==0)*1.0+(DoWeights==1)+(DoWeights==0)*1.0",
+       "dummyWeight_Zboson_MixedDown:="+common_weight+"*(DoZbosonReweighting==1)*internalZbosonWeight_MixedDown+(DoZbosonReweighting==0)*1.0+(DoZbosonReweighting==1)*internalZbosonWeight_nominal+(DoZbosonReweighting==0)*1.0+(DoWeights==1)+(DoWeights==0)*1.0",
+]
 
 MCWeight='35.91823'
 
 path_ntuples = "/nfs/dust/cms/user/mwassmer/DarkMatter/ntuples"
+# path_ntuples = "/nfs/dust/cms/user/swieland/Darkmatter/ntuples"
 
 sampleDict=SampleDictionary()
 sampleDict.doPrintout()
@@ -93,14 +150,14 @@ samples_data = [
 #z_nunu: 0.00001321
 #w_lnu: 0.0000086564
 samples_background = [
-                        Sample('Z(#nu#nu)+jets',ROOT.kBlue,path_ntuples+'/DYJetsToNuNu_PtZ-*/*nominal*.root',"1.*3*0.971"+"*"+MCWeight+sel_MET,'z_nunu_jets',weightSystNames+otherSystNames,samDict=sampleDict),
+                        Sample('Z(#nu#nu)+jets',ROOT.kBlue,path_ntuples+'/DYJetsToNuNu_PtZ-*/*nominal*.root',"1.*3*0.971"+"*"+MCWeight+sel_MET,'z_nunu_jets',weightSystNames+otherSystNames+ZBosonSystNames,samDict=sampleDict),
                         #Sample('Z(#nu#nu)+jets p_{T,Z}=50-100',ROOT.kBlue+4,path_ntuples+'/DYJetsToNuNu_PtZ-50To100*/*nominal*.root',"3*0.971"+"*"+MCWeight+sel_MET,'z_nunu_jets_a',weightSystNames+otherSystNames,samDict=sampleDict),
                         #Sample('Z(#nu#nu)+jets p_{T,Z}=100-250',ROOT.kBlue+2,path_ntuples+'/DYJetsToNuNu_PtZ-100To250*/*nominal*.root',"3*0.971"+"*"+MCWeight+sel_MET,'z_nunu_jets_b',weightSystNames+otherSystNames,samDict=sampleDict),
                         #Sample('Z(#nu#nu)+jets p_{T,Z}=250-400',ROOT.kBlue,path_ntuples+'/DYJetsToNuNu_PtZ-250To400*/*nominal*.root',"3*0.971"+"*"+MCWeight+sel_MET,'z_nunu_jets_c',weightSystNames+otherSystNames,samDict=sampleDict),
                         #Sample('Z(#nu#nu)+jets p_{T,Z}=400-650',ROOT.kBlue-2,path_ntuples+'/DYJetsToNuNu_PtZ-400To650*/*nominal*.root',"3*0.971"+"*"+MCWeight+sel_MET,'z_nunu_jets_d',weightSystNames+otherSystNames,samDict=sampleDict),
                         #Sample('Z(#nu#nu)+jets p_{T,Z}=650-Inf',ROOT.kBlue-5,path_ntuples+'/DYJetsToNuNu_PtZ-650ToInf*/*nominal*.root',"3*0.971"+"*"+MCWeight+sel_MET,'z_nunu_jets_e',weightSystNames+otherSystNames,samDict=sampleDict),
 
-                        Sample('W(l#nu)+jets',ROOT.kGreen,path_ntuples+'/WJetsToLNu_Pt-*/*nominal*.root',"1.*"+MCWeight+sel_MET,'w_lnu_jets',weightSystNames+otherSystNames,samDict=sampleDict),
+                        Sample('W(l#nu)+jets',ROOT.kGreen,path_ntuples+'/WJetsToLNu_Pt-*/*nominal*.root',"1.*"+MCWeight+sel_MET,'w_lnu_jets',weightSystNames+otherSystNames+WBosonSystNames,samDict=sampleDict),
                         #Sample('W(l#nu)+jets P_{T,W}=100-250',ROOT.kGreen,path_ntuples+'/WJetsToLNu_Pt-100To250*/*nominal*.root',"1.*"+MCWeight+sel_MET,'w_lnu_jets_a',weightSystNames+otherSystNames,samDict=sampleDict),
                         #Sample('W(l#nu)+jets p_{T,W}=250-400',ROOT.kGreen+2,path_ntuples+'/WJetsToLNu_Pt-250To400*/*nominal*.root',"1.*"+MCWeight+sel_MET,'w_lnu_jets_b',weightSystNames+otherSystNames,samDict=sampleDict),
                         #Sample('W(l#nu)+jets p_{T,W}=400-600',ROOT.kGreen+4,path_ntuples+'/WJetsToLNu_Pt-400To600*/*nominal*.root',"1.*"+MCWeight+sel_MET,'w_lnu_jets_c',weightSystNames+otherSystNames,samDict=sampleDict),

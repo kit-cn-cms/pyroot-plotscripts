@@ -29,7 +29,8 @@ additionalvariables=[    "N_TightMuons","N_TightElectrons","Evt_Pt_PrimaryLepton
                          "Weight_CSV","Weight_CSVLFup","Weight_CSVLFdown","Weight_CSVHFup","Weight_CSVHFdown","Weight_CSVHFStats1up","Weight_CSVHFStats1down",
                          "Weight_CSVLFStats1up","Weight_CSVLFStats1down","Weight_CSVHFStats2up","Weight_CSVHFStats2down","Weight_CSVLFStats2up","Weight_CSVLFStats2down",
                          "Weight_CSVCErr1up","Weight_CSVCErr1down","Weight_CSVCErr2up","Weight_CSVCErr2down","Weight_pu69p2",
-                         "Evt_E_PrimaryLepton","Evt_Phi_PrimaryLepton","Evt_Eta_PrimaryLepton","Evt_M_PrimaryLepton","GenEvt_I_TTPlusCC","GenEvt_I_TTPlusBB","Weight_GenValue"
+                         "Evt_E_PrimaryLepton","Evt_Phi_PrimaryLepton","Evt_Eta_PrimaryLepton","Evt_M_PrimaryLepton","GenEvt_I_TTPlusCC","GenEvt_I_TTPlusBB","Weight_GenValue",
+                         "W_Pt", "Z_Pt"
                          ]
 additionalvariables+=GetMEPDFadditionalVariablesList("/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv")
 
@@ -149,7 +150,7 @@ for sample in samples_background:
         thisnewsel=sample.selection
         systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),thisnewsel,sample.nick+sysname,samDict=sampleDict))
 
-THEoutputpath=plotParallel(jobname,5000000,plots,samples_signal+samples_background+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_FAST.json",otherSystNames,addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False,haddParallel=True)
+THEoutputpath=plotParallel(jobname,5000000,plots,samples_signal+samples_background+samples_data+systsamples,[''],['1.'],weightSystNames+WBosonSystNames+ZBosonSystNames,systWeights+WBosonWeights+ZBosonWeights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_FAST.json",otherSystNames,addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False,haddParallel=True)
 print "---------------------------------------------"
 print "THEoutputpath=",THEoutputpath
 print "---------------------------------------------"

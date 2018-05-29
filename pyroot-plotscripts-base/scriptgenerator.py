@@ -209,7 +209,7 @@ class LeptonSFHelper {
 //PUBLIC
 LeptonSFHelper::LeptonSFHelper( ){
 
-  //std::cout << "Initializing Lepton scale factors" << std::endl;
+  //std::cout << "InitialiWing Lepton scale factors" << std::endl;
 
   SetElectronHistos( );
   SetMuonHistos( );
@@ -293,7 +293,7 @@ float LeptonSFHelper::GetElectronSF(  float electronPt , float electronEta , int
     thisBin = h_ele_ISO_abseta_pt_ratio->FindBin( searchEta , searchPt );
     nomval=h_ele_ISO_abseta_pt_ratio->GetBinContent( thisBin );
     error=h_ele_ISO_abseta_pt_ratio->GetBinError( thisBin );
-    upval=nomval+error;  //DANGERZONE need to add pT depnednet 1% uncertainty
+    upval=nomval+error;  //DANGERWONE need to add pT depnednet 1% uncertainty
     downval=nomval-error;
     if(electronPt<20 || electronPt>80) {
         upval=upval*( 1.0+sqrt(0.01*0.01) );
@@ -306,7 +306,7 @@ float LeptonSFHelper::GetElectronSF(  float electronPt , float electronEta , int
     thisBin = h_ele_GFS_abseta_pt_ratio->FindBin( searchEta , searchPt );
     nomval=h_ele_GFS_abseta_pt_ratio->GetBinContent( thisBin );
     error=h_ele_GFS_abseta_pt_ratio->GetBinError( thisBin );
-    upval=nomval+error; //DANGERZONE need to add pT depnednet 1% uncertainty
+    upval=nomval+error; //DANGERWONE need to add pT depnednet 1% uncertainty
     downval=nomval-error;
     if(electronPt<20 || electronPt>80) {
         upval=upval*( 1.0+sqrt(0.01*0.01) );
@@ -531,7 +531,7 @@ void LeptonSFHelper::SetElectronHistos( ){
   std::string IDinputFileGtoH = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/ele_ID_SF_tight_GH.root";
 
   std::string TRIGGERinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/ele_TriggerSF_Run2016All_v1.root";
-  std::string ISOinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/ele_Reco_EGM2D.root"; // DANGERZONE: no iso SF yet??
+  std::string ISOinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/ele_Reco_EGM2D.root"; // DANGERWONE: no iso SF yet??
   std::string GFSinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/ele_Reco_EGM2D.root";
 
   TFile *f_IDSFBtoF = new TFile(std::string(IDinputFileBtoF).c_str(),"READ");
@@ -680,7 +680,7 @@ public:
     JESPileUpPtEC1up,
     JESPileUpPtEC2up,
     JESPileUpPtHFup,
-    JESPileUpMuZeroup,
+    JESPileUpMuWeroup,
     JESPileUpEnvelopeup,
     JESSubTotalPileUpup,
     JESSubTotalRelativeup,
@@ -692,7 +692,7 @@ public:
     JESTotalNoFlavorup,
     JESTotalNoTimeup,
     JESTotalNoFlavorNoTimeup,
-    JESFlavorZJetup,
+    JESFlavorWJetup,
     JESFlavorPhotonJetup,
     JESFlavorPureGluonup,
     JESFlavorPureQuarkup,
@@ -736,7 +736,7 @@ public:
     JESPileUpPtEC1down,
     JESPileUpPtEC2down,
     JESPileUpPtHFdown,
-    JESPileUpMuZerodown,
+    JESPileUpMuWerodown,
     JESPileUpEnvelopedown,
     JESSubTotalPileUpdown,
     JESSubTotalRelativedown,
@@ -748,7 +748,7 @@ public:
     JESTotalNoFlavordown,
     JESTotalNoTimedown,
     JESTotalNoFlavorNoTimedown,
-    JESFlavorZJetdown,
+    JESFlavorWJetdown,
     JESFlavorPhotonJetdown,
     JESFlavorPureGluondown,
     JESFlavorPureQuarkdown,
@@ -860,7 +860,7 @@ void Systematics::init() {
   add( JESPileUpPtEC1up,         JESPileUpPtEC1down,         "JESPileUpPtEC1",           "PileUpPtEC1"         );                        
   add( JESPileUpPtEC2up,         JESPileUpPtEC2down,         "JESPileUpPtEC2",           "PileUpPtEC2"         );                        
   add( JESPileUpPtHFup,          JESPileUpPtHFdown,          "JESPileUpPtHF",            "PileUpPtHF"          );                        
-  add( JESPileUpMuZeroup,        JESPileUpMuZerodown,        "JESPileUpMuZero",          "PileUpMuZero"        );             
+  add( JESPileUpMuWeroup,        JESPileUpMuWerodown,        "JESPileUpMuWero",          "PileUpMuWero"        );             
   add( JESPileUpEnvelopeup,      JESPileUpEnvelopedown,      "JESPileUpEnvelope",        "PileUpEnvelope"      );                             
   add( JESSubTotalPileUpup,      JESSubTotalPileUpdown,      "JESSubTotalPileUp",        "SubTotalPileUp"      );                             
   add( JESSubTotalRelativeup,    JESSubTotalRelativedown,    "JESSubTotalRelative",      "SubTotalRelative"    );                             
@@ -872,7 +872,7 @@ void Systematics::init() {
   add( JESTotalNoFlavorup,       JESTotalNoFlavordown,       "JESTotalNoFlavor",         "TotalNoFlavor"       );             
   add( JESTotalNoTimeup,         JESTotalNoTimedown,         "JESTotalNoTime",           "TotalNoTime"         );                        
   add( JESTotalNoFlavorNoTimeup, JESTotalNoFlavorNoTimedown, "JESTotalNoFlavorNoTime",   "TotalNoFlavorNoTime" );                    
-  add( JESFlavorZJetup,          JESFlavorZJetdown,          "JESFlavorZJet",            "FlavorZJet"          );                        
+  add( JESFlavorWJetup,          JESFlavorWJetdown,          "JESFlavorWJet",            "FlavorWJet"          );                        
   add( JESFlavorPhotonJetup,     JESFlavorPhotonJetdown,     "JESFlavorPhotonJet",       "FlavorPhotonJet"     );                             
   add( JESFlavorPureGluonup,     JESFlavorPureGluondown,     "JESFlavorPureGluon",       "FlavorPureGluon"     );                             
   add( JESFlavorPureQuarkup,     JESFlavorPureQuarkdown,     "JESFlavorPureQuark",       "FlavorPureQuark"     );                             
@@ -1073,7 +1073,7 @@ CSVHelper::~CSVHelper() {
 
 
 void CSVHelper::init(const std::string& hf, const std::string& lf, const int& nHFptBins,const int& nLFptBins,const int& nLFetaBins,const std::vector<Systematics::Type>& jecsysts) {
-  std::cout << "Initializing b-tag scale factors" <<  std::endl;
+  std::cout << "InitialiWing b-tag scale factors" <<  std::endl;
   std::cout<< "  HF : " << hf << " (" << nHFptBins << " pt bins)" <<  std::endl;
   std::cout<< "  LF : " << lf << " (" << nLFptBins << " pt bins)"  <<  std::endl;
   std::cout<< "  LF : " << lf << " (" << nLFetaBins << " eta bins)" <<  std::endl;
@@ -1195,7 +1195,7 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
 			double &csvWgtCF) const
 {
   if( !isInit_ ) {
-    std::cout<<"CSVHelper: Not initualized"<<std::endl;
+    std::cout<<"CSVHelper: Not initualiWed"<<std::endl;
   }
   // search for the position of the desired systematic in the systs vector
   const int iSys = std::find(systs.begin(),systs.end(),syst)-systs.begin();
@@ -1304,6 +1304,312 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
 
   return csvWgtTotal;
 }
+
+// BosonHelper for reweighting of W/W to NuNu Processes
+
+class BosonHelper
+{
+  public:
+    // see the definition/implementation file for a description of the functions 
+    BosonHelper(TString path_to_sf_file_W, TString path_to_sf_file_Z);
+    ~BosonHelper();
+    double GetScaleFactorW(float W_Pt, string label);
+    double GetScaleFactorZ(float Z_Pt, string label);
+    void Reset();
+    void LoadWFile(TString path_to_sf_file_);
+    void LoadZFile(TString path_to_sf_file_);
+      
+  private:
+    // pointer for the root file containing the desired histograms
+    TFile* scalefactor_fileW = 0;
+    TFile* scalefactor_fileZ = 0;
+    // path to the root file
+    TString path_to_sf_file = "";
+    // histograms containing the scale factors for electron and muon channel separately
+    TH1D* WbosonWeight_nominal = 0;
+    TH1D* WbosonWeight_QCD1Up = 0;
+    TH1D* WbosonWeight_QCD1Down = 0;
+    TH1D* WbosonWeight_QCD2Up = 0;
+    TH1D* WbosonWeight_QCD2Down = 0;
+    TH1D* WbosonWeight_QCD3Up = 0;
+    TH1D* WbosonWeight_QCD3Down = 0;
+    TH1D* WbosonWeight_EW1Up = 0;
+    TH1D* WbosonWeight_EW1Down = 0;
+    TH1D* WbosonWeight_EW2Up = 0;
+    TH1D* WbosonWeight_EW2Down = 0;
+    TH1D* WbosonWeight_EW3Up = 0;
+    TH1D* WbosonWeight_EW3Down = 0;
+    TH1D* WbosonWeight_MixedUp = 0;
+    TH1D* WbosonWeight_MixedDown = 0;
+
+    TH1D* ZbosonWeight_nominal = 0;
+    TH1D* ZbosonWeight_QCD1Up = 0;
+    TH1D* ZbosonWeight_QCD1Down = 0;
+    TH1D* ZbosonWeight_QCD2Up = 0;
+    TH1D* ZbosonWeight_QCD2Down = 0;
+    TH1D* ZbosonWeight_QCD3Up = 0;
+    TH1D* ZbosonWeight_QCD3Down = 0;
+    TH1D* ZbosonWeight_EW1Up = 0;
+    TH1D* ZbosonWeight_EW1Down = 0;
+    TH1D* ZbosonWeight_EW2Up = 0;
+    TH1D* ZbosonWeight_EW2Down = 0;
+    TH1D* ZbosonWeight_EW3Up = 0;
+    TH1D* ZbosonWeight_EW3Down = 0;
+    TH1D* ZbosonWeight_MixedUp = 0;
+    TH1D* ZbosonWeight_MixedDown = 0;
+    // flag if the file and the histograms were read properly
+    bool Winitialized = false;
+    bool Zinitialized = false;
+};
+
+BosonHelper::BosonHelper(TString path_to_sf_file_W, TString path_to_sf_file_Z)
+{
+  // just the constructor which loads a root file containing the histograms with the scale factors using the LoadFile function
+  LoadWFile(path_to_sf_file_W);
+  LoadZFile(path_to_sf_file_Z);
+}
+
+void BosonHelper::LoadWFile(TString path_to_sf_file_)
+{
+  // this function loads the file given by a string and initializes the 2 needed histograms if the file was loaded correctly
+  path_to_sf_file = path_to_sf_file_;
+  if(path_to_sf_file!="")
+  {
+    scalefactor_fileW = TFile::Open(path_to_sf_file);
+  }
+  if(scalefactor_fileW)
+  {
+    WbosonWeight_nominal =   (TH1D*)scalefactor_fileW->Get("evj_NNLO_NLO_nnn_nnn_n");
+    WbosonWeight_QCD1Up =    (TH1D*)scalefactor_fileW->Get("evj_NNLO_NLO_unn_nnn_n");
+    WbosonWeight_QCD1Down =  (TH1D*)scalefactor_fileW->Get("evj_NNLO_NLO_dnn_nnn_n");
+    WbosonWeight_QCD2Up =    (TH1D*)scalefactor_fileW->Get("evj_NNLO_NLO_nun_nnn_n");
+    WbosonWeight_QCD2Down =  (TH1D*)scalefactor_fileW->Get("evj_NNLO_NLO_ndn_nnn_n");
+    WbosonWeight_QCD3Up =    (TH1D*)scalefactor_fileW->Get("evj_NNLO_NLO_nnu_nnn_n");
+    WbosonWeight_QCD3Down =  (TH1D*)scalefactor_fileW->Get("evj_NNLO_NLO_nnd_nnn_n");
+    WbosonWeight_EW1Up =     (TH1D*)scalefactor_fileW->Get("evj_NNLO_NLO_nnn_unn_n");
+    WbosonWeight_EW1Down =   (TH1D*)scalefactor_fileW->Get("evj_NNLO_NLO_nnn_dnn_n");
+    WbosonWeight_EW2Up =     (TH1D*)scalefactor_fileW->Get("evj_NNLO_NLO_nnn_nun_n");
+    WbosonWeight_EW2Down =   (TH1D*)scalefactor_fileW->Get("evj_NNLO_NLO_nnn_ndn_n");
+    WbosonWeight_EW3Up =     (TH1D*)scalefactor_fileW->Get("evj_NNLO_NLO_nnn_nnu_n");
+    WbosonWeight_EW3Down =   (TH1D*)scalefactor_fileW->Get("evj_NNLO_NLO_nnn_nnd_n");
+    WbosonWeight_MixedUp =   (TH1D*)scalefactor_fileW->Get("evj_NNLO_NLO_nnn_nnn_u");
+    WbosonWeight_MixedDown = (TH1D*)scalefactor_fileW->Get("evj_NNLO_NLO_nnn_nnn_d");
+
+    Winitialized = true;
+  }
+}
+
+void BosonHelper::LoadZFile(TString path_to_sf_file_)
+{
+  // this function loads the file given by a string and initializes the 2 needed histograms if the file was loaded correctly
+  path_to_sf_file = path_to_sf_file_;
+  if(path_to_sf_file!="")
+  {
+    scalefactor_fileZ = TFile::Open(path_to_sf_file);
+  }
+  if(scalefactor_fileZ)
+  {
+    ZbosonWeight_nominal =   (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnn_nnn_n");
+    ZbosonWeight_QCD1Up =    (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_unn_nnn_n");
+    ZbosonWeight_QCD1Down =  (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_dnn_nnn_n");
+    ZbosonWeight_QCD2Up =    (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nun_nnn_n");
+    ZbosonWeight_QCD2Down =  (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_ndn_nnn_n");
+    ZbosonWeight_QCD3Up =    (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnu_nnn_n");
+    ZbosonWeight_QCD3Down =  (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnd_nnn_n");
+    ZbosonWeight_EW1Up =     (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnn_unn_n");
+    ZbosonWeight_EW1Down =   (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnn_dnn_n");
+    ZbosonWeight_EW2Up =     (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnn_nun_n");
+    ZbosonWeight_EW2Down =   (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnn_ndn_n");
+    ZbosonWeight_EW3Up =     (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnn_nnu_n");
+    ZbosonWeight_EW3Down =   (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnn_nnd_n");
+    ZbosonWeight_MixedUp =   (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnn_nnn_u");
+    ZbosonWeight_MixedDown = (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnn_nnn_d");
+    Zinitialized = true;
+  }
+}
+
+void BosonHelper::Reset()
+{
+  // resets all member data
+  scalefactor_fileW = 0;
+  scalefactor_fileZ = 0;
+  path_to_sf_file = "";
+  WbosonWeight_nominal = 0;
+  WbosonWeight_QCD1Up = 0;
+  WbosonWeight_QCD1Down = 0;
+  WbosonWeight_QCD2Up = 0;
+  WbosonWeight_QCD2Down = 0;
+  WbosonWeight_QCD3Up = 0;
+  WbosonWeight_QCD3Down = 0;
+  WbosonWeight_EW1Up = 0;
+  WbosonWeight_EW1Down = 0;
+  WbosonWeight_EW2Up = 0;
+  WbosonWeight_EW2Down = 0;
+  WbosonWeight_EW3Up = 0;
+  WbosonWeight_EW3Down = 0;
+  WbosonWeight_MixedUp = 0;
+  WbosonWeight_MixedDown = 0;
+
+  ZbosonWeight_nominal = 0;
+  ZbosonWeight_QCD1Up = 0;
+  ZbosonWeight_QCD1Down = 0;
+  ZbosonWeight_QCD2Up = 0;
+  ZbosonWeight_QCD2Down = 0;
+  ZbosonWeight_QCD3Up = 0;
+  ZbosonWeight_QCD3Down = 0;
+  ZbosonWeight_EW1Up = 0;
+  ZbosonWeight_EW1Down = 0;
+  ZbosonWeight_EW2Up = 0;
+  ZbosonWeight_EW2Down = 0;
+  ZbosonWeight_EW3Up = 0;
+  ZbosonWeight_EW3Down = 0;
+  ZbosonWeight_MixedUp = 0;
+  ZbosonWeight_MixedDown = 0;
+  Winitialized = false;
+  Zinitialized = false;
+}
+
+double BosonHelper::GetScaleFactorW(float W_Pt, string label)
+{
+  // this function gets the scale factor for a event dependent on the Pt of the W Boson
+  if(!Winitialized) return 0.;
+  int bin = -1;
+  double sf = 0.;
+  if (label == "nominal"){
+    bin = WbosonWeight_nominal->GetBin(W_Pt);
+    sf = WbosonWeight_nominal->GetBinContent(bin);
+  }
+  else if (label == "QCD1Up"){
+    bin = WbosonWeight_QCD1Up->GetBin(W_Pt);
+    sf = WbosonWeight_QCD1Up->GetBinContent(bin);  
+  }
+  else if (label == "QCD1Down"){
+    bin = WbosonWeight_QCD1Down->GetBin(W_Pt);
+    sf = WbosonWeight_QCD1Down->GetBinContent(bin);  
+  }
+  else if (label == "QCD2Up"){
+    bin = WbosonWeight_QCD2Up->GetBin(W_Pt);
+    sf = WbosonWeight_QCD2Up->GetBinContent(bin);  
+  }
+  else if (label == "QCD2Down"){
+    bin = WbosonWeight_QCD2Down->GetBin(W_Pt);
+    sf = WbosonWeight_QCD2Down->GetBinContent(bin);  
+  }
+  else if (label == "QCD3Up"){
+    bin = WbosonWeight_QCD1Up->GetBin(W_Pt);
+    sf = WbosonWeight_QCD1Up->GetBinContent(bin);  
+  }
+  else if (label == "QCD3Down"){
+    bin = WbosonWeight_QCD3Down->GetBin(W_Pt);
+    sf = WbosonWeight_QCD3Down->GetBinContent(bin);  
+  }
+
+  else if (label == "EW1Up"){
+    bin = WbosonWeight_EW1Up->GetBin(W_Pt);
+    sf = WbosonWeight_EW1Up->GetBinContent(bin);  
+  }
+  else if (label == "EW1Down"){
+    bin = WbosonWeight_EW1Down->GetBin(W_Pt);
+    sf = WbosonWeight_EW1Down->GetBinContent(bin);  
+  }
+  else if (label == "EW2Up"){
+    bin = WbosonWeight_EW2Up->GetBin(W_Pt);
+    sf = WbosonWeight_EW2Up->GetBinContent(bin);  
+  }
+  else if (label == "EW2Down"){
+    bin = WbosonWeight_EW2Down->GetBin(W_Pt);
+    sf = WbosonWeight_EW2Down->GetBinContent(bin);  
+  }
+  else if (label == "EW3Up"){
+    bin = WbosonWeight_EW3Up->GetBin(W_Pt);
+    sf = WbosonWeight_EW3Up->GetBinContent(bin);  
+  }
+  else if (label == "EW3Down"){
+    bin = WbosonWeight_EW3Down->GetBin(W_Pt);
+    sf = WbosonWeight_EW3Down->GetBinContent(bin);  
+  }
+  else if (label == "MixedUp"){
+    bin = WbosonWeight_MixedUp->GetBin(W_Pt);
+    sf = WbosonWeight_MixedUp->GetBinContent(bin);  
+  }
+  else if (label == "MixedDown"){
+    bin = WbosonWeight_MixedUp->GetBin(W_Pt);
+    sf = WbosonWeight_MixedUp->GetBinContent(bin);  
+  }
+  return sf;
+}
+
+double BosonHelper::GetScaleFactorZ(float Z_Pt, string label)
+{
+  // this function gets the scale factor for a event dependent on the Pt of the Z Boson
+  if(!Zinitialized) return 0.;
+  int bin = -1;
+  double sf = 0.;
+  if (label == "nominal"){
+    bin = ZbosonWeight_nominal->GetBin(Z_Pt);
+    sf = ZbosonWeight_nominal->GetBinContent(bin);
+  }
+  else if (label == "QCD1Up"){
+    bin = ZbosonWeight_QCD1Up->GetBin(Z_Pt);
+    sf = ZbosonWeight_QCD1Up->GetBinContent(bin);  
+  }
+  else if (label == "QCD1Down"){
+    bin = ZbosonWeight_QCD1Down->GetBin(Z_Pt);
+    sf = ZbosonWeight_QCD1Down->GetBinContent(bin);  
+  }
+  else if (label == "QCD2Up"){
+    bin = ZbosonWeight_QCD2Up->GetBin(Z_Pt);
+    sf = ZbosonWeight_QCD2Up->GetBinContent(bin);  
+  }
+  else if (label == "QCD2Down"){
+    bin = ZbosonWeight_QCD2Down->GetBin(Z_Pt);
+    sf = ZbosonWeight_QCD2Down->GetBinContent(bin);  
+  }
+  else if (label == "QCD3Up"){
+    bin = ZbosonWeight_QCD1Up->GetBin(Z_Pt);
+    sf = ZbosonWeight_QCD1Up->GetBinContent(bin);  
+  }
+  else if (label == "QCD3Down"){
+    bin = ZbosonWeight_QCD3Down->GetBin(Z_Pt);
+    sf = ZbosonWeight_QCD3Down->GetBinContent(bin);  
+  }
+
+  else if (label == "EW1Up"){
+    bin = ZbosonWeight_EW1Up->GetBin(Z_Pt);
+    sf = ZbosonWeight_EW1Up->GetBinContent(bin);  
+  }
+  else if (label == "EW1Down"){
+    bin = ZbosonWeight_EW1Down->GetBin(Z_Pt);
+    sf = ZbosonWeight_EW1Down->GetBinContent(bin);  
+  }
+  else if (label == "EW2Up"){
+    bin = ZbosonWeight_EW2Up->GetBin(Z_Pt);
+    sf = ZbosonWeight_EW2Up->GetBinContent(bin);  
+  }
+  else if (label == "EW2Down"){
+    bin = ZbosonWeight_EW2Down->GetBin(Z_Pt);
+    sf = ZbosonWeight_EW2Down->GetBinContent(bin);  
+  }
+  else if (label == "EW3Up"){
+    bin = ZbosonWeight_EW3Up->GetBin(Z_Pt);
+    sf = ZbosonWeight_EW3Up->GetBinContent(bin);  
+  }
+  else if (label == "EW3Down"){
+    bin = ZbosonWeight_EW3Down->GetBin(Z_Pt);
+    sf = ZbosonWeight_EW3Down->GetBinContent(bin);  
+  }
+  else if (label == "MixedUp"){
+    bin = ZbosonWeight_MixedUp->GetBin(Z_Pt);
+    sf = ZbosonWeight_MixedUp->GetBinContent(bin);  
+  }
+  else if (label == "MixedDown"){
+    bin = ZbosonWeight_MixedUp->GetBin(Z_Pt);
+    sf = ZbosonWeight_MixedUp->GetBinContent(bin);  
+  }
+  return sf;
+}
+
+
 
 // QCD Helper to retrieve scale factor for QCD Estimation with iso inverted ntuples
 
@@ -1497,6 +1803,12 @@ void plot(){
   // create vector of systematics
   std::vector<Systematics::Type> v_SystTypes = Systematics::getTypeVector();
   //for(auto itsyst : v_SystTypes){std::cout<< " Know :" << itsyst << std::endl;}
+  char currentdir[1024];
+  getcwd(currentdir, sizeof(currentdir));
+  string workingdir(currentdir);
+
+  TString WBoson_file = workingdir + "/../../TheoryXS_evj.root";
+  TString ZBoson_file = workingdir + "/../../TheoryXS_vvj.root";
 
   std::string csvHFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/factorized_jes/csv_rwt_fit_hf_v2_final_2017_6_7_all.root";
   std::string csvLFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/factorized_jes/csv_rwt_fit_lf_v2_final_2017_6_7_all.root";
@@ -1505,6 +1817,7 @@ void plot(){
   CSVHelper* internalCSVHelper= new CSVHelper(csvHFfile,csvLFfile, 5,4,3,v_SystTypes);
   LeptonSFHelper* internalLeptonSFHelper= new LeptonSFHelper();
   QCDHelper* internalQCDHelper = new QCDHelper(qcd_file);
+  BosonHelper* internalBosonHelper = new BosonHelper(WBoson_file, ZBoson_file);
 
   // open files
   TChain* chain = new TChain("MVATree");
@@ -1530,10 +1843,14 @@ void plot(){
   int DoWeights=1;
   int electron_data=0;
   int muon_data=0;
+  int DoWbosonReweighting = 0;
+  int DoZbosonReweighting = 0;
 
   //initialize Trigger Helper
 
-  if(processname=="MET" || processname=="data_obs"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
+  if(processname=="MET" || processname=="data_obs"){DoWeights=0; std::cout<<"is data, dont use nominal weights"<<std::endl;}
+  if(processname=="w_lnu_jets"){DoWbosonReweighting=1; std::cout<<"is W Sample -> apply Reweighting"<<std::endl;}
+  if(processname=="z_nunu_jets"){DoZbosonReweighting=1; std::cout<<"is Z Sample -> apply Reweighting"<<std::endl;}
 
 
 
@@ -2097,7 +2414,39 @@ def startLoop():
   float internalHDAMPweightdown = 0.0;
   float internalUEweightup = 0.0;
   float internalUEweightdown = 0.0;
-  
+
+  float internalWbosonWeight_nominal = 1.0;
+  float internalWbosonWeight_QCD1Up = 1.0;
+  float internalWbosonWeight_QCD1Down = 1.0;
+  float internalWbosonWeight_QCD2Up = 1.0;
+  float internalWbosonWeight_QCD2Down = 1.0;
+  float internalWbosonWeight_QCD3Up = 1.0;
+  float internalWbosonWeight_QCD3Down = 1.0;
+  float internalWbosonWeight_EW1Up = 1.0;
+  float internalWbosonWeight_EW1Down = 1.0;
+  float internalWbosonWeight_EW2Up = 1.0;
+  float internalWbosonWeight_EW2Down = 1.0;
+  float internalWbosonWeight_EW3Up = 1.0;
+  float internalWbosonWeight_EW3Down = 1.0;
+  float internalWbosonWeight_MixedUp = 1.0;
+  float internalWbosonWeight_MixedDown = 1.0;
+
+  float internalZbosonWeight_nominal = 1.0;
+  float internalZbosonWeight_QCD1Up = 1.0;
+  float internalZbosonWeight_QCD1Down = 1.0;
+  float internalZbosonWeight_QCD2Up = 1.0;
+  float internalZbosonWeight_QCD2Down = 1.0;
+  float internalZbosonWeight_QCD3Up = 1.0;
+  float internalZbosonWeight_QCD3Down = 1.0;
+  float internalZbosonWeight_EW1Up = 1.0;
+  float internalZbosonWeight_EW1Down = 1.0;
+  float internalZbosonWeight_EW2Up = 1.0;
+  float internalZbosonWeight_EW2Down = 1.0;
+  float internalZbosonWeight_EW3Up = 1.0;
+  float internalZbosonWeight_EW3Down = 1.0;
+  float internalZbosonWeight_MixedUp = 1.0;
+  float internalZbosonWeight_MixedDown = 1.0;
+
   double tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF;
   
   internalCSVweight=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,internalSystType,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF);
@@ -2125,12 +2474,49 @@ def startLoop():
   internalQCDweightup=internalQCDHelper->GetScaleFactorErrorUp(N_Jets,N_BTagsM,N_TightElectrons,N_TightMuons);
   internalQCDweightdown=internalQCDHelper->GetScaleFactorErrorDown(N_Jets,N_BTagsM,N_TightElectrons,N_TightMuons);
   
+  internalWbosonWeight_nominal = internalBosonHelper->GetScaleFactorW(W_Pt, "nominal");
+  internalWbosonWeight_QCD1Up = internalBosonHelper->GetScaleFactorW(W_Pt, "QCD1Up"); 
+  internalWbosonWeight_QCD1Down = internalBosonHelper->GetScaleFactorW(W_Pt, "QCD1Down");
+  internalWbosonWeight_QCD2Up = internalBosonHelper->GetScaleFactorW(W_Pt, "QCD2Up"); 
+  internalWbosonWeight_QCD2Down = internalBosonHelper->GetScaleFactorW(W_Pt, "QCD2Down");
+  internalWbosonWeight_QCD3Up = internalBosonHelper->GetScaleFactorW(W_Pt, "QCD3Up");
+  internalWbosonWeight_QCD3Down = internalBosonHelper->GetScaleFactorW(W_Pt, "QCD3Down");
+
+  internalWbosonWeight_EW1Up = internalBosonHelper->GetScaleFactorW(W_Pt, "EW1Up");
+  internalWbosonWeight_EW1Down = internalBosonHelper->GetScaleFactorW(W_Pt, "EW1Down");
+  internalWbosonWeight_EW2Up = internalBosonHelper->GetScaleFactorW(W_Pt, "EW2Up");
+  internalWbosonWeight_EW2Down = internalBosonHelper->GetScaleFactorW(W_Pt, "EW2Down");
+  internalWbosonWeight_EW3Up = internalBosonHelper->GetScaleFactorW(W_Pt, "EW3Up"); 
+  internalWbosonWeight_EW3Down = internalBosonHelper->GetScaleFactorW(W_Pt, "EW3Down");
+
+  internalWbosonWeight_MixedUp = internalBosonHelper->GetScaleFactorW(W_Pt, "MixedUp");
+  internalWbosonWeight_MixedDown = internalBosonHelper->GetScaleFactorW(W_Pt, "MixedDown");
+
+
+  internalZbosonWeight_nominal = internalBosonHelper->GetScaleFactorZ(Z_Pt, "nominal");
+  internalZbosonWeight_QCD1Up = internalBosonHelper->GetScaleFactorZ(Z_Pt, "QCD1Up"); 
+  internalZbosonWeight_QCD1Down = internalBosonHelper->GetScaleFactorZ(Z_Pt, "QCD1Down");
+  internalZbosonWeight_QCD2Up = internalBosonHelper->GetScaleFactorZ(Z_Pt, "QCD2Up");
+  internalZbosonWeight_QCD2Down = internalBosonHelper->GetScaleFactorZ(Z_Pt, "QCD2Down");
+  internalZbosonWeight_QCD3Up = internalBosonHelper->GetScaleFactorZ(Z_Pt, "QCD3Up"); 
+  internalZbosonWeight_QCD3Down = internalBosonHelper->GetScaleFactorZ(Z_Pt, "QCD3Down");
+
+  internalZbosonWeight_EW1Up = internalBosonHelper->GetScaleFactorZ(Z_Pt, "EW1Up"); 
+  internalZbosonWeight_EW1Down = internalBosonHelper->GetScaleFactorZ(Z_Pt, "EW1Down");
+  internalZbosonWeight_EW2Up = internalBosonHelper->GetScaleFactorZ(Z_Pt, "EW2Up"); 
+  internalZbosonWeight_EW2Down = internalBosonHelper->GetScaleFactorZ(Z_Pt, "EW2Down");
+  internalZbosonWeight_EW3Up = internalBosonHelper->GetScaleFactorZ(Z_Pt, "EW3Up"); 
+  internalZbosonWeight_EW3Down = internalBosonHelper->GetScaleFactorZ(Z_Pt, "EW3Down");
+
+  internalZbosonWeight_MixedUp = internalBosonHelper->GetScaleFactorZ(Z_Pt, "MixedUp"); 
+  internalZbosonWeight_MixedDown = internalBosonHelper->GetScaleFactorZ(Z_Pt, "MixedDown");
+
   
   
   totalTimeCalculateSFs+=timerCalculateSFs->RealTime();
 
  
-  // print stuff for synchronizing
+  // print stuff for synchroniWing
   bool printSyncStuff=0;
   //
   if(printSyncStuff){
@@ -2300,7 +2686,7 @@ def compileProgram(scriptname,usesDataBases,addCodeInterfaces):
     #TODO update the dataBases code
   # improve ram usage and reduce garbage of g++ compiler
   improveRAM = '--param ggc-min-expand=100 --param ggc-min-heapsize=2400000'
-  # if python cflags are used -O3 optimization is set, resulting in long compilation times, set it back to default -O0
+  # if python cflags are used -O3 optimiWation is set, resulting in long compilation times, set it back to default -O0
   resetCompilerOpt = '-O0'
   cmd= ['g++']+[improveRAM]+out[:-1].replace("\n"," ").split(' ')+dnnfiles+lhapdf+['-lTMVA']+memDBccfiles+[resetCompilerOpt]+[scriptname+'.cc','-o',scriptname]
   print cmd
@@ -2336,7 +2722,27 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 	    "electron_data","muon_data",
 	    "internalPDFweightUp","internalPDFweightDown","internalPDFweight",
 	    "internalISRweightdown","internalISRweightup","internalFSRweightdown","internalFSRweightup",
-        "internalHDAMPweightdown","internalHDAMPweightup","internalUEweightdown","internalUEweightup"
+      "internalHDAMPweightdown","internalHDAMPweightup","internalUEweightdown","internalUEweightup",
+
+      "internalWbosonWeight_nominal",
+      "internalWbosonWeight_QCD1Up","internalWbosonWeight_QCD1Down",
+      "internalWbosonWeight_QCD2Up","internalWbosonWeight_QCD2Down",
+      "internalWbosonWeight_QCD3Up","internalWbosonWeight_QCD3Down",
+      "internalWbosonWeight_EW1Up","internalWbosonWeight_EW1Down",
+      "internalWbosonWeight_EW2Up","internalWbosonWeight_EW2Down",
+      "internalWbosonWeight_EW3Up","internalWbosonWeight_EW3Down",
+      "internalWbosonWeight_MixedUp","internalWbosonWeight_MixedDown",
+
+      "internalWbosonWeight_nominal",
+      "internalWbosonWeight_QCD1Up","internalWbosonWeight_QCD1Down",
+      "internalWbosonWeight_QCD2Up","internalWbosonWeight_QCD2Down",
+      "internalWbosonWeight_QCD3Up","internalWbosonWeight_QCD3Down",
+      "internalWbosonWeight_EW1Up","internalWbosonWeight_EW1Down",
+      "internalWbosonWeight_EW2Up","internalWbosonWeight_EW2Down",
+      "internalWbosonWeight_EW3Up","internalWbosonWeight_EW3Down",
+      "internalWbosonWeight_MixedUp","internalWbosonWeight_MixedDown",
+      "DoWbosonReweighting",
+      "DoZbosonReweighting",
 ]
 
   #csv_file=os.getcwd()+"/rate_factors_onlyinternal_powhegpythia.csv"
@@ -2420,7 +2826,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   script=""
   script+=getHead(dataBases,addCodeInterfaces)
   script+=DeclareMEPDFNormFactors(csv_file)
-  script+=AddMEandPDFNormalizationsMap(csv_file)
+  script+=AddMEandPDFNormaliWationsMap(csv_file)
   
   for db in dataBases:
     script+=InitDataBase(db)
@@ -2708,7 +3114,7 @@ def createScript(scriptname,programpath,processname,filenames,outfilename,maxeve
   script+='export SUFFIX="'+suffix+'"\n'
   script+='export EVENTFILTERFILE="'+str(filterFile)+'"\n'  
   script+=programpath+'\n'
-  #DANGERZONE
+  #DANGERWONE
   script+='python '+programpath+'_rename.py\n'
   f=open(scriptname,'w')
   f.write(script)
@@ -2950,7 +3356,7 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   # create run scripts
   print 'creating run scripts'
   scripts,outputs,nentries,samplewiseoutputs=get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,programpath,cmsswpath,treeInformationJsonFile,cirun)
-  #DANGERZONE Submit jobs
+  #DANGERWONE Submit jobs
   if StopAfterCompileStep==True:
     exit(0)
   helperSubmitNAFJobs(scripts,outputs,nentries)
@@ -3232,7 +3638,7 @@ renameHistosParallel(filename,systematics,False)
   scrfile.close()
     
     
-def ReadMEandPDFNormalizations(csv_file):
+def ReadMEandPDFNormaliWations(csv_file):
 	mydict={}
 	with open(csv_file) as csvfile:
 		reader = csv.DictReader(csvfile)
@@ -3244,15 +3650,15 @@ def ReadMEandPDFNormalizations(csv_file):
 			mydict[(sample_name_modified,initial_weight_name)]=factor
 	return mydict
 	
-def AddMEandPDFNormalizationsMap(csv_file):
-	mydict=ReadMEandPDFNormalizations(csv_file)
+def AddMEandPDFNormaliWationsMap(csv_file):
+	mydict=ReadMEandPDFNormaliWations(csv_file)
 	code='std::map<TString,float> MEPDF_Norm_Map;\n'
 	for key in mydict:
 		code+='MEPDF_Norm_Map["'+key[0]+'_'+key[1]+'"]='+mydict[key]+';\n'
 	return code
 	
 def GetMEPDFadditionalVariablesList(csv_file):
-	mydict=ReadMEandPDFNormalizations(csv_file)
+	mydict=ReadMEandPDFNormaliWations(csv_file)
 	seen = set()
 	weight_vars_list=[]
 	for key in mydict:
