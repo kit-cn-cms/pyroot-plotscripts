@@ -7,10 +7,9 @@ import time
 import datetime
 import stat
 from subprocess import call
-filepath = os.path.dirname(__file__)
-sys.path.append(filepath+"/../")
 from nafSubmit import *
 import glob
+utilpath = os.path.dirname(os.path.realpath(__file__))
 
 def haddFiles(outname="",infiles=[],totalNumberOfHistosNeedsToRemainTheSame=False):
   print 'hadd from filelist'
@@ -123,9 +122,9 @@ def renameHistos(infname,outfname,sysnames,checkBins=False,prune=True,Epsilon=0.
 import ROOT
 import sys
 import os
-sys.path.append('pyroot-plotscripts-base')
-sys.path.append('pyroot-plotscripts-base/limittools')
-sys.path.append('limittools')
+"""
+    script+="sys.path.append('"+utilpath+"')\n"
+    script+="""
 import limittools
 
 infname=sys.argv[1]
