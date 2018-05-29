@@ -3,7 +3,7 @@ from array import array
 import ROOT
 import sys
 import json
-
+filedir = os.path.dirname(__file__)
 sys.path.append('../pyroot-plotscripts-base')
 import CMS_lumi
 
