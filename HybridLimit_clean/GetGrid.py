@@ -4,8 +4,8 @@ from subprocess import call
 import time as timer
 import sys
 import os
-filepath = os.path.dirname(__file__)
-sys.path.append(filepath+"/../../")
+filepath = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(filepath+"/../util")
 import nafSubmit
 datacard= sys.argv[1]
 currentPath = sys.path[0]
