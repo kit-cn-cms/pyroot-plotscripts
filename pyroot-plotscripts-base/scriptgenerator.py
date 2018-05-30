@@ -1807,8 +1807,8 @@ void plot(){
   getcwd(currentdir, sizeof(currentdir));
   string workingdir(currentdir);
 
-  TString WBoson_file = workingdir + "/../../TheoryXS_evj.root";
-  TString ZBoson_file = workingdir + "/../../TheoryXS_vvj.root";
+  TString WBoson_file = workingdir + "/TheoryXS_evj.root";
+  TString ZBoson_file = workingdir + "/TheoryXS_vvj.root";
 
   std::string csvHFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/factorized_jes/csv_rwt_fit_hf_v2_final_2017_6_7_all.root";
   std::string csvLFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/factorized_jes/csv_rwt_fit_lf_v2_final_2017_6_7_all.root";
