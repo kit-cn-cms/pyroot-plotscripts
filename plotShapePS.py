@@ -28,10 +28,10 @@ for c in acats:
 print "ok"
 #systs=['CMS_ttHbb_FSR', 'CMS_ttHbb_ISR', 'CMS_ttHbb_HDAMP', 'CMS_ttHbb_UE','CMS_ttHbbFROMTREES_FSR', 'CMS_ttHbbFROMTREES_ISR', 'CMS_ttHbbFROMTREES_HDAMP', 'CMS_ttHbbFROMTREES_UE']
 #systs=['CMS_ttHbb_PDF', 'CMS_ttHbb_scaleMuF', 'CMS_ttHbb_scaleMuR']
-systs=['CMS_ttHbb_PU']
+systs=['CMS_ttHbb_PU','CMS_ttHbb_scaleMuF', 'CMS_ttHbb_scaleMuR','CMS_scaleFlavorQCD_j']
 
 #procs="ttH_hbb ttH_hcc ttH_hww ttH_hzz ttH_htt ttH_hgg ttH_hgluglu ttH_hzg ttbarOther ttbarPlusB ttbarPlus2B ttbarPlusBBbar ttbarPlusCCbar singlet wjets zjets ttbarW ttbarZ diboson".split(" ")
-procs="ttH ttbarOther ttbarPlusB ttbarPlus2B ttbarPlusBBbar ttbarPlusCCbar ttbarIncl".split(" ")
+procs="ttH ttbarOther ttbarPlusB ttbarPlus2B ttbarPlusBBbar ttbarPlusCCbar ttbarIncl singlet wjets zjets diboson ttbarZ ttbarW".split(" ")
 print procs
 
 inf=ROOT.TFile(infname,"READ")
