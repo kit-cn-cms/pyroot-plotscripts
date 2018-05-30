@@ -25,16 +25,16 @@ def writeSubmitCode(script, logdir, hold = False, isArray = False, nScripts = 0)
   submitCode+="arguments = " + script + "\n"
   submitCode+="initialdir = "+os.getcwd()+"\n"
   submitCode+="notification = Never\n"
-  submitCode+="priority = 0\n"
-  submitCode+="request_memory = 5800M\n"
-  #submitCode+="request_disk = 5800M\n"
+  #submitCode+="priority = 0\n"
+  submitCode+="RequestMemory = 1000\n"
+  submitCode+="RequestDisk = 100000\n"
   if hold:
     submitCode+="hold = True\n"
 
   if isArray:
     submitCode+="error = "+logdir+"/"+submitScript+".$(Cluster)_$(ProcId).err\n"
     submitCode+="output = "+logdir+"/"+submitScript+".$(Cluster)_$(ProcId).out\n"
-    #submitCode+="log = "+logdir+"/"+submitScript+".$(Cluster)_$(ProcId).log\n"
+    submitCode+="log = "+logdir+"/"+submitScript+".$(Cluster)_$(ProcId).log\n"
     submitCode+="Queue Environment From (\n"
     for taskID in range(nScripts):
       submitCode+="\"SGE_TASK_ID="+str(taskID)+"\"\n"
@@ -42,7 +42,7 @@ def writeSubmitCode(script, logdir, hold = False, isArray = False, nScripts = 0)
   else:
     submitCode+="error = "+logdir+"/"+submitScript+".$(Cluster).err\n"
     submitCode+="output = "+logdir+"/"+submitScript+".$(Cluster).out\n"
-    #submitCode+="log = "+logdir+"/"+submitScript+".$(Cluster).log\n"
+    submitCode+="log = "+logdir+"/"+submitScript+".$(Cluster).log\n"
     submitCode+="queue"
 
   submitFile = open(submitPath, "w")
