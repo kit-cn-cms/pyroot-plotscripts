@@ -27,7 +27,7 @@ from plotconfig_v14 import *
 def main(argv):
 
     # Create analysis object with output name
-    name='limits_All_v28'
+    name='limits_All_v30'
     anaRootPath=os.getcwd()+'/workdir/'+name+'/output_limitInput.root'
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/latest/ttbb-cutbased-analysis_limitInput.root')
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/Sep17/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
@@ -157,7 +157,8 @@ def main(argv):
                   ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3",""),
                   ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4",""),
                   ]
-    bdtcuts=[-0.2,-0.2,0.2,0.22,0.17,0.22,0.05,0.17,0.17]
+    #bdtcuts=[-0.2,-0.2,0.2,0.22,0.17,0.22,0.05,0.17,0.17]
+    bdtcuts=[0.22,0.22,0.17,0.17]
     categorienames_JT2D=[]
     for cat,bdt in zip(unsplitcategorienames_JT2D,bdtcuts):
       if cat[1] in ["ljets_jge6_tge4","ljets_j5_tge4","ljets_j4_t4","ljets_jge6_t3"]:
@@ -421,7 +422,7 @@ def main(argv):
         else:
             outputpath=analysis.rootFilePath[:-16]+'.root'
             
-            
+    print outputpath            
     # make datacards
     if (analysis.doDrawParallel==False or analysis.plotNumber == None) and analysis.makeDataCards == True :
         #TODO
