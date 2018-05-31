@@ -29,7 +29,8 @@ additionalvariables=[    "N_TightMuons","N_TightElectrons","Evt_Pt_PrimaryLepton
                          "Weight_CSV","Weight_CSVLFup","Weight_CSVLFdown","Weight_CSVHFup","Weight_CSVHFdown","Weight_CSVHFStats1up","Weight_CSVHFStats1down",
                          "Weight_CSVLFStats1up","Weight_CSVLFStats1down","Weight_CSVHFStats2up","Weight_CSVHFStats2down","Weight_CSVLFStats2up","Weight_CSVLFStats2down",
                          "Weight_CSVCErr1up","Weight_CSVCErr1down","Weight_CSVCErr2up","Weight_CSVCErr2down","Weight_pu69p2",
-                         "Evt_E_PrimaryLepton","Evt_Phi_PrimaryLepton","Evt_Eta_PrimaryLepton","Evt_M_PrimaryLepton","GenEvt_I_TTPlusCC","GenEvt_I_TTPlusBB","Weight_GenValue"
+                         "Evt_E_PrimaryLepton","Evt_Phi_PrimaryLepton","Evt_Eta_PrimaryLepton","Evt_M_PrimaryLepton","GenEvt_I_TTPlusCC","GenEvt_I_TTPlusBB","Weight_GenValue",
+                         "W_Pt", "Z_Pt"
                          ]
 additionalvariables+=GetMEPDFadditionalVariablesList("/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv")
 
@@ -55,6 +56,8 @@ plots_inclusive=[
         Plot(ROOT.TH1F(plotprefix+"_"+"Evt_Pt_MET_T1","#slash{E}_{T} type1",23,250.,1400.),"Evt_Pt_MET_T1",plotselection_inclusive,plotlabel_inclusive),
         Plot(ROOT.TH1F(plotprefix+"_"+"Z_Pt","Z p_{T}",20,0.,500.),"Z_Pt",plotselection_inclusive,plotlabel_inclusive),
         Plot(ROOT.TH1F(plotprefix+"_"+"W_Pt","W p_{T}",20,0.,500.),"W_Pt",plotselection_inclusive,plotlabel_inclusive),
+        Plot(ROOT.TH1F(plotprefix+"_"+"WbosonWeight","WbosonWeight",20,0.,2.),"internalWbosonWeight_nominal",plotselection_inclusive,plotlabel_inclusive),
+        Plot(ROOT.TH1F(plotprefix+"_"+"ZbosonWeight","ZbosonWeight",20,0.,2.),"internalZbosonWeight_nominal",plotselection_inclusive,plotlabel_inclusive)
     ]
 
 plotselection_MET300 = "(Evt_Pt_MET>300.)*(DeltaPhi_Jet_MET[0]>1.)"
@@ -78,6 +81,8 @@ plots_MET300=[
         Plot(ROOT.TH1F(plotprefix+"_"+"Evt_Pt_MET_T1","#slash{E}_{T} type1",23,250.,1400.),"Evt_Pt_MET_T1",plotselection_MET300,plotlabel_MET300),
         Plot(ROOT.TH1F(plotprefix+"_"+"Z_Pt","Z p_{T}",20,0.,500.),"Z_Pt",plotselection_MET300,plotlabel_MET300),
         Plot(ROOT.TH1F(plotprefix+"_"+"W_Pt","W p_{T}",20,0.,500.),"W_Pt",plotselection_MET300,plotlabel_MET300),
+        Plot(ROOT.TH1F(plotprefix+"_"+"WbosonWeight","WbosonWeight",20,0.,2.),"internalWbosonWeight_nominal",plotselection_MET300,plotlabel_MET300),
+        Plot(ROOT.TH1F(plotprefix+"_"+"ZbosonWeight","ZbosonWeight",20,0.,2.),"internalZbosonWeight_nominal",plotselection_MET300,plotlabel_MET300)
     ]
 
 plotselection_MET400 = "(Evt_Pt_MET>400.)*(DeltaPhi_Jet_MET[0]>1.)"
@@ -101,6 +106,8 @@ plots_MET400=[
         Plot(ROOT.TH1F(plotprefix+"_"+"Evt_Pt_MET_T1","#slash{E}_{T} type1",23,250.,1400.),"Evt_Pt_MET_T1",plotselection_MET400,plotlabel_MET400),
         Plot(ROOT.TH1F(plotprefix+"_"+"Z_Pt","Z p_{T}",20,0.,500.),"Z_Pt",plotselection_MET400,plotlabel_MET400),
         Plot(ROOT.TH1F(plotprefix+"_"+"W_Pt","W p_{T}",20,0.,500.),"W_Pt",plotselection_MET400,plotlabel_MET400),
+        Plot(ROOT.TH1F(plotprefix+"_"+"WbosonWeight","WbosonWeight",20,0.,2.),"internalWbosonWeight_nominal",plotselection_MET400,plotlabel_MET400),
+        Plot(ROOT.TH1F(plotprefix+"_"+"ZbosonWeight","ZbosonWeight",20,0.,2.),"internalZbosonWeight_nominal",plotselection_MET400,plotlabel_MET400)
     ]
 
 plotselection_MET500 = "(Evt_Pt_MET>500.)*(DeltaPhi_Jet_MET[0]>1.)"
@@ -124,6 +131,8 @@ plots_MET500=[
         Plot(ROOT.TH1F(plotprefix+"_"+"Evt_Pt_MET_T1","#slash{E}_{T} type1",23,250.,1400.),"Evt_Pt_MET_T1",plotselection_MET500,plotlabel_MET500),
         Plot(ROOT.TH1F(plotprefix+"_"+"Z_Pt","Z p_{T}",20,0.,500.),"Z_Pt",plotselection_MET500,plotlabel_MET500),
         Plot(ROOT.TH1F(plotprefix+"_"+"W_Pt","W p_{T}",20,0.,500.),"W_Pt",plotselection_MET500,plotlabel_MET500),
+        Plot(ROOT.TH1F(plotprefix+"_"+"WbosonWeight","WbosonWeight",20,0.,2.),"internalWbosonWeight_nominal",plotselection_MET500,plotlabel_MET500),
+        Plot(ROOT.TH1F(plotprefix+"_"+"ZbosonWeight","ZbosonWeight",20,0.,2.),"internalZbosonWeight_nominal",plotselection_MET500,plotlabel_MET500)
     ]
 
 plotselection_MET600 = "(Evt_Pt_MET>600.)*(DeltaPhi_Jet_MET[0]>1.)"
@@ -147,6 +156,8 @@ plots_MET600=[
         Plot(ROOT.TH1F(plotprefix+"_"+"Evt_Pt_MET_T1","#slash{E}_{T} type1",23,250.,1400.),"Evt_Pt_MET_T1",plotselection_MET600,plotlabel_MET600),
         Plot(ROOT.TH1F(plotprefix+"_"+"Z_Pt","Z p_{T}",20,0.,500.),"Z_Pt",plotselection_MET600,plotlabel_MET600),
         Plot(ROOT.TH1F(plotprefix+"_"+"W_Pt","W p_{T}",20,0.,500.),"W_Pt",plotselection_MET600,plotlabel_MET600),
+        Plot(ROOT.TH1F(plotprefix+"_"+"WbosonWeight","WbosonWeight",20,0.,2.),"internalWbosonWeight_nominal",plotselection_MET600,plotlabel_MET600),
+        Plot(ROOT.TH1F(plotprefix+"_"+"ZbosonWeight","ZbosonWeight",20,0.,2.),"internalZbosonWeight_nominal",plotselection_MET600,plotlabel_MET600)
     ]
 
 plots = plots_inclusive+plots_MET300+plots_MET400+plots_MET500+plots_MET600
