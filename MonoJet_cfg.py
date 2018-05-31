@@ -16,10 +16,9 @@ weightSystNames=["",
                  ]
 
 # common_BosonWeight="*internalWbosonWeight_nominal*(DoWbosonReweighting==1)+(DoWbosonReweighting==0)*1.0+*internalZbosonWeight_nominal*(DoZbosonReweighting==1)+(DoZbosonReweighting==0)*1.0"
-common_WBosonWeight="*internalWbosonWeight_nominal*(DoWbosonReweighting==1)+(DoWbosonReweighting==0)*1.0"
-common_ZBosonWeight="*internalZbosonWeight_nominal*(DoZbosonReweighting==1)+(DoZbosonReweighting==0)*1.0"
-common_weight= "1.0*Weight_GEN_nom*Weight_CSV*Weight_pu69p2"+common_WBosonWeight+common_ZBosonWeight
-
+common_WBosonWeight="(internalWbosonWeight_nominal*(DoWbosonReweighting==1)+(DoWbosonReweighting==0)*1.0)"
+common_ZBosonWeight="(internalZbosonWeight_nominal*(DoZbosonReweighting==1)+(DoZbosonReweighting==0)*1.0)"
+common_weight= "1.0*Weight_GEN_nom*Weight_CSV*Weight_pu69p2*("+common_WBosonWeight+"*"+common_ZBosonWeight+")"
 
 systWeights=[   "NomWeight:="+common_weight+"+(DoWeights==1)+(DoWeights==0)*1.0",
                 "dummyWeight_CSVLFup:="+common_weight+"*Weight_CSVLFup*(DoWeights==1)+(DoWeights==0)*1.0",
@@ -53,6 +52,7 @@ otherSystFileNames=[
                         "JESup","JESdown",
                         "JERup","JERdown"
     ]
+
 WBosonSystNames=[
        "_WbosonWeight_QCD1Up","_WbosonWeight_QCD1Down",
        "_WbosonWeight_QCD2Up","_WbosonWeight_QCD2Down",
@@ -109,7 +109,6 @@ ZBosonWeights=[
        "dummyWeight_Zboson_MixedUp:="+common_weight+"*internalZbosonWeight_MixedUp/internalZbosonWeight_nominal*(DoZbosonReweighting==1)+(DoZbosonReweighting==0)*1.0",
        "dummyWeight_Zboson_MixedDown:="+common_weight+"*internalZbosonWeight_MixedDown/internalZbosonWeight_nominal*(DoZbosonReweighting==1)+(DoZbosonReweighting==0)*1.0",
 ]
-
 MCWeight='35.91823'
 
 path_ntuples = "/nfs/dust/cms/user/mwassmer/DarkMatter/ntuples"

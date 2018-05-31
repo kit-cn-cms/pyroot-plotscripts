@@ -1476,66 +1476,66 @@ double BosonHelper::GetScaleFactorW(float W_Pt, string label)
   int bin = -1;
   double sf = 0.;
   if (label == "nominal"){
-    bin = WbosonWeight_nominal->GetBin(W_Pt);
+    bin = WbosonWeight_nominal->FindBin(W_Pt);
     sf = WbosonWeight_nominal->GetBinContent(bin);
   }
   else if (label == "QCD1Up"){
-    bin = WbosonWeight_QCD1Up->GetBin(W_Pt);
+    bin = WbosonWeight_QCD1Up->FindBin(W_Pt);
     sf = WbosonWeight_QCD1Up->GetBinContent(bin);  
   }
   else if (label == "QCD1Down"){
-    bin = WbosonWeight_QCD1Down->GetBin(W_Pt);
+    bin = WbosonWeight_QCD1Down->FindBin(W_Pt);
     sf = WbosonWeight_QCD1Down->GetBinContent(bin);  
   }
   else if (label == "QCD2Up"){
-    bin = WbosonWeight_QCD2Up->GetBin(W_Pt);
+    bin = WbosonWeight_QCD2Up->FindBin(W_Pt);
     sf = WbosonWeight_QCD2Up->GetBinContent(bin);  
   }
   else if (label == "QCD2Down"){
-    bin = WbosonWeight_QCD2Down->GetBin(W_Pt);
+    bin = WbosonWeight_QCD2Down->FindBin(W_Pt);
     sf = WbosonWeight_QCD2Down->GetBinContent(bin);  
   }
   else if (label == "QCD3Up"){
-    bin = WbosonWeight_QCD1Up->GetBin(W_Pt);
+    bin = WbosonWeight_QCD1Up->FindBin(W_Pt);
     sf = WbosonWeight_QCD1Up->GetBinContent(bin);  
   }
   else if (label == "QCD3Down"){
-    bin = WbosonWeight_QCD3Down->GetBin(W_Pt);
+    bin = WbosonWeight_QCD3Down->FindBin(W_Pt);
     sf = WbosonWeight_QCD3Down->GetBinContent(bin);  
   }
-
   else if (label == "EW1Up"){
-    bin = WbosonWeight_EW1Up->GetBin(W_Pt);
+    bin = WbosonWeight_EW1Up->FindBin(W_Pt);
     sf = WbosonWeight_EW1Up->GetBinContent(bin);  
   }
   else if (label == "EW1Down"){
-    bin = WbosonWeight_EW1Down->GetBin(W_Pt);
+    bin = WbosonWeight_EW1Down->FindBin(W_Pt);
     sf = WbosonWeight_EW1Down->GetBinContent(bin);  
   }
   else if (label == "EW2Up"){
-    bin = WbosonWeight_EW2Up->GetBin(W_Pt);
+    bin = WbosonWeight_EW2Up->FindBin(W_Pt);
     sf = WbosonWeight_EW2Up->GetBinContent(bin);  
   }
   else if (label == "EW2Down"){
-    bin = WbosonWeight_EW2Down->GetBin(W_Pt);
+    bin = WbosonWeight_EW2Down->FindBin(W_Pt);
     sf = WbosonWeight_EW2Down->GetBinContent(bin);  
   }
   else if (label == "EW3Up"){
-    bin = WbosonWeight_EW3Up->GetBin(W_Pt);
+    bin = WbosonWeight_EW3Up->FindBin(W_Pt);
     sf = WbosonWeight_EW3Up->GetBinContent(bin);  
   }
   else if (label == "EW3Down"){
-    bin = WbosonWeight_EW3Down->GetBin(W_Pt);
+    bin = WbosonWeight_EW3Down->FindBin(W_Pt);
     sf = WbosonWeight_EW3Down->GetBinContent(bin);  
   }
   else if (label == "MixedUp"){
-    bin = WbosonWeight_MixedUp->GetBin(W_Pt);
+    bin = WbosonWeight_MixedUp->FindBin(W_Pt);
     sf = WbosonWeight_MixedUp->GetBinContent(bin);  
   }
   else if (label == "MixedDown"){
-    bin = WbosonWeight_MixedUp->GetBin(W_Pt);
+    bin = WbosonWeight_MixedUp->FindBin(W_Pt);
     sf = WbosonWeight_MixedUp->GetBinContent(bin);  
   }
+  if(W_Pt<=30.) sf = 1.;
   return sf;
 }
 
@@ -1546,66 +1546,67 @@ double BosonHelper::GetScaleFactorZ(float Z_Pt, string label)
   int bin = -1;
   double sf = 0.;
   if (label == "nominal"){
-    bin = ZbosonWeight_nominal->GetBin(Z_Pt);
+    bin = ZbosonWeight_nominal->FindBin(Z_Pt);
     sf = ZbosonWeight_nominal->GetBinContent(bin);
   }
   else if (label == "QCD1Up"){
-    bin = ZbosonWeight_QCD1Up->GetBin(Z_Pt);
+    bin = ZbosonWeight_QCD1Up->FindBin(Z_Pt);
     sf = ZbosonWeight_QCD1Up->GetBinContent(bin);  
   }
   else if (label == "QCD1Down"){
-    bin = ZbosonWeight_QCD1Down->GetBin(Z_Pt);
+    bin = ZbosonWeight_QCD1Down->FindBin(Z_Pt);
     sf = ZbosonWeight_QCD1Down->GetBinContent(bin);  
   }
   else if (label == "QCD2Up"){
-    bin = ZbosonWeight_QCD2Up->GetBin(Z_Pt);
+    bin = ZbosonWeight_QCD2Up->FindBin(Z_Pt);
     sf = ZbosonWeight_QCD2Up->GetBinContent(bin);  
   }
   else if (label == "QCD2Down"){
-    bin = ZbosonWeight_QCD2Down->GetBin(Z_Pt);
+    bin = ZbosonWeight_QCD2Down->FindBin(Z_Pt);
     sf = ZbosonWeight_QCD2Down->GetBinContent(bin);  
   }
   else if (label == "QCD3Up"){
-    bin = ZbosonWeight_QCD1Up->GetBin(Z_Pt);
+    bin = ZbosonWeight_QCD1Up->FindBin(Z_Pt);
     sf = ZbosonWeight_QCD1Up->GetBinContent(bin);  
   }
   else if (label == "QCD3Down"){
-    bin = ZbosonWeight_QCD3Down->GetBin(Z_Pt);
+    bin = ZbosonWeight_QCD3Down->FindBin(Z_Pt);
     sf = ZbosonWeight_QCD3Down->GetBinContent(bin);  
   }
 
   else if (label == "EW1Up"){
-    bin = ZbosonWeight_EW1Up->GetBin(Z_Pt);
+    bin = ZbosonWeight_EW1Up->FindBin(Z_Pt);
     sf = ZbosonWeight_EW1Up->GetBinContent(bin);  
   }
   else if (label == "EW1Down"){
-    bin = ZbosonWeight_EW1Down->GetBin(Z_Pt);
+    bin = ZbosonWeight_EW1Down->FindBin(Z_Pt);
     sf = ZbosonWeight_EW1Down->GetBinContent(bin);  
   }
   else if (label == "EW2Up"){
-    bin = ZbosonWeight_EW2Up->GetBin(Z_Pt);
+    bin = ZbosonWeight_EW2Up->FindBin(Z_Pt);
     sf = ZbosonWeight_EW2Up->GetBinContent(bin);  
   }
   else if (label == "EW2Down"){
-    bin = ZbosonWeight_EW2Down->GetBin(Z_Pt);
+    bin = ZbosonWeight_EW2Down->FindBin(Z_Pt);
     sf = ZbosonWeight_EW2Down->GetBinContent(bin);  
   }
   else if (label == "EW3Up"){
-    bin = ZbosonWeight_EW3Up->GetBin(Z_Pt);
+    bin = ZbosonWeight_EW3Up->FindBin(Z_Pt);
     sf = ZbosonWeight_EW3Up->GetBinContent(bin);  
   }
   else if (label == "EW3Down"){
-    bin = ZbosonWeight_EW3Down->GetBin(Z_Pt);
+    bin = ZbosonWeight_EW3Down->FindBin(Z_Pt);
     sf = ZbosonWeight_EW3Down->GetBinContent(bin);  
   }
   else if (label == "MixedUp"){
-    bin = ZbosonWeight_MixedUp->GetBin(Z_Pt);
+    bin = ZbosonWeight_MixedUp->FindBin(Z_Pt);
     sf = ZbosonWeight_MixedUp->GetBinContent(bin);  
   }
   else if (label == "MixedDown"){
-    bin = ZbosonWeight_MixedUp->GetBin(Z_Pt);
+    bin = ZbosonWeight_MixedUp->FindBin(Z_Pt);
     sf = ZbosonWeight_MixedUp->GetBinContent(bin);  
   }
+  if(Z_Pt<=30.) sf = 1.;
   return sf;
 }
 
@@ -1849,9 +1850,9 @@ void plot(){
   //initialize Trigger Helper
 
   if(processname=="MET" || processname=="data_obs"){DoWeights=0; std::cout<<"is data, dont use nominal weights"<<std::endl;}
-  if(processname=="w_lnu_jets"){DoWbosonReweighting=1; std::cout<<"is W Sample -> apply Reweighting"<<std::endl;}
-  if(processname=="z_nunu_jets"){DoZbosonReweighting=1; std::cout<<"is Z Sample -> apply Reweighting"<<std::endl;}
 
+  if(processname.find("w_lnu_jets")!=std::string::npos){DoWbosonReweighting=1; std::cout<<"is W Sample -> apply Reweighting"<<std::endl;}
+  if(processname.find("z_nunu_jets")!=std::string::npos){DoZbosonReweighting=1; std::cout<<"is Z Sample -> apply Reweighting"<<std::endl;}
 
   // read in samples to add to chain and get relevant names for the database
   std::map<TString, TString> sampleDataBaseIdentifiers;
@@ -2473,6 +2474,8 @@ def startLoop():
   internalQCDweightup=internalQCDHelper->GetScaleFactorErrorUp(N_Jets,N_BTagsM,N_TightElectrons,N_TightMuons);
   internalQCDweightdown=internalQCDHelper->GetScaleFactorErrorDown(N_Jets,N_BTagsM,N_TightElectrons,N_TightMuons);
   
+
+  if(processname.find("w_lnu_jets")!=std::string::npos){
   internalWbosonWeight_nominal = internalBosonHelper->GetScaleFactorW(W_Pt, "nominal");
   internalWbosonWeight_QCD1Up = internalBosonHelper->GetScaleFactorW(W_Pt, "QCD1Up"); 
   internalWbosonWeight_QCD1Down = internalBosonHelper->GetScaleFactorW(W_Pt, "QCD1Down");
@@ -2491,7 +2494,8 @@ def startLoop():
   internalWbosonWeight_MixedUp = internalBosonHelper->GetScaleFactorW(W_Pt, "MixedUp");
   internalWbosonWeight_MixedDown = internalBosonHelper->GetScaleFactorW(W_Pt, "MixedDown");
 
-
+  }
+  if(processname.find("z_nunu_jets")!=std::string::npos){
   internalZbosonWeight_nominal = internalBosonHelper->GetScaleFactorZ(Z_Pt, "nominal");
   internalZbosonWeight_QCD1Up = internalBosonHelper->GetScaleFactorZ(Z_Pt, "QCD1Up"); 
   internalZbosonWeight_QCD1Down = internalBosonHelper->GetScaleFactorZ(Z_Pt, "QCD1Down");
@@ -2509,7 +2513,7 @@ def startLoop():
 
   internalZbosonWeight_MixedUp = internalBosonHelper->GetScaleFactorZ(Z_Pt, "MixedUp"); 
   internalZbosonWeight_MixedDown = internalBosonHelper->GetScaleFactorZ(Z_Pt, "MixedDown");
-
+  }
   
   
   totalTimeCalculateSFs+=timerCalculateSFs->RealTime();
@@ -3374,7 +3378,7 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   haddclock.Start()
   if haddParallel==False:
     try:
-      subprocess.check_output(['hadd', outputpath]+outputs,stderr=subprocess.STDOUT)
+      subprocess.check_output(['hadd -f', outputpath]+outputs,stderr=subprocess.STDOUT)
       print 'hadd output worked ', ('in the first place.' if not haddResubmit else 'in the second place.')
     except subprocess.CalledProcessError, e:
       if not haddResubmit:
@@ -3382,7 +3386,7 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
           print '\n Resubmitting job script and then redoing hadd a second time.'
           haddResubmit = True
           helperSubmitNAFJobs(scripts,outputs,nentries)
-          subprocess.check_output(['hadd', outputpath]+outputs,stderr=subprocess.STDOUT)
+          subprocess.check_output(['hadd -f', outputpath]+outputs,stderr=subprocess.STDOUT)
       else:
           print "Hadd failed a second time with the following error, stopping program: \n \n", e.output
           sys.exit(-1)
@@ -3405,7 +3409,7 @@ import subprocess
 outfname=sys.argv[1]
 outlogname=sys.argv[2]
 infiles=sys.argv[3:]
-cmd='hadd '+outfname+' '+' '.join(infiles)
+cmd='hadd -f '+outfname+' '+' '.join(infiles)
 worked=False
 try:
     subprocess.check_output(cmd,shell=True,stderr=subprocess.STDOUT)
@@ -3518,7 +3522,7 @@ def haddFilesFromWildCard(outname="",inwildcard="",totalNumberOfHistosNeedsToRem
       theInf.Close()
     nHistosBefore=nHistos  
   if len(infiles)<nfilesPerHadd:
-    cmd='hadd'+' '+outname+' '+' '.join(infiles)
+    cmd='hadd -f'+' '+outname+' '+' '.join(infiles)
     print cmd
     subprocess.call(cmd,shell=True)
   else:
@@ -3531,7 +3535,7 @@ def haddFilesFromWildCard(outname="",inwildcard="",totalNumberOfHistosNeedsToRem
       if iinf%(nfilesPerHadd-1)==0 or inf==infiles[-1]:
         partname=outname.replace(".root","_part_"+str(len(parts))+".root")
         parts.append(partname)
-        cmd='hadd'+' '+partname+' '+' '.join(subpartfiles)
+        cmd='hadd -f'+' '+partname+' '+' '.join(subpartfiles)
         print cmd
         subprocess.call(cmd,shell=True)
         subpartfiles=[]
@@ -3539,7 +3543,7 @@ def haddFilesFromWildCard(outname="",inwildcard="",totalNumberOfHistosNeedsToRem
       print "OHOHOH HADDINGFROMWILDCARD missed or used some files twice!!!"
       exit(1)
     # now add the parts
-    cmd='hadd'+' '+outname+' '+' '.join(parts)
+    cmd='hadd -f'+' '+outname+' '+' '.join(parts)
     print cmd
     subprocess.call(cmd,shell=True)
   
