@@ -7,7 +7,8 @@ import imp
 #import importlib
 import inspect
 import ROOT
-
+import pandas 
+import ast
 filedir = os.path.dirname(os.path.realpath(__file__))
 pyrootdir = "/".join(filedir.split("/")[:-1])
 workdir = pyrootdir+"/"+"workdir"
@@ -15,41 +16,62 @@ sys.path.append(pyrootdir+'/util')
 sys.path.append(filedir+"/configs")
 import scriptgenerator
 import plotutils
+import tmputils
 import limittools
 
 import analysisClass
 import plotconfig_v14 as pltcfg
 #from configs.plotconfig_v14 import *
 
-def gencsv(filename, categories=[], nhistobins=[], minxvals=[], maxxvals=[], discrs =[], separator=","):
-    with open("configdata/limitsAllv20_"+filename+".csv", "w") as csvf:
-        csvf.write("#categories"+separator+"nhistobins"+separator+"minxvals"+separator+"maxxvals"+separator+"discrs")
-        for i in range(len(categories)):
-            line = "\n"
-            line+= str(categories[i])+separator
-            line+= str(nhistobins[i])+separator
-            line+= str(minxvals[i])+separator
-            line+=str(maxxvals[i])+separator
-            line+=str(discrs[i])
-            csvf.write(line)
+def main(pyrootdir, argv):
 
-def main(workdir, argv):
+    # ============================
+    # definition of some variables
+    # ============================
 
-    # Create analysis object with output name
-    
-    # TODO maybe makes more sense to give this as an argument instead of being hard coded
+    # name of the analysis (i.e. workdir name
     name='limits_All_v30'
+    workdir = pyrootdir + "/workdir/" + name
+    if not os.path.exists(workdir):
+        os.makedirs(workdir)
+        print("created workdir at "+str(workdir))
+        
+    # path to root file
+    anaRootPath=workdir+'/output_limitInput.root'
 
-    anaRootPath=workdir+'/'+name+'/output_limitInput.root'
-    #analysis=analysisClass.Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/latest/ttbb-cutbased-analysis_limitInput.root')
-    #analysis=analysisClass.Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/Sep17/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
-    #analysis=analysisClass.Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/output20170626-reference/workdir/ttbb-cutbased-analysis/output_limitInput.root')
-    
+    # Name of final discriminator, should not contain underscore
+    discrname='finaldiscr'
+
+    # define MEM discriminator variable
+    # this is not used anymore as the information is written in the csv files in configdata
+    # keep it for clarity
+    memexp='(memDBp>0.0)*(memDBp)+(memDBp<=0.0)*(0.01)+(memDBp==1.0)*(0.01)'
+
+    # define BDT output variables
+    bdtweightpath="/nfs/dust/cms/user/kelmorab/Spring17BDTWeights/"
+    bdtset="Spring17v2"
+    alternativebdtset="Spring17v3_ttbb"
+
+    # name of the csv files used in configdata folder
+    configDataBaseName = "limitsAllv20"
+
+    # used categories in configdata to be added
+    usedCategories = ["JTBDT", "JT2D", "JTMEM", "MultiDNN", "JT_control"] 
+    # usedCategories += ["JT2DOPTIMIZED", "JTBDTOPTIMIZED"]
+
+    # ============================
     # initializing analysisClass 
+    # ============================
+
     # TODO make the analysisClass more essential - atm it is not really needed
     analysis=analysisClass.Analysis(name,argv,anaRootPath,signalProcess='ttH')
-
-
+    #analysis=analysisClass.Analysis(name,argv,
+        #'/nfs/dust/cms/user/mharrend/doktorarbeit/latest/ttbb-cutbased-analysis_limitInput.root')
+    #analysis=analysisClass.Analysis(name,argv,
+        #'/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/Sep17/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
+    #analysis=analysisClass.Analysis(name,argv,
+        #'/nfs/dust/cms/user/mharrend/doktorarbeit/output20170626-reference/workdir/ttbb-cutbased-analysis/output_limitInput.root')
+    
     # TODO these options should be set automatically ?
     analysis.plotBlinded=True
     analysis.makeSimplePlots=True
@@ -57,16 +79,15 @@ def main(workdir, argv):
     analysis.makeDataCards=True
     analysis.additionalPlotVariables=False
 
-
     # Make sure proper plotconfig is loaded for either ttbb or ttH
     # TODO how is this determined?
     print "We will import the following plotconfig: ", analysis.getPlotConfig()
-    # make sure plotconfig gets imported into global namespace
-    #globals().update(importlib.import_module(analysis.getPlotConfig()).__dict__)
 
-
-
+    
+    ## ============================
     ## NNFlow interface
+    ## ============================
+
     # Create and configure NNFlow interface
     # NNFlowInterfacePath=os.getcwd()+'../util/dNNInterfaces/NNFlowInterface.py'
     # NNFlowInterface = imp.load_source("NNFlowInterface",NNFlowInterfacePath).theInterface()
@@ -77,337 +98,140 @@ def main(workdir, argv):
     #
     # print "NNFlowInterfacePath: ", NNFlowInterfacePath
     
+
     # TODO maybe print chosen functions into a .json file in workdir
     analysis.printChosenOptions()
 
-
-    # samples
-    #samples=samplesControlPlots
-    
-    samples=pltcfg.samplesLimits
-
-    samples_data=pltcfg.samplesDataControlPlots
-
-    
-    # TODO thos are names that can be set, maybe put them to the beginning of the file to be more accessible when editing?
-    # Name of final discriminator, should not contain underscore
-    discrname='finaldiscr'
-    # define MEM discriminator variable
-    memexp='(memDBp>0.0)*(memDBp)+(memDBp<=0.0)*(0.01)+(memDBp==1.0)*(0.01)'
-
-    # define BDT output variables
-    bdtweightpath="/nfs/dust/cms/user/kelmorab/Spring17BDTWeights/"
-    bdtset="Spring17v2"
-    alternativebdtset="Spring17v3_ttbb"
-
-
+    # ============================
     # define additional variables necessary for selection in plotparallel
-    # TODO can this be done better eg in other file or other config
-    additionalvariables=["Jet_Pt", "Muon_Pt", "Electron_Pt",
-                         "Jet_Eta", "Muon_Eta", "Electron_Eta",
-                         "Muon_Pt_BeForeRC","Electron_Pt_BeforeRun2Calibration","Electron_Eta_Supercluster",
-                         "Jet_CSV", "Jet_Flav", "N_Jets", "Jet_E", "Jet_Phi", "Jet_M",
-                         "Evt_Pt_PrimaryLepton","Evt_E_PrimaryLepton","Evt_M_PrimaryLepton","Evt_Phi_PrimaryLepton","Evt_Eta_PrimaryLepton",
-                         "Evt_Phi_MET","Evt_Pt_MET",
-                         "Weight_CSV","Weight_CSVLFup","Weight_CSVLFdown","Weight_CSVHFup","Weight_CSVHFdown","Weight_CSVHFStats1up","Weight_CSVHFStats1down",
-                         "Weight_CSVLFStats1up","Weight_CSVLFStats1down","Weight_CSVHFStats2up","Weight_CSVHFStats2down","Weight_CSVLFStats2up","Weight_CSVLFStats2down",
-                         "Weight_CSVCErr1up","Weight_CSVCErr1down","Weight_CSVCErr2up","Weight_CSVCErr2down","Evt_blr_ETH","Evt_blr_ETH_transformed",
-
-                         'conditionFor_finalbdt_ljets_j4_t3:=(N_Jets==4 && N_BTagsM==3)',
-                         'conditionFor_finalbdt_ljets_j4_t4:=(N_Jets==4 && N_BTagsM==4)',
-                         'conditionFor_finalbdt_ljets_j5_t3:=(N_Jets==5 && N_BTagsM==3)',
-                         'conditionFor_finalbdt_ljets_j5_tge4:=(N_Jets==5 && N_BTagsM>=4)',
-                         'conditionFor_finalbdt_ljets_jge6_t2:=(N_Jets>=6 && N_BTagsM==2)',
-                         'conditionFor_finalbdt_ljets_jge6_t3:=(N_Jets>=6 && N_BTagsM==3)',
-                         'conditionFor_finalbdt_ljets_jge6_tge4:=(N_Jets>=6 && N_BTagsM>=4)',
-                         'conditionFor_alternativebdt_ljets_jge6_tge4:=(N_Jets>=6 && N_BTagsM>=4)',
-                         'conditionFor_alternativebdt_ljets_jge6_t3:=(N_Jets>=6 && N_BTagsM==3)',
-                         'conditionFor_alternativebdt_ljets_j5_tge4:=(N_Jets==5 && N_BTagsM>=4)',
-                         'conditionFor_alternativebdt_ljets_j4_t4:=(N_Jets==4 && N_BTagsM==4)',
-                         "GenEvt_I_TTPlusBB","GenEvt_I_TTPlusCC",
-
-             			 'finalbdt_ljets_j4_t2:=Evt_HT_Jets',
-             			 'finalbdt_ljets_j5_t2:=Evt_HT_Jets',
-                         'finalbdt_ljets_j4_t3:='+bdtweightpath+'/weights_Final_43_'+bdtset+'.xml',
-                         'finalbdt_ljets_j4_t4:='+bdtweightpath+'/weights_Final_44_'+bdtset+'.xml',
-                         'finalbdt_ljets_j5_t3:='+bdtweightpath+'/weights_Final_53_'+bdtset+'.xml',
-                         'finalbdt_ljets_j5_tge4:='+bdtweightpath+'/weights_Final_54_'+bdtset+'.xml',
-                         'finalbdt_ljets_jge6_t2:='+bdtweightpath+'/weights_Final_62_'+bdtset+'.xml',
-                         'finalbdt_ljets_jge6_t3:='+bdtweightpath+'/weights_Final_63_'+bdtset+'.xml',
-                         'finalbdt_ljets_jge6_tge4:='+bdtweightpath+'/weights_Final_64_'+bdtset+'.xml',
-                         'alternativebdt_ljets_jge6_tge4:='+bdtweightpath+'/weights_Final_64_'+alternativebdtset+'.xml',
-                         'alternativebdt_ljets_jge6_t3:='+bdtweightpath+'/weights_Final_63_'+alternativebdtset+'.xml',
-                         'alternativebdt_ljets_j5_tge4:='+bdtweightpath+'/weights_Final_54_'+alternativebdtset+'.xml',
-                         'alternativebdt_ljets_j4_t4:='+bdtweightpath+'/weights_Final_44_'+alternativebdtset+'.xml',
-                         'hardestJetPt:=Jet_Pt[0]',
-                         ]
-    
-    with open("configdata/limitsAllv20_addVariables.csv", "w") as csvf:
-        csvf.write("#addVars")
-        for var in additionalvariables:
-            csvf.write("\n"+var)
-
-    # TODO these variables for example are set in scriptgenerator, why not the other ones?
-    additionalvariables+=scriptgenerator.GetMEPDFadditionalVariablesList("/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv")
+    # ============================
+    additionalvariables = tmputils.getAddVariables(pyrootdir = pyrootdir,
+                                                    name = configDataBaseName)
+    additionalvariables+= scriptgenerator.GetMEPDFadditionalVariablesList(
+        "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv")
     # append variables needed by NNFlow Interface
     #additionalvariables.extend(NNFlowInterface.getAdditionalVariablesList())
-    print "Debug output: Print additional variables list: ", additionalvariables
 
+    # save addition variables information to workdir and print
+    tmputils.saveAddVariablesToWorkdir(workdir, additionalvariables)
+
+    # ============================
     # prepare configdata
-    # TODO save this in a class maybe
-    categories=[]
-    nhistobins=[]
-    minxvals=[]
-    maxxvals=[]
-    discrs =[]
+    #
+    # access the information via
+    # configData.categories
+    # configData.nhistobins
+    # configData.minxvals
+    # configData.maxxvals
+    # configData.discrs
+    # configData.plotPreselection
+    # configData.binlabels
+    # ============================
+    configData = tmputils.configData(pyrootdir = pyrootdir, 
+                                        name = configDataBaseName, 
+                                        usedCategories = usedCategories)
+    configData.writeConfigDataToWorkdir(workdir)
+    configData.assertData()
+
     
-    # jet tag categories for BDTs
-    # TODO hard coded information maybe in another file
-    categorienames_JTBDT=[
-                  ("(N_Jets==4&&N_BTagsM==2)","ljets_j4_t2",""),
-                  ("(N_Jets==5&&N_BTagsM==2)","ljets_j5_t2",""),
-                  ("(N_Jets==4&&N_BTagsM==3)","ljets_j4_t3",""),
-                  ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4",""),
-                  ("(N_Jets==5&&N_BTagsM==3)","ljets_j5_t3",""),
-                  ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4",""),
-                  ("(N_Jets>=6&&N_BTagsM==2)","ljets_jge6_t2",""),
-                  ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3",""),
-                  ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4",""),
-                  ]
-    discrs_JTBDT=['finalbdt_ljets_j4_t2','finalbdt_ljets_j5_t2','finalbdt_ljets_j4_t3', 'finalbdt_ljets_j4_t4', 'finalbdt_ljets_j5_t3', 'finalbdt_ljets_j5_tge4', 'finalbdt_ljets_jge6_t2', 'finalbdt_ljets_jge6_t3', 'finalbdt_ljets_jge6_tge4']
-    nhistobins_JTBDT = [  20,20,      20,   12,    25,    16,   25,   25,   16 ]
-    minxvals_JTBDT =   [ 200, 200, -0.8,  -0.8, -0.8,   -0.9,         -0.6, -0.8,   -0.8]
-    maxxvals_JTBDT =   [800,800,    0.75,  0.7,   0.7,    0.8,  0.7,  0.75,    0.76]
-
-    discrs+=discrs_JTBDT
-    nhistobins+=nhistobins_JTBDT
-    minxvals+=minxvals_JTBDT
-    maxxvals+=maxxvals_JTBDT
-    categories+=categorienames_JTBDT
-    
-    gencsv("JTBDT",categorienames_JTBDT,nhistobins_JTBDT,minxvals_JTBDT,maxxvals_JTBDT,discrs_JTBDT)
-    # 2D analysis split at ttH median of BDTs
-    unsplitcategorienames_JT2D=[
-                  ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4",""),
-                  ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4",""),
-                  ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3",""),
-                  ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4",""),
-                  ]
-    #bdtcuts=[-0.2,-0.2,0.2,0.22,0.17,0.22,0.05,0.17,0.17]
-    bdtcuts=[0.22,0.22,0.17,0.17]
-    categorienames_JT2D=[]
-    for cat,bdt in zip(unsplitcategorienames_JT2D,bdtcuts):
-      if cat[1] in ["ljets_jge6_tge4","ljets_j5_tge4","ljets_j4_t4","ljets_jge6_t3"]:
-        categorienames_JT2D.append(('('+cat[0]+')*(finalbdt_'+cat[1]+'>'+str(bdt)+')',cat[1]+'_high') )
-        categorienames_JT2D.append(('('+cat[0]+')*(finalbdt_'+cat[1]+'<='+str(bdt)+')',cat[1]+'_low') )
-
-    discrs_JT2D=[memexp, memexp, memexp, memexp,memexp, memexp,memexp, memexp]
-
-    nhistobins_JT2D = [10,12, 8,10, 25,25,   12,15 ]
-    minxvals_JT2D =   [ 0.05, 0.05,0.1,0.1,0,0,0.05,0]
-    maxxvals_JT2D =   [1.0, 0.9,1.0,0.95,1.0,1.0,1.0,1.0]
-
-    gencsv("JT2D",categorienames_JT2D,nhistobins_JT2D,minxvals_JT2D,maxxvals_JT2D,discrs_JT2D)
-    
-    discrs+=discrs_JT2D
-    nhistobins+=nhistobins_JT2D
-    minxvals+=minxvals_JT2D
-    maxxvals+=maxxvals_JT2D
-    categories+=categorienames_JT2D
-    ## 2D analysis split at ttH median of BDTs OPTIMIZED FOR ttbb vs rest
-    #TODO recomment ->>
-    unsplitcategorienames_JT2DOPTIMIZED=[
-                    ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4",""),
-                    ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4",""),
-                    ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3",""),
-                    ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4",""),
-                    ]
-    bdtcuts=[-0.2,-0.2,0.2,0.22,0.17,0.22,0.05,0.17,0.17]
-    categorienames_JT2DOPTIMIZED=[]
-    for cat,bdt in zip(unsplitcategorienames_JT2DOPTIMIZED,bdtcuts):
-      if cat[1] in ["ljets_jge6_tge4","ljets_j5_tge4","ljets_j4_t4","ljets_jge6_t3"]:
-        categorienames_JT2DOPTIMIZED.append(('('+cat[0]+')*(alternativebdt_'+cat[1]+'>'+str(bdt)+')',cat[1]+'_ttbbOpt_high') )
-        categorienames_JT2DOPTIMIZED.append(('('+cat[0]+')*(alternativebdt_'+cat[1]+'<='+str(bdt)+')',cat[1]+'_ttbbOpt_low') )
-    discrs_JT2DOPTIMIZED=[memexp, memexp, memexp, memexp,memexp, memexp,memexp, memexp]
-    nhistobins_JT2DOPTIMIZED = [10,12, 8,10, 25,25,   12,15 ]
-    minxvals_JT2DOPTIMIZED =   [ 0.05, 0.05,0.1,0.1,0,0,0.05,0]
-    maxxvals_JT2DOPTIMIZED =   [0.95, 0.9,1.0,1.0,1.0,1.0,1.0,1.0]
-    discrs+=discrs_JT2DOPTIMIZED
-    nhistobins+=nhistobins_JT2DOPTIMIZED
-    minxvals+=minxvals_JT2DOPTIMIZED
-    maxxvals+=maxxvals_JT2DOPTIMIZED
-    categories+=categorienames_JT2DOPTIMIZED
-    gencsv("JT2DOPTIMIZED",categorienames_JT2DOPTIMIZED,nhistobins_JT2DOPTIMIZED,minxvals_JT2DOPTIMIZED,maxxvals_JT2DOPTIMIZED,discrs_JT2DOPTIMIZED)
-# BDT only but with the ttbb optimized BDTs
-    categorienames_JTBDTOPTIMIZED=[
-                  ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4_ttbbOpt",""),
-                  ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4_ttbbOpt",""),
-                  ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_ttbbOpt",""),
-                  ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4_ttbbOpt",""),
-                  ]
-    discrs_JTBDTOPTIMIZED=['alternativebdt_ljets_j4_t4',  'alternativebdt_ljets_j5_tge4',  'alternativebdt_ljets_jge6_t3', 'alternativebdt_ljets_jge6_tge4']
-    nhistobins_JTBDTOPTIMIZED = [  12,      16,     25,   16 ]
-    minxvals_JTBDTOPTIMIZED =   [ -0.8,   -0.65,  -0.65,   -0.7]
-    maxxvals_JTBDTOPTIMIZED =   [0.6,     0.65,   0.65,    0.8]
-    discrs+=discrs_JTBDTOPTIMIZED
-    nhistobins+=nhistobins_JTBDTOPTIMIZED
-    minxvals+=minxvals_JTBDTOPTIMIZED
-    maxxvals+=maxxvals_JTBDTOPTIMIZED
-    categories+=categorienames_JTBDTOPTIMIZED
-
-    gencsv("JTBDTOPTIMIZED",categorienames_JTBDTOPTIMIZED,nhistobins_JTBDTOPTIMIZED,minxvals_JTBDTOPTIMIZED,maxxvals_JTBDTOPTIMIZED,discrs_JTBDTOPTIMIZED)
-    # jet tag categories for Mem only and blr
-    # TODO same her, maybe somewhere else or at the beginning
-    categorienames_JTMEM=[                  
-                  ("(N_Jets==4&&N_BTagsM==3)","ljets_j4_t3_BLR",""),
-                  ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4_MEMONLY",""),
-                  ("(N_Jets==5&&N_BTagsM==3)","ljets_j5_t3_BLR",""),
-                  ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4_MEMONLY",""),
-                  ("(N_Jets>=6&&N_BTagsM==2)","ljets_jge6_t2_BLR",""),
-                  ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_MEMONLY",""),
-                  ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4_MEMONLY",""),
-                  ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_BLR",""),
-    ]
-    discrs_JTMEM=[  'Evt_blr_ETH_transformed',   memexp,    'Evt_blr_ETH_transformed',    memexp,   'Evt_blr_ETH_transformed',   memexp,   memexp , 'Evt_blr_ETH_transformed']
-    nhistobins_JTMEM = [  20,   12,    20,    18,   25,   25,   16, 25 ]
-    minxvals_JTMEM =   [ -1,  0.05, 0.0,   0.1, -3, 0,   0.1, 0.5]
-    maxxvals_JTMEM =   [6, 0.9,   6.5,    1.0,  4,  1.0,    0.9, 7.0]
-
-
-    discrs+=discrs_JTMEM
-    nhistobins+=nhistobins_JTMEM
-    minxvals+=minxvals_JTMEM
-    maxxvals+=maxxvals_JTMEM
-    categories+=categorienames_JTMEM
-
-    gencsv("JTMEM",categorienames_JTMEM,nhistobins_JTMEM,minxvals_JTMEM,maxxvals_JTMEM,discrs_JTMEM)
-
-    # DNN classes DNN outputs
-    # TODO same
-    categorienames_MultiDNN=[
-              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==0)","ljets_j4_tge3_ttHnode",""),
-              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==0)","ljets_j5_tge3_ttHnode",""),             
-              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==0)","ljets_jge6_tge3_ttHnode",""),
-
-              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==1)","ljets_j4_tge3_ttbbnode",""),
-              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==1)","ljets_j5_tge3_ttbbnode",""),             
-              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==1)","ljets_jge6_tge3_ttbbnode",""),
-
-              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==2)","ljets_j4_tge3_ttbnode",""),
-              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==2)","ljets_j5_tge3_ttbnode",""),             
-              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==2)","ljets_jge6_tge3_ttbnode",""),
-
-              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==3)","ljets_j4_tge3_tt2bnode",""),
-              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==3)","ljets_j5_tge3_tt2bnode",""),             
-              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==3)","ljets_jge6_tge3_tt2bnode",""),
-
-              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==4)","ljets_j4_tge3_ttccnode",""),
-              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==4)","ljets_j5_tge3_ttccnode",""),             
-              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==4)","ljets_jge6_tge3_ttccnode",""),
-
-              ("(N_Jets==4&&N_BTagsM>=3&&aachen_pred_class==5)","ljets_j4_tge3_ttlfnode",""),
-              ("(N_Jets==5&&N_BTagsM>=3&&aachen_pred_class==5)","ljets_j5_tge3_ttlfnode",""),             
-              ("(N_Jets>=6&&N_BTagsM>=3&&aachen_pred_class==5)","ljets_jge6_tge3_ttlfnode",""),
-
-              ("(N_Jets>=6&&N_BTagsM>=2&&aachen_pred_class==0)","ljets_jge6_tge2_ttHnode",""),
-              ("(N_Jets>=6&&N_BTagsM>=2&&aachen_pred_class==1)","ljets_jge6_tge2_ttbbnode",""),
-              ("(N_Jets>=6&&N_BTagsM>=2&&aachen_pred_class==2)","ljets_jge6_tge2_ttbnode",""),
-              ("(N_Jets>=6&&N_BTagsM>=2&&aachen_pred_class==3)","ljets_jge6_tge2_tt2bnode",""),
-              ("(N_Jets>=6&&N_BTagsM>=2&&aachen_pred_class==4)","ljets_jge6_tge2_ttccnode",""),
-              ("(N_Jets>=6&&N_BTagsM>=2&&aachen_pred_class==5)","ljets_jge6_tge2_ttlfnode",""),
-              ]
-    discrs_MultiDNN=[
-             'aachen_Out_ttH','aachen_Out_ttH','aachen_Out_ttH',
-             'aachen_Out_ttbarBB','aachen_Out_ttbarBB','aachen_Out_ttbarBB',
-             'aachen_Out_ttbarB','aachen_Out_ttbarB','aachen_Out_ttbarB',
-             'aachen_Out_ttbar2B','aachen_Out_ttbar2B','aachen_Out_ttbar2B',
-             'aachen_Out_ttbarCC','aachen_Out_ttbarCC','aachen_Out_ttbarCC',
-             'aachen_Out_ttbarOther','aachen_Out_ttbarOther','aachen_Out_ttbarOther',
-             ]
-    discrs_MultiDNN+=[
-               'aachen_Out_ttH',
-             'aachen_Out_ttbarBB',
-             'aachen_Out_ttbarB',
-             'aachen_Out_ttbar2B',
-             'aachen_Out_ttbarCC',
-             'aachen_Out_ttbarOther',
-               ]
-    nhistobins_MultiDNN= [   7,   10,    12,   7,   7,    12,   7,   7,    7,   8,   7,    7,   7,   7,    7,   7,   7,    4,]
-    minxvals_MultiDNN=   [ 0.2,  0.16, 0.17, 0.16,  0.16, 0.18, 0.2,  0.2, 0.18, 0.2,  0.16, 0.16, 0.17,  0.17, 0.21, 0.17,  0.17, 0.19,]
-    maxxvals_MultiDNN=   [0.6,  0.6, 0.7,    0.6,  0.6, 0.7,    0.4,  0.4, 0.35,    0.55,  0.5, 0.55,    0.35,  0.35, 0.3,    0.5,  0.4, 0.3,]
-    nhistobins_MultiDNN+=[12,12,7,7,7,7]
-    minxvals_MultiDNN+=[0.17,0.18,0.18,0.16,0.21,0.19]
-    maxxvals_MultiDNN+=[0.7,0.7,0.35,0.55,0.3,0.3]
-
-    gencsv("MultiDNN",categorienames_MultiDNN,nhistobins_MultiDNN,minxvals_MultiDNN,maxxvals_MultiDNN,discrs_MultiDNN)
-
-    discrs+=discrs_MultiDNN
-    nhistobins+=nhistobins_MultiDNN
-    minxvals+=minxvals_MultiDNN
-    maxxvals+=maxxvals_MultiDNN
-    categories+=categorienames_MultiDNN
-
-    categorienames_JT_control=[
-                  ("(N_Jets==4&&N_BTagsM==3)","ljets_j4_t3_hardestJetPt",""),
-                  ]
-    discrs_JT_control=['hardestJetPt']
-    nhistobins_JT_control = [10]
-    minxvals_JT_control =   [ 30]
-    maxxvals_JT_control =   [280]
-
-    gencsv("JT_control",categorienames_JT_control,nhistobins_JT_control,minxvals_JT_control,maxxvals_JT_control,discrs_JT_control)
-
-    discrs+=discrs_JT_control
-    nhistobins+=nhistobins_JT_control
-    minxvals+=minxvals_JT_control
-    maxxvals+=maxxvals_JT_control
-    categories+=categorienames_JT_control
-    
-    # assert, that all values are right, i.e. all list lenghts are correct
-    assert(len(nhistobins)==len(maxxvals))
-    assert(len(nhistobins)==len(minxvals))
-    assert(len(nhistobins)==len(categories))
-    assert(len(nhistobins)==len(discrs))
-    sys.exit()
-    # get input for plotting function
-    plotPreselections= [c[0] for c in categories]
-    binlabels= [c[1] for c in categories]
-
-
-    # add systematic ntuples
-    # TODO maybe make a function for this
+    # ============================
+    # loading samples and samples data
+    # 
+    # access the information via
+    # samplesData.samples
+    # samplesData.samples_data
+    # samplesData.systsamples
+    # ============================     
+    samplesData = tmputils.samplesData(pltcfg)
+    '''
+    samples = pltcfg.samplesLimits
+    sample_data = pltcfg.samplesDataControlPlots                    
     systsamples=[]
+    '''
+    # ============================
+    # add systematic samples
+    # ============================
+    samplesData.addSystSamples(
+                        pltcfg.otherSystNames, pltcfg.otherSystFileNames,
+                        pathReplace = ["'nominal'","filename"]
+                        )
+    '''
     for sample in samples:
-        for sysname,sysfilename in zip(otherSystNames,otherSystFileNames):
+        for sysname, sysfilename in zip(pltcfg.otherSystNames,pltcfg.otherSystFileNames):
             thisnewsel=sample.selection
-            systsamples.append(plotutils.Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),thisnewsel,sample.nick+sysname,samDict=sampleDict))
-
+            systsamples.append(
+                plotutils.Sample(
+                    sample.name+sysname, sample.color, 
+                    sample.path.replace(
+                        "nominal",sysfilename),
+                    thisnewsel, sample.nick+sysname, 
+                    samDict=pltcfg.sampleDict))
+    '''
     ## WARNING: Adjust Slice for samples if changing ttbar contributions
+    
+    
+    # ============================
+    # add Parton shower variation samples to systematic samples
+    # ============================
+    
+    nicks = ['ttbarOther', 'ttbarPlusCCbar','ttbarPlusBBbar','ttbarPlusB','ttbarPlus2B']
+    samplesData.addSystSamples(
+                        pltcfg.PSSystNames, pltcfg.PSSystFileNames,
+                        pathReplace = ["pltcfg.ttbarPathS",
+                            "'pltcfg.path_additionalSamples+'/ttbar_'+filename+'/*nominal*.root'"],
+                        selReplace = ["pltcfg.ttbarMCWeight","'*1.0'"],
+                        selReplace2 = ["pltcfg.mcWeight+pltcfg.evenSel","pltcfg.mcWeightAll"],
+                        filternicks = nicks)
 
-    # add Parton shower variation samples
     #for sample in samples[analysis.getTtbarSamplesLower() : analysis.getTtbarSamplesUpper()]: # only for ttbar samples
+    '''
     for sample in samples:
-        if sample.nick not in ['ttbarOther', 'ttbarPlusCCbar','ttbarPlusBBbar','ttbarPlusB','ttbarPlus2B']:
+        if sample.nick not in nicks:
           continue
-        for sysname,sysfilename in zip(PSSystNames,PSSystFileNames):
+        for sysname, sysfilename in zip(pltcfg.PSSystNames, pltcfg.PSSystFileNames):
             thisoldsel=sample.selection
             thisnewsel=sample.selection.replace(ttbarMCWeight,"*1.0").replace(mcWeight+evenSel,mcWeightAll)
             print "adding sample for ", sysname
             print "selection ", thisnewsel
             print "instead of ", thisoldsel
-            systsamples.append(plotutils.Sample(sample.name+sysname,sample.color,sample.path.replace(ttbarPathS,path_additionalSamples+"/ttbar_"+sysfilename+"/*nominal*.root"),thisnewsel,sample.nick+sysname,samDict=sampleDict))
-    
-    # add QCD sytematic for QCD sample
+            systsamples.append(
+                plotutils.Sample(
+                    sample.name+sysname, sample.color,
+                    sample.path.replace(
+                        ttbarPathS,path_additionalSamples+"/ttbar_"+sysfilename+"/*nominal*.root"),
+                    thisnewsel,sample.nick+sysname,
+                    samDict=pltcfg.sampleDict))
+    '''
+    # ============================
+    # add QCD sytematic for QCD sample to systematic samples
+    # ============================
+    samplesData.addSystSamples(
+                        pltcfg.QCDSystNames, pltcfg.QCDSystReplacementStrings,
+                        selReplace = ["'internalQCDweight", "filename"],
+                        filternames = "QCD")
+    '''
     for sample in samples:
         if sample.name!='QCD':
           continue
-        for sysname,sysreplacestring in zip(QCDSystNames,QCDSystReplacementStrings):
+        for sysname, sysreplacestring in zip(pltcfg.QCDSystNames, pltcfg.QCDSystReplacementStrings):
           thisnewsel=sample.selection.replace("internalQCDweight",sysreplacestring)
-          systsamples.append(plotutils.Sample(sample.name+sysname,sample.color,sample.path,thisnewsel,sample.nick+sysname,samDict=sampleDict))
+          systsamples.append(
+            plotutils.Sample(
+                sample.name+sysname, sample.color,
+                sample.path,
+                thisnewsel,sample.nick+sysname,
+                samDict=pltcfg.sampleDict))
+    '''
     
+    # ============================
+    # add samples and systsamples
+    # ============================
+    samplesData.addAllSamples(pltcfg.weightSystNames)
+    
+    '''
     allsamples=samples+systsamples
-    allsystnames=weightSystNames+otherSystNames+PSSystNames+QCDSystNames
-
+    allsystnames=weightSystNames+pltcfg.otherSystNames+pltcfg.PSSystNames+pltcfg.QCDSystNames
+    '''
 
     # define plots
     discriminatorPlots=[]
@@ -431,7 +255,7 @@ def main(workdir, argv):
     if analysis.doDrawParallel==False or analysis.plotNumber == None :
         #if not os.path.exists(analysis.rootFilePath):
             #print "Doing plotParallel step since root file was not found."
-            THEoutputpath=scriptgenerator.plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_latestAndGreatest.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=["../util/dNNInterfaces/dNNInterface_V6.py"],cirun=False,StopAfterCompileStep=False,haddParallel=True)
+            THEoutputpath=scriptgenerator.plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_latestAndGreatest.json",pltcfg.otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=["../util/dNNInterfaces/dNNInterface_V6.py"],cirun=False,StopAfterCompileStep=False,haddParallel=True)
             if type(THEoutputpath)==str:
               outputpath=THEoutputpath
             else:
@@ -528,7 +352,7 @@ if __name__ == "__main__":
 
    MainClock=ROOT.TStopwatch()
    MainClock.Start()
-   main(workdir, sys.argv[1:])
+   main(pyrootdir, sys.argv[1:])
    print "TOTAL Elapsed time since beginning of analysis script", MainClock.RealTime()
 
 

@@ -43,7 +43,9 @@ class SampleDictionary:
     print self.samplemap
 
 class Sample:
-    def __init__(self,name, color=ROOT.kBlack, path='', selection='',nick='',listOfShapes=[],up=0,down=None,samDict="",readTrees=True,filterFile="NONE",checknevents=-1,treename='MVATree'):
+    def __init__(self, name, color=ROOT.kBlack, path='', selection='', 
+                    nick='', listOfShapes=[], up=0, down=None, samDict="",
+                    readTrees=True, filterFile="NONE", checknevents=-1, treename='MVATree'):
         self.name=name
         self.color=color
         self.path=path
