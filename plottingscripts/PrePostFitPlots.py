@@ -408,7 +408,7 @@ def GetPlots(categories_processes_histos_dict,category,prepostfitflag):
     return  stack,legend,error_graph,data,ratio_background_data,signal,ratio_error_graph
 
 
-def plotutils.Plot(fitfile_,ch_cat_dict_,prepostfitflag):
+def Plot(fitfile_,ch_cat_dict_,prepostfitflag):
     
     fitfile = ROOT.TFile.Open(fitfile_,"READ")
     
@@ -503,13 +503,13 @@ def main(fitfile_,datacard_):
     ch_cat_dict = ReadDatacard(datacard_)
     
     # plot prefit
-    plotutils.Plot(fitfile_,ch_cat_dict,"shapes_prefit")
+    Plot(fitfile_,ch_cat_dict,"shapes_prefit")
     
     # plot post fit after s+b fit
-    plotutils.Plot(fitfile_,ch_cat_dict,"shapes_fit_s")
+    Plot(fitfile_,ch_cat_dict,"shapes_fit_s")
 
     # plot post fit after b-only fit
-    plotutils.Plot(fitfile_,ch_cat_dict,"shapes_fit_b")
+    Plot(fitfile_,ch_cat_dict,"shapes_fit_b")
 
 
 if __name__ == "__main__":
