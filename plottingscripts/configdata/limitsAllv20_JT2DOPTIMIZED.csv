@@ -1,0 +1,9 @@
+categories;nhistobins;minxvals;maxxvals;discrs
+('((N_Jets==4&&N_BTagsM>=4))*(alternativebdt_ljets_j4_t4>-0.2)', 'ljets_j4_t4_ttbbOpt_high');10;0.05;0.95;(memDBp>0.0)*(memDBp)+(memDBp<=0.0)*(0.01)+(memDBp==1.0)*(0.01)
+('((N_Jets==4&&N_BTagsM>=4))*(alternativebdt_ljets_j4_t4<=-0.2)', 'ljets_j4_t4_ttbbOpt_low');12;0.05;0.9;(memDBp>0.0)*(memDBp)+(memDBp<=0.0)*(0.01)+(memDBp==1.0)*(0.01)
+('((N_Jets==5&&N_BTagsM>=4))*(alternativebdt_ljets_j5_tge4>-0.2)', 'ljets_j5_tge4_ttbbOpt_high');8;0.1;1.0;(memDBp>0.0)*(memDBp)+(memDBp<=0.0)*(0.01)+(memDBp==1.0)*(0.01)
+('((N_Jets==5&&N_BTagsM>=4))*(alternativebdt_ljets_j5_tge4<=-0.2)', 'ljets_j5_tge4_ttbbOpt_low');10;0.1;1.0;(memDBp>0.0)*(memDBp)+(memDBp<=0.0)*(0.01)+(memDBp==1.0)*(0.01)
+('((N_Jets>=6&&N_BTagsM==3))*(alternativebdt_ljets_jge6_t3>0.2)', 'ljets_jge6_t3_ttbbOpt_high');25;0;1.0;(memDBp>0.0)*(memDBp)+(memDBp<=0.0)*(0.01)+(memDBp==1.0)*(0.01)
+('((N_Jets>=6&&N_BTagsM==3))*(alternativebdt_ljets_jge6_t3<=0.2)', 'ljets_jge6_t3_ttbbOpt_low');25;0;1.0;(memDBp>0.0)*(memDBp)+(memDBp<=0.0)*(0.01)+(memDBp==1.0)*(0.01)
+('((N_Jets>=6&&N_BTagsM>=4))*(alternativebdt_ljets_jge6_tge4>0.22)', 'ljets_jge6_tge4_ttbbOpt_high');12;0.05;1.0;(memDBp>0.0)*(memDBp)+(memDBp<=0.0)*(0.01)+(memDBp==1.0)*(0.01)
+('((N_Jets>=6&&N_BTagsM>=4))*(alternativebdt_ljets_jge6_tge4<=0.22)', 'ljets_jge6_tge4_ttbbOpt_low');15;0;1.0;(memDBp>0.0)*(memDBp)+(memDBp<=0.0)*(0.01)+(memDBp==1.0)*(0.01)
