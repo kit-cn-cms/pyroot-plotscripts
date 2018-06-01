@@ -53,7 +53,7 @@ otherSystFileNames=[
                         "JESup","JESdown",
                         "JERup","JERdown"
     ]
-"""
+
 WBosonSystNames=[
        "_WbosonWeight_QCD1Up","_WbosonWeight_QCD1Down",
        "_WbosonWeight_QCD2Up","_WbosonWeight_QCD2Down",
@@ -110,7 +110,7 @@ ZBosonWeights=[
        "dummyWeight_Zboson_MixedUp:="+common_weight+"*internalZbosonWeight_MixedUp/internalZbosonWeight_nominal*(DoZbosonReweighting==1)+(DoZbosonReweighting==0)*1.0",
        "dummyWeight_Zboson_MixedDown:="+common_weight+"*internalZbosonWeight_MixedDown/internalZbosonWeight_nominal*(DoZbosonReweighting==1)+(DoZbosonReweighting==0)*1.0",
 ]
-"""
+
 MCWeight='35.91823'
 
 path_ntuples = "/nfs/dust/cms/user/mwassmer/DarkMatter/ntuples"
@@ -155,14 +155,14 @@ samples_data = [
 #z_nunu: 0.00001321
 #w_lnu: 0.0000086564
 samples_background = [
-                        Sample('Z(#nu#nu)+jets',ROOT.kBlue,path_ntuples+'/DYJetsToNuNu_PtZ-*/*nominal*.root',"1.*3*0.971"+"*"+MCWeight+sel_MET,'z_nunu_jets',weightSystNames+otherSystNames,samDict=sampleDict),
+                        Sample('Z(#nu#nu)+jets',ROOT.kBlue,path_ntuples+'/DYJetsToNuNu_PtZ-*/*nominal*.root',"1.*3*0.971"+"*"+MCWeight+sel_MET,'z_nunu_jets',weightSystNames+ZBosonSystNames+otherSystNames,samDict=sampleDict),
                         #Sample('Z(#nu#nu)+jets p_{T,Z}=50-100',ROOT.kBlue+4,path_ntuples+'/DYJetsToNuNu_PtZ-50To100*/*nominal*.root',"3*0.971"+"*"+MCWeight+sel_MET,'z_nunu_jets_a',weightSystNames+otherSystNames,samDict=sampleDict),
                         #Sample('Z(#nu#nu)+jets p_{T,Z}=100-250',ROOT.kBlue+2,path_ntuples+'/DYJetsToNuNu_PtZ-100To250*/*nominal*.root',"3*0.971"+"*"+MCWeight+sel_MET,'z_nunu_jets_b',weightSystNames+otherSystNames,samDict=sampleDict),
                         #Sample('Z(#nu#nu)+jets p_{T,Z}=250-400',ROOT.kBlue,path_ntuples+'/DYJetsToNuNu_PtZ-250To400*/*nominal*.root',"3*0.971"+"*"+MCWeight+sel_MET,'z_nunu_jets_c',weightSystNames+otherSystNames,samDict=sampleDict),
                         #Sample('Z(#nu#nu)+jets p_{T,Z}=400-650',ROOT.kBlue-2,path_ntuples+'/DYJetsToNuNu_PtZ-400To650*/*nominal*.root',"3*0.971"+"*"+MCWeight+sel_MET,'z_nunu_jets_d',weightSystNames+otherSystNames,samDict=sampleDict),
                         #Sample('Z(#nu#nu)+jets p_{T,Z}=650-Inf',ROOT.kBlue-5,path_ntuples+'/DYJetsToNuNu_PtZ-650ToInf*/*nominal*.root',"3*0.971"+"*"+MCWeight+sel_MET,'z_nunu_jets_e',weightSystNames+otherSystNames,samDict=sampleDict),
 
-                        Sample('W(l#nu)+jets',ROOT.kGreen,path_ntuples+'/WJetsToLNu_Pt-*/*nominal*.root',"1.*"+MCWeight+sel_MET,'w_lnu_jets',weightSystNames+otherSystNames,samDict=sampleDict),
+                        Sample('W(l#nu)+jets',ROOT.kGreen,path_ntuples+'/WJetsToLNu_Pt-*/*nominal*.root',"1.*"+MCWeight+sel_MET,'w_lnu_jets',weightSystNames+WBosonSystNames+otherSystNames,samDict=sampleDict),
                         #Sample('W(l#nu)+jets P_{T,W}=100-250',ROOT.kGreen,path_ntuples+'/WJetsToLNu_Pt-100To250*/*nominal*.root',"1.*"+MCWeight+sel_MET,'w_lnu_jets_a',weightSystNames+otherSystNames,samDict=sampleDict),
                         #Sample('W(l#nu)+jets p_{T,W}=250-400',ROOT.kGreen+2,path_ntuples+'/WJetsToLNu_Pt-250To400*/*nominal*.root',"1.*"+MCWeight+sel_MET,'w_lnu_jets_b',weightSystNames+otherSystNames,samDict=sampleDict),
                         #Sample('W(l#nu)+jets p_{T,W}=400-600',ROOT.kGreen+4,path_ntuples+'/WJetsToLNu_Pt-400To600*/*nominal*.root',"1.*"+MCWeight+sel_MET,'w_lnu_jets_c',weightSystNames+otherSystNames,samDict=sampleDict),

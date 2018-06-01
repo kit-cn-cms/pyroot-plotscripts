@@ -162,7 +162,7 @@ plots_MET600=[
 
 plots = plots_inclusive+plots_MET300+plots_MET400+plots_MET500+plots_MET600
 
-allsystnames=weightSystNames+otherSystNames
+allsystnames=weightSystNames+ZBosonSystNames+WBosonSystNames+otherSystNames
 
 systsamples=[]
 for sample in samples_background:
@@ -170,7 +170,7 @@ for sample in samples_background:
         thisnewsel=sample.selection
         systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),thisnewsel,sample.nick+sysname,samDict=sampleDict))
 
-THEoutputpath=plotParallel(jobname,5000000,plots,samples_signal+samples_background+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_FAST.json",otherSystNames,addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False,haddParallel=True)
+THEoutputpath=plotParallel(jobname,5000000,plots,samples_signal+samples_background+samples_data+systsamples,[''],['1.'],weightSystNames+ZBosonSystNames+WBosonSystNames,systWeights+ZBosonWeights+WBosonWeights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_FAST.json",otherSystNames,addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False,haddParallel=True)
 print "---------------------------------------------"
 print "THEoutputpath=",THEoutputpath
 print "---------------------------------------------"
