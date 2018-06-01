@@ -3074,162 +3074,200 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
   return scripts,outputs,nentries,samplewiseoutputs
 
 # the dataBases should be defined as follows e.g. [[memDB,path],[blrDB,path]]
-def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],dataBases=[],treeInformationJsonFile="",otherSystnames=[],addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False,haddParallel=False,MEPDFCSVFile=""):
-  cmsswpath=os.environ['CMSSW_BASE']
-  if not "CMSSW" in cmsswpath:
-    print "you need CMSSW for this to work. Exiting!"
-    exit(0)
-  cmsswversion=os.environ['CMSSW_VERSION']
-  splitcmsswversion=cmsswversion.split("_")
-  #if doAachenDNN and not int(splitcmsswversion[1])>=8:
-    #print "You need at least CMSSW 8_0_26_patch2 for the DNNs from Aachen. Exiting!"
-    #exit(0)
-  #if doAachenDNN:
-    #commonclassifierexists=os.path.exists(cmsswpath+"/src/TTH/CommonClassifier")
-    #if not commonclassifierexists:
-      #print "You need the common classifier package with the dnns and tf installed. Exiting!"
-      #exit(0)
-  workdir=os.getcwd()+'/workdir/'+name
-  outputpath=workdir+'/output.root'
+def plotParallel(name, maxevents, plots, samples, 
+                catnames=[""], catselections=["1"],
+                systnames=[""], systweights=["1"],
+                additionalvariables=[], 
+                dataBases=[],
+                treeInformationJsonFile="",
+                otherSystnames=[], 
+                addCodeInterfacePaths=[],
+                cirun=False,
+                StopAfterCompileStep=False,
+                haddParallel=False,
+                MEPDFCSVFile=""):
 
-  addCodeInterfaces=[]
+    # check cmssw
+    cmsswpath=os.environ['CMSSW_BASE']
+    if not "CMSSW" in cmsswpath:
+        print "you need CMSSW for this to work. Exiting!"
+        exit(0)
+    cmsswversion=os.environ['CMSSW_VERSION']
+    splitcmsswversion=cmsswversion.split("_")
 
-  codeInterfaceCounter = 0
-  for acp in addCodeInterfacePaths:
-    codeInterfaceCounter += 1
-    if isinstance(acp, basestring):
-        addModuleName = "addModule" + str(codeInterfaceCounter)
-        print "loading module", acp, "as ", addModuleName, " module."
-        addCodeInterfaces.append(imp.load_source(addModuleName,acp).theInterface())
-    elif isinstance(acp, types.InstanceType):
-        print "appending class object initiated by user: ", acp
-        addCodeInterfaces.append(acp)
+
+    #if doAachenDNN and not int(splitcmsswversion[1])>=8:
+        #print "You need at least CMSSW 8_0_26_patch2 for the DNNs from Aachen. Exiting!"
+        #exit(0)
+    #if doAachenDNN:
+        #commonclassifierexists=os.path.exists(cmsswpath+"/src/TTH/CommonClassifier")
+        #if not commonclassifierexists:
+            #print "You need the common classifier package with the dnns and tf installed. Exiting!"
+            #exit(0)
+
+    # save working directory
+    workdir=os.getcwd()+'/../workdir/'+name
+    outputpath=workdir+'/output.root'
+
+    # adding code interfaces
+    addCodeInterfaces=[]
+
+    codeInterfaceCounter = 0
+    for acp in addCodeInterfacePaths:
+        codeInterfaceCounter += 1
+        if isinstance(acp, basestring):
+            addModuleName = "addModule" + str(codeInterfaceCounter)
+            print "loading module", acp, "as ", addModuleName, " module."
+            addCodeInterfaces.append(imp.load_source(addModuleName,acp).theInterface())
+        elif isinstance(acp, types.InstanceType):
+            print "appending class object initiated by user: ", acp
+            addCodeInterfaces.append(acp)
+        else:
+            print "Unknown additional code interface type: ", acp
+
+    # check if using data bases
+    usesDataBases=False
+    if dataBases!=[]:
+        usesDataBases=True
+
+    # create workdir folder
+    print 'creating workdir folder'
+    if not os.path.exists('../workdir'):
+        os.makedirs('../workdir')
+
+    # check if outputdirectory exists
+    if not os.path.exists(workdir):
+        os.makedirs(workdir)
     else:
-        print "Unknown additional code interface type: ", acp
+        # option to plot the already existing histograms if directory exists
+        # if the root-files are found plotParallel is terminated successfully
+        # TODO rework this
+        if askYesNo('plot existing histograms?'):
+            if haddParallel==True:
+                allthefiles=glob.glob(workdir+"/HaddOutputs/*.root")
+                allfilteredfiles=[]
+                for f in allthefiles:
+                    if not "_renamed_" in f:
+                        allfilteredfiles.append(f)
+                oldoutput=outputpath
+                outputpath=[oldoutput]+allfilteredfiles
+                return outputpath
+            else:
+                return outputpath
+        
+        # creating timestamp for output directory
+        workdirold=workdir+datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+        os.rename(workdir,workdirold)
+        os.makedirs(workdir)
+        # copying cc-files and creating backup
+        cmd='cp -v '+workdirold+'/'+name+'.cc'+' '+workdir+'/'+name+'.cc'
+        subprocess.call(cmd,shell=True)
+        cmd='cp -v '+workdirold+'/'+name+''+' '+workdir+'/'+name+'Backup'
+        subprocess.call(cmd,shell=True)
 
-  usesDataBases=False
-  if dataBases!=[]:
-    usesDataBases=True
+    # checking again if outputdirectory exists
+    if not os.path.exists(workdir):
+        os.makedirs(workdir)
 
-  # create workdir folder
-  print 'creating workdir folder'
-  if not os.path.exists('workdir'):
-    os.makedirs('workdir')
+    programpath=workdir+'/'+name
 
-  if not os.path.exists(workdir):
-    os.makedirs(workdir)
-  else:
-    if askYesNo('plot existing histograms?'):
-      if haddParallel==True:
-        allthefiles=glob.glob(workdir+"/HaddOutputs/*.root")
-        allfilteredfiles=[]
-        for f in allthefiles:
-          if not "_renamed_" in f:
-            allfilteredfiles.append(f)
+    # create c++ program
+    # TODO this whole thing could be a separate function --->
+    # check if the program already exists
+    alreadyWritten=os.path.exists(programpath+'.cc')
+    print os.path.exists(programpath+'.cc')
+    if alreadyWritten:
+        print "a c++ program was written previously. Will check if this needs to be updated"
+        cmd='cp -v '+programpath+'.cc'+' '+programpath+'.ccBackup'
+        subprocess.call(cmd,shell=True)
+    print 'creating c++ program'
+    # TODO look at this code
+    createProgram(programpath,plots,samples,catnames,catselections,systnames,systweights,additionalvariables, dataBases,addCodeInterfaces,MEPDFCSVFile)
+    if not os.path.exists(programpath+'.cc'):
+        print 'could not create c++ program'
+        sys.exit(-1)
+    # check if the code changed
+    codeWasChanged=True
+    if alreadyWritten:
+        print "comparing c++ code"
+        print programpath+'.ccBackup' ," vs ", programpath+'.cc'
+        codeWasChanged=not filecmp.cmp(programpath+'.ccBackup',programpath+'.cc')
+    if codeWasChanged:
+        print "c++ codes differ"
+        print 'compiling c++ program'
+        # TODO look at this code
+        compileProgram(programpath, usesDataBases,addCodeInterfaces)
+    else:
+        print 'c++ program already existing !!!! Check if this is reasonable!!!'
+        cmd = 'cp -v '+programpath+'Backup'+' '+programpath
+        subprocess.call(cmd,shell=True)
+    if not os.path.exists(programpath):
+        print 'could not compile c++ program'
+        sys.exit(-1)
+    # TODO <-----------
+
+    #create script to rename histograms
+    # TODO look at code
+    createRenameScript(programpath,systnames+otherSystnames)
+  
+    # create output folders
+    print 'creating output folders'
+    scriptsfolder=workdir+'/'+name+'_scripts'
+    if not os.path.exists(scriptsfolder):
+        os.makedirs(scriptsfolder)
+    plotspath=workdir+'/'+name+'_plots/'
+    if not os.path.exists(plotspath):
+        os.makedirs(plotspath)
+    if not os.path.exists(workdir):
+        print 'could not create workdirs'
+        sys.exit(-1)
+
+    # create run scripts
+    # TODO look at this function
+    print 'creating run scripts'
+    scripts,outputs,nentries,samplewiseoutputs=get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,programpath,cmsswpath,treeInformationJsonFile,cirun)
+
+    #DANGERZONE Submit jobs
+    if StopAfterCompileStep==True:
+        exit(0)
+    # TODO maybe rework this function 
+    helperSubmitNAFJobs(scripts,outputs,nentries)
+    #raw_input()
+    #raw_input()
+
+
+    #  hadd outputs
+    # Check if hadd output worked, otherwise resubmit jobs a second time
+    haddResubmit = False
+    print 'hadd output starting'
+    haddclock=ROOT.TStopwatch()
+    haddclock.Start()
+    if haddParallel==False:
+        # parallel histogram adding disabled:
+        try:
+            subprocess.check_output(['hadd', outputpath]+outputs,stderr=subprocess.STDOUT)
+            print 'hadd output worked ', ('in the first place.' if not haddResubmit else 'in the second place.')
+        except subprocess.CalledProcessError, e:
+            if not haddResubmit:
+                print 'Hadd failed with the following error in the first place:\n \n', e.output
+                print '\n Resubmitting job script and then redoing hadd a second time.'
+                haddResubmit = True
+                helperSubmitNAFJobs(scripts,outputs,nentries)
+                subprocess.check_output(['hadd', outputpath]+outputs,stderr=subprocess.STDOUT)
+            else:
+                print "Hadd failed a second time with the following error, stopping program: \n \n", e.output
+                sys.exit(-1)
+  
+    else:
+        # parallel histogram adding enabled:
+        # TODO this calls the ParaHadding function - check it 
+        resultingfiles=doParaHadding(name,samplewiseoutputs)
         oldoutput=outputpath
-        outputpath=[oldoutput]+allfilteredfiles
-        return outputpath
-      else:
-        return outputpath
-    workdirold=workdir+datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-    os.rename(workdir,workdirold)
-    os.makedirs(workdir)
-    cmd='cp -v '+workdirold+'/'+name+'.cc'+' '+workdir+'/'+name+'.cc'
-    subprocess.call(cmd,shell=True)
-    cmd='cp -v '+workdirold+'/'+name+''+' '+workdir+'/'+name+'Backup'
-    subprocess.call(cmd,shell=True)
-
-  if not os.path.exists(workdir):
-    os.makedirs(workdir)
-
-  cmsswpath=os.environ['CMSSW_BASE']
-  programpath=workdir+'/'+name
-
-  # create c++ program
-  # check if the program already exists
-  alreadyWritten=os.path.exists(programpath+'.cc')
-  print os.path.exists(programpath+'.cc')
-  if alreadyWritten:
-    print "a c++ program was written previously. Will check if this needs to be updated"
-    cmd='cp -v '+programpath+'.cc'+' '+programpath+'.ccBackup'
-    subprocess.call(cmd,shell=True)
-  print 'creating c++ program'
-  createProgram(programpath,plots,samples,catnames,catselections,systnames,systweights,additionalvariables, dataBases,addCodeInterfaces,MEPDFCSVFile)
-  if not os.path.exists(programpath+'.cc'):
-    print 'could not create c++ program'
-    sys.exit(-1)
-  # check if the code changed
-  codeWasChanged=True
-  if alreadyWritten:
-    print "comparing c++ code"
-    print programpath+'.ccBackup' ," vs ", programpath+'.cc'
-    codeWasChanged=not filecmp.cmp(programpath+'.ccBackup',programpath+'.cc')
-  if codeWasChanged:
-    print "c++ codes differ"
-    print 'compiling c++ program'
-    compileProgram(programpath, usesDataBases,addCodeInterfaces)
-  else:
-    print 'c++ program already existing !!!! Check if this is reasonable!!!'
-    cmd = 'cp -v '+programpath+'Backup'+' '+programpath
-    subprocess.call(cmd,shell=True)
-  if not os.path.exists(programpath):
-    print 'could not compile c++ program'
-    sys.exit(-1)
-    
-  #create script to rename histograms
-  createRenameScript(programpath,systnames+otherSystnames)
-  
-  # create output folders
-  print 'creating output folders'
-  scriptsfolder=workdir+'/'+name+'_scripts'
-  if not os.path.exists(scriptsfolder):
-    os.makedirs(scriptsfolder)
-  plotspath=workdir+'/'+name+'_plots/'
-  if not os.path.exists(plotspath):
-    os.makedirs(plotspath)
-  if not os.path.exists(workdir):
-    print 'could not create workdirs'
-    sys.exit(-1)
-
-  # create run scripts
-  print 'creating run scripts'
-  scripts,outputs,nentries,samplewiseoutputs=get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,programpath,cmsswpath,treeInformationJsonFile,cirun)
-  #DANGERZONE Submit jobs
-  if StopAfterCompileStep==True:
-    exit(0)
-  helperSubmitNAFJobs(scripts,outputs,nentries)
-  #raw_input()
-  #raw_input()
-
-
-  # hadd outputs
-  # Check if hadd output worked, otherwise resubmit jobs a second time
-  haddResubmit = False
-  print 'hadd output starting'
-  haddclock=ROOT.TStopwatch()
-  haddclock.Start()
-  if haddParallel==False:
-    try:
-      subprocess.check_output(['hadd', outputpath]+outputs,stderr=subprocess.STDOUT)
-      print 'hadd output worked ', ('in the first place.' if not haddResubmit else 'in the second place.')
-    except subprocess.CalledProcessError, e:
-      if not haddResubmit:
-          print 'Hadd failed with the following error in the first place:\n \n', e.output
-          print '\n Resubmitting job script and then redoing hadd a second time.'
-          haddResubmit = True
-          helperSubmitNAFJobs(scripts,outputs,nentries)
-          subprocess.check_output(['hadd', outputpath]+outputs,stderr=subprocess.STDOUT)
-      else:
-          print "Hadd failed a second time with the following error, stopping program: \n \n", e.output
-          sys.exit(-1)
-  
-  else:
-    resultingfiles=doParaHadding(name,samplewiseoutputs)
-    oldoutput=outputpath
-    outputpath=[oldoutput]+resultingfiles
-  haddtime=haddclock.RealTime()
-  print "hadding took ", haddtime
-  return  outputpath
+        outputpath=[oldoutput]+resultingfiles
+    haddtime=haddclock.RealTime()
+    print "hadding took ", haddtime
+    # in the first iteration this output is a list, where the first argument is the outputpath of the rootfile
+    return  outputpath
 
 
 def doParaHadding(name,inmap={}):

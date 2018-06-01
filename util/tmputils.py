@@ -1,6 +1,7 @@
 import pandas
 import ast
 import plotutils
+import ROOT
 
 class samplesData:
     def __init__(self, pltcfg):
@@ -16,29 +17,31 @@ class samplesData:
                         selReplace = ["''","''"],
                         selReplace2 = ["''","''"],
                         filternicks = None,
-                        filternames = None ):
-        systnames += systNames
+                        filtername = None ):
+        self.systnames += systNames
         for sample in self.samples:
             if filternicks:
                 if sample.nick not in filternicks:
                     continue
-            if filternames:
-                if sample.name not in filternames:      
+            if filtername:
+                if not sample.name == filtername:      
                     continue
             for name, filename in zip(systNames, systfileNames):
-                selection = sample.selection.replace(eval(selReplace[0]),eval(selReplace[1]))
+                selection = sample.selection.replace( eval(selReplace[0]), eval(selReplace[1]) )
                 selection = selection.replace( eval(selReplace2[0]), eval(selReplace2[1]) )
+                path = sample.path.replace( eval(pathReplace[0]), eval(pathReplace[1]) )
+                
                 self.systsamples.append(
                     plotutils.Sample(
                         sample.name + name, 
                         sample.color,
-                        sample.path.replace(eval(pathReplace[0]),eval(pathReplace[1])),
+                        path,
                         selection,
                         sample.nick + name,
                         samDict=self.pltcfg.sampleDict) )
                         
     def addAllSamples(self, addNames):
-        self.allsamples = self.samples + self.systsamples
+        self.allsamples = self.samples + self.samples_data + self.systsamples
         self.allsystnames = addNames + self.systnames
                         
         
@@ -101,7 +104,35 @@ class configData:
         assert(len(self.nhistobins) == len(self.minxvals))
         assert(len(self.nhistobins) == len(self.categories))
         assert(len(self.nhistobins) == len(self.discrs))
-        
+    
+    def printLengths(self):
+        print("length of nhistobins       \t"+str(len(self.nhistobins)))
+        print("length of minxvals         \t"+str(len(self.minxvals)))
+        print("length of maxxvals         \t"+str(len(self.maxxvals)))
+        print("length of discrs           \t"+str(len(self.discrs)))
+        print("length of plotPreselections\t"+str(len(self.plotPreselections)))
+        print("length of binlabels        \t"+str(len(self.binlabels)))       
+        zipped = zip(self.discrs,self.plotPreselections,self.binlabels,self.nhistobins,self.minxvals,self.maxxvals)
+        print("length of zipped data      \t"+str(len(zipped)))
+
+    def genDiscriminatorPlots(self, discrname):
+        self.discriminatorPlots = []
+        zippedData = zip(self.discrs,self.plotPreselections,self.binlabels,self.nhistobins,self.minxvals,self.maxxvals)
+        for discr, preselection, binlabel, nbin, minv, maxv in zippedData:
+            self.discriminatorPlots.append(
+                plotutils.Plot(
+                    histo = ROOT.TH1F(discrname+"_"+binlabel, "final discriminator ("+binlabel+")", nbin, minv, maxv),
+                    variable = discr,
+                    selection = preselection,
+                    label = binlabel))
+
+    def addAdditionalDiscriminatorPlots(self, plotlist):
+        evaluatedPlotList = [eval(plt) for plt in plotlist]
+        self.additionalPlotList = evaluatedPlotList
+        self.discriminatorPlots.extend(self.additionalPlotList)               
+        print("additional plots added to discriminatorPlots:")
+        for plt in plotlist:
+            print(plt)
 
 def getAddVariables(pyrootdir, name = ""):
     path = pyrootdir+"/plottingscripts/configdata/"+name+"_addVariables.csv"
