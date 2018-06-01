@@ -6,28 +6,37 @@ import os
 import imp
 #import importlib
 import inspect
-#import ROOT
+import ROOT
 
 filedir = os.path.dirname(os.path.realpath(__file__))
 pyrootdir = "/".join(filedir.split("/")[:-1])
 workdir = pyrootdir+"/"+"workdir"
-
 sys.path.append(pyrootdir+'/util')
-sys.exit()
-
+sys.path.append(filedir+"/configs")
 import scriptgenerator
 import plotutils
 import limittools
 
 import analysisClass
-import configs.plotconfig_v14 as pltcfg
-from configs.plotconfig_v14 import *
+import plotconfig_v14 as pltcfg
+#from configs.plotconfig_v14 import *
 
+def gencsv(filename, categories=[], nhistobins=[], minxvals=[], maxxvals=[], discrs =[], separator=","):
+    with open("configdata/limitsAllv20_"+filename+".csv", "w") as csvf:
+        csvf.write("#categories"+separator+"nhistobins"+separator+"minxvals"+separator+"maxxvals"+separator+"discrs")
+        for i in range(len(categories)):
+            line = "\n"
+            line+= str(categories[i])+separator
+            line+= str(nhistobins[i])+separator
+            line+= str(minxvals[i])+separator
+            line+=str(maxxvals[i])+separator
+            line+=str(discrs[i])
+            csvf.write(line)
 
-def main(argv):
+def main(workdir, argv):
 
     # Create analysis object with output name
-
+    
     # TODO maybe makes more sense to give this as an argument instead of being hard coded
     name='limits_All_v30'
 
@@ -67,7 +76,8 @@ def main(argv):
     # NNFlowInterface.update()
     #
     # print "NNFlowInterfacePath: ", NNFlowInterfacePath
-
+    
+    # TODO maybe print chosen functions into a .json file in workdir
     analysis.printChosenOptions()
 
 
@@ -131,6 +141,11 @@ def main(argv):
                          'alternativebdt_ljets_j4_t4:='+bdtweightpath+'/weights_Final_44_'+alternativebdtset+'.xml',
                          'hardestJetPt:=Jet_Pt[0]',
                          ]
+    
+    with open("configdata/limitsAllv20_addVariables.csv", "w") as csvf:
+        csvf.write("#addVars")
+        for var in additionalvariables:
+            csvf.write("\n"+var)
 
     # TODO these variables for example are set in scriptgenerator, why not the other ones?
     additionalvariables+=scriptgenerator.GetMEPDFadditionalVariablesList("/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv")
@@ -138,7 +153,8 @@ def main(argv):
     #additionalvariables.extend(NNFlowInterface.getAdditionalVariablesList())
     print "Debug output: Print additional variables list: ", additionalvariables
 
-    # prepare discriminators
+    # prepare configdata
+    # TODO save this in a class maybe
     categories=[]
     nhistobins=[]
     minxvals=[]
@@ -169,6 +185,7 @@ def main(argv):
     maxxvals+=maxxvals_JTBDT
     categories+=categorienames_JTBDT
     
+    gencsv("JTBDT",categorienames_JTBDT,nhistobins_JTBDT,minxvals_JTBDT,maxxvals_JTBDT,discrs_JTBDT)
     # 2D analysis split at ttH median of BDTs
     unsplitcategorienames_JT2D=[
                   ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4",""),
@@ -181,63 +198,64 @@ def main(argv):
     categorienames_JT2D=[]
     for cat,bdt in zip(unsplitcategorienames_JT2D,bdtcuts):
       if cat[1] in ["ljets_jge6_tge4","ljets_j5_tge4","ljets_j4_t4","ljets_jge6_t3"]:
-        categories.append(('('+cat[0]+')*(finalbdt_'+cat[1]+'>'+str(bdt)+')',cat[1]+'_high') )
-        categories.append(('('+cat[0]+')*(finalbdt_'+cat[1]+'<='+str(bdt)+')',cat[1]+'_low') )
+        categorienames_JT2D.append(('('+cat[0]+')*(finalbdt_'+cat[1]+'>'+str(bdt)+')',cat[1]+'_high') )
+        categorienames_JT2D.append(('('+cat[0]+')*(finalbdt_'+cat[1]+'<='+str(bdt)+')',cat[1]+'_low') )
 
-    # TODO what the hell is this?
     discrs_JT2D=[memexp, memexp, memexp, memexp,memexp, memexp,memexp, memexp]
 
     nhistobins_JT2D = [10,12, 8,10, 25,25,   12,15 ]
     minxvals_JT2D =   [ 0.05, 0.05,0.1,0.1,0,0,0.05,0]
     maxxvals_JT2D =   [1.0, 0.9,1.0,0.95,1.0,1.0,1.0,1.0]
 
-
+    gencsv("JT2D",categorienames_JT2D,nhistobins_JT2D,minxvals_JT2D,maxxvals_JT2D,discrs_JT2D)
+    
     discrs+=discrs_JT2D
     nhistobins+=nhistobins_JT2D
     minxvals+=minxvals_JT2D
     maxxvals+=maxxvals_JT2D
     categories+=categorienames_JT2D
-
     ## 2D analysis split at ttH median of BDTs OPTIMIZED FOR ttbb vs rest
-    #unsplitcategorienames_JT2DOPTIMIZED=[
-                  #("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4",""),
-                  #("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4",""),
-                  #("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3",""),
-                  #("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4",""),
-                  #]
-    #bdtcuts=[-0.2,-0.2,0.2,0.22,0.17,0.22,0.05,0.17,0.17]
-    #categorienames_JT2DOPTIMIZED=[]
-    #for cat,bdt in zip(unsplitcategorienames_JT2DOPTIMIZED,bdtcuts):
-      #if cat[1] in ["ljets_jge6_tge4","ljets_j5_tge4","ljets_j4_t4","ljets_jge6_t3"]:
-        #categories.append(('('+cat[0]+')*(alternativebdt_'+cat[1]+'>'+str(bdt)+')',cat[1]+'_ttbbOpt_high') )
-        #categories.append(('('+cat[0]+')*(alternativebdt_'+cat[1]+'<='+str(bdt)+')',cat[1]+'_ttbbOpt_low') )
-    #discrs_JT2DOPTIMIZED=[memexp, memexp, memexp, memexp,memexp, memexp,memexp, memexp]
-    #nhistobins_JT2DOPTIMIZED = [10,12, 8,10, 25,25,   12,15 ]
-    #minxvals_JT2DOPTIMIZED =   [ 0.05, 0.05,0.1,0.1,0,0,0.05,0]
-    #maxxvals_JT2DOPTIMIZED =   [0.95, 0.9,1.0,1.0,1.0,1.0,1.0,1.0]
-    #discrs+=discrs_JT2DOPTIMIZED
-    #nhistobins+=nhistobins_JT2DOPTIMIZED
-    #minxvals+=minxvals_JT2DOPTIMIZED
-    #maxxvals+=maxxvals_JT2DOPTIMIZED
-    #categories+=categorienames_JT2DOPTIMIZED
-
+    #TODO recomment ->>
+    unsplitcategorienames_JT2DOPTIMIZED=[
+                    ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4",""),
+                    ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4",""),
+                    ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3",""),
+                    ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4",""),
+                    ]
+    bdtcuts=[-0.2,-0.2,0.2,0.22,0.17,0.22,0.05,0.17,0.17]
+    categorienames_JT2DOPTIMIZED=[]
+    for cat,bdt in zip(unsplitcategorienames_JT2DOPTIMIZED,bdtcuts):
+      if cat[1] in ["ljets_jge6_tge4","ljets_j5_tge4","ljets_j4_t4","ljets_jge6_t3"]:
+        categorienames_JT2DOPTIMIZED.append(('('+cat[0]+')*(alternativebdt_'+cat[1]+'>'+str(bdt)+')',cat[1]+'_ttbbOpt_high') )
+        categorienames_JT2DOPTIMIZED.append(('('+cat[0]+')*(alternativebdt_'+cat[1]+'<='+str(bdt)+')',cat[1]+'_ttbbOpt_low') )
+    discrs_JT2DOPTIMIZED=[memexp, memexp, memexp, memexp,memexp, memexp,memexp, memexp]
+    nhistobins_JT2DOPTIMIZED = [10,12, 8,10, 25,25,   12,15 ]
+    minxvals_JT2DOPTIMIZED =   [ 0.05, 0.05,0.1,0.1,0,0,0.05,0]
+    maxxvals_JT2DOPTIMIZED =   [0.95, 0.9,1.0,1.0,1.0,1.0,1.0,1.0]
+    discrs+=discrs_JT2DOPTIMIZED
+    nhistobins+=nhistobins_JT2DOPTIMIZED
+    minxvals+=minxvals_JT2DOPTIMIZED
+    maxxvals+=maxxvals_JT2DOPTIMIZED
+    categories+=categorienames_JT2DOPTIMIZED
+    gencsv("JT2DOPTIMIZED",categorienames_JT2DOPTIMIZED,nhistobins_JT2DOPTIMIZED,minxvals_JT2DOPTIMIZED,maxxvals_JT2DOPTIMIZED,discrs_JT2DOPTIMIZED)
 # BDT only but with the ttbb optimized BDTs
-    #categorienames_JTBDTOPTIMIZED=[
-                  #("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4_ttbbOpt",""),
-                  #("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4_ttbbOpt",""),
-                  #("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_ttbbOpt",""),
-                  #("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4_ttbbOpt",""),
-                  #]
-    #discrs_JTBDTOPTIMIZED=['alternativebdt_ljets_j4_t4',  'alternativebdt_ljets_j5_tge4',  'alternativebdt_ljets_jge6_t3', 'alternativebdt_ljets_jge6_tge4']
-    #nhistobins_JTBDTOPTIMIZED = [  12,      16,     25,   16 ]
-    #minxvals_JTBDTOPTIMIZED =   [ -0.8,   -0.65,  -0.65,   -0.7]
-    #maxxvals_JTBDTOPTIMIZED =   [0.6,     0.65,   0.65,    0.8]
-    #discrs+=discrs_JTBDTOPTIMIZED
-    #nhistobins+=nhistobins_JTBDTOPTIMIZED
-    #minxvals+=minxvals_JTBDTOPTIMIZED
-    #maxxvals+=maxxvals_JTBDTOPTIMIZED
-    #categories+=categorienames_JTBDTOPTIMIZED
+    categorienames_JTBDTOPTIMIZED=[
+                  ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_t4_ttbbOpt",""),
+                  ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4_ttbbOpt",""),
+                  ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_ttbbOpt",""),
+                  ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4_ttbbOpt",""),
+                  ]
+    discrs_JTBDTOPTIMIZED=['alternativebdt_ljets_j4_t4',  'alternativebdt_ljets_j5_tge4',  'alternativebdt_ljets_jge6_t3', 'alternativebdt_ljets_jge6_tge4']
+    nhistobins_JTBDTOPTIMIZED = [  12,      16,     25,   16 ]
+    minxvals_JTBDTOPTIMIZED =   [ -0.8,   -0.65,  -0.65,   -0.7]
+    maxxvals_JTBDTOPTIMIZED =   [0.6,     0.65,   0.65,    0.8]
+    discrs+=discrs_JTBDTOPTIMIZED
+    nhistobins+=nhistobins_JTBDTOPTIMIZED
+    minxvals+=minxvals_JTBDTOPTIMIZED
+    maxxvals+=maxxvals_JTBDTOPTIMIZED
+    categories+=categorienames_JTBDTOPTIMIZED
 
+    gencsv("JTBDTOPTIMIZED",categorienames_JTBDTOPTIMIZED,nhistobins_JTBDTOPTIMIZED,minxvals_JTBDTOPTIMIZED,maxxvals_JTBDTOPTIMIZED,discrs_JTBDTOPTIMIZED)
     # jet tag categories for Mem only and blr
     # TODO same her, maybe somewhere else or at the beginning
     categorienames_JTMEM=[                  
@@ -261,6 +279,8 @@ def main(argv):
     minxvals+=minxvals_JTMEM
     maxxvals+=maxxvals_JTMEM
     categories+=categorienames_JTMEM
+
+    gencsv("JTMEM",categorienames_JTMEM,nhistobins_JTMEM,minxvals_JTMEM,maxxvals_JTMEM,discrs_JTMEM)
 
     # DNN classes DNN outputs
     # TODO same
@@ -319,6 +339,7 @@ def main(argv):
     minxvals_MultiDNN+=[0.17,0.18,0.18,0.16,0.21,0.19]
     maxxvals_MultiDNN+=[0.7,0.7,0.35,0.55,0.3,0.3]
 
+    gencsv("MultiDNN",categorienames_MultiDNN,nhistobins_MultiDNN,minxvals_MultiDNN,maxxvals_MultiDNN,discrs_MultiDNN)
 
     discrs+=discrs_MultiDNN
     nhistobins+=nhistobins_MultiDNN
@@ -326,8 +347,6 @@ def main(argv):
     maxxvals+=maxxvals_MultiDNN
     categories+=categorienames_MultiDNN
 
-    # JT control - what is this?
-    # TODO same    
     categorienames_JT_control=[
                   ("(N_Jets==4&&N_BTagsM==3)","ljets_j4_t3_hardestJetPt",""),
                   ]
@@ -336,6 +355,7 @@ def main(argv):
     minxvals_JT_control =   [ 30]
     maxxvals_JT_control =   [280]
 
+    gencsv("JT_control",categorienames_JT_control,nhistobins_JT_control,minxvals_JT_control,maxxvals_JT_control,discrs_JT_control)
 
     discrs+=discrs_JT_control
     nhistobins+=nhistobins_JT_control
@@ -348,7 +368,7 @@ def main(argv):
     assert(len(nhistobins)==len(minxvals))
     assert(len(nhistobins)==len(categories))
     assert(len(nhistobins)==len(discrs))
-
+    sys.exit()
     # get input for plotting function
     plotPreselections= [c[0] for c in categories]
     binlabels= [c[1] for c in categories]
@@ -508,7 +528,7 @@ if __name__ == "__main__":
 
    MainClock=ROOT.TStopwatch()
    MainClock.Start()
-   main(sys.argv[1:])
+   main(workdir, sys.argv[1:])
    print "TOTAL Elapsed time since beginning of analysis script", MainClock.RealTime()
 
 
