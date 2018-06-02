@@ -71,6 +71,34 @@ otherSystFileNames = [
     "JESup", "JESdown",
     "JERup", "JERdown"
 ]
+WBosonSystNames=[
+       "_WbosonWeight_QCD1Up","_WbosonWeight_QCD1Down",
+       "_WbosonWeight_QCD2Up","_WbosonWeight_QCD2Down",
+       "_WbosonWeight_QCD3Up","_WbosonWeight_QCD3Down",
+       "_WbosonWeight_EW1Up","_WbosonWeight_EW1Down",
+       "_WbosonWeight_EW2Up","_WbosonWeight_EW2Down",
+       "_WbosonWeight_EW3Up","_WbosonWeight_EW3Down",
+       "_WbosonWeight_MixedUp","_WbosonWeight_MixedDown",
+]
+
+ZBosonSystNames=[
+      "_ZbosonWeight_QCD1Up","_ZbosonWeight_QCD1Down",
+      "_ZbosonWeight_QCD2Up","_ZbosonWeight_QCD2Down",
+      "_ZbosonWeight_QCD3Up","_ZbosonWeight_QCD3Down",
+      "_ZbosonWeight_EW1Up","_ZbosonWeight_EW1Down",
+      "_ZbosonWeight_EW2Up","_ZbosonWeight_EW2Down",
+      "_ZbosonWeight_EW3Up","_ZbosonWeight_EW3Down",
+      "_ZbosonWeight_MixedUp","_ZbosonWeight_MixedDown",
+]
+
+unfoldedSystNames=[
+      "_DataStatUp", "_DataStatDown",
+      "_fakeStatUp","_fakeStatDown",
+      "_fakeScaleUp","_fakeScaleDown",
+      "_MCStatUp","_MCStatDown"
+]
+
+BosonSystNames=ZBosonSystNames+WBosonSystNames
 
 MCWeight = '35.91823'
 
@@ -89,9 +117,9 @@ samples_unfolded = [
 
 samples_background = [
     Sample('Z(#nu#nu)+jets', ROOT.kBlue, path_ntuples+'/DYJetsToNuNu_PtZ-*/*nominal*.root', "1.*3*0.971" +
-           "*"+MCWeight+sel_MET, 'z_nunu_jets', weightSystNames+otherSystNames, samDict=sampleDict),
+           "*"+MCWeight+sel_MET, 'z_nunu_jets', weightSystNames+ZBosonSystNames+otherSystNames, samDict=sampleDict),
     Sample('W(l#nu)+jets', ROOT.kGreen, path_ntuples+'/WJetsToLNu_Pt-*/*nominal*.root', "1.*" +
-           MCWeight+sel_MET, 'w_lnu_jets', weightSystNames+otherSystNames, samDict=sampleDict),
+           MCWeight+sel_MET, 'w_lnu_jets', weightSystNames+WBosonSystNames+otherSystNames, samDict=sampleDict),
     Sample('Diboson', ROOT.kViolet, path_ntuples+'/??_TuneCUETP8M1_13TeV-pythia8/*nominal*.root',
            "1."+"*"+MCWeight+sel_MET, 'diboson', weightSystNames[:-4]+otherSystNames, samDict=sampleDict),
     Sample('Single Top', ROOT.kViolet-1, path_ntuples+'/ST*/*nominal*.root', "1."+"*" +

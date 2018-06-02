@@ -1055,11 +1055,11 @@ def createUnfoldedHistoList(path, varname, systnames=[""]):
     for syst in systnames:
         ROOT.gDirectory.cd('PyROOT:/')
         key=varname+syst
-        o=f.Get(key)
-
+        histo=f.Get(key)
         # print key
-        if isinstance(o,ROOT.TH1) and not isinstance(o,ROOT.TH2):
-            l.append(o.Clone())
+        # histo.Print()
+        if isinstance(histo,ROOT.TH1) and not isinstance(histo,ROOT.TH2):
+            l.append(histo.Clone())
     return l
 
 def createErrorbands(lll,samples,DoRateSysts=True,verbosity=0):
@@ -2500,7 +2500,7 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
 
 
 
-def plotUnfoldedDataMCanWsyst(lUnfolded,listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,factor,name,listOflll,logscale=False,label='',ratio=True,blinded=False,verbosity=0):
+def plotUnfoldedDataMCanWsyst(lUnfolded,listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,factor,name,listOflll,xlabel,logscale=False,label='',ratio=True,blinded=False,verbosity=0):
 ################################################
 ################################################
     options = 'histo'
@@ -2622,9 +2622,9 @@ def plotUnfoldedDataMCanWsyst(lUnfolded,listOfHistoLists,samples,listOfhistosOnT
         BinCenters =array('d')
         BinContents=array('d')
 
-        for bin in range(data.GetN()):
+        for bin in range(data.GetN()+1):
+            bin+=1;
             # print "Bin: ", bin, ":"
-            # bin+=1;
             syserrorH=0
             syserrorL=0
             for l in lUnfolded[1:]:
@@ -2662,25 +2662,25 @@ def plotUnfoldedDataMCanWsyst(lUnfolded,listOfHistoLists,samples,listOfhistosOnT
             ratioerrorgraph=ROOT.TGraphAsymmErrors(errorgraph.GetN())
       # print ratioerrorgraph
       # raw_input()
-        x, y = ROOT.Double(0), ROOT.Double(0)
-        for igc in range(errorgraph.GetN()):
-          errorgraph.GetPoint(igc,x,y)
-          ratioerrorgraph.SetPoint(igc,x, 1.0)
-          relErrUp=0.0
-          relErrDown=0.0
-          # check if bincontent-error becomes negative and if that is the case print it to the log file
-          if (y-abs(errorgraph.GetErrorYlow(igc)))<0:
+            x, y = ROOT.Double(0), ROOT.Double(0)
+            for igc in range(errorgraph.GetN()):
+              errorgraph.GetPoint(igc,x,y)
+              ratioerrorgraph.SetPoint(igc,x, 1.0)
+              relErrUp=0.0
+              relErrDown=0.0
+              # check if bincontent-error becomes negative and if that is the case print it to the log file
+              if (y-abs(errorgraph.GetErrorYlow(igc)))<0:
                 print "WARNING: Stack - Error is negative in "+ot.GetName()+" "+str(igc)+" with values "+str(y)+" "+str(errorgraph.GetErrorYlow(igc))+" \n"
                 # BinningErrorFile.write("WARNING: Stack - Error is negative in "+ot.GetName()+" "+str(igc)+" with values "+str(y)+" "+str(errorgraph.GetErrorYlow(igc))+" \n")
-          if verbosity>=2:
-            print x,y,errorgraph.GetErrorYhigh(igc),errorgraph.GetErrorYlow(igc)
-            
-          if y>0.0:
-            relErrUp=errorgraph.GetErrorYhigh(igc)/y
-            relErrDown=errorgraph.GetErrorYlow(igc)/y
-          if verbosity>=2:
-            print relErrUp,relErrDown
-          ratioerrorgraph.SetPointError(igc, errorgraph.GetErrorXlow(igc),errorgraph.GetErrorXhigh(igc), relErrDown, relErrUp)
+              if verbosity>=2:
+                print x,y,errorgraph.GetErrorYhigh(igc),errorgraph.GetErrorYlow(igc)
+                
+              if y>0.0:
+                relErrUp=errorgraph.GetErrorYhigh(igc)/y
+                relErrDown=errorgraph.GetErrorYlow(igc)/y
+              if verbosity>=2:
+                print relErrUp,relErrDown
+              ratioerrorgraph.SetPointError(igc, errorgraph.GetErrorXlow(igc),errorgraph.GetErrorXhigh(igc), relErrDown, relErrUp)
 
 
         errorgraph.SetFillStyle(thisFillStyle)
@@ -2704,143 +2704,143 @@ def plotUnfoldedDataMCanWsyst(lUnfolded,listOfHistoLists,samples,listOfhistosOnT
         listOfRatioErrorGraphs.append(ratioerrorgraph)
         # print objects
         # raw_input()
-        # l1=getLegendL()
-        # l2=getLegendR()
-        l1=ROOT.TLegend(0.35, 0.61, 0.9, 0.91)
-        l1.SetX1NDC(0.1)
-        l1.SetX2NDC(0.95)
-        l1.SetY1NDC(0.92)
-        l1.SetY2NDC(0.93)
-        l1.SetBorderSize(0);
-        l1.SetLineStyle(0);
-        l1.SetTextFont(42);
-        l1.SetTextSize(0.05);
-        l1.SetFillStyle(0);
-        l1.Print()
+    # l1=getLegendL()
+    # l2=getLegendR()
+    l1=ROOT.TLegend(0.35, 0.61, 0.9, 0.91)
+    l1.SetX1NDC(0.1)
+    l1.SetX2NDC(0.95)
+    l1.SetY1NDC(0.92)
+    l1.SetY2NDC(0.93)
+    l1.SetBorderSize(0);
+    l1.SetLineStyle(0);
+    l1.SetTextFont(42);
+    l1.SetTextSize(0.05);
+    l1.SetFillStyle(0);
+    l1.Print()
 
-        l2=ROOT.TLegend(0.66, 0.61, 0.83, 0.91)
-        l2.SetX1NDC(0.66)
-        l2.SetX2NDC(0.83)
-        l2.SetY1NDC(0.9)
-        l2.SetY2NDC(0.91)
-        l2.SetBorderSize(0);
-        l2.SetLineStyle(0);
-        l2.SetTextFont(42);
-        l2.SetTextSize(0.05);
-        l2.SetFillStyle(0);
-        l2.Print()
-        # l2.Print()
-        l1.AddEntry22(data,'data','P')
-        if factor >= 0.:
-          l2.AddEntry22(otc,sampleOnTop.name+' x '+str(factor),'L')
-        else:
-          l2.AddEntry22(otc,sampleOnTop.name+(' x {:4.0f}').format(integralfactor),'L')
-        ilc=0
-        for h,sample in zip(stackedListOfHistos,samples):
-            ilc+=1
-            if ilc%2==1:
-                l1.AddEntry22(h,sample.name,'F')
-            if ilc%2==0:
-                l2.AddEntry22(h,sample.name,'F')
+    l2=ROOT.TLegend(0.66, 0.61, 0.83, 0.91)
+    l2.SetX1NDC(0.66)
+    l2.SetX2NDC(0.83)
+    l2.SetY1NDC(0.9)
+    l2.SetY2NDC(0.91)
+    l2.SetBorderSize(0);
+    l2.SetLineStyle(0);
+    l2.SetTextFont(42);
+    l2.SetTextSize(0.05);
+    l2.SetFillStyle(0);
+    l2.Print()
+    l2.Print()
+    l1.AddEntry22(data,'data','P')
+    if factor >= 0.:
+      l2.AddEntry22(otc,sampleOnTop.name+' x '+str(factor),'L')
+    else:
+      l2.AddEntry22(otc,sampleOnTop.name+(' x {:4.0f}').format(integralfactor),'L')
+    ilc=0
+    for h,sample in zip(stackedListOfHistos,samples):
+        ilc+=1
+        if ilc%2==1:
+            l1.AddEntry22(h,sample.name,'F')
+        if ilc%2==0:
+            l2.AddEntry22(h,sample.name,'F')
 
-        canvases.append(canvas)
-        l1.Draw('same')
-        l2.Draw('same')
-        objects.append(data)
-        objects.append(l1)
-        objects.append(l2)
-        objects.append(otc)
+    canvases.append(canvas)
+    l1.Draw('same')
+    l2.Draw('same')
+    objects.append(data)
+    objects.append(l1)
+    objects.append(l2)
+    objects.append(otc)
 
-        #draw the lumi text on the canvas
-        CMS_lumi.lumi_13TeV = "35.9 fb^{-1}"
-        CMS_lumi.writeExtraText = 1
-        #CMS_lumi.extraText = "Preliminary"
-        CMS_lumi.extraText = ""
-        CMS_lumi.cmsText="CMS"
+    #draw the lumi text on the canvas
+    CMS_lumi.lumi_13TeV = "35.9 fb^{-1}"
+    CMS_lumi.writeExtraText = 1
+    #CMS_lumi.extraText = "Preliminary"
+    CMS_lumi.extraText = ""
+    CMS_lumi.cmsText="CMS"
 
-        CMS_lumi.lumi_sqrtS = "13 TeV" # used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
+    CMS_lumi.lumi_sqrtS = "13 TeV" # used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
 
-        CMS_lumi.cmsTextSize = 0.55
-        CMS_lumi.cmsTextOffset = 0.49
-        CMS_lumi.lumiTextSize = 0.43
-        CMS_lumi.lumiTextOffset = 0.61
+    CMS_lumi.cmsTextSize = 0.55
+    CMS_lumi.cmsTextOffset = 0.49
+    CMS_lumi.lumiTextSize = 0.43
+    CMS_lumi.lumiTextOffset = 0.61
 
-        CMS_lumi.relPosX = 0.15
+    CMS_lumi.relPosX = 0.15
 
-        CMS_lumi.hOffset = 0.05
+    CMS_lumi.hOffset = 0.05
 
-        iPeriod=4   # 13TeV
-        iPos=0     # CMS inside frame
+    iPeriod=4   # 13TeV
+    iPos=0     # CMS inside frame
 
-        CMS_lumi.CMS_lumi(canvas, iPeriod, iPos)
+    CMS_lumi.CMS_lumi(canvas, iPeriod, iPos)
 
-        label = ROOT.TLatex(0.18, 0.89, labeltext);
-        label.SetTextFont(42)
-        label.SetTextSize(0.035)
-        label.SetNDC()
-        label.Draw()
-        objects.append(label)
+    label = ROOT.TLatex(0.18, 0.89, labeltext);
+    label.SetTextFont(42)
+    label.SetTextSize(0.035)
+    label.SetNDC()
+    label.Draw()
+    objects.append(label)
 
 
-        ratiograph,ratiominimum,ratiomaximum=getRatioGraph(data,stackedListOfHistos[0])
-        canvas.cd(2)
-        line=listOfHistos[0].Clone()
-        line.SetFillStyle(0)
-        line.Divide(listOfHistos[0])
+    ratiograph,ratiominimum,ratiomaximum=getRatioGraph(data,stackedListOfHistos[0])
+    canvas.cd(2)
+    line=listOfHistos[0].Clone()
+    line.SetFillStyle(0)
+    line.Divide(listOfHistos[0])
 
-        emptyHisto=listOfHistos[0].Clone()
-        print emptyHisto.GetName()
-        emptyHisto.SetFillStyle(0)
-        #line.GetYaxis().SetRangeUser(0.5,1.6)
-        ## with this line you can let the ratio graph scale the y axis automatically
-        #line.GetYaxis().SetRangeUser(ratiominimum-0.2,ratiomaximum+0.2)
-        line.GetYaxis().SetRangeUser(0.4,1.65)
+    emptyHisto=listOfHistos[0].Clone()
+    print emptyHisto.GetName()
+    emptyHisto.SetFillStyle(0)
+    ## with this line you can let the ratio graph scale the y axis automatically
+    #line.GetYaxis().SetRangeUser(ratiominimum-0.2,ratiomaximum+0.2)
+    line.GetYaxis().SetRangeUser(0.4,1.65)
 
-        line.GetXaxis().SetRangeUser(listOfHistos[0].GetXaxis().GetXmin(),listOfHistos[0].GetXaxis().GetXmax())
-        for inb in range(line.GetNbinsX()+2):
-            line.SetBinContent(inb,1)
-            line.SetBinError(inb,0)
-        #print listOfHistos[0].GetXaxis().GetXmin(),listOfHistos[0].GetXaxis().GetXmax(),listOfHistos[0].GetXaxis().GetBinLabel(1)
-        #print line.GetXaxis().GetXmin(),line.GetXaxis().GetXmax(),line.GetXaxis().GetBinLabel(1)
-        #raw_input()
-        line.GetXaxis().SetLabelSize(line.GetXaxis().GetLabelSize()*2.4)
-        line.GetYaxis().SetLabelSize(line.GetYaxis().GetLabelSize()*2.4)
-        line.GetXaxis().SetTitleSize(line.GetXaxis().GetTitleSize()*3)
-        #line.GetYaxis().SetTitleSize(line.GetYaxis().GetTitleSize()*2.4)
-        line.GetYaxis().SetTitleSize(line.GetYaxis().GetTitleSize()*2.4)
-        line.GetYaxis().CenterTitle(1);
-        line.GetYaxis().SetTitle('data/MC');
-        line.GetYaxis().SetNdivisions( 503 );
-        line.GetYaxis().SetTitleOffset( 0.5 );
-        line.GetXaxis().SetNdivisions( 510 );
-        if "N_BTagsM" in otc.GetName():
-          line.GetXaxis().SetNdivisions( 505 );
-        line.GetXaxis().SetTickLength( line.GetXaxis().GetTickLength() * 2.0 );
-        line.GetYaxis().SetTickLength( line.GetYaxis().GetTickLength() * 1.65 );
+    line.GetXaxis().SetRangeUser(listOfHistos[0].GetXaxis().GetXmin(),listOfHistos[0].GetXaxis().GetXmax())
+    for inb in range(line.GetNbinsX()+2):
+        line.SetBinContent(inb,1)
+        line.SetBinError(inb,0)
+    #print listOfHistos[0].GetXaxis().GetXmin(),listOfHistos[0].GetXaxis().GetXmax(),listOfHistos[0].GetXaxis().GetBinLabel(1)
+    #print line.GetXaxis().GetXmin(),line.GetXaxis().GetXmax(),line.GetXaxis().GetBinLabel(1)
+    #raw_input()
+    line.GetXaxis().SetLabelSize(line.GetXaxis().GetLabelSize()*2.4)
+    line.GetYaxis().SetLabelSize(line.GetYaxis().GetLabelSize()*2.4)
+    line.GetXaxis().SetTitleSize(line.GetXaxis().GetTitleSize()*3)
+    #line.GetYaxis().SetTitleSize(line.GetYaxis().GetTitleSize()*2.4)
+    line.GetYaxis().SetTitleSize(line.GetYaxis().GetTitleSize()*2.4)
+    line.GetYaxis().CenterTitle(1);
+    line.GetYaxis().SetTitle('data/MC');
+    line.GetYaxis().SetNdivisions( 503 );
+    line.GetYaxis().SetTitleOffset( 0.5 );
+    line.GetXaxis().SetNdivisions( 510 );
+    if "N_BTagsM" in otc.GetName():
+      line.GetXaxis().SetNdivisions( 505 );
+    line.GetXaxis().SetTickLength( line.GetXaxis().GetTickLength() * 2.0 );
+    line.GetYaxis().SetTickLength( line.GetYaxis().GetTickLength() * 1.65 );
+    line.GetXaxis().SetTitle(xlabel)
 
-        #line.GetXaxis().SetBinLabel(4,"bla")
-        line.Draw('histo')
-        objects.append(ratiograph)
-        #print len(listOfRatioErrorGraphs)
-        for ratioerrorgraph in listOfRatioErrorGraphs:
-          ratioerrorgraph.Draw("same2")
+    #line.GetXaxis().SetBinLabel(4,"bla")
+    line.Draw('histo')
+    objects.append(ratiograph)
+    #print len(listOfRatioErrorGraphs)
+    for ratioerrorgraph in listOfRatioErrorGraphs:
+      ratioerrorgraph.Draw("same2")
 #        objects.append(ratioerrorgraph)
-        ratiograph.Draw('sameP0')
-        line.SetLineWidth(1)
-        line.Draw('histosame')
-        #emptyHisto.GetYaxis().SetTitle('data/MC');
-        #print "title? ", emptyHisto.GetYaxis().GetTitle()
-        #print "title? ", line.GetYaxis().GetTitle()
-        line.Draw('axissame')
-        #emptyHisto.Draw("axissame")
-        #objects.append(emptyHisto)
-        objects.append(line)
-        #print labeltext
-        #raw_input()
+    ratiograph.Draw('sameP0')
+    line.SetLineWidth(1)
+    line.Draw('histosame')
+    #emptyHisto.GetYaxis().SetTitle('data/MC');
+    #print "title? ", emptyHisto.GetYaxis().GetTitle()
+    #print "title? ", line.GetYaxis().GetTitle()
+    line.Draw('axissame')
+    #emptyHisto.Draw("axissame")
+    #objects.append(emptyHisto)
+    objects.append(line)
+    #print labeltext
+    #raw_input()
 
-        #print labeltext
-        #raw_input()
-        #BinningErrorFile.close()
+    #print labeltext
+    #raw_input()
+    #BinningErrorFile.close()
 
 
 

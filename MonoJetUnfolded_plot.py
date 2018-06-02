@@ -24,15 +24,15 @@ jobname = "MonoJet_Plots"
 plotselection_inclusive = "1.*DeltaPhi_Jet_MET[0]>1."
 plotlabel_inclusive = "#slash{E}_{T}>250 GeV"
 plots_inclusive = [
-    Plot(ROOT.TH1F("Evt_Pt_GenMET", "Gen #slash{E}_{T}", 50, 0., 1500.),
+    Plot(ROOT.TH1F("Evt_Pt_GenMET", "Gen #slash{E}_{T}", 50, 0., 1000.),
          "Gen #slash{E}_{T}", plotselection_inclusive, plotlabel_inclusive),
 ]
 
 plots = plots_inclusive
 
-allsystnames = weightSystNames+otherSystNames
+allsystnames = weightSystNames+ZBosonSystNames+WBosonSystNames+otherSystNames
 
-THEoutputpath = "workdir"
+THEoutputpath = "/nfs/dust/cms/user/swieland/Darkmatter/DM_Unfolding/rootfiles/"
 print "---------------------------------------------"
 print "THEoutputpath=", THEoutputpath
 print "---------------------------------------------"
@@ -60,22 +60,17 @@ lolT_signal = transposeLOL(listOfHistoLists_signal)
 print "listOfHistoLists_signal=", listOfHistoLists_signal
 print "listOfHistoListsTransposed_signal=", lolT_signal
 # unfolded
-listOfHistoLists_unfolded = createHistoLists_fromSuperHistoFile(
-    outputpath, samples_unfolded, plots, 1)
-print "listOfHistoLists_unfolded=", listOfHistoLists_unfolded
-
+lUnfoldedData = createUnfoldedHistoList(
+    outputpath, "unfolded_Evt_Pt_GenMET", allsystnames+unfoldedSystNames)
 print "Making MC Control plots"
 
 lll = createLLL_fromSuperHistoFileSyst(
     outputpath, samples_background, plots, allsystnames)
 # print "lll=", lll
 
-lUnfoldedData = createUnfoldedHistoList(
-    outputpath, "unfolded_Evt_Pt_GenMET", allsystnames)
-# print "lUnfoldedData=", lUnfoldedData
+print "lUnfoldedData=", lUnfoldedData
 labels = [plot.label for plot in plots]
-# plotDataMCanWsyst(listOfHistoListsData=listOfHistoLists_unfolded, listOfHistoLists=transposeLOL(lolT_background), samples=samples_background,
-                  # listOfhistosOnTop=lolT_signal[0], sampleOnTop=samples_signal[0], factor=-1, name=jobname, listOflll=[[lll, 3354, ROOT.kBlack, True]], logscale=True, label=labels, ratio=True, blinded=False, verbosity=2)
+xlabel="unfolded #slash{E}_{T}"
 
 plotUnfoldedDataMCanWsyst(lUnfolded=lUnfoldedData, listOfHistoLists=transposeLOL(lolT_background), samples=samples_background,
-                  listOfhistosOnTop=lolT_signal[0], sampleOnTop=samples_signal[0], factor=-1, name=jobname, listOflll=[[lll, 3354, ROOT.kBlack, True]], logscale=True, label=labels, ratio=True, blinded=False, verbosity=2)
+                          listOfhistosOnTop=lolT_signal[0], sampleOnTop=samples_signal[0], factor=-1, name=jobname, listOflll=[[lll, 3354, ROOT.kBlack, True]], xlabel=xlabel, logscale=True, label=labels, ratio=True, blinded=False, verbosity=0)
