@@ -1341,6 +1341,12 @@ class BosonHelper
     TH1D* WbosonWeight_EW3Down = 0;
     TH1D* WbosonWeight_MixedUp = 0;
     TH1D* WbosonWeight_MixedDown = 0;
+    TH1D* WbosonWeight_AlphaUp = 0;
+    TH1D* WbosonWeight_AlphaDown = 0;
+    TH1D* WbosonWeight_muRUp = 0;
+    TH1D* WbosonWeight_muRDown = 0;
+    TH1D* WbosonWeight_muFUp = 0;
+    TH1D* WbosonWeight_muFDown = 0;
 
     TH1D* ZbosonWeight_nominal = 0;
     TH1D* ZbosonWeight_QCD1Up = 0;
@@ -1357,6 +1363,12 @@ class BosonHelper
     TH1D* ZbosonWeight_EW3Down = 0;
     TH1D* ZbosonWeight_MixedUp = 0;
     TH1D* ZbosonWeight_MixedDown = 0;
+    TH1D* ZbosonWeight_AlphaUp = 0;
+    TH1D* ZbosonWeight_AlphaDown = 0;
+    TH1D* ZbosonWeight_muRUp = 0;
+    TH1D* ZbosonWeight_muRDown = 0;
+    TH1D* ZbosonWeight_muFUp = 0;
+    TH1D* ZbosonWeight_muFDown = 0;
     // flag if the file and the histograms were read properly
     bool Winitialized = false;
     bool Zinitialized = false;
@@ -1394,7 +1406,12 @@ void BosonHelper::LoadWFile(TString path_to_sf_file_)
     WbosonWeight_EW3Down =   (TH1D*)scalefactor_fileW->Get("evj_NNLO_NLO_nnn_nnd_n");
     WbosonWeight_MixedUp =   (TH1D*)scalefactor_fileW->Get("evj_NNLO_NLO_nnn_nnn_u");
     WbosonWeight_MixedDown = (TH1D*)scalefactor_fileW->Get("evj_NNLO_NLO_nnn_nnn_d");
-
+    WbosonWeight_AlphaUp =   (TH1D*)scalefactor_fileW->Get("evj_NNLO_NLO_nnn_nnn_n_alpha_up");
+    WbosonWeight_AlphaDown = (TH1D*)scalefactor_fileW->Get("evj_NNLO_NLO_nnn_nnn_n_alpha_down");
+    WbosonWeight_muRUp =     (TH1D*)scalefactor_fileW->Get("evj_NNLO_NLO_nnn_nnn_n_Weight_scale_variation_muR_2p0_muF_1p0");
+    WbosonWeight_muRDown =   (TH1D*)scalefactor_fileW->Get("evj_NNLO_NLO_nnn_nnn_n_Weight_scale_variation_muR_0p5_muF_1p0");
+    WbosonWeight_muFUp =     (TH1D*)scalefactor_fileW->Get("evj_NNLO_NLO_nnn_nnn_n_Weight_scale_variation_muR_1p0_muF_2p0");
+    WbosonWeight_muFDown =   (TH1D*)scalefactor_fileW->Get("evj_NNLO_NLO_nnn_nnn_n_Weight_scale_variation_muR_1p0_muF_0p5");
     Winitialized = true;
   }
 }
@@ -1424,6 +1441,12 @@ void BosonHelper::LoadZFile(TString path_to_sf_file_)
     ZbosonWeight_EW3Down =   (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnn_nnd_n");
     ZbosonWeight_MixedUp =   (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnn_nnn_u");
     ZbosonWeight_MixedDown = (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnn_nnn_d");
+    ZbosonWeight_AlphaUp =   (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnn_nnn_n_alpha_up");
+    ZbosonWeight_AlphaDown = (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnn_nnn_n_alpha_down");
+    ZbosonWeight_muRUp =     (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnn_nnn_n_Weight_scale_variation_muR_2p0_muF_1p0");
+    ZbosonWeight_muRDown =   (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnn_nnn_n_Weight_scale_variation_muR_0p5_muF_1p0");
+    ZbosonWeight_muFUp =     (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnn_nnn_n_Weight_scale_variation_muR_1p0_muF_2p0");
+    ZbosonWeight_muFDown =   (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnn_nnn_n_Weight_scale_variation_muR_1p0_muF_0p5");
     Zinitialized = true;
   }
 }
@@ -1449,6 +1472,12 @@ void BosonHelper::Reset()
   WbosonWeight_EW3Down = 0;
   WbosonWeight_MixedUp = 0;
   WbosonWeight_MixedDown = 0;
+  WbosonWeight_AlphaUp = 0;
+  WbosonWeight_AlphaDown = 0;
+  WbosonWeight_muRUp = 0;
+  WbosonWeight_muRDown = 0;
+  WbosonWeight_muFUp = 0;
+  WbosonWeight_muFDown = 0;
 
   ZbosonWeight_nominal = 0;
   ZbosonWeight_QCD1Up = 0;
@@ -1465,6 +1494,13 @@ void BosonHelper::Reset()
   ZbosonWeight_EW3Down = 0;
   ZbosonWeight_MixedUp = 0;
   ZbosonWeight_MixedDown = 0;
+  ZbosonWeight_AlphaUp = 0;
+  ZbosonWeight_AlphaDown = 0;
+  ZbosonWeight_muRUp = 0;
+  ZbosonWeight_muRDown = 0;
+  ZbosonWeight_muFUp = 0;
+  ZbosonWeight_muFDown = 0;
+  
   Winitialized = false;
   Zinitialized = false;
 }
@@ -1536,6 +1572,30 @@ double BosonHelper::GetScaleFactorW(float W_Pt, string label)
     bin = WbosonWeight_MixedUp->FindBin(W_Pt);
     sf = WbosonWeight_MixedUp->GetBinContent(bin);  
   }
+  else if (label == "AlphaUp") {
+    bin = WbosonWeight_AlphaUp->FindBin(W_Pt);
+    sf = WbosonWeight_AlphaUp->GetBinContent(bin);  
+  }
+  else if (label == "AlphaDown") {
+    bin = WbosonWeight_AlphaDown->FindBin(W_Pt);
+    sf = WbosonWeight_AlphaDown->GetBinContent(bin);  
+  }
+  else if (label == "muRUp") {
+    bin = WbosonWeight_muRUp->FindBin(W_Pt);
+    sf = WbosonWeight_muRUp->GetBinContent(bin);  
+  }
+  else if (label == "muRDown") {
+    bin = WbosonWeight_muRDown->FindBin(W_Pt);
+    sf = WbosonWeight_muRDown->GetBinContent(bin);  
+  }
+  else if (label == "muFUp") {
+    bin = WbosonWeight_muFUp->FindBin(W_Pt);
+    sf = WbosonWeight_muFUp->GetBinContent(bin);  
+  }
+  else if (label == "muFDown") {
+    bin = WbosonWeight_muFDown->FindBin(W_Pt);
+    sf = WbosonWeight_muFDown->GetBinContent(bin);  
+  }
   if(W_Pt<=30.) sf = 1.;
   return sf;
 }
@@ -1606,6 +1666,30 @@ double BosonHelper::GetScaleFactorZ(float Z_Pt, string label)
   else if (label == "MixedDown"){
     bin = ZbosonWeight_MixedUp->FindBin(Z_Pt);
     sf = ZbosonWeight_MixedUp->GetBinContent(bin);  
+  }
+  else if (label == "AlphaUp") {
+    bin = ZbosonWeight_AlphaUp->FindBin(Z_Pt);
+    sf = ZbosonWeight_AlphaUp->GetBinContent(bin);  
+  }
+  else if (label == "AlphaDown") {
+    bin = ZbosonWeight_AlphaDown->FindBin(Z_Pt);
+    sf = ZbosonWeight_AlphaDown->GetBinContent(bin);  
+  }
+  else if (label == "muRUp") {
+    bin = ZbosonWeight_muRUp->FindBin(Z_Pt);
+    sf = ZbosonWeight_muRUp->GetBinContent(bin);  
+  }
+  else if (label == "muRDown") {
+    bin = ZbosonWeight_muRDown->FindBin(Z_Pt);
+    sf = ZbosonWeight_muRDown->GetBinContent(bin);  
+  }
+  else if (label == "muFUp") {
+    bin = ZbosonWeight_muFUp->FindBin(Z_Pt);
+    sf = ZbosonWeight_muFUp->GetBinContent(bin);  
+  }
+  else if (label == "muFDown") {
+    bin = ZbosonWeight_muFDown->FindBin(Z_Pt);
+    sf = ZbosonWeight_muFDown->GetBinContent(bin);  
   }
   if(Z_Pt<=30.) sf = 1.;
   return sf;
@@ -2432,6 +2516,12 @@ def startLoop():
   float internalWbosonWeight_EW3Down = 1.0;
   float internalWbosonWeight_MixedUp = 1.0;
   float internalWbosonWeight_MixedDown = 1.0;
+  float internalWbosonWeight_AlphaUp = 1.0;
+  float internalWbosonWeight_AlphaDown = 1.0;
+  float internalWbosonWeight_muRUp = 1.0;
+  float internalWbosonWeight_muRDown = 1.0;
+  float internalWbosonWeight_muFUp = 1.0;
+  float internalWbosonWeight_muFDown = 1.0;
 
   float internalZbosonWeight_nominal = 1.0;
   float internalZbosonWeight_QCD1Up = 1.0;
@@ -2448,6 +2538,12 @@ def startLoop():
   float internalZbosonWeight_EW3Down = 1.0;
   float internalZbosonWeight_MixedUp = 1.0;
   float internalZbosonWeight_MixedDown = 1.0;
+  float internalZbosonWeight_AlphaUp = 1.0;
+  float internalZbosonWeight_AlphaDown = 1.0;
+  float internalZbosonWeight_muRUp = 1.0;
+  float internalZbosonWeight_muRDown = 1.0;
+  float internalZbosonWeight_muFUp = 1.0;
+  float internalZbosonWeight_muFDown = 1.0;
 
   double tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF;
   
@@ -2494,6 +2590,15 @@ def startLoop():
 
   internalWbosonWeight_MixedUp = internalBosonHelper->GetScaleFactorW(W_Pt, "MixedUp");
   internalWbosonWeight_MixedDown = internalBosonHelper->GetScaleFactorW(W_Pt, "MixedDown");
+  
+  internalWbosonWeight_AlphaUp = internalBosonHelper->GetScaleFactorW(W_Pt, "AlphaUp");
+  internalWbosonWeight_AlphaDown = internalBosonHelper->GetScaleFactorW(W_Pt, "AlphaDown");
+  
+  internalWbosonWeight_muRUp = internalBosonHelper->GetScaleFactorW(W_Pt, "muRUp");
+  internalWbosonWeight_muRDown = internalBosonHelper->GetScaleFactorW(W_Pt, "muRDown");
+  
+  internalWbosonWeight_muFUp = internalBosonHelper->GetScaleFactorW(W_Pt, "muFUp");
+  internalWbosonWeight_muFDown = internalBosonHelper->GetScaleFactorW(W_Pt, "muFDown");
   }
   if(processname.find("z_nunu_jets")!=std::string::npos){
   internalZbosonWeight_nominal = internalBosonHelper->GetScaleFactorZ(Z_Pt, "nominal");
@@ -2513,6 +2618,15 @@ def startLoop():
 
   internalZbosonWeight_MixedUp = internalBosonHelper->GetScaleFactorZ(Z_Pt, "MixedUp"); 
   internalZbosonWeight_MixedDown = internalBosonHelper->GetScaleFactorZ(Z_Pt, "MixedDown");
+  
+  internalZbosonWeight_AlphaUp = internalBosonHelper->GetScaleFactorZ(Z_Pt, "AlphaUp");
+  internalZbosonWeight_AlphaDown = internalBosonHelper->GetScaleFactorZ(Z_Pt, "AlphaDown");
+  
+  internalZbosonWeight_muRUp = internalBosonHelper->GetScaleFactorZ(Z_Pt, "muRUp");
+  internalZbosonWeight_muRDown = internalBosonHelper->GetScaleFactorZ(Z_Pt, "muRDown");
+  
+  internalZbosonWeight_muFUp = internalBosonHelper->GetScaleFactorZ(Z_Pt, "muFUp");
+  internalZbosonWeight_muFDown = internalBosonHelper->GetScaleFactorZ(Z_Pt, "muFDown");
   }
   
   
