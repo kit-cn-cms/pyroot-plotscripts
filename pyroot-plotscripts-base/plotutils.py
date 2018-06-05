@@ -1003,40 +1003,43 @@ def createHistoLists_fromSuperHistoFile(path,samples,plots,rebin=1,catnames=[""]
     return listOfHistoLists
 
 def createLLL_fromSuperHistoFileSyst(path,samples,plots,systnames=[""]):
-    theclock=ROOT.TStopwatch()
+    theclock = ROOT.TStopwatch()
     theclock.Start()
-    verbosity=0
-    f=ROOT.TFile(path, "readonly")
+    verbosity = 0
+    f = ROOT.TFile(path, "readonly")
 #    print path
-    theobjectlist=[]
-    #dostore=False
+    theobjectlist = []
+    # dostore=False
     keyList = f.GetKeyNames()
-    lll=[]
+    lll = []
     for plot in plots:
-        ll=[]
+        ll = []
         print "creating LLL error histolist for plot ", plot.name
         for sample in samples:
-            nominal_key=sample.nick+'_'+plot.name+systnames[0]
-            nominal=f.Get(nominal_key)
-            #if dostore:
-	      #theobjectlist.append(nominal)
+            nominal_key = sample.nick+'_'+plot.name+systnames[0]
+            nominal = f.Get(nominal_key)
+            # if dostore:
+            # theobjectlist.append(nominal)
 #            print sample.name
-            #print "shapes ", sample.shape_unc
-            l=[]
+            # print "shapes ", sample.shape_unc
+            l = []
             for syst in systnames:
                 ROOT.gDirectory.cd('PyROOT:/')
-                key=sample.nick+'_'+plot.name+syst
-                #print key
+                key = sample.nick+'_'+plot.name+syst
+                # print sample.shape_unc
                 if not syst in sample.shape_unc:
-		    if verbosity>=2:
-		      print "using nominal for ", key
+                    if verbosity >= 2:
+                        print "using nominal for ", key
                     l.append(nominal.Clone(key))
                     continue
-                o=f.Get(key)
-                #if dostore:
-		  #theobjectlist.append(o)
-                if isinstance(o,ROOT.TH1) and not isinstance(o,ROOT.TH2):
-#		    print "using right one for", key
+                # print key
+
+                o = f.Get(key)
+                # o.Print()
+                # if dostore:
+                # theobjectlist.append(o)
+                if isinstance(o, ROOT.TH1) and not isinstance(o, ROOT.TH2):
+                    #           print "using right one for", key
                     l.append(o.Clone())
  #               else:
   #                  print syst,'not used for',sample.name
@@ -1044,6 +1047,7 @@ def createLLL_fromSuperHistoFileSyst(path,samples,plots,systnames=[""]):
         lll.append(ll)
     print "creating the LLL took ", theclock.RealTime()
     return lll
+
 
 def createUnfoldedHistoList(path, varname, systnames=[""]):
     f=ROOT.TFile(path, "readonly")
@@ -1062,7 +1066,7 @@ def createUnfoldedHistoList(path, varname, systnames=[""]):
             l.append(histo.Clone())
     return l
 
-def createErrorbands(lll,samples,DoRateSysts=True,verbosity=0):
+def createErrorbands(lll,samples,DoRateSysts=True,verbosity=3):
     print "creating errorbands"
     if DoRateSysts:
       print "using ratesysts"
@@ -1077,13 +1081,14 @@ def createErrorbands(lll,samples,DoRateSysts=True,verbosity=0):
           print "Creating error band for  ", nominal.GetName()
         for h in llT[0][1:]:
             nominal.Add(h)
-            #print h
-        #print "integrals ", llT[0][0].Integral(), nominal.Integral()
+            # print h
+        # print "integrals ", llT[0][0].Integral(), nominal.Integral()
         systs=[]
         #print "LLT[1:]", llT[1:]
         for l in llT[1:]: #for all systematics
-	    #print "l[1:]",l[1:]
+	    # print "l[1:]",l[1:]
             syst=l[0].Clone()
+            # syst.Print()
             for h in l[1:]:
                 syst.Add(h)
                 if verbosity>=1:
@@ -1115,7 +1120,7 @@ def createErrorbands(lll,samples,DoRateSysts=True,verbosity=0):
 	      syst=ls[0].Clone()
 	      for h in ls[1:]:
 		  syst.Add(h)
-	      #print "rates ", sample.nick, syst.Integral()
+	      # print "rates ", sample.nick, syst.Integral()
 	      systs.append(syst)
 
         uperrors=[0]*ll[0][0].GetNbinsX()
@@ -1124,6 +1129,7 @@ def createErrorbands(lll,samples,DoRateSysts=True,verbosity=0):
         #for sys in systs:
 	  #print sys, sys.Integral()
         for ibin in range(0,nominal.GetNbinsX()):
+            print "bin: ", ibin+1
             nerr=nominal.GetBinError(ibin+1)
             #print "Bin, name, content ",ibin, nominal.GetName(), nominal.GetBinContent(ibin+1)
             uperrors[ibin]=ROOT.TMath.Sqrt(uperrors[ibin]*uperrors[ibin]+nerr*nerr)
@@ -2610,12 +2616,13 @@ def plotUnfoldedDataMCanWsyst(lUnfolded,listOfHistoLists,samples,listOfhistosOnT
 
         data,blind=getDataGraphBlind(lUnfolded,nok)
         datahist=lUnfolded[0]
+        # datahist.Print()
         # print listOfHistosData[0][0]
         # print datahist[0]
         # print np.array(listOfHistosData).shape
         # data=listOfHistosData[0][0]
-        #loop over all Bins
 
+        #loop over all Bins
         zeros=array('d')
         sysUp=array('d')
         sysDown=array('d')

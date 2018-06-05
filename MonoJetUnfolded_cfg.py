@@ -16,7 +16,7 @@ ExSystNames = ["",
     "_CMS_res_jUp", "_CMS_res_jDown"
     ]
 
-commonTheorySystNames = [
+commonTheorySystNames = ["",
     "_Weight_scale_variation_muRUp", "_Weight_scale_variation_muRDown",
     "_Weight_scale_variation_muFUp", "_Weight_scale_variation_muFDown",
     ]
@@ -59,7 +59,7 @@ unfoldedExtraSystNames = [
 
 BosonSystNames = ZBosonSystNames+WBosonSystNames
 
-MCSystnames=[""] + commonTheorySystNames + BosonSystNames
+MCSystnames = commonTheorySystNames + BosonSystNames
 unfoldedSystNames =  ExSystNames + unfoldedExtraSystNames +MCSystnames 
 
 path_ntuples = "/nfs/dust/cms/user/mwassmer/DarkMatter/ntuples"
@@ -79,8 +79,8 @@ samples_unfolded = [
 ]
 
 samples_background = [
-    Sample('Z(#nu#nu)+jets', ROOT.kBlue, dummypath, dummyweight, 'z_nunu_jets', dummySys, samDict=sampleDict),
-    Sample('W(l#nu)+jets', ROOT.kGreen, dummypath, dummyweight, 'w_lnu_jets', dummySys, samDict=sampleDict),
+    Sample('Z(#nu#nu)+jets', ROOT.kBlue, dummypath, dummyweight, 'z_nunu_jets', commonTheorySystNames + ZBosonSystNames, samDict=sampleDict),
+    Sample('W(l#nu)+jets', ROOT.kGreen, dummypath, dummyweight, 'w_lnu_jets', commonTheorySystNames + WBosonSystNames, samDict=sampleDict),
     Sample('Diboson', ROOT.kViolet, dummypath, dummyweight, 'diboson', dummySys, samDict=sampleDict),
     Sample('Single Top', ROOT.kViolet-1, dummypath, dummyweight, 'singletop', dummySys, samDict=sampleDict),
     Sample('t#bar{t}', ROOT.kViolet-2, dummypath, dummyweight, 'ttbar', dummySys, samDict=sampleDict),

@@ -64,10 +64,10 @@ print "Making MC Control plots"
 
 lll = createLLL_fromSuperHistoFileSyst(
     outputpath, samples_background, plots, MCSystnames)
-# for ll in lll:
-# 	for l in ll:
-# 		for item in l:
-# 			print item
+for ll in lll:
+	for l in ll:
+		for item in l:
+			item.Print()
 
 # for hist in lUnfoldedData:
 # 	print hist
