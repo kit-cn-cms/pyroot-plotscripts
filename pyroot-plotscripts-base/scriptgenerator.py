@@ -2942,8 +2942,8 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   # start writing program
   script=""
   script+=getHead(dataBases,addCodeInterfaces)
-  script+=DeclareMEPDFNormFactors(csv_file)
-  script+=AddMEandPDFNormalizationsMap(csv_file)
+  #script+=DeclareMEPDFNormFactors(csv_file)
+  #script+=AddMEandPDFNormalizationsMap(csv_file)
   
   for db in dataBases:
     script+=InitDataBase(db)
@@ -2991,8 +2991,8 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
     startLoopStub=startLoopStub.replace("//PLACEHOLDERFORCASTLINES", castStub)
   script+=startLoopStub
   script+="   timerMapping->Start();\n"
-  script+=ResetMEPDFNormFactors(csv_file)
-  script+=RelateMEPDFMapToNormFactor(csv_file)
+  #script+=ResetMEPDFNormFactors(csv_file)
+  #script+=RelateMEPDFMapToNormFactor(csv_file)
   script+=PutPDFWeightsinVector(csv_file)
   script+=UseLHAPDF()
   script+="   totalTimeMapping+=timerMapping->RealTime();\n"
@@ -3775,13 +3775,13 @@ def AddMEandPDFNormalizationsMap(csv_file):
 	return code
 	
 def GetMEPDFadditionalVariablesList(csv_file):
-	mydict=ReadMEandPDFNormalizations(csv_file)
-	seen = set()
-	weight_vars_list=[]
-	for key in mydict:
-		if not key[1] in seen:
-			seen.add(key[1])
-			weight_vars_list.append(key[1])
+	#mydict=ReadMEandPDFNormalizations(csv_file)
+	#seen = set()
+	weight_vars_list=["Weight_pdf_variation_"+str(i+292201) for i in range(102)]
+	#for key in mydict:
+		#if not key[1] in seen:
+			#seen.add(key[1])
+			#weight_vars_list.append(key[1])
 	return weight_vars_list
 
 def RelateMEPDFMapToNormFactor(csv_file):
@@ -3830,14 +3830,15 @@ def GetPDFadditionalVariablesList(csv_file):
 	return pdf_weight_list
 	
 def PutPDFWeightsinVector(csv_file):
-	pdf_weights=GetPDFadditionalVariablesList(csv_file)
+	#pdf_weights=GetPDFadditionalVariablesList(csv_file)
+	pdf_weights=["Weight_pdf_variation_"+str(i+292201) for i in range(102)]
 	code='std::vector<double> pdf_weights;\n'
 	code+='pdf_weights.push_back(1.);\n'
 	for weight in pdf_weights:
-		code+='pdf_weights.push_back(internalNormFactor_'+weight+'*'+weight+');\n'
+		code+='pdf_weights.push_back('+weight+');\n'
 	return code
 def DefineLHAPDF():
-    code='LHAPDF::PDFSet pdfSet("NNPDF30_nlo_as_0118");\n'
+    code='LHAPDF::PDFSet pdfSet("NNPDF30_nlo_nf_5_pdfas");\n'
     return code
 
 def UseLHAPDF():

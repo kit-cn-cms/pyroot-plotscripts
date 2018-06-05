@@ -44,6 +44,8 @@ systWeights=[   "NomWeight:="+common_weight+"*(DoWeights==1)+(DoWeights==0)*1.0"
                 "dummyWeight_scale_variation_muRdown:="+common_weight+"*internalWbosonWeight_muRDown/internalWbosonWeight_nominal*internalZbosonWeight_muRDown/internalZbosonWeight_nominal*fabs(Weight_scale_variation_muR_0p5_muF_1p0)*(DoWeights==1)+(DoWeights==0)*1.0",
                 "dummyWeight_scale_variation_muFup:="+common_weight+"*internalWbosonWeight_muFUp/internalWbosonWeight_nominal*internalZbosonWeight_muFUp/internalZbosonWeight_nominal*fabs(Weight_scale_variation_muR_1p0_muF_2p0)*(DoWeights==1)+(DoWeights==0)*1.0",
                 "dummyWeight_scale_variation_muFdown:="+common_weight+"*internalWbosonWeight_muFDown/internalWbosonWeight_nominal*internalZbosonWeight_muFDown/internalZbosonWeight_nominal*fabs(Weight_scale_variation_muR_1p0_muF_0p5)*(DoWeights==1)+(DoWeights==0)*1.0",
+                #"dummyWeight_PDFup:="+common_weight+"*internalPDFweightUp*(DoWeights==1)+(DoWeights==0)*1.0",
+                #"dummyWeight_PDFdown:="+common_weight+"*internalPDFweightDown*(DoWeights==1)+(DoWeights==0)*1.0",
                 ]
 otherSystNames=[
                     "_CMS_scale_jUp","_CMS_scale_jDown",
