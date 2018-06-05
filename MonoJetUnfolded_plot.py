@@ -21,7 +21,7 @@ from MonoJetUnfolded_cfg import *
 
 jobname = "MonoJet_Plots"
 
-plotselection_inclusive = "1.*DeltaPhi_Jet_MET[0]>1."
+plotselection_inclusive = ""
 plotlabel_inclusive = "#slash{E}_{T}>250 GeV"
 plots_inclusive = [
     Plot(ROOT.TH1F("Evt_Pt_GenMET", "Gen #slash{E}_{T}", 50, 0., 1000.),
@@ -29,8 +29,6 @@ plots_inclusive = [
 ]
 
 plots = plots_inclusive
-
-allsystnames = weightSystNames+ZBosonSystNames+WBosonSystNames+otherSystNames
 
 THEoutputpath = "/nfs/dust/cms/user/swieland/Darkmatter/DM_Unfolding/rootfiles/"
 print "---------------------------------------------"
@@ -61,14 +59,18 @@ print "listOfHistoLists_signal=", listOfHistoLists_signal
 print "listOfHistoListsTransposed_signal=", lolT_signal
 # unfolded
 lUnfoldedData = createUnfoldedHistoList(
-    outputpath, "unfolded_Evt_Pt_GenMET", allsystnames+unfoldedSystNames)
+    outputpath, "unfolded_Evt_Pt_GenMET", unfoldedSystNames)
 print "Making MC Control plots"
 
 lll = createLLL_fromSuperHistoFileSyst(
-    outputpath, samples_background, plots, allsystnames)
-# print "lll=", lll
+    outputpath, samples_background, plots, MCSystnames)
+# for ll in lll:
+# 	for l in ll:
+# 		for item in l:
+# 			print item
 
-print "lUnfoldedData=", lUnfoldedData
+# for hist in lUnfoldedData:
+# 	print hist
 labels = [plot.label for plot in plots]
 xlabel="unfolded #slash{E}_{T}"
 
