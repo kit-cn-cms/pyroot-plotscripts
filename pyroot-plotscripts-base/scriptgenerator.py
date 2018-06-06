@@ -2501,49 +2501,28 @@ def startLoop():
   float internalUEweightup = 0.0;
   float internalUEweightdown = 0.0;
 
-  float internalWbosonWeight_nominal = 1.0;
-  float internalWbosonWeight_QCD1Up = 1.0;
-  float internalWbosonWeight_QCD1Down = 1.0;
-  float internalWbosonWeight_QCD2Up = 1.0;
-  float internalWbosonWeight_QCD2Down = 1.0;
-  float internalWbosonWeight_QCD3Up = 1.0;
-  float internalWbosonWeight_QCD3Down = 1.0;
-  float internalWbosonWeight_EW1Up = 1.0;
-  float internalWbosonWeight_EW1Down = 1.0;
-  float internalWbosonWeight_EW2Up = 1.0;
-  float internalWbosonWeight_EW2Down = 1.0;
-  float internalWbosonWeight_EW3Up = 1.0;
-  float internalWbosonWeight_EW3Down = 1.0;
-  float internalWbosonWeight_MixedUp = 1.0;
-  float internalWbosonWeight_MixedDown = 1.0;
-  float internalWbosonWeight_AlphaUp = 1.0;
-  float internalWbosonWeight_AlphaDown = 1.0;
-  float internalWbosonWeight_muRUp = 1.0;
-  float internalWbosonWeight_muRDown = 1.0;
-  float internalWbosonWeight_muFUp = 1.0;
-  float internalWbosonWeight_muFDown = 1.0;
+  float internalBosonWeight_nominal = 1.0;
+  float internalBosonWeight_QCD1Up = 1.0;
+  float internalBosonWeight_QCD1Down = 1.0;
+  float internalBosonWeight_QCD2Up = 1.0;
+  float internalBosonWeight_QCD2Down = 1.0;
+  float internalBosonWeight_QCD3Up = 1.0;
+  float internalBosonWeight_QCD3Down = 1.0;
+  float internalBosonWeight_EW1Up = 1.0;
+  float internalBosonWeight_EW1Down = 1.0;
+  float internalBosonWeight_EW2Up = 1.0;
+  float internalBosonWeight_EW2Down = 1.0;
+  float internalBosonWeight_EW3Up = 1.0;
+  float internalBosonWeight_EW3Down = 1.0;
+  float internalBosonWeight_MixedUp = 1.0;
+  float internalBosonWeight_MixedDown = 1.0;
+  float internalBosonWeight_AlphaUp = 1.0;
+  float internalBosonWeight_AlphaDown = 1.0;
+  float internalBosonWeight_muRUp = 1.0;
+  float internalBosonWeight_muRDown = 1.0;
+  float internalBosonWeight_muFUp = 1.0;
+  float internalBosonWeight_muFDown = 1.0;
 
-  float internalZbosonWeight_nominal = 1.0;
-  float internalZbosonWeight_QCD1Up = 1.0;
-  float internalZbosonWeight_QCD1Down = 1.0;
-  float internalZbosonWeight_QCD2Up = 1.0;
-  float internalZbosonWeight_QCD2Down = 1.0;
-  float internalZbosonWeight_QCD3Up = 1.0;
-  float internalZbosonWeight_QCD3Down = 1.0;
-  float internalZbosonWeight_EW1Up = 1.0;
-  float internalZbosonWeight_EW1Down = 1.0;
-  float internalZbosonWeight_EW2Up = 1.0;
-  float internalZbosonWeight_EW2Down = 1.0;
-  float internalZbosonWeight_EW3Up = 1.0;
-  float internalZbosonWeight_EW3Down = 1.0;
-  float internalZbosonWeight_MixedUp = 1.0;
-  float internalZbosonWeight_MixedDown = 1.0;
-  float internalZbosonWeight_AlphaUp = 1.0;
-  float internalZbosonWeight_AlphaDown = 1.0;
-  float internalZbosonWeight_muRUp = 1.0;
-  float internalZbosonWeight_muRDown = 1.0;
-  float internalZbosonWeight_muFUp = 1.0;
-  float internalZbosonWeight_muFDown = 1.0;
 
   double tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF;
   
@@ -2573,60 +2552,60 @@ def startLoop():
   internalQCDweightdown=internalQCDHelper->GetScaleFactorErrorDown(N_Jets,N_BTagsM,N_TightElectrons,N_TightMuons);
   
   if(processname.find("w_lnu_jets")!=std::string::npos){
-  internalWbosonWeight_nominal = internalBosonHelper->GetScaleFactorW(W_Pt, "nominal");
-  internalWbosonWeight_QCD1Up = internalBosonHelper->GetScaleFactorW(W_Pt, "QCD1Up"); 
-  internalWbosonWeight_QCD1Down = internalBosonHelper->GetScaleFactorW(W_Pt, "QCD1Down");
-  internalWbosonWeight_QCD2Up = internalBosonHelper->GetScaleFactorW(W_Pt, "QCD2Up"); 
-  internalWbosonWeight_QCD2Down = internalBosonHelper->GetScaleFactorW(W_Pt, "QCD2Down");
-  internalWbosonWeight_QCD3Up = internalBosonHelper->GetScaleFactorW(W_Pt, "QCD3Up");
-  internalWbosonWeight_QCD3Down = internalBosonHelper->GetScaleFactorW(W_Pt, "QCD3Down");
+  internalBosonWeight_nominal = internalBosonHelper->GetScaleFactorW(W_Pt, "nominal");
+  internalBosonWeight_QCD1Up = internalBosonHelper->GetScaleFactorW(W_Pt, "QCD1Up"); 
+  internalBosonWeight_QCD1Down = internalBosonHelper->GetScaleFactorW(W_Pt, "QCD1Down");
+  internalBosonWeight_QCD2Up = internalBosonHelper->GetScaleFactorW(W_Pt, "QCD2Up"); 
+  internalBosonWeight_QCD2Down = internalBosonHelper->GetScaleFactorW(W_Pt, "QCD2Down");
+  internalBosonWeight_QCD3Up = internalBosonHelper->GetScaleFactorW(W_Pt, "QCD3Up");
+  internalBosonWeight_QCD3Down = internalBosonHelper->GetScaleFactorW(W_Pt, "QCD3Down");
 
-  internalWbosonWeight_EW1Up = internalBosonHelper->GetScaleFactorW(W_Pt, "EW1Up");
-  internalWbosonWeight_EW1Down = internalBosonHelper->GetScaleFactorW(W_Pt, "EW1Down");
-  internalWbosonWeight_EW2Up = internalBosonHelper->GetScaleFactorW(W_Pt, "EW2Up");
-  internalWbosonWeight_EW2Down = internalBosonHelper->GetScaleFactorW(W_Pt, "EW2Down");
-  internalWbosonWeight_EW3Up = internalBosonHelper->GetScaleFactorW(W_Pt, "EW3Up"); 
-  internalWbosonWeight_EW3Down = internalBosonHelper->GetScaleFactorW(W_Pt, "EW3Down");
+  internalBosonWeight_EW1Up = internalBosonHelper->GetScaleFactorW(W_Pt, "EW1Up");
+  internalBosonWeight_EW1Down = internalBosonHelper->GetScaleFactorW(W_Pt, "EW1Down");
+  internalBosonWeight_EW2Up = internalBosonHelper->GetScaleFactorW(W_Pt, "EW2Up");
+  internalBosonWeight_EW2Down = internalBosonHelper->GetScaleFactorW(W_Pt, "EW2Down");
+  internalBosonWeight_EW3Up = internalBosonHelper->GetScaleFactorW(W_Pt, "EW3Up"); 
+  internalBosonWeight_EW3Down = internalBosonHelper->GetScaleFactorW(W_Pt, "EW3Down");
 
-  internalWbosonWeight_MixedUp = internalBosonHelper->GetScaleFactorW(W_Pt, "MixedUp");
-  internalWbosonWeight_MixedDown = internalBosonHelper->GetScaleFactorW(W_Pt, "MixedDown");
+  internalBosonWeight_MixedUp = internalBosonHelper->GetScaleFactorW(W_Pt, "MixedUp");
+  internalBosonWeight_MixedDown = internalBosonHelper->GetScaleFactorW(W_Pt, "MixedDown");
   
-  internalWbosonWeight_AlphaUp = internalBosonHelper->GetScaleFactorW(W_Pt, "AlphaUp");
-  internalWbosonWeight_AlphaDown = internalBosonHelper->GetScaleFactorW(W_Pt, "AlphaDown");
+  internalBosonWeight_AlphaUp = internalBosonHelper->GetScaleFactorW(W_Pt, "AlphaUp");
+  internalBosonWeight_AlphaDown = internalBosonHelper->GetScaleFactorW(W_Pt, "AlphaDown");
   
-  internalWbosonWeight_muRUp = internalBosonHelper->GetScaleFactorW(W_Pt, "muRUp");
-  internalWbosonWeight_muRDown = internalBosonHelper->GetScaleFactorW(W_Pt, "muRDown");
+  internalBosonWeight_muRUp = internalBosonHelper->GetScaleFactorW(W_Pt, "muRUp");
+  internalBosonWeight_muRDown = internalBosonHelper->GetScaleFactorW(W_Pt, "muRDown");
   
-  internalWbosonWeight_muFUp = internalBosonHelper->GetScaleFactorW(W_Pt, "muFUp");
-  internalWbosonWeight_muFDown = internalBosonHelper->GetScaleFactorW(W_Pt, "muFDown");
+  internalBosonWeight_muFUp = internalBosonHelper->GetScaleFactorW(W_Pt, "muFUp");
+  internalBosonWeight_muFDown = internalBosonHelper->GetScaleFactorW(W_Pt, "muFDown");
   }
   if(processname.find("z_nunu_jets")!=std::string::npos){
-  internalZbosonWeight_nominal = internalBosonHelper->GetScaleFactorZ(Z_Pt, "nominal");
-  internalZbosonWeight_QCD1Up = internalBosonHelper->GetScaleFactorZ(Z_Pt, "QCD1Up"); 
-  internalZbosonWeight_QCD1Down = internalBosonHelper->GetScaleFactorZ(Z_Pt, "QCD1Down");
-  internalZbosonWeight_QCD2Up = internalBosonHelper->GetScaleFactorZ(Z_Pt, "QCD2Up");
-  internalZbosonWeight_QCD2Down = internalBosonHelper->GetScaleFactorZ(Z_Pt, "QCD2Down");
-  internalZbosonWeight_QCD3Up = internalBosonHelper->GetScaleFactorZ(Z_Pt, "QCD3Up"); 
-  internalZbosonWeight_QCD3Down = internalBosonHelper->GetScaleFactorZ(Z_Pt, "QCD3Down");
+  internalBosonWeight_nominal = internalBosonHelper->GetScaleFactorZ(Z_Pt, "nominal");
+  internalBosonWeight_QCD1Up = internalBosonHelper->GetScaleFactorZ(Z_Pt, "QCD1Up"); 
+  internalBosonWeight_QCD1Down = internalBosonHelper->GetScaleFactorZ(Z_Pt, "QCD1Down");
+  internalBosonWeight_QCD2Up = internalBosonHelper->GetScaleFactorZ(Z_Pt, "QCD2Up");
+  internalBosonWeight_QCD2Down = internalBosonHelper->GetScaleFactorZ(Z_Pt, "QCD2Down");
+  internalBosonWeight_QCD3Up = internalBosonHelper->GetScaleFactorZ(Z_Pt, "QCD3Up"); 
+  internalBosonWeight_QCD3Down = internalBosonHelper->GetScaleFactorZ(Z_Pt, "QCD3Down");
 
-  internalZbosonWeight_EW1Up = internalBosonHelper->GetScaleFactorZ(Z_Pt, "EW1Up"); 
-  internalZbosonWeight_EW1Down = internalBosonHelper->GetScaleFactorZ(Z_Pt, "EW1Down");
-  internalZbosonWeight_EW2Up = internalBosonHelper->GetScaleFactorZ(Z_Pt, "EW2Up"); 
-  internalZbosonWeight_EW2Down = internalBosonHelper->GetScaleFactorZ(Z_Pt, "EW2Down");
-  internalZbosonWeight_EW3Up = internalBosonHelper->GetScaleFactorZ(Z_Pt, "EW3Up"); 
-  internalZbosonWeight_EW3Down = internalBosonHelper->GetScaleFactorZ(Z_Pt, "EW3Down");
+  internalBosonWeight_EW1Up = internalBosonHelper->GetScaleFactorZ(Z_Pt, "EW1Up"); 
+  internalBosonWeight_EW1Down = internalBosonHelper->GetScaleFactorZ(Z_Pt, "EW1Down");
+  internalBosonWeight_EW2Up = internalBosonHelper->GetScaleFactorZ(Z_Pt, "EW2Up"); 
+  internalBosonWeight_EW2Down = internalBosonHelper->GetScaleFactorZ(Z_Pt, "EW2Down");
+  internalBosonWeight_EW3Up = internalBosonHelper->GetScaleFactorZ(Z_Pt, "EW3Up"); 
+  internalBosonWeight_EW3Down = internalBosonHelper->GetScaleFactorZ(Z_Pt, "EW3Down");
 
-  internalZbosonWeight_MixedUp = internalBosonHelper->GetScaleFactorZ(Z_Pt, "MixedUp"); 
-  internalZbosonWeight_MixedDown = internalBosonHelper->GetScaleFactorZ(Z_Pt, "MixedDown");
+  internalBosonWeight_MixedUp = internalBosonHelper->GetScaleFactorZ(Z_Pt, "MixedUp"); 
+  internalBosonWeight_MixedDown = internalBosonHelper->GetScaleFactorZ(Z_Pt, "MixedDown");
   
-  internalZbosonWeight_AlphaUp = internalBosonHelper->GetScaleFactorZ(Z_Pt, "AlphaUp");
-  internalZbosonWeight_AlphaDown = internalBosonHelper->GetScaleFactorZ(Z_Pt, "AlphaDown");
+  internalBosonWeight_AlphaUp = internalBosonHelper->GetScaleFactorZ(Z_Pt, "AlphaUp");
+  internalBosonWeight_AlphaDown = internalBosonHelper->GetScaleFactorZ(Z_Pt, "AlphaDown");
   
-  internalZbosonWeight_muRUp = internalBosonHelper->GetScaleFactorZ(Z_Pt, "muRUp");
-  internalZbosonWeight_muRDown = internalBosonHelper->GetScaleFactorZ(Z_Pt, "muRDown");
+  internalBosonWeight_muRUp = internalBosonHelper->GetScaleFactorZ(Z_Pt, "muRUp");
+  internalBosonWeight_muRDown = internalBosonHelper->GetScaleFactorZ(Z_Pt, "muRDown");
   
-  internalZbosonWeight_muFUp = internalBosonHelper->GetScaleFactorZ(Z_Pt, "muFUp");
-  internalZbosonWeight_muFDown = internalBosonHelper->GetScaleFactorZ(Z_Pt, "muFDown");
+  internalBosonWeight_muFUp = internalBosonHelper->GetScaleFactorZ(Z_Pt, "muFUp");
+  internalBosonWeight_muFDown = internalBosonHelper->GetScaleFactorZ(Z_Pt, "muFDown");
   }
   
   
@@ -2841,23 +2820,15 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 	    "internalISRweightdown","internalISRweightup","internalFSRweightdown","internalFSRweightup",
       "internalHDAMPweightdown","internalHDAMPweightup","internalUEweightdown","internalUEweightup",
 
-      "internalWbosonWeight_nominal",
-      "internalWbosonWeight_QCD1Up","internalWbosonWeight_QCD1Down",
-      "internalWbosonWeight_QCD2Up","internalWbosonWeight_QCD2Down",
-      "internalWbosonWeight_QCD3Up","internalWbosonWeight_QCD3Down",
-      "internalWbosonWeight_EW1Up","internalWbosonWeight_EW1Down",
-      "internalWbosonWeight_EW2Up","internalWbosonWeight_EW2Down",
-      "internalWbosonWeight_EW3Up","internalWbosonWeight_EW3Down",
-      "internalWbosonWeight_MixedUp","internalWbosonWeight_MixedDown",
+      "internalBosonWeight_nominal",
+      "internalBosonWeight_QCD1Up","internalBosonWeight_QCD1Down",
+      "internalBosonWeight_QCD2Up","internalBosonWeight_QCD2Down",
+      "internalBosonWeight_QCD3Up","internalBosonWeight_QCD3Down",
+      "internalBosonWeight_EW1Up","internalBosonWeight_EW1Down",
+      "internalBosonWeight_EW2Up","internalBosonWeight_EW2Down",
+      "internalBosonWeight_EW3Up","internalBosonWeight_EW3Down",
+      "internalBosonWeight_MixedUp","internalBosonWeight_MixedDown",
 
-      "internalWbosonWeight_nominal",
-      "internalWbosonWeight_QCD1Up","internalWbosonWeight_QCD1Down",
-      "internalWbosonWeight_QCD2Up","internalWbosonWeight_QCD2Down",
-      "internalWbosonWeight_QCD3Up","internalWbosonWeight_QCD3Down",
-      "internalWbosonWeight_EW1Up","internalWbosonWeight_EW1Down",
-      "internalWbosonWeight_EW2Up","internalWbosonWeight_EW2Down",
-      "internalWbosonWeight_EW3Up","internalWbosonWeight_EW3Down",
-      "internalWbosonWeight_MixedUp","internalWbosonWeight_MixedDown",
       "DoWbosonReweighting",
       "DoZbosonReweighting",
 ]

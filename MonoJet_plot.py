@@ -56,8 +56,7 @@ plots_inclusive=[
         Plot(ROOT.TH1F(plotprefix+"_"+"Evt_Pt_MET_T1","#slash{E}_{T} type1",23,250.,1400.),"Evt_Pt_MET_T1",plotselection_inclusive,plotlabel_inclusive),
         Plot(ROOT.TH1F(plotprefix+"_"+"Z_Pt","Z p_{T}",20,0.,500.),"Z_Pt",plotselection_inclusive,plotlabel_inclusive),
         Plot(ROOT.TH1F(plotprefix+"_"+"W_Pt","W p_{T}",20,0.,500.),"W_Pt",plotselection_inclusive,plotlabel_inclusive),
-        Plot(ROOT.TH1F(plotprefix+"_"+"WbosonWeight","WbosonWeight",20,0.,2.),"internalWbosonWeight_nominal",plotselection_inclusive,plotlabel_inclusive),
-        Plot(ROOT.TH1F(plotprefix+"_"+"ZbosonWeight","ZbosonWeight",20,0.,2.),"internalZbosonWeight_nominal",plotselection_inclusive,plotlabel_inclusive)
+        Plot(ROOT.TH1F(plotprefix+"_"+"BosonWeight","BosonWeight",20,0.,2.),"internalBosonWeight_nominal",plotselection_inclusive,plotlabel_inclusive),
     ]
 
 plotselection_MET300 = "(Evt_Pt_MET>300.)*(DeltaPhi_Jet_MET[0]>1.)"
@@ -81,8 +80,7 @@ plots_MET300=[
         Plot(ROOT.TH1F(plotprefix+"_"+"Evt_Pt_MET_T1","#slash{E}_{T} type1",23,250.,1400.),"Evt_Pt_MET_T1",plotselection_MET300,plotlabel_MET300),
         Plot(ROOT.TH1F(plotprefix+"_"+"Z_Pt","Z p_{T}",20,0.,500.),"Z_Pt",plotselection_MET300,plotlabel_MET300),
         Plot(ROOT.TH1F(plotprefix+"_"+"W_Pt","W p_{T}",20,0.,500.),"W_Pt",plotselection_MET300,plotlabel_MET300),
-        Plot(ROOT.TH1F(plotprefix+"_"+"WbosonWeight","WbosonWeight",20,0.,2.),"internalWbosonWeight_nominal",plotselection_MET300,plotlabel_MET300),
-        Plot(ROOT.TH1F(plotprefix+"_"+"ZbosonWeight","ZbosonWeight",20,0.,2.),"internalZbosonWeight_nominal",plotselection_MET300,plotlabel_MET300)
+        Plot(ROOT.TH1F(plotprefix+"_"+"BosonWeight","BosonWeight",20,0.,2.),"internalBosonWeight_nominal",plotselection_MET300,plotlabel_MET300),
     ]
 
 plotselection_MET400 = "(Evt_Pt_MET>400.)*(DeltaPhi_Jet_MET[0]>1.)"
@@ -106,8 +104,7 @@ plots_MET400=[
         Plot(ROOT.TH1F(plotprefix+"_"+"Evt_Pt_MET_T1","#slash{E}_{T} type1",23,250.,1400.),"Evt_Pt_MET_T1",plotselection_MET400,plotlabel_MET400),
         Plot(ROOT.TH1F(plotprefix+"_"+"Z_Pt","Z p_{T}",20,0.,500.),"Z_Pt",plotselection_MET400,plotlabel_MET400),
         Plot(ROOT.TH1F(plotprefix+"_"+"W_Pt","W p_{T}",20,0.,500.),"W_Pt",plotselection_MET400,plotlabel_MET400),
-        Plot(ROOT.TH1F(plotprefix+"_"+"WbosonWeight","WbosonWeight",20,0.,2.),"internalWbosonWeight_nominal",plotselection_MET400,plotlabel_MET400),
-        Plot(ROOT.TH1F(plotprefix+"_"+"ZbosonWeight","ZbosonWeight",20,0.,2.),"internalZbosonWeight_nominal",plotselection_MET400,plotlabel_MET400)
+        Plot(ROOT.TH1F(plotprefix+"_"+"BosonWeight","BosonWeight",20,0.,2.),"internalBosonWeight_nominal",plotselection_MET400,plotlabel_MET400),
     ]
 
 plotselection_MET500 = "(Evt_Pt_MET>500.)*(DeltaPhi_Jet_MET[0]>1.)"
@@ -131,8 +128,7 @@ plots_MET500=[
         Plot(ROOT.TH1F(plotprefix+"_"+"Evt_Pt_MET_T1","#slash{E}_{T} type1",23,250.,1400.),"Evt_Pt_MET_T1",plotselection_MET500,plotlabel_MET500),
         Plot(ROOT.TH1F(plotprefix+"_"+"Z_Pt","Z p_{T}",20,0.,500.),"Z_Pt",plotselection_MET500,plotlabel_MET500),
         Plot(ROOT.TH1F(plotprefix+"_"+"W_Pt","W p_{T}",20,0.,500.),"W_Pt",plotselection_MET500,plotlabel_MET500),
-        Plot(ROOT.TH1F(plotprefix+"_"+"WbosonWeight","WbosonWeight",20,0.,2.),"internalWbosonWeight_nominal",plotselection_MET500,plotlabel_MET500),
-        Plot(ROOT.TH1F(plotprefix+"_"+"ZbosonWeight","ZbosonWeight",20,0.,2.),"internalZbosonWeight_nominal",plotselection_MET500,plotlabel_MET500)
+        Plot(ROOT.TH1F(plotprefix+"_"+"BosonWeight","BosonWeight",20,0.,2.),"internalBosonWeight_nominal",plotselection_MET500,plotlabel_MET500),
     ]
 
 plotselection_MET600 = "(Evt_Pt_MET>600.)*(DeltaPhi_Jet_MET[0]>1.)"
@@ -156,13 +152,12 @@ plots_MET600=[
         Plot(ROOT.TH1F(plotprefix+"_"+"Evt_Pt_MET_T1","#slash{E}_{T} type1",23,250.,1400.),"Evt_Pt_MET_T1",plotselection_MET600,plotlabel_MET600),
         Plot(ROOT.TH1F(plotprefix+"_"+"Z_Pt","Z p_{T}",20,0.,500.),"Z_Pt",plotselection_MET600,plotlabel_MET600),
         Plot(ROOT.TH1F(plotprefix+"_"+"W_Pt","W p_{T}",20,0.,500.),"W_Pt",plotselection_MET600,plotlabel_MET600),
-        Plot(ROOT.TH1F(plotprefix+"_"+"WbosonWeight","WbosonWeight",20,0.,2.),"internalWbosonWeight_nominal",plotselection_MET600,plotlabel_MET600),
-        Plot(ROOT.TH1F(plotprefix+"_"+"ZbosonWeight","ZbosonWeight",20,0.,2.),"internalZbosonWeight_nominal",plotselection_MET600,plotlabel_MET600)
+        Plot(ROOT.TH1F(plotprefix+"_"+"BosonWeight","BosonWeight",20,0.,2.),"internalBosonWeight_nominal",plotselection_MET600,plotlabel_MET600),
     ]
 
 plots = plots_inclusive+plots_MET300+plots_MET400+plots_MET500+plots_MET600
 
-allsystnames=weightSystNames+ZBosonSystNames+WBosonSystNames+otherSystNames
+allsystnames=weightSystNames+BosonSystNames+ZBosonSystNames+WBosonSystNames+otherSystNames
 
 systsamples=[]
 for sample in samples_background:
@@ -170,7 +165,7 @@ for sample in samples_background:
         thisnewsel=sample.selection
         systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),thisnewsel,sample.nick+sysname,samDict=sampleDict))
 
-THEoutputpath=plotParallel(jobname,5000000,plots,samples_signal+samples_background+samples_data+systsamples,[''],['1.'],weightSystNames+ZBosonSystNames+WBosonSystNames,systWeights+ZBosonWeights+WBosonWeights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_FAST.json",otherSystNames,addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False,haddParallel=True)
+THEoutputpath=plotParallel(jobname,5000000,plots,samples_signal+samples_background+samples_data+systsamples,[''],['1.'],weightSystNames+BosonSystNames+ZBosonSystNames+WBosonSystNames,systWeights+BosonWeights+ZBosonWeights+WBosonWeights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_FAST.json",otherSystNames,addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False,haddParallel=True)
 print "---------------------------------------------"
 print "THEoutputpath=",THEoutputpath
 print "---------------------------------------------"
