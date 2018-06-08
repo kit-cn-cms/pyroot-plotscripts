@@ -160,7 +160,7 @@ plots = plots_inclusive+plots_MET300+plots_MET400+plots_MET500+plots_MET600
 allsystnames=weightSystNames+BosonSystNames+ZBosonSystNames+WBosonSystNames+otherSystNames
 
 systsamples=[]
-for sample in samples_background:
+for sample in samples_background+samples_signal:
     for sysname,sysfilename in zip(otherSystNames,otherSystFileNames):
         thisnewsel=sample.selection
         systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),thisnewsel,sample.nick+sysname,samDict=sampleDict))
@@ -214,7 +214,7 @@ print "listOfHistoLists_data=",listOfHistoLists_data
 print "Making MC Control plots"
 print "skipping"
 
-lll=createLLL_fromSuperHistoFileSyst(outputpath,samples_background,plots,allsystnames)
+lll=createLLL_fromSuperHistoFileSyst(outputpath,samples_background+samples_signal,plots,allsystnames)
 #lllnoQCD=createLLL_fromSuperHistoFileSyst(outputpath,samples[1:],discriminatorPlots,errorSystNamesNoPSNoQCD)
 labels=[plot.label for plot in plots]
 plotDataMCanWsyst(listOfHistoLists_data,transposeLOL(lolT_background),samples_background,lolT_signal[0],samples_signal[0],-1,jobname,[[lll,3354,ROOT.kBlack,True]],True,labels,True,False)
