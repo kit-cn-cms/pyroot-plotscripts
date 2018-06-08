@@ -1532,8 +1532,8 @@ double BosonHelper::GetScaleFactorW(float W_Pt, string label)
     sf = WbosonWeight_QCD2Down->GetBinContent(bin);  
   }
   else if (label == "QCD3Up"){
-    bin = WbosonWeight_QCD1Up->FindBin(W_Pt);
-    sf = WbosonWeight_QCD1Up->GetBinContent(bin);  
+    bin = WbosonWeight_QCD3Up->FindBin(W_Pt);
+    sf = WbosonWeight_QCD3Up->GetBinContent(bin);  
   }
   else if (label == "QCD3Down"){
     bin = WbosonWeight_QCD3Down->FindBin(W_Pt);
@@ -1569,8 +1569,8 @@ double BosonHelper::GetScaleFactorW(float W_Pt, string label)
     sf = WbosonWeight_MixedUp->GetBinContent(bin);  
   }
   else if (label == "MixedDown"){
-    bin = WbosonWeight_MixedUp->FindBin(W_Pt);
-    sf = WbosonWeight_MixedUp->GetBinContent(bin);  
+    bin = WbosonWeight_MixedDown->FindBin(W_Pt);
+    sf = WbosonWeight_MixedDown->GetBinContent(bin);  
   }
   else if (label == "AlphaUp") {
     bin = WbosonWeight_AlphaUp->FindBin(W_Pt);
@@ -1627,8 +1627,8 @@ double BosonHelper::GetScaleFactorZ(float Z_Pt, string label)
     sf = ZbosonWeight_QCD2Down->GetBinContent(bin);  
   }
   else if (label == "QCD3Up"){
-    bin = ZbosonWeight_QCD1Up->FindBin(Z_Pt);
-    sf = ZbosonWeight_QCD1Up->GetBinContent(bin);  
+    bin = ZbosonWeight_QCD3Up->FindBin(Z_Pt);
+    sf = ZbosonWeight_QCD3Up->GetBinContent(bin);  
   }
   else if (label == "QCD3Down"){
     bin = ZbosonWeight_QCD3Down->FindBin(Z_Pt);
@@ -1664,8 +1664,8 @@ double BosonHelper::GetScaleFactorZ(float Z_Pt, string label)
     sf = ZbosonWeight_MixedUp->GetBinContent(bin);  
   }
   else if (label == "MixedDown"){
-    bin = ZbosonWeight_MixedUp->FindBin(Z_Pt);
-    sf = ZbosonWeight_MixedUp->GetBinContent(bin);  
+    bin = ZbosonWeight_MixedDown->FindBin(Z_Pt);
+    sf = ZbosonWeight_MixedDown->GetBinContent(bin);  
   }
   else if (label == "AlphaUp") {
     bin = ZbosonWeight_AlphaUp->FindBin(Z_Pt);
