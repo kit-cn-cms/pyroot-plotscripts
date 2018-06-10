@@ -1,0 +1,54 @@
+def renameHistosParallel(infname,sysnames,prune=False):
+    cmd="cp -v "+infname+" "+infname.replace(".root","_original.root")
+    theclock=ROOT.TStopwatch()
+    theclock.Start()
+    call(cmd,shell=True)
+    print sysnames
+    #infile=ROOT.TFile(infname,"READ")
+    outfile=ROOT.TFile(infname,"UPDATE")
+
+    keylist=outfile.GetListOfKeys()
+    theobjectlist=[]
+    listOfKeyNames=[]
+    for ikey, key in enumerate(keylist):
+        listOfKeyNames.append(key.GetName())
+    
+    for ikey, key in enumerate(listOfKeyNames):
+        thisname=key
+        #thish=outfile.Get(thisname)
+        thish=None
+        newname=thisname
+        do=True
+
+        if "dummy" in thisname:
+            continue
+        nsysts=0
+        for sys in sysnames:
+            if sys in newname:
+	        newname=newname.replace(sys,"")
+	        newname+=sys
+	        nsysts+=1
+	
+        if "JES" in thisname or "JER" in thisname or "_ttH_scaleFSR" in thisname or "_ttH_scaleISR" in thisname or "_ttH_FSR" in thisname or "_ttH_ISR" in thisname or "_ttH_hdamp" in thisname or "ttH_ue" in thisname or "_ttHbb_scaleFSR" in thisname or "_ttHbb_scaleISR" in thisname or "_ttHbb_FSR" in thisname or "_ttHbb_ISR" in thisname or "_ttHbb_HDAMP" in thisname or "ttHbb_UE" in thisname or (("CMS_scale" in thisname or "CMS_res_" in thisname) and ("_jUp" in thisname or "_jDown" in thisname)) or "_CMS_ttH_QCDScaleFactor" in thisname or "_CMS_ttHbbFROMTREES" in thisname:
+            if nsysts>2:
+                thish=outfile.Get(thisname)
+                theobjectlist.append(thish)
+	        print nsysts, " systs: removing ", thisname
+	        outfile.Delete(thisname)
+	        outfile.Delete(thisname+";1")
+	        continue
+
+        if newname!=thisname:
+            print "changed ", thisname, " to ", newname    
+            thish=outfile.Get(thisname)
+            theobjectlist.append(thish)
+            thish.SetName(newname)
+            #outfile.cd()
+            thish.Write()
+            outfile.Delete(thisname+";1")
+
+    outfile.Close()
+    #infile.Close()        
+    print "The renaming took ", theclock.RealTime()
+  
+renameHistosParallel(filename,systematics,False)

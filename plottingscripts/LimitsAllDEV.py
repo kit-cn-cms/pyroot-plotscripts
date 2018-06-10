@@ -9,14 +9,18 @@ import inspect
 import ROOT
 import pandas 
 import ast
+
 filedir = os.path.dirname(os.path.realpath(__file__))
 pyrootdir = "/".join(filedir.split("/")[:-1])
 workdir = pyrootdir+"/"+"workdir"
+
 sys.path.append(pyrootdir+'/util')
 sys.path.append(filedir+"/configs")
+
 import scriptgenerator
 import plotutils
 import tmputils
+import PDFutils
 import runTimer
 import limittools
 
@@ -29,10 +33,17 @@ def main(pyrootdir, argv):
     # welcome to main function - defining some variables
     # ========================================================
     '''
+    # BIG TODO: decide what needs to be initialized by the secondary scripts
+    # maybe give some information as an argument instead of doing it all over again
+    # initializing everything only takes < 1 minute per script but takes a lot of disk i think
 
     # name of the analysis (i.e. workdir name)
-    name='limits_All_v30'
+    name='wiprework'
+
+    # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
+
+    # creating workdir subfolder
     if not os.path.exists(workdir):
         os.makedirs(workdir)
         print("created workdir at "+str(workdir))
@@ -59,6 +70,12 @@ def main(pyrootdir, argv):
     # used categories in configdata to be added
     usedCategories = ["JTBDT", "JT2D", "JTMEM", "MultiDNN", "JT_control"] 
     # usedCategories += ["JT2DOPTIMIZED", "JTBDTOPTIMIZED"]
+    
+    # signal process
+    signalProcess = "ttH"
+    #############################################################################
+    # there should be no information that needs hard coded adjusting below this #
+    #############################################################################
 
     print '''
     # ========================================================
@@ -67,7 +84,8 @@ def main(pyrootdir, argv):
     '''
 
     # TODO make the analysisClass more essential - atm it is not really needed
-    analysis=analysisClass.Analysis(name,argv,anaRootPath,signalProcess='ttH')
+    analysis=analysisClass.Analysis(workdir, argv, anaRootPath, signalProcess = signalProcess)
+
     #analysis=analysisClass.Analysis(name,argv,
         #'/nfs/dust/cms/user/mharrend/doktorarbeit/latest/ttbb-cutbased-analysis_limitInput.root')
     #analysis=analysisClass.Analysis(name,argv,
@@ -76,11 +94,11 @@ def main(pyrootdir, argv):
         #'/nfs/dust/cms/user/mharrend/doktorarbeit/output20170626-reference/workdir/ttbb-cutbased-analysis/output_limitInput.root')
     
     # TODO these options should be set automatically ?
-    analysis.plotBlinded=True
-    analysis.makeSimplePlots=True
-    analysis.makeMCControlPlots=True
-    analysis.makeDataCards=True
-    analysis.additionalPlotVariables=False
+    analysis.plotBlinded = True
+    analysis.makeSimplePlots = True
+    analysis.makeMCControlPlots = True
+    analysis.makeDataCards = True
+    analysis.additionalPlotVariables = False
 
     # Make sure proper plotconfig is loaded for either ttbb or ttH
     # TODO how is this determined?
@@ -89,66 +107,70 @@ def main(pyrootdir, argv):
     # TODO maybe print chosen functions into a .json file in workdir
     analysis.printChosenOptions()
 
-    print '''    
+
+
+    #print '''    
     ## ========================================================
     ## NNFlow interface
     ## ========================================================
-    '''
-
+    #'''
+    #
     # Create and configure NNFlow interface
     # NNFlowInterfacePath=os.getcwd()+'../util/dNNInterfaces/NNFlowInterface.py'
     # NNFlowInterface = imp.load_source("NNFlowInterface",NNFlowInterfacePath).theInterface()
     # NNFlowInterface.setDebugOutput(True)
-    # NNFlowInterface.setModelFolderPath('/nfs/dust/cms/user/mharrend/doktorarbeit/tensorflowModels/neural_network_v3/multiclass_ttlight_ttcc_ttb_tt2b_ttbb_ttH_top_20/model')
+    # NNFlowInterface.setModelFolderPath(
+    #    '/nfs/dust/cms/user/mharrend/doktorarbeit/tensorflowModels/neural_network_v3/multiclass_ttlight_ttcc_ttb_tt2b_ttbb_ttH_top_20/model')
     # NNFlowInterface.setModelName('multiclass_ttlight_ttcc_ttb_tt2b_ttbb_ttH_top_20.ckpt')
     # NNFlowInterface.update()
     #
     # print "NNFlowInterfacePath: ", NNFlowInterfacePath
 
-    print '''    
-    # ========================================================
-    # define additional variables necessary for selection in plotparallel
-    # ========================================================
-    '''
-    additionalvariables = tmputils.getAddVariables(pyrootdir = pyrootdir,
-                                                    name = configDataBaseName)
-    additionalvariables+= scriptgenerator.GetMEPDFadditionalVariablesList(
-        "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv")
-    #additionalvariables.extend(NNFlowInterface.getAdditionalVariablesList())
-
-    # save addition variables information to workdir and print
-    tmputils.saveAddVariablesToWorkdir(workdir, additionalvariables)
 
     print '''
     # ========================================================
     # prepare configdata
     #
     # access the information via
-    # configData.categories
-    # configData.nhistobins
-    # configData.minxvals
-    # configData.maxxvals
-    # configData.discrs
-    # configData.plotPreselection
-    # configData.binlabels
+    # configData.Data.categories
+    # configData.Data.nhistobins
+    # configData.Data.minxvals
+    # configData.Data.maxxvals
+    # configData.Data.discrs
+    # configData.Data.plotPreselection
+    # configData.Data.binlabels
+    # configData.Data.discriminatorPlots
+    # configData.addVars
     # ========================================================
     '''
 
     configData = tmputils.configData(pyrootdir = pyrootdir, 
-                                        name = configDataBaseName, 
-                                        usedCategories = usedCategories)
+                                    analysisClass = analysis,
+                                    configDataBaseName = configDataBaseName, 
+                                    usedCategories = usedCategories)
     configData.writeConfigDataToWorkdir(workdir)
     configData.assertData()
+
+    configData.printLengths()
+    configData.genDiscriminatorPlots(discrname)
+
+    print '''    
+    # ========================================================
+    # define additional variables necessary for selection in plotparallel
+    # ========================================================
+    '''
+    configData.getAddVariables()
+    configData.getMEPDFAddVariables(
+        "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv")
+    #additionalvariables.extend(NNFlowInterface.getAdditionalVariablesList())
+
+    # save addition variables information to workdir and print
+    configData.printAddVariables()
 
 
     print '''    
     # ========================================================
     # loading samples and samples data
-    # 
-    # access the information via
-    # samplesData.samples
-    # samplesData.samples_data
-    # samplesData.systsamples
     # ========================================================
     '''
     samplesData = tmputils.samplesData(pltcfg)
@@ -191,74 +213,62 @@ def main(pyrootdir, argv):
     
     print '''
     # ========================================================
-    # add samples and systsamples
-    # ========================================================
-    '''
-    samplesData.addAllSamples(pltcfg.weightSystNames)
-    
-    print '''
-    # ========================================================
-    # define discriminator plots
+    # finish up sample gathering
     #
-    # accessible via configData.discriminatorPlots
+    # information accesible via
+    # samplesData.samples = pltcfg.samplesLimits
+    # samplesData.controlSamples  = pltcfg.samplesDataControlPlots
+    # samplesData.allNames = addNames + self.systNames
+    # samplesData.allSamples = self.samples + self.controlSamples + self.systSamples
+    # samplesData.allSystSamples = self.samples + self.systSamples
+    #
     # ========================================================
     '''
-    configData.printLengths()
-    configData.genDiscriminatorPlots(discrname)
-
+    samplesData.addAllSamples(addNames = pltcfg.weightSystNames)
     
     print '''
     # ========================================================
     # Check if additional (input) variables should be plotted and if necessary add them here to the discriminatorPlots
-    #
-    # new plots (evaluated) accesible via configData.additionalPlotList
     # ========================================================
     '''
-    # TODO rework this function as it is atm half in analysisClass and half in new tmputils class
     if analysis.additionalPlotVariables:
         #  Construct list with additional plot variables, will need name of discrs and plotPreselections for this
         print( "add additional plot variables")
-        clearTextAdditionalPlotList = analysis.getAdditionalPlotVariables(configData.discrs, configData.plotPreselections, configData.binlabels)
-        configData.addAdditionalDiscriminatorPlots(clearTextAdditionalPlotList)
+        configData.getAdditionalDiscriminatorPlots(analysis)
+
+    
 
     
     # plot everything, except during drawParallel step
     # Create file for data cards
-    if analysis.doDrawParallel==False or analysis.plotNumber == None :
+    if analysis.doDrawParallel == False or analysis.plotNumber == None :
         #if not os.path.exists(analysis.rootFilePath):
             print '''
             # ========================================================
             # Doing plotParallel step since root file was not found.
-            # ========================================================
+             ========================================================
             '''
-            dataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]]
-            treeInformationJsonFile = "/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_latestAndGreatest.json"
-            addCodeInterfacePaths = ["../util/dNNInterfaces/dNNInterface_V6.py"]
             
-            # timing plotParallel
             with runTimer.Timer("plotParallel"):
-                # TODO rewrite plotParallel - this is the main part of the script
-                plotParaOut = scriptgenerator.plotParallel(
-                            name = name,
-                            maxevents = 5000000,
-                            plots = configData.discriminatorPlots,
-                            samples = samplesData.allsamples,
-                            catnames = [''], catselections = ["1."],
-                            systnames = pltcfg.weightSystNames, systweights = pltcfg.systWeights,
-                            additionalvariables = additionalvariables,
-                            dataBases = dataBases,
-                            treeInformationJsonFile = treeInformationJsonFile,
-                            otherSystnames = samplesData.systnames,
-                            addCodeInterfacePaths = addCodeInterfacePaths,
-                            cirun = False,
-                            StopAfterCompileStep = False,
-                            haddParallel = True)
+                
+                # initialize plotParallel class
+                pP = scriptgenerator.plotParallel(workdir = workdir,
+                                        pltcfg = pltcfg,
+                                        configData = configData,
+                                        samplesData = samplesData)
 
-            # in the first iteration of plotParallel plotParaOut is a list where the first argument is the outputpath of the rootfile
-            if type(plotParaOut)==str:
-              outputpath=plotParaOut
-            else:
-              outputpath=plotParaOut[0]
+                # set some changed values
+                pP.setJson("/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_latestAndGreatest.json")
+                pP.setDataBases( [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]] )
+                pP.setAddInterfaces( ["../util/dNNInterfaces/dNNInterface_V6.py"] )
+                
+                # set options
+                pP.setOptions( {"cirun": True, "haddParallel": True} )
+    
+                # run plotParallel
+                pP.run()
+
+            # if pp.__haddFiles is a list we are probably in the first iteration
 
 
             if analysis.getActivatedOptimizedRebinning():
@@ -270,35 +280,37 @@ def main(pyrootdir, argv):
                 if analysis.getSignalProcess() == 'ttbb':
                     # samples[0:2]: tt+bb, tt+b, tt+2b as signal for S over b normalization
                     # TODO check the optimizedBinning function and adjust arguments to new structure
+                    # TODO rework samples splitting to be automated in samplesDataClass?
                     with runTimer.Timer("optimizeBinning"):
-                        plotutils.optimizeBinning(outputpath,
-                                            signalsamples=[samples[0:3]], 
-                                            backgroundsamples=samples[3:],
-                                            additionalSamples=samples_data, 
-                                            plots=discriminatorPlots, 
-                                            systnames=allsystnames, 
-                                            minBkgPerBin=2.0, 
-                                            optMode=analysis.getOptimzedRebinning(),
-                                            considerStatUnc=False, 
-                                            maxBins=20, 
-                                            minBins=2,
-                                            verbosity=2)
+                        plotutils.optimizeBinning(pP.getRootPath(),
+                                            signalsamples = [samplesData.samples[0:3]], 
+                                            backgroundsamples = samplesData.samples[3:],
+                                            additionalSamples = samplesData.controlSamples, 
+                                            plots = configData.getDiscriminatorPlots(), 
+                                            systnames = samplesData.allNames, 
+                                            minBkgPerBin = 2.0, 
+                                            optMode = analysis.getOptimzedRebinning(),
+                                            considerStatUnc = False, 
+                                            maxBins = 20, 
+                                            minBins = 2,
+                                            verbosity = 2)
 
                 elif analysis.getSignalProcess() == 'ttH':
-                    # samples: ttH as signal. ttH_bb, ttH_XX as additional samples together with data. Rest: background samples
+                    # samples: ttH as signal. ttH_bb, ttH_XX as additional samples together with data. 
+                    # Rest: background samples
                     with runTimer.Timer("optimizeBinning"):
-                        plotutils.optimizeBinning(outputpath,
-                                            signalsamples=[samples[0]], 
-                                            backgroundsamples=samples[9:],
-                                            additionalSamples=samples[1:9]+samples_data, 
-                                            plots=discriminatorPlots, 
-                                            systnames=allsystnames, 
-                                            minBkgPerBin=2.0, 
-                                            optMode=analysis.getOptimzedRebinning(),
-                                            considerStatUnc=False, 
-                                            maxBins=20, 
-                                            minBins=2,
-                                            verbosity=2)
+                        plotutils.optimizeBinning(pP.getRootPath(),
+                                            signalsamples = [samplesData.samples[0]], 
+                                            backgroundsamples = samplesData.samples[9:],
+                                            additionalSamples= samplesData.samples[1:9] + samplesData.controlSamples, 
+                                            plots = configData.getDiscriminatorPlots(), 
+                                            systnames = samplesData.allNames, 
+                                            minBkgPerBin = 2.0, 
+                                            optMode = analysis.getOptimzedRebinning(),
+                                            considerStatUnc = False, 
+                                            maxBins = 20, 
+                                            minBins = 2,
+                                            verbosity = 2)
                 else:
                     print 'Warning: Could not find signal process.'
 
@@ -312,43 +324,46 @@ def main(pyrootdir, argv):
             '''
             # TODO look at this function and adjust arguments
             with runTimer.Timer("haddFilesFromWildCard"):
-                scriptgenerator.haddFilesFromWildCard(outputpath,
-                                                    outputpath[:-11]+"/HaddOutputs/*.root",
-                                                    totalNumberOfHistosNeedsToRemainTheSame=True)
+                scriptgenerator.haddFilesFromWildCard(outname = pP.getRootPath(),
+                                                    inwildcard = pP.getHaddOutPath(),
+                                                    totalNumberOfHistosNeedsToRemainTheSame = True)
 
             
-            # Deactivate check bins functionality in renameHistos if additional plot variables are added via analysis class
-            renamedPath=outputpath[:-5]+'_limitInput.root'
-            if os.path.exists(renamedPath):
-                print "renamed file already exists"
+            # Deactivate check bins functionality in renameHistos 
+            #   if additional plot variables are added via analysis class
+            if os.path.exists( pP.setLimitPath() ):
+                print( "renamed file already exists - skipping renaming histos" )
             else:
                 print '''
                 # ========================================================
                 # renaming Histograms
                 # ========================================================
                 '''
-                if type(plotParaOut)==str:
-                    # TODO this option is not chosen in the default run - adjust variables + look at function
-                    with runTimer.Timer("renameHistos"):
+                # this function evaluates to True if haddFiles were created
+                # otherwise it is false
+                if pP.checkHaddFiles():
+                    # now we know, that haddFiles have been generated during the plotParallel run
+                    # we can now call the renameHistos step
+                    with runTimer.Timer("renameHistos-withHaddFiles"):
                         limittools.renameHistos(
-                                outputpath,
-                                renamedPath,
-                                allsystnames,
-                                checkBins=True,
-                                prune=False,
-                                Epsilon=0.0)
-
+                                infname = pP.getHaddFiles(),
+                                outfname = pP.getLimitPath(),
+                                sysnames = samplesData.allNames,
+                                checkBins = True,
+                                prune = False,
+                                Epsilon = 0.0)
                 else:
-                    # TODO this option is chosen in the first run -  adjust variables + look at function
-                    with runTimer.Timer("renameHistos"):
+                    # now we konw, that no haddFiles have been generated during plotParallel run
+                    # we can now call the renamedHistos step
+                    with runTimer.Timer("renameHistos-noHaddFiles"):
                         limittools.renameHistos(
-                                plotParaOut[1:],
-                                renamedPath,
-                                allsystnames,
-                                checkBins=True,
-                                prune=False,
-                                Epsilon=0.0)
-
+                                infname = pP.getRootPath(),
+                                outfname = pP.getLimitPath(),
+                                sysnames = samplesData.allNames,
+                                checkBins = True,
+                                prune = False,
+                                Epsilon = 0.0)
+            
             print '''
             # ========================================================
             # adding real data with limittools
@@ -356,31 +371,29 @@ def main(pyrootdir, argv):
             '''
             with runTimer.Timer("addRealData"):
                 limittools.addRealData(
-                            renamedPath,
-                            [s.nick for s in samples_data],
-                            binlabels,
-                            discrname)
+                            infname = pP.getLimitPath(),
+                            samplesData = [s.nick for s in samplesData.controlSamples],
+                            categories = configData.getBinlabels(),
+                            disc = discrname)
 
-            #limittools.addPseudoData(outputpath[:-5]+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
-            #outputpath=outputpath[:-5]+'_limitInput.root'
-            outputpath=outputpath[:-5]+'_limitInput.root'
+                #limittools.addPseudoData(
+                #            infname = pP.getLimitPath(),
+                #            samplesWOttH = [s.nick for s in samplesData.samples[9:]],
+                #            categories = configData.getBinlabels(),
+                #            sysnames = samplesData.allNames,
+                #            discr = discrname)
 
-        #else:
-            #print "Not doing plotParallel step since root file was found."
-            #outputpath=analysis.rootFilePath
-        #print "outputpath: ", outputpath
+            # the path that is referenced in following parts as 
+            # outputpath is the result of pP.getLimitPath()
+
+    # ---- plotparallel step is done here ----
     else:
         print "not doing plotParallel step"
-        # Warning This time output path refers only to output.root
-        # ToDo: Fix usage of output path and output limit path
-        if not os.path.exists(analysis.rootFilePath[:-16]+'.root'):
-            workdir=os.getcwd()+'/../workdir/'+name
-            outputpath=workdir+'/output.root'
-        else:
-            outputpath=analysis.rootFilePath[:-16]+'.root'
+        # initialize empty plotParalllel instance to reference pP.getLimitPath()
+        pP = scriptgenerator(analysis.rootFilePath)
      
     print("###### DONE WITH PLOTPARALLEL STEP ######")       
-    print("at the moment the outputpath is "+str(outputpath))
+    print("at the moment the outputpath is "+str(pP.getLimitPath()))
     print("#########################################")
 
 
@@ -397,17 +410,19 @@ def main(pyrootdir, argv):
         '''
         # TODO look at function and update variables
         with runTimer.Timer("makeDatacardsParallel"):
-            limittools.makeDatacardsParallel(outputpath,
-                            name+'/'+name+'_datacard',
-                            binlabels,
-                            doHdecay=True,
-                            discrname=discrname,
-                            datacardmaker="mk_datacard_JESTest13TeVPara")
+            limittools.makeDatacardsParallel(
+                            filename = pP.getLimitPath(),
+                            # TODO make sure this references the right place
+                            outname = name+'/datacard',
+                            categories = configData.getBinlabels(),
+                            doHdecay = True,
+                            discrname = discrname,
+                            datacardmaker = "mk_datacard_JESTest13TeVPara")
 
 
-    # =======================================================================================================
+    # =============================================================================================
     # Invoke drawParallel step
-    # =======================================================================================================
+    # =============================================================================================
     if analysis.doDrawParallel==True and analysis.plotNumber == None :
         # Hand over opts to keep commandline options
         print '''
@@ -417,82 +432,110 @@ def main(pyrootdir, argv):
         '''
         # TODO look at function and update variables
         with runTimer.Timer("DrawParallel"):
-            scriptgenerator.DrawParallel(discriminatorPlots,
-                                name,
-                                os.path.realpath(inspect.getsourcefile(lambda:0)),
-                                analysis.opts)
+            # TODO this is the function that calls this script again with various shell scripts
+            scriptgenerator.DrawParallel(
+                                ListOfPlots = configData.getDiscriminatorPlots(),
+                                workdir = workdir,
+                                PathToSelf = os.path.realpath(inspect.getsourcefile(lambda:0)),
+                                opts = analysis.opts)
 
     # belongs to DrawParallel
     if analysis.doDrawParallel==True and analysis.plotNumber != None :
+        # this is called by the secondary scripts
         print("we have a plotNumber --- changing discriminatorPlots")
-        discriminatorPlots=[discriminatorPlots[int(analysis.plotNumber)]]
-    # =======================================================================================================
+        configData.adjustDiscriminatorPlots(plotNumber = analysis.plotNumber)
+
+    # =============================================================================================
 
 
     # Lists needed later, produce them only if needed, so check if subsequent step comes
     if (analysis.doDrawParallel==False or analysis.plotNumber != None) and (analysis.makeSimplePlots==True or analysis.makeMCControlPlots==True or analysis.makeEventYields==True):
+        # this is called by the secondary scripts
         print '''
         # ========================================================
         # Creating lists for later use
         # ========================================================
         '''
-        # TODO this sucks - rework in any case
-        with runTimer.Timer("adjustingLists"):
-            listOfHistoLists = plotutils.createHistoLists_fromSuperHistoFile(outputpath,samples,discriminatorPlots,1)
+        # TODO this sucks - rework in any case, put the information into a DataFrame for example
+        with runTimer.Timer("adjustingLists-createHistoLists_fromSuperHistoFile"):
+            listOfHistoLists = plotutils.createHistoLists_fromSuperHistoFile(
+                                    path = pP.getLimitPath(),
+                                    samples = samplesData.samples,
+                                    plots = configData.getDiscriminatorPlots(),
+                                    rebin = 1)
+        with runTimer.Timer("adjustingLists-transposeLOL"):
             lolT=plotutils.transposeLOL(listOfHistoLists)
-            listOfHistoListsData = plotutils.createHistoLists_fromSuperHistoFile(outputpath,samples_data,discriminatorPlots,1)
+        with runTimer.Timer("adjustingLists-createHistoLists_fromSuperHistoFile"):
+            listOfHistoListsData = plotutils.createHistoLists_fromSuperHistoFile(
+                                    path = pP.getLimitPath(),
+                                    samples = samplesData.controlSamples,
+                                    plots = configData.getDiscriminatorPlots(),
+                                    rebin = 1)
 
 
     # plot simple MC plots
     if (analysis.doDrawParallel==False or analysis.plotNumber != None) and analysis.makeSimplePlots==True :
+        # this is called by the secondary scripts
         print '''
         # ========================================================
         # Making simple MC plots
         # ========================================================
         print '''
         # TODO this sucks - rework in any case
-        with runTimer.Timer("simpleMCplots"):
-            plotutils.writeLOLAndOneOnTop(plotutils.transposeLOL(lolT[9:]),
-                                            samples[9:],
-                                            lolT[0],
-                                            samples[0],
-                                            -1,
-                                            name+'/'+name+'_controlplots')
-
-            plotutils.writeListOfHistoListsAN(plotutils.transposeLOL([lolT[0]]+lolT[9:]),
-                                            [samples[0]]+samples[9:],
-                                            "",
-                                            name+'/'+name+'_shapes',
-                                            True, False, False, 'histo', False, True, False)
+        with runTimer.Timer("simpleMCplots-writeLOLAndOneOnTop"):
+            plotutils.writeLOLAndOneOnTop(
+                            listOfHistoLists = plotutils.transposeLOL(lolT[9:]),
+                            samples = samplesData.samples[9:],
+                            listOfhistosOnTop = lolT[0],
+                            sampleOnTop = samplesData.samples[0],
+                            factor = -1,
+                            name = name+'/'+name+'_controlplots')
+        with runTimer.Timer("simpleMCplots-writeListOfHistoListsAn"):
+            plotutils.writeListOfHistoListsAN(
+                            listOfHistoLists = plotutils.transposeLOL([lolT[0]]+lolT[9:]),
+                            samples = [samplesData.samples[0]]+samplesData.samples[9:],
+                            label = "",
+                            name = name+'/'+name+'_shapes',
+                            normalize = True, 
+                            stack = False, 
+                            logscale = False, 
+                            options = 'histo', 
+                            statTest = False, 
+                            sepaTest = True, 
+                            ratio = False)
 
 
     # Make MC Control plots
     if (analysis.doDrawParallel==False or analysis.plotNumber != None) and analysis.makeMCControlPlots==True :
+        # this is called by the secondary scripts
         print '''
         # ========================================================
         # Making MC Control plots
         # ========================================================
         '''
         # TODO this sucks - rework in any case
-        with runTimer.Timer("MCControlPlots"):
-            lll=plotutils.createLLL_fromSuperHistoFileSyst(outputpath,
-                                            samples[9:],
-                                            discriminatorPlots,
-                                            errorSystNamesNoQCD)
+        with runTimer.Timer("MCControlPlots-createLLL_fromSuperHistoFileSyst"):
+            lll = plotutils.createLLL_fromSuperHistoFileSyst(
+                                    path = pP.getLimitPath(),
+                                    samples = samplesData.samples[9:],
+                                    plots = configData.getDiscriminatorPlots(),
+                                    systnames = pltcfg.errorSystNamesNoQCD)
 
-            labels=[plot.label for plot in discriminatorPlots]
-            plotutils.plotDataMCanWsyst(listOfHistoListsData,
-                                            plotutils.transposeLOL(lolT[9:]),
-                                            samples[9:],
-                                            lolT[0],
-                                            samples[0],
-                                            -2,
-                                            name,
-                                            [[lll,3354,ROOT.kBlack,True]],
-                                            False,
-                                            labels,
-                                            True,
-                                            analysis.plotBlinded)
+            labels = [plot.label for plot in configData.discriminatorPlots]
+        with runTimer.Timer("MCControlPlots-plotDataMCanWsyst"):
+            plotutils.plotDataMCanWsyst(
+                                    listOfHistoListsData = listOfHistoListsData,
+                                    listOfHistoLists = plotutils.transposeLOL(lolT[9:]),
+                                    samples = samplesData.samples[9:],
+                                    listOfHistosOnTop = lolT[0],
+                                    sampleOnTop = samples[0],
+                                    factor = -2,
+                                    name = name,
+                                    listOflll = [[lll,3354,ROOT.kBlack,True]],
+                                    logscale = False,
+                                    label = labels,
+                                    ratio = True,
+                                    blinded = analysis.plotBlinded)
 
 
 
