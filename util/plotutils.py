@@ -2,11 +2,9 @@ import ROOT
 import math
 import numpy as np
 from itertools import product
-from collections import namedtuple
 import glob
 import subprocess
 import os
-import scriptgenerator
 import re
 import xml.etree.ElementTree as ET
 import CMS_lumi

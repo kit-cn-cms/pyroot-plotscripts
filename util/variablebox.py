@@ -335,6 +335,8 @@ class Variables:
 
   # initialize variables from expression list
   def initVarsFromExprList(self,exprlist,tree):
+    print("stehkragen")
+    print tree
     for expr in exprlist:
       self.initVarsFromExpr(expr,tree)
 

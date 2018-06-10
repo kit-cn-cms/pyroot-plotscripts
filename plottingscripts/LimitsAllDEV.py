@@ -17,12 +17,12 @@ workdir = pyrootdir+"/"+"workdir"
 sys.path.append(pyrootdir+'/util')
 sys.path.append(filedir+"/configs")
 
-import scriptgenerator
 import plotutils
 import tmputils
 import PDFutils
 import runTimer
 import limittools
+import plotParallel
 
 import analysisClass
 import plotconfig_v14 as pltcfg
@@ -38,7 +38,7 @@ def main(pyrootdir, argv):
     # initializing everything only takes < 1 minute per script but takes a lot of disk i think
 
     # name of the analysis (i.e. workdir name)
-    name='wiprework'
+    name='testrun'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -57,7 +57,7 @@ def main(pyrootdir, argv):
     # define MEM discriminator variable
     # this is not used anymore as the information is written in the csv files in configdata
     # keep it for clarity
-    memexp='(memDBp>0.0)*(memDBp)+(memDBp<=0.0)*(0.01)+(memDBp==1.0)*(0.01)'
+    # memexp='(memDBp>0.0)*(memDBp)+(memDBp<=0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # define BDT output variables
     bdtweightpath="/nfs/dust/cms/user/kelmorab/Spring17BDTWeights/"
@@ -84,7 +84,7 @@ def main(pyrootdir, argv):
     '''
 
     # TODO make the analysisClass more essential - atm it is not really needed
-    analysis=analysisClass.Analysis(workdir, argv, anaRootPath, signalProcess = signalProcess)
+    analysis = analysisClass.Analysis(workdir, argv, anaRootPath, signalProcess = signalProcess)
 
     #analysis=analysisClass.Analysis(name,argv,
         #'/nfs/dust/cms/user/mharrend/doktorarbeit/latest/ttbb-cutbased-analysis_limitInput.root')
@@ -148,7 +148,7 @@ def main(pyrootdir, argv):
                                     analysisClass = analysis,
                                     configDataBaseName = configDataBaseName, 
                                     usedCategories = usedCategories)
-    configData.writeConfigDataToWorkdir(workdir)
+    configData.writeConfigDataToWorkdir(analysis.workdir)
     configData.assertData()
 
     configData.printLengths()
@@ -165,7 +165,7 @@ def main(pyrootdir, argv):
     #additionalvariables.extend(NNFlowInterface.getAdditionalVariablesList())
 
     # save addition variables information to workdir and print
-    configData.printAddVariables()
+    configData.printAddVariables(analysis.workdir)
 
 
     print '''    
@@ -250,9 +250,8 @@ def main(pyrootdir, argv):
             '''
             
             with runTimer.Timer("plotParallel"):
-                
-                # initialize plotParallel class
-                pP = scriptgenerator.plotParallel(workdir = workdir,
+                # initialize plotParallel class 
+                pP = plotParallel.plotParallel(workdir = analysis.workdir,
                                         pltcfg = pltcfg,
                                         configData = configData,
                                         samplesData = samplesData)
@@ -263,13 +262,16 @@ def main(pyrootdir, argv):
                 pP.setAddInterfaces( ["../util/dNNInterfaces/dNNInterface_V6.py"] )
                 
                 # set options
-                pP.setOptions( {"cirun": True, "haddParallel": True} )
+                pP.setOptions( {"cirun": True,  "haddParallel": True, "useOldRoot": True} )
     
                 # run plotParallel
                 pP.run()
 
-            # if pp.__haddFiles is a list we are probably in the first iteration
+            # if pp.haddFiles is a list we are probably in the first iteration
 
+            # cross check if plotParallel has terminated successfully
+            # program exits if not
+            pP.checkTermination()
 
             if analysis.getActivatedOptimizedRebinning():
                 print '''
@@ -324,14 +326,14 @@ def main(pyrootdir, argv):
             '''
             # TODO look at this function and adjust arguments
             with runTimer.Timer("haddFilesFromWildCard"):
-                scriptgenerator.haddFilesFromWildCard(outname = pP.getRootPath(),
+                plotParallel.haddFilesFromWildCard(outname = pP.getRootPath(),
                                                     inwildcard = pP.getHaddOutPath(),
                                                     totalNumberOfHistosNeedsToRemainTheSame = True)
 
             
             # Deactivate check bins functionality in renameHistos 
             #   if additional plot variables are added via analysis class
-            if os.path.exists( pP.setLimitPath() ):
+            if pP.initlimitPath_exists():
                 print( "renamed file already exists - skipping renaming histos" )
             else:
                 print '''
@@ -390,9 +392,10 @@ def main(pyrootdir, argv):
     else:
         print "not doing plotParallel step"
         # initialize empty plotParalllel instance to reference pP.getLimitPath()
-        pP = scriptgenerator(analysis.rootFilePath)
-     
-    print("###### DONE WITH PLOTPARALLEL STEP ######")       
+        pP = plotParallel.plotParallel.empty(analysis.workdir, analysis.rootFilePath)
+
+    print("###### DONE WITH PLOTPARALLEL STEP ######")
+    pP.checkTermination()       
     print("at the moment the outputpath is "+str(pP.getLimitPath()))
     print("#########################################")
 
@@ -433,9 +436,9 @@ def main(pyrootdir, argv):
         # TODO look at function and update variables
         with runTimer.Timer("DrawParallel"):
             # TODO this is the function that calls this script again with various shell scripts
-            scriptgenerator.DrawParallel(
+            plotParallel.DrawParallel(
                                 ListOfPlots = configData.getDiscriminatorPlots(),
-                                workdir = workdir,
+                                workdir = analysis.workdir,
                                 PathToSelf = os.path.realpath(inspect.getsourcefile(lambda:0)),
                                 opts = analysis.opts)
 
