@@ -10,22 +10,36 @@ class Analysis:
     """Default constructor"""
     return self.__init__(self,"defaultanalysisname")
   
-  def __init__(self, name,argv=list(),rootFilePath='', signalProcess='ttbb'):
-    self.name = str(name)
-    if not os.path.exists(name):
-      print "Making dir."
-      os.makedirs(name)
-    self.rootFilePath=str(rootFilePath)
+  def __init__(self, workdir, argv=list(), rootFilePath='', signalProcess='ttbb'):
+
+    # handling working directory
+    self.workdir = str(workdir)
+    self.name = self.workdir.split("/")[-1]
+
+    if not os.path.exists(self.workdir):
+      print "Making workdir."
+      os.makedirs(self.workdir)
+
+    # handling rootFilePath
+    self.rootFilePath = str(rootFilePath)
     if self.rootFilePath == '':
-      self.rootFilePath = name+'/'+name+'_limitInput.root'
-    # Default settings
+      self.rootFilePath = self.name+'/limitInput.root'
+
+    # =============================================
+    # default settings
+    # =============================================
+
     #doPlotParallel or otherwise use old root file
-    self.doPlotParallel=False
+    if os.path.exists(self.rootFilePath):
+        self.doPlotParallel = False
+    else:
+        self.doPlotParallel = True
         
     # Use parallel script for plots
-    self.doDrawParallel=True
+    self.doDrawParallel = True
+
     # Set plotnumber to none
-    self.plotNumber=None
+    self.plotNumber = None
 
     # if one wants to plot blinded: True (default: False)
     self.plotBlinded = False
@@ -76,12 +90,13 @@ class Analysis:
     self.opts = None
     self.opts = self.evaluateCommandlineArgs(argv)
     
+    
   
-  
-  def evaluateCommandlineArgs(self,argv=list()):
+  def evaluateCommandlineArgs(self, argv = list()):
     """Evaluate any commandline arguments"""
     try:
-      opts, args = getopt.getopt(argv,"hp:",["plot=","doPlotParallel=","doDrawParallel=","plotBlinded=","makeEventYields=","makeDataCards=","makeSimplePlots=","makeMCControlPlots="])
+      opts, args = getopt.getopt(argv,"hp:",
+        ["plot=","doPlotParallel=","doDrawParallel=","plotBlinded=","makeEventYields=","makeDataCards=","makeSimplePlots=","makeMCControlPlots="])
     except getopt.GetoptError:
       print '[scriptname].py -p  <plotnumber> --doPlotParallel= --doDrawParallel= --plotBlinded= --makeEventYields= --makeDataCards= --makeSimplePlots= --makeMCControlPlots='
       sys.exit(2)
@@ -127,24 +142,31 @@ class Analysis:
   # Helper functions
   
   def printChosenOptions(self):
-    print "Print out of options set via analysis class:"
-    print "Option PlotNumber: ", self.plotNumber
-    print "Option doPlotParallel: ", self.doPlotParallel
-    print "Option doDrawParallel: ", self.doDrawParallel
-    print "Option PlotBlinded: ", self.plotBlinded
-    print "Option makeEventYields: ", self.makeEventYields
-    print "Option makeDataCards: ", self.makeDataCards
-    print "Option makeSimplePlots: ", self.makeSimplePlots
-    print "Option makeMCControlPlots: ", self.makeMCControlPlots
-    print "Option additionalPlotVariables: ", self.additionalPlotVariables
-    print "Option optimizedRebinning: ", self.optimizedRebinning
+    code = "Option, Value\n"
+    code +="PlotNumber, " +str(self.plotNumber) + "\n"
+    code +="PlotNumber, " + str(self.plotNumber) + "\n"
+    code +="doPlotParallel, " + str(self.doPlotParallel) + "\n"
+    code +="doDrawParallel, " + str(self.doDrawParallel) + "\n"
+    code +="PlotBlinded, " + str(self.plotBlinded) + "\n"
+    code +="makeEventYields, " + str(self.makeEventYields) + "\n"
+    code +="makeDataCards, " + str(self.makeDataCards) + "\n"
+    code +="makeSimplePlots, " + str(self.makeSimplePlots) + "\n"
+    code +="makeMCControlPlots, " + str(self.makeMCControlPlots) + "\n"
+    code +="additionalPlotVariables, " + str(self.additionalPlotVariables) + "\n"
+    code +="optimizedRebinning, " + str(self.optimizedRebinning)
+    print(code)
+    with open(self.workdir+"/analysisOptions.csv","w") as f:
+        f.write(code)
+    print("Options saved to: "+self.workdir+"/analysisOptions.csv")
   
   
   ## Getter functions
   def getAdditionalPlotVariables(self, discriminators, preselections, binLabels, alwaysExecute=False):
-    """Function creates plot list for additional (input) variables
+    """
+    Function creates plot list for additional (input) variables
     Function checks if additionalPlotVariablesMap.py file exists. 
-    If yes, then it will try to use it for determination of the amount of bins and the bin range of the plots. In case some variable cannot be mapped, the variable will be added to existing file and user will get warned.
+    If yes, then it will try to use it for determination of the amount of bins and the bin range of the plots. 
+            In case some variable cannot be mapped, the variable will be added to existing file and user will get warned.
     If no, then it will construct such a dict and stop the further execution.
     
     mapFile is a dict with additionalPlotVariable as key and numberOfBins, binLowerEdge, binUpperEdge as values contained in list
@@ -286,12 +308,16 @@ class Analysis:
     """Return position of ttbar samples in samples list, upper bound"""
     return self.ttbarSamplesUpper
   
-  
+
+
   
   ## Setter functions
   def setPlotNumber(self,arg):
     self.plotNumber = int(arg)
-  
+    self.workdir += "/subruns/number_"+str(self.plotNumber)
+    if not os.path.exists(self.workdir):
+        os.makedirs(self.workdir)
+
   def setDoPlotParallel(self,arg):
     self.doPlotParallel = arg
       
