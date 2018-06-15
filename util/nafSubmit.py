@@ -39,32 +39,33 @@ def writeSubmitCode(script, logdir, hold = False, isArray = False, nScripts = 0,
   submitScript = script.split("/")[-1][:-3]
 
   submitCode = ""
-  submitCode="universe = vanilla\n"
-  submitCode+="should_transfer_files = IF_NEEDED\n"
-  submitCode+="executable = /bin/zsh\n"
-  submitCode+="arguments = " + script + "\n"
-  #submitCode+="initialdir = "+os.getcwd()+"\n"
-  submitCode+="notification = Never\n"
-  #submitCode+="priority = 0\n"
-  #submitCode+="run_as_owner = True\n"
+  submitCode+= "universe = vanilla\n"
+  #submitCode+= "should_transfer_files = IF_NEEDED\n"
+  submitCode+= "executable = /bin/zsh\n"
+  submitCode+= "arguments = " + script + "\n"
+  #submitCode+= "initialdir = "+os.getcwd()+"\n"
+  #submitCode+= "notification = Never\n"
+  #submitCode+= "priority = 0\n"
+  #submitCode+= "run_as_owner = True\n"
+  #submitCode+= "job_lease_duration = 60\n"
   for opt in defaults:
     if defaults[opt]:
       if "Request" in opt:
         submitCode+=opt+" = "+str(defaults[opt])+"\n"
       if "PeriodicHold" in opt:
-        submitCode+="periodic_hold = ((JobStatus == 2) && (time() - EnteredCurrentStatus) > "+str(defaults[opt])+")\n"
+        submitCode+= "periodic_hold = ((JobStatus == 2) && (time() - EnteredCurrentStatus) > "+str(defaults[opt])+")\n"
       if "PeriodicRelease" in opt:
-        submitCode+="periodic_release = ((JobStatus == 5) && (time() - EnteredCurrentStatus) > "+str(defaults[opt])+")\n"  
+        submitCode+= "periodic_release = ((JobStatus == 5) && (time() - EnteredCurrentStatus) > "+str(defaults[opt])+")\n"  
   if hold:
-    submitCode+="hold = True\n"
+    submitCode+= "hold = True\n"
 
   if isArray:
-    submitCode+="error = "+logdir+"/"+submitScript+".$(Cluster)_$(ProcId).err\n"
-    submitCode+="output = "+logdir+"/"+submitScript+".$(Cluster)_$(ProcId).out\n"
-    submitCode+="log = "+logdir+"/"+submitScript+".$(Cluster)_$(ProcId).log\n"
-    submitCode+="Queue Environment From (\n"
+    submitCode+= "error = "+logdir+"/"+submitScript+".$(Cluster)_$(ProcId).err\n"
+    submitCode+= "output = "+logdir+"/"+submitScript+".$(Cluster)_$(ProcId).out\n"
+    submitCode+= "log = "+logdir+"/"+submitScript+".$(Cluster)_$(ProcId).log\n"
+    submitCode+= "Queue Environment From (\n"
     for taskID in range(nScripts):
-      submitCode+="\"SGE_TASK_ID="+str(taskID)+"\"\n"
+      submitCode+="\"SGE_TASK_ID="+str(taskID+1)+"\"\n"
     submitCode+=")"
   else:
     submitCode+="error = "+logdir+"/"+submitScript+".$(Cluster).err\n"
@@ -98,6 +99,7 @@ def writeArrayCode(scripts, arrayName):
   arrayCode+=")\n"
   arrayCode+="thescript=${subtasklist[$SGE_TASK_ID]}\n"
   arrayCode+="echo \"${thescript}\"\n"
+  arrayCode+="echo \"$SGE_TASK_ID\"\n"
   arrayCode+=". $thescript"
 
   with open(arrayscriptpath, "w") as aF:

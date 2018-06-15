@@ -185,282 +185,277 @@ class Variable:
 
 
 class Variables:
-  def __init__(self,veto=[]):
-    self.variables={}
-    self.vetolist=veto
-
-  # returns all variables of an expression
-  def varsIn(self,expr):
-    # find all words not followed by ( (these are functions)
-    variablescandidates = re.findall(r"\w+\b(?!\()", expr)
-    variables=[]
-    for v in variablescandidates:
-      if v[0].isalpha() or v[0]=='_':
-        variables.append(v)
-    return variables
+    def __init__(self,veto=[]):
+        self.variables = {}
+        self.vetolist = veto
 
 
-  # returns all variables of an expression that are not followed by [ (e.g. variable[0])
-  def varsNoIndex(self,expr):
-    # find all words not followed by [
-    variablescandidates = re.findall(r"\w+\b(?!\[)", expr)
-    variables=[]
-    for v in variablescandidates:
-      if v[0].isalpha() or v[0]=='_':
-        variables.append(v)
-    return variables
 
+    ## initialize variables from expression list ##
+    def initVarsFromExprList(self, exprlist, tree):
+        for expr in exprlist:
+            self.initVarsFromExpr(expr, tree)
 
-  # returns map of maximum array indices of variables in an expression
-  def varsWithMaxIndex(self,expr):
-    # find all words followed by [
-    variablescandidates = re.findall(r"\w+\b(?=\[)", expr)
-    variables=[]
-    maxidxs=[]
-    for v in variablescandidates:
-      if v[0].isalpha() or v[0]=='_':
-        variables.append(v)
-    variables=list(set(variables))
-    arraylength={}
-    for name,v in self.variables.iteritems():
-      if v.arraylength == None:
-        continue
-      arraylength[name]=v.arraylength
-    maxmap={}
-    for v in variables:
-      maxidx=-1
-      lower=0
-      while True:
-        varstart=expr.find(v+'[',lower)
-        if varstart>-1:
-          lower=varstart+len(v)+1
+    def initVarsFromExpr(self,expr,tree):
+        if ":=" in expr:
+            name, expr = expr.split(":=")
+            if not ".xml" in expr:
+                self.initVarsFromExpr(expr, tree)
+            self.initVar(tree,name,expr,'F')
         else:
-          break
-        upper=expr.find(']',lower)
-        if lower > 0 and upper>0 and (varstart==0  or ( not expr[varstart-1].isalpha() and not expr[varstart-1] == '_' ) ):
-          idx=int(expr[lower:upper])
-          if idx>maxidx: maxidx=idx
-      if arraylength[v] not in maxmap.keys() or maxmap[arraylength[v]]<maxidx:
-        maxmap[arraylength[v]]=maxidx
-    return maxmap
+            variablenames = self.varsIn(expr)
+            #print variablenames
+            for name in variablenames:
+                #print name
+                self.initVar(tree,name,name,'F')
+
+    def varsIn(self,expr):
+        # find all words not followed by ( (these are functions)
+        variablescandidates = re.findall(r"\w+\b(?!\()", expr)
+        variables = []
+        for v in variablescandidates:
+            if v[0].isalpha() or v[0]=='_':
+                variables.append(v)
+        return variables
+
+    def initVar(self,tree,name,expression='',vartype='F',arraylength=None):
+        if not name in self.variables and not name in self.vetolist:
+            if not ".xml" in expression and not hasattr(tree, expression) and not "Weight_" in name:
+                # Handle vector sub variables which have names like Jet_E_1, 
+                # so that vector variable Jet_E is included instead
+                # If not vector like variable is found 
+                # assume it is a forumal expression and recursive call initVarsFromExpr
+                foundVectorLikeVariable = False
+                if "_" in expression:
+                    expressionPart1, expressionPart2 = expression.rsplit('_', 1)
+                    if hasattr(tree, expressionPart1) and expressionPart2.isdigit():
+                        foundVectorLikeVariable = True
+                        print 'Found vector like variable: ', expression, ' which was converted to: ', expressionPart1
+                        # Make sure vector variable is not already included
+                        if not expressionPart1 in self.variables and not expressionPart1 in self.vetolist:
+                            print "creating variable", expressionPart1
+                            self.variables[expressionPart1] = Variable(expressionPart1, expressionPart1,vartype,arraylength)
+                            self.variables[expressionPart1].initVar(tree,self)
+                            return
+                        else:
+                            print "Variable exists already: ", expressionPart1, " do nothing."
+                            return
+                
+                # Handle formular expression by recursive function 
+                # which splits formular based on brackets
+                if (not foundVectorLikeVariable):    
+                    print 'init vasr for ', expression
+                    self.initVarsFromExpr(expression,tree)
+
+            print "creating variable", expression
+            self.variables[name]=Variable(name,expression,vartype,arraylength)
+            self.variables[name].initVar(tree,self)
 
 
-  # returns maximum array indices selection of variables in an expression
-  def checkArrayLengths(self,expr):
-    maxidxs=self.varsWithMaxIndex(expr)
-    arrayselection="1"
-    for v in maxidxs.keys():
-      arrayselection+='&&'+v+'>'+str(maxidxs[v])
-    return arrayselection
 
 
-  # replaces all occurances of array variables with an instance i of that variable ( e.g. Jet_Pt -> Jet_Pt[3] )
-  def getArrayEntries(self,expr,i):
-    print "getArrayEntries ", expr
-    newexpr=expr
-    variables=self.varsNoIndex(expr)
-    #print variables
-    #print self.variables
-    for v in variables:
-      print "search ", v
-      if v in self.variables:
-	print "found"
-        if self.variables[v].arraylength==None:
-	  print "no array"
-          continue
-        # substitute v by v[i]
-        rexp=(v.encode('string-escape')+r"+\b(?!\[)")
-        newexpr=re.sub(rexp,v+'['+str(i)+']',newexpr)
-        print "after subst ", newexpr
-    return newexpr
 
 
-  # initialize variable
-  def initVar(self,tree,name,expression='',vartype='F',arraylength=None):
-    #print "initVar", tree,name,expression
-   # print self.vetolist
-    if not name in self.variables and not name in self.vetolist:
 
-      if not ".xml" in expression and not hasattr(tree,expression) and not "Weight_" in name:
-        # Handle vector sub variables which have names like Jet_E_1, so that vector variable Jet_E is included instead
-        # If not vector like variable is found assume it is a forumal expression and recursive call initVarsFromExpr
-        foundVectorLikeVariable = False
-        if "_" in expression:
-          expressionPart1, expressionPart2 = expression.rsplit('_', 1)
-          if hasattr(tree, expressionPart1) and expressionPart2.isdigit():
-            foundVectorLikeVariable = True
-            print 'Found vector like variable: ', expression, ' which was converted to: ', expressionPart1
-            # Make sure vector variable is not already included
-            if not expressionPart1 in self.variables and not expressionPart1 in self.vetolist:
-              print "creating variable", expressionPart1
-              self.variables[expressionPart1]=Variable(expressionPart1,expressionPart1,vartype,arraylength)
-              self.variables[expressionPart1].initVar(tree,self)
-              return
-            else:
-              print "Variable exists already: ", expressionPart1, " do nothing."
-              return
+
+    # returns all variables of an expression that are not followed by [ (e.g. variable[0])
+    def varsNoIndex(self,expr):
+        # find all words not followed by [
+        variablescandidates = re.findall(r"\w+\b(?!\[)", expr)
+        variables=[]
+        for v in variablescandidates:
+            if v[0].isalpha() or v[0]=='_':
+                variables.append(v)
+        return variables
+
+
+    # returns map of maximum array indices of variables in an expression
+    def varsWithMaxIndex(self,expr):
+        # find all words followed by [
+        variablescandidates = re.findall(r"\w+\b(?=\[)", expr)
+        variables=[]
+        maxidxs=[]
+        for v in variablescandidates:
+            if v[0].isalpha() or v[0]=='_':
+                variables.append(v)
+        variables=list(set(variables))
+        arraylength={}
+        for name,v in self.variables.iteritems():
+            if v.arraylength == None:
+                continue
+            arraylength[name]=v.arraylength
+        maxmap={}
+        for v in variables:
+            maxidx=-1
+            lower=0
+            while True:
+                varstart=expr.find(v+'[',lower)
+                if varstart>-1:
+                    lower=varstart+len(v)+1
+                else:
+                    break
+                upper=expr.find(']',lower)
+                if lower > 0 and upper>0 and (varstart==0    or ( not expr[varstart-1].isalpha() and not expr[varstart-1] == '_' ) ):
+                    idx=int(expr[lower:upper])
+                    if idx>maxidx: maxidx=idx
+            if arraylength[v] not in maxmap.keys() or maxmap[arraylength[v]]<maxidx:
+                maxmap[arraylength[v]]=maxidx
+        return maxmap
+
+
+    # returns maximum array indices selection of variables in an expression
+    def checkArrayLengths(self,expr):
+        maxidxs=self.varsWithMaxIndex(expr)
+        arrayselection="1"
+        for v in maxidxs.keys():
+            arrayselection+='&&'+v+'>'+str(maxidxs[v])
+        return arrayselection
+
+
+    # replaces all occurances of array variables with an instance i of that variable ( e.g. Jet_Pt -> Jet_Pt[3] )
+    def getArrayEntries(self,expr,i):
+        print "getArrayEntries ", expr
+        newexpr=expr
+        variables=self.varsNoIndex(expr)
+        #print variables
+        #print self.variables
+        for v in variables:
+            print "search ", v
+            if v in self.variables:
+                print "found"
+                if self.variables[v].arraylength==None:
+                    print "no array"
+                    continue
+                # substitute v by v[i]
+                rexp=(v.encode('string-escape')+r"+\b(?!\[)")
+                newexpr=re.sub(rexp,v+'['+str(i)+']',newexpr)
+                print "after subst ", newexpr
+        return newexpr
+
+
+
+
+
+    # Program: Initialize all variables
+    def initVarsProgram(self):
+        castText=""
+        text="std::map<std::string, float*> floatMap;\nstd::map<std::string, Int_t*> intMap;\nstd::map<std::string, Long64_t*> longMap;\n\n"
+        for name,var in self.variables.iteritems():
+            stubInit, stubCast = var.initVarProgram()
+            text+=stubInit
+            castText+=stubCast
+        text+='\n'
+        castText+='\n'
+        return text, castText
+
+
+    # Program: Setup all branch addresses
+    def initBranchAddressesProgram(self):
+        text=""
+        for name,var in self.variables.iteritems():
+            if var.intree:
+                text+=var.initBranchAddressProgram()
+        text+='\n'
+        return text
+
+
+    # Program: Setup all TMVA readers
+    def setupTMVAReadersProgram(self):
+        text=""
+        for name,var in self.variables.iteritems():
+            if var.mvavar:
+                text+=var.setupTMVAReaderProgram(self)
+        return text
+
+
+    # Program: Setup all branch addresses
+    def calculateVarsProgram(self):
         
-        # Handle formular expression by recursive function which splits formular based on brackets
-        if (not foundVectorLikeVariable):  
-          print 'init vasr for ', expression
-          self.initVarsFromExpr(expression,tree)
+        #print self.variables
+        
+        text=""
+        
+        # figure out the dependencies between the variables so that they can be calculated in the proper order
+        print "print figuring out variable dependencies"
+        rawVariableList=[]
+        sortedVariableList=[]
+        for name,var in self.variables.iteritems():
+            rawVariableList.append([name,var])
+        #print rawVariableList
+        allVariablesHandled=False
+        nVariables=len(rawVariableList)
+        #print "nVariables", nVariables
+        variableCounter=-1
+        while allVariablesHandled==False:
+            variableCounter+=1
+            #print variableCounter
+            if len(sortedVariableList)>len(rawVariableList):
+                print "PROBLEM: sorted list longer than raw list?"
+                print rawVariableList
+                print sortedVariableList
+                exit(0)
+            name, var = rawVariableList[variableCounter]
+            # begin from begging of the raw list again
+            #print len(sortedVariableList)
+            if variableCounter==nVariables-1:
+                #print "starting loop from the beginning"
+                variableCounter=-1
+            if len(sortedVariableList)>0:
+                if collections.Counter(zip(*sortedVariableList)[0])==collections.Counter(zip(*rawVariableList)[0]):
+                    if len(rawVariableList)!=len(sortedVariableList):
+                        print "PROBLEM: lists have different lengths"
+                        print rawVariableList
+                        print sortedVariableList
+                        exit(0)
+                    # this will get the element with the most entries in the list and also how often it appears. If there are more than one it does not matter her
+                    MaxOcc, numMaxOcc=collections.Counter(zip(*sortedVariableList)[0]).most_common(1)[0]
+                    if numMaxOcc!=1:
+                        print "PROBLEM: sorted list contains the same entry multiple times"
+                        print MaxOcc, numMaxOcc
+                        exit(0)
+                    allVariablesHandled=True
+                    continue
+                if name in zip(*sortedVariableList)[0]:
+                    ##already have this variable
+                    continue
+            print "considering ", name, var
+            if var.name==var.expression:
+                sortedVariableList.append([name,var])
+                continue
+            if var.mvavar==True:
+                sortedVariableList.append([name,var])
+                continue
+            if var.intree==True:
+                sortedVariableList.append([name,var])
+                continue
+            alldependenciesresovled=True
+            for dvar in zip(*rawVariableList)[0]:
+                if dvar in var.expression:
+                    if len(sortedVariableList)==0:
+                        alldependenciesresovled=False
+                        continue
+                    if dvar not in zip(*sortedVariableList)[0]:
+                        # the needed variable was not added to the sorted list yet
+                        alldependenciesresovled=False
+            if alldependenciesresovled==True:
+                sortedVariableList.append([name,var])
 
-      print "creating variable", expression
-      self.variables[name]=Variable(name,expression,vartype,arraylength)
-      self.variables[name].initVar(tree,self)
-
-
-  # initialize variables from expression
-  def initVarsFromExpr(self,expr,tree):
-    #print "initVarsFromExpr",expr,tree
-    #print "initializing", expr
-    #print self.variables
-    if ":=" in expr:
-
-      name,expr=expr.split(":=")
-     # print name,expr
-
-      if not ".xml" in expr:
-        self.initVarsFromExpr(expr,tree)
-
-      self.initVar(tree,name,expr,'F')
-
-    else:
-      variablenames=self.varsIn(expr)
-      #print variablenames
-      for name in variablenames:
-        #print name
-        self.initVar(tree,name,name,'F')
-
-
-  # initialize variables from expression list
-  def initVarsFromExprList(self,exprlist,tree):
-    print("stehkragen")
-    print tree
-    for expr in exprlist:
-      self.initVarsFromExpr(expr,tree)
-
-
-  # Program: Initialize all variables
-  def initVarsProgram(self):
-    castText=""
-    text="std::map<std::string, float*> floatMap;\nstd::map<std::string, Int_t*> intMap;\nstd::map<std::string, Long64_t*> longMap;\n\n"
-    for name,var in self.variables.iteritems():
-      stubInit, stubCast = var.initVarProgram()
-      text+=stubInit
-      castText+=stubCast
-    text+='\n'
-    castText+='\n'
-    return text, castText
-
-
-  # Program: Setup all branch addresses
-  def initBranchAddressesProgram(self):
-    text=""
-    for name,var in self.variables.iteritems():
-      if var.intree:
-        text+=var.initBranchAddressProgram()
-    text+='\n'
-    return text
-
-
-  # Program: Setup all TMVA readers
-  def setupTMVAReadersProgram(self):
-    text=""
-    for name,var in self.variables.iteritems():
-      if var.mvavar:
-        text+=var.setupTMVAReaderProgram(self)
-    return text
-
-
-  # Program: Setup all branch addresses
-  def calculateVarsProgram(self):
-    
-    #print self.variables
-    
-    text=""
-    
-    # figure out the dependencies between the variables so that they can be calculated in the proper order
-    print "print figuring out variable dependencies"
-    rawVariableList=[]
-    sortedVariableList=[]
-    for name,var in self.variables.iteritems():
-      rawVariableList.append([name,var])
-    #print rawVariableList
-    allVariablesHandled=False
-    nVariables=len(rawVariableList)
-    #print "nVariables", nVariables
-    variableCounter=-1
-    while allVariablesHandled==False:
-      variableCounter+=1
-      #print variableCounter
-      if len(sortedVariableList)>len(rawVariableList):
-	print "PROBLEM: sorted list longer than raw list?"
-	print rawVariableList
-	print sortedVariableList
-	exit(0)
-      name, var = rawVariableList[variableCounter]
-      # begin from begging of the raw list again
-      #print len(sortedVariableList)
-      if variableCounter==nVariables-1:
-	#print "starting loop from the beginning"
-	variableCounter=-1
-      if len(sortedVariableList)>0:
-	if collections.Counter(zip(*sortedVariableList)[0])==collections.Counter(zip(*rawVariableList)[0]):
-	  if len(rawVariableList)!=len(sortedVariableList):
-	    print "PROBLEM: lists have different lengths"
-	    print rawVariableList
-	    print sortedVariableList
-	    exit(0)
-	  # this will get the element with the most entries in the list and also how often it appears. If there are more than one it does not matter her
-	  MaxOcc, numMaxOcc=collections.Counter(zip(*sortedVariableList)[0]).most_common(1)[0]
-	  if numMaxOcc!=1:
-	    print "PROBLEM: sorted list contains the same entry multiple times"
-	    print MaxOcc, numMaxOcc
-	    exit(0)
-	  allVariablesHandled=True
-          continue
-	if name in zip(*sortedVariableList)[0]:
-	  ##already have this variable
-	  continue
-      print "considering ", name, var
-      if var.name==var.expression:
-	sortedVariableList.append([name,var])
-	continue
-      if var.mvavar==True:
-	sortedVariableList.append([name,var])
-	continue
-      if var.intree==True:
-	sortedVariableList.append([name,var])
-	continue
-      alldependenciesresovled=True
-      for dvar in zip(*rawVariableList)[0]:
-	if dvar in var.expression:
-          if len(sortedVariableList)==0:
-	    alldependenciesresovled=False
-	    continue
-	  if dvar not in zip(*sortedVariableList)[0]:
-	    # the needed variable was not added to the sorted list yet
-	    alldependenciesresovled=False
-      if alldependenciesresovled==True:
-	sortedVariableList.append([name,var])
-
-    conditionVariableList=[]	
-    for name,var in sortedVariableList:
-      if "conditionFor" in name:
-        conditionVariableList.append([name,var])
-    
-    # now write the code for each variable
-    for name,var in sortedVariableList:
-      print "writing code for ", var.name
-      # check for conditional evaluation
-      hasCondition=False
-      for condname, condvar in conditionVariableList:
-        if name in condname:
-          hasCondition=True
-          text+='if('+condvar.expression+'){\n'
-      text+=var.calculateVarProgram()
-      if hasCondition:
-        text+='}\n'
-    text+='\n'
-    return text
+        conditionVariableList=[]        
+        for name,var in sortedVariableList:
+            if "conditionFor" in name:
+                conditionVariableList.append([name,var])
+        
+        # now write the code for each variable
+        for name,var in sortedVariableList:
+            print "writing code for ", var.name
+            # check for conditional evaluation
+            hasCondition=False
+            for condname, condvar in conditionVariableList:
+                if name in condname:
+                    hasCondition=True
+                    text+='if('+condvar.expression+'){\n'
+            text+=var.calculateVarProgram()
+            if hasCondition:
+                text+='}\n'
+        text+='\n'
+        return text
