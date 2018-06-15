@@ -7,69 +7,12 @@ import time
 import datetime
 import stat
 from subprocess import call
-from nafSubmit import *
 import glob
-utilpath = os.path.dirname(os.path.realpath(__file__))
 
-def haddFiles(outname="",infiles=[],totalNumberOfHistosNeedsToRemainTheSame=False):
-  print 'hadd from filelist'
-  haddclock=ROOT.TStopwatch()
-  haddclock.Start()
-  nfilesPerHadd=100
-  nHistosBefore=0
-  nHistosAfter=0
-  if totalNumberOfHistosNeedsToRemainTheSame:
-    # count number if histos before hadding
-    print "counting histos BEFORE hadding from wildcard"
-    nHistos=0
-    for inf in infiles:
-      theInf=ROOT.TFile(inf,"READ")
-      keylist=theInf.GetListOfKeys()
-      nHistos+=len(keylist)
-      theInf.Close()
-    nHistosBefore=nHistos  
-  if len(infiles)<nfilesPerHadd:
-    cmd='hadd'+' '+outname+' '+' '.join(infiles)
-    print cmd
-    subprocess.call(cmd,shell=True)
-  else:
-    parts=[]
-    subpartfiles=[]
-    totalsubpartfiles=[]
-    for iinf, inf in enumerate(infiles):
-      subpartfiles.append(inf)
-      totalsubpartfiles.append(inf)
-      if iinf%(nfilesPerHadd-1)==0 or inf==infiles[-1]:
-        partname=outname.replace(".root","_part_"+str(len(parts))+".root")
-        parts.append(partname)
-        cmd='hadd'+' '+partname+' '+' '.join(subpartfiles)
-        print cmd
-        subprocess.call(cmd,shell=True)
-        subpartfiles=[]
-    if len(totalsubpartfiles)!=len(infiles):
-      print "OHOHOH HADDINGFROMFILES missed or used some files twice!!!"
-      exit(1)
-    # now add the parts
-    cmd='hadd'+' '+outname+' '+' '.join(parts)
-    print cmd
-    subprocess.call(cmd,shell=True)
-  if totalNumberOfHistosNeedsToRemainTheSame:
-    # count number if histos before hadding
-    print "counting histos AFTER hadding from wildcard"
-    nHistos=0
-    for inf in [outname]:
-      theInf=ROOT.TFile(inf,"READ")
-      keylist=theInf.GetListOfKeys()
-      nHistos+=len(keylist)
-      theInf.Close()
-    nHistosAfter=nHistos
-    if nHistosAfter!=nHistosBefore:
-      print "haddFilesFromWildCard did not lead to the same number of histograms before and after the hadding!!!!"
-      exit(1)    
-  print 'done'
-  haddtime=haddclock.RealTime()
-  print "hadding took ", haddtime
-  return  outname
+# local imports
+import haddParallel
+import nafSubmit
+utilpath = os.path.dirname(os.path.realpath(__file__))
 
 class Limitresult:
   def __init__(self,combined,combined_up,combined_down,combined_2up,combined_2down,cats,catlimits,catlimits_up,catlimits_down,catlimits_2up,catlimits_2down):
@@ -144,9 +87,14 @@ print "done"
     
     outnamelist=[]
     renamescriptlist=[]
+    tmpname = outfname.split("/")
+    outsubdir = "/".join( tmpname[:-1]+ ["renameparts"])
+    if not os.path.exists(outsubdir):
+        os.makedirs(outsubdir)
+    outsubpath = "/".join( tmpname[:-1]+["renameparts", tmpname[-1]])
     # now create the shell scripts
     for inn,nn in enumerate(infname):
-      thisoutname=outfname.replace(".root","_"+str(inn)+".root")
+      thisoutname=outsubpath.replace(".root","_"+str(inn)+".root")
       outnamelist.append(thisoutname)
       scriptname=renamescriptdir+'/rename_'+str(inn)+'.sh'
       renamescriptlist.append(scriptname)
@@ -172,15 +120,15 @@ print "done"
     nTries=0
     while len(listOfJobsToSubmit)>0 or len(listOfJobOutFilesToGetFromSubmit)>0 or nJobsDone!=len(outnamelist):
       nTries+=1
-      if nTries>=4:
-        print "renaming did not work after 4 tries. ABORTING"
+      if nTries>=10:
+        print "renaming did not work after 10 tries. ABORTING"
         exit(1)
       if firstTry:
-        jobids=submitArrayToNAF(listOfJobsToSubmit, arrayName="renaming")
+        jobids=nafSubmit.submitArrayToNAF(listOfJobsToSubmit, arrayName="renaming")
         do_qstat(jobids)
         firstTry=False      
       else:
-        jobids=submitToNAF(listOfJobsToSubmit)
+        jobids=nafSubmit.submitToNAF(listOfJobsToSubmit)
         do_qstat(jobids)
       # check if each hadd worked
       listOfJobsToSubmit=[]
@@ -199,12 +147,14 @@ print "done"
           listOfJobOutFilesToGetFromSubmit.append(j)
     
     # finally hadd the renamed scripts
-    doTotalNumberOfHistosNeedsToRemainTheSame=True
+    nHistosRemainSame=True
     if prune:
-      doTotalNumberOfHistosNeedsToRemainTheSame=False
-    haddFiles(outfname,outnamelist,totalNumberOfHistosNeedsToRemainTheSame=doTotalNumberOfHistosNeedsToRemainTheSame)
-    #cmd="hadd "+outfname+" "+" ".join(outnamelist)
-    #subprocess.call(cmd,shell=True)
+      nHistosRemainSame=False
+    haddParallel.haddFiles( input = outnamelist,
+                            outName = outfname,
+                            subName = "renamingParts",
+                            nHistosRemainSame = doTotalNumberOfHistosNeedToRemainSame )
+
     print "The parallel renaming took ", theclock.RealTime()
 
     
@@ -501,7 +451,7 @@ def makeDatacardsParallel(filename,outname,categories=None,doHdecay=True,discrna
     os.makedirs(datacardscriptfolder)
     
   for c in categories:
-    scriptname=datacardscriptfolder+'/cardmaker_'+outname.rsplit("/",1)[-1]+'_'+c+'.sh'
+    scriptname=datacardscriptfolder+'/cardmaker_datacard_'+c+'.sh'
     script="#!/bin/bash \n"
     if cmsswpath!='':
       script+="export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch \n"
@@ -509,7 +459,7 @@ def makeDatacardsParallel(filename,outname,categories=None,doHdecay=True,discrna
       script+="export SCRAM_ARCH="+os.environ['SCRAM_ARCH']+"\n"
       script+='cd '+cmsswpath+'/src\neval `scram runtime -sh`\n'
       script+='cd - \n'
-    script+=datacardmaker+' -d '+' '+discrname+' '+' -c '+c+' -o '+outname+'_'+c+'_hdecay.txt '+filename+'\n'
+    script+=datacardmaker+' -d '+' '+discrname+' '+' -c '+c+' -o '+outname+'/'+c+'_hdecay.txt '+filename+'\n'
     f=open(scriptname,'w')
     f.write(script)
     f.close()
@@ -518,7 +468,7 @@ def makeDatacardsParallel(filename,outname,categories=None,doHdecay=True,discrna
     parascripts.append(scriptname)
     bbbrootfiles.append(filename.replace(".root","BBB_"+c+".root"))
   
-  jobids=submitArrayToNAF(parascripts,arrayName="cardmaking")
+  jobids=nafSubmit.submitArrayToNAF(parascripts,arrayName="cardmaking")
   do_qstat(jobids)
   # now hadd the bbb to the inital root file
   print "adding root files with BBB to other histos"
@@ -527,6 +477,16 @@ def makeDatacardsParallel(filename,outname,categories=None,doHdecay=True,discrna
   cmd='hadd '+filename+' '+filename.replace(".root","backup.root")+' '+' '.join(bbbrootfiles)
   subprocess.call(cmd,shell=True)
 
+
+  # move BBB files away from workdir
+  bbbpath = bbbrootfiles[0].split("/")[:-1]
+
+  bbbdir = "/".join(bbbpath+["bbbfiles"])
+  if not os.path.exists(bbbdir):
+    os.makedirs(bbbdir)
+
+  cmd = 'mv '+"/".join(bbbpath)+'/*BBB*.root '+bbbdir+'/'
+  subprocess.call(cmd, shell = True)
   print "done creating datacards"    
   
 def readLimit(fn='higgsCombineTest.Asymptotic.mH125.root'):

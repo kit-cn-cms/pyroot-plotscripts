@@ -314,7 +314,7 @@ class Analysis:
   ## Setter functions
   def setPlotNumber(self,arg):
     self.plotNumber = int(arg)
-    self.workdir += "/subruns/number_"+str(self.plotNumber)
+    self.workdir += "/drawParallelRuns/run"+str(self.plotNumber)
     if not os.path.exists(self.workdir):
         os.makedirs(self.workdir)
 

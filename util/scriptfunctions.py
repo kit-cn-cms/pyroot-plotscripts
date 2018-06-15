@@ -2,6 +2,7 @@
 import ROOT
 import json
 import plotutils
+import PDFutils
 ROOT.gROOT.SetBatch(True)
 
 # -- generating the head of the script ------------------------------------------------------------
@@ -45,6 +46,8 @@ using namespace std;
     retstr += head2.read()
   return retstr
 # -------------------------------------------------------------------------------------------------
+
+
 
 
 # -- initializing data bases ----------------------------------------------------------------------
@@ -170,6 +173,8 @@ def readOutDataBase(thisDataBase=[]):
 # -------------------------------------------------------------------------------------------------
 
 
+
+
 # -- initializing histograms ----------------------------------------------------------------------
 def initHistos(catnames, systnames, plots):
     rstr = ""
@@ -215,11 +220,15 @@ def initTwoDimHisto(name,nbinsX=10,xminX=0,xmaxX=0,nbinsY=10,xminY=0,xmaxY=0,tit
 # -------------------------------------------------------------------------------------------------
 
 
+
+
 # -- starting loop over events --------------------------------------------------------------------
 def startLoop(basepath):
   with open(basepath + "/txtfiles/cppEventLoopHead", "r") as head:
     return head.read()
 # -------------------------------------------------------------------------------------------------
+
+
 
 
 # -- encoding samples -----------------------------------------------------------------------------
@@ -236,6 +245,8 @@ def encodeSampleSelection(samples,variables):
     text+= '    else if(processname=="'+sample.nick+'") sampleweight='+sselection+';\n'
   return text
 # -------------------------------------------------------------------------------------------------
+
+
 
 
 
@@ -384,6 +395,8 @@ def fillTwoDimHistoSyst(name,varname1,varname2,weight,systnames,systweights):
 
 
 
+
+
 # -- finishing loop over events -------------------------------------------------------------------
 def endLoop():
   return """
@@ -392,6 +405,9 @@ def endLoop():
   std::cout<<"skipped a total of "<<evtFilter->GetNFiltered()<<std::endl;
 """
 # -------------------------------------------------------------------------------------------------
+
+
+
 
 
 # -- generating foot of the script ----------------------------------------------------------------
@@ -452,4 +468,76 @@ int main(){
 }
 """
   return rstr
+# -------------------------------------------------------------------------------------------------
+
+
+
+
+
+# -- functions dealing with MEPDFcsv file ---------------------------------------------------------
+def AddMEandPDFNormalizationsMap(csv_file):
+    mydict = PDFutils.ReadMEandPDFNormalizations(csv_file)
+    code='std::map<TString,float> MEPDF_Norm_Map;\n'
+    for key in mydict:
+        code+='MEPDF_Norm_Map["'+key[0]+'_'+key[1]+'"]='+mydict[key]+';\n'
+    return code
+
+def RelateMEPDFMapToNormFactor(csv_file):
+    weight_list = PDFutils.GetMEPDFadditionalVariablesList(csv_file)
+    code=''
+    code+="""
+    TString currentRelevantSampleNameForMEPDF=sampleDataBaseIdentifiers[currentfilename];
+    TString translatedCurrentRelevantSampleNameForMEPDF=sampleTranslationMapCPP[currentRelevantSampleNameForMEPDF];
+    //std::cout<<"MEPDF relation "<<currentfilename<<" "<<currentRelevantSampleNameForMEPDF<<" "<<translatedCurrentRelevantSampleNameForMEPDF<<std::endl;
+    """
+    code+='if(MEPDF_Norm_Map.find('+'translatedCurrentRelevantSampleNameForMEPDF'+'+"_'+weight_list[0]+'")!=MEPDF_Norm_Map.end()){;\n'
+    for weight in weight_list:
+        code+='internalNormFactor_'+weight+'='+'MEPDF_Norm_Map['+'translatedCurrentRelevantSampleNameForMEPDF'+'+"_'+weight+'"];\n'
+    code+='}\n'
+    code+='//else{std::cout<<"did not find pdf weights in map "<<translatedCurrentRelevantSampleNameForMEPDF<<std::endl;}\n'
+    code+='//std::cout<<"first internal pdf weight "<<'+'translatedCurrentRelevantSampleNameForMEPDF'+'+"_'+weight_list[0]+'" <<" "<< internalNormFactor_'+weight_list[0]+'<<std::endl;\n'
+    return code
+
+def GetMEPDFVetoList(csv_file):
+    weightList = PDFutils.GetMEPDFadditionalVariablesList(csv_file)
+    weightVetoList = []
+    for weight in weightList:
+        weightVetoList.append('internalNormFactor_'+weight)
+    return weightVetoList
+
+def DeclareMEPDFNormFactors(csv_file):
+    code=''
+    weight_list=PDFutils.GetMEPDFadditionalVariablesList(csv_file)
+    for weight in weight_list:
+        code+='float internalNormFactor_'+weight+'=0.0;\n'
+    return code
+
+def ResetMEPDFNormFactors(csv_file):
+    code=''
+    weight_list=PDFutils.GetMEPDFadditionalVariablesList(csv_file)
+    for weight in weight_list:
+        code+='internalNormFactor_'+weight+'=0.0;\n'
+    return code
+
+def PutPDFWeightsinVector(csv_file):
+    pdf_weights=PDFutils.GetPDFadditionalVariablesList(csv_file)
+    code='std::vector<double> pdf_weights;\n'
+    code+='pdf_weights.push_back(1.);\n'
+    for weight in pdf_weights:
+        code+='pdf_weights.push_back(internalNormFactor_'+weight+'*'+weight+');\n'
+    return code
+
+def DefineLHAPDF():
+    code='LHAPDF::PDFSet pdfSet("NNPDF30_nlo_as_0118");\n'
+    return code
+
+def UseLHAPDF():
+    code=''
+    #code+='LHAPDF::PDFSet pdfSet("NNPDF30_nlo_as_0118");\n'
+    code+='const LHAPDF::PDFUncertainty pdfUnc = pdfSet.uncertainty(pdf_weights, 68.);\n'
+    code+='internalPDFweightUp   = pdfUnc.central + pdfUnc.errplus;\n'
+    code+='internalPDFweightDown = pdfUnc.central - pdfUnc.errminus;\n'
+    code+='internalPDFweight = pdfUnc.central;\n'
+    code+='//std::cout<<"result pdf weights: central, down, up "<<pdfUnc.central<<" "<<internalPDFweightDown<< " "<<internalPDFweightUp<<std::endl;\n'
+    return code
 # -------------------------------------------------------------------------------------------------
