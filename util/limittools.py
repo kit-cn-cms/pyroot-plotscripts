@@ -4,6 +4,11 @@ import os
 import stat
 from subprocess import call
 
+
+## TODO ##
+# this is random unused stuff - is it still needed???
+
+
 class Limitresult:
   def __init__(self,combined,combined_up,combined_down,combined_2up,combined_2down,cats,catlimits,catlimits_up,catlimits_down,catlimits_2up,catlimits_2down):
     self.combined=combined
