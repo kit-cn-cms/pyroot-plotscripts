@@ -74,7 +74,7 @@ def makeDatacardsParallel(filePath, outPath,
 
     # create folder for BBB files
     bbbPath = bbbFiles[0].split("/")[:-1]
-    bbbDir = "/".join(bbbpath+["bbbFiles"])
+    bbbDir = "/".join(bbbPath+["bbbFiles"])
     backupPath = filePath.replace(".root","backup.root")
 
     if skipDatacards:
