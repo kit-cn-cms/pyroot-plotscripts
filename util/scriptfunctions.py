@@ -1,7 +1,8 @@
-# comment 
 import ROOT
 import json
-import plotutils
+
+# local imports
+import plotClasses
 import PDFutils
 ROOT.gROOT.SetBatch(True)
 
@@ -19,9 +20,9 @@ def getHead(basepath, dataBases, addCodeInterfaces=[]):
     retstr += "#include "+include+"\n"
   
   for addCodeInt in addCodeInterfaces:
-    retstr+=addCodeInt.getIncludeLines()
+    retstr += addCodeInt.getIncludeLines()
   
-  if dataBases!=[]:
+  if dataBases != []:
     retstr+="""
 #include "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBaseSpring17/MEMDataBase/MEMDataBase/interface/MEMDataBase.h"
 """
@@ -33,7 +34,7 @@ using namespace std;
   for addCodeInt in addCodeInterfaces:
     retstr += addCodeInt.getAdditionalFunctionDefinitionLines()
   
-  with open(basepath+"/txtfiles/cppHeadpt1", "r") as head1:
+  with open(basepath+"/util/scriptFiles/runFile-head1.cc", "r") as head1:
     retstr += head1.read()
 
   with open('/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBaseSpring17/MEMDataBase/MEMDataBase/test/sampleNameMap.json',"r") as jfile:
@@ -42,7 +43,7 @@ using namespace std;
   for transSample in sampleTranslationMap:
     retstr+="sampleTranslationMapCC[TString(\""+transSample+"\")]=TString(\""+sampleTranslationMap[transSample]+"\");\n"
   
-  with open(basepath+"/txtfiles/cppHeadpt2", "r") as head2:
+  with open(basepath+"/util/scriptFiles/runFile-head2.cc", "r") as head2:
     retstr += head2.read()
   return retstr
 # -------------------------------------------------------------------------------------------------
@@ -79,6 +80,149 @@ def InitDataBase(thisDataBase=[]):
   
   return rstr
 
+# -------------------------------------------------------------------------------------------------
+
+
+
+
+# -- initializing histograms ----------------------------------------------------------------------
+def initHistos(catnames, systnames, plots):
+    rstr = ""
+    for cat in catnames:
+        for plot in plots:
+            if isinstance(plot, plotClasses.TwoDimPlot):
+                title = plot.histo.GetTitle()+";"+plot.histo.GetXaxis().GetTitle()+";"+plot.histo.GetYaxis().GetTitle()
+                name = plot.histo.GetName()
+                maxX = plot.histo.GetXaxis().GetXmax()
+                minX = plot.histo.GetXaxis().GetXmin()
+                nbinsX = plot.histo.GetNbinsX()
+                maxY = plot.histo.GetYaxis().GetXmax()
+                minY = plot.histo.GetYaxis().GetXmin()
+                nbinsY = plot.histo.GetNbinsY()
+                for sname in systnames:
+                    rstr += initTwoDimHisto(cat+name+sname, nbinsX, minX, maxX, nbinsY, minY, maxY, title)
+            else:
+                title = plot.histo.GetTitle()
+                name = plot.histo.GetName()
+                maxX = plot.histo.GetXaxis().GetXmax()
+                minX = plot.histo.GetXaxis().GetXmin()
+                nbins = plot.histo.GetNbinsX()
+                for sname in systnames:
+                    rstr += initOneDimHisto(cat+name+sname, nbins, minX, maxX, title)
+    return rstr
+
+def initOneDimHisto(name,nbins,xmin=0,xmax=0,title_=''):
+  if title_=='':
+    title = name
+  else:
+    title = title_
+
+  return '  TH1F* h_'+name+'=new TH1F((processname+"_'+name+'"+suffix).c_str(),"'+title+'",'+str(nbins)+','+str(xmin)+','+str(xmax)+');\n'
+
+def initTwoDimHisto(name,nbinsX=10,xminX=0,xmaxX=0,nbinsY=10,xminY=0,xmaxY=0,title_=''):
+  if title_=='':
+    title=name
+  else:
+    title=title_
+
+  return '  TH2F* h_'+name+'=new TH2F((processname+"_'+name+'"+suffix).c_str(),"'+title+'",'+str(nbinsX)+','+str(xminX)+','+str(xmaxX)+','+str(nbinsY)+','+str(xminY)+','+str(xmaxY)+');\n'
+# -------------------------------------------------------------------------------------------------
+
+
+
+
+# -- defining LHAPDF ------------------------------------------------------------------------------
+def DefineLHAPDF():
+    code='LHAPDF::PDFSet pdfSet("NNPDF30_nlo_as_0118");\n'
+    return code
+# -------------------------------------------------------------------------------------------------
+
+
+
+# -- starting loop over events --------------------------------------------------------------------
+def startLoop(basepath):
+  with open(basepath + "/util/scriptFiles/eventLoop-head.cc", "r") as head:
+    return head.read()
+# -------------------------------------------------------------------------------------------------
+
+
+
+
+
+# -- handle MEPDF csv file ------------------------------------------------------------------------
+class initMEPDF:
+    def __init__(self, csv_file):
+        self.weight_list = PDFutils.GetMEPDFadditionalVariablesList(csv_file)
+        self.pdf_weights = PDFutils.GetPDFadditionalVariablesList(csv_file)
+
+    def writeCode():
+        code = ""
+        code += self.ResetMEPDFNormFactors()
+        code += self.RelateMEPDFMapToNormFactor()
+        code += self.PutPDFWeightsinVector()
+        code += self.UseLHAPDF()
+        return code
+
+    def ResetMEPDFNormFactors(self):
+        code=''
+        for weight in self.weight_list:
+            code+='internalNormFactor_'+weight+'=0.0;\n'
+        return code
+
+    def RelateMEPDFMapToNormFactor(self):
+        code=''
+        code+="""
+        TString currentRelevantSampleNameForMEPDF=sampleDataBaseIdentifiers[currentfilename];
+        TString translatedCurrentRelevantSampleNameForMEPDF=sampleTranslationMapCPP[currentRelevantSampleNameForMEPDF];
+        //std::cout<<"MEPDF relation "<<currentfilename<<" "<<currentRelevantSampleNameForMEPDF<<" "<<translatedCurrentRelevantSampleNameForMEPDF<<std::endl;
+        """
+        code+='if(MEPDF_Norm_Map.find('+'translatedCurrentRelevantSampleNameForMEPDF'+'+"_'+self.weight_list[0]+'")!=MEPDF_Norm_Map.end()){;\n'
+        for weight in self.weight_list:
+            code+='internalNormFactor_'+weight+'='+'MEPDF_Norm_Map['+'translatedCurrentRelevantSampleNameForMEPDF'+'+"_'+weight+'"];\n'
+        code+='}\n'
+        code+='//else{std::cout<<"did not find pdf weights in map "<<translatedCurrentRelevantSampleNameForMEPDF<<std::endl;}\n'
+        code+='//std::cout<<"first internal pdf weight "<<'+'translatedCurrentRelevantSampleNameForMEPDF'+'+"_'+self.weight_list[0]+'" <<" "<< internalNormFactor_'+self.weight_list[0]+'<<std::endl;\n'
+        return code
+
+    def PutPDFWeightsinVector(self):
+        code='std::vector<double> pdf_weights;\n'
+        code+='pdf_weights.push_back(1.);\n'
+        for weight in self.pdf_weights:
+            code+='pdf_weights.push_back(internalNormFactor_'+weight+'*'+weight+');\n'
+        return code
+
+    def UseLHAPDF():
+        code=''
+        #code+='LHAPDF::PDFSet pdfSet("NNPDF30_nlo_as_0118");\n'
+        code+='const LHAPDF::PDFUncertainty pdfUnc = pdfSet.uncertainty(pdf_weights, 68.);\n'
+        code+='internalPDFweightUp   = pdfUnc.central + pdfUnc.errplus;\n'
+        code+='internalPDFweightDown = pdfUnc.central - pdfUnc.errminus;\n'
+        code+='internalPDFweight = pdfUnc.central;\n'
+        code+='//std::cout<<"result pdf weights: central, down, up "<<pdfUnc.central<<" "<<internalPDFweightDown<< " "<<internalPDFweightUp<<std::endl;\n'
+        return code
+# -------------------------------------------------------------------------------------------------
+
+
+
+# -- encoding samples -----------------------------------------------------------------------------
+def encodeSampleSelection(samples, variables):
+  text = ''
+  for sample in samples:
+    arrayselection = variables.checkArrayLengths(sample.selection)
+    if arrayselection == '':
+      arrayselection = '1'
+    sselection = sample.selection
+    if sselection == '':
+      sselection = '1'
+    text+= '    if(processname=="'+sample.nick+'" && (!('+arrayselection+') || ('+sselection+')==0) ) continue;\n'
+    text+= '    else if(processname=="'+sample.nick+'") sampleweight='+sselection+';\n'
+  return text
+# -------------------------------------------------------------------------------------------------
+
+
+
+
+# -- reading data base ----------------------------------------------------------------------------
 def readOutDataBase(thisDataBase=[]):
   thisDataBaseName=thisDataBase[0]
   thisDataBasePath=thisDataBase[1]
@@ -175,81 +319,6 @@ def readOutDataBase(thisDataBase=[]):
 
 
 
-# -- initializing histograms ----------------------------------------------------------------------
-def initHistos(catnames, systnames, plots):
-    rstr = ""
-    for cat in catnames:
-        for plot in plots:
-            if isinstance(plot,plotutils.TwoDimPlot):
-                title = plot.histo.GetTitle()+";"+plot.histo.GetXaxis().GetTitle()+";"+plot.histo.GetYaxis().GetTitle()
-                name = plot.histo.GetName()
-                maxX = plot.histo.GetXaxis().GetXmax()
-                minX = plot.histo.GetXaxis().GetXmin()
-                nbinsX = plot.histo.GetNbinsX()
-                maxY = plot.histo.GetYaxis().GetXmax()
-                minY = plot.histo.GetYaxis().GetXmin()
-                nbinsY = plot.histo.GetNbinsY()
-                for sname in systnames:
-                    rstr += initTwoDimHisto(cat+name+sname, nbinsX, minX, maxX, nbinsY, minY, maxY, title)
-            else:
-                title = plot.histo.GetTitle()
-                name = plot.histo.GetName()
-                maxX = plot.histo.GetXaxis().GetXmax()
-                minX = plot.histo.GetXaxis().GetXmin()
-                nbins = plot.histo.GetNbinsX()
-                for sname in systnames:
-                    rstr += initOneDimHisto(cat+name+sname, nbins, minX, maxX, title)
-    return rstr
-
-def initOneDimHisto(name,nbins,xmin=0,xmax=0,title_=''):
-  if title_=='':
-    title = name
-  else:
-    title = title_
-
-  return '  TH1F* h_'+name+'=new TH1F((processname+"_'+name+'"+suffix).c_str(),"'+title+'",'+str(nbins)+','+str(xmin)+','+str(xmax)+');\n'
-
-def initTwoDimHisto(name,nbinsX=10,xminX=0,xmaxX=0,nbinsY=10,xminY=0,xmaxY=0,title_=''):
-  if title_=='':
-    title=name
-  else:
-    title=title_
-
-  return '  TH2F* h_'+name+'=new TH2F((processname+"_'+name+'"+suffix).c_str(),"'+title+'",'+str(nbinsX)+','+str(xminX)+','+str(xmaxX)+','+str(nbinsY)+','+str(xminY)+','+str(xmaxY)+');\n'
-
-# -------------------------------------------------------------------------------------------------
-
-
-
-
-# -- starting loop over events --------------------------------------------------------------------
-def startLoop(basepath):
-  with open(basepath + "/txtfiles/cppEventLoopHead", "r") as head:
-    return head.read()
-# -------------------------------------------------------------------------------------------------
-
-
-
-
-# -- encoding samples -----------------------------------------------------------------------------
-def encodeSampleSelection(samples,variables):
-  text=''
-  for sample in samples:
-    arrayselection=variables.checkArrayLengths(sample.selection)
-    if arrayselection=='':
-      arrayselection ='1'
-    sselection=sample.selection
-    if sselection=='':
-      sselection='1'
-    text+= '    if(processname=="'+sample.nick+'" && (!('+arrayselection+') || ('+sselection+')==0) ) continue;\n'
-    text+= '    else if(processname=="'+sample.nick+'") sampleweight='+sselection+';\n'
-  return text
-# -------------------------------------------------------------------------------------------------
-
-
-
-
-
 # -- initializing plots ---------------------------------------------------------------------------
 class initPlots:
     def __init__(self, variables, systnames, systweights):
@@ -269,128 +338,114 @@ class initPlots:
         script +='      float categoryweight='+catweight+';\n'
         return script
 
-    def initOneDimPlot(self, plot, tree, catname):
-        script = ""
-        name = plot.histo.GetName()
-        ex = plot.variable
-        pw = plot.selection
-        if pw=='':
-            pw='1'
-        # prepare loop over array variables
-        variablenames_without_index = self.variables.varsNoIndex(ex)
-        variablenames_without_index += self.variables.varsNoIndex(pw)
-        # get size of array
-        size_of_loop = None
-        for varname in variablenames_without_index:
-            if not varname in self.variables.variables:
-                continue
-            if self.variables.variables[varname].arraylength != None:
-                assert size_of_loop == None or size_of_loop == self.variables.variables[varname].arraylength
-                size_of_loop = self.variables.variables[varname].arraylength
-                print "sol", size_of_loop
-        histoname = catname + name
-        script += "\n"
-        if size_of_loop != None:
-            exi = self.variables.getArrayEntries(ex,"i")
-            pwi = self.variables.getArrayEntries(pw,"i")
-            script += varLoop("i",size_of_loop)
-            script += "{\n"
-            arrayselection = self.variables.checkArrayLengths(','.join([ex,pw]))
-            weight = '('+arrayselection+')*('+pwi+')*Weight_XS*categoryweight*sampleweight'
-            print "histoname, exi, weight"
-            print histoname
-            print exi
-            print weight
-            script += fillHistoSyst(histoname, exi, weight, self.systnames, self.systweights)
-            script += "            }\n"
-        else:
-            # Handle vector sub variables which have names like Jet_E_1, so that the variable Jet_E[1] is included instead
-            if not ".xml" in ex:
-                if not hasattr(tree, ex):
-                    if "_" in ex:
-                        exOld = ex
-                        expressionPart1, expressionPart2 = ex.rsplit('_', 1)
-                        if hasattr(tree, expressionPart1) and expressionPart2.isdigit():
-                            ex = expressionPart1 + '[' + str(int(expressionPart2) -1) + ']' 
-                            print 'Found vector sub variable: ', exOld, ' which was converted to: ', ex
-                
-            arrayselection = self.variables.checkArrayLengths(','.join([ex,pw]))
-            weight = '('+arrayselection+')*('+pw+')*Weight_XS*categoryweight*sampleweight'
-            script += fillHistoSyst(histoname, ex, weight, self.systnames, self.systweights)
-        return script
-
-    def initTwoDimPlot(self, plot, catname):
-        script = ""
-        name = plot.histo.GetName()
-        exX = plot.variable1
-        exY = plot.variable2
-        pw = plot.selection
-        if pw=='':
-            pw='1'
-
-        # prepare loop over array variables
-        variablenames_without_index = self.variables.varsNoIndex(exX)
-        variablenames_without_index += self.variables.varsNoIndex(exY)
-        variablenames_without_index += self.variables.varsNoIndex(pw)
-
-        # get size of array
-        size_of_loop = None
-        for varname in variablenames_without_index:
-            if not varname in self.variables.variables:
-                continue
-            if self.variables.variables[varname].arraylength != None:
-                assert size_of_loop == None or size_of_loop == self.variables.variables[varname].arraylength
-                size_of_loop = self.variables.variables[varname].arraylength
-
-
-        histoname=catname + name
-        script += "\n"
-        if size_of_loop != None:
-            exiX = self.variables.getArrayEntries(exX, "i")
-            exiY = self.variables.getArrayEntries(ex, "i")
-            pwi = self.variables.getArrayEntries(pw, "i")
-            script += varLoop("i", size_of_loop)
-            script += "{\n"
-            arrayselection = self.variables.checkArrayLengths(','.join([exX,exY,pw]))
-            weight = '('+arrayselection+')*('+pwi+')*Weight_XS*categoryweight*sampleweight'
-            script += fillTwoDimHistoSyst(histoname, exiX, exiY, weight, self.systnames, self.systweights)
-            script += "            }\n"
-        else:
-            arrayselection = self.variables.checkArrayLengths(','.join([ex,pw]), self.variables)
-            weight = '('+arrayselection+')*('+pw+')*Weight_XS*categoryweight*sampleweight'
-        script += fillTwoDimHistoSyst(histoname, exX, exY, weight, self.systnames, self.systweights)
-
-        return script
-    
     def endCat(self):
         return '    }\n    // end of category\n\n'
+
+    def initPlot(self, plot, tree, catname):
+        if isinstance(plot, plotClasses.Plot):
+            dim = 1
+        elif isinstance(plot, plotClasses.TwoDimPlot):
+            dim = 2
+        else:
+            print("plot is wrong instance")
+            return None
+
+        script = ""
+        plotName = plot.histo.GetName()
+        if dim == 1:
+            vars = [plot.variable]
+        if dim == 2:
+            vars = [plot.variable1, plot.variable2]
+        sel = plot.selection
+        if sel == "":
+            sel = "1"
+
+        # prepare loop over array variables
+        varsNoIndex = []
+        for var in vars:
+            varsNoIndex += self.variables.varsNoIndex(var)
+        varsNoIndex += self.variables.varsNoIndex(sel)
+
+        # get size of array
+        loopSize = None
+        for var in varsNoIndex:
+            if not var in self.variables.variables:
+                continue
+            if self.variables.variables[var].arraylength != None:
+                assert loopSize == None or loopSize == self.variables.variables[var].arraylength
+                loopSize = self.variables.variables[var].arraylength
+
+        histName = catname + plotName
+        
+        script += "\n"
+        if loopSize != None:
+            # write histo for array
+            var_i = [self.variables.getArrayEntries(var, "i") for var in vars]
+            sel_i = self.variables.getArrayEntries(sel, "i")
+
+            script += varLoop("i", loopSize)
+            script += "{\n"
+            
+            arraySelection = self.variables.checkArrayLengths(",".join(vars + [sel]))
+            weight = "("+arraySelection+")*("+sel_i+")*Weight_XS*categoryweight+sampleweight"
+
+            script += fillHistoSyst(histName, var_i, weight, self.systnames, self.systweights)
+            script += "            }\n"
+        else:
+            # write histo for single
+
+            # if the variable in 1Dplot doesnt have .xml in name, is not in tree and has "_" in name
+            # split the variable name, because it is a vector subvariable
+            if dim == 1 and not ".xml" in vars[0] and not hasattr(tree, vars[0]) and "_" in vars[0]:
+                varOld = vars[0]
+                varHead, varTail = varOld.rsplit("_", 1)
+                if hasattr(tree, varHead) and varTail.isdigit():
+                    vars[0] = varHead + "[" + str(int(varTail) - 1) + "]"
+                    print "Found vector sub variable: ", varOld, " which was converted to: ",vars[0] 
+
+            arraySelection = self.variables.checkArrayLengths(",".join(vars + [sel]))
+            weight = '('+arraySelection+')*('+sel+')*Weight_XS*categoryweight*sampleweight'
+            script += fillHistoSyst(histName, vars, weight, self.systnames, self.systweights)
+        
+        return script
+        
+
+
 
 def varLoop(i,n):
     return '      for(uint '+str(i)+'=0; '+str(i)+'<'+str(n)+'; '+str(i)+'++)'
 
-def fillHistoSyst(name,varname,weight,systnames,systweights):
-  text='      float weight_'+name+'='+weight+';\n'
-  # Write all individual systnames and systweights in nested vector to use together with function allowing variadic vector size -> speed-up of compilation and less code lines
-  text+='     std::vector<structHelpFillHisto> helpWeightVec_' + name + ' = {'
-  for sn,sw in zip(systnames,systweights):
-    text+='       { ' + 'h_'+name+sn + ', double(' + varname + '), ' + '('+sw+')*(weight_'+name+')' + '},'
-  # finish vector
-  text+='     };\n'
-  # call helper fill histo function which is defined in the beginning
-  text+='     helperFillHisto(helpWeightVec_' + name + ');\n' 
-  return text
+def fillHistoSyst(histName, varNames, weight, systNames, systWeights):
+    text = '      float weight_'+histName+'='+weight+';\n'
+    # Write all individual systnames and systweights in nested vector 
+    # to use together with function allowing variadic vector size 
+    # -> speed-up of compilation and less code lines
+    text += '     std::vector<structHelpFillHisto> helpWeightVec_' + histName + ' = {'
 
-def fillTwoDimHistoSyst(name,varname1,varname2,weight,systnames,systweights):
-  text='      float weight_'+name+'='+weight+';\n'
-  # Write all individual systnames and systweights in nested vector to use together with function allowing variadic vector size -> speed-up of compilation and less code lines
-  text+='     std::vector<structHelpFillTwoDimHisto> helpWeightVec_' + name + ' = {'
-  for sn,sw in zip(systnames,systweights):
-    text+='       { ' + 'h_'+name+sn + ', ' + varname1 + ', ' + varname2 + ', ' + '('+sw+')*(weight_'+name+')' + '},'
-  # finish vector
-  text+='     };\n'
-  # call helper fill histo function which is defined in the beginning
-  text+='     helperFillTwoDimHisto(helpWeightVec_' + name + ');\n' 
-  return text
+    # loop over systematics
+    for systName, systWeight in zip(systNames, systWeights):
+        text += '       { ' + 'h_'+ histName+systName + ', '
+        if len(varNames) == 1:
+            # this is a oneDimPlot
+            text += 'double(' + varNames[0] + '), '
+        elif len(varNames) == 2:
+            # this is a twoDimplot
+            text += varNames[0] + ', ' + varNames[1] + ', '
+        else:
+            print("this is not a valid configuration of varNames "+str(varNames))
+            return None
+        text+= '('+systWeight+')*(weight_'+histName+')' + '},'
+
+    # finish vector     
+    text+= '     };\n'
+
+    # call helper fill histo function which is defined in the beginning of CC script
+    if len(varNames) == 1:
+        text+='     helperFillHisto(helpWeightVec_' + histName + ');\n'
+    elif len(varNames) == 2:
+        text+='     helperFillTwoDimHisto(helpWeightVec_' + name + ');\n'
+    return text
+
 # -------------------------------------------------------------------------------------------------
 
 
@@ -482,21 +537,6 @@ def AddMEandPDFNormalizationsMap(csv_file):
         code+='MEPDF_Norm_Map["'+key[0]+'_'+key[1]+'"]='+mydict[key]+';\n'
     return code
 
-def RelateMEPDFMapToNormFactor(csv_file):
-    weight_list = PDFutils.GetMEPDFadditionalVariablesList(csv_file)
-    code=''
-    code+="""
-    TString currentRelevantSampleNameForMEPDF=sampleDataBaseIdentifiers[currentfilename];
-    TString translatedCurrentRelevantSampleNameForMEPDF=sampleTranslationMapCPP[currentRelevantSampleNameForMEPDF];
-    //std::cout<<"MEPDF relation "<<currentfilename<<" "<<currentRelevantSampleNameForMEPDF<<" "<<translatedCurrentRelevantSampleNameForMEPDF<<std::endl;
-    """
-    code+='if(MEPDF_Norm_Map.find('+'translatedCurrentRelevantSampleNameForMEPDF'+'+"_'+weight_list[0]+'")!=MEPDF_Norm_Map.end()){;\n'
-    for weight in weight_list:
-        code+='internalNormFactor_'+weight+'='+'MEPDF_Norm_Map['+'translatedCurrentRelevantSampleNameForMEPDF'+'+"_'+weight+'"];\n'
-    code+='}\n'
-    code+='//else{std::cout<<"did not find pdf weights in map "<<translatedCurrentRelevantSampleNameForMEPDF<<std::endl;}\n'
-    code+='//std::cout<<"first internal pdf weight "<<'+'translatedCurrentRelevantSampleNameForMEPDF'+'+"_'+weight_list[0]+'" <<" "<< internalNormFactor_'+weight_list[0]+'<<std::endl;\n'
-    return code
 
 def GetMEPDFVetoList(csv_file):
     weightList = PDFutils.GetMEPDFadditionalVariablesList(csv_file)
@@ -510,34 +550,5 @@ def DeclareMEPDFNormFactors(csv_file):
     weight_list=PDFutils.GetMEPDFadditionalVariablesList(csv_file)
     for weight in weight_list:
         code+='float internalNormFactor_'+weight+'=0.0;\n'
-    return code
-
-def ResetMEPDFNormFactors(csv_file):
-    code=''
-    weight_list=PDFutils.GetMEPDFadditionalVariablesList(csv_file)
-    for weight in weight_list:
-        code+='internalNormFactor_'+weight+'=0.0;\n'
-    return code
-
-def PutPDFWeightsinVector(csv_file):
-    pdf_weights=PDFutils.GetPDFadditionalVariablesList(csv_file)
-    code='std::vector<double> pdf_weights;\n'
-    code+='pdf_weights.push_back(1.);\n'
-    for weight in pdf_weights:
-        code+='pdf_weights.push_back(internalNormFactor_'+weight+'*'+weight+');\n'
-    return code
-
-def DefineLHAPDF():
-    code='LHAPDF::PDFSet pdfSet("NNPDF30_nlo_as_0118");\n'
-    return code
-
-def UseLHAPDF():
-    code=''
-    #code+='LHAPDF::PDFSet pdfSet("NNPDF30_nlo_as_0118");\n'
-    code+='const LHAPDF::PDFUncertainty pdfUnc = pdfSet.uncertainty(pdf_weights, 68.);\n'
-    code+='internalPDFweightUp   = pdfUnc.central + pdfUnc.errplus;\n'
-    code+='internalPDFweightDown = pdfUnc.central - pdfUnc.errminus;\n'
-    code+='internalPDFweight = pdfUnc.central;\n'
-    code+='//std::cout<<"result pdf weights: central, down, up "<<pdfUnc.central<<" "<<internalPDFweightDown<< " "<<internalPDFweightUp<<std::endl;\n'
     return code
 # -------------------------------------------------------------------------------------------------

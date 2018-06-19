@@ -9,7 +9,7 @@ import re
 import ROOT
 import xml.etree.ElementTree as ET
 import variablebox
-import plotutils
+import plotClasses
 import PDFutils
 import glob
 import json
@@ -2653,9 +2653,9 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 
   # get variables used in plots
   for plot in plots:
-    if isinstance(plot,plotutils.Plot):
+    if isinstance(plot,plotClasses.Plot):
       variables.initVarsFromExpr(plot.variable,tree)
-    if isinstance(plot,plotutils.TwoDimPlot):
+    if isinstance(plot,plotClasses.TwoDimPlot):
       variables.initVarsFromExpr(plot.variable1,tree)
       variables.initVarsFromExpr(plot.variable2,tree)
 
@@ -2689,7 +2689,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   # initialize histograms in all categories and for all systematics
   for c in catnames:
     for plot in plots:
-      if isinstance(plot,plotutils.TwoDimPlot):
+      if isinstance(plot,plotClasses.TwoDimPlot):
         t=plot.histo.GetTitle()+";"+plot.histo.GetXaxis().GetTitle()+";"+plot.histo.GetYaxis().GetTitle()
         n=plot.histo.GetName()
         mxX=plot.histo.GetXaxis().GetXmax()
@@ -2761,7 +2761,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
     # plot everything
     # plot one dimensional plots
     for plot in plots:
-      if isinstance(plot,plotutils.TwoDimPlot):
+      if isinstance(plot,plotClasses.TwoDimPlot):
         continue
 
       n=plot.histo.GetName()
@@ -2813,7 +2813,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 
     # plot two dimensional plots
     for plot in plots:
-        if not isinstance(plot,plotutils.TwoDimPlot):
+        if not isinstance(plot,plotClasses.TwoDimPlot):
           continue
 
         n=plot.histo.GetName()

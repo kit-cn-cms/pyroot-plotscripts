@@ -9,8 +9,9 @@ import filecmp
 
 # local imports 
 import variablebox
-import plotutils
+import plotClasses
 import scriptfunctions 
+utilpath = os.path.dirname(os.path.realpath(__file__))
 
 ###########################
 #                         #
@@ -230,31 +231,11 @@ class scriptWriter:
     def genVetolist(self):
         # collect variables
         # list varibles that should not be written to the program automatically
-        vetolist = ['processname', 'DoWeights', 'TMath', 'electronPt', 'electronEta', 'muonPt', 
-                    'muonEta', 'muonTriggerHelper', 'electronTriggerHelper', 'hasTrigger', 
-                    'internalCSVweight', 'internalCSVweight_CSVHFUp', 'internalCSVweight_CSVHFDown', 
-                    'internalCSVweight_CSVLFUp', 'internalCSVweight_CSVLFDown', 
-                    'internalCSVweight_CSVLFStats1Up', 'internalCSVweight_CSVLFStats1Down',
-                    'internalCSVweight_CSVLFStats2Up', 'internalCSVweight_CSVLFStats2Down', 
-                    'internalCSVweight_CSVHFStats1Up', 'internalCSVweight_CSVHFStats1Down', 
-                    'internalCSVweight_CSVHFStats2Up', 'internalCSVweight_CSVHFStats2Down',
-                    'internalCSVweight_CSVCErr1Up', 'internalCSVweight_CSVCErr1Down', 
-                    'internalCSVweight_CSVCErr2Up', 'internalCSVweight_CSVCErr2Down',
-                    "internalEleTriggerWeight", "internalEleTriggerWeightUp", "internalEleTriggerWeightDown",
-                    "internalEleIDWeight", "internalEleIDWeightUp", "internalEleIDWeightDown",
-                    "internalEleIsoWeight", "internalEleIsoWeightUp", "internalEleIsoWeightDown",
-                    "internalEleGFSWeight", "internalEleGFSWeightUp", "internalEleGFSWeightDown",
-                    "internalMuTriggerWeight", "internalMuTriggerWeightUp", "internalMuTriggerWeightDown",
-                    "internalMuIDWeight", "internalMuIDWeightUp", "internalMuIDWeightDown",
-                    "internalMuIsoWeight", "internalMuIsoWeightUp", "internalMuIsoWeightDown",
-                    "internalMuHIPWeight", "internalMuHIPWeightUp", "internalMuHIPWeightDown",
-                    "internalQCDweight", "internalQCDweightup", "internalQCDweightdown",
-                    "electron_data", "muon_data",
-                    "internalPDFweightUp", "internalPDFweightDown", "internalPDFweight",
-                    "internalISRweightdown", "internalISRweightup", "internalFSRweightdown", "internalFSRweightup",
-                    "internalHDAMPweightdown", "internalHDAMPweightup", "internalUEweightdown", "internalUEweightup"]
+        
+        dataFrame = pandas.read_csv(self.pp.plotbase+"/plottingscripts/configdata/vetolist.csv")
+        vetolist = list(dataFrame.vetolist)
 
-        #self.pp.MEPDFCSVFile = self.pp.plotbase + /txtfiles/rate_factors_onlyinternal_powhegpythia.csv
+        #self.pp.MEPDFCSVFile = self.pp.plotbase + /plottingscripts/configdata/rate_factors_onlyinternal_powhegpythia.csv
         if self.pp.MEPDFCSVFile!="":
             vetolist += scriptfunctions.GetMEPDFVetoList(self.pp.MEPDFCSVFile)
 
@@ -280,14 +261,14 @@ class scriptWriter:
         
         # get standard variables
         standardvars = ['Weight','Weight_CSV','Weight_XS']
-        variables.initVarsFromExprList(standardvars, tree)
+        variables.initVars(standardvars, tree)
 
         # get additional variables
         if len(self.pp.configData.addVars) > 0:
-            variables.initVarsFromExprList(self.pp.configData.addVars, tree)
+            variables.initVars(self.pp.configData.addVars, tree)
 
         # get systematic weight variables
-        variables.initVarsFromExprList(self.systWeights, tree)
+        variables.initVars(self.systWeights, tree)
 
         systWeights = []
         for systweight in self.pp.systWeights:
@@ -299,20 +280,20 @@ class scriptWriter:
 
         # get sample selection variables
         for sample in self.pp.samplesData.allSamples:
-            variables.initVarsFromExpr(sample.selection, tree)
+            variables.initVars(sample.selection, tree)
 
         # get category selection variables
-        variables.initVarsFromExprList(self.pp.categorySelections, tree)
+        variables.initVars(self.pp.categorySelections, tree)
 
         # get variables used in plots
         for plot in self.pp.configData.getDiscriminatorPlots():
-            if isinstance(plot, plotutils.Plot):
-                variables.initVarsFromExpr(plot.variable, tree)
-            if isinstance(plot, plotutils.TwoDimPlot):
-                variables.initVarsFromExpr(plot.variable1, tree)
-                variables.initVarsFromExpr(plot.variable2, tree)
+            if isinstance(plot, plotClasses.Plot):
+                variables.initVars(plot.variable, tree)
+            if isinstance(plot, plotClasses.TwoDimPlot):
+                variables.initVars(plot.variable1, tree)
+                variables.initVars(plot.variable2, tree)
 
-            variables.initVarsFromExpr(plot.selection, tree)
+            variables.initVars(plot.selection, tree)
 
         self.variables = variables
         
@@ -320,10 +301,9 @@ class scriptWriter:
         script = ""
         script += "     timerMapping->Start();\n"
         if self.pp.MEPDFCSVFile!="":
-            script += scriptfunctions.ResetMEPDFNormFactors(self.pp.MEPDFCSVFile)
-            script += scriptfunctions.RelateMEPDFMapToNormFactor(self.pp.MEPDFCSVFile)
-            script += scriptfunctions.PutPDFWeightsinVector(self.pp.MEPDFCSVFile)
-            script += scriptfunctions.UseLHAPDF()
+            mepdfWriter = scriptfunctions.initMEPDF(self.pp.MEPDFCSVFile)
+            script += mepdfWriter.writeCode()
+
         script += "     totalTimeMapping+=timerMapping->RealTime();\n"
 
         script += "     timerEvalDNN->Start();\n"
@@ -368,14 +348,8 @@ class scriptWriter:
             # for every category
             script += plotClass.startCat(catselection)
             # plot everything
-            # plot one dimensional plot
             for plot in self.pp.configData.getDiscriminatorPlots():
-                if isinstance(plot, plotutils.Plot):
-                    script += plotClass.initOneDimPlot(plot, tree, catname)
-            # plot two dimensional self.configData.getDiscriminatorPlots()
-            for plot in self.pp.configData.getDiscriminatorPlots():
-                if isinstance(plot,plotutils.TwoDimPlot):
-                    script += plotClass.initTwoDimPlot(plot, catname)
+                script += plotClass.initPlot(plot, tree, catname)
             # finish category
             script += plotClass.endCat()
 
@@ -387,19 +361,16 @@ class scriptWriter:
 
     ## renaming script ##
     def writeRenameScript(self):
-        script = "import ROOT\n"
-        script += "import sys\n"
+        script = "import sys\n"
         script += "import os\n"
-        script += "from subprocess import call\n"
-        script += "filename=os.getenv('OUTFILENAME')\n\n"
-
-        script += "systematics="+str(self.pp.samplesData.allNames)+"\n"
-
-        with open(self.pp.plotbase+"/txtfiles/renameBody", "r") as f:
-            body = f.read()
-
-        script += body
+        script *= "sys.path.append('"+utilpath+"')\n"
+        script += "import renameHistos\n\n"
+        script += "filename = os.getenv('OUTFILENAME')\n\n"
+        script += "outname = filename.replace('.root','_original.root')\n\n"
+        script += "systematics = "+str(self.pp.samplesData.allNames)+"\n\n"
+        script += "renameHistos.renameHistosParallel(filename, outname, systematics, prune = False, plotParaCall = True)\n"
   
+        # write script to file
         with open(self.ccPath.replace(".cc","_rename.py"), "w") as srcfile:
             srcfile.write(script)
 
@@ -408,16 +379,16 @@ class scriptWriter:
 
 
     ## run scripts ##
-    def writeRunScripts(self):
+    def writeRunScripts(self, writeScripts = True):
         # init outputs
-        scripts=[]
-        outputs=[]
-        nentries=[]
-        samplewiseMaps={}
+        self.scripts = []
+        self.outputs = []
+        self.nentries = []
+        self.samplewiseMaps = {}
 
         # loading tree info from json file
-        SaveTreeInforamtion={}
-        LoadedTreeInformation={}
+        SaveTreeInforamtion = {}
+        LoadedTreeInformation = {}
         if self.pp.jsonFile != "":
             print "Loading file with tree event information"
             with open(self.pp.jsonFile,"r") as jsonfile:
@@ -425,129 +396,139 @@ class scriptWriter:
                 LoadedTreeInformation = json.loads(jsonstring)
     
         # looping over samples
-        # TODO this thing needs to be done better, its kind of a mess
         for sample in self.pp.samplesData.allSamples:
-            print 'creating scripts for',sample.name,'from',sample.path
-            samplewiseMaps[sample.nick] = []
-            ntotal_events = 0
-            njob = 0
-            events_in_files = 0
+            if writeScripts:
+                print '\ncreating scripts for',sample.name,'from',sample.path
+            self.samplewiseMaps[sample.nick] = []
+
+            nEvents = 0
+            nJob = 0
+            nEventsInFiles = 0
+
             filterFile = sample.filterFile
-            files_to_submit = []
+            filesToSubmit = []
+
             # looping over files in sample
             for filename in sample.files:
-                events_in_file = 0
+                nEventsInFile = 0
 
                 if LoadedTreeInformation != {} and filename in LoadedTreeInformation:
-                    events_in_file = LoadedTreeInformation[filename]
+                    nEventsInFile = LoadedTreeInformation[filename]
                 else:
                     f = ROOT.TFile(filename)
                     tree = f.Get('MVATree')
-                    events_in_file = tree.GetEntries()
+                    nEventsInFile = tree.GetEntries()
 
-                SaveTreeInforamtion[filename] = events_in_file
+                SaveTreeInforamtion[filename] = nEventsInFile
 
+                
                 # if the file is larger than self.maxevents it is analyzed in portions of nevents
-                if events_in_file > self.pp.maxevents:
-                    for ijob in range(events_in_file / self.pp.maxevents + 1):
-                        njob += 1
-                        skipevents = (ijob)*self.pp.maxevents
-                        scriptname = self.pp.scriptsPath+'/'+sample.nick+'_'+str(njob)+'.sh'
-                        processname = sample.nick
-                        filenames = filename
-                        outfilename = self.pp.plotPath+sample.nick+'_'+str(njob)+'.root'
-                        processname = sample.nick
-                        # creating script
-                        self.CreateScript(scriptname, outfilename, filenames, processname, self.pp.maxevents, skipevents, filterFile)
-                        
-                        scripts.append(scriptname)
-                        outputs.append(outfilename)
-                        samplewiseMaps[sample.nick].append(outfilename)
-                        nentries.append(events_in_file)
-                        ntotal_events += events_in_file
+                if nEventsInFile > self.pp.maxevents:
+                    for ijob in range(nEventsInFile / self.pp.maxevents + 1):
+                        nJob += 1
+                        writeOptions = {"skipEvents": (ijob)*self.pp.maxevents}
+
+                        self.writeSingleScript(sample, filename, nJob, filterFile, writeOptions, writeScripts = writeScripts)
+                    self.nentries.append(nEventsInFile)
+                    nEvents += nEventsInFile
 
                 # else additional files are appended to list of files to be submitted
                 else :
-                    files_to_submit += [filename]
-                    events_in_files += events_in_file
-                    if events_in_files > self.pp.maxevents or filename == sample.files[-1] or len(files_to_submit)>400: 
-                        njob += 1
-                        skipevents = 0
-                        scriptname = self.pp.scriptsPath+'/'+sample.nick+'_'+str(njob)+'.sh'
-                        processname = sample.nick
-                        filenames = ' '.join(files_to_submit)
-                        outfilename = self.pp.plotPath+sample.nick+'_'+str(njob)+'.root'
-                        # creating script
-                        self.writeSingleScript(scriptname, outfilename, filenames, processname, events_in_files, skipevents, filterFile)
+                    filesToSubmit += [filename]
+                    nEventsInFiles += nEventsInFile
+                    if nEventsInFiles > self.pp.maxevents or filename == sample.files[-1] or len(filesToSubmit)>400: 
+                        nJob += 1
+                        filenames = ' '.join(filesToSubmit)
+                        self.writeSingleScript(sample, filenames, nJob, filterFile, writeScripts = writeScripts)
 
-                        scripts.append(scriptname)
-                        outputs.append(outfilename)
-                        samplewiseMaps[sample.nick].append(outfilename)
-                        nentries.append(events_in_files)
-                        ntotal_events += events_in_files
-                        files_to_submit = []
-                        events_in_files = 0
+                        self.nentries.append(nEventsInFiles)
+                        nEvents += nEventsInFiles
+
+                        filesToSubmit = []
+                        nEventsInFiles = 0
                         
                 # If self.options["cirun"] = true, only use small number of files             
                 if self.pp.options["cirun"]: 
                     break
 
             # submit remaining scripts (can happen if the last file was large)
-            if len(files_to_submit) > 0:
-                njob += 1
-                skipevents = 0
-                scriptname = self.pp.scriptsPath+'/'+sample.nick+'_'+str(njob)+'.sh'
-                processname = sample.nick
-                filenames = ' '.join(files_to_submit)
-                outfilename = self.pp.plotPath+sample.nick+'_'+str(njob)+'.root'
-                # creating script
-                self.writeSingleScript(scriptname, outfilename, filename, processname, events_in_files, skipevents, filterFile)
+            if len(filesToSubmit) > 0:
+                nJob += 1
+                filenames = ' '.join(filesToSubmit)
+                self.writeSingleScript(sample, filenames, nJob, filterFile, writeScripts = writeScripts)
                 
-                scripts.append(scriptname)
-                outputs.append(outfilename)
-                samplewiseMaps[sample.nick].append(outfilename)
-                nentries.append(events_in_files)
-                ntotal_events += events_in_files
-                files_to_submit = []
-                events_in_files=0
+                self.nentries.append(nEventsInFiles)
+                nEvents += nEventsInFiles
 
-            print ntotal_events, 'events found in', sample.name
+                filesToSubmit = []
+                nEventsInFiles = 0
+
+            print '\t', nEvents, 'events found'
         
         # save tree information to json file
-        treejson = json.dumps(SaveTreeInforamtion)
-        with open(self.pp.workdir+'/'+"treejson.json","w") as jsonfile:
-            jsonfile.write(treejson)
+        if writeScripts:
+            treejson = json.dumps(SaveTreeInforamtion)
+            with open(self.pp.workdir+'/'+"treejson.json","w") as jsonfile:
+                jsonfile.write(treejson)
+            print "Saved information about events in trees to ", self.pp.workdir+'/'+"treejson.json"
 
-        print "Saved information about events in trees to ", self.pp.workdir+'/'+"treejson.json"
-        return scripts, outputs, nentries, samplewiseMaps
+        returnData = {"scripts": self.scripts, 
+                        "outputs": self.outputs, 
+                        "entries": self.nentries, 
+                        "maps": self.samplewiseMaps}
+        return returnData
 
-    def writeSingleScript(self, scriptname, outfilename, filenames, processname, maxevents, skipevents, filterFile = "", suffix = ""):
-        if self.pp.options["cirun"] and maxevents < 100:
-            maxevents = 100
+    def writeSingleScript(self, sample, filenames, nJob, filterFile, writeOptions = {}, writeScripts = True):
+        # defaults
+        maxevents = self.pp.maxevents
+        processname = sample.nick
+        outfilename = self.pp.plotPath+processname+'_'+str(nJob)+'.root'
+        scriptname = self.pp.scriptsPath+'/'+processname+'_'+str(nJob)+'.sh'
 
-        script = "#!/bin/bash \n"
-        if self.pp.cmsswpath != '':
-            script += "export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch \n"
-            script += "source $VO_CMS_SW_DIR/cmsset_default.sh \n"
-            script += "export SCRAM_ARCH="+os.environ['SCRAM_ARCH']+"\n"
-            script += 'cd '+self.pp.cmsswpath+'/src\n'
-            script += 'eval `scram runtime -sh`\n'
-            script += 'cd - \n'
-        script += 'export PROCESSNAME="'+processname+'"\n'
-        script += 'export FILENAMES="'+filenames+'"\n'
-        script += 'export OUTFILENAME="'+outfilename+'"\n'
-        script += 'export MAXEVENTS="'+str(maxevents)+'"\n'
-        script += 'export SKIPEVENTS="'+str(skipevents)+'"\n'
-        script += 'export SUFFIX="'+suffix+'"\n'
-        script += 'export EVENTFILTERFILE="'+str(filterFile)+'"\n'
-        script += self.ccPath[:-3]+'\n'
-        #DANGERZONE
-        script += 'python '+self.ccPath.replace('.cc','_rename.py')+'\n'
-        
-        with open(scriptname, "w") as f:
-            f.write(script)
-        st = os.stat(scriptname)
-        os.chmod(scriptname, st.st_mode | stat.S_IEXEC)
+        if writeScripts:
+            suffix = ""
+            skipevents = 0
+
+            # check options
+            if "maxevents" in writeOptions:
+                maxevents = writeOptions["maxevents"]
+            if self.pp.options["cirun"] and maxevents < 100:
+                maxevents = 100
+            if "suffix" in writeOptions:
+                suffix = writeOptions["suffix"]
+            if "skipEvents" in writeOptions:
+                skipevents = writeOptions["skipEvents"]
+
+            # writing script
+            script = "#!/bin/bash \n"
+            if self.pp.cmsswpath != '':
+                script += "export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch \n"
+                script += "source $VO_CMS_SW_DIR/cmsset_default.sh \n"
+                script += "export SCRAM_ARCH="+os.environ['SCRAM_ARCH']+"\n"
+                script += 'cd '+self.pp.cmsswpath+'/src\n'
+                script += 'eval `scram runtime -sh`\n'
+                script += 'cd - \n'
+            script += 'export PROCESSNAME="'+processname+'"\n'
+            script += 'export FILENAMES="'+filenames+'"\n'
+            script += 'export OUTFILENAME="'+outfilename+'"\n'
+            script += 'export MAXEVENTS="'+str(maxevents)+'"\n'
+            script += 'export SKIPEVENTS="'+str(skipevents)+'"\n'
+            script += 'export SUFFIX="'+suffix+'"\n'
+            script += 'export EVENTFILTERFILE="'+str(filterFile)+'"\n'
+            script += self.ccPath[:-3]+'\n'    
+            #DANGERZONE
+            script += 'python '+self.ccPath.replace('.cc','_rename.py')+'\n'
+
+            # writing script to file and chmodding
+            with open(scriptname, "w") as f:
+                f.write(script)
+            st = os.stat(scriptname)
+            os.chmod(scriptname, st.st_mode | stat.S_IEXEC)
+
+        # saving script info to lists
+        self.scripts.append(scriptname)
+        self.outputs.append(outfilename)
+        self.samplewiseMaps[processname].append(outfilename)
     
 
 
@@ -564,6 +545,8 @@ class scriptWriter:
         script+= "outlogname = sys.argv[2]\n"
         script+= "infiles = sys.argv[3:]\n"
         script+= "cmd = ['hadd', '-f', outfname] + infiles\n"
+        script+= "print('hadding \\n' + '\\n'.join(infiles))\n"
+        script+= "print('outputfile: '+str(outfname))\n"
         script+= "worked = 'ERROR'\n"
         script+= "try:\n"
         script+= "\tsubprocess.check_output(cmd,stderr=subprocess.STDOUT)\n"
@@ -599,3 +582,5 @@ class scriptWriter:
 
         # chmodding shell script
         st = os.stat(scriptname)
+        os.chmod(scriptname, st.st_mode | stat.S_IEXEC)
+
