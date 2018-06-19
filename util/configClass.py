@@ -1,23 +1,25 @@
 import pandas
 import ast
-import plotutils
-import PDFutils
 import ROOT
-        
+ 
+# local imports       
+import plotClasses
+import PDFutils
 class configData:
     def __init__(self, pyrootdir, analysisClass, configDataBaseName = "", usedCategories = []):
 
         print("loading configdata ...")
-        self.__basename = configDataBaseName        
-        self.__pyrootdir = pyrootdir
-        self.__csvdir = pyrootdir + "/plottingscripts/configdata/"
+        self.basename = configDataBaseName        
+        self.pyrootdir = pyrootdir
+        self.csvdir = pyrootdir + "/plottingscripts/configdata/"
+        self.plotNumber = analysisClass.plotNumber
 
         # configdata
         self.Data = pandas.DataFrame(
             columns = ["categories", "nhistobins", "minxvals", "maxxvals", "discrs"])
 
         # data types of columns in .csv files
-        self.__colTypes = {"categories": ast.literal_eval, 
+        self.colTypes = {"categories": ast.literal_eval, 
                             "nhistobins": int, 
                             "minxvals": float, 
                             "maxxvals": float, 
@@ -25,7 +27,7 @@ class configData:
 
         # loop over usedCategories to load data and append to configdata lists
         for cat in usedCategories:
-            catData = self.__getCategoryData(cat)
+            catData = self.getCategoryData(cat)
             self.Data = self.Data.append(catData, ignore_index = True)
 
         # add plotPreselections and binlabels to DataFrame
@@ -41,12 +43,11 @@ class configData:
     
     def getDataFrame():
         return self.Data
-    
 
-    def __getCategoryData(self, category):
-        filename = self.__csvdir+"/"+self.__basename+"_"+category+".csv"
+    def getCategoryData(self, category):
+        filename = self.csvdir+"/"+self.basename+"_"+category+".csv"
         print("loading " + filename)
-        catDict = pandas.read_csv(filename, sep = ";", converters = self.__colTypes)
+        catDict = pandas.read_csv(filename, sep = ";", converters = self.colTypes)
         return catDict
 
     def writeConfigDataToWorkdir(self, workdir):
@@ -82,7 +83,7 @@ class configData:
         discriminatorPlots = []
         for index, row in self.Data.iterrows():
             discriminatorPlots.append(
-                plotutils.Plot(
+                plotClasses.Plot(
                     histo = ROOT.TH1F(
                         discrname+"_"+row["binlabels"], 
                         "final discriminator ("+row["binlabels"]+")", 
@@ -94,8 +95,9 @@ class configData:
                     label = row["binlabels"]))
         self.discriminatorPlots = discriminatorPlots
 
-    def adjustDiscriminatorPlots(self, plotNumber):
-        self.discriminatorPlotByNumber = [self.discriminatorPlots[int(plotNumber)]]
+    def adjustDiscriminatorPlots(self):
+        # select the discr plots for a certain plot number
+        self.discriminatorPlotByNumber = [self.discriminatorPlots[int(self.plotNumber)]]
         print("this is the new discriminatorPlot:")
         print(self.discriminatorPlotByNumber)
 
@@ -103,16 +105,16 @@ class configData:
 
     def getDiscriminatorPlots(self):
         # if discriminatorPlot
-        try:
+        if self.plotNumber:
             return self.discriminatorPlotByNumber
-        except:
+        else:
             return self.discriminatorPlots
 
     def getBinlabels(self):
         return self.Data.binlabels.values
 
     def getAddVariables(self):
-        path = self.__pyrootdir+"/plottingscripts/configdata/"+self.__basename+"_addVariables.csv"
+        path = self.pyrootdir+"/plottingscripts/configdata/"+self.basename+"_addVariables.csv"
         print( "searching for additional variables in "+str(path))
         variables = pandas.read_csv(path)
         self.addVars = list(variables["addVars"].values)
@@ -134,10 +136,10 @@ class configData:
         return
 
     def getAdditionalDiscriminatorPlots(self, analysisClass, alwaysExecute=False):
-        """
-        Function creates plot list for additional (input) variables
+        """ Function creates plot list for additional (input) variables
         Function checks if additionalPlotVariablesMap.py file exists.
-        If yes, then it will try to use it for determination of the amount of bins and the bin range of the plots.
+        If yes, then it will try to use it for determination of the 
+            amount of bins and the bin range of the plots.
             In case some variable cannot be mapped, 
             the variable will be added to existing file and user will get warned.
         If no, then it will construct such a dict and stop the further execution.
@@ -259,3 +261,8 @@ class configData:
         print("additional plots added to discriminatorPlots:")
         for plt in plotList:
             print(plt)
+
+
+
+
+

@@ -1,4 +1,4 @@
-import plotutils
+import plotClasses
 
 class samplesData:
     def __init__(self, pltcfg):
@@ -30,7 +30,7 @@ class samplesData:
                 path = sample.path.replace( eval(pathReplace[0]), eval(pathReplace[1]) )
                 
                 self.systSamples.append(
-                    plotutils.Sample(
+                    plotClasses.Sample(
                         sample.name + name, 
                         sample.color,
                         path,
@@ -42,4 +42,4 @@ class samplesData:
         self.allNames = addNames + self.systNames
         self.allSamples = self.samples + self.controlSamples + self.systSamples 
         self.allSystSamples = self.samples + self.systSamples
-                        
+

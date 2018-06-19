@@ -1,48 +1,73 @@
 import sys
 import os
-import subprocess
-import datetime
 import stat
-import ROOT
-import glob
-import imp 
-import types
 
 # local imports
 import nafSubmit
 
-def drawParallel(ListOfPlots,workdir,PathToSelf,opts=None):
-    ListofScripts=[]
+
+# -- script for parallel drawing ------------------------------------------------------------------
+def drawParallel(ListOfPlots, workdir, PathToSelf, opts=None):
+
+    ListOfScripts = []
+
     # create output folders
-    print 'creating output folders'
-    scriptsfolder=workdir+'/DrawScripts/'
-    if not os.path.exists(scriptsfolder):
-        os.makedirs(scriptsfolder)
+    print('creating output folders')
+    scriptPath = workdir+'/DrawScripts/'
+    if not os.path.exists(scriptPath):
+        os.makedirs(scriptPath)
 
     print "Creating Scripts for Parallel Drawing"
     for iPlot, Plot in enumerate(ListOfPlots):
-        ListofScripts.append(createSingleDrawScript(iPlot,Plot,PathToSelf,scriptsfolder,opts=None))
+        ListOfScripts.append( createDrawScript(iPlot, Plot, PathToSelf, scriptPath, opts=None) )
 
-    print "Submitting ", len(ListofScripts), " DrawScripts"
-    # print ListofScripts
-    # jobids=nafSubmit.submitToNAF(["DrawScripts/DrawParallel0.sh"])
-    #jobids=nafSubmit.submitToNAF(ListofScripts)
-    jobids=nafSubmit.submitArrayToNAF(ListofScripts,"DrawPara")
-    print jobids
-    nafSubmit.do_qstat(jobids)
+    print "Submitting ", len(ListOfScripts), " DrawScripts"
+    drawingSubmitInterface(ListOfScripts, ListOfPlots)
+
+    return
+# -------------------------------------------------------------------------------------------------
+    
 
 
-def createSingleDrawScript(iPlot,Plot,PathToSelf,scriptsfolder,opts=None):
-    # print "still needs to be implemented"
-    cmsswpath=os.environ['CMSSW_BASE']
+# -- interface for communicating with batch -------------------------------------------------------
+def drawingSubmitInterface(ListOfScripts, ListOfPlots, nTries = 0):
+    if nTries == 0:
+        jobIDs = nafSubmit.submitArrayToNAF(ListOfScripts, "DrawPara")
+        nafSubmit.do_qstat(jobIDs)
+    elif nTries < 3:
+        jobIDs = nafSubmit.submitToNAF(ListOfScripts)
+        nafSubmit.do_qstat(jobIDs)
+    else:
+        print("draw parallel did not work after 3 tries - ABORTING")
+        sys.exit(1)
+
+    print("-"*50)
+    print("check if draw parallel was terminated successfully")
+    print("TODO") # TODO
+    print("-"*50)
+    if False:
+        drawingSubmitInterface(ListOfScripts, ListOfPlots, nTries+1 )
+    else:
+        print("draw parallel terminated successfully")
+        return
+# -------------------------------------------------------------------------------------------------
+
+
+
+# -- create a single draw script ------------------------------------------------------------------
+def createDrawScript(iPlot, Plot, PathToSelf, scriptPath, opts=None):
+    
+    cmsswpath = os.environ['CMSSW_BASE']
     script="#!/bin/bash \n"
-    if cmsswpath!='':
-        script+="export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch \n"
-        script+="source $VO_CMS_SW_DIR/cmsset_default.sh \n"
-        script+="export SCRAM_ARCH="+os.environ['SCRAM_ARCH']+"\n"
-        script+='export OUTFILENAME="'+"plot" +str(iPlot)+'"\n'
-        script+='cd '+cmsswpath+'/src\neval `scram runtime -sh`\n'
-        script+='cd - \n'
+    if cmsswpath != '':
+        script += "export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch \n"
+        script += "source $VO_CMS_SW_DIR/cmsset_default.sh \n"
+        script += "export SCRAM_ARCH="+os.environ['SCRAM_ARCH']+"\n"
+        script += 'export OUTFILENAME="'+"plot" +str(iPlot)+'"\n'
+        script += 'cd '+cmsswpath+'/src\n'
+        script += 'eval `scram runtime -sh`\n'
+        script += 'cd - \n'
+
     # Parse commandline options if available to script    
     commandLineOptions = ''
     if opts != None:
@@ -51,41 +76,20 @@ def createSingleDrawScript(iPlot,Plot,PathToSelf,scriptsfolder,opts=None):
                 commandLineOptions = commandLineOptions + ' ' + opt + '=' + arg
             else:
                 commandLineOptions = commandLineOptions + ' ' + opt
-    script+='python '+PathToSelf+" -p "+str(iPlot)+ ' ' + commandLineOptions + ' noPlotParallel\n'
-    # script+="mv *.pdf " +os.getcwd()+"/plot"+str(iPlot)+".pdf\n"
 
+    script += 'python '+PathToSelf+" -p "+str(iPlot)+ ' ' + commandLineOptions + ' noPlotParallel\n'
 
-    scriptname=scriptsfolder+'DrawParallel'+str(iPlot)+'.sh'
-
-    # path = os.getcwd()+"/DrawScripts" 
-    # if not os.path.exists(path):
-    #     os.makedirs(path)
-    # os.chdir(path)
+    scriptPath = scriptPath+'DrawParallel'+str(iPlot)+'.sh'
     
-    f=open(scriptname,'w')
-    f.write(script)
-    f.close()
-    st = os.stat(scriptname)
-    os.chmod(scriptname, st.st_mode | stat.S_IEXEC)
+    # write and chmod shell scripts
+    with open(scriptPath, "w") as sf:
+        sf.write(script)
+    st = os.stat(scriptPath)
+    os.chmod(scriptPath, st.st_mode | stat.S_IEXEC)
     os.chdir(os.path.dirname(PathToSelf))
 
-    # PathToShellScript=path+scriptname
-    # return PathToShellScript
-    # return "DrawScripts/"+scriptname
-    return scriptname
+    return scriptPath
+# -------------------------------------------------------------------------------------------------
 
 
 
-
-def askYesNo(question):
-    print question
-    yes = set(['yes','y', 'ye', ''])
-    no = set(['no','n'])
-    choice = raw_input().lower()
-    if choice in yes:
-        return True
-    elif choice in no:
-        return False
-    else:
-        print "Please respond with 'yes' or 'no'"
-        return askYesNo(question)
