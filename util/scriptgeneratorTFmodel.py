@@ -7,14 +7,17 @@ import stat
 import re
 import ROOT
 import xml.etree.ElementTree as ET
-import variablebox
-import plotClasses
 import glob
 import json
 import filecmp
 import imp 
-from nafSubmit import *
 ROOT.gROOT.SetBatch(True)
+
+# local imports
+sys.path.append("tools")
+import variablebox
+import plotClasses
+from nafSubmit import *
 
 def getHead(dataBases,addCodeInterfaces=[]):
   

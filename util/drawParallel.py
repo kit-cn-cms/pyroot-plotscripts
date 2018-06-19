@@ -3,6 +3,7 @@ import os
 import stat
 
 # local imports
+sys.path.append("tools")
 import nafSubmit
 
 

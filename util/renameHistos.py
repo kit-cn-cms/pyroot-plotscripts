@@ -5,6 +5,7 @@ import stat
 from subprocess import call
 
 # local imports
+sys.path.append("tools")
 import haddParallel
 import nafSubmit
 utilpath = os.path.dirname(os.path.realpath(__file__))

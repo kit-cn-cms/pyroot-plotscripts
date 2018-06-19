@@ -1,3 +1,5 @@
+# local imports
+sys.path.append("tools")
 import plotClasses
 
 class samplesData:

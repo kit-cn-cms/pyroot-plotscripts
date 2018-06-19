@@ -375,7 +375,7 @@ def main(pyrootdir, argv):
 
             # Deactivate check bins functionality in renameHistos 
             #   if additional plot variables are added via analysis class
-            if os.path.exists( pP.setLimitPath() ) and analysis.plotNumber != None:
+            if os.path.exists( pP.setLimitPath() ):
                 monitor.printClass(pP, "after setlimitPath - true")
                 print( "renamed file already exists - skipping renaming histos" )
 
@@ -410,12 +410,13 @@ def main(pyrootdir, argv):
             # adding data with plotParallel
             # ========================================================
             '''
-            with monitor.Timer("addRealData"):
-                # real data with ttH
-                pP.addData(samples = samplesData.controlSamples, discr = discrname)
+            if not plotOptions["skipRenaming"]:
+                with monitor.Timer("addRealData"):
+                    # real data with ttH
+                    pP.addData(samples = samplesData.controlSamples, discr = discrname)
 
-                # pseudo data without ttH
-                # pP.addData(samples = samplesData.samples[9:], discr = discrname)
+                    # pseudo data without ttH
+                    # pP.addData(samples = samplesData.samples[9:], discr = discrname)
 
 
 

@@ -2,7 +2,7 @@ import sys
 import os
 import ROOT
 filedir = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(filedir+'/../../util')
+sys.path.append(filedir+'/../../util/tools')
 
  
 import plotClasses
