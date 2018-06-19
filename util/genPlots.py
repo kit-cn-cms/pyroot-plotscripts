@@ -17,12 +17,11 @@ ROOT.gROOT.SetBatch(True)
 
 
 class genPlots:
-    def __init__(self, outPath, plots, workdir, samplesData, rebin):
+    def __init__(self, outPath, plots, workdir, rebin):
         self.outPath = outPath
         self.plots = plots
         self.workdir = workdir
         self.rebin = 1
-        self.samplesData = samplesData
 
         self.lists = {}
         self.samples = {}

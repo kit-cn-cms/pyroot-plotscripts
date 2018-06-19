@@ -4,6 +4,7 @@ from subprocess import call
 import stat
 
 # local imports
+sys.path.append("tools")
 import nafSubmit
 
 
@@ -96,9 +97,11 @@ def makeDatacardsParallel(filePath, outPath,
     cmd='hadd '+filePath+' '+backupPath+' '+' '.join(bbbFiles)
     call( cmd.split(" ") )
 
-
-    cmd = 'mv '+"/".join(bbbPath)+'/*BBB*.root '+bbbDir+'/'
-    call( cmd.split(" ") )
+    # moving BBB files to subdir
+    for bbb in bbbFiles:
+        print("moving "+str(bbb))
+        cmd = ["mv", bbb, bbbDir+"/"]
+        call( cmd )
 
     print "done creating datacards"
     return

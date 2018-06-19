@@ -9,6 +9,7 @@ import imp
 import types
 
 # local imports
+sys.path.append("tools")
 import nafSubmit
 import scriptWriter
 import haddParallel

@@ -3,6 +3,7 @@ import ast
 import ROOT
  
 # local imports       
+sys.path.append("tools")
 import plotClasses
 import PDFutils
 class configData:
