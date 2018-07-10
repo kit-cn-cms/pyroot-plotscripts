@@ -5,9 +5,10 @@ import stat
 from subprocess import call
 
 # local imports
-sys.path.append("tools")
+filedir = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(filedir+"/tools")
 import haddParallel
-import nafSubmit
+import nafInterface
 utilpath = os.path.dirname(os.path.realpath(__file__))
 
 
@@ -15,7 +16,7 @@ utilpath = os.path.dirname(os.path.realpath(__file__))
 def renameHistos(inFiles, outFile, systNames, checkBins = False, prune = True, Epsilon = 0.0, skipRenaming = False):
     if type(inFiles) == str:
         print("input for rename Histos was string - performing actual renaming")
-        renameHistosActual(inFiles, outFile, systNames, checkBins, prune, Epsilon)
+        renameHistosParallel(inFiles, outFile, systNames, checkBins, prune, Epsilon)
         return 
         
 
@@ -67,7 +68,7 @@ def renameHistos(inFiles, outFile, systNames, checkBins = False, prune = True, E
 
 
     if skipRenaming:
-        undoneJobs, undoneFiles = renameCheckJobs( shellList, outFileList )
+        undoneJobs, undoneFiles = nafInterface.renameTerminationCheck( shellList, outFileList )
         if len(undoneJobs) > 0 or len(undoneFiles) > 0:
             print("renaming output not complete - redoing renaming")
             return renameHistos(inFiles, outFile, systNames, checkBins, prune, Epsilon, skipRenaming = False)
@@ -75,15 +76,15 @@ def renameHistos(inFiles, outFile, systNames, checkBins = False, prune = True, E
             print("renaming histos output complete - skipping rename histos")
     else:
         # submit jobs to batch system
-        renameSubmitInterface(shellList, outFileList)
+        nafInterface.renameInterface(shellList, outFileList)
 
     # hadd the renamed scripts
     nHistosRemainSame = False if prune else True
     if skipRenaming:
-        print("also check if haddWard output exists ...")
+        print("also check if hadded output exists ...")
     else:
         print("hadding renamed files")
-    haddParallel.haddWard(input = outFileList,
+    haddParallel.haddSplitter(input = outFileList,
                         outName = outFile,
                         subName = "renameHistosParts",
                         nHistosRemainSame = nHistosRemainSame,
@@ -125,53 +126,6 @@ def writeRenameScript(outFile, skipRenaming):
         sf.write(script)
 
     return scriptName, scriptPath
-# -------------------------------------------------------------------------------------------------
-
-
-
-# -- communication with batch system --------------------------------------------------------------
-def renameSubmitInterface(shellList, outFileList, nTries = 0):
-    # shellList = renamescriptlist = listOfJobsToSubmit
-    # outFileList = outnamelist = listOfJobOutFilesToGetFromSubmit
-    if len(shellList) != len(outFileList):
-        print("number of shell files should be equal to number of output files - ABORTING")
-        sys.exit(1)
-
-    if nTries == 0:    
-        jobIDs = nafSubmit.submitArrayToNAF(shellList, arrayName = "renaming")
-        nafSubmit.do_qstat(jobIDs)
-    elif nTries < 10:
-        jobIDs = nafSubmit.submitToNAF(shellList)
-        nafSubmit.do_qstat(jobIDs)
-    else:
-        print("renaming did not work after 10 tries. ABORTING")
-        sys.exit(1)
-
-
-    # checking for undone jobs
-    undoneJobs, undoneFiles = renameCheckJobs(shellList, outFileList)
-
-    if len(undoneJobs) > 0 or len(undoneFiles) > 0:
-        print("resubitting rename scripts as single scripts")
-        renameSubmitInterface(undoneJobs, undoneFiles, nTries+1)
-    else:
-        print("all rename jobs have terminated successfully")
-
-def renameCheckJobs(shellList, outFileList):
-    # count undone jobs
-    undoneJobs = []
-    undoneFiles = []
-
-    print("-"*50)
-    print("checking job output after renameHistos")
-    for outfile, shellfile in zip(outFileList, shellList):
-        if not os.path.exists(outfile):
-            undoneJobs.append(shellfile)
-            undoneFiles.append(outfile)
-    print("jobs without outputFile: "+str(len(undoneFiles)))
-    print("-"*50)
-    return undoneJobs, undoneFiles
-
 # -------------------------------------------------------------------------------------------------
 
 

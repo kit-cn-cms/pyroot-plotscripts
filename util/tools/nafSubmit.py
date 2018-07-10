@@ -132,14 +132,14 @@ def condorSubmit(submitPath):
       jobID = int(output[0].split(".")[0])
     except:
       print("something went wrong with calling the condir_submit command, submission of jobs was not successful")
-      print "DEBUG: jobIDstring (= communicate()): ",  output
+      print("DEBUG:")
+      print(output)
       tries += 1
       jobID = None
-    if tries > 3:
-      print("job submission was not successful after three tries - exiting without JOBID")
-      print("this refrains from monitoring this job in the future but does not terminate the script")
-      return 
-    
+      time.sleept(60)
+    if tries > 10:
+      print("job submission was not successful after ten tries - exiting without JOBID")
+      sys.exit(-1)
   print("JobID = " + str(jobID))
   # option to remove the created submit-scripts
   #os.system("rm "+submitPath) 
@@ -176,10 +176,10 @@ def setupRelease(oldJIDs, newJIDs):
     releaseCode += "basedir = '"+basedir+"'\n"
     releaseCode += "if not basedir in sys.path:\n"
     releaseCode += "\tsys.path.append(basedir)\n"
-    releaseCode += "from nafSubmit import do_qstat\n"
+    releaseCode += "from nafSubmit import monitorJobStatus\n"
     releaseCode += "import os\n"
-    releaseCode += "do_qstat("+str(oldJIDs)+")\n"
-    releaseCode += "os.system('condor_release -name bird-htc-sched01.desy.de"
+    releaseCode += "monitorJobStatus("+str(oldJIDs)+")\n"
+    releaseCode += "os.system('condor_release -name bird-htc-sched02.desy.de"
     for ID in newJIDs:
         releaseCode += " "+str(ID)
     releaseCode += "')\n"
@@ -282,7 +282,7 @@ def submitArrayToNAF(scripts, arrayName="", holdIDs=None, submitOptions = {}):
 
   return jobIDs
 
-def do_qstat(jobIDs = None):
+def monitorJobStatus(jobIDs = None):
   ''' monitoring of jobs via condor_q function. Loops condor_q output until all scripts have been terminated
 
   jobIDs: list of IDs of jobs to be monitored (if no argument is given, all jobs of the current NAF user are monitored)
@@ -322,9 +322,14 @@ def do_qstat(jobIDs = None):
       errorcount += 1
       # sometimes condor_q is not reachable - if this happens a lot something is probably wrong
       print("line does not match query")
-      if errorcount > 15:
-        print("something is off - condor_q does not work - exiting do_qstat")
+      if errorcount == 30:
+        print("something is off - condor_q has not worked for 15 minutes ...")
+        time.sleep(120)
+      if errorcount == 100:
+        print("this does not work anymore - removing jobs")
+        command[0] = "condor_rm"
+        a = subprocess.Popen(command, stdout = subprocess.PIPE, stderr = subprocess.STDOUT, stdin = subprocess.PIPE)
         return
 
-  print("all jobs are finished - exiting do_qstat")
+  print("all jobs are finished - exiting monitorJobStatus")
   return

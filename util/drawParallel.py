@@ -3,8 +3,9 @@ import os
 import stat
 
 # local imports
-sys.path.append("tools")
-import nafSubmit
+filedir = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(filedir+"/tools")
+import nafInterface
 
 
 # -- script for parallel drawing ------------------------------------------------------------------
@@ -23,35 +24,12 @@ def drawParallel(ListOfPlots, workdir, PathToSelf, opts=None):
         ListOfScripts.append( createDrawScript(iPlot, Plot, PathToSelf, scriptPath, opts=None) )
 
     print "Submitting ", len(ListOfScripts), " DrawScripts"
-    drawingSubmitInterface(ListOfScripts, ListOfPlots)
+    nafInterface.drawInterface(ListOfScripts, ListOfPlots)
 
     return
 # -------------------------------------------------------------------------------------------------
     
 
-
-# -- interface for communicating with batch -------------------------------------------------------
-def drawingSubmitInterface(ListOfScripts, ListOfPlots, nTries = 0):
-    if nTries == 0:
-        jobIDs = nafSubmit.submitArrayToNAF(ListOfScripts, "DrawPara")
-        nafSubmit.do_qstat(jobIDs)
-    elif nTries < 3:
-        jobIDs = nafSubmit.submitToNAF(ListOfScripts)
-        nafSubmit.do_qstat(jobIDs)
-    else:
-        print("draw parallel did not work after 3 tries - ABORTING")
-        sys.exit(1)
-
-    print("-"*50)
-    print("check if draw parallel was terminated successfully")
-    print("TODO") # TODO
-    print("-"*50)
-    if False:
-        drawingSubmitInterface(ListOfScripts, ListOfPlots, nTries+1 )
-    else:
-        print("draw parallel terminated successfully")
-        return
-# -------------------------------------------------------------------------------------------------
 
 
 

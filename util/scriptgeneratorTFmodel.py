@@ -14,7 +14,8 @@ import imp
 ROOT.gROOT.SetBatch(True)
 
 # local imports
-sys.path.append("tools")
+filedir = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(filedir+"/tools")
 import variablebox
 import plotClasses
 from nafSubmit import *

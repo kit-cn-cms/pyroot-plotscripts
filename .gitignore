@@ -7,3 +7,4 @@ workdir/*
 *.aux
 *.nav
 *.sub
+*.err

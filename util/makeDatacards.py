@@ -4,8 +4,9 @@ from subprocess import call
 import stat
 
 # local imports
-sys.path.append("tools")
-import nafSubmit
+filedir = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(filedir+"/tools")
+import nafInterface
 
 
 # -- making data cards (parallel) ----------------------------------------------------------------- 
@@ -58,7 +59,7 @@ def makeDatacardsParallel(filePath, outPath,
             os.chmod(scriptName, st.st_mode | stat.S_IEXEC)
     
     if skipDatacards:
-        undoneShells, undoneCards = cardCheckJobs(shellScripts, datacardFiles)
+        undoneShells, undoneCards = nafInterface.datacardTerminationCheck(shellScripts, datacardFiles)
         if len(undoneShells) > 0 or len(undoneCards) > 0:
             print("datacard making has not terminated sucessfully")
             print("redoing datacard making")
@@ -68,121 +69,35 @@ def makeDatacardsParallel(filePath, outPath,
                     skipDatacards = False)
         else:
             print("datacard making has terminated successfully")
-            print("checking BBB files ...")
-    else:
-        # submitting jobs to batch
-        datacardSubmitInterface(shellScripts, datacardFiles)
-
+            return 
+    
+    # submitting datacardmaking scripts
+    nafInterface.datacardInterface(shellScripts, datacardFiles)
+    # hadding binbybin files to output
+    haddBinByBinFiles(bbbFiles, filePath)
+    print "done creating datacards"
+    
+def haddBinByBinFiles(bbbFiles, filePath):
     # create folder for BBB files
     bbbPath = bbbFiles[0].split("/")[:-1]
-    bbbDir = "/".join(bbbPath+["bbbFiles"])
+    bbbDir = "/".join(bbbPath+["binbybinFiles"])
     backupPath = filePath.replace(".root","backup.root")
-
-    if skipDatacards:
-        if os.path.exists(bbbDir) and os.path.exists(backupPath):
-            print("hadding BBB files probably terminated successfully")
-            print("skipping making datacards")
-            return
-        else:   
-            print("hadding BBB files probably did not work")
-            print("redoing the hadding")
             
     if not os.path.exists(bbbDir):
         os.makedirs(bbbDir)
 
     # now hadd the bbb to the inital root file
-    print "adding root files with BBB to other histos"
-    cmd='mv '+filePath+' '+backupPath
-    call( cmd.split(" ") )
-    cmd='hadd '+filePath+' '+backupPath+' '+' '.join(bbbFiles)
-    call( cmd.split(" ") )
+    print("adding binbybin root files to other histos")
+    print("(binbybin files were created during parallel datacard making)")
+    cmd = ["mv", filePath, backupPath]
+    call(cmd)
+    cmd = ["hadd", filePath, backupPath]
+    cmd += bbbFiles
+    call(cmd)
 
     # moving BBB files to subdir
     for bbb in bbbFiles:
         print("moving "+str(bbb))
         cmd = ["mv", bbb, bbbDir+"/"]
-        call( cmd )
-
-    print "done creating datacards"
-    return
-# -------------------------------------------------------------------------------------------------
-
-
-
-# -- interface for communication with batch -------------------------------------------------------
-def datacardSubmitInterface(shellScripts, datacardFiles, nTries = 0):
-    if nTries == 0:
-        jobIDs = nafSubmit.submitArrayToNAF(shellScripts, arrayName = "cardmaking")
-        nafSubmit.do_qstat(jobIDs)
-    elif nTries < 5:
-        jobIDs = nafSubmit.submitToNAF(shellScripts)
-        nafSubmit.do_qstat(jobIDs)
-    else:
-        print("making datacards not successfull after 5 tries - ABORTING")
-        sys.exit(1)
-
-    # checking output
-    undoneShells, undoneCards = datacardCheckJobs(shellScripts, datacardFiles)
-
-    if len(undoneCards) > 0 or len(undoneShells) > 0:
-        print("some datacards have not been created - resubmitting as single scripts")
-        datacardSubmitInterface(undoneShells, undoneCards, nTries+1)
-    else:
-        print("making datacards was successfull")
-        return
-
-
-def datacardCheckJobs(shellScripts, datacardFiles):
-    print("-"*50)
-    print("check if all datacards were created")
-    undoneCards = []
-    undoneShells = []
-    for card, shell in zip(datacardFiles, shellScripts):
-        if not os.path.exists(card):
-            undoneCards.append(card)
-            undoneShells.append(shell)
-    print("number of undone datacards: "+str(len(undoneCards)))
-    print("-"*50)
-    return undoneShells, undoneCards
-
-# -------------------------------------------------------------------------------------------------
-
-
-
-
-# -- making datacards (non parallel) --------------------------------------------------------------
-# TODO is this even used anymore?
-def makeDatacards(filePath, outPath, 
-                categories = None, doHdecay = True,
-                discrname = 'finaldiscr', 
-                datacardmaker = 'mk_datacard_hdecay13TeV'):
-
-    if categories == None:
-        categories = ["ljets_j4_t3", "ljets_j4_t4",
-                    "ljets_j5_t3", "ljets_j5_tge4",
-                    "ljets_jge6_t2", "ljets_jge6_t3",
-                    "ljets_jge6_tge4"]
-
-    hdecay = "_hdecay" if doHdecay else ""
-    discr = discrname if doHdecay else "finaldiscr"
-
-    scriptPath = filePath.rsplit("/",1)[0]+'/cardScripts/'
-    if not os.path.exists(scriptPath):
-        os.makedirs(scriptPath)
-    scriptPath += "newCardScript.sh"
-
-    # writing script
-    script = "#!/bin/bash \n"
-
-    #cmd = ['mk_datacard_ttbb13TeV', '-d', discr, '-c',' '.join(categories),'-o', outPath+hdecay+'.txt', filePath]
-    #call(cmd)
-    #script+= " ".join(cmd)+"\n"
-
-    for cat in categories:
-        cmd = ['mk_datacard_ttbb13TeV', '-d', discr, '-c', cat, '-o', outPath+'_'+cat+hdecay+'.txt', filePath]
         call(cmd)
-        script+= " ".join(cmd)+"\n"
-
-    with open(scriptPath, "w") as cs:
-        cs.write(script)
 # -------------------------------------------------------------------------------------------------

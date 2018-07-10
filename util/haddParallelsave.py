@@ -137,16 +137,38 @@ def countFiles(inFiles):
     print("nHistos: "+str(nHistos))
     return nHistos
 
-def callHadd(targetFile, inputFiles, force = False, verbosity = 1):
-    cmd = "hadd "
-    if force:
-        cmd += "-f "
-    cmd += str(targetFile)+" "
-    cmd += " ".join(inputFiles)    
+def monitorHaddProcesses( processes, nBefore, outFiles ):
+    while len( processes ) > 0:
+        for iProcess in range(len(processes)):
+            if processes[iProcess].poll():
+                print("process "+str(processes[iProcess])+" terminated")
+                print("nHistos before: "+str(nBefore[iProcess]))
+                print("after hadding:")
+                countFiles([outFiles[iProcess]])
+                del processes[iProcess]
+                del nBefore[iProcess]
+                del outFiles[iProcess]
+                break
+    print("all hadds are done")
+    return 
 
+def callHadd(targetFile, inputFiles, force = False, verbosity = 1):
+    # count files before hadding
+    print("~"*40)
+    print("counting histos in inputFiles")
+    nBefore = countFiles(inputFiles)
+
+    cmd = ["hadd"]
+    if force:
+        cmd += ["-f"]
+    #cmd += ["-v", str(verbosity)]
+    cmd += [targetFile]
+    cmd += inputFiles
+    
     print('hadding\n' + '\n'.join(inputFiles))
     print('outfile: '+str(targetFile))
-    subprocess.call( cmd, shell = True )
+    process = subprocess.Popen( cmd )
+    return process, nBefore
 
 
 
@@ -188,12 +210,15 @@ def haddSplitter(input, outName = "", subName = "",  nHistosRemainSame = False, 
         # if number of input files less than filesPerHadd
         # hadd them all at once
         if len(inFiles) < filesPerHadd:
-            callHadd( outName, inFiles, force = forceHadd)
+            process, n = callHadd( outName, inFiles, force = forceHadd)
+            process.wait()
         else:
             # lists for managing 
             haddParts = [] # sub parts of hadding, e.g. output_X
             haddFiles = [] # files for a specific sub hadd
             allFiles = [] 
+            processes = [] # save the subprocesses from Popen 
+            nHistosProcess = []
 
             # create subfolder for haddFiles
             splitPath = outName.split("/")
@@ -211,8 +236,14 @@ def haddSplitter(input, outName = "", subName = "",  nHistosRemainSame = False, 
                 if (iFile%(filesPerHadd - 1) == 0 and iFile > 0) or inFile == inFiles[-1]:
                     partName = subPath.replace( ".root", "_part_"+str(len(haddParts))+".root" )
                     haddParts.append( partName )
-                    callHadd( partName, haddFiles, force = forceHadd)
+                    process, n = callHadd( partName, haddFiles, force = forceHadd)
+                    processes.append( process )
+                    nHistosProcess.append( n )
                     haddFiles = [] # empty out list for files to hadd for next hadd
+
+            # wait for all subprocesse to be finished
+            print(" waiting for hadd processes to be finished ... ")
+            monitorHaddProcesses( processes, nHistosProcess, haddParts )
 
             # consistency check
             if len(allFiles) != len(inFiles):
@@ -223,7 +254,8 @@ def haddSplitter(input, outName = "", subName = "",  nHistosRemainSame = False, 
             print "-"*50
             print "subfiles were hadded, now hadding the whole thing together"
             print "-"*50
-            callHadd( outName, haddParts, force = forceHadd)
+            process, n = callHadd( outName, haddParts, force = forceHadd)
+            process.wait()
 
     # if nhistos supposed to remain the same perform check
     if nHistosRemainSame:
@@ -247,3 +279,168 @@ def haddSplitter(input, outName = "", subName = "",  nHistosRemainSame = False, 
 
     return outName
 
+
+
+
+'''
+# -- main function for hadd handling --------------------------------------------------------------
+def haddSplitter(input, outName = "", subName = "",  nHistosRemainSame = False, skipHadd = False, forceHadd = True):
+    # determine wheter input is a list or a wildcard
+    if type(input) == str:
+        print "\nhadding from wildcard\n"
+        inFiles = glob.glob(input)
+    else:
+        print "\nhadding from input list\n"
+        inFiles = input
+
+    if skipHadd:
+        print("skip hadding was activated")
+        print("check output file first ...")
+        if not os.path.exists(outName):
+            print("output root file does not exist - performing the usual hadding")
+            skipHadd = False
+    
+    if not skipHadd:
+        print("#"*50)
+        print("haddSplitter input files are:")
+        print("\n".join(inFiles))
+        print("#"*50 + "\n")
+
+    # boundaries
+    filesPerHadd = 50
+    nHistosBefore = 0
+    nHistosAfter = 0
+
+    # if number of histos should remain the same, count them
+    if nHistosRemainSame:
+        print "counting histos BEFORE hadding"
+        nHistosBefore = countFiles(inFiles)
+
+
+    if not skipHadd:
+        # if number of input files less than filesPerHadd
+        # hadd them all at once
+        if len(inFiles) < filesPerHadd:
+            callHadd( outName, inFiles, force = forceHadd)
+        else:
+            # lists for managing 
+            # names of lists to hadd
+            haddParts = []
+            # list of list of files to hadd
+            haddFiles = []
+            # complete list of files 
+            allFiles = [] 
+            
+            # create subfolder for haddFiles
+            splitPath = outName.split("/")
+            subPath = "/".join( splitPath[:-1] + [subName] )    
+            # write python script for hadding
+            haddScriptPath = writeHaddScript( subPath )
+            if not os.path.exists(subPath):
+                os.makedirs(subPath)
+            subPath = "/".join( splitPath[:-1] + [subName, splitPath[-1]] )
+
+            # loop over files
+            for iFile, inFile in enumerate(inFiles):
+                # if filesPerHadd start new sublist
+                if iFile%(filesPerHadd - 1) == 0:
+                    haddFiles.append( [] )
+                    partName = subPath.replace( ".root", "_part_"+str(len(haddParts))+".root" )
+                    haddParts.append( partName )
+
+                haddFiles[-1].append(inFile)
+                allFiles.append(inFile)
+            
+            if len(haddFiles[-1]) < 2:
+                haddFiles[-2] += haddFiles[-1]
+                haddFiles.pop()
+                haddParts.pop()
+                
+
+            haddJobs = []
+            # writing shell scripts
+            for iJob, job in enumerate(haddParts):
+                shellScript = writeHaddShell( 
+                                haddScript = haddScriptPath,
+                                targetFile = job, 
+                                inputFiles = haddFiles[iJob] )
+                haddJobs.append( shellScript )
+
+            # submit jobs to batch
+            nafInterface.haddInterface( haddJobs, haddParts )
+    
+            # adding the parts together
+            print "-"*50
+            print "subfiles were hadded, now hadding the whole thing together"
+            print "-"*50
+            callHadd( outName, haddParts, force = forceHadd)
+
+
+    # if nhistos supposed to remain the same perform check
+    if nHistosRemainSame:
+        print "counting histos AFTER hadding"
+        nHistosAfter = countFiles( [outName] )
+        if nHistosAfter != nHistosBefore:
+            print("hadding did not lead to the same number of hists before hadding")
+            if skipHadd:
+                print("redoing the hadding")
+                return haddSplitter(input, outName, subName, nHistosRemainSame, 
+                                    skipHadd = False, forceHadd = forceHadd)
+            sys.exit(1)
+    
+    if skipHadd:
+        print("hadding output checks out")
+        print("skipping the hadd")
+    else: 
+        print "-"*50
+        print "hadding done"
+        print "-"*50
+
+    return outName
+
+## hadd parallel script ##
+def writeHaddScript(scriptPath):
+    # creating haddScript
+    script = "import os\n"
+    script+= "os.path.append('"+utilpath+"')\n"
+    script+= "from haddParallel import callHadd\n"
+    script+= "targetFile = sys.argv[1]\n"
+    script+= "logFile = sys.argv[2]\n"
+    script+= "inputFiles = sys.argv[3:]\n"
+    script+= "worked = callHadd(targetFile, inputFiles, force = True)\n"
+    script+= "with open(logFile, 'w') as log:\n"
+    script+= "\tlog.write(worked)\n"
+
+    # saving hadd script
+    haddScript = scriptPath+'/haddScript.py'
+    with open(haddScript, "w") as sf:
+        sf.write(script)
+    print("haddScript written to "+haddScript)
+    return haddScript
+
+
+def writeHaddShell(haddScript, targetFile, inputFiles):
+    shellScript = targetFile.replace(".root", ".sh")
+    logFile = targetFile.replace(".root", ".log")
+    script = "#!/bin/bash \n"
+    if os.environ['CMSSW_BASE']!='':
+        script += "export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch \n"
+        script += "source $VO_CMS_SW_DIR/cmsset_default.sh \n"
+        script += "export SCRAM_ARCH="+os.environ['SCRAM_ARCH']+"\n"
+        script += 'cd '+os.environ['CMSSW_BASE']+'/src\n'
+        script += 'eval `scram runtime -sh`\n'
+        script += 'cd - \n'
+    script += 'python '+haddScript+' '+targetFile+' '
+    script += logFile+' '+' '.join(inputFiles)+'\n'
+
+    # saving shell script
+    with open(shellScript, "w") as f:
+        f.write(shellScript)
+
+    # chmodding shell script
+    st = os.stat(shellScript)
+    os.chmod(shellScript, st.st_mode | stat.S_IEXEC)
+    return shellScript
+
+
+'''
