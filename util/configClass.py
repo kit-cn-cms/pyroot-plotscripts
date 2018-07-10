@@ -1,9 +1,12 @@
 import pandas
 import ast
 import ROOT
- 
+import os
+import sys
+
 # local imports       
-sys.path.append("tools")
+filedir = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(filedir+"/tools")
 import plotClasses
 import PDFutils
 class configData:

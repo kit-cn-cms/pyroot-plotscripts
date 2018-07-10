@@ -40,7 +40,7 @@ def main(pyrootdir, argv):
     # initializing everything only takes < 1 minute per script but takes a lot of disk i think
 
     # name of the analysis (i.e. workdir name)
-    name = 'testrun6'
+    name = 'fullrun3'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -77,7 +77,7 @@ def main(pyrootdir, argv):
     signalProcess = "ttH"
 
     # options for plotParallel
-    plotOptions = {"cirun": True,  "haddParallel": True, "useOldRoot": True, 
+    plotOptions = {"cirun": False,  "haddParallel": True, "useOldRoot": True, 
         # the skipXXX options try to skip the submission of files to the batch system
         # before skipping the output is crosschecked
         # if the output is not complete, the skipped part is done anyways
@@ -290,8 +290,13 @@ def main(pyrootdir, argv):
                 pP.setJson(plotJson)
                 pP.setDataBases(plotDataBases)
                 pP.setAddInterfaces(plotInterfaces)
+                # pP.setCatNames(...)
+                # pP.setCatSelections(...)
+                # pP.setSystNames(...)
+                # pP.setSystWeights(...)
+                # pP.setMaxEvts(...)
                 pP.setOptions( plotOptions )
-    
+
                 # run plotParallel
                 monitor.printClass(pP, "before run")
                 pP.run()
@@ -363,7 +368,7 @@ def main(pyrootdir, argv):
             # ========================================================
             '''
             with monitor.Timer("haddFilesFromWildCard"):
-                haddParallel.haddWard( input = pP.getHaddOutPath(),
+                haddParallel.haddSplitter( input = pP.getHaddOutPath(),
                                         outName = pP.getRootPath(),
                                         subName = "haddParts",
                                         nHistosRemainSame = True,
@@ -375,7 +380,7 @@ def main(pyrootdir, argv):
 
             # Deactivate check bins functionality in renameHistos 
             #   if additional plot variables are added via analysis class
-            if os.path.exists( pP.setLimitPath() ):
+            if os.path.exists( pP.setLimitPath() ) and (plotOptions["skipRenaming"] or analysis.plotNumber != None):
                 monitor.printClass(pP, "after setlimitPath - true")
                 print( "renamed file already exists - skipping renaming histos" )
 
@@ -386,14 +391,18 @@ def main(pyrootdir, argv):
                 # renaming Histograms
                 # ========================================================
                 '''
+
                 # in this function the variable self.renameInput is set
                 # if hadd files were created during plotParallel
                 #       (which is equivalent to THEoutputpath == list) 
-                # the renameInput is set to pP.getHaddFiles (a.k.a. the list of hadd files)
+                #       the renameInput is set to pP.getHaddFiles 
+                #       (a.k.a. the list of hadd files)
                 # if no hadd files were created during plotparallel
                 #       (which is equivalent to THEoutputlath == str)
-                # the renameInput is set to pp.getOutPath (a.ka. the path to output.root)
+                #       the renameInput is set to pp.getOutPath 
+                #       (a.ka. the path to output.root)
                 pP.setRenameInput()
+
                 monitor.printClass(pP, "after setting rename input")
                 with monitor.Timer("renameHistos"):
                     renameHistos.renameHistos(
@@ -510,7 +519,6 @@ def main(pyrootdir, argv):
         # Creating lists for later use
         # ========================================================
         '''
-        # TODO this sucks - rework in any case, put the information into a DataFrame for example
         gP = genPlots.genPlots( outPath = pP.getOutPath(),
                             plots = configData.getDiscriminatorPlots(),
                             workdir = workdir,
@@ -534,11 +542,27 @@ def main(pyrootdir, argv):
         # ========================================================
         '''
         with monitor.Timer("makingSimpleMCplots"):
-            options = {"stack": True}
-            gP.makeSimpleControlPlots( listName = "histoList", listIndex = 9, options = options)
+            # creating control plots
+            controlPlotsOptions = {
+                "factor": -1,
+                "logscale": False,
+                "canvasOptions": "histo",
+                "normalize": False,
+                "stack": True, # not default
+                "ratio": False,
+                "sepaTest": False}
+            gP.makeSimpleControlPlots( listName = "histoList", listIndex = 9, options = controlPlotsOptions)
 
-            options = {"normalize": True}
-            gP.makeSimpleShapePlots( listName = "histoList", listIndex = 9, options = options)
+            # creating shape plots
+            shapePlotsOptions = {
+                "logscale": False,
+                "canvasOptions": "histo",
+                "normalize": True, # not default
+                "stack": False,
+                "ratio": False,
+                "statTest": False,
+                "sepaTest": False}
+            gP.makeSimpleShapePlots( listName = "histoList", listIndex = 9, options = shapePlotsOptions)
 
             monitor.printClass(gP, "after making simple MC plots")
 
@@ -551,28 +575,34 @@ def main(pyrootdir, argv):
         # ========================================================
         '''
         with monitor.Timer("makingMCControlPlots"):
-            nestedHistsConfig = {}
 
             # generate the llloflist internally
-            gP.genNestedHistList(listName = "histoList", listIndex = 9,
-                                        systNames = pltcfg.errorSystNamesNoQCD, 
-                                        nestedName = "histoList")
+            gP.genNestedHistList(listName = "histoList", listIndex = 9, 
+                systNames = pltcfg.errorSystNamesNoQCD, 
+                outName = "histoList")
 
             monitor.printClass(gP, "after generating nested hist list")
             # set config of llloflist
+            nestedHistsConfig = {}
             nestedHistsConfig["histoList"] = {"style": 3354, 
                                             "color": ROOT.kBlack, 
                                             "doRateSysts": False}
 
+
             #set general plotoption
-            options = {"factor": -2, "ratio": True, "blinded": analysis.plotBlinded}
-
+            controlPlotsOptions = {
+                "factor": -2, #not default
+                "logscale": False,
+                "canvasOptions": "histo",
+                "ratio": True, # not default
+                "blinded": analysis.plotBlinded} #not default
             # makint the control plots
-            gP.makeControlPlots( listName = "histoList", listIndex = 9,
-                                        dataName = "dataList", nestedHistsConfig = nestedHistsConfig,
-                                        options = options )
+            gP.makeControlPlots( 
+                listName = "histoList", listIndex = 9,
+                dataName = "dataList", nestedHistsConfig = nestedHistsConfig,
+                options = controlPlotsOptions )
 
-            monitor.printClass(plotCass, "after making control plots")
+            monitor.printClass(gP, "after making control plots")
 
 
 

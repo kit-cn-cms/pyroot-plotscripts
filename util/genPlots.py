@@ -1,20 +1,19 @@
 import ROOT
 import math
-import numpy as np
 from itertools import product
-import glob
 import subprocess
 import os
+import sys
 import re
-import xml.etree.ElementTree as ET
-import CMS_lumi
-from copy import deepcopy
-import array
 from string import join
 
 ROOT.gStyle.SetPaintTextFormat("4.2f");
 ROOT.gROOT.SetBatch(True)
 
+# local imports
+filedir = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(filedir+"/tools")
+import CMS_lumi
 
 class genPlots:
     def __init__(self, outPath, plots, workdir, rebin):
@@ -35,16 +34,18 @@ class genPlots:
         rootFile = ROOT.TFile(self.outPath, "readonly")
         keyList = rootFile.GetKeyNames()
 
+        print("-"*30)
+        print("generated new list with name "+str(listName))
+        print("category names:")
+        print(catNames)
         # generate hist lists per sample
         for sample in samples:
             histList = []
             ROOT.gDirectory.cd("PyROOT:/")
-            print("category names:")
-            print catNames
             for cat in catNames:
                 for plot in self.plots:
                     key = sample.nick+"_"+cat+plot.name
-                    rootHist = f.Get(key)
+                    rootHist = rootFile.Get(key)
                     if isinstance(rootHist, ROOT.TH1) and not isinstance(rootHist, ROOT.TH2):
                         rootHist.Rebin(self.rebin)
                         histList.append( rootHist.Clone() )
@@ -54,8 +55,7 @@ class genPlots:
 
         # transpose the new list
         newList = transposeLOL(newList)
-        print("-"*30)
-        print("generated new list with name "+str(listName))
+        print("list:")
         print(newList)
         print("-"*30)
         self.lists[listName] = newList
@@ -76,16 +76,17 @@ class genPlots:
 
     # -- loading options for simple control/shape plots -------------------------------------------
     def loadOptions(self, options):
-        defaultOptions = {"factor": -1,
-                "logscale": False,
-                "canvasOptions": "histo",
-                "normalize": False,
-                "stack": False,
-                "ratio": False,
-                "doProfile": False,
-                "statTest": False,
-                "sepaTest": False,
-                "blinded": True}
+        defaultOptions = {
+            "factor": -1,
+            "logscale": False,
+            "canvasOptions": "histo",
+            "normalize": False,
+            "stack": False,
+            "ratio": False,
+            "doProfile": False,
+            "statTest": False,
+            "sepaTest": False,
+            "blinded": True}
 
         # set options
         for opt in defaultOptions:
@@ -101,9 +102,10 @@ class genPlots:
     # -- making simple control/shape plots --------------------------------------------------------
     # old def writeLOLAndOneOnTop
     def makeSimpleControlPlots(self, listName, listIndex, options = {}):
-
+        print("\n"+"="*30)
+        print("making simple control plots ...")
         # load options
-        print("loading options for making simple control plots")
+        print("loading options:")
         plotOptions = self.loadOptions(options)
         
         # load transposed list
@@ -111,9 +113,10 @@ class genPlots:
         samples = self.samples[listName]
 
         # generate stuff for control plots
-        plotPath = self.workdir + "/controlPlots/"
+        plotPath = self.workdir + "/simpleControlPlots/"
         if not os.path.exists(plotPath):
             os.makedirs(plotPath)
+        print("plots output: "+str(plotPath+"plots.pdf"))
 
         controlList = transposeLOL( transposedList[listIndex:] )
         headList = transposedList[0]
@@ -126,7 +129,12 @@ class genPlots:
         index = 0
         
         # start loop over used list
+        print("looping over used histolist ...")
         for listOfHists, headHist in zip(controlList, headList):
+            print(listOfHists)
+            print(headHist)
+            print
+
             index += 1
             integralFactor = 0
 
@@ -138,7 +146,7 @@ class genPlots:
                 setupHist( hist, sample.color, yTitle, plotOptions["stack"] )
                 
                 if plotOptions["factor"] < 0:
-                    integralFactor += histo.Integral()
+                    integralFactor += hist.Integral()
 
             # getting integralfactor
             if plotOptions["factor"] < 0:
@@ -155,7 +163,7 @@ class genPlots:
 
             # setting up head canvas
             headCanvas = headHist.Clone()
-            setupHist(headCanvas, headSample.color, yTitle = "")
+            setupHist(headCanvas, headSamples.color, yTitle = "")
 
             headCanvas.SetBinContent(1, 
                         headCanvas.GetBinContent(0)+headCanvas.GetBinContent(1));
@@ -177,12 +185,12 @@ class genPlots:
             legend2 = getLegendR()
 
             if plotOptions["factor"] >= 0:
-                legend2.addEntryLRLegend(headCanvas, headSample.name+" x "+str(plotOptions["factor"]), "L")
+                legend2.addEntryLRLegend(headCanvas, headSamples.name+" x "+str(plotOptions["factor"]), "L")
             else:
-                legend2.addEntryLRLegend(headCanvas, headSample.name+(' x {:4.0f}').format(integralFactor), "L")
+                legend2.addEntryLRLegend(headCanvas, headSamples.name+(' x {:4.0f}').format(integralFactor), "L")
             
             index = 0
-            for hist, sample in zip(listOfHistos, controlSamples):
+            for hist, sample in zip(listOfHists, controlSamples):
                 index += 1
                 if index%2 == 1:
                     legend1.addEntryLRLegend(hist, sample.name, "F")
@@ -206,8 +214,8 @@ class genPlots:
             objects.append(headCanvas)
 
             # do separation tests
-            if sepaTest:
-                sepTests = getSepaTests2(listOfHistos, headHist)
+            if plotOptions["sepaTest"]:
+                sepTests = getSepaTests2(listOfHists, headHist)
                 for sepTest in sepTests:
                     sepTest.Draw()
                     objects.append(sepTest)
@@ -221,16 +229,21 @@ class genPlots:
             #objects.append(cms)
         
         # print all canvases
+        print("done with loop")
+        print("printing canvases")
         printCanvases(canvases, plotPath)
         
         # write all objects
+        print("writing objects")
         writeObjects(canvases, plotPath)
 
 
     # old def writeListOfHistoListsAN
     def makeSimpleShapePlots(self, listName, listIndex, label = "", options = {}):
+        print("\n"+"="*30)
+        print("making simple shape plots ...")
         # load options
-        print("loading options for making simple shape plots")
+        print("loading options:")
         plotOptions = self.loadOptions(options)
 
         # load transposed list
@@ -238,9 +251,10 @@ class genPlots:
         samples = self.samples[listName]
 
         # generate stuff for shape plots    
-        plotPath = self.workdir + "/shapePlots/"
+        plotPath = self.workdir + "/simpleShapePlots/"
         if not os.path.exists(plotPath):
             os.makedirs(plotPath)
+        print("plots output: "+str(plotPath+"plots.pdf"))
 
         shapeList = transposeLOL( [transposedList[0]] + transposedList[listIndex:] )
         shapeSamples = [samples[0]] + samples[listIndex:]
@@ -257,7 +271,12 @@ class genPlots:
         index = 0
 
         # starting loop over list of hists
+        print("looping over used histolist ...")
         for listOfHists, labelText in zip( shapeList, labelTexts):
+            print(listOfHists)
+            print(labelText)
+            print
+         
             index += 1
 
             # starting loop over hists in list of hists
@@ -312,11 +331,13 @@ class genPlots:
             label.Draw()
             objects.append(label)
 
-        # print all canvases
-        printCanvases( canvases, plotPath )
+        print("done with loop")
+        print("printing canvases")
+        printCanvases(canvases, plotPath)
 
         # write all objects
-        writeObjects( canvases, plotPath )
+        print("writing objects")
+        writeObjects(canvases, plotPath)
     # ---------------------------------------------------------------------------------------------
 
 
@@ -325,20 +346,22 @@ class genPlots:
 
     # -- making control plots ---------------------------------------------------------------------
     # old def createLLL_fromSuperHistoFileSyst
-    def genNestedHistList(self, controlSamples, systNames, name):
+    def genNestedHistList(self, listName, listIndex, systNames, outName):
         rootFile = ROOT.TFile(self.outPath, "readonly")
 
         objects = []
         keyList = rootFile.GetKeyNames()
         outList = []
 
+        controlSamples = self.samples[listName][listIndex:]
+        
         # looping over discr plots
         for plot in self.plots:
             nestedList = []
             print("creating nested list for plot " + str(plot.name))
             for sample in controlSamples:
                 nominalKey = sample.nick+"_"+plot.name+systNames[0]
-                nominal = f.Get(nominalKey)
+                nominal = rootFile.Get(nominalKey)
 
                 baseList = []
                 for syst in systNames:
@@ -359,14 +382,16 @@ class genPlots:
             outList.append(nestedList)
 
         print("generated list of histograms for making control plots")
-        print("location: self.nestedHistList[name]")
-        self.nestedHistLists[name] = outList
+        print("location: self.nestedHistList["+str(outName)+"]")
+        self.nestedHistLists[outName] = outList
 
 
     # old def plotDataMCanWsyst
     def makeControlPlots(self, listName, listIndex, dataName, nestedHistsConfig, options):
+        print("\n"+"="*30)
+        print("making control plots ...")
         # load options
-        print("loading options for making simple shape plots")
+        print("loading options:")
         plotOptions = self.loadOptions(options)
 
         # load transposed list
@@ -377,6 +402,7 @@ class genPlots:
         plotPath = self.workdir + "/controlPlots/"
         if not os.path.exists(plotPath):
             os.makedirs(plotPath)
+        print("plots output: "+str(plotPath+"plots.pdf"))
 
         controlList = transposeLOL( transposedList[listIndex:] )
         headList = transposedList[0]
@@ -386,10 +412,10 @@ class genPlots:
 
         # get labels and label texts
         labels = [plot.label for plot in self.plots]
-        if isinstance(label, basestring):
-            labelTexts = len(dataList)*[label]
+        if isinstance(labels, basestring):
+            labelTexts = len(dataList)*[labels]
         else:
-            labelTexts = label
+            labelTexts = labels
 
         # init lists
         canvases = []
@@ -421,13 +447,22 @@ class genPlots:
                 graphs.append( graph ) 
             errorGraphs.append(graphs)
 
+
+        print("looping over used histolist ...")
         for headHist, listOfHists, listOfData, labelText, errorGraphList in zip( 
                 headList, controlList, dataList, labelTexts, errorGraphs ):
+            print(headHist)
+            print(listOfHists)
+            print(listOfData)
+            print(labelText)
+            print(errorGraphList)
+            print
+
             index += 1
             integralFactor = 0
             for hist, sample in zip( listOfHists, controlSamples ):
                 yTitle = "Events"
-                setupHist( hist, sample.color, yTitle, stack = True )
+                setupHist( hist, sample.color, yTitle, True )
 
                 if plotOptions["factor"] < -1 and headHist.GetName() == hist.GetName():
                     # if you stack the headHist (ontoph) to stackplot
@@ -504,13 +539,13 @@ class genPlots:
                         ROOT.TMath.Power( headHistClone.GetBinError(1), 2) ));
             headHistClone.SetBinError( headHistClone.GetNbinsX(), ROOT.TMath.Sqrt(
                     ROOT.TMath.Power( headHistClone.GetBinError( headHistClone.GetNbinsX()+1 ), 2) + \
-                        ROOT.TMath.Power( headHistClone.GetBinError( headHistClone.GetNbinX() ), 2) ));
+                        ROOT.TMath.Power( headHistClone.GetBinError( headHistClone.GetNbinsX() ), 2) ));
             headHistClone.SetLineWidth(2)   
 
             if plotOptions["factor"] >= 0.:
                 headHistClone.Scale(plotOptions["factor"])
             else:
-                headHistClone.Scape(integralFactor)
+                headHistClone.Scale(integralFactor)
 
             headHistClone.Draw("histosame")
             data.Draw("samePE1")
@@ -529,7 +564,7 @@ class genPlots:
                 ratioErrorGraph = ROOT.TGraphAsymmErrors( errorGraph.GetN() )
                 x, y = ROOT.Double(0), ROOT.Double(0)
                 for igCount in range( errorGraph.GetN() ):
-                    errorGraph.GetPoint( igCount, x, 1.0 )
+                    errorGraph.GetPoint( igCount, x, ROOT.Double(1.0) )
                     relErrUp = 0.0
                     relErrDown = 0.0
                     # check if bincontent error becomes negative
@@ -548,7 +583,7 @@ class genPlots:
                             errorGraph.GetErrorXhigh(igCount),
                             relErrDown, relErrUp)
                     
-                errorGraph.SetFillStype( fillStyle )
+                errorGraph.SetFillStyle( fillStyle )
                 errorGraph.SetLineColor( fillColor )
                 errorGraph.SetFillColor( fillColor )
                 ratioErrorGraph.SetFillStyle( fillStyle )
@@ -559,7 +594,7 @@ class genPlots:
                     #errorGraph.Draw("2")
                 #else:
                 errorGraph.Draw("same2")
-                graphCounter += 1
+                gCounter += 1
 
                 objects.append(errorGraph)
                 objects.append(ratioErrorGraph)
@@ -571,9 +606,9 @@ class genPlots:
             
             legend1.addEntryLRLegend(data, "data", "P")
             if plotOptions["factor"] >= 0.:
-                legend2.addEntryLRLegend( headHistClone, headSample.name+" x "+str(plotOptions["factor"]), "L")
+                legend2.addEntryLRLegend( headHistClone, headSamples.name+" x "+str(plotOptions["factor"]), "L")
             else:
-                legend2.addEntryLRLegend( headHistClone, headSample.name+(" x {:4.0f}").format(integralFactor), "L")
+                legend2.addEntryLRLegend( headHistClone, headSamples.name+(" x {:4.0f}").format(integralFactor), "L")
             
             ilc = 0
             for hist, sample in zip( stackedListOfHists, controlSamples ):
@@ -668,9 +703,13 @@ class genPlots:
             #objects.append(emptyHist)
             objects.append(line)
         
-        printCanvases( canvases, plotPath )
-        
-        writeObjects( canvases, plotPath )    
+        print("done with loop")
+        print("printing canvases")
+        printCanvases(canvases, plotPath)
+
+        # write all objects
+        print("writing objects")
+        writeObjects(canvases, plotPath)
 
 
 
@@ -698,7 +737,7 @@ def transposeLOL(lol):
 
 # -- set style of hist and its axes ---------------------------------------------------------------
 # old def setupHisto
-def setupHist(hist, color, yTitle = None, filled = False):
+def setupHist(histo, color, yTitle = None, filled = False):
     if isinstance(histo, ROOT.TH1):
         histo.SetStats(False)
 

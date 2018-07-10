@@ -9,8 +9,9 @@ import imp
 import types
 
 # local imports
-sys.path.append("tools")
-import nafSubmit
+filedir = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(filedir+"/tools")
+import nafInterface
 import scriptWriter
 import haddParallel
 
@@ -80,13 +81,14 @@ class plotParallel:
     @classmethod
     def empty(cls, workdir, rootFilePath):
         ''' this class methods initializes an empty class
-        used for drawParallel scripts that dont need all the informations '''
+        used for drawParallel scripts that dont need all the information '''
         emptycls = plotParallel(workdir,None,None,None)
         emptycls.setEmptyValues(rootFilePath)
         return emptycls
 
     def setEmptyValues(self, path):
         outPath = path.replace("_limitInput","")
+        # TODO redundancy, is this used?
         if os.path.exists(outPath):
             self.outPath = outPath
         else:
@@ -207,65 +209,6 @@ class plotParallel:
 
 
 
-
-    ## batch system handling ##
-    def plotSubmitInterface(self):
-
-        # submit run scripts
-        print 'submitting scripts'
-        submitOptions = {"PeriodicHold": 1500}
-        jobIDs = nafSubmit.submitArrayToNAF(self.runscriptData["scripts"], "PlotPara", submitOptions = submitOptions)
-        # monitoring running of jobs
-        nafSubmit.do_qstat(jobIDs)
-
-        # checking outputs
-        failedJobs = self.plotCheckJobs()
-        retries = 0
-        maxRetries = 10
-        while retries <= maxRetries and len(failedJobs) > 0:
-            retries+=1
-            print 'the following jobs failed'
-            for job in failedJobs:
-                print job
-            print 'resubmitting as single jobs'
-            jobIDs = nafSubmit.submitToNAF(failedJobs, submitOptions = submitOptions)
-            nafSubmit.do_qstat(jobIDs)
-            failedJobs = self.plotCheckJobs()
-            if retries >= maxRetries:
-                sys.exit("submission of jobs was not success full after multiple tries - exiting")
-    
-    def plotCheckJobs(self):
-        print("-"*50)
-        print("checking job output after plotpara")
-        failedJobs=[]
-        noCutflow = 0
-        wrongEntry = 0
-        for script, output, entries in zip(self.runscriptData["scripts"], 
-                                            self.runscriptData["outputs"], 
-                                            self.runscriptData["entries"]):
-            if not os.path.exists(output+'.cutflow.txt'):
-                failedJobs.append(script)
-                noCutflow += 1
-                continue
-            f = open(output+'.cutflow.txt')
-            processed_entries = -1
-            for line in f:
-                s = line.split(' : ')
-                if len(s) > 2 and 'all' in s[1]:
-                    processed_entries = int(s[2])
-                    break
-            if not entries == processed_entries:
-                failedJobs.append(script)
-                wrongEntry += 1
-        print("jobs without cutflow file: " + str(noCutflow))
-        print("jobs with wrong entry in cutflow file: " + str(wrongEntry))
-        print("-"*50)
-        return failedJobs
-
-
-
-
-
     ## main function ##
     def run(self):
         if self.options["skipPlotParallel"]:
@@ -277,9 +220,9 @@ class plotParallel:
             print("checking plotParallel outputs first...")
             writer = scriptWriter.scriptWriter(self)
             self.runscriptData = writer.writeRunScripts(writeScripts = False)
-            failedJobs = self.plotCheckJobs()
+            undoneJobsData = nafInterface.plotTerminationCheck(self.runscriptData)
 
-            if len(failedJobs) == 0:
+            if len(undoneJobsData["scripts"]) == 0:
                 print("plotParallel output is complete")
                 print("proceeding with haddParallel")
                 self.haddParallelInterface(writer)
@@ -348,7 +291,7 @@ class plotParallel:
             sys.exit(0)
 
         # job submission
-        self.plotSubmitInterface()
+        nafInterface.plotInterface(self.runscriptData)
         print("all jobs have terminated successfully")
         print("="*40)
 

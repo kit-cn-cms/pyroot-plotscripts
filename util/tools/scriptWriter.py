@@ -6,6 +6,7 @@ import ROOT
 import glob
 import json
 import filecmp
+import pandas
 
 # local imports 
 import variablebox
@@ -363,7 +364,7 @@ class scriptWriter:
     def writeRenameScript(self):
         script = "import sys\n"
         script += "import os\n"
-        script *= "sys.path.append('"+utilpath+"')\n"
+        script += "sys.path.append('"+utilpath+"')\n"
         script += "import renameHistos\n\n"
         script += "filename = os.getenv('OUTFILENAME')\n\n"
         script += "outname = filename.replace('.root','_original.root')\n\n"
