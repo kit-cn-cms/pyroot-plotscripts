@@ -384,15 +384,15 @@ float LeptonSFHelper::GetMuonSF(  float muonPt , float muonEta , int syst , std:
     upvalBtoF=( nomvalBtoF+errorBtoF );
     downvalBtoF=( nomvalBtoF-errorBtoF );
     
-    thisBin = h_mu_TRIGGER_abseta_ptGtoH->FindBin(  searchPt, searchEta  );
-    nomvalGtoH=h_mu_TRIGGER_abseta_ptGtoH->GetBinContent( thisBin );
-    errorGtoH=h_mu_TRIGGER_abseta_ptGtoH->GetBinError( thisBin );
-    upvalGtoH=( nomvalGtoH+errorGtoH );
-    downvalGtoH=( nomvalGtoH-errorGtoH );
+    //thisBin = h_mu_TRIGGER_abseta_ptGtoH->FindBin(  searchPt, searchEta  );
+    //nomvalGtoH=h_mu_TRIGGER_abseta_ptGtoH->GetBinContent( thisBin );
+    //errorGtoH=h_mu_TRIGGER_abseta_ptGtoH->GetBinError( thisBin );
+    //upvalGtoH=( nomvalGtoH+errorGtoH );
+    //downvalGtoH=( nomvalGtoH-errorGtoH );
 
-    nomval=(ljets_mu_BtoF_lumi*nomvalBtoF + ljets_mu_GtoH_lumi * nomvalGtoH)/(ljets_mu_BtoF_lumi+ljets_mu_GtoH_lumi);
-    upval=(ljets_mu_BtoF_lumi*upvalBtoF + ljets_mu_GtoH_lumi * upvalGtoH)/(ljets_mu_BtoF_lumi+ljets_mu_GtoH_lumi);
-    downval=(ljets_mu_BtoF_lumi*downvalBtoF + ljets_mu_GtoH_lumi * downvalGtoH)/(ljets_mu_BtoF_lumi+ljets_mu_GtoH_lumi);
+    nomval=nomvalBtoF;
+    upval=upvalBtoF;
+    downval=downvalBtoF;
     
   }
   else if ( type == "Iso" ){
@@ -554,7 +554,7 @@ void LeptonSFHelper::SetMuonHistos( ){
   std::string IDinputFileBtoF = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/mu_ID_EfficienciesAndSF_BCDEF.root";
   std::string IDinputFileGtoH = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/mu_ID_EfficienciesAndSF_GH.root";
 
-  std::string TRIGGERinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/mu_TRIGGER_BtoF.root";
+  std::string TRIGGERinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/Muon_EfficienciesAndSF_RunBtoF_Nov17Nov2017.root";
   std::string TRIGGERinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/mu_TRIGGER_GtoH.root";
 
   std::string ISOinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/mu_ISO_EfficienciesAndSF_BCDEF.root";
@@ -583,7 +583,7 @@ void LeptonSFHelper::SetMuonHistos( ){
   h_mu_HIP_eta_ratioBtoF = (TGraphAsymmErrors*)f_HIPSFBtoF->Get("ratio_eff_aeta_dr030e030_corr");
   h_mu_HIP_eta_ratioGtoH = (TGraphAsymmErrors*)f_HIPSFGtoH->Get("ratio_eff_aeta_dr030e030_corr");
 
-  h_mu_TRIGGER_abseta_ptBtoF= (TH2F*)f_TRIGGERSFBtoF->Get("IsoMu24_OR_IsoTkMu24_PtEtaBins/pt_abseta_ratio");
+  h_mu_TRIGGER_abseta_ptBtoF= (TH2F*)f_TRIGGERSFBtoF->Get("IsoMu27_PtEtaBins/pt_abseta_ratio");
   h_mu_TRIGGER_abseta_ptGtoH= (TH2F*)f_TRIGGERSFGtoH->Get("IsoMu24_OR_IsoTkMu24_PtEtaBins/pt_abseta_ratio");
 
   h_mu_ISO_abseta_pt_ratioBtoF = (TH2F*)f_ISOSFBtoF->Get("TightISO_TightID_pt_eta/pt_abseta_ratio");
@@ -1729,8 +1729,8 @@ void plot(){
   std::vector<Systematics::Type> v_SystTypes = Systematics::getTypeVector();
   //for(auto itsyst : v_SystTypes){std::cout<< " Know :" << itsyst << std::endl;}
 
-  std::string csvHFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/factorized_jes/csv_rwt_fit_hf_v2_final_2017_6_7_all.root";
-  std::string csvLFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/factorized_jes/csv_rwt_fit_lf_v2_final_2017_6_7_all.root";
+  std::string csvHFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_first2017/Deepcsv_rwt_fit_hf_v2_final_2018_2_12test.root";
+  std::string csvLFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_first2017/Deepcsv_rwt_fit_lf_v2_final_2018_2_12test.root";
   TString qcd_file = "/nfs/dust/cms/user/mwassmer/QCD_Estimation_September17/QCD_Estimation/QCD_Estimation_FakeScaleFactor_nominal.root";
   
   CSVHelper* internalCSVHelper= new CSVHelper(csvHFfile,csvLFfile, 5,4,3,v_SystTypes);
@@ -2186,8 +2186,10 @@ def startLoop():
      double electronEta=0.0;
      double electronPt=0.0;
     
-    if(chain->GetBranch("Electron_Pt_BeforeRun2Calibration") && chain->GetBranch("Electron_Eta_Supercluster") && chain->GetBranch("Muon_Pt_BeForeRC")){
-      //std::cout<<"using superclister and stuff"<<std::endl;
+    //if(chain->GetBranch("Electron_Pt_BeforeRun2Calibration") && chain->GetBranch("Electron_Eta_Supercluster") && chain->GetBranch("Muon_Pt_BeForeRC")){
+    //DANGERZONE pT variables before correcion not saved in current ntuples 
+    if(false){
+    //std::cout<<"using superclister and stuff"<<std::endl;
       if(N_TightMuons==1){muonPt=Muon_Pt_BeForeRC[0]; muonEta=Muon_Eta[0];}
       else{muonPt=0.0; muonEta=0.0;}
       if(N_TightElectrons==1){electronPt=Electron_Pt_BeforeRun2Calibration[0]; electronEta=Electron_Eta_Supercluster[0];}
@@ -2559,7 +2561,7 @@ def compileProgram(scriptname,usesDataBases,addCodeInterfaces):
     print "Compile failed with error:\n", e.output
 
 
-def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],allsystweights=["1"],additionalvariables=[],dataBases=[],addCodeInterfaces=[]):
+def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],allsystweights=["1"],additionalvariables=[],dataBases=[],addCodeInterfaces=[], useLHEWeights=False):
 
   # collect variables
   # list varibles that should not be written to the program automatically
@@ -2582,8 +2584,9 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 
   #csv_file=os.getcwd()+"/rate_factors_onlyinternal_powhegpythia.csv"
   csv_file="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv"
-
-  vetolist+=GetMEPDFVetoList(csv_file)
+  
+  if useLHEWeights:
+    vetolist+=GetMEPDFVetoList(csv_file)
 
   for addCodeInt in addCodeInterfaces:
     vetolist+=addCodeInt.getExternalyCallableVariables()
@@ -2660,8 +2663,9 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   # start writing program
   script=""
   script+=getHead(dataBases,addCodeInterfaces)
-  script+=DeclareMEPDFNormFactors(csv_file)
-  script+=AddMEandPDFNormalizationsMap(csv_file)
+  if useLHEWeights:
+    script+=DeclareMEPDFNormFactors(csv_file)
+    script+=AddMEandPDFNormalizationsMap(csv_file)
   
   for db in dataBases:
     script+=InitDataBase(db)
@@ -2702,17 +2706,19 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
           script+=initHistoWithProcessNameAndSuffix(c+n+s,nb,mn,mx,t)
 
   # start event loop
-  script+=DefineLHAPDF()
+  if useLHEWeights:
+    script+=DefineLHAPDF()
   startLoopStub=startLoop()
   if castStub!="":
     #print castStub
     startLoopStub=startLoopStub.replace("//PLACEHOLDERFORCASTLINES", castStub)
   script+=startLoopStub
   script+="   timerMapping->Start();\n"
-  script+=ResetMEPDFNormFactors(csv_file)
-  script+=RelateMEPDFMapToNormFactor(csv_file)
-  script+=PutPDFWeightsinVector(csv_file)
-  script+=UseLHAPDF()
+  if useLHEWeights:
+    script+=ResetMEPDFNormFactors(csv_file)
+    script+=RelateMEPDFMapToNormFactor(csv_file)
+    script+=PutPDFWeightsinVector(csv_file)
+    script+=UseLHAPDF()
   script+="   totalTimeMapping+=timerMapping->RealTime();\n"
 
   script+="   timerEvalDNN->Start();\n"
@@ -3071,7 +3077,7 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
   return scripts,outputs,nentries,samplewiseoutputs
 
 # the dataBases should be defined as follows e.g. [[memDB,path],[blrDB,path]]
-def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],dataBases=[],treeInformationJsonFile="",otherSystnames=[],addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False,haddParallel=False):
+def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],dataBases=[],treeInformationJsonFile="",otherSystnames=[],addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False,haddParallel=False, useLHEWeights=False):
   cmsswpath=os.environ['CMSSW_BASE']
   if not "CMSSW" in cmsswpath:
     print "you need CMSSW for this to work. Exiting!"
@@ -3151,7 +3157,7 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
     cmd='cp -v '+programpath+'.cc'+' '+programpath+'.ccBackup'
     subprocess.call(cmd,shell=True)
   print 'creating c++ program'
-  createProgram(programpath,plots,samples,catnames,catselections,systnames,systweights,additionalvariables, dataBases,addCodeInterfaces)
+  createProgram(programpath,plots,samples,catnames,catselections,systnames,systweights,additionalvariables, dataBases,addCodeInterfaces, useLHEWeights=useLHEWeights)
   if not os.path.exists(programpath+'.cc'):
     print 'could not create c++ program'
     sys.exit(-1)
