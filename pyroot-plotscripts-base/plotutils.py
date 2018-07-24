@@ -985,13 +985,16 @@ def createHistoLists_fromSuperHistoFile(path,samples,plots,rebin=1,catnames=[""]
             for plot in plots:
                 key=sample.nick+'_'+c+plot.name
                 #print key
-                print key, sample.nick, c, plot.name
+                #print key, sample.nick, c, plot.name
                 o=f.Get(key)
+                if o==None:
+                  print "did not find", key
                 #print o
                 if isinstance(o,ROOT.TH1) and not isinstance(o,ROOT.TH2):
-                    o.Rebin(rebin)
+                    if rebin>1:
+                      o.Rebin(rebin)
                     histoList.append(o.Clone())
-#                    print "ok", histoList[-1], len(histoList)
+                   #print "ok", histoList[-1], len(histoList)
                 if DoTwoDim and isinstance(o,ROOT.TH2):
 		    #print "2D"
 		    histoList.append(o.Clone())
@@ -2212,7 +2215,7 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
     listOfErrorGraphLists=[]
     #lll=[listOflistOflist of histograms, FillStyle, FillColor, DoRateSysts]
     for lll in listOflll:
-      listOfErrorGraphLists.append(createErrorbands(lll[0],samples,lll[3]))
+      listOfErrorGraphLists.append(createErrorbands(lll[0],samples,lll[3],verbosity))
       #print listOfErrorGraphLists[-1]
       #raw_input()
       listOfErrorGraphStyles.append(lll[1])
@@ -2358,13 +2361,21 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
 	  #print objects
 	  #raw_input()
 
+        print "biuilding legend"
         l1=getLegendL()
         l2=getLegendR()
+        print "l1", l1.GetX1NDC(), l1.GetX2NDC(), l1.GetY1NDC(), l1.GetY2NDC()
+        print "l2", l2.GetX1NDC(), l2.GetX2NDC(), l2.GetY1NDC(), l2.GetY2NDC()
+        
         l1.AddEntry22(data,'data','P')
         if factor >= 0.:
           l2.AddEntry22(otc,sampleOnTop.name+' x '+str(factor),'L')
+          print "l1", l1.GetX1NDC(), l1.GetX2NDC(), l1.GetY1NDC(), l1.GetY2NDC()
+          print "l2", l2.GetX1NDC(), l2.GetX2NDC(), l2.GetY1NDC(), l2.GetY2NDC()
         else:
           l2.AddEntry22(otc,sampleOnTop.name+(' x {:4.0f}').format(integralfactor),'L')
+          print "l1", l1.GetX1NDC(), l1.GetX2NDC(), l1.GetY1NDC(), l1.GetY2NDC()
+          print "l2", l2.GetX1NDC(), l2.GetX2NDC(), l2.GetY1NDC(), l2.GetY2NDC()
         ilc=0
         for h,sample in zip(stackedListOfHistos,samples):
             ilc+=1
@@ -2372,7 +2383,8 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
                 l1.AddEntry22(h,sample.name,'F')
             if ilc%2==0:
                 l2.AddEntry22(h,sample.name,'F')
-
+            print "l1", l1.GetX1NDC(), l1.GetX2NDC(), l1.GetY1NDC(), l1.GetY2NDC()
+            print "l2", l2.GetX1NDC(), l2.GetX2NDC(), l2.GetY1NDC(), l2.GetY2NDC()
         canvases.append(canvas)
         l1.Draw('same')
         l2.Draw('same')
