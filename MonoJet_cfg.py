@@ -193,9 +193,28 @@ samples_background = [
                         Sample('QCD',ROOT.kViolet+3,path_ntuples+'/QCD*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'qcd',weightSystNames[:-4]+otherSystNames,samDict=sampleDict),
                         Sample('#gamma +jets',ROOT.kViolet+7,path_ntuples+'/GJets*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'gamma_jets',weightSystNames[:-4]+otherSystNames,samDict=sampleDict)
                         ]
-
+"""
 samples_signal = [
                         Sample('AV|M1000|m300',ROOT.kRed,path_ntuples+'/DMV_NNPDF30_Axial_Mphi-1000_Mchi-300_gSM-0p25_gDM-1p0_v2_13TeV-powheg/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'SIG_AV_M1000_m300',weightSystNames,samDict=sampleDict),
-                        #Sample('test_s',ROOT.kGreen-7,path_ntuples+'/test/*nominal*.root',"1."+"*"+MCWeight,'test_s',[""],samDict=sampleDict)
-			#Sample('MET',ROOT.kBlack,path_ntuples+'/MET_Run2016*/*nominal*.root',"1."+sel_MET,'MET',samDict=sampleDict)    
-    ]
+                 ]
+"""
+"""
+samples_signal = [
+                        Sample('AV|M1000|m300',ROOT.kRed,path_ntuples+'/Axial_MonoJ_NLO_Mphi-1000_Mchi-300_gSM-0p25_gDM-1p0_13TeV-madgraph/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'SIG_AV_M1000_m300',weightSystNames[:-4],samDict=sampleDict),
+
+                 ]
+"""
+signal_samples_paths = glob.glob(path_ntuples+'/'+'*MonoJ*NLO*')
+signal_samples_names = []
+for i in range(len(signal_samples_paths)):
+    signal_samples_paths[i]=signal_samples_paths[i]+'/'+'*nominal*.root'
+    #signal_samples_names.append(signal_samples_paths[i].replace(path_ntuples+"/","").replace("/*nominal*.root","").replace("DMV_NNPDF30_","").replace("DMS_NNPDF30_","").replace("_v2_13TeV-powheg","").replace("-","_"))
+    signal_samples_names.append(signal_samples_paths[i].replace(path_ntuples+"/","").replace("/*nominal*.root","").replace("_13TeV-madgraph","").replace("-","_"))
+
+samples_signal = []
+for i in range(len(signal_samples_names)):
+    samples_signal.append(Sample(signal_samples_names[i],ROOT.kRed,signal_samples_paths[i],"1."+"*"+MCWeight+sel_MET,signal_samples_names[i],[""],samDict=sampleDict))
+    
+print samples_signal
+print signal_samples_names
+
