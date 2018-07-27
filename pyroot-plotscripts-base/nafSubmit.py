@@ -26,8 +26,9 @@ def writeSubmitCode(script, logdir, hold = False, isArray = False, nScripts = 0)
   submitCode+="initialdir = "+os.getcwd()+"\n"
   submitCode+="notification = Never\n"
   #submitCode+="priority = 0\n"
-  submitCode+="RequestMemory = 1000\n"
-  submitCode+="RequestDisk = 1000000\n"
+  submitCode+="RequestMemory = 2000\n"
+  submitCode+="RequestDisk = 500000\n"
+  submitCode+="run_as_owner = true\n"
   if hold:
     submitCode+="hold = True\n"
 
@@ -249,7 +250,7 @@ def do_qstat(jobIDs = False):
         jobsIdle =  int(states[2].split()[0])
         jobsHeld = int(states[4].split()[0])
         print(str(jobsRunning) + " jobs running, " + str(jobsIdle) + " jobs idling, " + str(jobsHeld) + " jobs held.")
-        nrunning = jobsRunning + jobsIdle + jobsHeld
+        nrunning += jobsRunning + jobsIdle + jobsHeld
 
     if nrunning == 0 and condor_q_worked:
       print "all jobs are finished"
