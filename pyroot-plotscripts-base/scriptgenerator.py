@@ -3254,7 +3254,10 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
 	#print "will add it"
         f=ROOT.TFile(fn)
         t=f.Get('MVATree')
-        events_in_file=t.GetEntries()
+        try:
+            events_in_file=t.GetEntries()
+        except:
+            events_in_file=0
       SaveTreeInforamtion[fn]=events_in_file
       # if the file is larger than maxevents it is analyzed in portions of nevents
       if events_in_file > maxevents:
@@ -3314,6 +3317,9 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
       events_in_files=0
 
     print ntotal_events,'events found in',s.name
+    if ntotal_events==0:
+        print "skipping sample ",s.name
+        continue
   
   # save tree information to json file
     treejson=json.dumps(SaveTreeInforamtion)
