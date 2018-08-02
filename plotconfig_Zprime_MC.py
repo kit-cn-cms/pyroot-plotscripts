@@ -364,7 +364,14 @@ weigthsystnamesMCSFs=[
                     "_" + ABCDversion + "_MCSF_facDown",
 
     ]
-          
+    
+        
+murmufttbar=[
+1.14398309396,0.880338673747,1.11578278373,0.897477695732,1.01990637208,0.975146721204
+]        
+        
+            
+    
 murmufs=[#muR20muF20,muR05muF05,muR20muF10,muR05muF10,muR10muF20,muR10muF05
 [0.943018825183,1.06342163233,0.999902678539,1.00011266322,0.943106166118,1.06331345473],    #1500
 [0.929516248064,1.08024932978,0.999949012411,1.00005880273,0.929561359871,1.08020214758],    #2000
@@ -429,12 +436,12 @@ systweightnamesMCSFs=[
                     "" + ABCDversion + "_ttbarXSDown:=(MCSF_Weight_" + ABCDversion + "*(1.0-0.05))*(DoWeights*DoMCDataWeights_ttbaronly==1)+(DoWeights*DoMCDataWeights_ttbaronly==0)*MCSF_Weight_" + ABCDversion + "+(DoWeights*DoMCDataWeights==0)*1.0",
                     
                     
-                    "" + ABCDversion + "_MCSF_renfacUp:=(MCSF_Weight_" + ABCDversion + "*Weight_scale_variation_muR2p0_muF2p0"+"*("+str(1.29465480107)+"*(DoMCDataWeights_ttbaronly==1)+1.0*(DoMCDataWeights_ST_tW==1+DoMCDataWeights_ST_t==1+DoMCDataWeights_ST_s)*(DoMCDataWeights_ttbaronly==0)+(murmuf1500==1)/"+str(murmufs[0][0])+"+(murmuf2000==1)/"+str(murmufs[1][0])+"+(murmuf2500==1)/"+str(murmufs[2][0])+"))*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "" + ABCDversion + "_MCSF_renfacDown:=(MCSF_Weight_" + ABCDversion + "*Weight_scale_variation_muR0p5_muF0p5"+"*("+str(0.755423761535)+"*(DoMCDataWeights_ttbaronly==1)+1.0*(DoMCDataWeights_ST_tW==1+DoMCDataWeights_ST_t==1+DoMCDataWeights_ST_s)*(DoMCDataWeights_ttbaronly==0)+(murmuf1500==1)/"+str(murmufs[0][1])+"+(murmuf2000==1)/"+str(murmufs[1][1])+"+(murmuf2500==1)/"+str(murmufs[2][1])+"))*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "" + ABCDversion + "_MCSF_renUp:=(MCSF_Weight_" + ABCDversion + "*Weight_scale_variation_muR2p0_muF1p0"+"*("+str(1.12267866063)+"*(DoMCDataWeights_ttbaronly==1)+1.0*(DoMCDataWeights_ST_tW==1+DoMCDataWeights_ST_t==1+DoMCDataWeights_ST_s)*(DoMCDataWeights_ttbaronly==0)+(murmuf1500==1)/"+str(murmufs[0][2])+"+(murmuf2000==1)/"+str(murmufs[1][2])+"+(murmuf2500==1)/"+str(murmufs[2][2])+"))*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "" + ABCDversion + "_MCSF_renDown:=(MCSF_Weight_" + ABCDversion + "*Weight_scale_variation_muR0p5_muF1p0"+"*("+str(0.814903279727)+"*(DoMCDataWeights_ttbaronly==1)+1.0*(DoMCDataWeights_ST_tW==1+DoMCDataWeights_ST_t==1+DoMCDataWeights_ST_s)*(DoMCDataWeights_ttbaronly==0)+(murmuf1500==1)/"+str(murmufs[0][3])+"+(murmuf2000==1)/"+str(murmufs[1][3])+"+(murmuf2500==1)/"+str(murmufs[2][3])+"))*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "" + ABCDversion + "_MCSF_facUp:=(MCSF_Weight_" + ABCDversion + "*Weight_scale_variation_muR1p0_muF2p0"+"*("+str(1.07529312329)+"*(DoMCDataWeights_ttbaronly==1)+1.0*(DoMCDataWeights_ST_tW==1+DoMCDataWeights_ST_t==1+DoMCDataWeights_ST_s)*(DoMCDataWeights_ttbaronly==0)+(murmuf1500==1)/"+str(murmufs[0][4])+"+(murmuf2000==1)/"+str(murmufs[1][4])+"+(murmuf2500==1)/"+str(murmufs[2][4])+"))*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
-                    "" + ABCDversion + "_MCSF_facDown:=(MCSF_Weight_" + ABCDversion + "*Weight_scale_variation_muR1p0_muF0p5"+"*("+str(0.926990626083)+"*(DoMCDataWeights_ttbaronly==1)+1.0*(DoMCDataWeights_ST_tW==1+DoMCDataWeights_ST_t==1+DoMCDataWeights_ST_s)*(DoMCDataWeights_ttbaronly==0)+(murmuf1500==1)/"+str(murmufs[0][5])+"+(murmuf2000==1)/"+str(murmufs[1][5])+"+(murmuf2500==1)/"+str(murmufs[2][5])+"))*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0", 
+                    "" + ABCDversion + "_MCSF_renfacUp:=(MCSF_Weight_" + ABCDversion + "*Weight_scale_variation_muR2p0_muF2p0"+"*("+str(murmufttbar[0])+"*(DoMCDataWeights_ttbaronly==1)+1.0*((DoMCDataWeights_ST_t==1)+(DoMCDataWeights_ST_s==1))*(DoMCDataWeights_ttbaronly==0)+(murmuf1500==1)/"+str(murmufs[0][0])+"+(murmuf2000==1)/"+str(murmufs[1][0])+"+(murmuf2500==1)/"+str(murmufs[2][0])+"))*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "" + ABCDversion + "_MCSF_renfacDown:=(MCSF_Weight_" + ABCDversion + "*Weight_scale_variation_muR0p5_muF0p5"+"*("+str(murmufttbar[1])+"*(DoMCDataWeights_ttbaronly==1)+1.0*((DoMCDataWeights_ST_t==1)+(DoMCDataWeights_ST_s==1))*(DoMCDataWeights_ttbaronly==0)+(murmuf1500==1)/"+str(murmufs[0][1])+"+(murmuf2000==1)/"+str(murmufs[1][1])+"+(murmuf2500==1)/"+str(murmufs[2][1])+"))*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "" + ABCDversion + "_MCSF_renUp:=(MCSF_Weight_" + ABCDversion + "*Weight_scale_variation_muR2p0_muF1p0"+"*("+str(murmufttbar[2])+"*(DoMCDataWeights_ttbaronly==1)+1.0*((DoMCDataWeights_ST_t==1)+(DoMCDataWeights_ST_s==1))*(DoMCDataWeights_ttbaronly==0)+(murmuf1500==1)/"+str(murmufs[0][2])+"+(murmuf2000==1)/"+str(murmufs[1][2])+"+(murmuf2500==1)/"+str(murmufs[2][2])+"))*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "" + ABCDversion + "_MCSF_renDown:=(MCSF_Weight_" + ABCDversion + "*Weight_scale_variation_muR0p5_muF1p0"+"*("+str(murmufttbar[3])+"*(DoMCDataWeights_ttbaronly==1)+1.0*((DoMCDataWeights_ST_t==1)+(DoMCDataWeights_ST_s==1))*(DoMCDataWeights_ttbaronly==0)+(murmuf1500==1)/"+str(murmufs[0][3])+"+(murmuf2000==1)/"+str(murmufs[1][3])+"+(murmuf2500==1)/"+str(murmufs[2][3])+"))*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "" + ABCDversion + "_MCSF_facUp:=(MCSF_Weight_" + ABCDversion + "*Weight_scale_variation_muR1p0_muF2p0"+"*("+str(murmufttbar[4])+"*(DoMCDataWeights_ttbaronly==1)+1.0*((DoMCDataWeights_ST_t==1)+(DoMCDataWeights_ST_s==1))*(DoMCDataWeights_ttbaronly==0)+(murmuf1500==1)/"+str(murmufs[0][4])+"+(murmuf2000==1)/"+str(murmufs[1][4])+"+(murmuf2500==1)/"+str(murmufs[2][4])+"))*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0",
+                    "" + ABCDversion + "_MCSF_facDown:=(MCSF_Weight_" + ABCDversion + "*Weight_scale_variation_muR1p0_muF0p5"+"*("+str(murmufttbar[5])+"*(DoMCDataWeights_ttbaronly==1)+1.0*((DoMCDataWeights_ST_t==1)+(DoMCDataWeights_ST_s==1))*(DoMCDataWeights_ttbaronly==0)+(murmuf1500==1)/"+str(murmufs[0][5])+"+(murmuf2000==1)/"+str(murmufs[1][5])+"+(murmuf2500==1)/"+str(murmufs[2][5])+"))*(DoWeights*DoMCDataWeights==1)+(DoWeights*DoMCDataWeights==0)*1.0", 
 
     ]
     

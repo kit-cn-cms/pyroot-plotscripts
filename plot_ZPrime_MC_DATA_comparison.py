@@ -80,16 +80,16 @@ plots=[
         
         
     Plot(ROOT.TH1F( "N_PrimaryVertices" ,"N_PrimaryVertices" ,50,-0.5,49.5),"N_PrimaryVertices",verybasicplotselection, ""),
-    Plot(ROOT.TH1F( "Evt_HT_Jets" ,"Evt_HT_Jets in GeV" ,50,0,5000),"Evt_HT_Jets",verybasicplotselection, ""),
-    Plot(ROOT.TH1F( "NAK4" ,"N_AK4" ,12,-0.5,11.5),"N_Jets",verybasicplotselection, ""),
-    Plot(ROOT.TH1F( "NAK8" ,"N_AK8" ,12,-0.5,11.5),"N_packedPatJetsAK8PFCHSSoftDrop",verybasicplotselection + "&& N_packedPatJetsAK8PFCHSSoftDrop>-1", ""),    
+    Plot(ROOT.TH1F( "Evt_HT_Jets" ,"HT_{Evt} in GeV" ,50,0,5000),"Evt_HT_Jets",verybasicplotselection, ""),
+    Plot(ROOT.TH1F( "NAK4" ,"N(AK4-jets)" ,9,2.5,11.5),"N_Jets",verybasicplotselection, ""),
+    Plot(ROOT.TH1F( "NAK8" ,"N(AK4-jets" ,10,1.5,11.5),"N_packedPatJetsAK8PFCHSSoftDrop",verybasicplotselection + "&& N_packedPatJetsAK8PFCHSSoftDrop>-1", ""),    
     
-    Plot(ROOT.TH1F( "N_BTagsM" ,"N_BTagsM" ,10,-0.5,9.5),"N_BTagsM",verybasicplotselection, ""),
+    Plot(ROOT.TH1F( "N_BTagsM" ,"N(medium b-tagged AK4-jets)" ,10,-0.5,9.5),"N_BTagsM",verybasicplotselection, ""),
     
     Plot(ROOT.TH1F( "AK4_pT" ,"p_{T}(AK4-jets) in GeV" ,50,0,2000),"Jet_Pt","Jet_Pt &&" + verybasicplotselection, ""),        
-    Plot(ROOT.TH1F( "AK4_Eta" ,"#eta (AK4-jet)" ,50,-2.5,2.5),"Jet_Eta",verybasicplotselection, ""),         
+    Plot(ROOT.TH1F( "AK4_Eta" ,"#eta (AK4-jets)" ,50,-2.5,2.5),"Jet_Eta",verybasicplotselection, ""),         
     Plot(ROOT.TH1F( "AK8_pT" ,"p_{T}(AK8-jets) in GeV" ,50,0,2000),"packedPatJetsAK8PFCHSSoftDrop_Pt","packedPatJetsAK8PFCHSSoftDrop_Pt>0 &&" + verybasicplotselection, ""),
-    Plot(ROOT.TH1F( "AK8_Eta" ,"#eta (AK8-jet)" ,50,-2.5,2.5),"packedPatJetsAK8PFCHSSoftDrop_Eta",verybasicplotselection, ""),        
+    Plot(ROOT.TH1F( "AK8_Eta" ,"#eta (AK8-jets)" ,50,-2.5,2.5),"packedPatJetsAK8PFCHSSoftDrop_Eta",verybasicplotselection, ""),        
     
     Plot(ROOT.TH1F( "AK4_1_pT" ,"p_{T}(first AK4-jet) in GeV" ,50,0,2000),"Jet_Pt[0]","Jet_Pt[0] &&" + verybasicplotselection, ""),            
     Plot(ROOT.TH1F( "AK4_2_pT" ,"p_{T}(second AK4-jet) in GeV" ,50,0,2000),"Jet_Pt[1]","Jet_Pt[1] &&" + verybasicplotselection, ""),            

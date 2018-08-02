@@ -38,14 +38,14 @@ path_80x="/nfs/dust/cms/user/skudella/processed_MC/flat_trees_new/"
 
 SignalSamples=[
                     
-                    Sample('Z->tT,T->Wb, m(Z\')=1.5TeV,m(T)=0.7TeV',ROOT.kMagenta,path_80x+'Signal_Zprime/Zprime*ToWB*1500*700*nominal*Tree.root',mcweight+'/95.06*0.80','SigZprime1500700_tWb'),
-                    Sample('Z->tT,T->Wb, m(Z\')=1.5TeV,m(T)=0.9TeV',ROOT.kMagenta-9,path_80x+'Signal_Zprime/Zprime*ToWB*1500*900*nominal*Tree.root',mcweight+'/138.07*1.5','SigZprime1500900_tWb'),
-                    Sample('Z->tT,T->Wb, m(Z\')=1.5TeV,m(T)=1.2TeV',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Zprime*ToWB*1500*1200*nominal*Tree.root',mcweight+'/99.03*8.6','SigZprime15001200_tWb'),
-                    Sample('Z->tT,T->Wb, m(Z\')=2.0TeV,m(T)=0.9TeV',ROOT.kCyan,path_80x+'Signal_Zprime/Zprime*ToWB*2000*900*nominal*Tree.root',mcweight+'/55.83*0.21','SigZprime2000900_tWb'),
-                    Sample('Z->tT,T->Wb, m(Z\')=2.0TeV,m(T)=1.2TeV',ROOT.kCyan-9,path_80x+'Signal_Zprime/Zprime*ToWB*2000*1200*LH*nominal*Tree.root',mcweight+'/86.28*0.27','SigZprime20001200_tWb'),
-                    Sample('Z->tT,T->Wb, m(Z\')=2.0TeV,m(T)=1.5TeV',ROOT.kCyan+2,path_80x+'Signal_Zprime/Zprime*ToWB*2000*1500*nominal*Tree.root',mcweight+'/83.47*0.90','SigZprime20001500_tWb'),
-                    Sample('Z->tT,T->Wb, m(Z\')=2.5TeV,m(T)=1.2TeV',ROOT.kRed,path_80x+'Signal_Zprime/Zprime*ToWB*2500*1200*nominal*Tree.root',mcweight+'/37.6*0.33','SigZprime25001200_tWb'),
-                    Sample('Z->tT,T->Wb, m(Z\')=2.5TeV,m(T)=1.5TeV',ROOT.kRed-9,path_80x+'Signal_Zprime/Zprime*ToWB*2500*1500*nominal*Tree.root',mcweight+'/53.9*0.29','SigZprime25001500_tWb'),
+                    Sample('m_{Z\'}=1.5 TeV, m_{T}=0.7 TeV',ROOT.kMagenta,path_80x+'Signal_Zprime/Zprime*ToWB*1500*700*nominal*Tree.root',mcweight+'/95.06*0.80','SigZprime1500700_tWb'),
+                    Sample('m_{Z\'}=1.5 TeV, m_{T}=0.9 TeV',ROOT.kMagenta-9,path_80x+'Signal_Zprime/Zprime*ToWB*1500*900*nominal*Tree.root',mcweight+'/138.07*1.5','SigZprime1500900_tWb'),
+                    Sample('m_{Z\'}=1.5 TeV, m_{T}=1.2 TeV',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Zprime*ToWB*1500*1200*nominal*Tree.root',mcweight+'/99.03*8.6','SigZprime15001200_tWb'),
+                    Sample('m_{Z\'}=2.0 TeV, m_{T}=0.9 TeV',ROOT.kCyan,path_80x+'Signal_Zprime/Zprime*ToWB*2000*900*nominal*Tree.root',mcweight+'/55.83*0.21','SigZprime2000900_tWb'),
+                    Sample('m_{Z\'}=2.0 TeV, m_{T}=1.2 TeV',ROOT.kCyan-9,path_80x+'Signal_Zprime/Zprime*ToWB*2000*1200*LH*nominal*Tree.root',mcweight+'/86.28*0.27','SigZprime20001200_tWb'),
+                    Sample('m_{Z\'}=2.0 TeV, m_{T}=1.5 TeV',ROOT.kCyan+2,path_80x+'Signal_Zprime/Zprime*ToWB*2000*1500*nominal*Tree.root',mcweight+'/83.47*0.90','SigZprime20001500_tWb'),
+                    Sample('m_{Z\'}=2.5 TeV, m_{T}=1.2 TeV',ROOT.kRed,path_80x+'Signal_Zprime/Zprime*ToWB*2500*1200*nominal*Tree.root',mcweight+'/37.6*0.33','SigZprime25001200_tWb'),
+                    Sample('m_{Z\'}=2.5 TeV, m_{T}=1.5 TeV',ROOT.kRed-9,path_80x+'Signal_Zprime/Zprime*ToWB*2500*1500*nominal*Tree.root',mcweight+'/53.9*0.29','SigZprime25001500_tWb'),
                     ]
 
 

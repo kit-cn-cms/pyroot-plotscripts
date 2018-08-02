@@ -106,24 +106,6 @@ if ABCDversion is 'ABCD5':
     generalselection=plotselection_ABCD5_general
     generalselection_0=plotselection_ABCD5_general_0
     generalselection_i=plotselection_ABCD5_general_i
-    
-    generalselection_JetMassScaleUp=plotselection_ABCD5_general_JetMassScaleUp
-    generalselection_JetMassScaleUp_0=plotselection_ABCD5_general_JetMassScaleUp_0
-    generalselection_JetMassScaleUp_i=plotselection_ABCD5_general_JetMassScaleUp_i  
-  
-    generalselection_JetMassScaleDown=plotselection_ABCD5_general_JetMassScaleDown
-    generalselection_JetMassScaleDown_0=plotselection_ABCD5_general_JetMassScaleDown_0
-    generalselection_JetMassScaleDown_i=plotselection_ABCD5_general_JetMassScaleDown_i
-    
-    generalselection_JetMassResUp=plotselection_ABCD5_general_JetMassResUp
-    generalselection_JetMassResUp_0=plotselection_ABCD5_general_JetMassResUp_0
-    generalselection_JetMassResUp_i=plotselection_ABCD5_general_JetMassResUp_i
-    
-    generalselection_JetMassResDown=plotselection_ABCD5_general_JetMassResDown
-    generalselection_JetMassResDown_0=plotselection_ABCD5_general_JetMassResDown_0
-    generalselection_JetMassResDown_i=plotselection_ABCD5_general_JetMassResDown_i    
-    
-    
     cut1=plotselection_W_MSD
     cut1_0=plotselection_W_MSD_0
     cut1_i=plotselection_W_MSD_i
@@ -143,8 +125,6 @@ if ABCDversion is 'ABCD5':
     cut3_anti=plotselection_W_tau21_anti
     cut3_anti_0=plotselection_W_tau21_anti_0
     cut3_anti_i=plotselection_W_tau21_anti_i
-    
-    
     
     if radi=='CHSSoftDrop':
         if WZwindow and fullWMSD:
@@ -182,19 +162,12 @@ if ABCDversion is 'ABCD5':
                 #Zprime_notopbtag_systshape_c=1.09896
               if bottomWP=='medium':
                   if topWP=='loose':
-                    #Zprime_withtopbtag_systrate=0.0736834218346
-                    #Zprime_withtopbtag_systshape_m=0.000157325109262
-                    #Zprime_withtopbtag_systshape_c=1.12496
-                    #Zprime_notopbtag_systrate=0.0428972485948 
-                    #Zprime_notopbtag_systshape_m=6.92106626942e-05
-                    #Zprime_notopbtag_systshape_c=1.09896      
-                    
-                    Zprime_withtopbtag_systrate=0.100533388233
-                    Zprime_withtopbtag_systshape_m=0.0001950250116
+                    Zprime_withtopbtag_systrate=0.0736834218346
+                    Zprime_withtopbtag_systshape_m=0.000157325109262
                     Zprime_withtopbtag_systshape_c=1.12496
-                    Zprime_notopbtag_systrate=0.0485657524616 
-                    Zprime_notopbtag_systshape_m=7.03893690402e-05
-                    Zprime_notopbtag_systshape_c=1.09896                        
+                    Zprime_notopbtag_systrate=0.0428972485948 
+                    Zprime_notopbtag_systshape_m=6.92106626942e-05
+                    Zprime_notopbtag_systshape_c=1.09896                  
                   if topWP=='medium':
                     Zprime_withtopbtag_systrate=0.0556968382142
                     Zprime_withtopbtag_systshape_m=4.83210624517e-05
@@ -276,11 +249,13 @@ if ABCDversion is 'ABCD7':
 
 pdf_normweightsttbar=[1.0285403928,0.990114159298,0.988584387133,1.01889332059,1.05237299927,0.990719379875,1.00301419012,0.989663113443,0.991213672507,1.01552978649,1.02919060016,0.993578383217,0.986258507017,0.989247880748,0.982315499527,0.990532531623,0.966543378558,0.984182264085,1.00121033535,0.98135925712,1.00565177648,1.0294786568,0.975096957768,1.02173090511,1.00232509869,1.01187842359,0.963790618158,0.993565976416,0.984103730765,0.994145810228,1.01694070493,1.019344479,1.01172956295,1.02709298741,0.962844423667,0.997843355474,0.980248409009,1.00381417816,1.01965674945,1.01152287811,1.00897608998,1.00672764538,1.02184748569,1.0104982065,1.01090950727,1.01372748795,0.997178341661,0.996356071703,0.991194332369,1.00457633422,1.00963244698,1.0099716397,1.00881927905,0.993733091322,1.00809331987,0.991929935383,0.990390359819,1.0093097003,0.986283737755,1.00761916317,1.00164630037,1.00108546959,1.00139198427,0.989844800211,0.990147536673,1.00950490752,0.960738336277,1.00176385194,1.0083175853,1.00345779683,1.01894242063,1.00451400139,1.01758593874,0.990464886279,1.00042586582,1.0414231102,1.02063812865,0.98302683342,1.00573007249,1.00645654393,1.00834027486,1.01479418482,0.978745112178,1.00152348867,0.999542226965,0.99713256733,0.987922642322,0.989194765429,0.976009425862,1.00978848378,1.00540542912,1.00768618879,0.988494121995,0.992451445508,0.982438151277,0.993567630021,0.996536555276,1.00522587406,0.979009767484,0.974661266971]
 
-#stringforPDFs="float Weight_pdf_1"
-#stringforPDFs1="Weight_pdf_1"
-#stringforPDFs2="""
-#PDFweights.push_back(Weight_pdf_1);
-#"""
+#:Weight_LHA_NNPDF30_lo_as_0130_nf_4263400
+
+stringforPDFs="float Weight_LHA_NNPDF30_lo_as_0130_nf_4263400"
+stringforPDFs1="Weight_LHA_NNPDF30_lo_as_0130_nf_4263400"
+stringforPDFs2="""
+PDFweights.push_back(Weight_LHA_NNPDF30_lo_as_0130_nf_4263400);
+"""
 #stringforPDFs_new="float Weight_pdf_new_1"
 #stringforPDFs1_new="Weight_pdf_new_1"
 #stringforPDFs2_new="""
@@ -297,23 +272,23 @@ pdf_normweightsttbar=[1.0285403928,0.990114159298,0.988584387133,1.01889332059,1
 #"""
 
 
-#for i in range(2,100):
-    ##if i<10:
-        ##istring="00"+str(i)
-    ##if i>9 and i<100:
-        ##istring="0"+str(i)
-    ##if i>99:
-        ##istring=""+str(i)
-    ##stringforPDFs=stringforPDFs+(", float Weight_nnpdf30_lo_as_0130_"+str(i))
-    ##stringforPDFs1=stringforPDFs1+(", Weight_nnpdf30_lo_as_0130_"+str(i))
-    ##stringforPDFs2=stringforPDFs2+("PDFweights.push_back(Weight_nnpdf30_lo_as_0130_"+str(i)+");")
-    ##stringforPDFs=stringforPDFs+(", float Weight_pdf_variation_260"+istring)
-    ##stringforPDFs1=stringforPDFs1+(", Weight_pdf_variation_260"+istring)
-    ##stringforPDFs2=stringforPDFs2+("PDFweights.push_back(Weight_pdf_variation_260"+istring+");")
-    #istring=str(i)
-    #stringforPDFs=stringforPDFs+(", float Weight_pdf_"+istring)
-    #stringforPDFs1=stringforPDFs1+(", Weight_pdf_"+istring)
-    #stringforPDFs2=stringforPDFs2+("PDFweights.push_back(Weight_pdf_"+istring+");")
+for i in range(1,99):
+    #if i<10:
+        #istring="00"+str(i)
+    #if i>9 and i<100:
+        #istring="0"+str(i)
+    #if i>99:
+        #istring=""+str(i)
+    #stringforPDFs=stringforPDFs+(", float Weight_nnpdf30_lo_as_0130_"+str(i))
+    #stringforPDFs1=stringforPDFs1+(", Weight_nnpdf30_lo_as_0130_"+str(i))
+    #stringforPDFs2=stringforPDFs2+("PDFweights.push_back(Weight_nnpdf30_lo_as_0130_"+str(i)+");")
+    #stringforPDFs=stringforPDFs+(", float Weight_pdf_variation_260"+istring)
+    #stringforPDFs1=stringforPDFs1+(", Weight_pdf_variation_260"+istring)
+    #stringforPDFs2=stringforPDFs2+("PDFweights.push_back(Weight_pdf_variation_260"+istring+");")
+    istring=str(4263400+i)
+    stringforPDFs=stringforPDFs+(", float Weight_LHA_NNPDF30_lo_as_0130_nf_"+istring)
+    stringforPDFs1=stringforPDFs1+(", Weight_LHA_NNPDF30_lo_as_0130_nf_"+istring)
+    stringforPDFs2=stringforPDFs2+("PDFweights.push_back(Weight_LHA_NNPDF30_lo_as_0130_nf_"+istring+");")
     #stringforPDFs_new=stringforPDFs_new+(", float Weight_pdf_new_"+istring)
     #stringforPDFs1_new=stringforPDFs1_new+(", Weight_pdf_new_"+istring)
     #stringforPDFs2_new=stringforPDFs2_new+("PDFweights_new.push_back(Weight_pdf_new_"+istring+");")    #print stringforPDFs
@@ -330,39 +305,34 @@ additionalfunctions=[
                         ##"float anti_loose_btag(const float* bottomCSVs, int sizeofarray){"+"\n"+"   float anti_tag=1;"+"\n"+"      for (int i=0;  i<sizeofarray;i++){"+"\n"+"        if (bottomCSVs[i]>0.46){"+"\n"+"        anti_tag=0;"+"\n"+"      }"+"\n"+"      }"+"\n"+"    return anti_tag;"+"}",
                         
 
-#"""
+"""
    
 
-#std::vector<float> PDF_RMS(""" + stringforPDFs+""", """+stringforPDFs_new+ """,bool DoMCDataWeights_ttbaronly){
-    #std::vector<float> PDFweights;
-    #std::vector<float> PDFweights_new;
-    #std::vector<float> PDFweights_refac;
-    #std::vector<float> res;
-    #float RMSmean=0.0;
-    #float RMSerror=0.0;
-    #"""+stringforPDFs3_refac+"""
-    #"""+stringforPDFs2+"""
-    #"""+stringforPDFs2_new+"""
-    #"""+stringforPDFs2_refac+"""
+std::vector<float> PDF_RMS(""" + stringforPDFs+"""){
+    std::vector<float> PDFweights;
+    std::vector<float> res;
+    float RMSmean=0.0;
+    float RMSerror=0.0;
+    """+stringforPDFs2+"""
     
     
-    #for(int i=0; i<PDFweights.size(); i++){
-        #RMSmean+=PDFweights[i]*PDFweights[i]*PDFweights_new[i]*PDFweights_new[i]*PDFweights_refac[i]*PDFweights_refac[i];
-    #}
-    #RMSmean=sqrt(RMSmean/float(PDFweights.size()));
-    #for(int i=0; i<PDFweights.size(); i++){
-        #RMSerror+=(RMSmean-PDFweights[i]*PDFweights_new[i]*PDFweights_refac[i])*(RMSmean-PDFweights[i]*PDFweights_new[i]*PDFweights_refac[i]);      
-    #}
-    #RMSerror=sqrt(RMSerror/float(PDFweights.size()));
-    #if (RMSmean>3.0 || RMSmean<0.0 || RMSerror>3.0 || RMSerror<0.0){ RMSmean=1.0; RMSerror=1.0; };
-    #res.push_back(RMSmean);
-    #res.push_back(RMSmean+RMSerror);
-    #res.push_back(RMSmean-RMSerror);
+    for(int i=0; i<PDFweights.size(); i++){
+        RMSmean+=PDFweights[i]*PDFweights[i];
+    }
+    RMSmean=sqrt(RMSmean/float(PDFweights.size()));
+    for(int i=0; i<PDFweights.size(); i++){
+        RMSerror+=(RMSmean-PDFweights[i])*(RMSmean-PDFweights[i]);      
+    }
+    RMSerror=sqrt(RMSerror/float(PDFweights.size()));
+    if (RMSmean>3.0 || RMSmean<0.0 || RMSerror>3.0 || RMSerror<0.0){ RMSmean=1.0; RMSerror=1.0; };
+    res.push_back(RMSmean);
+    res.push_back(RMSmean+RMSerror);
+    res.push_back(RMSmean-RMSerror);
     
-    #return res;
-#}
-#"""                        
-#,                        
+    return res;
+}
+"""                        
+,                        
 """
 float anti_loose_btag(float const* bottomCSVs, int sizeofarray){
     float anti_tag=1;
@@ -376,35 +346,6 @@ float anti_loose_btag(float const* bottomCSVs, int sizeofarray){
     return anti_tag;
 }
 """,
-
-
-#"""
-#std::vector<float> smearWmassfactor(float mass, float phi, float eta){
-    #std::vector<float> res;
-
-    
-    #UInt_t seed = int((phi + 10.0)*10000);
-    #int warmup = int((eta + 10.0)*100);
-    
-   
-    #TRandom3 myrandom=TRandom3(seed);
-    
-    #for (int i=0; i<warmup; i++){
-        #myrandom.Gaus(0.0,7.99);
-    #}
-    
-    #float randomnumber=myrandom.Gaus(0.0,7.99/82.0);
-    #res.push_back(1+sqrt(1.23*1.23 -1.0)*randomnumber);
-    #res.push_back(1+sqrt((1.23+0.18)*(1.23+0.18) -1.0)*randomnumber);
-    #res.push_back(1+sqrt((1.23-0.18)*(1.23-0.18) -1.0)*randomnumber);
-
-    
-    
-    #return res;
-
-#}
-#"""
-#,
 
 """
 
@@ -481,7 +422,7 @@ std::vector<float> bbarportionweight(int const N){
 """,
 
 """
-int ABCD_Category(float const* Zprimes_ABCD""" +  radi + """_M, float const* Tprimes_ABCD""" +  radi + """_M, float const* Tops_ABCD""" +  radi + """_maxsubjetCSVv2, float const* Ws_ABCD""" +  radi + """_MSD_smeared, float const* Ws_ABCD""" +  radi + """_corrL2L3, float const* Tops_ABCD""" +  radi + """_MSD, float const* Tops_ABCD""" +  radi + """_corrL2L3, float const* Tops_ABCD""" +  radi + """_t32, float const* Bottoms_ABCD""" +  radi + """_CSV, float const* Ws_ABCD""" +  radi + """_t21, float const* Ws_ABCD""" + radi + """_Pt, float const* Tops_ABCD""" + radi + """_Pt, float const* Bottoms_ABCD""" + radi + """_Pt, float Evt_HT_Jets, int N_Zprime_ABCD""" + radi + """, float N_Jets, float N_packedPatJetsAK8PF""" +  radi + """){
+int ABCD_Category(float const* Zprimes_ABCD""" +  radi + """_M, float const* Tprimes_ABCD""" +  radi + """_M, float const* Tops_ABCD""" +  radi + """_maxsubjetCSVv2, float const* Ws_ABCD""" +  radi + """_MSD, float const* Ws_ABCD""" +  radi + """_corrL2L3, float const* Tops_ABCD""" +  radi + """_MSD, float const* Tops_ABCD""" +  radi + """_corrL2L3, float const* Tops_ABCD""" +  radi + """_t32, float const* Bottoms_ABCD""" +  radi + """_CSV, float const* Ws_ABCD""" +  radi + """_t21, float const* Ws_ABCD""" + radi + """_Pt, float const* Tops_ABCD""" + radi + """_Pt, float const* Bottoms_ABCD""" + radi + """_Pt, float Evt_HT_Jets, int N_Zprime_ABCD""" + radi + """, float N_Jets, float N_packedPatJetsAK8PF""" +  radi + """){
 
     int res=0;
     for (int i=0; i<N_Zprime_ABCD""" +  radi + """; i++){
@@ -584,706 +525,10 @@ int ABCD_Category(float const* Zprimes_ABCD""" +  radi + """_M, float const* Tpr
 }
 """,
 
-#"""
-#std::vector<float> ABCD_Category_WJetMassScale(float const* Zprimes_ABCD""" +  radi + """_M, float const* Tprimes_ABCD""" +  radi + """_M, float const* Tops_ABCD""" +  radi + """_maxsubjetCSVv2, float const* Topsubjets_ABCD""" + radi + """_WeightCSVnominal, float const* Ws_ABCD""" +  radi + """_MSD_smeared, float const* Ws_ABCD""" +  radi + """_corrL2L3, float const* Tops_ABCD""" +  radi + """_MSD, float const* Tops_ABCD""" +  radi + """_corrL2L3, float const* Tops_ABCD""" +  radi + """_t32, float const* Bottoms_ABCD""" +  radi + """_CSV, float const* Bottoms_ABCD""" + radi + """_WeightCSVnominal, float const* Ws_ABCD""" +  radi + """_t21, float const* Ws_ABCD""" + radi + """_Pt, float const* Tops_ABCD""" + radi + """_Pt, float const* Bottoms_ABCD""" + radi + """_Pt){
-
-    #std::vector<float> res;
-
-    #float resup=0;
-    #float resdown=0;
-    
-    #float CSVnominal=1.0;
-    
-   
-    #float toptagnominal=1.0;
-
-    
-    #float Wtag_tag_nominal=1.0;
-
-    
-
-    #res.push_back(resup);
-    #res.push_back(resdown);
-    #res.push_back(CSVnominal*toptagnominal*Wtag_tag_nominal);
-    
-#}
-#""",
 
 
 """
-std::vector<float> ABCD_Category_WJetMassScale(float const* Zprimes_ABCD""" +  radi + """_M, float const* Tprimes_ABCD""" +  radi + """_M, float const* Tops_ABCD""" +  radi + """_maxsubjetCSVv2, float const* Topsubjets_ABCD""" + radi + """_WeightCSVnominal, float const* Ws_ABCD""" +  radi + """_MSD_smeared, float const* Ws_ABCD""" +  radi + """_corrL2L3, float const* Tops_ABCD""" +  radi + """_MSD, float const* Tops_ABCD""" +  radi + """_corrL2L3, float const* Tops_ABCD""" +  radi + """_t32, float const* Bottoms_ABCD""" +  radi + """_CSV, float const* Bottoms_ABCD""" + radi + """_WeightCSVnominal, float const* Ws_ABCD""" +  radi + """_t21, float const* Ws_ABCD""" + radi + """_Pt, float const* Tops_ABCD""" + radi + """_Pt, float const* Bottoms_ABCD""" + radi + """_Pt, float Evt_HT_Jets, int N_Zprime_ABCD""" + radi + """, float N_Jets, float N_packedPatJetsAK8PF""" +  radi + """, float const* Tops_ABCD""" + radi + """_real, float const* Tops_ABCD""" + radi + """_matcheddecays){
-
-    std::vector<float> res;
-
-    float resup=0;
-    float resdown=0;
-    
-    float CSVnominal_up=1.0;
-    float CSVnominal_down=1.0;
-    
-    float toptagnominal_up=1.0;
-    float toptagnominal_down=1.0;
-
-    
-    float SF_top_tau32_MSD_=""" + MCSF_top_t32_MSD + """;
-    float SF_top_tau32_MSDanti_=""" + MCSF_top_t32_MSD_down + """;
-    float SF_top_tau32anti_MSD_=""" + MCSF_top_t32_MSD + """;
-    float SF_top_tau32anti_MSDanti_=""" + MCSF_top_t32_MSD + """;
-    
-    float SF_topmiss_tau32_MSD_=""" + MCSF_topmiss_t32_MSD + """;
-    float SF_topmiss_tau32_MSDanti_=""" + MCSF_topmiss_t32_MSDanti + """;
-    float SF_topmiss_tau32anti_MSD_=""" + MCSF_topmiss_t32anti_MSD + """;
-    float SF_topmiss_tau32anti_MSDanti_=""" + MCSF_topmiss_t32anti_MSDanti + """;
-    
-    float Wtag_tag_nominal_up=1.0;
-    float Wtag_tag_nominal_down=1.0;
-    
-    float SF_W_tau21_MSD=""" + MCSF_W_t21_MSD + """;
-    float SF_W_tau21_MSDanti=""" + MCSF_W_t21_MSDanti + """;
-    float SF_W_tau21anti_MSD=""" + MCSF_W_t21anti_MSD + """;
-    float SF_W_tau21anti_MSDanti=""" + MCSF_W_t21anti_MSDanti + """;
-    
-    for (int i=0; i<N_Zprime_ABCD""" +  radi + """; i++){
-        if ("""+ generalselection_JetMassScaleUp_i +"""){
-        
-            if (Bottoms_ABCD""" + radi + """_WeightCSVnominal[i]>=0 && Bottoms_ABCD""" + radi + """_WeightCSVnominal[i]<=1000 && Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]>=0 && Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]<=1000){
-                CSVnominal_up = Bottoms_ABCD""" + radi + """_WeightCSVnominal[i]*Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i];
-            }
-            if(Tops_ABCD""" + radi + """_real[i]==1){
-                if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_i + """){
-                    toptagnominal_up = SF_top_tau32_MSD_;
-                }
-                if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_i + """){
-                    toptagnominal_up = SF_top_tau32anti_MSD_;
-                }
-                if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_anti_i + """){
-                    toptagnominal_up = SF_top_tau32_MSDanti_;
-                }
-                if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_anti_i + """){
-                    toptagnominal_up = SF_top_tau32anti_MSDanti_;
-                }
-            } else {
-                if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_i + """){
-                    toptagnominal_up = SF_topmiss_tau32_MSD_;
-                }
-                if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_i + """){
-                    toptagnominal_up = SF_topmiss_tau32anti_MSD_;
-                }
-                if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_anti_i + """){
-                    toptagnominal_up = SF_topmiss_tau32_MSDanti_;
-                }
-                if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_anti_i + """){
-                    toptagnominal_up = SF_topmiss_tau32anti_MSDanti_;
-                }
-            }
-            if((""" + plotselection_W_MSD_JetMassScaleUp_i + """)||("""+plotselection_W_MSD_anti_JetMassScaleUp_i+""")){
-                if(""" + plotselection_W_tau21_i + """ && ((""" + plotselection_W_MSD_JetMassScaleUp_i + """))){
-                    Wtag_tag_nominal_up = SF_W_tau21_MSD;  
-                }
-                if(""" + plotselection_W_tau21_anti_i + """ && ((""" + plotselection_W_MSD_JetMassScaleUp_i + """))){
-                    Wtag_tag_nominal_up = SF_W_tau21anti_MSD;            
-                }
-                if(""" + plotselection_W_tau21_i + """ && ((""" + plotselection_W_MSD_anti_JetMassScaleUp_i + """))){
-                    Wtag_tag_nominal_up = SF_W_tau21_MSDanti;            
-                }
-                if(""" + plotselection_W_tau21_anti_i + """ && ((""" + plotselection_W_MSD_anti_JetMassScaleUp_i + """))){
-                    Wtag_tag_nominal_up = SF_W_tau21anti_MSDanti;            
-                }                        
-            }
-            
-            if("""+ plotselection_topsubjetCSVv2_i +"""){
-                if("""+ plotselection_W_MSD_JetMassScaleUp_i +"""){
-                    if("""+ cut2_i + """){
-                        if(""" + cut3_i + """){
-                        
-                      
-                            resup=1;
-                            break;
-                        }
-                        if(""" + cut3_anti_i + """){
-                            resup=2;
-                            break;
-                        }
-                    }
-                    if("""+ cut2_anti_i + """){
-                        if(""" + cut3_i + """){
-                            resup=3;
-                            break;
-                        }
-                        if(""" + cut3_anti_i + """){
-                            resup=4;
-                            break;
-                        }
-                    }                
-                }
-                if("""+ plotselection_W_MSD_anti_JetMassScaleUp_i +"""){
-                    if("""+ cut2_i + """){
-                        if(""" + cut3_i + """){
-                            resup=5;
-                            break;
-                        }
-                        if(""" + cut3_anti_i + """){
-                            resup=6;
-                            break;
-                        }
-                    }
-        
-                    if("""+ cut2_anti_i + """){
-                        if(""" + cut3_i + """){
-                            resup=7;
-                            break;
-                        }
-                        if(""" + cut3_anti_i + """){
-                            resup=8;
-                            break;
-                        }
-                    }                
-                }
-            } else {
-                if("""+ plotselection_W_MSD_JetMassScaleUp_i +"""){
-                    if("""+ cut2_i + """){
-                        if(""" + cut3_i + """){
-                            resup=9;
-                            break;
-                        }
-                        if(""" + cut3_anti_i + """){
-                            resup=10;
-                            break;
-                        }
-                    }
-                    if("""+ cut2_anti_i + """){
-                        if(""" + cut3_i + """){
-                            resup=11;
-                            break;
-                        }
-                        if(""" + cut3_anti_i + """){
-                            resup=12;
-                            break;
-                        }
-                    }                
-                }
-                if("""+ plotselection_W_MSD_anti_JetMassScaleUp_i +"""){
-                    if("""+ cut2_i + """){
-                        if(""" + cut3_i + """){
-                            resup=13;
-                            break;
-                        }
-                        if(""" + cut3_anti_i + """){
-                            resup=14;
-                            break;
-                        }
-                    }
-                    if("""+ cut2_anti_i + """){
-                        if(""" + cut3_i + """){
-                            resup=15;
-                            break;
-                        }
-                        if(""" + cut3_anti_i + """){
-                            resup=16;
-                            break;
-                        }
-                    }                
-                }
-            }
-        }
-    }
-    
-    
-    for (int i=0; i<N_Zprime_ABCD""" +  radi + """; i++){
-        if ("""+ generalselection_JetMassScaleDown_i +"""){
-        
-            if (Bottoms_ABCD""" + radi + """_WeightCSVnominal[i]>=0 && Bottoms_ABCD""" + radi + """_WeightCSVnominal[i]<=1000 && Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]>=0 && Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]<=1000){
-                CSVnominal_down = Bottoms_ABCD""" + radi + """_WeightCSVnominal[i]*Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i];
-            }
-            if(Tops_ABCD""" + radi + """_real[i]==1){
-                if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_i + """){
-                    toptagnominal_down = SF_top_tau32_MSD_;
-                }
-                if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_i + """){
-                    toptagnominal_down = SF_top_tau32anti_MSD_;
-                }
-                if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_anti_i + """){
-                    toptagnominal_down = SF_top_tau32_MSDanti_;
-                }
-                if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_anti_i + """){
-                    toptagnominal_down = SF_top_tau32anti_MSDanti_;
-                }
-            } else {
-                if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_i + """){
-                    toptagnominal_down = SF_topmiss_tau32_MSD_;
-                }
-                if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_i + """){
-                    toptagnominal_down = SF_topmiss_tau32anti_MSD_;
-                }
-                if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_anti_i + """){
-                    toptagnominal_down = SF_topmiss_tau32_MSDanti_;
-                }
-                if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_anti_i + """){
-                    toptagnominal_down = SF_topmiss_tau32anti_MSDanti_;
-                }
-            }
-            if((""" + plotselection_W_MSD_JetMassScaleDown_i + """)||("""+plotselection_W_MSD_anti_JetMassScaleDown_i+""")){
-                if(""" + plotselection_W_tau21_i + """ && ((""" + plotselection_W_MSD_JetMassScaleDown_i + """))){
-                    Wtag_tag_nominal_down = SF_W_tau21_MSD;  
-                }
-                if(""" + plotselection_W_tau21_anti_i + """ && ((""" + plotselection_W_MSD_JetMassScaleDown_i + """))){
-                    Wtag_tag_nominal_down = SF_W_tau21anti_MSD;            
-                }
-                if(""" + plotselection_W_tau21_i + """ && ((""" + plotselection_W_MSD_anti_JetMassScaleDown_i + """))){
-                    Wtag_tag_nominal_down = SF_W_tau21_MSDanti;            
-                }
-                if(""" + plotselection_W_tau21_anti_i + """ && ((""" + plotselection_W_MSD_anti_JetMassScaleDown_i + """))){
-                    Wtag_tag_nominal_down = SF_W_tau21anti_MSDanti;            
-                }                        
-            }
-            
-        
-            if("""+ plotselection_topsubjetCSVv2_i +"""){
-                if("""+ plotselection_W_MSD_JetMassScaleDown_i +"""){
-                    if("""+ cut2_i + """){
-                        if(""" + cut3_i + """){
-                        
-                      
-                            resdown=1;
-                            break;
-                        }
-                        if(""" + cut3_anti_i + """){
-                            resdown=2;
-                            break;
-                        }
-                    }
-                    if("""+ cut2_anti_i + """){
-                        if(""" + cut3_i + """){
-                            resdown=3;
-                            break;
-                        }
-                        if(""" + cut3_anti_i + """){
-                            resdown=4;
-                            break;
-                        }
-                    }                
-                }
-                if("""+ plotselection_W_MSD_anti_JetMassScaleDown_i +"""){
-                    if("""+ cut2_i + """){
-                        if(""" + cut3_i + """){
-                            resdown=5;
-                            break;
-                        }
-                        if(""" + cut3_anti_i + """){
-                            resdown=6;
-                            break;
-                        }
-                    }
-        
-                    if("""+ cut2_anti_i + """){
-                        if(""" + cut3_i + """){
-                            resdown=7;
-                            break;
-                        }
-                        if(""" + cut3_anti_i + """){
-                            resdown=8;
-                            break;
-                        }
-                    }                
-                }
-            } else {
-                if("""+ plotselection_W_MSD_JetMassScaleDown_i +"""){
-                    if("""+ cut2_i + """){
-                        if(""" + cut3_i + """){
-                            resdown=9;
-                            break;
-                        }
-                        if(""" + cut3_anti_i + """){
-                            resdown=10;
-                            break;
-                        }
-                    }
-                    if("""+ cut2_anti_i + """){
-                        if(""" + cut3_i + """){
-                            resdown=11;
-                            break;
-                        }
-                        if(""" + cut3_anti_i + """){
-                            resdown=12;
-                            break;
-                        }
-                    }                
-                }
-                if("""+ plotselection_W_MSD_anti_JetMassScaleDown_i +"""){
-                    if("""+ cut2_i + """){
-                        if(""" + cut3_i + """){
-                            resdown=13;
-                            break;
-                        }
-                        if(""" + cut3_anti_i + """){
-                            resdown=14;
-                            break;
-                        }
-                    }
-                    if("""+ cut2_anti_i + """){
-                        if(""" + cut3_i + """){
-                            resdown=15;
-                            break;
-                        }
-                        if(""" + cut3_anti_i + """){
-                            resdown=16;
-                            break;
-                        }
-                    }                
-                }
-            }
-        }
-    }
-    res.push_back(resup);
-    res.push_back(resdown);
-    res.push_back(CSVnominal_up*toptagnominal_up*Wtag_tag_nominal_up);
-    res.push_back(CSVnominal_down*toptagnominal_down*Wtag_tag_nominal_down);
-    //std::cout<<"res hier"<<std::endl;
-    //for (int i=0; i<3; i++){
-    //std::cout<<"res"<<i<<"  "<<res[i]<<std::endl;
-    //}
-    return res;
-}
-""",
-
-"""
-std::vector<float> ABCD_Category_JetMassResolution(float const* Zprimes_ABCD""" +  radi + """_M, float const* Tprimes_ABCD""" +  radi + """_M, float const* Tops_ABCD""" +  radi + """_maxsubjetCSVv2, float const* Topsubjets_ABCD""" + radi + """_WeightCSVnominal, float const* Ws_ABCD""" +  radi + """_MSD_JetResup, float const* Ws_ABCD""" +  radi + """_MSD_JetResdown, float const* Ws_ABCD""" +  radi + """_corrL2L3, float const* Tops_ABCD""" +  radi + """_MSD, float const* Tops_ABCD""" +  radi + """_corrL2L3, float const* Tops_ABCD""" +  radi + """_t32, float const* Bottoms_ABCD""" +  radi + """_CSV, float const* Bottoms_ABCD""" + radi + """_WeightCSVnominal, float const* Ws_ABCD""" +  radi + """_t21, float const* Ws_ABCD""" + radi + """_Pt, float const* Tops_ABCD""" + radi + """_Pt, float const* Bottoms_ABCD""" + radi + """_Pt, float Evt_HT_Jets, int N_Zprime_ABCD""" + radi + """, float N_Jets, float N_packedPatJetsAK8PF""" +  radi + """, float const* Tops_ABCD""" + radi + """_real, float const* Tops_ABCD""" + radi + """_matcheddecays){
-
-    std::vector<float> res;
-
-    float resup=0;
-    float resdown=0;
-    
-    float CSVnominal_up=1.0;
-    float CSVnominal_down=1.0;
-    
-   
-    float toptagnominal_up=1.0;
-    float toptagnominal_down=1.0;
-
-    
-    float SF_top_tau32_MSD_=""" + MCSF_top_t32_MSD + """;
-    float SF_top_tau32_MSDanti_=""" + MCSF_top_t32_MSD_down + """;
-    float SF_top_tau32anti_MSD_=""" + MCSF_top_t32_MSD + """;
-    float SF_top_tau32anti_MSDanti_=""" + MCSF_top_t32_MSD + """;
-    
-    float SF_topmiss_tau32_MSD_=""" + MCSF_topmiss_t32_MSD + """;
-    float SF_topmiss_tau32_MSDanti_=""" + MCSF_topmiss_t32_MSDanti + """;
-    float SF_topmiss_tau32anti_MSD_=""" + MCSF_topmiss_t32anti_MSD + """;
-    float SF_topmiss_tau32anti_MSDanti_=""" + MCSF_topmiss_t32anti_MSDanti + """;
-    
-    float Wtag_tag_nominal_up=1.0;
-    float Wtag_tag_nominal_down=1.0;
-    
-    float SF_W_tau21_MSD=""" + MCSF_W_t21_MSD + """;
-    float SF_W_tau21_MSDanti=""" + MCSF_W_t21_MSDanti + """;
-    float SF_W_tau21anti_MSD=""" + MCSF_W_t21anti_MSD + """;
-    float SF_W_tau21anti_MSDanti=""" + MCSF_W_t21anti_MSDanti + """;
-    
-    for (int i=0; i<N_Zprime_ABCD""" +  radi + """; i++){
-        if ("""+ generalselection_JetMassResUp_i +"""){
-        
-            if (Bottoms_ABCD""" + radi + """_WeightCSVnominal[i]>=0 && Bottoms_ABCD""" + radi + """_WeightCSVnominal[i]<=1000 && Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]>=0 && Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]<=1000){
-                CSVnominal_up = Bottoms_ABCD""" + radi + """_WeightCSVnominal[i]*Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i];
-            }
-            if(Tops_ABCD""" + radi + """_real[i]==1){
-                if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_i + """){
-                    toptagnominal_up = SF_top_tau32_MSD_;
-                }
-                if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_i + """){
-                    toptagnominal_up = SF_top_tau32anti_MSD_;
-                }
-                if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_anti_i + """){
-                    toptagnominal_up = SF_top_tau32_MSDanti_;
-                }
-                if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_anti_i + """){
-                    toptagnominal_up = SF_top_tau32anti_MSDanti_;
-                }
-            } else {
-                if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_i + """){
-                    toptagnominal_up = SF_topmiss_tau32_MSD_;
-                }
-                if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_i + """){
-                    toptagnominal_up = SF_topmiss_tau32anti_MSD_;
-                }
-                if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_anti_i + """){
-                    toptagnominal_up = SF_topmiss_tau32_MSDanti_;
-                }
-                if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_anti_i + """){
-                    toptagnominal_up = SF_topmiss_tau32anti_MSDanti_;
-                }
-            }
-            if((""" + plotselection_W_MSD_JetMassResUp_i + """)||("""+plotselection_W_MSD_anti_JetMassResUp_i+""")){
-                if(""" + plotselection_W_tau21_i + """ && ((""" + plotselection_W_MSD_JetMassResUp_i + """))){
-                    Wtag_tag_nominal_up = SF_W_tau21_MSD;  
-                }
-                if(""" + plotselection_W_tau21_anti_i + """ && ((""" + plotselection_W_MSD_JetMassResUp_i + """))){
-                    Wtag_tag_nominal_up = SF_W_tau21anti_MSD;            
-                }
-                if(""" + plotselection_W_tau21_i + """ && ((""" + plotselection_W_MSD_anti_JetMassResUp_i + """))){
-                    Wtag_tag_nominal_up = SF_W_tau21_MSDanti;            
-                }
-                if(""" + plotselection_W_tau21_anti_i + """ && ((""" + plotselection_W_MSD_anti_JetMassResUp_i + """))){
-                    Wtag_tag_nominal_up = SF_W_tau21anti_MSDanti;            
-                }                        
-            }
-            
-            if("""+ plotselection_topsubjetCSVv2_i +"""){
-                if("""+ plotselection_W_MSD_JetMassResUp_i +"""){
-                    if("""+ cut2_i + """){
-                        if(""" + cut3_i + """){
-                        
-                      
-                            resup=1;
-                            break;
-                        }
-                        if(""" + cut3_anti_i + """){
-                            resup=2;
-                            break;
-                        }
-                    }
-                    if("""+ cut2_anti_i + """){
-                        if(""" + cut3_i + """){
-                            resup=3;
-                            break;
-                        }
-                        if(""" + cut3_anti_i + """){
-                            resup=4;
-                            break;
-                        }
-                    }                
-                }
-                if("""+ plotselection_W_MSD_anti_JetMassResUp_i +"""){
-                    if("""+ cut2_i + """){
-                        if(""" + cut3_i + """){
-                            resup=5;
-                            break;
-                        }
-                        if(""" + cut3_anti_i + """){
-                            resup=6;
-                            break;
-                        }
-                    }
-        
-                    if("""+ cut2_anti_i + """){
-                        if(""" + cut3_i + """){
-                            resup=7;
-                            break;
-                        }
-                        if(""" + cut3_anti_i + """){
-                            resup=8;
-                            break;
-                        }
-                    }                
-                }
-            } else {
-                if("""+ plotselection_W_MSD_JetMassResUp_i +"""){
-                    if("""+ cut2_i + """){
-                        if(""" + cut3_i + """){
-                            resup=9;
-                            break;
-                        }
-                        if(""" + cut3_anti_i + """){
-                            resup=10;
-                            break;
-                        }
-                    }
-                    if("""+ cut2_anti_i + """){
-                        if(""" + cut3_i + """){
-                            resup=11;
-                            break;
-                        }
-                        if(""" + cut3_anti_i + """){
-                            resup=12;
-                            break;
-                        }
-                    }                
-                }
-                if("""+ plotselection_W_MSD_anti_JetMassResUp_i +"""){
-                    if("""+ cut2_i + """){
-                        if(""" + cut3_i + """){
-                            resup=13;
-                            break;
-                        }
-                        if(""" + cut3_anti_i + """){
-                            resup=14;
-                            break;
-                        }
-                    }
-                    if("""+ cut2_anti_i + """){
-                        if(""" + cut3_i + """){
-                            resup=15;
-                            break;
-                        }
-                        if(""" + cut3_anti_i + """){
-                            resup=16;
-                            break;
-                        }
-                    }                
-                }
-            }
-        }
-    }
-    
-    
-    for (int i=0; i<N_Zprime_ABCD""" +  radi + """; i++){
-        if ("""+ generalselection_JetMassResDown_i +"""){
-        
-            if (Bottoms_ABCD""" + radi + """_WeightCSVnominal[i]>=0 && Bottoms_ABCD""" + radi + """_WeightCSVnominal[i]<=1000 && Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]>=0 && Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i]<=1000){
-                CSVnominal_down = Bottoms_ABCD""" + radi + """_WeightCSVnominal[i]*Topsubjets_ABCD""" + radi + """_WeightCSVnominal[i];
-            }
-            if(Tops_ABCD""" + radi + """_real[i]==1){
-                if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_i + """){
-                    toptagnominal_down = SF_top_tau32_MSD_;
-                }
-                if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_i + """){
-                    toptagnominal_down = SF_top_tau32anti_MSD_;
-                }
-                if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_anti_i + """){
-                    toptagnominal_down = SF_top_tau32_MSDanti_;
-                }
-                if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_anti_i + """){
-                    toptagnominal_down = SF_top_tau32anti_MSDanti_;
-                }
-            } else {
-                if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_i + """){
-                    toptagnominal_down = SF_topmiss_tau32_MSD_;
-                }
-                if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_i + """){
-                    toptagnominal_down = SF_topmiss_tau32anti_MSD_;
-                }
-                if(""" + plotselection_tau32_i + """ && """ + plotselection_t_MSD_anti_i + """){
-                    toptagnominal_down = SF_topmiss_tau32_MSDanti_;
-                }
-                if(""" + plotselection_tau32_anti_i + """ && """ + plotselection_t_MSD_anti_i + """){
-                    toptagnominal_down = SF_topmiss_tau32anti_MSDanti_;
-                }
-            }
-            if((""" + plotselection_W_MSD_JetMassResDown_i + """)||("""+plotselection_W_MSD_anti_JetMassResDown_i+""")){
-                if(""" + plotselection_W_tau21_i + """ && ((""" + plotselection_W_MSD_JetMassResDown_i + """))){
-                    Wtag_tag_nominal_down = SF_W_tau21_MSD;  
-                }
-                if(""" + plotselection_W_tau21_anti_i + """ && ((""" + plotselection_W_MSD_JetMassResDown_i + """))){
-                    Wtag_tag_nominal_down = SF_W_tau21anti_MSD;            
-                }
-                if(""" + plotselection_W_tau21_i + """ && ((""" + plotselection_W_MSD_anti_JetMassResDown_i + """))){
-                    Wtag_tag_nominal_down = SF_W_tau21_MSDanti;            
-                }
-                if(""" + plotselection_W_tau21_anti_i + """ && ((""" + plotselection_W_MSD_anti_JetMassResDown_i + """))){
-                    Wtag_tag_nominal_down = SF_W_tau21anti_MSDanti;            
-                }                        
-            }
-                    
-        
-            if("""+ plotselection_topsubjetCSVv2_i +"""){
-                if("""+ plotselection_W_MSD_JetMassResDown_i +"""){
-                    if("""+ cut2_i + """){
-                        if(""" + cut3_i + """){
-                        
-                      
-                            resdown=1;
-                            break;
-                        }
-                        if(""" + cut3_anti_i + """){
-                            resdown=2;
-                            break;
-                        }
-                    }
-                    if("""+ cut2_anti_i + """){
-                        if(""" + cut3_i + """){
-                            resdown=3;
-                            break;
-                        }
-                        if(""" + cut3_anti_i + """){
-                            resdown=4;
-                            break;
-                        }
-                    }                
-                }
-                if("""+ plotselection_W_MSD_anti_JetMassResDown_i +"""){
-                    if("""+ cut2_i + """){
-                        if(""" + cut3_i + """){
-                            resdown=5;
-                            break;
-                        }
-                        if(""" + cut3_anti_i + """){
-                            resdown=6;
-                            break;
-                        }
-                    }
-        
-                    if("""+ cut2_anti_i + """){
-                        if(""" + cut3_i + """){
-                            resdown=7;
-                            break;
-                        }
-                        if(""" + cut3_anti_i + """){
-                            resdown=8;
-                            break;
-                        }
-                    }                
-                }
-            } else {
-                if("""+ plotselection_W_MSD_JetMassResDown_i +"""){
-                    if("""+ cut2_i + """){
-                        if(""" + cut3_i + """){
-                            resdown=9;
-                            break;
-                        }
-                        if(""" + cut3_anti_i + """){
-                            resdown=10;
-                            break;
-                        }
-                    }
-                    if("""+ cut2_anti_i + """){
-                        if(""" + cut3_i + """){
-                            resdown=11;
-                            break;
-                        }
-                        if(""" + cut3_anti_i + """){
-                            resdown=12;
-                            break;
-                        }
-                    }                
-                }
-                if("""+ plotselection_W_MSD_anti_JetMassResDown_i +"""){
-                    if("""+ cut2_i + """){
-                        if(""" + cut3_i + """){
-                            resdown=13;
-                            break;
-                        }
-                        if(""" + cut3_anti_i + """){
-                            resdown=14;
-                            break;
-                        }
-                    }
-                    if("""+ cut2_anti_i + """){
-                        if(""" + cut3_i + """){
-                            resdown=15;
-                            break;
-                        }
-                        if(""" + cut3_anti_i + """){
-                            resdown=16;
-                            break;
-                        }
-                    }                
-                }
-            }
-        }
-    }
-        
-    res.push_back(resup);
-    res.push_back(resdown);
-    res.push_back(CSVnominal_up*toptagnominal_up*Wtag_tag_nominal_up);
-    res.push_back(CSVnominal_down*toptagnominal_down*Wtag_tag_nominal_down);
-    return res;
-}
-""",
-
-
-
-"""
-std::vector<float> CSV_weights_""" + ABCDversion + """(float const* Zprimes_ABCD""" + radi + """_M, float const* Tprimes_ABCD""" + radi + """_M, float const* Tops_ABCD""" + radi + """_maxsubjetCSVv2, float const* Ws_ABCD""" + radi + """_MSD_smeared, float const* Ws_ABCD""" + radi + """_corrL2L3, float const* Tops_ABCD""" + radi + """_MSD, float const* Tops_ABCD""" + radi + """_corrL2L3, float const* Tops_ABCD""" + radi + """_t32, float const* Bottoms_ABCD""" + radi + """_CSV, float const* Ws_ABCD""" + radi + """_t21, float const* Ws_ABCD""" + radi + """_Pt, float const* Tops_ABCD""" + radi + """_Pt, float const* Bottoms_ABCD""" + radi + """_Pt, float Evt_HT_Jets, int N_Zprime_ABCD""" + radi + """, float N_Jets, float N_packedPatJetsAK8PF""" +  radi + """, float const* Bottoms_ABCD""" + radi + """_WeightCSVnominal, float const* Bottoms_ABCD""" + radi + """_WeightCSVLFup, float const* Bottoms_ABCD""" + radi + """_WeightCSVLFdown, float const* Bottoms_ABCD""" + radi + """_WeightCSVHFup, float const* Bottoms_ABCD""" + radi + """_WeightCSVHFdown, float const* Bottoms_ABCD""" + radi + """_WeightCSVHFStats1up, float const* Bottoms_ABCD""" + radi + """_WeightCSVHFStats1down, float const* Bottoms_ABCD""" + radi + """_WeightCSVLFStats1up, float const* Bottoms_ABCD""" + radi + """_WeightCSVLFStats1down, float const* Bottoms_ABCD""" + radi + """_WeightCSVHFStats2up, float const* Bottoms_ABCD""" + radi + """_WeightCSVHFStats2down, float const* Bottoms_ABCD""" + radi + """_WeightCSVLFStats2up, float const* Bottoms_ABCD""" + radi + """_WeightCSVLFStats2down, float const* Bottoms_ABCD""" + radi + """_WeightCSVCErr1up, float const* Bottoms_ABCD""" + radi + """_WeightCSVCErr1down, float const* Bottoms_ABCD""" + radi + """_WeightCSVCErr2up, float const* Bottoms_ABCD""" + radi + """_WeightCSVCErr2down, float const* Topsubjets_ABCD""" + radi + """_WeightCSVnominal, float const* Topsubjets_ABCD""" + radi + """_WeightCSVLFup, float const* Topsubjets_ABCD""" + radi + """_WeightCSVLFdown, float const* Topsubjets_ABCD""" + radi + """_WeightCSVHFup, float const* Topsubjets_ABCD""" + radi + """_WeightCSVHFdown, float const* Topsubjets_ABCD""" + radi + """_WeightCSVHFStats1up, float const* Topsubjets_ABCD""" + radi + """_WeightCSVHFStats1down, float const* Topsubjets_ABCD""" + radi + """_WeightCSVLFStats1up, float const* Topsubjets_ABCD""" + radi + """_WeightCSVLFStats1down, float const* Topsubjets_ABCD""" + radi + """_WeightCSVHFStats2up, float const* Topsubjets_ABCD""" + radi + """_WeightCSVHFStats2down, float const* Topsubjets_ABCD""" + radi + """_WeightCSVLFStats2up, float const* Topsubjets_ABCD""" + radi + """_WeightCSVLFStats2down, float const* Topsubjets_ABCD""" + radi + """_WeightCSVCErr1up, float const* Topsubjets_ABCD""" + radi + """_WeightCSVCErr1down, float const* Topsubjets_ABCD""" + radi + """_WeightCSVCErr2up, float const* Topsubjets_ABCD""" + radi + """_WeightCSVCErr2down  ){
+std::vector<float> CSV_weights_""" + ABCDversion + """(float const* Zprimes_ABCD""" + radi + """_M, float const* Tprimes_ABCD""" + radi + """_M, float const* Tops_ABCD""" + radi + """_maxsubjetCSVv2, float const* Ws_ABCD""" + radi + """_MSD, float const* Ws_ABCD""" + radi + """_corrL2L3, float const* Tops_ABCD""" + radi + """_MSD, float const* Tops_ABCD""" + radi + """_corrL2L3, float const* Tops_ABCD""" + radi + """_t32, float const* Bottoms_ABCD""" + radi + """_CSV, float const* Ws_ABCD""" + radi + """_t21, float const* Ws_ABCD""" + radi + """_Pt, float const* Tops_ABCD""" + radi + """_Pt, float const* Bottoms_ABCD""" + radi + """_Pt, float Evt_HT_Jets, int N_Zprime_ABCD""" + radi + """, float N_Jets, float N_packedPatJetsAK8PF""" +  radi + """, float const* Bottoms_ABCD""" + radi + """_WeightCSVnominal, float const* Bottoms_ABCD""" + radi + """_WeightCSVLFup, float const* Bottoms_ABCD""" + radi + """_WeightCSVLFdown, float const* Bottoms_ABCD""" + radi + """_WeightCSVHFup, float const* Bottoms_ABCD""" + radi + """_WeightCSVHFdown, float const* Bottoms_ABCD""" + radi + """_WeightCSVHFStats1up, float const* Bottoms_ABCD""" + radi + """_WeightCSVHFStats1down, float const* Bottoms_ABCD""" + radi + """_WeightCSVLFStats1up, float const* Bottoms_ABCD""" + radi + """_WeightCSVLFStats1down, float const* Bottoms_ABCD""" + radi + """_WeightCSVHFStats2up, float const* Bottoms_ABCD""" + radi + """_WeightCSVHFStats2down, float const* Bottoms_ABCD""" + radi + """_WeightCSVLFStats2up, float const* Bottoms_ABCD""" + radi + """_WeightCSVLFStats2down, float const* Bottoms_ABCD""" + radi + """_WeightCSVCErr1up, float const* Bottoms_ABCD""" + radi + """_WeightCSVCErr1down, float const* Bottoms_ABCD""" + radi + """_WeightCSVCErr2up, float const* Bottoms_ABCD""" + radi + """_WeightCSVCErr2down, float const* Topsubjets_ABCD""" + radi + """_WeightCSVnominal, float const* Topsubjets_ABCD""" + radi + """_WeightCSVLFup, float const* Topsubjets_ABCD""" + radi + """_WeightCSVLFdown, float const* Topsubjets_ABCD""" + radi + """_WeightCSVHFup, float const* Topsubjets_ABCD""" + radi + """_WeightCSVHFdown, float const* Topsubjets_ABCD""" + radi + """_WeightCSVHFStats1up, float const* Topsubjets_ABCD""" + radi + """_WeightCSVHFStats1down, float const* Topsubjets_ABCD""" + radi + """_WeightCSVLFStats1up, float const* Topsubjets_ABCD""" + radi + """_WeightCSVLFStats1down, float const* Topsubjets_ABCD""" + radi + """_WeightCSVHFStats2up, float const* Topsubjets_ABCD""" + radi + """_WeightCSVHFStats2down, float const* Topsubjets_ABCD""" + radi + """_WeightCSVLFStats2up, float const* Topsubjets_ABCD""" + radi + """_WeightCSVLFStats2down, float const* Topsubjets_ABCD""" + radi + """_WeightCSVCErr1up, float const* Topsubjets_ABCD""" + radi + """_WeightCSVCErr1down, float const* Topsubjets_ABCD""" + radi + """_WeightCSVCErr2up, float const* Topsubjets_ABCD""" + radi + """_WeightCSVCErr2down  ){
     std::vector<float> weights;
     
     float CSVnominal=1.0;
@@ -1442,7 +687,7 @@ std::vector<float> CSV_weights_""" + ABCDversion + """(float const* Zprimes_ABCD
 ,
 
 """
-std::vector<float> toptag_weights_""" + ABCDversion + """(float const* Zprimes_ABCD""" + radi + """_M, float const* Tprimes_ABCD""" + radi + """_M, float const* Tops_ABCD""" + radi + """_maxsubjetCSVv2, float const* Ws_ABCD""" + radi + """_MSD_smeared, float const* Ws_ABCD""" + radi + """_corrL2L3, float const* Tops_ABCD""" + radi + """_MSD, float const* Tops_ABCD""" + radi + """_corrL2L3, float const* Tops_ABCD""" + radi + """_t32, float const* Bottoms_ABCD""" + radi + """_CSV, float const* Ws_ABCD""" + radi + """_t21, float const* Ws_ABCD""" + radi + """_Pt, float const* Tops_ABCD""" + radi + """_Pt, float const* Bottoms_ABCD""" + radi + """_Pt, float Evt_HT_Jets, int N_Zprime_ABCD""" + radi + """, float N_Jets, float N_packedPatJetsAK8PF""" +  radi + """, float const* Tops_ABCD""" + radi + """_real, float const* Tops_ABCD""" + radi + """_matcheddecays){
+std::vector<float> toptag_weights_""" + ABCDversion + """(float const* Zprimes_ABCD""" + radi + """_M, float const* Tprimes_ABCD""" + radi + """_M, float const* Tops_ABCD""" + radi + """_maxsubjetCSVv2, float const* Ws_ABCD""" + radi + """_MSD, float const* Ws_ABCD""" + radi + """_corrL2L3, float const* Tops_ABCD""" + radi + """_MSD, float const* Tops_ABCD""" + radi + """_corrL2L3, float const* Tops_ABCD""" + radi + """_t32, float const* Bottoms_ABCD""" + radi + """_CSV, float const* Ws_ABCD""" + radi + """_t21, float const* Ws_ABCD""" + radi + """_Pt, float const* Tops_ABCD""" + radi + """_Pt, float const* Bottoms_ABCD""" + radi + """_Pt, float Evt_HT_Jets, int N_Zprime_ABCD""" + radi + """, float N_Jets, float N_packedPatJetsAK8PF""" +  radi + """, float const* Tops_ABCD""" + radi + """_real, float const* Tops_ABCD""" + radi + """_matcheddecays){
     std::vector<float> weights;
     
     float toptagnominal=1.0;
@@ -1544,7 +789,7 @@ std::vector<float> toptag_weights_""" + ABCDversion + """(float const* Zprimes_A
 """
 ,
 """
-std::vector<float> Wtag_weights_""" + ABCDversion + """(float const* Zprimes_ABCD""" + radi + """_M, float const* Tprimes_ABCD""" + radi + """_M, float const* Tops_ABCD""" + radi + """_maxsubjetCSVv2, float const* Ws_ABCD""" + radi + """_MSD_smeared, float const* Ws_ABCD""" + radi + """_corrL2L3, float const* Tops_ABCD""" + radi + """_MSD, float const* Tops_ABCD""" + radi + """_corrL2L3, float const* Tops_ABCD""" + radi + """_t32, float const* Bottoms_ABCD""" + radi + """_CSV, float const* Ws_ABCD""" + radi + """_t21, float const* Ws_ABCD""" + radi + """_Pt, float const* Tops_ABCD""" + radi + """_Pt, float const* Bottoms_ABCD""" + radi + """_Pt, float Evt_HT_Jets, int N_Zprime_ABCD""" + radi + """, float N_Jets, float N_packedPatJetsAK8PF""" +  radi + """, float const* Ws_ABCD""" + radi + """_real, float const* Ws_ABCD""" + radi + """_matcheddecays){
+std::vector<float> Wtag_weights_""" + ABCDversion + """(float const* Zprimes_ABCD""" + radi + """_M, float const* Tprimes_ABCD""" + radi + """_M, float const* Tops_ABCD""" + radi + """_maxsubjetCSVv2, float const* Ws_ABCD""" + radi + """_MSD, float const* Ws_ABCD""" + radi + """_corrL2L3, float const* Tops_ABCD""" + radi + """_MSD, float const* Tops_ABCD""" + radi + """_corrL2L3, float const* Tops_ABCD""" + radi + """_t32, float const* Bottoms_ABCD""" + radi + """_CSV, float const* Ws_ABCD""" + radi + """_t21, float const* Ws_ABCD""" + radi + """_Pt, float const* Tops_ABCD""" + radi + """_Pt, float const* Bottoms_ABCD""" + radi + """_Pt, float Evt_HT_Jets, int N_Zprime_ABCD""" + radi + """, float N_Jets, float N_packedPatJetsAK8PF""" +  radi + """, float const* Ws_ABCD""" + radi + """_real, float const* Ws_ABCD""" + radi + """_matcheddecays){
     std::vector<float> weights;
     
     float Wtag_tag_nominal=1.0;
@@ -1671,7 +916,7 @@ std::vector<float> RenFacEnv(float muR20_muF20, float muR05_muF05, float muR10_m
 """
 
 """
-std::vector<float> ABCD_syts(float const* Zprimes_ABCD""" +  radi + """_M, float const* Tprimes_ABCD""" +  radi + """_M, float const* Tops_ABCD""" +  radi + """_maxsubjetCSVv2, float const* Ws_ABCD""" +  radi + """_MSD_smeared, float const* Ws_ABCD""" +  radi + """_corrL2L3, float const* Tops_ABCD""" +  radi + """_MSD, float const* Tops_ABCD""" +  radi + """_corrL2L3, float const* Tops_ABCD""" +  radi + """_t32, float const* Bottoms_ABCD""" +  radi + """_CSV, float const* Ws_ABCD""" +  radi + """_t21, float const* Ws_ABCD""" + radi + """_Pt, float const* Tops_ABCD""" + radi + """_Pt, float const* Bottoms_ABCD""" + radi + """_Pt, float Evt_HT_Jets, int N_Zprime_ABCD""" + radi + """, float N_Jets, float N_packedPatJetsAK8PF""" +  radi + """){
+std::vector<float> ABCD_syts(float const* Zprimes_ABCD""" +  radi + """_M, float const* Tprimes_ABCD""" +  radi + """_M, float const* Tops_ABCD""" +  radi + """_maxsubjetCSVv2, float const* Ws_ABCD""" +  radi + """_MSD, float const* Ws_ABCD""" +  radi + """_corrL2L3, float const* Tops_ABCD""" +  radi + """_MSD, float const* Tops_ABCD""" +  radi + """_corrL2L3, float const* Tops_ABCD""" +  radi + """_t32, float const* Bottoms_ABCD""" +  radi + """_CSV, float const* Ws_ABCD""" +  radi + """_t21, float const* Ws_ABCD""" + radi + """_Pt, float const* Tops_ABCD""" + radi + """_Pt, float const* Bottoms_ABCD""" + radi + """_Pt, float Evt_HT_Jets, int N_Zprime_ABCD""" + radi + """, float N_Jets, float N_packedPatJetsAK8PF""" +  radi + """){
     std::vector<float> res;
     float ABCD_rateUp=1.0;
     float ABCD_rateDown=1.0;
@@ -1842,84 +1087,84 @@ additionalobjectsfromaddtionalrootfile=[
 
 
 additionalvariables=[
-			#'anti_btag_withtopbtag:=anti_loose_btag(Sideband_withtopbtag_bottom_anti_Topfirst_Bottoms_CSVv2,N_Sideband_withtopbtag_bottom_anti_Topfirst_Bottoms)',
-			#'anti_btag:=anti_loose_btag(Sideband_bottom_anti_Topfirst_Bottoms_CSVv2,N_Sideband_bottom_anti_Topfirst_Bottoms)',
-                        ##'testea:=anti_btag + 2',
-                        #'QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M, Sideband_bottom_anti_Topfirst_Zprime_M ,true))[0]',
-                        #'QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt,Sideband_bottom_anti_Topfirst_Tops_Pt[0],N_Sideband_bottom_anti_Topfirst_Tops>0))[0]',
-                        #'QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt,Sideband_top_anti_Topfirst_Tops_Pt[0],N_Sideband_top_anti_Topfirst_Tops>0))[0]',
-                        #'QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt,Sideband_top_anti_Topfirst_Ws_Pt[0],N_Sideband_top_anti_Topfirst_Ws>0))[0]',
-                        #'QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M, Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M,true))[0]',
-                        #'QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt,Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt[0],N_Sideband_withtopbtag_bottom_anti_Topfirst_Tops>0))[0]',
-                        #'QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt,Sideband_top_withbtag_anti_Topfirst_Tops_Pt[0],N_Sideband_top_withbtag_anti_Topfirst_Tops>0))[0]',
-                        #'QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt,Sideband_top_withbtag_anti_Topfirst_Ws_Pt[0],N_Sideband_top_withbtag_anti_Topfirst_Ws>0))[0]',
+			'anti_btag_withtopbtag:=anti_loose_btag(Sideband_withtopbtag_bottom_anti_Topfirst_Bottoms_CSVv2,N_Sideband_withtopbtag_bottom_anti_Topfirst_Bottoms)',
+			'anti_btag:=anti_loose_btag(Sideband_bottom_anti_Topfirst_Bottoms_CSVv2,N_Sideband_bottom_anti_Topfirst_Bottoms)',
+                        #'testea:=anti_btag + 2',
+                        'QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M, Sideband_bottom_anti_Topfirst_Zprime_M ,true))[0]',
+                        'QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt,Sideband_bottom_anti_Topfirst_Tops_Pt[0],N_Sideband_bottom_anti_Topfirst_Tops>0))[0]',
+                        'QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt,Sideband_top_anti_Topfirst_Tops_Pt[0],N_Sideband_top_anti_Topfirst_Tops>0))[0]',
+                        'QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt,Sideband_top_anti_Topfirst_Ws_Pt[0],N_Sideband_top_anti_Topfirst_Ws>0))[0]',
+                        'QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M, Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M,true))[0]',
+                        'QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt,Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt[0],N_Sideband_withtopbtag_bottom_anti_Topfirst_Tops>0))[0]',
+                        'QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt,Sideband_top_withbtag_anti_Topfirst_Tops_Pt[0],N_Sideband_top_withbtag_anti_Topfirst_Tops>0))[0]',
+                        'QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt,Sideband_top_withbtag_anti_Topfirst_Ws_Pt[0],N_Sideband_top_withbtag_anti_Topfirst_Ws>0))[0]',
 			
-                        #'QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M, Sideband_bottom_anti_Topfirst_Zprime_M,true))[0]',
-                        #'QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt,Sideband_bottom_anti_Topfirst_Tops_Pt[0],N_Sideband_bottom_anti_Topfirst_Tops>0))[0]',
-                        #'QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt,Sideband_top_anti_Topfirst_Tops_Pt[0],N_Sideband_top_anti_Topfirst_Tops>0))[0]',
-                        #'QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Ws_Pt:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt,Sideband_top_anti_Topfirst_Ws_Pt[0],N_Sideband_top_anti_Topfirst_Ws>0))[0]',
-                        #'QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M, Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M,true))[0]',
-                        #'QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt,Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt[0],N_Sideband_withtopbtag_bottom_anti_Topfirst_Tops>0))[0]',
-                        #'QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt,Sideband_top_withbtag_anti_Topfirst_Tops_Pt[0],N_Sideband_top_withbtag_anti_Topfirst_Tops>0))[0]',
-                        #'QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt,Sideband_top_withbtag_anti_Topfirst_Ws_Pt[0],N_Sideband_top_withbtag_anti_Topfirst_Ws>0))[0]',
+                        'QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M, Sideband_bottom_anti_Topfirst_Zprime_M,true))[0]',
+                        'QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt,Sideband_bottom_anti_Topfirst_Tops_Pt[0],N_Sideband_bottom_anti_Topfirst_Tops>0))[0]',
+                        'QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt,Sideband_top_anti_Topfirst_Tops_Pt[0],N_Sideband_top_anti_Topfirst_Tops>0))[0]',
+                        'QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Ws_Pt:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt,Sideband_top_anti_Topfirst_Ws_Pt[0],N_Sideband_top_anti_Topfirst_Ws>0))[0]',
+                        'QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M, Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M,true))[0]',
+                        'QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt,Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt[0],N_Sideband_withtopbtag_bottom_anti_Topfirst_Tops>0))[0]',
+                        'QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt,Sideband_top_withbtag_anti_Topfirst_Tops_Pt[0],N_Sideband_top_withbtag_anti_Topfirst_Tops>0))[0]',
+                        'QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt,Sideband_top_withbtag_anti_Topfirst_Ws_Pt[0],N_Sideband_top_withbtag_anti_Topfirst_Ws>0))[0]',
                         
                         
                         
-                        #'QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M_systUp:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M, Sideband_bottom_anti_Topfirst_Zprime_M ,true))[1]',
-                        #'QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt_systUp:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt,Sideband_bottom_anti_Topfirst_Tops_Pt[0],N_Sideband_bottom_anti_Topfirst_Tops>0))[1]',
-                        #'QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt_systUp:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt,Sideband_top_anti_Topfirst_Tops_Pt[0],N_Sideband_top_anti_Topfirst_Tops>0))[1]',
-                        #'QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt_systUp:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt,Sideband_top_anti_Topfirst_Ws_Pt[0],N_Sideband_top_anti_Topfirst_Ws>0))[1]',
-                        #'QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M_systUp:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M, Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M,true))[1]',
-                        #'QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt_systUp:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt,Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt[0],N_Sideband_withtopbtag_bottom_anti_Topfirst_Tops>0))[1]',
-                        #'QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt_systUp:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt,Sideband_top_withbtag_anti_Topfirst_Tops_Pt[0],N_Sideband_top_withbtag_anti_Topfirst_Tops>0))[1]',
-                        #'QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt_systUp:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt,Sideband_top_withbtag_anti_Topfirst_Ws_Pt[0],N_Sideband_top_withbtag_anti_Topfirst_Ws>0))[1]',
+                        'QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M_systUp:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M, Sideband_bottom_anti_Topfirst_Zprime_M ,true))[1]',
+                        'QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt_systUp:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt,Sideband_bottom_anti_Topfirst_Tops_Pt[0],N_Sideband_bottom_anti_Topfirst_Tops>0))[1]',
+                        'QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt_systUp:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt,Sideband_top_anti_Topfirst_Tops_Pt[0],N_Sideband_top_anti_Topfirst_Tops>0))[1]',
+                        'QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt_systUp:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt,Sideband_top_anti_Topfirst_Ws_Pt[0],N_Sideband_top_anti_Topfirst_Ws>0))[1]',
+                        'QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M_systUp:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M, Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M,true))[1]',
+                        'QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt_systUp:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt,Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt[0],N_Sideband_withtopbtag_bottom_anti_Topfirst_Tops>0))[1]',
+                        'QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt_systUp:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt,Sideband_top_withbtag_anti_Topfirst_Tops_Pt[0],N_Sideband_top_withbtag_anti_Topfirst_Tops>0))[1]',
+                        'QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt_systUp:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt,Sideband_top_withbtag_anti_Topfirst_Ws_Pt[0],N_Sideband_top_withbtag_anti_Topfirst_Ws>0))[1]',
 			
-                        #'QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M_systUp:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M, Sideband_bottom_anti_Topfirst_Zprime_M,true))[1]',
-                        #'QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt_systUp:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt,Sideband_bottom_anti_Topfirst_Tops_Pt[0],N_Sideband_bottom_anti_Topfirst_Tops>0))[1]',
-                        #'QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt_systUp:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt,Sideband_top_anti_Topfirst_Tops_Pt[0],N_Sideband_top_anti_Topfirst_Tops>0))[1]',
-                        #'QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Ws_Pt_systUp:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt,Sideband_top_anti_Topfirst_Ws_Pt[0],N_Sideband_top_anti_Topfirst_Ws>0))[1]',
-                        #'QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M_systUp:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M, Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M,true))[1]',
-                        #'QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt_systUp:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt,Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt[0],N_Sideband_withtopbtag_bottom_anti_Topfirst_Tops>0))[1]',
-                        #'QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt_systUp:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt,Sideband_top_withbtag_anti_Topfirst_Tops_Pt[0],N_Sideband_top_withbtag_anti_Topfirst_Tops>0))[1]',
-                        #'QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt_systUp:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt,Sideband_top_withbtag_anti_Topfirst_Ws_Pt[0],N_Sideband_top_withbtag_anti_Topfirst_Ws>0))[1]',                        
+                        'QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M_systUp:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M, Sideband_bottom_anti_Topfirst_Zprime_M,true))[1]',
+                        'QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt_systUp:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt,Sideband_bottom_anti_Topfirst_Tops_Pt[0],N_Sideband_bottom_anti_Topfirst_Tops>0))[1]',
+                        'QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt_systUp:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt,Sideband_top_anti_Topfirst_Tops_Pt[0],N_Sideband_top_anti_Topfirst_Tops>0))[1]',
+                        'QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Ws_Pt_systUp:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt,Sideband_top_anti_Topfirst_Ws_Pt[0],N_Sideband_top_anti_Topfirst_Ws>0))[1]',
+                        'QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M_systUp:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M, Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M,true))[1]',
+                        'QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt_systUp:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt,Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt[0],N_Sideband_withtopbtag_bottom_anti_Topfirst_Tops>0))[1]',
+                        'QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt_systUp:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt,Sideband_top_withbtag_anti_Topfirst_Tops_Pt[0],N_Sideband_top_withbtag_anti_Topfirst_Tops>0))[1]',
+                        'QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt_systUp:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt,Sideband_top_withbtag_anti_Topfirst_Ws_Pt[0],N_Sideband_top_withbtag_anti_Topfirst_Ws>0))[1]',                        
                         
                         
-                        #'QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M_systDown:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M, Sideband_bottom_anti_Topfirst_Zprime_M ,true))[2]',
-                        #'QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt_systDown:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt,Sideband_bottom_anti_Topfirst_Tops_Pt[0],N_Sideband_bottom_anti_Topfirst_Tops>0))[2]',
-                        #'QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt_systDown:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt,Sideband_top_anti_Topfirst_Tops_Pt[0],N_Sideband_top_anti_Topfirst_Tops>0))[2]',
-                        #'QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt_systDown:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt,Sideband_top_anti_Topfirst_Ws_Pt[0],N_Sideband_top_anti_Topfirst_Ws>0))[2]',
-                        #'QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M_systDown:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M, Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M,true))[2]',
-                        #'QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt_systDown:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt,Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt[0],N_Sideband_withtopbtag_bottom_anti_Topfirst_Tops>0))[2]',
-                        #'QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt_systDown:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt,Sideband_top_withbtag_anti_Topfirst_Tops_Pt[0],N_Sideband_top_withbtag_anti_Topfirst_Tops>0))[2]',
-                        #'QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt_systDown:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt,Sideband_top_withbtag_anti_Topfirst_Ws_Pt[0],N_Sideband_top_withbtag_anti_Topfirst_Ws>0))[2]',
+                        'QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M_systDown:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M, Sideband_bottom_anti_Topfirst_Zprime_M ,true))[2]',
+                        'QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt_systDown:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt,Sideband_bottom_anti_Topfirst_Tops_Pt[0],N_Sideband_bottom_anti_Topfirst_Tops>0))[2]',
+                        'QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt_systDown:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt,Sideband_top_anti_Topfirst_Tops_Pt[0],N_Sideband_top_anti_Topfirst_Tops>0))[2]',
+                        'QCDMadgraph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt_systDown:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt,Sideband_top_anti_Topfirst_Ws_Pt[0],N_Sideband_top_anti_Topfirst_Ws>0))[2]',
+                        'QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M_systDown:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M, Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M,true))[2]',
+                        'QCDMadgraph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt_systDown:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt,Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt[0],N_Sideband_withtopbtag_bottom_anti_Topfirst_Tops>0))[2]',
+                        'QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt_systDown:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt,Sideband_top_withbtag_anti_Topfirst_Tops_Pt[0],N_Sideband_top_withbtag_anti_Topfirst_Tops>0))[2]',
+                        'QCDMadgraph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt_systDown:=(interpolateSFandSFerrors(*QCDMadgraph_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt,Sideband_top_withbtag_anti_Topfirst_Ws_Pt[0],N_Sideband_top_withbtag_anti_Topfirst_Ws>0))[2]',
 			
-                        #'QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M_systDown:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M, Sideband_bottom_anti_Topfirst_Zprime_M,true))[2]',
-                        #'QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt_systDown:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt,Sideband_bottom_anti_Topfirst_Tops_Pt[0],N_Sideband_bottom_anti_Topfirst_Tops>0))[2]',
-                        #'QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt_systDown:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt,Sideband_top_anti_Topfirst_Tops_Pt[0],N_Sideband_top_anti_Topfirst_Tops>0))[2]',
-                        #'QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Ws_Pt_systDown:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt,Sideband_top_anti_Topfirst_Ws_Pt[0],N_Sideband_top_anti_Topfirst_Ws>0))[2]',
-                        #'QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M_systDown:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M, Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M,true))[2]',
-                        #'QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt_systDown:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt,Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt[0],N_Sideband_withtopbtag_bottom_anti_Topfirst_Tops>0))[2]',
-                        #'QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt_systDown:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt,Sideband_top_withbtag_anti_Topfirst_Tops_Pt[0],N_Sideband_top_withbtag_anti_Topfirst_Tops>0))[2]',
-                        #'QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt_systDown:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt,Sideband_top_withbtag_anti_Topfirst_Ws_Pt[0],N_Sideband_top_withbtag_anti_Topfirst_Ws>0))[2]',
+                        'QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M_systDown:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M, Sideband_bottom_anti_Topfirst_Zprime_M,true))[2]',
+                        'QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt_systDown:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt,Sideband_bottom_anti_Topfirst_Tops_Pt[0],N_Sideband_bottom_anti_Topfirst_Tops>0))[2]',
+                        'QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Tops_Pt_systDown:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt,Sideband_top_anti_Topfirst_Tops_Pt[0],N_Sideband_top_anti_Topfirst_Tops>0))[2]',
+                        'QCDPythia8_SF_SB_top_anti_Signal_Topfirst_Ws_Pt_systDown:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt,Sideband_top_anti_Topfirst_Ws_Pt[0],N_Sideband_top_anti_Topfirst_Ws>0))[2]',
+                        'QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M_systDown:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M, Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M,true))[2]',
+                        'QCDPythia8_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt_systDown:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt,Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt[0],N_Sideband_withtopbtag_bottom_anti_Topfirst_Tops>0))[2]',
+                        'QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt_systDown:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt,Sideband_top_withbtag_anti_Topfirst_Tops_Pt[0],N_Sideband_top_withbtag_anti_Topfirst_Tops>0))[2]',
+                        'QCDPythia8_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt_systDown:=(interpolateSFandSFerrors(*QCDPythia8_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt,Sideband_top_withbtag_anti_Topfirst_Ws_Pt[0],N_Sideband_top_withbtag_anti_Topfirst_Ws>0))[2]',
                         
                       
                         
-			#"Sideband_withtopbtag_bottom_anti_Topfirst_Bottoms_CSVv2", "N_Sideband_withtopbtag_bottom_anti_Topfirst_Bottoms",
-                        #"Sideband_bottom_anti_Topfirst_Bottoms_CSVv2","N_Sideband_bottom_anti_Topfirst_Bottoms",
-                        #"Sideband_bottom_anti_Topfirst_Zprime_M","true",
-                        #"Sideband_bottom_anti_Topfirst_Tops_Pt","N_Sideband_bottom_anti_Topfirst_Tops",
-                        #"Sideband_top_anti_Topfirst_Tops_Pt","N_Sideband_top_anti_Topfirst_Tops",
-                        #"Sideband_top_anti_Topfirst_Ws_Pt","N_Sideband_top_anti_Topfirst_Ws",
-                        #"Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M","true",
-                        #"Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt","N_Sideband_withtopbtag_bottom_anti_Topfirst_Tops",
-                        #"Sideband_top_withbtag_anti_Topfirst_Tops_Pt","N_Sideband_top_withbtag_anti_Topfirst_Tops",
-                        #"Sideband_top_withbtag_anti_Topfirst_Ws_Pt","N_Sideband_top_withbtag_anti_Topfirst_Ws",
+			"Sideband_withtopbtag_bottom_anti_Topfirst_Bottoms_CSVv2", "N_Sideband_withtopbtag_bottom_anti_Topfirst_Bottoms",
+                        "Sideband_bottom_anti_Topfirst_Bottoms_CSVv2","N_Sideband_bottom_anti_Topfirst_Bottoms",
+                        "Sideband_bottom_anti_Topfirst_Zprime_M","true",
+                        "Sideband_bottom_anti_Topfirst_Tops_Pt","N_Sideband_bottom_anti_Topfirst_Tops",
+                        "Sideband_top_anti_Topfirst_Tops_Pt","N_Sideband_top_anti_Topfirst_Tops",
+                        "Sideband_top_anti_Topfirst_Ws_Pt","N_Sideband_top_anti_Topfirst_Ws",
+                        "Sideband_withtopbtag_bottom_anti_Topfirst_Zprime_M","true",
+                        "Sideband_withtopbtag_bottom_anti_Topfirst_Tops_Pt","N_Sideband_withtopbtag_bottom_anti_Topfirst_Tops",
+                        "Sideband_top_withbtag_anti_Topfirst_Tops_Pt","N_Sideband_top_withbtag_anti_Topfirst_Tops",
+                        "Sideband_top_withbtag_anti_Topfirst_Ws_Pt","N_Sideband_top_withbtag_anti_Topfirst_Ws",
                         
-			#'bportionUp:=(bbarportionweight(N_AK4_bottom_tag_candidates))[1]',
-			#'bportionDown:=(bbarportionweight(N_AK4_bottom_tag_candidates))[2]',
-			#'bportionno:=(bbarportionweight(N_AK4_bottom_tag_candidates))[3]',
-			#'bportionnorm:=(bbarportionweight(N_AK4_bottom_tag_candidates))[0]',
-			#"N_AK4_bottom_tag_candidates",
+			'bportionUp:=(bbarportionweight(N_AK4_bottom_tag_candidates))[1]',
+			'bportionDown:=(bbarportionweight(N_AK4_bottom_tag_candidates))[2]',
+			'bportionno:=(bbarportionweight(N_AK4_bottom_tag_candidates))[3]',
+			'bportionnorm:=(bbarportionweight(N_AK4_bottom_tag_candidates))[0]',
+			"N_AK4_bottom_tag_candidates",
                         
                         
                         'ABCD_CatID:=1.0 * ABCD_Category(Zprimes_ABCD' + radi + '_M,   Tprimes_ABCD' + radi + '_M,   Tops_ABCD' + radi + '_maxsubjetCSVv2,   Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3,   Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3,   Tops_ABCD' + radi + '_t32,   Bottoms_ABCD' + radi + '_CSV,   Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ')',
@@ -1948,33 +1193,8 @@ additionalvariables=[
                         'ABCD_CatG_notopbtag:=15',
                         'ABCD_CatH_notopbtag:=16',
                         
-                  
                         
-                    
-                        'ABCD_CatID_JetMassScaleUp:= 1.0 * (ABCD_Category_WJetMassScale(Zprimes_ABCD' + radi + '_M,   Tprimes_ABCD' + radi + '_M,   Tops_ABCD' + radi + '_maxsubjetCSVv2, Topsubjets_ABCD' + radi + '_WeightCSVnominal,   Ws_ABCD' + radi + '_MSD_smeared, Ws_ABCD' + radi + '_corrL2L3,   Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3,   Tops_ABCD' + radi + '_t32,   Bottoms_ABCD' + radi + '_CSV, Bottoms_ABCD' + radi + '_WeightCSVnominal, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Tops_ABCD' + radi + '_real, Tops_ABCD' + radi + '_matcheddecays))[0]',
-                        'ABCD_CatID_JetMassScaleDown:= 1.0 * (ABCD_Category_WJetMassScale(Zprimes_ABCD' + radi + '_M,   Tprimes_ABCD' + radi + '_M,   Tops_ABCD' + radi + '_maxsubjetCSVv2, Topsubjets_ABCD' + radi + '_WeightCSVnominal,   Ws_ABCD' + radi + '_MSD_smeared, Ws_ABCD' + radi + '_corrL2L3,   Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3,   Tops_ABCD' + radi + '_t32,   Bottoms_ABCD' + radi + '_CSV, Bottoms_ABCD' + radi + '_WeightCSVnominal, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Tops_ABCD' + radi + '_real, Tops_ABCD' + radi + '_matcheddecays))[1]',
-                        
-                        'MCSF_Weight_' + ABCDversion + '_JetMassScaleUp:= 1.0 * (ABCD_Category_WJetMassScale(Zprimes_ABCD' +  radi + '_M, Tprimes_ABCD' +  radi + '_M, Tops_ABCD' +  radi + '_maxsubjetCSVv2, Topsubjets_ABCD' + radi + '_WeightCSVnominal, Ws_ABCD' +  radi + '_MSD_smeared, Ws_ABCD' +  radi + '_corrL2L3, Tops_ABCD' +  radi + '_MSD, Tops_ABCD' +  radi + '_corrL2L3, Tops_ABCD' +  radi + '_t32, Bottoms_ABCD' +  radi + '_CSV, Bottoms_ABCD' + radi + '_WeightCSVnominal, Ws_ABCD' +  radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt, Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi +', Tops_ABCD' + radi + '_real, Tops_ABCD' + radi + '_matcheddecays))[2] *Weight_pu69p2*Weight_LHA_NNPDF30_nlo_as_0118_nominal',
-                        'MCSF_Weight_' + ABCDversion + '_JetMassScaleDown:= 1.0 * (ABCD_Category_WJetMassScale(Zprimes_ABCD' +  radi + '_M, Tprimes_ABCD' +  radi + '_M, Tops_ABCD' +  radi + '_maxsubjetCSVv2, Topsubjets_ABCD' + radi + '_WeightCSVnominal, Ws_ABCD' +  radi + '_MSD_smeared, Ws_ABCD' +  radi + '_corrL2L3, Tops_ABCD' +  radi + '_MSD, Tops_ABCD' +  radi + '_corrL2L3, Tops_ABCD' +  radi + '_t32, Bottoms_ABCD' +  radi + '_CSV, Bottoms_ABCD' + radi + '_WeightCSVnominal, Ws_ABCD' +  radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt, Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi +', Tops_ABCD' + radi + '_real, Tops_ABCD' + radi + '_matcheddecays))[3] *Weight_pu69p2*Weight_LHA_NNPDF30_nlo_as_0118_nominal',
-                        #*Weight_pu69p2*PDF_RMSMean' ,                      
-     
-                        #'ABCD_CatID_JetMassScaleUp:= 1.0 * (ABCD_Category_WJetMassScale(Zprimes_ABCD' + radi + '_M,   Tprimes_ABCD' + radi + '_M,   Tops_ABCD' + radi + '_maxsubjetCSVv2, Topsubjets_ABCD' + radi + '_WeightCSVnominal, Ws_ABCD' + radi + '_MSD_smeared, Ws_ABCD' + radi + '_corrL2L3,   Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3,   Tops_ABCD' + radi + '_t32,   Bottoms_ABCD' + radi + '_CSV,   Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt))[0]',
-                        #'ABCD_CatID_JetMassScaleDown:= 1.0 * (ABCD_Category_WJetMassScale(Zprimes_ABCD' + radi + '_M,   Tprimes_ABCD' + radi + '_M,   Tops_ABCD' + radi + '_maxsubjetCSVv2, Topsubjets_ABCD' + radi + '_WeightCSVnominal, Ws_ABCD' + radi + '_MSD_smeared, Ws_ABCD' + radi + '_corrL2L3,   Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3,   Tops_ABCD' + radi + '_t32,   Bottoms_ABCD' + radi + '_CSV,   Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt))[1]',
-                        
-                        #'MCSF_Weight_' + ABCDversion + '_JetMassScaleNom:= 1.0 * (ABCD_Category_WJetMassScale(Zprimes_ABCD' +  radi + '_M, Tprimes_ABCD' +  radi + '_M, Tops_ABCD' +  radi + '_maxsubjetCSVv2, Topsubjets_ABCD' + radi + '_WeightCSVnominal, Ws_ABCD' +  radi + '_MSD_smeared, Ws_ABCD' +  radi + '_corrL2L3, Tops_ABCD' +  radi + '_MSD, Tops_ABCD' +  radi + '_corrL2L3, Tops_ABCD' +  radi + '_t32, Bottoms_ABCD' +  radi + '_CSV, Bottoms_ABCD' + radi + '_WeightCSVnominal, Ws_ABCD' +  radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt, Bottoms_ABCD' + radi + '_Pt))[2]',
-                        ##*Weight_pu69p2*PDF_RMSMean' ,                      
-
-                        'ABCD_CatID_JetMassResUp:= 1.0 * (ABCD_Category_JetMassResolution(Zprimes_ABCD' + radi + '_M,   Tprimes_ABCD' + radi + '_M,   Tops_ABCD' + radi + '_maxsubjetCSVv2, Topsubjets_ABCD' + radi + '_WeightCSVnominal,   Ws_ABCD' + radi + '_MSD_JetResup, Ws_ABCD' + radi + '_MSD_JetResdown, Ws_ABCD' + radi + '_corrL2L3,   Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3,   Tops_ABCD' + radi + '_t32,   Bottoms_ABCD' + radi + '_CSV, Bottoms_ABCD' + radi + '_WeightCSVnominal,   Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Tops_ABCD' + radi + '_real, Tops_ABCD' + radi + '_matcheddecays))[0]',
-                        'ABCD_CatID_JetMassResDown:= 1.0 * (ABCD_Category_JetMassResolution(Zprimes_ABCD' + radi + '_M,   Tprimes_ABCD' + radi + '_M,   Tops_ABCD' + radi + '_maxsubjetCSVv2, Topsubjets_ABCD' + radi + '_WeightCSVnominal, Ws_ABCD' + radi + '_MSD_JetResup, Ws_ABCD' + radi + '_MSD_JetResdown, Ws_ABCD' + radi + '_corrL2L3,   Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3,   Tops_ABCD' + radi + '_t32,   Bottoms_ABCD' + radi + '_CSV, Bottoms_ABCD' + radi + '_WeightCSVnominal,   Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ', Tops_ABCD' + radi + '_real, Tops_ABCD' + radi + '_matcheddecays))[1]',
-                        
-                        
-                        'MCSF_Weight_' + ABCDversion + '_JetMassResUp:= 1.0 * (ABCD_Category_JetMassResolution(Zprimes_ABCD' +  radi + '_M, Tprimes_ABCD' +  radi + '_M, Tops_ABCD' +  radi + '_maxsubjetCSVv2, Topsubjets_ABCD' + radi + '_WeightCSVnominal, Ws_ABCD' +  radi + '_MSD_JetResup, Ws_ABCD' + radi + '_MSD_JetResdown, Ws_ABCD' +  radi + '_corrL2L3, Tops_ABCD' +  radi + '_MSD, Tops_ABCD' +  radi + '_corrL2L3, Tops_ABCD' +  radi + '_t32, Bottoms_ABCD' +  radi + '_CSV, Bottoms_ABCD' + radi + '_WeightCSVnominal, Ws_ABCD' +  radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt, Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi +', Tops_ABCD' + radi + '_real, Tops_ABCD' + radi + '_matcheddecays))[2] *Weight_pu69p2*Weight_LHA_NNPDF30_nlo_as_0118_nominal',
-                        'MCSF_Weight_' + ABCDversion + '_JetMassResDown:= 1.0 * (ABCD_Category_JetMassResolution(Zprimes_ABCD' +  radi + '_M, Tprimes_ABCD' +  radi + '_M, Tops_ABCD' +  radi + '_maxsubjetCSVv2, Topsubjets_ABCD' + radi + '_WeightCSVnominal, Ws_ABCD' +  radi + '_MSD_JetResup, Ws_ABCD' + radi + '_MSD_JetResdown, Ws_ABCD' +  radi + '_corrL2L3, Tops_ABCD' +  radi + '_MSD, Tops_ABCD' +  radi + '_corrL2L3, Tops_ABCD' +  radi + '_t32, Bottoms_ABCD' +  radi + '_CSV, Bottoms_ABCD' + radi + '_WeightCSVnominal, Ws_ABCD' +  radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt, Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi +', Tops_ABCD' + radi + '_real, Tops_ABCD' + radi + '_matcheddecays))[3] *Weight_pu69p2*Weight_LHA_NNPDF30_nlo_as_0118_nominal',
-                        #*Weight_pu69p2*PDF_RMSMean',                      
-
-                                                
-                        
-                        #'MCSF_Weight_' + ABCDversion + ':=' + ABCDversion + '_toptagweightnominal*' + ABCDversion + '_topmisstagweightnominal*' + ABCDversion + '_WeightCSVnominal*Weight_pu69p2*PDF_RMSMean*' + ABCDversion + '_Wtag_weightnominal',
+             
 
                         '' + ABCDversion + '_WeightCSVnominal:=(CSV_weights_' + ABCDversion + '(Zprimes_ABCD' + radi + '_M, Tprimes_ABCD' + radi + '_M, Tops_ABCD' + radi + '_maxsubjetCSVv2, Ws_ABCD' + radi + '_MSD, Ws_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_MSD, Tops_ABCD' + radi + '_corrL2L3, Tops_ABCD' + radi + '_t32, Bottoms_ABCD' + radi + '_CSV, Ws_ABCD' + radi + '_t21, Ws_ABCD' + radi + '_Pt, Tops_ABCD' + radi + '_Pt,  Bottoms_ABCD' + radi + '_Pt, Evt_HT_Jets, N_Zprime_ABCD' + radi + ', N_Jets, N_packedPatJetsAK8PF' +  radi + ',Bottoms_ABCD' + radi + '_WeightCSVnominal, Bottoms_ABCD' + radi + '_WeightCSVLFup, Bottoms_ABCD' + radi + '_WeightCSVLFdown, Bottoms_ABCD' + radi + '_WeightCSVHFup, Bottoms_ABCD' + radi + '_WeightCSVHFdown, Bottoms_ABCD' + radi + '_WeightCSVHFStats1up, Bottoms_ABCD' + radi + '_WeightCSVHFStats1down, Bottoms_ABCD' + radi + '_WeightCSVLFStats1up, Bottoms_ABCD' + radi + '_WeightCSVLFStats1down, Bottoms_ABCD' + radi + '_WeightCSVHFStats2up, Bottoms_ABCD' + radi + '_WeightCSVHFStats2down, Bottoms_ABCD' + radi + '_WeightCSVLFStats2up, Bottoms_ABCD' + radi + '_WeightCSVLFStats2down, Bottoms_ABCD' + radi + '_WeightCSVCErr1up, Bottoms_ABCD' + radi + '_WeightCSVCErr1down, Bottoms_ABCD' + radi + '_WeightCSVCErr2up, Bottoms_ABCD' + radi + '_WeightCSVCErr2down, Topsubjets_ABCD' + radi + '_WeightCSVnominal, Topsubjets_ABCD' + radi + '_WeightCSVLFup, Topsubjets_ABCD' + radi + '_WeightCSVLFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFup, Topsubjets_ABCD' + radi + '_WeightCSVHFdown, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats1down, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVHFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2up, Topsubjets_ABCD' + radi + '_WeightCSVLFStats2down, Topsubjets_ABCD' + radi + '_WeightCSVCErr1up, Topsubjets_ABCD' + radi + '_WeightCSVCErr1down, Topsubjets_ABCD' + radi + '_WeightCSVCErr2up, Topsubjets_ABCD' + radi + '_WeightCSVCErr2down  ))[0]',
 
@@ -2039,15 +1259,16 @@ additionalvariables=[
                         'MCSF_RenFac_envelopeUp:=(RenFacEnv(Weight_scale_variation_muR2p0_muF2p0, Weight_scale_variation_muR0p5_muF0p5, Weight_scale_variation_muR1p0_muF2p0 , Weight_scale_variation_muR1p0_muF0p5, Weight_scale_variation_muR2p0_muF1p0, Weight_scale_variation_muR0p5_muF1p0,DoMCDataWeights_ttbaronly))[0]',
                         'MCSF_RenFac_envelopeDown:=(RenFacEnv(Weight_scale_variation_muR2p0_muF2p0, Weight_scale_variation_muR0p5_muF0p5, Weight_scale_variation_muR1p0_muF2p0 , Weight_scale_variation_muR1p0_muF0p5, Weight_scale_variation_muR2p0_muF1p0, Weight_scale_variation_muR0p5_muF1p0,DoMCDataWeights_ttbaronly))[1]',
                                                #'N_Jets', 'Jet_Pt','Jet_Eta','Jet_CSV','Jet_Flav','Jet_M','Jet_Phi','Jet_E',
-                        #'PDF_RMSMean:=PDF_RMS('+ stringforPDFs1+', '+stringforPDFs1_new +',DoMCDataWeights_ttbaronly)[0]',
-                        #'PDF_RMSUp:=PDF_RMS('+ stringforPDFs1+', '+stringforPDFs1_new+',DoMCDataWeights_ttbaronly)[1]',
-                        #'PDF_RMSDown:=PDF_RMS('+ stringforPDFs1+', '+stringforPDFs1_new+',DoMCDataWeights_ttbaronly)[2]',
-                        
+                        #'PDF_RMSMean:=PDF_RMS('+ stringforPDFs1+')[0]',
+                        #'PDF_RMSUp:=PDF_RMS('+ stringforPDFs1+')[1]',
+                        #'PDF_RMSDown:=PDF_RMS('+ stringforPDFs1+')[2]',
+                        'PDF_RMSMean:=Weight_LHA_NNPDF30_lo_as_0130_nf_4_nominal',
+                        'PDF_RMSUp:=Weight_LHA_NNPDF30_lo_as_0130_nf_4_up',
+                        'PDF_RMSDown:=Weight_LHA_NNPDF30_lo_as_0130_nf_4_down',
                         #'MCSF_Weight_ABCD' + radi + '1:=ABCD1_toptagweightnominal*ABCD1_Wtagweightnominal*ABCD1_WeightCSVnominal*Weight_pu69p2*PDF_RMSMean',
                         #'MCSF_Weight_ABCD2:=ABCD2_toptagweightnominal*ABCD2_Wtagweightnominal*ABCD2_WeightCSVnominal*Weight_pu69p2*PDF_RMSMean',
-                        #'MCSF_Weight_' + ABCDversion + ':=' + ABCDversion + '_toptagweightnominal*' + ABCDversion + '_topmisstagweightnominal*' + ABCDversion + '_WeightCSVnominal*Weight_pu69p2*PDF_RMSMean*' + ABCDversion + '_Wtag_weightnominal',
-                        'MCSF_Weight_' + ABCDversion + ':=' + ABCDversion + '_toptagweightnominal*' + ABCDversion + '_topmisstagweightnominal*' + ABCDversion + '_WeightCSVnominal*Weight_pu69p2*Weight_LHA_NNPDF30_nlo_as_0118_nominal*' + ABCDversion + '_Wtag_weightnominal',
-
+                        'MCSF_Weight_' + ABCDversion + ':=' + ABCDversion + '_toptagweightnominal*' + ABCDversion + '_topmisstagweightnominal*' + ABCDversion + '_WeightCSVnominal*Weight_pu69p2*PDF_RMSMean*' + ABCDversion + '_Wtag_weightnominal',
+                        
                         
                         'triggered:=triggerresult(Triggered_HLT_PFHT800_vX, Triggered_HLT_PFHT900_vX, Triggered_HLT_PFJet450_vX, Prescale_HLT_PFHT800_vX, Prescale_HLT_PFHT900_vX, Prescale_HLT_PFJet450_vX)',
 

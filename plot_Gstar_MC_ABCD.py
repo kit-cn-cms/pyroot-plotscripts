@@ -2,8 +2,8 @@
 # plot general control distributions 
 ##############
 
-from plotconfig_Zprime_MC import *
-from plot_additional_Zprime_MC import *
+from plotconfig_Gstar_MC import *
+from plot_additional_Gstar_MC import *
 from plot_cuts_ZPrime_MC import *
 
 sys.path.insert(0, 'limittools')
@@ -13,7 +13,7 @@ import copy
 
 ABCDeventhandling='oncefirst'
 
-name='Zprime_MC_'+ABCDeventhandling+'_'+ABCDversion+radi+'_'+WPs
+name='Gstar_MC_'+ABCDeventhandling+'_'+ABCDversion+radi+'_'+WPs
 
 if doBR:
     name=name+'_'+BR_name
@@ -171,7 +171,7 @@ plots=[
     Plot(ROOT.TH1F( ABCDversion + "_withtopbtag_CatA_Zprime_eff" ,"m(Z') in GeV, CatA " ,1,0,5000),"Zprimes_ABCD"+radi+"_M", "ABCD_CatID==ABCD_CatA_withtopbtag" + " && " + generalselection + " && " + plotselection_topsubjetCSVv2 + " && " + cut3 + "&&" + cut2 + "&& " + cut1, "2 btag"),
     Plot(ROOT.TH1F( ABCDversion + "_notopbtag_CatA_Zprime_eff" ,"m(Z') in GeV, CatA " ,1,0,5000),"Zprimes_ABCD"+radi+"_M", "ABCD_CatID==ABCD_CatA_notopbtag" + " && " + generalselection + " && " + plotselection_topsubjetCSVv2_anti + " && " + cut3 + "&&" + cut2 + "&& " + cut1, "1 btag"),
     
-    Plot(ROOT.TH1F( "N_Gen_ZPrimes" ,"N_Gen_ZPrimes" ,1,0,5000),"N_Gen_ZPrimes", "N_Gen_ZPrimes>0", ""),
+    Plot(ROOT.TH1F( "N_Gen_ZPrimes" ,"N_Gen_ZPrimes" ,1,0,5000),"N_Gen_TPrimesandTPrimebars", "N_Gen_TPrimesandTPrimebars>0", ""),
 
     ##inclusive
     #Plot(ROOT.TH1F( ABCDversion + "_inclusive_CatA_Zprime_M" ,"m(Z') in GeV, CatA " ,80,1000,5000),"Zprimes_ABCD"+radi+"_M", "((ABCD_CatID==ABCD_CatA_withtopbtag) || ABCD_CatID==ABCD_CatA_notopbtag)" + " && " + generalselection + " && " + cut3 + "&&" + cut2 + "&& " + cut1, "1 btag"),
@@ -293,7 +293,7 @@ print OnlyFirstList, 'This is the boolean List for only first elements'
 #print allsystweights, "OK"
 #raw_input()
 
-outputpath=plotParallel(name,2000000,plots,SignalSamples+BackgroundSamples+DataSamples+systsamples,[""],["1"],allweightsystnames,allsystweights,additionalvariables,additionalfunctions,additionalobjectsfromaddtionalrootfile,OnlyFirstList,otherSystNames)
+outputpath=plotParallel(name,2000000,plots,SignalSamples+systsamples,[""],["1"],allweightsystnames,allsystweights,additionalvariables,additionalfunctions,additionalobjectsfromaddtionalrootfile,OnlyFirstList,otherSystNames)
 
 # plot dataMC comparison
 #listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,plots,1)
@@ -315,6 +315,8 @@ print 'debug filesave 1 ', rebinnedHistoPath[:-5]
 #print 'debug filesave 2 ', rebinnedandaddedHistoPath[:-5]
 print 'debug filesave 3 ', rebinnedandaddedBRHistoPath[:-5]
 print 'debug filesave 4 ', rebinnedBRHistoPath[:-5]
+
+
 
 #if not os.path.isfile(rebinnedHistoPath):
 
@@ -431,124 +433,67 @@ if not os.path.isfile(rebinnedHistoPath):
 
 
     lllSignal=createLLL_fromSuperHistoFileSyst(outputpath,SignalSamples,plots,allweightsystnames)
-    lllBackground=createLLL_fromSuperHistoFileSyst(outputpath,BackgroundSamples,plots,allweightsystnames)
     
+    print lllSignal
+    #raw_input()
 
-    
-    
-    for ll1,ll2,ll3,ll4 in zip(transposeLOL([transposeLOL(lllBackground)[BackgroundSampleNames.index('ttbar')]]),transposeLOL([transposeLOL(lllBackground)[BackgroundSampleNames.index('ST_tW')]]),transposeLOL([transposeLOL(lllBackground)   [BackgroundSampleNames.index('ST_t')]]),transposeLOL([transposeLOL(lllBackground)[BackgroundSampleNames.index('ST_s')]])):
-        for l1,l2,l3,l4 in zip(ll1,ll2,ll3,ll4):
-            for h1, h2,h3,h4 in zip(l1,l2,l3,l4):
-                h1.Add(h2)
-                h1.Add(h3)
-                h1.Add(h4)    
-    lllBackground=transposeLOL([transposeLOL(lllBackground)[BackgroundSampleNames.index('ttbar')]]+transposeLOL(lllBackground)[BackgroundSampleNames.index('QCDMadgraph'):BackgroundSampleNames.index('SC_none')+1])
-    BackgroundSamples=[BackgroundSamples[BackgroundSampleNames.index('ttbar')]]+BackgroundSamples[BackgroundSampleNames.index('QCDMadgraph'):BackgroundSampleNames.index('SC_none')+1]
-    
-    BackgroundSampleNames=[BackgroundSampleNames[BackgroundSampleNames.index('ttbar')]]+BackgroundSampleNames[BackgroundSampleNames.index('QCDMadgraph'):BackgroundSampleNames.index('SC_none')+1]
-    
     create_envelopes_new(lllSignal)
     renormshapestonom(lllSignal)
-    create_envelopes_new(lllBackground)
-    renormshapestonom(lllBackground)
-
     
-    lllData_Madgraph=createLLL_fromSuperHistoFileSyst(outputpath,DataSamples,plots,allweightsystnames)
-    #lllData_Pythia=createLLL_fromSuperHistoFileSyst(outputpath,DataSamples,plots,allweightsystnames)
     forcombine=True
     lllSignal=rebintovarbinsLLL(lllSignal,name,True,True,False,forcombine)
-    lllBackground=rebintovarbinsLLL(lllBackground,name,True,True,False,forcombine)
-    lllData_Madgraph=rebintovarbinsLLL(lllData_Madgraph,name,True,True,False,forcombine)
     
-    llltofile=lllSignal+lllBackground+lllData_Madgraph
+    llltofile=lllSignal
     writeLLLtoFile(llltofile,rebinnedHistoPath[:-5])
 
-    createBRLLL(transposeLOL(transposeLOL(lllSignal)[SignalSampleNames.index("SigZprime15001200_"+BR_name+""):SignalSampleNames.index("SigZprime25001500_"+BR_name+"")+1]),transposeLOL(transposeLOL(lllSignal)[SignalSampleNames.index("SigZprime15001200_tWb"):SignalSampleNames.index("SigZprime25001500_tWb")+1]),transposeLOL(transposeLOL(lllSignal)[SignalSampleNames.index("SigZprime15001200_ttZ"):SignalSampleNames.index("SigZprime25001500_ttZ")+1]),transposeLOL(transposeLOL(lllSignal)[SignalSampleNames.index("SigZprime15001200_ttH"):SignalSampleNames.index("SigZprime25001500_ttH")+1]),BR[0],BR[1],BR[2])
+    createBRLLL(transposeLOL(transposeLOL(lllSignal)[SignalSampleNames.index("SigGstar1500800_"+BR_name+"Nar"):SignalSampleNames.index("SigGstar40003000_"+BR_name+"Nar")+1]),transposeLOL(transposeLOL(lllSignal)[SignalSampleNames.index("SigGstar1500800_tWb"+"Nar"):SignalSampleNames.index("SigGstar40003000_tWb"+"Nar")+1]),transposeLOL(transposeLOL(lllSignal)[SignalSampleNames.index("SigGstar1500800_ttZ"+"Nar"):SignalSampleNames.index("SigGstar40003000_ttZ"+"Nar")+1]),transposeLOL(transposeLOL(lllSignal)[SignalSampleNames.index("SigGstar1500800_ttH"+"Nar"):SignalSampleNames.index("SigGstar40003000_ttH"+"Nar")+1]),BR[0],BR[1],BR[2])
     
-    createBRLLL(transposeLOL(transposeLOL(lllBackground)[BackgroundSampleNames.index("SC_Zprime15001200_"+BR_name+"_1pb"):BackgroundSampleNames.index("SC_Zprime25001500_"+BR_name+"_1pb")+1]),transposeLOL(transposeLOL(lllBackground)[BackgroundSampleNames.index("SC_Zprime15001200_tWb_1_0pb"):BackgroundSampleNames.index("SC_Zprime25001500_tWb_1_0pb")+1]),transposeLOL(transposeLOL(lllBackground)[BackgroundSampleNames.index("SC_Zprime15001200_ttZ_1_0pb"):BackgroundSampleNames.index("SC_Zprime25001500_ttZ_1_0pb")+1]),transposeLOL(transposeLOL(lllBackground)[BackgroundSampleNames.index("SC_Zprime15001200_ttH_1_0pb"):BackgroundSampleNames.index("SC_Zprime25001500_ttH_1_0pb")+1]),BR[0],BR[1],BR[2])
+    createBRLLL(transposeLOL(transposeLOL(lllSignal)[SignalSampleNames.index("SigGstar1500800_"+BR_name+"Wid"):SignalSampleNames.index("SigGstar40003000_"+BR_name+"Wid")+1]),transposeLOL(transposeLOL(lllSignal)[SignalSampleNames.index("SigGstar1500800_tWb"+"Wid"):SignalSampleNames.index("SigGstar40003000_tWb"+"Wid")+1]),transposeLOL(transposeLOL(lllSignal)[SignalSampleNames.index("SigGstar1500800_ttZ"+"Wid"):SignalSampleNames.index("SigGstar40003000_ttZ"+"Wid")+1]),transposeLOL(transposeLOL(lllSignal)[SignalSampleNames.index("SigGstar1500800_ttH"+"Wid"):SignalSampleNames.index("SigGstar40003000_ttH"+"Wid")+1]),BR[0],BR[1],BR[2])  ,
     
-    createBRLLL(transposeLOL(transposeLOL(lllData_Madgraph)[DataSampleNames.index("DATA_Zprime15001200_"+BR_name+"_1pb"):DataSampleNames.index("DATA_Zprime25001500_"+BR_name+"_1pb")+1]),transposeLOL(transposeLOL(lllData_Madgraph)[DataSampleNames.index("DATA_Zprime15001200_tWb_1_0pb"):DataSampleNames.index("DATA_Zprime25001500_tWb_1_0pb")+1]),transposeLOL(transposeLOL(lllData_Madgraph)[DataSampleNames.index("DATA_Zprime15001200_ttZ_1_0pb"):DataSampleNames.index("DATA_Zprime25001500_ttZ_1_0pb")+1]),transposeLOL(transposeLOL(lllData_Madgraph)[DataSampleNames.index("DATA_Zprime15001200_ttH_1_0pb"):DataSampleNames.index("DATA_Zprime25001500_ttH_1_0pb")+1]),BR[0],BR[1],BR[2])
-    raw_input()
-    scaleToLatestLimit(transposeLOL(transposeLOL(lllSignal)[SignalSampleNames.index("SigZprime15001200_"+BR_name+""):SignalSampleNames.index("SigZprime25001500_ttH")+1]),expectedSignals)
-    scaleToLatestLimit(transposeLOL(transposeLOL(lllBackground)[BackgroundSampleNames.index("SC_Zprime15001200_"+BR_name+"_1pb"):BackgroundSampleNames.index("SC_Zprime25001500_ttH_1_0pb")+1]),expectedSignals)
-    scaleToLatestLimit(transposeLOL(transposeLOL(lllData_Madgraph)[DataSampleNames.index("DATA_Zprime15001200_"+BR_name+"_1pb"):DataSampleNames.index("DATA_Zprime25001500_ttH_1_0pb")+1]),expectedSignals)        
-    raw_input()
-    BRllltofile=lllData_Madgraph+lllBackground+lllSignal
+    
+    BRllltofile=lllSignal
     writeLLLtoFile(BRllltofile,rebinnedBRHistoPath[:-5])     
-    
-    
-    addLLLtoLLL(lllData_Madgraph,transposeLOL([transposeLOL(lllBackground)[BackgroundSampleNames.index("QCDMadgraph")]]+[transposeLOL(lllBackground)[BackgroundSampleNames.index("ttbar")]]),name,False,allweightsystnames,True)
-    addedllltofile=lllData_Madgraph+lllBackground+lllSignal
-    writeLLLtoFile(addedllltofile,rebinnedandaddedBRHistoPath[:-5])
+
    
     
 else:
     if not os.path.isfile(rebinnedBRHistoPath):
         
-        BackgroundSamples=[BackgroundSamples[BackgroundSampleNames.index('ttbar')]]+BackgroundSamples[BackgroundSampleNames.index('QCDMadgraph'):BackgroundSampleNames.index('SC_none')+1]  
-        BackgroundSampleNames=[BackgroundSampleNames[BackgroundSampleNames.index('ttbar')]]+BackgroundSampleNames[BackgroundSampleNames.index('QCDMadgraph'):BackgroundSampleNames.index('SC_none')+1]
         
         
         lllSignal=createLLL_fromSuperHistoFileSyst(rebinnedHistoPath,SignalSamples,plots,allweightsystnames)
-        lllBackground=createLLL_fromSuperHistoFileSyst(rebinnedHistoPath,BackgroundSamples,plots,allweightsystnames)
         renormshapestonom(lllSignal)
-        renormshapestonom(lllBackground)
+        print lllSignal
+        #raw_input()        
         
-        lllData_Madgraph=createLLL_fromSuperHistoFileSyst(rebinnedHistoPath,DataSamples,plots,allweightsystnames) 
 
-        createBRLLL(transposeLOL(transposeLOL(lllSignal)[SignalSampleNames.index("SigZprime15001200_"+BR_name+""):SignalSampleNames.index("SigZprime25001500_"+BR_name+"")+1]),transposeLOL(transposeLOL(lllSignal)[SignalSampleNames.index("SigZprime15001200_tWb"):SignalSampleNames.index("SigZprime25001500_tWb")+1]),transposeLOL(transposeLOL(lllSignal)[SignalSampleNames.index("SigZprime15001200_ttZ"):SignalSampleNames.index("SigZprime25001500_ttZ")+1]),transposeLOL(transposeLOL(lllSignal)[SignalSampleNames.index("SigZprime15001200_ttH"):SignalSampleNames.index("SigZprime25001500_ttH")+1]),BR[0],BR[1],BR[2])
+        createBRLLL(transposeLOL(transposeLOL(lllSignal)[SignalSampleNames.index("SigGstar1500800_"+BR_name+"Nar"):SignalSampleNames.index("SigGstar40003000_"+BR_name+"Nar")+1]),transposeLOL(transposeLOL(lllSignal)[SignalSampleNames.index("SigGstar1500800_tWb"+"Nar"):SignalSampleNames.index("SigGstar40003000_tWb"+"Nar")+1]),transposeLOL(transposeLOL(lllSignal)[SignalSampleNames.index("SigGstar1500800_ttZ"+"Nar"):SignalSampleNames.index("SigGstar40003000_ttZ"+"Nar")+1]),transposeLOL(transposeLOL(lllSignal)[SignalSampleNames.index("SigGstar1500800_ttH"+"Nar"):SignalSampleNames.index("SigGstar40003000_ttH"+"Nar")+1]),BR[0],BR[1],BR[2])
         
-        createBRLLL(transposeLOL(transposeLOL(lllBackground)[BackgroundSampleNames.index("SC_Zprime15001200_"+BR_name+"_1pb"):BackgroundSampleNames.index("SC_Zprime25001500_"+BR_name+"_1pb")+1]),transposeLOL(transposeLOL(lllBackground)[BackgroundSampleNames.index("SC_Zprime15001200_tWb_1_0pb"):BackgroundSampleNames.index("SC_Zprime25001500_tWb_1_0pb")+1]),transposeLOL(transposeLOL(lllBackground)[BackgroundSampleNames.index("SC_Zprime15001200_ttZ_1_0pb"):BackgroundSampleNames.index("SC_Zprime25001500_ttZ_1_0pb")+1]),transposeLOL(transposeLOL(lllBackground)[BackgroundSampleNames.index("SC_Zprime15001200_ttH_1_0pb"):BackgroundSampleNames.index("SC_Zprime25001500_ttH_1_0pb")+1]),BR[0],BR[1],BR[2])
-        
-        createBRLLL(transposeLOL(transposeLOL(lllData_Madgraph)[DataSampleNames.index("DATA_Zprime15001200_"+BR_name+"_1pb"):DataSampleNames.index("DATA_Zprime25001500_"+BR_name+"_1pb")+1]),transposeLOL(transposeLOL(lllData_Madgraph)[DataSampleNames.index("DATA_Zprime15001200_tWb_1_0pb"):DataSampleNames.index("DATA_Zprime25001500_tWb_1_0pb")+1]),transposeLOL(transposeLOL(lllData_Madgraph)[DataSampleNames.index("DATA_Zprime15001200_ttZ_1_0pb"):DataSampleNames.index("DATA_Zprime25001500_ttZ_1_0pb")+1]),transposeLOL(transposeLOL(lllData_Madgraph)[DataSampleNames.index("DATA_Zprime15001200_ttH_1_0pb"):DataSampleNames.index("DATA_Zprime25001500_ttH_1_0pb")+1]),BR[0],BR[1],BR[2])
-        raw_input()
-        scaleToLatestLimit(transposeLOL(transposeLOL(lllSignal)[SignalSampleNames.index("SigZprime15001200_"+BR_name+""):SignalSampleNames.index("SigZprime25001500_ttH")+1]),expectedSignals)
-        scaleToLatestLimit(transposeLOL(transposeLOL(lllBackground)[BackgroundSampleNames.index("SC_Zprime15001200_"+BR_name+"_1pb"):BackgroundSampleNames.index("SC_Zprime25001500_ttH_1_0pb")+1]),expectedSignals)
-        scaleToLatestLimit(transposeLOL(transposeLOL(lllData_Madgraph)[DataSampleNames.index("DATA_Zprime15001200_"+BR_name+"_1pb"):DataSampleNames.index("DATA_Zprime25001500_ttH_1_0pb")+1]),expectedSignals)
-        raw_input()
+        createBRLLL(transposeLOL(transposeLOL(lllSignal)[SignalSampleNames.index("SigGstar1500800_"+BR_name+"Wid"):SignalSampleNames.index("SigGstar40003000_"+BR_name+"Wid")+1]),transposeLOL(transposeLOL(lllSignal)[SignalSampleNames.index("SigGstar1500800_tWb"+"Wid"):SignalSampleNames.index("SigGstar40003000_tWb"+"Wid")+1]),transposeLOL(transposeLOL(lllSignal)[SignalSampleNames.index("SigGstar1500800_ttZ"+"Wid"):SignalSampleNames.index("SigGstar40003000_ttZ"+"Wid")+1]),transposeLOL(transposeLOL(lllSignal)[SignalSampleNames.index("SigGstar1500800_ttH"+"Wid"):SignalSampleNames.index("SigGstar40003000_ttH"+"Wid")+1]),BR[0],BR[1],BR[2])  
 
-        BRllltofile=lllData_Madgraph+lllBackground+lllSignal
+        BRllltofile=lllSignal
         writeLLLtoFile(BRllltofile,rebinnedBRHistoPath[:-5])
-        
-        addLLLtoLLL(lllData_Madgraph,transposeLOL([transposeLOL(lllBackground)[BackgroundSampleNames.index("QCDMadgraph")]]+[transposeLOL(lllBackground)[BackgroundSampleNames.index("ttbar")]]),name,False,allweightsystnames,True)
-        addedllltofile=lllData_Madgraph+lllBackground+lllSignal
-        writeLLLtoFile(addedllltofile,rebinnedandaddedBRHistoPath[:-5])
-       
+
     
     else:
         
         
         if not os.path.isfile(rebinnedandaddedBRHistoPath):
             
-            BackgroundSamples=[BackgroundSamples[BackgroundSampleNames.index('ttbar')]]+BackgroundSamples[BackgroundSampleNames.index('QCDMadgraph'):BackgroundSampleNames.index('SC_none')+1]           
-            BackgroundSampleNames=[BackgroundSampleNames[BackgroundSampleNames.index('ttbar')]]+BackgroundSampleNames[BackgroundSampleNames.index('QCDMadgraph'):BackgroundSampleNames.index('SC_none')+1]
             
               
             lllSignal=createLLL_fromSuperHistoFileSyst(rebinnedBRHistoPath,SignalSamples,plots,allweightsystnames)
-            lllBackground=createLLL_fromSuperHistoFileSyst(rebinnedBRHistoPath,BackgroundSamples,plots,allweightsystnames)
-            lllData_Madgraph=createLLL_fromSuperHistoFileSyst(rebinnedBRHistoPath,DataSamples,plots,allweightsystnames) 
             renormshapestonom(lllSignal)
-            renormshapestonom(lllBackground)    
-            addLLLtoLLL(lllData_Madgraph,transposeLOL([transposeLOL(lllBackground)[BackgroundSampleNames.index("QCDMadgraph")]]+[transposeLOL(lllBackground)[BackgroundSampleNames.index("ttbar")]]),name,False,allweightsystnames,True)
-            addedllltofile=lllData_Madgraph+lllBackground+lllSignal
-            writeLLLtoFile(addedllltofile,rebinnedandaddedBRHistoPath[:-5])  
-            
+            print lllSignal
+            #raw_input()            
         else:
-            
-            BackgroundSamples=[BackgroundSamples[BackgroundSampleNames.index('ttbar')]]+BackgroundSamples[BackgroundSampleNames.index('QCDMadgraph'):BackgroundSampleNames.index('SC_none')+1]    
-            BackgroundSampleNames=[BackgroundSampleNames[BackgroundSampleNames.index('ttbar')]]+BackgroundSampleNames[BackgroundSampleNames.index('QCDMadgraph'):BackgroundSampleNames.index('SC_none')+1]
-            
+
             
             lllSignal=createLLL_fromSuperHistoFileSyst(rebinnedandaddedBRHistoPath,SignalSamples,plots,allweightsystnames)
-            lllBackground=createLLL_fromSuperHistoFileSyst(rebinnedandaddedBRHistoPath,BackgroundSamples,plots,allweightsystnames)
-            lllData_Madgraph=createLLL_fromSuperHistoFileSyst(rebinnedandaddedBRHistoPath,DataSamples,plots,allweightsystnames)            
             renormshapestonom(lllSignal)
-            renormshapestonom(lllBackground)    
 
-
-
-
-
+            print lllSignal
+            #raw_input()  
 
 
 
@@ -622,13 +567,117 @@ labels=[plot.label for plot in plots]
             #for ABCDversion in [ABCDversion]:
                 #for Category in ['notopbtag','withtopbtag']:#,'inclusive']:
           
-#################Final with ABCD only ###################
-##################with Syst notoptag #####################R
+################Final with ABCD only ###################
+#################with Syst notoptag #####################R
                     #if QCDname is 'QCDMadgraph':
                         #for ABCD_syst,ABCD_syst_name in zip([False,True],['Rateonly','RateAndShape']):
                         ##for ABCD_syst,ABCD_syst_name in zip([True],['RateAndShape']):
                             #ABCDBackgroundEstimationCalculationAndPlotsWithSystematics(lllData_Madgraph,lllBackground,lllSignal,BackgroundSamples,SignalSamples,DataSampleNames,BackgroundSampleNames, SignalSampleNames, plotnames,allweightsystnames,dataname,SC_name,signalname,ABCDversion+'_'+Category+'_CatA', ABCDversion+'_'+Category+'_CatB', ABCDversion+'_'+Category+'_CatC', ABCDversion+'_'+Category+'_CatD',QCDname, ABCDversion+'/fancy_'+ABCDversion+'_'+ABCDeventhandling+'_'+WPs+'_'+ABCD_syst_name,ABCD_syst)
-#print "signal efficiency in %"
+print "signal efficiency in %"
 
-#for l1,l2,l3,signame in zip(lllSignal[plotnames.index(ABCDversion + "_withtopbtag_CatA_Zprime_eff")],lllSignal[plotnames.index(ABCDversion + "_notopbtag_CatA_Zprime_eff")],lllSignal[plotnames.index("N_Gen_ZPrimes")], SignalSampleNames):
-    #print signame, " 2 b-tag:", l1[allweightsystnames.index('_'+ABCDversion+'_nominal')].Integral()/l3[allweightsystnames.index('_'+ABCDversion+'_nominal')].Integral()*100.0 ,"   1 b-tag:", l2[allweightsystnames.index('_'+ABCDversion+'_nominal')].Integral()/l3[allweightsystnames.index('_'+ABCDversion+'_nominal')].Integral()*100.0
+text=""
+
+
+
+
+for l1,l2,l3,signame in zip(lllSignal[plotnames.index(ABCDversion + "_withtopbtag_CatA_Zprime_eff")],lllSignal[plotnames.index(ABCDversion + "_notopbtag_CatA_Zprime_eff")],lllSignal[plotnames.index("N_Gen_ZPrimes")], SignalSampleNames):
+    #print "allweightsystnames.index('_'+ABCDversion+'_nominal')", allweightsystnames.index('_'+ABCDversion+'_nominal')
+    
+    #print "l1", l1
+    #print "l2", l2
+    #print "l3", l3
+    if len(l1)>0 and len(l2)>0 and len(l3)>0:
+        if l1[allweightsystnames.index('_'+ABCDversion+'_nominal')].Integral()>0 and l2[allweightsystnames.index('_'+ABCDversion+'_nominal')].Integral()>0 and l3[allweightsystnames.index('_'+ABCDversion+'_nominal')].Integral()>0:
+            
+            if "ttH" in signame:
+                decay="HT"
+            if "ttZ" in signame:
+                decay="ZT"                
+            if "tWb" in signame:
+                decay="WB"
+                
+            if "Wid" in signame:
+                width="WID"
+            if "Nar" in signame:
+                width="Nar"
+            
+            mZ=signame[8:12]
+            mT=signame[12:15]
+                
+            filename=glob.glob("/nfs/dust/cms/user/skudella/processed_MC/scripts/cutflow/*"+decay+"*Zp"+mZ+width+"*"+mT+"*.txt")
+            #print filename
+            f=open(filename[0],"r")
+            for line in f:
+                if ("0 : all : " in line):
+                    first=re.findall("\d+\.\d+",line)
+                if ("16 : >=3 jets >=0 tags : " in line):
+                    last=re.findall("\d+\.\d+",line)
+                    
+            taggeff=float(last[0])/float(first[0])
+            #print "taggeff",taggeff
+          
+            eff2b=l1[allweightsystnames.index('_'+ABCDversion+'_nominal')].Integral()/l3[allweightsystnames.index('_'+ABCDversion+'_nominal')].Integral()*100.0*taggeff
+            eff1b=l2[allweightsystnames.index('_'+ABCDversion+'_nominal')].Integral()/l3[allweightsystnames.index('_'+ABCDversion+'_nominal')].Integral()*100.0*taggeff
+            
+            eff2b_unc= (1.0/math.sqrt(l1[allweightsystnames.index('_'+ABCDversion+'_nominal')].Integral())+1.0/math.sqrt(240000))*eff2b
+            eff1b_unc= (1.0/math.sqrt(l2[allweightsystnames.index('_'+ABCDversion+'_nominal')].Integral())+1.0/math.sqrt(240000))*eff1b
+            
+            #print 1.0/math.sqrt(l1[allweightsystnames.index('_'+ABCDversion+'_nominal')].Integral()), "  ", 1.0/math.sqrt(float(first[0])), "  ", first[0]
+          
+            roundigit0=0
+            roundlimit0=eff2b
+            for i in range(10):
+                if roundlimit0<1.0:
+                    roundlimit0=roundlimit0*10
+                    roundigit0+=1
+            
+            roundigit1=0
+            roundlimit1=eff2b_unc
+            for i in range(10):
+                if roundlimit1<1.0:
+                    roundlimit1=roundlimit1*10
+                    roundigit1+=1
+                    
+            roundigit2=0
+            roundlimit2=eff1b
+            for i in range(10):
+                if roundlimit2<1.0:
+                    roundlimit2=roundlimit2*10
+                    roundigit2+=1
+                    
+                    
+            roundigit3=0
+            roundigit32=0
+            roundlimit3=eff1b_unc
+            for i in range(10):
+                if roundlimit3<1.0:
+                    roundlimit3=roundlimit3*10
+                    roundigit3+=1
+         
+            if roundigit1<2.0:
+                roundigit12=roundigit1+1
+            else:
+                roundigit12=roundigit1         
+         
+            if roundlimit3<2.0:
+                roundigit32=roundigit3+1
+            else:
+                roundigit32=roundigit3
+            
+            print signame, " 2 b-tag:", str(round(eff2b,roundigit1))," pm ",str(round(eff2b_unc,roundigit12)) ,"   1 b-tag:", str(round(eff1b,roundigit3))," pm ",str(round(eff1b_unc,roundigit32)) 
+            text=text+signame+""" & """+ str(round(eff2b,roundigit1))+"""\pm """+ str(round(eff2b_unc,roundigit12)) + """ & """+ str(round(eff1b,roundigit3))+"""\pm """+ str(round(eff1b_unc,roundigit32))+"""        
+"""
+        else:
+            print "l1",l1[allweightsystnames.index('_'+ABCDversion+'_nominal')].Integral(),"l2",l2[allweightsystnames.index('_'+ABCDversion+'_nominal')].Integral(),"l3",l3[allweightsystnames.index('_'+ABCDversion+'_nominal')].Integral()
+            print signame, " 2 b-tag: empty   1 b-tag: empty"
+            text=text+signame+"""& empty & empty"""+"""      
+"""            
+    else:
+        print signame, " 2 b-tag: buggy  1 b-tag: buggy"
+        text=text+signame+"""& buggy & buggy"""+"""        
+"""
+
+
+f=open("signal efficiency_Gstar.txt",'w')
+f.write(text)
+f.close()

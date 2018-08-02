@@ -256,7 +256,7 @@ class Variables:
   
   # initialize variable
   def initVar(self,tree,name,expression='',vartype='F',arraylength=None):
-    #print "initVar", tree,name,expression
+    print "initVar", tree,name,expression
     if not name in self.variables and not name in self.vetolist:
       
       if not ".xml" in expression and not hasattr(tree,expression):
@@ -269,7 +269,7 @@ class Variables:
   
   # initialize variables from expression
   def initVarsFromExpr(self,expr,tree):
-    print "initVarsFromExpr",expr,tree
+    print "initVarsFromExpr",expr,tree, self
     if ":=" in expr:
       name,expr=expr.split(":=")
       
@@ -283,14 +283,16 @@ class Variables:
       #self.
         
     else:
+      print expr
       variablenames=self.varsIn(expr)
       
       for name in variablenames:
-	#print name
+	print name
         self.initVar(tree,name,name,'F')  
   
   # initialize variables from expression list
   def initVarsFromExprList(self,exprlist,tree):
+    print exprlist
     for expr in exprlist:
       print expr
       self.initVarsFromExpr(expr,tree)

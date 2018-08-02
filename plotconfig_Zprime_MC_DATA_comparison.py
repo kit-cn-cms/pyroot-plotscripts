@@ -640,16 +640,16 @@ SignalSamples=[
                     #Sample('Z->tWb, m(Zp_{Nar})=2000, m(Tp_{Nar,LH})=1500',ROOT.kCyan+3,path_80x_MC+'Signal_Zprime/Zprime_2000_1500_nominal_Tree.root',mcweight,'Zprime20001500'),
                     #Sample('Signal',ROOT.kRed,path_80x_MC+'Signal_Zprime/Zprime*nominal*Tree.root',mcweight+'/35.9' ,'Zprimeall',allweightsystnames),
                     #Sample('Signal (1pb)',ROOT.kRed,path_80x_MC+'Signal_Zprime/Zprime*ToWB*2500*1200*nominal*Tree.root',mcweight+'/37.6' ,'Zprimeall',allweightsystnames),
-                    Sample("Sig. m(Z')=1500, m(T)=700",ROOT.kMagenta,path_80x_MC+'Signal_Zprime/Zprime*ToWB*1500*700*nominal*Tree.root',mcweight+'/95.06*0.80','Zprimeall',allweightsystnames) ,
+                    Sample("Sig. m_{Z'}=1.5 TeV, m_{T}=0.7 TeV",ROOT.kMagenta,path_80x_MC+'Signal_Zprime/Zprime*ToWB*1500*700*nominal*Tree.root',mcweight+'/95.06*0.80','Zprimeall',allweightsystnames) ,
 ]
 
 BackgroundSamples=[
+                    #Sample('t#bar{t}',ROOT.kBlue-4,path_80x_MC+'BKG_TTbar/*nominal*.root',mcweight+'/'+ttbarXS_MCgen+'*'+ttbarXS_NLO,'ttbar',allweightsystnames) ,
                     Sample('Top background',ROOT.kBlue-4,path_80x_MC+'BKG_TTbar/*nominal*.root',mcweight+'/'+ttbarXS_MCgen+'*'+ttbarXS_NLO,'ttbar',allweightsystnames) ,
-                    #Sample('Top background',ROOT.kBlue-4,path_80x_MC+'BKG_TTbar/*nominal*.root',mcweight+'/'+ttbarXS_MCgen+'*'+ttbarXS_NLO,'ttbar',allweightsystnames) ,
                     Sample('single top (tW-channel)',ROOT.kBlue+2,path_80x_MC+'BKG_ST/*ST*tW*nominal*.root',mcweight,'ST_tW',allweightsystnames) ,
                     Sample('single top (t-channel)',ROOT.kBlue-9,path_80x_MC+'BKG_ST/*ST*t-channel*nominal*.root',mcweight,'ST_t',allweightsystnames) ,
                     Sample('single top (s-channel)',ROOT.kBlue-7,path_80x_MC+'BKG_ST/*ST*s-channel*nominal*.root',mcweight,'ST_s',allweightsystnames) ,
-                    Sample('QCD from MC',ROOT.kOrange-3,path_80x_MC+'BKG_QCD/*QCD_H*nominal*Tree*.root',mcweight,'QCDMadgraph',allweightsystnames),
+                    Sample('QCD background from MC',ROOT.kOrange-3,path_80x_MC+'BKG_QCD/*QCD_H*nominal*Tree*.root',mcweight,'QCDMadgraph',allweightsystnames),
 ]
 
 

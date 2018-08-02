@@ -428,6 +428,38 @@ def getStatTests(h1,h2,option="WW"):
     tests.SetNDC()
     return tests
 
+
+
+def GetCMSandInfoLabels():
+    posy = 1.-ROOT.gStyle.GetPadTopMargin()+0.08
+
+    cms = ROOT.TPaveText(
+        ROOT.gStyle.GetPadLeftMargin()+0.05,posy,
+        1.-ROOT.gStyle.GetPadRightMargin()+0.02, 1.,
+        "NDC"
+    )
+    cms.AddText("#scale[1.7]{CMS private work}")
+    cms.SetFillColor(0)
+    cms.SetTextFont(43)
+    cms.SetTextSize(26)
+    cms.SetMargin(0.)
+    cms.SetTextAlign(13)
+
+    info = ROOT.TPaveText(
+        0.7, posy+0.02,
+        1.-ROOT.gStyle.GetPadRightMargin()+0.02, 1.,
+        "NDC"
+    )
+    info.AddText("#scale[1.7]{35.9 fb^{-1} (13 TeV)}")
+    info.SetFillColor(0)
+    info.SetTextFont(43)
+    info.SetTextSize(26)
+    info.SetMargin(0.)
+    info.SetTextAlign(33)
+
+    return cms,info
+
+
 def getStatTestsList(h1,lh2,option="WW"):
     mystrng=''
     ss=[]
@@ -1398,7 +1430,7 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
         else:
             c=drawHistosOnCanvas(listOfHistos,normalize,stack,logscale,options,ratio,DoProfile)
             c.Update()
-            c.SaveAs("testkarim2.png")
+            #c.SaveAs("testkarim2.png")
         if isinstance(listOfHistos[0],ROOT.TGraphAsymmErrors):
             option='samePZ'
             #option+=options_
@@ -1467,9 +1499,12 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
         # cms.Draw()
         # print cms
         # objects.append(cms)
-
+        #cms,info = GetCMSandInfoLabels()
+        #cms.Draw()
+        #info.Draw()        
         if not isinstance(c, list):
-            cms = ROOT.TLatex(0.2, 0.96, 'CMS private work,  35.9 fb^{-1},  #sqrt{s} = 13 TeV'  );
+            
+            cms = ROOT.TLatex(0.15, 0.95, 'CMS private work                            35.9 fb^{-1} (13 TeV)'  );
             cms.SetTextFont(42)
             cms.SetTextSize(0.05)
             cms.SetNDC()
@@ -1482,7 +1517,43 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
             label.SetNDC()
             label.Draw()
             objects.append(label)
+            
             listofallstattests.append(listofthisstattests)
+            
+            
+            #print "here"
+            
+            
+            #posy = 1.-ROOT.gStyle.GetPadTopMargin()+0.1
+
+            #cms = ROOT.TPaveText(
+                #ROOT.gStyle.GetPadLeftMargin()+0.05,posy,
+                #1.-ROOT.gStyle.GetPadRightMargin()+0.02, 1.,
+                #"NDC"
+            #)
+            #cms.AddText("#scale[1.7]{CMS private work}")
+            #cms.SetFillColor(0)
+            #cms.SetTextFont(43)
+            #cms.SetTextSize(26)
+            #cms.SetMargin(0.)
+            #cms.SetTextAlign(13)
+
+            #info = ROOT.TPaveText(
+                #0.7, posy+0.02,
+                #1.-ROOT.gStyle.GetPadRightMargin()+0.02, 1.,
+                #"NDC"
+            #)
+            #info.AddText("#scale[1.7]{35.9 fb^{-1} (13 TeV)}")
+            #info.SetFillColor(0)
+            #info.SetTextFont(43)
+            #info.SetTextSize(26)
+            #info.SetMargin(0.)
+            #info.SetTextAlign(33)
+
+            #cms.Draw()
+            #info.Draw()
+            #objects.append(cms)
+            #objects.append(info)
         # else:
         #     for can, sam in zip(c,samples):
         #         labeltext = sam.name
@@ -2755,7 +2826,14 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         for histo,sample in zip(listOfHistos,samples):
             yTitle='Events'
             setupHisto(histo,sample.color,yTitle,True)
-            
+            histo.GetYaxis().SetTitleSize(0.07)
+            histo.GetYaxis().SetLabelSize(0.07)
+            histo.GetYaxis().SetTitleOffset(1.0)
+            histo.GetXaxis().SetTitleSize(0.07)
+            histo.GetXaxis().SetTitleOffset(0.85)
+            histo.GetXaxis().SetLabelSize(0.06)
+            histo.GetXaxis().SetNdivisions(301)
+
             if factor < 0:
               integralfactor+=histo.Integral()
         
@@ -2926,25 +3004,31 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         objects.append(l2)
         objects.append(otc)
         
-        #draw the lumi text on the canvas
-        CMS_lumi.lumi_13TeV = "35.9 fb^{-1}"
-        CMS_lumi.writeExtraText = 1
-        CMS_lumi.extraText = "private work"
-        CMS_lumi.lumi_sqrtS = "13 TeV" # used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
+        ##draw the lumi text on the canvas
+        #CMS_lumi.lumi_13TeV = "35.9 fb^{-1}"
+        #CMS_lumi.writeExtraText = 1
+        #CMS_lumi.extraText = "private work"
+        #CMS_lumi.lumi_sqrtS = "13 TeV" # used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
 
-        CMS_lumi.cmsTextSize = 0.55
-        CMS_lumi.cmsTextOffset = 0.49
-        CMS_lumi.lumiTextSize = 0.43
-        CMS_lumi.lumiTextOffset = 0.61
+        #CMS_lumi.cmsTextSize = 0.55
+        #CMS_lumi.cmsTextOffset = 0.49
+        #CMS_lumi.lumiTextSize = 0.43
+        #CMS_lumi.lumiTextOffset = 0.61
         
-        CMS_lumi.relPosX = 0.15
+        #CMS_lumi.relPosX = 0.15
         
-        CMS_lumi.hOffset = 0.05
+        #CMS_lumi.hOffset = 0.05
         
-        iPeriod=4   # 13TeV
-        iPos=0     # CMS inside frame
+        #iPeriod=4   # 13TeV
+        #iPos=0     # CMS inside frame
         
-        CMS_lumi.CMS_lumi(canvas, iPeriod, iPos)
+        #CMS_lumi.CMS_lumi(canvas, iPeriod, iPos)
+        
+        cms,info = GetCMSandInfoLabels()
+        cms.Draw("same")
+        info.Draw("same")
+                
+        
         
         labelobj=label
         labelobj = ROOT.TLatex(0.18, 0.89, labeltext);
@@ -3007,8 +3091,10 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
                 line.GetYaxis().SetTitle('MCData/MC');       
 
         line.GetYaxis().SetNdivisions( 503 );
-        line.GetYaxis().SetTitleOffset( 0.5 );
-        line.GetXaxis().SetNdivisions( 510 );
+        #line.GetYaxis().SetTitleOffset( 0.5 );
+        line.GetYaxis().SetTitleOffset( 0.4 );
+        #line.GetXaxis().SetNdivisions( 510 );
+        line.GetXaxis().SetNdivisions( 505 );
         line.GetXaxis().SetTickLength( line.GetXaxis().GetTickLength() * 2.0 );
         line.GetYaxis().SetTickLength( line.GetYaxis().GetTickLength() * 1.65 );
 
@@ -6231,10 +6317,15 @@ def createBRLLL(final_lllBR,lll1,lll2,lll3, c1=1.0, c2=1.0, c3=1.0,):
                 final_hBR.Add(h3,c3)
         
 def scaleToLatestLimit(lll,listoflimits):
+    print lll
     for ll,limit in zip(transposeLOL(lll),listoflimits):
+        print ll
         for l in ll:
             for h in l:
+                print "before scaleing", h, "  ",h.Integral()
                 h.Scale(limit)
+                print "after scaleing", h, "  ",h.Integral()
+                raw_input()
     
 def efficiencies(listOfHistoListsToPlot,sampleListToPlot,numerator_index_list, denumerator_index_list,name='define name',labels=None):
     if labels==None:
@@ -6253,6 +6344,44 @@ def efficiencies(listOfHistoListsToPlot,sampleListToPlot,numerator_index_list, d
         ll.append(l)
 
     return ll
+
+
+
+
+            
+
+        
+def renormshapestonom(LLL):
+    #print LLL
+    
+    #raw_input()
+    for ll in LLL:
+        #print ll
+        #raw_input()
+        for l in ll:
+            #print l
+            #raw_input()
+            for h in l:
+                #print h.GetName()
+                if 'JES' in h.GetName():
+                    continue
+                if 'JER' in h.GetName():
+                    continue
+                if 'ttbar' in h.GetName():
+                    continue
+                if 'ST' in h.GetName():
+                    continue                
+                #if(('_nominal' in h.GetName()) and not ('JES' in h.GetName()) and not ('JER' in h.GetName())):
+                if('_nominal' in h.GetName()):
+                    h_nom=h
+                    print h.GetName()
+                if('PDF' in h.GetName()):
+                    print "renormalize PDF of ", h.GetName()," ",h.Integral() , "  to  ",h_nom.GetName(),"  ", h_nom.Integral()
+                    if h_nom.Integral()>0 and h.Integral()>0:
+                        h.Scale(h_nom.Integral()/h.Integral())
+
+            #raw_input()
+                        
 
 #def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='define name', rebin=1, fitoption='pol2', labels=None, autoXrange=False):
 
