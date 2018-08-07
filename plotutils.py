@@ -6204,26 +6204,45 @@ def create_envelopes_new(LLL):
                 if('_nominal' in h.GetName()):
                     h_nom=h
                     print h.GetName()
-                if('_MCSF_renfac_envUp' in h.GetName()):
-                    h_envUp=h
-                if('_MCSF_renfac_envDown' in h.GetName()):
-                    h_envDown=h
-                if('_MCSF_renfacUp' in h.GetName()):
-                    h_renfacUp=h
-                if('_MCSF_renfacDown' in h.GetName()):
-                    h_renfacDown=h
-                if('_MCSF_renUp' in h.GetName()):
-                    h_renUp=h
-                if('_MCSF_renDown' in h.GetName()):
-                    h_renDown=h
-                if('_MCSF_facUp' in h.GetName()):
-                    h_facUp=h
-                if('_MCSF_facDown' in h.GetName()):
-                    h_facDown=h
-            print  h_nom, h_envUp,  h_envDown  
-            print h_nom.Integral(),"  ",h_envUp.Integral(), "  ", h_envDown.Integral()
-            create_envelope(h_nom,h_envUp,h_envDown,[h_renfacUp,h_renfacDown,h_renUp,h_renDown,h_facUp,h_facDown])
-            print h_nom.Integral(),"  ",h_envUp.Integral(), "  ", h_envDown.Integral()
+                if('_MCSF_powheg_renfac_envUp' in h.GetName()):
+                    h_powheg_envUp=h
+                if('_MCSF_powheg_renfac_envDown' in h.GetName()):
+                    h_powheg_envDown=h
+                if('_MCSF_powheg_renfacUp' in h.GetName()):
+                    h_powheg_renfacUp=h
+                if('_MCSF_powheg_renfacDown' in h.GetName()):
+                    h_powheg_renfacDown=h
+                if('_MCSF_powheg_renUp' in h.GetName()):
+                    h_powheg_renUp=h
+                if('_MCSF_powheg_renDown' in h.GetName()):
+                    h_powheg_renDown=h
+                if('_MCSF_powheg_facUp' in h.GetName()):
+                    h_powheg_facUp=h
+                if('_MCSF_powheg_facDown' in h.GetName()):
+                    h_powheg_facDown=h
+                if('_MCSF_amc_renfac_envUp' in h.GetName()):
+                    h_amc_envUp=h
+                if('_MCSF_amc_renfac_envDown' in h.GetName()):
+                    h_amc_envDown=h
+                if('_MCSF_amc_renfacUp' in h.GetName()):
+                    h_amc_renfacUp=h
+                if('_MCSF_amc_renfacDown' in h.GetName()):
+                    h_amc_renfacDown=h
+                if('_MCSF_amc_renUp' in h.GetName()):
+                    h_amc_renUp=h
+                if('_MCSF_amc_renDown' in h.GetName()):
+                    h_amc_renDown=h
+                if('_MCSF_amc_facUp' in h.GetName()):
+                    h_amc_facUp=h
+                if('_MCSF_amc_facDown' in h.GetName()):
+                    h_amc_facDown=h
+                                        
+                    
+            #print  h_nom, h_envUp,  h_envDown  
+            #print h_nom.Integral(),"  ",h_envUp.Integral(), "  ", h_envDown.Integral()
+            create_envelope(h_nom,h_powheg_envUp,h_powheg_envDown,[h_powheg_renfacUp,h_powheg_renfacDown,h_powheg_renUp,h_powheg_renDown,h_powheg_facUp,h_powheg_facDown])
+            create_envelope(h_nom,h_amc_envUp,h_amc_envDown,[h_amc_renfacUp,h_amc_renfacDown,h_amc_renUp,h_amc_renDown,h_amc_facUp,h_amc_facDown])
+            #print h_nom.Integral(),"  ",h_envUp.Integral(), "  ", h_envDown.Integral()
             #raw_input()
             
                     
