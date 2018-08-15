@@ -1311,18 +1311,21 @@ class BosonHelper
 {
   public:
     // see the definition/implementation file for a description of the functions 
-    BosonHelper(TString path_to_sf_file_W, TString path_to_sf_file_Z);
+    BosonHelper(TString path_to_sf_file_W, TString path_to_sf_file_Zvv, TString path_to_sf_file_Zll);
     ~BosonHelper();
     double GetScaleFactorW(float W_Pt, string label);
-    double GetScaleFactorZ(float Z_Pt, string label);
+    double GetScaleFactorZvv(float Z_Pt, string label);
+    double GetScaleFactorZll(float Z_Pt, string label);
     void Reset();
     void LoadWFile(TString path_to_sf_file_);
-    void LoadZFile(TString path_to_sf_file_);
+    void LoadZvvFile(TString path_to_sf_file_);
+    void LoadZllFile(TString path_to_sf_file_);
       
   private:
     // pointer for the root file containing the desired histograms
     TFile* scalefactor_fileW = 0;
-    TFile* scalefactor_fileZ = 0;
+    TFile* scalefactor_fileZvv = 0;
+    TFile* scalefactor_fileZll = 0;
     // path to the root file
     TString path_to_sf_file = "";
     // histograms containing the scale factors for electron and muon channel separately
@@ -1348,37 +1351,62 @@ class BosonHelper
     TH1D* WbosonWeight_muFUp = 0;
     TH1D* WbosonWeight_muFDown = 0;
 
-    TH1D* ZbosonWeight_nominal = 0;
-    TH1D* ZbosonWeight_QCD1Up = 0;
-    TH1D* ZbosonWeight_QCD1Down = 0;
-    TH1D* ZbosonWeight_QCD2Up = 0;
-    TH1D* ZbosonWeight_QCD2Down = 0;
-    TH1D* ZbosonWeight_QCD3Up = 0;
-    TH1D* ZbosonWeight_QCD3Down = 0;
-    TH1D* ZbosonWeight_EW1Up = 0;
-    TH1D* ZbosonWeight_EW1Down = 0;
-    TH1D* ZbosonWeight_EW2Up = 0;
-    TH1D* ZbosonWeight_EW2Down = 0;
-    TH1D* ZbosonWeight_EW3Up = 0;
-    TH1D* ZbosonWeight_EW3Down = 0;
-    TH1D* ZbosonWeight_MixedUp = 0;
-    TH1D* ZbosonWeight_MixedDown = 0;
-    TH1D* ZbosonWeight_AlphaUp = 0;
-    TH1D* ZbosonWeight_AlphaDown = 0;
-    TH1D* ZbosonWeight_muRUp = 0;
-    TH1D* ZbosonWeight_muRDown = 0;
-    TH1D* ZbosonWeight_muFUp = 0;
-    TH1D* ZbosonWeight_muFDown = 0;
+    TH1D* ZvvbosonWeight_nominal = 0;
+    TH1D* ZvvbosonWeight_QCD1Up = 0;
+    TH1D* ZvvbosonWeight_QCD1Down = 0;
+    TH1D* ZvvbosonWeight_QCD2Up = 0;
+    TH1D* ZvvbosonWeight_QCD2Down = 0;
+    TH1D* ZvvbosonWeight_QCD3Up = 0;
+    TH1D* ZvvbosonWeight_QCD3Down = 0;
+    TH1D* ZvvbosonWeight_EW1Up = 0;
+    TH1D* ZvvbosonWeight_EW1Down = 0;
+    TH1D* ZvvbosonWeight_EW2Up = 0;
+    TH1D* ZvvbosonWeight_EW2Down = 0;
+    TH1D* ZvvbosonWeight_EW3Up = 0;
+    TH1D* ZvvbosonWeight_EW3Down = 0;
+    TH1D* ZvvbosonWeight_MixedUp = 0;
+    TH1D* ZvvbosonWeight_MixedDown = 0;
+    TH1D* ZvvbosonWeight_AlphaUp = 0;
+    TH1D* ZvvbosonWeight_AlphaDown = 0;
+    TH1D* ZvvbosonWeight_muRUp = 0;
+    TH1D* ZvvbosonWeight_muRDown = 0;
+    TH1D* ZvvbosonWeight_muFUp = 0;
+    TH1D* ZvvbosonWeight_muFDown = 0;
+    
+    TH1D* ZllbosonWeight_nominal = 0;
+    TH1D* ZllbosonWeight_QCD1Up = 0;
+    TH1D* ZllbosonWeight_QCD1Down = 0;
+    TH1D* ZllbosonWeight_QCD2Up = 0;
+    TH1D* ZllbosonWeight_QCD2Down = 0;
+    TH1D* ZllbosonWeight_QCD3Up = 0;
+    TH1D* ZllbosonWeight_QCD3Down = 0;
+    TH1D* ZllbosonWeight_EW1Up = 0;
+    TH1D* ZllbosonWeight_EW1Down = 0;
+    TH1D* ZllbosonWeight_EW2Up = 0;
+    TH1D* ZllbosonWeight_EW2Down = 0;
+    TH1D* ZllbosonWeight_EW3Up = 0;
+    TH1D* ZllbosonWeight_EW3Down = 0;
+    TH1D* ZllbosonWeight_MixedUp = 0;
+    TH1D* ZllbosonWeight_MixedDown = 0;
+    TH1D* ZllbosonWeight_AlphaUp = 0;
+    TH1D* ZllbosonWeight_AlphaDown = 0;
+    TH1D* ZllbosonWeight_muRUp = 0;
+    TH1D* ZllbosonWeight_muRDown = 0;
+    TH1D* ZllbosonWeight_muFUp = 0;
+    TH1D* ZllbosonWeight_muFDown = 0;
+    
     // flag if the file and the histograms were read properly
     bool Winitialized = false;
-    bool Zinitialized = false;
+    bool Zvvinitialized = false;
+    bool Zllinitialized = false;
 };
 
-BosonHelper::BosonHelper(TString path_to_sf_file_W, TString path_to_sf_file_Z)
+BosonHelper::BosonHelper(TString path_to_sf_file_W, TString path_to_sf_file_Zvv, TString path_to_sf_file_Zll)
 {
   // just the constructor which loads a root file containing the histograms with the scale factors using the LoadFile function
   LoadWFile(path_to_sf_file_W);
-  LoadZFile(path_to_sf_file_Z);
+  LoadZvvFile(path_to_sf_file_Zvv);
+  LoadZllFile(path_to_sf_file_Zll);
 }
 
 void BosonHelper::LoadWFile(TString path_to_sf_file_)
@@ -1416,38 +1444,73 @@ void BosonHelper::LoadWFile(TString path_to_sf_file_)
   }
 }
 
-void BosonHelper::LoadZFile(TString path_to_sf_file_)
+void BosonHelper::LoadZvvFile(TString path_to_sf_file_)
 {
   // this function loads the file given by a string and initializes the 2 needed histograms if the file was loaded correctly
   path_to_sf_file = path_to_sf_file_;
   if(path_to_sf_file!="")
   {
-    scalefactor_fileZ = TFile::Open(path_to_sf_file);
+    scalefactor_fileZvv = TFile::Open(path_to_sf_file);
   }
-  if(scalefactor_fileZ)
+  if(scalefactor_fileZvv)
   {
-    ZbosonWeight_nominal =   (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnn_nnn_n");
-    ZbosonWeight_QCD1Up =    (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_unn_nnn_n");
-    ZbosonWeight_QCD1Down =  (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_dnn_nnn_n");
-    ZbosonWeight_QCD2Up =    (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nun_nnn_n");
-    ZbosonWeight_QCD2Down =  (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_ndn_nnn_n");
-    ZbosonWeight_QCD3Up =    (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnu_nnn_n");
-    ZbosonWeight_QCD3Down =  (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnd_nnn_n");
-    ZbosonWeight_EW1Up =     (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnn_unn_n");
-    ZbosonWeight_EW1Down =   (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnn_dnn_n");
-    ZbosonWeight_EW2Up =     (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnn_nun_n");
-    ZbosonWeight_EW2Down =   (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnn_ndn_n");
-    ZbosonWeight_EW3Up =     (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnn_nnu_n");
-    ZbosonWeight_EW3Down =   (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnn_nnd_n");
-    ZbosonWeight_MixedUp =   (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnn_nnn_u");
-    ZbosonWeight_MixedDown = (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnn_nnn_d");
-    ZbosonWeight_AlphaUp =   (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnn_nnn_n_alpha_up");
-    ZbosonWeight_AlphaDown = (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnn_nnn_n_alpha_down");
-    ZbosonWeight_muRUp =     (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnn_nnn_n_Weight_scale_variation_muR_2p0_muF_1p0");
-    ZbosonWeight_muRDown =   (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnn_nnn_n_Weight_scale_variation_muR_0p5_muF_1p0");
-    ZbosonWeight_muFUp =     (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnn_nnn_n_Weight_scale_variation_muR_1p0_muF_2p0");
-    ZbosonWeight_muFDown =   (TH1D*)scalefactor_fileZ->Get("vvj_NNLO_NLO_nnn_nnn_n_Weight_scale_variation_muR_1p0_muF_0p5");
-    Zinitialized = true;
+    ZvvbosonWeight_nominal =   (TH1D*)scalefactor_fileZvv->Get("vvj_NNLO_NLO_nnn_nnn_n");
+    ZvvbosonWeight_QCD1Up =    (TH1D*)scalefactor_fileZvv->Get("vvj_NNLO_NLO_unn_nnn_n");
+    ZvvbosonWeight_QCD1Down =  (TH1D*)scalefactor_fileZvv->Get("vvj_NNLO_NLO_dnn_nnn_n");
+    ZvvbosonWeight_QCD2Up =    (TH1D*)scalefactor_fileZvv->Get("vvj_NNLO_NLO_nun_nnn_n");
+    ZvvbosonWeight_QCD2Down =  (TH1D*)scalefactor_fileZvv->Get("vvj_NNLO_NLO_ndn_nnn_n");
+    ZvvbosonWeight_QCD3Up =    (TH1D*)scalefactor_fileZvv->Get("vvj_NNLO_NLO_nnu_nnn_n");
+    ZvvbosonWeight_QCD3Down =  (TH1D*)scalefactor_fileZvv->Get("vvj_NNLO_NLO_nnd_nnn_n");
+    ZvvbosonWeight_EW1Up =     (TH1D*)scalefactor_fileZvv->Get("vvj_NNLO_NLO_nnn_unn_n");
+    ZvvbosonWeight_EW1Down =   (TH1D*)scalefactor_fileZvv->Get("vvj_NNLO_NLO_nnn_dnn_n");
+    ZvvbosonWeight_EW2Up =     (TH1D*)scalefactor_fileZvv->Get("vvj_NNLO_NLO_nnn_nun_n");
+    ZvvbosonWeight_EW2Down =   (TH1D*)scalefactor_fileZvv->Get("vvj_NNLO_NLO_nnn_ndn_n");
+    ZvvbosonWeight_EW3Up =     (TH1D*)scalefactor_fileZvv->Get("vvj_NNLO_NLO_nnn_nnu_n");
+    ZvvbosonWeight_EW3Down =   (TH1D*)scalefactor_fileZvv->Get("vvj_NNLO_NLO_nnn_nnd_n");
+    ZvvbosonWeight_MixedUp =   (TH1D*)scalefactor_fileZvv->Get("vvj_NNLO_NLO_nnn_nnn_u");
+    ZvvbosonWeight_MixedDown = (TH1D*)scalefactor_fileZvv->Get("vvj_NNLO_NLO_nnn_nnn_d");
+    ZvvbosonWeight_AlphaUp =   (TH1D*)scalefactor_fileZvv->Get("vvj_NNLO_NLO_nnn_nnn_n_alpha_up");
+    ZvvbosonWeight_AlphaDown = (TH1D*)scalefactor_fileZvv->Get("vvj_NNLO_NLO_nnn_nnn_n_alpha_down");
+    ZvvbosonWeight_muRUp =     (TH1D*)scalefactor_fileZvv->Get("vvj_NNLO_NLO_nnn_nnn_n_Weight_scale_variation_muR_2p0_muF_1p0");
+    ZvvbosonWeight_muRDown =   (TH1D*)scalefactor_fileZvv->Get("vvj_NNLO_NLO_nnn_nnn_n_Weight_scale_variation_muR_0p5_muF_1p0");
+    ZvvbosonWeight_muFUp =     (TH1D*)scalefactor_fileZvv->Get("vvj_NNLO_NLO_nnn_nnn_n_Weight_scale_variation_muR_1p0_muF_2p0");
+    ZvvbosonWeight_muFDown =   (TH1D*)scalefactor_fileZvv->Get("vvj_NNLO_NLO_nnn_nnn_n_Weight_scale_variation_muR_1p0_muF_0p5");
+    Zvvinitialized = true;
+  }
+}
+
+void BosonHelper::LoadZllFile(TString path_to_sf_file_)
+{
+  // this function loads the file given by a string and initializes the 2 needed histograms if the file was loaded correctly
+  path_to_sf_file = path_to_sf_file_;
+  if(path_to_sf_file!="")
+  {
+    scalefactor_fileZll = TFile::Open(path_to_sf_file);
+  }
+  if(scalefactor_fileZll)
+  {
+    ZllbosonWeight_nominal =   (TH1D*)scalefactor_fileZll->Get("eej_NNLO_NLO_nnn_nnn_n");
+    ZllbosonWeight_QCD1Up =    (TH1D*)scalefactor_fileZll->Get("eej_NNLO_NLO_unn_nnn_n");
+    ZllbosonWeight_QCD1Down =  (TH1D*)scalefactor_fileZll->Get("eej_NNLO_NLO_dnn_nnn_n");
+    ZllbosonWeight_QCD2Up =    (TH1D*)scalefactor_fileZll->Get("eej_NNLO_NLO_nun_nnn_n");
+    ZllbosonWeight_QCD2Down =  (TH1D*)scalefactor_fileZll->Get("eej_NNLO_NLO_ndn_nnn_n");
+    ZllbosonWeight_QCD3Up =    (TH1D*)scalefactor_fileZll->Get("eej_NNLO_NLO_nnu_nnn_n");
+    ZllbosonWeight_QCD3Down =  (TH1D*)scalefactor_fileZll->Get("eej_NNLO_NLO_nnd_nnn_n");
+    ZllbosonWeight_EW1Up =     (TH1D*)scalefactor_fileZll->Get("eej_NNLO_NLO_nnn_unn_n");
+    ZllbosonWeight_EW1Down =   (TH1D*)scalefactor_fileZll->Get("eej_NNLO_NLO_nnn_dnn_n");
+    ZllbosonWeight_EW2Up =     (TH1D*)scalefactor_fileZll->Get("eej_NNLO_NLO_nnn_nun_n");
+    ZllbosonWeight_EW2Down =   (TH1D*)scalefactor_fileZll->Get("eej_NNLO_NLO_nnn_ndn_n");
+    ZllbosonWeight_EW3Up =     (TH1D*)scalefactor_fileZll->Get("eej_NNLO_NLO_nnn_nnu_n");
+    ZllbosonWeight_EW3Down =   (TH1D*)scalefactor_fileZll->Get("eej_NNLO_NLO_nnn_nnd_n");
+    ZllbosonWeight_MixedUp =   (TH1D*)scalefactor_fileZll->Get("eej_NNLO_NLO_nnn_nnn_u");
+    ZllbosonWeight_MixedDown = (TH1D*)scalefactor_fileZll->Get("eej_NNLO_NLO_nnn_nnn_d");
+    ZllbosonWeight_AlphaUp =   (TH1D*)scalefactor_fileZll->Get("eej_NNLO_NLO_nnn_nnn_n_alpha_up");
+    ZllbosonWeight_AlphaDown = (TH1D*)scalefactor_fileZll->Get("eej_NNLO_NLO_nnn_nnn_n_alpha_down");
+    ZllbosonWeight_muRUp =     (TH1D*)scalefactor_fileZll->Get("eej_NNLO_NLO_nnn_nnn_n_Weight_scale_variation_muR_2p0_muF_1p0");
+    ZllbosonWeight_muRDown =   (TH1D*)scalefactor_fileZll->Get("eej_NNLO_NLO_nnn_nnn_n_Weight_scale_variation_muR_0p5_muF_1p0");
+    ZllbosonWeight_muFUp =     (TH1D*)scalefactor_fileZll->Get("eej_NNLO_NLO_nnn_nnn_n_Weight_scale_variation_muR_1p0_muF_2p0");
+    ZllbosonWeight_muFDown =   (TH1D*)scalefactor_fileZll->Get("eej_NNLO_NLO_nnn_nnn_n_Weight_scale_variation_muR_1p0_muF_0p5");
+    Zllinitialized = true;
   }
 }
 
@@ -1455,7 +1518,8 @@ void BosonHelper::Reset()
 {
   // resets all member data
   scalefactor_fileW = 0;
-  scalefactor_fileZ = 0;
+  scalefactor_fileZvv = 0;
+  scalefactor_fileZll = 0;
   path_to_sf_file = "";
   WbosonWeight_nominal = 0;
   WbosonWeight_QCD1Up = 0;
@@ -1479,30 +1543,53 @@ void BosonHelper::Reset()
   WbosonWeight_muFUp = 0;
   WbosonWeight_muFDown = 0;
 
-  ZbosonWeight_nominal = 0;
-  ZbosonWeight_QCD1Up = 0;
-  ZbosonWeight_QCD1Down = 0;
-  ZbosonWeight_QCD2Up = 0;
-  ZbosonWeight_QCD2Down = 0;
-  ZbosonWeight_QCD3Up = 0;
-  ZbosonWeight_QCD3Down = 0;
-  ZbosonWeight_EW1Up = 0;
-  ZbosonWeight_EW1Down = 0;
-  ZbosonWeight_EW2Up = 0;
-  ZbosonWeight_EW2Down = 0;
-  ZbosonWeight_EW3Up = 0;
-  ZbosonWeight_EW3Down = 0;
-  ZbosonWeight_MixedUp = 0;
-  ZbosonWeight_MixedDown = 0;
-  ZbosonWeight_AlphaUp = 0;
-  ZbosonWeight_AlphaDown = 0;
-  ZbosonWeight_muRUp = 0;
-  ZbosonWeight_muRDown = 0;
-  ZbosonWeight_muFUp = 0;
-  ZbosonWeight_muFDown = 0;
+  ZvvbosonWeight_nominal = 0;
+  ZvvbosonWeight_QCD1Up = 0;
+  ZvvbosonWeight_QCD1Down = 0;
+  ZvvbosonWeight_QCD2Up = 0;
+  ZvvbosonWeight_QCD2Down = 0;
+  ZvvbosonWeight_QCD3Up = 0;
+  ZvvbosonWeight_QCD3Down = 0;
+  ZvvbosonWeight_EW1Up = 0;
+  ZvvbosonWeight_EW1Down = 0;
+  ZvvbosonWeight_EW2Up = 0;
+  ZvvbosonWeight_EW2Down = 0;
+  ZvvbosonWeight_EW3Up = 0;
+  ZvvbosonWeight_EW3Down = 0;
+  ZvvbosonWeight_MixedUp = 0;
+  ZvvbosonWeight_MixedDown = 0;
+  ZvvbosonWeight_AlphaUp = 0;
+  ZvvbosonWeight_AlphaDown = 0;
+  ZvvbosonWeight_muRUp = 0;
+  ZvvbosonWeight_muRDown = 0;
+  ZvvbosonWeight_muFUp = 0;
+  ZvvbosonWeight_muFDown = 0;
+  
+  ZllbosonWeight_nominal = 0;
+  ZllbosonWeight_QCD1Up = 0;
+  ZllbosonWeight_QCD1Down = 0;
+  ZllbosonWeight_QCD2Up = 0;
+  ZllbosonWeight_QCD2Down = 0;
+  ZllbosonWeight_QCD3Up = 0;
+  ZllbosonWeight_QCD3Down = 0;
+  ZllbosonWeight_EW1Up = 0;
+  ZllbosonWeight_EW1Down = 0;
+  ZllbosonWeight_EW2Up = 0;
+  ZllbosonWeight_EW2Down = 0;
+  ZllbosonWeight_EW3Up = 0;
+  ZllbosonWeight_EW3Down = 0;
+  ZllbosonWeight_MixedUp = 0;
+  ZllbosonWeight_MixedDown = 0;
+  ZllbosonWeight_AlphaUp = 0;
+  ZllbosonWeight_AlphaDown = 0;
+  ZllbosonWeight_muRUp = 0;
+  ZllbosonWeight_muRDown = 0;
+  ZllbosonWeight_muFUp = 0;
+  ZllbosonWeight_muFDown = 0;
   
   Winitialized = false;
-  Zinitialized = false;
+  Zvvinitialized = false;
+  Zllinitialized = false;
 }
 
 double BosonHelper::GetScaleFactorW(float W_Pt, string label)
@@ -1600,101 +1687,196 @@ double BosonHelper::GetScaleFactorW(float W_Pt, string label)
   return sf;
 }
 
-double BosonHelper::GetScaleFactorZ(float Z_Pt, string label)
+double BosonHelper::GetScaleFactorZvv(float Z_Pt, string label)
 {
   // this function gets the scale factor for a event dependent on the Pt of the Z Boson
-  if(!Zinitialized) return 0.;
+  if(!Zvvinitialized) return 0.;
   int bin = -1;
   double sf = 0.;
   if (label == "nominal"){
-    bin = ZbosonWeight_nominal->FindBin(Z_Pt);
-    sf = ZbosonWeight_nominal->GetBinContent(bin);
+    bin = ZvvbosonWeight_nominal->FindBin(Z_Pt);
+    sf = ZvvbosonWeight_nominal->GetBinContent(bin);
   }
   else if (label == "QCD1Up"){
-    bin = ZbosonWeight_QCD1Up->FindBin(Z_Pt);
-    sf = ZbosonWeight_QCD1Up->GetBinContent(bin);  
+    bin = ZvvbosonWeight_QCD1Up->FindBin(Z_Pt);
+    sf = ZvvbosonWeight_QCD1Up->GetBinContent(bin);  
   }
   else if (label == "QCD1Down"){
-    bin = ZbosonWeight_QCD1Down->FindBin(Z_Pt);
-    sf = ZbosonWeight_QCD1Down->GetBinContent(bin);  
+    bin = ZvvbosonWeight_QCD1Down->FindBin(Z_Pt);
+    sf = ZvvbosonWeight_QCD1Down->GetBinContent(bin);  
   }
   else if (label == "QCD2Up"){
-    bin = ZbosonWeight_QCD2Up->FindBin(Z_Pt);
-    sf = ZbosonWeight_QCD2Up->GetBinContent(bin);  
+    bin = ZvvbosonWeight_QCD2Up->FindBin(Z_Pt);
+    sf = ZvvbosonWeight_QCD2Up->GetBinContent(bin);  
   }
   else if (label == "QCD2Down"){
-    bin = ZbosonWeight_QCD2Down->FindBin(Z_Pt);
-    sf = ZbosonWeight_QCD2Down->GetBinContent(bin);  
+    bin = ZvvbosonWeight_QCD2Down->FindBin(Z_Pt);
+    sf = ZvvbosonWeight_QCD2Down->GetBinContent(bin);  
   }
   else if (label == "QCD3Up"){
-    bin = ZbosonWeight_QCD3Up->FindBin(Z_Pt);
-    sf = ZbosonWeight_QCD3Up->GetBinContent(bin);  
+    bin = ZvvbosonWeight_QCD3Up->FindBin(Z_Pt);
+    sf = ZvvbosonWeight_QCD3Up->GetBinContent(bin);  
   }
   else if (label == "QCD3Down"){
-    bin = ZbosonWeight_QCD3Down->FindBin(Z_Pt);
-    sf = ZbosonWeight_QCD3Down->GetBinContent(bin);  
+    bin = ZvvbosonWeight_QCD3Down->FindBin(Z_Pt);
+    sf = ZvvbosonWeight_QCD3Down->GetBinContent(bin);  
   }
 
   else if (label == "EW1Up"){
-    bin = ZbosonWeight_EW1Up->FindBin(Z_Pt);
-    sf = ZbosonWeight_EW1Up->GetBinContent(bin);  
+    bin = ZvvbosonWeight_EW1Up->FindBin(Z_Pt);
+    sf = ZvvbosonWeight_EW1Up->GetBinContent(bin);  
   }
   else if (label == "EW1Down"){
-    bin = ZbosonWeight_EW1Down->FindBin(Z_Pt);
-    sf = ZbosonWeight_EW1Down->GetBinContent(bin);  
+    bin = ZvvbosonWeight_EW1Down->FindBin(Z_Pt);
+    sf = ZvvbosonWeight_EW1Down->GetBinContent(bin);  
   }
   else if (label == "EW2Up"){
-    bin = ZbosonWeight_EW2Up->FindBin(Z_Pt);
-    sf = ZbosonWeight_EW2Up->GetBinContent(bin);  
+    bin = ZvvbosonWeight_EW2Up->FindBin(Z_Pt);
+    sf = ZvvbosonWeight_EW2Up->GetBinContent(bin);  
   }
   else if (label == "EW2Down"){
-    bin = ZbosonWeight_EW2Down->FindBin(Z_Pt);
-    sf = ZbosonWeight_EW2Down->GetBinContent(bin);  
+    bin = ZvvbosonWeight_EW2Down->FindBin(Z_Pt);
+    sf = ZvvbosonWeight_EW2Down->GetBinContent(bin);  
   }
   else if (label == "EW3Up"){
-    bin = ZbosonWeight_EW3Up->FindBin(Z_Pt);
-    sf = ZbosonWeight_EW3Up->GetBinContent(bin);  
+    bin = ZvvbosonWeight_EW3Up->FindBin(Z_Pt);
+    sf = ZvvbosonWeight_EW3Up->GetBinContent(bin);  
   }
   else if (label == "EW3Down"){
-    bin = ZbosonWeight_EW3Down->FindBin(Z_Pt);
-    sf = ZbosonWeight_EW3Down->GetBinContent(bin);  
+    bin = ZvvbosonWeight_EW3Down->FindBin(Z_Pt);
+    sf = ZvvbosonWeight_EW3Down->GetBinContent(bin);  
   }
   else if (label == "MixedUp"){
-    bin = ZbosonWeight_MixedUp->FindBin(Z_Pt);
-    sf = ZbosonWeight_MixedUp->GetBinContent(bin);  
+    bin = ZvvbosonWeight_MixedUp->FindBin(Z_Pt);
+    sf = ZvvbosonWeight_MixedUp->GetBinContent(bin);  
   }
   else if (label == "MixedDown"){
-    bin = ZbosonWeight_MixedDown->FindBin(Z_Pt);
-    sf = ZbosonWeight_MixedDown->GetBinContent(bin);  
+    bin = ZvvbosonWeight_MixedDown->FindBin(Z_Pt);
+    sf = ZvvbosonWeight_MixedDown->GetBinContent(bin);  
   }
   else if (label == "AlphaUp") {
-    bin = ZbosonWeight_AlphaUp->FindBin(Z_Pt);
-    sf = ZbosonWeight_AlphaUp->GetBinContent(bin);  
+    bin = ZvvbosonWeight_AlphaUp->FindBin(Z_Pt);
+    sf = ZvvbosonWeight_AlphaUp->GetBinContent(bin);  
   }
   else if (label == "AlphaDown") {
-    bin = ZbosonWeight_AlphaDown->FindBin(Z_Pt);
-    sf = ZbosonWeight_AlphaDown->GetBinContent(bin);  
+    bin = ZvvbosonWeight_AlphaDown->FindBin(Z_Pt);
+    sf = ZvvbosonWeight_AlphaDown->GetBinContent(bin);  
   }
   else if (label == "muRUp") {
-    bin = ZbosonWeight_muRUp->FindBin(Z_Pt);
-    sf = ZbosonWeight_muRUp->GetBinContent(bin);  
+    bin = ZvvbosonWeight_muRUp->FindBin(Z_Pt);
+    sf = ZvvbosonWeight_muRUp->GetBinContent(bin);  
   }
   else if (label == "muRDown") {
-    bin = ZbosonWeight_muRDown->FindBin(Z_Pt);
-    sf = ZbosonWeight_muRDown->GetBinContent(bin);  
+    bin = ZvvbosonWeight_muRDown->FindBin(Z_Pt);
+    sf = ZvvbosonWeight_muRDown->GetBinContent(bin);  
   }
   else if (label == "muFUp") {
-    bin = ZbosonWeight_muFUp->FindBin(Z_Pt);
-    sf = ZbosonWeight_muFUp->GetBinContent(bin);  
+    bin = ZvvbosonWeight_muFUp->FindBin(Z_Pt);
+    sf = ZvvbosonWeight_muFUp->GetBinContent(bin);  
   }
   else if (label == "muFDown") {
-    bin = ZbosonWeight_muFDown->FindBin(Z_Pt);
-    sf = ZbosonWeight_muFDown->GetBinContent(bin);  
+    bin = ZvvbosonWeight_muFDown->FindBin(Z_Pt);
+    sf = ZvvbosonWeight_muFDown->GetBinContent(bin);  
   }
   if(Z_Pt<=30.) sf = 1.;
   return sf;
 }
 
+
+double BosonHelper::GetScaleFactorZll(float Z_Pt, string label)
+{
+  // this function gets the scale factor for a event dependent on the Pt of the Z Boson
+  if(!Zllinitialized) return 0.;
+  int bin = -1;
+  double sf = 0.;
+  if (label == "nominal"){
+    bin = ZllbosonWeight_nominal->FindBin(Z_Pt);
+    sf = ZllbosonWeight_nominal->GetBinContent(bin);
+  }
+  else if (label == "QCD1Up"){
+    bin = ZllbosonWeight_QCD1Up->FindBin(Z_Pt);
+    sf = ZllbosonWeight_QCD1Up->GetBinContent(bin);  
+  }
+  else if (label == "QCD1Down"){
+    bin = ZllbosonWeight_QCD1Down->FindBin(Z_Pt);
+    sf = ZllbosonWeight_QCD1Down->GetBinContent(bin);  
+  }
+  else if (label == "QCD2Up"){
+    bin = ZllbosonWeight_QCD2Up->FindBin(Z_Pt);
+    sf = ZllbosonWeight_QCD2Up->GetBinContent(bin);  
+  }
+  else if (label == "QCD2Down"){
+    bin = ZllbosonWeight_QCD2Down->FindBin(Z_Pt);
+    sf = ZllbosonWeight_QCD2Down->GetBinContent(bin);  
+  }
+  else if (label == "QCD3Up"){
+    bin = ZllbosonWeight_QCD3Up->FindBin(Z_Pt);
+    sf = ZllbosonWeight_QCD3Up->GetBinContent(bin);  
+  }
+  else if (label == "QCD3Down"){
+    bin = ZllbosonWeight_QCD3Down->FindBin(Z_Pt);
+    sf = ZllbosonWeight_QCD3Down->GetBinContent(bin);  
+  }
+
+  else if (label == "EW1Up"){
+    bin = ZllbosonWeight_EW1Up->FindBin(Z_Pt);
+    sf = ZllbosonWeight_EW1Up->GetBinContent(bin);  
+  }
+  else if (label == "EW1Down"){
+    bin = ZllbosonWeight_EW1Down->FindBin(Z_Pt);
+    sf = ZllbosonWeight_EW1Down->GetBinContent(bin);  
+  }
+  else if (label == "EW2Up"){
+    bin = ZllbosonWeight_EW2Up->FindBin(Z_Pt);
+    sf = ZllbosonWeight_EW2Up->GetBinContent(bin);  
+  }
+  else if (label == "EW2Down"){
+    bin = ZllbosonWeight_EW2Down->FindBin(Z_Pt);
+    sf = ZllbosonWeight_EW2Down->GetBinContent(bin);  
+  }
+  else if (label == "EW3Up"){
+    bin = ZllbosonWeight_EW3Up->FindBin(Z_Pt);
+    sf = ZllbosonWeight_EW3Up->GetBinContent(bin);  
+  }
+  else if (label == "EW3Down"){
+    bin = ZllbosonWeight_EW3Down->FindBin(Z_Pt);
+    sf = ZllbosonWeight_EW3Down->GetBinContent(bin);  
+  }
+  else if (label == "MixedUp"){
+    bin = ZllbosonWeight_MixedUp->FindBin(Z_Pt);
+    sf = ZllbosonWeight_MixedUp->GetBinContent(bin);  
+  }
+  else if (label == "MixedDown"){
+    bin = ZllbosonWeight_MixedDown->FindBin(Z_Pt);
+    sf = ZllbosonWeight_MixedDown->GetBinContent(bin);  
+  }
+  else if (label == "AlphaUp") {
+    bin = ZllbosonWeight_AlphaUp->FindBin(Z_Pt);
+    sf = ZllbosonWeight_AlphaUp->GetBinContent(bin);  
+  }
+  else if (label == "AlphaDown") {
+    bin = ZllbosonWeight_AlphaDown->FindBin(Z_Pt);
+    sf = ZllbosonWeight_AlphaDown->GetBinContent(bin);  
+  }
+  else if (label == "muRUp") {
+    bin = ZllbosonWeight_muRUp->FindBin(Z_Pt);
+    sf = ZllbosonWeight_muRUp->GetBinContent(bin);  
+  }
+  else if (label == "muRDown") {
+    bin = ZllbosonWeight_muRDown->FindBin(Z_Pt);
+    sf = ZllbosonWeight_muRDown->GetBinContent(bin);  
+  }
+  else if (label == "muFUp") {
+    bin = ZllbosonWeight_muFUp->FindBin(Z_Pt);
+    sf = ZllbosonWeight_muFUp->GetBinContent(bin);  
+  }
+  else if (label == "muFDown") {
+    bin = ZllbosonWeight_muFDown->FindBin(Z_Pt);
+    sf = ZllbosonWeight_muFDown->GetBinContent(bin);  
+  }
+  if(Z_Pt<=30.) sf = 1.;
+  return sf;
+}
 
 
 // QCD Helper to retrieve scale factor for QCD Estimation with iso inverted ntuples
@@ -1894,7 +2076,8 @@ void plot(){
   string workingdir(currentdir);
 
   TString WBoson_file = workingdir + "/TheoryXS_evj.root";
-  TString ZBoson_file = workingdir + "/TheoryXS_vvj.root";
+  TString ZvvBoson_file = workingdir + "/TheoryXS_vvj.root";
+  TString ZllBoson_file = workingdir + "/TheoryXS_eej.root";
 
   std::string csvHFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/factorized_jes/csv_rwt_fit_hf_v2_final_2017_6_7_all.root";
   std::string csvLFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/factorized_jes/csv_rwt_fit_lf_v2_final_2017_6_7_all.root";
@@ -1903,7 +2086,7 @@ void plot(){
   CSVHelper* internalCSVHelper= new CSVHelper(csvHFfile,csvLFfile, 5,4,3,v_SystTypes);
   LeptonSFHelper* internalLeptonSFHelper= new LeptonSFHelper();
   QCDHelper* internalQCDHelper = new QCDHelper(qcd_file);
-  BosonHelper* internalBosonHelper = new BosonHelper(WBoson_file, ZBoson_file);
+  BosonHelper* internalBosonHelper = new BosonHelper(WBoson_file, ZvvBoson_file, ZllBoson_file);
 
   // open files
   TChain* chain = new TChain("MVATree");
@@ -2580,32 +2763,60 @@ def startLoop():
   internalBosonWeight_muFDown = internalBosonHelper->GetScaleFactorW(W_Pt, "muFDown");
   }
   if(processname.find("z_nunu_jets")!=std::string::npos){
-  internalBosonWeight_nominal = internalBosonHelper->GetScaleFactorZ(Z_Pt, "nominal");
-  internalBosonWeight_QCD1Up = internalBosonHelper->GetScaleFactorZ(Z_Pt, "QCD1Up"); 
-  internalBosonWeight_QCD1Down = internalBosonHelper->GetScaleFactorZ(Z_Pt, "QCD1Down");
-  internalBosonWeight_QCD2Up = internalBosonHelper->GetScaleFactorZ(Z_Pt, "QCD2Up");
-  internalBosonWeight_QCD2Down = internalBosonHelper->GetScaleFactorZ(Z_Pt, "QCD2Down");
-  internalBosonWeight_QCD3Up = internalBosonHelper->GetScaleFactorZ(Z_Pt, "QCD3Up"); 
-  internalBosonWeight_QCD3Down = internalBosonHelper->GetScaleFactorZ(Z_Pt, "QCD3Down");
+  internalBosonWeight_nominal = internalBosonHelper->GetScaleFactorZvv(Z_Pt, "nominal");
+  internalBosonWeight_QCD1Up = internalBosonHelper->GetScaleFactorZvv(Z_Pt, "QCD1Up"); 
+  internalBosonWeight_QCD1Down = internalBosonHelper->GetScaleFactorZvv(Z_Pt, "QCD1Down");
+  internalBosonWeight_QCD2Up = internalBosonHelper->GetScaleFactorZvv(Z_Pt, "QCD2Up");
+  internalBosonWeight_QCD2Down = internalBosonHelper->GetScaleFactorZvv(Z_Pt, "QCD2Down");
+  internalBosonWeight_QCD3Up = internalBosonHelper->GetScaleFactorZvv(Z_Pt, "QCD3Up"); 
+  internalBosonWeight_QCD3Down = internalBosonHelper->GetScaleFactorZvv(Z_Pt, "QCD3Down");
 
-  internalBosonWeight_EW1Up = internalBosonHelper->GetScaleFactorZ(Z_Pt, "EW1Up"); 
-  internalBosonWeight_EW1Down = internalBosonHelper->GetScaleFactorZ(Z_Pt, "EW1Down");
-  internalBosonWeight_EW2Up = internalBosonHelper->GetScaleFactorZ(Z_Pt, "EW2Up"); 
-  internalBosonWeight_EW2Down = internalBosonHelper->GetScaleFactorZ(Z_Pt, "EW2Down");
-  internalBosonWeight_EW3Up = internalBosonHelper->GetScaleFactorZ(Z_Pt, "EW3Up"); 
-  internalBosonWeight_EW3Down = internalBosonHelper->GetScaleFactorZ(Z_Pt, "EW3Down");
+  internalBosonWeight_EW1Up = internalBosonHelper->GetScaleFactorZvv(Z_Pt, "EW1Up"); 
+  internalBosonWeight_EW1Down = internalBosonHelper->GetScaleFactorZvv(Z_Pt, "EW1Down");
+  internalBosonWeight_EW2Up = internalBosonHelper->GetScaleFactorZvv(Z_Pt, "EW2Up"); 
+  internalBosonWeight_EW2Down = internalBosonHelper->GetScaleFactorZvv(Z_Pt, "EW2Down");
+  internalBosonWeight_EW3Up = internalBosonHelper->GetScaleFactorZvv(Z_Pt, "EW3Up"); 
+  internalBosonWeight_EW3Down = internalBosonHelper->GetScaleFactorZvv(Z_Pt, "EW3Down");
 
-  internalBosonWeight_MixedUp = internalBosonHelper->GetScaleFactorZ(Z_Pt, "MixedUp"); 
-  internalBosonWeight_MixedDown = internalBosonHelper->GetScaleFactorZ(Z_Pt, "MixedDown");
+  internalBosonWeight_MixedUp = internalBosonHelper->GetScaleFactorZvv(Z_Pt, "MixedUp"); 
+  internalBosonWeight_MixedDown = internalBosonHelper->GetScaleFactorZvv(Z_Pt, "MixedDown");
   
-  internalBosonWeight_AlphaUp = internalBosonHelper->GetScaleFactorZ(Z_Pt, "AlphaUp");
-  internalBosonWeight_AlphaDown = internalBosonHelper->GetScaleFactorZ(Z_Pt, "AlphaDown");
+  internalBosonWeight_AlphaUp = internalBosonHelper->GetScaleFactorZvv(Z_Pt, "AlphaUp");
+  internalBosonWeight_AlphaDown = internalBosonHelper->GetScaleFactorZvv(Z_Pt, "AlphaDown");
   
-  internalBosonWeight_muRUp = internalBosonHelper->GetScaleFactorZ(Z_Pt, "muRUp");
-  internalBosonWeight_muRDown = internalBosonHelper->GetScaleFactorZ(Z_Pt, "muRDown");
+  internalBosonWeight_muRUp = internalBosonHelper->GetScaleFactorZvv(Z_Pt, "muRUp");
+  internalBosonWeight_muRDown = internalBosonHelper->GetScaleFactorZvv(Z_Pt, "muRDown");
   
-  internalBosonWeight_muFUp = internalBosonHelper->GetScaleFactorZ(Z_Pt, "muFUp");
-  internalBosonWeight_muFDown = internalBosonHelper->GetScaleFactorZ(Z_Pt, "muFDown");
+  internalBosonWeight_muFUp = internalBosonHelper->GetScaleFactorZvv(Z_Pt, "muFUp");
+  internalBosonWeight_muFDown = internalBosonHelper->GetScaleFactorZvv(Z_Pt, "muFDown");
+  }
+  if(processname.find("z_ll_jets")!=std::string::npos){
+  internalBosonWeight_nominal = internalBosonHelper->GetScaleFactorZll(Z_Pt, "nominal");
+  internalBosonWeight_QCD1Up = internalBosonHelper->GetScaleFactorZll(Z_Pt, "QCD1Up"); 
+  internalBosonWeight_QCD1Down = internalBosonHelper->GetScaleFactorZll(Z_Pt, "QCD1Down");
+  internalBosonWeight_QCD2Up = internalBosonHelper->GetScaleFactorZll(Z_Pt, "QCD2Up");
+  internalBosonWeight_QCD2Down = internalBosonHelper->GetScaleFactorZll(Z_Pt, "QCD2Down");
+  internalBosonWeight_QCD3Up = internalBosonHelper->GetScaleFactorZll(Z_Pt, "QCD3Up"); 
+  internalBosonWeight_QCD3Down = internalBosonHelper->GetScaleFactorZll(Z_Pt, "QCD3Down");
+
+  internalBosonWeight_EW1Up = internalBosonHelper->GetScaleFactorZll(Z_Pt, "EW1Up"); 
+  internalBosonWeight_EW1Down = internalBosonHelper->GetScaleFactorZll(Z_Pt, "EW1Down");
+  internalBosonWeight_EW2Up = internalBosonHelper->GetScaleFactorZll(Z_Pt, "EW2Up"); 
+  internalBosonWeight_EW2Down = internalBosonHelper->GetScaleFactorZll(Z_Pt, "EW2Down");
+  internalBosonWeight_EW3Up = internalBosonHelper->GetScaleFactorZll(Z_Pt, "EW3Up"); 
+  internalBosonWeight_EW3Down = internalBosonHelper->GetScaleFactorZll(Z_Pt, "EW3Down");
+
+  internalBosonWeight_MixedUp = internalBosonHelper->GetScaleFactorZll(Z_Pt, "MixedUp"); 
+  internalBosonWeight_MixedDown = internalBosonHelper->GetScaleFactorZll(Z_Pt, "MixedDown");
+  
+  internalBosonWeight_AlphaUp = internalBosonHelper->GetScaleFactorZll(Z_Pt, "AlphaUp");
+  internalBosonWeight_AlphaDown = internalBosonHelper->GetScaleFactorZll(Z_Pt, "AlphaDown");
+  
+  internalBosonWeight_muRUp = internalBosonHelper->GetScaleFactorZll(Z_Pt, "muRUp");
+  internalBosonWeight_muRDown = internalBosonHelper->GetScaleFactorZll(Z_Pt, "muRDown");
+  
+  internalBosonWeight_muFUp = internalBosonHelper->GetScaleFactorZll(Z_Pt, "muFUp");
+  internalBosonWeight_muFDown = internalBosonHelper->GetScaleFactorZll(Z_Pt, "muFDown");
   }
   
   
