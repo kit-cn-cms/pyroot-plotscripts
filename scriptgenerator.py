@@ -1840,15 +1840,26 @@ def submitToNAF(scripts):
 
     print 'submitting',script
     command = "condor_submit -terse " + submitscriptpath
-    a = subprocess.Popen(command.split(), stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
-    output = a.communicate()[0]
-    print "jobidstring: ", output
-    try:
-      jobID = int(output.split(".")[0])
-    except:
-      print "something went wrong with calling the condir_submit command, submission of jobs was not successful"
-      exit(0)
+    tries = 0
+    jobID = None
+    while not jobID:
+        a = subprocess.Popen(command.split(), stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
+        a.wait()
+        output = a.communicate()
+        print "jobidstring: ", output
+        try:
+            jobID = int(output[0].split(".")[0])
+        except:
+            print "something went wrong with calling the condir_submit command, submission of jobs was not successful"
+            tries += 1
+            jobID = None
+        if tries > 5:
+            print("job submission was not successfull after three tries - exiting without JOBID")
+            print("jib will not be monitored")
+            return
+
     print "JobID: ", jobID
+    jobids += [jobID]   
   submittime=submitclock.RealTime()
   print "submitted ", len(jobids), " in ", submittime
   return jobids
@@ -1856,27 +1867,55 @@ def submitToNAF(scripts):
 
 def do_qstat(jobids):
   allfinished=False
+  errorcount = 0   
   print "checking job status in condor_q ..."
+  command = ["condor_q"]
+  if jobids:
+    command += jobids
+    command = [str(c) for c in command]
+  command += ["-totals"]
   while not allfinished:
     time.sleep(20)
-    a = subprocess.Popen(['condor_q'], stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
+    #a = subprocess.Popen(['condor_q'], stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
+    a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
+    a.wait()
     qstat=a.communicate()[0]
     lines=qstat.split('\n')
     nrunning=0
+    nrunning=-1
+    queryline = [line for line in qstat.split("\n") if "Total for query" in line]
     # sum all jobs that are still idle or running
-    for line in lines:
-      if "Total for query" in line:
-        joblist = line.split(";")[1]
-        states = joblist.split(",")
-        jobs_running = int(states[3].split()[0])
-        jobs_idle =  int(states[2].split()[0])
-        print(str(jobs_running) + " jobs running, " + str(jobs_idle) + " jobs idling")
-        nrunning = jobs_running + jobs_idle
+    #for line in lines:
+      #if "Total for query" in line:
+        #joblist = line.split(";")[1]
+        #states = joblist.split(",")
+        #jobs_running = int(states[3].split()[0])
+        #jobs_idle =  int(states[2].split()[0])
+        #print(str(jobs_running) + " jobs running, " + str(jobs_idle) + " jobs idling")
+        #nrunning = jobs_running + jobs_idle
 
-    if nrunning == 0:
-      print "all jobs are finished"
-      allfinished=True
-
+    #if nrunning == 0:
+      #print "all jobs are finished"
+      #allfinished=True
+    if len(queryline) == 1:
+        jobsRunning = int(re.findall(r'\ [0-9]+\ running', queryline[0])[0][1:-8])
+        jobsIdle = int(re.findall(r'\ [0-9]+\ idle', queryline[0])[0][1:-5])
+        jobsHeld = int(re.findall(r'\ [0-9]+\ held', queryline[0])[0][1:-5])
+        nrunning = jobsRunning + jobsIdle + jobsHeld
+        print(str(jobsRunning) + " jobs running, " + str(jobsIdle) + " jobs idling, " + str(jobsHeld) + " jobs held\t->\t waiting on: "+str(nrunning)+" jobs.")
+        errorcount = 0
+        if nrunning == 0:
+            print("waiting on no more jobs - exiting loop")
+            allfinished=True
+    else:
+      errorcount += 1
+      # sometimes condor_q is not reachable - if this happens a lot something is probably wrong
+      print("line does not match query")
+      if errorcount > 15:
+        print("something is off - condor_q does not work - exiting do_qstat")
+        return
+  print("all jobs are finished - exiting do_qstat")
+  return
 
 def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,programpath,cmsswpath):
   scripts=[]

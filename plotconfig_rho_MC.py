@@ -138,9 +138,9 @@ murmufs=[#muR20muF20,muR05muF05,muR20muF10,muR05muF10,muR10muF20,muR10muF05
 ]
 
 PDFs=[
-[1.0,1.0,1.0], #1500
-[1.0,1.0,1.0], #2000
-[1.0,1.0,1.0], #2500
+[0.972675578181,0.921032569784,0.875886105338], #1500
+[0.948759964799,0.883672351076,0.830015010818], #2000
+[0.932585587385,0.845869285082,0.779920861235], #2500
 ]
 
 
@@ -325,35 +325,35 @@ DATA_MC_rate_scalefactor_QCD='0.761444753045'
 
 SignalSamples=[
 
-                    #Sample('Z->tWb, m(Z\'_{Nar})=1500, m(T\'_{Nar,LH})=700, T\'->Wb',ROOT.kMagenta-7,path_80x+'Signal_Zprime/Zprime*ToWB*1500*700*nominal*Tree.root',mcweight+'/95.06*232956.0/232893.0','SigRho1500700_tWb',allweightsystnames),
-                    Sample('Z->tWb, m(Z\'_{Nar})=1500, m(T\'_{Nar,LH})=700, T\'->Wb',ROOT.kMagenta-7,'/pnfs/desy.de/cms/tier2/store/user/skudella/ZprimeToTprimeT_TprimeToWB_Zp1500Nar_Tp1000Nar_LH_TuneCUETP8M2T4_13TeV-madgraph-pythia8_V2/MC_limits_ZprimeToTprimeT_TprimeToWB_Zp1500Nar_Tp1000Nar_LH/180725_094945/0000/ZprimeToTprimeT_TprimeToWB_Zp1500Nar_Tp1000Nar_LH_nominal_Tree_2.root',mcweight+'/95.06*232956.0/232893.0','SigRho1500700_tWb',allweightsystnames),
-                    #Sample('Z->tWb, m(Z\'_{Nar})=1500, m(T\'_{Nar,LH})=900, T\'->Wb',ROOT.kMagenta,path_80x+'Signal_Zprime/Zprime*ToWB*1500*900*nominal*Tree.root',mcweight+'/138.07*233247.0/233185.0','SigRho1500900_tWb',allweightsystnames),
-                    #Sample('Z->tWb, m(Z\'_{Nar})=1500, m(T\'_{Nar,LH})=1200, T\'->Wb',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Zprime*ToWB*1500*1200*nominal*Tree.root',mcweight+'/99.03*232087.0/197288.0','SigRho15001200_tWb',allweightsystnames),
-                    #Sample('Z->tWb, m(Z\'_{Nar})=2000, m(T\'_{Nar,LH})=900, T\'->Wb',ROOT.kCyan+3,path_80x+'Signal_Zprime/Zprime*ToWB*2000*900*nominal*Tree.root',mcweight+'/55.83*229339.0/230269.0','SigRho2000900_tWb',allweightsystnames),
-                    #Sample('Z->tWb, m(Z\'_{Nar})=2000, m(T\'_{Nar,LH})=1200, T\'->Wb',ROOT.kCyan,path_80x+'Signal_Zprime/Zprime*ToWB*2000*1200*LH*nominal*Tree.root',mcweight+'/86.28*197385.0/197288.0','SigRho20001200_tWb',allweightsystnames),
-                    #Sample('Z->tWb, m(Z\'_{Nar})=2000, m(T\'_{Nar,LH})=1500, T\'->Wb',ROOT.kCyan-6,path_80x+'Signal_Zprime/Zprime*ToWB*2000*1500*nominal*Tree.root',mcweight+'/83.47*229497.0/229372.0','SigRho20001500_tWb',allweightsystnames),
-                    #Sample('Z->tWb, m(Z\'_{Nar})=2500, m(T\'_{Nar,LH})=1200, T\'->Wb',ROOT.kRed,path_80x+'Signal_Zprime/Zprime*ToWB*2500*1200*nominal*Tree.root',mcweight+'/37.6*226697.0/223936.0','SigRho25001200_tWb',allweightsystnames), 
-                    #Sample('Z->tWb, m(Z\'_{Nar})=2500, m(T\'_{Nar,LH})=1500, T\'->Wb',ROOT.kRed-7,path_80x+'Signal_Zprime/Zprime*ToWB*2500*1500*nominal*Tree.root',mcweight+'/53.9*227926.0/225306.0','SigRho25001500_tWb',allweightsystnames),
+                    Sample('Z->tWb, m(Z\'_{Nar})=1500, m(T\'_{Nar,LH})=700, T\'->Wb',ROOT.kMagenta-7,path+'Zprime*ToWB*Mzp-1500Nar*700Nar*nominal*Tree*.root',mcweight+'/95.06*232956.0/232893.0','SigRho1500700_tWb',allweightsystnames),
+                    ##Sample('Z->tWb, m(Z\'_{Nar})=1500, m(T\'_{Nar,LH})=700, T\'->Wb',ROOT.kMagenta-7,'/pnfs/desy.de/cms/tier2/store/user/skudella/ZprimeToTprimeT_TprimeToWB_Zp1500Nar_Tp1000Nar_LH_TuneCUETP8M2T4_13TeV-madgraph-pythia8_V2/MC_limits_ZprimeToTprimeT_TprimeToWB_Zp1500Nar_Tp1000Nar_LH/180725_094945/0000/ZprimeToTprimeT_TprimeToWB_Zp1500Nar_Tp1000Nar_LH_nominal_Tree_2.root',mcweight+'/95.06*232956.0/232893.0','SigRho1500700_tWb',allweightsystnames),
+                    Sample('Z->tWb, m(Z\'_{Nar})=1500, m(T\'_{Nar,LH})=900, T\'->Wb',ROOT.kMagenta,path+'Zprime*ToWB*Mzp-1500Nar*900Nar*nominal*Tree*.root',mcweight+'/138.07*233247.0/233185.0','SigRho1500900_tWb',allweightsystnames),
+                    Sample('Z->tWb, m(Z\'_{Nar})=1500, m(T\'_{Nar,LH})=1200, T\'->Wb',ROOT.kMagenta+2,path+'Zprime*ToWB*Mzp-1500Nar*1200Nar*nominal*Tree*.root',mcweight+'/99.03*232087.0/197288.0','SigRho15001200_tWb',allweightsystnames),
+                    Sample('Z->tWb, m(Z\'_{Nar})=2000, m(T\'_{Nar,LH})=900, T\'->Wb',ROOT.kCyan+3,path+'Zprime*ToWB*Mzp-2000Nar*900Nar*nominal*Tree*.root',mcweight+'/55.83*229339.0/230269.0','SigRho2000900_tWb',allweightsystnames),
+                    Sample('Z->tWb, m(Z\'_{Nar})=2000, m(T\'_{Nar,LH})=1200, T\'->Wb',ROOT.kCyan,path+'Zprime*ToWB*Mzp-2000Nar*1200Nar*LH*nominal*Tree*.root',mcweight+'/86.28*197385.0/197288.0','SigRho20001200_tWb',allweightsystnames),
+                    Sample('Z->tWb, m(Z\'_{Nar})=2000, m(T\'_{Nar,LH})=1500, T\'->Wb',ROOT.kCyan-6,path+'Zprime*ToWB*Mzp-2000Nar*1500Nar*nominal*Tree*.root',mcweight+'/83.47*229497.0/229372.0','SigRho20001500_tWb',allweightsystnames),
+                    Sample('Z->tWb, m(Z\'_{Nar})=2500, m(T\'_{Nar,LH})=1200, T\'->Wb',ROOT.kRed,path+'Zprime*ToWB*Mzp-2500Nar*1200Nar*nominal*Tree*.root',mcweight+'/37.6*226697.0/223936.0','SigRho25001200_tWb',allweightsystnames), 
+                    Sample('Z->tWb, m(Z\'_{Nar})=2500, m(T\'_{Nar,LH})=1500, T\'->Wb',ROOT.kRed-7,path+'Zprime*ToWB*Mzp-2500Nar*1500Nar*nominal*Tree*.root',mcweight+'/53.9*227926.0/225306.0','SigRho25001500_tWb',allweightsystnames),
 
                     
-                    #Sample('Z->ttZ, m(Z\'_{Nar})=1500, m(T\'_{Nar,LH})=700, T\'->tZ',ROOT.kMagenta-7,path_80x+'Signal_Zprime/Zprime*ToZT*1500*700*nominal*Tree.root',mcweight+'/186.7*197390.0/197390.0','SigRho1500700_ttZ',allweightsystnames),
-                    #Sample('Z->ttZ, m(Z\'_{Nar})=1500, m(T\'_{Nar,LH})=900, T\'->tZ',ROOT.kMagenta,path_80x+'Signal_Zprime/Zprime*ToZT*1500*900*nominal*Tree.root',mcweight+'/320.4*205947.0/205919.0','SigRho1500900_ttZ',allweightsystnames),
-                    #Sample('Z->ttZ, m(Z\'_{Nar})=1500, m(T\'_{Nar,LH})=1200, T\'->tZ',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Zprime*ToZT*1500*1200*nominal*Tree.root',mcweight+'/285.1*201839.0/201808.0','SigRho15001200_ttZ',allweightsystnames),
-                    #Sample('Z->ttZ, m(Z\'_{Nar})=2000, m(T\'_{Nar,LH})=900, T\'->tZ',ROOT.kCyan+3,path_80x+'Signal_Zprime/Zprime*ToZT*2000*900*nominal*Tree.root',mcweight+'/114.7*206508.0/206453.0','SigRho2000900_ttZ',allweightsystnames),
-                    #Sample('Z->ttZ, m(Z\'_{Nar})=2000, m(T\'_{Nar,LH})=1200, T\'->tZ',ROOT.kCyan,path_80x+'Signal_Zprime/Zprime*ToZT*2000*1200*LH*nominal*Tree.root',mcweight+'/205.6*205497.0/205436.0','SigRho20001200_ttZ',allweightsystnames),
-                    #Sample('Z->ttZ, m(Z\'_{Nar})=2000, m(T\'_{Nar,LH})=1500, T\'->tZ',ROOT.kCyan-6,path_80x+'Signal_Zprime/Zprime*ToZT*2000*1500*nominal*Tree.root',mcweight+'/214.1*203441.0/203382.0','SigRho20001500_ttZ',allweightsystnames),
-                    #Sample('Z->ttZ, m(Z\'_{Nar})=2500, m(T\'_{Nar,LH})=1200, T\'->tZ',ROOT.kRed,path_80x+'Signal_Zprime/Zprime*ToZT*2500*1200*nominal*Tree.root',mcweight+'/83.5*206568.0/206497.0','SigRho25001200_ttZ',allweightsystnames), 
-                    #Sample('Z->ttZ, m(Z\'_{Nar})=2500, m(T\'_{Nar,LH})=1500, T\'->tZ',ROOT.kRed-7,path_80x+'Signal_Zprime/Zprime*ToZT*2500*1500*nominal*Tree.root',mcweight+'/124.2*206117.0/206035.0','SigRho25001500_ttZ',allweightsystnames),
+                    Sample('Z->ttZ, m(Z\'_{Nar})=1500, m(T\'_{Nar,LH})=700, T\'->tZ',ROOT.kMagenta-7,path+'Zprime*ToZT*Mzp-1500Nar*700Nar*nominal*Tree*.root',mcweight+'/186.7*197390.0/197390.0','SigRho1500700_ttZ',allweightsystnames),
+                    Sample('Z->ttZ, m(Z\'_{Nar})=1500, m(T\'_{Nar,LH})=900, T\'->tZ',ROOT.kMagenta,path+'Zprime*ToZT*Mzp-1500Nar*900Nar*nominal*Tree*.root',mcweight+'/320.4*205947.0/205919.0','SigRho1500900_ttZ',allweightsystnames),
+                    Sample('Z->ttZ, m(Z\'_{Nar})=1500, m(T\'_{Nar,LH})=1200, T\'->tZ',ROOT.kMagenta+2,path+'Zprime*ToZT*Mzp-1500Nar*1200Nar*nominal*Tree*.root',mcweight+'/285.1*201839.0/201808.0','SigRho15001200_ttZ',allweightsystnames),
+                    Sample('Z->ttZ, m(Z\'_{Nar})=2000, m(T\'_{Nar,LH})=900, T\'->tZ',ROOT.kCyan+3,path+'Zprime*ToZT*Mzp-2000Nar*900Nar*nominal*Tree*.root',mcweight+'/114.7*206508.0/206453.0','SigRho2000900_ttZ',allweightsystnames),
+                    Sample('Z->ttZ, m(Z\'_{Nar})=2000, m(T\'_{Nar,LH})=1200, T\'->tZ',ROOT.kCyan,path+'Zprime*ToZT*Mzp-2000Nar*1200Nar*LH*nominal*Tree*.root',mcweight+'/205.6*205497.0/205436.0','SigRho20001200_ttZ',allweightsystnames),
+                    Sample('Z->ttZ, m(Z\'_{Nar})=2000, m(T\'_{Nar,LH})=1500, T\'->tZ',ROOT.kCyan-6,path+'Zprime*ToZT*Mzp-2000Nar*1500Nar*nominal*Tree*.root',mcweight+'/214.1*203441.0/203382.0','SigRho20001500_ttZ',allweightsystnames),
+                    Sample('Z->ttZ, m(Z\'_{Nar})=2500, m(T\'_{Nar,LH})=1200, T\'->tZ',ROOT.kRed,path+'Zprime*ToZT*Mzp-2500Nar*1200Nar*nominal*Tree*.root',mcweight+'/83.5*206568.0/206497.0','SigRho25001200_ttZ',allweightsystnames), 
+                    Sample('Z->ttZ, m(Z\'_{Nar})=2500, m(T\'_{Nar,LH})=1500, T\'->tZ',ROOT.kRed-7,path+'Zprime*ToZT*Mzp-2500Nar*1500Nar*nominal*Tree*.root',mcweight+'/124.2*206117.0/206035.0','SigRho25001500_ttZ',allweightsystnames),
 
                     
-                    #Sample('Z->ttH, m(Z\'_{Nar})=1500, m(T\'_{Nar,LH})=700, T\'->tH',ROOT.kMagenta-7,path_80x+'Signal_Zprime/Zprime*ToHT*1500*700*nominal*Tree.root',mcweight+'/3.62*207419.0/207388.0','SigRho1500700_ttH',allweightsystnames),
-                    #Sample('Z->ttH, m(Z\'_{Nar})=1500, m(T\'_{Nar,LH})=900, T\'->tH',ROOT.kMagenta,path_80x+'Signal_Zprime/Zprime*ToHT*1500*900*nominal*Tree.root',mcweight+'/3.571*205787.0/205759.0','SigRho1500900_ttH',allweightsystnames),
-                    #Sample('Z->ttH, m(Z\'_{Nar})=1500, m(T\'_{Nar,LH})=1200, T\'->tH',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Zprime*ToHT*1500*1200*nominal*Tree.root',mcweight+'/1.731*203617.0/203575.0','SigRho15001200_ttH',allweightsystnames),
-                    #Sample('Z->ttH, m(Z\'_{Nar})=2000, m(T\'_{Nar,LH})=900, T\'->tH',ROOT.kCyan+3,path_80x+'Signal_Zprime/Zprime*ToHT*2000*900*nominal*Tree.root',mcweight+'/1.305*204023.0/207827.0','SigRho2000900_ttH',allweightsystnames),
-                    #Sample('Z->ttH, m(Z\'_{Nar})=2000, m(T\'_{Nar,LH})=1200, T\'->tH',ROOT.kCyan,path_80x+'Signal_Zprime/Zprime*ToHT*2000*1200*LH*nominal*Tree.root',mcweight+'/1.251*196615.0/206563.0','SigRho20001200_ttH',allweightsystnames),
-                    #Sample('Z->ttH, m(Z\'_{Nar})=2000, m(T\'_{Nar,LH})=1500, T\'->tH',ROOT.kCyan-6,path_80x+'Signal_Zprime/Zprime*ToHT*2000*1500*nominal*Tree.root',mcweight+'/0.8246*209543.0/196143.0','SigRho20001500_ttH',allweightsystnames),
-                    #Sample('Z->ttH, m(Z\'_{Nar})=2500, m(T\'_{Nar,LH})=1200, T\'->tH',ROOT.kRed,path_80x+'Signal_Zprime/Zprime*ToHT*2500*1200*nominal*Tree.root',mcweight+'/0.511*207688.0/207581.0','SigRho25001200_ttH',allweightsystnames), 
-                    #Sample('Z->ttH, m(Z\'_{Nar})=2500, m(T\'_{Nar,LH})=1500, T\'->tH',ROOT.kRed-7,path_80x+'Signal_Zprime/Zprime*ToHT*2500*1500*nominal*Tree.root',mcweight+'/0.4775*207043.0/206938.0','SigRho25001500_ttH',allweightsystnames),
+                    Sample('Z->ttH, m(Z\'_{Nar})=1500, m(T\'_{Nar,LH})=700, T\'->tH',ROOT.kMagenta-7,path+'Zprime*ToHT*Mzp-1500Nar*700Nar*nominal*Tree*.root',mcweight+'/3.62*207419.0/207388.0','SigRho1500700_ttH',allweightsystnames),
+                    Sample('Z->ttH, m(Z\'_{Nar})=1500, m(T\'_{Nar,LH})=900, T\'->tH',ROOT.kMagenta,path+'Zprime*ToHT*Mzp-1500Nar*900Nar*nominal*Tree*.root',mcweight+'/3.571*205787.0/205759.0','SigRho1500900_ttH',allweightsystnames),
+                    Sample('Z->ttH, m(Z\'_{Nar})=1500, m(T\'_{Nar,LH})=1200, T\'->tH',ROOT.kMagenta+2,path+'Zprime*ToHT*Mzp-1500Nar*1200Nar*nominal*Tree*.root',mcweight+'/1.731*203617.0/203575.0','SigRho15001200_ttH',allweightsystnames),
+                    Sample('Z->ttH, m(Z\'_{Nar})=2000, m(T\'_{Nar,LH})=900, T\'->tH',ROOT.kCyan+3,path+'Zprime*ToHT*Mzp-2000Nar*900Nar*nominal*Tree*.root',mcweight+'/1.305*204023.0/207827.0','SigRho2000900_ttH',allweightsystnames),
+                    Sample('Z->ttH, m(Z\'_{Nar})=2000, m(T\'_{Nar,LH})=1200, T\'->tH',ROOT.kCyan,path+'Zprime*ToHT*Mzp-2000Nar*1200Nar*LH*nominal*Tree*.root',mcweight+'/1.251*196615.0/206563.0','SigRho20001200_ttH',allweightsystnames),
+                    Sample('Z->ttH, m(Z\'_{Nar})=2000, m(T\'_{Nar,LH})=1500, T\'->tH',ROOT.kCyan-6,path+'Zprime*ToHT*Mzp-2000Nar*1500Nar*nominal*Tree*.root',mcweight+'/0.8246*209543.0/196143.0','SigRho20001500_ttH',allweightsystnames),
+                    Sample('Z->ttH, m(Z\'_{Nar})=2500, m(T\'_{Nar,LH})=1200, T\'->tH',ROOT.kRed,path+'Zprime*ToHT*Mzp-2500Nar*1200Nar*nominal*Tree*.root',mcweight+'/0.511*207688.0/207581.0','SigRho25001200_ttH',allweightsystnames), 
+                    Sample('Z->ttH, m(Z\'_{Nar})=2500, m(T\'_{Nar,LH})=1500, T\'->tH',ROOT.kRed-7,path+'Zprime*ToHT*Mzp-2500Nar*1500Nar*nominal*Tree*.root',mcweight+'/0.4775*207043.0/206938.0','SigRho25001500_ttH',allweightsystnames),
                     
 
 
@@ -361,14 +361,14 @@ SignalSamples=[
 
 
                     
-                    #Sample('Z->tWb/ttZ/ttH, m(Z\'_{Nar})=1500, m(T\'_{Nar,LH})=700, T\'->bW/tZ/tH, BR=0.5,0.25,0.25',ROOT.kMagenta-7,path_80x+'Signal_Zprime/Zprime*ToWB*1500*700*nominal*Tree.root',mcweight+'/10000000','SigRho1500700_'+BR_name+'',allweightsystnames),
-                    #Sample('Z->tWb/ttZ/ttH, m(Z\'_{Nar})=1500, m(T\'_{Nar,LH})=900, T\'->bW/tZ/tH, BR=0.5,0.25,0.25',ROOT.kMagenta,path_80x+'Signal_Zprime/Zprime*ToWB*1500*900*nominal*Tree.root',mcweight+'/10000000','SigRho1500900_'+BR_name+'',allweightsystnames),
-                    #Sample('Z->tWb/ttZ/ttH, m(Z\'_{Nar})=1500, m(T\'_{Nar,LH})=1200, T\'->bW/tZ/tH, BR=0.5,0.25,0.25',ROOT.kMagenta+2,path_80x+'Signal_Zprime/Zprime*ToWB*1500*1200*nominal*Tree.root',mcweight+'/10000000','SigRho15001200_'+BR_name+'',allweightsystnames),
-                    #Sample('Z->tWb/ttZ/ttH, m(Z\'_{Nar})=2000, m(T\'_{Nar,LH})=900, T\'->bW/tZ/tH, BR=0.5,0.25,0.25',ROOT.kCyan+3,path_80x+'Signal_Zprime/Zprime*ToWB*2000*900*nominal*Tree.root',mcweight+'/10000000','SigRho2000900_'+BR_name+'',allweightsystnames),
-                    #Sample('Z->tWb/ttZ/ttH, m(Z\'_{Nar})=2000, m(T\'_{Nar,LH})=1200, T\'->bW/tZ/tH, BR=0.5,0.25,0.25',ROOT.kCyan,path_80x+'Signal_Zprime/Zprime*ToWB*2000*1200*LH*nominal*Tree.root',mcweight+'/10000000','SigRho20001200_'+BR_name+'',allweightsystnames),
-                    #Sample('Z->tWb/ttZ/ttH, m(Z\'_{Nar})=2000, m(T\'_{Nar,LH})=1500, T\'->bW/tZ/tH, BR=0.5,0.25,0.25',ROOT.kCyan-6,path_80x+'Signal_Zprime/Zprime*ToWB*2000*1500*nominal*Tree.root',mcweight+'/10000000','SigRho20001500_'+BR_name+'',allweightsystnames),
-                    #Sample('Z->tWb/ttZ/ttH, m(Z\'_{Nar})=2500, m(T\'_{Nar,LH})=1200, T\'->bW/tZ/tH, BR=0.5,0.25,0.25',ROOT.kRed,path_80x+'Signal_Zprime/Zprime*ToWB*2500*1200*nominal*Tree.root',mcweight+'/10000000','SigRho25001200_'+BR_name+'',allweightsystnames), 
-                    #Sample('Z->tWb/ttZ/ttH, m(Z\'_{Nar})=2500, m(T\'_{Nar,LH})=1500, T\'->bW/tZ/tH, BR=0.5,0.25,0.25',ROOT.kRed-7,path_80x+'Signal_Zprime/Zprime*ToWB*2500*1500*nominal*Tree.root',mcweight+'/10000000','SigRho25001500_'+BR_name+'',allweightsystnames),
+                    Sample('Z->tWb/ttZ/ttH, m(Z\'_{Nar})=1500, m(T\'_{Nar,LH})=700, T\'->bW/tZ/tH, BR=0.5,0.25,0.25',ROOT.kMagenta-7,path+'Zprime*ToWB*1500*700*nominal*Tree*.root',mcweight+'/10000000','SigRho1500700_'+BR_name+'',allweightsystnames),
+                    Sample('Z->tWb/ttZ/ttH, m(Z\'_{Nar})=1500, m(T\'_{Nar,LH})=900, T\'->bW/tZ/tH, BR=0.5,0.25,0.25',ROOT.kMagenta,path+'Zprime*ToWB*1500*900*nominal*Tree*.root',mcweight+'/10000000','SigRho1500900_'+BR_name+'',allweightsystnames),
+                    Sample('Z->tWb/ttZ/ttH, m(Z\'_{Nar})=1500, m(T\'_{Nar,LH})=1200, T\'->bW/tZ/tH, BR=0.5,0.25,0.25',ROOT.kMagenta+2,path+'Zprime*ToWB*1500*1200*nominal*Tree*.root',mcweight+'/10000000','SigRho15001200_'+BR_name+'',allweightsystnames),
+                    Sample('Z->tWb/ttZ/ttH, m(Z\'_{Nar})=2000, m(T\'_{Nar,LH})=900, T\'->bW/tZ/tH, BR=0.5,0.25,0.25',ROOT.kCyan+3,path+'Zprime*ToWB*2000*900*nominal*Tree*.root',mcweight+'/10000000','SigRho2000900_'+BR_name+'',allweightsystnames),
+                    Sample('Z->tWb/ttZ/ttH, m(Z\'_{Nar})=2000, m(T\'_{Nar,LH})=1200, T\'->bW/tZ/tH, BR=0.5,0.25,0.25',ROOT.kCyan,path+'Zprime*ToWB*2000*1200*LH*nominal*Tree*.root',mcweight+'/10000000','SigRho20001200_'+BR_name+'',allweightsystnames),
+                    Sample('Z->tWb/ttZ/ttH, m(Z\'_{Nar})=2000, m(T\'_{Nar,LH})=1500, T\'->bW/tZ/tH, BR=0.5,0.25,0.25',ROOT.kCyan-6,path+'Zprime*ToWB*2000*1500*nominal*Tree*.root',mcweight+'/10000000','SigRho20001500_'+BR_name+'',allweightsystnames),
+                    Sample('Z->tWb/ttZ/ttH, m(Z\'_{Nar})=2500, m(T\'_{Nar,LH})=1200, T\'->bW/tZ/tH, BR=0.5,0.25,0.25',ROOT.kRed,path+'Zprime*ToWB*2500*1200*nominal*Tree*.root',mcweight+'/10000000','SigRho25001200_'+BR_name+'',allweightsystnames), 
+                    Sample('Z->tWb/ttZ/ttH, m(Z\'_{Nar})=2500, m(T\'_{Nar,LH})=1500, T\'->bW/tZ/tH, BR=0.5,0.25,0.25',ROOT.kRed-7,path+'Zprime*ToWB*2500*1500*nominal*Tree*.root',mcweight+'/10000000','SigRho25001500_'+BR_name+'',allweightsystnames),
 
 
 

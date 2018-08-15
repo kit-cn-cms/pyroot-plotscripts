@@ -343,6 +343,7 @@ usualweights="(1*Weight_PU*((Weight>0)-(Weight<0)))*Weight_ElectronSFID*Weight_E
 # input path 
 path_80x_MC="/nfs/dust/cms/user/skudella/processed_MC/flat_trees_new/"
 path_80x_DATA="/nfs/dust/cms/user/skudella/processed_DATA/flat_trees/"
+path="/pnfs/desy.de/cms/tier2/store/user/skudella/"
 
 
 #DATA_MC_rate_scalefactor_QCD='0.506626268137'
@@ -351,11 +352,11 @@ DATA_MC_rate_scalefactor_QCD='0.761444753045'
 
 
 BackgroundSamples=[
-                    Sample('ttbar',ROOT.kBlue-4,path_80x_MC+'BKG_TTbar/*nominal*.root',mcweight+'/'+ttbarXS_MCgen+'*'+ttbarXS_NLO,'ttbar',allweightsystnames) ,
+                    Sample('ttbar',ROOT.kBlue-4,path+'TT_*/MC_limits*/*/*/*nominal*.root',mcweight+'/'+ttbarXS_MCgen+'*'+ttbarXS_NLO,'ttbar',allweightsystnames) ,
                     #Sample('Top background',ROOT.kBlue-4,path_80x_MC+'BKG_TTbar/*nominal*.root',mcweight+'/'+ttbarXS_MCgen+'*'+ttbarXS_NLO,'ttbar',allweightsystnames) ,
-                    Sample('single top (tW-channel)',ROOT.kBlue+2,path_80x_MC+'BKG_ST/*ST*tW*nominal*.root',mcweight,'ST_tW',allweightsystnames) ,
-                    Sample('single top (t-channel)',ROOT.kBlue-9,path_80x_MC+'BKG_ST/*ST*t-channel*nominal*.root',mcweight,'ST_t',allweightsystnames) ,
-                    Sample('single top (s-channel)',ROOT.kBlue-7,path_80x_MC+'BKG_ST/*ST*s-channel*nominal*.root',mcweight,'ST_s',allweightsystnames) ,
+                    Sample('single top (tW-channel)',ROOT.kBlue+2,path+'ST_tW*/MC_limits*/*/*/*nominal*.root',mcweight,'ST_tW',allweightsystnames) ,
+                    Sample('single top (t-channel)',ROOT.kBlue-9,path+'ST_t*/MC_limits*/*/*/*nominal*.root',mcweight,'ST_t',allweightsystnames) ,
+                    Sample('single top (s-channel)',ROOT.kBlue-7,path+'ST_s*/MC_limits*/*/*/*nominal*.root',mcweight,'ST_s',allweightsystnames) ,
                     #Sample('QCD from MC',ROOT.kOrange-3,path_80x_MC+'BKG_QCD/*QCD_H*nominal*Tree*.root',mcweight,'QCDMadgraph',allweightsystnames),
 ]
 
@@ -380,9 +381,13 @@ DataSampleNames=[]
 for i in DataSamples:
     DataSampleNames.append(i.nick)
   
-samples=BackgroundSamples+DataSamples
+#samples=BackgroundSamples+DataSamples
 
-samplenames=BackgroundSampleNames+DataSampleNames
+#samplenames=BackgroundSampleNames+DataSampleNames
+
+samples=BackgroundSamples
+
+samplenames=BackgroundSampleNames
 
 
 
