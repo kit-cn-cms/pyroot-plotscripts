@@ -432,13 +432,6 @@ class Variables:
                 print "after subst ", newexpr
         return newexpr
 
-
-
-
-
-
-
-    # returns map of maximum array indices of variables in an expression
     def varsWithMaxIndex(self,expr):
         # find all words followed by [
         variablescandidates = re.findall(r"\w+\b(?=\[)", expr)
@@ -470,16 +463,3 @@ class Variables:
             if arraylength[v] not in maxmap.keys() or maxmap[arraylength[v]]<maxidx:
                 maxmap[arraylength[v]]=maxidx
         return maxmap
-
-
-
-
-
-
-
-
-
-
-
-
-

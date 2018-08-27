@@ -4,8 +4,16 @@ import nafSubmit
 #############################
 # parallel plotting
 #############################
-def plotInterface(jobData, maxTries = 10, nTries = 0):
-    submitOptions = {"PeriodicHold": 1500}
+def plotInterface(jobData, skip = False, maxTries = 10, nTries = 0):
+    if skip:
+        jobData = plotTerminationCheck( jobData )
+        if len(jobData["scripts"]) > 0 or len(jobData["outputs"]) > 0:
+            print(str(len(jobData["scripts"])) + " plotParallel scripts did not terminate successfully - resubmitting")
+        else:
+            print("all plotParallel scripts have terminated successfully - skipping")
+            return
+
+    submitOptions = {"PeriodicHold": 3600}
     if nTries == 0:
         print("submitting plotParallel scripts as array job")
         jobIDs = nafSubmit.submitArrayToNAF(jobData["scripts"], "plotPara", submitOptions = submitOptions)
@@ -22,7 +30,7 @@ def plotInterface(jobData, maxTries = 10, nTries = 0):
     undoneJobData = plotTerminationCheck(jobData)
 
     if len(undoneJobData["scripts"]) > 0 or len(undoneJobData["outputs"]) > 0:
-        return plotInterface( undoneJobData, maxTries, nTries+1 )
+        return plotInterface( undoneJobData, maxTries = maxTries, nTries = nTries+1 )
 
     print("plotParallel submit interface has terminated successfully")
 

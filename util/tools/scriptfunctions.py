@@ -342,13 +342,12 @@ class initPlots:
         return '    }\n    // end of category\n\n'
 
     def initPlot(self, plot, tree, catname):
-        if isinstance(plot, plotClasses.Plot):
-            dim = 1
-        elif isinstance(plot, plotClasses.TwoDimPlot):
-            dim = 2
-        else:
-            print("plot is wrong instance")
-            return None
+        # get dimension of plot
+        try:
+            dim = plot.dim
+        except:
+            print("seems like plot is not an instance of Plot or TwoDimPlot...")
+            sys.exit()
 
         script = ""
         plotName = plot.histo.GetName()

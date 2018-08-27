@@ -30,9 +30,10 @@ class SampleDictionary:
     print self.samplemap
 
 class Sample:
-    def __init__(self, name, color=ROOT.kBlack, path='', selection='', 
-                    nick='', listOfShapes=[], up=0, down=None, samDict="",
-                    readTrees=True, filterFile="NONE", checknevents=-1, treename='MVATree'):
+    def __init__(self, name, color = ROOT.kBlack, path = '', selection = '', 
+            nick = '', listOfShapes = [], up = 0, down = None, samDict = "",
+            readTrees = True, filterFile = "NONE", checknevents = -1, treename = 'MVATree'):
+
         self.name = name
         self.color = color
         self.path = path
@@ -41,7 +42,7 @@ class Sample:
         self.filterFile = filterFile
         subpaths = path.split(";")
         # allow globbing samples from different paths
-        if readTrees == True:
+        if readTrees:
           if samDict != "":
             if not samDict.hasKey(self.path):  
               print "globbing files for", name, self.path
@@ -107,6 +108,7 @@ class Plot:
             self.variable = variable
         self.selection = selection
         self.label = label
+        self.dim = 1
 
 class TwoDimPlot:
     def __init__(self, histo, variable1 = '', variable2 = '', selection = '',label = ''):
@@ -123,7 +125,7 @@ class TwoDimPlot:
         self.variable2 = variable2
         self.selection = selection
         self.label = label
-
+        self.dim = 2
 
 class MVAPlot:
     def __init__(self,histo, weightfile, selection='',label=''):

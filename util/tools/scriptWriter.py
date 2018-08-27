@@ -12,7 +12,6 @@ import pandas
 import variablebox
 import plotClasses
 import scriptfunctions 
-utilpath = os.path.dirname(os.path.realpath(__file__))
 
 ###########################
 #                         #
@@ -82,16 +81,16 @@ class scriptWriter:
     def createProgram(self):
         # generate a vetolist for variables that should not be generated automatically
         self.genVetolist()
-        
+
         # get tree for variable check
         tree = ROOT.TTree()
-        for i in range(len(self.pp.samplesData.allSamples)):
+        for i in range(len(self.pp.configData.allSamples)):
             thistreeisgood = False
-            for j in range(len(self.pp.samplesData.allSamples[i].files)):
-                f = ROOT.TFile(self.pp.samplesData.allSamples[i].files[j])
+            for j in range(len(self.pp.configData.allSamples[i].files)):
+                f = ROOT.TFile(self.pp.configData.allSamples[i].files[j])
                 tree = f.Get('MVATree')
                 if tree.GetEntries() > 0:
-                    print 'using',self.pp.samplesData.allSamples[i].files[j],'to determine variable types'
+                    print 'using',self.pp.configData.allSamples[i].files[j],'to determine variable types'
                     thistreeisgood = True
                     break
             if thistreeisgood:
@@ -102,7 +101,7 @@ class scriptWriter:
         
         # write program
         # start writing program
-        script = scriptfunctions.getHead(self.pp.plotbase, self.pp.dataBases, self.pp.addInterfaces)
+        script = scriptfunctions.getHead(self.pp.analysis.pyrootdir, self.pp.dataBases, self.pp.addInterfaces)
 
         if self.pp.MEPDFCSVFile!="":
             script += scriptfunctions.DeclareMEPDFNormFactors(self.pp.MEPDFCSVFile)
@@ -127,7 +126,7 @@ class scriptWriter:
 
         # start event loop
         script += scriptfunctions.DefineLHAPDF()
-        startLoopStub = scriptfunctions.startLoop(self.pp.plotbase)
+        startLoopStub = scriptfunctions.startLoop(self.pp.analysis.pyrootdir)
 
         if castStub!="":
             startLoopStub = startLoopStub.replace("//PLACEHOLDERFORCASTLINES", castStub)
@@ -233,10 +232,10 @@ class scriptWriter:
         # collect variables
         # list varibles that should not be written to the program automatically
         
-        dataFrame = pandas.read_csv(self.pp.plotbase+"/plottingscripts/configdata/vetolist.csv")
+        dataFrame = pandas.read_csv(self.pp.analysis.pyrootdir+"/data/vetolist.csv")
         vetolist = list(dataFrame.vetolist)
 
-        #self.pp.MEPDFCSVFile = self.pp.plotbase + /plottingscripts/configdata/rate_factors_onlyinternal_powhegpythia.csv
+        #self.pp.MEPDFCSVFile = self.pp.plotbase + /data/rate_factors_onlyinternal_powhegpythia.csv
         if self.pp.MEPDFCSVFile!="":
             vetolist += scriptfunctions.GetMEPDFVetoList(self.pp.MEPDFCSVFile)
 
@@ -259,10 +258,10 @@ class scriptWriter:
     def initVariables(self, tree):
         # initialize variables object
         variables = variablebox.Variables(self.vetolist)
-        
         # get standard variables
         standardvars = ['Weight','Weight_CSV','Weight_XS']
         variables.initVars(standardvars, tree)
+
 
         # get additional variables
         if len(self.pp.configData.addVars) > 0:
@@ -280,7 +279,7 @@ class scriptWriter:
         self.systWeights = systWeights
 
         # get sample selection variables
-        for sample in self.pp.samplesData.allSamples:
+        for sample in self.pp.configData.allSamples:
             variables.initVars(sample.selection, tree)
 
         # get category selection variables
@@ -288,16 +287,16 @@ class scriptWriter:
 
         # get variables used in plots
         for plot in self.pp.configData.getDiscriminatorPlots():
-            if isinstance(plot, plotClasses.Plot):
+            if plot.dim == 1:
                 variables.initVars(plot.variable, tree)
-            if isinstance(plot, plotClasses.TwoDimPlot):
+            if plot.dim == 2:
                 variables.initVars(plot.variable1, tree)
                 variables.initVars(plot.variable2, tree)
 
             variables.initVars(plot.selection, tree)
 
         self.variables = variables
-        
+
     def initLoop(self):
         script = ""
         script += "     timerMapping->Start();\n"
@@ -314,7 +313,7 @@ class scriptWriter:
 
         script += "     timerSampleWeight->Start();\n"
         script += '        float sampleweight=1;\n'
-        script += scriptfunctions.encodeSampleSelection(self.pp.samplesData.allSamples, self.variables)
+        script += scriptfunctions.encodeSampleSelection(self.pp.configData.allSamples, self.variables)
         script += "     totalTimeSampleWeight+=timerSampleWeight->RealTime();\n"
         
         script += "     timerReadDataBase->Start();\n"
@@ -345,7 +344,7 @@ class scriptWriter:
         # this way these havent got to be given as arguments for every plot initiated
         plotClass = scriptfunctions.initPlots(self.variables, self.pp.systNames, self.systWeights)
         
-        for catname, catselection in zip(self.pp.categoryNames,self.pp.categorySelections):
+        for catname, catselection in zip(self.pp.categoryNames, self.pp.categorySelections):
             # for every category
             script += plotClass.startCat(catselection)
             # plot everything
@@ -364,11 +363,11 @@ class scriptWriter:
     def writeRenameScript(self):
         script = "import sys\n"
         script += "import os\n"
-        script += "sys.path.append('"+utilpath+"')\n"
+        script += "sys.path.append('"+self.pp.analysis.pyrootdir+"/util"+"')\n"
         script += "import renameHistos\n\n"
         script += "filename = os.getenv('OUTFILENAME')\n\n"
         script += "outname = filename.replace('.root','_original.root')\n\n"
-        script += "systematics = "+str(self.pp.samplesData.allNames)+"\n\n"
+        script += "systematics = "+str(self.pp.systNames + self.pp.configData.otherSystNames)+"\n\n"
         script += "renameHistos.renameHistosParallel(filename, outname, systematics, prune = False, plotParaCall = True)\n"
   
         # write script to file
@@ -397,7 +396,7 @@ class scriptWriter:
                 LoadedTreeInformation = json.loads(jsonstring)
     
         # looping over samples
-        for sample in self.pp.samplesData.allSamples:
+        for sample in self.pp.configData.allSamples:
             if writeScripts:
                 print '\ncreating scripts for',sample.name,'from',sample.path
             self.samplewiseMaps[sample.nick] = []
@@ -449,7 +448,7 @@ class scriptWriter:
                         nEventsInFiles = 0
                         
                 # If self.options["cirun"] = true, only use small number of files             
-                if self.pp.options["cirun"]: 
+                if self.pp.analysis.cirun: 
                     break
 
             # submit remaining scripts (can happen if the last file was large)
@@ -469,9 +468,9 @@ class scriptWriter:
         # save tree information to json file
         if writeScripts:
             treejson = json.dumps(SaveTreeInforamtion)
-            with open(self.pp.workdir+'/'+"treejson.json","w") as jsonfile:
+            with open(self.pp.analysis.workdir+'/'+"treejson.json","w") as jsonfile:
                 jsonfile.write(treejson)
-            print "Saved information about events in trees to ", self.pp.workdir+'/'+"treejson.json"
+            print "Saved information about events in trees to ", self.pp.analysis.workdir+'/'+"treejson.json"
 
         returnData = {"scripts": self.scripts, 
                         "outputs": self.outputs, 
@@ -493,7 +492,7 @@ class scriptWriter:
             # check options
             if "maxevents" in writeOptions:
                 maxevents = writeOptions["maxevents"]
-            if self.pp.options["cirun"] and maxevents < 100:
+            if self.pp.analysis.cirun and maxevents < 100:
                 maxevents = 100
             if "suffix" in writeOptions:
                 suffix = writeOptions["suffix"]
@@ -560,7 +559,7 @@ class scriptWriter:
         script+= "\toutlog.write(worked)\n"
 
         # saving hadd script
-        self.haddScript = self.pp.workdir+'/haddScript.py'
+        self.haddScript = self.pp.analysis.workdir+'/haddScript.py'
         with open(self.haddScript, "w") as sf:
             sf.write(script)
         print("haddScript written to "+self.haddScript)

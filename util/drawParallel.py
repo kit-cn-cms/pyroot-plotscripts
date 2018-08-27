@@ -10,6 +10,7 @@ import nafInterface
 
 # -- script for parallel drawing ------------------------------------------------------------------
 def drawParallel(ListOfPlots, workdir, PathToSelf, opts=None):
+    print("PathToSelf:" +str(PathToSelf))
 
     ListOfScripts = []
 

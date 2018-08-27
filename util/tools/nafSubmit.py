@@ -8,75 +8,75 @@ import ROOT
 
 
 def writeSubmitCode(script, logdir, hold = False, isArray = False, nScripts = 0, options = {}):
-  ''' write the code for condor_submit file
+    ''' write the code for condor_submit file
 
-  script: path to .sh-script that should be executed
-  logdir: path to directory of logs
+    script: path to .sh-script that should be executed
+    logdir: path to directory of logs
 
-  hold: bool - should the scripts be initialized in hold state
-  isArray: set True if script is an array script
-  nScripts: number of scripts in the array script. Only needed if isArray=True
-  options: dict of options that differ from default options
+    hold: bool - should the scripts be initialized in hold state
+    isArray: set True if script is an array script
+    nScripts: number of scripts in the array script. Only needed if isArray=True
+    options: dict of options that differ from default options
 
-  returns basepath to submitFile as string '''
-  # handling options
-  defaults = {"RequestMemory": "1000M",
+    returns basepath to submitFile as string '''
+    # handling options
+    defaults = {"RequestMemory": "1000M",
                 "RequestDisk": "1000M",
                 "+RequestRuntime": 2000,
                 "PeriodicHold": 1000,
                 "PeriodicRelease": 5}
-  for opt in defaults:
-    if opt in options:
-        defaults[opt] = options[opt]
+    for opt in defaults:
+        if opt in options:
+            defaults[opt] = options[opt]
 
   # if hold = True there should not be a periodic release
-  if hold:
-    defaults["PeriodicRelease"] = None
-    print("PeriodicRelease was deactivated because hold = True")
+    if hold:
+        defaults["PeriodicRelease"] = None
+        print("PeriodicRelease was deactivated because hold = True")
 
-  # writing code
-  submitPath = script[:-3]+".sub"
-  submitScript = script.split("/")[-1][:-3]
+    # writing code
+    submitPath = script[:-3]+".sub"
+    submitScript = script.split("/")[-1][:-3]
 
-  submitCode = ""
-  submitCode+= "universe = vanilla\n"
-  #submitCode+= "should_transfer_files = IF_NEEDED\n"
-  submitCode+= "executable = /bin/zsh\n"
-  submitCode+= "arguments = " + script + "\n"
-  #submitCode+= "initialdir = "+os.getcwd()+"\n"
-  #submitCode+= "notification = Never\n"
-  #submitCode+= "priority = 0\n"
-  #submitCode+= "run_as_owner = True\n"
-  #submitCode+= "job_lease_duration = 60\n"
-  for opt in defaults:
-    if defaults[opt]:
-      if "Request" in opt:
-        submitCode+=opt+" = "+str(defaults[opt])+"\n"
-      if "PeriodicHold" in opt:
-        submitCode+= "periodic_hold = ((JobStatus == 2) && (time() - EnteredCurrentStatus) > "+str(defaults[opt])+")\n"
-      if "PeriodicRelease" in opt:
-        submitCode+= "periodic_release = ((JobStatus == 5) && (time() - EnteredCurrentStatus) > "+str(defaults[opt])+")\n"  
-  if hold:
-    submitCode+= "hold = True\n"
+    submitCode = ""
+    submitCode+= "universe = vanilla\n"
+    #submitCode+= "should_transfer_files = IF_NEEDED\n"
+    submitCode+= "executable = /bin/zsh\n"
+    submitCode+= "arguments = " + script + "\n"
+    #submitCode+= "initialdir = "+os.getcwd()+"\n"
+    #submitCode+= "notification = Never\n"
+    #submitCode+= "priority = 0\n"
+    #submitCode+= "run_as_owner = True\n"
+    #submitCode+= "job_lease_duration = 60\n"
+    for opt in defaults:
+        if defaults[opt]:
+            if "Request" in opt:
+                submitCode+=opt+" = "+str(defaults[opt])+"\n"
+            if "PeriodicHold" in opt:
+                submitCode+= "periodic_hold = ((JobStatus == 2) && (time() - EnteredCurrentStatus) > "+str(defaults[opt])+")\n"
+            if "PeriodicRelease" in opt:
+                submitCode+= "periodic_release = ((JobStatus == 5) && (time() - EnteredCurrentStatus) > "+str(defaults[opt])+")\n"  
+    if hold:
+        submitCode+= "hold = True\n"
 
-  if isArray:
-    submitCode+= "error = "+logdir+"/"+submitScript+".$(Cluster)_$(ProcId).err\n"
-    submitCode+= "output = "+logdir+"/"+submitScript+".$(Cluster)_$(ProcId).out\n"
-    submitCode+= "log = "+logdir+"/"+submitScript+".$(Cluster)_$(ProcId).log\n"
-    submitCode+= "Queue Environment From (\n"
-    for taskID in range(nScripts):
-      submitCode+="\"SGE_TASK_ID="+str(taskID+1)+"\"\n"
-    submitCode+=")"
-  else:
-    submitCode+="error = "+logdir+"/"+submitScript+".$(Cluster).err\n"
-    submitCode+="output = "+logdir+"/"+submitScript+".$(Cluster).out\n"
-    submitCode+="log = "+logdir+"/"+submitScript+".$(Cluster).log\n"
-    submitCode+="queue"
+    if isArray:
+        submitCode+= "error = "+logdir+"/"+submitScript+".$(Cluster)_$(ProcId).err\n"
+        submitCode+= "output = "+logdir+"/"+submitScript+".$(Cluster)_$(ProcId).out\n"
+        submitCode+= "log = "+logdir+"/"+submitScript+".$(Cluster)_$(ProcId).log\n"
+        submitCode+= "Queue Environment From (\n"
+        for taskID in range(nScripts):
+            submitCode+="\"SGE_TASK_ID="+str(taskID+1)+"\"\n"
+        submitCode+=")"
+    else:
+        submitCode+="error = "+logdir+"/"+submitScript+".$(Cluster).err\n"
+        submitCode+="output = "+logdir+"/"+submitScript+".$(Cluster).out\n"
+        submitCode+="log = "+logdir+"/"+submitScript+".$(Cluster).log\n"
+        submitCode+="queue"
 
-  with open(submitPath, "w") as sF:
-    sF.write(submitCode)
+    with open(submitPath, "w") as sF:
+        sF.write(submitCode)
 
-  return submitPath
+    return submitPath
 
 def writeArrayCode(scripts, arrayName):
   ''' writing code for array script
@@ -119,11 +119,12 @@ def condorSubmit(submitPath):
   '''
 
   # creating command  
-  submitCommand = "condor_submit -terse " + submitPath
+  submitCommand = "condor_submit -terse -name bird-htc-sched02.desy.de " + submitPath
   tries = 0
   jobID = None
   while not jobID:
     # submitting
+    print(submitCommand)
     process = subprocess.Popen(submitCommand.split(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, stdin=subprocess.PIPE)
     process.wait()
     output = process.communicate()
@@ -136,7 +137,7 @@ def condorSubmit(submitPath):
       print(output)
       tries += 1
       jobID = None
-      time.sleept(60)
+      time.sleep(60)
     if tries > 10:
       print("job submission was not successful after ten tries - exiting without JOBID")
       sys.exit(-1)
@@ -293,12 +294,14 @@ def monitorJobStatus(jobIDs = None):
   allfinished=False
   errorcount = 0
   print "checking job status in condor_q ..."
-  command = ["condor_q"]
+  command = ["condor_q", "-name", "bird-htc-sched02.desy.de"]
   # adding jobIDs to command
   if jobIDs:
     command += jobIDs
     command = [str(c) for c in command]
   command.append("-totals")
+  sTime = time.time()
+  csv = "t, run, idle, held\n"
   while not allfinished:
     time.sleep(30)
     # calling condor_q command
@@ -313,7 +316,9 @@ def monitorJobStatus(jobIDs = None):
         jobsIdle = int(re.findall(r'\ [0-9]+\ idle', queryline[0])[0][1:-5])
         jobsHeld = int(re.findall(r'\ [0-9]+\ held', queryline[0])[0][1:-5])
         nrunning = jobsRunning + jobsIdle + jobsHeld
-        print(str(jobsRunning) + " jobs running, " + str(jobsIdle) + " jobs idling, " + str(jobsHeld) + " jobs held\t->\t waiting on: "+str(nrunning)+" jobs.")
+        print("{:4d} running | {:4d} idling | {:4d} held |\t total: {:4d}".format(jobsRunning, jobsIdle, jobsHeld, nrunning))
+        csv += "{}, {}, {}, {}\n".format( time.time() - sTime, jobsRunning, jobsIdle, jobsHeld )
+
         errorcount = 0
         if nrunning == 0:
             print("waiting on no more jobs - exiting loop")
@@ -332,4 +337,6 @@ def monitorJobStatus(jobIDs = None):
         return
 
   print("all jobs are finished - exiting monitorJobStatus")
+  print("csv file print out")
+  print(csv)
   return
