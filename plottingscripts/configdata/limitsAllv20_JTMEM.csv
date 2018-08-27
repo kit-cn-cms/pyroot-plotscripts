@@ -1,9 +1,0 @@
-categories;nhistobins;minxvals;maxxvals;discrs
-('(N_Jets==4&&N_BTagsM==3)', 'ljets_j4_t3_BLR', '');20;-1;6;Evt_blr_ETH_transformed
-('(N_Jets==4&&N_BTagsM>=4)', 'ljets_j4_t4_MEMONLY', '');12;0.05;0.9;(memDBp>0.0)*(memDBp)+(memDBp<=0.0)*(0.01)+(memDBp==1.0)*(0.01)
-('(N_Jets==5&&N_BTagsM==3)', 'ljets_j5_t3_BLR', '');20;0.0;6.5;Evt_blr_ETH_transformed
-('(N_Jets==5&&N_BTagsM>=4)', 'ljets_j5_tge4_MEMONLY', '');18;0.1;1.0;(memDBp>0.0)*(memDBp)+(memDBp<=0.0)*(0.01)+(memDBp==1.0)*(0.01)
-('(N_Jets>=6&&N_BTagsM==2)', 'ljets_jge6_t2_BLR', '');25;-3;4;Evt_blr_ETH_transformed
-('(N_Jets>=6&&N_BTagsM==3)', 'ljets_jge6_t3_MEMONLY', '');25;0;1.0;(memDBp>0.0)*(memDBp)+(memDBp<=0.0)*(0.01)+(memDBp==1.0)*(0.01)
-('(N_Jets>=6&&N_BTagsM>=4)', 'ljets_jge6_tge4_MEMONLY', '');16;0.1;0.9;(memDBp>0.0)*(memDBp)+(memDBp<=0.0)*(0.01)+(memDBp==1.0)*(0.01)
-('(N_Jets>=6&&N_BTagsM==3)', 'ljets_jge6_t3_BLR', '');25;0.5;7.0;Evt_blr_ETH_transformed

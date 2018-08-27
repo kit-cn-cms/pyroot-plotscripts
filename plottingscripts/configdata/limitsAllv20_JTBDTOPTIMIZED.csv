@@ -1,5 +1,0 @@
-#categories,nhistobins,minxvals,maxxvals,discrs
-('(N_Jets==4&&N_BTagsM>=4)', 'ljets_j4_t4_ttbbOpt', ''),12,-0.8,0.6,alternativebdt_ljets_j4_t4
-('(N_Jets==5&&N_BTagsM>=4)', 'ljets_j5_tge4_ttbbOpt', ''),16,-0.65,0.65,alternativebdt_ljets_j5_tge4
-('(N_Jets>=6&&N_BTagsM==3)', 'ljets_jge6_t3_ttbbOpt', ''),25,-0.65,0.65,alternativebdt_ljets_jge6_t3
-('(N_Jets>=6&&N_BTagsM>=4)', 'ljets_jge6_tge4_ttbbOpt', ''),16,-0.7,0.8,alternativebdt_ljets_jge6_tge4
