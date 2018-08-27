@@ -22,7 +22,7 @@ from configs.plotconfig_v14 import *
 def main(argv):
 
     # Create analysis object with output name
-    name='controlplots_v16'
+    name='tests'
     #analysis=analysisClass.Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/latest/ttbb-cutbased-analysis_limitInput.root')
     analysis=analysisClass.Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/Sep17/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
     #analysis=analysisClass.Analysis(name,argv,'/nfs/dust/cms/user/mharrend/doktorarbeit/output20170626-reference/workdir/ttbb-cutbased-analysis/output_limitInput.root')
@@ -92,7 +92,7 @@ def main(argv):
     # append variables needed by NNFlow Interface
     #additionalvariables.extend(NNFlowInterface.getAdditionalVariablesList())
     print "Debug output: Print additional variables list: ", additionalvariables
-
+    sys.exit(0)
 
         # selections
 
