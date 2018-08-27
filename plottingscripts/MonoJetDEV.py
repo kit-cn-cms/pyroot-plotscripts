@@ -36,7 +36,7 @@ def main(pyrootdir, argv):
     # initializing everything only takes < 1 minute per script but takes a lot of disk i think
 
     # name of the analysis (i.e. workdir name)
-    name = 'testLimits'
+    name = 'testMJ'
     scriptType = "limits" # "controlPlots"
 
     # path to workdir subfolder where all information should be saved
@@ -51,7 +51,7 @@ def main(pyrootdir, argv):
     rootPathForAnalysis = workdir+'/output_limitInput.root'
 
     # signal process
-    signalProcess = "ttH"
+    signalProcess = None
 
     # Name of final discriminator, should not contain underscore
     discrName = 'finaldiscr'
@@ -67,57 +67,36 @@ def main(pyrootdir, argv):
     # alternativebdtset = "Spring17v3_ttbb"
 
     # name of the csv files used in configdata folder
-    configDataBaseName = "limitsAllv20"
+    configDataBaseName = "monoJet"
 
     # options for plotParallel
-    options = {
-        # options for analysis in general
-        "singleExecute":        False,
-        "plotBlinded":          True,
-        "cirun":                False,
-        # options for steps in script
-        "optimizedRebinning":   True,
-        "haddParallel":         True,
-        "addData":              True,
-        "drawParallel":         True,
-        "makeSimplePlots":      True,
-        "makeDataCards":        True,
-        "makeMCControlPlots":   True,
-        # options for trying to skip steps
-        "useOldRoot":           False,
-        "skipPlotParallel":     False,
-        "skipHaddParallel":     False,  
-        "skipHaddFromWildcard": False,
-        "skipRenaming":         False,
-        "skipDatacards":        False}
-        
     plotOptions = {
-        "cirun":                True,  
-        "haddParallel":         True, 
-        "useOldRoot":           False,
+        "cirun": False,  
+        "haddParallel": True, 
+        "useOldRoot": False,
         # the skipXXX options try to skip the submission of files to the batch system
         # before skipping the output is crosschecked
         # if the output is not complete, the skipped part is done anyways
-        "skipPlotParallel":     False,
-        "skipHaddParallel":     False,
+        "skipPlotParallel": False, 
+        "skipHaddParallel": False,
         "skipHaddFromWildcard": False,
-        "skipRenaming":         False,
-        "skipDatacards":        False}
+        "skipRenaming": False,
+        "skipDatacards": False}
 
     # general analysis Options
     analysisOptions = {
-        "singleExecute":        False,
-        "optimizedRebinning":   True,
-        "plotBlinded":          True,
-        "makeSimplePlots":      True,
-        "makeMCControlPlots":   True,
-        "makeDataCards":        True,
-        "drawParallel":         True,
-        "addData":              False}
+        "singleExecute": True,
+        "optimizedRebinning": False,
+        "plotBlinded": False,
+        "makeSimplePlots": True,
+        "makeMCControlPlots": False,
+        "makeDataCards": False,
+        "drawParallel": False,
+        "addData": False}
 
-    plotJson = "/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_latestAndGreatest.json"
-    plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]] 
-    plotInterfaces = ["../util/dNNInterfaces/dNNInterface_V6.py"]
+    plotJson = "/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_FAST.json"
+    plotDataBases = []
+    plotInterfaces = []
 
     # datacardmaker
     datacardmaker = "mk_datacard_JESTest13TeVPara"
@@ -193,7 +172,7 @@ def main(pyrootdir, argv):
     '''
     configData.getAddVariables()
     configData.getMEPDFAddVariables(
-        "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv")
+        "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv"
     # TODO additionalvariables.extend(NNFlowInterface.getAdditionalVariablesList())
     monitor.printClass(configData, "after getting additional Variables")
 
@@ -337,7 +316,7 @@ def main(pyrootdir, argv):
 
         # Deactivate check bins functionality in renameHistos 
         #   if additional plot variables are added via analysis class
-        if os.path.exists( analysis.setLimitPath(name = "limitInput") ):
+        if os.path.exists( analysis.setLimitPath() ):
         #if os.path.exists( pP.setLimitPath() ) and (plotOptions["skipRenaming"] or analysis.plotNumber != None):
             print( "renamed file already exists - skipping renaming histos" )
         elif analysis.skipRenaming:
@@ -365,11 +344,12 @@ def main(pyrootdir, argv):
                     inFiles = pP.getRenameInput(),
                     outFile = analysis.limitPath,
                     systNames = configData.allSystNames,
-                    checkBins = True,
+                    checkBins = False,
                     prune = False,
                     Epsilon = 0.0,
                     skipRenaming = analysis.skipRenaming)
 
+        if analysis.addData:
             print '''
             # ========================================================
             # adding data with plotParallel
@@ -377,7 +357,7 @@ def main(pyrootdir, argv):
             '''
             with monitor.Timer("addRealData"):
                 # real data with ttH
-                pP.addData(samples = configData.controlSamples)
+                #pP.addData(samples = configData.controlSamples)
 
                 # pseudo data without ttH
                 # pP.addData(samples = configData.samples[9:])
@@ -465,8 +445,9 @@ def main(pyrootdir, argv):
                 plotdir = analysis.getPlotPath(),
                 rebin = 1)
 
-            gP.genList(samples = configData.samples, listName = "histoList")
-            gP.genList(samples = configData.controlSamples, listName = "dataList")
+            gP.genList( samples = pltcfg.samples_background, listName = "bkgList" )
+            gP.genList( samples = pltcfg.samples_signal, listName = "signalList" )
+            gP.genList( samples = pltcfg.samples_data, listName = "dataList" )
             monitor.printClass(gP, "after creating init lists")
 
 
@@ -488,10 +469,10 @@ def main(pyrootdir, argv):
                     "logscale": False,
                     "canvasOptions": "histo",
                     "normalize": False,
-                    "stack": True, # not default
+                    "stack": False, # not default
                     "ratio": False,
                     "sepaTest": False}
-                gP.makeSimpleControlPlots( listName = "histoList", listIndex = 9, options = controlPlotsOptions)
+                #gP.makeSimpleControlPlots( listName = "histoList", listIndex = 9, options = controlPlotsOptions)
 
                 # creating shape plots
                 shapePlotsOptions = {
@@ -502,7 +483,7 @@ def main(pyrootdir, argv):
                     "ratio": False,
                     "statTest": False,
                     "sepaTest": False}
-                gP.makeSimpleShapePlots( listName = "histoList", listIndex = 9, options = shapePlotsOptions)
+                #gP.makeSimpleShapePlots( listName = "histoList", listIndex = 9, options = shapePlotsOptions)
 
                 monitor.printClass(gP, "after making simple MC plots")
 
@@ -518,56 +499,41 @@ def main(pyrootdir, argv):
             with monitor.Timer("makingMCControlPlots"):
 
                 # generate the llloflist internally
-                gP.genNestedHistList(listName = "histoList", listIndex = 9, 
-                    systNames = pltcfg.errorSystNamesNoQCD, 
-                    outName = "histoList")
-
+                gP.genNestedHistList(listName = "bkgList", listIndex = 0, 
+                    systNames = configData.allSystNames, 
+                    outName = "bkgList")
+                
                 monitor.printClass(gP, "after generating nested hist list")
                 # set config of llloflist
                 nestedHistsConfig = {}
-                nestedHistsConfig["histoList"] = {
+                nestedHistsConfig["bkgList"] = {
                     "style": 3354, 
                     "color": ROOT.kBlack, 
-                    "doRateSysts": False}
+                    "doRateSysts": True}
 
 
                 #set general plotoption
                 controlPlotsOptions = {
-                    "factor": -2, #not default
-                    "logscale": False,
+                    "factor": -1,
+                    "logscale": True,
                     "canvasOptions": "histo",
-                    "ratio": True, # not default
-                    "blinded": analysis.plotBlinded} #not default
+                    "ratio": True,
+                    "blinded": analysis.plotBlinded}
                 # makint the control plots
-                gP.makeControlPlots(
-                    dataConfig = {"name": "dataList", "index": 0},
-                    controlConfig = {"name": "histoList", "index": 9},
-                    sampleConfig = {"name": "histoLIst", "index": 9},
-                    headHist = "signalList",
-                    headSample = "signalList",
-                    nestedHistsConfig = nestedHistsConfig,
+                #gP.makeControlPlots( 
+                #    listName = "dataList", listIndex = 9,
+                #    dataName = "dataList", nestedHistsConfig = nestedHistsConfig,
+                #    options = controlPlotsOptions )
+                gp.makeControlPlots(
+                    dataConfig = {"name": "dataList", "index": 0}, 
+                    controlConfig = {"name": "bkgList", "index": 0},
+                    sampleConfig = {"name": "bkgList", "index": 0},
+                    headHist = "signalList", 
+                    headSample = "signalList", 
+                    nestedHistsConfig = nestedHistsConfig,  
                     options = controlPlotsOptions)
-
-
-                    #listName = "histoList", listIndex = 9,
-                    #dataName = "dataList", nestedHistsConfig = nestedHistsConfig,
-                    #options = controlPlotsOptions )
-
             monitor.printClass(gP, "after making control plots")
 
-        if analysis.makeEventYields:
-            print '''
-            # ========================================================
-            # Making Event Yields
-            # ========================================================
-            '''
-            with monitor.Timer("makeEventYields"):
-                gP.makeEventYields(
-                    categories = configData.getEventYieldCategories(),
-                    listName = "histoList",
-                    dataName = "dataList",
-                    nameRequirement = "JT"
-                    )
 
 
 if __name__ == "__main__":
