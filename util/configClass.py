@@ -3,61 +3,325 @@ import ast
 import ROOT
 import os
 import sys
+import importlib 
+import getopt
 
 # local imports       
 filedir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(filedir+"/tools")
 import plotClasses
 import PDFutils
+
+class analysisConfig:
+    def __init__(self, workdir, pyrootdir, rootPath, signalProcess = "ttbb", discrName = "finaldiscr", scriptType = "limits"):
+        self.workdir = str(workdir)
+        self.pyrootdir = str(pyrootdir)
+        self.name = self.workdir.split("/")[-1]
+        self.discrName = discrName
+        if not os.path.exists(self.workdir):
+            print("making workdir at "+str(self.workdir))
+            os.makedirs(self.workdir)
+
+        self.rootPath = str(rootPath)
+        if self.rootPath == "":
+            self.rootPath = self.name+"/limitInput.root"
+        self.ppRootPath = self.rootPath
+        self.limitPath = self.rootPath
+        self.scriptType = scriptType
+
+        self.setDefaults()
+        self.setSignalProcess(signalProcess)
+
+    def setDefaults(self):
+        if os.path.exists(self.rootPath):
+            self.plotParallel = False
+        else:
+            self.plotParallel = True
+
+        self.singleExecute = False
+
+        self.drawParallel = True
+        self.plotNumber = None
+        self.plotBlinded = False
+        self.makeDataCards = True
+        
+        self.makeEventYields = True
+        self.makeSimplePlots = True
+        self.makeMCControlPlots = True
+
+        self.additionalPlotVariables = []
+        self.checkBins = True
+        self.optimizedRebinning = ""
+
+        self.opts = None
+
+        self.cirun = False
+        self.stopAfterCompile = False
+        self.haddParallel = False
+        self.skipPlotParallel = False
+        self.useOldRoot = False
+        self.skipHaddParallel = False
+        self.skipHaddFromWildcard = False
+        self.skipRenaming = False
+        self.skipDatacards = False
+
+    def setSignalProcess(self, signalProcess):
+        if signalProcess == "ttbb":
+            self.signalProcess = "ttbb"
+            self.plotConfig = "plotconfigttbbSpring17v14"
+            # lower and upper end of samples
+            self.tt_samplesLower = 0
+            self.tt_samplesUpper = 5
+            print("ttbb was chosen as signal process")
+        elif signalProcess == "ttH" or signalProcess == "tth":
+            self.signalProcess = "ttH"
+            self.plotBlinded = True
+            self.plotConfig = 'plotconfig_v14'
+            self.tt_samplesLower = 9
+            self.tt_samplesUpper = 14
+            print("ttH was chosen as signal process. plotBlinded was set to True")
+        elif signalProcess == "DM":
+            self.signalProcess = "DM"
+            self.plotBlinded = False
+            self.plotConfig = "monoJet_cfg"
+            print("doing DM analysis")
+        else:
+            print("could not find signalProcess '"+str(signalProcess)+"'. Define it in analysisConfig")
+            sys.exit("unknow signalProcess chosen")
+
+
+    def initArguments(self, argv = list()):
+        """Evaluate any commandline arguments"""
+        try:
+            opts, args = getopt.getopt(argv,"hp:",
+                ["plot=", "doPlotParallel=", "doDrawParallel=", 
+                    "plotBlinded=", "makeEventYields=", "makeDataCards=", 
+                    "makeSimplePlots=", "makeMCControlPlots="])
+        except getopt.GetoptError:
+            print '[scriptname].py -p  <plotnumber> --doPlotParallel= --doDrawParallel= --plotBlinded= --makeEventYields= --makeDataCards= --makeSimplePlots= --makeMCControlPlots='
+            sys.exit(2)
+        for opt, arg in opts:
+            print 'opt: ', opt, ' arg: ', arg, ' found.'
+            if opt in ('-h', '--help'):
+                print '[scriptname].py -p <plotnumber> --doPlotParallel= --doDrawParallel= --plotBlinded= --makeEventYields= --makeDataCards= --makeSimplePlots= --makeMCControlPlots= --additionalPlotVariables= --optimizedRebinning='
+                sys.exit()
+            elif opt in ("-p","--plotNumber"):
+                self.setPlotNumber(arg)
+                print "Set plotNumber option to: ", arg
+            elif opt in ("--doPlotParallel"):
+                self.setDoPlotParallel(arg)
+                print "Set doPlotParallel option to: ", arg
+            elif opt in ("--doDrawParallel"):
+                self.setDoDrawParallel(arg)
+                print "Set doDrawParallel option to: ", arg
+            elif opt in ("--plotBlinded"):
+                self.setPlotBlinded(arg)
+                print "Set plotBlinded option to: ", arg
+            elif opt in ("--makeEventYields"):
+                self.setMakeEventYields(arg)
+                print "Set makeEventYields option to: ", arg
+            elif opt in ("--makeDataCards"):
+                self.setMakeDataCards(arg)
+                print "Set makeDataCards option to: ", arg
+            elif opt in ("--makeSimplePlots"):
+                self.setMakeSimplePlots(arg)
+                print "Set makeSimplePlots option to: ", arg
+            elif opt in ("--makeMCControlPlots"):
+                self.setMakeMCControlPlots(arg)
+                print "Set makeMCControlPlots option to: ", arg
+            elif opt in ("--additionalPlotVariables"):
+                self.setAdditionalPlotVariables(arg)
+                print "Set additionalPlotVariables option to: ", arg
+            elif opt in ("--optimizedRebinning"):
+                self.setOptimizedRebinning(arg)
+                print "Set optimizedRebinning option to: ", arg
+
+        return opts
+
+    def initPlotOptions(self, plotOptions = {}):
+        for key in plotOptions:
+            if key in ("cirun"):
+                self.cirun = bool(plotOptions[key])
+            elif key in ("stopAfterCompile"):
+                self.stopAfterCompile = bool(plotOptions[key])
+            elif key in ("haddParallel"):
+                self.haddParallel = bool(plotOptions[key])
+            elif key in ("skipPlotParallel"):
+                self.skipPlotParallel = bool(plotOptions[key])
+            elif key in ("skipHaddParallel"):
+                self.skipHaddParallel = bool(plotOptions[key])
+            elif key in ("skipHaddFromWildcard"):
+                self.skipHaddFromWildcard = bool(plotOptions[key])
+            elif key in ("skipRenaming"):
+                self.skipRenaming = bool(plotOptions[key])
+            elif key in ("skipDatacards"):
+                self.skipDatacards = bool(plotOptions[key])
+            elif key in ("useOldRoot"):
+                self.useOldRoot = bool(plotOptions[key])
+
+    def initAnalysisOptions(self, analysisOptions = {}):
+        for opt in analysisOptions:
+            if opt in ("plotNumber"):
+                self.setPlotNumber( analysisOptions[opt] )
+            elif opt in ("singleExecute"):
+                self.setSingleExecute( analysisOptions[opt] )
+            elif opt in ("plotParallel"):
+                self.setDoPlotParallel( analysisOptions[opt] )
+            elif opt in ("optimizedRebinning"):
+                self.setOptimizedRebinning( analysisOptions[opt] )
+            elif opt in ("drawParallel"):
+                self.setDoDrawParallel( analysisOptions[opt] )
+            elif opt in ("plotBlinded"):
+                self.setPlotBlinded( analysisOptions[opt] )
+            elif opt in ("makeEventYields"):
+                self.setMakeEventYields( analysisOptions[opt] )
+            elif opt in ("makeDataCards"):
+                self.setMakeDataCards( analysisOptions[opt] )
+            elif opt in ("makeSimplePlots"):
+                self.setMakeSimplePlots( analysisOptions[opt] )
+            elif opt in ("makeMCControlPlots"):
+                self.setMakeMCControlPlots( analysisOptions[opt] )
+            elif opt in ("additionalPlotVariables"):
+                self.setAdditionalPlotVariables( analysisOptions[opt] )
+            elif opt in ("optimizedRebinning"):
+                self.setOptimizedRebinning( analysisOptions[opt] )
+
+    def initPlotConfig(self):
+        configdir = self.pyrootdir+"/configs/"
+        sys.path.append(configdir)
+        self.pltcfg = importlib.import_module( self.plotConfig )
+        return self.pltcfg
+
+
+    ## Setter functions
+    def setLimitPath(self, name = "limitInput"):
+        self.limitPath = self.ppRootPath.replace(".root", "_"+str(name)+".root")
+        return self.limitPath
+
+    def setPlotNumber(self,arg):
+        self.plotNumber = int(arg)
+        self.workdir += "/drawParallelRuns/run"+str(self.plotNumber)
+        if not os.path.exists(self.workdir):
+            os.makedirs(self.workdir)
+
+    def setSingleExecute(self, arg):
+        self.singleExecute = bool(arg)
+        
+    def setDoPlotParallel(self,arg):
+        self.plotParallel = arg
+
+    def setDoDrawParallel(self,arg):
+        self.drawParallel = arg
+
+    def setPlotBlinded(self,arg):
+        self.plotBlinded = arg
+
+    def setMakeEventYields(self,arg):
+        self.makeEventYields = arg
+
+    def setMakeDataCards(self,arg):
+        self.makeDatacards = arg
+
+    def setMakeSimplePlots(self,arg):
+        self.makeSimplePlots = arg
+
+    def setMakeMCControlPlots(self,arg):
+        self.makeMCControlPlots = arg
+
+    def setAdditionalPlotVariables(self,arg):
+        if arg and type(arg) is list:
+            print "Activated additional plot variables.\n"
+            self.additionalPlotVariables = arg
+            print self.additionalPlotVariables
+        else:
+            print "Could not activate additional plot variables since argument is not a list."
+
+    def setOptimizedRebinning(self,arg):
+        self.optimizedRebinning = arg
+
+
+    def printChosenOptions(self):
+        code = "Option, Value\n"
+        code +="PlotNumber, " + str(self.plotNumber) + "\n"
+        code +="plotParallel, " + str(self.plotParallel) + "\n"
+        code +="drawParallel, " + str(self.drawParallel) + "\n"
+        code +="plotBlinded, " + str(self.plotBlinded) + "\n"
+        code +="makeEventYields, " + str(self.makeEventYields) + "\n"
+        code +="makeDataCards, " + str(self.makeDataCards) + "\n"
+        code +="makeSimplePlots, " + str(self.makeSimplePlots) + "\n"
+        code +="makeMCControlPlots, " + str(self.makeMCControlPlots) + "\n"
+        code +="additionalPlotVariables, " + str(self.additionalPlotVariables) + "\n"
+        code +="optimizedRebinning, " + str(self.optimizedRebinning)
+        print(code)
+        with open(self.workdir+"/analysisOptions.csv","w") as f:
+            f.write(code)
+        print("Options saved to: "+self.workdir+"/analysisOptions.csv")
+
+    def set_ppRootPath(self, name = "output.root"):
+        self.ppRootPath = self.workdir+"/"+name
+        print("set analysis.ppRootPath to "+str(self.ppRootPath))
+
+
+    # getters
+    def getPlotConfig(self):
+        """Return plotconfig module"""
+        return self.pltcfg
+
+    def get_ttSamplesLower(self):
+        """Return position of ttbar samples in samples list, lower bound"""
+        return self.tt_samplesLower
+
+    def get_ttSamplesUpper(self):
+        """Return position of ttbar samples in samples list, upper bound"""
+        return self.tt_samplesUpper
+
+    def getPlotPath(self):
+        if self.plotNumber == None:
+            print("this is not the right time to use this")
+            return
+        splitPath = self.workdir.split("/")[:-2]
+        self.plotPath = "/".join(splitPath) + "/outputPlots/"
+        if not os.path.exists(self.plotPath):
+            os.makedirs(self.plotPath)
+        return self.plotPath
+
+class catData:
+    def __init__(self):
+        self.discrs = []
+        self.nhistobins = []
+        self.minxvals = []
+        self.maxxvals = []
+        self.categories = []
+
+        self.plotPreselections = []
+        self.binlabels = []
+
 class configData:
-    def __init__(self, pyrootdir, analysisClass, configDataBaseName = "", usedCategories = []):
+    def __init__(self, analysisClass, configDataBaseName = ""):
 
         print("loading configdata ...")
-        self.basename = configDataBaseName        
-        self.pyrootdir = pyrootdir
-        self.csvdir = pyrootdir + "/plottingscripts/configdata/"
+        # name of files in config
+        self.basename = configDataBaseName
+        self.analysis = analysisClass
+        self.pltcfg = self.analysis.getPlotConfig()
+        self.cfgdir = self.analysis.pyrootdir + "/configs/"
         self.plotNumber = analysisClass.plotNumber
+        self.Data = None
 
-        # configdata
-        self.Data = pandas.DataFrame(
-            columns = ["categories", "nhistobins", "minxvals", "maxxvals", "discrs"])
+    def initData(self):
+        self.Data = catData()
 
-        # data types of columns in .csv files
-        self.colTypes = {"categories": ast.literal_eval, 
-                            "nhistobins": int, 
-                            "minxvals": float, 
-                            "maxxvals": float, 
-                            "discrs": str}
-
-        # loop over usedCategories to load data and append to configdata lists
-        for cat in usedCategories:
-            catData = self.getCategoryData(cat)
-            self.Data = self.Data.append(catData, ignore_index = True)
-
-        # add plotPreselections and binlabels to DataFrame
-        self.Data["plotPreselections"] = pandas.Series(
-            (cat[0] for cat in self.Data.categories.values), index = self.Data.index)
-        self.Data["binlabels"] = pandas.Series(
-            (cat[1] for cat in self.Data.categories.values), index = self.Data.index)
-        
-        # get additionalPlotVariables from analysisClass
-        # TODO rework this later into configData itself
-        self.additionalPlotVariables = analysisClass.additionalPlotVariables
-
-    
-    def getDataFrame():
+    def getData():
         return self.Data
 
-    def getCategoryData(self, category):
-        filename = self.csvdir+"/"+self.basename+"_"+category+".csv"
-        print("loading " + filename)
-        catDict = pandas.read_csv(filename, sep = ";", converters = self.colTypes)
-        return catDict
+    def writeConfigDataToWorkdir(self):
+        if self.Data == None:
+            print("there is no config data")
+            return
 
-    def writeConfigDataToWorkdir(self, workdir):
-        with open(workdir+"/configData.csv", "w") as csvf:
+        with open(self.analysis.workdir+"/configData.csv", "w") as csvf:
             csvf.write("categories,nhistobins,minxvals,maxxvals,discrs")
-            for i in range(self.Data.categories.size):
+            for i in range(len(self.Data.categories)):
                 line = "\n"
                 line+= str(self.Data.categories[i])+";"
                 line+= str(self.Data.nhistobins[i])+";"
@@ -66,42 +330,22 @@ class configData:
                 line+= str(self.Data.discrs[i])
                 csvf.write(line)
         print("wrote config data to workdir")
-        print("path: "+str(workdir+"/configData.csv"))
+        print("path: "+str(self.analysis.workdir+"/configData.csv"))
         return
 
-    def assertData(self):
-        assert(self.Data.nhistobins.size == self.Data.maxxvals.size)
-        assert(self.Data.nhistobins.size == self.Data.minxvals.size)
-        assert(self.Data.nhistobins.size == self.Data.categories.size)
-        assert(self.Data.nhistobins.size == self.Data.discrs.size)
-    
-    def printLengths(self):
-        print("length of nhistobins       \t"+str(self.Data.nhistobins.size))
-        print("length of minxvals         \t"+str(self.Data.minxvals.size))
-        print("length of maxxvals         \t"+str(self.Data.maxxvals.size))
-        print("length of discrs           \t"+str(self.Data.discrs.size))
-        print("length of plotPreselections\t"+str(self.Data.plotPreselections.size))
-        print("length of binlabels        \t"+str(self.Data.binlabels.size))   
+    def genDiscriminatorPlots(self, memexp):
+        sys.path.append(self.cfgdir)
+        fileName = self.basename+"_plots"
+        configdatafile = importlib.import_module( fileName )
+        configdatafile.memexp = memexp
 
-    def genDiscriminatorPlots(self, discrname):
-        discriminatorPlots = []
-        for index, row in self.Data.iterrows():
-            discriminatorPlots.append(
-                plotClasses.Plot(
-                    histo = ROOT.TH1F(
-                        discrname+"_"+row["binlabels"], 
-                        "final discriminator ("+row["binlabels"]+")", 
-                        int(row["nhistobins"]), 
-                        float(row["minxvals"]), 
-                        float(row["maxxvals"])),
-                    variable = row["discrs"],
-                    selection = row["plotPreselections"],
-                    label = row["binlabels"]))
-        self.discriminatorPlots = discriminatorPlots
+        self.discriminatorPlots = configdatafile.getDiscriminatorPlots(self.Data, self.analysis.discrName)
+        self.evtYieldCategories = configdatafile.evtYieldCategories()
 
-    def adjustDiscriminatorPlots(self):
+
+    def getDiscriminatorPlotByNumber(self):
         # select the discr plots for a certain plot number
-        self.discriminatorPlotByNumber = [self.discriminatorPlots[int(self.plotNumber)]]
+        self.discriminatorPlotByNumber = [self.discriminatorPlots[int(self.analysis.plotNumber)]]
         print("this is the new discriminatorPlot:")
         print(self.discriminatorPlotByNumber)
 
@@ -109,25 +353,25 @@ class configData:
 
     def getDiscriminatorPlots(self):
         # if discriminatorPlot
-        if self.plotNumber:
+        if not self.analysis.plotNumber == None:
             return self.discriminatorPlotByNumber
         else:
             return self.discriminatorPlots
 
     def getBinlabels(self):
-        return self.Data.binlabels.values
+        return self.Data.binlabels
 
     def getAddVariables(self):
-        path = self.pyrootdir+"/plottingscripts/configdata/"+self.basename+"_addVariables.csv"
+        path = self.analysis.pyrootdir+"/configs/"+self.basename+"_addVariables.csv"
         print( "searching for additional variables in "+str(path))
         variables = pandas.read_csv(path)
-        self.addVars = list(variables["addVars"].values)
+        self.addVars = list(variables.addVars.values)
 
     def getMEPDFAddVariables(self, csvfile):
         self.addVars += PDFutils.GetMEPDFadditionalVariablesList(csvfile)
 
-    def printAddVariables(self, workdir):
-        with open(workdir+"/additionalVariables.csv", "w") as csvf:
+    def printAddVariables(self):
+        with open(self.analysis.workdir+"/additionalVariables.csv", "w") as csvf:
             csvf.write("addVars")
             for var in self.addVars:
                 csvf.write("\n"+var)
@@ -135,11 +379,11 @@ class configData:
         print("all additional variables:")
         for var in self.addVars:
             print(var)
-        print("additional variables saved to "+workdir+"/additionalVariables.csv")
+        print("additional variables saved to "+self.analysis.workdir+"/additionalVariables.csv")
         print("-"*50)
         return
 
-    def getAdditionalDiscriminatorPlots(self, analysisClass, alwaysExecute=False):
+    def getAdditionalDiscriminatorPlots(self, alwaysExecute = False):
         """ Function creates plot list for additional (input) variables
         Function checks if additionalPlotVariablesMap.py file exists.
         If yes, then it will try to use it for determination of the 
@@ -253,7 +497,7 @@ class configData:
             plotList.append(plotString)
 
         # Set variable to deactivate checkBins functionality in renameHistos, because otherwise it will take a long time.
-        analysisClass.checkBins = False
+        self.analysis.checkBins = False
         print "Set checkBins variable to false. Make sure, this variable is used in renameHistos."
 
         print "before adding stuff", self.discriminatorPlots
@@ -267,6 +511,35 @@ class configData:
             print(plt)
 
 
+    def initSamples(self):
+        sys.path.append(self.cfgdir)
+        fileName = self.basename+"_samples"
+        samplesData = importlib.import_module( fileName )
+        
+        # list of samples
+        self.samples = samplesData.getSamples( self.pltcfg )
+        # list of controlsamples used in 'allSamples' list
+        self.controlSamples = samplesData.getControlSamples( self.pltcfg )
+        # list of systematic samples used in 'allSamples' and 'allSystSamples' list
+        self.systSamples = samplesData.gatherSystSamples( self.pltcfg, self.analysis, self.samples )
+        
+
+        # list of samples used to write C program       
+        self.allSamples = self.samples + self.controlSamples + self.systSamples
+        # TODO is this used anywhere?
+        #self.allSystSamples = samples + systSamples
 
 
+        # list of samples used e.g. in renameHistos       
+        self.allSystNames = samplesData.getAllSystNames( self.pltcfg )
+        # list of syst names used in plotParallel
+        self.weightSystNames = samplesData.getWeightSystNames( self.pltcfg )
+        # list of syst names used in plotParallel
+        self.otherSystNames = samplesData.getOtherSystNames( self.pltcfg )
 
+        # list of syst weights used in plotParallel
+        self.systWeights = samplesData.getSystWeights( self.pltcfg )
+
+
+    def getEventYieldCategories(self):
+        return self.evtYieldCategories

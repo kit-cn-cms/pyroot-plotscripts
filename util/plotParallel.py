@@ -21,107 +21,66 @@ import haddParallel
 #        C L A S S        #
 ###########################
 class plotParallel:
-    def __init__(self, workdir, pltcfg, configData, samplesData):
+    def __init__(self, analysis, configData):
         ''' default init 
 
-        takes workdir path,
-        pltcfg module,
-        configData module,
-        samplesData module
+        takes analysisConfig class,
+        configData class,
         as arguments '''
+        self.analysis = analysis
+        self.analysis.set_ppRootPath("output.root")
 
-        self.workdir = workdir
+        self.configData = configData
 
-        # get pyroot-plotscript directory
-        self.plotbase = self.workdir.split("/")
-        while not self.plotbase[-1] == "pyroot-plotscripts":
-            self.plotbase.pop(-1)
-        self.plotbase = "/".join(self.plotbase)
+        # status variables
+        self.finished = False
+        self.haddFiles = None
 
-        if pltcfg and configData and samplesData:
-            # if all modules are defined construct some more variables
-            self.rootPath = self.workdir + "/output.root"
-            self.analysisName = self.workdir.split("/")[-1]
+        # init defaults
+        self.initDefaults()
 
-            self.maxevents = 5000000
-            self.configData = configData
-            self.samplesData = samplesData
-            self.pltcfg = pltcfg
+    def initDefaults(self):
+        self.maxevents = 5000000
+        self.categoryNames = [""]
+        self.categorySelections = ["1."]        
+        
+        self.systNames = self.configData.weightSystNames
+        self.systWeights = self.configData.systWeights
 
-            self.finished = False
-            self.haddFiles = None
-
-            # defaults
-            self.categoryNames = [""]
-            self.categorySelections = ["1."]        
-            
-            self.systNames = self.pltcfg.weightSystNames
-            self.systWeights = self.pltcfg.systWeights
-
-            self.jsonFile = ""
-            self.dataBases = []
-            self.useDataBases = False
-            self.addInterfaces = []
-            self.MEPDFCSVFile = ""
-            
-            self.options = {"cirun": False,
-                            "stopAfterCompile": False,
-                            "haddParallel": False,
-                            "useOldRoot": False,
-                            "skipPlotParallel": False,
-                            "skipHaddParallel": False}
-            
-            # check cmssw
-            self.cmsswpath = os.environ['CMSSW_BASE']
-            if not "CMSSW" in self.cmsswpath:
-                print "you need CMSSW for this to work. Exiting!"
-                exit(0)
-            self.cmsswversion = os.environ['CMSSW_VERSION']
-
-    @classmethod
-    def empty(cls, workdir, rootFilePath):
-        ''' this class methods initializes an empty class
-        used for drawParallel scripts that dont need all the information '''
-        emptycls = plotParallel(workdir,None,None,None)
-        emptycls.setEmptyValues(rootFilePath)
-        return emptycls
-
-    def setEmptyValues(self, path):
-        outPath = path.replace("_limitInput","")
-        # TODO redundancy, is this used?
-        if os.path.exists(outPath):
-            self.outPath = outPath
-        else:
-            self.outPath = outPath
-            #self.outPath = self.workdir + "/output.root"
-        self.finished = True
-
-        print("initialized empty plotParallel with outPath set to: "+str(self.outPath))
-
-
+        self.jsonFile = ""
+        self.dataBases = []
+        self.useDataBases = False
+        self.addInterfaces = []
+        self.MEPDFCSVFile = ""
+        
+        # check cmssw
+        self.cmsswpath = os.environ['CMSSW_BASE']
+        if not "CMSSW" in self.cmsswpath:
+            print "you need CMSSW for this to work. Exiting!"
+            exit(0)
+        self.cmsswversion = os.environ['CMSSW_VERSION']
 
 
     
     ## setters functions ##
     def setCatNames(self, categoryNames):
         self.categoryNames = categoryNames
+        print("set categoryNames to "+str(categoryNames))
 
     def setCatSelections(self, categorySelections):
         self.categorySelections = categorySelections
-
-    def setSystNames(self, systNames):
-        self.systNames = systNames
-    
-    def setSystWeights(self, systWeights):
-        self.systWeights = systWeights
+        print("set categorySelections to "+str(categorySelections))
 
     def setJson(self, jsonFile):
         self.jsonFile = jsonFile
+        print("set jsonFile to "+str(jsonFile))
 
     def setDataBases(self, dataBases):
         self.dataBases = dataBases
+        print("set dataBases to "+str(dataBases))
         if self.dataBases != []:
             self.useDataBases = True
+            print("set useDataBases to True")
 
     def setAddInterfaces(self, interfaces):
         interfaceCounter = 0
@@ -139,37 +98,26 @@ class plotParallel:
         
     def setMEPDFCSV(self, csvfile):
         self.MEPDFCSVFile = csvfile
+        print("set MEPDFCSVFile to "+str(csvfile))
         
     def setMaxEvts(self, maxevts):
         self.maxevents = maxevts
+        print("set maxevents to "+str(maxevts))
 
-    def setOptions(self, opts):
-        for opt in opts:
-            if opt in self.options:
-                self.options[opt] = opts[opt]
-                print( str(opt) + " set to " + str(opts[opt]))
-    
-
-
+    def setRenameInput(self):
+        if self.checkHaddFiles():
+            self.renameInput = self.haddFiles
+        else:
+            self.renameInput = self.analysis.limitPath
+        print("set renameInput to "+str(self.renameInput))
 
     
     ## getter functions ##
-    def getRootPath(self):
-        if self.finished:
-            return self.rootPath
-        else:
-            print("plotParallel.run() has not terminated successfully")
-            print("                or has not been called yet -- exiting")
-            sys.exit()
-
     def getHaddOutPath(self):
-        return self.workdir+"/HaddOutputs/*.root"
+        return self.analysis.workdir+"/HaddOutputs/*.root"
     
-    def getRenameInput(self):
-        return self.renameInput
-
     def getOutPath(self):
-        return self.outPath
+        return self.analysis.limitPath
     
     ## other public functions ##
     def checkTermination(self):
@@ -186,20 +134,9 @@ class plotParallel:
         else:
             return False
 
-    def setLimitPath(self):
-        self.outPath = self.rootPath.replace(".root","_limitInput.root")
-        return self.outPath
-    
+    def getRenameInput(self):
+        return self.renameInput
 
-    def setRenameInput(self):
-        if self.checkHaddFiles():
-            self.renameInput = self.haddFiles
-        else:
-            self.renameInput = self.outPath
-
-
-
-    ## private functions ##
     def globHaddFiles(self):
         allFiles = glob.glob(self.getHaddOutPath())
         allFiles = [f for f in allFiles if not "_renamed_" in f]
@@ -211,81 +148,90 @@ class plotParallel:
 
     ## main function ##
     def run(self):
-        if self.options["skipPlotParallel"]:
-            print("skipping plot parallel step, going staight to haddParallel")
-            self.scriptsPath = self.workdir + "/plotParaScripts/"
-            self.plotPath = self.workdir + "/plotParaPlots/"            
-            self.ccPath = self.workdir + "/" + self.analysisName + ".cc"
+        # creating paths and folders
+        self.scriptsPath = self.analysis.workdir + "/ppScripts/"
+        self.plotPath = self.analysis.workdir + "/ppPlots/"
+        self.ccPath = self.analysis.workdir + "/" + self.analysis.name + ".cc"
 
-            print("checking plotParallel outputs first...")
+        # check output if skipping activated
+        if self.analysis.skipPlotParallel:
+            print("trying to skip plot Parallel - checking outputs first")
+            
+            # loading data of root files with writeScripts = False
+            # this way the scripts are not written only the neccesary cross checking data is loaded
             writer = scriptWriter.scriptWriter(self)
-            self.runscriptData = writer.writeRunScripts(writeScripts = False)
-            undoneJobsData = nafInterface.plotTerminationCheck(self.runscriptData)
+            self.runscriptData = writer.writeRunScripts( writeScripts = False )
 
-            if len(undoneJobsData["scripts"]) == 0:
-                print("plotParallel output is complete")
+            self.runscriptData = nafInterface.plotTerminationCheck( self.runscriptData )
+
+            if len( self.runscriptData["scripts"] ) == 0:
+                print("all outputs have been checked succesfully - skipping plotParallel step")
                 print("proceeding with haddParallel")
                 self.haddParallelInterface(writer)
-                print("plotParallel.run is finished")
-                return 
-
+                self.finished = True
+                print("exiting plotParallel")
+                return
             else:
-                print("plotParallel output is not complete")
-                print("proceeding with plotParallel as usual")
+                print("not all plotParallel scripts have terminated successfully - redoing the missing ones")
+                print("writing shell scripts")
+                writer.writeRunScripts( writeScripts = True )
+                # this step is kinda stupid, but we need to make sure, that the shell scripts exists
+                # so we write all shell scripts again (takes maybe 5 minutes)
+                # but take only the runscriptData from before, as these are the only unfinished pP-runs
+        
+        else:
+            # check what to do if rootFile already exists
+            if os.path.exists(self.analysis.ppRootPath):
 
-        # check whether to use the already existing root file
-        if os.path.exists(self.rootPath):
-            if self.options["useOldRoot"]:
-                if not self.options["haddParallel"]:
-                    print("old root file found && no parallel hadding")
+                if self.analysis.useOldRoot:
                     print("using old root file")
+                    if not self.analysis.haddParallel:
+                        print("no parallel hadding")
+                    else:
+                        print("parallel hadding activated")
+                        print("using old root file and saving haddFiles")
+                        self.haddFiles = self.globHaddFiles()
+                        print("type of haddFiles: " + str(type(self.haddFiles)) )
                     self.finished = True
-                    return
+                    print("exiting plotParallel")
+                    return 
+               
                 else:
-                    print("old root file found && parallel hadding activated")
-                    print("using old root file and saving haddFiles")
-                    self.haddFiles = self.globHaddFiles()
-                    print("type of haddFiles: " + str(type(self.haddFiles)) )
-                    self.finished = True
-                    return
-                    
-        # moving the old instance of workdir to a backup and copying C-file
-        if os.path.exists(self.rootPath):
-            oldWorkdir = self.workdir+datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-            os.rename(self.workdir, oldWorkdir)
-            os.makedirs(self.workdir)
+                    # moving the old instance of workdir to a backup and copying C-file
+                    oldWorkdir = self.analysis.workdir+datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+                    os.rename(self.analysis.workdir, oldWorkdir)
+                    os.makedirs(self.analysis.workdir)
 
-            cmd = "cp -v "+oldWorkdir+"/"+self.analysisName+".cc "+self.workdir+"/"+self.analysisName+".cc"
-            subprocess.call(cmd, shell = True)
-            cmd = "cp -v "+oldWorkdir+"/"+self.analysisName+" "+self.workdir+"/"+self.analysisName+"Backup"
-            subprocess.call(cmd, shell = True)
-        elif not os.path.exists(self.workdir):
-            os.makedirs(self.workdir)
+                    cmd = "cp -v "+oldWorkdir+"/"+self.analysis.name+".cc "+self.analysis.workdir+"/"+self.analysis.name+".cc"
+                    subprocess.call(cmd, shell = True)
+                    cmd = "cp -v "+oldWorkdir+"/"+self.analysis.name+" "+self.analysis.workdir+"/"+self.analysis.name+"Backup"
+                    subprocess.call(cmd, shell = True)
 
-        # creating c++ programm
-        self.ccPath = self.workdir + "/" + self.analysisName + ".cc"
-        writer = scriptWriter.scriptWriter(self)
-        writer.writeCC()
+            elif not os.path.exists(self.analysis.workdir):
+                os.makedirs(self.analysis.workdir)
 
-        # create rename script
-        # TODO look at rename script code and maybe also move to class
-        writer.writeRenameScript()
+            # creating c++ programm
+            self.ccPath = self.analysis.workdir + "/" + self.analysis.name + ".cc"
+            writer = scriptWriter.scriptWriter(self)
+            writer.writeCC()
 
-        # creating output folders
-        print( "creating output folders" )
-        self.scriptsPath = self.workdir + "/plotParaScripts/"
-        self.plotPath = self.workdir + "/plotParaPlots/"
-        if not os.path.exists(self.scriptsPath):
-            os.makedirs(self.scriptsPath)
-        if not os.path.exists(self.plotPath):
-            os.makedirs(self.plotPath)
+            # create rename script
+            writer.writeRenameScript()
 
-        # creating run script
-        print( "creating run scripts" )
-        # data consists of {"scripts", "outputs", "entries", "maps"}
-        self.runscriptData = writer.writeRunScripts()
+            # creating output folders
+            print( "creating output folders" )
+            if not os.path.exists(self.scriptsPath):
+                os.makedirs(self.scriptsPath)
+            if not os.path.exists(self.plotPath):
+                os.makedirs(self.plotPath)
+
+            # creating run script
+            print( "creating run scripts" )
+            # data consists of {"scripts", "outputs", "entries", "maps"}
+            self.runscriptData = writer.writeRunScripts()
+
         # check if we should stop
-        if self.options["stopAfterCompile"]:
+        if self.analysis.stopAfterCompile:
             print( "compiling is done and stopAfterCompile option is activated - exiting" )
             self.finished = True
             sys.exit(0)
@@ -315,19 +261,19 @@ class plotParallel:
 
 
     # -- adding pseudo and real data --------------------------------------------------------------
-    def addData(self, samples, discr = "BDT_ljets"):
+    def addData(self, samples):
 
         sampleNicks = [s.nick for s in samples]
         rootFile = ROOT.TFile(self.getOutPath(), "UPDATE")
         
         for label in self.configData.getBinlabels():
-            histName = str(sampleNicks[0])+"_"+str(discr)+"_"+label
+            histName = str(sampleNicks[0])+"_"+str(self.analysis.discrName)+"_"+label
             print("getting "+histName)
             oldHist = rootFile.Get(histName)
-            newHist = oldHist.Clone("data_obs_"+discr+"_"+label)
+            newHist = oldHist.Clone("data_obs_"+self.analysis.discrName+"_"+label)
             print("hewHist: "+str(newHist))
             for nick in sampleNicks[1:]:
-                sampleName = str(nick)+"_"+discr+"_"+label
+                sampleName = str(nick)+"_"+self.analysis.discrName+"_"+label
                 print("doing "+sampleName)
                 bufferHist = rootFile.Get(sampleName)
                 print("bufferHist: "+str(bufferHist))

@@ -14,12 +14,58 @@ ROOT.gROOT.SetBatch(True)
 filedir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(filedir+"/tools")
 import CMS_lumi
+import plotClasses
+
+class List:
+    def __init__(self, genPlots, samples, listName, catNames = [""], doTwoDim = False):
+        self.catNames = catNames
+        self.plots = genPlots.plots
+        self.rebin = genPlots.rebin
+        self.doTwoDim = doTwoDim
+
+        self.name = listName
+        self.samples = samples
+        self.data = []
+
+        rootFile = ROOT.TFile(genPlots.outPath, "readonly")
+        keyList = rootFile.GetKeyNames()
+
+        print("-"*30)
+        print("generating new list with name "+str(listName))
+        print("category names:")
+        print(catNames)
+        # generate hist list per sample
+        for sample in samples:
+            histList = self.fillHistList(rootFile, sample)
+            print(histList)
+            self.data.append(histList)
+        # generate transposed list
+        self.T = transposeLOL(self.data)
+        print("list:")
+        print(self.data)
+        print("list.T:")
+        print(self.T)
+        print("-"*30)
+
+    def fillHistList(self, rootFile, sample):
+        histList = []
+        ROOT.gDirectory.cd("PyROOT:/")
+        for cat in self.catNames:
+            for plot in self.plots:
+                key = sample.nick+"_"+cat+plot.name
+                rootHist = rootFile.Get(key)
+                if isinstance(rootHist, ROOT.TH1) and not isinstance(rootHist, ROOT.TH2):
+                    rootHist.Rebin(self.rebin)
+                    histList.append( rootHist.Clone() )
+                if self.doTwoDim and isinstance(rootHist, ROOT.TH2):
+                    histList.append( rootHist.Clone() )
+        return histList
 
 class genPlots:
-    def __init__(self, outPath, plots, workdir, rebin):
+    def __init__(self, outPath, plots, plotdir, rebin):
         self.outPath = outPath
         self.plots = plots
-        self.workdir = workdir
+        self.plotdir = plotdir
         self.rebin = 1
 
         self.lists = {}
@@ -30,48 +76,10 @@ class genPlots:
     # -- functions for setting up lists -----------------------------------------------------------
     # old def createHistoLists_fromSuperHistoFile
     def genList(self, samples, listName, catNames = [""], doTwoDim = False):
-        newList = []
-        rootFile = ROOT.TFile(self.outPath, "readonly")
-        keyList = rootFile.GetKeyNames()
-
-        print("-"*30)
-        print("generated new list with name "+str(listName))
-        print("category names:")
-        print(catNames)
-        # generate hist lists per sample
-        for sample in samples:
-            histList = []
-            ROOT.gDirectory.cd("PyROOT:/")
-            for cat in catNames:
-                for plot in self.plots:
-                    key = sample.nick+"_"+cat+plot.name
-                    rootHist = rootFile.Get(key)
-                    if isinstance(rootHist, ROOT.TH1) and not isinstance(rootHist, ROOT.TH2):
-                        rootHist.Rebin(self.rebin)
-                        histList.append( rootHist.Clone() )
-                    if doTwoDim and isinstance(rootHist, ROOT.TH2):
-                        histList.append( rootHist.Clone() )
-            newList.append(histList)
-
-        # transpose the new list
-        newList = transposeLOL(newList)
-        print("list:")
-        print(newList)
-        print("-"*30)
-        self.lists[listName] = newList
-        self.samples[listName] = samples
+        newList = List(self, samples, listName, catNames, doTwoDim)
+    
+        self.lists[newList.name] = newList
         return
-
-    def genTranspose(self, listName):
-        transposedList = transposeLOL( self.lists[listName] )
-        self.lists[listName+".T"] = transposedList
-        print("-"*30)
-        print("generated transposed list with name "+str(listName+".T"))
-        print(transposedList)
-        print("-"*30)
-        return
-    # ---------------------------------------------------------------------------------------------
-
 
 
     # -- loading options for simple control/shape plots -------------------------------------------
@@ -109,11 +117,11 @@ class genPlots:
         plotOptions = self.loadOptions(options)
         
         # load transposed list
-        transposedList = self.lists[listName+".T"]
-        samples = self.samples[listName]
+        transposedList = self.lists[listName].T
+        samples = self.lists[listName].samples
 
         # generate stuff for control plots
-        plotPath = self.workdir + "/simpleControlPlots/"
+        plotPath = self.plotdir + "/simpleControlPlots/"
         if not os.path.exists(plotPath):
             os.makedirs(plotPath)
         print("plots output: "+str(plotPath+"plots.pdf"))
@@ -247,11 +255,11 @@ class genPlots:
         plotOptions = self.loadOptions(options)
 
         # load transposed list
-        transposedList = self.lists[listName+".T"]
-        samples = self.samples[listName]
+        transposedList = self.lists[listName].T
+        samples = self.lists[listName].samples
 
         # generate stuff for shape plots    
-        plotPath = self.workdir + "/simpleShapePlots/"
+        plotPath = self.plotdir + "/simpleShapePlots/"
         if not os.path.exists(plotPath):
             os.makedirs(plotPath)
         print("plots output: "+str(plotPath+"plots.pdf"))
@@ -353,7 +361,7 @@ class genPlots:
         keyList = rootFile.GetKeyNames()
         outList = []
 
-        controlSamples = self.samples[listName][listIndex:]
+        controlSamples = self.lists[listName].samples[listIndex:]
         
         # looping over discr plots
         for plot in self.plots:
@@ -387,28 +395,39 @@ class genPlots:
 
 
     # old def plotDataMCanWsyst
-    def makeControlPlots(self, listName, listIndex, dataName, nestedHistsConfig, options):
+    # def makeControlPlots(self, listName, listIndex, dataName, nestedHistsConfig, options):
+    def makeControlPlots(self, dataConfig, controlConfig, sampleConfig, headHist, headSample, nestedHistsConfig, options):
         print("\n"+"="*30)
         print("making control plots ...")
         # load options
         print("loading options:")
         plotOptions = self.loadOptions(options)
 
-        # load transposed list
-        transposedList = self.lists[listName+".T"]
-        samples = self.samples[listName]
+        # set the used lists
+        # dataList was listOfHistoListsData
+        dataList = self.lists[ dataConfig.name ].data
+        
+        # controlList was listOfHistoLists
+        transposedList = self.lists[ controlConfig.name ].T
+        controlList = transposeLOL( transposedList[controlConfig.index:] )
+
+        # controlSamples was samples
+        samples = self.lists[ sampleConfig.name ].samples
+        controlSamples = samples[sampleConfig.index:]
+
+        # headList was listOfhistosOnTop
+        transposedList = self.lists[headHist].T
+        headList = transposedList[0]
+
+        # headSamples was sampleOnTop
+        samples = self.lists[headSample].samples
+        headSamples = samples[0]
 
         # generate stuff for control plots
-        plotPath = self.workdir + "/controlPlots/"
+        plotPath = self.plotdir + "/controlPlots/"
         if not os.path.exists(plotPath):
             os.makedirs(plotPath)
         print("plots output: "+str(plotPath+"plots.pdf"))
-
-        controlList = transposeLOL( transposedList[listIndex:] )
-        headList = transposedList[0]
-        dataList = self.lists[dataName]
-        controlSamples = samples[listIndex:]
-        headSamples = samples[0]
 
         # get labels and label texts
         labels = [plot.label for plot in self.plots]
@@ -712,7 +731,23 @@ class genPlots:
         writeObjects(canvases, plotPath)
 
 
+    def makeEventYields(self, categories, listName, dataName, nameRequirement = "JT"):
+        histoList = self.lists[listName].data  
+        dataList = self.lists[dataName].data
+        samples = self.lists[listName].samples
 
+        path = self.plotdir+"/eventYields"
+        for data, hist in zip(dataList, histoList):
+            if not nameRequirement in data[0].GetName():
+                continue
+            
+            name = data[0].GetName()
+            for h in data+hist:
+                for iCat, cat in enumerate(categories):
+                    h.GetXaxis().SetBinLabel(iCat+1, cat[1])
+
+            tablePath = path+"/"+name+"_yields"
+            eventYields( data, hist, samples, tablePath ) 
 
 
 
@@ -1459,6 +1494,111 @@ def getRatioGraph(data, mchisto):
 
 
 
+# ---------------------
+# stuff for eventYields
+# ---------------------
+def eventYields(data, hists, samples, tablePath, withError = True, makeRatios = True):
+    histData = data[0].Clone()
+    for h in data[1:]:
+        histData.Add(h)
+
+    sampleData = plotClasses.Sample("data")
+    bkgSample = plotClasses.Sample("Total bkg")
+    bkgHist = hists[1].Clone()
+    for h in hists[2:]:
+        bkgHist.Add( h.Clone() )
+
+    histsForTable = hists[1:]+[bkgHist]+[hists[0]]+[histData]
+    samplesForTable = samples[1:]+[bkgSample]+[samples[0]]+[sampleData]
+
+    # alternative from eventYieldsNew
+    #bkgSample = samples[-1]
+    #bkgHist = hists[-1]
+    #histsForTable = hists[1:]+[hists[0]]+[histData]
+    #samplesForTable = samples[1:]+[samples[0]]+[samplesData]
+
+    histRatio = None
+    if makeRatios:
+        histRatio = hists[0].Clone()
+        histRatio.Divide( bkgHist )
+        sRatio = plotClasses.Sample( "S/B" )
+        
+        hRatioData = histData.Clone()
+        hRatioData.Divide( bkgHist )
+
+        sRatioData = plotClasses.Sample("data/B")
+
+        histsForTable += [histRatio, hRatioData]
+        samplesForTable += [sRatio, sRatioData]
+
+    turn1DHistsToTable(
+        hists = histsForTable,
+        samples = samplesForTable,
+        outFile = tablePath,
+        withError = withError)
+
+    cmd = ["pdflatex", tablePath+".tex"]
+    subprocess.call(cmd)
+
+
+def turn1DHistsToTable(hists, samples, outFile, withError = True):
+    with open( outFile+".tex", "w") as out:
+        out.write('\\documentclass{article}\n')
+        
+        paperWidth = hists[0].GetNbinsX()*2.2 + 10
+        out.write('\\usepackage[paperwidth=' + str(paperWidth) + 'cm, paperheight=23cm, top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}\n')
+
+        out.write('\\begin{document}\n')
+        out.write('\\thispagestyle{empty}\n')
+        out.write('\\footnotesize\n')
+
+        cls = ["Process"]
+        for i in range(1, hists[0].GetNbinsX()+1):
+            cls.append( hists[0].GetXaxis().GetBinLabel(i) )
+
+        writeHead(out, cls)
+
+        for hist, sample in zip(hists, samples):
+            rounding = "1dig"
+            if sample.name == "S/B":
+                rounding = "3dig"
+            out.write( root2latex(sample.name) + " & " + turn1DHistToRow(hist, withError, rounding+ "\\\\ \n") )
+        
+        writeFoot(out)
+        out.write("\\end{document}\n")
+
+
+def turn1DHistToRow(hist, withError = True, rounding = "3dig"):
+    string = ""
+    for i in range(1, hist.GetNbinsX()+1):
+        if rounding == "3dig":
+            string += "%.3f" % hist.GetBinContent(i)
+        else:
+            string += "%.1f" % hist.GetBinContent(i)
+
+        if withError:
+            string += " $\pm$ "
+            if rounding == "3dig":
+                string += "%.3f" % hist.GetBinError(i)
+            else:
+                string += "%.1f" % hist.GetBinError(i)
+
+        if i == h.GetNbinsX():
+            string += "\\\\"
+        else:
+            string += "&"
+
+    return string
+
+def root2latex(string, mth = True):
+    new = ""
+    if mth:
+        new += "$"
+    new += string.replace("#", "\\")
+    if mth:
+        new += "$"
+    return new
+# -------------------------------------------------------------------------------------------------
 
 
 
@@ -2862,112 +3002,6 @@ def writeHead(f,columns):
         else:
           f.write('Bin' + str(entryNumber) + ' &')
     f.write('\\hline\n')
-# -------------------------------------------------------------------------------------------------
-
-
-
-
-
-# ---------------------
-# stuff for eventYields
-# ---------------------
-def eventYields(hl_data,hl_mc,samples,tablename,witherror=True,makeRatios=True):
-    h_data=hl_data[0].Clone()
-    for h in hl_data[1:]:
-        h_data.Add(h)
-    s_data=Sample('data')
-    s_bkg=Sample('Total bkg')
-    h_bkg=hl_mc[1].Clone()
-    for h in hl_mc[2:]:
-        h_bkg.Add(h.Clone())
-    hratio=None
-    if makeRatios:
-      hratio=hl_mc[0].Clone()
-      hratio.Divide(h_bkg)
-      s_ratio=Sample('S/B')
-      hratioData=h_data.Clone()
-      hratioData.Divide(h_bkg)
-      s_ratioData=Sample('data/B')
-      turn1dHistosToTable(hl_mc[1:]+[h_bkg]+[hl_mc[0]]+[h_data]+[hratio,hratioData],samples[1:]+[s_bkg]+[samples[0]]+[s_data]+[s_ratio,s_ratioData],tablename,witherror)
-    else:
-      turn1dHistosToTable(hl_mc[1:]+[h_bkg]+[hl_mc[0]]+[h_data],samples[1:]+[s_bkg]+[samples[0]]+[s_data],tablename,witherror)
-    command=['pdflatex',tablename+'.tex']
-    subprocess.call(command)
-
-def eventYieldsNew(hl_data,hl_mc,samples,tablename,witherror=True,makeRatios=True):
-    h_data=hl_data[0].Clone()
-    for h in hl_data[1:]:
-        h_data.Add(h)
-    s_data=Sample('data')
-    s_bkg=samples[-1]
-    h_bkg=hl_mc[-1]
-
-    hratio=None
-    if makeRatios:
-      hratio=hl_mc[0].Clone()
-      hratio.Divide(h_bkg)
-      s_ratio=Sample('S/B')
-      hratioData=h_data.Clone()
-      hratioData.Divide(h_bkg)
-      s_ratioData=Sample('data/B')
-      turn1dHistosToTable(hl_mc[1:]+[hl_mc[0]]+[h_data]+[hratio,hratioData],samples[1:]+[samples[0]]+[s_data]+[s_ratio,s_ratioData],tablename,witherror)
-    else:
-      turn1dHistosToTable(hl_mc[1:]+[hl_mc[0]]+[h_data],samples[1:]+[samples[0]]+[s_data],tablename,witherror)
-    command=['pdflatex',tablename+'.tex']
-    subprocess.call(command)
-
-
-def turn1dHistosToTable(histos,samples,outfile,witherror=True):
-    out=open(outfile+".tex","w")
-    out.write( '\\documentclass{article}\n')
-
-    paperwidth = histos[0].GetNbinsX()*2.2 + 10
-    out.write( '\\usepackage[paperwidth=' + str(paperwidth) + 'cm, paperheight=23cm, top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}\n')
-
-    out.write( '\\begin{document}\n')
-    out.write( '\\thispagestyle{empty}\n')
-    out.write( '\\footnotesize\n')
-    cls=['Process']
-    for i in range(1,histos[0].GetNbinsX()+1):
-        cls.append(histos[0].GetXaxis().GetBinLabel(i))
-    writeHead(out,cls)
-    for h,s in zip(histos,samples):
-        rounding="1dig"
-        if s.name=="S/B":
-          rounding="3dig"
-        out.write(root2latex(s.name) + " & " + turn1dHistoToRow(h,witherror,rounding)+ "\\\\ \n")
-    writeFoot(out)
-    out.write( '\\end{document}\n')
-
-
-def turn1dHistoToRow(h,witherror=True,rounding="3dig"):
-    s=""
-    for i in range(1,h.GetNbinsX()+1):
-        if rounding=="3dig":
-          s+="%.3f" % h.GetBinContent(i)
-        else:
-          s+="%.1f" % h.GetBinContent(i)
-        if witherror:
-            s+=" $\pm$ "
-            if rounding=="3dig":
-              s+="%.3f" % h.GetBinError(i)
-            else:
-              s+="%.1f" % h.GetBinError(i)
-        if i==h.GetNbinsX():
-            s+="\\\\"
-        else:
-            s+="&"
-    return s
-
-
-def root2latex(s,mth=True):
-    ns=""
-    if mth:
-        ns+="$"
-    ns+=s.replace('#','\\')
-    if mth:
-        ns+="$"
-    return ns
 # -------------------------------------------------------------------------------------------------
 
 

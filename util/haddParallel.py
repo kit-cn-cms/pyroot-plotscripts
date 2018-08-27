@@ -25,12 +25,12 @@ class haddParallel:
         inherits the needed functions '''
         self.inputmap = plotParaClass.runscriptData["maps"]
         self.outputs = plotParaClass.runscriptData["outputs"]
-        self.haddParallel = plotParaClass.options["haddParallel"]    
-        self.workdir = plotParaClass.workdir
-        self.rootPath = plotParaClass.rootPath
+        self.haddParallel = plotParaClass.analysis.haddParallel
+        self.workdir = plotParaClass.analysis.workdir
+        self.rootPath = plotParaClass.analysis.ppRootPath
         self.haddFiles = plotParaClass.haddFiles
 
-        self.skipHaddParallel = plotParaClass.options["skipHaddParallel"]
+        self.skipHaddParallel = plotParaClass.analysis.skipHaddParallel
         if self.skipHaddParallel:
             print("skipping HaddParallel")
 
