@@ -1,13 +1,9 @@
 #!/usr/bin/python2
-
 import sys
-import getopt
 import os
 import imp
 import inspect
 import ROOT
-import pandas 
-import ast
 
 filedir = os.path.dirname(os.path.realpath(__file__))
 pyrootdir = "/".join(filedir.split("/")[:-1])
@@ -31,13 +27,9 @@ def main(pyrootdir, argv):
     # welcome to main function - defining some variables
     # ========================================================
     '''
-    # BIG TODO: decide what needs to be initialized by the secondary scripts
-    # maybe give some information as an argument instead of doing it all over again
-    # initializing everything only takes < 1 minute per script but takes a lot of disk i think
-
     # name of the analysis (i.e. workdir name)
-    name = 'testLimits'
-    scriptType = "limits" # "controlPlots"
+    name = 'testControl'
+    scriptType = "controlPlots"
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -48,7 +40,8 @@ def main(pyrootdir, argv):
         print("created workdir at "+str(workdir))
     
     # path to root file
-    rootPathForAnalysis = workdir+'/output_limitInput.root'
+    #rootPathForAnalysis = workdir+'/output_limitInput.root'
+    rootPathForAnalysis = "/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/Sep17/pyroot-plotscripts/NOTDEFINED/output_limitInput.root"
 
     # signal process
     signalProcess = "ttH"
@@ -63,60 +56,34 @@ def main(pyrootdir, argv):
 
     # define BDT output variables (not used anymore)
     # bdtweightpath = "/nfs/dust/cms/user/kelmorab/Spring17BDTWeights/"
-    # bdtset = "Spring17v2"
-    # alternativebdtset = "Spring17v3_ttbb"
+    # bdtset = "Spring17v1"
 
     # name of the csv files used in configdata folder
-    configDataBaseName = "limitsAllv20"
+    configDataBaseName = "plotcontrolv14"
 
     # options for plotParallel
-    options = {
-        # options for analysis in general
-        "singleExecute":        False,
-        "plotBlinded":          True,
-        "cirun":                False,
-        # options for steps in script
-        "optimizedRebinning":   True,
-        "haddParallel":         True,
-        "addData":              True,
-        "drawParallel":         True,
-        "makeSimplePlots":      True,
-        "makeDataCards":        True,
-        "makeMCControlPlots":   True,
-        # options for trying to skip steps
-        "useOldRoot":           False,
-        "skipPlotParallel":     False,
-        "skipHaddParallel":     False,  
-        "skipHaddFromWildcard": False,
-        "skipRenaming":         False,
-        "skipDatacards":        False}
-        
     plotOptions = {
-        "cirun":                True,  
-        "haddParallel":         True, 
-        "useOldRoot":           False,
+        "cirun": True,  
+        "haddParallel": True, 
+        "useOldRoot": False,
         # the skipXXX options try to skip the submission of files to the batch system
         # before skipping the output is crosschecked
         # if the output is not complete, the skipped part is done anyways
-        "skipPlotParallel":     False,
-        "skipHaddParallel":     False,
+        "skipPlotParallel": False, 
+        "skipHaddParallel": False,
         "skipHaddFromWildcard": False,
-        "skipRenaming":         False,
-        "skipDatacards":        False}
+        "skipRenaming": False,
+        "skipDatacards": False}
 
     # general analysis Options
     analysisOptions = {
-        "singleExecute":        False,
-        "optimizedRebinning":   True,
-        "plotBlinded":          True,
-        "makeSimplePlots":      True,
-        "makeMCControlPlots":   True,
-        "makeDataCards":        True,
-        "drawParallel":         True,
-        "addData":              False}
+        "plotBlinded": False,
+        "makeSimplePlots": False,
+        "makeMCControlPlots": True,
+        "makeDataCards": False}
 
-    plotJson = "/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_latestAndGreatest.json"
-    plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]] 
+    plotJson = "/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_v5_08102017.json"
+    plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]]
     plotInterfaces = ["../util/dNNInterfaces/dNNInterface_V6.py"]
 
     # datacardmaker
@@ -147,7 +114,7 @@ def main(pyrootdir, argv):
     analysis.printChosenOptions()
 
     # loading monitorTools module locally
-    monitor = monitorTools.init(analysis.workdir)
+    monitor = monitorTools.init(analysis.workdir)      
     monitor.printClass(analysis, "init")
 
     #print '''    
@@ -179,12 +146,11 @@ def main(pyrootdir, argv):
         configDataBaseName = configDataBaseName)
 
     configData.initData()
-    monitor.printClass(configData, "init")
 
     # get the discriminator plots
     configData.genDiscriminatorPlots(memexp)
     configData.writeConfigDataToWorkdir()
-    monitor.printClass(configData, "after genDiscriminatorPlots")
+    monitor.printClass(configData, "init")
 
     print '''    
     # ========================================================
@@ -192,26 +158,26 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     configData.getAddVariables()
-    configData.getMEPDFAddVariables(
-        "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv")
+    #configData.getMEPDFAddVariables(
+    #    "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv")
     # TODO additionalvariables.extend(NNFlowInterface.getAdditionalVariablesList())
     monitor.printClass(configData, "after getting additional Variables")
 
     # save addition variables information to workdir and print
     configData.printAddVariables()
 
-    print '''
-    # ========================================================
-    # Check if additional (input) variables should be plotted
-    # if necessary add them here to the discriminatorPlots
-    # ========================================================
-    '''
-    if analysis.additionalPlotVariables:
-        # Construct list with additional plot variables, 
-        # will need name of discrs and plotPreselections for this
-        print( "add additional plot variables")
-        configData.getAdditionalDiscriminatorPlots()
-        monitor.printClass(configData, "after adding additional plot variables")
+    #print '''
+    ## ========================================================
+    ## Check if additional (input) variables should be plotted
+    ## if necessary add them here to the discriminatorPlots
+    ## ========================================================
+    #'''
+    #if analysis.additionalPlotVariables:
+    #    # Construct list with additional plot variables, 
+    #    # will need name of discrs and plotPreselections for this
+    #    print( "add additional plot variables")
+    #    configData.getAdditionalDiscriminatorPlots()
+    #    monitor.printClass(configData, "after adding additional plot variables")
     
 
     
@@ -222,7 +188,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     configData.initSamples()
-    
+
 
     print '''
     # ========================================================
@@ -230,7 +196,8 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
 
-    if analysis.plotNumber == None or analysis.singleExecute:
+
+    if analysis.plotNumber == None:
         # plot everything, except during drawParallel step
         # Create file for data cards
         #if not analysis.drawParallel:
@@ -252,8 +219,10 @@ def main(pyrootdir, argv):
             pP.setJson(plotJson)
             pP.setDataBases(plotDataBases)
             pP.setAddInterfaces(plotInterfaces)
-            pP.setCatNames([''])
-            pP.setCatSelections(['1.'])
+            # pP.setCatNames([''])
+            # pP.setCatSelections(['1.'])
+            # pP.setSystNames(pltcfg.weightSystNames)
+            # pP.setSystWeights(pltcfg.systWeights)
             # pP.setMaxEvts(...)
 
             # run plotParallel
@@ -321,23 +290,23 @@ def main(pyrootdir, argv):
 
         # hadd histo files before renaming. The histograms are actually already renamed. 
         # But the checkbins thingy will not have been done yet.
-        print '''
-        # ========================================================
-        # hadding from wildcard
-        # ========================================================
-        '''
-        with monitor.Timer("haddFilesFromWildCard"):
-            haddParallel.haddSplitter( input = pP.getHaddOutPath(),
-                outName = analysis.ppRootPath,
-                subName = "haddParts",
-                nHistosRemainSame = True,
-                skipHadd = analysis.skipHaddFromWildcard)
+        #print '''
+        ## ========================================================
+        ## hadding from wildcard
+        ## ========================================================
+        #'''
+        #with monitor.Timer("haddFilesFromWildCard"):
+        #    haddParallel.haddSplitter( input = pP.getHaddOutPath(),
+        #        outName = analysis.ppRootPath,
+        #        subName = "haddParts",
+        #        nHistosRemainSame = True,
+        #        skipHadd = analysis.skipHaddFromWildcard)
          
 
 
         # Deactivate check bins functionality in renameHistos 
         #   if additional plot variables are added via analysis class
-        if os.path.exists( analysis.setLimitPath(name = "limitInput") ):
+        if os.path.exists( analysis.setLimitPath() ):
         #if os.path.exists( pP.setLimitPath() ) and (plotOptions["skipRenaming"] or analysis.plotNumber != None):
             print( "renamed file already exists - skipping renaming histos" )
         elif analysis.skipRenaming:
@@ -370,17 +339,17 @@ def main(pyrootdir, argv):
                     Epsilon = 0.0,
                     skipRenaming = analysis.skipRenaming)
 
-            print '''
-            # ========================================================
-            # adding data with plotParallel
-            # ========================================================
-            '''
-            with monitor.Timer("addRealData"):
-                # real data with ttH
-                pP.addData(samples = configData.controlSamples)
-
-                # pseudo data without ttH
-                # pP.addData(samples = configData.samples[9:])
+            #print '''
+            ## ========================================================
+            ## adding data with plotParallel
+            ## ========================================================
+            #'''
+            #with monitor.Timer("addRealData"):
+            #    # real data with ttH
+            #    pP.addData(samples = configData.controlSamples)
+            #
+            #    # pseudo data without ttH
+            #    # pP.addData(samples = configData.samples[9:])
         
 
         pP.checkTermination()       
@@ -390,28 +359,28 @@ def main(pyrootdir, argv):
         print("at the moment the outputpath is "+str(analysis.limitPath))
         print("#################################################")
 
-        if analysis.makeDatacards:
-        #if (analysis.doDrawParallel==False or analysis.plotNumber == None) and analysis.makeDataCards == True :
-            #limittools.addRealData(outputpath,[s.nick for s in samples_data],binlabels,discrname)
-            print '''
-            # ========================================================
-            # Making Datacards.
-            # ========================================================
-            '''
-            # init datacards path
-            datacardsPath = analysis.workdir+"/datacards"
-            if not os.path.exists(datacardsPath):
-                os.makedirs(datacardsPath)
-
-            with monitor.Timer("makeDatacardsParallel"):
-                makeDatacards.makeDatacardsParallel(
-                    filePath = analysis.limitPath,
-                    outPath = datacardsPath,
-                    categories = configData.getBinlabels(),
-                    doHdecay = True,
-                    discrname = analysis.discrName,
-                    datacardmaker = datacardmaker,
-                    skipDatacards = analysis.skipDatacards)
+        #if analysis.makeDatacards:
+        ##if (analysis.doDrawParallel==False or analysis.plotNumber == None) and analysis.makeDataCards == True :
+        #    #limittools.addRealData(outputpath,[s.nick for s in samples_data],binlabels,discrname)
+        #    print '''
+        #    # ========================================================
+        #    # Making Datacards.
+        #    # ========================================================
+        #    '''
+        #    # init datacards path
+        #    datacardsPath = analysis.workdir+"/datacards"
+        #    if not os.path.exists(datacardsPath):
+        #        os.makedirs(datacardsPath)
+        #
+        #    with monitor.Timer("makeDatacardsParallel"):
+        #        makeDatacards.makeDatacardsParallel(
+        #            filePath = analysis.limitPath,
+        #            outPath = datacardsPath,
+        #            categories = configData.getBinlabels(),
+        #            doHdecay = True,
+        #            discrname = analysis.discrName,
+        #            datacardmaker = datacardmaker,
+        #            skipDatacards = analysis.skipDatacards)
 
 
         # =============================================================================================
@@ -444,7 +413,7 @@ def main(pyrootdir, argv):
     # =============================================================================================
     # everything beyond this point is called by the secondary scripts
     # =============================================================================================
-    elif analysis.plotNumber != None or analysis.singleExecute:
+    elif analysis.plotNumber != None:
         print("not doing plotParallel step")
         if analysis.drawParallel:
         #if analysis.doDrawParallel==True and analysis.plotNumber != None :
@@ -518,17 +487,16 @@ def main(pyrootdir, argv):
             with monitor.Timer("makingMCControlPlots"):
 
                 # generate the llloflist internally
-                gP.genNestedHistList(listName = "histoList", listIndex = 9, 
-                    systNames = pltcfg.errorSystNamesNoQCD, 
+                gP.genNestedHistList(listName = "histoList", listIndex = 1, 
+                    systNames = pltcfg.errorSystNamesNoPS, 
                     outName = "histoList")
 
                 monitor.printClass(gP, "after generating nested hist list")
                 # set config of llloflist
                 nestedHistsConfig = {}
-                nestedHistsConfig["histoList"] = {
-                    "style": 3354, 
-                    "color": ROOT.kBlack, 
-                    "doRateSysts": False}
+                nestedHistsConfig["histoList"] = {"style": 3354, 
+                                                "color": ROOT.kBlack, 
+                                                "doRateSysts": True}
 
 
                 #set general plotoption
@@ -541,15 +509,15 @@ def main(pyrootdir, argv):
                 # makint the control plots
                 gP.makeControlPlots(
                     dataConfig = {"name": "dataList", "index": 0},
-                    controlConfig = {"name": "histoList", "index": 9},
-                    sampleConfig = {"name": "histoLIst", "index": 9},
+                    controlConfig = {"name": "histoList", "index": 1},
+                    sampleConfig = {"name": "histoList", "index": 1},
                     headHist = "signalList",
                     headSample = "signalList",
                     nestedHistsConfig = nestedHistsConfig,
                     options = controlPlotsOptions)
 
 
-                    #listName = "histoList", listIndex = 9,
+                    #listName = "histoList", listIndex = 1,
                     #dataName = "dataList", nestedHistsConfig = nestedHistsConfig,
                     #options = controlPlotsOptions )
 
@@ -564,8 +532,8 @@ def main(pyrootdir, argv):
             with monitor.Timer("makeEventYields"):
                 gP.makeEventYields(
                     categories = configData.getEventYieldCategories(),
-                    listName = "histoList",
-                    dataName = "dataList",
+                    listName = "histoList", 
+                    dataName = "dataList", 
                     nameRequirement = "JT"
                     )
 
