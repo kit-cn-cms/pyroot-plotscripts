@@ -13,6 +13,7 @@ weightSystNames=["",
                  "_CMS_btag_cferr1Up","_CMS_btag_cferr1Down","_CMS_btag_cferr2Up","_CMS_btag_cferr2Down",
                  "_Weight_PUUp","_Weight_PUDown",
                  "_Weight_scale_variation_muRUp","_Weight_scale_variation_muRDown","_Weight_scale_variation_muFUp","_Weight_scale_variation_muFDown",
+                 "_Weight_PDFUp","_Weight_PDFDown"
                  ]
 
 
@@ -42,8 +43,8 @@ systWeights=[   "NomWeight:="+common_weight+"*(DoWeights==1)+(DoWeights==0)*1.0"
                 "dummyWeight_scale_variation_muRdown:="+common_weight+"*internalBosonWeight_muRDown/internalBosonWeight_nominal*fabs(Weight_scale_variation_muR_0p5_muF_1p0)*(DoWeights==1)+(DoWeights==0)*1.0",
                 "dummyWeight_scale_variation_muFup:="+common_weight+"*internalBosonWeight_muFUp/internalBosonWeight_nominal*fabs(Weight_scale_variation_muR_1p0_muF_2p0)*(DoWeights==1)+(DoWeights==0)*1.0",
                 "dummyWeight_scale_variation_muFdown:="+common_weight+"*internalBosonWeight_muFDown/internalBosonWeight_nominal*fabs(Weight_scale_variation_muR_1p0_muF_0p5)*(DoWeights==1)+(DoWeights==0)*1.0",
-                #"dummyWeight_PDFup:="+common_weight+"*internalPDFweightUp*(DoWeights==1)+(DoWeights==0)*1.0",
-                #"dummyWeight_PDFdown:="+common_weight+"*internalPDFweightDown*(DoWeights==1)+(DoWeights==0)*1.0",
+                "dummyWeight_PDFup:="+common_weight+"*(Weight_LHA_292200_up>0.)*Weight_LHA_292200_up*(DoWeights==1)+(DoWeights==0)*1.0",
+                "dummyWeight_PDFdown:="+common_weight+"*(Weight_LHA_292200_down>0.)*Weight_LHA_292200_down*(DoWeights==1)+(DoWeights==0)*1.0"
                 ]
 otherSystNames=[
                     "_CMS_scale_jUp","_CMS_scale_jDown",
@@ -152,13 +153,13 @@ WBosonWeights=[
 
 MCWeight='35.91823'
 
-path_ntuples = "/nfs/dust/cms/user/mwassmer/DarkMatter/ntuples"
+path_ntuples = "/nfs/dust/cms/user/mwassmer/DarkMatter/ntuples_controlregion"
 # path_ntuples = "/nfs/dust/cms/user/swieland/Darkmatter/ntuples"
 
 sampleDict=SampleDictionary()
 sampleDict.doPrintout()
 
-sel_MET="*(Triggered_HLT_PFMET170_X==1||Triggered_HLT_PFMETNoMu100_PFMHTNoMu100_IDTight_X==1||Triggered_HLT_PFMETNoMu110_PFMHTNoMu110_IDTight_X==1||Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_X==1||Triggered_HLT_PFMETNoMu90_PFMHTNoMu90_IDTight_X==1)"
+sel_MET="*((Triggered_HLT_PFMET170_X==1)||(Triggered_HLT_PFMETNoMu100_PFMHTNoMu100_IDTight_X==1)||(Triggered_HLT_PFMETNoMu110_PFMHTNoMu110_IDTight_X==1)||(Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_X==1)||(Triggered_HLT_PFMETNoMu90_PFMHTNoMu90_IDTight_X==1))*((N_LooseMuons==0)*(N_LooseElectrons==0)*(N_LooseTaus==0))"
 
 """
 Triggered_HLT_EcalHT800
@@ -194,7 +195,7 @@ samples_data = [
 #z_nunu: 0.00001321
 #w_lnu: 0.0000086564
 samples_background = [
-                        Sample('Z(#nu#nu)+jets',ROOT.kBlue,path_ntuples+'/DYJetsToNuNu*To*/*nominal*.root',"1.*3*0.971"+"*"+MCWeight+sel_MET,'z_nunu_jets',weightSystNames+BosonSystNames+ZvvBosonSystNames+otherSystNames,samDict=sampleDict),
+                        Sample('Z(#nu#nu)+jets',ROOT.kBlue,path_ntuples+'/DYJetsToNuNu*To*amc*/*nominal*.root',"1.*3*0.971"+"*"+MCWeight+sel_MET,'z_nunu_jets',weightSystNames+BosonSystNames+ZvvBosonSystNames+otherSystNames,samDict=sampleDict),
                         #Sample('Z(#nu#nu)+jets p_{T,Z}=50-100',ROOT.kBlue+4,path_ntuples+'/DYJetsToNuNu_PtZ-50To100*/*nominal*.root',"3*0.971"+"*"+MCWeight+sel_MET,'z_nunu_jets_a',weightSystNames+otherSystNames,samDict=sampleDict),
                         #Sample('Z(#nu#nu)+jets p_{T,Z}=100-250',ROOT.kBlue+2,path_ntuples+'/DYJetsToNuNu_PtZ-100To250*/*nominal*.root',"3*0.971"+"*"+MCWeight+sel_MET,'z_nunu_jets_b',weightSystNames+otherSystNames,samDict=sampleDict),
                         #Sample('Z(#nu#nu)+jets p_{T,Z}=250-400',ROOT.kBlue,path_ntuples+'/DYJetsToNuNu_PtZ-250To400*/*nominal*.root',"3*0.971"+"*"+MCWeight+sel_MET,'z_nunu_jets_c',weightSystNames+otherSystNames,samDict=sampleDict),
@@ -207,12 +208,12 @@ samples_background = [
                         #Sample('W(l#nu)+jets p_{T,W}=400-600',ROOT.kGreen+4,path_ntuples+'/WJetsToLNu_Pt-400To600*/*nominal*.root',"1.*"+MCWeight+sel_MET,'w_lnu_jets_c',weightSystNames+otherSystNames,samDict=sampleDict),
                         #Sample('W(l#nu)+jets p_{T,W}=600-Inf',ROOT.kGreen-6,path_ntuples+'/WJetsToLNu_Pt-600ToInf*/*nominal*.root',"1.*"+MCWeight+sel_MET,'w_lnu_jets_d',weightSystNames+otherSystNames,samDict=sampleDict),
                         
-                        Sample('Diboson',ROOT.kViolet,path_ntuples+'/??_TuneCUETP8M1_13TeV-pythia8/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'diboson',weightSystNames[:-4]+otherSystNames,samDict=sampleDict),
-                        Sample('Single Top',ROOT.kViolet-1,path_ntuples+'/ST*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'singletop',weightSystNames+otherSystNames,samDict=sampleDict),
-                        Sample('t#bar{t}',ROOT.kViolet-2,path_ntuples+'/TT_Tune*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'ttbar',weightSystNames+otherSystNames,samDict=sampleDict),
-                        Sample('Z(ll)+jets',ROOT.kViolet-7,path_ntuples+'/DYJetsToLL*/*nominal*.root',"1.*0.971"+"*"+MCWeight+sel_MET,'z_ll_jets',weightSystNames+BosonSystNames+ZllBosonSystNames+otherSystNames,samDict=sampleDict),
-                        Sample('QCD',ROOT.kViolet+3,path_ntuples+'/QCD*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'qcd',weightSystNames+otherSystNames,samDict=sampleDict),
-                        Sample('#gamma +jets',ROOT.kViolet+7,path_ntuples+'/GJets*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'gamma_jets',weightSystNames+otherSystNames,samDict=sampleDict)
+                        Sample('Diboson',ROOT.kViolet,path_ntuples+'/??_TuneCUETP8M1_13TeV-pythia8/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'diboson',weightSystNames[:-6]+otherSystNames,samDict=sampleDict),
+                        Sample('Single Top',ROOT.kViolet-1,path_ntuples+'/ST*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'singletop',weightSystNames[:-2]+otherSystNames,samDict=sampleDict),
+                        Sample('t#bar{t}',ROOT.kViolet-2,path_ntuples+'/TT_Tune*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'ttbar',weightSystNames[:-2]+otherSystNames,samDict=sampleDict),
+                        Sample('Z(ll)+jets',ROOT.kViolet-7,path_ntuples+'/DYJetsToLL*amc*/*nominal*.root',"1.*0.971"+"*"+MCWeight+sel_MET,'z_ll_jets',weightSystNames+BosonSystNames+ZllBosonSystNames+otherSystNames,samDict=sampleDict),
+                        Sample('QCD',ROOT.kViolet+3,path_ntuples+'/QCD*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'qcd',weightSystNames[:-2]+otherSystNames,samDict=sampleDict),
+                        Sample('#gamma +jets',ROOT.kViolet+7,path_ntuples+'/GJets*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'gamma_jets',weightSystNames[:-2]+otherSystNames,samDict=sampleDict)
                         ]
 """
 samples_signal = [
@@ -221,7 +222,7 @@ samples_signal = [
 """
 
 samples_signal = [
-                        Sample('AV|M1000|m300',ROOT.kRed,path_ntuples+'/Axial_MonoJ_NLO_Mphi-1000_Mchi-300_gSM-0p25_gDM-1p0_13TeV-madgraph/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'SIG_AV_M1000_m300',weightSystNames,samDict=sampleDict),
+                        Sample('AV|M1000|m300',ROOT.kRed,path_ntuples+'/Axial_MonoJ_NLO_Mphi-1000_Mchi-300_gSM-0p25_gDM-1p0_13TeV-madgraph/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'SIG_AV_M1000_m300',weightSystNames[:-2],samDict=sampleDict),
 
                  ]
 

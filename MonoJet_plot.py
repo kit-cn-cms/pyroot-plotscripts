@@ -30,12 +30,12 @@ additionalvariables=[    "N_TightMuons","N_TightElectrons","Evt_Pt_PrimaryLepton
                          "Weight_CSVLFStats1up","Weight_CSVLFStats1down","Weight_CSVHFStats2up","Weight_CSVHFStats2down","Weight_CSVLFStats2up","Weight_CSVLFStats2down",
                          "Weight_CSVCErr1up","Weight_CSVCErr1down","Weight_CSVCErr2up","Weight_CSVCErr2down","Weight_pu69p2",
                          "Evt_E_PrimaryLepton","Evt_Phi_PrimaryLepton","Evt_Eta_PrimaryLepton","Evt_M_PrimaryLepton","GenEvt_I_TTPlusCC","GenEvt_I_TTPlusBB","Weight_GenValue",
-                         "W_Pt", "Z_Pt"
+                         "W_Pt", "Z_Pt","Weight_LHA_292200_up","Weight_LHA_292200_down","Weight_LHA_292200_nominal"
                          ]
 additionalvariables+=GetMEPDFadditionalVariablesList("/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv")
 
 
-plotselection_inclusive = "1.*DeltaPhi_Jet_MET[0]>1."
+plotselection_inclusive = "1.*(DeltaPhi_Jet_MET[0]>1.)"
 plotlabel_inclusive = "#slash{E}_{T}>250 GeV"
 plotprefix = "incl"
 plots_inclusive=[
@@ -75,8 +75,8 @@ plots_MET300=[
         Plot(ROOT.TH1F(plotprefix+"_"+"Evt_Pt_CaloMET","#slash{E}_{T,Calo}",22,200.,1400.),"CaloMET",plotselection_MET300,plotlabel_MET300),
         Plot(ROOT.TH1F(plotprefix+"_"+"CaloMET_PFMET_ratio","#slash{E}_{T,Calo} #slash{E}_{T,PF} ratio",20,0.,1.),"CaloMET_PFMET_ratio",plotselection_MET300,plotlabel_MET300),
         Plot(ROOT.TH1F(plotprefix+"_"+"DeltaPhi_MET_Jet","#Delta #phi (#slash{E}_{T},jet)",32,0.,3.2),"DeltaPhi_Jet_MET",plotselection_MET300,plotlabel_MET300),
-        #Plot(ROOT.TH1F(plotprefix+"_"+"Hadr_Recoil_Pt","Hadr. Recoil Pt",23,250.,1400.),"Hadr_Recoil_Pt",plotselection_MET300,plotlabel_MET300),
-        #Plot(ROOT.TH1F(plotprefix+"_"+"Hadr_Recoil_Phi","Hadr. Recoil #phi",20,-3.2,3.2),"Hadr_Recoil_Phi",plotselection_MET300,plotlabel_MET300),
+        Plot(ROOT.TH1F(plotprefix+"_"+"Hadr_Recoil_Pt","Hadr. Recoil Pt",23,250.,1400.),"Hadr_Recoil_Pt",plotselection_MET300,plotlabel_MET300),
+        Plot(ROOT.TH1F(plotprefix+"_"+"Hadr_Recoil_Phi","Hadr. Recoil #phi",20,-3.2,3.2),"Hadr_Recoil_Phi",plotselection_MET300,plotlabel_MET300),
         Plot(ROOT.TH1F(plotprefix+"_"+"Evt_Pt_MET_T1","#slash{E}_{T} type1",23,250.,1400.),"Evt_Pt_MET_T1",plotselection_MET300,plotlabel_MET300),
         Plot(ROOT.TH1F(plotprefix+"_"+"Z_Pt","Z p_{T}",20,0.,500.),"Z_Pt",plotselection_MET300,plotlabel_MET300),
         Plot(ROOT.TH1F(plotprefix+"_"+"W_Pt","W p_{T}",20,0.,500.),"W_Pt",plotselection_MET300,plotlabel_MET300),
@@ -99,8 +99,8 @@ plots_MET400=[
         Plot(ROOT.TH1F(plotprefix+"_"+"Evt_Pt_CaloMET","#slash{E}_{T,Calo}",22,200.,1400.),"CaloMET",plotselection_MET400,plotlabel_MET400),
         Plot(ROOT.TH1F(plotprefix+"_"+"CaloMET_PFMET_ratio","#slash{E}_{T,Calo} #slash{E}_{T,PF} ratio",20,0.,1.),"CaloMET_PFMET_ratio",plotselection_MET400,plotlabel_MET400),
         Plot(ROOT.TH1F(plotprefix+"_"+"DeltaPhi_MET_Jet","#Delta #phi (#slash{E}_{T},jet)",32,0.,3.2),"DeltaPhi_Jet_MET",plotselection_MET400,plotlabel_MET400),
-        #Plot(ROOT.TH1F(plotprefix+"_"+"Hadr_Recoil_Pt","Hadr. Recoil Pt",23,250.,1400.),"Hadr_Recoil_Pt",plotselection_MET400,plotlabel_MET400),
-        #Plot(ROOT.TH1F(plotprefix+"_"+"Hadr_Recoil_Phi","Hadr. Recoil #phi",20,-3.2,3.2),"Hadr_Recoil_Phi",plotselection_MET400,plotlabel_MET400),
+        Plot(ROOT.TH1F(plotprefix+"_"+"Hadr_Recoil_Pt","Hadr. Recoil Pt",23,250.,1400.),"Hadr_Recoil_Pt",plotselection_MET400,plotlabel_MET400),
+        Plot(ROOT.TH1F(plotprefix+"_"+"Hadr_Recoil_Phi","Hadr. Recoil #phi",20,-3.2,3.2),"Hadr_Recoil_Phi",plotselection_MET400,plotlabel_MET400),
         Plot(ROOT.TH1F(plotprefix+"_"+"Evt_Pt_MET_T1","#slash{E}_{T} type1",23,250.,1400.),"Evt_Pt_MET_T1",plotselection_MET400,plotlabel_MET400),
         Plot(ROOT.TH1F(plotprefix+"_"+"Z_Pt","Z p_{T}",20,0.,500.),"Z_Pt",plotselection_MET400,plotlabel_MET400),
         Plot(ROOT.TH1F(plotprefix+"_"+"W_Pt","W p_{T}",20,0.,500.),"W_Pt",plotselection_MET400,plotlabel_MET400),
@@ -123,8 +123,8 @@ plots_MET500=[
         Plot(ROOT.TH1F(plotprefix+"_"+"Evt_Pt_CaloMET","#slash{E}_{T,Calo}",22,200.,1400.),"CaloMET",plotselection_MET500,plotlabel_MET500),
         Plot(ROOT.TH1F(plotprefix+"_"+"CaloMET_PFMET_ratio","#slash{E}_{T,Calo} #slash{E}_{T,PF} ratio",20,0.,1.),"CaloMET_PFMET_ratio",plotselection_MET500,plotlabel_MET500),
         Plot(ROOT.TH1F(plotprefix+"_"+"DeltaPhi_MET_Jet","#Delta #phi (#slash{E}_{T},jet)",32,0.,3.2),"DeltaPhi_Jet_MET",plotselection_MET500,plotlabel_MET500),
-        #Plot(ROOT.TH1F(plotprefix+"_"+"Hadr_Recoil_Pt","Hadr. Recoil Pt",23,250.,1400.),"Hadr_Recoil_Pt",plotselection_MET500,plotlabel_MET500),
-        #Plot(ROOT.TH1F(plotprefix+"_"+"Hadr_Recoil_Phi","Hadr. Recoil #phi",20,-3.2,3.2),"Hadr_Recoil_Phi",plotselection_MET500,plotlabel_MET500),
+        Plot(ROOT.TH1F(plotprefix+"_"+"Hadr_Recoil_Pt","Hadr. Recoil Pt",23,250.,1400.),"Hadr_Recoil_Pt",plotselection_MET500,plotlabel_MET500),
+        Plot(ROOT.TH1F(plotprefix+"_"+"Hadr_Recoil_Phi","Hadr. Recoil #phi",20,-3.2,3.2),"Hadr_Recoil_Phi",plotselection_MET500,plotlabel_MET500),
         Plot(ROOT.TH1F(plotprefix+"_"+"Evt_Pt_MET_T1","#slash{E}_{T} type1",23,250.,1400.),"Evt_Pt_MET_T1",plotselection_MET500,plotlabel_MET500),
         Plot(ROOT.TH1F(plotprefix+"_"+"Z_Pt","Z p_{T}",20,0.,500.),"Z_Pt",plotselection_MET500,plotlabel_MET500),
         Plot(ROOT.TH1F(plotprefix+"_"+"W_Pt","W p_{T}",20,0.,500.),"W_Pt",plotselection_MET500,plotlabel_MET500),
@@ -147,8 +147,8 @@ plots_MET600=[
         Plot(ROOT.TH1F(plotprefix+"_"+"Evt_Pt_CaloMET","#slash{E}_{T,Calo}",22,200.,1400.),"CaloMET",plotselection_MET600,plotlabel_MET600),
         Plot(ROOT.TH1F(plotprefix+"_"+"CaloMET_PFMET_ratio","#slash{E}_{T,Calo} #slash{E}_{T,PF} ratio",20,0.,1.),"CaloMET_PFMET_ratio",plotselection_MET600,plotlabel_MET600),
         Plot(ROOT.TH1F(plotprefix+"_"+"DeltaPhi_MET_Jet","#Delta #phi (#slash{E}_{T},jet)",32,0.,3.2),"DeltaPhi_Jet_MET",plotselection_MET600,plotlabel_MET600),
-        #Plot(ROOT.TH1F(plotprefix+"_"+"Hadr_Recoil_Pt","Hadr. Recoil Pt",23,250.,1400.),"Hadr_Recoil_Pt",plotselection_MET600,plotlabel_MET600),
-        #Plot(ROOT.TH1F(plotprefix+"_"+"Hadr_Recoil_Phi","Hadr. Recoil #phi",20,-3.2,3.2),"Hadr_Recoil_Phi",plotselection_MET600,plotlabel_MET600),
+        Plot(ROOT.TH1F(plotprefix+"_"+"Hadr_Recoil_Pt","Hadr. Recoil Pt",23,250.,1400.),"Hadr_Recoil_Pt",plotselection_MET600,plotlabel_MET600),
+        Plot(ROOT.TH1F(plotprefix+"_"+"Hadr_Recoil_Phi","Hadr. Recoil #phi",20,-3.2,3.2),"Hadr_Recoil_Phi",plotselection_MET600,plotlabel_MET600),
         Plot(ROOT.TH1F(plotprefix+"_"+"Evt_Pt_MET_T1","#slash{E}_{T} type1",23,250.,1400.),"Evt_Pt_MET_T1",plotselection_MET600,plotlabel_MET600),
         Plot(ROOT.TH1F(plotprefix+"_"+"Z_Pt","Z p_{T}",20,0.,500.),"Z_Pt",plotselection_MET600,plotlabel_MET600),
         Plot(ROOT.TH1F(plotprefix+"_"+"W_Pt","W p_{T}",20,0.,500.),"W_Pt",plotselection_MET600,plotlabel_MET600),
@@ -165,7 +165,7 @@ for sample in samples_background+samples_signal:
         thisnewsel=sample.selection
         systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),thisnewsel,sample.nick+sysname,samDict=sampleDict))
 
-THEoutputpath=plotParallel(jobname,5000000,plots,samples_signal+samples_background+samples_data+systsamples,[''],['1.'],weightSystNames+BosonSystNames+ZvvBosonSystNames+ZllBosonSystNames+WBosonSystNames,systWeights+BosonWeights+ZvvBosonWeights+ZllBosonWeights+WBosonWeights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_FAST.json",otherSystNames,addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False,haddParallel=True)
+THEoutputpath=plotParallel(jobname,5000000,plots,samples_background+samples_signal+samples_data+systsamples,[''],['1.'],weightSystNames+BosonSystNames+ZvvBosonSystNames+ZllBosonSystNames+WBosonSystNames,systWeights+BosonWeights+ZvvBosonWeights+ZllBosonWeights+WBosonWeights,additionalvariables,[],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_FAST.json",otherSystNames,addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False,haddParallel=True)
 print "---------------------------------------------"
 print "THEoutputpath=",THEoutputpath
 print "---------------------------------------------"
