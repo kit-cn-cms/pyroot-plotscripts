@@ -150,11 +150,11 @@ class LeptonSFHelper {
   LeptonSFHelper( );
   ~LeptonSFHelper( );
 
-  float GetElectronSF(  float electronPt , float electronEta , int syst , std::string type  );
-  float GetMuonSF(  float muonPt , float muonEta , int syst , std::string type  );
-  float GetElectronElectronSF( float electronEta1, float electronEta2, int syst , std::string type);
-  float GetMuonMuonSF( float muonEta1, float muonEta2, int syst , std::string type);
-  float GetElectronMuonSF( float electronEta, float muonEta, int syst , std::string type);
+  float GetElectronSF(  float electronPt , float electronEta , int syst , std::string type  ) const;
+  float GetMuonSF(  float muonPt , float muonEta , int syst , std::string type  ) const;
+  float GetElectronElectronSF( float electronEta1, float electronEta2, int syst , std::string type) const;
+  float GetMuonMuonSF( float muonEta1, float muonEta2, int syst , std::string type) const;
+  float GetElectronMuonSF( float electronEta, float muonEta, int syst , std::string type) const;
   void  ChangeMuIsoHistos(bool is_DL);
 
  private:
@@ -164,8 +164,8 @@ class LeptonSFHelper {
   void SetElectronElectronHistos( );
   void SetMuonMuonHistos( );
   void SetElectronMuonHistos( );
-  int findPoint(TGraphAsymmErrors& graph,float& x_);
-  float getValue(TGraphAsymmErrors& graph,float& x_,int syst);
+  int findPoint(TGraphAsymmErrors& graph,float& x_) const;
+  float getValue(TGraphAsymmErrors& graph,float& x_,int syst) const;
 
   TH2F *h_ele_ID_abseta_pt_ratioGtoH;
   TH2F *h_ele_ID_abseta_pt_ratioBtoF;
@@ -234,7 +234,7 @@ LeptonSFHelper::~LeptonSFHelper( ){
 
 }
 
-float LeptonSFHelper::GetElectronSF(  float electronPt , float electronEta , int syst , std::string type  ) {
+float LeptonSFHelper::GetElectronSF(  float electronPt , float electronEta , int syst , std::string type  ) const {
   if ( electronPt == 0.0 ){ return 1.0; }
 
   int thisBin=0;
@@ -329,7 +329,7 @@ float LeptonSFHelper::GetElectronSF(  float electronPt , float electronEta , int
 
 }
 
-float LeptonSFHelper::GetMuonSF(  float muonPt , float muonEta , int syst , std::string type  ){
+float LeptonSFHelper::GetMuonSF(  float muonPt , float muonEta , int syst , std::string type  ) const {
   if ( muonPt == 0.0 ){ return 1.0; }
 
   int thisBin=0;
@@ -459,7 +459,7 @@ float LeptonSFHelper::GetMuonSF(  float muonPt , float muonEta , int syst , std:
 
 
 }
-float LeptonSFHelper::GetElectronElectronSF(  float electronEta1 , float electronEta2 , int syst , std::string type  ) {
+float LeptonSFHelper::GetElectronElectronSF(  float electronEta1 , float electronEta2 , int syst , std::string type  ) const {
 
   int thisBin=0;
 
@@ -475,7 +475,7 @@ float LeptonSFHelper::GetElectronElectronSF(  float electronEta1 , float electro
   }
   return nomval;
 }
-float LeptonSFHelper::GetMuonMuonSF(  float muonEta1 , float muonEta2 , int syst , std::string type  ) {
+float LeptonSFHelper::GetMuonMuonSF(  float muonEta1 , float muonEta2 , int syst , std::string type  ) const {
   int thisBin=0;
 
   float searchEta1=fabs(muonEta1);
@@ -490,7 +490,7 @@ float LeptonSFHelper::GetMuonMuonSF(  float muonEta1 , float muonEta2 , int syst
   }
   return nomval;
 }
-float LeptonSFHelper::GetElectronMuonSF(  float electronEta , float muonEta , int syst , std::string type  ) {
+float LeptonSFHelper::GetElectronMuonSF(  float electronEta , float muonEta , int syst , std::string type  ) const {
   int thisBin=0;
 
   float searchEta1=fabs(electronEta);
@@ -615,7 +615,7 @@ void LeptonSFHelper::SetElectronMuonHistos( ){
   h_ele_mu_TRIGGER_abseta_abseta = (TH2F*)f_TRIGGERSF->Get("scalefactor_eta2d_with_syst");
 }
 
-int LeptonSFHelper::findPoint(TGraphAsymmErrors& graph,float& x_) {
+int LeptonSFHelper::findPoint(TGraphAsymmErrors& graph,float& x_) const {
     double x=0.;
     double y=0.;
     for(int i=0;i<graph.GetN();i++) {
@@ -629,7 +629,7 @@ int LeptonSFHelper::findPoint(TGraphAsymmErrors& graph,float& x_) {
     return -1;
 }
 
-float LeptonSFHelper::getValue(TGraphAsymmErrors& graph,float& x_,int syst) {
+float LeptonSFHelper::getValue(TGraphAsymmErrors& graph,float& x_,int syst) const {
     int i = findPoint(graph,x_);
     if(i<0) {std::cerr << "x-value " << x_ << " cannot be assigned to a valid point" << std::endl;}
     double x=0.;
