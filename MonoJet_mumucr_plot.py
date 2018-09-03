@@ -56,9 +56,9 @@ plots_inclusive=[
         Plot(ROOT.TH1F(plotprefix+"_"+"Evt_Pt_MET_T1","#slash{E}_{T} type1",23,250.,1400.),"Evt_Pt_MET_T1",plotselection_inclusive,plotlabel_inclusive),
         Plot(ROOT.TH1F(plotprefix+"_"+"Z_Pt","Z p_{T}",20,0.,500.),"Z_Pt",plotselection_inclusive,plotlabel_inclusive),
         Plot(ROOT.TH1F(plotprefix+"_"+"W_Pt","W p_{T}",20,0.,500.),"W_Pt",plotselection_inclusive,plotlabel_inclusive),
-        Plot(ROOT.TH1F(plotprefix+"_"+"BosonWeight","BosonWeight",20,0.,2.),"internalBosonWeight_nominal",plotselection_inclusive,plotlabel_inclusive),
+        Plot(ROOT.TH1F(plotprefix+"_"+"BosonWeight","BosonWeight",41,-0.025,2.025),"internalBosonWeight_nominal",plotselection_inclusive,plotlabel_inclusive),
         Plot(ROOT.TH1F(plotprefix+"_"+"Zmumu_Mass","Z_{#mu#mu} mass",20,60.,120.),"Zmumu_Mass",plotselection_inclusive,plotlabel_inclusive),
-        Plot(ROOT.TH1F(plotprefix+"_"+"MuonSF","MuonSF",42,-0.05,2.05),"internalMuIDWeight*internalMuIsoWeight*internalMuHIPWeight",plotselection_inclusive,plotlabel_inclusive),
+        Plot(ROOT.TH1F(plotprefix+"_"+"MuonSF","MuonSF",41,-0.025,2.025),"internalMuIDWeight*internalMuIsoWeight*internalMuHIPWeight",plotselection_inclusive,plotlabel_inclusive),
     ]
 
 plotselection_MET300 = "(Hadr_Recoil_Pt>300.)*(DeltaPhi_Jet_MET[0]>1.)"
@@ -82,8 +82,9 @@ plots_MET300=[
         Plot(ROOT.TH1F(plotprefix+"_"+"Evt_Pt_MET_T1","#slash{E}_{T} type1",23,250.,1400.),"Evt_Pt_MET_T1",plotselection_MET300,plotlabel_MET300),
         Plot(ROOT.TH1F(plotprefix+"_"+"Z_Pt","Z p_{T}",20,0.,500.),"Z_Pt",plotselection_MET300,plotlabel_MET300),
         Plot(ROOT.TH1F(plotprefix+"_"+"W_Pt","W p_{T}",20,0.,500.),"W_Pt",plotselection_MET300,plotlabel_MET300),
-        Plot(ROOT.TH1F(plotprefix+"_"+"BosonWeight","BosonWeight",20,0.,2.),"internalBosonWeight_nominal",plotselection_MET300,plotlabel_MET300),
+        Plot(ROOT.TH1F(plotprefix+"_"+"BosonWeight","BosonWeight",41,-0.025,2.025),"internalBosonWeight_nominal",plotselection_MET300,plotlabel_MET300),
         Plot(ROOT.TH1F(plotprefix+"_"+"Zmumu_Mass","Z_{#mu#mu} mass",20,60.,120.),"Zmumu_Mass",plotselection_MET300,plotlabel_MET300),
+        Plot(ROOT.TH1F(plotprefix+"_"+"MuonSF","MuonSF",41,-0.025,2.025),"internalMuIDWeight*internalMuIsoWeight*internalMuHIPWeight",plotselection_MET300,plotlabel_MET300),
     ]
 
 plotselection_MET400 = "(Hadr_Recoil_Pt>400.)*(DeltaPhi_Jet_MET[0]>1.)"
@@ -107,8 +108,9 @@ plots_MET400=[
         Plot(ROOT.TH1F(plotprefix+"_"+"Evt_Pt_MET_T1","#slash{E}_{T} type1",23,250.,1400.),"Evt_Pt_MET_T1",plotselection_MET400,plotlabel_MET400),
         Plot(ROOT.TH1F(plotprefix+"_"+"Z_Pt","Z p_{T}",20,0.,500.),"Z_Pt",plotselection_MET400,plotlabel_MET400),
         Plot(ROOT.TH1F(plotprefix+"_"+"W_Pt","W p_{T}",20,0.,500.),"W_Pt",plotselection_MET400,plotlabel_MET400),
-        Plot(ROOT.TH1F(plotprefix+"_"+"BosonWeight","BosonWeight",20,0.,2.),"internalBosonWeight_nominal",plotselection_MET400,plotlabel_MET400),
+        Plot(ROOT.TH1F(plotprefix+"_"+"BosonWeight","BosonWeight",41,-0.025,2.025),"internalBosonWeight_nominal",plotselection_MET400,plotlabel_MET400),
         Plot(ROOT.TH1F(plotprefix+"_"+"Zmumu_Mass","Z_{#mu#mu} mass",20,60.,120.),"Zmumu_Mass",plotselection_MET400,plotlabel_MET400),
+        Plot(ROOT.TH1F(plotprefix+"_"+"MuonSF","MuonSF",41,-0.025,2.025),"internalMuIDWeight*internalMuIsoWeight*internalMuHIPWeight",plotselection_MET400,plotlabel_MET400),
     ]
 
 plotselection_MET500 = "(Hadr_Recoil_Pt>500.)*(DeltaPhi_Jet_MET[0]>1.)"
@@ -132,8 +134,9 @@ plots_MET500=[
         Plot(ROOT.TH1F(plotprefix+"_"+"Evt_Pt_MET_T1","#slash{E}_{T} type1",23,250.,1400.),"Evt_Pt_MET_T1",plotselection_MET500,plotlabel_MET500),
         Plot(ROOT.TH1F(plotprefix+"_"+"Z_Pt","Z p_{T}",20,0.,500.),"Z_Pt",plotselection_MET500,plotlabel_MET500),
         Plot(ROOT.TH1F(plotprefix+"_"+"W_Pt","W p_{T}",20,0.,500.),"W_Pt",plotselection_MET500,plotlabel_MET500),
-        Plot(ROOT.TH1F(plotprefix+"_"+"BosonWeight","BosonWeight",20,0.,2.),"internalBosonWeight_nominal",plotselection_MET500,plotlabel_MET500),
+        Plot(ROOT.TH1F(plotprefix+"_"+"BosonWeight","BosonWeight",41,-0.025,2.025),"internalBosonWeight_nominal",plotselection_MET500,plotlabel_MET500),
         Plot(ROOT.TH1F(plotprefix+"_"+"Zmumu_Mass","Z_{#mu#mu} mass",20,60.,120.),"Zmumu_Mass",plotselection_MET500,plotlabel_MET500),
+        Plot(ROOT.TH1F(plotprefix+"_"+"MuonSF","MuonSF",41,-0.025,2.025),"internalMuIDWeight*internalMuIsoWeight*internalMuHIPWeight",plotselection_MET500,plotlabel_MET500),
     ]
 
 plotselection_MET600 = "(Hadr_Recoil_Pt>600.)*(DeltaPhi_Jet_MET[0]>1.)"
@@ -157,8 +160,9 @@ plots_MET600=[
         Plot(ROOT.TH1F(plotprefix+"_"+"Evt_Pt_MET_T1","#slash{E}_{T} type1",23,250.,1400.),"Evt_Pt_MET_T1",plotselection_MET600,plotlabel_MET600),
         Plot(ROOT.TH1F(plotprefix+"_"+"Z_Pt","Z p_{T}",20,0.,500.),"Z_Pt",plotselection_MET600,plotlabel_MET600),
         Plot(ROOT.TH1F(plotprefix+"_"+"W_Pt","W p_{T}",20,0.,500.),"W_Pt",plotselection_MET600,plotlabel_MET600),
-        Plot(ROOT.TH1F(plotprefix+"_"+"BosonWeight","BosonWeight",20,0.,2.),"internalBosonWeight_nominal",plotselection_MET600,plotlabel_MET600),
+        Plot(ROOT.TH1F(plotprefix+"_"+"BosonWeight","BosonWeight",41,-0.025,2.025),"internalBosonWeight_nominal",plotselection_MET600,plotlabel_MET600),
         Plot(ROOT.TH1F(plotprefix+"_"+"Zmumu_Mass","Z_{#mu#mu} mass",20,60.,120.),"Zmumu_Mass",plotselection_MET600,plotlabel_MET600),
+        Plot(ROOT.TH1F(plotprefix+"_"+"MuonSF","MuonSF",41,-0.025,2.025),"internalMuIDWeight*internalMuIsoWeight*internalMuHIPWeight",plotselection_MET600,plotlabel_MET600),
     ]
 
 plots = plots_inclusive+plots_MET300+plots_MET400+plots_MET500+plots_MET600
