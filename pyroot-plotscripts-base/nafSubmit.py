@@ -20,6 +20,7 @@ def writeSubmitCode(script, logdir, hold = False, isArray = False, nScripts = 0)
   submitScript = script.split("/")[-1][:-3]
 
   submitCode="universe = vanilla\n"
+  submitCode="run_as_owner = true\n"
   submitCode+="should_transfer_files = IF_NEEDED\n"
   submitCode+="executable = /bin/bash\n"
   submitCode+="arguments = " + script + "\n"
