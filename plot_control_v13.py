@@ -859,14 +859,7 @@ def main(argv):
             print "instead of ", thisoldsel
             systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("TuneCP5",sysfilename),thisnewsel,sample.nick+sysname,samDict=sampleDict))
     
-        # add QCD sytematic for QCD sample
-    for sample in samples:
-        if sample.name!='QCD':
-          continue
-        for sysname,sysreplacestring in zip(QCDSystNames,QCDSystReplacementStrings):
-          thisnewsel=sample.selection.replace("internalQCDweight",sysreplacestring)
-          systsamples.append(Sample(sample.name+sysname,sample.color,sample.path,thisnewsel,sample.nick+sysname,samDict=sampleDict))
-    
+
     #allsamples=samples+systsamples
     #allsystnames=weightSystNames+otherSystNames+PSSystNames
     allsamples=samples

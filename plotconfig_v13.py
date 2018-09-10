@@ -422,23 +422,11 @@ otherSystFileNames=[
 
 PSSystNames=[
   #"_CMS_ttHbb_PSTuneUp","_CMS_ttHbb_PSTuneDown",
-  #"_CMS_ttHbbFROMTREES_ISRUp","_CMS_ttHbbFROMTREES_ISRDown",
-  #"_CMS_ttHbbFROMTREES_HDAMPUp","_CMS_ttHbbFROMTREES_HDAMPDown",
-  #"_CMS_ttHbbFROMTREES_UEUp","_CMS_ttHbbFROMTREES_UEDown",
 ]
 PSSystFileNames=[
   #"TuneCP5up","TuneCP5down",
-  #"isr_up","isr_down",
-  #"hdamp_up","hdamp_down",
-  #"ue_up","ue_down",
 ]
 
-QCDSystNames=[
-  #"_CMS_ttHbb_QCDScaleFactorUp","_CMS_ttHbb_QCDScaleFactorDown",
-  ]
-QCDSystReplacementStrings=[
-  #"internalQCDweightup","internalQCDweightdown",
-  ]
 
 
 
