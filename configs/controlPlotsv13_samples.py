@@ -7,12 +7,12 @@ sys.path.append(pyrootdir)
 import util.tools.plotClasses as plotClasses
 
 def getSamples( pltcfg ):
-    return pltcfg.samplesLimits
+    return pltcfg.samplesControlPlots
 
 def getControlSamples( pltcfg ):
     return pltcfg.samplesDataControlPlots
 
-def gatherSystSamples(pltcfg, analysis, samples):
+def getSystSamples(pltcfg, analysis, samples):
     systSamples = []
 
     # adding other samples
@@ -29,12 +29,11 @@ def gatherSystSamples(pltcfg, analysis, samples):
                     samDict = pltcfg.sampleDict ))
 
     # adding Parton Shower variation
-    for sample in samples:
-        if sample.nick not in ["ttbarOther", "ttbarPlusCCbar", "ttbarPlusBBbar", "ttbarPlusB", "ttbarPlus2B"]:
-            continue
+    for sample in samples[1:6]: # only for ttbar samples
         for sysName, sysFileName in zip(pltcfg.PSSystNames, pltcfg.PSSystFileNames):
             oldSel = sample.selection
-            newSel = sample.selection.replace(pltcfg.ttbarMCWeight, "*1.0").replace(pltcfg.mcWeight+pltcfg.evenSel, pltcfg.mcWeightAll)
+            newSel = sample.selection
+            #newSel = sample.selection.replace(pltcfg.ttbarMCWeight, "*1.0").replace(pltcfg.mcWeight+pltcfg.evenSel, pltcfg.mcWeightAll)
             print("adding sample for "+str(sysName))
             print("selection: "+str(newSel))
             print("instead of: "+str(oldSel))
@@ -42,7 +41,7 @@ def gatherSystSamples(pltcfg, analysis, samples):
                 plotClasses.Sample( 
                     sample.name+sysName, 
                     sample.color, 
-                    sample.path.replace(pltcfg.ttbarPathS, pltcfg.path_additionalSamples+"/ttbar_"+sysFileName+"/*nominal*.root"), 
+                    sample.path.replace("TuneCP5",sysFileName), 
                     newSel, 
                     sample.nick+sysName, 
                     samDict = pltcfg.sampleDict ))
@@ -62,11 +61,13 @@ def gatherSystSamples(pltcfg, analysis, samples):
                     sample.nick+sysName,
                     samDict = pltcfg.sampleDict ))
 
-
     return systSamples
 
+def getAllSamples( pltcfg, analysis, samples ):
+    return getSamples(pltcfg) + getControlSamples(pltcfg) + getSystSamples(pltcfg, analysis, samples)
+
 def getAllSystNames( pltcfg ):
-    return pltcfg.weightSystNames+pltcfg.otherSystNames+pltcfg.PSSystNames+pltcfg.QCDSystNames
+    return pltcfg.weightSystNames#+pltcfg.otherSystNames+pltcfg.PSSystNames
 
 def getOtherSystNames( pltcfg ):
     return pltcfg.otherSystNames+pltcfg.PSSystNames+pltcfg.QCDSystNames
@@ -76,3 +77,4 @@ def getWeightSystNames( pltcfg ):
 
 def getSystWeights( pltcfg ):
     return pltcfg.systWeights
+

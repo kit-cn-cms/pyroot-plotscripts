@@ -6,13 +6,13 @@ pyrootdir = "/".join(filedir.split("/")[:-1])
 sys.path.append(pyrootdir)
 import util.tools.plotClasses as plotClasses
 
-def setSamples( pltcfg ):
+def getSamples( pltcfg ):
     return pltcfg.samples_background + pltcfg.samples_signal
 
-def setControlSamples( pltcfg ):
-    return pltcfg.samplesDataControlPlots
+def getControlSamples( pltcfg ):
+    return pltcfg.samples_data
 
-def gatherSamples(pltcfg, analysis, samples):
+def gatherSystSamples(pltcfg, analysis, samples):
 
     systSamples = []
 
