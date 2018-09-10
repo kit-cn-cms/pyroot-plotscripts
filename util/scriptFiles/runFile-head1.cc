@@ -1,7 +1,6 @@
+
 // Event filter to be used with CSV files
-
 class EventFilter {
-
   public:
     EventFilter(std::string filename);
     ~EventFilter();
@@ -56,7 +55,6 @@ EventFilter::EventFilter( std::string filename){
   }
   
 }
-
 bool EventFilter::KeepEvent(Long64_t Evt_Run, Long64_t Evt_Lumi, Long64_t Evt_ID){
   bool eventToBeKept=true;
   for(int i=0; i<listLength; i++){
@@ -69,29 +67,22 @@ bool EventFilter::KeepEvent(Long64_t Evt_Run, Long64_t Evt_Lumi, Long64_t Evt_ID
   return eventToBeKept;
   
 }
-
 int EventFilter::GetNFiltered(){
   return nEventsFiltered;
 }
-
   
 //hacked Lepton SF Helper from MiniAODHelper
-
 class LeptonSFHelper {
-
  public:
   LeptonSFHelper( );
   ~LeptonSFHelper( );
-
   float GetElectronSF(  float electronPt , float electronEta , int syst , std::string type  );
   float GetMuonSF(  float muonPt , float muonEta , int syst , std::string type  );
   float GetElectronElectronSF( float electronEta1, float electronEta2, int syst , std::string type);
   float GetMuonMuonSF( float muonEta1, float muonEta2, int syst , std::string type);
   float GetElectronMuonSF( float electronEta, float muonEta, int syst , std::string type);
   void  ChangeMuIsoHistos(bool is_DL);
-
  private:
-
   void SetElectronHistos( );
   void SetMuonHistos( );
   void SetElectronElectronHistos( );
@@ -99,86 +90,113 @@ class LeptonSFHelper {
   void SetElectronMuonHistos( );
   int findPoint(TGraphAsymmErrors& graph,float& x_);
   float getValue(TGraphAsymmErrors& graph,float& x_,int syst);
-
-  TH2F *h_ele_ID_abseta_pt_ratioGtoH;
   TH2F *h_ele_ID_abseta_pt_ratioBtoF;
-
   TH2F *h_ele_TRIGGER_abseta_pt_ratio;
   TH2F *h_ele_ISO_abseta_pt_ratio;
   TH2F *h_ele_GFS_abseta_pt_ratio;
-
+  TH2F *h_ele_GFS_abseta_pt_ratio_lowEt;
   TH2F *h_mu_ID_abseta_pt_ratio;
   TH1D *h_mu_HIP_eta_ratio;
   TH2F *h_mu_TRIGGER_abseta_pt;
   TH2F *h_mu_ISO_abseta_pt_ratio;
   
-    TH2F *h_mu_ID_abseta_pt_ratioBtoF;
+  TH2F *h_mu_ID_abseta_pt_ratioBtoF;
   TGraphAsymmErrors *h_mu_HIP_eta_ratioBtoF;
   TH2F *h_mu_TRIGGER_abseta_ptBtoF;
   TH2F *h_mu_ISO_abseta_pt_ratioBtoF;
-
-  TH2F *h_mu_ID_abseta_pt_ratioGtoH;
-  TGraphAsymmErrors *h_mu_HIP_eta_ratioGtoH;
-  TH2F *h_mu_TRIGGER_abseta_ptGtoH;
-  TH2F *h_mu_ISO_abseta_pt_ratioGtoH;
-
+  //TH2F *h_mu_ID_abseta_pt_ratioGtoH;
+  //TGraphAsymmErrors *h_mu_HIP_eta_ratioGtoH;
+  //TH2F *h_mu_TRIGGER_abseta_ptGtoH;
+  //TH2F *h_mu_ISO_abseta_pt_ratioGtoH;
   
   TH2F *h_ele_ele_TRIGGER_abseta_abseta;
   TH2F *h_mu_mu_TRIGGER_abseta_abseta;
   TH2F *h_ele_mu_TRIGGER_abseta_abseta;
-
+  float electronLowPtRangeCut;
   float electronMaxPt;
+  float electronMinPt;
+  float electronMinPtLowPt;
+  float electronMaxPtLowPt;
+  
   float electronMaxPtHigh;
   float electronMaxPtHigher;
+  float electronMaxEta;
+  float electronMaxEtaLow;
+  
+  
   float muonMaxPt;
   float muonMaxPtHigh;
+  float muonMinPt;
+  float muonMinPtHigh;
+  float muonMaxEta;
+  
   float ljets_mu_BtoF_lumi;
-  float ljets_mu_GtoH_lumi;
+  //float ljets_mu_GtoH_lumi;
   float ljets_ele_BtoF_lumi;
-  float ljets_ele_GtoH_lumi;  
-
+  //float ljets_ele_GtoH_lumi; 
 };
-
 //PUBLIC
 LeptonSFHelper::LeptonSFHelper( ){
-
   //std::cout << "Initializing Lepton scale factors" << std::endl;
-
   SetElectronHistos( );
   SetMuonHistos( );
   SetElectronElectronHistos( );
   SetMuonMuonHistos( );
   SetElectronMuonHistos( );
-
+  electronLowPtRangeCut=20.0;
   electronMaxPt = 150.0;
+  electronMinPt = 20.0;
+  electronMinPtLowPt = 10;
+  electronMaxPtLowPt = 19.9; 
   electronMaxPtHigh= 201.0;
-  electronMaxPtHigher=499.0;
-  muonMaxPt = 119.0;
-  muonMaxPtHigh = 499.0;
+  electronMaxPtHigher= 499.0;  //TH2 histos from Fall17 are binned up to 500 GeV
+  electronMaxEta=2.49;
+  electronMaxEtaLow=2.19;
   
-  ljets_mu_BtoF_lumi=19691.782;
-  ljets_mu_GtoH_lumi=16226.452;
-  ljets_ele_BtoF_lumi=19691.782;
-  ljets_ele_GtoH_lumi=16226.452;
-
+  
+  
+  muonMaxPt = 119.0;
+  muonMaxPtHigh = 1199.;       //TH2 Trigger SF histos from Fall17 are binned up to 1200 GEV 
+  muonMinPt = 20.0;
+  muonMinPtHigh = 20.0;
+  
+  muonMaxEta = 2.39;
+  
+  
 }
-
 LeptonSFHelper::~LeptonSFHelper( ){
-
 }
-
 float LeptonSFHelper::GetElectronSF(  float electronPt , float electronEta , int syst , std::string type  ) {
+  // TODO: why is LeptonSFHelper not working?
+  // temporary return of 1
+  // std::cout << "called LeptonSFHelper::GetElectronSF - reminder - this was disabled for bugfixing" << std::endl;
+  // return 1.0 ;
   if ( electronPt == 0.0 ){ return 1.0; }
-
   int thisBin=0;
-
+  // restrict electron eta 
   float searchEta=electronEta;
-  float searchPt=TMath::Min( electronPt , electronMaxPt ); // if e_pt < 150 use the corresponding bin
-  if(searchPt==electronMaxPt) {searchPt=electronMaxPtHigher;}; // if e_pt >= 150 go to last bin by setting searchpt to 499
-  if (type=="Trigger"){
-    searchPt=TMath::Min( electronPt , electronMaxPtHigh ); // if pt > 200 use overflow bin by setting searchpt to 201
+  if(searchEta<0 and searchEta<=-electronMaxEta){searchEta=-electronMaxEta;}
+  if(searchEta>0 and searchEta>=electronMaxEta){searchEta=electronMaxEta;}
+  if(type=="Trigger"){
+    if(searchEta<0 and searchEta<=-electronMaxEtaLow){searchEta=-electronMaxEtaLow;}
+    if(searchEta>0 and searchEta>=electronMaxEtaLow){searchEta=electronMaxEtaLow;}
   }
-
+  
+  // restrict electron pT
+  float searchPt=electronPt;
+  if(searchPt>electronLowPtRangeCut){
+    if(searchPt>=electronMaxPtHigher) {searchPt=electronMaxPtHigher;}; // if e_pt >= 500 go to last bin by setting searchPt to 499
+    if(searchPt<electronMinPt){searchPt=electronMinPt;}; // if e_pt < 20 go to first bin by setting searchPt to 20
+  }
+  else{
+    // these are now for the low pt Reco SF 
+    if(searchPt>=electronMaxPtLowPt) {searchPt=electronMaxPtLowPt;}; // if e_pt >= 500 go to last bin by setting searchPtLowPt to 499
+    if(searchPt<electronMinPtLowPt){searchPt=electronMinPtLowPt;}; // if e_pt < 20 go to first bin by setting searchPtLowPt to 20
+  }
+  //if (type=="Trigger"){
+    //searchPt=TMath::Min( electronPt , electronMaxPtHigh ); // if pt > 200 use overflow bin by setting searchPt to 201
+  //}
+  
   float nomval = 0;
   float error = 0;
   float upval = 0;
@@ -186,146 +204,120 @@ float LeptonSFHelper::GetElectronSF(  float electronPt , float electronEta , int
   float nomvalBtoF = 0;
   float errorBtoF = 0;
   float upvalBtoF = 0;
-  float downvalBtoF= 0;
-  float nomvalGtoH = 0;
-  float errorGtoH = 0;
-  float upvalGtoH = 0;
-  float downvalGtoH= 0;
-
-
+  float downvalBtoF = 0;
+//   float nomvalGtoH = 0;
+//   float errorGtoH = 0;
+//   float upvalGtoH = 0;
+//   float downvalGtoH= 0;
   if ( type == "ID" ){
-
     thisBin = h_ele_ID_abseta_pt_ratioBtoF->FindBin( searchEta , searchPt );
     nomvalBtoF=h_ele_ID_abseta_pt_ratioBtoF->GetBinContent( thisBin );
     errorBtoF=h_ele_ID_abseta_pt_ratioBtoF->GetBinError( thisBin );
     upvalBtoF=nomvalBtoF+errorBtoF;
     downvalBtoF=nomvalBtoF-errorBtoF;
-
-    thisBin = h_ele_ID_abseta_pt_ratioGtoH->FindBin( searchEta , searchPt );
-    nomvalGtoH=h_ele_ID_abseta_pt_ratioGtoH->GetBinContent( thisBin );
-    errorGtoH=h_ele_ID_abseta_pt_ratioGtoH->GetBinError( thisBin );
-    upvalGtoH=nomvalGtoH+errorGtoH;
-    downvalGtoH=nomvalGtoH-errorGtoH;
+//     thisBin = h_ele_ID_abseta_pt_ratioGtoH->FindBin( searchEta , searchPt );
+//     nomvalGtoH=h_ele_ID_abseta_pt_ratioGtoH->GetBinContent( thisBin );
+//     errorGtoH=h_ele_ID_abseta_pt_ratioGtoH->GetBinError( thisBin );
+//     upvalGtoH=nomvalGtoH+errorGtoH;
+//     downvalGtoH=nomvalGtoH-errorGtoH;
     
-    nomval=(ljets_ele_BtoF_lumi*nomvalBtoF + ljets_ele_GtoH_lumi * nomvalGtoH)/(ljets_ele_BtoF_lumi+ljets_ele_GtoH_lumi);
-    upval=(ljets_ele_BtoF_lumi*upvalBtoF + ljets_ele_GtoH_lumi * upvalGtoH)/(ljets_ele_BtoF_lumi+ljets_ele_GtoH_lumi);
-    downval=(ljets_ele_BtoF_lumi*downvalBtoF + ljets_ele_GtoH_lumi * downvalGtoH)/(ljets_ele_BtoF_lumi+ljets_ele_GtoH_lumi);
-
+    nomval=nomvalBtoF;
+    upval=upvalBtoF;
+    downval=downvalBtoF;
   }
   else if ( type == "Trigger" ){
-
     thisBin = h_ele_TRIGGER_abseta_pt_ratio->FindBin( searchPt, searchEta );
     nomval=h_ele_TRIGGER_abseta_pt_ratio->GetBinContent( thisBin );
     error=h_ele_TRIGGER_abseta_pt_ratio->GetBinError( thisBin );
     upval=nomval+error;
     downval=nomval-error;
-
   }
   else if ( type == "Iso" ){
-
-    thisBin = h_ele_ISO_abseta_pt_ratio->FindBin( searchEta , searchPt );
-    nomval=h_ele_ISO_abseta_pt_ratio->GetBinContent( thisBin );
-    error=h_ele_ISO_abseta_pt_ratio->GetBinError( thisBin );
-    upval=nomval+error;  //DANGERZONE need to add pT depnednet 1% uncertainty
-    downval=nomval-error;
-    if(electronPt<20 || electronPt>80) {
-        upval=upval*( 1.0+sqrt(0.01*0.01) );
-        downval=downval*( 1.0-sqrt(0.01*0.01) );
-    }
-
+   // // NOT AVAILABLE at the moment
+   // thisBin = h_ele_ISO_abseta_pt_ratio->FindBin( searchEta , searchPt );
+   // nomval=h_ele_ISO_abseta_pt_ratio->GetBinContent( thisBin );
+   // error=h_ele_ISO_abseta_pt_ratio->GetBinError( thisBin );
+   // upval=nomval+error;  //DANGERZONE need to add pT depnednet 1% uncertainty
+   // downval=nomval-error;
+   // if(electronPt<20 || electronPt>80) {
+   //     upval=upval*( 1.0+sqrt(0.01*0.01) );
+   //     downval=downval*( 1.0-sqrt(0.01*0.01) );
+   // }
   }
   else if ( type == "GFS" ){
-
-    thisBin = h_ele_GFS_abseta_pt_ratio->FindBin( searchEta , searchPt );
-    nomval=h_ele_GFS_abseta_pt_ratio->GetBinContent( thisBin );
-    error=h_ele_GFS_abseta_pt_ratio->GetBinError( thisBin );
+    TH2F* current_reco_histo; //create pt dependend TH2F histo pointer to avoid copy-pasting the same code
+    if(electronPt<electronLowPtRangeCut){ current_reco_histo = h_ele_GFS_abseta_pt_ratio_lowEt;}
+    else  {current_reco_histo = h_ele_GFS_abseta_pt_ratio;}
+    thisBin = current_reco_histo->FindBin( searchEta , searchPt );
+    nomval=current_reco_histo->GetBinContent( thisBin );
+    error=current_reco_histo->GetBinError( thisBin );
     upval=nomval+error; //DANGERZONE need to add pT depnednet 1% uncertainty
     downval=nomval-error;
-    if(electronPt<20 || electronPt>80) {
-        upval=upval*( 1.0+sqrt(0.01*0.01) );
-        downval=downval*( 1.0-sqrt(0.01*0.01) );
-    }
-
+    // if(electronPt<20 || electronPt>80) {
+    //     upval=upval*( 1.0+sqrt(0.01*0.01) );
+    //     downval=downval*( 1.0-sqrt(0.01*0.01) );
+    // }
   }
   else {
-
     std::cout << "Unknown Type. Supported Types are: ID, Trigger, Iso" << std::endl;
     nomval = -1;
     upval = -1;
     downval= -1;
-
   }
-
   if ( syst==-1 ){ return downval; }
   else if ( syst==1 ){ return upval; }
   else { return nomval; }
-
 }
-
 float LeptonSFHelper::GetMuonSF(  float muonPt , float muonEta , int syst , std::string type  ){
   if ( muonPt == 0.0 ){ return 1.0; }
-
   int thisBin=0;
-
   float searchEta=fabs( muonEta ); 
+  if(searchEta>=muonMaxEta){searchEta=muonMaxEta;}
   float searchPt=TMath::Min( muonPt , muonMaxPt ); // if muonpt > 119 use last bin
+  searchPt=TMath::Max(searchPt, muonMinPt);
   if (type=="Trigger"){
-    searchPt=TMath::Min( muonPt , muonMaxPtHigh );// if muonpt > 499 use last bin
+    searchPt=TMath::Min( muonPt , muonMaxPtHigh );// Trigger SF goes from 30 to 1119.0 GeV
+    searchPt=TMath::Max( searchPt, muonMinPtHigh);
   }
   float nomval = 0;
-  float error = 0;
+  //float error = 0;
   float upval = 0;
   float downval= 0;
   float nomvalBtoF = 0;
   float errorBtoF = 0;
   float upvalBtoF = 0;
   float downvalBtoF= 0;
-  float nomvalGtoH = 0;
-  float errorGtoH = 0;
-  float upvalGtoH = 0;
-  float downvalGtoH= 0;
+//   float nomvalGtoH = 0;
+//   float errorGtoH = 0;
+//   float upvalGtoH = 0;
+//   float downvalGtoH= 0;
   
-
   if ( type == "ID" ){
-
     thisBin = h_mu_ID_abseta_pt_ratioBtoF->FindBin(  searchPt, searchEta  );
     nomvalBtoF=h_mu_ID_abseta_pt_ratioBtoF->GetBinContent( thisBin );
     errorBtoF=h_mu_ID_abseta_pt_ratioBtoF->GetBinError( thisBin );
+    // current histogram contains systematic and statistical errors added in quadrature
     upvalBtoF=( nomvalBtoF+errorBtoF );
     downvalBtoF=( nomvalBtoF-errorBtoF );
-    upvalBtoF=upvalBtoF*( 1.0+sqrt(0.01*0.01+0.005*0.005) );
-    downvalBtoF=downvalBtoF*( 1.0-sqrt(0.01*0.01+0.005*0.005) );
-    
-    thisBin = h_mu_ID_abseta_pt_ratioGtoH->FindBin(  searchPt, searchEta  );
-    nomvalGtoH=h_mu_ID_abseta_pt_ratioGtoH->GetBinContent( thisBin );
-    errorGtoH=h_mu_ID_abseta_pt_ratioGtoH->GetBinError( thisBin );
-    upvalGtoH=( nomvalGtoH+errorGtoH );
-    downvalGtoH=( nomvalGtoH-errorGtoH );
-    upvalGtoH=upvalGtoH*( 1.0+sqrt(0.01*0.01+0.005*0.005) );
-    downvalGtoH=downvalGtoH*( 1.0-sqrt(0.01*0.01+0.005*0.005) );
-
-    nomval=(ljets_mu_BtoF_lumi*nomvalBtoF + ljets_mu_GtoH_lumi * nomvalGtoH)/(ljets_mu_BtoF_lumi+ljets_mu_GtoH_lumi);
-    upval=(ljets_mu_BtoF_lumi*upvalBtoF + ljets_mu_GtoH_lumi * upvalGtoH)/(ljets_mu_BtoF_lumi+ljets_mu_GtoH_lumi);
-    downval=(ljets_mu_BtoF_lumi*downvalBtoF + ljets_mu_GtoH_lumi * downvalGtoH)/(ljets_mu_BtoF_lumi+ljets_mu_GtoH_lumi);
-
+    nomval=nomvalBtoF;
+    upval=upvalBtoF;
+    downval=downvalBtoF;
   }
   else if ( type == "Trigger" ){
-
     thisBin = h_mu_TRIGGER_abseta_ptBtoF->FindBin(  searchPt, searchEta  );
     nomvalBtoF=h_mu_TRIGGER_abseta_ptBtoF->GetBinContent( thisBin );
     errorBtoF=h_mu_TRIGGER_abseta_ptBtoF->GetBinError( thisBin );
     upvalBtoF=( nomvalBtoF+errorBtoF );
     downvalBtoF=( nomvalBtoF-errorBtoF );
     
-    thisBin = h_mu_TRIGGER_abseta_ptGtoH->FindBin(  searchPt, searchEta  );
-    nomvalGtoH=h_mu_TRIGGER_abseta_ptGtoH->GetBinContent( thisBin );
-    errorGtoH=h_mu_TRIGGER_abseta_ptGtoH->GetBinError( thisBin );
-    upvalGtoH=( nomvalGtoH+errorGtoH );
-    downvalGtoH=( nomvalGtoH-errorGtoH );
-
-    nomval=(ljets_mu_BtoF_lumi*nomvalBtoF + ljets_mu_GtoH_lumi * nomvalGtoH)/(ljets_mu_BtoF_lumi+ljets_mu_GtoH_lumi);
-    upval=(ljets_mu_BtoF_lumi*upvalBtoF + ljets_mu_GtoH_lumi * upvalGtoH)/(ljets_mu_BtoF_lumi+ljets_mu_GtoH_lumi);
-    downval=(ljets_mu_BtoF_lumi*downvalBtoF + ljets_mu_GtoH_lumi * downvalGtoH)/(ljets_mu_BtoF_lumi+ljets_mu_GtoH_lumi);
+//     thisBin = h_mu_TRIGGER_abseta_ptGtoH->FindBin(  searchPt, searchEta  );
+//     nomvalGtoH=h_mu_TRIGGER_abseta_ptGtoH->GetBinContent( thisBin );
+//     errorGtoH=h_mu_TRIGGER_abseta_ptGtoH->GetBinError( thisBin );
+//     upvalGtoH=( nomvalGtoH+errorGtoH );
+//     downvalGtoH=( nomvalGtoH-errorGtoH );
+    nomval=nomvalBtoF;
+    upval=upvalBtoF;
+    downval=downvalBtoF;
     
   }
   else if ( type == "Iso" ){
@@ -334,220 +326,153 @@ float LeptonSFHelper::GetMuonSF(  float muonPt , float muonEta , int syst , std:
     thisBin = h_mu_ISO_abseta_pt_ratioBtoF->FindBin(  searchPt, searchEta  );
     nomvalBtoF=h_mu_ISO_abseta_pt_ratioBtoF->GetBinContent( thisBin );
     errorBtoF=h_mu_ISO_abseta_pt_ratioBtoF->GetBinError( thisBin );
+    // current histogram contains systematic and statistical errors added in quadrature
     upvalBtoF=( nomvalBtoF+errorBtoF );
     downvalBtoF=( nomvalBtoF-errorBtoF );
-    upvalBtoF=upvalBtoF*(1.0+0.005  );
-    downvalBtoF=downvalBtoF*(1.0-0.005 );
-    
-    thisBin = h_mu_ISO_abseta_pt_ratioGtoH->FindBin(  searchPt, searchEta  );
-    nomvalGtoH=h_mu_ISO_abseta_pt_ratioGtoH->GetBinContent( thisBin );
-    errorGtoH=h_mu_ISO_abseta_pt_ratioGtoH->GetBinError( thisBin );
-    upvalGtoH=( nomvalGtoH+errorGtoH );
-    downvalGtoH=( nomvalGtoH-errorGtoH );
-    upvalGtoH=upvalGtoH*(1.0+0.005  );
-    downvalGtoH=downvalGtoH*( 1.0-0.005 );
-
-    nomval=(ljets_mu_BtoF_lumi*nomvalBtoF + ljets_mu_GtoH_lumi * nomvalGtoH)/(ljets_mu_BtoF_lumi+ljets_mu_GtoH_lumi);
-    upval=(ljets_mu_BtoF_lumi*upvalBtoF + ljets_mu_GtoH_lumi * upvalGtoH)/(ljets_mu_BtoF_lumi+ljets_mu_GtoH_lumi);
-    downval=(ljets_mu_BtoF_lumi*downvalBtoF + ljets_mu_GtoH_lumi * downvalGtoH)/(ljets_mu_BtoF_lumi+ljets_mu_GtoH_lumi);
-
+    nomval=nomvalBtoF;
+    upval=upvalBtoF;
+    downval=downvalBtoF;
   }
-
   else if ( type == "HIP" ){
-
+    // NOT AVAILABLE at the moment
     //thisBin = findPoint(h_mu_HIP_eta_ratioBtoF,searchEta );
-    nomvalBtoF=getValue(*h_mu_HIP_eta_ratioBtoF,searchEta,0);
+    //nomvalBtoF=getValue(*h_mu_HIP_eta_ratioBtoF,searchEta,0);
     //errorBtoF=h_mu_HIP_eta_ratioBtoF->GetBinError( thisBin );
-    upvalBtoF=getValue(*h_mu_HIP_eta_ratioBtoF,searchEta,1);
-    downvalBtoF=getValue(*h_mu_HIP_eta_ratioBtoF,searchEta,-1);
+    //upvalBtoF=getValue(*h_mu_HIP_eta_ratioBtoF,searchEta,1);
+    //downvalBtoF=getValue(*h_mu_HIP_eta_ratioBtoF,searchEta,-1);
     
-    //thisBin = h_mu_HIP_eta_ratioGtoH->FindBin( searchEta );
-    nomvalGtoH=getValue(*h_mu_HIP_eta_ratioGtoH,searchEta,0);
-    //errorGtoH=h_mu_HIP_eta_ratioGtoH->GetBinError( thisBin );
-    upvalGtoH=getValue(*h_mu_HIP_eta_ratioGtoH,searchEta,1);
-    downvalGtoH=getValue(*h_mu_HIP_eta_ratioGtoH,searchEta,-1);
+//     //thisBin = h_mu_HIP_eta_ratioGtoH->FindBin( searchEta );
+//     nomvalGtoH=getValue(*h_mu_HIP_eta_ratioGtoH,searchEta,0);
+//     //errorGtoH=h_mu_HIP_eta_ratioGtoH->GetBinError( thisBin );
+//     upvalGtoH=getValue(*h_mu_HIP_eta_ratioGtoH,searchEta,1);
+//     downvalGtoH=getValue(*h_mu_HIP_eta_ratioGtoH,searchEta,-1);
     
-    nomval=(ljets_mu_BtoF_lumi*nomvalBtoF + ljets_mu_GtoH_lumi * nomvalGtoH)/(ljets_mu_BtoF_lumi+ljets_mu_GtoH_lumi);
-    upval=(ljets_mu_BtoF_lumi*upvalBtoF + ljets_mu_GtoH_lumi * upvalGtoH)/(ljets_mu_BtoF_lumi+ljets_mu_GtoH_lumi);
-    downval=(ljets_mu_BtoF_lumi*downvalBtoF + ljets_mu_GtoH_lumi * downvalGtoH)/(ljets_mu_BtoF_lumi+ljets_mu_GtoH_lumi);
+    //nomval=nomvalBtoF;
+    //upval=upvalBtoF;
+    //downval=downvalBtoF;
    
 //     upval=upval*( 1.0+0.005 );
 //     downval=downval*( 1.0-0.005 );
-
-
   }
   else {
-
-    std::cout << "Unknown Type. Supported Types are: ID, Trigger, Iso" << std::endl;
+    std::cout << "Unknown Type. Supported Types are: ID, Trigger, Iso, HIP" << std::endl;
     nomval = -1;
     upval = -1;
     downval= -1;
-
   }
-
-
   if ( syst==-1 ){ return downval; }
   else if ( syst==1 ){ return upval; }
   else { return nomval; }
-
-
 }
 float LeptonSFHelper::GetElectronElectronSF(  float electronEta1 , float electronEta2 , int syst , std::string type  ) {
-
   int thisBin=0;
-
   float searchEta1=fabs(electronEta1);
   float searchEta2=fabs(electronEta2);
-
   float nomval = 0;
   if ( type == "Trigger" ){
-
     thisBin = h_ele_ele_TRIGGER_abseta_abseta->FindBin( searchEta1 , searchEta2 );
     nomval = h_ele_ele_TRIGGER_abseta_abseta->GetBinContent( thisBin );
-
   }
   return nomval;
 }
 float LeptonSFHelper::GetMuonMuonSF(  float muonEta1 , float muonEta2 , int syst , std::string type  ) {
   int thisBin=0;
-
   float searchEta1=fabs(muonEta1);
   float searchEta2=fabs(muonEta2);
-
   float nomval = 0;
   if ( type == "Trigger" ){
-
     thisBin = h_mu_mu_TRIGGER_abseta_abseta->FindBin( searchEta1 , searchEta2 );
     nomval = h_mu_mu_TRIGGER_abseta_abseta->GetBinContent( thisBin );
-
   }
   return nomval;
 }
 float LeptonSFHelper::GetElectronMuonSF(  float electronEta , float muonEta , int syst , std::string type  ) {
   int thisBin=0;
-
   float searchEta1=fabs(electronEta);
   float searchEta2=fabs(muonEta);
-
   float nomval = 0;
   if ( type == "Trigger" ){
-
     thisBin = h_ele_mu_TRIGGER_abseta_abseta->FindBin( searchEta1 , searchEta2 );
     nomval= h_ele_mu_TRIGGER_abseta_abseta->GetBinContent( thisBin );
-
   }
   return nomval;
 }
-
 void LeptonSFHelper::ChangeMuIsoHistos(bool is_DL) {
-    std::string ISOinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/mu_ISO_EfficienciesAndSF_BCDEF.root";
-    std::string ISOinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/mu_ISO_EfficienciesAndSF_GH.root";
+    std::string ISOinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/oct202017/mu_ISO_EfficienciesAndSF_BCDEF.root";
+//     std::string ISOinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/oct202017/mu_ISO_EfficienciesAndSF_GH.root";
     TFile *f_ISOSFBtoF = new TFile(std::string(ISOinputFileBtoF).c_str(),"READ");
-    TFile *f_ISOSFGtoH = new TFile(std::string(ISOinputFileGtoH).c_str(),"READ");
+//     TFile *f_ISOSFGtoH = new TFile(std::string(ISOinputFileGtoH).c_str(),"READ");
     if(is_DL) {
         h_mu_ISO_abseta_pt_ratioBtoF=(TH2F*)f_ISOSFBtoF->Get("LooseISO_TightID_pt_eta/pt_abseta_ratio");
-        h_mu_ISO_abseta_pt_ratioGtoH=(TH2F*)f_ISOSFGtoH->Get("LooseISO_TightID_pt_eta/pt_abseta_ratio");
+//         h_mu_ISO_abseta_pt_ratioGtoH=(TH2F*)f_ISOSFGtoH->Get("LooseISO_TightID_pt_eta/pt_abseta_ratio");
     }
     else {
         h_mu_ISO_abseta_pt_ratioBtoF=(TH2F*)f_ISOSFBtoF->Get("TightISO_TightID_pt_eta/pt_abseta_ratio");
-        h_mu_ISO_abseta_pt_ratioGtoH=(TH2F*)f_ISOSFGtoH->Get("TightISO_TightID_pt_eta/pt_abseta_ratio");
+//         h_mu_ISO_abseta_pt_ratioGtoH=(TH2F*)f_ISOSFGtoH->Get("TightISO_TightID_pt_eta/pt_abseta_ratio");
     }
     delete f_ISOSFBtoF;
-    delete f_ISOSFGtoH;
+//     delete f_ISOSFGtoH;
 }
-
 //PRIVATE
-
 void LeptonSFHelper::SetElectronHistos( ){
-
-  std::string IDinputFileBtoF = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/ele_ID_SF_tight_BCDEF.root";
-  std::string IDinputFileGtoH = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/ele_ID_SF_tight_GH.root";
-
-  std::string TRIGGERinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/ele_TriggerSF_Run2016All_v1.root";
-  std::string ISOinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/ele_Reco_EGM2D.root"; // DANGERZONE: no iso SF yet??
-  std::string GFSinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/ele_Reco_EGM2D.root";
-
+  std::string IDinputFileBtoF = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/Fall17/egammaEffi.txt_EGM2D_runBCDEF_passingTight94X.root";
+  // std::string IDinputFileGtoH = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/oct202017/ele_ID_SF_tight_GH.root";
+  std::string TRIGGERinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/Fall17/SingleEG_JetHT_Trigger_Scale_Factors_ttHbb_Data_MC.root";
+  //std::string ISOinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/oct202017/ele_Reco_EGM2D.root"; // DANGERZONE: no iso SF yet??
+  std::string GFSinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/Fall17/egammaEffi.txt_EGM2D_runBCDEF_passingRECO.root"; //reco SFs for pt > 20
+  std::string GFSinputFile_lowEt = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/Fall17/egammaEffi.txt_EGM2D_runBCDEF_passingRECO_lowEt.root"; //reco SFs for pt<20
+  // std::string TRIGGERinputFile = GFSinputFile;  //not available yet
+  // std::string ISOinputFile = GFSinputFile;      //not available yet
   TFile *f_IDSFBtoF = new TFile(std::string(IDinputFileBtoF).c_str(),"READ");
-  TFile *f_IDSFGtoH = new TFile(std::string(IDinputFileGtoH).c_str(),"READ");
+  //TFile *f_IDSFGtoH = new TFile(std::string(IDinputFileGtoH).c_str(),"READ");
   
   TFile *f_TRIGGERSF = new TFile(std::string(TRIGGERinputFile).c_str(),"READ");
-  TFile *f_ISOSF = new TFile(std::string(ISOinputFile).c_str(),"READ");
+  //TFile *f_ISOSF = new TFile(std::string(ISOinputFile).c_str(),"READ");
   TFile *f_GFSSF = new TFile(std::string(GFSinputFile).c_str(),"READ");
-
-  h_ele_ID_abseta_pt_ratioGtoH=(TH2F*)f_IDSFGtoH->Get("EGamma_SF2D");
+  TFile *f_GFSSF_lowEt = new TFile(std::string(GFSinputFile_lowEt).c_str(),"READ");
+  //h_ele_ID_abseta_pt_ratioGtoH=(TH2F*)f_IDSFGtoH->Get("EGamma_SF2D");
   h_ele_ID_abseta_pt_ratioBtoF=(TH2F*)f_IDSFBtoF->Get("EGamma_SF2D");
-  h_ele_TRIGGER_abseta_pt_ratio = (TH2F*)f_TRIGGERSF->Get("Ele27_WPTight_Gsf");
-  h_ele_ISO_abseta_pt_ratio = (TH2F*)f_ISOSF->Get("EGamma_SF2D");
+  std::cout << "now selecting h_ele_TRIGGER_abseta_pt_ratio" << std::endl;
+  h_ele_TRIGGER_abseta_pt_ratio = (TH2F*)f_TRIGGERSF->Get("SFs_ele_pt_ele_sceta_ele28_ht150_OR_ele35_2017BCDEF");
+  //h_ele_ISO_abseta_pt_ratio = (TH2F*)f_ISOSF->Get("EGamma_SF2D");
   h_ele_GFS_abseta_pt_ratio = (TH2F*)f_GFSSF->Get("EGamma_SF2D");
-
+  h_ele_GFS_abseta_pt_ratio_lowEt = (TH2F*)f_GFSSF_lowEt->Get("EGamma_SF2D");
 }
-
 void LeptonSFHelper::SetMuonHistos( ){
-
-  std::string IDinputFileBtoF = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/mu_ID_EfficienciesAndSF_BCDEF.root";
-  std::string IDinputFileGtoH = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/mu_ID_EfficienciesAndSF_GH.root";
-
-  std::string TRIGGERinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/mu_TRIGGER_BtoF.root";
-  std::string TRIGGERinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/mu_TRIGGER_GtoH.root";
-
-  std::string ISOinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/mu_ISO_EfficienciesAndSF_BCDEF.root";
-  std::string ISOinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/mu_ISO_EfficienciesAndSF_GH.root";
+  std::string IDinputFileBtoF = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/Fall17/MuonIDSF_Errors_RunBtoF_Nov17Nov2017.root";
   
-  std::string HIPinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/HIP_BCDEF.root";
-  std::string HIPinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/HIP_GH.root";
-
-
+  std::string ISOinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/Fall17/MuonIsoSF_Errors_RunBtoF_Nov17Nov2017.root";
+  
+  std::string TRIGGERinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/Fall17/MuonTriggerSF_RunBtoF_Nov17Nov2017.root";
+  
   TFile *f_IDSFBtoF = new TFile(std::string(IDinputFileBtoF).c_str(),"READ");
-  TFile *f_IDSFGtoH = new TFile(std::string(IDinputFileGtoH).c_str(),"READ");
   
-  TFile *f_HIPSFBtoF = new TFile(std::string(HIPinputFileBtoF).c_str(),"READ");
-  TFile *f_HIPSFGtoH = new TFile(std::string(HIPinputFileGtoH).c_str(),"READ");
-
+  TFile *f_ISOSFBtoF = new TFile(std::string(ISOinputFileBtoF).c_str(),"READ");
   
   TFile *f_TRIGGERSFBtoF = new TFile(std::string(TRIGGERinputFileBtoF).c_str(),"READ");
-  TFile *f_TRIGGERSFGtoH = new TFile(std::string(TRIGGERinputFileGtoH).c_str(),"READ");
-
-  TFile *f_ISOSFBtoF = new TFile(std::string(ISOinputFileBtoF).c_str(),"READ");
-  TFile *f_ISOSFGtoH = new TFile(std::string(ISOinputFileGtoH).c_str(),"READ");
-
-  h_mu_ID_abseta_pt_ratioBtoF = (TH2F*)f_IDSFBtoF->Get("MC_NUM_TightID_DEN_genTracks_PAR_pt_eta/pt_abseta_ratio");
-  h_mu_ID_abseta_pt_ratioGtoH = (TH2F*)f_IDSFGtoH->Get("MC_NUM_TightID_DEN_genTracks_PAR_pt_eta/pt_abseta_ratio");
-
-  h_mu_HIP_eta_ratioBtoF = (TGraphAsymmErrors*)f_HIPSFBtoF->Get("ratio_eff_aeta_dr030e030_corr");
-  h_mu_HIP_eta_ratioGtoH = (TGraphAsymmErrors*)f_HIPSFGtoH->Get("ratio_eff_aeta_dr030e030_corr");
-
-  h_mu_TRIGGER_abseta_ptBtoF= (TH2F*)f_TRIGGERSFBtoF->Get("IsoMu24_OR_IsoTkMu24_PtEtaBins/pt_abseta_ratio");
-  h_mu_TRIGGER_abseta_ptGtoH= (TH2F*)f_TRIGGERSFGtoH->Get("IsoMu24_OR_IsoTkMu24_PtEtaBins/pt_abseta_ratio");
-
-  h_mu_ISO_abseta_pt_ratioBtoF = (TH2F*)f_ISOSFBtoF->Get("TightISO_TightID_pt_eta/pt_abseta_ratio");
-  h_mu_ISO_abseta_pt_ratioGtoH = (TH2F*)f_ISOSFGtoH->Get("TightISO_TightID_pt_eta/pt_abseta_ratio");
-
+  
+  h_mu_TRIGGER_abseta_ptBtoF= (TH2F*)f_TRIGGERSFBtoF->Get("IsoMu27_PtEtaBins/pt_abseta_ratio");
+  
+  h_mu_ID_abseta_pt_ratioBtoF = (TH2F*)f_IDSFBtoF->Get("NUM_TightID_DEN_genTracks_pt_abseta");
+  
+  h_mu_ISO_abseta_pt_ratioBtoF = (TH2F*)f_ISOSFBtoF->Get("NUM_TightRelIso_DEN_TightIDandIPCut_pt_abseta");
+  
 }
-
 void LeptonSFHelper::SetElectronElectronHistos( ){
-  std::string TRIGGERinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/triggerSummary_ee_ReReco2016_ttH.root";
-
+  std::string TRIGGERinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/oct202017/triggerSummary_ee_ReReco2016_ttH.root";
   TFile *f_TRIGGERSF = new TFile(std::string(TRIGGERinputFile).c_str(),"READ");
-
   h_ele_ele_TRIGGER_abseta_abseta = (TH2F*)f_TRIGGERSF->Get("scalefactor_eta2d_with_syst");
 }
-
 void LeptonSFHelper::SetMuonMuonHistos( ){
-  std::string TRIGGERinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/triggerSummary_mumu_ReReco2016_ttH.root";
-
+  std::string TRIGGERinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/oct202017/triggerSummary_mumu_ReReco2016_ttH.root";
   TFile *f_TRIGGERSF = new TFile(std::string(TRIGGERinputFile).c_str(),"READ");
-
   h_mu_mu_TRIGGER_abseta_abseta = (TH2F*)f_TRIGGERSF->Get("scalefactor_eta2d_with_syst");
 }
-
 void LeptonSFHelper::SetElectronMuonHistos( ){
-  std::string TRIGGERinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/oct202017/triggerSummary_emu_ReReco2016_ttH.root";
-
+  std::string TRIGGERinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/oct202017/triggerSummary_emu_ReReco2016_ttH.root";
   TFile *f_TRIGGERSF = new TFile(std::string(TRIGGERinputFile).c_str(),"READ");
-
   h_ele_mu_TRIGGER_abseta_abseta = (TH2F*)f_TRIGGERSF->Get("scalefactor_eta2d_with_syst");
 }
-
 int LeptonSFHelper::findPoint(TGraphAsymmErrors& graph,float& x_) {
     double x=0.;
     double y=0.;
@@ -561,7 +486,6 @@ int LeptonSFHelper::findPoint(TGraphAsymmErrors& graph,float& x_) {
     }
     return -1;
 }
-
 float LeptonSFHelper::getValue(TGraphAsymmErrors& graph,float& x_,int syst) {
     int i = findPoint(graph,x_);
     if(i<0) {std::cerr << "x-value " << x_ << " cannot be assigned to a valid point" << std::endl;}
@@ -573,18 +497,14 @@ float LeptonSFHelper::getValue(TGraphAsymmErrors& graph,float& x_,int syst) {
     else if(syst==-1) {return y_-graph.GetErrorYlow(i);}
     else {return y_;}
 }
-
 // Systematics enum from MiniAODHelper. Needed for the CSV helper (date 26.06.2017)
-
 class Systematics {
 public:
   enum Type {
     NA,
-
     // total JEC uncertainties
-    JESup,			
-    JESdown,			
-
+    JESup,                      
+    JESdown,                    
     // individual JEC uncertainties up
     JESAbsoluteStatup,
     JESAbsoluteScaleup,
@@ -698,17 +618,14 @@ public:
     JESCorrelationGroupUncorrelateddown,
     
     // JER uncertainty
-    JERup,			
+    JERup,                      
     JERdown,
-
     hfSFup,
     hfSFdown,
     lfSFdown,
     lfSFup,
-
     TESup,
     TESdown,
-
     CSVLFup,
     CSVLFdown,
     CSVHFup,
@@ -726,43 +643,31 @@ public:
     CSVCErr2up,
     CSVCErr2down 
   };
-
   // convert between string and int representation
   static Type get(const std::string& name);
   static std::string toString(const Type type);
-
   // true if type is one of the JEC-related uncertainties and up
   static bool isJECUncertaintyUp(const Type type);
-
   // true if type is one of the JEC-related uncertainties and down
   static bool isJECUncertaintyDown(const Type type);
-
   // true if type is one of the JEC-related uncertainties
   static bool isJECUncertainty(const Type type);
-
   // return the label that is used by JetCorrectorParametersCollection
   // to label the uncertainty type. See also:
   // https://cmssdt.cern.ch/SDT/doxygen/CMSSW_8_0_23/doc/html/dc/d33/classJetCorrectorParametersCollection.html#afb3d4c6fd711ca23d89e0625a22dc483 for a list of in principle valid labels. Whether the uncertainty
   static std::string GetJECUncertaintyLabel(const Type type);
-
   static std::vector<Systematics::Type> getTypeVector();
-
-
 private:
   static std::map<Type,std::string> typeStringMap_;
   static std::map<std::string,Type> stringTypeMap_;
   static std::map<Type,std::string> typeLabelMap_;
-
   static void init();
   static bool isInit();
   static void add(Systematics::Type typeUp, Systematics::Type typeDn, const std::string& name, const std::string& label);
 };
-
 std::map<Systematics::Type,std::string> Systematics::typeStringMap_ = std::map<Systematics::Type,std::string>();
 std::map<std::string,Systematics::Type> Systematics::stringTypeMap_ = std::map<std::string,Systematics::Type>();
 std::map<Systematics::Type,std::string> Systematics::typeLabelMap_  = std::map<Systematics::Type,std::string>();
-
-
 void Systematics::init() {
   add( JESup,JESdown,"JES","Uncertainty");
   add( JERup,JERdown,"JER","JER");
@@ -824,11 +729,9 @@ void Systematics::init() {
   add( CSVCErr1up,               CSVCErr1down,               "CSVcErr1",                 "CErr1"               );
   add( CSVCErr2up,               CSVCErr2down,               "CSVcErr2",                 "CErr2"               );
 }
-
 bool Systematics::isInit() {
   return typeStringMap_.size()>1;
 }
-
 void Systematics::add(Systematics::Type typeUp, Systematics::Type typeDn, const std::string& name, const std::string& label) {
   typeStringMap_[typeUp] = name+"up";
   typeStringMap_[typeDn] = name+"down";
@@ -837,7 +740,6 @@ void Systematics::add(Systematics::Type typeUp, Systematics::Type typeDn, const 
   typeLabelMap_[typeUp] = label;
   typeLabelMap_[typeDn] = label;
 }
-
 // added method to get a vector of all systematics
 std::vector<Systematics::Type> Systematics::getTypeVector() {
   if( !isInit() ) init();
@@ -849,12 +751,9 @@ std::vector<Systematics::Type> Systematics::getTypeVector() {
     }
   return outvector;
 }
-
 Systematics::Type Systematics::get(const std::string& name) {
   if( name == "" ) return NA;
-
   if( !isInit() ) init();
-
   std::map<std::string,Systematics::Type>::const_iterator it = stringTypeMap_.find(name);
   if( it == stringTypeMap_.end() ) {
     std::cout << "ERROR: No uncertainty with name " << name << " will use nominal "<<std::endl;
@@ -863,12 +762,9 @@ Systematics::Type Systematics::get(const std::string& name) {
     return it->second;
   }
 }
-
 std::string Systematics::toString(const Type type) {
   if( type == NA ) return "";
-
   if( !isInit() ) init();
-
   std::map<Systematics::Type,std::string>::const_iterator it = typeStringMap_.find(type);
   if( it == typeStringMap_.end() ) {
     std::cout << "ERROR: No uncertainty with name " << type << " will use nominal "<<std::endl;
@@ -877,21 +773,17 @@ std::string Systematics::toString(const Type type) {
     return it->second;
   }
 }
-
 bool Systematics::isJECUncertaintyUp(const Type type) {
   const std::string str = toString(type);
   return str.find("JES")==0 && str.find("up")==str.size()-2;
 }
-
 bool Systematics::isJECUncertaintyDown(const Type type) {
   const std::string str = toString(type);
   return str.find("JES")==0 && str.find("down") == str.size()-4;
 }
-
 bool Systematics::isJECUncertainty(const Type type) {
   return isJECUncertaintyUp(type) || isJECUncertaintyDown(type);
 }
-
 std::string Systematics::GetJECUncertaintyLabel(const Type type) {
   if( !isInit() ) init();
   std::map<Systematics::Type,std::string>::const_iterator it = typeLabelMap_.find(type);
@@ -901,8 +793,7 @@ std::string Systematics::GetJECUncertaintyLabel(const Type type) {
     return it->second;
   }
 }
-
-// hacked in CSV helper . Factorized JES. (date 26.06.2017)
+// hacked in CSV helper . Factorized JES. (date 01.09.2018)
 class CSVHelper
 {
 public:
@@ -922,28 +813,24 @@ public:
   void init(const std::string& hf, const std::string& lf, const int& nHFptBins,const int& nLFptBins,const int& nLFetaBins,const std::vector<Systematics::Type>& jecsysts);
   // function to get the csv weight
   double getCSVWeight(const std::vector<double>& jetPts,
-		      const std::vector<double>& jetEtas,
-		      const std::vector<double>& jetCSVs,
-		      const std::vector<int>& jetFlavors,
-		      const Systematics::Type syst,
-		      double &csvWgtHF,
-		      double &csvWgtLF,
-		      double &csvWgtCF) const;
-
+              const std::vector<double>& jetEtas,
+              const std::vector<double>& jetCSVs,
+              const std::vector<int>& jetFlavors,
+              const Systematics::Type syst,
+              double &csvWgtHF,
+              double &csvWgtLF,
+              double &csvWgtCF) const;
   // If there is no SF for a jet because it is out of acceptance
   // of SF, an SF of 1 is used for this jet. Intended when running
   // on MC with a more inclusive selection.
   // USE WITH CARE!
   void allowJetsOutOfBinning(const bool allow) { allowJetsOutOfBinning_ = allow; }
-
-
 private:
   bool isInit_;
   int nHFptBins_;//number of pt bins in hf(including c flavour) histograms
   int nLFptBins_;//number of pt bins in lf histograms
   int nLFetaBins_;//number of eta bins in lf histograms
   bool allowJetsOutOfBinning_;
-
   std::vector< std::vector<TH1*> > h_csv_wgt_hf;//vector to store pointers to the needed hf histograms
   std::vector< std::vector<TH1*> > c_csv_wgt_hf;//vector to store pointers to the needed c flavour histograms
   std::vector< std::vector< std::vector<TH1*> > > h_csv_wgt_lf;//vector to store pointers to the needed lf histograms
@@ -973,17 +860,12 @@ private:
   // function which reads the desired histogram from the provided root file
   TH1* readHistogram(TFile* file, const TString& name) const;
 };
-
 CSVHelper::CSVHelper()
   : isInit_(false), nHFptBins_(0),nLFptBins_(0),nLFetaBins_(0), allowJetsOutOfBinning_(false) {}
-
-
 CSVHelper::CSVHelper(const std::string& hf, const std::string& lf, const int& nHFptBins,const int& nLFptBins,const int& nLFetaBins, const std::vector<Systematics::Type>& jecsysts)
   : isInit_(false), nHFptBins_(0),nLFptBins_(0),nLFetaBins_(0), allowJetsOutOfBinning_(false) {
   init(hf,lf,nHFptBins,nLFptBins,nLFetaBins,jecsysts);
 }
-
-
 CSVHelper::~CSVHelper() {
   for(auto& i: h_csv_wgt_hf ) {
     for(auto& j: i) {
@@ -998,19 +880,16 @@ CSVHelper::~CSVHelper() {
   for(auto& i: h_csv_wgt_lf ) {
     for(auto& j: i) {
       for(auto& k: j) {
-	if( k ) delete k;
+    if( k ) delete k;
       }
     }
   }
 }
-
-
 void CSVHelper::init(const std::string& hf, const std::string& lf, const int& nHFptBins,const int& nLFptBins,const int& nLFetaBins,const std::vector<Systematics::Type>& jecsysts) {
   std::cout << "Initializing b-tag scale factors" <<  std::endl;
   std::cout<< "  HF : " << hf << " (" << nHFptBins << " pt bins)" <<  std::endl;
   std::cout<< "  LF : " << lf << " (" << nLFptBins << " pt bins)"  <<  std::endl;
   std::cout<< "  LF : " << lf << " (" << nLFetaBins << " eta bins)" <<  std::endl;
-
   nHFptBins_ = nHFptBins;
   nLFptBins_ = nLFptBins;
   nLFetaBins_ = nLFetaBins;
@@ -1022,7 +901,6 @@ void CSVHelper::init(const std::string& hf, const std::string& lf, const int& nH
   
   const std::string inputFileHF = hf.size() > 0 ? hf : "data/csv_rwt_hf_IT_FlatSF.root";
   const std::string inputFileLF = lf.size() > 0 ? lf : "data/csv_rwt_lf_IT_FlatSF.root";
-
   TFile *f_CSVwgt_HF = new TFile(std::string(inputFileHF).c_str());
   TFile *f_CSVwgt_LF = new TFile(std::string(inputFileLF).c_str());
   fillCSVHistos(f_CSVwgt_HF, f_CSVwgt_LF,systs);
@@ -1030,12 +908,8 @@ void CSVHelper::init(const std::string& hf, const std::string& lf, const int& nH
   f_CSVwgt_LF->Close();
   delete f_CSVwgt_HF;
   delete f_CSVwgt_LF;
-
   isInit_ = true;
 }
-
-
-
 // fill the histograms (done once)
 void
 CSVHelper::fillCSVHistos(TFile *fileHF, TFile *fileLF, const std::vector<Systematics::Type>& systs)
@@ -1103,8 +977,6 @@ CSVHelper::fillCSVHistos(TFile *fileHF, TFile *fileLF, const std::vector<Systema
     }
   }
 }
-
-
 TH1* CSVHelper::readHistogram(TFile* file, const TString& name) const {
   TH1* h = NULL;
   file->GetObject(name,h);
@@ -1115,17 +987,15 @@ TH1* CSVHelper::readHistogram(TFile* file, const TString& name) const {
   
   return h;
 }
-
-
 double
 CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
-			const std::vector<double>& jetEtas,
-			const std::vector<double>& jetCSVs,
-			const std::vector<int>& jetFlavors,
-			const Systematics::Type syst,
-			double &csvWgtHF,
-			double &csvWgtLF,
-			double &csvWgtCF) const
+            const std::vector<double>& jetEtas,
+            const std::vector<double>& jetCSVs,
+            const std::vector<int>& jetFlavors,
+            const Systematics::Type syst,
+            double &csvWgtHF,
+            double &csvWgtLF,
+            double &csvWgtCF) const
 {
   if( !isInit_ ) {
     std::cout<<"CSVHelper: Not initualized"<<std::endl;
@@ -1145,7 +1015,6 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
     const double jetPt = jetPts.at(iJet);
     const double jetAbsEta = fabs(jetEtas.at(iJet));
     const int flavor = jetFlavors.at(iJet);
-
     int iPt = -1;
     int iEta = -1;
     // pt binning for heavy flavour jets
@@ -1198,7 +1067,7 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
         //std::cout << "b flavor jet " << std::endl;
       // RESET iPt to maximum pt bin (only 5 bins for new SFs)
       if(iPt>=nHFptBins_){
-	iPt=nHFptBins_-1;
+    iPt=nHFptBins_-1;
       }
       if(h_csv_wgt_hf.at(iSys).at(iPt)) {
         const int useCSVBin = (csv >= 0.) ? h_csv_wgt_hf.at(iSys).at(iPt)->FindBin(csv) : 1;
@@ -1210,7 +1079,7 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
         //std::cout << "c flavor jet " << std::endl;
       // RESET iPt to maximum pt bin (only 5 bins for new SFs)
       if(iPt>=nHFptBins_){
-	iPt=nHFptBins_-1;
+    iPt=nHFptBins_-1;
       }
       if(c_csv_wgt_hf.at(iSys).at(iPt)) {
         const int useCSVBin = (csv >= 0.) ? c_csv_wgt_hf.at(iSys).at(iPt)->FindBin(csv) : 1;
@@ -1228,159 +1097,145 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
       }
     }
   }
-
   const double csvWgtTotal = csvWgthf * csvWgtC * csvWgtlf;
-
   csvWgtHF = csvWgthf;
   csvWgtLF = csvWgtlf;
   csvWgtCF = csvWgtC;
-
   return csvWgtTotal;
 }
-
 // QCD Helper to retrieve scale factor for QCD Estimation with iso inverted ntuples
-
 class QCDHelper
 {
-	public:
-		// see the definition/implementation file for a description of the functions 
-		QCDHelper(TString path_to_sf_file_);
-		~QCDHelper();
-		double GetScaleFactor(int n_jets, int n_btags, int n_isoinverted_electrons, int n_isoinverted_muons);
-		double GetScaleFactorError(int n_jets, int n_btags, int n_isoinverted_electrons, int n_isoinverted_muons);
-		double GetScaleFactorErrorUp(int n_jets, int n_btags, int n_isoinverted_electrons, int n_isoinverted_muons);
-		double GetScaleFactorErrorDown(int n_jets, int n_btags, int n_isoinverted_electrons, int n_isoinverted_muons);
-		void Reset();
-		void LoadFile(TString path_to_sf_file_);
-			
-	private:
-		// pointer for the root file containing the desired histograms
-		TFile* scalefactor_file = 0;
-		// path to the root file
-		TString path_to_sf_file = "";
-		// histograms containing the scale factors for electron and muon channel separately
-		TH2D* Mu_SF = 0;
-		TH2D* El_SF = 0;
-		// flag if the file and the histograms were read properly
-		bool initialized = false;
+    public:
+        // see the definition/implementation file for a description of the functions 
+        QCDHelper(TString path_to_sf_file_);
+        ~QCDHelper();
+        double GetScaleFactor(int n_jets, int n_btags, int n_isoinverted_electrons, int n_isoinverted_muons);
+        double GetScaleFactorError(int n_jets, int n_btags, int n_isoinverted_electrons, int n_isoinverted_muons);
+        double GetScaleFactorErrorUp(int n_jets, int n_btags, int n_isoinverted_electrons, int n_isoinverted_muons);
+        double GetScaleFactorErrorDown(int n_jets, int n_btags, int n_isoinverted_electrons, int n_isoinverted_muons);
+        void Reset();
+        void LoadFile(TString path_to_sf_file_);
+            
+    private:
+        // pointer for the root file containing the desired histograms
+        TFile* scalefactor_file = 0;
+        // path to the root file
+        TString path_to_sf_file = "";
+        // histograms containing the scale factors for electron and muon channel separately
+        TH2D* Mu_SF = 0;
+        TH2D* El_SF = 0;
+        // flag if the file and the histograms were read properly
+        bool initialized = false;
 };
-
 QCDHelper::QCDHelper(TString path_to_sf_file_)
 {
-	// just the constructor which loads a root file containing the histograms with the scale factors using the LoadFile function
-	LoadFile(path_to_sf_file_);
+    // just the constructor which loads a root file containing the histograms with the scale factors using the LoadFile function
+    LoadFile(path_to_sf_file_);
 }
-
 void QCDHelper::LoadFile(TString path_to_sf_file_)
 {
-	// this function loads the file given by a string and initializes the 2 needed histograms if the file was loaded correctly
-	path_to_sf_file = path_to_sf_file_;
-	if(path_to_sf_file!="")
-	{
-		scalefactor_file = TFile::Open(path_to_sf_file);
-	}
-	if(scalefactor_file)
-	{
-		El_SF = (TH2D*)scalefactor_file->Get("El_FakeSF");
-		Mu_SF = (TH2D*)scalefactor_file->Get("Mu_FakeSF");
-		initialized = true;
-	}
+    // this function loads the file given by a string and initializes the 2 needed histograms if the file was loaded correctly
+    path_to_sf_file = path_to_sf_file_;
+    if(path_to_sf_file!="")
+    {
+        scalefactor_file = TFile::Open(path_to_sf_file);
+    }
+    if(scalefactor_file)
+    {
+        El_SF = (TH2D*)scalefactor_file->Get("El_FakeSF");
+        Mu_SF = (TH2D*)scalefactor_file->Get("Mu_FakeSF");
+        initialized = true;
+    }
 }
-
 void QCDHelper::Reset()
 {
-	// resets all member data
-	scalefactor_file = 0;
-	path_to_sf_file = "";
-	Mu_SF = 0;
-	El_SF = 0;
-	initialized = false;
+    // resets all member data
+    scalefactor_file = 0;
+    path_to_sf_file = "";
+    Mu_SF = 0;
+    El_SF = 0;
+    initialized = false;
 }
-
 double QCDHelper::GetScaleFactor(int n_jets, int n_btags, int n_isoinverted_electrons, int n_isoinverted_muons)
 {
-	// this function gets the scale factor for a event dependent on the number of jets,btags and the lepton flavor
-	if(!initialized) return 0.;
-	int bin = -1;
-	double sf = 0.;
-	int N_jets = n_jets>6 ? 6 : n_jets;
-	int N_btags = n_btags>4 ? 4 : n_btags;
-	if(n_isoinverted_electrons==1&&n_isoinverted_muons==0) 
-	{
-		bin = El_SF->GetBin(N_jets+1,N_btags+1);
-		sf = El_SF->GetBinContent(bin);
-		// the values in the file are not correct for electron 6j4b category and have to be set manually
-		if(N_jets>=6&&N_btags>=4)
-		{
-			sf = 1.8;
-		}
-	}
-	else if(n_isoinverted_electrons==0&&n_isoinverted_muons==1)
-	{
-		bin = Mu_SF->GetBin(N_jets+1,N_btags+1);
-		sf = Mu_SF->GetBinContent(bin);
-	}
-	else 
-	{
-		return 0.;
-	}
-	return sf<=0. ? 0.001 : sf;
+    // this function gets the scale factor for a event dependent on the number of jets,btags and the lepton flavor
+    if(!initialized) return 0.;
+    int bin = -1;
+    double sf = 0.;
+    int N_jets = n_jets>6 ? 6 : n_jets;
+    int N_btags = n_btags>4 ? 4 : n_btags;
+    if(n_isoinverted_electrons==1&&n_isoinverted_muons==0) 
+    {
+        bin = El_SF->GetBin(N_jets+1,N_btags+1);
+        sf = El_SF->GetBinContent(bin);
+        // the values in the file are not correct for electron 6j4b category and have to be set manually
+        if(N_jets>=6&&N_btags>=4)
+        {
+            sf = 1.8;
+        }
+    }
+    else if(n_isoinverted_electrons==0&&n_isoinverted_muons==1)
+    {
+        bin = Mu_SF->GetBin(N_jets+1,N_btags+1);
+        sf = Mu_SF->GetBinContent(bin);
+    }
+    else 
+    {
+        return 0.;
+    }
+    return sf<=0. ? 0.001 : sf;
 }
-
 double QCDHelper::GetScaleFactorError(int n_jets, int n_btags, int n_isoinverted_electrons, int n_isoinverted_muons)
 {
-	// this function gets the error on the scale factor for a event dependent on the number of jets,btags and the lepton flavor
-	if(!initialized) return 0.;
-	int bin = -1;
-	double sf_err = 0.;
-	int N_jets = n_jets>6 ? 6 : n_jets;
-	int N_btags = n_btags>4 ? 4 : n_btags;
-	if(n_isoinverted_electrons==1&&n_isoinverted_muons==0) 
-	{
-		bin = El_SF->GetBin(N_jets+1,N_btags+1);
-		sf_err = El_SF->GetBinError(bin);
-		// the values in the file are not correct for electron 6j4b category and have to be set manually
-		if(N_jets>=6&&N_btags>=4)
-		{
-			sf_err = 2.0;
-		}
-	}
-	else if(n_isoinverted_electrons==0&&n_isoinverted_muons==1)
-	{
-		bin = Mu_SF->GetBin(N_jets+1,N_btags+1);
-		sf_err = Mu_SF->GetBinError(bin);
-	}
-	else 
-	{
-		return 0.;
-	}
-	return sf_err<0. ? 0. : sf_err;
+    // this function gets the error on the scale factor for a event dependent on the number of jets,btags and the lepton flavor
+    if(!initialized) return 0.;
+    int bin = -1;
+    double sf_err = 0.;
+    int N_jets = n_jets>6 ? 6 : n_jets;
+    int N_btags = n_btags>4 ? 4 : n_btags;
+    if(n_isoinverted_electrons==1&&n_isoinverted_muons==0) 
+    {
+        bin = El_SF->GetBin(N_jets+1,N_btags+1);
+        sf_err = El_SF->GetBinError(bin);
+        // the values in the file are not correct for electron 6j4b category and have to be set manually
+        if(N_jets>=6&&N_btags>=4)
+        {
+            sf_err = 2.0;
+        }
+    }
+    else if(n_isoinverted_electrons==0&&n_isoinverted_muons==1)
+    {
+        bin = Mu_SF->GetBin(N_jets+1,N_btags+1);
+        sf_err = Mu_SF->GetBinError(bin);
+    }
+    else 
+    {
+        return 0.;
+    }
+    return sf_err<0. ? 0. : sf_err;
 }
-
 double QCDHelper::GetScaleFactorErrorUp(int n_jets, int n_btags, int n_isoinverted_electrons, int n_isoinverted_muons)
 {
-	// gets the scale factor + error
-	if(!initialized) return 0.;
-	double sf = GetScaleFactor(n_jets,n_btags,n_isoinverted_electrons,n_isoinverted_muons);
-	double sf_err = GetScaleFactorError(n_jets,n_btags,n_isoinverted_electrons,n_isoinverted_muons);
-	return sf+sf_err <=0. ? 0.002 : sf+sf_err;
+    // gets the scale factor + error
+    if(!initialized) return 0.;
+    double sf = GetScaleFactor(n_jets,n_btags,n_isoinverted_electrons,n_isoinverted_muons);
+    double sf_err = GetScaleFactorError(n_jets,n_btags,n_isoinverted_electrons,n_isoinverted_muons);
+    return sf+sf_err <=0. ? 0.002 : sf+sf_err;
 }
-
 double QCDHelper::GetScaleFactorErrorDown(int n_jets, int n_btags, int n_isoinverted_electrons, int n_isoinverted_muons)
 {
-	// gets the scale factor - error
-	if(!initialized) return 0.;
-	double sf = GetScaleFactor(n_jets,n_btags,n_isoinverted_electrons,n_isoinverted_muons);
-	double sf_err = GetScaleFactorError(n_jets,n_btags,n_isoinverted_electrons,n_isoinverted_muons);
-	return sf-sf_err <=0. ? 0.0005 : sf-sf_err;
+    // gets the scale factor - error
+    if(!initialized) return 0.;
+    double sf = GetScaleFactor(n_jets,n_btags,n_isoinverted_electrons,n_isoinverted_muons);
+    double sf_err = GetScaleFactorError(n_jets,n_btags,n_isoinverted_electrons,n_isoinverted_muons);
+    return sf-sf_err <=0. ? 0.0005 : sf-sf_err;
 }
-
 QCDHelper::~QCDHelper()
 {
-	// destructor which closes the file if it was loaded in the first place
-	if(initialized) scalefactor_file->Close();
+    // destructor which closes the file if it was loaded in the first place
+    if(initialized) scalefactor_file->Close();
 }
-
 class ttbarsysthelper
 {
     public:
@@ -1408,7 +1263,6 @@ class ttbarsysthelper
         std::map<std::pair<int,int>,float> UEDown;
         
 };
-
 ttbarsysthelper::ttbarsysthelper()
 {
     // first number in pair: 0->ttlf,1->ttcc,2->ttb,3->tt2b,4->ttbb
@@ -1541,14 +1395,10 @@ ttbarsysthelper::ttbarsysthelper()
     UEDown[std::pair<int,int>(4,5)] = 1.019;
     UEDown[std::pair<int,int>(4,6)] = 0.99;
 }
-
-
-
 ttbarsysthelper::~ttbarsysthelper()
 {
     // nothing to do here
 }
-
 float ttbarsysthelper::GetISRScaleFactorUp(int& ttbar_subprocess,int& njets)
 {
     return njets<6 ? ISRUp[std::pair<int,int>(ttbar_subprocess,njets)] : ISRUp[std::pair<int,int>(ttbar_subprocess,6)];
@@ -1581,7 +1431,6 @@ float ttbarsysthelper::GetUEScaleFactorDown(int& ttbar_subprocess,int& njets)
 {
     return njets<6 ? UEDown[std::pair<int,int>(ttbar_subprocess,njets)] : UEDown[std::pair<int,int>(ttbar_subprocess,6)];
 }
-
 int ttbarsysthelper::GetTtbarSubProcess(int& GenEvt_I_TTPlusCC,int& GenEvt_I_TTPlusBB)
 {
     // translate the flags available in the ntuples to the flag needed above for the ttbar subprocesses
@@ -1613,9 +1462,6 @@ int ttbarsysthelper::GetTtbarSubProcess(int& GenEvt_I_TTPlusCC,int& GenEvt_I_TTP
     }
     return i;
 }
-
-
-
 // Helper struct to fill plots more efficiently
 // Until GCC 4.9 struct cannot have init values if one wants to initialize it with bracket lists
 struct structHelpFillHisto{
@@ -1623,7 +1469,6 @@ struct structHelpFillHisto{
   double var;
   double weight;
 };
-
 // helper function to fill plots more efficiently
 void helperFillHisto(const std::vector<structHelpFillHisto>& paramVec)
 {
@@ -1634,7 +1479,6 @@ void helperFillHisto(const std::vector<structHelpFillHisto>& paramVec)
       singleParams.histo->Fill(fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,singleParams.var)),singleParams.weight);
   }
 }
-
 // Helper struct to fill plots more efficiently
 // Until GCC 4.9 struct cannot have init values if one wants to initialize it with bracket lists
 struct structHelpFillTwoDimHisto{
@@ -1643,7 +1487,6 @@ struct structHelpFillTwoDimHisto{
   double var2;
   double weight;
 };
-
 // helper function to fill plots more efficiently
 void helperFillTwoDimHisto(const std::vector<structHelpFillTwoDimHisto>& paramVec)
 {
@@ -1654,23 +1497,19 @@ void helperFillTwoDimHisto(const std::vector<structHelpFillTwoDimHisto>& paramVe
       singleParams.histo->Fill(fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,singleParams.var1)),fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,singleParams.var2)),singleParams.weight);
   }
 }
-
 void plot(){
   TH1F::SetDefaultSumw2();
-
   // create vector of systematics
   std::vector<Systematics::Type> v_SystTypes = Systematics::getTypeVector();
   //for(auto itsyst : v_SystTypes){std::cout<< " Know :" << itsyst << std::endl;}
-
-  std::string csvHFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/factorized_jes/csv_rwt_fit_hf_v2_final_2017_6_7_all.root";
-  std::string csvLFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/factorized_jes/csv_rwt_fit_lf_v2_final_2017_6_7_all.root";
+  std::string csvHFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_first2017/Deepcsv_rwt_fit_hf_v2_final_2018_2_12test.root";
+  std::string csvLFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_first2017/Deepcsv_rwt_fit_lf_v2_final_2018_2_12test.root";
   TString qcd_file = "/nfs/dust/cms/user/mwassmer/QCD_Estimation_September17/QCD_Estimation/QCD_Estimation_FakeScaleFactor_nominal.root";
   
   CSVHelper* internalCSVHelper= new CSVHelper(csvHFfile,csvLFfile, 5,4,3,v_SystTypes);
   LeptonSFHelper* internalLeptonSFHelper= new LeptonSFHelper();
   QCDHelper* internalQCDHelper = new QCDHelper(qcd_file);
   ttbarsysthelper* internalttbarsysthelper = new ttbarsysthelper();
-
   // open files
   TChain* chain = new TChain("MVATree");
   char* filenames = getenv ("FILENAMES");
@@ -1680,35 +1519,25 @@ void plot(){
   int maxevents = atoi(getenv ("MAXEVENTS"));
   int skipevents = atoi(getenv ("SKIPEVENTS"));
   string eventFilterFile = string(getenv("EVENTFILTERFILE"));
-
   std::cout<<"processname" <<processname<<std::endl;
   std::cout<<"suffix" <<suffix<<std::endl;
-
   std::vector<TString> databaseRelevantFilenames;
-
   // create event filter class
   EventFilter* evtFilter = new EventFilter(eventFilterFile);
-
   int eventsAnalyzed=0;
   float sumOfWeights=0;
-
   int DoWeights=1;
   int electron_data=0;
   int muon_data=0;
-
   //initialize Trigger Helper
-
   // Hack for subsampling test
   //if(processname=="SingleEl" || processname=="SingleMu"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
   if((processname.find("SingleEl")!= std::string::npos) || (processname.find("SingleMu")!= std::string::npos)){DoWeights=0; std::cout<<"is data, dont use nominal weights!!!!"<<std::endl;}
-
-
   // read in samples to add to chain and get relevant names for the database
   std::map<TString, TString> sampleDataBaseIdentifiers;
   std::map<TString, std::map<TString, long>> sampleDataBaseFoundEvents;
   std::map<TString, std::map<TString, long>> sampleDataBaseLostEvents;
-  std::map<TString, TString> sampleTranslationMapCC ;
-
+  std::map<TString, TString> sampleTranslationMapCPP ;
   // vector to hold the jes uncertainty names
   std::vector<TString> SystListForDataBase;
   

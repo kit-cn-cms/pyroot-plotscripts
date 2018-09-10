@@ -41,7 +41,7 @@ using namespace std;
     jstring = jfile.read()
   sampleTranslationMap = json.loads(jstring)
   for transSample in sampleTranslationMap:
-    retstr+="sampleTranslationMapCC[TString(\""+transSample+"\")]=TString(\""+sampleTranslationMap[transSample]+"\");\n"
+    retstr+="\tsampleTranslationMapCPP[TString(\""+transSample+"\")]=TString(\""+sampleTranslationMap[transSample]+"\");\n"
   
   with open(basepath+"/util/scriptFiles/runFile-head2.cc", "r") as head2:
     retstr += head2.read()
@@ -243,7 +243,7 @@ def readOutDataBase(thisDataBase=[]):
   
   rstr+="""
     TString currentRelevantSampleName=sampleDataBaseIdentifiers[currentfilename];
-    TString translatedCurrentRelevantSampleName=sampleTranslationMapCC[currentRelevantSampleName];
+    TString translatedCurrentRelevantSampleName=sampleTranslationMapCPP[currentRelevantSampleName];
     if(processname=="QCD" or processname=="QCD_CMS_ttH_QCDScaleFactorUp" or processname=="QCD_CMS_ttH_QCDScaleFactorDown"){
       translatedCurrentRelevantSampleName+="QCD";
       }
@@ -386,7 +386,7 @@ class initPlots:
             script += "{\n"
             
             arraySelection = self.variables.checkArrayLengths(",".join(vars + [sel]))
-            weight = "("+arraySelection+")*("+sel_i+")*Weight_XS*categoryweight+sampleweight"
+            weight = "("+arraySelection+")*("+sel_i+")*Weight_XS*categoryweight*sampleweight"
 
             script += fillHistoSyst(histName, var_i, weight, self.systnames, self.systweights)
             script += "            }\n"

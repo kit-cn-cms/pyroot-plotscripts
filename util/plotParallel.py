@@ -155,80 +155,59 @@ class plotParallel:
 
         # check output if skipping activated
         if self.analysis.skipPlotParallel:
-            print("trying to skip plot Parallel - checking outputs first")
+            print("skip plotParallel has been activated")
+            print("this only skips the naf submission for the output files that already exist")
             
-            # loading data of root files with writeScripts = False
-            # this way the scripts are not written only the neccesary cross checking data is loaded
-            writer = scriptWriter.scriptWriter(self)
-            self.runscriptData = writer.writeRunScripts( writeScripts = False )
-
-            self.runscriptData = nafInterface.plotTerminationCheck( self.runscriptData )
-
-            if len( self.runscriptData["scripts"] ) == 0:
-                print("all outputs have been checked succesfully - skipping plotParallel step")
-                print("proceeding with haddParallel")
-                self.haddParallelInterface(writer)
+        # check what to do if rootFile already exists
+        if os.path.exists(self.analysis.ppRootPath):
+            # if useOldRoot is activated the old file is used with out checking its content
+            # TODO: implement sanity check
+            if self.analysis.useOldRoot:
+                print("using old root file")
+                if not self.analysis.haddParallel:
+                    print("no parallel hadding")
+                else:
+                    print("parallel hadding activated")
+                    print("using old root file and saving haddFiles")
+                    self.haddFiles = self.globHaddFiles()
+                    print("type of haddFiles: " + str(type(self.haddFiles)) )
                 self.finished = True
                 print("exiting plotParallel")
-                return
+                return 
+           
             else:
-                print("not all plotParallel scripts have terminated successfully - redoing the missing ones")
-                print("writing shell scripts")
-                writer.writeRunScripts( writeScripts = True )
-                # this step is kinda stupid, but we need to make sure, that the shell scripts exists
-                # so we write all shell scripts again (takes maybe 5 minutes)
-                # but take only the runscriptData from before, as these are the only unfinished pP-runs
-        
-        else:
-            # check what to do if rootFile already exists
-            if os.path.exists(self.analysis.ppRootPath):
-
-                if self.analysis.useOldRoot:
-                    print("using old root file")
-                    if not self.analysis.haddParallel:
-                        print("no parallel hadding")
-                    else:
-                        print("parallel hadding activated")
-                        print("using old root file and saving haddFiles")
-                        self.haddFiles = self.globHaddFiles()
-                        print("type of haddFiles: " + str(type(self.haddFiles)) )
-                    self.finished = True
-                    print("exiting plotParallel")
-                    return 
-               
-                else:
-                    # moving the old instance of workdir to a backup and copying C-file
-                    oldWorkdir = self.analysis.workdir+datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-                    os.rename(self.analysis.workdir, oldWorkdir)
-                    os.makedirs(self.analysis.workdir)
-
-                    cmd = "cp -v "+oldWorkdir+"/"+self.analysis.name+".cc "+self.analysis.workdir+"/"+self.analysis.name+".cc"
-                    subprocess.call(cmd, shell = True)
-                    cmd = "cp -v "+oldWorkdir+"/"+self.analysis.name+" "+self.analysis.workdir+"/"+self.analysis.name+"Backup"
-                    subprocess.call(cmd, shell = True)
-
-            elif not os.path.exists(self.analysis.workdir):
+                # moving the old instance of workdir to a backup and copying C-file
+                oldWorkdir = self.analysis.workdir+datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+                os.rename(self.analysis.workdir, oldWorkdir)
                 os.makedirs(self.analysis.workdir)
 
-            # creating c++ programm
-            self.ccPath = self.analysis.workdir + "/" + self.analysis.name + ".cc"
-            writer = scriptWriter.scriptWriter(self)
-            writer.writeCC()
+                cmd = "cp -v "+oldWorkdir+"/"+self.analysis.name+".cc "+self.analysis.workdir+"/"+self.analysis.name+".cc"
+                subprocess.call(cmd, shell = True)
+                cmd = "cp -v "+oldWorkdir+"/"+self.analysis.name+" "+self.analysis.workdir+"/"+self.analysis.name+"Backup"
+                subprocess.call(cmd, shell = True)
 
-            # create rename script
-            writer.writeRenameScript()
+        elif not os.path.exists(self.analysis.workdir):
+            os.makedirs(self.analysis.workdir)
 
-            # creating output folders
-            print( "creating output folders" )
-            if not os.path.exists(self.scriptsPath):
-                os.makedirs(self.scriptsPath)
-            if not os.path.exists(self.plotPath):
-                os.makedirs(self.plotPath)
+        # creating c++ programm
+        self.ccPath = self.analysis.workdir + "/" + self.analysis.name + ".cc"
+        writer = scriptWriter.scriptWriter(self)
+        writer.writeCC()
 
-            # creating run script
-            print( "creating run scripts" )
-            # data consists of {"scripts", "outputs", "entries", "maps"}
-            self.runscriptData = writer.writeRunScripts()
+        # create rename script
+        writer.writeRenameScript()
+
+        # creating output folders
+        print( "creating output folders" )
+        if not os.path.exists(self.scriptsPath):
+            os.makedirs(self.scriptsPath)
+        if not os.path.exists(self.plotPath):
+            os.makedirs(self.plotPath)
+
+        # creating run script
+        print( "creating run scripts" )
+        # runscriptData consists of {"scripts", "outputs", "entries", "maps"}
+        self.runscriptData = writer.writeRunScripts()
 
         # check if we should stop
         if self.analysis.stopAfterCompile:
@@ -237,7 +216,7 @@ class plotParallel:
             sys.exit(0)
 
         # job submission
-        nafInterface.plotInterface(self.runscriptData)
+        nafInterface.plotInterface(self.runscriptData, skipPlotParallel = self.analysis.skipPlotParallel)
         print("all jobs have terminated successfully")
         print("="*40)
 

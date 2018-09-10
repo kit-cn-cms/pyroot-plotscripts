@@ -16,6 +16,11 @@ sys.path.append(filedir+"/tools")
 import CMS_lumi
 import plotClasses
 
+class Config:
+    def __init__(self, name, index):
+        self.name = name
+        self.index = index
+
 class List:
     def __init__(self, genPlots, samples, listName, catNames = [""], doTwoDim = False):
         self.catNames = catNames
@@ -25,39 +30,55 @@ class List:
 
         self.name = listName
         self.samples = samples
-        self.data = []
 
         rootFile = ROOT.TFile(genPlots.outPath, "readonly")
         keyList = rootFile.GetKeyNames()
-
-        print("-"*30)
         print("generating new list with name "+str(listName))
         print("category names:")
         print(catNames)
+
+        dataT = []
         # generate hist list per sample
+        print("looping over samples ...")
         for sample in samples:
-            histList = self.fillHistList(rootFile, sample)
-            print(histList)
-            self.data.append(histList)
+            print("at sample "+str(sample))
+            histList = self.fillHistList(rootFile, sample, keyList)
+            print("histList: "+str(histList))
+            dataT.append(histList)
+            print("dataT: "+str(dataT))
+            print("-"*10)
         # generate transposed list
-        self.T = transposeLOL(self.data)
+        self.data = transposeLOL( dataT )
+        self.T = transposeLOL( self.data )
         print("list:")
         print(self.data)
         print("list.T:")
         print(self.T)
         print("-"*30)
 
-    def fillHistList(self, rootFile, sample):
+    def fillHistList(self, rootFile, sample, keyList):
         histList = []
         ROOT.gDirectory.cd("PyROOT:/")
         for cat in self.catNames:
             for plot in self.plots:
+                print("="*10)
+                print("creating histogram")
+                print("cat: "+str(cat))
+                print("plot: "+str(plot))
+                print("sample: "+str(sample))
                 key = sample.nick+"_"+cat+plot.name
+                print("key: "+str(key))
+                if key not in keyList:
+                    print("this key is not in key list")
                 rootHist = rootFile.Get(key)
+                print("type of hist is:")
+                print( type( rootHist ))
                 if isinstance(rootHist, ROOT.TH1) and not isinstance(rootHist, ROOT.TH2):
+                    print("is TH1")
                     rootHist.Rebin(self.rebin)
                     histList.append( rootHist.Clone() )
                 if self.doTwoDim and isinstance(rootHist, ROOT.TH2):
+                    print("is TH2")
                     histList.append( rootHist.Clone() )
         return histList
 
@@ -79,7 +100,7 @@ class genPlots:
         newList = List(self, samples, listName, catNames, doTwoDim)
     
         self.lists[newList.name] = newList
-        return
+        return newList.name
 
 
     # -- loading options for simple control/shape plots -------------------------------------------
@@ -113,10 +134,11 @@ class genPlots:
         print("\n"+"="*30)
         print("making simple control plots ...")
         # load options
+        print("-"*10)
         print("loading options:")
         plotOptions = self.loadOptions(options)
-        
-        # load transposed list
+        print("-"*10)
+        # load transposed list#
         transposedList = self.lists[listName].T
         samples = self.lists[listName].samples
 
@@ -130,7 +152,6 @@ class genPlots:
         headList = transposedList[0]
         controlSamples = samples[listIndex:]
         headSamples = samples[0]
-
         # starting draw control plots
         canvases = []
         objects = []
@@ -139,8 +160,8 @@ class genPlots:
         # start loop over used list
         print("looping over used histolist ...")
         for listOfHists, headHist in zip(controlList, headList):
-            print(listOfHists)
-            print(headHist)
+            print("listOfHists:" +str(listOfHists))
+            print("headHist: "+str(headHist))
             print
 
             index += 1
@@ -281,8 +302,8 @@ class genPlots:
         # starting loop over list of hists
         print("looping over used histolist ...")
         for listOfHists, labelText in zip( shapeList, labelTexts):
-            print(listOfHists)
-            print(labelText)
+            print("listOfHists: "+str(listOfHists))
+            print("labelText: "+str(labelText))
             print
          
             index += 1
@@ -391,6 +412,7 @@ class genPlots:
 
         print("generated list of histograms for making control plots")
         print("location: self.nestedHistList["+str(outName)+"]")
+        print
         self.nestedHistLists[outName] = outList
 
 
@@ -465,17 +487,10 @@ class genPlots:
                 graph = [errorBands[iBand][iGraph], errorStyles[iBand], errorColors[iBand]]
                 graphs.append( graph ) 
             errorGraphs.append(graphs)
+        
 
-
-        print("looping over used histolist ...")
         for headHist, listOfHists, listOfData, labelText, errorGraphList in zip( 
                 headList, controlList, dataList, labelTexts, errorGraphs ):
-            print(headHist)
-            print(listOfHists)
-            print(listOfData)
-            print(labelText)
-            print(errorGraphList)
-            print
 
             index += 1
             integralFactor = 0
@@ -637,6 +652,7 @@ class genPlots:
                 if ilc%2 == 0:
                     legend2.addEntryLRLegend(hist, sample.name, "F")
 
+            print("appending canvas "+str(canvas))
             canvases.append(canvas)
             legend1.Draw("same")
             legend2.Draw("same")
@@ -1208,6 +1224,8 @@ def getROC(histo1, histo2, rej = True):
 # -- write canvases to pdf and root ---------------------------------------------------------------
 def printCanvases(canvases, plotPath):
     plotPath += "/plots"
+    print("canvases:")
+    print(canvases)
     canvas = canvases[0]
     canvas.Print( plotPath+'.pdf[')
     for c in canvases:

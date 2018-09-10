@@ -37,7 +37,6 @@ def main(pyrootdir, argv):
 
     # name of the analysis (i.e. workdir name)
     name = 'testMJ'
-    scriptType = "limits" # "controlPlots"
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -51,7 +50,8 @@ def main(pyrootdir, argv):
     rootPathForAnalysis = workdir+'/output_limitInput.root'
 
     # signal process
-    signalProcess = None
+    # TODO maybe the name signalProcess is a bad choice, but it determines the used pltcfg
+    signalProcess = "DM"
 
     # Name of final discriminator, should not contain underscore
     discrName = 'finaldiscr'
@@ -71,7 +71,7 @@ def main(pyrootdir, argv):
 
     # options for plotParallel
     plotOptions = {
-        "cirun": False,  
+        "cirun": True,  
         "haddParallel": True, 
         "useOldRoot": False,
         # the skipXXX options try to skip the submission of files to the batch system
@@ -114,7 +114,7 @@ def main(pyrootdir, argv):
     # TODO make the analysisClass more essential - atm it is not really needed
     analysis = configClass.analysisConfig(
         workdir = workdir, pyrootdir = pyrootdir, rootPath = rootPathForAnalysis, 
-        signalProcess = signalProcess, discrName = discrName, scriptType = scriptType)
+        signalProcess = signalProcess, discrName = discrName)
 
     analysis.initArguments( argv )
     analysis.initPlotOptions( plotOptions )
@@ -172,7 +172,7 @@ def main(pyrootdir, argv):
     '''
     configData.getAddVariables()
     configData.getMEPDFAddVariables(
-        "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv"
+        "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv")
     # TODO additionalvariables.extend(NNFlowInterface.getAdditionalVariablesList())
     monitor.printClass(configData, "after getting additional Variables")
 
@@ -255,7 +255,7 @@ def main(pyrootdir, argv):
             # ========================================================
             '''
             #TODO rework
-            if analysis.getSignalProcess() == 'ttbb':
+            if analysis.signalProcess == 'ttbb':
                 # samples[0:2]: tt+bb, tt+b, tt+2b as signal for S over b normalization
                 # TODO check the optimizedBinning function and adjust arguments to new structure
                 # TODO rework samples splitting to be automated in samplesDataClass?
@@ -269,13 +269,13 @@ def main(pyrootdir, argv):
                         plots = configData.getDiscriminatorPlots(), 
                         systnames = configData.allSystNames, 
                         minBkgPerBin = 2.0, 
-                        optMode = analysis.getOptimzedRebinning(),
+                        optMode = analysis.optimizedRebinning,
                         considerStatUnc = False, 
                         maxBins = 20, 
                         minBins = 2,
                         verbosity = 2)
 
-            elif analysis.getSignalProcess() == 'ttH':
+            elif analysis.signalProcess == 'ttH':
                 # samples: ttH as signal. ttH_bb, ttH_XX as additional samples together with data. 
                 # Rest: background samples
                 with monitor.Timer("optimizeBinning"):
@@ -287,7 +287,7 @@ def main(pyrootdir, argv):
                         plots = configData.getDiscriminatorPlots(), 
                         systnames = configData.allSystNames, 
                         minBkgPerBin = 2.0, 
-                        optMode = analysis.getOptimzedRebinning(),
+                        optMode = analysis.optimizedRebinning,
                         considerStatUnc = False, 
                         maxBins = 20, 
                         minBins = 2,
@@ -356,11 +356,11 @@ def main(pyrootdir, argv):
             # ========================================================
             '''
             with monitor.Timer("addRealData"):
-                # real data with ttH
-                #pP.addData(samples = configData.controlSamples)
+                #real data with ttH
+                pP.addData(samples = configData.controlSamples)
 
-                # pseudo data without ttH
-                # pP.addData(samples = configData.samples[9:])
+                #pseudo data without ttH
+                pP.addData(samples = configData.samples[9:])
         
 
         pP.checkTermination()       

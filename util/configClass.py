@@ -13,7 +13,7 @@ import plotClasses
 import PDFutils
 
 class analysisConfig:
-    def __init__(self, workdir, pyrootdir, rootPath, signalProcess = "ttbb", discrName = "finaldiscr", scriptType = "limits"):
+    def __init__(self, workdir, pyrootdir, rootPath, signalProcess = "ttbb", discrName = "finaldiscr"):
         self.workdir = str(workdir)
         self.pyrootdir = str(pyrootdir)
         self.name = self.workdir.split("/")[-1]
@@ -27,7 +27,6 @@ class analysisConfig:
             self.rootPath = self.name+"/limitInput.root"
         self.ppRootPath = self.rootPath
         self.limitPath = self.rootPath
-        self.scriptType = scriptType
 
         self.setDefaults()
         self.setSignalProcess(signalProcess)
@@ -76,14 +75,14 @@ class analysisConfig:
         elif signalProcess == "ttH" or signalProcess == "tth":
             self.signalProcess = "ttH"
             self.plotBlinded = True
-            self.plotConfig = 'plotconfig_v14'
+            self.plotConfig = 'pltcfg_v13'
             self.tt_samplesLower = 9
             self.tt_samplesUpper = 14
             print("ttH was chosen as signal process. plotBlinded was set to True")
         elif signalProcess == "DM":
             self.signalProcess = "DM"
             self.plotBlinded = False
-            self.plotConfig = "monoJet_cfg"
+            self.plotConfig = "pltcfg_MonoJet"
             print("doing DM analysis")
         else:
             print("could not find signalProcess '"+str(signalProcess)+"'. Define it in analysisConfig")
@@ -361,11 +360,12 @@ class configData:
     def getBinlabels(self):
         return self.Data.binlabels
 
-    def getAddVariables(self):
-        path = self.analysis.pyrootdir+"/configs/"+self.basename+"_addVariables.csv"
-        print( "searching for additional variables in "+str(path))
-        variables = pandas.read_csv(path)
-        self.addVars = list(variables.addVars.values)
+    def getAddVariables(self, BDTWeightPath, BDTSet):
+        sys.path.append(self.cfgdir)
+        fileName = self.basename+"_addVariables"
+        print("getting additional variables from "+str(fileName))
+        addVarModule = importlib.import_module( fileName )
+        self.addVars = addVarModule.getAddVars( BDTWeightPath, BDTSet )
 
     def getMEPDFAddVariables(self, csvfile):
         self.addVars += PDFutils.GetMEPDFadditionalVariablesList(csvfile)
@@ -512,20 +512,33 @@ class configData:
 
 
     def initSamples(self):
+        # TODO: find a better naming sceme for the lists of samples/names/weights
+        # they are used at many different places and it is not at all obvious which are used where and what they really contain
+
         sys.path.append(self.cfgdir)
         fileName = self.basename+"_samples"
+
+        # imports file in cfgdir with given name as samplesData file
+        # this file should have a function
+        #       getSamples, getControlSamples, getSystSamples
+        # where the samples lists are created, and functions
+        #       getAllSystNames, getWeightSystNames, getOtherSystNames
+        # where lists of names are created, and functions
+        #       getSystWeights
+        # where lists of weights are created
         samplesData = importlib.import_module( fileName )
         
         # list of samples
         self.samples = samplesData.getSamples( self.pltcfg )
+        
         # list of controlsamples used in 'allSamples' list
         self.controlSamples = samplesData.getControlSamples( self.pltcfg )
         # list of systematic samples used in 'allSamples' and 'allSystSamples' list
-        self.systSamples = samplesData.gatherSystSamples( self.pltcfg, self.analysis, self.samples )
+        self.systSamples = samplesData.getSystSamples( self.pltcfg, self.analysis, self.samples )
         
 
         # list of samples used to write C program       
-        self.allSamples = self.samples + self.controlSamples + self.systSamples
+        self.allSamples = samplesData.getAllSamples( self.pltcfg, self.analysis, self.samples )
         # TODO is this used anywhere?
         #self.allSystSamples = samples + systSamples
 

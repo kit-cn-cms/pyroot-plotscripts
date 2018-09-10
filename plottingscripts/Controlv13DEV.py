@@ -28,7 +28,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'testControl'
+    name = 'testControl13'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -39,8 +39,8 @@ def main(pyrootdir, argv):
         print("created workdir at "+str(workdir))
     
     # path to root file
-    #rootPathForAnalysis = workdir+'/output_limitInput.root'
-    rootPathForAnalysis = "/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/Sep17/pyroot-plotscripts/NOTDEFINED/output_limitInput.root"
+    rootPathForAnalysis = workdir+'/output_limitInput.root'
+    #rootPathForAnalysis = "/nfs/dust/cms/user/kelmorab/plotscriptsSpring17/Sep17/pyroot-plotscripts/NOTDEFINED/output_limitInput.root"
 
     # signal process
     signalProcess = "ttH"
@@ -49,22 +49,20 @@ def main(pyrootdir, argv):
     discrName = 'finaldiscr'
 
     # define MEM discriminator variable
-    # this is not used anymore as the information is written in the csv files in configdata
-    # keep it for clarity
     memexp = '(memDBp>0.0)*(memDBp)+(memDBp<=0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
-    # define BDT output variables (not used anymore)
-    # bdtweightpath = "/nfs/dust/cms/user/kelmorab/Spring17BDTWeights/"
-    # bdtset = "Spring17v1"
+    # define BDT output variables for additional variables
+    BDTWeightPath = "/nfs/dust/cms/user/kelmorab/Spring17BDTWeights/"
+    BDTSet = "Spring17v1"
 
     # name of the csv files used in configdata folder
-    configDataBaseName = "plotcontrolv14"
+    configDataBaseName = "controlPlotsv13"
 
     # options for plotParallel
     plotOptions = {
         "cirun": False,  
         "haddParallel": True, 
-        "useOldRoot": False,
+        "useOldRoot": True,
         # the skipXXX options try to skip the submission of files to the batch system
         # before skipping the output is crosschecked
         # if the output is not complete, the skipped part is done anyways
@@ -82,9 +80,9 @@ def main(pyrootdir, argv):
         "makeDataCards": False,
         "makeEventYields": True}
 
-    plotJson = "/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_v5_08102017.json"
-    plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]]
-    plotInterfaces = ["../util/dNNInterfaces/dNNInterface_V6.py"]
+    plotJson = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/treejson_v13.json"
+    plotDataBases = []
+    plotInterfaces = []
 
     # datacardmaker
     datacardmaker = "mk_datacard_JESTest13TeVPara"
@@ -157,7 +155,7 @@ def main(pyrootdir, argv):
     # define additional variables necessary for selection in plotparallel
     # ========================================================
     '''
-    configData.getAddVariables()
+    configData.getAddVariables( BDTWeightPath, BDTSet )
     #configData.getMEPDFAddVariables(
     #    "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv")
     # TODO additionalvariables.extend(NNFlowInterface.getAdditionalVariablesList())
@@ -488,7 +486,7 @@ def main(pyrootdir, argv):
 
                 # generate the llloflist internally
                 gP.genNestedHistList(listName = "histoList", listIndex = 1, 
-                    systNames = pltcfg.errorSystNamesNoPS, 
+                    systNames = pltcfg.errorSystNames, 
                     outName = "histoList")
 
                 monitor.printClass(gP, "after generating nested hist list")
