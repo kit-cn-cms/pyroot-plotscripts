@@ -18,24 +18,24 @@ def writeSubmitCode(script, logdir, hold = False, isArray = False, nScripts = 0)
   '''
   submitPath = script[:-3]+".sub"
   submitScript = script.split("/")[-1][:-3]
-
+  print "submitpath ",submitPath
   submitCode="universe = vanilla\n"
-  submitCode="run_as_owner = true\n"
   submitCode+="should_transfer_files = IF_NEEDED\n"
   submitCode+="executable = /bin/bash\n"
   submitCode+="arguments = " + script + "\n"
   submitCode+="initialdir = "+os.getcwd()+"\n"
   submitCode+="notification = Never\n"
-  submitCode+="priority = 0\n"
-  submitCode+="request_memory = 5800M\n"
-  #submitCode+="request_disk = 5800M\n"
+  #submitCode+="priority = 0\n"
+  submitCode+="RequestMemory = 2000\n"
+  submitCode+="RequestDisk = 500000\n"
+  submitCode+="run_as_owner = true\n"
   if hold:
     submitCode+="hold = True\n"
 
   if isArray:
     submitCode+="error = "+logdir+"/"+submitScript+".$(Cluster)_$(ProcId).err\n"
     submitCode+="output = "+logdir+"/"+submitScript+".$(Cluster)_$(ProcId).out\n"
-    #submitCode+="log = "+logdir+"/"+submitScript+".$(Cluster)_$(ProcId).log\n"
+    submitCode+="log = "+logdir+"/"+submitScript+".$(Cluster)_$(ProcId).log\n"
     submitCode+="Queue Environment From (\n"
     for taskID in range(nScripts):
       submitCode+="\"SGE_TASK_ID="+str(taskID)+"\"\n"
@@ -43,7 +43,7 @@ def writeSubmitCode(script, logdir, hold = False, isArray = False, nScripts = 0)
   else:
     submitCode+="error = "+logdir+"/"+submitScript+".$(Cluster).err\n"
     submitCode+="output = "+logdir+"/"+submitScript+".$(Cluster).out\n"
-    #submitCode+="log = "+logdir+"/"+submitScript+".$(Cluster).log\n"
+    submitCode+="log = "+logdir+"/"+submitScript+".$(Cluster).log\n"
     submitCode+="queue"
 
   submitFile = open(submitPath, "w")
@@ -99,7 +99,7 @@ def condorSubmit(submitPath):
     print("DEBUG: jobIDstring (= communicate()[0]): " + output)
     exit(0)
   print("JobID = " + str(jobID))
-  os.system("rm "+submitPath) # option to remove the created submit-scripts
+  #os.system("rm "+submitPath) # option to remove the created submit-scripts
   return jobID
 
 def setupRelease(oldJIDs, newJIDs):
@@ -239,18 +239,20 @@ def do_qstat(jobIDs = False):
     qstat=a.communicate()[0]
     lines=qstat.split('\n')
     nrunning=0
+    condor_q_worked = False
     # sum all jobs that are still idle or running
     for line in lines:
       if "Total for query" in line:
+        condor_q_worked = True
         joblist = line.split(";")[1]
         states = joblist.split(",")
         jobsRunning = int(states[3].split()[0])
         jobsIdle =  int(states[2].split()[0])
         jobsHeld = int(states[4].split()[0])
         print(str(jobsRunning) + " jobs running, " + str(jobsIdle) + " jobs idling, " + str(jobsHeld) + " jobs held.")
-        nrunning = jobsRunning + jobsIdle + jobsHeld
+        nrunning += jobsRunning + jobsIdle + jobsHeld
 
-    if nrunning == 0:
+    if nrunning == 0 and condor_q_worked:
       print "all jobs are finished"
       allfinished=True
 

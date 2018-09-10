@@ -525,9 +525,9 @@ errorSystNames=[
 # input path 
 path_michael="/nfs/dust/cms/user/mwassmer/ttH_2018/ntuples"
 ttbarPathS=path_michael+'/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'+path_michael+'/TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'+path_michael+'/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'
-VJetsPathS=path_michael+'/DYJets*/*nominal*.root'+';'+'/WJets*/*nominal*.root'
-ttVPathS=path_michael+'/TTW*/*nominal*.root'+';'+'/TTZ*/*nominal*.root'
-dibosonPathS=path_michael+'/WW_*/*nominal*.root'+';'+'/WZ_*/*nominal*.root'+';'+'/ZZ_*/*nominal*.root'
+VJetsPathS=path_michael+'/DYJets*/*nominal*.root'+';'+path_michael+'/WJets*/*nominal*.root'
+ttVPathS=path_michael+'/TTW*/*nominal*.root'+';'+path_michael+'/TTZ*/*nominal*.root'
+dibosonPathS=path_michael+'/WW_*/*nominal*.root'+';'+path_michael+'/WZ_*/*nominal*.root'+';'+path_michael+'/ZZ_*/*nominal*.root'
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
 sampleDict=SampleDictionary()
