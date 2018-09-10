@@ -1,5 +1,6 @@
- 
-    translatedFileNameForDataBase=sampleTranslationMapCC[thisfilename];
+
+  
+    translatedFileNameForDataBase=sampleTranslationMapCPP[thisfilename];
     if(processname=="QCD" or processname=="QCD_CMS_ttH_QCDScaleFactorUp" or processname=="QCD_CMS_ttH_QCDScaleFactorDown"){
       translatedFileNameForDataBase+="QCD";
       }
@@ -52,9 +53,7 @@
     }
     
   chain->SetBranchStatus("*",0);
-
   TFile* outfile=new TFile(outfilename,"RECREATE");
-
   TStopwatch* totalWatch= new TStopwatch();
   TStopwatch* databaseWatch= new TStopwatch();
   double memTime=0;
@@ -68,7 +67,6 @@
   Int_t Evt_ID_INT;
   Int_t Evt_Run_INT;
   Int_t Evt_Lumi_INT;
-
   chain->SetBranchStatus("Evt_ID",1);
   chain->SetBranchStatus("Evt_Run",1);
   chain->SetBranchStatus("Evt_Lumi",1);
@@ -110,7 +108,5 @@
   TStopwatch* timerTotal=new TStopwatch();
   TStopwatch* timerMapping=new TStopwatch();
   
-
  
   // initialize variables from tree
-

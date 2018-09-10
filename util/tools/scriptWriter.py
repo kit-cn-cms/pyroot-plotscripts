@@ -125,7 +125,7 @@ class scriptWriter:
                                         self.pp.configData.getDiscriminatorPlots())
 
         # start event loop
-        script += scriptfunctions.DefineLHAPDF()
+        # script += scriptfunctions.DefineLHAPDF() #TODO why is this line not in karims new script?
         startLoopStub = scriptfunctions.startLoop(self.pp.analysis.pyrootdir)
 
         if castStub!="":
@@ -379,7 +379,7 @@ class scriptWriter:
 
 
     ## run scripts ##
-    def writeRunScripts(self, writeScripts = True):
+    def writeRunScripts(self):
         # init outputs
         self.scripts = []
         self.outputs = []
@@ -397,8 +397,7 @@ class scriptWriter:
     
         # looping over samples
         for sample in self.pp.configData.allSamples:
-            if writeScripts:
-                print '\ncreating scripts for',sample.name,'from',sample.path
+            print '\ncreating scripts for',sample.name,'from',sample.path
             self.samplewiseMaps[sample.nick] = []
 
             nEvents = 0
@@ -428,7 +427,7 @@ class scriptWriter:
                         nJob += 1
                         writeOptions = {"skipEvents": (ijob)*self.pp.maxevents}
 
-                        self.writeSingleScript(sample, filename, nJob, filterFile, writeOptions, writeScripts = writeScripts)
+                        self.writeSingleScript(sample, filename, nJob, filterFile, writeOptions)
                     self.nentries.append(nEventsInFile)
                     nEvents += nEventsInFile
 
@@ -439,7 +438,7 @@ class scriptWriter:
                     if nEventsInFiles > self.pp.maxevents or filename == sample.files[-1] or len(filesToSubmit)>400: 
                         nJob += 1
                         filenames = ' '.join(filesToSubmit)
-                        self.writeSingleScript(sample, filenames, nJob, filterFile, writeScripts = writeScripts)
+                        self.writeSingleScript(sample, filenames, nJob, filterFile)
 
                         self.nentries.append(nEventsInFiles)
                         nEvents += nEventsInFiles
@@ -455,7 +454,7 @@ class scriptWriter:
             if len(filesToSubmit) > 0:
                 nJob += 1
                 filenames = ' '.join(filesToSubmit)
-                self.writeSingleScript(sample, filenames, nJob, filterFile, writeScripts = writeScripts)
+                self.writeSingleScript(sample, filenames, nJob, filterFile)
                 
                 self.nentries.append(nEventsInFiles)
                 nEvents += nEventsInFiles
@@ -466,11 +465,10 @@ class scriptWriter:
             print '\t', nEvents, 'events found'
         
         # save tree information to json file
-        if writeScripts:
-            treejson = json.dumps(SaveTreeInforamtion)
-            with open(self.pp.analysis.workdir+'/'+"treejson.json","w") as jsonfile:
-                jsonfile.write(treejson)
-            print "Saved information about events in trees to ", self.pp.analysis.workdir+'/'+"treejson.json"
+        treejson = json.dumps(SaveTreeInforamtion)
+        with open(self.pp.analysis.workdir+'/'+"treejson.json","w") as jsonfile:
+            jsonfile.write(treejson)
+        print "Saved information about events in trees to ", self.pp.analysis.workdir+'/'+"treejson.json"
 
         returnData = {"scripts": self.scripts, 
                         "outputs": self.outputs, 
@@ -478,52 +476,51 @@ class scriptWriter:
                         "maps": self.samplewiseMaps}
         return returnData
 
-    def writeSingleScript(self, sample, filenames, nJob, filterFile, writeOptions = {}, writeScripts = True):
+    def writeSingleScript(self, sample, filenames, nJob, filterFile, writeOptions = {}):
         # defaults
         maxevents = self.pp.maxevents
         processname = sample.nick
         outfilename = self.pp.plotPath+processname+'_'+str(nJob)+'.root'
         scriptname = self.pp.scriptsPath+'/'+processname+'_'+str(nJob)+'.sh'
 
-        if writeScripts:
-            suffix = ""
-            skipevents = 0
+        suffix = ""
+        skipevents = 0
 
-            # check options
-            if "maxevents" in writeOptions:
-                maxevents = writeOptions["maxevents"]
-            if self.pp.analysis.cirun and maxevents < 100:
-                maxevents = 100
-            if "suffix" in writeOptions:
-                suffix = writeOptions["suffix"]
-            if "skipEvents" in writeOptions:
-                skipevents = writeOptions["skipEvents"]
+        # check options
+        if "maxevents" in writeOptions:
+            maxevents = writeOptions["maxevents"]
+        if self.pp.analysis.cirun and maxevents < 100:
+            maxevents = 100
+        if "suffix" in writeOptions:
+            suffix = writeOptions["suffix"]
+        if "skipEvents" in writeOptions:
+            skipevents = writeOptions["skipEvents"]
 
-            # writing script
-            script = "#!/bin/bash \n"
-            if self.pp.cmsswpath != '':
-                script += "export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch \n"
-                script += "source $VO_CMS_SW_DIR/cmsset_default.sh \n"
-                script += "export SCRAM_ARCH="+os.environ['SCRAM_ARCH']+"\n"
-                script += 'cd '+self.pp.cmsswpath+'/src\n'
-                script += 'eval `scram runtime -sh`\n'
-                script += 'cd - \n'
-            script += 'export PROCESSNAME="'+processname+'"\n'
-            script += 'export FILENAMES="'+filenames+'"\n'
-            script += 'export OUTFILENAME="'+outfilename+'"\n'
-            script += 'export MAXEVENTS="'+str(maxevents)+'"\n'
-            script += 'export SKIPEVENTS="'+str(skipevents)+'"\n'
-            script += 'export SUFFIX="'+suffix+'"\n'
-            script += 'export EVENTFILTERFILE="'+str(filterFile)+'"\n'
-            script += self.ccPath[:-3]+'\n'    
-            #DANGERZONE
-            script += 'python '+self.ccPath.replace('.cc','_rename.py')+'\n'
+        # writing script
+        script = "#!/bin/bash \n"
+        if self.pp.cmsswpath != '':
+            script += "export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch \n"
+            script += "source $VO_CMS_SW_DIR/cmsset_default.sh \n"
+            script += "export SCRAM_ARCH="+os.environ['SCRAM_ARCH']+"\n"
+            script += 'cd '+self.pp.cmsswpath+'/src\n'
+            script += 'eval `scram runtime -sh`\n'
+            script += 'cd - \n'
+        script += 'export PROCESSNAME="'+processname+'"\n'
+        script += 'export FILENAMES="'+filenames+'"\n'
+        script += 'export OUTFILENAME="'+outfilename+'"\n'
+        script += 'export MAXEVENTS="'+str(maxevents)+'"\n'
+        script += 'export SKIPEVENTS="'+str(skipevents)+'"\n'
+        script += 'export SUFFIX="'+suffix+'"\n'
+        script += 'export EVENTFILTERFILE="'+str(filterFile)+'"\n'
+        script += self.ccPath[:-3]+'\n'    
+        #DANGERZONE
+        script += 'python '+self.ccPath.replace('.cc','_rename.py')+'\n'
 
-            # writing script to file and chmodding
-            with open(scriptname, "w") as f:
-                f.write(script)
-            st = os.stat(scriptname)
-            os.chmod(scriptname, st.st_mode | stat.S_IEXEC)
+        # writing script to file and chmodding
+        with open(scriptname, "w") as f:
+            f.write(script)
+        st = os.stat(scriptname)
+        os.chmod(scriptname, st.st_mode | stat.S_IEXEC)
 
         # saving script info to lists
         self.scripts.append(scriptname)

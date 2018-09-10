@@ -4,16 +4,16 @@ import nafSubmit
 #############################
 # parallel plotting
 #############################
-def plotInterface(jobData, skip = False, maxTries = 10, nTries = 0):
-    if skip:
+def plotInterface(jobData, skipPlotParallel = False, maxTries = 10, nTries = 0):
+    if skipPlotParallel:
         jobData = plotTerminationCheck( jobData )
         if len(jobData["scripts"]) > 0 or len(jobData["outputs"]) > 0:
-            print(str(len(jobData["scripts"])) + " plotParallel scripts did not terminate successfully - resubmitting")
+            print("not all plotParallel scripts did terminate successfully - resubmitting")
         else:
-            print("all plotParallel scripts have terminated successfully - skipping")
+            print("all plotParallel scripts have terminated successfully - skipping plotParallel")
             return
 
-    submitOptions = {"PeriodicHold": 3600}
+    submitOptions = {"PeriodicHold": 4500}
     if nTries == 0:
         print("submitting plotParallel scripts as array job")
         jobIDs = nafSubmit.submitArrayToNAF(jobData["scripts"], "plotPara", submitOptions = submitOptions)
@@ -40,10 +40,11 @@ def plotTerminationCheck(jobData):
     undoneJobData["scripts"] = []
     undoneJobData["outputs"] = []
     undoneJobData["entries"] = []
+    samplewiseMaps = {}
     noCutflow = 0
     wrongEntry = 0
 
-    for script, output, entries in zip(jobData["scripts"], jobData["outputs"], jobData["entries"]):
+    for script, output, entries, mapKey in zip(jobData["scripts"], jobData["outputs"], jobData["entries"], jobData["maps"]):
         if os.path.exists(output+".cutflow.txt"):
             cfFile = open(output+".cutflow.txt")
             processedEntries = -1
@@ -62,7 +63,9 @@ def plotTerminationCheck(jobData):
         undoneJobData["scripts"].append( script )
         undoneJobData["outputs"].append( output ) 
         undoneJobData["entries"].append( entries ) 
+        samplewiseMaps[mapKey] = jobData["maps"][mapKey]
 
+    undoneJobData["maps"] = samplewiseMaps
     print("-"*50)
     print("done checking job outputs after plotpara - results:")
     print("jobs without cutflow file:     " +str(noCutflow))

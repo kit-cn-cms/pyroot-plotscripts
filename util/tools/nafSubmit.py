@@ -22,7 +22,7 @@ def writeSubmitCode(script, logdir, hold = False, isArray = False, nScripts = 0,
     # handling options
     defaults = {"RequestMemory": "1000M",
                 "RequestDisk": "1000M",
-                "+RequestRuntime": 2000,
+                "+RequestRuntime": 4800,
                 "PeriodicHold": 1000,
                 "PeriodicRelease": 5}
     for opt in defaults:
@@ -301,7 +301,7 @@ def monitorJobStatus(jobIDs = None):
     command = [str(c) for c in command]
   command.append("-totals")
   sTime = time.time()
-  csv = "t, run, idle, held\n"
+  csv = "t,run,idle,held\n"
   while not allfinished:
     time.sleep(30)
     # calling condor_q command
@@ -337,6 +337,8 @@ def monitorJobStatus(jobIDs = None):
         return
 
   print("all jobs are finished - exiting monitorJobStatus")
+  print("="*50)
   print("csv file print out")
   print(csv)
+  print("="*50)
   return

@@ -31,13 +31,8 @@ def main(pyrootdir, argv):
     # welcome to main function - defining some variables
     # ========================================================
     '''
-    # BIG TODO: decide what needs to be initialized by the secondary scripts
-    # maybe give some information as an argument instead of doing it all over again
-    # initializing everything only takes < 1 minute per script but takes a lot of disk i think
-
     # name of the analysis (i.e. workdir name)
-    name = 'testLimits'
-    scriptType = "limits" # "controlPlots"
+    name = 'testLimitsAll'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -48,6 +43,7 @@ def main(pyrootdir, argv):
         print("created workdir at "+str(workdir))
     
     # path to root file
+    # how is this name determined in different script types?
     rootPathForAnalysis = workdir+'/output_limitInput.root'
 
     # signal process
@@ -57,11 +53,9 @@ def main(pyrootdir, argv):
     discrName = 'finaldiscr'
 
     # define MEM discriminator variable
-    # this is not used anymore as the information is written in the csv files in configdata
-    # keep it for clarity
     memexp = '(memDBp>0.0)*(memDBp)+(memDBp<=0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
-    # define BDT output variables (not used anymore)
+    # define BDT output variables (is this still used?)
     # bdtweightpath = "/nfs/dust/cms/user/kelmorab/Spring17BDTWeights/"
     # bdtset = "Spring17v2"
     # alternativebdtset = "Spring17v3_ttbb"
@@ -70,6 +64,8 @@ def main(pyrootdir, argv):
     configDataBaseName = "limitsAllv20"
 
     # options for plotParallel
+    # TODO: this list contains both lists below
+    #       but is not used yet - need to implement into analysisClass
     options = {
         # options for analysis in general
         "singleExecute":        False,
@@ -83,6 +79,7 @@ def main(pyrootdir, argv):
         "makeSimplePlots":      True,
         "makeDataCards":        True,
         "makeMCControlPlots":   True,
+        "makeEventYields":      False,
         # options for trying to skip steps
         "useOldRoot":           False,
         "skipPlotParallel":     False,
@@ -92,7 +89,7 @@ def main(pyrootdir, argv):
         "skipDatacards":        False}
         
     plotOptions = {
-        "cirun":                True,  
+        "cirun":                False,  
         "haddParallel":         True, 
         "useOldRoot":           False,
         # the skipXXX options try to skip the submission of files to the batch system
@@ -107,15 +104,17 @@ def main(pyrootdir, argv):
     # general analysis Options
     analysisOptions = {
         "singleExecute":        False,
-        "optimizedRebinning":   True,
+        "optimizedRebinning":   False,
         "plotBlinded":          True,
         "makeSimplePlots":      True,
         "makeMCControlPlots":   True,
         "makeDataCards":        True,
+        "makeEventYields":      False,
         "drawParallel":         True,
         "addData":              False}
 
-    plotJson = "/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_latestAndGreatest.json"
+    #plotJson = "/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_latestAndGreatest.json"
+    plotJson = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/treejson_v13.json"
     plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]] 
     plotInterfaces = ["../util/dNNInterfaces/dNNInterface_V6.py"]
 
@@ -135,7 +134,7 @@ def main(pyrootdir, argv):
     # TODO make the analysisClass more essential - atm it is not really needed
     analysis = configClass.analysisConfig(
         workdir = workdir, pyrootdir = pyrootdir, rootPath = rootPathForAnalysis, 
-        signalProcess = signalProcess, discrName = discrName, scriptType = scriptType)
+        signalProcess = signalProcess, discrName = discrName)
 
     analysis.initArguments( argv )
     analysis.initPlotOptions( plotOptions )
@@ -267,6 +266,7 @@ def main(pyrootdir, argv):
         pP.checkHaddFiles()
         pP.checkTermination()
 
+        monitor.printClass(pP, "after plotParallel")
 
         if analysis.optimizedRebinning:
         #if analysis.getActivatedOptimizedRebinning():
@@ -276,7 +276,7 @@ def main(pyrootdir, argv):
             # ========================================================
             '''
             #TODO rework
-            if analysis.getSignalProcess() == 'ttbb':
+            if analysis.signalProcess == 'ttbb':
                 # samples[0:2]: tt+bb, tt+b, tt+2b as signal for S over b normalization
                 # TODO check the optimizedBinning function and adjust arguments to new structure
                 # TODO rework samples splitting to be automated in samplesDataClass?
@@ -290,13 +290,13 @@ def main(pyrootdir, argv):
                         plots = configData.getDiscriminatorPlots(), 
                         systnames = configData.allSystNames, 
                         minBkgPerBin = 2.0, 
-                        optMode = analysis.getOptimzedRebinning(),
+                        optMode = analysis.optimzedRebinning,
                         considerStatUnc = False, 
                         maxBins = 20, 
                         minBins = 2,
                         verbosity = 2)
 
-            elif analysis.getSignalProcess() == 'ttH':
+            elif analysis.signalProcess == 'ttH':
                 # samples: ttH as signal. ttH_bb, ttH_XX as additional samples together with data. 
                 # Rest: background samples
                 with monitor.Timer("optimizeBinning"):
@@ -308,7 +308,7 @@ def main(pyrootdir, argv):
                         plots = configData.getDiscriminatorPlots(), 
                         systnames = configData.allSystNames, 
                         minBkgPerBin = 2.0, 
-                        optMode = analysis.getOptimzedRebinning(),
+                        optMode = analysis.optimizedRebinning,
                         considerStatUnc = False, 
                         maxBins = 20, 
                         minBins = 2,
@@ -384,7 +384,7 @@ def main(pyrootdir, argv):
         
 
         pP.checkTermination()       
-        monitor.printClass(pP, "after plot parallel completely done")
+        monitor.printClass(pP, "after plotParallel completely done")
 
         print("########## DONE WITH PLOTPARALLEL STEP ##########")
         print("at the moment the outputpath is "+str(analysis.limitPath))
@@ -465,8 +465,8 @@ def main(pyrootdir, argv):
                 plotdir = analysis.getPlotPath(),
                 rebin = 1)
 
-            gP.genList(samples = configData.samples, listName = "histoList")
-            gP.genList(samples = configData.controlSamples, listName = "dataList")
+            histoList = gP.genList(samples = configData.samples, listName = "histoList")
+            dataList = gP.genList(samples = configData.controlSamples, listName = "dataList")
             monitor.printClass(gP, "after creating init lists")
 
 
@@ -491,7 +491,7 @@ def main(pyrootdir, argv):
                     "stack": True, # not default
                     "ratio": False,
                     "sepaTest": False}
-                gP.makeSimpleControlPlots( listName = "histoList", listIndex = 9, options = controlPlotsOptions)
+                gP.makeSimpleControlPlots( listName = histoList, listIndex = 9, options = controlPlotsOptions)
 
                 # creating shape plots
                 shapePlotsOptions = {
@@ -502,7 +502,7 @@ def main(pyrootdir, argv):
                     "ratio": False,
                     "statTest": False,
                     "sepaTest": False}
-                gP.makeSimpleShapePlots( listName = "histoList", listIndex = 9, options = shapePlotsOptions)
+                gP.makeSimpleShapePlots( listName = dataList, listIndex = 9, options = shapePlotsOptions)
 
                 monitor.printClass(gP, "after making simple MC plots")
 
@@ -518,7 +518,7 @@ def main(pyrootdir, argv):
             with monitor.Timer("makingMCControlPlots"):
 
                 # generate the llloflist internally
-                gP.genNestedHistList(listName = "histoList", listIndex = 9, 
+                gP.genNestedHistList(listName = histoList, listIndex = 9, 
                     systNames = pltcfg.errorSystNamesNoQCD, 
                     outName = "histoList")
 
@@ -540,18 +540,13 @@ def main(pyrootdir, argv):
                     "blinded": analysis.plotBlinded} #not default
                 # makint the control plots
                 gP.makeControlPlots(
-                    dataConfig = {"name": "dataList", "index": 0},
-                    controlConfig = {"name": "histoList", "index": 9},
-                    sampleConfig = {"name": "histoLIst", "index": 9},
-                    headHist = "signalList",
-                    headSample = "signalList",
+                    dataConfig = genPlots.Config(name = dataList, index = 0),
+                    controlConfig = genPlots.Config(name = histoList, index = 9),
+                    sampleConfig = genPlots.Config(name = histoList, index = 9),
+                    headHist = histoList,
+                    headSample = histoList,
                     nestedHistsConfig = nestedHistsConfig,
                     options = controlPlotsOptions)
-
-
-                    #listName = "histoList", listIndex = 9,
-                    #dataName = "dataList", nestedHistsConfig = nestedHistsConfig,
-                    #options = controlPlotsOptions )
 
             monitor.printClass(gP, "after making control plots")
 
@@ -564,8 +559,8 @@ def main(pyrootdir, argv):
             with monitor.Timer("makeEventYields"):
                 gP.makeEventYields(
                     categories = configData.getEventYieldCategories(),
-                    listName = "histoList",
-                    dataName = "dataList",
+                    listName = histoList,
+                    dataName = dataList,
                     nameRequirement = "JT"
                     )
 

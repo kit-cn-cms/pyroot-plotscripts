@@ -13,7 +13,10 @@ def optimizeBinning(infname, signalsamples = [], backgroundsamples = [], additio
         exit(0)
     
     # copy existing ROOT file as a backup we will write stuff into the existing file name
-    os.system('cp '+ infname + ' ' + infname[:-5] + '_preRebinning.root')
+    cmd = 'cp '+ infname + ' ' + infname.replace(".root", "_preRebinning.root")
+    print("copying existing ROOT file as backup:")
+    print(cmd)
+    os.system(cmd)
     
             
     theclock = ROOT.TStopwatch()
@@ -30,24 +33,28 @@ def optimizeBinning(infname, signalsamples = [], backgroundsamples = [], additio
         theBkgClone = None
 
         #add signal samples
-        print "getting ", signalsamples[0].nick+'_'+plot.name
-
-        s0 = infile.Get(signalsamples[0].nick+'_'+plot.name)
+        sName = signalsamples[0].nick+'_'+plot.name
+        print("getting " + str(sName))
+        
+        s0 = infile.Get(sName)
         theobjectlist.append(s0)
-        theSignalClone = s0.Clone('signalClone_'+signalsamples[0].nick+'_'+plot.name)
+        theSignalClone = s0.Clone('signalClone_'+sName)
 
         for ss in signalsamples[1:]:
-            sx = infile.Get(ss.nick+'_'+plot.name)
+            sName = ss.nick+"_"+plot.name
+            sx = infile.Get(sName)
             theobjectlist.append(sx)
             theSignalClone.Add(sx)
 
         #add background samples
-        b0 = infile.Get(backgroundsamples[0].nick+'_'+plot.name)
+        bName = backgroundsamples[0].nick+'_'+plot.name
+        b0 = infile.Get(bName)
         theobjectlist.append(b0)
-        theBkgClone = b0.Clone('backgroundClone_'+backgroundsamples[0].nick+'_'+plot.name)
+        theBkgClone = b0.Clone('backgroundClone_'+bName)
 
         for bs in backgroundsamples[1:]:
-            bx = infile.Get(bs.nick+'_'+plot.name)
+            bName = bs.nick+'_'+plot.name
+            bx = infile.Get(bName)
             theobjectlist.append(bx)
             theBkgClone.Add(bx)
 
