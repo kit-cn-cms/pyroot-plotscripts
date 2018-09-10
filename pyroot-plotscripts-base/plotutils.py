@@ -2394,7 +2394,7 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         objects.append(otc)
 
         #draw the lumi text on the canvas
-        CMS_lumi.lumi_13TeV = "35.9 fb^{-1}"
+        CMS_lumi.lumi_13TeV = "41.3 fb^{-1}"
         CMS_lumi.writeExtraText = 1
         #CMS_lumi.extraText = "Preliminary"
         CMS_lumi.extraText = ""
