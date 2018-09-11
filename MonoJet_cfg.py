@@ -1,5 +1,6 @@
 import sys
 import os
+import csv
 sys.path.append('pyroot-plotscripts-base')
 sys.path.append('pyroot-plotscripts-base/limittools')
 
@@ -219,7 +220,7 @@ samples_background = [
 samples_signal = [
                         Sample('AV|M1000|m300',ROOT.kRed,path_ntuples+'/DMV_NNPDF30_Axial_Mphi-1000_Mchi-300_gSM-0p25_gDM-1p0_v2_13TeV-powheg/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'SIG_AV_M1000_m300',weightSystNames,samDict=sampleDict),
                  ]
-"""
+
 
 samples_signal = [
                         Sample('AV|M1000|m300',ROOT.kRed,path_ntuples+'/Axial_MonoJ_NLO_Mphi-1000_Mchi-300_gSM-0p25_gDM-1p0_13TeV-madgraph/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'SIG_AV_M1000_m300',weightSystNames[:-2],samDict=sampleDict),
@@ -227,7 +228,9 @@ samples_signal = [
                  ]
 
 """
-signal_samples_paths = glob.glob(path_ntuples+'/'+'*MonoJ*NLO*')
+csvfile = open("/nfs/dust/cms/user/mwassmer/DarkMatter/pyroot-plotscripts/Madgraph_Signal_XS.csv","r")
+reader = csv.DictReader(csvfile)
+signal_samples_paths = glob.glob(path_ntuples+'/'+'*Axial*MonoJ*NLO*')
 signal_samples_names = []
 for i in range(len(signal_samples_paths)):
     signal_samples_paths[i]=signal_samples_paths[i]+'/'+'*nominal*.root'
@@ -236,8 +239,18 @@ for i in range(len(signal_samples_paths)):
 
 samples_signal = []
 for i in range(len(signal_samples_names)):
-    samples_signal.append(Sample(signal_samples_names[i],ROOT.kRed,signal_samples_paths[i],"1."+"*"+MCWeight+sel_MET,signal_samples_names[i],[""],samDict=sampleDict))
+    csvfile.seek(0)
+    xs = None
+    for row in reader:
+        if not signal_samples_names[i]==str(row['sample']).replace("_13TeV-madgraph","").replace("-","_"):
+            continue
+        else:
+            xs = str(row['xs'])
+    if xs == None:
+        print "reading of signal cross section went wrong"
+        exit()
+    samples_signal.append(Sample(signal_samples_names[i],ROOT.kRed,signal_samples_paths[i],"1.*"+xs+"*"+MCWeight+sel_MET,signal_samples_names[i],[""],samDict=sampleDict))
     
-print samples_signal
-print signal_samples_names
-"""
+#print samples_signal
+#print signal_samples_names
+
