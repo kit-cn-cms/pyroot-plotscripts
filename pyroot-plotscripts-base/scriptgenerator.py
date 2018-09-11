@@ -246,7 +246,7 @@ LeptonSFHelper::LeptonSFHelper( ){
   muonMaxPt = 119.0;
   muonMaxPtHigh = 1199.;       //TH2 Trigger SF histos from Fall17 are binned up to 1200 GEV 
   muonMinPt = 20.0;
-  muonMinPtHigh = 20.0;
+  muonMinPtHigh = 29.0;
   
   muonMaxEta = 2.39;
   
