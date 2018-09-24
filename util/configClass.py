@@ -360,12 +360,12 @@ class configData:
     def getBinlabels(self):
         return self.Data.binlabels
 
-    def getAddVariables(self, BDTWeightPath, BDTSet):
+    def getAddVariables(self):
         sys.path.append(self.cfgdir)
         fileName = self.basename+"_addVariables"
         print("getting additional variables from "+str(fileName))
         addVarModule = importlib.import_module( fileName )
-        self.addVars = addVarModule.getAddVars( BDTWeightPath, BDTSet )
+        self.addVars = addVarModule.getAddVars()
 
     def getMEPDFAddVariables(self, csvfile):
         self.addVars += PDFutils.GetMEPDFadditionalVariablesList(csvfile)

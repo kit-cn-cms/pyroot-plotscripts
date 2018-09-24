@@ -12,7 +12,7 @@ def getSamples( pltcfg ):
 def getControlSamples( pltcfg ):
     return pltcfg.samplesDataControlPlots
 
-def gatherSystSamples(pltcfg, analysis, samples):
+def getSystSamples(pltcfg, analysis, samples):
     systSamples = []
 
     # adding other samples
@@ -64,6 +64,9 @@ def gatherSystSamples(pltcfg, analysis, samples):
 
 
     return systSamples
+
+def getAllSamples( pltcfg, analysis, samples ):
+    return getSamples(pltcfg) + getControlSamples(pltcfg) + getSystSamples(pltcfg, analysis, samples)
 
 def getAllSystNames( pltcfg ):
     return pltcfg.weightSystNames+pltcfg.otherSystNames+pltcfg.PSSystNames+pltcfg.QCDSystNames

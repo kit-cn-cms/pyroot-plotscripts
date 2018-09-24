@@ -1,27 +1,28 @@
 def getAddVars():
     BDTWeightPath = "/nfs/dust/cms/user/kelmorab/Spring17BDTWeights/"
-    BDTSet = "Spring17v1"
+    BDTSet = "Spring17v2"
+    alternativeBDTSet = "Spring17v3_ttbb"
 
     addVars = [
-        "Jet_Pt",
-        "Muon_Pt",
+        "Jet_Pt", 
+        "Muon_Pt", 
         "Electron_Pt",
-        "Jet_Eta",
-        "Muon_Eta",
+        "Jet_Eta", 
+        "Muon_Eta", 
         "Electron_Eta",
         "Muon_Pt_BeForeRC",
         "Electron_Pt_BeforeRun2Calibration",
         "Electron_Eta_Supercluster",
-        "Jet_CSV",
-        "Jet_Flav",
-        "N_Jets",
-        "Jet_E",
-        "Jet_Phi",
+        "Jet_CSV", 
+        "Jet_Flav", 
+        "N_Jets", 
+        "Jet_E", 
+        "Jet_Phi", 
         "Jet_M",
         "Evt_Pt_PrimaryLepton",
         "Evt_E_PrimaryLepton",
         "Evt_M_PrimaryLepton",
-        "Evt_Phi_PrimaryLepton",
+        "Evt_Phi_PrimaryLepton",        
         "Evt_Eta_PrimaryLepton",
         "Evt_Phi_MET",
         "Evt_Pt_MET",
@@ -44,6 +45,20 @@ def getAddVars():
         "Weight_CSVCErr2down",
         "Evt_blr_ETH",
         "Evt_blr_ETH_transformed",
+
+        'conditionFor_finalbdt_ljets_j4_t3:=(N_Jets==4 && N_BTagsM==3)',
+        'conditionFor_finalbdt_ljets_j4_t4:=(N_Jets==4 && N_BTagsM==4)',
+        'conditionFor_finalbdt_ljets_j5_t3:=(N_Jets==5 && N_BTagsM==3)',
+        'conditionFor_finalbdt_ljets_j5_tge4:=(N_Jets==5 && N_BTagsM>=4)',
+        'conditionFor_finalbdt_ljets_jge6_t2:=(N_Jets>=6 && N_BTagsM==2)',
+        'conditionFor_finalbdt_ljets_jge6_t3:=(N_Jets>=6 && N_BTagsM==3)',
+        'conditionFor_finalbdt_ljets_jge6_tge4:=(N_Jets>=6 && N_BTagsM>=4)',
+        'conditionFor_alternativebdt_ljets_jge6_tge4:=(N_Jets>=6 && N_BTagsM>=4)',
+        'conditionFor_alternativebdt_ljets_jge6_t3:=(N_Jets>=6 && N_BTagsM==3)',
+        'conditionFor_alternativebdt_ljets_j5_tge4:=(N_Jets==5 && N_BTagsM>=4)',
+        'conditionFor_alternativebdt_ljets_j4_t4:=(N_Jets==4 && N_BTagsM==4)',
+        "GenEvt_I_TTPlusBB","GenEvt_I_TTPlusCC",
+
         'finalbdt_ljets_j4_t2:=Evt_HT_Jets',
         'finalbdt_ljets_j5_t2:=Evt_HT_Jets',
         'finalbdt_ljets_j4_t3:='+BDTWeightPath+'/weights_Final_43_'+BDTSet+'.xml',
@@ -53,5 +68,13 @@ def getAddVars():
         'finalbdt_ljets_jge6_t2:='+BDTWeightPath+'/weights_Final_62_'+BDTSet+'.xml',
         'finalbdt_ljets_jge6_t3:='+BDTWeightPath+'/weights_Final_63_'+BDTSet+'.xml',
         'finalbdt_ljets_jge6_tge4:='+BDTWeightPath+'/weights_Final_64_'+BDTSet+'.xml',
+        'alternativebdt_ljets_jge6_tge4:='+BDTWeightPath+'/weights_Final_64_'+alternativeBDTSet+'.xml',
+        'alternativebdt_ljets_jge6_t3:='+BDTWeightPath+'/weights_Final_63_'+alternativeBDTSet+'.xml',
+        'alternativebdt_ljets_j5_tge4:='+BDTWeightPath+'/weights_Final_54_'+alternativeBDTSet+'.xml',
+        'alternativebdt_ljets_j4_t4:='+BDTWeightPath+'/weights_Final_44_'+alternativeBDTSet+'.xml',
+        'hardestJetPt:=Jet_Pt[0]',
         ]
     return addVars
+
+
+    

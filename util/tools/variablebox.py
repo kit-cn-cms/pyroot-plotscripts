@@ -198,7 +198,9 @@ class Variables:
                 self.initSingleVar(tree, name, expr, "F")
             else:
                 varNames = self.getVarNames(expr)
+                print("got varNames from getVarNames - initing singlevars")
                 for name in varNames:
+                    print("staring with single var: "+str(name))
                     self.initSingleVar(tree, name, name, "F")
         else:
             print("input for initVars should either be a list of expressions or an expression (str)")
@@ -215,6 +217,7 @@ class Variables:
     def initSingleVar(self, tree, name, expression = '', vartype = 'F', arraylength=None):
         if name in self.variables or name in self.vetolist:
             # dont use variables in vetolist or already used
+            print("var "+str(name)+" already in variables or vetolist - skipping")
             return
 
         # if variable fulfils any of these conditions init the variable
@@ -234,6 +237,7 @@ class Variables:
         
         # handle formular expression by recursive function
         # splits formular based on bracets
+        print("non of the checks succeeded - returning to initvars for expression "+str(expression))
         print("init vars for "+str(expression))
         self.initVars(expression, tree)
         
@@ -242,7 +246,6 @@ class Variables:
         self.variables[name].initVar(tree, self)
         return
     ## -----------------------------------------------
-
 
     
     ## init variables for CC program and write code ##

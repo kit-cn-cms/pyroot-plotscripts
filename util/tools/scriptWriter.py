@@ -236,7 +236,7 @@ class scriptWriter:
         vetolist = list(dataFrame.vetolist)
 
         #self.pp.MEPDFCSVFile = self.pp.plotbase + /data/rate_factors_onlyinternal_powhegpythia.csv
-        if self.pp.MEPDFCSVFile!="":
+        if self.pp.useLHEWeights:
             vetolist += scriptfunctions.GetMEPDFVetoList(self.pp.MEPDFCSVFile)
 
         for addCodeInt in self.pp.addInterfaces:
@@ -260,6 +260,9 @@ class scriptWriter:
         variables = variablebox.Variables(self.vetolist)
         # get standard variables
         standardvars = ['Weight','Weight_CSV','Weight_XS']
+        print("tree")
+        print(tree)
+        print(type(tree))
         variables.initVars(standardvars, tree)
 
 

@@ -55,11 +55,6 @@ def main(pyrootdir, argv):
     # define MEM discriminator variable
     memexp = '(memDBp>0.0)*(memDBp)+(memDBp<=0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
-    # define BDT output variables (is this still used?)
-    # bdtweightpath = "/nfs/dust/cms/user/kelmorab/Spring17BDTWeights/"
-    # bdtset = "Spring17v2"
-    # alternativebdtset = "Spring17v3_ttbb"
-
     # name of the csv files used in configdata folder
     configDataBaseName = "limitsAllv20"
 
