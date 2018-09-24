@@ -52,6 +52,7 @@ class plotParallel:
         self.useDataBases = False
         self.addInterfaces = []
         self.MEPDFCSVFile = ""
+        self.useLHEWeights = False
         
         # check cmssw
         self.cmsswpath = os.environ['CMSSW_BASE']
@@ -98,8 +99,9 @@ class plotParallel:
         
     def setMEPDFCSV(self, csvfile):
         self.MEPDFCSVFile = csvfile
-        print("set MEPDFCSVFile to "+str(csvfile))
-        
+        self.useLHEWeights = True
+        print("set MEPDFCSVFile to "+str(csvfile)+" and useLHEWeights to TRUE")
+       
     def setMaxEvts(self, maxevts):
         self.maxevents = maxevts
         print("set maxevents to "+str(maxevts))

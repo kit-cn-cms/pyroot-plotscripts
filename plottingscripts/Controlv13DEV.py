@@ -51,12 +51,11 @@ def main(pyrootdir, argv):
     # define MEM discriminator variable
     memexp = '(memDBp>0.0)*(memDBp)+(memDBp<=0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
-    # define BDT output variables for additional variables
-    BDTWeightPath = "/nfs/dust/cms/user/kelmorab/Spring17BDTWeights/"
-    BDTSet = "Spring17v1"
-
     # name of the csv files used in configdata folder
     configDataBaseName = "controlPlotsv13"
+
+    # file for MEPDFs/LHEWeights
+    MEPDFCSVFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv"
 
     # options for plotParallel
     plotOptions = {
@@ -155,9 +154,8 @@ def main(pyrootdir, argv):
     # define additional variables necessary for selection in plotparallel
     # ========================================================
     '''
-    configData.getAddVariables( BDTWeightPath, BDTSet )
-    #configData.getMEPDFAddVariables(
-    #    "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv")
+    configData.getAddVariables()
+    #configData.getMEPDFAddVariables( MEPDFCSVFile )
     # TODO additionalvariables.extend(NNFlowInterface.getAdditionalVariablesList())
     monitor.printClass(configData, "after getting additional Variables")
 
@@ -217,6 +215,7 @@ def main(pyrootdir, argv):
             pP.setJson(plotJson)
             pP.setDataBases(plotDataBases)
             pP.setAddInterfaces(plotInterfaces)
+            # pP.setMEPDFCSV( MEPDFCSVFile )
             # pP.setCatNames([''])
             # pP.setCatSelections(['1.'])
             # pP.setSystNames(pltcfg.weightSystNames)
