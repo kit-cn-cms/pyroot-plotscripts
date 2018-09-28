@@ -12,12 +12,13 @@ weightSystNames=["",
                  "_CMS_btag_hfstats2Up","_CMS_btag_hfstats2Down","_CMS_btag_lfstats2Up","_CMS_btag_lfstats2Down",
                  "_CMS_btag_cferr1Up","_CMS_btag_cferr1Down","_CMS_btag_cferr2Up","_CMS_btag_cferr2Down",
                  "_Weight_PUUp","_Weight_PUDown",
+                 "_Weight_MuonSFIDUp","_Weight_MuonSFIDDown","_Weight_MuonSFIsoUp","_Weight_MuonSFIsoDown","_Weight_MuonSFHIPUp","_Weight_MuonSFHIPDown","_Weight_MuonSFTriggerUp","_Weight_MuonSFTriggerDown",
                  "_Weight_scale_variation_muRUp","_Weight_scale_variation_muRDown","_Weight_scale_variation_muFUp","_Weight_scale_variation_muFDown",
                  "_Weight_PDFUp","_Weight_PDFDown"
                  ]
 
 
-common_weight= "1.0*Weight_GEN_nom*Weight_CSV*Weight_pu69p2*internalBosonWeight_nominal*internalMuIDWeight*internalMuIsoWeight*internalMuHIPWeight"
+common_weight= "1.0*Weight_GEN_nom*Weight_CSV*Weight_pu69p2*internalBosonWeight_nominal*Weight_MuonSFID*Weight_MuonSFIso*Weight_MuonSFHIP*((Weight_MuonSFTrigger>0)*Weight_MuonSFTrigger+(Weight_MuonSFTrigger<=0)*1.)"
 
 
 systWeights=[   "NomWeight:="+common_weight+"*(DoWeights==1)+(DoWeights==0)*1.0",
@@ -39,6 +40,14 @@ systWeights=[   "NomWeight:="+common_weight+"*(DoWeights==1)+(DoWeights==0)*1.0"
                 "dummyWeight_CSVCErr2down:="+common_weight+"*Weight_CSVCErr2down*(DoWeights==1)+(DoWeights==0)*1.0",
                 "dummyWeight_PUup:="+common_weight+"*Weight_pu69p2Up/Weight_pu69p2*(DoWeights==1)+(DoWeights==0)*1.0",
                 "dummyWeight_PUdown:="+common_weight+"*Weight_pu69p2Down/Weight_pu69p2*(DoWeights==1)+(DoWeights==0)*1.0",
+                "dummyWeight_MuonSFIDup:="+common_weight+"*Weight_MuonSFID_Up/Weight_MuonSFID*(DoWeights==1)+(DoWeights==0)*1.0",
+                "dummyWeight_MuonSFIDdown:="+common_weight+"*Weight_MuonSFID_Down/Weight_MuonSFID*(DoWeights==1)+(DoWeights==0)*1.0",
+                "dummyWeight_MuonSFIsoup:="+common_weight+"*Weight_MuonSFIso_Up/Weight_MuonSFIso*(DoWeights==1)+(DoWeights==0)*1.0",
+                "dummyWeight_MuonSFIsodown:="+common_weight+"*Weight_MuonSFIso_Down/Weight_MuonSFIso*(DoWeights==1)+(DoWeights==0)*1.0",
+                "dummyWeight_MuonSFHIPup:="+common_weight+"*Weight_MuonSFHIP_Up/Weight_MuonSFHIP*(DoWeights==1)+(DoWeights==0)*1.0",
+                "dummyWeight_MuonSFHIPdown:="+common_weight+"*Weight_MuonSFHIP_Down/Weight_MuonSFHIP*(DoWeights==1)+(DoWeights==0)*1.0",
+                "dummyWeight_MuonSFTriggerup:="+common_weight+"*((Weight_MuonSFTrigger_Up>0)*Weight_MuonSFTrigger_Up+(Weight_MuonSFTrigger_Up<=0)*1.)/((Weight_MuonSFTrigger>0)*Weight_MuonSFTrigger+(Weight_MuonSFTrigger<=0)*1.)*(DoWeights==1)+(DoWeights==0)*1.0",
+                "dummyWeight_MuonSFTriggerdown:="+common_weight+"*((Weight_MuonSFTrigger_Down>0)*Weight_MuonSFTrigger_Down+(Weight_MuonSFTrigger_Down<=0)*1.)/((Weight_MuonSFTrigger>0)*Weight_MuonSFTrigger+(Weight_MuonSFTrigger<=0)*1.)*(DoWeights==1)+(DoWeights==0)*1.0",
                 "dummyWeight_scale_variation_muRup:="+common_weight+"*internalBosonWeight_muRUp/internalBosonWeight_nominal*fabs(Weight_scale_variation_muR_2p0_muF_1p0)*(DoWeights==1)+(DoWeights==0)*1.0",
                 "dummyWeight_scale_variation_muRdown:="+common_weight+"*internalBosonWeight_muRDown/internalBosonWeight_nominal*fabs(Weight_scale_variation_muR_0p5_muF_1p0)*(DoWeights==1)+(DoWeights==0)*1.0",
                 "dummyWeight_scale_variation_muFup:="+common_weight+"*internalBosonWeight_muFUp/internalBosonWeight_nominal*fabs(Weight_scale_variation_muR_1p0_muF_2p0)*(DoWeights==1)+(DoWeights==0)*1.0",
@@ -160,7 +169,8 @@ sampleDict=SampleDictionary()
 sampleDict.doPrintout()
 
 #sel_MET="*((Triggered_HLT_PFMET170_X==1)||(Triggered_HLT_PFMETNoMu100_PFMHTNoMu100_IDTight_X==1)||(Triggered_HLT_PFMETNoMu110_PFMHTNoMu110_IDTight_X==1)||(Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_X==1)||(Triggered_HLT_PFMETNoMu90_PFMHTNoMu90_IDTight_X==1))*(N_LooseMuons==2)*(N_LooseElectrons==0)*(N_LooseTaus==0)*(N_TightMuons>0)*(Zmumu_Mass>60)*(Zmumu_Mass<120)*(Muon_Charge[0]!=Muon_Charge[1])"
-sel_MET="*(Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_X==1)*(N_LooseMuons==2)*(N_LooseElectrons==0)*(N_LooseTaus==0)*(N_TightMuons>0)*(Zmumu_Mass>60)*(Zmumu_Mass<120)*(Muon_Charge[0]!=Muon_Charge[1])"
+#sel_MET="*(Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_X==1)*(N_LooseMuons==2)*(N_LooseElectrons==0)*(N_LooseTaus==0)*(N_TightMuons>0)*(Zmumu_Mass>60)*(Zmumu_Mass<120)*(Muon_Charge[0]!=Muon_Charge[1])"
+sel_MET="*((Triggered_HLT_IsoMu24_vX==1)||(Triggered_HLT_IsoTkMu24_vX==1))*(N_LooseMuons==2)*(N_LooseElectrons==0)*(N_LooseTaus==0)*(N_TightMuons>0)*(Zmumu_Mass>60)*(Zmumu_Mass<120)*(Muon_Charge[0]!=Muon_Charge[1])*((DoWeights==1)*(Weight_MuonSFID>0.)+(DoWeights==0)*1.0)"
 """
 Triggered_HLT_EcalHT800
 Triggered_HLT_Ele105_CaloIdVT_GsfTrkIdT

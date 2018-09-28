@@ -30,7 +30,8 @@ additionalvariables=[    "N_TightMuons","N_TightElectrons","Evt_Pt_PrimaryLepton
                          "Weight_CSVLFStats1up","Weight_CSVLFStats1down","Weight_CSVHFStats2up","Weight_CSVHFStats2down","Weight_CSVLFStats2up","Weight_CSVLFStats2down",
                          "Weight_CSVCErr1up","Weight_CSVCErr1down","Weight_CSVCErr2up","Weight_CSVCErr2down","Weight_pu69p2",
                          "Evt_E_PrimaryLepton","Evt_Phi_PrimaryLepton","Evt_Eta_PrimaryLepton","Evt_M_PrimaryLepton","GenEvt_I_TTPlusCC","GenEvt_I_TTPlusBB","Weight_GenValue",
-                         "W_Pt", "Z_Pt","Weight_LHA_292200_up","Weight_LHA_292200_down","Weight_LHA_292200_nominal"
+                         "W_Pt", "Z_Pt","Weight_LHA_292200_up","Weight_LHA_292200_down","Weight_LHA_292200_nominal",
+                         "Weight_MuonSFID","Weight_MuonSFIso","Weight_MuonSFHIP","Weight_MuonSFTrigger"
                          ]
 additionalvariables+=GetMEPDFadditionalVariablesList("/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv")
 
@@ -58,7 +59,7 @@ plots_inclusive=[
         Plot(ROOT.TH1F(plotprefix+"_"+"W_Pt","W p_{T}",20,0.,500.),"W_Pt",plotselection_inclusive,plotlabel_inclusive),
         Plot(ROOT.TH1F(plotprefix+"_"+"BosonWeight","BosonWeight",41,-0.025,2.025),"internalBosonWeight_nominal",plotselection_inclusive,plotlabel_inclusive),
         Plot(ROOT.TH1F(plotprefix+"_"+"Zmumu_Mass","Z_{#mu#mu} mass",20,60.,120.),"Zmumu_Mass",plotselection_inclusive,plotlabel_inclusive),
-        Plot(ROOT.TH1F(plotprefix+"_"+"MuonSF","MuonSF",41,-0.025,2.025),"internalMuIDWeight*internalMuIsoWeight*internalMuHIPWeight",plotselection_inclusive,plotlabel_inclusive),
+        Plot(ROOT.TH1F(plotprefix+"_"+"MuonSF","MuonSF",41,-0.025,2.025),"Weight_MuonSFID*Weight_MuonSFIso*Weight_MuonSFHIP*Weight_MuonSFTrigger",plotselection_inclusive,plotlabel_inclusive),
     ]
 
 plotselection_MET300 = "(Hadr_Recoil_Pt>300.)*(DeltaPhi_Jet_MET[0]>1.)"
@@ -84,7 +85,7 @@ plots_MET300=[
         Plot(ROOT.TH1F(plotprefix+"_"+"W_Pt","W p_{T}",20,0.,500.),"W_Pt",plotselection_MET300,plotlabel_MET300),
         Plot(ROOT.TH1F(plotprefix+"_"+"BosonWeight","BosonWeight",41,-0.025,2.025),"internalBosonWeight_nominal",plotselection_MET300,plotlabel_MET300),
         Plot(ROOT.TH1F(plotprefix+"_"+"Zmumu_Mass","Z_{#mu#mu} mass",20,60.,120.),"Zmumu_Mass",plotselection_MET300,plotlabel_MET300),
-        Plot(ROOT.TH1F(plotprefix+"_"+"MuonSF","MuonSF",41,-0.025,2.025),"internalMuIDWeight*internalMuIsoWeight*internalMuHIPWeight",plotselection_MET300,plotlabel_MET300),
+        Plot(ROOT.TH1F(plotprefix+"_"+"MuonSF","MuonSF",41,-0.025,2.025),"Weight_MuonSFID*Weight_MuonSFIso*Weight_MuonSFHIP*Weight_MuonSFTrigger",plotselection_MET300,plotlabel_MET300),
     ]
 
 plotselection_MET400 = "(Hadr_Recoil_Pt>400.)*(DeltaPhi_Jet_MET[0]>1.)"
@@ -110,7 +111,7 @@ plots_MET400=[
         Plot(ROOT.TH1F(plotprefix+"_"+"W_Pt","W p_{T}",20,0.,500.),"W_Pt",plotselection_MET400,plotlabel_MET400),
         Plot(ROOT.TH1F(plotprefix+"_"+"BosonWeight","BosonWeight",41,-0.025,2.025),"internalBosonWeight_nominal",plotselection_MET400,plotlabel_MET400),
         Plot(ROOT.TH1F(plotprefix+"_"+"Zmumu_Mass","Z_{#mu#mu} mass",20,60.,120.),"Zmumu_Mass",plotselection_MET400,plotlabel_MET400),
-        Plot(ROOT.TH1F(plotprefix+"_"+"MuonSF","MuonSF",41,-0.025,2.025),"internalMuIDWeight*internalMuIsoWeight*internalMuHIPWeight",plotselection_MET400,plotlabel_MET400),
+        Plot(ROOT.TH1F(plotprefix+"_"+"MuonSF","MuonSF",41,-0.025,2.025),"Weight_MuonSFID*Weight_MuonSFIso*Weight_MuonSFHIP*Weight_MuonSFTrigger",plotselection_MET400,plotlabel_MET400),
     ]
 
 plotselection_MET500 = "(Hadr_Recoil_Pt>500.)*(DeltaPhi_Jet_MET[0]>1.)"
@@ -136,7 +137,7 @@ plots_MET500=[
         Plot(ROOT.TH1F(plotprefix+"_"+"W_Pt","W p_{T}",20,0.,500.),"W_Pt",plotselection_MET500,plotlabel_MET500),
         Plot(ROOT.TH1F(plotprefix+"_"+"BosonWeight","BosonWeight",41,-0.025,2.025),"internalBosonWeight_nominal",plotselection_MET500,plotlabel_MET500),
         Plot(ROOT.TH1F(plotprefix+"_"+"Zmumu_Mass","Z_{#mu#mu} mass",20,60.,120.),"Zmumu_Mass",plotselection_MET500,plotlabel_MET500),
-        Plot(ROOT.TH1F(plotprefix+"_"+"MuonSF","MuonSF",41,-0.025,2.025),"internalMuIDWeight*internalMuIsoWeight*internalMuHIPWeight",plotselection_MET500,plotlabel_MET500),
+        Plot(ROOT.TH1F(plotprefix+"_"+"MuonSF","MuonSF",41,-0.025,2.025),"Weight_MuonSFID*Weight_MuonSFIso*Weight_MuonSFHIP*Weight_MuonSFTrigger",plotselection_MET500,plotlabel_MET500),
     ]
 
 plotselection_MET600 = "(Hadr_Recoil_Pt>600.)*(DeltaPhi_Jet_MET[0]>1.)"
@@ -162,7 +163,7 @@ plots_MET600=[
         Plot(ROOT.TH1F(plotprefix+"_"+"W_Pt","W p_{T}",20,0.,500.),"W_Pt",plotselection_MET600,plotlabel_MET600),
         Plot(ROOT.TH1F(plotprefix+"_"+"BosonWeight","BosonWeight",41,-0.025,2.025),"internalBosonWeight_nominal",plotselection_MET600,plotlabel_MET600),
         Plot(ROOT.TH1F(plotprefix+"_"+"Zmumu_Mass","Z_{#mu#mu} mass",20,60.,120.),"Zmumu_Mass",plotselection_MET600,plotlabel_MET600),
-        Plot(ROOT.TH1F(plotprefix+"_"+"MuonSF","MuonSF",41,-0.025,2.025),"internalMuIDWeight*internalMuIsoWeight*internalMuHIPWeight",plotselection_MET600,plotlabel_MET600),
+        Plot(ROOT.TH1F(plotprefix+"_"+"MuonSF","MuonSF",41,-0.025,2.025),"Weight_MuonSFID*Weight_MuonSFIso*Weight_MuonSFHIP*Weight_MuonSFTrigger",plotselection_MET600,plotlabel_MET600),
     ]
 
 plots = plots_inclusive+plots_MET300+plots_MET400+plots_MET500+plots_MET600
