@@ -336,19 +336,19 @@ def main(pyrootdir, argv):
                     Epsilon = 0.0,
                     skipRenaming = analysis.skipRenaming)
 
-            if analysis.addData:
-                print '''
-                # ========================================================
-                # adding data with plotParallel
-                # ========================================================
-                '''
-                with monitor.Timer("addRealData"):
-                    # real data with ttH
-                    pP.addData(samples = configData.controlSamples)
-                
-                    # pseudo data without ttH
-                    # pP.addData(samples = configData.samples[9:])
-        
+        if analysis.addData:
+            print '''
+            # ========================================================
+            # adding data with plotParallel
+            # ========================================================
+            '''
+            with monitor.Timer("addRealData"):
+                # real data with ttH
+                pP.addData(samples = configData.controlSamples)
+            
+                # pseudo data without ttH
+                # pP.addData(samples = configData.samples[9:])
+    
 
         pP.checkTermination()       
         monitor.printClass(pP, "after plot parallel completely done")
