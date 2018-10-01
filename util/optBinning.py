@@ -5,7 +5,7 @@ from copy import deepcopy
 import array
 
 def optimizeBinning(infname, signalsamples = [], backgroundsamples = [], additionalSamples = [], plots = [], 
-                    systnames = [""], minBkgPerBin = 2.0, optMode = "SoverB", doTheRebinning = True,
+                    systnames = [""], minBkgPerBin = 2.0, optMode = "SoverB",
                     considerStatUnc = False, maxBins = 100, minBins = 1, verbosity = 0):
 
     if len(signalsamples) == 0 or len(backgroundsamples) == 0:
@@ -145,10 +145,10 @@ def getEqualBinWidths(signalHisto, bkgHisto, minBkgPerBin, maxBins, minBins, ver
 
         binLowEdgesOriginal = [signalHisto.GetBinLowEdge(i) for i in range(1, nBinsOriginal+2)]
 
-        bkgBinContentsOriginal = [bkgHisto.GetBinContent(i)                                for i in range(1, nBinsOriginal+1)]
+        bkgBinContentsOriginal = [bkgHisto.GetBinContent(i) for i in range(1, nBinsOriginal+1)]
         sumBinContentsOriginal = [signalHisto.GetBinContent(i) + bkgHisto.GetBinContent(i) for i in range(1, nBinsOriginal+1)]
 
-        minBorderBin = next((i                                   for i, x in enumerate(sumBinContentsOriginal)           if x > 0))
+        minBorderBin = next((i for i, x in enumerate(sumBinContentsOriginal)           if x > 0))
         maxBorderBin = next((len(sumBinContentsOriginal) - 1 - i for i, x in enumerate(reversed(sumBinContentsOriginal)) if x > 0))
 
         borderBins = np.linspace(minBorderBin, maxBorderBin+1, minBins+1, endpoint=True, dtype=np.int)
@@ -192,6 +192,7 @@ def getOptimizedBinEdges(signalHisto, bkgHisto, optMode = "SoverB", minBkgPerBin
     if signalHisto.GetNbinsX() != bkgHisto.GetNbinsX():
         print "ERROR: getOptimizedBinEdges: signal and background histograms have different binnings!"
         exit(0)
+
     if minBins > maxBins:
         print "you want minbins > maxBins"
         exit(0)
@@ -408,7 +409,7 @@ def getOptimizedBinEdges(signalHisto, bkgHisto, optMode = "SoverB", minBkgPerBin
             theArray.insert(imin-1, newbin)
 
     # now we are done
-    if verbosity >= 2:
+    if verbosity >= 1:
         print "array after all merges"
         print theArray
     #extract binning information    

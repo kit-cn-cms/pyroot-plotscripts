@@ -58,9 +58,9 @@ class haddParallel:
             try:
                 rootFiles = self.addHaddFiles()
                 print("rootFiles: " + str(rootFiles))
-                subprocess.check_output( ["hadd", rootFiles] + self.outputs,
+                subprocess.check_output( ["hadd"] + rootFiles + self.outputs,
                                             stderr = subprocess.STDOUT )
-            except subprocess.CalledProcessorError, e:
+            except subprocess.CalledProcessError, e:
                 print( "hadd failed with the following error:")
                 print( e.output)
                 sys.exit(-1)

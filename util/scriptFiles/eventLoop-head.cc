@@ -4,7 +4,7 @@
   cout << "total number of events: " << nentries << endl;
 
   for (long iEntry=skipevents;iEntry<nentries;iEntry++) {
-    if(iEntry==maxevents) break;
+    //if(iEntry==maxevents) break;
     if(iEntry%10000==0) cout << "analyzing event " << iEntry << endl;
     
     timerGetEntry->Start();

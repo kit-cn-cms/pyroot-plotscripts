@@ -110,7 +110,7 @@ class plotParallel:
         if self.checkHaddFiles():
             self.renameInput = self.haddFiles
         else:
-            self.renameInput = self.analysis.limitPath
+            self.renameInput = self.analysis.renamedPath
         print("set renameInput to "+str(self.renameInput))
 
     
@@ -119,7 +119,7 @@ class plotParallel:
         return self.analysis.workdir+"/HaddOutputs/*.root"
     
     def getOutPath(self):
-        return self.analysis.limitPath
+        return self.analysis.renamedPath
     
     ## other public functions ##
     def checkTermination(self):
@@ -153,26 +153,22 @@ class plotParallel:
         # creating paths and folders
         self.scriptsPath = self.analysis.workdir + "/ppScripts/"
         self.plotPath = self.analysis.workdir + "/ppPlots/"
-        self.ccPath = self.analysis.workdir + "/" + self.analysis.name + ".cc"
 
         # check output if skipping activated
         if self.analysis.skipPlotParallel:
             print("skip plotParallel has been activated")
             print("this only skips the naf submission for the output files that already exist")
-            
+         
+        print("ppRootPath: "+str(self.analysis.ppRootPath))   
         # check what to do if rootFile already exists
         if os.path.exists(self.analysis.ppRootPath):
             # if useOldRoot is activated the old file is used with out checking its content
             # TODO: implement sanity check
             if self.analysis.useOldRoot:
                 print("using old root file")
-                if not self.analysis.haddParallel:
-                    print("no parallel hadding")
-                else:
-                    print("parallel hadding activated")
-                    print("using old root file and saving haddFiles")
-                    self.haddFiles = self.globHaddFiles()
-                    print("type of haddFiles: " + str(type(self.haddFiles)) )
+                print("using old root file and saving haddFiles")
+                self.haddFiles = self.globHaddFiles()
+                print("type of haddFiles: " + str(type(self.haddFiles)) )
                 self.finished = True
                 print("exiting plotParallel")
                 return 
@@ -210,6 +206,14 @@ class plotParallel:
         print( "creating run scripts" )
         # runscriptData consists of {"scripts", "outputs", "entries", "maps"}
         self.runscriptData = writer.writeRunScripts()
+        
+        # debug prints
+        scripts = self.runscriptData["scripts"]
+        outputs = self.runscriptData["outputs"]
+        entries = self.runscriptData["entries"]
+        for index in range(len(scripts)):
+            print("{:<10} | {:<150}\n\t{}".format(entries[index], scripts[index], outputs[index])) 
+
 
         # check if we should stop
         if self.analysis.stopAfterCompile:
@@ -221,7 +225,6 @@ class plotParallel:
         nafInterface.plotInterface(self.runscriptData, skipPlotParallel = self.analysis.skipPlotParallel)
         print("all jobs have terminated successfully")
         print("="*40)
-
 
         # starting on hadd output
         # TODO maybe split this completely and add another instance into limitsall
