@@ -153,7 +153,7 @@ WBosonWeights=[
 
 MCWeight='35.91823'
 
-path_ntuples = "/nfs/dust/cms/user/mwassmer/DarkMatter/ntuples"
+path_ntuples = "/nfs/dust/cms/user/mwassmer/DarkMatter/ntuples_controlregion"
 # path_ntuples = "/nfs/dust/cms/user/swieland/Darkmatter/ntuples"
 
 sampleDict=plotClasses.SampleDictionary()
