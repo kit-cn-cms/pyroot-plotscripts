@@ -94,7 +94,9 @@ def renameHistos(inFiles, outFile, systNames, checkBins = False, prune = True, E
 
 
 
-# -- writing rename script ------------------------------------------------------------------------    
+# -- writing rename script ------------------------------------------------------------------------
+# TODO maybe merge this with the function in scriptWriter
+# TODO this function is used in the renameHistos step, the scriptWriter function is used in the plotParallel step.
 def writeRenameScript(outFile, skipRenaming):
     scriptName = outFile.rsplit("/",1)[0]+"/renameScript.py"
     scriptPath = outFile.rsplit("/",1)[0]+"/renameScripts/"

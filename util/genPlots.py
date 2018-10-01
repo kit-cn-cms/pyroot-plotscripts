@@ -106,16 +106,16 @@ class genPlots:
     # -- loading options for simple control/shape plots -------------------------------------------
     def loadOptions(self, options):
         defaultOptions = {
-            "factor": -1,
-            "logscale": False,
-            "canvasOptions": "histo",
-            "normalize": False,
-            "stack": False,
-            "ratio": False,
-            "doProfile": False,
-            "statTest": False,
-            "sepaTest": False,
-            "blinded": True}
+            "factor":           -1,
+            "logscale":         False,
+            "canvasOptions":    "histo",
+            "normalize":        False,
+            "stack":            False,
+            "ratio":            False,
+            "doProfile":        False,
+            "statTest":         False,
+            "sepaTest":         False,
+            "blinded":          True}
 
         # set options
         for opt in defaultOptions:
@@ -130,17 +130,22 @@ class genPlots:
 
     # -- making simple control/shape plots --------------------------------------------------------
     # old def writeLOLAndOneOnTop
-    def makeSimpleControlPlots(self, listName, listIndex, options = {}):
+    def makeSimpleControlPlots(self, dataConfig, options = {}):
         print("\n"+"="*30)
         print("making simple control plots ...")
         # load options
         print("-"*10)
         print("loading options:")
         plotOptions = self.loadOptions(options)
+        listName = dataConfig.name
+        listIndex = dataConfig.index
         print("-"*10)
+
         # load transposed list#
         transposedList = self.lists[listName].T
         samples = self.lists[listName].samples
+        print("transposedList")
+        print(transposedList)
 
         # generate stuff for control plots
         plotPath = self.plotdir + "/simpleControlPlots/"
@@ -268,16 +273,20 @@ class genPlots:
 
 
     # old def writeListOfHistoListsAN
-    def makeSimpleShapePlots(self, listName, listIndex, label = "", options = {}):
+    def makeSimpleShapePlots(self, dataConfig, label = "", options = {}):
         print("\n"+"="*30)
         print("making simple shape plots ...")
         # load options
         print("loading options:")
         plotOptions = self.loadOptions(options)
+        listName = dataConfig.name
+        listIndex = dataConfig.index
 
         # load transposed list
         transposedList = self.lists[listName].T
         samples = self.lists[listName].samples
+        print("transposedList")
+        print(transposedList)
 
         # generate stuff for shape plots    
         plotPath = self.plotdir + "/simpleShapePlots/"
@@ -375,8 +384,10 @@ class genPlots:
 
     # -- making control plots ---------------------------------------------------------------------
     # old def createLLL_fromSuperHistoFileSyst
-    def genNestedHistList(self, listName, listIndex, systNames, outName):
+    def genNestedHistList(self, dataConfig, systNames, outName):
         rootFile = ROOT.TFile(self.outPath, "readonly")
+        listName = dataConfig.name
+        listIndex = dataConfig.index
 
         objects = []
         keyList = rootFile.GetKeyNames()
@@ -418,7 +429,7 @@ class genPlots:
 
     # old def plotDataMCanWsyst
     # def makeControlPlots(self, listName, listIndex, dataName, nestedHistsConfig, options):
-    def makeControlPlots(self, dataConfig, controlConfig, sampleConfig, headHist, headSample, nestedHistsConfig, options):
+    def makeControlPlots(self, dataConfig, controlConfig, sampleConfig, headHist, headSample, nestedHistsConfig, options = {}, outName = "controlPlots"):
         print("\n"+"="*30)
         print("making control plots ...")
         # load options
@@ -446,7 +457,7 @@ class genPlots:
         headSamples = samples[0]
 
         # generate stuff for control plots
-        plotPath = self.plotdir + "/controlPlots/"
+        plotPath = self.plotdir + "/"+str(outName)+"/"
         if not os.path.exists(plotPath):
             os.makedirs(plotPath)
         print("plots output: "+str(plotPath+"plots.pdf"))
@@ -747,23 +758,37 @@ class genPlots:
         writeObjects(canvases, plotPath)
 
 
-    def makeEventYields(self, categories, listName, dataName, nameRequirement = "JT"):
+    def makeEventYields(self, categories, listName, dataName, nameRequirements = []):
         histoList = self.lists[listName].data  
         dataList = self.lists[dataName].data
         samples = self.lists[listName].samples
 
         path = self.plotdir+"/eventYields"
+        if not os.path.exists( path ):
+            os.makedirs(path)
+        print("looping over data and histoLists:")
         for data, hist in zip(dataList, histoList):
-            if not nameRequirement in data[0].GetName():
+            print("-"*10)
+            print("now at dataList entry:")
+            print(data)
+            print("-"*10)
+
+            # check if name requirement is met
+            req_met = False
+            if nameRequirements == []:
+                req_met = True
+            for req in nameRequirements:
+                if req in data[0].GetName():
+                    req_met = True
+            if not req_met:
                 continue
-            
+
             name = data[0].GetName()
             for h in data+hist:
                 for iCat, cat in enumerate(categories):
                     h.GetXaxis().SetBinLabel(iCat+1, cat[1])
 
-            tablePath = path+"/"+name+"_yields"
-            eventYields( data, hist, samples, tablePath ) 
+            eventYields( data, hist, samples, path, name ) 
 
 
 
@@ -1280,8 +1305,8 @@ def createErrorbands(nestedHistList, samples, doRateSysts = True):
             syst = l[0].Clone()
             for hist in l[1:]:
                 syst.Add(hist)
-		print("adding to errorband (h, int, nominal.int)")
-		print hist, hist.Integral(), nominal.Integral()
+		#print("adding to errorband (h, int, nominal.int)")
+		#print hist, hist.Integral(), nominal.Integral()
             systs.append(syst)
         assert len(samples) == len(llT[0])
         for isample, sample in enumerate(samples): # for all normalization unc
@@ -1319,8 +1344,8 @@ def createErrorbands(nestedHistList, samples, doRateSysts = True):
             ups = systs[0::2]
             downs = systs[1::2]
             for up, down in zip(ups, downs):
-	        print "up/down name ", up.GetName(), down.GetName()
-	        print "up/down diff ",  up.GetBinContent(ibin+1)-n, down.GetBinContent(ibin+1)-n
+	        #print "up/down name ", up.GetName(), down.GetName()
+	        #print "up/down diff ",  up.GetBinContent(ibin+1)-n, down.GetBinContent(ibin+1)-n
                 u_ = up.GetBinContent(ibin+1)-n
                 d_ = down.GetBinContent(ibin+1)-n
                 #print u_,d_
@@ -1346,8 +1371,8 @@ def createErrorbands(nestedHistList, samples, doRateSysts = True):
 
                 uperrors[ibin] = ROOT.TMath.Sqrt( uperrors[ibin]*uperrors[ibin] + u*u )
                 downerrors[ibin] = ROOT.TMath.Sqrt( downerrors[ibin]*downerrors[ibin] + d*d)
-                print u, d
-                print "up/down errors ", uperrors[ibin],downerrors[ibin]
+                #print u, d
+                #print "up/down errors ", uperrors[ibin],downerrors[ibin]
 
         graph = ROOT.TGraphAsymmErrors(nominal)
         for i in range(len(uperrors)):
@@ -1515,11 +1540,12 @@ def getRatioGraph(data, mchisto):
 # ---------------------
 # stuff for eventYields
 # ---------------------
-def eventYields(data, hists, samples, tablePath, withError = True, makeRatios = True):
+def eventYields(data, hists, samples, path, name, withError = True, makeRatios = True):
+    tablePath = path + "/"+name+"_yields"
     histData = data[0].Clone()
     for h in data[1:]:
         histData.Add(h)
-
+    
     sampleData = plotClasses.Sample("data")
     bkgSample = plotClasses.Sample("Total bkg")
     bkgHist = hists[1].Clone()
@@ -1555,7 +1581,9 @@ def eventYields(data, hists, samples, tablePath, withError = True, makeRatios = 
         outFile = tablePath,
         withError = withError)
 
-    cmd = ["pdflatex", tablePath+".tex"]
+    cmd = ["pdflatex", "-output-directory", path, tablePath+".tex"]
+    print("calling pdflatex...")
+    print( " ".join(cmd) )
     subprocess.call(cmd)
 
 
@@ -1601,7 +1629,7 @@ def turn1DHistToRow(hist, withError = True, rounding = "3dig"):
             else:
                 string += "%.1f" % hist.GetBinError(i)
 
-        if i == h.GetNbinsX():
+        if i == hist.GetNbinsX():
             string += "\\\\"
         else:
             string += "&"

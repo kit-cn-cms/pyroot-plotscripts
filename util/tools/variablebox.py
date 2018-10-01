@@ -5,171 +5,174 @@ import xml.etree.ElementTree as ET
 import collections
 
 class Variable:
-  def __init__(self, name, expression='', vartype='F', arraylength=None):
-    self.name = name
-    self.vartype = vartype
-    self.arraylength = arraylength
-    self.expression = expression
-    if expression is '':
-      self.expression = name
-    self.intree = False
-    self.mvavar = False
-    self.exprvariables = []
+    def __init__(self, name, expression='', vartype='F', arraylength=None):
+        self.name = name
+        self.vartype = vartype
+        self.arraylength = arraylength
+        self.expression = expression
+        if expression is '':
+            self.expression = name
+        self.intree = False
+        self.mvavar = False
+        self.exprvariables = []
 
 
-  ## functions for initializing variables ##
-  def initVar(self,tree,variables):
-    if hasattr(tree, self.name):
-      self.intree = True
-      branch = tree.GetBranch(self.name)
-      branchtitle = branch.GetTitle()
-      self.setupVarType(branchtitle)
-      self.setupVarArray(tree, variables, branchtitle)
-      return
+    ## functions for initializing variables ##
+    def initVar(self,tree,variables):
+        if hasattr(tree, self.name):
+            self.intree = True
+            branch = tree.GetBranch(self.name)
+            branchtitle = branch.GetTitle()
+            self.setupVarType(branchtitle)
+            self.setupVarArray(tree, variables, branchtitle)
+            return
 
-    print(str(self.name)+' does not exist in tree!')
-    self.intree = False
-    self.vartype = 'F'
-    # setting up MVA variable
-    self.setupMVAVar(tree,variables)
+        print(str(self.name)+' does not exist in tree!')
+        self.intree = False
+        self.vartype = 'F'
+        # setting up MVA variable
+        self.setupMVAVar(tree,variables)
 
-  def setupVarType(self,branchtitle):
-    self.vartype = branchtitle.split('/')[1]
+    def setupVarType(self,branchtitle):
+        self.vartype = branchtitle.split('/')[1]
 
-  def setupVarArray(self, tree, variables, branchtitle):
-    isArray = branchtitle.split('/')[0][-1] == ']'
+    def setupVarArray(self, tree, variables, branchtitle):
+        isArray = branchtitle.split('/')[0][-1] == ']'
 
-    if not isArray:
-      self.arraylength = None
-      return
+        if not isArray:
+            self.arraylength = None
+            return
 
-    # variable is array
-    self.arraylength = re.findall(r"\[(.*?)\]",branchtitle.split('/')[0])[0]
-    # call initSingeVar with vartype I
-    variables.initSingleVar(tree,self.arraylength,self.arraylength,'I')
-
-
-  def setupMVAVar(self,tree,variables):
-    if not '.xml' in self.expression:
-      self.mvavar = False
-      return
-
-    self.mvavar = True
-
-    root = ET.parse(self.expression).getroot()
-    for var in root.iter('Variable'):
-      exprname = var.get('Internal')
-      exprexpr = var.get('Expression')
-      exprtype = var.get('Type')
-
-      self.exprvariables.append(exprname)
-
-      # calling initSingleVar
-      variables.initSingleVar(tree, exprname, exprexpr, exprtype)
+        # variable is array
+        self.arraylength = re.findall(r"\[(.*?)\]",branchtitle.split('/')[0])[0]
+        # call initSingeVar with vartype I
+        variables.initSingleVar(tree,self.arraylength,self.arraylength,'I')
 
 
+    def setupMVAVar(self,tree,variables):
+        if not '.xml' in self.expression:
+            self.mvavar = False
+            return
 
+        self.mvavar = True
 
-  ## function for initializing variable and writing cc code ##
-  def initVarProgram(self):
-    var = self.name
-    vartype = self.vartype
-    isArray = self.arraylength != None
-    castText = ""
-    if isArray:
-      if vartype == 'F':
-        text = '  float* '+var+' = new float[100];'
-        for i in range(0,100):
-          text += '\nfloatMap["' + var + '_' + str(i+1) + '"] = &' + var + '[' + str(i) + ']' + ';'
-      elif vartype == 'I':
-        text = '  Long64_t* '+var+' = new Long64_t[100];'
-        for i in range(0,100):
-          text += '\nintMap["' + var + '_' + str(i+1) + '"] = &' + var + '[' + str(i) + ']' + ';'
-      elif vartype == 'L':
-        text='  Long64_t* '+var+' = new Long64_t[100];'
-        for i in range(0,100):
-          text += '\nlongMap["' + var + '_' + str(i+1) + '"] = &' + var + '[' + str(i) + ']' + ';'    
-      else: "UNKNOWN TYPE", vartype
-    else:
-      if vartype =='F':
-        text = '\nfloat '+var+' = -999;\nfloatMap["' + var + '"] = &' + var + ';'
-      #DANGERZONE
-      # Needed hack because of mixing of Int and Long ntuples
-      # Avoid in the future
-      # Not working for array ints. But i dont think that there are any anywhere
-      elif (vartype == 'I' or vartype == 'L'):
-        text = '\nLong64_t '+var+'LONGDUMMY = -999;\nlongMap["' + var + 'LONGDUMMY"] = &' + var + 'LONGDUMMY;'
-        text += '\nInt_t '+var+' = -999;\nintMap["' + var + '"] = &' + var + ';'        
-        castText = '\n'+var+' = Int_t('+var + 'LONGDUMMY);'
-      #elif vartype =='L':
-        #text='\nLong64_t '+var+' = -999;\nlongMap["' + var + '"] = &' + var + ';'
-      else: "UNKNOWN TYPE", vartype
-    return text, castText
+        root = ET.parse(self.expression).getroot()
+        for var in root.iter('Variable'):
+            exprname = var.get('Internal')
+            exprexpr = var.get('Expression')
+            exprtype = var.get('Type')
+
+            self.exprvariables.append(exprname)
+
+            # calling initSingleVar
+            variables.initSingleVar(tree, exprname, exprexpr, exprtype)
 
 
 
 
-  ## init branch adress for CC programm and write code ##
-  def initBranchAddressProgram(self):
-    isArray = self.arraylength != None
-    text = ''
-    if isArray:
-      text += '  chain->SetBranchAddress("'+self.name+'",'+self.name+');\n'
-    else:
-      if self.vartype == 'I' or self.vartype == 'L':
-        text += '  chain->SetBranchAddress("'+self.name+'",&'+self.name+'LONGDUMMY);\n'
-      else:
-        text += '  chain->SetBranchAddress("'+self.name+'",&'+self.name+');\n'
-    return text
+    ## function for initializing variable and writing cc code ##
+    def initVarProgram(self):
+        var = self.name
+        vartype = self.vartype
+        isArray = self.arraylength != None
+        castText = ""
+        # manage array variable
+        if isArray:
+            if vartype == 'F':
+                text = '  float* '+var+' = new float[100];'
+                for i in range(0,100):
+                    text += '\nfloatMap["'+var+'_'+str(i+1)+'"] = &'+var+'['+str(i)+']'+';'
+            elif vartype == 'I':
+                text = '  Long64_t* '+var+' = new Long64_t[100];'
+                for i in range(0,100):
+                    text += '\nintMap["'+var+'_'+str(i+1)+'"] = &'+var+'['+str(i)+']'+';'
+            elif vartype == 'L':
+                text='  Long64_t* '+var+' = new Long64_t[100];'
+                for i in range(0,100):
+                    text += '\nlongMap["'+var+'_'+str(i+1)+'"] = &'+var+'['+str(i)+']'+';'        
+            else: "UNKNOWN TYPE", vartype
+        
+        # manage non array variable
+        else:
+            if vartype =='F':
+                text = '\nfloat '+var+' = -999;\nfloatMap["' + var + '"] = &' + var + ';'
+            #DANGERZONE
+            # Needed hack because of mixing of Int and Long ntuples
+            # Avoid in the future
+            # Not working for array ints. But i dont think that there are any anywhere
+            elif (vartype == 'I' or vartype == 'L'):
+                text = '\nLong64_t '+var+'LONGDUMMY = -999;\nlongMap["'+var+'LONGDUMMY"] = &'+var+'LONGDUMMY;'
+                text += '\nInt_t '+var+' = -999;\nintMap["'+var+'"] = &'+var+';'                
+                castText = '\n'+var+' = Int_t('+var+'LONGDUMMY);'
+            #elif vartype =='L':
+                #text='\nLong64_t '+var+' = -999;\nlongMap["' + var + '"] = &' + var + ';'
+            else: "UNKNOWN TYPE", vartype
+        return text, castText
 
 
 
 
-  ## functions for MVA reader ##
-  def setupTMVAReaderProgram(self,variables):
-    if not self.mvavar:
-      print 'Error! Trying to setup TMVA Reader for non MVA variable ',self.name,'!'
-      return None
-    text = ''
-    text += self.initReaderProgram()
-    text += self.addVariablesToReaderProgram(variables)
-    text += self.bookMVAProgram()
-    text += '\n'
-    return text
-
-  def initReaderProgram(self):
-    text = ''
-    text += '  TMVA::Reader *r_'+self.name+' = new TMVA::Reader("Silent");\n'
-    return text
-
-  def addVariablesToReaderProgram(self,variables):
-    text = ''
-    for varname in self.exprvariables:
-      if not varname in variables.variables:
-        print 'Error! Input variable ',varname,' does not exist in expr collection!'
-        return None
-
-      var = variables.variables[varname]
-      text += '  r_'+self.name+'->AddVariable("'+var.expression+'", &'+var.name+');\n'
-    return text
-
-  def bookMVAProgram(self):
-    text = '  r_'+self.name+'->BookMVA("BDT","'+self.expression+'");\n'
-    return text
+    ## init branch adress for CC programm and write code ##
+    def initBranchAddressProgram(self):
+        isArray = self.arraylength != None
+        text = ''
+        if isArray:
+            text += '  chain->SetBranchAddress("'+self.name+'",'+self.name+');\n'
+        else:
+            if self.vartype == 'I' or self.vartype == 'L':
+                text += '  chain->SetBranchAddress("'+self.name+'",&'+self.name+'LONGDUMMY);\n'
+            else:
+                text += '  chain->SetBranchAddress("'+self.name+'",&'+self.name+');\n'
+        return text
 
 
 
-  # setup branch adress for CC code ##
-  def calculateVarProgram(self):
-    text=''
 
-    if not self.intree:
-      if not self.mvavar:
-        text+='    '+self.name+' = '+self.expression+';\n'
-      else:
-        text+='    '+self.name+' = r_'+self.name+'->EvaluateMVA("BDT");\n'
+    ## functions for MVA reader ##
+    def setupTMVAReaderProgram(self,variables):
+        if not self.mvavar:
+            print 'Error! Trying to setup TMVA Reader for non MVA variable ',self.name,'!'
+            return None
+        text = ''
+        text += self.initReaderProgram()
+        text += self.addVariablesToReaderProgram(variables)
+        text += self.bookMVAProgram()
+        text += '\n'
+        return text
 
-    return text
+    def initReaderProgram(self):
+        text = ''
+        text += '  TMVA::Reader *r_'+self.name+' = new TMVA::Reader("Silent");\n'
+        return text
+
+    def addVariablesToReaderProgram(self,variables):
+        text = ''
+        for varname in self.exprvariables:
+            if not varname in variables.variables:
+                print 'Error! Input variable ',varname,' does not exist in expr collection!'
+                return None
+
+            var = variables.variables[varname]
+            text += '  r_'+self.name+'->AddVariable("'+var.expression+'", &'+var.name+');\n'
+        return text
+
+    def bookMVAProgram(self):
+        text = '  r_'+self.name+'->BookMVA("BDT","'+self.expression+'");\n'
+        return text
+
+
+
+    # setup branch adress for CC code ##
+    def calculateVarProgram(self):
+        text=''
+
+        if not self.intree:
+            if not self.mvavar:
+                text+='    '+self.name+' = '+self.expression+';\n'
+            else:
+                text+='    '+self.name+' = r_'+self.name+'->EvaluateMVA("BDT");\n'
+
+        return text
 
 
 
@@ -198,7 +201,7 @@ class Variables:
                 self.initSingleVar(tree, name, expr, "F")
             else:
                 varNames = self.getVarNames(expr)
-                print("got varNames from getVarNames - initing singlevars")
+                #print("got varNames from getVarNames - initing singlevars")
                 for name in varNames:
                     print("staring with single var: "+str(name))
                     self.initSingleVar(tree, name, name, "F")
@@ -217,12 +220,12 @@ class Variables:
     def initSingleVar(self, tree, name, expression = '', vartype = 'F', arraylength=None):
         if name in self.variables or name in self.vetolist:
             # dont use variables in vetolist or already used
-            print("var "+str(name)+" already in variables or vetolist - skipping")
+            # print("var "+str(name)+" already in variables or vetolist - skipping")
             return
 
         # if variable fulfils any of these conditions init the variable
         if ".xml" in expression or hasattr(tree, expression) or "Weight_" in name:
-            print("creating variable "+str(expression)+" with name "+str(name))
+            # print("creating variable "+str(expression)+" with name "+str(name))
             self.variables[name] = Variable(name, expression, vartype, arraylength)
             self.variables[name].initVar(tree, self) 
             return
@@ -231,14 +234,14 @@ class Variables:
         if "_" in expression:
             exprHead, exprTail = expression.rsplit("_", 1)
             if hasattr(tree, exprHead) and exprTail.isdigit():
-                print("found vector like variable: "+str(expression)+" which was converted to: "+str(exprHead))
+                # print("found vector like variable: "+str(expression)+" which was converted to: "+str(exprHead))
                 self.initSingleVar(tree, exprHead, exprHead, vartype, arraylength)
                 return
         
         # handle formular expression by recursive function
         # splits formular based on bracets
-        print("non of the checks succeeded - returning to initvars for expression "+str(expression))
-        print("init vars for "+str(expression))
+        # print("non of the checks succeeded - returning to initvars for expression "+str(expression))
+        # print("init vars for "+str(expression))
         self.initVars(expression, tree)
         
         print("creating variable "+str(expression)+" with name "+str(name))
@@ -419,20 +422,20 @@ class Variables:
 
     ## replaces all occurances of array variables with an instance i of that variable ( e.g. Jet_Pt -> Jet_Pt[3] ) ##
     def getArrayEntries(self,expr,i):
-        print "getArrayEntries ", expr
+        # print "getArrayEntries ", expr
         newexpr = expr
         variables = self.varsNoIndex(expr)
         for var in variables:
-            print "search ", var
+            # print "search ", var
             if var in self.variables:
-                print "found"
+                # print "found"
                 if self.variables[var].arraylength == None:
-                    print "no array"
+                    # print "no array"
                     continue
                 # substitute v by v[i]
                 rexp = (var.encode('string-escape')+r"+\b(?!\[)")
                 newexpr = re.sub(rexp,var+'['+str(i)+']',newexpr)
-                print "after subst ", newexpr
+                # print "after subst ", newexpr
         return newexpr
 
     def varsWithMaxIndex(self,expr):

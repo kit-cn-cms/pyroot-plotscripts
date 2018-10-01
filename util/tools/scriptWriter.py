@@ -413,7 +413,8 @@ class scriptWriter:
             # looping over files in sample
             for filename in sample.files:
                 nEventsInFile = 0
-
+                
+                # search for entry in json file to extract number of events per file
                 if LoadedTreeInformation != {} and filename in LoadedTreeInformation:
                     nEventsInFile = LoadedTreeInformation[filename]
                 else:
