@@ -10,7 +10,7 @@ import util.tools.plotClasses as plotClasses
 
 sel_singleel="(N_LooseMuons==0 && N_TightElectrons==1 && (Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1))*(N_Jets>=4 && N_BTagsM>=2)" # need to veto muon events in electron dataset to avoid double countung
 #TODO check why one muon trigger does not have any hits. and then construct the string so that tiggers are used in the right period
-sel_singlemu="(N_LooseElectrons==0 && N_TightMuons==1 && (Triggered_HLT_IsoMu24_2p1_vX==1 || Triggered_HLT_IsoMu27_vX==1))*(N_Jets>=4 && N_BTagsM>=2)" # and vice versa...
+sel_singlemu="(N_LooseElectrons==0 && N_TightMuons==1 && (Triggered_HLT_IsoMu24_eta2p1_vX==1 || Triggered_HLT_IsoMu27_vX==1))*(N_Jets>=4 && N_BTagsM>=2)" # and vice versa...
 #sel_MET="*(Evt_Pt_MET>20.)"
 sel_MET="*1.0"
 sel_StrangeMuWeights='*(abs(Weight_scale_variation_muR_0p5_muF_0p5)<=100 && abs(Weight_scale_variation_muR_0p5_muF_1p0)<=100 && abs(Weight_scale_variation_muR_0p5_muF_2p0)<=100 && abs(Weight_scale_variation_muR_1p0_muF_0p5)<=100 && abs(Weight_scale_variation_muR_1p0_muF_1p0)<=100 && abs(Weight_scale_variation_muR_1p0_muF_2p0)<=100 && abs(Weight_scale_variation_muR_2p0_muF_0p5)<=100 && abs(Weight_scale_variation_muR_2p0_muF_1p0)<=100 && abs(Weight_scale_variation_muR_2p0_muF_2p0)<=100)'
@@ -138,8 +138,8 @@ mcWeightAll='41.298'
 mcWeight='41.298*2.0'
 
 # TODO Add Trigger SFs
-#mcTriggerWeight='((1.0) * (internalEleTriggerWeight*(N_LooseMuons==0 && N_TightElectrons==1)* (Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1) +internalMuTriggerWeight*(N_LooseElectrons==0 && N_TightMuons==1) *(Triggered_HLT_IsoMu24_2p1_vX==1 || Triggered_HLT_IsoMu27_vX==1)))*(N_Jets>=4 && N_BTagsM>=2)'
-mcTriggerWeight='(1.0)'
+mcTriggerWeight='((1.0) * (internalEleTriggerWeight*(N_LooseMuons==0 && N_TightElectrons==1)* (Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1) +internalMuTriggerWeight*(N_LooseElectrons==0 && N_TightMuons==1) *(Triggered_HLT_IsoMu24_eta2p1_vX==1 || Triggered_HLT_IsoMu27_vX==1)))*(N_Jets>=4 && N_BTagsM>=2)'
+#mcTriggerWeight='(1.0)'
 #mcTriggerWeight='((1.0) * (1*(N_LooseMuons==0 && N_TightElectrons==1)* (1) +1*(N_LooseElectrons==0 && N_TightMuons==1) *(1)))*(N_Jets>=4 && N_BTagsM>=2)'
 
 #TODO Check that SFs and uncertainties are correct
@@ -575,7 +575,8 @@ errorSystNames=[
 
 # samples
 # input path 
-path_michael="/nfs/dust/cms/user/mwassmer/ttH_2018/ntuples"
+#path_michael="/nfs/dust/cms/user/mwassmer/ttH_2018/ntuples"
+path_michael="/nfs/dust/cms/user/kelmorab/ttH_2018/ntuples"
 ttbarPathS=path_michael+'/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'+path_michael+'/TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'+path_michael+'/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'
 VJetsPathS=path_michael+'/DYJets*/*nominal*.root'+';'+'/WJets*/*nominal*.root'
 ttVPathS=path_michael+'/TTW*/*nominal*.root'+';'+'/TTZ*/*nominal*.root'
