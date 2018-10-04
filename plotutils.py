@@ -355,6 +355,36 @@ def getSepaTests2(hs,h1):
     return tests
 
 
+def GetCMSandInfoLabels():
+    posy = 1.-ROOT.gStyle.GetPadTopMargin()+0.03
+
+    cms = ROOT.TPaveText(
+        ROOT.gStyle.GetPadLeftMargin()+0.05,posy+0.035,
+        1.-ROOT.gStyle.GetPadRightMargin(), 1.,
+        "NDC"
+    )
+    cms.AddText("#scale[1.5]{CMS private work}")
+    cms.SetFillColor(0)
+    cms.SetTextFont(43)
+    cms.SetTextSize(26)
+    cms.SetMargin(0.)
+    cms.SetTextAlign(13)
+
+    info = ROOT.TPaveText(
+        0.9, posy+0.055,
+        #1.-ROOT.gStyle.GetPadRightMargin(), 1.,
+        1.-ROOT.gStyle.GetPadRightMargin()/2.0, 1.,
+        "NDC"
+    )
+    info.AddText("#scale[1.5]{35.9 fb^{-1} (13 TeV)}")
+    info.SetFillColor(0)
+    info.SetTextFont(43)
+    info.SetTextSize(26)
+    info.SetMargin(0.)
+    info.SetTextAlign(33)
+
+    return cms,info
+
 
 # draws a list of histos on a canvas and returns canvas
 def drawHistosOnCanvas(listOfHistos_,normalize=False,stack=False,logscale=False,options_='histo',ratio=False,DoProfile=False):
@@ -1329,7 +1359,8 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
 
         if not isinstance(c, list):
             #cms = ROOT.TLatex(0.2, 0.96, 'CMS private work,  37.8 fb^{-1},  #sqrt{s} = 13 TeV'  );
-            cms = ROOT.TLatex(0.2, 0.96, 'CMS private work, #sqrt{s} = 13 TeV'  );
+            
+            cms = ROOT.TLatex(0.15, 0.95, 'CMS private work                            35.9 fb^{-1} (13 TeV)'  );
             cms.SetTextFont(42)
             cms.SetTextSize(0.05)
             cms.SetNDC()
@@ -1342,7 +1373,10 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
             label.SetNDC()
             label.Draw()
             objects.append(label)
+            
             listofallstattests.append(listofthisstattests)
+            
+            
         # else:
         #     for can, sam in zip(c,samples):
         #         labeltext = sam.name
@@ -3254,7 +3288,7 @@ def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='d
                 canvas.SetLogx()
             if 'DATA' in  histo.GetName():
                 fit[0].SetFillColor(ROOT.kGreen-10)
-                fit[0].SetLineColor(ROOT.kBlack)
+                fit[0].SetLineColor(ROOT.kBlue)
             else:
                 fit[0].SetFillColor(ROOT.kGreen-10)
                 fit[0].SetLineColor(ROOT.kBlue)
@@ -3265,15 +3299,29 @@ def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='d
             fit[0].GetYaxis().SetRangeUser(0,2)
             #print "testing ", histo.GetName()
             if 'CatA' in histo.GetName():
-                fit[0].GetXaxis().SetTitle("m(Z') in GeV")
-                data.GetXaxis().SetTitle("m(Z') in GeV")
+                if ('withtop' in histo.GetName()) or ('wtb' in histo.GetName()):
+                    fit[0].GetXaxis().SetTitle("2 b-tag, m(Z') in GeV")
+                    data.GetXaxis().SetTitle("2 b-tag, m(Z') in GeV")
+                else:
+                    fit[0].GetXaxis().SetTitle("1 b-tag, m(Z') in GeV")
+                    data.GetXaxis().SetTitle("1 b-tag, m(Z') in GeV")
+                
+                
+                
                 fit[0].GetYaxis().SetTitle("AD/BC")
                 data.GetYaxis().SetTitle("AD/BC")
                 fit[0].SetTitle("")
                 data.SetTitle("")
+                
+                
+                
             if 'CatE' in histo.GetName():
-                fit[0].GetXaxis().SetTitle("m(Z') in GeV")
-                data.GetXaxis().SetTitle("m(Z') in GeV")
+                if ('withtop' in histo.GetName()) or ('wtb' in histo.GetName()):
+                    fit[0].GetXaxis().SetTitle("2 b-tag, m(Z') in GeV")
+                    data.GetXaxis().SetTitle("2 b-tag, m(Z') in GeV")
+                else:
+                    fit[0].GetXaxis().SetTitle("1 b-tag, m(Z') in GeV")
+                    data.GetXaxis().SetTitle("1 b-tag, m(Z') in GeV")
                 fit[0].GetYaxis().SetTitle("EH/FG")
                 data.GetYaxis().SetTitle("EH/FGC")
                 fit[0].SetTitle("")
@@ -3284,11 +3332,21 @@ def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='d
             data.GetYaxis().SetTitleSize(0.07)
             fit[0].GetXaxis().SetTitleSize(0.07)
             data.GetXaxis().SetTitleSize(0.07)
+            
+            fit[0].GetXaxis().SetLabelSize(0.045)
+            data.GetXaxis().SetLabelSize(0.045)
+            
+            fit[0].GetYaxis().SetLabelSize(0.045)
+            data.GetYaxis().SetLabelSize(0.045)
+            
             fit[0].SetLineWidth(2)
             data.SetLineWidth(2)
                 #data.GetYaxis().SetRangeUser(0,2)
             #data.SetOptFit(1111)
             #canvas.Update()
+            
+            
+            
             fit[0].Draw('A3')
             #canvas.Update()
 
@@ -3301,11 +3359,21 @@ def writeHistoListwithXYErrors(listOfHistoListsToPlot, sampleListToPlot, name='d
             l=getLegend()
             label='fit propability='+str(round(fit[1].Prob(),3))
             l.AddEntryZprimeLarge(data,label ,'P') 
-            #l.AddEntryZprime(data,'Singal-BKG-Shape-Ratio','P')
+            print "hhh", sample.name
+            if "QCD" in sample.name:
+                l.AddEntryZprime(data,'QCD bkg. from MC','L')
+            else:
+                l.AddEntryZprime(data,'data - Top bkg.','L')
             l.AddEntryZprime(fit[0],"fit",'L')
             l.SetTextSize(0.04)
             l.Draw('same')
             
+        
+            
+            cms,info = GetCMSandInfoLabels()
+            cms.Draw("same")
+            info.Draw("same")       
+        
             #canvas.Update()
             canvases.append(canvas)
             objects.append(data)
@@ -4264,7 +4332,14 @@ def rebintovarbinsLLL(lll, writeRebinnedHistostoFile=False, treatMCasData=False,
                     objects.append(historeturn)
                 elif (('Zprime_M' in histo.GetName()) and (not (isinstance(histo,ROOT.TH2)))):
                     #print 'Nbins histo before ZprimeM ', histo.GetNbinsX()
-                    xbins= array.array('d',[1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3500,5000,5050])
+                    
+                    if (("CatE" in histo.GetName()) or ("CatF" in histo.GetName()) or ("CatG" in histo.GetName()) or ("CatH" in histo.GetName())):
+                        #xbins= array.array('d',[1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3500,5000,5050])
+                        xbins= array.array('d',[1000,1200,1400,1650,1950,2300,2750,3500,5000,5050])
+                    else:
+                        xbins= array.array('d',[1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3500,5000,5050])
+                    #xbins= array.array('d',[1000,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,5000,5050])
+                    #xbins= array.array('d',[1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,5000,5050])
                     #xbins= array.array('d',[0,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,5000])
                     #xbins= array.array('d',[0,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3500,4000,5000])
                     #xbins= array.array('d',[0,500,900,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3250,3500,3750,4000,4500,5000])
@@ -4347,7 +4422,14 @@ def rebintovarbinsLOL(lol,writeRebinnedHistostoFile=False, treatMCasData=False, 
                 objects.append(historeturn)
             elif (('Zprime_M' in histo.GetName()) and (not (isinstance(histo,ROOT.TH2)))):
                 #print 'Nbins histo before ZprimeM ', histo.GetNbinsX()
-                xbins= array.array('d',[1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3500,5000,5050])
+                
+                if (("CatE" in histo.GetName()) or ("CatF" in histo.GetName()) or ("CatG" in histo.GetName()) or ("CatH" in histo.GetName())):
+                    xbins= array.array('d',[1000,1200,1400,1650,1950,2300,2750,3500,5000,5050])
+                    #xbins= array.array('d',[1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3500,5000,5050])
+                else:
+                    xbins= array.array('d',[1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3500,5000,5050])
+                #xbins= array.array('d',[1000,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,5000,5050])
+                #xbins= array.array('d',[1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3500,5000,5050])
                 #xbins= array.array('d',[0,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,5000])
                 #xbins= array.array('d',[0,500,900,1000,1100,1200,1300,1400,1500,1650,1800,1950,2100,2300,2500,2750,3000,3250,3500,3750,4000,4500,5000])
                 #xbins= array.array('d',[0,500,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200,2300,2400,2500,2600,2700,2800,2900,3000,3100,3200,3300,3400,3500,3600,3700,3800,3900,4000,4200,4500,5000])                
@@ -4447,8 +4529,8 @@ def ABCDclosure1D(lol,plotnames,samples,CatA,CatB,CatC,CatD, CatE,CatF,CatG,CatH
 
     print "calculating shape uncertainty"
     if not isdata:
-        divideHistos(lolclone2, plotnames.index(CatA), plotnames.index(CatB), True,2,option)
-        divideHistos(lolclone2, plotnames.index(CatC), plotnames.index(CatD), True,2,option)
+        divideHistos(lolclone2, plotnames.index(CatA), plotnames.index(CatB), True,1,option)
+        divideHistos(lolclone2, plotnames.index(CatC), plotnames.index(CatD), True,1,option)
         divideHistos(lolclone2, plotnames.index(CatA), plotnames.index(CatC), False,1,option)
 
     divideHistos(lolclone2, plotnames.index(CatE), plotnames.index(CatF), True,2,option)

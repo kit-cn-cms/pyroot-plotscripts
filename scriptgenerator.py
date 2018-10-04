@@ -1,3 +1,5 @@
+
+    
 import sys
 import os
 import subprocess
@@ -10,20 +12,17 @@ import xml.etree.ElementTree as ET
 import variablebox
 import plotutils
 
-from plot_cuts_ZPrime_MC_Lena import *
-
-
 ROOT.gROOT.SetBatch(True)
 
 def getHead1():
   return """
 #include "TChain.h"
+#include "TString.h"
 #include "TBranch.h"
 #include "TLorentzVector.h"
 #include "TFile.h"
 #include "TH1F.h"
 #include "TH2F.h"
-#include "math.h"
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -37,9 +36,14 @@ def getHead2():
   return """
 void plot(){
   TH1F::SetDefaultSumw2();
+/*
+  std::string csvHFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/csv_rwt_fit_hf_v2_final_2017_3_29test.root";
+  std::string csvLFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/csv_rwt_fit_lf_v2_final_2017_3_29test.root";
+  
+  CSVHelper* internalCSVHelper= new CSVHelper(csvHFfile,csvLFfile, 5);
+*/
  
 """
-
 
 def getHead3():
   return """
@@ -48,6 +52,7 @@ def getHead3():
   char* filenames = getenv ("FILENAMES");
   char* outfilename = getenv ("OUTFILENAME");
   string processname = string(getenv ("PROCESSNAME"));
+  TString procname (processname);
   string suffix = string(getenv ("SUFFIX"));
   int lastevent = atoi(getenv ("LASTEVENT"));
   int firstevent = atoi(getenv ("FIRSTEVENT"));
@@ -56,19 +61,132 @@ def getHead3():
   float sumOfWeights=0;
   
   int DoWeights=1;
-  int DoMCDataWeights=0;
+  int DoABCDsyst=0;
+  int DoMCDataWeights=1;
+  int DoMCDataWeights_ttbaronly=0;
+  int DoMCDataWeights_ST_tW=0;
+  int DoMCDataWeights_ST_t=0;
+  int DoMCDataWeights_ST_s=0;
+  int murmuf1500=0;
+  int murmuf1750=0;
+  int murmuf2000=0;
+  int murmuf2250=0;
+  int murmuf2500=0;
+  int murmuf2750=0;
+  int murmuf3000=0;
+  int murmuf3500=0;
+  int murmuf4000=0;
+  int murmufGstar1500=0;
+  int murmufGstar1750=0;
+  int murmufGstar2000=0;
+  int murmufGstar2250=0;
+  int murmufGstar2500=0;
+  int murmufGstar2750=0;
+  int murmufGstar3000=0;
+  int murmufGstar3500=0;
+  int murmufGstar4000=0;  
+  
+  TString DATAstr ("DATA");
+  TString ttbarstr ("ttbar");
+  TString ST_tWstr ("ST_tW");
+  TString ST_tstr ("ST_t");
+  TString ST_sstr ("ST_s");
+  TString STstr ("ST");
+  TString QCDstr ("QCD");
+  TString SCstr ("SC");
+  TString Sigstr ("Sig");
+  
+  TString Sigstr1500 ("Zprime1500");
+  TString Sigstr1750 ("Zprime1750");
+  TString Sigstr2000 ("Zprime2000");
+  TString Sigstr2250 ("Zprime2250");
+  TString Sigstr2500 ("Zprime2500");
+  TString Sigstr2750 ("Zprime2750");
+  TString Sigstr3000 ("Zprime3000");
+  TString Sigstr3500 ("Zprime3500");
+  TString Sigstr4000 ("Zprime4000");  
+  
+  TString SigRhostr1500 ("Rho1500");
+  TString SigRhostr1750 ("Rho1750");
+  TString SigRhostr2000 ("Rho2000");
+  TString SigRhostr2250 ("Rho2250");
+  TString SigRhostr2500 ("Rho2500");
+  TString SigRhostr2750 ("Rho2750");
+  TString SigRhostr3000 ("Rho3000");
+  TString SigRhostr3500 ("Rho3500");
+  TString SigRhostr4000 ("Rho4000");  
+  
+    
+  TString SigGstarstr1500 ("Gstar1500");
+  TString SigGstarstr1750 ("Gstar1750");
+  TString SigGstarstr2000 ("Gstar2000");
+  TString SigGstarstr2250 ("Gstar2250");
+  TString SigGstarstr2500 ("Gstar2500");
+  TString SigGstarstr2750 ("Gstar2750");
+  TString SigGstarstr3000 ("Gstar3000");
+  TString SigGstarstr3500 ("Gstar3500");
+  TString SigGstarstr4000 ("Gstar4000");    
+  
   
   //if(processname=="SingleEl" || processname=="SingleMu"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
-  if(processname=="SingleEl" || processname=="SingleMu"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
-  if(processname=="DATA_2016" || processname=="DATA"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
-  if(processname=="ttbar" || processname=="t#bar{t} + jets"){DoMCDataWeights=1; std::cout<<"is ttbar, use MCDataSF nominal weihgts"<<std::endl;}
+  //if(processname=="SingleEl" || processname=="SingleMu"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
+  //if(processname=="Data" || processname=="data" || processname=="QCDMadgraph" || processname=="QCDPythia8" || procname.Contains("")){DoWeights=0;DoMCDataWeights=0 std::cout<<"is data or QCD, dont use nominal weihgts"<<std::endl;}
+  //if(processname=="QCDMadgraph" || processname=="QCDPythia8"){DoABCDsyst=1; DoMCDataWeights=0; std::cout<<"is QCD, use ABCD systematics"<<std::endl;}
+  //if(processname=="ttbar" || "ttbar_JESup" || "ttbar_JESup" || "ttbar_JERup" || "ttbar_JERup" || processname=="t#bar{t} + jets" || processname=="Signal" || processname=="SC"){DoMCDataWeights=1; std::cout<<"is ttbar or signal, use MCDataSF nominal weihgts"<<std::endl;}
+  //if(processname=="ttbar" || "ttbar_JESup" || "ttbar_JESup" || "ttbar_JERup" || "ttbar_JERup" || processname=="t#bar{t} + jets"){DoMCDataWeights_ttbaronly=1; std::cout<<"is ttbar, use MCDataSF nominal weihgts"<<std::endl;}
+
+  if(bool(procname.Contains(DATAstr))){DoABCDsyst=1; DoWeights=0; DoMCDataWeights=0; std::cout<<"is data or QCD, dont use nominal weihgts"<<std::endl;}
+  if(bool(procname.Contains(QCDstr))){DoABCDsyst=1; DoMCDataWeights=0; std::cout<<"is QCD, use ABCD systematics"<<std::endl;}
+  if(bool(procname.Contains(ttbarstr)) || bool(procname.Contains(SCstr)) || bool(procname.Contains(Sigstr))|| bool(procname.Contains(STstr))){DoMCDataWeights=1; std::cout<<"is ttbar or signal, use MCDataSF nominal weihgts"<<std::endl;}
+  if(bool(procname.Contains(ttbarstr))){DoMCDataWeights_ttbaronly=1; std::cout<<"is ttbar, use MCDataSF nominal weihgts"<<std::endl;}
+  if(bool(procname.Contains(SCstr)) || bool(procname.Contains(Sigstr))|| bool(procname.Contains(STstr))){DoMCDataWeights_ttbaronly=0; std::cout<<"is signal, use MCDataSF nominal weihgts"<<std::endl;}
+  
+  
+  if(bool(procname.Contains(ST_tWstr))){DoMCDataWeights_ST_tW=1;}
+  if(bool(procname.Contains(ST_tstr))){DoMCDataWeights_ST_t=1;}
+  if(bool(procname.Contains(ST_sstr))){DoMCDataWeights_ST_s=1;}
+  
+  if(bool(procname.Contains(Sigstr1500))){murmuf1500=1;}
+  if(bool(procname.Contains(Sigstr1750))){murmuf1750=1;}
+  if(bool(procname.Contains(Sigstr2000))){murmuf2000=1;}
+  if(bool(procname.Contains(Sigstr2250))){murmuf2250=1;}
+  if(bool(procname.Contains(Sigstr2500))){murmuf2500=1;}
+  if(bool(procname.Contains(Sigstr2750))){murmuf2750=1;}
+  if(bool(procname.Contains(Sigstr3000))){murmuf3000=1;}
+  if(bool(procname.Contains(Sigstr3500))){murmuf3500=1;}
+  if(bool(procname.Contains(Sigstr4000))){murmuf4000=1;}
+  
+  if(bool(procname.Contains(SigRhostr1500))){murmuf1500=1;}
+  if(bool(procname.Contains(SigRhostr1750))){murmuf1750=1;}
+  if(bool(procname.Contains(SigRhostr2000))){murmuf2000=1;}
+  if(bool(procname.Contains(SigRhostr2250))){murmuf2250=1;}
+  if(bool(procname.Contains(SigRhostr2500))){murmuf2500=1;}
+  if(bool(procname.Contains(SigRhostr2750))){murmuf2750=1;}
+  if(bool(procname.Contains(SigRhostr3000))){murmuf3000=1;}
+  if(bool(procname.Contains(SigRhostr3500))){murmuf3500=1;}
+  if(bool(procname.Contains(SigRhostr4000))){murmuf4000=1;}
+    
+  
+  
+  if(bool(procname.Contains(SigGstarstr1500))){murmufGstar1500=1;}
+  if(bool(procname.Contains(SigGstarstr1750))){murmufGstar1750=1;}
+  if(bool(procname.Contains(SigGstarstr2000))){murmufGstar2000=1;}
+  if(bool(procname.Contains(SigGstarstr2250))){murmufGstar2250=1;}
+  if(bool(procname.Contains(SigGstarstr2500))){murmufGstar2500=1;}
+  if(bool(procname.Contains(SigGstarstr2750))){murmufGstar2750=1;}
+  if(bool(procname.Contains(SigGstarstr3000))){murmufGstar3000=1;}
+  if(bool(procname.Contains(SigGstarstr3500))){murmufGstar3500=1;}
+  if(bool(procname.Contains(SigGstarstr4000))){murmufGstar4000=1;}  
+
   string buf;
   stringstream ss(filenames); 
   while (ss >> buf){
     chain->Add(buf.c_str());
   }
   chain->SetBranchStatus("*",0);
+
   TFile* outfile=new TFile(outfilename,"RECREATE");    
+
   // initialize variables from tree
 """
 
@@ -110,6 +228,7 @@ def initTwoDimHistoWithProcessNameAndSuffix(name,nbinsX=10,xminX=0,xmaxX=0,nbins
   return '  TH2F* h_'+name+'=new TH2F((processname+"_'+name+'"+suffix).c_str(),"'+title+'",'+str(nbinsX)+','+str(xminX)+','+str(xmaxX)+','+str(nbinsY)+','+str(xminY)+','+str(xmaxY)+');\n'
 
 
+
 def fillHistoSyst(name,varname,weight,systnames,systweights,OnlyFirst=False):
   text='      float weight_'+name+'='+weight+';\n'
   for sn,sw in zip(systnames,systweights):
@@ -136,8 +255,73 @@ def startLoop():
     
     chain->GetEntry(iEntry); 
     
+    TString currentfilename="";
+    currentfilename = chain->GetCurrentFile()->GetName();   
+    int hasTrigger=0;
+    if(currentfilename.Index("withTrigger")!=-1){hasTrigger=1;};
     eventsAnalyzed++;
     sumOfWeights+=Weight;
+  // DANGERZONE
+/*  
+  std::vector<double> jetPts;    
+  std::vector<double> jetEtas;    
+  std::vector<double> jetPhis; 
+  std::vector<double> jetMasses;
+  std::vector<double> jetEnergies; 
+  std::vector<double> jetCSVs;    
+  std::vector<int> jetFlavors;    
+    
+  for(int ijet =0; ijet<N_Jets; ijet++){
+	jetPts.push_back(Jet_Pt[ijet]);
+	jetEtas.push_back(Jet_Eta[ijet]);
+	jetCSVs.push_back(Jet_CSV[ijet]);
+	jetFlavors.push_back(Jet_Flav[ijet]);
+	jetMasses.push_back(Jet_M[ijet]);
+	jetPhis.push_back(Jet_Phi[ijet]);
+	jetEnergies.push_back(Jet_E[ijet]);
+  }
+  
+  float internalCSVweight=1.0;
+  float internalCSVweight_CSVHFUp=1.0;
+  float internalCSVweight_CSVHFDown=1.0;
+  float internalCSVweight_CSVLFUp=1.0;
+  float internalCSVweight_CSVLFDown=1.0;
+  float internalCSVweight_CSVLFStats1Up=1.0;
+  float internalCSVweight_CSVLFStats1Down=1.0;
+  float internalCSVweight_CSVLFStats2Up=1.0;
+  float internalCSVweight_CSVLFStats2Down=1.0;
+  float internalCSVweight_CSVHFStats1Up=1.0;
+  float internalCSVweight_CSVHFStats1Down=1.0;
+  float internalCSVweight_CSVHFStats2Up=1.0;
+  float internalCSVweight_CSVHFStats2Down=1.0;
+  float internalCSVweight_CSVCErr1Up=1.0;
+  float internalCSVweight_CSVCErr1Down=1.0;
+  float internalCSVweight_CSVCErr2Up=1.0;
+  float internalCSVweight_CSVCErr2Down=1.0;  
+  
+  double tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF;
+  
+  internalCSVweight=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,internalSystName,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF);
+  internalCSVweight_CSVHFUp=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,11,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVHFDown=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,12,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVLFUp=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,9,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVLFDown=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,10,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  
+  internalCSVweight_CSVLFStats1Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,17,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVLFStats1Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,18,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVLFStats2Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,19,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVLFStats2Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,20,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  
+  internalCSVweight_CSVHFStats1Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,13,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVHFStats1Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,14,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVHFStats2Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,15,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVHFStats2Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,16,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  
+  internalCSVweight_CSVCErr1Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,21,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVCErr1Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,22,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVCErr2Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,23,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  internalCSVweight_CSVCErr2Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,24,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
+  */
     
 """
 
@@ -232,6 +416,11 @@ def compileProgram(scriptname):
   p = subprocess.Popen(['root-config', '--cflags', '--libs'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
   out, err = p.communicate()
   cmd= ['g++']+out[:-1].split(' ')+['-lTMVA']+[scriptname+'.cc','-o',scriptname]
+  print "hier ", cmd
+  string=''
+  for i in cmd:
+      string+=(' '+i)
+  print string
   subprocess.call(cmd)
 
 
@@ -246,15 +435,23 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   
   # collect variables
   # list varibles that should not be written to the program automatically
-  vetolist=['processname','DoWeights','DoMCDataWeights','TMath','cout','for','int', 'if', 'cout', ';','<','i','i++','*=', 'temp','testea', 'anti_btag + 2', 'float','anti_loose_btag(Sideband_top_withbtag_anti_Topfirst_Bottoms_CSVv2,N_Sideband_top_withbtag_anti_Topfirst_Bottoms)','anti_loose_btag(Sideband_bottom_anti_Topfirst_Bottoms_CSVv2,N_Sideband_bottom_anti_Topfirst_Bottoms)' ]+['QCDMadgraph_Graph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M','QCDMadgraph_Graph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt','QCDMadgraph_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M','QCDMadgraph_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt','QCDPythia8_Graph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M','QCDPythia8_Graph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt','QCDPythia8_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M','QCDPythia8_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt','true', 'abs(', 'abs']+['abs( QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M)','abs( QCDPythia8_SF_SB_bottom_anti_Signal_Tops_Pt-QCDMadgraph_SF_SB_bottom_anti_Signal_Tops_Pt)']+['bbarportionweight(N_AK4_bottom_tag_candidates)','bbarportionweight(N_AK4_bottom_tag_candidates)']+['IsnoSignal_notopbtag(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)','IsnoSignal_withtopbtag(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)','IsnoSignal_inclusive(Zprimes_ABCD_M, Tprimes_ABCD_M, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)']+['pow(',')',',']+['pow(1+0.06,1.0/3.0','pow(1-0.06,1.0/3.0)','pow(1+0.08,1.0/3.0)','pow(1-0.08,1.0/3.0)','pow(1+0.35,1.0/3.0)','pow(1-0.35,1.0/3.0)','pow(1+0.06,1.0/3.0)','pow(1-0.06,1.0/3.0)','pow(1+0.08,1.0/3.0)','pow(1-0.08,1.0/3.0)','pow(1+0.6,1.0/3.0)','pow(1-0.6,1.0/3.0)','pow(1+0.005,1.0/7.0)','pow(1-0.005,1.0/7.0)','pow(1+0.06,1.0/7.0)','pow(1-0.06,1.0/7.0)','pow(1+0.02,1.0/7.0)','pow(1-0.02,1.0/7.0)','pow(1+0.8,1.0/7.0)','pow(1-0.8,1.0/7.0)','pow(1-0.06,1.0/3.0)','pow(1+0.10,1.0/3.0)','pow(1-0.10,1.0/3.0)','pow(1+0.02,1.0/3.0)','pow(1-0.02,1.0/3.0)','pow(1+0.12,1.0/3.0)','pow(1-0.12,1.0/3.0)','pow(1+0.01,1.0/3.0)','pow(1-0.01,1.0/3.0)','pow(1+0.08,1.0/7.0)','pow(1-0.08,1.0/7.0)','pow(1+0.05,1.0/7.0)','pow(1-0.05,1.0/7.0)','pow(1+0.02,1.0/7.0)','pow(1-0.02,1.0/7.0)']+['ABCD_Category(','const','const*']
-  vetolist=vetolist+  ['"CatA_withtopbtag"','"CatB_withtopbtag"','"CatC_withtopbtag"','"CatD_withtopbtag"','"CatE_withtopbtag"','"CatF_withtopbtag"','"CatG_withtopbtag"','"CatH_withtopbtag"'+'"CatA_notopbtag"','"CatB_notopbtag"','"CatC_notopbtag"','"CatD_notopbtag"','"CatE_notopbtag"','"CatF_notopbtag"','"CatG_notopbtag"','"CatH_notopbtag"','"CatA_inclusive"','"CatB_inclusive"','"CatC_inclusive"','"CatD_inclusive"','"CatE_inclusive"','"CatF_inclusive"','"CatG_inclusive"','"CatH_inclusive"']+['CatA_withtopbtag','CatB_withtopbtag','CatC_withtopbtag','CatD_withtopbtag','CatE_withtopbtag','CatF_withtopbtag','CatG_withtopbtag','CatH_withtopbtag'+'CatA_notopbtag','CatB_notopbtag','CatC_notopbtag','CatD_notopbtag','CatE_notopbtag','CatF_notopbtag','CatG_notopbtag','CatH_notopbtag','CatA_inclusive','CatB_inclusive','CatC_inclusive','CatD_inclusive','CatE_inclusive','CatF_inclusive','CatG_inclusive','CatH_inclusive'] #+['bportionweightup','bportionweightdown']#+['bportionweightup','bportionweightdown']  
   
-  #vetolist=vetolist+[   'ABCD_CatID:=1.0 * ABCD_Category(Zprimes_ABCD'+radi+'_M,   Tprimes_ABCD'+radi+'_M,   Tops_ABCD'+radi+'_maxsubjetCSVv2,   Ws_ABCD'+radi+'_MSD,   Tops_ABCD'+radi+'_MSD,   Tops_ABCD'+radi+'_t32,   Bottoms_ABCD'+radi+'_CSV,   Ws_ABCD'+radi+'_t21, N_Zprime_ABCD'+radi+', Evt_HT)',
-                        #'ABCD2_CatID:=1.0* ABCD2_Category(Zprimes_ABCD'+radi+'_M,   Tprimes_ABCD'+radi+'_M,   Tops_ABCD'+radi+'_maxsubjetCSVv2,   Ws_ABCD'+radi+'_MSD,   Tops_ABCD'+radi+'_MSD,   Tops_ABCD'+radi+'_t32,   Bottoms_ABCD'+radi+'_CSV,   Ws_ABCD'+radi+'_t21, N_Zprime_ABCD'+radi+', Evt_HT)',
-                        #'ABCD3_CatID:=1.0* ABCD3_Category(Zprimes_ABCD'+radi+'_M,   Tprimes_ABCD'+radi+'_M,   Tops_ABCD'+radi+'_maxsubjetCSVv2,   Ws_ABCD'+radi+'_MSD,   Tops_ABCD'+radi+'_MSD,   Tops_ABCD'+radi+'_t32,   Bottoms_ABCD'+radi+'_CSV,   Ws_ABCD'+radi+'_t21, N_Zprime_ABCD'+radi+', Evt_HT)',
-                        #'N_Zprime_ABCD'+radi,'Zprimes_ABCD'+radi+'_M','Tprimes_ABCD'+radi+'_M','Tops_ABCD'+radi+'_maxsubjetCSVv2','Ws_ABCD'+radi+'_MSD','Tops_ABCD'+radi+'_MSD','Tops_ABCD'+radi+'_t32','Bottoms_ABCD'+radi+'_CSV','Ws_ABCD'+radi+'_t21',
-                        
-#]
+  
+  
+  #vetolist=['DoWeights','DoABCDsyst','DoMCDataWeights','DoMCDataWeights_ttbaronly']
+  #vetolist=vetolist+['processname','DoWeights','TMath','cout','for','int', 'if', 'cout', ';','<','i','i++','*=', 'temp','testea', 'anti_btag + 2', 'float','anti_loose_btag(Sideband_top_withbtag_anti_Topfirst_Bottoms_CSVv2,N_Sideband_top_withbtag_anti_Topfirst_Bottoms)','anti_loose_btag(Sideband_bottom_anti_Topfirst_Bottoms_CSVv2,N_Sideband_bottom_anti_Topfirst_Bottoms)' ]+['QCDMadgraph_Graph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M','QCDMadgraph_Graph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt','QCDMadgraph_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M','QCDMadgraph_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt','QCDPythia8_Graph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M','QCDPythia8_Graph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt','QCDPythia8_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M','QCDPythia8_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt','true', 'abs(', 'abs']+['abs( QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M)','abs( QCDPythia8_SF_SB_bottom_anti_Signal_Tops_Pt-QCDMadgraph_SF_SB_bottom_anti_Signal_Tops_Pt)']+['bbarportionweight(N_AK4_bottom_tag_candidates)','bbarportionweight(N_AK4_bottom_tag_candidates)']+['IsnoSignal_notopbtag(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)','IsnoSignal_withtopbtag(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)','IsnoSignal_inclusive(Zprimes_ABCD_M, Tprimes_ABCD_M, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)']+['pow(',')',',']+['pow(1+0.06,1.0/3.0','pow(1-0.06,1.0/3.0)','pow(1+0.08,1.0/3.0)','pow(1-0.08,1.0/3.0)','pow(1+0.35,1.0/3.0)','pow(1-0.35,1.0/3.0)','pow(1+0.06,1.0/3.0)','pow(1-0.06,1.0/3.0)','pow(1+0.08,1.0/3.0)','pow(1-0.08,1.0/3.0)','pow(1+0.6,1.0/3.0)','pow(1-0.6,1.0/3.0)','pow(1+0.005,1.0/7.0)','pow(1-0.005,1.0/7.0)','pow(1+0.06,1.0/7.0)','pow(1-0.06,1.0/7.0)','pow(1+0.02,1.0/7.0)','pow(1-0.02,1.0/7.0)','pow(1+0.8,1.0/7.0)','pow(1-0.8,1.0/7.0)','pow(1-0.06,1.0/3.0)','pow(1+0.10,1.0/3.0)','pow(1-0.10,1.0/3.0)','pow(1+0.02,1.0/3.0)','pow(1-0.02,1.0/3.0)','pow(1+0.12,1.0/3.0)','pow(1-0.12,1.0/3.0)','pow(1+0.01,1.0/3.0)','pow(1-0.01,1.0/3.0)','pow(1+0.08,1.0/7.0)','pow(1-0.08,1.0/7.0)','pow(1+0.05,1.0/7.0)','pow(1-0.05,1.0/7.0)','pow(1+0.02,1.0/7.0)','pow(1-0.02,1.0/7.0)']+['ABCD_Category(','const','const*']
+  #vetolist=vetolist+['"CatA_withtopbtag"','"CatB_withtopbtag"','"CatC_withtopbtag"','"CatD_withtopbtag"','"CatE_withtopbtag"','"CatF_withtopbtag"','"CatG_withtopbtag"','"CatH_withtopbtag"'+'"CatA_notopbtag"','"CatB_notopbtag"','"CatC_notopbtag"','"CatD_notopbtag"','"CatE_notopbtag"','"CatF_notopbtag"','"CatG_notopbtag"','"CatH_notopbtag"','"CatA_inclusive"','"CatB_inclusive"','"CatC_inclusive"','"CatD_inclusive"','"CatE_inclusive"','"CatF_inclusive"','"CatG_inclusive"','"CatH_inclusive"']+['CatA_withtopbtag','CatB_withtopbtag','CatC_withtopbtag','CatD_withtopbtag','CatE_withtopbtag','CatF_withtopbtag','CatG_withtopbtag','CatH_withtopbtag'+'CatA_notopbtag','CatB_notopbtag','CatC_notopbtag','CatD_notopbtag','CatE_notopbtag','CatF_notopbtag','CatG_notopbtag','CatH_notopbtag','CatA_inclusive','CatB_inclusive','CatC_inclusive','CatD_inclusive','CatE_inclusive','CatF_inclusive','CatG_inclusive','CatH_inclusive']+['1.0*( ABCD_Category( Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)=="CatA_withtopbtag")','1.0*( ABCD_Category( Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)=="CatH_withtopbtag")'] #+['bportionweightup','bportionweightdown']#+['bportionweightup','bportionweightdown']  
+
+
+  
+  vetolist=['DoWeights','DoABCDsyst','DoMCDataWeights','DoMCDataWeights_ttbaronly','DoMCDataWeights_ST_tW','DoMCDataWeights_ST_t','DoMCDataWeights_ST_s','murmuf1500','murmuf1750','murmuf2000','murmuf2250','murmuf2500','murmuf2750','murmuf3000','murmuf3500','murmuf4000','murmufGstar1500','murmufGstar1750','murmufGstar2000','murmufGstar2250','murmufGstar2500','murmufGstar2750','murmufGstar3000','murmufGstar3500','murmufGstar4000']
+  vetolist=vetolist+['processname','DoWeights','TMath','cout','for','int', 'if', 'cout', ';','<','i','i++','*=', 'temp','testea', 'anti_btag + 2', 'float','anti_loose_btag(Sideband_top_withbtag_anti_Topfirst_Bottoms_CSVv2,N_Sideband_top_withbtag_anti_Topfirst_Bottoms)','anti_loose_btag(Sideband_bottom_anti_Topfirst_Bottoms_CSVv2,N_Sideband_bottom_anti_Topfirst_Bottoms)' ]+['QCDMadgraph_Graph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M','QCDMadgraph_Graph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt','QCDMadgraph_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M','QCDMadgraph_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt','QCDMadgraph_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt','QCDPythia8_Graph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M','QCDPythia8_Graph_SF_SB_bottom_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_anti_Signal_Topfirst_Ws_Pt','QCDPythia8_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Zprime_M','QCDPythia8_Graph_SF_SB_withtopbtag_bottom_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Tops_Pt','QCDPythia8_Graph_SF_SB_top_withbtag_anti_Signal_Topfirst_Ws_Pt','true', 'abs(', 'abs']+['abs( QCDPythia8_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M-QCDMadgraph_SF_SB_bottom_anti_Signal_Topfirst_Zprime_M)','abs( QCDPythia8_SF_SB_bottom_anti_Signal_Tops_Pt-QCDMadgraph_SF_SB_bottom_anti_Signal_Tops_Pt)']+['bbarportionweight(N_AK4_bottom_tag_candidates)','bbarportionweight(N_AK4_bottom_tag_candidates)']+['IsnoSignal_notopbtag(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)','IsnoSignal_withtopbtag(Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)','IsnoSignal_inclusive(Zprimes_ABCD_M, Tprimes_ABCD_M, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)']+['pow(',')',',']+['pow(1+0.06,1.0/3.0','pow(1-0.06,1.0/3.0)','pow(1+0.08,1.0/3.0)','pow(1-0.08,1.0/3.0)','pow(1+0.35,1.0/3.0)','pow(1-0.35,1.0/3.0)','pow(1+0.06,1.0/3.0)','pow(1-0.06,1.0/3.0)','pow(1+0.08,1.0/3.0)','pow(1-0.08,1.0/3.0)','pow(1+0.6,1.0/3.0)','pow(1-0.6,1.0/3.0)','pow(1+0.005,1.0/7.0)','pow(1-0.005,1.0/7.0)','pow(1+0.06,1.0/7.0)','pow(1-0.06,1.0/7.0)','pow(1+0.02,1.0/7.0)','pow(1-0.02,1.0/7.0)','pow(1+0.8,1.0/7.0)','pow(1-0.8,1.0/7.0)','pow(1-0.06,1.0/3.0)','pow(1+0.10,1.0/3.0)','pow(1-0.10,1.0/3.0)','pow(1+0.02,1.0/3.0)','pow(1-0.02,1.0/3.0)','pow(1+0.12,1.0/3.0)','pow(1-0.12,1.0/3.0)','pow(1+0.01,1.0/3.0)','pow(1-0.01,1.0/3.0)','pow(1+0.08,1.0/7.0)','pow(1-0.08,1.0/7.0)','pow(1+0.05,1.0/7.0)','pow(1-0.05,1.0/7.0)','pow(1+0.02,1.0/7.0)','pow(1-0.02,1.0/7.0)']+['ABCD_Category(','const','const*']
+  #vetolist=vetolist+['PDF_RMSMean','ABCD5_toptagweightnominal','ABCD5_topmisstagweightnominal']+['JetMassResolution','JetMassScale']
+  #vetolist=vetolist+['Weight','Weight_CSV','Weight_XS']
+  vetolist=vetolist+['"CatA_withtopbtag"','"CatB_withtopbtag"','"CatC_withtopbtag"','"CatD_withtopbtag"','"CatE_withtopbtag"','"CatF_withtopbtag"','"CatG_withtopbtag"','"CatH_withtopbtag"'+'"CatA_notopbtag"','"CatB_notopbtag"','"CatC_notopbtag"','"CatD_notopbtag"','"CatE_notopbtag"','"CatF_notopbtag"','"CatG_notopbtag"','"CatH_notopbtag"','"CatA_inclusive"','"CatB_inclusive"','"CatC_inclusive"','"CatD_inclusive"','"CatE_inclusive"','"CatF_inclusive"','"CatG_inclusive"','"CatH_inclusive"']+['CatA_withtopbtag','CatB_withtopbtag','CatC_withtopbtag','CatD_withtopbtag','CatE_withtopbtag','CatF_withtopbtag','CatG_withtopbtag','CatH_withtopbtag'+'CatA_notopbtag','CatB_notopbtag','CatC_notopbtag','CatD_notopbtag','CatE_notopbtag','CatF_notopbtag','CatG_notopbtag','CatH_notopbtag','CatA_inclusive','CatB_inclusive','CatC_inclusive','CatD_inclusive','CatE_inclusive','CatF_inclusive','CatG_inclusive','CatH_inclusive']+['1.0*( ABCD_Category( Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)=="CatA_withtopbtag")','1.0*( ABCD_Category( Zprimes_ABCD_M, Tprimes_ABCD_M, Tops_ABCD_maxsubjetCSVv2, Ws_ABCD_MSD, Tops_ABCD_MSD, Tops_ABCD_t32, Bottoms_ABCD_CSV, Ws_ABCD_t21, N_Zprime_ABCD)=="CatH_withtopbtag")'] #+['bportionweightup','bportionweightdown']#+['bportionweightup','bportionweightdown']  
+
+
+
   # initialize variables object
   variables = variablebox.Variables(vetolist)
   
@@ -395,7 +592,6 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
         if not v in variables.variables:
           continue
         if variables.variables[v].arraylength != None:
-          print 'variable length',  variables.variables[v].arraylength, ' of Variable ', variables.variables[v].name
           assert size_of_loop == None or size_of_loop == variables.variables[v].arraylength
           size_of_loop=variables.variables[v].arraylength
         print 'SIZE OF LOOP', size_of_loop
@@ -414,7 +610,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
         script+="{\n"
         script+="      if("+histoname+"_foundfirst) break;\n"
         arrayselection=variables.checkArrayLengths(','.join([ex,pw]))
-        weight='('+arrayselection+')*('+pwi+')*Weight*categoryweight*sampleweight'
+        weight='('+arrayselection+')*('+pwi+')*Weight_XS*categoryweight*sampleweight'
         print histoname
         print exi
         print weight
@@ -424,12 +620,9 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
       else:
         script+="      if(true){\n"  
         arrayselection=variables.checkArrayLengths(','.join([ex,pw]))
-        weight='('+arrayselection+')*('+pw+')*Weight*categoryweight*sampleweight'
+        weight='('+arrayselection+')*('+pw+')*Weight_XS*categoryweight*sampleweight'
         script+=fillHistoSyst(histoname,ex,weight,systnames,systweights)
-        script+="      }\n"
-
-    
-    
+        script+="    }\n"
     # plot two dimensional plots
     for plot, OnlyFirst in zip(plots, OnlyFirstList):
         if not isinstance(plot,plotutils.TwoDimPlot):
@@ -449,37 +642,33 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
         
         # get size of array
         size_of_loop=None
-        print 'SIZE OF LOOP', size_of_loop
         for v in variablenames_without_index:
           if not v in variables.variables:
             continue
           if variables.variables[v].arraylength != None:
             assert size_of_loop == None or size_of_loop == variables.variables[v].arraylength
             size_of_loop=variables.variables[v].arraylength
-        print 'SIZE OF LOOP', size_of_loop
+            
         
         histoname=cn+n
         script+="\n"
-        if (size_of_loop!=None and size_of_loop>0):
+        if size_of_loop!=None:
           exiX=variables.getArrayEntries(exX,"i")
           exiY=variables.getArrayEntries(exY,"i")
           pwi=variables.getArrayEntries(pw,"i")
-          script+="    bool "+histoname+"_foundfirst=false; \n"
           script+=varLoop("i",size_of_loop)                    
           script+="{\n"
-          script+="      if("+histoname+"_foundfirst) break;\n"
           arrayselection=variables.checkArrayLengths(','.join([exX,exY,pw]))
-          weight='('+arrayselection+')*('+pwi+')*Weight*categoryweight*sampleweight'
+          weight='('+arrayselection+')*('+pwi+')*Weight_XS*categoryweight*sampleweight'
           script+=fillTwoDimHistoSyst(histoname,exiX,exiY,weight,systnames,systweights, OnlyFirst)
           #script+="      }\n"
           script+="    }\n"
         else:
           script+="      if(true){\n"  
           arrayselection=variables.checkArrayLengths(','.join([exX,exY,pw]))
-          weight='('+arrayselection+')*('+pw+')*Weight*categoryweight*sampleweight'
+          weight='('+arrayselection+')*('+pw+')*Weight_XS*categoryweight*sampleweight'
           script+=fillTwoDimHistoSyst(histoname,exX,exY,weight,systnames,systweights)
-          script+="    }\n"
-
+    
     # finish category
     script+=endCat()
 
@@ -511,6 +700,8 @@ def createScript(scriptname,programpath,processname,filenames,outfilename,lastev
   script+='export FIRSTEVENT="'+str(firstevent)+'"\n'
   script+='export SUFFIX="'+suffix+'"\n'
   script+=programpath+'\n'
+  #DANGERZONE
+  script+='python '+programpath+'_rename.py\n'
   f=open(scriptname,'w')
   f.write(script)
   f.close()
@@ -531,48 +722,113 @@ def askYesNo(question):
     print "Please respond with 'yes' or 'no'"
     return askYesNo(question)
 
-
 def submitToNAF(scripts):
+  submitclock=ROOT.TStopwatch()
+  submitclock.Start()
   jobids=[]
+  logdir = os.getcwd()+"/logs"
+  if not os.path.exists(logdir):
+    os.makedirs(logdir)
   for script in scripts:
+
+    # create submitfile for condor_submit
+    submitscriptpath=script[:-3]+".sub"
+    scriptname = script.split("/")[-1][:-3]
+    submitscriptcode="universe = vanilla\n"
+    submitscriptcode+="should_transfer_files = IF_NEEDED\n"
+    submitscriptcode+="executable = /bin/bash\n"
+    submitscriptcode+="arguments = " + script + "\n"
+    submitscriptcode+="initialdir = "+os.getcwd()+"\n"
+    submitscriptcode+="error = "+logdir+"/"+scriptname+".$(Cluster).err\n"
+    submitscriptcode+="output = "+logdir+"/"+scriptname+".$(Cluster).out\n"
+    submitscriptcode+="log = "+logdir+"/"+scriptname+".$(Cluster).log\n"
+    submitscriptcode+="notification = Never\n"
+    submitscriptcode+="priority = 0\n"
+    submitscriptcode+="request_memory = 5800M\n"
+    submitscriptcode+="queue"
+
+    submitscriptfile = open(submitscriptpath,"w")
+    submitscriptfile.write(submitscriptcode)
+    submitscriptfile.close()
+
     print 'submitting',script
-    #print 'I am here: ', os.getcwd()
-    command=['qsub', '-cwd', '-S', '/bin/bash','-l', 'h=bird*', '-hard','-l', 'os=sld6', '-l' ,'h_vmem=3000M', '-l', 's_vmem=2500M' ,'-o', os.getcwd()+'/logs/$JOB_NAME.o$JOB_ID', '-e', os.getcwd()+'/logs/$JOB_NAME.e$JOB_ID', script]
-    a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
-    output = a.communicate()[0]
-    jobidstring = output.split()
-    for jid in jobidstring:
-      if jid.isdigit():
-        jobid=int(jid)
-        print "this job's ID is", jobid
-        jobids.append(jobid)
-        break
-          
+    command = "condor_submit -terse " + submitscriptpath
+    tries = 0
+    jobID = None
+    while not jobID:
+        a = subprocess.Popen(command.split(), stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
+        a.wait()
+        output = a.communicate()
+        print "jobidstring: ", output
+        try:
+            jobID = int(output[0].split(".")[0])
+        except:
+            print "something went wrong with calling the condir_submit command, submission of jobs was not successful"
+            tries += 1
+            jobID = None
+        if tries > 5:
+            print("job submission was not successfull after three tries - exiting without JOBID")
+            print("jib will not be monitored")
+            return
+
+    print "JobID: ", jobID
+    jobids += [jobID]   
+  submittime=submitclock.RealTime()
+  print "submitted ", len(jobids), " in ", submittime
   return jobids
 
 
 def do_qstat(jobids):
   allfinished=False
+  errorcount = 0   
+  print "checking job status in condor_q ..."
+  command = ["condor_q"]
+  if jobids:
+    command += jobids
+    command = [str(c) for c in command]
+  command += ["-totals"]
   while not allfinished:
-    time.sleep(10)
-    a = subprocess.Popen(['qstat'], stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
+    time.sleep(20)
+    #a = subprocess.Popen(['condor_q'], stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
+    a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
+    a.wait()
     qstat=a.communicate()[0]
     lines=qstat.split('\n')
     nrunning=0
-    for line in lines:
-      words=line.split()
-      for jid in words:
-        if jid.isdigit():
-          jobid=int(jid)
-          if jobid in jobids:
-           nrunning+=1
-          break
-    
-    if nrunning>0:
-      print nrunning,'jobs running'
-    else:
-      allfinished=True
+    nrunning=-1
+    queryline = [line for line in qstat.split("\n") if "Total for query" in line]
+    # sum all jobs that are still idle or running
+    #for line in lines:
+      #if "Total for query" in line:
+        #joblist = line.split(";")[1]
+        #states = joblist.split(",")
+        #jobs_running = int(states[3].split()[0])
+        #jobs_idle =  int(states[2].split()[0])
+        #print(str(jobs_running) + " jobs running, " + str(jobs_idle) + " jobs idling")
+        #nrunning = jobs_running + jobs_idle
 
+    #if nrunning == 0:
+      #print "all jobs are finished"
+      #allfinished=True
+    if len(queryline) == 1:
+        jobsRunning = int(re.findall(r'\ [0-9]+\ running', queryline[0])[0][1:-8])
+        jobsIdle = int(re.findall(r'\ [0-9]+\ idle', queryline[0])[0][1:-5])
+        jobsHeld = int(re.findall(r'\ [0-9]+\ held', queryline[0])[0][1:-5])
+        nrunning = jobsRunning + jobsIdle + jobsHeld
+        print(str(jobsRunning) + " jobs running, " + str(jobsIdle) + " jobs idling, " + str(jobsHeld) + " jobs held\t->\t waiting on: "+str(nrunning)+" jobs.")
+        errorcount = 0
+        if nrunning == 0:
+            print("waiting on no more jobs - exiting loop")
+            allfinished=True
+    else:
+      errorcount += 1
+      # sometimes condor_q is not reachable - if this happens a lot something is probably wrong
+      print("line does not match query")
+      if errorcount > 15:
+        print("something is off - condor_q does not work - exiting do_qstat")
+        return
+  print("all jobs are finished - exiting do_qstat")
+  return
 
 def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,programpath,cmsswpath):
   scripts=[]
@@ -668,7 +924,7 @@ def check_jobs(scripts,outputs,nentries):
   return failed_jobs
 
 
-def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],additionalfunctions=[],additionalobjectsfromaddtionalrootfile=[], OnlyFirstList=None):
+def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],additionalfunctions=[],additionalobjectsfromaddtionalrootfile=[], OnlyFirstList=None,otherSystnames=[]):
   workdir=os.getcwd()+'/workdir/'+name
   outputpath=workdir+'/output.root'
   
@@ -703,6 +959,11 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   if not os.path.exists(programpath):
     print 'could not compile c++ program'
     sys.exit()
+    
+  #create script to rename histograms
+  createRenameScript(programpath,systnames+otherSystnames)
+  
+  
   
   # create output folders
   print 'creating output folders'
@@ -746,4 +1007,195 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
   print 'hadd output'
   subprocess.call(['hadd', outputpath]+outputs)
   print 'done'
-  return outputpath
+  return  outputpath
+
+
+
+def createRenameScript(scriptname,systematics):
+  header= """
+import ROOT
+import sys
+import os
+import copy
+
+from subprocess import call
+filename=os.getenv("OUTFILENAME")
+"""
+  
+  
+  
+  body="""
+  
+def findcorrectnewname(oldname):
+    if ("MCSF_JetMassRes" in oldname):
+        if ("Up" in oldname):
+            return "JetmassResUp"
+        elif("Down" in oldname):
+            return "JetmassResDown"
+    elif("MCSF_JetMassScale" in oldname):
+        if ("Up" in oldname):
+            return "JetmassScaleUp"
+        elif("Down" in oldname):
+            return "JetmassScaleDown"
+        
+
+  
+  
+def renameHistosParallel(infname,sysnames,prune=False):
+  cmd="cp -v "+infname+" "+infname.replace(".root","_original.root")
+  theclock=ROOT.TStopwatch()
+  theclock.Start()
+  call(cmd,shell=True)
+  print sysnames
+  #infile=ROOT.TFile(infname,"READ")
+  outfile=ROOT.TFile(infname,"UPDATE")
+  keylist=outfile.GetListOfKeys()
+  theobjectlist=[]
+  listOfKeyNames=[]
+  for ikey, key in enumerate(keylist):
+    listOfKeyNames.append(key.GetName())
+  
+  for ikey, key in enumerate(listOfKeyNames):
+    thisname=key
+    #thish=outfile.Get(thisname)
+    thish=None
+    newname=thisname
+    do=True
+    #if do and "PSscaleUp" in thisname and "Q2scale" in thisname and thisname[-2:]=="Up":
+      #tmp=thisname
+      #tmp=tmp.replace('_CMS_ttH_PSscaleUp','')
+      #print 'stripped',tmp
+      #newname=tmp.replace('Q2scale','CombinedScale')
+    #if "PSscaleDown" in thisname and "Q2scale" in thisname and thisname[-4:]=="Down":
+      #tmp=thisname
+      #tmp=tmp.replace('_CMS_ttH_PSscaleDown','')
+      #newname=tmp.replace('Q2scale','CombinedScale')
+    if "dummy" in thisname:
+      continue
+      
+    nsysts=0
+    nominalfound=False
+    for sys in sysnames:
+      if sys in newname:
+	newname=newname.replace(sys,"")
+	newname+=sys
+	nsysts+=1
+      if 'nominal' in newname:
+        nominalfound=True
+	
+    if "JES" in thisname or "JER" in thisname or "_ttH_scaleFSR" in thisname or "_ttH_scaleISR" in thisname or "_ttH_FSR" in thisname or "_ttH_ISR" in thisname or "_ttH_hdamp" in thisname or "ttH_ue" in thisname or (("CMS_scale_" in thisname or "CMS_res_" in thisname) and ("_jUp" in thisname or "_jDown" in thisname)) or "JetmassScale" in thisname or "JetmassRes" in thisname:
+      
+    
+	
+      if nsysts>2 and (not nominalfound):
+        thish=outfile.Get(thisname)
+        theobjectlist.append(thish)
+	print nsysts, " systs: removing ", thisname
+	outfile.Delete(thisname)
+	outfile.Delete(thisname+";1")
+	continue
+    	
+    	
+    
+    if (("MCSF_JetMass" in thisname)):
+      #if (True):
+          #print "hey ",thisname    
+        
+       if (("MCSF_JetMass" in thisname) and not ("Jetmass" in thisname)):
+          newsystname=findcorrectnewname(thisname)
+          #print newsystname
+          tempname=thisname.replace("Zprime_M","Zprime_M_"+newsystname)
+          #print tempname
+          temph=copy.deepcopy(outfile.Get(tempname))
+          #temph2=copy.deepcopy(temph)
+          #print "here", temph
+          #print "here", temph2
+          
+          if (temph):
+            theobjectlist.append(temph)
+            temph.SetName(thisname)
+            outfile.Delete(thisname)
+            outfile.Delete(thisname+";1")
+            temph.Write()
+    	
+    	
+    	
+    #filter histograms for systs not belonging to the samples 
+    #for now until we have NNPDF syst for other samples
+    #if prune:
+      #if "CMS_ttH_NNPDF" in thisname:
+	#if thisname.split("_",1)[0]+"_" not in ["ttbarPlus2B_","ttbarPlusB_","ttbarPlusBBbar_","ttbarPlusCCbar_","ttbarOther_"]:
+	  #print "wrong syst: removing histogram", thisname
+	  #continue
+      #if "CMS_ttH_Q2scale_ttbarOther" in thisname and "ttbarOther"!=thisname.split("_",1)[0]:
+	#print "wrong syst: removing histogram", thisname
+	#continue
+      #if ("CMS_ttH_Q2scale_ttbarPlusBUp" in thisname or "CMS_ttH_Q2scale_ttbarPlusBDown" in thisname ) and "ttbarPlusB"!=thisname.split("_",1)[0] :
+	#print "wrong syst: removing histogram", thisname
+	#continue
+      #if "CMS_ttH_Q2scale_ttbarPlusBBbar" in thisname and "ttbarPlusBBbar"!=thisname.split("_",1)[0] :
+	#print "wrong syst: removing histogram", thisname
+	#continue
+      #if "CMS_ttH_Q2scale_ttbarPlusCCbar" in thisname and "ttbarPlusCCbar"!=thisname.split("_",1)[0] :
+	#print "wrong syst: removing histogram", thisname
+	#continue
+      #if "CMS_ttH_Q2scale_ttbarPlus2B" in thisname and "ttbarPlus2B"!=thisname.split("_",1)[0] :
+	#print "wrong syst: removing histogram", thisname
+	#continue
+    
+    #add ttbar type to systematics name for PS scale
+    #if "CMS_ttH_PSscaleUp" in newname or "CMS_ttH_PSscaleDown" in newname:
+      
+      #ttbartype=""
+      #if "ttbarOther"==thisname.split("_",1)[0]:
+	#ttbartype="ttbarOther"
+      #elif "ttbarPlusB"==thisname.split("_",1)[0] :
+	#ttbartype="ttbarPlusB"
+      #elif "ttbarPlusBBbar"==thisname.split("_",1)[0] :
+	#ttbartype="ttbarPlusBBbar"
+      #elif "ttbarPlusCCbar"==thisname.split("_",1)[0] :
+	#ttbartype="ttbarPlusCCbar"
+      #elif "ttbarPlus2B"==thisname.split("_",1)[0] :
+	#ttbartype="ttbarPlus2B"
+      #else:
+	#print "wrong syst: removing histogram", thisname
+	#continue
+      
+      #if "CMS_ttH_PSscaleUp" in newname:
+	#newname=newname.replace("CMS_ttH_PSscaleUp","CMS_ttH_PSscale_"+ttbartype+"Up")
+      #elif "CMS_ttH_PSscaleDown" in newname:
+	#newname=newname.replace("CMS_ttH_PSscaleDown","CMS_ttH_PSscale_"+ttbartype+"Down")
+      #else:
+	#print "wrong syst: removing histogram", thisname
+    if newname!=thisname:
+      print "changed ", thisname, " to ", newname  
+      thish=outfile.Get(thisname)
+      theobjectlist.append(thish)
+      thish.SetName(newname)
+      #outfile.cd()
+      thish.Write()
+      outfile.Delete(thisname+";1")
+  
+      
+  for ikey, key in enumerate(listOfKeyNames):
+      thisname=key
+      if ("Jetmass" in thisname):
+          outfile.Delete(thisname)
+	  outfile.Delete(thisname+";1")
+	    
+  
+  outfile.Close()
+  #infile.Close()    
+  print "The renaming took ", theclock.RealTime()
+  
+renameHistosParallel(filename,systematics,False) 
+  
+  """
+  
+  script=header
+  script+="systematics="+str(systematics)+"\n"
+  script+=body
+  
+  scrfile=open(scriptname+"_rename.py","w")
+  scrfile.write(script)
+  scrfile.close()
