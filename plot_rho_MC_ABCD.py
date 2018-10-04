@@ -265,6 +265,10 @@ plots=[
     
         
     
+    
+    Plot(ROOT.TH1F( "Wjetmass_nom" ,"mjet in GeV " ,50,0,250),"Ws_ABCD"+radi+"_MSD_smeared*Ws_ABCD"+radi+"_corrL2L3", generalselection, "1 btag"),
+    Plot(ROOT.TH1F( "Wjetmass_resup" ,"mjet in GeV " ,50,0,250),"Ws_ABCD"+radi+"_MSD_JetResup*Ws_ABCD"+radi+"_corrL2L3", generalselection_JetMassResUp, "1 btag"),
+    Plot(ROOT.TH1F( "Wjetmass_resdown" ,"mjet in GeV " ,50,0,250),"Ws_ABCD"+radi+"_MSD_JetResdown*Ws_ABCD"+radi+"_corrL2L3", generalselection_JetMassResDown, "1 btag"),
 
 
 
@@ -531,7 +535,7 @@ if not os.path.isfile(rebinnedHistoPath):
 
 
     lllSignal=createLLL_fromSuperHistoFileSyst(outputpath,SignalSamples,plots,allweightsystnames)
-    renormshapestonom(lllSignal)
+    #renormshapestonom(lllSignal)
     create_envelopes_new(lllSignal)
     
 
@@ -557,7 +561,7 @@ else:
         
         
         lllSignal=createLLL_fromSuperHistoFileSyst(rebinnedHistoPath,SignalSamples,plots,allweightsystnames)
-        renormshapestonom(lllSignal)
+        #renormshapestonom(lllSignal)
         
         
         
@@ -578,13 +582,13 @@ else:
             
               
             lllSignal=createLLL_fromSuperHistoFileSyst(rebinnedBRHistoPath,SignalSamples,plots,allweightsystnames)
-            renormshapestonom(lllSignal)
+            #renormshapestonom(lllSignal)
             
         else:
 
             
             lllSignal=createLLL_fromSuperHistoFileSyst(rebinnedandaddedBRHistoPath,SignalSamples,plots,allweightsystnames)
-            renormshapestonom(lllSignal)
+            #renormshapestonom(lllSignal)
 
 
 

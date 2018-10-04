@@ -66,7 +66,7 @@ systs_avg_max_ntb=[]
 systs_avg_min_wtb=[]
 systs_avg_min_ntb=[]
 
-for sys in ["MCSF_renfac_env","MCSF_CSVLF","MCSF_CSVHF","MCSF_CSVHFStats1","MCSF_CSVLFStats1","MCSF_CSVHFStats2","MCSF_CSVLFStats2","MCSF_CSVCErr1","MCSF_CSVCErr2","MCSF_toptag","MCSF_Wtag","MCSF_PU","MCSF_PDF","MCSF_Lumi","MCSF_Trigger","ttbarXS","nominal_JES","nominal_JER","ABCD_shape","ABCD_rate"]:
+for sys in ["MCSF_CSVLF","MCSF_CSVHF","MCSF_CSVHFStats1","MCSF_CSVLFStats1","MCSF_CSVHFStats2","MCSF_CSVLFStats2","MCSF_CSVCErr1","MCSF_CSVCErr2","MCSF_toptag","MCSF_Wtag","MCSF_PU","MCSF_PDF","MCSF_Lumi","MCSF_Trigger","ttbarXS","ST_tWXS","ST_tchanXS","ST_schanXS","nominal_JES","nominal_JER","MCSF_powheg_renfac_env","MCSF_amc_renfac_env","MCSF_JetMassScale","MCSF_JetMassRes","ABCD_shape","ABCD_rate"]:
 #for sys in ["MCSF_renfac_env","MCSF_CSVLF","MCSF_CSVHF","MCSF_CSVHFStats1"]:
 
 #for sys in ["nominal_JES","nominal_JER"]:
@@ -80,26 +80,28 @@ for sys in ["MCSF_renfac_env","MCSF_CSVLF","MCSF_CSVHF","MCSF_CSVHFStats1","MCSF
 
 #procs="ttH_hbb ttH_hcc ttH_hww ttH_hzz ttH_htt ttH_hgg ttH_hgluglu ttH_hzg ttbarOther ttbarPlusB ttbarPlus2B ttbarPlusBBbar ttbarPlusCCbar singlet wjets zjets ttbarW ttbarZ diboson".split(" ")
 #procs="SigZprime15001200_tWb SigZprime20001200_tWb SigZprime25001200_tWb SigZprime15001200_ttZ SigZprime20001200_ttZ SigZprime25001200_ttZ SigZprime15001200_ttH SigZprime20001200_ttH SigZprime25001200_ttH ttbar QCDMadgraph".split(" ")
-#procs="SigZprime15001200_tWb SigZprime20001200_tWb SigZprime25001200_tWb SigZprime15001200_ttZ SigZprime20001200_ttZ SigZprime25001200_ttZ SigZprime15001200_ttH SigZprime20001200_ttH SigZprime25001200_ttH ttbar".split(" ")
+#procs="SigZprime15001200_tWb SigZprime20001200_tWb SigZprime25001200_tWb SigZprime15001200_ttZ SigZprime20001200_ttZ SigZprime25001200_ttZ SigZprime15001200_ttH SigZprime20001200_ttH SigZprime25001200_ttH".split(" ")
+#procs="SigRho15001200_tWb SigRho20001200_tWb SigRho25001200_tWb SigRho15001200_ttZ SigRho20001200_ttZ SigRho25001200_ttZ SigRho15001200_ttH SigRho20001200_ttH SigRho25001200_ttH".split(" ")
 
 
-procs="ttbar QCDMadgraph".split(" ")
+#procs="ttbar QCDMadgraph".split(" ")
+#procs="ttbar".split(" ")
 ##procs="QCDMadgraph".split(" ")
 
 
-#procs=[]
-#Signals=["SigGstar1500800","SigGstar15001000","SigGstar15001300","SigGstar17501300","SigGstar20001000","SigGstar20001300","SigGstar20001500","SigGstar22501300","SigGstar22501500","SigGstar25001300","SigGstar25001500","SigGstar25001800","SigGstar27501500","SigGstar30001500","SigGstar30001800","SigGstar30002100","SigGstar35001800","SigGstar35002100","SigGstar35002500","SigGstar40002100","SigGstar40002500","SigGstar40003000"]
-#for i in Signals:
-    #for channel in ["tWb","ttZ","ttH"]:
-        #for width in ["Nar","Wid"]:
-            #if i=="SigGstar20001300" and channel=="ttH" and width=="Nar":
-                #continue
-            #if i=="SigGstar40003000" and channel=="ttZ" and width=="Nar":
-                #continue
-            #procs.append(i+"_"+channel+width)
+procs=[]
+Signals=["SigGstar1500800","SigGstar15001000","SigGstar15001300","SigGstar17501300","SigGstar20001000","SigGstar20001300","SigGstar20001500","SigGstar22501300","SigGstar22501500","SigGstar25001300","SigGstar25001500","SigGstar25001800","SigGstar27501500","SigGstar30001500","SigGstar30001800","SigGstar30002100","SigGstar35001800","SigGstar35002100","SigGstar35002500","SigGstar40002100","SigGstar40002500","SigGstar40003000"]
+for i in Signals:
+    for channel in ["tWb","ttZ","ttH"]:
+        for width in ["Nar","Wid"]:
+            if i=="SigGstar20001300" and channel=="ttH" and width=="Nar":
+                continue
+            if i=="SigGstar40003000" and channel=="ttZ" and width=="Nar":
+                continue
+            procs.append(i+"_"+channel+width)
 
 
-#print procs
+print procs
 
 inf=ROOT.TFile(infname,"READ")
 

@@ -675,6 +675,7 @@ SignalSamples=[
                     Sample('G->tWb, m(Gp_{Nar})=4000, m(Tp_{Nar,LH})=2100',ROOT.kBlue-3,path+'Zprime*ToWB*Zp4000Nar*2100Nar*nominal*Tree*.root',mcweight+'/0.1027*236624.0/236290.0' ,'SigGstar40002100_tWb'+'Nar',allweightsystnames,samDict=sampleDict),
                     Sample('G->tWb, m(Gp_{Nar})=4000, m(Tp_{Nar,LH})=2500',ROOT.kBlue-5,path+'Zprime*ToWB*Zp4000Nar*2500Nar*nominal*Tree*.root',mcweight+'/0.07946*244460.0/244109.0' ,'SigGstar40002500_tWb'+'Nar',allweightsystnames,samDict=sampleDict),                 
                     Sample('G->tWb, m(Gp_{Nar})=4000, m(Tp_{Nar,LH})=3000',ROOT.kBlue-9,path+'Zprime*ToWB*Zp4000Nar*3000Nar*nominal*Tree*.root',mcweight+'/0.04446*245912.0/245509.0' ,'SigGstar40003000_tWb'+'Nar',allweightsystnames,samDict=sampleDict), 
+                    #Sample('G->tWb, m(Gp_{Nar})=4000, m(Tp_{Nar,LH})=3000',ROOT.kBlue-9,path+'Zprime*ToWB*Zp4000Nar*2500Nar*nominal*Tree*.root',mcweight+'/0.04446*245912.0/245509.0' ,'SigGstar40003000_tWb'+'Nar',allweightsystnames,samDict=sampleDict), 
                     
          
 
@@ -782,7 +783,8 @@ SignalSamples=[
 
                     Sample('G->tWb/ttZ/ttH, m(Gp_{Nar})=4000, m(Tp_{Nar,LH})=2100',ROOT.kBlue-3,path+'Zprime*ToHT*Zp4000Nar*2100Nar*nominal*Tree*.root',mcweight+'/10000000' ,'SigGstar40002100_'+BR_name+'Nar',allweightsystnames,samDict=sampleDict),
                     Sample('G->tWb/ttZ/ttH, m(Gp_{Nar})=4000, m(Tp_{Nar,LH})=2500',ROOT.kBlue-5,path+'Zprime*ToHT*Zp4000Nar*2500Nar*nominal*Tree*.root',mcweight+'/10000000' ,'SigGstar40002500_'+BR_name+'Nar',allweightsystnames,samDict=sampleDict),                 
-                    Sample('G->tWb/ttZ/ttH, m(Gp_{Nar})=4000, m(Tp_{Nar,LH})=3000',ROOT.kBlue-9,path+'Zprime*ToHT*Zp4000Nar*3000Nar*nominal*Tree*.root',mcweight+'/10000000' ,'SigGstar40003000_'+BR_name+'Nar',allweightsystnames,samDict=sampleDict), 
+                    #Sample('G->tWb/ttZ/ttH, m(Gp_{Nar})=4000, m(Tp_{Nar,LH})=3000',ROOT.kBlue-9,path+'Zprime*ToHT*Zp4000Nar*3000Nar*nominal*Tree*.root',mcweight+'/10000000' ,'SigGstar40003000_'+BR_name+'Nar',allweightsystnames,samDict=sampleDict),
+                    Sample('G->tWb/ttZ/ttH, m(Gp_{Nar})=4000, m(Tp_{Nar,LH})=3000',ROOT.kBlue-9,path+'Zprime*ToHT*Zp4000Nar*2500Nar*nominal*Tree*.root',mcweight+'/10000000' ,'SigGstar40003000_'+BR_name+'Nar',allweightsystnames,samDict=sampleDict), 
 
 
 

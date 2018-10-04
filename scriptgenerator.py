@@ -1175,7 +1175,7 @@ def getHead3():
   
   TString DATAstr ("DATA");
   TString ttbarstr ("ttbar");
-  TString ST_tWstr ("ST_tW");
+  TString ST_Wtstr ("ST_Wt");
   TString ST_tstr ("ST_t");
   TString ST_sstr ("ST_s");
   TString STstr ("ST");
@@ -1229,7 +1229,7 @@ def getHead3():
   if(bool(procname.Contains(SCstr)) || bool(procname.Contains(Sigstr))|| bool(procname.Contains(STstr))){DoMCDataWeights_ttbaronly=0; std::cout<<"is signal, use MCDataSF nominal weihgts"<<std::endl;}
   
   
-  if(bool(procname.Contains(ST_tWstr))){DoMCDataWeights_ST_tW=1;}
+  if(bool(procname.Contains(ST_Wtstr))){DoMCDataWeights_ST_tW=1;}
   if(bool(procname.Contains(ST_tstr))){DoMCDataWeights_ST_t=1;}
   if(bool(procname.Contains(ST_sstr))){DoMCDataWeights_ST_s=1;}
   
@@ -2263,10 +2263,15 @@ def renameHistosParallel(infname,sysnames,prune=False):
       thish.Write()
       outfile.Delete(thisname+";1")
   
-      
-  for ikey, key in enumerate(listOfKeyNames):
+  keylist2=outfile.GetListOfKeys()
+  listOfKeyNames2=[]
+  for ikey, key in enumerate(keylist2):
+    listOfKeyNames2.append(key.GetName())      
+  for ikey, key in enumerate(listOfKeyNames2):
       thisname=key
+      #if (("Jetmass" in thisname) or (("Jetmass" in thisname) and ("JES" in thisname)) or (("Jetmass" in thisname) and ("JER" in thisname))):
       if ("Jetmass" in thisname):
+          print "remove ", thisname
           outfile.Delete(thisname)
 	  outfile.Delete(thisname+";1")
 	    

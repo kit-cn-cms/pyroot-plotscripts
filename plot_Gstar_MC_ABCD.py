@@ -539,7 +539,7 @@ if not os.path.isfile(rebinnedHistoPath):
     #raw_input()
 
     create_envelopes_new(lllSignal)
-    renormshapestonom(lllSignal)
+    #renormshapestonom(lllSignal)
     
     forcombine=True
     lllSignal=rebintovarbinsLLL(lllSignal,name,True,True,False,forcombine)
@@ -563,7 +563,7 @@ else:
         
         
         lllSignal=createLLL_fromSuperHistoFileSyst(rebinnedHistoPath,SignalSamples,plots,allweightsystnames)
-        renormshapestonom(lllSignal)
+        #renormshapestonom(lllSignal)
         print lllSignal
         #raw_input()        
         
@@ -584,14 +584,14 @@ else:
             
               
             lllSignal=createLLL_fromSuperHistoFileSyst(rebinnedBRHistoPath,SignalSamples,plots,allweightsystnames)
-            renormshapestonom(lllSignal)
+            #renormshapestonom(lllSignal)
             print lllSignal
             #raw_input()            
         else:
 
             
             lllSignal=createLLL_fromSuperHistoFileSyst(rebinnedandaddedBRHistoPath,SignalSamples,plots,allweightsystnames)
-            renormshapestonom(lllSignal)
+            #renormshapestonom(lllSignal)
 
             print lllSignal
             #raw_input()  

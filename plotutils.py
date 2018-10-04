@@ -6179,7 +6179,7 @@ def create_envelope(Histo_nom,Histo_envUp,Histo_envDown,HisoListforenvelope):
         #envelope_nom.append(envnom)
         #envelope_up.append(envup)
         #envelope_down.append(envdown)
-        
+        print "bin ",i," -- up:",envup," nom:",envnom," down:",envdown
         Histo_envUp.SetBinContent(i,envup)
         Histo_envDown.SetBinContent(i,envdown)
         
@@ -6220,6 +6220,7 @@ def create_envelopes_new(LLL):
                     h_powheg_facUp=h
                 if('_MCSF_powheg_facDown' in h.GetName()):
                     h_powheg_facDown=h
+                    
                 if('_MCSF_amc_renfac_envUp' in h.GetName()):
                     h_amc_envUp=h
                 if('_MCSF_amc_renfac_envDown' in h.GetName()):
