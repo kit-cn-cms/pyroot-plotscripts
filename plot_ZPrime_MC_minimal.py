@@ -26,6 +26,7 @@ plots=[
     Plot(ROOT.TH1F("Weight_scale_variation_muR0p5_muF1p0" ,"Weight_scale_variation_muR0p5_muF1p0" ,80,0.7,1.5),"Weight_scale_variation_muR0p5_muF1p0", "Weight_scale_variation_muR0p5_muF1p0>0", ""),
     Plot(ROOT.TH1F("Weight_scale_variation_muR0p5_muF2p0" ,"Weight_scale_variation_muR0p5_muF2p0" ,80,0.7,1.5),"Weight_scale_variation_muR0p5_muF2p0", "Weight_scale_variation_muR0p5_muF2p0>0", ""),
     Plot(ROOT.TH1F("Weight_scale_variation_muR1p0_muF0p5" ,"Weight_scale_variation_muR1p0_muF0p5" ,80,0.7,1.5),"Weight_scale_variation_muR1p0_muF0p5", "Weight_scale_variation_muR1p0_muF0p5>0", ""),
+    Plot(ROOT.TH1F("Weight_scale_variation_muR1p0_muF1p0" ,"Weight_scale_variation_muR1p0_muF1p0" ,80,0.7,1.5),"Weight_scale_variation_muR1p0_muF1p0", "Weight_scale_variation_muR1p0_muF1p0>0", ""),
     Plot(ROOT.TH1F("Weight_scale_variation_muR1p0_muF2p0" ,"Weight_scale_variation_muR1p0_muF2p0" ,80,0.7,1.5),"Weight_scale_variation_muR1p0_muF2p0", "Weight_scale_variation_muR1p0_muF2p0>0", ""),
     Plot(ROOT.TH1F("Weight_scale_variation_muR2p0_muF0p5" ,"Weight_scale_variation_muR2p0_muF0p5" ,80,0.7,1.5),"Weight_scale_variation_muR2p0_muF0p5", "Weight_scale_variation_muR2p0_muF0p5>0", ""),
     Plot(ROOT.TH1F("Weight_scale_variation_muR2p0_muF1p0" ,"Weight_scale_variation_muR2p0_muF1p0" ,80,0.7,1.5),"Weight_scale_variation_muR2p0_muF1p0", "Weight_scale_variation_muR2p0_muF1p0>0", ""),
