@@ -4,8 +4,8 @@ import os
 from copy import deepcopy
 import array
 
-def optimizeBinning(infname, signalsamples = [], backgroundsamples = [], additionalSamples = [], plots = [], 
-                    systnames = [""], minBkgPerBin = 2.0, optMode = "SoverB",
+def optimizeBinning(infname, signalsamples = [], backgroundsamples = [], additionalSamples = [], 
+                    plots = [], systnames = [""], minBkgPerBin = 2.0, optMode = "SoverB",
                     considerStatUnc = False, maxBins = 100, minBins = 1, verbosity = 0):
 
     if len(signalsamples) == 0 or len(backgroundsamples) == 0:

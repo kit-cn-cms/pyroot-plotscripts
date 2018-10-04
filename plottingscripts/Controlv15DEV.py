@@ -68,7 +68,7 @@ def main(pyrootdir, argv):
         "haddParallel":         False,  # parallel hadding instead of non-parallel
         "useOldRoot":           True,   # use existing root file if it exists (skips plotParallel)
         # options to activate parts of the script
-        "optimizedRebinning":   "equalBinWidth",
+        "optimizedRebinning":   False, # e.g. "SoverB", "Significance"
         "haddFromWildcard":     False,
         "makeDataCards":        False,
         "addData":              False,  # adding real data 
@@ -258,7 +258,7 @@ def main(pyrootdir, argv):
                         systnames = configData.allSystNames, 
                         minBkgPerBin = 2.0, 
                         optMode = analysis.optimizedRebinning,
-                        considerStatUnc = False, 
+                        considerStatUnc = False, # does not exist anyways
                         maxBins = 20, 
                         minBins = 2,
                         verbosity = 0)
@@ -269,17 +269,17 @@ def main(pyrootdir, argv):
                 with monitor.Timer("optimizeBinning"):
                     optBinning.optimizeBinning(
                         analysis.ppRootPath,
-                        signalsamples = [configData.samples[0]], 
+                        signalsamples = configData.samples[0:1], 
                         backgroundsamples = configData.samples[1:],
                         additionalSamples = configData.controlSamples, 
                         plots = configData.getDiscriminatorPlots(), 
                         systnames = configData.allSystNames, 
-                        minBkgPerBin = 2.0, 
+                        minBkgPerBin = 100.0, 
                         optMode = analysis.optimizedRebinning,
-                        considerStatUnc = False, 
+                        considerStatUnc = False, # does not exist anyways 
                         maxBins = 20, 
-                        minBins = 3,
-                        verbosity = 0)
+                        minBins = 5,    # the min bins flag somehow gets ignored
+                        verbosity = 1)
             else:
                 print("WARNING - could not find signal process")
                 print("not doing optimized rebinning")
