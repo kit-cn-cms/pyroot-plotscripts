@@ -2836,9 +2836,9 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
           pw='1'
 
         # prepare loop over array variables
-        variablenames_without_index=varsNoIndex(exX)
-        variablenames_without_index+=varsNoIndex(exY)
-        variablenames_without_index+=varsNoIndex(pw)
+        variablenames_without_index=variables.varsNoIndex(exX)
+        variablenames_without_index+=variables.varsNoIndex(exY)
+        variablenames_without_index+=variables.varsNoIndex(pw)
 
         # get size of array
         size_of_loop=None
