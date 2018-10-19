@@ -936,36 +936,36 @@ def main(argv):
         #makeDatacards(outputpath,name+'/'+name+'_datacard',binlabels,doHdecay=True,discrname=discrname,datacardmaker=analysis.getDataCardMaker())
 
 
-    # Invoke drawParallel step
-    if analysis.doDrawParallel==True and analysis.plotNumber == None :
-        # Hand over opts to keep commandline options
-        print 'Starting DrawParallel'
-        DrawParallel(discriminatorPlots,name,os.path.realpath(inspect.getsourcefile(lambda:0)),analysis.opts)
+    ## Invoke drawParallel step
+    #if analysis.doDrawParallel==True and analysis.plotNumber == None :
+        ## Hand over opts to keep commandline options
+        #print 'Starting DrawParallel'
+        #DrawParallel(discriminatorPlots,name,os.path.realpath(inspect.getsourcefile(lambda:0)),analysis.opts)
 
-    # belongs to DrawParallel
-    if analysis.doDrawParallel==True and analysis.plotNumber != None :
-        discriminatorPlots=[discriminatorPlots[int(analysis.plotNumber)]]
+    ## belongs to DrawParallel
+    #if analysis.doDrawParallel==True and analysis.plotNumber != None :
+        #discriminatorPlots=[discriminatorPlots[int(analysis.plotNumber)]]
 
 
 
-    # Lists needed later, produce them only if needed, so check if subsequent step comes
-    if (analysis.doDrawParallel==False or analysis.plotNumber != None) and (analysis.makeSimplePlots==True or analysis.makeMCControlPlots==True or analysis.makeEventYields==True):
-        print 'Create lists needed later'
-        listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,discriminatorPlots,1)
-        listOfHistoListsWith2D=createHistoLists_fromSuperHistoFile(outputpath,samples,discriminatorPlots,1,DoTwoDim=True)
-        print listOfHistoLists
-        print ""
-        lolT=transposeLOL(listOfHistoLists)
-        lolTWith2D=transposeLOL(listOfHistoListsWith2D)
-        listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,discriminatorPlots,1)
-        listOfHistoListsDataWith2D=createHistoLists_fromSuperHistoFile(outputpath,samples_data,discriminatorPlots,1,DoTwoDim=True)
+    ## Lists needed later, produce them only if needed, so check if subsequent step comes
+    #if (analysis.doDrawParallel==False or analysis.plotNumber != None) and (analysis.makeSimplePlots==True or analysis.makeMCControlPlots==True or analysis.makeEventYields==True):
+        #print 'Create lists needed later'
+        #listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,discriminatorPlots,1)
+        #listOfHistoListsWith2D=createHistoLists_fromSuperHistoFile(outputpath,samples,discriminatorPlots,1,DoTwoDim=True)
+        #print listOfHistoLists
+        #print ""
+        #lolT=transposeLOL(listOfHistoLists)
+        #lolTWith2D=transposeLOL(listOfHistoListsWith2D)
+        #listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,discriminatorPlots,1)
+        #listOfHistoListsDataWith2D=createHistoLists_fromSuperHistoFile(outputpath,samples_data,discriminatorPlots,1,DoTwoDim=True)
 
-    # plot simple MC plots
-    if (analysis.doDrawParallel==False or analysis.plotNumber != None) and analysis.makeSimplePlots==True :
-        print "Making simple MC plots."
-        writeLOLAndOneOnTop(transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-1,name+'/'+name+'_controlplots')
-        writeListOfHistoListsAN(transposeLOL([lolTWith2D[0]]+lolTWith2D[9:]),[samples[0]]+samples[9:],"",name+'/'+name+'_shapes',True,False,False,'histo',False,True,False)
-        #writeListOfHistoListsAN(transposeLOL([lolT[0]]+lolT[9:]),[samples[0]]+samples[9:],"",name+'/'+name+'_shapes',True,False,False,'histo',False,True,False)
+    ## plot simple MC plots
+    #if (analysis.doDrawParallel==False or analysis.plotNumber != None) and analysis.makeSimplePlots==True :
+        #print "Making simple MC plots."
+        #writeLOLAndOneOnTop(transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-1,name+'/'+name+'_controlplots')
+        #writeListOfHistoListsAN(transposeLOL([lolTWith2D[0]]+lolTWith2D[9:]),[samples[0]]+samples[9:],"",name+'/'+name+'_shapes',True,False,False,'histo',False,True,False)
+        ##writeListOfHistoListsAN(transposeLOL([lolT[0]]+lolT[9:]),[samples[0]]+samples[9:],"",name+'/'+name+'_shapes',True,False,False,'histo',False,True,False)
 
     ## Make MC Control plots
     #if (analysis.doDrawParallel==False or analysis.plotNumber != None) and analysis.makeMCControlPlots==True :
