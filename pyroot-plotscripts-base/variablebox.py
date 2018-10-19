@@ -110,6 +110,7 @@ class Variable():
   def initBranchAddressProgram(self):
     isarray=self.arraylength!=None
     text=''
+    print "setting branches for ", self.name
     #text+='if(chain->GetBranch("'+self.name+'")){\n'
     if isarray:
       text+='  chain->SetBranchAddress("'+self.name+'",'+self.name+');\n'

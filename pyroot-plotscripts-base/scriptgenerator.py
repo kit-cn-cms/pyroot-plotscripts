@@ -1731,7 +1731,7 @@ void helperFillTwoDimHisto(const std::vector<structHelpFillTwoDimHisto>& paramVe
   // singleParams: histo, var1, var2, weight
   {
     if((singleParams.weight)!=0)
-      singleParams.histo->Fill(fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,singleParams.var1)),fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,singleParams.var2)),singleParams.weight);
+      singleParams.histo->Fill(fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,singleParams.var1)),fmin(singleParams.histo->GetYaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetYaxis()->GetXmin()+1e-6,singleParams.var2)),singleParams.weight);
   }
 }
 
@@ -2124,7 +2124,7 @@ def fillTwoDimHistoSyst(name,varname1,varname2,weight,systnames,systweights):
   # Write all individual systnames and systweights in nested vector to use together with function allowing variadic vector size -> speed-up of compilation and less code lines
   text+='     std::vector<structHelpFillTwoDimHisto> helpWeightVec_' + name + ' = {'
   for sn,sw in zip(systnames,systweights):
-    text+='       { ' + 'h_'+name+sn + ', ' + varname1 + ', ' + varname2 + ', ' + '('+sw+')*(weight_'+name+')' + '},'
+    text+='       { ' + 'h_'+name+sn + ', double(' + varname1 + '), double(' + varname2 + '), ' + '('+sw+')*(weight_'+name+')' + '},'
   # finish vector
   text+='     };\n'
   # call helper fill histo function which is defined in the beginning
@@ -2550,6 +2550,7 @@ def compileProgram(scriptname,usesDataBases,addCodeInterfaces):
       
   print dnnfiles
   
+  #lhapdf=[' `/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/lhapdf/6.2.1-fmblme/bin/lhapdf-config --cflags --ldflags`']
   lhapdf=[' `/cvmfs/cms.cern.ch/slc6_amd64_gcc530/external/lhapdf/6.1.6-ikhhed2/bin/lhapdf-config --cflags --ldflags`']
   
   memDBccfiles=[]
@@ -2803,6 +2804,8 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
         script+=varLoop("i",size_of_loop)
         script+="{\n"
         arrayselection=variables.checkArrayLengths(','.join([ex,pw]))
+        print "arrayselection"
+        print arrayselection
         weight='('+arrayselection+')*('+pwi+')*Weight_XS*categoryweight*sampleweight'
         print histoname
         print exi
@@ -2854,7 +2857,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
         script+="\n"
         if size_of_loop!=None:
           exiX=variables.getArrayEntries(exX,"i")
-          exiY=variables.getArrayEntries(ex,"i")
+          exiY=variables.getArrayEntries(exY,"i")
           pwi=variables.getArrayEntries(pw,"i")
           script+=varLoop("i",size_of_loop)
           script+="{\n"
@@ -2863,7 +2866,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
           script+=fillTwoDimHistoSyst(histoname,exiX,exiY,weight,systnames,systweights)
           script+="      }\n"
         else:
-          arrayselection=variables.checkArrayLengths(','.join([exX,exY,pw]),variables)
+          arrayselection=variables.checkArrayLengths(','.join([exX,exY,pw]))
           weight='('+arrayselection+')*('+pw+')*Weight_XS*categoryweight*sampleweight'
           script+=fillTwoDimHistoSyst(histoname,exX,exY,weight,systnames,systweights)
 

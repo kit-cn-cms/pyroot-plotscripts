@@ -14,6 +14,7 @@ from copy import deepcopy
 import array
 from string import join
 
+
 ROOT.gStyle.SetPaintTextFormat("4.2f");
 ROOT.gROOT.SetBatch(True)
 
@@ -180,17 +181,17 @@ def setupHisto(histo,color,yTitle=None,filled=False):
     #print histo.GetTitle()
     if not isinstance(histo,ROOT.TH2):
       if histo.GetYaxis().GetTitle()=="":
-	#print "setting up title"
-	if histo.GetTitle()!='':
-	    histo.GetXaxis().SetTitle(histo.GetTitle())
-	    histo.SetTitle('')
-	if yTitle!=None:
-	    histo.GetYaxis().SetTitle(yTitle)
+        #print "setting up title"
+        if histo.GetTitle()!='':
+            histo.GetXaxis().SetTitle(histo.GetTitle())
+            histo.SetTitle('')
+        if yTitle!=None:
+            histo.GetYaxis().SetTitle(yTitle)
     if isinstance(histo,ROOT.TH2):
       if histo.GetXaxis().GetTitle()=="" and "VS" in histo.GetTitle() :
-	histo.GetXaxis().SetTitle(histo.GetTitle().split("VS",1)[0])
+        histo.GetXaxis().SetTitle(histo.GetTitle().split("VS",1)[0])
       if histo.GetYaxis().GetTitle()=="" and "VS" in histo.GetTitle() :
-	histo.GetYaxis().SetTitle(histo.GetTitle().split("VS",1)[1])
+        histo.GetYaxis().SetTitle(histo.GetTitle().split("VS",1)[1])
       histo.SetTitle('')
     histo.GetYaxis().SetTitleOffset(1.4)
     histo.GetXaxis().SetTitleOffset(1.2)
@@ -335,11 +336,11 @@ def getStatTestsList(h1,lh2,option="WW"):
     else:
       mystrng='#splitline{'+ss[0]+'}{secline}'
       for isss, sss in enumerate(ss[1:]):
-	submystrng='#splitline{'+sss+'}{secline}'
-	if isss==(len(ss[1:])-1):
-	  mystrng=mystrng.replace('secline',sss)
-	else:
-	  mystrng=mystrng.replace('secline',submystrng)
+        submystrng='#splitline{'+sss+'}{secline}'
+        if isss==(len(ss[1:])-1):
+            mystrng=mystrng.replace('secline',sss)
+        else:
+            mystrng=mystrng.replace('secline',submystrng)
     tests = ROOT.TLatex(0.2, 0.8, mystrng  );
     tests.SetTextFont(42);
     tests.SetTextSize(0.04);
@@ -1236,7 +1237,7 @@ def writeListOfHistoLists(listOfHistoLists,samples, label,name,normalize=True,st
 #        print cms
 #        objects.append(cms)
 
-        cms = ROOT.TLatex(0.2, 0.96, 'CMS preliminary,  36.0 fb^{-1},  #sqrt{s} = 13 TeV'  );
+        cms = ROOT.TLatex(0.2, 0.96, 'CMS preliminary,  41 fb^{-1},  #sqrt{s} = 13 TeV'  );
         cms.SetTextFont(42)
         cms.SetTextSize(0.05)
         cms.SetNDC()
