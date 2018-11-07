@@ -14,53 +14,65 @@ ExSystNames = ["",
     "_Weight_PUUp", "_Weight_PUDown",
     "_CMS_scale_jUp", "_CMS_scale_jDown",
     "_CMS_res_jUp", "_CMS_res_jDown"
-    ]
-
-commonTheorySystNames = ["",
-    "_Weight_scale_variation_muRUp", "_Weight_scale_variation_muRDown",
-    "_Weight_scale_variation_muFUp", "_Weight_scale_variation_muFDown",
-    ]
-
-otherSystNames = [
-    "_CMS_scale_jUp", "_CMS_scale_jDown",
-    "_CMS_res_jUp", "_CMS_res_jDown"
 ]
 
-WBosonSystNames = [
-    "_WbosonWeight_QCD1Up", "_WbosonWeight_QCD1Down",
-    "_WbosonWeight_QCD2Up", "_WbosonWeight_QCD2Down",
-    "_WbosonWeight_QCD3Up", "_WbosonWeight_QCD3Down",
-    "_WbosonWeight_EW1Up", "_WbosonWeight_EW1Down",
-    "_WbosonWeight_EW2Up", "_WbosonWeight_EW2Down",
-    "_WbosonWeight_EW3Up", "_WbosonWeight_EW3Down",
-    "_WbosonWeight_MixedUp", "_WbosonWeight_MixedDown",
-    "_WbosonWeight_AlphaUp","_WbosonWeight_AlphaDown",
-
+EWTheorySystNames = ["",
+    "_amc_scale_variation_muRUp", "_amc_scale_variation_muRDown",
+    "_amc_scale_variation_muFUp", "_amc_scale_variation_muFDown",
 ]
 
-ZBosonSystNames = [
-    "_ZbosonWeight_QCD1Up", "_ZbosonWeight_QCD1Down",
-    "_ZbosonWeight_QCD2Up", "_ZbosonWeight_QCD2Down",
-    "_ZbosonWeight_QCD3Up", "_ZbosonWeight_QCD3Down",
-    "_ZbosonWeight_EW1Up",  "_ZbosonWeight_EW1Down",
-    "_ZbosonWeight_EW2Up",  "_ZbosonWeight_EW2Down",
-    "_ZbosonWeight_EW3Up",  "_ZbosonWeight_EW3Down",
-    "_ZbosonWeight_MixedUp","_ZbosonWeight_MixedDown",
-    "_ZbosonWeight_AlphaUp","_ZbosonWeight_AlphaDown",
+madgraphTheorySystNames = ["",
+    "_madgraph_scale_variation_muRUp", "_madgraph_scale_variation_muRDown",
+    "_madgraph_scale_variation_muFUp", "_mpdgraph_scale_variation_muFDown",
 ]
+
+powhegTheorySystNames = ["",
+    "_powheg_scale_variation_muRUp", "_powheg_scale_variation_muRDown",
+    "_powheg_scale_variation_muFUp", "_powheg_scale_variation_muFDown",
+]
+
+PDFSystNames = [
+    "_Weight_PDFUp", "_Weight_PDFDown",
+]
+
+BosonSystNames = [
+    "_BosonWeight_QCD1Up", "_BosonWeight_QCD1Down",
+    "_BosonWeight_QCD2Up", "_BosonWeight_QCD2Down",
+    "_BosonWeight_QCD3Up", "_BosonWeight_QCD3Down",
+    "_BosonWeight_EW1Up", "_BosonWeight_EW1Down",
+    "_BosonWeight_AlphaUp","_BosonWeight_AlphaDown",
+]
+
+ZvvBosonSystNames=[
+    "_ZvvBosonWeight_EW2", "_ZvvBosonWeight_EW2Down",
+    "_ZvvBosonWeight_EW3", "_ZvvBosonWeight_EW3Down",
+    "_ZvvBosonWeight_MixedUp", "_ZvvBosonWeight_MixedDown",
+]
+
+WlnuBosonSystNames=[
+    "_WlnuBosonWeight_EW2Up", "_WlnBosonWeight_EW2Down",
+    "_WlnBosonWeight_EW3", "_WlnBosonWeight_EW3Down",
+    "_WlnBosonWeight_MixedUp", "_WlnBosonWeight_MixedDown",
+]
+
+ZllBosonSystNames=[
+    "_ZllBosonWeight_EW2Up", "_ZllBosonWeight_EW2Down",
+    "_ZllBosonWeight_EW3", "_ZllBosonWeight_EW3Down",
+    "_ZllBosonWeight_MixedUp", "_ZllBosonWeight_MixedDown",
+]
+
 
 unfoldedExtraSystNames = [
     "_DataStatUp", "_DataStatDown",
-    "_fakeStatUp", "_fakeStatDown",
-    "_fakeScaleUp", "_fakeScaleDown",
-    "_MCStatUp", "_MCStatDown"
+    # "_fakeStatUp", "_fakeStatDown",
+    # "_fakeScaleUp", "_fakeScaleDown",
+    # "_MCStatUp", "_MCStatDown"
 ]
 
 
-BosonSystNames = ZBosonSystNames+WBosonSystNames
-
-MCSystnames = commonTheorySystNames + BosonSystNames
-unfoldedSystNames =  ExSystNames + unfoldedExtraSystNames +MCSystnames 
+MCSystnames = EWTheorySystNames + BosonSystNames
+unfoldedSystNames =  ExSystNames + unfoldedExtraSystNames 
+allSystnames=MCSystnames+ExSystNames
 
 path_ntuples = "/nfs/dust/cms/user/mwassmer/DarkMatter/ntuples"
 # path_ntuples = "/nfs/dust/cms/user/swieland/Darkmatter/ntuples"
@@ -78,18 +90,31 @@ samples_unfolded = [
     Sample('unfolded', ROOT.kBlack, dummypath+"unfolded", dummyweight, 'unfolded', dummySys, samDict=sampleDict),
 ]
 
+samples_data = [
+    Sample('data',ROOT.kBlack, dummypath+"data",dummyweight,'data',[""],samDict=sampleDict),
+]
+
+samples_dataUnfolded = [
+    Sample('unfolded data',ROOT.kBlack, dummypath+"data",dummyweight,'data',[""],samDict=sampleDict),
+]
+
 samples_background = [
-    Sample('Z(#nu#nu)+jets', ROOT.kBlue, dummypath, dummyweight, 'z_nunu_jets', commonTheorySystNames + ZBosonSystNames, samDict=sampleDict),
-    Sample('W(l#nu)+jets', ROOT.kGreen, dummypath, dummyweight, 'w_lnu_jets', commonTheorySystNames + WBosonSystNames, samDict=sampleDict),
+    Sample('Z(#nu#nu)+jets', ROOT.kBlue, dummypath, dummyweight, 'z_nunu_jets', EWTheorySystNames + PDFSystNames + BosonSystNames + ZvvBosonSystNames, samDict=sampleDict),
+    Sample('W(l#nu)+jets', ROOT.kGreen, dummypath, dummyweight, 'w_lnu_jets', EWTheorySystNames + PDFSystNames + BosonSystNames + WlnuBosonSystNames, samDict=sampleDict),
     Sample('Diboson', ROOT.kViolet, dummypath, dummyweight, 'diboson', dummySys, samDict=sampleDict),
-    Sample('Single Top', ROOT.kViolet-1, dummypath, dummyweight, 'singletop', dummySys, samDict=sampleDict),
-    Sample('t#bar{t}', ROOT.kViolet-2, dummypath, dummyweight, 'ttbar', dummySys, samDict=sampleDict),
-    Sample('Z(ll)+jets', ROOT.kViolet-7, dummypath, dummyweight, 'z_ll_jets', dummySys, samDict=sampleDict),
-    Sample('QCD', ROOT.kViolet+3, dummypath, dummyweight, 'qcd', dummySys, samDict=sampleDict),
-    Sample('#gamma +jets', ROOT.kViolet+7, dummypath, dummyweight, 'gamma_jets', dummySys, samDict=sampleDict)
+    Sample('Single Top', ROOT.kViolet-1, dummypath, dummyweight, 'singletop', madgraphTheorySystNames, samDict=sampleDict),
+    Sample('t#bar{t}', ROOT.kViolet-2, dummypath, dummyweight, 'ttbar', madgraphTheorySystNames + PDFSystNames , samDict=sampleDict),
+    Sample('Z(ll)+jets', ROOT.kViolet-7, dummypath, dummyweight, 'z_ll_jets', EWTheorySystNames + PDFSystNames  + BosonSystNames + ZvvBosonSystNames, samDict=sampleDict),
+    Sample('QCD', ROOT.kViolet+3, dummypath, dummyweight, 'qcd', powhegTheorySystNames, samDict=sampleDict),
+    Sample('#gamma +jets', ROOT.kViolet+7, dummypath, dummyweight, 'gamma_jets', powhegTheorySystNames, samDict=sampleDict)
 ]
 
 
 samples_signal = [
-    Sample('signal', ROOT.kRed,dummypath, dummySys, 'signal', dummySys, samDict=sampleDict),
+    Sample('Signal', ROOT.kRed,dummypath, dummySys, 'signal', dummySys, samDict=sampleDict),
+]
+
+samples_signalUnfolded = [
+    Sample('Signal', ROOT.kRed,dummypath, dummySys, 'Axial_MonoJ_NLO_Mphi-1000_Mchi-300_gSM-0p25_gDM-1p0_13TeV-madgraph', dummySys, samDict=sampleDict),
+    # Sample('Signal', ROOT.kRed,dummypath, dummySys, 'Axial_MonoJ_NLO_Mphi-1750_Mchi-300_gSM-0p25_gDM-1p0_13TeV-madgraph', dummySys, samDict=sampleDict),
 ]

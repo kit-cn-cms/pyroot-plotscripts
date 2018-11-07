@@ -972,7 +972,7 @@ def createHistoLists_fromFiles(files,rebin=1):
     listOfHistoLists=transposeLOL(listOfHistoListsT)
     return listOfHistoLists
 
-def createHistoLists_fromSuperHistoFile(path,samples,plots,rebin=1,catnames=[""],DoTwoDim=False):
+def createHistoLists_fromSuperHistoFile(path,samples,plots,rebin=1,catnames=[""],DoTwoDim=False, isSignal = False, isTotalName = False):
     listOfHistoListsT=[]
     f=ROOT.TFile(path, "readonly")
     keyList = f.GetKeyNames()
@@ -984,8 +984,45 @@ def createHistoLists_fromSuperHistoFile(path,samples,plots,rebin=1,catnames=[""]
         print catnames
         for c in catnames:
             for plot in plots:
-                key=sample.nick+'_'+c+plot.name
-                #print key
+                # if isSignal:
+                if not isTotalName:
+                    key=sample.nick+'_'+c+plot.name
+                else:
+                    key=sample.nick
+                # else:
+                    # key=sample.nick+'_'+c+plot.name
+                print "key: ", key
+                print key, sample.nick, c, plot.name
+                o=f.Get(key)
+                print o
+                if isinstance(o,ROOT.TH1) and not isinstance(o,ROOT.TH2):
+                    o.Rebin(rebin)
+                    o.SetTitle(plot.variable)
+                    histoList.append(o.Clone())
+#                    print "ok", histoList[-1], len(histoList)
+                if DoTwoDim and isinstance(o,ROOT.TH2):
+		    #print "2D"
+		    histoList.append(o.Clone())
+	#raw_input()
+
+        listOfHistoListsT.append(histoList)
+    listOfHistoLists=transposeLOL(listOfHistoListsT)
+    return listOfHistoLists
+
+def createHistoLists_fromSuperHistoFileATLAS(path,samples,plots,rebin=1,catnames=[""],DoTwoDim=False):
+    listOfHistoListsT=[]
+    f=ROOT.TFile(path, "readonly")
+    keyList = f.GetKeyNames()
+    #print keyList
+    for sample in samples:
+
+        histoList=[]
+        ROOT.gDirectory.cd('PyROOT:/')
+        print catnames
+        for c in catnames:
+            for plot in plots:
+                key=sample.nick+c+plot.name
+                print key
                 print key, sample.nick, c, plot.name
                 o=f.Get(key)
                 #print o
@@ -993,10 +1030,8 @@ def createHistoLists_fromSuperHistoFile(path,samples,plots,rebin=1,catnames=[""]
                     o.Rebin(rebin)
                     histoList.append(o.Clone())
 #                    print "ok", histoList[-1], len(histoList)
-                if DoTwoDim and isinstance(o,ROOT.TH2):
-		    #print "2D"
-		    histoList.append(o.Clone())
-	#raw_input()
+            histoList.append(o.Clone())
+    #raw_input()
 
         listOfHistoListsT.append(histoList)
     listOfHistoLists=transposeLOL(listOfHistoListsT)
@@ -1017,6 +1052,7 @@ def createLLL_fromSuperHistoFileSyst(path,samples,plots,systnames=[""]):
         print "creating LLL error histolist for plot ", plot.name
         for sample in samples:
             nominal_key = sample.nick+'_'+plot.name+systnames[0]
+            print nominal_key
             nominal = f.Get(nominal_key)
             # if dostore:
             # theobjectlist.append(nominal)
@@ -1048,6 +1084,53 @@ def createLLL_fromSuperHistoFileSyst(path,samples,plots,systnames=[""]):
     print "creating the LLL took ", theclock.RealTime()
     return lll
 
+def createLLL_fromSuperHistoFileSystATLAS(path,samples,plots,systnames=[""]):
+    theclock = ROOT.TStopwatch()
+    theclock.Start()
+    verbosity = 0
+    f = ROOT.TFile(path, "readonly")
+#    print path
+    theobjectlist = []
+    # dostore=False
+    keyList = f.GetKeyNames()
+    lll = []
+    for plot in plots:
+        ll = []
+        print "creating LLL error histolist for plot ", plot.name
+        for sample in samples:
+            nominal_key = sample.nick+plot.name+systnames[0]
+            print nominal_key
+            nominal = f.Get(nominal_key)
+            # if dostore:
+            # theobjectlist.append(nominal)
+#            print sample.name
+            # print "shapes ", sample.shape_unc
+            l = []
+            for syst in systnames:
+                ROOT.gDirectory.cd('PyROOT:/')
+                key = sample.nick+plot.name+syst
+                print key
+                # print sample.shape_unc
+                if not syst in sample.shape_unc:
+                    if verbosity >= 2:
+                        print "using nominal for ", key
+                    l.append(nominal.Clone(key))
+                    continue
+                # print key
+
+                o = f.Get(key)
+                # o.Print()
+                # if dostore:
+                # theobjectlist.append(o)
+                if isinstance(o, ROOT.TH1) and not isinstance(o, ROOT.TH2):
+                    #           print "using right one for", key
+                    l.append(o.Clone())
+ #               else:
+  #                  print syst,'not used for',sample.name
+            ll.append(l)
+        lll.append(ll)
+    print "creating the LLL took ", theclock.RealTime()
+    return lll
 
 def createUnfoldedHistoList(path, varname, systnames=[""]):
     f=ROOT.TFile(path, "readonly")
@@ -1060,8 +1143,8 @@ def createUnfoldedHistoList(path, varname, systnames=[""]):
         ROOT.gDirectory.cd('PyROOT:/')
         key=varname+syst
         histo=f.Get(key)
-        # print key
-        # histo.Print()
+        print key
+        histo.Print()
         if isinstance(histo,ROOT.TH1) and not isinstance(histo,ROOT.TH2):
             l.append(histo.Clone())
     return l
@@ -2410,11 +2493,11 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         CMS_lumi.writeExtraText = 1
         #CMS_lumi.extraText = "Preliminary"
         CMS_lumi.extraText = ""
-        CMS_lumi.cmsText="CMS"
+        CMS_lumi.cmsText="CMS private work"
 
         CMS_lumi.lumi_sqrtS = "13 TeV" # used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
 
-        CMS_lumi.cmsTextSize = 0.55
+        CMS_lumi.cmsTextSize = 0.3
         CMS_lumi.cmsTextOffset = 0.49
         CMS_lumi.lumiTextSize = 0.43
         CMS_lumi.lumiTextOffset = 0.61
@@ -2509,6 +2592,7 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
 def plotUnfoldedDataMCanWsyst(lUnfolded,listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop,factor,name,listOflll,xlabel,logscale=False,label='',ratio=True,blinded=False,verbosity=0):
 ################################################
 ################################################
+
     options = 'histo'
     if isinstance(label, basestring):
         labeltexts = len(listOfHistoListsData)*[label]
@@ -2540,9 +2624,12 @@ def plotUnfoldedDataMCanWsyst(lUnfolded,listOfHistoLists,samples,listOfhistosOnT
 
     # for g in listOfErrorGraphs:
       # print g
-    # print len(listOfhistosOnTop),len(listOfHistoLists),len(listOfHistoListsData),len(labeltexts),len(listOfErrorGraphs)
+    # print len(listOfhistosOnTop),len(listOfHistoLists),len(labeltexts),len(listOfErrorGraphs)
     # raw_input()
+
     for ot, listOfHistos, labeltext, errorgraphList in zip(listOfhistosOnTop, listOfHistoLists, labeltexts, listOfErrorGraphs):
+        print "TEST"
+
         iplot += 1
         integralfactor = 0
         for histo, sample in zip(listOfHistos, samples):
@@ -2580,6 +2667,7 @@ def plotUnfoldedDataMCanWsyst(lUnfolded,listOfHistoLists,samples,listOfhistosOnT
         h=stackedListOfHistos[0]
         if logscale:
             h.GetYaxis().SetRangeUser(yMax/10000,yMax*10)
+            # h.GetYaxis().SetRangeUser(yMax/1000000,yMax*10)
             canvas.cd(1).SetLogy()
         else:
             h.GetYaxis().SetRangeUser(0,yMax*1.8)
@@ -2594,7 +2682,6 @@ def plotUnfoldedDataMCanWsyst(lUnfolded,listOfHistoLists,samples,listOfhistosOnT
         h.DrawCopy('axissame')
 #make error bars ##########
 ###
-
         otc=ot.Clone()
         nok=99999
         if blinded:
@@ -2636,10 +2723,10 @@ def plotUnfoldedDataMCanWsyst(lUnfolded,listOfHistoLists,samples,listOfhistosOnT
             syserrorL=0
             for l in lUnfolded[1:]:
                 h_shift=l
-                # h_shift.Print()
+                h_shift.Print()
                 nominal = datahist.GetBinContent(bin);
                 shift = nominal - h_shift.GetBinContent(bin)
-                # print shift
+                print shift
                 if shift > 0:
                     syserrorL+=(shift*shift)
                 else:
@@ -2737,7 +2824,7 @@ def plotUnfoldedDataMCanWsyst(lUnfolded,listOfHistoLists,samples,listOfhistosOnT
     l2.SetFillStyle(0);
     l2.Print()
     l2.Print()
-    l1.AddEntry22(data,'data','P')
+    l1.AddEntry22(data,'unf. data','P')
     if factor >= 0.:
       l2.AddEntry22(otc,sampleOnTop.name+' x '+str(factor),'L')
     else:
@@ -2762,7 +2849,7 @@ def plotUnfoldedDataMCanWsyst(lUnfolded,listOfHistoLists,samples,listOfhistosOnT
     CMS_lumi.lumi_13TeV = "35.9 fb^{-1}"
     CMS_lumi.writeExtraText = 1
     #CMS_lumi.extraText = "Preliminary"
-    CMS_lumi.extraText = ""
+    CMS_lumi.extraText = "private work"
     CMS_lumi.cmsText="CMS"
 
     CMS_lumi.lumi_sqrtS = "13 TeV" # used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
@@ -2799,7 +2886,7 @@ def plotUnfoldedDataMCanWsyst(lUnfolded,listOfHistoLists,samples,listOfhistosOnT
     print emptyHisto.GetName()
     emptyHisto.SetFillStyle(0)
     ## with this line you can let the ratio graph scale the y axis automatically
-    #line.GetYaxis().SetRangeUser(ratiominimum-0.2,ratiomaximum+0.2)
+    # line.GetYaxis().SetRangeUser(ratiominimum-0.2,ratiomaximum+0.2)
     line.GetYaxis().SetRangeUser(0.4,1.65)
 
     line.GetXaxis().SetRangeUser(listOfHistos[0].GetXaxis().GetXmin(),listOfHistos[0].GetXaxis().GetXmax())

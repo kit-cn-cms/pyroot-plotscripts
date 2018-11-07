@@ -220,6 +220,10 @@ print "Making MC Control plots"
 print "skipping"
 
 lll=createLLL_fromSuperHistoFileSyst(outputpath,samples_background,plots,allsystnames)
+# for ll in lll:
+# for l in lll[0]:
+#     for item in l:
+#         item.Print()
 #lllnoQCD=createLLL_fromSuperHistoFileSyst(outputpath,samples[1:],discriminatorPlots,errorSystNamesNoPSNoQCD)
 labels=[plot.label for plot in plots]
 plotDataMCanWsyst(listOfHistoLists_data,transposeLOL(lolT_background),samples_background,lolT_signal[0],samples_signal[0],-1,jobname,[[lll,3354,ROOT.kBlack,True]],True,labels,True,False)
