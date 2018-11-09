@@ -1,13 +1,9 @@
 #!/usr/bin/python2
-
 import sys
-import getopt
 import os
 import imp
 import inspect
 import ROOT
-import pandas 
-import ast
 
 filedir = os.path.dirname(os.path.realpath(__file__))
 pyrootdir = "/".join(filedir.split("/")[:-1])
@@ -15,6 +11,7 @@ pyrootdir = "/".join(filedir.split("/")[:-1])
 sys.path.append(pyrootdir)
 
 # local imports
+import util.analysisClass as analysisClass
 import util.optBinning as optBinning
 import util.genPlots as genPlots
 import util.configClass as configClass
@@ -43,7 +40,6 @@ def main(pyrootdir, argv):
         print("created workdir at "+str(workdir))
     
     # path to root file
-    # how is this name determined in different script types?
     rootPathForAnalysis = workdir+'/output_limitInput.root'
 
     # signal process
@@ -58,36 +54,31 @@ def main(pyrootdir, argv):
     # name of the csv files used in configdata folder
     configDataBaseName = "limitsAllv20"
 
-    # options for plotParallel
-    # TODO: this list contains both lists below
-    #       but is not used yet - need to implement into analysisClass
-    options = {
-        # options for analysis in general
-        "singleExecute":        False,
-        "plotBlinded":          True,
-        "cirun":                False,
-        # options for steps in script
-        "optimizedRebinning":   True,
-        "haddParallel":         True,
-        "addData":              True,
-        "drawParallel":         True,
-        "makeSimplePlots":      True,
+    # name of plotconfig
+    pltcfgName = "v15"
+
+    # file for MEPDFs/LHEWeights
+    MEPDFCSVFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv"
+
+    # script options
+    analysisOptions = {
+        # general options
+        "plotBlinded":          True,  # blind region
+        "cirun":                False,  # test run with less samples
+        "haddParallel":         True,  # parallel hadding instead of non-parallel
+        "useOldRoot":           False,   # use existing root file if it exists (skips plotParallel)
+        # options to activate parts of the script
+        "optimizedRebinning":   False, # e.g. "SoverB", "Significance"
+        "haddFromWildcard":     True,
         "makeDataCards":        True,
+        "addData":              True,  # adding real data 
+        "singleExecute":        False,  # for non parallel drawing
+        "drawParallel":         True,
+        # options for drawParallel/singleExecute sub programs
+        "makeSimplePlots":      True,
         "makeMCControlPlots":   True,
         "makeEventYields":      False,
-        # options for trying to skip steps
-        "useOldRoot":           False,
-        "skipPlotParallel":     False,
-        "skipHaddParallel":     False,  
-        "skipHaddFromWildcard": False,
-        "skipRenaming":         False,
-        "skipDatacards":        False}
-        
-    plotOptions = {
-        "cirun":                False,  
-        "haddParallel":         True, 
-        "useOldRoot":           False,
-        # the skipXXX options try to skip the submission of files to the batch system
+        # the skipX options try to skip the submission of files to the batch system
         # before skipping the output is crosschecked
         # if the output is not complete, the skipped part is done anyways
         "skipPlotParallel":     False,
@@ -95,18 +86,6 @@ def main(pyrootdir, argv):
         "skipHaddFromWildcard": False,
         "skipRenaming":         False,
         "skipDatacards":        False}
-
-    # general analysis Options
-    analysisOptions = {
-        "singleExecute":        False,
-        "optimizedRebinning":   False,
-        "plotBlinded":          True,
-        "makeSimplePlots":      True,
-        "makeMCControlPlots":   True,
-        "makeDataCards":        True,
-        "makeEventYields":      False,
-        "drawParallel":         True,
-        "addData":              False}
 
     #plotJson = "/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_latestAndGreatest.json"
     plotJson = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/treejson_v13.json"
@@ -128,11 +107,14 @@ def main(pyrootdir, argv):
 
     # TODO make the analysisClass more essential - atm it is not really needed
     analysis = configClass.analysisConfig(
-        workdir = workdir, pyrootdir = pyrootdir, rootPath = rootPathForAnalysis, 
-        signalProcess = signalProcess, discrName = discrName)
+        workdir = workdir, 
+        pyrootdir = pyrootdir, 
+        rootPath = rootPathForAnalysis, 
+        signalProcess = signalProcess, 
+        pltcfgName = pltcfgName,
+        discrName = discrName)
 
     analysis.initArguments( argv )
-    analysis.initPlotOptions( plotOptions )
     analysis.initAnalysisOptions( analysisOptions )
 
     pltcfg = analysis.initPlotConfig()
@@ -145,6 +127,7 @@ def main(pyrootdir, argv):
     monitor.printClass(analysis, "init")
 
     #print '''    
+    # TODO: rework not yet done
     ## ========================================================
     ## NNFlow interface
     ## ========================================================
@@ -173,12 +156,11 @@ def main(pyrootdir, argv):
         configDataBaseName = configDataBaseName)
 
     configData.initData()
-    monitor.printClass(configData, "init")
 
     # get the discriminator plots
     configData.genDiscriminatorPlots(memexp)
     configData.writeConfigDataToWorkdir()
-    monitor.printClass(configData, "after genDiscriminatorPlots")
+    monitor.printClass(configData, "init")
 
     print '''    
     # ========================================================
@@ -186,8 +168,8 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     configData.getAddVariables()
-    configData.getMEPDFAddVariables(
-        "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv")
+    configData.getMEPDFAddVariables(MEPDFCSVFile)
+
     # TODO additionalvariables.extend(NNFlowInterface.getAdditionalVariablesList())
     monitor.printClass(configData, "after getting additional Variables")
 
@@ -200,12 +182,11 @@ def main(pyrootdir, argv):
     # if necessary add them here to the discriminatorPlots
     # ========================================================
     '''
-    if analysis.additionalPlotVariables:
-        # Construct list with additional plot variables, 
-        # will need name of discrs and plotPreselections for this
-        print( "add additional plot variables")
-        configData.getAdditionalDiscriminatorPlots()
-        monitor.printClass(configData, "after adding additional plot variables")
+    # Construct list with additional plot variables, 
+    # will need name of discrs and plotPreselections for this
+    print( "add additional plot variables")
+    configData.getAdditionalDiscriminatorPlots()
+    monitor.printClass(configData, "after adding additional plot variables")
     
 
     
@@ -246,19 +227,14 @@ def main(pyrootdir, argv):
             pP.setJson(plotJson)
             pP.setDataBases(plotDataBases)
             pP.setAddInterfaces(plotInterfaces)
-            pP.setCatNames([''])
-            pP.setCatSelections(['1.'])
+            pP.setMEPDFCSV(MEPDFCSVFile)
+            #pP.setCatNames([''])
+            #pP.setCatSelections(['1.'])
             # pP.setMaxEvts(...)
 
             # run plotParallel
             pP.run()
 
-
-
-        # if pP.haddFiles is a list we are probably in the first iteration
-        # cross check if plotParallel has terminated successfully
-        # program exits if not
-        pP.checkHaddFiles()
         pP.checkTermination()
 
         monitor.printClass(pP, "after plotParallel")
@@ -365,6 +341,7 @@ def main(pyrootdir, argv):
                     Epsilon = 0.0,
                     skipRenaming = analysis.skipRenaming)
 
+        if analysis.addData:
             print '''
             # ========================================================
             # adding data with plotParallel
@@ -400,7 +377,7 @@ def main(pyrootdir, argv):
 
             with monitor.Timer("makeDatacardsParallel"):
                 makeDatacards.makeDatacardsParallel(
-                    filePath = analysis.limitPath,
+                    filePath = analysis.renamedPath,
                     outPath = datacardsPath,
                     categories = configData.getBinlabels(),
                     doHdecay = True,
@@ -479,25 +456,29 @@ def main(pyrootdir, argv):
             with monitor.Timer("makingSimpleMCplots"):
                 # creating control plots
                 controlPlotsOptions = {
-                    "factor": -1,
-                    "logscale": False,
-                    "canvasOptions": "histo",
-                    "normalize": False,
-                    "stack": True, # not default
-                    "ratio": False,
-                    "sepaTest": False}
-                gP.makeSimpleControlPlots( listName = histoList, listIndex = 9, options = controlPlotsOptions)
+                    "factor":           -1,
+                    "logscale":         False,
+                    "canvasOptions":    "histo",
+                    "normalize":        False,
+                    "stack":            True, # not default
+                    "ratio":            False,
+                    "sepaTest":         False}
+                gP.makeSimpleControlPlots( 
+                    dataConfig = genPlots.Config(name = histoList, index = 9,
+                    options = controlPlotsOptions
 
                 # creating shape plots
                 shapePlotsOptions = {
-                    "logscale": False,
-                    "canvasOptions": "histo",
-                    "normalize": True, # not default
-                    "stack": False,
-                    "ratio": False,
-                    "statTest": False,
-                    "sepaTest": False}
-                gP.makeSimpleShapePlots( listName = dataList, listIndex = 9, options = shapePlotsOptions)
+                    "logscale":         False,
+                    "canvasOptions":    "histo",
+                    "normalize":        True, # not default
+                    "stack":            False,
+                    "ratio":            False,
+                    "statTest":         False,
+                    "sepaTest":         False}
+                gP.makeSimpleShapePlots(
+                    dataConfig = genPlots.Config(name = dataList, index = 9),
+                    options = shapePlotsOptions)
 
                 monitor.printClass(gP, "after making simple MC plots")
 
@@ -513,26 +494,27 @@ def main(pyrootdir, argv):
             with monitor.Timer("makingMCControlPlots"):
 
                 # generate the llloflist internally
-                gP.genNestedHistList(listName = histoList, listIndex = 9, 
+                gP.genNestedHistList(
+                    dataConfig = genPlots.Config( name = histoList, index = 9 ),
                     systNames = pltcfg.errorSystNamesNoQCD, 
-                    outName = "histoList")
+                    outName = histoList)
 
                 monitor.printClass(gP, "after generating nested hist list")
                 # set config of llloflist
                 nestedHistsConfig = {}
-                nestedHistsConfig["histoList"] = {
-                    "style": 3354, 
-                    "color": ROOT.kBlack, 
-                    "doRateSysts": False}
+                nestedHistsConfig[histoList] = {
+                    "style":        3354, 
+                    "color":        ROOT.kBlack, 
+                    "doRateSysts":  False}
 
 
                 #set general plotoption
                 controlPlotsOptions = {
-                    "factor": -2, #not default
-                    "logscale": False,
-                    "canvasOptions": "histo",
-                    "ratio": True, # not default
-                    "blinded": analysis.plotBlinded} #not default
+                    "factor":           -2, #not default
+                    "logscale":         False,
+                    "canvasOptions":    "histo",
+                    "ratio":            True, # not default
+                    "blinded":          analysis.plotBlinded} #not default
                 # makint the control plots
                 gP.makeControlPlots(
                     dataConfig = genPlots.Config(name = dataList, index = 0),
@@ -541,7 +523,8 @@ def main(pyrootdir, argv):
                     headHist = histoList,
                     headSample = histoList,
                     nestedHistsConfig = nestedHistsConfig,
-                    options = controlPlotsOptions)
+                    options = controlPlotsOptions,
+                    outName = "controlPlots")
 
             monitor.printClass(gP, "after making control plots")
 
