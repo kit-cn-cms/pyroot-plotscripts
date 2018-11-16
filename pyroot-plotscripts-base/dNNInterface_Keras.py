@@ -61,7 +61,7 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
       max_pos = idim;
     }
   }
-  return idim;
+  return max_pos;
 }
 
 
@@ -196,7 +196,12 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
   def getVariableInitInsideEventLoopLines(self):
     rstr="""
     // variables for DNNs
-       int 4j3t_num_classes = 34;
+       int num_classes_4j3t = 6;
+    """
+    
+    rstr+="int num_features_4j3t = "+str(len(self._variable_helper_function("4j3t")))+";\n"
+       
+    rstr+="""
        double DNN_Out_4j3t_ttbar2B  = -6;
        double DNN_Out_4j3t_ttbarB  = -6;
        double DNN_Out_4j3t_ttbarBB  = -6;
@@ -205,7 +210,12 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
        double DNN_Out_4j3t_ttH  = -6;
        int DNN_4j3t_pred_class  = -6;
 
-       int 5j3t_num_classes = 42;
+       int num_classes_5j3t = 6;
+    """
+    
+    rstr+="int num_features_5j3t = "+str(len(self._variable_helper_function("5j3t")))+";\n"
+       
+    rstr+="""
        double DNN_Out_5j3t_ttbar2B  = -6;
        double DNN_Out_5j3t_ttbarB  = -6;
        double DNN_Out_5j3t_ttbarBB  = -6;
@@ -214,8 +224,13 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
        double DNN_Out_5j3t_ttH  = -6;
        int DNN_5j3t_pred_class  = -6;
 
-       int 6j3t_num_classes = 41;
-       double DNN_Out_6j3t_ttbar2B  = -6;
+       int num_classes_6j3t = 6;
+    """
+    
+    rstr+="int num_features_6j3t = "+str(len(self._variable_helper_function("6j3t")))+";\n"
+       
+    rstr+="""
+        double DNN_Out_6j3t_ttbar2B  = -6;
        double DNN_Out_6j3t_ttbarB  = -6;
        double DNN_Out_6j3t_ttbarBB  = -6;
        double DNN_Out_6j3t_ttbarCC  = -6;
@@ -223,9 +238,9 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
        double DNN_Out_6j3t_ttH  = -6;
        int DNN_6j3t_pred_class= -6;
 
-       Tensor tensor_4j3t (DT_FLOAT, TensorShape({1,4j3t_num_classes}));
-       Tensor tensor_5j3t (DT_FLOAT, TensorShape({1,5j3t_num_classes}));
-       Tensor tensor_6j3t (DT_FLOAT, TensorShape({1,6j3t_num_classes}));
+       Tensor tensor_4j3t (DT_FLOAT, TensorShape({1,num_features_4j3t}));
+       Tensor tensor_5j3t (DT_FLOAT, TensorShape({1,num_features_5j3t}));
+       Tensor tensor_6j3t (DT_FLOAT, TensorShape({1,num_features_6j3t}));
 
        std::vector<tensorflow::Tensor> outputTensors;
  """
@@ -243,19 +258,19 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
   if (N_Jets == 4 and N_BTagsM >= 3){
     //Load Data
     """
-    +str(self._fill_vector('4j3t'))"""
+    rstr+=str(self._fill_vector('4j3t'))
+    rstr+="""
 
     //Run graph
-    vector<pair<string,Tensor>> input2 = { {"input",tensor_4j3t}};
+    vector<pair<string,Tensor>> input2 = {{"input",tensor_4j3t}};
     status_4j3t = session_4j3t->Run(input2, {"dense_2/Softmax"},  {}, &outputTensors);
     if (!status_4j3t.ok()) 
     {
-      cout << status_4j3t.ToString() << "\n";
-      return 1;
+      std::cout << status_4j3t.ToString() << std::endl;
     }
     else
     {
-      cout << "Success load graph !! " << "\n";
+      std::cout << "Success load graph !! " << std::endl;
     }
 
     //Feed output into right variables
@@ -266,7 +281,7 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
     double DNN_Out_4j3t_ttbarCC  = outputTensors.at(0).tensor<float,2>()(0,4);
     double DNN_Out_4j3t_ttbarlf  = outputTensors.at(0).tensor<float,2>()(0,5);
     double DNN_Out_4j3t_ttH  = outputTensors.at(0).tensor<float,2>()(0,0);
-    int DNN_4j3t_pred_class  = int getMaxPosition(outputTensors,4j3t_num_classes);
+    int DNN_4j3t_pred_class  = getMaxPosition(outputTensors,num_classes_4j3t);
 
     bool printstuff=0;
     if(printstuff){
@@ -276,25 +291,24 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
       cout<<"ttbarBB node "<<DNN_Out_4j3t_ttbarBB<<std::endl;
       cout<<"ttbarB node "<<DNN_Out_4j3t_ttbarB<<std::endl;
       cout<<"ttbar2B node "<<DNN_Out_4j3t_ttbar2B<<std::endl;
-      cout<<"predicted class "<< DNN_Out_4j3t_class<<std::endl;
+      cout<<"predicted class "<< DNN_4j3t_pred_class<<std::endl;
      }
-
   }
   else if (N_Jets == 5 and N_BTagsM >= 3){
     """
-    +str(self._fill_vector('5j3t'))"""
+    rstr+=str(self._fill_vector('5j3t'))
+    rstr+="""
 
     //Run graph
-    vector<pair<string,Tensor>> input2 = { {"input",tensor_5j3t}};
+    vector<pair<string,Tensor>> input2 = {{"input",tensor_5j3t}};
     status_5j3t = session_5j3t->Run(input2, {"dense_2/Softmax"},  {}, &outputTensors);
     if (!status_5j3t.ok()) 
     {
-      cout << status_5j3t.ToString() << "\n";
-      return 1;
+      std::cout << status_5j3t.ToString() << std::endl;
     }
     else
     {
-      cout << "Success load graph !! " << "\n";
+      std::cout << "Success load graph !! " << std::endl;
     }
 
     //Feed output into right variables
@@ -305,7 +319,7 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
     double DNN_Out_5j3t_ttbarCC  = outputTensors.at(0).tensor<float,2>()(0,4);
     double DNN_Out_5j3t_ttbarlf  = outputTensors.at(0).tensor<float,2>()(0,5);
     double DNN_Out_5j3t_ttH  = outputTensors.at(0).tensor<float,2>()(0,0);
-    int DNN_5j3t_pred_class  = int getMaxPosition(outputTensors,4j3t_num_classes);
+    int DNN_5j3t_pred_class  = getMaxPosition(outputTensors,num_classes_4j3t);
 
     bool printstuff=0;
     if(printstuff){
@@ -315,25 +329,25 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
       cout<<"ttbarBB node "<<DNN_Out_5j3t_ttbarBB<<std::endl;
       cout<<"ttbarB node "<<DNN_Out_5j3t_ttbarB<<std::endl;
       cout<<"ttbar2B node "<<DNN_Out_5j3t_ttbar2B<<std::endl;
-      cout<<"predicted class "<< DNN_Out_5j3t_class<<std::endl;
+      cout<<"predicted class "<< DNN_5j3t_pred_class<<std::endl;
      }
 
   }
-  else (N_Jets == 6 and N_BTagsM >= 3){
+  else if(N_Jets == 6 and N_BTagsM >= 3){
       """
-    +str(self._fill_vector('6j3t'))"""
+    rstr+=str(self._fill_vector('6j3t'))
+    rstr+="""
 
     //Run graph
-    vector<pair<string,Tensor>> input2 = { {"input",tensor_6j3t}};
+    vector<pair<string,Tensor>> input2 = {{"input",tensor_6j3t}};
     status_6j3t = session_6j3t->Run(input2, {"dense_2/Softmax"},  {}, &outputTensors);
     if (!status_6j3t.ok()) 
     {
-      cout << status_6j3t.ToString() << "\n";
-      return 1;
+      std::cout << status_6j3t.ToString() << std::endl;
     }
     else
     {
-      cout << "Success load graph !! " << "\n";
+      std::cout << "Success load graph !! " << std::endl;
     }
 
     //Feed output into right variables
@@ -344,20 +358,18 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
     double DNN_Out_6j3t_ttbarCC  = outputTensors.at(0).tensor<float,2>()(0,4);
     double DNN_Out_6j3t_ttbarlf  = outputTensors.at(0).tensor<float,2>()(0,5);
     double DNN_Out_6j3t_ttH  = outputTensors.at(0).tensor<float,2>()(0,0);
-    int DNN_6j3t_pred_class  = int getMaxPosition(outputTensors,6j3t_num_classes);
+    int DNN_6j3t_pred_class  = getMaxPosition(outputTensors,num_classes_6j3t);
 
     bool printstuff=0;
     if(printstuff){
-      cout<<"-----DNN-----"<<std::endl;
-      cout<<"ttH node "<<DNN_Out_6j3t_ttH<<std::endl;
-      cout<<"ttbarCC node "<<DNN_Out_6j3t_ttbarCC<<std::endl;
-      cout<<"ttbarBB node "<<DNN_Out_6j3t_ttbarBB<<std::endl;
-      cout<<"ttbarB node "<<DNN_Out_6j3t_ttbarB<<std::endl;
-      cout<<"ttbar2B node "<<DNN_Out_6j3t_ttbar2B<<std::endl;
-      cout<<"predicted class "<< DNN_Out_6j3t_class<<std::endl;
+      std::cout<<"-----DNN-----"<<std::endl;
+      std::cout<<"ttH node "<<DNN_Out_6j3t_ttH<<std::endl;
+      std::cout<<"ttbarCC node "<<DNN_Out_6j3t_ttbarCC<<std::endl;
+      std::cout<<"ttbarBB node "<<DNN_Out_6j3t_ttbarBB<<std::endl;
+      std::cout<<"ttbarB node "<<DNN_Out_6j3t_ttbarB<<std::endl;
+      std::cout<<"ttbar2B node "<<DNN_Out_6j3t_ttbar2B<<std::endl;
+      std::cout<<"predicted class "<< DNN_6j3t_pred_class<<std::endl;
      }
-  }
-
   }
  
 
@@ -369,44 +381,44 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
   // 4 = ttcc 
   // 5 = ttlf
 
-  }
   
 """
 
     return rstr
 
   def getTestCallLines(self):
-    rstr="""
-  //TODO: Change TestCallLines
-  std::vector<TLorentzVector> testdnnjets = {
-        makeVectorE(561.853400685, -1.687604070, 1.248519063, 48.315901270),
-        makeVectorE(317.050318074, -0.592420697, -1.641329408, 41.454653026),
-        makeVectorE(130.993330071, -0.257405132, -2.218888283, 15.829634094),
-        makeVectorE(90.088794331, -0.758062780, -1.199205875, 11.687776745),
-        makeVectorE(57.793076163, 0.163249642, 2.988173246, 9.959981641),
-        makeVectorE(45.080527604, -1.838460445, 1.761856556, 7.07615728)
-    };
-    std::vector<double> testdnnjetCSVs = {
-        0.592329562, 0.156740859, 0.998748481, 0.944896400, 0.268956393, 0.109731160
-    };
+    rstr=""  
+    #rstr="""
+  #//TODO: Change TestCallLines
+  #std::vector<TLorentzVector> testdnnjets = {
+        #makeVectorE(561.853400685, -1.687604070, 1.248519063, 48.315901270),
+        #makeVectorE(317.050318074, -0.592420697, -1.641329408, 41.454653026),
+        #makeVectorE(130.993330071, -0.257405132, -2.218888283, 15.829634094),
+        #makeVectorE(90.088794331, -0.758062780, -1.199205875, 11.687776745),
+        #makeVectorE(57.793076163, 0.163249642, 2.988173246, 9.959981641),
+        #makeVectorE(45.080527604, -1.838460445, 1.761856556, 7.07615728)
+    #};
+    #std::vector<double> testdnnjetCSVs = {
+        #0.592329562, 0.156740859, 0.998748481, 0.944896400, 0.268956393, 0.109731160
+    #};
 
-    TLorentzVector testdnnlepton = makeVectorM(45.567291260, -1.122234225, 2.685425282, 0.105700001);
-    TLorentzVector testdnnmet = makeVectorM(70.089050293, 0.0, -2.230507374, 0.0); 
-    std::vector<double> testdnnAddFeatures;
-    testdnnAddFeatures.push_back(1.); // blr
-    testdnnAddFeatures.push_back(1.); // blr_transformed
-    testdnnAddFeatures.push_back(1.); // MEM
+    #TLorentzVector testdnnlepton = makeVectorM(45.567291260, -1.122234225, 2.685425282, 0.105700001);
+    #TLorentzVector testdnnmet = makeVectorM(70.089050293, 0.0, -2.230507374, 0.0); 
+    #std::vector<double> testdnnAddFeatures;
+    #testdnnAddFeatures.push_back(1.); // blr
+    #testdnnAddFeatures.push_back(1.); // blr_transformed
+    #testdnnAddFeatures.push_back(1.); // MEM
     
-    // evaluate
-    DNNOutput aachentestdnnoutput = dnn.evaluate(testdnnjets, testdnnjetCSVs, testdnnlepton, testdnnmet, testdnnAddFeatures);
-    std::vector<double> targetOutputsfordnntest = { 0.51680371, 0.25959021, 0.07142095, 0.07112622, 0.05624627, 0.02481263, 0.0};
-    std::cout<<"doing DNN unit test"<<std::endl;
-    std::cout<<"No error printout means it worked"<<std::endl;
-    for (size_t i = 0; i < targetOutputsfordnntest.size(); ++i)
-    {
-        //assert(fabs(targetOutputsfordnntest[i] - aachentestdnnoutput.values[i]) < 0.000001 && "The DNN output for 6 jet events is incorrect");
-    }
-"""
+    #// evaluate
+    #DNNOutput aachentestdnnoutput = dnn.evaluate(testdnnjets, testdnnjetCSVs, testdnnlepton, testdnnmet, testdnnAddFeatures);
+    #std::vector<double> targetOutputsfordnntest = { 0.51680371, 0.25959021, 0.07142095, 0.07112622, 0.05624627, 0.02481263, 0.0};
+    #std::cout<<"doing DNN unit test"<<std::endl;
+    #std::cout<<"No error printout means it worked"<<std::endl;
+    #for (size_t i = 0; i < targetOutputsfordnntest.size(); ++i)
+    #{
+        #//assert(fabs(targetOutputsfordnntest[i] - aachentestdnnoutput.values[i]) < 0.000001 && "The DNN output for 6 jet events is incorrect");
+    #}
+#"""
     return rstr
   
   def getCleanUpLines(self):
@@ -495,7 +507,7 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
 
     "blr":                      "Evt_blr_ETH",
     "blr_transformed":          "Evt_blr_ETH_transformed",
-    "dank_MEM":                 None,
+    "dank_MEM":                 "1.0",
     }
 
     # categories
@@ -699,27 +711,24 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
         "dank_MEM",
         ]
     if region=='4j3t':
-      return variables_4j_3b = [all_variables[var] for var in variables_4j_3b if not var in undefined_variables]
+      return  [all_variables[var] for var in variables_4j_3b ]
     elif region=='5j3t':
-      return variables_5j_3b = [all_variables[var] for var in variables_5j_3b if not var in undefined_variables]
-    elif region=='6j3t'
-      return variables_6j_3b = [all_variables[var] for var in variables_6j_3b if not var in undefined_variables]
+      return  [all_variables[var] for var in variables_5j_3b ]
+    elif region=='6j3t':
+      return  [all_variables[var] for var in variables_6j_3b ]
       
   def _fill_vector(self,cat):
 
     master_string= ""
     if cat == '4j3t': 
-      for i,value in enumerate(self._variable_helper_function('4j3t')):
-
-        master_string+="tensor_4j3t.tensor<float,2>()(0,"+str(i)") = float("+str(value)"); \n"
-      return master_string
+        for i,value in enumerate(self._variable_helper_function('4j3t')):
+            master_string+="tensor_4j3t.tensor<float,2>()(0,"+str(i)+") = float("+str(value)+"); \n"
+        return master_string
     elif cat == '5j3t':
-       for i,value in enumerate(self._variable_helper_function('5j3t')):
-
-        master_string+="tensor_5j3t.tensor<float,2>()(0,"+str(i)") = float("+str(value)"); \n"
-      return master_string
-    elif cat == 'j3t':
-       for i,value in enumerate(self._variable_helper_function('6j3t')):
-
-        master_string+="tensor_6j3t.tensor<float,2>()(0,"+str(i)") = float("+str(value)"); \n"
-      return master_string
+        for i,value in enumerate(self._variable_helper_function('5j3t')):
+            master_string+="tensor_5j3t.tensor<float,2>()(0,"+str(i)+") = float("+str(value)+"); \n"
+        return master_string
+    elif cat == '6j3t':
+        for i,value in enumerate(self._variable_helper_function('6j3t')):
+            master_string+="tensor_6j3t.tensor<float,2>()(0,"+str(i)+") = float("+str(value)+"); \n"
+        return master_string
