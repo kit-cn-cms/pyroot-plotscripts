@@ -246,6 +246,7 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
     +str(self._fill_vector('4j3t'))"""
 
     //Run graph
+    vector<pair<string,Tensor>> input2 = { {"input",tensor_4j3t}};
     status_4j3t = session_4j3t->Run(input2, {"dense_2/Softmax"},  {}, &outputTensors);
     if (!status_4j3t.ok()) 
     {
@@ -284,6 +285,7 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
     +str(self._fill_vector('5j3t'))"""
 
     //Run graph
+    vector<pair<string,Tensor>> input2 = { {"input",tensor_5j3t}};
     status_5j3t = session_5j3t->Run(input2, {"dense_2/Softmax"},  {}, &outputTensors);
     if (!status_5j3t.ok()) 
     {
@@ -322,6 +324,7 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
     +str(self._fill_vector('6j3t'))"""
 
     //Run graph
+    vector<pair<string,Tensor>> input2 = { {"input",tensor_6j3t}};
     status_6j3t = session_6j3t->Run(input2, {"dense_2/Softmax"},  {}, &outputTensors);
     if (!status_6j3t.ok()) 
     {
@@ -708,15 +711,15 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
     if cat == '4j3t': 
       for i,value in enumerate(self._variable_helper_function('4j3t')):
 
-        master_string+="tensor_4j3t.tensor<float,2>()(0,"+str(i)") = float("+str(value)") \n"
+        master_string+="tensor_4j3t.tensor<float,2>()(0,"+str(i)") = float("+str(value)"); \n"
       return master_string
     elif cat == '5j3t':
        for i,value in enumerate(self._variable_helper_function('5j3t')):
 
-        master_string+="tensor_5j3t.tensor<float,2>()(0,"+str(i)") = float("+str(value)") \n"
+        master_string+="tensor_5j3t.tensor<float,2>()(0,"+str(i)") = float("+str(value)"); \n"
       return master_string
     elif cat == 'j3t':
        for i,value in enumerate(self._variable_helper_function('6j3t')):
 
-        master_string+="tensor_6j3t.tensor<float,2>()(0,"+str(i)") = float("+str(value)") \n"
+        master_string+="tensor_6j3t.tensor<float,2>()(0,"+str(i)") = float("+str(value)"); \n"
       return master_string
