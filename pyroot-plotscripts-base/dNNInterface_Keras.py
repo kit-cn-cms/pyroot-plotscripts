@@ -520,7 +520,7 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
 
     "blr":                      "Evt_blr_ETH",
     "blr_transformed":          "Evt_blr_ETH_transformed",
-    "dank_MEM":                 "CSV[0]",
+    "dank_MEM":                 "memDBp",
     }
 
     # categories

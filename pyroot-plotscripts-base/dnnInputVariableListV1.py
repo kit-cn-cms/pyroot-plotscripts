@@ -76,7 +76,7 @@ all_variables = {
 
     "blr":                      "Evt_blr_ETH",
     "blr_transformed":          "Evt_blr_ETH_transformed",
-#    "dank_MEM":                 "memDBp",
+   "dank_MEM":                 "memDBp",
 }
 
 
@@ -150,7 +150,7 @@ variables_4j_3b = [
 
     "blr",
     "blr_transformed",
-#    "dank_MEM",
+   "dank_MEM",
     ]
 
 # SL 5j,>=3b
@@ -221,7 +221,7 @@ variables_5j_3b = [
 
     "blr",
     "blr_transformed",
-#    "dank_MEM",
+   "dank_MEM",
     ]
 
 
@@ -294,7 +294,7 @@ variables_6j_3b = [
 
     "blr",
     "blr_transformed",
-#    "dank_MEM",
+   "dank_MEM",
     ]
 
 
