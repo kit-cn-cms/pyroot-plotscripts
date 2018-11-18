@@ -1830,6 +1830,10 @@ void plot(){
     while(thisfilename.Last('-')>=0){ thisfilename.Replace(thisfilename.Last('-'),1,"");}
     std::cout<<" relevant database name "<<thisfilename<<std::endl;
         
+    if(thisfilename.Contains("SingleEl")){thisfilename="SingleElectron";}
+    if(thisfilename.Contains("SingleMu")){thisfilename="SingleMuon";}
+       
+        
    sampleDataBaseIdentifiers[originalfilename]=thisfilename;
     
     //check if already in vectr
