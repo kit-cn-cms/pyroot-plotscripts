@@ -2018,7 +2018,9 @@ def readOutDataBase(thisDataBase=[]):
   rstr+=" // loop over subsamples of this database\n"
   rstr+="    int nfoundresults=0;\n"
   
-  rstr+="  if((N_BTagsM>=3 && N_Jets>=6) || (N_BTagsM>=4 && (N_Jets==4 || N_Jets==5))){ \n"
+  # at the moment we want the MEM for everything
+  #rstr+="  if((N_BTagsM>=3 && N_Jets>=6) || (N_BTagsM>=4 && (N_Jets==4 || N_Jets==5))){ \n"
+  rstr+="  if((N_BTagsM>=3 && N_Jets>=4)){ \n" 
   rstr+="  databaseWatch->Start(); \n"
   
   rstr+="  for(unsigned int isn=0; isn<"+thisDataBaseName+"DB.size();isn++){ \n"

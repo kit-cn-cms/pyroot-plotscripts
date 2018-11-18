@@ -408,6 +408,7 @@ def addPseudoData(infname,samplesWOttH,categories,sysnames,disc="BDT_ljets"):
   for cat in categories:
     print "getting ", samplesWOttH[0]+"_"+disc+"_"+cat
     oldhist=infile.Get(samplesWOttH[0]+"_"+disc+"_"+cat)
+    print oldhist
     newhist=oldhist.Clone("data_obs_"+disc+"_"+cat)
     print newhist
     for s in samplesWOttH[1:]:
@@ -418,6 +419,27 @@ def addPseudoData(infname,samplesWOttH,categories,sysnames,disc="BDT_ljets"):
     newhist.Write()
   
   infile.Close()
+
+
+def addPseudoDataAllHistos(infname,samplesData,plots,forceOverwrite=False):
+    infile=ROOT.TFile(infname,"UPDATE")
+    for plot in plots:
+        print "getting ", samplesData[0]+"_"+plot.histo.GetName()
+        oldhist=infile.Get(samplesData[0]+"_"+plot.histo.GetName())
+        print oldhist, samplesData[0]+"_"+plot.histo.GetName()
+        newhist=oldhist.Clone("data_obs_"+plot.histo.GetName())
+        print newhist
+        for s in samplesData[1:]:
+            print "doiung ", s+"_"+plot.histo.GetName()
+            bufferhist=infile.Get(s+"_"+plot.histo.GetName())
+            print bufferhist
+            newhist.Add(bufferhist)
+        if forceOverwrite:
+            newhist.Write("",ROOT.TObject.kOverwrite)
+        else:    
+            newhist.Write()  
+    infile.Close()
+
 
 def addRealData(infname,samplesData,categories,disc="BDT_ljets"):
 
@@ -437,6 +459,26 @@ def addRealData(infname,samplesData,categories,disc="BDT_ljets"):
     newhist.Write()
   
   infile.Close()
+
+def addRealDataAllHistos(infname,samplesData,plots, forceOverwrite=False):
+    infile=ROOT.TFile(infname,"UPDATE")
+    for plot in plots:
+        print "getting ", samplesData[0]+"_"+plot.histo.GetName()
+        oldhist=infile.Get(samplesData[0]+"_"+plot.histo.GetName())
+        print oldhist, samplesData[0]+"_"+plot.histo.GetName()
+        newhist=oldhist.Clone("data_obs_"+plot.histo.GetName())
+        print newhist
+        for s in samplesData[1:]:
+            print "doiung ", s+"_"+plot.histo.GetName()
+            bufferhist=infile.Get(s+"_"+plot.histo.GetName())
+            print bufferhist
+            newhist.Add(bufferhist)
+        if forceOverwrite:
+            newhist.Write("",ROOT.TObject.kOverwrite)
+        else:    
+            newhist.Write()
+  
+    infile.Close()
 
 
 def MoveOverUnderflow(infname,outfname):

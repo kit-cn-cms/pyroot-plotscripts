@@ -1048,7 +1048,7 @@ def createLLL_fromSuperHistoFileSyst(path,samples,plots,systnames=[""]):
     print "creating the LLL took ", theclock.RealTime()
     return lll
 
-def createErrorbands(lll,samples,DoRateSysts=True,verbosity=0):
+def createErrorbands(lll,samples,DoRateSysts=True,verbosity=10):
     print "creating errorbands"
     if DoRateSysts:
       print "using ratesysts"
