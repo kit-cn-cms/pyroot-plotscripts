@@ -51,7 +51,7 @@ def getHead(dataBases,addCodeInterfaces=[]):
   
   if dataBases!=[]:
     retstr+="""
-#include "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBaseSpring17/MEMDataBase/MEMDataBase/interface/MEMDataBase.h"
+#include "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/interface/MEMDataBase.h"
 """
 
   retstr+="""
@@ -1826,28 +1826,30 @@ void plot(){
     thisfilename.Replace(thisfilename.Last('_'),thisfilename.Length(),"");
     //remove remaining underscores
     while(thisfilename.Last('_')>=0){ thisfilename.Replace(thisfilename.Last('_'),1,"");}
+    //remove remaining dashes
+    while(thisfilename.Last('-')>=0){ thisfilename.Replace(thisfilename.Last('-'),1,"");}
     std::cout<<" relevant database name "<<thisfilename<<std::endl;
         
    sampleDataBaseIdentifiers[originalfilename]=thisfilename;
     
     //check if already in vectr
-    TString translatedFileNameForDataBase;
+   // TString translatedFileNameForDataBase;
     """
-  jsonfileWithSampleTranslation=open('/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBaseSpring17/MEMDataBase/MEMDataBase/test/sampleNameMap.json',"r")
-  jsonstringWithSampleTranslation=jsonfileWithSampleTranslation.read()
-  sampleTranslationMapPython=json.loads(jsonstringWithSampleTranslation)
-  for transSample in sampleTranslationMapPython:
-    retstr+="sampleTranslationMapCPP[TString(\""+transSample+"\")]=TString(\""+sampleTranslationMapPython[transSample]+"\");\n"
+  #jsonfileWithSampleTranslation=open('/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/test/sampleNameMap.json',"r")
+  #jsonstringWithSampleTranslation=jsonfileWithSampleTranslation.read()
+  #sampleTranslationMapPython=json.loads(jsonstringWithSampleTranslation)
+  #for transSample in sampleTranslationMapPython:
+    #retstr+="sampleTranslationMapCPP[TString(\""+transSample+"\")]=TString(\""+sampleTranslationMapPython[transSample]+"\");\n"
   
   retstr+="""
   
-    translatedFileNameForDataBase=sampleTranslationMapCPP[thisfilename];
-    if(processname=="QCD" or processname=="QCD_CMS_ttH_QCDScaleFactorUp" or processname=="QCD_CMS_ttH_QCDScaleFactorDown"){
-      translatedFileNameForDataBase+="QCD";
-      }
-    samplename_in_database=translatedFileNameForDataBase;
-    if(! (std::find(databaseRelevantFilenames.begin(),databaseRelevantFilenames.end(),translatedFileNameForDataBase)!=databaseRelevantFilenames.end()  )){
-      databaseRelevantFilenames.push_back(translatedFileNameForDataBase.Copy());
+  //  translatedFileNameForDataBase=sampleTranslationMapCPP[thisfilename];
+  //  if(processname=="QCD" or processname=="QCD_CMS_ttH_QCDScaleFactorUp" or processname=="QCD_CMS_ttH_QCDScaleFactorDown"){
+  //    translatedFileNameForDataBase+="QCD";
+  //    }
+    samplename_in_database=thisfilename;
+    if(! (std::find(databaseRelevantFilenames.begin(),databaseRelevantFilenames.end(),thisfilename)!=databaseRelevantFilenames.end()  )){
+      databaseRelevantFilenames.push_back(thisfilename.Copy());
       //sampleDataBaseFoundEvents["jt42"][thisfilename]=0;
       //sampleDataBaseLostEvents["jt42"][thisfilename]=0;
       //sampleDataBaseFoundEvents["jt52"][thisfilename]=0;
@@ -2006,10 +2008,10 @@ def readOutDataBase(thisDataBase=[]):
   
   rstr+="""
     TString currentRelevantSampleName=sampleDataBaseIdentifiers[currentfilename];
-    TString translatedCurrentRelevantSampleName=sampleTranslationMapCPP[currentRelevantSampleName];
-    if(processname=="QCD" or processname=="QCD_CMS_ttH_QCDScaleFactorUp" or processname=="QCD_CMS_ttH_QCDScaleFactorDown"){
-      translatedCurrentRelevantSampleName+="QCD";
-      }
+    //TString translatedCurrentRelevantSampleName=sampleTranslationMapCPP[currentRelevantSampleName];
+    //if(processname=="QCD" or processname=="QCD_CMS_ttH_QCDScaleFactorUp" or processname=="QCD_CMS_ttH_QCDScaleFactorDown"){
+    //  translatedCurrentRelevantSampleName+="QCD";
+    //  }
     //std::cout<<currentfilename<<" "<<currentRelevantSampleName<<" "<<translatedCurrentRelevantSampleName<<std::endl;
   """
   
@@ -2020,7 +2022,7 @@ def readOutDataBase(thisDataBase=[]):
   rstr+="  databaseWatch->Start(); \n"
   
   rstr+="  for(unsigned int isn=0; isn<"+thisDataBaseName+"DB.size();isn++){ \n"
-  rstr+="    if(databaseRelevantFilenames.at(isn)==translatedCurrentRelevantSampleName){;\n"
+  rstr+="    if(databaseRelevantFilenames.at(isn)==currentRelevantSampleName){;\n"
   rstr+="         DataBaseMEMResult "+thisDataBaseName+"Result = "+thisDataBaseName+"DB.at(isn)->GetMEMResult(databaseRelevantFilenames.at(isn),Evt_Run,Evt_Lumi,Evt_ID);\n"
 
   #rstr+="        std::cout<<\" p p_sig p_bkg p_err_sig p_err_bkg n_perm_sig n_perm_bkg \"<<"+thisDataBaseName+"p<<\" \"<<"+thisDataBaseName+"p_sig<<\"   \"<<"+thisDataBaseName+"p_bkg<<\" \"<<"+thisDataBaseName+"p_err_sig<<\" \"<<"+thisDataBaseName+"p_err_bkg<<\" \"<<"+thisDataBaseName+"n_perm_sig<<\" \"<<"+thisDataBaseName+"n_perm_bkg<<\" \"<<std::endl;\n"
@@ -2555,7 +2557,7 @@ def compileProgram(scriptname,usesDataBases,addCodeInterfaces):
   
   memDBccfiles=[]
   if usesDataBases:
-    memDBccfiles=glob.glob('/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBaseSpring17/MEMDataBase/MEMDataBase/src/*.cc') 
+    memDBccfiles=glob.glob('/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/src/*.cc') 
     #TODO update the dataBases code
   # improve ram usage and reduce garbage of g++ compiler
   improveRAM = '--param ggc-min-expand=100 --param ggc-min-heapsize=2400000'
@@ -3018,8 +3020,8 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
     for fn in s.files:
       events_in_file=0
       if LoadedTreeInformation!={} and fn in LoadedTreeInformation:
-	#print "using tree event information"
-	events_in_file=LoadedTreeInformation[fn]
+        #print "using tree event information"
+        events_in_file=LoadedTreeInformation[fn]
       else:
 	#print "did not find this sample in the json file yet"
 	#print "will add it"
@@ -3531,12 +3533,13 @@ def RelateMEPDFMapToNormFactor(csv_file):
 	code=''
 	code+="""
     TString currentRelevantSampleNameForMEPDF=sampleDataBaseIdentifiers[currentfilename];
-    TString translatedCurrentRelevantSampleNameForMEPDF=sampleTranslationMapCPP[currentRelevantSampleNameForMEPDF];
+    //TString translatedCurrentRelevantSampleNameForMEPDF=sampleTranslationMapCPP[currentRelevantSampleNameForMEPDF];
     //std::cout<<"MEPDF relation "<<currentfilename<<" "<<currentRelevantSampleNameForMEPDF<<" "<<translatedCurrentRelevantSampleNameForMEPDF<<std::endl;
   """
-	code+='if(MEPDF_Norm_Map.find('+'translatedCurrentRelevantSampleNameForMEPDF'+'+"_'+weight_list[0]+'")!=MEPDF_Norm_Map.end()){;\n'
+	#code+='if(MEPDF_Norm_Map.find('+'translatedCurrentRelevantSampleNameForMEPDF'+'+"_'+weight_list[0]+'")!=MEPDF_Norm_Map.end()){;\n'
 	for weight in weight_list:
-		code+='internalNormFactor_'+weight+'='+'MEPDF_Norm_Map['+'translatedCurrentRelevantSampleNameForMEPDF'+'+"_'+weight+'"];\n'
+		#code+='internalNormFactor_'+weight+'='+'MEPDF_Norm_Map['+'translatedCurrentRelevantSampleNameForMEPDF'+'+"_'+weight+'"];\n'
+		code+='internalNormFactor_'+weight+'=1.0;\n'
 	code+='}\n'
 	code+='//else{std::cout<<"did not find pdf weights in map "<<translatedCurrentRelevantSampleNameForMEPDF<<std::endl;}\n'
 	code+='//std::cout<<"first internal pdf weight "<<'+'translatedCurrentRelevantSampleNameForMEPDF'+'+"_'+weight_list[0]+'" <<" "<< internalNormFactor_'+weight_list[0]+'<<std::endl;\n'
