@@ -1,4 +1,4 @@
-
+import tensorflow
 class theInterface:
   
   def __init__(self):
@@ -7,6 +7,7 @@ class theInterface:
     #self.libraryString="-L/nfs/dust/cms/user/kelmorab/CMSSW_Moriond2017/cardsCMSSWTF/CMSSW_8_0_26_patch2/lib/slc6_amd64_gcc530 -lDNNBase -lDNNTensorflow -lTTHCommonClassifier"
     self.libraryString="-L/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/tensorflow-cc/1.3.0-elfike/tensorflow_cc/lib -ltensorflow_cc -L/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/protobuf/3.4.0-fmblme/lib -lprotobuf -lrt"
     self.usesPythonLibraries=True
+
 
   def getExternalyCallableVariables(self):
     return [
@@ -70,11 +71,12 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
   
   
   def getBeforeLoopLines(self):
+  
     rstr="""
 
     //6j3t cat
-    const string pathToGraph_6j3t = "/nfs/dust/cms/user/jschindl/DNN_checkpoints/V1/6j3t/trained_main_net.meta";
-    const string checkpointPath_6j3t = "/nfs/dust/cms/user/jschindl/DNN_checkpoints/V1/6j3t/trained_main_net";
+    const string pathToGraph_6j3t = "/nfs/dust/cms/user/jschindl/DNN_checkpoints/V2/6j3t/trained_main_net.meta";
+    const string checkpointPath_6j3t = "/nfs/dust/cms/user/jschindl/DNN_checkpoints/V2/6j3t/trained_main_net";
 
     auto session_6j3t = NewSession(SessionOptions());
     if (session_6j3t == nullptr) {
@@ -113,8 +115,8 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
 
 
     //5j3t cat
-    const string pathToGraph_5j3t = "/nfs/dust/cms/user/jschindl/DNN_checkpoints/V1/5j3t/trained_main_net.meta";
-    const string checkpointPath_5j3t = "/nfs/dust/cms/user/jschindl/DNN_checkpoints/V1/5j3t/trained_main_net";
+    const string pathToGraph_5j3t = "/nfs/dust/cms/user/jschindl/DNN_checkpoints/V2/5j3t/trained_main_net.meta";
+    const string checkpointPath_5j3t = "/nfs/dust/cms/user/jschindl/DNN_checkpoints/V2/5j3t/trained_main_net";
 
     auto session_5j3t = NewSession(SessionOptions());
     if (session_5j3t == nullptr) {
@@ -151,8 +153,8 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
 
 
     //4j3t cat
-    const string pathToGraph_4j3t = "/nfs/dust/cms/user/jschindl/DNN_checkpoints/V1/4j3t/trained_main_net.meta";
-    const string checkpointPath_4j3t = "/nfs/dust/cms/user/jschindl/DNN_checkpoints/V1/4j3t/trained_main_net";
+    const string pathToGraph_4j3t = "/nfs/dust/cms/user/jschindl/DNN_checkpoints/V2/4j3t/trained_main_net.meta";
+    const string checkpointPath_4j3t = "/nfs/dust/cms/user/jschindl/DNN_checkpoints/V2/4j3t/trained_main_net";
 
     auto session_4j3t = NewSession(SessionOptions());
     if (session_4j3t == nullptr) {
@@ -244,7 +246,13 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
        Tensor tensor_5j3t (DT_FLOAT, TensorShape({1,num_features_5j3t}));
        Tensor tensor_6j3t (DT_FLOAT, TensorShape({1,num_features_6j3t}));
 
+       std::vector<std::pair<std::string, tensorflow::Tensor>> feed_dict;
        std::vector<tensorflow::Tensor> outputTensors;
+       Tensor drop_1 (DT_FLOAT, TensorShape({ 1}));
+
+      drop_1.tensor<float,1>()(0) = 1.0;
+
+
  """
     return rstr
   
@@ -265,8 +273,16 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
     rstr+="""
 
     //Run graph
-    vector<pair<string,Tensor>> input2 = {{"input",tensor_4j3t}};
-    status_4j3t = session_4j3t->Run(input2, {"output/Softmax"},  {}, &outputTensors);
+    feed_dict.push_back(std::make_pair("input",tensor_4j3t));
+    feed_dict.push_back(std::make_pair("dropout_1/dropout/keep_prob", drop_1)); 
+
+    feed_dict.push_back(std::make_pair("dropout_2/dropout/keep_prob", drop_1)); 
+
+    feed_dict.push_back(std::make_pair("dropout_3/dropout/keep_prob", drop_1)); 
+
+    feed_dict.push_back(std::make_pair("dropout_4/dropout/keep_prob", drop_1)); 
+
+    status_4j3t = session_4j3t->Run(feed_dict, {"output/Softmax"},  {}, &outputTensors);
     //if (!status_4j3t.ok()) 
     //{
     //  std::cout << status_4j3t.ToString() << std::endl;
@@ -312,8 +328,15 @@ for(int ifeat=0; ifeat<num_features_4j3t;ifeat++){
     rstr+="""
 
     //Run graph
-    vector<pair<string,Tensor>> input2 = {{"input",tensor_5j3t}};
-    status_5j3t = session_5j3t->Run(input2, {"output/Softmax"},  {}, &outputTensors);
+    feed_dict.push_back(std::make_pair("input",tensor_5j3t));    
+    feed_dict.push_back(std::make_pair("dropout_1/dropout/keep_prob", drop_1)); 
+
+    feed_dict.push_back(std::make_pair("dropout_2/dropout/keep_prob", drop_1)); 
+
+    feed_dict.push_back(std::make_pair("dropout_3/dropout/keep_prob", drop_1)); 
+
+    feed_dict.push_back(std::make_pair("dropout_4/dropout/keep_prob", drop_1)); 
+    status_5j3t = session_5j3t->Run(feed_dict, {"output/Softmax"},  {}, &outputTensors);
     //if (!status_5j3t.ok()) 
     //{
     //  std::cout << status_5j3t.ToString() << std::endl;
@@ -359,8 +382,15 @@ for(int ifeat=0; ifeat<num_features_5j3t;ifeat++){
     rstr+="""
 
     //Run graph
-    vector<pair<string,Tensor>> input2 = {{"input",tensor_6j3t}};
-    status_6j3t = session_6j3t->Run(input2, {"output/Softmax"},  {}, &outputTensors);
+    feed_dict.push_back(std::make_pair("input",tensor_6j3t));
+    feed_dict.push_back(std::make_pair("dropout_1/dropout/keep_prob", drop_1)); 
+
+    feed_dict.push_back(std::make_pair("dropout_2/dropout/keep_prob", drop_1)); 
+
+    feed_dict.push_back(std::make_pair("dropout_3/dropout/keep_prob", drop_1)); 
+
+    feed_dict.push_back(std::make_pair("dropout_4/dropout/keep_prob", drop_1)); 
+    status_6j3t = session_6j3t->Run(feed_dict, {"output/Softmax"},  {}, &outputTensors);
     //if (!status_6j3t.ok()) 
     //{
     //  std::cout << status_6j3t.ToString() << std::endl;
