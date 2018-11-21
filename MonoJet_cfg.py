@@ -155,12 +155,12 @@ WBosonWeights=[
 MCWeight='35.91823'
 
 path_ntuples = "/nfs/dust/cms/user/mwassmer/DarkMatter/ntuples_controlregion"
-# path_ntuples = "/nfs/dust/cms/user/swieland/Darkmatter/ntuples"
+path_ntuples_seb = "/nfs/dust/cms/user/swieland/Darkmatter/ntuples_michaelData"
 
 sampleDict=SampleDictionary()
 sampleDict.doPrintout()
 
-sel_MET="*((Triggered_HLT_PFMET170_X==1)||(Triggered_HLT_PFMETNoMu100_PFMHTNoMu100_IDTight_X==1)||(Triggered_HLT_PFMETNoMu110_PFMHTNoMu110_IDTight_X==1)||(Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_X==1)||(Triggered_HLT_PFMETNoMu90_PFMHTNoMu90_IDTight_X==1))*((N_LooseMuons==0)*(N_LooseElectrons==0)*(N_LooseTaus==0))"
+sel_MET="*((Triggered_HLT_PFMET170_X==1)||(Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_X==1))*((N_LooseMuons==0)*(N_LooseElectrons==0)*(N_LooseTaus==0))"
 
 """
 Triggered_HLT_EcalHT800
