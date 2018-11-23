@@ -834,12 +834,24 @@ def main(argv):
         #Plot(ROOT.TH1D(plotprefix+"43_ttlfnode","DNN ttlf node",20,0,1),"aachen_Out_ttbarOther","((N_Jets>=4&&N_BTagsM==3))","1 lepton, #geq4jets, 3 b-tags"),
         #Plot(ROOT.TH1D(plotprefix+"43_ttccnode","DNN ttcc node",20,0,1),"aachen_Out_ttbarCC","((N_Jets>=4&&N_BTagsM==3))","1 lepton, #geq4jets, 3 b-tags"),
     #]
-
+    print "_________________________________________________________________________________________________________"
+    print "PREPAIRING 2D PLOT HERE"
+    print "_________________________________________________________________________________________________________"
+    plotprefix="2D_TEST_s64_"
+    plots2Dcontrol=[
+        TwoDimPlot(ROOT.TH2D(plotprefix+"BDT_common5_input_sphericity_vs_BDT_common5_input_tagged_dijet_mass_closest_to_125",plotprefix+"BDT_common5_input_sphericity_vs_BDT_common5_input_tagged_dijet_mass_closest_to_125",20,0.,1.,20,40.,230.),"BDT_common5_input_sphericity","BDT_common5_input_tagged_dijet_mass_closest_to_125", plotselection, plotlabel),
+        TwoDimPlot(ROOT.TH2D(plotprefix+"BDT_common5_input_Evt_Deta_JetsAverage_vs_BDT_common5_input_HT",plotprefix+"BDT_common5_input_Evt_Deta_JetsAverage_vs_BDT_common5_input_HT",20,0.,3.4,20,40.,1000.),"BDT_common5_input_Evt_Deta_JetsAverage","BDT_common5_input_HT", plotselection, plotlabel)
+    ]
 
     #plots+=plotsAdditional+plots64+plots63+plots62+plots54+plots53+plots44+plots43+plots42+plots52
-    plots+=plotsAdditional
+    # plots+=plotsAdditional
+    plots = plots2Dcontrol
     discriminatorPlots=plots
     
+    print "_________________________________________________________________________________________________________"
+    print "CREATING SYSTSAMPLES"
+    print "_________________________________________________________________________________________________________"
+
     systsamples=[]
     for sample in samples:
         for sysname,sysfilename in zip(otherSystNames,otherSystFileNames):
@@ -885,10 +897,13 @@ def main(argv):
 
     # plot everything, except during drawParallel step
     # Create file for data cards
+    print "_________________________________________________________________________________________________________"
+    print "TRYING TO DO 'DODRAWPARALLEL'"
+    print "_________________________________________________________________________________________________________"
     if analysis.doDrawParallel==False or analysis.plotNumber == None :
         if not os.path.exists(analysis.rootFilePath):
             print "Doing plotParallel step since root file was not found."
-            outputpath=plotParallel(name,500000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[],"",otherSystNames+PSSystNames,addCodeInterfacePaths=[],cirun=False)
+            outputpath=plotParallel(name,500000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[],"treejson.json",otherSystNames+PSSystNames,addCodeInterfacePaths=[],cirun=False)
             #outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_v5_08102017.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_V6.py"],cirun=False)
 
             # Allow start of an improved rebinning algorithm
@@ -928,7 +943,7 @@ def main(argv):
             outputpath=workdir+'/output.root'
         else:
             outputpath=analysis.rootFilePath[:-16]+'.root'
-
+    return None
     ## make datacards
     #if (analysis.doDrawParallel==False or analysis.plotNumber == None) and analysis.makeDataCards == True :
         ##TODO
