@@ -313,7 +313,7 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
     // take close look at 4j4t events
     if(N_Jets==4 && N_BTagsM==4){
       printstuff=1; 
-      std::cout<<std::endl<<"4j4t event"<<std:endl;
+      std::cout<<std::endl<<"4j4t event"<<std::endl;
     }
     if(iEntry<200){printstuff=1;}
     if(printstuff){
