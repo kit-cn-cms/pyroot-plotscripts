@@ -301,8 +301,20 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
     DNN_Out_4j3t_ttbarlf  = outputTensors.at(0).tensor<float,2>()(0,5);
     DNN_Out_4j3t_ttH  = outputTensors.at(0).tensor<float,2>()(0,0);
     DNN_4j3t_pred_class  = getMaxPosition(outputTensors,num_classes_4j3t);
-
+    
     bool printstuff=0;
+    // fish for fishy outputs
+    for(int jclass=0; jclass<num_classes_4j3t; jclass++){
+      if(outputTensors.at(0).tensor<float,2>()(0,jclass)>0.95 or outputTensors.at(0).tensor<float,2>()(0,jclass)<0.05 or DNN_4j3t_pred_class<0 or DNN_4j3t_pred_class>5 ){
+      printstuff=1;
+      std::cout<<std::endl<<"Something is fishy here"<<std::endl;
+      }
+    }
+    // take close look at 4j4t events
+    if(N_Jets==4 && N_BTagsM==4){
+      printstuff=1; 
+      std::cout<<std::endl<<"4j4t event"<<std:endl;
+    }
     if(iEntry<200){printstuff=1;}
     if(printstuff){
       cout<<"-----DNN-----"<<std::endl;
@@ -354,9 +366,17 @@ for(int ifeat=0; ifeat<num_features_4j3t;ifeat++){
     DNN_Out_5j3t_ttbarCC  = outputTensors.at(0).tensor<float,2>()(0,4);
     DNN_Out_5j3t_ttbarlf  = outputTensors.at(0).tensor<float,2>()(0,5);
     DNN_Out_5j3t_ttH  = outputTensors.at(0).tensor<float,2>()(0,0);
-    DNN_5j3t_pred_class  = getMaxPosition(outputTensors,num_classes_4j3t);
+    DNN_5j3t_pred_class  = getMaxPosition(outputTensors,num_classes_5j3t);
 
     bool printstuff=0;
+    // fish for fishy outputs
+    for(int jclass=0; jclass<num_classes_5j3t; jclass++){
+      if(outputTensors.at(0).tensor<float,2>()(0,jclass)>0.95 or outputTensors.at(0).tensor<float,2>()(0,jclass)<0.05 or DNN_5j3t_pred_class<0 or DNN_5j3t_pred_class>5 ){
+      printstuff=1;
+      std::cout<<std::endl<<"Something is fishy here"<<std::endl;
+      }
+
+    }
     if(iEntry<200){printstuff=1;}
     if(printstuff){
       cout<<"-----DNN-----"<<std::endl;
@@ -411,6 +431,14 @@ for(int ifeat=0; ifeat<num_features_5j3t;ifeat++){
     DNN_6j3t_pred_class  = getMaxPosition(outputTensors,num_classes_6j3t);
 
     bool printstuff=0;
+        // fish for fishy outputs
+    for(int jclass=0; jclass<num_classes_6j3t; jclass++){
+      if(outputTensors.at(0).tensor<float,2>()(0,jclass)>0.95 or outputTensors.at(0).tensor<float,2>()(0,jclass)<0.05 or DNN_6j3t_pred_class<0 or DNN_6j3t_pred_class>5 ){
+      printstuff=1;
+      std::cout<<std::endl<<"Something is fishy here"<<std::endl;
+      }
+
+    }
     if(iEntry<200){printstuff=1;}
     if(printstuff){
       std::cout<<"-----DNN-----"<<std::endl;
