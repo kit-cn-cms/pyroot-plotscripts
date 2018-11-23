@@ -285,14 +285,9 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
     rstr+="""
 
     //Run graph
-    feed_dict.push_back(std::make_pair("input",tensor_4j3t));
-    feed_dict.push_back(std::make_pair("dropout_1/dropout/keep_prob", drop_1)); 
-
-    feed_dict.push_back(std::make_pair("dropout_2/dropout/keep_prob", drop_1)); 
-
-    feed_dict.push_back(std::make_pair("dropout_3/dropout/keep_prob", drop_1)); 
-
-    feed_dict.push_back(std::make_pair("dropout_4/dropout/keep_prob", drop_1)); 
+    feed_dict.push_back(std::make_pair("input",tensor_4j3t));"""
+    rstr+= self._fix_dropout('4j3t')
+    rstr="""
 
 
     status_4j3t = session_4j3t->Run(feed_dict, {"output/Softmax"},  {}, &outputTensors);
@@ -341,14 +336,9 @@ for(int ifeat=0; ifeat<num_features_4j3t;ifeat++){
     rstr+="""
 
     //Run graph
-    feed_dict.push_back(std::make_pair("input",tensor_5j3t));    
-    feed_dict.push_back(std::make_pair("dropout_1/dropout/keep_prob", drop_1)); 
-
-    feed_dict.push_back(std::make_pair("dropout_2/dropout/keep_prob", drop_1)); 
-
-    feed_dict.push_back(std::make_pair("dropout_3/dropout/keep_prob", drop_1)); 
-
-    feed_dict.push_back(std::make_pair("dropout_4/dropout/keep_prob", drop_1)); 
+    feed_dict.push_back(std::make_pair("input",tensor_5j3t));"""
+    rstr+= self._fix_dropout('5j3t')
+    rstr="""
 
     status_5j3t = session_5j3t->Run(feed_dict, {"output/Softmax"},  {}, &outputTensors);
     //if (!status_5j3t.ok()) 
