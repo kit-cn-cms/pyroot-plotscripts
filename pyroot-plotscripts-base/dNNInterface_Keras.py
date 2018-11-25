@@ -350,7 +350,7 @@ for(int ifeat=0; ifeat<num_features_4j3t;ifeat++){
     //Run graph
     feed_dict.push_back(std::make_pair("input",tensor_5j3t));"""
     rstr+= self._fix_dropout('5j3t')
-    rstr="""
+    rstr+="""
 
     status_5j3t = session_5j3t->Run(feed_dict, {"output/Softmax"},  {}, &outputTensors);
     //if (!status_5j3t.ok()) 
