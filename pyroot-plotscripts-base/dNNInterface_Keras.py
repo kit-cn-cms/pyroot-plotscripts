@@ -287,7 +287,7 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
     //Run graph
     feed_dict.push_back(std::make_pair("input",tensor_4j3t));"""
     rstr+= self._fix_dropout('4j3t')
-    rstr="""
+    rstr+="""
 
 
     status_4j3t = session_4j3t->Run(feed_dict, {"output/Softmax"},  {}, &outputTensors);
