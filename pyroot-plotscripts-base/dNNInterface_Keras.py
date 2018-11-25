@@ -307,7 +307,7 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
     for(int jclass=0; jclass<num_classes_4j3t; jclass++){
       if(outputTensors.at(0).tensor<float,2>()(0,jclass)>0.95 or outputTensors.at(0).tensor<float,2>()(0,jclass)<0.05 or DNN_4j3t_pred_class<0 or DNN_4j3t_pred_class>5 ){
       printstuff=1;
-      std::cout<<std::endl<<"Something is fishy here"<<std::endl;
+      std::cout<<std::endl<<"Something is fishy here "<<Evt_ID<<std::endl;
       }
     }
     // take close look at 4j4t events
@@ -373,7 +373,7 @@ for(int ifeat=0; ifeat<num_features_4j3t;ifeat++){
     for(int jclass=0; jclass<num_classes_5j3t; jclass++){
       if(outputTensors.at(0).tensor<float,2>()(0,jclass)>0.95 or outputTensors.at(0).tensor<float,2>()(0,jclass)<0.05 or DNN_5j3t_pred_class<0 or DNN_5j3t_pred_class>5 ){
       printstuff=1;
-      std::cout<<std::endl<<"Something is fishy here"<<std::endl;
+      std::cout<<std::endl<<"Something is fishy here "<<Evt_ID<<std::endl;
       }
 
     }
@@ -435,7 +435,7 @@ for(int ifeat=0; ifeat<num_features_5j3t;ifeat++){
     for(int jclass=0; jclass<num_classes_6j3t; jclass++){
       if(outputTensors.at(0).tensor<float,2>()(0,jclass)>0.95 or outputTensors.at(0).tensor<float,2>()(0,jclass)<0.05 or DNN_6j3t_pred_class<0 or DNN_6j3t_pred_class>5 ){
       printstuff=1;
-      std::cout<<std::endl<<"Something is fishy here"<<std::endl;
+      std::cout<<std::endl<<"Something is fishy here "<<Evt_ID<<std::endl;
       }
 
     }
