@@ -439,11 +439,11 @@ path_matsch="/nfs/dust/cms/user/kelmorab/ttH_2018/ntuples_v3"
 path_pkeicher="/nfs/dust/cms/user/pkeicher/ttH_2018/naf_jobs_for_Karim/ntuples"
 path_mwassmer="/nfs/dust/cms/user/mwassmer/ttH_2018/ntuples"
 ttbarPathS=path_karim_new+'/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8_v2/*nominal*.root'+';'+path_karim_new+'/TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8_new_pmx/*nominal*.root'+';'+path_karim_new+'/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'
-VJetsPathS=path_karim+'/DYJets*/*nominal*.root'+';'+path_mwassmer+'/WJets*/*nominal*.root'
-ttVPathS=path_pkeicher+'/TTW*/*nominal*.root'+';'+path_pkeicher+'/TTZ*/*nominal*.root'
-dibosonPathS=path_mwassmer+'/WW_*/*nominal*.root'+';'+path_mwassmer+'/WZ_*/*nominal*.root'+';'+path_mwassmer+'/ZZ_*/*nominal*.root'
-stpath=path_pkeicher+'/ST_*/*nominal*.root'
-ttHpath=path_mwassmer+'/ttHTo*/*nominal*.root'
+VJetsPathS=path_karim_new+'/DYJets*/*nominal*.root'+';'+path_mwassmer+'/WJets*/*nominal*.root'
+ttVPathS=path_karim_new+'/TTW*/*nominal*.root'+';'+path_karim_new+'/TTZ*/*nominal*.root'
+dibosonPathS=path_karim_new+'/WW_*/*nominal*.root'+';'+path_karim_new+'/WZ_*/*nominal*.root'+';'+path_karim_new+'/ZZ_*/*nominal*.root'
+stpath=path_karim_new+'/ST_*/*nominal*.root'
+ttHpath=path_karim_new+'/ttHTo*/*nominal*.root'
 
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
@@ -452,8 +452,8 @@ sampleDict.doPrintout()
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
 samplesDataControlPlots=[
-                    Sample('SingleMu',ROOT.kBlack,path_karim+'/SingleMuon*/*nominal*.root',sel_singlemu+sel_MET,'SingleMu',samDict=sampleDict),
-                    Sample('SingleEl',ROOT.kBlack,path_karim+'/SingleElectron*/*nominal*.root',sel_singleel+sel_MET,'SingleEl',samDict=sampleDict)
+                    Sample('SingleMu',ROOT.kBlack,path_karim_new+'/SingleMuon*/*nominal*.root',sel_singlemu+sel_MET,'SingleMu',samDict=sampleDict),
+                    Sample('SingleEl',ROOT.kBlack,path_karim_new+'/SingleElectron*/*nominal*.root',sel_singleel+sel_MET,'SingleEl',samDict=sampleDict)
 ]
 
 
@@ -490,10 +490,10 @@ samplesLimits=[
                     Sample('t#bar{t}+2b',ROOT.kRed+2,ttbarPathS,mcWeightAll+'*(GenEvt_I_TTPlusBB==2)'+sel_MET+sel_StrangeMuWeights,'ttbarPlus2B',systsAllSamples+systs_tt_all+systs_tt_2b,samDict=sampleDict),
                     Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,ttbarPathS,mcWeightAll+'*(GenEvt_I_TTPlusBB==3)'+sel_MET+sel_StrangeMuWeights,'ttbarPlusBBbar',systsAllSamples+systs_tt_all+systs_tt_bb,samDict=sampleDict), 
                     Sample('Single Top',ROOT.kMagenta,stpath,mcWeightAll+sel_MET,'singlet',systsAllSamples,samDict=sampleDict) , 
-                    Sample('Z+jets',ROOT.kGreen-3,path_karim+'/DYJets*/*nominal*.root',mcWeightAll+sel_MET,'zjets',systsAllSamples,samDict=sampleDict) , 
+                    Sample('Z+jets',ROOT.kGreen-3,path_karim_new+'/DYJets*/*nominal*.root',mcWeightAll+sel_MET,'zjets',systsAllSamples,samDict=sampleDict) , 
                     Sample('W+jets',ROOT.kGreen-7,path_mwassmer+'/WJets*/*nominal*.root',mcWeightAll+sel_MET,'wjets',systsAllSamples,samDict=sampleDict) , 
-                    Sample('t#bar{t}+W',ROOT.kBlue-10,path_pkeicher+'/TTW*/*nominal*.root',mcWeightAll+sel_MET,'ttbarW',systsAllSamples,samDict=sampleDict),
-                    Sample('t#bar{t}+Z',ROOT.kBlue-6,path_pkeicher+'/TTZ*/*nominal*.root',mcWeightAll+sel_MET,'ttbarZ',systsAllSamples,samDict=sampleDict),
+                    Sample('t#bar{t}+W',ROOT.kBlue-10,path_karim_new+'/TTW*/*nominal*.root',mcWeightAll+sel_MET,'ttbarW',systsAllSamples,samDict=sampleDict),
+                    Sample('t#bar{t}+Z',ROOT.kBlue-6,path_karim_new+'/TTZ*/*nominal*.root',mcWeightAll+sel_MET,'ttbarZ',systsAllSamples,samDict=sampleDict),
                     Sample('Diboson',ROOT.kAzure+2,dibosonPathS,mcWeightAll+sel_MET,'diboson',systsAllSamples,samDict=sampleDict) , 
                     #Sample('QCD',ROOT.kYellow,iso_inverted_paths,'1.'+sel_MET+'*internalQCDweight'+'*(((Weight_XS==1.0)*1.0*((electron_data*'+sel_singleel+')+(muon_data*'+sel_singlemu+')))+((Weight_XS!=1.0)*(-1.0)*35.91823))','QCD',[systsAllSamples[0]]+QCDSystNames,samDict=sampleDict),  
 ]

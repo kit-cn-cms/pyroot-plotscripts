@@ -27,7 +27,7 @@ from plotconfig_v27_noPS import *
 def main(argv):
 
     #Create analysis object with output name
-    name='limits_v30'
+    name='limits_v33'
     analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscripts18/July18/pyroot-plotscripts/workdir/limits_v27/output_limitInput.root ', signalProcess='ttH')
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscripts18/July18/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
 
