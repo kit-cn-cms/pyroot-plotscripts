@@ -54,7 +54,7 @@ systsAllSamples=[
                    #"_CMS_eff_mUp","_CMS_eff_mDown",  
                    "_CMS_ttHbb_PUUp","_CMS_ttHbb_PUDown",
 
-    #"_CMS_scale_jUp","_CMS_scale_jDown",
+    "_CMS_scale_jUp","_CMS_scale_jDown",
     "_CMS_res_jUp","_CMS_res_jDown",
     "_CMS_scaleAbsoluteStat_jUp","_CMS_scaleAbsoluteStat_jDown",
     "_CMS_scaleAbsoluteScale_jUp","_CMS_scaleAbsoluteScale_jDown",
@@ -96,8 +96,8 @@ systs_tt_cc=[]
 
 
 
-mcWeightAll='41.53'
-mcWeight='41.53*2.0'
+mcWeightAll='41.298'
+mcWeight='41.298*2.0'
 
 # TODO Add Trigger SFs
 mcTriggerWeight='((1.0) * (internalEleTriggerWeight*(N_LooseMuons==0 && N_TightElectrons==1)* (Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1) +internalMuTriggerWeight*(N_LooseElectrons==0 && N_TightMuons==1)*(Muon_Pt[0]>29.) *(Triggered_HLT_IsoMu27_vX==1)))*(N_Jets>=4 && N_BTagsM>=2)'
