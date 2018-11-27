@@ -1,4 +1,9 @@
 import tensorflow
+import csv
+import os
+import uuid
+from distutils.dir_util import copy_tree
+
 class theInterface:
   
   def __init__(self):
@@ -71,12 +76,20 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
   
   
   def getBeforeLoopLines(self):
-  
+    
+    self.unique_id = uuid.uuid4()
+    self.path_to_chekpoitns =os.getcwd()+"/workdir/checkpoints_"+str(self.unique_id)
+    if not os.path.isdir("workdir"):
+		os.mkdir("workdir")
+		os.mkdir(self.path_to_chekpoitns)
+    copy_tree('/nfs/dust/cms/user/jschindl/DNN_checkpoints/V2',self.path_to_chekpoitns)
+    self._get_variables_from_csv()
+
     rstr="""
 
     //6j3t cat
-    const string pathToGraph_6j3t = "/nfs/dust/cms/user/jschindl/DNN_checkpoints/V2/6j3t/trained_main_net.meta";
-    const string checkpointPath_6j3t = "/nfs/dust/cms/user/jschindl/DNN_checkpoints/V2/6j3t/trained_main_net";
+    const string pathToGraph_6j3t =\""""+str(self.path_to_chekpoitns)+"""/6j3t/trained_main_net.meta";
+    const string checkpointPath_6j3t =\""""+str(self.path_to_chekpoitns)+"""/6j3t/trained_main_net";
 
     auto session_6j3t = NewSession(SessionOptions());
     if (session_6j3t == nullptr) {
@@ -115,8 +128,8 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
 
 
     //5j3t cat
-    const string pathToGraph_5j3t = "/nfs/dust/cms/user/jschindl/DNN_checkpoints/V2/5j3t/trained_main_net.meta";
-    const string checkpointPath_5j3t = "/nfs/dust/cms/user/jschindl/DNN_checkpoints/V2/5j3t/trained_main_net";
+    const string pathToGraph_5j3t =\""""+str(self.path_to_chekpoitns)+"""/5j3t/trained_main_net.meta";
+    const string checkpointPath_5j3t =\""""+str(self.path_to_chekpoitns)+"""/5j3t/trained_main_net";
 
     auto session_5j3t = NewSession(SessionOptions());
     if (session_5j3t == nullptr) {
@@ -153,8 +166,8 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
 
 
     //4j3t cat
-    const string pathToGraph_4j3t = "/nfs/dust/cms/user/jschindl/DNN_checkpoints/V2/4j3t/trained_main_net.meta";
-    const string checkpointPath_4j3t = "/nfs/dust/cms/user/jschindl/DNN_checkpoints/V2/4j3t/trained_main_net";
+    const string pathToGraph_4j3t = \""""+str(self.path_to_chekpoitns)+"""/4j3t/trained_main_net.meta";
+    const string checkpointPath_4j3t =\""""+str(self.path_to_chekpoitns)+"""/4j3t/trained_main_net";
 
     auto session_4j3t = NewSession(SessionOptions());
     if (session_4j3t == nullptr) {
@@ -201,8 +214,7 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
        int num_classes_4j3t = 6;
     """
     
-    rstr+="int num_features_4j3t = "+str(len(self._variable_helper_function("4j3t")))+";\n"
-    #rstr+="cout<<"+str(len(self._variable_helper_function("4j3t")))+"<<std::endl;\n"
+    rstr+="int num_features_4j3t = "+str(len(self.variables_4j_3t))+";\n"
     
        
     rstr+="""
@@ -217,7 +229,7 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
        int num_classes_5j3t = 6;
     """
     
-    rstr+="int num_features_5j3t = "+str(len(self._variable_helper_function("5j3t")))+";\n"
+    rstr+="int num_features_5j3t = "+str(len(self.variables_5j_3t))+";\n"
        
     rstr+="""
        double DNN_Out_5j3t_ttbar2B  = -6;
@@ -231,7 +243,7 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
        int num_classes_6j3t = 6;
     """
     
-    rstr+="int num_features_6j3t = "+str(len(self._variable_helper_function("6j3t")))+";\n"
+    rstr+="int num_features_6j3t = "+str(len(self.variables_6j_3t))+";\n"
        
     rstr+="""
         double DNN_Out_6j3t_ttbar2B  = -6;
@@ -273,14 +285,10 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
     rstr+="""
 
     //Run graph
-    feed_dict.push_back(std::make_pair("input",tensor_4j3t));
-    feed_dict.push_back(std::make_pair("dropout_1/dropout/keep_prob", drop_1)); 
+    feed_dict.push_back(std::make_pair("input",tensor_4j3t));"""
+    rstr+= self._fix_dropout('4j3t')
+    rstr+="""
 
-    feed_dict.push_back(std::make_pair("dropout_2/dropout/keep_prob", drop_1)); 
-
-    feed_dict.push_back(std::make_pair("dropout_3/dropout/keep_prob", drop_1)); 
-
-    feed_dict.push_back(std::make_pair("dropout_4/dropout/keep_prob", drop_1)); 
 
     status_4j3t = session_4j3t->Run(feed_dict, {"output/Softmax"},  {}, &outputTensors);
     //if (!status_4j3t.ok()) 
@@ -301,8 +309,20 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
     DNN_Out_4j3t_ttbarlf  = outputTensors.at(0).tensor<float,2>()(0,5);
     DNN_Out_4j3t_ttH  = outputTensors.at(0).tensor<float,2>()(0,0);
     DNN_4j3t_pred_class  = getMaxPosition(outputTensors,num_classes_4j3t);
-
+    
     bool printstuff=0;
+    // fish for fishy outputs
+    for(int jclass=0; jclass<num_classes_4j3t; jclass++){
+      if(outputTensors.at(0).tensor<float,2>()(0,jclass)>0.95 or outputTensors.at(0).tensor<float,2>()(0,jclass)<0.05 or DNN_4j3t_pred_class<0 or DNN_4j3t_pred_class>5 ){
+      printstuff=1;
+      std::cout<<std::endl<<"Something is fishy here "<<Evt_ID<<std::endl;
+      }
+    }
+    // take close look at 4j4t events
+    if(N_Jets==4 && N_BTagsM==4){
+      printstuff=1; 
+      std::cout<<std::endl<<"4j4t event"<<std::endl;
+    }
     if(iEntry<200){printstuff=1;}
     if(printstuff){
       cout<<"-----DNN-----"<<std::endl;
@@ -328,14 +348,10 @@ for(int ifeat=0; ifeat<num_features_4j3t;ifeat++){
     rstr+="""
 
     //Run graph
-    feed_dict.push_back(std::make_pair("input",tensor_5j3t));    
-    feed_dict.push_back(std::make_pair("dropout_1/dropout/keep_prob", drop_1)); 
+    feed_dict.push_back(std::make_pair("input",tensor_5j3t));"""
+    rstr+= self._fix_dropout('5j3t')
+    rstr+="""
 
-    feed_dict.push_back(std::make_pair("dropout_2/dropout/keep_prob", drop_1)); 
-
-    feed_dict.push_back(std::make_pair("dropout_3/dropout/keep_prob", drop_1)); 
-
-    feed_dict.push_back(std::make_pair("dropout_4/dropout/keep_prob", drop_1)); 
     status_5j3t = session_5j3t->Run(feed_dict, {"output/Softmax"},  {}, &outputTensors);
     //if (!status_5j3t.ok()) 
     //{
@@ -354,9 +370,17 @@ for(int ifeat=0; ifeat<num_features_4j3t;ifeat++){
     DNN_Out_5j3t_ttbarCC  = outputTensors.at(0).tensor<float,2>()(0,4);
     DNN_Out_5j3t_ttbarlf  = outputTensors.at(0).tensor<float,2>()(0,5);
     DNN_Out_5j3t_ttH  = outputTensors.at(0).tensor<float,2>()(0,0);
-    DNN_5j3t_pred_class  = getMaxPosition(outputTensors,num_classes_4j3t);
+    DNN_5j3t_pred_class  = getMaxPosition(outputTensors,num_classes_5j3t);
 
     bool printstuff=0;
+    // fish for fishy outputs
+    for(int jclass=0; jclass<num_classes_5j3t; jclass++){
+      if(outputTensors.at(0).tensor<float,2>()(0,jclass)>0.95 or outputTensors.at(0).tensor<float,2>()(0,jclass)<0.05 or DNN_5j3t_pred_class<0 or DNN_5j3t_pred_class>5 ){
+      printstuff=1;
+      std::cout<<std::endl<<"Something is fishy here "<<Evt_ID<<std::endl;
+      }
+
+    }
     if(iEntry<200){printstuff=1;}
     if(printstuff){
       cout<<"-----DNN-----"<<std::endl;
@@ -365,7 +389,7 @@ for(int ifeat=0; ifeat<num_features_4j3t;ifeat++){
 for(int ifeat=0; ifeat<num_features_5j3t;ifeat++){
         cout<<tensor_5j3t.tensor<float,2>()(0,ifeat)<<std::endl;
         }
-      
+     
       cout<<"ttH node "<<DNN_Out_5j3t_ttH<<std::endl;
       cout<<"ttbarBB node "<<DNN_Out_5j3t_ttbarBB<<std::endl;
       cout<<"ttbar2B node "<<DNN_Out_5j3t_ttbar2B<<std::endl;
@@ -382,15 +406,11 @@ for(int ifeat=0; ifeat<num_features_5j3t;ifeat++){
     rstr+="""
 
     //Run graph
-    feed_dict.push_back(std::make_pair("input",tensor_6j3t));
-    feed_dict.push_back(std::make_pair("dropout_1/dropout/keep_prob", drop_1)); 
+    feed_dict.push_back(std::make_pair("input",tensor_6j3t));"""
 
-    feed_dict.push_back(std::make_pair("dropout_2/dropout/keep_prob", drop_1)); 
+    rstr+= self._fix_dropout('6j3t')
 
-    feed_dict.push_back(std::make_pair("dropout_3/dropout/keep_prob", drop_1)); 
-
-    feed_dict.push_back(std::make_pair("dropout_4/dropout/keep_prob", drop_1)); 
-    status_6j3t = session_6j3t->Run(feed_dict, {"output/Softmax"},  {}, &outputTensors);
+    rstr+="""status_6j3t = session_6j3t->Run(feed_dict, {"output/Softmax"},  {}, &outputTensors);
     //if (!status_6j3t.ok()) 
     //{
     //  std::cout << status_6j3t.ToString() << std::endl;
@@ -411,14 +431,22 @@ for(int ifeat=0; ifeat<num_features_5j3t;ifeat++){
     DNN_6j3t_pred_class  = getMaxPosition(outputTensors,num_classes_6j3t);
 
     bool printstuff=0;
+        // fish for fishy outputs
+    for(int jclass=0; jclass<num_classes_6j3t; jclass++){
+      if(outputTensors.at(0).tensor<float,2>()(0,jclass)>0.95 or outputTensors.at(0).tensor<float,2>()(0,jclass)<0.05 or DNN_6j3t_pred_class<0 or DNN_6j3t_pred_class>5 ){
+      printstuff=1;
+      std::cout<<std::endl<<"Something is fishy here "<<Evt_ID<<std::endl;
+      }
+
+    }
     if(iEntry<200){printstuff=1;}
     if(printstuff){
       std::cout<<"-----DNN-----"<<std::endl;
       std::cout<<"jt="<<N_Jets<<" "<<N_BTagsM<< "event "<<Evt_Run<<" "<<Evt_Lumi<<" "<<Evt_ID<<std::endl;
       cout<<"mem "<<memDBp<<std::endl;
-      for(int ifeat=0; ifeat<num_features_6j3t;ifeat++){
-        cout<<tensor_6j3t.tensor<float,2>()(0,ifeat)<<std::endl;
-        }
+     for(int ifeat=0; ifeat<num_features_6j3t;ifeat++){
+       cout<<tensor_6j3t.tensor<float,2>()(0,ifeat)<<std::endl;
+       }
       
       cout<<"ttH node "<<DNN_Out_6j3t_ttH<<std::endl;
       cout<<"ttbarBB node "<<DNN_Out_6j3t_ttbarBB<<std::endl;
@@ -428,6 +456,7 @@ for(int ifeat=0; ifeat<num_features_5j3t;ifeat++){
       cout<<"ttbarOther node "<<DNN_Out_6j3t_ttbarlf<<std::endl;
       std::cout<<"predicted class "<< DNN_6j3t_pred_class<<std::endl;
      }
+
   }
  
 
@@ -485,324 +514,102 @@ for(int ifeat=0; ifeat<num_features_5j3t;ifeat++){
    """
     return rstr
   
+  def _get_variables_from_csv(self):
+  	# Read variables from cvs files. The order of the variables is important for the DNN
+  	self.variables_4j_3t = []
+  	self.means_4j3t = []
+  	self.stddev_4j3t = []
+  	self.variables_5j_3t = []
+  	self.means_5j3t = []
+  	self.stddev_5j3t = []
+  	self.variables_6j_3t = []
+  	self.means_6j3t = []
+  	self.stddev_6j3t = []
+
+  	with open(self.path_to_chekpoitns+"/4j3t/variable_norm.csv") as csv_file:
+  		csv_reader = csv.reader(csv_file,delimiter=',')
+  		for i, row in enumerate(csv_reader):
+  			if i != 0:
+  				# MEM is not named right in CSV, workaround. TODO: Fix name in preprocessing
+  				if row[0]=="MEM":
+  					self.variables_4j_3t.append('memDBp')
+  				else:
+  					self.variables_4j_3t.append(row[0])
+  				self.means_4j3t.append(row[1])
+  				self.stddev_4j3t.append(row[2])
+
+  	with open(self.path_to_chekpoitns+"/5j3t/variable_norm.csv") as csv_file:
+  		csv_reader = csv.reader(csv_file,delimiter=',')
+  		for i, row in enumerate(csv_reader):
+  			if i != 0:
+  				if row[0]=="MEM":
+  					self.variables_5j_3t.append('memDBp')
+  				else:
+  					self.variables_5j_3t.append(row[0])
+  				self.means_5j3t.append(row[1])
+  				self.stddev_5j3t.append(row[2])
+
+  	with open(self.path_to_chekpoitns+"/6j3t/variable_norm.csv") as csv_file:
+  		csv_reader = csv.reader(csv_file,delimiter=',')
+  		for i, row in enumerate(csv_reader):
+  			if i != 0:
+  				if row[0]=="MEM":
+  					self.variables_6j_3t.append('memDBp')
+  				else:
+  					self.variables_6j_3t.append(row[0])
+  				self.means_6j3t.append(row[1])
+  				self.stddev_6j3t.append(row[2])
 
-  def _variable_helper_function(self,region):
-    all_variables = {
-    "pT_j1":                    "Jet_Pt[0]",
-    "eta_j1":                   "Jet_Eta[0]",
-    "CSV_j1":                   "Jet_CSV[0]",
-
-    "pT_j2":                    "Jet_Pt[1]",
-    "eta_j2":                   "Jet_Eta[1]",
-    "CSV_j2":                   "Jet_CSV[1]",
-
-    "pT_j3":                    "Jet_Pt[2]",
-    "eta_j3":                   "Jet_Eta[2]",
-    "CSV_j3":                   "Jet_CSV[2]",
-
-    "pT_j4":                    "Jet_Pt[3]",
-    "eta_j4":                   "Jet_Eta[3]",
-    "CSV_j4":                   "Jet_CSV[3]",
-
-    "pT_lep1":                  "LooseLepton_Pt[0]" ,
-    "eta_lep1":                 "LooseLepton_Eta[0]",
-
-    "HT":                       "Evt_HT",
-    "HT_tag":                   "BDT_common5_input_HT_tag",
-
-    "min_dR_jj":                "Evt_Dr_MinDeltaRJets",
-    "min_dR_bb":                "Evt_Dr_MinDeltaRTaggedJets",
-
-    "max_dR_jj":                "BDT_common5_input_max_dR_jj", 
-    "max_dR_bb":                "BDT_common5_input_max_dR_bb",
-
-    "aplanarity_jets":          "BDT_common5_input_aplanarity_jets",
-    "aplanarity_tags":          "BDT_common5_input_aplanarity_tags",
-
-    "centrality_jets":          "Evt_JetPtOverJetE",
-    "centrality_tags":          "BDT_common5_input_pt_all_jets_over_E_all_jets_tags",
-
-    "sphericity_jets":          "BDT_common5_input_sphericity_jets",
-    "sphericity_tags":          "BDT_common5_input_sphericity_tags",
-
-    # transverse sphericities
-    "sphericityT_jets":         "BDT_common5_input_transverse_sphericity_jets",
-    "sphericityT_tags":         "BDT_common5_input_transverse_sphericity_tags",
-
-    "avg_CSV_jets":             "Evt_CSV_Average",
-    "avg_CSV_tags":             "Evt_CSV_Average_Tagged",
-
-    "max_CSV_jets":             "CSV[0]",
-    "max_CSV_tags":             "CSV[0]",
-
-    "min_CSV_jets":             "Evt_CSV_Min",
-    "min_CSV_tags":             "Evt_CSV_Min_Tagged",
-
-    "min_dR_lep_jet":           "Evt_Dr_MinDeltaRLeptonJet",
-    "min_dR_lep_tag":           "Evt_Dr_MinDeltaRLeptonTaggedJet",
-
-    # fox wolframs
-    "H_2":                      "BDT_common5_input_h1",
-    "H_3":                      "BDT_common5_input_h2",
-    "H_4":                      "BDT_common5_input_h3",
-
-    "M_lep_closest_tag":        "Evt_M_MinDeltaRLeptonTaggedJet",
-
-    "avg_deta_bb":              "Evt_Deta_TaggedJetsAverage",
-    "avg_dR_bb":                "Evt_Dr_TaggedJetsAverage",
-
-    "M2_of_min_dR_bb":          "BDT_common5_input_closest_tagged_dijet_mass",
-    "2nd_moment_tagged_jets_CSVs":      "BDT_common5_input_dev_from_avg_disc_btags",
-
-    "avg_M_jets":               "Evt_M_JetsAverage",
-    "avg_M2_tags":              "Evt_M2_TaggedJetsAverage",
-
-    "N_tags_tight":             "N_BTagsT",
-
-    "M2_bb_closest_to_125":     "BDT_common5_input_tagged_dijet_mass_closest_to_125",
-
-    "2nd_highest_CSV":          "CSV[1]",
-
-    "blr":                      "Evt_blr_ETH",
-    "blr_transformed":          "Evt_blr_ETH_transformed",
-    "dank_MEM":                 "memDBp",
-    }
-
-    # categories
-    # SL 4j,>=3b
-    variables_4j_3b = [
-        "pT_j1",
-        "CSV_j1",
-
-        "eta_j2",
-        "CSV_j2",
-
-        "eta_j3",
-        "CSV_j3",
-
-        "pT_j4",
-        "eta_j4",
-        "CSV_j4",
-
-        "eta_lep1",
-
-        "HT_tag",
-
-        "min_dR_jj",
-        "min_dR_bb",
-
-        "aplanarity_tags",
-        "sphericity_jets",
-
-        "sphericityT_jets",
-        "sphericityT_tags",
-
-        "avg_CSV_jets",
-        "avg_CSV_tags",
-        "max_CSV_jets",
-        #"max_CSV_tags",
-        "min_CSV_jets",
-        "min_CSV_tags",
-
-        "min_dR_lep_jet",
-
-        "H_3",
-        "H_4",
-
-        "M_lep_closest_tag",
-        "M2_of_min_dR_bb",
-        "2nd_moment_tagged_jets_CSVs",
-
-        "avg_M_jets",
-        "avg_M2_tags",
-
-        "N_tags_tight",
-
-        "2nd_highest_CSV",
-
-        "blr",
-        "blr_transformed",
-        "dank_MEM",
-        ]
-
-    # SL 5j,>=3b
-    variables_5j_3b = [
-        "pT_j1",
-        "eta_j1",
-        "CSV_j1",
-
-        "pT_j2",
-        "eta_j2",
-        "CSV_j2",
-
-        "pT_j3",
-        "eta_j3",
-        "CSV_j3",
-
-        "pT_j4",
-        "eta_j4",
-
-        "pT_lep1",
-
-        "HT",
-        "HT_tag",
-
-        "min_dR_jj",
-        "min_dR_bb",
-
-        "max_dR_jj",
-
-        "aplanarity_jets",
-        "aplanarity_tags",
-
-        "sphericity_jets",
-        "sphericity_tags",
-
-        "sphericityT_jets",
-        "sphericityT_tags",
-
-        "avg_CSV_jets",
-        "avg_CSV_tags",
-
-        "max_CSV_jets",
-        #"max_CSV_tags",
-
-        "min_CSV_jets",
-        "min_CSV_tags",
-
-        "min_dR_lep_jet",
-        "min_dR_lep_tag",
-
-        "H_2",
-        "H_3",
-
-        "M_lep_closest_tag",
-
-        "avg_dR_bb",
-
-        "M2_of_min_dR_bb",
-        "2nd_moment_tagged_jets_CSVs",
-
-        "avg_M_jets",
-
-        "N_tags_tight",
-
-        "M2_bb_closest_to_125",
-
-        "2nd_highest_CSV",
-
-        "blr",
-        "blr_transformed",
-        "dank_MEM",
-        ]
-
-
-
-    # SL >=6j, >=3b
-    variables_6j_3b = [
-        "eta_j1",
-        "CSV_j1",
-
-        "eta_j2",
-        "CSV_j2",
-
-        "eta_j3",
-        "CSV_j3",
-
-        "eta_j4",
-        "CSV_j4",
-
-        "pT_lep1",
-        "eta_lep1",
-
-        "HT_tag",
-
-        "min_dR_jj",
-        "min_dR_bb",
-
-        "max_dR_bb",
-
-        "aplanarity_jets",
-        "aplanarity_tags",
-
-        "centrality_jets",
-        "centrality_tags",
-
-        "sphericity_jets",
-        "sphericity_tags",
-
-        "sphericityT_jets",
-        "sphericityT_tags",
-
-        "avg_CSV_jets",
-        "avg_CSV_tags",
-
-        "max_CSV_jets",
-        #"max_CSV_tags",
-
-        "min_CSV_jets",
-        "min_CSV_tags",
-
-        "min_dR_lep_tag",
-
-        "H_4",
-
-        "M_lep_closest_tag",
-
-        "avg_deta_bb",
-        "avg_dR_bb",
-
-        "M2_of_min_dR_bb",
-        "2nd_moment_tagged_jets_CSVs",
-
-        "avg_M_jets",
-        "avg_M2_tags",
-
-        "N_tags_tight",
-
-        "M2_bb_closest_to_125",
-
-        "2nd_highest_CSV",
-
-        "blr",
-        "blr_transformed",
-        "dank_MEM",
-        ]
-    if region=='4j3t':
-      return  [all_variables[var] for var in variables_4j_3b ]
-    elif region=='5j3t':
-      return  [all_variables[var] for var in variables_5j_3b ]
-    elif region=='6j3t':
-      return  [all_variables[var] for var in variables_6j_3b ]
       
   def _fill_vector(self,cat):
-    
-    means_4j3t = [137.42442321777344, 0.7040854692459106, -0.002667010063305497, 0.706744372844696, -0.0029508802108466625, 0.6589658260345459, 44.81528091430664, -0.005932101514190435, 0.6004650592803955, -0.001963152550160885, 265.8736877441406, 1.0248833894729614, 1.3533670902252197, 0.037160590291023254, 0.3212321102619171, 0.3685488700866699, 0.3482910394668579, 0.6682165861129761, 0.8427796959877014, 0.9680687785148621, 0.12919066846370697, 0.6893522143363953, 1.2168452739715576, 0.029151437804102898, -0.00427990173920989, 91.96558380126953, 104.1175537109375, 0.018611226230859756, 8.265861511230469, 160.66160583496094, 2.015070642093216, 0.8731255531311035, 0.4207630753517151, -0.08600679785013199,0.0434101040506144]
-    
-    stddev_4j3t = [75.24872589111328, 0.32950106263160706, 1.071563482284546, 0.3353903591632843, 1.1041667461395264, 0.36023637652397156, 15.387630462646484, 1.1405773162841797, 0.3784834146499634, 1.0388246774673462, 117.03247833251953, 0.3717459440231323, 0.5251893997192383, 0.04789897799491882, 0.18624438345432281, 0.22396820783615112, 0.2246055006980896, 0.09083244949579239, 0.08815127611160278, 0.05874808132648468, 0.19366784393787384, 0.14462552964687347, 0.46422579884529114, 0.08465658128261566, 0.06357312947511673, 42.57014083862305, 52.89622116088867, 0.014765373431146145, 2.8693623542785645, 74.20048522949219, 0.8281713935766097, 0.12357530742883682, 0.3543999195098877, 3.0725975036621094,0.16827486722246718]
-    
-    means_5j3t = [156.375732421875, -0.00032880803337320685, 0.6131682991981506, 105.55225372314453, -0.004987628664821386, 0.6288220286369324, 75.91429901123047, -0.003388760844245553, 0.5913440585136414, 56.25959777832031, -0.0018144077621400356, 75.46308898925781, 597.2225341796875, 283.2565002441406, 0.833136260509491, 1.298830509185791, 3.3669307231903076, 0.07262205332517624, 0.039233606308698654, 0.34573566913604736, 0.29650983214378357, 0.38770490884780884, 0.35514912009239197, 0.5750634670257568, 0.8545134663581848, 0.9723204374313354, 0.04474116489291191, 0.7062298059463501, 1.0992268323898315, 1.2617878913879395, 0.03608007729053497, 0.03382204473018646, 91.98273468017578, 2.1716742515563965, 104.11076354980469, 0.01721077226102352, 6.3061418533325195, 2.1743043582276704, 126.14007568359375, 0.889057993888855, 0.6431511044502258, 1.8492393493652344,0.09970538353532113]
-    
-    stddev_5j3t = [88.20352172851562, 1.0197919607162476, 0.379265695810318, 51.25883483886719, 1.0398567914962769, 0.38030382990837097, 30.92882537841797, 1.0721449851989746, 0.3952060639858246, 20.394432067871094, 1.1045029163360596, 46.308982849121094, 209.8328857421875, 124.52266693115234, 0.27812954783439636, 0.524810254573822, 0.44963932037353516, 0.061429448425769806, 0.04927894100546837, 0.1887226551771164, 0.182241752743721, 0.22402966022491455, 0.22506974637508392, 0.08860533684492111, 0.0877293199300766, 0.054021451622247696, 0.08164707571268082, 0.1492588371038437, 0.4125250577926636, 0.5172849297523499, 0.11800339072942734, 0.07911771535873413, 44.468082427978516, 0.41986992955207825, 54.75101089477539, 0.01454669889062643, 2.022589921951294, 0.8710606106845818, 32.66651153564453, 0.11747807264328003, 0.3359447419643402, 3.4670112133026123,0.25546956531646264]
-
-    means_6j3t = [-0.0008877884829416871, 0.4935821294784546, -0.0025072903372347355, 0.5363996028900146, -0.003351669292896986, 0.5134074687957764, -0.0020857935305684805, 0.4836447238922119, 79.5152587890625, -0.0029293408151715994, 306.08428955078125, 0.6799668073654175, 1.2340381145477295, 2.9112722873687744, 0.08225125074386597, 0.04102278873324394, 0.6223732829093933, 0.6703897714614868, 0.35639750957489014, 0.29853734374046326, 0.3923519551753998, 0.35610607266426086, 0.47097671031951904, 0.8573898673057556, 0.9742678999900818, 0.017539111897349358, 0.7076912522315979, 1.2088245153427124, -0.0018109147204086185, 92.76698303222656, 0.9589356780052185, 2.1291556358337402, 104.26104736328125, 0.016947662457823753, 4.670713901519775, 166.32098388671875, 2.2768849141199157, 126.27725219726562, 0.8968206644058228, 0.7888676524162292, 3.2685322761535645,0.49101815172037266]
-
-    stddev_6j3t = [1.0285539627075195, 0.40034034848213196, 1.0304632186889648, 0.4029228091239929, 1.0525333881378174, 0.4097650349140167, 1.0795516967773438, 0.4120606780052185, 50.92250442504883, 0.9998945593833923, 138.02743530273438, 0.19679751992225647, 0.5196573734283447, 0.587063729763031, 0.06376378983259201, 0.05062000826001167, 0.14537474513053894, 0.17313380539417267, 0.18998992443084717, 0.1838066577911377, 0.2232932299375534, 0.2260759472846985, 0.08877662569284439, 0.0869012251496315, 0.052015211433172226, 0.0422247052192688, 0.1498209834098816, 0.5142785310745239, 0.05038578808307648, 46.50405502319336, 0.4855087399482727, 0.4360775351524353, 58.25953674316406, 0.014364002272486687, 1.5304850339889526, 78.13500213623047, 0.90994039173215, 33.320430755615234, 0.11385979503393173, 0.2697998881340027, 3.5215914249420166,0.3414608286386706]
-
-
-
+   
+  	# Helper function to fill inputtensors for tensorflow
     master_string= ""
     if cat == '4j3t': 
-        for i,value in enumerate(self._variable_helper_function('4j3t')):
-            master_string+="tensor_4j3t.tensor<float,2>()(0,"+str(i)+") = float(("+str(value)+"-("+str(means_4j3t[i])+"))/"+str(stddev_4j3t[i])+"); \n"
+        for i,value in enumerate(self.variables_4j_3t):
+            master_string+="tensor_4j3t.tensor<float,2>()(0,"+str(i)+") = float(("+str(value)+"-("+str(self.means_4j3t[i])+"))/"+str(self.stddev_4j3t[i])+"); \n"
         return master_string
     elif cat == '5j3t':
-        for i,value in enumerate(self._variable_helper_function('5j3t')):
-            master_string+="tensor_5j3t.tensor<float,2>()(0,"+str(i)+") = float(("+str(value)+"-("+str(means_5j3t[i])+"))/"+str(stddev_5j3t[i])+"); \n"
+        for i,value in enumerate(self.variables_5j_3t):
+            master_string+="tensor_5j3t.tensor<float,2>()(0,"+str(i)+") = float(("+str(value)+"-("+str(self.means_5j3t[i])+"))/"+str(self.stddev_5j3t[i])+"); \n"
         return master_string
     elif cat == '6j3t':
-        for i,value in enumerate(self._variable_helper_function('6j3t')):
-            master_string+="tensor_6j3t.tensor<float,2>()(0,"+str(i)+") = float(("+str(value)+"-("+str(means_6j3t[i])+"))/"+str(stddev_6j3t[i])+"); \n"
-            master_string+="//cout<<float(("+str(value)+"-("+str(means_6j3t[i])+"))/"+str(stddev_6j3t[i])+")<<std::endl; \n"
+        for i,value in enumerate(self.variables_6j_3t):
+            master_string+="tensor_6j3t.tensor<float,2>()(0,"+str(i)+") = float(("+str(value)+"-("+str(self.means_6j3t[i])+"))/"+str(self.stddev_6j3t[i])+"); \n"
+            master_string+="//cout<<float(("+str(value)+"-("+str(self.means_6j3t[i])+"))/"+str(self.stddev_6j3t[i])+")<<std::endl; \n"
             
         return master_string
+
+  def _fix_dropout(self,cat):
+  	# Check how many dropout layers are in a model and feed the kepp_pro of 1 -> deactivates dropout
+
+  	# Clear default graph, otherwise old stuff still in the graph
+    tensorflow.reset_default_graph()
+    master_string = ""
+    if cat == '4j3t':
+	  sess_1=tensorflow.Session()
+	  saver_1= tensorflow.train.import_meta_graph(self.path_to_chekpoitns+'/4j3t/trained_main_net.meta')
+	  saver_1.restore(sess_1,self.path_to_chekpoitns+'/4j3t/trained_main_net')
+	  graph = tensorflow.get_default_graph()
+
+    elif cat == '5j3t':
+
+	  sess_2=tensorflow.Session()
+	  saver_2 = tensorflow.train.import_meta_graph(self.path_to_chekpoitns+'/5j3t/trained_main_net.meta')
+	  saver_2.restore(sess_2,self.path_to_chekpoitns+'/5j3t/trained_main_net')
+	  graph = tensorflow.get_default_graph()
+
+    elif cat == '6j3t':
+
+	  sess_1=tensorflow.Session()
+	  saver_1 = tensorflow.train.import_meta_graph(self.path_to_chekpoitns+'/6j3t/trained_main_net.meta')
+	  saver_1.restore(sess_1,self.path_to_chekpoitns+'/6j3t/trained_main_net')
+	  graph = tensorflow.get_default_graph()
+
+    graph = tensorflow.get_default_graph()
+    for op in graph.get_operations():
+	  if op.name.find("dropout/keep_prob")!=-1:
+	    master_string+="feed_dict.push_back(std::make_pair(\""+op.name + "\", drop_1)); \n"
+
+    return master_string
+
