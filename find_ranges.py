@@ -3,7 +3,7 @@ import os
 import sys
 import glob
 import ROOT
-#ROOT.ROOT.EnableImplicitMT()
+ROOT.ROOT.EnableImplicitMT()
 categoriesJT=[
 	("(N_Jets>=6&&N_BTagsM==2)","6j2t",""),
 	("(N_Jets==4&&N_BTagsM==3)","4j3t",""),
@@ -237,8 +237,8 @@ def guess_ranges(infos, ntuplepaths=None):
 				print "selected events: {0}/{1}".format(filterdict[selec]["count"], nevents)
 				minvalgraph = filtered_events.Min(vstring)
 				maxvalgraph = filtered_events.Max(vstring)
-				minval = minvalgraph.GetValue()
-				maxval = maxvalgraph.GetValue()
+				minval = round(minvalgraph.GetValue(), 2)
+				maxval = round(maxvalgraph.GetValue(), 2)
 
 			valdic["LOWEDGE"] = minval
 			valdic["UPEDGE"] = maxval
