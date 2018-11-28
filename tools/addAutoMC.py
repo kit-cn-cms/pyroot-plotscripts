@@ -23,7 +23,7 @@ for datacard in datacards:
 				else:
 					print "skipping", line
 			for cat in categories:
-				automc = cat + " autoMCStats 0 0 1"
+				automc = cat + " autoMCStats 5 0 1"
 				if automc in lines:
 					continue
 				print "writing line", automc
