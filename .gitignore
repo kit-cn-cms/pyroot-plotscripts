@@ -1,8 +1,11 @@
 *.root
 *.pdf
 *.png
-workdir/*
+workdir
 *.pyc
 *.log
 *.aux
 *.nav
+logs
+*/*.pdf
+*/*.png
