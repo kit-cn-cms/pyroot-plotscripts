@@ -110,7 +110,7 @@ sfs="internalEleIDWeight*internalMuIDWeight*internalMuIsoWeight*internalEleGFSWe
 #sfs="internalEleIDWeight*internalMuIDWeight*internalMuIsoWeight*internalEleGFSWeight*internalMuHIPWeight"
 #sfs="1.0"
 
-usualWeights="(1*Weight_pu69p2*Weight_GEN_nom*((Weight>0)-(Weight<0)))"+"*"+sfs
+usualWeights="(1*Weight_pu69p2*Weight_GEN_nom"+"*"+sfs
 #usualWeights="(1*(Weight_GEN_nom))"+"*"+sfs
 
 evenSel="*(Evt_Odd==0)"
