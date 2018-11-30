@@ -767,7 +767,7 @@ def add_sl6j4t():
 
     return plots64
 
-def add_dnn():
+def add_dnn(data):
     categories=[]
     nhistobins=[]
     minxvals=[]
@@ -1115,6 +1115,14 @@ def add_dnn():
     for discr, b, bl, nb, minx, maxx in zip(discrs,plotPreselections,binlabels,nhistobins,minxvals,maxxvals):
         DNNplots.append(plotClasses.Plot(ROOT.TH1F(discrname+"_"+bl,"final discriminator ("+bl+")",nb,minx,maxx),discr,b,bl))
 
+    data.categories += categories
+    data.discrs += discrs
+    data.nhistobins += nhistobins
+    data.minxvals += minxvals
+    data.maxxvals += maxxvals
+    data.plotPreselections = plotPreselections
+    data.binlabels = binlabels
+
     return DNNplots
 
 
@@ -1139,6 +1147,6 @@ def getDiscriminatorPlots(data = None, discrname = None):
     discriminatorPlots += add_sl5j3t()
     discriminatorPlots += add_sl4j4t()
     discriminatorPlots += add_sl4j3t()
-    discriminatorPlots += add_dnn()
+    discriminatorPlots += add_dnn(data)
 
     return discriminatorPlots
