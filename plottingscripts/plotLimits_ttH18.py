@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'testLimits_ttH18'
+    name = 'testLimits_ttH18_v2'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -50,6 +50,7 @@ def main(pyrootdir, argv):
 
     # define MEM discriminator variable
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
+    memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
 
     # name of the csv files used in configdata folder
     configDataBaseName = "limitsttH18"
@@ -81,7 +82,7 @@ def main(pyrootdir, argv):
         # the skipX options try to skip the submission of files to the batch system
         # before skipping the output is crosschecked
         # if the output is not complete, the skipped part is done anyways
-        "skipPlotParallel":     False,
+        "skipPlotParallel":     True,
         "skipHaddParallel":     False,
         "skipHaddFromWildcard": False,
         "skipRenaming":         False,
@@ -207,6 +208,7 @@ def main(pyrootdir, argv):
             # set some changed values
             pP.setJson(plotJson)
             pP.setDataBases(plotDataBases)
+            pP.setMEMDataBase(memDataBase)
             pP.setAddInterfaces(plotInterfaces)
             #pP.setMEPDFCSV(MEPDFCSVFile)
             pP.setCatNames([''])
@@ -290,7 +292,7 @@ def main(pyrootdir, argv):
 
         # Deactivate check bins functionality in renameHistos 
         #   if additional plot variables are added via analysis class
-        if os.path.exists( analysis.setLimitPath(name = "limitInput") ):
+        if os.path.exists( analysis.setRenamedPath(name = "limitInput") ):
         #if os.path.exists( pP.setLimitPath() ) and (plotOptions["skipRenaming"] or analysis.plotNumber != None):
             print( "renamed file already exists - skipping renaming histos" )
         elif analysis.skipRenaming:
