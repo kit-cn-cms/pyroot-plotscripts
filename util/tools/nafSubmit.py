@@ -35,18 +35,21 @@ def writeSubmitCode(script, logdir, hold = False, isArray = False, nScripts = 0,
         print("PeriodicRelease was deactivated because hold = True")
 
     # writing code
-    submitPath = script[:-3]+".sub"
-    submitScript = script.split("/")[-1][:-3]
+    submitPath = script.replace(".sh",".sub")
+    submitScript = script.split("/")[-1].replace(".sh","")
+    
 
     submitCode = ""
     submitCode+= "universe = vanilla\n"
-    #submitCode+= "should_transfer_files = IF_NEEDED\n"
+    submitCode+= "should_transfer_files = IF_NEEDED\n"
     submitCode+= "executable = /bin/zsh\n"
     submitCode+= "arguments = " + script + "\n"
-    #submitCode+= "initialdir = "+os.getcwd()+"\n"
-    #submitCode+= "notification = Never\n"
+    submitCode+= "initialdir = "+os.getcwd()+"\n"
+    submitCode+= "notification = Never\n"
     #submitCode+= "priority = 0\n"
-    #submitCode+= "run_as_owner = True\n"
+    submitCode+= "RequestMemory = 2000\n"
+    submitCode+= "RequestDisk = 500000\n"
+    submitCode+= "run_as_owner = True\n"
     #submitCode+= "job_lease_duration = 60\n"
     for opt in defaults:
         if defaults[opt]:

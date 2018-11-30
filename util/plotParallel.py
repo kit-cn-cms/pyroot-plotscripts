@@ -101,6 +101,10 @@ class plotParallel:
         self.MEPDFCSVFile = csvfile
         self.useLHEWeights = True
         print("set MEPDFCSVFile to "+str(csvfile)+" and useLHEWeights to TRUE")
+    
+    def setUseLHEWeights(self, use_lhe):
+        self.useLHEWeights = use_lhe
+        print("set useLHEWeights to "+str(use_lhe))
        
     def setMaxEvts(self, maxevts):
         self.maxevents = maxevts

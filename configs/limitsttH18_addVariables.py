@@ -112,6 +112,7 @@ def getAddVars():
         'finalbdt_ljets_jge6_t2:='+BDTWeightPath+'/weights_Final_62_'+BDTSet+'.xml',
         'finalbdt_ljets_jge6_t3:='+BDTWeightPath+'/weights_Final_63_'+BDTSet+'.xml',
         'finalbdt_ljets_jge6_tge4:='+BDTWeightPath+'/weights_Final_64_'+BDTSet+'.xml',
+        ]
 
     addVars += list(set(getDNNInputVars()))
     return addVars

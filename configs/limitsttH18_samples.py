@@ -55,10 +55,10 @@ def getAllSamples( pltcfg, analysis, samples ):
     return getSamples(pltcfg) + getControlSamples(pltcfg) + getSystSamples(pltcfg, analysis, samples)
 
 def getAllSystNames( pltcfg ):
-    return pltcfg.weightSystNames+pltcfg.otherSystNames+pltcfg.PSSystNames+pltcfg.QCDSystNames
+    return pltcfg.weightSystNames#+pltcfg.otherSystNames+pltcfg.PSSystNames+pltcfg.QCDSystNames
 
 def getOtherSystNames( pltcfg ):
-    return pltcfg.otherSystNames+pltcfg.PSSystNames+pltcfg.QCDSystNames
+    return pltcfg.otherSystNames#+pltcfg.PSSystNames+pltcfg.QCDSystNames
 
 def getWeightSystNames( pltcfg ):
     return pltcfg.weightSystNames

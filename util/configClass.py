@@ -20,6 +20,19 @@ class catData:
         self.plotPreselections = []
         self.binlabels = []
 
+    def getNEntries(self):
+        return len(self.discrs)
+
+    def getEntry(self, i):
+        return {
+            "discr":            self.discrs[i],
+            "nhistobins":       self.nhistobins[i],
+            "minxvals":         self.minxvals[i],
+            "maxxvals":         self.maxxvals[i],
+            "category":         self.categories[i],
+            "plotPreselection": self.plotPreselections[i],
+            "binlabel":         self.binlabels[i]}
+
 class configData:
     def __init__(self, analysisClass, configDataBaseName = ""):
 
@@ -126,12 +139,15 @@ class configData:
         #                        binUpperEdge ,discr, preselection, binLabel,            
 
         additionalPlotVarsDict_fromArgs = {}
-        for index, row in self.Data.iterrows():
-            for additionalPlotVariable in self.additionalPlotVariables:
+        print(self.Data.discrs)
+        #for index, row in self.Data.iterrows():
+        for index in range(self.Data.getNEntries()):
+            row = self.Data.getEntry(index)
+            for additionalPlotVariable in self.addVars: #self.additionalPlotVariables:
                 # Use fullVarName as key in class dict while additionalPlotVariable is key in map file
-                fullVarName = row["discrs"] + '_' + row["binlabels"] + '_' + additionalPlotVariable
+                fullVarName = row["discr"] + '_' + row["binlabel"] + '_' + additionalPlotVariable
                 additionalPlotVarsDict_fromArgs[fullVarName] = [additionalPlotVariable, 10, 0, 150, 
-                            row["discrs"], row["plotPreselections"], row["binlabels"]]
+                            row["discr"], row["plotPreselection"], row["binlabel"]]
         print("number of additional plot variables gathered from argv: " + \
                 str(len(additionalPlotVarsDict_fromArgs)))
         
