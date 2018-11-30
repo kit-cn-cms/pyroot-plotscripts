@@ -174,7 +174,7 @@ class genPlots:
 
             # start loop over histos in listofhists
             for hist, sample in zip(listOfHists, controlSamples):
-                yTitle = 'Events expected for 12.9 fb^{-1} @ 13 TeV'
+                yTitle = 'Events expected for 41.5 fb^{-1} @ 13 TeV'
 
                 # stup histogram
                 setupHist( hist, sample.color, yTitle, plotOptions["stack"] )
@@ -355,7 +355,7 @@ class genPlots:
 
 
             #cms = ROOT.TLatex( 0.2, 0.96, "CMS private work" );
-            cms = ROOT.TLatex(0.2, 0.96, "CMS preliminary,  36.0 fb^{-1},  #sqrt{s} = 13 TeV" );
+            cms = ROOT.TLatex(0.2, 0.96, "CMS preliminary,  41.5 fb^{-1},  #sqrt{s} = 13 TeV" );
             cms.SetTextFont(42)
             cms.SetTextSize(0.05)
             cms.SetNDC()
@@ -2345,7 +2345,7 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
         objects.append(otc)
 
         #draw the lumi text on the canvas
-        CMS_lumi.lumi_13TeV = "36.0 fb^{-1}"
+        CMS_lumi.lumi_13TeV = "41.5 fb^{-1}"
         CMS_lumi.writeExtraText = 1
         #CMS_lumi.extraText = "Preliminary"
         CMS_lumi.extraText = ""
@@ -2620,7 +2620,7 @@ def plotDataMCanWsystCustomBinLabels(listOfHistoListsData,listOfHistoLists,sampl
         #objects.append(otc)
 
         ##draw the lumi text on the canvas
-        #CMS_lumi.lumi_13TeV = "36.0 fb^{-1}"
+        #CMS_lumi.lumi_13TeV = "41.5 fb^{-1}"
         #CMS_lumi.writeExtraText = 1
         ##CMS_lumi.extraText = "Preliminary"
         #CMS_lumi.extraText = ""
@@ -2901,7 +2901,7 @@ def plotRefWsystandOthers(listOfHistoLists,samples,listOfhistosOnTop,sampleOnTop
         objects.append(otc)
 
         #draw the lumi text on the canvas
-        CMS_lumi.lumi_13TeV = "36.0 fb^{-1}"
+        CMS_lumi.lumi_13TeV = "41.5 fb^{-1}"
         CMS_lumi.writeExtraText = 1
         #CMS_lumi.extraText = "Preliminary"
         CMS_lumi.extraText = ""

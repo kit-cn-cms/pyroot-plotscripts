@@ -387,8 +387,9 @@ otherSystFileNames=[
     "JESPileUpPtHFup","JESPileUpPtHFdown",
     ]
 
+print("otherSystNames | otherSystFileNames")
 for i,j in zip(otherSystNames,otherSystFileNames):
-print i, j
+    print(str(i)+" | "+str(j))
 assert len(otherSystNames)==len(otherSystFileNames)
 
 
@@ -454,7 +455,7 @@ ttHpath=path_karim_new+'/ttHTo*/*nominal*.root'
 
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
-sampleDict=SampleDictionary()
+sampleDict=plotClasses.SampleDictionary()
 sampleDict.doPrintout()
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)

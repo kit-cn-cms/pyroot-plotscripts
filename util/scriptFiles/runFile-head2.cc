@@ -1,12 +1,10 @@
-
-  
-    translatedFileNameForDataBase=sampleTranslationMapCPP[thisfilename];
-    if(processname=="QCD" or processname=="QCD_CMS_ttH_QCDScaleFactorUp" or processname=="QCD_CMS_ttH_QCDScaleFactorDown"){
-      translatedFileNameForDataBase+="QCD";
-      }
-    samplename_in_database=translatedFileNameForDataBase;
-    if(! (std::find(databaseRelevantFilenames.begin(),databaseRelevantFilenames.end(),translatedFileNameForDataBase)!=databaseRelevantFilenames.end()  )){
-      databaseRelevantFilenames.push_back(translatedFileNameForDataBase.Copy());
+  //  translatedFileNameForDataBase=sampleTranslationMapCPP[thisfilename];
+  //  if(processname=="QCD" or processname=="QCD_CMS_ttH_QCDScaleFactorUp" or processname=="QCD_CMS_ttH_QCDScaleFactorDown"){
+  //    translatedFileNameForDataBase+="QCD";
+  //    }
+    samplename_in_database=thisfilename;
+    if(! (std::find(databaseRelevantFilenames.begin(),databaseRelevantFilenames.end(),thisfilename)!=databaseRelevantFilenames.end()  )){
+      databaseRelevantFilenames.push_back(thisfilename.Copy());
       //sampleDataBaseFoundEvents["jt42"][thisfilename]=0;
       //sampleDataBaseLostEvents["jt42"][thisfilename]=0;
       //sampleDataBaseFoundEvents["jt52"][thisfilename]=0;
@@ -53,7 +51,9 @@
     }
     
   chain->SetBranchStatus("*",0);
+
   TFile* outfile=new TFile(outfilename,"RECREATE");
+
   TStopwatch* totalWatch= new TStopwatch();
   TStopwatch* databaseWatch= new TStopwatch();
   double memTime=0;
@@ -67,6 +67,7 @@
   Int_t Evt_ID_INT;
   Int_t Evt_Run_INT;
   Int_t Evt_Lumi_INT;
+
   chain->SetBranchStatus("Evt_ID",1);
   chain->SetBranchStatus("Evt_Run",1);
   chain->SetBranchStatus("Evt_Lumi",1);
@@ -108,5 +109,6 @@
   TStopwatch* timerTotal=new TStopwatch();
   TStopwatch* timerMapping=new TStopwatch();
   
+
  
   // initialize variables from tree

@@ -72,10 +72,7 @@ class analysisConfig:
             print("ttbb was chosen as signal process")
         elif signalProcess == "ttH" or signalProcess == "tth":
             self.signalProcess = "ttH"
-            self.plotBlinded = True
-            self.tt_samplesLower = 9
-            self.tt_samplesUpper = 14
-            print("ttH was chosen as signal process. plotBlinded was set to True")
+            #print("ttH was chosen as signal process. plotBlinded was set to True")
         elif signalProcess == "DM":
             self.signalProcess = "DM"
             self.plotBlinded = False
@@ -84,6 +81,7 @@ class analysisConfig:
             print("could not find signalProcess '"+str(signalProcess)+"'. Define it in analysisConfig")
             sys.exit("unknow signalProcess chosen")
         self.plotConfig = "pltcfg_"+pltcfgName
+        print("set plotConfig to "+str(self.plotConfig))
         
     def initArguments(self, argv = list()):
         """Evaluate any commandline arguments"""

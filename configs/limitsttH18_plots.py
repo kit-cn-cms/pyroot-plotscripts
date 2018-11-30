@@ -25,8 +25,8 @@ def evtYieldCategories():
 
 # selection for categories
 categoriesJTsel="("+categoriesJT[0][0]
-for cat in categories[1:]:
-    categoriesJTset+="||"+cat[0]
+for cat in categoriesJT[1:]:
+    categoriesJTsel+="||"+cat[0]
 categoriesJTsel+=")"
 
 # category strings 
@@ -767,7 +767,7 @@ def add_sl6j4t():
 
     return plots64
 
-def add_dnn(data):
+def add_dnn(data, discrname):
     categories=[]
     nhistobins=[]
     minxvals=[]
@@ -800,24 +800,24 @@ def add_dnn(data):
         ("(N_Jets>=6&&N_BTagsM>=3&&DNN_6j3t_pred_class==5)","ljets_jge6_tge3_ttlfnode",""),
 
         # 3 tag and 4 tag events with MIN node output cuts
-        ("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==0&&DNN_Out_4j3t_ttH>0.3)","ljets_j4_tge3_minValue2p5_ttHnode",""),
-        ("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==1&&DNN_Out_4j3t_ttbarBB>0.3)","ljets_j4_tge3_minValue2p5_ttbbnode",""),
-        ("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==2&&DNN_Out_4j3t_ttbar2B>0.3)","ljets_j4_tge3_minValue2p5_tt2bnode",""),
-        ("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==3&&DNN_Out_4j3t_ttbarB>0.3)","ljets_j4_tge3_minValue2p5_ttbnode",""),
-        ("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==4&&DNN_Out_4j3t_ttbarCC>0.3)","ljets_j4_tge3_minValue2p5_ttccnode",""),
-        ("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==5&&DNN_Out_4j3t_ttbarlf>0.3)","ljets_j4_tge3_minValue2p5_ttlfnode",""),
+        ("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==0&&DNN_Out_4j3t_ttH>0.35)","ljets_j4_tge3_minValue0p35_ttHnode",""),
+        ("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==1&&DNN_Out_4j3t_ttbarBB>0.35)","ljets_j4_tge3_minValue0p35_ttbbnode",""),
+        ("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==2&&DNN_Out_4j3t_ttbar2B>0.35)","ljets_j4_tge3_minValue0p35_tt2bnode",""),
+        ("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==3&&DNN_Out_4j3t_ttbarB>0.35)","ljets_j4_tge3_minValue0p35_ttbnode",""),
+        ("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==4&&DNN_Out_4j3t_ttbarCC>0.35)","ljets_j4_tge3_minValue0p35_ttccnode",""),
+        ("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==5&&DNN_Out_4j3t_ttbarlf>0.35)","ljets_j4_tge3_minValue0p35_ttlfnode",""),
 
-        ("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==0&&DNN_Out_5j3t_ttH>0.3)","ljets_j5_tge3_minValue2p5_ttHnode",""),             
-        ("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==1&&DNN_Out_5j3t_ttbarBB>0.3)","ljets_j5_tge3_minValue2p5_ttbbnode",""),             
-        ("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==2&&DNN_Out_5j3t_ttbar2B>0.3)","ljets_j5_tge3_minValue2p5_tt2bnode",""),             
-        ("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==3&&DNN_Out_5j3t_ttbarB>0.3)","ljets_j5_tge3_minValue2p5_ttbnode",""),             
-        ("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==4&&DNN_Out_5j3t_ttbarCC>0.3)","ljets_j5_tge3_minValue2p5_ttccnode",""),             
-        ("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==5&&DNN_Out_5j3t_ttbarlf>0.3)","ljets_j5_tge3_minValue2p5_ttlfnode",""),             
+        ("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==0&&DNN_Out_5j3t_ttH>0.35)","ljets_j5_tge3_minValue0p35_ttHnode",""),             
+        ("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==1&&DNN_Out_5j3t_ttbarBB>0.35)","ljets_j5_tge3_minValue0p35_ttbbnode",""),             
+        ("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==2&&DNN_Out_5j3t_ttbar2B>0.35)","ljets_j5_tge3_minValue0p35_tt2bnode",""),             
+        ("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==3&&DNN_Out_5j3t_ttbarB>0.35)","ljets_j5_tge3_minValue0p35_ttbnode",""),             
+        ("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==4&&DNN_Out_5j3t_ttbarCC>0.35)","ljets_j5_tge3_minValue0p35_ttccnode",""),             
+        ("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==5&&DNN_Out_5j3t_ttbarlf>0.35)","ljets_j5_tge3_minValue0p35_ttlfnode",""),             
 
 
-        ("(N_Jets>=6&&N_BTagsM>=3&&DNN_6j3t_pred_class==0&&DNN_Out_6j3t_ttH>0.3)","ljets_jge6_tge3_minValue2p5_ttHnode",""),
-        ("(N_Jets>=6&&N_BTagsM>=3&&DNN_6j3t_pred_class==1&&DNN_Out_6j3t_ttbarBB>0.3)","ljets_jge6_tge3_minValue2p5_ttbbnode",""),
-        ("(N_Jets>=6&&N_BTagsM>=3&&DNN_6j3t_pred_class==2&&DNN_Out_6j3t_ttbar2B>0.3)","ljets_jge6_tge3_minValue2p5_tt2bnode",""),
+        ("(N_Jets>=6&&N_BTagsM>=3&&DNN_6j3t_pred_class==0&&DNN_Out_6j3t_ttH>0.35)","ljets_jge6_tge3_minValue0p35_ttHnode",""),
+        ("(N_Jets>=6&&N_BTagsM>=3&&DNN_6j3t_pred_class==1&&DNN_Out_6j3t_ttbarBB>0.35)","ljets_jge6_tge3_minValue0p35_ttbbnode",""),
+        ("(N_Jets>=6&&N_BTagsM>=3&&DNN_6j3t_pred_class==2&&DNN_Out_6j3t_ttbar2B>0.35)","ljets_jge6_tge3_minValue0p35_tt2bnode",""),
         ("(N_Jets>=6&&N_BTagsM>=3&&DNN_6j3t_pred_class==3&&DNN_Out_6j3t_ttbarB>0.3)","ljets_jge6_tge3_minValue2p5_ttbnode",""),
         ("(N_Jets>=6&&N_BTagsM>=3&&DNN_6j3t_pred_class==4&&DNN_Out_6j3t_ttbarCC>0.3)","ljets_jge6_tge3_minValue2p5_ttccnode",""),
         ("(N_Jets>=6&&N_BTagsM>=3&&DNN_6j3t_pred_class==5&&DNN_Out_6j3t_ttbarlf>0.3)","ljets_jge6_tge3_minValue2p5_ttlfnode",""),
@@ -1147,6 +1147,6 @@ def getDiscriminatorPlots(data = None, discrname = None):
     discriminatorPlots += add_sl5j3t()
     discriminatorPlots += add_sl4j4t()
     discriminatorPlots += add_sl4j3t()
-    discriminatorPlots += add_dnn(data)
+    discriminatorPlots += add_dnn(data, discrname)
 
     return discriminatorPlots
