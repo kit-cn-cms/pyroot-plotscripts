@@ -49,6 +49,7 @@ class plotParallel:
 
         self.jsonFile = ""
         self.dataBases = []
+        self.memDBpath = ""
         self.useDataBases = False
         self.addInterfaces = []
         self.MEPDFCSVFile = ""
@@ -83,6 +84,10 @@ class plotParallel:
             self.useDataBases = True
             print("set useDataBases to True")
 
+    def setMEMDataBase(self, db_path):
+        self.memDBpath = db_path
+        print("set path for MEM DataBase to "+str(db_path))
+
     def setAddInterfaces(self, interfaces):
         interfaceCounter = 0
         for interface in interfaces:
@@ -90,7 +95,7 @@ class plotParallel:
             if isinstance( interface, basestring ):
                 addModule = "addModule" + str(interfaceCounter)
                 print( "loading module: " + str(interface) + " as " + addModule + " module." )
-                self.addInterfaces.append( imp.load_source(addModule, interface).theInterface())
+                self.addInterfaces.append( imp.load_source(addModule, interface).theInterface(self.analysis.workdir))
             elif isinstance( interface, types.InstanceType ):
                 print( "appending class object initiated by user: " + str(interface) )
                 self.addInterfaces.append(interface)
