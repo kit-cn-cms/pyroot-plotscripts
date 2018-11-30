@@ -7,7 +7,7 @@ import PDFutils
 ROOT.gROOT.SetBatch(True)
 
 # -- generating the head of the script ------------------------------------------------------------
-def getHead(basepath, dataBases, addCodeInterfaces=[]):
+def getHead(basepath, dataBases, memDB_path, addCodeInterfaces=[]):
   
   includes = ['"TChain.h"', '"TBranch.h"', '"TLorentzVector.h"', '"TFile.h"',
                 '"TH1F.h"', '"TH2F.h"', '<iostream>', '<string>', '<sstream>',
@@ -23,9 +23,7 @@ def getHead(basepath, dataBases, addCodeInterfaces=[]):
     retstr += addCodeInt.getIncludeLines()
   
   if dataBases != []:
-    retstr+="""
-#include "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBaseSpring17/MEMDataBase/MEMDataBase/interface/MEMDataBase.h"
-"""
+    retstr+='#include "'+str(memDB_path)+'/interface/MEMDataBase.h"\n'
 
   retstr+="""
 using namespace std;
@@ -37,11 +35,11 @@ using namespace std;
   with open(basepath+"/util/scriptFiles/runFile-head1.cc", "r") as head1:
     retstr += head1.read()
 
-  with open('/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBaseSpring17/MEMDataBase/MEMDataBase/test/sampleNameMap.json',"r") as jfile:
-    jstring = jfile.read()
-  sampleTranslationMap = json.loads(jstring)
-  for transSample in sampleTranslationMap:
-    retstr+="\tsampleTranslationMapCPP[TString(\""+transSample+"\")]=TString(\""+sampleTranslationMap[transSample]+"\");\n"
+  #with open(self(memDB_path)+'/test/sampleNameMap.json',"r") as jfile:
+  #  jstring = jfile.read()
+  #sampleTranslationMap = json.loads(jstring)
+  #for transSample in sampleTranslationMap:
+  #  retstr+="\tsampleTranslationMapCPP[TString(\""+transSample+"\")]=TString(\""+sampleTranslationMap[transSample]+"\");\n"
   
   with open(basepath+"/util/scriptFiles/runFile-head2.cc", "r") as head2:
     retstr += head2.read()
@@ -244,10 +242,10 @@ def readOutDataBase(thisDataBase=[]):
   
   rstr+="""
     TString currentRelevantSampleName=sampleDataBaseIdentifiers[currentfilename];
-    TString translatedCurrentRelevantSampleName=sampleTranslationMapCPP[currentRelevantSampleName];
-    if(processname=="QCD" or processname=="QCD_CMS_ttH_QCDScaleFactorUp" or processname=="QCD_CMS_ttH_QCDScaleFactorDown"){
-      translatedCurrentRelevantSampleName+="QCD";
-      }
+    //TString translatedCurrentRelevantSampleName=sampleTranslationMapCPP[currentRelevantSampleName];
+    //if(processname=="QCD" or processname=="QCD_CMS_ttH_QCDScaleFactorUp" or processname=="QCD_CMS_ttH_QCDScaleFactorDown"){
+    //  translatedCurrentRelevantSampleName+="QCD";
+    //  }
     //std::cout<<currentfilename<<" "<<currentRelevantSampleName<<" "<<translatedCurrentRelevantSampleName<<std::endl;
   """
   
@@ -260,7 +258,7 @@ def readOutDataBase(thisDataBase=[]):
   rstr+="  databaseWatch->Start(); \n"
   
   rstr+="  for(unsigned int isn=0; isn<"+thisDataBaseName+"DB.size();isn++){ \n"
-  rstr+="    if(databaseRelevantFilenames.at(isn)==translatedCurrentRelevantSampleName){;\n"
+  rstr+="    if(databaseRelevantFilenames.at(isn)==currentRelevantSampleName){;\n"
   rstr+="         DataBaseMEMResult "+thisDataBaseName+"Result = "+thisDataBaseName+"DB.at(isn)->GetMEMResult(databaseRelevantFilenames.at(isn),Evt_Run,Evt_Lumi,Evt_ID);\n"
 
   #rstr+="        std::cout<<\" p p_sig p_bkg p_err_sig p_err_bkg n_perm_sig n_perm_bkg \"<<"+thisDataBaseName+"p<<\" \"<<"+thisDataBaseName+"p_sig<<\"   \"<<"+thisDataBaseName+"p_bkg<<\" \"<<"+thisDataBaseName+"p_err_sig<<\" \"<<"+thisDataBaseName+"p_err_bkg<<\" \"<<"+thisDataBaseName+"n_perm_sig<<\" \"<<"+thisDataBaseName+"n_perm_bkg<<\" \"<<std::endl;\n"

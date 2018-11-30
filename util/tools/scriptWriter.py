@@ -101,7 +101,7 @@ class scriptWriter:
         
         # write program
         # start writing program
-        script = scriptfunctions.getHead(self.pp.analysis.pyrootdir, self.pp.dataBases, self.pp.addInterfaces)
+        script = scriptfunctions.getHead(self.pp.analysis.pyrootdir, self.pp.dataBases, self.pp.memDBpath, self.pp.addInterfaces)
 
         if self.pp.MEPDFCSVFile!="":
             script += scriptfunctions.DeclareMEPDFNormFactors(self.pp.MEPDFCSVFile)
