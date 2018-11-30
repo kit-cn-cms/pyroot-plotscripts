@@ -1,42 +1,41 @@
 import tensorflow
 import csv
 import os
-import uuid
 from distutils.dir_util import copy_tree
 
 class theInterface:
-  
-  def __init__(self):
-
-    self.includeString="-I/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/tensorflow-cc/1.3.0-elfike/tensorflow_cc/include -I/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/eigen/c7dc0a897676/include/eigen3 -I/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/protobuf/3.4.0-fmblme/include"
+  def __init__(self, workdir):
+    self.workdir = workdir
+    self.includeString = "-I/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/tensorflow-cc/1.3.0-elfike/tensorflow_cc/include -I/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/eigen/c7dc0a897676/include/eigen3 -I/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/protobuf/3.4.0-fmblme/include"
     #self.libraryString="-L/nfs/dust/cms/user/kelmorab/CMSSW_Moriond2017/cardsCMSSWTF/CMSSW_8_0_26_patch2/lib/slc6_amd64_gcc530 -lDNNBase -lDNNTensorflow -lTTHCommonClassifier"
-    self.libraryString="-L/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/tensorflow-cc/1.3.0-elfike/tensorflow_cc/lib -ltensorflow_cc -L/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/protobuf/3.4.0-fmblme/lib -lprotobuf -lrt"
-    self.usesPythonLibraries=True
+    self.libraryString = "-L/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/tensorflow-cc/1.3.0-elfike/tensorflow_cc/lib -ltensorflow_cc -L/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/protobuf/3.4.0-fmblme/lib -lprotobuf -lrt"
+    self.usesPythonLibraries = True
 
 
   def getExternalyCallableVariables(self):
     return [
-	    "DNN_Out_4j3t_ttbar2B",
-	    "DNN_Out_4j3t_ttbarB",
-	    "DNN_Out_4j3t_ttbarBB",
-	    "DNN_Out_4j3t_ttbarCC",
-	    "DNN_Out_4j3t_ttbarlf",
-	    "DNN_Out_4j3t_ttH",
-	    "DNN_4j3t_pred_class",
-      "DNN_Out_5j3t_ttbar2B",
-      "DNN_Out_5j3t_ttbarB",
-      "DNN_Out_5j3t_ttbarBB",
-      "DNN_Out_5j3t_ttbarCC",
-      "DNN_Out_5j3t_ttbarlf",
-      "DNN_Out_5j3t_ttH",
-      "DNN_5j3t_pred_class",
-      "DNN_Out_6j3t_ttbar2B",
-      "DNN_Out_6j3t_ttbarB",
-      "DNN_Out_6j3t_ttbarBB",
-      "DNN_Out_6j3t_ttbarCC",
-      "DNN_Out_6j3t_ttbarlf",
-      "DNN_Out_6j3t_ttH",
-      "DNN_6j3t_pred_class",]
+        "DNN_Out_4j3t_ttbar2B",
+        "DNN_Out_4j3t_ttbarB",
+        "DNN_Out_4j3t_ttbarBB",
+        "DNN_Out_4j3t_ttbarCC",
+        "DNN_Out_4j3t_ttbarlf",
+        "DNN_Out_4j3t_ttH",
+        "DNN_4j3t_pred_class",
+        "DNN_Out_5j3t_ttbar2B",
+        "DNN_Out_5j3t_ttbarB",
+        "DNN_Out_5j3t_ttbarBB",
+        "DNN_Out_5j3t_ttbarCC",
+        "DNN_Out_5j3t_ttbarlf",
+        "DNN_Out_5j3t_ttH",
+        "DNN_5j3t_pred_class",
+        "DNN_Out_6j3t_ttbar2B",
+        "DNN_Out_6j3t_ttbarB",
+        "DNN_Out_6j3t_ttbarBB",
+        "DNN_Out_6j3t_ttbarCC",
+        "DNN_Out_6j3t_ttbarlf",
+        "DNN_Out_6j3t_ttH",
+        "DNN_6j3t_pred_class",
+        ]
     
   def getIncludeLines(self):
     retstr="""
@@ -77,11 +76,9 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
   
   def getBeforeLoopLines(self):
     
-    self.unique_id = uuid.uuid4()
-    self.path_to_chekpoitns =os.getcwd()+"/workdir/checkpoints_"+str(self.unique_id)
-    if not os.path.isdir("workdir"):
-		os.mkdir("workdir")
-		os.mkdir(self.path_to_chekpoitns)
+    self.path_to_chekpoitns = self.workdir+"/DNN_checkpoints/"
+    if not os.path.exists(self.path_to_chekpoitns):
+        os.makedirs(self.path_to_chekpoitns)
     # location of plain DNNs (no prenet)
     copy_tree('/nfs/dust/cms/user/vdlinden/DNN_checkpoints/',self.path_to_chekpoitns)
     self._get_variables_from_csv()
