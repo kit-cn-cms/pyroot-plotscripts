@@ -64,7 +64,7 @@ def main(pyrootdir, argv):
     analysisOptions = {
         # general options
         "plotBlinded":          True,  # blind region
-        "cirun":                False,  # test run with less samples
+        "cirun":                True,  # test run with less samples
         "haddParallel":         True,  # parallel hadding instead of non-parallel
         "useOldRoot":           False,   # use existing root file if it exists (skips plotParallel)
         # options to activate parts of the script
@@ -106,7 +106,7 @@ def main(pyrootdir, argv):
     '''
 
     # TODO make the analysisClass more essential - atm it is not really needed
-    analysis = configClass.analysisConfig(
+    analysis = analysisClass.analysisConfig(
         workdir = workdir, 
         pyrootdir = pyrootdir, 
         rootPath = rootPathForAnalysis, 
@@ -464,8 +464,8 @@ def main(pyrootdir, argv):
                     "ratio":            False,
                     "sepaTest":         False}
                 gP.makeSimpleControlPlots( 
-                    dataConfig = genPlots.Config(name = histoList, index = 9,
-                    options = controlPlotsOptions
+                    dataConfig = genPlots.Config(name = histoList, index = 9),
+                    options = controlPlotsOptions)
 
                 # creating shape plots
                 shapePlotsOptions = {
