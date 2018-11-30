@@ -982,7 +982,7 @@ std::string Systematics::GetJECUncertaintyLabel(const Type type) {
   }
 }
 
-// hacked in CSV helper . Factorized JES. (date 01.09.2018)
+// hacked in CSV helper . Factorized JES. (date 28.11.2018)
 class CSVHelper
 {
 public:
@@ -1141,6 +1141,8 @@ CSVHelper::fillCSVHistos(TFile *fileHF, TFile *fileLF, const std::vector<Systema
     }
     if(systematic!="") {systematic="_"+systematic;}
     
+    //DANGERZEONE
+    // Check if this is still correct
     if(systematic_original.Contains("HFStats")){
         systematic_original.ReplaceAll("HFStats","LFStats");
     }
@@ -1151,33 +1153,39 @@ CSVHelper::fillCSVHistos(TFile *fileHF, TFile *fileLF, const std::vector<Systema
     for (int iPt = 0; iPt < nHFptBins_; iPt++) {
         TString name = Form("csv_ratio_Pt%i_Eta0_%s", iPt, (syst_csv_suffix+systematic).Data());
         // only read the histogram if it exits in the root file
-        if(fileHF->GetListOfKeys()->Contains(name) && !(systematic_original.Contains("HF"))) {
+//        if(fileHF->GetListOfKeys()->Contains(name) && !(systematic_original.Contains("HF"))) {
+        if(fileHF->GetListOfKeys()->Contains(name)) {
             h_csv_wgt_hf.at(iSys).at(iPt) = readHistogram(fileHF,name);
-            std::cout << "added " << name << " from HF file" << std::endl;
+            std::cout <<"for "<<systematic_original<< " added " <<  h_csv_wgt_hf.at(iSys).at(iPt)->GetName() << " from HF file" << std::endl;
         }
         else {
             h_csv_wgt_hf.at(iSys).at(iPt) = readHistogram(fileHF,name.ReplaceAll(systematic,""));
+            std::cout <<"for "<<systematic_original<< " added " <<  h_csv_wgt_hf.at(iSys).at(iPt)->GetName() << " from HF file" << std::endl;
         }
     }
     for (int iPt = 0; iPt < nHFptBins_; iPt++) {
         TString name = Form("c_csv_ratio_Pt%i_Eta0_%s", iPt, (syst_csv_suffix+systematic).Data());
         if(fileHF->GetListOfKeys()->Contains(name)) {
             c_csv_wgt_hf.at(iSys).at(iPt) = readHistogram(fileHF,name);
-            std::cout << "added " << name << " from HF file" << std::endl;
+            std::cout <<"for "<<systematic_original<< " added " << c_csv_wgt_hf.at(iSys).at(iPt)->GetName() << " from CF(HF) file" << std::endl;
         }
         else {
             c_csv_wgt_hf.at(iSys).at(iPt) = readHistogram(fileHF,name.ReplaceAll(systematic,""));
+            std::cout <<"for "<<systematic_original<< " added " << c_csv_wgt_hf.at(iSys).at(iPt)->GetName() << " from CF(HF) file" << std::endl;
+
         }
     }
     for (int iPt = 0; iPt < nLFptBins_; iPt++) {
         for (int iEta = 0; iEta < nLFetaBins_; iEta++) {
             TString name = Form("csv_ratio_Pt%i_Eta%i_%s", iPt, iEta, (syst_csv_suffix+systematic).Data());
-            if(fileLF->GetListOfKeys()->Contains(name) && !(systematic_original.Contains("LF"))) {
+//            if(fileLF->GetListOfKeys()->Contains(name) && !(systematic_original.Contains("LF"))) {
+            if(fileLF->GetListOfKeys()->Contains(name)) {
                 h_csv_wgt_lf.at(iSys).at(iPt).at(iEta) = readHistogram(fileLF,name);
-                std::cout << "added " << name << " from LF file" << std::endl;
+                std::cout <<"for "<<systematic_original<< " added " << h_csv_wgt_lf.at(iSys).at(iPt).at(iEta)->GetName() << " from LF file" << std::endl;
             }
             else {
                 h_csv_wgt_lf.at(iSys).at(iPt).at(iEta) = readHistogram(fileLF,name.ReplaceAll(systematic,""));
+                std::cout <<"for "<<systematic_original<< " added " << h_csv_wgt_lf.at(iSys).at(iPt).at(iEta)->GetName() << " from LF file" << std::endl;
             }
         }
     }
@@ -1263,7 +1271,7 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
       iEta = 0;
     else if (jetAbsEta >= 0.8 && jetAbsEta < 1.6)
       iEta = 1;
-    else if (jetAbsEta >= 1.6 && jetAbsEta < 2.41)
+    else if (jetAbsEta >= 1.6 && jetAbsEta < 2.5)
       iEta = 2;
     
     if (iPt < 0 || iEta < 0) {
@@ -1278,7 +1286,7 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
         //std::cout << "b flavor jet " << std::endl;
       // RESET iPt to maximum pt bin (only 5 bins for new SFs)
       if(iPt>=nHFptBins_){
-	iPt=nHFptBins_-1;
+	iPt=nHFptBins_-1; /// [20-30], [30-50], [40-70], [70,100] and [1000-10000] only 5 Pt bins for lf
       }
       if(h_csv_wgt_hf.at(iSys).at(iPt)) {
         const int useCSVBin = (csv >= 0.) ? h_csv_wgt_hf.at(iSys).at(iPt)->FindBin(csv) : 1;
@@ -1289,8 +1297,8 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
     else if (abs(flavor) == 4) {
         //std::cout << "c flavor jet " << std::endl;
       // RESET iPt to maximum pt bin (only 5 bins for new SFs)
-      if(iPt>=nHFptBins_){
-	iPt=nHFptBins_-1;
+      if(iPt>=nHFptBins_){ 
+	iPt=nHFptBins_-1;  /// [20-30], [30-50], [40-70], [70,100] and [1000-10000] only 5 Pt bins for lf
       }
       if(c_csv_wgt_hf.at(iSys).at(iPt)) {
         const int useCSVBin = (csv >= 0.) ? c_csv_wgt_hf.at(iSys).at(iPt)->FindBin(csv) : 1;
@@ -1300,7 +1308,7 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
     } // light flavour jet
     else {
         //std::cout << "light flavor jet " << std::endl;
-      if (iPt >= nLFptBins_) iPt = nLFptBins_-1; /// [30-40], [40-60] and [60-10000] only 3 Pt bins for lf
+      if (iPt >= nLFptBins_) iPt = nLFptBins_-1; /// [20-30], [30-40], [40-60] and [60-10000] only 4 Pt bins for lf
       if(h_csv_wgt_lf.at(iSys).at(iPt).at(iEta)) {
         const int useCSVBin = (csv >= 0.) ? h_csv_wgt_lf.at(iSys).at(iPt).at(iEta)->FindBin(csv) : 1;
         const double iCSVWgtLF = h_csv_wgt_lf.at(iSys).at(iPt).at(iEta)->GetBinContent(useCSVBin);
@@ -1742,8 +1750,8 @@ void plot(){
   std::vector<Systematics::Type> v_SystTypes = Systematics::getTypeVector();
   //for(auto itsyst : v_SystTypes){std::cout<< " Know :" << itsyst << std::endl;}
 
-  std::string csvHFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_first2017/Deepcsv_rwt_fit_hf_v2_final_2018_2_12test.root";
-  std::string csvLFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_first2017/Deepcsv_rwt_fit_lf_v2_final_2018_2_12test.root";
+  std::string csvHFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_V2_2017/deepCSV_sfs_hf.root";
+  std::string csvLFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_V2_2017/deepCSV_sfs_lf.root";
   TString qcd_file = "/nfs/dust/cms/user/mwassmer/QCD_Estimation_September17/QCD_Estimation/QCD_Estimation_FakeScaleFactor_nominal.root";
   
   CSVHelper* internalCSVHelper= new CSVHelper(csvHFfile,csvLFfile, 5,4,3,v_SystTypes);

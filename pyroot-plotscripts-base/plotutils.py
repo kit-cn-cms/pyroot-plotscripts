@@ -2222,10 +2222,10 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
       listOfErrorGraphStyles.append(lll[1])
       listOfErrorGraphColors.append(lll[2])
     for igraph in range(len(listOfErrorGraphLists[0])):
-      thisgraphs=[]
-      for iband in range(len(listOfErrorGraphLists)):
-	thisgraphs.append([listOfErrorGraphLists[iband][igraph],listOfErrorGraphStyles[iband],listOfErrorGraphColors[iband]])
-      listOfErrorGraphs.append(thisgraphs)
+        thisgraphs=[]
+        for iband in range(len(listOfErrorGraphLists)):
+            thisgraphs.append([listOfErrorGraphLists[iband][igraph],listOfErrorGraphStyles[iband],listOfErrorGraphColors[iband]])
+        listOfErrorGraphs.append(thisgraphs)
     #for g in listOfErrorGraphs:
       #print g
     #print len(listOfhistosOnTop),len(listOfHistoLists),len(listOfHistoListsData),len(labeltexts),len(listOfErrorGraphs)
@@ -2238,9 +2238,9 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
             setupHisto(histo,sample.color,yTitle,True)
             
             if factor<-1 and ot.GetName()==histo.GetName(): ## case if you stack the ontop histogram to the stackplot but do not want it in the integral
-	      continue
+                continue
             if factor < 0:
-              integralfactor+=histo.Integral()
+                integralfactor+=histo.Integral()
 
         if factor < 0:
           # Check if on top histogram integral is not null, since it will give a zero division error
@@ -2270,6 +2270,9 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
             canvas.cd(1).SetLogy()
         else:
             h.GetYaxis().SetRangeUser(0,yMax*1.8)
+        # DANGERZONE
+        # Hashtag HACK
+
         option='histo'
         option+=options
         h.DrawCopy(option)
@@ -2316,51 +2319,51 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         if verbosity>=2:
           print "doing ratio error graph"
         for errorgraph,thisFillStyle,ThisFillColor in errorgraphList:
-	  ratioerrorgraph=ROOT.TGraphAsymmErrors(errorgraph.GetN())
-	  #print ratioerrorgraph
-	  #raw_input()
-	  x, y = ROOT.Double(0), ROOT.Double(0)
-	  for igc in range(errorgraph.GetN()):
-	      errorgraph.GetPoint(igc,x,y)
-	      ratioerrorgraph.SetPoint(igc,x, 1.0)
-	      relErrUp=0.0
-	      relErrDown=0.0
-	      #check if bincontent-error becomes negative and if that is the case print it to the log file
-	      if (y-abs(errorgraph.GetErrorYlow(igc)))<0:
-                print "WARNING: Stack - Error is negative in "+ot.GetName()+" "+str(igc)+" with values "+str(y)+" "+str(errorgraph.GetErrorYlow(igc))+" \n"
-                #BinningErrorFile.write("WARNING: Stack - Error is negative in "+ot.GetName()+" "+str(igc)+" with values "+str(y)+" "+str(errorgraph.GetErrorYlow(igc))+" \n")
-	      if verbosity>=2:
-	        print x,y,errorgraph.GetErrorYhigh(igc),errorgraph.GetErrorYlow(igc)
-	        
-	      if y>0.0:
-		  relErrUp=errorgraph.GetErrorYhigh(igc)/y
-		  relErrDown=errorgraph.GetErrorYlow(igc)/y
-		  if verbosity>=2:
-		    print relErrUp,relErrDown
-	      ratioerrorgraph.SetPointError(igc, errorgraph.GetErrorXlow(igc),errorgraph.GetErrorXhigh(igc), relErrDown, relErrUp)
+            ratioerrorgraph=ROOT.TGraphAsymmErrors(errorgraph.GetN())
+            #print ratioerrorgraph
+            #raw_input()
+            x, y = ROOT.Double(0), ROOT.Double(0)
+            for igc in range(errorgraph.GetN()):
+                errorgraph.GetPoint(igc,x,y)
+                ratioerrorgraph.SetPoint(igc,x, 1.0)
+                relErrUp=0.0
+                relErrDown=0.0
+                #check if bincontent-error becomes negative and if that is the case print it to the log file
+                if (y-abs(errorgraph.GetErrorYlow(igc)))<0:
+                        print "WARNING: Stack - Error is negative in "+ot.GetName()+" "+str(igc)+" with values "+str(y)+" "+str(errorgraph.GetErrorYlow(igc))+" \n"
+                        #BinningErrorFile.write("WARNING: Stack - Error is negative in "+ot.GetName()+" "+str(igc)+" with values "+str(y)+" "+str(errorgraph.GetErrorYlow(igc))+" \n")
+                if verbosity>=2:
+                    print x,y,errorgraph.GetErrorYhigh(igc),errorgraph.GetErrorYlow(igc)
+                    
+                if y>0.0:
+                    relErrUp=errorgraph.GetErrorYhigh(igc)/y
+                    relErrDown=errorgraph.GetErrorYlow(igc)/y
+                if verbosity>=2:
+                    print relErrUp,relErrDown
+                ratioerrorgraph.SetPointError(igc, errorgraph.GetErrorXlow(igc),errorgraph.GetErrorXhigh(igc), relErrDown, relErrUp)
 
 
-	  errorgraph.SetFillStyle(thisFillStyle)
-	  errorgraph.SetLineColor(ThisFillColor)
-	  errorgraph.SetFillColor(ThisFillColor)
-	  ratioerrorgraph.SetFillStyle(thisFillStyle)
-	  ratioerrorgraph.SetLineColor(ThisFillColor)
-	  ratioerrorgraph.SetFillColor(ThisFillColor)
-  #        ratioerrorgraph.SetFillStyle(1001)
-  #        ratioerrorgraph.SetLineColor(ROOT.kBlack)
-  #        ratioerrorgraph.SetFillColor(ROOT.kGreen)
+            errorgraph.SetFillStyle(thisFillStyle)
+            errorgraph.SetLineColor(ThisFillColor)
+            errorgraph.SetFillColor(ThisFillColor)
+            ratioerrorgraph.SetFillStyle(thisFillStyle)
+            ratioerrorgraph.SetLineColor(ThisFillColor)
+            ratioerrorgraph.SetFillColor(ThisFillColor)
+        #        ratioerrorgraph.SetFillStyle(1001)
+        #        ratioerrorgraph.SetLineColor(ROOT.kBlack)
+        #        ratioerrorgraph.SetFillColor(ROOT.kGreen)
 
-	  #if graphcounter==0:
-	    #errorgraph.Draw("2")
-	  #else:
-	  errorgraph.Draw("same2")
-	  graphcounter+=1
+            #if graphcounter==0:
+                #errorgraph.Draw("2")
+            #else:
+            errorgraph.Draw("same2")
+            graphcounter+=1
 
-	  objects.append(errorgraph)
-	  objects.append(ratioerrorgraph)
-	  listOfRatioErrorGraphs.append(ratioerrorgraph)
-	  #print objects
-	  #raw_input()
+            objects.append(errorgraph)
+            objects.append(ratioerrorgraph)
+            listOfRatioErrorGraphs.append(ratioerrorgraph)
+            #print objects
+            #raw_input()
 
         print "biuilding legend"
         l1=getLegendL()
@@ -2460,6 +2463,11 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
           line.GetXaxis().SetNdivisions( 505 );
         line.GetXaxis().SetTickLength( line.GetXaxis().GetTickLength() * 2.0 );
         line.GetYaxis().SetTickLength( line.GetYaxis().GetTickLength() * 1.65 );
+        print "title:", line.GetXaxis().GetTitle()
+        if line.GetXaxis().GetTitle()=="csv of all jets" or line.GetXaxis().GetTitle()=="B-tag of all jets":
+            print "resetting axis label with hack"
+            line.GetXaxis().SetTitle("DeepCSV of all jets")
+
 
         #line.GetXaxis().SetBinLabel(4,"bla")
         line.Draw('histo')
