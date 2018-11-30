@@ -982,7 +982,7 @@ std::string Systematics::GetJECUncertaintyLabel(const Type type) {
   }
 }
 
-// hacked in CSV helper . Factorized JES. (date 28.11.2018)
+// hacked in CSV helper . Factorized JES. (date 01.09.2018)
 class CSVHelper
 {
 public:
@@ -2593,7 +2593,7 @@ def compileProgram(scriptname,usesDataBases,addCodeInterfaces):
     print "Compile failed with error:\n", e.output
 
 
-def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],allsystweights=["1"],additionalvariables=[],dataBases=[],addCodeInterfaces=[], useLHEWeights=False):
+def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],allsystweights=["1"],additionalvariables=[],dataBases=[],addCodeInterfaces=[], useLHEWeights=False,useThisSampleForVariableSetup=None):
 
   # collect variables
   # list varibles that should not be written to the program automatically
@@ -2641,13 +2641,17 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   
   # get tree for variable check
   tree = ROOT.TTree()
-  for i in range(len(samples)):
+  samplesToCheck=samples
+  if useThisSampleForVariableSetup!=None:
+      if isinstance(useThisSampleForVariableSetup, plotutils.Sample):
+          samplesToCheck=[useThisSampleForVariableSetup]
+  for i in range(len(samplesToCheck)):
     thistreeisgood=False
-    for j in range(len(samples[i].files)):
-      f=ROOT.TFile(samples[i].files[j])
+    for j in range(len(samplesToCheck[i].files)):
+      f=ROOT.TFile(samplesToCheck[i].files[j])
       tree=f.Get('MVATree')
       if tree.GetEntries()>0:
-        print 'using',samples[i].files[j],'to determine variable types'
+        print 'using',samplesToCheck[i].files[j],'to determine variable types'
         thistreeisgood=True
         break
     if thistreeisgood:
@@ -3111,7 +3115,7 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
   return scripts,outputs,nentries,samplewiseoutputs
 
 # the dataBases should be defined as follows e.g. [[memDB,path],[blrDB,path]]
-def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],dataBases=[],treeInformationJsonFile="",otherSystnames=[],addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False,haddParallel=False, useLHEWeights=False):
+def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],dataBases=[],treeInformationJsonFile="",otherSystnames=[],addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False,haddParallel=False, useLHEWeights=False, useThisSampleForVariableSetup=None):
   cmsswpath=os.environ['CMSSW_BASE']
   if not "CMSSW" in cmsswpath:
     print "you need CMSSW for this to work. Exiting!"
@@ -3191,7 +3195,7 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
     cmd='cp -v '+programpath+'.cc'+' '+programpath+'.ccBackup'
     subprocess.call(cmd,shell=True)
   print 'creating c++ program'
-  createProgram(programpath,plots,samples,catnames,catselections,systnames,systweights,additionalvariables, dataBases,addCodeInterfaces, useLHEWeights=useLHEWeights)
+  createProgram(programpath,plots,samples,catnames,catselections,systnames,systweights,additionalvariables, dataBases,addCodeInterfaces, useLHEWeights=useLHEWeights,useThisSampleForVariableSetup=useThisSampleForVariableSetup)
   if not os.path.exists(programpath+'.cc'):
     print 'could not create c++ program'
     sys.exit(-1)
