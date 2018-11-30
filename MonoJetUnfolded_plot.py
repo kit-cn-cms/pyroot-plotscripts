@@ -24,14 +24,14 @@ jobname = "MonoJet_Plots"
 plotselection_inclusive = ""
 plotlabel_inclusive = ""
 plots_inclusive = [
-    Plot(ROOT.TH1F("Gen_Hadr_Recoil_Pt", "generated hadr. Recoil #vec{U} [GeV/c]", 50, 0., 1000.),
-         "generated hadr. Recoil #vec{U} [GeV/c]", plotselection_inclusive, plotlabel_inclusive),
+    Plot(ROOT.TH1F("Gen_Hadr_Recoil_Pt", "generated hadr. recoil |#vec{U}| [GeV/c]", 50, 0., 1000.),
+         "generated hadr. recoil |#vec{U}| [GeV/c]", plotselection_inclusive, plotlabel_inclusive),
 ]
 
 plots = plots_inclusive
 
-otherplots=Plot(ROOT.TH1F("Hadr_Recoil_Pt", "hadr. Recoil #vec{U} [GeV/c]", 50, 0., 1000.),
-         "hadr. Recoil #vec{U} [GeV/c]", plotselection_inclusive, plotlabel_inclusive),
+otherplots=Plot(ROOT.TH1F("Hadr_Recoil_Pt", "hadr. recoil |#vec{U}| [GeV/c]", 50, 0., 1000.),
+         "hadr. recoil |#vec{U}| [GeV/c]", plotselection_inclusive, plotlabel_inclusive),
 
 THEoutputpath = "/nfs/dust/cms/user/swieland/Darkmatter/DM_Unfolding/rootfiles/"
 print "---------------------------------------------"
@@ -77,7 +77,7 @@ lll = createLLL_fromSuperHistoFileSyst(
 # for hist in lUnfoldedData:
 # 	print hist
 labels = [plot.label for plot in plots]
-xlabel="unfolded hadr. Recoil #vec{U} [GeV/c]"
+xlabel="unfolded hadr. recoil |#vec{U}| [GeV/c]"
 print "lolT_signal[0]:" , lolT_signal[0]
 
 plotUnfoldedDataMCanWsyst(lUnfolded=lUnfoldedData, listOfHistoLists=transposeLOL(lolT_background), samples=samples_background,
