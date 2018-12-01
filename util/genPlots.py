@@ -674,7 +674,7 @@ class genPlots:
             objects.append(headHistClone)
 
             # draw lumi text on canvas
-            CMS_lumi.lumi_13TeV = "35.9 fb^{-1}"
+            CMS_lumi.lumi_13TeV = "41.5 fb^{-1}"
             CMS_lumi.writeExtraText = 1   
             #CMS_lumi.extraText = "Preliminary"
             CMS_lumi.extraText = ""

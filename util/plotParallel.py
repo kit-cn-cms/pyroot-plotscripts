@@ -54,7 +54,8 @@ class plotParallel:
         self.addInterfaces = []
         self.MEPDFCSVFile = ""
         self.useLHEWeights = False
-        
+        self.sampleForVariableSetup = None
+
         # check cmssw
         self.cmsswpath = os.environ['CMSSW_BASE']
         if not "CMSSW" in self.cmsswpath:
@@ -121,7 +122,10 @@ class plotParallel:
         else:
             self.renameInput = self.analysis.renamedPath
         print("set renameInput to "+str(self.renameInput))
-
+    
+    def setSampleForVariableSetup(self, sample):
+        self.sampleForVariableSetup = sample
+        print("using "+str(sample)+" for variable setup in scriptWriter")
     
     ## getter functions ##
     def getHaddOutPath(self):
@@ -170,33 +174,6 @@ class plotParallel:
          
         print("ppRootPath: "+str(self.analysis.ppRootPath))   
         # check what to do if rootFile already exists
-        '''
-        if os.path.exists(self.analysis.ppRootPath):
-            # if useOldRoot is activated the old file is used with out checking its content
-            # TODO: implement sanity check
-            if self.analysis.useOldRoot:
-                print("using old root file")
-                print("using old root file and saving haddFiles")
-                self.haddFiles = self.globHaddFiles()
-                print("type of haddFiles: " + str(type(self.haddFiles)) )
-                self.finished = True
-                print("exiting plotParallel")
-                return 
-           
-            else:
-                # moving the old instance of workdir to a backup and copying C-file
-                oldWorkdir = self.analysis.workdir+datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-                os.rename(self.analysis.workdir, oldWorkdir)
-                os.makedirs(self.analysis.workdir)
-
-                cmd = "cp -v "+oldWorkdir+"/"+self.analysis.name+".cc "+self.analysis.workdir+"/"+self.analysis.name+".cc"
-                subprocess.call(cmd, shell = True)
-                cmd = "cp -v "+oldWorkdir+"/"+self.analysis.name+" "+self.analysis.workdir+"/"+self.analysis.name+"Backup"
-                subprocess.call(cmd, shell = True)
-
-        elif not os.path.exists(self.analysis.workdir):
-            os.makedirs(self.analysis.workdir)
-        '''
         self.ccPath = self.analysis.workdir + "/" + self.analysis.name + ".cc"
         if os.path.exists(self.ccPath):
             if self.analysis.useOldRoot: #TODO namechange

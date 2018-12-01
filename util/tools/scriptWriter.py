@@ -25,7 +25,7 @@ class scriptWriter:
         self.pp = plotParaClass
         self.ccPath = plotParaClass.ccPath
         self.systWeights = plotParaClass.systWeights
-
+        self.sampleForVariableSetup = plotParaClass.sampleForVariableSetup
 
 
 
@@ -84,13 +84,17 @@ class scriptWriter:
 
         # get tree for variable check
         tree = ROOT.TTree()
-        for i in range(len(self.pp.configData.allSamples)):
+        if self.sampleForVariableSetup:
+            samplesToCheck = [self.sampleForVariableSetup]
+        else.
+            samplesToCheck = self.pp.configData.allSamples
+        for i in range(len(samplesToCheck)):
             thistreeisgood = False
-            for j in range(len(self.pp.configData.allSamples[i].files)):
-                f = ROOT.TFile(self.pp.configData.allSamples[i].files[j])
+            for j in range(len(samplesToCheck[i].files)):
+                f = ROOT.TFile(samplesToCheck[i].files[j])
                 tree = f.Get('MVATree')
                 if tree.GetEntries() > 0:
-                    print 'using',self.pp.configData.allSamples[i].files[j],'to determine variable types'
+                    print("using "+str(sampleToCheck[i].files[j])+" to determine variable types")
                     thistreeisgood = True
                     break
             if thistreeisgood:
