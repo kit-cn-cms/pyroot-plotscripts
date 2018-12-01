@@ -2503,8 +2503,15 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         CMS_lumi.lumiTextOffset = 0.61
 
         CMS_lumi.relPosX = 0.15
-
         CMS_lumi.hOffset = 0.05
+
+        if not ratio:
+            CMS_lumi.cmsTextSize = 0.5
+            CMS_lumi.cmsTextOffset = 0.3
+            CMS_lumi.lumiTextSize = 0.6
+            CMS_lumi.lumiTextOffset = 0.3    
+            CMS_lumi.relPosX = 0.00
+            CMS_lumi.hOffset = 0.00
 
         iPeriod=4   # 13TeV
         iPos=0     # CMS inside frame
@@ -2520,7 +2527,8 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
 
 
         ratiograph,ratiominimum,ratiomaximum=getRatioGraph(data,stackedListOfHistos[0])
-        canvas.cd(2)
+        if ratio:
+            canvas.cd(2)
         line=listOfHistos[0].Clone()
         line.SetFillStyle(0)
         line.Divide(listOfHistos[0])
@@ -2551,28 +2559,34 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         line.GetYaxis().SetTitleOffset( 0.5 );
         line.GetXaxis().SetNdivisions( 510 );
         if "N_BTagsM" in otc.GetName():
-          line.GetXaxis().SetNdivisions( 505 );
+            line.GetXaxis().SetNdivisions( 505 );
         line.GetXaxis().SetTickLength( line.GetXaxis().GetTickLength() * 2.0 );
         line.GetYaxis().SetTickLength( line.GetYaxis().GetTickLength() * 1.65 );
 
         #line.GetXaxis().SetBinLabel(4,"bla")
-        line.Draw('histo')
         objects.append(ratiograph)
         #print len(listOfRatioErrorGraphs)
-        for ratioerrorgraph in listOfRatioErrorGraphs:
-          ratioerrorgraph.Draw("same2")
+
 #        objects.append(ratioerrorgraph)
-        ratiograph.Draw('sameP0')
         line.SetLineWidth(1)
-        line.Draw('histosame')
         #emptyHisto.GetYaxis().SetTitle('data/MC');
         #print "title? ", emptyHisto.GetYaxis().GetTitle()
         #print "title? ", line.GetYaxis().GetTitle()
-        line.Draw('axissame')
         #emptyHisto.Draw("axissame")
+
         #objects.append(emptyHisto)
         objects.append(line)
         #print labeltext
+        if ratio:
+            line.Draw('histo')
+            for ratioerrorgraph in listOfRatioErrorGraphs:
+                ratioerrorgraph.Draw("same2")
+            ratiograph.Draw('sameP0')
+            line.Draw('histosame')
+            line.Draw('axissame')
+
+
+
         #raw_input()
 
         #print labeltext

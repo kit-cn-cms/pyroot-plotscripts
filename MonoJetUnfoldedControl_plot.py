@@ -176,3 +176,6 @@ print "lolT_signal[0]:", lolT_signal[0]
 
 plotDataMCanWsyst(listOfHistoLists_data, transposeLOL(lolT_background), samples_background,
                   lolT_signal[0], samples_signal[0], -1, jobname, [[lll, 3354, ROOT.kBlack, True]], True, labels, ratio=True, blinded=False, verbosity=0)
+
+plotDataMCanWsyst(listOfHistoLists_data, transposeLOL(lolT_background), samples_background,
+                  lolT_signal[0], samples_signal[0], -1, jobname+"_noRatio", [[lll, 3354, ROOT.kBlack, True]], True, labels, ratio=False, blinded=False, verbosity=0)
