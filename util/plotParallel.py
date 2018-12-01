@@ -170,6 +170,7 @@ class plotParallel:
          
         print("ppRootPath: "+str(self.analysis.ppRootPath))   
         # check what to do if rootFile already exists
+        '''
         if os.path.exists(self.analysis.ppRootPath):
             # if useOldRoot is activated the old file is used with out checking its content
             # TODO: implement sanity check
@@ -195,11 +196,18 @@ class plotParallel:
 
         elif not os.path.exists(self.analysis.workdir):
             os.makedirs(self.analysis.workdir)
+        '''
+        self.ccPath = self.analysis.workdir + "/" + self.analysis.name + ".cc"
+        if os.path.exists(self.ccPath):
+            if self.analysis.useOldRoot: #TODO namechange
+                print("using old cpp file")
+            else:
+                cmd = "cp -v "+self.analysis.workdir+"/"+self.analysis.name+" "+self.analysis.workdir+"/"+self.analysis.name+"Backup"
+                subprocess.call(cmd, shell = True)
 
         # creating c++ programm
-        self.ccPath = self.analysis.workdir + "/" + self.analysis.name + ".cc"
         writer = scriptWriter.scriptWriter(self)
-        writer.writeCC()
+        if not self.analysis.useOldRoot: writer.writeCC()
 
         # create rename script
         writer.writeRenameScript()

@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'testLimits_ttH18_v2'
+    name = 'ttHLimits_2018_v1'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -65,7 +65,7 @@ def main(pyrootdir, argv):
     analysisOptions = {
         # general options
         "plotBlinded":          False,  # blind region
-        "cirun":                True,  # test run with less samples
+        "cirun":                False,  # test run with less samples
         "haddParallel":         True,  # parallel hadding instead of non-parallel
         "useOldRoot":           False,   # use existing root file if it exists (skips plotParallel)
         # options to activate parts of the script
@@ -82,7 +82,7 @@ def main(pyrootdir, argv):
         # the skipX options try to skip the submission of files to the batch system
         # before skipping the output is crosschecked
         # if the output is not complete, the skipped part is done anyways
-        "skipPlotParallel":     True,
+        "skipPlotParallel":     False,
         "skipHaddParallel":     False,
         "skipHaddFromWildcard": False,
         "skipRenaming":         False,
@@ -213,7 +213,7 @@ def main(pyrootdir, argv):
             #pP.setMEPDFCSV(MEPDFCSVFile)
             pP.setCatNames([''])
             pP.setCatSelections(['1.'])
-            pP.setMaxEvts(500000)
+            pP.setMaxEvts(1000000)
             pP.setUseLHEWeights(False)
 
             # run plotParallel
@@ -318,7 +318,7 @@ def main(pyrootdir, argv):
             with monitor.Timer("renameHistos"):
                 renameHistos.renameHistos(
                     inFiles = pP.getRenameInput(),
-                    outFile = analysis.limitPath,
+                    outFile = analysis.renamedPath,
                     systNames = configData.allSystNames,
                     checkBins = True,
                     prune = False,
@@ -343,7 +343,7 @@ def main(pyrootdir, argv):
         monitor.printClass(pP, "after plotParallel completely done")
 
         print("########## DONE WITH PLOTPARALLEL STEP ##########")
-        print("at the moment the outputpath is "+str(analysis.limitPath))
+        print("at the moment the outputpath is "+str(analysis.renamedPath))
         print("#################################################")
 
         if analysis.makeDatacards:
@@ -417,7 +417,7 @@ def main(pyrootdir, argv):
             # ========================================================
             '''
             gP = genPlots.genPlots( 
-                outPath = analysis.limitPath,
+                outPath = analysis.renamedPath,
                 plots = configData.getDiscriminatorPlots(),
                 plotdir = analysis.getPlotPath(),
                 rebin = 1)
@@ -483,7 +483,7 @@ def main(pyrootdir, argv):
                 # generate the llloflist internally
                 gP.genNestedHistList(
                     dataConfig = genPlots.Config( name = histoList, index = 9 ),
-                    systNames = pltcfg.errorSystNamesNoQCD, 
+                    systNames = pltcfg.errorSystNames, 
                     outName = histoList)
 
 
