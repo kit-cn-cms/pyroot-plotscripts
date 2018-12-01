@@ -312,7 +312,7 @@ def monitorJobStatus(jobIDs = None, plot_batch_history = False, name = None):
   helds = []
   totals = []
   while not allfinished:
-    time.sleep(10)
+    time.sleep(15)
     # calling condor_q command
     a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
     a.wait()
@@ -353,6 +353,10 @@ def monitorJobStatus(jobIDs = None, plot_batch_history = False, name = None):
   print("all jobs are finished - exiting monitorJobStatus")
   if plot_batch_history:
     print("plotting history of jobs on NAF")
+    path = "batchHistory/"
+    if not os.path.exists(path):
+        os.makedirs(path)
+    path+=name+"_"+datetime.datetime.now().strftime("%Y%m%d%H%M%S")+".pdf"
     import matplotlib.pyplot as plt
     plt.figure(figsize = [7,5])
     plt.plot( times, runs, "r--", lw = 2, label = "running")
@@ -364,8 +368,8 @@ def monitorJobStatus(jobIDs = None, plot_batch_history = False, name = None):
     plt.title(name)
     plt.grid()
     plt.legend()
-    plt.savefig(name+".pdf")
-    print("saved plot at "+str(name)+".pdf")
+    plt.savefig(path)
+    print("saved plot at "+str(path)+".pdf\n")
     plt.clf()
 
 
