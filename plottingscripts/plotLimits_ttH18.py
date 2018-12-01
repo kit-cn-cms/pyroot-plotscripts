@@ -50,7 +50,6 @@ def main(pyrootdir, argv):
 
     # define MEM discriminator variable
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
-    memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
 
     # name of the csv files used in configdata folder
     configDataBaseName = "limitsttH18"
@@ -78,7 +77,7 @@ def main(pyrootdir, argv):
         # options for drawParallel/singleExecute sub programs
         "makeSimplePlots":      True,
         "makeMCControlPlots":   True,
-        "makeEventYields":      False,
+        "makeEventYields":      True,
         # the skipX options try to skip the submission of files to the batch system
         # before skipping the output is crosschecked
         # if the output is not complete, the skipped part is done anyways
@@ -91,14 +90,11 @@ def main(pyrootdir, argv):
     #plotJson = "/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_latestAndGreatest.json"
     plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttH_2018.json"
     plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018",True]] 
-    plotInterfaces = ["../util/dNNInterfaces/dNNInterface_Keras_cool.py"]
+    memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
+    plotInterfaces = [pyrootdir+"/util/dNNInterfaces/dNNInterface_Keras_cool.py"]
 
     # datacardmaker
     datacardmaker = "mk_datacard_JESTest13TeVPara"
-
-    #############################################################################
-    # there should be no information that needs hard coded adjusting below this #
-    #############################################################################
 
     print '''
     # ========================================================
@@ -106,7 +102,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
 
-    # TODO make the analysisClass more essential - atm it is not really needed
+    # save a lot of useful information concerning the analysis
     analysis = analysisClass.analysisConfig(
         workdir = workdir, 
         pyrootdir = pyrootdir, 
@@ -149,28 +145,23 @@ def main(pyrootdir, argv):
     # define additional variables necessary for selection in plotparallel
     # ========================================================
     '''
-    configData.getAddVariables()
+    configData.getAddVariables() # also adds DNN variables
     #configData.getMEPDFAddVariables(MEPDFCSVFile)
-
-    # TODO additionalvariables.extend(NNFlowInterface.getAdditionalVariablesList())
-    monitor.printClass(configData, "after getting additional Variables")
 
     # save addition variables information to workdir and print
     configData.printAddVariables()
+    monitor.printClass(configData, "after getting additional Variables")
 
-    print '''
+    #print '''
     # ========================================================
     # Check if additional (input) variables should be plotted
     # if necessary add them here to the discriminatorPlots
     # ========================================================
-    '''
+    #'''
     # Construct list with additional plot variables, 
     # will need name of discrs and plotPreselections for this
-    print( "add additional plot variables")
-    #configData.getAdditionalDiscriminatorPlots()
-    monitor.printClass(configData, "after adding additional plot variables")
-    
-
+    #print( "add additional plot variables")
+    #configData.getAdditionalDiscriminatorPlots() # TODO
     
 
     print '''    
@@ -190,11 +181,9 @@ def main(pyrootdir, argv):
     if analysis.plotNumber == None or analysis.singleExecute:
         # plot everything, except during drawParallel step
         # Create file for data cards
-        #if not analysis.drawParallel:
-        #if analysis.doDrawParallel == False or analysis.plotNumber == None :
         print '''
         # ========================================================
-        # Doing plotParallel step since root file was not found.
+        # starting with plotParallel step
         # ========================================================
         '''
         
@@ -213,18 +202,17 @@ def main(pyrootdir, argv):
             #pP.setMEPDFCSV(MEPDFCSVFile)
             pP.setCatNames([''])
             pP.setCatSelections(['1.'])
-            pP.setMaxEvts(1000000)
+            pP.setMaxEvts(500000)
             pP.setUseLHEWeights(False)
+            #pP.setSampleForVariableSetup()
 
             # run plotParallel
             pP.run()
 
         pP.checkTermination()
-
         monitor.printClass(pP, "after plotParallel")
 
         if analysis.optimizedRebinning:
-        #if analysis.getActivatedOptimizedRebinning():
             print '''
             # ========================================================
             # Doing OptimizedRebinning
@@ -293,7 +281,6 @@ def main(pyrootdir, argv):
         # Deactivate check bins functionality in renameHistos 
         #   if additional plot variables are added via analysis class
         if os.path.exists( analysis.setRenamedPath(name = "limitInput") ):
-        #if os.path.exists( pP.setLimitPath() ) and (plotOptions["skipRenaming"] or analysis.plotNumber != None):
             print( "renamed file already exists - skipping renaming histos" )
         elif analysis.skipRenaming:
             print("skipping renaming TODO")
@@ -315,6 +302,7 @@ def main(pyrootdir, argv):
             #       (which is equivalent to THEoutputlath == str)
             #       the renameInput is set to pp.getOutPath 
             #       (a.ka. the path to output.root)
+
             with monitor.Timer("renameHistos"):
                 renameHistos.renameHistos(
                     inFiles = pP.getRenameInput(),
@@ -347,8 +335,6 @@ def main(pyrootdir, argv):
         print("#################################################")
 
         if analysis.makeDatacards:
-        #if (analysis.doDrawParallel==False or analysis.plotNumber == None) and analysis.makeDataCards == True :
-            #limittools.addRealData(outputpath,[s.nick for s in samples_data],binlabels,discrname)
             print '''
             # ========================================================
             # Making Datacards.
@@ -374,7 +360,6 @@ def main(pyrootdir, argv):
         # Invoke drawParallel step
         # =============================================================================================
         if analysis.drawParallel:
-        #if analysis.doDrawParallel==True and analysis.plotNumber == None :
             print '''
             # ========================================================
             # Starting DrawParallel
@@ -403,14 +388,10 @@ def main(pyrootdir, argv):
     elif analysis.plotNumber != None or analysis.singleExecute:
         print("not doing plotParallel step")
         if analysis.drawParallel:
-        #if analysis.doDrawParallel==True and analysis.plotNumber != None :
             print("we have a plotNumber --- changing discriminatorPlots")
             configData.getDiscriminatorPlotByNumber()
-            print("the discriminator plots are now:" +str(configData.getDiscriminatorPlots()))
-
 
         if analysis.makeSimplePlots or analysis.makeMCControlPlots or analysis.makeEventYields:
-        #if (analysis.doDrawParallel==False or analysis.plotNumber != None) and (analysis.makeSimplePlots==True or analysis.makeMCControlPlots==True or analysis.makeEventYields==True):
             print '''
             # ========================================================
             # Creating lists for later use
@@ -426,7 +407,6 @@ def main(pyrootdir, argv):
             dataList = gP.genList(samples = configData.controlSamples, listName = "dataList")
             pseudodataList = gP.genList(
                 samples = [configData.samples[0]]+configData.samples[9:], listName = "pseudodataList")
-            #dataList = gP.genList(samples = configData.controlSamples, listName = "dataList")
             monitor.printClass(gP, "after creating init lists")
 
 
@@ -435,7 +415,6 @@ def main(pyrootdir, argv):
 
 
         if analysis.makeSimplePlots:
-        #if (analysis.doDrawParallel==False or analysis.plotNumber != None) and analysis.makeSimplePlots==True :
             print '''
             # ========================================================
             # Making simple MC plots
@@ -455,25 +434,24 @@ def main(pyrootdir, argv):
                     dataConfig = genPlots.Config(name = histoList, index = 9),
                     options = controlPlotsOptions)
 
-                ## creating shape plots
-                #shapePlotsOptions = {
-                #    "logscale":         False,
-                #    "canvasOptions":    "histo",
-                #    "normalize":        True, # not default
-                #    "stack":            False,
-                #    "ratio":            False,
-                #    "statTest":         False,
-                #    "sepaTest":         False}
-                #gP.makeSimpleShapePlots(
-                #    dataConfig = genPlots.Config(name = dataList, index = 9),
-                #    options = shapePlotsOptions)
+                # creating shape plots
+                shapePlotsOptions = {
+                    "logscale":         False,
+                    "canvasOptions":    "histo",
+                    "normalize":        True, # not default
+                    "stack":            False,
+                    "ratio":            False,
+                    "statTest":         False,
+                    "sepaTest":         False}
+                gP.makeSimpleShapePlots(
+                    dataConfig = genPlots.Config(name = dataList, index = 9),
+                    options = shapePlotsOptions)
 
                 monitor.printClass(gP, "after making simple MC plots")
 
 
 
         if analysis.makeMCControlPlots:
-        #if (analysis.doDrawParallel==False or analysis.plotNumber != None) and analysis.makeMCControlPlots==True :
             print '''
             # ========================================================
             # Making MC Control plots
@@ -503,7 +481,7 @@ def main(pyrootdir, argv):
                     "canvasOptions":    "histo",
                     "ratio":            True, # not default
                     "blinded":          analysis.plotBlinded} #not default
-                # makint the control plots
+                # making the control plots
                 gP.makeControlPlots(
                     dataConfig = genPlots.Config(name = dataList, index = 0),
                     controlConfig = genPlots.Config(name = histoList, index = 9),
