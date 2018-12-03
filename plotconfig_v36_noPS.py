@@ -28,7 +28,6 @@ hzzSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==23)
 hzgSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==22) || (abs(GenHiggs_DecProd1_PDGID)==22 && abs(GenHiggs_DecProd2_PDGID)==23))'
 
 # names of the systematics (proper names needed e.g. for combination)
-# TODO Add CSV SFs and uncertainties
 weightSystNames=[
                     "",
                    "_CMS_btag_lfUp","_CMS_btag_lfDown","_CMS_btag_hfUp","_CMS_btag_hfDown",
@@ -41,7 +40,8 @@ weightSystNames=[
                    #"_CMS_eff_mUp","_CMS_eff_mDown",
                    "_CMS_ttHbb_PUUp","_CMS_ttHbb_PUDown",
 ]
-
+# TODO: might have to change JES uncertainty names to
+# CMS_scale_j_SOURCENAME
 systsAllSamples=[
                     "",
                    "_CMS_btag_lfUp","_CMS_btag_lfDown","_CMS_btag_hfUp","_CMS_btag_hfDown",
@@ -314,6 +314,8 @@ print weightSystNames
 
 assert len(systWeights)==len(weightSystNames)
 
+# TODO: might have to change JES uncertainty names to
+# CMS_scale_j_SOURCENAME
 otherSystNames=[
                     #"_CMS_scale_jUp",
                     #"_CMS_scale_jDown",
@@ -384,7 +386,8 @@ for i,j in zip(otherSystNames,otherSystFileNames):
     print i, j
 assert len(otherSystNames)==len(otherSystFileNames)
 
-
+# TODO: might have to change JES uncertainty names to
+# CMS_scale_j_SOURCENAME
 errorSystNames=[
                     "",
                    "_CMS_btag_lfUp","_CMS_btag_lfDown","_CMS_btag_hfUp","_CMS_btag_hfDown",
