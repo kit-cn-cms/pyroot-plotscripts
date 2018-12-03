@@ -170,8 +170,8 @@ systs_tt_all=[
   #"_CMS_ttHbb_ttbar_NNPDFUp","_CMS_ttHbb_ttbar_NNPDFDown",
   "_CMS_ttHbb_ttbar_scaleMuRUp","_CMS_ttHbb_ttbar_scaleMuRDown",
   "_CMS_ttHbb_ttbar_scaleMuFUp","_CMS_ttHbb_ttbar_scaleMuFDown",
-  #"_CMS_ttHbb_ttbar_ISRUp","_CMS_ttHbb_ttbar_ISRDown",
-  #"_CMS_ttHbb_ttbar_FSRUp","_CMS_ttHbb_ttbar_FSRDown",
+  #"_CMS_ttHbb_ISR_ttbarUp","_CMS_ttHbb_ISR_ttbarDown",
+  #"_CMS_ttHbb_FSR_ttbarUp","_CMS_ttHbb_FSR_ttbarDown",
   
   
   ]
@@ -199,8 +199,8 @@ systs_tt_lf=[
     #"_CMS_ttHbb_ttbarOther_NNPDFUp","_CMS_ttHbb_ttbarOther_NNPDFDown",
   "_CMS_ttHbb_ttbarOther_scaleMuRUp","_CMS_ttHbb_ttbarOther_scaleMuRDown",
   "_CMS_ttHbb_ttbarOther_scaleMuFUp","_CMS_ttHbb_ttbarOther_scaleMuFDown",
-  #"_CMS_ttHbb_ttbarOther_ISRUp","_CMS_ttHbb_ttbarOther_ISRDown",
-  #"_CMS_ttHbb_ttbarOther_FSRUp","_CMS_ttHbb_ttbarOther_FSRDown",
+  #"_CMS_ttHbb_ISR_ttbarOtherUp","_CMS_ttHbb_ISR_ttbarOtherDown",
+  #"_CMS_ttHbb_FSR_ttbarOtherUp","_CMS_ttHbb_FSR_ttbarOtherDown",
   
   ]
 systs_tt_lf_weights=[
@@ -222,8 +222,8 @@ systs_tt_b=[
     #"_CMS_ttHbb_ttbarPlusB_NNPDFUp","_CMS_ttHbb_ttbarPlusB_NNPDFDown",
   "_CMS_ttHbb_ttbarPlusB_scaleMuRUp","_CMS_ttHbb_ttbarPlusB_scaleMuRDown",
   "_CMS_ttHbb_ttbarPlusB_scaleMuFUp","_CMS_ttHbb_ttbarPlusB_scaleMuFDown",
-  #"_CMS_ttHbb_ttbarPlusB_ISRUp","_CMS_ttHbb_ttbarPlusB_ISRDown",
-  #"_CMS_ttHbb_ttbarPlusB_FSRUp","_CMS_ttHbb_ttbarPlusB_FSRDown",
+  #"_CMS_ttHbb_ISR_ttbarPlusBUp","_CMS_ttHbb_ISR_ttbarPlusBDown",
+  #"_CMS_ttHbb_FSR_ttbarPlusBUp","_CMS_ttHbb_FSR_ttbarPlusBDown",
   ]
 systs_tt_b_weights=[
                     #"dummyWeight_CMS_ttH_ttbarPlusB_NNPDFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
@@ -244,8 +244,8 @@ systs_tt_2b=[
     #"_CMS_ttHbb_ttbarPlus2B_NNPDFUp","_CMS_ttHbb_ttbarPlus2B_NNPDFDown",
   "_CMS_ttHbb_ttbarPlus2B_scaleMuRUp","_CMS_ttHbb_ttbarPlus2B_scaleMuRDown",
   "_CMS_ttHbb_ttbarPlus2B_scaleMuFUp","_CMS_ttHbb_ttbarPlus2B_scaleMuFDown",
-  #"_CMS_ttHbb_ttbarPlus2B_ISRUp","_CMS_ttHbb_ttbarPlus2B_ISRDown",
-  #"_CMS_ttHbb_ttbarPlus2B_FSRUp","_CMS_ttHbb_ttbarPlus2B_FSRDown",
+  #"_CMS_ttHbb_ISR_ttbarPlus2BUp","_CMS_ttHbb_ISR_ttbarPlus2BDown",
+  #"_CMS_ttHbb_FSR_ttbarPlus2BUp","_CMS_ttHbb_FSR_ttbarPlus2BDown",
   ]
 systs_tt_2b_weights=[
                     #"dummyWeight_CMS_ttH_ttbarPlus2B_NNPDFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
@@ -266,8 +266,8 @@ systs_tt_bb=[
     #"_CMS_ttHbb_ttbarPlusBBbar_NNPDFUp","_CMS_ttHbb_ttbarPlusBBbar_NNPDFDown",
   "_CMS_ttHbb_ttbarPlusBBbar_scaleMuRUp","_CMS_ttHbb_ttbarPlusBBbar_scaleMuRDown",
   "_CMS_ttHbb_ttbarPlusBBbar_scaleMuFUp","_CMS_ttHbb_ttbarPlusBBbar_scaleMuFDown",
-  #"_CMS_ttHbb_ttbarPlusBBbar_ISRUp","_CMS_ttHbb_ttbarPlusBBbar_ISRDown",
-  #"_CMS_ttHbb_ttbarPlusBBbar_FSRUp","_CMS_ttHbb_ttbarPlusBBbar_FSRDown",
+  #"_CMS_ttHbb_ISR_ttbarPlusBBbarUp","_CMS_ttHbb_ISR_ttbarPlusBBbarDown",
+  #"_CMS_ttHbb_FSR_ttbarPlusBBbarUp","_CMS_ttHbb_FSR_ttbarPlusBBbarDown",
   ]
 systs_tt_bb_weights=[
                     #"dummyWeight_CMS_ttH_ttbarPlusBBbar_NNPDFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
@@ -288,8 +288,8 @@ systs_tt_cc=[
     #"_CMS_ttHbb_ttbarPlusCCbar_NNPDFUp","_CMS_ttHbb_ttbarPlusCCbar_NNPDFDown",
   "_CMS_ttHbb_ttbarPlusCCbar_scaleMuRUp","_CMS_ttHbb_ttbarPlusCCbar_scaleMuRDown",
   "_CMS_ttHbb_ttbarPlusCCbar_scaleMuFUp","_CMS_ttHbb_ttbarPlusCCbar_scaleMuFDown",
-  #"_CMS_ttHbb_ttbarPlusCCbar_ISRUp","_CMS_ttHbb_ttbarPlusCCbar_ISRDown",
-  #"_CMS_ttHbb_ttbarPlusCCbar_FSRUp","_CMS_ttHbb_ttbarPlusCCbar_FSRDown",
+  #"_CMS_ttHbb_ISR_ttbarPlusCCbarUp","_CMS_ttHbb_ISR_ttbarPlusCCbarDown",
+  #"_CMS_ttHbb_FSR_ttbarPlusCCbarUp","_CMS_ttHbb_FSR_ttbarPlusCCbarDown",
   ]
 systs_tt_cc_weights=[
                     #"dummyWeight_CMS_ttH_ttbarPlusCCbar_NNPDFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
