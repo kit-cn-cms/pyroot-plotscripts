@@ -86,7 +86,7 @@ class scriptWriter:
         tree = ROOT.TTree()
         if self.sampleForVariableSetup:
             samplesToCheck = [self.sampleForVariableSetup]
-        else.
+        else:
             samplesToCheck = self.pp.configData.allSamples
         for i in range(len(samplesToCheck)):
             thistreeisgood = False
@@ -94,7 +94,7 @@ class scriptWriter:
                 f = ROOT.TFile(samplesToCheck[i].files[j])
                 tree = f.Get('MVATree')
                 if tree.GetEntries() > 0:
-                    print("using "+str(sampleToCheck[i].files[j])+" to determine variable types")
+                    print("using "+str(samplesToCheck[i].files[j])+" to determine variable types")
                     thistreeisgood = True
                     break
             if thistreeisgood:
