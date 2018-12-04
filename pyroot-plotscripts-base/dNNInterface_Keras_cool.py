@@ -286,12 +286,12 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
     rstr+="""
 
     //Run graph
-    feed_dict.push_back(std::make_pair("input",tensor_4j3t));"""
+    feed_dict.push_back(std::make_pair("dense_1_input",tensor_4j3t));"""
     rstr+= self._fix_dropout('4j3t')
     rstr+="""
 
 
-    status_4j3t = session_4j3t->Run(feed_dict, {"output/Softmax"},  {}, &outputTensors);
+    status_4j3t = session_4j3t->Run(feed_dict, {"dense_4/Softmax"},  {}, &outputTensors);
     //if (!status_4j3t.ok()) 
     //{
     //  std::cout << status_4j3t.ToString() << std::endl;
@@ -349,11 +349,11 @@ for(int ifeat=0; ifeat<num_features_4j3t;ifeat++){
     rstr+="""
 
     //Run graph
-    feed_dict.push_back(std::make_pair("input",tensor_5j3t));"""
+    feed_dict.push_back(std::make_pair("dense_1_input",tensor_5j3t));"""
     rstr+= self._fix_dropout('5j3t')
     rstr+="""
 
-    status_5j3t = session_5j3t->Run(feed_dict, {"output/Softmax"},  {}, &outputTensors);
+    status_5j3t = session_5j3t->Run(feed_dict, {"dense_4/Softmax"},  {}, &outputTensors);
     //if (!status_5j3t.ok()) 
     //{
     //  std::cout << status_5j3t.ToString() << std::endl;
@@ -377,7 +377,7 @@ for(int ifeat=0; ifeat<num_features_4j3t;ifeat++){
     // fish for fishy outputs
     for(int jclass=0; jclass<num_classes_5j3t; jclass++){
       if(outputTensors.at(0).tensor<float,2>()(0,jclass)>0.95 or outputTensors.at(0).tensor<float,2>()(0,jclass)<0.05 or DNN_5j3t_pred_class<0 or DNN_5j3t_pred_class>5 ){
-      printstuff=1;
+      //printstuff=1;
       std::cout<<std::endl<<"Something is fishy here "<<Evt_ID<<std::endl;
       }
 
@@ -407,11 +407,11 @@ for(int ifeat=0; ifeat<num_features_5j3t;ifeat++){
     rstr+="""
 
     //Run graph
-    feed_dict.push_back(std::make_pair("input",tensor_6j3t));"""
+    feed_dict.push_back(std::make_pair("dense_1_input",tensor_6j3t));"""
 
     rstr+= self._fix_dropout('6j3t')
 
-    rstr+="""status_6j3t = session_6j3t->Run(feed_dict, {"output/Softmax"},  {}, &outputTensors);
+    rstr+="""status_6j3t = session_6j3t->Run(feed_dict, {"dense_4/Softmax"},  {}, &outputTensors);
     //if (!status_6j3t.ok()) 
     //{
     //  std::cout << status_6j3t.ToString() << std::endl;
