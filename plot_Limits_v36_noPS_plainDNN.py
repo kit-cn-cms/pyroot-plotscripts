@@ -1210,7 +1210,10 @@ memexp,
         for sysname,sysfilename in zip(otherSystNames,otherSystFileNames):
             thisnewsel=sample.selection
             systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),thisnewsel,sample.nick+sysname,samDict=sampleDict))
-
+            
+            if sample.nick.startswith("ttbarPlus") or sample.nick == "ttbarOther":
+                for ue_hdamp, ue_hdamp_file in zip(hdamp_ue_systnames, hdamp_ue_filenames):
+                    systsamples.append(Sample(sample.name+ue_hdamp,sample.color,ue_hdamp_file,thisnewsel,sample.nick+ue_hdamp,samDict=sampleDict))
     ## WARNING: Adjust Slice for samples if changing ttbar contributions
 
     ## add Parton shower variation samples
@@ -1255,7 +1258,7 @@ memexp,
         #if False:
             
             print "Doing plotParallel step since root file was not found.", analysis.rootFilePath
-            THEoutputpath=plotParallel(name,500000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018",True]],"/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttH_2018.json",otherSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_Keras_cool.py"],cirun=False,StopAfterCompileStep=False,haddParallel=True)
+            THEoutputpath=plotParallel(name,500000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018",True]],"/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttH_2018.json",otherSystNames+hdamp_ue_systnames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_Keras_cool.py"],cirun=False,StopAfterCompileStep=False,haddParallel=True)
             #outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_v5_08102017.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_V6.py"],cirun=False)
             
             if type(THEoutputpath)==str:
