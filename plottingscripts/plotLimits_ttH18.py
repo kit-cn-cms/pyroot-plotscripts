@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttHLimits_2018_v1'
+    name = 'ttHLimits_2018_v3'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -55,7 +55,7 @@ def main(pyrootdir, argv):
     configDataBaseName = "limitsttH18"
 
     # name of plotconfig
-    pltcfgName = "v36_noPS"
+    pltcfgName = "v37_noPS"
 
     # file for MEPDFs/LHEWeights
     MEPDFCSVFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv"
@@ -81,7 +81,7 @@ def main(pyrootdir, argv):
         # the skipX options try to skip the submission of files to the batch system
         # before skipping the output is crosschecked
         # if the output is not complete, the skipped part is done anyways
-        "skipPlotParallel":     False,
+        "skipPlotParallel":     True,
         "skipHaddParallel":     False,
         "skipHaddFromWildcard": False,
         "skipRenaming":         False,
@@ -202,7 +202,7 @@ def main(pyrootdir, argv):
             #pP.setMEPDFCSV(MEPDFCSVFile)
             pP.setCatNames([''])
             pP.setCatSelections(['1.'])
-            pP.setMaxEvts(500000)
+            pP.setMaxEvts(2000000)
             pP.setUseLHEWeights(False)
             #pP.setSampleForVariableSetup()
 
