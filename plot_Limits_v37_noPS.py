@@ -27,7 +27,7 @@ from plotconfig_v37_noPS import *
 def main(argv):
 
     #Create analysis object with output name
-    name='limits_v36'
+    name='limits_v37_noPS'
     analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscripts18/July18/pyroot-plotscripts/workdir/'+name+'/output_limitInput.root ', signalProcess='ttH')
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscripts18/July18/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
 
@@ -1210,14 +1210,11 @@ memexp,
         for sysname,sysfilename in zip(otherSystNames,otherSystFileNames):
             thisnewsel=sample.selection
             systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),thisnewsel,sample.nick+sysname,samDict=sampleDict))
+            # add HDAMP and UE uncertainties for ttbar processes
             if sample.nick.startswith("ttbarPlus") or sample.nick == "ttbarOther":
                 for ue_hdamp, ue_hdamp_file in zip(hdamp_ue_systnames, hdamp_ue_filenames):
                     systsamples.append(Sample(sample.name+ue_hdamp,sample.color,ue_hdamp_file,thisnewsel,sample.nick+ue_hdamp,samDict=sampleDict))
-                    print systsamples[-1].name
-                    print systsamples[-1].nick
-                    print systsamples[-1].path
-    # sys.exit("DEBUG END: DONE WITH GENERATION OF SYST SAMPLES")
-
+    
     ## WARNING: Adjust Slice for samples if changing ttbar contributions
 
     ## add Parton shower variation samples
