@@ -453,6 +453,18 @@ dibosonPathS=path_karim_new+'/WW_*/*nominal*.root'+';'+path_karim_new+'/WZ_*/*no
 stpath=path_karim_new+'/ST_*/*nominal*.root'
 ttHpath=path_karim_new+'/ttHTo*/*nominal*.root'
 
+hdamp_ue_systnames = [
+    "_CMS_ttHbb_HDAMPUp", "_CMS_ttHbb_HDAMPDown",
+    "_CMS_ttHbb_UEUp", "_CMS_ttHbb_UEDown"
+]
+
+errorSystNames += hdamp_ue_systnames
+
+hdamp_ue_filenames = [
+    os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
+    os.path.join(path_karim_new, "*TuneCP5up*/*nominal*.root"), os.path.join(path_karim_new, "*TuneCP5down*/*nominal*.root")
+]
+
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
 sampleDict=plotClasses.SampleDictionary()
