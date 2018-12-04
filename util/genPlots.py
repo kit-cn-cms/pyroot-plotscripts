@@ -1011,7 +1011,7 @@ def getLegend():
     legend.SetBorderSize(0);
     legend.SetLineStyle(0);
     legend.SetTextFont(42);
-    legend.SetTextSize(0.05);
+    legend.SetTextSize(0.03);
     legend.SetFillStyle(0);
     return legend
 
@@ -1024,7 +1024,7 @@ def getLegendL():
     legend.SetBorderSize(0);
     legend.SetLineStyle(0);
     legend.SetTextFont(42);
-    legend.SetTextSize(0.04);
+    legend.SetTextSize(0.03);
     legend.SetFillStyle(0);
     return legend
 
@@ -1037,7 +1037,7 @@ def getLegendR():
     legend.SetBorderSize(0);
     legend.SetLineStyle(0);
     legend.SetTextFont(42);
-    legend.SetTextSize(0.04);
+    legend.SetTextSize(0.03);
     legend.SetFillStyle(0);
     return legend
 
@@ -1051,7 +1051,7 @@ def getLegend2():
     legend.SetBorderSize(0);
     legend.SetLineStyle(0);
     legend.SetTextFont(42);
-    legend.SetTextSize(0.04);
+    legend.SetTextSize(0.03);
     legend.SetFillStyle(0);
     return legend
 
@@ -1252,13 +1252,13 @@ def printCanvases(canvases, plotPath):
     print("canvases:")
     print(canvases)
     canvas = canvases[0]
-    canvas.Print( plotPath+'.pdf[')
-    for c in canvases:
-        canvas = c
-        canvas.Print( plotPath+'.pdf')
-        #canvas.SaveAs(name+"/"+c.GetName()+'.png')
+    #canvas.Print( plotPath+'.pdf[')
+    #for c in canvases:
+    #    canvas = c
+    #    canvas.Print( plotPath+'.pdf')
+    #    canvas.SaveAs(name+"/"+c.GetName()+'.png')
 
-    canvas.Print( plotPath+'.pdf]')
+    #canvas.Print( plotPath+'.pdf]')
     if not os.path.exists( plotPath ):
         os.makedirs( plotPath )
     for c in canvases:
