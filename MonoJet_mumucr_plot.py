@@ -36,7 +36,7 @@ additionalvariables=[    "N_TightMuons","N_TightElectrons","Evt_Pt_PrimaryLepton
 additionalvariables+=GetMEPDFadditionalVariablesList("/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv")
 
 
-plotselection_inclusive = "1.*(DeltaPhi_Jet_MET[0]>1.)"
+plotselection_inclusive = "1."
 plotlabel_inclusive = "#slash{U}_{T}>250 GeV"
 plotprefix = "incl"
 plots_inclusive=[
@@ -50,8 +50,11 @@ plots_inclusive=[
         Plot(ROOT.TH1F(plotprefix+"_"+"Jet_Phi_0","leading jet #phi",20,-3.2,3.2),"Jet_Phi[0]",plotselection_inclusive,plotlabel_inclusive),
         Plot(ROOT.TH1F(plotprefix+"_"+"N_Jets","N_Jets",10,0.5,10.5),"N_Jets",plotselection_inclusive,plotlabel_inclusive),
         Plot(ROOT.TH1F(plotprefix+"_"+"Evt_Pt_CaloMET","#slash{E}_{T,Calo}",22,200.,1400.),"CaloMET",plotselection_inclusive,plotlabel_inclusive),
-        Plot(ROOT.TH1F(plotprefix+"_"+"CaloMET_PFMET_ratio","#slash{E}_{T,Calo} #slash{E}_{T,PF} ratio",20,0.,1.),"CaloMET_PFMET_ratio",plotselection_inclusive,plotlabel_inclusive),
+        Plot(ROOT.TH1F(plotprefix+"_"+"CaloMET_PFMET_ratio","#slash{E}_{T,Calo} #slash{E}_{T,PF} ratio",50,0.,5.),"CaloMET_PFMET_ratio",plotselection_inclusive,plotlabel_inclusive),
         Plot(ROOT.TH1F(plotprefix+"_"+"DeltaPhi_MET_Jet","#Delta #phi (#slash{E}_{T},jet)",32,0.,3.2),"DeltaPhi_Jet_MET",plotselection_inclusive,plotlabel_inclusive),
+        Plot(ROOT.TH1F(plotprefix+"_"+"DeltaPhi_MET_Jet0","#Delta #phi (#slash{E}_{T},jet0)",32,0.,3.2),"DeltaPhi_Jet_MET[0]",plotselection_inclusive,plotlabel_inclusive),
+        Plot(ROOT.TH1F(plotprefix+"_"+"DeltaPhi_Hadr_Recoil_Jet","#Delta #phi (#slash{U}_{T},jet)",32,0.,3.2),"DeltaPhi_Jet_Hadr_Recoil",plotselection_inclusive,plotlabel_inclusive),
+        Plot(ROOT.TH1F(plotprefix+"_"+"DeltaPhi_Hadr_Recoil_Jet0","#Delta #phi (#slash{U}_{T},jet0)",32,0.,3.2),"DeltaPhi_Jet_Hadr_Recoil[0]",plotselection_inclusive,plotlabel_inclusive),
         Plot(ROOT.TH1F(plotprefix+"_"+"Hadr_Recoil_Pt","Hadr. Recoil Pt",23,250.,1400.),"Hadr_Recoil_Pt",plotselection_inclusive,plotlabel_inclusive),
         Plot(ROOT.TH1F(plotprefix+"_"+"Hadr_Recoil_Phi","Hadr. Recoil #phi",20,-3.2,3.2),"Hadr_Recoil_Phi",plotselection_inclusive,plotlabel_inclusive),
         Plot(ROOT.TH1F(plotprefix+"_"+"Evt_Pt_MET_T1","#slash{E}_{T} type1",23,250.,1400.),"Evt_Pt_MET_T1",plotselection_inclusive,plotlabel_inclusive),
@@ -60,9 +63,16 @@ plots_inclusive=[
         Plot(ROOT.TH1F(plotprefix+"_"+"BosonWeight","BosonWeight",41,-0.025,2.025),"internalBosonWeight_nominal",plotselection_inclusive,plotlabel_inclusive),
         Plot(ROOT.TH1F(plotprefix+"_"+"Zmumu_Mass","Z_{#mu#mu} mass",20,60.,120.),"Zmumu_Mass",plotselection_inclusive,plotlabel_inclusive),
         Plot(ROOT.TH1F(plotprefix+"_"+"MuonSF","MuonSF",41,-0.025,2.025),"Weight_MuonSFID*Weight_MuonSFIso*Weight_MuonSFHIP*Weight_MuonSFTrigger",plotselection_inclusive,plotlabel_inclusive),
+        Plot(ROOT.TH1F(plotprefix+"_"+"CaloMET_Hadr_Recoil_ratio","#slash{E}_{T,Calo} Hadr. Recoil ratio",50,0.,5.),"CaloMET_Hadr_Recoil_ratio",plotselection_inclusive,plotlabel_inclusive),
+        Plot(ROOT.TH1F(plotprefix+"_"+"Zmumu_Pt_Hadr_Recoil_Pt_ratio","Zmumu_Pt_Hadr_Recoil_Pt_ratio",20,0.,1.),"Zmumu_Pt_Hadr_Recoil_Pt_ratio",plotselection_inclusive,plotlabel_inclusive),
+        Plot(ROOT.TH1F(plotprefix+"_"+"Muon_Pt_0","Leading Muon p_{T}",25,0.,500.),"Muon_Pt[0]",plotselection_inclusive,plotlabel_inclusive),
+        Plot(ROOT.TH1F(plotprefix+"_"+"Muon_Pt_1","Subleading Muon p_{T}",25,0.,500.),"Muon_Pt[1]",plotselection_inclusive,plotlabel_inclusive),
+        Plot(ROOT.TH1F(plotprefix+"_"+"Muon_Eta_0","Leading Muon #eta",40,-3.,3.),"Muon_Eta[0]",plotselection_inclusive,plotlabel_inclusive),
+        Plot(ROOT.TH1F(plotprefix+"_"+"Muon_Eta_1","Subleading Muon #eta",40,-3.,3.),"Muon_Eta[1]",plotselection_inclusive,plotlabel_inclusive),
+        Plot(ROOT.TH1F(plotprefix+"_"+"JetPt0_Hadr_Recoil_ratio","JetPt0 Hadr. Recoil ratio",50,0.,5.),"fabs(Jet_Pt[0]-Hadr_Recoil_Pt)/Hadr_Recoil_Pt",plotselection_inclusive,plotlabel_inclusive),
     ]
 
-plotselection_MET300 = "(Hadr_Recoil_Pt>300.)*(DeltaPhi_Jet_MET[0]>1.)"
+plotselection_MET300 = "(Hadr_Recoil_Pt>300.)"
 plotlabel_MET300 = "#slash{U}_{T}>300 GeV"
 plotprefix = "MET300"
 plots_MET300=[
@@ -88,7 +98,7 @@ plots_MET300=[
         Plot(ROOT.TH1F(plotprefix+"_"+"MuonSF","MuonSF",41,-0.025,2.025),"Weight_MuonSFID*Weight_MuonSFIso*Weight_MuonSFHIP*Weight_MuonSFTrigger",plotselection_MET300,plotlabel_MET300),
     ]
 
-plotselection_MET400 = "(Hadr_Recoil_Pt>400.)*(DeltaPhi_Jet_MET[0]>1.)"
+plotselection_MET400 = "(Hadr_Recoil_Pt>400.)"
 plotlabel_MET400 = "#slash{U}_{T}>400 GeV"
 plotprefix = "MET400"
 plots_MET400=[
@@ -114,7 +124,7 @@ plots_MET400=[
         Plot(ROOT.TH1F(plotprefix+"_"+"MuonSF","MuonSF",41,-0.025,2.025),"Weight_MuonSFID*Weight_MuonSFIso*Weight_MuonSFHIP*Weight_MuonSFTrigger",plotselection_MET400,plotlabel_MET400),
     ]
 
-plotselection_MET500 = "(Hadr_Recoil_Pt>500.)*(DeltaPhi_Jet_MET[0]>1.)"
+plotselection_MET500 = "(Hadr_Recoil_Pt>500.)"
 plotlabel_MET500 = "#slash{U}_{T}>500 GeV"
 plotprefix = "MET500"
 plots_MET500=[
@@ -140,7 +150,7 @@ plots_MET500=[
         Plot(ROOT.TH1F(plotprefix+"_"+"MuonSF","MuonSF",41,-0.025,2.025),"Weight_MuonSFID*Weight_MuonSFIso*Weight_MuonSFHIP*Weight_MuonSFTrigger",plotselection_MET500,plotlabel_MET500),
     ]
 
-plotselection_MET600 = "(Hadr_Recoil_Pt>600.)*(DeltaPhi_Jet_MET[0]>1.)"
+plotselection_MET600 = "(Hadr_Recoil_Pt>600.)"
 plotlabel_MET600 = "#slash{U}_{T}>600 GeV"
 plotprefix = "MET600"
 plots_MET600=[

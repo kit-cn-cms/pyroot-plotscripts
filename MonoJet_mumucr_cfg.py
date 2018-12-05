@@ -160,7 +160,7 @@ WBosonWeights=[
     ]
 
 
-MCWeight='35.91823'
+MCWeight='35.9'
 #MCWeight='31.8'
 
 path_ntuples = "/nfs/dust/cms/user/mwassmer/DarkMatter/ntuples_controlregion"
@@ -173,7 +173,7 @@ sampleDict.doPrintout()
 #sel_MET="*(Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_X==1)*(N_LooseMuons==2)*(N_LooseElectrons==0)*(N_LooseTaus==0)*(N_TightMuons>0)*(Zmumu_Mass>60)*(Zmumu_Mass<120)*(Muon_Charge[0]!=Muon_Charge[1])"
 #sel_MET="*((Triggered_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_vX==1)||(Triggered_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_vX==1)||(Triggered_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_vX==1)||(Triggered_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_vX==1))*(N_LooseMuons==2)*(N_LooseElectrons==0)*(N_LooseTaus==0)*(N_TightMuons>0)*(Zmumu_Mass>60)*(Zmumu_Mass<120)*(Muon_Charge[0]!=Muon_Charge[1])*(Muon_Pt[0]>120)"#*(Muon_Pt[1]>40)"#*((DoWeights==1)*(Weight_MuonSFID>0.)*((Triggered_HLT_PFMET170_X==1)||(Triggered_HLT_PFMETNoMu100_PFMHTNoMu100_IDTight_X==1)||(Triggered_HLT_PFMETNoMu110_PFMHTNoMu110_IDTight_X==1)||(Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_X==1)||(Triggered_HLT_PFMETNoMu90_PFMHTNoMu90_IDTight_X==1))+(DoWeights==0)*1.0)"
 
-sel_MET="*((Triggered_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_vX==1)||(Triggered_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_vX==1))*(N_LooseMuons==2)*(N_LooseElectrons==0)*(N_LooseTaus==0)*(N_TightMuons>0)*(Muon_Charge[0]!=Muon_Charge[1])"#*(Zmumu_Mass>60)*(Zmumu_Mass<120)*(Muon_Pt[0]>120)"
+sel_MET="*((Triggered_HLT_PFMET170_X==1)||(Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_X==1))*(N_LooseMuons==2)*(N_LooseElectrons==0)*(N_LooseTaus==0)*(N_TightMuons>0)*(Muon_Charge[0]!=Muon_Charge[1])*(Zmumu_Mass>60)*(Zmumu_Mass<120)"#*(Zmumu_Pt_Hadr_Recoil_Pt_ratio<0.25)"
 
 
 """
@@ -203,7 +203,7 @@ Sample('W(l#nu)+jets p_{T,W}=600-Inf',ROOT.kGreen-4,path_ntuples+'/WJetsToLNu_Pt
 """
 
 samples_data = [
-            Sample('data',ROOT.kBlack,path_ntuples+'/DoubleMuon_Run2016*/*nominal*.root',"1."+sel_MET,'data_obs',[""],samDict=sampleDict),
+            Sample('data',ROOT.kBlack,path_ntuples+'/MET_Run2016*/*nominal*.root',"1.0"+sel_MET,'data_obs',[""],samDict=sampleDict),
         ]
 #complete sample xs weight
 #z_nunu: 0.00001321
@@ -213,9 +213,9 @@ samples_background = [
                         Sample('Diboson',ROOT.kViolet,path_ntuples+'/??_TuneCUETP8M1_13TeV-pythia8/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'diboson',weightSystNames[:-6]+otherSystNames,samDict=sampleDict),                        
                         Sample('t#bar{t}',ROOT.kViolet-2,path_ntuples+'/TT_Tune*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'ttbar',weightSystNames[:-2]+otherSystNames,samDict=sampleDict),
                         Sample('Single Top',ROOT.kViolet-1,path_ntuples+'/ST*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'singletop',weightSystNames[:-2]+otherSystNames,samDict=sampleDict),
-                        Sample('W(l#nu)+jets',ROOT.kGreen,path_ntuples+'/WJetsToLNu*To*/*nominal*.root',"1.*"+MCWeight+sel_MET,'w_lnu_jets',weightSystNames+BosonSystNames+WBosonSystNames+otherSystNames,samDict=sampleDict),
-                        Sample('QCD',ROOT.kViolet+3,path_ntuples+'/QCD*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'qcd',weightSystNames[:-2]+otherSystNames,samDict=sampleDict),
-                        Sample('#gamma +jets',ROOT.kViolet+7,path_ntuples+'/GJets*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'gamma_jets',weightSystNames[:-2]+otherSystNames,samDict=sampleDict)
+                        #Sample('W(l#nu)+jets',ROOT.kGreen,path_ntuples+'/WJetsToLNu*To*/*nominal*.root',"1.*"+MCWeight+sel_MET,'w_lnu_jets',weightSystNames+BosonSystNames+WBosonSystNames+otherSystNames,samDict=sampleDict),
+                        #Sample('QCD',ROOT.kViolet+3,path_ntuples+'/QCD*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'qcd',weightSystNames[:-2]+otherSystNames,samDict=sampleDict),
+                        #Sample('#gamma +jets',ROOT.kViolet+7,path_ntuples+'/GJets*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'gamma_jets',weightSystNames[:-2]+otherSystNames,samDict=sampleDict)
                         #Sample('Z(#nu#nu)+jets',ROOT.kBlue,path_ntuples+'/DYJetsToNuNu*To*amc*/*nominal*.root',"1.*3*0.971"+"*"+MCWeight+sel_MET,'z_nunu_jets',weightSystNames+BosonSystNames+ZvvBosonSystNames+otherSystNames,samDict=sampleDict),
                         ]
 """
