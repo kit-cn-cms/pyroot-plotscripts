@@ -173,7 +173,7 @@ sampleDict.doPrintout()
 #sel_MET="*(Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_X==1)*(N_LooseMuons==2)*(N_LooseElectrons==0)*(N_LooseTaus==0)*(N_TightMuons>0)*(Zmumu_Mass>60)*(Zmumu_Mass<120)*(Muon_Charge[0]!=Muon_Charge[1])"
 #sel_MET="*((Triggered_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_vX==1)||(Triggered_HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_vX==1)||(Triggered_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_vX==1)||(Triggered_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_vX==1))*(N_LooseMuons==2)*(N_LooseElectrons==0)*(N_LooseTaus==0)*(N_TightMuons>0)*(Zmumu_Mass>60)*(Zmumu_Mass<120)*(Muon_Charge[0]!=Muon_Charge[1])*(Muon_Pt[0]>120)"#*(Muon_Pt[1]>40)"#*((DoWeights==1)*(Weight_MuonSFID>0.)*((Triggered_HLT_PFMET170_X==1)||(Triggered_HLT_PFMETNoMu100_PFMHTNoMu100_IDTight_X==1)||(Triggered_HLT_PFMETNoMu110_PFMHTNoMu110_IDTight_X==1)||(Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_X==1)||(Triggered_HLT_PFMETNoMu90_PFMHTNoMu90_IDTight_X==1))+(DoWeights==0)*1.0)"
 
-sel_MET="*((Triggered_HLT_PFMET170_X==1)||(Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_X==1))*(N_LooseMuons==2)*(N_LooseElectrons==0)*(N_LooseTaus==0)*(N_TightMuons>0)*(Muon_Charge[0]!=Muon_Charge[1])*(Zmumu_Mass>60)*(Zmumu_Mass<120)"#*(Zmumu_Pt_Hadr_Recoil_Pt_ratio<0.25)"
+sel_MET="*((Triggered_HLT_PFMET170_X==1)||(Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_X==1))*(N_LooseMuons==2)*(N_LooseElectrons==0)*(N_LooseTaus==0)*(N_TightMuons>0)*(Muon_Charge[0]!=Muon_Charge[1])*(Zmumu_Mass>60)*(Zmumu_Mass<120)*(Zmumu_Pt_Hadr_Recoil_Pt_ratio<0.25)"
 
 
 """
