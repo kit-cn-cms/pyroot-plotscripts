@@ -278,7 +278,7 @@ class Variables:
 
   # initialize variable
   def initVar(self,tree,name,expression='',vartype='F',arraylength=None):
-    #print "initVar", tree,name,expression
+    print "initVar", tree,name,expression, hasattr(tree,expression)
    # print self.vetolist
     if not name in self.variables and not name in self.vetolist:
 

@@ -2628,7 +2628,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 ]
 
   #csv_file=os.getcwd()+"/rate_factors_onlyinternal_powhegpythia.csv"
-  csv_file="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv"
+  csv_file="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/rate_factors.csv"
   
   if useGenWeightNormMap:
     vetolist+=GetGenWeightNormalizationVetoList(csv_file)
@@ -2654,11 +2654,14 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   
   # get tree for variable check
   tree = ROOT.TTree()
+  print "getting tree to setup with"
   samplesToCheck=samples
   if useThisSampleForVariableSetup!=None:
       if isinstance(useThisSampleForVariableSetup, plotutils.Sample):
           samplesToCheck=[useThisSampleForVariableSetup]
+  #print samplesToCheck, samplesToCheck[0].nick
   for i in range(len(samplesToCheck)):
+    #print "checking ", samplesToCheck.nick
     thistreeisgood=False
     for j in range(len(samplesToCheck[i].files)):
       f=ROOT.TFile(samplesToCheck[i].files[j])
