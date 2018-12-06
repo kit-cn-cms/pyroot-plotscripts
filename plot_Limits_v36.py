@@ -28,13 +28,16 @@ def main(argv):
 
     #Create analysis object with output name
     name='limits_v37'
-    analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscripts18/July18/pyroot-plotscripts/workdir/'+name+'/output_limitInput.root ', signalProcess='ttH')
+    analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscripts18/July18/pyroot-plotscripts/workdir/'+name+'/output_limitInput.root', signalProcess='ttH')
+    print os.path.exists(analysis.rootFilePath), "AAAARgh"
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscripts18/July18/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
 
     analysis.plotBlinded=False
-    analysis.makeSimplePlots=True
-    analysis.makeMCControlPlots=True
-    analysis.makeDataCards=True
+    analysis.makeSimplePlots=False
+    analysis.makeMCControlPlots=False
+    analysis.makeDataCards=False
+    analysis.makeEventYields=True
+    
 
     # Make sure proper plotconfig is loaded for either ttbb or ttH
     print "We will import the following plotconfig: ", analysis.getPlotConfig()
@@ -1251,6 +1254,9 @@ memexp,
     # plot everything, except during drawParallel step
     # Create file for data cards
     if analysis.doDrawParallel==False or analysis.plotNumber == None :
+        #print type(analysis.rootFilePath), analysis.rootFilePath
+        #print os.path.exists(analysis.rootFilePath)
+        #raw_input()
         if not os.path.exists(analysis.rootFilePath):
         #if False:
             
@@ -1382,7 +1388,7 @@ memexp,
         print "Making yield table."
         print "Will do only some plots"
         for hld,hl in zip(listOfHistoListsData,listOfHistoLists):
-          if not ("JT" in hld[0].GetName() or "N_Jets" in hld[0].GetName()) :
+          if not ("JT" in hld[0].GetName() or "N_Jets" in hld[0].GetName()) or ("node" in hld[0].GetName() and not "minVal" in hld[0].GetName()):
             continue
           else:
             hldName = hld[0].GetName()

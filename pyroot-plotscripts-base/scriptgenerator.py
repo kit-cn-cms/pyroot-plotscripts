@@ -1855,10 +1855,23 @@ void plot(){
   
   retstr+="""
   
-  //  translatedFileNameForDataBase=sampleTranslationMapCPP[thisfilename];
-  //  if(processname=="QCD" or processname=="QCD_CMS_ttH_QCDScaleFactorUp" or processname=="QCD_CMS_ttH_QCDScaleFactorDown"){
-  //    translatedFileNameForDataBase+="QCD";
-  //    }
+  
+  //DANGERZONE
+  // hardcode sample translation map for now 
+  std::cout<<"WARNING!: Hardcoded sampleTranslationMapCPP !"<<std::endl;
+  sampleTranslationMapCPP[TString("TTToSemiLeptonicTuneCP5PSweights13TeVpowhegpythia8v2")]=TString("TTToSemiLeptonicTuneCP5PSweights13TeVpowhegpythia8");
+  sampleTranslationMapCPP[TString("TTToSemiLeptonicTuneCP513TeVpowhegpythia8newpmx")]=TString("TTToSemiLeptonicTuneCP513TeVpowhegpythia8");
+
+  sampleTranslationMapCPP[TString("TTTo2L2NuTuneCP5PSweights13TeVpowhegpythia8")]=TString("TTTo2L2NuTuneCP5PSweights13TeVpowhegpythia8");
+  sampleTranslationMapCPP[TString("TTTo2L2NuTuneCP513TeVpowhegpythia8newpmx")]=TString("TTTo2L2NuTuneCP513TeVpowhegpythia8");
+
+  sampleTranslationMapCPP[TString("TTToHadronicTuneCP5PSweights13TeVpowhegpythia8newpmx")]=TString("TTToHadronicTuneCP5PSweights13TeVpowhegpythia8");
+  sampleTranslationMapCPP[TString("TTToHadronicTuneCP513TeVpowhegpythia8newpmx")]=TString("TTToHadronicTuneCP513TeVpowhegpythia8");
+
+  sampleTranslationMapCPP[TString("ttHTobbM125TuneCP513TeVpowhegpythia8newpmx")]=TString("ttHTobbM125TuneCP513TeVpowhegpythia8");
+  sampleTranslationMapCPP[TString("ttHToNonbbM125TuneCP513TeVpowhegpythia8newpmx")]=TString("ttHToNonbbM125TuneCP513TeVpowhegpythia8");
+
+
     samplename_in_database=thisfilename;
     if(! (std::find(databaseRelevantFilenames.begin(),databaseRelevantFilenames.end(),thisfilename)!=databaseRelevantFilenames.end()  )){
       databaseRelevantFilenames.push_back(thisfilename.Copy());
@@ -2593,7 +2606,7 @@ def compileProgram(scriptname,usesDataBases,addCodeInterfaces):
     print "Compile failed with error:\n", e.output
 
 
-def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],allsystweights=["1"],additionalvariables=[],dataBases=[],addCodeInterfaces=[], useLHEWeights=False,useThisSampleForVariableSetup=None):
+def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],systnames=[""],allsystweights=["1"],additionalvariables=[],dataBases=[],addCodeInterfaces=[], useGenWeightNormMap=False,useThisSampleForVariableSetup=None):
 
   # collect variables
   # list varibles that should not be written to the program automatically
@@ -2615,10 +2628,10 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 ]
 
   #csv_file=os.getcwd()+"/rate_factors_onlyinternal_powhegpythia.csv"
-  csv_file="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv"
+  csv_file="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/rate_factors.csv"
   
-  if useLHEWeights:
-    vetolist+=GetMEPDFVetoList(csv_file)
+  if useGenWeightNormMap:
+    vetolist+=GetGenWeightNormalizationVetoList(csv_file)
 
   for addCodeInt in addCodeInterfaces:
     vetolist+=addCodeInt.getExternalyCallableVariables()
@@ -2641,11 +2654,14 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   
   # get tree for variable check
   tree = ROOT.TTree()
+  print "getting tree to setup with"
   samplesToCheck=samples
   if useThisSampleForVariableSetup!=None:
       if isinstance(useThisSampleForVariableSetup, plotutils.Sample):
           samplesToCheck=[useThisSampleForVariableSetup]
+  #print samplesToCheck, samplesToCheck[0].nick
   for i in range(len(samplesToCheck)):
+    #print "checking ", samplesToCheck.nick
     thistreeisgood=False
     for j in range(len(samplesToCheck[i].files)):
       f=ROOT.TFile(samplesToCheck[i].files[j])
@@ -2699,9 +2715,9 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   # start writing program
   script=""
   script+=getHead(dataBases,addCodeInterfaces)
-  if useLHEWeights:
-    script+=DeclareMEPDFNormFactors(csv_file)
-    script+=AddMEandPDFNormalizationsMap(csv_file)
+  if useGenWeightNormMap:
+    script+=DeclareGenWeightNormFactors(csv_file)
+    script+=AddGenWeightNormalizationsMap(csv_file)
   
   for db in dataBases:
     script+=InitDataBase(db)
@@ -2742,19 +2758,19 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
           script+=initHistoWithProcessNameAndSuffix(c+n+s,nb,mn,mx,t)
 
   # start event loop
-  if useLHEWeights:
-    script+=DefineLHAPDF()
+  #if useGenWeightNormMap:
+    #script+=DefineLHAPDF()
   startLoopStub=startLoop()
   if castStub!="":
     #print castStub
     startLoopStub=startLoopStub.replace("//PLACEHOLDERFORCASTLINES", castStub)
   script+=startLoopStub
   script+="   timerMapping->Start();\n"
-  if useLHEWeights:
-    script+=ResetMEPDFNormFactors(csv_file)
-    script+=RelateMEPDFMapToNormFactor(csv_file)
-    script+=PutPDFWeightsinVector(csv_file)
-    script+=UseLHAPDF()
+  if useGenWeightNormMap:
+    script+=ResetGenWeightNormFactors(csv_file)
+    script+=RelateGenWeightMapToNormFactor(csv_file)
+    #script+=PutPDFWeightsinVector(csv_file)
+    ##script+=UseLHAPDF()
   script+="   totalTimeMapping+=timerMapping->RealTime();\n"
 
   script+="   timerEvalDNN->Start();\n"
@@ -3115,7 +3131,7 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
   return scripts,outputs,nentries,samplewiseoutputs
 
 # the dataBases should be defined as follows e.g. [[memDB,path],[blrDB,path]]
-def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],dataBases=[],treeInformationJsonFile="",otherSystnames=[],addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False,haddParallel=False, useLHEWeights=False, useThisSampleForVariableSetup=None):
+def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],systnames=[""],systweights=["1"],additionalvariables=[],dataBases=[],treeInformationJsonFile="",otherSystnames=[],addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False,haddParallel=False, useGenWeightNormMap=False, useThisSampleForVariableSetup=None):
   cmsswpath=os.environ['CMSSW_BASE']
   if not "CMSSW" in cmsswpath:
     print "you need CMSSW for this to work. Exiting!"
@@ -3195,7 +3211,7 @@ def plotParallel(name,maxevents,plots,samples,catnames=[""],catselections=["1"],
     cmd='cp -v '+programpath+'.cc'+' '+programpath+'.ccBackup'
     subprocess.call(cmd,shell=True)
   print 'creating c++ program'
-  createProgram(programpath,plots,samples,catnames,catselections,systnames,systweights,additionalvariables, dataBases,addCodeInterfaces, useLHEWeights=useLHEWeights,useThisSampleForVariableSetup=useThisSampleForVariableSetup)
+  createProgram(programpath,plots,samples,catnames,catselections,systnames,systweights,additionalvariables, dataBases,addCodeInterfaces, useGenWeightNormMap=useGenWeightNormMap,useThisSampleForVariableSetup=useThisSampleForVariableSetup)
   if not os.path.exists(programpath+'.cc'):
     print 'could not create c++ program'
     sys.exit(-1)
@@ -3517,100 +3533,109 @@ renameHistosParallel(filename,systematics,False)
   scrfile.close()
     
     
-def ReadMEandPDFNormalizations(csv_file):
-	mydict={}
-	with open(csv_file) as csvfile:
-		reader = csv.DictReader(csvfile)
-		for row in reader:
-			name_array=row['name'].split("/")
-			sample_name_modified = name_array[1].replace("_","").replace("-","")
-			initial_weight_name = row['weight']
-			factor=row['factor']
-			mydict[(sample_name_modified,initial_weight_name)]=factor
-	return mydict
-	
-def AddMEandPDFNormalizationsMap(csv_file):
-	mydict=ReadMEandPDFNormalizations(csv_file)
-	code='std::map<TString,float> MEPDF_Norm_Map;\n'
-	for key in mydict:
-		code+='MEPDF_Norm_Map["'+key[0]+'_'+key[1]+'"]='+mydict[key]+';\n'
-	return code
-	
-def GetMEPDFadditionalVariablesList(csv_file):
-	mydict=ReadMEandPDFNormalizations(csv_file)
-	seen = set()
-	weight_vars_list=[]
-	for key in mydict:
-		if not key[1] in seen:
-			seen.add(key[1])
-			weight_vars_list.append(key[1])
-	return weight_vars_list
+def ReadGenWeightNormalizations(csv_file):
+    mydict={}
+    with open(csv_file) as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            name_array=row['name'].split("/")
+            sample_name_modified = name_array[1].replace("_","").replace("-","")
+            initial_weight_name = row['weight']
+            factor=row['factor']
+            mydict[(sample_name_modified,initial_weight_name)]=factor
+    return mydict
+    
+def AddGenWeightNormalizationsMap(csv_file):
+    mydict=ReadGenWeightNormalizations(csv_file)
+    code='std::map<TString,float> GenWeight_Norm_Map;\n'
+    for key in mydict:
+        code+='GenWeight_Norm_Map["'+key[0]+'_'+key[1]+'"]='+mydict[key]+';\n'
+    return code
+    
+def GetGenWeightadditionalVariablesList(csv_file):
+    mydict=ReadGenWeightNormalizations(csv_file)
+    seen = set()
+    weight_vars_list=[]
+    for key in mydict:
+        if not key[1] in seen:
+            seen.add(key[1])
+            weight_vars_list.append(key[1])
+    return weight_vars_list
 
-def RelateMEPDFMapToNormFactor(csv_file):
-	weight_list=GetMEPDFadditionalVariablesList(csv_file)
-	code=''
-	code+="""
-    TString currentRelevantSampleNameForMEPDF=sampleDataBaseIdentifiers[currentfilename];
-    //TString translatedCurrentRelevantSampleNameForMEPDF=sampleTranslationMapCPP[currentRelevantSampleNameForMEPDF];
-    //std::cout<<"MEPDF relation "<<currentfilename<<" "<<currentRelevantSampleNameForMEPDF<<" "<<translatedCurrentRelevantSampleNameForMEPDF<<std::endl;
+def RelateGenWeightMapToNormFactor(csv_file):
+    weight_list=GetGenWeightadditionalVariablesList(csv_file)
+    code=''
+    code+="""
+    TString currentRelevantSampleNameForGenWeights=sampleDataBaseIdentifiers[currentfilename];
+    TString translatedCurrentRelevantSampleNameForGenWeights=sampleTranslationMapCPP[currentRelevantSampleNameForGenWeights];
+    std::cout<<"MEPDF relation "<<currentfilename<<" "<<currentRelevantSampleNameForGenWeights<<" "<<translatedCurrentRelevantSampleNameForGenWeights<<std::endl;
   """
-	#code+='if(MEPDF_Norm_Map.find('+'translatedCurrentRelevantSampleNameForMEPDF'+'+"_'+weight_list[0]+'")!=MEPDF_Norm_Map.end()){;\n'
-	for weight in weight_list:
-		#code+='internalNormFactor_'+weight+'='+'MEPDF_Norm_Map['+'translatedCurrentRelevantSampleNameForMEPDF'+'+"_'+weight+'"];\n'
-		code+='internalNormFactor_'+weight+'=1.0;\n'
-	code+='}\n'
-	code+='//else{std::cout<<"did not find pdf weights in map "<<translatedCurrentRelevantSampleNameForMEPDF<<std::endl;}\n'
-	code+='//std::cout<<"first internal pdf weight "<<'+'translatedCurrentRelevantSampleNameForMEPDF'+'+"_'+weight_list[0]+'" <<" "<< internalNormFactor_'+weight_list[0]+'<<std::endl;\n'
-	return code
-	
-	
-def GetMEPDFVetoList(csv_file):
-	weight_list=GetMEPDFadditionalVariablesList(csv_file)
-	weight_veto_list=[]
-	for weight in weight_list:
-		weight_veto_list.append('internalNormFactor_'+weight)
-	return weight_veto_list
-	
-	
-def DeclareMEPDFNormFactors(csv_file):
-	code=''
-	weight_list=GetMEPDFadditionalVariablesList(csv_file)
-	for weight in weight_list:
-		code+='float internalNormFactor_'+weight+'=0.0;\n'
-	return code
-def ResetMEPDFNormFactors(csv_file):
+    ## set all gen weight norms to 1 
+    for weight in weight_list:
+        code+='internalNormFactor_'+weight+'=1.0;\n'
+        #code+='internalNormFactor_'+weight+'=1.0;\n'
+    ## if the sample is known readout the actual gen weight norms
+    code+='if(GenWeight_Norm_Map.find('+'translatedCurrentRelevantSampleNameForGenWeights'+'+"_'+weight_list[0]+'")!=GenWeight_Norm_Map.end()){;\n'
+    for weight in weight_list:
+        code+='internalNormFactor_'+weight+'='+'GenWeight_Norm_Map['+'translatedCurrentRelevantSampleNameForGenWeights'+'+"_'+weight+'"];\n'
+        #code+='internalNormFactor_'+weight+'=1.0;\n'
+    code+='}\n'
+    code+='else{std::cout<<"did not find pdf weights in map "<<translatedCurrentRelevantSampleNameForGenWeights<<std::endl;}\n'
+    code+='//std::cout<<"first internal pdf weight "<<'+'translatedCurrentRelevantSampleNameForGenWeights'+'+"_'+weight_list[0]+'" <<" "<< internalNormFactor_'+weight_list[0]+'<<std::endl;\n'
+    return code
+    
+    
+def GetGenWeightNormalizationVetoList(csv_file):
+    weight_list=GetGenWeightadditionalVariablesList(csv_file)
+    weight_veto_list=[]
+    for weight in weight_list:
+        weight_veto_list.append('internalNormFactor_'+weight)
+    return weight_veto_list
+    
+    
+def DeclareGenWeightNormFactors(csv_file):
+    code=''
+    weight_list=GetGenWeightadditionalVariablesList(csv_file)
+    for weight in weight_list:
+        code+='float internalNormFactor_'+weight+'=0.0;\n'
+    return code
+def ResetGenWeightNormFactors(csv_file):
         code=''
-        weight_list=GetMEPDFadditionalVariablesList(csv_file)
+        weight_list=GetGenWeightadditionalVariablesList(csv_file)
         for weight in weight_list:
                 code+='internalNormFactor_'+weight+'=0.0;\n'
-        return code	
-def GetPDFadditionalVariablesList(csv_file):
-	weight_list=GetMEPDFadditionalVariablesList(csv_file)
-	pdf_weight_list=[]
-	for weight in weight_list:
-		if "pdf" in weight:
-			pdf_weight_list.append(weight)
-	return pdf_weight_list
+        return code
+    
+    
+    
+    
+#def GetPDFadditionalVariablesList(csv_file):
+	#weight_list=GetGenWeightadditionalVariablesList(csv_file)
+	#pdf_weight_list=[]
+	#for weight in weight_list:
+		#if "pdf" in weight:
+			#pdf_weight_list.append(weight)
+	#return pdf_weight_list
 	
-def PutPDFWeightsinVector(csv_file):
-	pdf_weights=GetPDFadditionalVariablesList(csv_file)
-	code='std::vector<double> pdf_weights;\n'
-	code+='pdf_weights.push_back(1.);\n'
-	for weight in pdf_weights:
-		code+='pdf_weights.push_back(internalNormFactor_'+weight+'*'+weight+');\n'
-	return code
-def DefineLHAPDF():
-    code='LHAPDF::PDFSet pdfSet("NNPDF30_nlo_as_0118");\n'
-    return code
+#def PutPDFWeightsinVector(csv_file):
+	#pdf_weights=GetPDFadditionalVariablesList(csv_file)
+	#code='std::vector<double> pdf_weights;\n'
+	#code+='pdf_weights.push_back(1.);\n'
+	#for weight in pdf_weights:
+		#code+='pdf_weights.push_back(internalNormFactor_'+weight+'*'+weight+');\n'
+	#return code
+#def DefineLHAPDF():
+    #code='LHAPDF::PDFSet pdfSet("NNPDF30_nlo_as_0118");\n'
+    #return code
 
-def UseLHAPDF():
-    code=''
-    #code+='LHAPDF::PDFSet pdfSet("NNPDF30_nlo_as_0118");\n'
-    code+='const LHAPDF::PDFUncertainty pdfUnc = pdfSet.uncertainty(pdf_weights, 68.);\n'
-    code+='internalPDFweightUp   = pdfUnc.central + pdfUnc.errplus;\n'
-    code+='internalPDFweightDown = pdfUnc.central - pdfUnc.errminus;\n'
-    code+='internalPDFweight = pdfUnc.central;\n'
-    code+='//std::cout<<"result pdf weights: central, down, up "<<pdfUnc.central<<" "<<internalPDFweightDown<< " "<<internalPDFweightUp<<std::endl;\n'
-    return code
+#def UseLHAPDF():
+    #code=''
+    ##code+='LHAPDF::PDFSet pdfSet("NNPDF30_nlo_as_0118");\n'
+    #code+='const LHAPDF::PDFUncertainty pdfUnc = pdfSet.uncertainty(pdf_weights, 68.);\n'
+    #code+='internalPDFweightUp   = pdfUnc.central + pdfUnc.errplus;\n'
+    #code+='internalPDFweightDown = pdfUnc.central - pdfUnc.errminus;\n'
+    #code+='internalPDFweight = pdfUnc.central;\n'
+    #code+='//std::cout<<"result pdf weights: central, down, up "<<pdfUnc.central<<" "<<internalPDFweightDown<< " "<<internalPDFweightUp<<std::endl;\n'
+    #return code
 
     
