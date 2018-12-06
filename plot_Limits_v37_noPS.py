@@ -1211,7 +1211,7 @@ memexp,
             thisnewsel=sample.selection
             systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),thisnewsel,sample.nick+sysname,samDict=sampleDict))
             # add HDAMP and UE uncertainties for ttbar processes
-            if sample.nick.startswith("ttbarPlus") or sample.nick == "ttbarOther":
+        if sample.nick.startswith("ttbarPlus") or sample.nick == "ttbarOther":
                 for ue_hdamp, ue_hdamp_file in zip(hdamp_ue_systnames, hdamp_ue_filenames):
                     systsamples.append(Sample(sample.name+ue_hdamp,sample.color,ue_hdamp_file,thisnewsel,sample.nick+ue_hdamp,samDict=sampleDict))
     
