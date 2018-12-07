@@ -93,7 +93,7 @@ def haddInterface(jobsToSubmit, outfilesFromSubmit, maxTries = 10, nTries = 0):
         sys.exit(1)
 
     # monitor running
-    nafSubmit.monitorJobStatus(jobIDs, plot_batch_history = nTries==0, name = "haddParallel")
+    nafSubmit.monitorJobStatus(jobIDs)
     # check for termination of jobs
     undoneJobs, undoneOutFiles = haddTerminationCheck(jobsToSubmit, outfilesFromSubmit)
 
@@ -163,7 +163,7 @@ def renameInterface(jobsToSubmit, outfilesFromSubmit, maxTries = 10, nTries = 0)
         sys.exit(1)
 
     # monitor running of jobs
-    nafSubmit.monitorJobStatus(jobIDs, plot_batch_history = nTries==0, name = "renameHistos")
+    nafSubmit.monitorJobStatus(jobIDs)
     # checking for undone jobs
     undoneJobs, undoneFiles = renameTerminationCheck(jobsToSubmit, outfilesFromSubmit)
 
@@ -209,12 +209,12 @@ def datacardInterface(jobsToSubmit, datacardFiles, maxTries = 10, nTries = 0):
         sys.exit(1)
 
     # monitoring running of jobs
-    nafSubmit.monitorJobStatus(jobIDs, plot_batch_history = nTries==0, name = "makeDatacards")
+    nafSubmit.monitorJobStatus(jobIDs)
     # checking output
     undoneJobs, undoneCards = datacardTerminationCheck(jobsToSubmit, datacardFiles)
 
     if len(undoneCards) > 0 or len(undoneJobs) > 0:
-        return datacardInterface(undoneShells, undoneCards, maxTries, nTries+1)
+        return datacardInterface(undoneJobs, undoneCards, maxTries, nTries+1)
     
     print("makingDatacards submit interface has terminated successfully")
 
@@ -254,7 +254,7 @@ def drawInterface(jobsToSubmit, outputPlots, nTries = 0):
         sys.exit(1)
     
     # monitoring running jobs
-    nafSubmit.monitorJobStatus(jobIDs, plot_batch_history = nTries==0, name = "drawParallel")
+    nafSubmit.monitorJobStatus(jobIDs)
     # checking output
     undoneScripts, undonePlots = drawTerminationCheck(jobsToSubmit, outputPlots)
 

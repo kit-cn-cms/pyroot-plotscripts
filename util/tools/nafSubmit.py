@@ -370,7 +370,7 @@ def monitorJobStatus(jobIDs = None, plot_batch_history = False, name = None):
     plt.grid()
     plt.legend()
     plt.savefig(path)
-    print("saved plot at "+str(path)+".pdf\n")
+    print("saved plot at "+str(path)+"\n")
     plt.clf()
 
 

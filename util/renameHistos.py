@@ -153,8 +153,13 @@ def renameHistosParallel(inFile, outFile, systNames, checkBins = False, prune = 
     call( cmd )
 
     # opening outFile
+    print("opening root file "+str(inFile))
     rootFile = ROOT.TFile(inFile, "UPDATE")
+    print("list of keys:")
     rootKeys = rootFile.GetListOfKeys()
+    for k in rootKeys:
+        print(k)
+    print("-"*10)
 
     objectList = []
     keyNames = []
