@@ -28,17 +28,42 @@ def getSystSamples(pltcfg, analysis, samples):
                     sample.nick+sysName, 
                     samDict = pltcfg.sampleDict ))
 
-            if sample.nick.startswith("ttbarPlus") or sample.nick == "ttbarOther":
-                for ue_hdamp, ue_hdamp_file in zip(pltcfg.hdamp_ue_systnames, pltcfg.hdamp_ue_filenames):
-                    systSamples.append(
-                        plotClasses.Sample(
-                            sample.name+ue_hdamp,
-                            sample.color,
-                            ue_hdamp_file,
-                            newSel,
-                            sample.nick+ue_hdamp,
-                            samDict = pltcfg.sampleDict ))
 
+            if sample.nick.startswith("ttbarPlus") or sample.nick == "ttbarOther":
+                for ue_hdamp, ue_hdamp_file in zip(pltcfg.hdamp_ue_systnames_tt_all, pltcfg.hdamp_ue_filenames_tt_all):
+                    systSamples.append(
+                        plotClasses.Sample(sample.name+ue_hdamp, sample.color, ue_hdamp_file, newSel,
+                            sample.nick+ue_hdamp, samDict = pltcfg.sampleDict ))
+
+            if sample.nick == "ttbarOther":
+                for ue_hdamp, ue_hdamp_file in zip(pltcfg.hdamp_ue_systnames_tt_lf, pltcfg.hdamp_ue_filenames_tt_lf):
+                    systSamples.append(
+                        plotClasses.Sample(sample.name+ue_hdamp, sample.color, ue_hdamp_file, newSel,
+                            sample.nick+ue_hdamp, samDict = pltcfg.sampleDict ))
+
+            if sample.nick == "ttbarPlusCCbar":
+                for ue_hdamp, ue_hdamp_file in zip(pltcfg.hdamp_ue_systnames_tt_cc, pltcfg.hdamp_ue_filenames_tt_cc):
+                    systSamples.append(
+                        plotClasses.Sample(sample.name+ue_hdamp, sample.color, ue_hdamp_file, newSel,
+                            sample.nick+ue_hdamp, samDict = pltcfg.sampleDict ))
+
+            if sample.nick == "ttbarPlusB":
+                for ue_hdamp, ue_hdamp_file in zip(pltcfg.hdamp_ue_systnames_tt_b, pltcfg.hdamp_ue_filenames_tt_b):
+                    systSamples.append(
+                        plotClasses.Sample(sample.name+ue_hdamp, sample.color, ue_hdamp_file, newSel,
+                            sample.nick+ue_hdamp, samDict = pltcfg.sampleDict ))
+
+            if sample.nick == "ttbarPlus2B":
+                for ue_hdamp, ue_hdamp_file in zip(pltcfg.hdamp_ue_systnames_tt_2b, pltcfg.hdamp_ue_filenames_tt_2b):
+                    systSamples.append(
+                        plotClasses.Sample(sample.name+ue_hdamp, sample.color, ue_hdamp_file, newSel,
+                            sample.nick+ue_hdamp, samDict = pltcfg.sampleDict ))
+
+            if sample.nick == "ttbarPlusBBbar":
+                for ue_hdamp, ue_hdamp_file in zip(pltcfg.hdamp_ue_systnames_tt_bb, pltcfg.hdamp_ue_filenames_tt_bb):
+                    systSamples.append(
+                        plotClasses.Sample(sample.name+ue_hdamp, sample.color, ue_hdamp_file, newSel,
+                            sample.nick+ue_hdamp, samDict = pltcfg.sampleDict ))
     return systSamples
 
 def getAllSamples( pltcfg, analysis, samples ):
@@ -48,7 +73,7 @@ def getAllSystNames( pltcfg ):
     return pltcfg.weightSystNames
 
 def getOtherSystNames( pltcfg ):
-    return pltcfg.otherSystNames+pltcfg.hdamp_ue_systnames
+    return pltcfg.otherSystNames
 
 def getWeightSystNames( pltcfg ):
     return pltcfg.weightSystNames
