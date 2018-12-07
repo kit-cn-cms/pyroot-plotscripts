@@ -18,8 +18,9 @@ weightSystNames=["",
                  ]
 
 
-common_weight= "1.0*Weight_GEN_nom*Weight_CSV*Weight_pu69p2*internalBosonWeight_nominal*Weight_MuonSFID*Weight_MuonSFIso*Weight_MuonSFHIP"#*((Weight_MuonSFTrigger>0)*Weight_MuonSFTrigger+(Weight_MuonSFTrigger<=0)*1.)"
-
+common_weight= "1.0*internalSFWeight_notNormed*Weight_GEN_nom*Weight_CSV*Weight_pu69p2*internalBosonWeight_nominal*Weight_MuonSFID*Weight_MuonSFIso*Weight_MuonSFHIP"#*((Weight_MuonSFTrigger>0)*Weight_MuonSFTrigger+(Weight_MuonSFTrigger<=0)*1.)"
+# internalSFWeight_Normed
+# internalSFWeight_notNormed for CR SF not correcting for rate differences also
 
 systWeights=[   "NomWeight:="+common_weight+"*(DoWeights==1)+(DoWeights==0)*1.0",
                 "dummyWeight_CSVLFup:="+common_weight+"*Weight_CSVLFup*(DoWeights==1)+(DoWeights==0)*1.0",
