@@ -1702,6 +1702,16 @@ int ttbarsysthelper::GetTtbarSubProcess(int& GenEvt_I_TTPlusCC,int& GenEvt_I_TTP
     return i;
 }
 
+// struct to store information 1D histograms
+struct Histo1DInfoStruct{
+    std::string identifier;
+    std::string title;
+    int nbins;
+    float xmin;
+    float xmax;
+    TH1* histoptr;
+};
+
 
 
 // Helper struct to fill plots more efficiently
@@ -2141,7 +2151,7 @@ def fillHistoSyst(name,varname,weight,systnames,systweights):
   # Write all individual systnames and systweights in nested vector to use together with function allowing variadic vector size -> speed-up of compilation and less code lines
   text+='     std::vector<structHelpFillHisto> helpWeightVec_' + name + ' = {'
   for sn,sw in zip(systnames,systweights):
-    text+='       { ' + 'h_'+name+sn + ', double(' + varname + '), ' + '('+sw+')*(weight_'+name+')' + '},'
+    text+='       { ' + 'catvarsyst['+'"'+name+sn+'"].histoptr' + ', double(' + varname + '), ' + '('+sw+')*(weight_'+name+')' + '},'
   # finish vector
   text+='     };\n'
   # call helper fill histo function which is defined in the beginning
@@ -2733,30 +2743,45 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 
   # initialize TMVA Readers
   script+=variables.setupTMVAReadersProgram()
-
-  # initialize histograms in all categories and for all systematics
+  
+  script+="std::map<std::string,Histo1DInfoStruct> catvarsyst;\n"
   for c in catnames:
     for plot in plots:
-      if isinstance(plot,plotutils.TwoDimPlot):
-        t=plot.histo.GetTitle()+";"+plot.histo.GetXaxis().GetTitle()+";"+plot.histo.GetYaxis().GetTitle()
-        n=plot.histo.GetName()
-        mxX=plot.histo.GetXaxis().GetXmax()
-        mnX=plot.histo.GetXaxis().GetXmin()
-        nbX=plot.histo.GetNbinsX()
-        mxY=plot.histo.GetYaxis().GetXmax()
-        mnY=plot.histo.GetYaxis().GetXmin()
-        nbY=plot.histo.GetNbinsY()
         for s in systnames:
-          script+=initTwoDimHistoWithProcessNameAndSuffix(c+n+s,nbX,mnX,mxX,nbY,mnY,mxY,t)
-      else:
-        t=plot.histo.GetTitle()
-        n=plot.histo.GetName()
-        mx=plot.histo.GetXaxis().GetXmax()
-        mn=plot.histo.GetXaxis().GetXmin()
-        nb=plot.histo.GetNbinsX()
-        for s in systnames:
-          script+=initHistoWithProcessNameAndSuffix(c+n+s,nb,mn,mx,t)
-
+            t=plot.histo.GetTitle()
+            n=plot.histo.GetName()
+            mx=plot.histo.GetXaxis().GetXmax()
+            mn=plot.histo.GetXaxis().GetXmin()
+            nb=plot.histo.GetNbinsX()
+            script+='catvarsyst["'+c+n+s+'"]={"'+c+n+s+'","'+t+'",'+str(nb)+","+str(mn)+","+str(mx)+",nullptr};"
+  script+="\n"
+  script+="for(auto& obj : catvarsyst){\n"
+  script+="    auto& Histo1DInfo = obj.second;\n"
+  script+="    Histo1DInfo.histoptr = new TH1F((Histo1DInfo.identifier).c_str(),(Histo1DInfo.title).c_str(),Histo1DInfo.nbins,Histo1DInfo.xmin,Histo1DInfo.xmax);\n"
+  script+="}\n"
+  
+  # initialize histograms in all categories and for all systematics
+  #for c in catnames:
+    #for plot in plots:
+      #if isinstance(plot,plotutils.TwoDimPlot):
+        #t=plot.histo.GetTitle()+";"+plot.histo.GetXaxis().GetTitle()+";"+plot.histo.GetYaxis().GetTitle()
+        #n=plot.histo.GetName()
+        #mxX=plot.histo.GetXaxis().GetXmax()
+        #mnX=plot.histo.GetXaxis().GetXmin()
+        #nbX=plot.histo.GetNbinsX()
+        #mxY=plot.histo.GetYaxis().GetXmax()
+        #mnY=plot.histo.GetYaxis().GetXmin()
+        #nbY=plot.histo.GetNbinsY()
+        #for s in systnames:
+          #script+=initTwoDimHistoWithProcessNameAndSuffix(c+n+s,nbX,mnX,mxX,nbY,mnY,mxY,t)
+      #else:
+        #t=plot.histo.GetTitle()
+        #n=plot.histo.GetName()
+        #mx=plot.histo.GetXaxis().GetXmax()
+        #mn=plot.histo.GetXaxis().GetXmin()
+        #nb=plot.histo.GetNbinsX()
+        #for s in systnames:
+          #script+=initHistoWithProcessNameAndSuffix(c+n+s,nb,mn,mx,t)
   # start event loop
   #if useGenWeightNormMap:
     #script+=DefineLHAPDF()
