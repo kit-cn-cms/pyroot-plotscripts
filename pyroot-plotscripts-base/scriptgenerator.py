@@ -3498,7 +3498,7 @@ def renameHistosParallel(infname,sysnames,prune=False):
         newname+=sys
         nsysts+=1
 	
-    if "JES" in thisname or "JER" in thisname or "_ttH_scaleFSR" in thisname or "_ttH_scaleISR" in thisname or "_ttH_FSR" in thisname or "_ttH_ISR" in thisname or "_ttH_hdamp" in thisname or "ttH_ue" in thisname or "_ttHbb_scaleFSR" in thisname or "_ttHbb_scaleISR" in thisname or "_ttHbb_FSR" in thisname or "_ttHbb_ISR" in thisname or "_ttHbb_HDAMP" in thisname or "ttHbb_UE" in thisname or (("CMS_scale" in thisname or "CMS_res_" in thisname) and ("_jUp" in thisname or "_jDown" in thisname or "_j_2017Up" in thisname or "_j_2017" in thisname)) or "_CMS_ttH_QCDScaleFactor" in thisname or "_CMS_ttHbbFROMTREES" in thisname:
+    if "JES" in thisname or "JER" in thisname or "_ttH_scaleFSR" in thisname or "_ttH_scaleISR" in thisname or "_ttH_FSR" in thisname or "_ttH_ISR" in thisname or "_ttH_hdamp" in thisname or "ttH_ue" in thisname or "_ttHbb_scaleFSR" in thisname or "_ttHbb_scaleISR" in thisname or "_ttHbb_FSR" in thisname or "_ttHbb_ISR" in thisname or "_ttHbb_HDAMP" in thisname or "ttHbb_UE" in thisname or (("CMS_scale" in thisname or "CMS_res_" in thisname) and ("_jUp" in thisname or "_jDown" in thisname or "_j_2017Up" in thisname or "_j_2017Down" in thisname)) or "_CMS_ttH_QCDScaleFactor" in thisname or "_CMS_ttHbbFROMTREES" in thisname:
         if nsysts>2:
             thish=outfile.Get(thisname)
             theobjectlist.append(thish)
