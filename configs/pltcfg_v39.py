@@ -7,8 +7,8 @@ pyrootdir = "/".join(filedir.split("/")[:-1])
 sys.path.append(pyrootdir)
 import util.tools.plotClasses as plotClasses
 
-sel_singleel="(N_LooseMuons==0 && N_TightElectrons==1 && (Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1))*(N_Jets>=4 && N_BTagsM>=2)" # need to veto muon events in electron dataset to avoid double countung
-sel_singlemu="(N_LooseElectrons==0 && N_TightMuons==1 && (Triggered_HLT_IsoMu27_vX==1))*(N_Jets>=4 && N_BTagsM>=2)*(Muon_Pt[0]>29.)" # and vice versa...
+sel_singleel="(N_LooseMuons==0 && N_TightElectrons==1 && (Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1))*(N_Jets>=4 && N_BTagsM>=3)" # need to veto muon events in electron dataset to avoid double countung
+sel_singlemu="(N_LooseElectrons==0 && N_TightMuons==1 && (Triggered_HLT_IsoMu27_vX==1))*(N_Jets>=4 && N_BTagsM>=3)*(Muon_Pt[0]>29.)" # and vice versa...
 sel_MET="*(Evt_Pt_MET>20.)"
 #sel_MET="*1.0"
 sel_StrangeMuWeights='*(abs(Weight_scale_variation_muR_0p5_muF_0p5)<=100 && abs(Weight_scale_variation_muR_0p5_muF_1p0)<=100 && abs(Weight_scale_variation_muR_0p5_muF_2p0)<=100 && abs(Weight_scale_variation_muR_1p0_muF_0p5)<=100 && abs(Weight_scale_variation_muR_1p0_muF_1p0)<=100 && abs(Weight_scale_variation_muR_1p0_muF_2p0)<=100 && abs(Weight_scale_variation_muR_2p0_muF_0p5)<=100 && abs(Weight_scale_variation_muR_2p0_muF_1p0)<=100 && abs(Weight_scale_variation_muR_2p0_muF_2p0)<=100)'
@@ -101,7 +101,7 @@ mcWeightAll='41.53'
 mcWeight='41.53*2.0'
 
 # TODO Add Trigger SFs
-mcTriggerWeight='((1.0) * (internalEleTriggerWeight*(N_LooseMuons==0 && N_TightElectrons==1)* (Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1) +internalMuTriggerWeight*(N_LooseElectrons==0 && N_TightMuons==1)*(Muon_Pt[0]>29.) *(Triggered_HLT_IsoMu27_vX==1)))*(N_Jets>=4 && N_BTagsM>=2)'
+mcTriggerWeight='((1.0) * (internalEleTriggerWeight*(N_LooseMuons==0 && N_TightElectrons==1)* (Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1) +internalMuTriggerWeight*(N_LooseElectrons==0 && N_TightMuons==1)*(Muon_Pt[0]>29.) *(Triggered_HLT_IsoMu27_vX==1)))*(N_Jets>=4 && N_BTagsM>=3)'
 #mcTriggerWeight='(1.0)'
 #mcTriggerWeight='((1.0) * (1*(N_LooseMuons==0 && N_TightElectrons==1)* (1) +1*(N_LooseElectrons==0 && N_TightMuons==1) *(1)))*(N_Jets>=4 && N_BTagsM>=2)'
 
@@ -477,61 +477,61 @@ ttHpath=path_karim_new+'/ttHTo*/*nominal*.root'
 
 
 hdamp_ue_systnames_tt_all = [
-    #"_CMS_ttHbb_HDAMPUp", "_CMS_ttHbb_HDAMPDown",
+    "_CMS_ttHbb_HDAMPUp", "_CMS_ttHbb_HDAMPDown",
     "_CMS_ttHbb_UEUp", "_CMS_ttHbb_UEDown"
     ]
 hdamp_ue_filenames_tt_all = [
-    #os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
+    os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
     os.path.join(path_karim_new, "*TuneCP5up*/*nominal*.root"), os.path.join(path_karim_new, "*TuneCP5down*/*nominal*.root")
     ]
 
 
 hdamp_ue_systnames_tt_lf = [
-    #"_CMS_ttHbb_HDAMP_ttbarOtherUp", "_CMS_ttHbb_HDAMP_ttbarOtherDown",
+    "_CMS_ttHbb_HDAMP_ttbarOtherUp", "_CMS_ttHbb_HDAMP_ttbarOtherDown",
     "_CMS_ttHbb_UE_ttbarOtherUp", "_CMS_ttHbb_UE_ttbarOtherDown"
     ]
 hdamp_ue_filenames_tt_lf = [
-    #os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
+    os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
     os.path.join(path_karim_new, "*TuneCP5up*/*nominal*.root"), os.path.join(path_karim_new, "*TuneCP5down*/*nominal*.root")
     ]
 
 
 hdamp_ue_systnames_tt_bb = [
-    #"_CMS_ttHbb_HDAMP_ttbarPlusBBbarUp", "_CMS_ttHbb_HDAMP_ttbarPlusBBbarDown",
+    "_CMS_ttHbb_HDAMP_ttbarPlusBBbarUp", "_CMS_ttHbb_HDAMP_ttbarPlusBBbarDown",
     "_CMS_ttHbb_UE_ttbarPlusBBbarUp", "_CMS_ttHbb_UE_ttbarPlusBBbarDown"
     ]
 hdamp_ue_filenames_tt_bb = [
-    #os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
+    os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
     os.path.join(path_karim_new, "*TuneCP5up*/*nominal*.root"), os.path.join(path_karim_new, "*TuneCP5down*/*nominal*.root")
     ]
 
 
 hdamp_ue_systnames_tt_2b = [
-    #"_CMS_ttHbb_HDAMP_ttbarPlus2BUp", "_CMS_ttHbb_HDAMP_ttbarPlus2BDown",
+    "_CMS_ttHbb_HDAMP_ttbarPlus2BUp", "_CMS_ttHbb_HDAMP_ttbarPlus2BDown",
     "_CMS_ttHbb_UE_ttbarPlus2BUp", "_CMS_ttHbb_UE_ttbarPlus2BDown"
     ]
 hdamp_ue_filenames_tt_2b = [
-    #os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
+    os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
     os.path.join(path_karim_new, "*TuneCP5up*/*nominal*.root"), os.path.join(path_karim_new, "*TuneCP5down*/*nominal*.root")
     ]
 
 
 hdamp_ue_systnames_tt_b = [
-    #"_CMS_ttHbb_HDAMP_ttbarPlusBUp", "_CMS_ttHbb_HDAMP_ttbarPlusBDown",
+    "_CMS_ttHbb_HDAMP_ttbarPlusBUp", "_CMS_ttHbb_HDAMP_ttbarPlusBDown",
     "_CMS_ttHbb_UE_ttbarPlusBUp", "_CMS_ttHbb_UE_ttbarPlusBDown"
     ]
 hdamp_ue_filenames_tt_b = [
-    #os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
+    os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
     os.path.join(path_karim_new, "*TuneCP5up*/*nominal*.root"), os.path.join(path_karim_new, "*TuneCP5down*/*nominal*.root")
     ]
 
 
 hdamp_ue_systnames_tt_cc = [
-    #"_CMS_ttHbb_HDAMP_ttbarPlusCCbarUp", "_CMS_ttHbb_HDAMP_ttbarPlusCCbarDown",
+    "_CMS_ttHbb_HDAMP_ttbarPlusCCbarUp", "_CMS_ttHbb_HDAMP_ttbarPlusCCbarDown",
     "_CMS_ttHbb_UE_ttbarPlusCCbarUp", "_CMS_ttHbb_UE_ttbarPlusCCbarDown"
     ]
 hdamp_ue_filenames_tt_cc = [
-    #os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
+    os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
     os.path.join(path_karim_new, "*TuneCP5up*/*nominal*.root"), os.path.join(path_karim_new, "*TuneCP5down*/*nominal*.root")
     ]
 
@@ -596,15 +596,15 @@ samplesDataControlPlots=[
 
 print "controlsamples"
 samplesControlPlots=[
-    plotClasses.Sample('t#bar{t}H',ROOT.kBlue+1,path_mwassmer+'/ttH*/*nominal*.root',mcWeightAll+sel_MET,'ttH',systsAllSamples+systs_ttH+systs_tt_and_ttH,samDict=sampleDict, readTrees=doReadTrees) ,     
+    plotClasses.Sample('t#bar{t}H',ROOT.kBlue+1,path_mwassmer+'/ttH*/*nominal*.root',mcWeightAll+sel_MET,'ttH',systsAllSamples,samDict=sampleDict, readTrees=doReadTrees) ,     
 
-    plotClasses.Sample('t#bar{t}+lf',ROOT.kRed-7,ttbarPathS,mcWeightAll+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)'+sel_MET+sel_StrangeMuWeights,'ttbarOther',systsAllSamples+systs_tt_all+systs_tt_lf+systs_tt_and_ttH+hdamp_ue_filenames_tt_all+hdamp_ue_filenames_tt_lf,samDict=sampleDict, readTrees=doReadTrees),
-    plotClasses.Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,ttbarPathS,mcWeightAll+'*(GenEvt_I_TTPlusCC==1)'+sel_MET+sel_StrangeMuWeights,'ttbarPlusCCbar',systsAllSamples+systs_tt_all+systs_tt_cc+systs_tt_and_ttH+hdamp_ue_filenames_tt_all+hdamp_ue_filenames_tt_cc,samDict=sampleDict, readTrees=doReadTrees),
-    plotClasses.Sample('t#bar{t}+b',ROOT.kRed-2,ttbarPathS,mcWeightAll+'*(GenEvt_I_TTPlusBB==1)'+sel_MET+sel_StrangeMuWeights,'ttbarPlusB',systsAllSamples+systs_tt_all+systs_tt_b+systs_tt_and_ttH+hdamp_ue_filenames_tt_all+hdamp_ue_filenames_tt_b,samDict=sampleDict, readTrees=doReadTrees),
-    plotClasses.Sample('t#bar{t}+2b',ROOT.kRed+2,ttbarPathS,mcWeightAll+'*(GenEvt_I_TTPlusBB==2)'+sel_MET+sel_StrangeMuWeights,'ttbarPlus2B',systsAllSamples+systs_tt_all+systs_tt_2b+systs_tt_and_ttH+hdamp_ue_filenames_tt_all+hdamp_ue_filenames_tt_2b,samDict=sampleDict, readTrees=doReadTrees),
-    plotClasses.Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,ttbarPathS,mcWeightAll+'*(GenEvt_I_TTPlusBB==3)'+sel_MET+sel_StrangeMuWeights,'ttbarPlusBBbar',systsAllSamples+systs_tt_all+systs_tt_bb+systs_tt_and_ttH+hdamp_ue_filenames_tt_all+hdamp_ue_filenames_tt_bb,samDict=sampleDict, readTrees=doReadTrees), 
+    plotClasses.Sample('t#bar{t}+lf',ROOT.kRed-7,ttbarPathS,mcWeightAll+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)'+sel_MET+sel_StrangeMuWeights,'ttbarOther',systsAllSamples+systs_tt_all+systs_tt_lf,samDict=sampleDict, readTrees=doReadTrees),
+    plotClasses.Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,ttbarPathS,mcWeightAll+'*(GenEvt_I_TTPlusCC==1)'+sel_MET+sel_StrangeMuWeights,'ttbarPlusCCbar',systsAllSamples+systs_tt_all+systs_tt_cc,sammDict=sampleDict, readTrees=doReadTrees),
+    plotClasses.Sample('t#bar{t}+b',ROOT.kRed-2,ttbarPathS,mcWeightAll+'*(GenEvt_I_TTPlusBB==1)'+sel_MET+sel_StrangeMuWeights,'ttbarPlusB',systsAllSamples+systs_tt_all+systs_tt_b,samDict=sampleDict, readTrees=doReadTrees),
+    plotClasses.Sample('t#bar{t}+2b',ROOT.kRed+2,ttbarPathS,mcWeightAll+'*(GenEvt_I_TTPlusBB==2)'+sel_MET+sel_StrangeMuWeights,'ttbarPlus2B',systsAllSamples+systs_tt_all+systs_tt_2b,samDict=sampleDict, readTrees=doReadTrees),
+    plotClasses.Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,ttbarPathS,mcWeightAll+'*(GenEvt_I_TTPlusBB==3)'+sel_MET+sel_StrangeMuWeights,'ttbarPlusBBbar',systsAllSamples+systs_tt_all+systs_tt_bb,samDict=sampleDict, readTrees=doReadTrees), 
 
-    plotClasses.Sample('Single Top',ROOT.kMagenta,stpath,mcWeightAll+sel_MET,'singlet',systsAllSamples,samDict=sampleDict, readTrees=doReadTrees) , 
+    plotClasses.Sample('Single Top',ROOT.kMagenta,stpath,mcWeightAll+sel_MET,'SingleTop',systsAllSamples,samDict=sampleDict, readTrees=doReadTrees) , 
     plotClasses.Sample('V+jets',ROOT.kGreen-3,VJetsPathS,mcWeightAll+sel_MET,'Vjets',systsAllSamples,samDict=sampleDict, readTrees=doReadTrees) , 
     plotClasses.Sample('t#bar{t}+V',ROOT.kBlue-10,ttVPathS,mcWeightAll+sel_MET,'ttV',systsAllSamples,samDict=sampleDict, readTrees=doReadTrees),         
     plotClasses.Sample('Diboson',ROOT.kAzure+2,dibosonPathS,mcWeightAll+sel_MET,'diboson',systsAllSamples,samDict=sampleDict, readTrees=doReadTrees) , 
