@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttHLimits_2018_v1'
+    name = 'ttHControl_2018_v1'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -52,10 +52,10 @@ def main(pyrootdir, argv):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # name of the csv files used in configdata folder
-    configDataBaseName = "limitsttH18"
+    configDataBaseName = "controlPlotsttH18"
 
     # name of plotconfig
-    pltcfgName = "v39"
+    pltcfgName = "v40"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -71,7 +71,7 @@ def main(pyrootdir, argv):
         # options to activate parts of the script
         "optimizedRebinning":   False, # e.g. "SoverB", "Significance"
         "haddFromWildcard":     True,
-        "makeDataCards":        True,
+        "makeDataCards":        False,
         "addData":              True,  # adding real data 
         "singleExecute":        False,  # for non parallel drawing
         "drawParallel":         True,
@@ -88,11 +88,9 @@ def main(pyrootdir, argv):
         "skipRenaming":         False,
         "skipDatacards":        False}
 
-    #plotJson = "/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_latestAndGreatest.json"
     plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttH_2018.json"
     plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018",True]] 
     memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
-    plotInterfaces = [pyrootdir+"/util/dNNInterfaces/dNNInterface_Keras_cool.py"]
 
     # datacardmaker
     datacardmaker = "mk_datacard_JESTest13TeVPara"
@@ -170,7 +168,7 @@ def main(pyrootdir, argv):
     # loading samples and samples data
     # ========================================================
     '''
-    configData.initSamples()
+    configData.initSamples(scriptType = "ControlPlots")
     
 
     print '''
@@ -199,7 +197,7 @@ def main(pyrootdir, argv):
             pP.setJson(plotJson)
             pP.setDataBases(plotDataBases)
             pP.setMEMDataBase(memDataBase)
-            pP.setAddInterfaces(plotInterfaces)
+            #pP.setAddInterfaces(plotInterfaces)
             pP.setCatNames([''])
             pP.setCatSelections(['1.'])
             pP.setMaxEvts(350000)
