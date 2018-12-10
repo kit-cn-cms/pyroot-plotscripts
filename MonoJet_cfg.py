@@ -155,12 +155,12 @@ WBosonWeights=[
 MCWeight='35.91823'
 
 path_ntuples = "/nfs/dust/cms/user/mwassmer/DarkMatter/ntuples_controlregion"
-path_ntuples_seb = "/nfs/dust/cms/user/swieland/Darkmatter/ntuples_michaelData"
+#path_ntuples_seb = "/nfs/dust/cms/user/swieland/Darkmatter/ntuples_michaelData"
 
 sampleDict=SampleDictionary()
 sampleDict.doPrintout()
 
-sel_MET="*((Triggered_HLT_PFMET170_X==1)||(Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_X==1))*((N_LooseMuons==0)*(N_LooseElectrons==0)*(N_LooseTaus==0))"
+sel_MET="*(((Triggered_HLT_PFMET170_X==1)||(Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_X==1))&&((N_LooseMuons==0)&&(N_LooseElectrons==0)&&(N_LooseTaus==0))&&(CaloMET_PFMET_ratio<0.5)&&(DeltaPhi_Jet_MET[0]>1.)&&(((N_Jets>1)&&(DeltaPhi_Jet_MET[1]>0.5))||(N_Jets<2))&&(((N_Jets>2)&&(DeltaPhi_Jet_MET[2]>0.5))||(N_Jets<3))&&(((N_Jets>3)&&(DeltaPhi_Jet_MET[3]>0.5))||(N_Jets<4)))"
 
 """
 Triggered_HLT_EcalHT800
@@ -209,12 +209,12 @@ samples_background = [
                         #Sample('W(l#nu)+jets p_{T,W}=400-600',ROOT.kGreen+4,path_ntuples+'/WJetsToLNu_Pt-400To600*/*nominal*.root',"1.*"+MCWeight+sel_MET,'w_lnu_jets_c',weightSystNames+otherSystNames,samDict=sampleDict),
                         #Sample('W(l#nu)+jets p_{T,W}=600-Inf',ROOT.kGreen-6,path_ntuples+'/WJetsToLNu_Pt-600ToInf*/*nominal*.root',"1.*"+MCWeight+sel_MET,'w_lnu_jets_d',weightSystNames+otherSystNames,samDict=sampleDict),
                         
-                        Sample('Diboson',ROOT.kViolet,path_ntuples+'/??_TuneCUETP8M1_13TeV-pythia8/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'diboson',weightSystNames[:-6]+otherSystNames,samDict=sampleDict),
+                        Sample('Diboson',ROOT.kOrange,path_ntuples+'/??_TuneCUETP8M1_13TeV-pythia8/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'diboson',weightSystNames[:-6]+otherSystNames,samDict=sampleDict),
                         Sample('Single Top',ROOT.kViolet-1,path_ntuples+'/ST_*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'singletop',weightSystNames[:-2]+otherSystNames,samDict=sampleDict),
-                        Sample('t#bar{t}',ROOT.kViolet-2,path_ntuples+'/TT_Tune*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'ttbar',weightSystNames[:-2]+otherSystNames,samDict=sampleDict),
-                        Sample('Z(ll)+jets',ROOT.kViolet-7,path_ntuples+'/DYJetsToLL*amc*/*nominal*.root',"1.*0.971"+"*"+MCWeight+sel_MET,'z_ll_jets',weightSystNames+BosonSystNames+ZllBosonSystNames+otherSystNames,samDict=sampleDict),
-                        Sample('QCD',ROOT.kViolet+3,path_ntuples+'/QCD*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'qcd',weightSystNames[:-2]+otherSystNames,samDict=sampleDict),
-                        Sample('#gamma +jets',ROOT.kViolet+7,path_ntuples+'/GJets*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'gamma_jets',weightSystNames[:-2]+otherSystNames,samDict=sampleDict)
+                        Sample('t#bar{t}',ROOT.kViolet-7,path_ntuples+'/TT_Tune*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'ttbar',weightSystNames[:-2]+otherSystNames,samDict=sampleDict),
+                        Sample('Z(ll)+jets',ROOT.kCyan,path_ntuples+'/DYJetsToLL*amc*/*nominal*.root',"1.*0.971"+"*"+MCWeight+sel_MET,'z_ll_jets',weightSystNames+BosonSystNames+ZllBosonSystNames+otherSystNames,samDict=sampleDict),
+                        #Sample('QCD',ROOT.kGray,path_ntuples+'/QCD*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'qcd',weightSystNames[:-2]+otherSystNames,samDict=sampleDict),
+                        Sample('#gamma +jets',ROOT.kYellow+2,path_ntuples+'/GJets*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'gamma_jets',weightSystNames[:-2]+otherSystNames,samDict=sampleDict)
                         ]
 """
 samples_signal = [
@@ -253,4 +253,3 @@ for i in range(len(signal_samples_names)):
     
 #print samples_signal
 #print signal_samples_names
-
