@@ -3,7 +3,6 @@ import json
 
 # local imports
 import plotClasses
-import PDFutils
 ROOT.gROOT.SetBatch(True)
 
 # -- generating the head of the script ------------------------------------------------------------
@@ -144,62 +143,6 @@ def startLoop(basepath):
 # -------------------------------------------------------------------------------------------------
 
 
-
-
-
-# -- handle MEPDF csv file ------------------------------------------------------------------------
-class initMEPDF:
-    def __init__(self, csv_file):
-        self.weight_list = PDFutils.GetMEPDFadditionalVariablesList(csv_file)
-        self.pdf_weights = PDFutils.GetPDFadditionalVariablesList(csv_file)
-
-    def writeCode():
-        code = ""
-        code += self.ResetMEPDFNormFactors()
-        code += self.RelateMEPDFMapToNormFactor()
-        code += self.PutPDFWeightsinVector()
-        code += self.UseLHAPDF()
-        return code
-
-    def ResetMEPDFNormFactors(self):
-        code=''
-        for weight in self.weight_list:
-            code+='internalNormFactor_'+weight+'=0.0;\n'
-        return code
-
-    def RelateMEPDFMapToNormFactor(self):
-        code=''
-        code+="""
-        TString currentRelevantSampleNameForMEPDF=sampleDataBaseIdentifiers[currentfilename];
-        //TString translatedCurrentRelevantSampleNameForMEPDF=sampleTranslationMapCPP[currentRelevantSampleNameForMEPDF];
-        //std::cout<<"MEPDF relation "<<currentfilename<<" "<<currentRelevantSampleNameForMEPDF<<" "<<translatedCurrentRelevantSampleNameForMEPDF<<std::endl;
-        """
-        #code+='if(MEPDF_Norm_Map.find('+'translatedCurrentRelevantSampleNameForMEPDF'+'+"_'+self.weight_list[0]+'")!=MEPDF_Norm_Map.end()){;\n'
-        for weight in self.weight_list:
-            #code+='internalNormFactor_'+weight+'='+'MEPDF_Norm_Map['+'translatedCurrentRelevantSampleNameForMEPDF'+'+"_'+weight+'"];\n'
-            code+="internalNormFactor_"+weight+"=1.0;\n"
-        code+='}\n'
-        code+='//else{std::cout<<"did not find pdf weights in map "<<translatedCurrentRelevantSampleNameForMEPDF<<std::endl;}\n'
-        code+='//std::cout<<"first internal pdf weight "<<'+'translatedCurrentRelevantSampleNameForMEPDF'+'+"_'+self.weight_list[0]+'" <<" "<< internalNormFactor_'+self.weight_list[0]+'<<std::endl;\n'
-        return code
-
-    def PutPDFWeightsinVector(self):
-        code='std::vector<double> pdf_weights;\n'
-        code+='pdf_weights.push_back(1.);\n'
-        for weight in self.pdf_weights:
-            code+='pdf_weights.push_back(internalNormFactor_'+weight+'*'+weight+');\n'
-        return code
-
-    def UseLHAPDF():
-        code=''
-        #code+='LHAPDF::PDFSet pdfSet("NNPDF30_nlo_as_0118");\n'
-        code+='const LHAPDF::PDFUncertainty pdfUnc = pdfSet.uncertainty(pdf_weights, 68.);\n'
-        code+='internalPDFweightUp   = pdfUnc.central + pdfUnc.errplus;\n'
-        code+='internalPDFweightDown = pdfUnc.central - pdfUnc.errminus;\n'
-        code+='internalPDFweight = pdfUnc.central;\n'
-        code+='//std::cout<<"result pdf weights: central, down, up "<<pdfUnc.central<<" "<<internalPDFweightDown<< " "<<internalPDFweightUp<<std::endl;\n'
-        return code
-# -------------------------------------------------------------------------------------------------
 
 
 
@@ -528,27 +471,3 @@ int main(){
 
 
 
-
-# -- functions dealing with MEPDFcsv file ---------------------------------------------------------
-def AddMEandPDFNormalizationsMap(csv_file):
-    mydict = PDFutils.ReadMEandPDFNormalizations(csv_file)
-    code='std::map<TString,float> MEPDF_Norm_Map;\n'
-    for key in mydict:
-        code+='MEPDF_Norm_Map["'+key[0]+'_'+key[1]+'"]='+mydict[key]+';\n'
-    return code
-
-
-def GetMEPDFVetoList(csv_file):
-    weightList = PDFutils.GetMEPDFadditionalVariablesList(csv_file)
-    weightVetoList = []
-    for weight in weightList:
-        weightVetoList.append('internalNormFactor_'+weight)
-    return weightVetoList
-
-def DeclareMEPDFNormFactors(csv_file):
-    code=''
-    weight_list=PDFutils.GetMEPDFadditionalVariablesList(csv_file)
-    for weight in weight_list:
-        code+='float internalNormFactor_'+weight+'=0.0;\n'
-    return code
-# -------------------------------------------------------------------------------------------------
