@@ -656,8 +656,9 @@ def main(argv):
     #allsamples=samples+systsamples
     #allsystnames=weightSystNames+otherSystNames+PSSystNames
     allsamples=samples
-    allsystnames=weightSystNames
-
+    allsystnames=weightSystNames+otherSystNames
+    print allsystnames
+    exit(0)
 
     # plot everything, except during drawParallel step
     # Create file for data cards
@@ -708,9 +709,9 @@ def main(argv):
               print "renamed file already exists"
             else:
               if type(THEoutputpath)==str:
-                renameHistos(outputpath,renamedPath,allsystnames,checkBins=True,prune=False,Epsilon=0.0)
+                renameHistos(outputpath,renamedPath,allsystnames,checkBins=True,prune=True,Epsilon=0.0)
               else:
-                renameHistos(THEoutputpath[1:],renamedPath,allsystnames,checkBins=True,prune=False,Epsilon=0.0)
+                renameHistos(THEoutputpath[1:],renamedPath,allsystnames,checkBins=True,prune=True,Epsilon=0.0)
 
             #addRealDataAllHistos(renamedPath,[s.nick for s in samples_data],discriminatorPlots,forceOverwrite=True) # use this version for all histograms even if they do not follow the cat_disc_var naming scheme
             #addRealData(renamedPath,[s.nick for s in samples_data],binlabels,discrname)

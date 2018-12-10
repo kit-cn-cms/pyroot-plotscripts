@@ -461,57 +461,57 @@ ttHpath=path_karim_new+'/ttHTo*/*nominal*.root'
 
 
 hdamp_ue_systnames_tt_all = [
-  "_CMS_ttHbb_HDAMPUp", "_CMS_ttHbb_HDAMPDown",
-  "_CMS_ttHbb_UEUp", "_CMS_ttHbb_UEDown"
+  #"_CMS_ttHbb_HDAMPUp", "_CMS_ttHbb_HDAMPDown",
+  #"_CMS_ttHbb_UEUp", "_CMS_ttHbb_UEDown"
 ]
 hdamp_ue_filenames_tt_all = [
-  os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
-  os.path.join(path_karim_new, "*TuneCP5up*/*nominal*.root"), os.path.join(path_karim_new, "*TuneCP5down*/*nominal*.root")
+  #os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
+  #os.path.join(path_karim_new, "*TuneCP5up*/*nominal*.root"), os.path.join(path_karim_new, "*TuneCP5down*/*nominal*.root")
 ]
 
 
 hdamp_ue_systnames_tt_lf = [
-  "_CMS_ttHbb_HDAMP_ttbarOtherUp", "_CMS_ttHbb_HDAMP_ttbarOtherDown",
+  #"_CMS_ttHbb_HDAMP_ttbarOtherUp", "_CMS_ttHbb_HDAMP_ttbarOtherDown",
   "_CMS_ttHbb_UE_ttbarOtherUp", "_CMS_ttHbb_UE_ttbarOtherDown"
 ]
 hdamp_ue_filenames_tt_lf = [
-  os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
+  #os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
   os.path.join(path_karim_new, "*TuneCP5up*/*nominal*.root"), os.path.join(path_karim_new, "*TuneCP5down*/*nominal*.root")
 ]
 
 hdamp_ue_systnames_tt_bb = [
-  "_CMS_ttHbb_HDAMP_ttbarPlusBBbarUp", "_CMS_ttHbb_HDAMP_ttbarPlusBBbarDown",
+  #"_CMS_ttHbb_HDAMP_ttbarPlusBBbarUp", "_CMS_ttHbb_HDAMP_ttbarPlusBBbarDown",
   "_CMS_ttHbb_UE_ttbarPlusBBbarUp", "_CMS_ttHbb_UE_ttbarPlusBBbarDown"
 ]
 hdamp_ue_filenames_tt_bb = [
-  os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
+  #os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
   os.path.join(path_karim_new, "*TuneCP5up*/*nominal*.root"), os.path.join(path_karim_new, "*TuneCP5down*/*nominal*.root")
 ]
 
 hdamp_ue_systnames_tt_2b = [
-  "_CMS_ttHbb_HDAMP_ttbarPlus2BUp", "_CMS_ttHbb_HDAMP_ttbarPlus2BDown",
+  #"_CMS_ttHbb_HDAMP_ttbarPlus2BUp", "_CMS_ttHbb_HDAMP_ttbarPlus2BDown",
   "_CMS_ttHbb_UE_ttbarPlus2BUp", "_CMS_ttHbb_UE_ttbarPlus2BDown"
 ]
 hdamp_ue_filenames_tt_2b = [
-  os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
+  #os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
   os.path.join(path_karim_new, "*TuneCP5up*/*nominal*.root"), os.path.join(path_karim_new, "*TuneCP5down*/*nominal*.root")
 ]
 
 hdamp_ue_systnames_tt_b = [
-  "_CMS_ttHbb_HDAMP_ttbarPlusBUp", "_CMS_ttHbb_HDAMP_ttbarPlusBDown",
+  #"_CMS_ttHbb_HDAMP_ttbarPlusBUp", "_CMS_ttHbb_HDAMP_ttbarPlusBDown",
   "_CMS_ttHbb_UE_ttbarPlusBUp", "_CMS_ttHbb_UE_ttbarPlusBDown"
 ]
 hdamp_ue_filenames_tt_b = [
-  os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
+  #os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
   os.path.join(path_karim_new, "*TuneCP5up*/*nominal*.root"), os.path.join(path_karim_new, "*TuneCP5down*/*nominal*.root")
 ]
 
 hdamp_ue_systnames_tt_cc = [
-  "_CMS_ttHbb_HDAMP_ttbarPlusCCbarUp", "_CMS_ttHbb_HDAMP_ttbarPlusCCbarDown",
+  #"_CMS_ttHbb_HDAMP_ttbarPlusCCbarUp", "_CMS_ttHbb_HDAMP_ttbarPlusCCbarDown",
   "_CMS_ttHbb_UE_ttbarPlusCCbarUp", "_CMS_ttHbb_UE_ttbarPlusCCbarDown"
 ]
 hdamp_ue_filenames_tt_cc = [
-  os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
+  #os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
   os.path.join(path_karim_new, "*TuneCP5up*/*nominal*.root"), os.path.join(path_karim_new, "*TuneCP5down*/*nominal*.root")
 ]
 
