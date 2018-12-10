@@ -2901,11 +2901,11 @@ def startLoop():
   
   internalBosonWeight_muFUp = internalBosonHelper->GetScaleFactorZll(Z_Pt, "muFUp");
   internalBosonWeight_muFDown = internalBosonHelper->GetScaleFactorZll(Z_Pt, "muFDown");
+  }
+
 
   internalSFWeight_Normed = internalCR_ScalefactorHelper->GetScaleFactorZll(Hadr_Recoil_Pt, "Normed");
-  internalSFWeight_notNormed = internalCR_ScalefactorHelper->GetScaleFactorZll(Hadr_Recoil_Pt, "notNormed");
-  }
-  
+  internalSFWeight_notNormed = internalCR_ScalefactorHelper->GetScaleFactorZll(Hadr_Recoil_Pt, "notNormed");  
   
   totalTimeCalculateSFs+=timerCalculateSFs->RealTime();
 
