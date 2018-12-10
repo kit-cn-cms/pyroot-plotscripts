@@ -78,14 +78,17 @@ class Variable():
     if isarray:
       if t=='F':
         text='  float* '+var+' = new float[100];'
+        text+='   std::fill_n ('+var+',100,-999);'
         for i in range(0,100):
           text+='\nfloatMap["' + var + '_' + str(i+1) + '"] = &' + var + '[' + str(i) + ']' + ';'
       elif t=='I':
         text='  Long64_t* '+var+' = new Long64_t[100];'
+        text+='   std::fill_n ('+var+',100,-999);'
         for i in range(0,100):
           text+='\nintMap["' + var + '_' + str(i+1) + '"] = &' + var + '[' + str(i) + ']' + ';'
       elif t=='L':
         text='  Long64_t* '+var+' = new Long64_t[100];'
+        text+='   std::fill_n ('+var+',100,-999);'
         for i in range(0,100):
           text+='\nlongMap["' + var + '_' + str(i+1) + '"] = &' + var + '[' + str(i) + ']' + ';'    
       else: "UNKNOWN TYPE",t
