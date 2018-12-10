@@ -31,10 +31,10 @@ hzgSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==22)
 # TODO Add CSV SFs and uncertainties
 weightSystNames=[
                     "",
-                   "_CMS_btag_lfUp","_CMS_btag_lfDown","_CMS_btag_hfUp","_CMS_btag_hfDown",
-                   "_CMS_btag_hfstats1Up","_CMS_btag_hfstats1Down","_CMS_btag_lfstats1Up","_CMS_btag_lfstats1Down",
-                   "_CMS_btag_hfstats2Up","_CMS_btag_hfstats2Down","_CMS_btag_lfstats2Up","_CMS_btag_lfstats2Down",
-                   "_CMS_btag_cferr1Up","_CMS_btag_cferr1Down","_CMS_btag_cferr2Up","_CMS_btag_cferr2Down",
+                   "_CMS_btag_lf_2017Up","_CMS_btag_lf_2017Down","_CMS_btag_hf_2017Up","_CMS_btag_hf_2017Down",
+                   "_CMS_btag_hfstats1_2017Up","_CMS_btag_hfstats1_2017Down","_CMS_btag_lfstats1_2017Up","_CMS_btag_lfstats1_2017Down",
+                   "_CMS_btag_hfstats2_2017Up","_CMS_btag_hfstats2_2017Down","_CMS_btag_lfstats2_2017Up","_CMS_btag_lfstats2_2017Down",
+                   "_CMS_btag_cferr1_2017Up","_CMS_btag_cferr1_2017Down","_CMS_btag_cferr2_2017Up","_CMS_btag_cferr2_2017Down",
                   #"_CMS_effTrigger_eUp","_CMS_effTrigger_eDown",  
                    #"_CMS_effTrigger_mUp","_CMS_effTrigger_mDown",  
                    #"_CMS_eff_eUp","_CMS_eff_eDown", 
@@ -44,45 +44,45 @@ weightSystNames=[
 
 systsAllSamples=[
                     "",
-                   "_CMS_btag_lfUp","_CMS_btag_lfDown","_CMS_btag_hfUp","_CMS_btag_hfDown",
-                   "_CMS_btag_hfstats1Up","_CMS_btag_hfstats1Down","_CMS_btag_lfstats1Up","_CMS_btag_lfstats1Down",
-                   "_CMS_btag_hfstats2Up","_CMS_btag_hfstats2Down","_CMS_btag_lfstats2Up","_CMS_btag_lfstats2Down",
-                   "_CMS_btag_cferr1Up","_CMS_btag_cferr1Down","_CMS_btag_cferr2Up","_CMS_btag_cferr2Down",
+                   "_CMS_btag_lf_2017Up","_CMS_btag_lf_2017Down","_CMS_btag_hf_2017Up","_CMS_btag_hf_2017Down",
+                   "_CMS_btag_hfstats1_2017Up","_CMS_btag_hfstats1_2017Down","_CMS_btag_lfstats1_2017Up","_CMS_btag_lfstats1_2017Down",
+                   "_CMS_btag_hfstats2_2017Up","_CMS_btag_hfstats2_2017Down","_CMS_btag_lfstats2_2017Up","_CMS_btag_lfstats2_2017Down",
+                   "_CMS_btag_cferr1_2017Up","_CMS_btag_cferr1_2017Down","_CMS_btag_cferr2_2017Up","_CMS_btag_cferr2_2017Down",
                   #"_CMS_effTrigger_eUp","_CMS_effTrigger_eDown",  
                    #"_CMS_effTrigger_mUp","_CMS_effTrigger_mDown",  
                     #"_CMS_eff_eUp","_CMS_eff_eDown", 
                    #"_CMS_eff_mUp","_CMS_eff_mDown",  
                    "_CMS_ttHbb_PUUp","_CMS_ttHbb_PUDown",
 
-    #"_CMS_scale_jUp","_CMS_scale_jDown",
-    "_CMS_res_jUp","_CMS_res_jDown",
-    "_CMS_scaleAbsoluteStat_jUp","_CMS_scaleAbsoluteStat_jDown",
-    "_CMS_scaleAbsoluteScale_jUp","_CMS_scaleAbsoluteScale_jDown",
-    ##"_CMS_scaleAbsoluteFlavMap_jUp","_CMS_scaleAbsoluteFlavMap_jDown",
-    "_CMS_scaleAbsoluteMPFBias_jUp","_CMS_scaleAbsoluteMPFBias_jDown",
-    "_CMS_scaleFragmentation_jUp","_CMS_scaleFragmentation_jDown",
-    "_CMS_scaleSinglePionECAL_jUp","_CMS_scaleSinglePionECAL_jDown",
-    "_CMS_scaleSinglePionHCAL_jUp","_CMS_scaleSinglePionHCAL_jDown",
-    "_CMS_scaleFlavorQCD_jUp","_CMS_scaleFlavorQCD_jDown",
-    "_CMS_scaleTimePtEta_jUp","_CMS_scaleTimePtEta_jDown",
-    "_CMS_scaleRelativeJEREC1_jUp","_CMS_scaleRelativeJEREC1_jDown",
-    "_CMS_scaleRelativeJEREC2_jUp","_CMS_scaleRelativeJEREC2_jDown",
-    "_CMS_scaleRelativeJERHF_jUp","_CMS_scaleRelativeJERHF_jDown",
-    "_CMS_scaleRelativePtBB_jUp","_CMS_scaleRelativePtBB_jDown",
-    "_CMS_scaleRelativePtEC1_jUp","_CMS_scaleRelativePtEC1_jDown",
-    "_CMS_scaleRelativePtEC2_jUp","_CMS_scaleRelativePtEC2_jDown",
-    "_CMS_scaleRelativePtHF_jUp","_CMS_scaleRelativePtHF_jDown",
-    "_CMS_scaleRelativeBal_jUp","_CMS_scaleRelativeBal_jDown",
-    "_CMS_scaleRelativeFSR_jUp","_CMS_scaleRelativeFSR_jDown",
-    "_CMS_scaleRelativeStatFSR_jUp","_CMS_scaleRelativeStatFSR_jDown",
-    "_CMS_scaleRelativeStatEC_jUp","_CMS_scaleRelativeStatEC_jDown",
-    "_CMS_scaleRelativeStatHF_jUp","_CMS_scaleRelativeStatHF_jDown",
-    "_CMS_scalePileUpDataMC_jUp","_CMS_scalePileUpDataMC_jDown",
-    "_CMS_scalePileUpPtRef_jUp","_CMS_scalePileUpPtRef_jDown",
-    "_CMS_scalePileUpPtBB_jUp","_CMS_scalePileUpPtBB_jDown",
-    "_CMS_scalePileUpPtEC1_jUp","_CMS_scalePileUpPtEC1_jDown",
-    "_CMS_scalePileUpPtEC2_jUp","_CMS_scalePileUpPtEC2_jDown",
-    "_CMS_scalePileUpPtHF_jUp","_CMS_scalePileUpPtHF_jDown",
+    #"_CMS_scale_j_2017Up","_CMS_scale_j_2017Down",
+    "_CMS_res_j_2017Up","_CMS_res_j_2017Down",
+    "_CMS_scaleAbsoluteStat_j_2017Up","_CMS_scaleAbsoluteStat_j_2017Down",
+    "_CMS_scaleAbsoluteScale_j_2017Up","_CMS_scaleAbsoluteScale_j_2017Down",
+    ##"_CMS_scaleAbsoluteFlavMap_j_2017Up","_CMS_scaleAbsoluteFlavMap_j_2017Down",
+    "_CMS_scaleAbsoluteMPFBias_j_2017Up","_CMS_scaleAbsoluteMPFBias_j_2017Down",
+    "_CMS_scaleFragmentation_j_2017Up","_CMS_scaleFragmentation_j_2017Down",
+    "_CMS_scaleSinglePionECAL_j_2017Up","_CMS_scaleSinglePionECAL_j_2017Down",
+    "_CMS_scaleSinglePionHCAL_j_2017Up","_CMS_scaleSinglePionHCAL_j_2017Down",
+    "_CMS_scaleFlavorQCD_j_2017Up","_CMS_scaleFlavorQCD_j_2017Down",
+    "_CMS_scaleTimePtEta_j_2017Up","_CMS_scaleTimePtEta_j_2017Down",
+    "_CMS_scaleRelativeJEREC1_j_2017Up","_CMS_scaleRelativeJEREC1_j_2017Down",
+    "_CMS_scaleRelativeJEREC2_j_2017Up","_CMS_scaleRelativeJEREC2_j_2017Down",
+    "_CMS_scaleRelativeJERHF_j_2017Up","_CMS_scaleRelativeJERHF_j_2017Down",
+    "_CMS_scaleRelativePtBB_j_2017Up","_CMS_scaleRelativePtBB_j_2017Down",
+    "_CMS_scaleRelativePtEC1_j_2017Up","_CMS_scaleRelativePtEC1_j_2017Down",
+    "_CMS_scaleRelativePtEC2_j_2017Up","_CMS_scaleRelativePtEC2_j_2017Down",
+    "_CMS_scaleRelativePtHF_j_2017Up","_CMS_scaleRelativePtHF_j_2017Down",
+    "_CMS_scaleRelativeBal_j_2017Up","_CMS_scaleRelativeBal_j_2017Down",
+    "_CMS_scaleRelativeFSR_j_2017Up","_CMS_scaleRelativeFSR_j_2017Down",
+    "_CMS_scaleRelativeStatFSR_j_2017Up","_CMS_scaleRelativeStatFSR_j_2017Down",
+    "_CMS_scaleRelativeStatEC_j_2017Up","_CMS_scaleRelativeStatEC_j_2017Down",
+    "_CMS_scaleRelativeStatHF_j_2017Up","_CMS_scaleRelativeStatHF_j_2017Down",
+    "_CMS_scalePileUpDataMC_j_2017Up","_CMS_scalePileUpDataMC_j_2017Down",
+    "_CMS_scalePileUpPtRef_j_2017Up","_CMS_scalePileUpPtRef_j_2017Down",
+    "_CMS_scalePileUpPtBB_j_2017Up","_CMS_scalePileUpPtBB_j_2017Down",
+    "_CMS_scalePileUpPtEC1_j_2017Up","_CMS_scalePileUpPtEC1_j_2017Down",
+    "_CMS_scalePileUpPtEC2_j_2017Up","_CMS_scalePileUpPtEC2_j_2017Down",
+    "_CMS_scalePileUpPtHF_j_2017Up","_CMS_scalePileUpPtHF_j_2017Down",
 ]
 
 systs_tt_all= [
@@ -171,8 +171,8 @@ systs_tt_and_ttH=[
   "_CMS_ttHbb_PDFUp","_CMS_ttHbb_PDFDown",
   "_CMS_ttHbb_scaleMuRUp","_CMS_ttHbb_scaleMuRDown",
   "_CMS_ttHbb_scaleMuFUp","_CMS_ttHbb_scaleMuFDown",
-  "_CMS_ttHbb_ISRUp","_CMS_ttHbb_ISRDown",
-  "_CMS_ttHbb_FSRUp","_CMS_ttHbb_FSRDown",
+  #"_CMS_ttHbb_ISRUp","_CMS_ttHbb_ISRDown",
+  #"_CMS_ttHbb_FSRUp","_CMS_ttHbb_FSRDown",
   
   
   ]
@@ -187,30 +187,30 @@ systs_tt_and_ttH_weights=[
                     "dummyWeight_CMS_ttH_scaleMuFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_2p0*internalNormFactor_weight_scale_variation_muR_1p0_muF_2p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     "dummyWeight_CMS_ttH_scaleMuFDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_0p5*internalNormFactor_weight_scale_variation_muR_1p0_muF_0p5*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
-                    "dummyWeight_CMS_ttH_ISRUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_6*1.0*(DoWeights==1)+(DoWeights==0)*1.0",                    "dummyWeight_CMS_ttH_ISRDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_8*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ISRUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_6*1.0*(DoWeights==1)+(DoWeights==0)*1.0",                    "dummyWeight_CMS_ttH_ISRDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_8*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
-                    "dummyWeight_CMS_ttH_FSRUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_7*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
-                    "dummyWeight_CMS_ttH_FSRDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_9*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_FSRUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_7*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_FSRDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_9*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
                     ]
 
 systs_ttH=[
-  "_CMS_ttHbb_ttH_PDFUp","_CMS_ttHbb_ttH_PDFDown",
-  "_CMS_ttHbb_ttH_scaleMuRUp","_CMS_ttHbb_ttH_scaleMuRDown",
-  "_CMS_ttHbb_ttH_scaleMuFUp","_CMS_ttHbb_ttH_scaleMuFDown",
+  #"_CMS_ttHbb_ttH_PDFUp","_CMS_ttHbb_ttH_PDFDown",
+  #"_CMS_ttHbb_ttH_scaleMuRUp","_CMS_ttHbb_ttH_scaleMuRDown",
+  #"_CMS_ttHbb_ttH_scaleMuFUp","_CMS_ttHbb_ttH_scaleMuFDown",
   "_CMS_ttHbb_ttH_ISRUp","_CMS_ttHbb_ttH_ISRDown",
   "_CMS_ttHbb_ttH_FSRUp","_CMS_ttHbb_ttH_FSRDown",
   ]
 
 systs_ttH_weights=[
-                    "dummyWeight_CMS_ttH_ttH_NNPDFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_up*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
-                    "dummyWeight_CMS_ttH_ttH_NNPDFDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_down*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttH_NNPDFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_up*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttH_NNPDFDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_down*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
-                    "dummyWeight_CMS_ttH_ttH_scaleMuRUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_2p0_muF_1p0*internalNormFactor_weight_scale_variation_muR_2p0_muF_1p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
-                    "dummyWeight_CMS_ttH_ttH_scaleMuRDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_0p5_muF_1p0*internalNormFactor_weight_scale_variation_muR_0p5_muF_1p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttH_scaleMuRUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_2p0_muF_1p0*internalNormFactor_weight_scale_variation_muR_2p0_muF_1p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttH_scaleMuRDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_0p5_muF_1p0*internalNormFactor_weight_scale_variation_muR_0p5_muF_1p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
-                    "dummyWeight_CMS_ttH_ttH_scaleMuFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_2p0*internalNormFactor_weight_scale_variation_muR_1p0_muF_2p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
-                    "dummyWeight_CMS_ttH_ttH_scaleMuFDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_0p5*internalNormFactor_weight_scale_variation_muR_1p0_muF_0p5*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttH_scaleMuFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_2p0*internalNormFactor_weight_scale_variation_muR_1p0_muF_2p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttH_scaleMuFDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_0p5*internalNormFactor_weight_scale_variation_muR_1p0_muF_0p5*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
                     "dummyWeight_CMS_ttH_ttH_ISRUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_6*1.0*(DoWeights==1)+(DoWeights==0)*1.0",                    "dummyWeight_CMS_ttH_ttH_ISRDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_8*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
@@ -221,49 +221,49 @@ systs_ttH_weights=[
 
 
 systs_tt_all=[
-  "_CMS_ttHbb_PDF_ttbarUp","_CMS_ttHbb_PDF_ttbarDown",
-  "_CMS_ttHbb_scaleMuR_ttbarUp","_CMS_ttHbb_scaleMuR_ttbarDown",
-  "_CMS_ttHbb_scaleMuF_ttbarUp","_CMS_ttHbb_scaleMuF_ttbarDown",
-  "_CMS_ttHbb_ISR_ttbarUp","_CMS_ttHbb_ISR_ttbarDown",
-  "_CMS_ttHbb_FSR_ttbarUp","_CMS_ttHbb_FSR_ttbarDown",
+  #"_CMS_ttHbb_PDF_ttbarUp","_CMS_ttHbb_PDF_ttbarDown",
+  #"_CMS_ttHbb_scaleMuR_ttbarUp","_CMS_ttHbb_scaleMuR_ttbarDown",
+  #"_CMS_ttHbb_scaleMuF_ttbarUp","_CMS_ttHbb_scaleMuF_ttbarDown",
+  #"_CMS_ttHbb_ISR_ttbarUp","_CMS_ttHbb_ISR_ttbarDown",
+  #"_CMS_ttHbb_FSR_ttbarUp","_CMS_ttHbb_FSR_ttbarDown",
   ]
 
 systs_tt_all_weights=[
-                    "dummyWeight_CMS_ttH_ttbar_NNPDFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_up*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
-                    "dummyWeight_CMS_ttH_ttbar_NNPDFDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_down*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbar_NNPDFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_up*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbar_NNPDFDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_down*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
-                    "dummyWeight_CMS_ttH_ttbar_scaleMuRUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_2p0_muF_1p0*internalNormFactor_weight_scale_variation_muR_2p0_muF_1p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
-                    "dummyWeight_CMS_ttH_ttbar_scaleMuRDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_0p5_muF_1p0*internalNormFactor_weight_scale_variation_muR_0p5_muF_1p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbar_scaleMuRUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_2p0_muF_1p0*internalNormFactor_weight_scale_variation_muR_2p0_muF_1p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbar_scaleMuRDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_0p5_muF_1p0*internalNormFactor_weight_scale_variation_muR_0p5_muF_1p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
-                    "dummyWeight_CMS_ttH_ttbar_scaleMuFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_2p0*internalNormFactor_weight_scale_variation_muR_1p0_muF_2p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
-                    "dummyWeight_CMS_ttH_ttbar_scaleMuFDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_0p5*internalNormFactor_weight_scale_variation_muR_1p0_muF_0p5*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbar_scaleMuFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_2p0*internalNormFactor_weight_scale_variation_muR_1p0_muF_2p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbar_scaleMuFDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_0p5*internalNormFactor_weight_scale_variation_muR_1p0_muF_0p5*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
-                    "dummyWeight_CMS_ttH_ttbar_ISRUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_6*1.0*(DoWeights==1)+(DoWeights==0)*1.0",                    "dummyWeight_CMS_ttH_ttbar_ISRDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_8*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbar_ISRUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_6*1.0*(DoWeights==1)+(DoWeights==0)*1.0",                    "dummyWeight_CMS_ttH_ttbar_ISRDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_8*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
-                    "dummyWeight_CMS_ttH_ttbar_FSRUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_7*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
-                    "dummyWeight_CMS_ttH_ttbar_FSRDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_9*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbar_FSRUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_7*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbar_FSRDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_9*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
                     ]
 
 
 
 systs_tt_lf=[
-    "_CMS_ttHbb_PDF_ttbarOtherUp","_CMS_ttHbb_PDF_ttbarOtherDown",
-  "_CMS_ttHbb_scaleMuR_ttbarOtherUp","_CMS_ttHbb_scaleMuR_ttbarOtherDown",
-  "_CMS_ttHbb_scaleMuF_ttbarOtherUp","_CMS_ttHbb_scaleMuF_ttbarOtherDown",
+    #"_CMS_ttHbb_PDF_ttbarOtherUp","_CMS_ttHbb_PDF_ttbarOtherDown",
+  #"_CMS_ttHbb_scaleMuR_ttbarOtherUp","_CMS_ttHbb_scaleMuR_ttbarOtherDown",
+  #"_CMS_ttHbb_scaleMuF_ttbarOtherUp","_CMS_ttHbb_scaleMuF_ttbarOtherDown",
   "_CMS_ttHbb_ISR_ttbarOtherUp","_CMS_ttHbb_ISR_ttbarOtherDown",
   "_CMS_ttHbb_FSR_ttbarOtherUp","_CMS_ttHbb_FSR_ttbarOtherDown",
   
   ]
 systs_tt_lf_weights=[
-                    "dummyWeight_CMS_ttH_ttbarOther_NNPDFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_up*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
-                    "dummyWeight_CMS_ttH_ttbarOther_NNPDFDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_down*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbarOther_NNPDFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_up*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbarOther_NNPDFDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_down*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
-                    "dummyWeight_CMS_ttH_ttbarOther_scaleMuRUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_2p0_muF_1p0*internalNormFactor_weight_scale_variation_muR_2p0_muF_1p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
-                    "dummyWeight_CMS_ttH_ttbarOther_scaleMuRDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_0p5_muF_1p0*internalNormFactor_weight_scale_variation_muR_0p5_muF_1p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbarOther_scaleMuRUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_2p0_muF_1p0*internalNormFactor_weight_scale_variation_muR_2p0_muF_1p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbarOther_scaleMuRDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_0p5_muF_1p0*internalNormFactor_weight_scale_variation_muR_0p5_muF_1p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
-                    "dummyWeight_CMS_ttH_ttbarOther_scaleMuFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_2p0*internalNormFactor_weight_scale_variation_muR_1p0_muF_2p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
-                    "dummyWeight_CMS_ttH_ttbarOther_scaleMuFDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_0p5*internalNormFactor_weight_scale_variation_muR_1p0_muF_0p5*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbarOther_scaleMuFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_2p0*internalNormFactor_weight_scale_variation_muR_1p0_muF_2p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbarOther_scaleMuFDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_0p5*internalNormFactor_weight_scale_variation_muR_1p0_muF_0p5*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
                     "dummyWeight_CMS_ttH_ttbarOther_ISRUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_6*1.0*(DoWeights==1)+(DoWeights==0)*1.0",                    "dummyWeight_CMS_ttH_ttbarOther_ISRDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_8*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
@@ -272,21 +272,21 @@ systs_tt_lf_weights=[
                     ]
 
 systs_tt_b=[
-    "_CMS_ttHbb_PDF_ttbarPlusBUp","_CMS_ttHbb_PDF_ttbarPlusBDown",
-  "_CMS_ttHbb_scaleMuR_ttbarPlusBUp","_CMS_ttHbb_scaleMuR_ttbarPlusBDown",
-  "_CMS_ttHbb_scaleMuF_ttbarPlusBUp","_CMS_ttHbb_scaleMuF_ttbarPlusBDown",
+    #"_CMS_ttHbb_PDF_ttbarPlusBUp","_CMS_ttHbb_PDF_ttbarPlusBDown",
+  #"_CMS_ttHbb_scaleMuR_ttbarPlusBUp","_CMS_ttHbb_scaleMuR_ttbarPlusBDown",
+  #"_CMS_ttHbb_scaleMuF_ttbarPlusBUp","_CMS_ttHbb_scaleMuF_ttbarPlusBDown",
   "_CMS_ttHbb_ISR_ttbarPlusBUp","_CMS_ttHbb_ISR_ttbarPlusBDown",
   "_CMS_ttHbb_FSR_ttbarPlusBUp","_CMS_ttHbb_FSR_ttbarPlusBDown",
   ]
 systs_tt_b_weights=[
-                    "dummyWeight_CMS_ttH_ttbarPlusB_NNPDFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_up*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
-                    "dummyWeight_CMS_ttH_ttbarPlusB_NNPDFDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_down*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbarPlusB_NNPDFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_up*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbarPlusB_NNPDFDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_down*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
-                    "dummyWeight_CMS_ttH_ttbarPlusB_scaleMuRUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_2p0_muF_1p0*internalNormFactor_weight_scale_variation_muR_2p0_muF_1p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
-                    "dummyWeight_CMS_ttH_ttbarPlusB_scaleMuRDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_0p5_muF_1p0*internalNormFactor_weight_scale_variation_muR_0p5_muF_1p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbarPlusB_scaleMuRUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_2p0_muF_1p0*internalNormFactor_weight_scale_variation_muR_2p0_muF_1p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbarPlusB_scaleMuRDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_0p5_muF_1p0*internalNormFactor_weight_scale_variation_muR_0p5_muF_1p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
-                    "dummyWeight_CMS_ttH_ttbarPlusB_scaleMuFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_2p0*internalNormFactor_weight_scale_variation_muR_1p0_muF_2p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
-                    "dummyWeight_CMS_ttH_ttbarPlusB_scaleMuFDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_0p5*internalNormFactor_weight_scale_variation_muR_1p0_muF_0p5*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbarPlusB_scaleMuFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_2p0*internalNormFactor_weight_scale_variation_muR_1p0_muF_2p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbarPlusB_scaleMuFDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_0p5*internalNormFactor_weight_scale_variation_muR_1p0_muF_0p5*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
                     "dummyWeight_CMS_ttH_ttbarPlusB_ISRUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_6*1.0*(DoWeights==1)+(DoWeights==0)*1.0",                    "dummyWeight_CMS_ttH_ttbarPlusB_ISRDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_8*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
@@ -295,21 +295,21 @@ systs_tt_b_weights=[
                     ]
 
 systs_tt_2b=[
-    "_CMS_ttHbb_PDF_ttbarPlus2BUp","_CMS_ttHbb_PDF_ttbarPlus2BDown",
-  "_CMS_ttHbb_scaleMuR_ttbarPlus2BUp","_CMS_ttHbb_scaleMuR_ttbarPlus2BDown",
-  "_CMS_ttHbb_scaleMuF_ttbarPlus2BUp","_CMS_ttHbb_scaleMuF_ttbarPlus2BDown",
+    #"_CMS_ttHbb_PDF_ttbarPlus2BUp","_CMS_ttHbb_PDF_ttbarPlus2BDown",
+  #"_CMS_ttHbb_scaleMuR_ttbarPlus2BUp","_CMS_ttHbb_scaleMuR_ttbarPlus2BDown",
+  #"_CMS_ttHbb_scaleMuF_ttbarPlus2BUp","_CMS_ttHbb_scaleMuF_ttbarPlus2BDown",
   "_CMS_ttHbb_ISR_ttbarPlus2BUp","_CMS_ttHbb_ISR_ttbarPlus2BDown",
   "_CMS_ttHbb_FSR_ttbarPlus2BUp","_CMS_ttHbb_FSR_ttbarPlus2BDown",
   ]
 systs_tt_2b_weights=[
-                    "dummyWeight_CMS_ttH_ttbarPlus2B_NNPDFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_up*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
-                    "dummyWeight_CMS_ttH_ttbarPlus2B_NNPDFDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_down*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbarPlus2B_NNPDFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_up*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbarPlus2B_NNPDFDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_down*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
-                    "dummyWeight_CMS_ttH_ttbarPlus2B_scaleMuRUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_2p0_muF_1p0*internalNormFactor_weight_scale_variation_muR_2p0_muF_1p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
-                    "dummyWeight_CMS_ttH_ttbarPlus2B_scaleMuRDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_0p5_muF_1p0*internalNormFactor_weight_scale_variation_muR_0p5_muF_1p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbarPlus2B_scaleMuRUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_2p0_muF_1p0*internalNormFactor_weight_scale_variation_muR_2p0_muF_1p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbarPlus2B_scaleMuRDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_0p5_muF_1p0*internalNormFactor_weight_scale_variation_muR_0p5_muF_1p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
-                    "dummyWeight_CMS_ttH_ttbarPlus2B_scaleMuFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_2p0*internalNormFactor_weight_scale_variation_muR_1p0_muF_2p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
-                    "dummyWeight_CMS_ttH_ttbarPlus2B_scaleMuFDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_0p5*internalNormFactor_weight_scale_variation_muR_1p0_muF_0p5*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbarPlus2B_scaleMuFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_2p0*internalNormFactor_weight_scale_variation_muR_1p0_muF_2p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbarPlus2B_scaleMuFDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_0p5*internalNormFactor_weight_scale_variation_muR_1p0_muF_0p5*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
                     "dummyWeight_CMS_ttH_ttbarPlus2B_ISRUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_6*1.0*(DoWeights==1)+(DoWeights==0)*1.0",                    "dummyWeight_CMS_ttH_ttbarPlus2B_ISRDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_8*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
@@ -318,21 +318,21 @@ systs_tt_2b_weights=[
                 ]
 
 systs_tt_bb=[
-    "_CMS_ttHbb_PDF_ttbarPlusBBbarUp","_CMS_ttHbb_PDF_ttbarPlusBBbarDown",
-  "_CMS_ttHbb_scaleMuR_ttbarPlusBBbarUp","_CMS_ttHbb_scaleMuR_ttbarPlusBBbarDown",
-  "_CMS_ttHbb_scaleMuF_ttbarPlusBBbarUp","_CMS_ttHbb_scaleMuF_ttbarPlusBBbarDown",
+    #"_CMS_ttHbb_PDF_ttbarPlusBBbarUp","_CMS_ttHbb_PDF_ttbarPlusBBbarDown",
+  #"_CMS_ttHbb_scaleMuR_ttbarPlusBBbarUp","_CMS_ttHbb_scaleMuR_ttbarPlusBBbarDown",
+  #"_CMS_ttHbb_scaleMuF_ttbarPlusBBbarUp","_CMS_ttHbb_scaleMuF_ttbarPlusBBbarDown",
   "_CMS_ttHbb_ISR_ttbarPlusBBbarUp","_CMS_ttHbb_ISR_ttbarPlusBBbarDown",
   "_CMS_ttHbb_FSR_ttbarPlusBBbarUp","_CMS_ttHbb_FSR_ttbarPlusBBbarDown",
   ]
 systs_tt_bb_weights=[
-                    "dummyWeight_CMS_ttH_ttbarPlusBBbar_NNPDFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_up*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
-                    "dummyWeight_CMS_ttH_ttbarPlusBBbar_NNPDFDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_down*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbarPlusBBbar_NNPDFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_up*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbarPlusBBbar_NNPDFDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_down*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
-                    "dummyWeight_CMS_ttH_ttbarPlusBBbar_scaleMuRUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_2p0_muF_1p0*internalNormFactor_weight_scale_variation_muR_2p0_muF_1p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
-                    "dummyWeight_CMS_ttH_ttbarPlusBBbar_scaleMuRDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_0p5_muF_1p0*internalNormFactor_weight_scale_variation_muR_0p5_muF_1p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbarPlusBBbar_scaleMuRUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_2p0_muF_1p0*internalNormFactor_weight_scale_variation_muR_2p0_muF_1p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbarPlusBBbar_scaleMuRDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_0p5_muF_1p0*internalNormFactor_weight_scale_variation_muR_0p5_muF_1p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
-                    "dummyWeight_CMS_ttH_ttbarPlusBBbar_scaleMuFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_2p0*internalNormFactor_weight_scale_variation_muR_1p0_muF_2p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
-                    "dummyWeight_CMS_ttH_ttbarPlusBBbar_scaleMuFDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_0p5*internalNormFactor_weight_scale_variation_muR_1p0_muF_0p5*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbarPlusBBbar_scaleMuFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_2p0*internalNormFactor_weight_scale_variation_muR_1p0_muF_2p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbarPlusBBbar_scaleMuFDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_0p5*internalNormFactor_weight_scale_variation_muR_1p0_muF_0p5*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
                     "dummyWeight_CMS_ttH_ttbarPlusBBbar_ISRUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_6*1.0*(DoWeights==1)+(DoWeights==0)*1.0",                    "dummyWeight_CMS_ttH_ttbarPlusBBbar_ISRDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_8*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
@@ -341,21 +341,21 @@ systs_tt_bb_weights=[
                 ]
 
 systs_tt_cc=[
-    "_CMS_ttHbb_PDF_ttbarPlusCCbarUp","_CMS_ttHbb_PDF_ttbarPlusCCbarDown",
-  "_CMS_ttHbb_scaleMuR_ttbarPlusCCbarUp","_CMS_ttHbb_scaleMuR_ttbarPlusCCbarDown",
-  "_CMS_ttHbb_scaleMuF_ttbarPlusCCbarUp","_CMS_ttHbb_scaleMuF_ttbarPlusCCbarDown",
+    #"_CMS_ttHbb_PDF_ttbarPlusCCbarUp","_CMS_ttHbb_PDF_ttbarPlusCCbarDown",
+  #"_CMS_ttHbb_scaleMuR_ttbarPlusCCbarUp","_CMS_ttHbb_scaleMuR_ttbarPlusCCbarDown",
+  #"_CMS_ttHbb_scaleMuF_ttbarPlusCCbarUp","_CMS_ttHbb_scaleMuF_ttbarPlusCCbarDown",
   "_CMS_ttHbb_ISR_ttbarPlusCCbarUp","_CMS_ttHbb_ISR_ttbarPlusCCbarDown",
   "_CMS_ttHbb_FSR_ttbarPlusCCbarUp","_CMS_ttHbb_FSR_ttbarPlusCCbarDown",
   ]
 systs_tt_cc_weights=[
-                    "dummyWeight_CMS_ttH_ttbarPlusCCbar_NNPDFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_up*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
-                    "dummyWeight_CMS_ttH_ttbarPlusCCbar_NNPDFDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_down*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbarPlusCCbar_NNPDFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_up*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbarPlusCCbar_NNPDFDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_down*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
-                    "dummyWeight_CMS_ttH_ttbarPlusCCbar_scaleMuRUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_2p0_muF_1p0*internalNormFactor_weight_scale_variation_muR_2p0_muF_1p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
-                    "dummyWeight_CMS_ttH_ttbarPlusCCbar_scaleMuRDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_0p5_muF_1p0*internalNormFactor_weight_scale_variation_muR_0p5_muF_1p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbarPlusCCbar_scaleMuRUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_2p0_muF_1p0*internalNormFactor_weight_scale_variation_muR_2p0_muF_1p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbarPlusCCbar_scaleMuRDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_0p5_muF_1p0*internalNormFactor_weight_scale_variation_muR_0p5_muF_1p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
-                    "dummyWeight_CMS_ttH_ttbarPlusCCbar_scaleMuFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_2p0*internalNormFactor_weight_scale_variation_muR_1p0_muF_2p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
-                    "dummyWeight_CMS_ttH_ttbarPlusCCbar_scaleMuFDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_0p5*internalNormFactor_weight_scale_variation_muR_1p0_muF_0p5*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbarPlusCCbar_scaleMuFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_2p0*internalNormFactor_weight_scale_variation_muR_1p0_muF_2p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    #"dummyWeight_CMS_ttH_ttbarPlusCCbar_scaleMuFDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_0p5*internalNormFactor_weight_scale_variation_muR_1p0_muF_0p5*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
                     "dummyWeight_CMS_ttH_ttbarPlusCCbar_ISRUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_6*1.0*(DoWeights==1)+(DoWeights==0)*1.0",                    "dummyWeight_CMS_ttH_ttbarPlusCCbar_ISRDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_8*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
@@ -363,45 +363,45 @@ systs_tt_cc_weights=[
                     "dummyWeight_CMS_ttH_ttbarPlusCCbar_FSRDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_9*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     ]
 
-systWeights+=systs_tt_all_weights+systs_tt_lf_weights+systs_tt_b_weights+systs_tt_2b_weights+systs_tt_bb_weights+systs_tt_cc_weights
-weightSystNames+=systs_tt_all+systs_tt_lf+systs_tt_b+systs_tt_2b+systs_tt_bb+systs_tt_cc
+systWeights+=systs_tt_all_weights+systs_tt_lf_weights+systs_tt_b_weights+systs_tt_2b_weights+systs_tt_bb_weights+systs_tt_cc_weights+systs_tt_and_ttH_weights+systs_ttH_weights
+weightSystNames+=systs_tt_all+systs_tt_lf+systs_tt_b+systs_tt_2b+systs_tt_bb+systs_tt_cc+systs_tt_and_ttH+systs_ttH
 print systWeights
 print weightSystNames
 
 assert len(systWeights)==len(weightSystNames)
 
 otherSystNames=[
-                    #"_CMS_scale_jUp",
-                    #"_CMS_scale_jDown",
-                   "_CMS_res_jUp",
-                   "_CMS_res_jDown",
-    "_CMS_scaleAbsoluteStat_jUp","_CMS_scaleAbsoluteStat_jDown",
-    "_CMS_scaleAbsoluteScale_jUp","_CMS_scaleAbsoluteScale_jDown",
-    #"_CMS_scaleAbsoluteFlavMap_jUp","_CMS_scaleAbsoluteFlavMap_jDown",
-    "_CMS_scaleAbsoluteMPFBias_jUp","_CMS_scaleAbsoluteMPFBias_jDown",
-    "_CMS_scaleFragmentation_jUp","_CMS_scaleFragmentation_jDown",
-    "_CMS_scaleSinglePionECAL_jUp","_CMS_scaleSinglePionECAL_jDown",
-    "_CMS_scaleSinglePionHCAL_jUp","_CMS_scaleSinglePionHCAL_jDown",
-    "_CMS_scaleFlavorQCD_jUp","_CMS_scaleFlavorQCD_jDown",
-    "_CMS_scaleTimePtEta_jUp","_CMS_scaleTimePtEta_jDown",
-    "_CMS_scaleRelativeJEREC1_jUp","_CMS_scaleRelativeJEREC1_jDown",
-    "_CMS_scaleRelativeJEREC2_jUp","_CMS_scaleRelativeJEREC2_jDown",
-    "_CMS_scaleRelativeJERHF_jUp","_CMS_scaleRelativeJERHF_jDown",
-    "_CMS_scaleRelativePtBB_jUp","_CMS_scaleRelativePtBB_jDown",
-    "_CMS_scaleRelativePtEC1_jUp","_CMS_scaleRelativePtEC1_jDown",
-    "_CMS_scaleRelativePtEC2_jUp","_CMS_scaleRelativePtEC2_jDown",
-    "_CMS_scaleRelativePtHF_jUp","_CMS_scaleRelativePtHF_jDown",
-    "_CMS_scaleRelativeBal_jUp","_CMS_scaleRelativeBal_jDown",
-    "_CMS_scaleRelativeFSR_jUp","_CMS_scaleRelativeFSR_jDown",
-    "_CMS_scaleRelativeStatFSR_jUp","_CMS_scaleRelativeStatFSR_jDown",
-    "_CMS_scaleRelativeStatEC_jUp","_CMS_scaleRelativeStatEC_jDown",
-    "_CMS_scaleRelativeStatHF_jUp","_CMS_scaleRelativeStatHF_jDown",
-    "_CMS_scalePileUpDataMC_jUp","_CMS_scalePileUpDataMC_jDown",
-    "_CMS_scalePileUpPtRef_jUp","_CMS_scalePileUpPtRef_jDown",
-    "_CMS_scalePileUpPtBB_jUp","_CMS_scalePileUpPtBB_jDown",
-    "_CMS_scalePileUpPtEC1_jUp","_CMS_scalePileUpPtEC1_jDown",
-    "_CMS_scalePileUpPtEC2_jUp","_CMS_scalePileUpPtEC2_jDown",
-    "_CMS_scalePileUpPtHF_jUp","_CMS_scalePileUpPtHF_jDown",
+                    #"_CMS_scale_j_2017Up",
+                    #"_CMS_scale_j_2017Down",
+                   "_CMS_res_j_2017Up",
+                   "_CMS_res_j_2017Down",
+    "_CMS_scaleAbsoluteStat_j_2017Up","_CMS_scaleAbsoluteStat_j_2017Down",
+    "_CMS_scaleAbsoluteScale_j_2017Up","_CMS_scaleAbsoluteScale_j_2017Down",
+    #"_CMS_scaleAbsoluteFlavMap_j_2017Up","_CMS_scaleAbsoluteFlavMap_j_2017Down",
+    "_CMS_scaleAbsoluteMPFBias_j_2017Up","_CMS_scaleAbsoluteMPFBias_j_2017Down",
+    "_CMS_scaleFragmentation_j_2017Up","_CMS_scaleFragmentation_j_2017Down",
+    "_CMS_scaleSinglePionECAL_j_2017Up","_CMS_scaleSinglePionECAL_j_2017Down",
+    "_CMS_scaleSinglePionHCAL_j_2017Up","_CMS_scaleSinglePionHCAL_j_2017Down",
+    "_CMS_scaleFlavorQCD_j_2017Up","_CMS_scaleFlavorQCD_j_2017Down",
+    "_CMS_scaleTimePtEta_j_2017Up","_CMS_scaleTimePtEta_j_2017Down",
+    "_CMS_scaleRelativeJEREC1_j_2017Up","_CMS_scaleRelativeJEREC1_j_2017Down",
+    "_CMS_scaleRelativeJEREC2_j_2017Up","_CMS_scaleRelativeJEREC2_j_2017Down",
+    "_CMS_scaleRelativeJERHF_j_2017Up","_CMS_scaleRelativeJERHF_j_2017Down",
+    "_CMS_scaleRelativePtBB_j_2017Up","_CMS_scaleRelativePtBB_j_2017Down",
+    "_CMS_scaleRelativePtEC1_j_2017Up","_CMS_scaleRelativePtEC1_j_2017Down",
+    "_CMS_scaleRelativePtEC2_j_2017Up","_CMS_scaleRelativePtEC2_j_2017Down",
+    "_CMS_scaleRelativePtHF_j_2017Up","_CMS_scaleRelativePtHF_j_2017Down",
+    "_CMS_scaleRelativeBal_j_2017Up","_CMS_scaleRelativeBal_j_2017Down",
+    "_CMS_scaleRelativeFSR_j_2017Up","_CMS_scaleRelativeFSR_j_2017Down",
+    "_CMS_scaleRelativeStatFSR_j_2017Up","_CMS_scaleRelativeStatFSR_j_2017Down",
+    "_CMS_scaleRelativeStatEC_j_2017Up","_CMS_scaleRelativeStatEC_j_2017Down",
+    "_CMS_scaleRelativeStatHF_j_2017Up","_CMS_scaleRelativeStatHF_j_2017Down",
+    "_CMS_scalePileUpDataMC_j_2017Up","_CMS_scalePileUpDataMC_j_2017Down",
+    "_CMS_scalePileUpPtRef_j_2017Up","_CMS_scalePileUpPtRef_j_2017Down",
+    "_CMS_scalePileUpPtBB_j_2017Up","_CMS_scalePileUpPtBB_j_2017Down",
+    "_CMS_scalePileUpPtEC1_j_2017Up","_CMS_scalePileUpPtEC1_j_2017Down",
+    "_CMS_scalePileUpPtEC2_j_2017Up","_CMS_scalePileUpPtEC2_j_2017Down",
+    "_CMS_scalePileUpPtHF_j_2017Up","_CMS_scalePileUpPtHF_j_2017Down",
 ]
 
 otherSystFileNames=[
@@ -461,112 +461,106 @@ ttHpath=path_karim_new+'/ttHTo*/*nominal*.root'
 
 
 hdamp_ue_systnames_tt_all = [
-  "_CMS_ttHbb_HDAMPUp", "_CMS_ttHbb_HDAMPDown",
+  #"_CMS_ttHbb_HDAMPUp", "_CMS_ttHbb_HDAMPDown",
   "_CMS_ttHbb_UEUp", "_CMS_ttHbb_UEDown"
 ]
 hdamp_ue_filenames_tt_all = [
-  os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
+  #os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
   os.path.join(path_karim_new, "*TuneCP5up*/*nominal*.root"), os.path.join(path_karim_new, "*TuneCP5down*/*nominal*.root")
 ]
-systs_tt_all+=hdamp_ue_systnames_tt_all
 
 
 hdamp_ue_systnames_tt_lf = [
-  "_CMS_ttHbb_HDAMP_ttbarOtherUp", "_CMS_ttHbb_HDAMP_ttbarOtherDown",
+  #"_CMS_ttHbb_HDAMP_ttbarOtherUp", "_CMS_ttHbb_HDAMP_ttbarOtherDown",
   "_CMS_ttHbb_UE_ttbarOtherUp", "_CMS_ttHbb_UE_ttbarOtherDown"
 ]
 hdamp_ue_filenames_tt_lf = [
-  os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
+  #os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
   os.path.join(path_karim_new, "*TuneCP5up*/*nominal*.root"), os.path.join(path_karim_new, "*TuneCP5down*/*nominal*.root")
 ]
-systs_tt_lf+=hdamp_ue_systnames_tt_lf
 
 hdamp_ue_systnames_tt_bb = [
-  "_CMS_ttHbb_HDAMP_ttbarPlusBBbarUp", "_CMS_ttHbb_HDAMP_ttbarPlusBBbarDown",
+  #"_CMS_ttHbb_HDAMP_ttbarPlusBBbarUp", "_CMS_ttHbb_HDAMP_ttbarPlusBBbarDown",
   "_CMS_ttHbb_UE_ttbarPlusBBbarUp", "_CMS_ttHbb_UE_ttbarPlusBBbarDown"
 ]
 hdamp_ue_filenames_tt_bb = [
-  os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
+  #os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
   os.path.join(path_karim_new, "*TuneCP5up*/*nominal*.root"), os.path.join(path_karim_new, "*TuneCP5down*/*nominal*.root")
 ]
-systs_tt_bb+=hdamp_ue_systnames_tt_bb
 
 hdamp_ue_systnames_tt_2b = [
-  "_CMS_ttHbb_HDAMP_ttbarPlus2BUp", "_CMS_ttHbb_HDAMP_ttbarPlus2BDown",
+  #"_CMS_ttHbb_HDAMP_ttbarPlus2BUp", "_CMS_ttHbb_HDAMP_ttbarPlus2BDown",
   "_CMS_ttHbb_UE_ttbarPlus2BUp", "_CMS_ttHbb_UE_ttbarPlus2BDown"
 ]
 hdamp_ue_filenames_tt_2b = [
-  os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
+  #os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
   os.path.join(path_karim_new, "*TuneCP5up*/*nominal*.root"), os.path.join(path_karim_new, "*TuneCP5down*/*nominal*.root")
 ]
-systs_tt_2b+=hdamp_ue_systnames_tt_2b
 
 hdamp_ue_systnames_tt_b = [
-  "_CMS_ttHbb_HDAMP_ttbarPlusBUp", "_CMS_ttHbb_HDAMP_ttbarPlusBDown",
+  #"_CMS_ttHbb_HDAMP_ttbarPlusBUp", "_CMS_ttHbb_HDAMP_ttbarPlusBDown",
   "_CMS_ttHbb_UE_ttbarPlusBUp", "_CMS_ttHbb_UE_ttbarPlusBDown"
 ]
 hdamp_ue_filenames_tt_b = [
-  os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
+  #os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
   os.path.join(path_karim_new, "*TuneCP5up*/*nominal*.root"), os.path.join(path_karim_new, "*TuneCP5down*/*nominal*.root")
 ]
-systs_tt_b+=hdamp_ue_systnames_tt_b
 
 hdamp_ue_systnames_tt_cc = [
-  "_CMS_ttHbb_HDAMP_ttbarPlusCCbarUp", "_CMS_ttHbb_HDAMP_ttbarPlusCCbarDown",
+  #"_CMS_ttHbb_HDAMP_ttbarPlusCCbarUp", "_CMS_ttHbb_HDAMP_ttbarPlusCCbarDown",
   "_CMS_ttHbb_UE_ttbarPlusCCbarUp", "_CMS_ttHbb_UE_ttbarPlusCCbarDown"
 ]
 hdamp_ue_filenames_tt_cc = [
-  os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
+  #os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
   os.path.join(path_karim_new, "*TuneCP5up*/*nominal*.root"), os.path.join(path_karim_new, "*TuneCP5down*/*nominal*.root")
 ]
-systs_tt_cc+=hdamp_ue_systnames_tt_cc
 
 
 
 
 errorSystNames=[
                     "",
-                   "_CMS_btag_lfUp","_CMS_btag_lfDown","_CMS_btag_hfUp","_CMS_btag_hfDown",
-                   "_CMS_btag_hfstats1Up","_CMS_btag_hfstats1Down","_CMS_btag_lfstats1Up","_CMS_btag_lfstats1Down",
-                   "_CMS_btag_hfstats2Up","_CMS_btag_hfstats2Down","_CMS_btag_lfstats2Up","_CMS_btag_lfstats2Down",
-                   "_CMS_btag_cferr1Up","_CMS_btag_cferr1Down","_CMS_btag_cferr2Up","_CMS_btag_cferr2Down",
+                   "_CMS_btag_lf_2017Up","_CMS_btag_lf_2017Down","_CMS_btag_hf_2017Up","_CMS_btag_hf_2017Down",
+                   "_CMS_btag_hfstats1_2017Up","_CMS_btag_hfstats1_2017Down","_CMS_btag_lfstats1_2017Up","_CMS_btag_lfstats1_2017Down",
+                   "_CMS_btag_hfstats2_2017Up","_CMS_btag_hfstats2_2017Down","_CMS_btag_lfstats2_2017Up","_CMS_btag_lfstats2_2017Down",
+                   "_CMS_btag_cferr1_2017Up","_CMS_btag_cferr1_2017Down","_CMS_btag_cferr2_2017Up","_CMS_btag_cferr2_2017Down",
                    "_CMS_ttHbb_PUUp","_CMS_ttHbb_PUDown",
 
-    #"_CMS_scale_jUp","_CMS_scale_jDown",
-    #"_CMS_res_jUp","_CMS_res_jDown",
+    #"_CMS_scale_j_2017Up","_CMS_scale_j_2017Down",
+    #"_CMS_res_j_2017Up","_CMS_res_j_2017Down",
     
-        "_CMS_res_jUp","_CMS_res_jDown",
-    "_CMS_scaleAbsoluteStat_jUp","_CMS_scaleAbsoluteStat_jDown",
-    "_CMS_scaleAbsoluteScale_jUp","_CMS_scaleAbsoluteScale_jDown",
-    ##"_CMS_scaleAbsoluteFlavMap_jUp","_CMS_scaleAbsoluteFlavMap_jDown",
-    "_CMS_scaleAbsoluteMPFBias_jUp","_CMS_scaleAbsoluteMPFBias_jDown",
-    "_CMS_scaleFragmentation_jUp","_CMS_scaleFragmentation_jDown",
-    "_CMS_scaleSinglePionECAL_jUp","_CMS_scaleSinglePionECAL_jDown",
-    "_CMS_scaleSinglePionHCAL_jUp","_CMS_scaleSinglePionHCAL_jDown",
-    "_CMS_scaleFlavorQCD_jUp","_CMS_scaleFlavorQCD_jDown",
-    "_CMS_scaleTimePtEta_jUp","_CMS_scaleTimePtEta_jDown",
-    "_CMS_scaleRelativeJEREC1_jUp","_CMS_scaleRelativeJEREC1_jDown",
-    "_CMS_scaleRelativeJEREC2_jUp","_CMS_scaleRelativeJEREC2_jDown",
-    "_CMS_scaleRelativeJERHF_jUp","_CMS_scaleRelativeJERHF_jDown",
-    "_CMS_scaleRelativePtBB_jUp","_CMS_scaleRelativePtBB_jDown",
-    "_CMS_scaleRelativePtEC1_jUp","_CMS_scaleRelativePtEC1_jDown",
-    "_CMS_scaleRelativePtEC2_jUp","_CMS_scaleRelativePtEC2_jDown",
-    "_CMS_scaleRelativePtHF_jUp","_CMS_scaleRelativePtHF_jDown",
-    "_CMS_scaleRelativeBal_jUp","_CMS_scaleRelativeBal_jDown",
-    "_CMS_scaleRelativeFSR_jUp","_CMS_scaleRelativeFSR_jDown",
-    "_CMS_scaleRelativeStatFSR_jUp","_CMS_scaleRelativeStatFSR_jDown",
-    "_CMS_scaleRelativeStatEC_jUp","_CMS_scaleRelativeStatEC_jDown",
-    "_CMS_scaleRelativeStatHF_jUp","_CMS_scaleRelativeStatHF_jDown",
-    "_CMS_scalePileUpDataMC_jUp","_CMS_scalePileUpDataMC_jDown",
-    "_CMS_scalePileUpPtRef_jUp","_CMS_scalePileUpPtRef_jDown",
-    "_CMS_scalePileUpPtBB_jUp","_CMS_scalePileUpPtBB_jDown",
-    "_CMS_scalePileUpPtEC1_jUp","_CMS_scalePileUpPtEC1_jDown",
-    "_CMS_scalePileUpPtEC2_jUp","_CMS_scalePileUpPtEC2_jDown",
-    "_CMS_scalePileUpPtHF_jUp","_CMS_scalePileUpPtHF_jDown",
+        "_CMS_res_j_2017Up","_CMS_res_j_2017Down",
+    "_CMS_scaleAbsoluteStat_j_2017Up","_CMS_scaleAbsoluteStat_j_2017Down",
+    "_CMS_scaleAbsoluteScale_j_2017Up","_CMS_scaleAbsoluteScale_j_2017Down",
+    ##"_CMS_scaleAbsoluteFlavMap_j_2017Up","_CMS_scaleAbsoluteFlavMap_j_2017Down",
+    "_CMS_scaleAbsoluteMPFBias_j_2017Up","_CMS_scaleAbsoluteMPFBias_j_2017Down",
+    "_CMS_scaleFragmentation_j_2017Up","_CMS_scaleFragmentation_j_2017Down",
+    "_CMS_scaleSinglePionECAL_j_2017Up","_CMS_scaleSinglePionECAL_j_2017Down",
+    "_CMS_scaleSinglePionHCAL_j_2017Up","_CMS_scaleSinglePionHCAL_j_2017Down",
+    "_CMS_scaleFlavorQCD_j_2017Up","_CMS_scaleFlavorQCD_j_2017Down",
+    "_CMS_scaleTimePtEta_j_2017Up","_CMS_scaleTimePtEta_j_2017Down",
+    "_CMS_scaleRelativeJEREC1_j_2017Up","_CMS_scaleRelativeJEREC1_j_2017Down",
+    "_CMS_scaleRelativeJEREC2_j_2017Up","_CMS_scaleRelativeJEREC2_j_2017Down",
+    "_CMS_scaleRelativeJERHF_j_2017Up","_CMS_scaleRelativeJERHF_j_2017Down",
+    "_CMS_scaleRelativePtBB_j_2017Up","_CMS_scaleRelativePtBB_j_2017Down",
+    "_CMS_scaleRelativePtEC1_j_2017Up","_CMS_scaleRelativePtEC1_j_2017Down",
+    "_CMS_scaleRelativePtEC2_j_2017Up","_CMS_scaleRelativePtEC2_j_2017Down",
+    "_CMS_scaleRelativePtHF_j_2017Up","_CMS_scaleRelativePtHF_j_2017Down",
+    "_CMS_scaleRelativeBal_j_2017Up","_CMS_scaleRelativeBal_j_2017Down",
+    "_CMS_scaleRelativeFSR_j_2017Up","_CMS_scaleRelativeFSR_j_2017Down",
+    "_CMS_scaleRelativeStatFSR_j_2017Up","_CMS_scaleRelativeStatFSR_j_2017Down",
+    "_CMS_scaleRelativeStatEC_j_2017Up","_CMS_scaleRelativeStatEC_j_2017Down",
+    "_CMS_scaleRelativeStatHF_j_2017Up","_CMS_scaleRelativeStatHF_j_2017Down",
+    "_CMS_scalePileUpDataMC_j_2017Up","_CMS_scalePileUpDataMC_j_2017Down",
+    "_CMS_scalePileUpPtRef_j_2017Up","_CMS_scalePileUpPtRef_j_2017Down",
+    "_CMS_scalePileUpPtBB_j_2017Up","_CMS_scalePileUpPtBB_j_2017Down",
+    "_CMS_scalePileUpPtEC1_j_2017Up","_CMS_scalePileUpPtEC1_j_2017Down",
+    "_CMS_scalePileUpPtEC2_j_2017Up","_CMS_scalePileUpPtEC2_j_2017Down",
+    "_CMS_scalePileUpPtHF_j_2017Up","_CMS_scalePileUpPtHF_j_2017Down",
 
-]+systs_tt_all
+]+systs_tt_lf+systs_tt_cc+systs_tt_b+systs_tt_2b+systs_tt_bb+hdamp_ue_systnames_tt_lf+hdamp_ue_systnames_tt_cc+hdamp_ue_systnames_tt_b+hdamp_ue_systnames_tt_2b+hdamp_ue_systnames_tt_bb
 
-
+otherSystNames+=hdamp_ue_systnames_tt_lf+hdamp_ue_systnames_tt_cc+hdamp_ue_systnames_tt_b+hdamp_ue_systnames_tt_2b+hdamp_ue_systnames_tt_bb
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
 sampleDict=SampleDictionary()
@@ -582,13 +576,15 @@ samplesDataControlPlots=[
 
 print "controlsamples"
 samplesControlPlots=[
-                    Sample('t#bar{t}H',ROOT.kBlue+1,path_mwassmer+'/ttH*/*nominal*.root',mcWeightAll+sel_MET,'ttH',systsAllSamples,samDict=sampleDict, readTrees=doReadTrees) ,     
-                    Sample('t#bar{t}+lf',ROOT.kRed-7,ttbarPathS,mcWeightAll+sel_MET+sel_StrangeMuWeights+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)','ttbarOther',systsAllSamples+systs_tt_all+systs_tt_lf,samDict=sampleDict, readTrees=doReadTrees),
-                    Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,ttbarPathS,mcWeightAll+sel_MET+sel_StrangeMuWeights+'*(GenEvt_I_TTPlusCC==1)','ttbarPlusCCbar',systsAllSamples+systs_tt_all+systs_tt_cc,samDict=sampleDict, readTrees=doReadTrees),
-                    Sample('t#bar{t}+b',ROOT.kRed-2,ttbarPathS,mcWeightAll+sel_MET+sel_StrangeMuWeights+'*(GenEvt_I_TTPlusBB==1)','ttbarPlusB',systsAllSamples+systs_tt_all+systs_tt_b,samDict=sampleDict, readTrees=doReadTrees),
-                    Sample('t#bar{t}+2b',ROOT.kRed+2,ttbarPathS,mcWeightAll+sel_MET+sel_StrangeMuWeights+'*(GenEvt_I_TTPlusBB==2)','ttbarPlus2B',systsAllSamples+systs_tt_all+systs_tt_2b,samDict=sampleDict, readTrees=doReadTrees),
-                    Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,ttbarPathS,mcWeightAll+sel_MET+sel_StrangeMuWeights+'*(GenEvt_I_TTPlusBB==3)','ttbarPlusBBbar',systsAllSamples+systs_tt_all+systs_tt_bb,samDict=sampleDict, readTrees=doReadTrees),  
-                    Sample('Single Top',ROOT.kMagenta,stpath,mcWeightAll+sel_MET,'SingleTop',systsAllSamples,samDict=sampleDict, readTrees=doReadTrees) , 
+                    Sample('t#bar{t}H',ROOT.kBlue+1,path_mwassmer+'/ttH*/*nominal*.root',mcWeightAll+sel_MET,'ttH',systsAllSamples+systs_ttH+systs_tt_and_ttH,samDict=sampleDict, readTrees=doReadTrees) ,     
+                    
+                    Sample('t#bar{t}+lf',ROOT.kRed-7,ttbarPathS,mcWeightAll+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)'+sel_MET+sel_StrangeMuWeights,'ttbarOther',systsAllSamples+systs_tt_all+systs_tt_lf+systs_tt_and_ttH+hdamp_ue_filenames_tt_all+hdamp_ue_filenames_tt_lf,samDict=sampleDict, readTrees=doReadTrees),
+                    Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,ttbarPathS,mcWeightAll+'*(GenEvt_I_TTPlusCC==1)'+sel_MET+sel_StrangeMuWeights,'ttbarPlusCCbar',systsAllSamples+systs_tt_all+systs_tt_cc+systs_tt_and_ttH+hdamp_ue_filenames_tt_all+hdamp_ue_filenames_tt_cc,samDict=sampleDict, readTrees=doReadTrees),
+                    Sample('t#bar{t}+b',ROOT.kRed-2,ttbarPathS,mcWeightAll+'*(GenEvt_I_TTPlusBB==1)'+sel_MET+sel_StrangeMuWeights,'ttbarPlusB',systsAllSamples+systs_tt_all+systs_tt_b+systs_tt_and_ttH+hdamp_ue_filenames_tt_all+hdamp_ue_filenames_tt_b,samDict=sampleDict, readTrees=doReadTrees),
+                    Sample('t#bar{t}+2b',ROOT.kRed+2,ttbarPathS,mcWeightAll+'*(GenEvt_I_TTPlusBB==2)'+sel_MET+sel_StrangeMuWeights,'ttbarPlus2B',systsAllSamples+systs_tt_all+systs_tt_2b+systs_tt_and_ttH+hdamp_ue_filenames_tt_all+hdamp_ue_filenames_tt_2b,samDict=sampleDict, readTrees=doReadTrees),
+                    Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,ttbarPathS,mcWeightAll+'*(GenEvt_I_TTPlusBB==3)'+sel_MET+sel_StrangeMuWeights,'ttbarPlusBBbar',systsAllSamples+systs_tt_all+systs_tt_bb+systs_tt_and_ttH+hdamp_ue_filenames_tt_all+hdamp_ue_filenames_tt_bb,samDict=sampleDict, readTrees=doReadTrees), 
+                    
+                    Sample('Single Top',ROOT.kMagenta,stpath,mcWeightAll+sel_MET,'singlet',systsAllSamples,samDict=sampleDict, readTrees=doReadTrees) , 
                     Sample('V+jets',ROOT.kGreen-3,VJetsPathS,mcWeightAll+sel_MET,'Vjets',systsAllSamples,samDict=sampleDict, readTrees=doReadTrees) , 
                     Sample('t#bar{t}+V',ROOT.kBlue-10,ttVPathS,mcWeightAll+sel_MET,'ttV',systsAllSamples,samDict=sampleDict, readTrees=doReadTrees),         
                     Sample('Diboson',ROOT.kAzure+2,dibosonPathS,mcWeightAll+sel_MET,'diboson',systsAllSamples,samDict=sampleDict, readTrees=doReadTrees) , 
@@ -607,11 +603,12 @@ samplesLimits=[
                     Sample('t#bar{t}H, H to ZZ',ROOT.kBlue+1,path_mwassmer+'/ttHToNonbb*/*nominal*.root','1.0*'+mcWeight+evenSel+hzzSel+sel_MET,'ttH_hzz',systsAllSamples+systs_ttH+systs_tt_and_ttH,samDict=sampleDict, readTrees=doReadTrees) ,  
                     Sample('t#bar{t}H, H to #gamma Z',ROOT.kBlue+1,path_mwassmer+'/ttHToNonbb*/*nominal*.root','1.0*'+mcWeight+evenSel+hzgSel+sel_MET,'ttH_hzg',systsAllSamples+systs_ttH+systs_tt_and_ttH,samDict=sampleDict, readTrees=doReadTrees) ,
                     
-                    Sample('t#bar{t}+lf',ROOT.kRed-7,ttbarPathS,mcWeightAll+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)'+sel_MET+sel_StrangeMuWeights,'ttbarOther',systsAllSamples+systs_tt_all+systs_tt_lf+systs_tt_and_ttH,samDict=sampleDict, readTrees=doReadTrees),
-                    Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,ttbarPathS,mcWeightAll+'*(GenEvt_I_TTPlusCC==1)'+sel_MET+sel_StrangeMuWeights,'ttbarPlusCCbar',systsAllSamples+systs_tt_all+systs_tt_cc+systs_tt_and_ttH,samDict=sampleDict, readTrees=doReadTrees),
-                    Sample('t#bar{t}+b',ROOT.kRed-2,ttbarPathS,mcWeightAll+'*(GenEvt_I_TTPlusBB==1)'+sel_MET+sel_StrangeMuWeights,'ttbarPlusB',systsAllSamples+systs_tt_all+systs_tt_b+systs_tt_and_ttH,samDict=sampleDict, readTrees=doReadTrees),
-                    Sample('t#bar{t}+2b',ROOT.kRed+2,ttbarPathS,mcWeightAll+'*(GenEvt_I_TTPlusBB==2)'+sel_MET+sel_StrangeMuWeights,'ttbarPlus2B',systsAllSamples+systs_tt_all+systs_tt_2b+systs_tt_and_ttH,samDict=sampleDict, readTrees=doReadTrees),
-                    Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,ttbarPathS,mcWeightAll+'*(GenEvt_I_TTPlusBB==3)'+sel_MET+sel_StrangeMuWeights,'ttbarPlusBBbar',systsAllSamples+systs_tt_all+systs_tt_bb+systs_tt_and_ttH,samDict=sampleDict, readTrees=doReadTrees), 
+                    Sample('t#bar{t}+lf',ROOT.kRed-7,ttbarPathS,mcWeightAll+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)'+sel_MET+sel_StrangeMuWeights,'ttbarOther',systsAllSamples+systs_tt_all+systs_tt_lf+systs_tt_and_ttH+hdamp_ue_filenames_tt_all+hdamp_ue_filenames_tt_lf,samDict=sampleDict, readTrees=doReadTrees),
+                    Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,ttbarPathS,mcWeightAll+'*(GenEvt_I_TTPlusCC==1)'+sel_MET+sel_StrangeMuWeights,'ttbarPlusCCbar',systsAllSamples+systs_tt_all+systs_tt_cc+systs_tt_and_ttH+hdamp_ue_filenames_tt_all+hdamp_ue_filenames_tt_cc,samDict=sampleDict, readTrees=doReadTrees),
+                    Sample('t#bar{t}+b',ROOT.kRed-2,ttbarPathS,mcWeightAll+'*(GenEvt_I_TTPlusBB==1)'+sel_MET+sel_StrangeMuWeights,'ttbarPlusB',systsAllSamples+systs_tt_all+systs_tt_b+systs_tt_and_ttH+hdamp_ue_filenames_tt_all+hdamp_ue_filenames_tt_b,samDict=sampleDict, readTrees=doReadTrees),
+                    Sample('t#bar{t}+2b',ROOT.kRed+2,ttbarPathS,mcWeightAll+'*(GenEvt_I_TTPlusBB==2)'+sel_MET+sel_StrangeMuWeights,'ttbarPlus2B',systsAllSamples+systs_tt_all+systs_tt_2b+systs_tt_and_ttH+hdamp_ue_filenames_tt_all+hdamp_ue_filenames_tt_2b,samDict=sampleDict, readTrees=doReadTrees),
+                    Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,ttbarPathS,mcWeightAll+'*(GenEvt_I_TTPlusBB==3)'+sel_MET+sel_StrangeMuWeights,'ttbarPlusBBbar',systsAllSamples+systs_tt_all+systs_tt_bb+systs_tt_and_ttH+hdamp_ue_filenames_tt_all+hdamp_ue_filenames_tt_bb,samDict=sampleDict, readTrees=doReadTrees), 
+                    
                     Sample('Single Top',ROOT.kMagenta,stpath,mcWeightAll+sel_MET,'singlet',systsAllSamples,samDict=sampleDict, readTrees=doReadTrees) , 
                     Sample('Z+jets',ROOT.kGreen-3,path_karim_new+'/DYJets*/*nominal*.root',mcWeightAll+sel_MET,'zjets',systsAllSamples,samDict=sampleDict, readTrees=doReadTrees) , 
                     Sample('W+jets',ROOT.kGreen-7,path_karim_new+'/WJets*/*nominal*.root',mcWeightAll+sel_MET,'wjets',systsAllSamples,samDict=sampleDict, readTrees=doReadTrees) , 

@@ -21,13 +21,13 @@ from limittools import replaceQ2scale
 import dnnInputVariableListV1
 
 from analysisClass import *
-from plotconfig_v38 import *
+from plotconfig_v39 import *
 
 
 def main(argv):
 
     #Create analysis object with output name
-    name='limits_v38'
+    name='limits_v39'
     analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscripts18/July18/pyroot-plotscripts/workdir/'+name+'/output_limitInput.root', signalProcess='ttH')
     print os.path.exists(analysis.rootFilePath), "AAAARgh"
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscripts18/July18/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
@@ -138,19 +138,19 @@ def main(argv):
     #plotlabelboosted="#splitline{1 lepton, #geq 4 jets, #geq 2 b-tags}{#geq 1 C/A 1.5 jet p_{T} > 200 GeV}"
     plotselection="(N_Jets>=4&&N_BTagsM>=2)"
     plots=[
-        Plot(ROOT.TH1D("JT" ,"jet-tag categories",len(categoriesJT),0.5,0.5+len(categoriesJT)),catstringJT,categoriesJTsel,"1 lepton"),
+        #Plot(ROOT.TH1D("JT" ,"jet-tag categories",len(categoriesJT),0.5,0.5+len(categoriesJT)),catstringJT,categoriesJTsel,"1 lepton"),
         #Plot(ROOT.TH1D("BCAT" ,"jet-tag + boosted categories",len(categoriesJTB),0.5,0.5+len(categoriesJTB)),catstringJTB,categoriesJTBsel,"1 lepton"),
         Plot(ROOT.TH1D("N_Jets","Number of ak4 jets",11,3.5,14.5),"N_Jets",plotselection,plotlabel),
         Plot(ROOT.TH1D("N_BTagsM","Number of b-tags",4,1.5,5.5),"N_BTagsM",plotselection,plotlabel),
         #Plot(ROOT.TH1D("CSV0","B-tag of leading jet",22,-.1,1),"Jet_CSV[0]",plotselection,plotlabel),
         #Plot(ROOT.TH1D("CSV1","B-tag of second jet",22,-.1,1),"Jet_CSV[1]",plotselection,plotlabel),
-        Plot(ROOT.TH1D("CSV","B-tag of all jets",22,-.1,1),"Jet_CSV",plotselection,plotlabel),
+        #Plot(ROOT.TH1D("CSV","B-tag of all jets",22,-.1,1),"Jet_CSV",plotselection,plotlabel),
         
         #Plot(ROOT.TH1D("eta1","#eta of leading jet",50,-2.5,2.5),"Jet_Eta[0]",plotselection,plotlabel),
         #Plot(ROOT.TH1D("eta2","#eta of second jet",50,-2.5,2.5),"Jet_Eta[1]",plotselection,plotlabel),
         #Plot(ROOT.TH1D("phij1","#phi of leading jet",64,-3.2,3.2),"Jet_Phi[0]",plotselection,plotlabel),
         #Plot(ROOT.TH1D("phij2","#phi of second jet",64,-3.2,3.2),"Jet_Phi[1]",plotselection,plotlabel),
-        Plot(ROOT.TH1D("Evt_HT_Jets","Sum p_{T} jets",75,0,1500),"Evt_HT_Jets",plotselection,plotlabel),
+        #Plot(ROOT.TH1D("Evt_HT_Jets","Sum p_{T} jets",75,0,1500),"Evt_HT_Jets",plotselection,plotlabel),
         Plot(ROOT.TH1D("ptalljets","p_{T} of all jets",60,0,300),"Jet_Pt",plotselection,plotlabel),
         Plot(ROOT.TH1D("etaalljets","#eta of all jets",60,-2.5,2.5),"Jet_Eta",plotselection,plotlabel),
         #Plot(ROOT.TH1D("pumvaalljets","PU MVA of all jets",60,0,1.0),"Jet_PileUpMVA",plotselection,plotlabel),
@@ -575,38 +575,38 @@ def main(argv):
     
     # now do only MEM for 4 tag events 
     
-    categorienames_MEM=[
+    #categorienames_MEM=[
               
-              ### only 4 tag events 
-              ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_tge4_MEM",""),
-              ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4_MEM",""),             
-              ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4_MEM",""),
-              ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_MEM",""),
-              ]
+              #### only 4 tag events 
+              #("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_tge4_MEM",""),
+              #("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4_MEM",""),             
+              #("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4_MEM",""),
+              #("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_MEM",""),
+              #]
     
     
-    discrs_MEM=[
-memexp,
-memexp,
-memexp,
-memexp,
+    #discrs_MEM=[
+#memexp,
+#memexp,
+#memexp,
+#memexp,
 
-    ]
-    #nhistobins_MultiDNN= [   7,   10,    12,   7,   7,    12,   7,   7,    7,   8,   7,    7,   7,   7,    7,   7,   7,    4,]
-    #minxvals_MultiDNN=   [ 0.2,  0.16, 0.17, 0.16,  0.16, 0.18, 0.2,  0.2, 0.18, 0.2,  0.16, 0.16, 0.17,  0.17, 0.21, 0.17,  0.17, 0.19,]
-    #maxxvals_MultiDNN=   [0.6,  0.6, 0.7,    0.6,  0.6, 0.7,    0.4,  0.4, 0.35,    0.55,  0.5, 0.55,    0.35,  0.35, 0.3,    0.5,  0.4, 0.3,]
-    #nhistobins_MultiDNN+=[12,12,7,7,7,7]
-    #minxvals_MultiDNN+=[0.17,0.18,0.18,0.16,0.21,0.19]
-    #maxxvals_MultiDNN+=[0.7,0.7,0.35,0.55,0.3,0.3]
-    nhistobins_MEM=[10,10,10,20]
-    minxvals_MEM=[0.0,0.0,0.0,0.0]
-    maxxvals_MEM=[1.0,1.0,1.0,1.0]
+    #]
+    ##nhistobins_MultiDNN= [   7,   10,    12,   7,   7,    12,   7,   7,    7,   8,   7,    7,   7,   7,    7,   7,   7,    4,]
+    ##minxvals_MultiDNN=   [ 0.2,  0.16, 0.17, 0.16,  0.16, 0.18, 0.2,  0.2, 0.18, 0.2,  0.16, 0.16, 0.17,  0.17, 0.21, 0.17,  0.17, 0.19,]
+    ##maxxvals_MultiDNN=   [0.6,  0.6, 0.7,    0.6,  0.6, 0.7,    0.4,  0.4, 0.35,    0.55,  0.5, 0.55,    0.35,  0.35, 0.3,    0.5,  0.4, 0.3,]
+    ##nhistobins_MultiDNN+=[12,12,7,7,7,7]
+    ##minxvals_MultiDNN+=[0.17,0.18,0.18,0.16,0.21,0.19]
+    ##maxxvals_MultiDNN+=[0.7,0.7,0.35,0.55,0.3,0.3]
+    #nhistobins_MEM=[10,10,10,20]
+    #minxvals_MEM=[0.0,0.0,0.0,0.0]
+    #maxxvals_MEM=[1.0,1.0,1.0,1.0]
     
-    discrs+=discrs_MEM
-    nhistobins+=nhistobins_MEM
-    minxvals+=minxvals_MEM
-    maxxvals+=maxxvals_MEM
-    categories+=categorienames_MEM    
+    #discrs+=discrs_MEM
+    #nhistobins+=nhistobins_MEM
+    #minxvals+=minxvals_MEM
+    #maxxvals+=maxxvals_MEM
+    #categories+=categorienames_MEM    
 
             
     # get input for plotting function
@@ -669,7 +669,7 @@ memexp,
         #if False:
             
             print "Doing plotParallel step since root file was not found.", analysis.rootFilePath
-            THEoutputpath=plotParallel(name,500000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018",True]],"/nfs/dust/cms/user/kelmorab/plotscripts18/July18/pyroot-plotscripts/treejson_v3.json",otherSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_Keras_cool.py"],cirun=False,StopAfterCompileStep=False,haddParallel=True,useGenWeightNormMap=True,useThisSampleForVariableSetup=samples[9])
+            THEoutputpath=plotParallel(name,350000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018",True]],"/nfs/dust/cms/user/kelmorab/plotscripts18/July18/pyroot-plotscripts/treejson_v3.json",otherSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_Keras_cool.py"],cirun=False,StopAfterCompileStep=False,haddParallel=True,useGenWeightNormMap=True,useThisSampleForVariableSetup=samples[9])
             #outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_v5_08102017.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_V6.py"],cirun=False)
             
             if type(THEoutputpath)==str:
