@@ -40,7 +40,7 @@ def add_plots():
     #plotlabelboosted="#splitline{1 lepton, #geq 4 jets, #geq 2 b-tags}{#geq 1 C/A 1.5 jet p_{T} > 200 GeV}"
     plotselection="(N_Jets>=4&&N_BTagsM>=2)"
     plots=[
-        #plotClasses.Plot(ROOT.TH1D("JT" ,"jet-tag categories",len(categoriesJT),0.5,0.5+len(categoriesJT)),catstringJT,categoriesJTsel,"1 lepton"),
+        plotClasses.Plot(ROOT.TH1D("JT" ,"jet-tag categories",len(categoriesJT),0.5,0.5+len(categoriesJT)),catstringJT,categoriesJTsel,"1 lepton"),
         #plotClasses.Plot(ROOT.TH1D("BCAT" ,"jet-tag + boosted categories",len(categoriesJTB),0.5,0.5+len(categoriesJTB)),catstringJTB,categoriesJTBsel,"1 lepton"),
         plotClasses.Plot(ROOT.TH1D("N_Jets","Number of ak4 jets",11,3.5,14.5),"N_Jets",plotselection,plotlabel),
         plotClasses.Plot(ROOT.TH1D("N_BTagsM","Number of b-tags",4,1.5,5.5),"N_BTagsM",plotselection,plotlabel),
@@ -621,24 +621,28 @@ def add_dnn(data, discrname):
     #categories+=categorienames_PlainDNN
             
     # get input for plotting function
-    plotPreselections= [c[0] for c in categories]
-    binlabels= [c[1] for c in categories]
+    plotPreselections   = [c[0] for c in categories]
+    binlabels           = [c[1] for c in categories]
 
-    DNNplots = []
     print len(discrs),len(plotPreselections),len(binlabels),len(nhistobins),len(minxvals),len(maxxvals),
     assert(len(set([len(discrs),len(plotPreselections),len(binlabels),len(nhistobins),len(minxvals),len(maxxvals)]))==1)
     print len(zip(discrs,plotPreselections,binlabels,nhistobins,minxvals,maxxvals))
 
+    DNNplots = []
     for discr, b, bl, nb, minx, maxx in zip(discrs,plotPreselections,binlabels,nhistobins,minxvals,maxxvals):
-        DNNplots.append(plotClasses.Plot(ROOT.TH1F(discrname+"_"+bl,"final discriminator ("+bl+")",nb,minx,maxx),discr,b,bl))
+        DNNplots.append(
+            plotClasses.Plot(
+                ROOT.TH1F(discrname+"_"+bl,"final discriminator ("+bl+")",nb,minx,maxx),
+                discr,b,bl))
 
     data.categories += categories
-    data.discrs += discrs
+    data.discrs     += discrs
     data.nhistobins += nhistobins
-    data.minxvals += minxvals
-    data.maxxvals += maxxvals
-    data.plotPreselections = plotPreselections
-    data.binlabels = binlabels
+    data.minxvals   += minxvals
+    data.maxxvals   += maxxvals
+
+    data.plotPreselections  += plotPreselections
+    data.binlabels          += binlabels
 
     return DNNplots
 
