@@ -2492,12 +2492,12 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         CMS_lumi.lumi_13TeV = "35.9 fb^{-1}"
         CMS_lumi.writeExtraText = 1
         #CMS_lumi.extraText = "Preliminary"
-        CMS_lumi.extraText = ""
-        CMS_lumi.cmsText="CMS private work"
+        CMS_lumi.extraText = "private work"
+        CMS_lumi.cmsText="CMS"
 
         CMS_lumi.lumi_sqrtS = "13 TeV" # used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
 
-        CMS_lumi.cmsTextSize = 0.3
+        CMS_lumi.cmsTextSize = 0.55
         CMS_lumi.cmsTextOffset = 0.49
         CMS_lumi.lumiTextSize = 0.43
         CMS_lumi.lumiTextOffset = 0.61
@@ -2506,12 +2506,12 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         CMS_lumi.hOffset = 0.05
 
         if not ratio:
-            CMS_lumi.cmsTextSize = 0.5
+            CMS_lumi.cmsTextSize = 0.9
             CMS_lumi.cmsTextOffset = 0.3
             CMS_lumi.lumiTextSize = 0.6
             CMS_lumi.lumiTextOffset = 0.3    
-            CMS_lumi.relPosX = 0.00
-            CMS_lumi.hOffset = 0.00
+            CMS_lumi.relPosX = 0.15
+            CMS_lumi.hOffset = 0.02
 
         iPeriod=4   # 13TeV
         iPos=0     # CMS inside frame

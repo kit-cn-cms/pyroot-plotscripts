@@ -65,11 +65,11 @@ plots_inclusive = [
     Plot(ROOT.TH1F("N_Jets", "number of ak4-jets", 50, 0., 1000.),
          "number of ak4-jets", plotselection_inclusive, plotlabel_inclusive),
 
-    Plot(ROOT.TH1F("fakes", "hadr. recoil |#vec{U}| [GeV/c]", 50, 0., 1000.),
-         "hadr. recoil |#vec{U}| [Gev/c]", plotselection_inclusive, plotlabel_fakes),
+    Plot(ROOT.TH1F("fakes", "hadr. recoil |#vec{U}_{T}| [GeV/c]", 50, 0., 1000.),
+         "hadr. recoil |#vec{U}_{T}| [Gev/c]", plotselection_inclusive, plotlabel_fakes),
 
-    Plot(ROOT.TH1F("misses", "hadr. recoil |#vec{U}| [GeV/c]", 50, 0., 1000.),
-         "hadr. recoil |#vec{U}| [Gev/c]", plotselection_inclusive, plotlabel_misses),
+    Plot(ROOT.TH1F("misses", "hadr. recoil |#vec{U}_{T}| [GeV/c]", 50, 0., 1000.),
+         "hadr. recoil |#vec{U}_{T}| [Gev/c]", plotselection_inclusive, plotlabel_misses),
 
     Plot(ROOT.TH1F("h_W_Pt", "W p_{T} [GeV/c]", 50, 0., 1000.),
          "W p_{T} [GeV]", plotselection_inclusive, plotlabel_inclusive),
@@ -77,17 +77,17 @@ plots_inclusive = [
     Plot(ROOT.TH1F("h_Z_Pt", "Z p_{T} [GeV/c]", 50, 0., 1000.),
          "Z p_{T} [GeV]", plotselection_inclusive, plotlabel_inclusive),
 
-    Plot(ROOT.TH1F("Hadr_Recoil_Pt", "hadr. recoil |#vec{U}| [GeV/c]", 50, 0., 1000.),
-         "hadr. recoil #vec{U} [GeV/c]", plotselection_inclusive, plotlabel_inclusive),
+    Plot(ROOT.TH1F("Hadr_Recoil_Pt", "hadr. recoil |#vec{U}_{T}| [GeV/c]", 50, 0., 1000.),
+         "hadr. recoil |#vec{U}_{T}| [GeV/c]", plotselection_inclusive, plotlabel_inclusive),
 
-    Plot(ROOT.TH1F("Hadr_Recoil_Phi", "hadr. recoil #vec{U} #phi", 50, 0., 1000.),
-         "hadr. recoil |#vec{U}| #phi", plotselection_inclusive, plotlabel_inclusive),
+    Plot(ROOT.TH1F("Hadr_Recoil_Phi", "#phi of hadr. recoil #vec{U}", 50, 0., 1000.),
+         "#phi of hadr. recoil #vec{U}", plotselection_inclusive, plotlabel_inclusive),
 
-    Plot(ROOT.TH1F("GenHadr_Recoil_Pt", "generated generated hadr. recoil |#vec{U}| [GeV/c]", 50, 0., 1000.),
-         "generated hadr. recoil |#vec{U}| [GeV/c]", plotselection_inclusive, plotlabel_inclusive),
+    Plot(ROOT.TH1F("GenHadr_Recoil_Pt", "generated hadr. recoil |#vec{U}_{T}| [GeV/c]", 50, 0., 1000.),
+         "generated hadr. recoil |#vec{U}_{T}| [GeV/c]", plotselection_inclusive, plotlabel_inclusive),
     
-    Plot(ROOT.TH1F("GenHadr_Recoil_Phi", "generated hadr. recoil #phi", 50, 0., 1000.),
-         "generated hadr. recoil #phi", plotselection_inclusive, plotlabel_inclusive),
+    Plot(ROOT.TH1F("GenHadr_Recoil_Phi", "#phi of generated hadr. recoil #vec{U}", 50, 0., 1000.),
+         "#phi of generated hadr. recoil #vec{U}", plotselection_inclusive, plotlabel_inclusive),
 
     Plot(ROOT.TH1F("N_LooseLeptons", "# loose leptons", 50, 0., 1000.),
          "# loose leptons", plotselection_inclusive, plotlabel_inclusive),
@@ -98,26 +98,8 @@ plots_inclusive = [
     Plot(ROOT.TH1F("CaloMET_PFMET_ratio", "#slash{E}_{T,Calo} #slash{E}_{T,PF} ratio", 50, 0., 1000.),
          "#slash{E}_{T,Calo} #slash{E}_{T,PF} ratio", plotselection_inclusive, plotlabel_inclusive),
 
-    Plot(ROOT.TH1F("dPhi_Jet_MET", "#Delta #phi (#slash{E}_{T},ak4-jets)", 50, 0., 1000.),
-         "#Delta #phi (#slash{E}_{T},ak4-jets)", plotselection_inclusive, plotlabel_inclusive),
-
-
-
-  # TH1F* h_Jet_PtAK8 = 0;
-  # std::map<std::string, TH1F*> h_Jet_PtAK8Sys;
-
-  # TH1F* h_Jet_EtaAK8 = 0;
-  # std::map<std::string, TH1F*> h_Jet_EtaAK8Sys;
-
-  # TH1F* h_Jet_PhiAK8 = 0;
-  # std::map<std::string, TH1F*> h_Jet_PhiAK8Sys;
-
-  # TH1F* h_Jet_Chf = 0;
-  # std::map<std::string, TH1F*> h_Jet_ChfSys;
-
-  # TH1F* h_Jet_Nhf = 0;
-  # std::map<std::string, TH1F*> h_Jet_NhfSys;
-
+    Plot(ROOT.TH1F("dPhi_Jet_MET", "#Delta #phi (ak4-jets,#slash{E}_{T})", 50, 0., 1000.),
+         "#Delta #phi (ak4-jets,#slash{E}_{T})", plotselection_inclusive, plotlabel_inclusive),
 ]
 
 
