@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttHLimits_2018_v3'
+    name = 'ttHLimits_2018_v39'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -55,10 +55,11 @@ def main(pyrootdir, argv):
     configDataBaseName = "limitsttH18"
 
     # name of plotconfig
-    pltcfgName = "v37_noPS"
+    pltcfgName = "v39"
 
-    # file for MEPDFs/LHEWeights
-    MEPDFCSVFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv"
+    # file for rate factors
+    #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
+    rateFactorsFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/rate_factors.csv"
 
     # script options
     analysisOptions = {
@@ -75,13 +76,13 @@ def main(pyrootdir, argv):
         "singleExecute":        False,  # for non parallel drawing
         "drawParallel":         True,
         # options for drawParallel/singleExecute sub programs
-        "makeSimplePlots":      True,
+        "makeSimplePlots":      False,
         "makeMCControlPlots":   True,
         "makeEventYields":      True,
         # the skipX options try to skip the submission of files to the batch system
         # before skipping the output is crosschecked
         # if the output is not complete, the skipped part is done anyways
-        "skipPlotParallel":     True,
+        "skipPlotParallel":     False,
         "skipHaddParallel":     False,
         "skipHaddFromWildcard": False,
         "skipRenaming":         False,
@@ -199,12 +200,11 @@ def main(pyrootdir, argv):
             pP.setDataBases(plotDataBases)
             pP.setMEMDataBase(memDataBase)
             pP.setAddInterfaces(plotInterfaces)
-            #pP.setMEPDFCSV(MEPDFCSVFile)
             pP.setCatNames([''])
             pP.setCatSelections(['1.'])
-            pP.setMaxEvts(2000000)
-            pP.setUseLHEWeights(False)
-            #pP.setSampleForVariableSetup()
+            pP.setMaxEvts(350000)
+            pP.setRateFactorsFile(rateFactorsFile)
+            pP.setSampleForVariableSetup(configData.samples[9])
 
             # run plotParallel
             pP.run()
@@ -482,15 +482,15 @@ def main(pyrootdir, argv):
                     "ratio":            True, # not default
                     "blinded":          analysis.plotBlinded} #not default
                 # making the control plots
-                gP.makeControlPlots(
-                    dataConfig = genPlots.Config(name = dataList, index = 0),
-                    controlConfig = genPlots.Config(name = histoList, index = 9),
-                    sampleConfig = genPlots.Config(name = histoList, index = 9),
-                    headHist = histoList,
-                    headSample = histoList,
-                    nestedHistsConfig = nestedHistsConfig,
-                    options = controlPlotsOptions,
-                    outName = "controlPlots_data")
+                #gP.makeControlPlots(
+                #    dataConfig = genPlots.Config(name = dataList, index = 0),
+                #    controlConfig = genPlots.Config(name = histoList, index = 9),
+                #    sampleConfig = genPlots.Config(name = histoList, index = 9),
+                #    headHist = histoList,
+                #    headSample = histoList,
+                #    nestedHistsConfig = nestedHistsConfig,
+                #    options = controlPlotsOptions,
+                #    outName = "controlPlots_data")
                 gP.makeControlPlots(
                     dataConfig = genPlots.Config(name = pseudodataList, index = 0),
                     controlConfig = genPlots.Config(name = histoList, index = 9),
@@ -504,15 +504,15 @@ def main(pyrootdir, argv):
 
                 controlPlotsOptions["logscale"] = True
                 
-                gP.makeControlPlots(
-                    dataConfig = genPlots.Config(name = dataList, index = 0),
-                    controlConfig = genPlots.Config(name = histoList, index = 9),
-                    sampleConfig = genPlots.Config(name = histoList, index = 9),
-                    headHist = histoList,
-                    headSample = histoList,
-                    nestedHistsConfig = nestedHistsConfig,
-                    options = controlPlotsOptions,
-                    outName = "controlPlots_data_LOG")
+                #gP.makeControlPlots(
+                #    dataConfig = genPlots.Config(name = dataList, index = 0),
+                #    controlConfig = genPlots.Config(name = histoList, index = 9),
+                #    sampleConfig = genPlots.Config(name = histoList, index = 9),
+                #    headHist = histoList,
+                #    headSample = histoList,
+                #    nestedHistsConfig = nestedHistsConfig,
+                #    options = controlPlotsOptions,
+                #    outName = "controlPlots_data_LOG")
 
                 gP.makeControlPlots(
                     dataConfig = genPlots.Config(name = pseudodataList, index = 0),
@@ -537,7 +537,7 @@ def main(pyrootdir, argv):
                     categories = configData.getEventYieldCategories(),
                     listName = histoList,
                     dataName = dataList,
-                    nameRequirements = ["JT", "N_Jets"]
+                    nameRequirements = ["node"]
                     )
 
 
