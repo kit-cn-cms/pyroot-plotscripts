@@ -2855,6 +2855,7 @@ def encodeSampleSelection(samples,variables):
     sselection=sample.selection
     if sselection=='':
       sselection='1'
+    arrayselection='1'
     text+= '    if(processname=="'+sample.nick+'" && (!('+arrayselection+') || ('+sselection+')==0) ) continue;\n'
     text+= '    else if(processname=="'+sample.nick+'") sampleweight='+sselection+';\n'
   return text
