@@ -79,29 +79,31 @@ class Variable:
         # manage array variable
         if isArray:
             if vartype == 'F':
-                text = '  float* '+var+' = new float[100];'
-                for i in range(0,100):
-                    text += '\nfloatMap["'+var+'_'+str(i+1)+'"] = &'+var+'['+str(i)+']'+';'
+                text = '\n  float* '+var+' = new float[100];'
+                #for i in range(0,100):
+                #    text += '\nfloatMap["'+var+'_'+str(i+1)+'"] = &'+var+'['+str(i)+']'+';'
             elif vartype == 'I':
                 text = '  Long64_t* '+var+' = new Long64_t[100];'
-                for i in range(0,100):
-                    text += '\nintMap["'+var+'_'+str(i+1)+'"] = &'+var+'['+str(i)+']'+';'
+                #for i in range(0,100):
+                #    text += '\nintMap["'+var+'_'+str(i+1)+'"] = &'+var+'['+str(i)+']'+';'
             elif vartype == 'L':
-                text='  Long64_t* '+var+' = new Long64_t[100];'
-                for i in range(0,100):
-                    text += '\nlongMap["'+var+'_'+str(i+1)+'"] = &'+var+'['+str(i)+']'+';'        
-            else: "UNKNOWN TYPE", vartype
+                text = '  Long64_t* '+var+' = new Long64_t[100];'
+                #for i in range(0,100):
+                #    text += '\nlongMap["'+var+'_'+str(i+1)+'"] = &'+var+'['+str(i)+']'+';'        
+            else: print("UNKNOWN TYPE: " +str(vartype))
         
         # manage non array variable
         else:
             if vartype =='F':
-                text = '\nfloat '+var+' = -999;\nfloatMap["' + var + '"] = &' + var + ';'
+                text = '\nfloat '+var+' = -999;'
+                #text+='\nfloatMap["' + var + '"] = &' + var + ';'
             #DANGERZONE
             # Needed hack because of mixing of Int and Long ntuples
             # Avoid in the future
             # Not working for array ints. But i dont think that there are any anywhere
             elif (vartype == 'I' or vartype == 'L'):
-                text = '\nLong64_t '+var+'LONGDUMMY = -999;\nlongMap["'+var+'LONGDUMMY"] = &'+var+'LONGDUMMY;'
+                text = '\nLong64_t '+var+'LONGDUMMY = -999;'
+                text += '\nlongMap["'+var+'LONGDUMMY"] = &'+var+'LONGDUMMY;'
                 text += '\nInt_t '+var+' = -999;\nintMap["'+var+'"] = &'+var+';'                
                 castText = '\n'+var+' = Int_t('+var+'LONGDUMMY);'
             #elif vartype =='L':
