@@ -1305,7 +1305,85 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
   return csvWgtTotal;
 }
 
-// BosonHelper for reweighting of W/W to NuNu Processes
+// Helper for ControlRegion Reweighting
+
+class CR_ScalefactorHelper
+{
+  public:
+    // see the definition/implementation file for a description of the functions 
+    CR_ScalefactorHelper(TString path_to_sf_file);
+    ~CR_ScalefactorHelper();
+    double GetScaleFactorZll(float Hadr_Recoil, string label);
+    void Reset();
+    void LoadSFFile(TString path_to_sf_file_);
+      
+  private:
+    // pointer for the root file containing the desired histograms
+    TFile* scalefactor_file = 0;
+    // path to the root file
+    TString path_to_sf_file = "";
+
+    // histograms containing the scale factors for electron and muon channel separately
+    TH1D* Zll_CR_Scalefactor_nominal = 0;
+    TH1D* Zll_CR_normedScalefactor_nominal = 0;
+    
+    // flag if the file and the histograms were read properly
+    bool initialized = false;
+};
+
+CR_ScalefactorHelper::CR_ScalefactorHelper(TString path_to_sf_file)
+{
+  // just the constructor which loads a root file containing the histograms with the scale factors using the LoadFile function
+  LoadSFFile(path_to_sf_file);
+}
+
+void CR_ScalefactorHelper::LoadSFFile(TString path_to_sf_file_)
+{
+  // this function loads the file given by a string and initializes the 2 needed histograms if the file was loaded correctly
+  path_to_sf_file = path_to_sf_file_;
+  if(path_to_sf_file!="")
+  {
+    scalefactor_file = TFile::Open(path_to_sf_file);
+  }
+  if(scalefactor_file)
+  {
+    Zll_CR_Scalefactor_nominal =   (TH1D*)scalefactor_file->Get("SFPlotNoRescale");
+    Zll_CR_normedScalefactor_nominal =    (TH1D*)scalefactor_file->Get("SFPlotRescale");
+    initialized = true;
+  }
+}
+
+void CR_ScalefactorHelper::Reset()
+{
+  // resets all member data
+  scalefactor_file = 0;
+  path_to_sf_file = "";
+  Zll_CR_Scalefactor_nominal = 0;
+  Zll_CR_normedScalefactor_nominal = 0;
+  
+  initialized = false;
+}
+
+double CR_ScalefactorHelper::GetScaleFactorZll(float Hadr_Recoil_Pt, string label)
+{
+  // this function gets the scale factor for a event dependent on the Pt of the W Boson
+  if(!initialized) return 0.;
+  int bin = -1;
+  double sf = 0.;
+  if (label == "Normed"){
+    bin = Zll_CR_normedScalefactor_nominal->FindBin(Hadr_Recoil_Pt);
+    sf = Zll_CR_normedScalefactor_nominal->GetBinContent(bin);
+  }
+  else if (label == "notNormed"){
+    bin = Zll_CR_Scalefactor_nominal->FindBin(Hadr_Recoil_Pt);
+    sf = Zll_CR_Scalefactor_nominal->GetBinContent(bin);  
+  }
+
+  if(Hadr_Recoil_Pt>=700.) sf = 1.;
+  return sf;
+}
+
+// BosonHelper for reweighting of W/Z to NuNu Processes
 
 class BosonHelper
 {
@@ -2079,6 +2157,8 @@ void plot(){
   TString ZvvBoson_file = workingdir + "/TheoryXS_vvj.root";
   TString ZllBoson_file = workingdir + "/TheoryXS_eej.root";
 
+  TString SF_file = workingdir + "/ScaleFactors.root";
+
   std::string csvHFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/factorized_jes/csv_rwt_fit_hf_v2_final_2017_6_7_all.root";
   std::string csvLFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/factorized_jes/csv_rwt_fit_lf_v2_final_2017_6_7_all.root";
   TString qcd_file = "/nfs/dust/cms/user/mwassmer/QCD_Estimation_September17/QCD_Estimation/QCD_Estimation_FakeScaleFactor_nominal.root";
@@ -2087,6 +2167,7 @@ void plot(){
   LeptonSFHelper* internalLeptonSFHelper= new LeptonSFHelper();
   QCDHelper* internalQCDHelper = new QCDHelper(qcd_file);
   BosonHelper* internalBosonHelper = new BosonHelper(WBoson_file, ZvvBoson_file, ZllBoson_file);
+  CR_ScalefactorHelper* internalCR_ScalefactorHelper = new CR_ScalefactorHelper(SF_file);
 
   // open files
   TChain* chain = new TChain("MVATree");
@@ -2706,6 +2787,9 @@ def startLoop():
   float internalBosonWeight_muFUp = 1.0;
   float internalBosonWeight_muFDown = 1.0;
 
+  float internalSFWeight_Normed = 1.0;
+  float internalSFWeight_notNormed = 1.0;
+
 
   double tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF;
   
@@ -2818,7 +2902,10 @@ def startLoop():
   internalBosonWeight_muFUp = internalBosonHelper->GetScaleFactorZll(Z_Pt, "muFUp");
   internalBosonWeight_muFDown = internalBosonHelper->GetScaleFactorZll(Z_Pt, "muFDown");
   }
-  
+
+
+  internalSFWeight_Normed = internalCR_ScalefactorHelper->GetScaleFactorZll(Hadr_Recoil_Pt, "Normed");
+  internalSFWeight_notNormed = internalCR_ScalefactorHelper->GetScaleFactorZll(Hadr_Recoil_Pt, "notNormed");  
   
   totalTimeCalculateSFs+=timerCalculateSFs->RealTime();
 
