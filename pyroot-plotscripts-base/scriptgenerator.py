@@ -1364,22 +1364,22 @@ void CR_ScalefactorHelper::Reset()
   initialized = false;
 }
 
-double CR_ScalefactorHelper::GetScaleFactorZll(float Hadr_Recoil, string label)
+double CR_ScalefactorHelper::GetScaleFactorZll(float Hadr_Recoil_Pt, string label)
 {
   // this function gets the scale factor for a event dependent on the Pt of the W Boson
-  if(initialized) return 0.;
+  if(!initialized) return 0.;
   int bin = -1;
   double sf = 0.;
   if (label == "Normed"){
-    bin = Zll_CR_normedScalefactor_nominal->FindBin(Hadr_Recoil);
+    bin = Zll_CR_normedScalefactor_nominal->FindBin(Hadr_Recoil_Pt);
     sf = Zll_CR_normedScalefactor_nominal->GetBinContent(bin);
   }
   else if (label == "notNormed"){
-    bin = Zll_CR_Scalefactor_nominal->FindBin(Hadr_Recoil);
+    bin = Zll_CR_Scalefactor_nominal->FindBin(Hadr_Recoil_Pt);
     sf = Zll_CR_Scalefactor_nominal->GetBinContent(bin);  
   }
 
-  if(Hadr_Recoil>=800.) sf = 1.;
+  if(Hadr_Recoil_Pt>=700.) sf = 1.;
   return sf;
 }
 
