@@ -21,13 +21,13 @@ from limittools import replaceQ2scale
 import dnnInputVariableListV1
 
 from analysisClass import *
-from plotconfig_v39 import *
+from plotconfig_v42 import *
 
 
 def main(argv):
 
     #Create analysis object with output name
-    name='limits_v39'
+    name='limits_v42'
     analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscripts18/July18/pyroot-plotscripts/workdir/'+name+'/output_limitInput.root', signalProcess='ttH')
     print os.path.exists(analysis.rootFilePath), "AAAARgh"
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscripts18/July18/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
@@ -338,8 +338,8 @@ def main(argv):
     ]
     
     plots+=plots64+plots63+plots54+plots53+plots44+plots43
-    discriminatorPlots=plots
-    
+    #discriminatorPlots=plots
+
         # prepare discriminators
     categories=[]
     nhistobins=[]
@@ -373,27 +373,27 @@ def main(argv):
               ("(N_Jets>=6&&N_BTagsM>=3&&DNN_6j3t_pred_class==5)","ljets_jge6_tge3_ttlfnode",""),
 
               # 3 tag and 4 tag events with MIN node output cuts
-              ("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==0&&DNN_Out_4j3t_ttH>0.25)","ljets_j4_tge3_discrCut_ttHnode",""),
-              ("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==1&&DNN_Out_4j3t_ttbarBB>0.2)","ljets_j4_tge3_discrCut_ttbbnode",""),
-              ("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==2&&DNN_Out_4j3t_ttbar2B>0.3)","ljets_j4_tge3_discrCut_tt2bnode",""),
-              ("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==3&&DNN_Out_4j3t_ttbarB>0.3)","ljets_j4_tge3_discrCut_ttbnode",""),
-              ("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==4&&DNN_Out_4j3t_ttbarCC>0.2)","ljets_j4_tge3_discrCut_ttccnode",""),
-              ("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==5&&DNN_Out_4j3t_ttbarlf>0.35)","ljets_j4_tge3_discrCut_ttlfnode",""),
+              #("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==0&&DNN_Out_4j3t_ttH>0.25)","ljets_j4_tge3_discrCut_ttHnode",""),
+              #("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==1&&DNN_Out_4j3t_ttbarBB>0.2)","ljets_j4_tge3_discrCut_ttbbnode",""),
+              #("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==2&&DNN_Out_4j3t_ttbar2B>0.3)","ljets_j4_tge3_discrCut_tt2bnode",""),
+              #("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==3&&DNN_Out_4j3t_ttbarB>0.3)","ljets_j4_tge3_discrCut_ttbnode",""),
+              #("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==4&&DNN_Out_4j3t_ttbarCC>0.2)","ljets_j4_tge3_discrCut_ttccnode",""),
+              #("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==5&&DNN_Out_4j3t_ttbarlf>0.35)","ljets_j4_tge3_discrCut_ttlfnode",""),
               
-              ("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==0&&DNN_Out_5j3t_ttH>0.25)","ljets_j5_tge3_discrCut_ttHnode",""),             
-              ("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==1&&DNN_Out_5j3t_ttbarBB>0.2)","ljets_j5_tge3_discrCut_ttbbnode",""),             
-              ("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==2&&DNN_Out_5j3t_ttbar2B>0.3)","ljets_j5_tge3_discrCut_tt2bnode",""),             
-              ("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==3&&DNN_Out_5j3t_ttbarB>0.3)","ljets_j5_tge3_discrCut_ttbnode",""),             
-              ("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==4&&DNN_Out_5j3t_ttbarCC>0.2)","ljets_j5_tge3_discrCut_ttccnode",""),             
-              ("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==5&&DNN_Out_5j3t_ttbarlf>0.35)","ljets_j5_tge3_discrCut_ttlfnode",""),             
+              #("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==0&&DNN_Out_5j3t_ttH>0.25)","ljets_j5_tge3_discrCut_ttHnode",""),             
+              #("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==1&&DNN_Out_5j3t_ttbarBB>0.2)","ljets_j5_tge3_discrCut_ttbbnode",""),             
+              #("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==2&&DNN_Out_5j3t_ttbar2B>0.3)","ljets_j5_tge3_discrCut_tt2bnode",""),             
+              #("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==3&&DNN_Out_5j3t_ttbarB>0.3)","ljets_j5_tge3_discrCut_ttbnode",""),             
+              #("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==4&&DNN_Out_5j3t_ttbarCC>0.2)","ljets_j5_tge3_discrCut_ttccnode",""),             
+              #("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==5&&DNN_Out_5j3t_ttbarlf>0.35)","ljets_j5_tge3_discrCut_ttlfnode",""),             
 
 
-              ("(N_Jets>=6&&N_BTagsM>=3&&DNN_6j3t_pred_class==0&&DNN_Out_6j3t_ttH>0.25)","ljets_jge6_tge3_discrCut_ttHnode",""),
-              ("(N_Jets>=6&&N_BTagsM>=3&&DNN_6j3t_pred_class==1&&DNN_Out_6j3t_ttbarBB>0.2)","ljets_jge6_tge3_discrCut_ttbbnode",""),
-              ("(N_Jets>=6&&N_BTagsM>=3&&DNN_6j3t_pred_class==2&&DNN_Out_6j3t_ttbar2B>0.3)","ljets_jge6_tge3_discrCut_tt2bnode",""),
-              ("(N_Jets>=6&&N_BTagsM>=3&&DNN_6j3t_pred_class==3&&DNN_Out_6j3t_ttbarB>0.3)","ljets_jge6_tge3_discrCut_ttbnode",""),
-              ("(N_Jets>=6&&N_BTagsM>=3&&DNN_6j3t_pred_class==4&&DNN_Out_6j3t_ttbarCC>0.2)","ljets_jge6_tge3_discrCut_ttccnode",""),
-              ("(N_Jets>=6&&N_BTagsM>=3&&DNN_6j3t_pred_class==5&&DNN_Out_6j3t_ttbarlf>0.35)","ljets_jge6_tge3_discrCut_ttlfnode",""),
+              #("(N_Jets>=6&&N_BTagsM>=3&&DNN_6j3t_pred_class==0&&DNN_Out_6j3t_ttH>0.25)","ljets_jge6_tge3_discrCut_ttHnode",""),
+              #("(N_Jets>=6&&N_BTagsM>=3&&DNN_6j3t_pred_class==1&&DNN_Out_6j3t_ttbarBB>0.2)","ljets_jge6_tge3_discrCut_ttbbnode",""),
+              #("(N_Jets>=6&&N_BTagsM>=3&&DNN_6j3t_pred_class==2&&DNN_Out_6j3t_ttbar2B>0.3)","ljets_jge6_tge3_discrCut_tt2bnode",""),
+              #("(N_Jets>=6&&N_BTagsM>=3&&DNN_6j3t_pred_class==3&&DNN_Out_6j3t_ttbarB>0.3)","ljets_jge6_tge3_discrCut_ttbnode",""),
+              #("(N_Jets>=6&&N_BTagsM>=3&&DNN_6j3t_pred_class==4&&DNN_Out_6j3t_ttbarCC>0.2)","ljets_jge6_tge3_discrCut_ttccnode",""),
+              #("(N_Jets>=6&&N_BTagsM>=3&&DNN_6j3t_pred_class==5&&DNN_Out_6j3t_ttbarlf>0.35)","ljets_jge6_tge3_discrCut_ttlfnode",""),
 
               #### only 3 tag events 
               #("(N_Jets==4&&N_BTagsM==3&&DNN_4j3t_pred_class==0)","ljets_j4_t3_ttHnode",""),
@@ -466,24 +466,24 @@ def main(argv):
 'DNN_Out_6j3t_ttbarlf',
 
 # 3 and 4 tags with minimal node output values 
-'DNN_Out_4j3t_ttH',
-'DNN_Out_4j3t_ttbarBB',
-'DNN_Out_4j3t_ttbar2B',
-'DNN_Out_4j3t_ttbarB',
-'DNN_Out_4j3t_ttbarCC',
-'DNN_Out_4j3t_ttbarlf',
-'DNN_Out_5j3t_ttH',
-'DNN_Out_5j3t_ttbarBB',
-'DNN_Out_5j3t_ttbar2B',
-'DNN_Out_5j3t_ttbarB',
-'DNN_Out_5j3t_ttbarCC',
-'DNN_Out_5j3t_ttbarlf',
-'DNN_Out_6j3t_ttH',
-'DNN_Out_6j3t_ttbarBB',
-'DNN_Out_6j3t_ttbar2B',
-'DNN_Out_6j3t_ttbarB',
-'DNN_Out_6j3t_ttbarCC',
-'DNN_Out_6j3t_ttbarlf',
+#'DNN_Out_4j3t_ttH',
+#'DNN_Out_4j3t_ttbarBB',
+#'DNN_Out_4j3t_ttbar2B',
+#'DNN_Out_4j3t_ttbarB',
+#'DNN_Out_4j3t_ttbarCC',
+#'DNN_Out_4j3t_ttbarlf',
+#'DNN_Out_5j3t_ttH',
+#'DNN_Out_5j3t_ttbarBB',
+#'DNN_Out_5j3t_ttbar2B',
+#'DNN_Out_5j3t_ttbarB',
+#'DNN_Out_5j3t_ttbarCC',
+#'DNN_Out_5j3t_ttbarlf',
+#'DNN_Out_6j3t_ttH',
+#'DNN_Out_6j3t_ttbarBB',
+#'DNN_Out_6j3t_ttbar2B',
+#'DNN_Out_6j3t_ttbarB',
+#'DNN_Out_6j3t_ttbarCC',
+#'DNN_Out_6j3t_ttbarlf',
 
 
 ## only 3 tag events
@@ -539,13 +539,13 @@ def main(argv):
                        0.85, 0.8, 0.65, 0.5, 0.4, 0.6     ]
 
     # 3 and 4 tags with minimal node output of 0.25
-    nhistobins_MultiDNN+=[15,  15 , 15, 15,15, 15,
-                         15, 15, 15, 15, 15, 15 ,
-                         15, 15, 15, 12, 15, 15  ]
-    minxvals_MultiDNN+=[0.3]*18
-    maxxvals_MultiDNN+=[0.75, 0.8, 0.65, 0.4, 0.4, 0.63,
-                       0.85, 0.8, 0.6, 0.45, 0.4, 0.5,
-                       0.85, 0.8, 0.65, 0.5, 0.4, 0.6     ]
+    #nhistobins_MultiDNN+=[15,  15 , 15, 15,15, 15,
+                         #15, 15, 15, 15, 15, 15 ,
+                         #15, 15, 15, 12, 15, 15  ]
+    #minxvals_MultiDNN+=[0.3]*18
+    #maxxvals_MultiDNN+=[0.75, 0.8, 0.65, 0.4, 0.4, 0.63,
+                       #0.85, 0.8, 0.6, 0.45, 0.4, 0.5,
+                       #0.85, 0.8, 0.65, 0.5, 0.4, 0.6     ]
     
     ## only 3 tags
     #nhistobins_MultiDNN+=[15,  15 , 15, 15,15, 15, 15, 15, 15, 15, 15, 15 , 15, 15, 15, 12, 15, 15  ]
@@ -613,7 +613,7 @@ def main(argv):
     plotPreselections= [c[0] for c in categories]
     binlabels= [c[1] for c in categories]
 
-
+    discriminatorPlots=[]
     DNNplots=[]
     print len(discrs),len(plotPreselections),len(binlabels),len(nhistobins),len(minxvals),len(maxxvals),
     assert(len(set([len(discrs),len(plotPreselections),len(binlabels),len(nhistobins),len(minxvals),len(maxxvals)]))==1)
@@ -658,7 +658,6 @@ def main(argv):
     allsamples=samples
     allsystnames=weightSystNames+otherSystNames
     print allsystnames
-    exit(0)
 
     # plot everything, except during drawParallel step
     # Create file for data cards
