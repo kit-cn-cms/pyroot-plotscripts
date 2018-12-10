@@ -9,6 +9,7 @@ import filecmp
 import pandas
 
 # local imports 
+import GenWeightUtils
 import variablebox
 import plotClasses
 import scriptfunctions 
@@ -26,7 +27,9 @@ class scriptWriter:
         self.ccPath = plotParaClass.ccPath
         self.systWeights = plotParaClass.systWeights
         self.sampleForVariableSetup = plotParaClass.sampleForVariableSetup
-
+        if self.pp.useGenWeightNormMap:
+            # initialize class to handle genWeight normalization stuff
+            self.genWeightNormalization = GenWeightUtils.GenWeightNormalization(self.pp.rateFactorsFile)
 
 
     ## main function for writing and compiling c++ code ##
@@ -84,6 +87,7 @@ class scriptWriter:
 
         # get tree for variable check
         tree = ROOT.TTree()
+        print("getting tree to setup with")
         if self.sampleForVariableSetup:
             samplesToCheck = [self.sampleForVariableSetup]
         else:
@@ -107,9 +111,9 @@ class scriptWriter:
         # start writing program
         script = scriptfunctions.getHead(self.pp.analysis.pyrootdir, self.pp.dataBases, self.pp.memDBpath, self.pp.addInterfaces)
 
-        if self.pp.MEPDFCSVFile!="":
-            script += scriptfunctions.DeclareMEPDFNormFactors(self.pp.MEPDFCSVFile)
-            script += scriptfunctions.AddMEandPDFNormalizationsMap(self.pp.MEPDFCSVFile)
+        if self.pp.useGenWeightNormMap:
+            script += self.genWeightNormalization.declareNormFactors()
+            script += self.genWeightNormalization.addNormalizationMap()
         
         for db in self.pp.dataBases:
             script += scriptfunctions.InitDataBase(db)
@@ -129,7 +133,8 @@ class scriptWriter:
                                         self.pp.configData.getDiscriminatorPlots())
 
         # start event loop
-        # script += scriptfunctions.DefineLHAPDF() #TODO why is this line not in karims new script?
+        #if self.pp.useGenWeightNormMap:
+        #    script += scriptfunctions.DefineLHAPDF()
         startLoopStub = scriptfunctions.startLoop(self.pp.analysis.pyrootdir)
 
         if castStub!="":
@@ -241,8 +246,8 @@ class scriptWriter:
         vetolist = list(dataFrame.vetolist)
 
         #self.pp.MEPDFCSVFile = self.pp.plotbase + /data/rate_factors_onlyinternal_powhegpythia.csv
-        if self.pp.useLHEWeights:
-            vetolist += scriptfunctions.GetMEPDFVetoList(self.pp.MEPDFCSVFile)
+        if self.pp.useGenWeightNormMap:
+            vetolist += genWeightNormalization.getVetolist()
 
         for addCodeInt in self.pp.addInterfaces:
             vetolist += addCodeInt.getExternalyCallableVariables()
@@ -308,9 +313,9 @@ class scriptWriter:
     def initLoop(self):
         script = ""
         script += "     timerMapping->Start();\n"
-        if self.pp.MEPDFCSVFile!="":
-            mepdfWriter = scriptfunctions.initMEPDF(self.pp.MEPDFCSVFile)
-            script += mepdfWriter.writeCode()
+        if self.pp.useGenWeightNormMap:
+            script += self.genWeightNormalization.resetNormalizationFactors()
+            script += self.genWeightNormalization.relateMapToNormalizationFactor()
 
         script += "     totalTimeMapping+=timerMapping->RealTime();\n"
 

@@ -52,8 +52,8 @@ class plotParallel:
         self.memDBpath = ""
         self.useDataBases = False
         self.addInterfaces = []
-        self.MEPDFCSVFile = ""
-        self.useLHEWeights = False
+        self.rateFactorsFile = None
+        self.useGenWeightNormMap = False
         self.sampleForVariableSetup = None
 
         # check cmssw
@@ -103,14 +103,14 @@ class plotParallel:
             else:
                 print( "unknown additional code interface type: " + str(interface) )
         
-    def setMEPDFCSV(self, csvfile):
-        self.MEPDFCSVFile = csvfile
-        self.useLHEWeights = True
+    def setRateFactorsFile(self, csvfile):
+        self.rateFactorsFile = csvfile
+        self.setUseGenWeightNormMap(True)
         print("set MEPDFCSVFile to "+str(csvfile)+" and useLHEWeights to TRUE")
     
-    def setUseLHEWeights(self, use_lhe):
-        self.useLHEWeights = use_lhe
-        print("set useLHEWeights to "+str(use_lhe))
+    def setUseGenWeightNormMap(self, use_genWeightNormMap):
+        self.useGenWeightNormMap = use_genWeightNormMap
+        print("set useGenWeightNormMap to "+str(use_lhe))
        
     def setMaxEvts(self, maxevts):
         self.maxevents = maxevts

@@ -1,7 +1,19 @@
-  //  translatedFileNameForDataBase=sampleTranslationMapCPP[thisfilename];
-  //  if(processname=="QCD" or processname=="QCD_CMS_ttH_QCDScaleFactorUp" or processname=="QCD_CMS_ttH_QCDScaleFactorDown"){
-  //    translatedFileNameForDataBase+="QCD";
-  //    }
+  //DANGERZONE
+  // hardcode sample translation map for now
+  std::cout<<"WARNING!: Hardcoded sampleTranslationMapCPP !"<<std::endl;
+  sampleTranslationMapCPP[TString("TTToSemiLeptonicTuneCP5PSweights13TeVpowhegpythia8v2")]=TString("TTToSemiLeptonicTuneCP5PSweights13TeVpowhegpythia8");
+  sampleTranslationMapCPP[TString("TTToSemiLeptonicTuneCP513TeVpowhegpythia8newpmx")]=TString("TTToSemiLeptonicTuneCP513TeVpowhegpythia8");
+
+  sampleTranslationMapCPP[TString("TTTo2L2NuTuneCP5PSweights13TeVpowhegpythia8")]=TString("TTTo2L2NuTuneCP5PSweights13TeVpowhegpythia8");
+  sampleTranslationMapCPP[TString("TTTo2L2NuTuneCP513TeVpowhegpythia8newpmx")]=TString("TTTo2L2NuTuneCP513TeVpowhegpythia8");
+
+  sampleTranslationMapCPP[TString("TTToHadronicTuneCP5PSweights13TeVpowhegpythia8newpmx")]=TString("TTToHadronicTuneCP5PSweights13TeVpowhegpythia8");
+  sampleTranslationMapCPP[TString("TTToHadronicTuneCP513TeVpowhegpythia8newpmx")]=TString("TTToHadronicTuneCP513TeVpowhegpythia8");
+
+  sampleTranslationMapCPP[TString("ttHTobbM125TuneCP513TeVpowhegpythia8newpmx")]=TString("ttHTobbM125TuneCP513TeVpowhegpythia8");
+  sampleTranslationMapCPP[TString("ttHToNonbbM125TuneCP513TeVpowhegpythia8newpmx")]=TString("ttHToNonbbM125TuneCP513TeVpowhegpythia8");
+
+
     samplename_in_database=thisfilename;
     if(! (std::find(databaseRelevantFilenames.begin(),databaseRelevantFilenames.end(),thisfilename)!=databaseRelevantFilenames.end()  )){
       databaseRelevantFilenames.push_back(thisfilename.Copy());
