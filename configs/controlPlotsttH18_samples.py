@@ -7,7 +7,7 @@ sys.path.append(pyrootdir)
 import util.tools.plotClasses as plotClasses
 
 def getSamples( pltcfg ):
-    return pltcfg.samplesLimits
+    return pltcfg.samplesControlPlots
         
 
 def getControlSamples( pltcfg ):

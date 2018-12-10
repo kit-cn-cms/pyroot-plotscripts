@@ -291,7 +291,7 @@ class configData:
         
 
         # list of samples used to write C program       
-        self.allSamples = samplesData.getAllSamples( self.pltcfg, self.analysis, self.samples )
+        self.allSamples = samplesData.getAllSamples( self.pltcfg, self.analysis, self.samples)
         # TODO is this used anywhere?
         #self.allSystSamples = samples + systSamples
 
