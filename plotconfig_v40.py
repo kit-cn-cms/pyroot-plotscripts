@@ -462,11 +462,11 @@ ttHpath=path_karim_new+'/ttHTo*/*nominal*.root'
 
 hdamp_ue_systnames_tt_all = [
   #"_CMS_ttHbb_HDAMPUp", "_CMS_ttHbb_HDAMPDown",
-  "_CMS_ttHbb_UEUp", "_CMS_ttHbb_UEDown"
+  #"_CMS_ttHbb_UEUp", "_CMS_ttHbb_UEDown"
 ]
 hdamp_ue_filenames_tt_all = [
   #os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
-  os.path.join(path_karim_new, "*TuneCP5up*/*nominal*.root"), os.path.join(path_karim_new, "*TuneCP5down*/*nominal*.root")
+  #os.path.join(path_karim_new, "*TuneCP5up*/*nominal*.root"), os.path.join(path_karim_new, "*TuneCP5down*/*nominal*.root")
 ]
 
 

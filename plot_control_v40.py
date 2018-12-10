@@ -595,7 +595,7 @@ def main(argv):
     #allsamples=samples+systsamples
     #allsystnames=weightSystNames+otherSystNames+PSSystNames
     allsamples=samples
-    allsystnames=weightSystNames
+    allsystnames=weightSystNames+otherSystNames
 
 
     # plot everything, except during drawParallel step
@@ -653,7 +653,7 @@ def main(argv):
 
             #addRealDataAllHistos(renamedPath,[s.nick for s in samples_data],discriminatorPlots,forceOverwrite=True) # use this version for all histograms even if they do not follow the cat_disc_var naming scheme
             #addRealData(renamedPath,[s.nick for s in samples_data],binlabels,discrname)
-            addPseudoData(outputpath[:-5]+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
+            #addPseudoData(outputpath[:-5]+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
             #outputpath=outputpath[:-5]+'_limitInput.root'
             outputpath=outputpath[:-5]+'_limitInput.root'
         else:
