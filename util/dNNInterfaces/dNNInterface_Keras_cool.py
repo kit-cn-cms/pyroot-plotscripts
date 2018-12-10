@@ -4,13 +4,44 @@ import os
 from distutils.dir_util import copy_tree
 
 class theInterface:
-  def __init__(self, workdir):
+  def __init__(self, workdir, cpLocation):
     self.workdir = workdir
     self.includeString = "-I/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/tensorflow-cc/1.3.0-elfike/tensorflow_cc/include -I/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/eigen/c7dc0a897676/include/eigen3 -I/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/protobuf/3.4.0-fmblme/include"
     #self.libraryString="-L/nfs/dust/cms/user/kelmorab/CMSSW_Moriond2017/cardsCMSSWTF/CMSSW_8_0_26_patch2/lib/slc6_amd64_gcc530 -lDNNBase -lDNNTensorflow -lTTHCommonClassifier"
     self.libraryString = "-L/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/tensorflow-cc/1.3.0-elfike/tensorflow_cc/lib -ltensorflow_cc -L/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/protobuf/3.4.0-fmblme/lib -lprotobuf -lrt"
     self.usesPythonLibraries = True
+    self.DNNCheckpointLocation = cpLocation
+    self.copyCheckpoints()
+    self._get_variables_from_csv()
 
+  def copyCheckpoints(self):
+    self.localCheckpointPath = self.workdir + "/DNNCheckpoints/"
+    if not os.path.exists(self.localCheckpointPath):
+        os.makedirs(self.localCheckpointPath)
+    copy_tree(self.DNNCheckpointLocation, self.DNNCheckpointPath)
+    print("copied DNN checkpoint files to "+str(self.localCheckpointPath))
+    print("checking structure of checkpoint files...")
+    categories = ["4j_ge3t", "5j_ge3t", "ge6j_ge3t"]
+    files = ["trained_model.meta", "trained_model", "variable_norm.csv", "checkpoint"]
+    errors = False
+    for cat in categories:
+        cat_path = self.localCheckpointPath+"/"+cat
+        if not os.path.exists(cat_path):
+            print("directory "+cat_path+" missing.")
+            errors = True
+        else:
+            for f in files:
+                file_path = cat_path + "/" + f
+                if not os.path.exists(file_path):
+                    print("file "+str(file_path)+" missing.")
+                    errors = True
+    if errors:
+        print("... not all neccesary files found for dnn loading")
+        exit()
+    else:
+        print("... all files found.")
+
+            
 
   def getExternalyCallableVariables(self):
     return [
@@ -21,6 +52,7 @@ class theInterface:
         "DNN_Out_4j_ge3t_ttbarlf",
         "DNN_Out_4j_ge3t_ttH",
         "DNN_4j_ge3t_pred_class",
+
         "DNN_Out_5j_ge3t_ttbar2B",
         "DNN_Out_5j_ge3t_ttbarB",
         "DNN_Out_5j_ge3t_ttbarBB",
@@ -28,6 +60,7 @@ class theInterface:
         "DNN_Out_5j_ge3t_ttbarlf",
         "DNN_Out_5j_ge3t_ttH",
         "DNN_5j_ge3t_pred_class",
+
         "DNN_Out_ge6j_ge3t_ttbar2B",
         "DNN_Out_ge6j_ge3t_ttbarB",
         "DNN_Out_ge6j_ge3t_ttbarBB",
@@ -75,19 +108,12 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
   
   
   def getBeforeLoopLines(self):
-    
-    self.path_to_chekpoitns = self.workdir+"/DNN_checkpoints/"
-    if not os.path.exists(self.path_to_chekpoitns):
-        os.makedirs(self.path_to_chekpoitns)
-    # location of plain DNNs (no prenet)
-    copy_tree('/nfs/dust/cms/user/vdlinden/DNN_checkpoints/',self.path_to_chekpoitns)
-    self._get_variables_from_csv()
 
     rstr="""
 
     //ge6j_ge3t cat
-    const string pathToGraph_ge6j_ge3t =\""""+str(self.path_to_chekpoitns)+"""/ge6j_ge3t/trained_model.meta";
-    const string checkpointPath_ge6j_ge3t =\""""+str(self.path_to_chekpoitns)+"""/ge6j_ge3t/trained_model";
+    const string pathToGraph_ge6j_ge3t =\""""+str(self.localCheckpointPath)+"""/ge6j_ge3t/trained_model.meta";
+    const string checkpointPath_ge6j_ge3t =\""""+str(self.localCheckpointPath)+"""/ge6j_ge3t/trained_model";
 
     auto session_ge6j_ge3t = NewSession(SessionOptions());
     if (session_ge6j_ge3t == nullptr) {
@@ -126,8 +152,8 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
 
 
     //5j_ge3t cat
-    const string pathToGraph_5j_ge3t =\""""+str(self.path_to_chekpoitns)+"""/5j_ge3t/trained_model.meta";
-    const string checkpointPath_5j_ge3t =\""""+str(self.path_to_chekpoitns)+"""/5j_ge3t/trained_model";
+    const string pathToGraph_5j_ge3t =\""""+str(self.localCheckpointPath)+"""/5j_ge3t/trained_model.meta";
+    const string checkpointPath_5j_ge3t =\""""+str(self.localCheckpointPath)+"""/5j_ge3t/trained_model";
 
     auto session_5j_ge3t = NewSession(SessionOptions());
     if (session_5j_ge3t == nullptr) {
@@ -164,8 +190,8 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
 
 
     //4j_ge3t cat
-    const string pathToGraph_4j_ge3t = \""""+str(self.path_to_chekpoitns)+"""/4j_ge3t/trained_model.meta";
-    const string checkpointPath_4j_ge3t =\""""+str(self.path_to_chekpoitns)+"""/4j_ge3t/trained_model";
+    const string pathToGraph_4j_ge3t = \""""+str(self.localCheckpointPath)+"""/4j_ge3t/trained_model.meta";
+    const string checkpointPath_4j_ge3t =\""""+str(self.localCheckpointPath)+"""/4j_ge3t/trained_model";
 
     auto session_4j_ge3t = NewSession(SessionOptions());
     if (session_4j_ge3t == nullptr) {
@@ -445,43 +471,10 @@ for(int ifeat=0; ifeat<num_features_5j_ge3t;ifeat++){
 
   def getTestCallLines(self):
     rstr=""  
-    #rstr="""
-  #//TODO: Change TestCallLines
-  #std::vector<TLorentzVector> testdnnjets = {
-        #makeVectorE(561.853400685, -1.687604070, 1.248519063, 48.315901270),
-        #makeVectorE(317.050318074, -0.592420697, -1.641329408, 41.454653026),
-        #makeVectorE(130.993330071, -0.257405132, -2.218888283, 15.829634094),
-        #makeVectorE(90.088794331, -0.758062780, -1.199205875, 11.687776745),
-        #makeVectorE(57.793076163, 0.163249642, 2.988173246, 9.959981641),
-        #makeVectorE(45.080527604, -1.838460445, 1.761856556, 7.07615728)
-    #};
-    #std::vector<double> testdnnjetCSVs = {
-        #0.592329562, 0.156740859, 0.998748481, 0.944896400, 0.268956393, 0.109731160
-    #};
-
-    #TLorentzVector testdnnlepton = makeVectorM(45.567291260, -1.122234225, 2.685425282, 0.105700001);
-    #TLorentzVector testdnnmet = makeVectorM(70.089050293, 0.0, -2.230507374, 0.0); 
-    #std::vector<double> testdnnAddFeatures;
-    #testdnnAddFeatures.push_back(1.); // blr
-    #testdnnAddFeatures.push_back(1.); // blr_transformed
-    #testdnnAddFeatures.push_back(1.); // MEM
-    
-    #// evaluate
-    #DNNOutput aachentestdnnoutput = dnn.evaluate(testdnnjets, testdnnjetCSVs, testdnnlepton, testdnnmet, testdnnAddFeatures);
-    #std::vector<double> targetOutputsfordnntest = { 0.51680371, 0.25959021, 0.07142095, 0.07112622, 0.05624627, 0.02481263, 0.0};
-    #std::cout<<"doing DNN unit test"<<std::endl;
-    #std::cout<<"No error printout means it worked"<<std::endl;
-    #for (size_t i = 0; i < targetOutputsfordnntest.size(); ++i)
-    #{
-        #//assert(fabs(targetOutputsfordnntest[i] - aachentestdnnoutput.values[i]) < 0.000001 && "The DNN output for 6 jet events is incorrect");
-    #}
-#"""
     return rstr
   
   def getCleanUpLines(self):
-    rstr="""
-
-   """
+    rstr=""
     return rstr
   
   def _get_variables_from_csv(self):
@@ -496,7 +489,7 @@ for(int ifeat=0; ifeat<num_features_5j_ge3t;ifeat++){
   	self.means_ge6j_ge3t = []
   	self.stddev_ge6j_ge3t = []
 
-  	with open(self.path_to_chekpoitns+"/4j_ge3t/variable_norm.csv") as csv_file:
+  	with open(self.localCheckpointPath+"/4j_ge3t/variable_norm.csv") as csv_file:
   		csv_reader = csv.reader(csv_file,delimiter=',')
   		for i, row in enumerate(csv_reader):
   			if i != 0:
@@ -508,7 +501,7 @@ for(int ifeat=0; ifeat<num_features_5j_ge3t;ifeat++){
   				self.means_4j_ge3t.append(row[1])
   				self.stddev_4j_ge3t.append(row[2])
 
-  	with open(self.path_to_chekpoitns+"/5j_ge3t/variable_norm.csv") as csv_file:
+  	with open(self.localCheckpointPath+"/5j_ge3t/variable_norm.csv") as csv_file:
   		csv_reader = csv.reader(csv_file,delimiter=',')
   		for i, row in enumerate(csv_reader):
   			if i != 0:
@@ -519,7 +512,7 @@ for(int ifeat=0; ifeat<num_features_5j_ge3t;ifeat++){
   				self.means_5j_ge3t.append(row[1])
   				self.stddev_5j_ge3t.append(row[2])
 
-  	with open(self.path_to_chekpoitns+"/ge6j_ge3t/variable_norm.csv") as csv_file:
+  	with open(self.localCheckpointPath+"/ge6j_ge3t/variable_norm.csv") as csv_file:
   		csv_reader = csv.reader(csv_file,delimiter=',')
   		for i, row in enumerate(csv_reader):
   			if i != 0:
@@ -532,7 +525,6 @@ for(int ifeat=0; ifeat<num_features_5j_ge3t;ifeat++){
 
       
   def _fill_vector(self,cat):
-   
   	# Helper function to fill inputtensors for tensorflow
     master_string= ""
     if cat == '4j_ge3t': 
@@ -550,6 +542,7 @@ for(int ifeat=0; ifeat<num_features_5j_ge3t;ifeat++){
             
         return master_string
 
+
   def _fix_dropout(self,cat):
   	# Check how many dropout layers are in a model and feed the kepp_pro of 1 -> deactivates dropout
 
@@ -557,24 +550,22 @@ for(int ifeat=0; ifeat<num_features_5j_ge3t;ifeat++){
     tensorflow.reset_default_graph()
     master_string = ""
     if cat == '4j_ge3t':
-	  sess_1=tensorflow.Session()
-	  saver_1= tensorflow.train.import_meta_graph(self.path_to_chekpoitns+'/4j_ge3t/trained_model.meta')
-	  saver_1.restore(sess_1,self.path_to_chekpoitns+'/4j_ge3t/trained_model')
-	  graph = tensorflow.get_default_graph()
+	  sess_1    = tensorflow.Session()
+	  saver_1   = tensorflow.train.import_meta_graph(self.localCheckpointPath+'/4j_ge3t/trained_model.meta')
+	  saver_1.restore(sess_1, self.localCheckpointPath+'/4j_ge3t/trained_model')
+	  graph     = tensorflow.get_default_graph()
 
     elif cat == '5j_ge3t':
-
-	  sess_2=tensorflow.Session()
-	  saver_2 = tensorflow.train.import_meta_graph(self.path_to_chekpoitns+'/5j_ge3t/trained_model.meta')
-	  saver_2.restore(sess_2,self.path_to_chekpoitns+'/5j_ge3t/trained_model')
-	  graph = tensorflow.get_default_graph()
+	  sess_2    = tensorflow.Session()
+	  saver_2   = tensorflow.train.import_meta_graph(self.localCheckpointPath+'/5j_ge3t/trained_model.meta')
+	  saver_2.restore(sess_2, self.localCheckpointPath+'/5j_ge3t/trained_model')
+	  graph     = tensorflow.get_default_graph()
 
     elif cat == 'ge6j_ge3t':
-
-	  sess_1=tensorflow.Session()
-	  saver_1 = tensorflow.train.import_meta_graph(self.path_to_chekpoitns+'/ge6j_ge3t/trained_model.meta')
-	  saver_1.restore(sess_1,self.path_to_chekpoitns+'/ge6j_ge3t/trained_model')
-	  graph = tensorflow.get_default_graph()
+	  sess_1    = tensorflow.Session()
+	  saver_1   = tensorflow.train.import_meta_graph(self.localCheckpointPath+'/ge6j_ge3t/trained_model.meta')
+	  saver_1.restore(sess_1, self.localCheckpointPath+'/ge6j_ge3t/trained_model')
+	  graph     = tensorflow.get_default_graph()
 
     graph = tensorflow.get_default_graph()
     for op in graph.get_operations():

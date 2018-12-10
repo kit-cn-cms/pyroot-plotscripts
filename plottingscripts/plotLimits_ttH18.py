@@ -92,8 +92,8 @@ def main(pyrootdir, argv):
     plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttH_2018.json"
     plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018",True]] 
     memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
-    plotInterfaces = [pyrootdir+"/util/dNNInterfaces/dNNInterface_Keras_cool.py"]
-
+    dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/dNNInterface_Keras_cool.py",
+                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/DNNCheckpointFiles/top10Variables"}
     # datacardmaker
     datacardmaker = "mk_datacard_JESTest13TeVPara"
 
@@ -199,7 +199,7 @@ def main(pyrootdir, argv):
             pP.setJson(plotJson)
             pP.setDataBases(plotDataBases)
             pP.setMEMDataBase(memDataBase)
-            pP.setAddInterfaces(plotInterfaces)
+            pP.setDNNInterface(dnnInterface)
             pP.setCatNames([''])
             pP.setCatSelections(['1.'])
             pP.setMaxEvts(350000)

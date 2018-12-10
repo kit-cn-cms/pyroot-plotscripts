@@ -90,7 +90,7 @@ class plotParallel:
         print("set path for MEM DataBase to "+str(db_path))
 
     def setAddInterfaces(self, interfaces):
-        interfaceCounter = 0
+        interfaceCounter = len(self.addInterfaces)
         for interface in interfaces:
             interfaceCounter += 1
             if isinstance( interface, basestring ):
@@ -102,7 +102,16 @@ class plotParallel:
                 self.addInterfaces.append(interface)
             else:
                 print( "unknown additional code interface type: " + str(interface) )
-        
+    
+    def setDNNInterface(self, interfaceConfig):
+        interfacePath = interfaceConfig["interfacePath"]
+        checkpointFiles = interfaceConfig["checkpointFiles"]
+        addModule = "addModule"+str(len(self.addInterfaces)+1)
+        print("loading module "+str(interfacePath)+" as "+addModule+" module.")
+        self.addInterfaces.append(
+            imp.load_source(addModule, interfacePath).theInterface(
+                self.analysis.workdir, checkpointFiles))
+
     def setRateFactorsFile(self, csvfile):
         self.rateFactorsFile = csvfile
         self.setUseGenWeightNormMap(True)
