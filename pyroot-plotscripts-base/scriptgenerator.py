@@ -2785,7 +2785,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   script+="}\n"
   script+="for(auto& obj : catvarsyst2D){\n"
   script+="    auto& Histo2DInfo = obj.second;\n"
-  script+="    Histo2DInfo.histoptr.reset(new TH2F((Histo2DInfo.identifier).c_str(),(Histo2DInfo.title).c_str(),Histo2DInfo.nbinsx,Histo2DInfo.nbinsy,Histo2DInfo.xmin,Histo2DInfo.xmax,Histo2DInfo.ymin,Histo2DInfo.ymax));\n"
+  script+="    Histo2DInfo.histoptr.reset(new TH2F((Histo2DInfo.identifier).c_str(),(Histo2DInfo.title).c_str(),Histo2DInfo.nbinsx,Histo2DInfo.xmin,Histo2DInfo.xmax,Histo2DInfo.nbinsy,Histo2DInfo.ymin,Histo2DInfo.ymax));\n"
   script+="}\n"
   
   # initialize histograms in all categories and for all systematics
