@@ -18,11 +18,11 @@ class theInterface:
     self.localCheckpointPath = self.workdir + "/DNNCheckpoints/"
     if not os.path.exists(self.localCheckpointPath):
         os.makedirs(self.localCheckpointPath)
-    copy_tree(self.DNNCheckpointLocation, self.DNNCheckpointPath)
+    copy_tree(self.DNNCheckpointLocation, self.localCheckpointPath)
     print("copied DNN checkpoint files to "+str(self.localCheckpointPath))
     print("checking structure of checkpoint files...")
     categories = ["4j_ge3t", "5j_ge3t", "ge6j_ge3t"]
-    files = ["trained_model.meta", "trained_model", "variable_norm.csv", "checkpoint"]
+    files = ["trained_model.meta", "trained_model.index", "trained_model.data-00000-of-00001", "variable_norm.csv", "checkpoint"]
     errors = False
     for cat in categories:
         cat_path = self.localCheckpointPath+"/"+cat
