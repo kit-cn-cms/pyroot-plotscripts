@@ -1735,6 +1735,18 @@ void helperFillHisto(const std::vector<structHelpFillHisto>& paramVec)
 
 // Helper struct to fill plots more efficiently
 // Until GCC 4.9 struct cannot have init values if one wants to initialize it with bracket lists
+struct Histo2DInfoStruct{
+    std::string identifier;
+    std::string title;
+    int nbinsx;
+    int nbinsy;
+    float xmin;
+    float xmax;
+    float ymin;
+    float ymax;
+    std::unique_ptr<TH2> histoptr;
+};
+
 struct structHelpFillTwoDimHisto{
   TH2* histo;
   double var1;
@@ -2163,7 +2175,7 @@ def fillTwoDimHistoSyst(name,varname1,varname2,weight,systnames,systweights):
   # Write all individual systnames and systweights in nested vector to use together with function allowing variadic vector size -> speed-up of compilation and less code lines
   text+='     std::vector<structHelpFillTwoDimHisto> helpWeightVec_' + name + ' = {'
   for sn,sw in zip(systnames,systweights):
-    text+='       { ' + 'h_'+name+sn + ', double(' + varname1 + '), double(' + varname2 + '), ' + '('+sw+')*(weight_'+name+')' + '},'
+    text+='       { ' + 'catvarsyst2D['+'"'+name+sn+'"].histoptr.get()' + ', double(' + varname1 + '), double(' + varname2 + '), ' + '('+sw+')*(weight_'+name+')' + '},'
   # finish vector
   text+='     };\n'
   # call helper fill histo function which is defined in the beginning
@@ -2745,19 +2757,35 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   script+=variables.setupTMVAReadersProgram()
   
   script+="std::map<std::string,Histo1DInfoStruct> catvarsyst;\n"
+  script+="std::map<std::string,Histo2DInfoStruct> catvarsyst2D;\n"
   for c in catnames:
     for plot in plots:
         for s in systnames:
-            t=plot.histo.GetTitle()
-            n=plot.histo.GetName()
-            mx=plot.histo.GetXaxis().GetXmax()
-            mn=plot.histo.GetXaxis().GetXmin()
-            nb=plot.histo.GetNbinsX()
-            script+='catvarsyst["'+c+n+s+'"]={"'+c+n+s+'","'+t+'",'+str(nb)+","+str(mn)+","+str(mx)+",nullptr};"
+            if not isinstance(plot,plotutils.TwoDimPlot):
+                t=plot.histo.GetTitle()
+                n=plot.histo.GetName()
+                mx=plot.histo.GetXaxis().GetXmax()
+                mn=plot.histo.GetXaxis().GetXmin()
+                nb=plot.histo.GetNbinsX()
+                script+='catvarsyst["'+c+n+s+'"]={"'+c+n+s+'","'+t+'",'+str(nb)+","+str(mn)+","+str(mx)+",nullptr};"
+            else:
+                t=plot.histo.GetTitle()+";"+plot.histo.GetXaxis().GetTitle()+";"+plot.histo.GetYaxis().GetTitle()
+                n=plot.histo.GetName()
+                mxX=plot.histo.GetXaxis().GetXmax()
+                mnX=plot.histo.GetXaxis().GetXmin()
+                nbX=plot.histo.GetNbinsX()
+                mxY=plot.histo.GetYaxis().GetXmax()
+                mnY=plot.histo.GetYaxis().GetXmin()
+                nbY=plot.histo.GetNbinsY()
+                script+='catvarsyst2D["'+c+n+s+'"]={"'+c+n+s+'","'+t+'",'+str(nbX)+","+str(mnX)+","+str(mxX)+","+str(nbY)+","+str(mnY)+","+str(mxY)+","+",nullptr};"
   script+="\n\n"
   script+="for(auto& obj : catvarsyst){\n"
   script+="    auto& Histo1DInfo = obj.second;\n"
   script+="    Histo1DInfo.histoptr.reset(new TH1F((Histo1DInfo.identifier).c_str(),(Histo1DInfo.title).c_str(),Histo1DInfo.nbins,Histo1DInfo.xmin,Histo1DInfo.xmax));\n"
+  script+="}\n"
+  script+="for(auto& obj : catvarsyst2D){\n"
+  script+="    auto& Histo2DInfo = obj.second;\n"
+  script+="    Histo2DInfo.histoptr.reset(new TH2F((Histo2DInfo.identifier).c_str(),(Histo2DInfo.title).c_str(),Histo2DInfo.nbinsx,Histo2DInfo.nbinsy,Histo2DInfo.xmin,Histo2DInfo.xmax,Histo2DInfo.ymin,Histo2DInfo.ymax));\n"
   script+="}\n"
   
   # initialize histograms in all categories and for all systematics
