@@ -2777,7 +2777,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
                 mxY=plot.histo.GetYaxis().GetXmax()
                 mnY=plot.histo.GetYaxis().GetXmin()
                 nbY=plot.histo.GetNbinsY()
-                script+='catvarsyst2D["'+c+n+s+'"]={"'+c+n+s+'","'+t+'",'+str(nbX)+","+str(mnX)+","+str(mxX)+","+str(nbY)+","+str(mnY)+","+str(mxY)+","+",nullptr};"
+                script+='catvarsyst2D["'+c+n+s+'"]={"'+c+n+s+'","'+t+'",'+str(nbX)+","+str(nbY)+","+str(mnX)+","+str(mxX)+","+str(mnY)+","+str(mxY)+",nullptr};"
   script+="\n\n"
   script+="for(auto& obj : catvarsyst){\n"
   script+="    auto& Histo1DInfo = obj.second;\n"
