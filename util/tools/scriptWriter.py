@@ -13,7 +13,7 @@ import GenWeightUtils
 import variablebox
 import plotClasses
 import scriptfunctions 
-
+import variableCancer
 ###########################
 #                         #
 # S C R I P T W R I T E R #
@@ -121,12 +121,12 @@ class scriptWriter:
             script += addCodeInt.getBeforeLoopLines()
             
         # initialize all variables
-        initStub, castStub = self.variables.initVarsProgram()
+        initStub, castStub = self.varManager.writeVariableInitialization()
         script += initStub
-        script += self.variables.initBranchAddressesProgram()
+        script += self.varManager.writeBranchAdresses()
 
         # initialize TMVA Readers
-        script += self.variables.setupTMVAReadersProgram()
+        script += self.varManager.writeTMVAReader()
 
         # initialize histograms in all categories and for all systematics
         script += scriptfunctions.initHistos(self.pp.categoryNames, self.pp.systNames, 
@@ -247,7 +247,7 @@ class scriptWriter:
 
         #self.pp.MEPDFCSVFile = self.pp.plotbase + /data/rate_factors_onlyinternal_powhegpythia.csv
         if self.pp.useGenWeightNormMap:
-            vetolist += genWeightNormalization.getVetolist()
+            vetolist += self.genWeightNormalization.getVetolist()
 
         for addCodeInt in self.pp.addInterfaces:
             vetolist += addCodeInt.getExternalyCallableVariables()
@@ -265,50 +265,46 @@ class scriptWriter:
         # set self.vetolist so it can be accessed everywhere in the cls
         self.vetolist = vetolist
 
+
     def initVariables(self, tree):
-        # initialize variables object
-        variables = variablebox.Variables(self.vetolist)
-        # get standard variables
-        standardvars = ['Weight','Weight_CSV','Weight_XS']
-        print("tree")
-        print(tree)
-        print(type(tree))
-        variables.initVars(standardvars, tree)
-
-
+        # initialize variables objects
+        variableManager = variableCancer.VariableManager(tree, self.vetolist, verbose = 1)
+        variableManager.add( ["Weight", "Weight_CSV", "Weight_XS"] )
+        
         # get additional variables
         if len(self.pp.configData.addVars) > 0:
-            variables.initVars(self.pp.configData.addVars, tree)
+            variableManager.add( self.pp.configData.addVars )
 
         # get systematic weight variables
-        variables.initVars(self.systWeights, tree)
+        variableManager.add( self.systWeights )
 
         systWeights = []
-        for systweight in self.pp.systWeights:
-            if ":=" in systweight:
-                    systWeights.append(systweight.split(":=")[0])
-            else:
-                    systWeights.append(systweight)
+        for w in self.systWeights:
+            if ":=" in w:   systWeights.append( w.split(":=")[0] )
+            else:           systWeights.append(w)
         self.systWeights = systWeights
 
         # get sample selection variables
         for sample in self.pp.configData.allSamples:
-            variables.initVars(sample.selection, tree)
+            variableManager.add( sample.selection )
 
         # get category selection variables
-        variables.initVars(self.pp.categorySelections, tree)
+        variableManager.add( self.pp.categorySelections )
 
         # get variables used in plots
         for plot in self.pp.configData.getDiscriminatorPlots():
             if plot.dim == 1:
-                variables.initVars(plot.variable, tree)
+                variableManager.add( plot.variable )
             if plot.dim == 2:
-                variables.initVars(plot.variable1, tree)
-                variables.initVars(plot.variable2, tree)
+                variableManager.add( plot.variable1 )
+                variableManager.add( plot.variable2 )
 
-            variables.initVars(plot.selection, tree)
+            variableManager.add( plot.selection )
+     
+        # run the variable initialization program
+        variableManager.run()
+        self.varManager = variableManager
 
-        self.variables = variables
 
     def initLoop(self):
         script = ""
@@ -326,7 +322,7 @@ class scriptWriter:
 
         script += "     timerSampleWeight->Start();\n"
         script += '        float sampleweight=1;\n'
-        script += scriptfunctions.encodeSampleSelection(self.pp.configData.allSamples, self.variables)
+        script += scriptfunctions.encodeSampleSelection(self.pp.configData.allSamples, self.varManager)
         script += "     totalTimeSampleWeight+=timerSampleWeight->RealTime();\n"
         
         script += "     timerReadDataBase->Start();\n"
@@ -342,8 +338,9 @@ class scriptWriter:
         script += "     totalTimeEvalDNN+=timerEvalDNN->RealTime();\n"
 
         script += "     timerEvalWeightsAndBDT->Start();\n"
+
         # calculate varibles and get TMVA outputs
-        script += self.variables.calculateVarsProgram()
+        script += self.varManager.calculateVariables()
         print("done")
         script += "     totalTimeEvalWeightsAndBDT+=timerEvalWeightsAndBDT->RealTime();\n"
         
@@ -355,17 +352,18 @@ class scriptWriter:
         script = ""
         # this class temporary saves variables, systNames and systWeights
         # this way these havent got to be given as arguments for every plot initiated
-        plotClass = scriptfunctions.initPlots(self.variables, self.pp.systNames, self.systWeights)
+        plotClass = scriptfunctions.initPlots(self.varManager, self.pp.systNames, self.systWeights)
         
         for catname, catselection in zip(self.pp.categoryNames, self.pp.categorySelections):
             # for every category
-            script += plotClass.startCat(catselection)
+            plotText = plotClass.startCat(catselection)
             # plot everything
             for plot in self.pp.configData.getDiscriminatorPlots():
-                script += plotClass.initPlot(plot, tree, catname)
+                plotText += plotClass.initPlot(plot, tree, catname)
             # finish category
-            script += plotClass.endCat()
-
+            plotText += plotClass.endCat()
+            script += plotText
+        
         return script
 
 

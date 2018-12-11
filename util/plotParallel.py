@@ -119,7 +119,7 @@ class plotParallel:
     
     def setUseGenWeightNormMap(self, use_genWeightNormMap):
         self.useGenWeightNormMap = use_genWeightNormMap
-        print("set useGenWeightNormMap to "+str(use_lhe))
+        print("set useGenWeightNormMap to "+str(use_genWeightNormMap))
        
     def setMaxEvts(self, maxevts):
         self.maxevents = maxevts

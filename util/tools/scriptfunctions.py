@@ -31,17 +31,21 @@ using namespace std;
   for addCodeInt in addCodeInterfaces:
     retstr += addCodeInt.getAdditionalFunctionDefinitionLines()
   
-  with open(basepath+"/util/scriptFiles/runFile-head1.cc", "r") as head1:
-    retstr += head1.read()
+  includedClasses = [
+    "EventFilter",
+    "LeptonSFHelper",
+    "Systematics",
+    "CSVHelper",
+    #"QCDHelper",
+    #"TTbarSystHelper",
+    ]
+  for cls in includedClasses:
+    with open(basepath+"/util/scriptFiles/class"+cls+".cc", "r") as clsCode:
+      retstr += clsCode.read()
 
-  #with open(self(memDB_path)+'/test/sampleNameMap.json',"r") as jfile:
-  #  jstring = jfile.read()
-  #sampleTranslationMap = json.loads(jstring)
-  #for transSample in sampleTranslationMap:
-  #  retstr+="\tsampleTranslationMapCPP[TString(\""+transSample+"\")]=TString(\""+sampleTranslationMap[transSample]+"\");\n"
-  
-  with open(basepath+"/util/scriptFiles/runFile-head2.cc", "r") as head2:
-    retstr += head2.read()
+  with open(basepath+"/util/scriptFiles/plotHead.cc", "r") as head:
+    retstr += head.read()
+
   return retstr
 # -------------------------------------------------------------------------------------------------
 
@@ -146,19 +150,17 @@ def startLoop(basepath):
 
 
 
-# -- encoding samples -----------------------------------------------------------------------------
-def encodeSampleSelection(samples, variables):
-  text = ''
-  for sample in samples:
-    arrayselection = variables.checkArrayLengths(sample.selection)
-    if arrayselection == '':
-      arrayselection = '1'
-    sselection = sample.selection
-    if sselection == '':
-      sselection = '1'
-    text+= '    if(processname=="'+sample.nick+'" && (!('+arrayselection+') || ('+sselection+')==0) ) continue;\n'
-    text+= '    else if(processname=="'+sample.nick+'") sampleweight='+sselection+';\n'
-  return text
+# -- encoding sampleSelections --------------------------------------------------------------------
+def encodeSampleSelection(samples, varManager):
+    text = ''
+    for sample in samples:
+        arraySelection = varManager.checkArrayLengths(sample.selection)
+        if arraySelection == '':  arraySelection = '1'
+        sampleSelection = sample.selection
+        if sampleSelection == '': sampleSelection = '1'
+        text+= '    if(processname=="'+sample.nick+'" && (!('+arraySelection+') || ('+sampleSelection+')==0) ) continue;\n'
+        text+= '    else if(processname=="'+sample.nick+'") sampleweight='+sampleSelection+';\n'
+    return text
 # -------------------------------------------------------------------------------------------------
 
 
@@ -265,21 +267,22 @@ def readOutDataBase(thisDataBase=[]):
 
 # -- initializing plots ---------------------------------------------------------------------------
 class initPlots:
-    def __init__(self, variables, systnames, systweights):
+    def __init__(self, varManager, systnames, systweights):
         self.systnames = systnames
         self.systweights = systweights
-        self.variables = variables
+        self.varManager = varManager
 
-    def startCat(self, catweight):
+    def startCat(self, catWeight):
         script ='\n    // staring category\n'
 
-        arrayselection = self.variables.checkArrayLengths(catweight)
-        if catweight=='':
-            catweight='1'
-        if arrayselection=='':
-            arrayselection ='1'
-        script +='    if((('+arrayselection+')*('+catweight+'))!=0) {\n'
-        script +='      float categoryweight='+catweight+';\n'
+        arraySelection = self.varManager.checkArrayLengths(catWeight)
+        print("arraySelection:" +str(arraySelection))
+
+        if catWeight == '':         catWeight='1'
+        if arraySelection == '':    arraySelection ='1'
+
+        script +='    if( ( ('+arraySelection+')*('+catWeight+') )!=0 )\n    {\n'
+        script +='      float categoryweight='+catWeight+';\n'
         return script
 
     def endCat(self):
@@ -287,69 +290,66 @@ class initPlots:
 
     def initPlot(self, plot, tree, catname):
         # get dimension of plot
-        try:
-            dim = plot.dim
+        try: dim = plot.dim
         except:
             print("seems like plot is not an instance of Plot or TwoDimPlot...")
             sys.exit()
 
         script = ""
         plotName = plot.histo.GetName()
-        if dim == 1:
-            vars = [plot.variable]
-        if dim == 2:
-            vars = [plot.variable1, plot.variable2]
+        if dim == 1: variables = [plot.variable]
+        if dim == 2: variables = [plot.variable1, plot.variable2]
         sel = plot.selection
-        if sel == "":
-            sel = "1"
+        if sel == "": sel = "1"
 
         # prepare loop over array variables
-        varsNoIndex = []
-        for var in vars:
-            varsNoIndex += self.variables.varsNoIndex(var)
-        varsNoIndex += self.variables.varsNoIndex(sel)
+        variablesNoIndex = []
+        for var in variables:
+            variablesNoIndex += self.varManager.getVariablesNoIndex(var)
+        variablesNoIndex += self.varManager.getVariablesNoIndex(sel)
+        variablesNoIndex = list(set(variablesNoIndex))
 
         # get size of array
         loopSize = None
-        for var in varsNoIndex:
-            if not var in self.variables.variables:
-                continue
-            if self.variables.variables[var].arraylength != None:
-                assert loopSize == None or loopSize == self.variables.variables[var].arraylength
-                loopSize = self.variables.variables[var].arraylength
+        for var in variablesNoIndex:
+            if not var in self.varManager.variables: continue
 
+            if self.varManager.variables[var].isArray:
+                assert loopSize == None or loopSize == self.varManager.variables[var].indexVariable
+                loopSize = self.varManager.variables[var].indexVariable
+
+        # set histogram name
         histName = catname + plotName
         
         script += "\n"
-        if loopSize != None:
+        if not loopSize == None:
             # write histo for array
-            var_i = [self.variables.getArrayEntries(var, "i") for var in vars]
-            sel_i = self.variables.getArrayEntries(sel, "i")
+            var_i = [self.varManager.getArrayEntries(var, "i") for var in variables]
+            sel_i = self.varManager.getArrayEntries(sel, "i")
 
             script += varLoop("i", loopSize)
             script += "{\n"
             
-            arraySelection = self.variables.checkArrayLengths(",".join(vars + [sel]))
+            arraySelection = self.varManager.checkArrayLengths(",".join(variables + [sel]))
             weight = "("+arraySelection+")*("+sel_i+")*Weight_XS*categoryweight*sampleweight"
 
             script += fillHistoSyst(histName, var_i, weight, self.systnames, self.systweights)
             script += "            }\n"
         else:
-            # write histo for single
-
-            # if the variable in 1Dplot doesnt have .xml in name, is not in tree and has "_" in name
-            # split the variable name, because it is a vector subvariable
-            if dim == 1 and not ".xml" in vars[0] and not hasattr(tree, vars[0]) and "_" in vars[0]:
-                varOld = vars[0]
+            # only handle one dimensional plots that are not BDT variables, are not in tree and have '_' in name
+            if dim == 1 and not ".xml" in variables[0] and not hasattr(tree, variables[0]) and "_" in variables[0]:
+                
+                varOld = variables[0]
                 varHead, varTail = varOld.rsplit("_", 1)
                 if hasattr(tree, varHead) and varTail.isdigit():
-                    vars[0] = varHead + "[" + str(int(varTail) - 1) + "]"
-                    print "Found vector sub variable: ", varOld, " which was converted to: ",vars[0] 
+                    # construct array like variable varHead[index]
+                    variables[0] = varHead + "[" + str(int(varTail) - 1) + "]"
+                    print("found vector variable "+str(varOld)+". Converted to: "+str(variables[0]))
 
-            arraySelection = self.variables.checkArrayLengths(",".join(vars + [sel]))
+            arraySelection = self.varManager.checkArrayLengths(",".join(variables + [sel]))
             weight = '('+arraySelection+')*('+sel+')*Weight_XS*categoryweight*sampleweight'
-            script += fillHistoSyst(histName, vars, weight, self.systnames, self.systweights)
-        
+            script += fillHistoSyst(histName, variables, weight, self.systnames, self.systweights)
+        if self.varManager.verbose > 20: print("\n\ninit plot code for "+str(plotName)+":\n"+str(script))
         return script
         
 
@@ -363,7 +363,7 @@ def fillHistoSyst(histName, varNames, weight, systNames, systWeights):
     # Write all individual systnames and systweights in nested vector 
     # to use together with function allowing variadic vector size 
     # -> speed-up of compilation and less code lines
-    text += '     std::vector<structHelpFillHisto> helpWeightVec_' + histName + ' = {'
+    text += '       std::vector<structHelpFillHisto> helpWeightVec_' + histName + ' = {\n'
 
     # loop over systematics
     for systName, systWeight in zip(systNames, systWeights):
@@ -377,7 +377,7 @@ def fillHistoSyst(histName, varNames, weight, systNames, systWeights):
         else:
             print("this is not a valid configuration of varNames "+str(varNames))
             return None
-        text+= '('+systWeight+')*(weight_'+histName+')' + '},'
+        text+= '('+systWeight+')*(weight_'+histName+')' + '},\n'
 
     # finish vector     
     text+= '     };\n'
