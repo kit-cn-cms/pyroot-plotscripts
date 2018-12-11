@@ -77,15 +77,18 @@ class Variable():
     castText=""
     if isarray:
       if t=='F':
-        text=' \nfloat* '+var+' = new float[100];'
+        text=' \nstd::unique_ptr<float[]> '+var+' ( new float[20] );'
+        text+='   std::fill_n ('+var+'.get(),20,-999);'
         #for i in range(0,100):
           #text+='\nfloatMap["' + var + '_' + str(i+1) + '"] = &' + var + '[' + str(i) + ']' + ';'
       elif t=='I':
-        text='  Long64_t* '+var+' = new Long64_t[100];'
+        text=' \nstd::unique_ptr<Long64_t[]> '+var+' ( new Long64_t[20] );'
+        text+='   std::fill_n ('+var+'.get(),20,-999);'
         #for i in range(0,100):
           #text+='\nintMap["' + var + '_' + str(i+1) + '"] = &' + var + '[' + str(i) + ']' + ';'
       elif t=='L':
-        text='  Long64_t* '+var+' = new Long64_t[100];'
+        text=' \nstd::unique_ptr<Long64_t[]> '+var+' ( new Long64_t[20] );'
+        text+='   std::fill_n ('+var+'.get(),20,-999);'
         #for i in range(0,100):
           #text+='\nlongMap["' + var + '_' + str(i+1) + '"] = &' + var + '[' + str(i) + ']' + ';'    
       else: "UNKNOWN TYPE",t
@@ -100,7 +103,8 @@ class Variable():
       elif (t=='I' or t=='L'):
         text='\nLong64_t '+var+'LONGDUMMY = -999;'
         #text+='\nlongMap["' + var + 'LONGDUMMY"] = &' + var + 'LONGDUMMY;'
-        text+='\nInt_t '+var+' = -999;\nintMap["' + var + '"] = &' + var + ';'        
+        #text+='\nInt_t '+var+' = -999;\nintMap["' + var + '"] = &' + var + ';'
+        text+='\nInt_t '+var+' = -999;'
         castText='\n'+var+' = Int_t('+var + 'LONGDUMMY);'
       #elif t=='L':
         #text='\nLong64_t '+var+' = -999;\nlongMap["' + var + '"] = &' + var + ';'
@@ -115,7 +119,7 @@ class Variable():
     print "setting branches for ", self.name
     #text+='if(chain->GetBranch("'+self.name+'")){\n'
     if isarray:
-      text+='  chain->SetBranchAddress("'+self.name+'",'+self.name+');\n'
+      text+='  chain->SetBranchAddress("'+self.name+'",'+self.name+'.get());\n'
     else:
       if self.vartype=='I' or self.vartype=='L':
         text+='  chain->SetBranchAddress("'+self.name+'",&'+self.name+'LONGDUMMY);\n'
@@ -345,7 +349,8 @@ class Variables:
   # Program: Initialize all variables
   def initVarsProgram(self):
     castText=""
-    text="std::map<std::string, float*> floatMap;\nstd::map<std::string, Int_t*> intMap;\nstd::map<std::string, Long64_t*> longMap;\n\n"
+    #text="std::map<std::string, float*> floatMap;\nstd::map<std::string, Int_t*> intMap;\nstd::map<std::string, Long64_t*> longMap;\n\n"
+    text="\n"
     for name,var in self.variables.iteritems():
       stubInit, stubCast = var.initVarProgram()
       text+=stubInit
