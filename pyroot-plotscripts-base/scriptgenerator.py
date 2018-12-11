@@ -3523,15 +3523,48 @@ def renameHistosParallel(infname,sysnames,prune=False):
         newname+=sys
         nsysts+=1
 	
-    if "JES" in thisname or "JER" in thisname or "_ttH_scaleFSR" in thisname or "_ttH_scaleISR" in thisname or "_ttH_FSR" in thisname or "_ttH_ISR" in thisname or "_ttH_hdamp" in thisname or "ttH_ue" in thisname or "_ttHbb_scaleFSR" in thisname or "_ttHbb_scaleISR" in thisname or "_ttHbb_FSR" in thisname or "_ttHbb_ISR" in thisname or "_ttHbb_HDAMP" in thisname or "ttHbb_UE" in thisname or (("CMS_scale" in thisname or "CMS_res_" in thisname) and ("_jUp" in thisname or "_jDown" in thisname)) or "_CMS_ttH_QCDScaleFactor" in thisname or "_CMS_ttHbbFROMTREES" in thisname:
-      if nsysts>2:
-        thish=outfile.Get(thisname)
-        theobjectlist.append(thish)
-	print nsysts, " systs: removing ", thisname
-	outfile.Delete(thisname)
-	outfile.Delete(thisname+";1")
-	continue
-
+    if "JES" in thisname or "JER" in thisname or "_ttH_scaleFSR" in thisname or "_ttH_scaleISR" in thisname or "_ttH_FSR" in thisname or "_ttH_ISR" in thisname or "_ttH_hdamp" in thisname or "ttH_ue" in thisname or "_ttHbb_scaleFSR" in thisname or "_ttHbb_scaleISR" in thisname or "_ttHbb_FSR" in thisname or "_ttHbb_ISR" in thisname or "_ttHbb_HDAMP" in thisname or "ttHbb_UE" in thisname or (("CMS_scale" in thisname or "CMS_res_" in thisname) and ("_jUp" in thisname or "_jDown" in thisname or "_j_2017Up" in thisname or "_j_2017Down" in thisname)) or "_CMS_ttH_QCDScaleFactor" in thisname or "_CMS_ttHbbFROMTREES" in thisname:
+        if nsysts>2:
+            thish=outfile.Get(thisname)
+            theobjectlist.append(thish)
+            print nsysts, " systs: removing ", thisname
+            outfile.Delete(thisname)
+            outfile.Delete(thisname+";1")
+            continue
+    
+    deleted=False
+    # these samples do not have Gen systs at the moment -> delete the histos
+    samplesWhithoutGenSysts=["diboson","ttbarW","ttbarZ","ttV","SingleTop","Vjets","zjets","wjets","singlet"]
+    for ss in samplesWhithoutGenSysts:
+        if thisname.startswith(ss):
+            if "CMS_ttHbb_ISR" in thisname or "CMS_ttHbb_FSR" in thisname or "CMS_ttHbb_scaleMuR" in thisname or "CMS_ttHbb_PDF" in thisname:
+                print "removing minor", thisname
+                thish=outfile.Get(thisname)
+                theobjectlist.append(thish)
+                outfile.Delete(thisname)
+                outfile.Delete(thisname+";1")
+                deleted=True
+    if deleted:
+        continue
+        
+    # filter histos with uncertainties not belonging to this specific sample
+    deleted=False
+    ttbarsamples=["ttbarOther","ttbarPlus2B","ttbarPlusB","ttbarPlusCCbar","ttbarPlusBBbar"]
+    for ss in ttbarsamples:
+        if thisname.startswith(ss+"_"):
+            for sss in ttbarsamples:
+                if sss==ss:
+                    continue # skip case for the sample itself
+                if (sss+"Up" in thisname or sss+"Down" in thisname) and not thisname.startswith(sss+"_") : 
+                    print "removing double", thisname
+                    # now there should be 2 different ttbar samples in the name-> delete this 
+                    thish=outfile.Get(thisname)
+                    theobjectlist.append(thish)
+                    outfile.Delete(thisname)
+                    outfile.Delete(thisname+";1")
+                    deleted=True
+    if deleted:
+        contin
     if newname!=thisname:
       print "changed ", thisname, " to ", newname  
       thish=outfile.Get(thisname)
