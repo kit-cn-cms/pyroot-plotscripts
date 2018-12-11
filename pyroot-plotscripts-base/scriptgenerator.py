@@ -1709,7 +1709,7 @@ struct Histo1DInfoStruct{
     int nbins;
     float xmin;
     float xmax;
-    TH1* histoptr;
+    std::unique_ptr<TH1> histoptr;
 };
 
 
@@ -2151,7 +2151,7 @@ def fillHistoSyst(name,varname,weight,systnames,systweights):
   # Write all individual systnames and systweights in nested vector to use together with function allowing variadic vector size -> speed-up of compilation and less code lines
   text+='     std::vector<structHelpFillHisto> helpWeightVec_' + name + ' = {'
   for sn,sw in zip(systnames,systweights):
-    text+='       { ' + 'catvarsyst['+'"'+name+sn+'"].histoptr' + ', double(' + varname + '), ' + '('+sw+')*(weight_'+name+')' + '},'
+    text+='       { ' + 'catvarsyst['+'"'+name+sn+'"].histoptr.get()' + ', double(' + varname + '), ' + '('+sw+')*(weight_'+name+')' + '},'
   # finish vector
   text+='     };\n'
   # call helper fill histo function which is defined in the beginning
@@ -2754,10 +2754,10 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
             mn=plot.histo.GetXaxis().GetXmin()
             nb=plot.histo.GetNbinsX()
             script+='catvarsyst["'+c+n+s+'"]={"'+c+n+s+'","'+t+'",'+str(nb)+","+str(mn)+","+str(mx)+",nullptr};"
-  script+="\n"
+  script+="\n\n"
   script+="for(auto& obj : catvarsyst){\n"
   script+="    auto& Histo1DInfo = obj.second;\n"
-  script+="    Histo1DInfo.histoptr = new TH1F((Histo1DInfo.identifier).c_str(),(Histo1DInfo.title).c_str(),Histo1DInfo.nbins,Histo1DInfo.xmin,Histo1DInfo.xmax);\n"
+  script+="    Histo1DInfo.histoptr.reset(new TH1F((Histo1DInfo.identifier).c_str(),(Histo1DInfo.title).c_str(),Histo1DInfo.nbins,Histo1DInfo.xmin,Histo1DInfo.xmax));\n"
   script+="}\n"
   
   # initialize histograms in all categories and for all systematics
