@@ -605,8 +605,8 @@ def makeDatacardsParallel(filename,outname,categories=None,doHdecay=True,discrna
   do_qstat(jobids)
   # now hadd the bbb to the inital root file
   print "adding root files with BBB to other histos"
-  cmd='mv '+filename+' '+filename.replace(".root","backup.root")
-  subprocess.call(cmd,shell=True)
+  #cmd='mv '+filename+' '+filename.replace(".root","backup.root")
+  #subprocess.call(cmd,shell=True)
   #cmd='hadd '+filename+' '+filename.replace(".root","backup.root")+' '+' '.join(bbbrootfiles)
   #subprocess.call(cmd,shell=True)
 
