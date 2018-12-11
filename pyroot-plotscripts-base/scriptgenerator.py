@@ -1314,6 +1314,8 @@ class CR_ScalefactorHelper
     CR_ScalefactorHelper(TString path_to_sf_file);
     ~CR_ScalefactorHelper();
     double GetScaleFactorZll(float Hadr_Recoil, string label);
+    double GetScaleFactorZllUp(float Hadr_Recoil, string label);
+    double GetScaleFactorZllDown(float Hadr_Recoil, string label);
     void Reset();
     void LoadSFFile(TString path_to_sf_file_);
       
@@ -1379,8 +1381,52 @@ double CR_ScalefactorHelper::GetScaleFactorZll(float Hadr_Recoil_Pt, string labe
     sf = Zll_CR_Scalefactor_nominal->GetBinContent(bin);  
   }
 
-  if(Hadr_Recoil_Pt>=700.) sf = 1.;
+  if(Hadr_Recoil_Pt>=1000.) sf = 1.;
   return sf;
+}
+
+double CR_ScalefactorHelper::GetScaleFactorZllUp(float Hadr_Recoil_Pt, string label)
+{
+  // this function gets the scale factor for a event dependent on the Pt of the W Boson
+  if(!initialized) return 0.;
+  int bin = -1;
+  double sf = 0.;
+  double sfup = 0.;
+  if (label == "Normed"){
+    bin = Zll_CR_normedScalefactor_nominal->FindBin(Hadr_Recoil_Pt);
+    sf = Zll_CR_normedScalefactor_nominal->GetBinContent(bin);
+    sfup = (sf+Zll_CR_normedScalefactor_nominal->GetBinError(bin))/sf;
+  }
+  else if (label == "notNormed"){
+    bin = Zll_CR_Scalefactor_nominal->FindBin(Hadr_Recoil_Pt);
+    sf = Zll_CR_Scalefactor_nominal->GetBinContent(bin);  
+    sfup = (sf+Zll_CR_Scalefactor_nominal->GetBinError(bin))/sf;
+  }
+
+  if(Hadr_Recoil_Pt>=1000.) sfup = 1.;
+  return sfup;
+}
+
+double CR_ScalefactorHelper::GetScaleFactorZllDown(float Hadr_Recoil_Pt, string label)
+{
+  // this function gets the scale factor for a event dependent on the Pt of the W Boson
+  if(!initialized) return 0.;
+  int bin = -1;
+  double sf = 0.;
+  double sfdown = 0.;
+  if (label == "Normed"){
+    bin = Zll_CR_normedScalefactor_nominal->FindBin(Hadr_Recoil_Pt);
+    sf = Zll_CR_normedScalefactor_nominal->GetBinContent(bin);
+    sfdown = (sf-Zll_CR_normedScalefactor_nominal->GetBinError(bin))/sf;
+  }
+  else if (label == "notNormed"){
+    bin = Zll_CR_Scalefactor_nominal->FindBin(Hadr_Recoil_Pt);
+    sf = Zll_CR_Scalefactor_nominal->GetBinContent(bin);  
+    sfdown = (sf-Zll_CR_Scalefactor_nominal->GetBinError(bin))/sf;
+  }
+
+  if(Hadr_Recoil_Pt>=1000.) sfdown = 1.;
+  return sfdown;
 }
 
 // BosonHelper for reweighting of W/Z to NuNu Processes
@@ -2788,7 +2834,11 @@ def startLoop():
   float internalBosonWeight_muFDown = 1.0;
 
   float internalSFWeight_Normed = 1.0;
+  float internalSFWeight_NormedUp = 1.0;
+  float internalSFWeight_NormedDown = 1.0;
   float internalSFWeight_notNormed = 1.0;
+  float internalSFWeight_notNormedUp = 1.0;
+  float internalSFWeight_notNormedDown = 1.0;
 
 
   double tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF;
@@ -2903,9 +2953,14 @@ def startLoop():
   internalBosonWeight_muFDown = internalBosonHelper->GetScaleFactorZll(Z_Pt, "muFDown");
   }
 
-
+  if(processname.find("z_ll_jets")!=std::string::npos || processname.find("z_nunu_jets")!=std::string::npos){
   internalSFWeight_Normed = internalCR_ScalefactorHelper->GetScaleFactorZll(Hadr_Recoil_Pt, "Normed");
+  internalSFWeight_NormedUp = internalCR_ScalefactorHelper->GetScaleFactorZllUp(Hadr_Recoil_Pt, "Normed");
+  internalSFWeight_NormedDown = internalCR_ScalefactorHelper->GetScaleFactorZllDown(Hadr_Recoil_Pt, "Normed");
   internalSFWeight_notNormed = internalCR_ScalefactorHelper->GetScaleFactorZll(Hadr_Recoil_Pt, "notNormed");  
+  internalSFWeight_notNormedUp = internalCR_ScalefactorHelper->GetScaleFactorZllUp(Hadr_Recoil_Pt, "notNormed");  
+  internalSFWeight_notNormedDown = internalCR_ScalefactorHelper->GetScaleFactorZllDown(Hadr_Recoil_Pt, "notNormed");  
+  }
   
   totalTimeCalculateSFs+=timerCalculateSFs->RealTime();
 
@@ -3130,6 +3185,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 
       "DoWbosonReweighting",
       "DoZbosonReweighting",
+      "internalSFWeight_Normed","internalSFWeight_NormedUp","internalSFWeight_NormedDown"
 ]
 
   #csv_file=os.getcwd()+"/rate_factors_onlyinternal_powhegpythia.csv"
