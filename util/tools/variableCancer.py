@@ -539,7 +539,7 @@ class Variable:
                 text = "    float "+varName+" = -999;\n"
             elif varType == "I" or varType == "L":
                 text = "    Long64_t "+varName+"LONGDUMMY = -999;\n"
-                text = "    Int_t "+varName+" = -999;\n"
+                text+= "    Int_t "+varName+" = -999;\n"
                 castText = "    "+varName+" = Int_t("+varName+"LONGDUMMY);\n"
             else: print("UNKNOWN TYPE: "+str(varType))
         return text, castText
@@ -551,12 +551,12 @@ class Variable:
         text = ""
 
         if self.isArray:
-            text += "   chain->SetBranchAddress(\""+self.varName+"\","+self.varName+");\n"
+            text += "    chain->SetBranchAddress(\""+self.varName+"\", &"+self.varName+");\n"
         else:
             if self.varType == "I" or self.varType == "L":
-                text += "   chain->SetBranchAddress(\""+self.varName+"\", &"+self.varName+"LONGDUMMY);\n"
+                text += "    chain->SetBranchAddress(\""+self.varName+"\", &"+self.varName+"LONGDUMMY);\n"
             else:
-                text += "   chain->SetBranchAddress(\""+self.varName+"\", &"+self.varName+");\n"
+                text += "    chain->SetBranchAddress(\""+self.varName+"\", &"+self.varName+");\n"
         return text
 
     def writeTMVAReader(self, variableManager):

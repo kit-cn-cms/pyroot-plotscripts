@@ -80,11 +80,11 @@ class GenWeightNormalization():
         """
         for weight in self.weightList:
             code += "internalNormFactor_"+weight+" = 1.0;\n"
-        code += "if( GenWeight_Norm_Map.find("+"translatedCurrentRelevantSampleNameForGenWeights"+"+\"_"+self.weightList[0]+"\")!=GenWeight_NormMap.end()){;\n"
+        code += "if( GenWeight_Norm_Map.find("+"translatedCurrentRelevantSampleNameForGenWeights"+"+\"_"+self.weightList[0]+"\")!=GenWeight_Norm_Map.end()){;\n"
         for weight in self.weightList:
-            code += "internalNormFactor_"+weight+"="+"GenWeight_Norm_Map["+"translatedCurrentRelevantSampleNameForGenWeights"+"+'_"+weight+"'];\n"
+            code += "internalNormFactor_"+weight+"="+"GenWeight_Norm_Map["+"translatedCurrentRelevantSampleNameForGenWeights"+"+\"_"+weight+"\"];\n"
         code += "}\n"
         code += "else{ std::cout << \"did not find weights in map \"<<translatedCurrentRelevantSampleNameForGenWeights<<std::endl;}\n"
-        code += "//std::cout<<'first internal weight '<<"+"translatedCurrentRelevantSampleForGenWeights"+"+'_"+self.weightList[0]+"' <<' '<< internalNormFactor_"+self.weightList[0]+"<<std::endl;\n"
+        code += "//std::cout<<'first internal weight '<<"+"translatedCurrentRelevantSampleForGenWeights"+"+\"_"+self.weightList[0]+"\" <<\" \"<< internalNormFactor_"+self.weightList[0]+"<<std::endl;\n"
         return code
 
