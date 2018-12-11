@@ -408,7 +408,8 @@ class scriptWriter:
     
         # looping over samples
         for sample in self.pp.configData.allSamples:
-            print '\ncreating scripts for',sample.name,'from',sample.path
+            print("creating scripts for "+str(sample.name))
+            #print '\ncreating scripts for',sample.name,'from',sample.path
             self.samplewiseMaps[sample.nick] = []
 
             nEvents = 0

@@ -235,19 +235,19 @@
   internalCSVweight_CSVCErr2Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVCErr2up,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
   internalCSVweight_CSVCErr2Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVCErr2down,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
   
-  internalQCDweight=internalQCDHelper->GetScaleFactor(N_Jets,N_BTagsM,N_TightElectrons,N_TightMuons);
-  internalQCDweightup=internalQCDHelper->GetScaleFactorErrorUp(N_Jets,N_BTagsM,N_TightElectrons,N_TightMuons);
-  internalQCDweightdown=internalQCDHelper->GetScaleFactorErrorDown(N_Jets,N_BTagsM,N_TightElectrons,N_TightMuons);
+  //internalQCDweight=internalQCDHelper->GetScaleFactor(N_Jets,N_BTagsM,N_TightElectrons,N_TightMuons);
+  //internalQCDweightup=internalQCDHelper->GetScaleFactorErrorUp(N_Jets,N_BTagsM,N_TightElectrons,N_TightMuons);
+  //internalQCDweightdown=internalQCDHelper->GetScaleFactorErrorDown(N_Jets,N_BTagsM,N_TightElectrons,N_TightMuons);
   
-  int ttbar_subprocess = internalttbarsysthelper->GetTtbarSubProcess(GenEvt_I_TTPlusCC,GenEvt_I_TTPlusBB);
-  internalISRweightup = internalttbarsysthelper->GetISRScaleFactorUp(ttbar_subprocess,N_Jets);
-  internalISRweightdown = internalttbarsysthelper->GetISRScaleFactorDown(ttbar_subprocess,N_Jets);
-  internalFSRweightup = internalttbarsysthelper->GetFSRScaleFactorUp(ttbar_subprocess,N_Jets);
-  internalFSRweightdown = internalttbarsysthelper->GetFSRScaleFactorDown(ttbar_subprocess,N_Jets);
-  internalHDAMPweightup = internalttbarsysthelper->GetHDAMPScaleFactorUp(ttbar_subprocess,N_Jets);
-  internalHDAMPweightdown = internalttbarsysthelper->GetHDAMPScaleFactorDown(ttbar_subprocess,N_Jets);
-  internalUEweightup = internalttbarsysthelper->GetUEScaleFactorUp(ttbar_subprocess,N_Jets);
-  internalUEweightdown = internalttbarsysthelper->GetUEScaleFactorDown(ttbar_subprocess,N_Jets);
+  //int ttbar_subprocess = internalttbarsysthelper->GetTtbarSubProcess(GenEvt_I_TTPlusCC,GenEvt_I_TTPlusBB);
+  //internalISRweightup = internalttbarsysthelper->GetISRScaleFactorUp(ttbar_subprocess,N_Jets);
+  //internalISRweightdown = internalttbarsysthelper->GetISRScaleFactorDown(ttbar_subprocess,N_Jets);
+  //internalFSRweightup = internalttbarsysthelper->GetFSRScaleFactorUp(ttbar_subprocess,N_Jets);
+  //internalFSRweightdown = internalttbarsysthelper->GetFSRScaleFactorDown(ttbar_subprocess,N_Jets);
+  //internalHDAMPweightup = internalttbarsysthelper->GetHDAMPScaleFactorUp(ttbar_subprocess,N_Jets);
+  //internalHDAMPweightdown = internalttbarsysthelper->GetHDAMPScaleFactorDown(ttbar_subprocess,N_Jets);
+  //internalUEweightup = internalttbarsysthelper->GetUEScaleFactorUp(ttbar_subprocess,N_Jets);
+  //internalUEweightdown = internalttbarsysthelper->GetUEScaleFactorDown(ttbar_subprocess,N_Jets);
   
   totalTimeCalculateSFs+=timerCalculateSFs->RealTime();
 

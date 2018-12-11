@@ -142,7 +142,7 @@ def DefineLHAPDF():
 
 # -- starting loop over events --------------------------------------------------------------------
 def startLoop(basepath):
-  with open(basepath + "/util/scriptFiles/eventLoop-head.cc", "r") as head:
+  with open(basepath + "/util/scriptFiles/eventLoopHead.cc", "r") as head:
     return head.read()
 # -------------------------------------------------------------------------------------------------
 

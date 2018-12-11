@@ -173,8 +173,8 @@ class plotParallel:
     ## main function ##
     def run(self):
         # creating paths and folders
-        self.scriptsPath = self.analysis.workdir + "/ppScripts/"
-        self.plotPath = self.analysis.workdir + "/ppPlots/"
+        self.scriptsPath = self.analysis.workdir + "/plotParallelScripts/"
+        self.plotPath = self.analysis.workdir + "/plotParllelOutputs/"
 
         # check output if skipping activated
         if self.analysis.skipPlotParallel:
@@ -215,7 +215,7 @@ class plotParallel:
         outputs = self.runscriptData["outputs"]
         entries = self.runscriptData["entries"]
         for index in range(len(scripts)):
-            print("{:<10} | {:<150}\n\t{}".format(entries[index], scripts[index], outputs[index])) 
+            print("{:<40} | {:<15}".format( outputs[index].split("/")[-1], entries[index] ))
 
 
         # check if we should stop
