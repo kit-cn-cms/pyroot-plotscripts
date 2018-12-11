@@ -211,6 +211,8 @@ print "done"
     
 def renameHistosActual(infname,outfname,sysnames,checkBins=False,prune=True,Epsilon=0.0):
   print "RenameHistosStep: checking bins set to ", checkBins
+  print "RenameHistosStep: prune set to ", prune
+  
   theclock=ROOT.TStopwatch()
   theclock.Start()
   subclock=ROOT.TStopwatch()
@@ -246,10 +248,10 @@ def renameHistosActual(infname,outfname,sysnames,checkBins=False,prune=True,Epsi
 
     # dont need the dummy histograms
     if "dummy" in thisname:
-      if prune:
-	print "Deleting ", thisname+";1"
-	infile.Delete(thisname+";1")
-      continue
+        if prune:
+            print "Deleting ", thisname+";1"
+            infile.Delete(thisname+";1")
+        continue
     
     nsysts=0
     for sys in sysnames:
@@ -260,10 +262,48 @@ def renameHistosActual(infname,outfname,sysnames,checkBins=False,prune=True,Epsi
     
     # do not need histograms with more than two systs
     if nsysts>2:
-      if prune:
-	print "Deleting ", thisname+";1"
-	infile.Delete(thisname+";1")
-      continue
+        if prune:
+            print "Deleting ", thisname+";1"
+            infile.Delete(thisname+";1")
+        continue
+
+    deleted=False
+    # these samples do not have Gen systs at the moment -> delete the histos
+    samplesWhithoutGenSysts=["diboson","ttbarW","ttbarZ","ttV","SingleTop","Vjets","zjets","wjets","singlet"]
+    for ss in samplesWhithoutGenSysts:
+        if thisname.startswith(ss):
+            if "CMS_ttHbb_ISR" in thisname or "CMS_ttHbb_FSR" in thisname or "CMS_ttHbb_scaleMuR" in thisname or "CMS_ttHbb_PDF" in thisname:
+                if prune:
+                    print "Deleting ", thisname+";1"
+                    thish=infile.Get(thisname)
+                    theobjectlist.append(thish)
+                    infile.Delete(thisname)
+                    infile.Delete(thisname+";1")
+                    deleted=True
+    if deleted:
+        continue
+    
+    # filter histos with uncertainties not belonging to this specific sample
+    deleted=False
+    ttbarsamples=["ttbarOther","ttbarPlus2B","ttbarPlusB","ttbarPlusCCbar","ttbarPlusBBbar"]
+    for ss in ttbarsamples:
+        if thisname.startswith(ss+"_"):
+            for sss in ttbarsamples:
+                if sss==ss:
+                    continue # skip case for the sample itself
+                if (sss+"Up" in thisname or sss+"Down" in thisname) and not thisname.startswith(sss+"_") : 
+                    # now there should be 2 different ttbar samples in the name-> delete this
+                    if prune:
+                        print "Deleting ", thisname+";1"
+                        thish=infile.Get(thisname)
+                        theobjectlist.append(thish)
+                        infile.Delete(thisname)
+                        infile.Delete(thisname+";1")
+                        deleted=True
+    if deleted:
+        continue
+
+
     
     newhist=""
     
@@ -565,10 +605,10 @@ def makeDatacardsParallel(filename,outname,categories=None,doHdecay=True,discrna
   do_qstat(jobids)
   # now hadd the bbb to the inital root file
   print "adding root files with BBB to other histos"
-  cmd='mv '+filename+' '+filename.replace(".root","backup.root")
-  subprocess.call(cmd,shell=True)
-  cmd='hadd '+filename+' '+filename.replace(".root","backup.root")+' '+' '.join(bbbrootfiles)
-  subprocess.call(cmd,shell=True)
+  #cmd='mv '+filename+' '+filename.replace(".root","backup.root")
+  #subprocess.call(cmd,shell=True)
+  #cmd='hadd '+filename+' '+filename.replace(".root","backup.root")+' '+' '.join(bbbrootfiles)
+  #subprocess.call(cmd,shell=True)
 
   print "done creating datacards"    
   

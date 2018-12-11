@@ -595,7 +595,7 @@ def main(argv):
     #allsamples=samples+systsamples
     #allsystnames=weightSystNames+otherSystNames+PSSystNames
     allsamples=samples
-    allsystnames=weightSystNames
+    allsystnames=weightSystNames+otherSystNames
 
 
     # plot everything, except during drawParallel step
@@ -608,7 +608,7 @@ def main(argv):
         #if False:
             
             print "Doing plotParallel step since root file was not found.", analysis.rootFilePath
-            THEoutputpath=plotParallel(name,350000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018",True]],"/nfs/dust/cms/user/kelmorab/plotscripts18/July18/pyroot-plotscripts/treejson_v3.json",otherSystNames,addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False,haddParallel=True,useGenWeightNormMap=True,useThisSampleForVariableSetup=samples[9])
+            THEoutputpath=plotParallel(name,300000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018",True]],"/nfs/dust/cms/user/kelmorab/plotscripts18/July18/pyroot-plotscripts/treejson_v3.json",otherSystNames,addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False,haddParallel=True,useGenWeightNormMap=True,useThisSampleForVariableSetup=samples[9])
             #outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_v5_08102017.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_V6.py"],cirun=False)
             
             if type(THEoutputpath)==str:
@@ -653,7 +653,7 @@ def main(argv):
 
             #addRealDataAllHistos(renamedPath,[s.nick for s in samples_data],discriminatorPlots,forceOverwrite=True) # use this version for all histograms even if they do not follow the cat_disc_var naming scheme
             #addRealData(renamedPath,[s.nick for s in samples_data],binlabels,discrname)
-            addPseudoData(outputpath[:-5]+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
+            #addPseudoData(outputpath[:-5]+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
             #outputpath=outputpath[:-5]+'_limitInput.root'
             outputpath=outputpath[:-5]+'_limitInput.root'
         else:
