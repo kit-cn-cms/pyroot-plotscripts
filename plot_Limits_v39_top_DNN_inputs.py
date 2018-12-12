@@ -285,12 +285,12 @@ def main(argv):
     Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Min","Evt_CSV_Min",30,-0.10000000149,0.49388423562),"Evt_CSV_Min",plotselection,plotlabel),
     Plot(ROOT.TH1D(plotprefix+"second_jet_Eta","second_jet_Eta",30,-2.5,2.5),"Jet_Eta[1]",plotselection,plotlabel),
     Plot(ROOT.TH1D(plotprefix+"Evt_blr_ETH_transformed","Evt_blr_ETH_transformed",30,-11.6342458725,7.72277259827),"Evt_blr_ETH_transformed",plotselection,plotlabel),
-    Plot(ROOT.TH1D("Evt_Dr_MinDeltaRTaggedJets","#Delta R of closest tagged jets",50,0.,5.0),"Evt_Dr_MinDeltaRTaggedJets",plotselection,plotlabel),
+    Plot(ROOT.TH1D(plotprefix+"Evt_Dr_MinDeltaRTaggedJets","#Delta R of closest tagged jets",50,0.,5.0),"Evt_Dr_MinDeltaRTaggedJets",plotselection,plotlabel),
     Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Average_Tagged","Evt_CSV_Average_Tagged",30,0.510232031345,0.999261438847),"Evt_CSV_Average_Tagged",plotselection,plotlabel),
     Plot(ROOT.TH1D(plotprefix+"secon_jet_CSV","secon_jet_CSV",30,-0.1,1),"Jet_CSV[1]",plotselection,plotlabel),
     Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Average","Evt_CSV_Average",30,-0.1,1),"Evt_CSV_Average",plotselection,plotlabel),
     Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Min_Tagged","Evt_CSV_Min_Tagged",30,-0.1,1),"Evt_CSV_Min_Tagged",plotselection,plotlabel),
-    Plot(ROOT.TH1D(plotprefix+"N_BTagsT","N_BTagsT",30,3,9),"Evt_CSV_Min_Tagged",plotselection,plotlabel),
+    Plot(ROOT.TH1D(plotprefix+"N_BTagsT","N_BTagsT",30,3,9),"N_BTagsT",plotselection,plotlabel),
     Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_HT_tag","BDT_common5_input_HT_tag",30,0,500),"BDT_common5_input_HT_tag",plotselection,plotlabel),
     Plot(ROOT.TH1D(plotprefix+"Evt_M_JetsAverage","Evt_M_JetsAverage",30,3.29856276512,44.2075080872),"Evt_M_JetsAverage",plotselection,plotlabel),
 
@@ -444,7 +444,7 @@ def main(argv):
         Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_HT_tag","BDT_common5_input_HT_tag",30,0,500),"BDT_common5_input_HT_tag",plotselection,plotlabel),
         Plot(ROOT.TH1D(plotprefix+"Evt_HT","Sum p_{T}",30,0,1500),"Evt_HT",plotselection,plotlabel),
         Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Average","Evt_CSV_Average",30,0.,1),"Evt_CSV_Average",plotselection,plotlabel),
-        Plot(ROOT.TH1D("Evt_Dr_MinDeltaRTaggedJets","#Delta R of closest tagged jets",50,0.,5.0),"Evt_Dr_MinDeltaRTaggedJets",plotselection,plotlabel),
+        Plot(ROOT.TH1D(plotprefix+"Evt_Dr_MinDeltaRTaggedJets","#Delta R of closest tagged jets",50,0.,5.0),"Evt_Dr_MinDeltaRTaggedJets",plotselection,plotlabel),
         Plot(ROOT.TH1D(plotprefix+"MEM","MEM",30,0,1.),memexp,plotselection,plotlabel),
 
         # Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_maxeta_jet_tag","BDT_common5_input_maxeta_jet_tag",30,0.03415389359,1.73617899418),"BDT_common5_input_maxeta_jet_tag",plotselection,plotlabel),
