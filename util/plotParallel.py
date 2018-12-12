@@ -174,7 +174,7 @@ class plotParallel:
     def run(self):
         # creating paths and folders
         self.scriptsPath = self.analysis.workdir + "/plotParallelScripts/"
-        self.plotPath = self.analysis.workdir + "/plotParllelOutputs/"
+        self.plotPath = self.analysis.workdir + "/plotParallelOutputs/"
 
         # check output if skipping activated
         if self.analysis.skipPlotParallel:
