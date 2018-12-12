@@ -205,17 +205,22 @@ def renameHistosParallel(inFile, outFile, systNames, checkBins = False, prune = 
                 newName+= syst
                 nSysts += 1
 
+        # check nSysts
+        print("nSysts: {} - Checking: {}".format(nSysts, thisName))        
+
         # do not need histograms with more than two systs
         if nSysts > 2:
             if not plotParaCall and prune:
                 print("Deleting "+str(thisName)+";1")
                 rootFile.Delete(thisName+";1")
                 continue
+
             elif plotParaCall and ("JES" in thisName or "JER" in thisName or "_ttH_scaleFSR" in thisName or "_ttH_scaleISR" in thisName or \
                 "_ttH_FSR" in thisName or "_ttH_ISR" in thisName or "_ttH_hdamp" in thisName or "ttH_ue" in thisName or \
                 "_ttHbb_scaleFSR" in thisName or "_ttHbb_scaleISR" in thisName or "_ttHbb_FSR" in thisName or \
                 "_ttHbb_ISR" in thisName or "_ttHbb_HDAMP" in thisName or "ttHbb_UE" in thisName or \
-                (("CMS_scale" in thisName or "CMS_res_" in thisName) and ("_jUp" in thisName or "_jDown" in thisName)) or \
+                (("CMS_scale" in thisName or "CMS_res_" in thisName) and \
+                ("_jUp" in thisName or "_jDown" in thisName or "_j_2017Up" in thisName or "_j_2017Down" in thisName)) or \
                 "_CMS_ttH_QCDScaleFactor" in thisName or "_CMS_ttHbbFROMTREES" in thisName):
                 
                 thisHist = rootFile.Get(thisName)
@@ -224,6 +229,55 @@ def renameHistosParallel(inFile, outFile, systNames, checkBins = False, prune = 
                 rootFile.Delete(thisName)
                 rootFile.Delete(thisName+";1")
                 continue
+
+
+        if plotParaCall and ("SingleMu" in thisName or "SingleEl" in thisName) and nSysts > 2:
+            thisHist = rootFile.Get(thisName)
+            objectList.append(thisHist)
+            print(str(nSysts)+" systs - removing "+str(thisName))
+            rootFile.Delete(thisName)
+            rootFile.Delete(thisName+";1")
+            continue
+
+
+
+        deleted = False
+        # these samples to not have Gen systs at the moment -> delete the histos
+        samplesWithoutGenSysts = [
+            "diboson","ttbarW","ttbarZ","ttV","SingleTop","Vjets","zjets","wjets","singlet"]
+
+        for sampleName in samplesWithoutGenSysts:
+            if thisName.startswith(sampleName):
+                if "CMS_ttHbb_ISR" in thisName or "CMS_ttHbb_FSR" in thisName or \
+                    "CMS_ttHbb_scaleMuR" in thisName or "CMS_ttHbb_PDF" in thisName:
+                    if plotParaCall or prune:
+                        print("Deleting "+str(thisName)+";1")
+                        thisHist = rootFile.Get(thisName)
+                        objectList.append(thisHist)
+                        rootFile.Delete(thisName)
+                        rootFile.Delete(thisName+";1")
+                        deleted = True
+        if deleted: continue
+
+
+        # filter histos with uncertainties not belonging to this specific sample
+        deleted = False
+        ttbarSamples = ["ttbarOther","ttbarPlus2B","ttbarPlusB","ttbarPlusCCbar","ttbarPlusBBbar"]
+        for sampleName in ttbarSamples:
+            if thisName.startswith(sampleName+"_")
+                for sampleName2 in ttbarSamples:
+                    if sampleName2 == sampleName: continue
+                    if (sampleName2+"Up" in thisName or sampleName2+"Down" in thisName) \
+                        and not thisName.startswith(sampleName2+"_"):
+                        if plotParaCall or prune:
+                            print("Deleting "+str(thisName)+";1")
+                            thisHist = rootFile.Get(thisName)
+                            objectList.append(thisHist)
+                            rootFile.Delete(thisName)
+                            rootFile.Delete(thisName+";1")
+                            deleted = True
+        if delted: continue                               
+
 
         if not plotParaCall:
             newHist = ""

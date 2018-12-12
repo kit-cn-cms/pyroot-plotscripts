@@ -73,8 +73,11 @@ def makeDatacardsParallel(filePath, outPath,
     
     # submitting datacardmaking scripts
     nafInterface.datacardInterface(shellScripts, datacardFiles)
+    
     # hadding binbybin files to output
-    haddBinByBinFiles(bbbFiles, filePath)
+    #haddBinByBinFiles(bbbFiles, filePath)
+    # remove empty binbybin files
+    removeBinByBinFiles(bbbFiles, filePath)
     print "done creating datacards"
     
 def haddBinByBinFiles(bbbFiles, filePath):
@@ -100,4 +103,13 @@ def haddBinByBinFiles(bbbFiles, filePath):
         print("moving "+str(bbb))
         cmd = ["mv", bbb, bbbDir+"/"]
         call(cmd)
+
+def removeBinByBinFiles(bbbFiles, filePath):
+    print("removing binbybin files")
+    for bbb in bbbFiles:
+        print("removing "+str(bbb))
+        cmd = ["rm", bbb]
+        call(cmd)
+
+    
 # -------------------------------------------------------------------------------------------------
