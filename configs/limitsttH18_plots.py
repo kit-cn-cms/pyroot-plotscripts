@@ -291,185 +291,75 @@ def add_dnn(data, discrname):
     maxxvals=[]
     discrs =[]
     
-    # DNN classes DNN outputs
-    categorienames_MultiDNN=[
-        # 3 tag and 4 tag events
-        ("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==0)","ljets_j4_tge3_ttHnode",""),
-        ("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==1)","ljets_j4_tge3_ttbbnode",""),
-        ("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==2)","ljets_j4_tge3_tt2bnode",""),
-        ("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==3)","ljets_j4_tge3_ttbnode",""),
-        ("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==4)","ljets_j4_tge3_ttccnode",""),
-        ("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==5)","ljets_j4_tge3_ttlfnode",""),
+    nodes       = ["ttH", "ttbb",    "tt2b",    "ttb",    "ttcc",    "ttlf"]
+    discrNames  = ["ttH", "ttbarBB", "ttbar2B", "ttbarB", "ttbarCC", "ttbarlf"]
 
-        ("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==0)","ljets_j5_tge3_ttHnode",""),             
-        ("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==1)","ljets_j5_tge3_ttbbnode",""),             
-        ("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==2)","ljets_j5_tge3_tt2bnode",""),             
-        ("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==3)","ljets_j5_tge3_ttbnode",""),             
-        ("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==4)","ljets_j5_tge3_ttccnode",""),             
-        ("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==5)","ljets_j5_tge3_ttlfnode",""),             
+    categorienames_MultiDNN = [
+        ("(N_Jets==4&&N_BTagsM>=3&&DNN_4j_ge3t_pred_class=="+str(i)+")","ljets_j4_tge3_"+str(node)+"node","")
+        for i,node in enumerate(nodes)]
+    discrs_MultiDNN = ['DNN_Out_4j_ge3t_'+str(node) for node in discrNames]
 
+    categorienames_MultiDNN+= [
+        ("(N_Jets==5&&N_BTagsM>=3&&DNN_5j_ge3t_pred_class=="+str(i)+")","ljets_j5_tge3_"+str(node)+"node","")
+        for i,node in enumerate(nodes)]
+    discrs_MultiDNN+= ['DNN_Out_5j_ge3t_'+str(node) for node in discrNames]
 
-        ("(N_Jets>=6&&N_BTagsM>=3&&DNN_6j3t_pred_class==0)","ljets_jge6_tge3_ttHnode",""),
-        ("(N_Jets>=6&&N_BTagsM>=3&&DNN_6j3t_pred_class==1)","ljets_jge6_tge3_ttbbnode",""),
-        ("(N_Jets>=6&&N_BTagsM>=3&&DNN_6j3t_pred_class==2)","ljets_jge6_tge3_tt2bnode",""),
-        ("(N_Jets>=6&&N_BTagsM>=3&&DNN_6j3t_pred_class==3)","ljets_jge6_tge3_ttbnode",""),
-        ("(N_Jets>=6&&N_BTagsM>=3&&DNN_6j3t_pred_class==4)","ljets_jge6_tge3_ttccnode",""),
-        ("(N_Jets>=6&&N_BTagsM>=3&&DNN_6j3t_pred_class==5)","ljets_jge6_tge3_ttlfnode",""),
-
-        # 3 tag and 4 tag events with MIN node output cuts
-        #("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==0&&DNN_Out_4j3t_ttH>0.25)","ljets_j4_tge3_discrCut_ttHnode",""),
-        #("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==1&&DNN_Out_4j3t_ttbarBB>0.2)","ljets_j4_tge3_discrCut_ttbbnode",""),
-        #("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==2&&DNN_Out_4j3t_ttbar2B>0.3)","ljets_j4_tge3_discrCut_tt2bnode",""),
-        #("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==3&&DNN_Out_4j3t_ttbarB>0.3)","ljets_j4_tge3_discrCut_ttbnode",""),
-        #("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==4&&DNN_Out_4j3t_ttbarCC>0.2)","ljets_j4_tge3_discrCut_ttccnode",""),
-        #("(N_Jets==4&&N_BTagsM>=3&&DNN_4j3t_pred_class==5&&DNN_Out_4j3t_ttbarlf>0.35)","ljets_j4_tge3_discrCut_ttlfnode",""),
-
-        #("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==0&&DNN_Out_5j3t_ttH>0.25)","ljets_j5_tge3_discrCut_ttHnode",""),             
-        #("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==1&&DNN_Out_5j3t_ttbarBB>0.2)","ljets_j5_tge3_discrCut_ttbbnode",""),             
-        #("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==2&&DNN_Out_5j3t_ttbar2B>0.3)","ljets_j5_tge3_discrCut_tt2bnode",""),             
-        #("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==3&&DNN_Out_5j3t_ttbarB>0.3)","ljets_j5_tge3_discrCut_ttbnode",""),             
-        #("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==4&&DNN_Out_5j3t_ttbarCC>0.2)","ljets_j5_tge3_discrCut_ttccnode",""),             
-        #("(N_Jets==5&&N_BTagsM>=3&&DNN_5j3t_pred_class==5&&DNN_Out_5j3t_ttbarlf>0.35)","ljets_j5_tge3_discrCut_ttlfnode",""),             
+    categorienames_MultiDNN+= [
+        ("(N_Jets>=6&&N_BTagsM>=3&&DNN_ge6j_ge3t_pred_class=="+str(i)+")","ljets_jge6_tge3_"+str(node)+"node","")
+        for i,node in enumerate(nodes)]
+    discrs_MultiDNN+= ['DNN_Out_ge6j_ge3t_'+str(node) for node in discrNames]
 
 
-        #("(N_Jets>=6&&N_BTagsM>=3&&DNN_6j3t_pred_class==0&&DNN_Out_6j3t_ttH>0.25)","ljets_jge6_tge3_discrCut_ttHnode",""),
-        #("(N_Jets>=6&&N_BTagsM>=3&&DNN_6j3t_pred_class==1&&DNN_Out_6j3t_ttbarBB>0.2)","ljets_jge6_tge3_discrCut_ttbbnode",""),
-        #("(N_Jets>=6&&N_BTagsM>=3&&DNN_6j3t_pred_class==2&&DNN_Out_6j3t_ttbar2B>0.3)","ljets_jge6_tge3_discrCut_tt2bnode",""),
-        #("(N_Jets>=6&&N_BTagsM>=3&&DNN_6j3t_pred_class==3&&DNN_Out_6j3t_ttbarB>0.3)","ljets_jge6_tge3_discrCut_ttbnode",""),
-        #("(N_Jets>=6&&N_BTagsM>=3&&DNN_6j3t_pred_class==4&&DNN_Out_6j3t_ttbarCC>0.2)","ljets_jge6_tge3_discrCut_ttccnode",""),
-        #("(N_Jets>=6&&N_BTagsM>=3&&DNN_6j3t_pred_class==5&&DNN_Out_6j3t_ttbarlf>0.35)","ljets_jge6_tge3_discrCut_ttlfnode",""),
+    # add cuts to discriminators
+    #cuts = [0.25, 0.2, 0.3, 0.3, 0.2, 0.35]
+    #categorienames_MultiDNN+= [
+    #    ("(N_Jets==4&&N_BTagsM>=3&&DNN_4j_ge3t_pred_class=="+str(i)+"&&DNN_Out_4j_ge3t_"+str(discrName[i])+">"+str(cuts[i])+")","ljets_j4_tge3_discrCut_"+str(node)+"node","")
+    #    for i,node in enumerate(nodes)]
+    #discrs_MultiDNN+= ['DNN_Out_4j_ge3t_'+str(node) for node in discrNames]
 
-        #### only 3 tag events 
-        #("(N_Jets==4&&N_BTagsM==3&&DNN_4j3t_pred_class==0)","ljets_j4_t3_ttHnode",""),
-        #("(N_Jets==4&&N_BTagsM==3&&DNN_4j3t_pred_class==1)","ljets_j4_t3_ttbbnode",""),
-        #("(N_Jets==4&&N_BTagsM==3&&DNN_4j3t_pred_class==2)","ljets_j4_t3_tt2bnode",""),
-        #("(N_Jets==4&&N_BTagsM==3&&DNN_4j3t_pred_class==3)","ljets_j4_t3_ttbnode",""),
-        #("(N_Jets==4&&N_BTagsM==3&&DNN_4j3t_pred_class==4)","ljets_j4_t3_ttccnode",""),
-        #("(N_Jets==4&&N_BTagsM==3&&DNN_4j3t_pred_class==5)","ljets_j4_t3_ttlfnode",""),
+    #categorienames_MultiDNN+= [
+    #    ("(N_Jets==5&&N_BTagsM>=3&&DNN_5j_ge3t_pred_class=="+str(i)+"&&DNN_Out_5j_ge3t_"+str(discrName[i])+">"+str(cuts[i])+")","ljets_j5_tge3_discrCut_"+str(node)+"node","")
+    #    for i,node in enumerate(nodes)]
+    #discrs_MultiDNN+= ['DNN_Out_5j_ge3t_'+str(node) for node in discrNames]
 
-        #("(N_Jets==5&&N_BTagsM==3&&DNN_5j3t_pred_class==0)","ljets_j5_t3_ttHnode",""),             
-        #("(N_Jets==5&&N_BTagsM==3&&DNN_5j3t_pred_class==1)","ljets_j5_t3_ttbbnode",""),             
-        #("(N_Jets==5&&N_BTagsM==3&&DNN_5j3t_pred_class==2)","ljets_j5_t3_tt2bnode",""),             
-        #("(N_Jets==5&&N_BTagsM==3&&DNN_5j3t_pred_class==3)","ljets_j5_t3_ttbnode",""),             
-        #("(N_Jets==5&&N_BTagsM==3&&DNN_5j3t_pred_class==4)","ljets_j5_t3_ttccnode",""),             
-        #("(N_Jets==5&&N_BTagsM==3&&DNN_5j3t_pred_class==5)","ljets_j5_t3_ttlfnode",""),             
+    #categorienames_MultiDNN+= [
+    #    ("(N_Jets>=6&&N_BTagsM>=3&&DNN_ge6j_ge3t_pred_class=="+str(i)+"&&DNN_Out_ge6j_ge3t_"+str(discrName[i])+">"+str(cuts[i])+")","ljets_jge6_tge3_discrCut_"+str(node)+"node","")
+    #    for i,node in enumerate(nodes)]
+    #discrs_MultiDNN+= ['DNN_Out_ge6j_ge3t_'+str(node) for node in discrNames]
+    
 
+    # only three tag events
+    #categorienames_MultiDNN = [
+    #    ("(N_Jets==4&&N_BTagsM==3&&DNN_4j_3t_pred_class=="+str(i)+")","ljets_j4_t3_"+str(node)+"node","")
+    #    for i,node in enumerate(nodes)]
+    #discrs_MultiDNN+= ['DNN_Out_4j_ge3t_'+str(node) for node in discrNames]
 
-        #("(N_Jets>=6&&N_BTagsM==3&&DNN_6j3t_pred_class==0)","ljets_jge6_t3_ttHnode",""),
-        #("(N_Jets>=6&&N_BTagsM==3&&DNN_6j3t_pred_class==1)","ljets_jge6_t3_ttbbnode",""),
-        #("(N_Jets>=6&&N_BTagsM==3&&DNN_6j3t_pred_class==2)","ljets_jge6_t3_tt2bnode",""),
-        #("(N_Jets>=6&&N_BTagsM==3&&DNN_6j3t_pred_class==3)","ljets_jge6_t3_ttbnode",""),
-        #("(N_Jets>=6&&N_BTagsM==3&&DNN_6j3t_pred_class==4)","ljets_jge6_t3_ttccnode",""),
-        #("(N_Jets>=6&&N_BTagsM==3&&DNN_6j3t_pred_class==5)","ljets_jge6_t3_ttlfnode",""),
+    #categorienames_MultiDNN+= [
+    #    ("(N_Jets==5&&N_BTagsM==3&&DNN_5j_3t_pred_class=="+str(i)+")","ljets_j5_t3_"+str(node)+"node","")
+    #    for i,node in enumerate(nodes)]
+    #discrs_MultiDNN+= ['DNN_Out_5j_ge3t_'+str(node) for node in discrNames]
 
-        #### only 4 tag events 
-        #("(N_Jets==4&&N_BTagsM>=4&&DNN_4j3t_pred_class==0)","ljets_j4_tge4_ttHnode",""),
-        #("(N_Jets==4&&N_BTagsM>=4&&DNN_4j3t_pred_class==1)","ljets_j4_tge4_ttbbnode",""),
-        #("(N_Jets==4&&N_BTagsM>=4&&DNN_4j3t_pred_class==2)","ljets_j4_tge4_tt2bnode",""),
-        #("(N_Jets==4&&N_BTagsM>=4&&DNN_4j3t_pred_class==3)","ljets_j4_tge4_ttbnode",""),
-        #("(N_Jets==4&&N_BTagsM>=4&&DNN_4j3t_pred_class==4)","ljets_j4_tge4_ttccnode",""),
-        #("(N_Jets==4&&N_BTagsM>=4&&DNN_4j3t_pred_class==5)","ljets_j4_tge4_ttlfnode",""),
+    #categorienames_MultiDNN+= [
+    #    ("(N_Jets>=6&&N_BTagsM==3&&DNN_ge6j_3t_pred_class=="+str(i)+")","ljets_jge6_t3_"+str(node)+"node","")
+    #    for i,node in enumerate(nodes)]
+    #discrs_MultiDNN+= ['DNN_Out_ge6j_ge3t_'+str(node) for node in discrNames]
 
-        #("(N_Jets==5&&N_BTagsM>=4&&DNN_5j3t_pred_class==0)","ljets_j5_tge4_ttHnode",""),             
-        #("(N_Jets==5&&N_BTagsM>=4&&DNN_5j3t_pred_class==1)","ljets_j5_tge4_ttbbnode",""),             
-        #("(N_Jets==5&&N_BTagsM>=4&&DNN_5j3t_pred_class==2)","ljets_j5_tge4_tt2bnode",""),             
-        #("(N_Jets==5&&N_BTagsM>=4&&DNN_5j3t_pred_class==3)","ljets_j5_tge4_ttbnode",""),             
-        #("(N_Jets==5&&N_BTagsM>=4&&DNN_5j3t_pred_class==4)","ljets_j5_tge4_ttccnode",""),             
-        #("(N_Jets==5&&N_BTagsM>=4&&DNN_5j3t_pred_class==5)","ljets_j5_tge4_ttlfnode",""),             
+    # only four tag events
+    #categorienames_MultiDNN = [
+    #    ("(N_Jets==4&&N_BTagsM==4&&DNN_4j_4t_pred_class=="+str(i)+")","ljets_j4_t4_"+str(node)+"node","")
+    #    for i,node in enumerate(nodes)]
+    #discrs_MultiDNN+= ['DNN_Out_4j_ge3t_'+str(node) for node in discrNames]
 
+    #categorienames_MultiDNN+= [
+    #    ("(N_Jets==5&&N_BTagsM==4&&DNN_5j_4t_pred_class=="+str(i)+")","ljets_j5_t4_"+str(node)+"node","")
+    #    for i,node in enumerate(nodes)]
+    #discrs_MultiDNN+= ['DNN_Out_5j_ge3t_'+str(node) for node in discrNames]
 
-        #("(N_Jets>=6&&N_BTagsM>=4&&DNN_6j3t_pred_class==0)","ljets_jge6_tge4_ttHnode",""),
-        #("(N_Jets>=6&&N_BTagsM>=4&&DNN_6j3t_pred_class==1)","ljets_jge6_tge4_ttbbnode",""),
-        #("(N_Jets>=6&&N_BTagsM>=4&&DNN_6j3t_pred_class==2)","ljets_jge6_tge4_tt2bnode",""),
-        #("(N_Jets>=6&&N_BTagsM>=4&&DNN_6j3t_pred_class==3)","ljets_jge6_tge4_ttbnode",""),
-        #("(N_Jets>=6&&N_BTagsM>=4&&DNN_6j3t_pred_class==4)","ljets_jge6_tge4_ttccnode",""),
-        #("(N_Jets>=6&&N_BTagsM>=4&&DNN_6j3t_pred_class==5)","ljets_jge6_tge4_ttlfnode",""),
+    #categorienames_MultiDNN+= [
+    #    ("(N_Jets>=6&&N_BTagsM==4&&DNN_ge6j_4t_pred_class=="+str(i)+")","ljets_jge6_t4_"+str(node)+"node","")
+    #    for i,node in enumerate(nodes)]
+    #discrs_MultiDNN+= ['DNN_Out_ge6j_ge3t_'+str(node) for node in discrNames]
 
-        ]
-
-
-    discrs_MultiDNN=[
-        # 3 and 4 tags        
-        'DNN_Out_4j3t_ttH',
-        'DNN_Out_4j3t_ttbarBB',
-        'DNN_Out_4j3t_ttbar2B',
-        'DNN_Out_4j3t_ttbarB',
-        'DNN_Out_4j3t_ttbarCC',
-        'DNN_Out_4j3t_ttbarlf',
-        'DNN_Out_5j3t_ttH',
-        'DNN_Out_5j3t_ttbarBB',
-        'DNN_Out_5j3t_ttbar2B',
-        'DNN_Out_5j3t_ttbarB',
-        'DNN_Out_5j3t_ttbarCC',
-        'DNN_Out_5j3t_ttbarlf',
-        'DNN_Out_6j3t_ttH',
-        'DNN_Out_6j3t_ttbarBB',
-        'DNN_Out_6j3t_ttbar2B',
-        'DNN_Out_6j3t_ttbarB',
-        'DNN_Out_6j3t_ttbarCC',
-        'DNN_Out_6j3t_ttbarlf',
-
-        # 3 and 4 tags with minimal node output values 
-        #'DNN_Out_4j3t_ttH',
-        #'DNN_Out_4j3t_ttbarBB',
-        #'DNN_Out_4j3t_ttbar2B',
-        #'DNN_Out_4j3t_ttbarB',
-        #'DNN_Out_4j3t_ttbarCC',
-        #'DNN_Out_4j3t_ttbarlf',
-        #'DNN_Out_5j3t_ttH',
-        #'DNN_Out_5j3t_ttbarBB',
-        #'DNN_Out_5j3t_ttbar2B',
-        #'DNN_Out_5j3t_ttbarB',
-        #'DNN_Out_5j3t_ttbarCC',
-        #'DNN_Out_5j3t_ttbarlf',
-        #'DNN_Out_6j3t_ttH',
-        #'DNN_Out_6j3t_ttbarBB',
-        #'DNN_Out_6j3t_ttbar2B',
-        #'DNN_Out_6j3t_ttbarB',
-        #'DNN_Out_6j3t_ttbarCC',
-        #'DNN_Out_6j3t_ttbarlf',
-
-
-        ## only 3 tag events
-        #'DNN_Out_4j3t_ttH',
-        #'DNN_Out_4j3t_ttbarBB',
-        #'DNN_Out_4j3t_ttbar2B',
-        #'DNN_Out_4j3t_ttbarB',
-        #'DNN_Out_4j3t_ttbarCC',
-        #'DNN_Out_4j3t_ttbarlf',
-        #'DNN_Out_5j3t_ttH',
-        #'DNN_Out_5j3t_ttbarBB',
-        #'DNN_Out_5j3t_ttbar2B',
-        #'DNN_Out_5j3t_ttbarB',
-        #'DNN_Out_5j3t_ttbarCC',
-        #'DNN_Out_5j3t_ttbarlf',
-        #'DNN_Out_6j3t_ttH',
-        #'DNN_Out_6j3t_ttbarBB',
-        #'DNN_Out_6j3t_ttbar2B',
-        #'DNN_Out_6j3t_ttbarB',
-        #'DNN_Out_6j3t_ttbarCC',
-        #'DNN_Out_6j3t_ttbarlf',
-
-        ## only 4 tag events 
-        #'DNN_Out_4j3t_ttH',
-        #'DNN_Out_4j3t_ttbarBB',
-        #'DNN_Out_4j3t_ttbar2B',
-        #'DNN_Out_4j3t_ttbarB',
-        #'DNN_Out_4j3t_ttbarCC',
-        #'DNN_Out_4j3t_ttbarlf',
-        #'DNN_Out_5j3t_ttH',
-        #'DNN_Out_5j3t_ttbarBB',
-        #'DNN_Out_5j3t_ttbar2B',
-        #'DNN_Out_5j3t_ttbarB',
-        #'DNN_Out_5j3t_ttbarCC',
-        #'DNN_Out_5j3t_ttbarlf',
-        #'DNN_Out_6j3t_ttH',
-        #'DNN_Out_6j3t_ttbarBB',
-        #'DNN_Out_6j3t_ttbar2B',
-        #'DNN_Out_6j3t_ttbarB',
-        #'DNN_Out_6j3t_ttbarCC',
-        #'DNN_Out_6j3t_ttbarlf',
-    ]
 
     # 3 and 4 tags
     nhistobins_MultiDNN=[15, 15, 15, 15, 15, 15,
@@ -495,24 +385,26 @@ def add_dnn(data, discrname):
     #                    0.85, 0.8, 0.65, 0.5,  0.4, 0.6]
     
     ## only 3 tags
-    #nhistobins_MultiDNN+=[15,  15 , 15, 15,15, 15, 15, 15, 15, 15, 15, 15 , 15, 15, 15, 12, 15, 15  ]
+    #nhistobins_MultiDNN+=[ 15, 15, 15, 15, 15, 15, 
+    #                       15, 15, 15, 15, 15, 15, 
+    #                       15, 15, 15, 12, 15, 15]
     #minxvals_MultiDNN+=[0.16, 0.16, 0.16, 0.16, 0.2, 0.2,
-                       #0.16, 0.16, 0.2, 0.16, 0.2, 0.2,
-                       #0.16, 0.16, 0.16, 0.2, 0.2, 0.2        ]
-    #maxxvals_MultiDNN+=[0.75, 0.8, 0.65, 0.4, 0.4, 0.63,
-                       #0.85, 0.8, 0.6, 0.45, 0.4, 0.5,
-                       #0.85, 0.8, 0.65, 0.5, 0.4, 0.6  ]
+    #                    0.16, 0.16, 0.2,  0.16, 0.2, 0.2,
+    #                    0.16, 0.16, 0.16, 0.2,  0.2, 0.2]
+    #maxxvals_MultiDNN+=[0.75, 0.8, 0.65, 0.4,  0.4, 0.63,
+                       # 0.85, 0.8, 0.6,  0.45, 0.4, 0.5,
+                       # 0.85, 0.8, 0.65, 0.5,  0.4, 0.6]
 
     ## only 4 tags
-    #nhistobins_MultiDNN+=[9,  15 , 3, 3, 4, 5,
-                          #10, 10, 4, 3, 4, 4 ,
-                          #10, 10, 10, 4, 5, 5  ]
+    #nhistobins_MultiDNN+=[9,  15, 3,  3, 4, 5,
+    #                      10, 10, 4,  3, 4, 4,
+    #                      10, 10, 10, 4, 5, 5]
     #minxvals_MultiDNN+=[0.16, 0.25, 0.2, 0.2, 0.16, 0.16,
-                        #0.2, 0.16, 0.2, 0.2, 0.2, 0.2,
-                        #0.2, 0.2, 0.2, 0.2, 0.2, 0.2        ]
-    #maxxvals_MultiDNN+=[0.85, 0.85, 0.3, 0.3, 0.3, 0.3,
-                        #0.9, 0.9, 0.5, 0.35, 0.4, 0.5,
-                        #0.9, 0.9, 0.45, 0.4, 0.4, 0.4     ]
+    #                    0.2,  0.16, 0.2, 0.2, 0.2,  0.2,
+    #                    0.2,  0.2,  0.2, 0.2, 0.2,  0.2]
+    #maxxvals_MultiDNN+=[0.85, 0.85, 0.3,  0.3,  0.3, 0.3,
+    #                    0.9,  0.9,  0.5,  0.35, 0.4, 0.5,
+    #                    0.9,  0.9,  0.45, 0.4,  0.4, 0.4]
 
     discrs+=discrs_MultiDNN
     nhistobins+=nhistobins_MultiDNN
@@ -521,105 +413,30 @@ def add_dnn(data, discrname):
     categories+=categorienames_MultiDNN
     
     # now do only MEM for 4 tag events 
-    
-    categorienames_MEM=[
-        ### only 4 tag events 
-        ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_tge4_MEM",""),
-        ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4_MEM",""),             
-        ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4_MEM",""),
-        ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_MEM",""),
-        ]
-    discrs_MEM=[
-        memexp,
-        memexp,
-        memexp,
-        memexp,
-        ]
+    #categorienames_MEM=[
+    #    ### only 4 tag events 
+    #    ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_tge4_MEM",""),
+    #    ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4_MEM",""),             
+    #    ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4_MEM",""),
+    #    ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_MEM",""),
+    #    ]
+    #discrs_MEM=[
+    #    memexp,
+    #    memexp,
+    #    memexp,
+    #    memexp,
+    #    ]
 
-    #nhistobins_MultiDNN= [   7,   10,    12,   7,   7,    12,   7,   7,    7,   8,   7,    7,   7,   7,    7,   7,   7,    4,]
-    #minxvals_MultiDNN=   [ 0.2,  0.16, 0.17, 0.16,  0.16, 0.18, 0.2,  0.2, 0.18, 0.2,  0.16, 0.16, 0.17,  0.17, 0.21, 0.17,  0.17, 0.19,]
-    #maxxvals_MultiDNN=   [0.6,  0.6, 0.7,    0.6,  0.6, 0.7,    0.4,  0.4, 0.35,    0.55,  0.5, 0.55,    0.35,  0.35, 0.3,    0.5,  0.4, 0.3,]
-    #nhistobins_MultiDNN+=[12,12,7,7,7,7]
-    #minxvals_MultiDNN+=[0.17,0.18,0.18,0.16,0.21,0.19]
-    #maxxvals_MultiDNN+=[0.7,0.7,0.35,0.55,0.3,0.3]
-    nhistobins_MEM=[10,  10,  10,  20]
-    minxvals_MEM=  [0.0, 0.0, 0.0, 0.0]
-    maxxvals_MEM=  [1.0, 1.0, 1.0, 1.0]
+    #nhistobins_MEM=[10,  10,  10,  20]
+    #minxvals_MEM=  [0.0, 0.0, 0.0, 0.0]
+    #maxxvals_MEM=  [1.0, 1.0, 1.0, 1.0]
     
-    discrs+=discrs_MEM
-    nhistobins+=nhistobins_MEM
-    minxvals+=minxvals_MEM
-    maxxvals+=maxxvals_MEM
-    categories+=categorienames_MEM    
+    #discrs+=discrs_MEM
+    #nhistobins+=nhistobins_MEM
+    #minxvals+=minxvals_MEM
+    #maxxvals+=maxxvals_MEM
+    #categories+=categorienames_MEM    
     
-    
-    ## plot the DNNs again but without the argmax classification
-    ## DNN classes DNN outputs
-    #categorienames_PlainDNN=[
-              ## 3 tag and 4 tag events
-              #("(N_Jets==4&&N_BTagsM>=3)","ljets_j4_tge3_plain_ttHnode",""),
-              #("(N_Jets==4&&N_BTagsM>=3)","ljets_j4_tge3_plain_ttbbnode",""),
-              #("(N_Jets==4&&N_BTagsM>=3)","ljets_j4_tge3_plain_tt2bnode",""),
-              #("(N_Jets==4&&N_BTagsM>=3)","ljets_j4_tge3_plain_ttbnode",""),
-              #("(N_Jets==4&&N_BTagsM>=3)","ljets_j4_tge3_plain_ttccnode",""),
-              #("(N_Jets==4&&N_BTagsM>=3)","ljets_j4_tge3_plain_ttlfnode",""),
-              
-              #("(N_Jets==5&&N_BTagsM>=3)","ljets_j5_tge3_plain_ttHnode",""),             
-              #("(N_Jets==5&&N_BTagsM>=3)","ljets_j5_tge3_plain_ttbbnode",""),             
-              #("(N_Jets==5&&N_BTagsM>=3)","ljets_j5_tge3_plain_tt2bnode",""),             
-              #("(N_Jets==5&&N_BTagsM>=3)","ljets_j5_tge3_plain_ttbnode",""),             
-              #("(N_Jets==5&&N_BTagsM>=3)","ljets_j5_tge3_plain_ttccnode",""),             
-              #("(N_Jets==5&&N_BTagsM>=3)","ljets_j5_tge3_plain_ttlfnode",""),             
-
-
-              #("(N_Jets>=6&&N_BTagsM>=3)","ljets_jge6_tge3_plain_ttHnode",""),
-              #("(N_Jets>=6&&N_BTagsM>=3)","ljets_jge6_tge3_plain_ttbbnode",""),
-              #("(N_Jets>=6&&N_BTagsM>=3)","ljets_jge6_tge3_plain_tt2bnode",""),
-              #("(N_Jets>=6&&N_BTagsM>=3)","ljets_jge6_tge3_plain_ttbnode",""),
-              #("(N_Jets>=6&&N_BTagsM>=3)","ljets_jge6_tge3_plain_ttccnode",""),
-              #("(N_Jets>=6&&N_BTagsM>=3)","ljets_jge6_tge3_plain_ttlfnode",""),
-
-
-              #]
-    
-    
-    #discrs_PlainDNN=[
-        #'DNN_Out_4j3t_ttH',
-        #'DNN_Out_4j3t_ttbarBB',
-        #'DNN_Out_4j3t_ttbar2B',
-        #'DNN_Out_4j3t_ttbarB',
-        #'DNN_Out_4j3t_ttbarCC',
-        #'DNN_Out_4j3t_ttbarlf',
-        #'DNN_Out_5j3t_ttH',
-        #'DNN_Out_5j3t_ttbarBB',
-        #'DNN_Out_5j3t_ttbar2B',
-        #'DNN_Out_5j3t_ttbarB',
-        #'DNN_Out_5j3t_ttbarCC',
-        #'DNN_Out_5j3t_ttbarlf',
-        #'DNN_Out_6j3t_ttH',
-        #'DNN_Out_6j3t_ttbarBB',
-        #'DNN_Out_6j3t_ttbar2B',
-        #'DNN_Out_6j3t_ttbarB',
-        #'DNN_Out_6j3t_ttbarCC',
-        #'DNN_Out_6j3t_ttbarlf',
-
-    #]
-    ##nhistobins_PlainDNN= [   7,   10,    12,   7,   7,    12,   7,   7,    7,   8,   7,    7,   7,   7,    7,   7,   7,    4,]
-    ##minxvals_PlainDNN=   [ 0.2,  0.16, 0.17, 0.16,  0.16, 0.18, 0.2,  0.2, 0.18, 0.2,  0.16, 0.16, 0.17,  0.17, 0.21, 0.17,  0.17, 0.19,]
-    ##maxxvals_PlainDNN=   [0.6,  0.6, 0.7,    0.6,  0.6, 0.7,    0.4,  0.4, 0.35,    0.55,  0.5, 0.55,    0.35,  0.35, 0.3,    0.5,  0.4, 0.3,]
-    ##nhistobins_PlainDNN+=[12,12,7,7,7,7]
-    ##minxvals_PlainDNN+=[0.17,0.18,0.18,0.16,0.21,0.19]
-    ##maxxvals_PlainDNN+=[0.7,0.7,0.35,0.55,0.3,0.3]
-    #nhistobins_PlainDNN=[50]*18
-    #minxvals_PlainDNN=[0.0]*18
-    #maxxvals_PlainDNN=[1.0]*18
-    
-    #discrs+=discrs_PlainDNN
-    #nhistobins+=nhistobins_PlainDNN
-    #minxvals+=minxvals_PlainDNN
-    #maxxvals+=maxxvals_PlainDNN
-    #categories+=categorienames_PlainDNN
-            
     # get input for plotting function
     plotPreselections   = [c[0] for c in categories]
     binlabels           = [c[1] for c in categories]
