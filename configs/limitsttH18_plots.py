@@ -478,13 +478,14 @@ def add_dnn(data, discrname):
 
 
 def getDiscriminatorPlots(data = None, discrname = None):
-    discriminatorPlots = add_plots()
-    discriminatorPlots += add_sl6j4t()
-    discriminatorPlots += add_sl6j3t()
-    discriminatorPlots += add_sl5j4t()
-    discriminatorPlots += add_sl5j3t()
-    discriminatorPlots += add_sl4j4t()
-    discriminatorPlots += add_sl4j3t()
+    discriminatorPlots = []
+    #discriminatorPlots += add_plots()
+    #discriminatorPlots += add_sl6j4t()
+    #discriminatorPlots += add_sl6j3t()
+    #discriminatorPlots += add_sl5j4t()
+    #discriminatorPlots += add_sl5j3t()
+    #discriminatorPlots += add_sl4j4t()
+    #discriminatorPlots += add_sl4j3t()
     discriminatorPlots += add_dnn(data, discrname)
 
     return discriminatorPlots

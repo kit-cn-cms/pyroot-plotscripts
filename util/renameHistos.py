@@ -264,7 +264,7 @@ def renameHistosParallel(inFile, outFile, systNames, checkBins = False, prune = 
         deleted = False
         ttbarSamples = ["ttbarOther","ttbarPlus2B","ttbarPlusB","ttbarPlusCCbar","ttbarPlusBBbar"]
         for sampleName in ttbarSamples:
-            if thisName.startswith(sampleName+"_")
+            if thisName.startswith(sampleName+"_"):
                 for sampleName2 in ttbarSamples:
                     if sampleName2 == sampleName: continue
                     if (sampleName2+"Up" in thisName or sampleName2+"Down" in thisName) \
