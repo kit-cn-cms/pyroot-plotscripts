@@ -55,7 +55,7 @@ def main(pyrootdir, argv):
     configDataBaseName = "limitsttH18"
 
     # name of plotconfig
-    pltcfgName = "v39"
+    pltcfgName = "v42"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -306,13 +306,13 @@ def main(pyrootdir, argv):
 
             with monitor.Timer("renameHistos"):
                 renameHistos.renameHistos(
-                    inFiles = pP.getRenameInput(),
-                    outFile = analysis.renamedPath,
-                    systNames = configData.allSystNames,
-                    checkBins = True,
-                    prune = False,
-                    Epsilon = 0.0,
-                    skipRenaming = analysis.skipRenaming)
+                    inFiles =       pP.getRenameInput(),
+                    outFile =       analysis.renamedPath,
+                    systNames =     configData.allSystNames,
+                    checkBins =     True,
+                    prune =         True,
+                    Epsilon =       0.0,
+                    skipRenaming =  analysis.skipRenaming)
 
         if analysis.addData:
             print '''
