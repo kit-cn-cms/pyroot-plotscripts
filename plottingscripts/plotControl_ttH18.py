@@ -197,7 +197,6 @@ def main(pyrootdir, argv):
             pP.setJson(plotJson)
             pP.setDataBases(plotDataBases)
             pP.setMEMDataBase(memDataBase)
-            #pP.setAddInterfaces(plotInterfaces)
             pP.setCatNames([''])
             pP.setCatSelections(['1.'])
             pP.setMaxEvts(350000)
