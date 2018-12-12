@@ -1703,13 +1703,13 @@ int ttbarsysthelper::GetTtbarSubProcess(int& GenEvt_I_TTPlusCC,int& GenEvt_I_TTP
 }
 */
 // struct to store information 1D histograms
-struct Histo1DInfoStruct{
+struct Plot1DInfoStruct{
     std::string identifier;
     std::string title;
     int nbins;
     float xmin;
     float xmax;
-    std::unique_ptr<TH1> histoptr;
+    //std::unique_ptr<TH1> histoptr;
 };
 
 
@@ -1718,24 +1718,24 @@ struct Histo1DInfoStruct{
 // Until GCC 4.9 struct cannot have init values if one wants to initialize it with bracket lists
 struct structHelpFillHisto{
   TH1* histo;
-  double var;
+  //double var;
   double weight;
 };
 
 // helper function to fill plots more efficiently
-void helperFillHisto(const std::vector<structHelpFillHisto>& paramVec)
+void helperFillHisto(const std::vector<structHelpFillHisto>& paramVec, const double& val)
 {
   for (const auto &singleParams: paramVec)
   // singleParams: histo, var, weight
   {
     if((singleParams.weight)!=0)
-      singleParams.histo->Fill(fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,singleParams.var)),singleParams.weight);
+      singleParams.histo->Fill(fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,val)),singleParams.weight);
   }
 }
 
 // Helper struct to fill plots more efficiently
 // Until GCC 4.9 struct cannot have init values if one wants to initialize it with bracket lists
-struct Histo2DInfoStruct{
+struct Plot2DInfoStruct{
     std::string identifier;
     std::string title;
     int nbinsx;
@@ -1744,24 +1744,24 @@ struct Histo2DInfoStruct{
     float xmax;
     float ymin;
     float ymax;
-    std::unique_ptr<TH2> histoptr;
+    //std::unique_ptr<TH2> histoptr;
 };
 
 struct structHelpFillTwoDimHisto{
   TH2* histo;
-  double var1;
-  double var2;
+  //double var1;
+  //double var2;
   double weight;
 };
 
 // helper function to fill plots more efficiently
-void helperFillTwoDimHisto(const std::vector<structHelpFillTwoDimHisto>& paramVec)
+void helperFillTwoDimHisto(const std::vector<structHelpFillTwoDimHisto>& paramVec, const double& val1, const double& val2)
 {
   for (const auto &singleParams: paramVec)
   // singleParams: histo, var1, var2, weight
   {
     if((singleParams.weight)!=0)
-      singleParams.histo->Fill(fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,singleParams.var1)),fmin(singleParams.histo->GetYaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetYaxis()->GetXmin()+1e-6,singleParams.var2)),singleParams.weight);
+      singleParams.histo->Fill(fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,val1)),fmin(singleParams.histo->GetYaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetYaxis()->GetXmin()+1e-6,val2)),singleParams.weight);
   }
 }
 
@@ -2163,11 +2163,13 @@ def fillHistoSyst(name,varname,weight,systnames,systweights):
   # Write all individual systnames and systweights in nested vector to use together with function allowing variadic vector size -> speed-up of compilation and less code lines
   text+='     std::vector<structHelpFillHisto> helpWeightVec_' + name + ' = {'
   for sn,sw in zip(systnames,systweights):
-    text+='       { ' + 'catvarsyst['+'"'+name+sn+'"].histoptr.get()' + ', double(' + varname + '), ' + '('+sw+')*(weight_'+name+')' + '},'
+    text+='       { ' + 'histos1D['+'"'+name+sn+'"].get()' + ',('+sw+')*(weight_'+name+')' + '},'
   # finish vector
   text+='     };\n'
+  text+='     variable = '+varname+';\n'
   # call helper fill histo function which is defined in the beginning
-  text+='     helperFillHisto(helpWeightVec_' + name + ');\n' 
+  text+='     helperFillHisto(helpWeightVec_' + name + ',variable);\n' 
+  text+='     variable = -999;\n'
   return text
 
 def fillTwoDimHistoSyst(name,varname1,varname2,weight,systnames,systweights):
@@ -2175,11 +2177,15 @@ def fillTwoDimHistoSyst(name,varname1,varname2,weight,systnames,systweights):
   # Write all individual systnames and systweights in nested vector to use together with function allowing variadic vector size -> speed-up of compilation and less code lines
   text+='     std::vector<structHelpFillTwoDimHisto> helpWeightVec_' + name + ' = {'
   for sn,sw in zip(systnames,systweights):
-    text+='       { ' + 'catvarsyst2D['+'"'+name+sn+'"].histoptr.get()' + ', double(' + varname1 + '), double(' + varname2 + '), ' + '('+sw+')*(weight_'+name+')' + '},'
+    text+='       { ' + 'histos2D['+'"'+name+sn+'"].get()'  + ',('+sw+')*(weight_'+name+')' + '},'
   # finish vector
   text+='     };\n'
+  text+='     variable1 = '+varname1+';\n'
+  text+='     variable2 = '+varname2+';\n'
   # call helper fill histo function which is defined in the beginning
-  text+='     helperFillTwoDimHisto(helpWeightVec_' + name + ');\n' 
+  text+='     helperFillTwoDimHisto(helpWeightVec_' + name + ',variable1,variable2);\n' 
+  text+='     variable1 = -999;\n'
+  text+='     variable2 = -999;\n'
   return text
 
 def startLoop():
@@ -2756,36 +2762,57 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
   # initialize TMVA Readers
   script+=variables.setupTMVAReadersProgram()
   
-  script+="std::map<std::string,Histo1DInfoStruct> catvarsyst;\n"
-  script+="std::map<std::string,Histo2DInfoStruct> catvarsyst2D;\n"
+  script+="double variable = -999;\n"
+  script+="double variable1 = -999;\n"
+  script+="double variable2 = -999;\n"
+  script+="std::vector<std::string> systematics = {\n"
+  for syst in systnames:
+      script+='"'+syst+'"'+","
+  script=script[:-1]
+  script+="};\n"
+  script+="std::vector<std::string> categs = {\n"
   for c in catnames:
-    for plot in plots:
-        for s in systnames:
-            if not isinstance(plot,plotutils.TwoDimPlot):
-                t=plot.histo.GetTitle()
-                n=plot.histo.GetName()
-                mx=plot.histo.GetXaxis().GetXmax()
-                mn=plot.histo.GetXaxis().GetXmin()
-                nb=plot.histo.GetNbinsX()
-                script+='catvarsyst["'+c+n+s+'"]={"'+c+n+s+'","'+t+'",'+str(nb)+","+str(mn)+","+str(mx)+",nullptr};"
-            else:
-                t=plot.histo.GetTitle()+";"+plot.histo.GetXaxis().GetTitle()+";"+plot.histo.GetYaxis().GetTitle()
-                n=plot.histo.GetName()
-                mxX=plot.histo.GetXaxis().GetXmax()
-                mnX=plot.histo.GetXaxis().GetXmin()
-                nbX=plot.histo.GetNbinsX()
-                mxY=plot.histo.GetYaxis().GetXmax()
-                mnY=plot.histo.GetYaxis().GetXmin()
-                nbY=plot.histo.GetNbinsY()
-                script+='catvarsyst2D["'+c+n+s+'"]={"'+c+n+s+'","'+t+'",'+str(nbX)+","+str(nbY)+","+str(mnX)+","+str(mxX)+","+str(mnY)+","+str(mxY)+",nullptr};"
+      script+='"'+c+'"'+","
+  script=script[:-1]
+  script+="};\n"
+  script+="std::map<std::string,Plot1DInfoStruct> plotinfo1D;\n"
+  script+="std::map<std::string,Plot2DInfoStruct> plotinfo2D;\n"
+  script+="std::map<std::string,std::unique_ptr<TH1>> histos1D;\n"
+  script+="std::map<std::string,std::unique_ptr<TH2>> histos2D;\n"
+  for plot in plots:
+      if not isinstance(plot,plotutils.TwoDimPlot):
+          t=plot.histo.GetTitle()
+          n=plot.histo.GetName()
+          mx=plot.histo.GetXaxis().GetXmax()
+          mn=plot.histo.GetXaxis().GetXmin()
+          nb=plot.histo.GetNbinsX()
+          script+='plotinfo1D["'+n+'"]={"'+n+'","'+t+'",'+str(nb)+","+str(mn)+","+str(mx)+"};"
+      else:
+          t=plot.histo.GetTitle()+";"+plot.histo.GetXaxis().GetTitle()+";"+plot.histo.GetYaxis().GetTitle()
+          n=plot.histo.GetName()
+          mxX=plot.histo.GetXaxis().GetXmax()
+          mnX=plot.histo.GetXaxis().GetXmin()
+          nbX=plot.histo.GetNbinsX()
+          mxY=plot.histo.GetYaxis().GetXmax()
+          mnY=plot.histo.GetYaxis().GetXmin()
+          nbY=plot.histo.GetNbinsY()
+          script+='plotinfo2D["'+n+'"]={"'+n+'","'+t+'",'+str(nbX)+","+str(nbY)+","+str(mnX)+","+str(mxX)+","+str(mnY)+","+str(mxY)+"};"
   script+="\n\n"
-  script+="for(auto& obj : catvarsyst){\n"
-  script+="    auto& Histo1DInfo = obj.second;\n"
-  script+="    Histo1DInfo.histoptr.reset(new TH1F((Histo1DInfo.identifier).c_str(),(Histo1DInfo.title).c_str(),Histo1DInfo.nbins,Histo1DInfo.xmin,Histo1DInfo.xmax));\n"
+  script+="for(const auto& cat : categs){\n"
+  script+="    for(const auto& obj : plotinfo1D){\n"
+  script+="        for(const auto& syst : systematics){\n"
+  script+="            const auto& PlotInfo1D = obj.second;\n"
+  script+="            histos1D[cat+obj.first+syst]=std::unique_ptr<TH1>(new TH1F((cat+obj.first+syst).c_str(),(PlotInfo1D.title).c_str(),PlotInfo1D.nbins,PlotInfo1D.xmin,PlotInfo1D.xmax));\n"
+  script+="        }\n"
+  script+="    }\n"
   script+="}\n"
-  script+="for(auto& obj : catvarsyst2D){\n"
-  script+="    auto& Histo2DInfo = obj.second;\n"
-  script+="    Histo2DInfo.histoptr.reset(new TH2F((Histo2DInfo.identifier).c_str(),(Histo2DInfo.title).c_str(),Histo2DInfo.nbinsx,Histo2DInfo.xmin,Histo2DInfo.xmax,Histo2DInfo.nbinsy,Histo2DInfo.ymin,Histo2DInfo.ymax));\n"
+  script+="for(const auto& cat : categs){\n"
+  script+="    for(const auto& obj : plotinfo2D){\n"
+  script+="        for(const auto& syst : systematics){\n"
+  script+="                const auto& PlotInfo2D = obj.second;\n"
+  script+="                histos2D[cat+obj.first+syst]=std::unique_ptr<TH2>(new TH2F((cat+obj.first+syst).c_str(),(PlotInfo2D.title).c_str(),PlotInfo2D.nbinsx,PlotInfo2D.xmin,PlotInfo2D.xmax,PlotInfo2D.nbinsy,PlotInfo2D.ymin,PlotInfo2D.ymax));\n"
+  script+="        }\n"
+  script+="    }\n"
   script+="}\n"
   
   # initialize histograms in all categories and for all systematics
