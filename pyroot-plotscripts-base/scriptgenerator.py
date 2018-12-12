@@ -3609,7 +3609,7 @@ def renameHistosParallel(infname,sysnames,prune=False):
                     outfile.Delete(thisname+";1")
                     deleted=True
     if deleted:
-        contin
+        continue
     if newname!=thisname:
       print "changed ", thisname, " to ", newname  
       thish=outfile.Get(thisname)
