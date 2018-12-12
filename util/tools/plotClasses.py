@@ -45,7 +45,7 @@ class Sample:
         if readTrees:
           if samDict != "":
             if not samDict.hasKey(self.path):  
-              print "globbing files for", name, self.path
+              print("globbing files for "+str(name))#, self.path
               for sp in subpaths:
                 self.files += glob.glob(sp)
                 if sp != '' and len(self.files) == 0:
@@ -53,7 +53,7 @@ class Sample:
                   print 'no files found at',sp
               samDict.addToMap(path, self.files)
             else:
-              print "map already knows this sample", self.path
+              #print("map already knows this sample "+str(self.path))
               self.files = samDict.getFiles(path)
           else:
             print "empty map: globbing files for", name, self.path
