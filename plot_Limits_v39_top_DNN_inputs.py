@@ -809,9 +809,50 @@ def main(argv):
         #Plot(ROOT.TH1D(plotprefix+"Reco_TTBBME_off_best_TTLikelihood_comb","Reco_TTBBME_off_best_TTLikelihood_comb",20,-0.1,1),"Reco_TTBBME_off_best_TTLikelihood_comb",plotselection,plotlabel),
         #Plot(ROOT.TH1D(plotprefix+"Reco_TTBBLikelihoodTimesME_off_best_TTLikelihood_comb","Reco_TTBBLikelihoodTimesME_off_best_TTLikelihood_comb",20,-0.1,1),"Reco_TTBBLikelihoodTimesME_off_best_TTLikelihood_comb",plotselection,plotlabel),
     ]
+    plot2D_cats = [plots43,plots53,plots63]
+    plots2D=[]
+    for cats2D in plot2D_cats:
+        seenCombinations=[]
+        plots = cats2D
+        for plot1 in plots:
+            for plot2 in plots:
+                # skip same plots
+                if plot1==plot2:
+                    print "skipping cause same", plot1, plot2, plot1.variable, plot2.variable
+                    continue
+                # do not mix different categories
+                if plot1.selection!=plot2.selection:
+                    print "skipping cause selection", plot1, plot2, plot1.variable, plot2.variable
+                    continue
+                name1=plot1.histo.GetName()
+                name2=plot2.histo.GetName()
+                print name1, name2
+                selection=plot1.selection
+                title1=plot1.histo.GetTitle()
+                title2=plot2.histo.GetTitle()
+                nbins1=plot1.histo.GetNbinsX()
+                nbins2=plot2.histo.GetNbinsX()
+                min1=plot1.histo.GetXaxis().GetXmin()
+                min2=plot2.histo.GetXaxis().GetXmin()
+                max1=plot1.histo.GetXaxis().GetXmax()
+                max2=plot2.histo.GetXaxis().GetXmax()
+                label=plot1.label
+                var1=plot1.variable
+                var2=plot2.variable
+                # skip combinations we already saw (no mirrored diagonal axis cases)
+                if [selection,var1,var2] in seenCombinations or [selection,var2,var1] in seenCombinations:
+                    print "skipping cause seen ", plot1, plot2, plot1.variable, plot2.variable
+                    continue
+                seenCombinations.append([selection,var1,var2])
+                # now construct new 2D plot
+                # keep naive binning for now
+                newBinsX=nbins1
+                newBinsY=nbins2
+                
+                plots2D.append(TwoDimPlot(ROOT.TH2D(name1+"_"+name2,title1+"_"+title2+";"+title1+";"+title2,newBinsX,min1,max1,newBinsY,min2,max2),var1,var2,selection,label))
     
     plots+=plots64+plots63+plots54+plots53+plots44+plots43
-    discriminatorPlots=plots
+    discriminatorPlots=plots2D
     
         # prepare discriminators
     categories=[]
