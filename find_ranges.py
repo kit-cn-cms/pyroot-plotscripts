@@ -14,7 +14,7 @@ categoriesJT=[
 	("(N_Jets>=6&&N_BTagsM>=4)","6j4t","")
 ]
 
-path_karim="/nfs/dust/cms/user/kelmorab/ttH_2018/ntuples_v2"
+path_karim="/nfs/dust/cms/user/kelmorab/ttH_2018/ntuples_v4"
 path_matsch="/nfs/dust/cms/user/kelmorab/ttH_2018/ntuples_v3"
 path_pkeicher="/nfs/dust/cms/user/pkeicher/ttH_2018/naf_jobs_for_Karim/ntuples"
 path_mwassmer="/nfs/dust/cms/user/mwassmer/ttH_2018/ntuples"
