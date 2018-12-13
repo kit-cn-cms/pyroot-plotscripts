@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttHLimits_2018_top10DNN'
+    name = 'limits_top10'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -68,7 +68,7 @@ def main(pyrootdir, argv):
         "cirun":                False,  # test run with less samples
         "haddParallel":         True,  # parallel hadding instead of non-parallel
         "useOldRoot":           False,   # use existing root file if it exists (skips plotParallel)
-        "stopAfterCompile":     True,   # stop script after compiling
+        "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
         "optimizedRebinning":   False, # e.g. "SoverB", "Significance"
         "haddFromWildcard":     True,
