@@ -276,7 +276,7 @@ def renameHistosParallel(inFile, outFile, systNames, checkBins = False, prune = 
                             rootFile.Delete(thisName)
                             rootFile.Delete(thisName+";1")
                             deleted = True
-        if delted: continue                               
+        if deleted: continue                               
 
 
         if not plotParaCall:

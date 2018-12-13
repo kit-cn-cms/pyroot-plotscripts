@@ -551,7 +551,7 @@ class Variable:
         text = ""
 
         if self.isArray:
-            text += "    chain->SetBranchAddress(\""+self.varName+"\", &"+self.varName+");\n"
+            text += "    chain->SetBranchAddress(\""+self.varName+"\", "+self.varName+".get());\n"
         else:
             if self.varType == "I" or self.varType == "L":
                 text += "    chain->SetBranchAddress(\""+self.varName+"\", &"+self.varName+"LONGDUMMY);\n"

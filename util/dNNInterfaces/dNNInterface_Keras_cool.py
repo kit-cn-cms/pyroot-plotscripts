@@ -314,7 +314,7 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
     rstr+="""
 
 
-    status_4j_ge3t = session_4j_ge3t->Run(feed_dict, {"dense_4/Softmax"},  {}, &outputTensors);
+    status_4j_ge3t = session_4j_ge3t->Run(feed_dict, {"dense_3/Softmax"},  {}, &outputTensors);
     //if (!status_4j_ge3t.ok()) 
     //{
     //  std::cout << status_4j_ge3t.ToString() << std::endl;
@@ -364,7 +364,7 @@ for(int ifeat=0; ifeat<num_features_4j_ge3t;ifeat++){
     rstr+= self._fix_dropout('5j_ge3t')
     rstr+="""
 
-    status_5j_ge3t = session_5j_ge3t->Run(feed_dict, {"dense_4/Softmax"},  {}, &outputTensors);
+    status_5j_ge3t = session_5j_ge3t->Run(feed_dict, {"dense_3/Softmax"},  {}, &outputTensors);
     //if (!status_5j_ge3t.ok()) 
     //{
     //  std::cout << status_5j_ge3t.ToString() << std::endl;
@@ -414,7 +414,7 @@ for(int ifeat=0; ifeat<num_features_5j_ge3t;ifeat++){
 
     rstr+= self._fix_dropout('ge6j_ge3t')
 
-    rstr+="""status_ge6j_ge3t = session_ge6j_ge3t->Run(feed_dict, {"dense_4/Softmax"},  {}, &outputTensors);
+    rstr+="""status_ge6j_ge3t = session_ge6j_ge3t->Run(feed_dict, {"dense_3/Softmax"},  {}, &outputTensors);
     //if (!status_ge6j_ge3t.ok()) 
     //{
     //  std::cout << status_ge6j_ge3t.ToString() << std::endl;
