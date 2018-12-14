@@ -2525,7 +2525,13 @@ def varLoop(i,n):
 
 def getFoot(addCodeInterfaces):
   rstr= """
-  outfile->Write();
+  for(auto& histo1D : histos1D){
+      outfile->WriteTObject(histo1D.second.get());
+  }
+  for(auto& histo2D : histos2D){
+      outfile->WriteTObject(histo2D.second.get());
+  }
+  //outfile->Write();
   outfile->Close();
   std::ofstream f_nevents((string(outfilename)+".cutflow.txt").c_str());
   f_nevents << "0" << " : " << "all" << " : " << eventsAnalyzed << " : " << sumOfWeights <<endl;
