@@ -509,7 +509,7 @@ def add_sl4j3tDNN():
 
 def getDiscriminatorPlots(data = None, discrname = None):
     discriminatorPlots = add_plots()
-    discriminatorPlots += add_ak8()
+    #discriminatorPlots += add_ak8()
     discriminatorPlots += add_sl6j4t()
     discriminatorPlots += add_sl6j3t()
     discriminatorPlots += add_sl5j4t()
