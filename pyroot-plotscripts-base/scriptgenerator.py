@@ -1381,7 +1381,7 @@ double CR_ScalefactorHelper::GetScaleFactorZll(float Hadr_Recoil_Pt, string labe
     sf = Zll_CR_Scalefactor_nominal->GetBinContent(bin);  
   }
 
-  if(Hadr_Recoil_Pt>=1000.) sf = 1.;
+  if(Hadr_Recoil_Pt>=1500.) sf = 1.;
   return sf;
 }
 
@@ -1395,15 +1395,15 @@ double CR_ScalefactorHelper::GetScaleFactorZllUp(float Hadr_Recoil_Pt, string la
   if (label == "Normed"){
     bin = Zll_CR_normedScalefactor_nominal->FindBin(Hadr_Recoil_Pt);
     sf = Zll_CR_normedScalefactor_nominal->GetBinContent(bin);
-    sfup = (sf+Zll_CR_normedScalefactor_nominal->GetBinError(bin))/sf;
+    sfup = 1+fabs(1-sf);
   }
   else if (label == "notNormed"){
     bin = Zll_CR_Scalefactor_nominal->FindBin(Hadr_Recoil_Pt);
     sf = Zll_CR_Scalefactor_nominal->GetBinContent(bin);  
-    sfup = (sf+Zll_CR_Scalefactor_nominal->GetBinError(bin))/sf;
+    sfup = 1+fabs(1-sf);
   }
 
-  if(Hadr_Recoil_Pt>=1000.) sfup = 1.;
+  if(Hadr_Recoil_Pt>=1500.) sfup = 1.;
   return sfup;
 }
 
@@ -1417,15 +1417,15 @@ double CR_ScalefactorHelper::GetScaleFactorZllDown(float Hadr_Recoil_Pt, string 
   if (label == "Normed"){
     bin = Zll_CR_normedScalefactor_nominal->FindBin(Hadr_Recoil_Pt);
     sf = Zll_CR_normedScalefactor_nominal->GetBinContent(bin);
-    sfdown = (sf-Zll_CR_normedScalefactor_nominal->GetBinError(bin))/sf;
+    sfdown = 1-fabs(1-sf);
   }
   else if (label == "notNormed"){
     bin = Zll_CR_Scalefactor_nominal->FindBin(Hadr_Recoil_Pt);
     sf = Zll_CR_Scalefactor_nominal->GetBinContent(bin);  
-    sfdown = (sf-Zll_CR_Scalefactor_nominal->GetBinError(bin))/sf;
+    sfdown = 1-fabs(1-sf);
   }
 
-  if(Hadr_Recoil_Pt>=1000.) sfdown = 1.;
+  if(Hadr_Recoil_Pt>=1500.) sfdown = 1.;
   return sfdown;
 }
 
@@ -2564,6 +2564,19 @@ def initHistoWithProcessNameAndSuffix(name,nbins,xmin=0,xmax=0,title_=''):
 
   return '  TH1F* h_'+name+'=new TH1F((processname+"_'+name+'"+suffix).c_str(),"'+title+'",'+str(nbins)+','+str(xmin)+','+str(xmax)+');\n'
 
+def initHistoWithProcessNameAndSuffixVariableBinSize(name,nbins,basename,lower_bin_edges=[],title_=''):
+  if title_=='':
+    title=name
+  else:
+    title=title_
+  text=''
+  #text+='std::unique_ptr<float[]> lower_bin_edges_'+name+'(new float['+str(len(lower_bin_edges))+']{'
+  #for bin_edge in lower_bin_edges:
+    #text+=bin_edge+","
+  #text=text[:-1]
+  #text+='});\n'
+  text+='TH1F* h_'+name+'=new TH1F((processname+"_'+name+'"+suffix).c_str(),"'+title+'",'+str(len(lower_bin_edges)-1)+','+'lower_bin_edges_'+basename+'.get()'+');\n'
+  return text
 
 def initTwoDimHistoWithProcessNameAndSuffix(name,nbinsX=10,xminX=0,xmaxX=0,nbinsY=10,xminY=0,xmaxY=0,title_=''):
   if title_=='':
@@ -3306,8 +3319,21 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
         mx=plot.histo.GetXaxis().GetXmax()
         mn=plot.histo.GetXaxis().GetXmin()
         nb=plot.histo.GetNbinsX()
-        for s in systnames:
-          script+=initHistoWithProcessNameAndSuffix(c+n+s,nb,mn,mx,t)
+        if not plot.variable_bin_width:
+          for s in systnames:
+            script+=initHistoWithProcessNameAndSuffix(c+n+s,nb,mn,mx,t)
+        else:
+          lower_bin_edges=[]
+          for i in range(1,plot.histo.GetNbinsX()+2):
+            lower_bin_edges.append(str(plot.histo.GetBinLowEdge(i)))
+            print "lower bin edges: ",lower_bin_edges
+          script+='std::unique_ptr<float[]> lower_bin_edges_'+c+n+'(new float['+str(len(lower_bin_edges))+']{'
+          for bin_edge in lower_bin_edges:
+            script+=bin_edge+","
+          script=script[:-1]
+          script+='});\n'          
+          for s in systnames:
+            script+=initHistoWithProcessNameAndSuffixVariableBinSize(c+n+s,nb,c+n,lower_bin_edges,t)
 
   # start event loop
   script+=DefineLHAPDF()

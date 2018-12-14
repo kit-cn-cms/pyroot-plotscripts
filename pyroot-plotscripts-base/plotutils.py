@@ -105,7 +105,7 @@ class Sample:
 
 
 class Plot:
-    def __init__(self,histo, variable='', selection='',label=''):
+    def __init__(self,histo, variable='', selection='',label='',variable_bin_width=False):
         if isinstance(histo,ROOT.TH1):
             self.histo=histo
             self.name=histo.GetName()
@@ -118,6 +118,7 @@ class Plot:
             self.variable=variable
         self.selection=selection
         self.label=label
+        self.variable_bin_width=variable_bin_width
 
 class TwoDimPlot:
     def __init__(self,histo, variable1='', variable2='', selection='',label=''):

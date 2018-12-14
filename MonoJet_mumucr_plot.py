@@ -5,7 +5,6 @@ import ROOT
 sys.path.append('pyroot-plotscripts-base')
 sys.path.append('pyroot-plotscripts-base/limittools')
 sys.path.append('limittools')
-
 from scriptgenerator import *
 from plotutils import *
 from limittools import renameHistos
@@ -18,6 +17,8 @@ from limittools import calcLimits
 from limittools import replaceQ2scale
 
 from MonoJet_mumucr_cfg import *
+
+from array import array
 
 jobname = "MonoJet_Plots_mumucr"
 
@@ -34,6 +35,17 @@ additionalvariables=[    "N_TightMuons","N_TightElectrons","Evt_Pt_PrimaryLepton
                          "Weight_MuonSFID","Weight_MuonSFIso","Weight_MuonSFHIP","Weight_MuonSFTrigger"
                          ]
 additionalvariables+=GetMEPDFadditionalVariablesList("/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv")
+
+plotselection_rebin = "1."
+plotlabel_rebin = "#slash{U}_{T}>250 GeV"
+plotprefix = "rebin"
+bins_rebin = [250,300,350,400,450,500,550,600,650,750,1400]
+bins_array = array('f',bins_rebin)
+plots_rebin = [
+
+Plot(ROOT.TH1F(plotprefix+"_"+"Hadr_Recoil_Pt","Hadr. Recoil p_{T}",len(bins_rebin)-1,bins_array),"Hadr_Recoil_Pt",plotselection_rebin,plotlabel_rebin,True)
+
+]
 
 
 plotselection_inclusive = "1."
@@ -176,7 +188,7 @@ plots_MET600=[
         Plot(ROOT.TH1F(plotprefix+"_"+"MuonSF","MuonSF",41,-0.025,2.025),"Weight_MuonSFID*Weight_MuonSFIso*Weight_MuonSFHIP*Weight_MuonSFTrigger",plotselection_MET600,plotlabel_MET600),
     ]
 
-plots = plots_inclusive+plots_MET300+plots_MET400+plots_MET500+plots_MET600
+plots = plots_rebin+plots_inclusive+plots_MET300+plots_MET400+plots_MET500+plots_MET600
 
 allsystnames=weightSystNames+BosonSystNames+ZvvBosonSystNames+ZllBosonSystNames+WBosonSystNames+otherSystNames
 
