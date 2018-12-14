@@ -83,14 +83,14 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
 		os.mkdir("workdir")
 		os.mkdir(self.path_to_chekpoitns)
     # location of plain DNNs (no prenet)
-    copy_tree('/nfs/dust/cms/user/vdlinden/DNN_checkpoints/',self.path_to_chekpoitns)
+    copy_tree('/nfs/dust/cms/user/vdlinden/DNNCheckpointFiles/DNNPreApproval/',self.path_to_chekpoitns)
     self._get_variables_from_csv()
 
     rstr="""
 
     //6j3t cat
-    const string pathToGraph_6j3t =\""""+str(self.path_to_chekpoitns)+"""/6j3t/trained_model.meta";
-    const string checkpointPath_6j3t =\""""+str(self.path_to_chekpoitns)+"""/6j3t/trained_model";
+    const string pathToGraph_6j3t =\""""+str(self.path_to_chekpoitns)+"""/ge6j_ge3t/checkpoints/trained_model.meta";
+    const string checkpointPath_6j3t =\""""+str(self.path_to_chekpoitns)+"""/ge6j_ge3t/checkpoints/trained_model";
 
     auto session_6j3t = NewSession(SessionOptions());
     if (session_6j3t == nullptr) {
@@ -129,8 +129,8 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
 
 
     //5j3t cat
-    const string pathToGraph_5j3t =\""""+str(self.path_to_chekpoitns)+"""/5j3t/trained_model.meta";
-    const string checkpointPath_5j3t =\""""+str(self.path_to_chekpoitns)+"""/5j3t/trained_model";
+    const string pathToGraph_5j3t =\""""+str(self.path_to_chekpoitns)+"""/5j_ge3t/checkpoints/trained_model.meta";
+    const string checkpointPath_5j3t =\""""+str(self.path_to_chekpoitns)+"""/5j_ge3t/checkpoints/trained_model";
 
     auto session_5j3t = NewSession(SessionOptions());
     if (session_5j3t == nullptr) {
@@ -167,8 +167,8 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
 
 
     //4j3t cat
-    const string pathToGraph_4j3t = \""""+str(self.path_to_chekpoitns)+"""/4j3t/trained_model.meta";
-    const string checkpointPath_4j3t =\""""+str(self.path_to_chekpoitns)+"""/4j3t/trained_model";
+    const string pathToGraph_4j3t = \""""+str(self.path_to_chekpoitns)+"""/4j_ge3t/checkpoints/trained_model.meta";
+    const string checkpointPath_4j3t =\""""+str(self.path_to_chekpoitns)+"""/4j_ge3t/checkpoints/trained_model";
 
     auto session_4j3t = NewSession(SessionOptions());
     if (session_4j3t == nullptr) {
@@ -525,7 +525,7 @@ for(int ifeat=0; ifeat<num_features_5j3t;ifeat++){
   	self.means_6j3t = []
   	self.stddev_6j3t = []
 
-  	with open(self.path_to_chekpoitns+"/4j3t/variable_norm.csv") as csv_file:
+  	with open(self.path_to_chekpoitns+"/4j_ge3t/checkpoints/variable_norm.csv") as csv_file:
   		csv_reader = csv.reader(csv_file,delimiter=',')
   		for i, row in enumerate(csv_reader):
   			if i != 0:
@@ -537,7 +537,7 @@ for(int ifeat=0; ifeat<num_features_5j3t;ifeat++){
   				self.means_4j3t.append(row[1])
   				self.stddev_4j3t.append(row[2])
 
-  	with open(self.path_to_chekpoitns+"/5j3t/variable_norm.csv") as csv_file:
+  	with open(self.path_to_chekpoitns+"/5j_ge3t/checkpoints/variable_norm.csv") as csv_file:
   		csv_reader = csv.reader(csv_file,delimiter=',')
   		for i, row in enumerate(csv_reader):
   			if i != 0:
@@ -548,7 +548,7 @@ for(int ifeat=0; ifeat<num_features_5j3t;ifeat++){
   				self.means_5j3t.append(row[1])
   				self.stddev_5j3t.append(row[2])
 
-  	with open(self.path_to_chekpoitns+"/6j3t/variable_norm.csv") as csv_file:
+  	with open(self.path_to_chekpoitns+"/ge6j_ge3t/checkpoints/variable_norm.csv") as csv_file:
   		csv_reader = csv.reader(csv_file,delimiter=',')
   		for i, row in enumerate(csv_reader):
   			if i != 0:
@@ -587,22 +587,22 @@ for(int ifeat=0; ifeat<num_features_5j3t;ifeat++){
     master_string = ""
     if cat == '4j3t':
 	  sess_1=tensorflow.Session()
-	  saver_1= tensorflow.train.import_meta_graph(self.path_to_chekpoitns+'/4j3t/trained_model.meta')
-	  saver_1.restore(sess_1,self.path_to_chekpoitns+'/4j3t/trained_model')
+	  saver_1= tensorflow.train.import_meta_graph(self.path_to_chekpoitns+'/4j_ge3t/checkpoints/trained_model.meta')
+	  saver_1.restore(sess_1,self.path_to_chekpoitns+'/4j_ge3t/checkpoints/trained_model')
 	  graph = tensorflow.get_default_graph()
 
     elif cat == '5j3t':
 
 	  sess_2=tensorflow.Session()
-	  saver_2 = tensorflow.train.import_meta_graph(self.path_to_chekpoitns+'/5j3t/trained_model.meta')
-	  saver_2.restore(sess_2,self.path_to_chekpoitns+'/5j3t/trained_model')
+	  saver_2 = tensorflow.train.import_meta_graph(self.path_to_chekpoitns+'/5j_ge3t/checkpoints/trained_model.meta')
+	  saver_2.restore(sess_2,self.path_to_chekpoitns+'/5j_ge3t/checkpoints/trained_model')
 	  graph = tensorflow.get_default_graph()
 
     elif cat == '6j3t':
 
 	  sess_1=tensorflow.Session()
-	  saver_1 = tensorflow.train.import_meta_graph(self.path_to_chekpoitns+'/6j3t/trained_model.meta')
-	  saver_1.restore(sess_1,self.path_to_chekpoitns+'/6j3t/trained_model')
+	  saver_1 = tensorflow.train.import_meta_graph(self.path_to_chekpoitns+'/ge6j_ge3t/checkpoints/trained_model.meta')
+	  saver_1.restore(sess_1,self.path_to_chekpoitns+'/ge6j_ge3t/checkpoints/trained_model')
 	  graph = tensorflow.get_default_graph()
 
     graph = tensorflow.get_default_graph()
