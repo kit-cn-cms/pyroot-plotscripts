@@ -13,6 +13,7 @@ weightSystNames=["",
                  "_CMS_btag_hfstats2Up","_CMS_btag_hfstats2Down","_CMS_btag_lfstats2Up","_CMS_btag_lfstats2Down",
                  "_CMS_btag_cferr1Up","_CMS_btag_cferr1Down","_CMS_btag_cferr2Up","_CMS_btag_cferr2Down",
                  "_Weight_PUUp","_Weight_PUDown",
+                 "_SFWeight_NormedUp","_SFWeight_NormedDown",
                  "_Weight_scale_variation_muRUp","_Weight_scale_variation_muRDown","_Weight_scale_variation_muFUp","_Weight_scale_variation_muFDown",
                  "_Weight_PDFUp","_Weight_PDFDown"
                  ]
@@ -40,6 +41,8 @@ systWeights=[   "NomWeight:="+common_weight+"*(DoWeights==1)+(DoWeights==0)*1.0"
                 "dummyWeight_CSVCErr2down:="+common_weight+"*Weight_CSVCErr2down*(DoWeights==1)+(DoWeights==0)*1.0",
                 "dummyWeight_PUup:="+common_weight+"*Weight_pu69p2Up/Weight_pu69p2*(DoWeights==1)+(DoWeights==0)*1.0",
                 "dummyWeight_PUdown:="+common_weight+"*Weight_pu69p2Down/Weight_pu69p2*(DoWeights==1)+(DoWeights==0)*1.0",
+                "dummyWeight_SFWeight_Normedup:="+common_weight+"*internalSFWeight_NormedUp*(DoWeights==1)+(DoWeights==0)*1.0",
+                "dummyWeight_SFWeight_Normeddown:="+common_weight+"*internalSFWeight_NormedDown*(DoWeights==1)+(DoWeights==0)*1.0",
                 "dummyWeight_scale_variation_muRup:="+common_weight+"*internalBosonWeight_muRUp/internalBosonWeight_nominal*fabs(Weight_scale_variation_muR_2p0_muF_1p0)*(DoWeights==1)+(DoWeights==0)*1.0",
                 "dummyWeight_scale_variation_muRdown:="+common_weight+"*internalBosonWeight_muRDown/internalBosonWeight_nominal*fabs(Weight_scale_variation_muR_0p5_muF_1p0)*(DoWeights==1)+(DoWeights==0)*1.0",
                 "dummyWeight_scale_variation_muFup:="+common_weight+"*internalBosonWeight_muFUp/internalBosonWeight_nominal*fabs(Weight_scale_variation_muR_1p0_muF_2p0)*(DoWeights==1)+(DoWeights==0)*1.0",
@@ -250,6 +253,5 @@ for i in range(len(signal_samples_names)):
         print "reading of signal cross section went wrong"
         exit()
     samples_signal.append(Sample(signal_samples_names[i],ROOT.kRed,signal_samples_paths[i],"1.*"+xs+"*"+MCWeight+sel_MET,signal_samples_names[i],[""],samDict=sampleDict))
-    
 #print samples_signal
 #print signal_samples_names
