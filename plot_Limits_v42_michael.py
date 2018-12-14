@@ -27,7 +27,7 @@ from plotconfig_v42 import *
 def main(argv):
 
     #Create analysis object with output name
-    name='limits_v42_optimized'
+    name='limits_v42_test'
     analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscripts18/July18/pyroot-plotscripts/workdir/'+name+'/output_limitInput.root', signalProcess='ttH')
     print os.path.exists(analysis.rootFilePath), "AAAARgh"
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscripts18/July18/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
@@ -755,7 +755,7 @@ def main(argv):
         #if False:
             
             print "Doing plotParallel step since root file was not found.", analysis.rootFilePath
-            THEoutputpath=plotParallel(name,175000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018",True]],"/nfs/dust/cms/user/kelmorab/plotscripts18/July18/pyroot-plotscripts/treejson_v3.json",otherSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_Keras_cool.py"],cirun=False,StopAfterCompileStep=False,haddParallel=True,useGenWeightNormMap=True,useThisSampleForVariableSetup=samples[9])
+            THEoutputpath=plotParallel(name,150000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018",True]],"/nfs/dust/cms/user/kelmorab/plotscripts18/July18/pyroot-plotscripts/treejson_v3.json",otherSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_Keras_cool.py"],cirun=False,StopAfterCompileStep=False,haddParallel=True,useGenWeightNormMap=True,useThisSampleForVariableSetup=samples[9])
             #outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_v5_08102017.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_V6.py"],cirun=False)
             
             if type(THEoutputpath)==str:
