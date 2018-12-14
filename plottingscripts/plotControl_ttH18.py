@@ -201,7 +201,7 @@ def main(pyrootdir, argv):
             pP.setCatSelections(['1.'])
             pP.setMaxEvts(350000)
             pP.setRateFactorsFile(rateFactorsFile)
-            pP.setSampleForVariableSetup(configData.samples[9])
+            pP.setSampleForVariableSetup(configData.samples[1])
 
             # run plotParallel
             pP.run()
