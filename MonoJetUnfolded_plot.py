@@ -24,7 +24,7 @@ jobname = "MonoJet_Plots"
 plotselection_inclusive = ""
 plotlabel_inclusive = ""
 plots_inclusive = [
-    Plot(ROOT.TH1F("Gen_Hadr_Recoil_Pt", "generated hadr. recoil |#vec{U}_{T}| [GeV/c]", 50, 0., 1000.),
+    Plot(ROOT.TH1F("Gen_Hadr_Recoil_Pt", "generated hadr. recoil |#vec{U}_{T}| [GeV]", 50, 0., 1000.),
          "generated hadr. recoil |#vec{U}_{T}| [GeV/c]", plotselection_inclusive, plotlabel_inclusive),
 ]
 
@@ -77,7 +77,7 @@ lll = createLLL_fromSuperHistoFileSyst(
 # for hist in lUnfoldedData:
 # 	print hist
 labels = [plot.label for plot in plots]
-xlabel="unfolded hadr. recoil |#vec{U}_{T}| [GeV/c]"
+xlabel="unfolded hadr. recoil |#vec{U}_{T}| [GeV]"
 print "lolT_signal[0]:" , lolT_signal[0]
 
 plotUnfoldedDataMCanWsyst(lUnfolded=lUnfoldedData, listOfHistoLists=transposeLOL(lolT_background), samples=samples_background,

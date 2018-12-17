@@ -1068,7 +1068,7 @@ def createLLL_fromSuperHistoFileSyst(path,samples,plots,systnames=[""]):
                         print "using nominal for ", key
                     l.append(nominal.Clone(key))
                     continue
-                # print key
+                print key
 
                 o = f.Get(key)
                 # o.Print()
@@ -1149,7 +1149,7 @@ def createUnfoldedHistoList(path, varname, systnames=[""]):
             l.append(histo.Clone())
     return l
 
-def createErrorbands(lll,samples,DoRateSysts=True,verbosity=3):
+def createErrorbands(lll,samples,DoRateSysts=True,verbosity=0):
     print "creating errorbands"
     if DoRateSysts:
       print "using ratesysts"
@@ -1161,58 +1161,59 @@ def createErrorbands(lll,samples,DoRateSysts=True,verbosity=3):
         #print llT
         nominal=llT[0][0].Clone()
         if verbosity>=0:
-          print "Creating error band for  ", nominal.GetName()
+            print "Creating error band for  ", nominal.GetName()
         for h in llT[0][1:]:
             nominal.Add(h)
             # print h
-        # print "integrals ", llT[0][0].Integral(), nominal.Integral()
+        #print "integrals ", llT[0][0].Integral(), nominal.Integral()
         systs=[]
         #print "LLT[1:]", llT[1:]
         for l in llT[1:]: #for all systematics
-	    # print "l[1:]",l[1:]
+        #print "l[1:]",l[1:]
             syst=l[0].Clone()
-            # syst.Print()
+            syst.Print()
             for h in l[1:]:
                 syst.Add(h)
                 if verbosity>=1:
-		  print "adding to errorband"
-		  print h, h.Integral(), nominal.Integral()
+                    print "adding to errorband"
+                    print h, h.Integral(), nominal.Integral()
             systs.append(syst)
+        
         assert len(samples)==len(llT[0])
-        for isample,sample in enumerate(samples): # for all normalization unc
-	      ls=[]
-	      for ihisto,h in enumerate(llT[0]):
-		  ls.append(h.Clone())
-		  if ihisto==isample:
-		    if DoRateSysts:
-		      ls[-1].Scale(1+sample.unc_up)
-	      syst=ls[0].Clone()
-	      #print syst.GetName()
-	      for h in ls[1:]:
-		  syst.Add(h)
-		  #print h.GetName()
-	      #print "rates ", sample.nick, syst.Integral()
-	      systs.append(syst)
 
-	      ls=[]
-	      for ihisto,h in enumerate(llT[0]):
-		  ls.append(h.Clone())
-		  if ihisto==isample:
-		    if DoRateSysts:
-		      ls[-1].Scale(1-sample.unc_down)
-	      syst=ls[0].Clone()
-	      for h in ls[1:]:
-		  syst.Add(h)
-	      # print "rates ", sample.nick, syst.Integral()
-	      systs.append(syst)
+        for isample,sample in enumerate(samples): # for all normalization unc
+            ls=[]
+            for ihisto,h in enumerate(llT[0]):
+                ls.append(h.Clone())
+                if ihisto==isample:
+                  if DoRateSysts:
+                    ls[-1].Scale(1+sample.unc_up)
+            syst=ls[0].Clone()
+            #print syst.GetName()
+            for h in ls[1:]:
+                syst.Add(h)
+                #print h.GetName()
+                #print "rates ", sample.nick, syst.Integral()
+            systs.append(syst)
+
+            ls=[]
+            for ihisto,h in enumerate(llT[0]):
+                ls.append(h.Clone())
+                if ihisto==isample:
+                  if DoRateSysts:
+                    ls[-1].Scale(1-sample.unc_down)
+            syst=ls[0].Clone()
+            for h in ls[1:]:
+                syst.Add(h)
+                #print "rates ", sample.nick, syst.Integral()
+            systs.append(syst)
 
         uperrors=[0]*ll[0][0].GetNbinsX()
         downerrors=[0]*ll[0][0].GetNbinsX()
 
         #for sys in systs:
-	  #print sys, sys.Integral()
+      #print sys, sys.Integral()
         for ibin in range(0,nominal.GetNbinsX()):
-            print "bin: ", ibin+1
             nerr=nominal.GetBinError(ibin+1)
             #print "Bin, name, content ",ibin, nominal.GetName(), nominal.GetBinContent(ibin+1)
             uperrors[ibin]=ROOT.TMath.Sqrt(uperrors[ibin]*uperrors[ibin]+nerr*nerr)
@@ -1221,9 +1222,9 @@ def createErrorbands(lll,samples,DoRateSysts=True,verbosity=3):
             ups=systs[0::2]
             downs=systs[1::2]
             for up,down in zip(ups,downs):
-	        if verbosity>=1:
-	          print "up/down name ", up.GetName(), down.GetName()
-	          print "up/down diff ",  up.GetBinContent(ibin+1)-n, down.GetBinContent(ibin+1)-n
+                if verbosity>=1:
+                    print "up/down name ", up.GetName(), down.GetName()
+                    print "up/down diff ",  up.GetBinContent(ibin+1)-n, down.GetBinContent(ibin+1)-n
                 u_=up.GetBinContent(ibin+1)-n
                 d_=down.GetBinContent(ibin+1)-n
                 #print u_,d_
@@ -1242,8 +1243,8 @@ def createErrorbands(lll,samples,DoRateSysts=True,verbosity=3):
                 elif u_ < 0 and u_ < d_:
                     d=u_
                     if d_>=0:
-		      u=d_
-		    else:
+                        u=d_
+                else:
                       u=0
 
                 uperrors[ibin]=ROOT.TMath.Sqrt(uperrors[ibin]*uperrors[ibin]+u*u)
@@ -1777,13 +1778,14 @@ def getDataGraph(listOfHistosData,nunblinded):
     return data
     # TODO: proper y-errors
 
-def getDataGraphBlind(listOfHistosData,nunblinded,verbosity=0):
+def getDataGraphBlind(listOfHistosData,nunblinded,verbosity=0, moveOF=True):
     print "blind after point ", nunblinded
     if len(listOfHistosData)>0:
         datahisto=listOfHistosData[0].Clone()
     for d in listOfHistosData[1:]:
         datahisto.Add(d)
-    moveOverFlow(datahisto)
+    if moveOF:
+        moveOverFlow(datahisto)
     data=ROOT.TGraphAsymmErrors(datahisto)
     alpha = 1 - 0.6827
     for i in range(0,data.GetN()):
@@ -2369,7 +2371,7 @@ def plotDataMCanWsyst(listOfHistoListsData,listOfHistoLists,samples,listOfhistos
         #draw first histo
         h=stackedListOfHistos[0]
         if logscale:
-            h.GetYaxis().SetRangeUser(yMax/10000,yMax*10)
+            h.GetYaxis().SetRangeUser(yMax/10000,yMax*100)
             canvas.cd(1).SetLogy()
         else:
             h.GetYaxis().SetRangeUser(0,yMax*1.8)
@@ -2666,8 +2668,8 @@ def plotUnfoldedDataMCanWsyst(lUnfolded,listOfHistoLists,samples,listOfhistosOnT
 
         #
         # mover over/underflow
-        for h in listOfHistos:
-            moveOverFlow(h)
+        # for h in listOfHistos:
+            # moveOverFlow(h)
         # stack
         stackedListOfHistos=stackHistoList(listOfHistos)
         objects.append(stackedListOfHistos)
@@ -2680,7 +2682,7 @@ def plotUnfoldedDataMCanWsyst(lUnfolded,listOfHistoLists,samples,listOfhistosOnT
         # draw first histo
         h=stackedListOfHistos[0]
         if logscale:
-            h.GetYaxis().SetRangeUser(yMax/10000,yMax*10)
+            h.GetYaxis().SetRangeUser(yMax/100000,yMax*10)
             # h.GetYaxis().SetRangeUser(yMax/1000000,yMax*10)
             canvas.cd(1).SetLogy()
         else:
@@ -2715,7 +2717,7 @@ def plotUnfoldedDataMCanWsyst(lUnfolded,listOfHistoLists,samples,listOfhistosOnT
           otc.Scale(integralfactor)
         otc.Draw('histosame')
 
-        data,blind=getDataGraphBlind(lUnfolded,nok)
+        data,blind=getDataGraphBlind(lUnfolded,nok, moveOF=False)
         datahist=lUnfolded[0]
         # datahist.Print()
         # print listOfHistosData[0][0]
@@ -2730,9 +2732,10 @@ def plotUnfoldedDataMCanWsyst(lUnfolded,listOfHistoLists,samples,listOfhistosOnT
         BinCenters =array('d')
         BinContents=array('d')
 
-        for bin in range(data.GetN()+1):
+        for bin in range(data.GetN()+2):
             bin+=1;
-            # print "Bin: ", bin, ":"
+            
+            print "Bin: ", bin, ":"
             syserrorH=0
             syserrorL=0
             for l in lUnfolded[1:]:
@@ -2745,14 +2748,16 @@ def plotUnfoldedDataMCanWsyst(lUnfolded,listOfHistoLists,samples,listOfhistosOnT
                     syserrorL+=(shift*shift)
                 else:
                     syserrorH+=(shift*shift)
-            # print "errors: ", syserrorL, syserrorH
+            print "bin center: ", datahist.GetBinCenter(bin) 
+            print "errors: ", syserrorL, syserrorH
             zeros.append(0)
             sysUp.append(math.sqrt(syserrorH))
             sysDown.append(math.sqrt(syserrorL))
             BinCenters.append(datahist.GetBinCenter(bin))
             BinContents.append(datahist.GetBinContent(bin))
 
-        UnfoldedTGraph = ROOT.TGraphAsymmErrors(datahist.GetNbinsX(), BinCenters, BinContents, zeros, zeros, sysUp, sysDown)
+
+        UnfoldedTGraph = ROOT.TGraphAsymmErrors(datahist.GetNbinsX()+1, BinCenters, BinContents, zeros, zeros, sysUp, sysDown)
         UnfoldedTGraph.SetMarkerStyle(20)
         UnfoldedTGraph.SetMarkerSize(1.3)
         UnfoldedTGraph.SetLineWidth(3)

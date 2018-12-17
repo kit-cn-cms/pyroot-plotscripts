@@ -26,11 +26,11 @@ plotlabel_inclusive = ""
 plotlabel_fakes = "fakes"
 plotlabel_misses = "misses"
 plots_inclusive = [
-    Plot(ROOT.TH1F("GenMET", "generated #slash{E}_{T} [GeV/c]", 50, 0., 1000.),
-         "generated #slash{E}_{T} [GeV/c]", plotselection_inclusive, plotlabel_inclusive),
+    Plot(ROOT.TH1F("GenMET", "generated #slash{E}_{T} [GeV]", 50, 0., 1000.),
+         "generated #slash{E}_{T} [GeV]", plotselection_inclusive, plotlabel_inclusive),
 
-    Plot(ROOT.TH1F("MET", "#slash{E}_{T} [GeV/c]", 50, 0., 1000.),
-         "#slash{E}_{T} [GeV/c]", plotselection_inclusive, plotlabel_inclusive),
+    Plot(ROOT.TH1F("MET", "#slash{E}_{T} [GeV]", 50, 0., 1000.),
+         "#slash{E}_{T} [GeV]", plotselection_inclusive, plotlabel_inclusive),
 
     Plot(ROOT.TH1F("Evt_Phi_MET", "#slash{E}_{T} #phi", 50, 0., 1000.),
          "#slash{E}_{T} #phi", plotselection_inclusive, plotlabel_inclusive),
@@ -38,14 +38,32 @@ plots_inclusive = [
     Plot(ROOT.TH1F("Evt_Phi_GenMET", "generated #slash{E}_{T} #phi", 50, 0., 1000.),
          "generated #slash{E}_{T} #phi", plotselection_inclusive, plotlabel_inclusive),
 
+    Plot(ROOT.TH1F("Jet_Pt", "ak4-jets p_{T} [GeV]", 50, 0., 1000.),
+         "ak4-jets p_{T} [GeV]", plotselection_inclusive, plotlabel_inclusive),
+
     Plot(ROOT.TH1F("Jet_Eta", "ak4-jets #eta", 50, 0., 1000.),
          "ak4-jets #eta", plotselection_inclusive, plotlabel_inclusive),
 
-    Plot(ROOT.TH1F("Jet_Pt", "ak4-jets p_{T} [GeV/c]", 50, 0., 1000.),
-         "ak4-jets p_{T} [GeV/c]", plotselection_inclusive, plotlabel_inclusive),
-
     Plot(ROOT.TH1F("Jet_Phi", "ak4-jets #phi", 50, 0., 1000.),
          "ak4-jets #phi", plotselection_inclusive, plotlabel_inclusive),
+
+    Plot(ROOT.TH1F("Jet_Pt_0", "p_{T} of hardest ak4-jet [GeV] ", 50, 0., 1000.),
+         "p_{T} of hardest ak4-jet [GeV]", plotselection_inclusive, plotlabel_inclusive),
+
+    Plot(ROOT.TH1F("Jet_Eta_0", "#eta of hardest ak4-jet", 50, 0., 1000.),
+         "#eta of hardest ak4-jet", plotselection_inclusive, plotlabel_inclusive),
+
+    Plot(ROOT.TH1F("Jet_Phi_0", "#phi of hardest ak4-jet", 50, 0., 1000.),
+         "#phi of hardest ak4-jet", plotselection_inclusive, plotlabel_inclusive),
+
+    Plot(ROOT.TH1F("Jet_PtAK8_0", "p_{T} of hardest ak8-jet [GeV] ", 50, 0., 1000.),
+         "p_{T} of hardest ak8-jet [GeV]", plotselection_inclusive, plotlabel_inclusive),
+
+    Plot(ROOT.TH1F("Jet_EtaAK8_0", "#eta of hardest ak8-jet", 50, 0., 1000.),
+         "#eta of hardest ak8-jet", plotselection_inclusive, plotlabel_inclusive),
+
+    Plot(ROOT.TH1F("Jet_PhiAK8_0", "#phi of hardest ak8-jet", 50, 0., 1000.),
+         "#phi of hardest ak8-jet", plotselection_inclusive, plotlabel_inclusive),
 
     Plot(ROOT.TH1F("Jet_Chf", "ak4-jets CHF", 50, 0., 1000.),
          "ak4-jets CHF", plotselection_inclusive, plotlabel_inclusive),
@@ -56,8 +74,8 @@ plots_inclusive = [
     Plot(ROOT.TH1F("Jet_EtaAK8", "ak8-jets #eta", 50, 0., 1000.),
          "ak8-jets #eta", plotselection_inclusive, plotlabel_inclusive),
 
-    Plot(ROOT.TH1F("Jet_PtAK8", "ak8-jets p_{T} [GeV/c]", 50, 0., 1000.),
-         "ak8-jets p_{T} [GeV/c]", plotselection_inclusive, plotlabel_inclusive),
+    Plot(ROOT.TH1F("Jet_PtAK8", "ak8-jets p_{T} [GeV]", 50, 0., 1000.),
+         "ak8-jets p_{T} [GeV]", plotselection_inclusive, plotlabel_inclusive),
 
     Plot(ROOT.TH1F("Jet_PhiAK8", "ak8-jets #phi", 50, 0., 1000.),
          "ak8-jets #phi", plotselection_inclusive, plotlabel_inclusive),
@@ -65,26 +83,29 @@ plots_inclusive = [
     Plot(ROOT.TH1F("N_Jets", "number of ak4-jets", 50, 0., 1000.),
          "number of ak4-jets", plotselection_inclusive, plotlabel_inclusive),
 
-    Plot(ROOT.TH1F("fakes", "hadr. recoil |#vec{U}_{T}| [GeV/c]", 50, 0., 1000.),
-         "hadr. recoil |#vec{U}_{T}| [Gev/c]", plotselection_inclusive, plotlabel_fakes),
+    Plot(ROOT.TH1F("N_JetsAK8", "number of ak8-jets", 50, 0., 1000.),
+         "number of ak8-jets", plotselection_inclusive, plotlabel_inclusive),
 
-    Plot(ROOT.TH1F("misses", "hadr. recoil |#vec{U}_{T}| [GeV/c]", 50, 0., 1000.),
-         "hadr. recoil |#vec{U}_{T}| [Gev/c]", plotselection_inclusive, plotlabel_misses),
+    Plot(ROOT.TH1F("fakes", "hadr. recoil |#vec{U}_{T}| [GeV]", 50, 0., 1000.),
+         "hadr. recoil |#vec{U}_{T}| [Gev]", plotselection_inclusive, plotlabel_fakes),
 
-    Plot(ROOT.TH1F("h_W_Pt", "W p_{T} [GeV/c]", 50, 0., 1000.),
+    Plot(ROOT.TH1F("misses", "hadr. recoil |#vec{U}_{T}| [GeV]", 50, 0., 1000.),
+         "hadr. recoil |#vec{U}_{T}| [Gev]", plotselection_inclusive, plotlabel_misses),
+
+    Plot(ROOT.TH1F("h_W_Pt", "W p_{T} [GeV]", 50, 0., 1000.),
          "W p_{T} [GeV]", plotselection_inclusive, plotlabel_inclusive),
 
-    Plot(ROOT.TH1F("h_Z_Pt", "Z p_{T} [GeV/c]", 50, 0., 1000.),
+    Plot(ROOT.TH1F("h_Z_Pt", "Z p_{T} [GeV]", 50, 0., 1000.),
          "Z p_{T} [GeV]", plotselection_inclusive, plotlabel_inclusive),
 
-    Plot(ROOT.TH1F("Hadr_Recoil_Pt", "hadr. recoil |#vec{U}_{T}| [GeV/c]", 50, 0., 1000.),
-         "hadr. recoil |#vec{U}_{T}| [GeV/c]", plotselection_inclusive, plotlabel_inclusive),
+    Plot(ROOT.TH1F("Hadr_Recoil_Pt", "hadr. recoil |#vec{U}_{T}| [GeV]", 50, 0., 1000.),
+         "hadr. recoil |#vec{U}_{T}| [GeV]", plotselection_inclusive, plotlabel_inclusive),
 
     Plot(ROOT.TH1F("Hadr_Recoil_Phi", "#phi of hadr. recoil #vec{U}", 50, 0., 1000.),
          "#phi of hadr. recoil #vec{U}", plotselection_inclusive, plotlabel_inclusive),
 
-    Plot(ROOT.TH1F("GenHadr_Recoil_Pt", "generated hadr. recoil |#vec{U}_{T}| [GeV/c]", 50, 0., 1000.),
-         "generated hadr. recoil |#vec{U}_{T}| [GeV/c]", plotselection_inclusive, plotlabel_inclusive),
+    Plot(ROOT.TH1F("GenHadr_Recoil_Pt", "generated hadr. recoil |#vec{U}_{T}| [GeV]", 50, 0., 1000.),
+         "generated hadr. recoil |#vec{U}_{T}| [GeV]", plotselection_inclusive, plotlabel_inclusive),
     
     Plot(ROOT.TH1F("GenHadr_Recoil_Phi", "#phi of generated hadr. recoil #vec{U}", 50, 0., 1000.),
          "#phi of generated hadr. recoil #vec{U}", plotselection_inclusive, plotlabel_inclusive),
@@ -95,11 +116,11 @@ plots_inclusive = [
     Plot(ROOT.TH1F("CaloMET", "#slash{E}_{T,Calo}", 50, 0., 1000.),
          "#slash{E}_{T,Calo}", plotselection_inclusive, plotlabel_inclusive),
 
-    Plot(ROOT.TH1F("CaloMET_PFMET_ratio", "#slash{E}_{T,Calo} #slash{E}_{T,PF} ratio", 50, 0., 1000.),
-         "#slash{E}_{T,Calo} #slash{E}_{T,PF} ratio", plotselection_inclusive, plotlabel_inclusive),
+    Plot(ROOT.TH1F("CaloMET_PFMET_ratio", "|#slash{E}_{T,Calo} - #slash{E}_{T,PF}| / #slash{E}_{T,Calo}", 50, 0., 1000.),
+         "|#slash{E}_{T,Calo} - #slash{E}_{T,PF}| / #slash{E}_{T,Calo}", plotselection_inclusive, plotlabel_inclusive),
 
-    Plot(ROOT.TH1F("dPhi_Jet_MET", "#Delta #phi (ak4-jets,#slash{E}_{T})", 50, 0., 1000.),
-         "#Delta #phi (ak4-jets,#slash{E}_{T})", plotselection_inclusive, plotlabel_inclusive),
+    Plot(ROOT.TH1F("dPhi_Jet_MET", "#Delta #phi (ak4-jets, #slash{E}_{T})", 50, 0., 1000.),
+         "#Delta #phi (ak4-jets, #slash{E}_{T})", plotselection_inclusive, plotlabel_inclusive),
 ]
 
 
@@ -146,9 +167,9 @@ print "Making MC Control plots"
 lll = createLLL_fromSuperHistoFileSyst(
     outputpath, samples_background, plots, allSystnames)
 # for ll in lll:
-# for l in ll:
-# for item in l:
-# item.Print()
+#     for l in ll:
+#         for item in l:
+#             item.Print()
 
 # for hist in lUnfoldedData:
 #   print hist
@@ -157,7 +178,7 @@ labels = [plot.label for plot in plots]
 print "lolT_signal[0]:", lolT_signal[0]
 
 plotDataMCanWsyst(listOfHistoLists_data, transposeLOL(lolT_background), samples_background,
-                  lolT_signal[0], samples_signal[0], -1, jobname, [[lll, 3354, ROOT.kBlack, True]], True, labels, ratio=True, blinded=False, verbosity=0)
+                  lolT_signal[0], samples_signal[0], -1, jobname, [[lll, 3354, ROOT.kBlack, True]], True, labels, ratio=True, blinded=False, verbosity=99)
 
 plotDataMCanWsyst(listOfHistoLists_data, transposeLOL(lolT_background), samples_background,
                   lolT_signal[0], samples_signal[0], -1, jobname+"_noRatio", [[lll, 3354, ROOT.kBlack, True]], True, labels, ratio=False, blinded=False, verbosity=0)

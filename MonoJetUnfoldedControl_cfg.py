@@ -13,7 +13,7 @@ ExSystNames = [
     "_CMS_btag_cferr1Up", "_CMS_btag_cferr1Down", "_CMS_btag_cferr2Up", "_CMS_btag_cferr2Down",
     "_Weight_PUUp", "_Weight_PUDown",
     "_CMS_scale_jUp", "_CMS_scale_jDown",
-    "_CMS_res_jUp", "_CMS_res_jDown"
+    "_CMS_res_jUp", "_CMS_res_jDown",
 ]
 
 commonTheorySystNames = ["",
@@ -31,8 +31,8 @@ BosonSystNames = [
     "_BosonWeight_QCD3Up", "_BosonWeight_QCD3Down",
     "_BosonWeight_EW1Up",  "_BosonWeight_EW1Down",
     "_BosonWeight_AlphaUp","_BosonWeight_AlphaDown",
-    "_BosonWeight_EW2",    "_BosonWeight_EW2Down",
-    "_BosonWeight_EW3",    "_BosonWeight_EW3Down",
+    "_BosonWeight_EW2Up",    "_BosonWeight_EW2Down",
+    "_BosonWeight_EW3Up",    "_BosonWeight_EW3Down",
     "_BosonWeight_MixedUp","_BosonWeight_MixedDown",
 ]
 
@@ -63,9 +63,11 @@ unfoldedExtraSystNames = [
 ]
 
 
-MCSystnames = commonTheorySystNames + BosonSystNames + PDFSystNames
+# MCSystnames = commonTheorySystNames + BosonSystNames + PDFSystNames
+MCSystnames = commonTheorySystNames + PDFSystNames
 unfoldedSystNames =  ExSystNames + unfoldedExtraSystNames 
-allSystnames=MCSystnames+ExSystNames
+commonSystnames=MCSystnames+ExSystNames
+allSystnames=commonSystnames+BosonSystNames#+ZvvBosonSystNames+WlnuBosonSystNames+ZllBosonSystNames
 
 path_ntuples = "/nfs/dust/cms/user/mwassmer/DarkMatter/ntuples"
 # path_ntuples = "/nfs/dust/cms/user/swieland/Darkmatter/ntuples"
@@ -92,14 +94,14 @@ samples_dataUnfolded = [
 ]
 
 samples_background = [
-    Sample('Z(#nu#nu)+jets', ROOT.kBlue, dummypath, dummyweight, 'z_nunu_jets', allSystnames, samDict=sampleDict),
-    Sample('W(l#nu)+jets', ROOT.kGreen, dummypath, dummyweight, 'w_lnu_jets', allSystnames, samDict=sampleDict),
-    Sample('Diboson', ROOT.kViolet, dummypath, dummyweight, 'diboson', allSystnames, samDict=sampleDict),
-    Sample('Single Top', ROOT.kViolet-1, dummypath, dummyweight, 'singletop', allSystnames, samDict=sampleDict),
-    Sample('t#bar{t}', ROOT.kViolet-2, dummypath, dummyweight, 'ttbar', allSystnames , samDict=sampleDict),
-    Sample('Z(ll)+jets', ROOT.kViolet-7, dummypath, dummyweight, 'z_ll_jets', allSystnames, samDict=sampleDict),
-    Sample('QCD', ROOT.kViolet+3, dummypath, dummyweight, 'qcd', allSystnames, samDict=sampleDict),
-    Sample('#gamma +jets', ROOT.kViolet+7, dummypath, dummyweight, 'gamma_jets', allSystnames, samDict=sampleDict)
+    Sample('Z(#nu#nu)+jets', ROOT.kBlue, dummypath, dummyweight, 'z_nunu_jets', commonSystnames+BosonSystNames, samDict=sampleDict),
+    Sample('W(l#nu)+jets', ROOT.kGreen, dummypath, dummyweight, 'w_lnu_jets', commonSystnames+BosonSystNames, samDict=sampleDict),
+    Sample('Diboson', ROOT.kViolet, dummypath, dummyweight, 'diboson', commonSystnames, samDict=sampleDict),
+    Sample('Single Top', ROOT.kViolet-1, dummypath, dummyweight, 'singletop', commonSystnames, samDict=sampleDict),
+    Sample('t#bar{t}', ROOT.kViolet-2, dummypath, dummyweight, 'ttbar', commonSystnames , samDict=sampleDict),
+    Sample('Z(ll)+jets', ROOT.kViolet-7, dummypath, dummyweight, 'z_ll_jets', commonSystnames+BosonSystNames, samDict=sampleDict),
+    Sample('QCD', ROOT.kViolet+3, dummypath, dummyweight, 'qcd', commonSystnames, samDict=sampleDict),
+    Sample('#gamma +jets', ROOT.kViolet+7, dummypath, dummyweight, 'gamma_jets', commonSystnames, samDict=sampleDict)
 ]
 
 
