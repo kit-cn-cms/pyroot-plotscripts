@@ -17,23 +17,95 @@ import CMS_lumi
 import plotClasses
 
 class Config:
-    def __init__(self, name, index):
-        self.name = name
-        self.index = index
+    def __init__(self, histograms, sampleIndex):
+        self.histList    = histograms
+        self.sampleIndex = sampleIndex
+
+    def getHistogramsT(self, withHead = False, transposed = True):
+        if withHead:
+            histograms = [self.histList.T[0]] + self.histList.T[self.sampleIndex:]
+        else:
+            histograms = self.histList.T[self.sampleIndex:]
+
+        if transposed: return transposeLOL(histograms)
+        else: return histograms
+
+    def getHistograms(self):
+        return self.histList.data
+
+    def getSamples(self, withHead = False, getAll = False):
+        if getAll: return self.histList.samples
+        if not withHead: return self.histList.samples[self.sampleIndex:]
+        else: return [self.histList.samples[0]] + self.histList.samples[self.sampleIndex:]
+
+    def getHeadHist(self):
+        return self.histList.T[0]
+
+    def getHeadSample(self):
+        return self.histList.samples[0]
+
+    def getHeadColor(self):
+        return self.getHeadSample().color
+
+    def getHeadName(self):
+        return self.getHeadSample().name
+
+
+    def genNestedHistList(self, genPlotsClass, systNames):
+        rootFile = ROOT.TFile(genPlotsClass.outPath, "readonly")
+
+        objects = []
+        keyList = rootFile.GetKeyNames()
+        outList = []
+
+        controlSamples = self.getSamples(withHead = False)
+
+        # looping over discr plots
+        for plot in genPlotsClass.plots:
+            nestedList = []
+            print("creating nested list for plot " + str(plot.name))
+            for sample in controlSamples:
+                nominalKey = sample.nick+"_"+plot.name+systNames[0]
+                nominal = rootFile.Get(nominalKey)
+
+                baseList = []
+                for syst in systNames:
+                    ROOT.gDirectory.cd("PyROOT:/")
+                    key = sample.nick+"_"+plot.name+syst
+
+                    if not syst in sample.shape_unc:
+                        print("using nominal key for " + str(key))
+                        baseList.append( nominal.Clone(key) )
+                        continue
+
+                    outHist = rootFile.Get(key)
+                    if isinstance(outHist, ROOT.TH1) and not isinstance(outHist, ROOT.TH2):
+                        baseList.append( outHist.Clone() )
+                    else:
+                        print(str(syst)+" not used for "+str(sample.name))
+                nestedList.append(baseList)
+            outList.append(nestedList)
+
+        print("generated list of histograms for making control plots")
+        self.nestedHistList = outList
+
+    def setErrorbandConfig(self, config = {}):
+        self.errorbandConfig = config
+
+
 
 class List:
-    def __init__(self, genPlots, samples, listName, catNames = [""], doTwoDim = False):
-        self.catNames = catNames
-        self.plots = genPlots.plots
-        self.rebin = genPlots.rebin
-        self.doTwoDim = doTwoDim
+    def __init__(self, genPlots, samples, catNames = [""], doTwoDim = False):
+        self.catNames   = catNames
+        self.plots      = genPlots.plots
+        self.rebin      = genPlots.rebin
+        self.doTwoDim   = doTwoDim
 
-        self.name = listName
-        self.samples = samples
+        self.samples    = samples
 
         rootFile = ROOT.TFile(genPlots.outPath, "readonly")
         keyList = rootFile.GetKeyNames()
-        print("generating new list with name "+str(listName))
+        print("generating new list")
         print("category names:")
         print(catNames)
 
@@ -45,16 +117,12 @@ class List:
             histList = self.fillHistList(rootFile, sample, keyList)
             print("histList: "+str(histList))
             dataT.append(histList)
-            print("dataT: "+str(dataT))
             print("-"*10)
+
         # generate transposed list
         self.data = transposeLOL( dataT )
         self.T = transposeLOL( self.data )
-        print("list:")
-        print(self.data)
-        print("list.T:")
-        print(self.T)
-        print("-"*30)
+        print("generated lists.\n")
 
     def fillHistList(self, rootFile, sample, keyList):
         histList = []
@@ -62,24 +130,26 @@ class List:
         for cat in self.catNames:
             for plot in self.plots:
                 print("="*10)
-                print("creating histogram")
-                print("cat: "+str(cat))
-                print("plot: "+str(plot))
-                print("sample: "+str(sample))
+                print("creating histogram with")
+                print("    cat:    "+str(cat))
+                print("    plot:   "+str(plot))
+                print("    sample: "+str(sample))
+
                 key = sample.nick+"_"+cat+plot.name
-                print("key: "+str(key))
+
+                print("    key: "+str(key))
                 if key not in keyList:
-                    print("this key is not in key list")
+                    print("    this key is not in key list")
                 rootHist = rootFile.Get(key)
-                print("type of hist is:")
-                print( type( rootHist ))
+                print("    type of hist is: "+str(type(rootHist)) )
+
                 if isinstance(rootHist, ROOT.TH1) and not isinstance(rootHist, ROOT.TH2):
-                    print("is TH1")
                     rootHist.Rebin(self.rebin)
                     histList.append( rootHist.Clone() )
+
                 if self.doTwoDim and isinstance(rootHist, ROOT.TH2):
-                    print("is TH2")
                     histList.append( rootHist.Clone() )
+
         return histList
 
 class genPlots:
@@ -89,19 +159,10 @@ class genPlots:
         self.plotdir = plotdir
         self.rebin = 1
 
-        self.lists = {}
-        self.samples = {}
-        self.nestedHistLists = {}
-
-
     # -- functions for setting up lists -----------------------------------------------------------
     # old def createHistoLists_fromSuperHistoFile
-    def genList(self, samples, listName, catNames = [""], doTwoDim = False):
-        newList = List(self, samples, listName, catNames, doTwoDim)
-    
-        self.lists[newList.name] = newList
-        return newList.name
-
+    def genList(self, samples, catNames = [""], doTwoDim = False):
+        return List(self, samples, catNames, doTwoDim)
 
     # -- loading options for simple control/shape plots -------------------------------------------
     def loadOptions(self, options):
@@ -115,7 +176,8 @@ class genPlots:
             "doProfile":        False,
             "statTest":         False,
             "sepaTest":         False,
-            "blinded":          True}
+            "blinded":          True,
+            "privateWork":      False}
 
         # set options
         for opt in defaultOptions:
@@ -131,52 +193,44 @@ class genPlots:
     # -- making simple control/shape plots --------------------------------------------------------
     # old def writeLOLAndOneOnTop
     def makeSimpleControlPlots(self, dataConfig, options = {}):
-        print("\n"+"="*30)
+        print("\n\n"+"="*30)
         print("making simple control plots ...")
         # load options
-        print("-"*10)
         print("loading options:")
         plotOptions = self.loadOptions(options)
-        listName = dataConfig.name
-        listIndex = dataConfig.index
-        print("-"*10)
 
-        # load transposed list#
-        transposedList = self.lists[listName].T
-        samples = self.lists[listName].samples
-        print("transposedList")
-        print(transposedList)
-
-        # generate stuff for control plots
+        # generate directory for control plots
         plotPath = self.plotdir + "/simpleControlPlots/"
         if not os.path.exists(plotPath):
             os.makedirs(plotPath)
-        print("plots output: "+str(plotPath+"plots.pdf"))
+        print("plots output: "+str(plotPath))
 
-        controlList = transposeLOL( transposedList[listIndex:] )
-        headList = transposedList[0]
-        controlSamples = samples[listIndex:]
-        headSamples = samples[0]
-        # starting draw control plots
+        # setup lists
+        controlList    = dataConfig.getHistogramsT(withHead = False)
+        controlSamples = dataConfig.getSamples(withHead = False)
+
+        headHist       = dataConfig.getHeadHist()
+        headSample     = dataConfig.getHeadSample()
+
+        # start drawing control plots
         canvases = []
         objects = []
         index = 0
         
-        # start loop over used list
-        print("looping over used histolist ...")
-        for listOfHists, headHist in zip(controlList, headList):
-            print("listOfHists:" +str(listOfHists))
-            print("headHist: "+str(headHist))
-            print
+        # start looping over histograms
+        print("looping over histograms ...")
+        for headHist, listOfHists in zip(headHist, controlList):
+            print("listOfHists: " +str(listOfHists))
+            print("headHist:    " +str(headHist))
 
             index += 1
             integralFactor = 0
 
-            # start loop over histos in listofhists
-            for hist, sample in zip(listOfHists, controlSamples):
-                yTitle = 'Events expected for 41.5 fb^{-1} @ 13 TeV'
+            # start looping over hists in listOfHists
+            for hist, sample in zip(listOfHists, dataConfig.getSamples(getAll = True)):
+                yTitle = "Events expected for 41.5 fb^{-1} @ 13 TeV"
 
-                # stup histogram
+                # setup histogram
                 setupHist( hist, sample.color, yTitle, plotOptions["stack"] )
                 
                 if plotOptions["factor"] < 0:
@@ -197,8 +251,9 @@ class genPlots:
 
             # setting up head canvas
             headCanvas = headHist.Clone()
-            setupHist(headCanvas, headSamples.color, yTitle = "")
+            setupHist(headCanvas, dataConfig.getHeadColor(), yTitle = "")
 
+            # move under/overflow bins into plotrange
             headCanvas.SetBinContent(1, 
                         headCanvas.GetBinContent(0)+headCanvas.GetBinContent(1));
             headCanvas.SetBinContent(headCanvas.GetNbinsX(),
@@ -219,9 +274,9 @@ class genPlots:
             legend2 = getLegendR()
 
             if plotOptions["factor"] >= 0:
-                legend2.addEntryLRLegend(headCanvas, headSamples.name+" x "+str(plotOptions["factor"]), "L")
+                legend2.addEntryLRLegend(headCanvas, dataConfig.getHeadName()+" x "+str(plotOptions["factor"]), "L")
             else:
-                legend2.addEntryLRLegend(headCanvas, headSamples.name+(' x {:4.0f}').format(integralFactor), "L")
+                legend2.addEntryLRLegend(headCanvas, dataConfig.getHeadName()+(' x {:4.0f}').format(integralFactor), "L")
             
             index = 0
             for hist, sample in zip(listOfHists, controlSamples):
@@ -254,13 +309,14 @@ class genPlots:
                     sepTest.Draw()
                     objects.append(sepTest)
         
-            #cms = ROOT.TLatex(0.2, 0.96, "CMS private work");
-            #cms = ROOT.TLatex(0.18, 0.85, "#splitline{CMS simulation}{WORK IN PROGRESS}" );
-            #cms.SetTextFont(42)
-            #cms.SetTextSize(0.065)
-            #cms.SetNDC()
-            #cms.Draw()
-            #objects.append(cms)
+            if plotOptions["privateWork"]:
+                cms = ROOT.TLatex(0.2, 0.96, "CMS private work");
+                cms = ROOT.TLatex(0.18, 0.85, "#splitline{CMS simulation}{WORK IN PROGRESS}" );
+                cms.SetTextFont(42)
+                cms.SetTextSize(0.065)
+                cms.SetNDC()
+                cms.Draw()
+                objects.append(cms)
         
         # print all canvases
         print("done with loop")
@@ -279,23 +335,15 @@ class genPlots:
         # load options
         print("loading options:")
         plotOptions = self.loadOptions(options)
-        listName = dataConfig.name
-        listIndex = dataConfig.index
 
-        # load transposed list
-        transposedList = self.lists[listName].T
-        samples = self.lists[listName].samples
-        print("transposedList")
-        print(transposedList)
-
-        # generate stuff for shape plots    
+        # generate directory for shape plots    
         plotPath = self.plotdir + "/simpleShapePlots/"
         if not os.path.exists(plotPath):
             os.makedirs(plotPath)
-        print("plots output: "+str(plotPath+"plots.pdf"))
+        print("plots output: "+str(plotPath))
 
-        shapeList = transposeLOL( [transposedList[0]] + transposedList[listIndex:] )
-        shapeSamples = [samples[0]] + samples[listIndex:]
+        shapeList    = dataConfig.getHistogramsT(withHead = True)
+        shapeSamples = dataConfig.getSamples(withHead = True)
 
         # get label texts
         if isinstance(label, basestring):
@@ -310,10 +358,9 @@ class genPlots:
 
         # starting loop over list of hists
         print("looping over used histolist ...")
-        for listOfHists, labelText in zip( shapeList, labelTexts):
+        for listOfHists, labelText in zip(shapeList, labelTexts):
             print("listOfHists: "+str(listOfHists))
             print("labelText: "+str(labelText))
-            print
          
             index += 1
 
@@ -354,13 +401,14 @@ class genPlots:
                 objects.append( sepTests )
 
 
-            #cms = ROOT.TLatex( 0.2, 0.96, "CMS private work" );
-            cms = ROOT.TLatex(0.2, 0.96, "CMS preliminary,  41.5 fb^{-1},  #sqrt{s} = 13 TeV" );
-            cms.SetTextFont(42)
-            cms.SetTextSize(0.05)
-            cms.SetNDC()
-            cms.Draw()
-            objects.append(cms)
+            if plotOptions["privateWork"]:
+                #cms = ROOT.TLatex( 0.2, 0.96, "CMS private work" );
+                cms = ROOT.TLatex(0.2, 0.96, "CMS preliminary,  41.5 fb^{-1},  #sqrt{s} = 13 TeV" );
+                cms.SetTextFont(42)
+                cms.SetTextSize(0.05)
+                cms.SetNDC()
+                cms.Draw()
+                objects.append(cms)
 
             label = ROOT.TLatex(0.2, 0.86, labelText);
             label.SetTextFont(42)
@@ -383,53 +431,8 @@ class genPlots:
 
 
     # -- making control plots ---------------------------------------------------------------------
-    # old def createLLL_fromSuperHistoFileSyst
-    def genNestedHistList(self, dataConfig, systNames, outName):
-        rootFile = ROOT.TFile(self.outPath, "readonly")
-        listName = dataConfig.name
-        listIndex = dataConfig.index
-
-        objects = []
-        keyList = rootFile.GetKeyNames()
-        outList = []
-
-        controlSamples = self.lists[listName].samples[listIndex:]
-        
-        # looping over discr plots
-        for plot in self.plots:
-            nestedList = []
-            print("creating nested list for plot " + str(plot.name))
-            for sample in controlSamples:
-                nominalKey = sample.nick+"_"+plot.name+systNames[0]
-                nominal = rootFile.Get(nominalKey)
-
-                baseList = []
-                for syst in systNames:
-                    ROOT.gDirectory.cd("PyROOT:/")
-                    key = sample.nick+"_"+plot.name+syst
-
-                    if not syst in sample.shape_unc:
-                        print("using nominal key for " + str(key))
-                        baseList.append( nominal.Clone(key) )
-                        continue
-
-                    outHist = rootFile.Get(key)
-                    if isinstance(outHist, ROOT.TH1) and not isinstance(outHist, ROOT.TH2):
-                        baseList.append( outHist.Clone() )
-                    else:
-                        print(str(syst)+" not used for "+str(sample.name))
-                nestedList.append(baseList)
-            outList.append(nestedList)
-
-        print("generated list of histograms for making control plots")
-        print("location: self.nestedHistList["+str(outName)+"]")
-        print
-        self.nestedHistLists[outName] = outList
-
-
     # old def plotDataMCanWsyst
-    # def makeControlPlots(self, listName, listIndex, dataName, nestedHistsConfig, options):
-    def makeControlPlots(self, dataConfig, controlConfig, sampleConfig, headHist, headSample, nestedHistsConfig, options = {}, outName = "controlPlots"):
+    def makeControlPlots(self, sampleConfig, dataConfig, options, outName):
         print("\n"+"="*30)
         print("making control plots ...")
         # load options
@@ -438,29 +441,25 @@ class genPlots:
 
         # set the used lists
         # dataList was listOfHistoListsData
-        dataList = self.lists[ dataConfig.name ].data
+        dataHistograms = dataConfig.getHistograms()
         
         # controlList was listOfHistoLists
-        transposedList = self.lists[ controlConfig.name ].T
-        controlList = transposeLOL( transposedList[controlConfig.index:] )
+        controlHistograms = sampleConfig.getHistogramsT(withHead = False)
 
         # controlSamples was samples
-        samples = self.lists[ sampleConfig.name ].samples
-        controlSamples = samples[sampleConfig.index:]
+        controlSamples = sampleConfig.getSamples(withHead = False)
 
         # headList was listOfhistosOnTop
-        transposedList = self.lists[headHist].T
-        headList = transposedList[0]
+        headHistogram = sampleConfig.getHeadHist()
 
         # headSamples was sampleOnTop
-        samples = self.lists[headSample].samples
-        headSamples = samples[0]
+        headSample = sampleConfig.getHeadSample()
 
         # generate stuff for control plots
         plotPath = self.plotdir + "/"+str(outName)+"/"
         if not os.path.exists(plotPath):
             os.makedirs(plotPath)
-        print("plots output: "+str(plotPath+"plots.pdf"))
+        print("plots output: "+str(plotPath))
 
         # get labels and label texts
         labels = [plot.label for plot in self.plots]
@@ -474,24 +473,18 @@ class genPlots:
         objects = []
         index = 0
 
-        errorGraphs = []
+        # create errorbands
         errorStyles = []
         errorColors = []
-        
         errorBands = []
     
-        # [ [ lll, fillstyle, fillcolor, doratesysts ] ]
-        #lllll = [ [ lll, 3354, ROOT.kBlack, True] ]
-        # loop at all samples for every plot
-        for nestedName in nestedHistsConfig:
-            histConfig = nestedHistsConfig[nestedName]
-            nestedHistList = self.nestedHistLists[nestedName]
+        errorBands.append( createErrorbands( sampleConfig.nestedHistList, controlSamples, sampleConfig.errorbandConfig["doRateSysts"] ))
+        errorStyles.append( sampleConfig.errorbandConfig["style"] )
+        errorColors.append( sampleConfig.errorbandConfig["color"] )
+        print("errorband created: "+str(errorBands[-1]))
+         
 
-            errorBands.append( createErrorbands(nestedHistList, controlSamples, histConfig["doRateSysts"]) )
-            errorStyles.append( histConfig["style"] )
-            errorColors.append( histConfig["color"] )
-            print("errorband created: "+str(errorBands[-1]))
-            
+        errorGraphs = []
         for iGraph in range(len(errorBands[0])):
             graphs = []
             for iBand in range(len(errorBands)):
@@ -499,9 +492,9 @@ class genPlots:
                 graphs.append( graph ) 
             errorGraphs.append(graphs)
         
-
+        
         for headHist, listOfHists, listOfData, labelText, errorGraphList in zip( 
-                headList, controlList, dataList, labelTexts, errorGraphs ):
+            headHistogram, controlHistograms, dataHistograms, labelTexts, errorGraphs ):
 
             index += 1
             integralFactor = 0
@@ -572,7 +565,7 @@ class genPlots:
             data, blind = getDataGraphBlind( listOfData, nok )
 
             # setup hists
-            setupHist( headHistClone, headSamples.color, yTitle = "")
+            setupHist( headHistClone, headSample.color, yTitle = "")
 
             headHistClone.SetBinContent(1, headHistClone.GetBinContent(0)+headHistClone.GetBinContent(1));
             headHistClone.SetBinContent(headHistClone.GetNbinsX(),
@@ -651,9 +644,9 @@ class genPlots:
             
             legend1.addEntryLRLegend(data, "data", "P")
             if plotOptions["factor"] >= 0.:
-                legend2.addEntryLRLegend( headHistClone, headSamples.name+" x "+str(plotOptions["factor"]), "L")
+                legend2.addEntryLRLegend( headHistClone, headSample.name+" x "+str(plotOptions["factor"]), "L")
             else:
-                legend2.addEntryLRLegend( headHistClone, headSamples.name+(" x {:4.0f}").format(integralFactor), "L")
+                legend2.addEntryLRLegend( headHistClone, headSample.name+(" x {:4.0f}").format(integralFactor), "L")
             
             ilc = 0
             for hist, sample in zip( stackedListOfHists, controlSamples ):
@@ -758,11 +751,12 @@ class genPlots:
         writeObjects(canvases, plotPath)
 
 
-    def makeEventYields(self, categories, listName, dataName, nameRequirements = []):
-        histoList = self.lists[listName].data  
-        dataList = self.lists[dataName].data
-        samples = self.lists[listName].samples
+    def makeEventYields(self, categories, samplesConfig, dataConfig, nameRequirements = []):
+        histoList = samplesConfig.data
+        samples = samplesConfig.samples
 
+        dataList = dataConfig.data
+        
         path = self.plotdir+"/eventYields"
         if not os.path.exists( path ):
             os.makedirs(path)
@@ -857,7 +851,7 @@ def drawHistOnCanvas(listOfHistos, plotOptions):
     # init canvas
     canvas = getCanvas(listOfHistos[0].GetName(), plotOptions["ratio"])
 
-    # mover over/underflow
+    # mover over/underflow from bins outside plotrange into plotrange
     for hist in listOfHistos:
         hist.SetBinContent(1, 
             hist.GetBinContent(0)+hist.GetBinContent(1));
@@ -897,6 +891,8 @@ def drawHistOnCanvas(listOfHistos, plotOptions):
                     print("this would lead to zero division error")
                 
     canvas.cd(1)
+
+    # get maximum
     yMax = 1e-9
     yMinMax = 1000.
     for hist in listOfHistos:
@@ -904,7 +900,7 @@ def drawHistOnCanvas(listOfHistos, plotOptions):
         if hist.GetBinContent(hist.GetMaximumBin()) > 0:
             yMinMax = min(hist.GetBinContent(hist.GetMaximumBin()), yMinMax)
 
-    #draw first
+    #draw first hist
     hist0 = listOfHistos[0]
     if plotOptions["logscale"]:
         hist0.GetYaxis().SetRangeUser(yMinMax/10000,yMax*10)
@@ -915,12 +911,12 @@ def drawHistOnCanvas(listOfHistos, plotOptions):
     option += plotOptions["canvasOptions"]
     hist0.DrawCopy(option)
 
-    #draw remaining
+    #draw remaining hists
     for hist in listOfHistos[1:]:
         hist.DrawCopy(option+'same')
     hist0.DrawCopy('axissame')
 
-    #h.DrawCopy('axissame')
+    # draw ratio plot if activated
     if plotOptions["ratio"]:
         canvas.cd(2)
         line = listOfHistos[0].Clone()
@@ -1365,8 +1361,8 @@ def createErrorbands(nestedHistList, samples, doRateSysts = True):
                 elif u_ < 0 and u_ < d_:
                     d = u_
                     if d_ >= 0:
-		        u = d_
-		    else:
+                        u = d_
+                    else:
                         u = 0
 
                 uperrors[ibin] = ROOT.TMath.Sqrt( uperrors[ibin]*uperrors[ibin] + u*u )
