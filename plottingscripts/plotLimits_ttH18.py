@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'limits_top10'
+    name = 'limits_top10Variables_v2'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -89,12 +89,11 @@ def main(pyrootdir, argv):
         "skipRenaming":         False,
         "skipDatacards":        False}
 
-    #plotJson = "/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_latestAndGreatest.json"
     plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttH_2018.json"
     plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018",True]] 
     memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/dNNInterface_Keras_cool.py",
-                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/DNNCheckpointFiles/top10Variables"}
+                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/DNNCheckpointFiles/top10_DNN"}
     # datacardmaker
     datacardmaker = "mk_datacard_JESTest13TeVPara"
 
@@ -203,7 +202,7 @@ def main(pyrootdir, argv):
             pP.setDNNInterface(dnnInterface)
             pP.setCatNames([''])
             pP.setCatSelections(['1.'])
-            pP.setMaxEvts(350000)
+            pP.setMaxEvts(2000000)
             pP.setRateFactorsFile(rateFactorsFile)
             pP.setSampleForVariableSetup(configData.samples[9])
 
@@ -348,13 +347,13 @@ def main(pyrootdir, argv):
 
             with monitor.Timer("makeDatacardsParallel"):
                 makeDatacards.makeDatacardsParallel(
-                    filePath = analysis.renamedPath,
-                    outPath = datacardsPath,
-                    categories = configData.getBinlabels(),
-                    doHdecay = True,
-                    discrname = analysis.discrName,
-                    datacardmaker = datacardmaker,
-                    skipDatacards = analysis.skipDatacards)
+                    filePath        = analysis.renamedPath,
+                    outPath         = datacardsPath,
+                    categories      = configData.getBinlabels(),
+                    doHdecay        = True,
+                    discrname       = analysis.discrName,
+                    datacardmaker   = datacardmaker,
+                    skipDatacards   = analysis.skipDatacards)
 
 
         # =============================================================================================
@@ -366,13 +365,14 @@ def main(pyrootdir, argv):
             # Starting DrawParallel
             # ========================================================
             '''
+            # this step reexecutes this top level script once for each discriminator plot
             with monitor.Timer("DrawParallel"):
                 drawParallel.drawParallel(
                     ListOfPlots = configData.getDiscriminatorPlots(),
-                    workdir = analysis.workdir,
-                    PathToSelf = os.path.realpath(inspect.getsourcefile(lambda:0)),
+                    workdir     = analysis.workdir,
+                    PathToSelf  = os.path.realpath(inspect.getsourcefile(lambda:0)),
                     # Hand over opts to keep commandline options
-                    opts = analysis.opts)
+                    opts        = analysis.opts)
             print '''
             # ========================================================
             # this is the end of the script 
@@ -400,14 +400,13 @@ def main(pyrootdir, argv):
             '''
             gP = genPlots.genPlots( 
                 outPath = analysis.renamedPath,
-                plots = configData.getDiscriminatorPlots(),
+                plots   = configData.getDiscriminatorPlots(),
                 plotdir = analysis.getPlotPath(),
-                rebin = 1)
+                rebin   = 1)
 
-            histoList = gP.genList(samples = configData.samples, listName = "histoList")
-            dataList = gP.genList(samples = configData.controlSamples, listName = "dataList")
-            pseudodataList = gP.genList(
-                samples = [configData.samples[0]]+configData.samples[9:], listName = "pseudodataList")
+            histoList       = gP.genList(samples = configData.samples)
+            dataList        = gP.genList(samples = configData.controlSamples)
+            pseudodataList  = gP.genList(samples = [configData.samples[0]]+configData.samples[9:])
             monitor.printClass(gP, "after creating init lists")
 
 
@@ -423,7 +422,7 @@ def main(pyrootdir, argv):
             '''
             with monitor.Timer("makingSimpleMCplots"):
                 # creating control plots
-                controlPlotsOptions = {
+                controlPlotOptions = {
                     "factor":           -1,
                     "logscale":         False,
                     "canvasOptions":    "histo",
@@ -431,12 +430,13 @@ def main(pyrootdir, argv):
                     "stack":            True, # not default
                     "ratio":            False,
                     "sepaTest":         False}
-                gP.makeSimpleControlPlots( 
-                    dataConfig = genPlots.Config(name = histoList, index = 9),
-                    options = controlPlotsOptions)
+                sampleConfig = genPlots.Config(
+                    histograms  = histoList,
+                    sampleIndex = 9)
+                gP.makeSimpleControlPlots( sampleConfig, controlPlotOptions )
 
                 # creating shape plots
-                shapePlotsOptions = {
+                shapePlotOptions = {
                     "logscale":         False,
                     "canvasOptions":    "histo",
                     "normalize":        True, # not default
@@ -444,9 +444,10 @@ def main(pyrootdir, argv):
                     "ratio":            False,
                     "statTest":         False,
                     "sepaTest":         False}
-                gP.makeSimpleShapePlots(
-                    dataConfig = genPlots.Config(name = dataList, index = 9),
-                    options = shapePlotsOptions)
+                sampleConfig = genPlots.Config(
+                    histograms  = dataList,
+                    sampleIndex = 9)
+                gP.makeSimpleShapePlots( sampleConfig, shapePlotOptions )
 
                 monitor.printClass(gP, "after making simple MC plots")
 
@@ -459,71 +460,45 @@ def main(pyrootdir, argv):
             # ========================================================
             '''
             with monitor.Timer("makingMCControlPlots"):
+                sampleConfig = genPlots.Config(
+                    histograms  = histoList,
+                    sampleIndex = 9)
+
                 # generate the llloflist internally
-                gP.genNestedHistList(
-                    dataConfig = genPlots.Config( name = histoList, index = 9 ),
-                    systNames = pltcfg.errorSystNames, 
-                    outName = histoList)
-
-
-                monitor.printClass(gP, "after generating nested hist list")
-                # set config of llloflist
-                nestedHistsConfig = {}
-                nestedHistsConfig[histoList] = {
+                sampleConfig.genNestedHistList(
+                    genPlotsClass = gP,
+                    systNames = pltcfg.errorSystNames)
+                sampleConfig.setErrorbandConfig({
                     "style":        3354, 
                     "color":        ROOT.kBlack, 
-                    "doRateSysts":  False}
+                    "doRateSysts":  False})
+        
 
+                pseudodataConfig = genPlots.Config(
+                    histograms  = pseudodataList,
+                    sampleIndex = 0)
 
                 #set general plotoption
-                controlPlotsOptions = {
+                controlPlotOptions = {
                     "factor":           -2, #not default
                     "logscale":         False,
                     "canvasOptions":    "histo",
                     "ratio":            True, # not default
                     "blinded":          analysis.plotBlinded} #not default
                 # making the control plots
-                #gP.makeControlPlots(
-                #    dataConfig = genPlots.Config(name = dataList, index = 0),
-                #    controlConfig = genPlots.Config(name = histoList, index = 9),
-                #    sampleConfig = genPlots.Config(name = histoList, index = 9),
-                #    headHist = histoList,
-                #    headSample = histoList,
-                #    nestedHistsConfig = nestedHistsConfig,
-                #    options = controlPlotsOptions,
-                #    outName = "controlPlots_data")
                 gP.makeControlPlots(
-                    dataConfig = genPlots.Config(name = pseudodataList, index = 0),
-                    controlConfig = genPlots.Config(name = histoList, index = 9),
-                    sampleConfig = genPlots.Config(name = histoList, index = 9),
-                    headHist = histoList,
-                    headSample = histoList,
-                    nestedHistsConfig = nestedHistsConfig,
-                    options = controlPlotsOptions,
-                    outName = "controlPlots_pseudodata")
+                    sampleConfig = sampleConfig,
+                    dataConfig   = pseudodataConfig,
+                    options      = controlPlotOptions,
+                    outName      = "controlPlots_pseudodata")
 
 
-                controlPlotsOptions["logscale"] = True
-                
-                #gP.makeControlPlots(
-                #    dataConfig = genPlots.Config(name = dataList, index = 0),
-                #    controlConfig = genPlots.Config(name = histoList, index = 9),
-                #    sampleConfig = genPlots.Config(name = histoList, index = 9),
-                #    headHist = histoList,
-                #    headSample = histoList,
-                #    nestedHistsConfig = nestedHistsConfig,
-                #    options = controlPlotsOptions,
-                #    outName = "controlPlots_data_LOG")
-
+                controlPlotOptions["logscale"] = True
                 gP.makeControlPlots(
-                    dataConfig = genPlots.Config(name = pseudodataList, index = 0),
-                    controlConfig = genPlots.Config(name = histoList, index = 9),
-                    sampleConfig = genPlots.Config(name = histoList, index = 9),
-                    headHist = histoList,
-                    headSample = histoList,
-                    nestedHistsConfig = nestedHistsConfig,
-                    options = controlPlotsOptions,
-                    outName = "controlPlots_pseudodata_LOG")
+                    sampleConfig = sampleConfig,
+                    dataConfig   = pseudodataConfig,
+                    options      = controlPlotOptions,
+                    outName      = "controlPlots_pseudodata_LOG")
 
             monitor.printClass(gP, "after making control plots")
 
@@ -535,9 +510,9 @@ def main(pyrootdir, argv):
             '''
             with monitor.Timer("makeEventYields"):
                 gP.makeEventYields(
-                    categories = configData.getEventYieldCategories(),
-                    listName = histoList,
-                    dataName = dataList,
+                    categories    = configData.getEventYieldCategories(),
+                    samplesConfig = histoList,
+                    dataConfig    = pseudodataList,
                     nameRequirements = ["node"]
                     )
 
