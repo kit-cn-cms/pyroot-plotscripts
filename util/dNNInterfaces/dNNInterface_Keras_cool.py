@@ -1,5 +1,6 @@
 import tensorflow
 import csv
+import json
 import os
 from distutils.dir_util import copy_tree
 
@@ -11,20 +12,34 @@ class theInterface:
     self.libraryString = "-L/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/tensorflow-cc/1.3.0-elfike/tensorflow_cc/lib -ltensorflow_cc -L/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/protobuf/3.4.0-fmblme/lib -lprotobuf -lrt"
     self.usesPythonLibraries = True
     self.DNNCheckpointLocation = cpLocation
-    self.copyCheckpoints()
-    self._get_variables_from_csv()
+    
+    # define categories
+    self.categories = ["4j_ge3t", "5j_ge3t", "ge6j_ge3t"]
+    self.categorySelection = {
+        "4j_ge3t":      "N_Jets == 4 and N_BTagsM >= 3",
+        "5j_ge3t":      "N_Jets == 5 and N_BTagsM >= 3",
+        "ge6j_ge3t":    "N_Jets >= 6 and N_BTagsM >= 3"}
 
-  def copyCheckpoints(self):
+    self.__loadCheckpoints()
+    self.__getVariables()
+
+  def __loadCheckpoints(self):
+    # generate directory
     self.localCheckpointPath = self.workdir + "/DNNCheckpoints/"
     if not os.path.exists(self.localCheckpointPath):
         os.makedirs(self.localCheckpointPath)
+
+    # copy directory with checkpoint files
     copy_tree(self.DNNCheckpointLocation, self.localCheckpointPath)
     print("copied DNN checkpoint files to "+str(self.localCheckpointPath))
+
+    # check if all files are present
     print("checking structure of checkpoint files...")
-    categories = ["4j_ge3t", "5j_ge3t", "ge6j_ge3t"]
-    files = ["trained_model.meta", "trained_model.index", "trained_model.data-00000-of-00001", "variable_norm.csv", "checkpoint"]
+    files = ["trained_model.meta", "trained_model.index", "trained_model.data-00000-of-00001", 
+            "variable_norm.csv", "checkpoint", "net_config.json"
+            ]
     errors = False
-    for cat in categories:
+    for cat in self.categories:
         cat_path = self.localCheckpointPath+"/"+cat
         if not os.path.exists(cat_path):
             print("directory "+cat_path+" missing.")
@@ -35,41 +50,63 @@ class theInterface:
                 if not os.path.exists(file_path):
                     print("file "+str(file_path)+" missing.")
                     errors = True
-    if errors:
-        print("... not all neccesary files found for dnn loading")
-        exit()
-    else:
-        print("... all files found.")
 
-            
+    if errors:  exit("... not all neccesary files found for dnn loading")
+    else:       print("... all files found.")
+
+    # get input and output layer names from config files
+    self.inputLayers = {}
+    self.outputLayers = {}
+    for cat in self.categories:
+        config_file = self.localCheckpointPath+"/"+cat+"/net_config.json"
+        with open(config_file, "r") as jf:
+            configs = json.load(jf)
+
+        self.inputLayers[cat] = configs["inputName"]
+        self.outputLayers[cat] = configs["outputName"]
+        print("set inputLayer name for "+cat+" to "+configs["inputName"])
+        print("set outputLayer name for "+cat+" to "+configs["outputName"])
+
+
+  def __getVariables(self):
+  	# Read variables from cvs files. The order of the variables is important for the DNN
+    self.variables = {}
+    self.variable_means = {}
+    self.variable_stds = {}
+    for cat in self.categories:
+        variables = []
+        means = []
+        stds = []
+        with open(self.localCheckpointPath+"/"+cat+"/variable_norm.csv", "r") as cf:
+            csv_reader = csv.reader(cf, delimiter = ",")
+            for i, row in enumerate(csv_reader):
+                if i == 0: continue
+                # rename mem (called 'MEM' in file, should be called 'memDBp'
+                if row[0] == "MEM": variables.append("memDBp")
+                else:               variables.append(row[0])
+                means.append(row[1])
+                stds.append( row[2])
+        self.variables[cat] = variables
+        self.variable_means[cat] = means
+        self.variable_stds[cat] = stds
+
+
+
 
   def getExternalyCallableVariables(self):
-    return [
-        "DNN_Out_4j_ge3t_ttbar2B",
-        "DNN_Out_4j_ge3t_ttbarB",
-        "DNN_Out_4j_ge3t_ttbarBB",
-        "DNN_Out_4j_ge3t_ttbarCC",
-        "DNN_Out_4j_ge3t_ttbarlf",
-        "DNN_Out_4j_ge3t_ttH",
-        "DNN_4j_ge3t_pred_class",
+    variables = []
+    for cat in self.categories:
+        variables += [
+            "DNN_Out_"+cat+"_ttbar2B",
+            "DNN_Out_"+cat+"_ttbarB",
+            "DNN_Out_"+cat+"_ttbarBB",
+            "DNN_Out_"+cat+"_ttbarCC",
+            "DNN_Out_"+cat+"_ttbarlf",
+            "DNN_Out_"+cat+"_ttH",
+            "DNN_"+cat+"_pred_class",
+            ]
+    return variables 
 
-        "DNN_Out_5j_ge3t_ttbar2B",
-        "DNN_Out_5j_ge3t_ttbarB",
-        "DNN_Out_5j_ge3t_ttbarBB",
-        "DNN_Out_5j_ge3t_ttbarCC",
-        "DNN_Out_5j_ge3t_ttbarlf",
-        "DNN_Out_5j_ge3t_ttH",
-        "DNN_5j_ge3t_pred_class",
-
-        "DNN_Out_ge6j_ge3t_ttbar2B",
-        "DNN_Out_ge6j_ge3t_ttbarB",
-        "DNN_Out_ge6j_ge3t_ttbarBB",
-        "DNN_Out_ge6j_ge3t_ttbarCC",
-        "DNN_Out_ge6j_ge3t_ttbarlf",
-        "DNN_Out_ge6j_ge3t_ttH",
-        "DNN_ge6j_ge3t_pred_class",
-        ]
-    
   def getIncludeLines(self):
     retstr="""
 #include <tensorflow/core/protobuf/meta_graph.pb.h>
@@ -84,8 +121,6 @@ using namespace tensorflow;
   
   def getAdditionalFunctionDefinitionLines(self):
     retstr="""
-
-
 
 int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
 {
@@ -102,370 +137,113 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
   return max_pos;
 }
 
-
 """
     return retstr
   
   
   def getBeforeLoopLines(self):
 
-    rstr="""
+    rstr = ""
+    for cat in self.categories:
+        rstr += "    //"+cat+" category\n"
+        rstr += "    const string pathToGraph_"+cat+" = \""+str(self.localCheckpointPath)+"/"+cat+"/trained_model.meta\";\n"
+        rstr += "    const string checkpointPath_"+cat+" = \""+str(self.localCheckpointPath)+"/"+cat+"/trained_model\";\n\n"
 
-    //ge6j_ge3t cat
-    const string pathToGraph_ge6j_ge3t =\""""+str(self.localCheckpointPath)+"""/ge6j_ge3t/trained_model.meta";
-    const string checkpointPath_ge6j_ge3t =\""""+str(self.localCheckpointPath)+"""/ge6j_ge3t/trained_model";
+        rstr += "    auto session_"+cat+" = NewSession(SessionOptions());\n"
+        rstr += "    if (session_"+cat+" == nullptr) {throw runtime_error(\"Could not create Tensorflow session.\");}\n"
+        rstr += "    Status status_"+cat+";\n"
 
-    auto session_ge6j_ge3t = NewSession(SessionOptions());
-    if (session_ge6j_ge3t == nullptr) {
-        throw runtime_error("Could not create Tensorflow session.");
-    }
+        rstr += "    // Read in the protobuf graph we exported\n"
+        rstr += "    MetaGraphDef graph_def_"+cat+";\n"
+        rstr += "    status_"+cat+" = ReadBinaryProto(Env::Default(), pathToGraph_"+cat+", &graph_def_"+cat+");\n"
+        rstr += "    if (!status_"+cat+".ok()) {throw runtime_error(\"status could not be read\");}\n"
 
-    Status status_ge6j_ge3t;
+        rstr += "    // Add the graph to the session\n"
+        rstr += "    status_"+cat+" = session_"+cat+"->Create(graph_def_"+cat+".graph_def());\n"
+        rstr += "    if (!status_"+cat+".ok()) {throw runtime_error(\"Error creating graph: \" + status_"+cat+".ToString());}\n"
 
-    // Read in the protobuf graph we exported
-    MetaGraphDef graph_def_ge6j_ge3t;
-    status_ge6j_ge3t = ReadBinaryProto(Env::Default(), pathToGraph_ge6j_ge3t, &graph_def_ge6j_ge3t);
-    if (!status_ge6j_ge3t.ok()) {
-        throw runtime_error("Error reading graph definition from " + pathToGraph_ge6j_ge3t + ": " + status_ge6j_ge3t.ToString());
-    }
+        rstr += "    // Read weights from the saved checkpoint\n"
+        rstr += "    Tensor checkpointPathTensor_"+cat+"(DT_STRING, TensorShape());\n"
+        rstr += "    checkpointPathTensor_"+cat+".scalar<std::string>()() = checkpointPath_"+cat+";\n"
+        rstr += "    status_"+cat+" = session_"+cat+"->Run(\n"
+        rstr += "        {{graph_def_"+cat+".saver_def().filename_tensor_name(), checkpointPathTensor_"+cat+" },},{},\n"
+        rstr += "        {graph_def_"+cat+".saver_def().restore_op_name()}, nullptr);\n"
+        rstr += "    if (!status_"+cat+".ok()) {throw runtime_error(\"Error loading checkpoint from \" + checkpointPath_"+cat+" +\": \"+ status_"+cat+".ToString());}\n" 
 
-    // Add the graph to the session
-    status_ge6j_ge3t = session_ge6j_ge3t->Create(graph_def_ge6j_ge3t.graph_def());
-    if (!status_ge6j_ge3t.ok()) {
-        throw runtime_error("Error creating graph: " + status_ge6j_ge3t.ToString());
-    }
-
-
-    // Read weights from the saved checkpoint
-    Tensor checkpointPathTensor_ge6j_ge3t(DT_STRING, TensorShape());
-    checkpointPathTensor_ge6j_ge3t.scalar<std::string>()() = checkpointPath_ge6j_ge3t;
-    status_ge6j_ge3t = session_ge6j_ge3t->Run(
-            {{ graph_def_ge6j_ge3t.saver_def().filename_tensor_name(), checkpointPathTensor_ge6j_ge3t },},
-            {},
-      {graph_def_ge6j_ge3t.saver_def().restore_op_name()},
-            nullptr);
-    if (!status_ge6j_ge3t.ok()) {
-        throw runtime_error("Error loading checkpoint from " + checkpointPath_ge6j_ge3t + ": " + status_ge6j_ge3t.ToString());
-    } 
-
-
-
-
-    //5j_ge3t cat
-    const string pathToGraph_5j_ge3t =\""""+str(self.localCheckpointPath)+"""/5j_ge3t/trained_model.meta";
-    const string checkpointPath_5j_ge3t =\""""+str(self.localCheckpointPath)+"""/5j_ge3t/trained_model";
-
-    auto session_5j_ge3t = NewSession(SessionOptions());
-    if (session_5j_ge3t == nullptr) {
-        throw runtime_error("Could not create Tensorflow session.");
-    }
-
-    Status status_5j_ge3t;
-
-    // Read in the protobuf graph we exported
-    MetaGraphDef graph_def_5j_ge3t;
-    status_5j_ge3t = ReadBinaryProto(Env::Default(), pathToGraph_5j_ge3t, &graph_def_5j_ge3t);
-    if (!status_5j_ge3t.ok()) {
-        throw runtime_error("Error reading graph definition from " + pathToGraph_5j_ge3t + ": " + status_5j_ge3t.ToString());
-    }
-
-    // Add the graph to the session
-    status_5j_ge3t = session_5j_ge3t->Create(graph_def_5j_ge3t.graph_def());
-    if (!status_5j_ge3t.ok()) {
-        throw runtime_error("Error creating graph: " + status_5j_ge3t.ToString());
-    }
-
-
-    // Read weights from the saved checkpoint
-    Tensor checkpointPathTensor_5j_ge3t(DT_STRING, TensorShape());
-    checkpointPathTensor_5j_ge3t.scalar<std::string>()() = checkpointPath_5j_ge3t;
-    status_5j_ge3t = session_5j_ge3t->Run(
-            {{ graph_def_5j_ge3t.saver_def().filename_tensor_name(), checkpointPathTensor_5j_ge3t },},
-            {},
-      {graph_def_5j_ge3t.saver_def().restore_op_name()},
-            nullptr);
-    if (!status_5j_ge3t.ok()) {
-        throw runtime_error("Error loading checkpoint from " + checkpointPath_5j_ge3t + ": " + status_5j_ge3t.ToString());
-    } 
-
-
-    //4j_ge3t cat
-    const string pathToGraph_4j_ge3t = \""""+str(self.localCheckpointPath)+"""/4j_ge3t/trained_model.meta";
-    const string checkpointPath_4j_ge3t =\""""+str(self.localCheckpointPath)+"""/4j_ge3t/trained_model";
-
-    auto session_4j_ge3t = NewSession(SessionOptions());
-    if (session_4j_ge3t == nullptr) {
-        throw runtime_error("Could not create Tensorflow session.");
-    }
-
-    Status status_4j_ge3t;
-
-    // Read in the protobuf graph we exported
-    MetaGraphDef graph_def_4j_ge3t;
-    status_4j_ge3t = ReadBinaryProto(Env::Default(), pathToGraph_4j_ge3t, &graph_def_4j_ge3t);
-    if (!status_4j_ge3t.ok()) {
-        throw runtime_error("Error reading graph definition from " + pathToGraph_4j_ge3t + ": " + status_4j_ge3t.ToString());
-    }
-
-    // Add the graph to the session
-    status_4j_ge3t = session_4j_ge3t->Create(graph_def_4j_ge3t.graph_def());
-    if (!status_4j_ge3t.ok()) {
-        throw runtime_error("Error creating graph: " + status_4j_ge3t.ToString());
-    }
-
-
-    // Read weights from the saved checkpoint
-    Tensor checkpointPathTensor_4j_ge3t(DT_STRING, TensorShape());
-    checkpointPathTensor_4j_ge3t.scalar<std::string>()() = checkpointPath_4j_ge3t;
-    status_4j_ge3t = session_4j_ge3t->Run(
-            {{ graph_def_4j_ge3t.saver_def().filename_tensor_name(), checkpointPathTensor_4j_ge3t },},
-            {},
-      {graph_def_4j_ge3t.saver_def().restore_op_name()},
-            nullptr);
-    if (!status_4j_ge3t.ok()) {
-        throw runtime_error("Error loading checkpoint from " + checkpointPath_4j_ge3t + ": " + status_4j_ge3t.ToString());
-    } 
-
-
-
-
-"""
     return rstr
 
   def getVariableInitInsideEventLoopLines(self):
-    rstr="""
-    // variables for DNNs
-       int num_classes_4j_ge3t = 6;
-    """
+    rstr = "       // variables for DNNs\n"
+    for cat in self.categories:
+        rstr += "        int num_classes_"+cat+" = 6;\n"
+        rstr += "        int num_features_"+cat+" = "+str(len(self.variables[cat]))+";\n"
+        rstr += "        double DNN_Out_"+cat+"_ttbar2B = -6;\n"
+        rstr += "        double DNN_Out_"+cat+"_ttbarB  = -6;\n"
+        rstr += "        double DNN_Out_"+cat+"_ttbarBB = -6;\n"
+        rstr += "        double DNN_Out_"+cat+"_ttbarCC = -6;\n"
+        rstr += "        double DNN_Out_"+cat+"_ttbarlf = -6;\n"
+        rstr += "        double DNN_Out_"+cat+"_ttH     = -6;\n"
+        rstr += "        int DNN_"+cat+"_pred_class     = -6;\n\n"
+        rstr += "        Tensor tensor_"+cat+" (DT_FLOAT, TensorShape({1, num_features_"+cat+"}));\n\n"
     
-    rstr+="int num_features_4j_ge3t = "+str(len(self.variables_4j_ge3t))+";\n"
-    
-       
-    rstr+="""
-       double DNN_Out_4j_ge3t_ttbar2B  = -6;
-       double DNN_Out_4j_ge3t_ttbarB  = -6;
-       double DNN_Out_4j_ge3t_ttbarBB  = -6;
-       double DNN_Out_4j_ge3t_ttbarCC  = -6;
-       double DNN_Out_4j_ge3t_ttbarlf = -6;
-       double DNN_Out_4j_ge3t_ttH  = -6;
-       int DNN_4j_ge3t_pred_class  = -6;
-
-       int num_classes_5j_ge3t = 6;
-    """
-    
-    rstr+="int num_features_5j_ge3t = "+str(len(self.variables_5j_ge3t))+";\n"
-       
-    rstr+="""
-       double DNN_Out_5j_ge3t_ttbar2B  = -6;
-       double DNN_Out_5j_ge3t_ttbarB  = -6;
-       double DNN_Out_5j_ge3t_ttbarBB  = -6;
-       double DNN_Out_5j_ge3t_ttbarCC  = -6;
-       double DNN_Out_5j_ge3t_ttbarlf = -6;
-       double DNN_Out_5j_ge3t_ttH  = -6;
-       int DNN_5j_ge3t_pred_class  = -6;
-
-       int num_classes_ge6j_ge3t = 6;
-    """
-    
-    rstr+="int num_features_ge6j_ge3t = "+str(len(self.variables_ge6j_ge3t))+";\n"
-       
-    rstr+="""
-        double DNN_Out_ge6j_ge3t_ttbar2B  = -6;
-       double DNN_Out_ge6j_ge3t_ttbarB  = -6;
-       double DNN_Out_ge6j_ge3t_ttbarBB  = -6;
-       double DNN_Out_ge6j_ge3t_ttbarCC  = -6;
-       double DNN_Out_ge6j_ge3t_ttbarlf  = -6;
-       double DNN_Out_ge6j_ge3t_ttH  = -6;
-       int DNN_ge6j_ge3t_pred_class= -6;
-
-       Tensor tensor_4j_ge3t (DT_FLOAT, TensorShape({1,num_features_4j_ge3t}));
-       Tensor tensor_5j_ge3t (DT_FLOAT, TensorShape({1,num_features_5j_ge3t}));
-       Tensor tensor_ge6j_ge3t (DT_FLOAT, TensorShape({1,num_features_ge6j_ge3t}));
-
-       std::vector<std::pair<std::string, tensorflow::Tensor>> feed_dict;
-       std::vector<tensorflow::Tensor> outputTensors;
-       Tensor drop_1 (DT_FLOAT, TensorShape({ 1}));
-
-      drop_1.tensor<float,1>()(0) = 1.0;
-
-
- """
+    rstr += "        std::vector<std::pair<std::string, tensorflow::Tensor>> feed_dict;\n"
+    rstr += "        std::vector<tensorflow::Tensor> outputTensors;\n"
+    rstr += "        Tensor drop_1 (DT_FLOAT, TensorShape({1}));\n"
+    rstr += "        drop_1.tensor<float, 1>()(0) = 1.0;\n"       
     return rstr
   
   def getEventLoopCodeLines(self):
-    rstr="""
-  // classes are 
-  // 0 = ttH 
-  // 1 = ttbb 
-  // 2 = tt2b 
-  // 3 = ttb 
-  // 4 = ttcc 
-  // 5 = ttlf
-  //std::cout<<N_Jets<<" "<<N_BTagsM<<std::endl;
-  if (N_Jets == 4 and N_BTagsM >= 3){
-    //Load Data
+    rstr = """ 
+        // classes are 
+        // 0 = ttH 
+        // 1 = ttbb 
+        // 2 = tt2b 
+        // 3 = ttb 
+        // 4 = ttcc 
+        // 5 = ttlf
+        //std::cout<<N_Jets<<" "<<N_BTagsM<<std::endl;
     """
-    rstr+=str(self._fill_vector('4j_ge3t'))
-    rstr+="""
-
-    //Run graph
-    feed_dict.push_back(std::make_pair("dense_1_input",tensor_4j_ge3t));"""
-    rstr+= self._fix_dropout('4j_ge3t')
-    rstr+="""
-
-
-    status_4j_ge3t = session_4j_ge3t->Run(feed_dict, {"dense_3/Softmax"},  {}, &outputTensors);
-    //if (!status_4j_ge3t.ok()) 
-    //{
-    //  std::cout << status_4j_ge3t.ToString() << std::endl;
-    //}
-    //else
-    //{
-    //  std::cout << "Success load graph !! " << std::endl;
-    //}
-
-    //Feed output into right variables
-
-    DNN_Out_4j_ge3t_ttbar2B  = outputTensors.at(0).tensor<float,2>()(0,2);
-    DNN_Out_4j_ge3t_ttbarB  = outputTensors.at(0).tensor<float,2>()(0,3);
-    DNN_Out_4j_ge3t_ttbarBB  = outputTensors.at(0).tensor<float,2>()(0,1);
-    DNN_Out_4j_ge3t_ttbarCC  = outputTensors.at(0).tensor<float,2>()(0,4);
-    DNN_Out_4j_ge3t_ttbarlf  = outputTensors.at(0).tensor<float,2>()(0,5);
-    DNN_Out_4j_ge3t_ttH  = outputTensors.at(0).tensor<float,2>()(0,0);
-    DNN_4j_ge3t_pred_class  = getMaxPosition(outputTensors,num_classes_4j_ge3t);
-    
-    bool printstuff=0;
-    if(iEntry<200){printstuff=1;}
-    if(printstuff){
-      cout<<"-----DNN-----"<<std::endl;
-      std::cout<<"jt="<<N_Jets<<" "<<N_BTagsM<< "event "<<Evt_Run<<" "<<Evt_Lumi<<" "<<Evt_ID<<std::endl;
-      cout<<"mem "<<memDBp<<std::endl;
-for(int ifeat=0; ifeat<num_features_4j_ge3t;ifeat++){
-        cout<<tensor_4j_ge3t.tensor<float,2>()(0,ifeat)<<std::endl;
-        }
-      
-      cout<<"ttH node "<<DNN_Out_4j_ge3t_ttH<<std::endl;
-      cout<<"ttbarBB node "<<DNN_Out_4j_ge3t_ttbarBB<<std::endl;
-      cout<<"ttbar2B node "<<DNN_Out_4j_ge3t_ttbar2B<<std::endl;
-      cout<<"ttbarB node "<<DNN_Out_4j_ge3t_ttbarB<<std::endl;
-      cout<<"ttbarCC node "<<DNN_Out_4j_ge3t_ttbarCC<<std::endl;
-      cout<<"ttbarOther node "<<DNN_Out_4j_ge3t_ttbarlf<<std::endl;
-      
-      cout<<"predicted class "<< DNN_4j_ge3t_pred_class<<std::endl;
-     }
-  }
-  else if (N_Jets == 5 and N_BTagsM >= 3){
-    """
-    rstr+=str(self._fill_vector('5j_ge3t'))
-    rstr+="""
-
-    //Run graph
-    feed_dict.push_back(std::make_pair("dense_1_input",tensor_5j_ge3t));"""
-    rstr+= self._fix_dropout('5j_ge3t')
-    rstr+="""
-
-    status_5j_ge3t = session_5j_ge3t->Run(feed_dict, {"dense_3/Softmax"},  {}, &outputTensors);
-    //if (!status_5j_ge3t.ok()) 
-    //{
-    //  std::cout << status_5j_ge3t.ToString() << std::endl;
-    //}
-    //else
-    //{
-    //  std::cout << "Success load graph !! " << std::endl;
-    //}
-
-    //Feed output into right variables
-
-    DNN_Out_5j_ge3t_ttbar2B  = outputTensors.at(0).tensor<float,2>()(0,2);
-    DNN_Out_5j_ge3t_ttbarB  = outputTensors.at(0).tensor<float,2>()(0,3);
-    DNN_Out_5j_ge3t_ttbarBB  = outputTensors.at(0).tensor<float,2>()(0,1);
-    DNN_Out_5j_ge3t_ttbarCC  = outputTensors.at(0).tensor<float,2>()(0,4);
-    DNN_Out_5j_ge3t_ttbarlf  = outputTensors.at(0).tensor<float,2>()(0,5);
-    DNN_Out_5j_ge3t_ttH  = outputTensors.at(0).tensor<float,2>()(0,0);
-    DNN_5j_ge3t_pred_class  = getMaxPosition(outputTensors,num_classes_5j_ge3t);
-
-    bool printstuff=0;
-    if(iEntry<200){printstuff=1;}
-    if(printstuff){
-      cout<<"-----DNN-----"<<std::endl;
-      std::cout<<"jt="<<N_Jets<<" "<<N_BTagsM<< "event "<<Evt_Run<<" "<<Evt_Lumi<<" "<<Evt_ID<<std::endl;
-      cout<<"mem "<<memDBp<<std::endl;
-for(int ifeat=0; ifeat<num_features_5j_ge3t;ifeat++){
-        cout<<tensor_5j_ge3t.tensor<float,2>()(0,ifeat)<<std::endl;
-        }
-     
-      cout<<"ttH node "<<DNN_Out_5j_ge3t_ttH<<std::endl;
-      cout<<"ttbarBB node "<<DNN_Out_5j_ge3t_ttbarBB<<std::endl;
-      cout<<"ttbar2B node "<<DNN_Out_5j_ge3t_ttbar2B<<std::endl;
-      cout<<"ttbarB node "<<DNN_Out_5j_ge3t_ttbarB<<std::endl;
-      cout<<"ttbarCC node "<<DNN_Out_5j_ge3t_ttbarCC<<std::endl;
-      cout<<"ttbarOther node "<<DNN_Out_5j_ge3t_ttbarlf<<std::endl;
-      cout<<"predicted class "<< DNN_5j_ge3t_pred_class<<std::endl;
-     }
-
-  }
-  else if(N_Jets >= 6 and N_BTagsM >= 3){
-      """
-    rstr+=str(self._fill_vector('ge6j_ge3t'))
-    rstr+="""
-
-    //Run graph
-    feed_dict.push_back(std::make_pair("dense_1_input",tensor_ge6j_ge3t));"""
-
-    rstr+= self._fix_dropout('ge6j_ge3t')
-
-    rstr+="""status_ge6j_ge3t = session_ge6j_ge3t->Run(feed_dict, {"dense_3/Softmax"},  {}, &outputTensors);
-    //if (!status_ge6j_ge3t.ok()) 
-    //{
-    //  std::cout << status_ge6j_ge3t.ToString() << std::endl;
-    //}
-    //else
-    //{
-    //  std::cout << "Success load graph !! " << std::endl;
-    //}
-
-    //Feed output into right variables
-
-    DNN_Out_ge6j_ge3t_ttbar2B  = outputTensors.at(0).tensor<float,2>()(0,2);
-    DNN_Out_ge6j_ge3t_ttbarB  = outputTensors.at(0).tensor<float,2>()(0,3);
-    DNN_Out_ge6j_ge3t_ttbarBB  = outputTensors.at(0).tensor<float,2>()(0,1);
-    DNN_Out_ge6j_ge3t_ttbarCC  = outputTensors.at(0).tensor<float,2>()(0,4);
-    DNN_Out_ge6j_ge3t_ttbarlf  = outputTensors.at(0).tensor<float,2>()(0,5);
-    DNN_Out_ge6j_ge3t_ttH  = outputTensors.at(0).tensor<float,2>()(0,0);
-    DNN_ge6j_ge3t_pred_class  = getMaxPosition(outputTensors,num_classes_ge6j_ge3t);
-
-    bool printstuff=0;
-    if(iEntry<200){printstuff=1;}
-    if(printstuff){
-      std::cout<<"-----DNN-----"<<std::endl;
-      std::cout<<"jt="<<N_Jets<<" "<<N_BTagsM<< "event "<<Evt_Run<<" "<<Evt_Lumi<<" "<<Evt_ID<<std::endl;
-      cout<<"mem "<<memDBp<<std::endl;
-     for(int ifeat=0; ifeat<num_features_ge6j_ge3t;ifeat++){
-       cout<<tensor_ge6j_ge3t.tensor<float,2>()(0,ifeat)<<std::endl;
-       }
-      
-      cout<<"ttH node "<<DNN_Out_ge6j_ge3t_ttH<<std::endl;
-      cout<<"ttbarBB node "<<DNN_Out_ge6j_ge3t_ttbarBB<<std::endl;
-      cout<<"ttbar2B node "<<DNN_Out_ge6j_ge3t_ttbar2B<<std::endl;
-      cout<<"ttbarB node "<<DNN_Out_ge6j_ge3t_ttbarB<<std::endl;
-      cout<<"ttbarCC node "<<DNN_Out_ge6j_ge3t_ttbarCC<<std::endl;
-      cout<<"ttbarOther node "<<DNN_Out_ge6j_ge3t_ttbarlf<<std::endl;
-      std::cout<<"predicted class "<< DNN_ge6j_ge3t_pred_class<<std::endl;
-     }
-
-  }
- 
-
-  // classes are 
-  // 0 = ttH 
-  // 1 = ttbb 
-  // 2 = tt2b 
-  // 3 = ttb 
-  // 4 = ttcc 
-  // 5 = ttlf
-
-  
-"""
+    for i, cat in enumerate(self.categories):
+        if i == 0:
+            rstr += "        if( "+self.categorySelection[cat]+" ){\n"
+        else:
+            rstr += "        else if( "+self.categorySelection[cat]+" ){\n"
+            
+        rstr += "        // Loading Data\n"
+        rstr += self.__fillVector(cat)
+        rstr += "        // Run graph\n"
+        rstr += "        feed_dict.push_back(std::make_pair(\""+self.inputLayers[cat]+"\", tensor_"+cat+"));\n"
+        rstr += self.__fixDropout(cat)
+        rstr += "        status_"+cat+" = session_"+cat+"->Run(feed_dict, {\""+self.outputLayers[cat]+"\"}, {}, &outputTensors);\n\n"
+        rstr += "        if( !status_"+cat+".ok()){ std::cout << status_"+cat+".ToString() << std::endl; }\n"
+        rstr += "        //else { std::cout << \"Graph loaded\" << std::endl; }\n\n"
+        rstr += "        // Feed output into right variables\n"
+        rstr += "        DNN_Out_"+cat+"_ttH     = outputTensors.at(0).tensor<float,2>()(0,0);\n"
+        rstr += "        DNN_Out_"+cat+"_ttbarBB = outputTensors.at(0).tensor<float,2>()(0,1);\n"
+        rstr += "        DNN_Out_"+cat+"_ttbar2B = outputTensors.at(0).tensor<float,2>()(0,2);\n"
+        rstr += "        DNN_Out_"+cat+"_ttbarB  = outputTensors.at(0).tensor<float,2>()(0,3);\n"
+        rstr += "        DNN_Out_"+cat+"_ttbarCC = outputTensors.at(0).tensor<float,2>()(0,4);\n"
+        rstr += "        DNN_Out_"+cat+"_ttbarlf = outputTensors.at(0).tensor<float,2>()(0,5);\n"
+        rstr += "        DNN_"+cat+"_pred_class  = getMaxPosition(outputTensors, num_classes_"+cat+");\n\n"
+        rstr += "        bool printstuff = 0;\n"
+        rstr += "        if(iEntry < 100){ printstuff = 1; }\n"
+        rstr += "        if( printstuff ){\n"
+        rstr += "            std::cout << \"========== DNN output ==========\" << std::endl;\n"
+        rstr += "            std::cout << \"JT  = \"<<N_Jets<<\" \"<<N_BTagsM<<\"; Event: \"<<Evt_Run<<\" \"<<Evt_Lumi<<\" \"<<Evt_ID<<std::endl;\n"
+        rstr += "            std::cout << \"MEM = \"<<memDBp<<std::endl;\n\n"
+        rstr += "            for( int ifeat=0; ifeat<num_features_"+cat+"; ifeat++){\n"
+        rstr += "                std::cout << tensor_"+cat+".tensor<float,2>()(0,ifeat)<<std::endl;}\n"
+        rstr += "            std::cout << \"-------------------->\"<<std::endl;\n"
+        rstr += "            std::cout << \"ttH node        \"<<DNN_Out_"+cat+"_ttH<<std::endl;\n"      
+        rstr += "            std::cout << \"ttbarBB node    \"<<DNN_Out_"+cat+"_ttbarBB<<std::endl;\n"      
+        rstr += "            std::cout << \"ttbar2B node    \"<<DNN_Out_"+cat+"_ttbar2B<<std::endl;\n"      
+        rstr += "            std::cout << \"ttbarB node     \"<<DNN_Out_"+cat+"_ttbarB<<std::endl;\n"      
+        rstr += "            std::cout << \"ttbarCC node    \"<<DNN_Out_"+cat+"_ttbarCC<<std::endl;\n"      
+        rstr += "            std::cout << \"ttbarOther node \"<<DNN_Out_"+cat+"_ttbarlf<<std::endl;\n\n"
+        rstr += "            std::cout << \"predicted class \"<<DNN_"+cat+"_pred_class<<std::endl;\n"
+        rstr += "            std::cout << \"-------------------->\"<<std::endl;\n"
+        rstr += "            }\n"
+        rstr += "        }\n"      
 
     return rstr
 
@@ -477,100 +255,33 @@ for(int ifeat=0; ifeat<num_features_5j_ge3t;ifeat++){
     rstr=""
     return rstr
   
-  def _get_variables_from_csv(self):
-  	# Read variables from cvs files. The order of the variables is important for the DNN
-  	self.variables_4j_ge3t = []
-  	self.means_4j_ge3t = []
-  	self.stddev_4j_ge3t = []
-  	self.variables_5j_ge3t = []
-  	self.means_5j_ge3t = []
-  	self.stddev_5j_ge3t = []
-  	self.variables_ge6j_ge3t = []
-  	self.means_ge6j_ge3t = []
-  	self.stddev_ge6j_ge3t = []
-
-  	with open(self.localCheckpointPath+"/4j_ge3t/variable_norm.csv") as csv_file:
-  		csv_reader = csv.reader(csv_file,delimiter=',')
-  		for i, row in enumerate(csv_reader):
-  			if i != 0:
-  				# MEM is not named right in CSV, workaround. TODO: Fix name in preprocessing
-  				if row[0]=="MEM":
-  					self.variables_4j_ge3t.append('memDBp')
-  				else:
-  					self.variables_4j_ge3t.append(row[0])
-  				self.means_4j_ge3t.append(row[1])
-  				self.stddev_4j_ge3t.append(row[2])
-
-  	with open(self.localCheckpointPath+"/5j_ge3t/variable_norm.csv") as csv_file:
-  		csv_reader = csv.reader(csv_file,delimiter=',')
-  		for i, row in enumerate(csv_reader):
-  			if i != 0:
-  				if row[0]=="MEM":
-  					self.variables_5j_ge3t.append('memDBp')
-  				else:
-  					self.variables_5j_ge3t.append(row[0])
-  				self.means_5j_ge3t.append(row[1])
-  				self.stddev_5j_ge3t.append(row[2])
-
-  	with open(self.localCheckpointPath+"/ge6j_ge3t/variable_norm.csv") as csv_file:
-  		csv_reader = csv.reader(csv_file,delimiter=',')
-  		for i, row in enumerate(csv_reader):
-  			if i != 0:
-  				if row[0]=="MEM":
-  					self.variables_ge6j_ge3t.append('memDBp')
-  				else:
-  					self.variables_ge6j_ge3t.append(row[0])
-  				self.means_ge6j_ge3t.append(row[1])
-  				self.stddev_ge6j_ge3t.append(row[2])
-
       
-  def _fill_vector(self,cat):
+  def __fillVector(self, cat):
   	# Helper function to fill inputtensors for tensorflow
-    master_string= ""
-    if cat == '4j_ge3t': 
-        for i,value in enumerate(self.variables_4j_ge3t):
-            master_string+="tensor_4j_ge3t.tensor<float,2>()(0,"+str(i)+") = float(("+str(value)+"-("+str(self.means_4j_ge3t[i])+"))/"+str(self.stddev_4j_ge3t[i])+"); \n"
-        return master_string
-    elif cat == '5j_ge3t':
-        for i,value in enumerate(self.variables_5j_ge3t):
-            master_string+="tensor_5j_ge3t.tensor<float,2>()(0,"+str(i)+") = float(("+str(value)+"-("+str(self.means_5j_ge3t[i])+"))/"+str(self.stddev_5j_ge3t[i])+"); \n"
-        return master_string
-    elif cat == 'ge6j_ge3t':
-        for i,value in enumerate(self.variables_ge6j_ge3t):
-            master_string+="tensor_ge6j_ge3t.tensor<float,2>()(0,"+str(i)+") = float(("+str(value)+"-("+str(self.means_ge6j_ge3t[i])+"))/"+str(self.stddev_ge6j_ge3t[i])+"); \n"
-            master_string+="//cout<<float(("+str(value)+"-("+str(self.means_ge6j_ge3t[i])+"))/"+str(self.stddev_ge6j_ge3t[i])+")<<std::endl; \n"
-            
-        return master_string
+    rstr = ""
+    for i, var in enumerate(self.variables[cat]):
+        rstr += "        tensor_"+cat+".tensor<float,2>()(0,"+str(i)+") = "
+        rstr += "float( (("+var+")-("+str(self.variable_means[cat][i])+"))/("+str(self.variable_stds[cat][i])+") );\n"
+    return rstr
 
 
-  def _fix_dropout(self,cat):
-  	# Check how many dropout layers are in a model and feed the kepp_pro of 1 -> deactivates dropout
+  def __fixDropout(self, cat):
+  	# Check how many dropout layers are in a model 
+    # and feed them a keep probability of 1 -> deactivates dropout
 
   	# Clear default graph, otherwise old stuff still in the graph
     tensorflow.reset_default_graph()
-    master_string = ""
-    if cat == '4j_ge3t':
-	  sess_1    = tensorflow.Session()
-	  saver_1   = tensorflow.train.import_meta_graph(self.localCheckpointPath+'/4j_ge3t/trained_model.meta')
-	  saver_1.restore(sess_1, self.localCheckpointPath+'/4j_ge3t/trained_model')
-	  graph     = tensorflow.get_default_graph()
+    rstr = ""
+    session = {}
+    saver = {}
 
-    elif cat == '5j_ge3t':
-	  sess_2    = tensorflow.Session()
-	  saver_2   = tensorflow.train.import_meta_graph(self.localCheckpointPath+'/5j_ge3t/trained_model.meta')
-	  saver_2.restore(sess_2, self.localCheckpointPath+'/5j_ge3t/trained_model')
-	  graph     = tensorflow.get_default_graph()
-
-    elif cat == 'ge6j_ge3t':
-	  sess_1    = tensorflow.Session()
-	  saver_1   = tensorflow.train.import_meta_graph(self.localCheckpointPath+'/ge6j_ge3t/trained_model.meta')
-	  saver_1.restore(sess_1, self.localCheckpointPath+'/ge6j_ge3t/trained_model')
-	  graph     = tensorflow.get_default_graph()
-
+    session[cat] = tensorflow.Session()
+    saver[cat] = tensorflow.train.import_meta_graph( self.localCheckpointPath+"/"+cat+"/trained_model.meta" )
+    saver[cat].restore( session[cat], self.localCheckpointPath+"/"+cat+"/trained_model" )
     graph = tensorflow.get_default_graph()
     for op in graph.get_operations():
-	  if op.name.find("dropout/keep_prob")!=-1:
-	    master_string+="feed_dict.push_back(std::make_pair(\""+op.name + "\", drop_1)); \n"
+	    if op.name.find("dropout/keep_prob") != -1:
+	      rstr += "        feed_dict.push_back(std::make_pair(\""+op.name+"\", drop_1));\n"
 
-    return master_string
+    return rstr
 
