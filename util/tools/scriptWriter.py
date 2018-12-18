@@ -129,8 +129,10 @@ class scriptWriter:
         script += self.varManager.writeTMVAReader()
 
         # initialize histograms in all categories and for all systematics
-        script += scriptfunctions.initHistos(self.pp.categoryNames, self.pp.systNames, 
-                                        self.pp.configData.getDiscriminatorPlots())
+        script += scriptfunctions.initHistos(
+            catnames  = self.pp.categoryNames, 
+            systnames = self.pp.systNames, 
+            plots     = self.pp.configData.getDiscriminatorPlots())
 
         # start event loop
         #if self.pp.useGenWeightNormMap:
@@ -398,13 +400,13 @@ class scriptWriter:
         self.samplewiseMaps = {}
 
         # loading tree info from json file
-        SaveTreeInforamtion = {}
+        SaveTreeInformation = {}
         LoadedTreeInformation = {}
         if self.pp.jsonFile != "":
-            print "Loading file with tree event information"
+            print("Loading file with tree event information")
             with open(self.pp.jsonFile,"r") as jsonfile:
-                jsonstring = list(jsonfile)[0]
-                LoadedTreeInformation = json.loads(jsonstring)
+                LoadedTreeInformation = json.load(jsonfile)
+
     
         # looping over samples
         for sample in self.pp.configData.allSamples:
@@ -431,7 +433,7 @@ class scriptWriter:
                     tree = f.Get('MVATree')
                     nEventsInFile = tree.GetEntries()
 
-                SaveTreeInforamtion[filename] = nEventsInFile
+                SaveTreeInformation[filename] = nEventsInFile
 
                 
                 # if the file is larger than self.maxevents it is analyzed in portions of nevents
@@ -478,16 +480,17 @@ class scriptWriter:
             print '\t', nEvents, 'events found'
         
         # save tree information to json file
-        treejson = json.dumps(SaveTreeInforamtion)
+        #treejson = json.dumps(SaveTreeInformation)
         with open(self.pp.analysis.workdir+'/'+"treejson.json","w") as jsonfile:
-            jsonfile.write(treejson)
+            json.dump(SaveTreeInformation, jsonfile, indent = 2, separators = (",", ": "))
+            #jsonfile.write(treejson)
         print "Saved information about events in trees to ", self.pp.analysis.workdir+'/'+"treejson.json"
-
         returnData = {"scripts": self.scripts, 
                         "outputs": self.outputs, 
                         "entries": self.nentries, 
                         "maps": self.samplewiseMaps}
         return returnData
+    
 
     def writeSingleScript(self, sample, filenames, nJob, filterFile, writeOptions = {}):
         # defaults

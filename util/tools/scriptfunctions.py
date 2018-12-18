@@ -89,27 +89,64 @@ def InitDataBase(thisDataBase=[]):
 # -- initializing histograms ----------------------------------------------------------------------
 def initHistos(catnames, systnames, plots):
     rstr = ""
+    rstr += "double variable = -999;\n"
+    rstr += "double variable1 = -999;\n"
+    rstr += "double variable2 = -999;\n"
+    rstr += "std::vector<std::string> systematics = {\n"
+    for syst in systnames:
+        rstr += "    \""+syst+"\",\n"
+    rstr = rstr[:-2]+"\n};\n"
+    rstr += "std::vector<std::string> categs = {\n"
     for cat in catnames:
-        for plot in plots:
-            if isinstance(plot, plotClasses.TwoDimPlot):
-                title = plot.histo.GetTitle()+";"+plot.histo.GetXaxis().GetTitle()+";"+plot.histo.GetYaxis().GetTitle()
-                name = plot.histo.GetName()
-                maxX = plot.histo.GetXaxis().GetXmax()
-                minX = plot.histo.GetXaxis().GetXmin()
-                nbinsX = plot.histo.GetNbinsX()
-                maxY = plot.histo.GetYaxis().GetXmax()
-                minY = plot.histo.GetYaxis().GetXmin()
-                nbinsY = plot.histo.GetNbinsY()
-                for sname in systnames:
-                    rstr += initTwoDimHisto(cat+name+sname, nbinsX, minX, maxX, nbinsY, minY, maxY, title)
-            else:
-                title = plot.histo.GetTitle()
-                name = plot.histo.GetName()
-                maxX = plot.histo.GetXaxis().GetXmax()
-                minX = plot.histo.GetXaxis().GetXmin()
-                nbins = plot.histo.GetNbinsX()
-                for sname in systnames:
-                    rstr += initOneDimHisto(cat+name+sname, nbins, minX, maxX, title)
+        rstr += "    \""+cat+"\",\n"
+    rstr = rstr[:-2]+"\n};\n"
+    rstr += "std::map<std::string, Plot1DInfoStruct> plotinfo1D;\n"
+    rstr += "std::map<std::string, Plot2DInfoStruct> plotinfo2D;\n"
+    rstr += "std::map<std::string, std::unique_ptr<TH1>> histos1D;\n"
+    rstr += "std::map<std::string, std::unique_ptr<TH2>> histos2D;\n"
+    for plot in plots:
+        if isinstance(plot, plotClasses.TwoDimPlot):
+            title  = plot.histo.GetTitle()+";"+plot.histo.GetXaxis().GetTitle()+";"+plot.histo.GetYaxis().GetTitle()
+            name   = plot.histo.GetName()
+            maxX   = plot.histo.GetXaxis().GetXmax()
+            minX   = plot.histo.GetXaxis().GetXmin()
+            nbinsX = plot.histo.GetNbinsX()
+            maxY   = plot.histo.GetYaxis().GetXmax()
+            minY   = plot.histo.GetYaxis().GetXmin()
+            nbinsY = plot.histo.GetNbinsY()
+            rstr  += "plotinfo2D[\""+name+"\"] = {\""+name+"\",\""+title+"\","+str(nbinsX)+","+str(minX)+","+str(maxX)+","+str(minY)+","+str(maxY)+"};\n"
+        else:
+            title  = plot.histo.GetTitle()
+            name   = plot.histo.GetName()
+            maxX   = plot.histo.GetXaxis().GetXmax()
+            minX   = plot.histo.GetXaxis().GetXmin()
+            nbins  = plot.histo.GetNbinsX()
+            rstr  += "plotinfo1D[\""+name+"\"] = {\""+name+"\",\""+title+"\","+str(nbins)+","+str(minX)+","+str(maxX)+"};\n"
+
+    rstr += "\n\n"
+    rstr += "for(const auto& cat: categs){\n"
+    rstr += "    for(const auto& obj: plotinfo1D){\n"
+    rstr += "        for(const auto& syst: systematics){\n"
+    rstr += "            const auto& PlotInfo1D = obj.second;\n"
+    rstr += "            histos1D[cat+obj.first+syst] = "
+    rstr += "std::unique_ptr<TH1>(new TH1F((processname+\"_\"+cat+obj.first+syst+suffix).c_str(), (PlotInfo1D.title).c_str(), PlotInfo1D.nbins, PlotInfo1D.xmin, PlotInfo1D.xmax));\n"
+    rstr += "            histos1D[cat+obj.first+syst]->SetDirectory(0);\n"
+    rstr += "        }\n"
+    rstr += "    }\n"
+    rstr += "}\n"
+
+    rstr += "for(const auto& cat: categs){\n"
+    rstr += "    for(const auto& obj: plotinfo2D){\n"
+    rstr += "        for(const auto& syst: systematics){\n"
+    rstr += "            const auto& PlotInfo2D = obj.second;\n"
+    rstr += "            histos2D[cat+obj.first+syst] = "
+    rstr += "std::unique_ptr<TH2>(new TH2F((processname+\"_\"+cat+obj.first+syst+suffix).c_str(), (PlotInfo2D.title).c_str(), "
+    rstr += "PlotInfo2D.nbinsx, PlotInfo2D.xmin, PlotInfo2D.xmax, PlotInfo2D.nbinsy, PlotInfo2D.ymin, PlotInfo2D.ymax));\n"
+    rstr += "            histos2D[cat+obj.first+syst]->SetDirectory(0);\n"
+    rstr += "        }\n"
+    rstr += "    }\n"
+    rstr += "}\n"
+    
     return rstr
 
 def initOneDimHisto(name,nbins,xmin=0,xmax=0,title_=''):
@@ -363,32 +400,31 @@ def fillHistoSyst(histName, varNames, weight, systNames, systWeights):
     # Write all individual systnames and systweights in nested vector 
     # to use together with function allowing variadic vector size 
     # -> speed-up of compilation and less code lines
-    text += '       std::vector<structHelpFillHisto> helpWeightVec_' + histName + ' = {\n'
-
-    # loop over systematics
-    for systName, systWeight in zip(systNames, systWeights):
-        text += '       { ' + 'h_'+ histName+systName + ', '
-        if len(varNames) == 1:
-            # this is a oneDimPlot
-            text += 'double(' + varNames[0] + '), '
-        elif len(varNames) == 2:
-            # this is a twoDimplot
-            text += varNames[0] + ', ' + varNames[1] + ', '
-        else:
-            print("this is not a valid configuration of varNames "+str(varNames))
-            return None
-        text+= '('+systWeight+')*(weight_'+histName+')' + '},\n'
-
-    # finish vector     
-    text+= '     };\n'
-
-    # call helper fill histo function which is defined in the beginning of CC script
     if len(varNames) == 1:
-        text+='     helperFillHisto(helpWeightVec_' + histName + ');\n'
-    elif len(varNames) == 2:
-        text+='     helperFillTwoDimHisto(helpWeightVec_' + name + ');\n'
-    return text
+        # 1D Histograms
+        text += '       std::vector<structHelpFillHisto> helpWeightVec_' + histName + ' = {\n'
+        for systName, systWeight in zip(systNames, systWeights):
+            text += "       {histos1D[\""+histName+systName+"\"].get()"+", ("+systWeight+")*(weight_"+histName+")},\n"
+            
+        text += "       };\n"
+        text += "       variable = "+varNames[0]+";\n"
 
+        text += "       helperFillHisto(helpWeightVec_"+histName+", variable);\n"
+        text += "       variable = -999;\n"
+    if len(varNames) == 2:
+        # 2D Histograms
+        text += '       std::vector<structHelpFillTwoDimHisto> helpWeightVec_' + histName + ' = {\n'
+        for systName, systWeight in zip(systNames, systWeights):
+            text += "       {histos2D[\""+histName+systName+"\"].get()"+", ("+systWeight+")*(weight_"+histName+")},\n"
+            
+        text += "       };\n"
+        text += "       variable1 = "+varNames[0]+":\n"
+        text += "       variable2 = "+varNames[1]+":\n"
+
+        text += "       helperFillTwoDimHisto(helpWeightVec_"+histName+", variable1, variable2);\n"
+        text += "       variable1 = -999;\n"
+        text += "       variable2 = -999;\n"
+    return text
 # -------------------------------------------------------------------------------------------------
 
 
@@ -411,7 +447,10 @@ def endLoop():
 # -- generating foot of the script ----------------------------------------------------------------
 def getFoot(addCodeInterfaces):
   rstr= """
-  outfile->Write();
+  for(auto& histo1D: histos1D){ outfile->WriteTObject(histo1D.second.get()); }
+  for(auto& histo2D: histos2D){ outfile->WriteTObject(histo2D.second.get()); }
+  //outfile->Write();
+
   outfile->Close();
   std::ofstream f_nevents((string(outfilename)+".cutflow.txt").c_str());
   f_nevents << "0" << " : " << "all" << " : " << eventsAnalyzed << " : " << sumOfWeights <<endl;

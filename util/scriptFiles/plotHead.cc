@@ -1,39 +1,59 @@
+// struct to store information 1D histograms
+struct Plot1DInfoStruct{
+    std::string identifier;
+    std::string title;
+    int nbins;
+    float xmin;
+    float xmax;
+    //std::unique_ptr<TH1> histoptr;
+};
+
+
 // Helper struct to fill plots more efficiently
 // Until GCC 4.9 struct cannot have init values if one wants to initialize it with bracket lists
 struct structHelpFillHisto{
   TH1* histo;
-  double var;
   double weight;
 };
 
 // helper function to fill plots more efficiently
-void helperFillHisto(const std::vector<structHelpFillHisto>& paramVec)
+void helperFillHisto(const std::vector<structHelpFillHisto>& paramVec, const double& val)
 {
   for (const auto &singleParams: paramVec)
   // singleParams: histo, var, weight
   {
     if((singleParams.weight)!=0)
-      singleParams.histo->Fill(fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,singleParams.var)),singleParams.weight);
+        singleParams.histo->Fill(fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,val)),singleParams.weight);
   }
 }
 
 // Helper struct to fill plots more efficiently
 // Until GCC 4.9 struct cannot have init values if one wants to initialize it with bracket lists
+struct Plot2DInfoStruct{
+    std::string identifier;
+    std::string title;
+    int nbinsx;
+    int nbinsy;
+    float xmin;
+    float xmax;
+    float ymin;
+    float ymax;
+    //std::unique_ptr<TH2> histoptr;
+};
+
 struct structHelpFillTwoDimHisto{
   TH2* histo;
-  double var1;
-  double var2;
   double weight;
 };
 
 // helper function to fill plots more efficiently
-void helperFillTwoDimHisto(const std::vector<structHelpFillTwoDimHisto>& paramVec)
+void helperFillTwoDimHisto(const std::vector<structHelpFillTwoDimHisto>& paramVec, const double& val1, const double& val2)
 {
   for (const auto &singleParams: paramVec)
   // singleParams: histo, var1, var2, weight
   {
     if((singleParams.weight)!=0)
-      singleParams.histo->Fill(fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,singleParams.var1)),fmin(singleParams.histo->GetYaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetYaxis()->GetXmin()+1e-6,singleParams.var2)),singleParams.weight);
+        singleParams.histo->Fill(fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,val1)),fmin(singleParams.histo->GetYaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetYaxis()->GetXmin()+1e-6,val2)),singleParams.weight);
   }
 }
 
