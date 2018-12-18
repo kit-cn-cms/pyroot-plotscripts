@@ -115,7 +115,7 @@ class plotParallel:
     def setRateFactorsFile(self, csvfile):
         self.rateFactorsFile = csvfile
         self.setUseGenWeightNormMap(True)
-        print("set MEPDFCSVFile to "+str(csvfile)+" and useLHEWeights to TRUE")
+        print("set rateFactorsFile to "+str(csvfile))
     
     def setUseGenWeightNormMap(self, use_genWeightNormMap):
         self.useGenWeightNormMap = use_genWeightNormMap
