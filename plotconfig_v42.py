@@ -168,9 +168,9 @@ assert len(weightSystNames)==len(systWeights)
 
 
 systs_tt_and_ttH=[
-  "_CMS_ttHbb_PDFUp","_CMS_ttHbb_PDFDown",
-  "_CMS_ttHbb_scaleMuRUp","_CMS_ttHbb_scaleMuRDown",
-  "_CMS_ttHbb_scaleMuFUp","_CMS_ttHbb_scaleMuFDown",
+  "_CMS_ttHbb_PDF_2017Up","_CMS_ttHbb_PDF_2017Down",
+  "_CMS_ttHbb_scaleMuR_2017Up","_CMS_ttHbb_scaleMuR_2017Down",
+  "_CMS_ttHbb_scaleMuF_2017Up","_CMS_ttHbb_scaleMuF_2017Down",
   #"_CMS_ttHbb_ISRUp","_CMS_ttHbb_ISRDown",
   #"_CMS_ttHbb_FSRUp","_CMS_ttHbb_FSRDown",
   
@@ -198,8 +198,8 @@ systs_ttH=[
   #"_CMS_ttHbb_ttH_PDFUp","_CMS_ttHbb_ttH_PDFDown",
   #"_CMS_ttHbb_ttH_scaleMuRUp","_CMS_ttHbb_ttH_scaleMuRDown",
   #"_CMS_ttHbb_ttH_scaleMuFUp","_CMS_ttHbb_ttH_scaleMuFDown",
-  "_CMS_ttHbb_ttH_ISRUp","_CMS_ttHbb_ttH_ISRDown",
-  "_CMS_ttHbb_ttH_FSRUp","_CMS_ttHbb_ttH_FSRDown",
+  "_CMS_ttHbb_ttH_ISR_2017Up","_CMS_ttHbb_ttH_ISR_2017Down",
+  "_CMS_ttHbb_ttH_FSR_2017Up","_CMS_ttHbb_ttH_FSR_2017Down",
   ]
 
 systs_ttH_weights=[
@@ -251,8 +251,8 @@ systs_tt_lf=[
     #"_CMS_ttHbb_PDF_ttbarOtherUp","_CMS_ttHbb_PDF_ttbarOtherDown",
   #"_CMS_ttHbb_scaleMuR_ttbarOtherUp","_CMS_ttHbb_scaleMuR_ttbarOtherDown",
   #"_CMS_ttHbb_scaleMuF_ttbarOtherUp","_CMS_ttHbb_scaleMuF_ttbarOtherDown",
-  "_CMS_ttHbb_ISR_ttbarOtherUp","_CMS_ttHbb_ISR_ttbarOtherDown",
-  "_CMS_ttHbb_FSR_ttbarOtherUp","_CMS_ttHbb_FSR_ttbarOtherDown",
+  "_CMS_ttHbb_ISR_ttbarOther_2017Up","_CMS_ttHbb_ISR_ttbarOther_2017Down",
+  "_CMS_ttHbb_FSR_ttbarOther_2017Up","_CMS_ttHbb_FSR_ttbarOther_2017Down",
   
   ]
 systs_tt_lf_weights=[
@@ -275,8 +275,8 @@ systs_tt_b=[
     #"_CMS_ttHbb_PDF_ttbarPlusBUp","_CMS_ttHbb_PDF_ttbarPlusBDown",
   #"_CMS_ttHbb_scaleMuR_ttbarPlusBUp","_CMS_ttHbb_scaleMuR_ttbarPlusBDown",
   #"_CMS_ttHbb_scaleMuF_ttbarPlusBUp","_CMS_ttHbb_scaleMuF_ttbarPlusBDown",
-  "_CMS_ttHbb_ISR_ttbarPlusBUp","_CMS_ttHbb_ISR_ttbarPlusBDown",
-  "_CMS_ttHbb_FSR_ttbarPlusBUp","_CMS_ttHbb_FSR_ttbarPlusBDown",
+  "_CMS_ttHbb_ISR_ttbarPlusB_2017Up","_CMS_ttHbb_ISR_ttbarPlusB_2017Down",
+  "_CMS_ttHbb_FSR_ttbarPlusB_2017Up","_CMS_ttHbb_FSR_ttbarPlusB_2017Down",
   ]
 systs_tt_b_weights=[
                     #"dummyWeight_CMS_ttH_ttbarPlusB_NNPDFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_up*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
@@ -298,8 +298,8 @@ systs_tt_2b=[
     #"_CMS_ttHbb_PDF_ttbarPlus2BUp","_CMS_ttHbb_PDF_ttbarPlus2BDown",
   #"_CMS_ttHbb_scaleMuR_ttbarPlus2BUp","_CMS_ttHbb_scaleMuR_ttbarPlus2BDown",
   #"_CMS_ttHbb_scaleMuF_ttbarPlus2BUp","_CMS_ttHbb_scaleMuF_ttbarPlus2BDown",
-  "_CMS_ttHbb_ISR_ttbarPlus2BUp","_CMS_ttHbb_ISR_ttbarPlus2BDown",
-  "_CMS_ttHbb_FSR_ttbarPlus2BUp","_CMS_ttHbb_FSR_ttbarPlus2BDown",
+  "_CMS_ttHbb_ISR_ttbarPlus2B_2017Up","_CMS_ttHbb_ISR_ttbarPlus2B_2017Down",
+  "_CMS_ttHbb_FSR_ttbarPlus2B_2017Up","_CMS_ttHbb_FSR_ttbarPlus2B_2017Down",
   ]
 systs_tt_2b_weights=[
                     #"dummyWeight_CMS_ttH_ttbarPlus2B_NNPDFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_up*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
@@ -321,8 +321,8 @@ systs_tt_bb=[
     #"_CMS_ttHbb_PDF_ttbarPlusBBbarUp","_CMS_ttHbb_PDF_ttbarPlusBBbarDown",
   #"_CMS_ttHbb_scaleMuR_ttbarPlusBBbarUp","_CMS_ttHbb_scaleMuR_ttbarPlusBBbarDown",
   #"_CMS_ttHbb_scaleMuF_ttbarPlusBBbarUp","_CMS_ttHbb_scaleMuF_ttbarPlusBBbarDown",
-  "_CMS_ttHbb_ISR_ttbarPlusBBbarUp","_CMS_ttHbb_ISR_ttbarPlusBBbarDown",
-  "_CMS_ttHbb_FSR_ttbarPlusBBbarUp","_CMS_ttHbb_FSR_ttbarPlusBBbarDown",
+  "_CMS_ttHbb_ISR_ttbarPlusBBbar_2017Up","_CMS_ttHbb_ISR_ttbarPlusBBbar_2017Down",
+  "_CMS_ttHbb_FSR_ttbarPlusBBbar_2017Up","_CMS_ttHbb_FSR_ttbarPlusBBbar_2017Down",
   ]
 systs_tt_bb_weights=[
                     #"dummyWeight_CMS_ttH_ttbarPlusBBbar_NNPDFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_up*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
@@ -344,8 +344,8 @@ systs_tt_cc=[
     #"_CMS_ttHbb_PDF_ttbarPlusCCbarUp","_CMS_ttHbb_PDF_ttbarPlusCCbarDown",
   #"_CMS_ttHbb_scaleMuR_ttbarPlusCCbarUp","_CMS_ttHbb_scaleMuR_ttbarPlusCCbarDown",
   #"_CMS_ttHbb_scaleMuF_ttbarPlusCCbarUp","_CMS_ttHbb_scaleMuF_ttbarPlusCCbarDown",
-  "_CMS_ttHbb_ISR_ttbarPlusCCbarUp","_CMS_ttHbb_ISR_ttbarPlusCCbarDown",
-  "_CMS_ttHbb_FSR_ttbarPlusCCbarUp","_CMS_ttHbb_FSR_ttbarPlusCCbarDown",
+  "_CMS_ttHbb_ISR_ttbarPlusCCbar_2017Up","_CMS_ttHbb_ISR_ttbarPlusCCbar_2017Down",
+  "_CMS_ttHbb_FSR_ttbarPlusCCbar_2017Up","_CMS_ttHbb_FSR_ttbarPlusCCbar_2017Down",
   ]
 systs_tt_cc_weights=[
                     #"dummyWeight_CMS_ttH_ttbarPlusCCbar_NNPDFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_up*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
