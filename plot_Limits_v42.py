@@ -633,37 +633,36 @@ def main(argv):
         if sample.nick.startswith("ttbarPlus") or sample.nick == "ttbarOther":
                 for ue_hdamp, ue_hdamp_file in zip(hdamp_ue_systnames_tt_all, hdamp_ue_filenames_tt_all):
                     thisnewsel=sample.selection
-                    if ue_hdamp.endswith("HDAMPUp"):
+                    if "HDAMP" in ue_hdamp and ue_hdamp.endswith("Up"):
                         thisnewsel+= "*((N_GenTopHad==1 && N_GenTopLep==1)* %s + !(N_GenTopHad==1 && N_GenTopLep ==1)*1)" %str(round(1.0399, 2))
                     systsamples.append(Sample(sample.name+ue_hdamp,sample.color,ue_hdamp_file,thisnewsel,nsample.nick+ue_hdamp,samDict=sampleDict))
         if sample.nick=="ttbarOther":
                 for ue_hdamp, ue_hdamp_file in zip(hdamp_ue_systnames_tt_lf, hdamp_ue_filenames_tt_lf):
                     thisnewsel=sample.selection
-                    if ue_hdamp.endswith("HDAMPUp"):
+                    if "HDAMP" in ue_hdamp and ue_hdamp.endswith("Up"):
                         thisnewsel+= "*((N_GenTopHad==1 && N_GenTopLep==1)* %s + !(N_GenTopHad==1 && N_GenTopLep ==1)*1)" %str(round(1.0399, 2))
                     systsamples.append(Sample(sample.name+ue_hdamp,sample.color,ue_hdamp_file,thisnewseln,sample.nick+ue_hdamp,samDict=sampleDict))
         elif sample.nick=="ttbarPlusCCbar":
                 for ue_hdamp, ue_hdamp_file in zip(hdamp_ue_systnames_tt_cc, hdamp_ue_filenames_tt_cc):
                     thisnewsel=sample.selection
-                    if ue_hdamp.endswith("HDAMPUp"):
+                    if "HDAMP" in ue_hdamp and ue_hdamp.endswith("Up"):
                         thisnewsel+= "*((N_GenTopHad==1 && N_GenTopLep==1)* %s + !(N_GenTopHad==1 && N_GenTopLep ==1)*1)" %str(round(1.0399, 2))
                     systsamples.append(Sample(sample.name+ue_hdamp,sample.color,ue_hdamp_file,thisnewseln,sample.nick+ue_hdamp,samDict=sampleDict))
         elif sample.nick=="ttbarPlusB":
                 for ue_hdamp, ue_hdamp_file in zip(hdamp_ue_systnames_tt_b, hdamp_ue_filenames_tt_b):
                     thisnewsel=sample.selection
-                    if ue_hdamp.endswith("HDAMPUp"):
+                    if "HDAMP" in ue_hdamp and ue_hdamp.endswith("Up"):
                         thisnewsel+= "*((N_GenTopHad==1 && N_GenTopLep==1)* %s + !(N_GenTopHad==1 && N_GenTopLep ==1)*1)" %str(round(1.0399, 2))
                     systsamples.append(Sample(sample.name+ue_hdamp,sample.color,ue_hdamp_file,thisnewseln,sample.nick+ue_hdamp,samDict=sampleDict))
         elif sample.nick=="ttbarPlus2B":
                 for ue_hdamp, ue_hdamp_file in zip(hdamp_ue_systnames_tt_2b, hdamp_ue_filenames_tt_2b):
                     thisnewsel=sample.selection
-                    if ue_hdamp.endswith("HDAMPUp"):
+                    if "HDAMP" in ue_hdamp and ue_hdamp.endswith("Up"):
                         thisnewsel+= "*((N_GenTopHad==1 && N_GenTopLep==1)* %s + !(N_GenTopHad==1 && N_GenTopLep ==1)*1)" %str(round(1.0399, 2))
                     systsamples.append(Sample(sample.name+ue_hdamp,sample.color,ue_hdamp_file,thisnewseln,sample.nick+ue_hdamp,samDict=sampleDict))
         elif sample.nick=="ttbarPlusBBbar":
                 for ue_hdamp, ue_hdamp_file in zip(hdamp_ue_systnames_tt_bb, hdamp_ue_filenames_tt_bb):
-                    thisnewsel=sample.selection
-                    if ue_hdamp.endswith("HDAMPUp"):
+                    if "HDAMP" in ue_hdamp and ue_hdamp.endswith("Up"):
                         thisnewsel+= "*((N_GenTopHad==1 && N_GenTopLep==1)* %s + !(N_GenTopHad==1 && N_GenTopLep ==1)*1)" %str(round(1.0399, 2))
                     systsamples.append(Sample(sample.name+ue_hdamp,sample.color,ue_hdamp_file,thisnewseln,sample.nick+ue_hdamp,samDict=sampleDict))
                                 
