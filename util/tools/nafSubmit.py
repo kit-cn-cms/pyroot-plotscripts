@@ -352,7 +352,7 @@ def monitorJobStatus(jobIDs = None, plot_batch_history = False, name = None):
         return
 
   print("all jobs are finished - exiting monitorJobStatus")
-  if plot_batch_history:
+  if False:#plot_batch_history:
     print("plotting history of jobs on NAF")
     path = "batchHistory/"
     if not os.path.exists(path):

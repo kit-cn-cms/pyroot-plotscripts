@@ -1,6 +1,8 @@
 import sys
 import os
+import glob
 from subprocess import call
+from fnmatch import filter
 import stat
 
 # local imports
@@ -113,3 +115,126 @@ def removeBinByBinFiles(bbbFiles, filePath):
 
     
 # -------------------------------------------------------------------------------------------------
+
+# WIP class for peforming fits
+# TODO
+#   - combine datacards 
+#   - create workspaces
+#   - perform asimov fit
+class performFits:
+    def __init__(self, datacards, datacardmaker = None):
+        self.datacards = datacards
+        if isinstance(self.datacards, basestring):
+            self.datacards = glob.glob(self.datacards)
+
+        self.dcmaker = datacardmaker
+        if not self.dcmaker:
+            self.dcmaker = "/nfs/dust/cms/user/pkeicher/projects/datacardMaker/src"
+        if not self.dcmaker in sys.path:
+            sys.path.append(self.dcmaker)
+        from datacardMaker import datacardMaker
+        self.dcmaker = datacardMaker()
+        self.dcmaker.replace_files = True
+
+        self.getListOfNuisances()
+
+
+    def getListOfNuisances(self):
+        card = self.datacards[0]
+
+        with open(card, "r") as infile:
+            lines = list(infile)
+
+        print("nuisances:")
+        nuisances = []
+        for l in lines:
+            split = l.split(" ")
+
+            if split[0] == "shapes": continue
+            if "lnN" in l or "shape" in l:
+                if "#" in split: continue
+                name = split[0]
+                print(name)
+                nuisances.append(name)
+        
+        self.nuisances = nuisances
+
+    
+    def removeUncertainties(self):
+        removal_list = []
+        removal_list = list(set(removal_list + filter(self.nuisances, "*HDAMP")))
+        #removal_list = list(set(removal_list + filter(self.nuisances, "*UE")))
+        #removal_list = list(set(removal_list + filter(self.nuisances, "*scaleMu*")))
+        from analysisObject import analysisObject        
+
+        removed_cards = []
+        for card in self.datacards:
+            card = os.path.abspath(card)
+            aO = analysisObject(pathToDatacard = card)
+
+            for cat in aO:
+                # add data obs line
+                aO[cat].observation = "data_obs"
+           
+                aO.delete_uncertainties_for_all_processes(removal_list)
+                basename = os.path.basename(card)
+                dirname  = os.path.dirname(card)
+                new_card = os.path.join(dirname, "removed_"+basename)
+    
+                d = datacardMaker(analysis = aO, outputpath = new_card)
+                removed_cards.append(new_card)
+
+        self.datacards = removed_cards
+
+    def addAutoMC(self, evtThreshold = 0, includeSignal = 0, histMode = 1):
+        for card in self.datacards:
+            newlines = []
+            with open(card, "r+") as infile:
+                lines = infile.read().splitlines()
+                categories = []
+                for n, line in enumerate(lines):
+                    if n!=len(lines) and line.startswith("bin") and lines[n+1].startswith("observation"):
+                        categories = line.split()[1:]
+                        print("found categories:\n"+str(categories))
+                    if not "BDTbin" in line:
+                        if line.startswith("kmax"):
+                            entries = line.split()
+                            entries[1] = "*"
+                            line = " ".join(entries)
+                        newlines.append(line)
+                    else:
+                        print("skipping line "+line)
+                for cat in categories:
+                    automc = cat+" autoMCStats {} {} {}".format(
+                        evtThreshold, includeSignal, histMode)
+                    if automc in lines: continue
+                    print("writing line "+automc)
+                    newlines.append(automc)
+            with open(d, "w") as newfile:
+                newfile.write("\n".join(newlines))
+
+    def createFitScripts(self):
+	pass
+        # TODO
+        #   - find out which datacards to combine
+        #   - write one shell script for each combined datacard
+        #   - load cmssw version from philip
+        #   - use combineCards.py
+        #   - create workspace with do_workspaces
+        #   - start combine fits
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
