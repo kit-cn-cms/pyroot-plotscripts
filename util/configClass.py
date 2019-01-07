@@ -7,7 +7,6 @@ import importlib
 filedir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(filedir+"/tools")
 import plotClasses
-import PDFutils
 
 class catData:
     def __init__(self):

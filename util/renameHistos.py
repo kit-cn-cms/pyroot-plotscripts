@@ -267,7 +267,7 @@ def renameHistosParallel(inFile, outFile, systNames, checkBins = False, prune = 
             if thisName.startswith(sampleName+"_"):
                 for sampleName2 in ttbarSamples:
                     if sampleName2 == sampleName: continue
-                    if (sampleName2+"Up" in thisName or sampleName2+"Down" in thisName) \
+                    if (sampleName2+"Up" in thisName or sampleName2+"Down" in thisName or sampleName2+"_2017Up" in thisName or sampleName2+"_2017Down" in thisName) \
                         and not thisName.startswith(sampleName2+"_"):
                         if plotParaCall or prune:
                             print("Deleting "+str(thisName)+";1")
@@ -277,6 +277,21 @@ def renameHistosParallel(inFile, outFile, systNames, checkBins = False, prune = 
                             rootFile.Delete(thisName+";1")
                             deleted = True
         if deleted: continue                               
+
+        # now remove the ttH histos with nuisances belonging to the ttbar histos
+        deleted = False
+        ttbarSamples = ["ttbarOther","ttbarPlus2B","ttbarPlusB","ttbarPlusCCbar","ttbarPlusBBbar"]
+        if thisName.startswith("ttH_"):
+            for sampleName in ttbarSamples:
+                if sampleName+"Up" in thisName or sampleName+"Down" in thisName or sampleName+"_2017Up" in thisName or sampleName+"_2017Down" in thisName:
+                    if plotParaCall:
+                        print("Removing ttH histo "+str(thisName))
+                        thisHist = rootFile.Get(thisName)
+                        objectList.append(thisHist)
+                        rootFile.Delete(thisName)
+                        rootFile.Delete(thisName+";1")
+                        deleted = True
+        if deleted: continue
 
 
         if not plotParaCall:

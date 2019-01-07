@@ -32,36 +32,54 @@ def getSystSamples(pltcfg, analysis, samples):
 
             if sample.nick.startswith("ttbarPlus") or sample.nick == "ttbarOther":
                 for ue_hdamp, ue_hdamp_file in zip(pltcfg.hdamp_ue_systnames_tt_all, pltcfg.hdamp_ue_filenames_tt_all):
+                    newSel = sample.selection
+                    if "HDAMP" in ue_hdamp and ue_hdamp.endswith("Up"):
+                        newSel += "*((N_GenTopHad==1 && N_GenTopLep==1)* %s + !(N_GenTopHad==1 && N_GenTopLep ==1)*1)" %str(round(1.0399, 2))
                     systSamples.append(
                         plotClasses.Sample(sample.name+ue_hdamp, sample.color, ue_hdamp_file, newSel,
                             sample.nick+ue_hdamp, samDict = pltcfg.sampleDict ))
 
             if sample.nick == "ttbarOther":
                 for ue_hdamp, ue_hdamp_file in zip(pltcfg.hdamp_ue_systnames_tt_lf, pltcfg.hdamp_ue_filenames_tt_lf):
+                    newSel = sample.selection
+                    if "HDAMP" in ue_hdamp and ue_hdamp.endswith("Up"):
+                        newSel += "*((N_GenTopHad==1 && N_GenTopLep==1)* %s + !(N_GenTopHad==1 && N_GenTopLep ==1)*1)" %str(round(1.0399, 2))
                     systSamples.append(
                         plotClasses.Sample(sample.name+ue_hdamp, sample.color, ue_hdamp_file, newSel,
                             sample.nick+ue_hdamp, samDict = pltcfg.sampleDict ))
 
             if sample.nick == "ttbarPlusCCbar":
                 for ue_hdamp, ue_hdamp_file in zip(pltcfg.hdamp_ue_systnames_tt_cc, pltcfg.hdamp_ue_filenames_tt_cc):
+                    newSel = sample.selection
+                    if "HDAMP" in ue_hdamp and ue_hdamp.endswith("Up"):
+                        newSel += "*((N_GenTopHad==1 && N_GenTopLep==1)* %s + !(N_GenTopHad==1 && N_GenTopLep ==1)*1)" %str(round(1.0399, 2))
                     systSamples.append(
                         plotClasses.Sample(sample.name+ue_hdamp, sample.color, ue_hdamp_file, newSel,
                             sample.nick+ue_hdamp, samDict = pltcfg.sampleDict ))
 
             if sample.nick == "ttbarPlusB":
                 for ue_hdamp, ue_hdamp_file in zip(pltcfg.hdamp_ue_systnames_tt_b, pltcfg.hdamp_ue_filenames_tt_b):
+                    newSel = sample.selection
+                    if "HDAMP" in ue_hdamp and ue_hdamp.endswith("Up"):
+                        newSel += "*((N_GenTopHad==1 && N_GenTopLep==1)* %s + !(N_GenTopHad==1 && N_GenTopLep ==1)*1)" %str(round(1.0399, 2))
                     systSamples.append(
                         plotClasses.Sample(sample.name+ue_hdamp, sample.color, ue_hdamp_file, newSel,
                             sample.nick+ue_hdamp, samDict = pltcfg.sampleDict ))
 
             if sample.nick == "ttbarPlus2B":
                 for ue_hdamp, ue_hdamp_file in zip(pltcfg.hdamp_ue_systnames_tt_2b, pltcfg.hdamp_ue_filenames_tt_2b):
+                    newSel = sample.selection
+                    if "HDAMP" in ue_hdamp and ue_hdamp.endswith("Up"):
+                        newSel += "*((N_GenTopHad==1 && N_GenTopLep==1)* %s + !(N_GenTopHad==1 && N_GenTopLep ==1)*1)" %str(round(1.0399, 2))
                     systSamples.append(
                         plotClasses.Sample(sample.name+ue_hdamp, sample.color, ue_hdamp_file, newSel,
                             sample.nick+ue_hdamp, samDict = pltcfg.sampleDict ))
 
             if sample.nick == "ttbarPlusBBbar":
                 for ue_hdamp, ue_hdamp_file in zip(pltcfg.hdamp_ue_systnames_tt_bb, pltcfg.hdamp_ue_filenames_tt_bb):
+                    newSel = sample.selection
+                    if "HDAMP" in ue_hdamp and ue_hdamp.endswith("Up"):
+                        newSel += "*((N_GenTopHad==1 && N_GenTopLep==1)* %s + !(N_GenTopHad==1 && N_GenTopLep ==1)*1)" %str(round(1.0399, 2))
                     systSamples.append(
                         plotClasses.Sample(sample.name+ue_hdamp, sample.color, ue_hdamp_file, newSel,
                             sample.nick+ue_hdamp, samDict = pltcfg.sampleDict ))

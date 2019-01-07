@@ -88,7 +88,6 @@ class haddParallel:
         
         print("-"*40+"\nlooping over samples in samplewiseMaps\n")
         for sample in self.inputmap:
-            print sample
             
             # writing shell script
             scriptname = self.haddScriptFolder+'haddscript_'+sample+'.sh'

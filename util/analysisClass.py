@@ -7,7 +7,6 @@ import getopt
 filedir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(filedir+"/tools")
 import plotClasses
-import PDFutils
 
 class analysisConfig:
     def __init__(self, workdir, pyrootdir, rootPath, signalProcess = "ttbb", pltcfgName = "v13", discrName = "finaldiscr"):

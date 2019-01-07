@@ -215,7 +215,7 @@ class plotParallel:
         outputs = self.runscriptData["outputs"]
         entries = self.runscriptData["entries"]
         for index in range(len(scripts)):
-            print("{:<40} | {:<15}".format( outputs[index].split("/")[-1], entries[index] ))
+            print("{:<70} | {:<15}".format( outputs[index].split("/")[-1], entries[index] ))
 
 
         # check if we should stop
