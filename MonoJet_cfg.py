@@ -172,10 +172,10 @@ PowhegSystNames=[
 
 PowhegSystWeights=[
     
-    "dummyWeight_powheg_scale_variation_muRup:="+common_weight+"*internalBosonWeight_muRUp/internalBosonWeight_nominal*fabs(Weight_scale_variation_muR_2p0_muF_1p0)*(DoWeights==1)+(DoWeights==0)*1.0",
-    "dummyWeight_powheg_scale_variation_muRdown:="+common_weight+"*internalBosonWeight_muRDown/internalBosonWeight_nominal*fabs(Weight_scale_variation_muR_0p5_muF_1p0)*(DoWeights==1)+(DoWeights==0)*1.0",
-    "dummyWeight_powheg_scale_variation_muFup:="+common_weight+"*internalBosonWeight_muFUp/internalBosonWeight_nominal*fabs(Weight_scale_variation_muR_1p0_muF_2p0)*(DoWeights==1)+(DoWeights==0)*1.0",
-    "dummyWeight_powheg_scale_variation_muFdown:="+common_weight+"*internalBosonWeight_muFDown/internalBosonWeight_nominal*fabs(Weight_scale_variation_muR_1p0_muF_0p5)*(DoWeights==1)+(DoWeights==0)*1.0"
+    "dummyWeight_powheg_scale_variation_muRup:="+common_weight+"*internalBosonWeight_muRUp/internalBosonWeight_nominal*internalNormFactor_muRUp*fabs(Weight_scale_variation_muR_2p0_muF_1p0)*(DoWeights==1)+(DoWeights==0)*1.0",
+    "dummyWeight_powheg_scale_variation_muRdown:="+common_weight+"*internalBosonWeight_muRDown/internalBosonWeight_nominal*internalNormFactor_muRDown*fabs(Weight_scale_variation_muR_0p5_muF_1p0)*(DoWeights==1)+(DoWeights==0)*1.0",
+    "dummyWeight_powheg_scale_variation_muFup:="+common_weight+"*internalBosonWeight_muFUp/internalBosonWeight_nominal*internalNormFactor_muFUp*fabs(Weight_scale_variation_muR_1p0_muF_2p0)*(DoWeights==1)+(DoWeights==0)*1.0",
+    "dummyWeight_powheg_scale_variation_muFdown:="+common_weight+"*internalBosonWeight_muFDown/internalBosonWeight_nominal*internalNormFactor_muFDown*fabs(Weight_scale_variation_muR_1p0_muF_0p5)*(DoWeights==1)+(DoWeights==0)*1.0"
     
     ]
 
@@ -187,10 +187,10 @@ MadGraphSystNames=[
 
 MadGraphSystWeights=[
     
-    "dummyWeight_madgraph_scale_variation_muRup:="+common_weight+"*internalBosonWeight_muRUp/internalBosonWeight_nominal*fabs(Weight_scale_variation_muR_2p0_muF_1p0)*(DoWeights==1)+(DoWeights==0)*1.0",
-    "dummyWeight_madgraph_scale_variation_muRdown:="+common_weight+"*internalBosonWeight_muRDown/internalBosonWeight_nominal*fabs(Weight_scale_variation_muR_0p5_muF_1p0)*(DoWeights==1)+(DoWeights==0)*1.0",
-    "dummyWeight_madgraph_scale_variation_muFup:="+common_weight+"*internalBosonWeight_muFUp/internalBosonWeight_nominal*fabs(Weight_scale_variation_muR_1p0_muF_2p0)*(DoWeights==1)+(DoWeights==0)*1.0",
-    "dummyWeight_madgraph_scale_variation_muFdown:="+common_weight+"*internalBosonWeight_muFDown/internalBosonWeight_nominal*fabs(Weight_scale_variation_muR_1p0_muF_0p5)*(DoWeights==1)+(DoWeights==0)*1.0"
+    "dummyWeight_madgraph_scale_variation_muRup:="+common_weight+"*internalBosonWeight_muRUp/internalBosonWeight_nominal*internalNormFactor_muRUp*fabs(Weight_scale_variation_muR_2p0_muF_1p0)*(DoWeights==1)+(DoWeights==0)*1.0",
+    "dummyWeight_madgraph_scale_variation_muRdown:="+common_weight+"*internalBosonWeight_muRDown/internalBosonWeight_nominal*internalNormFactor_muRDown*fabs(Weight_scale_variation_muR_0p5_muF_1p0)*(DoWeights==1)+(DoWeights==0)*1.0",
+    "dummyWeight_madgraph_scale_variation_muFup:="+common_weight+"*internalBosonWeight_muFUp/internalBosonWeight_nominal*internalNormFactor_muFUp*fabs(Weight_scale_variation_muR_1p0_muF_2p0)*(DoWeights==1)+(DoWeights==0)*1.0",
+    "dummyWeight_madgraph_scale_variation_muFdown:="+common_weight+"*internalBosonWeight_muFDown/internalBosonWeight_nominal*internalNormFactor_muFDown*fabs(Weight_scale_variation_muR_1p0_muF_0p5)*(DoWeights==1)+(DoWeights==0)*1.0"
     
     ]
 
@@ -270,7 +270,7 @@ samples_background = [
                         Sample('Single Top',ROOT.kViolet-1,path_ntuples+'/ST_*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'singletop',weightSystNames+PowhegSystNames+otherSystNames,samDict=sampleDict),
                         Sample('t#bar{t}',ROOT.kViolet-7,path_ntuples+'/TT_Tune*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'ttbar',weightSystNames+PowhegSystNames+otherSystNames,samDict=sampleDict),
                         Sample('Z(ll)+jets',ROOT.kCyan,path_ntuples+'/DYJetsToLL*amc*/*nominal*.root',"1.*0.971"+"*"+MCWeight+sel_MET,'z_ll_jets',weightSystNames+BosonSystNames+ZllBosonSystNames+otherSystNames,samDict=sampleDict),
-                        #Sample('QCD',ROOT.kGray,path_ntuples+'/QCD*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'qcd',weightSystNames+MadGraphSystNames+otherSystNames,samDict=sampleDict),
+                        Sample('QCD',ROOT.kGray,path_ntuples+'/QCD*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'qcd',weightSystNames+MadGraphSystNames+otherSystNames,samDict=sampleDict),
                         Sample('#gamma +jets',ROOT.kYellow+2,path_ntuples+'/GJets*/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'gamma_jets',weightSystNames+MadGraphSystNames+otherSystNames,samDict=sampleDict)
                         ]
 """
@@ -278,16 +278,16 @@ samples_signal = [
                         Sample('AV|M1000|m300',ROOT.kRed,path_ntuples+'/DMV_NNPDF30_Axial_Mphi-1000_Mchi-300_gSM-0p25_gDM-1p0_v2_13TeV-powheg/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'SIG_AV_M1000_m300',weightSystNames,samDict=sampleDict),
                  ]
 
-
+"""
 samples_signal = [
-                        Sample('AV|M1000|m300',ROOT.kRed,path_ntuples+'/Axial_MonoJ_NLO_Mphi-1000_Mchi-300_gSM-0p25_gDM-1p0_13TeV-madgraph/*nominal*.root',"1."+"*"+MCWeight+sel_MET,'SIG_AV_M1000_m300',weightSystNames[:-2],samDict=sampleDict),
+                        Sample('AV|M1000|m300',ROOT.kRed,path_ntuples+'/Axial_MonoJ_NLO_Mphi-1000_Mchi-300_gSM-0p25_gDM-1p0_13TeV-madgraph/*nominal*.root',"1."+"*0.7826*"+MCWeight+sel_MET,'SIG_AV_M1000_m300',weightSystNames+SignalSystNames+otherSystNames,samDict=sampleDict),
 
                  ]
 
 """
 csvfile = open("/nfs/dust/cms/user/mwassmer/DarkMatter/pyroot-plotscripts/Madgraph_Signal_XS.csv","r")
 reader = csv.DictReader(csvfile)
-signal_samples_paths = glob.glob(path_ntuples+'/'+'*Axial*MonoJ*NLO*')
+signal_samples_paths = glob.glob(path_ntuples+'/'+'*MonoJ*NLO*')
 signal_samples_names = []
 for i in range(len(signal_samples_paths)):
     signal_samples_paths[i]=signal_samples_paths[i]+'/'+'*nominal*.root'
@@ -298,8 +298,10 @@ samples_signal = []
 for i in range(len(signal_samples_names)):
     csvfile.seek(0)
     xs = None
+    #print signal_samples_names[i]
     for row in reader:
         if not signal_samples_names[i]==str(row['sample']).replace("_13TeV-madgraph","").replace("-","_"):
+            #print str(row['sample']).replace("_13TeV-madgraph","").replace("-","_")
             continue
         else:
             xs = str(row['xs'])
@@ -309,3 +311,4 @@ for i in range(len(signal_samples_names)):
     samples_signal.append(Sample(signal_samples_names[i],ROOT.kRed,signal_samples_paths[i],"1.*"+xs+"*"+MCWeight+sel_MET,signal_samples_names[i],weightSystNames+SignalSystNames+otherSystNames,samDict=sampleDict))
 #print samples_signal
 #print signal_samples_names
+"""

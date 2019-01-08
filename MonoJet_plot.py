@@ -19,6 +19,8 @@ from limittools import replaceQ2scale
 
 from MonoJet_cfg import *
 
+from array import array
+
 jobname = "MonoJet_Plots"
 
 additionalvariables=[    "N_TightMuons","N_TightElectrons","Evt_Pt_PrimaryLepton","N_BTagsM",
@@ -34,6 +36,16 @@ additionalvariables=[    "N_TightMuons","N_TightElectrons","Evt_Pt_PrimaryLepton
                          ]
 additionalvariables+=GetMEPDFadditionalVariablesList("/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/rate_factors_onlyinternal_powhegpythia.csv")
 
+plotselection_rebin = "1.*(DeltaPhi_Jet_MET[0]>1.)"
+plotlabel_rebin = "#slash{E}_{T}>250 GeV"
+plotprefix = "rebin"
+bins_rebin = [250,350,450,550,650,750,850,950,1050,1150,1300]
+bins_array = array('f',bins_rebin)
+plots_rebin = [
+
+Plot(ROOT.TH1F(plotprefix+"_"+"Hadr_Recoil_Pt","Hadr. Recoil p_{T}",len(bins_rebin)-1,bins_array),"Hadr_Recoil_Pt",plotselection_rebin,plotlabel_rebin,True)
+
+]
 
 plotselection_inclusive = "1.*(DeltaPhi_Jet_MET[0]>1.)"
 plotlabel_inclusive = "#slash{E}_{T}>250 GeV"
@@ -155,7 +167,7 @@ plots_MET600=[
         Plot(ROOT.TH1F(plotprefix+"_"+"BosonWeight","BosonWeight",41,-0.025,2.025),"internalBosonWeight_nominal",plotselection_MET600,plotlabel_MET600),
     ]
 
-plots = plots_inclusive+plots_MET300+plots_MET400+plots_MET500+plots_MET600
+plots = plots_rebin+plots_inclusive+plots_MET300+plots_MET400+plots_MET500+plots_MET600
 
 allsystnames=weightSystNames+BosonSystNames+ZvvBosonSystNames+ZllBosonSystNames+WBosonSystNames+PowhegSystNames+MadGraphSystNames+SignalSystNames+otherSystNames
 

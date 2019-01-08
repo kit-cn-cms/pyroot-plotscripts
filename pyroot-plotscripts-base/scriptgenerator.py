@@ -2852,6 +2852,11 @@ def startLoop():
   float internalSFWeight_notNormed = 1.0;
   float internalSFWeight_notNormedUp = 1.0;
   float internalSFWeight_notNormedDown = 1.0;
+  
+  float internalNormFactor_muRUp = 1.0;
+  float internalNormFactor_muRDown = 1.0;
+  float internalNormFactor_muFUp = 1.0;
+  float internalNormFactor_muFDown = 1.0;
 
 
   double tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF;
@@ -2974,6 +2979,38 @@ def startLoop():
   internalSFWeight_notNormedUp = internalCR_ScalefactorHelper->GetScaleFactorZllUp(Hadr_Recoil_Pt, "notNormed");  
   internalSFWeight_notNormedDown = internalCR_ScalefactorHelper->GetScaleFactorZllDown(Hadr_Recoil_Pt, "notNormed");  
   }
+  
+  if(processname.find("ttbar")!=std::string::npos){
+  internalNormFactor_muRUp = 1.11;
+  internalNormFactor_muRDown = 0.90;
+  internalNormFactor_muFUp = 1.03;
+  internalNormFactor_muFDown = 0.97;
+  }
+  else if(processname.find("singletop")!=std::string::npos){
+  internalNormFactor_muRUp = 1.06;
+  internalNormFactor_muRDown = 0.94;
+  internalNormFactor_muFUp = 1.01;
+  internalNormFactor_muFDown = 0.98;
+  }
+  else if(processname.find("qcd")!=std::string::npos){
+  internalNormFactor_muRUp = 1.13;
+  internalNormFactor_muRDown = 0.87;
+  internalNormFactor_muFUp = 0.94;
+  internalNormFactor_muFDown = 1.10;
+  }
+  else if(processname.find("gamma_jets")!=std::string::npos){
+  internalNormFactor_muRUp = 1.09;
+  internalNormFactor_muRDown = 0.90;
+  internalNormFactor_muFUp = 1.02;
+  internalNormFactor_muFDown = 0.98;
+  }
+  else{
+  internalNormFactor_muRUp = 1.0;
+  internalNormFactor_muRDown = 1.0;
+  internalNormFactor_muFUp = 1.0;
+  internalNormFactor_muFDown = 1.0;
+  }
+           
   
   totalTimeCalculateSFs+=timerCalculateSFs->RealTime();
 
@@ -3198,7 +3235,8 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 
       "DoWbosonReweighting",
       "DoZbosonReweighting",
-      "internalSFWeight_Normed","internalSFWeight_NormedUp","internalSFWeight_NormedDown"
+      "internalSFWeight_Normed","internalSFWeight_NormedUp","internalSFWeight_NormedDown",
+      "internalNormFactor_muRUp","internalNormFactor_muRDown","internalNormFactor_muFUp","internalNormFactor_muFDown"
 ]
 
   #csv_file=os.getcwd()+"/rate_factors_onlyinternal_powhegpythia.csv"
