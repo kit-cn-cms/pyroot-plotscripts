@@ -6,8 +6,8 @@ sys.path.append('pyroot-plotscripts-base/limittools')
 from scriptgenerator import *
 from plotutils import *
 
-sel_singleel="(N_LooseMuons==0 && N_TightElectrons==1 && (Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1))*(N_Jets>=4 && N_BTagsM>=3)" # need to veto muon events in electron dataset to avoid double countung
-sel_singlemu="(N_LooseElectrons==0 && N_TightMuons==1 && (Triggered_HLT_IsoMu27_vX==1))*(N_Jets>=4 && N_BTagsM>=3)*(Muon_Pt[0]>29.)" # and vice versa...
+sel_singleel="(N_LooseMuons==0 && N_TightElectrons==1 && (Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1))*(N_Jets>=4 && N_BTagsM>=2)" # need to veto muon events in electron dataset to avoid double countung
+sel_singlemu="(N_LooseElectrons==0 && N_TightMuons==1 && (Triggered_HLT_IsoMu27_vX==1))*(N_Jets>=4 && N_BTagsM>=2)*(Muon_Pt[0]>29.)" # and vice versa...
 sel_MET="*(Evt_Pt_MET>20.)"
 #sel_MET="*1.0"
 sel_StrangeMuWeights='*(abs(Weight_scale_variation_muR_0p5_muF_0p5)<=100 && abs(Weight_scale_variation_muR_0p5_muF_1p0)<=100 && abs(Weight_scale_variation_muR_0p5_muF_2p0)<=100 && abs(Weight_scale_variation_muR_1p0_muF_0p5)<=100 && abs(Weight_scale_variation_muR_1p0_muF_1p0)<=100 && abs(Weight_scale_variation_muR_1p0_muF_2p0)<=100 && abs(Weight_scale_variation_muR_2p0_muF_0p5)<=100 && abs(Weight_scale_variation_muR_2p0_muF_1p0)<=100 && abs(Weight_scale_variation_muR_2p0_muF_2p0)<=100)'
@@ -100,9 +100,9 @@ mcWeightAll='41.53'
 mcWeight='41.53*2.0'
 
 # TODO Add Trigger SFs
-mcTriggerWeight='((1.0) * (internalEleTriggerWeight*(N_LooseMuons==0 && N_TightElectrons==1)* (Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1) +internalMuTriggerWeight*(N_LooseElectrons==0 && N_TightMuons==1)*(Muon_Pt[0]>29.) *(Triggered_HLT_IsoMu27_vX==1)))*(N_Jets>=4 && N_BTagsM>=3)'
+mcTriggerWeight='((1.0) * (internalEleTriggerWeight*(N_LooseMuons==0 && N_TightElectrons==1)* (Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1) +internalMuTriggerWeight*(N_LooseElectrons==0 && N_TightMuons==1)*(Muon_Pt[0]>29.) *(Triggered_HLT_IsoMu27_vX==1)))*(N_Jets>=4 && N_BTagsM>=2)'
 #mcTriggerWeight='(1.0)'
-#mcTriggerWeight='((1.0) * (1*(N_LooseMuons==0 && N_TightElectrons==1)* (1) +1*(N_LooseElectrons==0 && N_TightMuons==1) *(1)))*(N_Jets>=4 && N_BTagsM>=3)'
+#mcTriggerWeight='((1.0) * (1*(N_LooseMuons==0 && N_TightElectrons==1)* (1) +1*(N_LooseElectrons==0 && N_TightMuons==1) *(1)))*(N_Jets>=4 && N_BTagsM>=2)'
 
 #TODO Check that SFs and uncertainties are correct
 sfs="1.0"
@@ -168,9 +168,9 @@ assert len(weightSystNames)==len(systWeights)
 
 
 systs_tt_and_ttH=[
-  "_CMS_ttHbb_PDF_2017Up","_CMS_ttHbb_PDF_2017Down",
-  "_CMS_ttHbb_scaleMuR_2017Up","_CMS_ttHbb_scaleMuR_2017Down",
-  "_CMS_ttHbb_scaleMuF_2017Up","_CMS_ttHbb_scaleMuF_2017Down",
+  "_CMS_ttHbb_PDFUp","_CMS_ttHbb_PDFDown",
+  "_CMS_ttHbb_scaleMuRUp","_CMS_ttHbb_scaleMuRDown",
+  "_CMS_ttHbb_scaleMuFUp","_CMS_ttHbb_scaleMuFDown",
   #"_CMS_ttHbb_ISRUp","_CMS_ttHbb_ISRDown",
   #"_CMS_ttHbb_FSRUp","_CMS_ttHbb_FSRDown",
   
@@ -198,8 +198,8 @@ systs_ttH=[
   #"_CMS_ttHbb_ttH_PDFUp","_CMS_ttHbb_ttH_PDFDown",
   #"_CMS_ttHbb_ttH_scaleMuRUp","_CMS_ttHbb_ttH_scaleMuRDown",
   #"_CMS_ttHbb_ttH_scaleMuFUp","_CMS_ttHbb_ttH_scaleMuFDown",
-  "_CMS_ttHbb_ttH_ISR_2017Up","_CMS_ttHbb_ttH_ISR_2017Down",
-  "_CMS_ttHbb_ttH_FSR_2017Up","_CMS_ttHbb_ttH_FSR_2017Down",
+  "_CMS_ttHbb_ttH_ISRUp","_CMS_ttHbb_ttH_ISRDown",
+  "_CMS_ttHbb_ttH_FSRUp","_CMS_ttHbb_ttH_FSRDown",
   ]
 
 systs_ttH_weights=[
@@ -251,8 +251,8 @@ systs_tt_lf=[
     #"_CMS_ttHbb_PDF_ttbarOtherUp","_CMS_ttHbb_PDF_ttbarOtherDown",
   #"_CMS_ttHbb_scaleMuR_ttbarOtherUp","_CMS_ttHbb_scaleMuR_ttbarOtherDown",
   #"_CMS_ttHbb_scaleMuF_ttbarOtherUp","_CMS_ttHbb_scaleMuF_ttbarOtherDown",
-  "_CMS_ttHbb_ISR_ttbarOther_2017Up","_CMS_ttHbb_ISR_ttbarOther_2017Down",
-  "_CMS_ttHbb_FSR_ttbarOther_2017Up","_CMS_ttHbb_FSR_ttbarOther_2017Down",
+  "_CMS_ttHbb_ISR_ttbarOtherUp","_CMS_ttHbb_ISR_ttbarOtherDown",
+  "_CMS_ttHbb_FSR_ttbarOtherUp","_CMS_ttHbb_FSR_ttbarOtherDown",
   
   ]
 systs_tt_lf_weights=[
@@ -275,8 +275,8 @@ systs_tt_b=[
     #"_CMS_ttHbb_PDF_ttbarPlusBUp","_CMS_ttHbb_PDF_ttbarPlusBDown",
   #"_CMS_ttHbb_scaleMuR_ttbarPlusBUp","_CMS_ttHbb_scaleMuR_ttbarPlusBDown",
   #"_CMS_ttHbb_scaleMuF_ttbarPlusBUp","_CMS_ttHbb_scaleMuF_ttbarPlusBDown",
-  "_CMS_ttHbb_ISR_ttbarPlusB_2017Up","_CMS_ttHbb_ISR_ttbarPlusB_2017Down",
-  "_CMS_ttHbb_FSR_ttbarPlusB_2017Up","_CMS_ttHbb_FSR_ttbarPlusB_2017Down",
+  "_CMS_ttHbb_ISR_ttbarPlusBUp","_CMS_ttHbb_ISR_ttbarPlusBDown",
+  "_CMS_ttHbb_FSR_ttbarPlusBUp","_CMS_ttHbb_FSR_ttbarPlusBDown",
   ]
 systs_tt_b_weights=[
                     #"dummyWeight_CMS_ttH_ttbarPlusB_NNPDFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_up*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
@@ -298,8 +298,8 @@ systs_tt_2b=[
     #"_CMS_ttHbb_PDF_ttbarPlus2BUp","_CMS_ttHbb_PDF_ttbarPlus2BDown",
   #"_CMS_ttHbb_scaleMuR_ttbarPlus2BUp","_CMS_ttHbb_scaleMuR_ttbarPlus2BDown",
   #"_CMS_ttHbb_scaleMuF_ttbarPlus2BUp","_CMS_ttHbb_scaleMuF_ttbarPlus2BDown",
-  "_CMS_ttHbb_ISR_ttbarPlus2B_2017Up","_CMS_ttHbb_ISR_ttbarPlus2B_2017Down",
-  "_CMS_ttHbb_FSR_ttbarPlus2B_2017Up","_CMS_ttHbb_FSR_ttbarPlus2B_2017Down",
+  "_CMS_ttHbb_ISR_ttbarPlus2BUp","_CMS_ttHbb_ISR_ttbarPlus2BDown",
+  "_CMS_ttHbb_FSR_ttbarPlus2BUp","_CMS_ttHbb_FSR_ttbarPlus2BDown",
   ]
 systs_tt_2b_weights=[
                     #"dummyWeight_CMS_ttH_ttbarPlus2B_NNPDFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_up*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
@@ -321,8 +321,8 @@ systs_tt_bb=[
     #"_CMS_ttHbb_PDF_ttbarPlusBBbarUp","_CMS_ttHbb_PDF_ttbarPlusBBbarDown",
   #"_CMS_ttHbb_scaleMuR_ttbarPlusBBbarUp","_CMS_ttHbb_scaleMuR_ttbarPlusBBbarDown",
   #"_CMS_ttHbb_scaleMuF_ttbarPlusBBbarUp","_CMS_ttHbb_scaleMuF_ttbarPlusBBbarDown",
-  "_CMS_ttHbb_ISR_ttbarPlusBBbar_2017Up","_CMS_ttHbb_ISR_ttbarPlusBBbar_2017Down",
-  "_CMS_ttHbb_FSR_ttbarPlusBBbar_2017Up","_CMS_ttHbb_FSR_ttbarPlusBBbar_2017Down",
+  "_CMS_ttHbb_ISR_ttbarPlusBBbarUp","_CMS_ttHbb_ISR_ttbarPlusBBbarDown",
+  "_CMS_ttHbb_FSR_ttbarPlusBBbarUp","_CMS_ttHbb_FSR_ttbarPlusBBbarDown",
   ]
 systs_tt_bb_weights=[
                     #"dummyWeight_CMS_ttH_ttbarPlusBBbar_NNPDFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_up*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
@@ -344,8 +344,8 @@ systs_tt_cc=[
     #"_CMS_ttHbb_PDF_ttbarPlusCCbarUp","_CMS_ttHbb_PDF_ttbarPlusCCbarDown",
   #"_CMS_ttHbb_scaleMuR_ttbarPlusCCbarUp","_CMS_ttHbb_scaleMuR_ttbarPlusCCbarDown",
   #"_CMS_ttHbb_scaleMuF_ttbarPlusCCbarUp","_CMS_ttHbb_scaleMuF_ttbarPlusCCbarDown",
-  "_CMS_ttHbb_ISR_ttbarPlusCCbar_2017Up","_CMS_ttHbb_ISR_ttbarPlusCCbar_2017Down",
-  "_CMS_ttHbb_FSR_ttbarPlusCCbar_2017Up","_CMS_ttHbb_FSR_ttbarPlusCCbar_2017Down",
+  "_CMS_ttHbb_ISR_ttbarPlusCCbarUp","_CMS_ttHbb_ISR_ttbarPlusCCbarDown",
+  "_CMS_ttHbb_FSR_ttbarPlusCCbarUp","_CMS_ttHbb_FSR_ttbarPlusCCbarDown",
   ]
 systs_tt_cc_weights=[
                     #"dummyWeight_CMS_ttH_ttbarPlusCCbar_NNPDFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_up*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
@@ -371,69 +371,69 @@ print weightSystNames
 assert len(systWeights)==len(weightSystNames)
 
 otherSystNames=[
-                    #"_CMS_scale_j_2017Up",
-                    #"_CMS_scale_j_2017Down",
+                    "_CMS_scale_j_2017Up",
+                    "_CMS_scale_j_2017Down",
                    "_CMS_res_j_2017Up",
                    "_CMS_res_j_2017Down",
-    "_CMS_scaleAbsoluteStat_j_2017Up","_CMS_scaleAbsoluteStat_j_2017Down",
-    "_CMS_scaleAbsoluteScale_j_2017Up","_CMS_scaleAbsoluteScale_j_2017Down",
-    #"_CMS_scaleAbsoluteFlavMap_j_2017Up","_CMS_scaleAbsoluteFlavMap_j_2017Down",
-    "_CMS_scaleAbsoluteMPFBias_j_2017Up","_CMS_scaleAbsoluteMPFBias_j_2017Down",
-    "_CMS_scaleFragmentation_j_2017Up","_CMS_scaleFragmentation_j_2017Down",
-    "_CMS_scaleSinglePionECAL_j_2017Up","_CMS_scaleSinglePionECAL_j_2017Down",
-    "_CMS_scaleSinglePionHCAL_j_2017Up","_CMS_scaleSinglePionHCAL_j_2017Down",
-    "_CMS_scaleFlavorQCD_j_2017Up","_CMS_scaleFlavorQCD_j_2017Down",
-    "_CMS_scaleTimePtEta_j_2017Up","_CMS_scaleTimePtEta_j_2017Down",
-    "_CMS_scaleRelativeJEREC1_j_2017Up","_CMS_scaleRelativeJEREC1_j_2017Down",
-    "_CMS_scaleRelativeJEREC2_j_2017Up","_CMS_scaleRelativeJEREC2_j_2017Down",
-    "_CMS_scaleRelativeJERHF_j_2017Up","_CMS_scaleRelativeJERHF_j_2017Down",
-    "_CMS_scaleRelativePtBB_j_2017Up","_CMS_scaleRelativePtBB_j_2017Down",
-    "_CMS_scaleRelativePtEC1_j_2017Up","_CMS_scaleRelativePtEC1_j_2017Down",
-    "_CMS_scaleRelativePtEC2_j_2017Up","_CMS_scaleRelativePtEC2_j_2017Down",
-    "_CMS_scaleRelativePtHF_j_2017Up","_CMS_scaleRelativePtHF_j_2017Down",
-    "_CMS_scaleRelativeBal_j_2017Up","_CMS_scaleRelativeBal_j_2017Down",
-    "_CMS_scaleRelativeFSR_j_2017Up","_CMS_scaleRelativeFSR_j_2017Down",
-    "_CMS_scaleRelativeStatFSR_j_2017Up","_CMS_scaleRelativeStatFSR_j_2017Down",
-    "_CMS_scaleRelativeStatEC_j_2017Up","_CMS_scaleRelativeStatEC_j_2017Down",
-    "_CMS_scaleRelativeStatHF_j_2017Up","_CMS_scaleRelativeStatHF_j_2017Down",
-    "_CMS_scalePileUpDataMC_j_2017Up","_CMS_scalePileUpDataMC_j_2017Down",
-    "_CMS_scalePileUpPtRef_j_2017Up","_CMS_scalePileUpPtRef_j_2017Down",
-    "_CMS_scalePileUpPtBB_j_2017Up","_CMS_scalePileUpPtBB_j_2017Down",
-    "_CMS_scalePileUpPtEC1_j_2017Up","_CMS_scalePileUpPtEC1_j_2017Down",
-    "_CMS_scalePileUpPtEC2_j_2017Up","_CMS_scalePileUpPtEC2_j_2017Down",
-    "_CMS_scalePileUpPtHF_j_2017Up","_CMS_scalePileUpPtHF_j_2017Down",
+    #"_CMS_scaleAbsoluteStat_j_2017Up","_CMS_scaleAbsoluteStat_j_2017Down",
+    #"_CMS_scaleAbsoluteScale_j_2017Up","_CMS_scaleAbsoluteScale_j_2017Down",
+    ##"_CMS_scaleAbsoluteFlavMap_j_2017Up","_CMS_scaleAbsoluteFlavMap_j_2017Down",
+    #"_CMS_scaleAbsoluteMPFBias_j_2017Up","_CMS_scaleAbsoluteMPFBias_j_2017Down",
+    #"_CMS_scaleFragmentation_j_2017Up","_CMS_scaleFragmentation_j_2017Down",
+    #"_CMS_scaleSinglePionECAL_j_2017Up","_CMS_scaleSinglePionECAL_j_2017Down",
+    #"_CMS_scaleSinglePionHCAL_j_2017Up","_CMS_scaleSinglePionHCAL_j_2017Down",
+    #"_CMS_scaleFlavorQCD_j_2017Up","_CMS_scaleFlavorQCD_j_2017Down",
+    #"_CMS_scaleTimePtEta_j_2017Up","_CMS_scaleTimePtEta_j_2017Down",
+    #"_CMS_scaleRelativeJEREC1_j_2017Up","_CMS_scaleRelativeJEREC1_j_2017Down",
+    #"_CMS_scaleRelativeJEREC2_j_2017Up","_CMS_scaleRelativeJEREC2_j_2017Down",
+    #"_CMS_scaleRelativeJERHF_j_2017Up","_CMS_scaleRelativeJERHF_j_2017Down",
+    #"_CMS_scaleRelativePtBB_j_2017Up","_CMS_scaleRelativePtBB_j_2017Down",
+    #"_CMS_scaleRelativePtEC1_j_2017Up","_CMS_scaleRelativePtEC1_j_2017Down",
+    #"_CMS_scaleRelativePtEC2_j_2017Up","_CMS_scaleRelativePtEC2_j_2017Down",
+    #"_CMS_scaleRelativePtHF_j_2017Up","_CMS_scaleRelativePtHF_j_2017Down",
+    #"_CMS_scaleRelativeBal_j_2017Up","_CMS_scaleRelativeBal_j_2017Down",
+    #"_CMS_scaleRelativeFSR_j_2017Up","_CMS_scaleRelativeFSR_j_2017Down",
+    #"_CMS_scaleRelativeStatFSR_j_2017Up","_CMS_scaleRelativeStatFSR_j_2017Down",
+    #"_CMS_scaleRelativeStatEC_j_2017Up","_CMS_scaleRelativeStatEC_j_2017Down",
+    #"_CMS_scaleRelativeStatHF_j_2017Up","_CMS_scaleRelativeStatHF_j_2017Down",
+    #"_CMS_scalePileUpDataMC_j_2017Up","_CMS_scalePileUpDataMC_j_2017Down",
+    #"_CMS_scalePileUpPtRef_j_2017Up","_CMS_scalePileUpPtRef_j_2017Down",
+    #"_CMS_scalePileUpPtBB_j_2017Up","_CMS_scalePileUpPtBB_j_2017Down",
+    #"_CMS_scalePileUpPtEC1_j_2017Up","_CMS_scalePileUpPtEC1_j_2017Down",
+    #"_CMS_scalePileUpPtEC2_j_2017Up","_CMS_scalePileUpPtEC2_j_2017Down",
+    #"_CMS_scalePileUpPtHF_j_2017Up","_CMS_scalePileUpPtHF_j_2017Down",
 ]
 
 otherSystFileNames=[
-      #"JESup","JESdown",
+      "JESup","JESdown",
       "JERup","JERdown",
-    "JESAbsoluteStatup","JESAbsoluteStatdown",
-    "JESAbsoluteScaleup","JESAbsoluteScaledown",
-    #"JESAbsoluteFlavMapup","JESAbsoluteFlavMapdown",
-    "JESAbsoluteMPFBiasup","JESAbsoluteMPFBiasdown",
-    "JESFragmentationup","JESFragmentationdown",
-    "JESSinglePionECALup","JESSinglePionECALdown",
-    "JESSinglePionHCALup","JESSinglePionHCALdown",
-    "JESFlavorQCDup","JESFlavorQCDdown",
-    "JESTimePtEtaup","JESTimePtEtadown",
-    "JESRelativeJEREC1up","JESRelativeJEREC1down",
-    "JESRelativeJEREC2up","JESRelativeJEREC2down",
-    "JESRelativeJERHFup","JESRelativeJERHFdown",
-    "JESRelativePtBBup","JESRelativePtBBdown",
-    "JESRelativePtEC1up","JESRelativePtEC1down",
-    "JESRelativePtEC2up","JESRelativePtEC2down",
-    "JESRelativePtHFup","JESRelativePtHFdown",
-    "JESRelativeBalup","JESRelativeBaldown",
-    "JESRelativeFSRup","JESRelativeFSRdown",
-    "JESRelativeStatFSRup","JESRelativeStatFSRdown",
-    "JESRelativeStatECup","JESRelativeStatECdown",
-    "JESRelativeStatHFup","JESRelativeStatHFdown",
-    "JESPileUpDataMCup","JESPileUpDataMCdown",
-    "JESPileUpPtRefup","JESPileUpPtRefdown",
-    "JESPileUpPtBBup","JESPileUpPtBBdown",
-    "JESPileUpPtEC1up","JESPileUpPtEC1down",
-    "JESPileUpPtEC2up","JESPileUpPtEC2down",
-    "JESPileUpPtHFup","JESPileUpPtHFdown",
+    #"JESAbsoluteStatup","JESAbsoluteStatdown",
+    #"JESAbsoluteScaleup","JESAbsoluteScaledown",
+    ##"JESAbsoluteFlavMapup","JESAbsoluteFlavMapdown",
+    #"JESAbsoluteMPFBiasup","JESAbsoluteMPFBiasdown",
+    #"JESFragmentationup","JESFragmentationdown",
+    #"JESSinglePionECALup","JESSinglePionECALdown",
+    #"JESSinglePionHCALup","JESSinglePionHCALdown",
+    #"JESFlavorQCDup","JESFlavorQCDdown",
+    #"JESTimePtEtaup","JESTimePtEtadown",
+    #"JESRelativeJEREC1up","JESRelativeJEREC1down",
+    #"JESRelativeJEREC2up","JESRelativeJEREC2down",
+    #"JESRelativeJERHFup","JESRelativeJERHFdown",
+    #"JESRelativePtBBup","JESRelativePtBBdown",
+    #"JESRelativePtEC1up","JESRelativePtEC1down",
+    #"JESRelativePtEC2up","JESRelativePtEC2down",
+    #"JESRelativePtHFup","JESRelativePtHFdown",
+    #"JESRelativeBalup","JESRelativeBaldown",
+    #"JESRelativeFSRup","JESRelativeFSRdown",
+    #"JESRelativeStatFSRup","JESRelativeStatFSRdown",
+    #"JESRelativeStatECup","JESRelativeStatECdown",
+    #"JESRelativeStatHFup","JESRelativeStatHFdown",
+    #"JESPileUpDataMCup","JESPileUpDataMCdown",
+    #"JESPileUpPtRefup","JESPileUpPtRefdown",
+    #"JESPileUpPtBBup","JESPileUpPtBBdown",
+    #"JESPileUpPtEC1up","JESPileUpPtEC1down",
+    #"JESPileUpPtEC2up","JESPileUpPtEC2down",
+    #"JESPileUpPtHFup","JESPileUpPtHFdown",
 ]
 
 for i,j in zip(otherSystNames,otherSystFileNames):
@@ -447,11 +447,8 @@ assert len(otherSystNames)==len(otherSystFileNames)
 
 # samples
 # input path 
-#path_karim="/nfs/dust/cms/user/kelmorab/ttH_2018/ntuples_v2"
-path_karim_new="/nfs/dust/cms/user/kelmorab/ttH_2018/ntuples_v4"
-path_matsch="/nfs/dust/cms/user/kelmorab/ttH_2018/ntuples_v3"
-path_pkeicher="/nfs/dust/cms/user/pkeicher/ttH_2018/naf_jobs_for_Karim/ntuples"
-path_mwassmer="/nfs/dust/cms/user/mwassmer/ttH_2018/ntuples"
+path_karim_new="/nfs/dust/cms/user/kelmorab/ttH_2018/ntuples_v5"
+path_mwassmer="/nfs/dust/cms/user/kelmorab/ttH_2018/ntuples_v5"
 ttbarPathS=path_karim_new+'/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8_v2/*nominal*.root'+';'+path_karim_new+'/TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8_new_pmx/*nominal*.root'+';'+path_karim_new+'/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'
 VJetsPathS=path_karim_new+'/DYJets*/*nominal*.root'+';'+path_karim_new+'/WJets*/*nominal*.root'
 ttVPathS=path_karim_new+'/TTW*/*nominal*.root'+';'+path_karim_new+'/TTZ*/*nominal*.root'
@@ -471,47 +468,47 @@ hdamp_ue_filenames_tt_all = [
 
 
 hdamp_ue_systnames_tt_lf = [
-  "_CMS_ttHbb_HDAMP_ttbarOther_2017Up", "_CMS_ttHbb_HDAMP_ttbarOther_2017Down",
-  "_CMS_ttHbb_UE_ttbarOther_2017Up", "_CMS_ttHbb_UE_ttbarOther_2017Down"
+  #"_CMS_ttHbb_HDAMP_ttbarOtherUp", "_CMS_ttHbb_HDAMP_ttbarOtherDown",
+  "_CMS_ttHbb_UE_ttbarOtherUp", "_CMS_ttHbb_UE_ttbarOtherDown"
 ]
 hdamp_ue_filenames_tt_lf = [
-  os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
+  #os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
   os.path.join(path_karim_new, "*TuneCP5up*/*nominal*.root"), os.path.join(path_karim_new, "*TuneCP5down*/*nominal*.root")
 ]
 
 hdamp_ue_systnames_tt_bb = [
-  "_CMS_ttHbb_HDAMP_ttbarPlusBBbar_2017Up", "_CMS_ttHbb_HDAMP_ttbarPlusBBbar_2017Down",
-  "_CMS_ttHbb_UE_ttbarPlusBBbar_2017Up", "_CMS_ttHbb_UE_ttbarPlusBBbar_2017Down"
+  #"_CMS_ttHbb_HDAMP_ttbarPlusBBbarUp", "_CMS_ttHbb_HDAMP_ttbarPlusBBbarDown",
+  "_CMS_ttHbb_UE_ttbarPlusBBbarUp", "_CMS_ttHbb_UE_ttbarPlusBBbarDown"
 ]
 hdamp_ue_filenames_tt_bb = [
-  os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
+  #os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
   os.path.join(path_karim_new, "*TuneCP5up*/*nominal*.root"), os.path.join(path_karim_new, "*TuneCP5down*/*nominal*.root")
 ]
 
 hdamp_ue_systnames_tt_2b = [
-  "_CMS_ttHbb_HDAMP_ttbarPlus2B_2017Up", "_CMS_ttHbb_HDAMP_ttbarPlus2B_2017Down",
-  "_CMS_ttHbb_UE_ttbarPlus2B_2017Up", "_CMS_ttHbb_UE_ttbarPlus2B_2017Down"
+  #"_CMS_ttHbb_HDAMP_ttbarPlus2BUp", "_CMS_ttHbb_HDAMP_ttbarPlus2BDown",
+  "_CMS_ttHbb_UE_ttbarPlus2BUp", "_CMS_ttHbb_UE_ttbarPlus2BDown"
 ]
 hdamp_ue_filenames_tt_2b = [
-  os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
+  #os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
   os.path.join(path_karim_new, "*TuneCP5up*/*nominal*.root"), os.path.join(path_karim_new, "*TuneCP5down*/*nominal*.root")
 ]
 
 hdamp_ue_systnames_tt_b = [
-  "_CMS_ttHbb_HDAMP_ttbarPlusB_2017Up", "_CMS_ttHbb_HDAMP_ttbarPlusB_2017Down",
-  "_CMS_ttHbb_UE_ttbarPlusB_2017Up", "_CMS_ttHbb_UE_ttbarPlusB_2017Down"
+  #"_CMS_ttHbb_HDAMP_ttbarPlusBUp", "_CMS_ttHbb_HDAMP_ttbarPlusBDown",
+  "_CMS_ttHbb_UE_ttbarPlusBUp", "_CMS_ttHbb_UE_ttbarPlusBDown"
 ]
 hdamp_ue_filenames_tt_b = [
-  os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
+  #os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
   os.path.join(path_karim_new, "*TuneCP5up*/*nominal*.root"), os.path.join(path_karim_new, "*TuneCP5down*/*nominal*.root")
 ]
 
 hdamp_ue_systnames_tt_cc = [
-  "_CMS_ttHbb_HDAMP_ttbarPlusCCbar_2017Up", "_CMS_ttHbb_HDAMP_ttbarPlusCCbar_2017Down",
-  "_CMS_ttHbb_UE_ttbarPlusCCbar_2017Up", "_CMS_ttHbb_UE_ttbarPlusCCbar_2017Down"
+  #"_CMS_ttHbb_HDAMP_ttbarPlusCCbarUp", "_CMS_ttHbb_HDAMP_ttbarPlusCCbarDown",
+  "_CMS_ttHbb_UE_ttbarPlusCCbarUp", "_CMS_ttHbb_UE_ttbarPlusCCbarDown"
 ]
 hdamp_ue_filenames_tt_cc = [
-  os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
+  #os.path.join(path_karim_new, "*hdampUP*/*nominal*.root"), os.path.join(path_karim_new, "*hdampDOWN*/*nominal*.root"),
   os.path.join(path_karim_new, "*TuneCP5up*/*nominal*.root"), os.path.join(path_karim_new, "*TuneCP5down*/*nominal*.root")
 ]
 
@@ -526,37 +523,37 @@ errorSystNames=[
                    "_CMS_btag_cferr1_2017Up","_CMS_btag_cferr1_2017Down","_CMS_btag_cferr2_2017Up","_CMS_btag_cferr2_2017Down",
                    "_CMS_ttHbb_PUUp","_CMS_ttHbb_PUDown",
 
-    #"_CMS_scale_j_2017Up","_CMS_scale_j_2017Down",
+    "_CMS_scale_j_2017Up","_CMS_scale_j_2017Down",
     #"_CMS_res_j_2017Up","_CMS_res_j_2017Down",
     
         "_CMS_res_j_2017Up","_CMS_res_j_2017Down",
-    "_CMS_scaleAbsoluteStat_j_2017Up","_CMS_scaleAbsoluteStat_j_2017Down",
-    "_CMS_scaleAbsoluteScale_j_2017Up","_CMS_scaleAbsoluteScale_j_2017Down",
-    ##"_CMS_scaleAbsoluteFlavMap_j_2017Up","_CMS_scaleAbsoluteFlavMap_j_2017Down",
-    "_CMS_scaleAbsoluteMPFBias_j_2017Up","_CMS_scaleAbsoluteMPFBias_j_2017Down",
-    "_CMS_scaleFragmentation_j_2017Up","_CMS_scaleFragmentation_j_2017Down",
-    "_CMS_scaleSinglePionECAL_j_2017Up","_CMS_scaleSinglePionECAL_j_2017Down",
-    "_CMS_scaleSinglePionHCAL_j_2017Up","_CMS_scaleSinglePionHCAL_j_2017Down",
-    "_CMS_scaleFlavorQCD_j_2017Up","_CMS_scaleFlavorQCD_j_2017Down",
-    "_CMS_scaleTimePtEta_j_2017Up","_CMS_scaleTimePtEta_j_2017Down",
-    "_CMS_scaleRelativeJEREC1_j_2017Up","_CMS_scaleRelativeJEREC1_j_2017Down",
-    "_CMS_scaleRelativeJEREC2_j_2017Up","_CMS_scaleRelativeJEREC2_j_2017Down",
-    "_CMS_scaleRelativeJERHF_j_2017Up","_CMS_scaleRelativeJERHF_j_2017Down",
-    "_CMS_scaleRelativePtBB_j_2017Up","_CMS_scaleRelativePtBB_j_2017Down",
-    "_CMS_scaleRelativePtEC1_j_2017Up","_CMS_scaleRelativePtEC1_j_2017Down",
-    "_CMS_scaleRelativePtEC2_j_2017Up","_CMS_scaleRelativePtEC2_j_2017Down",
-    "_CMS_scaleRelativePtHF_j_2017Up","_CMS_scaleRelativePtHF_j_2017Down",
-    "_CMS_scaleRelativeBal_j_2017Up","_CMS_scaleRelativeBal_j_2017Down",
-    "_CMS_scaleRelativeFSR_j_2017Up","_CMS_scaleRelativeFSR_j_2017Down",
-    "_CMS_scaleRelativeStatFSR_j_2017Up","_CMS_scaleRelativeStatFSR_j_2017Down",
-    "_CMS_scaleRelativeStatEC_j_2017Up","_CMS_scaleRelativeStatEC_j_2017Down",
-    "_CMS_scaleRelativeStatHF_j_2017Up","_CMS_scaleRelativeStatHF_j_2017Down",
-    "_CMS_scalePileUpDataMC_j_2017Up","_CMS_scalePileUpDataMC_j_2017Down",
-    "_CMS_scalePileUpPtRef_j_2017Up","_CMS_scalePileUpPtRef_j_2017Down",
-    "_CMS_scalePileUpPtBB_j_2017Up","_CMS_scalePileUpPtBB_j_2017Down",
-    "_CMS_scalePileUpPtEC1_j_2017Up","_CMS_scalePileUpPtEC1_j_2017Down",
-    "_CMS_scalePileUpPtEC2_j_2017Up","_CMS_scalePileUpPtEC2_j_2017Down",
-    "_CMS_scalePileUpPtHF_j_2017Up","_CMS_scalePileUpPtHF_j_2017Down",
+    #"_CMS_scaleAbsoluteStat_j_2017Up","_CMS_scaleAbsoluteStat_j_2017Down",
+    #"_CMS_scaleAbsoluteScale_j_2017Up","_CMS_scaleAbsoluteScale_j_2017Down",
+    ###"_CMS_scaleAbsoluteFlavMap_j_2017Up","_CMS_scaleAbsoluteFlavMap_j_2017Down",
+    #"_CMS_scaleAbsoluteMPFBias_j_2017Up","_CMS_scaleAbsoluteMPFBias_j_2017Down",
+    #"_CMS_scaleFragmentation_j_2017Up","_CMS_scaleFragmentation_j_2017Down",
+    #"_CMS_scaleSinglePionECAL_j_2017Up","_CMS_scaleSinglePionECAL_j_2017Down",
+    #"_CMS_scaleSinglePionHCAL_j_2017Up","_CMS_scaleSinglePionHCAL_j_2017Down",
+    #"_CMS_scaleFlavorQCD_j_2017Up","_CMS_scaleFlavorQCD_j_2017Down",
+    #"_CMS_scaleTimePtEta_j_2017Up","_CMS_scaleTimePtEta_j_2017Down",
+    #"_CMS_scaleRelativeJEREC1_j_2017Up","_CMS_scaleRelativeJEREC1_j_2017Down",
+    #"_CMS_scaleRelativeJEREC2_j_2017Up","_CMS_scaleRelativeJEREC2_j_2017Down",
+    #"_CMS_scaleRelativeJERHF_j_2017Up","_CMS_scaleRelativeJERHF_j_2017Down",
+    #"_CMS_scaleRelativePtBB_j_2017Up","_CMS_scaleRelativePtBB_j_2017Down",
+    #"_CMS_scaleRelativePtEC1_j_2017Up","_CMS_scaleRelativePtEC1_j_2017Down",
+    #"_CMS_scaleRelativePtEC2_j_2017Up","_CMS_scaleRelativePtEC2_j_2017Down",
+    #"_CMS_scaleRelativePtHF_j_2017Up","_CMS_scaleRelativePtHF_j_2017Down",
+    #"_CMS_scaleRelativeBal_j_2017Up","_CMS_scaleRelativeBal_j_2017Down",
+    #"_CMS_scaleRelativeFSR_j_2017Up","_CMS_scaleRelativeFSR_j_2017Down",
+    #"_CMS_scaleRelativeStatFSR_j_2017Up","_CMS_scaleRelativeStatFSR_j_2017Down",
+    #"_CMS_scaleRelativeStatEC_j_2017Up","_CMS_scaleRelativeStatEC_j_2017Down",
+    #"_CMS_scaleRelativeStatHF_j_2017Up","_CMS_scaleRelativeStatHF_j_2017Down",
+    #"_CMS_scalePileUpDataMC_j_2017Up","_CMS_scalePileUpDataMC_j_2017Down",
+    #"_CMS_scalePileUpPtRef_j_2017Up","_CMS_scalePileUpPtRef_j_2017Down",
+    #"_CMS_scalePileUpPtBB_j_2017Up","_CMS_scalePileUpPtBB_j_2017Down",
+    #"_CMS_scalePileUpPtEC1_j_2017Up","_CMS_scalePileUpPtEC1_j_2017Down",
+    #"_CMS_scalePileUpPtEC2_j_2017Up","_CMS_scalePileUpPtEC2_j_2017Down",
+    #"_CMS_scalePileUpPtHF_j_2017Up","_CMS_scalePileUpPtHF_j_2017Down",
 
 ]+systs_tt_lf+systs_tt_cc+systs_tt_b+systs_tt_2b+systs_tt_bb+hdamp_ue_systnames_tt_lf+hdamp_ue_systnames_tt_cc+hdamp_ue_systnames_tt_b+hdamp_ue_systnames_tt_2b+hdamp_ue_systnames_tt_bb
 

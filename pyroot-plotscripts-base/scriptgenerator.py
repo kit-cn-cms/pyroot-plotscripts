@@ -3547,7 +3547,7 @@ def renameHistosParallel(infname,sysnames,prune=False):
             for sss in ttbarsamples:
                 if sss==ss:
                     continue # skip case for the sample itself
-                if (sss+"Up" in thisname or sss+"Down" in thisname) and not thisname.startswith(sss+"_") : 
+                if (sss+"Up" in thisname or sss+"Down" in thisname or sss+"_2017Up" in thisname or sss+"_2017Down" in thisname) and not thisname.startswith(sss+"_") : 
                     print "removing double", thisname
                     # now there should be 2 different ttbar samples in the name-> delete this 
                     thish=outfile.Get(thisname)
@@ -3557,6 +3557,24 @@ def renameHistosParallel(infname,sysnames,prune=False):
                     deleted=True
     if deleted:
         continue
+        
+    # now remove the ttH histos with nuisances belonging to the ttbar histos
+    deleted=False
+    ttbarsamples=["ttbarOther","ttbarPlus2B","ttbarPlusB","ttbarPlusCCbar","ttbarPlusBBbar"]
+    if thisname.startswith("ttH_"):
+            for sss in ttbarsamples:
+                if (sss+"Up" in thisname or sss+"Down" in thisname or sss+"_2017Up" in thisname or sss+"_2017Down" in thisname ): 
+                    print "removing ttH histo", thisname
+                    # now there should be 2 different ttbar samples in the name-> delete this 
+                    thish=outfile.Get(thisname)
+                    theobjectlist.append(thish)
+                    outfile.Delete(thisname)
+                    outfile.Delete(thisname+";1")
+                    deleted=True
+    if deleted:
+        continue
+    
+    
     if newname!=thisname:
       print "changed ", thisname, " to ", newname  
       thish=outfile.Get(thisname)
