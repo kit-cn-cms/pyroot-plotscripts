@@ -23,13 +23,13 @@ from limittools import replaceQ2scale
 import dnnInputVariableListV1
 
 from analysisClass import *
-from plotconfig_v42 import *
+from plotconfig_v45 import *
 
 
 def main(argv):
 
     #Create analysis object with output name
-    name='limits_v42_1D_philip_Njets_ge4tags'
+    name='limits_v45_philip_newJEC_ge3btags'
     analysis=Analysis(name,argv,'/nfs/dust/cms/user/pkeicher/ttH_2018/pyroot-plotscripts/workdir/'+name+'/output_limitInput.root', signalProcess='ttH')
     print os.path.exists(analysis.rootFilePath), "AAAARgh"
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscripts18/July18/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
@@ -113,9 +113,9 @@ def main(argv):
     # definition of categories
     categoriesJT=[
                   ("(N_Jets>=6&&N_BTagsM==2)","6j2t",""),
-                  ("(N_Jets==4&&N_BTagsM==3)","4j3t",""),
-                  ("(N_Jets==5&&N_BTagsM==3)","5j3t",""),
-                  ("(N_Jets>=6&&N_BTagsM==3)","6j3t",""),
+                  ("(N_Jets==4&&N_BTagsM>=3)","4jge3t",""),
+                  ("(N_Jets==5&&N_BTagsM>=3)","5jge3t",""),
+                  ("(N_Jets>=6&&N_BTagsM>=3)","6jge3t",""),
                   ("(N_Jets==4&&N_BTagsM>=4)","4j4t",""),
                   ("(N_Jets==5&&N_BTagsM>=4)","5j4t",""),
                   ("(N_Jets>=6&&N_BTagsM>=4)","6j4t","")
@@ -217,27 +217,27 @@ def main(argv):
         #Plot(ROOT.TH1D("CSVNPV0to10","B-tag of all jets (0#leqNPV#leq10)",22,-.1,1),"Jet_CSV",plotselection+"*(N_PrimaryVertices<=10 && N_PrimaryVertices>=0)",plotlabel),
 
 
-        Plot(ROOT.TH1D("pt1","p_{T} of leading jet",50,0,500),"Jet_Pt[0]",plotselection,plotlabel),
-        Plot(ROOT.TH1D("pt2","p_{T} of second jet",50,0,500),"Jet_Pt[1]",plotselection,plotlabel),
-        Plot(ROOT.TH1D("pt3","p_{T} of third jet",40,0,400),"Jet_Pt[2]",plotselection,plotlabel),
-        Plot(ROOT.TH1D("pt4","p_{T} of fourth jet",60,0,300),"Jet_Pt[3]",plotselection,plotlabel),
-        Plot(ROOT.TH1D("pt5","p_{T} of fifth jet",40,0,200),"Jet_Pt[4]",plotselection,plotlabel),
-        Plot(ROOT.TH1D("pt6","p_{T} of sixth jet",40,0,200),"Jet_Pt[5]",plotselection,plotlabel),
-        #Plot(ROOT.TH1D("pt2tagged","p_{T} of second tagged jet",50,0,500),"TaggedJet_Pt[1]",plotselection,plotlabel),
-        #Plot(ROOT.TH1D("pt1tagged","p_{T} of leading tagged jet",50,0,500),"TaggedJet_Pt[0]",plotselection,plotlabel),
-        #Plot(ROOT.TH1D("pt3tagged","p_{T} of third tagged jet",40,0,400),"TaggedJet_Pt[2]",plotselection,plotlabel),
-        #Plot(ROOT.TH1D("pt4tagged","p_{T} of fourth tagged jet",60,0,300),"TaggedJet_Pt[3]",plotselection,plotlabel),
+        # Plot(ROOT.TH1D("pt1","p_{T} of leading jet",50,0,500),"Jet_Pt[0]",plotselection,plotlabel),
+        # Plot(ROOT.TH1D("pt2","p_{T} of second jet",50,0,500),"Jet_Pt[1]",plotselection,plotlabel),
+        # Plot(ROOT.TH1D("pt3","p_{T} of third jet",40,0,400),"Jet_Pt[2]",plotselection,plotlabel),
+        # Plot(ROOT.TH1D("pt4","p_{T} of fourth jet",60,0,300),"Jet_Pt[3]",plotselection,plotlabel),
+        # Plot(ROOT.TH1D("pt5","p_{T} of fifth jet",40,0,200),"Jet_Pt[4]",plotselection,plotlabel),
+        # Plot(ROOT.TH1D("pt6","p_{T} of sixth jet",40,0,200),"Jet_Pt[5]",plotselection,plotlabel),
+        # #Plot(ROOT.TH1D("pt2tagged","p_{T} of second tagged jet",50,0,500),"TaggedJet_Pt[1]",plotselection,plotlabel),
+        # #Plot(ROOT.TH1D("pt1tagged","p_{T} of leading tagged jet",50,0,500),"TaggedJet_Pt[0]",plotselection,plotlabel),
+        # #Plot(ROOT.TH1D("pt3tagged","p_{T} of third tagged jet",40,0,400),"TaggedJet_Pt[2]",plotselection,plotlabel),
+        # #Plot(ROOT.TH1D("pt4tagged","p_{T} of fourth tagged jet",60,0,300),"TaggedJet_Pt[3]",plotselection,plotlabel),
 
-        #Plot(ROOT.TH1D("Prescale_HLT_Ele27_eta2p1_WPTight_Gsf_vX","Prescale_HLT_Ele27_eta2p1_WPTight_Gsf_vX",50,0,2.0),"Prescale_HLT_Ele27_eta2p1_WPTight_Gsf_vX",plotselection,plotlabel),
-        #Plot(ROOT.TH1D("Prescale_HLT_IsoMu22_vX","Prescale_HLT_IsoMu22_vX",50,0,2.0),"Prescale_HLT_IsoMu22_vX",plotselection,plotlabel),
-        #Plot(ROOT.TH1D("Prescale_HLT_IsoTkMu22_vX","Prescale_HLT_IsoTkMu22_vX",50,0,2.0),"Prescale_HLT_IsoTkMu22_vX",plotselection,plotlabel),
+        # #Plot(ROOT.TH1D("Prescale_HLT_Ele27_eta2p1_WPTight_Gsf_vX","Prescale_HLT_Ele27_eta2p1_WPTight_Gsf_vX",50,0,2.0),"Prescale_HLT_Ele27_eta2p1_WPTight_Gsf_vX",plotselection,plotlabel),
+        # #Plot(ROOT.TH1D("Prescale_HLT_IsoMu22_vX","Prescale_HLT_IsoMu22_vX",50,0,2.0),"Prescale_HLT_IsoMu22_vX",plotselection,plotlabel),
+        # #Plot(ROOT.TH1D("Prescale_HLT_IsoTkMu22_vX","Prescale_HLT_IsoTkMu22_vX",50,0,2.0),"Prescale_HLT_IsoTkMu22_vX",plotselection,plotlabel),
 
-        Plot(ROOT.TH1D("eliso","electron relative isolation",50,0,0.15),"Electron_RelIso[0]",plotselection,plotlabel),
-        Plot(ROOT.TH1D("muiso","muon relative isolation",50,0,0.15),"Muon_RelIso[0]",plotselection,plotlabel),
-        Plot(ROOT.TH1D("MET","missing transverse energy",50,0,200),"Evt_Pt_MET",plotselection,plotlabel),
-        Plot(ROOT.TH1D("METphi","MET #phi",64,-3.2,3.2),"Evt_Phi_MET",plotselection,plotlabel),
-        Plot(ROOT.TH1D("N_PrimaryVertices","Reconstructed primary vertices",26,-.5,50.5),"N_PrimaryVertices",plotselection,plotlabel),
-        Plot(ROOT.TH1D("blrAll","B-tagging likelihood ratio",44,-6,10),"TMath::Log(Evt_blr_ETH/(1-Evt_blr_ETH))",plotselection,plotlabel),
+        # Plot(ROOT.TH1D("eliso","electron relative isolation",50,0,0.15),"Electron_RelIso[0]",plotselection,plotlabel),
+        # Plot(ROOT.TH1D("muiso","muon relative isolation",50,0,0.15),"Muon_RelIso[0]",plotselection,plotlabel),
+        # Plot(ROOT.TH1D("MET","missing transverse energy",50,0,200),"Evt_Pt_MET",plotselection,plotlabel),
+        # Plot(ROOT.TH1D("METphi","MET #phi",64,-3.2,3.2),"Evt_Phi_MET",plotselection,plotlabel),
+        # Plot(ROOT.TH1D("N_PrimaryVertices","Reconstructed primary vertices",26,-.5,50.5),"N_PrimaryVertices",plotselection,plotlabel),
+        # Plot(ROOT.TH1D("blrAll","B-tagging likelihood ratio",44,-6,10),"TMath::Log(Evt_blr_ETH/(1-Evt_blr_ETH))",plotselection,plotlabel),
         #Plot(ROOT.TH1D("Evt_M_MinDeltaRJets","dijet mass of closest jets",30,0.,150),"Evt_M_MinDeltaRJets",plotselection,plotlabel),
         #Plot(ROOT.TH1D("Evt_M_MinDeltaRTaggedJets","mass of closest tagged jets",45,0.,450),"Evt_M_MinDeltaRTaggedJets",plotselection,plotlabel),
         #Plot(ROOT.TH1D("Evt_Dr_MinDeltaRJets","#Delta R of closest jets",50,0.,5.0),"Evt_Dr_MinDeltaRJets",plotselection,plotlabel),
@@ -274,27 +274,27 @@ def main(argv):
         Plot(ROOT.TH1D(plotprefix+"Evt_HT","Sum p_{T} jets",75,0,1500),"Evt_HT_Jets",plotselection,plotlabel),
     ]
 
-    plotlabel="1 lepton, 4 jets, 3 b-tags"
+    plotlabel="1 lepton, 4 jets, #geq3 b-tags"
     plotselection=categoriesJT[1][0]
-    plotprefix="s43_"
+    plotprefix="s4ge3_"
     plots43=[
-    # Plot(ROOT.TH1D(plotprefix+"forth_jet_pt","forth_jet_pt",30,30.0249652863,309.913513184),"Jet_Pt[3]",plotselection,plotlabel),
-    # Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_transverse_sphericity_jets","BDT_common5_input_transverse_sphericity_jets",30,0,1),"BDT_common5_input_transverse_sphericity_jets",plotselection,plotlabel),
-    # Plot(ROOT.TH1D(plotprefix+"Evt_M2_TaggedJetsAverage","Evt_M2_TaggedJetsAverage",30,31.2903900146,933.360778809),"Evt_M2_TaggedJetsAverage",plotselection,plotlabel),
-    # Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_h3","BDT_common5_input_h3",30,-0.204661205411,0.267688572407),"BDT_common5_input_h3",plotselection,plotlabel),
-    # Plot(ROOT.TH1D(plotprefix+"MEM","MEM",30,0.,1.),memexp,plotselection,plotlabel),
-    # Plot(ROOT.TH1D(plotprefix+"second_highest_CSV","second_highest_CSV",30,-0.1,1),"CSV[1]",plotselection,plotlabel),
-    # Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Min","Evt_CSV_Min",30,-0.10000000149,0.49388423562),"Evt_CSV_Min",plotselection,plotlabel),
-    # Plot(ROOT.TH1D(plotprefix+"second_jet_Eta","second_jet_Eta",30,-2.5,2.5),"Jet_Eta[1]",plotselection,plotlabel),
-    # Plot(ROOT.TH1D(plotprefix+"Evt_blr_ETH_transformed","Evt_blr_ETH_transformed",30,-11.6342458725,7.72277259827),"Evt_blr_ETH_transformed",plotselection,plotlabel),
-    # Plot(ROOT.TH1D(plotprefix+"Evt_Dr_MinDeltaRTaggedJets","#Delta R of closest tagged jets",50,0.,5.0),"Evt_Dr_MinDeltaRTaggedJets",plotselection,plotlabel),
-    # Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Average_Tagged","Evt_CSV_Average_Tagged",30,0.510232031345,0.999261438847),"Evt_CSV_Average_Tagged",plotselection,plotlabel),
-    # Plot(ROOT.TH1D(plotprefix+"secon_jet_CSV","secon_jet_CSV",30,-0.1,1),"Jet_CSV[1]",plotselection,plotlabel),
-    # Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Average","Evt_CSV_Average",30,-0.1,1),"Evt_CSV_Average",plotselection,plotlabel),
-    # Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Min_Tagged","Evt_CSV_Min_Tagged",30,-0.1,1),"Evt_CSV_Min_Tagged",plotselection,plotlabel),
-    # Plot(ROOT.TH1D(plotprefix+"N_BTagsT","N_BTagsT",30,3,9),"N_BTagsT",plotselection,plotlabel),
-    # Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_HT_tag","BDT_common5_input_HT_tag",30,0,500),"BDT_common5_input_HT_tag",plotselection,plotlabel),
-    # Plot(ROOT.TH1D(plotprefix+"Evt_M_JetsAverage","Evt_M_JetsAverage",30,3.29856276512,44.2075080872),"Evt_M_JetsAverage",plotselection,plotlabel),
+    Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_h3","BDT_common5_input_h3",30,-0.19,0.27),"BDT_common5_input_h3",plotselection,plotlabel),
+    Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Average_Tagged","Evt_CSV_Average_Tagged",30,0.53,1.0),"Evt_CSV_Average_Tagged",plotselection,plotlabel),
+    Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_HT_tag","BDT_common5_input_HT_tag",30,92.67,1217.62),"BDT_common5_input_HT_tag",plotselection,plotlabel),
+    Plot(ROOT.TH1D(plotprefix+"second_highest_CSV","second_highest_CSV",30,-0.1,1),"CSV[1]",plotselection,plotlabel),
+    Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_transverse_sphericity_jets","BDT_common5_input_transverse_sphericity_jets",30,0.0,0.99),"BDT_common5_input_transverse_sphericity_jets",plotselection,plotlabel),
+    Plot(ROOT.TH1D(plotprefix+"Evt_Dr_MinDeltaRTaggedJets","#Delta R of closest tagged jets",30,0.41,3.47),"Evt_Dr_MinDeltaRTaggedJets",plotselection,plotlabel),
+    Plot(ROOT.TH1D(plotprefix+"Evt_blr_ETH_transformed","Evt_blr_ETH_transformed",30,-8.95,8.28),"Evt_blr_ETH_transformed",plotselection,plotlabel),
+    Plot(ROOT.TH1D(plotprefix+"second_jet_Eta","second_jet_Eta",30,-2.5,2.5),"Jet_Eta[1]",plotselection,plotlabel),
+    Plot(ROOT.TH1D(plotprefix+"Evt_M2_TaggedJetsAverage","Evt_M2_TaggedJetsAverage",30,23.54,1251.75),"Evt_M2_TaggedJetsAverage",plotselection,plotlabel),
+    Plot(ROOT.TH1D(plotprefix+"N_BTagsT","N_BTagsT",30,0.0,3.0),"N_BTagsT",plotselection,plotlabel),
+    Plot(ROOT.TH1D(plotprefix+"Evt_M_JetsAverage","Evt_M_JetsAverage",30,3.35,36.35),"Evt_M_JetsAverage",plotselection,plotlabel),
+    Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Min_Tagged","Evt_CSV_Min_Tagged",30,0.49,1.0),"Evt_CSV_Min_Tagged",plotselection,plotlabel),
+    Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Min","Evt_CSV_Min",30,-0.1,0.49),"Evt_CSV_Min",plotselection,plotlabel),
+    Plot(ROOT.TH1D(plotprefix+"secon_jet_CSV","secon_jet_CSV",30,-0.1,1),"Jet_CSV[1]",plotselection,plotlabel),
+    Plot(ROOT.TH1D(plotprefix+"MEM","MEM",30,0,1),memexp,plotselection,plotlabel),
+    Plot(ROOT.TH1D(plotprefix+"forth_jet_pt","forth_jet_pt",30,30,310),"Jet_Pt[3]",plotselection,plotlabel),
+    Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Average","Evt_CSV_Average",30,0.41,0.86),"Evt_CSV_Average",plotselection,plotlabel),
 
     # Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_maxeta_jet_tag","BDT_common5_input_maxeta_jet_tag",30,0.0153507888317,1.70412755013),"BDT_common5_input_maxeta_jet_tag",plotselection,plotlabel),
     # Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_h1","BDT_common5_input_h1",30,-0.212307035923,0.35206374526),"BDT_common5_input_h1",plotselection,plotlabel),
@@ -359,24 +359,6 @@ def main(argv):
     plotprefix="s44_"
     # weights_Final_44_MEMBDTv2.xml
     plots44=[
-        Plot(ROOT.TH1D(plotprefix+"forth_jet_pt","forth_jet_pt",30,30.0249652863,309.913513184),"Jet_Pt[3]",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_transverse_sphericity_jets","BDT_common5_input_transverse_sphericity_jets",30,0,1),"BDT_common5_input_transverse_sphericity_jets",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"Evt_M2_TaggedJetsAverage","Evt_M2_TaggedJetsAverage",30,31.2903900146,933.360778809),"Evt_M2_TaggedJetsAverage",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_h3","BDT_common5_input_h3",30,-0.204661205411,0.267688572407),"BDT_common5_input_h3",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"MEM","MEM",30,0.,1.),memexp,plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"second_highest_CSV","second_highest_CSV",30,-0.1,1),"CSV[1]",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Min","Evt_CSV_Min",30,-0.10000000149,0.49388423562),"Evt_CSV_Min",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"second_jet_Eta","second_jet_Eta",30,-2.5,2.5),"Jet_Eta[1]",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"Evt_blr_ETH_transformed","Evt_blr_ETH_transformed",30,-11.6342458725,7.72277259827),"Evt_blr_ETH_transformed",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"Evt_Dr_MinDeltaRTaggedJets","#Delta R of closest tagged jets",50,0.,5.0),"Evt_Dr_MinDeltaRTaggedJets",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Average_Tagged","Evt_CSV_Average_Tagged",30,0.510232031345,0.999261438847),"Evt_CSV_Average_Tagged",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"secon_jet_CSV","secon_jet_CSV",30,-0.1,1),"Jet_CSV[1]",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Average","Evt_CSV_Average",30,-0.1,1),"Evt_CSV_Average",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Min_Tagged","Evt_CSV_Min_Tagged",30,-0.1,1),"Evt_CSV_Min_Tagged",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"N_BTagsT","N_BTagsT",30,3,9),"N_BTagsT",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_HT_tag","BDT_common5_input_HT_tag",30,0,500),"BDT_common5_input_HT_tag",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"Evt_M_JetsAverage","Evt_M_JetsAverage",30,3.29856276512,44.2075080872),"Evt_M_JetsAverage",plotselection,plotlabel),
-
         # Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_Evt_CSV_Average","BDT_common5_input_Evt_CSV_Average",20,0.6,1.0),"BDT_common5_input_Evt_CSV_Average",plotselection,plotlabel),
         # Plot(ROOT.TH1D(plotprefix+"MEM","MEM",20,0.0,1.0),memexp,plotselection,plotlabel),
         # Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_Evt_Deta_JetsAverage","BDT_common5_input_Evt_Deta_JetsAverage",20,0.0,3.4),"BDT_common5_input_Evt_Deta_JetsAverage",plotselection,plotlabel),
@@ -443,29 +425,29 @@ def main(argv):
     ]
 
 
-    plotlabel="1 lepton, 5 jets, 3 b-tags"
+    plotlabel="1 lepton, 5 jets, #geq3 b-tags"
     plotselection=categoriesJT[2][0]
-    plotprefix="s53_"
+    plotprefix="s5ge3_"
     plots53=[
-        # Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_aplanarity_tags","BDT_common5_input_aplanarity_tags",30,0.,1.),"BDT_common5_input_aplanarity_tags",plotselection,plotlabel),
-        # Plot(ROOT.TH1D(plotprefix+"second_jet_Pt","second_jet_Pt",30,30.0249652863,309.913513184),"Jet_Pt[1]",plotselection,plotlabel),
-        # Plot(ROOT.TH1D(plotprefix+"third_jet_CSV","secon_jet_CSV",30,-0.1,1),"Jet_CSV[2]",plotselection,plotlabel),
-        # Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_max_dR_jj","BDT_common5_input_max_dR_jj",30,0.,5),"BDT_common5_input_max_dR_jj",plotselection,plotlabel),
-        # Plot(ROOT.TH1D(plotprefix+"Evt_M_JetsAverage","Evt_M_JetsAverage",30,2.6179523468,22.3616428375),"Evt_M_JetsAverage",plotselection,plotlabel),
-        # Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_sphericity_jets","BDT_common5_input_sphericity_jets",30,0.,1),"BDT_common5_input_sphericity_jets",plotselection,plotlabel),
-        # Plot(ROOT.TH1D(plotprefix+"third_jet_Pt","third_jet_Pt",30,30.0249652863,500),"Jet_Pt[2]",plotselection,plotlabel),
-        # Plot(ROOT.TH1D(plotprefix+"Evt_blr_ETH_transformed","Evt_blr_ETH_transformed",30,-8.87575912476,8.36474990845),"Evt_blr_ETH_transformed",plotselection,plotlabel),
-        # Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_dev_from_avg_disc_btags","BDT_common5_input_dev_from_avg_disc_btags",30,8.26003621057e-09,0.0561485365033),"BDT_common5_input_dev_from_avg_disc_btags",plotselection,plotlabel),
-        # Plot(ROOT.TH1D(plotprefix+"Evt_Dr_MinDeltaRLeptonTaggedJet","Evt_Dr_MinDeltaRLeptonTaggedJet",30,0.400092959404,3.55373048782),"Evt_Dr_MinDeltaRLeptonTaggedJet",plotselection,plotlabel),
-        # Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_closest_tagged_dijet_mass","BDT_common5_input_closest_tagged_dijet_mass",30,18.6768493652,701.629150391),"BDT_common5_input_closest_tagged_dijet_mass",plotselection,plotlabel),
-        # Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Min_Tagged","Evt_CSV_Min_Tagged",30,-0.1,1),"Evt_CSV_Min_Tagged",plotselection,plotlabel),
-        # Plot(ROOT.TH1D(plotprefix+"highest_CSV","highest_CSV",30,-0.1,1),"CSV[0]",plotselection,plotlabel),
-        # Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Average_Tagged","Evt_CSV_Average_Tagged",30,0.519650936127,0.999474525452),"Evt_CSV_Average_Tagged",plotselection,plotlabel),
-        # Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_HT_tag","BDT_common5_input_HT_tag",30,0,500),"BDT_common5_input_HT_tag",plotselection,plotlabel),
-        # Plot(ROOT.TH1D(plotprefix+"Evt_HT","Sum p_{T}",30,0,1500),"Evt_HT",plotselection,plotlabel),
-        # Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Average","Evt_CSV_Average",30,0.,1),"Evt_CSV_Average",plotselection,plotlabel),
-        # Plot(ROOT.TH1D(plotprefix+"Evt_Dr_MinDeltaRTaggedJets","#Delta R of closest tagged jets",50,0.,5.0),"Evt_Dr_MinDeltaRTaggedJets",plotselection,plotlabel),
-        # Plot(ROOT.TH1D(plotprefix+"MEM","MEM",30,0,1.),memexp,plotselection,plotlabel),
+        Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Average_Tagged","Evt_CSV_Average_Tagged",30,0.52,1.0),"Evt_CSV_Average_Tagged",plotselection,plotlabel),
+        Plot(ROOT.TH1D(plotprefix+"Evt_HT","Sum p_{T}",30,258.22,2543.69),"Evt_HT",plotselection,plotlabel),
+        Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Min_Tagged","Evt_CSV_Min_Tagged",30,0.49,1.0),"Evt_CSV_Min_Tagged",plotselection,plotlabel),
+        Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_HT_tag","BDT_common5_input_HT_tag",30,97.23,1336.25),"BDT_common5_input_HT_tag",plotselection,plotlabel),
+        Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_dev_from_avg_disc_btags","BDT_common5_input_dev_from_avg_disc_btags",30,0.0,0.06),"BDT_common5_input_dev_from_avg_disc_btags",plotselection,plotlabel),
+        Plot(ROOT.TH1D(plotprefix+"MEM","MEM",30,0,1),memexp,plotselection,plotlabel),
+        Plot(ROOT.TH1D(plotprefix+"Evt_Dr_MinDeltaRTaggedJets","#Delta R of closest tagged jets",30,0.41,3.56),"Evt_Dr_MinDeltaRTaggedJets",plotselection,plotlabel),
+        Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_sphericity_jets","BDT_common5_input_sphericity_jets",30,0.01,0.87),"BDT_common5_input_sphericity_jets",plotselection,plotlabel),
+        Plot(ROOT.TH1D(plotprefix+"Evt_blr_ETH_transformed","Evt_blr_ETH_transformed",30,-7.51,7.7),"Evt_blr_ETH_transformed",plotselection,plotlabel),
+        Plot(ROOT.TH1D(plotprefix+"third_jet_CSV","secon_jet_CSV",30,-0.1,1),"Jet_CSV[2]",plotselection,plotlabel),
+        Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_closest_tagged_dijet_mass","BDT_common5_input_closest_tagged_dijet_mass",30,17.81,1004.73),"BDT_common5_input_closest_tagged_dijet_mass",plotselection,plotlabel),
+        Plot(ROOT.TH1D(plotprefix+"third_jet_Pt","third_jet_Pt",30,30,310.),"Jet_Pt[2]",plotselection,plotlabel),
+        Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_max_dR_jj","BDT_common5_input_max_dR_jj",30,2.02,5.55),"BDT_common5_input_max_dR_jj",plotselection,plotlabel),
+        Plot(ROOT.TH1D(plotprefix+"Evt_Dr_MinDeltaRLeptonTaggedJet","Evt_Dr_MinDeltaRLeptonTaggedJet",30,0.41,3.43),"Evt_Dr_MinDeltaRLeptonTaggedJet",plotselection,plotlabel),
+        Plot(ROOT.TH1D(plotprefix+"second_jet_Pt","second_jet_Pt",30,30,310),"Jet_Pt[1]",plotselection,plotlabel),
+        Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_aplanarity_tags","BDT_common5_input_aplanarity_tags",30,-0.0,0.36),"BDT_common5_input_aplanarity_tags",plotselection,plotlabel),
+        Plot(ROOT.TH1D(plotprefix+"highest_CSV","highest_CSV",30,-0.1,1),"CSV[0]",plotselection,plotlabel),
+        Plot(ROOT.TH1D(plotprefix+"Evt_M_JetsAverage","Evt_M_JetsAverage",30,2.65,27.86),"Evt_M_JetsAverage",plotselection,plotlabel),
+        Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Average","Evt_CSV_Average",30,0.33,0.74),"Evt_CSV_Average",plotselection,plotlabel),
 
         # Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_maxeta_jet_tag","BDT_common5_input_maxeta_jet_tag",30,0.03415389359,1.73617899418),"BDT_common5_input_maxeta_jet_tag",plotselection,plotlabel),
         # Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_h1","BDT_common5_input_h1",30,-0.198400422931,0.352122873068),"BDT_common5_input_h1",plotselection,plotlabel),
@@ -529,26 +511,6 @@ def main(argv):
     plotselection=categoriesJT[5][0]
     plotprefix="s54_"
     plots54=[
-        Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_aplanarity_tags","BDT_common5_input_aplanarity_tags",30,0.,1.),"BDT_common5_input_aplanarity_tags",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"second_jet_Pt","second_jet_Pt",30,30.0249652863,309.913513184),"Jet_Pt[1]",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"third_jet_CSV","secon_jet_CSV",30,-0.1,1),"Jet_CSV[2]",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_max_dR_jj","BDT_common5_input_max_dR_jj",30,0.,5),"BDT_common5_input_max_dR_jj",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"Evt_M_JetsAverage","Evt_M_JetsAverage",30,2.6179523468,22.3616428375),"Evt_M_JetsAverage",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_sphericity_jets","BDT_common5_input_sphericity_jets",30,0.,1),"BDT_common5_input_sphericity_jets",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"third_jet_Pt","third_jet_Pt",30,30.0249652863,500),"Jet_Pt[2]",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"Evt_blr_ETH_transformed","Evt_blr_ETH_transformed",30,-8.87575912476,8.36474990845),"Evt_blr_ETH_transformed",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_dev_from_avg_disc_btags","BDT_common5_input_dev_from_avg_disc_btags",30,8.26003621057e-09,0.0561485365033),"BDT_common5_input_dev_from_avg_disc_btags",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"Evt_Dr_MinDeltaRLeptonTaggedJet","Evt_Dr_MinDeltaRLeptonTaggedJet",30,0.400092959404,3.55373048782),"Evt_Dr_MinDeltaRLeptonTaggedJet",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_closest_tagged_dijet_mass","BDT_common5_input_closest_tagged_dijet_mass",30,18.6768493652,701.629150391),"BDT_common5_input_closest_tagged_dijet_mass",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Min_Tagged","Evt_CSV_Min_Tagged",30,-0.1,1),"Evt_CSV_Min_Tagged",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"highest_CSV","highest_CSV",30,-0.1,1),"CSV[0]",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Average_Tagged","Evt_CSV_Average_Tagged",30,0.519650936127,0.999474525452),"Evt_CSV_Average_Tagged",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_HT_tag","BDT_common5_input_HT_tag",30,0,500),"BDT_common5_input_HT_tag",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"Evt_HT","Sum p_{T}",30,0,1500),"Evt_HT",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Average","Evt_CSV_Average",30,0.,1),"Evt_CSV_Average",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"Evt_Dr_MinDeltaRTaggedJets","#Delta R of closest tagged jets",50,0.,5.0),"Evt_Dr_MinDeltaRTaggedJets",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"MEM","MEM",30,0,1.),memexp,plotselection,plotlabel),
-
         # Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_Evt_CSV_Average","BDT_common5_input_Evt_CSV_Average",20,0.6,1.0),"BDT_common5_input_Evt_CSV_Average",plotselection,plotlabel),
         # Plot(ROOT.TH1D(plotprefix+"MEM","MEM",20,0.0,1.0),memexp,plotselection,plotlabel),
         #Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_Evt_Deta_JetsAverage","BDT_common5_input_Evt_Deta_JetsAverage",20,0.0,3.4),"BDT_common5_input_Evt_Deta_JetsAverage",plotselection,plotlabel),
@@ -693,26 +655,24 @@ def main(argv):
     ]
 
 
-    plotlabel="1 lepton, #geq6 jets, 3 b-tags"
+    plotlabel="1 lepton, #geq6 jets, #geq3 b-tags"
     plotselection=categoriesJT[3][0]
-    plotprefix="s63_"
+    plotprefix="s6ge3_"
     plots63=[
-    # Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_max_dR_bb","BDT_common5_input_max_dR_bb",30,0.,5),"BDT_common5_input_max_dR_bb",plotselection,plotlabel),
-    # Plot(ROOT.TH1D(plotprefix+"Evt_Dr_TaggedJetsAverage","Evt_Dr_TaggedJetsAverage",30,0.545018851757,4.16827630997),"Evt_Dr_TaggedJetsAverage",plotselection,plotlabel),
-    # Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_transverse_sphericity_tags","BDT_common5_input_transverse_sphericity_tags",30,0,1),"BDT_common5_input_transverse_sphericity_tags",plotselection,plotlabel),
-    # Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_transverse_sphericity_jets","BDT_common5_input_transverse_sphericity_jets",30,0,1),"BDT_common5_input_transverse_sphericity_jets",plotselection,plotlabel),
-    # Plot(ROOT.TH1D(plotprefix+"Evt_M_MinDeltaRLeptonTaggedJet","Evt_M_MinDeltaRLeptonTaggedJet",30,0.,5),"Evt_M_MinDeltaRLeptonTaggedJet",plotselection,plotlabel),
-    # Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_closest_tagged_dijet_mass","BDT_common5_input_closest_tagged_dijet_mass",30,18.015329361,861.33190918),"BDT_common5_input_closest_tagged_dijet_mass",plotselection,plotlabel),
-    # Plot(ROOT.TH1D(plotprefix+"Evt_Dr_MinDeltaRTaggedJets","#Delta R of closest tagged jets",50,0.,5.0),"Evt_Dr_MinDeltaRTaggedJets",plotselection,plotlabel),
-    # Plot(ROOT.TH1D(plotprefix+"Evt_M2_TaggedJetsAverage","Evt_M2_TaggedJetsAverage",30,28.9838237762,946.658508301),"Evt_M2_TaggedJetsAverage",plotselection,plotlabel),
-    # Plot(ROOT.TH1D(plotprefix+"MEM","MEM",30,0,1.),memexp,plotselection,plotlabel),
-    # Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_HT_tag","BDT_common5_input_HT_tag",30,0,500),"BDT_common5_input_HT_tag",plotselection,plotlabel),
-    # Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Average","Evt_CSV_Average",30,0.0,1),"Evt_CSV_Average",plotselection,plotlabel),
-    # Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Average_Tagged","Evt_CSV_Average_Tagged",30,0.505652368069,0.999587237835),"Evt_CSV_Average_Tagged",plotselection,plotlabel),
-    # Plot(ROOT.TH1D(plotprefix+"Evt_M_JetsAverage","Evt_M_JetsAverage",30,1.71226847172,23.9440631866),"Evt_M_JetsAverage",plotselection,plotlabel),
-    # Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Min_Tagged","Evt_CSV_Min_Tagged",30,-0.1,1),"Evt_CSV_Min_Tagged",plotselection,plotlabel),
-    Plot(ROOT.TH1D(plotprefix+"Evt_blr_ETH_transformed","Evt_blr_ETH_transformed",30,-5.9987578392,8.41789054871),"Evt_blr_ETH_transformed",plotselection,plotlabel),
-
+    Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Average_Tagged","Evt_CSV_Average_Tagged",30,0.53,1.0),"Evt_CSV_Average_Tagged",plotselection,plotlabel),
+    Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_HT_tag","BDT_common5_input_HT_tag",30,98.02,1487.99),"BDT_common5_input_HT_tag",plotselection,plotlabel),
+    Plot(ROOT.TH1D(plotprefix+"Evt_Dr_MinDeltaRTaggedJets","#Delta R of closest tagged jets",30,0.4,3.53),"Evt_Dr_MinDeltaRTaggedJets",plotselection,plotlabel),
+    Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Min_Tagged","Evt_CSV_Min_Tagged",30,0.49,1.0),"Evt_CSV_Min_Tagged",plotselection,plotlabel),
+    Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_transverse_sphericity_jets","BDT_common5_input_transverse_sphericity_jets",30,0.0,0.98),"BDT_common5_input_transverse_sphericity_jets",plotselection,plotlabel),
+    Plot(ROOT.TH1D(plotprefix+"Evt_M2_TaggedJetsAverage","Evt_M2_TaggedJetsAverage",30,28.98,1162.56),"Evt_M2_TaggedJetsAverage",plotselection,plotlabel),
+    Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_closest_tagged_dijet_mass","BDT_common5_input_closest_tagged_dijet_mass",30,18.02,989.52),"BDT_common5_input_closest_tagged_dijet_mass",plotselection,plotlabel),
+    Plot(ROOT.TH1D(plotprefix+"Evt_M_MinDeltaRLeptonTaggedJet","Evt_M_MinDeltaRLeptonTaggedJet",30,17.69,462.22),"Evt_M_MinDeltaRLeptonTaggedJet",plotselection,plotlabel),
+    Plot(ROOT.TH1D(plotprefix+"Evt_M_JetsAverage","Evt_M_JetsAverage",30,1.95,14.51),"Evt_M_JetsAverage",plotselection,plotlabel),
+    Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_max_dR_bb","BDT_common5_input_max_dR_bb",30,0.77,5.38),"BDT_common5_input_max_dR_bb",plotselection,plotlabel),
+    Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Average","Evt_CSV_Average",30,0.22,0.65),"Evt_CSV_Average",plotselection,plotlabel),
+    Plot(ROOT.TH1D(plotprefix+"MEM","MEM",30,0.,1),memexp,plotselection,plotlabel),
+    Plot(ROOT.TH1D(plotprefix+"Evt_Dr_TaggedJetsAverage","Evt_Dr_TaggedJetsAverage",30,0.58,3.99),"Evt_Dr_TaggedJetsAverage",plotselection,plotlabel),
+    Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_transverse_sphericity_tags","BDT_common5_input_transverse_sphericity_tags",30,0.0,0.98),"BDT_common5_input_transverse_sphericity_tags",plotselection,plotlabel),
 
     # Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_maxeta_jet_tag","BDT_common5_input_maxeta_jet_tag",30,0.0199760980904,1.81036174297),"BDT_common5_input_maxeta_jet_tag",plotselection,plotlabel),
     # Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_h1","BDT_common5_input_h1",30,-0.175212517381,0.371365427971),"BDT_common5_input_h1",plotselection,plotlabel),
@@ -744,6 +704,7 @@ def main(argv):
     # Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_M3","BDT_common5_input_M3",30,49.9820327759,4132.41210938),"BDT_common5_input_M3",plotselection,plotlabel),
     # Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_pt_all_jets_over_E_all_jets","BDT_common5_input_pt_all_jets_over_E_all_jets",30,0.249926298857,0.963635444641),"BDT_common5_input_pt_all_jets_over_E_all_jets",plotselection,plotlabel),
     # Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_h0","BDT_common5_input_h0",30,0.142892166972,0.443892478943),"BDT_common5_input_h0",plotselection,plotlabel),
+    # Plot(ROOT.TH1D(plotprefix+"Evt_blr_ETH_transformed","Evt_blr_ETH_transformed",30,-5.9987578392,8.41789054871),"Evt_blr_ETH_transformed",plotselection,plotlabel),
     # Plot(ROOT.TH1D(plotprefix+"Evt_Eta_PrimaryLepton","Evt_Eta_PrimaryLepton",30,-2.37992596626,2.39206981659),"Evt_Eta_PrimaryLepton",plotselection,plotlabel),
     # Plot(ROOT.TH1D(plotprefix+"Evt_M_MedianTaggedJets","Evt_M_MedianTaggedJets",30,22.1278095245,1173.1661377),"Evt_M_MedianTaggedJets",plotselection,plotlabel),
     # Plot(ROOT.TH1D(plotprefix+"Evt_M3","Evt_M3",30,49.9820327759,4132.41210938),"Evt_M3",plotselection,plotlabel),
@@ -775,22 +736,6 @@ def main(argv):
     plotselection=categoriesJT[6][0]
     plotprefix="s64"
     plots64=[
-        Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_max_dR_bb","BDT_common5_input_max_dR_bb",30,0.,5),"BDT_common5_input_max_dR_bb",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"Evt_Dr_TaggedJetsAverage","Evt_Dr_TaggedJetsAverage",30,0.545018851757,4.16827630997),"Evt_Dr_TaggedJetsAverage",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_transverse_sphericity_tags","BDT_common5_input_transverse_sphericity_tags",30,0,1),"BDT_common5_input_transverse_sphericity_tags",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_transverse_sphericity_jets","BDT_common5_input_transverse_sphericity_jets",30,0,1),"BDT_common5_input_transverse_sphericity_jets",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"Evt_M_MinDeltaRLeptonTaggedJet","Evt_M_MinDeltaRLeptonTaggedJet",30,0.,5),"Evt_M_MinDeltaRLeptonTaggedJet",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_closest_tagged_dijet_mass","BDT_common5_input_closest_tagged_dijet_mass",30,18.015329361,861.33190918),"BDT_common5_input_closest_tagged_dijet_mass",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"Evt_Dr_MinDeltaRTaggedJets","#Delta R of closest tagged jets",50,0.,5.0),"Evt_Dr_MinDeltaRTaggedJets",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"Evt_M2_TaggedJetsAverage","Evt_M2_TaggedJetsAverage",30,28.9838237762,946.658508301),"Evt_M2_TaggedJetsAverage",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"MEM","MEM",30,0,1.),memexp,plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_HT_tag","BDT_common5_input_HT_tag",30,0,500),"BDT_common5_input_HT_tag",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Average","Evt_CSV_Average",30,0.0,1),"Evt_CSV_Average",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Average_Tagged","Evt_CSV_Average_Tagged",30,0.505652368069,0.999587237835),"Evt_CSV_Average_Tagged",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"Evt_M_JetsAverage","Evt_M_JetsAverage",30,1.71226847172,23.9440631866),"Evt_M_JetsAverage",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Min_Tagged","Evt_CSV_Min_Tagged",30,-0.1,1),"Evt_CSV_Min_Tagged",plotselection,plotlabel),
-        Plot(ROOT.TH1D(plotprefix+"Evt_blr_ETH_transformed","Evt_blr_ETH_transformed",30,-5.9987578392,8.41789054871),"Evt_blr_ETH_transformed",plotselection,plotlabel),
-
         #Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_Evt_CSV_Average","BDT_common5_input_Evt_CSV_Average",20,0.6,1.0),"BDT_common5_input_Evt_CSV_Average",plotselection,plotlabel),
         # Plot(ROOT.TH1D(plotprefix+"MEM","MEM",20,0.0,1.0),memexp,plotselection,plotlabel),
         #Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_Evt_Deta_JetsAverage","BDT_common5_input_Evt_Deta_JetsAverage",20,0.0,3.4),"BDT_common5_input_Evt_Deta_JetsAverage",plotselection,plotlabel),
@@ -1156,8 +1101,8 @@ def main(argv):
     
     systsamples=[]
     for sample in samples:
+        thisnewsel=sample.selection
         for sysname,sysfilename in zip(otherSystNames,otherSystFileNames):
-            thisnewsel=sample.selection
             systsamples.append(Sample(sample.name+sysname,sample.color,sample.path.replace("nominal",sysfilename),thisnewsel,sample.nick+sysname,samDict=sampleDict))
             # now add the UE and hdamp samples only for ttbar 
         if sample.nick.startswith("ttbarPlus") or sample.nick == "ttbarOther":
@@ -1201,7 +1146,7 @@ def main(argv):
         #if False:
             
             print "Doing plotParallel step since root file was not found.", analysis.rootFilePath
-            THEoutputpath=plotParallel(name,350000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018",True]],"/nfs/dust/cms/user/pkeicher/ttH_2018/pyroot-plotscripts/treejson_v42.json",otherSystNames,addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False,haddParallel=True,useGenWeightNormMap=True,useThisSampleForVariableSetup=samples[9])
+            THEoutputpath=plotParallel(name,350000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018",True]],"",otherSystNames,addCodeInterfacePaths=[],cirun=False,StopAfterCompileStep=False,haddParallel=True,useGenWeightNormMap=True,useThisSampleForVariableSetup=samples[9])
             #outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_v5_08102017.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_V6.py"],cirun=False)
             
             if type(THEoutputpath)==str:

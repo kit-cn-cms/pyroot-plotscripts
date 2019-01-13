@@ -554,13 +554,13 @@ void LeptonSFHelper::ChangeMuIsoHistos(bool is_DL) {
 
 void LeptonSFHelper::SetElectronHistos( ){
 
-  std::string IDinputFileBtoF = "/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/egammaEffi.txt_EGM2D_runBCDEF_passingTight94X.root";
+  std::string IDinputFileBtoF = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/Fall17/egammaEffi.txt_EGM2D_runBCDEF_passingTight94X.root";
   // std::string IDinputFileGtoH = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/oct202017/ele_ID_SF_tight_GH.root";
 
-  std::string TRIGGERinputFile = "/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/SingleEG_JetHT_Trigger_Scale_Factors_ttHbb_Data_MC_v5.0.root";
+  std::string TRIGGERinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/Fall17/SingleEG_JetHT_Trigger_Scale_Factors_ttHbb_Data_MC_v2.0.root";
   //std::string ISOinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/oct202017/ele_Reco_EGM2D.root"; // DANGERZONE: no iso SF yet??
-  std::string GFSinputFile = "/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/egammaEffi.txt_EGM2D_runBCDEF_passingRECO.root"; //reco SFs for pt > 20
-  std::string GFSinputFile_lowEt = "/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/egammaEffi.txt_EGM2D_runBCDEF_passingRECO_lowEt.root"; //reco SFs for pt<20
+  std::string GFSinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/Fall17/egammaEffi.txt_EGM2D_runBCDEF_passingRECO.root"; //reco SFs for pt > 20
+  std::string GFSinputFile_lowEt = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/Fall17/egammaEffi.txt_EGM2D_runBCDEF_passingRECO_lowEt.root"; //reco SFs for pt<20
   // std::string TRIGGERinputFile = GFSinputFile;  //not available yet
   // std::string ISOinputFile = GFSinputFile;      //not available yet
 
@@ -583,11 +583,11 @@ void LeptonSFHelper::SetElectronHistos( ){
 
 void LeptonSFHelper::SetMuonHistos( ){
 
-  std::string IDinputFileBtoF = "/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/Muon_RunBCDEF_SF_ID_syst.root";
+  std::string IDinputFileBtoF = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/Fall17/MuonIDSF_Errors_RunBtoF_Nov17Nov2017.root";
   
-  std::string ISOinputFileBtoF =  "/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/Muon_RunBCDEF_SF_ISO_syst.root";
+  std::string ISOinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/Fall17/MuonIsoSF_Errors_RunBtoF_Nov17Nov2017.root";
   
-  std::string TRIGGERinputFileBtoF =  "/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/Muon_Trigger_SF_EfficienciesAndSF_RunBtoF_Nov17Nov2017.root";
+  std::string TRIGGERinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/Fall17/MuonTriggerSF_RunBtoF_Nov17Nov2017.root";
   
   TFile *f_IDSFBtoF = new TFile(std::string(IDinputFileBtoF).c_str(),"READ");
   
@@ -1327,7 +1327,7 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
 }
 
 // QCD Helper to retrieve scale factor for QCD Estimation with iso inverted ntuples
-/*
+
 class QCDHelper
 {
 	public:
@@ -1701,16 +1701,6 @@ int ttbarsysthelper::GetTtbarSubProcess(int& GenEvt_I_TTPlusCC,int& GenEvt_I_TTP
     }
     return i;
 }
-*/
-// struct to store information 1D histograms
-struct Plot1DInfoStruct{
-    std::string identifier;
-    std::string title;
-    int nbins;
-    float xmin;
-    float xmax;
-    //std::unique_ptr<TH1> histoptr;
-};
 
 
 
@@ -1718,50 +1708,38 @@ struct Plot1DInfoStruct{
 // Until GCC 4.9 struct cannot have init values if one wants to initialize it with bracket lists
 struct structHelpFillHisto{
   TH1* histo;
-  //double var;
+  double var;
   double weight;
 };
 
 // helper function to fill plots more efficiently
-void helperFillHisto(const std::vector<structHelpFillHisto>& paramVec, const double& val)
+void helperFillHisto(const std::vector<structHelpFillHisto>& paramVec)
 {
   for (const auto &singleParams: paramVec)
   // singleParams: histo, var, weight
   {
     if((singleParams.weight)!=0)
-      singleParams.histo->Fill(fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,val)),singleParams.weight);
+      singleParams.histo->Fill(fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,singleParams.var)),singleParams.weight);
   }
 }
 
 // Helper struct to fill plots more efficiently
 // Until GCC 4.9 struct cannot have init values if one wants to initialize it with bracket lists
-struct Plot2DInfoStruct{
-    std::string identifier;
-    std::string title;
-    int nbinsx;
-    int nbinsy;
-    float xmin;
-    float xmax;
-    float ymin;
-    float ymax;
-    //std::unique_ptr<TH2> histoptr;
-};
-
 struct structHelpFillTwoDimHisto{
   TH2* histo;
-  //double var1;
-  //double var2;
+  double var1;
+  double var2;
   double weight;
 };
 
 // helper function to fill plots more efficiently
-void helperFillTwoDimHisto(const std::vector<structHelpFillTwoDimHisto>& paramVec, const double& val1, const double& val2)
+void helperFillTwoDimHisto(const std::vector<structHelpFillTwoDimHisto>& paramVec)
 {
   for (const auto &singleParams: paramVec)
   // singleParams: histo, var1, var2, weight
   {
     if((singleParams.weight)!=0)
-      singleParams.histo->Fill(fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,val1)),fmin(singleParams.histo->GetYaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetYaxis()->GetXmin()+1e-6,val2)),singleParams.weight);
+      singleParams.histo->Fill(fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,singleParams.var1)),fmin(singleParams.histo->GetYaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetYaxis()->GetXmin()+1e-6,singleParams.var2)),singleParams.weight);
   }
 }
 
@@ -1772,14 +1750,14 @@ void plot(){
   std::vector<Systematics::Type> v_SystTypes = Systematics::getTypeVector();
   //for(auto itsyst : v_SystTypes){std::cout<< " Know :" << itsyst << std::endl;}
 
-  std::string csvHFfile="/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/deepCSV_sfs_hf.root";
-  std::string csvLFfile="/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/deepCSV_sfs_lf.root";
+  std::string csvHFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_V2_2017/deepCSV_sfs_hf.root";
+  std::string csvLFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_V2_2017/deepCSV_sfs_lf.root";
   TString qcd_file = "/nfs/dust/cms/user/mwassmer/QCD_Estimation_September17/QCD_Estimation/QCD_Estimation_FakeScaleFactor_nominal.root";
   
   CSVHelper* internalCSVHelper= new CSVHelper(csvHFfile,csvLFfile, 5,4,3,v_SystTypes);
   LeptonSFHelper* internalLeptonSFHelper= new LeptonSFHelper();
-  //QCDHelper* internalQCDHelper = new QCDHelper(qcd_file);
-  //ttbarsysthelper* internalttbarsysthelper = new ttbarsysthelper();
+  QCDHelper* internalQCDHelper = new QCDHelper(qcd_file);
+  ttbarsysthelper* internalttbarsysthelper = new ttbarsysthelper();
 
   // open files
   TChain* chain = new TChain("MVATree");
@@ -2163,13 +2141,11 @@ def fillHistoSyst(name,varname,weight,systnames,systweights):
   # Write all individual systnames and systweights in nested vector to use together with function allowing variadic vector size -> speed-up of compilation and less code lines
   text+='     std::vector<structHelpFillHisto> helpWeightVec_' + name + ' = {'
   for sn,sw in zip(systnames,systweights):
-    text+='       { ' + 'histos1D['+'"'+name+sn+'"].get()' + ',('+sw+')*(weight_'+name+')' + '},'
+    text+='       { ' + 'h_'+name+sn + ', double(' + varname + '), ' + '('+sw+')*(weight_'+name+')' + '},'
   # finish vector
   text+='     };\n'
-  text+='     variable = '+varname+';\n'
   # call helper fill histo function which is defined in the beginning
-  text+='     helperFillHisto(helpWeightVec_' + name + ',variable);\n' 
-  text+='     variable = -999;\n'
+  text+='     helperFillHisto(helpWeightVec_' + name + ');\n' 
   return text
 
 def fillTwoDimHistoSyst(name,varname1,varname2,weight,systnames,systweights):
@@ -2177,15 +2153,11 @@ def fillTwoDimHistoSyst(name,varname1,varname2,weight,systnames,systweights):
   # Write all individual systnames and systweights in nested vector to use together with function allowing variadic vector size -> speed-up of compilation and less code lines
   text+='     std::vector<structHelpFillTwoDimHisto> helpWeightVec_' + name + ' = {'
   for sn,sw in zip(systnames,systweights):
-    text+='       { ' + 'histos2D['+'"'+name+sn+'"].get()'  + ',('+sw+')*(weight_'+name+')' + '},'
+    text+='       { ' + 'h_'+name+sn + ', double(' + varname1 + '), double(' + varname2 + '), ' + '('+sw+')*(weight_'+name+')' + '},'
   # finish vector
   text+='     };\n'
-  text+='     variable1 = '+varname1+';\n'
-  text+='     variable2 = '+varname2+';\n'
   # call helper fill histo function which is defined in the beginning
-  text+='     helperFillTwoDimHisto(helpWeightVec_' + name + ',variable1,variable2);\n' 
-  text+='     variable1 = -999;\n'
-  text+='     variable2 = -999;\n'
+  text+='     helperFillTwoDimHisto(helpWeightVec_' + name + ');\n' 
   return text
 
 def startLoop():
@@ -2428,19 +2400,19 @@ def startLoop():
   internalCSVweight_CSVCErr2Up=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVCErr2up,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
   internalCSVweight_CSVCErr2Down=internalCSVHelper->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,Systematics::CSVCErr2down,tmpcsvWgtHF, tmpcsvWgtLF, tmpcsvWgtCF)/internalCSVweight;
   
-  //internalQCDweight=internalQCDHelper->GetScaleFactor(N_Jets,N_BTagsM,N_TightElectrons,N_TightMuons);
-  //internalQCDweightup=internalQCDHelper->GetScaleFactorErrorUp(N_Jets,N_BTagsM,N_TightElectrons,N_TightMuons);
-  //internalQCDweightdown=internalQCDHelper->GetScaleFactorErrorDown(N_Jets,N_BTagsM,N_TightElectrons,N_TightMuons);
+  internalQCDweight=internalQCDHelper->GetScaleFactor(N_Jets,N_BTagsM,N_TightElectrons,N_TightMuons);
+  internalQCDweightup=internalQCDHelper->GetScaleFactorErrorUp(N_Jets,N_BTagsM,N_TightElectrons,N_TightMuons);
+  internalQCDweightdown=internalQCDHelper->GetScaleFactorErrorDown(N_Jets,N_BTagsM,N_TightElectrons,N_TightMuons);
   
-  //int ttbar_subprocess = internalttbarsysthelper->GetTtbarSubProcess(GenEvt_I_TTPlusCC,GenEvt_I_TTPlusBB);
-  //internalISRweightup = internalttbarsysthelper->GetISRScaleFactorUp(ttbar_subprocess,N_Jets);
-  //internalISRweightdown = internalttbarsysthelper->GetISRScaleFactorDown(ttbar_subprocess,N_Jets);
-  //internalFSRweightup = internalttbarsysthelper->GetFSRScaleFactorUp(ttbar_subprocess,N_Jets);
-  //internalFSRweightdown = internalttbarsysthelper->GetFSRScaleFactorDown(ttbar_subprocess,N_Jets);
-  //internalHDAMPweightup = internalttbarsysthelper->GetHDAMPScaleFactorUp(ttbar_subprocess,N_Jets);
-  //internalHDAMPweightdown = internalttbarsysthelper->GetHDAMPScaleFactorDown(ttbar_subprocess,N_Jets);
-  //internalUEweightup = internalttbarsysthelper->GetUEScaleFactorUp(ttbar_subprocess,N_Jets);
-  //internalUEweightdown = internalttbarsysthelper->GetUEScaleFactorDown(ttbar_subprocess,N_Jets);
+  int ttbar_subprocess = internalttbarsysthelper->GetTtbarSubProcess(GenEvt_I_TTPlusCC,GenEvt_I_TTPlusBB);
+  internalISRweightup = internalttbarsysthelper->GetISRScaleFactorUp(ttbar_subprocess,N_Jets);
+  internalISRweightdown = internalttbarsysthelper->GetISRScaleFactorDown(ttbar_subprocess,N_Jets);
+  internalFSRweightup = internalttbarsysthelper->GetFSRScaleFactorUp(ttbar_subprocess,N_Jets);
+  internalFSRweightdown = internalttbarsysthelper->GetFSRScaleFactorDown(ttbar_subprocess,N_Jets);
+  internalHDAMPweightup = internalttbarsysthelper->GetHDAMPScaleFactorUp(ttbar_subprocess,N_Jets);
+  internalHDAMPweightdown = internalttbarsysthelper->GetHDAMPScaleFactorDown(ttbar_subprocess,N_Jets);
+  internalUEweightup = internalttbarsysthelper->GetUEScaleFactorUp(ttbar_subprocess,N_Jets);
+  internalUEweightdown = internalttbarsysthelper->GetUEScaleFactorDown(ttbar_subprocess,N_Jets);
   
   totalTimeCalculateSFs+=timerCalculateSFs->RealTime();
 
@@ -2525,13 +2497,7 @@ def varLoop(i,n):
 
 def getFoot(addCodeInterfaces):
   rstr= """
-  for(auto& histo1D : histos1D){
-      outfile->WriteTObject(histo1D.second.get());
-  }
-  for(auto& histo2D : histos2D){
-      outfile->WriteTObject(histo2D.second.get());
-  }
-  //outfile->Write();
+  outfile->Write();
   outfile->Close();
   std::ofstream f_nevents((string(outfilename)+".cutflow.txt").c_str());
   f_nevents << "0" << " : " << "all" << " : " << eventsAnalyzed << " : " << sumOfWeights <<endl;
@@ -2767,84 +2733,30 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 
   # initialize TMVA Readers
   script+=variables.setupTMVAReadersProgram()
-  
-  script+="double variable = -999;\n"
-  script+="double variable1 = -999;\n"
-  script+="double variable2 = -999;\n"
-  script+="std::vector<std::string> systematics = {\n"
-  for syst in systnames:
-      script+='"'+syst+'"'+","
-  script=script[:-1]
-  script+="};\n"
-  script+="std::vector<std::string> categs = {\n"
-  for c in catnames:
-      script+='"'+c+'"'+","
-  script=script[:-1]
-  script+="};\n"
-  script+="std::map<std::string,Plot1DInfoStruct> plotinfo1D;\n"
-  script+="std::map<std::string,Plot2DInfoStruct> plotinfo2D;\n"
-  script+="std::map<std::string,std::unique_ptr<TH1>> histos1D;\n"
-  script+="std::map<std::string,std::unique_ptr<TH2>> histos2D;\n"
-  for plot in plots:
-      if not isinstance(plot,plotutils.TwoDimPlot):
-          t=plot.histo.GetTitle()
-          n=plot.histo.GetName()
-          mx=plot.histo.GetXaxis().GetXmax()
-          mn=plot.histo.GetXaxis().GetXmin()
-          nb=plot.histo.GetNbinsX()
-          script+='plotinfo1D["'+n+'"]={"'+n+'","'+t+'",'+str(nb)+","+str(mn)+","+str(mx)+"};"
-      else:
-          t=plot.histo.GetTitle()+";"+plot.histo.GetXaxis().GetTitle()+";"+plot.histo.GetYaxis().GetTitle()
-          n=plot.histo.GetName()
-          mxX=plot.histo.GetXaxis().GetXmax()
-          mnX=plot.histo.GetXaxis().GetXmin()
-          nbX=plot.histo.GetNbinsX()
-          mxY=plot.histo.GetYaxis().GetXmax()
-          mnY=plot.histo.GetYaxis().GetXmin()
-          nbY=plot.histo.GetNbinsY()
-          script+='plotinfo2D["'+n+'"]={"'+n+'","'+t+'",'+str(nbX)+","+str(nbY)+","+str(mnX)+","+str(mxX)+","+str(mnY)+","+str(mxY)+"};"
-  script+="\n\n"
-  script+="for(const auto& cat : categs){\n"
-  script+="    for(const auto& obj : plotinfo1D){\n"
-  script+="        for(const auto& syst : systematics){\n"
-  script+="            const auto& PlotInfo1D = obj.second;\n"
-  script+="            histos1D[cat+obj.first+syst]=std::unique_ptr<TH1>(new TH1F((processname+"+'"_"'+"+cat+obj.first+syst+suffix).c_str(),(PlotInfo1D.title).c_str(),PlotInfo1D.nbins,PlotInfo1D.xmin,PlotInfo1D.xmax));\n"
-  script+="            histos1D[cat+obj.first+syst]->SetDirectory(0);\n"
-  script+="        }\n"
-  script+="    }\n"
-  script+="}\n"
-  script+="for(const auto& cat : categs){\n"
-  script+="    for(const auto& obj : plotinfo2D){\n"
-  script+="        for(const auto& syst : systematics){\n"
-  script+="                const auto& PlotInfo2D = obj.second;\n"
-  script+="                histos2D[cat+obj.first+syst]=std::unique_ptr<TH2>(new TH2F((processname+"+'"_"'+"+cat+obj.first+syst+suffix).c_str(),(PlotInfo2D.title).c_str(),PlotInfo2D.nbinsx,PlotInfo2D.xmin,PlotInfo2D.xmax,PlotInfo2D.nbinsy,PlotInfo2D.ymin,PlotInfo2D.ymax));\n"
-  script+="                histos2D[cat+obj.first+syst]->SetDirectory(0);\n"
-  script+="        }\n"
-  script+="    }\n"
-  script+="}\n"
-  
+
   # initialize histograms in all categories and for all systematics
-  #for c in catnames:
-    #for plot in plots:
-      #if isinstance(plot,plotutils.TwoDimPlot):
-        #t=plot.histo.GetTitle()+";"+plot.histo.GetXaxis().GetTitle()+";"+plot.histo.GetYaxis().GetTitle()
-        #n=plot.histo.GetName()
-        #mxX=plot.histo.GetXaxis().GetXmax()
-        #mnX=plot.histo.GetXaxis().GetXmin()
-        #nbX=plot.histo.GetNbinsX()
-        #mxY=plot.histo.GetYaxis().GetXmax()
-        #mnY=plot.histo.GetYaxis().GetXmin()
-        #nbY=plot.histo.GetNbinsY()
-        #for s in systnames:
-          #script+=initTwoDimHistoWithProcessNameAndSuffix(c+n+s,nbX,mnX,mxX,nbY,mnY,mxY,t)
-      #else:
-        #t=plot.histo.GetTitle()
-        #n=plot.histo.GetName()
-        #mx=plot.histo.GetXaxis().GetXmax()
-        #mn=plot.histo.GetXaxis().GetXmin()
-        #nb=plot.histo.GetNbinsX()
-        #for s in systnames:
-          #script+=initHistoWithProcessNameAndSuffix(c+n+s,nb,mn,mx,t)
+  for c in catnames:
+    for plot in plots:
+      if isinstance(plot,plotutils.TwoDimPlot):
+        t=plot.histo.GetTitle()+";"+plot.histo.GetXaxis().GetTitle()+";"+plot.histo.GetYaxis().GetTitle()
+        n=plot.histo.GetName()
+        mxX=plot.histo.GetXaxis().GetXmax()
+        mnX=plot.histo.GetXaxis().GetXmin()
+        nbX=plot.histo.GetNbinsX()
+        mxY=plot.histo.GetYaxis().GetXmax()
+        mnY=plot.histo.GetYaxis().GetXmin()
+        nbY=plot.histo.GetNbinsY()
+        for s in systnames:
+          script+=initTwoDimHistoWithProcessNameAndSuffix(c+n+s,nbX,mnX,mxX,nbY,mnY,mxY,t)
+      else:
+        t=plot.histo.GetTitle()
+        n=plot.histo.GetName()
+        mx=plot.histo.GetXaxis().GetXmax()
+        mn=plot.histo.GetXaxis().GetXmin()
+        nb=plot.histo.GetNbinsX()
+        for s in systnames:
+          script+=initHistoWithProcessNameAndSuffix(c+n+s,nb,mn,mx,t)
+
   # start event loop
   #if useGenWeightNormMap:
     #script+=DefineLHAPDF()
