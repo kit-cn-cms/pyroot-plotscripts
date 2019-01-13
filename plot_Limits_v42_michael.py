@@ -27,7 +27,7 @@ from plotconfig_v42 import *
 def main(argv):
 
     #Create analysis object with output name
-    name='limits_v42_test'
+    name='limits_v42_4b'
     analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscripts18/July18/pyroot-plotscripts/workdir/'+name+'/output_limitInput.root', signalProcess='ttH')
     print os.path.exists(analysis.rootFilePath), "AAAARgh"
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscripts18/July18/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
@@ -111,9 +111,9 @@ def main(argv):
     # definition of categories
     categoriesJT=[
                   ("(N_Jets>=6&&N_BTagsM==2)","6j2t",""),
-                  ("(N_Jets==4&&N_BTagsM==3)","4j3t",""),
-                  ("(N_Jets==5&&N_BTagsM==3)","5j3t",""),
-                  ("(N_Jets>=6&&N_BTagsM==3)","6j3t",""),
+                  ("(N_Jets==4&&N_BTagsM>=3)","4j3t",""),
+                  ("(N_Jets==5&&N_BTagsM>=3)","5j3t",""),
+                  ("(N_Jets>=6&&N_BTagsM>=3)","6j3t",""),
                   ("(N_Jets==4&&N_BTagsM>=4)","4j4t",""),
                   ("(N_Jets==5&&N_BTagsM>=4)","5j4t",""),
                   ("(N_Jets>=6&&N_BTagsM>=4)","6j4t","")
@@ -368,7 +368,8 @@ def main(argv):
     Plot(ROOT.TH1D(plotprefix+"Evt_CSV_Average","Evt_CSV_Average",30,0.22,0.65),"Evt_CSV_Average",plotselection,plotlabel),
     Plot(ROOT.TH1D(plotprefix+"MEM","MEM",30,0.,1),memexp,plotselection,plotlabel),
     Plot(ROOT.TH1D(plotprefix+"Evt_Dr_TaggedJetsAverage","Evt_Dr_TaggedJetsAverage",30,0.58,3.99),"Evt_Dr_TaggedJetsAverage",plotselection,plotlabel),
-    Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_transverse_sphericity_tags","BDT_common5_input_transverse_sphericity_tags",30,0.0,0.98),"BDT_common5_input_transverse_sphericity_tags",plotselection,plotlabel)
+    Plot(ROOT.TH1D(plotprefix+"BDT_common5_input_transverse_sphericity_tags","BDT_common5_input_transverse_sphericity_tags",30,0.0,0.98),"BDT_common5_input_transverse_sphericity_tags",plotselection,plotlabel),
+    Plot(ROOT.TH1D(plotprefix+"Evt_blr_ETH_transformed","Evt_blr_ETH_transformed",30,-5.9987578392,8.41789054871),"Evt_blr_ETH_transformed",plotselection,plotlabel)
     ]
 
     plotlabel="1 lepton, #geq6 jets, #geq4 b-tags"
@@ -394,6 +395,9 @@ def main(argv):
                 if plot1.selection!=plot2.selection:
                     print "skipping cause selection", plot1, plot2, plot1.variable, plot2.variable
                     continue
+                #if (not "blr" in plot1.variable) and (not "blr" in plot2.variable):
+                    #print "not blr, hell no!"
+                    #continue
                 name1=plot1.histo.GetName()
                 name2=plot2.histo.GetName()
                 print name1, name2
