@@ -6,8 +6,8 @@ sys.path.append('pyroot-plotscripts-base/limittools')
 from scriptgenerator import *
 from plotutils import *
 
-sel_singleel="(N_LooseMuons==0 && N_TightElectrons==1 && (Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1))*(N_Jets>=4 && N_BTagsM>=2)" # need to veto muon events in electron dataset to avoid double countung
-sel_singlemu="(N_LooseElectrons==0 && N_TightMuons==1 && (Triggered_HLT_IsoMu27_vX==1))*(N_Jets>=4 && N_BTagsM>=2)*(Muon_Pt[0]>29.)" # and vice versa...
+sel_singleel="(N_LooseMuons==0 && N_TightElectrons==1 && (Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1))*(N_Jets>=4 && N_BTagsM>=3)" # need to veto muon events in electron dataset to avoid double countung
+sel_singlemu="(N_LooseElectrons==0 && N_TightMuons==1 && (Triggered_HLT_IsoMu27_vX==1))*(N_Jets>=4 && N_BTagsM>=3)*(Muon_Pt[0]>29.)" # and vice versa...
 sel_MET="*(Evt_Pt_MET>20.)"
 #sel_MET="*1.0"
 sel_StrangeMuWeights='*(abs(Weight_scale_variation_muR_0p5_muF_0p5)<=100 && abs(Weight_scale_variation_muR_0p5_muF_1p0)<=100 && abs(Weight_scale_variation_muR_0p5_muF_2p0)<=100 && abs(Weight_scale_variation_muR_1p0_muF_0p5)<=100 && abs(Weight_scale_variation_muR_1p0_muF_1p0)<=100 && abs(Weight_scale_variation_muR_1p0_muF_2p0)<=100 && abs(Weight_scale_variation_muR_2p0_muF_0p5)<=100 && abs(Weight_scale_variation_muR_2p0_muF_1p0)<=100 && abs(Weight_scale_variation_muR_2p0_muF_2p0)<=100)'
@@ -100,9 +100,9 @@ mcWeightAll='41.53'
 mcWeight='41.53*2.0'
 
 # TODO Add Trigger SFs
-mcTriggerWeight='((1.0) * (internalEleTriggerWeight*(N_LooseMuons==0 && N_TightElectrons==1)* (Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1) +internalMuTriggerWeight*(N_LooseElectrons==0 && N_TightMuons==1)*(Muon_Pt[0]>29.) *(Triggered_HLT_IsoMu27_vX==1)))*(N_Jets>=4 && N_BTagsM>=2)'
+mcTriggerWeight='((1.0) * (internalEleTriggerWeight*(N_LooseMuons==0 && N_TightElectrons==1)* (Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1) +internalMuTriggerWeight*(N_LooseElectrons==0 && N_TightMuons==1)*(Muon_Pt[0]>29.) *(Triggered_HLT_IsoMu27_vX==1)))*(N_Jets>=4 && N_BTagsM>=3)'
 #mcTriggerWeight='(1.0)'
-#mcTriggerWeight='((1.0) * (1*(N_LooseMuons==0 && N_TightElectrons==1)* (1) +1*(N_LooseElectrons==0 && N_TightMuons==1) *(1)))*(N_Jets>=4 && N_BTagsM>=2)'
+#mcTriggerWeight='((1.0) * (1*(N_LooseMuons==0 && N_TightElectrons==1)* (1) +1*(N_LooseElectrons==0 && N_TightMuons==1) *(1)))*(N_Jets>=4 && N_BTagsM>=3)'
 
 #TODO Check that SFs and uncertainties are correct
 sfs="1.0"
@@ -371,69 +371,69 @@ print weightSystNames
 assert len(systWeights)==len(weightSystNames)
 
 otherSystNames=[
-                    # "_CMS_scale_j_2017Up",
-                    # "_CMS_scale_j_2017Down",
+                    "_CMS_scale_j_2017Up",
+                    "_CMS_scale_j_2017Down",
                    "_CMS_res_j_2017Up",
                    "_CMS_res_j_2017Down",
-    "_CMS_scaleAbsoluteStat_j_2017Up","_CMS_scaleAbsoluteStat_j_2017Down",
-    "_CMS_scaleAbsoluteScale_j_2017Up","_CMS_scaleAbsoluteScale_j_2017Down",
-    #"_CMS_scaleAbsoluteFlavMap_j_2017Up","_CMS_scaleAbsoluteFlavMap_j_2017Down",
-    "_CMS_scaleAbsoluteMPFBias_j_2017Up","_CMS_scaleAbsoluteMPFBias_j_2017Down",
-    "_CMS_scaleFragmentation_j_2017Up","_CMS_scaleFragmentation_j_2017Down",
-    "_CMS_scaleSinglePionECAL_j_2017Up","_CMS_scaleSinglePionECAL_j_2017Down",
-    "_CMS_scaleSinglePionHCAL_j_2017Up","_CMS_scaleSinglePionHCAL_j_2017Down",
-    "_CMS_scaleFlavorQCD_j_2017Up","_CMS_scaleFlavorQCD_j_2017Down",
-    "_CMS_scaleTimePtEta_j_2017Up","_CMS_scaleTimePtEta_j_2017Down",
-    "_CMS_scaleRelativeJEREC1_j_2017Up","_CMS_scaleRelativeJEREC1_j_2017Down",
-    "_CMS_scaleRelativeJEREC2_j_2017Up","_CMS_scaleRelativeJEREC2_j_2017Down",
-    "_CMS_scaleRelativeJERHF_j_2017Up","_CMS_scaleRelativeJERHF_j_2017Down",
-    "_CMS_scaleRelativePtBB_j_2017Up","_CMS_scaleRelativePtBB_j_2017Down",
-    "_CMS_scaleRelativePtEC1_j_2017Up","_CMS_scaleRelativePtEC1_j_2017Down",
-    "_CMS_scaleRelativePtEC2_j_2017Up","_CMS_scaleRelativePtEC2_j_2017Down",
-    "_CMS_scaleRelativePtHF_j_2017Up","_CMS_scaleRelativePtHF_j_2017Down",
-    "_CMS_scaleRelativeBal_j_2017Up","_CMS_scaleRelativeBal_j_2017Down",
-    "_CMS_scaleRelativeFSR_j_2017Up","_CMS_scaleRelativeFSR_j_2017Down",
-    "_CMS_scaleRelativeStatFSR_j_2017Up","_CMS_scaleRelativeStatFSR_j_2017Down",
-    "_CMS_scaleRelativeStatEC_j_2017Up","_CMS_scaleRelativeStatEC_j_2017Down",
-    "_CMS_scaleRelativeStatHF_j_2017Up","_CMS_scaleRelativeStatHF_j_2017Down",
-    "_CMS_scalePileUpDataMC_j_2017Up","_CMS_scalePileUpDataMC_j_2017Down",
-    "_CMS_scalePileUpPtRef_j_2017Up","_CMS_scalePileUpPtRef_j_2017Down",
-    "_CMS_scalePileUpPtBB_j_2017Up","_CMS_scalePileUpPtBB_j_2017Down",
-    "_CMS_scalePileUpPtEC1_j_2017Up","_CMS_scalePileUpPtEC1_j_2017Down",
-    "_CMS_scalePileUpPtEC2_j_2017Up","_CMS_scalePileUpPtEC2_j_2017Down",
-    "_CMS_scalePileUpPtHF_j_2017Up","_CMS_scalePileUpPtHF_j_2017Down",
+    #"_CMS_scaleAbsoluteStat_j_2017Up","_CMS_scaleAbsoluteStat_j_2017Down",
+    #"_CMS_scaleAbsoluteScale_j_2017Up","_CMS_scaleAbsoluteScale_j_2017Down",
+    ##"_CMS_scaleAbsoluteFlavMap_j_2017Up","_CMS_scaleAbsoluteFlavMap_j_2017Down",
+    #"_CMS_scaleAbsoluteMPFBias_j_2017Up","_CMS_scaleAbsoluteMPFBias_j_2017Down",
+    #"_CMS_scaleFragmentation_j_2017Up","_CMS_scaleFragmentation_j_2017Down",
+    #"_CMS_scaleSinglePionECAL_j_2017Up","_CMS_scaleSinglePionECAL_j_2017Down",
+    #"_CMS_scaleSinglePionHCAL_j_2017Up","_CMS_scaleSinglePionHCAL_j_2017Down",
+    #"_CMS_scaleFlavorQCD_j_2017Up","_CMS_scaleFlavorQCD_j_2017Down",
+    #"_CMS_scaleTimePtEta_j_2017Up","_CMS_scaleTimePtEta_j_2017Down",
+    #"_CMS_scaleRelativeJEREC1_j_2017Up","_CMS_scaleRelativeJEREC1_j_2017Down",
+    #"_CMS_scaleRelativeJEREC2_j_2017Up","_CMS_scaleRelativeJEREC2_j_2017Down",
+    #"_CMS_scaleRelativeJERHF_j_2017Up","_CMS_scaleRelativeJERHF_j_2017Down",
+    #"_CMS_scaleRelativePtBB_j_2017Up","_CMS_scaleRelativePtBB_j_2017Down",
+    #"_CMS_scaleRelativePtEC1_j_2017Up","_CMS_scaleRelativePtEC1_j_2017Down",
+    #"_CMS_scaleRelativePtEC2_j_2017Up","_CMS_scaleRelativePtEC2_j_2017Down",
+    #"_CMS_scaleRelativePtHF_j_2017Up","_CMS_scaleRelativePtHF_j_2017Down",
+    #"_CMS_scaleRelativeBal_j_2017Up","_CMS_scaleRelativeBal_j_2017Down",
+    #"_CMS_scaleRelativeFSR_j_2017Up","_CMS_scaleRelativeFSR_j_2017Down",
+    #"_CMS_scaleRelativeStatFSR_j_2017Up","_CMS_scaleRelativeStatFSR_j_2017Down",
+    #"_CMS_scaleRelativeStatEC_j_2017Up","_CMS_scaleRelativeStatEC_j_2017Down",
+    #"_CMS_scaleRelativeStatHF_j_2017Up","_CMS_scaleRelativeStatHF_j_2017Down",
+    #"_CMS_scalePileUpDataMC_j_2017Up","_CMS_scalePileUpDataMC_j_2017Down",
+    #"_CMS_scalePileUpPtRef_j_2017Up","_CMS_scalePileUpPtRef_j_2017Down",
+    #"_CMS_scalePileUpPtBB_j_2017Up","_CMS_scalePileUpPtBB_j_2017Down",
+    #"_CMS_scalePileUpPtEC1_j_2017Up","_CMS_scalePileUpPtEC1_j_2017Down",
+    #"_CMS_scalePileUpPtEC2_j_2017Up","_CMS_scalePileUpPtEC2_j_2017Down",
+    #"_CMS_scalePileUpPtHF_j_2017Up","_CMS_scalePileUpPtHF_j_2017Down",
 ]
 
 otherSystFileNames=[
-      # "JESup","JESdown",
+      "JESup","JESdown",
       "JERup","JERdown",
-    "JESAbsoluteStatup","JESAbsoluteStatdown",
-    "JESAbsoluteScaleup","JESAbsoluteScaledown",
-    #"JESAbsoluteFlavMapup","JESAbsoluteFlavMapdown",
-    "JESAbsoluteMPFBiasup","JESAbsoluteMPFBiasdown",
-    "JESFragmentationup","JESFragmentationdown",
-    "JESSinglePionECALup","JESSinglePionECALdown",
-    "JESSinglePionHCALup","JESSinglePionHCALdown",
-    "JESFlavorQCDup","JESFlavorQCDdown",
-    "JESTimePtEtaup","JESTimePtEtadown",
-    "JESRelativeJEREC1up","JESRelativeJEREC1down",
-    "JESRelativeJEREC2up","JESRelativeJEREC2down",
-    "JESRelativeJERHFup","JESRelativeJERHFdown",
-    "JESRelativePtBBup","JESRelativePtBBdown",
-    "JESRelativePtEC1up","JESRelativePtEC1down",
-    "JESRelativePtEC2up","JESRelativePtEC2down",
-    "JESRelativePtHFup","JESRelativePtHFdown",
-    "JESRelativeBalup","JESRelativeBaldown",
-    "JESRelativeFSRup","JESRelativeFSRdown",
-    "JESRelativeStatFSRup","JESRelativeStatFSRdown",
-    "JESRelativeStatECup","JESRelativeStatECdown",
-    "JESRelativeStatHFup","JESRelativeStatHFdown",
-    "JESPileUpDataMCup","JESPileUpDataMCdown",
-    "JESPileUpPtRefup","JESPileUpPtRefdown",
-    "JESPileUpPtBBup","JESPileUpPtBBdown",
-    "JESPileUpPtEC1up","JESPileUpPtEC1down",
-    "JESPileUpPtEC2up","JESPileUpPtEC2down",
-    "JESPileUpPtHFup","JESPileUpPtHFdown",
+    #"JESAbsoluteStatup","JESAbsoluteStatdown",
+    #"JESAbsoluteScaleup","JESAbsoluteScaledown",
+    ##"JESAbsoluteFlavMapup","JESAbsoluteFlavMapdown",
+    #"JESAbsoluteMPFBiasup","JESAbsoluteMPFBiasdown",
+    #"JESFragmentationup","JESFragmentationdown",
+    #"JESSinglePionECALup","JESSinglePionECALdown",
+    #"JESSinglePionHCALup","JESSinglePionHCALdown",
+    #"JESFlavorQCDup","JESFlavorQCDdown",
+    #"JESTimePtEtaup","JESTimePtEtadown",
+    #"JESRelativeJEREC1up","JESRelativeJEREC1down",
+    #"JESRelativeJEREC2up","JESRelativeJEREC2down",
+    #"JESRelativeJERHFup","JESRelativeJERHFdown",
+    #"JESRelativePtBBup","JESRelativePtBBdown",
+    #"JESRelativePtEC1up","JESRelativePtEC1down",
+    #"JESRelativePtEC2up","JESRelativePtEC2down",
+    #"JESRelativePtHFup","JESRelativePtHFdown",
+    #"JESRelativeBalup","JESRelativeBaldown",
+    #"JESRelativeFSRup","JESRelativeFSRdown",
+    #"JESRelativeStatFSRup","JESRelativeStatFSRdown",
+    #"JESRelativeStatECup","JESRelativeStatECdown",
+    #"JESRelativeStatHFup","JESRelativeStatHFdown",
+    #"JESPileUpDataMCup","JESPileUpDataMCdown",
+    #"JESPileUpPtRefup","JESPileUpPtRefdown",
+    #"JESPileUpPtBBup","JESPileUpPtBBdown",
+    #"JESPileUpPtEC1up","JESPileUpPtEC1down",
+    #"JESPileUpPtEC2up","JESPileUpPtEC2down",
+    #"JESPileUpPtHFup","JESPileUpPtHFdown",
 ]
 
 for i,j in zip(otherSystNames,otherSystFileNames):
