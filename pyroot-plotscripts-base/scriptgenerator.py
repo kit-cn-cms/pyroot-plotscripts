@@ -1836,11 +1836,18 @@ void plot(){
     while(thisfilename.Last('_')>=0){ thisfilename.Replace(thisfilename.Last('_'),1,"");}
     //remove remaining dashes
     while(thisfilename.Last('-')>=0){ thisfilename.Replace(thisfilename.Last('-'),1,"");}
-    std::cout<<" relevant database name "<<thisfilename<<std::endl;
         
     if(thisfilename.Contains("SingleEl")){thisfilename="SingleElectron";}
     if(thisfilename.Contains("SingleMu")){thisfilename="SingleMuon";}
+
        
+    // now replace remaining v2 and newmpx strings because of different namings in new MEM DB
+    if(thisfilename.Contains("v2")==1){ thisfilename.ReplaceAll("v2","");}
+    if(thisfilename.Contains("newpmx")==1){ thisfilename.ReplaceAll("newmpx","");}
+
+       
+    std::cout<<" relevant database name "<<thisfilename<<std::endl;
+
         
    sampleDataBaseIdentifiers[originalfilename]=thisfilename;
     
@@ -1859,17 +1866,17 @@ void plot(){
   //DANGERZONE
   // hardcode sample translation map for now 
   std::cout<<"WARNING!: Hardcoded sampleTranslationMapCPP !"<<std::endl;
-  sampleTranslationMapCPP[TString("TTToSemiLeptonicTuneCP5PSweights13TeVpowhegpythia8v2")]=TString("TTToSemiLeptonicTuneCP5PSweights13TeVpowhegpythia8");
-  sampleTranslationMapCPP[TString("TTToSemiLeptonicTuneCP513TeVpowhegpythia8newpmx")]=TString("TTToSemiLeptonicTuneCP513TeVpowhegpythia8");
+  sampleTranslationMapCPP[TString("TTToSemiLeptonicTuneCP5PSweights13TeVpowhegpythia8")]=TString("TTToSemiLeptonicTuneCP5PSweights13TeVpowhegpythia8");
+  sampleTranslationMapCPP[TString("TTToSemiLeptonicTuneCP513TeVpowhegpythia8")]=TString("TTToSemiLeptonicTuneCP513TeVpowhegpythia8");
 
   sampleTranslationMapCPP[TString("TTTo2L2NuTuneCP5PSweights13TeVpowhegpythia8")]=TString("TTTo2L2NuTuneCP5PSweights13TeVpowhegpythia8");
-  sampleTranslationMapCPP[TString("TTTo2L2NuTuneCP513TeVpowhegpythia8newpmx")]=TString("TTTo2L2NuTuneCP513TeVpowhegpythia8");
+  sampleTranslationMapCPP[TString("TTTo2L2NuTuneCP513TeVpowhegpythia8")]=TString("TTTo2L2NuTuneCP513TeVpowhegpythia8");
 
-  sampleTranslationMapCPP[TString("TTToHadronicTuneCP5PSweights13TeVpowhegpythia8newpmx")]=TString("TTToHadronicTuneCP5PSweights13TeVpowhegpythia8");
-  sampleTranslationMapCPP[TString("TTToHadronicTuneCP513TeVpowhegpythia8newpmx")]=TString("TTToHadronicTuneCP513TeVpowhegpythia8");
+  sampleTranslationMapCPP[TString("TTToHadronicTuneCP5PSweights13TeVpowhegpythia8")]=TString("TTToHadronicTuneCP5PSweights13TeVpowhegpythia8");
+  sampleTranslationMapCPP[TString("TTToHadronicTuneCP513TeVpowhegpythia8")]=TString("TTToHadronicTuneCP513TeVpowhegpythia8");
 
-  sampleTranslationMapCPP[TString("ttHTobbM125TuneCP513TeVpowhegpythia8newpmx")]=TString("ttHTobbM125TuneCP513TeVpowhegpythia8");
-  sampleTranslationMapCPP[TString("ttHToNonbbM125TuneCP513TeVpowhegpythia8newpmx")]=TString("ttHToNonbbM125TuneCP513TeVpowhegpythia8");
+  sampleTranslationMapCPP[TString("ttHTobbM125TuneCP513TeVpowhegpythia8")]=TString("ttHTobbM125TuneCP513TeVpowhegpythia8");
+  sampleTranslationMapCPP[TString("ttHToNonbbM125TuneCP513TeVpowhegpythia8")]=TString("ttHToNonbbM125TuneCP513TeVpowhegpythia8");
 
 
     samplename_in_database=thisfilename;
