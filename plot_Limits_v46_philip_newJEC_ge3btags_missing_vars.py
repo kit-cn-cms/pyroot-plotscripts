@@ -29,7 +29,7 @@ from plotconfig_v46 import *
 def main(argv):
 
     #Create analysis object with output name
-    name='limits_v46_philip_newJEC_ge3btags'
+    name='limits_v46_philip_newJEC_ge3btags_missing_vars'
     analysis=Analysis(name,argv,'/nfs/dust/cms/user/pkeicher/ttH_2018/pyroot-plotscripts/workdir/'+name+'/output_limitInput.root', signalProcess='ttH')
     print os.path.exists(analysis.rootFilePath), "AAAARgh"
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscripts18/July18/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
