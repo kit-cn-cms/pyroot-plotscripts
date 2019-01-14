@@ -554,13 +554,13 @@ void LeptonSFHelper::ChangeMuIsoHistos(bool is_DL) {
 
 void LeptonSFHelper::SetElectronHistos( ){
 
-  std::string IDinputFileBtoF = "/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/egammaEffi.txt_EGM2D_runBCDEF_passingTight94X.root";
+  std::string IDinputFileBtoF = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/Fall17/egammaEffi.txt_EGM2D_runBCDEF_passingTight94X.root";
   // std::string IDinputFileGtoH = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/oct202017/ele_ID_SF_tight_GH.root";
 
-  std::string TRIGGERinputFile = "/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/SingleEG_JetHT_Trigger_Scale_Factors_ttHbb_Data_MC_v5.0.root";
+  std::string TRIGGERinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/Fall17/SingleEG_JetHT_Trigger_Scale_Factors_ttHbb_Data_MC_v2.0.root";
   //std::string ISOinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/oct202017/ele_Reco_EGM2D.root"; // DANGERZONE: no iso SF yet??
-  std::string GFSinputFile = "/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/egammaEffi.txt_EGM2D_runBCDEF_passingRECO.root"; //reco SFs for pt > 20
-  std::string GFSinputFile_lowEt = "/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/egammaEffi.txt_EGM2D_runBCDEF_passingRECO_lowEt.root"; //reco SFs for pt<20
+  std::string GFSinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/Fall17/egammaEffi.txt_EGM2D_runBCDEF_passingRECO.root"; //reco SFs for pt > 20
+  std::string GFSinputFile_lowEt = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/Fall17/egammaEffi.txt_EGM2D_runBCDEF_passingRECO_lowEt.root"; //reco SFs for pt<20
   // std::string TRIGGERinputFile = GFSinputFile;  //not available yet
   // std::string ISOinputFile = GFSinputFile;      //not available yet
 
@@ -583,11 +583,11 @@ void LeptonSFHelper::SetElectronHistos( ){
 
 void LeptonSFHelper::SetMuonHistos( ){
 
-  std::string IDinputFileBtoF = "/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/Muon_RunBCDEF_SF_ID_syst.root";
+  std::string IDinputFileBtoF = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/Fall17/MuonIDSF_Errors_RunBtoF_Nov17Nov2017.root";
   
-  std::string ISOinputFileBtoF =  "/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/Muon_RunBCDEF_SF_ISO_syst.root";
+  std::string ISOinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/Fall17/MuonIsoSF_Errors_RunBtoF_Nov17Nov2017.root";
   
-  std::string TRIGGERinputFileBtoF =  "/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/Muon_Trigger_SF_EfficienciesAndSF_RunBtoF_Nov17Nov2017.root";
+  std::string TRIGGERinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/Fall17/MuonTriggerSF_RunBtoF_Nov17Nov2017.root";
   
   TFile *f_IDSFBtoF = new TFile(std::string(IDinputFileBtoF).c_str(),"READ");
   
@@ -1750,8 +1750,8 @@ void plot(){
   std::vector<Systematics::Type> v_SystTypes = Systematics::getTypeVector();
   //for(auto itsyst : v_SystTypes){std::cout<< " Know :" << itsyst << std::endl;}
 
-  std::string csvHFfile="/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/deepCSV_sfs_hf.root";
-  std::string csvLFfile="/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/deepCSV_sfs_lf.root";
+  std::string csvHFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_V2_2017/deepCSV_sfs_hf.root";
+  std::string csvLFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_V2_2017/deepCSV_sfs_lf.root";
   TString qcd_file = "/nfs/dust/cms/user/mwassmer/QCD_Estimation_September17/QCD_Estimation/QCD_Estimation_FakeScaleFactor_nominal.root";
   
   CSVHelper* internalCSVHelper= new CSVHelper(csvHFfile,csvLFfile, 5,4,3,v_SystTypes);
@@ -1836,18 +1836,11 @@ void plot(){
     while(thisfilename.Last('_')>=0){ thisfilename.Replace(thisfilename.Last('_'),1,"");}
     //remove remaining dashes
     while(thisfilename.Last('-')>=0){ thisfilename.Replace(thisfilename.Last('-'),1,"");}
+    std::cout<<" relevant database name "<<thisfilename<<std::endl;
         
     if(thisfilename.Contains("SingleEl")){thisfilename="SingleElectron";}
     if(thisfilename.Contains("SingleMu")){thisfilename="SingleMuon";}
-
        
-    // now replace remaining v2 and newmpx strings because of different namings in new MEM DB
-    if(thisfilename.Contains("v2")==1){ thisfilename.ReplaceAll("v2","");}
-    if(thisfilename.Contains("newpmx")==1){ thisfilename.ReplaceAll("newmpx","");}
-
-       
-    std::cout<<" relevant database name "<<thisfilename<<std::endl;
-
         
    sampleDataBaseIdentifiers[originalfilename]=thisfilename;
     
@@ -1866,17 +1859,17 @@ void plot(){
   //DANGERZONE
   // hardcode sample translation map for now 
   std::cout<<"WARNING!: Hardcoded sampleTranslationMapCPP !"<<std::endl;
-  sampleTranslationMapCPP[TString("TTToSemiLeptonicTuneCP5PSweights13TeVpowhegpythia8")]=TString("TTToSemiLeptonicTuneCP5PSweights13TeVpowhegpythia8");
-  sampleTranslationMapCPP[TString("TTToSemiLeptonicTuneCP513TeVpowhegpythia8")]=TString("TTToSemiLeptonicTuneCP513TeVpowhegpythia8");
+  sampleTranslationMapCPP[TString("TTToSemiLeptonicTuneCP5PSweights13TeVpowhegpythia8v2")]=TString("TTToSemiLeptonicTuneCP5PSweights13TeVpowhegpythia8");
+  sampleTranslationMapCPP[TString("TTToSemiLeptonicTuneCP513TeVpowhegpythia8newpmx")]=TString("TTToSemiLeptonicTuneCP513TeVpowhegpythia8");
 
   sampleTranslationMapCPP[TString("TTTo2L2NuTuneCP5PSweights13TeVpowhegpythia8")]=TString("TTTo2L2NuTuneCP5PSweights13TeVpowhegpythia8");
-  sampleTranslationMapCPP[TString("TTTo2L2NuTuneCP513TeVpowhegpythia8")]=TString("TTTo2L2NuTuneCP513TeVpowhegpythia8");
+  sampleTranslationMapCPP[TString("TTTo2L2NuTuneCP513TeVpowhegpythia8newpmx")]=TString("TTTo2L2NuTuneCP513TeVpowhegpythia8");
 
-  sampleTranslationMapCPP[TString("TTToHadronicTuneCP5PSweights13TeVpowhegpythia8")]=TString("TTToHadronicTuneCP5PSweights13TeVpowhegpythia8");
-  sampleTranslationMapCPP[TString("TTToHadronicTuneCP513TeVpowhegpythia8")]=TString("TTToHadronicTuneCP513TeVpowhegpythia8");
+  sampleTranslationMapCPP[TString("TTToHadronicTuneCP5PSweights13TeVpowhegpythia8newpmx")]=TString("TTToHadronicTuneCP5PSweights13TeVpowhegpythia8");
+  sampleTranslationMapCPP[TString("TTToHadronicTuneCP513TeVpowhegpythia8newpmx")]=TString("TTToHadronicTuneCP513TeVpowhegpythia8");
 
-  sampleTranslationMapCPP[TString("ttHTobbM125TuneCP513TeVpowhegpythia8")]=TString("ttHTobbM125TuneCP513TeVpowhegpythia8");
-  sampleTranslationMapCPP[TString("ttHToNonbbM125TuneCP513TeVpowhegpythia8")]=TString("ttHToNonbbM125TuneCP513TeVpowhegpythia8");
+  sampleTranslationMapCPP[TString("ttHTobbM125TuneCP513TeVpowhegpythia8newpmx")]=TString("ttHTobbM125TuneCP513TeVpowhegpythia8");
+  sampleTranslationMapCPP[TString("ttHToNonbbM125TuneCP513TeVpowhegpythia8newpmx")]=TString("ttHToNonbbM125TuneCP513TeVpowhegpythia8");
 
 
     samplename_in_database=thisfilename;
