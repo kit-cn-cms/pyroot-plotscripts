@@ -35,10 +35,10 @@ weightSystNames=[
                    "_CMS_btag_hfstats1_2017Up","_CMS_btag_hfstats1_2017Down","_CMS_btag_lfstats1_2017Up","_CMS_btag_lfstats1_2017Down",
                    "_CMS_btag_hfstats2_2017Up","_CMS_btag_hfstats2_2017Down","_CMS_btag_lfstats2_2017Up","_CMS_btag_lfstats2_2017Down",
                    "_CMS_btag_cferr1_2017Up","_CMS_btag_cferr1_2017Down","_CMS_btag_cferr2_2017Up","_CMS_btag_cferr2_2017Down",
-                  #"_CMS_effTrigger_eUp","_CMS_effTrigger_eDown",  
-                   #"_CMS_effTrigger_mUp","_CMS_effTrigger_mDown",  
-                   #"_CMS_eff_eUp","_CMS_eff_eDown", 
-                   #"_CMS_eff_mUp","_CMS_eff_mDown",
+                  "_CMS_effTrigger_e_2017Up","_CMS_effTrigger_e_2017Down",  
+                   "_CMS_effTrigger_m_2017Up","_CMS_effTrigger_m_2017Down",  
+                   "_CMS_eff_e_2017Up","_CMS_eff_e_2017Down", 
+                   "_CMS_eff_m_2017Up","_CMS_eff_m_2017Down",
                    "_CMS_ttHbb_PUUp","_CMS_ttHbb_PUDown",
 ]
 
@@ -48,10 +48,10 @@ systsAllSamples=[
                    "_CMS_btag_hfstats1_2017Up","_CMS_btag_hfstats1_2017Down","_CMS_btag_lfstats1_2017Up","_CMS_btag_lfstats1_2017Down",
                    "_CMS_btag_hfstats2_2017Up","_CMS_btag_hfstats2_2017Down","_CMS_btag_lfstats2_2017Up","_CMS_btag_lfstats2_2017Down",
                    "_CMS_btag_cferr1_2017Up","_CMS_btag_cferr1_2017Down","_CMS_btag_cferr2_2017Up","_CMS_btag_cferr2_2017Down",
-                  #"_CMS_effTrigger_eUp","_CMS_effTrigger_eDown",  
-                   #"_CMS_effTrigger_mUp","_CMS_effTrigger_mDown",  
-                    #"_CMS_eff_eUp","_CMS_eff_eDown", 
-                   #"_CMS_eff_mUp","_CMS_eff_mDown",  
+                  "_CMS_effTrigger_e_2017Up","_CMS_effTrigger_e_2017Down",  
+                   "_CMS_effTrigger_m_2017Up","_CMS_effTrigger_m_2017Down",  
+                    "_CMS_eff_e_2017Up","_CMS_eff_e_2017Down", 
+                   "_CMS_eff_m_2017Up","_CMS_eff_m_2017Down",  
                    "_CMS_ttHbb_PUUp","_CMS_ttHbb_PUDown",
 
     #"_CMS_scale_j_2017Up","_CMS_scale_j_2017Down",
@@ -142,17 +142,18 @@ systWeights=[
 
                    "dummyWeight_CMS_ttH_PUDown:="+"(1*Weight_pu69p2Down*Weight_GEN_nom*((Weight>0)-(Weight<0)))"+"*"+sfs+"*"+mcTriggerWeight+"*internalCSVweight*(DoWeights==1)+(DoWeights==0)*1.0",
 
-                   #"dummyWeight_CMS_ttH_ljets_Trig_elUp:="+usualWeights+"*"+"((1.0)*(internalEleTriggerWeightUp*internalMuTriggerWeight)*((N_TightElectrons==1 && Triggered_HLT_Ele27_eta2p1_WPTight_Gsf_vX==1)||(N_TightMuons==1 && (Triggered_HLT_IsoMu24_vX==1 || Triggered_HLT_IsoTkMu24_vX==1))) )"+"*internalCSVweight*(DoWeights==1)+(DoWeights==0)*1.0",
+                   "dummyWeight_CMS_ttH_ljets_Trig_elUp:="+usualWeights+"*"+'((1.0) * (internalEleTriggerWeightUp*(N_LooseMuons==0 && N_TightElectrons==1)* (Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1) +internalMuTriggerWeight*(N_LooseElectrons==0 && N_TightMuons==1)*(Muon_Pt[0]>29.) *(Triggered_HLT_IsoMu27_vX==1)))*(N_Jets>=4 && N_BTagsM>=3)'+"*internalCSVweight*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
-                    #"dummyWeight_CMS_ttH_ljets_Trig_elDown:="+usualWeights+"*"+"((1.0)*(internalEleTriggerWeightDown*internalMuTriggerWeight)*((N_TightElectrons==1 && Triggered_HLT_Ele27_eta2p1_WPTight_Gsf_vX==1)||(N_TightMuons==1 && (Triggered_HLT_IsoMu24_vX==1 || Triggered_HLT_IsoTkMu24_vX==1))) )"+"*internalCSVweight*(DoWeights==1)+(DoWeights==0)*1.0",
+                    "dummyWeight_CMS_ttH_ljets_Trig_elDown:="+usualWeights+"*"+'((1.0) * (internalEleTriggerWeightDown*(N_LooseMuons==0 && N_TightElectrons==1)* (Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1) +internalMuTriggerWeight*(N_LooseElectrons==0 && N_TightMuons==1)*(Muon_Pt[0]>29.) *(Triggered_HLT_IsoMu27_vX==1)))*(N_Jets>=4 && N_BTagsM>=3)'+"*internalCSVweight*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
-                    #"dummyWeight_CMS_ttH_ljets_Trig_muUp:="+usualWeights+"*"+"((1.0)*(internalEleTriggerWeight*internalMuTriggerWeightUp)*((N_TightElectrons==1 && Triggered_HLT_Ele27_eta2p1_WPTight_Gsf_vX==1)||(N_TightMuons==1 && (Triggered_HLT_IsoMu24_vX==1 || Triggered_HLT_IsoTkMu24_vX==1))) )"+"*internalCSVweight*(DoWeights==1)+(DoWeights==0)*1.0",
+                    "dummyWeight_CMS_ttH_ljets_Trig_muUp:="+usualWeights+"*"+'((1.0) * (internalEleTriggerWeight*(N_LooseMuons==0 && N_TightElectrons==1)* (Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1) +internalMuTriggerWeightUp*(N_LooseElectrons==0 && N_TightMuons==1)*(Muon_Pt[0]>29.) *(Triggered_HLT_IsoMu27_vX==1)))*(N_Jets>=4 && N_BTagsM>=3)'+"*internalCSVweight*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
-                    #"dummyWeight_CMS_ttH_ljets_Trig_muDown:="+usualWeights+"*"+"((1.0)*(internalEleTriggerWeight*internalMuTriggerWeightDown)*((N_TightElectrons==1 && Triggered_HLT_Ele27_eta2p1_WPTight_Gsf_vX==1)||(N_TightMuons==1 && (Triggered_HLT_IsoMu24_vX==1 || Triggered_HLT_IsoTkMu24_vX==1))) )"+"*internalCSVweight*(DoWeights==1)+(DoWeights==0)*1.0",
-                    #"dummyWeight_CMS_ttH_eff_elUp:=(1*Weight_pu69p2*((Weight>0)-(Weight<0))*internalEleIDWeightUp*internalMuIDWeight*internalMuIsoWeight*internalEleGFSWeightUp*internalMuHIPWeight*"+mcTriggerWeight+"*internalCSVweight)*(DoWeights==1)+(DoWeights==0)*1.0",
-                    #"dummyWeight_CMS_ttH_eff_elDown:=(1*Weight_pu69p2*((Weight>0)-(Weight<0))"+"*internalEleIDWeightDown*internalMuIDWeight*internalMuIsoWeight*internalEleGFSWeightDown*internalMuHIPWeight*"+mcTriggerWeight+"*internalCSVweight)*(DoWeights==1)+(DoWeights==0)*1.0",
-                     #"dummyWeight_CMS_ttH_eff_muUp:=(1*Weight_pu69p2*((Weight>0)-(Weight<0))"+"*internalEleIDWeight*internalMuIDWeightUp*internalMuIsoWeightUp*internalEleGFSWeight*internalMuHIPWeightUp*"+mcTriggerWeight+"*internalCSVweight)*(DoWeights==1)+(DoWeights==0)*1.0",
-                    #"dummyWeight_CMS_ttH_eff_muDown:=(1*Weight_pu69p2*((Weight>0)-(Weight<0))"+"*internalEleIDWeight*internalMuIDWeightDown*internalMuIsoWeightDown*internalEleGFSWeight*internalMuHIPWeightDown*"+mcTriggerWeight+"*internalCSVweight)*(DoWeights==1)+(DoWeights==0)*1.0",
+                    "dummyWeight_CMS_ttH_ljets_Trig_muDown:="+usualWeights+"*"+'((1.0) * (internalEleTriggerWeight*(N_LooseMuons==0 && N_TightElectrons==1)* (Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1) +internalMuTriggerWeightDown*(N_LooseElectrons==0 && N_TightMuons==1)*(Muon_Pt[0]>29.) *(Triggered_HLT_IsoMu27_vX==1)))*(N_Jets>=4 && N_BTagsM>=3)'+"*internalCSVweight*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    
+                    "dummyWeight_CMS_ttH_eff_elUp:="+"(1*Weight_pu69p2*Weight_GEN_nom)"+"*"+"internalEleIDWeightUp*internalMuIDWeight*internalMuIsoWeight*internalEleGFSWeightUp"+"*"+mcTriggerWeight+"*internalCSVweight*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    "dummyWeight_CMS_ttH_eff_elDown:"+"(1*Weight_pu69p2*Weight_GEN_nom)"+"*"+"internalEleIDWeightDown*internalMuIDWeight*internalMuIsoWeight*internalEleGFSWeightDown"+"*"+mcTriggerWeight+"*internalCSVweight*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                     "dummyWeight_CMS_ttH_eff_muUp:="+"(1*Weight_pu69p2*Weight_GEN_nom)"+"*"+"internalEleIDWeight*internalMuIDWeightUp*internalMuIsoWeightUp*internalEleGFSWeight"+"*"+mcTriggerWeight+"*internalCSVweight*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    "dummyWeight_CMS_ttH_eff_muDown:="+"(1*Weight_pu69p2*Weight_GEN_nom)"+"*"+"internalEleIDWeight*internalMuIDWeightDown*internalMuIsoWeightDown*internalEleGFSWeight"+"*"+mcTriggerWeight+"*internalCSVweight*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
                     #"dummyWeightPileUpUp:="+"(1*Weight_pu69p2Up*((Weight>0)-(Weight<0)))"+"*"+sfs+"*"+mcTriggerWeight+"*internalCSVweight*(DoWeights==1)+(DoWeights==0)*1.0",
                     #"dummyWeightPileUpDown:="+"(1*Weight_pu69p2Down*((Weight>0)-(Weight<0)))"+"*"+sfs+"*"+mcTriggerWeight+"*internalCSVweight*(DoWeights==1)+(DoWeights==0)*1.0",
@@ -521,6 +522,12 @@ errorSystNames=[
                    "_CMS_btag_hfstats1_2017Up","_CMS_btag_hfstats1_2017Down","_CMS_btag_lfstats1_2017Up","_CMS_btag_lfstats1_2017Down",
                    "_CMS_btag_hfstats2_2017Up","_CMS_btag_hfstats2_2017Down","_CMS_btag_lfstats2_2017Up","_CMS_btag_lfstats2_2017Down",
                    "_CMS_btag_cferr1_2017Up","_CMS_btag_cferr1_2017Down","_CMS_btag_cferr2_2017Up","_CMS_btag_cferr2_2017Down",
+                   
+                   "_CMS_effTrigger_e_2017Up","_CMS_effTrigger_e_2017Down",  
+                   "_CMS_effTrigger_m_2017Up","_CMS_effTrigger_m_2017Down",  
+                    "_CMS_eff_e_2017Up","_CMS_eff_e_2017Down", 
+                   "_CMS_eff_m_2017Up","_CMS_eff_m_2017Down", 
+                   
                    "_CMS_ttHbb_PUUp","_CMS_ttHbb_PUDown",
 
     # "_CMS_scale_j_2017Up","_CMS_scale_j_2017Down",

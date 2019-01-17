@@ -83,7 +83,7 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses)
 		os.mkdir("workdir")
 		os.mkdir(self.path_to_chekpoitns)
     # location of plain DNNs (no prenet)
-    copy_tree('/nfs/dust/cms/user/vdlinden/DNNCheckpointFiles/newJEC_top20Variables/',self.path_to_chekpoitns)
+    copy_tree('/nfs/dust/cms/user/vdlinden/DNNCheckpointFiles/newJEC_preApprovalVariables/',self.path_to_chekpoitns)
     self._get_variables_from_csv()
 
     rstr="""
