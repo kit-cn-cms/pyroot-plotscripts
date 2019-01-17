@@ -55,7 +55,7 @@ systsAllSamples=[
                    "_CMS_ttHbb_PUUp","_CMS_ttHbb_PUDown",
 
     #"_CMS_scale_j_2017Up","_CMS_scale_j_2017Down",
-    "_CMS_res_j_2017Up","_CMS_res_j_2017Down",
+        "_CMS_res_j_2017Up","_CMS_res_j_2017Down",
     "_CMS_scaleAbsoluteStat_j_2017Up","_CMS_scaleAbsoluteStat_j_2017Down",
     "_CMS_scaleAbsoluteScale_jUp","_CMS_scaleAbsoluteScale_jDown",
     ##"_CMS_scaleAbsoluteFlavMap_j_2017Up","_CMS_scaleAbsoluteFlavMap_j_2017Down",
@@ -151,7 +151,7 @@ systWeights=[
                     "dummyWeight_CMS_ttH_ljets_Trig_muDown:="+usualWeights+"*"+'((1.0) * (internalEleTriggerWeight*(N_LooseMuons==0 && N_TightElectrons==1)* (Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1) +internalMuTriggerWeightDown*(N_LooseElectrons==0 && N_TightMuons==1)*(Muon_Pt[0]>29.) *(Triggered_HLT_IsoMu27_vX==1)))*(N_Jets>=4 && N_BTagsM>=3)'+"*internalCSVweight*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
                     "dummyWeight_CMS_ttH_eff_elUp:="+"(1*Weight_pu69p2*Weight_GEN_nom)"+"*"+"internalEleIDWeightUp*internalMuIDWeight*internalMuIsoWeight*internalEleGFSWeightUp"+"*"+mcTriggerWeight+"*internalCSVweight*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
-                    "dummyWeight_CMS_ttH_eff_elDown:"+"(1*Weight_pu69p2*Weight_GEN_nom)"+"*"+"internalEleIDWeightDown*internalMuIDWeight*internalMuIsoWeight*internalEleGFSWeightDown"+"*"+mcTriggerWeight+"*internalCSVweight*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    "dummyWeight_CMS_ttH_eff_elDown:="+"(1*Weight_pu69p2*Weight_GEN_nom)"+"*"+"internalEleIDWeightDown*internalMuIDWeight*internalMuIsoWeight*internalEleGFSWeightDown"+"*"+mcTriggerWeight+"*internalCSVweight*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                      "dummyWeight_CMS_ttH_eff_muUp:="+"(1*Weight_pu69p2*Weight_GEN_nom)"+"*"+"internalEleIDWeight*internalMuIDWeightUp*internalMuIsoWeightUp*internalEleGFSWeight"+"*"+mcTriggerWeight+"*internalCSVweight*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     "dummyWeight_CMS_ttH_eff_muDown:="+"(1*Weight_pu69p2*Weight_GEN_nom)"+"*"+"internalEleIDWeight*internalMuIDWeightDown*internalMuIsoWeightDown*internalEleGFSWeight"+"*"+mcTriggerWeight+"*internalCSVweight*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
@@ -374,11 +374,10 @@ assert len(systWeights)==len(weightSystNames)
 otherSystNames=[
                     # "_CMS_scale_j_2017Up",
                     # "_CMS_scale_j_2017Down",
-                   "_CMS_res_j_2017Up",
-                   "_CMS_res_j_2017Down",
+        "_CMS_res_j_2017Up","_CMS_res_j_2017Down",
     "_CMS_scaleAbsoluteStat_j_2017Up","_CMS_scaleAbsoluteStat_j_2017Down",
     "_CMS_scaleAbsoluteScale_jUp","_CMS_scaleAbsoluteScale_jDown",
-    #"_CMS_scaleAbsoluteFlavMap_j_2017Up","_CMS_scaleAbsoluteFlavMap_j_2017Down",
+    ##"_CMS_scaleAbsoluteFlavMap_j_2017Up","_CMS_scaleAbsoluteFlavMap_j_2017Down",
     "_CMS_scaleAbsoluteMPFBias_jUp","_CMS_scaleAbsoluteMPFBias_jDown",
     "_CMS_scaleFragmentation_jUp","_CMS_scaleFragmentation_jDown",
     "_CMS_scaleSinglePionECAL_jUp","_CMS_scaleSinglePionECAL_jDown",
