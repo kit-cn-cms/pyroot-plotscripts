@@ -21,7 +21,7 @@ from limittools import replaceQ2scale
 import dnnInputVariableListV1
 
 from analysisClass import *
-from plotconfig_v47 import *
+from plotconfig_v48 import *
 
 
 def main(argv):
