@@ -27,7 +27,7 @@ from plotconfig_v47 import *
 def main(argv):
 
     #Create analysis object with output name
-    name='limits_v47'
+    name='limits_v48'
     analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscripts18/newJEC/pyroot-plotscripts/workdir/'+name+'/output_limitInput.root', signalProcess='ttH')
     print os.path.exists(analysis.rootFilePath), "AAAARgh"
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscripts18/July18/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
@@ -465,107 +465,18 @@ def main(argv):
 'DNN_Out_6j3t_ttbarCC',
 'DNN_Out_6j3t_ttbarlf',
 
-# 3 and 4 tags with minimal node output values 
-#'DNN_Out_4j3t_ttH',
-#'DNN_Out_4j3t_ttbarBB',
-#'DNN_Out_4j3t_ttbar2B',
-#'DNN_Out_4j3t_ttbarB',
-#'DNN_Out_4j3t_ttbarCC',
-#'DNN_Out_4j3t_ttbarlf',
-#'DNN_Out_5j3t_ttH',
-#'DNN_Out_5j3t_ttbarBB',
-#'DNN_Out_5j3t_ttbar2B',
-#'DNN_Out_5j3t_ttbarB',
-#'DNN_Out_5j3t_ttbarCC',
-#'DNN_Out_5j3t_ttbarlf',
-#'DNN_Out_6j3t_ttH',
-#'DNN_Out_6j3t_ttbarBB',
-#'DNN_Out_6j3t_ttbar2B',
-#'DNN_Out_6j3t_ttbarB',
-#'DNN_Out_6j3t_ttbarCC',
-#'DNN_Out_6j3t_ttbarlf',
-
-
-## only 3 tag events
-#'DNN_Out_4j3t_ttH',
-#'DNN_Out_4j3t_ttbarBB',
-#'DNN_Out_4j3t_ttbar2B',
-#'DNN_Out_4j3t_ttbarB',
-#'DNN_Out_4j3t_ttbarCC',
-#'DNN_Out_4j3t_ttbarlf',
-#'DNN_Out_5j3t_ttH',
-#'DNN_Out_5j3t_ttbarBB',
-#'DNN_Out_5j3t_ttbar2B',
-#'DNN_Out_5j3t_ttbarB',
-#'DNN_Out_5j3t_ttbarCC',
-#'DNN_Out_5j3t_ttbarlf',
-#'DNN_Out_6j3t_ttH',
-#'DNN_Out_6j3t_ttbarBB',
-#'DNN_Out_6j3t_ttbar2B',
-#'DNN_Out_6j3t_ttbarB',
-#'DNN_Out_6j3t_ttbarCC',
-#'DNN_Out_6j3t_ttbarlf',
-
-## only 4 tag events 
-#'DNN_Out_4j3t_ttH',
-#'DNN_Out_4j3t_ttbarBB',
-#'DNN_Out_4j3t_ttbar2B',
-#'DNN_Out_4j3t_ttbarB',
-#'DNN_Out_4j3t_ttbarCC',
-#'DNN_Out_4j3t_ttbarlf',
-#'DNN_Out_5j3t_ttH',
-#'DNN_Out_5j3t_ttbarBB',
-#'DNN_Out_5j3t_ttbar2B',
-#'DNN_Out_5j3t_ttbarB',
-#'DNN_Out_5j3t_ttbarCC',
-#'DNN_Out_5j3t_ttbarlf',
-#'DNN_Out_6j3t_ttH',
-#'DNN_Out_6j3t_ttbarBB',
-#'DNN_Out_6j3t_ttbar2B',
-#'DNN_Out_6j3t_ttbarB',
-#'DNN_Out_6j3t_ttbarCC',
-#'DNN_Out_6j3t_ttbarlf',
     ]
 
     # 3 and 4 tags
-    nhistobins_MultiDNN=[15,  15 , 15, 15,15, 15,
-                         15, 15, 15, 15, 15, 15 ,
-                         15, 15, 15, 12, 15, 15  ]
+    nhistobins_MultiDNN=[15,  15 , 15, 12,15, 15,
+                         15, 15, 15, 10, 12, 15 ,
+                         15, 15, 15, 10, 15, 15  ]
     minxvals_MultiDNN=[0.16, 0.16, 0.16, 0.2, 0.2, 0.2,
                        0.16, 0.16, 0.2, 0.2, 0.2, 0.2,
                        0.16, 0.16, 0.2, 0.2, 0.2, 0.2        ]
-    maxxvals_MultiDNN=[0.75, 0.8, 0.65, 0.4, 0.4, 0.63,
-                       0.85, 0.8, 0.6, 0.45, 0.4, 0.5,
-                       0.85, 0.8, 0.65, 0.5, 0.4, 0.6     ]
-
-    # 3 and 4 tags with minimal node output of 0.25
-    #nhistobins_MultiDNN+=[15,  15 , 15, 15,15, 15,
-                         #15, 15, 15, 15, 15, 15 ,
-                         #15, 15, 15, 12, 15, 15  ]
-    #minxvals_MultiDNN+=[0.3]*18
-    #maxxvals_MultiDNN+=[0.75, 0.8, 0.65, 0.4, 0.4, 0.63,
-                       #0.85, 0.8, 0.6, 0.45, 0.4, 0.5,
-                       #0.85, 0.8, 0.65, 0.5, 0.4, 0.6     ]
-    
-    ## only 3 tags
-    #nhistobins_MultiDNN+=[15,  15 , 15, 15,15, 15, 15, 15, 15, 15, 15, 15 , 15, 15, 15, 12, 15, 15  ]
-    #minxvals_MultiDNN+=[0.16, 0.16, 0.16, 0.16, 0.2, 0.2,
-                       #0.16, 0.16, 0.2, 0.16, 0.2, 0.2,
-                       #0.16, 0.16, 0.16, 0.2, 0.2, 0.2        ]
-    #maxxvals_MultiDNN+=[0.75, 0.8, 0.65, 0.4, 0.4, 0.63,
-                       #0.85, 0.8, 0.6, 0.45, 0.4, 0.5,
-                       #0.85, 0.8, 0.65, 0.5, 0.4, 0.6  ]
-
-    ## only 4 tags
-    #nhistobins_MultiDNN+=[9,  15 , 3, 3, 4, 5,
-                          #10, 10, 4, 3, 4, 4 ,
-                          #10, 10, 10, 4, 5, 5  ]
-    #minxvals_MultiDNN+=[0.16, 0.25, 0.2, 0.2, 0.16, 0.16,
-                        #0.2, 0.16, 0.2, 0.2, 0.2, 0.2,
-                        #0.2, 0.2, 0.2, 0.2, 0.2, 0.2        ]
-    #maxxvals_MultiDNN+=[0.85, 0.85, 0.3, 0.3, 0.3, 0.3,
-                        #0.9, 0.9, 0.5, 0.35, 0.4, 0.5,
-                        #0.9, 0.9, 0.45, 0.4, 0.4, 0.4     ]
+    maxxvals_MultiDNN=[0.6, 0.65, 0.6, 0.45, 0.34, 0.45,
+                       0.65, 0.77, 0.57, 0.4, 0.33, 0.4,
+                       0.65, 0.75, 0.6, 0.4, 0.3, 0.45     ]
 
     discrs+=discrs_MultiDNN
     nhistobins+=nhistobins_MultiDNN
@@ -573,40 +484,6 @@ def main(argv):
     maxxvals+=maxxvals_MultiDNN
     categories+=categorienames_MultiDNN
     
-    # now do only MEM for 4 tag events 
-    
-    #categorienames_MEM=[
-              
-              #### only 4 tag events 
-              #("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_tge4_MEM",""),
-              #("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4_MEM",""),             
-              #("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4_MEM",""),
-              #("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_MEM",""),
-              #]
-    
-    
-    #discrs_MEM=[
-#memexp,
-#memexp,
-#memexp,
-#memexp,
-
-    #]
-    ##nhistobins_MultiDNN= [   7,   10,    12,   7,   7,    12,   7,   7,    7,   8,   7,    7,   7,   7,    7,   7,   7,    4,]
-    ##minxvals_MultiDNN=   [ 0.2,  0.16, 0.17, 0.16,  0.16, 0.18, 0.2,  0.2, 0.18, 0.2,  0.16, 0.16, 0.17,  0.17, 0.21, 0.17,  0.17, 0.19,]
-    ##maxxvals_MultiDNN=   [0.6,  0.6, 0.7,    0.6,  0.6, 0.7,    0.4,  0.4, 0.35,    0.55,  0.5, 0.55,    0.35,  0.35, 0.3,    0.5,  0.4, 0.3,]
-    ##nhistobins_MultiDNN+=[12,12,7,7,7,7]
-    ##minxvals_MultiDNN+=[0.17,0.18,0.18,0.16,0.21,0.19]
-    ##maxxvals_MultiDNN+=[0.7,0.7,0.35,0.55,0.3,0.3]
-    #nhistobins_MEM=[10,10,10,20]
-    #minxvals_MEM=[0.0,0.0,0.0,0.0]
-    #maxxvals_MEM=[1.0,1.0,1.0,1.0]
-    
-    #discrs+=discrs_MEM
-    #nhistobins+=nhistobins_MEM
-    #minxvals+=minxvals_MEM
-    #maxxvals+=maxxvals_MEM
-    #categories+=categorienames_MEM    
 
             
     # get input for plotting function
@@ -687,7 +564,7 @@ def main(argv):
         #if False:
             
             print "Doing plotParallel step since root file was not found.", analysis.rootFilePath
-            THEoutputpath=plotParallel(name,350000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]],"",otherSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_Keras_cool.py"],cirun=False,StopAfterCompileStep=False,haddParallel=True,useGenWeightNormMap=True,useThisSampleForVariableSetup=samples[9])
+            THEoutputpath=plotParallel(name,350000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]],"/nfs/dust/cms/user/kelmorab/plotscripts18/newJEC/pyroot-plotscripts/treejson_newJEC_V1.json",otherSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_Keras_cool.py"],cirun=False,StopAfterCompileStep=False,haddParallel=True,useGenWeightNormMap=True,useThisSampleForVariableSetup=samples[9])
             #outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_v5_08102017.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_V6.py"],cirun=False)
             
             if type(THEoutputpath)==str:
