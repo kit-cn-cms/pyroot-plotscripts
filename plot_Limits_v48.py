@@ -21,7 +21,7 @@ from limittools import replaceQ2scale
 import dnnInputVariableListV1
 
 from analysisClass import *
-from plotconfig_v47 import *
+from plotconfig_v48 import *
 
 
 def main(argv):
@@ -608,8 +608,8 @@ def main(argv):
                 renameHistos(THEoutputpath[1:],renamedPath,allsystnames,checkBins=True,prune=True,Epsilon=0.0)
 
             #addRealDataAllHistos(renamedPath,[s.nick for s in samples_data],discriminatorPlots,forceOverwrite=True) # use this version for all histograms even if they do not follow the cat_disc_var naming scheme
-            #addRealData(renamedPath,[s.nick for s in samples_data],binlabels,discrname)
-            addPseudoData(outputpath[:-5]+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
+            addRealData(outputpath[:-5]+'_limitInput.root',[s.nick for s in samples_data],binlabels,discrname)
+            #addPseudoData(outputpath[:-5]+'_limitInput.root',[s.nick for s in samples[9:]],binlabels,allsystnames,discrname)
             #outputpath=outputpath[:-5]+'_limitInput.root'
             outputpath=outputpath[:-5]+'_limitInput.root'
         else:
