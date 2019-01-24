@@ -467,13 +467,14 @@ print("-"*30)
 path_karim_new="/nfs/dust/cms/user/kelmorab/ttH_2018/ntuples_v4"
 path_matsch="/nfs/dust/cms/user/kelmorab/ttH_2018/ntuples_v3"
 path_pkeicher="/nfs/dust/cms/user/pkeicher/ttH_2018/naf_jobs_for_Karim/ntuples"
+path_pkeicher2="/nfs/dust/cms/user/pkeicher/ttH_2018/ntuples"
 path_mwassmer="/nfs/dust/cms/user/mwassmer/ttH_2018/ntuples"
 ttbarPathS=path_karim_new+'/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8_v2/*nominal*.root'+';'+path_karim_new+'/TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8_new_pmx/*nominal*.root'+';'+path_karim_new+'/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'
 VJetsPathS=path_karim_new+'/DYJets*/*nominal*.root'+';'+path_karim_new+'/WJets*/*nominal*.root'
 ttVPathS=path_karim_new+'/TTW*/*nominal*.root'+';'+path_karim_new+'/TTZ*/*nominal*.root'
 dibosonPathS=path_karim_new+'/WW_*/*nominal*.root'+';'+path_karim_new+'/WZ_*/*nominal*.root'+';'+path_karim_new+'/ZZ_*/*nominal*.root'
 stpath=path_karim_new+'/ST_*/*nominal*.root'
-ttHpath=path_karim_new+'/ttHTo*/*nominal*.root'
+ttHpath=path_pkeicher2+'/ttHTo*/*nominal*.root'
 
 
 hdamp_ue_systnames_tt_all = [
@@ -591,7 +592,7 @@ samplesDataControlPlots=[
 
 print "controlsamples"
 samplesControlPlots=[
-    plotClasses.Sample('t#bar{t}H',ROOT.kBlue+1,path_mwassmer+'/ttH*/*nominal*.root',mcWeightAll+sel_MET,'ttH',systsAllSamples+systs_ttH+systs_tt_and_ttH,samDict=sampleDict, readTrees=doReadTrees) ,     
+    plotClasses.Sample('t#bar{t}H',ROOT.kBlue+1,path_pkeicher2+'/ttH*/*nominal*.root',mcWeightAll+sel_MET,'ttH',systsAllSamples+systs_ttH+systs_tt_and_ttH,samDict=sampleDict, readTrees=doReadTrees) ,     
     plotClasses.Sample('t#bar{t}+lf',ROOT.kRed-7,ttbarPathS,mcWeightAll+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)'+sel_MET+sel_StrangeMuWeights,'ttbarOther',systsAllSamples+systs_tt_all+systs_tt_lf+systs_tt_and_ttH+hdamp_ue_filenames_tt_all+hdamp_ue_filenames_tt_lf,samDict=sampleDict, readTrees=doReadTrees),
     plotClasses.Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,ttbarPathS,mcWeightAll+'*(GenEvt_I_TTPlusCC==1)'+sel_MET+sel_StrangeMuWeights,'ttbarPlusCCbar',systsAllSamples+systs_tt_all+systs_tt_cc+systs_tt_and_ttH+hdamp_ue_filenames_tt_all+hdamp_ue_filenames_tt_cc,samDict=sampleDict, readTrees=doReadTrees),
     plotClasses.Sample('t#bar{t}+b',ROOT.kRed-2,ttbarPathS,mcWeightAll+'*(GenEvt_I_TTPlusBB==1)'+sel_MET+sel_StrangeMuWeights,'ttbarPlusB',systsAllSamples+systs_tt_all+systs_tt_b+systs_tt_and_ttH+hdamp_ue_filenames_tt_all+hdamp_ue_filenames_tt_b,samDict=sampleDict, readTrees=doReadTrees),
@@ -606,15 +607,15 @@ samplesControlPlots=[
 
     #print "limit samples"
 samplesLimits=[
-    plotClasses.Sample('t#bar{t}H',ROOT.kBlue+1,path_mwassmer+'/ttH*/*nominal*.root',mcWeight+evenSel+sel_MET,'ttH',systsAllSamples+systs_ttH+systs_tt_and_ttH  ,samDict=sampleDict, readTrees=doReadTrees) ,     
-    plotClasses.Sample('t#bar{t}H, H to b#bar{b}',ROOT.kBlue+1,path_mwassmer+'/ttHTobb*/*nominal*.root','1.0*'+mcWeight+evenSel+sel_MET,'ttH_hbb',systsAllSamples+systs_ttH+systs_tt_and_ttH,samDict=sampleDict, readTrees=doReadTrees) ,  
-    plotClasses.Sample('t#bar{t}H, H to c#bar{c}',ROOT.kBlue+1,path_mwassmer+'/ttHToNonbb*/*nominal*.root','1.0*'+mcWeight+evenSel+hccSel+sel_MET,'ttH_hcc',systsAllSamples+systs_ttH+systs_tt_and_ttH,samDict=sampleDict, readTrees=doReadTrees) ,  
-    plotClasses.Sample('t#bar{t}H, H to #tau#tau',ROOT.kBlue+1,path_mwassmer+'/ttHToNonbb*/*nominal*.root','1.0*'+mcWeight+evenSel+httSel+sel_MET,'ttH_htt',systsAllSamples+systs_ttH+systs_tt_and_ttH,samDict=sampleDict, readTrees=doReadTrees) ,  
-    plotClasses.Sample('t#bar{t}H, H to #gamma#gamma',ROOT.kBlue+1,path_mwassmer+'/ttHToNonbb*/*nominal*.root','1.0*'+mcWeight+evenSel+hggSel+sel_MET,'ttH_hgg',systsAllSamples+systs_ttH+systs_tt_and_ttH,samDict=sampleDict, readTrees=doReadTrees) ,  
-    plotClasses.Sample('t#bar{t}H, H to gluglu',ROOT.kBlue+1,path_mwassmer+'/ttHToNonbb*/*nominal*.root','1.0*'+mcWeight+evenSel+hglugluSel+sel_MET,'ttH_hgluglu',systsAllSamples+systs_ttH+systs_tt_and_ttH,samDict=sampleDict, readTrees=doReadTrees) ,  
-    plotClasses.Sample('t#bar{t}H, H to WW',ROOT.kBlue+1,path_mwassmer+'/ttHToNonbb*/*nominal*.root','1.0*'+mcWeight+evenSel+hwwSel+sel_MET,'ttH_hww',systsAllSamples+systs_ttH+systs_tt_and_ttH,samDict=sampleDict, readTrees=doReadTrees) ,  
-    plotClasses.Sample('t#bar{t}H, H to ZZ',ROOT.kBlue+1,path_mwassmer+'/ttHToNonbb*/*nominal*.root','1.0*'+mcWeight+evenSel+hzzSel+sel_MET,'ttH_hzz',systsAllSamples+systs_ttH+systs_tt_and_ttH,samDict=sampleDict, readTrees=doReadTrees) ,  
-    plotClasses.Sample('t#bar{t}H, H to #gamma Z',ROOT.kBlue+1,path_mwassmer+'/ttHToNonbb*/*nominal*.root','1.0*'+mcWeight+evenSel+hzgSel+sel_MET,'ttH_hzg',systsAllSamples+systs_ttH+systs_tt_and_ttH,samDict=sampleDict, readTrees=doReadTrees) ,
+    plotClasses.Sample('t#bar{t}H',ROOT.kBlue+1,path_pkeicher2+'/ttH*/*nominal*.root',mcWeight+evenSel+sel_MET,'ttH',systsAllSamples+systs_ttH+systs_tt_and_ttH  ,samDict=sampleDict, readTrees=doReadTrees) ,     
+    plotClasses.Sample('t#bar{t}H, H to b#bar{b}',ROOT.kBlue+1,path_pkeicher2+'/ttHTobb*/*nominal*.root','1.0*'+mcWeight+evenSel+sel_MET,'ttH_hbb',systsAllSamples+systs_ttH+systs_tt_and_ttH,samDict=sampleDict, readTrees=doReadTrees) ,  
+    plotClasses.Sample('t#bar{t}H, H to c#bar{c}',ROOT.kBlue+1,path_pkeicher2+'/ttHToNonbb*/*nominal*.root','1.0*'+mcWeight+evenSel+hccSel+sel_MET,'ttH_hcc',systsAllSamples+systs_ttH+systs_tt_and_ttH,samDict=sampleDict, readTrees=doReadTrees) ,  
+    plotClasses.Sample('t#bar{t}H, H to #tau#tau',ROOT.kBlue+1,path_pkeicher2+'/ttHToNonbb*/*nominal*.root','1.0*'+mcWeight+evenSel+httSel+sel_MET,'ttH_htt',systsAllSamples+systs_ttH+systs_tt_and_ttH,samDict=sampleDict, readTrees=doReadTrees) ,  
+    plotClasses.Sample('t#bar{t}H, H to #gamma#gamma',ROOT.kBlue+1,path_pkeicher2+'/ttHToNonbb*/*nominal*.root','1.0*'+mcWeight+evenSel+hggSel+sel_MET,'ttH_hgg',systsAllSamples+systs_ttH+systs_tt_and_ttH,samDict=sampleDict, readTrees=doReadTrees) ,  
+    plotClasses.Sample('t#bar{t}H, H to gluglu',ROOT.kBlue+1,path_pkeicher2+'/ttHToNonbb*/*nominal*.root','1.0*'+mcWeight+evenSel+hglugluSel+sel_MET,'ttH_hgluglu',systsAllSamples+systs_ttH+systs_tt_and_ttH,samDict=sampleDict, readTrees=doReadTrees) ,  
+    plotClasses.Sample('t#bar{t}H, H to WW',ROOT.kBlue+1,path_pkeicher2+'/ttHToNonbb*/*nominal*.root','1.0*'+mcWeight+evenSel+hwwSel+sel_MET,'ttH_hww',systsAllSamples+systs_ttH+systs_tt_and_ttH,samDict=sampleDict, readTrees=doReadTrees) ,  
+    plotClasses.Sample('t#bar{t}H, H to ZZ',ROOT.kBlue+1,path_pkeicher2+'/ttHToNonbb*/*nominal*.root','1.0*'+mcWeight+evenSel+hzzSel+sel_MET,'ttH_hzz',systsAllSamples+systs_ttH+systs_tt_and_ttH,samDict=sampleDict, readTrees=doReadTrees) ,  
+    plotClasses.Sample('t#bar{t}H, H to #gamma Z',ROOT.kBlue+1,path_pkeicher2+'/ttHToNonbb*/*nominal*.root','1.0*'+mcWeight+evenSel+hzgSel+sel_MET,'ttH_hzg',systsAllSamples+systs_ttH+systs_tt_and_ttH,samDict=sampleDict, readTrees=doReadTrees) ,
 
     plotClasses.Sample('t#bar{t}+lf',ROOT.kRed-7,ttbarPathS,mcWeightAll+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)'+sel_MET+sel_StrangeMuWeights,'ttbarOther',systsAllSamples+systs_tt_all+systs_tt_lf+systs_tt_and_ttH+hdamp_ue_filenames_tt_all+hdamp_ue_filenames_tt_lf,samDict=sampleDict, readTrees=doReadTrees),
     plotClasses.Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,ttbarPathS,mcWeightAll+'*(GenEvt_I_TTPlusCC==1)'+sel_MET+sel_StrangeMuWeights,'ttbarPlusCCbar',systsAllSamples+systs_tt_all+systs_tt_cc+systs_tt_and_ttH+hdamp_ue_filenames_tt_all+hdamp_ue_filenames_tt_cc,samDict=sampleDict, readTrees=doReadTrees),
