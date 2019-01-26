@@ -411,13 +411,13 @@ void LeptonSFHelper::ChangeMuIsoHistos(bool is_DL) {
 
 void LeptonSFHelper::SetElectronHistos( ){
 
-  std::string IDinputFileBtoF = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/Fall17/egammaEffi.txt_EGM2D_runBCDEF_passingTight94X.root";
+  std::string IDinputFileBtoF = "/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/egammaEffi.txt_EGM2D_runBCDEF_passingTight94X.root";
   // std::string IDinputFileGtoH = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/oct202017/ele_ID_SF_tight_GH.root";
 
-  std::string TRIGGERinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/Fall17/SingleEG_JetHT_Trigger_Scale_Factors_ttHbb_Data_MC_v2.0.root";
+  std::string TRIGGERinputFile = "/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/SingleEG_JetHT_Trigger_Scale_Factors_ttHbb_Data_MC_v5.0.root";
   //std::string ISOinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/oct202017/ele_Reco_EGM2D.root"; // DANGERZONE: no iso SF yet??
-  std::string GFSinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/Fall17/egammaEffi.txt_EGM2D_runBCDEF_passingRECO.root"; //reco SFs for pt > 20
-  std::string GFSinputFile_lowEt = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/Fall17/egammaEffi.txt_EGM2D_runBCDEF_passingRECO_lowEt.root"; //reco SFs for pt<20
+  std::string GFSinputFile = "/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/egammaEffi.txt_EGM2D_runBCDEF_passingRECO.root"; //reco SFs for pt > 20
+  std::string GFSinputFile_lowEt = "/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/egammaEffi.txt_EGM2D_runBCDEF_passingRECO_lowEt.root"; //reco SFs for pt<20
   // std::string TRIGGERinputFile = GFSinputFile;  //not available yet
   // std::string ISOinputFile = GFSinputFile;      //not available yet
 
@@ -440,11 +440,11 @@ void LeptonSFHelper::SetElectronHistos( ){
 
 void LeptonSFHelper::SetMuonHistos( ){
 
-  std::string IDinputFileBtoF = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/Fall17/MuonIDSF_Errors_RunBtoF_Nov17Nov2017.root";
+  std::string IDinputFileBtoF = "/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/Muon_RunBCDEF_SF_ID_syst.root";
   
-  std::string ISOinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/Fall17/MuonIsoSF_Errors_RunBtoF_Nov17Nov2017.root";
+  std::string ISOinputFileBtoF =  "/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/Muon_RunBCDEF_SF_ISO_syst.root";
   
-  std::string TRIGGERinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/Fall17/MuonTriggerSF_RunBtoF_Nov17Nov2017.root";
+  std::string TRIGGERinputFileBtoF =  "/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/Muon_Trigger_SF_EfficienciesAndSF_RunBtoF_Nov17Nov2017.root";
   
   TFile *f_IDSFBtoF = new TFile(std::string(IDinputFileBtoF).c_str(),"READ");
   
