@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'limits_top10Variables_v2'
+    name = 'testLea6'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -55,7 +55,7 @@ def main(pyrootdir, argv):
     configDataBaseName = "limitsttH18"
 
     # name of plotconfig
-    pltcfgName = "v42"
+    pltcfgName = "v49"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -89,11 +89,11 @@ def main(pyrootdir, argv):
         "skipRenaming":         False,
         "skipDatacards":        False}
 
-    plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttH_2018.json"
-    plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018",True]] 
+    plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttH_2018_newJEC.json"
+    plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/dNNInterface_Keras_cool.py",
-                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/DNNCheckpointFiles/top10_DNN"}
+                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/DNNCheckpointFiles/newJEC_validatedVariables/"}
     # datacardmaker
     datacardmaker = "mk_datacard_JESTest13TeVPara"
 
