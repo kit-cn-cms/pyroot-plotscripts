@@ -64,8 +64,8 @@ void plot(){
   std::vector<Systematics::Type> v_SystTypes = Systematics::getTypeVector();
   //for(auto itsyst : v_SystTypes){std::cout<< " Know :" << itsyst << std::endl;}
 
-  std::string csvHFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_V2_2017/deepCSV_sfs_hf.root";
-  std::string csvLFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_V2_2017/deepCSV_sfs_lf.root";
+  std::string csvHFfile="/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/deepCSV_sfs_hf.root";
+  std::string csvLFfile="/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/deepCSV_sfs_lf.root";
   TString qcd_file = "/nfs/dust/cms/user/mwassmer/QCD_Estimation_September17/QCD_Estimation/QCD_Estimation_FakeScaleFactor_nominal.root";
   
   CSVHelper* internalCSVHelper= new CSVHelper(csvHFfile,csvLFfile, 5,4,3,v_SystTypes);
@@ -155,7 +155,10 @@ void plot(){
     if(thisfilename.Contains("SingleEl")){thisfilename="SingleElectron";}
     if(thisfilename.Contains("SingleMu")){thisfilename="SingleMuon";}
        
-        
+    // now replace remaining v2 and newmpx strings because of different namings in new MEM DB
+    if(thisfilename.Contains("v2")==1){ thisfilename.ReplaceAll("v2","");}
+    if(thisfilename.Contains("newpmx")==1){ thisfilename.ReplaceAll("newpmx","");}
+    std::cout<<" relevant database name "<<thisfilename<<std::endl;
    sampleDataBaseIdentifiers[originalfilename]=thisfilename;
     
     //check if already in vectr
@@ -165,17 +168,17 @@ void plot(){
   //DANGERZONE
   // hardcode sample translation map for now
   std::cout<<"WARNING!: Hardcoded sampleTranslationMapCPP !"<<std::endl;
-  sampleTranslationMapCPP[TString("TTToSemiLeptonicTuneCP5PSweights13TeVpowhegpythia8v2")]=TString("TTToSemiLeptonicTuneCP5PSweights13TeVpowhegpythia8");
-  sampleTranslationMapCPP[TString("TTToSemiLeptonicTuneCP513TeVpowhegpythia8newpmx")]=TString("TTToSemiLeptonicTuneCP513TeVpowhegpythia8");
+  sampleTranslationMapCPP[TString("TTToSemiLeptonicTuneCP5PSweights13TeVpowhegpythia8")]=TString("TTToSemiLeptonicTuneCP5PSweights13TeVpowhegpythia8");
+  sampleTranslationMapCPP[TString("TTToSemiLeptonicTuneCP513TeVpowhegpythia8")]=TString("TTToSemiLeptonicTuneCP513TeVpowhegpythia8");
 
   sampleTranslationMapCPP[TString("TTTo2L2NuTuneCP5PSweights13TeVpowhegpythia8")]=TString("TTTo2L2NuTuneCP5PSweights13TeVpowhegpythia8");
-  sampleTranslationMapCPP[TString("TTTo2L2NuTuneCP513TeVpowhegpythia8newpmx")]=TString("TTTo2L2NuTuneCP513TeVpowhegpythia8");
+  sampleTranslationMapCPP[TString("TTTo2L2NuTuneCP513TeVpowhegpythia8")]=TString("TTTo2L2NuTuneCP513TeVpowhegpythia8");
 
-  sampleTranslationMapCPP[TString("TTToHadronicTuneCP5PSweights13TeVpowhegpythia8newpmx")]=TString("TTToHadronicTuneCP5PSweights13TeVpowhegpythia8");
-  sampleTranslationMapCPP[TString("TTToHadronicTuneCP513TeVpowhegpythia8newpmx")]=TString("TTToHadronicTuneCP513TeVpowhegpythia8");
+  sampleTranslationMapCPP[TString("TTToHadronicTuneCP5PSweights13TeVpowhegpythia8")]=TString("TTToHadronicTuneCP5PSweights13TeVpowhegpythia8");
+  sampleTranslationMapCPP[TString("TTToHadronicTuneCP513TeVpowhegpythia8")]=TString("TTToHadronicTuneCP513TeVpowhegpythia8");
 
-  sampleTranslationMapCPP[TString("ttHTobbM125TuneCP513TeVpowhegpythia8newpmx")]=TString("ttHTobbM125TuneCP513TeVpowhegpythia8");
-  sampleTranslationMapCPP[TString("ttHToNonbbM125TuneCP513TeVpowhegpythia8newpmx")]=TString("ttHToNonbbM125TuneCP513TeVpowhegpythia8");
+  sampleTranslationMapCPP[TString("ttHTobbM125TuneCP513TeVpowhegpythia8")]=TString("ttHTobbM125TuneCP513TeVpowhegpythia8");
+  sampleTranslationMapCPP[TString("ttHToNonbbM125TuneCP513TeVpowhegpythia8")]=TString("ttHToNonbbM125TuneCP513TeVpowhegpythia8");
 
 
     samplename_in_database=thisfilename;
