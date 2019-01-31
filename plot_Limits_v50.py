@@ -21,13 +21,13 @@ from limittools import replaceQ2scale
 import dnnInputVariableListV1
 
 from analysisClass import *
-from plotconfig_v49 import *
+from plotconfig_v50 import *
 
 
 def main(argv):
 
     #Create analysis object with output name
-    name='limits_v49'
+    name='limits_v50'
     analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscripts18/newJEC/pyroot-plotscripts/workdir/'+name+'/output_limitInput.root', signalProcess='ttH')
     print os.path.exists(analysis.rootFilePath), "AAAARgh"
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscripts18/July18/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
@@ -474,9 +474,9 @@ def main(argv):
     minxvals_MultiDNN=[0.16, 0.16, 0.16, 0.2, 0.2, 0.2,
                        0.16, 0.16, 0.2, 0.2, 0.2, 0.2,
                        0.16, 0.16, 0.2, 0.2, 0.2, 0.2        ]
-    maxxvals_MultiDNN=[0.55, 0.6, 0.5, 0.35, 0.4, 0.5,
-                       0.67, 0.65, 0.47, 0.35, 0.35, 0.45,
-                       0.65, 0.7, 0.55, 0.4, 0.35, 0.43     ]
+    maxxvals_MultiDNN=[0.55, 0.6, 0.5, 0.35, 0.35, 0.43,
+                       0.67, 0.65, 0.47, 0.35, 0.3, 0.4,
+                       0.65, 0.7, 0.55, 0.4, 0.32, 0.43     ]
 
     discrs+=discrs_MultiDNN
     nhistobins+=nhistobins_MultiDNN
