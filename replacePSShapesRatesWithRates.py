@@ -6,7 +6,7 @@ rootfile=sys.argv[1]
 incards=sys.argv[2:]
 
 discrname="finaldiscr"
-nuisanceStringsToFind=["CMS_ttHbb_ISR","CMS_ttHbb_FSR","CMS_ttHbb_HDAMP","CMS_ttHbb_UE"]
+nuisanceStringsToFind=["CMS_ttHbb_HDAMP","CMS_ttHbb_UE"]
 f=ROOT.TFile(rootfile,"READ")
 
 def round_to_sign(x):
@@ -21,6 +21,27 @@ def round_to_sign(x):
   #print nDigs, actualNDigs
   return round(x, nDigs)
 
+def getNumbersSchemeOne(nomInt,downInt,upInt):
+    upRatio=upInt/nomInt
+    downRatio=downInt/nomInt
+    
+    up_relerr = ((upRatio if upRatio>=1.0 else (1.0/upRatio)) -1.0)
+    down_relerr = ((downRatio if downRatio>=1.0 else (1.0/downRatio)) -1.0)
+    
+    #average absolute up/down variation
+    avg_err = 0.5*(up_relerr+down_relerr)
+    
+    # use avg abs error as symmetric error
+    # example : up=1.2 down=1.1 => up=1.15, down 0.85
+    upRatio_new=upRatio
+    downRatio_new=downRatio
+    if (upRatio>=downRatio): upRatio_new = (1.0 + avg_err); downRatio_new = 1.0/(1.0+avg_err)
+    else: downRatio_new = (1.0 + avg_err); upRatio_new = 1.0/(1.0+avg_err)
+    
+    return downRatio_new, upRatio_new
+
+
+
 def replaceShapeWithRate(rootfile,card,nuisanceStringsToFind):
   
   binlist=[]
@@ -34,17 +55,17 @@ def replaceShapeWithRate(rootfile,card,nuisanceStringsToFind):
   afterNuisStart=False
   for line in inlist:
     newline=line
-    print line
+    #print line
     if "observation" in line:
       afterHeader=True
     if afterHeader:
       if "bin" in line:
         binlist=line.replace("  "," ").replace("\n","").replace("\t"," ").split(" ")
-        print binlist
+        #print binlist
       if "process" in line and "tt" in line:
         processlist=line.replace("  "," ").replace("\n","").replace("\t"," ").split(" ")
         afterNuisStart=True
-        print processlist
+        #print processlist
     if afterNuisStart:
       for nuis in nuisanceStringsToFind:
         if nuis in line:
@@ -72,13 +93,22 @@ def replaceShapeWithRate(rootfile,card,nuisanceStringsToFind):
               upInt=hup.Integral()
               downInt=hdown.Integral()
               if nomInt==0:
+                print "WARNING NO NOM"
                 nomInt=0.001
-              upRatio=upInt/nomInt
-              downRatio=downInt/nomInt
-              print nomInt, upInt, downInt, upRatio, downRatio
+              if (upInt>nomInt and downInt>nomInt) or (upInt<nomInt and downInt<nomInt):
+                  print "WARNING same sided ! "
+              downRatio, upRatio = getNumbersSchemeOne(nomInt,downInt,upInt)
+              upRatio_naive=upInt/nomInt
+              downRatio_naive=downInt/nomInt
+              #print nomInt, upInt, downInt, upRatio, downRatio
               downRatio=round_to_sign(downRatio)
               upRatio=round_to_sign(upRatio)
-              print nomInt, upInt, downInt, upRatio, downRatio
+              print nomInt, downInt, upInt, round_to_sign(downRatio_naive), round_to_sign(upRatio_naive),  downRatio, upRatio
+              if (upInt>nomInt  and upRatio<1) or (upInt<nomInt  and upRatio>1):
+                  print "warning direction Flip UP"
+              if (downInt>nomInt  and downRatio<1) or (downInt<nomInt  and downRatio>1):
+                  print "warning direction Flip DOWN",  (downInt>nomInt  and downRatio<1), (downInt<nomInt  and downRatio>1)
+                  
               newcol=str(downRatio)+"/"+str(upRatio)
               newlinelist.append(newcol)
             else:
