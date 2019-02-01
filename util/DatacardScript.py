@@ -30,6 +30,11 @@ parser.add_option("--dataobs", dest="dataobs",
 
 (options, args) = parser.parse_args()
 
+if not path.exists(options.Rootfile):
+    sys.exit("ERROR: rootfile does not exist!")
+elif not path.exists(options.csvFile):
+    sys.exit("ERROR: csvfile does not exist!")
+
 #Load datacardMaker 
 srcdir = path.join(options.directory, "src")
 if not srcdir in sys.path:

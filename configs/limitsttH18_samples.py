@@ -83,12 +83,20 @@ def getSystSamples(pltcfg, analysis, samples):
                     systSamples.append(
                         plotClasses.Sample(sample.name+ue_hdamp, sample.color, ue_hdamp_file, newSel,
                             sample.nick+ue_hdamp, samDict = pltcfg.sampleDict ))
+    print "-"*130
+    print "SYST SAMPLES"
+    print systSamples
+    print "-"*130
     return systSamples
 
 def getAllSamples( pltcfg, analysis, samples):
     return getSamples(pltcfg) + getControlSamples(pltcfg) + getSystSamples(pltcfg, analysis, samples)
 
 def getAllSystNames( pltcfg ):
+    print "-"*130
+    print "getAllSystNames"
+    print pltcfg.weightSystNames+pltcfg.otherSystNames
+    print "-"*130
     return pltcfg.weightSystNames+pltcfg.otherSystNames
 
 def getOtherSystNames( pltcfg ):
