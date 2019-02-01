@@ -15,7 +15,9 @@ import nafInterface
 def makeDatacardsParallel(filePath, outPath, 
                     categories = None, doHdecay = True, 
                     discrname = 'finaldiscr', 
-                    datacardmaker = 'DatacardScript.py', #TODO: add in config
+                    datacardmaker = 'DatacardScript.py',
+                    datacardDirectory = ' ',
+                    datacardcsv=' ',
                     skipDatacards = False):
 
     # init directory for scripts
@@ -51,8 +53,13 @@ def makeDatacardsParallel(filePath, outPath,
                 script += 'cd '+cmsswpath+'/src\n'
                 script += 'eval `scram runtime -sh`\n'
                 script += 'cd - \n'
-            script += 'python '+datacardmaker+' '+cat+' '
-            script += filePath+' '+outPath+'/'+cat+'_hdecay.txt \n'
+            #--categoryName=CATEGORYNAME --rootfile=FILE --outputfile=FILE --directory=PATH -csvfile=FILE
+            script += 'python '+datacardmaker+' '
+            script += '--categoryname='+cat+' '
+            script += '--rootfile='+filePath+' '
+            script += '--outputfile='+outPath+'/'+cat+'_hdecay.txt '
+            script += '--directory='+datacardDirectory+' '
+            script += '--csvfile='+datacardcsv+' \n'
 
             # saving and chmodding script
             with open(scriptName, "w") as dcs:
@@ -213,8 +220,8 @@ class performFits:
             with open(d, "w") as newfile:
                 newfile.write("\n".join(newlines))
 
-    def createFitScripts(self):
-    pass
+    #def createFitScripts(self):
+    #pass
         # TODO
         #   - find out which datacards to combine
         #   - write one shell script for each combined datacard
