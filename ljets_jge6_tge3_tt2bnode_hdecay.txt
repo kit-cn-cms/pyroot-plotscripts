@@ -1,0 +1,100 @@
+imax * # number of channels
+jmax * # number of backgrounds
+kmax * # number of nuisance parameters
+---------------
+bin ljets_jge6_tge3_tt2bnode
+observation 2573.663817
+---------------
+shapes * * /nfs/dust/cms/user/lreuter/forPhilip/pyroot-plotscripts/output_limitInput.root $PROCESS_finaldiscr_$CHANNEL $PROCESS_finaldiscr_$CHANNEL_$SYSTEMATIC
+shapes ttH_hbb * /nfs/dust/cms/user/lreuter/forPhilip/pyroot-plotscripts/output_limitInput.root ttH_hbb_finaldiscr_$CHANNEL ttH_hbb_finaldiscr_$CHANNEL_$SYSTEMATIC
+shapes ttH_hcc * /nfs/dust/cms/user/lreuter/forPhilip/pyroot-plotscripts/output_limitInput.root ttH_hcc_finaldiscr_$CHANNEL ttH_hcc_finaldiscr_$CHANNEL_$SYSTEMATIC
+shapes ttH_hww * /nfs/dust/cms/user/lreuter/forPhilip/pyroot-plotscripts/output_limitInput.root ttH_hww_finaldiscr_$CHANNEL ttH_hww_finaldiscr_$CHANNEL_$SYSTEMATIC
+shapes ttH_hzz * /nfs/dust/cms/user/lreuter/forPhilip/pyroot-plotscripts/output_limitInput.root ttH_hzz_finaldiscr_$CHANNEL ttH_hzz_finaldiscr_$CHANNEL_$SYSTEMATIC
+shapes ttH_htt * /nfs/dust/cms/user/lreuter/forPhilip/pyroot-plotscripts/output_limitInput.root ttH_htt_finaldiscr_$CHANNEL ttH_htt_finaldiscr_$CHANNEL_$SYSTEMATIC
+shapes ttH_hgg * /nfs/dust/cms/user/lreuter/forPhilip/pyroot-plotscripts/output_limitInput.root ttH_hgg_finaldiscr_$CHANNEL ttH_hgg_finaldiscr_$CHANNEL_$SYSTEMATIC
+shapes ttH_hgluglu * /nfs/dust/cms/user/lreuter/forPhilip/pyroot-plotscripts/output_limitInput.root ttH_hgluglu_finaldiscr_$CHANNEL ttH_hgluglu_finaldiscr_$CHANNEL_$SYSTEMATIC
+shapes ttH_hzg * /nfs/dust/cms/user/lreuter/forPhilip/pyroot-plotscripts/output_limitInput.root ttH_hzg_finaldiscr_$CHANNEL ttH_hzg_finaldiscr_$CHANNEL_$SYSTEMATIC
+---------------
+bin ljets_jge6_tge3_tt2bnode ljets_jge6_tge3_tt2bnode ljets_jge6_tge3_tt2bnode ljets_jge6_tge3_tt2bnode ljets_jge6_tge3_tt2bnode ljets_jge6_tge3_tt2bnode ljets_jge6_tge3_tt2bnode ljets_jge6_tge3_tt2bnode ljets_jge6_tge3_tt2bnode ljets_jge6_tge3_tt2bnode ljets_jge6_tge3_tt2bnode ljets_jge6_tge3_tt2bnode ljets_jge6_tge3_tt2bnode ljets_jge6_tge3_tt2bnode ljets_jge6_tge3_tt2bnode ljets_jge6_tge3_tt2bnode ljets_jge6_tge3_tt2bnode ljets_jge6_tge3_tt2bnode ljets_jge6_tge3_tt2bnode
+process  ttH_hbb ttH_hcc ttH_hww ttH_hzz ttH_htt ttH_hgg ttH_hgluglu ttH_hzg ttbarOther ttbarPlusB ttbarPlus2B ttbarPlusBBbar ttbarPlusCCbar singlet wjets zjets ttbarW ttbarZ diboson
+process 0 -1 -2 -3 -4 -5 -6 -7 1 2 3 4 5 6 7 8 9 10 11
+rate -1 -1 -1 -1 -1 -1 -1 -1 662.39 376.761 401.089 417.128 558.061 95.8115 17.0852 5.45074 14.5239 24.2516 1.11174
+---------------
+lumi_13TeV_2017 lnN 1.023 1.023 1.023 1.023 1.023 1.023 1.023 1.023 1.023 1.023 1.023 1.023 1.023 1.023 1.023 1.023 1.023 1.023 1.023
+QCDscale_ttH lnN 0.908/1.058 0.908/1.058 0.908/1.058 0.908/1.058 0.908/1.058 0.908/1.058 0.908/1.058 0.908/1.058 - - - - - - - - - - -
+QCDscale_ttbar lnN - - - - - - - - 0.96/1.02 0.96/1.02 0.96/1.02 0.96/1.02 0.96/1.02 - - - 0.88/1.13 0.88/1.10 -
+QCDscale_singlet lnN - - - - - - - - - - - - - 0.98/1.03 - - - - -
+pdf_Higgs_ttH lnN 1.036 1.036 1.036 1.036 1.036 1.036 1.036 1.036 - - - - - - - - - - -
+pdf_gg lnN - - - - - - - - 1.04 1.04 1.04 1.04 1.04 - - - - 1.03 -
+pdf_qqbar lnN - - - - - - - - - - - - - - 1.04 1.04 1.02 - 1.02
+pdf_qg lnN - - - - - - - - - - - - - 1.04 - - - - -
+QCDscale_V lnN - - - - - - - - - - - - - - 1.01 1.01 - - -
+QCDscale_VV lnN - - - - - - - - - - - - - - - - - - 1.02
+CMS_btag_lf_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_btag_hf_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_btag_hfstats1_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_btag_lfstats1_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_btag_hfstats2_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_btag_lfstats2_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_btag_cferr1_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_btag_cferr2_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_ttHbb_bgnorm_ttbarPlusB_2017 lnN - - - - - - - - - 1.5 - - - - - - - - -
+CMS_ttHbb_bgnorm_ttbarPlus2B_2017 lnN - - - - - - - - - - 1.5 - - - - - - - -
+CMS_ttHbb_bgnorm_ttbarPlusBBbar_2017 lnN - - - - - - - - - - - 1.5 - - - - - - -
+CMS_ttHbb_bgnorm_ttbarPlusCCbar_2017 lnN - - - - - - - - - - - - 1.5 - - - - - -
+CMS_ttHbb_PU shape 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+CMS_eff_m_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_eff_e_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_effTrigger_m_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_effTrigger_e_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_res_j_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_scaleAbsoluteStat_j_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_scaleTimePtEta_j_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_scaleRelativeJEREC1_j_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_scaleRelativeJEREC2_j_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_scaleRelativePtEC1_j_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_scaleRelativePtEC2_j_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_scaleRelativeStatFSR_j_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_scaleRelativeStatEC_j_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_scaleRelativeStatHF_j_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_scaleAbsoluteScale_j shape 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+CMS_scaleAbsoluteMPFBias_j shape 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+CMS_scaleFragmentation_j shape 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+CMS_scaleSinglePionECAL_j shape 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+CMS_scaleSinglePionHCAL_j shape 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+CMS_scaleFlavorQCD_j shape 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+CMS_scaleRelativeJERHF_j shape 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+CMS_scaleRelativePtBB_j shape 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+CMS_scaleRelativePtHF_j shape 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+CMS_scaleRelativeBal_j shape 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+CMS_scaleRelativeFSR_j shape 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+CMS_scalePileUpDataMC_j shape 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+CMS_scalePileUpPtRef_j shape 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+CMS_scalePileUpPtBB_j shape 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+CMS_scalePileUpPtEC1_j shape 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+CMS_scalePileUpPtEC2_j shape 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+CMS_scalePileUpPtHF_j shape 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+CMS_ttHbb_PDF_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_ttHbb_scaleMuF shape - - - - - - - - - - - - - - - - - - -
+CMS_ttHbb_scaleMuR shape - - - - - - - - - - - - - - - - - - -
+CMS_ttHbb_FSR_ttbarOther_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_ttHbb_FSR_ttbarPlusB_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_ttHbb_FSR_ttbarPlus2B_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_ttHbb_FSR_ttbarPlusBBbar_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_ttHbb_FSR_ttbarPlusCCbar_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_ttHbb_ISR_ttbarOther_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_ttHbb_ISR_ttbarPlusB_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_ttHbb_ISR_ttbarPlus2B_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_ttHbb_ISR_ttbarPlusBBbar_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_ttHbb_ISR_ttbarPlusCCbar_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_ttHbb_HDAMP_ttbarOther_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_ttHbb_HDAMP_ttbarPlusB_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_ttHbb_HDAMP_ttbarPlus2B_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_ttHbb_HDAMP_ttbarPlusBBbar_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_ttHbb_HDAMP_ttbarPlusCCbar_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_ttHbb_UE_ttbarOther_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_ttHbb_UE_ttbarPlusB_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_ttHbb_UE_ttbarPlus2B_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_ttHbb_UE_ttbarPlusBBbar_2017 shape - - - - - - - - - - - - - - - - - - -
+CMS_ttHbb_UE_ttbarPlusCCbar_2017 shape - - - - - - - - - - - - - - - - - - -
+---------------
