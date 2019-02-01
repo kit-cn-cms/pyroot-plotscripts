@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'testRunCI'
+    name = 'testRunNewDatacardMaker2'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -94,8 +94,15 @@ def main(pyrootdir, argv):
     memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/dNNInterface_Keras_cool.py",
                     "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/DNNCheckpointFiles/newJEC_validatedVariables/"}
+
     # datacardmaker
-    datacardmaker = "mk_datacard_JESTest13TeVPara"
+    datacardmaker = "DatacardScript.py"
+
+    # path to datacardMaker directory
+    datacardMaker_directory = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
+
+    # path to csv file used to build datacards
+    datacards_csv="/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker/systematics_hdecay13TeVJESTest.csv"
 
     print '''
     # ========================================================
