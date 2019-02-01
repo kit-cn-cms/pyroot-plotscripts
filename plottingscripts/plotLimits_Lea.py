@@ -65,7 +65,7 @@ def main(pyrootdir, argv):
     analysisOptions = {
         # general options
         "plotBlinded":          False,  # blind region
-        "cirun":                True,  # test run with less samples
+        "cirun":                False,  # test run with less samples
         "haddParallel":         True,  # parallel hadding instead of non-parallel
         "useOldRoot":           False,   # use existing root file if it exists (skips plotParallel)
         "stopAfterCompile":     False,   # stop script after compiling
