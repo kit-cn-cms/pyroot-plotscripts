@@ -35,10 +35,10 @@ category=categoryObject(categoryName=categoryName,defaultRootFile=file,
                     defaultnominalkey=nominalkey,systkey=systkey)
 #TODO: Add in config csv file path
 category.add_from_csv(pathToFile="/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker/systematics_hdecay13TeVJESTest.csv")
+#Delete processes that dont exist in file
 for process in category:
-	print category[process].key_nominal_hist
 	if not category[process].key_nominal_hist:
-		print "deleted process"
+		print "deleted process %s" % process
 		category.delete_process(processName=process)
 #TODO: Add data_obs to config
 print "-"*130
@@ -46,4 +46,3 @@ print "create observation"
 category.observation = "data_obs"
 analysis.add_category(category)
 datacard=datacardMaker(analysis,outputfile,hardcodenumbers=True)
-
