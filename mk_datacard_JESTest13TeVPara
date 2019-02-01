@@ -1,0 +1,143 @@
+#!/usr/bin/env python
+
+"""
+===================
+Creating a Datacard
+===================
+
+Usage
+=====
+::
+
+    mk_datacard file.root > your_data.card
+    mk_datacard -o your_data.card file.root
+    mk_datacard -d MyOtherFancyDiscriminant file.root
+    mk_datacard -c "+my special additional categories" file.root
+
+Note that the input ROOT file _will_ be modified!
+
+Workflow / Customization
+========================
+* To disable certain samples, use -S option, (newly added)
+* To add new systematics, edit `systematics.csv`
+* To change categories:
+  - edit the definition of `all_categories` at the very end of this file
+  - use the following command-line options:
+    + `-c "+my_cat1 my_cat2"` adds two new categories
+    + `-c "-my_cat"` removes one category from being considered
+    + `-c "my_cat1 my_cat2 my_cat3"` will only consider the three
+      categories passed.
+  - only save the desired categories in the input file.
+
+Notes
+=====
+* Sample and discriminant names may not contain underscores (with the
+  exception of the sample "data_obs")
+* Indentation is four spaces
+* "systematics.csv" is aligned at the delimiter "," with spaces.
+  (best achieved with the `tabularized.vim` plugin)
+
+To Do
+-----
+* treat categories as [(cat_name, cat_partons, cat_jets)]
+* finish documentation
+* doNorm
+* summary of signal + background numbers for each category (stdout)
+
+To Test
+-------
+* new b-tag split modes
+
+Recently Tested
+---------------
+* b-tag uncertainty splitting
+  * Inject b-tag uncertainties properly
+  * `splitUncertainties_byCat.C`
+* `copyQ2.C`
+* `statUncertainties.C`
+"""
+
+import optparse
+import ROOT as r
+
+from ttH.Limits.datacard_hdecay13TeVJESTestPara import *
+
+r.gROOT.SetBatch()
+
+# This has the format "category:jet_multiplicity:partons" where the
+# latter two are optional.
+all_categories = map(split_category_string,
+        "ljets_j4_t3:4:0 ljets_j4_t4:4:0 ljets_j5_t3:5:1 ljets_j5_tge4:5:1 " \
+        "ljets_jge6_t2:6:2 ljets_jge6_t3:6:2 ljets_jge6_tge4:6:2 ljets_boosted " \
+        "ge3t:3:1 e3je2t:3:1 ge4je2t:4:2 " \
+        "SS_ge4je1t:4:1 SS_e3jge2t:3:0 SS_ge4jge2t:3:1 " \
+        "TTL_1b_1nb:4:0 TTL_1b_2nb:5:1 TTL_1b_3+nb:6:2 " \
+        "TTL_2b_0nb:4:0 TTL_2b_1nb:5:1 TTL_2b_2+nb:6:2".split())
+
+# Indicate systematics that concern only certain categories.  This is a
+# dictionary with the uncertainty as key and an anonymous function as
+# value, that returns `True` when the category passed should be considered.
+# E.g., `eTauFake` is only activated for categories starting with `TTL_`.
+limited_systematics = {
+        'NPSF_4j1t': lambda c: c == "SS_ge4je1t",
+        'NPSF_4j2t': lambda c: c == "SS_ge4jge2t",
+        'NPSF_3j2t': lambda c: c == "SS_e3jge2t",
+        'TES': lambda c: c.startswith("TTL_"),
+        'eTauFake': lambda c: c.startswith("TTL_"),
+        'jetTauFake': lambda c: c.startswith("TTL_"),
+        'tauIdEff': lambda c: c.startswith("TTL_")}
+
+parser = optparse.OptionParser(usage="%prog [options] file")
+parser.add_option("-d", "--discriminant", dest="disc",
+        help="use DISC as discriminant", metavar="DISC",
+        default="MVA")
+parser.add_option("-o", "--outfile", dest="ofile",
+        help="write datacard to FILE", metavar="FILE")
+parser.add_option("-c", "--categories", dest="categories",
+        help="use CATS for possible categories (separated by whitespace).  "
+        "A leading `+` adds to the default, a leading `-` removes.",
+        metavar="CATS")
+parser.add_option("-s", "--disable-systematic", dest="nosys",
+        help="disable uncertainties in SYS (separated by whitespace).",
+        metavar="SYS", default="")
+parser.add_option("-S", "--disable-sample", dest="nosample",
+        help="disable samples (separated by whitespace).",
+        metavar="SAMPLE", default="")
+parser.add_option("-b", "--btag-mode", dest="btag",
+        help="set b-tag uncertainty treatment to MODE.  (Allowed "
+        "values: off, rate, shape, category)", metavar="MODE",
+        default="off")
+
+(opts, args) = parser.parse_args()
+
+if len(args) != 1:
+    parser.error("need to specify input file")
+
+try:
+    btag_mode = parse_btag_mode(opts.btag)
+except:
+    parser.error("invalid b-tag mode: " + opts.btag)
+
+if not opts.ofile:
+    ofile = sys.stdout
+else:
+    ofile = open(opts.ofile, 'w')
+
+if opts.categories:
+    if opts.categories.startswith("+"):
+        categories = all_categories + map(split_category_string, opts.categories[1:].split())
+    elif opts.categories.startswith("-"):
+        categories = all_categories
+        disabled = map(lambda (c, j, p): c, map(split_category_string, opts.categories[1:].split()))
+        categories = filter(lambda (c, j, p): c not in disabled, categories)
+    else:
+        categories = map(split_category_string, opts.categories.split())
+else:
+    categories = all_categories
+
+f = r.TFile(args[0], "READ")
+create_datacard(f, ofile, opts.disc, categories,
+        disabled_systematics=opts.nosys.split(),
+        disabled_samples=opts.nosample.split(),
+        limited_systematics=limited_systematics,
+        btag_mode=btag_mode, print_summary=True)
