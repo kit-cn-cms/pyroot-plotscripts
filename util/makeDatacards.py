@@ -15,7 +15,7 @@ import nafInterface
 def makeDatacardsParallel(filePath, outPath, 
                     categories = None, doHdecay = True, 
                     discrname = 'finaldiscr', 
-                    datacardmaker = 'mk_datacard_hdecay13TeVPara',
+                    datacardmaker = 'DatacardScript.py', #TODO: add in config
                     skipDatacards = False):
 
     # init directory for scripts
@@ -51,8 +51,8 @@ def makeDatacardsParallel(filePath, outPath,
                 script += 'cd '+cmsswpath+'/src\n'
                 script += 'eval `scram runtime -sh`\n'
                 script += 'cd - \n'
-            script += datacardmaker+' -d '+' '+discrname+' '+' -c '+cat
-            script += ' -o '+outPath+'/'+cat+'_hdecay.txt '+filePath+'\n'
+            script += 'python '+datacardmaker+' '+cat+' '
+            script += filePath+' '+outPath+'/'+cat+'_hdecay.txt \n'
 
             # saving and chmodding script
             with open(scriptName, "w") as dcs:
@@ -214,7 +214,7 @@ class performFits:
                 newfile.write("\n".join(newlines))
 
     def createFitScripts(self):
-	pass
+    pass
         # TODO
         #   - find out which datacards to combine
         #   - write one shell script for each combined datacard
