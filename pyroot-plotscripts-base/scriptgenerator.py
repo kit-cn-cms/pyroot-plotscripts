@@ -2649,7 +2649,7 @@ def createProgram(scriptname,plots,samples,catnames=[""],catselections=["1"],sys
 ]
 
   #csv_file=os.getcwd()+"/rate_factors_onlyinternal_powhegpythia.csv"
-  csv_file="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/rate_factors.csv"
+  csv_file="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/rate_factors_V2.csv"
   
   if useGenWeightNormMap:
     vetolist+=GetGenWeightNormalizationVetoList(csv_file)
