@@ -3145,11 +3145,12 @@ def get_scripts_outputs_and_nentries(samples,maxevents,scriptsfolder,plotspath,p
     print ntotal_events,'events found in',s.name
   
   # save tree information to json file
-    treejson=json.dumps(SaveTreeInforamtion)
-    jsonfile=open(scriptsfolder+'/'+"treejson.json","w")
-    jsonfile.write(treejson)
-    jsonfile.close()
-    print "Saved information about events in trees to ", scriptsfolder+'/'+"treejson.json"
+  print "saving tree information to json"
+  treejson=json.dumps(SaveTreeInforamtion)
+  jsonfile=open(scriptsfolder+'/'+"treejson.json","w")
+  jsonfile.write(treejson)
+  jsonfile.close()
+  print "Saved information about events in trees to ", scriptsfolder+'/'+"treejson.json"
   return scripts,outputs,nentries,samplewiseoutputs
 
 # the dataBases should be defined as follows e.g. [[memDB,path],[blrDB,path]]
