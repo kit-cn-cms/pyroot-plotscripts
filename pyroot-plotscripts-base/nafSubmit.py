@@ -88,6 +88,7 @@ def condorSubmit(submitPath):
   returns jobID as integer value
   '''
   submitCommand = "condor_submit -terse " + submitPath
+  #submitCommand = "condor_submit -name bird-htc-sched14.desy.de -terse " + submitPath
   process = subprocess.Popen(submitCommand.split(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, stdin=subprocess.PIPE)
   output = process.communicate()[0]
 
@@ -132,7 +133,8 @@ def setupRelease(oldJIDs, newJIDs):
     releaseCode += "from nafSubmit import do_qstat\n"
     releaseCode += "import os\n"
     releaseCode += "do_qstat("+str(oldJIDs)+")\n"
-    releaseCode += "os.system('condor_release -name bird-htc-sched02.desy.de"
+    releaseCode += "os.system('condor_release "
+    #releaseCode += "os.system('condor_release -name bird-htc-sched02.desy.de"
     for ID in newJIDs:
         releaseCode += " "+str(ID)
     releaseCode += "')\n"
@@ -229,6 +231,7 @@ def do_qstat(jobIDs = False):
   '''
   allfinished=False
   print "checking job status in condor_q ..."
+  #command = ["condor_q","-name","bird-htc-sched14.desy.de"]
   command = ["condor_q"]
   if jobIDs:
     command += jobIDs
