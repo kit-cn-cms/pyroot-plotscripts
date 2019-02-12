@@ -56,7 +56,7 @@ for c in acats:
   cats.append(c)
 
 #procs="ttH ttbarOther ttbarPlusB ttbarPlus2B ttbarPlusBBbar ttbarPlusCCbar ttbarIncl".split(" ")
-procs="ttbarOther ttbarPlusBBbar ttbarPlus2B ttbarPlusB ttbarPlusCCbar ttH".split(" ")
+procs="ttbarOther ttbarPlusBBbar ttbarPlus2B ttbarPlusB ttbarPlusCCbar ttH_hbb".split(" ")
 print procs
 
 print "ok"
@@ -67,9 +67,12 @@ asysts=['CMS_btag_lf_2017', 'CMS_btag_hf_2017', 'CMS_btag_hfstats1_2017', 'CMS_b
 #filter non existent systs
 systs=[]
 for asyst in asysts:
-    if not "_j" in asyst:
-      continue
+    #if not "_j" in asyst:
+      #continue
     systs.append(asyst)  
+#systs=["CMS_btag_cferr1_2017","CMS_btag_cferr2_2017"]    
+#print systs
+systs=['CMS_ttHbb_PDF_2017','CMS_effTrigger_e_2017', 'CMS_ttHbb_scaleMuF', 'CMS_ttHbb_scaleMuR']
 
 #for p in procs:
     #for s in ["CMS_scaleFlavorQCD_j_2017","JESPileUpDataMC_j_2017","JESPileUpPtRef_j_2017","JESPileUpPtBB_j_2017","JESPileUpPtEC1_j_2017","JESPileUpPtEC2_j_2017","JESPileUpPtHF_j_2017","CMS_scaleAbsoluteMPFBias_j_2017","CMS_ttHbb_ISR_ttbarPlusBBbar","CMS_ttHbb_FSR_ttbarPlusBBbar","CMS_ttHbb_UE_ttbarPlusBBbar"]:
@@ -96,6 +99,7 @@ for c in cats:
   else:
     discname="inputVar"
   for p in procs:
+    print p   
     if p=="ttbarIncl":
       firstnom=inf.Get("ttbarOther"+"_"+discname+"_"+c)
       for subp in "ttbarPlusB ttbarPlus2B ttbarPlusBBbar ttbarPlusCCbar".split(" "):
@@ -109,8 +113,10 @@ for c in cats:
     else:
       firstnom=inf.Get(p+"_"+discname+"_"+c)
     if firstnom==None:
+        #print "x"
         continue
     for s in systs:
+      print s  
       nom=firstnom.Clone()
       print p+"_"+discname+"_"+c+"_"+s
       if p=="ttbarIncl":
@@ -206,9 +212,9 @@ for c in cats:
         downr.Divide(nom)
         upperRatioMax=max(upr.GetMaximum(),downr.GetMaximum())
         lowerRatioMin=min(upr.GetMinimum(),downr.GetMinimum())
-        nomr.GetYaxis().SetRangeUser(lowerRatioMin*0.9,upperRatioMax*1.1)
+        nomr.GetYaxis().SetRangeUser(lowerRatioMin*0.99,upperRatioMax*1.01)
         print upperRatioMax, lowerRatioMin
-        exit(0)
+        #exit(0)
         #nomr.GetYaxis().SetRangeUser(0.5,1.5)
         nomr.Draw("histoE")
         upr.Draw("samehistoE")
@@ -225,6 +231,6 @@ for c in cats:
         counter+=1
       else:
           print "did not find", p+"_"+discname+"_"+c+"_"+s+"Up"
+      #print "hm"    
 buff.Print(name+'.pdf]')
         
-        #exit(0)
