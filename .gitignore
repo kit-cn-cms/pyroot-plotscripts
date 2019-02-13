@@ -1,3 +1,6 @@
+*.out
+*.toc
+*.gz
 *.root*
 *.pdf
 *.png
