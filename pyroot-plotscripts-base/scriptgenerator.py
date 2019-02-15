@@ -1150,6 +1150,10 @@ CSVHelper::fillCSVHistos(TFile *fileHF, TFile *fileLF, const std::vector<Systema
     if(systematic=="HFStats1Down"){systematic=TString("HFstats1Down");}
     if(systematic=="HFStats2Up"){systematic=TString("HFstats2Up");}
     if(systematic=="HFStats2Down"){systematic=TString("HFstats2Down");}
+    if(systematic=="CErr1Up"){systematic=TString("cErr1Up");}
+    if(systematic=="CErr1Down"){systematic=TString("cErr1Down");}
+    if(systematic=="CErr2Up"){systematic=TString("cErr2Up");}
+    if(systematic=="CErr2Down"){systematic=TString("cErr2Down");}
     
     
     if(systematic!="") {systematic="_"+systematic;}
