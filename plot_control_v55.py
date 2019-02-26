@@ -21,13 +21,13 @@ from limittools import replaceQ2scale
 import dnnInputVariableListV1
 
 from analysisClass import *
-from plotconfig_v49 import *
+from plotconfig_v55_aux import *
 
 
 def main(argv):
 
     #Create analysis object with output name
-    name='controlplots_v51'
+    name='controlplots_v55'
     analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscripts18/newJEC/pyroot-plotscripts/workdir/'+name+'/output_limitInput.root', signalProcess='ttH')
     print os.path.exists(analysis.rootFilePath), "AAAARgh"
     #analysis=Analysis(name,argv,'/nfs/dust/cms/user/kelmorab/plotscripts18/July18/pyroot-plotscripts/NOTDEFINED/output_limitInput.root ', signalProcess='ttH')
@@ -599,7 +599,8 @@ def main(argv):
         ]
     
     #plots+=plots64+plots63+plots54+plots53+plots44+plots43
-    plots+=plotsAdditional+plots43DNN+plots53DNN+plots63DNN
+    #plots+=plotsAdditional+plots43DNN+plots53DNN+plots63DNN
+    plots+=plotsAdditional
     discriminatorPlots=plots
     
     #discriminatorPlots+=[
@@ -714,7 +715,7 @@ def main(argv):
         #if False:
             
             print "Doing plotParallel step since root file was not found.", analysis.rootFilePath
-            THEoutputpath=plotParallel(name,350000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]],"/nfs/dust/cms/user/kelmorab/plotscripts18/newJEC/pyroot-plotscripts/treejson_newJEC_V1.json",otherSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_MattiSchrode_KIT_cool.py"],cirun=False,StopAfterCompileStep=False,haddParallel=True,useGenWeightNormMap=True,useThisSampleForVariableSetup=samples[0])
+            THEoutputpath=plotParallel(name,350000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]],"/nfs/dust/cms/user/kelmorab/plotscripts18/newJEC/pyroot-plotscripts/treejson_newJEC_V1.json",otherSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_MattiSchrode_KIT_cool.py"],cirun=False,StopAfterCompileStep=False,haddParallel=True,useGenWeightNormMap=True,useThisSampleForVariableSetup=samples[1])
 
             #outputpath=plotParallel(name,5000000,discriminatorPlots,samples+samples_data+systsamples,[''],['1.'],weightSystNames,systWeights,additionalvariables,[["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_Spring17_V1",False]],"/nfs/dust/cms/user/kelmorab/treeJsons/treejson_Spring17_v5_08102017.json",otherSystNames+PSSystNames+QCDSystNames,addCodeInterfacePaths=["pyroot-plotscripts-base/dNNInterface_V6.py"],cirun=False)
             
