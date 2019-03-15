@@ -55,7 +55,7 @@
 			electron_data=0;
 		}
 	}
-  
+  /*
   // DANGERZONE
   // Only Works for SL events at the moment
   // Lepton SFs 
@@ -271,3 +271,4 @@
     std::cout<<"mu trigger weight "<<internalMuTriggerWeight<<std::endl;
     std::cout<<"CSV weight "<<internalCSVweight<<std::endl;
  }   
+*/

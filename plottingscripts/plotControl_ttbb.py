@@ -25,7 +25,7 @@ import util.makeDatacards as makeDatacards
 def main(pyrootdir, argv):
     print '''
     # ========================================================
-    # welcome to main function - defining some variables
+	# welcome to main function - defining some variables
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
@@ -68,9 +68,8 @@ def main(pyrootdir, argv):
         "cirun":                False,  # test run with less samples
         "haddParallel":         True,  # parallel hadding instead of non-parallel
         "useOldRoot":           False,   # use existing root file if it exists (skips plotParallel)
-        "stopAfterCompile":     True,   # stop script after compiling
         # options to activate parts of the script
-        "optimizedRebinning":   True, # e.g. "SoverB", "Significance"
+        "optimizedRebinning":   False, # e.g. "SoverB", "Significance"
         "haddFromWildcard":     True,
         "makeDataCards":        False,
         "addData":              False,  # adding real data 
@@ -83,13 +82,14 @@ def main(pyrootdir, argv):
         # the skipX options try to skip the submission of files to the batch system
         # before skipping the output is crosschecked
         # if the output is not complete, the skipped part is done anyways
+        "stopAfterCompile":     False,   # stop script after compiling
         "skipPlotParallel":     False,
         "skipHaddParallel":     False,
         "skipHaddFromWildcard": False,
         "skipRenaming":         False,
         "skipDatacards":        False}
 
-    plotJson = ""
+    plotJson = "/nfs/dust/cms/user/mhorzela/DPGjson.json"
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018",True]] 
     #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
 
@@ -169,7 +169,7 @@ def main(pyrootdir, argv):
     # loading samples and samples data
     # ========================================================
     '''
-    configData.initSamples(scriptType = "ControlPlots")
+    configData.initSamples()
     
 
     print '''
@@ -202,13 +202,30 @@ def main(pyrootdir, argv):
             pP.setCatSelections(['1.'])
             pP.setMaxEvts(350000)
             #pP.setRateFactorsFile(rateFactorsFile)
-            pP.setSampleForVariableSetup(configData.samples[1])
+            pP.setSampleForVariableSetup(configData.samples[0])
 
             # run plotParallel
             pP.run()
 
         pP.checkTermination()
         monitor.printClass(pP, "after plotParallel")
+
+
+# hadd histo files before renaming. The histograms are actually already renamed. 
+        # But the checkbins thingy will not have been done yet.
+        print '''
+        # ========================================================
+        # hadding from wildcard
+        # ========================================================
+        '''
+        with monitor.Timer("haddFilesFromWildCard"):
+            haddParallel.haddSplitter( input = pP.getHaddOutPath(),
+                outName = analysis.ppRootPath,
+                subName = "haddParts",
+                nHistosRemainSame = True,
+                skipHadd = analysis.skipHaddFromWildcard)
+        
+
 
         if analysis.optimizedRebinning:
             print '''
@@ -225,13 +242,13 @@ def main(pyrootdir, argv):
                 with monitor.Timer("optimizeBinning"):
                     optBinning.optimizeBinning(
                         infname = analysis.ppRootPath,
-                        signalsamples = [configData.samples[0:3]], 
-                        backgroundsamples = configData.samples[3:],
-                        additionalSamples = configData.controlSamples, 
+                        signalsamples = [configData.samples[0]], 
+                        backgroundsamples = configData.samples[1:],
+                        additionalSamples= [],
                         plots = configData.getDiscriminatorPlots(), 
                         systnames = configData.allSystNames, 
                         minBkgPerBin = 2.0, 
-                        optMode = analysis.optimzedRebinning,
+                        optMode = "Stats",
                         considerStatUnc = False, 
                         maxBins = 20, 
                         minBins = 2,
@@ -260,19 +277,6 @@ def main(pyrootdir, argv):
 
 
 
-        # hadd histo files before renaming. The histograms are actually already renamed. 
-        # But the checkbins thingy will not have been done yet.
-        print '''
-        # ========================================================
-        # hadding from wildcard
-        # ========================================================
-        '''
-        with monitor.Timer("haddFilesFromWildCard"):
-            haddParallel.haddSplitter( input = pP.getHaddOutPath(),
-                outName = analysis.ppRootPath,
-                subName = "haddParts",
-                nHistosRemainSame = True,
-                skipHadd = analysis.skipHaddFromWildcard)
          
 
 
@@ -395,16 +399,19 @@ def main(pyrootdir, argv):
             # Creating lists for later use
             # ========================================================
             '''
+            # print analysis.renamedPath
+            analysis.renamedPath=analysis.renamedPath.replace("_limitInput","")
+
             gP = genPlots.genPlots( 
                 outPath = analysis.renamedPath,
-                plots = configData.getDiscriminatorPlots(),
+                plots   = configData.getDiscriminatorPlots(),
                 plotdir = analysis.getPlotPath(),
-                rebin = 1)
+                rebin   = 1)
 
-            histoList = gP.genList(samples = configData.samples, listName = "histoList")
-            dataList = gP.genList(samples = configData.controlSamples, listName = "dataList")
-            pseudodataList = gP.genList(
-                samples = [configData.samples[0]]+configData.samples[9:], listName = "pseudodataList")
+            histoList       = gP.genList(samples = configData.samples[0:])
+            dataList        = gP.genList(samples = configData.controlSamples)
+            # pseudodataList  = gP.genList(samples = [configData.samples[0]]+configData.samples[9:])
+            pseudodataList = gP.genList(samples = configData.samples[0:])
             monitor.printClass(gP, "after creating init lists")
 
 
@@ -420,30 +427,46 @@ def main(pyrootdir, argv):
             '''
             with monitor.Timer("makingSimpleMCplots"):
                 # creating control plots
-                controlPlotsOptions = {
-                    "factor":           -1,
-                    "logscale":         False,
-                    "canvasOptions":    "histo",
-                    "normalize":        False,
-                    "stack":            True, # not default
-                    "ratio":            False,
-                    "sepaTest":         False}
-                gP.makeSimpleControlPlots( 
-                    dataConfig = genPlots.Config(name = histoList, index = 9),
-                    options = controlPlotsOptions)
+                
+
+                
+                
+                #controlPlotOptions = {
+                    #"factor":           -1,
+                    #"logscale":         True,
+                    #"canvasOptions":    "histo",
+                    #"normalize":        False,
+                    #"stack":            False, # not default
+                    #"ratio":            False,
+                    #"sepaTest":         False}
+                #sampleConfig = genPlots.Config(
+                    #histograms  = histoList,
+                    #sampleIndex = 0)
+                #gP.makeSimpleControlPlots( sampleConfig, controlPlotOptions )
 
                 # creating shape plots
-                shapePlotsOptions = {
-                    "logscale":         False,
+                shapePlotOptions = {
+                    "logscale":         True,
                     "canvasOptions":    "histo",
                     "normalize":        True, # not default
                     "stack":            False,
                     "ratio":            True,
+                    "errorband":        True,
                     "statTest":         False,
-                    "sepaTest":         False}
-                gP.makeSimpleShapePlots(
-                    dataConfig = genPlots.Config(name = dataList, index = 9),
-                    options = shapePlotsOptions)
+                    "sepaTest":         False,
+                    "privateWork":      True}
+                sampleConfig = genPlots.Config(
+                    histograms  = histoList,
+                    sampleIndex = 0)
+                # generate the llloflist internally
+                sampleConfig.addNestedHistList(
+                    genPlotsClass = gP,
+                    systNames = pltcfg.errorSystNames)
+                sampleConfig.addErrorbandConfig({
+                    "style":        1001, 
+                    "color":        ROOT.kRed, 
+                    "doRateSysts":  False})
+                gP.makeSimpleShapePlots( sampleConfig, label = "", options = shapePlotOptions )
 
                 monitor.printClass(gP, "after making simple MC plots")
 
@@ -456,71 +479,45 @@ def main(pyrootdir, argv):
             # ========================================================
             '''
             with monitor.Timer("makingMCControlPlots"):
+                sampleConfig = genPlots.Config(
+                    histograms  = histoList,
+                    sampleIndex = 0)
+
                 # generate the llloflist internally
-                gP.genNestedHistList(
-                    dataConfig = genPlots.Config( name = histoList, index = 9 ),
-                    systNames = pltcfg.errorSystNames, 
-                    outName = histoList)
-
-
-                monitor.printClass(gP, "after generating nested hist list")
-                # set config of llloflist
-                nestedHistsConfig = {}
-                nestedHistsConfig[histoList] = {
+                sampleConfig.genNestedHistList(
+                    genPlotsClass = gP,
+                    systNames = pltcfg.errorSystNames)
+                sampleConfig.setErrorbandConfig({
                     "style":        3354, 
                     "color":        ROOT.kBlack, 
-                    "doRateSysts":  False}
+                    "doRateSysts":  False})
+        
 
+                pseudodataConfig = genPlots.Config(
+                    histograms  = pseudodataList,
+                    sampleIndex = 0)
 
                 #set general plotoption
-                controlPlotsOptions = {
+                controlPlotOptions = {
                     "factor":           -2, #not default
                     "logscale":         False,
                     "canvasOptions":    "histo",
                     "ratio":            True, # not default
                     "blinded":          analysis.plotBlinded} #not default
                 # making the control plots
-                #gP.makeControlPlots(
-                #    dataConfig = genPlots.Config(name = dataList, index = 0),
-                #    controlConfig = genPlots.Config(name = histoList, index = 9),
-                #    sampleConfig = genPlots.Config(name = histoList, index = 9),
-                #    headHist = histoList,
-                #    headSample = histoList,
-                #    nestedHistsConfig = nestedHistsConfig,
-                #    options = controlPlotsOptions,
-                #    outName = "controlPlots_data")
                 gP.makeControlPlots(
-                    dataConfig = genPlots.Config(name = pseudodataList, index = 0),
-                    controlConfig = genPlots.Config(name = histoList, index = 9),
-                    sampleConfig = genPlots.Config(name = histoList, index = 9),
-                    headHist = histoList,
-                    headSample = histoList,
-                    nestedHistsConfig = nestedHistsConfig,
-                    options = controlPlotsOptions,
-                    outName = "controlPlots_pseudodata")
+                    sampleConfig = sampleConfig,
+                    dataConfig   = pseudodataConfig,
+                    options      = controlPlotOptions,
+                    outName      = "controlPlots_pseudodata")
 
 
-                controlPlotsOptions["logscale"] = True
-                
-                #gP.makeControlPlots(
-                #    dataConfig = genPlots.Config(name = dataList, index = 0),
-                #    controlConfig = genPlots.Config(name = histoList, index = 9),
-                #    sampleConfig = genPlots.Config(name = histoList, index = 9),
-                #    headHist = histoList,
-                #    headSample = histoList,
-                #    nestedHistsConfig = nestedHistsConfig,
-                #    options = controlPlotsOptions,
-                #    outName = "controlPlots_data_LOG")
-
+                controlPlotOptions["logscale"] = True
                 gP.makeControlPlots(
-                    dataConfig = genPlots.Config(name = pseudodataList, index = 0),
-                    controlConfig = genPlots.Config(name = histoList, index = 9),
-                    sampleConfig = genPlots.Config(name = histoList, index = 9),
-                    headHist = histoList,
-                    headSample = histoList,
-                    nestedHistsConfig = nestedHistsConfig,
-                    options = controlPlotsOptions,
-                    outName = "controlPlots_pseudodata_LOG")
+                    sampleConfig = sampleConfig,
+                    dataConfig   = pseudodataConfig,
+                    options      = controlPlotOptions,
+                    outName      = "controlPlots_pseudodata_LOG")
 
             monitor.printClass(gP, "after making control plots")
 
@@ -532,9 +529,9 @@ def main(pyrootdir, argv):
             '''
             with monitor.Timer("makeEventYields"):
                 gP.makeEventYields(
-                    categories = configData.getEventYieldCategories(),
-                    listName = histoList,
-                    dataName = dataList,
+                    categories    = configData.getEventYieldCategories(),
+                    samplesConfig = histoList,
+                    dataConfig    = pseudodataList,
                     nameRequirements = ["node"]
                     )
 
@@ -542,5 +539,3 @@ def main(pyrootdir, argv):
 if __name__ == "__main__":
 
     main(pyrootdir, sys.argv[1:])
-
-

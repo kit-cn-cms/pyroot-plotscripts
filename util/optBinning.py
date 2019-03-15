@@ -37,6 +37,7 @@ def optimizeBinning(infname, signalsamples = [], backgroundsamples = [], additio
         print("getting " + str(sName))
         
         s0 = infile.Get(sName)
+        print sName, s0
         theobjectlist.append(s0)
         theSignalClone = s0.Clone('signalClone_'+sName)
 
@@ -186,7 +187,7 @@ def getEqualBinWidths(signalHisto, bkgHisto, minBkgPerBin, maxBins, minBins, ver
         return listOfBinLowEdges
 
 
-def getOptimizedBinEdges(signalHisto, bkgHisto, optMode = "SoverB", minBkgPerBin = 2.0, 
+def getOptimizedBinEdges(signalHisto, bkgHisto, optMode = "Stats", minBkgPerBin = 2.0, 
                             maxBins = 100, minBins = 1, considerStatUnc = False, verbosity=0):
 
     if signalHisto.GetNbinsX() != bkgHisto.GetNbinsX():
@@ -200,23 +201,51 @@ def getOptimizedBinEdges(signalHisto, bkgHisto, optMode = "SoverB", minBkgPerBin
     if optMode == "equalBinWidth":
         return getEqualBinWidths(signalHisto, bkgHisto, minBkgPerBin, maxBins, minBins, verbosity)
 
-    def getSoverB(S,B):
-        if B > 0:
-            return S/float(B)
-        elif S > 0:
-            return 99999.9
+    def getFom(bin1, optMode = optMode):
+        S = bin1[0]         #bincontent of signal
+        errorS=bin1[1]      #error on signal
+        B = bin1[2]         #bincontent of background
+        errorB=bin1[3]      #error on background
+        binlowedge=bin1[4]
+        binwidth=bin1[5]
+        binFom=bin1[6]      #value of FoM
+        lookAt=bin1[7]      #bool
+
+        def getSoverB(S,B):
+            if B > 0:
+                return S/float(B)
+            elif S > 0:
+                return 99999.9
+            else:
+                return 0.0
+
+        def getSignificance(S,B):
+            if (S+B) > 0:
+                return S/ROOT.TMath.Sqrt(S+B)
+            elif S > 0:
+                return 99999.9
+            else:
+                return 0.0
+
+        def getStatError(errorS):
+            if S==0:
+                return 99999.9
+            else:
+                return S/errorS
+
+        if optMode == "SoverB":
+            return getSoverB(S=S,B=B)
+        elif optMode == "Significance":
+            return getSignificance(S=S,B=B)
+        elif optMode == "Stats":
+            return getStatError(errorS=errorS)
         else:
-            return 0.0
+            print "unknown optimization mode"
+            exit(0)
+
+    
         
-    def getSignificance(S,B):
-        if (S+B) > 0:
-            return S/ROOT.TMath.Sqrt(S+B)
-        elif S > 0:
-            return 99999.9
-        else:
-            return 0.0
-        
-    def mergeBins(bin1, bin2, pointerToFoM, verbosity=0):
+    def mergeBins(bin1, bin2, verbosity=0):
         # array has form [[bincontentsSignal,binErrorsSignal,bincontentsBackgound,binErrorsBackground, binlowedges, binwidths,FigureOfMerit,lookAt]]
         retbin = [ 
             bin1[0] + bin2[0],    # combine bin contents for signal
@@ -225,7 +254,7 @@ def getOptimizedBinEdges(signalHisto, bkgHisto, optMode = "SoverB", minBkgPerBin
             float(ROOT.TMath.Sqrt(bin1[3]*bin1[3] + bin2[3]*bin2[3])), # combine stat uncertainties for bkg
             min(bin1[4], bin2[4]), # low edge of both bins
             bin1[5] + bin2[5],    # combine bin width
-            getFom(bin1[0] + bin2[0], bin1[2] + bin2[2]),
+            getFom(bin1 = [bin1[i]+bin2[i] for i in range(len(bin1))], optMode = optMode),
             1.0 # reset is already good flag
             ]
 
@@ -234,14 +263,7 @@ def getOptimizedBinEdges(signalHisto, bkgHisto, optMode = "SoverB", minBkgPerBin
             print "to ", retbin
         return retbin
     
-    getFom = None
-    if optMode == "SoverB":
-        getFom = getSoverB
-    elif optMode == "Significance":
-        getFom = getSignificance
-    else:
-        print "unknown optimization mode"
-        exit(0)
+    
     
     if considerStatUnc:
         print "Considering statistical uncertainty not yet implemented! Ignoring your wishes for now!"
@@ -259,14 +281,23 @@ def getOptimizedBinEdges(signalHisto, bkgHisto, optMode = "SoverB", minBkgPerBin
             print "reading signal ", signalHisto.GetName()
             print "iBin, Content", ibin, signalHisto.GetBinContent(ibin)
             print "reading background ", bkgHisto.GetName()
-            print "iBin, Content", ibin, bkgHisto.GetBinContent(ibin)
+            print "iBin, Content", ibin, bkgHisto.GetBinContent(ibin)   
+
+        bintmp = [signalHisto.GetBinContent(ibin), 
+                    signalHisto.GetBinError(ibin), 
+                    bkgHisto.GetBinContent(ibin), 
+                    bkgHisto.GetBinError(ibin), 
+                    signalHisto.GetBinLowEdge(ibin), 
+                    signalHisto.GetBinWidth(ibin), 
+                    None, 1]
+
         theArray.append([signalHisto.GetBinContent(ibin), 
                         signalHisto.GetBinError(ibin), 
                         bkgHisto.GetBinContent(ibin), 
                         bkgHisto.GetBinError(ibin), 
                         signalHisto.GetBinLowEdge(ibin), 
                         signalHisto.GetBinWidth(ibin), 
-                        getFom(signalHisto.GetBinContent(ibin),bkgHisto.GetBinContent(ibin)), 1])
+                        getFom(bin1=bintmp, optMode=optMode), 1])
     
     # make deep copy of original binning
     sarraycopy = deepcopy(theArray)
@@ -313,12 +344,12 @@ def getOptimizedBinEdges(signalHisto, bkgHisto, optMode = "SoverB", minBkgPerBin
         hypotheticalBinRight = []
 
         if imax != 0: # not the leftmost bin (underflow)
-            hypotheticalBinLeft = mergeBins( theArray[imax-1], theArray[imax], getFom, verbosity )
-            mergeLeftIncreasesFoM = hypotheticalBinLeft[6] - getFom( theArray[imax][0], theArray[imax][2] )
+            hypotheticalBinLeft = mergeBins( theArray[imax-1], theArray[imax], verbosity )
+            mergeLeftIncreasesFoM = hypotheticalBinLeft[6] - getFom( theArray[imax], optMode )
 
         if imax!=nbins-1: # not the rightmost bin (overflow)
-            hypotheticalBinRight = mergeBins( theArray[imax+1], theArray[imax], getFom, verbosity )
-            mergeRightIncreasesFoM = hypotheticalBinRight[6] - getFom( theArray[imax][0], theArray[imax][2] )
+            hypotheticalBinRight = mergeBins( theArray[imax+1], theArray[imax], verbosity )
+            mergeRightIncreasesFoM = hypotheticalBinRight[6] - getFom( theArray[imax], optMode )
         
         if hasMinBkg and (mergeLeftIncreasesFoM <= 0 and mergeRightIncreasesFoM <= 0):
         # enough bkg in bin and no increase of FoM by merging
@@ -371,7 +402,7 @@ def getOptimizedBinEdges(signalHisto, bkgHisto, optMode = "SoverB", minBkgPerBin
     # reset FoM entries
     nbins = len(theArray)
     for ibin in range(nbins):
-        theArray[ibin][6] = getFom(theArray[ibin][0],theArray[ibin][2])
+        theArray[ibin][6] = getFom(theArray[ibin], optMode)
     # now we look for the bins with the worst FoM and merge those 
     while doReduceBins and len(theArray) >= maxBins:
         nbins = len(theArray)
@@ -388,22 +419,22 @@ def getOptimizedBinEdges(signalHisto, bkgHisto, optMode = "SoverB", minBkgPerBin
             FoMRight = theArray[imin+1][6]
         if FoMLeft != None and FoMRight != None:
             if FoMLeft <= FoMRight:
-                newbin = mergeBins(theArray[imin],theArray[imin-1],getFom, verbosity)
+                newbin = mergeBins(theArray[imin],theArray[imin-1], verbosity)
                 del theArray[imin]
                 del theArray[imin-1]
                 theArray.insert(imin-1, newbin)
             else:
-                newbin = mergeBins(theArray[imin],theArray[imin+1],getFom, verbosity)
+                newbin = mergeBins(theArray[imin],theArray[imin+1], verbosity)
                 del theArray[imin+1]
                 del theArray[imin]
                 theArray.insert(imin,newbin)
         elif FoMRight != None:
-            newbin = mergeBins(theArray[imin],theArray[imin+1],getFom, verbosity)
+            newbin = mergeBins(theArray[imin],theArray[imin+1], verbosity)
             del theArray[imin+1]
             del theArray[imin]
             theArray.insert(imin,newbin)
         elif FoMLeft != None:
-            newbin = mergeBins(theArray[imin],theArray[imin-1],getFom, verbosity)
+            newbin = mergeBins(theArray[imin],theArray[imin-1], verbosity)
             del theArray[imin]
             del theArray[imin-1]
             theArray.insert(imin-1, newbin)
