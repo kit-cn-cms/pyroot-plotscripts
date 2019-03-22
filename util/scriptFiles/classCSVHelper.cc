@@ -113,9 +113,9 @@ void CSVHelper::init(const std::string& hf, const std::string& lf, const int& nH
   nLFetaBins_ = nLFetaBins;
   
   //combine the vector with the csv systematics and the jec systematics into one vector
-  systs.reserve(csvsysts.size()+jecsysts.size());
+  systs.reserve(jecsysts.size());
   systs.insert(systs.end(),jecsysts.begin(),jecsysts.end());
-  systs.insert(systs.end(),csvsysts.begin(),csvsysts.end());
+  //systs.insert(systs.end(),csvsysts.begin(),csvsysts.end());
   
   const std::string inputFileHF = hf.size() > 0 ? hf : "data/csv_rwt_hf_IT_FlatSF.root";
   const std::string inputFileLF = lf.size() > 0 ? lf : "data/csv_rwt_lf_IT_FlatSF.root";
@@ -152,19 +152,30 @@ CSVHelper::fillCSVHistos(TFile *fileHF, TFile *fileLF, const std::vector<Systema
     systematic.ReplaceAll("down","Down");
     systematic.ReplaceAll("CSV","");
     std::cout << "adding histograms for systematic " << systematic << std::endl;
-    if(systematic.Contains("Stats")) {
-        systematic.ReplaceAll("HF","");
-        systematic.ReplaceAll("LF","");
-    }
+    if(systematic=="JESUp"){systematic=TString("JESTotalUp");} 
+    if(systematic=="JESDown"){systematic=TString("JESTotalDown");} 
+    //if(systematic.Contains("Stats")) {
+    //    systematic.ReplaceAll("HF","");
+    //    systematic.ReplaceAll("LF","");
+    //}
+
+    if(systematic=="LFStats1Up"){systematic=TString("LFstats1Up");}
+    if(systematic=="LFStats1Down"){systematic=TString("LFstats1Down");}
+    if(systematic=="LFStats2Up"){systematic=TString("LFstats2Up");}
+    if(systematic=="LFStats2Down"){systematic=TString("LFstats2Down");}
+    if(systematic=="HFStats1Up"){systematic=TString("HFstats1Up");}
+    if(systematic=="HFStats1Down"){systematic=TString("HFstats1Down");}
+    if(systematic=="HFStats2Up"){systematic=TString("HFstats2Up");}
+    if(systematic=="HFStats2Down"){systematic=TString("HFstats2Down");}
     if(systematic!="") {systematic="_"+systematic;}
     
     //DANGERZEONE
     // Check if this is still correct
-    if(systematic_original.Contains("HFStats")){
-        systematic_original.ReplaceAll("HFStats","LFStats");
-    }
-    else if(systematic_original.Contains("LFStats")){
-        systematic_original.ReplaceAll("LFStats","HFStats");
+    //if(systematic_original.Contains("HFStats")){
+    //    systematic_original.ReplaceAll("HFStats","LFStats");
+    //}
+    //else if(systematic_original.Contains("LFStats")){
+    //    systematic_original.ReplaceAll("LFStats","HFStats");
     }
     // loop over all pt bins of the different jet flavours
     for (int iPt = 0; iPt < nHFptBins_; iPt++) {
