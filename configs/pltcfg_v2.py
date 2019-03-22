@@ -342,7 +342,7 @@ systs_tt_cc=[
 # HDAMP and UE systs
 hdamp_ue_systnames_tt_all = [
     #"_CMS_ttHbb_HDAMPUp", "_CMS_ttHbb_HDAMPDown",
-#"_CMS_ttHbb_UEUp", "_CMS_ttHbb_UEDown"
+    #"_CMS_ttHbb_UEUp", "_CMS_ttHbb_UEDown"
 ]
 hdamp_ue_systnames_tt_lf = [
     "_CMS_ttHbb_HDAMP_ttbarOther_2017Up", "_CMS_ttHbb_HDAMP_ttbarOther_2017Down",

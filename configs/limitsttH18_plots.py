@@ -269,17 +269,17 @@ def add_dnn(data, discrname):
     discrNames  = ["ttH", "ttbarBB", "ttbar2B", "ttbarB", "ttbarCC", "ttbarlf"]
 
     categorienames_MultiDNN = [
-        ("(N_Jets==4&&N_BTagsM>=3&&DNN_4j_ge3t_pred_class=="+str(i)+")","ljets_j4_tge3_"+str(node)+"node","")
+        ("(N_Jets==4&&N_BTagsM>=3&&DNN_4j_ge3t_pred_class=="+str(i)+")*L1ScaleFactor_j4_tge3_"+str(node)+"node","ljets_j4_tge3_"+str(node)+"node","")
         for i,node in enumerate(nodes)]
     discrs_MultiDNN = ['DNN_Out_4j_ge3t_'+str(node) for node in discrNames]
 
     categorienames_MultiDNN+= [
-        ("(N_Jets==5&&N_BTagsM>=3&&DNN_5j_ge3t_pred_class=="+str(i)+")","ljets_j5_tge3_"+str(node)+"node","")
+        ("(N_Jets==5&&N_BTagsM>=3&&DNN_5j_ge3t_pred_class=="+str(i)+")*L1ScaleFactor_j5_tge3_"+str(node)+"node","ljets_j5_tge3_"+str(node)+"node","")
         for i,node in enumerate(nodes)]
     discrs_MultiDNN+= ['DNN_Out_5j_ge3t_'+str(node) for node in discrNames]
 
     categorienames_MultiDNN+= [
-        ("(N_Jets>=6&&N_BTagsM>=3&&DNN_ge6j_ge3t_pred_class=="+str(i)+")","ljets_jge6_tge3_"+str(node)+"node","")
+        ("(N_Jets>=6&&N_BTagsM>=3&&DNN_ge6j_ge3t_pred_class=="+str(i)+")*L1ScaleFactor_jge6_tge3_"+str(node)+"node","ljets_jge6_tge3_"+str(node)+"node","")
         for i,node in enumerate(nodes)]
     discrs_MultiDNN+= ['DNN_Out_ge6j_ge3t_'+str(node) for node in discrNames]
 
