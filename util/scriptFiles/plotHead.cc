@@ -64,8 +64,8 @@ void plot(){
   std::vector<Systematics::Type> v_SystTypes = Systematics::getTypeVector();
   //for(auto itsyst : v_SystTypes){std::cout<< " Know :" << itsyst << std::endl;}
 
-  std::string csvHFfile="/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/deepCSV_sfs_hf.root";
-  std::string csvLFfile="/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/deepCSV_sfs_lf.root";
+  std::string csvHFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_V3_2017/deepCSV_sfs_hf.root";
+  std::string csvLFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_V3_2017/deepCSV_sfs_lf.root";
   TString qcd_file = "/nfs/dust/cms/user/mwassmer/QCD_Estimation_September17/QCD_Estimation/QCD_Estimation_FakeScaleFactor_nominal.root";
   
   CSVHelper* internalCSVHelper= new CSVHelper(csvHFfile,csvLFfile, 5,4,3,v_SystTypes);
