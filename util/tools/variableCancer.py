@@ -108,9 +108,21 @@ class VariableManager:
             return
         
         # dont add variables that already exist
-        if varName in self.variablesToInit or varName in self.variables:
+        if varName in self.variables:
             if self.verbose > 20: print("variable already in variableList")
             return
+
+        if varName in self.variablesToInit:
+            # check if expressions match
+            initExpr = self.variablesToInit[varName].expression
+            if initExpr == expression:
+                if self.verbose > 20: print("variable expressions match - skip.")
+                return
+            elif initExpr != varName:
+                if self.verbose > 20: print("variable already has an expression string")
+                return
+            else:
+                if self.verbose > 20: print("adding variable again with new expression")
 
         # adding variables that 
         #   are BDT weight files (.xml)
@@ -386,6 +398,8 @@ class VariableManager:
 
         print("all variable dependencies resolved and variable list sorted")
         self.sortedVariables = sortedVariables                    
+        for v in self.sortedVariables:
+            print(v)
             
     # ---------------------------------------------------------------------------------------------
     # functions for writing code in plot loops
