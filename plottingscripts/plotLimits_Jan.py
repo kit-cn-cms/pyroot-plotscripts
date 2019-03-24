@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'testSystematics1'
+    name = 'testRun_v2'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -55,7 +55,7 @@ def main(pyrootdir, argv):
     configDataBaseName = "limitsttH18"
 
     # name of plotconfig
-    pltcfgName = "v49"
+    pltcfgName = "v2"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -77,7 +77,7 @@ def main(pyrootdir, argv):
         "singleExecute":        False,  # for non parallel drawing
         "drawParallel":         True,
         # options for drawParallel/singleExecute sub programs
-        "makeSimplePlots":      False,
+        "makeSimplePlots":      True,
         "makeMCControlPlots":   True,
         "makeEventYields":      True,
         # the skipX options try to skip the submission of files to the batch system
@@ -89,7 +89,7 @@ def main(pyrootdir, argv):
         "skipRenaming":         False,
         "skipDatacards":        False}
 
-    plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttH_2018_newJEC.json"
+    plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttH_2018_newJEC_v5.json"
     plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/dNNInterface_Keras_cool.py",
