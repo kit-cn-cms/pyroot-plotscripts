@@ -565,8 +565,8 @@ class genPlots:
 
 
             if plotOptions["privateWork"]:
-                #cms = ROOT.TLatex( 0.2, 0.96, "CMS private work" );
-                cms = ROOT.TLatex(0.2, 0.96, "CMS private work" );
+                # ~ cms = ROOT.TLatex(0.2, 0.96, "CMS private work" );
+                cms = ROOT.TLatex(0.18, 0.85, "#splitline{CMS simulation}{WORK IN PROGRESS}" );
                 cms.SetTextFont(42)
                 cms.SetTextSize(0.05)
                 cms.SetNDC()
