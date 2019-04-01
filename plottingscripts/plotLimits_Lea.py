@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'testSystematics1'
+    name = 'configTestAll'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -55,7 +55,7 @@ def main(pyrootdir, argv):
     configDataBaseName = "limitsttH18"
 
     # name of plotconfig
-    pltcfgName = "v49"
+    pltcfgName = "v2"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -111,6 +111,9 @@ def main(pyrootdir, argv):
     '''
 
     # save a lot of useful information concerning the analysis
+    print "analysis"
+    
+
     analysis = analysisClass.analysisConfig(
         workdir = workdir, 
         pyrootdir = pyrootdir, 
@@ -118,10 +121,15 @@ def main(pyrootdir, argv):
         signalProcess = signalProcess, 
         pltcfgName = pltcfgName,
         discrName = discrName)
+    print analysis
 
+    print "initArguments"
     analysis.initArguments( argv )
+
+    print "initAnalysisOptions"
     analysis.initAnalysisOptions( analysisOptions )
 
+    print "initPlotConfig"
     pltcfg = analysis.initPlotConfig()
     print "We will import the following plotconfig: ", analysis.getPlotConfig()
 
