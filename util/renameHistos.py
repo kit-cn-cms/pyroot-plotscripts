@@ -312,7 +312,8 @@ def renameHistosParallel(inFile, outFile, systNames, checkBins = False, prune = 
 
                     for iBin in range(nBins):
                         if newHist.GetBinContent(iBin+1) <= 0.0:
-                            newHist.setBin(iBin, QCDEpsilon)
+                            newHist.SetBinContent(iBin+1, QCDEpsilon)
+                            newHist.SetBinError(iBin+1, ROOT.TMath.Sqrt(QCDEpsilon))
                             histChanged = True
 
                 elif thisHist.GetMinimum() < Epsilon:
@@ -321,7 +322,8 @@ def renameHistosParallel(inFile, outFile, systNames, checkBins = False, prune = 
                     objectList.append( newHist )
                     for iBin in range(nBins):
                         if newHist.GetBinContent(iBin+1) <= 0:
-                            newHist.setBin(iBin, Epsilon)
+                            newHist.SetBinContent(iBin+1, Epsilon)
+                            newHist.SetBinError(iBin+1, ROOT.TMath.Sqrt(Epsilon))
                             histChanged = True
 
         if newName != thisName:

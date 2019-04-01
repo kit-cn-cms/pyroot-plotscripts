@@ -1,5 +1,3 @@
-
-// hacked in CSV helper . Factorized JES. (date 28.11.2018)
 class CSVHelper
 {
 public:
@@ -19,13 +17,13 @@ public:
   void init(const std::string& hf, const std::string& lf, const int& nHFptBins,const int& nLFptBins,const int& nLFetaBins,const std::vector<Systematics::Type>& jecsysts);
   // function to get the csv weight
   double getCSVWeight(const std::vector<double>& jetPts,
-		      const std::vector<double>& jetEtas,
-		      const std::vector<double>& jetCSVs,
-		      const std::vector<int>& jetFlavors,
-		      const Systematics::Type syst,
-		      double &csvWgtHF,
-		      double &csvWgtLF,
-		      double &csvWgtCF) const;
+              const std::vector<double>& jetEtas,
+              const std::vector<double>& jetCSVs,
+              const std::vector<int>& jetFlavors,
+              const Systematics::Type syst,
+              double &csvWgtHF,
+              double &csvWgtLF,
+              double &csvWgtCF) const;
 
   // If there is no SF for a jet because it is out of acceptance
   // of SF, an SF of 1 is used for this jet. Intended when running
@@ -95,7 +93,7 @@ CSVHelper::~CSVHelper() {
   for(auto& i: h_csv_wgt_lf ) {
     for(auto& j: i) {
       for(auto& k: j) {
-	if( k ) delete k;
+    if( k ) delete k;
       }
     }
   }
@@ -113,9 +111,9 @@ void CSVHelper::init(const std::string& hf, const std::string& lf, const int& nH
   nLFetaBins_ = nLFetaBins;
   
   //combine the vector with the csv systematics and the jec systematics into one vector
-  systs.reserve(csvsysts.size()+jecsysts.size());
+  systs.reserve(jecsysts.size());
   systs.insert(systs.end(),jecsysts.begin(),jecsysts.end());
-  systs.insert(systs.end(),csvsysts.begin(),csvsysts.end());
+  //systs.insert(systs.end(),csvsysts.begin(),csvsysts.end());
   
   const std::string inputFileHF = hf.size() > 0 ? hf : "data/csv_rwt_hf_IT_FlatSF.root";
   const std::string inputFileLF = lf.size() > 0 ? lf : "data/csv_rwt_lf_IT_FlatSF.root";
@@ -152,20 +150,34 @@ CSVHelper::fillCSVHistos(TFile *fileHF, TFile *fileLF, const std::vector<Systema
     systematic.ReplaceAll("down","Down");
     systematic.ReplaceAll("CSV","");
     std::cout << "adding histograms for systematic " << systematic << std::endl;
-    if(systematic.Contains("Stats")) {
-        systematic.ReplaceAll("HF","");
-        systematic.ReplaceAll("LF","");
-    }
+    if(systematic=="JESUp"){systematic=TString("JESTotalUp");}
+    if(systematic=="JESDown"){systematic=TString("JESTotalDown");}
+//     if(systematic.Contains("Stats")) {
+//         systematic.ReplaceAll("HF","");
+//         systematic.ReplaceAll("LF","");
+//     }
+    //DANGERZONE
+    if(systematic=="LFStats1Up"){systematic=TString("LFstats1Up");}
+    if(systematic=="LFStats1Down"){systematic=TString("LFstats1Down");}
+    if(systematic=="LFStats2Up"){systematic=TString("LFstats2Up");}
+    if(systematic=="LFStats2Down"){systematic=TString("LFstats2Down");}
+    if(systematic=="HFStats1Up"){systematic=TString("HFstats1Up");}
+    if(systematic=="HFStats1Down"){systematic=TString("HFstats1Down");}
+    if(systematic=="HFStats2Up"){systematic=TString("HFstats2Up");}
+    if(systematic=="HFStats2Down"){systematic=TString("HFstats2Down");}
+    
+    
     if(systematic!="") {systematic="_"+systematic;}
     
     //DANGERZEONE
     // Check if this is still correct
-    if(systematic_original.Contains("HFStats")){
-        systematic_original.ReplaceAll("HFStats","LFStats");
-    }
-    else if(systematic_original.Contains("LFStats")){
-        systematic_original.ReplaceAll("LFStats","HFStats");
-    }
+//     if(systematic_original.Contains("HFStats")){
+//         systematic_original.ReplaceAll("HFStats","LFStats");
+//     }
+//     else if(systematic_original.Contains("LFStats")){
+//         systematic_original.ReplaceAll("LFStats","HFStats");
+//     }
+
     // loop over all pt bins of the different jet flavours
     for (int iPt = 0; iPt < nHFptBins_; iPt++) {
         TString name = Form("csv_ratio_Pt%i_Eta0_%s", iPt, (syst_csv_suffix+systematic).Data());
@@ -173,22 +185,22 @@ CSVHelper::fillCSVHistos(TFile *fileHF, TFile *fileLF, const std::vector<Systema
 //        if(fileHF->GetListOfKeys()->Contains(name) && !(systematic_original.Contains("HF"))) {
         if(fileHF->GetListOfKeys()->Contains(name)) {
             h_csv_wgt_hf.at(iSys).at(iPt) = readHistogram(fileHF,name);
-            std::cout <<"for "<<systematic_original<< " added " <<  h_csv_wgt_hf.at(iSys).at(iPt)->GetName() << " from HF file" << std::endl;
+            std::cout <<"for "<<systematic<<" "<<systematic_original<< " added " <<  h_csv_wgt_hf.at(iSys).at(iPt)->GetName() <<" looking for "<<name<< " from HF file" << std::endl;
         }
         else {
             h_csv_wgt_hf.at(iSys).at(iPt) = readHistogram(fileHF,name.ReplaceAll(systematic,""));
-            std::cout <<"for "<<systematic_original<< " added " <<  h_csv_wgt_hf.at(iSys).at(iPt)->GetName() << " from HF file" << std::endl;
+            std::cout <<"for "<<systematic<<" "<<systematic_original<< " added " <<  h_csv_wgt_hf.at(iSys).at(iPt)->GetName() <<" looking for "<<name<< " from HF file!!!???!!!" << std::endl;
         }
     }
     for (int iPt = 0; iPt < nHFptBins_; iPt++) {
         TString name = Form("c_csv_ratio_Pt%i_Eta0_%s", iPt, (syst_csv_suffix+systematic).Data());
         if(fileHF->GetListOfKeys()->Contains(name)) {
             c_csv_wgt_hf.at(iSys).at(iPt) = readHistogram(fileHF,name);
-            std::cout <<"for "<<systematic_original<< " added " << c_csv_wgt_hf.at(iSys).at(iPt)->GetName() << " from CF(HF) file" << std::endl;
+            std::cout <<"for "<<systematic<<" "<<systematic_original<< " added " << c_csv_wgt_hf.at(iSys).at(iPt)->GetName() <<" looking for "<<name<< " from CF(HF) file" << std::endl;
         }
         else {
             c_csv_wgt_hf.at(iSys).at(iPt) = readHistogram(fileHF,name.ReplaceAll(systematic,""));
-            std::cout <<"for "<<systematic_original<< " added " << c_csv_wgt_hf.at(iSys).at(iPt)->GetName() << " from CF(HF) file" << std::endl;
+            std::cout <<"for "<<systematic<<" "<<systematic_original<< " added " << c_csv_wgt_hf.at(iSys).at(iPt)->GetName() <<" looking for "<<name<< " from CF(HF) file!!!???!!!" << std::endl;
 
         }
     }
@@ -198,11 +210,11 @@ CSVHelper::fillCSVHistos(TFile *fileHF, TFile *fileLF, const std::vector<Systema
 //            if(fileLF->GetListOfKeys()->Contains(name) && !(systematic_original.Contains("LF"))) {
             if(fileLF->GetListOfKeys()->Contains(name)) {
                 h_csv_wgt_lf.at(iSys).at(iPt).at(iEta) = readHistogram(fileLF,name);
-                std::cout <<"for "<<systematic_original<< " added " << h_csv_wgt_lf.at(iSys).at(iPt).at(iEta)->GetName() << " from LF file" << std::endl;
+                std::cout <<"for "<<systematic<<" "<<systematic_original<< " added " << h_csv_wgt_lf.at(iSys).at(iPt).at(iEta)->GetName() <<" looking for "<<name<< " from LF file" << std::endl;
             }
             else {
                 h_csv_wgt_lf.at(iSys).at(iPt).at(iEta) = readHistogram(fileLF,name.ReplaceAll(systematic,""));
-                std::cout <<"for "<<systematic_original<< " added " << h_csv_wgt_lf.at(iSys).at(iPt).at(iEta)->GetName() << " from LF file" << std::endl;
+                std::cout <<"for "<<systematic<<" "<<systematic_original<< " added " << h_csv_wgt_lf.at(iSys).at(iPt).at(iEta)->GetName() <<" looking for "<<name<< " from LF file!!!???!!!" << std::endl;
             }
         }
     }
@@ -224,13 +236,13 @@ TH1* CSVHelper::readHistogram(TFile* file, const TString& name) const {
 
 double
 CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
-			const std::vector<double>& jetEtas,
-			const std::vector<double>& jetCSVs,
-			const std::vector<int>& jetFlavors,
-			const Systematics::Type syst,
-			double &csvWgtHF,
-			double &csvWgtLF,
-			double &csvWgtCF) const
+            const std::vector<double>& jetEtas,
+            const std::vector<double>& jetCSVs,
+            const std::vector<int>& jetFlavors,
+            const Systematics::Type syst,
+            double &csvWgtHF,
+            double &csvWgtLF,
+            double &csvWgtCF) const
 {
   if( !isInit_ ) {
     std::cout<<"CSVHelper: Not initualized"<<std::endl;
@@ -303,7 +315,7 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
         //std::cout << "b flavor jet " << std::endl;
       // RESET iPt to maximum pt bin (only 5 bins for new SFs)
       if(iPt>=nHFptBins_){
-	iPt=nHFptBins_-1; /// [20-30], [30-50], [40-70], [70,100] and [1000-10000] only 5 Pt bins for lf
+    iPt=nHFptBins_-1; /// [20-30], [30-50], [40-70], [70,100] and [1000-10000] only 5 Pt bins for lf
       }
       if(h_csv_wgt_hf.at(iSys).at(iPt)) {
         const int useCSVBin = (csv >= 0.) ? h_csv_wgt_hf.at(iSys).at(iPt)->FindBin(csv) : 1;
@@ -315,7 +327,7 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
         //std::cout << "c flavor jet " << std::endl;
       // RESET iPt to maximum pt bin (only 5 bins for new SFs)
       if(iPt>=nHFptBins_){ 
-	iPt=nHFptBins_-1;  /// [20-30], [30-50], [40-70], [70,100] and [1000-10000] only 5 Pt bins for lf
+    iPt=nHFptBins_-1;  /// [20-30], [30-50], [40-70], [70,100] and [1000-10000] only 5 Pt bins for lf
       }
       if(c_csv_wgt_hf.at(iSys).at(iPt)) {
         const int useCSVBin = (csv >= 0.) ? c_csv_wgt_hf.at(iSys).at(iPt)->FindBin(csv) : 1;
