@@ -64,8 +64,8 @@ void plot(){
   std::vector<Systematics::Type> v_SystTypes = Systematics::getTypeVector();
   //for(auto itsyst : v_SystTypes){std::cout<< " Know :" << itsyst << std::endl;}
 
-  std::string csvHFfile="/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/deepCSV_sfs_hf.root";
-  std::string csvLFfile="/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/deepCSV_sfs_lf.root";
+  std::string csvHFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_V3_2017/deepCSV_sfs_hf.root";
+  std::string csvLFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_V3_2017/deepCSV_sfs_lf.root";
   TString qcd_file = "/nfs/dust/cms/user/mwassmer/QCD_Estimation_September17/QCD_Estimation/QCD_Estimation_FakeScaleFactor_nominal.root";
   
   CSVHelper* internalCSVHelper= new CSVHelper(csvHFfile,csvLFfile, 5,4,3,v_SystTypes);
@@ -95,6 +95,7 @@ void plot(){
   float sumOfWeights=0;
 
   int DoWeights=1;
+  int isTthSample=0;
   int electron_data=0;
   int muon_data=0;
 
@@ -104,6 +105,9 @@ void plot(){
   //if(processname=="SingleEl" || processname=="SingleMu"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
   if((processname.find("SingleEl")!= std::string::npos) || (processname.find("SingleMu")!= std::string::npos)){DoWeights=0; std::cout<<"is data, dont use nominal weights!!!!"<<std::endl;}
 
+  //Hack to find out if sample is ttH or other
+  if((processname.find("ttH") != std::string::npos) ) {isTthSample=1; std::cout<<"This is a ttH sample!!!!"<<std::endl;}    
+  else{ std::cout << "This is NOT a ttH sample!!!!"<<std::endl;}
 
   // read in samples to add to chain and get relevant names for the database
   std::map<TString, TString> sampleDataBaseIdentifiers;

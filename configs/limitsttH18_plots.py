@@ -147,32 +147,6 @@ def add_plots():
     return plots + plotsAdditional
 
 
-def add_ak8():
-
-    plotlabel="1 lepton, #geq 4 jets, #geq 2 b-tags"
-    plotselection="(N_Jets>=4&&N_BTagsM>=2)"
-    plotlabelboosted="#splitline{1 lepton, #geq 4 jets, #geq 2 b-tags}{#geq 1 Ak8 jet p_{T} > 200 GeV}"
-    plotselectionboosted="(N_Jets>=4&&N_BTagsM>=2&&N_AK8Jets>=1)*(AK8Jet_Pt>200)"
-    plotsAK8jets=[
-        plotClasses.Plot(ROOT.TH1D("ptallak8jets","p_{T} of all ak8 jets",50,0,1000),"AK8Jet_Pt",plotselectionboosted,plotlabel),
-        plotClasses.Plot(ROOT.TH1D("doublecsvallak8jets","double btag of all ak8 jets",44,-.1,1),"AK8Jet_DoubleCSV",plotselectionboosted,plotlabel),
-        plotClasses.Plot(ROOT.TH1D("etaallak8jets","#eta of all ak8 jets",60,-2.5,2.5),"AK8Jet_Eta",plotselectionboosted,plotlabel),
-        #plotClasses.Plot(ROOT.TH1D("AK8Jet_EnergyCorrelation_b1N2","AK8Jet_EnergyCorrelation_b1N2",50,0,1),"AK8Jet_EnergyCorrelation_b1N2",plotselectionboosted,plotlabel),
-        #plotClasses.Plot(ROOT.TH1D("AK8Jet_EnergyCorrelation_b1N3","AK8Jet_EnergyCorrelation_b1N3",50,0,1),"AK8Jet_EnergyCorrelation_b1N3",plotselectionboosted,plotlabel),
-        #plotClasses.Plot(ROOT.TH1D("AK8Jet_EnergyCorrelation_b2N2","AK8Jet_EnergyCorrelation_b2N2",50,0,1),"AK8Jet_EnergyCorrelation_b2N2",plotselectionboosted,plotlabel),
-        #plotClasses.Plot(ROOT.TH1D("AK8Jet_EnergyCorrelation_b2N3","AK8Jet_EnergyCorrelation_b2N3",50,0,1),"AK8Jet_EnergyCorrelation_b2N3",plotselectionboosted,plotlabel),
-
-        plotClasses.Plot(ROOT.TH1D("AK8Jet_Puppi_Softdrop_Mass","AK8Jet_Puppi_Softdrop_Mass",35,50,400),"AK8Jet_Puppi_Softdrop_Mass",plotselectionboosted,plotlabel),
-        #plotClasses.Plot(ROOT.TH1D("AK8Jet_tau21","AK8 jet tau 21",50,0,1),"AK8Jet_Tau2/AK8Jet_Tau1",plotselectionboosted,plotlabel),
-        #plotClasses.Plot(ROOT.TH1D("AK8Jet_tau32","AK8 jet tau 32",50,0,1),"AK8Jet_Tau3/AK8Jet_Tau2",plotselectionboosted,plotlabel),
-        plotClasses.Plot(ROOT.TH1D("AK8Subjet1_DeepCSV","AK8Subjet1_DeepCSV",50,0,1),"AK8Subjet1_DeepCSV",plotselectionboosted,plotlabel),
-        plotClasses.Plot(ROOT.TH1D("AK8Subjet2_DeepCSV","AK8Subjet2_DeepCSV",50,0,1),"AK8Subjet2_DeepCSV",plotselectionboosted,plotlabel),
-        plotClasses.Plot(ROOT.TH1D("AK8Subjet1_Pt","AK8Subjet1_Pt",50,30,300),"AK8Subjet1_Pt",plotselectionboosted,plotlabel),
-        plotClasses.Plot(ROOT.TH1D("AK8Subjet2_Pt","AK8Subjet2_Pt",50,30,300),"AK8Subjet2_Pt",plotselectionboosted,plotlabel),
-    ]
-
-    return plotsAK8jets
-
 def add_sl4j2t():
     plotlabel="1 lepton, 4 jets, 2 b-tags"
     plotselection="((N_Jets==4&&N_BTagsM==2))"
@@ -295,71 +269,19 @@ def add_dnn(data, discrname):
     discrNames  = ["ttH", "ttbarBB", "ttbar2B", "ttbarB", "ttbarCC", "ttbarlf"]
 
     categorienames_MultiDNN = [
-        ("(N_Jets==4&&N_BTagsM>=3&&DNN_4j_ge3t_pred_class=="+str(i)+")","ljets_j4_tge3_"+str(node)+"node","")
+        ("(N_Jets==4&&N_BTagsM>=3&&DNN_4j_ge3t_pred_class=="+str(i)+")*L1ScaleFactor_j4_tge3_"+str(node)+"node","ljets_j4_tge3_"+str(node)+"node","")
         for i,node in enumerate(nodes)]
     discrs_MultiDNN = ['DNN_Out_4j_ge3t_'+str(node) for node in discrNames]
 
     categorienames_MultiDNN+= [
-        ("(N_Jets==5&&N_BTagsM>=3&&DNN_5j_ge3t_pred_class=="+str(i)+")","ljets_j5_tge3_"+str(node)+"node","")
+        ("(N_Jets==5&&N_BTagsM>=3&&DNN_5j_ge3t_pred_class=="+str(i)+")*L1ScaleFactor_j5_tge3_"+str(node)+"node","ljets_j5_tge3_"+str(node)+"node","")
         for i,node in enumerate(nodes)]
     discrs_MultiDNN+= ['DNN_Out_5j_ge3t_'+str(node) for node in discrNames]
 
     categorienames_MultiDNN+= [
-        ("(N_Jets>=6&&N_BTagsM>=3&&DNN_ge6j_ge3t_pred_class=="+str(i)+")","ljets_jge6_tge3_"+str(node)+"node","")
+        ("(N_Jets>=6&&N_BTagsM>=3&&DNN_ge6j_ge3t_pred_class=="+str(i)+")*L1ScaleFactor_jge6_tge3_"+str(node)+"node","ljets_jge6_tge3_"+str(node)+"node","")
         for i,node in enumerate(nodes)]
     discrs_MultiDNN+= ['DNN_Out_ge6j_ge3t_'+str(node) for node in discrNames]
-
-
-    # add cuts to discriminators
-    #cuts = [0.25, 0.2, 0.3, 0.3, 0.2, 0.35]
-    #categorienames_MultiDNN+= [
-    #    ("(N_Jets==4&&N_BTagsM>=3&&DNN_4j_ge3t_pred_class=="+str(i)+"&&DNN_Out_4j_ge3t_"+str(discrName[i])+">"+str(cuts[i])+")","ljets_j4_tge3_discrCut_"+str(node)+"node","")
-    #    for i,node in enumerate(nodes)]
-    #discrs_MultiDNN+= ['DNN_Out_4j_ge3t_'+str(node) for node in discrNames]
-
-    #categorienames_MultiDNN+= [
-    #    ("(N_Jets==5&&N_BTagsM>=3&&DNN_5j_ge3t_pred_class=="+str(i)+"&&DNN_Out_5j_ge3t_"+str(discrName[i])+">"+str(cuts[i])+")","ljets_j5_tge3_discrCut_"+str(node)+"node","")
-    #    for i,node in enumerate(nodes)]
-    #discrs_MultiDNN+= ['DNN_Out_5j_ge3t_'+str(node) for node in discrNames]
-
-    #categorienames_MultiDNN+= [
-    #    ("(N_Jets>=6&&N_BTagsM>=3&&DNN_ge6j_ge3t_pred_class=="+str(i)+"&&DNN_Out_ge6j_ge3t_"+str(discrName[i])+">"+str(cuts[i])+")","ljets_jge6_tge3_discrCut_"+str(node)+"node","")
-    #    for i,node in enumerate(nodes)]
-    #discrs_MultiDNN+= ['DNN_Out_ge6j_ge3t_'+str(node) for node in discrNames]
-    
-
-    # only three tag events
-    #categorienames_MultiDNN = [
-    #    ("(N_Jets==4&&N_BTagsM==3&&DNN_4j_3t_pred_class=="+str(i)+")","ljets_j4_t3_"+str(node)+"node","")
-    #    for i,node in enumerate(nodes)]
-    #discrs_MultiDNN+= ['DNN_Out_4j_ge3t_'+str(node) for node in discrNames]
-
-    #categorienames_MultiDNN+= [
-    #    ("(N_Jets==5&&N_BTagsM==3&&DNN_5j_3t_pred_class=="+str(i)+")","ljets_j5_t3_"+str(node)+"node","")
-    #    for i,node in enumerate(nodes)]
-    #discrs_MultiDNN+= ['DNN_Out_5j_ge3t_'+str(node) for node in discrNames]
-
-    #categorienames_MultiDNN+= [
-    #    ("(N_Jets>=6&&N_BTagsM==3&&DNN_ge6j_3t_pred_class=="+str(i)+")","ljets_jge6_t3_"+str(node)+"node","")
-    #    for i,node in enumerate(nodes)]
-    #discrs_MultiDNN+= ['DNN_Out_ge6j_ge3t_'+str(node) for node in discrNames]
-
-    # only four tag events
-    #categorienames_MultiDNN = [
-    #    ("(N_Jets==4&&N_BTagsM==4&&DNN_4j_4t_pred_class=="+str(i)+")","ljets_j4_t4_"+str(node)+"node","")
-    #    for i,node in enumerate(nodes)]
-    #discrs_MultiDNN+= ['DNN_Out_4j_ge3t_'+str(node) for node in discrNames]
-
-    #categorienames_MultiDNN+= [
-    #    ("(N_Jets==5&&N_BTagsM==4&&DNN_5j_4t_pred_class=="+str(i)+")","ljets_j5_t4_"+str(node)+"node","")
-    #    for i,node in enumerate(nodes)]
-    #discrs_MultiDNN+= ['DNN_Out_5j_ge3t_'+str(node) for node in discrNames]
-
-    #categorienames_MultiDNN+= [
-    #    ("(N_Jets>=6&&N_BTagsM==4&&DNN_ge6j_4t_pred_class=="+str(i)+")","ljets_jge6_t4_"+str(node)+"node","")
-    #    for i,node in enumerate(nodes)]
-    #discrs_MultiDNN+= ['DNN_Out_ge6j_ge3t_'+str(node) for node in discrNames]
-
 
     # 3 and 4 tags
     nhistobins_MultiDNN=[15, 15, 15, 15, 15, 15,
@@ -374,68 +296,11 @@ def add_dnn(data, discrname):
                        0.85, 0.8,  0.6,  0.45, 0.4,  0.5,
                        0.85, 0.8,  0.65, 0.5,  0.4,  0.6]
 
-    # 3 and 4 tags with minimal node output of 0.25
-    #nhistobins_MultiDNN+=[15, 15, 15, 15, 15, 15,
-    #                      15, 15, 15, 15, 15, 15,
-    #                      15, 15, 15, 12, 15, 15]
-
-    #minxvals_MultiDNN+=[0.25]*18
-    #maxxvals_MultiDNN+=[0.75, 0.8, 0.65, 0.4,  0.4, 0.63,
-    #                    0.85, 0.8, 0.6,  0.45, 0.4, 0.5,
-    #                    0.85, 0.8, 0.65, 0.5,  0.4, 0.6]
-    
-    ## only 3 tags
-    #nhistobins_MultiDNN+=[ 15, 15, 15, 15, 15, 15, 
-    #                       15, 15, 15, 15, 15, 15, 
-    #                       15, 15, 15, 12, 15, 15]
-    #minxvals_MultiDNN+=[0.16, 0.16, 0.16, 0.16, 0.2, 0.2,
-    #                    0.16, 0.16, 0.2,  0.16, 0.2, 0.2,
-    #                    0.16, 0.16, 0.16, 0.2,  0.2, 0.2]
-    #maxxvals_MultiDNN+=[0.75, 0.8, 0.65, 0.4,  0.4, 0.63,
-                       # 0.85, 0.8, 0.6,  0.45, 0.4, 0.5,
-                       # 0.85, 0.8, 0.65, 0.5,  0.4, 0.6]
-
-    ## only 4 tags
-    #nhistobins_MultiDNN+=[9,  15, 3,  3, 4, 5,
-    #                      10, 10, 4,  3, 4, 4,
-    #                      10, 10, 10, 4, 5, 5]
-    #minxvals_MultiDNN+=[0.16, 0.25, 0.2, 0.2, 0.16, 0.16,
-    #                    0.2,  0.16, 0.2, 0.2, 0.2,  0.2,
-    #                    0.2,  0.2,  0.2, 0.2, 0.2,  0.2]
-    #maxxvals_MultiDNN+=[0.85, 0.85, 0.3,  0.3,  0.3, 0.3,
-    #                    0.9,  0.9,  0.5,  0.35, 0.4, 0.5,
-    #                    0.9,  0.9,  0.45, 0.4,  0.4, 0.4]
-
     discrs+=discrs_MultiDNN
     nhistobins+=nhistobins_MultiDNN
     minxvals+=minxvals_MultiDNN
     maxxvals+=maxxvals_MultiDNN
     categories+=categorienames_MultiDNN
-    
-    # now do only MEM for 4 tag events 
-    #categorienames_MEM=[
-    #    ### only 4 tag events 
-    #    ("(N_Jets==4&&N_BTagsM>=4)","ljets_j4_tge4_MEM",""),
-    #    ("(N_Jets==5&&N_BTagsM>=4)","ljets_j5_tge4_MEM",""),             
-    #    ("(N_Jets>=6&&N_BTagsM>=4)","ljets_jge6_tge4_MEM",""),
-    #    ("(N_Jets>=6&&N_BTagsM==3)","ljets_jge6_t3_MEM",""),
-    #    ]
-    #discrs_MEM=[
-    #    memexp,
-    #    memexp,
-    #    memexp,
-    #    memexp,
-    #    ]
-
-    #nhistobins_MEM=[10,  10,  10,  20]
-    #minxvals_MEM=  [0.0, 0.0, 0.0, 0.0]
-    #maxxvals_MEM=  [1.0, 1.0, 1.0, 1.0]
-    
-    #discrs+=discrs_MEM
-    #nhistobins+=nhistobins_MEM
-    #minxvals+=minxvals_MEM
-    #maxxvals+=maxxvals_MEM
-    #categories+=categorienames_MEM    
     
     # get input for plotting function
     plotPreselections   = [c[0] for c in categories]
