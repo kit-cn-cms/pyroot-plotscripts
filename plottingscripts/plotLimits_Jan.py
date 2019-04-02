@@ -55,7 +55,7 @@ def main(pyrootdir, argv):
     configDataBaseName = "limitsttH18"
 
     # name of plotconfig
-    pltcfgName = "v2"
+    pltcfgName = "ttH18"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
