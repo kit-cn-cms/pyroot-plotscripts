@@ -34,9 +34,9 @@ def main(argv):
 
     analysis.plotBlinded=False
     analysis.makeSimplePlots=True
-    analysis.makeMCControlPlots=True
-    analysis.makeDataCards=True
-    analysis.makeEventYields=True
+    analysis.makeMCControlPlots=False
+    analysis.makeDataCards=False
+    analysis.makeEventYields=False
     
 
     # Make sure proper plotconfig is loaded for either ttbb or ttH
@@ -388,7 +388,7 @@ def main(argv):
         print 'Create lists needed later'
         listOfHistoLists=createHistoLists_fromSuperHistoFile(outputpath,samples,discriminatorPlots,1)
         print listOfHistoLists
-        print ""
+        #print ""
         lolT=transposeLOL(listOfHistoLists)
         listOfHistoListsData=createHistoLists_fromSuperHistoFile(outputpath,samples_data,discriminatorPlots,1)
         listOfHistoListsPseudoData=createHistoLists_fromSuperHistoFile(outputpath,[samples[0]]+samples[9:],discriminatorPlots,1)
@@ -396,8 +396,8 @@ def main(argv):
     # plot simple MC plots
     if (analysis.doDrawParallel==False or analysis.plotNumber != None) and analysis.makeSimplePlots==True :
         print "Making simple MC plots."
-        writeLOLAndOneOnTop(transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-1,name+'/'+name+'_controlplots')
-        writeListOfHistoListsAN(transposeLOL([lolT[0]]+lolT[9:]),[samples[0]]+samples[9:],"",name+'/'+name+'_shapes',True,False,False,'histo',False,True,False)
+        #writeLOLAndOneOnTop(transposeLOL(lolT[9:]),samples[9:],lolT[0],samples[0],-1,name+'/'+name+'_controlplots')
+        writeListOfHistoListsAN(transposeLOL([lolT[0]]+lolT[9:14]),[samples[0]]+samples[9:14],"",name+'/'+name+'_shapes',True,False,False,'histo',False,False,False)
         #writeListOfHistoListsAN(transposeLOL([lolT[0]]+lolT[9:]),[samples[0]]+samples[9:],"",name+'/'+name+'_shapes',True,False,False,'histo',False,True,False)
 
     # Make MC Control plots
