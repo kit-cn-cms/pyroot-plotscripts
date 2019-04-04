@@ -20,7 +20,7 @@ class Systematics:
 	def getSystematicsForProcesses(self,list_of_processes):
 		self.processes={}
 		for process in list_of_processes:
-			self.processes[process]=[]
+			self.processes[process]={}
 		for i,systematic in self.systematics.iterrows():
 			name=systematic["Uncertainty"]
 			if name.startswith("#"):
@@ -36,31 +36,31 @@ class Systematics:
 			for process in list_of_processes:
 				if systematic[process] is not "-":				
 					temp=SystematicsForProcess(name,process,typ,construction,Up,Down)
-					self.processes[process].append(temp)
+					self.processes[process][name]=temp
 
 	#returns weight systematics for specific process
 	def get_weight_systs(self,process):
 		weightsysts=[]
 		for systematic in self.processes[process]:
-			if systematic.construction=="weight":
+			if self.processes[process][systematic].construction=="weight":
 				#adds variable name to list of weightsysts
-				weightsysts.append(systematic.name)
+				weightsysts.append(systematic)
 		return weightsysts
 	#returns variation systematics for specific process
 	def get_variation_systs(self,process):
 		variationsysts=[]
 		for systematic in self.processes[process]:
-			if systematic.construction=="variation":
+			if self.processes[process][systematic].construction=="variation":
 				#adds variable name to list of variationsysts
-				variationsysts.append(systematic.name)
+				variationsysts.append(systematic)
 		return variationsysts
 	#returns all rate systematics
 	def get_rate_systs(self,process):
 		ratesysts=[]
 		for systematic in self.processes[process]:
-			if systematic.construction=="rate":
+			if self.processes[process][systematic].construction=="rate":
 				#adds variable name to list of ratesysts
-				ratesysts.append(systematic.name)
+				ratesysts.append(systematic)
 		return ratesysts
 
 
