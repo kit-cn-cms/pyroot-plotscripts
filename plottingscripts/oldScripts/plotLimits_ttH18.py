@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'testLea6'
+    name = 'testRun_v2'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -55,11 +55,11 @@ def main(pyrootdir, argv):
     configDataBaseName = "limitsttH18"
 
     # name of plotconfig
-    pltcfgName = "v49"
+    pltcfgName = "ttH18"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
-    rateFactorsFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/rate_factors.csv"
+    rateFactorsFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/rate_factors_V2.csv"
 
     # script options
     analysisOptions = {
@@ -77,7 +77,7 @@ def main(pyrootdir, argv):
         "singleExecute":        False,  # for non parallel drawing
         "drawParallel":         True,
         # options for drawParallel/singleExecute sub programs
-        "makeSimplePlots":      False,
+        "makeSimplePlots":      True,
         "makeMCControlPlots":   True,
         "makeEventYields":      True,
         # the skipX options try to skip the submission of files to the batch system
@@ -89,13 +89,20 @@ def main(pyrootdir, argv):
         "skipRenaming":         False,
         "skipDatacards":        False}
 
-    plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttH_2018_newJEC.json"
+    plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttH_2018_newJEC_v5.json"
     plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/dNNInterface_Keras_cool.py",
                     "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/DNNCheckpointFiles/newJEC_validatedVariables/"}
-    # datacardmaker
-    datacardmaker = "mk_datacard_JESTest13TeVPara"
+
+    # path to script making datacards
+    datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/pyroot-plotscripts/util/DatacardScript.py"
+
+    # path to datacardMaker directory
+    datacardMakerDirectory = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
+
+    # path to csv file used to build datacards
+    datacardcsv="/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker/systematics_hdecay13TeVJESTest.csv"
 
     print '''
     # ========================================================
@@ -347,13 +354,15 @@ def main(pyrootdir, argv):
 
             with monitor.Timer("makeDatacardsParallel"):
                 makeDatacards.makeDatacardsParallel(
-                    filePath        = analysis.renamedPath,
-                    outPath         = datacardsPath,
-                    categories      = configData.getBinlabels(),
-                    doHdecay        = True,
-                    discrname       = analysis.discrName,
-                    datacardmaker   = datacardmaker,
-                    skipDatacards   = analysis.skipDatacards)
+                    filePath            = analysis.renamedPath,
+                    outPath             = datacardsPath,
+                    categories          = configData.getBinlabels(),
+                    doHdecay            = True,
+                    discrname           = analysis.discrName,
+                    datacardmaker       = datacardmaker,
+                    datacardDirectory   = datacardMakerDirectory,
+                    datacardcsv         = datacardcsv,
+                    skipDatacards       = analysis.skipDatacards)
 
 
         # =============================================================================================
