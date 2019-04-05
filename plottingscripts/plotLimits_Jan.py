@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'yields_ttH18_v1'
+    name = 'controlYields_v1'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -51,11 +51,11 @@ def main(pyrootdir, argv):
     # define MEM discriminator variable
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
-    # name of the csv files used in configdata folder
-    configDataBaseName = "limitsttH18"
-
-    # name of plotconfig
-    pltcfgName = "ttH18"
+    # configs
+    cfg             = "pltcfg_ttH18"
+    variable_cfg    = "ttH18_addVariables"
+    plot_cfg        = "binningStudy_plots"
+    sample_cfg      = "ttH18_samples"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -116,7 +116,7 @@ def main(pyrootdir, argv):
         pyrootdir = pyrootdir, 
         rootPath = rootPathForAnalysis, 
         signalProcess = signalProcess, 
-        pltcfgName = pltcfgName,
+        pltcfgName = cfg,
         discrName = discrName)
 
     analysis.initArguments( argv )
@@ -139,7 +139,9 @@ def main(pyrootdir, argv):
 
     configData = configClass.configData(
         analysisClass = analysis,
-        configDataBaseName = configDataBaseName)
+        variable_config = variable_cfg,
+        sample_config = sample_cfg,
+        plot_config = plot_cfg)
 
     configData.initData()
 
@@ -218,56 +220,6 @@ def main(pyrootdir, argv):
 
         pP.checkTermination()
         monitor.printClass(pP, "after plotParallel")
-
-        if analysis.optimizedRebinning:
-            print '''
-            # ========================================================
-            # Doing OptimizedRebinning
-            # ========================================================
-            '''
-            #TODO rework
-            if analysis.signalProcess == 'ttbb':
-                # samples[0:2]: tt+bb, tt+b, tt+2b as signal for S over b normalization
-                # TODO check the optimizedBinning function and adjust arguments to new structure
-                # TODO rework samples splitting to be automated in samplesDataClass?
-                # TODO call this only once and determine bkg/signal samples in the function itself
-                with monitor.Timer("optimizeBinning"):
-                    optBinning.optimizeBinning(
-                        infname = analysis.ppRootPath,
-                        signalsamples = [configData.samples[0:3]], 
-                        backgroundsamples = configData.samples[3:],
-                        additionalSamples = configData.controlSamples, 
-                        plots = configData.getDiscriminatorPlots(), 
-                        systnames = configData.allSystNames, 
-                        minBkgPerBin = 2.0, 
-                        optMode = analysis.optimzedRebinning,
-                        considerStatUnc = False, 
-                        maxBins = 20, 
-                        minBins = 2,
-                        verbosity = 2)
-
-            elif analysis.signalProcess == 'ttH':
-                # samples: ttH as signal. ttH_bb, ttH_XX as additional samples together with data. 
-                # Rest: background samples
-                with monitor.Timer("optimizeBinning"):
-                    optBinning.optimizeBinning(
-                        analysis.ppRootPath,
-                        signalsamples = [configData.samples[0]], 
-                        backgroundsamples = configData.samples[9:],
-                        additionalSamples= configData.samples[1:9] + configData.controlSamples, 
-                        plots = configData.getDiscriminatorPlots(), 
-                        systnames = configData.allSystNames, 
-                        minBkgPerBin = 2.0, 
-                        optMode = analysis.optimizedRebinning,
-                        considerStatUnc = False, 
-                        maxBins = 20, 
-                        minBins = 2,
-                        verbosity = 2)
-            else:
-                print("WARNING - could not find signal process")
-                print("not doing optimized rebinning")
-
-
 
         # hadd histo files before renaming. The histograms are actually already renamed. 
         # But the checkbins thingy will not have been done yet.
