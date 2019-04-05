@@ -96,7 +96,7 @@ def main(pyrootdir, argv):
                     "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/DNNCheckpointFiles/newJEC_validatedVariables/"}
 
     # path to script making datacards
-    datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/pyroot-plotscripts/util/DatacardScript.py"
+    datacardmaker = "/nfs/dust/cms/user/vdlinden/legacyTTH/plotscript/util/DatacardScript.py"
 
     # path to datacardMaker directory
     datacardMakerDirectory = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
@@ -209,7 +209,7 @@ def main(pyrootdir, argv):
             pP.setDNNInterface(dnnInterface)
             pP.setCatNames([''])
             pP.setCatSelections(['1.'])
-            pP.setMaxEvts(2000000)
+            pP.setMaxEvts(500000)
             pP.setRateFactorsFile(rateFactorsFile)
             pP.setSampleForVariableSetup(configData.samples[9])
 
