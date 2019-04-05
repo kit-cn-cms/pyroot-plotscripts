@@ -33,16 +33,20 @@ class catData:
             "binlabel":         self.binlabels[i]}
 
 class configData:
-    def __init__(self, analysisClass, configDataBaseName = ""):
+    def __init__(self, analysisClass, variable_config, sample_config, plot_config):
 
         print("loading configdata ...")
         # name of files in config
-        self.basename = configDataBaseName
+        self.variable_config = variable_config
+        self.sample_config = sample_config
+        self.plot_config = plot_config
+
         self.analysis = analysisClass
         self.pltcfg = self.analysis.getPlotConfig()
         self.cfgdir = self.analysis.pyrootdir + "/configs/"
         self.plotNumber = analysisClass.plotNumber
         self.Data = None
+
 
     def initData(self):
         self.Data = catData()
@@ -71,7 +75,7 @@ class configData:
 
     def genDiscriminatorPlots(self, memexp):
         sys.path.append(self.cfgdir)
-        fileName = self.basename+"_plots"
+        fileName = self.plot_config
         configdatafile = importlib.import_module( fileName )
         configdatafile.memexp = memexp
 
@@ -99,7 +103,7 @@ class configData:
 
     def getAddVariables(self):
         sys.path.append(self.cfgdir)
-        fileName = self.basename+"_addVariables"
+        fileName = self.variable_config
         print("getting additional variables from "+str(fileName))
         addVarModule = importlib.import_module( fileName )
         self.addVars = addVarModule.getAddVars()
@@ -256,7 +260,7 @@ class configData:
         # they are used at many different places and it is not at all obvious which are used where and what they really contain
 
         sys.path.append(self.cfgdir)
-        fileName = self.basename+"_samples"
+        fileName = self.sample_config
 
         # imports file in cfgdir with given name as samplesData file
         # this file should have a function

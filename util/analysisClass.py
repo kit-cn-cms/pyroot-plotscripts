@@ -9,7 +9,7 @@ sys.path.append(filedir+"/tools")
 import plotClasses
 
 class analysisConfig:
-    def __init__(self, workdir, pyrootdir, rootPath, signalProcess = "ttbb", pltcfgName = "v13", discrName = "finaldiscr"):
+    def __init__(self, workdir, pyrootdir, rootPath, signalProcess = "ttbb", pltcfgName = "pltcfg_ttH18", discrName = "finaldiscr"):
         self.workdir = str(workdir)
         self.pyrootdir = str(pyrootdir)
         self.name = self.workdir.split("/")[-1]
@@ -79,7 +79,7 @@ class analysisConfig:
         else:
             print("could not find signalProcess '"+str(signalProcess)+"'. Define it in analysisConfig")
             sys.exit("unknow signalProcess chosen")
-        self.plotConfig = "pltcfg_"+pltcfgName
+        self.plotConfig = pltcfgName
         print("set plotConfig to "+str(self.plotConfig))
         
     def initArguments(self, argv = list()):
