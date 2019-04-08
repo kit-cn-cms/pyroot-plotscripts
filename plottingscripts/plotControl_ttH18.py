@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'controlPlots_v1'
+    name = 'controlPlots_v2'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -89,7 +89,8 @@ def main(pyrootdir, argv):
         "skipRenaming":         False,
         "skipDatacards":        False}
 
-    plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttH_2018_newJEC_v5.json"
+    # plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttH_2018_newJEC_v5.json"
+    plotJson = "/nfs/dust/cms/user/swieland/ttH/pyroot-plotscripts/json_2017DeepJet.json"
     plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/dNNInterface_Keras_cool.py",
@@ -280,10 +281,11 @@ def main(pyrootdir, argv):
             '''
             with monitor.Timer("addRealData"):
                 # real data with ttH
-                # pP.addData(samples = configData.controlSamples)
-
+                if not analysis.plotBlinded:
+                    pP.addData(samples = configData.controlSamples)
+                else: 
                 # pseudo data without ttH
-                pP.addData(samples = configData.samples[9:])
+                    pP.addData(samples = configData.samples[9:])
         
 
         pP.checkTermination()       
