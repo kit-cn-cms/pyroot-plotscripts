@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'configTestAll'
+    name = 'csvConfig1'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -55,10 +55,10 @@ def main(pyrootdir, argv):
     configDataBaseName = "limitsttH18"
 
     # name of plotconfig
-    pltcfgName = "v2"
+    pltcfgName = "5"
 
     #name of the systconfig
-    systconfig = "systematics_hdecay13TeVJESTest.csv"
+    systconfig = pyrootdir+"/configs/systematics_hdecay13TeVJESTest.csv"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -147,8 +147,8 @@ def main(pyrootdir, argv):
 
     configData = configClass.configData(
         analysisClass = analysis,
-        configDataBaseName = configDataBaseName,
-        systconfig=systconfig)
+        systconfig=systconfig,
+        configDataBaseName = configDataBaseName)
 
     configData.initData()
 
