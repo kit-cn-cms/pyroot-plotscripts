@@ -34,7 +34,7 @@ class catData:
             "binlabel":         self.binlabels[i]}
 
 class configData:
-    def __init__(self, analysisClass, configDataBaseName = ""):
+    def __init__(self, analysisClass, systconfig, configDataBaseName = ""):
 
         print("loading configdata ...")
         # name of files in config
@@ -44,7 +44,7 @@ class configData:
         self.cfgdir = self.analysis.pyrootdir + "/configs/"
         self.plotNumber = analysisClass.plotNumber
         self.Data = None
-        self.getSystematics()
+        self.getSystematics(systconfig)
 
     def initData(self):
         self.Data = catData()
@@ -52,10 +52,11 @@ class configData:
     def getData():
         return self.Data
 
-    def getSystematics():
-        systcfg=self.analysis.getSystConfig()
+    def getSystematics(self,systcfg):
         self.systematics=Systematics.Systematics(systcfg)
-        self.systematics.getSystematicsForProcesses(self.pltcf.list_of_processes)
+        self.systematics.getSystematicsForProcesses(self.pltcfg.list_of_processes)
+        print "loading systematics..."
+        print self.systematics
 
     def writeConfigDataToWorkdir(self):
         if self.Data == None:
@@ -291,15 +292,16 @@ class configData:
         for sample in self.controlSamples:
             print(sample.name)
         print("-"*30) 
+        print self.systematics
 
         print "systSamples"
         # list of systematic samples used in 'allSamples' and 'allSystSamples' list
-        self.systSamples = samplesData.getSystSamples( self.systematics, self.analysis, self.samples )
+        self.systSamples = samplesData.getSystSamples( self.pltcfg,self.systematics, self.analysis, self.samples )
 
         
         print "allSamples"
         # list of samples used to write C program       
-        self.allSamples = samplesData.getAllSamples( self.systematics, self.analysis, self.samples)
+        self.allSamples = samplesData.getAllSamples(self.pltcfg, self.systematics, self.analysis, self.samples)
         # TODO is this used anywhere?
         #self.allSystSamples = samples + systSamples
 
