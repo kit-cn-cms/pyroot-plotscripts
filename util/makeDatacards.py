@@ -53,7 +53,7 @@ def makeDatacardsParallel(filePath, outPath,
                 script += 'eval `scram runtime -sh`\n'
                 script += 'cd - \n'
             #--categoryName=CATEGORYNAME --rootfile=FILE --outputfile=FILE --directory=PATH -csvfile=FILE
-            script += 'python '+filedir+'/tools/DatacardScript.py '
+            script += 'python '+filedir+'/DatacardScript.py '
             script += '--categoryname='+cat+' '
             script += '--rootfile='+filePath+' '
             script += '--outputfile='+outPath+'/'+cat+'_hdecay.txt '
