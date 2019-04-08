@@ -57,6 +57,9 @@ def main(pyrootdir, argv):
     # name of plotconfig
     pltcfgName = "v2"
 
+    #name of the systconfig
+    systconfig = "systematics_hdecay13TeVJESTest.csv"
+
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
     rateFactorsFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/rate_factors_V2.csv"
@@ -144,7 +147,8 @@ def main(pyrootdir, argv):
 
     configData = configClass.configData(
         analysisClass = analysis,
-        configDataBaseName = configDataBaseName)
+        configDataBaseName = configDataBaseName,
+        systconfig=systconfig)
 
     configData.initData()
 
