@@ -5,19 +5,23 @@ pyrootdir = "/".join(filedir.split("/")[:-1])
 
 sys.path.append(pyrootdir)
 import util.tools.plotClasses as plotClasses
+import util.tools.Systematics
 
 def getSamples( pltcfg ):
     return pltcfg.samples
+
+def getControlSamples( pltcfg ):
+    return pltcfg.samplesDataControlPlots
     
-def getSystSamples(systematics, analysis, samples):
+def getSystSamples(systematics, pltcfg, analysis, samples):
     systSamples = []
 
     # adding other samples
     for sample in samples:
-        variationsysts=systematics.get_variation_systs(sample.name)
+        variationsysts=systematics.get_variation_systs(sample.nick)
         for sysName in variationsysts:
             newSel = sample.selection
-            fileName=systematics[sample.name][sysName].expression
+            fileName=systematics.processes[sample.nick][sysName].expression
             if "/" in fileName:
                 newpath=fileName
             else:
@@ -30,7 +34,7 @@ def getSystSamples(systematics, analysis, samples):
                 plotClasses.Sample( 
                     sample.name+sysName, 
                     sample.color, 
-                    sample.path.replace("nominal", sysFileName), 
+                    sample.path.replace("nominal", fileName), 
                     newSel, 
                     sample.nick+sysName, 
                     samDict = pltcfg.sampleDict ))
