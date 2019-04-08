@@ -95,11 +95,8 @@ def main(pyrootdir, argv):
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/dNNInterface_Keras_cool.py",
                     "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/DNNCheckpointFiles/newJEC_validatedVariables/"}
 
-    # path to script making datacards
-    datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/pyroot-plotscripts/util/DatacardScript.py"
-
     # path to datacardMaker directory
-    datacardMakerDirectory = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
+    datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
 
     # path to csv file used to build datacards
     datacardcsv="/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker/systematics_hdecay13TeVJESTest.csv"
@@ -368,7 +365,6 @@ def main(pyrootdir, argv):
                     doHdecay            = True,
                     discrname           = analysis.discrName,
                     datacardmaker       = datacardmaker,
-                    datacardDirectory   = datacardMakerDirectory,
                     datacardcsv         = datacardcsv,
                     skipDatacards       = analysis.skipDatacards)
 
