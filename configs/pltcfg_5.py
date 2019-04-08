@@ -59,10 +59,6 @@ hzgSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==22)
 
 # names of the systematics (proper names needed e.g. for combination)
 # TODO Add CSV SFs and uncertainties
-systematicconfig='systematics_hdecay13TeVJESTest.csv'
-systematics=Systematics.Systematics(systematicconfig)
-processes=["ttH_hbb","ttH_hcc","ttH_hww","ttH_hzz","ttH_htt","ttH_hgg","ttH_hgluglu","ttH_hzg","ttbarOther","ttbarPlusB","ttbarPlus2B","ttbarPlusBBbar","ttbarPlusCCbar","singlet","wjets","zjets","ttbarW","ttbarZ","diboson","QCD"]
-systematics.getSystematicsForProcesses(processes)
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
 sampleDict=plotClasses.SampleDictionary()
@@ -82,151 +78,62 @@ samplesDataControlPlots=[
             'SingleEl', samDict=sampleDict, readTrees=doReadTrees)
 ]
 
+list_of_processes=["ttH_hbb","ttH_hcc","ttH_hww","ttH_hzz","ttH_htt","ttH_hgg","ttH_hgluglu",
+                    "ttH_hzg","ttbarOther","ttbarPlusB","ttbarPlus2B","ttbarPlusBBbar","ttbarPlusCCbar",
+                    "singlet","wjets","zjets","ttbarW","ttbarZ","diboson","QCD"]
 
-print "controlsamples"
-samplesControlPlots=[
-    
-    # signal sample
+print "samples"
 
-    plotClasses.Sample('t#bar{t}H',ROOT.kBlue+1,
-            path_mwassmer+'/ttH*/*nominal*.root',
-            mcWeightAll+sel_MET,
-            'ttH',
-            , 
-            samDict=sampleDict, readTrees=doReadTrees),     
-    
-    # background samples
-
-    plotClasses.Sample('t#bar{t}+lf',ROOT.kRed-7,
-            ttbarPathS,
-            mcWeightAll+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)'+sel_MET+sel_StrangeMuWeights,
-            'ttbarOther',
-            systsAllSamples+systs_tt_all+systs_tt_lf+systs_tt_and_ttH+hdamp_ue_systnames_tt_all+hdamp_ue_systnames_tt_lf,
-            samDict=sampleDict, readTrees=doReadTrees),
-
-    plotClasses.Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,
-            ttbarPathS,
-            mcWeightAll+'*(GenEvt_I_TTPlusCC==1)'+sel_MET+sel_StrangeMuWeights,
-            'ttbarPlusCCbar',
-            systsAllSamples+systs_tt_all+systs_tt_cc+systs_tt_and_ttH+hdamp_ue_systnames_tt_all+hdamp_ue_systnames_tt_cc,
-            samDict=sampleDict, readTrees=doReadTrees),
-
-    plotClasses.Sample('t#bar{t}+b',ROOT.kRed-2,
-            ttbarPathS,
-            mcWeightAll+'*(GenEvt_I_TTPlusBB==1)'+sel_MET+sel_StrangeMuWeights,
-            'ttbarPlusB',
-            systsAllSamples+systs_tt_all+systs_tt_b+systs_tt_and_ttH+hdamp_ue_systnames_tt_all+hdamp_ue_systnames_tt_b,
-            samDict=sampleDict, readTrees=doReadTrees),
-
-    plotClasses.Sample('t#bar{t}+2b',ROOT.kRed+2,
-            ttbarPathS,
-            mcWeightAll+'*(GenEvt_I_TTPlusBB==2)'+sel_MET+sel_StrangeMuWeights,
-            'ttbarPlus2B',
-            systsAllSamples+systs_tt_all+systs_tt_2b+systs_tt_and_ttH+hdamp_ue_systnames_tt_all+hdamp_ue_systnames_tt_2b,
-            samDict=sampleDict, readTrees=doReadTrees),
-
-    plotClasses.Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,
-            ttbarPathS,
-            mcWeightAll+'*(GenEvt_I_TTPlusBB==3)'+sel_MET+sel_StrangeMuWeights,
-            'ttbarPlusBBbar',
-            systsAllSamples+systs_tt_all+systs_tt_bb+systs_tt_and_ttH+hdamp_ue_systnames_tt_all+hdamp_ue_systnames_tt_bb,
-            samDict=sampleDict, readTrees=doReadTrees), 
-    
-    # minor samples
-    
-    plotClasses.Sample('Single Top',ROOT.kMagenta,
-            stpath,
-            mcWeightAll+sel_MET,
-            'singlet',
-            systsAllSamples,
-            samDict=sampleDict, readTrees=doReadTrees),
- 
-    plotClasses.Sample('V+jets',ROOT.kGreen-3,
-            VJetsPathS,
-            mcWeightAll+sel_MET,
-            'Vjets',
-            systsAllSamples,
-            samDict=sampleDict, readTrees=doReadTrees),
- 
-    plotClasses.Sample(
-            't#bar{t}+V',ROOT.kBlue-10,
-            ttVPathS,
-            mcWeightAll+sel_MET,
-            'ttV',  
-            systsAllSamples,
-            samDict=sampleDict, readTrees=doReadTrees),         
-
-    plotClasses.Sample('Diboson',ROOT.kAzure+2,
-            dibosonPathS,
-            mcWeightAll+sel_MET,
-            'diboson',
-            systsAllSamples,
-            samDict=sampleDict, readTrees=doReadTrees), 
-]
 
 #print "limit samples"
-samplesLimits=[
+samples=[
+
+    # signal samples     
     
-    # signal samples
-    plotClasses.Sample('t#bar{t}H',ROOT.kBlue+1,
-            path_mwassmer+'/ttH*/*nominal*.root',
-            mcWeight+evenSel+sel_MET,
-            'ttH',
-            systsAllSamples+systs_ttH+systs_tt_and_ttH,
-            samDict=sampleDict, readTrees=doReadTrees),
-     
     plotClasses.Sample('t#bar{t}H, H to b#bar{b}',ROOT.kBlue+1,
             path_mwassmer+'/ttHTobb*/*nominal*.root',
             '1.0*'+mcWeight+evenSel+sel_MET,
             'ttH_hbb',
-            systsAllSamples+systs_ttH+systs_tt_and_ttH,
             samDict=sampleDict, readTrees=doReadTrees),
   
     plotClasses.Sample('t#bar{t}H, H to c#bar{c}',ROOT.kBlue+1,
             path_mwassmer+'/ttHToNonbb*/*nominal*.root',
             '1.0*'+mcWeight+evenSel+hccSel+sel_MET,
             'ttH_hcc',
-            systsAllSamples+systs_ttH+systs_tt_and_ttH,
             samDict=sampleDict, readTrees=doReadTrees),
   
     plotClasses.Sample('t#bar{t}H, H to #tau#tau',ROOT.kBlue+1,
             path_mwassmer+'/ttHToNonbb*/*nominal*.root',
             '1.0*'+mcWeight+evenSel+httSel+sel_MET,
             'ttH_htt',
-            systsAllSamples+systs_ttH+systs_tt_and_ttH,
             samDict=sampleDict, readTrees=doReadTrees),
   
     plotClasses.Sample('t#bar{t}H, H to #gamma#gamma',ROOT.kBlue+1,
             path_mwassmer+'/ttHToNonbb*/*nominal*.root',
             '1.0*'+mcWeight+evenSel+hggSel+sel_MET,
-            'ttH_hgg',systsAllSamples+systs_ttH+systs_tt_and_ttH,
             samDict=sampleDict, readTrees=doReadTrees), 
  
     plotClasses.Sample('t#bar{t}H, H to gluglu',ROOT.kBlue+1,
             path_mwassmer+'/ttHToNonbb*/*nominal*.root',
             '1.0*'+mcWeight+evenSel+hglugluSel+sel_MET, 
             'ttH_hgluglu',
-            systsAllSamples+systs_ttH+systs_tt_and_ttH,
             samDict=sampleDict, readTrees=doReadTrees), 
  
     plotClasses.Sample('t#bar{t}H, H to WW',ROOT.kBlue+1,
             path_mwassmer+'/ttHToNonbb*/*nominal*.root',
             '1.0*'+mcWeight+evenSel+hwwSel+sel_MET,'ttH_hww',
-            systsAllSamples+systs_ttH+systs_tt_and_ttH,
             samDict=sampleDict, readTrees=doReadTrees),
   
     plotClasses.Sample('t#bar{t}H, H to ZZ',ROOT.kBlue+1,
             path_mwassmer+'/ttHToNonbb*/*nominal*.root',
             '1.0*'+mcWeight+evenSel+hzzSel+sel_MET,
             'ttH_hzz',
-            systsAllSamples+systs_ttH+systs_tt_and_ttH,
             samDict=sampleDict, readTrees=doReadTrees),
   
     plotClasses.Sample('t#bar{t}H, H to #gamma Z',ROOT.kBlue+1,
             path_mwassmer+'/ttHToNonbb*/*nominal*.root',
             '1.0*'+mcWeight+evenSel+hzgSel+sel_MET, 
             'ttH_hzg',
-            systsAllSamples+systs_ttH+systs_tt_and_ttH,
             samDict=sampleDict, readTrees=doReadTrees),
     
     # background samples
@@ -235,35 +142,30 @@ samplesLimits=[
             ttbarPathS,
             mcWeightAll+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)'+sel_MET+sel_StrangeMuWeights,
             'ttbarOther',
-            systsAllSamples+systs_tt_all+systs_tt_lf+systs_tt_and_ttH+hdamp_ue_systnames_tt_all+hdamp_ue_systnames_tt_lf,
             samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,
             ttbarPathS,
             mcWeightAll+'*(GenEvt_I_TTPlusCC==1)'+sel_MET+sel_StrangeMuWeights,
             'ttbarPlusCCbar',
-            systsAllSamples+systs_tt_all+systs_tt_cc+systs_tt_and_ttH+hdamp_ue_systnames_tt_all+hdamp_ue_systnames_tt_cc,
             samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}+b',ROOT.kRed-2,
             ttbarPathS,
             mcWeightAll+'*(GenEvt_I_TTPlusBB==1)'+sel_MET+sel_StrangeMuWeights,
             'ttbarPlusB',
-            systsAllSamples+systs_tt_all+systs_tt_b+systs_tt_and_ttH+hdamp_ue_systnames_tt_all+hdamp_ue_systnames_tt_b,
             samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}+2b',ROOT.kRed+2,
             ttbarPathS,
             mcWeightAll+'*(GenEvt_I_TTPlusBB==2)'+sel_MET+sel_StrangeMuWeights,
             'ttbarPlus2B',
-            systsAllSamples+systs_tt_all+systs_tt_2b+systs_tt_and_ttH+hdamp_ue_systnames_tt_all+hdamp_ue_systnames_tt_2b,
             samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,
             ttbarPathS,
             mcWeightAll+'*(GenEvt_I_TTPlusBB==3)'+sel_MET+sel_StrangeMuWeights,
             'ttbarPlusBBbar',
-            systsAllSamples+systs_tt_all+systs_tt_bb+systs_tt_and_ttH+hdamp_ue_systnames_tt_all+hdamp_ue_systnames_tt_bb,
             samDict=sampleDict, readTrees=doReadTrees), 
 
     # minor samples
