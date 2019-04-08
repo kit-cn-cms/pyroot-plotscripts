@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttbb-studies'
+    name = 'ttbb-RECOstudies'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -52,10 +52,10 @@ def main(pyrootdir, argv):
     memexp = ''
 
     # name of the csv files used in configdata folder
-    configDataBaseName = "ttbb-studies"
+    configDataBaseName = "ttbb-RECOstudies"
 
     # name of plotconfig
-    pltcfgName = "GEN"
+    pltcfgName = "RECO"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -89,7 +89,7 @@ def main(pyrootdir, argv):
         "skipRenaming":         False,
         "skipDatacards":        False}
 
-    plotJson = "/nfs/dust/cms/user/mhorzela/DPGjson.json"
+    plotJson = "" #"/nfs/dust/cms/user/mhorzela/DPGjson.json"
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018",True]] 
     #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
 

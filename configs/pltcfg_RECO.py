@@ -66,26 +66,26 @@ assert len(weightSystNames)==len(systWeights)
 
 
 systs_tt_and_ttH=[
-                    "_CMS_ttHbb_PDF_2017Up","_CMS_ttHbb_PDF_2017Down",
-                    "_CMS_ttHbb_scaleMuRUp","_CMS_ttHbb_scaleMuRDown",
-                    "_CMS_ttHbb_scaleMuFUp","_CMS_ttHbb_scaleMuFDown",
-                    #"_CMS_ttHbb_ISRUp","_CMS_ttHbb_ISRDown",
-                    #"_CMS_ttHbb_FSRUp","_CMS_ttHbb_FSRDown",
+                    # ~ "_CMS_ttHbb_PDF_2017Up","_CMS_ttHbb_PDF_2017Down",
+                    # ~ "_CMS_ttHbb_scaleMuRUp","_CMS_ttHbb_scaleMuRDown",
+                    # ~ "_CMS_ttHbb_scaleMuFUp","_CMS_ttHbb_scaleMuFDown",
+                    # ~ "_CMS_ttHbb_ISRUp","_CMS_ttHbb_ISRDown",
+                    # ~ "_CMS_ttHbb_FSRUp","_CMS_ttHbb_FSRDown",
                     ]
 systs_tt_and_ttH_weights=[
-                        "dummyWeight_CMS_ttH_NNPDFUp:="+usualWeights+"*"+mcTriggerWeight+"*Weight_LHA_306000_up*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
-                        "dummyWeight_CMS_ttH_NNPDFDown:="+usualWeights+"*"+mcTriggerWeight+"*Weight_LHA_306000_down*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                        # ~ "dummyWeight_CMS_ttH_NNPDFUp:="+usualWeights+"*"+mcTriggerWeight+"*Weight_LHA_306000_up*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                        # ~ "dummyWeight_CMS_ttH_NNPDFDown:="+usualWeights+"*"+mcTriggerWeight+"*Weight_LHA_306000_down*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
 
-                        "dummyWeight_CMS_ttH_scaleMuRUp:="+usualWeights+"*"+mcTriggerWeight+"*Weight_scale_variation_muR_2p0_muF_1p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
-                        "dummyWeight_CMS_ttH_scaleMuRDown:="+usualWeights+"*"+mcTriggerWeight+"*Weight_scale_variation_muR_0p5_muF_1p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                        # ~ "dummyWeight_CMS_ttH_scaleMuRUp:="+usualWeights+"*"+mcTriggerWeight+"*Weight_scale_variation_muR_2p0_muF_1p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                        # ~ "dummyWeight_CMS_ttH_scaleMuRDown:="+usualWeights+"*"+mcTriggerWeight+"*Weight_scale_variation_muR_0p5_muF_1p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
 
-                        "dummyWeight_CMS_ttH_scaleMuFUp:="+usualWeights+"*"+mcTriggerWeight+"*Weight_scale_variation_muR_1p0_muF_2p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
-                        "dummyWeight_CMS_ttH_scaleMuFDown:="+usualWeights+"*"+mcTriggerWeight+"*Weight_scale_variation_muR_1p0_muF_0p5*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                        # ~ "dummyWeight_CMS_ttH_scaleMuFUp:="+usualWeights+"*"+mcTriggerWeight+"*Weight_scale_variation_muR_1p0_muF_2p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                        # ~ "dummyWeight_CMS_ttH_scaleMuFDown:="+usualWeights+"*"+mcTriggerWeight+"*Weight_scale_variation_muR_1p0_muF_0p5*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
 
-                        #"dummyWeight_CMS_ttH_ISRUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_6*1.0*(DoWeights==1)+(DoWeights==0)*1.0",                    "dummyWeight_CMS_ttH_ISRDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_8*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                        # ~ "dummyWeight_CMS_ttH_ISRUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_6*1.0*(DoWeights==1)+(DoWeights==0)*1.0",                 "dummyWeight_CMS_ttH_ISRDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_8*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
 
-                        #"dummyWeight_CMS_ttH_FSRUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_7*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
-                        #"dummyWeight_CMS_ttH_FSRDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_9*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                        # ~ "dummyWeight_CMS_ttH_FSRUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_7*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                        # ~ "dummyWeight_CMS_ttH_FSRDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*GenWeight_9*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
 
                         ]
 
@@ -371,11 +371,12 @@ assert len(otherSystNames)==len(otherSystFileNames)
 
 # samples
 # input path 
-path_ttbbdata="/nfs/dust/cms/user/mhorzela/ttbb_data/ntuples_gen/"
-ttbarPathS=path_ttbbdata+'TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8_new_pmx/*nominal*.root'
-ttbbPathPowOL=path_ttbbdata+'TTbb_Powheg_Openloops/*nominal*.root'
-ttbbPathPowHel=path_ttbbdata+'TTbb_Powheg_Helac/*nominal*.root'
-ttbbPathaMCatNLO=path_ttbbdata+'ttbb_4FS_ckm_NNPDF31_TuneCP5_amcatnlo_madspin_pythia_new_pmx/*nominal*.root'
+path_mwassmer="/nfs/dust/cms/user/kelmorab/ttH_2018/ntuples_v5"
+path_ttbbdata="/nfs/dust/cms/user/mhorzela/ttbb_data/ntuples_reco/"
+ttbarPathS=path_ttbbdata+'TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8*/*nominal*.root'
+ttbbPathPowOL=path_ttbbdata+'TTbb_Powheg_Openloops*/*nominal*.root'
+ttbbPathPowHel=path_ttbbdata+'TTbb_Powheg_Helac*/*nominal*.root'
+# ~ ttbbPathaMCatNLO=path_ttbbdata+'ttbb_4FS_ckm_NNPDF31_TuneCP5_amcatnlo_madspin_pythia_new_pmx/*nominal*.root'
 # VJetsPathS=path_karim_new+'/DYJets*/*nominal*.root'+';'+path_karim_new+'/WJets*/*nominal*.root'
 # ttVPathS=path_karim_new+'/TTW*/*nominal*.root'+';'+path_karim_new+'/TTZ*/*nominal*.root'
 # dibosonPathS=path_karim_new+'/WW_*/*nominal*.root'+';'+path_karim_new+'/WZ_*/*nominal*.root'+';'+path_karim_new+'/ZZ_*/*nominal*.root'
@@ -436,6 +437,8 @@ samplesDataControlPlots=[
 
 print "controlsamples"
 samplesControlPlots=[
+                    plotClasses.Sample('t#bar{t}H, H to b#bar{b}',ROOT.kBlue+1,path_mwassmer+'/ttHTobb*/*nominal*.root','1.0*'+mcWeight+'*(N_GenTopHad==1&&N_GenTopLep==1)'+evenSel+sel_MET,'ttH_hbb',systsAllSamples+systs_ttH+systs_tt_and_ttH,samDict=sampleDict, readTrees=doReadTrees) ,
+                    
                     plotClasses.Sample('Powheg t#bar{t}+b-jets ',ROOT.kBlack,ttbarPathS,mcWeightAll+'*(GenEvt_I_TTPlusBB>0)'+sel_MET+sel_StrangeMuWeights,'tt-inclusive',systsAllSamples+systs_tt_all+systs_tt_bb+systs_ttbb_incl+hdamp_ue_filenames_tt_all+hdamp_ue_filenames_tt_bb,samDict=sampleDict, readTrees=doReadTrees),
                     
                     plotClasses.Sample('Powheg+OpenLoops t#bar{t}+b-jets',ROOT.kRed,ttbbPathPowOL,mcWeightAll+'*(GenEvt_I_TTPlusBB>0)'+sel_MET+sel_StrangeMuWeights,'ttbb-PowOL',systsAllSamples+systs_ttbb_PowOL+hdamp_ue_filenames_tt_all+hdamp_ue_filenames_tt_bb,samDict=sampleDict, readTrees=doReadTrees),

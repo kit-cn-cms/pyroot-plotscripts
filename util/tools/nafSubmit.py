@@ -7,6 +7,7 @@ import datetime
 import stat
 import ROOT
 
+default_scheduler = "bird-htc-sched13.desy.de"
 
 def writeSubmitCode(script, logdir, hold = False, isArray = False, nScripts = 0, options = {}):
     ''' write the code for condor_submit file
@@ -123,7 +124,7 @@ def condorSubmit(submitPath):
   '''
 
   # creating command  
-  submitCommand = "condor_submit -terse -name bird-htc-sched12.desy.de " + submitPath
+  submitCommand = "condor_submit -terse -name "+default_scheduler+" "+submitPath
   tries = 0
   jobID = None
   while not jobID:
@@ -184,7 +185,7 @@ def setupRelease(oldJIDs, newJIDs):
     releaseCode += "from nafSubmit import monitorJobStatus\n"
     releaseCode += "import os\n"
     releaseCode += "monitorJobStatus("+str(oldJIDs)+")\n"
-    releaseCode += "os.system('condor_release -name bird-htc-sched12.desy.de"
+    releaseCode += "os.system('condor_release -name "+default_scheduler
     for ID in newJIDs:
         releaseCode += " "+str(ID)
     releaseCode += "')\n"
@@ -298,7 +299,7 @@ def monitorJobStatus(jobIDs = None, plot_batch_history = False, name = None):
   allfinished=False
   errorcount = 0
   print "checking job status in condor_q ..."
-  command = ["condor_q", "-name", "bird-htc-sched12.desy.de"]
+  command = ["condor_q", "-name", default_scheduler]
   # adding jobIDs to command
   if jobIDs:
     command += jobIDs
