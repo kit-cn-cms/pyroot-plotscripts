@@ -14,7 +14,7 @@ import nafInterface
 # -- making data cards (parallel) ----------------------------------------------------------------- 
 def makeDatacardsParallel(filePath, outPath, 
                     categories = None, doHdecay = True, 
-                    discrname = 'finaldiscr', ,
+                    discrname = 'finaldiscr', 
                     datacardmaker = ' ',
                     datacardcsv=' ',
                     skipDatacards = False):
