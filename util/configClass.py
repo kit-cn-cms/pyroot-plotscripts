@@ -7,6 +7,7 @@ import importlib
 filedir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(filedir+"/tools")
 import plotClasses
+import Systematics
 
 class catData:
     def __init__(self):
@@ -43,12 +44,18 @@ class configData:
         self.cfgdir = self.analysis.pyrootdir + "/configs/"
         self.plotNumber = analysisClass.plotNumber
         self.Data = None
+        self.getSystematics()
 
     def initData(self):
         self.Data = catData()
 
     def getData():
         return self.Data
+
+    def getSystematics():
+        systcfg=self.analysis.getSystConfig()
+        self.systematics=Systematics.Systematics(systcfg)
+        self.systematics.getSystematicsForProcesses(self.pltcf.list_of_processes)
 
     def writeConfigDataToWorkdir(self):
         if self.Data == None:
@@ -285,25 +292,27 @@ class configData:
             print(sample.name)
         print("-"*30) 
 
+        print "systSamples"
         # list of systematic samples used in 'allSamples' and 'allSystSamples' list
-        self.systSamples = samplesData.getSystSamples( self.pltcfg, self.analysis, self.samples )
-        
+        self.systSamples = samplesData.getSystSamples( self.systematics, self.analysis, self.samples )
 
+        
+        print "allSamples"
         # list of samples used to write C program       
-        self.allSamples = samplesData.getAllSamples( self.pltcfg, self.analysis, self.samples)
+        self.allSamples = samplesData.getAllSamples( self.systematics, self.analysis, self.samples)
         # TODO is this used anywhere?
         #self.allSystSamples = samples + systSamples
 
-
+        print "all syst names"
         # list of samples used e.g. in renameHistos       
-        self.allSystNames = samplesData.getAllSystNames( self.pltcfg )
+        self.allSystNames = self.systematics.get_all_weight_systs()+self.systematics.get_all_variation_systs()
         # list of syst names used in plotParallel
-        self.weightSystNames = samplesData.getWeightSystNames( self.pltcfg )
+        self.weightSystNames = self.systematics.get_all_weight_systs()
         # list of syst names used in plotParallel
-        self.otherSystNames = samplesData.getOtherSystNames( self.pltcfg )
+        self.otherSystNames = self.systematics.get_all_variation_systs()
 
         # list of syst weights used in plotParallel
-        self.systWeights = samplesData.getSystWeights( self.pltcfg )
+        self.systWeights = self.systematics.get_all_weight_expressions()
 
 
     def getEventYieldCategories(self):
