@@ -72,22 +72,50 @@ class Systematics:
 	def get_all_weight_systs(self):
 		weightsysts=[]
 		for i,systematic in self.systematics.iterrows():
+			if systematic["Uncertainty"].startswith("#"):
+				continue
 			if systematic["Construction"]=="weight":
 				#adds variable name to list of weightsysts
-				weightsysts.append(systematic["Uncertainty"])
+				systName=systematic["Uncertainty"]
+				up="_"+systName+"Up"
+				down="_"+systName+"Down"
+				weightsysts.append(up)
+				weightsysts.append(down)
+		return weightsysts
+
+	def get_all_weight_expressions(self):
+		weightexp=[]
+		weightsysts=[]
+		for i,systematic in self.systematics.iterrows():
+			if systematic["Uncertainty"].startswith("#"):
+				continue
+			if systematic["Construction"]=="weight":
+				#adds variable name to list of weightsysts
+				up=systematic["Up"]
+				down=systematic["Down"]
+				weightsysts.append(up)
+				weightsysts.append(down)
 		return weightsysts
 	#returns all variation systematics
 	def get_all_variation_systs(self):
 		variationsysts=[]
 		for i,systematic in self.systematics.iterrows():
+			if systematic["Uncertainty"].startswith("#"):
+				continue
 			if systematic["Construction"]=="variation":
 				#adds variable name to list of variationsysts
-				variationsysts.append(systematic["Uncertainty"])
+				systName=systematic["Uncertainty"]
+				up="_"+systName+"Up"
+				down="_"+systName+"Down"
+				variationsysts.append(up)
+				variationsysts.append(down)
 		return variationsysts
 	#returns all rate systematics
 	def get_all_rate_systs(self):
 		ratesysts=[]
 		for i,systematic in self.systematics.iterrows():
+			if systematic["Uncertainty"].startswith("#"):
+				continue
 			if systematic["Construction"]=="rate":
 				#adds variable name to list of ratesysts
 				ratesysts.append(systematic["Uncertainty"])
