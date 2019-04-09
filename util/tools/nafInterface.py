@@ -25,7 +25,7 @@ def plotInterface(jobData, skipPlotParallel = False, maxTries = 10, nTries = 0):
         sys.exit(1)
 
     # monitor running
-    nafSubmit.monitorJobStatus(jobIDs, plot_batch_history = nTries==0, name = "plotParallel") 
+    nafSubmit.monitorJobStatus(jobIDs) 
     # check fo termination of jobs
     undoneJobData = plotTerminationCheck(jobData)
 
