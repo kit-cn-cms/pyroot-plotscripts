@@ -123,7 +123,7 @@ def condorSubmit(submitPath):
   '''
 
   # creating command  
-  submitCommand = "condor_submit -terse -name "+default_scheduler+" "+submitPath
+  submitCommand = "condor_submit -terse "+submitPath
   tries = 0
   jobID = None
   while not jobID:
@@ -184,7 +184,7 @@ def setupRelease(oldJIDs, newJIDs):
     releaseCode += "from nafSubmit import monitorJobStatus\n"
     releaseCode += "import os\n"
     releaseCode += "monitorJobStatus("+str(oldJIDs)+")\n"
-    releaseCode += "os.system('condor_release -name "+default_scheduler
+    releaseCode += "os.system('condor_release"
     for ID in newJIDs:
         releaseCode += " "+str(ID)
     releaseCode += "')\n"
@@ -287,7 +287,7 @@ def submitArrayToNAF(scripts, arrayName="", holdIDs=None, submitOptions = {}):
 
   return jobIDs
 
-def monitorJobStatus(jobIDs = None, plot_batch_history = False, name = None):
+def monitorJobStatus(jobIDs = None):
   ''' monitoring of jobs via condor_q function. Loops condor_q output until all scripts have been terminated
 
   jobIDs: list of IDs of jobs to be monitored (if no argument is given, all jobs of the current NAF user are monitored)
@@ -298,12 +298,12 @@ def monitorJobStatus(jobIDs = None, plot_batch_history = False, name = None):
   allfinished=False
   errorcount = 0
   print "checking job status in condor_q ..."
-  command = ["condor_q", "-name", default_scheduler]
+  command = ["condor_q"]
   # adding jobIDs to command
   if jobIDs:
     command += jobIDs
     command = [str(c) for c in command]
-  command.append("-totals")
+  command += ["-totals"]#, "|", "grep", "'Total for query'"]
   sTime = time.time()
 
   # counts
@@ -317,28 +317,12 @@ def monitorJobStatus(jobIDs = None, plot_batch_history = False, name = None):
     # calling condor_q command
     a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
     a.wait()
-    qstat=a.communicate()[0]
-    nrunning=-1
-    queryline = [line for line in qstat.split("\n") if "Total for query" in line] 
-    # sum all jobs that are still idle or running
-    if len(queryline) == 1:
-        jobsRunning = int(re.findall(r'\ [0-9]+\ running', queryline[0])[0][1:-8])
-        jobsIdle = int(re.findall(r'\ [0-9]+\ idle', queryline[0])[0][1:-5])
-        jobsHeld = int(re.findall(r'\ [0-9]+\ held', queryline[0])[0][1:-5])
-        nrunning = jobsRunning + jobsIdle + jobsHeld
-        print("{:4d} running | {:4d} idling | {:4d} held |\t total: {:4d}".format(jobsRunning, jobsIdle, jobsHeld, nrunning))
-        # add counting stuff
-        times.append( (time.time() -sTime)/60.)
-        runs.append(jobsRunning)
-        idles.append(jobsIdle)
-        helds.append(jobsHeld)
-        totals.append(jobsRunning+jobsIdle+jobsHeld)
+    qstat = a.communicate()[0]
+    nrunning = 0
+    querylines = [line for line in qstat.split("\n") if "Total for query" in line]
 
-        errorcount = 0
-        if nrunning == 0:
-            print("waiting on no more jobs - exiting loop")
-            allfinished=True
-    else:
+    # check if query matches
+    if len(querylines) == 0:
       errorcount += 1
       # sometimes condor_q is not reachable - if this happens a lot something is probably wrong
       print("line does not match query")
@@ -350,28 +334,24 @@ def monitorJobStatus(jobIDs = None, plot_batch_history = False, name = None):
         command[0] = "condor_rm"
         a = subprocess.Popen(command, stdout = subprocess.PIPE, stderr = subprocess.STDOUT, stdin = subprocess.PIPE)
         return
+      continue
+
+    errorcount = 0
+    # sum all jobs that are still idle or running
+    jobsRunning = 0
+    jobsIdle    = 0
+    jobsHeld    = 0
+    for line in querylines:
+        jobsRunning += int(re.findall(r'\ [0-9]+\ running', line)[0][1:-8])
+        jobsIdle += int(re.findall(r'\ [0-9]+\ idle', line)[0][1:-5])
+        jobsHeld += int(re.findall(r'\ [0-9]+\ held', line)[0][1:-5])
+
+    nrunning += jobsRunning + jobsIdle + jobsHeld
+    print("{:4d} running | {:4d} idling | {:4d} held |\t total: {:4d}".format(jobsRunning, jobsIdle, jobsHeld, nrunning))
+
+    if nrunning == 0:
+        print("waiting on no more jobs - exiting loop")
+        allfinished=True
 
   print("all jobs are finished - exiting monitorJobStatus")
-  if False:#plot_batch_history:
-    print("plotting history of jobs on NAF")
-    path = "batchHistory/"
-    if not os.path.exists(path):
-        os.makedirs(path)
-    path+=name+"_"+datetime.datetime.now().strftime("%Y%m%d%H%M%S")+".pdf"
-    import matplotlib.pyplot as plt
-    plt.figure(figsize = [7,5])
-    plt.plot( times, runs, "r--", lw = 2, label = "running")
-    plt.plot( times, idles, "g-", lw = 2, label = "idle")
-    plt.plot( times, helds, "b-", label = "held")
-    plt.plot( times, totals, ".", color = "black", lw = 2, label = "total")
-    plt.xlabel("time in minutes")
-    plt.ylabel("number of jobs")
-    plt.title(name)
-    plt.grid()
-    plt.legend()
-    plt.savefig(path)
-    print("saved plot at "+str(path)+"\n")
-    plt.clf()
-
-
   return
