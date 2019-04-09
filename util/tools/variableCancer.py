@@ -175,7 +175,7 @@ class VariableManager:
         # check if new variables need to be initialized
         if len(self.variablesToInit)>0:
             print("during the initialization of variables, {} other variables were added".format(len(self.variablesToInit)))
-            if self.verbose>=1:
+            if self.verbose > 1:
                 print("\tvariables:")
                 for var in self.variablesToInit:
                     print("\t"+str(var))
@@ -277,7 +277,6 @@ class VariableManager:
                 if lowerBound > 0 and upperBound > 0:
                     if variableStart == 0 or (not selection[variableStart-1].isalpha() and not selection[variableStart-1] == "_"):
                         index = int(selection[lowerBound:upperBound])
-                        print(index)
                         maxIndex = max(index, maxIndex)
             if self.indexMap[var] not in maxIndexMap.keys() or maxIndexMap[self.indexMap[var]] < maxIndex:
                 maxIndexMap[self.indexMap[var]] = maxIndex
@@ -398,8 +397,6 @@ class VariableManager:
 
         print("all variable dependencies resolved and variable list sorted")
         self.sortedVariables = sortedVariables                    
-        for v in self.sortedVariables:
-            print(v)
             
     # ---------------------------------------------------------------------------------------------
     # functions for writing code in plot loops
