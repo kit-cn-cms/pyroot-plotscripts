@@ -100,10 +100,6 @@ samplesDataControlPlots=[
             'SingleEl', samDict=sampleDict, readTrees=doReadTrees)
 ]
 
-# list_of_processes=["ttH_hbb","ttH_hcc","ttH_hww","ttH_hzz","ttH_htt","ttH_hgg","ttH_hgluglu",
-#                     "ttH_hzg","ttbarOther","ttbarPlusB","ttbarPlus2B","ttbarPlusBBbar","ttbarPlusCCbar",
-#                     "singlet","wjets","zjets","ttbarW","ttbarZ","diboson","QCD"]
-
 print "samples"
 
 
