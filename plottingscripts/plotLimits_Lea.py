@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'csvConfig1'
+    name = 'csvConfig2'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -58,7 +58,7 @@ def main(pyrootdir, argv):
     pltcfgName = "5"
 
     #name of the systconfig
-    systconfig = pyrootdir+"/configs/systematics_hdecay13TeVJESTest.csv"
+    systconfig = pyrootdir+"/configs/testsysts.csv"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -101,8 +101,6 @@ def main(pyrootdir, argv):
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
 
-    # path to csv file used to build datacards
-    datacardcsv="/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker/systematics_hdecay13TeVJESTest.csv"
 
     print '''
     # ========================================================
@@ -357,19 +355,16 @@ def main(pyrootdir, argv):
             # ========================================================
             '''
             # init datacards path
-            datacardsPath = analysis.workdir+"/datacards"
-            if not os.path.exists(datacardsPath):
-                os.makedirs(datacardsPath)
+            
 
             with monitor.Timer("makeDatacardsParallel"):
                 makeDatacards.makeDatacardsParallel(
                     filePath            = analysis.renamedPath,
-                    outPath             = datacardsPath,
+                    workdir             = analysis.workdir,
                     categories          = configData.getBinlabels(),
                     doHdecay            = True,
                     discrname           = analysis.discrName,
                     datacardmaker       = datacardmaker,
-                    datacardcsv         = datacardcsv,
                     skipDatacards       = analysis.skipDatacards)
 
 
