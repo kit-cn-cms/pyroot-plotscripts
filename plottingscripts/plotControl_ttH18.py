@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'controlPlots_v1'
+    name = 'controlPlots_v3'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -89,7 +89,9 @@ def main(pyrootdir, argv):
         "skipRenaming":         False,
         "skipDatacards":        False}
 
-    plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttH_2018_newJEC_v5.json"
+    # plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttH_2018_newJEC_v5.json"
+    # plotJson = "/nfs/dust/cms/user/swieland/ttH/pyroot-plotscripts/json_2017DeepJet.json"
+    plotJson = ""
     plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/dNNInterface_Keras_cool.py",
@@ -280,10 +282,11 @@ def main(pyrootdir, argv):
             '''
             with monitor.Timer("addRealData"):
                 # real data with ttH
-                # pP.addData(samples = configData.controlSamples)
-
+                if not analysis.plotBlinded:
+                    pP.addData(samples = configData.controlSamples)
+                else: 
                 # pseudo data without ttH
-                pP.addData(samples = configData.samples[9:])
+                    pP.addData(samples = configData.samples[9:])
         
 
         pP.checkTermination()       
@@ -434,6 +437,9 @@ def main(pyrootdir, argv):
                     "color":        ROOT.kBlack, 
                     "doRateSysts":  False})
         
+                dataConfig = genPlots.Config(
+                    histograms  = dataList,
+                    sampleIndex = 0)
 
                 pseudodataConfig = genPlots.Config(
                     histograms  = pseudodataList,
@@ -447,19 +453,34 @@ def main(pyrootdir, argv):
                     "ratio":            True, # not default
                     "blinded":          analysis.plotBlinded} #not default
                 # making the control plots
-                gP.makeControlPlots(
-                    sampleConfig = sampleConfig,
-                    dataConfig   = pseudodataConfig,
-                    options      = controlPlotOptions,
-                    outName      = "controlPlots_pseudodata")
+                if analysis.plotBlinded:
+                    gP.makeControlPlots(
+                        sampleConfig = sampleConfig,
+                        dataConfig   = pseudodataConfig,
+                        options      = controlPlotOptions,
+                        outName      = "controlPlots_pseudodata")
 
 
-                controlPlotOptions["logscale"] = True
-                gP.makeControlPlots(
+                    controlPlotOptions["logscale"] = True
+                    gP.makeControlPlots(
+                        sampleConfig = sampleConfig,
+                        dataConfig   = pseudodataConfig,
+                        options      = controlPlotOptions,
+                        outName      = "controlPlots_pseudodata_LOG")
+                else:
+                    gP.makeControlPlots(
                     sampleConfig = sampleConfig,
-                    dataConfig   = pseudodataConfig,
+                    dataConfig   = dataConfig,
                     options      = controlPlotOptions,
-                    outName      = "controlPlots_pseudodata_LOG")
+                    outName      = "controlPlots_data")
+
+
+                    controlPlotOptions["logscale"] = True
+                    gP.makeControlPlots(
+                        sampleConfig = sampleConfig,
+                        dataConfig   = dataConfig,
+                        options      = controlPlotOptions,
+                        outName      = "controlPlots_data_LOG")                
 
             monitor.printClass(gP, "after making control plots")
 
