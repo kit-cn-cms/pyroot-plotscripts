@@ -121,4 +121,14 @@ class Systematics:
 				ratesysts.append(systematic["Uncertainty"])
 		return ratesysts
 
+	def makeCSV(self,list_of_processes,outputpath):
+		header=["Uncertainty","Type"]
+		header+=list_of_processes
+		#only get information for processes that are included
+		newCSV=self.systematics[header]
+		#delete all uncertainties that start with "#"
+		newCSV=newCSV[~newCSV["Uncertainty"].astype(str).str.startswith("#")]
+		newCSV.to_csv(outputpath, index=False)
+
+
 
