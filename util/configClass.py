@@ -33,7 +33,7 @@ class catData:
             "binlabel":         self.binlabels[i]}
 
 class configData:
-    def __init__(self, analysisClass, variable_config, sample_config, plot_config):
+    def __init__(self, analysisClass, variable_config, sample_config, plot_config, execute_file = None):
 
         print("loading configdata ...")
         # name of files in config
@@ -41,12 +41,21 @@ class configData:
         self.sample_config = sample_config
         self.plot_config = plot_config
 
+        self.execute_file = execute_file
+
         self.analysis = analysisClass
         self.pltcfg = self.analysis.getPlotConfig()
         self.cfgdir = self.analysis.pyrootdir + "/configs/"
         self.plotNumber = analysisClass.plotNumber
         self.Data = None
 
+        if self.execute_file:
+            self.saveFile()
+
+    def saveFile(self):
+        command = "cp {} {}/plottingscript.py".format(self.execute_file, self.analysis.workdir)
+        print(command)
+        os.system(command)        
 
     def initData(self):
         self.Data = catData()
