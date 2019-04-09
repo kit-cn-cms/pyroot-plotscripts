@@ -393,7 +393,7 @@ class initPlots:
 
 
 def varLoop(i,n):
-    return '      for(uint '+str(i)+'=0; '+str(i)+'<'+str(n)+'; '+str(i)+'++)'
+    return '      for(int '+str(i)+'=0; '+str(i)+'<'+str(n)+'; '+str(i)+'++)'
 
 def fillHistoSyst(histName, varNames, weight, systNames, systWeights):
     text = '      float weight_'+histName+'='+weight+';\n'
