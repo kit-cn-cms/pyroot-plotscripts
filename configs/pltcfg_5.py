@@ -79,6 +79,8 @@ usualWeights="(1*Weight_pu69p2*Weight_GEN_nom)"+"*"+sfs
 
 evenSel="*(Evt_Odd==0)"
 
+nominalweight="NomWeight:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*1.0*(DoWeights==1)+(DoWeights==0)*1.0"
+
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
 sampleDict=plotClasses.SampleDictionary()
@@ -98,9 +100,9 @@ samplesDataControlPlots=[
             'SingleEl', samDict=sampleDict, readTrees=doReadTrees)
 ]
 
-list_of_processes=["ttH_hbb","ttH_hcc","ttH_hww","ttH_hzz","ttH_htt","ttH_hgg","ttH_hgluglu",
-                    "ttH_hzg","ttbarOther","ttbarPlusB","ttbarPlus2B","ttbarPlusBBbar","ttbarPlusCCbar",
-                    "singlet","wjets","zjets","ttbarW","ttbarZ","diboson","QCD"]
+# list_of_processes=["ttH_hbb","ttH_hcc","ttH_hww","ttH_hzz","ttH_htt","ttH_hgg","ttH_hgluglu",
+#                     "ttH_hzg","ttbarOther","ttbarPlusB","ttbarPlus2B","ttbarPlusBBbar","ttbarPlusCCbar",
+#                     "singlet","wjets","zjets","ttbarW","ttbarZ","diboson","QCD"]
 
 print "samples"
 
@@ -130,7 +132,7 @@ samples=[
   
     plotClasses.Sample('t#bar{t}H, H to #gamma#gamma',ROOT.kBlue+1,
             path_mwassmer+'/ttHToNonbb*/*nominal*.root',
-            '1.0*'+mcWeight+evenSel+hggSel+sel_MET,
+            '1.0*'+mcWeight+evenSel+hggSel+sel_MET,'ttH_hgg',
             samDict=sampleDict, readTrees=doReadTrees), 
  
     plotClasses.Sample('t#bar{t}H, H to gluglu',ROOT.kBlue+1,
@@ -227,5 +229,7 @@ samples=[
             samDict=sampleDict, readTrees=doReadTrees), 
 ]
 
-
-
+processes=[]
+for sample in samples:
+    processes.append(sample.nick)
+list_of_processes=processes
