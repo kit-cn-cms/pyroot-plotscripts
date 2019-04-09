@@ -602,7 +602,8 @@ class genPlots:
                 ratioErrorGraph = ROOT.TGraphAsymmErrors( errorGraph.GetN() )
                 x, y = ROOT.Double(0), ROOT.Double(0)
                 for igCount in range( errorGraph.GetN() ):
-                    errorGraph.GetPoint( igCount, x, ROOT.Double(1.0) )
+                    errorGraph.GetPoint( igCount, x, y )
+                    ratioErrorGraph.SetPoint(igCount, x, 1.0)
                     relErrUp = 0.0
                     relErrDown = 0.0
                     # check if bincontent error becomes negative
