@@ -12,7 +12,7 @@ import nafInterface
 
 
 # -- making data cards (parallel) ----------------------------------------------------------------- 
-def makeDatacardsParallel(filePath, outPath, 
+def makeDatacardsParallel(filePath, workdir, 
                     categories = None, doHdecay = True, 
                     discrname = 'finaldiscr', 
                     datacardmaker = ' ',
@@ -20,6 +20,11 @@ def makeDatacardsParallel(filePath, outPath,
                     skipDatacards = False):
 
     # init directory for scripts
+    datacardcsv=workdir+"/datacard.csv"
+    outPath = workdir+"/datacards"
+    if not os.path.exists(outPath):
+        os.makedirs(outPath)
+
     scriptPath = filePath.rsplit("/",1)[0]+'/cardmakingscripts/'
     if not os.path.exists(scriptPath):
         os.makedirs(scriptPath)
