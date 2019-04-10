@@ -31,12 +31,13 @@ class SampleDictionary:
 
 class Sample:
     def __init__(self, name, color = ROOT.kBlack, path = '', selection = '', 
-            nick = '', listOfShapes = [], up = 0, down = None, samDict = "",
+            nick = '', up = 0, down = None, samDict = "",
             readTrees = True, filterFile = "NONE", checknevents = -1, treename = 'MVATree'):
 
         self.name = name
         self.color = color
         self.path = path
+
         self.selection = selection
         self.files = []
         self.filterFile = filterFile
@@ -67,11 +68,14 @@ class Sample:
             self.nick = name
         else:
             self.nick = nick
-        self.shape_unc = listOfShapes
+        #self.shape_unc = listOfShapes
         self.unc_up = up
         self.unc_down = up
         if down != None:
             self.unc_down = down
+
+    def setShapes(self,listOfShapes):
+        self.shape_unc=listOfShapes
 
 
     def checkNevents():

@@ -12,15 +12,19 @@ import nafInterface
 
 
 # -- making data cards (parallel) ----------------------------------------------------------------- 
-def makeDatacardsParallel(filePath, outPath, 
+def makeDatacardsParallel(filePath, workdir, 
                     categories = None, doHdecay = True, 
                     discrname = 'finaldiscr', 
-                    datacardmaker = 'DatacardScript.py',
-                    datacardDirectory = ' ',
+                    datacardmaker = ' ',
                     datacardcsv=' ',
                     skipDatacards = False):
 
     # init directory for scripts
+    datacardcsv=workdir+"/datacard.csv"
+    outPath = workdir+"/datacards"
+    if not os.path.exists(outPath):
+        os.makedirs(outPath)
+
     scriptPath = filePath.rsplit("/",1)[0]+'/cardmakingscripts/'
     if not os.path.exists(scriptPath):
         os.makedirs(scriptPath)
@@ -54,11 +58,11 @@ def makeDatacardsParallel(filePath, outPath,
                 script += 'eval `scram runtime -sh`\n'
                 script += 'cd - \n'
             #--categoryName=CATEGORYNAME --rootfile=FILE --outputfile=FILE --directory=PATH -csvfile=FILE
-            script += 'python '+datacardmaker+' '
+            script += 'python '+filedir+'/DatacardScript.py '
             script += '--categoryname='+cat+' '
             script += '--rootfile='+filePath+' '
             script += '--outputfile='+outPath+'/'+cat+'_hdecay.txt '
-            script += '--directory='+datacardDirectory+' '
+            script += '--directory='+datacardmaker+' '
             script += '--csvfile='+datacardcsv+' \n'
 
             # saving and chmodding script
@@ -74,7 +78,7 @@ def makeDatacardsParallel(filePath, outPath,
             print("redoing datacard making")
             return makeDatacardsParallel(
                     filePath, outPath, categories, 
-                    doHdecay, discrname, datacardmaker,
+                    doHdecay, discrname, datacardmaker,datacardcsv,
                     skipDatacards = False)
         else:
             print("datacard making has terminated successfully")
