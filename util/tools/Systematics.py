@@ -13,7 +13,7 @@ class SystematicsForProcess:
 class Systematics:
 	def __init__(self,systematicconfig):
 		print "loading systematics config ..."
-		self.systematics=pandas.read_csv(systematicconfig)
+		self.systematics=pandas.read_csv(systematicconfig,sep=";")
 
 	def getSystematicsForProcesses(self,list_of_processes):
 		self.processes={}
@@ -66,7 +66,10 @@ class Systematics:
 				#adds variable name to list of ratesysts
 				ratesysts.append(systematic)
 		return ratesysts
-
+	#returns all shape systematics
+	def get_shape_systs(self,process):
+		shape_systs=self.get_weight_systs(process)+self.get_variation_systs(process)
+		return shape_systs
 
 	#returns all weight systematics
 	def get_all_weight_systs(self):
@@ -129,6 +132,21 @@ class Systematics:
 		#delete all uncertainties that start with "#"
 		newCSV=newCSV[~newCSV["Uncertainty"].astype(str).str.startswith("#")]
 		newCSV.to_csv(outputpath, index=False)
+
+	def plot_shapes(self):
+		plotShapes=[]
+		for i,systematic in self.systematics.iterrows():
+			if systematic["Uncertainty"].startswith("#"):
+				continue
+			if str(systematic["Plot"])=="1":
+				systName=systematic["Uncertainty"]
+				up="_"+systName+"Up"
+				down="_"+systName+"Down"
+				plotShapes.append(up)
+				plotShapes.append(down)
+		return plotShapes
+
+
 
 
 
