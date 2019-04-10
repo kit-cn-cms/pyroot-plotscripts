@@ -461,8 +461,8 @@ class scriptWriter:
                         filesToSubmit = []
                         nEventsInFiles = 0
                         
-                # If self.options["cirun"] = true, only use small number of files             
-                if self.pp.analysis.cirun: 
+                # If self.options["testrun"] = true, only use small number of files             
+                if self.pp.analysis.testrun: 
                     break
 
             # submit remaining scripts (can happen if the last file was large)
@@ -505,7 +505,7 @@ class scriptWriter:
         # check options
         if "maxevents" in writeOptions:
             maxevents = writeOptions["maxevents"]
-        if self.pp.analysis.cirun and maxevents < 100:
+        if self.pp.analysis.testrun and maxevents < 100:
             maxevents = 100
         if "suffix" in writeOptions:
             suffix = writeOptions["suffix"]

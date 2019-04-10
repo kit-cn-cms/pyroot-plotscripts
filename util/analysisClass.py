@@ -52,7 +52,7 @@ class analysisConfig:
 
         self.opts = None
 
-        self.cirun = False
+        self.testrun = False
         self.stopAfterCompile = False
         self.haddParallel = False
         self.skipPlotParallel = False
@@ -132,8 +132,8 @@ class analysisConfig:
 
     def initAnalysisOptions(self, analysisOptions = {}):
         for key in analysisOptions:
-            if key in ("cirun"):
-                self.cirun = bool(analysisOptions[key])
+            if key in ("testrun"):
+                self.testrun = bool(analysisOptions[key])
             elif key in ("stopAfterCompile"):
                 self.stopAfterCompile = bool(analysisOptions[key])
             elif key in ("haddParallel"):
