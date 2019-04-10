@@ -7,6 +7,7 @@ import importlib
 filedir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(filedir+"/tools")
 import plotClasses
+import Systematics
 
 class catData:
     def __init__(self):
@@ -62,6 +63,19 @@ class configData:
 
     def getData():
         return self.Data
+
+    def initSystematics(self,systconfig):
+
+        print "loading systematics..."
+        processes=self.pltcfg.list_of_processes
+        workdir=self.analysis.workdir
+        outputpath=workdir+"/datacard.csv"
+        self.systematics=Systematics.Systematics(systconfig)
+        self.systematics.getSystematicsForProcesses(processes)
+        self.systematics.makeCSV(processes,outputpath)
+        for sample in self.pltcfg.samples:
+            sample.setShapes(self.systematics.get_shape_systs(sample.nick))
+        self.plots=self.systematics.plot_shapes()
 
     def writeConfigDataToWorkdir(self):
         if self.Data == None:
@@ -264,25 +278,42 @@ class configData:
             print(plt)
 
 
+    
+    def getSystSamples(self):
+        systSamples = []
+
+        # adding other samples
+        for sample in self.samples:
+            variationsysts=self.systematics.get_variation_systs(sample.nick)
+            for sysName in variationsysts:
+                newSel = sample.selection
+                fileName=self.systematics.processes[sample.nick][sysName].expression
+                if "/" in fileName:
+                    newpath=fileName
+                else:
+                    newpath=sample.path.replace("nominal",fileName)
+                #not enough samples ind hdamp up
+                if "HDAMP" in sysName and sysName.endswith("Up"):
+                    newSel += "*((N_GenTopHad==1 && N_GenTopLep==1)* %s + !(N_GenTopHad==1 && N_GenTopLep ==1)*1)" %str(round(1.0399, 2))
+
+                systSamples.append( 
+                    plotClasses.Sample( 
+                        sample.name+sysName, 
+                        sample.color, 
+                        newpath, 
+                        newSel, 
+                        sample.nick+sysName, 
+                        samDict = self.pltcfg.sampleDict ))
+
+        return systSamples
+
+
     def initSamples(self):
         # TODO: find a better naming sceme for the lists of samples/names/weights
         # they are used at many different places and it is not at all obvious which are used where and what they really contain
 
-        sys.path.append(self.cfgdir)
-        fileName = self.sample_config
-
-        # imports file in cfgdir with given name as samplesData file
-        # this file should have a function
-        #       getSamples, getControlSamples, getSystSamples
-        # where the samples lists are created, and functions
-        #       getAllSystNames, getWeightSystNames, getOtherSystNames
-        # where lists of names are created, and functions
-        #       getSystWeights
-        # where lists of weights are created
-        samplesData = importlib.import_module( fileName )
-        
         # list of samples
-        self.samples = samplesData.getSamples( self.pltcfg )
+        self.samples = self.pltcfg.samples
         # debug printout
         print("-"*30+"\nsamples:")
         for sample in self.samples:
@@ -291,33 +322,38 @@ class configData:
 
 
         # list of controlsamples used in 'allSamples' list
-        self.controlSamples = samplesData.getControlSamples( self.pltcfg )
+        self.controlSamples = self.pltcfg.samplesDataControlPlots
         # debug printout
         print("-"*30+"\ncontrol samples:")
         for sample in self.controlSamples:
             print(sample.name)
         print("-"*30) 
+        print self.systematics
 
+        print "systSamples"
         # list of systematic samples used in 'allSamples' and 'allSystSamples' list
-        self.systSamples = samplesData.getSystSamples( self.pltcfg, self.analysis, self.samples )
-        
+        self.systSamples = self.getSystSamples()
 
+        
+        print "allSamples"
         # list of samples used to write C program       
-        self.allSamples = samplesData.getAllSamples( self.pltcfg, self.analysis, self.samples)
+        self.allSamples = self.pltcfg.samples+self.getSystSamples()
         # TODO is this used anywhere?
         #self.allSystSamples = samples + systSamples
 
-
+        print "all syst names"
         # list of samples used e.g. in renameHistos       
-        self.allSystNames = samplesData.getAllSystNames( self.pltcfg )
+        self.allSystNames = self.systematics.get_all_weight_systs()+self.systematics.get_all_variation_systs()
         # list of syst names used in plotParallel
-        self.weightSystNames = samplesData.getWeightSystNames( self.pltcfg )
+        self.weightSystNames = self.systematics.get_all_weight_systs()
+        self.weightSystNames.insert(0,"")
         # list of syst names used in plotParallel
-        self.otherSystNames = samplesData.getOtherSystNames( self.pltcfg )
+        self.otherSystNames = self.systematics.get_all_variation_systs()
 
         # list of syst weights used in plotParallel
-        self.systWeights = samplesData.getSystWeights( self.pltcfg )
-
+        self.systWeights = self.systematics.get_all_weight_expressions()
+        self.systWeights.insert(0,self.pltcfg.nominalweight)
 
     def getEventYieldCategories(self):
         return self.evtYieldCategories
+

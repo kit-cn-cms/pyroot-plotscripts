@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'testSystematics1'
+    name = 'csvConfigAll'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -55,7 +55,11 @@ def main(pyrootdir, argv):
     configDataBaseName = "limitsttH18"
 
     # name of plotconfig
-    pltcfgName = "v49"
+    pltcfgName = "5"
+
+    #name of the systconfig
+    systconfig = pyrootdir+"/configs/systematics_hdecay13TeVJESTest.csv"
+    # systconfig = pyrootdir+"/configs/testsysts.csv"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -89,20 +93,15 @@ def main(pyrootdir, argv):
         "skipRenaming":         False,
         "skipDatacards":        False}
 
-    plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttH_2018_newJEC.json"
+    plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttH_2018_newJEC_v5.json"
     plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/dNNInterface_Keras_cool.py",
                     "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/DNNCheckpointFiles/newJEC_validatedVariables/"}
 
-    # path to script making datacards
-    datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/pyroot-plotscripts/util/DatacardScript.py"
-
     # path to datacardMaker directory
-    datacardMakerDirectory = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
+    datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
 
-    # path to csv file used to build datacards
-    datacardcsv="/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker/systematics_hdecay13TeVJESTest.csv"
 
     print '''
     # ========================================================
@@ -111,6 +110,9 @@ def main(pyrootdir, argv):
     '''
 
     # save a lot of useful information concerning the analysis
+    print "analysis"
+    
+
     analysis = analysisClass.analysisConfig(
         workdir = workdir, 
         pyrootdir = pyrootdir, 
@@ -118,10 +120,15 @@ def main(pyrootdir, argv):
         signalProcess = signalProcess, 
         pltcfgName = pltcfgName,
         discrName = discrName)
+    print analysis
 
+    print "initArguments"
     analysis.initArguments( argv )
+
+    print "initAnalysisOptions"
     analysis.initAnalysisOptions( analysisOptions )
 
+    print "initPlotConfig"
     pltcfg = analysis.initPlotConfig()
     print "We will import the following plotconfig: ", analysis.getPlotConfig()
 
@@ -140,6 +147,8 @@ def main(pyrootdir, argv):
     configData = configClass.configData(
         analysisClass = analysis,
         configDataBaseName = configDataBaseName)
+
+    configData.initSystematics(systconfig=systconfig)
 
     configData.initData()
 
@@ -348,20 +357,16 @@ def main(pyrootdir, argv):
             # ========================================================
             '''
             # init datacards path
-            datacardsPath = analysis.workdir+"/datacards"
-            if not os.path.exists(datacardsPath):
-                os.makedirs(datacardsPath)
+            
 
             with monitor.Timer("makeDatacardsParallel"):
                 makeDatacards.makeDatacardsParallel(
                     filePath            = analysis.renamedPath,
-                    outPath             = datacardsPath,
+                    workdir             = analysis.workdir,
                     categories          = configData.getBinlabels(),
                     doHdecay            = True,
                     discrname           = analysis.discrName,
                     datacardmaker       = datacardmaker,
-                    datacardDirectory   = datacardMakerDirectory,
-                    datacardcsv         = datacardcsv,
                     skipDatacards       = analysis.skipDatacards)
 
 
@@ -476,7 +481,7 @@ def main(pyrootdir, argv):
                 # generate the llloflist internally
                 sampleConfig.genNestedHistList(
                     genPlotsClass = gP,
-                    systNames = pltcfg.errorSystNames)
+                    systNames = configData.plots)
                 sampleConfig.setErrorbandConfig({
                     "style":        3354, 
                     "color":        ROOT.kBlack, 
