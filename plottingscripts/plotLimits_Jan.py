@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'controlYields_v1'
+    name = 'yields_ttH18_v1'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -77,9 +77,9 @@ def main(pyrootdir, argv):
         "singleExecute":        False,  # for non parallel drawing
         "drawParallel":         True,
         # options for drawParallel/singleExecute sub programs
-        "makeSimplePlots":      True,
+        "makeSimplePlots":      False,
         "makeMCControlPlots":   True,
-        "makeEventYields":      True,
+        "makeEventYields":      False,
         # the skipX options try to skip the submission of files to the batch system
         # before skipping the output is crosschecked
         # if the output is not complete, the skipped part is done anyways
@@ -141,7 +141,8 @@ def main(pyrootdir, argv):
         analysisClass = analysis,
         variable_config = variable_cfg,
         sample_config = sample_cfg,
-        plot_config = plot_cfg)
+        plot_config = plot_cfg,
+        execute_file = os.path.realpath(inspect.getsourcefile(lambda:0)))
 
     configData.initData()
 
