@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'csvConfig2'
+    name = 'csvConfigAll'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -58,7 +58,8 @@ def main(pyrootdir, argv):
     pltcfgName = "5"
 
     #name of the systconfig
-    systconfig = pyrootdir+"/configs/testsysts.csv"
+    systconfig = pyrootdir+"/configs/systematics_hdecay13TeVJESTest.csv"
+    # systconfig = pyrootdir+"/configs/testsysts.csv"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -145,8 +146,9 @@ def main(pyrootdir, argv):
 
     configData = configClass.configData(
         analysisClass = analysis,
-        systconfig=systconfig,
         configDataBaseName = configDataBaseName)
+
+    configData.initSystematics(systconfig=systconfig)
 
     configData.initData()
 
@@ -479,7 +481,7 @@ def main(pyrootdir, argv):
                 # generate the llloflist internally
                 sampleConfig.genNestedHistList(
                     genPlotsClass = gP,
-                    systNames = pltcfg.errorSystNames)
+                    systNames = configData.plots)
                 sampleConfig.setErrorbandConfig({
                     "style":        3354, 
                     "color":        ROOT.kBlack, 
