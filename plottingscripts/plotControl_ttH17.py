@@ -91,11 +91,8 @@ def main(pyrootdir, argv):
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/dNNInterface_Keras_cool.py",
                     "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/DNNCheckpointFiles/newJEC_validatedVariables/"}
 
-    # path to script making datacards
-    datacardmaker = "/nfs/dust/cms/user/vdlinden/legacyTTH/plotscript/util/DatacardScript.py"
-
     # path to datacardMaker directory
-    datacardMakerDirectory = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
+    datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
 
     print '''
     # ========================================================
