@@ -72,4 +72,4 @@ for process in category:
 #TODO: Add data_obs to config
 category.observation = options.dataobs
 analysis.add_category(category)
-datacard=datacardMaker(analysis,options.outputfile,hardcodenumbers=True)
+datacard=datacardMaker(analysis,options.outputfile,hardcodenumbers=True,replacefiles=True)
