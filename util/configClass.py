@@ -34,12 +34,11 @@ class catData:
             "binlabel":         self.binlabels[i]}
 
 class configData:
-    def __init__(self, analysisClass, variable_config, sample_config, plot_config, execute_file = None):
+    def __init__(self, analysisClass, variable_config, plot_config, execute_file = None):
 
         print("loading configdata ...")
         # name of files in config
         self.variable_config = variable_config
-        self.sample_config = sample_config
         self.plot_config = plot_config
 
         self.execute_file = execute_file
@@ -70,7 +69,7 @@ class configData:
         processes=self.pltcfg.list_of_processes
         workdir=self.analysis.workdir
         outputpath=workdir+"/datacard.csv"
-        self.systematics=Systematics.Systematics(systconfig)
+        self.systematics=Systematics.Systematics(self.cfgdir+"/"+systconfig+".csv")
         self.systematics.getSystematicsForProcesses(processes)
         self.systematics.makeCSV(processes,outputpath)
         for sample in self.pltcfg.samples:
