@@ -34,7 +34,7 @@ class catData:
             "binlabel":         self.binlabels[i]}
 
 class configData:
-    def __init__(self, analysisClass, systconfig, configDataBaseName = ""):
+    def __init__(self, analysisClass, configDataBaseName = ""):
 
         print("loading configdata ...")
         # name of files in config
@@ -44,7 +44,6 @@ class configData:
         self.cfgdir = self.analysis.pyrootdir + "/configs/"
         self.plotNumber = analysisClass.plotNumber
         self.Data = None
-        self.getSystematics(systconfig)
 
     def initData(self):
         self.Data = catData()
@@ -52,15 +51,18 @@ class configData:
     def getData():
         return self.Data
 
-    def getSystematics(self,systcfg):
+    def initSystematics(self,systconfig):
 
         print "loading systematics..."
         processes=self.pltcfg.list_of_processes
         workdir=self.analysis.workdir
         outputpath=workdir+"/datacard.csv"
-        self.systematics=Systematics.Systematics(systcfg)
+        self.systematics=Systematics.Systematics(systconfig)
         self.systematics.getSystematicsForProcesses(processes)
         self.systematics.makeCSV(processes,outputpath)
+        for sample in self.pltcfg.samples:
+            sample.setShapes(self.systematics.get_shape_systs(sample.nick))
+        self.plots=self.systematics.plot_shapes()
 
     def writeConfigDataToWorkdir(self):
         if self.Data == None:
@@ -285,7 +287,7 @@ class configData:
                     plotClasses.Sample( 
                         sample.name+sysName, 
                         sample.color, 
-                        sample.path.replace("nominal", fileName), 
+                        newpath, 
                         newSel, 
                         sample.nick+sysName, 
                         samDict = self.pltcfg.sampleDict ))
