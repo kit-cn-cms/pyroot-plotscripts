@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'yields_ttH18_v1'
+    name = 'ttHAnalysis_2017'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -52,10 +52,10 @@ def main(pyrootdir, argv):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    cfg             = "pltcfg_ttH18"
+    config          = "pltcfg_ttH18"
     variable_cfg    = "ttH18_addVariables"
-    plot_cfg        = "binningStudy_plots"
-    sample_cfg      = "ttH18_samples"
+    plot_cfg        = "ttH18_discrPlots"
+    syst_cfg        = "ttH18_systematics"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -65,16 +65,13 @@ def main(pyrootdir, argv):
     analysisOptions = {
         # general options
         "plotBlinded":          False,  # blind region
-        "cirun":                False,  # test run with less samples
-        "haddParallel":         True,  # parallel hadding instead of non-parallel
-        "useOldRoot":           False,   # use existing root file if it exists (skips plotParallel)
+        "testrun":              True,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
         "optimizedRebinning":   False, # e.g. "SoverB", "Significance"
         "haddFromWildcard":     True,
         "makeDataCards":        True,
         "addData":              True,  # adding real data 
-        "singleExecute":        False,  # for non parallel drawing
         "drawParallel":         True,
         # options for drawParallel/singleExecute sub programs
         "makeSimplePlots":      False,
@@ -101,9 +98,6 @@ def main(pyrootdir, argv):
     # path to datacardMaker directory
     datacardMakerDirectory = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
 
-    # path to csv file used to build datacards
-    datacardcsv="/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker/systematics_hdecay13TeVJESTest.csv"
-
     print '''
     # ========================================================
     # initializing analysisClass 
@@ -112,20 +106,18 @@ def main(pyrootdir, argv):
 
     # save a lot of useful information concerning the analysis
     analysis = analysisClass.analysisConfig(
-        workdir = workdir, 
-        pyrootdir = pyrootdir, 
-        rootPath = rootPathForAnalysis, 
-        signalProcess = signalProcess, 
-        pltcfgName = cfg,
-        discrName = discrName)
+        workdir         = workdir, 
+        pyrootdir       = pyrootdir, 
+        rootPath        = rootPathForAnalysis, 
+        signalProcess   = signalProcess, 
+        pltcfgName      = config,
+        discrName       = discrName)
 
     analysis.initArguments( argv )
     analysis.initAnalysisOptions( analysisOptions )
 
     pltcfg = analysis.initPlotConfig()
     print "We will import the following plotconfig: ", analysis.getPlotConfig()
-
-    analysis.printChosenOptions()
 
     # loading monitorTools module locally
     monitor = monitorTools.init(analysis.workdir)
@@ -138,11 +130,12 @@ def main(pyrootdir, argv):
     '''
 
     configData = configClass.configData(
-        analysisClass = analysis,
+        analysisClass   = analysis,
         variable_config = variable_cfg,
-        sample_config = sample_cfg,
-        plot_config = plot_cfg,
-        execute_file = os.path.realpath(inspect.getsourcefile(lambda:0)))
+        plot_config     = plot_cfg,
+        execute_file    = os.path.realpath(inspect.getsourcefile(lambda:0)))
+
+    configData.initSystematics(systconfig = syst_cfg)
 
     configData.initData()
 
@@ -189,7 +182,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
 
-    if analysis.plotNumber == None or analysis.singleExecute:
+    if analysis.plotNumber == None:
         # plot everything, except during drawParallel step
         # Create file for data cards
         print '''
@@ -212,7 +205,7 @@ def main(pyrootdir, argv):
             pP.setDNNInterface(dnnInterface)
             pP.setCatNames([''])
             pP.setCatSelections(['1.'])
-            pP.setMaxEvts(500000)
+            pP.setMaxEvts(1000000)
             pP.setRateFactorsFile(rateFactorsFile)
             pP.setSampleForVariableSetup(configData.samples[9])
 
@@ -265,13 +258,13 @@ def main(pyrootdir, argv):
 
             with monitor.Timer("renameHistos"):
                 renameHistos.renameHistos(
-                    inFiles =       pP.getRenameInput(),
-                    outFile =       analysis.renamedPath,
-                    systNames =     configData.allSystNames,
-                    checkBins =     True,
-                    prune =         True,
-                    Epsilon =       0.0,
-                    skipRenaming =  analysis.skipRenaming)
+                    inFiles         = pP.getRenameInput(),
+                    outFile         = analysis.renamedPath,
+                    systNames       = configData.allSystNames,
+                    checkBins       = True,
+                    prune           = True,
+                    Epsilon         = 0.0,
+                    skipRenaming    = analysis.skipRenaming)
 
         if analysis.addData:
             print '''
@@ -280,11 +273,13 @@ def main(pyrootdir, argv):
             # ========================================================
             '''
             with monitor.Timer("addRealData"):
-                # real data with ttH
-                # pP.addData(samples = configData.controlSamples)
+                if analysis.plotBlinded:
+                    # pseudo data without ttH
+                    pP.addData(samples = configData.samples[9:])
+                else:
+                    # real data with ttH
+                    pP.addData(samples = configData.controlSamples)
 
-                # pseudo data without ttH
-                pP.addData(samples = configData.samples[9:])
         
 
         pP.checkTermination()       
@@ -300,21 +295,14 @@ def main(pyrootdir, argv):
             # Making Datacards.
             # ========================================================
             '''
-            # init datacards path
-            datacardsPath = analysis.workdir+"/datacards"
-            if not os.path.exists(datacardsPath):
-                os.makedirs(datacardsPath)
-
             with monitor.Timer("makeDatacardsParallel"):
                 makeDatacards.makeDatacardsParallel(
                     filePath            = analysis.renamedPath,
-                    outPath             = datacardsPath,
+                    workdir             = analysis.workdir,
                     categories          = configData.getBinlabels(),
                     doHdecay            = True,
                     discrname           = analysis.discrName,
                     datacardmaker       = datacardmaker,
-                    datacardDirectory   = datacardMakerDirectory,
-                    datacardcsv         = datacardcsv,
                     skipDatacards       = analysis.skipDatacards)
 
 
@@ -435,32 +423,60 @@ def main(pyrootdir, argv):
                     "color":        ROOT.kBlack, 
                     "doRateSysts":  False})
         
+                if analysis.plotBlinded:
+                    pseudodataConfig = genPlots.Config(
+                        histograms  = pseudodataList,
+                        sampleIndex = 0)
 
-                pseudodataConfig = genPlots.Config(
-                    histograms  = pseudodataList,
-                    sampleIndex = 0)
-
-                #set general plotoption
-                controlPlotOptions = {
-                    "factor":           -2, #not default
-                    "logscale":         False,
-                    "canvasOptions":    "histo",
-                    "ratio":            True, # not default
-                    "blinded":          analysis.plotBlinded} #not default
-                # making the control plots
-                gP.makeControlPlots(
-                    sampleConfig = sampleConfig,
-                    dataConfig   = pseudodataConfig,
-                    options      = controlPlotOptions,
-                    outName      = "controlPlots_pseudodata")
+                    #set general plotoption
+                    controlPlotOptions = {
+                        "factor":           -2, #not default
+                        "logscale":         False,
+                        "canvasOptions":    "histo",
+                        "ratio":            True, # not default
+                        "blinded":          analysis.plotBlinded} #not default
+                    # making the control plots
+                    gP.makeControlPlots(
+                        sampleConfig = sampleConfig,
+                        dataConfig   = pseudodataConfig,
+                        options      = controlPlotOptions,
+                        outName      = "controlPlots_pseudodata")
 
 
-                controlPlotOptions["logscale"] = True
-                gP.makeControlPlots(
-                    sampleConfig = sampleConfig,
-                    dataConfig   = pseudodataConfig,
-                    options      = controlPlotOptions,
-                    outName      = "controlPlots_pseudodata_LOG")
+                    controlPlotOptions["logscale"] = True
+                    gP.makeControlPlots(
+                        sampleConfig = sampleConfig,
+                        dataConfig   = pseudodataConfig,
+                        options      = controlPlotOptions,
+                        outName      = "controlPlots_pseudodata_LOG")
+
+                else:
+                    dataConfig = genPlots.Config(
+                        histograms  = dataList,
+                        sampleIndex = 0)
+
+                    #set general plotoption
+                    controlPlotOptions = {
+                        "factor":           -2, #not default
+                        "logscale":         False,
+                        "canvasOptions":    "histo",
+                        "ratio":            True, # not default
+                        "blinded":          analysis.plotBlinded} #not default
+                    # making the control plots
+                    gP.makeControlPlots(
+                        sampleConfig = sampleConfig,
+                        dataConfig   = dataConfig,
+                        options      = controlPlotOptions,
+                        outName      = "controlPlots_data")
+
+
+                    controlPlotOptions["logscale"] = True
+                    gP.makeControlPlots(
+                        sampleConfig = sampleConfig,
+                        dataConfig   = dataConfig,
+                        options      = controlPlotOptions,
+                        outName      = "controlPlots_data_LOG")
+                    
 
             monitor.printClass(gP, "after making control plots")
 
