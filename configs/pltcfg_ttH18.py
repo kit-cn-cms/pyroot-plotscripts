@@ -2,7 +2,6 @@ import sys
 import os
 import ROOT
 import pandas
-import Systematics
 filedir = os.path.dirname(os.path.realpath(__file__))
 pyrootdir = os.path.dirname(filedir)
 
@@ -229,3 +228,28 @@ processes=[]
 for sample in samples:
     processes.append(sample.nick)
 list_of_processes=processes
+
+
+#define samples that get added later in the plotting step
+plottingsamples=[
+    
+    plotClasses.Sample('t#bar{t}H',ROOT.kBlue+1,
+            path_mwassmer+'/ttH*/*nominal*.root',
+            mcWeightAll+sel_MET,
+            'ttH', 
+            addsamples=['ttH_hbb','ttH_hcc','ttH_htt','ttH_hgg','ttH_hgluglu','ttH_hww','ttH_hzz','ttH_hzg'],
+            samDict=sampleDict, readTrees=doReadTrees), 
+
+    plotClasses.Sample('V+jets',ROOT.kGreen-3,
+            VJetsPathS,
+            mcWeightAll+sel_MET,
+            'Vjets', addsamples=['wjets','zjets'],
+            samDict=sampleDict, readTrees=doReadTrees),
+
+    plotClasses.Sample(
+            't#bar{t}+V',ROOT.kBlue-10,
+            ttVPathS,
+            mcWeightAll+sel_MET,
+            'ttV',  addsamples=['ttbarW','ttbarZ'],
+            samDict=sampleDict, readTrees=doReadTrees),
+]
