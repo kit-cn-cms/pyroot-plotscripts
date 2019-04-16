@@ -3,12 +3,13 @@ import sys
 import pandas
 
 class SystematicsForProcess:
-	def __init__(self,name,process,typ,construction,expression=None):
+	def __init__(self,name,process,typ,construction,expression=None,plot=None):
 		self.name=name
 	 	self.process=process 
 	 	self.typ=typ 
 	 	self.construction=construction 
 	 	self.expression=expression
+	 	self.plot=plot
 
 class Systematics:
 	def __init__(self,systematicconfig):
@@ -41,6 +42,39 @@ class Systematics:
 						self.processes[process][down]=SystematicsForProcess(down,process,typ,construction,Down)
 					if not Up and not Down:
 						self.processes[process][name]=SystematicsForProcess(name,process,typ,construction)
+
+	def plotSystematicsForProcesses(self,list_of_processes):
+		self.processes={}
+		for process in list_of_processes:
+			self.processes[process]={}
+		for i,systematic in self.systematics.iterrows():
+			name=systematic["Uncertainty"]
+			if name.startswith("#"):
+				continue
+			plot=str(systematic["Plot"])
+			if plot=="-":
+				continue
+			typ=systematic["Type"]
+			construction=systematic["Construction"]
+			Up=systematic["Up"]
+			if Up=="-":
+				Up=None
+			Down=systematic["Down"]
+			if Down=="-":
+				Down=None
+			for process in list_of_processes:
+				if systematic[process] is not "-":
+					if Up:
+						up="_"+name+"Up"	
+						self.processes[process][up]=SystematicsForProcess(up,process,typ,construction,
+																			expression=Up,plot=plot)
+					if Down:
+						down="_"+name+"Down"
+						self.processes[process][down]=SystematicsForProcess(down,process,typ,construction,
+																			expression=Down,plot=plot)
+					if not Up and not Down:
+						self.processes[process][name]=SystematicsForProcess(name,process,typ,construction,
+																			plot=plot)
 
 	#returns weight systematics for specific process
 	def get_weight_systs(self,process):
