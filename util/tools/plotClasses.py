@@ -31,7 +31,7 @@ class SampleDictionary:
 
 class Sample:
     def __init__(self, name, color = ROOT.kBlack, path = '', selection = '', 
-            nick = '', up = 0, down = None, samDict = "",
+            nick = '', up = 0, down = None, samDict = "",addsamples=None,
             readTrees = True, filterFile = "NONE", checknevents = -1, treename = 'MVATree'):
 
         self.name = name
@@ -41,6 +41,7 @@ class Sample:
         self.selection = selection
         self.files = []
         self.filterFile = filterFile
+        self.addsamples=addsamples
         subpaths = path.split(";")
         # allow globbing samples from different paths
         if readTrees:
@@ -96,6 +97,12 @@ class Sample:
         for f in self.files:
             chain.Add(f)
         return chain
+
+    def addSamples(self):
+        if addsamples:
+            return self.addsamples 
+        else:
+            return [self.nick]
 
 
 class Plot:
