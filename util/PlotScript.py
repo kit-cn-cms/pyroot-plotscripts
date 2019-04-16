@@ -2,6 +2,7 @@ import sys
 from os import path
 import optparse
 import importlib 
+import ROOT
 
 usage="usage=%prog [options] \n"
 usage+="USE: Plotscript.py --categoryname=CATEGORYNAME --rootfile=FILE --outputfile=FILE --directory=PATH -csvfile=FILE \n"
@@ -23,8 +24,8 @@ parser.add_option("--systconfig", dest="systconfig",
 
 (options, args) = parser.parse_args()
 
-configdir = options.directory +"/configs/"
-utildir = options.directory +"/util/"
+configdir = options.directory+"/configs/"
+utildir = options.directory+"/util/"
 systconfig=configdir+options.systconfig+".csv"
 plotconfig=configdir+options.plotconfig+".py"
 
@@ -56,8 +57,26 @@ for sample in pltcfg.samples:
     sample.setShapes(systematics.get_shape_systs(sample.nick))
 
 
+print '''
+    # ========================================================
+    # loading histograms
+    # ========================================================
+    '''
+Plots = importlib.import_module("Plots" )
+PlotList={}
+rootFile = ROOT.TFile(options.Rootfile, "readonly")  
+for sample in pltcfg.samples:
+	histname=sample.nick+"_"+options.categoryName
+	print histname
+	rootHist=rootFile.Get(histname)
+	PlotList[sample.nick]=Plots.Plot(rootHist,sample.nick)
+	print("    type of hist is: "+str(type(rootHist)) )
 
-
-
+for sample in pltcfg.plottingsamples:
+	hists=[]
+	for process in sample.addsamples:
+		hists.append(PlotList[process].histo)
+	hist=ROOT.Merge(hists)
+	PlotList[sample.nick]=Plots.Plot(hist,sample.nick)
 
 
