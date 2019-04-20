@@ -135,6 +135,8 @@ class Systematics:
 
 	def plot_shapes(self):
 		plotShapes=[]
+		# add nominal
+		plotShapes.append("")
 		for i,systematic in self.systematics.iterrows():
 			if systematic["Uncertainty"].startswith("#"):
 				continue
