@@ -14,7 +14,7 @@ For readability there is a README for each step, if deeper adjustments have to b
 
 ## Workflow
 ### Configs
-- create/adjust a plotconfig file named `pltcfg_STR.py`, that includes all samples that shall be used in the pyroot-plotscript. Two lists of Samples 
+- create/adjust a plotconfig file named `pltcfg_STR.py`, that includes all samples that shall be used in the pyroot-plotscript and the nominal weight expression. Two lists of Samples 
 	- `samplesDataControlPlots` (data samples)
 	- `samples` (simulated samples)
 	add Sample using, with `SAMPLENAMEINCSVCONFIG` being the process name in the used systematics csv file `STR_systematics.csv`
@@ -24,6 +24,10 @@ For readability there is a README for each step, if deeper adjustments have to b
         SELECTION,
         SAMPLENAMEINCSVCONFIG,
         samDict=sampleDict, readTrees=doReadTrees)
+	```
+	- create/adjust the nominal weight expression 
+	```python
+	nominalweight="STR"
 	```
 - create/adjust a systematics csv file `STR_systematics.csv`, **care to use semicolons as seperator!**, add entries regarding the columns:
 	- **Uncertainty** name of the uncertainty, add `#` to skip
