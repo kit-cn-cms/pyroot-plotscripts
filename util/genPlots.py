@@ -80,6 +80,7 @@ class Config:
 
                     outHist = rootFile.Get(key)
                     if isinstance(outHist, ROOT.TH1) and not isinstance(outHist, ROOT.TH2):
+                        print("\tusing variation for " + str(key))
                         baseList.append( outHist.Clone() )
                     else:
                         print(str(syst)+" not used for "+str(sample.name))
@@ -1291,8 +1292,20 @@ def createErrorbands(nestedHistList, samples, doRateSysts = True):
     if doRateSysts:
         print "using ratesysts"
     errorBand = []
+
+    print("nestedHistList:")
+    print(nestedHistList)
+    print("\n"*2)
+    
+
     for ll in nestedHistList: #for all plots
+        print("ll ->")
+        print(ll)
+        print("\n"*2)
         llT = transposeLOL(ll)
+        print("llT ->")
+        print(llT)
+        print("\n"*2)
         nominal = llT[0][0].Clone()
         print("Creating error band for "+str(nominal.GetName()))
         for hist in llT[0][1:]:
@@ -1302,33 +1315,34 @@ def createErrorbands(nestedHistList, samples, doRateSysts = True):
             syst = l[0].Clone()
             for hist in l[1:]:
                 syst.Add(hist)
-		#print("adding to errorband (h, int, nominal.int)")
-		#print hist, hist.Integral(), nominal.Integral()
+                if hist.Integral() <= 0.:
+                    print("adding to errorband (h, int, nominal.int)")
+                    print hist, hist.Integral(), nominal.Integral()
             systs.append(syst)
         assert len(samples) == len(llT[0])
         for isample, sample in enumerate(samples): # for all normalization unc
-	    ls = []
-	    for ihisto, hist in enumerate(llT[0]):
-		ls.append(hist.Clone())
-		if ihisto == isample:
-		    if doRateSysts:
-		        ls[-1].Scale(1 + sample.unc_up)
-	    syst = ls[0].Clone()
-	    for hist in ls[1:]:
-		syst.Add(hist)
-	    systs.append(syst)
+            ls = []
+            for ihisto, hist in enumerate(llT[0]):
+                ls.append(hist.Clone())
+                if ihisto == isample:
+                    if doRateSysts:
+                        ls[-1].Scale(1 + sample.unc_up)
+            syst = ls[0].Clone()
+            for hist in ls[1:]:
+                syst.Add(hist)
+            systs.append(syst)
 
-	    ls = []
-	    for ihisto, hist in enumerate(llT[0]):
-		ls.append(hist.Clone())
-		if ihisto==isample:
-		    if doRateSysts:
-		        ls[-1].Scale(1 - sample.unc_down)
-	    syst = ls[0].Clone()
-	    for hist in ls[1:]:
-		syst.Add(hist)
-	    #print "rates ", sample.nick, syst.Integral()
-	    systs.append(syst)
+            ls = []
+            for ihisto, hist in enumerate(llT[0]):
+                ls.append(hist.Clone())
+                if ihisto==isample:
+                    if doRateSysts:
+                        ls[-1].Scale(1 - sample.unc_down)
+            syst = ls[0].Clone()
+            for hist in ls[1:]:
+                syst.Add(hist)
+            #print "rates ", sample.nick, syst.Integral()
+            systs.append(syst)
 
         uperrors = [0]*ll[0][0].GetNbinsX()
         downerrors = [0]*ll[0][0].GetNbinsX()
@@ -1341,11 +1355,12 @@ def createErrorbands(nestedHistList, samples, doRateSysts = True):
             ups = systs[0::2]
             downs = systs[1::2]
             for up, down in zip(ups, downs):
-	        #print "up/down name ", up.GetName(), down.GetName()
-	        #print "up/down diff ",  up.GetBinContent(ibin+1)-n, down.GetBinContent(ibin+1)-n
+                if ibin%20==0:
+                    print "up/down name ", up.GetName(), down.GetName()
+                    print "up/down diff ",  up.GetBinContent(ibin+1)-n, down.GetBinContent(ibin+1)-n
                 u_ = up.GetBinContent(ibin+1)-n
                 d_ = down.GetBinContent(ibin+1)-n
-                #print u_,d_
+                if ibin%20==0: print u_,d_
                 # TODO that shit sucks
                 if u_ >= 0 and u_ >= d_:
                     u = u_
@@ -1368,8 +1383,9 @@ def createErrorbands(nestedHistList, samples, doRateSysts = True):
 
                 uperrors[ibin] = ROOT.TMath.Sqrt( uperrors[ibin]*uperrors[ibin] + u*u )
                 downerrors[ibin] = ROOT.TMath.Sqrt( downerrors[ibin]*downerrors[ibin] + d*d)
-                #print u, d
-                #print "up/down errors ", uperrors[ibin],downerrors[ibin]
+                if ibin%20==0:
+                    print u, d
+                    print "up/down errors ", uperrors[ibin],downerrors[ibin]
 
         graph = ROOT.TGraphAsymmErrors(nominal)
         for i in range(len(uperrors)):
@@ -1511,7 +1527,7 @@ def getRatioGraph(data, mchisto):
               ratio.SetPointEYlow(i, data.GetErrorYlow(i)/currentBinContent)
               ratio.SetPointEYhigh(i, data.GetErrorYhigh(i)/currentBinContent)
             else:
-	      ratio.SetPointEYlow( i, 1 - (y-data.GetErrorYlow(i)) / y )
+              ratio.SetPointEYlow( i, 1 - (y-data.GetErrorYlow(i)) / y )
               ratio.SetPointEYhigh( i, (y + data.GetErrorYhigh(i)) / y - 1 )
             
         else:

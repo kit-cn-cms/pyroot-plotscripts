@@ -54,7 +54,7 @@ class analysisConfig:
 
         self.testrun = False
         self.stopAfterCompile = False
-        self.haddParallel = False
+        self.haddParallel = True
         self.skipPlotParallel = False
         self.useOldRoot = False
         self.skipHaddParallel = False

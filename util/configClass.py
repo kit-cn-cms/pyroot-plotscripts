@@ -71,7 +71,8 @@ class configData:
         outputpath=workdir+"/datacard.csv"
         self.systematics=Systematics.Systematics(self.cfgdir+"/"+systconfig+".csv")
         self.systematics.getSystematicsForProcesses(processes)
-        self.systematics.makeCSV(processes,outputpath)
+        datacard_processes = self.pltcfg.datacard_processes
+        self.systematics.makeCSV(datacard_processes,outputpath)
         for sample in self.pltcfg.samples:
             sample.setShapes(self.systematics.get_shape_systs(sample.nick))
         self.plots=self.systematics.plot_shapes()
@@ -336,7 +337,7 @@ class configData:
         
         print "allSamples"
         # list of samples used to write C program       
-        self.allSamples = self.pltcfg.samples+self.getSystSamples()
+        self.allSamples = self.pltcfg.samples+self.controlSamples+self.getSystSamples()
         # TODO is this used anywhere?
         #self.allSystSamples = samples + systSamples
 
