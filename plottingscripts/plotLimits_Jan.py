@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttHAnalysis_2017'
+    name = 'interfaceTest_data_allSysts'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -53,8 +53,8 @@ def main(pyrootdir, argv):
 
     # configs
     config          = "pltcfg_ttH18"
-    variable_cfg    = "ttH18_addVariables"
-    plot_cfg        = "ttH18_discrPlots"
+    variable_cfg    = "test_addVariables"
+    plot_cfg        = "test_discrPlots"
     syst_cfg        = "ttH18_systematics"
 
     # file for rate factors
@@ -64,11 +64,10 @@ def main(pyrootdir, argv):
     # script options
     analysisOptions = {
         # general options
-        "plotBlinded":          False,  # blind region
-        "testrun":              True,  # test run with less samples
+        "plotBlinded":          False,  # True for real data
+        "testrun":              False,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
-        "optimizedRebinning":   False, # e.g. "SoverB", "Significance"
         "haddFromWildcard":     True,
         "makeDataCards":        True,
         "addData":              True,  # adding real data 
@@ -76,7 +75,7 @@ def main(pyrootdir, argv):
         # options for drawParallel/singleExecute sub programs
         "makeSimplePlots":      False,
         "makeMCControlPlots":   True,
-        "makeEventYields":      False,
+        "makeEventYields":      True,
         # the skipX options try to skip the submission of files to the batch system
         # before skipping the output is crosschecked
         # if the output is not complete, the skipped part is done anyways
@@ -89,8 +88,8 @@ def main(pyrootdir, argv):
     plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttH_2018_newJEC_v5.json"
     plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
-    dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/dNNInterface_Keras_cool.py",
-                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/DNNCheckpointFiles/newJEC_validatedVariables/"}
+    dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
+                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/mergedTest/"}
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
@@ -414,7 +413,7 @@ def main(pyrootdir, argv):
                 # generate the llloflist internally
                 sampleConfig.genNestedHistList(
                     genPlotsClass = gP,
-                    systNames = pltcfg.errorSystNames)
+                    systNames = configData.plots)
                 sampleConfig.setErrorbandConfig({
                     "style":        3354, 
                     "color":        ROOT.kBlack, 
@@ -431,7 +430,7 @@ def main(pyrootdir, argv):
                         "logscale":         False,
                         "canvasOptions":    "histo",
                         "ratio":            True, # not default
-                        "blinded":          analysis.plotBlinded} #not default
+                        "blinded":          False}
                     # making the control plots
                     gP.makeControlPlots(
                         sampleConfig = sampleConfig,
@@ -458,7 +457,7 @@ def main(pyrootdir, argv):
                         "logscale":         False,
                         "canvasOptions":    "histo",
                         "ratio":            True, # not default
-                        "blinded":          analysis.plotBlinded} #not default
+                        "blinded":          False} #not default
                     # making the control plots
                     gP.makeControlPlots(
                         sampleConfig = sampleConfig,
