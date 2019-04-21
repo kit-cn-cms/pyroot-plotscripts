@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttHAnalysis_2017'
+    name = 'ttHAnalysis_2017_newInterface'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -54,7 +54,7 @@ def main(pyrootdir, argv):
     # configs
     config          = "pltcfg_ttH18"
     variable_cfg    = "ttH18_addVariables"
-    plot_cfg        = "ttH18_discrPlots"
+    plot_cfg        = "ttH17_discrPlots"
     syst_cfg        = "ttH18_systematics"
 
     # file for rate factors
@@ -88,7 +88,7 @@ def main(pyrootdir, argv):
     plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttH_2018_newJEC_v5.json"
     plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
-    dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/dNNInterface_Keras_cool.py",
+    dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
                     "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/DNNCheckpointFiles/newJEC_validatedVariables/"}
 
     # path to datacardMaker directory
@@ -199,8 +199,6 @@ def main(pyrootdir, argv):
             pP.setDataBases(plotDataBases)
             pP.setMEMDataBase(memDataBase)
             pP.setDNNInterface(dnnInterface)
-            pP.setCatNames([''])
-            pP.setCatSelections(['1.'])
             pP.setMaxEvts(1000000)
             pP.setRateFactorsFile(rateFactorsFile)
             pP.setSampleForVariableSetup(configData.samples[9])
@@ -413,7 +411,7 @@ def main(pyrootdir, argv):
                 # generate the llloflist internally
                 sampleConfig.genNestedHistList(
                     genPlotsClass = gP,
-                    systNames = pltcfg.errorSystNames)
+                    systNames = configData.plots)
                 sampleConfig.setErrorbandConfig({
                     "style":        3354, 
                     "color":        ROOT.kBlack, 
