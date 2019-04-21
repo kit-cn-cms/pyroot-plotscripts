@@ -52,10 +52,10 @@ def main(pyrootdir, argv):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    config          = "pltcfg_ttH18"
-    variable_cfg    = "ttH18_addVariables"
-    plot_cfg        = "ttH18_controlPlots"
-    syst_cfg        = "ttH18_systematics"
+    config          = "pltcfg_ttH17"
+    variable_cfg    = "ttH17_addVariables"
+    plot_cfg        = "ttH17_controlPlots"
+    syst_cfg        = "ttH17_systematics"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -88,8 +88,6 @@ def main(pyrootdir, argv):
     plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttH_2018_newJEC_v5.json"
     plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
-    dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/dNNInterface_Keras_cool.py",
-                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/DNNCheckpointFiles/newJEC_validatedVariables/"}
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
@@ -198,7 +196,6 @@ def main(pyrootdir, argv):
             pP.setJson(plotJson)
             pP.setDataBases(plotDataBases)
             pP.setMEMDataBase(memDataBase)
-            pP.setDNNInterface(dnnInterface)
             pP.setCatNames([''])
             pP.setCatSelections(['1.'])
             pP.setMaxEvts(1000000)
@@ -284,23 +281,6 @@ def main(pyrootdir, argv):
         print("########## DONE WITH PLOTPARALLEL STEP ##########")
         print("at the moment the outputpath is "+str(analysis.renamedPath))
         print("#################################################")
-
-        if analysis.makeDatacards:
-            print '''
-            # ========================================================
-            # Making Datacards.
-            # ========================================================
-            '''
-            with monitor.Timer("makeDatacardsParallel"):
-                makeDatacards.makeDatacardsParallel(
-                    filePath            = analysis.renamedPath,
-                    workdir             = analysis.workdir,
-                    categories          = configData.getBinlabels(),
-                    doHdecay            = True,
-                    discrname           = analysis.discrName,
-                    datacardmaker       = datacardmaker,
-                    skipDatacards       = analysis.skipDatacards)
-
 
         # =============================================================================================
         # Invoke drawParallel step
@@ -413,7 +393,7 @@ def main(pyrootdir, argv):
                 # generate the llloflist internally
                 sampleConfig.genNestedHistList(
                     genPlotsClass = gP,
-                    systNames = pltcfg.errorSystNames)
+                    systNames = configData.plots)
                 sampleConfig.setErrorbandConfig({
                     "style":        3354, 
                     "color":        ROOT.kBlack, 

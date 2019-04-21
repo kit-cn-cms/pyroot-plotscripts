@@ -265,7 +265,7 @@ def add_dnn(data, discrname):
     maxxvals=[]
     discrs =[]
     
-    nodes       = ["ttH", "ttbb",    "tt2b",    "ttb",    "ttcc",    "ttlf"]
+    nodes       = ["ttH", "ttbb", "tt2b", "ttb", "ttcc", "ttlf"]
 
     categorienames_MultiDNN = [
         ("(N_Jets==4&&N_BTagsM>=3&&DNNPredictedClass_4j_ge3t=="+str(i)+")*L1ScaleFactor_j4_tge3_"+str(node)+"node","ljets_j4_tge3_"+str(node)+"node","")
@@ -287,13 +287,13 @@ def add_dnn(data, discrname):
                          15, 15, 15, 15, 15, 15,
                          15, 15, 15, 15, 15, 15]
 
-    minxvals_MultiDNN=[0.2, 0.2, 0.2, 0.2, 0.2, 0.2,
-                       0.2, 0.2, 0.2, 0.2, 0.2, 0.2,
-                       0.2, 0.2, 0.2, 0.2, 0.2, 0.2]
+    minxvals_MultiDNN=[0.16, 0.16, 0.16, 0.16, 0.16, 0.16,
+                       0.16, 0.16, 0.16, 0.16, 0.16, 0.16,
+                       0.16, 0.16, 0.16, 0.16, 0.16, 0.16]
 
-    maxxvals_MultiDNN=[0.8, 0.8,  0.6, 0.4, 0.4, 0.6,
-                       0.8, 0.8,  0.6, 0.4, 0.4, 0.6,
-                       0.8, 0.8,  0.6, 0.4, 0.4, 0.6]
+    maxxvals_MultiDNN=[0.8, 0.8,  0.5, 0.4, 0.35, 0.45,
+                       0.8, 0.8,  0.5, 0.4, 0.35, 0.45,
+                       0.8, 0.8,  0.5, 0.4, 0.35, 0.45]
 
     discrs+=discrs_MultiDNN
     nhistobins+=nhistobins_MultiDNN

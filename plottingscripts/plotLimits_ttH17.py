@@ -52,10 +52,10 @@ def main(pyrootdir, argv):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    config          = "pltcfg_ttH18"
-    variable_cfg    = "ttH18_addVariables"
+    config          = "pltcfg_ttH17"
+    variable_cfg    = "ttH17_addVariables"
     plot_cfg        = "ttH17_discrPlots"
-    syst_cfg        = "ttH18_systematics"
+    syst_cfg        = "ttH17_systematics"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
