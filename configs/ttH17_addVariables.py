@@ -60,7 +60,6 @@ def getAddVars():
         "L1ScaleFactor_jge6_tge3_ttlfnode:=((DoWeights==1)*(isTthSample==1)*0.971+(DoWeights==1)*(isTthSample==0)*0.969+(DoWeights==0)*1.0)",
         ]
 
-    addVars += list(set(getDNNInputVars()))
     return addVars
 
 
