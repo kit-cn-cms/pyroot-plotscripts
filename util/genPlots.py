@@ -1293,19 +1293,8 @@ def createErrorbands(nestedHistList, samples, doRateSysts = True):
         print "using ratesysts"
     errorBand = []
 
-    print("nestedHistList:")
-    print(nestedHistList)
-    print("\n"*2)
-    
-
     for ll in nestedHistList: #for all plots
-        print("ll ->")
-        print(ll)
-        print("\n"*2)
         llT = transposeLOL(ll)
-        print("llT ->")
-        print(llT)
-        print("\n"*2)
         nominal = llT[0][0].Clone()
         print("Creating error band for "+str(nominal.GetName()))
         for hist in llT[0][1:]:
@@ -1316,8 +1305,8 @@ def createErrorbands(nestedHistList, samples, doRateSysts = True):
             for hist in l[1:]:
                 syst.Add(hist)
                 if hist.Integral() <= 0.:
-                    print("adding to errorband (h, int, nominal.int)")
-                    print hist, hist.Integral(), nominal.Integral()
+                    print("DANGERZONE!!! NEGATIVE INTEGRAL")
+                    print hist, hist.Integral()
             systs.append(syst)
         assert len(samples) == len(llT[0])
         for isample, sample in enumerate(samples): # for all normalization unc
@@ -1355,12 +1344,8 @@ def createErrorbands(nestedHistList, samples, doRateSysts = True):
             ups = systs[0::2]
             downs = systs[1::2]
             for up, down in zip(ups, downs):
-                if ibin%20==0:
-                    print "up/down name ", up.GetName(), down.GetName()
-                    print "up/down diff ",  up.GetBinContent(ibin+1)-n, down.GetBinContent(ibin+1)-n
                 u_ = up.GetBinContent(ibin+1)-n
                 d_ = down.GetBinContent(ibin+1)-n
-                if ibin%20==0: print u_,d_
                 # TODO that shit sucks
                 if u_ >= 0 and u_ >= d_:
                     u = u_
@@ -1383,9 +1368,6 @@ def createErrorbands(nestedHistList, samples, doRateSysts = True):
 
                 uperrors[ibin] = ROOT.TMath.Sqrt( uperrors[ibin]*uperrors[ibin] + u*u )
                 downerrors[ibin] = ROOT.TMath.Sqrt( downerrors[ibin]*downerrors[ibin] + d*d)
-                if ibin%20==0:
-                    print u, d
-                    print "up/down errors ", uperrors[ibin],downerrors[ibin]
 
         graph = ROOT.TGraphAsymmErrors(nominal)
         for i in range(len(uperrors)):
