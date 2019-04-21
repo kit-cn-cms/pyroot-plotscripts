@@ -107,6 +107,11 @@ print "samples"
 samples=[
 
     # signal samples     
+    plotClasses.Sample('t#bar{t}H',ROOT.kBlue+1,
+            path_mwassmer+'/ttH*/*nominal*.root',
+            '1.0*'+mcWeight+evenSel+sel_MET,
+            'ttH',
+            samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}H, H to b#bar{b}',ROOT.kBlue+1,
             path_mwassmer+'/ttHTobb*/*nominal*.root',
@@ -229,3 +234,5 @@ processes=[]
 for sample in samples:
     processes.append(sample.nick)
 list_of_processes=processes
+datacard_processes = [p for p in processes if not p=="ttH"]
+

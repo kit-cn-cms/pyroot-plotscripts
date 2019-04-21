@@ -147,32 +147,6 @@ def add_plots():
     return plots + plotsAdditional
 
 
-def add_ak8():
-
-    plotlabel="1 lepton, #geq 4 jets, #geq 2 b-tags"
-    plotselection="(N_Jets>=4&&N_BTagsM>=2)"
-    plotlabelboosted="#splitline{1 lepton, #geq 4 jets, #geq 2 b-tags}{#geq 1 Ak8 jet p_{T} > 200 GeV}"
-    plotselectionboosted="(N_Jets>=4&&N_BTagsM>=2&&N_AK8Jets>=1)*(AK8Jet_Pt>200)"
-    plotsAK8jets=[
-        plotClasses.Plot(ROOT.TH1D("ptallak8jets","p_{T} of all ak8 jets",50,0,1000),"AK8Jet_Pt",plotselectionboosted,plotlabel),
-        plotClasses.Plot(ROOT.TH1D("doublecsvallak8jets","double btag of all ak8 jets",44,-.1,1),"AK8Jet_DoubleCSV",plotselectionboosted,plotlabel),
-        plotClasses.Plot(ROOT.TH1D("etaallak8jets","#eta of all ak8 jets",60,-2.5,2.5),"AK8Jet_Eta",plotselectionboosted,plotlabel),
-        #plotClasses.Plot(ROOT.TH1D("AK8Jet_EnergyCorrelation_b1N2","AK8Jet_EnergyCorrelation_b1N2",50,0,1),"AK8Jet_EnergyCorrelation_b1N2",plotselectionboosted,plotlabel),
-        #plotClasses.Plot(ROOT.TH1D("AK8Jet_EnergyCorrelation_b1N3","AK8Jet_EnergyCorrelation_b1N3",50,0,1),"AK8Jet_EnergyCorrelation_b1N3",plotselectionboosted,plotlabel),
-        #plotClasses.Plot(ROOT.TH1D("AK8Jet_EnergyCorrelation_b2N2","AK8Jet_EnergyCorrelation_b2N2",50,0,1),"AK8Jet_EnergyCorrelation_b2N2",plotselectionboosted,plotlabel),
-        #plotClasses.Plot(ROOT.TH1D("AK8Jet_EnergyCorrelation_b2N3","AK8Jet_EnergyCorrelation_b2N3",50,0,1),"AK8Jet_EnergyCorrelation_b2N3",plotselectionboosted,plotlabel),
-
-        plotClasses.Plot(ROOT.TH1D("AK8Jet_Puppi_Softdrop_Mass","AK8Jet_Puppi_Softdrop_Mass",35,50,400),"AK8Jet_Puppi_Softdrop_Mass",plotselectionboosted,plotlabel),
-        plotClasses.Plot(ROOT.TH1D("AK8Jet_tau21","AK8 jet tau 21",50,0,1),"AK8Jet_Tau2/AK8Jet_Tau1",plotselectionboosted,plotlabel),
-        plotClasses.Plot(ROOT.TH1D("AK8Jet_tau32","AK8 jet tau 32",50,0,1),"AK8Jet_Tau3/AK8Jet_Tau2",plotselectionboosted,plotlabel),
-        plotClasses.Plot(ROOT.TH1D("AK8Subjet1_DeepCSV","AK8Subjet1_DeepCSV",50,0,1),"AK8Subjet1_DeepCSV",plotselectionboosted,plotlabel),
-        plotClasses.Plot(ROOT.TH1D("AK8Subjet2_DeepCSV","AK8Subjet2_DeepCSV",50,0,1),"AK8Subjet2_DeepCSV",plotselectionboosted,plotlabel),
-        plotClasses.Plot(ROOT.TH1D("AK8Subjet1_Pt","AK8Subjet1_Pt",50,30,300),"AK8Subjet1_Pt",plotselectionboosted,plotlabel),
-        plotClasses.Plot(ROOT.TH1D("AK8Subjet2_Pt","AK8Subjet2_Pt",50,30,300),"AK8Subjet2_Pt",plotselectionboosted,plotlabel),
-    ]
-
-    return plotsAK8jets
-
 def add_sl4j2t():
     plotlabel="1 lepton, 4 jets, 2 b-tags"
     plotselection="((N_Jets==4&&N_BTagsM==2))"
@@ -516,9 +490,9 @@ def getDiscriminatorPlots(data = None, discrname = None):
     discriminatorPlots += add_sl5j3t()
     discriminatorPlots += add_sl4j4t()
     discriminatorPlots += add_sl4j3t()
-    discriminatorPlots += add_sl4j3tDNN()
-    discriminatorPlots += add_sl5j3tDNN()
-    discriminatorPlots += add_sl6j3tDNN()
+    #discriminatorPlots += add_sl4j3tDNN()
+    #discriminatorPlots += add_sl5j3tDNN()
+    #discriminatorPlots += add_sl6j3tDNN()
 
 
     return discriminatorPlots

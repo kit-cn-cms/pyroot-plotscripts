@@ -277,6 +277,10 @@ class scriptWriter:
         if len(self.pp.configData.addVars) > 0:
             variableManager.add( self.pp.configData.addVars )
 
+        # get DNN variables
+        for interface in self.pp.addInterfaces:
+            variableManager.add( interface.getVariables() )
+
         # get systematic weight variables
         variableManager.add( self.systWeights )
 
