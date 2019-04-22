@@ -144,23 +144,6 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     configData.getAddVariables() # also adds DNN variables
-    #configData.getMEPDFAddVariables(MEPDFCSVFile)
-
-    # save addition variables information to workdir and print
-    configData.printAddVariables()
-    monitor.printClass(configData, "after getting additional Variables")
-
-    #print '''
-    # ========================================================
-    # Check if additional (input) variables should be plotted
-    # if necessary add them here to the discriminatorPlots
-    # ========================================================
-    #'''
-    # Construct list with additional plot variables, 
-    # will need name of discrs and plotPreselections for this
-    #print( "add additional plot variables")
-    #configData.getAdditionalDiscriminatorPlots() # TODO
-    
 
     print '''    
     # ========================================================
