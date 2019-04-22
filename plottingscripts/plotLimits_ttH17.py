@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttHAnalysis_2017_newInterface'
+    name = 'ttHAnalysis_2017'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -411,7 +411,7 @@ def main(pyrootdir, argv):
                         "logscale":         False,
                         "canvasOptions":    "histo",
                         "ratio":            True, # not default
-                        "blinded":          analysis.plotBlinded} #not default
+                        "blinded":          False} #not default
                     # making the control plots
                     gP.makeControlPlots(
                         sampleConfig = sampleConfig,
@@ -438,7 +438,7 @@ def main(pyrootdir, argv):
                         "logscale":         False,
                         "canvasOptions":    "histo",
                         "ratio":            True, # not default
-                        "blinded":          analysis.plotBlinded} #not default
+                        "blinded":          False} #not default
                     # making the control plots
                     gP.makeControlPlots(
                         sampleConfig = sampleConfig,

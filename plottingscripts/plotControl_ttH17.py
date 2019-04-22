@@ -179,8 +179,6 @@ def main(pyrootdir, argv):
             pP.setJson(plotJson)
             pP.setDataBases(plotDataBases)
             pP.setMEMDataBase(memDataBase)
-            pP.setCatNames([''])
-            pP.setCatSelections(['1.'])
             pP.setMaxEvts(1000000)
             pP.setRateFactorsFile(rateFactorsFile)
             pP.setSampleForVariableSetup(configData.samples[9])
