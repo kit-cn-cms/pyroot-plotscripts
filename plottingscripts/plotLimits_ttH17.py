@@ -73,7 +73,7 @@ def main(pyrootdir, argv):
         "addData":              True,  # adding data 
         "drawParallel":         True,
         # options for drawParallel/singleExecute sub programs
-        "makeSimplePlots":      False,
+        "makeSimplePlots":      True,
         "makeMCControlPlots":   True,
         "makeEventYields":      True,
         # the skipX options try to skip the submission of files to the batch system
@@ -145,24 +145,7 @@ def main(pyrootdir, argv):
     # define additional variables necessary for selection in plotparallel
     # ========================================================
     '''
-    configData.getAddVariables() # also adds DNN variables
-    #configData.getMEPDFAddVariables(MEPDFCSVFile)
-
-    # save addition variables information to workdir and print
-    configData.printAddVariables()
-    monitor.printClass(configData, "after getting additional Variables")
-
-    #print '''
-    # ========================================================
-    # Check if additional (input) variables should be plotted
-    # if necessary add them here to the discriminatorPlots
-    # ========================================================
-    #'''
-    # Construct list with additional plot variables, 
-    # will need name of discrs and plotPreselections for this
-    #print( "add additional plot variables")
-    #configData.getAdditionalDiscriminatorPlots() # TODO
-    
+    configData.getAddVariables()
 
     print '''    
     # ========================================================
