@@ -52,10 +52,10 @@ def main(pyrootdir, argv):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    config          = "pltcfg_ttH18"
-    variable_cfg    = "ttH18_addVariables"
-    plot_cfg        = "ttH18_controlPlots"
-    syst_cfg        = "ttH18_systematics"
+    config          = "pltcfg_ttH17"
+    variable_cfg    = "ttH17_addVariables"
+    plot_cfg        = "ttH17_controlPlots"
+    syst_cfg        = "ttH17_systematics"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -73,7 +73,7 @@ def main(pyrootdir, argv):
         "addData":              True,  # adding data 
         "drawParallel":         True,
         # options for drawParallel/singleExecute sub programs
-        "makeSimplePlots":      False,
+        "makeSimplePlots":      True,
         "makeMCControlPlots":   True,
         "makeEventYields":      False,
         # the skipX options try to skip the submission of files to the batch system
@@ -144,23 +144,6 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     configData.getAddVariables() # also adds DNN variables
-    #configData.getMEPDFAddVariables(MEPDFCSVFile)
-
-    # save addition variables information to workdir and print
-    configData.printAddVariables()
-    monitor.printClass(configData, "after getting additional Variables")
-
-    #print '''
-    # ========================================================
-    # Check if additional (input) variables should be plotted
-    # if necessary add them here to the discriminatorPlots
-    # ========================================================
-    #'''
-    # Construct list with additional plot variables, 
-    # will need name of discrs and plotPreselections for this
-    #print( "add additional plot variables")
-    #configData.getAdditionalDiscriminatorPlots() # TODO
-    
 
     print '''    
     # ========================================================
@@ -196,8 +179,6 @@ def main(pyrootdir, argv):
             pP.setJson(plotJson)
             pP.setDataBases(plotDataBases)
             pP.setMEMDataBase(memDataBase)
-            pP.setCatNames([''])
-            pP.setCatSelections(['1.'])
             pP.setMaxEvts(1000000)
             pP.setRateFactorsFile(rateFactorsFile)
             pP.setSampleForVariableSetup(configData.samples[9])
