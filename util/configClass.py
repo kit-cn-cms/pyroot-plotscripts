@@ -69,7 +69,7 @@ class configData:
         processes=self.pltcfg.list_of_processes
         workdir=self.analysis.workdir
         outputpath=workdir+"/datacard.csv"
-        self.systematics=Systematics.Systematics(self.cfgdir+"/"+systconfig+".csv")
+        self.systematics=Systematics.Systematics(self.cfgdir+"/"+systconfig+".csv", self.pltcfg.weightReplacements)
         self.systematics.getSystematicsForProcesses(processes)
         datacard_processes = self.pltcfg.datacard_processes
         self.systematics.makeCSV(datacard_processes,outputpath)

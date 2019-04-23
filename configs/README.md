@@ -19,9 +19,15 @@ plotClasses.Sample('t#bar{t}H, H to b#bar{b}',ROOT.kBlue+1,
     'ttH_hbb',
     samDict=sampleDict, readTrees=doReadTrees)
 ```
+- add weight expressions to the `weightReplacements` dictionary to replace some `STRING` in the up/down variatons defined in the systematics config, for example
+```python
+weightReplacements = {
+    "JETTAGSELECTION":   "(N_Jets>=4&&N_BTags>=3)",
+    }
+```
 
 ## Systematic config
-create/adjust a systematics csv file `STR_systematics.csv`, **care to use semicolon as seperator!**
+create/adjust a systematics csv file `STR_systematics.csv`
 
 add entries regarding the columns:
 - **Uncertainty** name of the uncertainty as it is used later for the datacards, uncertainties starting with `#` are skipped
@@ -30,8 +36,8 @@ add entries regarding the columns:
 	- type `lnN` use `rate`
 	- type `shape` with calculated weights use `weight`
 	- type `shape` with samples use `variation`
-- **Up** if construction is `weight`, add the weight expression for the up shape, if the construction is `variation` add the `SAMPLENAME` that gets replaced with the nominal path or absolute `PATH/TO/SAMPLE` for the up shape
-- **Down** if construction is `weight`, add the weight expression for the down shape, if the construction is `variation` add the `SAMPLENAME` that gets replaced with the nominal path or absolute `PATH/TO/SAMPLE` for the down shape
+- **Up** if construction is `weight`, add the weight expression for the up shape, if the construction is `variation` add the `SAMPLENAME` that gets replaced with the nominal path or absolute `PATH/TO/SAMPLE` for the up shape. You can use STRING placeholders which can be replaced when added to a dictionary in `pltcfg_STR.py`.
+- **Down** if construction is `weight`, add the weight expression for the down shape, if the construction is `variation` add the `SAMPLENAME` that gets replaced with the nominal path or absolute `PATH/TO/SAMPLE` for the down shape. You can use STRING placeholders which can be replaced when added to a dictionary in `pltcfg_STR.py`.
 - **Plot** use `1` when uncertainty shall be plotted (only for plotting step!)
 - **PROCESSES** all processes used in `samples` in `pltcfg_STR.py` need to be defined in the csv file `STR_systematics.csv` (processes in `STR_systematics.csv` that are not defined in `samples` in `pltcfg_STR.py` are skipped) for example `ttH_hbb;ttH_hcc;ttH_hww;ttH_hzz;ttH_htt;ttH_hgg;ttH_hgluglu;ttH_hzg;ttbarOther;ttbarPlusB;ttbarPlus2B;ttbarPlusBBbar;ttbarPlusCCbar`
 	- to activate `rate` uncertainties add values for specific processes to be used for the datacards later
