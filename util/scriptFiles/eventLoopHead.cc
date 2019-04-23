@@ -8,6 +8,7 @@
     if(iEntry%10000==0) cout << "analyzing event " << iEntry << endl;
     
     timerGetEntry->Start();
+    //PLACEHOLDERFORVARIABLERESET
     chain->GetEntry(iEntry);
 //    if(evtIDisIntBranch==1){
 //      Evt_ID=Evt_ID_INT;

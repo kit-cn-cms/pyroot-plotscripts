@@ -64,7 +64,7 @@ def main(pyrootdir, argv):
     # script options
     analysisOptions = {
         # general options
-        "plotBlinded":          True,  # True for real data
+        "plotBlinded":          False,  # True for real data
         "testrun":              False,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
@@ -83,7 +83,7 @@ def main(pyrootdir, argv):
         "skipHaddParallel":     False,
         "skipHaddFromWildcard": False,
         "skipRenaming":         False,
-        "skipDatacards":        False}
+        "skipDatacards":        True}
 
     plotJson = ""
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 

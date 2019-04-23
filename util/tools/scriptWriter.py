@@ -140,6 +140,7 @@ class scriptWriter:
 
         if castStub!="":
             startLoopStub = startLoopStub.replace("//PLACEHOLDERFORCASTLINES", castStub)
+        startLoopStub = startLoopStub.replace("//PLACEHOLDERFORVARIABLERESET",self.varManager.resetVariableInitialization())
         script += startLoopStub
         script += self.initLoop()
 

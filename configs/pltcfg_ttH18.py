@@ -67,7 +67,7 @@ mcTriggerWeight='((1.0) * (1*(N_LooseMuons==0 && N_TightElectrons==1)* (1) +1*(N
 
 #TODO Check that SFs and uncertainties are correct
 #sfs="1.0"
-sfs="((ElectronIdentificationSF>0. && ElectronReconstructionSF>0.)*ElectronIdentificationSF*ElectronReconstructionSF + (MuonIdentificationSF>0. && MuonIsolationSF>0.)*MuonIdentificationSF*MuonIsolationSF)"
+sfs="(((N_TightElectrons==1) && (Electron_IdentificationSF[0]>0.) && (Electron_ReconstructionSF[0]>0.))*Electron_IdentificationSF[0]*Electron_ReconstructionSF[0] + ((N_TightMuons==1) && (Muon_IdentificationSF[0]>0.) && (Muon_IsolationSF[0]>0.))*Muon_IdentificationSF[0]*Muon_IsolationSF[0])"
 #sfs="internalEleIDWeight*internalMuIDWeight*internalMuIsoWeight*internalEleGFSWeight*internalMuHIPWeight"
 #sfs="1.0"
 
