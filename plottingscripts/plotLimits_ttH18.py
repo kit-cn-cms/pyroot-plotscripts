@@ -180,7 +180,7 @@ def main(pyrootdir, argv):
             pP.setJson(plotJson)
             #pP.setDataBases(plotDataBases)
             #pP.setMEMDataBase(memDataBase)
-            pP.setDNNInterface(dnnInterface)
+            #pP.setDNNInterface(dnnInterface)
             pP.setMaxEvts(1000000)
             pP.setRateFactorsFile(rateFactorsFile)
             pP.setSampleForVariableSetup(configData.samples[9])
