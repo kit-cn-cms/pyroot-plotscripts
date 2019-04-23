@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'interfaceTest_data_allSysts'
+    name = 'merged_ttH17_cfgtest'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -54,7 +54,7 @@ def main(pyrootdir, argv):
     # configs
     config          = "pltcfg_ttH17"
     variable_cfg    = "ttH17_addVariables"
-    plot_cfg        = "ttH17_discrPlots"
+    plot_cfg        = None
     syst_cfg        = "ttH17_systematics"
 
     # file for rate factors
@@ -73,7 +73,7 @@ def main(pyrootdir, argv):
         "addData":              True,  # adding real data 
         "drawParallel":         True,
         # options for drawParallel/singleExecute sub programs
-        "makeSimplePlots":      True,
+        "makeSimplePlots":      False,
         "makeMCControlPlots":   True,
         "makeEventYields":      True,
         # the skipX options try to skip the submission of files to the batch system
@@ -89,7 +89,7 @@ def main(pyrootdir, argv):
     plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/mergedTest/"}
+                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/merged_ttH17/"}
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
@@ -136,10 +136,9 @@ def main(pyrootdir, argv):
     configData.initData()
 
     # get the discriminator plots
-    configData.genDiscriminatorPlots(memexp)
+    configData.genDiscriminatorPlots(memexp, dnnInterface)
     configData.writeConfigDataToWorkdir()
     monitor.printClass(configData, "init")
-
     print '''    
     # ========================================================
     # define additional variables necessary for selection in plotparallel

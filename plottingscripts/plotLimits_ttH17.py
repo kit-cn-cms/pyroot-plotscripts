@@ -136,7 +136,7 @@ def main(pyrootdir, argv):
     configData.initData()
 
     # get the discriminator plots
-    configData.genDiscriminatorPlots(memexp)
+    configData.genDiscriminatorPlots(memexp, dnnInterface)
     configData.writeConfigDataToWorkdir()
     monitor.printClass(configData, "init")
 
