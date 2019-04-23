@@ -75,9 +75,9 @@ weightReplacements = {
 # names of the systematics (proper names needed e.g. for combination)
 # Lumi weight
 mcWeight = "59.7"
-evenSet  = "*1."
+evenSel  = "*1."
 
-nominalweight="NomWeight:="+usualWeights+"*"+mcTriggerWeight+"*Weight_CSV*1.0"+"*"+doWeightsFlag
+nominalweight="NomWeight:="+usualWeight+"*"+mcTriggerWeight+"*Weight_CSV*1.0"+"*"+doWeightsFlag
 
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
