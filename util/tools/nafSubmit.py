@@ -48,8 +48,8 @@ def writeSubmitCode(script, logdir, hold = False, isArray = False, nScripts = 0,
     submitCode+= "initialdir = "+os.getcwd()+"\n"
     submitCode+= "notification = Never\n"
     #submitCode+= "priority = 0\n"
-    submitCode+= "RequestMemory = 2000\n"
-    submitCode+= "RequestDisk = 500000\n"
+    #submitCode+= "RequestMemory = 2000\n"
+    #submitCode+= "RequestDisk = 500000\n"
     submitCode+= "run_as_owner = True\n"
     #submitCode+= "job_lease_duration = 60\n"
     for opt in defaults:
