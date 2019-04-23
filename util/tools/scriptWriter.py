@@ -10,7 +10,6 @@ import pandas
 
 # local imports 
 import GenWeightUtils
-import variablebox
 import plotClasses
 import scriptfunctions 
 import variableCancer
