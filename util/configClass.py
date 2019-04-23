@@ -96,7 +96,28 @@ class configData:
         print("path: "+str(self.analysis.workdir+"/configData.csv"))
         return
 
-    def genDiscriminatorPlots(self, memexp):
+    def genDiscriminatorPlots(self, memexp, dnnInterface = None):
+        if not self.plot_config:
+            print("no plot config specified - generating plots from DNN checkpoints")
+            if not dnnInterface: sys.exit("cannot load plots because no dnnInterface specified and no plotconfig")
+            # loading dnn interface
+            path = dnnInterface["interfacePath"]
+            sys.path.append(os.path.dirname(path))
+            dnnModule = importlib.import_module( path.split("/")[-1].replace(".py","") )
+            interface = dnnModule.theInterface(dnnSet = dnnInterface["checkpointFiles"])
+
+            # generate new plot file
+            cfg_string = interface.generatePlotConfig()
+
+            # generate output file
+            out_file = self.analysis.workdir + "/plotconfig_local.py"
+            with open(out_file,"w") as f:
+                f.write(cfg_string)
+            print("wrote plot config to {}".format(out_file))
+
+            self.plot_config = "plotconfig_local"
+            sys.path.append(self.analysis.workdir)
+        
         sys.path.append(self.cfgdir)
         fileName = self.plot_config
         configdatafile = importlib.import_module( fileName )
@@ -104,7 +125,6 @@ class configData:
 
         self.discriminatorPlots = configdatafile.getDiscriminatorPlots(self.Data, self.analysis.discrName)
         self.evtYieldCategories = configdatafile.evtYieldCategories()
-
 
     def getDiscriminatorPlotByNumber(self):
         # select the discr plots for a certain plot number
