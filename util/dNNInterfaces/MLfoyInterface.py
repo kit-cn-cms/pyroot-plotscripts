@@ -5,6 +5,7 @@ import os
 import sys
 from distutils.dir_util import copy_tree
 import glob
+import pandas as pd
 
 includeString = "-I/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/tensorflow-cc/1.3.0-elfike/tensorflow_cc/include -I/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/eigen/c7dc0a897676/include/eigen3 -I/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/protobuf/3.4.0-fmblme/include"
 libraryString = "-L/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/tensorflow-cc/1.3.0-elfike/tensorflow_cc/lib -ltensorflow_cc -L/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/protobuf/3.4.0-fmblme/lib -lprotobuf -lrt"
@@ -18,13 +19,14 @@ class DNN:
             self.config = json.loads(f.read())
 
         self.category = self.config["JetTagCategory"]
+        self.label = self.config["categoryLabel"]
         self.selection = self.config["Selection"]
         self.inputLayer = self.config["inputName"]
         self.outputLayer = self.config["outputName"]
-        print("category: {}".format(self.category))
-        print("selection: {}".format(self.selection))
-        print("inputName: {}".format(self.inputLayer))
-        print("outputName: {}".format(self.outputLayer))
+        print("    category: {}".format(self.category))
+        print("    selection: {}".format(self.selection))
+        print("    inputName: {}".format(self.inputLayer))
+        print("    outputName: {}".format(self.outputLayer))
         
         # collecting variables
         self.variables = []
@@ -150,11 +152,13 @@ class DNN:
         if testPrint:
             # add test print lines        
             string += """
-            if(iEntry < 100) {{
+            if(iEntry < 100) {
                 std::cout << "=========== DNN output ============" << std::endl;
                 std::cout << "JT = "<<N_Jets<<" "<<N_BTagsM<< std::endl;
-                std::cout << "Event: "<<Evt_Run<<" "<<Evt_Lumi<<" "<<Evt_ID<< std::endl;
-                std::cout << "MEM: "<<memDBp<< std::endl;
+                std::cout << "Event: "<<Evt_Run<<" "<<Evt_Lumi<<" "<<Evt_ID<< std::endl;"""
+            if "memDBp" in self.variables:
+                string+="                std::cout << \"MEM: \"<<memDBp<< std::endl;\n"
+            string += """
                 for( int ifeat=0; ifeat<num_features_{cat}; ifeat++) {{
                     std::cout << tensor_{cat}.tensor<float,2>()(0,ifeat)<<std::endl;
                     }}
@@ -185,6 +189,74 @@ class DNN:
             if op.name.find("dropout/keep_prob") != -1:
                 string += "            feed_dict.push_back( std::make_pair(\"{name}\", dropout_disable));\n".format(name = op.name)
         return string
+
+
+    def generateInputPlots(self):
+        # loading plot config csv
+        csv_path = self.path+"/plot_config.csv"
+        if not os.path.exists(csv_path):
+            print("no plot config for DNN {}\n\tnot adding any input plots.".format(self.path))
+            return ""
+        
+        # read variable set
+        variables = pd.read_csv(csv_path, sep = ",").set_index("variablename", drop = True)
+
+        # generate header
+        string = "    label = \"{}\"\n".format(self.label)
+        string+= "    selection = \"{}\"\n\n".format(self.selection.replace(" ","").replace("and","&&"))
+        string+= "    plots = ["
+
+        for var in list(variables.index):
+            # generate dictionary
+            plotConfig = {
+                "histname":     "\""+self.category+"_"+var+"\"", 
+                "plotname":     "\""+variables.loc[var, "displayname"]+"\"",
+                "nbins":        variables.loc[var, "numberofbins"],
+                "minval":       variables.loc[var, "minvalue"],
+                "maxval":       variables.loc[var, "maxvalue"],
+                "expression":   "\""+var+"\""}
+            
+            # var[1]->var_1 renaming
+            plotConfig["histname"] = plotConfig["histname"].replace("[","_").replace("]","")
+
+            # special case: MEM
+            if var == "memDBp": plotConfig["expression"] = "memexp"
+
+            # generate the plot string
+            string += """
+        plotClasses.Plot(ROOT.TH1D({histname},{plotname},{nbins},{minval},{maxval}),{expression},selection,label),""".format(**plotConfig)
+
+        string += "\n        ]\n\n"
+        return string
+        
+
+    def generateOutputPlots(self):
+        # generate categoires list
+        string = "    categories += ["
+        for i, node in enumerate(self.out_nodes):
+            string += """
+        ("({sel}&&{pred_var}=={i})","{cat}_{node}_node",""),""".format(
+            sel=self.selection.replace(" ","").replace("and","&&"), 
+            pred_var=self.predictionVariable, 
+            i=i, cat=self.category, node=node)
+        string += "        ]\n"
+
+        # generate discriminators list
+        string += "    discrs += [\n"
+        for discr in self.discrNames:
+            string += "        \"{}\",\n".format(discr)
+        string += "        ]\n"
+
+        # fill binranges
+        string += "    nhistobins += {}\n".format([15 for _ in range(len(self.out_nodes))])
+        string += "    minxvals += {}\n".format([0. for _ in range(len(self.out_nodes))])
+        string += "    maxxvals += {}\n".format([1. for _ in range(len(self.out_nodes))])
+        string += "\n\n"
+
+        return string
+
+
+
 
 class theInterface:
     def __init__(self, workdir = None, dnnSet = None):
@@ -217,7 +289,7 @@ class theInterface:
                     errors = True
                     print("file {}/{} missing.".format(dnnDir,req))
             if not errors:
-                print("\tAdding DNN {}".format(dnnDir))
+                print("\nAdding DNN {}".format(dnnDir))
                 self.DNNs.append(DNN(dnnDir))
         if len(self.DNNs) == 0:
             sys.exit("no suitable DNN checkpoints found")
@@ -298,4 +370,122 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses) {
 
     def getCleanUpLines(self):
         return ""
+
+    def generatePlotConfig(self):
+        '''
+        generate plot config from variables and plots in checkpoint files
+        '''
+
+        # header
+        string = """
+import sys
+import os
+filedir = os.path.dirname(os.path.realpath(__file__))
+pyrootdir = os.path.dirname(filedir)
+basedir = os.path.dirname(pyrootdir)
+sys.path.append(pyrootdir)
+sys.path.append(basedir)
+
+import util.tools.plotClasses as plotClasses
+import ROOT\n\n\n"""
+
+        # get event yield categories
+        string += """
+def evtYieldCategories():
+    return [
+    ("(N_Jets>=6&&N_BTagsM==2)","6j2t",""),
+    ("(N_Jets==4&&N_BTagsM==3)","4j3t",""),
+    ("(N_Jets==5&&N_BTagsM==3)","5j3t",""),
+    ("(N_Jets>=6&&N_BTagsM==3)","6j3t",""),
+    ("(N_Jets==4&&N_BTagsM>=4)","4j4t",""),
+    ("(N_Jets==5&&N_BTagsM>=4)","5j4t",""),
+    ("(N_Jets>=6&&N_BTagsM>=4)","6j4t","")
+    ]
+
+memexp = ""\n\n\n"""
+
+        # header for discr plots function
+        funcstring = "def getDiscriminatorPlots(data = None, discrname = None):\n"
+        funcstring +="    discriminatorPlots = []\n"
+
+        # loop over dnns writing code for plots
+        for dnn in self.DNNs:
+            string += "def plots_{}():\n".format(dnn.category)
+            string += dnn.generateInputPlots()
+            string += "    return plots\n\n"
+
+            funcstring += "    discriminatorPlots += plots_{}()\n".format(dnn.category)
+
+
+        # writing code for dnn output plots
+        string += """
+def plots_dnn(data, discrname):
+    categories = []
+    nhistobins = []
+    minxvals = []
+    maxxvals = []
+    discrs = []\n"""
+
+        # loop over dnns witing code for DNN discr plots
+        for dnn in self.DNNs:
+            string += dnn.generateOutputPlots()
+
+        # generating plot classes for DNN plots and adding info to data class
+        string += """
+    plotPreselections = [c[0] for c in categories]
+    binlabels =         [c[1] for c in categories]
+
+    DNNPlots = []
+    for discr, sel, label, nbins, minx, maxx in zip(discrs,plotPreselections,binlabels,nhistobins,minxvals,maxxvals):
+        DNNPlots.append(
+            plotClasses.Plot(
+                ROOT.TH1F(discrname+"_"+label,"final discriminator ("+label+")",nbins,minx,maxx),
+                discr,sel,label))
+
+    data.categories += categories
+    data.discrs     += discrs
+    data.nhistobins += nhistobins
+    data.minxvals   += minxvals
+    data.maxxvals   += maxxvals
+    
+    data.plotPreselections  += plotPreselections
+    data.binlabels          += binlabels
+
+    return DNNPlots\n\n\n"""
+
+        string += funcstring
+        string += "    discriminatorPlots += plots_dnn(data, discrname)\n\n"
+        string += "    return discriminatorPlots"
+
+        return string
+
+
+
+
+
+if __name__ == "__main__":
+    import optparse
+    parser = optparse.OptionParser()
+    parser.add_option("-c","--checkpoints",dest="checkpoints",default=None,metavar="CHECKPOINTS",
+        help = "path to DNN checkpoints")
+    parser.add_option("-o","--output",dest="output",default="autogenerated_plotconfig.py",metavar="OUTPUT",
+        help = "output file")
+
+    (opts, args) = parser.parse_args()
+
+    if not opts.checkpoints:
+        sys.exit("need to specify path to checkpoints")
+
+
+    interface = theInterface(dnnSet = opts.checkpoints)
+    cfg_string = interface.generatePlotConfig()
+    with open(opts.output, "w") as f:
+        f.write(cfg_string)
+    print("write new plot config to {}".format(opts.output))    
+
+
+
+
+
+
 
