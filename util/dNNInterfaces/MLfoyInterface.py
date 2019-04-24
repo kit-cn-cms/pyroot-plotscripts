@@ -196,7 +196,7 @@ class DNN:
         csv_path = self.path+"/plot_config.csv"
         if not os.path.exists(csv_path):
             print("no plot config for DNN {}\n\tnot adding any input plots.".format(self.path))
-            return ""
+            return "    plots = []"
         
         # read variable set
         variables = pd.read_csv(csv_path, sep = ",").set_index("variablename", drop = True)

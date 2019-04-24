@@ -36,7 +36,7 @@ ttHpath = path_mwassmer+'/ttHTo*/*nominal*.root'
 sel_singleel="(N_LooseMuons==0 && N_TightElectrons==1 && (Triggered_HLT_Ele32_WPTight_Gsf_vX==1))*(N_Jets>=4 && N_BTagsM>=3)"
 sel_singlemu="(N_LooseElectrons==0 && N_TightMuons==1 && (Triggered_HLT_IsoMu24_vX==1))*(N_Jets>=4 && N_BTagsM>=3)"
 sel_MET="*(Evt_Pt_MET>20.)"
-#sel_MET="*1.0"
+
 #sel_StrangeMuWeights='*(abs(Weight_scale_variation_muR_0p5_muF_0p5)<=100 && abs(Weight_scale_variation_muR_0p5_muF_1p0)<=100 && abs(Weight_scale_variation_muR_0p5_muF_2p0)<=100 && abs(Weight_scale_variation_muR_1p0_muF_0p5)<=100 && abs(Weight_scale_variation_muR_1p0_muF_1p0)<=100 && abs(Weight_scale_variation_muR_1p0_muF_2p0)<=100 && abs(Weight_scale_variation_muR_2p0_muF_0p5)<=100 && abs(Weight_scale_variation_muR_2p0_muF_1p0)<=100 && abs(Weight_scale_variation_muR_2p0_muF_2p0)<=100)'
 sel_StrangeMuWeights = '*1.'
 
@@ -55,29 +55,29 @@ hzzSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==23)
 # hzg with id 23 and id 22
 hzgSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==22) || (abs(GenHiggs_DecProd1_PDGID)==22 && abs(GenHiggs_DecProd2_PDGID)==23))'
 
+# weights
+usualWeight = "(1.*Weight_pu69p2*Weight_GEN_nom)"
+
+scalefactors = "(((N_TightElectrons==1) && (Electron_IdentificationSF[0]>0.) && (Electron_ReconstructionSF[0]>0.))*Electron_IdentificationSF[0]*Electron_ReconstructionSF[0] + ((N_TightMuons==1) && (Muon_IdentificationSF[0]>0.) && (Muon_IsolationSF[0]>0.))*Muon_IdentificationSF[0]*Muon_IsolationSF[0])"
+
+mcTriggerWeight = "((1.0) * (1*(N_LooseMuons==0 && N_TightElectrons==1)* (1) +1*(N_LooseElectrons==0 && N_TightMuons==1) *(1)))*(N_Jets>=4 && N_BTagsM>=3)"
+
+doWeightsFlag = "(DoWeights==1)+(DoWeights==0)*1.0"
+
+# dictionary of expressions to replace in systematics csv
+weightReplacements = {
+    "USUALWEIGHT":  usualWeight,
+    "SCALEFACTORS": scalefactors,
+    "MCWEIGHT":     mcTriggerWeight,
+    "DOWEIGHTS":    doWeightsFlag
+    }
+
 # names of the systematics (proper names needed e.g. for combination)
-# TODO Add CSV SFs and uncertainties
 # Lumi weight
-mcWeight='59.7'
+mcWeight = "59.7"
+evenSel  = "*1."
 
-# TODO Add Trigger SFs
-#mcTriggerWeight='((1.0) * (internalEleTriggerWeight*(N_LooseMuons==0 && N_TightElectrons==1)* (Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1) +internalMuTriggerWeight*(N_LooseElectrons==0 && N_TightMuons==1)*(Muon_Pt[0]>29.) *(Triggered_HLT_IsoMu27_vX==1)))*(N_Jets>=4 && N_BTagsM>=3)'
-#mcTriggerWeight='(1.0)'
-mcTriggerWeight='((1.0) * (1*(N_LooseMuons==0 && N_TightElectrons==1)* (1) +1*(N_LooseElectrons==0 && N_TightMuons==1) *(1)))*(N_Jets>=4 && N_BTagsM>=3)'
-
-#TODO Check that SFs and uncertainties are correct
-#sfs="1.0"
-sfs="(((N_TightElectrons==1) && (Electron_IdentificationSF[0]>0.) && (Electron_ReconstructionSF[0]>0.))*Electron_IdentificationSF[0]*Electron_ReconstructionSF[0] + ((N_TightMuons==1) && (Muon_IdentificationSF[0]>0.) && (Muon_IsolationSF[0]>0.))*Muon_IdentificationSF[0]*Muon_IsolationSF[0])"
-#sfs="internalEleIDWeight*internalMuIDWeight*internalMuIsoWeight*internalEleGFSWeight*internalMuHIPWeight"
-#sfs="1.0"
-
-usualWeights="(1.*Weight_pu69p2*Weight_GEN_nom)"+"*"+sfs
-#usualWeights="(1*(Weight_GEN_nom))"+"*"+sfs
-
-#evenSel="*(Evt_Odd==0)*2.0"
-evenSel="*1."
-
-nominalweight="NomWeight:="+usualWeights+"*"+mcTriggerWeight+"*Weight_CSV*1.0*(DoWeights==1)+(DoWeights==0)*1.0"
+nominalweight="NomWeight:="+usualWeight+"*"+mcTriggerWeight+"*Weight_CSV*1.0"+"*"+doWeightsFlag
 
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)

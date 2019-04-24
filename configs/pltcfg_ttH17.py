@@ -57,29 +57,28 @@ hzzSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==23)
 # hzg with id 23 and id 22
 hzgSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==22) || (abs(GenHiggs_DecProd1_PDGID)==22 && abs(GenHiggs_DecProd2_PDGID)==23))'
 
+# weights
+usualWeight = "(1*Weight_pu69p2*Weight_GEN_nom)"
+
+scalefactors = "internalEleIDWeight*internalMuIDWeight*internalMuIsoWeight*internalEleGFSWeight"
+
+mcTriggerWeight = "((1.0) * (internalEleTriggerWeight*(N_LooseMuons==0 && N_TightElectrons==1)* (Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1) +internalMuTriggerWeight*(N_LooseElectrons==0 && N_TightMuons==1)*(Muon_Pt[0]>29.) *(Triggered_HLT_IsoMu27_vX==1)))*(N_Jets>=4 && N_BTagsM>=3)"
+
+doWeightsFlag = "(DoWeights==1)+(DoWeights==0)*1.0"
+
+# dictionary of expressions to replace in systematics csv
+weightReplacements = {
+    "USUALWEIGHT":  usualWeight,
+    "SCALEFACTORS": scalefactors,
+    "MCWEIGHT":     mcTriggerWeight,
+    "DOWEIGHTS":    doWeightsFlag}
+
 # names of the systematics (proper names needed e.g. for combination)
-# TODO Add CSV SFs and uncertainties
 # Lumi weight
-mcWeightAll='41.53'
-mcWeight='41.53*2.0' # for even/odd splitting
+mcWeight='41.53'
+evenSel="*(Evt_Odd==0)*2.0"
 
-# TODO Add Trigger SFs
-mcTriggerWeight='((1.0) * (internalEleTriggerWeight*(N_LooseMuons==0 && N_TightElectrons==1)* (Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1) +internalMuTriggerWeight*(N_LooseElectrons==0 && N_TightMuons==1)*(Muon_Pt[0]>29.) *(Triggered_HLT_IsoMu27_vX==1)))*(N_Jets>=4 && N_BTagsM>=3)'
-#mcTriggerWeight='(1.0)'
-#mcTriggerWeight='((1.0) * (1*(N_LooseMuons==0 && N_TightElectrons==1)* (1) +1*(N_LooseElectrons==0 && N_TightMuons==1) *(1)))*(N_Jets>=4 && N_BTagsM>=3)'
-
-#TODO Check that SFs and uncertainties are correct
-sfs="1.0"
-sfs="internalEleIDWeight*internalMuIDWeight*internalMuIsoWeight*internalEleGFSWeight"
-#sfs="internalEleIDWeight*internalMuIDWeight*internalMuIsoWeight*internalEleGFSWeight*internalMuHIPWeight"
-#sfs="1.0"
-
-usualWeights="(1*Weight_pu69p2*Weight_GEN_nom)"+"*"+sfs
-#usualWeights="(1*(Weight_GEN_nom))"+"*"+sfs
-
-evenSel="*(Evt_Odd==0)"
-
-nominalweight="NomWeight:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*1.0*(DoWeights==1)+(DoWeights==0)*1.0"
+nominalweight="NomWeight:="+usualWeight+"*"+scalefactors+"*"+mcTriggerWeight+"*internalCSVweight*1.0"+"*"+doWeightsFlag
 
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
@@ -163,31 +162,31 @@ samples=[
 
     plotClasses.Sample('t#bar{t}+lf',ROOT.kRed-7,
             ttbarPathS,
-            mcWeightAll+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)'+sel_MET+sel_StrangeMuWeights,
+            mcWeight+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)'+sel_MET+sel_StrangeMuWeights,
             'ttbarOther',
             samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,
             ttbarPathS,
-            mcWeightAll+'*(GenEvt_I_TTPlusCC==1)'+sel_MET+sel_StrangeMuWeights,
+            mcWeight+'*(GenEvt_I_TTPlusCC==1)'+sel_MET+sel_StrangeMuWeights,
             'ttbarPlusCCbar',
             samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}+b',ROOT.kRed-2,
             ttbarPathS,
-            mcWeightAll+'*(GenEvt_I_TTPlusBB==1)'+sel_MET+sel_StrangeMuWeights,
+            mcWeight+'*(GenEvt_I_TTPlusBB==1)'+sel_MET+sel_StrangeMuWeights,
             'ttbarPlusB',
             samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}+2b',ROOT.kRed+2,
             ttbarPathS,
-            mcWeightAll+'*(GenEvt_I_TTPlusBB==2)'+sel_MET+sel_StrangeMuWeights,
+            mcWeight+'*(GenEvt_I_TTPlusBB==2)'+sel_MET+sel_StrangeMuWeights,
             'ttbarPlus2B',
             samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,
             ttbarPathS,
-            mcWeightAll+'*(GenEvt_I_TTPlusBB==3)'+sel_MET+sel_StrangeMuWeights,
+            mcWeight+'*(GenEvt_I_TTPlusBB==3)'+sel_MET+sel_StrangeMuWeights,
             'ttbarPlusBBbar',
             samDict=sampleDict, readTrees=doReadTrees), 
 
@@ -195,37 +194,37 @@ samples=[
     
     plotClasses.Sample('Single Top',ROOT.kMagenta,
             stpath,
-            mcWeightAll+sel_MET,
+            mcWeight+sel_MET,
             'singlet',
             samDict=sampleDict, readTrees=doReadTrees),
  
     plotClasses.Sample('Z+jets',ROOT.kGreen-3,
             path_karim_new+'/DYJets*/*nominal*.root',
-            mcWeightAll+sel_MET,
+            mcWeight+sel_MET,
             'zjets',
             samDict=sampleDict, readTrees=doReadTrees),
  
     plotClasses.Sample('W+jets',ROOT.kGreen-7,
             path_karim_new+'/WJets*/*nominal*.root',
-            mcWeightAll+sel_MET,
+            mcWeight+sel_MET,
             'wjets',
             samDict=sampleDict, readTrees=doReadTrees), 
 
     plotClasses.Sample('t#bar{t}+W',ROOT.kBlue-10,
             path_karim_new+'/TTW*/*nominal*.root',  
-            mcWeightAll+sel_MET,
+            mcWeight+sel_MET,
             'ttbarW',
             samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}+Z',ROOT.kBlue-6,
             path_karim_new+'/TTZ*/*nominal*.root',
-            mcWeightAll+sel_MET,
+            mcWeight+sel_MET,
             'ttbarZ',
             samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('Diboson',ROOT.kAzure+2,
             dibosonPathS,
-            mcWeightAll+sel_MET,
+            mcWeight+sel_MET,
             'diboson',
             samDict=sampleDict, readTrees=doReadTrees), 
 ]
