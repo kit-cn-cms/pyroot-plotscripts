@@ -56,9 +56,17 @@ hzzSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==23)
 hzgSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==22) || (abs(GenHiggs_DecProd1_PDGID)==22 && abs(GenHiggs_DecProd2_PDGID)==23))'
 
 # weights
-usualWeight = "(1.*Weight_pu69p2*Weight_GEN_nom)"
+usualWeight = "1.*Weight_GEN_nom"
 
-scalefactors = "(((N_TightElectrons==1) && (Electron_IdentificationSF[0]>0.) && (Electron_ReconstructionSF[0]>0.))*Electron_IdentificationSF[0]*Electron_ReconstructionSF[0] + ((N_TightMuons==1) && (Muon_IdentificationSF[0]>0.) && (Muon_IsolationSF[0]>0.))*Muon_IdentificationSF[0]*Muon_IsolationSF[0])"
+puWeight = "Weight_pu69p2"
+
+csvWeight = "Weight_CSV"
+
+leptonscalefactors = "(((N_TightElectrons==1) && (Electron_IdentificationSF[0]>0.) && (Electron_ReconstructionSF[0]>0.))*Electron_IdentificationSF[0]*Electron_ReconstructionSF[0] + ((N_TightMuons==1) && (Muon_IdentificationSF[0]>0.) && (Muon_IsolationSF[0]>0.))*Muon_IdentificationSF[0]*Muon_IsolationSF[0])"
+electronscalefactorsup = "(((N_TightElectrons==1) && (Electron_IdentificationSFUp[0]>0.) && (Electron_ReconstructionSFUp[0]>0.))*Electron_IdentificationSFUp[0]*Electron_ReconstructionSFUp[0] + ((N_TightMuons==1) && (Muon_IdentificationSF[0]>0.) && (Muon_IsolationSF[0]>0.))*Muon_IdentificationSF[0]*Muon_IsolationSF[0])"
+electronscalefactorsdown = "(((N_TightElectrons==1) && (Electron_IdentificationSFDown[0]>0.) && (Electron_ReconstructionSFDown[0]>0.))*Electron_IdentificationSFDown[0]*Electron_ReconstructionSFDown[0] + ((N_TightMuons==1) && (Muon_IdentificationSF[0]>0.) && (Muon_IsolationSF[0]>0.))*Muon_IdentificationSF[0]*Muon_IsolationSF[0])"
+muonscalefactorsup = "(((N_TightElectrons==1) && (Electron_IdentificationSF[0]>0.) && (Electron_ReconstructionSF[0]>0.))*Electron_IdentificationSF[0]*Electron_ReconstructionSF[0] + ((N_TightMuons==1) && (Muon_IdentificationSFUp[0]>0.) && (Muon_IsolationSFUp[0]>0.))*Muon_IdentificationSFUp[0]*Muon_IsolationSFUp[0])"
+muonscalefactorsdown = "(((N_TightElectrons==1) && (Electron_IdentificationSF[0]>0.) && (Electron_ReconstructionSF[0]>0.))*Electron_IdentificationSF[0]*Electron_ReconstructionSF[0] + ((N_TightMuons==1) && (Muon_IdentificationSFDown[0]>0.) && (Muon_IsolationSFDown[0]>0.))*Muon_IdentificationSFDown[0]*Muon_IsolationSFDown[0])"
 
 mcTriggerWeight = "((1.0) * (1*(N_LooseMuons==0 && N_TightElectrons==1)* (1) +1*(N_LooseElectrons==0 && N_TightMuons==1) *(1)))*(N_Jets>=4 && N_BTagsM>=3)"
 
@@ -67,9 +75,15 @@ doWeightsFlag = "(DoWeights==1)+(DoWeights==0)*1.0"
 # dictionary of expressions to replace in systematics csv
 weightReplacements = {
     "USUALWEIGHT":  usualWeight,
-    "SCALEFACTORS": scalefactors,
+    "LEPTONSCALEFACTORS": leptonscalefactors,
+    "ELECTRONSCALEFACTORSUP": electronscalefactorsup,
+    "ELECTRONSCALEFACTORSDOWN": electronscalefactorsdown,
+    "MUONSCALEFACTORSUP": muonscalefactorsup,
+    "MUONSCALEFACTORSDOWN": muonscalefactorsdown,
     "MCWEIGHT":     mcTriggerWeight,
-    "DOWEIGHTS":    doWeightsFlag
+    "DOWEIGHTS":    doWeightsFlag,
+    "CSVWEIGHT": csvWeight,
+    "PUWEIGHT": puWeight
     }
 
 # names of the systematics (proper names needed e.g. for combination)
@@ -77,7 +91,7 @@ weightReplacements = {
 mcWeight = "59.7"
 evenSel  = "*1."
 
-nominalweight="NomWeight:="+usualWeight+"*"+mcTriggerWeight+"*"+scalefactors+"*Weight_CSV*1.0"+"*"+doWeightsFlag
+nominalweight="NomWeight:="+usualWeight+"*"+puWeight+"*"+mcTriggerWeight+"*"+leptonscalefactors+"*"+csvWeight+"*"+doWeightsFlag
 
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
