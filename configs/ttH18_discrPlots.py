@@ -59,7 +59,7 @@ def add_plots():
         #plotClasses.Plot(ROOT.TH1D("pumvaalljets","PU MVA of all jets",60,0,1.0),"Jet_PileUpMVA",plotselection,plotlabel),
         #plotClasses.Plot(ROOT.TH1D("puidalljets","PU MVA of all jets",60,0,1.0),"Jet_PileUpID",plotselection,plotlabel),
         
-        plotClasses.Plot(ROOT.TH1D("csvalljets","DeepCSV of all jets",44,-.1,1),"Jet_CSV",plotselection,plotlabel),
+        plotClasses.Plot(ROOT.TH1D("csvalljets","DeepJet score of all jets",44,-.1,1),"Jet_CSV",plotselection,plotlabel),
         plotClasses.Plot(ROOT.TH1D("leppt","lepton p_{T}",50,0,200),"LooseLepton_Pt[0]",plotselection,plotlabel),
         plotClasses.Plot(ROOT.TH1D("lepeta","lepton #eta",50,-2.5,2.5),"LooseLepton_Eta[0]",plotselection,plotlabel),
         plotClasses.Plot(ROOT.TH1D("elleppt","electron p_{T}",50,0,200),"Electron_Pt[0]",'Electron_Pt[0]>10',plotlabel),
@@ -72,6 +72,12 @@ def add_plots():
         plotClasses.Plot(ROOT.TH1D("MET","missing transverse energy",50,0,200),"Evt_Pt_MET",plotselection,plotlabel),
         plotClasses.Plot(ROOT.TH1D("METphi","MET #phi",64,-3.2,3.2),"Evt_Phi_MET",plotselection,plotlabel),
         plotClasses.Plot(ROOT.TH1D("N_PrimaryVertices","Reconstructed primary vertices",26,-.5,50.5),"N_PrimaryVertices",plotselection,plotlabel),
+        plotClasses.Plot(ROOT.TH1D("Weight_CSV","DeepJet SF",80,0.,4.),"Weight_CSV",plotselection,plotlabel),
+        plotClasses.Plot(ROOT.TH1D("Ele_IDSF","Electron ID SF",20,0.95,1.05),"Electron_IdentificationSF[0]",plotselection,plotlabel),
+        plotClasses.Plot(ROOT.TH1D("Ele_RECOSF","Electron Reco SF",20,0.95,1.05),"Electron_ReconstructionSF[0]",plotselection,plotlabel),
+        plotClasses.Plot(ROOT.TH1D("Mu_IDSF","Muon ID SF",20,0.95,1.05),"Muon_IdentificationSF[0]",plotselection,plotlabel),
+        plotClasses.Plot(ROOT.TH1D("Mu_ISOSF","Muon Iso SF",20,0.95,1.05),"Muon_IsolationSF[0]",plotselection,plotlabel),
+        plotClasses.Plot(ROOT.TH1D("Weight_PU","Pileup Weight",40,0.5,1.5),"Weight_pu69p2",plotselection,plotlabel),
     ]
 
 

@@ -77,7 +77,7 @@ weightReplacements = {
 mcWeight = "59.7"
 evenSel  = "*1."
 
-nominalweight="NomWeight:="+usualWeight+"*"+mcTriggerWeight+"*Weight_CSV*1.0"+"*"+doWeightsFlag
+nominalweight="NomWeight:="+usualWeight+"*"+mcTriggerWeight+"*"+scalefactors+"*Weight_CSV*1.0"+"*"+doWeightsFlag
 
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
@@ -216,7 +216,7 @@ samples=[
             samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}+Z',ROOT.kBlue-6,
-            path_mwassmer+'/TTZToBB*/*nominal*.root',
+            path_mwassmer+'/TTZToLLNuNu*/*nominal*.root'+';'+ path_mwassmer+'/TTZToQQ*/*nominal*.root',
             mcWeight+evenSel+sel_MET,
             'ttbarZ',
             samDict=sampleDict, readTrees=doReadTrees),
