@@ -77,7 +77,7 @@ weightReplacements = {
 mcWeight = "59.7"
 evenSel  = "*1."
 
-nominalweight="NomWeight:="+usualWeight+"*"+mcTriggerWeight+"*Weight_CSV*1.0"+"*"+doWeightsFlag
+nominalweight="NomWeight:="+usualWeight+"*"+mcTriggerWeight+"*"+scalefactors+"*Weight_CSV*1.0"+"*"+doWeightsFlag
 
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
