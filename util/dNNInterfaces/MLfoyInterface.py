@@ -239,7 +239,7 @@ class DNN:
             sel=self.selection.replace(" ","").replace("and","&&"), 
             pred_var=self.predictionVariable, 
             i=i, cat=self.category, node=node)
-        string += "        ]\n"
+        string += "\n        ]\n"
 
         # generate discriminators list
         string += "    discrs += [\n"
