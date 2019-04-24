@@ -216,7 +216,7 @@ samples=[
             samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}+Z',ROOT.kBlue-6,
-            path_mwassmer+'/TTZToBB*/*nominal*.root',
+            path_mwassmer+'/TTZToLLNuNu*/*nominal*.root'+';'+ path_mwassmer+'/TTZToQQ*/*nominal*.root',
             mcWeight+evenSel+sel_MET,
             'ttbarZ',
             samDict=sampleDict, readTrees=doReadTrees),
