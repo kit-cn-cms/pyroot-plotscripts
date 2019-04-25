@@ -37,12 +37,12 @@ def drawParallel(ListOfPlots, workdir, PathToSelf, opts=None):
 # -- create a single draw script ------------------------------------------------------------------
 def createDrawScript(iPlot, Plot, PathToSelf, scriptPath, opts=None):
     
-    cmsswpath = os.environ['CMSSW_BASE']
+    cmsswpath = "/cvmfs/cms.cern.ch/slc6_amd64_gcc530/cms/cmssw-patch/CMSSW_8_0_26_patch2"
     script="#!/bin/bash \n"
     if cmsswpath != '':
         script += "export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch \n"
         script += "source $VO_CMS_SW_DIR/cmsset_default.sh \n"
-        script += "export SCRAM_ARCH="+os.environ['SCRAM_ARCH']+"\n"
+        script += "export SCRAM_ARCH="+"slc6_amd64_gcc530"+"\n"
         script += 'export OUTFILENAME="'+"plot" +str(iPlot)+'"\n'
         script += 'cd '+cmsswpath+'/src\n'
         script += 'eval `scram runtime -sh`\n'
