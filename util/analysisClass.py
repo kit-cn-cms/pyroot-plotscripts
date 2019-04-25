@@ -72,10 +72,8 @@ class analysisConfig:
         elif signalProcess == "ttH" or signalProcess == "tth":
             self.signalProcess = "ttH"
             #print("ttH was chosen as signal process. plotBlinded was set to True")
-        elif signalProcess == "DM":
-            self.signalProcess = "DM"
-            self.plotBlinded = False
-            print("doing DM analysis")
+        elif signalProcess == "ttZ" or signalProcess == "ttbarZ":
+            self.signalProcess = "ttbarZ"
         else:
             print("could not find signalProcess '"+str(signalProcess)+"'. Define it in analysisConfig")
             sys.exit("unknow signalProcess chosen")
