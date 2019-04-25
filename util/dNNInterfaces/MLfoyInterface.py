@@ -196,7 +196,7 @@ class DNN:
         csv_path = self.path+"/plot_config.csv"
         if not os.path.exists(csv_path):
             print("no plot config for DNN {}\n\tnot adding any input plots.".format(self.path))
-            return "    plots = []"
+            return "    plots = []\n"
         
         # read variable set
         variables = pd.read_csv(csv_path, sep = ",").set_index("variablename", drop = True)
@@ -235,7 +235,7 @@ class DNN:
         string = "    categories += ["
         for i, node in enumerate(self.out_nodes):
             string += """
-        ("({sel}&&{pred_var}=={i})","{cat}_{node}_node",""),""".format(
+        ("({sel}&&{pred_var}=={i})","ljets_{cat}_{node}_node",""),""".format(
             sel=self.selection.replace(" ","").replace("and","&&"), 
             pred_var=self.predictionVariable, 
             i=i, cat=self.category, node=node)

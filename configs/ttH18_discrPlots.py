@@ -36,7 +36,7 @@ for i,cat in enumerate(categoriesJT):
 
 def add_plots():
     # book plots
-    plotlabel="1 lepton, #geq 4 jets, #geq 2 b-tags"
+    plotlabel="1 lepton, #geq 4 jets, #geq 3 b-tags"
     #plotlabelboosted="#splitline{1 lepton, #geq 4 jets, #geq 2 b-tags}{#geq 1 C/A 1.5 jet p_{T} > 200 GeV}"
     plotselection="(N_Jets>=4&&N_BTagsM>=2)"
     plots=[
@@ -71,9 +71,9 @@ def add_plots():
         #plotClasses.Plot(ROOT.TH1D("N_AK8_Jets","Number of ak8 jets",10,0.5,10.5),"N_AK8Jets",plotselection,plotlabel),
         plotClasses.Plot(ROOT.TH1D("MET","missing transverse energy",50,0,200),"Evt_Pt_MET",plotselection,plotlabel),
         plotClasses.Plot(ROOT.TH1D("METphi","MET #phi",64,-3.2,3.2),"Evt_Phi_MET",plotselection,plotlabel),
-        plotClasses.Plot(ROOT.TH1D("N_PrimaryVertices","Reconstructed primary vertices",26,-.5,50.5),"N_PrimaryVertices",plotselection,plotlabel),
+        plotClasses.Plot(ROOT.TH1D("N_PrimaryVertices","Reconstructed primary vertices",25,0.,50.),"N_PrimaryVertices",plotselection,plotlabel),
         plotClasses.Plot(ROOT.TH1D("Weight_CSV","DeepJet SF",80,0.,4.),"Weight_CSV",plotselection,plotlabel),
-        plotClasses.Plot(ROOT.TH1D("Ele_IDSF","Electron ID SF",20,0.95,1.05),"Electron_IdentificationSF[0]",plotselection,plotlabel),
+        plotClasses.Plot(ROOT.TH1D("Ele_IDSF","Electron ID SF",30,0.90,1.05),"Electron_IdentificationSF[0]",plotselection,plotlabel),
         plotClasses.Plot(ROOT.TH1D("Ele_RECOSF","Electron Reco SF",20,0.95,1.05),"Electron_ReconstructionSF[0]",plotselection,plotlabel),
         plotClasses.Plot(ROOT.TH1D("Mu_IDSF","Muon ID SF",20,0.95,1.05),"Muon_IdentificationSF[0]",plotselection,plotlabel),
         plotClasses.Plot(ROOT.TH1D("Mu_ISOSF","Muon Iso SF",20,0.95,1.05),"Muon_IsolationSF[0]",plotselection,plotlabel),
