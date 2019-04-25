@@ -1347,27 +1347,15 @@ def createErrorbands(nestedHistList, samples, doRateSysts = True):
             for up, down in zip(ups, downs):
                 print "up/down name ", up.GetName(), down.GetName()
                 print "up/down diff ", up.GetBinContent(ibin+1)-n, down.GetBinContent(ibin+1)-n
+                # get up down variations
                 u_ = up.GetBinContent(ibin+1)-n
                 d_ = down.GetBinContent(ibin+1)-n
-                # TODO that shit sucks
-                if u_ >= 0 and u_ >= d_:
-                    u = u_
-                    if d_ < 0:
-                        d = d_
-                    else:
-                        d = 0
-                elif u_ >= 0 and u_ <= d_:
-                    u = d_
-                    d = 0
-                elif u_ < 0 and d_ <= u_:
-                    d = d_
-                    u = 0
-                elif u_ < 0 and u_ < d_:
-                    d = u_
-                    if d_ >= 0:
-                        u = d_
-                    else:
-                        u = 0
+                # set max as up and min as down
+                u = max(u_,d_)
+                d = min(u_,d_)
+                # only consider positive up and negative down variations
+                u = max(0.,u)
+                d = min(0.,d)
 
                 uperrors[ibin] = ROOT.TMath.Sqrt( uperrors[ibin]*uperrors[ibin] + u*u )
                 downerrors[ibin] = ROOT.TMath.Sqrt( downerrors[ibin]*downerrors[ibin] + d*d)
