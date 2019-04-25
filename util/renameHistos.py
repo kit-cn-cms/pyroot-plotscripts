@@ -231,7 +231,7 @@ def renameHistosParallel(inFile, outFile, systNames, checkBins = False, prune = 
                 continue
 
 
-        if plotParaCall and ("SingleMu" in thisName or "SingleEl" in thisName) and nSysts > 2:
+        if plotParaCall and ("SingleMu" in thisName or "SingleEl" in thisName) and nSysts > 1:
             thisHist = rootFile.Get(thisName)
             objectList.append(thisHist)
             print(str(nSysts)+" systs - removing "+str(thisName))
