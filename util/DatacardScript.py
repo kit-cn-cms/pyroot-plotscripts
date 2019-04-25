@@ -27,6 +27,8 @@ parser.add_option("-c", "--csvfile", dest="csvFile",
         help="FILE to csv file used to create systematics", metavar="/path/to/csvfile")
 parser.add_option("--dataobs", dest="dataobs",
         help="Name of observed data", metavar="dataobs",default="data_obs")
+parser.add_option("--signaltag", dest="tag",
+        help="tag of signal classes", metavar="signaltag",default="ttH")
 
 (options, args) = parser.parse_args()
 
@@ -63,7 +65,7 @@ analysis=analysisObject()
 category=categoryObject(categoryName=options.categoryName,defaultRootFile=options.Rootfile,
                     defaultnominalkey=nominalkey,systkey=systkey)
 
-category.add_from_csv(pathToFile=options.csvFile)
+category.add_from_csv(pathToFile=options.csvFile,signaltag=options.tag)
 #Delete processes that dont exist in file
 for process in category:
 	if not category[process].key_nominal_hist:
