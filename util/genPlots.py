@@ -1337,6 +1337,7 @@ def createErrorbands(nestedHistList, samples, doRateSysts = True):
         downerrors = [0]*ll[0][0].GetNbinsX()
 
         for ibin in range(0, nominal.GetNbinsX()):
+            print "\nadding error band for bin ",ibin
             nerr = nominal.GetBinError(ibin+1)
             uperrors[ibin] = ROOT.TMath.Sqrt( uperrors[ibin]*uperrors[ibin] + nerr*nerr )
             downerrors[ibin] = ROOT.TMath.Sqrt( downerrors[ibin]*downerrors[ibin] + nerr*nerr )
@@ -1344,30 +1345,23 @@ def createErrorbands(nestedHistList, samples, doRateSysts = True):
             ups = systs[0::2]
             downs = systs[1::2]
             for up, down in zip(ups, downs):
+                print "up/down name ", up.GetName(), down.GetName()
+                print "up/down diff ", up.GetBinContent(ibin+1)-n, down.GetBinContent(ibin+1)-n
+                # get up down variations
                 u_ = up.GetBinContent(ibin+1)-n
                 d_ = down.GetBinContent(ibin+1)-n
-                # TODO that shit sucks
-                if u_ >= 0 and u_ >= d_:
-                    u = u_
-                    if d_ < 0:
-                        d = d_
-                    else:
-                        d = 0
-                elif u_ >= 0 and u_ <= d_:
-                    u = d_
-                    d = 0
-                elif u_ < 0 and d_ <= u_:
-                    d = d_
-                    u = 0
-                elif u_ < 0 and u_ < d_:
-                    d = u_
-                    if d_ >= 0:
-                        u = d_
-                    else:
-                        u = 0
+                # set max as up and min as down
+                u = max(u_,d_)
+                d = min(u_,d_)
+                # only consider positive up and negative down variations
+                u = max(0.,u)
+                d = min(0.,d)
 
                 uperrors[ibin] = ROOT.TMath.Sqrt( uperrors[ibin]*uperrors[ibin] + u*u )
                 downerrors[ibin] = ROOT.TMath.Sqrt( downerrors[ibin]*downerrors[ibin] + d*d)
+                print "adding up/down ", u, d
+                print "total up/down now: ", uperrors[ibin], downerrors[ibin]
+                print "-"*50
 
         graph = ROOT.TGraphAsymmErrors(nominal)
         for i in range(len(uperrors)):

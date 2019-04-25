@@ -17,7 +17,8 @@ def makeDatacardsParallel(filePath, workdir,
                     discrname = 'finaldiscr', 
                     datacardmaker = ' ',
                     datacardcsv=' ',
-                    skipDatacards = False):
+                    skipDatacards = False,
+                    signalTag = "ttH"):
 
     # init directory for scripts
     datacardcsv=workdir+"/datacard.csv"
@@ -63,6 +64,7 @@ def makeDatacardsParallel(filePath, workdir,
             script += '--rootfile='+filePath+' '
             script += '--outputfile='+outPath+'/'+cat+'_hdecay.txt '
             script += '--directory='+datacardmaker+' '
+            script += '--signaltag='+signalTag+' '
             script += '--csvfile='+datacardcsv+' \n'
 
             # saving and chmodding script
