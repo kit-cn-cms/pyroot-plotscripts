@@ -10,7 +10,6 @@ import pandas
 
 # local imports 
 import GenWeightUtils
-import variablebox
 import plotClasses
 import scriptfunctions 
 import variableCancer
@@ -141,6 +140,7 @@ class scriptWriter:
 
         if castStub!="":
             startLoopStub = startLoopStub.replace("//PLACEHOLDERFORCASTLINES", castStub)
+        startLoopStub = startLoopStub.replace("//PLACEHOLDERFORVARIABLERESET",self.varManager.resetVariableInitialization())
         script += startLoopStub
         script += self.initLoop()
 
@@ -276,6 +276,10 @@ class scriptWriter:
         # get additional variables
         if len(self.pp.configData.addVars) > 0:
             variableManager.add( self.pp.configData.addVars )
+
+        # get DNN variables
+        for interface in self.pp.addInterfaces:
+            variableManager.add( interface.getVariables() )
 
         # get systematic weight variables
         variableManager.add( self.systWeights )
@@ -521,6 +525,7 @@ class scriptWriter:
             script += 'cd '+self.pp.cmsswpath+'/src\n'
             script += 'eval `scram runtime -sh`\n'
             script += 'cd - \n'
+        script += 'export PLOTSCRIPTBASEDIR="'+self.pp.analysis.pyrootdir+'"\n'
         script += 'export PROCESSNAME="'+processname+'"\n'
         script += 'export FILENAMES="'+filenames+'"\n'
         script += 'export OUTFILENAME="'+outfilename+'"\n'

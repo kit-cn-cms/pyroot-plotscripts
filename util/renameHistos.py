@@ -136,6 +136,7 @@ def writeRenameScript(outFile, skipRenaming):
 # -- actual rename function -----------------------------------------------------------------------
 def renameHistosParallel(inFile, outFile, systNames, checkBins = False, prune = False, plotParaCall = False, Epsilon = 0.0):
     print ("RenameHistosStep: checking bins set to "+str(checkBins))
+
     # starting the clocks      
     theclock = ROOT.TStopwatch()
     theclock.Start()
@@ -173,6 +174,9 @@ def renameHistosParallel(inFile, outFile, systNames, checkBins = False, prune = 
     print("number of plots: "+str(nPlots))
 
     for iKey, key in enumerate(keyNames):
+        print("="*30)
+        print("key: {}".format(key))
+
         histChanged = False
         counter += 1
         
@@ -231,7 +235,7 @@ def renameHistosParallel(inFile, outFile, systNames, checkBins = False, prune = 
                 continue
 
 
-        if plotParaCall and ("SingleMu" in thisName or "SingleEl" in thisName) and nSysts > 2:
+        if plotParaCall and ("SingleMu" in thisName or "SingleEl" in thisName) and nSysts > 1:
             thisHist = rootFile.Get(thisName)
             objectList.append(thisHist)
             print(str(nSysts)+" systs - removing "+str(thisName))
@@ -249,7 +253,8 @@ def renameHistosParallel(inFile, outFile, systNames, checkBins = False, prune = 
         for sampleName in samplesWithoutGenSysts:
             if thisName.startswith(sampleName):
                 if "CMS_ttHbb_ISR" in thisName or "CMS_ttHbb_FSR" in thisName or \
-                    "CMS_ttHbb_scaleMuR" in thisName or "CMS_ttHbb_PDF" in thisName:
+                    "CMS_ttHbb_scaleMuR" in thisName or "CMS_ttHbb_PDF" in thisName or \
+                    "CMS_ttHbb_scaleMuF" in thisName:
                     if plotParaCall or prune:
                         print("Deleting "+str(thisName)+";1")
                         thisHist = rootFile.Get(thisName)
@@ -298,9 +303,12 @@ def renameHistosParallel(inFile, outFile, systNames, checkBins = False, prune = 
             newHist = ""
             # only load histogram if it is really needed
             if checkBins or (newname != thisName) or thisName.startswith("QQCD_"):
+                print("loading histogram {}".format(thisName))
                 thisHist = rootFile.Get(thisName)
 
             if checkBins or thisName.startswith("QCD_"):
+                print("checking bins")
+                print("hist min {}".format(thisHist.GetMinimum()))
                 if thisName.startswith("QCD_"):
                     nBins = thisHist.GetNbinsX()
                     newHist = thisHist.Clone()
@@ -315,8 +323,8 @@ def renameHistosParallel(inFile, outFile, systNames, checkBins = False, prune = 
                             newHist.SetBinContent(iBin+1, QCDEpsilon)
                             newHist.SetBinError(iBin+1, ROOT.TMath.Sqrt(QCDEpsilon))
                             histChanged = True
-
                 elif thisHist.GetMinimum() < Epsilon:
+                    print("\thistogram has negative bins")
                     nBins = thisHist.GetNbinsX()
                     newHist = thisHist.Clone()
                     objectList.append( newHist )

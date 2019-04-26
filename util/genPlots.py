@@ -80,6 +80,7 @@ class Config:
 
                     outHist = rootFile.Get(key)
                     if isinstance(outHist, ROOT.TH1) and not isinstance(outHist, ROOT.TH2):
+                        print("\tusing variation for " + str(key))
                         baseList.append( outHist.Clone() )
                     else:
                         print(str(syst)+" not used for "+str(sample.name))
@@ -1291,6 +1292,7 @@ def createErrorbands(nestedHistList, samples, doRateSysts = True):
     if doRateSysts:
         print "using ratesysts"
     errorBand = []
+
     for ll in nestedHistList: #for all plots
         llT = transposeLOL(ll)
         nominal = llT[0][0].Clone()
@@ -1302,38 +1304,40 @@ def createErrorbands(nestedHistList, samples, doRateSysts = True):
             syst = l[0].Clone()
             for hist in l[1:]:
                 syst.Add(hist)
-		#print("adding to errorband (h, int, nominal.int)")
-		#print hist, hist.Integral(), nominal.Integral()
+                if hist.Integral() < 0.:
+                    print("DANGERZONE!!! NEGATIVE INTEGRAL")
+                    print hist, hist.Integral()
             systs.append(syst)
         assert len(samples) == len(llT[0])
         for isample, sample in enumerate(samples): # for all normalization unc
-	    ls = []
-	    for ihisto, hist in enumerate(llT[0]):
-		ls.append(hist.Clone())
-		if ihisto == isample:
-		    if doRateSysts:
-		        ls[-1].Scale(1 + sample.unc_up)
-	    syst = ls[0].Clone()
-	    for hist in ls[1:]:
-		syst.Add(hist)
-	    systs.append(syst)
+            ls = []
+            for ihisto, hist in enumerate(llT[0]):
+                ls.append(hist.Clone())
+                if ihisto == isample:
+                    if doRateSysts:
+                        ls[-1].Scale(1 + sample.unc_up)
+            syst = ls[0].Clone()
+            for hist in ls[1:]:
+                syst.Add(hist)
+            systs.append(syst)
 
-	    ls = []
-	    for ihisto, hist in enumerate(llT[0]):
-		ls.append(hist.Clone())
-		if ihisto==isample:
-		    if doRateSysts:
-		        ls[-1].Scale(1 - sample.unc_down)
-	    syst = ls[0].Clone()
-	    for hist in ls[1:]:
-		syst.Add(hist)
-	    #print "rates ", sample.nick, syst.Integral()
-	    systs.append(syst)
+            ls = []
+            for ihisto, hist in enumerate(llT[0]):
+                ls.append(hist.Clone())
+                if ihisto==isample:
+                    if doRateSysts:
+                        ls[-1].Scale(1 - sample.unc_down)
+            syst = ls[0].Clone()
+            for hist in ls[1:]:
+                syst.Add(hist)
+            #print "rates ", sample.nick, syst.Integral()
+            systs.append(syst)
 
         uperrors = [0]*ll[0][0].GetNbinsX()
         downerrors = [0]*ll[0][0].GetNbinsX()
 
         for ibin in range(0, nominal.GetNbinsX()):
+            print "\nadding error band for bin ",ibin
             nerr = nominal.GetBinError(ibin+1)
             uperrors[ibin] = ROOT.TMath.Sqrt( uperrors[ibin]*uperrors[ibin] + nerr*nerr )
             downerrors[ibin] = ROOT.TMath.Sqrt( downerrors[ibin]*downerrors[ibin] + nerr*nerr )
@@ -1341,35 +1345,23 @@ def createErrorbands(nestedHistList, samples, doRateSysts = True):
             ups = systs[0::2]
             downs = systs[1::2]
             for up, down in zip(ups, downs):
-	        #print "up/down name ", up.GetName(), down.GetName()
-	        #print "up/down diff ",  up.GetBinContent(ibin+1)-n, down.GetBinContent(ibin+1)-n
+                print "up/down name ", up.GetName(), down.GetName()
+                print "up/down diff ", up.GetBinContent(ibin+1)-n, down.GetBinContent(ibin+1)-n
+                # get up down variations
                 u_ = up.GetBinContent(ibin+1)-n
                 d_ = down.GetBinContent(ibin+1)-n
-                #print u_,d_
-                # TODO that shit sucks
-                if u_ >= 0 and u_ >= d_:
-                    u = u_
-                    if d_ < 0:
-                        d = d_
-                    else:
-                        d = 0
-                elif u_ >= 0 and u_ <= d_:
-                    u = d_
-                    d = 0
-                elif u_ < 0 and d_ <= u_:
-                    d = d_
-                    u = 0
-                elif u_ < 0 and u_ < d_:
-                    d = u_
-                    if d_ >= 0:
-                        u = d_
-                    else:
-                        u = 0
+                # set max as up and min as down
+                u = max(u_,d_)
+                d = min(u_,d_)
+                # only consider positive up and negative down variations
+                u = max(0.,u)
+                d = min(0.,d)
 
                 uperrors[ibin] = ROOT.TMath.Sqrt( uperrors[ibin]*uperrors[ibin] + u*u )
                 downerrors[ibin] = ROOT.TMath.Sqrt( downerrors[ibin]*downerrors[ibin] + d*d)
-                #print u, d
-                #print "up/down errors ", uperrors[ibin],downerrors[ibin]
+                print "adding up/down ", u, d
+                print "total up/down now: ", uperrors[ibin], downerrors[ibin]
+                print "-"*50
 
         graph = ROOT.TGraphAsymmErrors(nominal)
         for i in range(len(uperrors)):
@@ -1511,7 +1503,7 @@ def getRatioGraph(data, mchisto):
               ratio.SetPointEYlow(i, data.GetErrorYlow(i)/currentBinContent)
               ratio.SetPointEYhigh(i, data.GetErrorYhigh(i)/currentBinContent)
             else:
-	      ratio.SetPointEYlow( i, 1 - (y-data.GetErrorYlow(i)) / y )
+              ratio.SetPointEYlow( i, 1 - (y-data.GetErrorYlow(i)) / y )
               ratio.SetPointEYhigh( i, (y + data.GetErrorYhigh(i)) / y - 1 )
             
         else:
@@ -1563,14 +1555,22 @@ def eventYields(data, hists, samples, path, name, withError = True, makeRatios =
         histRatio = hists[0].Clone()
         histRatio.Divide( bkgHist )
         sRatio = plotClasses.Sample( "S/B" )
-        
+
+        histRatioSsqrtB = hists[0].Clone()
+        histSqrtB = bkgHist.Clone()
+        for i in range(histSqrtB.GetNbinsX()+1):
+            histSqrtB.SetBinContent(i,ROOT.TMath.Sqrt(bkgHist.GetBinContent(i)))
+        histRatioSsqrtB.Divide( histSqrtB )
+
+        SqrtB = plotClasses.Sample( "S/#sqrt{B}" )
+
         hRatioData = histData.Clone()
         hRatioData.Divide( bkgHist )
 
         sRatioData = plotClasses.Sample("data/B")
 
-        histsForTable += [histRatio, hRatioData]
-        samplesForTable += [sRatio, sRatioData]
+        histsForTable += [histRatio, histRatioSsqrtB, hRatioData]
+        samplesForTable += [sRatio, SqrtB, sRatioData]
 
     turn1DHistsToTable(
         hists = histsForTable,
@@ -1608,6 +1608,28 @@ def turn1DHistsToTable(hists, samples, outFile, withError = True):
             out.write( root2latex(sample.name) + " & " + turn1DHistToRow(hist, withError, rounding+ "\\\\ \n") )
         
         writeFoot(out)
+
+        # Integral
+        writeHead(out, ["Process", "Integral"])
+        for hist, sample in zip(hists, samples):
+            error=ROOT.Double(0)
+            integral = hist.IntegralAndError(0,hist.GetNbinsX()+1,error)
+            rounding = "1dig"
+            if sample.name == "S/B":
+                rounding = "3dig"
+            if sample.name == "Total bkg":
+                bkgError = ROOT.Double(0.)
+                bkgIntegral = hist.IntegralAndError(0,hist.GetNbinsX()+1,bkgError)
+                error = bkgError
+            if sample.name == "S/#sqrt{B}":
+                Serror = ROOT.Double(0.)
+                Sintegral=hists[0].IntegralAndError(0,hist.GetNbinsX()+1,Serror)
+                integral = Sintegral/ROOT.TMath.Sqrt(bkgIntegral)
+                error=ROOT.TMath.Sqrt(Serror**2/bkgIntegral+(Sintegral*bkgError)**2/(4*bkgIntegral**3))
+                print error
+            out.write( root2latex(sample.name) + " & " + "%.2f" % integral + " $\pm$ " + "%.3f" % error + "\\\\ \n") 
+        writeFoot(out)
+
         out.write("\\end{document}\n")
 
 
