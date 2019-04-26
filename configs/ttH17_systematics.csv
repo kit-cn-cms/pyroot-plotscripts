@@ -38,7 +38,6 @@ CMS_scale_j_2017,shape,variation,JESup,JESdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 #CMS_scaleSinglePionECAL_j_2017,shape,-,-,-,-,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-
 #CMS_scaleSinglePionHCAL_j_2017,shape,-,-,-,-,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-
 #CMS_scaleFlavorQCD_j_2017,shape,-,-,-,-,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-
-<<<<<<< Updated upstream
 CMS_scaleTimePtEta_j_2017,shape,variation,JESTimePtEtaup,JESTimePtEtadown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-
 CMS_scaleRelativeJEREC1_j_2017,shape,variation,JESRelativeJEREC1up,JESRelativeJEREC1down,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-
 CMS_scaleRelativeJEREC2_j_2017,shape,variation,JESRelativeJEREC2up,JESRelativeJEREC2down,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-
@@ -52,21 +51,6 @@ CMS_scaleRelativePtEC2_j_2017,shape,variation,JESRelativePtEC2up,JESRelativePtEC
 CMS_scaleRelativeStatFSR_j_2017,shape,variation,JESRelativeStatFSRup,JESRelativeStatFSRdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-
 CMS_scaleRelativeStatEC_j_2017,shape,variation,JESRelativeStatECup,JESRelativeStatECdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-
 CMS_scaleRelativeStatHF_j_2017,shape,variation,JESRelativeStatHFup,JESRelativeStatHFdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-
-=======
-#CMS_scaleTimePtEta_j_2017,shape,variation,JESTimePtEtaup,JESTimePtEtadown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-
-#CMS_scaleRelativeJEREC1_j_2017,shape,variation,JESRelativeJEREC1up,JESRelativeJEREC1down,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-
-#CMS_scaleRelativeJEREC2_j_2017,shape,variation,JESRelativeJEREC2up,JESRelativeJEREC2down,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-
-#CMS_scaleRelativeJERHF_j_2017,shape,-,-,-,-,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-
-#CMS_scaleRelativePtBB_j_2017,shape,-,-,-,-,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-
-#CMS_scaleRelativePtEC1_j_2017,shape,variation,JESRelativePtEC1up,JESRelativePtEC1down,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-
-#CMS_scaleRelativePtEC2_j_2017,shape,variation,JESRelativePtEC2up,JESRelativePtEC2down,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-
-#CMS_scaleRelativePtHF_j_2017,shape,-,-,-,-,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-
-#CMS_scaleRelativeBal_j_2017,shape,-,-,-,-,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-
-#CMS_scaleRelativeFSR_j_2017,shape,-,-,-,-,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-
-#CMS_scaleRelativeStatFSR_j_2017,shape,variation,JESRelativeStatFSRup,JESRelativeStatFSRdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-
-#CMS_scaleRelativeStatEC_j_2017,shape,variation,JESRelativeStatECup,JESRelativeStatECdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-
-#CMS_scaleRelativeStatHF_j_2017,shape,variation,JESRelativeStatHFup,JESRelativeStatHFdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-
->>>>>>> Stashed changes
 #CMS_scalePileUpDataMC_j_2017,shape,-,-,-,-,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-
 #CMS_scalePileUpPtRef_j_2017,shape,-,-,-,-,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-
 #CMS_scalePileUpPtBB_j_2017,shape,-,-,-,-,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-

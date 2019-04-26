@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'merged_ttH17_cfgtest'
+    name = 'merged_ttH17'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -54,7 +54,7 @@ def main(pyrootdir, argv):
     # configs
     config          = "pltcfg_ttH17"
     variable_cfg    = "ttH17_addVariables"
-    plot_cfg        = None
+    plot_cfg        = "merged_ttH_plots"
     syst_cfg        = "ttH17_systematics"
 
     # file for rate factors
