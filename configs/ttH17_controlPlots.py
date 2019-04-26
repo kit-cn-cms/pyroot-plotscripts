@@ -490,9 +490,9 @@ def getDiscriminatorPlots(data = None, discrname = None):
     discriminatorPlots += add_sl5j3t()
     discriminatorPlots += add_sl4j4t()
     discriminatorPlots += add_sl4j3t()
-    #discriminatorPlots += add_sl4j3tDNN()
-    #discriminatorPlots += add_sl5j3tDNN()
-    #discriminatorPlots += add_sl6j3tDNN()
+    discriminatorPlots += add_sl4j3tDNN()
+    discriminatorPlots += add_sl5j3tDNN()
+    discriminatorPlots += add_sl6j3tDNN()
 
 
     return discriminatorPlots
