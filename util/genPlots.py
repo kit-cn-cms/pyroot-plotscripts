@@ -1555,14 +1555,22 @@ def eventYields(data, hists, samples, path, name, withError = True, makeRatios =
         histRatio = hists[0].Clone()
         histRatio.Divide( bkgHist )
         sRatio = plotClasses.Sample( "S/B" )
-        
+
+        histRatioSsqrtB = hists[0].Clone()
+        histSqrtB = bkgHist.Clone()
+        for i in range(histSqrtB.GetNbinsX()+1):
+            histSqrtB.SetBinContent(i,ROOT.TMath.Sqrt(bkgHist.GetBinContent(i)))
+        histRatioSsqrtB.Divide( histSqrtB )
+
+        SqrtB = plotClasses.Sample( "S/#sqrt{B}" )
+
         hRatioData = histData.Clone()
         hRatioData.Divide( bkgHist )
 
         sRatioData = plotClasses.Sample("data/B")
 
-        histsForTable += [histRatio, hRatioData]
-        samplesForTable += [sRatio, sRatioData]
+        histsForTable += [histRatio, histRatioSsqrtB, hRatioData]
+        samplesForTable += [sRatio, SqrtB, sRatioData]
 
     turn1DHistsToTable(
         hists = histsForTable,
