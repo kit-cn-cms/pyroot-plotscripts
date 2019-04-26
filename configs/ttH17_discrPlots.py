@@ -283,17 +283,17 @@ def add_dnn(data, discrname):
     discrs_MultiDNN+= ['DNNOutput_ge6j_ge3t_node_'+str(node) for node in nodes]
 
     # 3 and 4 tags
-    nhistobins_MultiDNN=[15, 15, 15, 15, 15, 15,
-                         15, 15, 15, 15, 15, 15,
-                         15, 15, 15, 15, 15, 15]
+    nhistobins_MultiDNN=[12, 12, 12, 8, 15, 15,
+                         15, 15, 12, 8, 12, 15,
+                         15, 15, 14, 10, 15, 15]
 
-    minxvals_MultiDNN=[0.16, 0.16, 0.16, 0.16, 0.16, 0.16,
-                       0.16, 0.16, 0.16, 0.16, 0.16, 0.16,
-                       0.16, 0.16, 0.16, 0.16, 0.16, 0.16]
+    minxvals_MultiDNN=[0.16, 0.16, 0.16, 0.2, 0.2, 0.2,
+                       0.16, 0.16, 0.2, 0.2, 0.2, 0.2,
+                       0.16, 0.16, 0.2, 0.2, 0.16, 0.2]
 
-    maxxvals_MultiDNN=[0.7, 0.8,  0.5, 0.4, 0.35, 0.45,
-                       0.7, 0.8,  0.5, 0.4, 0.35, 0.45,
-                       0.7, 0.8,  0.5, 0.4, 0.35, 0.45]
+    maxxvals_MultiDNN=[0.55, 0.6,  0.5, 0.35, 0.35, 0.43,
+                       0.67, 0.65, 0.46, 0.35, 0.3, 0.4,
+                       0.65, 0.7,  0.55, 0.4, 0.32, 0.43]
 
     discrs+=discrs_MultiDNN
     nhistobins+=nhistobins_MultiDNN
