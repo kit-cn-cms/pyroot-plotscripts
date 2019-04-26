@@ -60,12 +60,26 @@ void helperFillTwoDimHisto(const std::vector<structHelpFillTwoDimHisto>& paramVe
 void plot(){
   TH1F::SetDefaultSumw2();
 
+  // open files
+  TChain* chain = new TChain("MVATree");
+  char* filenames = getenv ("FILENAMES");
+  char* outfilename = getenv ("OUTFILENAME");
+  std::string plotskriptBaseDir = getenv ("PLOTSCRIPTBASEDIR");
+  string processname = string(getenv ("PROCESSNAME"));
+  string suffix = string(getenv ("SUFFIX"));
+  int maxevents = atoi(getenv ("MAXEVENTS"));
+  int skipevents = atoi(getenv ("SKIPEVENTS"));
+  string eventFilterFile = string(getenv("EVENTFILTERFILE"));
+
+
   // create vector of systematics
   std::vector<Systematics::Type> v_SystTypes = Systematics::getTypeVector();
   //for(auto itsyst : v_SystTypes){std::cout<< " Know :" << itsyst << std::endl;}
 
-  std::string csvHFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_V3_2017/deepCSV_sfs_hf.root";
-  std::string csvLFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_V3_2017/deepCSV_sfs_lf.root";
+  // std::string csvHFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_V3_2017/deepCSV_sfs_hf.root";
+  // std::string csvLFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_V3_2017/deepCSV_sfs_lf.root";
+  std::string csvHFfile=plotskriptBaseDir+"/data/CSV/sfs_deepjet_2017_hf.root";
+  std::string csvLFfile=plotskriptBaseDir+"/data/CSV/sfs_deepjet_2017_lf.root";
   TString qcd_file = "/nfs/dust/cms/user/mwassmer/QCD_Estimation_September17/QCD_Estimation/QCD_Estimation_FakeScaleFactor_nominal.root";
   
   CSVHelper* internalCSVHelper= new CSVHelper(csvHFfile,csvLFfile, 5,4,3,v_SystTypes);
@@ -73,15 +87,7 @@ void plot(){
   //QCDHelper* internalQCDHelper = new QCDHelper(qcd_file);
   //ttbarsysthelper* internalttbarsysthelper = new ttbarsysthelper();
 
-  // open files
-  TChain* chain = new TChain("MVATree");
-  char* filenames = getenv ("FILENAMES");
-  char* outfilename = getenv ("OUTFILENAME");
-  string processname = string(getenv ("PROCESSNAME"));
-  string suffix = string(getenv ("SUFFIX"));
-  int maxevents = atoi(getenv ("MAXEVENTS"));
-  int skipevents = atoi(getenv ("SKIPEVENTS"));
-  string eventFilterFile = string(getenv("EVENTFILTERFILE"));
+
 
   std::cout<<"processname" <<processname<<std::endl;
   std::cout<<"suffix" <<suffix<<std::endl;
