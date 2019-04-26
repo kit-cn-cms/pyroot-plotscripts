@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttbb-studies'
+    name = 'Merged-ttbarTEST'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -52,10 +52,10 @@ def main(pyrootdir, argv):
     memexp = ''
 
     # name of the csv files used in configdata folder
-    configDataBaseName = "ttbb-studies"
+    configDataBaseName = "ttbb-Mergedstudies"
 
     # name of plotconfig
-    pltcfgName = "GEN"
+    pltcfgName = "Merged"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -89,7 +89,7 @@ def main(pyrootdir, argv):
         "skipRenaming":         False,
         "skipDatacards":        False}
 
-    plotJson = "/nfs/dust/cms/user/mhorzela/DPGjson.json"
+    plotJson = "/nfs/dust/cms/user/mhorzela/pyroot-plotscripts/RECO.json" #"/nfs/dust/cms/user/mhorzela/DPGjson.json"
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018",True]] 
     #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
 
@@ -412,6 +412,13 @@ def main(pyrootdir, argv):
             dataList        = gP.genList(samples = configData.controlSamples)
             # pseudodataList  = gP.genList(samples = [configData.samples[0]]+configData.samples[9:])
             pseudodataList = gP.genList(samples = configData.samples[0:])
+            
+            histoLists = []
+            print "Samples: ", configData.samples
+            for i in range(len(configData.samples)/5):
+                print "Samples[0:5*i]: ", configData.samples[i*5:(i+1)*5]
+                histoLists.append( gP.genList(samples = configData.samples[i*5:(i+1)*5]) )
+                
             monitor.printClass(gP, "after creating init lists")
 
 
@@ -427,10 +434,6 @@ def main(pyrootdir, argv):
             '''
             with monitor.Timer("makingSimpleMCplots"):
                 # creating control plots
-                
-
-                
-                
                 #controlPlotOptions = {
                     #"factor":           -1,
                     #"logscale":         True,
@@ -444,8 +447,36 @@ def main(pyrootdir, argv):
                     #sampleIndex = 0)
                 #gP.makeSimpleControlPlots( sampleConfig, controlPlotOptions )
 
+
+
                 # creating shape plots
-                shapePlotOptions = {
+                # ~ shapePlotOptions = {
+                    # ~ "logscale":         True,
+                    # ~ "canvasOptions":    "histo",
+                    # ~ "normalize":        True, # not default
+                    # ~ "stack":            False,
+                    # ~ "ratio":            True,
+                    # ~ "errorband":        True,
+                    # ~ "statTest":         False,
+                    # ~ "sepaTest":         False,
+                    # ~ "privateWork":      True}
+                # ~ sampleConfig = genPlots.Config(
+                    # ~ histograms  = histoList,
+                    # ~ sampleIndex = 1)
+                # ~ # generate the llloflist internally
+                # ~ sampleConfig.addNestedHistList(
+                    # ~ genPlotsClass = gP,
+                    # ~ systNames = pltcfg.errorSystNames)
+                # ~ sampleConfig.addErrorbandConfig({
+                    # ~ "style":        1001, 
+                    # ~ "color":        ROOT.kRed, 
+                    # ~ "doRateSysts":  False})
+                # ~ gP.makeSimpleShapePlots( sampleConfig, label = "", options = shapePlotOptions )
+                
+                
+                
+                # creating merged shape plots
+                shapeMergedPlotOptions = {
                     "logscale":         True,
                     "canvasOptions":    "histo",
                     "normalize":        True, # not default
@@ -455,18 +486,26 @@ def main(pyrootdir, argv):
                     "statTest":         False,
                     "sepaTest":         False,
                     "privateWork":      True}
-                sampleConfig = genPlots.Config(
-                    histograms  = histoList,
-                    sampleIndex = 0)
-                # generate the llloflist internally
-                sampleConfig.addNestedHistList(
-                    genPlotsClass = gP,
-                    systNames = pltcfg.errorSystNames)
-                sampleConfig.addErrorbandConfig({
-                    "style":        1001, 
-                    "color":        ROOT.kRed, 
-                    "doRateSysts":  False})
-                gP.makeSimpleShapePlots( sampleConfig, label = "", options = shapePlotOptions )
+                    
+                print "\nHistoList: ", histoLists[0], "with samples: ", histoLists[0].samples
+                sampleConfigs = []
+                for i in range(len(configData.samples)/5):
+                    sampleConfig = genPlots.Config(
+                        histograms  = histoLists[i],
+                        sampleIndex = 0)
+                    # generate the llloflist internally
+                    sampleConfig.addNestedHistList(
+                        genPlotsClass = gP,
+                        systNames = pltcfg.errorSystNames)
+                    samples = sampleConfig.getSamples(withHead=False)
+                    print samples
+                    sampleConfig.addErrorbandConfig({
+                        "style":        1001, 
+                        "color":        samples[0].color, 
+                        "doRateSysts":  False})
+                    sampleConfigs.append(sampleConfig)
+                    
+                gP.makeSimpleShapePlotsMerged( sampleConfigs, label = "", options = shapeMergedPlotOptions )
 
                 monitor.printClass(gP, "after making simple MC plots")
 
@@ -484,10 +523,10 @@ def main(pyrootdir, argv):
                     sampleIndex = 0)
 
                 # generate the llloflist internally
-                sampleConfig.genNestedHistList(
+                sampleConfig.addNestedHistList(
                     genPlotsClass = gP,
                     systNames = pltcfg.errorSystNames)
-                sampleConfig.setErrorbandConfig({
+                sampleConfig.addErrorbandConfig({
                     "style":        3354, 
                     "color":        ROOT.kBlack, 
                     "doRateSysts":  False})
@@ -539,3 +578,4 @@ def main(pyrootdir, argv):
 if __name__ == "__main__":
 
     main(pyrootdir, sys.argv[1:])
+

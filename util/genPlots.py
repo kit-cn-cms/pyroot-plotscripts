@@ -77,7 +77,7 @@ class Config:
 
                     if not syst in sample.shape_unc:
                         print("using nominal key for " + str(key))
-                        baseList.append( nominal.Clone(key) )
+                        baseList.append( nominal.Clone("NomDummy_"+key) )
                         continue
 
                     outHist = rootFile.Get(key)
@@ -85,11 +85,13 @@ class Config:
                         baseList.append( outHist.Clone() )
                     else:
                         print(str(syst)+" not used for "+str(sample.name))
+                # ~ print baseList
                 nestedList.append(baseList)
             outList.append(nestedList)
 
         print("generated list of histograms for making control plots")
         self.nestedHistList.append(outList)
+        # ~ print self.nestedHistList
 
     def addErrorbandConfig(self, config = {}):
         self.errorbandConfig.append(config)
@@ -159,7 +161,7 @@ class genPlots:
         self.outPath = outPath
         self.plots = plots
         self.plotdir = plotdir
-        self.rebin = 1
+        self.rebin = rebin
 
     # -- functions for setting up lists -----------------------------------------------------------
     # old def createHistoLists_fromSuperHistoFile
@@ -599,7 +601,299 @@ class genPlots:
         print("writing objects")
         writeObjects(canvases, plotPath)
     # ---------------------------------------------------------------------------------------------
+    
+    
+    
+    
+    
+    # make shape plots for several merged samples
+    def makeSimpleShapePlotsMerged(self, dataConfigs, label = "", options = {}):
 
+        print("\n"+"="*30)
+        print("making simple shape plots ...")
+        # load options
+        print("loading options:")
+        plotOptions = self.loadOptions(options)
+
+        # generate directory for shape plots    
+        plotPath = self.plotdir + "/simpleShapePlots/"
+        if not os.path.exists(plotPath):
+            os.makedirs(plotPath)
+        print("plots output: "+str(plotPath))
+        
+        listOfStackedHists = []
+        errorGraphs = []
+        shapeSamplesS = []
+        for dataConfig in dataConfigs:
+            shapeList    = dataConfig.getHistogramsT(withHead = False) # list of phys. quantities of lists of samples
+            shapeSamples = dataConfig.getSamples(withHead = False)
+            shapeSamplesS.append(shapeSamples)
+            nestedshitlist = dataConfig.nestedHistList # list of nestedhistlists from different configs of list of list of samples with list of histograms (nominal and variations) 
+
+            # get label texts
+            if isinstance(label, basestring):
+                labelTexts = len(shapeList)*[label]
+            else:
+                labelTexts = label
+                
+            # create errorbands
+            errorStyles = []
+            errorColors = []
+            errorBands = []
+            
+            errorbandConfig = dataConfig.errorbandConfig[0].copy()
+            errorbandConfig.update(plotOptions)
+            # ~ print "TESTEST ", errorbandConfig, plotOptions
+            # ~ return
+
+            errorBands.append( createErrorbandsMerged( dataConfig.nestedHistList, shapeSamples, errorbandConfig))
+            # ~ print "\nErrorBands: \n"+"-"*80+"\n",errorBands, "\n"+"-"*80
+            errorStyles.append( dataConfig.errorbandConfig[0]["style"] )
+            errorColors.append( dataConfig.errorbandConfig[0]["color"] )
+            print("errorband created: "+str(errorBands[-1]))
+             
+            # combine bands, styles and colors for each sample and plot
+            
+            for isample in range(len(errorBands[0])):
+                graphs = []
+                for iplot in range(len(errorBands)):
+                    graphs = [errorBands[iplot][isample], errorStyles[iplot], errorColors[iplot]]
+                    errorGraphs.append(graphs)                
+            # ~ print "errorBands: ", errorBands
+            # ~ print "errorGraphs: ", errorGraphs
+            
+            # starting shape plots
+            canvases = []
+            objects = []
+            index = 0
+        
+            ## starting loop over list of hists
+            print("looping over used histolist ...")
+            
+            # ~ print "shapeList: ", shapeList, "\nlabelTexts: ", labelTexts, "\nerrorGraphs: ", errorGraphs
+            for listOfHists, labelText in zip(shapeList, labelTexts):
+                # ~ print("listOfHists: "+str(listOfHists))
+                # ~ print("labelText: "+str(labelText))
+                # ~ print("errorGraphList: "+str(errorGraphList))
+                
+                # ~ print "\n\n", index, "\n\n"
+                index += 1
+
+                # starting loop over hists in list of hists
+                for hist, sample in zip(listOfHists, shapeSamples):
+                    hist
+                    # setting y title
+                    yTitle = "Events"
+                    if plotOptions["normalize"]:
+                        yTitle = "arbitrary units"
+
+                    # setting up histogram
+                    setupHist( hist, sample.color, yTitle, plotOptions["stack"] )
+                print  "Sis is se plotoption for se errorbandcontrolplot: ", plotOptions["errorband"]
+                
+                # move over/underflow
+                for hist in listOfHists:
+                    moveOverFlow( hist )
+                
+                # stack
+                stackedListOfHists = stackHistoList( listOfHists )
+                objects.append( stackedListOfHists )
+                listOfStackedHists.append(stackedListOfHists[0])
+            
+            print "These are the Stacked hists and Errorgraphs for dataConfig ", dataConfig, ": ", listOfStackedHists, errorGraphs
+            
+        # drawing canvas
+        canvas = drawHistOnCanvas( listOfStackedHists, plotOptions )
+        canvas.SetName( listOfStackedHists[0].GetName() )
+        canvas.cd(1)
+
+
+        # create errorbands for ratioplot and draw errorbands
+        errorGraphsControl = []
+        ratioErrorGraphs = []
+        gCounter = 0
+        print("doing ratio error graph")
+        referrorGraphList = []
+        refindex = 0
+        referrorGraph = None
+        for errorGraphList in errorGraphs:                    
+            
+            if refindex == 0: 
+                referrorGraphList = errorGraphList
+                referrorGraph = referrorGraphList[0].Clone()
+            
+            errorGraph = errorGraphList[0]
+            errorGraphControl = ROOT.TGraphAsymmErrors( errorGraph.GetN() )
+            print "printing error graph for: ", errorGraph
+            
+            # get the styles for the error graphs
+            fillStyle = errorGraphList[1] #+ 20*refindex
+            fillColor = errorGraphList[2]
+            fillOpacity = 0.3
+            # ~ if refindex == 0:
+                # ~ fillStyle = 3002
+                # ~ fillOpacity = 1.0
+            
+            
+            ratioErrorGraph = ROOT.TGraphAsymmErrors( errorGraph.GetN() )
+            x, y = ROOT.Double(0), ROOT.Double(0)
+            xref, yref = ROOT.Double(0), ROOT.Double(0)
+            errorYmax, errorYmin = ROOT.Double(0), ROOT.Double(0)
+            
+            for igCount in range( errorGraph.GetN() ):
+                if abs(errorGraph.GetErrorYlow(igCount)) > abs(errorYmin): errorYmin = -abs(errorGraph.GetErrorYlow(igCount))
+                if abs(errorGraph.GetErrorYhigh(igCount)) > abs(errorYmax): errorYmax = abs(errorGraph.GetErrorYhigh(igCount))
+                
+                errorGraph.GetPoint( igCount, x,y )
+                                    
+                referrorGraph.GetPoint( igCount, xref,yref )
+                relErrUp = 0.0
+                relErrDown = 0.0
+                relErrDownControl = 0.0
+                relErrUpControl = 0.0
+                print x,y,errorGraph.GetErrorYhigh(igCount),errorGraph.GetErrorYlow(igCount)
+                # check if bincontent error becomes negative
+                if (y - abs(errorGraph.GetErrorYlow(igCount))) < 0:
+                    print("WARNING")
+                    print("stack - error is negative in "+str(hist.GetName())+" "+str(igCount))
+                    print("with valies "+str(y)+" "+str(errorGraph.GetErrorYlow(igCount))+" \n")
+                
+                if y > 0.0 and yref > 0.0:
+                    relErrUp = (errorGraph.GetErrorYhigh(igCount))/yref
+                    relErrUpControl = (errorGraph.GetErrorYhigh(igCount))/y
+                    relErrDown = (errorGraph.GetErrorYlow(igCount))/yref
+                    relErrDownControl = (errorGraph.GetErrorYlow(igCount))/y
+                    # ~ print "errUp/Down: ", relErrUp, relErrDown
+                    
+                errorGraphControl.SetPoint(igCount, x, 0.)
+                errorGraphControl.SetPointError(igCount, 
+                        errorGraph.GetErrorXlow(igCount),
+                        errorGraph.GetErrorXhigh(igCount),
+                        relErrDownControl, relErrUpControl)
+                
+                if yref != 0:
+                    ratioErrorGraph.SetPoint(igCount,x,y/yref)
+                else:
+                    ratioErrorGraph.SetPoint(igCount,x,0.0)
+                if refindex == 0:
+                    ratioErrorGraph.SetPointError(igCount, 
+                            errorGraph.GetErrorXlow(igCount),
+                            errorGraph.GetErrorXhigh(igCount),
+                            relErrDown, relErrUp)
+                else:
+                    ratioErrorGraph.SetPointError(igCount, 
+                            errorGraph.GetErrorXlow(igCount),
+                            errorGraph.GetErrorXhigh(igCount),
+                            0., 0.)
+            
+            # set the style for error graphs in all three canvases    
+            errorGraph.SetFillStyle( fillStyle )
+            errorGraph.SetLineColor( fillColor )
+            errorGraph.SetFillColor( fillColor )
+            errorGraph.SetFillColorAlpha(fillColor, fillOpacity)
+            errorGraphControl.SetFillStyle( fillStyle )
+            errorGraphControl.SetLineColor( fillColor )
+            errorGraphControl.SetFillColor( fillColor )
+            errorGraphControl.SetFillColorAlpha(fillColor, fillOpacity)
+            ratioErrorGraph.SetFillStyle( fillStyle )
+            ratioErrorGraph.SetLineColor( fillColor )
+            ratioErrorGraph.SetFillColor( fillColor )
+            ratioErrorGraph.SetFillColorAlpha(fillColor, fillOpacity)
+
+            #if gCounter == 0:
+                #errorGraph.Draw("2")
+            #else:
+            # draw error graph for first canvas
+            canvas.cd(1)
+            errorGraph.Draw("same2")    
+            
+            # drawing errorbands in comparison plot
+            if plotOptions["errorband"]:
+                if plotOptions["ratio"]: canvas.cd(3)
+                else: canvas.cd(2)
+                print "printing error graph comparison plot", errorGraphControl.GetErrorYlow(1)
+                # ~ errorGraphControl.SetRangeUser(errorYmin*1.5, errorYmax*1.5)
+                errorGraphControl.Draw("same2")
+                
+            gCounter += 1
+            refindex += 1
+            
+            objects.append(errorGraph)
+            objects.append(ratioErrorGraph)
+            objects.append(errorGraphControl)
+            ratioErrorGraphs.append(ratioErrorGraph)
+            errorGraphsControl.append(errorGraphControl)
+
+
+        # setting up legend
+        canvas.cd(1)
+        legend = getLegend()
+        for hist, samples in zip(listOfStackedHists, shapeSamplesS):
+            legendOpt = "L" if plotOptions["stack"] else "L"
+            sample = samples[-1]
+            legend.AddEntryLegend( hist, "Merged "+sample.name.split()[0], legendOpt )
+
+        # adding canvas to list
+        canvases.append( canvas )
+        legend.Draw("same")
+        ROOT.gPad.Update()
+        legend.SetY1NDC(0.78)
+        legend.SetY2NDC(0.9)
+        legend.SetX1NDC(0.6)
+        legend.SetX2NDC(0.9)
+        ROOT.gStyle.SetLegendTextSize(2)
+        ROOT.gPad.Modified()
+        ROOT.gPad.Update()
+        
+        objects.append( legend )
+
+        # doint stat and sepa tests
+        if plotOptions["statTest"]:
+            statTests = getStatTests( listOfStackedHists[0], listOfStackedHists[1] )
+            statTests.Draw()
+            objects.append( statTests )
+        if plotOptions["sepaTest"]:
+            sepTests = getSepaTests( listOfStackedHists[0], listOfStackedHists[1] )
+            sepTests.Draw()
+            objects.append( sepTests )
+
+
+        if plotOptions["privateWork"]:
+            # ~ cms = ROOT.TLatex(0.2, 0.96, "CMS private work" );
+            cms = ROOT.TLatex(0.18, 0.85, "#splitline{CMS simulation}{WORK IN PROGRESS}" );
+            cms.SetTextFont(42)
+            cms.SetTextSize(0.05)
+            cms.SetNDC()
+            cms.Draw()
+            objects.append(cms)
+
+        label = ROOT.TLatex(0.2, 0.86, labelText);
+        label.SetTextFont(42)
+        label.SetTextSize(0.05)
+        label.SetNDC()
+        label.Draw()
+        objects.append(label)
+        
+        
+        # drawing ratio errorbands
+        if plotOptions["ratio"]:
+            canvas.cd(2)
+            print "printing ratio error graph"
+            for ratioErrorGraph in ratioErrorGraphs:
+                #x, y = ROOT.Double(0), ROOT.Double(0)
+                #ratioErrorGraph.GetPoint(1,x,y)
+                #print x,y, ratioErrorGraph.GetErrorXhigh(1),ratioErrorGraph.GetErrorYhigh(1)
+                ratioErrorGraph.Draw("same2")   # draw ratioerrorgraph
+
+        print("done with loop")
+        print("printing canvases")
+        printCanvases(canvases, plotPath)
+
+        # write all objects
+        print("writing objects")
+        writeObjects(canvases, plotPath)
+    # ---------------------------------------------------------------------------------------------
+    
 
 
 
@@ -1116,11 +1410,11 @@ def drawHistOnCanvas(listOfHistos, plotOptions):
             line.SetBinContent(i, 1)
             line.SetBinError(i, 0)
         line.SetLineWidth(1)
-        line.DrawCopy('histo')
+        line.DrawCopy('histoE')
         for hist in listOfHistos[1:]:
             ratioPlot = hist.Clone()
             ratioPlot.Divide(listOfHistos[0])
-            ratioPlot.DrawCopy('samehisto')
+            ratioPlot.DrawCopy('samehistoE')
             
     # draw errorband comparison plot if activated
     if plotOptions["errorband"]:
@@ -1143,7 +1437,7 @@ def drawHistOnCanvas(listOfHistos, plotOptions):
         line.GetYaxis().SetNdivisions(505)
         line.SetLineWidth(1)
         line.SetLineColor(ROOT.kBlack)
-        line.DrawCopy('histo')
+        line.DrawCopy('histoE')
         
     return canvas
 
@@ -1648,9 +1942,12 @@ def createErrorbandsShapePlot(nestedHistList, samples, errorbandConfig):
     # create a graph which draws the error band for each plot for each sample 
     errorBand = []
     #for all plots (ll represents the plot) 
+    # ~ print nestedHistList
     for ll in nestedHistList[0]:            # use only the first nestedHistList from the first sample config# ll[isample][ivar]
+        # ~ print ll
         llT = transposeLOL(ll)              # list of histo variations of list of samples  # llT[ivar][isample]
         # for all samples
+        # ~ print "llT:\n", llT
         assert len(samples) == len(llT[0])
         errorBands = []
         for isample, sample in enumerate(samples):
@@ -1662,8 +1959,9 @@ def createErrorbandsShapePlot(nestedHistList, samples, errorbandConfig):
                 # ~ print hist.GetNbinsX()
                 # ~ nominal.Add(hist)
             systs = [] # list of histograms with alternating up and down variations (one alternation for every systematic)
-            for l in llT[1:]: #for all systematics 
+            for l in llT[1:]: #for all systematics
                 syst = l[isample].Clone()
+                # ~ print "l:\n", l
                 # ~ for hist in l[1:]: # stack up all variations
                     # ~ syst.Add(hist)
                     # ~ print hist.GetNbinsX()
@@ -1693,6 +1991,7 @@ def createErrorbandsShapePlot(nestedHistList, samples, errorbandConfig):
                 # ~ syst.Add(hist)
                 # ~ print "rates ", sample.nick, syst.Integral()
             systs.append(syst)
+            # ~ print "list of systs", systs
 
             # get the up- and down-variation of the nominal histogram for each bin of all uncertainties combined
             # store them in lists for each bin
@@ -1708,11 +2007,9 @@ def createErrorbandsShapePlot(nestedHistList, samples, errorbandConfig):
                 ups = systs[0::2]
                 downs = systs[1::2]
                 for up, down in zip(ups, downs):
-                    #print "up/down name ", up.GetName(), down.GetName()
-                    #print "up/down diff ",  up.GetBinContent(ibin+1)-n, down.GetBinContent(ibin+1)-n
                     upDelta = up.GetBinContent(ibin+1)-n         # difference of up-variation to nominal histo
                     downDelta = down.GetBinContent(ibin+1)-n       # difference of down-variation to nominal histo
-                    #print upDelta,downDelta
+                    # ~ print upDelta,downDelta
                     # TODO that shit sucks
                     if upDelta >= 0 and upDelta >= downDelta:
                         u = upDelta
@@ -1732,6 +2029,10 @@ def createErrorbandsShapePlot(nestedHistList, samples, errorbandConfig):
                             u = downDelta
                         else:
                             u = 0
+                            
+                    # ~ if upDelta!=0 or downDelta!=0:
+                        # ~ print "up/down name ", up.GetName(), down.GetName()
+                        # ~ print "up/down diff ",  ibin+1, upDelta, downDelta
                     
                     # compute uncorrelated sum of uncertainties
                     uperrors[ibin] = ROOT.TMath.Sqrt( uperrors[ibin]*uperrors[ibin] + u*u )
@@ -1765,6 +2066,124 @@ def createErrorbandsShapePlot(nestedHistList, samples, errorbandConfig):
         
     return errorBand
 
+
+def createErrorbandsMerged(nestedHistList, samples, errorbandConfig):
+    print "\ncreating errorbands"
+    #print nestedHistList
+    if errorbandConfig["doRateSysts"]:
+        print "using ratesysts"
+    errorBand = []
+    for ll in nestedHistList[0]: #for all plots
+        #print "\nll:\n", "-"*30, ll
+        llT = transposeLOL(ll)
+        #print "\nllT:\n", "-"*30, llT
+        nominal = llT[0][0].Clone()
+        print("Creating error band for "+str(nominal.GetName()))
+        for hist in llT[0][1:]:
+            #print "\nllT[0][1:]:\n", hist, "\t"
+            print hist.GetNbinsX()
+            nominal.Add(hist)
+        systs = []
+        for l in llT[1:]: #for all systematics
+            syst = l[0].Clone()
+            for hist in l[1:]:
+                syst.Add(hist)
+                print hist.GetNbinsX()
+                print("adding to errorband (h, int, total syst, nominal.int)")
+                print hist, hist.Integral(), syst.Integral(), nominal.Integral()
+            systs.append(syst)
+        assert len(samples) == len(llT[0])
+        for isample, sample in enumerate(samples): # for all normalization unc
+            ls = []
+            for ihisto, hist in enumerate(llT[0]):
+                ls.append(hist.Clone())
+                if ihisto == isample:
+                    if errorbandConfig["doRateSysts"]:
+                        ls[-1].Scale(1 + sample.unc_up)
+            syst = ls[0].Clone()
+            for hist in ls[1:]:
+                syst.Add(hist)
+            systs.append(syst)
+
+            ls = []
+            for ihisto, hist in enumerate(llT[0]):
+                ls.append(hist.Clone())
+                if ihisto==isample:
+                    if errorbandConfig["doRateSysts"]:
+                        ls[-1].Scale(1 - sample.unc_down)
+            syst = ls[0].Clone()
+            for hist in ls[1:]:
+                syst.Add(hist)
+                print "rates ", sample.nick, syst.Integral()
+            systs.append(syst)
+
+        uperrors = [0]*ll[0][0].GetNbinsX()
+        downerrors = [0]*ll[0][0].GetNbinsX()
+
+        for ibin in range(0, nominal.GetNbinsX()):
+            nerr = nominal.GetBinError(ibin+1)
+            uperrors[ibin] = ROOT.TMath.Sqrt( uperrors[ibin]*uperrors[ibin] + nerr*nerr )
+            downerrors[ibin] = ROOT.TMath.Sqrt( downerrors[ibin]*downerrors[ibin] + nerr*nerr )
+            n = nominal.GetBinContent(ibin+1)
+            ups = systs[0::2]
+            downs = systs[1::2]
+            for up, down in zip(ups, downs):
+                #print "up/down name ", up.GetName(), down.GetName()
+                #print "up/down diff ",  up.GetBinContent(ibin+1)-n, down.GetBinContent(ibin+1)-n
+                u_ = up.GetBinContent(ibin+1)-n
+                d_ = down.GetBinContent(ibin+1)-n
+                #print u_,d_
+                # TODO that shit sucks
+                if u_ >= 0 and u_ >= d_:
+                    u = u_
+                    if d_ < 0:
+                        d = d_
+                    else:
+                        d = 0
+                elif u_ >= 0 and u_ <= d_:
+                    u = d_
+                    d = 0
+                elif u_ < 0 and d_ <= u_:
+                    d = d_
+                    u = 0
+                elif u_ < 0 and u_ < d_:
+                    d = u_
+                    if d_ >= 0:
+                        u = d_
+                    else:
+                        u = 0
+
+                uperrors[ibin] = ROOT.TMath.Sqrt( uperrors[ibin]*uperrors[ibin] + u*u )
+                downerrors[ibin] = ROOT.TMath.Sqrt( downerrors[ibin]*downerrors[ibin] + d*d)
+                
+                if uperrors[ibin] == 0 and downerrors[ibin] == 0: continue
+                #print u, d
+                print "up/down errors ", uperrors[ibin],downerrors[ibin]
+        
+        # generate the graph which will draw the errorband, normalize if necessary
+        if errorbandConfig["normalize"]:
+            if nominal.Integral() > 0:
+                integral = nominal.Integral()
+            else:
+                integral = 1.
+                print "Warning: Integral of nominal hist is zero! The errorbands might not be scaled correctly."
+        else:
+            integral = 1.
+            
+        # ~ print "\nINTEGRAL FOR SCALING OD NOMINAL: ", integral, "\n"
+        scalednominal = nominal.Clone()
+        scalednominal.Scale(1/integral)
+        
+        graph = ROOT.TGraphAsymmErrors(scalednominal)
+        
+        for i in range(len(uperrors)):
+            graph.SetPointEYlow(i, downerrors[i]/integral)
+            graph.SetPointEYhigh(i, uperrors[i]/integral)
+            graph.SetPointEXlow(i, nominal.GetBinWidth(i+1)/2.)
+            graph.SetPointEXhigh(i, nominal.GetBinWidth(i+1)/2.)
+
+        errorBand.append(graph)
+    return errorBand
 
 
 # -- functions for creating control plots ---------------------------------------------------------
