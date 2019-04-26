@@ -129,8 +129,8 @@ systs_tt_lf=[
             #"_CMS_ttHbb_PDF_ttbarOtherUp","_CMS_ttHbb_PDF_ttbarOtherDown",
             #"_CMS_ttHbb_scaleMuR_ttbarOtherUp","_CMS_ttHbb_scaleMuR_ttbarOtherDown",
             #"_CMS_ttHbb_scaleMuF_ttbarOtherUp","_CMS_ttHbb_scaleMuF_ttbarOtherDown",
-            "_CMS_ttHbb_ISR_ttbarOther_2017Up","_CMS_ttHbb_ISR_ttbarOther_2017Down",
-            "_CMS_ttHbb_FSR_ttbarOther_2017Up","_CMS_ttHbb_FSR_ttbarOther_2017Down",
+            # ~ "_CMS_ttHbb_ISR_ttbarOther_2017Up","_CMS_ttHbb_ISR_ttbarOther_2017Down",
+            # ~ "_CMS_ttHbb_FSR_ttbarOther_2017Up","_CMS_ttHbb_FSR_ttbarOther_2017Down",
             ]
 systs_tt_lf_weights=[
                     #"dummyWeight_CMS_ttH_ttbarOther_NNPDFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_up*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
@@ -142,18 +142,18 @@ systs_tt_lf_weights=[
                     #"dummyWeight_CMS_ttH_ttbarOther_scaleMuFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_2p0*internalNormFactor_weight_scale_variation_muR_1p0_muF_2p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     #"dummyWeight_CMS_ttH_ttbarOther_scaleMuFDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_0p5*internalNormFactor_weight_scale_variation_muR_1p0_muF_0p5*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
-                    "dummyWeight_CMS_ttH_ttbarOther_ISRUp:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_6*1.0*(DoWeights==1)+(DoWeights==0)*1.0",                    "dummyWeight_CMS_ttH_ttbarOther_ISRDown:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_8*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    # ~ "dummyWeight_CMS_ttH_ttbarOther_ISRUp:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_6*1.0*(DoWeights==1)+(DoWeights==0)*1.0",                    "dummyWeight_CMS_ttH_ttbarOther_ISRDown:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_8*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
-                    "dummyWeight_CMS_ttH_ttbarOther_FSRUp:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_7*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
-                    "dummyWeight_CMS_ttH_ttbarOther_FSRDown:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_9*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    # ~ "dummyWeight_CMS_ttH_ttbarOther_FSRUp:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_7*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    # ~ "dummyWeight_CMS_ttH_ttbarOther_FSRDown:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_9*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     ]
 
 systs_tt_b=[
             #"_CMS_ttHbb_PDF_ttbarPlusBUp","_CMS_ttHbb_PDF_ttbarPlusBDown",
             #"_CMS_ttHbb_scaleMuR_ttbarPlusBUp","_CMS_ttHbb_scaleMuR_ttbarPlusBDown",
             #"_CMS_ttHbb_scaleMuF_ttbarPlusBUp","_CMS_ttHbb_scaleMuF_ttbarPlusBDown",
-            "_CMS_ttHbb_ISR_ttbarPlusB_2017Up","_CMS_ttHbb_ISR_ttbarPlusB_2017Down",
-            "_CMS_ttHbb_FSR_ttbarPlusB_2017Up","_CMS_ttHbb_FSR_ttbarPlusB_2017Down",
+            # ~ "_CMS_ttHbb_ISR_ttbarPlusB_2017Up","_CMS_ttHbb_ISR_ttbarPlusB_2017Down",
+            # ~ "_CMS_ttHbb_FSR_ttbarPlusB_2017Up","_CMS_ttHbb_FSR_ttbarPlusB_2017Down",
             ]
 systs_tt_b_weights=[
                     #"dummyWeight_CMS_ttH_ttbarPlusB_NNPDFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_up*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
@@ -165,18 +165,18 @@ systs_tt_b_weights=[
                     #"dummyWeight_CMS_ttH_ttbarPlusB_scaleMuFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_2p0*internalNormFactor_weight_scale_variation_muR_1p0_muF_2p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     #"dummyWeight_CMS_ttH_ttbarPlusB_scaleMuFDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_0p5*internalNormFactor_weight_scale_variation_muR_1p0_muF_0p5*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
 
-                    "dummyWeight_CMS_ttH_ttbarPlusB_ISRUp:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_6*1.0*(DoWeights==1)+(DoWeights==0)*1.0",                    "dummyWeight_CMS_ttH_ttbarPlusB_ISRDown:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_8*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    # ~ "dummyWeight_CMS_ttH_ttbarPlusB_ISRUp:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_6*1.0*(DoWeights==1)+(DoWeights==0)*1.0",                    "dummyWeight_CMS_ttH_ttbarPlusB_ISRDown:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_8*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
 
-                    "dummyWeight_CMS_ttH_ttbarPlusB_FSRUp:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_7*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
-                    "dummyWeight_CMS_ttH_ttbarPlusB_FSRDown:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_9*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    # ~ "dummyWeight_CMS_ttH_ttbarPlusB_FSRUp:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_7*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    # ~ "dummyWeight_CMS_ttH_ttbarPlusB_FSRDown:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_9*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     ]
 
 systs_tt_2b=[
             #"_CMS_ttHbb_PDF_ttbarPlus2BUp","_CMS_ttHbb_PDF_ttbarPlus2BDown",
             #"_CMS_ttHbb_scaleMuR_ttbarPlus2BUp","_CMS_ttHbb_scaleMuR_ttbarPlus2BDown",
             #"_CMS_ttHbb_scaleMuF_ttbarPlus2BUp","_CMS_ttHbb_scaleMuF_ttbarPlus2BDown",
-            "_CMS_ttHbb_ISR_ttbarPlus2B_2017Up","_CMS_ttHbb_ISR_ttbarPlus2B_2017Down",
-            "_CMS_ttHbb_FSR_ttbarPlus2B_2017Up","_CMS_ttHbb_FSR_ttbarPlus2B_2017Down",
+            # ~ "_CMS_ttHbb_ISR_ttbarPlus2B_2017Up","_CMS_ttHbb_ISR_ttbarPlus2B_2017Down",
+            # ~ "_CMS_ttHbb_FSR_ttbarPlus2B_2017Up","_CMS_ttHbb_FSR_ttbarPlus2B_2017Down",
             ]
 systs_tt_2b_weights=[
                     #"dummyWeight_CMS_ttH_ttbarPlus2B_NNPDFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_up*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
@@ -188,18 +188,18 @@ systs_tt_2b_weights=[
                     #"dummyWeight_CMS_ttH_ttbarPlus2B_scaleMuFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_2p0*internalNormFactor_weight_scale_variation_muR_1p0_muF_2p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     #"dummyWeight_CMS_ttH_ttbarPlus2B_scaleMuFDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_0p5*internalNormFactor_weight_scale_variation_muR_1p0_muF_0p5*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
 
-                    "dummyWeight_CMS_ttH_ttbarPlus2B_ISRUp:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_6*1.0*(DoWeights==1)+(DoWeights==0)*1.0",                    "dummyWeight_CMS_ttH_ttbarPlus2B_ISRDown:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_8*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    # ~ "dummyWeight_CMS_ttH_ttbarPlus2B_ISRUp:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_6*1.0*(DoWeights==1)+(DoWeights==0)*1.0",                    "dummyWeight_CMS_ttH_ttbarPlus2B_ISRDown:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_8*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
 
-                    "dummyWeight_CMS_ttH_ttbarPlus2B_FSRUp:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_7*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
-                    "dummyWeight_CMS_ttH_ttbarPlus2B_FSRDown:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_9*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    # ~ "dummyWeight_CMS_ttH_ttbarPlus2B_FSRUp:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_7*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    # ~ "dummyWeight_CMS_ttH_ttbarPlus2B_FSRDown:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_9*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     ]
 
 systs_tt_bb=[
             #"_CMS_ttHbb_PDF_ttbarPlusBBbarUp","_CMS_ttHbb_PDF_ttbarPlusBBbarDown",
             #"_CMS_ttHbb_scaleMuR_ttbarPlusBBbarUp","_CMS_ttHbb_scaleMuR_ttbarPlusBBbarDown",
             #"_CMS_ttHbb_scaleMuF_ttbarPlusBBbarUp","_CMS_ttHbb_scaleMuF_ttbarPlusBBbarDown",
-            "_CMS_ttHbb_ISR_ttbarPlusBBbar_2017Up","_CMS_ttHbb_ISR_ttbarPlusBBbar_2017Down",
-            "_CMS_ttHbb_FSR_ttbarPlusBBbar_2017Up","_CMS_ttHbb_FSR_ttbarPlusBBbar_2017Down",
+            # ~ "_CMS_ttHbb_ISR_ttbarPlusBBbar_2017Up","_CMS_ttHbb_ISR_ttbarPlusBBbar_2017Down",
+            # ~ "_CMS_ttHbb_FSR_ttbarPlusBBbar_2017Up","_CMS_ttHbb_FSR_ttbarPlusBBbar_2017Down",
             ]
 systs_tt_bb_weights=[
                     #"dummyWeight_CMS_ttH_ttbarPlusBBbar_NNPDFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_up*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
@@ -211,18 +211,18 @@ systs_tt_bb_weights=[
                     #"dummyWeight_CMS_ttH_ttbarPlusBBbar_scaleMuFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_2p0*internalNormFactor_weight_scale_variation_muR_1p0_muF_2p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     #"dummyWeight_CMS_ttH_ttbarPlusBBbar_scaleMuFDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_0p5*internalNormFactor_weight_scale_variation_muR_1p0_muF_0p5*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
 
-                    "dummyWeight_CMS_ttH_ttbarPlusBBbar_ISRUp:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_6*1.0*(DoWeights==1)+(DoWeights==0)*1.0",                "dummyWeight_CMS_ttH_ttbarPlusBBbar_ISRDown:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_8*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    # ~ "dummyWeight_CMS_ttH_ttbarPlusBBbar_ISRUp:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_6*1.0*(DoWeights==1)+(DoWeights==0)*1.0",                "dummyWeight_CMS_ttH_ttbarPlusBBbar_ISRDown:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_8*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
 
-                    "dummyWeight_CMS_ttH_ttbarPlusBBbar_FSRUp:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_7*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
-                    "dummyWeight_CMS_ttH_ttbarPlusBBbar_FSRDown:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_9*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    # ~ "dummyWeight_CMS_ttH_ttbarPlusBBbar_FSRUp:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_7*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    # ~ "dummyWeight_CMS_ttH_ttbarPlusBBbar_FSRDown:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_9*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     ]
 
 systs_tt_cc=[
             #"_CMS_ttHbb_PDF_ttbarPlusCCbarUp","_CMS_ttHbb_PDF_ttbarPlusCCbarDown",
             #"_CMS_ttHbb_scaleMuR_ttbarPlusCCbarUp","_CMS_ttHbb_scaleMuR_ttbarPlusCCbarDown",
             #"_CMS_ttHbb_scaleMuF_ttbarPlusCCbarUp","_CMS_ttHbb_scaleMuF_ttbarPlusCCbarDown",
-            "_CMS_ttHbb_ISR_ttbarPlusCCbar_2017Up","_CMS_ttHbb_ISR_ttbarPlusCCbar_2017Down",
-            "_CMS_ttHbb_FSR_ttbarPlusCCbar_2017Up","_CMS_ttHbb_FSR_ttbarPlusCCbar_2017Down",
+            # ~ "_CMS_ttHbb_ISR_ttbarPlusCCbar_2017Up","_CMS_ttHbb_ISR_ttbarPlusCCbar_2017Down",
+            # ~ "_CMS_ttHbb_FSR_ttbarPlusCCbar_2017Up","_CMS_ttHbb_FSR_ttbarPlusCCbar_2017Down",
             ]
 systs_tt_cc_weights=[                                           #"dummyWeight_CMS_ttH_ttbarPlusCCbar_NNPDFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_up*internalNormFactor_weight_LHA_306000_up*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     #"dummyWeight_CMS_ttH_ttbarPlusCCbar_NNPDFDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_LHA_306000_down*internalNormFactor_weight_LHA_306000_down*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
@@ -233,10 +233,10 @@ systs_tt_cc_weights=[                                           #"dummyWeight_CM
                     #"dummyWeight_CMS_ttH_ttbarPlusCCbar_scaleMuFUp:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_2p0*internalNormFactor_weight_scale_variation_muR_1p0_muF_2p0*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     #"dummyWeight_CMS_ttH_ttbarPlusCCbar_scaleMuFDown:="+usualWeights+"*"+mcTriggerWeight+"*internalCSVweight*Weight_scale_variation_muR_1p0_muF_0p5*internalNormFactor_weight_scale_variation_muR_1p0_muF_0p5*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
-                    "dummyWeight_CMS_ttH_ttbarPlusCCbar_ISRUp:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_6*1.0*(DoWeights==1)+(DoWeights==0)*1.0",                 "dummyWeight_CMS_ttH_ttbarPlusCCbar_ISRDown:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_8*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    # ~ "dummyWeight_CMS_ttH_ttbarPlusCCbar_ISRUp:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_6*1.0*(DoWeights==1)+(DoWeights==0)*1.0",                 "dummyWeight_CMS_ttH_ttbarPlusCCbar_ISRDown:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_8*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     
-                    "dummyWeight_CMS_ttH_ttbarPlusCCbar_FSRUp:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_7*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
-                    "dummyWeight_CMS_ttH_ttbarPlusCCbar_FSRDown:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_9*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    # ~ "dummyWeight_CMS_ttH_ttbarPlusCCbar_FSRUp:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_7*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
+                    # ~ "dummyWeight_CMS_ttH_ttbarPlusCCbar_FSRDown:="+usualWeights+"*"+mcTriggerWeight+"*GenWeight_9*1.0*(DoWeights==1)+(DoWeights==0)*1.0",
                     ]
 
 
@@ -436,8 +436,9 @@ samplesDataControlPlots=[
 
 
 print "controlsamples"
-samplesControlPlots=[
+samplesControlPlots=[                    
                     plotClasses.Sample('t#bar{t}H, H to b#bar{b}',ROOT.kBlue+1,path_mwassmer+'/ttHTobb*/*nominal*.root','1.0*'+mcWeight+'*(N_GenTopHad==1&&N_GenTopLep==1)'+evenSel+sel_MET,'ttH_hbb',systsAllSamples+systs_ttH+systs_tt_and_ttH,samDict=sampleDict, readTrees=doReadTrees) ,
+                    
                     
                     plotClasses.Sample('Powheg t#bar{t}+b-jets ',ROOT.kBlack,ttbarPathS,mcWeightAll+'*(GenEvt_I_TTPlusBB>0)'+sel_MET+sel_StrangeMuWeights,'tt-inclusive',systsAllSamples+systs_tt_all+systs_tt_bb+systs_ttbb_incl+hdamp_ue_filenames_tt_all+hdamp_ue_filenames_tt_bb,samDict=sampleDict, readTrees=doReadTrees),
                     

@@ -89,7 +89,7 @@ def main(pyrootdir, argv):
         "skipRenaming":         False,
         "skipDatacards":        False}
 
-    plotJson = "" #"/nfs/dust/cms/user/mhorzela/DPGjson.json"
+    plotJson = "/nfs/dust/cms/user/mhorzela/pyroot-plotscripts/RECO.json" #"/nfs/dust/cms/user/mhorzela/DPGjson.json"
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018",True]] 
     #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
 
@@ -427,10 +427,6 @@ def main(pyrootdir, argv):
             '''
             with monitor.Timer("makingSimpleMCplots"):
                 # creating control plots
-                
-
-                
-                
                 #controlPlotOptions = {
                     #"factor":           -1,
                     #"logscale":         True,
@@ -443,6 +439,8 @@ def main(pyrootdir, argv):
                     #histograms  = histoList,
                     #sampleIndex = 0)
                 #gP.makeSimpleControlPlots( sampleConfig, controlPlotOptions )
+
+
 
                 # creating shape plots
                 shapePlotOptions = {
@@ -457,7 +455,7 @@ def main(pyrootdir, argv):
                     "privateWork":      True}
                 sampleConfig = genPlots.Config(
                     histograms  = histoList,
-                    sampleIndex = 0)
+                    sampleIndex = 1)
                 # generate the llloflist internally
                 sampleConfig.addNestedHistList(
                     genPlotsClass = gP,
@@ -467,8 +465,6 @@ def main(pyrootdir, argv):
                     "color":        ROOT.kRed, 
                     "doRateSysts":  False})
                 gP.makeSimpleShapePlots( sampleConfig, label = "", options = shapePlotOptions )
-
-                monitor.printClass(gP, "after making simple MC plots")
 
 
 
@@ -484,10 +480,10 @@ def main(pyrootdir, argv):
                     sampleIndex = 0)
 
                 # generate the llloflist internally
-                sampleConfig.genNestedHistList(
+                sampleConfig.addNestedHistList(
                     genPlotsClass = gP,
                     systNames = pltcfg.errorSystNames)
-                sampleConfig.setErrorbandConfig({
+                sampleConfig.addErrorbandConfig({
                     "style":        3354, 
                     "color":        ROOT.kBlack, 
                     "doRateSysts":  False})
