@@ -1555,14 +1555,22 @@ def eventYields(data, hists, samples, path, name, withError = True, makeRatios =
         histRatio = hists[0].Clone()
         histRatio.Divide( bkgHist )
         sRatio = plotClasses.Sample( "S/B" )
-        
+
+        histRatioSsqrtB = hists[0].Clone()
+        histSqrtB = bkgHist.Clone()
+        for i in range(histSqrtB.GetNbinsX()+1):
+            histSqrtB.SetBinContent(i,ROOT.TMath.Sqrt(bkgHist.GetBinContent(i)))
+        histRatioSsqrtB.Divide( histSqrtB )
+
+        SqrtB = plotClasses.Sample( "S/#sqrt{B}" )
+
         hRatioData = histData.Clone()
         hRatioData.Divide( bkgHist )
 
         sRatioData = plotClasses.Sample("data/B")
 
-        histsForTable += [histRatio, hRatioData]
-        samplesForTable += [sRatio, sRatioData]
+        histsForTable += [histRatio, histRatioSsqrtB, hRatioData]
+        samplesForTable += [sRatio, SqrtB, sRatioData]
 
     turn1DHistsToTable(
         hists = histsForTable,
@@ -1600,6 +1608,28 @@ def turn1DHistsToTable(hists, samples, outFile, withError = True):
             out.write( root2latex(sample.name) + " & " + turn1DHistToRow(hist, withError, rounding+ "\\\\ \n") )
         
         writeFoot(out)
+
+        # Integral
+        writeHead(out, ["Process", "Integral"])
+        for hist, sample in zip(hists, samples):
+            error=ROOT.Double(0)
+            integral = hist.IntegralAndError(0,hist.GetNbinsX()+1,error)
+            rounding = "1dig"
+            if sample.name == "S/B":
+                rounding = "3dig"
+            if sample.name == "Total bkg":
+                bkgError = ROOT.Double(0.)
+                bkgIntegral = hist.IntegralAndError(0,hist.GetNbinsX()+1,bkgError)
+                error = bkgError
+            if sample.name == "S/#sqrt{B}":
+                Serror = ROOT.Double(0.)
+                Sintegral=hists[0].IntegralAndError(0,hist.GetNbinsX()+1,Serror)
+                integral = Sintegral/ROOT.TMath.Sqrt(bkgIntegral)
+                error=ROOT.TMath.Sqrt(Serror**2/bkgIntegral+(Sintegral*bkgError)**2/(4*bkgIntegral**3))
+                print error
+            out.write( root2latex(sample.name) + " & " + "%.2f" % integral + " $\pm$ " + "%.3f" % error + "\\\\ \n") 
+        writeFoot(out)
+
         out.write("\\end{document}\n")
 
 
