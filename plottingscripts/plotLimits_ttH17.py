@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttHAnalysis_2017'
+    name = 'ttHAnalysis_2017_DeepJet_v2'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -52,10 +52,10 @@ def main(pyrootdir, argv):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    config          = "pltcfg_ttH18"
-    variable_cfg    = "ttH18_addVariables"
-    plot_cfg        = "ttH18_discrPlots"
-    syst_cfg        = "ttH18_systematics"
+    config          = "pltcfg_ttH17"
+    variable_cfg    = "ttH17_addVariables"
+    plot_cfg        = "ttH17_discrPlots"
+    syst_cfg        = "ttH17_systematics_v2"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -73,7 +73,7 @@ def main(pyrootdir, argv):
         "addData":              True,  # adding data 
         "drawParallel":         True,
         # options for drawParallel/singleExecute sub programs
-        "makeSimplePlots":      False,
+        "makeSimplePlots":      True,
         "makeMCControlPlots":   True,
         "makeEventYields":      True,
         # the skipX options try to skip the submission of files to the batch system
@@ -85,11 +85,11 @@ def main(pyrootdir, argv):
         "skipRenaming":         False,
         "skipDatacards":        False}
 
-    plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttH_2018_newJEC_v5.json"
+    plotJson = "/nfs/dust/cms/user/swieland/ttH/bTagStudy/pyroot-plotscripts/treejson.json"
     plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
-    dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/dNNInterface_Keras_cool.py",
-                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/DNNCheckpointFiles/newJEC_validatedVariables/"}
+    dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
+                    "checkpointFiles":  "/nfs/dust/cms/user/swieland/ttH/bTagStudy/DNNs/DeepJet/"}
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
@@ -136,7 +136,7 @@ def main(pyrootdir, argv):
     configData.initData()
 
     # get the discriminator plots
-    configData.genDiscriminatorPlots(memexp)
+    configData.genDiscriminatorPlots(memexp, dnnInterface)
     configData.writeConfigDataToWorkdir()
     monitor.printClass(configData, "init")
 
@@ -145,24 +145,7 @@ def main(pyrootdir, argv):
     # define additional variables necessary for selection in plotparallel
     # ========================================================
     '''
-    configData.getAddVariables() # also adds DNN variables
-    #configData.getMEPDFAddVariables(MEPDFCSVFile)
-
-    # save addition variables information to workdir and print
-    configData.printAddVariables()
-    monitor.printClass(configData, "after getting additional Variables")
-
-    #print '''
-    # ========================================================
-    # Check if additional (input) variables should be plotted
-    # if necessary add them here to the discriminatorPlots
-    # ========================================================
-    #'''
-    # Construct list with additional plot variables, 
-    # will need name of discrs and plotPreselections for this
-    #print( "add additional plot variables")
-    #configData.getAdditionalDiscriminatorPlots() # TODO
-    
+    configData.getAddVariables()
 
     print '''    
     # ========================================================
@@ -199,8 +182,6 @@ def main(pyrootdir, argv):
             pP.setDataBases(plotDataBases)
             pP.setMEMDataBase(memDataBase)
             pP.setDNNInterface(dnnInterface)
-            pP.setCatNames([''])
-            pP.setCatSelections(['1.'])
             pP.setMaxEvts(1000000)
             pP.setRateFactorsFile(rateFactorsFile)
             pP.setSampleForVariableSetup(configData.samples[9])
@@ -430,7 +411,7 @@ def main(pyrootdir, argv):
                         "logscale":         False,
                         "canvasOptions":    "histo",
                         "ratio":            True, # not default
-                        "blinded":          analysis.plotBlinded} #not default
+                        "blinded":          False} #not default
                     # making the control plots
                     gP.makeControlPlots(
                         sampleConfig = sampleConfig,
@@ -457,7 +438,7 @@ def main(pyrootdir, argv):
                         "logscale":         False,
                         "canvasOptions":    "histo",
                         "ratio":            True, # not default
-                        "blinded":          analysis.plotBlinded} #not default
+                        "blinded":          False} #not default
                     # making the control plots
                     gP.makeControlPlots(
                         sampleConfig = sampleConfig,

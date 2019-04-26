@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'csvConfigAll'
+    name = 'ttH_Legacy_2018'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -51,15 +51,11 @@ def main(pyrootdir, argv):
     # define MEM discriminator variable
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
-    # name of the csv files used in configdata folder
-    configDataBaseName = "limitsttH18"
-
-    # name of plotconfig
-    pltcfgName = "5"
-
-    #name of the systconfig
-    systconfig = pyrootdir+"/configs/systematics_hdecay13TeVJESTest.csv"
-    # systconfig = pyrootdir+"/configs/testsysts.csv"
+    # configs
+    config          = "pltcfg_ttH18"
+    variable_cfg    = "ttH18_addVariables"
+    plot_cfg        = "ttH18_discrPlots"
+    syst_cfg        = "ttH18_systematics"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -68,17 +64,13 @@ def main(pyrootdir, argv):
     # script options
     analysisOptions = {
         # general options
-        "plotBlinded":          False,  # blind region
-        "cirun":                False,  # test run with less samples
-        "haddParallel":         True,  # parallel hadding instead of non-parallel
-        "useOldRoot":           False,   # use existing root file if it exists (skips plotParallel)
+        "plotBlinded":          False,  # True for real data
+        "testrun":              False,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
-        "optimizedRebinning":   False, # e.g. "SoverB", "Significance"
         "haddFromWildcard":     True,
-        "makeDataCards":        True,
+        "makeDataCards":        False,
         "addData":              True,  # adding real data 
-        "singleExecute":        False,  # for non parallel drawing
         "drawParallel":         True,
         # options for drawParallel/singleExecute sub programs
         "makeSimplePlots":      False,
@@ -93,15 +85,14 @@ def main(pyrootdir, argv):
         "skipRenaming":         False,
         "skipDatacards":        False}
 
-    plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttH_2018_newJEC_v5.json"
-    plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
-    memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
-    dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/dNNInterface_Keras_cool.py",
-                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/DNNCheckpointFiles/newJEC_validatedVariables/"}
+    plotJson = ""
+    #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
+    #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
+    dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
+                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/ttZ_test/"}
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
-
 
     print '''
     # ========================================================
@@ -110,29 +101,19 @@ def main(pyrootdir, argv):
     '''
 
     # save a lot of useful information concerning the analysis
-    print "analysis"
-    
-
     analysis = analysisClass.analysisConfig(
-        workdir = workdir, 
-        pyrootdir = pyrootdir, 
-        rootPath = rootPathForAnalysis, 
-        signalProcess = signalProcess, 
-        pltcfgName = pltcfgName,
-        discrName = discrName)
-    print analysis
+        workdir         = workdir, 
+        pyrootdir       = pyrootdir, 
+        rootPath        = rootPathForAnalysis, 
+        signalProcess   = signalProcess, 
+        pltcfgName      = config,
+        discrName       = discrName)
 
-    print "initArguments"
     analysis.initArguments( argv )
-
-    print "initAnalysisOptions"
     analysis.initAnalysisOptions( analysisOptions )
 
-    print "initPlotConfig"
     pltcfg = analysis.initPlotConfig()
     print "We will import the following plotconfig: ", analysis.getPlotConfig()
-
-    analysis.printChosenOptions()
 
     # loading monitorTools module locally
     monitor = monitorTools.init(analysis.workdir)
@@ -145,41 +126,25 @@ def main(pyrootdir, argv):
     '''
 
     configData = configClass.configData(
-        analysisClass = analysis,
-        configDataBaseName = configDataBaseName)
+        analysisClass   = analysis,
+        variable_config = variable_cfg,
+        plot_config     = plot_cfg,
+        execute_file    = os.path.realpath(inspect.getsourcefile(lambda:0)))
 
-    configData.initSystematics(systconfig=systconfig)
+    configData.initSystematics(systconfig = syst_cfg)
 
     configData.initData()
 
     # get the discriminator plots
-    configData.genDiscriminatorPlots(memexp)
+    configData.genDiscriminatorPlots(memexp, dnnInterface)
     configData.writeConfigDataToWorkdir()
     monitor.printClass(configData, "init")
-
     print '''    
     # ========================================================
     # define additional variables necessary for selection in plotparallel
     # ========================================================
     '''
     configData.getAddVariables() # also adds DNN variables
-    #configData.getMEPDFAddVariables(MEPDFCSVFile)
-
-    # save addition variables information to workdir and print
-    configData.printAddVariables()
-    monitor.printClass(configData, "after getting additional Variables")
-
-    #print '''
-    # ========================================================
-    # Check if additional (input) variables should be plotted
-    # if necessary add them here to the discriminatorPlots
-    # ========================================================
-    #'''
-    # Construct list with additional plot variables, 
-    # will need name of discrs and plotPreselections for this
-    #print( "add additional plot variables")
-    #configData.getAdditionalDiscriminatorPlots() # TODO
-    
 
     print '''    
     # ========================================================
@@ -195,7 +160,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
 
-    if analysis.plotNumber == None or analysis.singleExecute:
+    if analysis.plotNumber == None:
         # plot everything, except during drawParallel step
         # Create file for data cards
         print '''
@@ -213,12 +178,10 @@ def main(pyrootdir, argv):
             monitor.printClass(pP, "init")
             # set some changed values
             pP.setJson(plotJson)
-            pP.setDataBases(plotDataBases)
-            pP.setMEMDataBase(memDataBase)
-            pP.setDNNInterface(dnnInterface)
-            pP.setCatNames([''])
-            pP.setCatSelections(['1.'])
-            pP.setMaxEvts(2000000)
+            #pP.setDataBases(plotDataBases)
+            #pP.setMEMDataBase(memDataBase)
+            #pP.setDNNInterface(dnnInterface)
+            pP.setMaxEvts(1000000)
             pP.setRateFactorsFile(rateFactorsFile)
             pP.setSampleForVariableSetup(configData.samples[9])
 
@@ -227,56 +190,6 @@ def main(pyrootdir, argv):
 
         pP.checkTermination()
         monitor.printClass(pP, "after plotParallel")
-
-        if analysis.optimizedRebinning:
-            print '''
-            # ========================================================
-            # Doing OptimizedRebinning
-            # ========================================================
-            '''
-            #TODO rework
-            if analysis.signalProcess == 'ttbb':
-                # samples[0:2]: tt+bb, tt+b, tt+2b as signal for S over b normalization
-                # TODO check the optimizedBinning function and adjust arguments to new structure
-                # TODO rework samples splitting to be automated in samplesDataClass?
-                # TODO call this only once and determine bkg/signal samples in the function itself
-                with monitor.Timer("optimizeBinning"):
-                    optBinning.optimizeBinning(
-                        infname = analysis.ppRootPath,
-                        signalsamples = [configData.samples[0:3]], 
-                        backgroundsamples = configData.samples[3:],
-                        additionalSamples = configData.controlSamples, 
-                        plots = configData.getDiscriminatorPlots(), 
-                        systnames = configData.allSystNames, 
-                        minBkgPerBin = 2.0, 
-                        optMode = analysis.optimzedRebinning,
-                        considerStatUnc = False, 
-                        maxBins = 20, 
-                        minBins = 2,
-                        verbosity = 2)
-
-            elif analysis.signalProcess == 'ttH':
-                # samples: ttH as signal. ttH_bb, ttH_XX as additional samples together with data. 
-                # Rest: background samples
-                with monitor.Timer("optimizeBinning"):
-                    optBinning.optimizeBinning(
-                        analysis.ppRootPath,
-                        signalsamples = [configData.samples[0]], 
-                        backgroundsamples = configData.samples[9:],
-                        additionalSamples= configData.samples[1:9] + configData.controlSamples, 
-                        plots = configData.getDiscriminatorPlots(), 
-                        systnames = configData.allSystNames, 
-                        minBkgPerBin = 2.0, 
-                        optMode = analysis.optimizedRebinning,
-                        considerStatUnc = False, 
-                        maxBins = 20, 
-                        minBins = 2,
-                        verbosity = 2)
-            else:
-                print("WARNING - could not find signal process")
-                print("not doing optimized rebinning")
-
-
 
         # hadd histo files before renaming. The histograms are actually already renamed. 
         # But the checkbins thingy will not have been done yet.
@@ -321,13 +234,13 @@ def main(pyrootdir, argv):
 
             with monitor.Timer("renameHistos"):
                 renameHistos.renameHistos(
-                    inFiles =       pP.getRenameInput(),
-                    outFile =       analysis.renamedPath,
-                    systNames =     configData.allSystNames,
-                    checkBins =     True,
-                    prune =         True,
-                    Epsilon =       0.0,
-                    skipRenaming =  analysis.skipRenaming)
+                    inFiles         = pP.getRenameInput(),
+                    outFile         = analysis.renamedPath,
+                    systNames       = configData.allSystNames,
+                    checkBins       = True,
+                    prune           = True,
+                    Epsilon         = 0.0,
+                    skipRenaming    = analysis.skipRenaming)
 
         if analysis.addData:
             print '''
@@ -336,11 +249,13 @@ def main(pyrootdir, argv):
             # ========================================================
             '''
             with monitor.Timer("addRealData"):
-                # real data with ttH
-                # pP.addData(samples = configData.controlSamples)
+                if analysis.plotBlinded:
+                    # pseudo data without ttH
+                    pP.addData(samples = configData.samples[9:])
+                else:
+                    # real data with ttH
+                    pP.addData(samples = configData.controlSamples)
 
-                # pseudo data without ttH
-                pP.addData(samples = configData.samples[9:])
         
 
         pP.checkTermination()       
@@ -356,9 +271,6 @@ def main(pyrootdir, argv):
             # Making Datacards.
             # ========================================================
             '''
-            # init datacards path
-            
-
             with monitor.Timer("makeDatacardsParallel"):
                 makeDatacards.makeDatacardsParallel(
                     filePath            = analysis.renamedPath,
@@ -487,32 +399,60 @@ def main(pyrootdir, argv):
                     "color":        ROOT.kBlack, 
                     "doRateSysts":  False})
         
+                if analysis.plotBlinded:
+                    pseudodataConfig = genPlots.Config(
+                        histograms  = pseudodataList,
+                        sampleIndex = 0)
 
-                pseudodataConfig = genPlots.Config(
-                    histograms  = pseudodataList,
-                    sampleIndex = 0)
-
-                #set general plotoption
-                controlPlotOptions = {
-                    "factor":           -2, #not default
-                    "logscale":         False,
-                    "canvasOptions":    "histo",
-                    "ratio":            True, # not default
-                    "blinded":          analysis.plotBlinded} #not default
-                # making the control plots
-                gP.makeControlPlots(
-                    sampleConfig = sampleConfig,
-                    dataConfig   = pseudodataConfig,
-                    options      = controlPlotOptions,
-                    outName      = "controlPlots_pseudodata")
+                    #set general plotoption
+                    controlPlotOptions = {
+                        "factor":           -2, #not default
+                        "logscale":         False,
+                        "canvasOptions":    "histo",
+                        "ratio":            True, # not default
+                        "blinded":          False}
+                    # making the control plots
+                    gP.makeControlPlots(
+                        sampleConfig = sampleConfig,
+                        dataConfig   = pseudodataConfig,
+                        options      = controlPlotOptions,
+                        outName      = "controlPlots_pseudodata")
 
 
-                controlPlotOptions["logscale"] = True
-                gP.makeControlPlots(
-                    sampleConfig = sampleConfig,
-                    dataConfig   = pseudodataConfig,
-                    options      = controlPlotOptions,
-                    outName      = "controlPlots_pseudodata_LOG")
+                    controlPlotOptions["logscale"] = True
+                    gP.makeControlPlots(
+                        sampleConfig = sampleConfig,
+                        dataConfig   = pseudodataConfig,
+                        options      = controlPlotOptions,
+                        outName      = "controlPlots_pseudodata_LOG")
+
+                else:
+                    dataConfig = genPlots.Config(
+                        histograms  = dataList,
+                        sampleIndex = 0)
+
+                    #set general plotoption
+                    controlPlotOptions = {
+                        "factor":           -2, #not default
+                        "logscale":         False,
+                        "canvasOptions":    "histo",
+                        "ratio":            True, # not default
+                        "blinded":          False} #not default
+                    # making the control plots
+                    gP.makeControlPlots(
+                        sampleConfig = sampleConfig,
+                        dataConfig   = dataConfig,
+                        options      = controlPlotOptions,
+                        outName      = "controlPlots_data")
+
+
+                    controlPlotOptions["logscale"] = True
+                    gP.makeControlPlots(
+                        sampleConfig = sampleConfig,
+                        dataConfig   = dataConfig,
+                        options      = controlPlotOptions,
+                        outName      = "controlPlots_data_LOG")
+                    
 
             monitor.printClass(gP, "after making control plots")
 

@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'controlPlots_v2'
+    name = 'ttZ_betatest'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -52,10 +52,10 @@ def main(pyrootdir, argv):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    cfg             = "pltcfg_ttH18"
-    variable_cfg    = "ttH18_addVariables"
-    sample_cfg      = "ttH18_samples"
-    plot_cfg        = "ttH18_controlPlots"
+    config          = "pltcfg_ttZ18"
+    variable_cfg    = "ttZ18_addVariables"
+    plot_cfg        = None
+    syst_cfg        = "ttZ18_systematics"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -64,20 +64,16 @@ def main(pyrootdir, argv):
     # script options
     analysisOptions = {
         # general options
-        "plotBlinded":          False,  # blind region
-        "cirun":                False,  # test run with less samples
-        "haddParallel":         True,  # parallel hadding instead of non-parallel
-        "useOldRoot":           False,   # use existing root file if it exists (skips plotParallel)
+        "plotBlinded":          True,  # True for real data
+        "testrun":              False,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
-        "optimizedRebinning":   False, # e.g. "SoverB", "Significance"
         "haddFromWildcard":     True,
-        "makeDataCards":        False,
+        "makeDataCards":        True,
         "addData":              True,  # adding real data 
-        "singleExecute":        False,  # for non parallel drawing
         "drawParallel":         True,
         # options for drawParallel/singleExecute sub programs
-        "makeSimplePlots":      True,
+        "makeSimplePlots":      False,
         "makeMCControlPlots":   True,
         "makeEventYields":      True,
         # the skipX options try to skip the submission of files to the batch system
@@ -89,20 +85,14 @@ def main(pyrootdir, argv):
         "skipRenaming":         False,
         "skipDatacards":        False}
 
-    plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttH_2018_newJEC_v5.json"
-    plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
-    memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
-    dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/dNNInterface_Keras_cool.py",
-                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/DNNCheckpointFiles/newJEC_validatedVariables/"}
-
-    # path to script making datacards
-    datacardmaker = "/nfs/dust/cms/user/vdlinden/legacyTTH/plotscript/util/DatacardScript.py"
+    plotJson = ""
+    #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
+    #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
+    dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
+                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/ttZ_test/"}
 
     # path to datacardMaker directory
-    datacardMakerDirectory = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
-
-    # path to csv file used to build datacards
-    datacardcsv="/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker/systematics_hdecay13TeVJESTest.csv"
+    datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
 
     print '''
     # ========================================================
@@ -112,20 +102,18 @@ def main(pyrootdir, argv):
 
     # save a lot of useful information concerning the analysis
     analysis = analysisClass.analysisConfig(
-        workdir = workdir, 
-        pyrootdir = pyrootdir, 
-        rootPath = rootPathForAnalysis, 
-        signalProcess = signalProcess, 
-        pltcfgName = cfg,
-        discrName = discrName)
+        workdir         = workdir, 
+        pyrootdir       = pyrootdir, 
+        rootPath        = rootPathForAnalysis, 
+        signalProcess   = signalProcess, 
+        pltcfgName      = config,
+        discrName       = discrName)
 
     analysis.initArguments( argv )
     analysis.initAnalysisOptions( analysisOptions )
 
     pltcfg = analysis.initPlotConfig()
     print "We will import the following plotconfig: ", analysis.getPlotConfig()
-
-    analysis.printChosenOptions()
 
     # loading monitorTools module locally
     monitor = monitorTools.init(analysis.workdir)
@@ -138,42 +126,25 @@ def main(pyrootdir, argv):
     '''
 
     configData = configClass.configData(
-        analysisClass = analysis,
+        analysisClass   = analysis,
         variable_config = variable_cfg,
-        sample_config = sample_cfg,
-        plot_config = plot_cfg,
-        execute_file = os.path.realpath(inspect.getsourcefile(lambda:0)))
+        plot_config     = plot_cfg,
+        execute_file    = os.path.realpath(inspect.getsourcefile(lambda:0)))
+
+    configData.initSystematics(systconfig = syst_cfg)
 
     configData.initData()
 
     # get the discriminator plots
-    configData.genDiscriminatorPlots(memexp)
+    configData.genDiscriminatorPlots(memexp, dnnInterface)
     configData.writeConfigDataToWorkdir()
     monitor.printClass(configData, "init")
-
     print '''    
     # ========================================================
     # define additional variables necessary for selection in plotparallel
     # ========================================================
     '''
     configData.getAddVariables() # also adds DNN variables
-    #configData.getMEPDFAddVariables(MEPDFCSVFile)
-
-    # save addition variables information to workdir and print
-    configData.printAddVariables()
-    monitor.printClass(configData, "after getting additional Variables")
-
-    #print '''
-    # ========================================================
-    # Check if additional (input) variables should be plotted
-    # if necessary add them here to the discriminatorPlots
-    # ========================================================
-    #'''
-    # Construct list with additional plot variables, 
-    # will need name of discrs and plotPreselections for this
-    #print( "add additional plot variables")
-    #configData.getAdditionalDiscriminatorPlots() # TODO
-    
 
     print '''    
     # ========================================================
@@ -189,7 +160,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
 
-    if analysis.plotNumber == None or analysis.singleExecute:
+    if analysis.plotNumber == None:
         # plot everything, except during drawParallel step
         # Create file for data cards
         print '''
@@ -207,12 +178,10 @@ def main(pyrootdir, argv):
             monitor.printClass(pP, "init")
             # set some changed values
             pP.setJson(plotJson)
-            pP.setDataBases(plotDataBases)
-            pP.setMEMDataBase(memDataBase)
+            #pP.setDataBases(plotDataBases)
+            #pP.setMEMDataBase(memDataBase)
             pP.setDNNInterface(dnnInterface)
-            pP.setCatNames([''])
-            pP.setCatSelections(['1.'])
-            pP.setMaxEvts(300000)
+            pP.setMaxEvts(1000000)
             pP.setRateFactorsFile(rateFactorsFile)
             pP.setSampleForVariableSetup(configData.samples[9])
 
@@ -265,13 +234,13 @@ def main(pyrootdir, argv):
 
             with monitor.Timer("renameHistos"):
                 renameHistos.renameHistos(
-                    inFiles =       pP.getRenameInput(),
-                    outFile =       analysis.renamedPath,
-                    systNames =     configData.allSystNames,
-                    checkBins =     True,
-                    prune =         True,
-                    Epsilon =       0.0,
-                    skipRenaming =  analysis.skipRenaming)
+                    inFiles         = pP.getRenameInput(),
+                    outFile         = analysis.renamedPath,
+                    systNames       = configData.allSystNames,
+                    checkBins       = True,
+                    prune           = True,
+                    Epsilon         = 0.0,
+                    skipRenaming    = analysis.skipRenaming)
 
         if analysis.addData:
             print '''
@@ -302,21 +271,14 @@ def main(pyrootdir, argv):
             # Making Datacards.
             # ========================================================
             '''
-            # init datacards path
-            datacardsPath = analysis.workdir+"/datacards"
-            if not os.path.exists(datacardsPath):
-                os.makedirs(datacardsPath)
-
             with monitor.Timer("makeDatacardsParallel"):
                 makeDatacards.makeDatacardsParallel(
                     filePath            = analysis.renamedPath,
-                    outPath             = datacardsPath,
+                    workdir             = analysis.workdir,
                     categories          = configData.getBinlabels(),
                     doHdecay            = True,
                     discrname           = analysis.discrName,
                     datacardmaker       = datacardmaker,
-                    datacardDirectory   = datacardMakerDirectory,
-                    datacardcsv         = datacardcsv,
                     skipDatacards       = analysis.skipDatacards)
 
 
@@ -431,7 +393,7 @@ def main(pyrootdir, argv):
                 # generate the llloflist internally
                 sampleConfig.genNestedHistList(
                     genPlotsClass = gP,
-                    systNames = pltcfg.errorSystNames)
+                    systNames = configData.plots)
                 sampleConfig.setErrorbandConfig({
                     "style":        3354, 
                     "color":        ROOT.kBlack, 
@@ -448,7 +410,7 @@ def main(pyrootdir, argv):
                         "logscale":         False,
                         "canvasOptions":    "histo",
                         "ratio":            True, # not default
-                        "blinded":          analysis.plotBlinded} #not default
+                        "blinded":          False}
                     # making the control plots
                     gP.makeControlPlots(
                         sampleConfig = sampleConfig,
@@ -475,7 +437,7 @@ def main(pyrootdir, argv):
                         "logscale":         False,
                         "canvasOptions":    "histo",
                         "ratio":            True, # not default
-                        "blinded":          analysis.plotBlinded} #not default
+                        "blinded":          False} #not default
                     # making the control plots
                     gP.makeControlPlots(
                         sampleConfig = sampleConfig,
@@ -490,6 +452,7 @@ def main(pyrootdir, argv):
                         dataConfig   = dataConfig,
                         options      = controlPlotOptions,
                         outName      = "controlPlots_data_LOG")
+                    
 
             monitor.printClass(gP, "after making control plots")
 

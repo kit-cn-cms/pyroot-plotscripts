@@ -38,10 +38,6 @@ def getAddVars():
         "Weight_CSVCErr2down",
         "Evt_blr_ETH",
         "Evt_blr_ETH_transformed",
-        "Electron_IdentificationSF",
-        "Electron_ReconstructionSF",
-        "Muon_IdentificationSF",
-        "Muon_IsolationSF"
         ]
 
     return addVars
