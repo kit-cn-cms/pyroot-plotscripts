@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttZ_betatest'
+    name = 'ttZDatacards'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -43,7 +43,7 @@ def main(pyrootdir, argv):
     rootPathForAnalysis = workdir+'/output_limitInput.root'
 
     # signal process
-    signalProcess = "ttH"
+    signalProcess = "ttZ"
 
     # Name of final discriminator, should not contain underscore
     discrName = 'finaldiscr'
@@ -54,7 +54,7 @@ def main(pyrootdir, argv):
     # configs
     config          = "pltcfg_ttZ18"
     variable_cfg    = "ttZ18_addVariables"
-    plot_cfg        = None
+    plot_cfg        = "ttZ_discrPlots"
     syst_cfg        = "ttZ18_systematics"
 
     # file for rate factors
@@ -183,7 +183,7 @@ def main(pyrootdir, argv):
             pP.setDNNInterface(dnnInterface)
             pP.setMaxEvts(1000000)
             pP.setRateFactorsFile(rateFactorsFile)
-            pP.setSampleForVariableSetup(configData.samples[9])
+            pP.setSampleForVariableSetup(configData.samples[0])
 
             # run plotParallel
             pP.run()
@@ -251,7 +251,7 @@ def main(pyrootdir, argv):
             with monitor.Timer("addRealData"):
                 if analysis.plotBlinded:
                     # pseudo data without ttH
-                    pP.addData(samples = configData.samples[9:])
+                    pP.addData(samples = configData.samples[1:])
                 else:
                     # real data with ttH
                     pP.addData(samples = configData.controlSamples)
@@ -279,6 +279,7 @@ def main(pyrootdir, argv):
                     doHdecay            = True,
                     discrname           = analysis.discrName,
                     datacardmaker       = datacardmaker,
+                    signalTag           = analysis.signalProcess,
                     skipDatacards       = analysis.skipDatacards)
 
 
@@ -332,7 +333,7 @@ def main(pyrootdir, argv):
 
             histoList       = gP.genList(samples = configData.samples)
             dataList        = gP.genList(samples = configData.controlSamples)
-            pseudodataList  = gP.genList(samples = [configData.samples[0]]+configData.samples[9:])
+            pseudodataList  = gP.genList(samples = configData.samples)
             monitor.printClass(gP, "after creating init lists")
 
 
@@ -358,7 +359,7 @@ def main(pyrootdir, argv):
                     "sepaTest":         False}
                 sampleConfig = genPlots.Config(
                     histograms  = histoList,
-                    sampleIndex = 9)
+                    sampleIndex = 1)
                 gP.makeSimpleControlPlots( sampleConfig, controlPlotOptions )
 
                 # creating shape plots
@@ -372,7 +373,7 @@ def main(pyrootdir, argv):
                     "sepaTest":         False}
                 sampleConfig = genPlots.Config(
                     histograms  = dataList,
-                    sampleIndex = 9)
+                    sampleIndex = 1)
                 gP.makeSimpleShapePlots( sampleConfig, shapePlotOptions )
 
                 monitor.printClass(gP, "after making simple MC plots")
@@ -388,7 +389,7 @@ def main(pyrootdir, argv):
             with monitor.Timer("makingMCControlPlots"):
                 sampleConfig = genPlots.Config(
                     histograms  = histoList,
-                    sampleIndex = 9)
+                    sampleIndex = 1)
 
                 # generate the llloflist internally
                 sampleConfig.genNestedHistList(
