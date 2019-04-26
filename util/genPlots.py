@@ -1304,7 +1304,7 @@ def createErrorbands(nestedHistList, samples, doRateSysts = True):
             syst = l[0].Clone()
             for hist in l[1:]:
                 syst.Add(hist)
-                if hist.Integral() <= 0.:
+                if hist.Integral() < 0.:
                     print("DANGERZONE!!! NEGATIVE INTEGRAL")
                     print hist, hist.Integral()
             systs.append(syst)
