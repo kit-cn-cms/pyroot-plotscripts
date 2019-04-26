@@ -525,7 +525,7 @@ class scriptWriter:
             script += 'cd '+self.pp.cmsswpath+'/src\n'
             script += 'eval `scram runtime -sh`\n'
             script += 'cd - \n'
-        script += 'export PLOTSCRIPTBASEDIR="'+os.getcwd()+'"\n'
+        script += 'export PLOTSCRIPTBASEDIR="'+self.pp.analysis.pyrootdir+'"\n'
         script += 'export PROCESSNAME="'+processname+'"\n'
         script += 'export FILENAMES="'+filenames+'"\n'
         script += 'export OUTFILENAME="'+outfilename+'"\n'
