@@ -78,6 +78,12 @@ class Sample:
     def setShapes(self,listOfShapes):
         self.shape_unc=listOfShapes
 
+    def getShapes(self):
+        if self.shape_unc:
+            return self.shape_unc
+        else:
+            return "ERROR: no shapes for this sample"
+
 
     def checkNevents():
         if checknevents > 0:
