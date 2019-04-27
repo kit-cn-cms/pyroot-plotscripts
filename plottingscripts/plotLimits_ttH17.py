@@ -193,7 +193,6 @@ def main(pyrootdir, argv):
         monitor.printClass(pP, "after plotParallel")
 
 
-        raw_input()
 
         # hadd histo files before renaming. The histograms are actually already renamed. 
         # But the checkbins thingy will not have been done yet.
@@ -209,7 +208,6 @@ def main(pyrootdir, argv):
                 nHistosRemainSame = True,
                 skipHadd = analysis.skipHaddFromWildcard)
          
-        raw_input()
 
         # Deactivate check bins functionality in renameHistos 
         #   if additional plot variables are added via analysis class
@@ -236,7 +234,6 @@ def main(pyrootdir, argv):
             #       (a.ka. the path to output.root)
             print(pP.getRenameInput())
             print(analysis.renamedPath)
-            raw_input()
 
             with monitor.Timer("renameHistos"):
                 renameHistos.renameHistos(
@@ -248,26 +245,6 @@ def main(pyrootdir, argv):
                     Epsilon         = 0.0,
                     skipRenaming    = analysis.skipRenaming)
 
-        raw_input()
-        if analysis.addData:
-            print '''
-            # ========================================================
-            # adding data with plotParallel
-            # ========================================================
-            '''
-            with monitor.Timer("addRealData"):
-                if analysis.plotBlinded:
-                    # pseudo data without ttH
-                    pP.addData(samples = configData.samples[9:])
-                else:
-                    # real data with ttH
-                    pP.addData(samples = configData.controlSamples)
-
-        
-
-        pP.checkTermination()       
-        monitor.printClass(pP, "after plotParallel completely done")
-        raw_input()
         print("########## DONE WITH PLOTPARALLEL STEP ##########")
         print("at the moment the outputpath is "+str(analysis.renamedPath))
         print("#################################################")
