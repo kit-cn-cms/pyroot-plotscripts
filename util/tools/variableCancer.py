@@ -569,7 +569,7 @@ class Variable:
         if self.isArray:
             code+="    std::fill_n ("+varName+".get(), 20, -999);\n"
         else:
-            code+=varName+" = -999;\n"
+            code+="    "+varName+" = -999;\n"
         return code
         
     def writeBranchAdress(self):
