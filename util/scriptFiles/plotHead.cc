@@ -3,8 +3,8 @@ struct Plot1DInfoStruct{
     std::string identifier;
     std::string title;
     int nbins;
-    float xmin;
-    float xmax;
+    double xmin;
+    double xmax;
     //std::unique_ptr<TH1> histoptr;
 };
 
