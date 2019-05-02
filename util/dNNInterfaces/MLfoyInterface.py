@@ -436,7 +436,7 @@ memexp = ""\n\n\n"""
             funcstring += "    "
             if not enable_input_plots:
                 funcstring+= "#"
-            funcstring += "    discriminatorPlots += plots_{}()\n".format(dnn.category)
+            funcstring += "discriminatorPlots += plots_{}()\n".format(dnn.category)
 
 
         # writing code for dnn output plots
