@@ -390,7 +390,7 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses) {
     def getCleanUpLines(self):
         return ""
 
-    def generatePlotConfig(self, enable_input_plots):
+    def generatePlotConfig(self, enable_input_plots = True):
         '''
         generate plot config from variables and plots in checkpoint files
         '''
