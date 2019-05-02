@@ -9,7 +9,7 @@ sys.path.append(filedir+"/tools")
 import plotClasses
 
 class analysisConfig:
-    def __init__(self, workdir, pyrootdir, rootPath, signalProcess = "ttbb", pltcfgName = "pltcfg_ttH18", discrName = "finaldiscr"):
+    def __init__(self, workdir, pyrootdir, rootPath, signalProcess = "ttbb", pltcfgName = "pltcfg_ttH18", discrName = "finaldiscr", dataera = "2017"):
         self.workdir = str(workdir)
         self.pyrootdir = str(pyrootdir)
         self.name = self.workdir.split("/")[-1]
@@ -23,6 +23,10 @@ class analysisConfig:
             self.rootPath = self.name+"/limitInput.root"
         self.ppRootPath = self.rootPath
         self.renamedPath = self.rootPath
+    
+        self.dataera = dataera
+        if not self.dataera in ["2017", "2018"]:
+            sys.exit("invalid dataera")
 
         self.setDefaults()
         self.setSignalProcess(signalProcess, pltcfgName)
