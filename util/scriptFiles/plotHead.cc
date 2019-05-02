@@ -70,16 +70,30 @@ void plot(){
   int maxevents = atoi(getenv ("MAXEVENTS"));
   int skipevents = atoi(getenv ("SKIPEVENTS"));
   string eventFilterFile = string(getenv("EVENTFILTERFILE"));
-
+  string dataera = string(getenv ("DATAERA"));
 
   // create vector of systematics
   std::vector<Systematics::Type> v_SystTypes = Systematics::getTypeVector();
   //for(auto itsyst : v_SystTypes){std::cout<< " Know :" << itsyst << std::endl;}
 
+
+  std::string csvHFfile = "";
+  std::string csvLFfile = "";
   // std::string csvHFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_V3_2017/deepCSV_sfs_hf.root";
   // std::string csvLFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_V3_2017/deepCSV_sfs_lf.root";
-  std::string csvHFfile=plotskriptBaseDir+"/data/CSV/sfs_deepjet_2017_hf.root";
-  std::string csvLFfile=plotskriptBaseDir+"/data/CSV/sfs_deepjet_2017_lf.root";
+  if( dataera == "2017" ) {
+      csvHFfile=plotskriptBaseDir+"/data/CSV/sfs_deepjet_2017_hf.root";
+      csvLFfile=plotskriptBaseDir+"/data/CSV/sfs_deepjet_2017_lf.root";
+      }
+  else if( dataera == "2018" ) {
+      csvHFfile=plotskriptBaseDir+"/data/CSV/sfs_deepjet_2018_hf.root";
+      csvLFfile=plotskriptBaseDir+"/data/CSV/sfs_deepjet_2018_lf.root";
+      }
+  else {
+      std::cout << "NO VALID DATAERA CHOSEN!!" << std::endl;
+      std::cout << "dataera: " << dataera << std::endl;
+      }
+
   TString qcd_file = "/nfs/dust/cms/user/mwassmer/QCD_Estimation_September17/QCD_Estimation/QCD_Estimation_FakeScaleFactor_nominal.root";
   
   CSVHelper* internalCSVHelper= new CSVHelper(csvHFfile,csvLFfile, 5,4,3,v_SystTypes);
