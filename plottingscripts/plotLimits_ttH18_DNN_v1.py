@@ -45,7 +45,7 @@ def main(pyrootdir, argv):
     # signal process
     signalProcess = "ttH"
     
-    # data era
+    # dataera
     dataera = "2018"
 
     # Name of final discriminator, should not contain underscore

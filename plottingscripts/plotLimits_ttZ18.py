@@ -45,6 +45,9 @@ def main(pyrootdir, argv):
     # signal process
     signalProcess = "ttZ"
 
+    # dataera
+    dataera = "2018"
+    
     # Name of final discriminator, should not contain underscore
     discrName = 'finaldiscr'
 
@@ -107,7 +110,8 @@ def main(pyrootdir, argv):
         rootPath        = rootPathForAnalysis, 
         signalProcess   = signalProcess, 
         pltcfgName      = config,
-        discrName       = discrName)
+        discrName       = discrName,
+        dataera         = dataera)
 
     analysis.initArguments( argv )
     analysis.initAnalysisOptions( analysisOptions )
