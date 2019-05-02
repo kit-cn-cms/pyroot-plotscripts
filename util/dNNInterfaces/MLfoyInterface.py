@@ -43,8 +43,21 @@ class DNN:
         # collection event classes
         classes = self.config["eventClasses"]
         self.out_nodes = []
+        self.node_mins = []
+        self.node_maxs = []
         for cls in classes:
+
+            # save names of output nodes
             self.out_nodes.append(cls["sampleLabel"])
+
+            # save min and max values of output nodes
+            if "min" in cls and "max" in cls:
+                self.node_mins.append(cls["min"])
+                self.node_maxs.append(cls["max"])
+            else:
+                print("\tdid not find plotrange for discriminator {} - setting it to [0.,1.]".format(cls["sampleLabel"]))
+                self.node_mins.append(0.)
+                self.node_maxs.append(1.)
 
         # generate discriminator names
         self.discrNames = [
@@ -253,8 +266,8 @@ class DNN:
 
         # fill binranges
         string += "    nhistobins += {}\n".format([15 for _ in range(len(self.out_nodes))])
-        string += "    minxvals += {}\n".format([0. for _ in range(len(self.out_nodes))])
-        string += "    maxxvals += {}\n".format([1. for _ in range(len(self.out_nodes))])
+        string += "    minxvals += {}\n".format(self.node_mins)
+        string += "    maxxvals += {}\n".format(self.node_maxs)
         string += "\n\n"
 
         return string
