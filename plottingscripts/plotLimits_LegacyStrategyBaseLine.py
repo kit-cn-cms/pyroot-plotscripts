@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttHAnalysis_2017_DeepJet_v2'
+    name = 'ttHAnalysis_2017_LegacyStrategyBaseline'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -42,11 +42,11 @@ def main(pyrootdir, argv):
     # path to root file
     rootPathForAnalysis = workdir+'/output_limitInput.root'
 
-    # signal process
-    signalProcess = "ttH"
-
     # dataera
     dataera = "2017"
+
+    # signal process
+    signalProcess = "ttH"
 
     # Name of final discriminator, should not contain underscore
     discrName = 'finaldiscr'
@@ -57,8 +57,8 @@ def main(pyrootdir, argv):
     # configs
     config          = "pltcfg_ttH17"
     variable_cfg    = "ttH17_addVariables"
-    plot_cfg        = "ttH17_discrPlots"
-    syst_cfg        = "ttH17_systematics_v2"
+    plot_cfg        = "LegacyStrategyStudyBaseline_Plots"
+    syst_cfg        = "LegacyStrategyStudy_Systematics"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -82,17 +82,17 @@ def main(pyrootdir, argv):
         # the skipX options try to skip the submission of files to the batch system
         # before skipping the output is crosschecked
         # if the output is not complete, the skipped part is done anyways
-        "skipPlotParallel":     False,
-        "skipHaddParallel":     False,
-        "skipHaddFromWildcard": False,
-        "skipRenaming":         False,
+        "skipPlotParallel":     True,
+        "skipHaddParallel":     True,
+        "skipHaddFromWildcard": True,
+        "skipRenaming":         True,
         "skipDatacards":        False}
 
-    plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttH_2018_newJEC_v5.json"
+    plotJson = "/nfs/dust/cms/user/swieland/ttH/pyroot-plotscripts/LegacyStudy_treejson.json"
     plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/DNNCheckpointFiles/newJEC_validatedVariables/"}
+                    "checkpointFiles":  "/nfs/dust/cms/user/swieland/ttH/LegacyStudy/DNNs/BaseLine/"}
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
@@ -263,6 +263,11 @@ def main(pyrootdir, argv):
                     # real data with ttH
                     pP.addData(samples = configData.controlSamples)
 
+        
+
+        pP.checkTermination()       
+        monitor.printClass(pP, "after plotParallel completely done")
+
         print("########## DONE WITH PLOTPARALLEL STEP ##########")
         print("at the moment the outputpath is "+str(analysis.renamedPath))
         print("#################################################")
@@ -341,7 +346,7 @@ def main(pyrootdir, argv):
 
 
 
-
+# 
         if analysis.makeSimplePlots:
             print '''
             # ========================================================
