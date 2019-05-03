@@ -43,7 +43,7 @@ def main(pyrootdir, argv):
     rootPathForAnalysis = workdir+'/output_limitInput.root'
 
     # dataera
-    dataera = "2017"
+    dataera = "2017_deepCSV"
 
     # signal process
     signalProcess = "ttH"
