@@ -249,6 +249,20 @@ def main(pyrootdir, argv):
                     Epsilon         = 0.0,
                     skipRenaming    = analysis.skipRenaming)
 
+        if analysis.addData:
+            print '''
+            # ========================================================
+            # adding data with plotParallel
+            # ========================================================
+            '''
+            with monitor.Timer("addRealData"):
+                if analysis.plotBlinded:
+                    # pseudo data without ttH
+                    pP.addData(samples = configData.samples[9:])
+                else:
+                    # real data with ttH
+                    pP.addData(samples = configData.controlSamples)
+
         print("########## DONE WITH PLOTPARALLEL STEP ##########")
         print("at the moment the outputpath is "+str(analysis.renamedPath))
         print("#################################################")
