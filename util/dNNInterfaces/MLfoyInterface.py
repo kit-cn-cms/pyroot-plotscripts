@@ -18,6 +18,9 @@ class DNN:
         with open(self.configFile) as f:
             self.config = json.loads(f.read())
 
+        if "binaryConfig" in self.config:
+            print("    BINARY DNN")
+
         self.category = self.config["JetTagCategory"]
         self.label = self.config["categoryLabel"]
         self.selection = self.config["Selection"]
@@ -40,31 +43,40 @@ class DNN:
                 self.var_means.append(row[1])
                 self.var_stds.append( row[2])
 
-        # collection event classes
-        classes = self.config["eventClasses"]
-        self.out_nodes = []
-        self.node_mins = []
-        self.node_maxs = []
-        for cls in classes:
+        if not "binaryConfig" in self.config:
+            # collecting event classes
+            classes = self.config["eventClasses"]
+            self.out_nodes = []
+            self.node_mins = []
+            self.node_maxs = []
+            for cls in classes:
 
-            # save names of output nodes
-            self.out_nodes.append(cls["sampleLabel"])
+                # save names of output nodes
+                self.out_nodes.append(cls["sampleLabel"])
 
-            # save min and max values of output nodes
-            if "min" in cls and "max" in cls:
-                self.node_mins.append(cls["min"])
-                self.node_maxs.append(cls["max"])
-            else:
-                print("\tdid not find plotrange for discriminator {} - setting it to [0.,1.]".format(cls["sampleLabel"]))
-                self.node_mins.append(0.)
-                self.node_maxs.append(1.)
+                # save min and max values of output nodes
+                if "min" in cls and "max" in cls:
+                    self.node_mins.append(cls["min"])
+                    self.node_maxs.append(cls["max"])
+                else:
+                    print("\tdid not find plotrange for discriminator {} - setting it to [0.,1.]".format(cls["sampleLabel"]))
+                    self.node_mins.append(0.)
+                    self.node_maxs.append(1.)
 
-        # generate discriminator names
-        self.discrNames = [
-            "DNNOutput_{}_node_{}".format(self.category, node)
-            for node in self.out_nodes]
-        # generate class prediction variable
-        self.predictionVariable = "DNNPredictedClass_{}".format(self.category)
+            # generate discriminator names
+            self.discrNames = [
+                "DNNOutput_{}_node_{}".format(self.category, node)
+                for node in self.out_nodes]
+            # generate class prediction variable
+            self.predictionVariable = "DNNPredictedClass_{}".format(self.category)
+        else:
+            self.out_nodes = ["binary"]
+            self.node_mins = [self.config["binaryConfig"]["minValue"]]
+            self.node_maxs = [self.config["binaryConfig"]["maxValue"]]
+            self.discrNames = ["DNNOutput_{}".format(self.category)]
+            self.predictionVariable = "DNNPredictedClass_{}".format(self.category)
+
+
 
     def getBeforeLoopLines(self):
         return """
