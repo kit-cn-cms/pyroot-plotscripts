@@ -79,8 +79,6 @@ void plot(){
 
   std::string csvHFfile = "";
   std::string csvLFfile = "";
-  // std::string csvHFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_V3_2017/deepCSV_sfs_hf.root";
-  // std::string csvLFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_V3_2017/deepCSV_sfs_lf.root";
   if( dataera == "2017" ) {
       csvHFfile=plotskriptBaseDir+"/data/CSV/sfs_deepjet_2017_hf.root";
       csvLFfile=plotskriptBaseDir+"/data/CSV/sfs_deepjet_2017_lf.root";
@@ -88,6 +86,10 @@ void plot(){
   else if( dataera == "2018" ) {
       csvHFfile=plotskriptBaseDir+"/data/CSV/sfs_deepjet_2018_hf.root";
       csvLFfile=plotskriptBaseDir+"/data/CSV/sfs_deepjet_2018_lf.root";
+      }
+  else if( dataera == "2017_deepCSV" ) {
+      std::string csvHFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_V3_2017/deepCSV_sfs_hf.root";
+      std::string csvLFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_V3_2017/deepCSV_sfs_lf.root";
       }
   else {
       std::cout << "NO VALID DATAERA CHOSEN!!" << std::endl;
