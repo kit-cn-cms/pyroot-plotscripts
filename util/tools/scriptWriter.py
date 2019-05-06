@@ -270,7 +270,7 @@ class scriptWriter:
 
     def initVariables(self, tree):
         # initialize variables objects
-        variableManager = variableCancer.VariableManager(tree, self.vetolist, verbose = 1)
+        variableManager = variableCancer.VariableManager(tree, self.vetolist)
         variableManager.add( ["Weight", "Weight_CSV", "Weight_XS"] )
         
         # get additional variables
