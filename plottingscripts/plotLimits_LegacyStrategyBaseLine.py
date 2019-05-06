@@ -67,7 +67,7 @@ def main(pyrootdir, argv):
     # script options
     analysisOptions = {
         # general options
-        "plotBlinded":          False,  # blind region
+        "usePseudoData":          False,  # blind region
         "testrun":              False,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
@@ -82,10 +82,10 @@ def main(pyrootdir, argv):
         # the skipX options try to skip the submission of files to the batch system
         # before skipping the output is crosschecked
         # if the output is not complete, the skipped part is done anyways
-        "skipPlotParallel":     True,
-        "skipHaddParallel":     True,
-        "skipHaddFromWildcard": True,
-        "skipRenaming":         True,
+        "skipPlotParallel":     False,
+        "skipHaddParallel":     False,
+        "skipHaddFromWildcard": False,
+        "skipRenaming":         False,
         "skipDatacards":        False}
 
     plotJson = "/nfs/dust/cms/user/swieland/ttH/pyroot-plotscripts/LegacyStudy_treejson.json"
@@ -256,7 +256,7 @@ def main(pyrootdir, argv):
             # ========================================================
             '''
             with monitor.Timer("addRealData"):
-                if analysis.plotBlinded:
+                if analysis.usePseudoData:
                     # pseudo data without ttH
                     pP.addData(samples = configData.samples[9:])
                 else:
@@ -406,7 +406,7 @@ def main(pyrootdir, argv):
                     "color":        ROOT.kBlack, 
                     "doRateSysts":  False})
         
-                if analysis.plotBlinded:
+                if analysis.usePseudoData:
                     pseudodataConfig = genPlots.Config(
                         histograms  = pseudodataList,
                         sampleIndex = 0)
