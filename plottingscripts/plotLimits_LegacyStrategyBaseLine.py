@@ -82,10 +82,10 @@ def main(pyrootdir, argv):
         # the skipX options try to skip the submission of files to the batch system
         # before skipping the output is crosschecked
         # if the output is not complete, the skipped part is done anyways
-        "skipPlotParallel":     True,
-        "skipHaddParallel":     True,
-        "skipHaddFromWildcard": True,
-        "skipRenaming":         True,
+        "skipPlotParallel":     False,
+        "skipHaddParallel":     False,
+        "skipHaddFromWildcard": False,
+        "skipRenaming":         False,
         "skipDatacards":        False}
 
     plotJson = "/nfs/dust/cms/user/swieland/ttH/pyroot-plotscripts/LegacyStudy_treejson.json"
