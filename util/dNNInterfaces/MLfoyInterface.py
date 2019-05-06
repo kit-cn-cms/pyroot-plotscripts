@@ -261,7 +261,8 @@ class DNN:
 
     def generateOutputPlots(self):
         # generate categoires list
-        string = "    categories += ["
+        string = "\n\n\n    # plots for {}\n".format(self.category)
+        string += "    categories += ["
         for i, node in enumerate(self.out_nodes):
             string += """
         ("({sel}&&{pred_var}=={i})","ljets_{cat}_{node}_node",""),""".format(
@@ -277,7 +278,8 @@ class DNN:
         string += "        ]\n"
 
         # fill binranges
-        string += "    nhistobins += {}\n".format([15 for _ in range(len(self.out_nodes))])
+        string += "    nhistobins += {}\n".format(
+            str(['ndefaultbins' for _ in range(len(self.out_nodes))]).replace("'",""))
         string += "    minxvals += {}\n".format(self.node_mins)
         string += "    maxxvals += {}\n".format(self.node_maxs)
         string += "\n\n"
@@ -402,7 +404,7 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses) {
     def getCleanUpLines(self):
         return ""
 
-    def generatePlotConfig(self, enable_input_plots = True):
+    def generatePlotConfig(self, ndefaultbins = 15, enable_input_plots = True):
         '''
         generate plot config from variables and plots in checkpoint files
         '''
@@ -458,7 +460,9 @@ def plots_dnn(data, discrname):
     nhistobins = []
     minxvals = []
     maxxvals = []
-    discrs = []\n"""
+    discrs = []
+
+    ndefaultbins = {}\n\n""".format(ndefaultbins)
 
         # loop over dnns witing code for DNN discr plots
         for dnn in self.DNNs:
@@ -506,6 +510,8 @@ if __name__ == "__main__":
         help = "output file")
     parser.add_option("--disableplots", dest="input_plots",default=True,action="store_false",metavar="DISABLEPLOTS",
         help = "disable plotting of input features as default setting")
+    parser.add_option("-n", "--ndefaultbins", dest="ndefaultbins",default=15,metavar="NDEFAULTBINS",
+        help = "number of default bins per discriminator")
 
     (opts, args) = parser.parse_args()
 
@@ -514,7 +520,7 @@ if __name__ == "__main__":
 
 
     interface = theInterface(dnnSet = opts.checkpoints)
-    cfg_string = interface.generatePlotConfig(opts.input_plots)
+    cfg_string = interface.generatePlotConfig(opts.ndefaultbins, opts.input_plots)
     with open(opts.output, "w") as f:
         f.write(cfg_string)
     print("write new plot config to {}".format(opts.output))    
