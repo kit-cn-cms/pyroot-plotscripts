@@ -60,7 +60,6 @@ class analysisConfig:
         self.stopAfterCompile = False
         self.haddParallel = True
         self.skipPlotParallel = False
-        self.useOldRoot = False
         self.skipHaddParallel = False
         self.skipHaddFromWildcard = False
         self.skipRenaming = False
@@ -150,8 +149,6 @@ class analysisConfig:
                 self.skipRenaming = bool(analysisOptions[key])
             elif key in ("skipDatacards"):
                 self.skipDatacards = bool(analysisOptions[key])
-            elif key in ("useOldRoot"):
-                self.useOldRoot = bool(analysisOptions[key])
             elif key in ("plotNumber"):
                 self.setPlotNumber( analysisOptions[key] )
             elif key in ("singleExecute"):
