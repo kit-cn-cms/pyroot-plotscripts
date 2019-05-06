@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttHAnalysis_2017_DeepJet_v2'
+    name = 'ttHAnalysis2017'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -46,7 +46,7 @@ def main(pyrootdir, argv):
     signalProcess = "ttH"
 
     # dataera
-    dataera = "2017"
+    dataera = "2017_deepCSV"
 
     # Name of final discriminator, should not contain underscore
     discrName = 'finaldiscr'
