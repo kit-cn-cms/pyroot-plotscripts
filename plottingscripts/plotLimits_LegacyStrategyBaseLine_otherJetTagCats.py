@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttHAnalysis_2017_LegacyStrategyBaseline_otherJetTagCats_v2'
+    name = 'ttHAnalysis_2017_LegacyStrategyBaseline_otherJetTagCats'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -43,7 +43,7 @@ def main(pyrootdir, argv):
     rootPathForAnalysis = workdir+'/output_limitInput.root'
 
     # dataera
-    dataera = "2017"
+    dataera = "2017_deepCSV"
 
     # signal process
     signalProcess = "ttH"
