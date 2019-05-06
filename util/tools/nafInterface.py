@@ -5,8 +5,12 @@ import nafSubmit
 # parallel plotting
 #############################
 def plotInterface(jobData, skipPlotParallel = False, maxTries = 10, nTries = 0):
+    print("NUMBER OF JOBS TO BE SUBMITTED: {}".format(len(jobData["scripts"])))
     if skipPlotParallel:
+        print("skip plot parallel was activated")
         jobData = plotTerminationCheck( jobData )
+        print("NUMBER OF JOBS TO BE RESUBMITTED: {}".format(len(jobData["scripts"])))
+
         if len(jobData["scripts"]) > 0 or len(jobData["outputs"]) > 0:
             print("not all plotParallel scripts did terminate successfully - resubmitting")
         else:
@@ -40,11 +44,10 @@ def plotTerminationCheck(jobData):
     undoneJobData["scripts"] = []
     undoneJobData["outputs"] = []
     undoneJobData["entries"] = []
-    samplewiseMaps = {}
     noCutflow = 0
     wrongEntry = 0
 
-    for script, output, entries, mapKey in zip(jobData["scripts"], jobData["outputs"], jobData["entries"], jobData["maps"]):
+    for script, output, entries in zip(jobData["scripts"], jobData["outputs"], jobData["entries"]):
         if os.path.exists(output+".cutflow.txt"):
             cfFile = open(output+".cutflow.txt")
             processedEntries = -1
@@ -63,9 +66,8 @@ def plotTerminationCheck(jobData):
         undoneJobData["scripts"].append( script )
         undoneJobData["outputs"].append( output ) 
         undoneJobData["entries"].append( entries ) 
-        samplewiseMaps[mapKey] = jobData["maps"][mapKey]
 
-    undoneJobData["maps"] = samplewiseMaps
+    undoneJobData["maps"] = jobData["maps"]
     print("-"*50)
     print("done checking job outputs after plotpara - results:")
     print("jobs without cutflow file:     " +str(noCutflow))

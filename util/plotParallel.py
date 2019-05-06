@@ -204,14 +204,6 @@ class plotParallel:
         # runscriptData consists of {"scripts", "outputs", "entries", "maps"}
         self.runscriptData = writer.writeRunScripts()
         
-        # debug prints
-        scripts = self.runscriptData["scripts"]
-        outputs = self.runscriptData["outputs"]
-        entries = self.runscriptData["entries"]
-        #for index in range(len(scripts)):
-        #    print("{:<70} | {:<15}".format( outputs[index].split("/")[-1], entries[index] ))
-
-
         # check if we should stop
         if self.analysis.stopAfterCompile:
             print( "compiling is done and stopAfterCompile option is activated - exiting" )
