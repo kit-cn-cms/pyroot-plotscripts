@@ -25,7 +25,7 @@ class analysisConfig:
         self.renamedPath = self.rootPath
     
         self.dataera = dataera
-        if not self.dataera in ["2017", "2018"]:
+        if not self.dataera in ["2017", "2018", "2017_deepCSV"]:
             sys.exit("invalid dataera")
 
         self.setDefaults()
