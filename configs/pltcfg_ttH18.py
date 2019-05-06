@@ -28,7 +28,8 @@ dibosonPathS = path_mwassmer+'/WW_*/*nominal*.root'+';'+ path_mwassmer+'/ZZ_*/*n
 
 stpath = path_mwassmer+'/ST_*/*nominal*.root'
 
-ttHpath = path_mwassmer+'/ttHTo*/*nominal*.root'
+ttHpath = path_mwassmer+'/ttHTobb_M125*/*nominal*.root'+';'+ \
+          path_mwassmer+'/ttHToNonbb_M125*/*nominal*.root'
 
 # SELECTIONS
 
