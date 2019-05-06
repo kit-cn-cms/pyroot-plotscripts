@@ -67,7 +67,7 @@ def main(pyrootdir, argv):
     # script options
     analysisOptions = {
         # general options
-        "plotBlinded":          False,  # blind region
+        "usePseudoData":          False,  # blind region
         "testrun":              False,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
@@ -260,7 +260,7 @@ def main(pyrootdir, argv):
             # ========================================================
             '''
             with monitor.Timer("addRealData"):
-                if analysis.plotBlinded:
+                if analysis.usePseudoData:
                     # pseudo data without ttH
                     pP.addData(samples = configData.samples[9:])
                 else:
@@ -410,7 +410,7 @@ def main(pyrootdir, argv):
                     "color":        ROOT.kBlack, 
                     "doRateSysts":  False})
         
-                if analysis.plotBlinded:
+                if analysis.usePseudoData:
                     pseudodataConfig = genPlots.Config(
                         histograms  = pseudodataList,
                         sampleIndex = 0)
