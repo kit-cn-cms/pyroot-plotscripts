@@ -19,7 +19,7 @@ CMS_btag_lfstats2_2017,shape,weight,"""dummyWeight_CSVLFStats2up:=(USUALWEIGHT*S
 CMS_btag_cferr1_2017,shape,weight,"""dummyWeight_CSVCErr1up:=(USUALWEIGHT*SCALEFACTORS*MCWEIGHT*internalCSVweight_CSVCErr1Up*internalCSVweight)*DOWEIGHTS""","""dummyWeight_CSVCErr1down:=(USUALWEIGHT*SCALEFACTORS*MCWEIGHT*internalCSVweight_CSVCErr1Down*internalCSVweight)*DOWEIGHTS""",1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 CMS_btag_cferr2_2017,shape,weight,"""dummyWeight_CSVCErr2up:=(USUALWEIGHT*SCALEFACTORS*MCWEIGHT*internalCSVweight_CSVCErr2Up*internalCSVweight)*DOWEIGHTS""","""dummyWeight_CSVCErr2down:=(USUALWEIGHT*SCALEFACTORS*MCWEIGHT*internalCSVweight_CSVCErr2Down*internalCSVweight)*DOWEIGHTS""",1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 CMS_scale_j_2017,shape,variation,JESup,JESdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-#CMS_ttHbb_bgnorm_ttbarPlusB_2017,lnN,rate,-,-,-,-,-,-,-,-,-,-,-,-,-,x,-,-,-,-,-,-,-,-,-,-
+CMS_ttHbb_bgnorm_ttbarPlusB_2017,lnN,rate,-,-,-,-,-,-,-,-,-,-,-,-,-,x,-,-,-,-,-,-,-,-,-,-
 CMS_ttHbb_bgnorm_ttbarPlus2B_2017,lnN,rate,-,-,-,-,-,-,-,-,-,-,-,-,-,-,x,-,-,-,-,-,-,-,-,-
 CMS_ttHbb_bgnorm_ttbarPlusBBbar_2017,lnN,rate,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,x,-,-,-,-,-,-,-,-
 CMS_ttHbb_bgnorm_ttbarPlusCCbar_2017,lnN,rate,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,x,-,-,-,-,-,-,-
