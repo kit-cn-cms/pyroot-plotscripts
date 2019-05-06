@@ -18,6 +18,9 @@ class DNN:
         with open(self.configFile) as f:
             self.config = json.loads(f.read())
 
+        if "binaryConfig" in self.config:
+            print("    BINARY DNN")
+
         self.category = self.config["JetTagCategory"]
         self.label = self.config["categoryLabel"]
         self.selection = self.config["Selection"]
@@ -40,31 +43,40 @@ class DNN:
                 self.var_means.append(row[1])
                 self.var_stds.append( row[2])
 
-        # collection event classes
-        classes = self.config["eventClasses"]
-        self.out_nodes = []
-        self.node_mins = []
-        self.node_maxs = []
-        for cls in classes:
+        if not "binaryConfig" in self.config:
+            # collecting event classes
+            classes = self.config["eventClasses"]
+            self.out_nodes = []
+            self.node_mins = []
+            self.node_maxs = []
+            for cls in classes:
 
-            # save names of output nodes
-            self.out_nodes.append(cls["sampleLabel"])
+                # save names of output nodes
+                self.out_nodes.append(cls["sampleLabel"])
 
-            # save min and max values of output nodes
-            if "min" in cls and "max" in cls:
-                self.node_mins.append(cls["min"])
-                self.node_maxs.append(cls["max"])
-            else:
-                print("\tdid not find plotrange for discriminator {} - setting it to [0.,1.]".format(cls["sampleLabel"]))
-                self.node_mins.append(0.)
-                self.node_maxs.append(1.)
+                # save min and max values of output nodes
+                if "min" in cls and "max" in cls:
+                    self.node_mins.append(cls["min"])
+                    self.node_maxs.append(cls["max"])
+                else:
+                    print("\tdid not find plotrange for discriminator {} - setting it to [0.,1.]".format(cls["sampleLabel"]))
+                    self.node_mins.append(0.)
+                    self.node_maxs.append(1.)
 
-        # generate discriminator names
-        self.discrNames = [
-            "DNNOutput_{}_node_{}".format(self.category, node)
-            for node in self.out_nodes]
-        # generate class prediction variable
-        self.predictionVariable = "DNNPredictedClass_{}".format(self.category)
+            # generate discriminator names
+            self.discrNames = [
+                "DNNOutput_{}_node_{}".format(self.category, node)
+                for node in self.out_nodes]
+            # generate class prediction variable
+            self.predictionVariable = "DNNPredictedClass_{}".format(self.category)
+        else:
+            self.out_nodes = ["binary"]
+            self.node_mins = [self.config["binaryConfig"]["minValue"]]
+            self.node_maxs = [self.config["binaryConfig"]["maxValue"]]
+            self.discrNames = ["DNNOutput_{}".format(self.category)]
+            self.predictionVariable = "DNNPredictedClass_{}".format(self.category)
+
+
 
     def getBeforeLoopLines(self):
         return """
@@ -249,7 +261,8 @@ class DNN:
 
     def generateOutputPlots(self):
         # generate categoires list
-        string = "    categories += ["
+        string = "\n\n\n    # plots for {}\n".format(self.category)
+        string += "    categories += ["
         for i, node in enumerate(self.out_nodes):
             string += """
         ("({sel}&&{pred_var}=={i})","ljets_{cat}_{node}_node",""),""".format(
@@ -265,7 +278,8 @@ class DNN:
         string += "        ]\n"
 
         # fill binranges
-        string += "    nhistobins += {}\n".format([15 for _ in range(len(self.out_nodes))])
+        string += "    nhistobins += {}\n".format(
+            str(['ndefaultbins' for _ in range(len(self.out_nodes))]).replace("'",""))
         string += "    minxvals += {}\n".format(self.node_mins)
         string += "    maxxvals += {}\n".format(self.node_maxs)
         string += "\n\n"
@@ -390,7 +404,7 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses) {
     def getCleanUpLines(self):
         return ""
 
-    def generatePlotConfig(self, enable_input_plots = True):
+    def generatePlotConfig(self, ndefaultbins = 15, enable_input_plots = True):
         '''
         generate plot config from variables and plots in checkpoint files
         '''
@@ -446,7 +460,9 @@ def plots_dnn(data, discrname):
     nhistobins = []
     minxvals = []
     maxxvals = []
-    discrs = []\n"""
+    discrs = []
+
+    ndefaultbins = {}\n\n""".format(ndefaultbins)
 
         # loop over dnns witing code for DNN discr plots
         for dnn in self.DNNs:
@@ -494,6 +510,8 @@ if __name__ == "__main__":
         help = "output file")
     parser.add_option("--disableplots", dest="input_plots",default=True,action="store_false",metavar="DISABLEPLOTS",
         help = "disable plotting of input features as default setting")
+    parser.add_option("-n", "--ndefaultbins", dest="ndefaultbins",default=15,metavar="NDEFAULTBINS",
+        help = "number of default bins per discriminator")
 
     (opts, args) = parser.parse_args()
 
@@ -502,7 +520,7 @@ if __name__ == "__main__":
 
 
     interface = theInterface(dnnSet = opts.checkpoints)
-    cfg_string = interface.generatePlotConfig(opts.input_plots)
+    cfg_string = interface.generatePlotConfig(opts.ndefaultbins, opts.input_plots)
     with open(opts.output, "w") as f:
         f.write(cfg_string)
     print("write new plot config to {}".format(opts.output))    
