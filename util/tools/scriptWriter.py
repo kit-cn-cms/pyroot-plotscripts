@@ -40,7 +40,8 @@ class scriptWriter:
         ccExists = os.path.exists(self.ccPath)
         if ccExists:
             print("c++ file already exists - check if this needs to be updated.")
-            cmd = "cp -v "+self.ccPath+" "+self.ccPath+"Backup"
+            print("moving it to backup")
+            cmd = "mv -v "+self.ccPath+" "+self.ccPath+"Backup"
             print("cmd: "+cmd)
             subprocess.call(cmd, shell = True)
 
@@ -57,20 +58,21 @@ class scriptWriter:
         if ccExists:
             print( "comparing c++ codes ..." )
             codeDiffers = not filecmp.cmp(self.ccPath+"Backup", self.ccPath)
+            if codeDiffers: print( "c++ codes differ" )
+
+        # check if needs to be compiled
         if codeDiffers:
-            print( "c++ codes differ" )
             print( "compiling c++ program" )
             # compiling programm
             self.compileProgram()
         else:
-            print( "c++ program already existing !! check if this is reasonable" )
-            cmd = "cp -v "+self.ccPath[:-3]+"Backup "+self.ccPath[:-3]
-            subprocess.call(cmd, shell = True)
+            print( "c++ code already existed without differences -- skipping compilation" )
         
         # check if compiling was successful
         if not os.path.exists(self.ccPath[:-3]):
             print( "could not compile c++ program - exiting" )
             sys.exit(-1)
+
         print("#"*50)
         print(" done with writing and compiling c++ program")
         print("#"*50)
