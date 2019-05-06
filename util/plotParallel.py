@@ -184,16 +184,10 @@ class plotParallel:
         print("ppRootPath: "+str(self.analysis.ppRootPath))   
         # check what to do if rootFile already exists
         self.ccPath = self.analysis.workdir + "/" + self.analysis.name + ".cc"
-        if os.path.exists(self.ccPath):
-            if self.analysis.useOldRoot: #TODO namechange
-                print("using old cpp file")
-            else:
-                cmd = "cp -v "+self.analysis.workdir+"/"+self.analysis.name+" "+self.analysis.workdir+"/"+self.analysis.name+"Backup"
-                subprocess.call(cmd, shell = True)
 
         # creating c++ programm
         writer = scriptWriter.scriptWriter(self)
-        if not self.analysis.useOldRoot: writer.writeCC()
+        writer.writeCC()
 
         # create rename script
         writer.writeRenameScript()
@@ -210,14 +204,6 @@ class plotParallel:
         # runscriptData consists of {"scripts", "outputs", "entries", "maps"}
         self.runscriptData = writer.writeRunScripts()
         
-        # debug prints
-        scripts = self.runscriptData["scripts"]
-        outputs = self.runscriptData["outputs"]
-        entries = self.runscriptData["entries"]
-        #for index in range(len(scripts)):
-        #    print("{:<70} | {:<15}".format( outputs[index].split("/")[-1], entries[index] ))
-
-
         # check if we should stop
         if self.analysis.stopAfterCompile:
             print( "compiling is done and stopAfterCompile option is activated - exiting" )

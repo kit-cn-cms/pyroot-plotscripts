@@ -41,7 +41,7 @@ class analysisConfig:
 
         self.drawParallel = True
         self.plotNumber = None
-        self.plotBlinded = False
+        self.usePseudoData = True
         self.makeDataCards = True
         self.haddFromWildcard = True        
         self.addData = False
@@ -60,7 +60,6 @@ class analysisConfig:
         self.stopAfterCompile = False
         self.haddParallel = True
         self.skipPlotParallel = False
-        self.useOldRoot = False
         self.skipHaddParallel = False
         self.skipHaddFromWildcard = False
         self.skipRenaming = False
@@ -75,7 +74,6 @@ class analysisConfig:
             print("ttbb was chosen as signal process")
         elif signalProcess == "ttH" or signalProcess == "tth":
             self.signalProcess = "ttH"
-            #print("ttH was chosen as signal process. plotBlinded was set to True")
         elif signalProcess == "ttZ" or signalProcess == "ttbarZ":
             self.signalProcess = "ttbarZ"
         else:
@@ -89,15 +87,15 @@ class analysisConfig:
         try:
             opts, args = getopt.getopt(argv,"hp:",
                 ["plot=", "doPlotParallel=", "doDrawParallel=", 
-                    "plotBlinded=", "makeEventYields=", "makeDataCards=", 
+                    "usePseudoData=", "makeEventYields=", "makeDataCards=", 
                     "makeSimplePlots=", "makeMCControlPlots="])
         except getopt.GetoptError:
-            print '[scriptname].py -p  <plotnumber> --doPlotParallel= --doDrawParallel= --plotBlinded= --makeEventYields= --makeDataCards= --makeSimplePlots= --makeMCControlPlots='
+            print '[scriptname].py -p  <plotnumber> --doPlotParallel= --doDrawParallel= --usePseudoData= --makeEventYields= --makeDataCards= --makeSimplePlots= --makeMCControlPlots='
             sys.exit(2)
         for opt, arg in opts:
             print 'opt: ', opt, ' arg: ', arg, ' found.'
             if opt in ('-h', '--help'):
-                print '[scriptname].py -p <plotnumber> --doPlotParallel= --doDrawParallel= --plotBlinded= --makeEventYields= --makeDataCards= --makeSimplePlots= --makeMCControlPlots= --additionalPlotVariables= --optimizedRebinning='
+                print '[scriptname].py -p <plotnumber> --doPlotParallel= --doDrawParallel= --usePseudoData= --makeEventYields= --makeDataCards= --makeSimplePlots= --makeMCControlPlots= --additionalPlotVariables= --optimizedRebinning='
                 sys.exit()
             elif opt in ("-p","--plotNumber"):
                 self.setPlotNumber(arg)
@@ -108,9 +106,9 @@ class analysisConfig:
             elif opt in ("--doDrawParallel"):
                 self.setDoDrawParallel(arg)
                 print "Set doDrawParallel option to: ", arg
-            elif opt in ("--plotBlinded"):
+            elif opt in ("--usePseudoData"):
                 self.setPlotBlinded(arg)
-                print "Set plotBlinded option to: ", arg
+                print "Set usePseudoData option to: ", arg
             elif opt in ("--makeEventYields"):
                 self.setMakeEventYields(arg)
                 print "Set makeEventYields option to: ", arg
@@ -150,8 +148,6 @@ class analysisConfig:
                 self.skipRenaming = bool(analysisOptions[key])
             elif key in ("skipDatacards"):
                 self.skipDatacards = bool(analysisOptions[key])
-            elif key in ("useOldRoot"):
-                self.useOldRoot = bool(analysisOptions[key])
             elif key in ("plotNumber"):
                 self.setPlotNumber( analysisOptions[key] )
             elif key in ("singleExecute"):
@@ -160,7 +156,7 @@ class analysisConfig:
                 self.setDoPlotParallel( analysisOptions[key] )
             elif key in ("drawParallel"):
                 self.setDoDrawParallel( analysisOptions[key] )
-            elif key in ("plotBlinded"):
+            elif key in ("usePseudoData"):
                 self.setPlotBlinded( analysisOptions[key] )
             elif key in ("makeEventYields"):
                 self.setMakeEventYields( analysisOptions[key] )
@@ -211,7 +207,7 @@ class analysisConfig:
         self.drawParallel = arg
 
     def setPlotBlinded(self,arg):
-        self.plotBlinded = arg
+        self.usePseudoData = arg
 
     def setMakeEventYields(self,arg):
         self.makeEventYields = arg
@@ -244,7 +240,7 @@ class analysisConfig:
         code +="PlotNumber, " + str(self.plotNumber) + "\n"
         code +="plotParallel, " + str(self.plotParallel) + "\n"
         code +="drawParallel, " + str(self.drawParallel) + "\n"
-        code +="plotBlinded, " + str(self.plotBlinded) + "\n"
+        code +="usePseudoData, " + str(self.usePseudoData) + "\n"
         code +="makeEventYields, " + str(self.makeEventYields) + "\n"
         code +="makeDataCards, " + str(self.makeDataCards) + "\n"
         code +="makeSimplePlots, " + str(self.makeSimplePlots) + "\n"
