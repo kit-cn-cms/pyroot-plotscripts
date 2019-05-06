@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttZDatacards'
+    name = 'ttZDatacards_v3'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -57,7 +57,7 @@ def main(pyrootdir, argv):
     # configs
     config          = "pltcfg_ttZ18"
     variable_cfg    = "ttZ18_addVariables"
-    plot_cfg        = "ttZ_discrPlots"
+    plot_cfg        = "ttZ18_DNNplots"
     syst_cfg        = "ttZ18_systematics"
 
     # file for rate factors
@@ -92,7 +92,7 @@ def main(pyrootdir, argv):
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/ttZ_test/"}
+                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/ttZ_merged_v1"}
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
