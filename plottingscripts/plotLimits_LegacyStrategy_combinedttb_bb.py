@@ -55,7 +55,7 @@ def main(pyrootdir, argv):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    config          = "pltcfg_ttH17"
+    config          = "pltcfg_ttH17_combinedb_bb"
     variable_cfg    = "ttH17_addVariables"
     plot_cfg        = "LegacyStrategyStudycombinedttb_bb_Plots"
     syst_cfg        = "LegacyStrategyStudy_Systematics_combinedttb_bb"
@@ -67,7 +67,7 @@ def main(pyrootdir, argv):
     # script options
     analysisOptions = {
         # general options
-        "plotBlinded":          False,  # blind region
+        "usePseudoData":          False,  # blind region
         "testrun":              False,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
@@ -256,7 +256,7 @@ def main(pyrootdir, argv):
             # ========================================================
             '''
             with monitor.Timer("addRealData"):
-                if analysis.plotBlinded:
+                if analysis.usePseudoData:
                     # pseudo data without ttH
                     pP.addData(samples = configData.samples[9:])
                 else:
@@ -406,7 +406,7 @@ def main(pyrootdir, argv):
                     "color":        ROOT.kBlack, 
                     "doRateSysts":  False})
         
-                if analysis.plotBlinded:
+                if analysis.usePseudoData:
                     pseudodataConfig = genPlots.Config(
                         histograms  = pseudodataList,
                         sampleIndex = 0)
