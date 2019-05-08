@@ -67,7 +67,7 @@ def main(pyrootdir, argv):
     # script options
     analysisOptions = {
         # general options
-        "plotBlinded":          False,  # blind region
+        "usePseudoData":        False,  # blind region
         "testrun":              False,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
@@ -82,13 +82,13 @@ def main(pyrootdir, argv):
         # the skipX options try to skip the submission of files to the batch system
         # before skipping the output is crosschecked
         # if the output is not complete, the skipped part is done anyways
-        "skipPlotParallel":     False,
+        "skipPlotParallel":     True,
         "skipHaddParallel":     False,
         "skipHaddFromWildcard": False,
         "skipRenaming":         False,
         "skipDatacards":        False}
 
-    plotJson = ""
+    plotJson = "/nfs/dust/cms/user/pkeicher/ttH_legacy/pyroot-plotscripts/Baseline_JES_sources_treejson.json"
     plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
@@ -256,7 +256,7 @@ def main(pyrootdir, argv):
             # ========================================================
             '''
             with monitor.Timer("addRealData"):
-                if analysis.plotBlinded:
+                if analysis.usePseudoData:
                     # pseudo data without ttH
                     pP.addData(samples = configData.samples[1:])
                 else:
@@ -406,59 +406,59 @@ def main(pyrootdir, argv):
                     "color":        ROOT.kBlack, 
                     "doRateSysts":  False})
         
-                if analysis.plotBlinded:
-                    pseudodataConfig = genPlots.Config(
-                        histograms  = pseudodataList,
-                        sampleIndex = 0)
+                # if analysis.usePseudoData:
+                pseudodataConfig = genPlots.Config(
+                    histograms  = pseudodataList,
+                    sampleIndex = 0)
 
-                    #set general plotoption
-                    controlPlotOptions = {
-                        "factor":           -2, #not default
-                        "logscale":         False,
-                        "canvasOptions":    "histo",
-                        "ratio":            True, # not default
-                        "blinded":          False} #not default
-                    # making the control plots
-                    gP.makeControlPlots(
-                        sampleConfig = sampleConfig,
-                        dataConfig   = pseudodataConfig,
-                        options      = controlPlotOptions,
-                        outName      = "controlPlots_pseudodata")
-
-
-                    controlPlotOptions["logscale"] = True
-                    gP.makeControlPlots(
-                        sampleConfig = sampleConfig,
-                        dataConfig   = pseudodataConfig,
-                        options      = controlPlotOptions,
-                        outName      = "controlPlots_pseudodata_LOG")
-
-                else:
-                    dataConfig = genPlots.Config(
-                        histograms  = dataList,
-                        sampleIndex = 0)
-
-                    #set general plotoption
-                    controlPlotOptions = {
-                        "factor":           -2, #not default
-                        "logscale":         False,
-                        "canvasOptions":    "histo",
-                        "ratio":            True, # not default
-                        "blinded":          False} #not default
-                    # making the control plots
-                    gP.makeControlPlots(
-                        sampleConfig = sampleConfig,
-                        dataConfig   = dataConfig,
-                        options      = controlPlotOptions,
-                        outName      = "controlPlots_data")
+                #set general plotoption
+                controlPlotOptions = {
+                    "factor":           -2, #not default
+                    "logscale":         False,
+                    "canvasOptions":    "histo",
+                    "ratio":            True, # not default
+                    "blinded":          False} #not default
+                # making the control plots
+                gP.makeControlPlots(
+                    sampleConfig = sampleConfig,
+                    dataConfig   = pseudodataConfig,
+                    options      = controlPlotOptions,
+                    outName      = "controlPlots_pseudodata")
 
 
-                    controlPlotOptions["logscale"] = True
-                    gP.makeControlPlots(
-                        sampleConfig = sampleConfig,
-                        dataConfig   = dataConfig,
-                        options      = controlPlotOptions,
-                        outName      = "controlPlots_data_LOG")
+                controlPlotOptions["logscale"] = True
+                gP.makeControlPlots(
+                    sampleConfig = sampleConfig,
+                    dataConfig   = pseudodataConfig,
+                    options      = controlPlotOptions,
+                    outName      = "controlPlots_pseudodata_LOG")
+
+                # else:
+                dataConfig = genPlots.Config(
+                    histograms  = dataList,
+                    sampleIndex = 0)
+
+                #set general plotoption
+                controlPlotOptions = {
+                    "factor":           -2, #not default
+                    "logscale":         False,
+                    "canvasOptions":    "histo",
+                    "ratio":            True, # not default
+                    "blinded":          False} #not default
+                # making the control plots
+                gP.makeControlPlots(
+                    sampleConfig = sampleConfig,
+                    dataConfig   = dataConfig,
+                    options      = controlPlotOptions,
+                    outName      = "controlPlots_data")
+
+
+                controlPlotOptions["logscale"] = True
+                gP.makeControlPlots(
+                    sampleConfig = sampleConfig,
+                    dataConfig   = dataConfig,
+                    options      = controlPlotOptions,
+                    outName      = "controlPlots_data_LOG")
                     
 
             monitor.printClass(gP, "after making control plots")
