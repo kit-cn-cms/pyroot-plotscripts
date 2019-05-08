@@ -76,7 +76,7 @@ def main(pyrootdir, argv):
         "addData":              True,  # adding data 
         "drawParallel":         True,
         # options for drawParallel/singleExecute sub programs
-        "makeSimplePlots":      True,
+        "makeSimplePlots":      False,
         "makeMCControlPlots":   True,
         "makeEventYields":      True,
         # the skipX options try to skip the submission of files to the batch system
@@ -365,7 +365,7 @@ def main(pyrootdir, argv):
                     "sepaTest":         False}
                 sampleConfig = genPlots.Config(
                     histograms  = histoList,
-                    sampleIndex = 9)
+                    sampleIndex = 1)
                 gP.makeSimpleControlPlots( sampleConfig, controlPlotOptions )
 
                 # creating shape plots
@@ -379,7 +379,7 @@ def main(pyrootdir, argv):
                     "sepaTest":         False}
                 sampleConfig = genPlots.Config(
                     histograms  = dataList,
-                    sampleIndex = 9)
+                    sampleIndex = 1)
                 gP.makeSimpleShapePlots( sampleConfig, shapePlotOptions )
 
                 monitor.printClass(gP, "after making simple MC plots")
@@ -395,7 +395,7 @@ def main(pyrootdir, argv):
             with monitor.Timer("makingMCControlPlots"):
                 sampleConfig = genPlots.Config(
                     histograms  = histoList,
-                    sampleIndex = 9)
+                    sampleIndex = 1)
 
                 # generate the llloflist internally
                 sampleConfig.genNestedHistList(
