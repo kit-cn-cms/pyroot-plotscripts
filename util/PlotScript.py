@@ -4,6 +4,8 @@ import optparse
 import importlib 
 import ROOT
 
+debug=0
+
 
 """
 Enabling parser options
@@ -29,6 +31,8 @@ parser.add_option("--nominalkey", dest="nominalKey", default="$PROCESS_$CHANNEL"
         help="KEY of the systematics histograms", metavar="nominalKey")
 parser.add_option("--systematickey", dest="systematicKey", default="$PROCESS_$CHANNEL_$SYSTEMATIC",
         help="KEY of the nominal histograms", metavar="systematicKey")
+parser.add_option("--signal", dest="signal", default="$ttH",
+        help="signal processes", metavar="signal")
 
 
 (options, args) = parser.parse_args()
@@ -41,6 +45,9 @@ Define parser options for further use
 procIden    = "$PROCESS"
 chIden      = "$CHANNEL"
 sysIden     = "$SYSTEMATIC"
+
+signal=options.signal.split(",")
+print signal
 
 if chIden in options.nominalKey:
     nominalKey = options.nominalKey.replace(chIden, options.channelName)
@@ -106,18 +113,25 @@ Plots = importlib.import_module("Plots" )
 PlotList = {}
 # load ROOT File
 rootFile = ROOT.TFile(options.Rootfile, "readonly")  
+upErrors=None
+downErrors=None
 # load samples
 for sample in pltcfg.samples:
     print "NEW SAMPLE"
+    print sample.nick
     # replace keys to get histogram key
     if procIden in nominalKey:
         sampleKey = nominalKey.replace(procIden, sample.nick)
     else:
         sampleKey=nominalKey
-    print sampleKey
     rootHist = rootFile.Get(sampleKey)
-    PlotList[sample.nick]=Plots.Plot(rootHist,sample.nick)
-    print("    type of hist is: "+str(type(rootHist)) )
+    #moves underflow in the first and overflow in the last bin
+    Plots.moveOverUnderFlow(rootHist)
+    print("type of hist is: "+str(type(rootHist)) )
+    if isinstance(rootHist, ROOT.TH1):
+        PlotList[sample.nick]=Plots.Plot(rootHist,sample.nick,label=sample.name,color=sample.color)
+        print "_"*130
+        print sample.color
 
     # replace keys to get systematic key
     print "STARTING WITH SYSTEMATICS"
@@ -125,42 +139,147 @@ for sample in pltcfg.samples:
         sampleSystKey = systematicKey.replace(procIden, sample.nick)
     else:
         sampleSystKey = systematicKey
-    print sampleSystKey
+
+    """
+    create empty Error Band for sample to fill 
+    """
+    if not upErrors and not downErrors:
+        upErrors=[0]*rootHist.GetNbinsX()
+        downErrors=[0]*rootHist.GetNbinsX()
+
     for systematic in sample.getShapes():
         print systematic
         if sysIden in sampleSystKey:
             sampleHistKey = sampleSystKey.replace(sysIden, systematic)
         else:
             sampleHistKey = sampleSystKey
-        print sampleHistKey
         upname=sampleHistKey+"Up"
-        print upname
         up= rootFile.Get(upname)
         downname=sampleHistKey+"Down"
-        print downname
         down= rootFile.Get(downname)
-        print("    type of up shape hist is: "+str(type(up)) )
-        print("    type of down shape is: "+str(type(down)) )
-        #TODO: Error message if not TH1F Type and delete systematic
-        #PlotList[sample.nick].add_uncertainty(systematic,up,down)
+        
+        if isinstance(up, ROOT.TH1) and isinstance(down, ROOT.TH1):
+            Plots.moveOverUnderFlow(up)
+            Plots.moveOverUnderFlow(down)
 
+            for ibin in range(0, rootHist.GetNbinsX()):
+                # get up down variations
+                u_=up[ibin+1]-rootHist[ibin+1]
+                d_=down[ibin+1]-rootHist[ibin+1]
+                 # set max as up and min as down
+                u = max(u_,d_)
+                d = min(u_,d_)
+                # only consider positive up and negative down variations
+                u = max(0.,u)
+                d = min(0.,d)
+                upErrors[ibin]=ROOT.TMath.Sqrt( upErrors[ibin]*upErrors[ibin] + u*u )
+                downErrors[ibin] = ROOT.TMath.Sqrt( downErrors[ibin]*downErrors[ibin] + d*d)
+                if debug>99:
+                    print "adding up/down ", u, d
+                    print "total up/down now: ", upErrors[ibin], downErrors[ibin]
+                    print "-"*50
+
+        else:
+            print("ERROR! can not use: "+str(systematic) )
+            print("->type of up shape hist is: "+str(type(up)) )
+            print("->type of down shape is: "+str(type(down)) )
+      
+
+"""
+Make Error Bands
+"""
+
+AllHists=None
+for sample in pltcfg.samples:
+    print "ERROR BANDS"
+    print sample
+    if AllHists:
+        AllHists.Add(PlotList[sample.nick].histo)
+    else:
+        AllHists=PlotList[sample.nick].histo
+
+graph = ROOT.TGraphAsymmErrors(AllHists)
+for i in range(len(upErrors)):
+    graph.SetPointEYlow(i, downErrors[i])
+    graph.SetPointEYhigh(i, upErrors[i])
+    graph.SetPointEXlow(i, AllHists.GetBinWidth(i+1)/2.)
+    graph.SetPointEXhigh(i, AllHists.GetBinWidth(i+1)/2.)
+graph.SetFillStyle(3004)
+graph.SetLineColor(ROOT.kBlack)
+graph.SetFillColor(ROOT.kBlack)
+
+print graph
 
 """
 Combine Histograms for combined plot channels
 """
 
 for sample in pltcfg.plottingsamples:
-    print sample
-    hists=[]
     combinedHist = None
     for process in sample.addsamples:
-        print process
         if combinedHist:
             combinedHist.Add(PlotList[process].histo)
             del PlotList[process]
         else:
-            combinedHist = PlotList[process].histo 
-    
-    PlotList[sample.nick]=Plots.Plot(combinedHist, sample.nick)
+            combinedHist = PlotList[process].histo
+            del PlotList[process] 
+    PlotList[sample.nick]=Plots.Plot(combinedHist, sample.nick, color=sample.color, label=sample.name)
+"""
+Signal and Background difference
+"""
+sigHists=[]
+sigLabels=[]
+bkgHists=[]
+bkgLabels=[]
+for plotname in PlotList:
+    hist=PlotList[plotname].histo
+    color=PlotList[plotname].color
+    label=PlotList[plotname].label
+    hist.SetStats(False)
+    print "-"*130
+    print color
+    if plotname in signal:
+        hist.SetLineColor( color )
+        hist.SetFillColor(0)
+        hist.SetLineWidth(2)
+        sigHists.append(hist)
+        sigLabels.append(label)
+    else:
+        hist.SetLineColor(ROOT.kBlack )
+        hist.SetFillColor(color)
+        hist.SetLineWidth(1)
+        bkgHists.append(hist)
+        bkgLabels.append(label)
 
+print sigHists 
+print sigLabels
+print bkgHists     
+print bkgLabels  
 
+canvas=Plots.drawHistsOnCanvas(sigHists,bkgHists,options.channelName,ratio="#frac{scaled Signal}{Background}",errorband=graph)
+
+# setup legend
+legend = Plots.getLegend()
+
+# add signal entry
+for i, h in enumerate(sigHists):
+    legend.AddEntry(h, sigLabels[i], "L")
+
+# # add background entries
+for i, h in enumerate(bkgHists):
+    legend.AddEntry(h, bkgLabels[i], "F")
+
+# draw legend
+legend.Draw("same")
+
+# add ROC score if activated
+# if self.printROCScore and len(signalIndex)==1:
+# setup.printROCScore(canvas, nodeROC, plotOptions["ratio"])
+
+# # add lumi or private work label to plot
+# if self.privateWork:
+# setup.printPrivateWork(canvas, plotOptions["ratio"], nodePlot = True)
+# else:
+# setup.printLumi(canvas, ratio = plotOptions["ratio"])
+
+Plots.saveCanvas(canvas,options.directory+"/workdir/"+options.channelName+"discriminator.pdf")
