@@ -1,3 +1,4 @@
+import sys
 import re
 import collections
 import xml.etree.ElementTree as ET
@@ -616,7 +617,9 @@ class Variable:
         indent = ""
         if hasCondition: indent+= "    "
         if self.inTree:     return ""
-        if self.isBDTVar:   return "    "+indent+self.varName+" = r_"+self.varName+"->EvaluateMVA('BDT'):\n"
+        elif self.isBDTVar: return "    "+indent+self.varName+" = r_"+self.varName+"->EvaluateMVA('BDT'):\n"
+        elif self.varName == self.expression:
+            sys.exit("trying to initialize variable '{}' with itself (var = var;) - this does not work".format(self.varName))
         else:               return "    "+indent+self.varName+" = "+self.expression+";\n"
 
 
