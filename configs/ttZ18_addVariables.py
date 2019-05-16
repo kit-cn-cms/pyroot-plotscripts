@@ -36,8 +36,6 @@ def getAddVars():
         "Weight_CSVCErr1down",
         "Weight_CSVCErr2up",
         "Weight_CSVCErr2down",
-        "Evt_blr_ETH",
-        "Evt_blr_ETH_transformed",
         ]
 
     return addVars
