@@ -71,6 +71,8 @@ def add_plots():
         #plotClasses.Plot(ROOT.TH1D("N_AK8_Jets","Number of ak8 jets",10,0.5,10.5),"N_AK8Jets",plotselection,plotlabel),
         plotClasses.Plot(ROOT.TH1D("MET","missing transverse energy",50,0,200),"Evt_Pt_MET",plotselection,plotlabel),
         plotClasses.Plot(ROOT.TH1D("METphi","MET #phi",64,-3.2,3.2),"Evt_Phi_MET",plotselection,plotlabel),
+        plotClasses.Plot(ROOT.TH1D("MET_T1","missing transverse energy T1",50,0,200),"Evt_Pt_MET_T1",plotselection,plotlabel),
+        plotClasses.Plot(ROOT.TH1D("METphi_T1","MET #phi T1",64,-3.2,3.2),"Evt_Phi_MET_T1",plotselection,plotlabel),
         plotClasses.Plot(ROOT.TH1D("N_PrimaryVertices","Reconstructed primary vertices",25,0.,50.),"N_PrimaryVertices",plotselection,plotlabel),
         plotClasses.Plot(ROOT.TH1D("Weight_CSV","DeepJet SF",80,0.,4.),"Weight_CSV",plotselection,plotlabel),
         plotClasses.Plot(ROOT.TH1D("Ele_IDSF","Electron ID SF",30,0.90,1.05),"Electron_IdentificationSF[0]",plotselection,plotlabel),
@@ -78,6 +80,7 @@ def add_plots():
         plotClasses.Plot(ROOT.TH1D("Mu_IDSF","Muon ID SF",20,0.95,1.05),"Muon_IdentificationSF[0]",plotselection,plotlabel),
         plotClasses.Plot(ROOT.TH1D("Mu_ISOSF","Muon Iso SF",20,0.95,1.05),"Muon_IsolationSF[0]",plotselection,plotlabel),
         plotClasses.Plot(ROOT.TH1D("Weight_PU","Pileup Weight",40,0.5,1.5),"Weight_pu69p2",plotselection,plotlabel),
+        plotClasses.Plot(ROOT.TH1D("Weight_MuonTriggerSF","Muon Trigger SF",20,0.95,1.05),"Weight_MuonTriggerSF",plotselection,plotlabel),
     ]
 
 
@@ -119,7 +122,7 @@ def add_plots():
         plotClasses.Plot(ROOT.TH1D("eliso","electron relative isolation",50,0,0.15),"Electron_RelIso[0]",plotselection,plotlabel),
         plotClasses.Plot(ROOT.TH1D("muiso","muon relative isolation",50,0,0.15),"Muon_RelIso[0]",plotselection,plotlabel),
         
-        plotClasses.Plot(ROOT.TH1D("blrAll","B-tagging likelihood ratio",44,-6,10),"TMath::Log(Evt_blr_ETH/(1-Evt_blr_ETH))",plotselection,plotlabel),
+        #plotClasses.Plot(ROOT.TH1D("blrAll","B-tagging likelihood ratio",44,-6,10),"TMath::Log(Evt_blr_ETH/(1-Evt_blr_ETH))",plotselection,plotlabel),
         #plotClasses.Plot(ROOT.TH1D("Evt_M_MinDeltaRJets","dijet mass of closest jets",30,0.,150),"Evt_M_MinDeltaRJets",plotselection,plotlabel),
         #plotClasses.Plot(ROOT.TH1D("Evt_M_MinDeltaRTaggedJets","mass of closest tagged jets",45,0.,450),"Evt_M_MinDeltaRTaggedJets",plotselection,plotlabel),
         #plotClasses.Plot(ROOT.TH1D("Evt_Dr_MinDeltaRJets","#Delta R of closest jets",50,0.,5.0),"Evt_Dr_MinDeltaRJets",plotselection,plotlabel),
