@@ -121,47 +121,47 @@ samples=[
             path_mwassmer+'/ttHTobb_M125*/*nominal*.root',
             '1.0*'+mcWeight+evenSel+sel_MET,
             'ttH_hbb',
-            samDict=sampleDict, readTrees=doReadTrees),
+            samDict=sampleDict, readTrees=doReadTrees,typ="signal"),
   
     plotClasses.Sample('t#bar{t}H, H to c#bar{c}',ROOT.kBlue+1,
             path_mwassmer+'/ttHToNonbb_M125*/*nominal*.root',
             '1.0*'+mcWeight+evenSel+hccSel+sel_MET,
             'ttH_hcc',
-            samDict=sampleDict, readTrees=doReadTrees),
+            samDict=sampleDict, readTrees=doReadTrees,typ="signal"),
   
     plotClasses.Sample('t#bar{t}H, H to #tau#tau',ROOT.kBlue+1,
             path_mwassmer+'/ttHToNonbb_M125*/*nominal*.root',
             '1.0*'+mcWeight+evenSel+httSel+sel_MET,
             'ttH_htt',
-            samDict=sampleDict, readTrees=doReadTrees),
+            samDict=sampleDict, readTrees=doReadTrees,typ="signal"),
   
     plotClasses.Sample('t#bar{t}H, H to #gamma#gamma',ROOT.kBlue+1,
             path_mwassmer+'/ttHToNonbb_M125*/*nominal*.root',
             '1.0*'+mcWeight+evenSel+hggSel+sel_MET,'ttH_hgg',
-            samDict=sampleDict, readTrees=doReadTrees), 
+            samDict=sampleDict, readTrees=doReadTrees,typ="signal"), 
  
     plotClasses.Sample('t#bar{t}H, H to gluglu',ROOT.kBlue+1,
             path_mwassmer+'/ttHToNonbb_M125*/*nominal*.root',
             '1.0*'+mcWeight+evenSel+hglugluSel+sel_MET, 
             'ttH_hgluglu',
-            samDict=sampleDict, readTrees=doReadTrees), 
+            samDict=sampleDict, readTrees=doReadTrees,typ="signal"), 
  
     plotClasses.Sample('t#bar{t}H, H to WW',ROOT.kBlue+1,
             path_mwassmer+'/ttHToNonbb_M125*/*nominal*.root',
             '1.0*'+mcWeight+evenSel+hwwSel+sel_MET,'ttH_hww',
-            samDict=sampleDict, readTrees=doReadTrees),
+            samDict=sampleDict, readTrees=doReadTrees,typ="signal"),
   
     plotClasses.Sample('t#bar{t}H, H to ZZ',ROOT.kBlue+1,
             path_mwassmer+'/ttHToNonbb_M125*/*nominal*.root',
             '1.0*'+mcWeight+evenSel+hzzSel+sel_MET,
             'ttH_hzz',
-            samDict=sampleDict, readTrees=doReadTrees),
+            samDict=sampleDict, readTrees=doReadTrees,typ="signal"),
   
     plotClasses.Sample('t#bar{t}H, H to #gamma Z',ROOT.kBlue+1,
             path_mwassmer+'/ttHToNonbb_M125*/*nominal*.root',
             '1.0*'+mcWeight+evenSel+hzgSel+sel_MET, 
             'ttH_hzg',
-            samDict=sampleDict, readTrees=doReadTrees),
+            samDict=sampleDict, readTrees=doReadTrees,typ="signal"),
     
     # background samples
 
@@ -249,7 +249,7 @@ plottingsamples=[
             mcWeight+sel_MET,
             'ttH', 
             addsamples=['ttH_hbb','ttH_hcc','ttH_htt','ttH_hgg','ttH_hgluglu','ttH_hww','ttH_hzz','ttH_hzg'],
-            samDict=sampleDict, readTrees=doReadTrees), 
+            samDict=sampleDict, readTrees=doReadTrees,typ="signal"), 
 
     plotClasses.Sample('V+jets',ROOT.kGreen-3,
             VJetsPathS,

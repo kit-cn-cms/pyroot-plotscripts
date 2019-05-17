@@ -31,9 +31,6 @@ parser.add_option("--nominalkey", dest="nominalKey", default="$PROCESS_$CHANNEL"
         help="KEY of the systematics histograms", metavar="nominalKey")
 parser.add_option("--systematickey", dest="systematicKey", default="$PROCESS_$CHANNEL_$SYSTEMATIC",
         help="KEY of the nominal histograms", metavar="systematicKey")
-parser.add_option("--signal", dest="signal", default="$ttH",
-        help="signal processes", metavar="signal")
-
 
 (options, args) = parser.parse_args()
 
@@ -46,8 +43,7 @@ procIden    = "$PROCESS"
 chIden      = "$CHANNEL"
 sysIden     = "$SYSTEMATIC"
 
-signal=options.signal.split(",")
-print signal
+
 
 if chIden in options.nominalKey:
     nominalKey = options.nominalKey.replace(chIden, options.channelName)
@@ -79,9 +75,9 @@ start loading configs
 """
 
 print '''
-    # ========================================================
-    # loading configs
-    # ========================================================
+# ========================================================
+# loading configs
+# ========================================================
     '''
 # loading plt_X.py config
 
@@ -104,114 +100,22 @@ for sample in pltcfg.samples:
 start loading  histograms
 """
 print '''
-    # ========================================================
-    # loading histograms
-    # ========================================================
+# ========================================================
+# loading histograms and creating Errorbands
+# ========================================================
     '''
 # import plot class
 Plots = importlib.import_module("Plots" )
-PlotList = {}
+PlotList = []
 # load ROOT File
 rootFile = ROOT.TFile(options.Rootfile, "readonly")  
-upErrors=None
-downErrors=None
 # load samples
 for sample in pltcfg.samples:
-    print "NEW SAMPLE"
-    print sample.nick
-    # replace keys to get histogram key
-    if procIden in nominalKey:
-        sampleKey = nominalKey.replace(procIden, sample.nick)
-    else:
-        sampleKey=nominalKey
-    rootHist = rootFile.Get(sampleKey)
-    #moves underflow in the first and overflow in the last bin
-    Plots.moveOverUnderFlow(rootHist)
-    print("type of hist is: "+str(type(rootHist)) )
-    if isinstance(rootHist, ROOT.TH1):
-        PlotList[sample.nick]=Plots.Plot(rootHist,sample.nick,label=sample.name,color=sample.color)
-        print "_"*130
-        print sample.color
-
-    # replace keys to get systematic key
-    print "STARTING WITH SYSTEMATICS"
-    if procIden in systematicKey:
-        sampleSystKey = systematicKey.replace(procIden, sample.nick)
-    else:
-        sampleSystKey = systematicKey
-
-    """
-    create empty Error Band for sample to fill 
-    """
-    if not upErrors and not downErrors:
-        upErrors=[0]*rootHist.GetNbinsX()
-        downErrors=[0]*rootHist.GetNbinsX()
-
-    for systematic in sample.getShapes():
-        print systematic
-        if sysIden in sampleSystKey:
-            sampleHistKey = sampleSystKey.replace(sysIden, systematic)
-        else:
-            sampleHistKey = sampleSystKey
-        upname=sampleHistKey+"Up"
-        up= rootFile.Get(upname)
-        downname=sampleHistKey+"Down"
-        down= rootFile.Get(downname)
-        
-        if isinstance(up, ROOT.TH1) and isinstance(down, ROOT.TH1):
-            Plots.moveOverUnderFlow(up)
-            Plots.moveOverUnderFlow(down)
-
-            for ibin in range(0, rootHist.GetNbinsX()):
-                # get up down variations
-                u_=up[ibin+1]-rootHist[ibin+1]
-                d_=down[ibin+1]-rootHist[ibin+1]
-                 # set max as up and min as down
-                u = max(u_,d_)
-                d = min(u_,d_)
-                # only consider positive up and negative down variations
-                u = max(0.,u)
-                d = min(0.,d)
-                upErrors[ibin]=ROOT.TMath.Sqrt( upErrors[ibin]*upErrors[ibin] + u*u )
-                downErrors[ibin] = ROOT.TMath.Sqrt( downErrors[ibin]*downErrors[ibin] + d*d)
-                if debug>99:
-                    print "adding up/down ", u, d
-                    print "total up/down now: ", upErrors[ibin], downErrors[ibin]
-                    print "-"*50
-
-        else:
-            print("ERROR! can not use: "+str(systematic) )
-            print("->type of up shape hist is: "+str(type(up)) )
-            print("->type of down shape is: "+str(type(down)) )
-      
-
-"""
-Make Error Bands
-"""
-
-AllHists=None
-for sample in pltcfg.samples:
-    print "ERROR BANDS"
-    print sample
-    if AllHists:
-        AllHists.Add(PlotList[sample.nick].histo)
-    else:
-        AllHists=PlotList[sample.nick].histo
-
-graph = ROOT.TGraphAsymmErrors(AllHists)
-for i in range(len(upErrors)):
-    graph.SetPointEYlow(i, downErrors[i])
-    graph.SetPointEYhigh(i, upErrors[i])
-    graph.SetPointEXlow(i, AllHists.GetBinWidth(i+1)/2.)
-    graph.SetPointEXhigh(i, AllHists.GetBinWidth(i+1)/2.)
-graph.SetFillStyle(3004)
-graph.SetLineColor(ROOT.kBlack)
-graph.SetFillColor(ROOT.kBlack)
-
-print graph
-
+    Plotlist.append(Plots.buildHistogramAndErrorBand(rootfile=rootfile,sample=sample,
+    				nominalKey=nominalKey,systematicKey=systematicKey))
 """
 Combine Histograms for combined plot channels
+TODO change strukture
 """
 
 for sample in pltcfg.plottingsamples:

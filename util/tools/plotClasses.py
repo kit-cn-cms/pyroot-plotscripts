@@ -32,7 +32,7 @@ class SampleDictionary:
 class Sample:
     def __init__(self, name, color = ROOT.kBlack, path = '', selection = '', 
             nick = '', up = 0, down = None, samDict = "",addsamples=None,
-            readTrees = True, filterFile = "NONE", checknevents = -1, treename = 'MVATree'):
+            readTrees = True, filterFile = "NONE", checknevents = -1, treename = 'MVATree',typ="bkg"):
 
         self.name = name
         self.color = color
@@ -69,6 +69,7 @@ class Sample:
             self.nick = name
         else:
             self.nick = nick
+        self.typ=typ
         #self.shape_unc = listOfShapes
         self.unc_up = up
         self.unc_down = up
