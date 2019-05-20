@@ -154,11 +154,12 @@ class List:
         return histList
 
 class genPlots:
-    def __init__(self, outPath, plots, plotdir, rebin):
+    def __init__(self, outPath, plots, plotdir, rebin, dataera = "2017"):
         self.outPath = outPath
         self.plots = plots
         self.plotdir = plotdir
         self.rebin = 1
+        self.era = dataera
 
     # -- functions for setting up lists -----------------------------------------------------------
     # old def createHistoLists_fromSuperHistoFile
@@ -669,10 +670,16 @@ class genPlots:
             objects.append(headHistClone)
 
             # draw lumi text on canvas
-            CMS_lumi.lumi_13TeV = "41.5 fb^{-1}"
-            CMS_lumi.writeExtraText = 1   
-            #CMS_lumi.extraText = "Preliminary"
+            if "2017" in self.era:
+                CMS_lumi.lumi_13TeV = "41.5 fb^{-1}"
+            elif "2018" in self.era:
+                CMS_lumi.lumi_13TeV = "59.7 fb^{-1}"
+
+            CMS_lumi.writeExtraText = 1
             CMS_lumi.extraText = ""
+            if plotOptions["privateWork"]:
+                CMS_lumi.extraText = "work in progress"
+
             CMS_lumi.cmsText="CMS"
             CMS_lumi.lumi_sqrtS = "13 TeV"
             CMS_lumi.cmsTextSize = 0.55
