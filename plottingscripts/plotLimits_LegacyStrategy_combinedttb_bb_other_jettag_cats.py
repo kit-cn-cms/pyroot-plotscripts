@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttHAnalysis_2017_LegacyStrategy_combinedttb_bb_JES_sources'
+    name = 'ttHAnalysis_2017_LegacyStrategy_combinedttb_bb_JES_sources_other_JetTag'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -57,7 +57,7 @@ def main(pyrootdir, argv):
     # configs
     config          = "pltcfg_ttH17_combinedb_bb_JES_sources"
     variable_cfg    = "ttH17_addVariables"
-    plot_cfg        = "LegacyStrategyStudycombinedttb_bb_Plots"
+    plot_cfg        = "combined_ttb_bb_other_jettag_cats"
     syst_cfg        = "LegacyStrategyStudy_Systematics_JES_sources_major_bkg_ttH_combinedb_bb"
 
     # file for rate factors
@@ -92,7 +92,7 @@ def main(pyrootdir, argv):
     plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                    "checkpointFiles":  "/nfs/dust/cms/user/swieland/ttH/LegacyStudy/DNNs/combinedttb_bb/"}
+                    "checkpointFiles":  "/nfs/dust/cms/user/pkeicher/ttH_legacy/tthlegacystrategystudy/combinedttb_bb_JES_sources_otherCategories/"}
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
