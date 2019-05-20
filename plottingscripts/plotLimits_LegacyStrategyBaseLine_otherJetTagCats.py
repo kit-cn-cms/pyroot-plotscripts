@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttHAnalysis_2017_LegacyStrategyBaseline_otherJetTagCats_altSet'
+    name = 'ttHAnalysis_2017_LegacyStrategyBaseline_otherJetTagCats_ge4j_ge3t'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -67,7 +67,7 @@ def main(pyrootdir, argv):
     # script options
     analysisOptions = {
         # general options
-        "usePseudoData":        False,  # blind region
+        "usePseudoData":        True,  # blind region
         "testrun":              False,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
