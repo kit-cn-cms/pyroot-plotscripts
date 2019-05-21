@@ -55,10 +55,10 @@ def main(pyrootdir, argv):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    config          = "pltcfg_ttH18_Jan"
-    variable_cfg    = "ttZ18_addVariables"
-    plot_cfg        = "ttH18_dnnPlots"
-    syst_cfg        = "ttZ18_systematics"
+    config          = "pltcfg_ttH18"
+    variable_cfg    = "ttZH8_addVariables"
+    plot_cfg        = "ttH18_discrPlots"
+    syst_cfg        = "ttH18_systematics"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -67,12 +67,12 @@ def main(pyrootdir, argv):
     # script options
     analysisOptions = {
         # general options
-        "usePseudoData":        True,
+        "usePseudoData":        False,
         "testrun":              False,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
-        "makeDataCards":        True,
+        "makeDataCards":        False,
         "addData":              True,  # adding real data 
         "drawParallel":         True,
         # options for drawParallel/singleExecute sub programs
@@ -187,7 +187,7 @@ def main(pyrootdir, argv):
             pP.setDNNInterface(dnnInterface)
             pP.setMaxEvts(500000)
             pP.setRateFactorsFile(rateFactorsFile)
-            pP.setSampleForVariableSetup(configData.samples[1])
+            pP.setSampleForVariableSetup(configData.samples[9])
 
             # run plotParallel
             pP.run()
@@ -255,7 +255,7 @@ def main(pyrootdir, argv):
             with monitor.Timer("addRealData"):
                 if analysis.usePseudoData:
                     # pseudo data without ttH
-                    pP.addData(samples = configData.samples[1:])
+                    pP.addData(samples = configData.samples[9:])
                 else:
                     # real data with ttH
                     pP.addData(samples = configData.controlSamples)
@@ -337,7 +337,7 @@ def main(pyrootdir, argv):
 
             histoList       = gP.genList(samples = configData.samples)
             dataList        = gP.genList(samples = configData.controlSamples)
-            pseudodataList  = gP.genList(samples = [configData.samples[0]]+configData.samples[1:])
+            pseudodataList  = gP.genList(samples = [configData.samples[0]]+configData.samples[9:])
             monitor.printClass(gP, "after creating init lists")
 
 
@@ -363,7 +363,7 @@ def main(pyrootdir, argv):
                     "sepaTest":         False}
                 sampleConfig = genPlots.Config(
                     histograms  = histoList,
-                    sampleIndex = 1)
+                    sampleIndex = 9)
                 gP.makeSimpleControlPlots( sampleConfig, controlPlotOptions )
 
                 # creating shape plots
@@ -377,7 +377,7 @@ def main(pyrootdir, argv):
                     "sepaTest":         False}
                 sampleConfig = genPlots.Config(
                     histograms  = dataList,
-                    sampleIndex = 1)
+                    sampleIndex = 9)
                 gP.makeSimpleShapePlots( sampleConfig, shapePlotOptions )
 
                 monitor.printClass(gP, "after making simple MC plots")
@@ -393,7 +393,7 @@ def main(pyrootdir, argv):
             with monitor.Timer("makingMCControlPlots"):
                 sampleConfig = genPlots.Config(
                     histograms  = histoList,
-                    sampleIndex = 1)
+                    sampleIndex = 9)
 
                 # generate the llloflist internally
                 sampleConfig.genNestedHistList(
