@@ -32,11 +32,9 @@ struct Plot2DInfoStruct{
     std::string identifier;
     std::string title;
     int nbinsx;
+    std::vector<float> edges_x;
     int nbinsy;
-    float xmin;
-    float xmax;
-    float ymin;
-    float ymax;
+    std::vector<float> edges_y;
     //std::unique_ptr<TH2> histoptr;
 };
 
