@@ -25,6 +25,88 @@ def evtYieldCategories():
 
 memexp = ""
 
+def plots_ge6j_ge4t():
+    label = "\geq 6 jets, \geq 4 b-tags"
+    selection = "(N_Jets>=6&&N_BTagsM>=4)"
+
+    plots = [
+        plotClasses.Plot(ROOT.TH1D("ge6j_ge4t_Evt_M_JetsAverage","average M(jets)",30,2.0,20.0),"Evt_M_JetsAverage",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_ge4t_CSV_4","fifth highest btag value",30,0.0,1.0),"CSV[4]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_ge4t_CSV_2","third highest btag value",30,0.3,1.0),"CSV[2]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_ge4t_Jet_DeepJetCSV_0","DeepJet btag value of leading jet",30,0.0,1.0),"Jet_DeepJetCSV[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_ge4t_MVA_invariant_mass_of_everything","invariant mass of everything",30,200.0,2500.0),"MVA_invariant_mass_of_everything",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_ge4t_Jet_Pt_3","p_{T} of fourth jet",30,30.0,200.0),"Jet_Pt[3]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_ge4t_Jet_Pt_2","p_{T} of third jet",30,30.0,300.0),"Jet_Pt[2]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_ge4t_MVA_HT","H_{T}",30,100.0,1500.0),"MVA_HT",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_ge4t_MVA_Evt_CSV_Average","average btag value",30,0.2,1.0),"MVA_Evt_CSV_Average",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_ge4t_Evt_M_MedianTaggedJets","median M(tags)",30,50.0,500.0),"Evt_M_MedianTaggedJets",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_ge4t_Evt_M_TaggedJetsAverage","average M(tags)",30,5.0,50.0),"Evt_M_TaggedJetsAverage",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_ge4t_MVA_best_higgs_mass","best higgs mass",30,0.0,250.0),"MVA_best_higgs_mass",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_ge4t_MVA_Evt_M2_TaggedJetsAverage","average M_{2}(tags)",30,0.0,600.0),"MVA_Evt_M2_TaggedJetsAverage",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_ge4t_MVA_MHT","missing H_{T}",30,0.0,300.0),"MVA_MHT",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_ge4t_MVA_blr","btag likelihood ratio",30,0.0,1.0),"MVA_blr",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_ge4t_MVA_HT_tag","H_{T}(tags)",30,100.0,900.0),"MVA_HT_tag",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_ge4t_Jet_M_0","mass of leading jet",30,0.0,100.0),"Jet_M[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_ge4t_CSV_0","highest btag value",30,0.3,1.0),"CSV[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_ge4t_MVA_avg_dr_tagged_jets","average #DeltaR of tagged jets",30,0.4,3.5),"MVA_avg_dr_tagged_jets",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_ge4t_MVA_h2","third fox wolfram moment",30,-0.15,0.3),"MVA_h2",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_ge4t_MVA_delta_eta_l_bhad","#Delta#eta(lep b_{had})",30,0.0,4.0),"MVA_delta_eta_l_bhad",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_ge4t_Evt_Dr_TaggedJetsAverage","average #DeltaR(tags)",30,0.5,3.5),"Evt_Dr_TaggedJetsAverage",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_ge4t_MVA_M3","M_{3}",30,100.0,1000.0),"MVA_M3",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_ge4t_MVA_Evt_Deta_TaggedJetsAverage","average #Delta#eta(tags)",30,0.0,3.0),"MVA_Evt_Deta_TaggedJetsAverage",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_ge4t_Jet_Pt_0","p_{T} of leading jet",30,0.0,600.0),"Jet_Pt[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_ge4t_Evt_Dr_MinDeltaRTaggedJets","min #DeltaR(tag tag)",30,0.3,3.5),"Evt_Dr_MinDeltaRTaggedJets",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_ge4t_Evt_Pt_MinDeltaRTaggedJets","p_{T} of min #DeltaR(tag tag)",30,20.0,500.0),"Evt_Pt_MinDeltaRTaggedJets",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_ge4t_MVA_closest_tagged_dijet_mass","closest tagged dijet mass",30,0.0,400.0),"MVA_closest_tagged_dijet_mass",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_ge4t_Evt_M_MinDeltaRTaggedJets","mass of min #DeltaR(tag tag)",30,20.0,400.0),"Evt_M_MinDeltaRTaggedJets",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_ge4t_MVA_tagged_dijet_mass_closest_to_125","M_{2}(tags) closest to 125 GeV",30,50.0,250.0),"MVA_tagged_dijet_mass_closest_to_125",selection,label),
+        ]
+
+    return plots
+
+
+def plots_ge6j_3t():
+    label = "\geq 6 jets, 3 b-tags"
+    selection = "(N_Jets>=6&&N_BTagsM==3)"
+
+    plots = [
+        plotClasses.Plot(ROOT.TH1D("ge6j_3t_Evt_M_JetsAverage","average M(jets)",30,2.0,20.0),"Evt_M_JetsAverage",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_3t_CSV_5","sixth highest btag value",30,0.0,1.0),"CSV[5]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_3t_MVA_cos_theta_l_bhad","cos#theta(lep b_{had})",30,-1.0,1.0),"MVA_cos_theta_l_bhad",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_3t_Jet_DeepJetCSV_1","DeepJet btag value of subleading jet",30,0.0,1.0),"Jet_DeepJetCSV[1]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_3t_MVA_delta_eta_l_bhad","#Delta#eta(lep b_{had})",30,0.0,4.0),"MVA_delta_eta_l_bhad",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_3t_MVA_HT_tag","H_{T}(tags)",30,100.0,900.0),"MVA_HT_tag",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_3t_MVA_delta_eta_blep_bhad","#Delta#eta(b_{lep} b_{had})",30,0.0,4.0),"MVA_delta_eta_blep_bhad",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_3t_LooseLepton_Pt_0","p_{T}(lep)",30,0.0,400.0),"LooseLepton_Pt[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_3t_N_LooseJets","N(LooseJets)",7,3.5,10.5),"N_LooseJets",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_3t_CSV_4","fifth highest btag value",30,0.0,1.0),"CSV[4]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_3t_Evt_M_MedianTaggedJets","median M(tags)",30,50.0,500.0),"Evt_M_MedianTaggedJets",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_3t_Jet_Pt_5","p_{T} of sixth jet",30,30.0,100.0),"Jet_Pt[5]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_3t_MVA_MHT","missing H_{T}",30,0.0,300.0),"MVA_MHT",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_3t_MVA_Mlb","Mlb",30,20.0,300.0),"MVA_Mlb",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_3t_MVA_Evt_M2_TaggedJetsAverage","average M_{2}(tags)",30,0.0,600.0),"MVA_Evt_M2_TaggedJetsAverage",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_3t_Jet_Pt_0","p_{T} of leading jet",30,0.0,600.0),"Jet_Pt[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_3t_Evt_M_MinDeltaRLeptonTaggedJet","mass of min #DeltaR(lep tag)",30,20.0,300.0),"Evt_M_MinDeltaRLeptonTaggedJet",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_3t_Evt_Dr_MinDeltaRTaggedJets","min #DeltaR(tag tag)",30,0.3,3.5),"Evt_Dr_MinDeltaRTaggedJets",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_3t_Jet_M_0","mass of leading jet",30,0.0,100.0),"Jet_M[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_3t_MVA_Evt_Deta_JetsAverage","average #Delta#eta(jets)",30,0.25,2.5),"MVA_Evt_Deta_JetsAverage",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_3t_MVA_closest_tagged_dijet_mass","closest tagged dijet mass",30,0.0,400.0),"MVA_closest_tagged_dijet_mass",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_3t_Jet_DeepJetCSV_0","DeepJet btag value of leading jet",30,0.0,1.0),"Jet_DeepJetCSV[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_3t_Evt_M_MinDeltaRTaggedJets","mass of min #DeltaR(tag tag)",30,20.0,400.0),"Evt_M_MinDeltaRTaggedJets",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_3t_CSV_3","fourth highest btag value",30,0.0,1.0),"CSV[3]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_3t_Evt_Dr_MinDeltaRLeptonTaggedJet","min #DeltaR (lep tag)",30,0.3,3.0),"Evt_Dr_MinDeltaRLeptonTaggedJet",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_3t_MVA_dev_from_avg_disc_btags","deviation from average btag value for tagged jets",30,0.0,0.13),"MVA_dev_from_avg_disc_btags",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_3t_MVA_tagged_dijet_mass_closest_to_125","M_{2}(tags) closest to 125 GeV",30,50.0,250.0),"MVA_tagged_dijet_mass_closest_to_125",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_3t_MVA_Evt_Deta_TaggedJetsAverage","average #Delta#eta(tags)",30,0.0,3.0),"MVA_Evt_Deta_TaggedJetsAverage",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_3t_Evt_Pt_MinDeltaRTaggedJets","p_{T} of min #DeltaR(tag tag)",30,20.0,500.0),"Evt_Pt_MinDeltaRTaggedJets",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_3t_Evt_M_TaggedJetsAverage","average M(tags)",30,5.0,50.0),"Evt_M_TaggedJetsAverage",selection,label),
+        ]
+
+    return plots
+
+
+
+
 
 def plots_ge4j_ge4t():
     label = "\geq 4 jets, \geq 4 b-tags"
@@ -310,6 +392,45 @@ def plots_dnn(data, discrname):
     ndefaultbins = 15
 
 
+    # plots for ge6j_ge4t
+    categories += [
+        ("((N_Jets>=6&&N_BTagsM>=4)&&DNNPredictedClass_ge6j_ge4t==0)","ljets_ge6j_ge4t_ttZ_node",""),
+        ("((N_Jets>=6&&N_BTagsM>=4)&&DNNPredictedClass_ge6j_ge4t==1)","ljets_ge6j_ge4t_ttH_node",""),
+        ("((N_Jets>=6&&N_BTagsM>=4)&&DNNPredictedClass_ge6j_ge4t==2)","ljets_ge6j_ge4t_tthf_node",""),
+        ]
+    discrs += [
+        "DNNOutput_ge6j_ge4t_node_ttZ",
+        "DNNOutput_ge6j_ge4t_node_ttH",
+        "DNNOutput_ge6j_ge4t_node_tthf",
+        ]
+    nhistobins += [ndefaultbins, 10, 10]
+    minxvals += [0.35, 0.35, 0.35]
+    maxxvals += [0.8, 0.75, 0.9]
+
+
+    # plots for ge6j_3t
+    categories += [
+        ("((N_Jets>=6&&N_BTagsM==3)&&DNNPredictedClass_ge6j_3t==0)","ljets_ge6j_3t_ttZ_node",""),
+        ("((N_Jets>=6&&N_BTagsM==3)&&DNNPredictedClass_ge6j_3t==1)","ljets_ge6j_3t_ttH_node",""),
+        ("((N_Jets>=6&&N_BTagsM==3)&&DNNPredictedClass_ge6j_3t==2)","ljets_ge6j_3t_tthf_node",""),
+        ("((N_Jets>=6&&N_BTagsM==3)&&DNNPredictedClass_ge6j_3t==3)","ljets_ge6j_3t_ttcc_node",""),
+        ("((N_Jets>=6&&N_BTagsM==3)&&DNNPredictedClass_ge6j_3t==4)","ljets_ge6j_3t_ttlf_node",""),
+        ]
+    discrs += [
+        "DNNOutput_ge6j_3t_node_ttZ",
+        "DNNOutput_ge6j_3t_node_ttH",
+        "DNNOutput_ge6j_3t_node_tthf",
+        "DNNOutput_ge6j_3t_node_ttcc",
+        "DNNOutput_ge6j_3t_node_ttlf",
+        ]
+    nhistobins += [ndefaultbins, 10, 10, 10, 10]
+    minxvals += [0.25, 0.25, 0.25, 0.25, 0.25]
+    maxxvals += [0.8, 0.7, 0.75, 0.45, 0.6]
+
+
+
+
+
 
 
     # plots for ge4j_ge4t
@@ -328,7 +449,7 @@ def plots_dnn(data, discrname):
         "DNNOutput_ge4j_ge4t_node_ttlf",
         ]
     nhistobins += [ndefaultbins, 10, 10, 10, 10]
-    minxvals += [0.25, 0.25, 0.3, 0.25, 0.3]
+    minxvals += [0.25, 0.25, 0.25, 0.25, 0.25]
     maxxvals += [0.7, 0.65, 0.7, 0.6, 0.6]
 
 
@@ -417,7 +538,7 @@ def plots_dnn(data, discrname):
         "DNNOutput_ge4j_ge3t_node_ttlf",
         ]
     nhistobins += [ndefaultbins, 10, 10, 10, 10]
-    minxvals += [0.25, 0.25, 0.25, 0.25, 0.3]
+    minxvals += [0.25, 0.25, 0.25, 0.25, 0.25]
     maxxvals += [0.65, 0.65, 0.65, 0.45, 0.7]
 
 
@@ -492,6 +613,8 @@ def plots_dnn(data, discrname):
 
 def getDiscriminatorPlots(data = None, discrname = None):
     discriminatorPlots = []
+    discriminatorPlots += plots_ge6j_ge4t()
+    discriminatorPlots += plots_ge6j_3t()
     discriminatorPlots += plots_ge4j_ge4t()
     discriminatorPlots += plots_le5j_ge3t()
     discriminatorPlots += plots_5j_ge3t()

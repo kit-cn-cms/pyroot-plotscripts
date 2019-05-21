@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttZDatacards_v1'
+    name = 'ttZDatacards'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -57,7 +57,7 @@ def main(pyrootdir, argv):
     # configs
     config          = "pltcfg_ttZ18"
     variable_cfg    = "ttZ18_addVariables"
-    plot_cfg        = "ttZ18_DNNplots"
+    plot_cfg        = "ttZ18_dnnPlots"
     syst_cfg        = "ttZ18_systematics"
 
     # file for rate factors
@@ -82,7 +82,7 @@ def main(pyrootdir, argv):
         # the skipX options try to skip the submission of files to the batch system
         # before skipping the output is crosschecked
         # if the output is not complete, the skipped part is done anyways
-        "skipPlotParallel":     False,
+        "skipPlotParallel":     True,
         "skipHaddParallel":     False,
         "skipHaddFromWildcard": False,
         "skipRenaming":         False,
@@ -92,7 +92,7 @@ def main(pyrootdir, argv):
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/ttZ_merged_v1"}
+                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/ttZ18"}
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
@@ -185,7 +185,7 @@ def main(pyrootdir, argv):
             #pP.setDataBases(plotDataBases)
             #pP.setMEMDataBase(memDataBase)
             pP.setDNNInterface(dnnInterface)
-            pP.setMaxEvts(1000000)
+            pP.setMaxEvts(500000)
             pP.setRateFactorsFile(rateFactorsFile)
             pP.setSampleForVariableSetup(configData.samples[0])
 
@@ -333,6 +333,7 @@ def main(pyrootdir, argv):
                 outPath = analysis.renamedPath,
                 plots   = configData.getDiscriminatorPlots(),
                 plotdir = analysis.getPlotPath(),
+                dataera = dataera,
                 rebin   = 1)
 
             histoList       = gP.genList(samples = configData.samples)
@@ -415,7 +416,8 @@ def main(pyrootdir, argv):
                         "logscale":         False,
                         "canvasOptions":    "histo",
                         "ratio":            True, # not default
-                        "blinded":          False}
+                        "blinded":          False,
+                        "privateWork":      True}
                     # making the control plots
                     gP.makeControlPlots(
                         sampleConfig = sampleConfig,
@@ -442,7 +444,8 @@ def main(pyrootdir, argv):
                         "logscale":         False,
                         "canvasOptions":    "histo",
                         "ratio":            True, # not default
-                        "blinded":          False} #not default
+                        "blinded":          False,
+                        "privateWork":      True} #not default
                     # making the control plots
                     gP.makeControlPlots(
                         sampleConfig = sampleConfig,
