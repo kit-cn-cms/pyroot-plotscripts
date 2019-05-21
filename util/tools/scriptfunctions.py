@@ -118,10 +118,11 @@ def initHistos(catnames, systnames, plots):
         else:
             title  = plot.histo.GetTitle()
             name   = plot.histo.GetName()
-            maxX   = plot.histo.GetXaxis().GetXmax()
-            minX   = plot.histo.GetXaxis().GetXmin()
             nbins  = plot.histo.GetNbinsX()
-            rstr  += "plotinfo1D[\""+name+"\"] = {\""+name+"\",\""+title+"\","+str(nbins)+","+str(minX)+","+str(maxX)+"};\n"
+            bin_edges = []
+            for i in range(1, nbins+2):
+              bin_edges.append(str(plot.histo.GetBinLowEdge(i)))
+            rstr  += """plotinfo1D["{0}"] = {{"{0}","{1}",{2},{{ {3} }} }};\n""".format(name, title, nbins, ",".join(bin_edges))
 
     rstr += "\n\n"
     rstr += "for(const auto& cat: categs){\n"
@@ -129,7 +130,7 @@ def initHistos(catnames, systnames, plots):
     rstr += "        for(const auto& syst: systematics){\n"
     rstr += "            const auto& PlotInfo1D = obj.second;\n"
     rstr += "            histos1D[cat+obj.first+syst] = "
-    rstr += "std::unique_ptr<TH1>(new TH1F((processname+\"_\"+cat+obj.first+syst+suffix).c_str(), (PlotInfo1D.title).c_str(), PlotInfo1D.nbins, PlotInfo1D.xmin, PlotInfo1D.xmax));\n"
+    rstr += "std::unique_ptr<TH1>(new TH1F((processname+\"_\"+cat+obj.first+syst+suffix).c_str(), (PlotInfo1D.title).c_str(), PlotInfo1D.nbins, PlotInfo1D.edges.data()));\n"
     rstr += "            histos1D[cat+obj.first+syst]->SetDirectory(0);\n"
     rstr += "        }\n"
     rstr += "    }\n"
