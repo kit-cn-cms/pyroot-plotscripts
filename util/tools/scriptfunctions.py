@@ -108,13 +108,15 @@ def initHistos(catnames, systnames, plots):
         if isinstance(plot, plotClasses.TwoDimPlot):
             title  = plot.histo.GetTitle()+";"+plot.histo.GetXaxis().GetTitle()+";"+plot.histo.GetYaxis().GetTitle()
             name   = plot.histo.GetName()
-            maxX   = plot.histo.GetXaxis().GetXmax()
-            minX   = plot.histo.GetXaxis().GetXmin()
             nbinsX = plot.histo.GetNbinsX()
-            maxY   = plot.histo.GetYaxis().GetXmax()
-            minY   = plot.histo.GetYaxis().GetXmin()
+            bin_edges_x = []
+            for i in range(1, nbins+2):
+              bin_edges.append(str(plot.histo.GetXaxis().GetBinLowEdge(i)))
             nbinsY = plot.histo.GetNbinsY()
-            rstr  += "plotinfo2D[\""+name+"\"] = {\""+name+"\",\""+title+"\","+str(nbinsX)+","+str(minX)+","+str(maxX)+","+str(minY)+","+str(maxY)+"};\n"
+            bin_edges_y = []
+            for i in range(1, nbins+2):
+              bin_edges_y.append(str(plot.histo.GetYaxis().GetBinLowEdge(i)))
+            rstr  += """plotinfo2D["{0}"] = {{"{0}","{1}",{2},{{ {3} }}, {4}, {{ {5} }} }};\n""".format(name, title, nbinsX, ",".join(bin_edges_x), nbinsY, ",".join(bin_edges_y))
         else:
             title  = plot.histo.GetTitle()
             name   = plot.histo.GetName()
@@ -142,7 +144,7 @@ def initHistos(catnames, systnames, plots):
     rstr += "            const auto& PlotInfo2D = obj.second;\n"
     rstr += "            histos2D[cat+obj.first+syst] = "
     rstr += "std::unique_ptr<TH2>(new TH2F((processname+\"_\"+cat+obj.first+syst+suffix).c_str(), (PlotInfo2D.title).c_str(), "
-    rstr += "PlotInfo2D.nbinsx, PlotInfo2D.xmin, PlotInfo2D.xmax, PlotInfo2D.nbinsy, PlotInfo2D.ymin, PlotInfo2D.ymax));\n"
+    rstr += "PlotInfo2D.nbinsx, PlotInfo2D.edges_x.data(), PlotInfo2D.nbinsy, PlotInfo2D.edges_y.data()));\n"
     rstr += "            histos2D[cat+obj.first+syst]->SetDirectory(0);\n"
     rstr += "        }\n"
     rstr += "    }\n"
