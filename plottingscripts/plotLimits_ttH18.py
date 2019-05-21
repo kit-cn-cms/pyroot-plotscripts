@@ -56,7 +56,7 @@ def main(pyrootdir, argv):
 
     # configs
     config          = "pltcfg_ttH18"
-    variable_cfg    = "ttZH8_addVariables"
+    variable_cfg    = "ttH18_addVariables"
     plot_cfg        = "ttH18_discrPlots"
     syst_cfg        = "ttH18_systematics"
 
