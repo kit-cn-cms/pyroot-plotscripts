@@ -167,7 +167,8 @@ class scriptWriter:
             scriptf.write(script)
         print(self.ccPath + " written")
 
-
+        # check if all variables are initialized correctly - exit otherwise
+        self.varManager.checkVariableInitialization()
 
 
 
