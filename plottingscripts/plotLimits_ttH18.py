@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttH_Legacy_2018_160519'
+    name = 'ttHDatacards'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -67,7 +67,7 @@ def main(pyrootdir, argv):
     # script options
     analysisOptions = {
         # general options
-        "usePseudoData":          False,
+        "usePseudoData":        False,
         "testrun":              False,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
@@ -88,11 +88,11 @@ def main(pyrootdir, argv):
         "skipRenaming":         False,
         "skipDatacards":        False}
 
-    plotJson = ""
+    plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttZ_2018_v1.json"
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/ttZ_test/"}
+                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/ttH18"}
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
@@ -184,8 +184,8 @@ def main(pyrootdir, argv):
             pP.setJson(plotJson)
             #pP.setDataBases(plotDataBases)
             #pP.setMEMDataBase(memDataBase)
-            #pP.setDNNInterface(dnnInterface)
-            pP.setMaxEvts(1000000)
+            pP.setDNNInterface(dnnInterface)
+            pP.setMaxEvts(500000)
             pP.setRateFactorsFile(rateFactorsFile)
             pP.setSampleForVariableSetup(configData.samples[9])
 
@@ -332,6 +332,7 @@ def main(pyrootdir, argv):
                 outPath = analysis.renamedPath,
                 plots   = configData.getDiscriminatorPlots(),
                 plotdir = analysis.getPlotPath(),
+                dataera = dataera,
                 rebin   = 1)
 
             histoList       = gP.genList(samples = configData.samples)

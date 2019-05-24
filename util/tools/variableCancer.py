@@ -22,7 +22,7 @@ class VariableManager:
         self.expressionsToInit  = []
         # verbosity setting
         self.verbose            = verbose
-
+        
     # functions for variable setup
     # =============================================================================================
     def add(self, expressionList):
@@ -439,7 +439,10 @@ class VariableManager:
         return newExpression
                 
         
-
+    def checkVariableInitialization(self):
+        for var in self.variables:
+            if self.variables[var].initError:
+                sys.exit("error during variable initialisation")
 
 
 class Variable:
@@ -456,6 +459,7 @@ class Variable:
         self.isInitialized          = False
         self.expressionVariables    = []
     
+        self.initError              = False
 
     def setupVariable(self, tree, verbose, variableManager):
         '''
@@ -618,9 +622,11 @@ class Variable:
         if hasCondition: indent+= "    "
         if self.inTree:     return ""
         elif self.isBDTVar: return "    "+indent+self.varName+" = r_"+self.varName+"->EvaluateMVA('BDT'):\n"
-        elif self.varName == self.expression:
-            sys.exit("trying to initialize variable '{}' with itself (var = var;) - this does not work".format(self.varName))
-        else:               return "    "+indent+self.varName+" = "+self.expression+";\n"
+        else:               
+            if self.varName == self.expression:
+                self.initError = True
+                print("trying to initialize variable '{}' with itself (var = var) - this does not work".format(self.varName))
+            return "    "+indent+self.varName+" = "+self.expression+";\n"
 
 
 
