@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'legacy18_DNNBetaTest'
+    name = 'ttHAnalysis_2017_LegacyStrategy_binning_5node'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -42,11 +42,11 @@ def main(pyrootdir, argv):
     # path to root file
     rootPathForAnalysis = workdir+'/output_limitInput.root'
 
+    # dataera
+    dataera = "2017_deepCSV"
+
     # signal process
     signalProcess = "ttH"
-    
-    # dataera
-    dataera = "2018"
 
     # Name of final discriminator, should not contain underscore
     discrName = 'finaldiscr'
@@ -55,10 +55,10 @@ def main(pyrootdir, argv):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    config          = "pltcfg_ttH18"
-    variable_cfg    = "ttH18_addVariables"
-    plot_cfg        = "ttH18_dnnPlots"
-    syst_cfg        = "ttH18_systematics"
+    config          = "pltcfg_ttH17_JES_sources"
+    variable_cfg    = "ttH17_addVariables"
+    plot_cfg        = "5node_plots"
+    syst_cfg        = "LegacyStrategyStudy_Systematics_JES_sources_major_bkg_ttH"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -67,16 +67,16 @@ def main(pyrootdir, argv):
     # script options
     analysisOptions = {
         # general options
-        "usePseudoData":          True,
+        "usePseudoData":        True,  # blind region
         "testrun":              False,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
         "makeDataCards":        True,
-        "addData":              True,  # adding real data 
+        "addData":              True,  # adding data 
         "drawParallel":         True,
         # options for drawParallel/singleExecute sub programs
-        "makeSimplePlots":      False,
+        "makeSimplePlots":      True,
         "makeMCControlPlots":   True,
         "makeEventYields":      True,
         # the skipX options try to skip the submission of files to the batch system
@@ -88,11 +88,11 @@ def main(pyrootdir, argv):
         "skipRenaming":         False,
         "skipDatacards":        False}
 
-    plotJson = ""
-    #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
-    #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
+    plotJson = "/nfs/dust/cms/user/swieland/ttH/pyroot-plotscripts/LegacyStudy_JES_sources_treejson.json"
+    plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
+    memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/legacy18_ttH17rebuild/"}
+                    "checkpointFiles":  "/nfs/dust/cms/user/swieland/ttH/tthlegacystrategystudy/DNNs/binning_tthf/5node"}
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
@@ -143,12 +143,13 @@ def main(pyrootdir, argv):
     configData.genDiscriminatorPlots(memexp, dnnInterface)
     configData.writeConfigDataToWorkdir()
     monitor.printClass(configData, "init")
+
     print '''    
     # ========================================================
     # define additional variables necessary for selection in plotparallel
     # ========================================================
     '''
-    configData.getAddVariables() # also adds DNN variables
+    configData.getAddVariables()
 
     print '''    
     # ========================================================
@@ -182,18 +183,21 @@ def main(pyrootdir, argv):
             monitor.printClass(pP, "init")
             # set some changed values
             pP.setJson(plotJson)
-            #pP.setDataBases(plotDataBases)
-            #pP.setMEMDataBase(memDataBase)
+            pP.setDataBases(plotDataBases)
+            pP.setMEMDataBase(memDataBase)
             pP.setDNNInterface(dnnInterface)
-            pP.setMaxEvts(1000000)
+            # pP.setMaxEvts(1000000)
+            pP.setMaxEvts(600000)
             pP.setRateFactorsFile(rateFactorsFile)
-            pP.setSampleForVariableSetup(configData.samples[9])
+            pP.setSampleForVariableSetup(configData.samples[1])
 
             # run plotParallel
             pP.run()
 
         pP.checkTermination()
         monitor.printClass(pP, "after plotParallel")
+
+
 
         # hadd histo files before renaming. The histograms are actually already renamed. 
         # But the checkbins thingy will not have been done yet.
@@ -210,7 +214,6 @@ def main(pyrootdir, argv):
                 skipHadd = analysis.skipHaddFromWildcard)
          
 
-
         # Deactivate check bins functionality in renameHistos 
         #   if additional plot variables are added via analysis class
         if os.path.exists( analysis.setRenamedPath(name = "limitInput") ):
@@ -224,7 +227,6 @@ def main(pyrootdir, argv):
             # renaming Histograms
             # ========================================================
             '''
-
             pP.setRenameInput()
             # in this function the variable self.renameInput is set
             # if hadd files were created during plotParallel
@@ -235,6 +237,8 @@ def main(pyrootdir, argv):
             #       (which is equivalent to THEoutputlath == str)
             #       the renameInput is set to pp.getOutPath 
             #       (a.ka. the path to output.root)
+            print(pP.getRenameInput())
+            print(analysis.renamedPath)
 
             with monitor.Timer("renameHistos"):
                 renameHistos.renameHistos(
@@ -255,7 +259,7 @@ def main(pyrootdir, argv):
             with monitor.Timer("addRealData"):
                 if analysis.usePseudoData:
                     # pseudo data without ttH
-                    pP.addData(samples = configData.samples[9:])
+                    pP.addData(samples = configData.samples[1:])
                 else:
                     # real data with ttH
                     pP.addData(samples = configData.controlSamples)
@@ -336,14 +340,14 @@ def main(pyrootdir, argv):
 
             histoList       = gP.genList(samples = configData.samples)
             dataList        = gP.genList(samples = configData.controlSamples)
-            pseudodataList  = gP.genList(samples = [configData.samples[0]]+configData.samples[9:])
+            pseudodataList  = gP.genList(samples = [configData.samples[0]]+configData.samples[1:])
             monitor.printClass(gP, "after creating init lists")
 
 
 
 
 
-
+# 
         if analysis.makeSimplePlots:
             print '''
             # ========================================================
@@ -362,7 +366,7 @@ def main(pyrootdir, argv):
                     "sepaTest":         False}
                 sampleConfig = genPlots.Config(
                     histograms  = histoList,
-                    sampleIndex = 9)
+                    sampleIndex = 1)
                 gP.makeSimpleControlPlots( sampleConfig, controlPlotOptions )
 
                 # creating shape plots
@@ -376,7 +380,7 @@ def main(pyrootdir, argv):
                     "sepaTest":         False}
                 sampleConfig = genPlots.Config(
                     histograms  = dataList,
-                    sampleIndex = 9)
+                    sampleIndex = 1)
                 gP.makeSimpleShapePlots( sampleConfig, shapePlotOptions )
 
                 monitor.printClass(gP, "after making simple MC plots")
@@ -392,7 +396,7 @@ def main(pyrootdir, argv):
             with monitor.Timer("makingMCControlPlots"):
                 sampleConfig = genPlots.Config(
                     histograms  = histoList,
-                    sampleIndex = 9)
+                    sampleIndex = 1)
 
                 # generate the llloflist internally
                 sampleConfig.genNestedHistList(
@@ -414,7 +418,7 @@ def main(pyrootdir, argv):
                         "logscale":         False,
                         "canvasOptions":    "histo",
                         "ratio":            True, # not default
-                        "blinded":          False}
+                        "blinded":          False} #not default
                     # making the control plots
                     gP.makeControlPlots(
                         sampleConfig = sampleConfig,

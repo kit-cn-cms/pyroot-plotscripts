@@ -33,6 +33,9 @@ stpath = path_mwassmer+'/ST_*/*nominal*.root'
 ttHpath = path_mwassmer+'/ttHTobb_M125*/*nominal*.root'+';'+ \
 	  path_mwassmer+'/ttHToNonbb_M125*/*nominal*.root'
 
+ttZpath = path_mwassmer+'/TTZToBB*/*nominal*.root'+';'+ \
+      path_mwassmer+'/TTZToLLNuNu_M-10*/*nominal*.root'+';'
+
 # SELECTIONS
 
 # need to veto muon events in electron dataset to avoid double counting and vice versa
@@ -122,7 +125,7 @@ print "samples"
 samples=[
     # signal samples     
     plotClasses.Sample('t#bar{t}+Z',ROOT.kCyan,
-            path_mwassmer+'/TTZToBB*/*nominal*.root',
+            ttZpath,
             mcWeight+evenSel+sel_MET,
             'ttbarZ',
             samDict=sampleDict, readTrees=doReadTrees),

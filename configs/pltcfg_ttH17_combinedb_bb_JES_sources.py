@@ -187,7 +187,7 @@ samples=[
     plotClasses.Sample('t#bar{t}+b/b#bar{b}',ROOT.kRed+3,
             ttbarPathS,
             mcWeight+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
-            'ttbarPlusB_Bbbar',
+            'ttbarPlusB_BBbar',
             samDict=sampleDict, readTrees=doReadTrees), 
 
     # minor samples

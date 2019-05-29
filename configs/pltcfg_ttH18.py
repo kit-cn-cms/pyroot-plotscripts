@@ -63,6 +63,7 @@ puWeight = "Weight_pu69p2"
 
 csvWeight = "Weight_CSV"
 
+# lepton scalefactors
 leptonscalefactors = "(((N_TightElectrons==1) && (Electron_IdentificationSF[0]>0.) && (Electron_ReconstructionSF[0]>0.))*Electron_IdentificationSF[0]*Electron_ReconstructionSF[0] + ((N_TightMuons==1) && (Muon_IdentificationSF[0]>0.) && (Muon_IsolationSF[0]>0.))*Muon_IdentificationSF[0]*Muon_IsolationSF[0])"
 
 electronscalefactorsup = "(((N_TightElectrons==1) && (Electron_IdentificationSFUp[0]>0.) && (Electron_ReconstructionSFUp[0]>0.))*Electron_IdentificationSFUp[0]*Electron_ReconstructionSFUp[0] + ((N_TightMuons==1) && (Muon_IdentificationSF[0]>0.) && (Muon_IsolationSF[0]>0.))*Muon_IdentificationSF[0]*Muon_IsolationSF[0])"
