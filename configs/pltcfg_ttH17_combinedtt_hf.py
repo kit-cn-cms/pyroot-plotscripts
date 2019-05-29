@@ -172,23 +172,23 @@ samples=[
             'ttbarPlusCCbar',
             samDict=sampleDict, readTrees=doReadTrees),
 
-#     plotClasses.Sample('t#bar{t}+b',ROOT.kRed-2,
-#             ttbarPathS,
-#             mcWeight+'*(GenEvt_I_TTPlusBB==1)'+sel_MET+sel_StrangeMuWeights,
-#             'ttbarPlusB',
-#             samDict=sampleDict, readTrees=doReadTrees),
-
-#     plotClasses.Sample('t#bar{t}+2b',ROOT.kRed+2,
-#             ttbarPathS,
-#             mcWeight+'*(GenEvt_I_TTPlusBB==2)'+sel_MET+sel_StrangeMuWeights,
-#             'ttbarPlus2B',
-#             samDict=sampleDict, readTrees=doReadTrees),
-
-    plotClasses.Sample('t#bar{t}+hf',ROOT.kRed+3,
+    plotClasses.Sample('t#bar{t}+b',ROOT.kRed-2,
             ttbarPathS,
-            mcWeight+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==3)||(GenEvt_I_TTPlusBB==2))'+sel_MET+sel_StrangeMuWeights,
-            'ttbarHF',
-            samDict=sampleDict, readTrees=doReadTrees), 
+            mcWeight+'*(GenEvt_I_TTPlusBB==1)'+sel_MET+sel_StrangeMuWeights,
+            'ttbarPlusB',
+            samDict=sampleDict, readTrees=doReadTrees),
+
+    plotClasses.Sample('t#bar{t}+2b',ROOT.kRed+2,
+            ttbarPathS,
+            mcWeight+'*(GenEvt_I_TTPlusBB==2)'+sel_MET+sel_StrangeMuWeights,
+            'ttbarPlus2B',
+            samDict=sampleDict, readTrees=doReadTrees),
+
+    plotClasses.Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,
+            ttbarPathS,
+            mcWeight+'*(GenEvt_I_TTPlusBB==3)'+sel_MET+sel_StrangeMuWeights,
+            'ttbarPlusBBbar',
+            samDict=sampleDict, readTrees=doReadTrees),  
 
     # minor samples
     

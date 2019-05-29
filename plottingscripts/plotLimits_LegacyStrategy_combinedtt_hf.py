@@ -57,8 +57,8 @@ def main(pyrootdir, argv):
     # configs
     config          = "pltcfg_ttH17_combinedtt_hf"
     variable_cfg    = "ttH17_addVariables"
-    plot_cfg        = "LegacyStrategyStudycombinedtt_hf_Plots"
-    syst_cfg        = "LegacyStrategyStudy_Systematics_JES_sources_major_bkg_ttH_combinedtt_hf"
+    plot_cfg        = "combined_tthf_other_jettag_cats"
+    syst_cfg        = "LegacyStrategyStudy_Systematics_JES_sources_major_bkg_ttH.csv"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
