@@ -6,6 +6,7 @@ import sys
 from distutils.dir_util import copy_tree
 import glob
 import pandas as pd
+import numpy as np
 
 includeString = "-I/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/tensorflow-cc/1.3.0-elfike/tensorflow_cc/include -I/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/eigen/c7dc0a897676/include/eigen3 -I/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/protobuf/3.4.0-fmblme/include"
 libraryString = "-L/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/tensorflow-cc/1.3.0-elfike/tensorflow_cc/lib -ltensorflow_cc -L/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/protobuf/3.4.0-fmblme/lib -lprotobuf -lrt"
@@ -259,31 +260,53 @@ class DNN:
         return string
         
 
-    def generateOutputPlots(self):
+    def generateOutputPlots(self, variable_binning=False, nbins = None):
         # generate categoires list
         string = "\n\n\n    # plots for {}\n".format(self.category)
-        string += "    categories += ["
+        template ="""
+    category_dict["category"] = ("{PRESELECTION}","{LABEL}","")
+    category_dict["discr"] = "{DISCR_NAME}"
+    category_dict["nhistobins"] = ndefaultbins\n"""
+
+
+
         for i, node in enumerate(self.out_nodes):
+            label = "ljets_{cat}_{node}_node".format(cat=self.category, node = node)
+            preselection = "({sel}&&{pred_var}=={i})".format(
+                sel=self.selection.replace(" ","").replace("and","&&"), 
+                pred_var=self.predictionVariable, 
+                i=i)
+            string += template.format(  PRESELECTION = preselection,
+                                        LABEL = label,
+                                        DISCR_NAME = self.discrNames[i]
+                                    )
+
+            if variable_binning:
+                if not nbins is None:
+                    default_edges = np.linspace(self.node_mins[i], self.node_maxs[i], nbins, dtype = float)
+                    delta = (default_edges[1] - default_edges[0])/2.
+                    nextval = default_edges[-1] + delta
+                    default_edges = np.concatenate([default_edges, [nextval]])
+                    #shift values to get lower edges
+                    default_edges -= delta
+                else:
+                    print("WARNING: variable binning is required, but there is no information about the binning!")
+                    default_edges = ["\n\n"]
+                indents = "\t\t\t"
+                separator = ",\n\t"+indents
+                string += '    category_dict["bin_edges"] = [ {} \n{}]'.format(separator.join([str(round(x,4)) for x in default_edges]),
+                                                                                indents)
+                
+            else:
+                # fill binranges
+                string += '    category_dict["minxval"] = {}\n'.format(self.node_mins[i])
+                string += '    category_dict["maxxval"] = {}\n'.format(self.node_maxs[i])
+                # string += "\n\n"
+
             string += """
-        ("({sel}&&{pred_var}=={i})","ljets_{cat}_{node}_node",""),""".format(
-            sel=self.selection.replace(" ","").replace("and","&&"), 
-            pred_var=self.predictionVariable, 
-            i=i, cat=self.category, node=node)
-        string += "\n        ]\n"
-
-        # generate discriminators list
-        string += "    discrs += [\n"
-        for discr in self.discrNames:
-            string += "        \"{}\",\n".format(discr)
-        string += "        ]\n"
-
-        # fill binranges
-        string += "    nhistobins += {}\n".format(
-            str(['ndefaultbins' for _ in range(len(self.out_nodes))]).replace("'",""))
-        string += "    minxvals += {}\n".format(self.node_mins)
-        string += "    maxxvals += {}\n".format(self.node_maxs)
-        string += "\n\n"
-
+    this_dict["{LABEL}"] = deepcopy(category_dict)
+    category_dict.clear()
+    """.format(LABEL=label)
         return string
 
 
@@ -404,7 +427,7 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses) {
     def getCleanUpLines(self):
         return ""
 
-    def generatePlotConfig(self, ndefaultbins = 15, enable_input_plots = True):
+    def generatePlotConfig(self, ndefaultbins = 15, enable_input_plots = True, variable_binning = False):
         '''
         generate plot config from variables and plots in checkpoint files
         '''
@@ -420,7 +443,9 @@ sys.path.append(pyrootdir)
 sys.path.append(basedir)
 
 import util.tools.plotClasses as plotClasses
-import ROOT\n\n\n"""
+import ROOT
+from array import array
+from copy import deepcopy\n\n\n"""
 
         # get event yield categories
         string += """
@@ -456,49 +481,70 @@ memexp = ""\n\n\n"""
         # writing code for dnn output plots
         string += """
 def plots_dnn(data, discrname):
-    categories = []
-    nhistobins = []
-    minxvals = []
-    maxxvals = []
-    discrs = []
 
-    ndefaultbins = {}\n\n""".format(ndefaultbins)
+    ndefaultbins = {}
+    category_dict = {{}}
+    this_dict = {{}}\n\n""".format(ndefaultbins)
+
 
         # loop over dnns witing code for DNN discr plots
         for dnn in self.DNNs:
-            string += dnn.generateOutputPlots()
+            string += dnn.generateOutputPlots(variable_binning = variable_binning, nbins = ndefaultbins)
 
         # generating plot classes for DNN plots and adding info to data class
         string += """
-    plotPreselections = [c[0] for c in categories]
-    binlabels =         [c[1] for c in categories]
 
-    DNNPlots = []
-    for discr, sel, label, nbins, minx, maxx in zip(discrs,plotPreselections,binlabels,nhistobins,minxvals,maxxvals):
-        DNNPlots.append(
-            plotClasses.Plot(
-                ROOT.TH1F(discrname+"_"+label,"final discriminator ("+label+")",nbins,minx,maxx),
-                discr,sel,label))
+    for l in this_dict:
+        this_dict[l]["histoname"] = this_dict[l]["discr"]+"_"+l
+        this_dict[l]["histotitle"] = "final discriminator ({})".format(l)
+        this_dict[l]["plotPreselections"] = this_dict[l]["category"][0]
 
-    data.categories += categories
-    data.discrs     += discrs
-    data.nhistobins += nhistobins
-    data.minxvals   += minxvals
-    data.maxxvals   += maxxvals
-    
-    data.plotPreselections  += plotPreselections
-    data.binlabels          += binlabels
-
+    DNNPlots = init_plots(dictionary = this_dict, data = data)
     return DNNPlots\n\n\n"""
 
         string += funcstring
         string += "    discriminatorPlots += plots_dnn(data, discrname)\n\n"
-        string += "    return discriminatorPlots"
+        string += "    return discriminatorPlots\n\n"
+        string += self.generateInitPlotsFunc()
 
         return string
 
+    def generateInitPlotsFunc(self):
+        code ="""
+def init_plots(dictionary, data = None):
+    plots = [] #init list of plotClasses objects to return
+    for label in dictionary:
+        subdict = dictionary[label] #for easy access
+        discr = subdict["discr"] # load discriminator name
+        sel = subdict["plotPreselections"] # load selection
+        histoname = subdict["histoname"] # load histogram name
+        histotitle = subdict["histotitle"] # load histogram title
 
-
+        # check if initialization uses bin edges or min/max vals
+        # if 'subdict' contains the keyword 'bin_edges', an array
+        # of type float is created from the corresponding python list.
+        # Else, the min/maxvals are used 
+        if "bin_edges" in subdict:
+            bins = array("f", subdict["bin_edges"])
+            nbins = len(bins)-1 # last bin edge in array is overflow bin => subtract for nbins
+            subdict["nhistobins"] = nbins # update number of bins
+            plots.append(
+                plotClasses.Plot(
+                    ROOT.TH1F(histoname,histotitle,nbins,bins),
+                    discr,sel,label))
+        elif "minxval" in subdict and "maxxval" in subdict:
+            nbins = subdict["nhistobins"]
+            xmax  = subdict["maxxval"]
+            xmin  = subdict["minxval"]
+            plots.append(
+                plotClasses.Plot(
+                    ROOT.TH1F(histoname, histotitle,nbins,xmin, xmax),
+                    discr,sel,label))
+    if not data is None:
+        data.categories.update(dictionary)
+    return plots
+    """
+        return code
 
 
 if __name__ == "__main__":
@@ -512,15 +558,18 @@ if __name__ == "__main__":
         help = "disable plotting of input features as default setting")
     parser.add_option("-n", "--ndefaultbins", dest="ndefaultbins",default=15,metavar="NDEFAULTBINS",
         help = "number of default bins per discriminator")
+    parser.add_option("-v", "--variableBinning", dest = "variable_binning", action = "store_true", default = False,
+        help = """enable variable binning (currently only for discriminator distributions. 
+        The config will contain lists of bin edges which are equally spaced by default.""")
 
     (opts, args) = parser.parse_args()
 
     if not opts.checkpoints:
-        sys.exit("need to specify path to checkpoints")
+        parser.error("need to specify path to checkpoints")
 
 
     interface = theInterface(dnnSet = opts.checkpoints)
-    cfg_string = interface.generatePlotConfig(opts.ndefaultbins, opts.input_plots)
+    cfg_string = interface.generatePlotConfig(opts.ndefaultbins, opts.input_plots, opts.variable_binning)
     with open(opts.output, "w") as f:
         f.write(cfg_string)
     print("write new plot config to {}".format(opts.output))    
