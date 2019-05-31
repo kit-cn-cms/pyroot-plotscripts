@@ -3,8 +3,7 @@ struct Plot1DInfoStruct{
     std::string identifier;
     std::string title;
     int nbins;
-    double xmin;
-    double xmax;
+    std::vector<float> edges;
     //std::unique_ptr<TH1> histoptr;
 };
 
@@ -33,11 +32,9 @@ struct Plot2DInfoStruct{
     std::string identifier;
     std::string title;
     int nbinsx;
+    std::vector<float> edges_x;
     int nbinsy;
-    float xmin;
-    float xmax;
-    float ymin;
-    float ymax;
+    std::vector<float> edges_y;
     //std::unique_ptr<TH2> histoptr;
 };
 
