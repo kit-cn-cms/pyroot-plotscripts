@@ -1,4 +1,4 @@
-Uncertainty,Type,Construction,Up,Down,Plot,ttH,ttbarOther,ttbarPlus2B,ttbarPlusB_Bbbar,ttbarPlusCCbar,singlet
+Uncertainty,Type,Construction,Up,Down,Plot,ttH,ttbarOther,ttbarPlus2B,ttbarPlusB_BBbar,ttbarPlusCCbar,singlet
 #CMS_ttHbb_L1PreFiring,lnN,rate,-,-,-,1.006/0.994,1.006/0.994,1.006/0.994,1.006/0.994,1.006/0.994,1.006/0.994
 lumi_13TeV_2017,lnN,rate,-,-,-,x,x,x,x,x,x
 QCDscale_ttH,lnN,rate,-,-,-,0.908/1.058,-,-,-,-,-
@@ -20,7 +20,7 @@ CMS_btag_cferr1_2017,shape,weight,"""dummyWeight_CSVCErr1up:=(USUALWEIGHT*SCALEF
 CMS_btag_cferr2_2017,shape,weight,"""dummyWeight_CSVCErr2up:=(USUALWEIGHT*SCALEFACTORS*MCWEIGHT*internalCSVweight_CSVCErr2Up*internalCSVweight)*DOWEIGHTS""","""dummyWeight_CSVCErr2down:=(USUALWEIGHT*SCALEFACTORS*MCWEIGHT*internalCSVweight_CSVCErr2Down*internalCSVweight)*DOWEIGHTS""",1,1,1,1,1,1,1
 #CMS_ttHbb_bgnorm_ttbarPlusB_2017,lnN,rate,-,-,-,-,-,-,-,-,-
 CMS_ttHbb_bgnorm_ttbarPlus2B_2017,lnN,rate,-,-,-,-,-,x,-,-,-
-CMS_ttHbb_bgnorm_ttbarPlusB_Bbbar_2017,lnN,rate,-,-,-,-,-,-,x,-,-
+CMS_ttHbb_bgnorm_ttbarPlusB_BBbar_2017,lnN,rate,-,-,-,-,-,-,x,-,-
 CMS_ttHbb_bgnorm_ttbarPlusCCbar_2017,lnN,rate,-,-,-,-,-,-,-,x,-
 CMS_ttHbb_PU,shape,weight,"""dummyWeight_CMS_ttH_PUUp:=(1*Weight_pu69p2Up*Weight_GEN_nom*((Weight>0)-(Weight<0)))*SCALEFACTORS*MCWEIGHT*internalCSVweight*DOWEIGHTS""","""dummyWeight_CMS_ttH_PUDown:=(1*Weight_pu69p2Down*Weight_GEN_nom*((Weight>0)-(Weight<0)))*SCALEFACTORS*MCWEIGHT*internalCSVweight*DOWEIGHTS""",1,1,1,1,1,1,1
 #CMS_ttHbb_eff_lepton,shape,-,-,-,-,1,1,1,1,1,1
@@ -99,12 +99,12 @@ CMS_ttHbb_scaleMuR,shape,weight,"""dummyWeight_CMS_ttH_scaleMuRUp:=USUALWEIGHT*S
 CMS_ttHbb_FSR_ttbarOther_2017,shape,weight,"""dummyWeight_CMS_ttH_ttbarOther_FSRUp:=USUALWEIGHT*SCALEFACTORS*MCWEIGHT*internalCSVweight*GenWeight_7*1.0*DOWEIGHTS""","""dummyWeight_CMS_ttH_ttbarOther_FSRDown:=USUALWEIGHT*SCALEFACTORS*MCWEIGHT*internalCSVweight*GenWeight_9*1.0*DOWEIGHTS""",1,-,1,-,-,-,-
 #CMS_ttHbb_FSR_ttbarPlusB_2017,shape,weight,"""dummyWeight_CMS_ttH_ttbarPlusB_FSRUp:=USUALWEIGHT*SCALEFACTORS*MCWEIGHT*internalCSVweight*GenWeight_7*1.0*DOWEIGHTS""","""dummyWeight_CMS_ttH_ttbarPlusB_FSRDown:=USUALWEIGHT*SCALEFACTORS*MCWEIGHT*internalCSVweight*GenWeight_9*1.0*DOWEIGHTS""",1,-,-,-,-,-,-
 CMS_ttHbb_FSR_ttbarPlus2B_2017,shape,weight,"""dummyWeight_CMS_ttH_ttbarPlus2B_FSRUp:=USUALWEIGHT*SCALEFACTORS*MCWEIGHT*internalCSVweight*GenWeight_7*1.0*DOWEIGHTS""","""dummyWeight_CMS_ttH_ttbarPlus2B_FSRDown:=USUALWEIGHT*SCALEFACTORS*MCWEIGHT*internalCSVweight*GenWeight_9*1.0*DOWEIGHTS""",1,-,-,1,-,-,-
-CMS_ttHbb_FSR_ttbarPlusB_Bbbar_2017,shape,weight,"""dummyWeight_CMS_ttH_ttbarPlusBBbar_FSRUp:=USUALWEIGHT*SCALEFACTORS*MCWEIGHT*internalCSVweight*GenWeight_7*1.0*DOWEIGHTS""","""dummyWeight_CMS_ttH_ttbarPlusBBbar_FSRDown:=USUALWEIGHT*SCALEFACTORS*MCWEIGHT*internalCSVweight*GenWeight_9*1.0*DOWEIGHTS""",1,-,-,-,1,-,-
+CMS_ttHbb_FSR_ttbarPlusB_BBbar_2017,shape,weight,"""dummyWeight_CMS_ttH_ttbarPlusBBbar_FSRUp:=USUALWEIGHT*SCALEFACTORS*MCWEIGHT*internalCSVweight*GenWeight_7*1.0*DOWEIGHTS""","""dummyWeight_CMS_ttH_ttbarPlusBBbar_FSRDown:=USUALWEIGHT*SCALEFACTORS*MCWEIGHT*internalCSVweight*GenWeight_9*1.0*DOWEIGHTS""",1,-,-,-,1,-,-
 CMS_ttHbb_FSR_ttbarPlusCCbar_2017,shape,weight,"""dummyWeight_CMS_ttH_ttbarPlusCCbar_FSRUp:=USUALWEIGHT*SCALEFACTORS*MCWEIGHT*internalCSVweight*GenWeight_7*1.0*DOWEIGHTS""","""dummyWeight_CMS_ttH_ttbarPlusCCbar_FSRDown:=USUALWEIGHT*SCALEFACTORS*MCWEIGHT*internalCSVweight*GenWeight_9*1.0*DOWEIGHTS""",1,-,-,-,-,1,-
 CMS_ttHbb_ISR_ttbarOther_2017,shape,weight,"""dummyWeight_CMS_ttH_ttbarOther_ISRUp:=USUALWEIGHT*SCALEFACTORS*MCWEIGHT*internalCSVweight*GenWeight_6*1.0*DOWEIGHTS""","""dummyWeight_CMS_ttH_ttbarOther_ISRDown:=USUALWEIGHT*SCALEFACTORS*MCWEIGHT*internalCSVweight*GenWeight_8*1.0*DOWEIGHTS""",1,-,1,-,-,-,-
 #CMS_ttHbb_ISR_ttbarPlusB_2017,shape,weight,"""dummyWeight_CMS_ttH_ttbarPlusB_ISRUp:=USUALWEIGHT*SCALEFACTORS*MCWEIGHT*internalCSVweight*GenWeight_6*1.0*DOWEIGHTS""","""dummyWeight_CMS_ttH_ttbarPlusB_ISRDown:=USUALWEIGHT*SCALEFACTORS*MCWEIGHT*internalCSVweight*GenWeight_8*1.0*DOWEIGHTS""",1,-,-,-,-,-,-
 CMS_ttHbb_ISR_ttbarPlus2B_2017,shape,weight,"""dummyWeight_CMS_ttH_ttbarPlus2B_ISRUp:=USUALWEIGHT*SCALEFACTORS*MCWEIGHT*internalCSVweight*GenWeight_6*1.0*DOWEIGHTS""","""dummyWeight_CMS_ttH_ttbarPlus2B_ISRDown:=USUALWEIGHT*SCALEFACTORS*MCWEIGHT*internalCSVweight*GenWeight_8*1.0*DOWEIGHTS""",1,-,-,1,-,-,-
-CMS_ttHbb_ISR_ttbarPlusB_Bbbar_2017,shape,weight,"""dummyWeight_CMS_ttH_ttbarPlusBBbar_ISRUp:=USUALWEIGHT*SCALEFACTORS*MCWEIGHT*internalCSVweight*GenWeight_6*1.0*DOWEIGHTS""","""dummyWeight_CMS_ttH_ttbarPlusBBbar_ISRDown:=USUALWEIGHT*SCALEFACTORS*MCWEIGHT*internalCSVweight*GenWeight_8*1.0*DOWEIGHTS""",1,-,-,-,1,-,-
+CMS_ttHbb_ISR_ttbarPlusB_BBbar_2017,shape,weight,"""dummyWeight_CMS_ttH_ttbarPlusBBbar_ISRUp:=USUALWEIGHT*SCALEFACTORS*MCWEIGHT*internalCSVweight*GenWeight_6*1.0*DOWEIGHTS""","""dummyWeight_CMS_ttH_ttbarPlusBBbar_ISRDown:=USUALWEIGHT*SCALEFACTORS*MCWEIGHT*internalCSVweight*GenWeight_8*1.0*DOWEIGHTS""",1,-,-,-,1,-,-
 CMS_ttHbb_ISR_ttbarPlusCCbar_2017,shape,weight,"""dummyWeight_CMS_ttH_ttbarPlusCCbar_ISRUp:=USUALWEIGHT*SCALEFACTORS*MCWEIGHT*internalCSVweight*GenWeight_6*1.0*DOWEIGHTS""","""dummyWeight_CMS_ttH_ttbarPlusCCbar_ISRDown:=USUALWEIGHT*SCALEFACTORS*MCWEIGHT*internalCSVweight*GenWeight_8*1.0*DOWEIGHTS""",1,-,-,-,-,1,-
 #CMS_ttHbb_PDF_ttbarOther_2017,shape,-,-,-,-,-,1,-,-,-,-
 #CMS_ttHbb_PDF_ttbarPlusB_2017,shape,-,-,-,-,-,-,-,-,-,-

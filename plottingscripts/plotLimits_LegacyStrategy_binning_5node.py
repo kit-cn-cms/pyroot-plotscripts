@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttHAnalysis_2017_LegacyStrategy_combinedtt_hf'
+    name = 'ttHAnalysis_2017_LegacyStrategy_binning_5node'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -55,10 +55,10 @@ def main(pyrootdir, argv):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    config          = "pltcfg_ttH17_combinedtt_hf"
+    config          = "pltcfg_ttH17_JES_sources"
     variable_cfg    = "ttH17_addVariables"
-    plot_cfg        = "combined_tthf_other_jettag_cats"
-    syst_cfg        = "LegacyStrategyStudy_Systematics_JES_sources_major_bkg_ttH.csv"
+    plot_cfg        = "5node_plots"
+    syst_cfg        = "LegacyStrategyStudy_Systematics_JES_sources_major_bkg_ttH"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -92,7 +92,7 @@ def main(pyrootdir, argv):
     plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                    "checkpointFiles":  "/nfs/dust/cms/user/swieland/ttH/tthlegacystrategystudy/DNNs/combinedtt_hf/"}
+                    "checkpointFiles":  "/nfs/dust/cms/user/swieland/ttH/tthlegacystrategystudy/DNNs/binning_tthf/5node"}
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
@@ -186,6 +186,7 @@ def main(pyrootdir, argv):
             pP.setDataBases(plotDataBases)
             pP.setMEMDataBase(memDataBase)
             pP.setDNNInterface(dnnInterface)
+            # pP.setMaxEvts(1000000)
             pP.setMaxEvts(600000)
             pP.setRateFactorsFile(rateFactorsFile)
             pP.setSampleForVariableSetup(configData.samples[1])
