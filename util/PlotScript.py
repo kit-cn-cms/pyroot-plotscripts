@@ -6,7 +6,6 @@ import ROOT
 
 debug=0
 
-
 """
 Enabling parser options
 """
@@ -80,21 +79,19 @@ print '''
 # ========================================================
     '''
 # loading plt_X.py config
-
 sys.path.append(configdir)
 pltcfg = importlib.import_module( options.plotconfig )
+print("Using plotconfig %s"%pltcfg)
 
-# loading X_systematics.py config
+# loading X_systematics.csv config
 sys.path.append(utildir+"/tools/")
-print(utildir)
 Systematics = importlib.import_module("Systematics")
-print(dir(Systematics))
 processes=pltcfg.list_of_processes
 systematics=Systematics.Systematics(systconfig)
 systematics.plotSystematicsForProcesses(processes)
 for sample in pltcfg.samples:
     sample.setShapes(systematics.get_shape_systs(sample.nick))
-
+print("Using systematic config %s"%systconfig)
 
 """
 start loading  histograms
@@ -106,75 +103,29 @@ print '''
     '''
 # import plot class
 Plots = importlib.import_module("Plots" )
-PlotList = []
+PlotList = {}
 # load ROOT File
-rootFile = ROOT.TFile(options.Rootfile, "readonly")  
+rootfilename = options.Rootfile
+rootFile = ROOT.TFile(rootfilename, "readonly")  
 # load samples
 for sample in pltcfg.samples:
-    Plotlist.append(Plots.buildHistogramAndErrorBand(rootfile=rootfile,sample=sample,
-    				nominalKey=nominalKey,systematicKey=systematicKey))
-"""
-Combine Histograms for combined plot channels
-TODO change strukture
-"""
+    PlotList[sample.nick]=Plots.buildHistogramAndErrorBand(rootFile=rootFile,sample=sample,
+    				nominalKey=nominalKey,procIden=procIden,systematicKey=systematicKey,sysIden=sysIden)
 
+"""
+Combine Histograms and errorbands for combined plot channels
+"""
 for sample in pltcfg.plottingsamples:
-    combinedHist = None
-    for process in sample.addsamples:
-        if combinedHist:
-            combinedHist.Add(PlotList[process].histo)
-            del PlotList[process]
-        else:
-            combinedHist = PlotList[process].histo
-            del PlotList[process] 
-    PlotList[sample.nick]=Plots.Plot(combinedHist, sample.nick, color=sample.color, label=sample.name)
-"""
-Signal and Background difference
-"""
-sigHists=[]
-sigLabels=[]
-bkgHists=[]
-bkgLabels=[]
-for plotname in PlotList:
-    hist=PlotList[plotname].histo
-    color=PlotList[plotname].color
-    label=PlotList[plotname].label
-    hist.SetStats(False)
-    print "-"*130
-    print color
-    if plotname in signal:
-        hist.SetLineColor( color )
-        hist.SetFillColor(0)
-        hist.SetLineWidth(2)
-        sigHists.append(hist)
-        sigLabels.append(label)
-    else:
-        hist.SetLineColor(ROOT.kBlack )
-        hist.SetFillColor(color)
-        hist.SetLineWidth(1)
-        bkgHists.append(hist)
-        bkgLabels.append(label)
+    PlotList=Plots.addSamples(sample=sample,PlotList=PlotList)
 
-print sigHists 
-print sigLabels
-print bkgHists     
-print bkgLabels  
+print '''
+# ========================================================
+# plotting histograms and Errorbands
+# ========================================================
+    '''
+canvas=Plots.drawHistsOnCanvas(PlotList,options.channelName,ratio="#frac{scaled Signal}{Background}",errorband=True)
 
-canvas=Plots.drawHistsOnCanvas(sigHists,bkgHists,options.channelName,ratio="#frac{scaled Signal}{Background}",errorband=graph)
 
-# setup legend
-legend = Plots.getLegend()
-
-# add signal entry
-for i, h in enumerate(sigHists):
-    legend.AddEntry(h, sigLabels[i], "L")
-
-# # add background entries
-for i, h in enumerate(bkgHists):
-    legend.AddEntry(h, bkgLabels[i], "F")
-
-# draw legend
-legend.Draw("same")
 
 # add ROC score if activated
 # if self.printROCScore and len(signalIndex)==1:
