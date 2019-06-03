@@ -241,7 +241,7 @@ list_of_processes=processes
 
 
 
-#define samples that get added later in the plotting step
+#define summerized samples that are used later in the plotting step instead of the single processes
 plottingsamples=[
     
     plotClasses.Sample('t#bar{t}H',ROOT.kBlue+1,
