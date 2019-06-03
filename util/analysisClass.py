@@ -65,6 +65,8 @@ class analysisConfig:
         self.skipRenaming = False
         self.skipDatacards = False
 
+        self.crossEvaluation = True
+
     def setSignalProcess(self, signalProcess, pltcfgName):
         if signalProcess == "ttbb":
             self.signalProcess = "ttbb"
@@ -174,7 +176,8 @@ class analysisConfig:
                 self.setHaddFromWildcard( analysisOptions[key] )
             elif key in ("addData"):
                 self.setAddData( analysisOptions[key] )
-
+            elif key in ("crossEvaluation"):
+                self.setCrossEvaluation( analysisOptions[key] )
 
     def initPlotConfig(self):
         configdir = self.pyrootdir+"/configs/"
@@ -234,6 +237,10 @@ class analysisConfig:
     
     def setAddData(self, arg):
         self.addData = arg
+
+    def setCrossEvaluation(self, arg):
+        print("setting crossEvaluation to {}".format(arg))
+        self.crossEvaluation = arg
 
     def printChosenOptions(self):
         code = "Option, Value\n"
