@@ -2,7 +2,7 @@ import ROOT
 ROOT.gROOT.SetBatch(True)
 import re
 import numpy as np
-
+debug=0
 """
 Class handling the Plotting
 Contains the Name and the Histogram
@@ -13,92 +13,91 @@ Errorband should be all uncertainties
 specific error band as list of error bands
 """
 class Plot:
-	def __init__(self, hist, name, label = None, 
-					color=None, typ='bkg', OverUnderFlowInc=False, 
-					errorband=None, specificerrorband=None):
-		self.hist=hist
-		self.name=name
-		self.label=label
-		if not label:
-			self.label=name
-		self.color=color
-		if not color:
-			self.GetPlotColor
-		self.typ=typ
-		self.OverUnderFlowInc=OverUnderFlowInc
-		self.errorband=errorband
-		self.specificerrorband=specificerrorband
-		if specificerrorband:
-			if not isinstance(specificerrorband, list):
-				self.specificerrorband=[specificerrorband]
-			self.sebColor=[ROOT.kCyan,ROOT.kYellow, 
-									ROOT.kMagenta,ROOT.kOrange,
-									ROOT.kPink, ROOT.kViolet]
-	# dictionary for colors
-	def GetPlotColor(self ):
-	    color_dict = {
-	        "ttZ":          ROOT.kCyan,
-	        "ttH":          ROOT.kBlue+1,
-	        "ttlf":         ROOT.kRed-7,
-	        "ttcc":         ROOT.kRed+1,
-	        "ttbb":         ROOT.kRed+3,
-	        "tt2b":         ROOT.kRed+2,
-	        "ttb":          ROOT.kRed-2,
-	        "tthf":         ROOT.kRed-3,
-	        "ttbar":        ROOT.kOrange,
-	        "ttmergedb":    ROOT.kRed-1,
-	    
-	        "sig":   ROOT.kCyan,
-	        "bkg":   ROOT.kOrange,
-	        }
-	    cls=self.name
-	    if "ttZ" in cls: cls = "ttZ"
-	    if "ttH" in cls: cls = "ttH"
-	    self.color=color_dict[cls]
+    def __init__(self, hist, name, label = None, 
+                    color=None, typ='bkg', OverUnderFlowInc=False, 
+                    errorband=None, specificerrorband=None):
+        self.hist=hist
+        self.name=name
+        self.label=label
+        if not label:
+            self.label=name
+        self.color=color
+        if not color:
+            self.GetPlotColor
+        self.typ=typ
+        self.OverUnderFlowInc=OverUnderFlowInc
+        self.errorband=errorband
+        self.specificerrorband=specificerrorband
+        if specificerrorband:
+            if not isinstance(specificerrorband, list):
+                self.specificerrorband=[specificerrorband]
+            self.sebColor=[ROOT.kCyan,ROOT.kYellow, 
+                                    ROOT.kMagenta,ROOT.kOrange,
+                                    ROOT.kPink, ROOT.kViolet]
+    # dictionary for colors
+    def GetPlotColor(self ):
+        color_dict = {
+            "ttZ":          ROOT.kCyan,
+            "ttH":          ROOT.kBlue+1,
+            "ttlf":         ROOT.kRed-7,
+            "ttcc":         ROOT.kRed+1,
+            "ttbb":         ROOT.kRed+3,
+            "tt2b":         ROOT.kRed+2,
+            "ttb":          ROOT.kRed-2,
+            "tthf":         ROOT.kRed-3,
+            "ttbar":        ROOT.kOrange,
+            "ttmergedb":    ROOT.kRed-1,
+        
+            "sig":   ROOT.kCyan,
+            "bkg":   ROOT.kOrange,
+            }
+        cls=self.name
+        if "ttZ" in cls: cls = "ttZ"
+        if "ttH" in cls: cls = "ttH"
+        self.color=color_dict[cls]
 
-	def handleOverUnderFlow(self)
-		moveOverUnderFlow(self.hist)
-	    # set flag that over and underflow werde merged into the histogram
-	    self.OverUnderFlowInc=True
+    def handleOverUnderFlow(self):
+        moveOverUnderFlow(self.hist)
+        # set flag that over and underflow werde merged into the histogram
+        self.OverUnderFlowInc=True
 
-	def setStyle(self):
-		#Sets style for Histogram, filled for background, line for signal
-		if self.typ=="bkg":
-			self.hist.SetLineColor(ROOT.kBlack )
-        	self.hist.SetFillColor(color)
-        	self.hist.SetLineWidth(1)
-		elif self.typ=="signal":
-			self.hist.SetLineColor( color )
-	        self.hist.SetFillColor(0)
-	        self.hist.SetLineWidth(2)
-		else:
-			print("ERROR! Type wrong!")
-		#sets style for error band
-		if self.errorband:
-			self.errorband.SetFillStyle(3004)
-			self.errorband.SetLineColor(ROOT.kBlack)
-			self.errorband.SetFillColor(ROOT.kBlack)
-		#sets style for error band
-		if self.specificerrorband:
-			for n,seb in enumerate(specificerrorband):
-				seb.SetFillStyle(3004)
-				seb.SetLineColor(self.sebColor[n])
-				seb.SetFillColor(self.sebColor[n])
+    def setStyle(self):
+        #Sets style for Histogram, filled for background, line for signal
+        if self.typ=="bkg":
+            self.hist.SetLineColor(ROOT.kBlack )
+            self.hist.SetFillColor(self.color)
+            self.hist.SetLineWidth(1)
+        elif self.typ=="signal":
+            self.hist.SetLineColor(self.color )
+            self.hist.SetFillColor(0)
+            self.hist.SetLineWidth(2)
+        else:
+            print("ERROR! Type wrong!")
+        #sets style for error band
+        if self.errorband:
+            self.errorband.SetFillStyle(3004)
+            self.errorband.SetLineColor(ROOT.kBlack)
+            self.errorband.SetFillColor(ROOT.kBlack)
+        #sets style for error band
+        if self.specificerrorband:
+            for n,seb in enumerate(specificerrorband):
+                seb.SetFillStyle(3004)
+                seb.SetLineColor(self.sebColor[n])
+                seb.SetFillColor(self.sebColor[n])
 
-def buildHistogramAndErrorBand(rootfile,sample,nominalKey,systematicKey):
-	print("NEW SAMPLE"+str(sample.nick))
+def buildHistogramAndErrorBand(rootFile,sample,nominalKey,procIden,systematicKey,sysIden):
+    print("NEW SAMPLE"+str(sample.nick))
     # replace keys to get histogram key
     if procIden in nominalKey:
         sampleKey = nominalKey.replace(procIden, sample.nick)
     else:
         sampleKey=nominalKey
     rootHist = rootFile.Get(sampleKey)
-    #moves underflow in the first and overflow in the last bin
-    Plots.moveOverUnderFlow(rootHist)
     print("type of hist is: "+str(type(rootHist)) )
     if not isinstance(rootHist, ROOT.TH1):
-        continue
-
+        return "ERROR"
+    #moves underflow in the first and overflow in the last bin
+    moveOverUnderFlow(rootHist)
     # replace keys to get systematic key
     print("STARTING WITH SYSTEMATICS - building Errorband")
     if procIden in systematicKey:
@@ -106,22 +105,22 @@ def buildHistogramAndErrorBand(rootfile,sample,nominalKey,systematicKey):
     else:
         sampleSystKey = systematicKey
     #Lists for error band values
-	upErrors=None
-	downErrors=None
+    upErrors=None
+    downErrors=None
     """
     Loop over systematics to get Error band for sample
     """
     for systematic in sample.getShapes():
         print systematic
         """
-	    create empty Error Band for sample to fill 
-	    """
-	    if not upErrors and not downErrors:
-	        upErrors=[0]*rootHist.GetNbinsX()
-	        downErrors=[0]*rootHist.GetNbinsX()
-	    """
-	    Get Key for Sytematic (up and down variation)
-	    """
+        create empty Error Band for sample to fill 
+        """
+        if not upErrors and not downErrors:
+            upErrors=[0]*rootHist.GetNbinsX()
+            downErrors=[0]*rootHist.GetNbinsX()
+        """
+        Get Key for Sytematic (up and down variation)
+        """
         if sysIden in sampleSystKey:
             sampleHistKey = sampleSystKey.replace(sysIden, systematic)
         else:
@@ -135,8 +134,8 @@ def buildHistogramAndErrorBand(rootfile,sample,nominalKey,systematicKey):
         check if histogram is TH1 type, else skip uncertainty
         """
         if isinstance(up, ROOT.TH1) and isinstance(down, ROOT.TH1):
-            Plots.moveOverUnderFlow(up)
-            Plots.moveOverUnderFlow(down)
+            moveOverUnderFlow(up)
+            moveOverUnderFlow(down)
 
             for ibin in range(0, rootHist.GetNbinsX()):
                 # get up down variations
@@ -160,33 +159,70 @@ def buildHistogramAndErrorBand(rootfile,sample,nominalKey,systematicKey):
             print("->type of down shape is: "+str(type(down)) )
 
     if upErrors:
-    	eb = ROOT.TGraphAsymmErrors(hist)
-    	for i in range(len(upErrors)):
-		    eb.SetPointEYlow(i, downErrors[i])
-		    eb.SetPointEYhigh(i, upErrors[i])
-		    eb.SetPointEXlow(i, AllHists.GetBinWidth(i+1)/2.)
-		    eb.SetPointEXhigh(i, AllHists.GetBinWidth(i+1)/2.)
-  		Plot=Plot(rootHist,sample.nick,label=sample.name,
-  									color=sample.color,typ=sample.typ,
-  									errorband=eb)
-  	else:
-  		Plot=Plot(rootHist,sample.nick,label=sample.name,
-  									color=sample.color,typ=sample.typ)
-  	return Plot
+        errorband = ROOT.TGraphAsymmErrors(rootHist)
+        for i in range(len(upErrors)):
+            errorband.SetPointEYlow(i, downErrors[i])
+            errorband.SetPointEYhigh(i, upErrors[i])
+            errorband.SetPointEXlow(i, rootHist.GetBinWidth(i+1)/2.)
+            errorband.SetPointEXhigh(i, rootHist.GetBinWidth(i+1)/2.)
+        PlotObject=Plot(rootHist,sample.nick,label=sample.name,
+                                    color=sample.color,typ=sample.typ,
+                                    errorband=errorband,OverUnderFlowInc=True)
+    else:
+        PlotObject=Plot(rootHist,sample.nick,label=sample.name,
+                                    color=sample.color,typ=sample.typ,
+                                    OverUnderFlowInc=True)
+    return PlotObject
+
+def addSamples(sample,PlotList):
+    combinedErrorbands=[]
+    combinedHist = None
+    print("Adding samples for summarized process %s" % sample.nick)
+    for process in sample.addsamples:
+        print process
+        if combinedHist:
+            combinedHist.Add(PlotList[process].hist)
+            combinedErrorbands.append(PlotList[process].errorband)
+            del PlotList[process]
+        else:
+            combinedHist    = PlotList[process].hist 
+            combinedErrorbands.append(PlotList[process].errorband)
+            del PlotList[process]
+    errorband=addErrorbands(combinedErrorbands,combinedHist)
+    PlotList[sample.nick]=Plot(combinedHist, sample.nick, color=sample.color, typ=sample.typ, label=sample.name, errorband=errorband)
+    return PlotList
+
+def addErrorbands(combinedErrorbands,combinedHist,correlated=False):
+    newErrorband = ROOT.TGraphAsymmErrors(combinedHist)
+    for i in range (newErrorband.GetN()):
+        up=0
+        down=0
+        for errorband in combinedErrorbands:
+                if correlated:
+                   up=up+errorband.GetErrorYhigh(i)
+                   down=down+errorband.GetErrorYlow(i)
+                else:
+                    up=ROOT.TMath.Sqrt(up*up+errorband.GetErrorYhigh(i)*errorband.GetErrorYhigh(i))
+                    down=ROOT.TMath.Sqrt(down*down+errorband.GetErrorYlow(i)*errorband.GetErrorYlow(i))
+        newErrorband.SetPointEYlow(i, down)
+        newErrorband.SetPointEYhigh(i, up)
+        newErrorband.SetPointEXlow(i, combinedHist.GetBinWidth(i+1)/2.)
+        newErrorband.SetPointEXhigh(i, combinedHist.GetBinWidth(i+1)/2.)
+    return newErrorband
 
 def moveOverUnderFlow(hist):
-	    # move underflow
-	    hist.SetBinContent(1, hist.GetBinContent(0)+hist.GetBinContent(1))
-	    # move overflow
-	    hist.SetBinContent(hist.GetNbinsX(), hist.GetBinContent(hist.GetNbinsX()+1)+hist.GetBinContent(hist.GetNbinsX()))
+    # move underflow
+    hist.SetBinContent(1, hist.GetBinContent(0)+hist.GetBinContent(1))
+    # move overflow
+    hist.SetBinContent(hist.GetNbinsX(), hist.GetBinContent(hist.GetNbinsX()+1)+hist.GetBinContent(hist.GetNbinsX()))
 
-	    # set underflow error
-	    hist.SetBinError(1, ROOT.TMath.Sqrt(
-	        ROOT.TMath.Power(hist.GetBinError(0),2) + ROOT.TMath.Power(hist.GetBinError(1),2) ))
-	    # set overflow error
-	    hist.SetBinError(hist.GetNbinsX(), ROOT.TMath.Sqrt(
-			ROOT.TMath.Power(hist.GetBinError(hist.GetNbinsX()),2) + 
-			ROOT.TMath.Power(hist.GetBinError(hist.GetNbinsX()+1),2) ))
+    # set underflow error
+    hist.SetBinError(1, ROOT.TMath.Sqrt(
+        ROOT.TMath.Power(hist.GetBinError(0),2) + ROOT.TMath.Power(hist.GetBinError(1),2) ))
+    # set overflow error
+    hist.SetBinError(hist.GetNbinsX(), ROOT.TMath.Sqrt(
+        ROOT.TMath.Power(hist.GetBinError(hist.GetNbinsX()),2) + 
+        ROOT.TMath.Power(hist.GetBinError(hist.GetNbinsX()+1),2) ))
 
 def GetyTitle(privateWork = False):
     # if privateWork flag is enabled, normalize plots to unit area
@@ -199,27 +235,59 @@ def GetyTitle(privateWork = False):
 # DRAW HISTOGRAMS ON CANVAS
 # ===============================================
 
-def drawHistsOnCanvas(sigHists, bkgHists, canvasName,ratio=False, errorband=None, displayname=None, logoption=False):
+def drawHistsOnCanvas(PlotList, canvasName,ratio=False, errorband=None, displayname=None, logoption=False):
     if not displayname: 
         displayname=canvasName
-    if not isinstance(sigHists, list):
-        sigHists = [sigHists]
-    if not isinstance(bkgHists, list):
-        bkgHists = [bkgHists]
-    
+        
     canvas = getCanvas(canvasName, ratio)
+    """
+    set the Style for the Signal and Background Plots
+    """
+    Signal={}
+    Background={}
+    for sample in PlotList:
+        PlotObject=PlotList[sample]
+        PlotObject.setStyle()
+        if PlotObject.typ=="signal":
+            Signal[PlotObject.name]=PlotObject.hist.Integral()
+        elif PlotObject.typ=="bkg":
+            Background[PlotObject.name]=PlotObject.hist.Integral()
+    """
+    set the Style for the Signal and Background Plots
+    sort it by Event Yield, lowest to highest
+    """
+    sortedSignal=sorted(Signal, key=Signal.get)
+    sortedBackground=sorted(Background, key=Background.get)
 
-    # # move over/underflow bins into plotrange
-    # for h in bkgHists:
-    #     moveOverUnderFlow(h)
-    # for h in sigHists:
-    #     moveOverUnderFlow(h)
-    
-    # stack Histograms
-    bkgHists = [bkgHists[len(bkgHists)-1-i] for i in range(len(bkgHists))]
-    for i in range(len(bkgHists)-1, 0, -1):
-        bkgHists[i-1].Add(bkgHists[i])
+    # stack bakcground Histograms
+    # TODO: all the same 
+    bkgHists=[]
+    for i,background in enumerate(sortedBackground):
+        PlotObject=PlotList[background]
+        if i==0:
+            hist=PlotObject.hist
+            hist.SetLineColor(ROOT.kBlack )
+            hist.SetFillColor(PlotObject.color)
+            hist.SetLineWidth(1)
+            bkgHists.append(hist)
+        else:
+            hist=bkgHists[i-1]
+            hist.Add(PlotObject.hist)
+            hist.SetLineColor(ROOT.kBlack )
+            hist.SetFillColor(PlotObject.color)
+            hist.SetLineWidth(1)
+            bkgHists.insert(0,hist)
+            
+    print bkgHists
 
+    # signal Histograms
+    sigHists=[]
+    for signal in sortedSignal:
+        PlotObject=PlotList[signal]
+        hist.SetLineColor(PlotObject.color )
+        hist.SetFillColor(0)
+        hist.SetLineWidth(2)
+        sigHists.append(hist)
     # figure out plotrange
     canvas.cd(1)
     yMax = 1e-9
@@ -231,7 +299,7 @@ def drawHistsOnCanvas(sigHists, bkgHists, canvasName,ratio=False, errorband=None
     
     # draw the first histogram
     if len(bkgHists) == 0:
-        firstHist = sigHists[0]
+        firstHist = PlotList[sortedSignal[0]].hist
     else:
         firstHist = bkgHists[0]
     if logoption:
@@ -248,8 +316,8 @@ def drawHistsOnCanvas(sigHists, bkgHists, canvasName,ratio=False, errorband=None
     for h in bkgHists[1:]:
         h.DrawCopy(option+"same")
 
-    if errorband:
-    	errorband.Draw("same2")
+    #if errorband:
+    #    errorband.Draw("same2")
 
     canvas.cd(1)
     # redraw axis
@@ -257,9 +325,9 @@ def drawHistsOnCanvas(sigHists, bkgHists, canvasName,ratio=False, errorband=None
 
     
     # draw signal histograms
-    for sH in sigHists:
+    for signal in sigHists:
         # draw signal histogram
-        sH.DrawCopy(option+" E0 same")
+        signal.DrawCopy(option+" E0 same")
     
 
     if ratio:
@@ -296,6 +364,14 @@ def drawHistsOnCanvas(sigHists, bkgHists, canvasName,ratio=False, errorband=None
             ROOT.gStyle.SetErrorX(0)
             ratioPlot.DrawCopy("sameP")
         canvas.cd(1)
+
+    legend = getLegend()
+    for i,signal in enumerate(sortedSignal):
+        legend.AddEntry(sigHists[i], PlotList[signal].label, "L")
+    for i,background in enumerate(sortedBackground):
+        legend.AddEntry(bkgHists[i], PlotList[background].label, "F")
+    legend.Draw("same")
+
     return canvas
     
 
