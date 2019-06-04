@@ -296,8 +296,6 @@ def plots_dnn(data, discrname):
     category_dict["discr"] = "DNNOutput_ge6j_ge3t_node_ttH"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["bin_edges"] = [ 0.1489,
-				0.1911,
-				0.2332,
 				0.2754,
 				0.3175,
 				0.3596,
@@ -314,8 +312,6 @@ def plots_dnn(data, discrname):
     category_dict["discr"] = "DNNOutput_ge6j_ge3t_node_ttbb"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["bin_edges"] = [ 0.1457,
-				0.1943,
-				0.2429,
 				0.2914,
 				0.34,
 				0.3886,
@@ -332,8 +328,6 @@ def plots_dnn(data, discrname):
     category_dict["discr"] = "DNNOutput_ge6j_ge3t_node_tt2b"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["bin_edges"] = [ 0.1479,
-				0.1921,
-				0.2364,
 				0.2807,
 				0.325,
 				0.3693,
@@ -350,8 +344,6 @@ def plots_dnn(data, discrname):
     category_dict["discr"] = "DNNOutput_ge6j_ge3t_node_ttb"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["bin_edges"] = [ 0.1557,
-				0.1843,
-				0.2129,
 				0.2414,
 				0.27,
 				0.2986,
@@ -368,8 +360,6 @@ def plots_dnn(data, discrname):
     category_dict["discr"] = "DNNOutput_ge6j_ge3t_node_ttcc"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["bin_edges"] = [ 0.1607,
-				0.1793,
-				0.1979,
 				0.2164,
 				0.235,
 				0.2536,
@@ -386,8 +376,6 @@ def plots_dnn(data, discrname):
     category_dict["discr"] = "DNNOutput_ge6j_ge3t_node_ttlf"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["bin_edges"] = [ 0.1568,
-				0.1832,
-				0.2096,
 				0.2361,
 				0.2625,
 				0.2889,
@@ -408,8 +396,6 @@ def plots_dnn(data, discrname):
     category_dict["discr"] = "DNNOutput_le5j_ge3t_node_ttH"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["bin_edges"] = [ 0.1493,
-				0.1907,
-				0.2321,
 				0.2736,
 				0.315,
 				0.3564,
@@ -426,8 +412,6 @@ def plots_dnn(data, discrname):
     category_dict["discr"] = "DNNOutput_le5j_ge3t_node_ttbb"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["bin_edges"] = [ 0.1439,
-				0.1961,
-				0.2482,
 				0.3004,
 				0.3525,
 				0.4046,
@@ -444,8 +428,6 @@ def plots_dnn(data, discrname):
     category_dict["discr"] = "DNNOutput_le5j_ge3t_node_tt2b"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["bin_edges"] = [ 0.1521,
-				0.1879,
-				0.2236,
 				0.2593,
 				0.295,
 				0.3307,
@@ -462,8 +444,6 @@ def plots_dnn(data, discrname):
     category_dict["discr"] = "DNNOutput_le5j_ge3t_node_ttb"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["bin_edges"] = [ 0.1571,
-				0.1829,
-				0.2086,
 				0.2343,
 				0.26,
 				0.2857,
@@ -480,8 +460,6 @@ def plots_dnn(data, discrname):
     category_dict["discr"] = "DNNOutput_le5j_ge3t_node_ttcc"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["bin_edges"] = [ 0.1614,
-				0.1786,
-				0.1957,
 				0.2129,
 				0.23,
 				0.2471,
@@ -498,8 +476,6 @@ def plots_dnn(data, discrname):
     category_dict["discr"] = "DNNOutput_le5j_ge3t_node_ttlf"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["bin_edges"] = [ 0.1486,
-				0.1914,
-				0.2343,
 				0.2771,
 				0.32,
 				0.3629,
@@ -514,7 +490,7 @@ def plots_dnn(data, discrname):
     
 
     for l in this_dict:
-        this_dict[l]["histoname"] = this_dict[l]["discr"]+"_"+l
+        this_dict[l]["histoname"] = discrname+"_"+l
         this_dict[l]["histotitle"] = "final discriminator ({})".format(l)
         this_dict[l]["plotPreselections"] = this_dict[l]["category"][0]
 
@@ -522,7 +498,7 @@ def plots_dnn(data, discrname):
     return DNNPlots
 
 
-def getDiscriminatorPlots(data = None, discrname = None):
+def getDiscriminatorPlots(data = None, discrname = ''):
     discriminatorPlots = []
     discriminatorPlots += plots_ge6j_ge3t()
     discriminatorPlots += plots_le5j_ge3t()
