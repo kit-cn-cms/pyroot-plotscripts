@@ -13,17 +13,25 @@ libraryString = "-L/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/tensorflow-cc/1
 
 class DNN:
     def __init__(self, cpPath, suffix = "", xEval = True):
+        # if dictionary of paths is given initialize multiple DNNs here
         if type(cpPath) == dict:
-            self.DNNs       = [DNN(cpPath[key], suffix = "_"+key, xEval = xEval) for key in cpPath]
+            self.DNNs       = [DNN(
+                    cpPath  = cpPath[key], 
+                    suffix  = "_"+key, 
+                    xEval   = xEval) 
+                    for key in cpPath]
             self.multiDNN   = True
             self.xEval      = xEval
             return
 
+        # structural options
         self.multiDNN   = False
         self.xEval      = xEval
         self.suffix     = suffix
         self.path       = cpPath
 
+        # set evaluation suffix when cross evaluation is 
+        # activated and remove the usual suffix
         self.evalSuffix = ""
         if self.xEval:
             self.evalSuffix = self.suffix
