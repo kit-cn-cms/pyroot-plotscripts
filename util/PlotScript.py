@@ -123,7 +123,7 @@ print '''
 # plotting histograms and Errorbands
 # ========================================================
     '''
-canvas=Plots.drawHistsOnCanvas(PlotList,options.channelName,ratio="#frac{scaled Signal}{Background}",errorband=True)
+canvas, legend =Plots.drawHistsOnCanvas(PlotList,options.channelName,ratio="#frac{scaled Signal}{Background}",errorband=True)
 
 
 
@@ -138,3 +138,4 @@ canvas=Plots.drawHistsOnCanvas(PlotList,options.channelName,ratio="#frac{scaled 
 # setup.printLumi(canvas, ratio = plotOptions["ratio"])
 
 Plots.saveCanvas(canvas,options.directory+"/workdir/"+options.channelName+"discriminator.pdf")
+
