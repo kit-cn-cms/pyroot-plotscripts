@@ -463,7 +463,7 @@ def evtYieldCategories():
 memexp = ""\n\n\n"""
 
         # header for discr plots function
-        funcstring = "def getDiscriminatorPlots(data = None, discrname = None):\n"
+        funcstring = "def getDiscriminatorPlots(data = None, discrname = ''):\n"
         funcstring +="    discriminatorPlots = []\n"
 
         # loop over dnns writing code for plots
@@ -495,7 +495,7 @@ def plots_dnn(data, discrname):
         string += """
 
     for l in this_dict:
-        this_dict[l]["histoname"] = this_dict[l]["discr"]+"_"+l
+        this_dict[l]["histoname"] = discrname+"_"+l
         this_dict[l]["histotitle"] = "final discriminator ({})".format(l)
         this_dict[l]["plotPreselections"] = this_dict[l]["category"][0]
 
