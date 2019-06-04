@@ -239,7 +239,6 @@ class analysisConfig:
         self.addData = arg
 
     def setCrossEvaluation(self, arg):
-        print("setting crossEvaluation to {}".format(arg))
         self.crossEvaluation = arg
 
     def printChosenOptions(self):
