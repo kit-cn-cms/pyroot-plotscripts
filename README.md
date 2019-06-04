@@ -29,7 +29,7 @@ For readability there is a README for each step, if deeper adjustments have to b
 	```python
 	nominalweight="STR"
 	```
-- create/adjust a systematics csv file `STR_systematics.csv`, **care to use semicolons as seperator!**, add entries regarding the columns:
+- create/adjust a systematics csv file `STR_systematics.csv`, add entries regarding the columns:
 	- **Uncertainty** name of the uncertainty, add `#` to skip
 	- **Type** type of the uncertainty 
 	- **Construction** construction type of the uncertainty, `rate` for `lnN`, `variation` and `weight` for `shape`
