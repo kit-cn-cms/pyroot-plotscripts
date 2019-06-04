@@ -391,11 +391,13 @@ class DNN:
                 else:
                     print("WARNING: variable binning is required, but there is no information about the binning!")
                     default_edges = ["\n\n"]
-                indents = "\t\t\t"
-                separator = ",\n\t"+indents
-                string += '    category_dict["bin_edges"] = [ {} \n{}]'.format(
+                indents = "\t\t\t\t"
+                separator = ",\n"+indents
+                string += '    category_dict["bin_edges"] = [ \n{}{}\n{}]'.format(
+                    indents,
                     separator.join([str(round(x,4)) for x in default_edges]),
-                    indents)
+                    indents
+                    )
                 
             else:
                 # fill binranges
@@ -578,7 +580,7 @@ def evtYieldCategories():
 memexp = ""\n\n\n"""
 
         # header for discr plots function
-        funcstring = "def getDiscriminatorPlots(data = None, discrname = None):\n"
+        funcstring = "def getDiscriminatorPlots(data = None, discrname = ''):\n"
         funcstring +="    discriminatorPlots = []\n"
 
         # loop over dnns writing code for plots
@@ -604,7 +606,7 @@ def plots_dnn(data, discrname):
         string += """
 
     for l in this_dict:
-        this_dict[l]["histoname"] = this_dict[l]["discr"]+"_"+l
+        this_dict[l]["histoname"] = discrname+"_"+l
         this_dict[l]["histotitle"] = "final discriminator ({})".format(l)
         this_dict[l]["plotPreselections"] = this_dict[l]["category"][0]
 
