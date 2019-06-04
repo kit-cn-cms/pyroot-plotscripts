@@ -62,6 +62,7 @@ class Plot:
         self.OverUnderFlowInc=True
 
     def setStyle(self):
+        self.hist.SetStats(False)
         #Sets style for Histogram, filled for background, line for signal
         if self.typ=="bkg":
             self.hist.SetLineColor(ROOT.kBlack )
@@ -265,29 +266,18 @@ def drawHistsOnCanvas(PlotList, canvasName,ratio=False, errorband=None, displayn
     for i,background in enumerate(sortedBackground):
         PlotObject=PlotList[background]
         if i==0:
-            hist=PlotObject.hist
-            hist.SetLineColor(ROOT.kBlack )
-            hist.SetFillColor(PlotObject.color)
-            hist.SetLineWidth(1)
-            bkgHists.append(hist)
+            bkgHists.append(PlotObject.hist.Clone())
         else:
-            hist=bkgHists[i-1]
-            hist.Add(PlotObject.hist)
-            hist.SetLineColor(ROOT.kBlack )
-            hist.SetFillColor(PlotObject.color)
-            hist.SetLineWidth(1)
-            bkgHists.insert(0,hist)
-            
-    print bkgHists
+            hist = PlotObject.hist.Clone()
+            hist.Add(bkgHists[0])
+            bkgHists.insert(0, hist)
 
     # signal Histograms
     sigHists=[]
     for signal in sortedSignal:
         PlotObject=PlotList[signal]
-        hist.SetLineColor(PlotObject.color )
-        hist.SetFillColor(0)
-        hist.SetLineWidth(2)
-        sigHists.append(hist)
+        sigHists.append(PlotObject.hist.Clone())
+
     # figure out plotrange
     canvas.cd(1)
     yMax = 1e-9
@@ -322,7 +312,6 @@ def drawHistsOnCanvas(PlotList, canvasName,ratio=False, errorband=None, displayn
     canvas.cd(1)
     # redraw axis
     firstHist.DrawCopy("axissame")
-
     
     # draw signal histograms
     for signal in sigHists:
@@ -372,7 +361,7 @@ def drawHistsOnCanvas(PlotList, canvasName,ratio=False, errorband=None, displayn
         legend.AddEntry(bkgHists[i], PlotList[background].label, "F")
     legend.Draw("same")
 
-    return canvas
+    return canvas, legend
     
 
 
