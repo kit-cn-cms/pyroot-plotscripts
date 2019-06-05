@@ -11,7 +11,7 @@ import util.tools.plotClasses as plotClasses
 
 # samples
 # input path 
-path_mwassmer  = "/nfs/dust/cms/user/mwassmer/ttH_2019/ntuples_2018_backup"
+path_mwassmer  = "/nfs/dust/cms/user/mwassmer/ttH_2019/ntuples_2018"
 
 ttbarPathS = path_mwassmer+'/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
              path_mwassmer+'/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'+';'+\
