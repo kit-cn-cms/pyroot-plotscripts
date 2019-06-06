@@ -86,6 +86,10 @@ class Plot:
                 seb.SetLineColor(self.sebColor[n])
                 seb.SetFillColor(self.sebColor[n])
 
+# ===============================================
+# GET HISTOGRAMS AND ERROR BANDS
+# ===============================================
+
 def buildHistogramAndErrorBand(rootFile,sample,nominalKey,procIden,systematicKey,sysIden):
     print("NEW SAMPLE"+str(sample.nick))
     # replace keys to get histogram key
@@ -211,6 +215,25 @@ def addErrorbands(combinedErrorbands,combinedHist,correlated=False):
         newErrorband.SetPointEXhigh(i, combinedHist.GetBinWidth(i+1)/2.)
     return newErrorband
 
+def generateRatioErrorband(errorband):
+    ratioerrorband=errorband.Clone()
+    for i in range(ratioerrorband.GetN()):
+        x=ROOT.Double()
+        y=ROOT.Double()
+        ratioerrorband.GetPoint(i,x,y)
+        print y
+        ratioerrorband.SetPoint(i,x,1)
+        if y>0.:
+            ratioerrorband.SetPointEYlow(i,ratioerrorband.GetErrorYlow(i)/y)
+            ratioerrorband.SetPointEYhigh(i,ratioerrorband.GetErrorYhigh(i)/y)
+        else:
+            ratioerrorband.SetPointEYlow(i,0)
+            ratioerrorband.SetPointEYhigh(i,0)
+
+    return ratioerrorband
+
+
+
 def moveOverUnderFlow(hist):
     # move underflow
     hist.SetBinContent(1, hist.GetBinContent(0)+hist.GetBinContent(1))
@@ -236,7 +259,7 @@ def GetyTitle(privateWork = False):
 # DRAW HISTOGRAMS ON CANVAS
 # ===============================================
 
-def drawHistsOnCanvas(PlotList, canvasName,ratio=False, errorband=None, displayname=None, logoption=False):
+def drawHistsOnCanvas(PlotList, canvasName, data, ratio=False, errorband=None, displayname=None, logoption=False):
     if not displayname: 
         displayname=canvasName
         
@@ -257,21 +280,26 @@ def drawHistsOnCanvas(PlotList, canvasName,ratio=False, errorband=None, displayn
     set the Style for the Signal and Background Plots
     sort it by Event Yield, lowest to highest
     """
-    sortedSignal=sorted(Signal, key=Signal.get)
-    sortedBackground=sorted(Background, key=Background.get)
+    sortedSignal=sorted(Signal, key=Signal.get, reverse=True)
+    sortedBackground=sorted(Background, key=Background.get,reverse=True)
 
     # stack bakcground Histograms
-    # TODO: all the same 
+    # add errorbands
+    errorbands=[]
     bkgHists=[]
-    for i,background in enumerate(sortedBackground):
+    for i in range(len(sortedBackground),0,-1):
+        background=sortedBackground[i-1]
         PlotObject=PlotList[background]
-        if i==0:
+        if len(bkgHists)==0:
             bkgHists.append(PlotObject.hist.Clone())
+            errorbands.append(PlotObject.errorband.Clone())
         else:
             hist = PlotObject.hist.Clone()
             hist.Add(bkgHists[0])
             bkgHists.insert(0, hist)
+            errorbands.append(PlotObject.errorband.Clone())
 
+    errorband=addErrorbands(errorbands,hist)
     # signal Histograms
     sigHists=[]
     for signal in sortedSignal:
@@ -306,8 +334,16 @@ def drawHistsOnCanvas(PlotList, canvasName,ratio=False, errorband=None, displayn
     for h in bkgHists[1:]:
         h.DrawCopy(option+"same")
 
-    #if errorband:
-    #    errorband.Draw("same2")
+    errorband.SetFillStyle(3004)
+    errorband.SetLineColor(ROOT.kBlack)
+    errorband.SetFillColor(ROOT.kBlack)
+    errorband.Draw("same2")
+    # errorband.Draw(option+" E0 same")
+
+    # draw data
+    data.SetLineColor(ROOT.kBlack)
+    data.SetMarkerStyle(20)
+    data.Draw("same2")
 
     canvas.cd(1)
     # redraw axis
@@ -321,8 +357,8 @@ def drawHistsOnCanvas(PlotList, canvasName,ratio=False, errorband=None, displayn
 
     if ratio:
         canvas.cd(2)
-        line = sigHists[0].Clone()
-        line.Divide(sigHists[0])
+        line = data.Clone()
+        line.Divide(data)
         line.GetYaxis().SetRangeUser(0.5,1.5)
         line.GetYaxis().SetTitle(ratio)
 
@@ -341,27 +377,23 @@ def drawHistsOnCanvas(PlotList, canvasName,ratio=False, errorband=None, displayn
         line.SetLineWidth(1)
         line.SetLineColor(ROOT.kBlack)
         line.DrawCopy("histo")
-        # ratio plots
-        for sigHist in sigHists:
-            ratioPlot = sigHist.Clone()
-            ratioPlot.Divide(bkgHists[0])
-            ratioPlot.SetTitle(displayname)
-            ratioPlot.SetLineColor(sigHist.GetLineColor())
-            ratioPlot.SetLineWidth(1)
-            ratioPlot.SetMarkerStyle(20)
-            ratioPlot.SetMarkerColor(sigHist.GetMarkerColor())
-            ROOT.gStyle.SetErrorX(0)
-            ratioPlot.DrawCopy("sameP")
+        # ratio plot
+        ratioPlot = data.Clone()
+        ratioPlot.Divide(bkgHists[0])
+        ratioPlot.SetTitle(displayname)
+        ratioPlot.SetLineColor(ROOT.kBlack)
+        ratioPlot.SetLineWidth(1)
+        ratioPlot.SetMarkerStyle(20)
+        ROOT.gStyle.SetErrorX(0)
+        ratioPlot.DrawCopy("sameP")
+
+        ratioerrorband=generateRatioErrorband(errorband)
+        ratioerrorband.Draw("same2")
         canvas.cd(1)
-
-    legend = getLegend()
-    for i,signal in enumerate(sortedSignal):
-        legend.AddEntry(sigHists[i], PlotList[signal].label, "L")
-    for i,background in enumerate(sortedBackground):
-        legend.AddEntry(bkgHists[i], PlotList[background].label, "F")
-    legend.Draw("same")
-
-    return canvas, legend
+    if ratio:
+        return canvas, errorband, ratioerrorband, sortedSignal, sigHists, sortedBackground, bkgHists
+    else:
+        return canvas, errorband, sortedSignal, sigHists, sortedBackground, bkgHists
     
 
 
@@ -402,7 +434,7 @@ def getLegend():
     legend.SetBorderSize(0);
     legend.SetLineStyle(0);
     legend.SetTextFont(42);
-    legend.SetTextSize(0.05);
+    legend.SetTextSize(0.03);
     legend.SetFillStyle(0);
     return legend
 
