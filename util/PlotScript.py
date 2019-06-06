@@ -30,6 +30,10 @@ parser.add_option("--nominalkey", dest="nominalKey", default="$PROCESS_$CHANNEL"
         help="KEY of the systematics histograms", metavar="nominalKey")
 parser.add_option("--systematickey", dest="systematicKey", default="$PROCESS_$CHANNEL_$SYSTEMATIC",
         help="KEY of the nominal histograms", metavar="systematicKey")
+parser.add_option("--datakeyreplace", dest="datakeyreplace", default="data_obs",
+        help="Key replacement for the data sample", metavar="datakeyreplace")
+parser.add_option("--datalabel", dest="datalabel", default="data",
+        help="label of the data", metavar="datalabel")
 
 (options, args) = parser.parse_args()
 
@@ -106,7 +110,14 @@ Plots = importlib.import_module("Plots" )
 PlotList = {}
 # load ROOT File
 rootfilename = options.Rootfile
-rootFile = ROOT.TFile(rootfilename, "readonly")  
+rootFile = ROOT.TFile(rootfilename, "readonly") 
+
+# load data and move under and overflow bin
+dataKey = nominalKey.replace(procIden, options.datakeyreplace)
+dataHist=rootFile.Get(dataKey)
+dataHist.SetStats(False)
+Plots.moveOverUnderFlow(dataHist)
+
 # load samples
 for sample in pltcfg.samples:
     PlotList[sample.nick]=Plots.buildHistogramAndErrorBand(rootFile=rootFile,sample=sample,
@@ -123,9 +134,17 @@ print '''
 # plotting histograms and Errorbands
 # ========================================================
     '''
-canvas, legend =Plots.drawHistsOnCanvas(PlotList,options.channelName,ratio="#frac{scaled Signal}{Background}",errorband=True)
+# returning sorted Lists and Histograms necessary to draw the legend
+canvas, errorband, ratioerrorband, sortedSignal, sigHists, sortedBackground, bkgHists =Plots.drawHistsOnCanvas(PlotList,options.channelName,data=dataHist,ratio="#frac{data}{MC Background}",errorband=True)
 
-
+# drawing the legend
+legend = Plots.getLegend()
+legend.AddEntry(dataHist,options.datalabel,"P")
+for i,signal in enumerate(sortedSignal):
+    legend.AddEntry(sigHists[i], PlotList[signal].label, "L")
+for i,background in enumerate(sortedBackground):
+    legend.AddEntry(bkgHists[i], PlotList[background].label, "F")
+legend.Draw("same")
 
 # add ROC score if activated
 # if self.printROCScore and len(signalIndex)==1:
