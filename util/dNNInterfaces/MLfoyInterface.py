@@ -7,9 +7,87 @@ from distutils.dir_util import copy_tree
 import glob
 import pandas as pd
 import numpy as np
+import ROOT
 
 includeString = "-I/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/tensorflow-cc/1.3.0-elfike/tensorflow_cc/include -I/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/eigen/c7dc0a897676/include/eigen3 -I/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/protobuf/3.4.0-fmblme/include"
 libraryString = "-L/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/tensorflow-cc/1.3.0-elfike/tensorflow_cc/lib -ltensorflow_cc -L/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/protobuf/3.4.0-fmblme/lib -lprotobuf -lrt"
+
+
+def doRebinning(rootfile, histolist, threshold):
+    combinedHist = None
+
+    # loop over hists and add them to a combined histogram
+    for h in histolist:
+        h_tmp = rootfile.Get(h)
+        if combinedHist is None:
+            combinedHist = h_tmp.Clone("combinedHist")
+            combinedHist.Reset()
+        combinedHist.Add(h_tmp)
+
+    if combinedHist is None:
+        print("ERROR: could not add any histograms!")
+        return []
+
+    squaredError = 0.
+    binContent = 0.
+    bin_edges = []
+    last_added_edge = 0
+    for i in range(1, combinedHist.GetNbinsX()+1):
+        if i == 1:
+            last_added_edge = combinedHist.GetBinLowEdge(i)
+            bin_edges.append(last_added_edge)
+
+        # add together squared bin errors and bin contents
+        squaredError += combinedHist.GetBinError(i)**2
+        binContent += combinedHist.GetBinContent(i)
+
+        # calculate relative error
+        relerror = squaredError**0.5/binContent if not binContent == 0 else squaredError**0.5
+        
+        # if relative error is smaller than threshold, start new bin
+        if relerror <= threshold:
+            last_added_edge = combinedHist.GetBinLowEdge(i+1)
+            bin_edges.append(last_added_edge)
+            squaredError = 0.
+            binContent = 0.
+
+    overflow_edge = combinedHist.GetBinLowEdge(combinedHist.GetNbinsX()+2)
+    if not overflow_edge in bin_edges: bin_edges.append(overflow_edge)
+
+    print("\tnew bin edges: [{}]".format(",".join([str(round(b,4)) for b in bin_edges])))
+    return bin_edges
+
+
+def getOptimizedBinEdges(label, opts):
+    channel = opts.discrname+"_"+label
+
+    # open rootfile
+    rfile = ROOT.TFile.Open(opts.histogram_file)
+    keylist = [x.GetName() for x in rfile.GetListOfKeys()]
+    print("\noptimizing bin edges for channel {}".format(channel))
+
+    # collect keys to conider for rebinning
+    consider_for_rebinning = []
+    for p in opts.considered_processes.split(","):
+        branch = p+"_"+channel
+        if branch in keylist:
+            consider_for_rebinning.append(branch)
+        else:
+            print("ERROR: Could not find histogram with name {} in inputfile {}".format(
+                branch, opts.histogram_file))
+
+    # do the rebinning
+    if len(consider_for_rebinning) > 0:
+        return doRebinning(
+            rootfile  = rfile,
+            histolist = consider_for_rebinning,
+            threshold = float(opts.threshold))
+    else:
+        return []
+
+
+
+
 
 class DNN:
     def __init__(self, cpPath, suffix = "", xEval = True):
@@ -336,26 +414,26 @@ class DNN:
         string += "    return plots\n"
         return string
     
-    def generatePlotCall(self, enable_input_plots):
+    def generatePlotCall(self, opts):
         if self.multiDNN:
             string = ""
             for dnn in self.DNNs:
-                string += dnn.generatePlotCall(enable_input_plots)
+                string += dnn.generatePlotCall(opts)
                 if self.xEval: break
             return string
 
         string = "    "
-        if not enable_input_plots:
+        if not opts.input_plots:
             string+= "#"
         string += "discriminatorPlots += plots_{}()\n".format(self.category)
         return string
    
 
-    def generateOutputPlots(self, variable_binning=False, nbins = None):
+    def generateOutputPlots(self, opts):
         if self.multiDNN:
             string = ""
             for dnn in self.DNNs:
-                string += dnn.generateOutputPlots(variable_binning, nbins)
+                string += dnn.generateOutputPlots(opts)
                 if self.xEval: break
             return string
 
@@ -388,22 +466,28 @@ class DNN:
                 LABEL           = label,
                 DISCR_NAME      = self.discrNames[i])
 
-            if variable_binning:
-                if not nbins is None:
-                    default_edges = np.linspace(self.node_mins[i], self.node_maxs[i], nbins, dtype = float)
-                    delta = (default_edges[1] - default_edges[0])/2.
-                    nextval = default_edges[-1] + delta
-                    default_edges = np.concatenate([default_edges, [nextval]])
+            if opts.variable_binning or opts.optimize_binning:
+                if opts.optimize_binning:
+                    # generate optimized bin edges
+                    bin_edges = getOptimizedBinEdges(label, opts)
+                elif not opts.ndefaultbins is None:
+                    # generate default bin edges
+                    bin_edges = np.linspace(self.node_mins[i], self.node_maxs[i], opts.ndefaultbins, dtype = float)
+                    delta = (bin_edges[1] - bin_edges[0])/2.
+                    nextval = bin_edges[-1] + delta
+                    bin_edges = np.concatenate([bin_edges, [nextval]])
                     #shift values to get lower edges
-                    default_edges -= delta
+                    bin_edges -= delta
                 else:
                     print("WARNING: variable binning is required, but there is no information about the binning!")
-                    default_edges = ["\n\n"]
+                    bin_edges = []
+
+                # write bin edges to file
                 indents = "\t\t\t\t"
                 separator = ",\n"+indents
                 string += '    category_dict["bin_edges"] = [ \n{}{}\n{}]'.format(
                     indents,
-                    separator.join([str(round(x,4)) for x in default_edges]),
+                    separator.join([str(round(x,4)) for x in bin_edges]),
                     indents
                     )
                 
@@ -552,7 +636,7 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses) {
     def getCleanUpLines(self):
         return ""
 
-    def generatePlotConfig(self, ndefaultbins = 15, enable_input_plots = True, variable_binning = False):
+    def generatePlotConfig(self, opts):
         '''
         generate plot config from variables and plots in checkpoint files
         '''
@@ -594,7 +678,7 @@ memexp = ""\n\n\n"""
         # loop over dnns writing code for plots
         for dnn in self.DNNs:
             string += dnn.generateInputPlots()
-            funcstring += dnn.generatePlotCall(enable_input_plots)
+            funcstring += dnn.generatePlotCall(opts)
 
 
         # writing code for dnn output plots
@@ -603,12 +687,12 @@ def plots_dnn(data, discrname):
 
     ndefaultbins = {}
     category_dict = {{}}
-    this_dict = {{}}\n\n""".format(ndefaultbins)
+    this_dict = {{}}\n\n""".format(opts.ndefaultbins)
 
 
         # loop over dnns witing code for DNN discr plots
         for dnn in self.DNNs:
-            string += dnn.generateOutputPlots(variable_binning = variable_binning, nbins = ndefaultbins)
+            string += dnn.generateOutputPlots(opts)
 
         # generating plot classes for DNN plots and adding info to data class
         string += """
@@ -669,6 +753,8 @@ def init_plots(dictionary, data = None):
 if __name__ == "__main__":
     import optparse
     parser = optparse.OptionParser()
+    
+    
     parser.add_option("-c","--checkpoints",dest="checkpoints",default=None,metavar="CHECKPOINTS",
         help = "path to DNN checkpoints")
     parser.add_option("-o","--output",dest="output",default="autogenerated_plotconfig.py",metavar="OUTPUT",
@@ -688,6 +774,20 @@ If this subfolder again contains multiple subfolders with checkpoint files these
 are evaluated as separate DNNs. If the crossEvaluation flag is activated
 no separate plots and no separate discriminators are produced""")
 
+    binningOptions = optparse.OptionGroup(parser, "binning Options", description = 
+        "settings concerning the variable binning of discriminator plots")
+    binningOptions.add_option("--optimizeBinning",dest="optimize_binning",default=False,action="store_true",metavar="OPTBINNING",
+        help = "enable optimization of binning. Requires some additional input information from already produced output plots")
+    binningOptions.add_option("-f",dest="histogram_file",default="output_limitInput.root",metavar="HISTFILE",
+        help = "root file with histograms for binning optimization")
+    binningOptions.add_option("-p",dest="considered_processes",default="ttbarOther,ttbarPlusB,ttbarPlus2B,ttbarPlusBBbar,ttbarPlusCCbar",metavar="PROCESSES",
+        help = "comma separated list of processes to be considered during at the binning optimization")
+    binningOptions.add_option("-t",dest="threshold",default=0.1,metavar="THRESHOLD",
+        help = "relative stat uncertainty threshold for binning optimization")
+    binningOptions.add_option("-d",dest="discrname",default="finaldiscr",
+        help = "name of discriminator in histogram file for binning optimization")
+
+    parser.add_option_group(binningOptions)
     (opts, args) = parser.parse_args()
 
     if not opts.checkpoints:
@@ -695,10 +795,10 @@ no separate plots and no separate discriminators are produced""")
 
 
     interface = theInterface(dnnSet = opts.checkpoints, crossEvaluation = opts.crossEvaluation)
-    cfg_string = interface.generatePlotConfig(opts.ndefaultbins, opts.input_plots, opts.variable_binning)
+    cfg_string = interface.generatePlotConfig(opts)
     with open(opts.output, "w") as f:
         f.write(cfg_string)
-    print("write new plot config to {}".format(opts.output))    
+    print("\n\nwrite new plot config to {}".format(opts.output))    
 
 
 
