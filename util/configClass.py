@@ -109,7 +109,9 @@ class configData:
             path = dnnInterface["interfacePath"]
             sys.path.append(os.path.dirname(path))
             dnnModule = importlib.import_module( path.split("/")[-1].replace(".py","") )
-            interface = dnnModule.theInterface(dnnSet = dnnInterface["checkpointFiles"])
+            interface = dnnModule.theInterface(
+                dnnSet = dnnInterface["checkpointFiles"], 
+                crossEvaluation = self.analysis.crossEvaluation)
 
             # generate new plot file
             cfg_string = interface.generatePlotConfig()
