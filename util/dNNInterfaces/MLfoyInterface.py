@@ -45,14 +45,20 @@ def doRebinning(rootfile, histolist, threshold):
         relerror = squaredError**0.5/binContent if not binContent == 0 else squaredError**0.5
         
         # if relative error is smaller than threshold, start new bin
-        if relerror <= threshold:
+        if relerror <= threshold and not binContent == 0:
             last_added_edge = combinedHist.GetBinLowEdge(i+1)
             bin_edges.append(last_added_edge)
             squaredError = 0.
             binContent = 0.
-
+    
+    
     overflow_edge = combinedHist.GetBinLowEdge(combinedHist.GetNbinsX()+2)
-    if not overflow_edge in bin_edges: bin_edges.append(overflow_edge)
+    if not overflow_edge in bin_edges:
+        # if overflow_edge is not in bin_edges list the relative
+        # error of the last bin is too small, so just merge the
+        # last two bins by replacing the last_added_edge with
+        # the overflow_edge 
+        bin_edges[-1] = overflow_edge
 
     print("\tnew bin edges: [{}]".format(",".join([str(round(b,4)) for b in bin_edges])))
     return bin_edges
