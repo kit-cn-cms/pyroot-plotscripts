@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttZDatacards_hf_v2'
+    name = 'ttZDatacards_hf_optBins'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -57,7 +57,7 @@ def main(pyrootdir, argv):
     # configs
     config          = "pltcfg_ttZ18"
     variable_cfg    = "ttZ18_addVariables"
-    plot_cfg        = "ttZ18_dnnPlots_hf"
+    plot_cfg        = "ttZ18_dnnPlots_hf_v2"
     syst_cfg        = "ttZ18_systematics"
 
     # file for rate factors
