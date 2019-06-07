@@ -96,7 +96,7 @@ class plotParallel:
             if isinstance( interface, basestring ):
                 addModule = "addModule" + str(interfaceCounter)
                 print( "loading module: " + str(interface) + " as " + addModule + " module." )
-                self.addInterfaces.append( imp.load_source(addModule, interface).theInterface(self.analysis.workdir))
+                self.addInterfaces.append(imp.load_source(addModule, interface).theInterface(self.analysis.workdir))
             elif isinstance( interface, types.InstanceType ):
                 print( "appending class object initiated by user: " + str(interface) )
                 self.addInterfaces.append(interface)
@@ -110,7 +110,8 @@ class plotParallel:
         print("loading module "+str(interfacePath)+" as "+addModule+" module.")
         self.addInterfaces.append(
             imp.load_source(addModule, interfacePath).theInterface(
-                self.analysis.workdir, checkpointFiles))
+                self.analysis.workdir, checkpointFiles, 
+                crossEvaluation = self.analysis.crossEvaluation))
 
     def setRateFactorsFile(self, csvfile):
         self.rateFactorsFile = csvfile
