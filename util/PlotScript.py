@@ -22,6 +22,8 @@ parser.add_option("--outputpath", dest="outputpath",
         help="output path", metavar="/path/to/outputpath")
 parser.add_option("--directory", dest="directory",
          help="PATH to pyroot plotscript directory", metavar="/path/to/directory")
+parser.add_option("--workdir", dest="workdir",
+         help="PATH to workdir", metavar="/path/to/workdir")
 parser.add_option("--plotconfig", dest="plotconfig",
         help="Name of plot config", metavar="plotconfig")
 parser.add_option("--systconfig", dest="systconfig",
@@ -156,5 +158,5 @@ legend.Draw("same")
 # else:
 # setup.printLumi(canvas, ratio = plotOptions["ratio"])
 
-Plots.saveCanvas(canvas,options.directory+"/workdir/"+options.channelName+"discriminator.pdf")
+Plots.saveCanvas(canvas,options.workdir+"/"+options.channelName+"discriminator.pdf")
 
