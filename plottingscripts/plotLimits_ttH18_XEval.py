@@ -58,7 +58,7 @@ def main(pyrootdir, argv):
     config          = "pltcfg_ttH18_XEval"
     variable_cfg    = "ttH18_addVariables_XEval"
     plot_cfg        = "ttH18_discrPlots_XEval"
-    syst_cfg        = "ttZ18_systematics"
+    syst_cfg        = "ttH18_systematics"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
