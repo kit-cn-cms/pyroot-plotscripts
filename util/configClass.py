@@ -69,6 +69,7 @@ class configData:
     def initSystematics(self,systconfig):
 
         print "loading systematics..."
+        self.systconfig=systconfig
         processes=self.pltcfg.list_of_processes
         workdir=self.analysis.workdir
         outputpath=workdir+"/datacard.csv"
