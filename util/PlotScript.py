@@ -36,6 +36,17 @@ parser.add_option("--datakeyreplace", dest="datakeyreplace", default="data_obs",
         help="Key replacement for the data sample", metavar="datakeyreplace")
 parser.add_option("--datalabel", dest="datalabel", default="data",
         help="label of the data", metavar="datalabel")
+parser.add_option("--signalscaling", dest="signalscaling", default="-1",
+        help="scale factor of the signal processes, -1 to scale with background integral", metavar="signalscaling")
+parser.add_option("--lumilabel", dest="lumilabel", action = "store_true", default=False,
+        help="print luminosity label on canvas", metavar="lumilabel")
+parser.add_option("--privatework", dest="privatework", action = "store_true", default=False,
+        help="print privatework label on canvas", metavar="privatework")
+parser.add_option("--ratio", dest="ratio",  default="#frac{data}{MC Background}",
+        help="make ratio plot", metavar="ratio")
+parser.add_option("--logarithmic", dest="logarithmic", action = "store_true", default=False,
+        help="enable logarithmic plots", metavar="logarithmic")
+
 
 (options, args) = parser.parse_args()
 
@@ -62,10 +73,10 @@ else:
 
 
 # Define directories used to import stuff
-configdir = options.directory+"/configs/"
-utildir = options.directory+"/util/"
-systconfig=configdir+options.systconfig+".csv"
-plotconfig=configdir+options.plotconfig+".py"
+configdir   = options.directory+"/configs/"
+utildir     = options.directory+"/util/"
+systconfig  = configdir+options.systconfig+".csv"
+plotconfig  = configdir+options.plotconfig+".py"
 
 # checks if paths given exist
 if not path.exists(options.Rootfile):
@@ -137,7 +148,10 @@ print '''
 # ========================================================
     '''
 # returning sorted Lists and Histograms necessary to draw the legend
-canvas, errorband, ratioerrorband, sortedSignal, sigHists, sortedBackground, bkgHists =Plots.drawHistsOnCanvas(PlotList,options.channelName,data=dataHist,ratio="#frac{data}{MC Background}",errorband=True)
+canvas, errorband, ratioerrorband, sortedSignal, sigHists, sortedBackground, bkgHists =Plots.drawHistsOnCanvas(PlotList,options.channelName,
+                                                                                        data=dataHist,ratio=options.ratio, 
+                                                                                        signalscaling=int(options.signalscaling),
+                                                                                        errorband=True, logoption=options.logoption)
 
 # drawing the legend
 legend = Plots.getLegend()
@@ -148,15 +162,15 @@ for i,background in enumerate(sortedBackground):
     legend.AddEntry(bkgHists[i], PlotList[background].label, "F")
 legend.Draw("same")
 
-# add ROC score if activated
-# if self.printROCScore and len(signalIndex)==1:
-# setup.printROCScore(canvas, nodeROC, plotOptions["ratio"])
-
 # # add lumi or private work label to plot
-# if self.privateWork:
-# setup.printPrivateWork(canvas, plotOptions["ratio"], nodePlot = True)
-# else:
-# setup.printLumi(canvas, ratio = plotOptions["ratio"])
+if options.privateWork:
+    Plots.printPrivateWork(canvas, plotOptions["ratio"], nodePlot = True)
+if options.lumilabel:
+    Plots.printLumi(canvas, ratio = plotOptions["ratio"])
 
-Plots.saveCanvas(canvas,options.workdir+"/"+options.channelName+"discriminator.pdf")
+plotpath=options.workdir+"/Plots/"
+if not os.path.exists(options.workdir+"/outputPlots/"):
+        os.makedirs(options.workdir+"/outputPlots/")
+
+Plots.saveCanvas(canvas,plotpath+"/"+options.channelName+"discriminator.pdf")
 
