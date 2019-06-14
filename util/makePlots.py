@@ -14,12 +14,18 @@ import nafInterface
 
 
 def makePlots(configData):
-    ListOfPlots=configData.getDiscriminatorPlots()
-    workdir=configData.analysis.workdir
-    config=configData.analysis.plotConfig
-    #plot_config=configData.plot_config
-    syst_config=configData.systconfig
-    pyrootdir=configData.analysis.pyrootdir
+    # get Information from configData
+    ListOfPlots     = configData.getDiscriminatorPlots()
+    workdir         = configData.analysis.workdir
+    config          = configData.analysis.plotConfig
+    syst_config     = configData.systconfig
+    pyrootdir       = configData.analysis.pyrootdir
+    rootfile        = configData.analysis.rootPath
+    signalScaling   = configData.analysis.signalScaling
+    lumiLabel       = configData.analysis.lumiLabel
+    privateWork     = configData.analysis.privateWork
+    ratio           = configData.analysis.ratio
+    logarithmic     = configData.analysis.logarithmic
 
     # create output folders
     print('creating output folders')
@@ -33,15 +39,20 @@ def makePlots(configData):
         print "-"*130
         print Plot.name
         ListOfScripts.append( createPlotScript(channel=Plot.name,pyrootdir=pyrootdir, 
-        										workdir=workdir, scriptPath=scriptPath,plotconfig=config,
-        										systconfig=syst_config) )
+        										workdir=workdir, scriptPath=scriptPath,
+                                                plotconfig=config, systconfig=syst_config,
+                                                rootfile=rootPath, signalScaling=signalScaling,
+                                                lumiLabel=lumiLabel, privateWork=privateWork,
+                                                ratio=ratio, logarithmic=logarithmic ) )
 
     print "Submitting ", len(ListOfScripts), " DrawScripts"
     nafInterface.drawInterface(ListOfScripts, ListOfPlots)
 
     return
 
-def createPlotScript(channel,pyrootdir,workdir,scriptPath,plotconfig,systconfig):
+def createPlotScript(channel,pyrootdir,workdir,scriptPath,
+                        plotconfig,systconfig,rootfile,signalScaling,
+                        lumiLabel,privateWork,ratio,logarithmic):
     pathtoself=pyrootdir+'/util/'
     cmsswpath = os.environ['CMSSW_BASE']
     script="#!/bin/bash \n"
@@ -56,10 +67,15 @@ def createPlotScript(channel,pyrootdir,workdir,scriptPath,plotconfig,systconfig)
 
     script += 'python '+pathtoself+'PlotScript.py --plotconfig="'+plotconfig+'" '
     script += ' --channelname="'+channel+'" '
-    script += ' --rootfile="/nfs/dust/cms/user/lreuter/forPhilip/plotscript/workdir/csvConfigAll/output_limitInput.root" '
+    script += ' --rootfile="'+rootfile+'" '
     script += ' --directory="'+pyrootdir+'"' 
     script += ' --workdir="'+workdir+'"' 
-    script += ' --systconfig="'+systconfig+'"\n'
+    script += ' --systconfig="'+systconfig+'"'
+    script += ' --signalscaling="'+signalScaling+'"'
+    script += ' --lumilabel="'+lumiLabel+'"'
+    script += ' --privatework="'+privateWork+'"'
+    script += ' --ratio="'+ratio+'"'
+    script += ' --logarithmic="'+logarithmic+'"\n'
 
     scriptPath = scriptPath+'makePlots'+str(channel)+'.sh'
 
