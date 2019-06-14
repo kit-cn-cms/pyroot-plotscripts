@@ -4,13 +4,15 @@ import re
 import numpy as np
 debug=0
 """
+===============================================
 Class handling the Plotting
 Contains the Name and the Histogram
 label is for the legend naming
 if color is not set uses dictionary defined here
 OverUnderFlowInc as flag if Overflow and Underflow were already merged in the hist
 Errorband should be all uncertainties
-specific error band as list of error bands
+TODO: specific error band as list of error bands
+===============================================
 """
 class Plot:
     def __init__(self, hist, name, label = None, 
@@ -56,11 +58,13 @@ class Plot:
         if "ttH" in cls: cls = "ttH"
         self.color=color_dict[cls]
 
+    # moves underflow in first histogram bin and overflow in last bin
     def handleOverUnderFlow(self):
         moveOverUnderFlow(self.hist)
         # set flag that over and underflow werde merged into the histogram
         self.OverUnderFlowInc=True
 
+    # sets the Style for the Histogram and errorband
     def setStyle(self):
         self.hist.SetStats(False)
         #Sets style for Histogram, filled for background, line for signal
@@ -85,6 +89,21 @@ class Plot:
                 seb.SetFillStyle(3004)
                 seb.SetLineColor(self.sebColor[n])
                 seb.SetFillColor(self.sebColor[n])
+
+# moves underflow in first histogram bin and overflow in last bin
+def moveOverUnderFlow(hist):
+    # move underflow
+    hist.SetBinContent(1, hist.GetBinContent(0)+hist.GetBinContent(1))
+    # move overflow
+    hist.SetBinContent(hist.GetNbinsX(), hist.GetBinContent(hist.GetNbinsX()+1)+hist.GetBinContent(hist.GetNbinsX()))
+
+    # set underflow error
+    hist.SetBinError(1, ROOT.TMath.Sqrt(
+        ROOT.TMath.Power(hist.GetBinError(0),2) + ROOT.TMath.Power(hist.GetBinError(1),2) ))
+    # set overflow error
+    hist.SetBinError(hist.GetNbinsX(), ROOT.TMath.Sqrt(
+        ROOT.TMath.Power(hist.GetBinError(hist.GetNbinsX()),2) + 
+        ROOT.TMath.Power(hist.GetBinError(hist.GetNbinsX()+1),2) ))
 
 # ===============================================
 # GET HISTOGRAMS AND ERROR BANDS
@@ -179,6 +198,9 @@ def buildHistogramAndErrorBand(rootFile,sample,nominalKey,procIden,systematicKey
                                     OverUnderFlowInc=True)
     return PlotObject
 
+# combines other samples as it is defined in the input "sample"
+# to create an clearer plot
+# combines Histogram and Errorband and deletes other samples
 def addSamples(sample,PlotList):
     combinedErrorbands=[]
     combinedHist = None
@@ -193,10 +215,14 @@ def addSamples(sample,PlotList):
             combinedHist    = PlotList[process].hist 
             combinedErrorbands.append(PlotList[process].errorband)
             del PlotList[process]
+    # add all Errorbands together
     errorband=addErrorbands(combinedErrorbands,combinedHist)
+    # add the new combined sample
     PlotList[sample.nick]=Plot(combinedHist, sample.nick, color=sample.color, typ=sample.typ, label=sample.name, errorband=errorband)
+    # return the altered PlotList
     return PlotList
 
+# adding Errorbands with correlated option
 def addErrorbands(combinedErrorbands,combinedHist,correlated=False):
     newErrorband = ROOT.TGraphAsymmErrors(combinedHist)
     for i in range (newErrorband.GetN()):
@@ -215,6 +241,7 @@ def addErrorbands(combinedErrorbands,combinedHist,correlated=False):
         newErrorband.SetPointEXhigh(i, combinedHist.GetBinWidth(i+1)/2.)
     return newErrorband
 
+# scales the Errorband for the ratio plot
 def generateRatioErrorband(errorband):
     ratioerrorband=errorband.Clone()
     for i in range(ratioerrorband.GetN()):
@@ -233,21 +260,6 @@ def generateRatioErrorband(errorband):
     return ratioerrorband
 
 
-
-def moveOverUnderFlow(hist):
-    # move underflow
-    hist.SetBinContent(1, hist.GetBinContent(0)+hist.GetBinContent(1))
-    # move overflow
-    hist.SetBinContent(hist.GetNbinsX(), hist.GetBinContent(hist.GetNbinsX()+1)+hist.GetBinContent(hist.GetNbinsX()))
-
-    # set underflow error
-    hist.SetBinError(1, ROOT.TMath.Sqrt(
-        ROOT.TMath.Power(hist.GetBinError(0),2) + ROOT.TMath.Power(hist.GetBinError(1),2) ))
-    # set overflow error
-    hist.SetBinError(hist.GetNbinsX(), ROOT.TMath.Sqrt(
-        ROOT.TMath.Power(hist.GetBinError(hist.GetNbinsX()),2) + 
-        ROOT.TMath.Power(hist.GetBinError(hist.GetNbinsX()+1),2) ))
-
 def GetyTitle(privateWork = False):
     # if privateWork flag is enabled, normalize plots to unit area
     if privateWork:
@@ -259,7 +271,7 @@ def GetyTitle(privateWork = False):
 # DRAW HISTOGRAMS ON CANVAS
 # ===============================================
 
-def drawHistsOnCanvas(PlotList, canvasName, data, ratio=False, errorband=None, displayname=None, logoption=False):
+def drawHistsOnCanvas(PlotList, canvasName, data, ratio=False, signalscaling=1, errorband=None, displayname=None, logoption=False):
     if not displayname: 
         displayname=canvasName
         
@@ -351,6 +363,12 @@ def drawHistsOnCanvas(PlotList, canvasName, data, ratio=False, errorband=None, d
     
     # draw signal histograms
     for signal in sigHists:
+        # scale signal
+        if signalscaling==-1:
+            scalefactor=bkgHist[0].Integral()/signal.Integral()
+        else:
+            scalefactor=signalscaling
+        signal.scale(scalefactor)
         # draw signal histogram
         signal.DrawCopy(option+" E0 same")
     
