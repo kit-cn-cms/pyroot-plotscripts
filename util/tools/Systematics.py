@@ -3,12 +3,14 @@ import sys
 import pandas
 
 class SystematicsForProcess:
-    def __init__(self,name,process,typ,construction,expression=None):
+    def __init__(self,name,process,typ,construction,expression=None,plot=None):
         self.name=name
         self.process=process 
         self.typ=typ 
         self.construction=construction 
         self.expression=expression
+        self.plot=plot
+
 
 class Systematics:
     def __init__(self,systematicconfig,weightDictionary = {}):
@@ -16,6 +18,12 @@ class Systematics:
         self.systematics=pandas.read_csv(systematicconfig,sep=",")
         self.weightDictionary = weightDictionary
 
+    """
+    get all variables that shall be used, 
+    for each shape variable makes two variables
+    with Up and Down added at the end to find 
+    them in the ROOT File
+    """ 
     def getSystematicsForProcesses(self,list_of_processes):
         self.processes={}
         for process in list_of_processes:
@@ -42,6 +50,25 @@ class Systematics:
                         self.processes[process][down]=SystematicsForProcess(down,process,typ,construction,Down)
                     if not Up and not Down:
                         self.processes[process][name]=SystematicsForProcess(name,process,typ,construction)
+
+    # only gets variables to plot, without variation of name with up and down!
+    def plotSystematicsForProcesses(self,list_of_processes):
+        self.processes={}
+        for process in list_of_processes:
+            self.processes[process]={}
+        for i,systematic in self.systematics.iterrows():
+            name=systematic["Uncertainty"]
+            if name.startswith("#"):
+                continue
+            plot=str(systematic["Plot"])
+            if plot=="-":
+                continue
+            typ=systematic["Type"]
+            construction=systematic["Construction"]
+            for process in list_of_processes:
+                if systematic[process] is not "-":
+                    self.processes[process][name]=SystematicsForProcess(name,process,typ,construction,
+                                                                            plot=plot)
 
     #returns weight systematics for specific process
     def get_weight_systs(self,process):
@@ -71,6 +98,7 @@ class Systematics:
     def get_shape_systs(self,process):
         shape_systs=self.get_weight_systs(process)+self.get_variation_systs(process)
         return shape_systs
+
 
     #returns all weight systematics
     def get_all_weight_systs(self):
