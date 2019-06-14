@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttH18_XEval'
+    name = 'ttH18_XEvaluation'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -257,7 +257,7 @@ def main(pyrootdir, argv):
             with monitor.Timer("addRealData"):
                 if analysis.usePseudoData:
                     # pseudo data without ttH
-                    pP.addData(samples = configData.samples[1:])
+                    pP.addData(samples = configData.samples[9:])
                 else:
                     # real data with ttH
                     pP.addData(samples = configData.controlSamples)
@@ -339,7 +339,7 @@ def main(pyrootdir, argv):
 
             histoList       = gP.genList(samples = configData.samples)
             dataList        = gP.genList(samples = configData.controlSamples)
-            pseudodataList  = gP.genList(samples = [configData.samples[0]]+configData.samples[1:])
+            pseudodataList  = gP.genList(samples = [configData.samples[0]]+configData.samples[9:])
             monitor.printClass(gP, "after creating init lists")
 
 
@@ -365,7 +365,7 @@ def main(pyrootdir, argv):
                     "sepaTest":         False}
                 sampleConfig = genPlots.Config(
                     histograms  = histoList,
-                    sampleIndex = 1)
+                    sampleIndex = 9)
                 gP.makeSimpleControlPlots( sampleConfig, controlPlotOptions )
 
                 # creating shape plots
@@ -379,7 +379,7 @@ def main(pyrootdir, argv):
                     "sepaTest":         False}
                 sampleConfig = genPlots.Config(
                     histograms  = dataList,
-                    sampleIndex = 1)
+                    sampleIndex = 9)
                 gP.makeSimpleShapePlots( sampleConfig, shapePlotOptions )
 
                 monitor.printClass(gP, "after making simple MC plots")
@@ -395,7 +395,7 @@ def main(pyrootdir, argv):
             with monitor.Timer("makingMCControlPlots"):
                 sampleConfig = genPlots.Config(
                     histograms  = histoList,
-                    sampleIndex = 1)
+                    sampleIndex = 9)
 
                 # generate the llloflist internally
                 sampleConfig.genNestedHistList(
