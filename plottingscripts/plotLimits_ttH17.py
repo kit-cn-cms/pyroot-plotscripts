@@ -58,7 +58,7 @@ def main(pyrootdir, argv):
     config          = "pltcfg_ttH17"
     variable_cfg    = "ttH17_addVariables"
     plot_cfg        = "ttH17_discrPlots"
-    syst_cfg        = "ttH17_systematics_v2"
+    syst_cfg        = "ttH17_systematics"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
