@@ -101,7 +101,7 @@ weightReplacements = {
 # names of the systematics (proper names needed e.g. for combination)
 # Lumi weight
 mcWeight = "59.7"
-evenSel  = "*1."
+evenSel  = "*(Evt_Odd==0)*2.0"
 
 nominalweight="NomWeight:="+usualWeight+"*"+puWeight+"*"+triggerscalefactors+"*"+leptonscalefactors+"*"+csvWeight+"*"+doWeightsFlag
 
@@ -243,13 +243,13 @@ samples=[
 
     plotClasses.Sample('t#bar{t}+Z',ROOT.kBlue-6,
             path_mwassmer+'/TTZToLLNuNu*/*nominal*.root'+';'+ path_mwassmer+'/TTZToQQ*/*nominal*.root',
-            mcWeight+evenSel+sel_MET,
+            mcWeight+sel_MET,
             'ttbarZ',
             samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('Diboson',ROOT.kAzure+2,
            dibosonPathS,
-           mcWeight+evenSel+sel_MET,
+           mcWeight+sel_MET,
            'diboson',
            samDict=sampleDict, readTrees=doReadTrees), 
 ]
