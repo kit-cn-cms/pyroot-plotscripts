@@ -89,7 +89,7 @@ def main(pyrootdir, argv):
         "skipRenaming":         False,
         "skipDatacards":        False}
 
-    plotJson = "/nfs/dust/cms/user/mhorzela/pyroot-plotscripts/RECO.json" #"/nfs/dust/cms/user/mhorzela/DPGjson.json"
+    plotJson = ""#/nfs/dust/cms/user/mhorzela/pyroot-plotscripts/RECO.json" #"/nfs/dust/cms/user/mhorzela/DPGjson.json"
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018",True]] 
     #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
 
@@ -455,7 +455,7 @@ def main(pyrootdir, argv):
                     "privateWork":      True}
                 sampleConfig = genPlots.Config(
                     histograms  = histoList,
-                    sampleIndex = 1)
+                    sampleIndex = 0)
                 # generate the llloflist internally
                 sampleConfig.addNestedHistList(
                     genPlotsClass = gP,

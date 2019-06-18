@@ -437,7 +437,7 @@ samplesDataControlPlots=[
 
 print "controlsamples"
 samplesControlPlots=[                    
-                    plotClasses.Sample('t#bar{t}H, H to b#bar{b}',ROOT.kBlue+1,path_mwassmer+'/ttHTobb*/*nominal*.root','1.0*'+mcWeight+'*(N_GenTopHad==1&&N_GenTopLep==1)'+evenSel+sel_MET,'ttH_hbb',systsAllSamples+systs_ttH+systs_tt_and_ttH,samDict=sampleDict, readTrees=doReadTrees) ,
+                    # ~ plotClasses.Sample('t#bar{t}H, H to b#bar{b}',ROOT.kBlue+1,path_mwassmer+'/ttHTobb*/*nominal*.root','1.0*'+mcWeight+'*(N_GenTopHad==1&&N_GenTopLep==1)'+evenSel+sel_MET,'ttH_hbb',systsAllSamples+systs_ttH+systs_tt_and_ttH,samDict=sampleDict, readTrees=doReadTrees) ,
                     
                     
                     plotClasses.Sample('Powheg t#bar{t}+b-jets ',ROOT.kBlack,ttbarPathS,mcWeightAll+'*(GenEvt_I_TTPlusBB>0)'+sel_MET+sel_StrangeMuWeights,'tt-inclusive',systsAllSamples+systs_tt_all+systs_tt_bb+systs_ttbb_incl+hdamp_ue_filenames_tt_all+hdamp_ue_filenames_tt_bb,samDict=sampleDict, readTrees=doReadTrees),
