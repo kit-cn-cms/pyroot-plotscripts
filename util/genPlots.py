@@ -1410,11 +1410,11 @@ def drawHistOnCanvas(listOfHistos, plotOptions):
             line.SetBinContent(i, 1)
             line.SetBinError(i, 0)
         line.SetLineWidth(1)
-        line.DrawCopy('histoE')
+        line.DrawCopy('histo')
         for hist in listOfHistos[1:]:
             ratioPlot = hist.Clone()
             ratioPlot.Divide(listOfHistos[0])
-            ratioPlot.DrawCopy('samehistoE')
+            ratioPlot.DrawCopy('samehisto')
             
     # draw errorband comparison plot if activated
     if plotOptions["errorband"]:
