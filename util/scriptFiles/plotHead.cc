@@ -3,8 +3,7 @@ struct Plot1DInfoStruct{
     std::string identifier;
     std::string title;
     int nbins;
-    float xmin;
-    float xmax;
+    std::vector<float> edges;
     //std::unique_ptr<TH1> histoptr;
 };
 
@@ -33,11 +32,9 @@ struct Plot2DInfoStruct{
     std::string identifier;
     std::string title;
     int nbinsx;
+    std::vector<float> edges_x;
     int nbinsy;
-    float xmin;
-    float xmax;
-    float ymin;
-    float ymax;
+    std::vector<float> edges_y;
     //std::unique_ptr<TH2> histoptr;
 };
 
@@ -70,16 +67,32 @@ void plot(){
   int maxevents = atoi(getenv ("MAXEVENTS"));
   int skipevents = atoi(getenv ("SKIPEVENTS"));
   string eventFilterFile = string(getenv("EVENTFILTERFILE"));
-
+  string dataera = string(getenv ("DATAERA"));
 
   // create vector of systematics
   std::vector<Systematics::Type> v_SystTypes = Systematics::getTypeVector();
   //for(auto itsyst : v_SystTypes){std::cout<< " Know :" << itsyst << std::endl;}
 
-  // std::string csvHFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_V3_2017/deepCSV_sfs_hf.root";
-  // std::string csvLFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_V3_2017/deepCSV_sfs_lf.root";
-  std::string csvHFfile=plotskriptBaseDir+"/data/CSV/sfs_deepjet_2017_hf.root";
-  std::string csvLFfile=plotskriptBaseDir+"/data/CSV/sfs_deepjet_2017_lf.root";
+
+  std::string csvHFfile = "";
+  std::string csvLFfile = "";
+  if( dataera == "2017" ) {
+      csvHFfile=plotskriptBaseDir+"/data/CSV/sfs_deepjet_2017_hf.root";
+      csvLFfile=plotskriptBaseDir+"/data/CSV/sfs_deepjet_2017_lf.root";
+      }
+  else if( dataera == "2018" ) {
+      csvHFfile=plotskriptBaseDir+"/data/CSV/sfs_deepjet_2018_hf.root";
+      csvLFfile=plotskriptBaseDir+"/data/CSV/sfs_deepjet_2018_lf.root";
+      }
+  else if( dataera == "2017_deepCSV" ) {
+      csvHFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_V3_2017/deepCSV_sfs_hf.root";
+      csvLFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_V3_2017/deepCSV_sfs_lf.root";
+      }
+  else {
+      std::cout << "NO VALID DATAERA CHOSEN!!" << std::endl;
+      std::cout << "dataera: " << dataera << std::endl;
+      }
+
   TString qcd_file = "/nfs/dust/cms/user/mwassmer/QCD_Estimation_September17/QCD_Estimation/QCD_Estimation_FakeScaleFactor_nominal.root";
   
   CSVHelper* internalCSVHelper= new CSVHelper(csvHFfile,csvLFfile, 5,4,3,v_SystTypes);

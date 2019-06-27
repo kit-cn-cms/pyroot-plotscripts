@@ -11,27 +11,30 @@ import Systematics
 
 class catData:
     def __init__(self):
-        self.discrs = []
-        self.nhistobins = []
-        self.minxvals = []
-        self.maxxvals = []
-        self.categories = []
+        self.categories = {}
 
-        self.plotPreselections = []
-        self.binlabels = []
+        # self.discrs = []
+        # self.nhistobins = []
+        # self.minxvals = []
+        # self.maxxvals = []
+        # self.categories = []
+
+        # self.plotPreselections = []
+        # self.binlabels = []
 
     def getNEntries(self):
-        return len(self.discrs)
+        return len(self.categories)
 
-    def getEntry(self, i):
-        return {
-            "discr":            self.discrs[i],
-            "nhistobins":       self.nhistobins[i],
-            "minxvals":         self.minxvals[i],
-            "maxxvals":         self.maxxvals[i],
-            "category":         self.categories[i],
-            "plotPreselection": self.plotPreselections[i],
-            "binlabel":         self.binlabels[i]}
+    # def getEntry(self, i):
+    #     return {
+    #         "discr":            self.discrs[i],
+    #         "nhistobins":       self.nhistobins[i],
+    #         "minxvals":         self.minxvals[i],
+    #         "maxxvals":         self.maxxvals[i],
+    #         "category":         self.categories[i],
+    #         "plotPreselection": self.plotPreselections[i],
+    #         "binlabel":         self.binlabels[i]}
+
 
 class configData:
     def __init__(self, analysisClass, variable_config, plot_config, execute_file = None):
@@ -79,22 +82,24 @@ class configData:
         self.plots=self.systematics.plot_shapes()
 
     def writeConfigDataToWorkdir(self):
-        if self.Data == None:
-            print("there is no config data")
-            return
+        # if self.Data == None:
+        #     print("there is no config data")
+        #     return
 
-        with open(self.analysis.workdir+"/configData.csv", "w") as csvf:
-            csvf.write("categories,nhistobins,minxvals,maxxvals,discrs")
-            for i in range(len(self.Data.categories)):
-                line = "\n"
-                line+= str(self.Data.categories[i])+";"
-                line+= str(self.Data.nhistobins[i])+";"
-                line+= str(self.Data.minxvals[i])+";"
-                line+= str(self.Data.maxxvals[i])+";"
-                line+= str(self.Data.discrs[i])
-                csvf.write(line)
-        print("wrote config data to workdir")
-        print("path: "+str(self.analysis.workdir+"/configData.csv"))
+        # with open(self.analysis.workdir+"/configData.csv", "w") as csvf:
+        #     csvf.write("categories,nhistobins,minxvals,maxxvals,discrs")
+        #     for label in self.Data.categories:
+        #         subdict = self.Data.categories[label]
+        #         line = "\n"
+        #         line+= str(subdict["categories"])+";"
+        #         line+= str(subdict["nhistobins"])+";"
+        #         if "bin_edges" in 
+        #         line+= str(self.Data.minxvals[i])+";"
+        #         line+= str(self.Data.maxxvals[i])+";"
+        #         line+= str(self.Data.discrs[i])
+        #         csvf.write(line)
+        # print("wrote config data to workdir")
+        # print("path: "+str(self.analysis.workdir+"/configData.csv"))
         return
 
     def genDiscriminatorPlots(self, memexp, dnnInterface = None):
@@ -105,7 +110,9 @@ class configData:
             path = dnnInterface["interfacePath"]
             sys.path.append(os.path.dirname(path))
             dnnModule = importlib.import_module( path.split("/")[-1].replace(".py","") )
-            interface = dnnModule.theInterface(dnnSet = dnnInterface["checkpointFiles"])
+            interface = dnnModule.theInterface(
+                dnnSet = dnnInterface["checkpointFiles"], 
+                crossEvaluation = self.analysis.crossEvaluation)
 
             # generate new plot file
             cfg_string = interface.generatePlotConfig()
@@ -143,7 +150,7 @@ class configData:
             return self.discriminatorPlots
 
     def getBinlabels(self):
-        return self.Data.binlabels
+        return self.Data.categories.keys()
 
     def getAddVariables(self):
         sys.path.append(self.cfgdir)

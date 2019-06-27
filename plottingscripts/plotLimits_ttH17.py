@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttHAnalysis_2017_DeepJet_v2'
+    name = 'ttHAnalysis2017'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -45,6 +45,9 @@ def main(pyrootdir, argv):
     # signal process
     signalProcess = "ttH"
 
+    # dataera
+    dataera = "2017_deepCSV"
+
     # Name of final discriminator, should not contain underscore
     discrName = 'finaldiscr'
 
@@ -55,7 +58,7 @@ def main(pyrootdir, argv):
     config          = "pltcfg_ttH17"
     variable_cfg    = "ttH17_addVariables"
     plot_cfg        = "ttH17_discrPlots"
-    syst_cfg        = "ttH17_systematics_v2"
+    syst_cfg        = "ttH17_systematics"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -64,7 +67,7 @@ def main(pyrootdir, argv):
     # script options
     analysisOptions = {
         # general options
-        "plotBlinded":          False,  # blind region
+        "usePseudoData":          False,  # blind region
         "testrun":              False,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
@@ -85,11 +88,11 @@ def main(pyrootdir, argv):
         "skipRenaming":         False,
         "skipDatacards":        False}
 
-    plotJson = "/nfs/dust/cms/user/swieland/ttH/bTagStudy/pyroot-plotscripts/treejson.json"
+    plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttH_2018_newJEC_v5.json"
     plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                    "checkpointFiles":  "/nfs/dust/cms/user/swieland/ttH/bTagStudy/DNNs/DeepJet/"}
+                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/DNNCheckpointFiles/newJEC_validatedVariables/"}
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
@@ -107,7 +110,8 @@ def main(pyrootdir, argv):
         rootPath        = rootPathForAnalysis, 
         signalProcess   = signalProcess, 
         pltcfgName      = config,
-        discrName       = discrName)
+        discrName       = discrName,
+        dataera         = dataera)
 
     analysis.initArguments( argv )
     analysis.initAnalysisOptions( analysisOptions )
@@ -192,6 +196,8 @@ def main(pyrootdir, argv):
         pP.checkTermination()
         monitor.printClass(pP, "after plotParallel")
 
+
+
         # hadd histo files before renaming. The histograms are actually already renamed. 
         # But the checkbins thingy will not have been done yet.
         print '''
@@ -207,7 +213,6 @@ def main(pyrootdir, argv):
                 skipHadd = analysis.skipHaddFromWildcard)
          
 
-
         # Deactivate check bins functionality in renameHistos 
         #   if additional plot variables are added via analysis class
         if os.path.exists( analysis.setRenamedPath(name = "limitInput") ):
@@ -221,7 +226,6 @@ def main(pyrootdir, argv):
             # renaming Histograms
             # ========================================================
             '''
-
             pP.setRenameInput()
             # in this function the variable self.renameInput is set
             # if hadd files were created during plotParallel
@@ -232,6 +236,8 @@ def main(pyrootdir, argv):
             #       (which is equivalent to THEoutputlath == str)
             #       the renameInput is set to pp.getOutPath 
             #       (a.ka. the path to output.root)
+            print(pP.getRenameInput())
+            print(analysis.renamedPath)
 
             with monitor.Timer("renameHistos"):
                 renameHistos.renameHistos(
@@ -250,17 +256,12 @@ def main(pyrootdir, argv):
             # ========================================================
             '''
             with monitor.Timer("addRealData"):
-                if analysis.plotBlinded:
+                if analysis.usePseudoData:
                     # pseudo data without ttH
                     pP.addData(samples = configData.samples[9:])
                 else:
                     # real data with ttH
                     pP.addData(samples = configData.controlSamples)
-
-        
-
-        pP.checkTermination()       
-        monitor.printClass(pP, "after plotParallel completely done")
 
         print("########## DONE WITH PLOTPARALLEL STEP ##########")
         print("at the moment the outputpath is "+str(analysis.renamedPath))
@@ -400,7 +401,7 @@ def main(pyrootdir, argv):
                     "color":        ROOT.kBlack, 
                     "doRateSysts":  False})
         
-                if analysis.plotBlinded:
+                if analysis.usePseudoData:
                     pseudodataConfig = genPlots.Config(
                         histograms  = pseudodataList,
                         sampleIndex = 0)

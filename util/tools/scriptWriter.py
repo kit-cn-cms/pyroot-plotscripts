@@ -40,7 +40,8 @@ class scriptWriter:
         ccExists = os.path.exists(self.ccPath)
         if ccExists:
             print("c++ file already exists - check if this needs to be updated.")
-            cmd = "cp -v "+self.ccPath+" "+self.ccPath+"Backup"
+            print("moving it to backup")
+            cmd = "mv -v "+self.ccPath+" "+self.ccPath+"Backup"
             print("cmd: "+cmd)
             subprocess.call(cmd, shell = True)
 
@@ -57,20 +58,21 @@ class scriptWriter:
         if ccExists:
             print( "comparing c++ codes ..." )
             codeDiffers = not filecmp.cmp(self.ccPath+"Backup", self.ccPath)
+            if codeDiffers: print( "c++ codes differ" )
+
+        # check if needs to be compiled
         if codeDiffers:
-            print( "c++ codes differ" )
             print( "compiling c++ program" )
             # compiling programm
             self.compileProgram()
         else:
-            print( "c++ program already existing !! check if this is reasonable" )
-            cmd = "cp -v "+self.ccPath[:-3]+"Backup "+self.ccPath[:-3]
-            subprocess.call(cmd, shell = True)
+            print( "c++ code already existed without differences -- skipping compilation" )
         
         # check if compiling was successful
         if not os.path.exists(self.ccPath[:-3]):
             print( "could not compile c++ program - exiting" )
             sys.exit(-1)
+
         print("#"*50)
         print(" done with writing and compiling c++ program")
         print("#"*50)
@@ -165,7 +167,8 @@ class scriptWriter:
             scriptf.write(script)
         print(self.ccPath + " written")
 
-
+        # check if all variables are initialized correctly - exit otherwise
+        self.varManager.checkVariableInitialization()
 
 
 
@@ -270,7 +273,7 @@ class scriptWriter:
 
     def initVariables(self, tree):
         # initialize variables objects
-        variableManager = variableCancer.VariableManager(tree, self.vetolist, verbose = 1)
+        variableManager = variableCancer.VariableManager(tree, self.vetolist)
         variableManager.add( ["Weight", "Weight_CSV", "Weight_XS"] )
         
         # get additional variables
@@ -526,6 +529,7 @@ class scriptWriter:
             script += 'eval `scram runtime -sh`\n'
             script += 'cd - \n'
         script += 'export PLOTSCRIPTBASEDIR="'+self.pp.analysis.pyrootdir+'"\n'
+        script += 'export DATAERA="'+self.pp.analysis.dataera+'"\n'
         script += 'export PROCESSNAME="'+processname+'"\n'
         script += 'export FILENAMES="'+filenames+'"\n'
         script += 'export OUTFILENAME="'+outfilename+'"\n'

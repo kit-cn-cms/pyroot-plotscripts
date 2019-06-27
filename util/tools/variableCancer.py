@@ -1,3 +1,4 @@
+import sys
 import re
 import collections
 import xml.etree.ElementTree as ET
@@ -21,7 +22,7 @@ class VariableManager:
         self.expressionsToInit  = []
         # verbosity setting
         self.verbose            = verbose
-
+        
     # functions for variable setup
     # =============================================================================================
     def add(self, expressionList):
@@ -438,7 +439,10 @@ class VariableManager:
         return newExpression
                 
         
-
+    def checkVariableInitialization(self):
+        for var in self.variables:
+            if self.variables[var].initError:
+                sys.exit("error during variable initialisation")
 
 
 class Variable:
@@ -455,6 +459,7 @@ class Variable:
         self.isInitialized          = False
         self.expressionVariables    = []
     
+        self.initError              = False
 
     def setupVariable(self, tree, verbose, variableManager):
         '''
@@ -569,7 +574,7 @@ class Variable:
         if self.isArray:
             code+="    std::fill_n ("+varName+".get(), 20, -999);\n"
         else:
-            code+=varName+" = -999;\n"
+            code+="    "+varName+" = -999;\n"
         return code
         
     def writeBranchAdress(self):
@@ -616,8 +621,12 @@ class Variable:
         indent = ""
         if hasCondition: indent+= "    "
         if self.inTree:     return ""
-        if self.isBDTVar:   return "    "+indent+self.varName+" = r_"+self.varName+"->EvaluateMVA('BDT'):\n"
-        else:               return "    "+indent+self.varName+" = "+self.expression+";\n"
+        elif self.isBDTVar: return "    "+indent+self.varName+" = r_"+self.varName+"->EvaluateMVA('BDT'):\n"
+        else:               
+            if self.varName == self.expression:
+                self.initError = True
+                print("trying to initialize variable '{}' with itself (var = var) - this does not work".format(self.varName))
+            return "    "+indent+self.varName+" = "+self.expression+";\n"
 
 
 
