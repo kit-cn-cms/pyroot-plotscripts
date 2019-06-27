@@ -90,11 +90,11 @@ class Plot:
 # GET HISTOGRAMS AND ERROR BANDS
 # ===============================================
 
-def buildHistogramAndErrorBand(rootFile,sample,nominalKey,procIden,systematicKey,sysIden):
-    print("NEW SAMPLE"+str(sample.nick))
+def buildHistogramAndErrorBand(rootFile,sample,color,typ,label,systematics,nominalKey,procIden,systematicKey,sysIden):
+    print("NEW SAMPLE"+str(sample))
     # replace keys to get histogram key
     if procIden in nominalKey:
-        sampleKey = nominalKey.replace(procIden, sample.nick)
+        sampleKey = nominalKey.replace(procIden, sample)
     else:
         sampleKey=nominalKey
     rootHist = rootFile.Get(sampleKey)
@@ -106,7 +106,7 @@ def buildHistogramAndErrorBand(rootFile,sample,nominalKey,procIden,systematicKey
     # replace keys to get systematic key
     print("STARTING WITH SYSTEMATICS - building Errorband")
     if procIden in systematicKey:
-        sampleSystKey = systematicKey.replace(procIden, sample.nick)
+        sampleSystKey = systematicKey.replace(procIden, sample)
     else:
         sampleSystKey = systematicKey
     #Lists for error band values
@@ -115,8 +115,7 @@ def buildHistogramAndErrorBand(rootFile,sample,nominalKey,procIden,systematicKey
     """
     Loop over systematics to get Error band for sample
     """
-    for systematic in sample.getShapes():
-        print systematic
+    for systematic in systematics:
         """
         create empty Error Band for sample to fill 
         """
@@ -138,7 +137,9 @@ def buildHistogramAndErrorBand(rootFile,sample,nominalKey,procIden,systematicKey
         """
         check if histogram is TH1 type, else skip uncertainty
         """
+
         if isinstance(up, ROOT.TH1) and isinstance(down, ROOT.TH1):
+            print  "adding systematic ",systematic
             moveOverUnderFlow(up)
             moveOverUnderFlow(down)
 
@@ -154,14 +155,18 @@ def buildHistogramAndErrorBand(rootFile,sample,nominalKey,procIden,systematicKey
                 d = min(0.,d)
                 upErrors[ibin]=ROOT.TMath.Sqrt( upErrors[ibin]*upErrors[ibin] + u*u )
                 downErrors[ibin] = ROOT.TMath.Sqrt( downErrors[ibin]*downErrors[ibin] + d*d)
-                if debug>99:
-                    print "adding up/down ", u, d
-                    print "total up/down now: ", upErrors[ibin], downErrors[ibin]
-                    print "-"*50
+            
+            if debug>99:
+                print "adding up/down ", u, d
+                print "total up/down now: ", upErrors[ibin], downErrors[ibin]
+                print "-"*50
         else:
-            print("ERROR! can not use: "+str(systematic) )
-            print("->type of up shape hist is: "+str(type(up)) )
-            print("->type of down shape is: "+str(type(down)) )
+            if debug>9:
+                print("ERROR! can not use: "+str(systematic) )
+                print("->type of up shape hist is: "+str(type(up)) )
+                print("->type of down shape is: "+str(type(down)) )
+            else:
+                continue
 
     if upErrors:
         errorband = ROOT.TGraphAsymmErrors(rootHist)
@@ -170,31 +175,31 @@ def buildHistogramAndErrorBand(rootFile,sample,nominalKey,procIden,systematicKey
             errorband.SetPointEYhigh(i, upErrors[i])
             errorband.SetPointEXlow(i, rootHist.GetBinWidth(i+1)/2.)
             errorband.SetPointEXhigh(i, rootHist.GetBinWidth(i+1)/2.)
-        PlotObject=Plot(rootHist,sample.nick,label=sample.name,
-                                    color=sample.color,typ=sample.typ,
+        PlotObject=Plot(rootHist,sample,label=label,
+                                    color=color,typ=typ,
                                     errorband=errorband,OverUnderFlowInc=True)
     else:
-        PlotObject=Plot(rootHist,sample.nick,label=sample.name,
-                                    color=sample.color,typ=sample.typ,
+        PlotObject=Plot(rootHist,sample,label=label,
+                                    color=color,typ=typ,
                                     OverUnderFlowInc=True)
     return PlotObject
 
-def addSamples(sample,PlotList):
+def addSamples(sample,color,typ,label,addsamples,PlotList):
     combinedErrorbands=[]
     combinedHist = None
-    print("Adding samples for summarized process %s" % sample.nick)
-    for process in sample.addsamples:
-        print process
+    print("Adding samples for summarized process %s" % sample)
+    for sample in addsamples:
+        print sample
         if combinedHist:
-            combinedHist.Add(PlotList[process].hist)
-            combinedErrorbands.append(PlotList[process].errorband)
-            del PlotList[process]
+            combinedHist.Add(PlotList[sample].hist)
+            combinedErrorbands.append(PlotList[sample].errorband)
+            del PlotList[sample]
         else:
-            combinedHist    = PlotList[process].hist 
-            combinedErrorbands.append(PlotList[process].errorband)
-            del PlotList[process]
+            combinedHist    = PlotList[sample].hist 
+            combinedErrorbands.append(PlotList[sample].errorband)
+            del PlotList[sample]
     errorband=addErrorbands(combinedErrorbands,combinedHist)
-    PlotList[sample.nick]=Plot(combinedHist, sample.nick, color=sample.color, typ=sample.typ, label=sample.name, errorband=errorband)
+    PlotList[sample]=Plot(combinedHist, sample, color=color, typ=typ, label=label, errorband=errorband)
     return PlotList
 
 def addErrorbands(combinedErrorbands,combinedHist,correlated=False):
@@ -247,6 +252,11 @@ def moveOverUnderFlow(hist):
     hist.SetBinError(hist.GetNbinsX(), ROOT.TMath.Sqrt(
         ROOT.TMath.Power(hist.GetBinError(hist.GetNbinsX()),2) + 
         ROOT.TMath.Power(hist.GetBinError(hist.GetNbinsX()+1),2) ))
+    #delete overflow and underflow after moving
+    hist.SetBinContent(0,0)
+    hist.SetBinError(0,0)
+    hist.SetBinContent(hist.GetNbinsX()+1,0)
+    hist.SetBinError(hist.GetNbinsX()+1,0)
 
 def GetyTitle(privateWork = False):
     # if privateWork flag is enabled, normalize plots to unit area
