@@ -3,12 +3,13 @@
  create/adjust a plotconfig file named `pltcfg_STR.py`, that includes all samples that shall be used in the pyroot-plotscript. Two lists of Samples 
 - `samplesDataControlPlots` (data samples)
 - `samples` (simulated samples)
-add Sample using, with `SAMPLENAMEINCSVCONFIG` being the process name in the used systematics csv file `STR_systematics.csv`
+add Sample using, with `SAMPLENAMEINCSVCONFIG` being the process name in the used systematics csv file `STR_systematics.csv` 
+define samples as signal for the plotting step by edding `typ=signal`, else it is treated as background
 ```python
 plotClasses.Sample(SAMPLENAMEONPLOTS,COLOR,
     PATH/TO/SAMPLE,
     SELECTION,
-    SAMPLENAMEINCSVCONFIG,
+    SAMPLENAMEINCSVCONFIG, 
     samDict=sampleDict, readTrees=doReadTrees)
 ```
 for example for ttH_hbb
@@ -17,7 +18,7 @@ plotClasses.Sample('t#bar{t}H, H to b#bar{b}',ROOT.kBlue+1,
     'path/to/ttHTobb*/*nominal*.root',
     '1.0*41.53*2.0*(Evt_Odd==0)*(Evt_Pt_MET>20.)',
     'ttH_hbb',
-    samDict=sampleDict, readTrees=doReadTrees)
+    samDict=sampleDict, readTrees=doReadTrees, typ=signal)
 ```
 - add weight expressions to the `weightReplacements` dictionary to replace some `STRING` in the up/down variatons defined in the systematics config, for example
 ```python

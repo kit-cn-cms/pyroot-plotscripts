@@ -17,7 +17,7 @@ import util.genPlots as genPlots
 import util.configClass as configClass
 import util.monitorTools as monitorTools
 import util.plotParallel as plotParallel
-import util.drawParallel as drawParallel
+import util.makePlots as makePlots
 import util.haddParallel as haddParallel
 import util.renameHistos as renameHistos
 import util.makeDatacards as makeDatacards
@@ -71,8 +71,8 @@ def main(pyrootdir, argv):
         "haddFromWildcard":     True,
         "makeDataCards":        False,
         "addData":              True,  # adding real data 
-        "drawParallel":         True,
-        # options for drawParallel/singleExecute sub programs
+        "makePlots":         True,
+        # options for makePlots/singleExecute sub programs
         "makeSimplePlots":      False,
         "makeMCControlPlots":   True,
         "makeEventYields":      True,
@@ -183,7 +183,7 @@ def main(pyrootdir, argv):
             #pP.setDNNInterface(dnnInterface)
             pP.setMaxEvts(1000000)
             pP.setRateFactorsFile(rateFactorsFile)
-            pP.setSampleForVariableSetup(configData.samples[9])
+            pP.setSampleForVariableSetup(configData.samples[8])
 
             # run plotParallel
             pP.run()
@@ -251,7 +251,7 @@ def main(pyrootdir, argv):
             with monitor.Timer("addRealData"):
                 if analysis.plotBlinded:
                     # pseudo data without ttH
-                    pP.addData(samples = configData.samples[9:])
+                    pP.addData(samples = configData.samples[8:])
                 else:
                     # real data with ttH
                     pP.addData(samples = configData.controlSamples)
@@ -283,22 +283,20 @@ def main(pyrootdir, argv):
 
 
         # =============================================================================================
-        # Invoke drawParallel step
+        # Invoke makePlots step
         # =============================================================================================
-        if analysis.drawParallel:
+        if analysis.makePlots:
             print '''
             # ========================================================
-            # Starting DrawParallel
+            # Making Plots
             # ========================================================
             '''
             # this step reexecutes this top level script once for each discriminator plot
-            with monitor.Timer("DrawParallel"):
-                drawParallel.drawParallel(
+            with monitor.Timer("makePlots"):
+                makePlots.makePlots(
                     ListOfPlots = configData.getDiscriminatorPlots(),
                     workdir     = analysis.workdir,
-                    PathToSelf  = os.path.realpath(inspect.getsourcefile(lambda:0)),
-                    # Hand over opts to keep commandline options
-                    opts        = analysis.opts)
+                    PathToSelf  = os.path.realpath(inspect.getsourcefile(lambda:0)))
             print '''
             # ========================================================
             # this is the end of the script 
@@ -332,7 +330,7 @@ def main(pyrootdir, argv):
 
             histoList       = gP.genList(samples = configData.samples)
             dataList        = gP.genList(samples = configData.controlSamples)
-            pseudodataList  = gP.genList(samples = [configData.samples[0]]+configData.samples[9:])
+            pseudodataList  = gP.genList(samples = [configData.samples[0]]+configData.samples[8:])
             monitor.printClass(gP, "after creating init lists")
 
 
@@ -358,7 +356,7 @@ def main(pyrootdir, argv):
                     "sepaTest":         False}
                 sampleConfig = genPlots.Config(
                     histograms  = histoList,
-                    sampleIndex = 9)
+                    sampleIndex = 8)
                 gP.makeSimpleControlPlots( sampleConfig, controlPlotOptions )
 
                 # creating shape plots
@@ -372,7 +370,7 @@ def main(pyrootdir, argv):
                     "sepaTest":         False}
                 sampleConfig = genPlots.Config(
                     histograms  = dataList,
-                    sampleIndex = 9)
+                    sampleIndex = 8)
                 gP.makeSimpleShapePlots( sampleConfig, shapePlotOptions )
 
                 monitor.printClass(gP, "after making simple MC plots")
@@ -388,7 +386,7 @@ def main(pyrootdir, argv):
             with monitor.Timer("makingMCControlPlots"):
                 sampleConfig = genPlots.Config(
                     histograms  = histoList,
-                    sampleIndex = 9)
+                    sampleIndex = 8)
 
                 # generate the llloflist internally
                 sampleConfig.genNestedHistList(
