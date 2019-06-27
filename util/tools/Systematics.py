@@ -164,17 +164,16 @@ class Systematics:
 
     def plot_shapes(self):
         plotShapes=[]
-        # add nominal
-        plotShapes.append("")
         for i,systematic in self.systematics.iterrows():
             if systematic["Uncertainty"].startswith("#"):
                 continue
-            if str(systematic["Plot"])=="1":
+            if "shape" in systematic["Type"]:
                 systName=systematic["Uncertainty"]
-                up="_"+systName+"Up"
-                down="_"+systName+"Down"
-                plotShapes.append(up)
-                plotShapes.append(down)
+                if not str(systematic["Plot"])=="-":
+                    plotShapes.append(systName)
+                else:
+                    plotShapes.append("#"+systName)
+                print systName
         return plotShapes
 
     def replaceDummies(self, variationString):

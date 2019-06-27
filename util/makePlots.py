@@ -1,6 +1,7 @@
 import sys
 import os
 import stat
+import json
 import configClass as configClass
 import analysisClass as analysisClass
 
@@ -14,12 +15,11 @@ import nafInterface
 
 
 def makePlots(configData):
-    # get Information from configData
-    ListOfPlots     = configData.getDiscriminatorPlots()
-    workdir         = configData.analysis.workdir
-    config          = configData.analysis.plotConfig
-    syst_config     = configData.systconfig
-    pyrootdir       = configData.analysis.pyrootdir
+
+    ListOfPlots=configData.getDiscriminatorPlots()
+    workdir=configData.analysis.workdir
+    pyrootdir=configData.analysis.pyrootdir
+    plotconfig=createPlotConfig(configData,workdir)
     rootfile        = configData.analysis.rootPath
     signalScaling   = configData.analysis.signalScaling
     lumiLabel       = configData.analysis.lumiLabel
@@ -34,25 +34,80 @@ def makePlots(configData):
         os.makedirs(scriptPath)
 
     ListOfScripts = []
-    #print('Creating Scripts for Parallel Drawing')
+    print('Creating Scripts for Parallel Drawing')
     for Plot in ListOfPlots:
         print "-"*130
         print Plot.name
         ListOfScripts.append( createPlotScript(channel=Plot.name,pyrootdir=pyrootdir, 
-        										workdir=workdir, scriptPath=scriptPath,
-                                                plotconfig=config, systconfig=syst_config,
+        										                    workdir=workdir, scriptPath=scriptPath,
+                                                plotconfig=plotconfig,
                                                 rootfile=rootPath, signalScaling=signalScaling,
                                                 lumiLabel=lumiLabel, privateWork=privateWork,
                                                 ratio=ratio, logarithmic=logarithmic ) )
+
 
     print "Submitting ", len(ListOfScripts), " DrawScripts"
     nafInterface.drawInterface(ListOfScripts, ListOfPlots)
 
     return
 
+
+    # creates plot wrapper of the plotting information
+def createPlotConfig(configData,workdir):
+    samples={}
+    #samples named in the rootfile
+    for sample in configData.pltcfg.samples:
+        samples[sample.nick]={
+        "label": sample.name,
+        "typ": sample.typ,
+        "color": sample.color,
+        }
+
+    #combined samples
+    plottingsamples={}
+    for plotsample in configData.pltcfg.plottingsamples:
+        plottingsamples[plotsample.nick]={
+                "label": plotsample.name,
+                "typ": plotsample.typ,
+                "color": plotsample.color,
+                "addSamples":plotsample.addsamples,
+                }
+
+    #systematics to be plotted
+    systematics=configData.plots
+    print systematics
+
+    #writes config to file
+    outputpath=workdir+'/plotconfig.py'
+    print outputpath
+
+    with open(outputpath,'w') as outfile:
+        outfile.write('#samples named in the rootfile\n')
+        outfile.write('samples = {\n')
+        for key, value in samples.items():
+             outfile.write(' '*8+'"%s":%s,\n' % (key, value))
+        outfile.write(' '*4+'}\n')
+        outfile.write('#combined samples\n')
+        outfile.write('plottingsamples = {\n')
+        for key, value in plottingsamples.items():
+            outfile.write(' '*8+'"%s":%s,\n' % (key, value))
+        outfile.write(' '*4+'}\n')
+        outfile.write('#systematics to be plotted\n')
+        outfile.write('systematics = [\n')
+        for systematic in systematics:
+            if systematic.startswith('#'):
+                systematic.replace('#','')
+                outfile.write(' '*8+'#"'+systematic+'",\n')
+            else:
+                outfile.write(' '*8+'"'+systematic+'",\n')
+
+        outfile.write(' '*4+']\n')
+
+
 def createPlotScript(channel,pyrootdir,workdir,scriptPath,
-                        plotconfig,systconfig,rootfile,signalScaling,
+                        plotconfig,rootfile,signalScaling,
                         lumiLabel,privateWork,ratio,logarithmic):
+
     pathtoself=pyrootdir+'/util/'
     cmsswpath = os.environ['CMSSW_BASE']
     script="#!/bin/bash \n"
@@ -69,13 +124,14 @@ def createPlotScript(channel,pyrootdir,workdir,scriptPath,
     script += ' --channelname="'+channel+'" '
     script += ' --rootfile="'+rootfile+'" '
     script += ' --directory="'+pyrootdir+'"' 
+
     script += ' --workdir="'+workdir+'"' 
-    script += ' --systconfig="'+systconfig+'"'
     script += ' --signalscaling="'+signalScaling+'"'
     script += ' --lumilabel="'+lumiLabel+'"'
     script += ' --privatework="'+privateWork+'"'
     script += ' --ratio="'+ratio+'"'
     script += ' --logarithmic="'+logarithmic+'"\n'
+
 
     scriptPath = scriptPath+'makePlots'+str(channel)+'.sh'
 
