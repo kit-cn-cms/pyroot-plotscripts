@@ -87,7 +87,7 @@ def InitDataBase(thisDataBase=[]):
 
 
 # -- initializing histograms ----------------------------------------------------------------------
-def initHistos(catnames, systnames, plots):
+def initHistos(catnames, systnames, plots, edge_precision=4):
     rstr = ""
     rstr += "double variable = -999;\n"
     rstr += "double variable1 = -999;\n"
@@ -108,20 +108,26 @@ def initHistos(catnames, systnames, plots):
         if isinstance(plot, plotClasses.TwoDimPlot):
             title  = plot.histo.GetTitle()+";"+plot.histo.GetXaxis().GetTitle()+";"+plot.histo.GetYaxis().GetTitle()
             name   = plot.histo.GetName()
-            maxX   = plot.histo.GetXaxis().GetXmax()
-            minX   = plot.histo.GetXaxis().GetXmin()
             nbinsX = plot.histo.GetNbinsX()
-            maxY   = plot.histo.GetYaxis().GetXmax()
-            minY   = plot.histo.GetYaxis().GetXmin()
+            bin_edges_x = []
+            for i in range(1, nbins+2):
+              bin_edges.append(str(round(plot.histo.GetXaxis().GetBinLowEdge(i),edge_precision)))
             nbinsY = plot.histo.GetNbinsY()
-            rstr  += "plotinfo2D[\""+name+"\"] = {\""+name+"\",\""+title+"\","+str(nbinsX)+","+str(minX)+","+str(maxX)+","+str(minY)+","+str(maxY)+"};\n"
+            bin_edges_y = []
+            for i in range(1, nbins+2):
+              bin_edges_y.append(str(round(plot.histo.GetYaxis().GetBinLowEdge(i),edge_precision)))
+            rstr  += """plotinfo2D["{0}"] = {{"{0}","{1}",{2},{{ {3} }}, {4}, {{ {5} }} }};\n""".format(name, title, 
+                                                                                                        nbinsX, ",".join(bin_edges_x), 
+                                                                                                        nbinsY, ",".join(bin_edges_y)
+                                                                                                        )
         else:
             title  = plot.histo.GetTitle()
             name   = plot.histo.GetName()
-            maxX   = plot.histo.GetXaxis().GetXmax()
-            minX   = plot.histo.GetXaxis().GetXmin()
             nbins  = plot.histo.GetNbinsX()
-            rstr  += "plotinfo1D[\""+name+"\"] = {\""+name+"\",\""+title+"\","+str(nbins)+","+str(minX)+","+str(maxX)+"};\n"
+            bin_edges = []
+            for i in range(1, nbins+2):
+              bin_edges.append(str(round(plot.histo.GetBinLowEdge(i),edge_precision)))
+            rstr  += """plotinfo1D["{0}"] = {{"{0}","{1}",{2},{{ {3} }} }};\n""".format(name, title, nbins, ",".join(bin_edges))
 
     rstr += "\n\n"
     rstr += "for(const auto& cat: categs){\n"
@@ -129,7 +135,7 @@ def initHistos(catnames, systnames, plots):
     rstr += "        for(const auto& syst: systematics){\n"
     rstr += "            const auto& PlotInfo1D = obj.second;\n"
     rstr += "            histos1D[cat+obj.first+syst] = "
-    rstr += "std::unique_ptr<TH1>(new TH1F((processname+\"_\"+cat+obj.first+syst+suffix).c_str(), (PlotInfo1D.title).c_str(), PlotInfo1D.nbins, PlotInfo1D.xmin, PlotInfo1D.xmax));\n"
+    rstr += "std::unique_ptr<TH1>(new TH1F((processname+\"_\"+cat+obj.first+syst+suffix).c_str(), (PlotInfo1D.title).c_str(), PlotInfo1D.nbins, PlotInfo1D.edges.data()));\n"
     rstr += "            histos1D[cat+obj.first+syst]->SetDirectory(0);\n"
     rstr += "        }\n"
     rstr += "    }\n"
@@ -141,7 +147,7 @@ def initHistos(catnames, systnames, plots):
     rstr += "            const auto& PlotInfo2D = obj.second;\n"
     rstr += "            histos2D[cat+obj.first+syst] = "
     rstr += "std::unique_ptr<TH2>(new TH2F((processname+\"_\"+cat+obj.first+syst+suffix).c_str(), (PlotInfo2D.title).c_str(), "
-    rstr += "PlotInfo2D.nbinsx, PlotInfo2D.xmin, PlotInfo2D.xmax, PlotInfo2D.nbinsy, PlotInfo2D.ymin, PlotInfo2D.ymax));\n"
+    rstr += "PlotInfo2D.nbinsx, PlotInfo2D.edges_x.data(), PlotInfo2D.nbinsy, PlotInfo2D.edges_y.data()));\n"
     rstr += "            histos2D[cat+obj.first+syst]->SetDirectory(0);\n"
     rstr += "        }\n"
     rstr += "    }\n"

@@ -27,7 +27,8 @@ dibosonPathS = path_mwassmer+'/WW_*/*nominal*.root'+';'+ path_mwassmer+'/ZZ_*/*n
 
 stpath = path_mwassmer+'/ST_*/*nominal*.root'
 
-ttHpath = path_mwassmer+'/ttHTo*/*nominal*.root'
+ttHpath = path_mwassmer+'/ttHTobb_M125*/*nominal*.root'+';'+ \
+          path_mwassmer+'/ttHToNonbb_M125*/*nominal*.root'
 
 # SELECTIONS
 
@@ -55,19 +56,28 @@ hzzSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==23)
 hzgSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==22) || (abs(GenHiggs_DecProd1_PDGID)==22 && abs(GenHiggs_DecProd2_PDGID)==23))'
 
 # weights
-usualWeight = "1.*Weight_GEN_nom"
+usualWeight = "1.*(N_Jets>=4 && N_BTagsM>=3)*Weight_GEN_nom"
 
 puWeight = "Weight_pu69p2"
 
 csvWeight = "Weight_CSV"
 
+# lepton scalefactors
 leptonscalefactors = "(((N_TightElectrons==1) && (Electron_IdentificationSF[0]>0.) && (Electron_ReconstructionSF[0]>0.))*Electron_IdentificationSF[0]*Electron_ReconstructionSF[0] + ((N_TightMuons==1) && (Muon_IdentificationSF[0]>0.) && (Muon_IsolationSF[0]>0.))*Muon_IdentificationSF[0]*Muon_IsolationSF[0])"
+
 electronscalefactorsup = "(((N_TightElectrons==1) && (Electron_IdentificationSFUp[0]>0.) && (Electron_ReconstructionSFUp[0]>0.))*Electron_IdentificationSFUp[0]*Electron_ReconstructionSFUp[0] + ((N_TightMuons==1) && (Muon_IdentificationSF[0]>0.) && (Muon_IsolationSF[0]>0.))*Muon_IdentificationSF[0]*Muon_IsolationSF[0])"
+
 electronscalefactorsdown = "(((N_TightElectrons==1) && (Electron_IdentificationSFDown[0]>0.) && (Electron_ReconstructionSFDown[0]>0.))*Electron_IdentificationSFDown[0]*Electron_ReconstructionSFDown[0] + ((N_TightMuons==1) && (Muon_IdentificationSF[0]>0.) && (Muon_IsolationSF[0]>0.))*Muon_IdentificationSF[0]*Muon_IsolationSF[0])"
+
 muonscalefactorsup = "(((N_TightElectrons==1) && (Electron_IdentificationSF[0]>0.) && (Electron_ReconstructionSF[0]>0.))*Electron_IdentificationSF[0]*Electron_ReconstructionSF[0] + ((N_TightMuons==1) && (Muon_IdentificationSFUp[0]>0.) && (Muon_IsolationSFUp[0]>0.))*Muon_IdentificationSFUp[0]*Muon_IsolationSFUp[0])"
+
 muonscalefactorsdown = "(((N_TightElectrons==1) && (Electron_IdentificationSF[0]>0.) && (Electron_ReconstructionSF[0]>0.))*Electron_IdentificationSF[0]*Electron_ReconstructionSF[0] + ((N_TightMuons==1) && (Muon_IdentificationSFDown[0]>0.) && (Muon_IsolationSFDown[0]>0.))*Muon_IdentificationSFDown[0]*Muon_IsolationSFDown[0])"
 
-mcTriggerWeight = "((1.0) * (1*(N_LooseMuons==0 && N_TightElectrons==1)* (1) +1*(N_LooseElectrons==0 && N_TightMuons==1) *(1)))*(N_Jets>=4 && N_BTagsM>=3)"
+triggerscalefactors = "(((N_TightElectrons==1) && (N_LooseMuons==0) && (Triggered_HLT_Ele32_WPTight_Gsf_vX==1))*1. + ((N_TightMuons==1) && (N_LooseElectrons==0) && (Triggered_HLT_IsoMu24_vX==1) && (Weight_MuonTriggerSF>0.))*Weight_MuonTriggerSF)"
+
+muontrigscalefactorsup = "(((N_TightElectrons==1) && (N_LooseMuons==0) && (Triggered_HLT_Ele32_WPTight_Gsf_vX==1))*1. + ((N_TightMuons==1) && (N_LooseElectrons==0) && (Triggered_HLT_IsoMu24_vX==1) && (Weight_MuonTriggerSF_Up>0.))*Weight_MuonTriggerSF_Up)"
+
+muontrigscalefactorsdown = "(((N_TightElectrons==1) && (N_LooseMuons==0) && (Triggered_HLT_Ele32_WPTight_Gsf_vX==1))*1. + ((N_TightMuons==1) && (N_LooseElectrons==0) && (Triggered_HLT_IsoMu24_vX==1) && (Weight_MuonTriggerSF_Down>0.))*Weight_MuonTriggerSF_Down)"
 
 doWeightsFlag = "(DoWeights==1)+(DoWeights==0)*1.0"
 
@@ -79,18 +89,20 @@ weightReplacements = {
     "ELECTRONSCALEFACTORSDOWN": electronscalefactorsdown,
     "MUONSCALEFACTORSUP": muonscalefactorsup,
     "MUONSCALEFACTORSDOWN": muonscalefactorsdown,
-    "MCWEIGHT":     mcTriggerWeight,
+    "TRIGGERSCALEFACTORS":     triggerscalefactors,
     "DOWEIGHTS":    doWeightsFlag,
     "CSVWEIGHT": csvWeight,
-    "PUWEIGHT": puWeight
+    "PUWEIGHT": puWeight,
+    "MUONTRIGSCALEFACTORSUP" : muontrigscalefactorsup,
+    "MUONTRIGSCALEFACTORSDOWN" : muontrigscalefactorsdown
     }
 
 # names of the systematics (proper names needed e.g. for combination)
 # Lumi weight
 mcWeight = "59.7"
-evenSel  = "*1."
+evenSel  = "*(Evt_Odd==0)*2.0"
 
-nominalweight="NomWeight:="+usualWeight+"*"+puWeight+"*"+mcTriggerWeight+"*"+leptonscalefactors+"*"+csvWeight+"*"+doWeightsFlag
+nominalweight="NomWeight:="+usualWeight+"*"+puWeight+"*"+triggerscalefactors+"*"+leptonscalefactors+"*"+csvWeight+"*"+doWeightsFlag
 
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
@@ -223,13 +235,13 @@ samples=[
 
     plotClasses.Sample('t#bar{t}+Z',ROOT.kBlue-6,
             path_mwassmer+'/TTZToLLNuNu*/*nominal*.root'+';'+ path_mwassmer+'/TTZToQQ*/*nominal*.root',
-            mcWeight+evenSel+sel_MET,
+            mcWeight+sel_MET,
             'ttbarZ',
             samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('Diboson',ROOT.kAzure+2,
            dibosonPathS,
-           mcWeight+evenSel+sel_MET,
+           mcWeight+sel_MET,
            'diboson',
            samDict=sampleDict, readTrees=doReadTrees), 
 ]

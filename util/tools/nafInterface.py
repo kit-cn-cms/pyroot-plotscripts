@@ -5,15 +5,19 @@ import nafSubmit
 # parallel plotting
 #############################
 def plotInterface(jobData, skipPlotParallel = False, maxTries = 10, nTries = 0):
+    print("NUMBER OF JOBS TO BE SUBMITTED: {}".format(len(jobData["scripts"])))
     if skipPlotParallel:
+        print("skip plot parallel was activated")
         jobData = plotTerminationCheck( jobData )
+        print("NUMBER OF JOBS TO BE RESUBMITTED: {}".format(len(jobData["scripts"])))
+
         if len(jobData["scripts"]) > 0 or len(jobData["outputs"]) > 0:
             print("not all plotParallel scripts did terminate successfully - resubmitting")
         else:
             print("all plotParallel scripts have terminated successfully - skipping plotParallel")
             return
 
-    submitOptions = {"PeriodicHold": 4500}
+    submitOptions = {"PeriodicHold": 7000}
     if nTries == 0:
         print("submitting plotParallel scripts as array job")
         jobIDs = nafSubmit.submitArrayToNAF(jobData["scripts"], "plotPara", submitOptions = submitOptions)
@@ -40,11 +44,10 @@ def plotTerminationCheck(jobData):
     undoneJobData["scripts"] = []
     undoneJobData["outputs"] = []
     undoneJobData["entries"] = []
-    samplewiseMaps = {}
     noCutflow = 0
     wrongEntry = 0
 
-    for script, output, entries, mapKey in zip(jobData["scripts"], jobData["outputs"], jobData["entries"], jobData["maps"]):
+    for script, output, entries in zip(jobData["scripts"], jobData["outputs"], jobData["entries"]):
         if os.path.exists(output+".cutflow.txt"):
             cfFile = open(output+".cutflow.txt")
             processedEntries = -1
@@ -63,9 +66,8 @@ def plotTerminationCheck(jobData):
         undoneJobData["scripts"].append( script )
         undoneJobData["outputs"].append( output ) 
         undoneJobData["entries"].append( entries ) 
-        samplewiseMaps[mapKey] = jobData["maps"][mapKey]
 
-    undoneJobData["maps"] = samplewiseMaps
+    undoneJobData["maps"] = jobData["maps"]
     print("-"*50)
     print("done checking job outputs after plotpara - results:")
     print("jobs without cutflow file:     " +str(noCutflow))
@@ -240,17 +242,17 @@ def datacardTerminationCheck(shellScripts, datacardFiles):
 
 
 #############################
-# parallel drawing
+# make Plots
 #############################
 def drawInterface(jobsToSubmit, outputPlots, nTries = 0):
     if nTries == 0:
-        print("submitting drawParallel scripts as array job")
-        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "drawPara")
+        print("submitting makePlots scripts as array job")
+        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "makePlots")
     elif nTries < maxTries:
-        print("resubmitting drawParallel scripts as single jobs")
+        print("resubmitting makePlots scripts as single jobs")
         jobIDs = nafSubmit.submitToNAF(jobsToSubmit)
     else:
-        print("draw parallel did not work after "+str(maxTries)+" tries - ABORTING")
+        print("make Plots did not work after "+str(maxTries)+" tries - ABORTING")
         sys.exit(1)
     
     # monitoring running jobs
@@ -261,7 +263,7 @@ def drawInterface(jobsToSubmit, outputPlots, nTries = 0):
     if len(undoneScripts) > 0 or len(undonePlots) > 0:
         return drawInterface(undoneScripts, undonePlots, maxTries, nTries+1)
 
-    print("drawParallel submit interface has terminated successfully")
+    print("makePlots submit interface has terminated successfully")
 
 def drawTerminationCheck(jobsToSubmit, outputPlots):
     print("no check for the termination of draw Parallel has been implemented yet...")
