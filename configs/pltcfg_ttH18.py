@@ -112,7 +112,7 @@ doReadTrees=True
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
 samplesDataControlPlots=[
-   plotClasses.Sample('SingleMu',ROOT.kBlack,
+   plotClasses.Sample('SingleMu','ROOT.kBlack',
            path_mwassmer+'/SingleMuon*/*nominal*.root',
            sel_singlemu+sel_MET,
            'SingleMu', samDict=sampleDict, readTrees=doReadTrees),
@@ -177,11 +177,11 @@ samples=[
     
     # background samples
 
-    plotClasses.Sample('t#bar{t}+lf',ROOT.kRed-7,
-            ttbarPathS,
-            mcWeight+evenSel+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)'+sel_MET+sel_StrangeMuWeights,
-            'ttbarOther',
-            samDict=sampleDict, readTrees=doReadTrees),
+    # plotClasses.Sample('t#bar{t}+lf',ROOT.kRed-7,
+    #         ttbarPathS,
+    #         mcWeight+evenSel+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)'+sel_MET+sel_StrangeMuWeights,
+    #         'ttbarOther',
+    #         samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,
             ttbarPathS,

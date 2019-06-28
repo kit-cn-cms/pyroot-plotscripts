@@ -305,8 +305,6 @@ def main(pyrootdir, argv):
             # ========================================================
             '''
 
-
-
 if __name__ == "__main__":
 
     main(pyrootdir, sys.argv[1:])

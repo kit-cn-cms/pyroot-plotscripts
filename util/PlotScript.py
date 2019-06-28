@@ -26,8 +26,6 @@ parser.add_option("--workdir", dest="workdir",
          help="PATH to workdir", metavar="/path/to/workdir")
 parser.add_option("--plotconfig", dest="plotconfig",
         help="Name of plot config", metavar="plotconfig")
-parser.add_option("--systconfig", dest="systconfig",
-        help="Name of systematics config", metavar="systconfig")
 parser.add_option("--nominalkey", dest="nominalKey", default="$PROCESS_$CHANNEL",
         help="KEY of the systematics histograms", metavar="nominalKey")
 parser.add_option("--systematickey", dest="systematicKey", default="$PROCESS_$CHANNEL_$SYSTEMATIC",
@@ -73,42 +71,41 @@ else:
 
 
 # Define directories used to import stuff
-configdir   = options.directory+"/configs/"
-utildir     = options.directory+"/util/"
-systconfig  = configdir+options.systconfig+".csv"
-plotconfig  = configdir+options.plotconfig+".py"
+
+tooldir = options.directory+"/util/tools/"
+plotconfig=options.plotconfig
+workdir=options.workdir
 
 # checks if paths given exist
 if not path.exists(options.Rootfile):
     sys.exit("ERROR: rootfile does not exist!")
-elif not path.exists(systconfig):
-    sys.exit("ERROR: systconfig does not exist!")
 elif not path.exists(plotconfig):
     sys.exit("ERROR: plotconfig does not exist!")
 
 """
-start loading configs
+start loading plotconfig
 """
 
 print '''
 # ========================================================
-# loading configs
+# loading config
 # ========================================================
     '''
-# loading plt_X.py config
-sys.path.append(configdir)
-pltcfg = importlib.import_module( options.plotconfig )
-print("Using plotconfig %s"%pltcfg)
+plotconfigpath,plotconfigfile=path.split(plotconfig)
+print plotconfigpath
+print "-"*130
+print plotconfigfile
+print "-"*130
+plotconfigfile=plotconfigfile.replace('.py','')
+print plotconfigfile
+print "-"*130
+sys.path.append(plotconfigpath)
 
-# loading X_systematics.csv config
-sys.path.append(utildir+"/tools/")
-Systematics = importlib.import_module("Systematics")
-processes=pltcfg.list_of_processes
-systematics=Systematics.Systematics(systconfig)
-systematics.plotSystematicsForProcesses(processes)
-for sample in pltcfg.samples:
-    sample.setShapes(systematics.get_shape_systs(sample.nick))
-print("Using systematic config %s"%systconfig)
+
+pltcfg = importlib.import_module(plotconfigfile)
+samples=pltcfg.samples
+plottingsamples=pltcfg.plottingsamples
+systematics=pltcfg.systematics
 
 """
 start loading  histograms
@@ -119,6 +116,7 @@ print '''
 # ========================================================
     '''
 # import plot class
+sys.path.append(tooldir)
 Plots = importlib.import_module("Plots" )
 PlotList = {}
 # load ROOT File
@@ -132,15 +130,22 @@ dataHist.SetStats(False)
 Plots.moveOverUnderFlow(dataHist)
 
 # load samples
-for sample in pltcfg.samples:
-    PlotList[sample.nick]=Plots.buildHistogramAndErrorBand(rootFile=rootFile,sample=sample,
+for sample in samples:
+    color=samples[sample]['color']
+    typ=samples[sample]['typ']
+    label=samples[sample]['label']
+    PlotList[sample]=Plots.buildHistogramAndErrorBand(rootFile=rootFile,sample=sample,color=color,typ=typ,label=label,systematics=systematics,
     				nominalKey=nominalKey,procIden=procIden,systematicKey=systematicKey,sysIden=sysIden)
 
 """
 Combine Histograms and errorbands for combined plot channels
 """
-for sample in pltcfg.plottingsamples:
-    PlotList=Plots.addSamples(sample=sample,PlotList=PlotList)
+for sample in plottingsamples:
+    color=plottingsamples[sample]['color']
+    typ=plottingsamples[sample]['typ']
+    label=plottingsamples[sample]['label']
+    addsamples=plottingsamples[sample]['addSamples']
+    PlotList=Plots.addSamples(sample=sample,color=color,typ=typ,label=label,addsamples=addsamples,PlotList=PlotList)
 
 print '''
 # ========================================================
@@ -172,5 +177,5 @@ plotpath=options.workdir+"/Plots/"
 if not os.path.exists(options.workdir+"/outputPlots/"):
         os.makedirs(options.workdir+"/outputPlots/")
 
-Plots.saveCanvas(canvas,plotpath+"/"+options.channelName+"discriminator.pdf")
+Plots.saveCanvas(canvas,workdir+"/"+options.channelName+"discriminator.pdf")
 
