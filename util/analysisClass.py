@@ -39,7 +39,6 @@ class analysisConfig:
 
         self.singleExecute = False
 
-        self.drawParallel = True
         self.plotNumber = None
         self.usePseudoData = True
         self.makeDataCards = True
@@ -107,6 +106,8 @@ class analysisConfig:
                 self.skipDatacards = bool(analysisOptions[key])
             elif key in ("plotNumber"):
                 self.haddFromWildcard= analysisOptions[key] 
+            elif key in ("plotParallel"):
+                self.plotParallel=  analysisOptions[key] 
             elif key in ("addData"):
                 self.addData = analysisOptions[key]
             elif key in ("crossEvaluation"):
@@ -121,6 +122,8 @@ class analysisConfig:
                 self.ratio= analysisOptions[key]
             elif key in ("logarithmic"):
                 self.logarithmic= analysisOptions[key]
+            elif key in ("makeDataCards"):
+                self.makeDataCards= analysisOptions[key] 
 
 
     def initPlotConfig(self):

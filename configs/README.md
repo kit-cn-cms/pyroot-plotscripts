@@ -4,6 +4,7 @@
 - `samplesDataControlPlots` (data samples)
 - `samples` (simulated samples)
 add Sample using, with `SAMPLENAMEINCSVCONFIG` being the process name in the used systematics csv file `STR_systematics.csv`
+define samples as signal for the plotting step by edding `typ=signal`, else it is treated as background
 ```python
 plotClasses.Sample(SAMPLENAMEONPLOTS,COLOR,
     PATH/TO/SAMPLE,
@@ -17,13 +18,23 @@ plotClasses.Sample('t#bar{t}H, H to b#bar{b}',ROOT.kBlue+1,
     'path/to/ttHTobb*/*nominal*.root',
     '1.0*41.53*2.0*(Evt_Odd==0)*(Evt_Pt_MET>20.)',
     'ttH_hbb',
-    samDict=sampleDict, readTrees=doReadTrees)
+    samDict=sampleDict, readTrees=doReadTrees,typ=signal)
 ```
 - add weight expressions to the `weightReplacements` dictionary to replace some `STRING` in the up/down variatons defined in the systematics config, for example
 ```python
 weightReplacements = {
     "JETTAGSELECTION":   "(N_Jets>=4&&N_BTags>=3)",
     }
+```
+- for clearer plots it is possible to combine samples into one sample
+therefore add samples in the `plottingsamples` list as before, with the additional information `addsamples=[LIST,OF,SAMPLE,NICK]` which previous defined samples to use, for example ttH
+```python
+plotClasses.Sample('t#bar{t}H',ROOT.kBlue+1,
+            path_mwassmer+'/ttH*/*nominal*.root',
+            mcWeight+sel_MET,
+            'ttH', 
+            addsamples=['ttH_hbb','ttH_hcc','ttH_htt','ttH_hgg','ttH_hgluglu','ttH_hww','ttH_hzz','ttH_hzg'],
+            samDict=sampleDict, readTrees=doReadTrees,typ="signal")
 ```
 
 ## Systematic config

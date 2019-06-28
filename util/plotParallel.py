@@ -238,11 +238,11 @@ class plotParallel:
     def addData(self, samples):
 
         sampleNicks = [s.nick for s in samples]
-	print(sampleNicks)
+        print(sampleNicks)
         rootFile = ROOT.TFile(self.getOutPath(), "UPDATE")
         
         for label in self.configData.getBinlabels():
-	    print("doing {}".format(label))
+            print("doing {}".format(label))
             histName = str(sampleNicks[0])+"_"+str(self.analysis.discrName)+"_"+label
             print("getting "+histName)
             oldHist = rootFile.Get(histName)
