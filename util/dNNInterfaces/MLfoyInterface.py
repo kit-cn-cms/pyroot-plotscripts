@@ -7,13 +7,119 @@ from distutils.dir_util import copy_tree
 import glob
 import pandas as pd
 import numpy as np
+import ROOT
 
 includeString = "-I/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/tensorflow-cc/1.3.0-elfike/tensorflow_cc/include -I/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/eigen/c7dc0a897676/include/eigen3 -I/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/protobuf/3.4.0-fmblme/include"
 libraryString = "-L/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/tensorflow-cc/1.3.0-elfike/tensorflow_cc/lib -ltensorflow_cc -L/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/protobuf/3.4.0-fmblme/lib -lprotobuf -lrt"
 
+
+def doRebinning(rootfile, histolist, threshold):
+    combinedHist = None
+
+    # loop over hists and add them to a combined histogram
+    for h in histolist:
+        h_tmp = rootfile.Get(h)
+        if combinedHist is None:
+            combinedHist = h_tmp.Clone("combinedHist")
+            combinedHist.Reset()
+        combinedHist.Add(h_tmp)
+
+    if combinedHist is None:
+        print("ERROR: could not add any histograms!")
+        return []
+
+    squaredError = 0.
+    binContent = 0.
+    bin_edges = []
+    last_added_edge = 0
+    for i in range(1, combinedHist.GetNbinsX()+1):
+        if i == 1:
+            last_added_edge = combinedHist.GetBinLowEdge(i)
+            bin_edges.append(last_added_edge)
+
+        # add together squared bin errors and bin contents
+        squaredError += combinedHist.GetBinError(i)**2
+        binContent += combinedHist.GetBinContent(i)
+
+        # calculate relative error
+        relerror = squaredError**0.5/binContent if not binContent == 0 else squaredError**0.5
+        
+        # if relative error is smaller than threshold, start new bin
+        if relerror <= threshold and not binContent == 0:
+            last_added_edge = combinedHist.GetBinLowEdge(i+1)
+            bin_edges.append(last_added_edge)
+            squaredError = 0.
+            binContent = 0.
+    
+    
+    overflow_edge = combinedHist.GetBinLowEdge(combinedHist.GetNbinsX()+2)
+    if not overflow_edge in bin_edges:
+        # if overflow_edge is not in bin_edges list the relative
+        # error of the last bin is too small, so just merge the
+        # last two bins by replacing the last_added_edge with
+        # the overflow_edge 
+        bin_edges[-1] = overflow_edge
+
+    print("\tnew bin edges: [{}]".format(",".join([str(round(b,4)) for b in bin_edges])))
+    return bin_edges
+
+
+def getOptimizedBinEdges(label, opts):
+    channel = opts.discrname+"_"+label
+
+    # open rootfile
+    rfile = ROOT.TFile.Open(opts.histogram_file)
+    keylist = [x.GetName() for x in rfile.GetListOfKeys()]
+    print("\noptimizing bin edges for channel {}".format(channel))
+
+    # collect keys to conider for rebinning
+    consider_for_rebinning = []
+    for p in opts.considered_processes.split(","):
+        branch = p+"_"+channel
+        if branch in keylist:
+            consider_for_rebinning.append(branch)
+        else:
+            print("ERROR: Could not find histogram with name {} in inputfile {}".format(
+                branch, opts.histogram_file))
+
+    # do the rebinning
+    if len(consider_for_rebinning) > 0:
+        return doRebinning(
+            rootfile  = rfile,
+            histolist = consider_for_rebinning,
+            threshold = float(opts.threshold))
+    else:
+        return []
+
+
+
+
+
 class DNN:
-    def __init__(self, cpPath):
-        self.path = cpPath
+    def __init__(self, cpPath, suffix = "", xEval = True):
+        # if dictionary of paths is given initialize multiple DNNs here
+        if type(cpPath) == dict:
+            self.DNNs       = [DNN(
+                    cpPath  = cpPath[key], 
+                    suffix  = "_"+key, 
+                    xEval   = xEval) 
+                    for key in cpPath]
+            self.multiDNN   = True
+            self.xEval      = xEval
+            return
+
+        # structural options
+        self.multiDNN   = False
+        self.xEval      = xEval
+        self.suffix     = suffix
+        self.path       = cpPath
+
+        # set evaluation suffix when cross evaluation is 
+        # activated and remove the usual suffix
+        self.evalSuffix = ""
+        if self.xEval:
+            self.evalSuffix = self.suffix
+            self.suffix = ""
 
         self.configFile = self.path+"/net_config.json"
         with open(self.configFile) as f:
@@ -22,13 +128,14 @@ class DNN:
         if "binaryConfig" in self.config:
             print("    BINARY DNN")
 
-        self.category = self.config["JetTagCategory"]
-        self.label = self.config["categoryLabel"]
-        self.selection = self.config["Selection"]
-        self.inputLayer = self.config["inputName"]
-        self.outputLayer = self.config["outputName"]
+        self.category       = self.config["JetTagCategory"]+self.suffix
+        self.label          = self.config["categoryLabel"]
+        self.selection      = self.config["Selection"]
+        self.evalSelection  = "&&("+self.config["evalSelection"]+")"
+        self.inputLayer     = self.config["inputName"]
+        self.outputLayer    = self.config["outputName"]
         print("    category: {}".format(self.category))
-        print("    selection: {}".format(self.selection))
+        print("    selection: {}{}".format(self.selection, self.evalSelection))
         print("    inputName: {}".format(self.inputLayer))
         print("    outputName: {}".format(self.outputLayer))
         
@@ -77,9 +184,35 @@ class DNN:
             self.discrNames = ["DNNOutput_{}".format(self.category)]
             self.predictionVariable = "DNNPredictedClass_{}".format(self.category)
 
+    def getVariables(self):
+        if self.multiDNN:
+            variables = []
+            for dnn in self.DNNs:
+                variables += dnn.getVariables()
+            variables = list(set(variables))
+            return variables
+
+        return self.variables
+
+    def getExternalVariables(self):
+        if self.multiDNN:
+            variables = []
+            for dnn in self.DNNs:
+                variables += dnn.getExternalVariables()
+            variables = list(set(variables))
+            return variables
+
+        return self.discrNames + [self.predictionVariable]
 
 
     def getBeforeLoopLines(self):
+        if self.multiDNN:
+            string = ""
+            for dnn in self.DNNs:
+                string += dnn.getBeforeLoopLines()
+                string += "\n"
+            return string
+
         return """
     // category {cat}
     const string pathToGraph_{cat} = "{path}/trained_model.meta";
@@ -118,9 +251,18 @@ class DNN:
     if( !status_{cat}.ok() ) {{
         throw runtime_error("Error loading checkpoint from "+checkpointPath_{cat}+": "+status_{cat}.ToString());
         }}
-    """.format( cat = self.category, path = self.path )
+        """.format( cat = self.category+self.evalSuffix, path = self.path )
+        
 
     def getVariableInitInsideEventLoopLines(self):
+        if self.multiDNN:
+            string = ""
+            for dnn in self.DNNs:
+                string += dnn.getVariableInitInsideEventLoopLines()
+                string += "\n"
+                if self.xEval: break
+            return string
+
         string = """
         int num_classes_{cat} = {ncls};
         int num_features_{cat} = {nvars};\n""".format(
@@ -134,6 +276,11 @@ class DNN:
         return string
 
     def getEventLoopCodeLines(self, testPrint = False):
+        if self.multiDNN:
+            string = ""
+            for dnn in self.DNNs:
+                string += dnn.getEventLoopCodeLines(testPrint)
+            return string
 
         string = """
         if( {selection} ) {{
@@ -141,7 +288,7 @@ class DNN:
             std::vector<std::pair<std::string, tensorflow::Tensor>> feed_dict;
             std::vector<tensorflow::Tensor> outputTensors;
 
-            // loading data\n""".format(selection = self.selection)
+            // loading data\n""".format(selection = self.selection.replace(" and ","&&")+self.evalSelection)
 
         # fill vector
         for i, var in enumerate(self.variables):
@@ -166,7 +313,7 @@ class DNN:
                 }}
 
             // feed output into right variables""".format(
-            cat = self.category, output = self.outputLayer)
+            cat = self.category+self.evalSuffix, output = self.outputLayer)
         
         # get outputs
         for i, discr in enumerate(self.discrNames):
@@ -222,6 +369,15 @@ class DNN:
 
 
     def generateInputPlots(self):
+        if self.multiDNN:
+            string = ""
+            for dnn in self.DNNs:
+                string += dnn.generateInputPlots()
+                string += "\n"
+                # only read one set of input plots if cross evaluation activated
+                if self.xEval: break
+            return string
+
         # loading plot config csv
         csv_path = self.path+"/plot_config.csv"
         if not os.path.exists(csv_path):
@@ -232,8 +388,12 @@ class DNN:
         variables = pd.read_csv(csv_path, sep = ",").set_index("variablename", drop = True)
 
         # generate header
-        string = "    label = \"{}\"\n".format(self.label)
-        string+= "    selection = \"{}\"\n\n".format(self.selection.replace(" ","").replace("and","&&"))
+        string = "def plots_{}():\n".format(self.category)
+        string+= "    label = \"{}\"\n".format(self.label)
+        if self.xEval:
+            string+= "    selection = \"{}\"\n\n".format(self.selection.replace(" ","").replace("and","&&"))
+        else:
+            string+= "    selection = \"{}\"\n\n".format(self.selection.replace(" ","").replace("and","&&")+self.evalSelection)
         string+= "    plots = ["
 
         for var in list(variables.index):
@@ -257,10 +417,32 @@ class DNN:
         plotClasses.Plot(ROOT.TH1D({histname},{plotname},{nbins},{minval},{maxval}),{expression},selection,label),""".format(**plotConfig)
 
         string += "\n        ]\n\n"
+        string += "    return plots\n"
         return string
-        
+    
+    def generatePlotCall(self, opts):
+        if self.multiDNN:
+            string = ""
+            for dnn in self.DNNs:
+                string += dnn.generatePlotCall(opts)
+                if self.xEval: break
+            return string
 
-    def generateOutputPlots(self, variable_binning=False, nbins = None):
+        string = "    "
+        if not opts.input_plots:
+            string+= "#"
+        string += "discriminatorPlots += plots_{}()\n".format(self.category)
+        return string
+   
+
+    def generateOutputPlots(self, opts):
+        if self.multiDNN:
+            string = ""
+            for dnn in self.DNNs:
+                string += dnn.generateOutputPlots(opts)
+                if self.xEval: break
+            return string
+
         # generate categoires list
         string = "\n\n\n    # plots for {}\n".format(self.category)
         template ="""
@@ -271,31 +453,49 @@ class DNN:
 
 
         for i, node in enumerate(self.out_nodes):
-            label = "ljets_{cat}_{node}_node".format(cat=self.category, node = node)
-            preselection = "({sel}&&{pred_var}=={i})".format(
-                sel=self.selection.replace(" ","").replace("and","&&"), 
-                pred_var=self.predictionVariable, 
-                i=i)
-            string += template.format(  PRESELECTION = preselection,
-                                        LABEL = label,
-                                        DISCR_NAME = self.discrNames[i]
-                                    )
+            label = "ljets_{cat}_{node}_node".format(cat = self.category, node = node)
 
-            if variable_binning:
-                if not nbins is None:
-                    default_edges = np.linspace(self.node_mins[i], self.node_maxs[i], nbins, dtype = float)
-                    delta = (default_edges[1] - default_edges[0])/2.
-                    nextval = default_edges[-1] + delta
-                    default_edges = np.concatenate([default_edges, [nextval]])
+            if self.xEval:
+                preselection = "({sel}&&({pred_var}=={i}))".format(
+                    sel         = self.selection.replace(" ","").replace("and","&&"), 
+                    pred_var    = self.predictionVariable, 
+                    i           = i)
+            else:
+                preselection = "({sel}&&({pred_var}=={i}))".format(
+                    sel         = self.selection.replace(" ","").replace("and","&&")+self.evalSelection, 
+                    pred_var    = self.predictionVariable, 
+                    i           = i)
+                
+
+            string += template.format(  
+                PRESELECTION    = preselection,
+                LABEL           = label,
+                DISCR_NAME      = self.discrNames[i])
+
+            if opts.variable_binning or opts.optimize_binning:
+                if opts.optimize_binning:
+                    # generate optimized bin edges
+                    bin_edges = getOptimizedBinEdges(label, opts)
+                elif not opts.ndefaultbins is None:
+                    # generate default bin edges
+                    bin_edges = np.linspace(self.node_mins[i], self.node_maxs[i], opts.ndefaultbins, dtype = float)
+                    delta = (bin_edges[1] - bin_edges[0])/2.
+                    nextval = bin_edges[-1] + delta
+                    bin_edges = np.concatenate([bin_edges, [nextval]])
                     #shift values to get lower edges
-                    default_edges -= delta
+                    bin_edges -= delta
                 else:
                     print("WARNING: variable binning is required, but there is no information about the binning!")
-                    default_edges = ["\n\n"]
-                indents = "\t\t\t"
-                separator = ",\n\t"+indents
-                string += '    category_dict["bin_edges"] = [ {} \n{}]'.format(separator.join([str(round(x,4)) for x in default_edges]),
-                                                                                indents)
+                    bin_edges = []
+
+                # write bin edges to file
+                indents = "\t\t\t\t"
+                separator = ",\n"+indents
+                string += '    category_dict["bin_edges"] = [ \n{}{}\n{}]'.format(
+                    indents,
+                    separator.join([str(round(x,4)) for x in bin_edges]),
+                    indents
+                    )
                 
             else:
                 # fill binranges
@@ -313,11 +513,12 @@ class DNN:
 
 
 class theInterface:
-    def __init__(self, workdir = None, dnnSet = None):
+    def __init__(self, workdir = None, dnnSet = None, crossEvaluation = True):
         # compile stuff
         self.includeString = includeString
         self.libraryString = libraryString
         self.usesPythonLibraries = True
+        self.xEval = crossEvaluation
 
         if workdir:
             copy_tree(dnnSet, workdir+"/DNNCheckpoints/")
@@ -337,21 +538,40 @@ class theInterface:
 
         self.DNNs = []
         for dnnDir in dnnDirs:
+            dnnDict = {}
+            # check if there are subdirectories 
+            subDirs = glob.glob(dnnDir+"/*")
+            for subDir in subDirs:
+                if not os.path.isdir(subDir): continue
+                # append subdir to dnnDict
+                dnnDict[os.path.basename(subDir)] = subDir
+
+            # if no subdirectories were found there is 
+            # only one DNN to be evaluated, so add it 
+            # to the dnnDict 
+            if len(dnnDict) == 0:
+                dnnDict[os.path.basename(dnnDir)] = dnnDir
+
+            # now loop over all dnnDicts and find files
             errors = False
-            for req in requirements:
-                if not os.path.exists(dnnDir+"/"+req):
-                    errors = True
-                    print("file {}/{} missing.".format(dnnDir,req))
+            for key in dnnDict:
+                for req in requirements:
+                    if not os.path.exists(dnnDict[key]+"/"+req):
+                        errors = True
+                        print("file {}/{} missing.".format(dnnDict[key],req))
+
             if not errors:
-                print("\nAdding DNN {}".format(dnnDir))
-                self.DNNs.append(DNN(dnnDir))
-        if len(self.DNNs) == 0:
-            sys.exit("no suitable DNN checkpoints found")
+                if len(dnnDict) == 1:
+                    self.DNNs.append(DNN(dnnDict[dnnDict.keys()[0]], xEval = self.xEval))
+                else:
+                    self.DNNs.append(DNN(dnnDict, xEval = self.xEval))
+            if len(self.DNNs) == 0:
+                sys.exit("no suitable DNN checkpoints found")
 
     def getVariables(self):
         variables = []
         for dnn in self.DNNs:
-            variables += dnn.variables
+            variables += dnn.getVariables()
         variables = list(set(variables))
         variables = [v for v in variables if not v == "memDBp"]
         return variables
@@ -359,8 +579,7 @@ class theInterface:
     def getExternalyCallableVariables(self):
         variables = []
         for dnn in self.DNNs:
-            variables += dnn.discrNames
-            variables += [dnn.predictionVariable]
+            variables += dnn.getExternalVariables()
         return variables    
 
     def getBeforeLoopLines(self):
@@ -376,10 +595,6 @@ class theInterface:
             string += dnn.getVariableInitInsideEventLoopLines()
             string += "\n"
         string += """
-          
-        // initialize this for every evaluated DNN separately  
-        //std::vector<std::pair<std::string, tensorflow::Tensor>> feed_dict;
-        //std::vector<tensorflow::Tensor> outputTensors;
 
         Tensor dropout_disable (DT_FLOAT, TensorShape({1}));
         dropout_disable.tensor<float, 1>()(0) = 1.0;
@@ -427,7 +642,7 @@ int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses) {
     def getCleanUpLines(self):
         return ""
 
-    def generatePlotConfig(self, ndefaultbins = 15, enable_input_plots = True, variable_binning = False):
+    def generatePlotConfig(self, opts):
         '''
         generate plot config from variables and plots in checkpoint files
         '''
@@ -463,19 +678,13 @@ def evtYieldCategories():
 memexp = ""\n\n\n"""
 
         # header for discr plots function
-        funcstring = "def getDiscriminatorPlots(data = None, discrname = None):\n"
+        funcstring = "def getDiscriminatorPlots(data = None, discrname = ''):\n"
         funcstring +="    discriminatorPlots = []\n"
 
         # loop over dnns writing code for plots
         for dnn in self.DNNs:
-            string += "def plots_{}():\n".format(dnn.category)
             string += dnn.generateInputPlots()
-            string += "    return plots\n\n"
-
-            funcstring += "    "
-            if not enable_input_plots:
-                funcstring+= "#"
-            funcstring += "discriminatorPlots += plots_{}()\n".format(dnn.category)
+            funcstring += dnn.generatePlotCall(opts)
 
 
         # writing code for dnn output plots
@@ -484,18 +693,18 @@ def plots_dnn(data, discrname):
 
     ndefaultbins = {}
     category_dict = {{}}
-    this_dict = {{}}\n\n""".format(ndefaultbins)
+    this_dict = {{}}\n\n""".format(opts.ndefaultbins)
 
 
         # loop over dnns witing code for DNN discr plots
         for dnn in self.DNNs:
-            string += dnn.generateOutputPlots(variable_binning = variable_binning, nbins = ndefaultbins)
+            string += dnn.generateOutputPlots(opts)
 
         # generating plot classes for DNN plots and adding info to data class
         string += """
 
     for l in this_dict:
-        this_dict[l]["histoname"] = this_dict[l]["discr"]+"_"+l
+        this_dict[l]["histoname"] = discrname+"_"+l
         this_dict[l]["histotitle"] = "final discriminator ({})".format(l)
         this_dict[l]["plotPreselections"] = this_dict[l]["category"][0]
 
@@ -550,6 +759,8 @@ def init_plots(dictionary, data = None):
 if __name__ == "__main__":
     import optparse
     parser = optparse.OptionParser()
+    
+    
     parser.add_option("-c","--checkpoints",dest="checkpoints",default=None,metavar="CHECKPOINTS",
         help = "path to DNN checkpoints")
     parser.add_option("-o","--output",dest="output",default="autogenerated_plotconfig.py",metavar="OUTPUT",
@@ -560,19 +771,40 @@ if __name__ == "__main__":
         help = "number of default bins per discriminator")
     parser.add_option("-v", "--variableBinning", dest = "variable_binning", action = "store_true", default = False,
         help = """enable variable binning (currently only for discriminator distributions. 
-        The config will contain lists of bin edges which are equally spaced by default.""")
+The config will contain lists of bin edges which are equally spaced by default.""")
+    parser.add_option("-x", "--crossEvaluation", dest = "crossEvaluation", action = "store_true", default = False,
+        help = """enable cross evaluation of multi DNN structures.
+The usual structure of DNN checkpoint files is a folder containing
+one subfolder per evaluated DNN containing the corresponding checkpoint files.
+If this subfolder again contains multiple subfolders with checkpoint files these
+are evaluated as separate DNNs. If the crossEvaluation flag is activated
+no separate plots and no separate discriminators are produced""")
 
+    binningOptions = optparse.OptionGroup(parser, "binning Options", description = 
+        "settings concerning the variable binning of discriminator plots")
+    binningOptions.add_option("--optimizeBinning",dest="optimize_binning",default=False,action="store_true",metavar="OPTBINNING",
+        help = "enable optimization of binning. Requires some additional input information from already produced output plots")
+    binningOptions.add_option("-f",dest="histogram_file",default="output_limitInput.root",metavar="HISTFILE",
+        help = "root file with histograms for binning optimization")
+    binningOptions.add_option("-p",dest="considered_processes",default="ttbarOther,ttbarPlusB,ttbarPlus2B,ttbarPlusBBbar,ttbarPlusCCbar",metavar="PROCESSES",
+        help = "comma separated list of processes to be considered during at the binning optimization")
+    binningOptions.add_option("-t",dest="threshold",default=0.1,metavar="THRESHOLD",
+        help = "relative stat uncertainty threshold for binning optimization")
+    binningOptions.add_option("-d",dest="discrname",default="finaldiscr",
+        help = "name of discriminator in histogram file for binning optimization")
+
+    parser.add_option_group(binningOptions)
     (opts, args) = parser.parse_args()
 
     if not opts.checkpoints:
         parser.error("need to specify path to checkpoints")
 
 
-    interface = theInterface(dnnSet = opts.checkpoints)
-    cfg_string = interface.generatePlotConfig(opts.ndefaultbins, opts.input_plots, opts.variable_binning)
+    interface = theInterface(dnnSet = opts.checkpoints, crossEvaluation = opts.crossEvaluation)
+    cfg_string = interface.generatePlotConfig(opts)
     with open(opts.output, "w") as f:
         f.write(cfg_string)
-    print("write new plot config to {}".format(opts.output))    
+    print("\n\nwrite new plot config to {}".format(opts.output))    
 
 
 

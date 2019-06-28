@@ -29,7 +29,7 @@ For readability there is a README for each step, if deeper adjustments have to b
 	```python
 	nominalweight="STR"
 	```
-- create/adjust a systematics csv file `STR_systematics.csv`, **care to use semicolons as seperator!**, add entries regarding the columns:
+- create/adjust a systematics csv file `STR_systematics.csv`, add entries regarding the columns:
 	- **Uncertainty** name of the uncertainty, add `#` to skip
 	- **Type** type of the uncertainty 
 	- **Construction** construction type of the uncertainty, `rate` for `lnN`, `variation` and `weight` for `shape`
@@ -45,5 +45,29 @@ Navigate to the plottinscripts directory and run the plottingscript `plotLimits_
 ```bash
 python `plotLimits_STR.py`
 ```
+
+### Cross Evaluation Workflow
+
+- first train separate DNNs with the `DRACO_MLfoy` Framework on the `Odd/Even` subsamples by appending the options `--even` or `--odd` to the execution of the train script (this of course requires a previous preprocessing of `Odd` and `Even` MC events)
+- generate a new set of DNNs with the following structure:
+```
+NAME_OF_DNN_SET
+----/DNNS_OF_FIRST_JT_REGION
+--------/ODD
+------------checkpointfiles
+--------/EVEN
+------------checkpointfiles
+----/DNNS_OF_SECOND_JT_REGION
+...
+```
+- generate a new `plt_config` with the `utils/tools/dNNInterfaces/MLfoyInterface.py` and specify the option `-x` to activate the cross evaluation setup.
+Activating this option creates input-feature-plots and output-discriminator-plots for each jet-tag-region by combining the subfolders (`EVEN/ODD`). If the option is not specified when creating the new `plt_config`, separate plots are created for the subfolder checkpoint files.
+- add the created config to the `plt_config` variable in your top-level-script.
+- check your `config` file and remove the `(Evt_Odd==0)*2.0` selection if it still exists and replace it by `1.0` to select all events and remove the adjusted weight.
+- add the variable `Evt_Odd` to your `variable_cfg` if it does not exist yet.
+- add the option `crossEvaluation` to your `analysisOptions` dictionary in the top-level-script if it does not exist yet and set it to `True`.
+If the option is set to `False` the `c++` code that is written will evaluate all DNNs separately, so you also need a `plt_config` that was not created with the `-x` option.
+- set the path to your new DNNSet in the `dnnInterface` dictionary in the top-level-script.
+- execute the top-level-script as usual.
 
 
