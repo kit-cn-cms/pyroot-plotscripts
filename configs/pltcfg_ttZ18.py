@@ -11,7 +11,7 @@ import util.tools.plotClasses as plotClasses
 
 # samples
 # input path 
-path_vdlinden  = "/nfs/dust/cms/user/vdlinden/legacyTTH/ntuples/legacy_2018_ttZ"
+path_vdlinden  = "/nfs/dust/cms/user/vdlinden/legacyTTH/ntuples/legacy_2018_ttZ_v2"
 
 ttbarPathS = path_vdlinden+'/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
              path_vdlinden+'/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'+';'+\
@@ -39,14 +39,22 @@ ttZpath = path_vdlinden+'/TTZToBB*/*nominal*.root'+';'+ \
 # SELECTIONS
 
 # need to veto muon events in electron dataset to avoid double counting and vice versa
-sel_singleel="(N_LooseMuons==0 && N_TightElectrons==1 && (Triggered_HLT_Ele32_WPTight_Gsf_vX==1))*(N_Jets>=4 && N_BTagsM>=3)"
-sel_singlemu="(N_LooseElectrons==0 && N_TightMuons==1 && (Triggered_HLT_IsoMu24_vX==1))*(N_Jets>=4 && N_BTagsM>=3)"
+sel_singleel="(N_LooseMuons==0 && N_TightElectrons==1 && (Triggered_HLT_Ele32_WPTight_Gsf_vX==1))"
+sel_singlemu="(N_LooseElectrons==0 && N_TightMuons==1 && (Triggered_HLT_IsoMu24_vX==1))"
 
+# jet tag base selection
+sel_jettag = "(N_Jets>=4 && N_BTagsM>=3)"
+
+# MET base selection
 sel_MET="*(Evt_MET_Pt>20.)"
 #sel_MET="*1.0"
+
+# select events without huge MuR/MuF weights
 #sel_StrangeMuWeights='*(abs(Weight_scale_variation_muR_0p5_muF_0p5)<=100 && abs(Weight_scale_variation_muR_0p5_muF_1p0)<=100 && abs(Weight_scale_variation_muR_0p5_muF_2p0)<=100 && abs(Weight_scale_variation_muR_1p0_muF_0p5)<=100 && abs(Weight_scale_variation_muR_1p0_muF_1p0)<=100 && abs(Weight_scale_variation_muR_1p0_muF_2p0)<=100 && abs(Weight_scale_variation_muR_2p0_muF_0p5)<=100 && abs(Weight_scale_variation_muR_2p0_muF_1p0)<=100 && abs(Weight_scale_variation_muR_2p0_muF_2p0)<=100)'
 sel_StrangeMuWeights ="*1.0"
 
+
+# higgs decay selections
 # hcc is uu dd ss cc with ids 1 2 3 4
 hccSel='*((abs(GenHiggs_DecProd1_PDGID)==1 && abs(GenHiggs_DecProd2_PDGID)==1) || (abs(GenHiggs_DecProd1_PDGID)==2 && abs(GenHiggs_DecProd2_PDGID)==2) || (abs(GenHiggs_DecProd1_PDGID)==3 && abs(GenHiggs_DecProd2_PDGID)==3) || (abs(GenHiggs_DecProd1_PDGID)==4 && abs(GenHiggs_DecProd2_PDGID)==4) )'
 # htt is mumu tautau with ids 13 15
@@ -62,45 +70,73 @@ hzzSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==23)
 # hzg with id 23 and id 22
 hzgSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==22) || (abs(GenHiggs_DecProd1_PDGID)==22 && abs(GenHiggs_DecProd2_PDGID)==23))'
 
-# weights
-usualWeight = "1.*Weight_GEN_nom"
 
-puWeight = "Weight_pu69p2"
+# ======= # 
+# WEIGHTS #
+# ======= #
+defaultWeight = sel_jettag+"*Weight_GEN_nom*Weight_CSV"
 
-csvWeight = "Weight_CSV"
+# pile up weights
+pileupWeightUp   = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2Up*Weight_CSV"
+pilepuWeightDown = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2Down*Weight_CSV"
 
-leptonscalefactors = "(((N_TightElectrons==1) && (Electron_IdentificationSF[0]>0.) && (Electron_ReconstructionSF[0]>0.))*Electron_IdentificationSF[0]*Electron_ReconstructionSF[0] + ((N_TightMuons==1) && (Muon_IdentificationSF[0]>0.) && (Muon_IsolationSF[0]>0.))*Muon_IdentificationSF[0]*Muon_IsolationSF[0])"
-electronscalefactorsup = "(((N_TightElectrons==1) && (Electron_IdentificationSFUp[0]>0.) && (Electron_ReconstructionSFUp[0]>0.))*Electron_IdentificationSFUp[0]*Electron_ReconstructionSFUp[0] + ((N_TightMuons==1) && (Muon_IdentificationSF[0]>0.) && (Muon_IsolationSF[0]>0.))*Muon_IdentificationSF[0]*Muon_IsolationSF[0])"
-electronscalefactorsdown = "(((N_TightElectrons==1) && (Electron_IdentificationSFDown[0]>0.) && (Electron_ReconstructionSFDown[0]>0.))*Electron_IdentificationSFDown[0]*Electron_ReconstructionSFDown[0] + ((N_TightMuons==1) && (Muon_IdentificationSF[0]>0.) && (Muon_IsolationSF[0]>0.))*Muon_IdentificationSF[0]*Muon_IsolationSF[0])"
-muonscalefactorsup = "(((N_TightElectrons==1) && (Electron_IdentificationSF[0]>0.) && (Electron_ReconstructionSF[0]>0.))*Electron_IdentificationSF[0]*Electron_ReconstructionSF[0] + ((N_TightMuons==1) && (Muon_IdentificationSFUp[0]>0.) && (Muon_IsolationSFUp[0]>0.))*Muon_IdentificationSFUp[0]*Muon_IsolationSFUp[0])"
-muonscalefactorsdown = "(((N_TightElectrons==1) && (Electron_IdentificationSF[0]>0.) && (Electron_ReconstructionSF[0]>0.))*Electron_IdentificationSF[0]*Electron_ReconstructionSF[0] + ((N_TightMuons==1) && (Muon_IdentificationSFDown[0]>0.) && (Muon_IsolationSFDown[0]>0.))*Muon_IdentificationSFDown[0]*Muon_IsolationSFDown[0])"
+# lepton scale factors
+electronSFs = "((N_TightElectrons==1)&&(Electron_IdentificationSF[0]>0.)&&(Electron_ReconstructionSF[0]>0.))*Electron_IdentificationSF[0]*Electron_ReconstructionSF[0]"
+muonSFs     = "((N_TightMuons==1)&&(Muon_IdentificationSF[0]>0.)&&(Muon_IsolationSF[0]>0.))*Muon_IdentificationSF[0]*Muon_IsolationSF[0]"
 
-mcTriggerWeight = "((1.0) * (1*(N_LooseMuons==0 && N_TightElectrons==1)* (1) +1*(N_LooseElectrons==0 && N_TightMuons==1) *(1)))*(N_Jets>=4 && N_BTagsM>=3)"
+electronSFs_up = "((N_TightElectrons==1)&&(Electron_IdentificationSFUp[0]>0.)&&(Electron_ReconstructionSFUp[0]>0.))*Electron_IdentificationSFUp[0]*Electron_ReconstructionSFUp[0]"
+electronSFs_down = "((N_TightElectrons==1)&&(Electron_IdentificationSFDown[0]>0.)&&(Electron_ReconstructionSFDown[0]>0.))*Electron_IdentificationSFDown[0]*Electron_ReconstructionSFDown[0]"
+muonSFs_up = "((N_TightMuons==1)&&(Muon_IdentificationSFUp[0]>0.)&&(Muon_IsolationSFUp[0]>0.))*Muon_IdentificationSFUp[0]*Muon_IsolationSFUp[0]"
+muonSFs_down = "((N_TightMuons==1)&&(Muon_IdentificationSFDown[0]>0.)&&(Muon_IsolationSFDown[0]>0.))*Muon_IdentificationSFDown[0]*Muon_IsolationSFDown[0]"
 
-doWeightsFlag = "(DoWeights==1)+(DoWeights==0)*1.0"
+
+# trigger scale factors
+# DANGERZONE: ELECTRON TRIGGER NOT DERIVED YET
+electronTrigger = "("+sel_singleel+"&&1.)*1."
+muonTrigger = "("+sel_singlemu+"&&(Weight_MuonTriggerSF>0.))*Weight_MuonTriggerSF"
+
+electronTrigger_up = "("+sel_singleel+"&&1.)*1."
+electronTrigger_down = "("+sel_singleel+"&&1.)*1."
+muonTrigger_up = "("+sel_singlemu+"&&(Weight_MuonTriggerSF_Up>0.))*Weight_MuonTriggerSF_Up"
+muonTrigger_down = "("+sel_singlemu+"&&(Weight_MuonTriggerSF_Down>0.))*Weight_MuonTriggerSF_Down"
+
 
 # dictionary of expressions to replace in systematics csv
 weightReplacements = {
-    "USUALWEIGHT":              usualWeight,
-    "LEPTONSCALEFACTORS":       leptonscalefactors,
-    "ELECTRONSCALEFACTORSUP":   electronscalefactorsup,
-    "ELECTRONSCALEFACTORSDOWN": electronscalefactorsdown,
-    "MUONSCALEFACTORSUP":       muonscalefactorsup,
-    "MUONSCALEFACTORSDOWN":     muonscalefactorsdown,
-    "MCWEIGHT":                 mcTriggerWeight,
-    "DOWEIGHTS":                doWeightsFlag,
-    "CSVWEIGHT":                csvWeight,
-    "PUWEIGHT":                 puWeight
+    # default weight
+    "DEFAULTWEIGHT":    defaultWeight,
+
+    # pileup weights
+    "PUWEIGHTUP":       pileupWeightUp,
+    "PUWEIGHTDOWN":     pileupWeightDown,
+
+    # lepton scale factors
+    "LEPTONSFS":        "("+electronSFs+"+"+muonSFs+")",
+    "ELESFUP":          "("+electronSFs_up+"+"+muonSFs+")",
+    "ELESFDOWN":        "("+electronSFs_down+"+"+muonSFs+")",
+    "MUSFUP":           "("+electronSFs+"+"+muonSFs_up+")",
+    "MUSFDOWN":         "("+electronSFs+"+"+muonSFs_down+")",
+
+    # trigger scale factors
+    "TRIGGERSFS":       "("+electronTrigger+"+"+muonTrigger+")",
+    "ELETRIGGERSFUP":   "("+electronTrigger_up+"+"+muonTrigger+")",
+    "ELETRIGGERSFDOWN": "("+electronTrigger_down+"+"+muonTrigger+")",
+    "MUTRIGGERSFUP":    "("+electronTrigger+"+"+muonTrigger_up+")",
+    "MUTRIGGERSFDOWN":  "("+electronTrigger+"+"+muonTrigger_down+")",
+
+    # do weights for data
+    "DOWEIGHTS":        "(DoWeights==1)+(DoWeights==0)*1.0",
+
     }
 
 # Lumi weight
-mcWeight='59.7'
+lumi = '59.7'
+
+# nominal weight
+nominalweight="NomWeight:=("+defaultWeight+"*"+"("+electronSFs+"+"+muonSFs+")"+"*"+"("+electronTrigger+"+"+muonTrigger+")"+")*(DoWeights==1)+(DoWeights==0)*1.0"
+
+# even selection for sample splitting
 evenSel="*(Evt_Odd==0)*2.0"
-
-nominalweight="NomWeight:="+usualWeight+"*"+puWeight+"*"+mcTriggerWeight+"*"+leptonscalefactors+"*"+csvWeight+"*"+doWeightsFlag
-
-
-
 
 sampleDict=plotClasses.SampleDictionary()
 sampleDict.doPrintout()
@@ -127,7 +163,7 @@ samples=[
     # signal samples     
     plotClasses.Sample('t#bar{t}+Z',ROOT.kCyan,
             ttZpath,
-            mcWeight+evenSel+sel_MET,
+            lumi+evenSel+sel_MET,
             'ttbarZ',
             samDict=sampleDict, readTrees=doReadTrees),
 
@@ -138,31 +174,31 @@ samples=[
 
     plotClasses.Sample('t#bar{t}+lf',ROOT.kRed-7,
             ttbarPathS,
-            mcWeight+evenSel+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)'+sel_MET+sel_StrangeMuWeights,
+            lumi+evenSel+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)'+sel_MET+sel_StrangeMuWeights,
             'ttbarOther',
             samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,
             ttbarPathS,
-            mcWeight+evenSel+'*(GenEvt_I_TTPlusCC==1)'+sel_MET+sel_StrangeMuWeights,
+            lumi+evenSel+'*(GenEvt_I_TTPlusCC==1)'+sel_MET+sel_StrangeMuWeights,
             'ttbarPlusCCbar',
             samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}+b',ROOT.kRed-2,
             ttbarPathS,
-            mcWeight+evenSel+'*(GenEvt_I_TTPlusBB==1)'+sel_MET+sel_StrangeMuWeights,
+            lumi+evenSel+'*(GenEvt_I_TTPlusBB==1)'+sel_MET+sel_StrangeMuWeights,
             'ttbarPlusB',
             samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}+2b',ROOT.kRed+2,
             ttbarPathS,
-            mcWeight+evenSel+'*(GenEvt_I_TTPlusBB==2)'+sel_MET+sel_StrangeMuWeights,
+            lumi+evenSel+'*(GenEvt_I_TTPlusBB==2)'+sel_MET+sel_StrangeMuWeights,
             'ttbarPlus2B',
             samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,
             ttbarPathS,
-            mcWeight+evenSel+'*(GenEvt_I_TTPlusBB==3)'+sel_MET+sel_StrangeMuWeights,
+            lumi+evenSel+'*(GenEvt_I_TTPlusBB==3)'+sel_MET+sel_StrangeMuWeights,
             'ttbarPlusBBbar',
             samDict=sampleDict, readTrees=doReadTrees), 
 
@@ -170,38 +206,38 @@ samples=[
     
     plotClasses.Sample('Single Top',ROOT.kMagenta,
             stpath,
-            mcWeight+sel_MET,
+            lumi+sel_MET,
             'singlet',
             samDict=sampleDict, readTrees=doReadTrees),
  
     plotClasses.Sample('Z+jets',ROOT.kGreen-3,
             path_vdlinden+'/DYJets*/*nominal*.root',
-            mcWeight+sel_MET,
+            lumi+sel_MET,
             'zjets',
             samDict=sampleDict, readTrees=doReadTrees),
  
     plotClasses.Sample('W+jets',ROOT.kGreen-7,
             path_vdlinden+'/WJets*/*nominal*.root',
-            mcWeight+sel_MET,
+            lumi+sel_MET,
             'wjets',
             samDict=sampleDict, readTrees=doReadTrees), 
 
     plotClasses.Sample('t#bar{t}+W',ROOT.kBlue-10,
             path_vdlinden+'/TTW*/*nominal*.root',  
-            mcWeight+sel_MET,
+            lumi+sel_MET,
             'ttbarW',
             samDict=sampleDict, readTrees=doReadTrees),
 
 
-    #plotClasses.Sample('Diboson',ROOT.kAzure+2,
-    #        dibosonPathS,
-    #        mcWeight+evenSel+sel_MET,
-    #        'diboson',
-    #        samDict=sampleDict, readTrees=doReadTrees),
+    plotClasses.Sample('Diboson',ROOT.kAzure+2,
+            dibosonPathS,
+            lumi+evenSel+sel_MET,
+            'diboson',
+            samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}H',ROOT.kBlue+1,
             ttHpath,
-            '1.0*'+mcWeight+evenSel+sel_MET,
+            '1.0*'+lumi+evenSel+sel_MET,
             'ttH',
             samDict=sampleDict, readTrees=doReadTrees),
 ]
@@ -215,47 +251,47 @@ datacard_processes=processes
 ttH_classes = [
     plotClasses.Sample('t#bar{t}H, H to b#bar{b}',ROOT.kBlue+1,
             path_vdlinden+'/ttHTobb*/*nominal*.root',
-            '1.0*'+mcWeight+evenSel+sel_MET,
+            '1.0*'+lumi+evenSel+sel_MET,
             'ttH_hbb',
             samDict=sampleDict, readTrees=doReadTrees),
   
     plotClasses.Sample('t#bar{t}H, H to c#bar{c}',ROOT.kBlue+1,
             path_vdlinden+'/ttHToNonbb*/*nominal*.root',
-            '1.0*'+mcWeight+evenSel+hccSel+sel_MET,
+            '1.0*'+lumi+evenSel+hccSel+sel_MET,
             'ttH_hcc',
             samDict=sampleDict, readTrees=doReadTrees),
   
     plotClasses.Sample('t#bar{t}H, H to #tau#tau',ROOT.kBlue+1,
             path_vdlinden+'/ttHToNonbb*/*nominal*.root',
-            '1.0*'+mcWeight+evenSel+httSel+sel_MET,
+            '1.0*'+lumi+evenSel+httSel+sel_MET,
             'ttH_htt',
             samDict=sampleDict, readTrees=doReadTrees),
   
     plotClasses.Sample('t#bar{t}H, H to #gamma#gamma',ROOT.kBlue+1,
             path_vdlinden+'/ttHToNonbb*/*nominal*.root',
-            '1.0*'+mcWeight+evenSel+hggSel+sel_MET,'ttH_hgg',
+            '1.0*'+lumi+evenSel+hggSel+sel_MET,'ttH_hgg',
             samDict=sampleDict, readTrees=doReadTrees), 
  
     plotClasses.Sample('t#bar{t}H, H to gluglu',ROOT.kBlue+1,
             path_vdlinden+'/ttHToNonbb*/*nominal*.root',
-            '1.0*'+mcWeight+evenSel+hglugluSel+sel_MET, 
+            '1.0*'+lumi+evenSel+hglugluSel+sel_MET, 
             'ttH_hgluglu',
             samDict=sampleDict, readTrees=doReadTrees), 
  
     plotClasses.Sample('t#bar{t}H, H to WW',ROOT.kBlue+1,
             path_vdlinden+'/ttHToNonbb*/*nominal*.root',
-            '1.0*'+mcWeight+evenSel+hwwSel+sel_MET,'ttH_hww',
+            '1.0*'+lumi+evenSel+hwwSel+sel_MET,'ttH_hww',
             samDict=sampleDict, readTrees=doReadTrees),
   
     plotClasses.Sample('t#bar{t}H, H to ZZ',ROOT.kBlue+1,
             path_vdlinden+'/ttHToNonbb*/*nominal*.root',
-            '1.0*'+mcWeight+evenSel+hzzSel+sel_MET,
+            '1.0*'+lumi+evenSel+hzzSel+sel_MET,
             'ttH_hzz',
             samDict=sampleDict, readTrees=doReadTrees),
   
     plotClasses.Sample('t#bar{t}H, H to #gamma Z',ROOT.kBlue+1,
             path_vdlinden+'/ttHToNonbb*/*nominal*.root',
-            '1.0*'+mcWeight+evenSel+hzgSel+sel_MET, 
+            '1.0*'+lumi+evenSel+hzgSel+sel_MET, 
             'ttH_hzg',
             samDict=sampleDict, readTrees=doReadTrees),
     ]
