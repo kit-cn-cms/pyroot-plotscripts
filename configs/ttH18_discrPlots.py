@@ -2408,7 +2408,7 @@ def getDiscriminatorPlots(data = None, discrname = ''):
     discriminatorPlots += plots_4j_ge3t()
     discriminatorPlots += plots_ge4j_3t()
     discriminatorPlots += plots_dnn(data, discrname)
-
+    
     return discriminatorPlots
 
 

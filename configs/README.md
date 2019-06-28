@@ -9,7 +9,7 @@ define samples as signal for the plotting step by edding `typ=signal`, else it i
 plotClasses.Sample(SAMPLENAMEONPLOTS,COLOR,
     PATH/TO/SAMPLE,
     SELECTION,
-    SAMPLENAMEINCSVCONFIG,
+    SAMPLENAMEINCSVCONFIG, 
     samDict=sampleDict, readTrees=doReadTrees)
 ```
 for example for ttH_hbb
@@ -19,6 +19,7 @@ plotClasses.Sample('t#bar{t}H, H to b#bar{b}',ROOT.kBlue+1,
     '1.0*41.53*2.0*(Evt_Odd==0)*(Evt_Pt_MET>20.)',
     'ttH_hbb',
     samDict=sampleDict, readTrees=doReadTrees,typ=signal)
+
 ```
 - add weight expressions to the `weightReplacements` dictionary to replace some `STRING` in the up/down variatons defined in the systematics config, for example
 ```python
