@@ -78,7 +78,7 @@ defaultWeight = sel_jettag+"*Weight_GEN_nom*Weight_CSV"
 
 # pile up weights
 pileupWeightUp   = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2Up*Weight_CSV"
-pilepuWeightDown = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2Down*Weight_CSV"
+pileupWeightDown = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2Down*Weight_CSV"
 
 # lepton scale factors
 electronSFs = "((N_TightElectrons==1)&&(Electron_IdentificationSF[0]>0.)&&(Electron_ReconstructionSF[0]>0.))*Electron_IdentificationSF[0]*Electron_ReconstructionSF[0]"
@@ -89,14 +89,16 @@ electronSFs_down = "((N_TightElectrons==1)&&(Electron_IdentificationSFDown[0]>0.
 muonSFs_up = "((N_TightMuons==1)&&(Muon_IdentificationSFUp[0]>0.)&&(Muon_IsolationSFUp[0]>0.))*Muon_IdentificationSFUp[0]*Muon_IsolationSFUp[0]"
 muonSFs_down = "((N_TightMuons==1)&&(Muon_IdentificationSFDown[0]>0.)&&(Muon_IsolationSFDown[0]>0.))*Muon_IdentificationSFDown[0]*Muon_IsolationSFDown[0]"
 
-
 # trigger scale factors
-# DANGERZONE: ELECTRON TRIGGER NOT DERIVED YET
-electronTrigger = "("+sel_singleel+"&&1.)*1."
+# DANGERZONE: ELECTRON TRIGGER NOT ADDED TO NTUPLES YET, USE INTERNAL SFS
+#electronTrigger = "("+sel_singleel+"&&(Weight_EleTriggerSF>0.))*Weight_EleTriggerSF"
+electronTrigger = "("+sel_singleel+"&&(internalEleTriggerWeight>0.))*internalEleTriggerWeight"
 muonTrigger = "("+sel_singlemu+"&&(Weight_MuonTriggerSF>0.))*Weight_MuonTriggerSF"
 
-electronTrigger_up = "("+sel_singleel+"&&1.)*1."
-electronTrigger_down = "("+sel_singleel+"&&1.)*1."
+#electronTrigger_up = "("+sel_singleel+"&&(Weight_EleTriggerSF_Up>0.))*Weight_EleTriggerSF_Up"
+#electronTrigger_down = "("+sel_singleel+"&&(Weight_EleTriggerSF_Down>0.))*Weight_EleTriggerSF_Down"
+electronTrigger_up = "("+sel_singleel+"&&(internalEleTriggerWeightUp>0.))*internalEleTriggerWeightUp"
+electronTrigger_down = "("+sel_singleel+"&&(internalEleTriggerWeightDown>0.))*internalEleTriggerWeightDown"
 muonTrigger_up = "("+sel_singlemu+"&&(Weight_MuonTriggerSF_Up>0.))*Weight_MuonTriggerSF_Up"
 muonTrigger_down = "("+sel_singlemu+"&&(Weight_MuonTriggerSF_Down>0.))*Weight_MuonTriggerSF_Down"
 
@@ -119,10 +121,10 @@ weightReplacements = {
 
     # trigger scale factors
     "TRIGGERSFS":       "("+electronTrigger+"+"+muonTrigger+")",
-    "ELETRIGGERSFUP":   "("+electronTrigger_up+"+"+muonTrigger+")",
-    "ELETRIGGERSFDOWN": "("+electronTrigger_down+"+"+muonTrigger+")",
-    "MUTRIGGERSFUP":    "("+electronTrigger+"+"+muonTrigger_up+")",
-    "MUTRIGGERSFDOWN":  "("+electronTrigger+"+"+muonTrigger_down+")",
+    "ELETRIGSUP":       "("+electronTrigger_up+"+"+muonTrigger+")",
+    "ELETRIGSDOWN":     "("+electronTrigger_down+"+"+muonTrigger+")",
+    "MUTRIGSUP":        "("+electronTrigger+"+"+muonTrigger_up+")",
+    "MUTRIGSDOWN":      "("+electronTrigger+"+"+muonTrigger_down+")",
 
     # do weights for data
     "DOWEIGHTS":        "(DoWeights==1)+(DoWeights==0)*1.0",
