@@ -4,7 +4,7 @@
 class LeptonSFHelper {
 
  public:
-  LeptonSFHelper( );
+  LeptonSFHelper(std::string dataera_, std::string basedir_);
   ~LeptonSFHelper( );
 
   float GetElectronSF(  float electronPt , float electronEta , int syst , std::string type  );
@@ -74,12 +74,17 @@ class LeptonSFHelper {
   float ljets_ele_BtoF_lumi;
   //float ljets_ele_GtoH_lumi; 
 
+  std::string dataera;
+  std::string plotscriptBaseDir;
 };
 
 //PUBLIC
-LeptonSFHelper::LeptonSFHelper( ){
+LeptonSFHelper::LeptonSFHelper(std::string dataera_, std::string basedir_){
 
   //std::cout << "Initializing Lepton scale factors" << std::endl;
+  
+  dataera = dataera_;
+  plotscriptBaseDir = basedir_;
 
   SetElectronHistos( );
   SetMuonHistos( );
@@ -106,8 +111,6 @@ LeptonSFHelper::LeptonSFHelper( ){
   muonMinPtHigh = 29.0;
   
   muonMaxEta = 2.39;
-  
-  
 }
 
 LeptonSFHelper::~LeptonSFHelper( ){
@@ -410,11 +413,21 @@ void LeptonSFHelper::ChangeMuIsoHistos(bool is_DL) {
 //PRIVATE
 
 void LeptonSFHelper::SetElectronHistos( ){
-
+  
   std::string IDinputFileBtoF = "/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/egammaEffi.txt_EGM2D_runBCDEF_passingTight94X.root";
   // std::string IDinputFileGtoH = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/oct202017/ele_ID_SF_tight_GH.root";
 
-  std::string TRIGGERinputFile = "/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/SingleEG_JetHT_Trigger_Scale_Factors_ttHbb_Data_MC_v5.0.root";
+  std::string TRIGGERinputFile = "";
+  std::string TRIGGERhistName  = "";
+  if( dataera == "2017" || dataera == "2017_deepCSV") {
+      TRIGGERinputFile = plotscriptBaseDir+"/data/triggerSFs/SingleEG_JetHT_Trigger_Scale_Factors_ttHbb_Legacy2017_v1.root";
+      TRIGGERhistName  = "ele28_ht150_OR_ele32_ele_pt_ele_sceta";
+      }
+  else if( dataera == "2018" ) {
+      TRIGGERinputFile = plotscriptBaseDir+"/data/triggerSFs/SingleEG_JetHT_Trigger_Scale_Factors_ttHbb_Legacy2018_v1.root";
+      TRIGGERhistName  = "ele28_ht150_OR_ele32_ele_pt_ele_sceta";
+      }
+
   //std::string ISOinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/oct202017/ele_Reco_EGM2D.root"; // DANGERZONE: no iso SF yet??
   std::string GFSinputFile = "/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/egammaEffi.txt_EGM2D_runBCDEF_passingRECO.root"; //reco SFs for pt > 20
   std::string GFSinputFile_lowEt = "/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/egammaEffi.txt_EGM2D_runBCDEF_passingRECO_lowEt.root"; //reco SFs for pt<20
@@ -431,7 +444,7 @@ void LeptonSFHelper::SetElectronHistos( ){
 
   //h_ele_ID_abseta_pt_ratioGtoH=(TH2F*)f_IDSFGtoH->Get("EGamma_SF2D");
   h_ele_ID_abseta_pt_ratioBtoF=(TH2F*)f_IDSFBtoF->Get("EGamma_SF2D");
-  h_ele_TRIGGER_abseta_pt_ratio = (TH2F*)f_TRIGGERSF->Get("SFs_ele_pt_ele_sceta_ele28_ht150_OR_ele35_2017BCDEF");
+  h_ele_TRIGGER_abseta_pt_ratio = (TH2F*)f_TRIGGERSF->Get(std::string(TRIGGERhistName).c_str());
   //h_ele_ISO_abseta_pt_ratio = (TH2F*)f_ISOSF->Get("EGamma_SF2D");
   h_ele_GFS_abseta_pt_ratio = (TH2F*)f_GFSSF->Get("EGamma_SF2D");
   h_ele_GFS_abseta_pt_ratio_lowEt = (TH2F*)f_GFSSF_lowEt->Get("EGamma_SF2D");

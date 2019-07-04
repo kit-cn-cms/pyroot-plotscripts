@@ -61,13 +61,13 @@ void plot(){
   TChain* chain = new TChain("MVATree");
   char* filenames = getenv ("FILENAMES");
   char* outfilename = getenv ("OUTFILENAME");
-  std::string plotskriptBaseDir = getenv ("PLOTSCRIPTBASEDIR");
+  std::string plotscriptBaseDir = getenv ("PLOTSCRIPTBASEDIR");
   string processname = string(getenv ("PROCESSNAME"));
   string suffix = string(getenv ("SUFFIX"));
   int maxevents = atoi(getenv ("MAXEVENTS"));
   int skipevents = atoi(getenv ("SKIPEVENTS"));
   string eventFilterFile = string(getenv("EVENTFILTERFILE"));
-  string dataera = string(getenv ("DATAERA"));
+  std::string dataera = string(getenv ("DATAERA"));
 
   // create vector of systematics
   std::vector<Systematics::Type> v_SystTypes = Systematics::getTypeVector();
@@ -77,12 +77,12 @@ void plot(){
   std::string csvHFfile = "";
   std::string csvLFfile = "";
   if( dataera == "2017" ) {
-      csvHFfile=plotskriptBaseDir+"/data/CSV/sfs_deepjet_2017_hf.root";
-      csvLFfile=plotskriptBaseDir+"/data/CSV/sfs_deepjet_2017_lf.root";
+      csvHFfile=plotscriptBaseDir+"/data/CSV/sfs_deepjet_2017_hf.root";
+      csvLFfile=plotscriptBaseDir+"/data/CSV/sfs_deepjet_2017_lf.root";
       }
   else if( dataera == "2018" ) {
-      csvHFfile=plotskriptBaseDir+"/data/CSV/sfs_deepjet_2018_hf.root";
-      csvLFfile=plotskriptBaseDir+"/data/CSV/sfs_deepjet_2018_lf.root";
+      csvHFfile=plotscriptBaseDir+"/data/CSV/sfs_deepjet_2018_hf.root";
+      csvLFfile=plotscriptBaseDir+"/data/CSV/sfs_deepjet_2018_lf.root";
       }
   else if( dataera == "2017_deepCSV" ) {
       csvHFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_V3_2017/deepCSV_sfs_hf.root";
@@ -96,7 +96,7 @@ void plot(){
   TString qcd_file = "/nfs/dust/cms/user/mwassmer/QCD_Estimation_September17/QCD_Estimation/QCD_Estimation_FakeScaleFactor_nominal.root";
   
   CSVHelper* internalCSVHelper= new CSVHelper(csvHFfile,csvLFfile, 5,4,3,v_SystTypes);
-  LeptonSFHelper* internalLeptonSFHelper= new LeptonSFHelper();
+  LeptonSFHelper* internalLeptonSFHelper= new LeptonSFHelper(dataera, plotscriptBaseDir);
   //QCDHelper* internalQCDHelper = new QCDHelper(qcd_file);
   //ttbarsysthelper* internalttbarsysthelper = new ttbarsysthelper();
 
