@@ -52,7 +52,7 @@ def doRebinning(rootfile, histolist, threshold):
             binContent = 0.
     
     
-    overflow_edge = combinedHist.GetBinLowEdge(combinedHist.GetNbinsX()+2)
+    overflow_edge = combinedHist.GetBinLowEdge(combinedHist.GetNbinsX()+1)
     if not overflow_edge in bin_edges:
         # if overflow_edge is not in bin_edges list the relative
         # error of the last bin is too small, so just merge the
