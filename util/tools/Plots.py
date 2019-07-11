@@ -305,6 +305,7 @@ def drawHistsOnCanvas(PlotList, canvasName, data, ratio=False, signalscaling=1, 
     canvas = getCanvas(canvasName, ratio)
     """
     set the Style for the Signal and Background Plots
+    get the integral of the hists to sort it by event yield for plotting
     """
     Signal={}
     Background={}
@@ -316,14 +317,16 @@ def drawHistsOnCanvas(PlotList, canvasName, data, ratio=False, signalscaling=1, 
         elif PlotObject.typ=="bkg":
             Background[PlotObject.name]=PlotObject.hist.Integral()
     """
-    set the Style for the Signal and Background Plots
     sort it by Event Yield, lowest to highest
     """
     sortedSignal=sorted(Signal, key=Signal.get, reverse=True)
     sortedBackground=sorted(Background, key=Background.get,reverse=True)
 
-    # stack bakcground Histograms
-    # add errorbands
+    """
+    stack background Histograms
+    add errorbands of background histograms to a list
+    to combine them for the errorband of all backgrounds
+    """
     errorbands=[]
     bkgHists=[]
     for i in range(len(sortedBackground),0,-1):
@@ -339,13 +342,21 @@ def drawHistsOnCanvas(PlotList, canvasName, data, ratio=False, signalscaling=1, 
             errorbands.append(PlotObject.errorband.Clone())
 
     errorband=addErrorbands(errorbands,hist)
-    # signal Histograms
+
+    """
+    sort signal Histograms by Event Yield
+    """
     sigHists=[]
     for signal in sortedSignal:
         PlotObject=PlotList[signal]
         sigHists.append(PlotObject.hist.Clone())
 
-    # figure out plotrange
+    """
+    figure out plotrange
+    yMax is the maximum bin value of all background histograms
+    yMinMax is the minimal bin value of all background histograms, 
+    needed for logarithmic plotting (need to set lowest value)
+    """
     canvas.cd(1)
     yMax = 1e-9
     yMinMax = 1000.
@@ -354,22 +365,33 @@ def drawHistsOnCanvas(PlotList, canvasName, data, ratio=False, signalscaling=1, 
         if h.GetBinContent(h.GetMaximumBin()) > 0:
             yMinMax = min(h.GetBinContent(h.GetMaximumBin()), yMinMax)
     
-    # draw the first histogram
+    """
+    get the first histogram to draw,
+    use the first background histogram,
+    else use an signal histogram
+    """
     if len(bkgHists) == 0:
         firstHist = PlotList[sortedSignal[0]].hist
     else:
         firstHist = bkgHists[0]
+
+    """
+    consider logoption and set the user range accordingly
+    scaling maximal and minimal y value for better readability
+    """
     if logoption:
-        firstHist.GetYaxis().SetRangeUser(yMinMax/10000, yMax*10)
-        canvas.SetLogy()
+        firstHist.GetYaxis().SetRangeUser(yMinMax/10000, yMax*1000)
+        ROOT.gPad.SetLogy(1)
     else:
         firstHist.GetYaxis().SetRangeUser(0, yMax*1.5)
-    firstHist.GetXaxis().SetTitle(displayname)
+    firstHist.GetXaxis().SetTitle("")
+    firstHist.SetTitle("")
 
     option = "histo"
     firstHist.DrawCopy(option+"E0")
-
-    # draw the other histograms
+    """
+    draw the other histograms and the errorband
+    """
     for h in bkgHists[1:]:
         h.DrawCopy(option+"same")
 
@@ -377,7 +399,6 @@ def drawHistsOnCanvas(PlotList, canvasName, data, ratio=False, signalscaling=1, 
     errorband.SetLineColor(ROOT.kBlack)
     errorband.SetFillColor(ROOT.kBlack)
     errorband.Draw("same2")
-    # errorband.Draw(option+" E0 same")
 
     # draw data
     data.SetLineColor(ROOT.kBlack)
@@ -392,14 +413,16 @@ def drawHistsOnCanvas(PlotList, canvasName, data, ratio=False, signalscaling=1, 
     for signal in sigHists:
         # scale signal
         if signalscaling==-1:
-            scalefactor=bkgHist[0].Integral()/signal.Integral()
+            scalefactor=bkgHists[0].Integral()/signal.Integral()
         else:
             scalefactor=signalscaling
-        signal.scale(scalefactor)
+        signal.Scale(scalefactor)
         # draw signal histogram
         signal.DrawCopy(option+" E0 same")
     
-
+    """
+    Draws the ratio plot, scales the background, signal and errorband to the background
+    """
     if ratio:
         canvas.cd(2)
         line = data.Clone()
@@ -407,9 +430,11 @@ def drawHistsOnCanvas(PlotList, canvasName, data, ratio=False, signalscaling=1, 
         line.GetYaxis().SetRangeUser(0.5,1.5)
         line.GetYaxis().SetTitle(ratio)
 
+        line.SetTitle("")
+
         line.GetXaxis().SetLabelSize(line.GetXaxis().GetLabelSize()*2.4)
         line.GetYaxis().SetLabelSize(line.GetYaxis().GetLabelSize()*2.2)
-        line.GetXaxis().SetTitle(displayname)
+        line.GetXaxis().SetTitle("")
 
         line.GetXaxis().SetTitleSize(line.GetXaxis().GetTitleSize()*3)
         line.GetYaxis().SetTitleSize(line.GetYaxis().GetTitleSize()*2.5)
@@ -425,7 +450,7 @@ def drawHistsOnCanvas(PlotList, canvasName, data, ratio=False, signalscaling=1, 
         # ratio plot
         ratioPlot = data.Clone()
         ratioPlot.Divide(bkgHists[0])
-        ratioPlot.SetTitle(displayname)
+        ratioPlot.SetTitle("")
         ratioPlot.SetLineColor(ROOT.kBlack)
         ratioPlot.SetLineWidth(1)
         ratioPlot.SetMarkerStyle(20)
@@ -435,6 +460,12 @@ def drawHistsOnCanvas(PlotList, canvasName, data, ratio=False, signalscaling=1, 
         ratioerrorband=generateRatioErrorband(errorband)
         ratioerrorband.Draw("same2")
         canvas.cd(1)
+
+    """
+    return everything ROOT related,
+    as well as the signal and background histogram list
+    for labels
+    """
     if ratio:
         return canvas, errorband, ratioerrorband, sortedSignal, sigHists, sortedBackground, bkgHists
     else:
@@ -476,6 +507,24 @@ def getCanvas(name, ratiopad = False):
 
 def getLegend():
     legend=ROOT.TLegend(0.70,0.6,0.95,0.9)
+    legend.SetBorderSize(0);
+    legend.SetLineStyle(0);
+    legend.SetTextFont(42);
+    legend.SetTextSize(0.03);
+    legend.SetFillStyle(0);
+    return legend
+
+def getLegend1():
+    legend=ROOT.TLegend(0.65,0.7,0.8,0.9)
+    legend.SetBorderSize(0);
+    legend.SetLineStyle(0);
+    legend.SetTextFont(42);
+    legend.SetTextSize(0.03);
+    legend.SetFillStyle(0);
+    return legend
+
+def getLegend2():
+    legend=ROOT.TLegend(0.8,0.7,0.95,0.9)
     legend.SetBorderSize(0);
     legend.SetLineStyle(0);
     legend.SetTextFont(42);
