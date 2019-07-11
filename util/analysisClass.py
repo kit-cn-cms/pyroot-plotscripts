@@ -123,6 +123,8 @@ class analysisConfig:
                 self.ratio= analysisOptions[key]
             elif key in ("logarithmic"):
                 self.logarithmic= analysisOptions[key]
+            elif key in ("splitLegend"):
+                self.splitLegend= analysisOptions[key] 
             elif key in ("makeDataCards"):
                 self.makeDataCards= analysisOptions[key] 
             elif key in ("makePlots"):
