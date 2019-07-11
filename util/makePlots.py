@@ -21,14 +21,6 @@ def makePlots(configData):
     pyrootdir=configData.analysis.pyrootdir
     plotconfig=createPlotConfig(configData,workdir)
     rootfile        = configData.analysis.rootPath
-    signalScaling   = configData.analysis.signalScaling
-    lumiLabel       = configData.analysis.lumiLabel
-    if lumiLabel:
-        if isinstance(lumiLabel,bool):
-            lumiLabel=configData.analysis.getLumi()
-    privateWork     = configData.analysis.privateWork
-    ratio           = configData.analysis.ratio
-    logarithmic     = configData.analysis.logarithmic
 
     # create output folders
     print('creating output folders')
@@ -43,10 +35,8 @@ def makePlots(configData):
         print Plot.name
         ListOfScripts.append( createPlotScript(channel=Plot.name,pyrootdir=pyrootdir, 
         										                    workdir=workdir, scriptPath=scriptPath,
-                                                plotconfig=plotconfig,
-                                                rootfile=rootfile, signalScaling=signalScaling,
-                                                lumiLabel=lumiLabel, privateWork=privateWork,
-                                                ratio=ratio, logarithmic=logarithmic ) )
+                                                                    plotconfig=plotconfig,
+                                                                    rootfile=rootfile, ) )
 
 
     print "Submitting ", len(ListOfScripts), " DrawScripts"
@@ -57,6 +47,17 @@ def makePlots(configData):
 
     # creates plot wrapper of the plotting information
 def createPlotConfig(configData,workdir):
+    #get plotting information
+    signalScaling   = configData.analysis.signalScaling
+    lumiLabel       = configData.analysis.lumiLabel
+    if lumiLabel:
+        if isinstance(lumiLabel,bool):
+            lumiLabel=configData.analysis.getLumi()
+    privateWork     = configData.analysis.privateWork
+    ratio           = configData.analysis.ratio
+    logarithmic     = configData.analysis.logarithmic
+    splitLegend     = configData.analysis.splitLegend
+
     samples={}
     #samples named in the rootfile
     for sample in configData.pltcfg.samples:
@@ -105,12 +106,20 @@ def createPlotConfig(configData,workdir):
                 outfile.write(' '*8+'"'+systematic+'",\n')
 
         outfile.write(' '*4+']\n')
+        outfile.write('#options for the plotting style\n')
+        outfile.write('plotoptions = {\n')
+        outfile.write(' '*4+'"signalscaling":'+str(signalScaling)+',\n')
+        outfile.write(' '*4+'"lumilabel":'+str(lumiLabel)+',\n')
+        outfile.write(' '*4+'"privatework":'+str(privateWork)+',\n')
+        outfile.write(' '*4+'"ratio":"'+str(ratio)+'",\n')
+        outfile.write(' '*4+'"logarithmic":'+str(logarithmic)+',\n')
+        outfile.write(' '*4+'"splitlegend":'+str(splitLegend)+',\n')
+        outfile.write(' '*4+'}\n')
     return outputpath
 
 
 def createPlotScript(channel,pyrootdir,workdir,scriptPath,
-                        plotconfig,rootfile,signalScaling,
-                        lumiLabel,privateWork,ratio,logarithmic):
+                        plotconfig,rootfile):
 
     pathtoself=pyrootdir+'/util/'
     cmsswpath = os.environ['CMSSW_BASE']
@@ -128,17 +137,7 @@ def createPlotScript(channel,pyrootdir,workdir,scriptPath,
     script += ' --channelname="'+channel+'" '
     script += ' --rootfile="'+rootfile+'" '
     script += ' --directory="'+pyrootdir+'"' 
-
-    script += ' --workdir="'+workdir+'"' 
-    script += ' --signalscaling="'+str(signalScaling)+'"'
-    if lumiLabel:
-        script += ' --lumilabel="'+str(lumiLabel)+'"'
-    if privateWork:
-        script += ' --privatework '
-    if ratio:
-        script += ' --ratio="'+ratio+'"'
-    if logarithmic:
-        script += ' --logarithmic \n'
+    script += ' --workdir="'+workdir+'"\n' 
 
 
     scriptPath = scriptPath+'makePlots'+str(channel)+'.sh'
