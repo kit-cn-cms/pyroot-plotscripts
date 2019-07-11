@@ -25,7 +25,7 @@ class analysisConfig:
         self.renamedPath = self.rootPath
     
         self.dataera = dataera
-        if not self.dataera in ["2017", "2018", "2017_deepCSV"]:
+        if not self.dataera in ["2017", "2018", "2017_deepCSV","2016"]:
             sys.exit("invalid dataera")
 
         self.setDefaults()
@@ -45,6 +45,7 @@ class analysisConfig:
         self.haddFromWildcard = True        
         self.addData = False
 
+        self.makePlots=False
         self.signalScaling=      False
         self.lumiLabel=True
         self.privateWork= False
@@ -115,15 +116,17 @@ class analysisConfig:
             elif key in ("signalScaling"):
                 self.signalScaling= analysisOptions[key]
             elif key in ("lumiLabel"):
-                self.lumiLabel= bool(analysisOptions[key])
+                self.lumiLabel= analysisOptions[key]
             elif key in ("privateWork"):
-                self.privateWork= bool(analysisOptions[key])
+                self.privateWork=analysisOptions[key]
             elif key in ("ratio"):
                 self.ratio= analysisOptions[key]
             elif key in ("logarithmic"):
                 self.logarithmic= analysisOptions[key]
             elif key in ("makeDataCards"):
                 self.makeDataCards= analysisOptions[key] 
+            elif key in ("makePlots"):
+                self.makePlots= analysisOptions[key] 
 
 
     def initPlotConfig(self):
@@ -131,6 +134,15 @@ class analysisConfig:
         sys.path.append(configdir)
         self.pltcfg = importlib.import_module( self.plotConfig )
         return self.pltcfg
+
+    def getLumi(self):
+        lumi={
+            "2016":"36.9",
+            "2017":"41.5",  
+            "2017_deepCSV":"41.5",
+            "2018":"59.7",
+        }
+        return lumi[self.dataera]
 
 
     ## Setter functions
