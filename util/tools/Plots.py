@@ -75,7 +75,7 @@ class Plot:
         elif self.typ=="signal":
             self.hist.SetLineColor(self.color )
             self.hist.SetFillColor(0)
-            self.hist.SetLineWidth(2)
+            self.hist.SetLineWidth(3)
         else:
             print("ERROR! Type wrong!")
         #sets style for error band
@@ -380,11 +380,12 @@ def drawHistsOnCanvas(PlotList, canvasName, data, ratio=False, signalscaling=1, 
         ROOT.gPad.SetLogy(1)
     else:
         firstHist.GetYaxis().SetRangeUser(0, yMax*1.5)
+    
     firstHist.GetXaxis().SetTitle("")
     firstHist.GetYaxis().SetTitle(GetyTitle(normalize))
     firstHist.GetYaxis().SetTitleSize(firstHist.GetYaxis().GetTitleSize()*1.2)
     #firstHist.GetYaxis().SetTitleOffset(0.5)
-
+    canvaslabel=firstHist.GetTitle()
     firstHist.SetTitle("")
 
     option = "histo"
@@ -434,7 +435,7 @@ def drawHistsOnCanvas(PlotList, canvasName, data, ratio=False, signalscaling=1, 
 
         line.GetXaxis().SetLabelSize(line.GetXaxis().GetLabelSize()*2.4)
         line.GetYaxis().SetLabelSize(line.GetYaxis().GetLabelSize()*2.2)
-        line.GetXaxis().SetTitle("")
+        line.GetXaxis().SetTitle(canvaslabel)
 
         line.GetXaxis().SetTitleSize(line.GetXaxis().GetTitleSize()*3)
         line.GetYaxis().SetTitleSize(line.GetYaxis().GetTitleSize()*2.5)
@@ -450,7 +451,7 @@ def drawHistsOnCanvas(PlotList, canvasName, data, ratio=False, signalscaling=1, 
         # ratio plot
         ratioPlot = data.Clone()
         ratioPlot.Divide(bkgHists[0])
-        ratioPlot.SetTitle("")
+        ratioPlot.SetTitle(firstHist.GetTitle())
         ratioPlot.SetLineColor(ROOT.kBlack)
         ratioPlot.SetLineWidth(1)
         ratioPlot.SetMarkerStyle(20)
