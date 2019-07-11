@@ -6,6 +6,41 @@ import ROOT
 
 debug=0
 
+#get bool information out of parser string
+def stringtobool(variable):
+    if isinstance(variable, bool):
+       return variable
+    if variable.lower() in ('yes', 'true', 't', 'y', '1'):
+        return True
+    elif variable.lower() in ('no', 'false', 'f', 'n', '0'):
+        return False
+    else:
+        raise argparse.ArgumentTypeError('Boolean value expected.')
+
+# get plotting style information parser>config>default for bool type
+def getParserConfigDefaultBool(parser,config,plotoptions,defaultbool):
+    print "-"*130
+    if not parser is None:
+        print "PARSER"
+        return stringtobool(parser)
+    elif config in plotoptions:
+        print "CONFIG"
+        return stringtobool(plotoptions[config])
+    else:
+        print "DEFAULT"
+        return stringtobool(defaultbool)
+# get plotting style information parser>config>default
+def getParserConfigDefaultValue(parser,config,plotoptions,defaultvalue):
+    print "-"*130
+    if not parser is None:
+        print "PARSER"
+        return parser
+    elif config in plotoptions:
+        print "CONFIG"
+        return plotoptions[config]
+    else:
+        print "DEFAULT"
+        return defaultvalue
 """
 Enabling parser options
 """
@@ -34,19 +69,25 @@ parser.add_option("--datakeyreplace", dest="datakeyreplace", default="data_obs",
         help="Key replacement for the data sample", metavar="datakeyreplace")
 parser.add_option("--datalabel", dest="datalabel", default="data",
         help="label of the data", metavar="datalabel")
-parser.add_option("--signalscaling", dest="signalscaling", default="-1",
+parser.add_option("--signalscaling", dest="signalscaling", default=None,
         help="scale factor of the signal processes, -1 to scale with background integral", metavar="signalscaling")
-parser.add_option("--lumilabel", dest="lumilabel", default=False,
+parser.add_option("--lumilabel", dest="lumilabel", default=None,
         help="print luminosity label on canvas", metavar="lumilabel")
-parser.add_option("--privatework", dest="privatework", action = "store_true", default=False,
+parser.add_option("--privatework", dest="privatework", default=None,
         help="print privatework label on canvas", metavar="privatework")
-parser.add_option("--ratio", dest="ratio",  default="#frac{data}{MC Background}",
+parser.add_option("--ratio", dest="ratio",  default=None,
         help="make ratio plot", metavar="ratio")
-parser.add_option("--logarithmic", dest="logarithmic", action = "store_true", default=False,
+parser.add_option("--logarithmic", dest="logarithmic", default=None,
         help="enable logarithmic plots", metavar="logarithmic")
+parser.add_option("--splitlegend", dest="splitlegend",  default=None,
+        help="splits the legend in two", metavar="splitlegend")
+parser.add_option("--normalize", dest="normalize",  default=None,
+        help="normalizes plot", metavar="normalize")
 
 
 (options, args) = parser.parse_args()
+
+
 
 """
 Define parser options for further use
@@ -107,6 +148,7 @@ pltcfg = importlib.import_module(plotconfigfile)
 samples=pltcfg.samples
 plottingsamples=pltcfg.plottingsamples
 systematics=pltcfg.systematics
+plotoptions=pltcfg.plotoptions
 
 """
 start loading  histograms
@@ -153,28 +195,40 @@ print '''
 # plotting histograms and Errorbands
 # ========================================================
     '''
+
+#get plotting style information, prioritized by parser>config>default
+signalscaling=getParserConfigDefaultValue(parser=options.signalscaling,config="signalscaling",
+                                            plotoptions=plotoptions,defaultvalue=-1)
+print signalscaling
+ratio=getParserConfigDefaultValue(parser=options.ratio,config="ratio",
+                                            plotoptions=plotoptions,defaultvalue="#frac{data}{MC Background}")
+print ratio
+lumilabel=getParserConfigDefaultValue(parser=options.lumilabel,config="lumilabel",
+                                            plotoptions=plotoptions,defaultvalue=False)
+print lumilabel
+privatework=getParserConfigDefaultBool(parser=options.privatework,config="privatework",
+                                            plotoptions=plotoptions,defaultbool=False)
+print privatework
+logarithmic=getParserConfigDefaultBool(parser=options.logarithmic,config="logarithmic",
+                                            plotoptions=plotoptions,defaultbool=False)
+print logarithmic
+splitlegend=getParserConfigDefaultBool(parser=options.splitlegend,config="splitlegend",
+                                            plotoptions=plotoptions,defaultbool=False)
+print splitlegend
 """
 returning sorted Lists and Histograms necessary to draw the legend
 and everything ROOT related
 """
 canvas, errorband, ratioerrorband, sortedSignal, sigHists, sortedBackground, bkgHists =Plots.drawHistsOnCanvas(PlotList,options.channelName,
-                                                                                        data=dataHist,ratio=options.ratio, 
-                                                                                        signalscaling=int(options.signalscaling),
-                                                                                        errorband=True, logoption=options.logarithmic)
+                                                                                        data=dataHist,ratio=ratio, 
+                                                                                        signalscaling=int(signalscaling),
+                                                                                        errorband=True, logoption=logarithmic,
+                                                                                        normalize=False)
 
 # drawing the legend
 #one legend:
-legendinone=False
-if legendinone:
-    legend = Plots.getLegend2()
-    legend.AddEntry(dataHist,options.datalabel,"P")
 
-    for i,signal in enumerate(sortedSignal):
-        legend.AddEntry(sigHists[i], PlotList[signal].label, "L")
-    for i,background in enumerate(sortedBackground):
-        legend.AddEntry(bkgHists[i], PlotList[background].label, "F")
-    legend.Draw("same")
-else:
+if splitlegend:
     legend1 = Plots.getLegend1()
     legend2 = Plots.getLegend2()
     legend1.AddEntry(dataHist,options.datalabel,"P")
@@ -195,12 +249,21 @@ else:
         n+=1
     legend1.Draw("same")
     legend2.Draw("same")
+else:
+    legend = Plots.getLegend2()
+    legend.AddEntry(dataHist,options.datalabel,"P")
+
+    for i,signal in enumerate(sortedSignal):
+        legend.AddEntry(sigHists[i], PlotList[signal].label, "L")
+    for i,background in enumerate(sortedBackground):
+        legend.AddEntry(bkgHists[i], PlotList[background].label, "F")
+    legend.Draw("same")
 
 # add lumi or private work label to plot
-if options.privatework:
-    Plots.printPrivateWork(canvas, ratio=options.ratio, nodePlot = True)
-if options.lumilabel:
-    Plots.printLumi(canvas, lumi=options.lumilabel, ratio = options.ratio)
+if privatework:
+    Plots.printPrivateWork(canvas, ratio=ratio)
+if lumilabel:
+    Plots.printLumi(canvas, lumi=lumilabel, ratio = ratio)
 
 plotpath=workdir+"/outputPlots/"
 if not os.path.exists(plotpath):
