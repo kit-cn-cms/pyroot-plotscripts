@@ -287,18 +287,14 @@ def moveOverUnderFlow(hist):
     hist.SetBinError(hist.GetNbinsX()+1,0)
 
 
-def GetyTitle(privateWork = False):
-    # if privateWork flag is enabled, normalize plots to unit area
-    if privateWork:
-        return "normalized to unit area"
-    return "Events expected"
+
 
 
 # ===============================================
 # DRAW HISTOGRAMS ON CANVAS
 # ===============================================
 
-def drawHistsOnCanvas(PlotList, canvasName, data, ratio=False, signalscaling=1, errorband=None, displayname=None, logoption=False):
+def drawHistsOnCanvas(PlotList, canvasName, data, ratio=False, signalscaling=1, errorband=None, displayname=None, logoption=False, normalize=False):
     if not displayname: 
         displayname=canvasName
         
@@ -385,6 +381,10 @@ def drawHistsOnCanvas(PlotList, canvasName, data, ratio=False, signalscaling=1, 
     else:
         firstHist.GetYaxis().SetRangeUser(0, yMax*1.5)
     firstHist.GetXaxis().SetTitle("")
+    firstHist.GetYaxis().SetTitle(GetyTitle(normalize))
+    firstHist.GetYaxis().SetTitleSize(firstHist.GetYaxis().GetTitleSize()*1.2)
+    #firstHist.GetYaxis().SetTitleOffset(0.5)
+
     firstHist.SetTitle("")
 
     option = "histo"
@@ -471,7 +471,11 @@ def drawHistsOnCanvas(PlotList, canvasName, data, ratio=False, signalscaling=1, 
     else:
         return canvas, errorband, sortedSignal, sigHists, sortedBackground, bkgHists
     
-
+def GetyTitle(normalize = False):
+    # if privateWork flag is enabled, normalize plots to unit area
+    if normalize:
+        return "normalized to unit area"
+    return "Events expected"
 
 # ===============================================
 # GENERATE CANVAS AND LEGENDS
