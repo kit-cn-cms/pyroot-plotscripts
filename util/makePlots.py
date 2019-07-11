@@ -41,7 +41,7 @@ def makePlots(configData):
 
 
     print "Submitting ", len(ListOfScripts), " DrawScripts"
-    #nafInterface.drawInterface(ListOfScripts, ListOfPlots)
+    nafInterface.drawInterface(ListOfScripts, ListOfPlots)
 
     return
 
