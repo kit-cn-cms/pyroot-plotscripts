@@ -51,6 +51,8 @@ parser = optparse.OptionParser(usage=usage)
 
 parser.add_option("--channelname", dest="channelName",
         help="NAME of the channel", metavar="channelName")
+parser.add_option("--selectionlabel", dest="selectionlabel", default=None,
+        help="label of the selection", metavar="selectionlabel")
 parser.add_option("--rootfile", dest="Rootfile",
         help="ROOTFILE including the data used to create the plots", metavar="/path/to/rootfile")
 parser.add_option("--outputpath", dest="outputpath",
@@ -264,7 +266,9 @@ if privatework:
     Plots.printPrivateWork(canvas, ratio=ratio)
 if lumilabel:
     Plots.printLumi(canvas, lumi=lumilabel, ratio = ratio)
-
+#add selection label to plot
+if options.selectionlabel:
+    Plots.printCategoryLabel(canvas, catLabel=options.selectionlabel, ratio = ratio)
 plotpath=workdir+"/outputPlots/"
 if not os.path.exists(plotpath):
         os.makedirs(plotpath)
