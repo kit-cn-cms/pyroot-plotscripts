@@ -28,7 +28,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'testplot'
+    name = 'plswork'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -80,14 +80,15 @@ def main(pyrootdir, argv):
         "privateWork":          True,
         "ratio":                "#frac{data}{MC Background}",
         "logarithmic":          False,
+        "splitLegend":          True,
         # the skipX options try to skip the submission of files to the batch system
         # before skipping the output is crosschecked
         # if the output is not complete, the skipped part is done anyways
-        "skipPlotParallel":     False,
-        "skipHaddParallel":     False,
-        "skipHaddFromWildcard": False,
-        "skipRenaming":         False,
-        "skipDatacards":        False}
+        "skipPlotParallel":     True,
+        "skipHaddParallel":     True,
+        "skipHaddFromWildcard": True,
+        "skipRenaming":         True,
+        "skipDatacards":        True}
 
     plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_legacy2018_ntuples_v1.json"
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
@@ -268,7 +269,7 @@ def main(pyrootdir, argv):
         print("at the moment the outputpath is "+str(analysis.renamedPath))
         print("#################################################")
 
-        if analysis.makeDatacards:
+        if analysis.makeDataCards:
             print '''
             # ========================================================
             # Making Datacards.
