@@ -1,5 +1,5 @@
 import sys
-from os import path
+import os
 import optparse
 import importlib 
 import ROOT
@@ -36,7 +36,7 @@ parser.add_option("--datalabel", dest="datalabel", default="data",
         help="label of the data", metavar="datalabel")
 parser.add_option("--signalscaling", dest="signalscaling", default="-1",
         help="scale factor of the signal processes, -1 to scale with background integral", metavar="signalscaling")
-parser.add_option("--lumilabel", dest="lumilabel", action = "store_true", default=False,
+parser.add_option("--lumilabel", dest="lumilabel", default=False,
         help="print luminosity label on canvas", metavar="lumilabel")
 parser.add_option("--privatework", dest="privatework", action = "store_true", default=False,
         help="print privatework label on canvas", metavar="privatework")
@@ -57,7 +57,8 @@ procIden    = "$PROCESS"
 chIden      = "$CHANNEL"
 sysIden     = "$SYSTEMATIC"
 
-
+print "-"*130
+print options.logarithmic
 
 if chIden in options.nominalKey:
     nominalKey = options.nominalKey.replace(chIden, options.channelName)
@@ -77,9 +78,9 @@ plotconfig=options.plotconfig
 workdir=options.workdir
 
 # checks if paths given exist
-if not path.exists(options.Rootfile):
+if not os.path.exists(options.Rootfile):
     sys.exit("ERROR: rootfile does not exist!")
-elif not path.exists(plotconfig):
+elif not os.path.exists(plotconfig):
     sys.exit("ERROR: plotconfig does not exist!")
 
 """
@@ -91,7 +92,7 @@ print '''
 # loading config
 # ========================================================
     '''
-plotconfigpath,plotconfigfile=path.split(plotconfig)
+plotconfigpath,plotconfigfile=os.path.split(plotconfig)
 print plotconfigpath
 print "-"*130
 print plotconfigfile
@@ -152,30 +153,59 @@ print '''
 # plotting histograms and Errorbands
 # ========================================================
     '''
-# returning sorted Lists and Histograms necessary to draw the legend
+"""
+returning sorted Lists and Histograms necessary to draw the legend
+and everything ROOT related
+"""
 canvas, errorband, ratioerrorband, sortedSignal, sigHists, sortedBackground, bkgHists =Plots.drawHistsOnCanvas(PlotList,options.channelName,
                                                                                         data=dataHist,ratio=options.ratio, 
                                                                                         signalscaling=int(options.signalscaling),
-                                                                                        errorband=True, logoption=options.logoption)
+                                                                                        errorband=True, logoption=options.logarithmic)
 
 # drawing the legend
-legend = Plots.getLegend()
-legend.AddEntry(dataHist,options.datalabel,"P")
-for i,signal in enumerate(sortedSignal):
-    legend.AddEntry(sigHists[i], PlotList[signal].label, "L")
-for i,background in enumerate(sortedBackground):
-    legend.AddEntry(bkgHists[i], PlotList[background].label, "F")
-legend.Draw("same")
+#one legend:
+legendinone=False
+if legendinone:
+    legend = Plots.getLegend2()
+    legend.AddEntry(dataHist,options.datalabel,"P")
 
-# # add lumi or private work label to plot
-if options.privateWork:
-    Plots.printPrivateWork(canvas, plotOptions["ratio"], nodePlot = True)
+    for i,signal in enumerate(sortedSignal):
+        legend.AddEntry(sigHists[i], PlotList[signal].label, "L")
+    for i,background in enumerate(sortedBackground):
+        legend.AddEntry(bkgHists[i], PlotList[background].label, "F")
+    legend.Draw("same")
+else:
+    legend1 = Plots.getLegend1()
+    legend2 = Plots.getLegend2()
+    legend1.AddEntry(dataHist,options.datalabel,"P")
+
+    legendentries=len(sortedSignal)+len(sortedBackground)
+    n=0
+    for i,signal in enumerate(sortedSignal):
+        if n<legendentries/2:
+            legend1.AddEntry(sigHists[i], PlotList[signal].label, "L")
+        else:
+            legend2.AddEntry(sigHists[i], PlotList[signal].label, "L")
+        n+=1
+    for i,background in enumerate(sortedBackground):
+        if n<legendentries/2:
+            legend1.AddEntry(bkgHists[i], PlotList[background].label, "F")
+        else:
+            legend2.AddEntry(bkgHists[i], PlotList[background].label, "F")
+        n+=1
+    legend1.Draw("same")
+    legend2.Draw("same")
+
+# add lumi or private work label to plot
+if options.privatework:
+    Plots.printPrivateWork(canvas, ratio=options.ratio, nodePlot = True)
 if options.lumilabel:
-    Plots.printLumi(canvas, ratio = plotOptions["ratio"])
+    Plots.printLumi(canvas, lumi=options.lumilabel, ratio = options.ratio)
 
-plotpath=options.workdir+"/Plots/"
-if not os.path.exists(options.workdir+"/outputPlots/"):
-        os.makedirs(options.workdir+"/outputPlots/")
+plotpath=workdir+"/outputPlots/"
+if not os.path.exists(plotpath):
+        os.makedirs(plotpath)
 
-Plots.saveCanvas(canvas,workdir+"/"+options.channelName+"discriminator.pdf")
+
+Plots.saveCanvas(canvas,plotpath+"/"+options.channelName+"discriminator.pdf")
 
