@@ -36,7 +36,8 @@ def makePlots(configData):
         ListOfScripts.append( createPlotScript(channel=Plot.name,pyrootdir=pyrootdir, 
         										                    workdir=workdir, scriptPath=scriptPath,
                                                                     plotconfig=plotconfig,
-                                                                    rootfile=rootfile, ) )
+                                                                    rootfile=rootfile, 
+                                                                    selectionlabel=Plot.label) )
 
 
     print "Submitting ", len(ListOfScripts), " DrawScripts"
@@ -119,7 +120,7 @@ def createPlotConfig(configData,workdir):
 
 
 def createPlotScript(channel,pyrootdir,workdir,scriptPath,
-                        plotconfig,rootfile):
+                        plotconfig,rootfile,selectionlabel):
 
     pathtoself=pyrootdir+'/util/'
     cmsswpath = os.environ['CMSSW_BASE']
@@ -135,6 +136,7 @@ def createPlotScript(channel,pyrootdir,workdir,scriptPath,
 
     script += 'python '+pathtoself+'PlotScript.py --plotconfig="'+plotconfig+'" '
     script += ' --channelname="'+channel+'" '
+    script += ' --selectionlabel="'+selectionlabel+'"'
     script += ' --rootfile="'+rootfile+'" '
     script += ' --directory="'+pyrootdir+'"' 
     script += ' --workdir="'+workdir+'"\n' 
