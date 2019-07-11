@@ -23,6 +23,9 @@ def makePlots(configData):
     rootfile        = configData.analysis.rootPath
     signalScaling   = configData.analysis.signalScaling
     lumiLabel       = configData.analysis.lumiLabel
+    if lumiLabel:
+        if isinstance(lumiLabel,bool):
+            lumiLabel=configData.analysis.getLumi()
     privateWork     = configData.analysis.privateWork
     ratio           = configData.analysis.ratio
     logarithmic     = configData.analysis.logarithmic
@@ -41,13 +44,13 @@ def makePlots(configData):
         ListOfScripts.append( createPlotScript(channel=Plot.name,pyrootdir=pyrootdir, 
         										                    workdir=workdir, scriptPath=scriptPath,
                                                 plotconfig=plotconfig,
-                                                rootfile=rootPath, signalScaling=signalScaling,
+                                                rootfile=rootfile, signalScaling=signalScaling,
                                                 lumiLabel=lumiLabel, privateWork=privateWork,
                                                 ratio=ratio, logarithmic=logarithmic ) )
 
 
     print "Submitting ", len(ListOfScripts), " DrawScripts"
-    nafInterface.drawInterface(ListOfScripts, ListOfPlots)
+    #nafInterface.drawInterface(ListOfScripts, ListOfPlots)
 
     return
 
@@ -102,6 +105,7 @@ def createPlotConfig(configData,workdir):
                 outfile.write(' '*8+'"'+systematic+'",\n')
 
         outfile.write(' '*4+']\n')
+    return outputpath
 
 
 def createPlotScript(channel,pyrootdir,workdir,scriptPath,
@@ -126,11 +130,15 @@ def createPlotScript(channel,pyrootdir,workdir,scriptPath,
     script += ' --directory="'+pyrootdir+'"' 
 
     script += ' --workdir="'+workdir+'"' 
-    script += ' --signalscaling="'+signalScaling+'"'
-    script += ' --lumilabel="'+lumiLabel+'"'
-    script += ' --privatework="'+privateWork+'"'
-    script += ' --ratio="'+ratio+'"'
-    script += ' --logarithmic="'+logarithmic+'"\n'
+    script += ' --signalscaling="'+str(signalScaling)+'"'
+    if lumiLabel:
+        script += ' --lumilabel="'+str(lumiLabel)+'"'
+    if privateWork:
+        script += ' --privatework '
+    if ratio:
+        script += ' --ratio="'+ratio+'"'
+    if logarithmic:
+        script += ' --logarithmic \n'
 
 
     scriptPath = scriptPath+'makePlots'+str(channel)+'.sh'
