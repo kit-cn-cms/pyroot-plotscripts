@@ -16,6 +16,7 @@ class Systematics:
     def __init__(self,systematicconfig,weightDictionary = {}):
         print "loading systematics config ..."
         self.systematics=pandas.read_csv(systematicconfig,sep=",")
+        self.systematics.fillna("-", inplace=True)
         self.weightDictionary = weightDictionary
 
     """
@@ -158,8 +159,8 @@ class Systematics:
         header+=list_of_processes
         #only get information for processes that are included
         newCSV=self.systematics[header]
-        #delete all uncertainties that start with "#"
-        newCSV=newCSV[~newCSV["Uncertainty"].astype(str).str.startswith("#")]
+        #delete all uncertainties that start with "#" or "-"
+        newCSV = newCSV[~newCSV["Uncertainty"].astype(str).str.startswith("#")]
         newCSV.to_csv(outputpath, index=False)
 
     def plot_shapes(self):
@@ -167,6 +168,7 @@ class Systematics:
         for i,systematic in self.systematics.iterrows():
             if systematic["Uncertainty"].startswith("#"):
                 continue
+
             if "shape" in systematic["Type"]:
                 systName=systematic["Uncertainty"]
                 if not str(systematic["Plot"])=="-":

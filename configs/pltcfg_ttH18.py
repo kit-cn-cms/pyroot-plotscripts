@@ -83,18 +83,18 @@ doWeightsFlag = "(DoWeights==1)+(DoWeights==0)*1.0"
 
 # dictionary of expressions to replace in systematics csv
 weightReplacements = {
-    "USUALWEIGHT":  usualWeight,
-    "LEPTONSCALEFACTORS": leptonscalefactors,
-    "ELECTRONSCALEFACTORSUP": electronscalefactorsup,
+    "USUALWEIGHT":              usualWeight,
+    "LEPTONSCALEFACTORS":       leptonscalefactors,
+    "ELECTRONSCALEFACTORSUP":   electronscalefactorsup,
     "ELECTRONSCALEFACTORSDOWN": electronscalefactorsdown,
-    "MUONSCALEFACTORSUP": muonscalefactorsup,
-    "MUONSCALEFACTORSDOWN": muonscalefactorsdown,
-    "TRIGGERSCALEFACTORS":     triggerscalefactors,
-    "DOWEIGHTS":    doWeightsFlag,
-    "CSVWEIGHT": csvWeight,
-    "PUWEIGHT": puWeight,
-    "MUONTRIGSCALEFACTORSUP" : muontrigscalefactorsup,
-    "MUONTRIGSCALEFACTORSDOWN" : muontrigscalefactorsdown
+    "MUONSCALEFACTORSUP":       muonscalefactorsup,
+    "MUONSCALEFACTORSDOWN":     muonscalefactorsdown,
+    "TRIGGERSCALEFACTORS":      triggerscalefactors,
+    "DOWEIGHTS":                doWeightsFlag,
+    "CSVWEIGHT":                csvWeight,
+    "PUWEIGHT":                 puWeight,
+    "MUONTRIGSCALEFACTORSUP":   muontrigscalefactorsup,
+    "MUONTRIGSCALEFACTORSDOWN": muontrigscalefactorsdown
     }
 
 # names of the systematics (proper names needed e.g. for combination)

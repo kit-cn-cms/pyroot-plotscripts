@@ -79,7 +79,7 @@ class analysisConfig:
         elif signalProcess == "ttH" or signalProcess == "tth":
             self.signalProcess = "ttH"
         elif signalProcess == "ttZ" or signalProcess == "ttbarZ":
-            self.signalProcess = "ttbarZ"
+            self.signalProcess = "ttZ"
         else:
             print("could not find signalProcess '"+str(signalProcess)+"'. Define it in analysisConfig")
             sys.exit("unknow signalProcess chosen")

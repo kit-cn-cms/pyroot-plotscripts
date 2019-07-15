@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttZ18_hfDNN_v2_t0p5'
+    name = 'ttZControlPlots_v3'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -44,7 +44,7 @@ def main(pyrootdir, argv):
 
     # signal process
     signalProcess = "ttZ"
-    nSigSamples   = 3  
+    nSigSamples   = 3
 
     # dataera
     dataera = "2018"
@@ -56,9 +56,9 @@ def main(pyrootdir, argv):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    config          = "pltcfg_ttZ18"
+    config          = "pltcfg_ttZ18_controlPlots"
     variable_cfg    = "ttZ18_addVariables"
-    plot_cfg        = "ttZ18_dnnPlots_hfReco_t0p5"
+    plot_cfg        = "ttZ18_controlPlots"
     syst_cfg        = "ttZ18_systematics"
 
     # file for rate factors
@@ -68,12 +68,12 @@ def main(pyrootdir, argv):
     # script options
     analysisOptions = {
         # general options
-        "usePseudoData":        True,
+        "usePseudoData":        False,
         "testrun":              False,  # test run with less samples
-        "stopAfterCompile":     False,  # stop script after compiling
+        "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
-        "makeDataCards":        True,
+        "makeDataCards":        False,
         "addData":              True,  # adding real data 
         "drawParallel":         True,
         # options for drawParallel/singleExecute sub programs
@@ -92,8 +92,9 @@ def main(pyrootdir, argv):
     plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttZ_2018_v4.json"
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
-    dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/ttZ18_hf_reco_v2"}
+    #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
+    #                "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/ttZ18_hf_recoVars"}
+    dnnInterface = None
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
@@ -185,7 +186,7 @@ def main(pyrootdir, argv):
             pP.setJson(plotJson)
             #pP.setDataBases(plotDataBases)
             #pP.setMEMDataBase(memDataBase)
-            pP.setDNNInterface(dnnInterface)
+            #pP.setDNNInterface(dnnInterface)
             pP.setMaxEvts(500000)
             #pP.setRateFactorsFile(rateFactorsFile)
             pP.setSampleForVariableSetup(configData.samples[nSigSamples])

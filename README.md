@@ -10,7 +10,7 @@ For readability there is a README for each step, if deeper adjustments have to b
 - standaloneTools: files not correlated to the pyroot-plotscript but Karim insists on keeping them
 
 ## Package-requirements
-- `CMSSW_9_4_9` or newer
+- `CMSSW_9_4_X`, e.g. `9_4_10`, newer versions might lead to C++ library problems. (WIP)
 
 ## Workflow
 ### Configs
