@@ -138,7 +138,7 @@ lumi = '59.7'
 nominalweight="NomWeight:=("+defaultWeight+"*"+"("+electronSFs+"+"+muonSFs+")"+"*"+"("+electronTrigger+"+"+muonTrigger+")"+")*(DoWeights==1)+(DoWeights==0)*1.0"
 
 # even selection for sample splitting
-evenSel="*(Evt_Odd==0)*2.0"
+evenSel="*1.0"
 
 sampleDict=plotClasses.SampleDictionary()
 sampleDict.doPrintout()
@@ -146,39 +146,39 @@ doReadTrees=True
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
 samplesDataControlPlots=[
-#    plotClasses.Sample('SingleMu',ROOT.kBlack,
-#            path_vdlinden+'/SingleMuon*/*nominal*.root',
-#            sel_singlemu+sel_MET,
-#            'SingleMu', samDict=sampleDict, readTrees=doReadTrees),
-#
-#    plotClasses.Sample('SingleEl',ROOT.kBlack,
-#            path_vdlinden+'/EGamma*/*nominal*.root',
-#            sel_singleel+sel_MET,
-#            'SingleEl', samDict=sampleDict, readTrees=doReadTrees)
+    plotClasses.Sample('SingleMu',ROOT.kBlack,
+            path_vdlinden+'/SingleMuon*/*nominal*.root',
+            sel_singlemu+sel_MET,
+            'SingleMu', samDict=sampleDict, readTrees=doReadTrees),
+
+    plotClasses.Sample('SingleEl',ROOT.kBlack,
+            path_vdlinden+'/EGamma*/*nominal*.root',
+            sel_singleel+sel_MET,
+            'SingleEl', samDict=sampleDict, readTrees=doReadTrees)
 ]
 
 print "samples"
 
 
 #print "limit samples"
-samples = [
+samples=[
     # signal samples     
-    plotClasses.Sample('t#bar{t}+Z(b#bar{b})',ROOT.kCyan,
+    plotClasses.Sample('t#bar{t}+Z, Z to b#bar{b}',ROOT.kCyan,
             path_vdlinden+'/TTZToBB*/*nominal*.root',
             # lumi reweighting factor due to stupid cross section calculation
-            lumi+"*1.087"+evenSel+sel_MET,
+            lumi+"*1.1017"+evenSel+sel_MET,
             'ttZbb',
             samDict=sampleDict, readTrees=doReadTrees),
 
-    plotClasses.Sample('t#bar{t}+Z(q#bar{q})',ROOT.kCyan,
+    plotClasses.Sample('t#bar{t}+Z, Z to q#bar{q}',ROOT.kCyan,
             path_vdlinden+'/TTZToQQ*/*nominal*.root',
-            lumi+"*1.119"+evenSel+"*(GenEvt_I_TTZ==0)"+sel_MET,
+            lumi+"*1.1348"+evenSel+"*(GenEvt_I_TTZ==0)"+sel_MET,
             'ttZqq',
             samDict=sampleDict, readTrees=doReadTrees),
-
-    plotClasses.Sample('t#bar{t}+Z(ll)', ROOT.kCyan,
+    
+    plotClasses.Sample('t#bar[t}+Z, Z to ll', ROOT.kCyan,
             path_vdlinden+'/TTZToLLNuNu_M-10*/*nominal*.root',
-            lumi+"*1.006"+evenSel+sel_MET,
+            lumi+"*1.0237"+evenSel+sel_MET,
             'ttZll',
             samDict=sampleDict, readTrees=doReadTrees),
     
