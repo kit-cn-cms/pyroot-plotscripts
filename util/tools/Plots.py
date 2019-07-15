@@ -110,20 +110,20 @@ def moveOverUnderFlow(hist):
 # ===============================================
 
 def buildHistogramAndErrorBand(rootFile,sample,color,typ,label,systematics,nominalKey,procIden,systematicKey,sysIden):
-    print("NEW SAMPLE"+str(sample))
+    print("new sample: "+str(sample))
     # replace keys to get histogram key
     if procIden in nominalKey:
         sampleKey = nominalKey.replace(procIden, sample)
     else:
         sampleKey=nominalKey
     rootHist = rootFile.Get(sampleKey)
-    print("type of hist is: "+str(type(rootHist)) )
+    print("    type of hist is: "+str(type(rootHist)) )
     if not isinstance(rootHist, ROOT.TH1):
         return "ERROR"
     #moves underflow in the first and overflow in the last bin
     moveOverUnderFlow(rootHist)
     # replace keys to get systematic key
-    print("STARTING WITH SYSTEMATICS - building Errorband")
+    print("    starting with systematics - building Errorband")
     if procIden in systematicKey:
         sampleSystKey = systematicKey.replace(procIden, sample)
     else:
@@ -158,7 +158,7 @@ def buildHistogramAndErrorBand(rootFile,sample,color,typ,label,systematics,nomin
         """
 
         if isinstance(up, ROOT.TH1) and isinstance(down, ROOT.TH1):
-            print  "adding systematic ",systematic
+            print  "    adding systematic ",systematic
             moveOverUnderFlow(up)
             moveOverUnderFlow(down)
 
@@ -212,7 +212,7 @@ def addSamples(sample,color,typ,label,addsamples,PlotList):
     combinedHist = None
     print("Adding samples for summarized process %s" % sample)
     for sample in addsamples:
-        print sample
+        print "    "+sample
         if combinedHist:
             combinedHist.Add(PlotList[sample].hist)
             combinedErrorbands.append(PlotList[sample].errorband)
@@ -255,7 +255,6 @@ def generateRatioErrorband(errorband):
         x=ROOT.Double()
         y=ROOT.Double()
         ratioerrorband.GetPoint(i,x,y)
-        print y
         ratioerrorband.SetPoint(i,x,1)
         if y>0.:
             ratioerrorband.SetPointEYlow(i,ratioerrorband.GetErrorYlow(i)/y)
@@ -411,15 +410,16 @@ def drawHistsOnCanvas(PlotList, canvasName, data, ratio=False, signalscaling=1, 
     firstHist.DrawCopy("axissame")
     
     # draw signal histograms
-    for signal in sigHists:
+    for n,signal in enumerate(sigHists):
         # scale signal
         if signalscaling==-1:
             scalefactor=bkgHists[0].Integral()/signal.Integral()
         else:
             scalefactor=signalscaling
         signal.Scale(scalefactor)
+        PlotList[sortedSignal[n]].label += " x "+str(int(scalefactor))
         # draw signal histogram
-        signal.DrawCopy(option+" E0 same")
+        signal.DrawCopy(option+" same")
     
     """
     Draws the ratio plot, scales the background, signal and errorband to the background
