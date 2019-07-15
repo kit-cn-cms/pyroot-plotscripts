@@ -19,33 +19,31 @@ def stringtobool(variable):
 
 # get plotting style information parser>config>default for bool type
 def getParserConfigDefaultBool(parser,config,plotoptions,defaultbool):
-    print "-"*130
     if not parser is None:
-        print "PARSER"
+        print "%s using parser specification: %s" % (config,parser)
         return stringtobool(parser)
     elif config in plotoptions:
-        print "CONFIG"
+        print "%s using config specification: %s" % (config,plotoptions[config])
         return stringtobool(plotoptions[config])
     else:
-        print "DEFAULT"
+        print "%s using default specification: %s" % (config,defaultbool)
         return stringtobool(defaultbool)
 # get plotting style information parser>config>default
 def getParserConfigDefaultValue(parser,config,plotoptions,defaultvalue):
-    print "-"*130
     if not parser is None:
-        print "PARSER"
+        print "%s using parser specification: %s" % (config,parser)
         return parser
     elif config in plotoptions:
-        print "CONFIG"
+        print "%s using config specification: %s" % (config,plotoptions[config])
         return plotoptions[config]
     else:
-        print "DEFAULT"
+        print "%s using default specification: %s" % (config,defaultvalue)
         return defaultvalue
 """
 Enabling parser options
 """
 usage="usage=%prog [options] \n"
-usage+="USE: Plotscript.py --channelName=CHANNELNAME --rootfile=FILE --outputfile=FILE --directory=PATH -csvfile=FILE \n"
+usage+="USE: Plotscript.py --channelName=CHANNELNAME --rootfile=FILE --outputpath=PATH --directory=PATH --workdir=PATH --plotconfig=PLOTCONFIGNAME \n"
 
 parser = optparse.OptionParser(usage=usage)
 
@@ -84,12 +82,10 @@ parser.add_option("--logarithmic", dest="logarithmic", default=None,
 parser.add_option("--splitlegend", dest="splitlegend",  default=None,
         help="splits the legend in two", metavar="splitlegend")
 parser.add_option("--normalize", dest="normalize",  default=None,
-        help="normalizes plot", metavar="normalize")
+        help="normalizes plot WIP", metavar="normalize")
 
 
 (options, args) = parser.parse_args()
-
-
 
 """
 Define parser options for further use
@@ -100,25 +96,23 @@ procIden    = "$PROCESS"
 chIden      = "$CHANNEL"
 sysIden     = "$SYSTEMATIC"
 
-print "-"*130
-print options.logarithmic
+# build keys
+if chIden in options.nominalKey:
+    nominalKey      = options.nominalKey.replace(chIden, options.channelName)
+else:
+    nominalKey      = options.nominalKey
 
 if chIden in options.nominalKey:
-    nominalKey = options.nominalKey.replace(chIden, options.channelName)
+    systematicKey   = options.systematicKey.replace(chIden, options.channelName)
 else:
-    nominalKey=options.nominalKey
-
-if chIden in options.nominalKey:
-    systematicKey = options.systematicKey.replace(chIden, options.channelName)
-else:
-    systematicKey=options.systematicKey
+    systematicKey   = options.systematicKey
 
 
 # Define directories used to import stuff
 
-tooldir = options.directory+"/util/tools/"
-plotconfig=options.plotconfig
-workdir=options.workdir
+tooldir     = options.directory+"/util/tools/"
+plotconfig  = options.plotconfig
+workdir     = options.workdir
 
 # checks if paths given exist
 if not os.path.exists(options.Rootfile):
@@ -135,22 +129,16 @@ print '''
 # loading config
 # ========================================================
     '''
-plotconfigpath,plotconfigfile=os.path.split(plotconfig)
-print plotconfigpath
-print "-"*130
-print plotconfigfile
-print "-"*130
-plotconfigfile=plotconfigfile.replace('.py','')
-print plotconfigfile
-print "-"*130
+plotconfigpath,plotconfigfile   = os.path.split(plotconfig)
+plotconfigfile                  = plotconfigfile.replace('.py','')
 sys.path.append(plotconfigpath)
+pltcfg                          = importlib.import_module(plotconfigfile)
+print "using plotconfig: %s" % (plotconfigfile)
 
-
-pltcfg = importlib.import_module(plotconfigfile)
-samples=pltcfg.samples
-plottingsamples=pltcfg.plottingsamples
-systematics=pltcfg.systematics
-plotoptions=pltcfg.plotoptions
+samples         = pltcfg.samples
+plottingsamples = pltcfg.plottingsamples
+systematics     = pltcfg.systematics
+plotoptions     = pltcfg.plotoptions
 
 """
 start loading  histograms
@@ -162,35 +150,41 @@ print '''
     '''
 # import plot class
 sys.path.append(tooldir)
-Plots = importlib.import_module("Plots" )
-PlotList = {}
+Plots       = importlib.import_module("Plots" )
+PlotList    = {}
 # load ROOT File
-rootfilename = options.Rootfile
-rootFile = ROOT.TFile(rootfilename, "readonly") 
+rootfilename    = options.Rootfile
+rootFile        = ROOT.TFile(rootfilename, "readonly") 
 
 # load data and move under and overflow bin
-dataKey = nominalKey.replace(procIden, options.datakeyreplace)
-dataHist=rootFile.Get(dataKey)
+dataKey     = nominalKey.replace(procIden, options.datakeyreplace)
+dataHist    = rootFile.Get(dataKey)
 dataHist.SetStats(False)
 Plots.moveOverUnderFlow(dataHist)
+print "using data: %s" % (dataKey)
 
 # load samples
+print "start loading  samples" 
 for sample in samples:
-    color=samples[sample]['color']
-    typ=samples[sample]['typ']
-    label=samples[sample]['label']
-    PlotList[sample]=Plots.buildHistogramAndErrorBand(rootFile=rootFile,sample=sample,color=color,typ=typ,label=label,systematics=systematics,
-    				nominalKey=nominalKey,procIden=procIden,systematicKey=systematicKey,sysIden=sysIden)
+    color   = samples[sample]['color']
+    typ     = samples[sample]['typ']
+    label   = samples[sample]['label']
+    PlotList[sample] = Plots.buildHistogramAndErrorBand(rootFile=rootFile,sample=sample,
+                                                        color=color,typ=typ,label=label,
+                                                        systematics=systematics,
+                                                        nominalKey=nominalKey,procIden=procIden,
+                                                        systematicKey=systematicKey,sysIden=sysIden)
 
 """
 Combine Histograms and errorbands for combined plot channels
 """
 for sample in plottingsamples:
-    color=plottingsamples[sample]['color']
-    typ=plottingsamples[sample]['typ']
-    label=plottingsamples[sample]['label']
-    addsamples=plottingsamples[sample]['addSamples']
-    PlotList=Plots.addSamples(sample=sample,color=color,typ=typ,label=label,addsamples=addsamples,PlotList=PlotList)
+    color       = plottingsamples[sample]['color']
+    typ         = plottingsamples[sample]['typ']
+    label       = plottingsamples[sample]['label']
+    addsamples  = plottingsamples[sample]['addSamples']
+    PlotList = Plots.addSamples(sample=sample,color=color,typ=typ,label=label,
+                                    addsamples=addsamples,PlotList=PlotList)
 
 print '''
 # ========================================================
@@ -199,24 +193,18 @@ print '''
     '''
 
 #get plotting style information, prioritized by parser>config>default
-signalscaling=getParserConfigDefaultValue(parser=options.signalscaling,config="signalscaling",
+signalscaling   = getParserConfigDefaultValue(parser=options.signalscaling,config="signalscaling",
                                             plotoptions=plotoptions,defaultvalue=-1)
-print signalscaling
-ratio=getParserConfigDefaultValue(parser=options.ratio,config="ratio",
+ratio           = getParserConfigDefaultValue(parser=options.ratio,config="ratio",
                                             plotoptions=plotoptions,defaultvalue="#frac{data}{MC Background}")
-print ratio
-lumilabel=getParserConfigDefaultValue(parser=options.lumilabel,config="lumilabel",
+lumilabel       = getParserConfigDefaultValue(parser=options.lumilabel,config="lumilabel",
                                             plotoptions=plotoptions,defaultvalue=False)
-print lumilabel
-privatework=getParserConfigDefaultBool(parser=options.privatework,config="privatework",
+privatework     = getParserConfigDefaultBool(parser=options.privatework,config="privatework",
                                             plotoptions=plotoptions,defaultbool=False)
-print privatework
-logarithmic=getParserConfigDefaultBool(parser=options.logarithmic,config="logarithmic",
+logarithmic     = getParserConfigDefaultBool(parser=options.logarithmic,config="logarithmic",
                                             plotoptions=plotoptions,defaultbool=False)
-print logarithmic
-splitlegend=getParserConfigDefaultBool(parser=options.splitlegend,config="splitlegend",
+splitlegend     = getParserConfigDefaultBool(parser=options.splitlegend,config="splitlegend",
                                             plotoptions=plotoptions,defaultbool=False)
-print splitlegend
 """
 returning sorted Lists and Histograms necessary to draw the legend
 and everything ROOT related
@@ -228,15 +216,15 @@ canvas, errorband, ratioerrorband, sortedSignal, sigHists, sortedBackground, bkg
                                                                                         normalize=False)
 
 # drawing the legend
-#one legend:
+# split legend:
 
 if splitlegend:
     legend1 = Plots.getLegend1()
     legend2 = Plots.getLegend2()
     legend1.AddEntry(dataHist,options.datalabel,"P")
 
-    legendentries=len(sortedSignal)+len(sortedBackground)
-    n=0
+    legendentries = len(sortedSignal)+len(sortedBackground)
+    n = 0
     for i,signal in enumerate(sortedSignal):
         if n<legendentries/2:
             legend1.AddEntry(sigHists[i], PlotList[signal].label, "L")
@@ -263,16 +251,17 @@ else:
 
 # add lumi or private work label to plot
 if privatework:
-    Plots.printPrivateWork(canvas, ratio=ratio)
+    Plots.printPrivateWork(canvas, ratio = ratio)
 if lumilabel:
-    Plots.printLumi(canvas, lumi=lumilabel, ratio = ratio)
+    Plots.printLumi(canvas, lumi = lumilabel, ratio = ratio)
+
 #add selection label to plot
 if options.selectionlabel:
-    Plots.printCategoryLabel(canvas, catLabel=options.selectionlabel, ratio = ratio)
-plotpath=workdir+"/outputPlots/"
+    Plots.printCategoryLabel(canvas, catLabel = options.selectionlabel, ratio = ratio)
+plotpath = workdir+"/outputPlots/"
 if not os.path.exists(plotpath):
         os.makedirs(plotpath)
 
 
-Plots.saveCanvas(canvas,plotpath+"/"+options.channelName+"discriminator.pdf")
+Plots.saveCanvas(canvas,plotpath+"/"+options.channelName+".pdf")
 
