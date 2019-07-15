@@ -41,7 +41,8 @@ def getAddVars():
         "GenWeight_isr_Def_up:=GenWeight_6",
         "GenWeight_fsr_Def_down:=GenWeight_9",
         "GenWeight_fsr_Def_up:=GenWeight_7",
-
+        "Chi2Z_mirror:=max(1.-RecoTTZ_Chi2Z,0.)",
+        "Chi2Higgs_mirror:=max(1.-RecoTTH_Chi2Higgs,0.)"
 
         ]
 
