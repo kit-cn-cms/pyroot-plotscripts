@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttHDatacards'
+    name = 'ttHDatacards_test'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -55,10 +55,10 @@ def main(pyrootdir, argv):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    config          = "pltcfg_ttH18"
+    config          = "pltcfg_ttH18_Jan"
     variable_cfg    = "ttH18_addVariables"
     plot_cfg        = "ttH18_discrPlots"
-    syst_cfg        = "ttH18_systematics"
+    syst_cfg        = "ttZ18_systematics"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -68,7 +68,7 @@ def main(pyrootdir, argv):
     analysisOptions = {
         # general options
         "usePseudoData":        False,
-        "testrun":              False,  # test run with less samples
+        "testrun":              True,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
