@@ -242,17 +242,17 @@ def datacardTerminationCheck(shellScripts, datacardFiles):
 
 
 #############################
-# parallel drawing
+# make Plots
 #############################
 def drawInterface(jobsToSubmit, outputPlots, nTries = 0):
     if nTries == 0:
-        print("submitting drawParallel scripts as array job")
-        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "drawPara")
+        print("submitting makePlots scripts as array job")
+        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "makePlots")
     elif nTries < maxTries:
-        print("resubmitting drawParallel scripts as single jobs")
+        print("resubmitting makePlots scripts as single jobs")
         jobIDs = nafSubmit.submitToNAF(jobsToSubmit)
     else:
-        print("draw parallel did not work after "+str(maxTries)+" tries - ABORTING")
+        print("make Plots did not work after "+str(maxTries)+" tries - ABORTING")
         sys.exit(1)
     
     # monitoring running jobs
@@ -263,7 +263,7 @@ def drawInterface(jobsToSubmit, outputPlots, nTries = 0):
     if len(undoneScripts) > 0 or len(undonePlots) > 0:
         return drawInterface(undoneScripts, undonePlots, maxTries, nTries+1)
 
-    print("drawParallel submit interface has terminated successfully")
+    print("makePlots submit interface has terminated successfully")
 
 def drawTerminationCheck(jobsToSubmit, outputPlots):
     print("no check for the termination of draw Parallel has been implemented yet...")
