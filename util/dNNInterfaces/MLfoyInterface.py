@@ -388,7 +388,7 @@ class DNN:
         variables = pd.read_csv(csv_path, sep = ",").set_index("variablename", drop = True)
 
         # generate header
-        string = "def plots_{}():\n".format(self.category)
+        string = "def plots_{}(data = None):\n".format(self.category)
         string+= "    label = \"{}\"\n".format(self.label)
         if self.xEval:
             string+= "    selection = \"{}\"\n\n".format(self.selection.replace(" ","").replace("and","&&"))
@@ -417,6 +417,8 @@ class DNN:
         plotClasses.Plot(ROOT.TH1D({histname},{plotname},{nbins},{minval},{maxval}),{expression},selection,label),""".format(**plotConfig)
 
         string += "\n        ]\n\n"
+        string += "    if data:\n"
+        string += "        add_data_plots(plots=plots,data=data)\n"
         string += "    return plots\n"
         return string
     
@@ -431,7 +433,7 @@ class DNN:
         string = "    "
         if not opts.input_plots:
             string+= "#"
-        string += "discriminatorPlots += plots_{}()\n".format(self.category)
+        string += "discriminatorPlots += plots_{}(data)\n".format(self.category)
         return string
    
 
@@ -752,6 +754,12 @@ def init_plots(dictionary, data = None):
     if not data is None:
         data.categories.update(dictionary)
     return plots
+
+def add_data_plots(plots,data):
+    plotnames=[]
+    for plot in plots:
+        plotnames.append(plot.name)
+    data.datavariables.extend(plotnames)
     """
         return code
 
