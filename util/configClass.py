@@ -11,8 +11,8 @@ import Systematics
 
 class catData:
     def __init__(self):
-        self.categories = {}
-
+        self.categories         = {}
+        self.datavariables      = []
         # self.discrs = []
         # self.nhistobins = []
         # self.minxvals = []
@@ -151,6 +151,9 @@ class configData:
 
     def getBinlabels(self):
         return self.Data.categories.keys()
+
+    def getVariablelabels(self):
+        return self.Data.datavariables
 
     def getAddVariables(self):
         sys.path.append(self.cfgdir)
