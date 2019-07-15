@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttZDatacards_hf_recoVars_v1'
+    name = 'ttZ18_hfDNN_v2_t0p5'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -44,6 +44,7 @@ def main(pyrootdir, argv):
 
     # signal process
     signalProcess = "ttZ"
+    nSigSamples   = 3  
 
     # dataera
     dataera = "2018"
@@ -57,19 +58,19 @@ def main(pyrootdir, argv):
     # configs
     config          = "pltcfg_ttZ18"
     variable_cfg    = "ttZ18_addVariables"
-    plot_cfg        = "ttZ18_dnnPlots_hf_withReco_v1"
+    plot_cfg        = "ttZ18_dnnPlots_hfReco_t0p5"
     syst_cfg        = "ttZ18_systematics"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
-    rateFactorsFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/rate_factors_V2.csv"
+    #rateFactorsFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/rate_factors_V2.csv"
 
     # script options
     analysisOptions = {
         # general options
         "usePseudoData":        True,
         "testrun":              False,  # test run with less samples
-        "stopAfterCompile":     False,   # stop script after compiling
+        "stopAfterCompile":     False,  # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
         "makeDataCards":        True,
@@ -88,11 +89,11 @@ def main(pyrootdir, argv):
         "skipRenaming":         False,
         "skipDatacards":        False}
 
-    plotJson = ""
+    plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttZ_2018_v4.json"
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/ttZ18_hf_recoVars"}
+                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/ttZ18_hf_reco_v2"}
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
@@ -186,8 +187,8 @@ def main(pyrootdir, argv):
             #pP.setMEMDataBase(memDataBase)
             pP.setDNNInterface(dnnInterface)
             pP.setMaxEvts(500000)
-            pP.setRateFactorsFile(rateFactorsFile)
-            pP.setSampleForVariableSetup(configData.samples[0])
+            #pP.setRateFactorsFile(rateFactorsFile)
+            pP.setSampleForVariableSetup(configData.samples[nSigSamples])
 
             # run plotParallel
             pP.run()
@@ -255,7 +256,7 @@ def main(pyrootdir, argv):
             with monitor.Timer("addRealData"):
                 if analysis.usePseudoData:
                     # pseudo data without ttH
-                    pP.addData(samples = configData.samples[1:])
+                    pP.addData(samples = configData.samples[nSigSamples:])
                 else:
                     # real data with ttH
                     pP.addData(samples = configData.controlSamples)
@@ -364,7 +365,7 @@ def main(pyrootdir, argv):
                     "sepaTest":         False}
                 sampleConfig = genPlots.Config(
                     histograms  = histoList,
-                    sampleIndex = 1)
+                    sampleIndex = nSigSamples)
                 gP.makeSimpleControlPlots( sampleConfig, controlPlotOptions )
 
                 # creating shape plots
@@ -378,7 +379,7 @@ def main(pyrootdir, argv):
                     "sepaTest":         False}
                 sampleConfig = genPlots.Config(
                     histograms  = dataList,
-                    sampleIndex = 1)
+                    sampleIndex = nSigSamples)
                 gP.makeSimpleShapePlots( sampleConfig, shapePlotOptions )
 
                 monitor.printClass(gP, "after making simple MC plots")
@@ -394,7 +395,7 @@ def main(pyrootdir, argv):
             with monitor.Timer("makingMCControlPlots"):
                 sampleConfig = genPlots.Config(
                     histograms  = histoList,
-                    sampleIndex = 1)
+                    sampleIndex = nSigSamples)
 
                 # generate the llloflist internally
                 sampleConfig.genNestedHistList(
