@@ -58,7 +58,7 @@ def main(pyrootdir, argv):
     # configs
     config          = "pltcfg_ttZ18"
     variable_cfg    = "ttZ18_addVariables"
-    plot_cfg        = "ttZ18_dnnPlots_no_ttH"
+    plot_cfg        = "ttZ18_dnnPlots_no_ttH_v2"
     syst_cfg        = "ttZ18_systematics"
 
     # file for rate factors
