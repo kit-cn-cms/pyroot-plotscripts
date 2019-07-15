@@ -177,11 +177,11 @@ samples=[
     
     # background samples
 
-    # plotClasses.Sample('t#bar{t}+lf',ROOT.kRed-7,
-    #         ttbarPathS,
-    #         mcWeight+evenSel+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)'+sel_MET+sel_StrangeMuWeights,
-    #         'ttbarOther',
-    #         samDict=sampleDict, readTrees=doReadTrees),
+    plotClasses.Sample('t#bar{t}+lf',ROOT.kRed-7,
+            ttbarPathS,
+            mcWeight+evenSel+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)'+sel_MET+sel_StrangeMuWeights,
+            'ttbarOther',
+            samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,
             ttbarPathS,
