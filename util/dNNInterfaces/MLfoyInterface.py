@@ -448,6 +448,7 @@ class DNN:
         template ="""
     category_dict["category"] = ("{PRESELECTION}","{LABEL}","")
     category_dict["discr"] = "{DISCR_NAME}"
+    category_dict["catlabel"] = "{CATLABEL}"
     category_dict["nhistobins"] = ndefaultbins\n"""
 
 
@@ -470,6 +471,7 @@ class DNN:
             string += template.format(  
                 PRESELECTION    = preselection,
                 LABEL           = label,
+                CATLABEL        = self.label,
                 DISCR_NAME      = self.discrNames[i])
 
             if opts.variable_binning or opts.optimize_binning:
@@ -728,6 +730,7 @@ def init_plots(dictionary, data = None):
         sel = subdict["plotPreselections"] # load selection
         histoname = subdict["histoname"] # load histogram name
         histotitle = subdict["histotitle"] # load histogram title
+        catlabel = subdict["catlabel"] # category label
 
         # check if initialization uses bin edges or min/max vals
         # if 'subdict' contains the keyword 'bin_edges', an array
@@ -740,7 +743,7 @@ def init_plots(dictionary, data = None):
             plots.append(
                 plotClasses.Plot(
                     ROOT.TH1F(histoname,histotitle,nbins,bins),
-                    discr,sel,label))
+                    discr,sel,catlabel))
         elif "minxval" in subdict and "maxxval" in subdict:
             nbins = subdict["nhistobins"]
             xmax  = subdict["maxxval"]
@@ -748,7 +751,7 @@ def init_plots(dictionary, data = None):
             plots.append(
                 plotClasses.Plot(
                     ROOT.TH1F(histoname, histotitle,nbins,xmin, xmax),
-                    discr,sel,label))
+                    discr,sel,catlabel))
     if not data is None:
         data.categories.update(dictionary)
     return plots
