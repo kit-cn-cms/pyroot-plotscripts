@@ -2,7 +2,6 @@ import sys
 import os
 import ROOT
 import pandas
-import Systematics
 filedir = os.path.dirname(os.path.realpath(__file__))
 pyrootdir = os.path.dirname(filedir)
 
@@ -113,7 +112,7 @@ doReadTrees=True
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
 samplesDataControlPlots=[
-   plotClasses.Sample('SingleMu',ROOT.kBlack,
+   plotClasses.Sample('SingleMu','ROOT.kBlack',
            path_mwassmer+'/SingleMuon*/*nominal*.root',
            sel_singlemu+sel_MET,
            'SingleMu', samDict=sampleDict, readTrees=doReadTrees),
@@ -130,58 +129,51 @@ print "samples"
 #print "limit samples"
 samples=[
 
-    # signal samples     
-    plotClasses.Sample('t#bar{t}H',ROOT.kBlue+1,
-            path_mwassmer+'/ttHTobb_M125*/*nominal*.root'+';'+ path_mwassmer+'/ttHToNonbb_M125*/*nominal*.root',
-            '1.0*'+mcWeight+evenSel+sel_MET,
-            'ttH',
-            samDict=sampleDict, readTrees=doReadTrees),
-
     plotClasses.Sample('t#bar{t}H, H to b#bar{b}',ROOT.kBlue+1,
             path_mwassmer+'/ttHTobb_M125*/*nominal*.root',
             '1.0*'+mcWeight+evenSel+sel_MET,
             'ttH_hbb',
-            samDict=sampleDict, readTrees=doReadTrees),
+            samDict=sampleDict, readTrees=doReadTrees,typ="signal"),
   
     plotClasses.Sample('t#bar{t}H, H to c#bar{c}',ROOT.kBlue+1,
             path_mwassmer+'/ttHToNonbb_M125*/*nominal*.root',
             '1.0*'+mcWeight+evenSel+hccSel+sel_MET,
             'ttH_hcc',
-            samDict=sampleDict, readTrees=doReadTrees),
+            samDict=sampleDict, readTrees=doReadTrees,typ="signal"),
   
     plotClasses.Sample('t#bar{t}H, H to #tau#tau',ROOT.kBlue+1,
             path_mwassmer+'/ttHToNonbb_M125*/*nominal*.root',
             '1.0*'+mcWeight+evenSel+httSel+sel_MET,
             'ttH_htt',
-            samDict=sampleDict, readTrees=doReadTrees),
+            samDict=sampleDict, readTrees=doReadTrees,typ="signal"),
   
     plotClasses.Sample('t#bar{t}H, H to #gamma#gamma',ROOT.kBlue+1,
             path_mwassmer+'/ttHToNonbb_M125*/*nominal*.root',
             '1.0*'+mcWeight+evenSel+hggSel+sel_MET,'ttH_hgg',
-            samDict=sampleDict, readTrees=doReadTrees), 
+            samDict=sampleDict, readTrees=doReadTrees,typ="signal"), 
  
     plotClasses.Sample('t#bar{t}H, H to gluglu',ROOT.kBlue+1,
             path_mwassmer+'/ttHToNonbb_M125*/*nominal*.root',
             '1.0*'+mcWeight+evenSel+hglugluSel+sel_MET, 
             'ttH_hgluglu',
-            samDict=sampleDict, readTrees=doReadTrees), 
+            samDict=sampleDict, readTrees=doReadTrees,typ="signal"), 
  
     plotClasses.Sample('t#bar{t}H, H to WW',ROOT.kBlue+1,
             path_mwassmer+'/ttHToNonbb_M125*/*nominal*.root',
             '1.0*'+mcWeight+evenSel+hwwSel+sel_MET,'ttH_hww',
-            samDict=sampleDict, readTrees=doReadTrees),
+            samDict=sampleDict, readTrees=doReadTrees,typ="signal"),
   
     plotClasses.Sample('t#bar{t}H, H to ZZ',ROOT.kBlue+1,
             path_mwassmer+'/ttHToNonbb_M125*/*nominal*.root',
             '1.0*'+mcWeight+evenSel+hzzSel+sel_MET,
             'ttH_hzz',
-            samDict=sampleDict, readTrees=doReadTrees),
+            samDict=sampleDict, readTrees=doReadTrees,typ="signal"),
   
     plotClasses.Sample('t#bar{t}H, H to #gamma Z',ROOT.kBlue+1,
             path_mwassmer+'/ttHToNonbb_M125*/*nominal*.root',
             '1.0*'+mcWeight+evenSel+hzgSel+sel_MET, 
             'ttH_hzg',
-            samDict=sampleDict, readTrees=doReadTrees),
+            samDict=sampleDict, readTrees=doReadTrees,typ="signal"),
     
     # background samples
 
@@ -258,5 +250,32 @@ processes=[]
 for sample in samples:
     processes.append(sample.nick)
 list_of_processes=processes
+
+
+
+#define summerized samples that are used later in the plotting step instead of the single processes
+plottingsamples=[
+    
+    plotClasses.Sample('t#bar{t}H',ROOT.kBlue+1,
+            path_mwassmer+'/ttH*/*nominal*.root',
+            mcWeight+sel_MET,
+            'ttH', 
+            addsamples=['ttH_hbb','ttH_hcc','ttH_htt','ttH_hgg','ttH_hgluglu','ttH_hww','ttH_hzz','ttH_hzg'],
+            samDict=sampleDict, readTrees=doReadTrees,typ="signal"), 
+
+    plotClasses.Sample('V+jets',ROOT.kGreen-3,
+            VJetsPathS,
+            mcWeight+sel_MET,
+            'Vjets', addsamples=['wjets','zjets'],
+            samDict=sampleDict, readTrees=doReadTrees),
+
+    plotClasses.Sample(
+            't#bar{t}+V',ROOT.kBlue-10,
+            ttVPathS,
+            mcWeight+sel_MET,
+            'ttV',  addsamples=['ttbarW','ttbarZ'],
+            samDict=sampleDict, readTrees=doReadTrees),
+]
+
 datacard_processes = [p for p in processes if not p=="ttH"]
 

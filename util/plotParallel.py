@@ -238,11 +238,13 @@ class plotParallel:
     def addData(self, samples):
 
         sampleNicks = [s.nick for s in samples]
-	print(sampleNicks)
+        print(sampleNicks)
         rootFile = ROOT.TFile(self.getOutPath(), "UPDATE")
-        
+        """
+        get histograms and add them to data obs
+        """
         for label in self.configData.getBinlabels():
-	    print("doing {}".format(label))
+            print("doing {}".format(label))
             histName = str(sampleNicks[0])+"_"+str(self.analysis.discrName)+"_"+label
             print("getting "+histName)
             oldHist = rootFile.Get(histName)
@@ -256,5 +258,20 @@ class plotParallel:
                 newHist.Add(bufferHist)
             newHist.Write()
 
+        for datavariable in self.configData.getVariablelabels():
+            print("doing {}".format(datavariable))
+            histName = str(sampleNicks[0])+"_"+datavariable
+            print("getting "+histName)
+            oldHist = rootFile.Get(histName)
+            newHist = oldHist.Clone("data_obs_"+datavariable)
+            print("hewHist: "+str(newHist))
+            for nick in sampleNicks[1:]:
+                sampleName = str(nick)+"_"+datavariable
+                print("doing "+sampleName)
+                bufferHist = rootFile.Get(sampleName)
+                print("bufferHist: "+str(bufferHist))
+                newHist.Add(bufferHist)
+            newHist.Write()
+            
         rootFile.Close()
 
