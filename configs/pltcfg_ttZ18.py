@@ -163,22 +163,22 @@ print "samples"
 #print "limit samples"
 samples = [
     # signal samples     
-    plotClasses.Sample('t#bar{t}+Z, Z to b#bar{b}',ROOT.kCyan,
+    plotClasses.Sample('t#bar{t}+Z(b#bar{b})',ROOT.kCyan,
             path_vdlinden+'/TTZToBB*/*nominal*.root',
             # lumi reweighting factor due to stupid cross section calculation
-            lumi+"*1.1017"+evenSel+sel_MET,
+            lumi+"*1.087"+evenSel+sel_MET,
             'ttZbb',
             samDict=sampleDict, readTrees=doReadTrees),
 
-    plotClasses.Sample('t#bar{t}+Z, Z to q#bar{q}',ROOT.kCyan,
+    plotClasses.Sample('t#bar{t}+Z(q#bar{q})',ROOT.kCyan,
             path_vdlinden+'/TTZToQQ*/*nominal*.root',
-            lumi+"*1.1348"+evenSel+"*(GenEvt_I_TTZ==0)"+sel_MET,
+            lumi+"*1.119"+evenSel+"*(GenEvt_I_TTZ==0)"+sel_MET,
             'ttZqq',
             samDict=sampleDict, readTrees=doReadTrees),
 
-    plotClasses.Sample('t#bar[t}+Z, Z to ll', ROOT.kCyan,
+    plotClasses.Sample('t#bar{t}+Z(ll)', ROOT.kCyan,
             path_vdlinden+'/TTZToLLNuNu_M-10*/*nominal*.root',
-            lumi+"*1.0237"+evenSel+sel_MET,
+            lumi+"*1.006"+evenSel+sel_MET,
             'ttZll',
             samDict=sampleDict, readTrees=doReadTrees),
     
