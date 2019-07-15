@@ -16,10 +16,10 @@ import nafInterface
 
 def makePlots(configData):
 
-    ListOfPlots=configData.getDiscriminatorPlots()
-    workdir=configData.analysis.workdir
-    pyrootdir=configData.analysis.pyrootdir
-    plotconfig=createPlotConfig(configData,workdir)
+    ListOfPlots     = configData.getDiscriminatorPlots()
+    workdir         = configData.analysis.workdir
+    pyrootdir       = configData.analysis.pyrootdir
+    plotconfig      = createPlotConfig(configData,workdir)
     rootfile        = configData.analysis.rootPath
 
     # create output folders
@@ -29,18 +29,17 @@ def makePlots(configData):
         os.makedirs(scriptPath)
 
     ListOfScripts = []
-    print('Creating Scripts for Parallel Drawing')
+    print('Creating Scripts to Make Plots')
     for Plot in ListOfPlots:
-        print "-"*130
-        print Plot.name
+        print('    - {plot}' .format(plot=Plot.name)) 
         ListOfScripts.append( createPlotScript(channel=Plot.name,pyrootdir=pyrootdir, 
-        										                    workdir=workdir, scriptPath=scriptPath,
+                                                                    workdir=workdir, scriptPath=scriptPath,
                                                                     plotconfig=plotconfig,
                                                                     rootfile=rootfile, 
                                                                     selectionlabel=Plot.label) )
 
 
-    print "Submitting ", len(ListOfScripts), " DrawScripts"
+    print "Submitting ", len(ListOfScripts), " PlotScripts"
     nafInterface.drawInterface(ListOfScripts, ListOfPlots)
 
     return
@@ -49,15 +48,15 @@ def makePlots(configData):
     # creates plot wrapper of the plotting information
 def createPlotConfig(configData,workdir):
     #get plotting information
-    signalScaling   = configData.analysis.signalScaling
-    lumiLabel       = configData.analysis.lumiLabel
+    signalScaling       = configData.analysis.signalScaling
+    lumiLabel           = configData.analysis.lumiLabel
     if lumiLabel:
         if isinstance(lumiLabel,bool):
-            lumiLabel=configData.analysis.getLumi()
-    privateWork     = configData.analysis.privateWork
-    ratio           = configData.analysis.ratio
-    logarithmic     = configData.analysis.logarithmic
-    splitLegend     = configData.analysis.splitLegend
+            lumiLabel   = configData.analysis.getLumi()
+    privateWork         = configData.analysis.privateWork
+    ratio               = configData.analysis.ratio
+    logarithmic         = configData.analysis.logarithmic
+    splitLegend         = configData.analysis.splitLegend
 
     samples={}
     #samples named in the rootfile
@@ -116,9 +115,10 @@ def createPlotConfig(configData,workdir):
         outfile.write(' '*4+'"logarithmic":'+str(logarithmic)+',\n')
         outfile.write(' '*4+'"splitlegend":'+str(splitLegend)+',\n')
         outfile.write(' '*4+'}\n')
+
     return outputpath
 
-
+# creates PlotScript to make plots for a specific channel
 def createPlotScript(channel,pyrootdir,workdir,scriptPath,
                         plotconfig,rootfile,selectionlabel):
 
