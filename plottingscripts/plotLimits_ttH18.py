@@ -28,7 +28,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'plswork'
+    name = 'testrun1'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -71,7 +71,7 @@ def main(pyrootdir, argv):
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
-        "makeDataCards":        False,
+        "makeDataCards":        True,
         "addData":              True,  # adding real data 
         "makePlots":            True,
         # options for makePlots
