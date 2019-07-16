@@ -42,7 +42,8 @@ def main(pyrootdir, argv):
     rootPathForAnalysis = workdir+'/output_limitInput.root'
 
     # signal process
-    signalProcess = "ttH"
+    signalProcess   = "ttH"
+    nSigSamples     = 8
 
     # dataera
     dataera = "2018"
@@ -84,11 +85,11 @@ def main(pyrootdir, argv):
         # the skipX options try to skip the submission of files to the batch system
         # before skipping the output is crosschecked
         # if the output is not complete, the skipped part is done anyways
-        "skipPlotParallel":     True,
-        "skipHaddParallel":     True,
-        "skipHaddFromWildcard": True,
-        "skipRenaming":         True,
-        "skipDatacards":        True}
+        "skipPlotParallel":     False,
+        "skipHaddParallel":     False,
+        "skipHaddFromWildcard": False,
+        "skipRenaming":         False,
+        "skipDatacards":        False}
 
     plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_legacy2018_ntuples_v1.json"
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
@@ -255,7 +256,9 @@ def main(pyrootdir, argv):
             with monitor.Timer("addRealData"):
                 if analysis.usePseudoData:
                     # pseudo data without ttH
-                    pP.addData(samples = configData.samples[8:])
+                    pP.addData(samples = configData.samples[nSigSamples:])
+                    # pseudo data with signal
+                    #pP.addData(samples = configData.samples)
                 else:
                     # real data with ttH
                     pP.addData(samples = configData.controlSamples)
@@ -297,14 +300,14 @@ def main(pyrootdir, argv):
             '''
             # this step reexecutes this top level script once for each discriminator plot
             with monitor.Timer("makePlots"):
-                makePlots.makePlots(
-                    configData=configData
-                    )
-            print '''
-            # ========================================================
-            # this is the end of the script 
-            # ========================================================
-            '''
+                makePlots.makePlots(configData = configData)
+
+
+        print '''
+        # ========================================================
+        # this is the end of the script 
+        # ========================================================
+        '''
 
 if __name__ == "__main__":
 
