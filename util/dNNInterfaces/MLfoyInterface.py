@@ -419,7 +419,7 @@ class DNN:
         string += "\n        ]\n\n"
         string += "    if data:\n"
         string += "        add_data_plots(plots=plots,data=data)\n"
-        string += "    return plots\n"
+        string += "    return plots\n\n\n\n"
         return string
     
     def generatePlotCall(self, opts):
@@ -727,25 +727,26 @@ def plots_dnn(data, discrname):
 def init_plots(dictionary, data = None):
     plots = [] #init list of plotClasses objects to return
     for label in dictionary:
-        subdict = dictionary[label] #for easy access
-        discr = subdict["discr"] # load discriminator name
-        sel = subdict["plotPreselections"] # load selection
-        histoname = subdict["histoname"] # load histogram name
-        histotitle = subdict["histotitle"] # load histogram title
-        catlabel = subdict["catlabel"] # category label
+        subdict     = dictionary[label] #for easy access
+        discr       = subdict["discr"] # load discriminator name
+        sel         = subdict["plotPreselections"] # load selection
+        histoname   = subdict["histoname"] # load histogram name
+        histotitle  = subdict["histotitle"] # load histogram title
+        catlabel    = subdict["catlabel"] # category label
 
         # check if initialization uses bin edges or min/max vals
         # if 'subdict' contains the keyword 'bin_edges', an array
         # of type float is created from the corresponding python list.
         # Else, the min/maxvals are used 
         if "bin_edges" in subdict:
-            bins = array("f", subdict["bin_edges"])
+            bins  = array("f", subdict["bin_edges"])
             nbins = len(bins)-1 # last bin edge in array is overflow bin => subtract for nbins
             subdict["nhistobins"] = nbins # update number of bins
             plots.append(
                 plotClasses.Plot(
                     ROOT.TH1F(histoname,histotitle,nbins,bins),
                     discr,sel,catlabel))
+
         elif "minxval" in subdict and "maxxval" in subdict:
             nbins = subdict["nhistobins"]
             xmax  = subdict["maxxval"]
@@ -754,12 +755,14 @@ def init_plots(dictionary, data = None):
                 plotClasses.Plot(
                     ROOT.TH1F(histoname, histotitle,nbins,xmin, xmax),
                     discr,sel,catlabel))
+
     if not data is None:
         data.categories.update(dictionary)
+
     return plots
 
-def add_data_plots(plots,data):
-    plotnames=[]
+def add_data_plots(plots, data):
+    plotnames = []
     for plot in plots:
         plotnames.append(plot.name)
     data.datavariables.extend(plotnames)
