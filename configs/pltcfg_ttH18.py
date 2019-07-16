@@ -112,7 +112,7 @@ doReadTrees=True
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
 samplesDataControlPlots=[
-   plotClasses.Sample('SingleMu','ROOT.kBlack',
+   plotClasses.Sample('SingleMu',ROOT.kBlack,
            path_mwassmer+'/SingleMuon*/*nominal*.root',
            sel_singlemu+sel_MET,
            'SingleMu', samDict=sampleDict, readTrees=doReadTrees),
@@ -246,10 +246,11 @@ samples=[
            samDict=sampleDict, readTrees=doReadTrees), 
 ]
 
-processes=[]
+processes = []
 for sample in samples:
     processes.append(sample.nick)
-list_of_processes=processes
+list_of_processes   = processes
+datacard_processes  = processes
 
 
 
@@ -277,5 +278,4 @@ plottingsamples=[
             samDict=sampleDict, readTrees=doReadTrees),
 ]
 
-datacard_processes = [p for p in processes if not p=="ttH"]
 
