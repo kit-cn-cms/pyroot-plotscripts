@@ -17,7 +17,7 @@ import util.genPlots as genPlots
 import util.configClass as configClass
 import util.monitorTools as monitorTools
 import util.plotParallel as plotParallel
-import util.drawParallel as drawParallel
+import util.makePlots as makePlots
 import util.haddParallel as haddParallel
 import util.renameHistos as renameHistos
 import util.makeDatacards as makeDatacards
@@ -75,15 +75,18 @@ def main(pyrootdir, argv):
         "haddFromWildcard":     True,
         "makeDataCards":        False,
         "addData":              True,  # adding real data 
-        "drawParallel":         True,
-        # options for drawParallel/singleExecute sub programs
-        "makeSimplePlots":      False,
-        "makeMCControlPlots":   True,
-        "makeEventYields":      True,
+        "makePlots":            True,
+        # options for makePlots
+        "signalScaling":        -1,
+        "lumiLabel":            True,
+        "privateWork":          True,
+        "ratio":                "#frac{data}{MC Background}",
+        "logarithmic":          False,
+        "splitLegend":          True,
         # the skipX options try to skip the submission of files to the batch system
         # before skipping the output is crosschecked
         # if the output is not complete, the skipped part is done anyways
-        "skipPlotParallel":     True,
+        "skipPlotParallel":     False,
         "skipHaddParallel":     False,
         "skipHaddFromWildcard": False,
         "skipRenaming":         False,
@@ -115,7 +118,7 @@ def main(pyrootdir, argv):
         discrName       = discrName,
         dataera         = dataera)
 
-    analysis.initArguments( argv )
+    
     analysis.initAnalysisOptions( analysisOptions )
 
     pltcfg = analysis.initPlotConfig()
@@ -258,6 +261,8 @@ def main(pyrootdir, argv):
                 if analysis.usePseudoData:
                     # pseudo data without ttH
                     pP.addData(samples = configData.samples[nSigSamples:])
+                    # pseudo data with signal
+                    #pP.addData(samples = configData.samples)
                 else:
                     # real data with ttH
                     pP.addData(samples = configData.controlSamples)
@@ -271,7 +276,7 @@ def main(pyrootdir, argv):
         print("at the moment the outputpath is "+str(analysis.renamedPath))
         print("#################################################")
 
-        if analysis.makeDatacards:
+        if analysis.makeDataCards:
             print '''
             # ========================================================
             # Making Datacards.
@@ -287,198 +292,26 @@ def main(pyrootdir, argv):
                     datacardmaker       = datacardmaker,
                     signalTag           = analysis.signalProcess,
                     skipDatacards       = analysis.skipDatacards)
-
-
+        
         # =============================================================================================
-        # Invoke drawParallel step
+        # Invoke makePlots step
         # =============================================================================================
-        if analysis.drawParallel:
+        if analysis.makePlots:
             print '''
             # ========================================================
-            # Starting DrawParallel
+            # Making Plots
             # ========================================================
             '''
             # this step reexecutes this top level script once for each discriminator plot
-            with monitor.Timer("DrawParallel"):
-                drawParallel.drawParallel(
-                    ListOfPlots = configData.getDiscriminatorPlots(),
-                    workdir     = analysis.workdir,
-                    PathToSelf  = os.path.realpath(inspect.getsourcefile(lambda:0)),
-                    # Hand over opts to keep commandline options
-                    opts        = analysis.opts)
-            print '''
-            # ========================================================
-            # this is the end of the script 
-            # ========================================================
-            '''
+            with monitor.Timer("makePlots"):
+                makePlots.makePlots(configData = configData)
 
 
-
-
-
-    # =============================================================================================
-    # everything beyond this point is called by the secondary scripts
-    # =============================================================================================
-    elif analysis.plotNumber != None or analysis.singleExecute:
-        print("not doing plotParallel step")
-        if analysis.drawParallel:
-            print("we have a plotNumber --- changing discriminatorPlots")
-            configData.getDiscriminatorPlotByNumber()
-
-        if analysis.makeSimplePlots or analysis.makeMCControlPlots or analysis.makeEventYields:
-            print '''
-            # ========================================================
-            # Creating lists for later use
-            # ========================================================
-            '''
-            gP = genPlots.genPlots( 
-                outPath = analysis.renamedPath,
-                plots   = configData.getDiscriminatorPlots(),
-                plotdir = analysis.getPlotPath(),
-                dataera = dataera,
-                rebin   = 1)
-
-            histoList       = gP.genList(samples = configData.samples)
-            dataList        = gP.genList(samples = configData.controlSamples)
-            pseudodataList  = gP.genList(samples = configData.samples)
-            monitor.printClass(gP, "after creating init lists")
-
-
-
-
-
-
-        if analysis.makeSimplePlots:
-            print '''
-            # ========================================================
-            # Making simple MC plots
-            # ========================================================
-            '''
-            with monitor.Timer("makingSimpleMCplots"):
-                # creating control plots
-                controlPlotOptions = {
-                    "factor":           -1,
-                    "logscale":         False,
-                    "canvasOptions":    "histo",
-                    "normalize":        False,
-                    "stack":            True, # not default
-                    "ratio":            False,
-                    "sepaTest":         False}
-                sampleConfig = genPlots.Config(
-                    histograms  = histoList,
-                    sampleIndex = nSigSamples)
-                gP.makeSimpleControlPlots( sampleConfig, controlPlotOptions )
-
-                # creating shape plots
-                shapePlotOptions = {
-                    "logscale":         False,
-                    "canvasOptions":    "histo",
-                    "normalize":        True, # not default
-                    "stack":            False,
-                    "ratio":            False,
-                    "statTest":         False,
-                    "sepaTest":         False}
-                sampleConfig = genPlots.Config(
-                    histograms  = dataList,
-                    sampleIndex = nSigSamples)
-                gP.makeSimpleShapePlots( sampleConfig, shapePlotOptions )
-
-                monitor.printClass(gP, "after making simple MC plots")
-
-
-
-        if analysis.makeMCControlPlots:
-            print '''
-            # ========================================================
-            # Making MC Control plots
-            # ========================================================
-            '''
-            with monitor.Timer("makingMCControlPlots"):
-                sampleConfig = genPlots.Config(
-                    histograms  = histoList,
-                    sampleIndex = nSigSamples)
-
-                # generate the llloflist internally
-                sampleConfig.genNestedHistList(
-                    genPlotsClass = gP,
-                    systNames = configData.plots)
-                sampleConfig.setErrorbandConfig({
-                    "style":        3354, 
-                    "color":        ROOT.kBlack, 
-                    "doRateSysts":  False})
-        
-                if analysis.usePseudoData:
-                    pseudodataConfig = genPlots.Config(
-                        histograms  = pseudodataList,
-                        sampleIndex = 0)
-
-                    #set general plotoption
-                    controlPlotOptions = {
-                        "factor":           -2, #not default
-                        "logscale":         False,
-                        "canvasOptions":    "histo",
-                        "ratio":            True, # not default
-                        "blinded":          False,
-                        "privateWork":      True}
-                    # making the control plots
-                    gP.makeControlPlots(
-                        sampleConfig = sampleConfig,
-                        dataConfig   = pseudodataConfig,
-                        options      = controlPlotOptions,
-                        outName      = "controlPlots_pseudodata")
-
-
-                    controlPlotOptions["logscale"] = True
-                    gP.makeControlPlots(
-                        sampleConfig = sampleConfig,
-                        dataConfig   = pseudodataConfig,
-                        options      = controlPlotOptions,
-                        outName      = "controlPlots_pseudodata_LOG")
-
-                else:
-                    dataConfig = genPlots.Config(
-                        histograms  = dataList,
-                        sampleIndex = 0)
-
-                    #set general plotoption
-                    controlPlotOptions = {
-                        "factor":           -2, #not default
-                        "logscale":         False,
-                        "canvasOptions":    "histo",
-                        "ratio":            True, # not default
-                        "blinded":          False,
-                        "privateWork":      True} #not default
-                    # making the control plots
-                    gP.makeControlPlots(
-                        sampleConfig = sampleConfig,
-                        dataConfig   = dataConfig,
-                        options      = controlPlotOptions,
-                        outName      = "controlPlots_data")
-
-
-                    controlPlotOptions["logscale"] = True
-                    gP.makeControlPlots(
-                        sampleConfig = sampleConfig,
-                        dataConfig   = dataConfig,
-                        options      = controlPlotOptions,
-                        outName      = "controlPlots_data_LOG")
-                    
-
-            monitor.printClass(gP, "after making control plots")
-
-        if analysis.makeEventYields:
-            print '''
-            # ========================================================
-            # Making Event Yields
-            # ========================================================
-            '''
-            with monitor.Timer("makeEventYields"):
-                gP.makeEventYields(
-                    categories    = configData.getEventYieldCategories(),
-                    samplesConfig = histoList,
-                    dataConfig    = pseudodataList,
-                    nameRequirements = ["node"]
-                    )
+        print '''
+        # ========================================================
+        # this is the end of the script 
+        # ========================================================
+        '''
 
 
 if __name__ == "__main__":
