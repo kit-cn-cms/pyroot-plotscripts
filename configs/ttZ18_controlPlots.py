@@ -27,7 +27,7 @@ def evtYieldCategories():
 
 memexp = ""
 
-def control_plots():
+def control_plots(data=None):
     label = "\geq 4 jets, \geq 3 b-tags"
     selection = "(N_Jets>=4&&N_BTagsM>=3)"
 
@@ -38,10 +38,13 @@ def control_plots():
         plotClasses.Plot(ROOT.TH1D("inclusive_CSV_0","highest b-tag value",50,0.3,1.),"CSV[0]",selection,label),
         plotClasses.Plot(ROOT.TH1D("inclusive_JetCSV_0","b-tag value of leading jet",50,0.,1.),"Jet_CSV[0]",selection,label),
         ]
+    if data:
+        add_data_plots(plots=plots,data=data)
+
     return plots
 
 
-def plots_ge4j_ge4t():
+def plots_ge4j_ge4t(data=None):
     label = "\geq 4 jets, \geq 4 b-tags"
     selection = "(N_Jets>=4&&N_BTagsM>=4)"
 
@@ -67,9 +70,11 @@ def plots_ge4j_ge4t():
         plotClasses.Plot(ROOT.TH1D("ge4j_ge4t_Evt_Pt_minDrTaggedJets","p_{T}( min #DeltaR(tag,tag) )",50,30.0,500.0),"Evt_Pt_minDrTaggedJets",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge4j_ge4t_CSV_2","third highest b-tag value",50,0.3,1.0),"CSV[2]",selection,label),
         ]
+    if data:
+        add_data_plots(plots=plots,data=data)
 
     return plots
-def plots_ge6j_ge3t():
+def plots_ge6j_ge3t(data=None):
     label = "\geq 6 jets, \geq 3 b-tags"
     selection = "(N_Jets>=6&&N_BTagsM>=3)"
 
@@ -112,9 +117,11 @@ def plots_ge6j_ge3t():
         plotClasses.Plot(ROOT.TH1D("control_Chi2_Higgs_log_mirrored","log(#chi^{2}(H))",50,-50.,0.),"log(Chi2Higgs_mirror+1e-30)",selection,label),
         plotClasses.Plot(ROOT.TH1D("control_Chi2_Z_log_mirrored","log(#chi^{2}(Z))",50,-50.,0.),"log(Chi2Z_mirror+1e-30)",selection,label),
         ]
+    if data:
+        add_data_plots(plots=plots,data=data)
 
     return plots
-def plots_le5j_ge3t():
+def plots_le5j_ge3t(data=None):
     label = "\leq 5 jets, \geq 3 b-tags"
     selection = "(N_Jets<=5&&N_BTagsM>=3)"
 
@@ -140,9 +147,11 @@ def plots_le5j_ge3t():
         plotClasses.Plot(ROOT.TH1D("le5j_ge3t_Evt_Pt_minDrTaggedJets","p_{T}( min #DeltaR(tag,tag) )",50,0.0,500.0),"Evt_Pt_minDrTaggedJets",selection,label),
         plotClasses.Plot(ROOT.TH1D("le5j_ge3t_Evt_M_TaggedJetsAverage","average M(tags)",50,5.0,50.0),"Evt_M_TaggedJetsAverage",selection,label),
         ]
+    if data:
+        add_data_plots(plots=plots,data=data)
 
     return plots
-def plots_5j_ge3t():
+def plots_5j_ge3t(data=None):
     label = "5 jets, \geq 3 b-tags"
     selection = "(N_Jets==5&&N_BTagsM>=3)"
 
@@ -168,9 +177,11 @@ def plots_5j_ge3t():
         plotClasses.Plot(ROOT.TH1D("5j_ge3t_Evt_M_TaggedJetsAverage","average M(tags)",50,5.0,50.0),"Evt_M_TaggedJetsAverage",selection,label),
         plotClasses.Plot(ROOT.TH1D("5j_ge3t_Evt_Pt_minDrTaggedJets","p_{T}( min #DeltaR(tag,tag) )",50,0.0,500.0),"Evt_Pt_minDrTaggedJets",selection,label),
         ]
+    if data:
+        add_data_plots(plots=plots,data=data)
 
     return plots
-def plots_ge4j_ge3t():
+def plots_ge4j_ge3t(data=None):
     label = "\geq 4 jets, \geq 3 b-tags"
     selection = "(N_Jets>=4&&N_BTagsM>=3)"
 
@@ -196,9 +207,11 @@ def plots_ge4j_ge3t():
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_CSV_2","third highest b-tag value",50,0.3,1.0),"CSV[2]",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Evt_Pt_minDrTaggedJets","p_{T}( min #DeltaR(tag,tag) )",50,0.0,500.0),"Evt_Pt_minDrTaggedJets",selection,label),
         ]
+    if data:
+        add_data_plots(plots=plots,data=data)
 
     return plots
-def plots_4j_ge3t():
+def plots_4j_ge3t(data=None):
     label = "4 jets, \geq 3 b-tags"
     selection = "(N_Jets==4&&N_BTagsM>=3)"
 
@@ -224,9 +237,11 @@ def plots_4j_ge3t():
         plotClasses.Plot(ROOT.TH1D("4j_ge3t_Evt_M_TaggedJetsAverage","average M(tags)",50,5.0,50.0),"Evt_M_TaggedJetsAverage",selection,label),
         plotClasses.Plot(ROOT.TH1D("4j_ge3t_RecoTTZ_TopHad_M","ttZ reconstruction M(t_{had})",50,100.0,500.0),"RecoTTZ_TopHad_M",selection,label),
         ]
+    if data:
+        add_data_plots(plots=plots,data=data)
 
     return plots
-def plots_ge4j_3t():
+def plots_ge4j_3t(data=None):
     label = "\geq 4 jets, 3 b-tags"
     selection = "(N_Jets>=4&&N_BTagsM==3)"
 
@@ -252,20 +267,22 @@ def plots_ge4j_3t():
         plotClasses.Plot(ROOT.TH1D("ge4j_3t_Evt_Pt_minDrTaggedJets","p_{T}( min #DeltaR(tag,tag) )",50,0.0,500.0),"Evt_Pt_minDrTaggedJets",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge4j_3t_Evt_M_TaggedJetsAverage","average M(tags)",50,5.0,50.0),"Evt_M_TaggedJetsAverage",selection,label),
         ]
+    if data:
+        add_data_plots(plots=plots,data=data)
 
     return plots
 
 
 def getDiscriminatorPlots(data = None, discrname = ''):
     discriminatorPlots = []
-    discriminatorPlots += control_plots()
-    discriminatorPlots += plots_ge4j_ge4t()
-    discriminatorPlots += plots_ge6j_ge3t()
-    discriminatorPlots += plots_le5j_ge3t()
-    discriminatorPlots += plots_5j_ge3t()
-    discriminatorPlots += plots_ge4j_ge3t()
-    discriminatorPlots += plots_4j_ge3t()
-    discriminatorPlots += plots_ge4j_3t()
+    discriminatorPlots += control_plots(data)
+    discriminatorPlots += plots_ge4j_ge4t(data)
+    discriminatorPlots += plots_ge6j_ge3t(data)
+    discriminatorPlots += plots_le5j_ge3t(data)
+    discriminatorPlots += plots_5j_ge3t(data)
+    discriminatorPlots += plots_ge4j_ge3t(data)
+    discriminatorPlots += plots_4j_ge3t(data)
+    discriminatorPlots += plots_ge4j_3t(data)
 
     return discriminatorPlots
 
@@ -303,3 +320,9 @@ def init_plots(dictionary, data = None):
         data.categories.update(dictionary)
     return plots
     
+
+def add_data_plots(plots, data):
+    plotnames = []
+    for plot in plots:
+        plotnames.append(plot.name)
+    data.datavariables.extend(plotnames)
