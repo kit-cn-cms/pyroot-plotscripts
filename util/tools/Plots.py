@@ -71,7 +71,7 @@ class Plot:
         if self.typ=="bkg":
             self.hist.SetLineColor(ROOT.kBlack )
             self.hist.SetFillColor(self.color)
-            self.hist.SetLineWidth(1)
+            self.hist.SetLineWidth(0)
         elif self.typ=="signal":
             self.hist.SetLineColor(self.color )
             self.hist.SetFillColor(0)
@@ -154,18 +154,26 @@ def buildHistogramAndErrorBand(rootFile,sample,color,typ,label,systematics,nomin
         down= rootFile.Get(downname)
         
         """
-        check if histogram is TH1 type, else skip uncertainty
+        check if histogram is TH1 type and integrals>0, else skip uncertainty
         """
 
         if isinstance(up, ROOT.TH1) and isinstance(down, ROOT.TH1):
+            if up.Integral() < 0 or down.Integral() < 0:
+                print("    variation Integrals of systematic {} smaller zero. skipping.".format(systematic))
+                continue
             print  "    adding systematic ",systematic
             moveOverUnderFlow(up)
             moveOverUnderFlow(down)
 
+            if debug>9:
+                print("        integral up   {}".format(up.Integral()))
+                print("        integral nom  {}".format(rootHist.Integral()))
+                print("        integral down {}".format(down.Integral()))
+
             for ibin in range(0, rootHist.GetNbinsX()):
                 # get up down variations
-                u_=up[ibin+1]-rootHist[ibin+1]
-                d_=down[ibin+1]-rootHist[ibin+1]
+                u_= up[ibin+1]-rootHist[ibin+1]
+                d_= down[ibin+1]-rootHist[ibin+1]
                  # set max as up and min as down
                 u = max(u_,d_)
                 d = min(u_,d_)
@@ -175,10 +183,10 @@ def buildHistogramAndErrorBand(rootFile,sample,color,typ,label,systematics,nomin
                 upErrors[ibin]=ROOT.TMath.Sqrt( upErrors[ibin]*upErrors[ibin] + u*u )
                 downErrors[ibin] = ROOT.TMath.Sqrt( downErrors[ibin]*downErrors[ibin] + d*d)
             
-            if debug>99:
-                print "adding up/down ", u, d
-                print "total up/down now: ", upErrors[ibin], downErrors[ibin]
-                print "-"*50
+                if debug>99:
+                    print("        adding up/down {}/{}".format(u,d))
+                    print("             total {} +{}/-{}".format(rootHist[ibin+1], upErrors[ibin], downErrors[ibin]))
+                    #print "-"*50
         else:
             if debug>9:
                 print("ERROR! can not use: "+str(systematic) )
