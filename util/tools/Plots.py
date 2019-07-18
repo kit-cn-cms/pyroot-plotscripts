@@ -301,11 +301,10 @@ def moveOverUnderFlow(hist):
 # DRAW HISTOGRAMS ON CANVAS
 # ===============================================
 
-def drawHistsOnCanvas(PlotList, canvasName, data, ratio=False, signalscaling=1, errorband=None, displayname=None, logoption=False, normalize=False):
+def drawHistsOnCanvas(PlotList, canvasName, data=None, ratio=False, signalscaling=1, errorband=None, displayname=None, logoption=False, normalize=False):
     if not displayname: 
         displayname=canvasName
         
-    canvas = getCanvas(canvasName, ratio)
     """
     set the Style for the Signal and Background Plots
     get the integral of the hists to sort it by event yield for plotting
@@ -332,6 +331,7 @@ def drawHistsOnCanvas(PlotList, canvasName, data, ratio=False, signalscaling=1, 
     """
     errorbands=[]
     bkgHists=[]
+    combinederrorband=None
     for i in range(len(sortedBackground),0,-1):
         background=sortedBackground[i-1]
         PlotObject=PlotList[background]
@@ -343,8 +343,8 @@ def drawHistsOnCanvas(PlotList, canvasName, data, ratio=False, signalscaling=1, 
             hist.Add(bkgHists[0])
             bkgHists.insert(0, hist)
             errorbands.append(PlotObject.errorband.Clone())
-
-    errorband=addErrorbands(errorbands,hist)
+    if bkgHists:
+        combinederrorband=addErrorbands(errorbands,bkgHists[0])
 
     """
     sort signal Histograms by Event Yield
@@ -360,10 +360,13 @@ def drawHistsOnCanvas(PlotList, canvasName, data, ratio=False, signalscaling=1, 
     yMinMax is the minimal bin value of all background histograms, 
     needed for logarithmic plotting (need to set lowest value)
     """
-    canvas.cd(1)
     yMax = 1e-9
     yMinMax = 1000.
     for h in bkgHists:
+        yMax = max(h.GetBinContent(h.GetMaximumBin()), yMax)
+        if h.GetBinContent(h.GetMaximumBin()) > 0:
+            yMinMax = min(h.GetBinContent(h.GetMaximumBin()), yMinMax)
+    for h in sigHists:
         yMax = max(h.GetBinContent(h.GetMaximumBin()), yMax)
         if h.GetBinContent(h.GetMaximumBin()) > 0:
             yMinMax = min(h.GetBinContent(h.GetMaximumBin()), yMinMax)
@@ -375,8 +378,23 @@ def drawHistsOnCanvas(PlotList, canvasName, data, ratio=False, signalscaling=1, 
     """
     if len(bkgHists) == 0:
         firstHist = PlotList[sortedSignal[0]].hist
+        signalscaling=1
+        ratio=False
+        data=False
     else:
         firstHist = bkgHists[0]
+    """
+    create Canvas split in two if ratio is activated
+    """
+    canvas = getCanvas(canvasName, ratio)
+    canvas.cd(1)
+
+    firstHistIntegral=firstHist.Integral()
+    if normalize:
+        normalizefactor=1/firstHist.Integral()
+        firstHist.Scale(normalizefactor)
+        yMax    = yMax*normalizefactor
+        yMinMax = yMinMax*normalizefactor
 
     """
     consider logoption and set the user range accordingly
@@ -388,30 +406,42 @@ def drawHistsOnCanvas(PlotList, canvasName, data, ratio=False, signalscaling=1, 
     else:
         firstHist.GetYaxis().SetRangeUser(0, yMax*1.5)
     
-    firstHist.GetXaxis().SetTitle("")
+    
     firstHist.GetYaxis().SetTitle(GetyTitle(normalize))
     firstHist.GetYaxis().SetTitleSize(firstHist.GetYaxis().GetTitleSize()*1.2)
     #firstHist.GetYaxis().SetTitleOffset(0.5)
     canvaslabel=firstHist.GetTitle()
-    firstHist.SetTitle("")
+    if ratio:
+        firstHist.GetXaxis().SetTitle("")
+        firstHist.SetTitle("")
+    else:
+        firstHist.GetXaxis().SetTitle(canvaslabel)
+        firstHist.SetTitle("")
 
     option = "histo"
-    firstHist.DrawCopy(option+"E0")
+    if bkgHists:
+        firstHist.DrawCopy(option+"E0")
+    else:
+        firstHist.DrawCopy(option)
     """
     draw the other histograms and the errorband
     """
     for h in bkgHists[1:]:
+        if normalize:
+            h.Scale(normalizefactor)
         h.DrawCopy(option+"same")
 
-    errorband.SetFillStyle(3004)
-    errorband.SetLineColor(ROOT.kBlack)
-    errorband.SetFillColor(ROOT.kBlack)
-    errorband.Draw("same2")
+    if errorband and combinederrorband:
+        combinederrorband.SetFillStyle(3004)
+        combinederrorband.SetLineColor(ROOT.kBlack)
+        combinederrorband.SetFillColor(ROOT.kBlack)
+        combinederrorband.Draw("same2")
 
     # draw data
-    data.SetLineColor(ROOT.kBlack)
-    data.SetMarkerStyle(20)
-    data.Draw("same2")
+    if data:
+        data.SetLineColor(ROOT.kBlack)
+        data.SetMarkerStyle(20)
+        data.Draw("same2")
 
     canvas.cd(1)
     # redraw axis
@@ -419,13 +449,17 @@ def drawHistsOnCanvas(PlotList, canvasName, data, ratio=False, signalscaling=1, 
     
     # draw signal histograms
     for n,signal in enumerate(sigHists):
+        print sortedSignal[n]
         # scale signal
-        if signalscaling==-1:
-            scalefactor=bkgHists[0].Integral()/signal.Integral()
+        if normalize:
+            scalefactor=1/signal.Integral()
+        elif signalscaling==-1:
+            scalefactor=firstHistIntegral/signal.Integral()
         else:
             scalefactor=signalscaling
         signal.Scale(scalefactor)
-        PlotList[sortedSignal[n]].label += " x "+str(int(scalefactor))
+        if scalefactor != 1 and not normalize:
+            PlotList[sortedSignal[n]].label += " x "+str(int(scalefactor))
         # draw signal histogram
         signal.DrawCopy(option+" same")
     
@@ -458,7 +492,7 @@ def drawHistsOnCanvas(PlotList, canvasName, data, ratio=False, signalscaling=1, 
         line.DrawCopy("histo")
         # ratio plot
         ratioPlot = data.Clone()
-        ratioPlot.Divide(bkgHists[0])
+        ratioPlot.Divide(firstHist)
         ratioPlot.SetTitle(firstHist.GetTitle())
         ratioPlot.SetLineColor(ROOT.kBlack)
         ratioPlot.SetLineWidth(1)
@@ -466,7 +500,7 @@ def drawHistsOnCanvas(PlotList, canvasName, data, ratio=False, signalscaling=1, 
         ROOT.gStyle.SetErrorX(0)
         ratioPlot.DrawCopy("sameP")
 
-        ratioerrorband=generateRatioErrorband(errorband)
+        ratioerrorband=generateRatioErrorband(combinederrorband)
         ratioerrorband.Draw("same2")
         canvas.cd(1)
 
@@ -476,9 +510,9 @@ def drawHistsOnCanvas(PlotList, canvasName, data, ratio=False, signalscaling=1, 
     for labels
     """
     if ratio:
-        return canvas, errorband, ratioerrorband, sortedSignal, sigHists, sortedBackground, bkgHists
+        return canvas, combinederrorband, ratioerrorband, sortedSignal, sigHists, sortedBackground, bkgHists, data, ratio
     else:
-        return canvas, errorband, sortedSignal, sigHists, sortedBackground, bkgHists
+        return canvas, combinederrorband, False, sortedSignal, sigHists, sortedBackground, bkgHists, data, ratio
     
 def GetyTitle(normalize = False):
     # if privateWork flag is enabled, normalize plots to unit area
