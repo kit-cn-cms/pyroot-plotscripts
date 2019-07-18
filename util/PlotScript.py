@@ -82,7 +82,7 @@ parser.add_option("--logarithmic", dest="logarithmic", default=None,
 parser.add_option("--splitlegend", dest="splitlegend",  default=None,
         help="splits the legend in two", metavar="splitlegend")
 parser.add_option("--normalize", dest="normalize",  default=None,
-        help="normalizes plot WIP", metavar="normalize")
+        help="normalizes plot", metavar="normalize")
 
 
 (options, args) = parser.parse_args()
@@ -205,15 +205,17 @@ logarithmic     = getParserConfigDefaultBool(parser=options.logarithmic,config="
                                             plotoptions=plotoptions,defaultbool=False)
 splitlegend     = getParserConfigDefaultBool(parser=options.splitlegend,config="splitlegend",
                                             plotoptions=plotoptions,defaultbool=False)
+normalize       = getParserConfigDefaultBool(parser=options.normalize,config="normalize",
+                                            plotoptions=plotoptions,defaultbool=False)
 """
 returning sorted Lists and Histograms necessary to draw the legend
 and everything ROOT related
 """
-canvas, errorband, ratioerrorband, sortedSignal, sigHists, sortedBackground, bkgHists =Plots.drawHistsOnCanvas(PlotList,options.channelName,
+canvas, errorband, ratioerrorband, sortedSignal, sigHists, sortedBackground, bkgHists, data, ratio =Plots.drawHistsOnCanvas(PlotList,options.channelName,
                                                                                         data=dataHist,ratio=ratio, 
                                                                                         signalscaling=int(signalscaling),
                                                                                         errorband=True, logoption=logarithmic,
-                                                                                        normalize=False)
+                                                                                        normalize=normalize)
 
 # drawing the legend
 # split legend:
@@ -221,7 +223,8 @@ canvas, errorband, ratioerrorband, sortedSignal, sigHists, sortedBackground, bkg
 if splitlegend:
     legend1 = Plots.getLegend1()
     legend2 = Plots.getLegend2()
-    legend1.AddEntry(dataHist,options.datalabel,"P")
+    if data:
+        legend1.AddEntry(dataHist,options.datalabel,"P")
 
     legendentries = len(sortedSignal)+len(sortedBackground)
     n = 0
