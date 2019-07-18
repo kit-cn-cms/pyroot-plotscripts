@@ -37,12 +37,22 @@ def control_plots(data=None):
         plotClasses.Plot(ROOT.TH1D("inclusive_N_Jets","number of reconstructed jets",10,3.5,13.5),"N_Jets",selection,label),
         plotClasses.Plot(ROOT.TH1D("inclusive_CSV_0","highest b-tag value",50,0.3,1.),"CSV[0]",selection,label),
         plotClasses.Plot(ROOT.TH1D("inclusive_JetCSV_0","b-tag value of leading jet",50,0.,1.),"Jet_CSV[0]",selection,label),
+
+        plotClasses.Plot(ROOT.TH1D("inclusive_Electron_Pt","p_{T}(electron)",40,20,200),"Electron_Pt",selection,label),
+        plotClasses.Plot(ROOT.TH1D("inclusive_Electron_Eta","#eta(electron)",40,-2.5,2.5),"Electron_Eta[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("inclusive_Electron_Phi","#phi(electron)",40,-3.1416,3.1416),"Electron_Phi[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("inclusive_Muon_Pt","p_{T}(muon)",40,20,200),"Muon_Pt",selection,label),
+        plotClasses.Plot(ROOT.TH1D("inclusive_Muon_Eta","#eta(muon)",40,-2.5,2.5),"Muon_Eta[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("inclusive_Muon_Phi","#phi(muon)",40,-3.1416,3.1416),"Muon_Phi[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("inclusive_Lepton_Pt","p_{T}(lepton)",40,20,200),"LooseLepton_Pt",selection,label),
+        plotClasses.Plot(ROOT.TH1D("inclusive_Lepton_Eta","#eta(lepton)",40,-2.5,2.5),"LooseLepton_Eta[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("inclusive_Lepton_Phi","#phi(lepton)",40,-3.1416,3.1416),"LooseLepton_Phi[0]",selection,label),
+
         ]
     if data:
         add_data_plots(plots=plots,data=data)
 
     return plots
-
 
 def plots_ge4j_ge4t(data=None):
     label = "\geq 4 jets, \geq 4 b-tags"
@@ -279,9 +289,9 @@ def getDiscriminatorPlots(data = None, discrname = ''):
     discriminatorPlots += plots_ge4j_ge4t(data)
     discriminatorPlots += plots_ge6j_ge3t(data)
     discriminatorPlots += plots_le5j_ge3t(data)
-    discriminatorPlots += plots_5j_ge3t(data)
+    #discriminatorPlots += plots_5j_ge3t(data)
     discriminatorPlots += plots_ge4j_ge3t(data)
-    discriminatorPlots += plots_4j_ge3t(data)
+    #discriminatorPlots += plots_4j_ge3t(data)
     discriminatorPlots += plots_ge4j_3t(data)
 
     return discriminatorPlots

@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttZ18_5NodeDNN'
+    name = 'ttZ18_5NodeDNN_t0p1_internalCSV'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -56,10 +56,10 @@ def main(pyrootdir, argv):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    config          = "pltcfg_ttZ18"
+    config          = "pltcfg_ttZ18_internalCSV"
     variable_cfg    = "ttZ18_addVariables"
-    plot_cfg        = "ttZ18_discrPlots_5Node"
-    syst_cfg        = "ttZ18_systematics"
+    plot_cfg        = "ttZ18_discrPlots_5Node_t0p1"
+    syst_cfg        = "ttZ18_systematics_internalCSV"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
