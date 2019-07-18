@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttZControlPlots_v3'
+    name = 'ttZControlPlots_internalCSV'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -44,7 +44,7 @@ def main(pyrootdir, argv):
 
     # signal process
     signalProcess = "ttZ"
-    nSigSamples   = 3
+    nSigSamples   = 1
 
     # dataera
     dataera = "2018"
@@ -56,10 +56,10 @@ def main(pyrootdir, argv):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    config          = "pltcfg_ttZ18_controlPlots"
+    config          = "pltcfg_ttZ18_controlPlots_internalCSV"
     variable_cfg    = "ttZ18_addVariables"
     plot_cfg        = "ttZ18_controlPlots"
-    syst_cfg        = "ttZ18_systematics"
+    syst_cfg        = "ttZ18_systematics_internalCSV"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -190,7 +190,7 @@ def main(pyrootdir, argv):
             #pP.setDataBases(plotDataBases)
             #pP.setMEMDataBase(memDataBase)
             #pP.setDNNInterface(dnnInterface)
-            pP.setMaxEvts(500000)
+            pP.setMaxEvts(250000)
             #pP.setRateFactorsFile(rateFactorsFile)
             pP.setSampleForVariableSetup(configData.samples[nSigSamples])
 

@@ -164,24 +164,24 @@ print "samples"
 #print "limit samples"
 samples=[
     # signal samples     
-    plotClasses.Sample('t#bar{t}+Z, Z to b#bar{b}',ROOT.kCyan,
+    plotClasses.Sample('t#bar{t}Z(b#bar{b})',ROOT.kCyan,
             path_vdlinden+'/TTZToBB*/*nominal*.root',
             # lumi reweighting factor due to stupid cross section calculation
             lumi+"*1.1017"+evenSel+sel_MET,
             'ttZbb',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
-    plotClasses.Sample('t#bar{t}+Z, Z to q#bar{q}',ROOT.kCyan,
+    plotClasses.Sample('t#bar{t}Z(q#bar{q})',ROOT.kSpring+10,
             path_vdlinden+'/TTZToQQ*/*nominal*.root',
-            lumi+"*1.1348"+evenSel+"*(GenEvt_I_TTZ==0)"+sel_MET,
+            lumi+"*1.1348"+evenSel+"*(GenEvt_I_TTZ==1)"+sel_MET,
             'ttZqq',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
     
-    plotClasses.Sample('t#bar[t}+Z, Z to ll', ROOT.kCyan,
-            path_vdlinden+'/TTZToLLNuNu_M-10*/*nominal*.root',
-            lumi+"*1.0237"+evenSel+sel_MET,
-            'ttZll',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+    #plotClasses.Sample('t#bar[t}Z(ll)', ROOT.kCyan,
+    #        path_vdlinden+'/TTZToLLNuNu_M-10*/*nominal*.root',
+    #        lumi+"*1.0237"+evenSel+sel_MET,
+    #        'ttZll',
+    #        samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
     
     # background samples
 
@@ -263,11 +263,11 @@ datacard_processes  = processes
 
 
 plottingsamples = [
-    plotClasses.Sample("t#bar{t}Z", ROOT.kCyan,
-        ttZpath,
-        lumi+evenSel+sel_MET,
-        "ttZ", addsamples = ["ttZbb", "ttZqq", "ttZll"],
-        samDict = sampleDict, readTrees = doReadTrees, typ = "signal"),
+    #plotClasses.Sample("t#bar{t}Z", ROOT.kCyan,
+    #    ttZpath,
+    #    lumi+evenSel+sel_MET,
+    #    "ttZ", addsamples = ["ttZbb", "ttZqq", "ttZll"],
+    #    samDict = sampleDict, readTrees = doReadTrees, typ = "signal"),
 
     plotClasses.Sample("V+jets", ROOT.kGreen-3,
         VJetsPathS,

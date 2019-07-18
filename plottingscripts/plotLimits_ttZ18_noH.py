@@ -29,7 +29,7 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttZ18_4NodeDNN'
+    name = 'ttZ18_4NodeDNN_t0p1'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -58,7 +58,7 @@ def main(pyrootdir, argv):
     # configs
     config          = "pltcfg_ttZ18"
     variable_cfg    = "ttZ18_addVariables"
-    plot_cfg        = "ttZ18_discrPlots_4Node"
+    plot_cfg        = "ttZ18_discrPlots_4Node_t0p1"
     syst_cfg        = "ttZ18_systematics"
 
     # file for rate factors
