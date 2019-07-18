@@ -72,10 +72,6 @@ class analysisConfig:
     def setSignalProcess(self, signalProcess, pltcfgName):
         if signalProcess == "ttbb":
             self.signalProcess = "ttbb"
-            # lower and upper end of samples
-            self.tt_samplesLower = 0
-            self.tt_samplesUpper = 5
-            print("ttbb was chosen as signal process")
         elif signalProcess == "ttH" or signalProcess == "tth":
             self.signalProcess = "ttH"
         elif signalProcess == "ttZ" or signalProcess == "ttbarZ":
@@ -129,7 +125,8 @@ class analysisConfig:
                 self.makeDataCards= analysisOptions[key] 
             elif key in ("makePlots"):
                 self.makePlots= analysisOptions[key] 
-
+            elif key in ("usePseudoData"):
+                self.usePseudoData = analysisOptions[key]
 
     def initPlotConfig(self):
         configdir = self.pyrootdir+"/configs/"

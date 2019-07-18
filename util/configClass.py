@@ -13,27 +13,9 @@ class catData:
     def __init__(self):
         self.categories         = {}
         self.datavariables      = []
-        # self.discrs = []
-        # self.nhistobins = []
-        # self.minxvals = []
-        # self.maxxvals = []
-        # self.categories = []
-
-        # self.plotPreselections = []
-        # self.binlabels = []
 
     def getNEntries(self):
         return len(self.categories)
-
-    # def getEntry(self, i):
-    #     return {
-    #         "discr":            self.discrs[i],
-    #         "nhistobins":       self.nhistobins[i],
-    #         "minxvals":         self.minxvals[i],
-    #         "maxxvals":         self.maxxvals[i],
-    #         "category":         self.categories[i],
-    #         "plotPreselection": self.plotPreselections[i],
-    #         "binlabel":         self.binlabels[i]}
 
 
 class configData:
@@ -82,24 +64,7 @@ class configData:
         self.plots=self.systematics.plot_shapes()
 
     def writeConfigDataToWorkdir(self):
-        # if self.Data == None:
-        #     print("there is no config data")
-        #     return
-
-        # with open(self.analysis.workdir+"/configData.csv", "w") as csvf:
-        #     csvf.write("categories,nhistobins,minxvals,maxxvals,discrs")
-        #     for label in self.Data.categories:
-        #         subdict = self.Data.categories[label]
-        #         line = "\n"
-        #         line+= str(subdict["categories"])+";"
-        #         line+= str(subdict["nhistobins"])+";"
-        #         if "bin_edges" in 
-        #         line+= str(self.Data.minxvals[i])+";"
-        #         line+= str(self.Data.maxxvals[i])+";"
-        #         line+= str(self.Data.discrs[i])
-        #         csvf.write(line)
-        # print("wrote config data to workdir")
-        # print("path: "+str(self.analysis.workdir+"/configData.csv"))
+        # deprecated
         return
 
     def genDiscriminatorPlots(self, memexp, dnnInterface = None):
