@@ -190,9 +190,8 @@ class plotParallel:
         writer = scriptWriter.scriptWriter(self)
         writer.writeCC()
 
-        # create rename script
+        # create cleanup script
         writer.writeCleanupScript()
-        #writer.writeRenameScript()
 
         # creating output folders
         print( "creating output folders" )

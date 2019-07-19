@@ -379,7 +379,7 @@ class scriptWriter:
 
 
 
-    ## renaming script ##
+    ## cleanup script (during plot parallel) ##
     def writeCleanupScript(self):
         script = "import sys\n"
         script += "import os\n"
