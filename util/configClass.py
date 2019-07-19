@@ -31,7 +31,6 @@ class configData:
         self.analysis = analysisClass
         self.pltcfg = self.analysis.getPlotConfig()
         self.cfgdir = self.analysis.pyrootdir + "/configs/"
-        self.plotNumber = analysisClass.plotNumber
         self.Data = None
 
         if self.execute_file:
@@ -99,20 +98,9 @@ class configData:
         self.discriminatorPlots = configdatafile.getDiscriminatorPlots(self.Data, self.analysis.discrName)
         self.evtYieldCategories = configdatafile.evtYieldCategories()
 
-    def getDiscriminatorPlotByNumber(self):
-        # select the discr plots for a certain plot number
-        self.discriminatorPlotByNumber = [self.discriminatorPlots[int(self.analysis.plotNumber)]]
-        print("this is the new discriminatorPlot:")
-        print(self.discriminatorPlotByNumber)
-
-
 
     def getDiscriminatorPlots(self):
-        # if discriminatorPlot
-        if not self.analysis.plotNumber == None:
-            return self.discriminatorPlotByNumber
-        else:
-            return self.discriminatorPlots
+        return self.discriminatorPlots
 
     def getBinlabels(self):
         return self.Data.categories.keys()
