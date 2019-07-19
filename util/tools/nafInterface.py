@@ -145,9 +145,9 @@ def haddTerminationCheck(outputScripts, outputFiles):
 
 
 #############################
-# renaming histos
+# checking histos
 #############################
-def renameInterface(jobsToSubmit, outfilesFromSubmit, maxTries = 10, nTries = 0):
+def checkHistoInterface(jobsToSubmit, outfilesFromSubmit, maxTries = 10, nTries = 0):
     # shellList = renamescriptlist = listOfJobsToSubmit
     # outFileList = outnamelist = listOfJobOutFilesToGetFromSubmit
     if len(jobsToSubmit) != len(outfilesFromSubmit):
@@ -167,14 +167,14 @@ def renameInterface(jobsToSubmit, outfilesFromSubmit, maxTries = 10, nTries = 0)
     # monitor running of jobs
     nafSubmit.monitorJobStatus(jobIDs)
     # checking for undone jobs
-    undoneJobs, undoneFiles = renameTerminationCheck(jobsToSubmit, outfilesFromSubmit)
+    undoneJobs, undoneFiles = checkHistoTerminationCheck(jobsToSubmit, outfilesFromSubmit)
 
     if len(undoneJobs) > 0 or len(undoneFiles) > 0:
-        return renameInterface(undoneJobs, undoneFiles, maxTries, nTries+1)
+        return checkHistoInterface(undoneJobs, undoneFiles, maxTries, nTries+1)
 
     print("renamingHistos submit interface has terminated successfully")
 
-def renameTerminationCheck(shellScripts, outputFiles):
+def checkHistoTerminationCheck(shellScripts, outputFiles):
     # count undone jobs
     undoneJobs = []
     undoneOutFiles = []
