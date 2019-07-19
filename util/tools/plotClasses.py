@@ -181,17 +181,3 @@ class Cateogry:
         self.title = title
         self.selection = selection
 
-
-
-def askYesNo(question):
-    print question
-    yes = set(['yes','y', 'ye', ''])
-    no = set(['no','n'])
-    choice = raw_input().lower()
-    if choice in yes:
-        return True
-    elif choice in no:
-        return False
-    else:
-        print "Please respond with 'yes' or 'no'"
-        return askYesNo(question)
