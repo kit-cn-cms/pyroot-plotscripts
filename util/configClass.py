@@ -128,9 +128,6 @@ class configData:
                     newpath=fileName
                 else:
                     newpath=sample.path.replace("nominal",fileName)
-                #not enough samples ind hdamp up
-                if "HDAMP" in sysName and sysName.endswith("Up"):
-                    newSel += "*((N_GenTopHad==1 && N_GenTopLep==1)* %s + !(N_GenTopHad==1 && N_GenTopLep ==1)*1)" %str(round(1.0399, 2))
 
                 systSamples.append( 
                     plotClasses.Sample( 
