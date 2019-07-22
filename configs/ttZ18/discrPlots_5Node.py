@@ -2,7 +2,7 @@
 import sys
 import os
 filedir = os.path.dirname(os.path.realpath(__file__))
-pyrootdir = os.path.dirname(filedir)
+pyrootdir = os.path.dirname(os.path.dirname(filedir))
 basedir = os.path.dirname(pyrootdir)
 sys.path.append(pyrootdir)
 sys.path.append(basedir)
