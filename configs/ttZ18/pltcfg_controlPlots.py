@@ -4,7 +4,7 @@ import ROOT
 import pandas
 import Systematics
 filedir = os.path.dirname(os.path.realpath(__file__))
-pyrootdir = os.path.dirname(filedir)
+pyrootdir = os.path.dirname(os.path.dirname(filedir))
 
 sys.path.append(pyrootdir)
 import util.tools.plotClasses as plotClasses
@@ -30,8 +30,8 @@ dibosonPathS = path_vdlinden+'/WW_*/*nominal*.root'+';'+ \
 
 stpath = path_vdlinden+'/ST_*/*nominal*.root'
 
-ttHpath =   path_vdlinden+'/ttHTobb_M125*/*nominal*.root'+';'+ \
-	        path_vdlinden+'/ttHToNonbb_M125*/*nominal*.root'
+ttHpath = path_vdlinden+'/ttHTobb_M125*/*nominal*.root'+';'+ \
+	  path_vdlinden+'/ttHToNonbb_M125*/*nominal*.root'
 
 ttZpath =  path_vdlinden+'/TTZToQQ*/*nominal*.root'+';'+ \
             path_vdlinden+'/TTZToBB*/*nominal*.root'+';'+ \
@@ -139,7 +139,7 @@ lumi = '59.7'
 nominalweight="NomWeight:=("+defaultWeight+"*"+"("+electronSFs+"+"+muonSFs+")"+"*"+"("+electronTrigger+"+"+muonTrigger+")"+")*(DoWeights==1)+(DoWeights==0)*1.0"
 
 # even selection for sample splitting
-evenSel="*(Evt_Odd==0)*2.0"
+evenSel="*1.0"
 
 sampleDict=plotClasses.SampleDictionary()
 sampleDict.doPrintout()
@@ -147,41 +147,41 @@ doReadTrees=True
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
 samplesDataControlPlots=[
-#    plotClasses.Sample('SingleMu',ROOT.kBlack,
-#            path_vdlinden+'/SingleMuon*/*nominal*.root',
-#            sel_singlemu+sel_MET,
-#            'SingleMu', samDict=sampleDict, readTrees=doReadTrees),
-#
-#    plotClasses.Sample('SingleEl',ROOT.kBlack,
-#            path_vdlinden+'/EGamma*/*nominal*.root',
-#            sel_singleel+sel_MET,
-#            'SingleEl', samDict=sampleDict, readTrees=doReadTrees)
+    plotClasses.Sample('SingleMu',ROOT.kBlack,
+            path_vdlinden+'/SingleMuon*/*nominal*.root',
+            sel_singlemu+sel_MET,
+            'SingleMu', samDict=sampleDict, readTrees=doReadTrees),
+
+    plotClasses.Sample('SingleEl',ROOT.kBlack,
+            path_vdlinden+'/EGamma*/*nominal*.root',
+            sel_singleel+sel_MET,
+            'SingleEl', samDict=sampleDict, readTrees=doReadTrees)
 ]
 
 print "samples"
 
 
 #print "limit samples"
-samples = [
+samples=[
     # signal samples     
-    plotClasses.Sample('t#bar{t}+Z(b#bar{b})',ROOT.kCyan,
+    plotClasses.Sample('t#bar{t}Z(b#bar{b})',ROOT.kCyan,
             path_vdlinden+'/TTZToBB*/*nominal*.root',
             # lumi reweighting factor due to stupid cross section calculation
-            lumi+"*1.087"+evenSel+sel_MET,
+            lumi+"*1.1017"+evenSel+sel_MET,
             'ttZbb',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
-    plotClasses.Sample('t#bar{t}+Z(q#bar{q})',ROOT.kCyan,
+    plotClasses.Sample('t#bar{t}Z(q#bar{q})',ROOT.kSpring+10,
             path_vdlinden+'/TTZToQQ*/*nominal*.root',
-            lumi+"*1.119"+evenSel+"*(GenEvt_I_TTZ==0)"+sel_MET,
+            lumi+"*1.1348"+evenSel+"*(GenEvt_I_TTZ==1)"+sel_MET,
             'ttZqq',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
-
-    plotClasses.Sample('t#bar{t}+Z(ll)', ROOT.kCyan,
-            path_vdlinden+'/TTZToLLNuNu_M-10*/*nominal*.root',
-            lumi+"*1.006"+evenSel+sel_MET,
-            'ttZll',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+    
+    #plotClasses.Sample('t#bar[t}Z(ll)', ROOT.kCyan,
+    #        path_vdlinden+'/TTZToLLNuNu_M-10*/*nominal*.root',
+    #        lumi+"*1.0237"+evenSel+sel_MET,
+    #        'ttZll',
+    #        samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
     
     # background samples
 
@@ -261,12 +261,13 @@ for sample in samples:
 list_of_processes   = processes
 datacard_processes  = processes
 
+
 plottingsamples = [
-    plotClasses.Sample("t#bar{t}Z", ROOT.kCyan,
-        ttZpath,
-        lumi+evenSel+sel_MET,
-        "ttZ", addsamples = ["ttZbb", "ttZqq", "ttZll"],
-        samDict = sampleDict, readTrees = doReadTrees, typ = "signal"),
+    #plotClasses.Sample("t#bar{t}Z", ROOT.kCyan,
+    #    ttZpath,
+    #    lumi+evenSel+sel_MET,
+    #    "ttZ", addsamples = ["ttZbb", "ttZqq", "ttZll"],
+    #    samDict = sampleDict, readTrees = doReadTrees, typ = "signal"),
 
     plotClasses.Sample("V+jets", ROOT.kGreen-3,
         VJetsPathS,
@@ -274,11 +275,4 @@ plottingsamples = [
         "Vjets", addsamples = ["wjets", "zjets"],
         samDict = sampleDict, readTrees = doReadTrees)
     ]
-
-
-
-
-
-
-
 

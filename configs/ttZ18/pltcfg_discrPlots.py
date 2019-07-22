@@ -4,7 +4,7 @@ import ROOT
 import pandas
 import Systematics
 filedir = os.path.dirname(os.path.realpath(__file__))
-pyrootdir = os.path.dirname(filedir)
+pyrootdir = os.path.dirname(os.path.dirname(filedir))
 
 sys.path.append(pyrootdir)
 import util.tools.plotClasses as plotClasses
@@ -30,13 +30,12 @@ dibosonPathS = path_vdlinden+'/WW_*/*nominal*.root'+';'+ \
 
 stpath = path_vdlinden+'/ST_*/*nominal*.root'
 
-ttHpath = path_vdlinden+'/ttHTobb_M125*/*nominal*.root'+';'+ \
-	  path_vdlinden+'/ttHToNonbb_M125*/*nominal*.root'
+ttHpath =   path_vdlinden+'/ttHTobb_M125*/*nominal*.root'+';'+ \
+	        path_vdlinden+'/ttHToNonbb_M125*/*nominal*.root'
 
 ttZpath =  path_vdlinden+'/TTZToQQ*/*nominal*.root'+';'+ \
             path_vdlinden+'/TTZToBB*/*nominal*.root'+';'+ \
             path_vdlinden+'/TTZToLLNuNu_M-10*/*nominal*.root'+';'
-
 
 # SELECTIONS
 
@@ -163,12 +162,25 @@ print "samples"
 
 
 #print "limit samples"
-samples=[
+samples = [
     # signal samples     
-    plotClasses.Sample('t#bar{t}H',ROOT.kBlue+1,
-            ttHpath,
-            lumi+evenSel+sel_MET,
-            'ttH',
+    plotClasses.Sample('t#bar{t}+Z(b#bar{b})',ROOT.kCyan,
+            path_vdlinden+'/TTZToBB*/*nominal*.root',
+            # lumi reweighting factor due to stupid cross section calculation
+            lumi+"*1.087"+evenSel+sel_MET,
+            'ttZbb',
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+
+    plotClasses.Sample('t#bar{t}+Z(q#bar{q})',ROOT.kCyan,
+            path_vdlinden+'/TTZToQQ*/*nominal*.root',
+            lumi+"*1.119"+evenSel+"*(GenEvt_I_TTZ==0)"+sel_MET,
+            'ttZqq',
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+
+    plotClasses.Sample('t#bar{t}+Z(ll)', ROOT.kCyan,
+            path_vdlinden+'/TTZToLLNuNu_M-10*/*nominal*.root',
+            lumi+"*1.006"+evenSel+sel_MET,
+            'ttZll',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
     
     # background samples
@@ -229,24 +241,6 @@ samples=[
             'ttbarW',
             samDict=sampleDict, readTrees=doReadTrees),
 
-    plotClasses.Sample('t#bar{t}+Z(b#bar{b})',ROOT.kCyan,
-            path_vdlinden+'/TTZToBB*/*nominal*.root',
-            # lumi reweighting factor due to stupid cross section calculation
-            lumi+"*1.087"+evenSel+sel_MET,
-            'ttZbb',
-            samDict=sampleDict, readTrees=doReadTrees),
-
-    plotClasses.Sample('t#bar{t}+Z(q#bar{q})',ROOT.kCyan,
-            path_vdlinden+'/TTZToQQ*/*nominal*.root',
-            lumi+"*1.119"+evenSel+"*(GenEvt_I_TTZ==0)"+sel_MET,
-            'ttZqq',
-            samDict=sampleDict, readTrees=doReadTrees),
-
-    plotClasses.Sample('t#bar{t}+Z(ll)', ROOT.kCyan,
-            path_vdlinden+'/TTZToLLNuNu_M-10*/*nominal*.root',
-            lumi+"*1.006"+evenSel+sel_MET,
-            'ttZll',
-            samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('Diboson',ROOT.kAzure+2,
             dibosonPathS,
@@ -254,6 +248,11 @@ samples=[
             'diboson',
             samDict=sampleDict, readTrees=doReadTrees),
 
+    plotClasses.Sample('t#bar{t}H',ROOT.kBlue+1,
+            ttHpath,
+            lumi+evenSel+sel_MET,
+            'ttH',
+            samDict=sampleDict, readTrees=doReadTrees),
 ]
 
 processes = []
@@ -275,3 +274,11 @@ plottingsamples = [
         "Vjets", addsamples = ["wjets", "zjets"],
         samDict = sampleDict, readTrees = doReadTrees)
     ]
+
+
+
+
+
+
+
+

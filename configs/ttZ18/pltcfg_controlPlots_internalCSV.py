@@ -4,7 +4,7 @@ import ROOT
 import pandas
 import Systematics
 filedir = os.path.dirname(os.path.realpath(__file__))
-pyrootdir = os.path.dirname(filedir)
+pyrootdir = os.path.dirname(os.path.dirname(filedir))
 
 sys.path.append(pyrootdir)
 import util.tools.plotClasses as plotClasses
@@ -171,11 +171,11 @@ samples=[
             'ttZbb',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
-    #plotClasses.Sample('t#bar{t}Z(q#bar{q})',ROOT.kSpring+10,
-    #        path_vdlinden+'/TTZToQQ*/*nominal*.root',
-    #        lumi+"*1.1348"+evenSel+"*(GenEvt_I_TTZ==1)"+sel_MET,
-    #        'ttZqq',
-    #        samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+    plotClasses.Sample('t#bar{t}Z(q#bar{q})',ROOT.kSpring+4,
+            path_vdlinden+'/TTZToQQ*/*nominal*.root',
+            lumi+evenSel+"*(GenEvt_I_TTZ==1)"+sel_MET,
+            'ttZqq',
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
     
     #plotClasses.Sample('t#bar[t}Z(ll)', ROOT.kCyan,
     #        path_vdlinden+'/TTZToLLNuNu_M-10*/*nominal*.root',
