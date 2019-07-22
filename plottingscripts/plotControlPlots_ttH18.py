@@ -3,8 +3,9 @@ import sys
 import os
 import imp
 import inspect
-import ROOT
 import optparse
+import ROOT
+ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 filedir = os.path.dirname(os.path.realpath(__file__))
 pyrootdir = "/".join(filedir.split("/")[:-1])

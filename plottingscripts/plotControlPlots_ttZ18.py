@@ -3,8 +3,9 @@ import sys
 import os
 import imp
 import inspect
-import ROOT
 import optparse
+import ROOT
+ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 filedir = os.path.dirname(os.path.realpath(__file__))
 pyrootdir = "/".join(filedir.split("/")[:-1])
@@ -28,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttZControlPlots_internalCSV'
+    name = 'ttZControlPlots'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
