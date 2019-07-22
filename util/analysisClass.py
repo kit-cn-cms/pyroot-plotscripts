@@ -112,9 +112,9 @@ class analysisConfig:
                 self.usePseudoData = analysisOptions[key]
 
     def initPlotConfig(self):
-        configdir = self.pyrootdir+"/configs/"
-        sys.path.append(configdir)
-        self.pltcfg = importlib.import_module( self.plotConfig )
+        configdir = self.pyrootdir+"/configs/"+self.plotConfig
+        sys.path.append(os.path.dirname(configdir))
+        self.pltcfg = importlib.import_module( os.path.basename(configdir) )
         return self.pltcfg
 
     def getLumi(self):

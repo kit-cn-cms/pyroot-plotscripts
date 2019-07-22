@@ -90,9 +90,9 @@ class configData:
             self.plot_config = "plotconfig_local"
             sys.path.append(self.analysis.workdir)
         
-        sys.path.append(self.cfgdir)
-        fileName = self.plot_config
-        configdatafile = importlib.import_module( fileName )
+        fileName = self.cfgdir+"/"+self.plot_config
+        sys.path.append(os.path.dirname(fileName))
+        configdatafile = importlib.import_module( os.path.basename(fileName) )
         configdatafile.memexp = memexp
 
         self.discriminatorPlots = configdatafile.getDiscriminatorPlots(self.Data, self.analysis.discrName)
@@ -109,10 +109,10 @@ class configData:
         return self.Data.datavariables
 
     def getAddVariables(self):
-        sys.path.append(self.cfgdir)
-        fileName = self.variable_config
+        fileName = self.cfgdir+"/"+self.variable_config
+        sys.path.append(os.path.dirname(fileName))
         print("getting additional variables from "+str(fileName))
-        addVarModule = importlib.import_module( fileName )
+        addVarModule = importlib.import_module( os.path.basename(fileName) )
         self.addVars = addVarModule.getAddVars()
 
     def getSystSamples(self):
