@@ -35,7 +35,7 @@ def main(pyrootdir, opts):
 
     # signal process
     signalProcess = "ttZ"
-    nSigSamples   = 1
+    nSigSamples   = 2
 
     # dataera
     dataera = "2018"
@@ -47,10 +47,10 @@ def main(pyrootdir, opts):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    config          = "pltcfg_ttZ18_controlPlots_internalCSV"
-    variable_cfg    = "ttZ18_addVariables"
-    plot_cfg        = "ttZ18_controlPlots"
-    syst_cfg        = "ttZ18_systematics_internalCSV"
+    config          = "ttZ18/pltcfg_controlPlots_internalCSV"
+    variable_cfg    = "ttZ18/additionalVariables"
+    plot_cfg        = "ttZ18/controlPlots"
+    syst_cfg        = "ttZ18/systematics_internalCSV"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"

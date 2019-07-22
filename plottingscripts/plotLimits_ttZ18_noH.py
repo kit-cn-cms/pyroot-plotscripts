@@ -4,7 +4,7 @@ import os
 import imp
 import inspect
 import ROOT
-import opts
+import optparse
 
 filedir = os.path.dirname(os.path.realpath(__file__))
 pyrootdir = "/".join(filedir.split("/")[:-1])
@@ -28,7 +28,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttZ18_4NodeDNN_t0p1'
+    name = 'ttZ18_4NodeDNN_t0p1_internalCSV'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -47,10 +47,10 @@ def main(pyrootdir, opts):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    config          = "pltcfg_ttZ18"
-    variable_cfg    = "ttZ18_addVariables"
-    plot_cfg        = "ttZ18_discrPlots_4Node_t0p1"
-    syst_cfg        = "ttZ18_systematics"
+    config          = "ttZ18/pltcfg_discrPlots_internalCSV"
+    variable_cfg    = "ttZ18/additionalVariables"
+    plot_cfg        = "ttZ18/discrPlots_4Node_t0p1"
+    syst_cfg        = "ttZ18/systematics_internalCSV"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
