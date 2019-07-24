@@ -7,8 +7,6 @@ import optparse
 import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 
-
-
 filedir = os.path.dirname(os.path.realpath(__file__))
 pyrootdir = "/".join(filedir.split("/")[:-1])
 
@@ -16,7 +14,6 @@ sys.path.append(pyrootdir)
 
 # local imports
 import util.analysisClass as analysisClass
-
 import util.configClass as configClass
 import util.monitorTools as monitorTools
 import util.plotParallel as plotParallel
@@ -32,29 +29,26 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'testrun1'
+    name = 'Monotop_controlplots'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
 
     # signal process
-    signalProcess   = "ttH"
-    nSigSamples     = 8
+    signalProcess = "VectorMonotop_Mphi_2000_Mchi_1500"
+    nSigSamples   = 0
 
     # dataera
     dataera = "2018"
-
+    
     # Name of final discriminator, should not contain underscore
     discrName = 'finaldiscr'
 
-    # define MEM discriminator variable
-    memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
-
     # configs
-    config          = "ttH18/pltcfg_Jan"
-    variable_cfg    = "ttH18/additionalVariables"
-    plot_cfg        = "ttH18/discrPlots"
-    syst_cfg        = "ttZ18/systematics"
+    config          = "Monotop/pltcfg_controlPlots"
+    variable_cfg    = "Monotop/additionalVariables"
+    plot_cfg        = "Monotop/controlPlots"
+    syst_cfg        = "Monotop/systematics"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -68,9 +62,8 @@ def main(pyrootdir, opts):
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
-        "makeDataCards":        True,
-        "makeInputDatacards":   False, # create datacards also for all defined plots
-        "addData":              True,  # adding real data 
+        "makeDataCards":        False,
+        "addData":              True,  # adding data object 
         "makePlots":            True,
         # options for makePlots
         "signalScaling":        -1,
@@ -88,11 +81,12 @@ def main(pyrootdir, opts):
         "skipHistoCheck":       opts.skipHistoCheck,
         "skipDatacards":        opts.skipDatacards}
 
-    plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_legacy2018_ntuples_v1.json"
+    plotJson = ""
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
-    dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/ttH18"}
+    #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
+    #                "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/ttZ18_hf_recoVars"}
+    dnnInterface = None
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
@@ -107,12 +101,12 @@ def main(pyrootdir, opts):
     analysis = analysisClass.analysisConfig(
         workdir         = workdir, 
         pyrootdir       = pyrootdir, 
- 
         signalProcess   = signalProcess, 
         pltcfgName      = config,
         discrName       = discrName,
         dataera         = dataera)
 
+    
     analysis.initAnalysisOptions( analysisOptions )
 
     pltcfg = analysis.initPlotConfig()
@@ -139,6 +133,7 @@ def main(pyrootdir, opts):
     configData.initData()
 
     # get the discriminator plots
+    memexp = ""
     configData.genDiscriminatorPlots(memexp, dnnInterface)
     configData.writeConfigDataToWorkdir()
     monitor.printClass(configData, "init")
@@ -163,6 +158,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
 
+    # plot everything, except during drawParallel step
     # Create file for data cards
     print '''
     # ========================================================
@@ -173,17 +169,17 @@ def main(pyrootdir, opts):
     with monitor.Timer("plotParallel"):
         # initialize plotParallel class 
         pP = plotParallel.plotParallel(
-            analysis    = analysis,
-            configData  = configData)
+            analysis = analysis,
+            configData = configData)
 
         monitor.printClass(pP, "init")
         # set some changed values
         pP.setJson(plotJson)
         #pP.setDataBases(plotDataBases)
         #pP.setMEMDataBase(memDataBase)
-        pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts(500000)
-        pP.setRateFactorsFile(rateFactorsFile)
+        #pP.setDNNInterface(dnnInterface)
+        pP.setMaxEvts(250000)
+        #pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
 
         # run plotParallel
@@ -228,6 +224,7 @@ def main(pyrootdir, opts):
         # if no hadd files were created during plotparallel
         #       the renameInput is set to pp.getOutPath 
         #       (a.ka. the path to output.root)
+
         with monitor.Timer("checkHistos"):
             checkHistos.checkHistsManager(
                 inFiles         = pP.getRenameInput(),
@@ -235,7 +232,6 @@ def main(pyrootdir, opts):
                 checkBins       = True,
                 eps             = 0.0,
                 skipHistoCheck  = analysis.skipHistoCheck)
-
 
     if analysis.addData:
         print '''
@@ -246,9 +242,9 @@ def main(pyrootdir, opts):
         with monitor.Timer("addRealData"):
             if analysis.usePseudoData:
                 # pseudo data without ttH
-                pP.addData(samples = configData.samples[nSigSamples:])
+                #pP.addData(samples = configData.samples[nSigSamples:])
                 # pseudo data with signal
-                #pP.addData(samples = configData.samples)
+                pP.addData(samples = configData.samples)
             else:
                 # real data with ttH
                 pP.addData(samples = configData.controlSamples)
@@ -262,7 +258,7 @@ def main(pyrootdir, opts):
     print("at the moment the outputpath is "+str(analysis.renamedPath))
     print("#################################################")
 
-    if analysis.makeDataCards or analysis.makeInputDatacards:
+    if analysis.makeDataCards:
         print '''
         # ========================================================
         # Making Datacards.
@@ -272,13 +268,13 @@ def main(pyrootdir, opts):
             makeDatacards.makeDatacardsParallel(
                 filePath            = analysis.renamedPath,
                 workdir             = analysis.workdir,
-                categories          = configData.getDatacardLabels(analysis.makeInputDatacards),
+                categories          = configData.getBinlabels(),
                 doHdecay            = True,
                 discrname           = analysis.discrName,
                 datacardmaker       = datacardmaker,
+                signalTag           = analysis.signalProcess,
                 skipDatacards       = analysis.skipDatacards)
-
-
+    
     if analysis.makePlots:
         print '''
         # ========================================================
@@ -294,6 +290,7 @@ def main(pyrootdir, opts):
     # this is the end of the script 
     # ========================================================
     '''
+
 
 if __name__ == "__main__":
     parser = optparse.OptionParser()

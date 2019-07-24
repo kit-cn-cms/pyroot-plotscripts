@@ -16,7 +16,6 @@ sys.path.append(pyrootdir)
 
 # local imports
 import util.analysisClass as analysisClass
-
 import util.configClass as configClass
 import util.monitorTools as monitorTools
 import util.plotParallel as plotParallel
@@ -32,18 +31,18 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'testrun1'
+    name = 'ttZ18_4NodeDNN'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
 
     # signal process
-    signalProcess   = "ttH"
-    nSigSamples     = 8
+    signalProcess = "ttZ"
+    nSigSamples   = 3
 
     # dataera
     dataera = "2018"
-
+    
     # Name of final discriminator, should not contain underscore
     discrName = 'finaldiscr'
 
@@ -51,10 +50,10 @@ def main(pyrootdir, opts):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    config          = "ttH18/pltcfg_Jan"
-    variable_cfg    = "ttH18/additionalVariables"
-    plot_cfg        = "ttH18/discrPlots"
-    syst_cfg        = "ttZ18/systematics"
+    config          = "ttZ18/pltcfg_discrPlots_internalCSV"
+    variable_cfg    = "ttZ18/additionalVariables"
+    plot_cfg        = "ttZ18/discrPlots_4Node"
+    syst_cfg        = "ttZ18/systematics_internalCSV"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -65,12 +64,12 @@ def main(pyrootdir, opts):
         # general options
         "usePseudoData":        True,
         "testrun":              False,  # test run with less samples
-        "stopAfterCompile":     False,   # stop script after compiling
+        "stopAfterCompile":     False,  # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
         "makeDataCards":        True,
         "makeInputDatacards":   False, # create datacards also for all defined plots
-        "addData":              True,  # adding real data 
+        "addData":              True,  # adding real data
         "makePlots":            True,
         # options for makePlots
         "signalScaling":        -1,
@@ -88,11 +87,11 @@ def main(pyrootdir, opts):
         "skipHistoCheck":       opts.skipHistoCheck,
         "skipDatacards":        opts.skipDatacards}
 
-    plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_legacy2018_ntuples_v1.json"
+    plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttZ_2018_v4.json"
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/ttH18"}
+                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/ttZ_4Node_top30_v4"}
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
@@ -107,12 +106,12 @@ def main(pyrootdir, opts):
     analysis = analysisClass.analysisConfig(
         workdir         = workdir, 
         pyrootdir       = pyrootdir, 
- 
         signalProcess   = signalProcess, 
         pltcfgName      = config,
         discrName       = discrName,
         dataera         = dataera)
 
+    
     analysis.initAnalysisOptions( analysisOptions )
 
     pltcfg = analysis.initPlotConfig()
@@ -163,6 +162,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
 
+    # plot everything, except during drawParallel step
     # Create file for data cards
     print '''
     # ========================================================
@@ -183,7 +183,7 @@ def main(pyrootdir, opts):
         #pP.setMEMDataBase(memDataBase)
         pP.setDNNInterface(dnnInterface)
         pP.setMaxEvts(500000)
-        pP.setRateFactorsFile(rateFactorsFile)
+        #pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
 
         # run plotParallel
@@ -236,7 +236,6 @@ def main(pyrootdir, opts):
                 eps             = 0.0,
                 skipHistoCheck  = analysis.skipHistoCheck)
 
-
     if analysis.addData:
         print '''
         # ========================================================
@@ -246,9 +245,9 @@ def main(pyrootdir, opts):
         with monitor.Timer("addRealData"):
             if analysis.usePseudoData:
                 # pseudo data without ttH
-                pP.addData(samples = configData.samples[nSigSamples:])
+                #pP.addData(samples = configData.samples[nSigSamples:])
                 # pseudo data with signal
-                #pP.addData(samples = configData.samples)
+                pP.addData(samples = configData.samples)
             else:
                 # real data with ttH
                 pP.addData(samples = configData.controlSamples)
@@ -276,8 +275,8 @@ def main(pyrootdir, opts):
                 doHdecay            = True,
                 discrname           = analysis.discrName,
                 datacardmaker       = datacardmaker,
+                signalTag           = analysis.signalProcess,
                 skipDatacards       = analysis.skipDatacards)
-
 
     if analysis.makePlots:
         print '''

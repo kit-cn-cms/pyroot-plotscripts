@@ -31,8 +31,8 @@ class SampleDictionary:
 
 class Sample:
     def __init__(self, name, color = ROOT.kBlack, path = '', selection = '', 
-            nick = '', up = 0, down = None, samDict = "",
-            readTrees = True, filterFile = "NONE", checknevents = -1, treename = 'MVATree'):
+            nick = '', up = 0, down = None, samDict = "",addsamples=None,
+            readTrees = True, filterFile = "NONE", checknevents = -1, treename = 'MVATree',typ="bkg"):
 
         self.name = name
         self.color = color
@@ -41,6 +41,7 @@ class Sample:
         self.selection = selection
         self.files = []
         self.filterFile = filterFile
+        self.addsamples=addsamples
         subpaths = path.split(";")
         # allow globbing samples from different paths
         if readTrees:
@@ -68,6 +69,7 @@ class Sample:
             self.nick = name
         else:
             self.nick = nick
+        self.typ=typ
         #self.shape_unc = listOfShapes
         self.unc_up = up
         self.unc_down = up
@@ -76,6 +78,12 @@ class Sample:
 
     def setShapes(self,listOfShapes):
         self.shape_unc=listOfShapes
+
+    def getShapes(self):
+        if self.shape_unc:
+            return self.shape_unc
+        else:
+            return "ERROR: no shapes for this sample"
 
 
     def checkNevents():
@@ -96,6 +104,12 @@ class Sample:
         for f in self.files:
             chain.Add(f)
         return chain
+
+    def addSamples(self):
+        if addsamples:
+            return self.addsamples 
+        else:
+            return [self.nick]
 
 
 class Plot:
@@ -167,17 +181,3 @@ class Cateogry:
         self.title = title
         self.selection = selection
 
-
-
-def askYesNo(question):
-    print question
-    yes = set(['yes','y', 'ye', ''])
-    no = set(['no','n'])
-    choice = raw_input().lower()
-    if choice in yes:
-        return True
-    elif choice in no:
-        return False
-    else:
-        print "Please respond with 'yes' or 'no'"
-        return askYesNo(question)

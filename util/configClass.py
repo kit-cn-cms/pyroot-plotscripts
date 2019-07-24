@@ -11,29 +11,11 @@ import Systematics
 
 class catData:
     def __init__(self):
-        self.categories = {}
-
-        # self.discrs = []
-        # self.nhistobins = []
-        # self.minxvals = []
-        # self.maxxvals = []
-        # self.categories = []
-
-        # self.plotPreselections = []
-        # self.binlabels = []
+        self.categories         = {}
+        self.datavariables      = []
 
     def getNEntries(self):
         return len(self.categories)
-
-    # def getEntry(self, i):
-    #     return {
-    #         "discr":            self.discrs[i],
-    #         "nhistobins":       self.nhistobins[i],
-    #         "minxvals":         self.minxvals[i],
-    #         "maxxvals":         self.maxxvals[i],
-    #         "category":         self.categories[i],
-    #         "plotPreselection": self.plotPreselections[i],
-    #         "binlabel":         self.binlabels[i]}
 
 
 class configData:
@@ -49,7 +31,6 @@ class configData:
         self.analysis = analysisClass
         self.pltcfg = self.analysis.getPlotConfig()
         self.cfgdir = self.analysis.pyrootdir + "/configs/"
-        self.plotNumber = analysisClass.plotNumber
         self.Data = None
 
         if self.execute_file:
@@ -69,6 +50,7 @@ class configData:
     def initSystematics(self,systconfig):
 
         print "loading systematics..."
+        self.systconfig=systconfig
         processes=self.pltcfg.list_of_processes
         workdir=self.analysis.workdir
         outputpath=workdir+"/datacard.csv"
@@ -81,24 +63,7 @@ class configData:
         self.plots=self.systematics.plot_shapes()
 
     def writeConfigDataToWorkdir(self):
-        # if self.Data == None:
-        #     print("there is no config data")
-        #     return
-
-        # with open(self.analysis.workdir+"/configData.csv", "w") as csvf:
-        #     csvf.write("categories,nhistobins,minxvals,maxxvals,discrs")
-        #     for label in self.Data.categories:
-        #         subdict = self.Data.categories[label]
-        #         line = "\n"
-        #         line+= str(subdict["categories"])+";"
-        #         line+= str(subdict["nhistobins"])+";"
-        #         if "bin_edges" in 
-        #         line+= str(self.Data.minxvals[i])+";"
-        #         line+= str(self.Data.maxxvals[i])+";"
-        #         line+= str(self.Data.discrs[i])
-        #         csvf.write(line)
-        # print("wrote config data to workdir")
-        # print("path: "+str(self.analysis.workdir+"/configData.csv"))
+        # deprecated
         return
 
     def genDiscriminatorPlots(self, memexp, dnnInterface = None):
@@ -125,37 +90,35 @@ class configData:
             self.plot_config = "plotconfig_local"
             sys.path.append(self.analysis.workdir)
         
-        sys.path.append(self.cfgdir)
-        fileName = self.plot_config
-        configdatafile = importlib.import_module( fileName )
+        fileName = self.cfgdir+"/"+self.plot_config
+        sys.path.append(os.path.dirname(fileName))
+        configdatafile = importlib.import_module( os.path.basename(fileName) )
         configdatafile.memexp = memexp
 
         self.discriminatorPlots = configdatafile.getDiscriminatorPlots(self.Data, self.analysis.discrName)
-        self.evtYieldCategories = configdatafile.evtYieldCategories()
-
-    def getDiscriminatorPlotByNumber(self):
-        # select the discr plots for a certain plot number
-        self.discriminatorPlotByNumber = [self.discriminatorPlots[int(self.analysis.plotNumber)]]
-        print("this is the new discriminatorPlot:")
-        print(self.discriminatorPlotByNumber)
-
+        #self.evtYieldCategories = configdatafile.evtYieldCategories()
 
 
     def getDiscriminatorPlots(self):
-        # if discriminatorPlot
-        if not self.analysis.plotNumber == None:
-            return self.discriminatorPlotByNumber
-        else:
-            return self.discriminatorPlots
+        return self.discriminatorPlots
 
     def getBinlabels(self):
         return self.Data.categories.keys()
 
+    def getVariablelabels(self):
+        return self.Data.datavariables
+
+    def getDatacardLabels(self, doVariables = False):
+        if not doVariables:
+            return self.getBinlabels()
+        else:
+            return self.getBinlabels() + self.getVariablelabels()
+
     def getAddVariables(self):
-        sys.path.append(self.cfgdir)
-        fileName = self.variable_config
+        fileName = self.cfgdir+"/"+self.variable_config
+        sys.path.append(os.path.dirname(fileName))
         print("getting additional variables from "+str(fileName))
-        addVarModule = importlib.import_module( fileName )
+        addVarModule = importlib.import_module( os.path.basename(fileName) )
         self.addVars = addVarModule.getAddVars()
 
     def getSystSamples(self):
@@ -171,9 +134,6 @@ class configData:
                     newpath=fileName
                 else:
                     newpath=sample.path.replace("nominal",fileName)
-                #not enough samples ind hdamp up
-                if "HDAMP" in sysName and sysName.endswith("Up"):
-                    newSel += "*((N_GenTopHad==1 && N_GenTopLep==1)* %s + !(N_GenTopHad==1 && N_GenTopLep ==1)*1)" %str(round(1.0399, 2))
 
                 systSamples.append( 
                     plotClasses.Sample( 
@@ -233,6 +193,6 @@ class configData:
         self.systWeights = self.systematics.get_all_weight_expressions()
         self.systWeights.insert(0,self.pltcfg.nominalweight)
 
-    def getEventYieldCategories(self):
-        return self.evtYieldCategories
+    #def getEventYieldCategories(self):
+    #    return self.evtYieldCategories
 
