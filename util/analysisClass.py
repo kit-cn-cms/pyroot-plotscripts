@@ -34,6 +34,7 @@ class analysisConfig:
     def setDefaults(self):
         self.usePseudoData      = True
         self.makeDataCards      = True
+        self.makeInputDatacards = False
         self.haddFromWildcard   = True        
         self.addData            = False
 
@@ -110,6 +111,9 @@ class analysisConfig:
                 self.makePlots = analysisOptions[key] 
             elif key in ("usePseudoData"):
                 self.usePseudoData = analysisOptions[key]
+            elif key in ("makeInputDatacards"):
+                self.makeInputDatacards = analysisOptions[key]
+
 
     def initPlotConfig(self):
         configdir = self.pyrootdir+"/configs/"+self.plotConfig
@@ -119,7 +123,7 @@ class analysisConfig:
 
     def getLumi(self):
         lumi = {
-            "2016":         "36.9",
+            "2016":         "35.9",
             "2017":         "41.5",  
             "2017_deepCSV": "41.5",
             "2018":         "59.7",

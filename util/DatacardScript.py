@@ -53,17 +53,28 @@ from categoryObject import categoryObject
 from identificationLogic import identificationLogic
 
 #Initialize identificationLogic to get generic keys
-key_generator=identificationLogic()
+key_generator = identificationLogic()
 
-nominalkey=key_generator.generic_nominal_key
-systkey=key_generator.generic_systematics_key
+nominalkey = key_generator.generic_nominal_key
+systkey = key_generator.generic_systematics_key
 
 #Initialize analysisObject
 analysis=analysisObject()
 
+# DANGERZONE: hack
+# remove _finandiscr from keys for input feature datacards
+if not "_node" in options.categoryName:
+    nominalkey  = nominalkey.replace("_finaldiscr_","_")
+    systkey     = systkey.replace("_finaldiscr_","_")
+
 #Create Category Object out of csv file and write to datacard
-category=categoryObject(categoryName=options.categoryName,defaultRootFile=options.Rootfile,
-                    defaultnominalkey=nominalkey,systkey=systkey)
+category = categoryObject(
+    categoryName        = options.categoryName, 
+    defaultRootFile     = options.Rootfile,
+    defaultnominalkey   = nominalkey,
+    systkey             = systkey)
+
+
 
 category.add_from_csv(pathToFile=options.csvFile,signaltag=options.tag)
 #Delete processes that dont exist in file
