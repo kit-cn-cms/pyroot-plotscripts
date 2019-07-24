@@ -65,8 +65,11 @@ class analysisConfig:
         elif signalProcess == "ttZ" or signalProcess == "ttbarZ":
             self.signalProcess = "ttZ"
         else:
-            print("could not find signalProcess '"+str(signalProcess)+"'. Define it in analysisConfig")
-            sys.exit("unknow signalProcess chosen")
+            print("non default signal Process chosen, this could lead to errors later in the script (e.g. datacard creation). Setting it anyways.")
+            print("signalProcess: {}".format(signalProcess))
+            self.signalProcess = signalProcess
+
+
         self.plotConfig = pltcfgName
         print("set plotConfig to "+str(self.plotConfig))
         
