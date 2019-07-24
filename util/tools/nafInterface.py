@@ -23,7 +23,7 @@ def plotInterface(jobData, skipPlotParallel = False, maxTries = 10, nTries = 0):
         jobIDs = nafSubmit.submitArrayToNAF(jobData["scripts"], "plotPara", submitOptions = submitOptions)
     elif nTries < maxTries:
         print("resubmitting plotParallel scripts as single jobs")
-        jobIDs = nafSubmit.submitToNAF(jobData["scripts"], submitOptions = submitOptions)
+        jobIDs = nafSubmit.submitArrayToNAF(jobData["scripts"], "plotPara_resubmit", submitOptions = submitOptions)
     else:
         print("plotParallel did not work after "+str(maxTries)+" tries - ABORTING")
         sys.exit(1)
@@ -89,7 +89,7 @@ def haddInterface(jobsToSubmit, outfilesFromSubmit, maxTries = 10, nTries = 0):
         jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "haddPara")
     elif nTries < maxTries:
         print("resubmitting haddParallel scripts as single jobs")
-        jobIDs = nafSubmit.submitToNAF(jobsToSubmit)
+        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "haddPara_resubmit")
     else:
         print("hadding did not work after "+str(maxTries)+" tries - ABORTING")
         sys.exit(1)
@@ -159,7 +159,7 @@ def checkHistoInterface(jobsToSubmit, outfilesFromSubmit, maxTries = 10, nTries 
         jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, arrayName = "renamePara")
     elif nTries < maxTries:
         print("resubmitting rename scripts as single jobs")
-        jobIDs = nafSubmit.submitToNAF(jobsToSubmit)
+        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, arrayName = "renamePara_resubmit")
     else:
         print("renaming did not work after "+str(maxTries)+" tries - ABORTING")
         sys.exit(1)
@@ -205,7 +205,7 @@ def datacardInterface(jobsToSubmit, datacardFiles, maxTries = 10, nTries = 0):
         jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, arrayName = "cardmakingPara")
     elif nTries < maxTries:
         print("resubmitting datacardmaking scripts as single jobs")
-        jobIDs = nafSubmit.submitToNAF(jobsToSubmit)
+        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, arrayName = "cardmaking_resubmit")
     else:
         print("making datacards did not work after "+str(maxTries)+" tries -ABORTING")
         sys.exit(1)
@@ -250,7 +250,7 @@ def drawInterface(jobsToSubmit, outputPlots, nTries = 0):
         jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "makePlots")
     elif nTries < maxTries:
         print("resubmitting makePlots scripts as single jobs")
-        jobIDs = nafSubmit.submitToNAF(jobsToSubmit)
+        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "makePlots_resubmit")
     else:
         print("make Plots did not work after "+str(maxTries)+" tries - ABORTING")
         sys.exit(1)
