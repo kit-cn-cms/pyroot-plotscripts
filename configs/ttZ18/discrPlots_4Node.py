@@ -2,7 +2,7 @@
 import sys
 import os
 filedir = os.path.dirname(os.path.realpath(__file__))
-pyrootdir = os.path.dirname(os.path.dirname(filedir))
+pyrootdir = os.path.dirname(filedir)
 basedir = os.path.dirname(pyrootdir)
 sys.path.append(pyrootdir)
 sys.path.append(basedir)
@@ -13,256 +13,13 @@ from array import array
 from copy import deepcopy
 
 
-
-def evtYieldCategories():
-    return [
-    ("(N_Jets>=6&&N_BTagsM==2)","6j2t",""),
-    ("(N_Jets==4&&N_BTagsM==3)","4j3t",""),
-    ("(N_Jets==5&&N_BTagsM==3)","5j3t",""),
-    ("(N_Jets>=6&&N_BTagsM==3)","6j3t",""),
-    ("(N_Jets==4&&N_BTagsM>=4)","4j4t",""),
-    ("(N_Jets==5&&N_BTagsM>=4)","5j4t",""),
-    ("(N_Jets>=6&&N_BTagsM>=4)","6j4t","")
-    ]
-
 memexp = ""
-
-
-def plots_ge4j_ge4t(data = None):
-    label = "\geq 4 jets, \geq 4 b-tags"
-    selection = "(N_Jets>=4&&N_BTagsM>=4)&&((Evt_Odd==0))"
-
-    plots = [
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge4t_Jet_M_0","mass of leading jet",50,0.0,100.0),"Jet_M[0]",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge4t_Evt_M_TaggedJetsAverage","average M(tags)",50,5.0,50.0),"Evt_M_TaggedJetsAverage",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge4t_Evt_Dr_TaggedJetsAverage","average #DeltaR(tags)",50,0.5,3.5),"Evt_Dr_TaggedJetsAverage",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge4t_Evt_M_minDrLepTag","M_{2}( min #DeltaR(lep,tag) )",50,0.0,250.0),"Evt_M_minDrLepTag",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge4t_Evt_CSV_min_tagged","minimal b-tag value of tagged jets",50,0.28,1.0),"Evt_CSV_min_tagged",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge4t_Evt_Deta_JetsAverage","average #Delta#eta(jets)",50,0.25,2.5),"Evt_Deta_JetsAverage",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge4t_Evt_CSV_avg","average b-tag value",50,0.1,0.9),"Evt_CSV_avg",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge4t_Evt_M2_closestTo125TaggedJets","M_{2}(tag,tag) closest to 125 GeV",50,0.0,300.0),"Evt_M2_closestTo125TaggedJets",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge4t_Evt_M2_minDrTaggedJets","M_{2}( min #DeltaR(tag,tag) )",50,0.0,400.0),"Evt_M2_minDrTaggedJets",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge4t_Evt_h0","first fox wolfram moment",50,0.2,0.45),"Evt_h0",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge4t_Evt_CSV_dev","average deviation of b-tag value",50,0.0,0.24),"Evt_CSV_dev",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge4t_CSV_3","fourth highest b-tag value",50,0.0,1.0),"CSV[3]",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge4t_Jet_Pt_0","p_{T} of leading jet",50,0.0,600.0),"Jet_Pt[0]",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge4t_N_BTagsM","number of b-tags (medium)",5,2.5,7.5),"N_BTagsM",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge4t_Evt_Deta_TaggedJetsAverage","average #Delta#eta(tags)",50,0.0,3.0),"Evt_Deta_TaggedJetsAverage",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge4t_N_BTagsL","number of b-tags (loose)",6,2.5,8.5),"N_BTagsL",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge4t_Evt_M2_closestTo91TaggedJets","M_{2}(tag,tag) closest to 91 GeV",50,0.0,300.0),"Evt_M2_closestTo91TaggedJets",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge4t_Evt_CSV_avg_tagged","average b-tag value of tagged jets",50,0.3,1.0),"Evt_CSV_avg_tagged",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge4t_Evt_Pt_minDrTaggedJets","p_{T}( min #DeltaR(tag,tag) )",50,0.0,500.0),"Evt_Pt_minDrTaggedJets",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge4t_CSV_2","third highest b-tag value",50,0.3,1.0),"CSV[2]",selection,label),
-        ]
-
-    if data:
-        add_data_plots(plots=plots,data=data)
-    return plots
-
-
-
-def plots_ge6j_ge3t(data = None):
-    label = "\geq 6 jets, \geq 3 b-tags"
-    selection = "(N_Jets>=6&&N_BTagsM>=3)&&((Evt_Odd==0))"
-
-    plots = [
-        plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_Evt_Deta_TaggedJetsAverage","average #Delta#eta(tags)",50,0.0,3.0),"Evt_Deta_TaggedJetsAverage",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_RecoTTZ_TopLep_M","ttZ reconstruction M(t_{lep})",50,100.0,500.0),"RecoTTZ_TopLep_M",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_RecoTTZ_TopHad_M","ttZ reconstruction M(t_{had})",50,100.0,500.0),"RecoTTZ_TopHad_M",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_RecoTTZ_Z_BJet2_Pt","ttZ reconstruction p_{T}(b_{Z})[1]",50,0.0,200.0),"RecoTTZ_Z_BJet2_Pt",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_Evt_M2_closestTo125TaggedJets","M_{2}(tag,tag) closest to 125 GeV",50,0.0,300.0),"Evt_M2_closestTo125TaggedJets",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_Jet_M_0","mass of leading jet",50,0.0,100.0),"Jet_M[0]",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_Evt_M_JetsAverage","average M(jets)",50,5.0,30.0),"Evt_M_JetsAverage",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_Evt_M2_minDrTaggedJets","M_{2}( min #DeltaR(tag,tag) )",50,0.0,400.0),"Evt_M2_minDrTaggedJets",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_RecoTTZ_Z_M","ttZ reconstruction M(Z)",50,0.0,300.0),"RecoTTZ_Z_M",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_Evt_CSV_dev_tagged","average deviation of b-tag value of tagged jets",50,0.0,0.12),"Evt_CSV_dev_tagged",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_RecoTTZ_Chi2Z","ttZ reconstruction #chi^{2}(Z)",50,0.0,300.0),"RecoTTZ_Chi2Z",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_Evt_MTW","MTW",50,0.0,300.0),"Evt_MTW",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_Evt_Dr_minDrLepTag","#DeltaR( min #DeltaR(lep,tag) )",50,0.4,3.5),"Evt_Dr_minDrLepTag",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_Evt_Dr_minDrTaggedJets","#DeltaR( min #DeltaR(tag,tag) )",50,0.4,3.5),"Evt_Dr_minDrTaggedJets",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_Evt_M_minDrLepTag","M_{2}( min #DeltaR(lep,tag) )",50,0.0,250.0),"Evt_M_minDrLepTag",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_Evt_CSV_dev","average deviation of b-tag value",50,0.0,0.24),"Evt_CSV_dev",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_Evt_M_TaggedJetsAverage","average M(tags)",50,5.0,50.0),"Evt_M_TaggedJetsAverage",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_Evt_Pt_minDrTaggedJets","p_{T}( min #DeltaR(tag,tag) )",50,0.0,500.0),"Evt_Pt_minDrTaggedJets",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_CSV_2","third highest b-tag value",50,0.3,1.0),"CSV[2]",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_CSV_3","fourth highest b-tag value",50,0.0,1.0),"CSV[3]",selection,label),
-        ]
-
-    if data:
-        add_data_plots(plots=plots,data=data)
-    return plots
-
-
-
-def plots_le5j_ge3t(data = None):
-    label = "\leq 5 jets, \geq 3 b-tags"
-    selection = "(N_Jets<=5&&N_BTagsM>=3)&&((Evt_Odd==0))"
-
-    plots = [
-        plotClasses.Plot(ROOT.TH1D("le5j_ge3t_Jet_Pt_3","p_{T} of fourth jet",30,50.0,200.0),"Jet_Pt[3]",selection,label),
-        plotClasses.Plot(ROOT.TH1D("le5j_ge3t_Evt_Pt_minDrJets","p_{T}( min #DeltaR(jet,jet) )",50,0.0,600.0),"Evt_Pt_minDrJets",selection,label),
-        plotClasses.Plot(ROOT.TH1D("le5j_ge3t_Jet_Pt_0","p_{T} of leading jet",50,0.0,600.0),"Jet_Pt[0]",selection,label),
-        plotClasses.Plot(ROOT.TH1D("le5j_ge3t_Evt_CSV_dev_tagged","average deviation of b-tag value of tagged jets",50,0.0,0.12),"Evt_CSV_dev_tagged",selection,label),
-        plotClasses.Plot(ROOT.TH1D("le5j_ge3t_Evt_Deta_TaggedJetsAverage","average #Delta#eta(tags)",50,0.0,3.0),"Evt_Deta_TaggedJetsAverage",selection,label),
-        plotClasses.Plot(ROOT.TH1D("le5j_ge3t_Jet_M_0","mass of leading jet",50,0.0,100.0),"Jet_M[0]",selection,label),
-        plotClasses.Plot(ROOT.TH1D("le5j_ge3t_Evt_MHT","missing H_{T}",50,0.0,400.0),"Evt_MHT",selection,label),
-        plotClasses.Plot(ROOT.TH1D("le5j_ge3t_Evt_M2_closestTo91TaggedJets","M_{2}(tag,tag) closest to 91 GeV",50,0.0,300.0),"Evt_M2_closestTo91TaggedJets",selection,label),
-        plotClasses.Plot(ROOT.TH1D("le5j_ge3t_Evt_MTW","MTW",50,0.0,300.0),"Evt_MTW",selection,label),
-        plotClasses.Plot(ROOT.TH1D("le5j_ge3t_Evt_M2_closestTo125TaggedJets","M_{2}(tag,tag) closest to 125 GeV",50,0.0,300.0),"Evt_M2_closestTo125TaggedJets",selection,label),
-        plotClasses.Plot(ROOT.TH1D("le5j_ge3t_Evt_Dr_minDrTaggedJets","#DeltaR( min #DeltaR(tag,tag) )",50,0.4,3.5),"Evt_Dr_minDrTaggedJets",selection,label),
-        plotClasses.Plot(ROOT.TH1D("le5j_ge3t_Evt_M2_minDrTaggedJets","M_{2}( min #DeltaR(tag,tag) )",50,0.0,400.0),"Evt_M2_minDrTaggedJets",selection,label),
-        plotClasses.Plot(ROOT.TH1D("le5j_ge3t_Jet_DeepJetCSV_0","DeepJet b-tag value of leading jet",50,0.0,1.0),"Jet_DeepJetCSV[0]",selection,label),
-        plotClasses.Plot(ROOT.TH1D("le5j_ge3t_Evt_CSV_avg","average b-tag value",50,0.1,0.9),"Evt_CSV_avg",selection,label),
-        plotClasses.Plot(ROOT.TH1D("le5j_ge3t_RecoTTZ_TopLep_M","ttZ reconstruction M(t_{lep})",50,100.0,500.0),"RecoTTZ_TopLep_M",selection,label),
-        plotClasses.Plot(ROOT.TH1D("le5j_ge3t_RecoTTZ_TopHad_M","ttZ reconstruction M(t_{had})",50,100.0,500.0),"RecoTTZ_TopHad_M",selection,label),
-        plotClasses.Plot(ROOT.TH1D("le5j_ge3t_CSV_2","third highest b-tag value",50,0.3,1.0),"CSV[2]",selection,label),
-        plotClasses.Plot(ROOT.TH1D("le5j_ge3t_CSV_3","fourth highest b-tag value",50,0.0,1.0),"CSV[3]",selection,label),
-        plotClasses.Plot(ROOT.TH1D("le5j_ge3t_Evt_Pt_minDrTaggedJets","p_{T}( min #DeltaR(tag,tag) )",50,0.0,500.0),"Evt_Pt_minDrTaggedJets",selection,label),
-        plotClasses.Plot(ROOT.TH1D("le5j_ge3t_Evt_M_TaggedJetsAverage","average M(tags)",50,5.0,50.0),"Evt_M_TaggedJetsAverage",selection,label),
-        ]
-
-    if data:
-        add_data_plots(plots=plots,data=data)
-    return plots
-
-
-
-def plots_5j_ge3t(data = None):
-    label = "5 jets, \geq 3 b-tags"
-    selection = "(N_Jets==5&&N_BTagsM>=3)&&((Evt_Odd==0))"
-
-    plots = [
-        plotClasses.Plot(ROOT.TH1D("5j_ge3t_Evt_Deta_TaggedJetsAverage","average #Delta#eta(tags)",50,0.0,3.0),"Evt_Deta_TaggedJetsAverage",selection,label),
-        plotClasses.Plot(ROOT.TH1D("5j_ge3t_Evt_Dr_minDrLepTag","#DeltaR( min #DeltaR(lep,tag) )",50,0.4,3.5),"Evt_Dr_minDrLepTag",selection,label),
-        plotClasses.Plot(ROOT.TH1D("5j_ge3t_Jet_DeepJetCSV_0","DeepJet b-tag value of leading jet",50,0.0,1.0),"Jet_DeepJetCSV[0]",selection,label),
-        plotClasses.Plot(ROOT.TH1D("5j_ge3t_Jet_M_0","mass of leading jet",50,0.0,100.0),"Jet_M[0]",selection,label),
-        plotClasses.Plot(ROOT.TH1D("5j_ge3t_Evt_M_minDrLepTag","M_{2}( min #DeltaR(lep,tag) )",50,0.0,250.0),"Evt_M_minDrLepTag",selection,label),
-        plotClasses.Plot(ROOT.TH1D("5j_ge3t_Evt_MHT","missing H_{T}",50,0.0,400.0),"Evt_MHT",selection,label),
-        plotClasses.Plot(ROOT.TH1D("5j_ge3t_Evt_CSV_avg","average b-tag value",50,0.1,0.9),"Evt_CSV_avg",selection,label),
-        plotClasses.Plot(ROOT.TH1D("5j_ge3t_Evt_CSV_dev_tagged","average deviation of b-tag value of tagged jets",50,0.0,0.12),"Evt_CSV_dev_tagged",selection,label),
-        plotClasses.Plot(ROOT.TH1D("5j_ge3t_Evt_MTW","MTW",50,0.0,300.0),"Evt_MTW",selection,label),
-        plotClasses.Plot(ROOT.TH1D("5j_ge3t_Evt_M2_closestTo125TaggedJets","M_{2}(tag,tag) closest to 125 GeV",50,0.0,300.0),"Evt_M2_closestTo125TaggedJets",selection,label),
-        plotClasses.Plot(ROOT.TH1D("5j_ge3t_Evt_CSV_dev","average deviation of b-tag value",50,0.0,0.24),"Evt_CSV_dev",selection,label),
-        plotClasses.Plot(ROOT.TH1D("5j_ge3t_Evt_M2_closestTo91TaggedJets","M_{2}(tag,tag) closest to 91 GeV",50,0.0,300.0),"Evt_M2_closestTo91TaggedJets",selection,label),
-        plotClasses.Plot(ROOT.TH1D("5j_ge3t_RecoTTZ_TopLep_M","ttZ reconstruction M(t_{lep})",50,100.0,500.0),"RecoTTZ_TopLep_M",selection,label),
-        plotClasses.Plot(ROOT.TH1D("5j_ge3t_Evt_Dr_minDrTaggedJets","#DeltaR( min #DeltaR(tag,tag) )",50,0.4,3.5),"Evt_Dr_minDrTaggedJets",selection,label),
-        plotClasses.Plot(ROOT.TH1D("5j_ge3t_Evt_M2_minDrTaggedJets","M_{2}( min #DeltaR(tag,tag) )",50,0.0,400.0),"Evt_M2_minDrTaggedJets",selection,label),
-        plotClasses.Plot(ROOT.TH1D("5j_ge3t_RecoTTZ_TopHad_M","ttZ reconstruction M(t_{had})",50,100.0,500.0),"RecoTTZ_TopHad_M",selection,label),
-        plotClasses.Plot(ROOT.TH1D("5j_ge3t_CSV_2","third highest b-tag value",50,0.3,1.0),"CSV[2]",selection,label),
-        plotClasses.Plot(ROOT.TH1D("5j_ge3t_CSV_3","fourth highest b-tag value",50,0.0,1.0),"CSV[3]",selection,label),
-        plotClasses.Plot(ROOT.TH1D("5j_ge3t_Evt_M_TaggedJetsAverage","average M(tags)",50,5.0,50.0),"Evt_M_TaggedJetsAverage",selection,label),
-        plotClasses.Plot(ROOT.TH1D("5j_ge3t_Evt_Pt_minDrTaggedJets","p_{T}( min #DeltaR(tag,tag) )",50,0.0,500.0),"Evt_Pt_minDrTaggedJets",selection,label),
-        ]
-
-    if data:
-        add_data_plots(plots=plots,data=data)
-    return plots
-
-
-
-def plots_ge4j_ge3t(data = None):
-    label = "\geq 4 jets, \geq 3 b-tags"
-    selection = "(N_Jets>=4&&N_BTagsM>=3)&&((Evt_Odd==0))"
-
-    plots = [
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Evt_CSV_dev_tagged","average deviation of b-tag value of tagged jets",50,0.0,0.12),"Evt_CSV_dev_tagged",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Evt_M2_closestTo125TaggedJets","M_{2}(tag,tag) closest to 125 GeV",50,0.0,300.0),"Evt_M2_closestTo125TaggedJets",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Evt_MTW","MTW",50,0.0,300.0),"Evt_MTW",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Evt_Dr_minDrLepTag","#DeltaR( min #DeltaR(lep,tag) )",50,0.4,3.5),"Evt_Dr_minDrLepTag",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Evt_Deta_TaggedJetsAverage","average #Delta#eta(tags)",50,0.0,3.0),"Evt_Deta_TaggedJetsAverage",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Evt_M_minDrLepTag","M_{2}( min #DeltaR(lep,tag) )",50,0.0,250.0),"Evt_M_minDrLepTag",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Evt_M2_closestTo91TaggedJets","M_{2}(tag,tag) closest to 91 GeV",50,0.0,300.0),"Evt_M2_closestTo91TaggedJets",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Jet_M_0","mass of leading jet",50,0.0,100.0),"Jet_M[0]",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Jet_DeepJetCSV_0","DeepJet b-tag value of leading jet",50,0.0,1.0),"Jet_DeepJetCSV[0]",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Evt_Dr_minDrTaggedJets","#DeltaR( min #DeltaR(tag,tag) )",50,0.4,3.5),"Evt_Dr_minDrTaggedJets",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Evt_M_JetsAverage","average M(jets)",50,5.0,30.0),"Evt_M_JetsAverage",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Jet_Pt_0","p_{T} of leading jet",50,0.0,600.0),"Jet_Pt[0]",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_RecoTTZ_TopLep_M","ttZ reconstruction M(t_{lep})",50,100.0,500.0),"RecoTTZ_TopLep_M",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_RecoTTZ_TopHad_M","ttZ reconstruction M(t_{had})",50,100.0,500.0),"RecoTTZ_TopHad_M",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Evt_CSV_avg","average b-tag value",50,0.1,0.9),"Evt_CSV_avg",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Evt_M2_minDrTaggedJets","M_{2}( min #DeltaR(tag,tag) )",50,0.0,400.0),"Evt_M2_minDrTaggedJets",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_CSV_3","fourth highest b-tag value",50,0.0,1.0),"CSV[3]",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Evt_M_TaggedJetsAverage","average M(tags)",50,5.0,50.0),"Evt_M_TaggedJetsAverage",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_CSV_2","third highest b-tag value",50,0.3,1.0),"CSV[2]",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Evt_Pt_minDrTaggedJets","p_{T}( min #DeltaR(tag,tag) )",50,0.0,500.0),"Evt_Pt_minDrTaggedJets",selection,label),
-        ]
-
-    if data:
-        add_data_plots(plots=plots,data=data)
-    return plots
-
-
-
-def plots_4j_ge3t(data = None):
-    label = "4 jets, \geq 3 b-tags"
-    selection = "(N_Jets==4&&N_BTagsM>=3)&&((Evt_Odd==0))"
-
-    plots = [
-        plotClasses.Plot(ROOT.TH1D("4j_ge3t_RecoTTZ_Chi2TopHad","ttZ reconstruction #chi^{2}(t_{had})",50,0.0,300.0),"RecoTTZ_Chi2TopHad",selection,label),
-        plotClasses.Plot(ROOT.TH1D("4j_ge3t_Evt_Dr_minDrTaggedJets","#DeltaR( min #DeltaR(tag,tag) )",50,0.4,3.5),"Evt_Dr_minDrTaggedJets",selection,label),
-        plotClasses.Plot(ROOT.TH1D("4j_ge3t_Evt_M2_minDrTaggedJets","M_{2}( min #DeltaR(tag,tag) )",50,0.0,400.0),"Evt_M2_minDrTaggedJets",selection,label),
-        plotClasses.Plot(ROOT.TH1D("4j_ge3t_Jet_M_0","mass of leading jet",50,0.0,100.0),"Jet_M[0]",selection,label),
-        plotClasses.Plot(ROOT.TH1D("4j_ge3t_Evt_M2_closestTo125TaggedJets","M_{2}(tag,tag) closest to 125 GeV",50,0.0,300.0),"Evt_M2_closestTo125TaggedJets",selection,label),
-        plotClasses.Plot(ROOT.TH1D("4j_ge3t_RecoTTZ_Chi2WHad","ttZ reconstruction #chi^{2}(W_{had})",50,0.0,300.0),"RecoTTZ_Chi2WHad",selection,label),
-        plotClasses.Plot(ROOT.TH1D("4j_ge3t_Evt_M2_minDrJets","M_{2}( min #DeltaR(jet,jet) )",50,0.0,200.0),"Evt_M2_minDrJets",selection,label),
-        plotClasses.Plot(ROOT.TH1D("4j_ge3t_Evt_CSV_dev_tagged","average deviation of b-tag value of tagged jets",50,0.0,0.12),"Evt_CSV_dev_tagged",selection,label),
-        plotClasses.Plot(ROOT.TH1D("4j_ge3t_Evt_Pt_minDrJets","p_{T}( min #DeltaR(jet,jet) )",50,0.0,600.0),"Evt_Pt_minDrJets",selection,label),
-        plotClasses.Plot(ROOT.TH1D("4j_ge3t_Jet_DeepJetCSV_0","DeepJet b-tag value of leading jet",50,0.0,1.0),"Jet_DeepJetCSV[0]",selection,label),
-        plotClasses.Plot(ROOT.TH1D("4j_ge3t_Evt_M2_closestTo91TaggedJets","M_{2}(tag,tag) closest to 91 GeV",50,0.0,300.0),"Evt_M2_closestTo91TaggedJets",selection,label),
-        plotClasses.Plot(ROOT.TH1D("4j_ge3t_Evt_CSV_dev","average deviation of b-tag value",50,0.0,0.24),"Evt_CSV_dev",selection,label),
-        plotClasses.Plot(ROOT.TH1D("4j_ge3t_RecoTTZ_TopHad_Pt","ttZ reconstruction p_{T}(t_{had})",50,0.0,700.0),"RecoTTZ_TopHad_Pt",selection,label),
-        plotClasses.Plot(ROOT.TH1D("4j_ge3t_Evt_MTW","MTW",50,0.0,300.0),"Evt_MTW",selection,label),
-        plotClasses.Plot(ROOT.TH1D("4j_ge3t_Evt_MHT","missing H_{T}",50,0.0,400.0),"Evt_MHT",selection,label),
-        plotClasses.Plot(ROOT.TH1D("4j_ge3t_RecoTTZ_TopLep_M","ttZ reconstruction M(t_{lep})",50,100.0,500.0),"RecoTTZ_TopLep_M",selection,label),
-        plotClasses.Plot(ROOT.TH1D("4j_ge3t_Evt_Pt_minDrTaggedJets","p_{T}( min #DeltaR(tag,tag) )",50,0.0,500.0),"Evt_Pt_minDrTaggedJets",selection,label),
-        plotClasses.Plot(ROOT.TH1D("4j_ge3t_CSV_2","third highest b-tag value",50,0.3,1.0),"CSV[2]",selection,label),
-        plotClasses.Plot(ROOT.TH1D("4j_ge3t_Evt_M_TaggedJetsAverage","average M(tags)",50,5.0,50.0),"Evt_M_TaggedJetsAverage",selection,label),
-        plotClasses.Plot(ROOT.TH1D("4j_ge3t_RecoTTZ_TopHad_M","ttZ reconstruction M(t_{had})",50,100.0,500.0),"RecoTTZ_TopHad_M",selection,label),
-        ]
-
-    if data:
-        add_data_plots(plots=plots,data=data)
-    return plots
-
-
-
-def plots_ge4j_3t(data = None):
-    label = "\geq 4 jets, 3 b-tags"
-    selection = "(N_Jets>=4&&N_BTagsM==3)&&((Evt_Odd==0))"
-
-    plots = [
-        plotClasses.Plot(ROOT.TH1D("ge4j_3t_CSV_2","third highest b-tag value",50,0.3,1.0),"CSV[2]",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_3t_Evt_CSV_min_tagged","minimal b-tag value of tagged jets",50,0.28,1.0),"Evt_CSV_min_tagged",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_3t_Evt_M2_closestTo125TaggedJets","M_{2}(tag,tag) closest to 125 GeV",50,0.0,300.0),"Evt_M2_closestTo125TaggedJets",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_3t_Evt_Dr_minDrTaggedJets","#DeltaR( min #DeltaR(tag,tag) )",50,0.4,3.5),"Evt_Dr_minDrTaggedJets",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_3t_Evt_M2_closestTo91TaggedJets","M_{2}(tag,tag) closest to 91 GeV",50,0.0,300.0),"Evt_M2_closestTo91TaggedJets",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_3t_Evt_CSV_dev_tagged","average deviation of b-tag value of tagged jets",50,0.0,0.12),"Evt_CSV_dev_tagged",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_3t_Evt_Deta_TaggedJetsAverage","average #Delta#eta(tags)",50,0.0,3.0),"Evt_Deta_TaggedJetsAverage",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_3t_Evt_M_minDrLepTag","M_{2}( min #DeltaR(lep,tag) )",50,0.0,250.0),"Evt_M_minDrLepTag",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_3t_Evt_Dr_minDrLepTag","#DeltaR( min #DeltaR(lep,tag) )",50,0.4,3.5),"Evt_Dr_minDrLepTag",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_3t_Evt_MTW","MTW",50,0.0,300.0),"Evt_MTW",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_3t_Evt_M2_minDrTaggedJets","M_{2}( min #DeltaR(tag,tag) )",50,0.0,400.0),"Evt_M2_minDrTaggedJets",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_3t_Jet_M_0","mass of leading jet",50,0.0,100.0),"Jet_M[0]",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_3t_Evt_M_JetsAverage","average M(jets)",50,5.0,30.0),"Evt_M_JetsAverage",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_3t_RecoTTZ_TopLep_M","ttZ reconstruction M(t_{lep})",50,100.0,500.0),"RecoTTZ_TopLep_M",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_3t_Jet_Pt_0","p_{T} of leading jet",50,0.0,600.0),"Jet_Pt[0]",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_3t_Evt_CSV_avg","average b-tag value",50,0.1,0.9),"Evt_CSV_avg",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_3t_Jet_DeepJetCSV_0","DeepJet b-tag value of leading jet",50,0.0,1.0),"Jet_DeepJetCSV[0]",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_3t_RecoTTZ_TopHad_M","ttZ reconstruction M(t_{had})",50,100.0,500.0),"RecoTTZ_TopHad_M",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_3t_Evt_Pt_minDrTaggedJets","p_{T}( min #DeltaR(tag,tag) )",50,0.0,500.0),"Evt_Pt_minDrTaggedJets",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_3t_Evt_M_TaggedJetsAverage","average M(tags)",50,5.0,50.0),"Evt_M_TaggedJetsAverage",selection,label),
-        ]
-
-    if data:
-        add_data_plots(plots=plots,data=data)
-    return plots
-
 
 
 
 def plots_dnn(data, discrname):
 
-    ndefaultbins = 20
+    ndefaultbins = 15
     category_dict = {}
     this_dict = {}
 
@@ -276,7 +33,7 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "\geq 4 jets, \geq 4 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["minxval"] = 0.25
-    category_dict["maxxval"] = 0.92
+    category_dict["maxxval"] = 0.98
 
     this_dict["ljets_ge4j_ge4t_ttZ_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -286,7 +43,7 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "\geq 4 jets, \geq 4 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["minxval"] = 0.25
-    category_dict["maxxval"] = 0.88
+    category_dict["maxxval"] = 0.93
 
     this_dict["ljets_ge4j_ge4t_tthf_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -296,7 +53,7 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "\geq 4 jets, \geq 4 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["minxval"] = 0.25
-    category_dict["maxxval"] = 0.55
+    category_dict["maxxval"] = 0.62
 
     this_dict["ljets_ge4j_ge4t_ttcc_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -306,7 +63,7 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "\geq 4 jets, \geq 4 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["minxval"] = 0.25
-    category_dict["maxxval"] = 0.67
+    category_dict["maxxval"] = 0.81
 
     this_dict["ljets_ge4j_ge4t_ttlf_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -320,7 +77,7 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "\geq 6 jets, \geq 3 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["minxval"] = 0.25
-    category_dict["maxxval"] = 0.97
+    category_dict["maxxval"] = 0.96
 
     this_dict["ljets_ge6j_ge3t_ttZ_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -340,7 +97,7 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "\geq 6 jets, \geq 3 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["minxval"] = 0.25
-    category_dict["maxxval"] = 0.53
+    category_dict["maxxval"] = 0.6
 
     this_dict["ljets_ge6j_ge3t_ttcc_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -350,7 +107,7 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "\geq 6 jets, \geq 3 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["minxval"] = 0.25
-    category_dict["maxxval"] = 0.75
+    category_dict["maxxval"] = 0.73
 
     this_dict["ljets_ge6j_ge3t_ttlf_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -364,7 +121,7 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "\leq 5 jets, \geq 3 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["minxval"] = 0.25
-    category_dict["maxxval"] = 0.98
+    category_dict["maxxval"] = 1.0
 
     this_dict["ljets_le5j_ge3t_ttZ_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -374,7 +131,7 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "\leq 5 jets, \geq 3 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["minxval"] = 0.25
-    category_dict["maxxval"] = 0.84
+    category_dict["maxxval"] = 0.86
 
     this_dict["ljets_le5j_ge3t_tthf_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -384,7 +141,7 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "\leq 5 jets, \geq 3 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["minxval"] = 0.25
-    category_dict["maxxval"] = 0.56
+    category_dict["maxxval"] = 0.61
 
     this_dict["ljets_le5j_ge3t_ttcc_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -394,7 +151,7 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "\leq 5 jets, \geq 3 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["minxval"] = 0.25
-    category_dict["maxxval"] = 0.73
+    category_dict["maxxval"] = 0.79
 
     this_dict["ljets_le5j_ge3t_ttlf_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -408,7 +165,7 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "5 jets, \geq 3 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["minxval"] = 0.25
-    category_dict["maxxval"] = 0.97
+    category_dict["maxxval"] = 0.99
 
     this_dict["ljets_5j_ge3t_ttZ_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -418,7 +175,7 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "5 jets, \geq 3 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["minxval"] = 0.25
-    category_dict["maxxval"] = 0.82
+    category_dict["maxxval"] = 0.83
 
     this_dict["ljets_5j_ge3t_tthf_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -428,7 +185,7 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "5 jets, \geq 3 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["minxval"] = 0.25
-    category_dict["maxxval"] = 0.56
+    category_dict["maxxval"] = 0.53
 
     this_dict["ljets_5j_ge3t_ttcc_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -438,7 +195,7 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "5 jets, \geq 3 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["minxval"] = 0.25
-    category_dict["maxxval"] = 0.65
+    category_dict["maxxval"] = 0.74
 
     this_dict["ljets_5j_ge3t_ttlf_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -452,7 +209,7 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "\geq 4 jets, \geq 3 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["minxval"] = 0.25
-    category_dict["maxxval"] = 0.99
+    category_dict["maxxval"] = 0.98
 
     this_dict["ljets_ge4j_ge3t_ttZ_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -462,7 +219,7 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "\geq 4 jets, \geq 3 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["minxval"] = 0.25
-    category_dict["maxxval"] = 0.84
+    category_dict["maxxval"] = 0.83
 
     this_dict["ljets_ge4j_ge3t_tthf_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -472,7 +229,7 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "\geq 4 jets, \geq 3 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["minxval"] = 0.25
-    category_dict["maxxval"] = 0.53
+    category_dict["maxxval"] = 0.71
 
     this_dict["ljets_ge4j_ge3t_ttcc_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -482,7 +239,7 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "\geq 4 jets, \geq 3 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["minxval"] = 0.25
-    category_dict["maxxval"] = 0.77
+    category_dict["maxxval"] = 0.84
 
     this_dict["ljets_ge4j_ge3t_ttlf_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -496,7 +253,7 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "4 jets, \geq 3 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["minxval"] = 0.25
-    category_dict["maxxval"] = 0.97
+    category_dict["maxxval"] = 1.0
 
     this_dict["ljets_4j_ge3t_ttZ_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -506,7 +263,7 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "4 jets, \geq 3 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["minxval"] = 0.25
-    category_dict["maxxval"] = 0.82
+    category_dict["maxxval"] = 0.86
 
     this_dict["ljets_4j_ge3t_tthf_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -516,7 +273,7 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "4 jets, \geq 3 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["minxval"] = 0.25
-    category_dict["maxxval"] = 0.48
+    category_dict["maxxval"] = 0.64
 
     this_dict["ljets_4j_ge3t_ttcc_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -526,7 +283,7 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "4 jets, \geq 3 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["minxval"] = 0.25
-    category_dict["maxxval"] = 0.74
+    category_dict["maxxval"] = 0.75
 
     this_dict["ljets_4j_ge3t_ttlf_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -540,7 +297,7 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "\geq 4 jets, 3 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["minxval"] = 0.25
-    category_dict["maxxval"] = 0.98
+    category_dict["maxxval"] = 0.96
 
     this_dict["ljets_ge4j_3t_ttZ_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -550,7 +307,7 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "\geq 4 jets, 3 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["minxval"] = 0.25
-    category_dict["maxxval"] = 0.84
+    category_dict["maxxval"] = 0.85
 
     this_dict["ljets_ge4j_3t_tthf_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -570,7 +327,7 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "\geq 4 jets, 3 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["minxval"] = 0.25
-    category_dict["maxxval"] = 0.74
+    category_dict["maxxval"] = 0.99
 
     this_dict["ljets_ge4j_3t_ttlf_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -587,13 +344,6 @@ def plots_dnn(data, discrname):
 
 def getDiscriminatorPlots(data = None, discrname = ''):
     discriminatorPlots = []
-    discriminatorPlots += plots_ge4j_ge4t(data)
-    discriminatorPlots += plots_ge6j_ge3t(data)
-    discriminatorPlots += plots_le5j_ge3t(data)
-    discriminatorPlots += plots_5j_ge3t(data)
-    discriminatorPlots += plots_ge4j_ge3t(data)
-    discriminatorPlots += plots_4j_ge3t(data)
-    discriminatorPlots += plots_ge4j_3t(data)
     discriminatorPlots += plots_dnn(data, discrname)
 
     return discriminatorPlots
