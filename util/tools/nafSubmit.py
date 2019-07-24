@@ -247,7 +247,7 @@ def submitToNAF(scripts, holdIDs = None, submitOptions = {}):
         # add the release script if hold = True
         print("the scripts were submitted in hold state - creating release script")
         releaseID = setupRelease(holdIDs, jobIDs)
-    jobIDs += releaseID
+        jobIDs += releaseID
 
     return jobIDs
 
@@ -293,7 +293,6 @@ def submitArrayToNAF(scripts, arrayName="", holdIDs=None, submitOptions = {}):
 
 def monitorJobStatus(jobIDs = None):
     ''' monitoring of jobs via condor_q function. Loops condor_q output until all scripts have been terminated
-
     jobIDs: list of IDs of jobs to be monitored (if no argument is given, all jobs of the current NAF user are monitored)
     hold: if set True also waits on jobs in hold state to be finished
     
@@ -317,7 +316,7 @@ def monitorJobStatus(jobIDs = None):
     helds = []
     totals = []
     while not allfinished:
-        time.sleep(15)
+        time.sleep(300)
         # calling condor_q command
         a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
         a.wait()

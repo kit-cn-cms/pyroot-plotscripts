@@ -24,7 +24,7 @@ def makePlots(configData):
 
     # create output folders
     print('creating output folders')
-    scriptPath = workdir+'/PlotScripts/'
+    scriptPath = workdir+'/plottingScripts/'
     if not os.path.exists(scriptPath):
         os.makedirs(scriptPath)
 
@@ -108,12 +108,12 @@ def createPlotConfig(configData,workdir):
         outfile.write(' '*4+']\n')
         outfile.write('#options for the plotting style\n')
         outfile.write('plotoptions = {\n')
-        outfile.write(' '*4+'"signalscaling":'+str(signalScaling)+',\n')
-        outfile.write(' '*4+'"lumilabel":'+str(lumiLabel)+',\n')
-        outfile.write(' '*4+'"privatework":'+str(privateWork)+',\n')
-        outfile.write(' '*4+'"ratio":"'+str(ratio)+'",\n')
-        outfile.write(' '*4+'"logarithmic":'+str(logarithmic)+',\n')
-        outfile.write(' '*4+'"splitlegend":'+str(splitLegend)+',\n')
+        outfile.write(' '*4+'"signalscaling": '+str(signalScaling)+',\n')
+        outfile.write(' '*4+'"lumilabel": '+str(lumiLabel)+',\n')
+        outfile.write(' '*4+'"privatework": '+str(privateWork)+',\n')
+        outfile.write(' '*4+'"ratio": "'+str(ratio)+'",\n')
+        outfile.write(' '*4+'"logarithmic": '+str(logarithmic)+',\n')
+        outfile.write(' '*4+'"splitlegend": '+str(splitLegend)+',\n')
         outfile.write(' '*4+'}\n')
 
     return outputpath
@@ -142,7 +142,7 @@ def createPlotScript(channel,pyrootdir,workdir,scriptPath,
     script += ' --workdir="'+workdir+'"\n' 
 
 
-    scriptPath = scriptPath+'makePlots'+str(channel)+'.sh'
+    scriptPath = scriptPath+'makePlots_'+str(channel)+'.sh'
 
     # write and chmod shell scripts
     with open(scriptPath, "w") as sf:

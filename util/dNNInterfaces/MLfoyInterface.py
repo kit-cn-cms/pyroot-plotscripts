@@ -396,7 +396,7 @@ class DNN:
             string+= "    selection = \"{}\"\n\n".format(self.selection.replace(" ","").replace("and","&&")+self.evalSelection)
         string+= "    plots = ["
 
-        for var in list(variables.index):
+        for var in sorted(list(variables.index)):
             # generate dictionary
             plotConfig = {
                 "histname":     "\""+self.category+"_"+var+"\"", 
@@ -666,29 +666,18 @@ import ROOT
 from array import array
 from copy import deepcopy\n\n\n"""
 
-        # get event yield categories
-        string += """
-def evtYieldCategories():
-    return [
-    ("(N_Jets>=6&&N_BTagsM==2)","6j2t",""),
-    ("(N_Jets==4&&N_BTagsM==3)","4j3t",""),
-    ("(N_Jets==5&&N_BTagsM==3)","5j3t",""),
-    ("(N_Jets>=6&&N_BTagsM==3)","6j3t",""),
-    ("(N_Jets==4&&N_BTagsM>=4)","4j4t",""),
-    ("(N_Jets==5&&N_BTagsM>=4)","5j4t",""),
-    ("(N_Jets>=6&&N_BTagsM>=4)","6j4t","")
-    ]
-
-memexp = ""\n\n\n"""
+        # add memexpression
+        string += "memexp = \"\"\n\n\n"
 
         # header for discr plots function
         funcstring = "def getDiscriminatorPlots(data = None, discrname = ''):\n"
         funcstring +="    discriminatorPlots = []\n"
 
         # loop over dnns writing code for plots
-        for dnn in self.DNNs:
-            string += dnn.generateInputPlots()
-            funcstring += dnn.generatePlotCall(opts)
+        if opts.input_plots:
+            for dnn in self.DNNs:
+                string += dnn.generateInputPlots()
+                funcstring += dnn.generatePlotCall(opts)
 
 
         # writing code for dnn output plots
