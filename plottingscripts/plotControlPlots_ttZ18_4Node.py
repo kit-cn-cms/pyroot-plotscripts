@@ -66,6 +66,7 @@ def main(pyrootdir, opts):
         # options to activate parts of the script
         "haddFromWildcard":     True,
         "makeDataCards":        False,
+        "makeInputDatacards":   True, # create datacards also for all defined plots
         "addData":              True,  # adding real data 
         "makePlots":            True,
         # options for makePlots
@@ -260,7 +261,7 @@ def main(pyrootdir, opts):
     print("at the moment the outputpath is "+str(analysis.renamedPath))
     print("#################################################")
 
-    if analysis.makeDataCards:
+    if analysis.makeDataCards or analysis.makeInputDatacards:
         print '''
         # ========================================================
         # Making Datacards.
@@ -270,7 +271,7 @@ def main(pyrootdir, opts):
             makeDatacards.makeDatacardsParallel(
                 filePath            = analysis.renamedPath,
                 workdir             = analysis.workdir,
-                categories          = configData.getBinlabels(),
+                categories          = configData.getDatacardLabels(analysis.makeInputDatacards),
                 doHdecay            = True,
                 discrname           = analysis.discrName,
                 datacardmaker       = datacardmaker,
