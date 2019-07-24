@@ -29,14 +29,14 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttZControlPlots'
+    name = 'ttZControlPlots_bbComparison'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
 
     # signal process
     signalProcess = "ttZ"
-    nSigSamples   = 2
+    nSigSamples   = 3
 
     # dataera
     dataera = "2018"
@@ -50,7 +50,7 @@ def main(pyrootdir, opts):
     # configs
     config          = "ttZ18/pltcfg_controlPlots_internalCSV"
     variable_cfg    = "ttZ18/additionalVariables"
-    plot_cfg        = "ttZ18/controlPlots"
+    plot_cfg        = "ttZ18/controlPlots_4Node"
     syst_cfg        = "ttZ18/systematics_internalCSV"
 
     # file for rate factors
@@ -66,6 +66,7 @@ def main(pyrootdir, opts):
         # options to activate parts of the script
         "haddFromWildcard":     True,
         "makeDataCards":        False,
+        "makeInputDatacards":   True, # create datacards also for all defined plots
         "addData":              True,  # adding real data 
         "makePlots":            True,
         # options for makePlots
@@ -260,7 +261,7 @@ def main(pyrootdir, opts):
     print("at the moment the outputpath is "+str(analysis.renamedPath))
     print("#################################################")
 
-    if analysis.makeDataCards:
+    if analysis.makeDataCards or analysis.makeInputDatacards:
         print '''
         # ========================================================
         # Making Datacards.
@@ -270,7 +271,7 @@ def main(pyrootdir, opts):
             makeDatacards.makeDatacardsParallel(
                 filePath            = analysis.renamedPath,
                 workdir             = analysis.workdir,
-                categories          = configData.getBinlabels(),
+                categories          = configData.getDatacardLabels(analysis.makeInputDatacards),
                 doHdecay            = True,
                 discrname           = analysis.discrName,
                 datacardmaker       = datacardmaker,

@@ -31,7 +31,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttZ18_4NodeDNN_t0p1_internalCSV'
+    name = 'ttZ18_4NodeDNN'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -52,7 +52,7 @@ def main(pyrootdir, opts):
     # configs
     config          = "ttZ18/pltcfg_discrPlots_internalCSV"
     variable_cfg    = "ttZ18/additionalVariables"
-    plot_cfg        = "ttZ18/discrPlots_4Node_t0p1"
+    plot_cfg        = "ttZ18/discrPlots_4Node"
     syst_cfg        = "ttZ18/systematics_internalCSV"
 
     # file for rate factors
@@ -68,6 +68,7 @@ def main(pyrootdir, opts):
         # options to activate parts of the script
         "haddFromWildcard":     True,
         "makeDataCards":        True,
+        "makeInputDatacards":   False, # create datacards also for all defined plots
         "addData":              True,  # adding real data
         "makePlots":            True,
         # options for makePlots
@@ -90,7 +91,7 @@ def main(pyrootdir, opts):
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/ttZ18_no_ttH"}
+                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/ttZ_4Node_top30_v4"}
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
@@ -260,7 +261,7 @@ def main(pyrootdir, opts):
     print("at the moment the outputpath is "+str(analysis.renamedPath))
     print("#################################################")
 
-    if analysis.makeDataCards:
+    if analysis.makeDataCards or analysis.makeInputDatacards:
         print '''
         # ========================================================
         # Making Datacards.
@@ -270,7 +271,7 @@ def main(pyrootdir, opts):
             makeDatacards.makeDatacardsParallel(
                 filePath            = analysis.renamedPath,
                 workdir             = analysis.workdir,
-                categories          = configData.getBinlabels(),
+                categories          = configData.getDatacardLabels(analysis.makeInputDatacards),
                 doHdecay            = True,
                 discrname           = analysis.discrName,
                 datacardmaker       = datacardmaker,
