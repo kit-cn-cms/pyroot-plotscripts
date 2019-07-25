@@ -65,7 +65,7 @@ parser.add_option("--nominalkey", dest="nominalKey", default="$PROCESS_$CHANNEL"
         help="KEY of the systematics histograms", metavar="nominalKey")
 parser.add_option("--systematickey", dest="systematicKey", default="$PROCESS_$CHANNEL_$SYSTEMATIC",
         help="KEY of the nominal histograms", metavar="systematicKey")
-parser.add_option("--datakeyreplace", dest="datakeyreplace", default="data_obs",
+parser.add_option("--data", dest="datakeyreplace", default="data_obs",
         help="Key replacement for the data sample", metavar="datakeyreplace")
 parser.add_option("--datalabel", dest="datalabel", default="data",
         help="label of the data", metavar="datalabel")
@@ -156,12 +156,17 @@ PlotList    = {}
 rootfilename    = options.Rootfile
 rootFile        = ROOT.TFile(rootfilename, "readonly") 
 
-# load data and move under and overflow bin
+# load data if avaliable and move under and overflow bin
 dataKey     = nominalKey.replace(procIden, options.datakeyreplace)
 dataHist    = rootFile.Get(dataKey)
-dataHist.SetStats(False)
-Plots.moveOverUnderFlow(dataHist)
-print "using data: %s" % (dataKey)
+print("    type of data hist is: "+str(type(rootHist)) )
+if isinstance(rootHist, ROOT.TH1):
+    dataHist.SetStats(False)
+    Plots.moveOverUnderFlow(dataHist)
+    print "using data: %s" % (dataKey)
+else:
+    print "ERROR: Not using data!"
+    dataHist=None
 
 # load samples
 print "start loading  samples" 
@@ -211,11 +216,11 @@ normalize       = getParserConfigDefaultBool(parser=options.normalize,config="no
 returning sorted Lists and Histograms necessary to draw the legend
 and everything ROOT related
 """
-canvas, errorband, ratioerrorband, sortedSignal, sigHists, sortedBackground, bkgHists, data, ratio =Plots.drawHistsOnCanvas(PlotList,options.channelName,
-                                                                                        data=dataHist,ratio=ratio, 
-                                                                                        signalscaling=int(signalscaling),
-                                                                                        errorband=True, logoption=logarithmic,
-                                                                                        normalize=normalize)
+DrawHistogramObject = Plots.DrawHistograms(PlotList,options.channelName,
+                                data=dataHist,ratio=ratio, 
+                                signalscaling=int(signalscaling),
+                                errorband=True, logoption=logarithmic,
+                                normalize=normalize)
 
 # drawing the legend
 # split legend:
