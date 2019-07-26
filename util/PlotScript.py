@@ -73,8 +73,8 @@ parser.add_option("--signalscaling", dest="signalscaling", default=None,
         help="scale factor of the signal processes, -1 to scale with background integral", metavar="signalscaling")
 parser.add_option("--lumilabel", dest="lumilabel", default=None,
         help="print luminosity label on canvas", metavar="lumilabel")
-parser.add_option("--privatework", dest="privatework", default=None,
-        help="print privatework label on canvas", metavar="privatework")
+parser.add_option("--cmslabel", dest="cmslabel", default=None,
+        help="print CMS label on canvas", metavar="cmslabel")
 parser.add_option("--ratio", dest="ratio",  default=None,
         help="make ratio plot", metavar="ratio")
 parser.add_option("--logarithmic", dest="logarithmic", default=None,
@@ -159,8 +159,8 @@ rootFile        = ROOT.TFile(rootfilename, "readonly")
 # load data if avaliable and move under and overflow bin
 dataKey     = nominalKey.replace(procIden, options.datakeyreplace)
 dataHist    = rootFile.Get(dataKey)
-print("    type of data hist is: "+str(type(rootHist)) )
-if isinstance(rootHist, ROOT.TH1):
+print("    type of data hist is: "+str(type(dataHist)) )
+if isinstance(dataHist, ROOT.TH1):
     dataHist.SetStats(False)
     Plots.moveOverUnderFlow(dataHist)
     print "using data: %s" % (dataKey)
@@ -204,8 +204,8 @@ ratio           = getParserConfigDefaultValue(parser=options.ratio,config="ratio
                                             plotoptions=plotoptions,defaultvalue="#frac{data}{MC Background}")
 lumilabel       = getParserConfigDefaultValue(parser=options.lumilabel,config="lumilabel",
                                             plotoptions=plotoptions,defaultvalue=False)
-privatework     = getParserConfigDefaultBool(parser=options.privatework,config="privatework",
-                                            plotoptions=plotoptions,defaultbool=False)
+cmslabel        = getParserConfigDefaultValue(parser=options.cmslabel,config="cmslabel",
+                                            plotoptions=plotoptions,defaultvalue=False)
 logarithmic     = getParserConfigDefaultBool(parser=options.logarithmic,config="logarithmic",
                                             plotoptions=plotoptions,defaultbool=False)
 splitlegend     = getParserConfigDefaultBool(parser=options.splitlegend,config="splitlegend",
@@ -220,56 +220,24 @@ DrawHistogramObject = Plots.DrawHistograms(PlotList,options.channelName,
                                 data=dataHist,ratio=ratio, 
                                 signalscaling=int(signalscaling),
                                 errorband=True, logoption=logarithmic,
-                                normalize=normalize)
+                                normalize=normalize,splitlegend=splitlegend)
 
-# drawing the legend
-# split legend:
+DrawHistogramObject.drawHistsOnCanvas()
 
-if splitlegend:
-    legend1 = Plots.getLegend1()
-    legend2 = Plots.getLegend2()
-    if data:
-        legend1.AddEntry(dataHist,options.datalabel,"P")
-
-    legendentries = len(sortedSignal)+len(sortedBackground)
-    n = 0
-    for i,signal in enumerate(sortedSignal):
-        if n<legendentries/2:
-            legend1.AddEntry(sigHists[i], PlotList[signal].label, "L")
-        else:
-            legend2.AddEntry(sigHists[i], PlotList[signal].label, "L")
-        n+=1
-    for i,background in enumerate(sortedBackground):
-        if n<legendentries/2:
-            legend1.AddEntry(bkgHists[i], PlotList[background].label, "F")
-        else:
-            legend2.AddEntry(bkgHists[i], PlotList[background].label, "F")
-        n+=1
-    legend1.Draw("same")
-    legend2.Draw("same")
-else:
-    legend = Plots.getLegend2()
-    legend.AddEntry(dataHist,options.datalabel,"P")
-
-    for i,signal in enumerate(sortedSignal):
-        legend.AddEntry(sigHists[i], PlotList[signal].label, "L")
-    for i,background in enumerate(sortedBackground):
-        legend.AddEntry(bkgHists[i], PlotList[background].label, "F")
-    legend.Draw("same")
-
+DrawHistogramObject.builtLegend()
 # add lumi or private work label to plot
-if privatework:
-    Plots.printPrivateWork(canvas, ratio = ratio)
+if cmslabel:
+    DrawHistogramObject.printCMSLabel(cmslabel=cmslabel)
 if lumilabel:
-    Plots.printLumi(canvas, lumi = lumilabel, ratio = ratio)
+    DrawHistogramObject.printLumi(lumi = lumilabel)
 
 #add selection label to plot
 if options.selectionlabel:
-    Plots.printCategoryLabel(canvas, catLabel = options.selectionlabel, ratio = ratio)
+    DrawHistogramObject.printCategoryLabel(catLabel = options.selectionlabel)
 plotpath = workdir+"/outputPlots/"
 if not os.path.exists(plotpath):
         os.makedirs(plotpath)
 
 
-Plots.saveCanvas(canvas,plotpath+"/"+options.channelName+".pdf")
+DrawHistogramObject.saveCanvas(path = plotpath+"/"+options.channelName+".pdf")
 
