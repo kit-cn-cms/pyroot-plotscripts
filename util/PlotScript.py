@@ -83,6 +83,13 @@ parser.add_option("--splitlegend", dest="splitlegend",  default=None,
         help="splits the legend in two", metavar="splitlegend")
 parser.add_option("--normalize", dest="normalize",  default=None,
         help="normalizes plot", metavar="normalize")
+parser.add_option("--shape", dest="shape",  default=None,
+        help="drawing shape plot, default normalize and no data", metavar="shape")
+parser.add_option("--combineflag", dest="combineflag", default=None,
+        help="NAME of the combine plot", metavar="combineflag")
+parser.add_option("--sortedprocesses", dest="sortedprocesses", default=None,
+        help="List for the sequence of Processes", metavar="sortedprocesses")
+
 
 
 (options, args) = parser.parse_args()
@@ -95,6 +102,14 @@ Define parser options for further use
 procIden    = "$PROCESS"
 chIden      = "$CHANNEL"
 sysIden     = "$SYSTEMATIC"
+combineIden = "$FLAG"
+
+
+combineflag             = options.combineflag
+if combineflag:
+    options.nominalKey  = "$FLAG/$CHANNEL/$PROCESS"
+    nominalKey          = nominalKey.replace(combineIden, combineflag)
+
 
 # build keys
 if chIden in options.nominalKey:
@@ -164,6 +179,11 @@ if isinstance(dataHist, ROOT.TH1):
     dataHist.SetStats(False)
     Plots.moveOverUnderFlow(dataHist)
     print "using data: %s" % (dataKey)
+# data in combine in TGraphAsymmErrors, get TH1 out of it
+elif isinstance(dataHist, ROOT.TGraphAsymmErrors):
+    dataHist = Plots.GetHistoFromTGraphAE(dataHist)
+    Plots.moveOverUnderFlow(dataHist)
+    dataHist.SetStats(False)
 else:
     print "ERROR: Not using data!"
     dataHist=None
@@ -174,7 +194,12 @@ for sample in samples:
     color   = samples[sample]['color']
     typ     = samples[sample]['typ']
     label   = samples[sample]['label']
-    PlotList[sample] = Plots.buildHistogramAndErrorBand(rootFile=rootFile,sample=sample,
+    if combineflag:
+        PlotList[sample] = Plots.getHistogramAndErrorband(rootFile=rootFile,sample=sample,
+                                                        color=color,typ=typ,label=label,
+                                                        nominalKey=nominalKey,procIden=procIden)
+    else:
+        PlotList[sample] = Plots.buildHistogramAndErrorBand(rootFile=rootFile,sample=sample,
                                                         color=color,typ=typ,label=label,
                                                         systematics=systematics,
                                                         nominalKey=nominalKey,procIden=procIden,
@@ -189,7 +214,30 @@ for sample in plottingsamples:
     label       = plottingsamples[sample]['label']
     addsamples  = plottingsamples[sample]['addSamples']
     PlotList = Plots.addSamples(sample=sample,color=color,typ=typ,label=label,
-                                    addsamples=addsamples,PlotList=PlotList)
+                                    addsamples=addsamples,PlotList=PlotList,combineflag=combineflag)
+
+"""
+Get errorband and signalhist in case of combine output file,
+else no signal
+"""
+if combineflag:
+    if combineflag=="shapes_fit_s":
+        bkgKey = nominalKey.replace(procIden, "total")
+        totalsignalkey  = nominalKey.replace(procIden, "total_signal")
+        totalsignal     = rootFile.Get(totalsignalkey)
+        PlotList["sig"] = Plots.Plot(totalsignal,sample,label="Total signal",
+                                        typ=signal, OverUnderFlowInc=True)
+    else:
+        bkgKey = nominalKey.replace(procIden, "total_background")
+    # from total background or total background+signal prediction histogram in mlfit file, get the error band
+    background = rootFile.Get(bkgKey)
+    errorband = Plots.GetErrorGraph(background)
+else:
+    errorband = None
+
+
+
+
 
 print '''
 # ========================================================
@@ -206,21 +254,33 @@ lumilabel       = getParserConfigDefaultValue(parser=options.lumilabel,config="l
                                             plotoptions=plotoptions,defaultvalue=False)
 cmslabel        = getParserConfigDefaultValue(parser=options.cmslabel,config="cmslabel",
                                             plotoptions=plotoptions,defaultvalue=False)
+sortedProcesses = getParserConfigDefaultValue(parser=options.sortedprocesses,config="sortedprocesses",
+                                            plotoptions=plotoptions,defaultvalue=False)
 logarithmic     = getParserConfigDefaultBool(parser=options.logarithmic,config="logarithmic",
                                             plotoptions=plotoptions,defaultbool=False)
 splitlegend     = getParserConfigDefaultBool(parser=options.splitlegend,config="splitlegend",
                                             plotoptions=plotoptions,defaultbool=False)
 normalize       = getParserConfigDefaultBool(parser=options.normalize,config="normalize",
                                             plotoptions=plotoptions,defaultbool=False)
+shape           = getParserConfigDefaultBool(parser=options.shape,config="shape",
+                                            plotoptions=plotoptions,defaultbool=False)
+if shape:
+    dataHist        = None
+    ratio           = False
+    normalize       = True
+
 """
-returning sorted Lists and Histograms necessary to draw the legend
-and everything ROOT related
+
 """
+
+
 DrawHistogramObject = Plots.DrawHistograms(PlotList,options.channelName,
                                 data=dataHist,ratio=ratio, 
                                 signalscaling=int(signalscaling),
-                                errorband=True, logoption=logarithmic,
-                                normalize=normalize,splitlegend=splitlegend)
+                                errorband=errorband, logoption=logarithmic,
+                                normalize=normalize,splitlegend=splitlegend,
+                                combineflag=combineflag,shape=shape,
+                                sortedProcesses=sortedProcesses)
 
 DrawHistogramObject.drawHistsOnCanvas()
 

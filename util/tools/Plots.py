@@ -65,14 +65,16 @@ class Plot:
         self.OverUnderFlowInc=True
 
     # sets the Style for the Histogram and errorband
-    def setStyle(self):
+    def setStyle(self, typ=None):
+        if not typ:
+            typ = self.typ
         self.hist.SetStats(False)
         #Sets style for Histogram, filled for background, line for signal
-        if self.typ=="bkg":
+        if typ=="bkg":
             self.hist.SetLineColor(ROOT.kBlack )
             self.hist.SetFillColor(self.color)
             self.hist.SetLineWidth(1)
-        elif self.typ=="signal":
+        elif typ=="signal":
             self.hist.SetLineColor(self.color )
             self.hist.SetFillColor(0)
             self.hist.SetLineWidth(3)
@@ -320,8 +322,9 @@ Class handling the Drawing of the Histograms
 """
 class DrawHistograms:
     def __init__(self, PlotList, canvasName, data=None, ratio=False, signalscaling=1, 
-                    errorband=None, displayname=None, logoption=False, 
-                    normalize=False, combineflag=False, splitlegend=False, datalabel="data"):
+                    errorband=None, displayname=None, logoption=False, shape=False,
+                    normalize=False, combineflag=False, splitlegend=False, datalabel="data",
+                    sortedProcesses=False):
         self.PlotList       = PlotList
         self.canvasName     = canvasName
         self.data           = data 
@@ -329,7 +332,7 @@ class DrawHistograms:
         if self.data:
             self.ratio      = ratio 
         else:
-            self.ratio      = false
+            self.ratio      = False
         self.signalscaling  = signalscaling
         self.errorband      = errorband 
         self.displayname    = displayname 
@@ -339,6 +342,8 @@ class DrawHistograms:
         self.normalize      = normalize 
         self.combineflag    = combineflag
         self.splitlegend    = splitlegend
+        self.shape          = shape
+        self.sortedProcesses = sortedProcesses
 
 
     # ===============================================
@@ -380,9 +385,10 @@ class DrawHistograms:
         and do shape Plots
         """
         if len(self.stackPlots) == 0:
-            firstHist = PlotList[self.shapePlots[0]].hist
-            self.ratio=False
-            self.data=False
+            firstHist       = self.shapePlots[0]
+            self.ratio      = False
+            self.data       = False
+            self.normalize  = True
         else:
             firstHist = self.stackPlots[0]
 
@@ -466,20 +472,19 @@ class DrawHistograms:
         firstHist.DrawCopy("axissame")
         
         # draw signal histograms
-        for n,signal in enumerate(self.shapePlots):
-            print self.sortedShapes[n]
+        for n,shape in enumerate(self.shapePlots):
             # scale signal
-            if self.normalize:
-                scalefactor=1/signal.Integral()
+            if self.normalize or self.shape:
+                scalefactor=1/shape.Integral()
             elif self.signalscaling==-1:
-                scalefactor=firstHistIntegral/signal.Integral()
+                scalefactor=firstHistIntegral/shape.Integral()
             else:
                 scalefactor=self.signalscaling
-            signal.Scale(scalefactor)
-            if scalefactor != 1 and not self.normalize:
+            shape.Scale(scalefactor)
+            if scalefactor != 1 and not self.normalize and not self.shape:
                 self.PlotList[self.sortedShapes[n]].label += " x "+str(int(scalefactor))
             # draw signal histogram
-            signal.DrawCopy(option+" same")
+            shape.DrawCopy(option+" same")
 
         """
         Draws the ratio plot, scales the background, signal and errorband to the background
@@ -499,16 +504,39 @@ class DrawHistograms:
         Stacks      = {}
         for sample in self.PlotList:
             PlotObject = self.PlotList[sample]
-            PlotObject.setStyle()
-            if PlotObject.typ == "signal":
+            
+            if self.shape:
+                PlotObject.setStyle("signal")
                 Shapes[PlotObject.name] = PlotObject.hist.Integral()
-            elif PlotObject.typ == "bkg":
-                Stacks[PlotObject.name] = PlotObject.hist.Integral()
+            else:
+                PlotObject.setStyle()
+                if PlotObject.typ == "signal":
+                    Shapes[PlotObject.name] = PlotObject.hist.Integral()
+                elif PlotObject.typ == "bkg":
+                    Stacks[PlotObject.name] = PlotObject.hist.Integral()
         """
         sort it by Event Yield, lowest to highest
         """
         self.sortedShapes      = sorted(Shapes, key=Shapes.get, reverse=True)
         self.sortedStacks      = sorted(Stacks, key=Stacks.get,reverse=True)
+
+        if self.sortedProcesses:
+            sortedShapes        = self.sortedShapes
+            self.sortedShapes   = []
+            sortedStacks        = self.sortedStacks
+            self.sortedStacks   = []
+            for process in self.sortedProcesses:
+                if process in sortedShapes:
+                    self.sortedShapes.append(process)
+                elif process in sortedStacks:
+                    self.sortedStacks.append(process)
+            for shape in sortedShapes:
+                if shape not in self.sortedShapes:
+                    self.sortedShapes.append(shape)
+            for stack in sortedStacks:
+                if stack not in self.sortedStacks:
+                    self.sortedStacks.append(stack)
+
 
     def stackPlots(self, sortedPlots):
         """
@@ -575,7 +603,7 @@ class DrawHistograms:
         to normalize the Plot 
         """
         self.normalizefactor=1/PlotHist.Integral()
-        PlotHist.Scale(normalizefactor)
+        PlotHist.Scale(self.normalizefactor)
         self.yMax    = self.yMax*self.normalizefactor
         self.yMinMax = self.yMinMax*self.normalizefactor
 
