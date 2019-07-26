@@ -218,7 +218,7 @@ def GetErrorGraph(histo):
 # combines other samples as it is defined in the input "sample"
 # to create an clearer plot
 # combines Histogram and Errorband and deletes other samples
-def addSamples(sample,color,typ,label,addsamples,PlotList):
+def addSamples(sample,color,typ,label,addsamples,PlotList,combineflag=None):
     combinedErrorbands=[]
     combinedHist = None
     print("Adding samples for summarized process %s" % sample)
@@ -226,16 +226,21 @@ def addSamples(sample,color,typ,label,addsamples,PlotList):
         print "    "+sample
         if combinedHist:
             combinedHist.Add(PlotList[sample].hist)
-            combinedErrorbands.append(PlotList[sample].errorband)
+            if not combineflag:
+                combinedErrorbands.append(PlotList[sample].errorband)
             del PlotList[sample]
         else:
-            combinedHist    = PlotList[sample].hist 
-            combinedErrorbands.append(PlotList[sample].errorband)
+            combinedHist    = PlotList[sample].hist
+            if not combineflag: 
+                combinedErrorbands.append(PlotList[sample].errorband)
             del PlotList[sample]
     # add all Errorbands together
-    errorband=addErrorbands(combinedErrorbands,combinedHist)
-    # add the new combined sample
-    PlotList[sample]=Plot(combinedHist, sample, color=color, typ=typ, label=label, errorband=errorband)
+    if not combineflag:
+        errorband=addErrorbands(combinedErrorbands,combinedHist)
+        # add the new combined sample
+        PlotList[sample]=Plot(combinedHist, sample, color=color, typ=typ, label=label, errorband=errorband)
+    else:
+        PlotList[sample]=Plot(combinedHist, sample, color=color, typ=typ, label=label)
     
     # return the altered PlotList
     return PlotList
@@ -437,16 +442,16 @@ class DrawHistograms:
                 h.Scale(self.normalizefactor)
             h.DrawCopy(option+"same")
 
-        if self.errorband and self.combinederrorband:
-            self.combinederrorband.SetFillStyle(3004)
-            self.combinederrorband.SetLineColor(ROOT.kBlack)
-            self.combinederrorband.SetFillColor(ROOT.kBlack)
-            self.combinederrorband.Draw("same2")
-        elif self.errorband:
+        if self.errorband:
             self.errorband.SetFillStyle(3004)
             self.errorband.SetLineColor(ROOT.kBlack)
             self.errorband.SetFillColor(ROOT.kBlack)
             self.errorband.Draw("same2")
+        elif self.combinederrorband:
+            self.combinederrorband.SetFillStyle(3004)
+            self.combinederrorband.SetLineColor(ROOT.kBlack)
+            self.combinederrorband.SetFillColor(ROOT.kBlack)
+            self.combinederrorband.Draw("same2")
 
 
 
@@ -512,7 +517,7 @@ class DrawHistograms:
         add errorbands of background histograms to a list
         to combine them for the errorband of all backgrounds
         """
-        self.errorbands         = []
+        errorbands         = []
         self.stackPlots         = []
         self.combinederrorband  = None
         for i in range(len(sortedPlots),0,-1):
@@ -520,16 +525,16 @@ class DrawHistograms:
             PlotObject  = self.PlotList[Plot]
             if len(self.stackPlots)==0:
                 self.stackPlots.append(PlotObject.hist.Clone())
-                if not self.combineflag and self.errorband:
-                    self.errorbands.append(PlotObject.errorband.Clone())
+                if not self.combineflag:
+                    errorbands.append(PlotObject.errorband.Clone())
             else:
                 hist = PlotObject.hist.Clone()
                 hist.Add(self.stackPlots[0])
                 self.stackPlots.insert(0, hist)
-                if not self.combineflag and self.errorband:
-                    self.errorbands.append(PlotObject.errorband.Clone())
+                if not self.combineflag:
+                    errorbands.append(PlotObject.errorband.Clone())
         if self.stackPlots and not self.combineflag:
-            self.combinederrorband=addErrorbands(self.errorbands,self.stackPlots[0])
+            self.combinederrorband=addErrorbands(errorbands,self.stackPlots[0])
 
 
     def shapePlots(self,sortedPlots):
@@ -612,29 +617,29 @@ class DrawHistograms:
         ROOT.gStyle.SetErrorX(0)
         ratioPlot.DrawCopy("sameP")
 
-        ratioerrorband=self.generateRatioErrorband()
-        ratioerrorband.Draw("same2")
+        self.generateRatioErrorband()
         self.canvas.cd(1)
 
     # scales the Errorband for the ratio plot
     def generateRatioErrorband(self):
-        if self.errorband and self.combinederrorband:
-            ratioerrorband=self.combinederrorband.Clone()
+        if self.combinederrorband:
+            self.ratioerrorband = self.combinederrorband.Clone()
         elif self.errorband:
-            ratioerrorband=self.errorband.Clone()
-        for i in range(ratioerrorband.GetN()):
+            self.ratioerrorband = self.errorband.Clone()
+        else: return 
+        for i in range(self.ratioerrorband.GetN()):
             x=ROOT.Double()
             y=ROOT.Double()
-            ratioerrorband.GetPoint(i,x,y)
-            ratioerrorband.SetPoint(i,x,1)
+            self.ratioerrorband.GetPoint(i,x,y)
+            self.ratioerrorband.SetPoint(i,x,1)
             if y>0.:
-                ratioerrorband.SetPointEYlow(i,ratioerrorband.GetErrorYlow(i)/y)
-                ratioerrorband.SetPointEYhigh(i,ratioerrorband.GetErrorYhigh(i)/y)
+                self.ratioerrorband.SetPointEYlow(i,self.ratioerrorband.GetErrorYlow(i)/y)
+                self.ratioerrorband.SetPointEYhigh(i,self.ratioerrorband.GetErrorYhigh(i)/y)
             else:
-                ratioerrorband.SetPointEYlow(i,0)
-                ratioerrorband.SetPointEYhigh(i,0)
+                self.ratioerrorband.SetPointEYlow(i,0)
+                self.ratioerrorband.SetPointEYhigh(i,0)
 
-        return ratioerrorband
+        self.ratioerrorband.Draw("same2")
         
     def GetyTitle(self):
         # normalize plots to unit area
