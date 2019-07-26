@@ -316,10 +316,11 @@ Class handling the Drawing of the Histograms
 class DrawHistograms:
     def __init__(self, PlotList, canvasName, data=None, ratio=False, signalscaling=1, 
                     errorband=None, displayname=None, logoption=False, 
-                    normalize=False, combineflag=False, splitlegend=False):
+                    normalize=False, combineflag=False, splitlegend=False, datalabel="data"):
         self.PlotList       = PlotList
         self.canvasName     = canvasName
         self.data           = data 
+        self.datalabel      = datalabel
         if self.data:
             self.ratio      = ratio 
         else:
@@ -345,19 +346,19 @@ class DrawHistograms:
         get the integral of the hists to sort it by event yield for plotting
         sort it by Event Yield, lowest to highest
         """
-        sortPlots()
+        self.sortPlots()
 
         """
         stack background Histograms
         add errorbands of background histograms to a list
         to combine them for the errorband of all backgrounds
         """
-        stackPlots()
+        self.stackPlots(self.sortedStacks)
 
         """
         sort signal Histograms by Event Yield
         """
-        SortedShapeHistList()
+        self.shapePlots(self.sortedShapes)
 
         """
         figure out plotrange
@@ -365,7 +366,7 @@ class DrawHistograms:
         yMinMax is the minimal bin value of all background histograms, 
         needed for logarithmic plotting (need to set lowest value)
         """
-        PlotRange()
+        self.PlotRange()
         
         """
         get the first histogram to draw,
@@ -373,12 +374,12 @@ class DrawHistograms:
         else use an signal histogram
         and do shape Plots
         """
-        if len(bkgHists) == 0:
-            firstHist = PlotList[self.sortedSignal[0]].hist
+        if len(self.stackPlots) == 0:
+            firstHist = PlotList[self.shapePlots[0]].hist
             self.ratio=False
             self.data=False
         else:
-            firstHist = bkgHists[0]
+            firstHist = self.stackPlots[0]
 
         """
         get the total background event yield
@@ -386,31 +387,31 @@ class DrawHistograms:
         and normalize the Plot 
         """
         firstHistIntegral=firstHist.Integral()
-        if normalize:
-            normalizePlot(PlotHist=firstHist)
+        if self.normalize:
+            self.normalizePlot(PlotHist=firstHist)
 
         """
         create Canvas split in two if ratio is activated
         """
-        self.canvas = getCanvas()
+        self.canvas = getCanvas(self.displayname,self.ratio)
         self.canvas.cd(1)
 
         """
         consider logoption and set the user range accordingly
         scaling maximal and minimal y value for better readability
         """
-        if logoption:
-            firstHist.GetYaxis().SetRangeUser(yMinMax/10000, yMax*1000)
+        if self.logoption:
+            firstHist.GetYaxis().SetRangeUser(self.yMinMax/10000, self.yMax*1000)
             ROOT.gPad.SetLogy(1)
         else:
-            firstHist.GetYaxis().SetRangeUser(0, yMax*1.5)
+            firstHist.GetYaxis().SetRangeUser(0, self.yMax*1.5)
         
         """
         Handle titles
         """
-        firstHist.GetYaxis().SetTitle(GetyTitle(normalize))
+        firstHist.GetYaxis().SetTitle(self.GetyTitle())
         firstHist.GetYaxis().SetTitleSize(firstHist.GetYaxis().GetTitleSize()*1.2)
-        anvaslabel=firstHist.GetTitle()
+        canvaslabel=firstHist.GetTitle()
 
         if self.ratio:
             firstHist.GetXaxis().SetTitle("")
@@ -423,7 +424,7 @@ class DrawHistograms:
         Draws first hist
         """
         option = "histo"
-        if self.bkgHists:
+        if self.stackPlots:
             firstHist.DrawCopy(option+"E0")
         else:
             firstHist.DrawCopy(option)
@@ -431,7 +432,7 @@ class DrawHistograms:
         """
         draw the other histograms and the errorband
         """
-        for h in self.bkgHists[1:]:
+        for h in self.stackPlots[1:]:
             if self.normalize:
                 h.Scale(self.normalizefactor)
             h.DrawCopy(option+"same")
@@ -460,8 +461,8 @@ class DrawHistograms:
         firstHist.DrawCopy("axissame")
         
         # draw signal histograms
-        for n,signal in enumerate(self.sigHists):
-            print self.sortedSignal[n]
+        for n,signal in enumerate(self.shapePlots):
+            print self.sortedShapes[n]
             # scale signal
             if self.normalize:
                 scalefactor=1/signal.Integral()
@@ -471,39 +472,40 @@ class DrawHistograms:
                 scalefactor=self.signalscaling
             signal.Scale(scalefactor)
             if scalefactor != 1 and not self.normalize:
-                self.PlotList[self.sortedSignal[n]].label += " x "+str(int(scalefactor))
+                self.PlotList[self.sortedShapes[n]].label += " x "+str(int(scalefactor))
             # draw signal histogram
             signal.DrawCopy(option+" same")
 
         """
         Draws the ratio plot, scales the background, signal and errorband to the background
         """
-        if ratio:
+        if self.ratio:
             self.canvas.cd(2)
-            ratio(stackhist=firstHist,canvaslabel=canvaslabel)
+            self.drawRatio(stackhist = firstHist, canvaslabel = canvaslabel)
+
 
 
     def sortPlots(self):
-          """
+        """
         set the Style for the Signal and Background Plots
         get the integral of the hists to sort it by event yield for plotting
         """
-        Signal      = {}
-        Background  = {}
+        Shapes      = {}
+        Stacks      = {}
         for sample in self.PlotList:
-            PlotObject=self.PlotList[sample]
+            PlotObject = self.PlotList[sample]
             PlotObject.setStyle()
             if PlotObject.typ == "signal":
-                Signal[PlotObject.name] = PlotObject.hist.Integral()
+                Shapes[PlotObject.name] = PlotObject.hist.Integral()
             elif PlotObject.typ == "bkg":
-                Background[PlotObject.name] = PlotObject.hist.Integral()
+                Stacks[PlotObject.name] = PlotObject.hist.Integral()
         """
         sort it by Event Yield, lowest to highest
         """
-        self.sortedSignal        = sorted(Signal, key=Signal.get, reverse=True)
-        self.sortedBackground    = sorted(Background, key=Background.get,reverse=True)
+        self.sortedShapes      = sorted(Shapes, key=Shapes.get, reverse=True)
+        self.sortedStacks      = sorted(Stacks, key=Stacks.get,reverse=True)
 
-    def stackPlots(self):
+    def stackPlots(self, sortedPlots):
         """
         stack background Histograms
         if not combine style of rootfile
@@ -513,34 +515,36 @@ class DrawHistograms:
         self.errorbands         = []
         self.stackPlots         = []
         self.combinederrorband  = None
-        for i in range(len(self.sortedPlots),0,-1):
-            Plot        = self.sortedPlots[i-1]
+        for i in range(len(sortedPlots),0,-1):
+            Plot        = sortedPlots[i-1]
             PlotObject  = self.PlotList[Plot]
-            if len(stackPlots)==0:
+            if len(self.stackPlots)==0:
                 self.stackPlots.append(PlotObject.hist.Clone())
-                if not self.combineflag:
+                if not self.combineflag and self.errorband:
                     self.errorbands.append(PlotObject.errorband.Clone())
             else:
                 hist = PlotObject.hist.Clone()
-                hist.Add(stackPlots[0])
+                hist.Add(self.stackPlots[0])
                 self.stackPlots.insert(0, hist)
-                if not self.combineflag:
+                if not self.combineflag and self.errorband:
                     self.errorbands.append(PlotObject.errorband.Clone())
-        if stackPlots and not combineflag:
-            self.combinederrorband=addErrorbands(errorbands,stackPlots[0])
+        if self.stackPlots and not self.combineflag:
+            self.combinederrorband=addErrorbands(self.errorbands,self.stackPlots[0])
 
-    def SortedShapeHistList(self):
+
+    def shapePlots(self,sortedPlots):
         """
-        sort Shape Histograms by Event Yield
+        get Shape Histograms in a List
+        with combine flag activated only get total signal
         """
-        sigHists=[]
-        if len(self.sortedSignal)==1 and self.combineflag:
+        self.shapePlots=[]
+        if self.combineflag: # and len(self.sortedSignal)==1 
             PlotObject = self.PlotList["total_signal"]
-            sigHists.append(PlotObject.hist.Clone())
+            self.shapePlots.append(PlotObject.hist.Clone())
         else:
-            for signal in self.sortedSignal:
+            for signal in sortedPlots:
                 PlotObject = self.PlotList[signal]
-                sigHists.append(PlotObject.hist.Clone())
+                self.shapePlots.append(PlotObject.hist.Clone())
 
     def PlotRange(self):
         """
@@ -551,14 +555,14 @@ class DrawHistograms:
         """
         self.yMax = 1e-9
         self.yMinMax = 1000.
-        for hist in self.bkgHists:
-            self.yMax = max(hist.GetBinContent(h.GetMaximumBin()), yMax)
+        for hist in self.stackPlots:
+            self.yMax = max(hist.GetBinContent(hist.GetMaximumBin()), self.yMax)
             if hist.GetBinContent(hist.GetMaximumBin()) > 0:
-                self.yMinMax = min(hist.GetBinContent(h.GetMaximumBin()), yMinMax)
-        for hist in self.sigHists:
-            self.yMax = max(hist.GetBinContent(h.GetMaximumBin()), yMax)
+                self.yMinMax = min(hist.GetBinContent(hist.GetMaximumBin()), self.yMinMax)
+        for hist in self.shapePlots:
+            self.yMax = max(hist.GetBinContent(hist.GetMaximumBin()), self.yMax)
             if hist.GetBinContent(hist.GetMaximumBin()) > 0:
-                self.yMinMax = min(hist.GetBinContent(h.GetMaximumBin()), yMinMax)
+                self.yMinMax = min(hist.GetBinContent(hist.GetMaximumBin()), self.yMinMax)
 
     def normalizePlot(self, PlotHist):
 
@@ -571,7 +575,7 @@ class DrawHistograms:
         self.yMinMax = self.yMinMax*self.normalizefactor
 
 
-    def ratio(self,stackhist,canvaslabel=""):
+    def drawRatio(self,stackhist,canvaslabel=""):
         """
         Draws the ratio plot, scales the background, signal and errorband to the background
         """
@@ -608,9 +612,9 @@ class DrawHistograms:
         ROOT.gStyle.SetErrorX(0)
         ratioPlot.DrawCopy("sameP")
 
-        ratioerrorband=generateRatioErrorband()
+        ratioerrorband=self.generateRatioErrorband()
         ratioerrorband.Draw("same2")
-        canvas.cd(1)
+        self.canvas.cd(1)
 
     # scales the Errorband for the ratio plot
     def generateRatioErrorband(self):
@@ -632,11 +636,106 @@ class DrawHistograms:
 
         return ratioerrorband
         
-    def GetyTitle(self, normalize = False):
-        # if privateWork flag is enabled, normalize plots to unit area
-        if normalize:
+    def GetyTitle(self):
+        # normalize plots to unit area
+        if self.normalize:
             return "normalized to unit area"
         return "Events expected"
+
+    def builtLegend(self):
+        # drawing the legend
+        # split legend:
+
+        if self.splitlegend:
+            self.legend1 = getLegend1()
+            self.legend2 = getLegend2()
+            if self.data:
+                self.legend1.AddEntry(self.data,self.datalabel,"P")
+
+            legendentries = len(self.sortedShapes)+len(self.sortedStacks)
+            n = 0
+            for i,shape in enumerate(self.sortedShapes):
+                if n<legendentries/2:
+                    self.legend1.AddEntry(self.shapePlots[i], self.PlotList[shape].label, "L")
+                else:
+                    self.legend2.AddEntry(self.shapePlots[i], self.PlotList[shape].label, "L")
+                n+=1
+            for i,stack in enumerate(self.sortedStacks):
+                if n<legendentries/2:
+                    self.legend1.AddEntry(self.stackPlots[i], self.PlotList[stack].label, "F")
+                else:
+                    self.legend2.AddEntry(self.stackPlots[i], self.PlotList[stack].label, "F")
+                n+=1
+            self.legend1.Draw("same")
+            self.legend2.Draw("same")
+        else:
+            self.legend = getLegend2()
+            if self.data:
+                self.legend.AddEntry(self.data,self.datalabel,"P")
+
+            for i,shape in enumerate(self.sortedShapes):
+                self.legend.AddEntry(self.shapePlots[i], self.PlotList[shape].label, "L")
+            for i,stack in enumerate(self.sortedStacks):
+                self.legend.AddEntry(self.stackPlots[i], self.PlotList[stack].label, "F")
+            self.legend.Draw("same")
+
+    # ===============================================
+    # PRINT STUFF ON CANVAS
+    # ===============================================
+    def printLumi(self, lumi):
+        if lumi == 0.: return
+
+        lumi_text = str(lumi)+" fb^{-1} (13 TeV)"
+
+        self.canvas.cd(1)
+        l = self.canvas.GetLeftMargin()
+        t = self.canvas.GetTopMargin()
+        r = self.canvas.GetRightMargin()
+        b = self.canvas.GetBottomMargin()
+
+        latex = ROOT.TLatex()
+        latex.SetNDC()
+        latex.SetTextColor(ROOT.kBlack)
+        
+        if self.ratio:  latex.DrawLatex(l+0.60,1.-t+0.04,lumi_text)
+        else:           latex.DrawLatex(l+0.53,1.-t+0.02,lumi_text)
+
+    def printCategoryLabel(self, catLabel):
+        self.canvas.cd(1)
+        l = self.canvas.GetLeftMargin()
+        t = self.canvas.GetTopMargin()
+        r = self.canvas.GetRightMargin()
+        b = self.canvas.GetBottomMargin()
+
+        latex = ROOT.TLatex()
+        latex.SetNDC()
+        latex.SetTextColor(ROOT.kBlack)
+
+        if self.ratio:  latex.DrawLatex(l+0.07,1.-t-0.04, catLabel)
+        else:           latex.DrawLatex(l+0.02,1.-t-0.06, catLabel)
+
+    def printCMSLabel(self, cmslabel):
+        self.canvas.cd(1) 
+        l = self.canvas.GetLeftMargin() 
+        t = self.canvas.GetTopMargin() 
+        r = self.canvas.GetRightMargin() 
+        b = self.canvas.GetBottomMargin() 
+     
+        latex = ROOT.TLatex() 
+        latex.SetNDC() 
+        latex.SetTextColor(ROOT.kBlack) 
+        latex.SetTextSize(0.04)
+
+        text = "CMS "+ cmslabel 
+
+        if self.ratio:      latex.DrawLatex(l+0.05,1.-t+0.04, text) 
+        else:               latex.DrawLatex(l,1.-t+0.01, text)
+
+    def saveCanvas(self, path):
+        self.canvas.SaveAs(path)
+        self.canvas.SaveAs(path.replace(".pdf",".png"))
+        self.canvas.Clear()
+
 
 # ===============================================
 # GENERATE CANVAS AND LEGENDS
@@ -697,63 +796,4 @@ def getLegend2():
     legend.SetFillStyle(0);
     return legend
 
-def saveCanvas(canvas, path):
-    canvas.SaveAs(path)
-    canvas.SaveAs(path.replace(".pdf",".png"))
-    canvas.Clear()
 
-
-# ===============================================
-# PRINT STUFF ON CANVAS
-# ===============================================
-def printLumi(pad, lumi = 41.5, ratio = False, twoDim = False):
-    if lumi == 0.: return
-
-    lumi_text = str(lumi)+" fb^{-1} (13 TeV)"
-
-    pad.cd(1)
-    l = pad.GetLeftMargin()
-    t = pad.GetTopMargin()
-    r = pad.GetRightMargin()
-    b = pad.GetBottomMargin()
-
-    latex = ROOT.TLatex()
-    latex.SetNDC()
-    latex.SetTextColor(ROOT.kBlack)
-    
-    if twoDim:  latex.DrawLatex(l+0.40,1.-t+0.01,lumi_text)
-    elif ratio: latex.DrawLatex(l+0.60,1.-t+0.04,lumi_text)
-    else:       latex.DrawLatex(l+0.53,1.-t+0.02,lumi_text)
-
-def printCategoryLabel(pad, catLabel, ratio = False):
-    pad.cd(1)
-    l = pad.GetLeftMargin()
-    t = pad.GetTopMargin()
-    r = pad.GetRightMargin()
-    b = pad.GetBottomMargin()
-
-    latex = ROOT.TLatex()
-    latex.SetNDC()
-    latex.SetTextColor(ROOT.kBlack)
-
-    if ratio:   latex.DrawLatex(l+0.07,1.-t-0.04, catLabel)
-    else:       latex.DrawLatex(l+0.02,1.-t-0.06, catLabel)
-
-def printPrivateWork(pad, ratio = False, twoDim = False, nodePlot = False):
-    pad.cd(1) 
-    l = pad.GetLeftMargin() 
-    t = pad.GetTopMargin() 
-    r = pad.GetRightMargin() 
-    b = pad.GetBottomMargin() 
- 
-    latex = ROOT.TLatex() 
-    latex.SetNDC() 
-    latex.SetTextColor(ROOT.kBlack) 
-    latex.SetTextSize(0.04)
-
-    text = "CMS private work" 
-
-    if nodePlot:    latex.DrawLatex(l+0.57,1.-t+0.01, text)
-    elif twoDim:    latex.DrawLatex(l+0.39,1.-t+0.01, text)
-    elif ratio:     latex.DrawLatex(l+0.05,1.-t+0.04, text) 
-    else:           latex.DrawLatex(l,1.-t+0.01, text)
