@@ -452,7 +452,12 @@ def drawHistsOnCanvas(PlotList, canvasName, data=None, ratio=False, signalscalin
         print sortedSignal[n]
         # scale signal
         if normalize:
-            scalefactor=1/signal.Integral()
+            try:
+                scalefactor=1/signal.Integral()
+            except ZeroDivisionError:
+                print("WARNING!")
+                print("Cannot normalize "+signal.GetName()+" due to zero integral! Skipping ...")
+                continue
         elif signalscaling==-1:
             scalefactor=firstHistIntegral/signal.Integral()
         else:
@@ -607,7 +612,7 @@ def printLumi(pad, lumi = 41.5, ratio = False, twoDim = False):
     elif ratio: latex.DrawLatex(l+0.60,1.-t+0.04,lumi_text)
     else:       latex.DrawLatex(l+0.53,1.-t+0.02,lumi_text)
 
-def printCategoryLabel(pad, catLabel, ratio = False):
+def printCategoryLabel(pad, catLabel, ratio = False, labelScalefactor = 1.0):
     pad.cd(1)
     l = pad.GetLeftMargin()
     t = pad.GetTopMargin()
@@ -617,6 +622,7 @@ def printCategoryLabel(pad, catLabel, ratio = False):
     latex = ROOT.TLatex()
     latex.SetNDC()
     latex.SetTextColor(ROOT.kBlack)
+    latex.SetTextSize(latex.GetTextSize()*labelScalefactor)
 
     if ratio:   latex.DrawLatex(l+0.07,1.-t-0.04, catLabel)
     else:       latex.DrawLatex(l+0.02,1.-t-0.06, catLabel)
