@@ -65,7 +65,7 @@ parser.add_option("--nominalkey", dest="nominalKey", default="$PROCESS_$CHANNEL"
         help="KEY of the systematics histograms", metavar="nominalKey")
 parser.add_option("--systematickey", dest="systematicKey", default="$PROCESS_$CHANNEL_$SYSTEMATIC",
         help="KEY of the nominal histograms", metavar="systematicKey")
-parser.add_option("--data", dest="datakeyreplace", default="data_obs",
+parser.add_option("--data", dest="data", default="data_obs",
         help="Key replacement for the data sample", metavar="datakeyreplace")
 parser.add_option("--datalabel", dest="datalabel", default="data",
         help="label of the data", metavar="datalabel")
@@ -108,7 +108,7 @@ combineIden = "$FLAG"
 combineflag             = options.combineflag
 if combineflag:
     options.nominalKey  = "$FLAG/$CHANNEL/$PROCESS"
-    nominalKey          = nominalKey.replace(combineIden, combineflag)
+    options.nominalKey  = options.nominalKey.replace(combineIden, combineflag)
 
 
 # build keys
@@ -171,23 +171,6 @@ PlotList    = {}
 rootfilename    = options.Rootfile
 rootFile        = ROOT.TFile(rootfilename, "readonly") 
 
-# load data if avaliable and move under and overflow bin
-dataKey     = nominalKey.replace(procIden, options.datakeyreplace)
-dataHist    = rootFile.Get(dataKey)
-print("    type of data hist is: "+str(type(dataHist)) )
-if isinstance(dataHist, ROOT.TH1):
-    dataHist.SetStats(False)
-    Plots.moveOverUnderFlow(dataHist)
-    print "using data: %s" % (dataKey)
-# data in combine in TGraphAsymmErrors, get TH1 out of it
-elif isinstance(dataHist, ROOT.TGraphAsymmErrors):
-    dataHist = Plots.GetHistoFromTGraphAE(dataHist)
-    Plots.moveOverUnderFlow(dataHist)
-    dataHist.SetStats(False)
-else:
-    print "ERROR: Not using data!"
-    dataHist=None
-
 # load samples
 print "start loading  samples" 
 for sample in samples:
@@ -195,7 +178,10 @@ for sample in samples:
     typ     = samples[sample]['typ']
     label   = samples[sample]['label']
     if combineflag:
-        PlotList[sample] = Plots.getHistogramAndErrorband(rootFile=rootFile,sample=sample,
+        if typ=="signal":
+            continue
+        else:
+            PlotList[sample] = Plots.getHistogramAndErrorband(rootFile=rootFile,sample=sample,
                                                         color=color,typ=typ,label=label,
                                                         nominalKey=nominalKey,procIden=procIden)
     else:
@@ -211,32 +197,60 @@ Combine Histograms and errorbands for combined plot channels
 for sample in plottingsamples:
     color       = plottingsamples[sample]['color']
     typ         = plottingsamples[sample]['typ']
+    if combineflag and typ=="signal":
+        continue
     label       = plottingsamples[sample]['label']
     addsamples  = plottingsamples[sample]['addSamples']
     PlotList = Plots.addSamples(sample=sample,color=color,typ=typ,label=label,
                                     addsamples=addsamples,PlotList=PlotList,combineflag=combineflag)
-
+    print PlotList
+print PlotList
 """
 Get errorband and signalhist in case of combine output file,
 else no signal
 """
 if combineflag:
+    totalsignalkey  = nominalKey.replace(procIden, "total_signal")
+    totalsignal     = rootFile.Get(totalsignalkey)
+    """
+    add signal to stack plot if already fitted (post fit),
+    else keep as shape plot
+    """
     if combineflag=="shapes_fit_s":
         bkgKey = nominalKey.replace(procIden, "total")
-        totalsignalkey  = nominalKey.replace(procIden, "total_signal")
-        totalsignal     = rootFile.Get(totalsignalkey)
-        PlotList["sig"] = Plots.Plot(totalsignal,sample,label="Total signal",
-                                        typ=signal, OverUnderFlowInc=True)
+        PlotList["total_signal"] = Plots.Plot(totalsignal,"total_signal",label="Total signal",
+                                        typ="bkg", OverUnderFlowInc=True)
     else:
         bkgKey = nominalKey.replace(procIden, "total_background")
+        PlotList["total_signal"] = Plots.Plot(totalsignal,"total_signal",label="Total signal",
+                                        typ="signal", OverUnderFlowInc=True)
     # from total background or total background+signal prediction histogram in mlfit file, get the error band
     background = rootFile.Get(bkgKey)
     errorband = Plots.GetErrorGraph(background)
 else:
     errorband = None
 
+"""
+load data if avaliable and move under and overflow bin
+"""
 
-
+data        = options.data
+dataKey     = nominalKey.replace(procIden, data)
+dataHist    = rootFile.Get(dataKey)
+print("    type of data hist is: "+str(type(dataHist)) )
+if isinstance(dataHist, ROOT.TH1):
+    dataHist.SetStats(False)
+    Plots.moveOverUnderFlow(dataHist)
+    print "using data: %s" % (dataKey)
+# data in combine in TGraphAsymmErrors, get TH1 out of it
+elif isinstance(dataHist, ROOT.TGraphAsymmErrors):
+    n_bins   = Plots.FindNewBinNumber(background)
+    dataHist = Plots.GetHistoFromTGraphAE(dataHist, data, n_bins)
+    Plots.moveOverUnderFlow(dataHist)
+    dataHist.SetStats(False)
+else:
+    print "ATTENTION: Not using data!"
+    dataHist=None
 
 
 print '''
@@ -256,6 +270,7 @@ cmslabel        = getParserConfigDefaultValue(parser=options.cmslabel,config="cm
                                             plotoptions=plotoptions,defaultvalue=False)
 sortedProcesses = getParserConfigDefaultValue(parser=options.sortedprocesses,config="sortedprocesses",
                                             plotoptions=plotoptions,defaultvalue=False)
+if sortedProcesses:     sortedProcesses = [x.strip() for x in sortedProcesses.split(",")]
 logarithmic     = getParserConfigDefaultBool(parser=options.logarithmic,config="logarithmic",
                                             plotoptions=plotoptions,defaultbool=False)
 splitlegend     = getParserConfigDefaultBool(parser=options.splitlegend,config="splitlegend",

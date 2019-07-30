@@ -23,9 +23,10 @@ class Plot:
         self.label=label
         if not label:
             self.label=name
-        self.color=color
         if not color:
-            self.GetPlotColor
+            self.GetPlotColor()
+        else:
+            self.color=color
         self.typ=typ
         self.OverUnderFlowInc=OverUnderFlowInc
         self.errorband=errorband
@@ -50,13 +51,14 @@ class Plot:
             "ttbar":        ROOT.kOrange,
             "ttmergedb":    ROOT.kRed-1,
         
-            "sig":   ROOT.kCyan,
-            "bkg":   ROOT.kOrange,
+            "sig":          ROOT.kCyan,
+            "total_signal": ROOT.kCyan,
+            "bkg":          ROOT.kOrange,
             }
-        cls=self.name
+        cls = self.name
         if "ttZ" in cls: cls = "ttZ"
         if "ttH" in cls: cls = "ttH"
-        self.color=color_dict[cls]
+        self.color = color_dict[cls]
 
     # moves underflow in first histogram bin and overflow in last bin
     def handleOverUnderFlow(self):
@@ -224,18 +226,18 @@ def addSamples(sample,color,typ,label,addsamples,PlotList,combineflag=None):
     combinedErrorbands=[]
     combinedHist = None
     print("Adding samples for summarized process %s" % sample)
-    for sample in addsamples:
+    for addsample in addsamples:
         print "    "+sample
         if combinedHist:
-            combinedHist.Add(PlotList[sample].hist)
+            combinedHist.Add(PlotList[addsample].hist)
             if not combineflag:
-                combinedErrorbands.append(PlotList[sample].errorband)
-            del PlotList[sample]
+                combinedErrorbands.append(PlotList[addsample].errorband)
+            del PlotList[addsample]
         else:
-            combinedHist    = PlotList[sample].hist
+            combinedHist    = PlotList[addsample].hist
             if not combineflag: 
-                combinedErrorbands.append(PlotList[sample].errorband)
-            del PlotList[sample]
+                combinedErrorbands.append(PlotList[addsample].errorband)
+            del PlotList[addsample]
     # add all Errorbands together
     if not combineflag:
         errorband=addErrorbands(combinedErrorbands,combinedHist)
@@ -287,10 +289,10 @@ def moveOverUnderFlow(hist):
     hist.SetBinError(hist.GetNbinsX()+1,0)
 
 # converts the TGraphAsymmError data object in the mlfit file to a histogram (therby dropping bins again) and in addition sets asymmetric errors***
-def GetHistoFromTGraphAE(tgraph,category,nbins_new):
+def GetHistoFromTGraphAE(tgraph,process,nbins_new):
     nbins_old = tgraph.GetN()
     # add category to name of histogram so each histogram has a different name to avoid problems with ROOT
-    histo = ROOT.TH1F(process+category,process,nbins_new,0,nbins_new)
+    histo = ROOT.TH1F(process,process,nbins_new,0,nbins_new)
     # set this flag for asymmetric errors in data histogram
     histo.Sumw2(ROOT.kFALSE)
     # loop has to go from 0..nbins_new-1 for a tgraphasymmerror with nbins_new points
@@ -344,6 +346,8 @@ class DrawHistograms:
         self.splitlegend    = splitlegend
         self.shape          = shape
         self.sortedProcesses = sortedProcesses
+        if self.combineflag and not self.sortedProcesses:
+            self.sortedProcesses = ["total_signal"]
 
 
     # ===============================================
@@ -493,7 +497,11 @@ class DrawHistograms:
             self.canvas.cd(2)
             self.drawRatio(stackhist = firstHist, canvaslabel = canvaslabel)
 
+        print self.sortedShapes
+        print self.shapePlots
 
+        print self.sortedStacks
+        print self.stackPlots
 
     def sortPlots(self):
         """
@@ -571,13 +579,9 @@ class DrawHistograms:
         with combine flag activated only get total signal
         """
         self.shapePlots=[]
-        if self.combineflag: # and len(self.sortedSignal)==1 
-            PlotObject = self.PlotList["total_signal"]
+        for signal in sortedPlots:
+            PlotObject = self.PlotList[signal]
             self.shapePlots.append(PlotObject.hist.Clone())
-        else:
-            for signal in sortedPlots:
-                PlotObject = self.PlotList[signal]
-                self.shapePlots.append(PlotObject.hist.Clone())
 
     def PlotRange(self):
         """
@@ -759,7 +763,7 @@ class DrawHistograms:
         latex.SetTextColor(ROOT.kBlack) 
         latex.SetTextSize(0.04)
 
-        text = "CMS "+ cmslabel 
+        text = "CMS #bf{#it{"+cmslabel+"}}"
 
         if self.ratio:      latex.DrawLatex(l+0.05,1.-t+0.04, text) 
         else:               latex.DrawLatex(l,1.-t+0.01, text)
