@@ -80,7 +80,9 @@ ttbarPathS = (
 # SELECTIONS
 
 # need to veto muon events in electron dataset to avoid double counting and vice versa
-sel_signal = "*(N_LooseMuons==0 && N_LooseElectrons==0 && N_LoosePhotons==0)"
+sel_signal = (
+    "*(N_LooseMuons==0 && N_LooseElectrons==0 && N_LoosePhotons==0)*(Evt_Pt_MET>250.)"
+)
 
 
 # select events without huge MuR/MuF weights
@@ -92,7 +94,7 @@ sel_StrangeMuWeights = "*1.0"
 # WEIGHTS #
 # ======= #
 # defaultWeight = "Weight_GEN_nom*Weight_pu69p2*Weight_CSV"
-defaultWeight = "Weight_GEN_nom*Weight_pu69p2"
+defaultWeight = "Weight_GEN_nom"
 
 # pile up weights
 # pileupWeightUp = "Weight_GEN_nom*Weight_pu69p2Up*Weight_CSV"
@@ -231,15 +233,16 @@ samples = [
         typ="signal",
     ),
     # minor samples
-    # plotClasses.Sample(
-    # "Single Top",
-    # ROOT.kMagenta,
-    # stpath,
-    # lumi + sel_signal ,
-    # "singlet",
-    # samDict=sampleDict,
-    # readTrees=doReadTrees,
-    # ),
+    plotClasses.Sample(
+        "Single Top",
+        ROOT.kBlue,
+        path_mwassmer + "/ST_*/*nominal*.root",
+        lumi + sel_signal,
+        "singlet",
+        samDict=sampleDict,
+        readTrees=doReadTrees,
+        typ="signal",
+    ),
     plotClasses.Sample(
         "Z(#nu#nu)+jets",
         ROOT.kGreen - 3,
@@ -251,8 +254,18 @@ samples = [
         typ="signal",
     ),
     plotClasses.Sample(
+        "Z(ll)+jets",
+        ROOT.kGreen - 5,
+        path_mwassmer + "/DYJetsToLL*/*nominal*.root",
+        lumi + sel_signal,
+        "zlljets",
+        samDict=sampleDict,
+        readTrees=doReadTrees,
+        typ="signal",
+    ),
+    plotClasses.Sample(
         "W(l#nu)+jets",
-        ROOT.kGreen - 7,
+        ROOT.kOrange,
         path_mwassmer + "/WJetsToLNu*/*nominal*.root",
         lumi + sel_signal,
         "wlnujets",
@@ -260,24 +273,26 @@ samples = [
         readTrees=doReadTrees,
         typ="signal",
     ),
-    # plotClasses.Sample(
-    # "t#bar{t}+W",
-    # ROOT.kBlue - 10,
-    # path_mwassmer + "/TTW*/*nominal*.root",
-    # lumi + sel_signal ,
-    # "ttbarW",
-    # samDict=sampleDict,
-    # readTrees=doReadTrees,
-    # ),
-    # plotClasses.Sample(
-    # "Diboson",
-    # ROOT.kAzure + 2,
-    # dibosonPathS,
-    # lumi + sel_signal ,
-    # "diboson",
-    # samDict=sampleDict,
-    # readTrees=doReadTrees,
-    # ),
+    plotClasses.Sample(
+        "QCD",
+        ROOT.kBlue - 10,
+        path_mwassmer + "/QCD*/*nominal*.root",
+        lumi + sel_signal,
+        "qcd",
+        samDict=sampleDict,
+        readTrees=doReadTrees,
+        typ="signal",
+    ),
+    plotClasses.Sample(
+        "Diboson",
+        ROOT.kAzure + 2,
+        path_mwassmer + "/??_TuneCP5_13TeV-pythia8*/*nominal*.root",
+        lumi + sel_signal,
+        "diboson",
+        samDict=sampleDict,
+        readTrees=doReadTrees,
+        typ="signal",
+    ),
 ]
 
 processes = []
