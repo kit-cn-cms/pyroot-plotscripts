@@ -202,7 +202,6 @@ def getHistogramAndErrorband(rootFile,sample,color,typ,label,nominalKey,procIden
         sampleKey = nominalKey.replace(procIden, sample)
     else:
         sampleKey=nominalKey
-        print sample.Key
     rootHist = rootFile.Get(sampleKey)
     print("    type of hist is: "+str(type(rootHist)) )
     if not isinstance(rootHist, ROOT.TH1):
@@ -227,7 +226,7 @@ def addSamples(sample,color,typ,label,addsamples,PlotList,combineflag=None):
     combinedHist = None
     print("Adding samples for summarized process %s" % sample)
     for addsample in addsamples:
-        print "    "+sample
+        print "    "+addsample
         if combinedHist:
             combinedHist.Add(PlotList[addsample].hist)
             if not combineflag:
@@ -402,7 +401,9 @@ class DrawHistograms:
         and normalize the Plot 
         """
         firstHistIntegral=firstHist.Integral()
-        if self.normalize:
+        if self.shape:
+            firstHist.Scale(1/firstHistIntegral)
+        elif self.normalize:
             self.normalizePlot(PlotHist=firstHist)
 
         """
@@ -497,12 +498,6 @@ class DrawHistograms:
             self.canvas.cd(2)
             self.drawRatio(stackhist = firstHist, canvaslabel = canvaslabel)
 
-        print self.sortedShapes
-        print self.shapePlots
-
-        print self.sortedStacks
-        print self.stackPlots
-
     def sortPlots(self):
         """
         set the Style for the Signal and Background Plots
@@ -592,14 +587,18 @@ class DrawHistograms:
         """
         self.yMax = 1e-9
         self.yMinMax = 1000.
-        for hist in self.stackPlots:
-            self.yMax = max(hist.GetBinContent(hist.GetMaximumBin()), self.yMax)
+        for hist in self.stackPlots+self.shapePlots:
+            if self.shape:
+                self.yMax = max(hist.GetBinContent(hist.GetMaximumBin())/hist.Integral(), self.yMax)
+            else:
+                self.yMax = max(hist.GetBinContent(hist.GetMaximumBin()), self.yMax)
             if hist.GetBinContent(hist.GetMaximumBin()) > 0:
-                self.yMinMax = min(hist.GetBinContent(hist.GetMaximumBin()), self.yMinMax)
-        for hist in self.shapePlots:
-            self.yMax = max(hist.GetBinContent(hist.GetMaximumBin()), self.yMax)
-            if hist.GetBinContent(hist.GetMaximumBin()) > 0:
-                self.yMinMax = min(hist.GetBinContent(hist.GetMaximumBin()), self.yMinMax)
+                if self.shape:
+                    self.yMinMax = min(hist.GetBinContent(hist.GetMaximumBin())/hist.Integral(), self.yMinMax)
+                else:
+                    self.yMinMax = min(hist.GetBinContent(hist.GetMaximumBin()), self.yMinMax)
+        print self.yMax
+        print self.yMinMax
 
     def normalizePlot(self, PlotHist):
 
@@ -610,6 +609,9 @@ class DrawHistograms:
         PlotHist.Scale(self.normalizefactor)
         self.yMax    = self.yMax*self.normalizefactor
         self.yMinMax = self.yMinMax*self.normalizefactor
+
+        print self.yMax
+        print self.yMinMax
 
 
     def drawRatio(self,stackhist,canvaslabel=""):
@@ -692,13 +694,13 @@ class DrawHistograms:
             legendentries = len(self.sortedShapes)+len(self.sortedStacks)
             n = 0
             for i,shape in enumerate(self.sortedShapes):
-                if n<legendentries/2:
+                if not n%2:
                     self.legend1.AddEntry(self.shapePlots[i], self.PlotList[shape].label, "L")
                 else:
                     self.legend2.AddEntry(self.shapePlots[i], self.PlotList[shape].label, "L")
                 n+=1
             for i,stack in enumerate(self.sortedStacks):
-                if n<legendentries/2:
+                if not n%2:
                     self.legend1.AddEntry(self.stackPlots[i], self.PlotList[stack].label, "F")
                 else:
                     self.legend2.AddEntry(self.stackPlots[i], self.PlotList[stack].label, "F")
@@ -737,7 +739,7 @@ class DrawHistograms:
         if self.ratio:  latex.DrawLatex(l+0.60,1.-t+0.04,lumi_text)
         else:           latex.DrawLatex(l+0.53,1.-t+0.02,lumi_text)
 
-    def printCategoryLabel(self, catLabel):
+    def printChannelLabel(self, channelLabel):
         self.canvas.cd(1)
         l = self.canvas.GetLeftMargin()
         t = self.canvas.GetTopMargin()
@@ -748,8 +750,8 @@ class DrawHistograms:
         latex.SetNDC()
         latex.SetTextColor(ROOT.kBlack)
 
-        if self.ratio:  latex.DrawLatex(l+0.07,1.-t-0.04, catLabel)
-        else:           latex.DrawLatex(l+0.02,1.-t-0.06, catLabel)
+        if self.ratio:  latex.DrawLatex(l+0.07,1.-t-0.04, channelLabel)
+        else:           latex.DrawLatex(l+0.02,1.-t-0.06, channelLabel)
 
     def printCMSLabel(self, cmslabel):
         self.canvas.cd(1) 
