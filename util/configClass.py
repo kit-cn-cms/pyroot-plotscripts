@@ -132,7 +132,7 @@ class configData:
         configdatafile.memexp = memexp
 
         self.discriminatorPlots = configdatafile.getDiscriminatorPlots(self.Data, self.analysis.discrName)
-        self.evtYieldCategories = configdatafile.evtYieldCategories()
+        #self.evtYieldCategories = configdatafile.evtYieldCategories()
 
     def getDiscriminatorPlotByNumber(self):
         # select the discr plots for a certain plot number
@@ -238,5 +238,6 @@ class configData:
         self.systWeights.insert(0,self.pltcfg.nominalweight)
 
     def getEventYieldCategories(self):
-        return self.evtYieldCategories
+        return []
+        #return self.evtYieldCategories
 

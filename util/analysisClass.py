@@ -117,8 +117,8 @@ class analysisConfig:
                 self.signalScaling= analysisOptions[key]
             elif key in ("lumiLabel"):
                 self.lumiLabel= analysisOptions[key]
-            elif key in ("privateWork"):
-                self.privateWork=analysisOptions[key]
+            elif key in ("CMSlabel"):
+                self.cmslabel=analysisOptions[key]
             elif key in ("ratio"):
                 self.ratio= analysisOptions[key]
             elif key in ("logarithmic"):
