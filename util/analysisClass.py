@@ -125,6 +125,8 @@ class analysisConfig:
                 self.logarithmic= analysisOptions[key]
             elif key in ("splitLegend"):
                 self.splitLegend= analysisOptions[key] 
+            elif key in ("shape"):
+                self.shape= analysisOptions[key]
             elif key in ("makeDataCards"):
                 self.makeDataCards= analysisOptions[key] 
             elif key in ("makePlots"):

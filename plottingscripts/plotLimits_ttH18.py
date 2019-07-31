@@ -77,8 +77,9 @@ def main(pyrootdir, argv):
         # options for makePlots
         "signalScaling":        -1,
         "lumiLabel":            True,
-        "privateWork":          True,
+        "CMSlabel":             True,
         "ratio":                "#frac{data}{MC Background}",
+        "shape":                True,
         "logarithmic":          False,
         "splitLegend":          True,
         # the skipX options try to skip the submission of files to the batch system
