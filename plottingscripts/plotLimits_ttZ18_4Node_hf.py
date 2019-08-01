@@ -7,6 +7,8 @@ import optparse
 import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 
+
+
 filedir = os.path.dirname(os.path.realpath(__file__))
 pyrootdir = "/".join(filedir.split("/")[:-1])
 
@@ -29,14 +31,14 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttHControlPlots'
+    name = 'ttZ18_4NodeDNN_hf_binning3_v2'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
 
     # signal process
-    signalProcess = "ttH"
-    nSigSamples   = 1
+    signalProcess = "ttZ"
+    nSigSamples   = 3
 
     # dataera
     dataera = "2018"
@@ -48,26 +50,26 @@ def main(pyrootdir, opts):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    config          = "ttH18/pltcfg_controlPlots"
+    config          = "ttZ18/pltcfg_discrPlots_internalCSV_hf"
     variable_cfg    = "ttZ18/additionalVariables"
-    plot_cfg        = "ttH18/controlPlots"
-    syst_cfg        = "ttH18/systematics"
+    plot_cfg        = "ttZ18/discrPlots_4Node_binning3"
+    syst_cfg        = "ttZ18/systematics_internalCSV_hf"
 
-    # file for rate factors
+    # file for rate factors1
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
     #rateFactorsFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/rate_factors_V2.csv"
 
     # script options
     analysisOptions = {
         # general options
-        "usePseudoData":        False,
+        "usePseudoData":        True,
         "testrun":              False,  # test run with less samples
-        "stopAfterCompile":     False,   # stop script after compiling
+        "stopAfterCompile":     False,  # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
-        "makeDataCards":        False,
+        "makeDataCards":        True,
         "makeInputDatacards":   False, # create datacards also for all defined plots
-        "addData":              True,  # adding real data 
+        "addData":              True,  # adding real data
         "makePlots":            True,
         # options for makePlots
         "signalScaling":        -1,
@@ -88,9 +90,8 @@ def main(pyrootdir, opts):
     plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttZ_2018_v4.json"
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
-    #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-    #                "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/ttZ18_hf_recoVars"}
-    dnnInterface = None
+    dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
+                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/ttZ_4Node_top30_v4"}
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
@@ -172,15 +173,15 @@ def main(pyrootdir, opts):
     with monitor.Timer("plotParallel"):
         # initialize plotParallel class 
         pP = plotParallel.plotParallel(
-            analysis = analysis,
-            configData = configData)
+            analysis    = analysis,
+            configData  = configData)
 
         monitor.printClass(pP, "init")
         # set some changed values
         pP.setJson(plotJson)
         #pP.setDataBases(plotDataBases)
         #pP.setMEMDataBase(memDataBase)
-        #pP.setDNNInterface(dnnInterface)
+        pP.setDNNInterface(dnnInterface)
         pP.setMaxEvts(500000)
         #pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
@@ -227,7 +228,6 @@ def main(pyrootdir, opts):
         # if no hadd files were created during plotparallel
         #       the renameInput is set to pp.getOutPath 
         #       (a.ka. the path to output.root)
-
         with monitor.Timer("checkHistos"):
             checkHistos.checkHistsManager(
                 inFiles         = pP.getRenameInput(),
@@ -235,7 +235,6 @@ def main(pyrootdir, opts):
                 checkBins       = True,
                 eps             = 0.0,
                 skipHistoCheck  = analysis.skipHistoCheck)
-
 
     if analysis.addData:
         print '''
@@ -245,13 +244,11 @@ def main(pyrootdir, opts):
         '''
         with monitor.Timer("addRealData"):
             if analysis.usePseudoData:
-                print("adding data_obs histograms as pseudo data")
                 # pseudo data without ttH
-                pP.addData(samples = configData.samples[nSigSamples:])
+                #pP.addData(samples = configData.samples[nSigSamples:])
                 # pseudo data with signal
-                #pP.addData(samples = configData.samples)
+                pP.addData(samples = configData.samples)
             else:
-                print("adding data_obs histograms as real data")
                 # real data with ttH
                 pP.addData(samples = configData.controlSamples)
 
@@ -280,7 +277,7 @@ def main(pyrootdir, opts):
                 datacardmaker       = datacardmaker,
                 signalTag           = analysis.signalProcess,
                 skipDatacards       = analysis.skipDatacards)
-    
+
     if analysis.makePlots:
         print '''
         # ========================================================
@@ -297,15 +294,14 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
 
-
 if __name__ == "__main__":
     parser = optparse.OptionParser()
-    parser.add_option("--skipPlotParallel",     dest = "skipPlotParallel",      action  = "store_true", default = False)
-    parser.add_option("--skipHaddParallel",     dest = "skipHaddParallel",      action  = "store_true", default = False)
-    parser.add_option("--skipHaddFromWildcard", dest = "skipHaddFromWildcard",  action  = "store_true", default = False)
-    parser.add_option("--skipHistoCheck",       dest = "skipHistoCheck",        action  = "store_true", default = False)
-    parser.add_option("--skipDatacards",        dest = "skipDatacards",         action  = "store_true", default = False)
-    parser.add_option("--skip",                 dest = "skip",                  default = 0,            type = "int", 
+    parser.add_option("--skipPlotParallel",     dest = "skipPlotParallel",      action = "store_true", default = False)
+    parser.add_option("--skipHaddParallel",     dest = "skipHaddParallel",      action = "store_true", default = False)
+    parser.add_option("--skipHaddFromWildcard", dest = "skipHaddFromWildcard",  action = "store_true", default = False)
+    parser.add_option("--skipHistoCheck",       dest = "skipHistoCheck",        action = "store_true", default = False)
+    parser.add_option("--skipDatacards",        dest = "skipDatacards",         action = "store_true", default = False)
+    parser.add_option("--skip",                 dest = "skip",                  default = 0,            type = "int",
         help = "skip first INT parallel stages. plotParallel (1), haddParallel (2), haddFromWildcard (3), histoCheck (4), Datacards (5)")
 
     (opts, args) = parser.parse_args()
@@ -315,6 +311,7 @@ if __name__ == "__main__":
     if opts.skip >= 3: opts.skipHaddFromWildcard    = True
     if opts.skip >= 4: opts.skipHistoCheck          = True
     if opts.skip >= 5: opts.skipDatacards           = True
+
 
     main(pyrootdir, opts)
 

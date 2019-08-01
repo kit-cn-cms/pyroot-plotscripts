@@ -216,7 +216,7 @@ def main(pyrootdir, opts):
     else:
         print '''
         # ========================================================
-        # renaming Histograms
+        # checking Histograms
         # ========================================================
         '''
 
@@ -302,8 +302,18 @@ if __name__ == "__main__":
     parser.add_option("--skipHaddFromWildcard", dest = "skipHaddFromWildcard",  action = "store_true", default = False)
     parser.add_option("--skipHistoCheck",       dest = "skipHistoCheck",        action = "store_true", default = False)
     parser.add_option("--skipDatacards",        dest = "skipDatacards",         action = "store_true", default = False)
+    parser.add_option("--skip",                 dest = "skip",                  default = 0,            type = "int",
+        help = "skip first INT parallel stages. plotParallel (1), haddParallel (2), haddFromWildcard (3), histoCheck (4), Datacards (5)")
 
     (opts, args) = parser.parse_args()
+
+    if opts.skip >= 1: opts.skipPlotParallel        = True
+    if opts.skip >= 2: opts.skipHaddParallel        = True
+    if opts.skip >= 3: opts.skipHaddFromWildcard    = True
+    if opts.skip >= 4: opts.skipHistoCheck          = True
+    if opts.skip >= 5: opts.skipDatacards           = True
+
+
     main(pyrootdir, opts)
 
 
