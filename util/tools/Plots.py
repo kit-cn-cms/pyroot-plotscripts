@@ -244,6 +244,7 @@ def addErrorbands(combinedErrorbands,combinedHist,correlated=False):
         up=0
         down=0
         for errorband in combinedErrorbands:
+                if errorband is None: continue
                 if correlated:
                    up=up+errorband.GetErrorYhigh(i)
                    down=down+errorband.GetErrorYlow(i)
@@ -337,12 +338,12 @@ def drawHistsOnCanvas(PlotList, canvasName, data=None, ratio=False, signalscalin
         PlotObject=PlotList[background]
         if len(bkgHists)==0:
             bkgHists.append(PlotObject.hist.Clone())
-            errorbands.append(PlotObject.errorband.Clone())
+            if not PlotObject.errorband is None: errorbands.append(PlotObject.errorband.Clone())
         else:
             hist = PlotObject.hist.Clone()
             hist.Add(bkgHists[0])
             bkgHists.insert(0, hist)
-            errorbands.append(PlotObject.errorband.Clone())
+            if not PlotObject.errorband is None: errorbands.append(PlotObject.errorband.Clone())
     if bkgHists:
         combinederrorband=addErrorbands(errorbands,bkgHists[0])
 
