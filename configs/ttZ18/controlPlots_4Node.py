@@ -39,9 +39,9 @@ def reco_plots(data=None):
         plotClasses.Plot(ROOT.TH1D("control_Chi2_Higgs","#chi^{2}(H)",40,0.0,10.0),"RecoTTH_Chi2Higgs",selection,label),
         plotClasses.Plot(ROOT.TH1D("control_Chi2_Higgs_log","log(#chi^{2}(H))",40,-10,7),"log(RecoTTH_Chi2Higgs+1e-30)",selection,label),
 
-        plotClasses.Plot(ROOT.TH1D("control_RecoTTZ_TopHad_M_log","log(M(t_{had}))",40,0.,6.),"log(RecoTTZ_TopHad_M)",selection,label),
-        plotClasses.Plot(ROOT.TH1D("control_RecoTTZ_TopLep_M_log","log(M(t_{lep}))",40,0.,6.),"log(RecoTTZ_TopLep_M)",selection,label),
-        plotClasses.Plot(ROOT.TH1D("control_RecoTTZ_Z_M_log","log(M(Z))",40,0.,6.),"log(RecoTTZ_Z_M)",selection,label),
+        plotClasses.Plot(ROOT.TH1D("control_RecoTTZ_TopHad_M_log","log(M(t_{had}))",40,4.,7.),"log(RecoTTZ_TopHad_M)",selection,label),
+        plotClasses.Plot(ROOT.TH1D("control_RecoTTZ_TopLep_M_log","log(M(t_{lep}))",40,4.,7.),"log(RecoTTZ_TopLep_M)",selection,label),
+        plotClasses.Plot(ROOT.TH1D("control_RecoTTZ_Z_M_log","log(M(Z))",40,4.,7.),"log(RecoTTZ_Z_M)",selection,label),
         ]
     if data:
         add_data_plots(plots=plots,data=data)
