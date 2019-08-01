@@ -15,12 +15,12 @@ def getAddVars():
         "Jet_E",
         "Jet_Phi",
         "Jet_M",
-        "Evt_Pt_PrimaryLepton:=LooseLepton_Pt[0]",
-        "Evt_E_PrimaryLepton:=LooseLepton_E[0]",
-        "Evt_M_PrimaryLepton:=LooseLepton_M[0]",
-        "Evt_Phi_PrimaryLepton:=LooseLepton_Phi[0]",
-        "Evt_Eta_PrimaryLepton:=LooseLepton_Eta[0]",
-        "Evt_Pt_MET:=Evt_MET_Pt",
+        # "Evt_Pt_PrimaryLepton:=LooseLepton_Pt[0]",
+        # "Evt_E_PrimaryLepton:=LooseLepton_E[0]",
+        # "Evt_M_PrimaryLepton:=LooseLepton_M[0]",
+        # "Evt_Phi_PrimaryLepton:=LooseLepton_Phi[0]",
+        # "Evt_Eta_PrimaryLepton:=LooseLepton_Eta[0]",
+        # "Evt_Pt_MET:=Evt_MET_Pt",
         "Weight_CSV",
         "Weight_CSVLFup",
         "Weight_CSVLFdown",
@@ -38,12 +38,10 @@ def getAddVars():
         "Weight_CSVCErr2down",
         "Weight_pu69p2",
         "N_BTagsM"
-        #"GenWeight_isr_Def_down:=GenWeight_8",
-        #"GenWeight_isr_Def_up:=GenWeight_6",
-        #"GenWeight_fsr_Def_down:=GenWeight_9",
-        #"GenWeight_fsr_Def_up:=GenWeight_7",
-        ]
+        # "GenWeight_isr_Def_down:=GenWeight_8",
+        # "GenWeight_isr_Def_up:=GenWeight_6",
+        # "GenWeight_fsr_Def_down:=GenWeight_9",
+        # "GenWeight_fsr_Def_up:=GenWeight_7",
+    ]
 
     return addVars
-
-
