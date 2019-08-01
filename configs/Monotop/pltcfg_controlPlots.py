@@ -81,7 +81,7 @@ ttbarPathS = (
 
 # need to veto muon events in electron dataset to avoid double counting and vice versa
 sel_signal = (
-    "*(N_LooseMuons==0 && N_LooseElectrons==0 && N_LoosePhotons==0)*(Evt_Pt_MET>250.)"
+    "*(1.)"
 )
 
 
