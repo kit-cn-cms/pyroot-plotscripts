@@ -30,8 +30,8 @@ dibosonPathS = path_vdlinden+'/WW_*/*nominal*.root'+';'+ \
 
 stpath = path_vdlinden+'/ST_*/*nominal*.root'
 
-ttHpath = path_vdlinden+'/ttHTobb_M125*/*nominal*.root'+';'+ \
-	  path_vdlinden+'/ttHToNonbb_M125*/*nominal*.root'
+ttHpath =   path_vdlinden+'/ttHTobb_M125*/*nominal*.root'+';'+ \
+	        path_vdlinden+'/ttHToNonbb_M125*/*nominal*.root'
 
 ttZpath =  path_vdlinden+'/TTZToQQ*/*nominal*.root'+';'+ \
             path_vdlinden+'/TTZToBB*/*nominal*.root'+';'+ \
@@ -139,7 +139,7 @@ lumi = '59.7'
 nominalweight="NomWeight:=("+defaultWeight+"*"+"("+electronSFs+"+"+muonSFs+")"+"*"+"("+electronTrigger+"+"+muonTrigger+")"+")*(DoWeights==1)+(DoWeights==0)*1.0"
 
 # even selection for sample splitting
-evenSel="*1.0"
+evenSel="*(Evt_Odd==0)*2.0"
 
 sampleDict=plotClasses.SampleDictionary()
 sampleDict.doPrintout()
@@ -147,15 +147,15 @@ doReadTrees=True
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
 samplesDataControlPlots=[
-    plotClasses.Sample('SingleMu',ROOT.kBlack,
-            path_vdlinden+'/SingleMuon*/*nominal*.root',
-            sel_singlemu+sel_MET,
-            'SingleMu', samDict=sampleDict, readTrees=doReadTrees),
-
-    plotClasses.Sample('SingleEl',ROOT.kBlack,
-            path_vdlinden+'/EGamma*/*nominal*.root',
-            sel_singleel+sel_MET,
-            'SingleEl', samDict=sampleDict, readTrees=doReadTrees)
+#    plotClasses.Sample('SingleMu',ROOT.kBlack,
+#            path_vdlinden+'/SingleMuon*/*nominal*.root',
+#            sel_singlemu+sel_MET,
+#            'SingleMu', samDict=sampleDict, readTrees=doReadTrees),
+#
+#    plotClasses.Sample('SingleEl',ROOT.kBlack,
+#            path_vdlinden+'/EGamma*/*nominal*.root',
+#            sel_singleel+sel_MET,
+#            'SingleEl', samDict=sampleDict, readTrees=doReadTrees)
 ]
 
 print "samples"
@@ -196,22 +196,10 @@ samples = [
             'ttcc',
             samDict=sampleDict, readTrees=doReadTrees),
 
-    plotClasses.Sample('t#bar{t}+b',ROOT.kAzure+8,
+    plotClasses.Sample('t#bar{t}+hf',ROOT.kAzure+4,
             ttbarPathS,
-            lumi+evenSel+'*(GenEvt_I_TTPlusBB==1)'+sel_MET+sel_StrangeMuWeights,
-            'ttb',
-            samDict=sampleDict, readTrees=doReadTrees),
-
-    plotClasses.Sample('t#bar{t}+2b',ROOT.kAzure+3,
-            ttbarPathS,
-            lumi+evenSel+'*(GenEvt_I_TTPlusBB==2)'+sel_MET+sel_StrangeMuWeights,
-            'tt2b',
-            samDict=sampleDict, readTrees=doReadTrees),
-
-    plotClasses.Sample('t#bar{t}+b#bar{b}',ROOT.kAzure+4,
-            ttbarPathS,
-            lumi+evenSel+'*(GenEvt_I_TTPlusBB==3)'+sel_MET+sel_StrangeMuWeights,
-            'ttbb',
+            lumi+evenSel+'*(GenEvt_I_TTPlusBB>=1)'+sel_MET+sel_StrangeMuWeights,
+            'tthf',
             samDict=sampleDict, readTrees=doReadTrees),
 
     # minor samples
@@ -271,4 +259,12 @@ plottingsamples = [
         "", "", "misc", addsamples = ["wjets", "zjets", "diboson", "ttW"],
         samDict = sampleDict, readTrees = doReadTrees)
     ]
+
+
+
+
+
+
+
+
 
