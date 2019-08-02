@@ -9,18 +9,18 @@ sys.path.append(filedir+"/tools")
 import plotClasses
 
 class analysisConfig:
-    def __init__(self, workdir, pyrootdir, rootPath, signalProcess = "ttbb", pltcfgName = "pltcfg_ttH18", discrName = "finaldiscr", dataera = "2017"):
-        self.workdir = str(workdir)
-        self.pyrootdir = str(pyrootdir)
-        self.name = self.workdir.split("/")[-1]
-        self.discrName = discrName
+    def __init__(self, workdir, pyrootdir, signalProcess = "ttH", pltcfgName = "pltcfg_ttH18", discrName = "finaldiscr", dataera = "2018"):
+        self.workdir    = str(workdir)
+        self.pyrootdir  = str(pyrootdir)
+        self.name       = self.workdir.split("/")[-1]
+        self.discrName  = discrName
+
         if not os.path.exists(self.workdir):
             print("making workdir at "+str(self.workdir))
             os.makedirs(self.workdir)
 
-        self.rootPath = str(rootPath)
-        if self.rootPath == "":
-            self.rootPath = self.name+"/limitInput.root"
+        self.rootPath   = self.workdir+"/output_limitInput.root"
+
         self.ppRootPath = self.rootPath
         self.renamedPath = self.rootPath
     
@@ -32,57 +32,44 @@ class analysisConfig:
         self.setSignalProcess(signalProcess, pltcfgName)
 
     def setDefaults(self):
-        if os.path.exists(self.rootPath):
-            self.plotParallel = False
-        else:
-            self.plotParallel = True
+        self.usePseudoData      = True
+        self.makeDataCards      = True
+        self.makeInputDatacards = False
+        self.haddFromWildcard   = True        
+        self.addData            = False
 
-        self.singleExecute = False
+        self.makePlots          = False
+        self.signalScaling      = False
+        self.lumiLabel          = True
+        self.privateWork        = False
+        self.ratio              = True
+        self.logarithmic        = False
 
-        self.plotNumber = None
-        self.usePseudoData = True
-        self.makeDataCards = True
-        self.haddFromWildcard = True        
-        self.addData = False
+        self.testrun            = False
+        self.stopAfterCompile   = False
+        self.haddParallel       = True
 
-        self.makePlots=False
-        self.signalScaling=      False
-        self.lumiLabel=True
-        self.privateWork= False
-        self.ratio=True
-        self.logarithmic=False
+        self.skipPlotParallel       = False
+        self.skipHaddParallel       = False
+        self.skipHaddFromWildcard   = False
+        self.skipHistoCheck         = False
+        self.skipDatacards          = False
 
-        self.additionalPlotVariables = []
-        self.checkBins = True
-        self.optimizedRebinning = ""
-
-        self.opts = None
-
-        self.testrun = False
-        self.stopAfterCompile = False
-        self.haddParallel = True
-        self.skipPlotParallel = False
-        self.skipHaddParallel = False
-        self.skipHaddFromWildcard = False
-        self.skipRenaming = False
-        self.skipDatacards = False
-
-        self.crossEvaluation = True
+        self.crossEvaluation    = True
 
     def setSignalProcess(self, signalProcess, pltcfgName):
         if signalProcess == "ttbb":
             self.signalProcess = "ttbb"
-            # lower and upper end of samples
-            self.tt_samplesLower = 0
-            self.tt_samplesUpper = 5
-            print("ttbb was chosen as signal process")
         elif signalProcess == "ttH" or signalProcess == "tth":
             self.signalProcess = "ttH"
         elif signalProcess == "ttZ" or signalProcess == "ttbarZ":
             self.signalProcess = "ttZ"
         else:
-            print("could not find signalProcess '"+str(signalProcess)+"'. Define it in analysisConfig")
-            sys.exit("unknow signalProcess chosen")
+            print("non default signal Process chosen, this could lead to errors later in the script (e.g. datacard creation). Setting it anyways.")
+            print("signalProcess: {}".format(signalProcess))
+            self.signalProcess = signalProcess
+
+
         self.plotConfig = pltcfgName
         print("set plotConfig to "+str(self.plotConfig))
         
@@ -101,21 +88,18 @@ class analysisConfig:
                 self.skipHaddParallel = bool(analysisOptions[key])
             elif key in ("skipHaddFromWildcard"):
                 self.skipHaddFromWildcard = bool(analysisOptions[key])
-            elif key in ("skipRenaming"):
-                self.skipRenaming = bool(analysisOptions[key])
+            elif key in ("skipHistoCheck"):
+                self.skipHistoCheck = bool(analysisOptions[key])
             elif key in ("skipDatacards"):
                 self.skipDatacards = bool(analysisOptions[key])
-            elif key in ("plotNumber"):
-                self.haddFromWildcard= analysisOptions[key] 
-            elif key in ("plotParallel"):
-                self.plotParallel=  analysisOptions[key] 
             elif key in ("addData"):
                 self.addData = analysisOptions[key]
             elif key in ("crossEvaluation"):
-                self.crossEvaluation= analysisOptions[key]
+                self.crossEvaluation = analysisOptions[key]
             elif key in ("signalScaling"):
-                self.signalScaling= analysisOptions[key]
+                self.signalScaling = analysisOptions[key]
             elif key in ("lumiLabel"):
+
                 self.lumiLabel= analysisOptions[key]
             elif key in ("CMSlabel"):
                 self.cmslabel=analysisOptions[key]
@@ -124,29 +108,34 @@ class analysisConfig:
             elif key in ("normalize"):
                 self.normalize= analysisOptions[key]
             elif key in ("logarithmic"):
-                self.logarithmic= analysisOptions[key]
+                self.logarithmic = analysisOptions[key]
             elif key in ("splitLegend"):
+
                 self.splitLegend= analysisOptions[key] 
             elif key in ("shape"):
                 self.shape= analysisOptions[key]
             elif key in ("makeDataCards"):
-                self.makeDataCards= analysisOptions[key] 
+                self.makeDataCards = analysisOptions[key] 
             elif key in ("makePlots"):
-                self.makePlots= analysisOptions[key] 
+                self.makePlots = analysisOptions[key] 
+            elif key in ("usePseudoData"):
+                self.usePseudoData = analysisOptions[key]
+            elif key in ("makeInputDatacards"):
+                self.makeInputDatacards = analysisOptions[key]
 
 
     def initPlotConfig(self):
-        configdir = self.pyrootdir+"/configs/"
-        sys.path.append(configdir)
-        self.pltcfg = importlib.import_module( self.plotConfig )
+        configdir = self.pyrootdir+"/configs/"+self.plotConfig
+        sys.path.append(os.path.dirname(configdir))
+        self.pltcfg = importlib.import_module( os.path.basename(configdir) )
         return self.pltcfg
 
     def getLumi(self):
-        lumi={
-            "2016":"36.9",
-            "2017":"41.5",  
-            "2017_deepCSV":"41.5",
-            "2018":"59.7",
+        lumi = {
+            "2016":         "35.9",
+            "2017":         "41.5",  
+            "2017_deepCSV": "41.5",
+            "2018":         "59.7",
         }
         return lumi[self.dataera]
 
@@ -166,11 +155,4 @@ class analysisConfig:
         """Return plotconfig module"""
         return self.pltcfg
 
-    def get_ttSamplesLower(self):
-        """Return position of ttbar samples in samples list, lower bound"""
-        return self.tt_samplesLower
-
-    def get_ttSamplesUpper(self):
-        """Return position of ttbar samples in samples list, upper bound"""
-        return self.tt_samplesUpper
 

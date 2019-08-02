@@ -20,10 +20,10 @@ def plotInterface(jobData, skipPlotParallel = False, maxTries = 10, nTries = 0):
     submitOptions = {"PeriodicHold": 7000}
     if nTries == 0:
         print("submitting plotParallel scripts as array job")
-        jobIDs = nafSubmit.submitArrayToNAF(jobData["scripts"], "plotPara", submitOptions = submitOptions)
+        jobIDs = nafSubmit.submitArrayToNAF(jobData["scripts"], "makeTemplates", submitOptions = submitOptions)
     elif nTries < maxTries:
         print("resubmitting plotParallel scripts as single jobs")
-        jobIDs = nafSubmit.submitToNAF(jobData["scripts"], submitOptions = submitOptions)
+        jobIDs = nafSubmit.submitArrayToNAF(jobData["scripts"], "makeTemplates_resubmit", submitOptions = submitOptions)
     else:
         print("plotParallel did not work after "+str(maxTries)+" tries - ABORTING")
         sys.exit(1)
@@ -86,10 +86,10 @@ def plotTerminationCheck(jobData):
 def haddInterface(jobsToSubmit, outfilesFromSubmit, maxTries = 10, nTries = 0):
     if nTries == 0:
         print("submitting haddParallel scripts as array job")
-        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "haddPara")
+        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "hadding")
     elif nTries < maxTries:
         print("resubmitting haddParallel scripts as single jobs")
-        jobIDs = nafSubmit.submitToNAF(jobsToSubmit)
+        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "hadding_resubmit")
     else:
         print("hadding did not work after "+str(maxTries)+" tries - ABORTING")
         sys.exit(1)
@@ -145,9 +145,9 @@ def haddTerminationCheck(outputScripts, outputFiles):
 
 
 #############################
-# renaming histos
+# checking histos
 #############################
-def renameInterface(jobsToSubmit, outfilesFromSubmit, maxTries = 10, nTries = 0):
+def checkHistoInterface(jobsToSubmit, outfilesFromSubmit, maxTries = 10, nTries = 0):
     # shellList = renamescriptlist = listOfJobsToSubmit
     # outFileList = outnamelist = listOfJobOutFilesToGetFromSubmit
     if len(jobsToSubmit) != len(outfilesFromSubmit):
@@ -156,10 +156,10 @@ def renameInterface(jobsToSubmit, outfilesFromSubmit, maxTries = 10, nTries = 0)
 
     if nTries == 0:
         print("submitting rename scripts as array job")
-        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, arrayName = "renamePara")
+        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, arrayName = "checkingHistos")
     elif nTries < maxTries:
         print("resubmitting rename scripts as single jobs")
-        jobIDs = nafSubmit.submitToNAF(jobsToSubmit)
+        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, arrayName = "checkingHistos_resubmit")
     else:
         print("renaming did not work after "+str(maxTries)+" tries - ABORTING")
         sys.exit(1)
@@ -167,14 +167,14 @@ def renameInterface(jobsToSubmit, outfilesFromSubmit, maxTries = 10, nTries = 0)
     # monitor running of jobs
     nafSubmit.monitorJobStatus(jobIDs)
     # checking for undone jobs
-    undoneJobs, undoneFiles = renameTerminationCheck(jobsToSubmit, outfilesFromSubmit)
+    undoneJobs, undoneFiles = checkHistoTerminationCheck(jobsToSubmit, outfilesFromSubmit)
 
     if len(undoneJobs) > 0 or len(undoneFiles) > 0:
-        return renameInterface(undoneJobs, undoneFiles, maxTries, nTries+1)
+        return checkHistoInterface(undoneJobs, undoneFiles, maxTries, nTries+1)
 
     print("renamingHistos submit interface has terminated successfully")
 
-def renameTerminationCheck(shellScripts, outputFiles):
+def checkHistoTerminationCheck(shellScripts, outputFiles):
     # count undone jobs
     undoneJobs = []
     undoneOutFiles = []
@@ -202,10 +202,10 @@ def renameTerminationCheck(shellScripts, outputFiles):
 def datacardInterface(jobsToSubmit, datacardFiles, maxTries = 10, nTries = 0):
     if nTries == 0:
         print("submitting datacardmaking scripts as array job")
-        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, arrayName = "cardmakingPara")
+        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, arrayName = "makeDatacards")
     elif nTries < maxTries:
         print("resubmitting datacardmaking scripts as single jobs")
-        jobIDs = nafSubmit.submitToNAF(jobsToSubmit)
+        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, arrayName = "makeDatacards_resubmit")
     else:
         print("making datacards did not work after "+str(maxTries)+" tries -ABORTING")
         sys.exit(1)
@@ -250,7 +250,7 @@ def drawInterface(jobsToSubmit, outputPlots, nTries = 0):
         jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "makePlots")
     elif nTries < maxTries:
         print("resubmitting makePlots scripts as single jobs")
-        jobIDs = nafSubmit.submitToNAF(jobsToSubmit)
+        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "makePlots_resubmit")
     else:
         print("make Plots did not work after "+str(maxTries)+" tries - ABORTING")
         sys.exit(1)

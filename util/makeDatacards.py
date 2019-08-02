@@ -37,7 +37,7 @@ def makeDatacardsParallel(filePath, workdir,
 
 
     shellScripts = []
-    bbbFiles = []
+    #bbbFiles = []
     datacardFiles = []
 
     # writing shell script
@@ -47,7 +47,7 @@ def makeDatacardsParallel(filePath, workdir,
 
         datacardFiles.append(datacard)
         shellScripts.append(scriptName)
-        bbbFiles.append(filePath.replace(".root","BBB_"+cat+".root"))
+        #bbbFiles.append(filePath.replace(".root","BBB_"+cat+".root"))
         
         if not skipDatacards:
             script = "#!/bin/bash \n"
@@ -92,7 +92,7 @@ def makeDatacardsParallel(filePath, workdir,
     # hadding binbybin files to output
     #haddBinByBinFiles(bbbFiles, filePath)
     # remove empty binbybin files
-    removeBinByBinFiles(bbbFiles, filePath)
+    #removeBinByBinFiles(bbbFiles, filePath)
     print "done creating datacards"
     
 def haddBinByBinFiles(bbbFiles, filePath):

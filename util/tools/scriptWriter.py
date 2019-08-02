@@ -379,21 +379,22 @@ class scriptWriter:
 
 
 
-    ## renaming script ##
-    def writeRenameScript(self):
+    ## cleanup script (during plot parallel) ##
+    def writeCleanupScript(self):
         script = "import sys\n"
         script += "import os\n"
         script += "sys.path.append('"+self.pp.analysis.pyrootdir+"/util"+"')\n"
-        script += "import renameHistos\n\n"
-        script += "filename = os.getenv('OUTFILENAME')\n\n"
-        script += "outname = filename.replace('.root','_original.root')\n\n"
-        script += "systematics = "+str(self.pp.systNames + self.pp.configData.otherSystNames)+"\n\n"
-        script += "renameHistos.renameHistosParallel(filename, outname, systematics, prune = False, plotParaCall = True)\n"
+        script += "import cleanupHistos\n\n"
+        script += "filename     = os.getenv('OUTFILENAME')\n\n"
+        script += "process      = os.getenv('PROCESSNAME')\n"
+        script += "outname      = filename.replace('.root','_original.root')\n\n"
+        systpath = self.pp.configData.cfgdir+"/"+self.pp.configData.systconfig+".csv"
+        script += "systematics  = \""+systpath+"\"\n\n"
+        script += "cleanupHistos.cleanupHistos(filename, outname, process, systematics)\n"
   
         # write script to file
-        with open(self.ccPath.replace(".cc","_rename.py"), "w") as srcfile:
+        with open(self.ccPath.replace(".cc","_cleanupHistos.py"), "w") as srcfile:
             srcfile.write(script)
-
 
 
 
@@ -539,7 +540,7 @@ class scriptWriter:
         script += 'export EVENTFILTERFILE="'+str(filterFile)+'"\n'
         script += self.ccPath[:-3]+'\n'    
         #DANGERZONE
-        script += 'python '+self.ccPath.replace('.cc','_rename.py')+'\n'
+        script += 'python '+self.ccPath.replace('.cc','_cleanupHistos.py')+'\n'
 
         # writing script to file and chmodding
         with open(scriptname, "w") as f:

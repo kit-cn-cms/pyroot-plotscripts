@@ -24,7 +24,7 @@ def makePlots(configData):
 
     # create output folders
     print('creating output folders')
-    scriptPath = workdir+'/PlotScripts/'
+    scriptPath = workdir+'/plottingScripts/'
     if not os.path.exists(scriptPath):
         os.makedirs(scriptPath)
 
@@ -143,6 +143,7 @@ def createPlotConfig(configData,workdir):
         outfile.write('\n')
         outfile.write(' '*4+'# "combineflag":"shapes_prefit"/"shapes_fit_s",\n')
         outfile.write(' '*4+'# "signallabel":"Signal",\n')
+
         outfile.write(' '*4+'}\n')
 
     return outputpath
@@ -171,7 +172,7 @@ def createPlotScript(channel,pyrootdir,workdir,scriptPath,
     script += ' --workdir="'+workdir+'"\n' 
 
 
-    scriptPath = scriptPath+'makePlots'+str(channel)+'.sh'
+    scriptPath = scriptPath+'makePlots_'+str(channel)+'.sh'
 
     # write and chmod shell scripts
     with open(scriptPath, "w") as sf:
