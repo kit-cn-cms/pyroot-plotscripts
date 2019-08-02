@@ -898,3 +898,5 @@ def createExamplePlotconfig(outputpath):
         outfile.write(' '*4+'# "combineflag":"shapes_prefit"/"shapes_fit_s",\n')
         outfile.write(' '*4+'# "signallabel":"Signal",\n')
         outfile.write(' '*4+'}\n')
+
+        print("saved Example Plotconfig at {}".format(outputpath))
