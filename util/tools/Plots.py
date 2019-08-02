@@ -559,11 +559,11 @@ class DrawHistograms:
                 self.stackPlots.append(PlotObject.hist.Clone())
                 if not self.combineflag and not PlotObject.errorband is None:
                     errorbands.append(PlotObject.errorband.Clone())
-            elif not PlotObject.errorband is None:
+            else:
                 hist = PlotObject.hist.Clone()
                 hist.Add(self.stackPlots[0])
                 self.stackPlots.insert(0, hist)
-                if not self.combineflag:
+                if not self.combineflag and not PlotObject.errorband is None:
                     errorbands.append(PlotObject.errorband.Clone())
         if self.stackPlots and not self.combineflag:
             self.combinederrorband=addErrorbands(errorbands,self.stackPlots[0])
@@ -874,7 +874,9 @@ def createExamplePlotconfig(outputpath):
 
         outfile.write('#options for the plotting style\n')
         outfile.write('plotoptions = {\n')
+        outfile.write(' '*4+'# "pdftag":"matti_schrode_KIT_cool",\n')
 
+        outfile.write('\n')
         outfile.write(' '*4+'"data":"data_obs",\n')
 
         outfile.write('\n')
