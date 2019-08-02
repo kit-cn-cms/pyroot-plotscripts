@@ -32,7 +32,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'testrun1'
+    name = 'plotting2'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -64,7 +64,7 @@ def main(pyrootdir, opts):
     analysisOptions = {
         # general options
         "usePseudoData":        True,
-        "testrun":              False,  # test run with less samples
+        "testrun":              True,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
@@ -73,12 +73,14 @@ def main(pyrootdir, opts):
         "addData":              True,  # adding real data 
         "makePlots":            True,
         # options for makePlots
-        "signalScaling":        -1,
+        "signalScaling":        1,
         "lumiLabel":            True,
-        "privateWork":          True,
+        "CMSlabel":             "private Work",
         "ratio":                "#frac{data}{MC Background}",
+        "shape":                False,
         "logarithmic":          False,
         "splitLegend":          True,
+        "normalize":            False,
         # the skipX options try to skip the submission of files to the batch system
         # before skipping the output is crosschecked
         # if the output is not complete, the skipped part is done anyways
@@ -315,5 +317,4 @@ if __name__ == "__main__":
 
 
     main(pyrootdir, opts)
-
 
