@@ -255,6 +255,7 @@ def addErrorbands(combinedErrorbands,combinedHist,correlated=False):
         up=0
         down=0
         for errorband in combinedErrorbands:
+                if errorband is None: continue
                 if correlated:
                    up=up+errorband.GetErrorYhigh(i)
                    down=down+errorband.GetErrorYlow(i)
@@ -556,9 +557,9 @@ class DrawHistograms:
             PlotObject  = self.PlotList[Plot]
             if len(self.stackPlots)==0:
                 self.stackPlots.append(PlotObject.hist.Clone())
-                if not self.combineflag:
+                if not self.combineflag and not PlotObject.errorband is None:
                     errorbands.append(PlotObject.errorband.Clone())
-            else:
+            elif not PlotObject.errorband is None:
                 hist = PlotObject.hist.Clone()
                 hist.Add(self.stackPlots[0])
                 self.stackPlots.insert(0, hist)
@@ -588,17 +589,15 @@ class DrawHistograms:
         self.yMax = 1e-9
         self.yMinMax = 1000.
         for hist in self.stackPlots+self.shapePlots:
-            if self.shape:
+            if self.shape and hist.Integral()!=0:
                 self.yMax = max(hist.GetBinContent(hist.GetMaximumBin())/hist.Integral(), self.yMax)
             else:
                 self.yMax = max(hist.GetBinContent(hist.GetMaximumBin()), self.yMax)
             if hist.GetBinContent(hist.GetMaximumBin()) > 0:
-                if self.shape:
+                if self.shape and hist.Integral()!=0:
                     self.yMinMax = min(hist.GetBinContent(hist.GetMaximumBin())/hist.Integral(), self.yMinMax)
                 else:
                     self.yMinMax = min(hist.GetBinContent(hist.GetMaximumBin()), self.yMinMax)
-        print self.yMax
-        print self.yMinMax
 
     def normalizePlot(self, PlotHist):
 
@@ -836,3 +835,66 @@ def getLegend2():
     return legend
 
 
+def createExamplePlotconfig(outputpath):
+    outputpath=outputpath+'/ExamplePlotconfig.py'
+
+    with open(outputpath,'w') as outfile:
+        outfile.write("import ROOT")
+        outfile.write('\n')
+
+        outfile.write('#samples named in the rootfile\n')
+        outfile.write('samples = {\n')
+        outfile.write(' '*8+'"ttH_hbb":{"color": ROOT.kCyan, "typ": "signal", "label": "t#bar{t}H, H to b#bar{b}"},\n')
+        outfile.write(' '*8+'"ttH_hgg":{"color": ROOT.kCyan, "typ": "signal", "label": "t#bar{t}H, H to #gamma#gamma"},\n')
+        outfile.write(' '*8+'"ttbarOther":{"color": ROOT.kRed-7, "typ": "bkg", "label": "t#bar{t}+lf"},\n')
+        outfile.write(' '*8+'"ttbarW":{"color": ROOT.kBlue-10, "typ": "bkg", "label": "t#bar{t}+W"},\n')
+        outfile.write(' '*8+'"ttbarZ":{"color": ROOT.kBlue-6, "typ": "bkg", "label": "t#bar{t}+Z"},\n')
+        outfile.write(' '*8+'"ttbarPlusBBbar":{"color": ROOT.kRed+3, "typ": "bkg", "label": "t#bar{t}+b#bar{b}"},\n')
+        outfile.write(' '*4+'}\n')
+        outfile.write('\n')
+
+        outfile.write('#combined samples\n')
+        outfile.write('plottingsamples = {\n')
+        outfile.write(' '*8+'"ttH":{"color": ROOT.kCyan, "addSamples": ["ttH_hbb", "ttH_hgg"], "typ": "signal", "label": "t#bar{t}H"},\n' )
+        outfile.write(' '*8+'"ttV":{"color": ROOT.kBlue-10, "addSamples": ["ttbarW", "ttbarZ"], "typ": "bkg", "label": "t#bar{t}+V"},\n')
+        outfile.write(' '*4+'}\n')
+        outfile.write('\n')
+
+        outfile.write('#systematics to be plotted\n')
+        outfile.write('systematics = [\n')
+        outfile.write(' '*8+'"CMS_ttHbb_PU",\n')
+        outfile.write(' '*8+'"CMS_eff_e_2018",\n')
+        outfile.write(' '*8+'"CMS_scale_j_2018",\n')
+        outfile.write(' '*4+']\n')
+        outfile.write('\n')
+
+        outfile.write('# order of the stack processes, descending from top to bottom\n')      
+        outfile.write('sortedprocesses=["ttV","ttbarPlusBBbar"],\n')
+        outfile.write('\n')
+
+        outfile.write('#options for the plotting style\n')
+        outfile.write('plotoptions = {\n')
+
+        outfile.write(' '*4+'"data":"data_obs",\n')
+
+        outfile.write('\n')
+        outfile.write(' '*4+'"ratio":"#frac{data}{MC Background}",\n')
+        outfile.write(' '*4+'"logarithmic":False,\n')
+        outfile.write(' '*4+'"shape":False,\n')
+        outfile.write(' '*4+'"normalize":False,\n')
+
+        outfile.write('\n')
+        outfile.write(' '*4+'"signalscaling":-1,\n')
+        outfile.write(' '*4+'# "lumilabel":59.7,\n')
+        outfile.write(' '*4+'# "cmslabel":"private Work",\n')
+        outfile.write(' '*4+'# "splitlegend":True,\n')
+        outfile.write(' '*4+'# "sortedprocesses":,\n')
+        outfile.write(' '*4+'# "datalabel":data,\n')
+
+        outfile.write('\n')
+        outfile.write(' '*4+'#use for combine plots, use shapes_prefit for prefit and shapes_fit_s for post fit\n')
+        outfile.write(' '*4+'#only uses total signal and does not split signal processes\n')
+        outfile.write('\n')
+        outfile.write(' '*4+'# "combineflag":"shapes_prefit"/"shapes_fit_s",\n')
+        outfile.write(' '*4+'# "signallabel":"Signal",\n')
+        outfile.write(' '*4+'}\n')
