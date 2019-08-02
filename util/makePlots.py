@@ -138,7 +138,7 @@ def createPlotConfig(configData,workdir):
         outfile.write(' '*4+'#use for combine plots, use shapes_prefit for prefit and shapes_fit_s for post fit\n')
         outfile.write(' '*4+'#only uses total signal and does not split signal processes\n')
         outfile.write('\n')
-        outfile.write(' '*4+'# "combineflag":shapes_prefit/shapes_fit_s,\n')
+        outfile.write(' '*4+'# "combineflag":"shapes_prefit"/"shapes_fit_s",\n')
         outfile.write(' '*4+'# "signallabel":"Signal",\n')
         outfile.write(' '*4+'}\n')
 
