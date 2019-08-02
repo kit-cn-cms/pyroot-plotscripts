@@ -272,3 +272,6 @@ plottingsamples = [
         samDict = sampleDict, readTrees = doReadTrees)
     ]
 
+# sort subset of processes in plots. descending order
+sortedProcesses = ["ttlf", "ttcc", "ttb", "tt2b", "ttbb", "singlet", "ttH", "misc"]
+
