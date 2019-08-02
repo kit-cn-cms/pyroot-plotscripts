@@ -191,3 +191,6 @@ datacard_processes  = processes
 plottingsamples = [
     ]
 
+# sort subset of processes in plots. descending order
+sortedProcesses = []
+

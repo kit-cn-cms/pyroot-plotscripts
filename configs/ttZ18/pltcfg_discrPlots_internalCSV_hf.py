@@ -262,6 +262,8 @@ plottingsamples = [
 
 
 
+# sort subset of processes in plots. descending order
+sortedProcesses = ["ttlf", "ttcc", "tthf", "singlet", "ttH", "misc"]
 
 
 

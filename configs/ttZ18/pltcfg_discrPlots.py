@@ -277,6 +277,8 @@ plottingsamples = [
 
 
 
+# sort subset of processes in plots. descending order
+sortedProcesses = []
 
 
 
