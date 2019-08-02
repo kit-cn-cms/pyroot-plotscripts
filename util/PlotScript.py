@@ -68,6 +68,8 @@ filesAndDirectories.add_option("--directory", dest="directory", default=None,
          metavar="/path/to/directory")
 filesAndDirectories.add_option("-p", "--plotconfig", dest="plotconfig", default="plotconfig",
         help="FILE of plot config, if none is given uses the plotconfig.py in the workdir", metavar="/path/to/file.py")
+filesAndDirectories.add_option("--pdftag", dest="pdftag", default=None,
+        help="adds the NAMETAG to the saved plot .pdf", metavar="something_NAMETAG.pdf")
 filesAndDirectories.add_option("--pdfname", dest="pdfname", default=None,
         help="NAME of the saved plot .pdf", metavar="NAME.pdf")
 
@@ -419,10 +421,22 @@ plotpath = workdir+"/outputPlots/"
 if not os.path.exists(plotpath):
         os.makedirs(plotpath)
 
+"""
+safe options
+"""
+pdftag           = getParserConfigDefaultValue(parser=options.pdftag,config="pdftag",
+                                            plotoptions=plotoptions,defaultvalue=False)
+
 if options.pdfname:
     path = plotpath+"/"+options.pdfname
 else:
     path = plotpath+"/"+options.channelName
+
+if pdftag:
+    path += "_"+str(pdftag)
+
+if shape:
+    path += "_shape"
 
 if logarithmic:
     path +="_log.pdf"
