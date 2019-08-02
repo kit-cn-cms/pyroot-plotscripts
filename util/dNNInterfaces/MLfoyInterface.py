@@ -396,7 +396,7 @@ class DNN:
             string+= "    selection = \"{}\"\n\n".format(self.selection.replace(" ","").replace("and","&&")+self.evalSelection)
         string+= "    plots = ["
 
-        for var in list(variables.index):
+        for var in sorted(list(variables.index)):
             # generate dictionary
             plotConfig = {
                 "histname":     "\""+self.category+"_"+var+"\"", 
@@ -419,7 +419,7 @@ class DNN:
         string += "\n        ]\n\n"
         string += "    if data:\n"
         string += "        add_data_plots(plots=plots,data=data)\n"
-        string += "    return plots\n"
+        string += "    return plots\n\n\n\n"
         return string
     
     def generatePlotCall(self, opts):
@@ -450,6 +450,7 @@ class DNN:
         template ="""
     category_dict["category"] = ("{PRESELECTION}","{LABEL}","")
     category_dict["discr"] = "{DISCR_NAME}"
+    category_dict["catlabel"] = "{CATLABEL}"
     category_dict["nhistobins"] = ndefaultbins\n"""
 
 
@@ -472,6 +473,7 @@ class DNN:
             string += template.format(  
                 PRESELECTION    = preselection,
                 LABEL           = label,
+                CATLABEL        = self.label,
                 DISCR_NAME      = self.discrNames[i])
 
             if opts.variable_binning or opts.optimize_binning:
@@ -664,29 +666,18 @@ import ROOT
 from array import array
 from copy import deepcopy\n\n\n"""
 
-        # get event yield categories
-        string += """
-def evtYieldCategories():
-    return [
-    ("(N_Jets>=6&&N_BTagsM==2)","6j2t",""),
-    ("(N_Jets==4&&N_BTagsM==3)","4j3t",""),
-    ("(N_Jets==5&&N_BTagsM==3)","5j3t",""),
-    ("(N_Jets>=6&&N_BTagsM==3)","6j3t",""),
-    ("(N_Jets==4&&N_BTagsM>=4)","4j4t",""),
-    ("(N_Jets==5&&N_BTagsM>=4)","5j4t",""),
-    ("(N_Jets>=6&&N_BTagsM>=4)","6j4t","")
-    ]
-
-memexp = ""\n\n\n"""
+        # add memexpression
+        string += "memexp = \"\"\n\n\n"
 
         # header for discr plots function
         funcstring = "def getDiscriminatorPlots(data = None, discrname = ''):\n"
         funcstring +="    discriminatorPlots = []\n"
 
         # loop over dnns writing code for plots
-        for dnn in self.DNNs:
-            string += dnn.generateInputPlots()
-            funcstring += dnn.generatePlotCall(opts)
+        if opts.input_plots:
+            for dnn in self.DNNs:
+                string += dnn.generateInputPlots()
+                funcstring += dnn.generatePlotCall(opts)
 
 
         # writing code for dnn output plots
@@ -725,24 +716,26 @@ def plots_dnn(data, discrname):
 def init_plots(dictionary, data = None):
     plots = [] #init list of plotClasses objects to return
     for label in dictionary:
-        subdict = dictionary[label] #for easy access
-        discr = subdict["discr"] # load discriminator name
-        sel = subdict["plotPreselections"] # load selection
-        histoname = subdict["histoname"] # load histogram name
-        histotitle = subdict["histotitle"] # load histogram title
+        subdict     = dictionary[label] #for easy access
+        discr       = subdict["discr"] # load discriminator name
+        sel         = subdict["plotPreselections"] # load selection
+        histoname   = subdict["histoname"] # load histogram name
+        histotitle  = subdict["histotitle"] # load histogram title
+        catlabel    = subdict["catlabel"] # category label
 
         # check if initialization uses bin edges or min/max vals
         # if 'subdict' contains the keyword 'bin_edges', an array
         # of type float is created from the corresponding python list.
         # Else, the min/maxvals are used 
         if "bin_edges" in subdict:
-            bins = array("f", subdict["bin_edges"])
+            bins  = array("f", subdict["bin_edges"])
             nbins = len(bins)-1 # last bin edge in array is overflow bin => subtract for nbins
             subdict["nhistobins"] = nbins # update number of bins
             plots.append(
                 plotClasses.Plot(
                     ROOT.TH1F(histoname,histotitle,nbins,bins),
-                    discr,sel,label))
+                    discr,sel,catlabel))
+
         elif "minxval" in subdict and "maxxval" in subdict:
             nbins = subdict["nhistobins"]
             xmax  = subdict["maxxval"]
@@ -750,13 +743,15 @@ def init_plots(dictionary, data = None):
             plots.append(
                 plotClasses.Plot(
                     ROOT.TH1F(histoname, histotitle,nbins,xmin, xmax),
-                    discr,sel,label))
+                    discr,sel,catlabel))
+
     if not data is None:
         data.categories.update(dictionary)
+
     return plots
 
-def add_data_plots(plots,data):
-    plotnames=[]
+def add_data_plots(plots, data):
+    plotnames = []
     for plot in plots:
         plotnames.append(plot.name)
     data.datavariables.extend(plotnames)

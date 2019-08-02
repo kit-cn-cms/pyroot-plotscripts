@@ -3,7 +3,9 @@ import sys
 import os
 import imp
 import inspect
+import optparse
 import ROOT
+ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 filedir = os.path.dirname(os.path.realpath(__file__))
 pyrootdir = "/".join(filedir.split("/")[:-1])
@@ -12,35 +14,25 @@ sys.path.append(pyrootdir)
 
 # local imports
 import util.analysisClass as analysisClass
-import util.optBinning as optBinning
-import util.genPlots as genPlots
 import util.configClass as configClass
 import util.monitorTools as monitorTools
 import util.plotParallel as plotParallel
-import util.drawParallel as drawParallel
+import util.makePlots as makePlots
 import util.haddParallel as haddParallel
-import util.renameHistos as renameHistos
+import util.checkHistos as checkHistos
 import util.makeDatacards as makeDatacards
 
-def main(pyrootdir, argv):
+def main(pyrootdir, opts):
     print '''
     # ========================================================
     # welcome to main function - defining some variables
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttZControlPlots_v3'
+    name = 'ttZControlPlots_bbComparison'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
-
-    # creating workdir subfolder
-    if not os.path.exists(workdir):
-        os.makedirs(workdir)
-        print("created workdir at "+str(workdir))
-    
-    # path to root file
-    rootPathForAnalysis = workdir+'/output_limitInput.root'
 
     # signal process
     signalProcess = "ttZ"
@@ -56,10 +48,10 @@ def main(pyrootdir, argv):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    config          = "pltcfg_ttZ18_controlPlots"
-    variable_cfg    = "ttZ18_addVariables"
-    plot_cfg        = "ttZ18_controlPlots"
-    syst_cfg        = "ttZ18_systematics"
+    config          = "ttZ18/pltcfg_controlPlots_internalCSV"
+    variable_cfg    = "ttZ18/additionalVariables"
+    plot_cfg        = "ttZ18/controlPlots_4Node"
+    syst_cfg        = "ttZ18/systematics_internalCSV"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -74,20 +66,24 @@ def main(pyrootdir, argv):
         # options to activate parts of the script
         "haddFromWildcard":     True,
         "makeDataCards":        False,
+        "makeInputDatacards":   False, # create datacards also for all defined plots
         "addData":              True,  # adding real data 
-        "drawParallel":         True,
-        # options for drawParallel/singleExecute sub programs
-        "makeSimplePlots":      False,
-        "makeMCControlPlots":   True,
-        "makeEventYields":      True,
+        "makePlots":            True,
+        # options for makePlots
+        "signalScaling":        -1,
+        "lumiLabel":            True,
+        "privateWork":          True,
+        "ratio":                "#frac{data}{MC Background}",
+        "logarithmic":          False,
+        "splitLegend":          True,
         # the skipX options try to skip the submission of files to the batch system
         # before skipping the output is crosschecked
         # if the output is not complete, the skipped part is done anyways
-        "skipPlotParallel":     True,
-        "skipHaddParallel":     False,
-        "skipHaddFromWildcard": False,
-        "skipRenaming":         False,
-        "skipDatacards":        False}
+        "skipPlotParallel":     opts.skipPlotParallel,
+        "skipHaddParallel":     opts.skipHaddParallel,
+        "skipHaddFromWildcard": opts.skipHaddFromWildcard,
+        "skipHistoCheck":       opts.skipHistoCheck,
+        "skipDatacards":        opts.skipDatacards}
 
     plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttZ_2018_v4.json"
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
@@ -109,13 +105,12 @@ def main(pyrootdir, argv):
     analysis = analysisClass.analysisConfig(
         workdir         = workdir, 
         pyrootdir       = pyrootdir, 
-        rootPath        = rootPathForAnalysis, 
         signalProcess   = signalProcess, 
         pltcfgName      = config,
         discrName       = discrName,
         dataera         = dataera)
 
-    analysis.initArguments( argv )
+    
     analysis.initAnalysisOptions( analysisOptions )
 
     pltcfg = analysis.initPlotConfig()
@@ -166,323 +161,159 @@ def main(pyrootdir, argv):
     # ========================================================
     '''
 
-    if analysis.plotNumber == None:
-        # plot everything, except during drawParallel step
-        # Create file for data cards
+    # plot everything, except during drawParallel step
+    # Create file for data cards
+    print '''
+    # ========================================================
+    # starting with plotParallel step
+    # ========================================================
+    '''
+    
+    with monitor.Timer("plotParallel"):
+        # initialize plotParallel class 
+        pP = plotParallel.plotParallel(
+            analysis = analysis,
+            configData = configData)
+
+        monitor.printClass(pP, "init")
+        # set some changed values
+        pP.setJson(plotJson)
+        #pP.setDataBases(plotDataBases)
+        #pP.setMEMDataBase(memDataBase)
+        #pP.setDNNInterface(dnnInterface)
+        pP.setMaxEvts(250000)
+        #pP.setRateFactorsFile(rateFactorsFile)
+        pP.setSampleForVariableSetup(configData.samples[nSigSamples])
+
+        # run plotParallel
+        pP.run()
+
+    pP.checkTermination()
+    monitor.printClass(pP, "after plotParallel")
+
+    # hadd histo files before renaming. The histograms are actually already renamed. 
+    # But the checkbins thingy will not have been done yet.
+    print '''
+    # ========================================================
+    # hadding from wildcard
+    # ========================================================
+    '''
+    with monitor.Timer("haddFilesFromWildCard"):
+        haddParallel.haddSplitter( 
+            input               = pP.getHaddOutPath(),
+            outName             = analysis.ppRootPath,
+            subName             = "haddParts",
+            nHistosRemainSame   = True,
+            skipHadd            = analysis.skipHaddFromWildcard)
+     
+
+
+    # Deactivate check bins functionality in renameHistos 
+    #   if additional plot variables are added via analysis class
+    if os.path.exists( analysis.setRenamedPath(name = "limitInput") ):
+        print( "renamed file already exists - skipping renaming histos" )
+    else:
         print '''
         # ========================================================
-        # starting with plotParallel step
+        # checking Histograms
         # ========================================================
         '''
-        
-        with monitor.Timer("plotParallel"):
-            # initialize plotParallel class 
-            pP = plotParallel.plotParallel(
-                analysis = analysis,
-                configData = configData)
 
-            monitor.printClass(pP, "init")
-            # set some changed values
-            pP.setJson(plotJson)
-            #pP.setDataBases(plotDataBases)
-            #pP.setMEMDataBase(memDataBase)
-            #pP.setDNNInterface(dnnInterface)
-            pP.setMaxEvts(500000)
-            #pP.setRateFactorsFile(rateFactorsFile)
-            pP.setSampleForVariableSetup(configData.samples[nSigSamples])
+        pP.setRenameInput()
+        # in this function the variable self.renameInput is set
+        # if hadd files were created during plotParallel
+        #       the renameInput is set to pP.getHaddFiles 
+        #       (a.k.a. the list of hadd files)
+        # if no hadd files were created during plotparallel
+        #       the renameInput is set to pp.getOutPath 
+        #       (a.ka. the path to output.root)
 
-            # run plotParallel
-            pP.run()
+        with monitor.Timer("checkHistos"):
+            checkHistos.checkHistsManager(
+                inFiles         = pP.getRenameInput(),
+                outFile         = analysis.renamedPath,
+                checkBins       = True,
+                eps             = 0.0,
+                skipHistoCheck  = analysis.skipHistoCheck)
 
-        pP.checkTermination()
-        monitor.printClass(pP, "after plotParallel")
-
-        # hadd histo files before renaming. The histograms are actually already renamed. 
-        # But the checkbins thingy will not have been done yet.
+    if analysis.addData:
         print '''
         # ========================================================
-        # hadding from wildcard
+        # adding data with plotParallel
         # ========================================================
         '''
-        with monitor.Timer("haddFilesFromWildCard"):
-            haddParallel.haddSplitter( input = pP.getHaddOutPath(),
-                outName = analysis.ppRootPath,
-                subName = "haddParts",
-                nHistosRemainSame = True,
-                skipHadd = analysis.skipHaddFromWildcard)
-         
+        with monitor.Timer("addRealData"):
+            if analysis.usePseudoData:
+                # pseudo data without ttH
+                pP.addData(samples = configData.samples[nSigSamples:])
+                # pseudo data with signal
+                #pP.addData(samples = configData.samples)
+            else:
+                # real data with ttH
+                pP.addData(samples = configData.controlSamples)
+
+    
+
+    pP.checkTermination()       
+    monitor.printClass(pP, "after plotParallel completely done")
+
+    print("########## DONE WITH PLOTPARALLEL STEP ##########")
+    print("at the moment the outputpath is "+str(analysis.renamedPath))
+    print("#################################################")
+
+    if analysis.makeDataCards or analysis.makeInputDatacards:
+        print '''
+        # ========================================================
+        # Making Datacards.
+        # ========================================================
+        '''
+        with monitor.Timer("makeDatacardsParallel"):
+            makeDatacards.makeDatacardsParallel(
+                filePath            = analysis.renamedPath,
+                workdir             = analysis.workdir,
+                categories          = configData.getDatacardLabels(analysis.makeInputDatacards),
+                doHdecay            = True,
+                discrname           = analysis.discrName,
+                datacardmaker       = datacardmaker,
+                signalTag           = analysis.signalProcess,
+                skipDatacards       = analysis.skipDatacards)
+    
+    if analysis.makePlots:
+        print '''
+        # ========================================================
+        # Making Plots
+        # ========================================================
+        '''
+        with monitor.Timer("makePlots"):
+            makePlots.makePlots(configData = configData)
 
 
-        # Deactivate check bins functionality in renameHistos 
-        #   if additional plot variables are added via analysis class
-        if os.path.exists( analysis.setRenamedPath(name = "limitInput") ):
-            print( "renamed file already exists - skipping renaming histos" )
-        elif analysis.skipRenaming:
-            print("skipping renaming TODO")
-            # WIP rename skip TODO
-        else:
-            print '''
-            # ========================================================
-            # renaming Histograms
-            # ========================================================
-            '''
-
-            pP.setRenameInput()
-            # in this function the variable self.renameInput is set
-            # if hadd files were created during plotParallel
-            #       (which is equivalent to THEoutputpath == list) 
-            #       the renameInput is set to pP.getHaddFiles 
-            #       (a.k.a. the list of hadd files)
-            # if no hadd files were created during plotparallel
-            #       (which is equivalent to THEoutputlath == str)
-            #       the renameInput is set to pp.getOutPath 
-            #       (a.ka. the path to output.root)
-
-            with monitor.Timer("renameHistos"):
-                renameHistos.renameHistos(
-                    inFiles         = pP.getRenameInput(),
-                    outFile         = analysis.renamedPath,
-                    systNames       = configData.allSystNames,
-                    checkBins       = True,
-                    prune           = True,
-                    Epsilon         = 0.0,
-                    skipRenaming    = analysis.skipRenaming)
-
-        if analysis.addData:
-            print '''
-            # ========================================================
-            # adding data with plotParallel
-            # ========================================================
-            '''
-            with monitor.Timer("addRealData"):
-                if analysis.usePseudoData:
-                    # pseudo data without ttH
-                    pP.addData(samples = configData.samples[nSigSamples:])
-                else:
-                    # real data with ttH
-                    pP.addData(samples = configData.controlSamples)
-
-        
-
-        pP.checkTermination()       
-        monitor.printClass(pP, "after plotParallel completely done")
-
-        print("########## DONE WITH PLOTPARALLEL STEP ##########")
-        print("at the moment the outputpath is "+str(analysis.renamedPath))
-        print("#################################################")
-
-        if analysis.makeDatacards:
-            print '''
-            # ========================================================
-            # Making Datacards.
-            # ========================================================
-            '''
-            with monitor.Timer("makeDatacardsParallel"):
-                makeDatacards.makeDatacardsParallel(
-                    filePath            = analysis.renamedPath,
-                    workdir             = analysis.workdir,
-                    categories          = configData.getBinlabels(),
-                    doHdecay            = True,
-                    discrname           = analysis.discrName,
-                    datacardmaker       = datacardmaker,
-                    signalTag           = analysis.signalProcess,
-                    skipDatacards       = analysis.skipDatacards)
-
-
-        # =============================================================================================
-        # Invoke drawParallel step
-        # =============================================================================================
-        if analysis.drawParallel:
-            print '''
-            # ========================================================
-            # Starting DrawParallel
-            # ========================================================
-            '''
-            # this step reexecutes this top level script once for each discriminator plot
-            with monitor.Timer("DrawParallel"):
-                drawParallel.drawParallel(
-                    ListOfPlots = configData.getDiscriminatorPlots(),
-                    workdir     = analysis.workdir,
-                    PathToSelf  = os.path.realpath(inspect.getsourcefile(lambda:0)),
-                    # Hand over opts to keep commandline options
-                    opts        = analysis.opts)
-            print '''
-            # ========================================================
-            # this is the end of the script 
-            # ========================================================
-            '''
-
-
-
-
-
-    # =============================================================================================
-    # everything beyond this point is called by the secondary scripts
-    # =============================================================================================
-    elif analysis.plotNumber != None or analysis.singleExecute:
-        print("not doing plotParallel step")
-        if analysis.drawParallel:
-            print("we have a plotNumber --- changing discriminatorPlots")
-            configData.getDiscriminatorPlotByNumber()
-
-        if analysis.makeSimplePlots or analysis.makeMCControlPlots or analysis.makeEventYields:
-            print '''
-            # ========================================================
-            # Creating lists for later use
-            # ========================================================
-            '''
-            gP = genPlots.genPlots( 
-                outPath = analysis.renamedPath,
-                plots   = configData.getDiscriminatorPlots(),
-                plotdir = analysis.getPlotPath(),
-                dataera = dataera,
-                rebin   = 1)
-
-            histoList       = gP.genList(samples = configData.samples)
-            dataList        = gP.genList(samples = configData.controlSamples)
-            pseudodataList  = gP.genList(samples = configData.samples)
-            monitor.printClass(gP, "after creating init lists")
-
-
-
-
-
-
-        if analysis.makeSimplePlots:
-            print '''
-            # ========================================================
-            # Making simple MC plots
-            # ========================================================
-            '''
-            with monitor.Timer("makingSimpleMCplots"):
-                # creating control plots
-                controlPlotOptions = {
-                    "factor":           -1,
-                    "logscale":         False,
-                    "canvasOptions":    "histo",
-                    "normalize":        False,
-                    "stack":            True, # not default
-                    "ratio":            False,
-                    "sepaTest":         False}
-                sampleConfig = genPlots.Config(
-                    histograms  = histoList,
-                    sampleIndex = nSigSamples)
-                gP.makeSimpleControlPlots( sampleConfig, controlPlotOptions )
-
-                # creating shape plots
-                shapePlotOptions = {
-                    "logscale":         False,
-                    "canvasOptions":    "histo",
-                    "normalize":        True, # not default
-                    "stack":            False,
-                    "ratio":            False,
-                    "statTest":         False,
-                    "sepaTest":         False}
-                sampleConfig = genPlots.Config(
-                    histograms  = dataList,
-                    sampleIndex = nSigSamples)
-                gP.makeSimpleShapePlots( sampleConfig, shapePlotOptions )
-
-                monitor.printClass(gP, "after making simple MC plots")
-
-
-
-        if analysis.makeMCControlPlots:
-            print '''
-            # ========================================================
-            # Making MC Control plots
-            # ========================================================
-            '''
-            with monitor.Timer("makingMCControlPlots"):
-                sampleConfig = genPlots.Config(
-                    histograms  = histoList,
-                    sampleIndex = nSigSamples)
-
-                # generate the llloflist internally
-                sampleConfig.genNestedHistList(
-                    genPlotsClass = gP,
-                    systNames = configData.plots)
-                sampleConfig.setErrorbandConfig({
-                    "style":        3354, 
-                    "color":        ROOT.kBlack, 
-                    "doRateSysts":  False})
-        
-                if analysis.usePseudoData:
-                    pseudodataConfig = genPlots.Config(
-                        histograms  = pseudodataList,
-                        sampleIndex = 0)
-
-                    #set general plotoption
-                    controlPlotOptions = {
-                        "factor":           -2, #not default
-                        "logscale":         False,
-                        "canvasOptions":    "histo",
-                        "ratio":            True, # not default
-                        "blinded":          False,
-                        "privateWork":      True}
-                    # making the control plots
-                    gP.makeControlPlots(
-                        sampleConfig = sampleConfig,
-                        dataConfig   = pseudodataConfig,
-                        options      = controlPlotOptions,
-                        outName      = "controlPlots_pseudodata")
-
-
-                    controlPlotOptions["logscale"] = True
-                    gP.makeControlPlots(
-                        sampleConfig = sampleConfig,
-                        dataConfig   = pseudodataConfig,
-                        options      = controlPlotOptions,
-                        outName      = "controlPlots_pseudodata_LOG")
-
-                else:
-                    dataConfig = genPlots.Config(
-                        histograms  = dataList,
-                        sampleIndex = 0)
-
-                    #set general plotoption
-                    controlPlotOptions = {
-                        "factor":           -2, #not default
-                        "logscale":         False,
-                        "canvasOptions":    "histo",
-                        "ratio":            True, # not default
-                        "blinded":          False,
-                        "privateWork":      True} #not default
-                    # making the control plots
-                    gP.makeControlPlots(
-                        sampleConfig = sampleConfig,
-                        dataConfig   = dataConfig,
-                        options      = controlPlotOptions,
-                        outName      = "controlPlots_data")
-
-
-                    controlPlotOptions["logscale"] = True
-                    gP.makeControlPlots(
-                        sampleConfig = sampleConfig,
-                        dataConfig   = dataConfig,
-                        options      = controlPlotOptions,
-                        outName      = "controlPlots_data_LOG")
-                    
-
-            monitor.printClass(gP, "after making control plots")
-
-        if analysis.makeEventYields:
-            print '''
-            # ========================================================
-            # Making Event Yields
-            # ========================================================
-            '''
-            with monitor.Timer("makeEventYields"):
-                gP.makeEventYields(
-                    categories    = configData.getEventYieldCategories(),
-                    samplesConfig = histoList,
-                    dataConfig    = pseudodataList,
-                    nameRequirements = ["node"]
-                    )
+    print '''
+    # ========================================================
+    # this is the end of the script 
+    # ========================================================
+    '''
 
 
 if __name__ == "__main__":
+    parser = optparse.OptionParser()
+    parser.add_option("--skipPlotParallel",     dest = "skipPlotParallel",      action = "store_true", default = False)
+    parser.add_option("--skipHaddParallel",     dest = "skipHaddParallel",      action = "store_true", default = False)
+    parser.add_option("--skipHaddFromWildcard", dest = "skipHaddFromWildcard",  action = "store_true", default = False)
+    parser.add_option("--skipHistoCheck",       dest = "skipHistoCheck",        action = "store_true", default = False)
+    parser.add_option("--skipDatacards",        dest = "skipDatacards",         action = "store_true", default = False)
+    parser.add_option("--skip",                 dest = "skip",                  default = 0,            type = "int",
+        help = "skip first INT parallel stages. plotParallel (1), haddParallel (2), haddFromWildcard (3), histoCheck (4), Datacards (5)")
 
-    main(pyrootdir, sys.argv[1:])
+    (opts, args) = parser.parse_args()
+
+    if opts.skip >= 1: opts.skipPlotParallel        = True
+    if opts.skip >= 2: opts.skipHaddParallel        = True
+    if opts.skip >= 3: opts.skipHaddFromWildcard    = True
+    if opts.skip >= 4: opts.skipHistoCheck          = True
+    if opts.skip >= 5: opts.skipDatacards           = True
+
+
+    main(pyrootdir, opts)
 
 
