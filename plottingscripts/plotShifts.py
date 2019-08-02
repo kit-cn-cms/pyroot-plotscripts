@@ -95,30 +95,39 @@ if opts.variables:
     opts.variables = opts.variables.split(",")
 else:
     print("using default variables:")
+    #opts.variables = [
+    #    #"finaldiscr_ljets_ge6j_ge3t_ttcc_node",
+    #    #"finaldiscr_ljets_ge6j_ge3t_ttZ_node",
+    #    #"finaldiscr_ljets_ge6j_ge3t_tthf_node",
+    #    #"finaldiscr_ljets_ge6j_ge3t_ttlf_node",
+    #    "inclusive_CSV_0",
+    #    "inclusive_JetCSV_0",
+    #    "inclusive_Jet_Pt_0",
+    #    "inclusive_N_BTagsM",
+    #    "inclusive_N_Jets"
+    #    #"ge6j_ge3t_RecoTTZ_Z_M",
+    #    ]
     opts.variables = [
-        #"finaldiscr_ljets_ge6j_ge3t_ttcc_node",
-        #"finaldiscr_ljets_ge6j_ge3t_ttZ_node",
-        #"finaldiscr_ljets_ge6j_ge3t_tthf_node",
-        #"finaldiscr_ljets_ge6j_ge3t_ttlf_node",
-        "inclusive_CSV_0",
-        "inclusive_JetCSV_0",
-        "inclusive_Jet_Pt_0",
-        "inclusive_N_BTagsM",
-        "inclusive_N_Jets"
-        #"ge6j_ge3t_RecoTTZ_Z_M",
-        ]
-    opts.variables = [
-        "finaldiscr_ljets_ge4j_3t_ttH_node",
         "finaldiscr_ljets_ge4j_3t_ttZ_node",
         "finaldiscr_ljets_ge4j_3t_tthf_node",
-        "finaldiscr_ljets_ge4j_3t_ttcc_node",
-        "finaldiscr_ljets_ge4j_3t_ttlf_node",
 
-        "finaldiscr_ljets_ge4j_ge4t_ttH_node",
         "finaldiscr_ljets_ge4j_ge4t_ttZ_node",
         "finaldiscr_ljets_ge4j_ge4t_tthf_node",
-        "finaldiscr_ljets_ge4j_ge4t_ttcc_node",
-        "finaldiscr_ljets_ge4j_ge4t_ttlf_node",
+
+        "finaldiscr_ljets_ge4j_ge3t_ttZ_node",
+        "finaldiscr_ljets_ge4j_ge3t_tthf_node",
+
+        "finaldiscr_ljets_ge6j_ge3t_ttZ_node",
+        "finaldiscr_ljets_ge6j_ge3t_tthf_node",
+
+        "finaldiscr_ljets_le5j_ge3t_ttZ_node",
+        "finaldiscr_ljets_le5j_ge3t_tthf_node",
+
+        "finaldiscr_ljets_4j_ge3t_ttZ_node",
+        "finaldiscr_ljets_4j_ge3t_tthf_node",
+
+        "finaldiscr_ljets_5j_ge3t_ttZ_node",
+        "finaldiscr_ljets_5j_ge3t_tthf_node",
         ]
 
     print("\n".join(opts.variables))
