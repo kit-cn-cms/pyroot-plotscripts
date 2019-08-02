@@ -121,6 +121,8 @@ class analysisConfig:
                 self.cmslabel=analysisOptions[key]
             elif key in ("ratio"):
                 self.ratio= analysisOptions[key]
+            elif key in ("normalize"):
+                self.normalize= analysisOptions[key]
             elif key in ("logarithmic"):
                 self.logarithmic= analysisOptions[key]
             elif key in ("splitLegend"):
