@@ -56,6 +56,7 @@ def main(pyrootdir, opts):
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
     #rateFactorsFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/rate_factors_V2.csv"
+    rateFactorsFile = "/nfs/dust/cms/user/vdlinden/legacyTTH/ratefactors/ratefactors_2018.csv"
 
     # script options
     analysisOptions = {
@@ -182,7 +183,7 @@ def main(pyrootdir, opts):
         #pP.setMEMDataBase(memDataBase)
         #pP.setDNNInterface(dnnInterface)
         pP.setMaxEvts(250000)
-        #pP.setRateFactorsFile(rateFactorsFile)
+        pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
 
         # run plotParallel
