@@ -54,10 +54,12 @@ def createPlotConfig(configData,workdir):
         if isinstance(lumiLabel,bool):
             lumiLabel   = configData.analysis.getLumi()
     cmslabel            = configData.analysis.cmslabel
+    normalize           = configData.analysis.normalize
     ratio               = configData.analysis.ratio
     logarithmic         = configData.analysis.logarithmic
     splitLegend         = configData.analysis.splitLegend
     shape               = configData.analysis.shape
+    sortedProcesses     = configData.pltcfg.sortedProcesses
 
     samples={}
     #samples named in the rootfile
@@ -92,11 +94,13 @@ def createPlotConfig(configData,workdir):
         for key, value in samples.items():
              outfile.write(' '*8+'"%s":%s,\n' % (key, value))
         outfile.write(' '*4+'}\n')
+        outfile.write('\n')
         outfile.write('#combined samples\n')
         outfile.write('plottingsamples = {\n')
         for key, value in plottingsamples.items():
             outfile.write(' '*8+'"%s":%s,\n' % (key, value))
         outfile.write(' '*4+'}\n')
+        outfile.write('\n')
         outfile.write('#systematics to be plotted\n')
         outfile.write('systematics = [\n')
         for systematic in systematics:
@@ -105,12 +109,17 @@ def createPlotConfig(configData,workdir):
                 outfile.write(' '*8+'#"'+systematic+'",\n')
             else:
                 outfile.write(' '*8+'"'+systematic+'",\n')
-
         outfile.write(' '*4+']\n')
+        outfile.write('\n')
+
+        outfile.write('# order of the stack processes, descending from top to bottom\n')      
+        outfile.write('sortedprocesses='+str(sortedProcesses)+',\n')
+        outfile.write('\n')
+
         outfile.write('#options for the plotting style\n')
         outfile.write('plotoptions = {\n')
 
-        outfile.write(' '*4+'"data":'+str(dataLabel)+',\n')
+        outfile.write(' '*4+'"data":"data_obs",\n')
 
         outfile.write('\n')
         outfile.write(' '*4+'"ratio":"'+str(ratio)+'",\n')
@@ -121,16 +130,14 @@ def createPlotConfig(configData,workdir):
         outfile.write('\n')
         outfile.write(' '*4+'"signalscaling":'+str(signalScaling)+',\n')
         outfile.write(' '*4+'"lumilabel":'+str(lumiLabel)+',\n')
-        outfile.write(' '*4+'"cmslabel":'+str(cmslabel)+',\n')
-        outfile.write(' '*4+'"splitlegend"'+str(splitLegend)+',\n')
-        outfile.write(' '*4+'# "sortedprocesses":NICK,NICK,...,\n')
-        outfile.write(' '*4+'# "datalabel":data,\n')
+        outfile.write(' '*4+'"cmslabel":"'+str(cmslabel)+'",\n')
+        outfile.write(' '*4+'"splitlegend":'+str(splitLegend)+',\n')
+        outfile.write(' '*4+'"datalabel":"data",\n')
 
         outfile.write('\n')
-        outfile.write(' '*4+'"""\n')
-        outfile.write(' '*4+'use for combine plots, use shapes_prefit for prefit and shapes_fit_s for post fit\n')
-        outfile.write(' '*4+'only uses total signal and does not split signal processes\n')
-        outfile.write(' '*4+'"""\n')
+        outfile.write(' '*4+'#use for combine plots, use shapes_prefit for prefit and shapes_fit_s for post fit\n')
+        outfile.write(' '*4+'#only uses total signal and does not split signal processes\n')
+        outfile.write('\n')
         outfile.write(' '*4+'# "combineflag":shapes_prefit/shapes_fit_s,\n')
         outfile.write(' '*4+'# "signallabel":"Signal",\n')
         outfile.write(' '*4+'}\n')
