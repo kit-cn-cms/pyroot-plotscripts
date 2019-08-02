@@ -40,7 +40,7 @@ def makePlots(configData):
 
 
     print "Submitting ", len(ListOfScripts), " PlotScripts"
-    #nafInterface.drawInterface(ListOfScripts, ListOfPlots)
+    nafInterface.drawInterface(ListOfScripts, ListOfPlots)
 
     return
 
@@ -119,6 +119,9 @@ def createPlotConfig(configData,workdir):
         outfile.write('#options for the plotting style\n')
         outfile.write('plotoptions = {\n')
 
+        outfile.write(' '*4+'# "pdftag":"matti_schrode_KIT_cool",\n')
+
+        outfile.write('\n')
         outfile.write(' '*4+'"data":"data_obs",\n')
 
         outfile.write('\n')
