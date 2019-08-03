@@ -6,10 +6,10 @@ CMS_scale_j_2018,shape,variation,JESup,JESdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 #CMS_HDAMP_2018,shape,variation,"""/nfs/dust/cms/user/vdlinden/legacyTTH/ntuples/legacy_2018_ttZ_v2/*hdampUP*/*nominal*.root""","""/nfs/dust/cms/user/vdlinden/legacyTTH/ntuples/legacy_2018_ttZ_v2/*hdampDOWN*/*nominal*.root""",1,,,,1,1,1,1,1,,,,,,
 CMS_UE_2018,shape,variation,"""/nfs/dust/cms/user/vdlinden/legacyTTH/ntuples/legacy_2018_ttZ_v2/*TuneCP5up*/*nominal*.root""","""/nfs/dust/cms/user/vdlinden/legacyTTH/ntuples/legacy_2018_ttZ_v2/*TuneCP5down*/*nominal*.root""",1,,,,1,1,1,1,1,,,,,,
 #,,,,,,,,,,,,,,,,,,,
-CMS_PDF_2018,shape,weight,"""weight_PDFUp:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*Weight_LHA_306000_up)*DOWEIGHTS""","""weight_PDFDown:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*Weight_LHA_306000_down)*DOWEIGHTS""",1,,,,1,1,1,1,1,,,,,,1
+CMS_PDF_2018,shape,weight,"""weight_PDFUp:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*Weight_LHA_306000_up*internalNormFactor_Weight_LHA_306000_up)*DOWEIGHTS""","""weight_PDFDown:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*Weight_LHA_306000_down*internalNormFactor_Weight_LHA_306000_down)*DOWEIGHTS""",1,,,,1,1,1,1,1,,,,,,1
 #,,,,,,,,,,,,,,,,,,,
-CMS_scaleMuF_2018,shape,weight,"""weight_MuFUp:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*Weight_scale_variation_muR_1p0_muF_2p0)*DOWEIGHTS""","""weight_MuFDown:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*Weight_scale_variation_muR_1p0_muF_0p5)*DOWEIGHTS""",1,,,,1,1,1,1,1,,,,,,1
-CMS_scaleMuR_2018,shape,weight,"""weight_MuRUp:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*Weight_scale_variation_muR_2p0_muF_1p0)*DOWEIGHTS""","""weight_MuRDown:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*Weight_scale_variation_muR_0p5_muF_1p0)*DOWEIGHTS""",1,,,,1,1,1,1,1,,,,,,1
+CMS_scaleMuF_2018,shape,weight,"""weight_MuFUp:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*SCALEMUFUP)*DOWEIGHTS""","""weight_MuFDown:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*SCALEMUFDOWN)*DOWEIGHTS""",1,,,,1,1,1,1,1,,,,,,1
+CMS_scaleMuR_2018,shape,weight,"""weight_MuRUp:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*SCALEMURUP)*DOWEIGHTS""","""weight_MuRDown:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*SCALEMURDOWN)*DOWEIGHTS""",1,,,,1,1,1,1,1,,,,,,1
 #,,,,,,,,,,,,,,,,,,,
 #CMS_ISR_2018,shape,weight,"""weight_ISRUp:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*GenWeight_isr_Def_up)*DOWEIGHTS""","""weight_ISRDown:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*GenWeight_isr_Def_down)*DOWEIGHTS""",,,,,1,1,1,1,1,,,,,,1
 #CMS_FSR_2018,shape,weight,"""weight_FSRUp:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*GenWeight_fsr_Def_up)*DOWEIGHTS""","""weight_FSRDown:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*GenWeight_fsr_Def_down)*DOWEIGHTS""",,,,,1,1,1,1,1,,,,,,1

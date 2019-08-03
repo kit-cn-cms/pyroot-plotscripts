@@ -54,9 +54,7 @@ def main(pyrootdir, opts):
     syst_cfg        = "ttZ18/systematics_internalCSV"
 
     # file for rate factors
-    #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
-    #rateFactorsFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/rate_factors_V2.csv"
-    rateFactorsFile = "/nfs/dust/cms/user/vdlinden/legacyTTH/ratefactors/ratefactors_2018.csv"
+    rateFactorsFile = pyrootdir+"/data/rateFactors/rateFactors_2018.csv"
 
     # script options
     analysisOptions = {
