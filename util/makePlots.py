@@ -113,7 +113,7 @@ def createPlotConfig(configData,workdir):
         outfile.write('\n')
 
         outfile.write('# order of the stack processes, descending from top to bottom\n')      
-        outfile.write('sortedprocesses='+str(sortedProcesses)+',\n')
+        outfile.write('sortedprocesses='+str(sortedProcesses)+'\n')
         outfile.write('\n')
 
         outfile.write('#options for the plotting style\n')
