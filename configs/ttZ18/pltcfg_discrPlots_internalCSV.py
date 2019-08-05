@@ -127,6 +127,12 @@ weightReplacements = {
     "MUTRIGSUP":        "("+electronTrigger+"+"+muonTrigger_up+")",
     "MUTRIGSDOWN":      "("+electronTrigger+"+"+muonTrigger_down+")",
 
+    # muR/muF variations
+    "SCALEMURUP":       "Weight_scale_variation_muR_2p0_muF_1p0*internalNormFactor_Weight_scale_variation_muR_2p0_muF_1p0",
+    "SCALEMURDOWN":     "Weight_scale_variation_muR_0p5_muF_1p0*internalNormFactor_Weight_scale_variation_muR_0p5_muF_1p0",
+    "SCALEMUFUP":       "Weight_scale_variation_muR_1p0_muF_2p0*internalNormFactor_Weight_scale_variation_muR_1p0_muF_2p0",
+    "SCALEMUFDOWN":     "Weight_scale_variation_muR_1p0_muF_0p5*internalNormFactor_Weight_scale_variation_muR_1p0_muF_0p5",
+
     # do weights for data
     "DOWEIGHTS":        "(DoWeights==1)+(DoWeights==0)*1.0",
 
@@ -164,20 +170,20 @@ print "samples"
 #print "limit samples"
 samples = [
     # signal samples     
-    plotClasses.Sample('t#bar{t}Z(b#bar{b})',ROOT.kCyan,
+    plotClasses.Sample('t#bar{t}Z(b#bar{b})',ROOT.kOrange+7,
             path_vdlinden+'/TTZToBB*/*nominal*.root',
             # lumi reweighting factor due to stupid cross section calculation
             lumi+"*1.087"+evenSel+sel_MET,
             'ttZbb',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
-    plotClasses.Sample('t#bar{t}Z(q#bar{q})',ROOT.kSpring+10,
+    plotClasses.Sample('t#bar{t}Z(q#bar{q})',ROOT.kOrange+7,
             path_vdlinden+'/TTZToQQ*/*nominal*.root',
             lumi+evenSel+"*(GenEvt_I_TTZ==0)"+sel_MET,
             'ttZqq',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
-    plotClasses.Sample('t#bar{t}Z(ll)', ROOT.kGray,
+    plotClasses.Sample('t#bar{t}Z(ll)', ROOT.kOrange+7,
             path_vdlinden+'/TTZToLLNuNu_M-10*/*nominal*.root',
             lumi+"*1.006"+evenSel+sel_MET,
             'ttZll',
@@ -185,39 +191,39 @@ samples = [
     
     # background samples
 
-    plotClasses.Sample('t#bar{t}+lf',ROOT.kRed-7,
+    plotClasses.Sample('t#bar{t}+lf',ROOT.kAzure-9,
             ttbarPathS,
             lumi+evenSel+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)'+sel_MET+sel_StrangeMuWeights,
-            'ttbarOther',
+            'ttlf',
             samDict=sampleDict, readTrees=doReadTrees),
 
-    plotClasses.Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,
+    plotClasses.Sample('t#bar{t}+c#bar{c}',ROOT.kAzure+9,
             ttbarPathS,
             lumi+evenSel+'*(GenEvt_I_TTPlusCC==1)'+sel_MET+sel_StrangeMuWeights,
-            'ttbarPlusCCbar',
+            'ttcc',
             samDict=sampleDict, readTrees=doReadTrees),
 
-    plotClasses.Sample('t#bar{t}+b',ROOT.kRed-2,
+    plotClasses.Sample('t#bar{t}+b',ROOT.kAzure+8,
             ttbarPathS,
             lumi+evenSel+'*(GenEvt_I_TTPlusBB==1)'+sel_MET+sel_StrangeMuWeights,
-            'ttbarPlusB',
+            'ttb',
             samDict=sampleDict, readTrees=doReadTrees),
 
-    plotClasses.Sample('t#bar{t}+2b',ROOT.kRed+2,
+    plotClasses.Sample('t#bar{t}+2b',ROOT.kAzure+3,
             ttbarPathS,
             lumi+evenSel+'*(GenEvt_I_TTPlusBB==2)'+sel_MET+sel_StrangeMuWeights,
-            'ttbarPlus2B',
+            'tt2b',
             samDict=sampleDict, readTrees=doReadTrees),
 
-    plotClasses.Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,
+    plotClasses.Sample('t#bar{t}+b#bar{b}',ROOT.kAzure+4,
             ttbarPathS,
             lumi+evenSel+'*(GenEvt_I_TTPlusBB==3)'+sel_MET+sel_StrangeMuWeights,
-            'ttbarPlusBBbar',
+            'ttbb',
             samDict=sampleDict, readTrees=doReadTrees), 
 
     # minor samples
     
-    plotClasses.Sample('Single Top',ROOT.kMagenta,
+    plotClasses.Sample('Single Top',ROOT.kRed-2,
             stpath,
             lumi+evenSel+sel_MET,
             'singlet',
@@ -238,7 +244,7 @@ samples = [
     plotClasses.Sample('t#bar{t}+W',ROOT.kBlue-10,
             path_vdlinden+'/TTW*/*nominal*.root',  
             lumi+evenSel+sel_MET,
-            'ttbarW',
+            'ttW',
             samDict=sampleDict, readTrees=doReadTrees),
 
 
@@ -248,7 +254,7 @@ samples = [
             'diboson',
             samDict=sampleDict, readTrees=doReadTrees),
 
-    plotClasses.Sample('t#bar{t}H',ROOT.kBlue+1,
+    plotClasses.Sample('t#bar{t}H',ROOT.kRed+1,
             ttHpath,
             lumi+evenSel+sel_MET,
             'ttH',
@@ -262,20 +268,20 @@ list_of_processes   = processes
 datacard_processes  = processes
 
 plottingsamples = [
-    plotClasses.Sample("t#bar{t}Z", ROOT.kCyan,
+    plotClasses.Sample("t#bar{t}Z", ROOT.kOrange+7,
         ttZpath,
         lumi+evenSel+sel_MET,
         "ttZ", addsamples = ["ttZbb", "ttZqq", "ttZll"],
         samDict = sampleDict, readTrees = doReadTrees, typ = "signal"),
 
-    plotClasses.Sample("V+jets", ROOT.kGreen-3,
-        VJetsPathS,
-        lumi+evenSel+sel_MET,
-        "Vjets", addsamples = ["wjets", "zjets"],
+    plotClasses.Sample("misc.", ROOT.kGray,
+        "", "", "misc", addsamples = ["wjets", "zjets", "diboson", "ttW"],
         samDict = sampleDict, readTrees = doReadTrees)
     ]
 
 
+# sort subset of processes in plots. descending order
+sortedProcesses = ["ttlf", "ttcc", "ttb", "tt2b", "ttbb", "singlet", "ttH", "misc"]
 
 
 

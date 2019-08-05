@@ -127,6 +127,12 @@ weightReplacements = {
     "MUTRIGSUP":        "("+electronTrigger+"+"+muonTrigger_up+")",
     "MUTRIGSDOWN":      "("+electronTrigger+"+"+muonTrigger_down+")",
 
+    # muR/muF variations
+    "SCALEMURUP":       "Weight_scale_variation_muR_2p0_muF_1p0*internalNormFactor_Weight_scale_variation_muR_2p0_muF_1p0",
+    "SCALEMURDOWN":     "Weight_scale_variation_muR_0p5_muF_1p0*internalNormFactor_Weight_scale_variation_muR_0p5_muF_1p0",
+    "SCALEMUFUP":       "Weight_scale_variation_muR_1p0_muF_2p0*internalNormFactor_Weight_scale_variation_muR_1p0_muF_2p0",
+    "SCALEMUFDOWN":     "Weight_scale_variation_muR_1p0_muF_0p5*internalNormFactor_Weight_scale_variation_muR_1p0_muF_0p5",
+
     # do weights for data
     "DOWEIGHTS":        "(DoWeights==1)+(DoWeights==0)*1.0",
 
@@ -287,4 +293,7 @@ plottingsamples = [
         "Vjets", addsamples = ["wjets", "zjets"],
         samDict = sampleDict, readTrees = doReadTrees)
     ]
+
+# sort subset of processes in plots. descending order
+sortedProcesses = []
 

@@ -322,3 +322,6 @@ plottingsamples = [
     # readTrees=doReadTrees,
     # )
 ]
+
+# sort subset of processes in plots. descending order
+sortedProcesses = []
