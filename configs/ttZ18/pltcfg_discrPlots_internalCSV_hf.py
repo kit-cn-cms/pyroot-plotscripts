@@ -196,13 +196,13 @@ samples = [
             'ttlf',
             samDict=sampleDict, readTrees=doReadTrees),
 
-    plotClasses.Sample('t#bar{t}+c#bar{c}',ROOT.kAzure+9,
+    plotClasses.Sample('t#bar{t}+c#bar{c}',ROOT.kAzure+8,
             ttbarPathS,
             lumi+evenSel+'*(GenEvt_I_TTPlusCC==1)'+sel_MET+sel_StrangeMuWeights,
             'ttcc',
             samDict=sampleDict, readTrees=doReadTrees),
 
-    plotClasses.Sample('t#bar{t}+hf',ROOT.kAzure+4,
+    plotClasses.Sample('t#bar{t}+hf',ROOT.kAzure+3,
             ttbarPathS,
             lumi+evenSel+'*(GenEvt_I_TTPlusBB>=1)'+sel_MET+sel_StrangeMuWeights,
             'tthf',
