@@ -509,6 +509,30 @@ def control_plots_mumu(data=None):
             selection,
             label,
         ),
+        plotClasses.Plot(
+            ROOT.TH1D("DiMuon_Pt"+extension, "DiMuon p_{t}", 59, 10.0, 600.0),
+            "DiMuon_Pt",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("DiMuon_Eta"+extension, "DiMuon #eta", 25, -2.5, 2.5),
+            "DiMuon_Eta",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("DiMuon_Phi"+extension, "DiMuon #phi", 30, -3.14, 3.14),
+            "DiMuon_Phi",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("DiMuon_Mass"+extension, "DiMuon mass", 40, 0.0, 200.0),
+            "DiMuon_Mass",
+            selection,
+            label,
+        ),
     ]
     if data:
         add_data_plots(plots=plots, data=data)
@@ -525,7 +549,7 @@ def getDiscriminatorPlots(data=None, discrname=""):
     # discriminatorPlots += plots_ge4j_ge3t(data)
     # discriminatorPlots += plots_4j_ge3t(data)
     # discriminatorPlots += plots_ge4j_3t(data)
-    discriminatorPlots += control_plots(data)
+    #discriminatorPlots += control_plots(data)
     discriminatorPlots += control_plots_mumu(data)
     # discriminatorPlots += reco_plots(data)
 

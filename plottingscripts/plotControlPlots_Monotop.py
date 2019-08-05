@@ -33,7 +33,7 @@ def main(pyrootdir, opts):
     """
     )
     # name of the analysis (i.e. workdir name)
-    name = "Monotop_shapeplots"
+    name = "Monotop_controlplots"
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -61,7 +61,7 @@ def main(pyrootdir, opts):
     # script options
     analysisOptions = {
         # general options
-        "usePseudoData": True,
+        "usePseudoData": False,
         "testrun": False,  # test run with less samples
         "stopAfterCompile": False,  # stop script after compiling
         # options to activate parts of the script
@@ -86,6 +86,7 @@ def main(pyrootdir, opts):
         "skipHaddFromWildcard": opts.skipHaddFromWildcard,
         "skipHistoCheck": opts.skipHistoCheck,
         "skipDatacards": opts.skipDatacards,
+        "shapeplots": False
     }
 
     plotJson = ""
@@ -166,7 +167,6 @@ def main(pyrootdir, opts):
     """
     )
     configData.initSamples()
-
     print (
         """
     # ========================================================
