@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttZControlPlots_v3'
+    name = 'ttZControlPlots_v4'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -48,10 +48,10 @@ def main(pyrootdir, opts):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    config          = "ttZ18/pltcfg_controlPlots_internalCSV_4Node"
+    config          = "ttZ18/pltcfg_controlPlots_internalCSV_4Node_splitJES"
     variable_cfg    = "ttZ18/additionalVariables"
     plot_cfg        = "ttZ18/controlPlots_4Node"
-    syst_cfg        = "ttZ18/systematics_internalCSV"
+    syst_cfg        = "ttZ18/systematics_internalCSV_JES"
 
     # file for rate factors
     rateFactorsFile = pyrootdir+"/data/rateFactors/rateFactors_2018.csv"
@@ -86,7 +86,7 @@ def main(pyrootdir, opts):
         "skipHistoCheck":       opts.skipHistoCheck,
         "skipDatacards":        opts.skipDatacards}
 
-    plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttZ_2018_v4.json"
+    plotJson = ""#/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttZ_2018_v4.json"
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
