@@ -31,7 +31,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttZ18_5NodeDNN_hf_binning3_v3'
+    name = 'ttZ18_5NodeDNN_hf_binning4_v3'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -52,7 +52,7 @@ def main(pyrootdir, opts):
     # configs
     config          = "ttZ18/pltcfg_discrPlots_internalCSV_hf"
     variable_cfg    = "ttZ18/additionalVariables"
-    plot_cfg        = "ttZ18/discrPlots_5Node_binning3"
+    plot_cfg        = "ttZ18/discrPlots_5Node_binning4"
     syst_cfg        = "ttZ18/systematics_internalCSV_hf"
 
     # file for rate factors1
