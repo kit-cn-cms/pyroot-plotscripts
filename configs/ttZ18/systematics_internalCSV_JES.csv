@@ -89,7 +89,6 @@ JESTimePtEta,shape,variation,JESTimePtEtaup,JESTimePtEtadown,1,1,1,1,1,1,1,1,1,1
 JESRelativeJEREC1,shape,variation,JESRelativeJEREC1up,JESRelativeJEREC1down,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 JESRelativePtBB,shape,variation,JESRelativePtBBup,JESRelativePtBBdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 JESRelativePtEC1,shape,variation,JESRelativePtEC1up,JESRelativePtEC1down,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-JESRelativePtEC2,shape,variation,JESRelativePtEC2up,JESRelativePtEC2down,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 JESRelativeBal,shape,variation,JESRelativeBalup,JESRelativeBaldown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 JESRelativeFSR,shape,variation,JESRelativeFSR,JESRelativeFSRdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 JESRelativeStatFSR,shape,variation,JESRelativeStatFSRup,JESRelativeStatFSRdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1

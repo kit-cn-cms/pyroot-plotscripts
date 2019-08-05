@@ -34,14 +34,17 @@ def reco_plots(data=None):
     plots = [
         plotClasses.Plot(ROOT.TH1D("control_Chi2_Z","#chi^{2}(Z)",40,0.0,10.0),"RecoTTZ_Chi2Z",selection,label),
         plotClasses.Plot(ROOT.TH1D("control_Chi2_Z_log","log(#chi^{2}(Z))",40,-10,7),"log(RecoTTZ_Chi2Z+1e-30)",selection,label),
-        plotClasses.Plot(ROOT.TH1D("control_Chi2_Z_over_H_likelihood","#chi^{2}(Z)/#chi^{2}(H)",40,0.0,20.0),"RecoTTZ_Chi2Z/(RecoTTH_Chi2Higgs+1e-30)",selection,label),
-        plotClasses.Plot(ROOT.TH1D("control_Chi2_Z_percentage","#chi^{2}(Z)/(#chi^{2}(Z) + #chi^{2}(H))",40,0.0,1.0),"RecoTTZ_Chi2Z/(RecoTTH_Chi2Higgs+RecoTTZ_Chi2Z)",selection,label),
-        plotClasses.Plot(ROOT.TH1D("control_Chi2_Higgs","#chi^{2}(H)",40,0.0,10.0),"RecoTTH_Chi2Higgs",selection,label),
-        plotClasses.Plot(ROOT.TH1D("control_Chi2_Higgs_log","log(#chi^{2}(H))",40,-10,7),"log(RecoTTH_Chi2Higgs+1e-30)",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("control_Chi2_Z_over_H_likelihood","#chi^{2}(Z)/#chi^{2}(H)",40,0.0,20.0),"RecoTTZ_Chi2Z/(RecoTTH_Chi2Higgs+1e-30)",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("control_Chi2_Z_percentage","#chi^{2}(Z)/(#chi^{2}(Z) + #chi^{2}(H))",40,0.0,1.0),"RecoTTZ_Chi2Z/(RecoTTH_Chi2Higgs+RecoTTZ_Chi2Z)",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("control_Chi2_Higgs","#chi^{2}(H)",40,0.0,10.0),"RecoTTH_Chi2Higgs",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("control_Chi2_Higgs_log","log(#chi^{2}(H))",40,-10,7),"log(RecoTTH_Chi2Higgs+1e-30)",selection,label),
 
         plotClasses.Plot(ROOT.TH1D("control_RecoTTZ_TopHad_M_log","log(M(t_{had}))",40,4.,7.),"log(RecoTTZ_TopHad_M)",selection,label),
         plotClasses.Plot(ROOT.TH1D("control_RecoTTZ_TopLep_M_log","log(M(t_{lep}))",40,4.,7.),"log(RecoTTZ_TopLep_M)",selection,label),
         plotClasses.Plot(ROOT.TH1D("control_RecoTTZ_Z_M_log","log(M(Z))",40,4.,7.),"log(RecoTTZ_Z_M)",selection,label),
+
+        plotClasses.Plot(ROOT.TH1D("control_Evt_blr","b-tag likelihood ratio",40,0.,1.),"Evt_blr",selection,label),
+        plotClasses.Plot(ROOT.TH1D("control_Evt_blr_transformed","transformed b-tag likelihood ratio",40,-7,15.),"Evt_blr_transformed",selection,label),
         ]
     if data:
         add_data_plots(plots=plots,data=data)
@@ -72,6 +75,9 @@ def control_plots(data=None):
         plotClasses.Plot(ROOT.TH1D("inclusive_Lepton_Eta","#eta(lepton)",30,-2.5,2.5),"LooseLepton_Eta[0]",selection,label),
         plotClasses.Plot(ROOT.TH1D("inclusive_Lepton_Phi","#phi(lepton)",30,-3.1416,3.1416),"LooseLepton_Phi[0]",selection,label),
 
+        plotClasses.Plot(ROOT.TH1D("inclusive_Evt_blr","b-tag likelihood ratio",40,0.,1.),"Evt_blr",selection,label),
+        plotClasses.Plot(ROOT.TH1D("inclusive_Evt_blr_transformed","transformed b-tag likelihood ratio",40,-7,15.),"Evt_blr_transformed",selection,label),
+
         ]
     if data:
         add_data_plots(plots=plots,data=data)
@@ -84,6 +90,9 @@ def plots_ge4j_ge4t(data = None):
     selection = "(N_Jets>=4&&N_BTagsM>=4)"
 
     plots = [
+        plotClasses.Plot(ROOT.TH1D("ge4j_ge4t_Evt_blr","b-tag likelihood ratio",40,0.,1.),"Evt_blr",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge4j_ge4t_Evt_blr_transformed","transformed b-tag likelihood ratio",40,-7,15.),"Evt_blr_transformed",selection,label),
+
         plotClasses.Plot(ROOT.TH1D("ge4j_ge4t_CSV_1","second highest b-tag value",30,0.275,1.0),"CSV[1]",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge4j_ge4t_CSV_2","third highest b-tag value",30,0.275,1.0),"CSV[2]",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge4j_ge4t_CSV_3","fourth highest b-tag value",30,0.275,1.0),"CSV[3]",selection,label),
