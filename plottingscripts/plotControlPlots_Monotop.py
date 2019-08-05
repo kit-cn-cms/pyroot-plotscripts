@@ -72,8 +72,10 @@ def main(pyrootdir, opts):
         # options for makePlots
         "signalScaling": -1,
         "lumiLabel": False,
-        "privateWork": True,
+        "CMSlabel": "private Work",
         "ratio": "#frac{data}{MC Background}",
+        "shape": False, # for shape plots
+        "normalize": False, # normalize yield to integral 1
         "logarithmic": False,
         "splitLegend": False,
         # the skipX options try to skip the submission of files to the batch system

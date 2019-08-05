@@ -33,10 +33,10 @@ def makePlots(configData):
     for Plot in ListOfPlots:
         print('    - {plot}' .format(plot=Plot.name)) 
         ListOfScripts.append( createPlotScript(channel=Plot.name,pyrootdir=pyrootdir, 
-                                                                    workdir=workdir, scriptPath=scriptPath,
-                                                                    plotconfig=plotconfig,
-                                                                    rootfile=rootfile, 
-                                                                    selectionlabel=Plot.label) )
+                                                    workdir=workdir, scriptPath=scriptPath,
+                                                    plotconfig=plotconfig,
+                                                    rootfile=rootfile, 
+                                                    selectionlabel=Plot.label) )
 
 
     print "Submitting ", len(ListOfScripts), " PlotScripts"
@@ -53,10 +53,13 @@ def createPlotConfig(configData,workdir):
     if lumiLabel:
         if isinstance(lumiLabel,bool):
             lumiLabel   = configData.analysis.getLumi()
-    privateWork         = configData.analysis.privateWork
+    cmslabel            = configData.analysis.cmslabel
+    normalize           = configData.analysis.normalize
     ratio               = configData.analysis.ratio
     logarithmic         = configData.analysis.logarithmic
     splitLegend         = configData.analysis.splitLegend
+    shape               = configData.analysis.shape
+    sortedProcesses     = configData.pltcfg.sortedProcesses
 
     samples={}
     #samples named in the rootfile
@@ -91,11 +94,13 @@ def createPlotConfig(configData,workdir):
         for key, value in samples.items():
              outfile.write(' '*8+'"%s":%s,\n' % (key, value))
         outfile.write(' '*4+'}\n')
+        outfile.write('\n')
         outfile.write('#combined samples\n')
         outfile.write('plottingsamples = {\n')
         for key, value in plottingsamples.items():
             outfile.write(' '*8+'"%s":%s,\n' % (key, value))
         outfile.write(' '*4+'}\n')
+        outfile.write('\n')
         outfile.write('#systematics to be plotted\n')
         outfile.write('systematics = [\n')
         for systematic in systematics:
@@ -104,16 +109,41 @@ def createPlotConfig(configData,workdir):
                 outfile.write(' '*8+'#"'+systematic+'",\n')
             else:
                 outfile.write(' '*8+'"'+systematic+'",\n')
-
         outfile.write(' '*4+']\n')
+        outfile.write('\n')
+
+        outfile.write('# order of the stack processes, descending from top to bottom\n')      
+        outfile.write('sortedprocesses='+str(sortedProcesses)+',\n')
+        outfile.write('\n')
+
         outfile.write('#options for the plotting style\n')
         outfile.write('plotoptions = {\n')
-        outfile.write(' '*4+'"signalscaling": '+str(signalScaling)+',\n')
-        outfile.write(' '*4+'"lumilabel": '+str(lumiLabel)+',\n')
-        outfile.write(' '*4+'"privatework": '+str(privateWork)+',\n')
-        outfile.write(' '*4+'"ratio": "'+str(ratio)+'",\n')
-        outfile.write(' '*4+'"logarithmic": '+str(logarithmic)+',\n')
-        outfile.write(' '*4+'"splitlegend": '+str(splitLegend)+',\n')
+
+        outfile.write(' '*4+'# "pdftag":"matti_schrode_KIT_cool",\n')
+
+        outfile.write('\n')
+        outfile.write(' '*4+'"data":"data_obs",\n')
+
+        outfile.write('\n')
+        outfile.write(' '*4+'"ratio":"'+str(ratio)+'",\n')
+        outfile.write(' '*4+'"logarithmic":'+str(logarithmic)+',\n')
+        outfile.write(' '*4+'"shape":'+str(shape)+',\n')
+        outfile.write(' '*4+'"normalize":'+str(normalize)+',\n')
+
+        outfile.write('\n')
+        outfile.write(' '*4+'"signalscaling":'+str(signalScaling)+',\n')
+        outfile.write(' '*4+'"lumilabel":'+str(lumiLabel)+',\n')
+        outfile.write(' '*4+'"cmslabel":"'+str(cmslabel)+'",\n')
+        outfile.write(' '*4+'"splitlegend":'+str(splitLegend)+',\n')
+        outfile.write(' '*4+'"datalabel":"data",\n')
+
+        outfile.write('\n')
+        outfile.write(' '*4+'#use for combine plots, use shapes_prefit for prefit and shapes_fit_s for post fit\n')
+        outfile.write(' '*4+'#only uses total signal and does not split signal processes\n')
+        outfile.write('\n')
+        outfile.write(' '*4+'# "combineflag":"shapes_prefit"/"shapes_fit_s",\n')
+        outfile.write(' '*4+'# "signallabel":"Signal",\n')
+
         outfile.write(' '*4+'}\n')
 
     return outputpath
