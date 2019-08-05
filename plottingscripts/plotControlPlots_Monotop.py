@@ -167,10 +167,6 @@ def main(pyrootdir, opts):
     """
     )
     configData.initSamples()
-    if analysisOptions["shapeplots"]:
-        for sample in configData.samples:
-            sample.typ = "signal"
-
     print (
         """
     # ========================================================
