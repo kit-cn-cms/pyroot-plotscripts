@@ -76,7 +76,7 @@ class Plot:
             self.hist.SetLineColor(ROOT.kBlack )
             self.hist.SetFillColor(self.color)
 
-            self.hist.SetLineWidth(1)
+            self.hist.SetLineWidth(2)
         elif typ=="signal":
 
             self.hist.SetLineColor(self.color )
@@ -483,7 +483,7 @@ class DrawHistograms:
         if self.data:
             self.data.SetLineColor(ROOT.kBlack)
             self.data.SetMarkerStyle(20)
-            self.data.Draw("same2")
+            self.data.Draw("same1")
 
         self.canvas.cd(1)
         # redraw axis
@@ -552,7 +552,6 @@ class DrawHistograms:
             for stack in sortedStacks:
                 if stack not in self.sortedStacks:
                     self.sortedStacks.append(stack)
-
 
     def stackPlots(self, sortedPlots):
         """
@@ -699,11 +698,12 @@ class DrawHistograms:
         if self.splitlegend:
             self.legend1 = getLegend1()
             self.legend2 = getLegend2()
+            n = 0
             if self.data:
                 self.legend1.AddEntry(self.data,self.datalabel,"P")
+                n+=1
 
             legendentries = len(self.sortedShapes)+len(self.sortedStacks)
-            n = 0
             for i,shape in enumerate(self.sortedShapes):
                 if not n%2:
                     self.legend1.AddEntry(self.shapePlots[i], self.PlotList[shape].label, "L")
