@@ -54,8 +54,7 @@ def main(pyrootdir, opts):
     syst_cfg        = "ttZ18/systematics_internalCSV"
 
     # file for rate factors
-    #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
-    #rateFactorsFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/rate_factors_V2.csv"
+    rateFactorsFile = pyrootdir+"/data/rateFactors/rateFactors_2018.csv"
 
     # script options
     analysisOptions = {
@@ -66,14 +65,16 @@ def main(pyrootdir, opts):
         # options to activate parts of the script
         "haddFromWildcard":     True,
         "makeDataCards":        False,
-        "makeInputDatacards":   True, # create datacards also for all defined plots
+        "makeInputDatacards":   False, # create datacards also for all defined plots
         "addData":              True,  # adding real data 
         "makePlots":            True,
         # options for makePlots
         "signalScaling":        -1,
         "lumiLabel":            True,
-        "privateWork":          True,
+        "CMSlabel":             "private Work",
         "ratio":                "#frac{data}{MC Background}",
+        "shape":                False, # for shape plots
+        "normalize":            False, # normalize yield to integral 1
         "logarithmic":          False,
         "splitLegend":          True,
         # the skipX options try to skip the submission of files to the batch system
@@ -182,7 +183,7 @@ def main(pyrootdir, opts):
         #pP.setMEMDataBase(memDataBase)
         #pP.setDNNInterface(dnnInterface)
         pP.setMaxEvts(250000)
-        #pP.setRateFactorsFile(rateFactorsFile)
+        pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
 
         # run plotParallel
@@ -215,7 +216,7 @@ def main(pyrootdir, opts):
     else:
         print '''
         # ========================================================
-        # renaming Histograms
+        # checking Histograms
         # ========================================================
         '''
 
@@ -302,8 +303,18 @@ if __name__ == "__main__":
     parser.add_option("--skipHaddFromWildcard", dest = "skipHaddFromWildcard",  action = "store_true", default = False)
     parser.add_option("--skipHistoCheck",       dest = "skipHistoCheck",        action = "store_true", default = False)
     parser.add_option("--skipDatacards",        dest = "skipDatacards",         action = "store_true", default = False)
+    parser.add_option("--skip",                 dest = "skip",                  default = 0,            type = "int",
+        help = "skip first INT parallel stages. plotParallel (1), haddParallel (2), haddFromWildcard (3), histoCheck (4), Datacards (5)")
 
     (opts, args) = parser.parse_args()
+
+    if opts.skip >= 1: opts.skipPlotParallel        = True
+    if opts.skip >= 2: opts.skipHaddParallel        = True
+    if opts.skip >= 3: opts.skipHaddFromWildcard    = True
+    if opts.skip >= 4: opts.skipHistoCheck          = True
+    if opts.skip >= 5: opts.skipDatacards           = True
+
+
     main(pyrootdir, opts)
 
 
