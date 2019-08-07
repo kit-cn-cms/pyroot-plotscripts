@@ -71,7 +71,7 @@ def main(pyrootdir, opts):
         "makePlots": True,
         # options for makePlots
         "signalScaling": -1,
-        "lumiLabel": False,
+        "lumiLabel": 59.7,
         "CMSlabel": "private Work",
         "ratio": "#frac{data}{MC Background}",
         "shape": False, # for shape plots
@@ -86,7 +86,6 @@ def main(pyrootdir, opts):
         "skipHaddFromWildcard": opts.skipHaddFromWildcard,
         "skipHistoCheck": opts.skipHistoCheck,
         "skipDatacards": opts.skipDatacards,
-        "shapeplots": False
     }
 
     plotJson = ""
