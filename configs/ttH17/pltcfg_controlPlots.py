@@ -294,3 +294,6 @@ plottingsamples = []
 #         samDict = sampleDict, readTrees = doReadTrees)
 #     ]
 
+# sort subset of processes in plots. descending order
+sortedProcesses = []
+

@@ -42,77 +42,156 @@ def getParserConfigDefaultValue(parser,config,plotoptions,defaultvalue):
 """
 Enabling parser options
 """
-usage="usage=%prog [options] \n"
-usage+="USE: Plotscript.py --channelName=CHANNELNAME --rootfile=FILE --outputpath=PATH --directory=PATH --workdir=PATH --plotconfig=PLOTCONFIGNAME \n"
+#usage="usage=%prog [options] \n"
+usage = "-"*30+"\n"
+usage+= "Requirered Specifications:\n"
+usage+= "Plotscript.py --rootfile=ROOTFILE --workdir=WORKDIRPATH \n"
+usage+= "If no Plotconfig is avaliable use: \n"
+usage+= "Plotscript.py -e PATH \n"
+usage+= "For further adjustments refer to the option descriptions.\n"
+usage = "-"*30+"\n"
 
 parser = optparse.OptionParser(usage=usage)
 
-parser.add_option("--channelname", dest="channelName",
-        help="NAME of the channel", metavar="channelName")
-parser.add_option("--selectionlabel", dest="selectionlabel", default=None,
-        help="label of the selection", metavar="selectionlabel")
-parser.add_option("--rootfile", dest="Rootfile",
-        help="ROOTFILE including the data used to create the plots", metavar="/path/to/rootfile")
-parser.add_option("--outputpath", dest="outputpath",
-        help="output path", metavar="/path/to/outputpath")
-parser.add_option("--directory", dest="directory",
-         help="PATH to pyroot plotscript directory", metavar="/path/to/directory")
-parser.add_option("--workdir", dest="workdir",
-         help="PATH to workdir", metavar="/path/to/workdir")
-parser.add_option("--plotconfig", dest="plotconfig",
-        help="Name of plot config", metavar="plotconfig")
-parser.add_option("--nominalkey", dest="nominalKey", default="$PROCESS_$CHANNEL",
-        help="KEY of the systematics histograms", metavar="nominalKey")
-parser.add_option("--systematickey", dest="systematicKey", default="$PROCESS_$CHANNEL_$SYSTEMATIC",
-        help="KEY of the nominal histograms", metavar="systematicKey")
-parser.add_option("--datakeyreplace", dest="datakeyreplace", default="data_obs",
-        help="Key replacement for the data sample", metavar="datakeyreplace")
-parser.add_option("--datalabel", dest="datalabel", default="data",
-        help="label of the data", metavar="datalabel")
-parser.add_option("--signalscaling", dest="signalscaling", default=None,
-        help="scale factor of the signal processes, -1 to scale with background integral", metavar="signalscaling")
-parser.add_option("--lumilabel", dest="lumilabel", default=None,
-        help="print luminosity label on canvas", metavar="lumilabel")
-parser.add_option("--privatework", dest="privatework", default=None,
-        help="print privatework label on canvas", metavar="privatework")
-parser.add_option("--ratio", dest="ratio",  default=None,
+
+"""
+Required input 
+"""
+filesAndDirectories = optparse.OptionGroup(parser, "File and Directory Options")
+
+filesAndDirectories.add_option("-r", "--rootfile", dest="Rootfile", 
+        help="REQUIRED: ROOTFILE including the entries to be plotted to create the plots", metavar="/path/to/rootfile")
+filesAndDirectories.add_option("-w", "--workdir", dest="workdir",
+         help="REQUIRED: OUTPUT PATH to workdir", metavar="/path/to/workdir")
+filesAndDirectories.add_option("--directory", dest="directory", default=None,
+         help="PATH to pyroot plotscript directory, takes directory of PlotScript.py file if none is given",
+         metavar="/path/to/directory")
+filesAndDirectories.add_option("-p", "--plotconfig", dest="plotconfig", default="plotconfig",
+        help="FILE of plot config, if none is given uses the plotconfig.py in the workdir", metavar="/path/to/file.py")
+filesAndDirectories.add_option("--pdftag", dest="pdftag", default=None,
+        help="adds the NAMETAG to the saved plot .pdf", metavar="something_NAMETAG.pdf")
+filesAndDirectories.add_option("--pdfname", dest="pdfname", default=None,
+        help="NAME of the saved plot .pdf", metavar="NAME.pdf")
+
+parser.add_option_group(filesAndDirectories)
+
+"""
+Key Options for the parser, used to extract the information
+of the root file
+"""
+keyOptions       = optparse.OptionGroup(parser, "Key Options")
+
+keyOptions.add_option("-k","--nominalkey", dest="nominalKey", default="$PROCESS_$CHANNEL",
+        help="KEY of the systematics histograms")
+keyOptions.add_option("-s","--systematickey", dest="systematicKey", default="$PROCESS_$CHANNEL_$SYSTEMATIC",
+        help="KEY of the nominal histograms")
+keyOptions.add_option("-d","--data", dest="data", default=None,
+        help="NAME of the data in the root file, used to replace the process identifier ($PROCESS) in the nominal key to get the data sample", metavar="datakeyreplace")
+keyOptions.add_option("-c","--channelname", dest="channelName",
+        help="NAME of the channel in the root file, used to replace the channel identifier ($CHANNEL) in the nominal and systematic key")
+
+parser.add_option_group(keyOptions)
+
+"""
+Plot Options to change the style of the plot,
+activate ratio plot, normalize plot, make shape plots,
+set logarithmic style or plot combine outputs
+"""
+plotOptions      = optparse.OptionGroup(parser, "Plot Options")
+
+plotOptions.add_option("--normalize", dest="normalize",  default=None,
+        help="normalizes plot")
+plotOptions.add_option("--shape", dest="shape",  default=None,
+        help="drawing shape plot, default normalize and no data")
+plotOptions.add_option("--combineflag", dest="combineflag", default=None,
+        help="NAME of the combine plot,  use for combine plots, use shapes_prefit for prefit and shapes_fit_s for post fit, ATTENTION only uses total signal and does not split signal processes,")
+plotOptions.add_option("--ratio", dest="ratio",  default=None,
         help="make ratio plot", metavar="ratio")
-parser.add_option("--logarithmic", dest="logarithmic", default=None,
-        help="enable logarithmic plots", metavar="logarithmic")
-parser.add_option("--splitlegend", dest="splitlegend",  default=None,
-        help="splits the legend in two", metavar="splitlegend")
-parser.add_option("--normalize", dest="normalize",  default=None,
-        help="normalizes plot", metavar="normalize")
+plotOptions.add_option("--logarithmic", dest="logarithmic", default=None,
+        help="enable logarithmic plots")
 
+parser.add_option_group(plotOptions)
 
+"""
+Aesthetic options
+"""
+
+styleOptions     = optparse.OptionGroup(parser, "Aesthetic Style Options")
+
+styleOptions.add_option("--selectionlabel", dest="selectionlabel", default=None,
+        help='label of the selection (e.g. "6 jets, \geq 3 b-tags"), printed in the upper left part of the plot')
+styleOptions.add_option("--datalabel", dest="datalabel", default=None,
+        help="label of the data in the legend")
+styleOptions.add_option("--signallabel", dest="signallabel", default=None,
+        help="Option only for COMBINE Plots: label of the signal in the legend")
+styleOptions.add_option("--signalscaling", dest="signalscaling", default=None,
+        help="scale factor of the signal processes, -1 to scale with background integral")
+styleOptions.add_option("--lumilabel", dest="lumilabel", default=None,
+        help="print luminosity label on canvas")
+styleOptions.add_option("--cmslabel", dest="cmslabel", default=None,
+        help="print CMS label on canvas")
+styleOptions.add_option("--splitlegend", dest="splitlegend",  default=None,
+        help="splits the legend in two")
+styleOptions.add_option("--sortedprocesses", dest="sortedprocesses", default=None,
+        help="List for the order of Processes to be stacked, starts with first, if processes are not specified in this list but included in the background, they get added at the end by their event yield. (For shapes only important for legend order)")
+
+parser.add_option_group(styleOptions)
+
+"""
+Creates an exemplary Plot Config to be edited,
+exits the PlotScript afterwards
+"""
+createPlotconfig    = optparse.OptionGroup(parser, "Creates an exemplary Plotconfig to edit")
+
+createPlotconfig.add_option("-e", "--examplePlotconfig", dest="examplePlotconfig", 
+        default=False, action="store_true", help="creates exemplary Plotconfig")
+createPlotconfig.add_option("-o", "--ouputPlotconfig", dest="outputPlotconfig", default=False,
+        help="OUTPUTPATH where exemplary Plotconfig is created (else using current directory)")
+
+parser.add_option_group(createPlotconfig)
+
+"""
+get all options
+"""
 (options, args) = parser.parse_args()
-
 """
-Define parser options for further use
+check if requirered options are there (except when creating an empty Plotconfing)
 """
-
-# Define placeholders for the keys of the histograms
-procIden    = "$PROCESS"
-chIden      = "$CHANNEL"
-sysIden     = "$SYSTEMATIC"
-
-# build keys
-if chIden in options.nominalKey:
-    nominalKey      = options.nominalKey.replace(chIden, options.channelName)
-else:
-    nominalKey      = options.nominalKey
-
-if chIden in options.nominalKey:
-    systematicKey   = options.systematicKey.replace(chIden, options.channelName)
-else:
-    systematicKey   = options.systematicKey
+if not options.examplePlotconfig:
+    if not options.Rootfile:
+        parser.error("Rootfile not given")
+    if not options.workdir:
+        parser.error("Workdir not given!")
 
 
 # Define directories used to import stuff
-
-tooldir     = options.directory+"/util/tools/"
+directory   = options.directory
+if not directory:
+    directory = os.path.dirname(os.path.abspath(__file__))
+    directory+="/"
+if "/util/" in directory:
+    tooldir = directory +"tools/"
+else:
+    tooldir = directory+"/util/tools/"
 plotconfig  = options.plotconfig
 workdir     = options.workdir
+
+"""
+import plot class
+"""
+sys.path.append(tooldir)
+Plots       = importlib.import_module("Plots" )
+
+"""
+creates emtpy Plotconfig
+"""
+if options.examplePlotconfig:
+    if options.outputPlotconfig:
+        outputpath = options.outputPlotconfig
+    else:
+        outputpath = os.getcwd()
+    Plots.createExamplePlotconfig(outputpath=outputpath)
+    sys.exit("Created exemplary Plotconfig!")
 
 # checks if paths given exist
 if not os.path.exists(options.Rootfile):
@@ -129,10 +208,15 @@ print '''
 # loading config
 # ========================================================
     '''
-plotconfigpath,plotconfigfile   = os.path.split(plotconfig)
-plotconfigfile                  = plotconfigfile.replace('.py','')
-sys.path.append(plotconfigpath)
-pltcfg                          = importlib.import_module(plotconfigfile)
+if os.path.abspath(plotconfig):
+    plotconfigpath,plotconfigfile   = os.path.split(plotconfig)
+    plotconfigfile                  = plotconfigfile.replace('.py','')
+    sys.path.append(plotconfigpath)
+    pltcfg                          = importlib.import_module(plotconfigfile)
+else:
+    sys.path.append(workdir)
+    plotconfigfile                  = plotconfig
+    pltcfg                          = importlib.import_module(plotconfigfile)
 print "using plotconfig: %s" % (plotconfigfile)
 
 samples         = pltcfg.samples
@@ -143,25 +227,45 @@ plotoptions     = pltcfg.plotoptions
 """
 start loading  histograms
 """
+
 print '''
 # ========================================================
 # loading histograms and creating Errorbands
 # ========================================================
     '''
-# import plot class
-sys.path.append(tooldir)
-Plots       = importlib.import_module("Plots" )
+"""
+manage keys for root file
+"""
+# Define placeholders for the keys of the histograms
+procIden    = "$PROCESS"
+chIden      = "$CHANNEL"
+sysIden     = "$SYSTEMATIC"
+combineIden = "$FLAG"
+
+
+combineflag             = options.combineflag
+if combineflag:
+    options.nominalKey  = "$FLAG/$CHANNEL/$PROCESS"
+    options.data        = "data"
+    options.nominalKey  = options.nominalKey.replace(combineIden, combineflag)
+
+
+# build keys
+if chIden in options.nominalKey:
+    nominalKey      = options.nominalKey.replace(chIden, options.channelName)
+else:
+    nominalKey      = options.nominalKey
+
+if chIden in options.nominalKey:
+    systematicKey   = options.systematicKey.replace(chIden, options.channelName)
+else:
+    systematicKey   = options.systematicKey
+
+
 PlotList    = {}
 # load ROOT File
 rootfilename    = options.Rootfile
 rootFile        = ROOT.TFile(rootfilename, "readonly") 
-
-# load data and move under and overflow bin
-dataKey     = nominalKey.replace(procIden, options.datakeyreplace)
-dataHist    = rootFile.Get(dataKey)
-dataHist.SetStats(False)
-Plots.moveOverUnderFlow(dataHist)
-print "using data: %s" % (dataKey)
 
 # load samples
 print "start loading  samples" 
@@ -169,7 +273,15 @@ for sample in samples:
     color   = samples[sample]['color']
     typ     = samples[sample]['typ']
     label   = samples[sample]['label']
-    PlotList[sample] = Plots.buildHistogramAndErrorBand(rootFile=rootFile,sample=sample,
+    if combineflag:
+        if typ=="signal":
+            continue
+        else:
+            PlotList[sample] = Plots.getHistogramAndErrorband(rootFile=rootFile,sample=sample,
+                                                        color=color,typ=typ,label=label,
+                                                        nominalKey=nominalKey,procIden=procIden)
+    else:
+        PlotList[sample] = Plots.buildHistogramAndErrorBand(rootFile=rootFile,sample=sample,
                                                         color=color,typ=typ,label=label,
                                                         systematics=systematics,
                                                         nominalKey=nominalKey,procIden=procIden,
@@ -181,10 +293,71 @@ Combine Histograms and errorbands for combined plot channels
 for sample in plottingsamples:
     color       = plottingsamples[sample]['color']
     typ         = plottingsamples[sample]['typ']
+    if combineflag and typ=="signal":
+        continue
     label       = plottingsamples[sample]['label']
     addsamples  = plottingsamples[sample]['addSamples']
     PlotList = Plots.addSamples(sample=sample,color=color,typ=typ,label=label,
-                                    addsamples=addsamples,PlotList=PlotList)
+                                    addsamples=addsamples,PlotList=PlotList,combineflag=combineflag)
+
+"""
+Get errorband and signalhist in case of combine output file,
+else no signal
+"""
+
+if combineflag:
+    totalsignalkey  = nominalKey.replace(procIden, "total_signal")
+    totalsignal     = rootFile.Get(totalsignalkey)
+
+    signallabel   = getParserConfigDefaultValue(parser=options.signallabel,config="signallabel",
+                                            plotoptions=plotoptions,defaultvalue="signal")
+    """
+    add signal to stack plot if already fitted (post fit),
+    else keep as shape plot
+    """
+    if combineflag=="shapes_fit_s":
+        bkgKey = nominalKey.replace(procIden, "total")
+        PlotList["total_signal"] = Plots.Plot(totalsignal,"total_signal",label=signallabel,
+                                        typ="bkg", OverUnderFlowInc=True)
+    else:
+        bkgKey = nominalKey.replace(procIden, "total_background")
+        PlotList["total_signal"] = Plots.Plot(totalsignal,"total_signal",label=signallabel,
+                                        typ="signal", OverUnderFlowInc=True)
+    # from total background or total background+signal prediction histogram in mlfit file, get the error band
+    background = rootFile.Get(bkgKey)
+    errorband = Plots.GetErrorGraph(background)
+else:
+    errorband = None
+
+"""
+load data if avaliable and move under and overflow bin
+"""
+
+data        = getParserConfigDefaultValue(parser=options.data,config="data",
+                                            plotoptions=plotoptions,defaultvalue=False)
+datalabel   = getParserConfigDefaultValue(parser=options.datalabel,config="datalabel",
+                                            plotoptions=plotoptions,defaultvalue="data")
+if data:
+    dataKey     = nominalKey.replace(procIden, data)
+    dataHist    = rootFile.Get(dataKey)
+    print("    type of data hist is: "+str(type(dataHist)) )
+    if isinstance(dataHist, ROOT.TH1):
+        dataHist.SetStats(False)
+        Plots.moveOverUnderFlow(dataHist)
+        print "using data: %s" % (dataKey)
+    # data in combine in TGraphAsymmErrors, get TH1 out of it
+    elif isinstance(dataHist, ROOT.TGraphAsymmErrors):
+        n_bins   = Plots.FindNewBinNumber(background)
+        dataHist = Plots.GetHistoFromTGraphAE(dataHist, data, n_bins)
+        Plots.moveOverUnderFlow(dataHist)
+        dataHist.SetStats(False)
+    else:
+        print "ATTENTION: Not using data!"
+        dataHist=None
+else:
+        print "ATTENTION: Not using data!"
+        dataHist=None
+
 
 print '''
 # ========================================================
@@ -199,72 +372,76 @@ ratio           = getParserConfigDefaultValue(parser=options.ratio,config="ratio
                                             plotoptions=plotoptions,defaultvalue="#frac{data}{MC Background}")
 lumilabel       = getParserConfigDefaultValue(parser=options.lumilabel,config="lumilabel",
                                             plotoptions=plotoptions,defaultvalue=False)
-privatework     = getParserConfigDefaultBool(parser=options.privatework,config="privatework",
-                                            plotoptions=plotoptions,defaultbool=False)
+cmslabel        = getParserConfigDefaultValue(parser=options.cmslabel,config="cmslabel",
+                                            plotoptions=plotoptions,defaultvalue=False)
 logarithmic     = getParserConfigDefaultBool(parser=options.logarithmic,config="logarithmic",
                                             plotoptions=plotoptions,defaultbool=False)
 splitlegend     = getParserConfigDefaultBool(parser=options.splitlegend,config="splitlegend",
                                             plotoptions=plotoptions,defaultbool=False)
 normalize       = getParserConfigDefaultBool(parser=options.normalize,config="normalize",
                                             plotoptions=plotoptions,defaultbool=False)
-"""
-returning sorted Lists and Histograms necessary to draw the legend
-and everything ROOT related
-"""
-canvas, errorband, ratioerrorband, sortedSignal, sigHists, sortedBackground, bkgHists, data, ratio =Plots.drawHistsOnCanvas(PlotList,options.channelName,
-                                                                                        data=dataHist,ratio=ratio, 
-                                                                                        signalscaling=int(signalscaling),
-                                                                                        errorband=True, logoption=logarithmic,
-                                                                                        normalize=normalize)
+shape           = getParserConfigDefaultBool(parser=options.shape,config="shape",
+                                            plotoptions=plotoptions,defaultbool=False)
+if shape:
+    dataHist        = None
+    ratio           = False
+    normalize       = True
 
-# drawing the legend
-# split legend:
-
-if splitlegend:
-    legend1 = Plots.getLegend1()
-    legend2 = Plots.getLegend2()
-    if data:
-        legend1.AddEntry(dataHist,options.datalabel,"P")
-
-    legendentries = len(sortedSignal)+len(sortedBackground)
-    n = 0
-    for i,signal in enumerate(sortedSignal):
-        if n<legendentries/2:
-            legend1.AddEntry(sigHists[i], PlotList[signal].label, "L")
-        else:
-            legend2.AddEntry(sigHists[i], PlotList[signal].label, "L")
-        n+=1
-    for i,background in enumerate(sortedBackground):
-        if n<legendentries/2:
-            legend1.AddEntry(bkgHists[i], PlotList[background].label, "F")
-        else:
-            legend2.AddEntry(bkgHists[i], PlotList[background].label, "F")
-        n+=1
-    legend1.Draw("same")
-    legend2.Draw("same")
+if options.sortedprocesses:     
+    sortedProcesses = [x.strip() for x in options.sortedprocesses.split(",")]
 else:
-    legend = Plots.getLegend2()
-    legend.AddEntry(dataHist,options.datalabel,"P")
+    sortedProcesses = pltcfg.sortedprocesses
 
-    for i,signal in enumerate(sortedSignal):
-        legend.AddEntry(sigHists[i], PlotList[signal].label, "L")
-    for i,background in enumerate(sortedBackground):
-        legend.AddEntry(bkgHists[i], PlotList[background].label, "F")
-    legend.Draw("same")
+"""
 
+"""
+
+
+DrawHistogramObject = Plots.DrawHistograms(PlotList,options.channelName,
+                                data=dataHist,ratio=ratio, 
+                                signalscaling=int(signalscaling),
+                                errorband=errorband, logoption=logarithmic,
+                                normalize=normalize,splitlegend=splitlegend,
+                                combineflag=combineflag,shape=shape,
+                                sortedProcesses=sortedProcesses)
+
+DrawHistogramObject.drawHistsOnCanvas()
+
+DrawHistogramObject.builtLegend()
 # add lumi or private work label to plot
-if privatework:
-    Plots.printPrivateWork(canvas, ratio = ratio)
+if cmslabel:
+    DrawHistogramObject.printCMSLabel(cmslabel=cmslabel)
 if lumilabel:
-    Plots.printLumi(canvas, lumi = lumilabel, ratio = ratio)
+    DrawHistogramObject.printLumi(lumi = lumilabel)
 
 #add selection label to plot
 if options.selectionlabel:
-    Plots.printCategoryLabel(canvas, catLabel = options.selectionlabel, ratio = ratio)
+    DrawHistogramObject.printChannelLabel(channelLabel = options.selectionlabel)
 plotpath = workdir+"/outputPlots/"
 if not os.path.exists(plotpath):
         os.makedirs(plotpath)
 
+"""
+safe options
+"""
+pdftag           = getParserConfigDefaultValue(parser=options.pdftag,config="pdftag",
+                                            plotoptions=plotoptions,defaultvalue=False)
 
-Plots.saveCanvas(canvas,plotpath+"/"+options.channelName+".pdf")
+if options.pdfname:
+    path = plotpath+"/"+options.pdfname
+else:
+    path = plotpath+"/"+options.channelName
+
+if pdftag:
+    path += "_"+str(pdftag)
+
+if shape:
+    path += "_shape"
+
+if logarithmic:
+    path +="_log.pdf"
+else:
+    path += ".pdf"
+
+DrawHistogramObject.saveCanvas(path=path)
 

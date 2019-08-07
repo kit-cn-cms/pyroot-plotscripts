@@ -453,7 +453,9 @@ class DNN:
     category_dict["catlabel"] = "{CATLABEL}"
     category_dict["nhistobins"] = ndefaultbins\n"""
 
-
+        if not opts.binning_rule is None:
+            with open(opts.binning_rule, 'r') as f:
+                rules = json.load(f)
 
         for i, node in enumerate(self.out_nodes):
             label = "ljets_{cat}_{node}_node".format(cat = self.category, node = node)
@@ -477,7 +479,7 @@ class DNN:
                 DISCR_NAME      = self.discrNames[i])
 
             if opts.variable_binning or opts.optimize_binning:
-                if opts.optimize_binning:
+                if opts.optimize_binning and opts.binning_rule is None:
                     # generate optimized bin edges
                     bin_edges = getOptimizedBinEdges(label, opts)
                 elif not opts.ndefaultbins is None:
@@ -491,6 +493,9 @@ class DNN:
                 else:
                     print("WARNING: variable binning is required, but there is no information about the binning!")
                     bin_edges = []
+                
+                if not opts.binning_rule is None:
+                    bin_edges = [bin_edges[i] for i in rules[node]]
 
                 # write bin edges to file
                 indents = "\t\t\t\t"
@@ -795,6 +800,8 @@ no separate plots and no separate discriminators are produced""")
         help = "relative stat uncertainty threshold for binning optimization")
     binningOptions.add_option("-d",dest="discrname",default="finaldiscr",
         help = "name of discriminator in histogram file for binning optimization")
+    binningOptions.add_option("-r","--rules",dest="binning_rule",default=None,
+        help = "file with binning rules as dictionary of 'nodename: [list, of, binedges, to, keep]'")
 
     parser.add_option_group(binningOptions)
     (opts, args) = parser.parse_args()

@@ -99,15 +99,21 @@ class analysisConfig:
             elif key in ("signalScaling"):
                 self.signalScaling = analysisOptions[key]
             elif key in ("lumiLabel"):
-                self.lumiLabel = analysisOptions[key]
-            elif key in ("privateWork"):
-                self.privateWork = analysisOptions[key]
+
+                self.lumiLabel= analysisOptions[key]
+            elif key in ("CMSlabel"):
+                self.cmslabel=analysisOptions[key]
             elif key in ("ratio"):
-                self.ratio = analysisOptions[key]
+                self.ratio= analysisOptions[key]
+            elif key in ("normalize"):
+                self.normalize= analysisOptions[key]
             elif key in ("logarithmic"):
                 self.logarithmic = analysisOptions[key]
             elif key in ("splitLegend"):
-                self.splitLegend = analysisOptions[key] 
+
+                self.splitLegend= analysisOptions[key] 
+            elif key in ("shape"):
+                self.shape= analysisOptions[key]
             elif key in ("makeDataCards"):
                 self.makeDataCards = analysisOptions[key] 
             elif key in ("makePlots"):
