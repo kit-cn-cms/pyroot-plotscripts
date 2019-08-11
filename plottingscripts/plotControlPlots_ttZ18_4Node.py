@@ -48,7 +48,7 @@ def main(pyrootdir, opts):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    config          = "ttZ18/pltcfg_controlPlots_internalCSV_4Node_splitJES"
+    config          = "ttZ18/pltcfg_controlPlots_internalCSV_4Node"
     variable_cfg    = "ttZ18/additionalVariables"
     plot_cfg        = "ttZ18/controlPlots_4Node"
     syst_cfg        = "ttZ18/systematics_internalCSV_JES"
@@ -86,7 +86,7 @@ def main(pyrootdir, opts):
         "skipHistoCheck":       opts.skipHistoCheck,
         "skipDatacards":        opts.skipDatacards}
 
-    plotJson = ""#/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttZ_2018_v4.json"
+    plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttZ_2018_v5.json"
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
@@ -182,7 +182,7 @@ def main(pyrootdir, opts):
         #pP.setDataBases(plotDataBases)
         #pP.setMEMDataBase(memDataBase)
         #pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts(250000)
+        pP.setMaxEvts(100000)
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
 

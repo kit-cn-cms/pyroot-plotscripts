@@ -31,7 +31,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttZ18_4NodeDNN_hf_binning3_v3'
+    name = 'ttZ18_4NodeDNN_hf_binning3_v4'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -53,7 +53,7 @@ def main(pyrootdir, opts):
     config          = "ttZ18/pltcfg_discrPlots_internalCSV_hf"
     variable_cfg    = "ttZ18/additionalVariables"
     plot_cfg        = "ttZ18/discrPlots_4Node_binning3"
-    syst_cfg        = "ttZ18/systematics_internalCSV_hf"
+    syst_cfg        = "ttZ18/systematics_internalCSV_hf_JES"
 
     # file for rate factors1
     rateFactorsFile = pyrootdir+"/data/rateFactors/rateFactors_2018.csv"
@@ -88,7 +88,7 @@ def main(pyrootdir, opts):
         "skipHistoCheck":       opts.skipHistoCheck,
         "skipDatacards":        opts.skipDatacards}
 
-    plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttZ_2018_v4.json"
+    plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttZ_2018_v5.json"
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
@@ -183,7 +183,7 @@ def main(pyrootdir, opts):
         #pP.setDataBases(plotDataBases)
         #pP.setMEMDataBase(memDataBase)
         pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts(500000)
+        pP.setMaxEvts(100000)
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
 
