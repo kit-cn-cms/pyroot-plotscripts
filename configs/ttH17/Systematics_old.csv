@@ -1,4 +1,4 @@
-Uncertainty,Type,Construction,Up,Down,Plot,ttH,ttbarOther,ttbarPlusB,ttbarPlus2B,ttbarPlusBBbar,ttbarPlusCCbar,,,,,,,,
+Uncertainty,Type,Construction,Up,Down,Plot,ttH,ttbarOther,ttbarPlusB,ttbarPlus2B,ttbarPlusBBbar,ttbarPlusCCbar,singlet,THQ,THW,,,,,
 #CMS_ttHbb_L1PreFiring,lnN,rate,-,-,-,1.006/0.994,1.006/0.994,1.006/0.994,1.006/0.994,1.006/0.994,1.006/0.994,,,,,,,,
 lumi_13TeV_2017,lnN,rate,-,-,-,x,x,x,x,x,x,,,,,,,,
 QCDscale_ttH,lnN,rate,-,-,-,0.908/1.058,-,-,-,-,-,,,,,,,,

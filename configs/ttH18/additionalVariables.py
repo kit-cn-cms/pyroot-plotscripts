@@ -15,12 +15,12 @@ def getAddVars():
         "Jet_E",
         "Jet_Phi",
         "Jet_M",
-        "Evt_Pt_PrimaryLepton",
-        "Evt_E_PrimaryLepton",
-        "Evt_M_PrimaryLepton",
-        "Evt_Phi_PrimaryLepton",
-        "Evt_Eta_PrimaryLepton",
-        "Evt_Pt_MET",
+        "Evt_Pt_PrimaryLepton:=LooseLepton_Pt[0]",
+        "Evt_E_PrimaryLepton:=LooseLepton_E[0]",
+        "Evt_M_PrimaryLepton:=LooseLepton_M[0]",
+        "Evt_Phi_PrimaryLepton:=LooseLepton_Phi[0]",
+        "Evt_Eta_PrimaryLepton:=LooseLepton_Eta[0]",
+        "Evt_Pt_MET:=Evt_MET_Pt",
         "Weight_CSV",
         "Weight_CSVLFup",
         "Weight_CSVLFdown",
@@ -36,12 +36,7 @@ def getAddVars():
         "Weight_CSVCErr1down",
         "Weight_CSVCErr2up",
         "Weight_CSVCErr2down",
-        #"Evt_blr_ETH",
-        #"Evt_blr_ETH_transformed",
-        "Electron_IdentificationSF",
-        "Electron_ReconstructionSF",
-        "Muon_IdentificationSF",
-        "Muon_IsolationSF"
+        "Weight_pu69p2",
         ]
 
     return addVars
