@@ -388,9 +388,11 @@ class scriptWriter:
         script += "filename     = os.getenv('OUTFILENAME')\n\n"
         script += "process      = os.getenv('PROCESSNAME')\n"
         script += "outname      = filename.replace('.root','_original.root')\n\n"
-        systpath = self.pp.configData.cfgdir+"/"+self.pp.configData.systconfig+".csv"
+        systpath = self.pp.configData.local_syst_path
         script += "systematics  = \""+systpath+"\"\n\n"
-        script += "cleanupHistos.cleanupHistos(filename, outname, process, systematics)\n"
+        script += "nHistsBefore, nHistsAfter = cleanupHistos.cleanupHistos(filename, outname, process, systematics)\n"
+        script += "with open(outname.replace('.root','_cleanedUp.txt'), 'w') as f:\n"
+        script += "    f.write('{} : {}'.format(nHistsBefore, nHistsAfter))\n"
   
         # write script to file
         with open(self.ccPath.replace(".cc","_cleanupHistos.py"), "w") as srcfile:
@@ -403,6 +405,7 @@ class scriptWriter:
     def writeRunScripts(self):
         # init outputs
         self.scripts = []
+        self.cleanup_scripts = []
         self.outputs = []
         self.nentries = []
         self.samplewiseMaps = {}
@@ -493,7 +496,8 @@ class scriptWriter:
             json.dump(SaveTreeInformation, jsonfile, indent = 2, separators = (",", ": "))
             #jsonfile.write(treejson)
         print "Saved information about events in trees to ", self.pp.analysis.workdir+'/'+"treejson.json"
-        returnData = {"scripts": self.scripts, 
+        returnData = {  "scripts": self.scripts,
+                        "cleanup": self.cleanup_scripts,
                         "outputs": self.outputs, 
                         "entries": self.nentries, 
                         "maps": self.samplewiseMaps}
@@ -506,7 +510,7 @@ class scriptWriter:
         processname = sample.nick
         outfilename = self.pp.plotPath+processname+'_'+str(nJob)+'.root'
         scriptname = self.pp.scriptsPath+'/'+processname+'_'+str(nJob)+'.sh'
-
+        cleanupname = self.pp.scriptsPath+"/"+processname+"_cleanup_"+str(nJob)+".sh"
         suffix = ""
         skipevents = 0
 
@@ -538,18 +542,24 @@ class scriptWriter:
         script += 'export SKIPEVENTS="'+str(skipevents)+'"\n'
         script += 'export SUFFIX="'+suffix+'"\n'
         script += 'export EVENTFILTERFILE="'+str(filterFile)+'"\n'
-        script += self.ccPath[:-3]+'\n'    
         #DANGERZONE
-        script += 'python '+self.ccPath.replace('.cc','_cleanupHistos.py')+'\n'
+        pPscript = script + self.ccPath[:-3]+'\n'
+        cleanup  = script + 'python '+self.ccPath.replace('.cc','_cleanupHistos.py')+'\n'
 
         # writing script to file and chmodding
         with open(scriptname, "w") as f:
-            f.write(script)
+            f.write(pPscript)
         st = os.stat(scriptname)
         os.chmod(scriptname, st.st_mode | stat.S_IEXEC)
 
+        with open(cleanupname, "w") as f:
+            f.write(cleanup)
+        st = os.stat(cleanupname)
+        os.chmod(cleanupname, st.st_mode | stat.S_IEXEC)
+
         # saving script info to lists
         self.scripts.append(scriptname)
+        self.cleanup_scripts.append(cleanupname)
         self.outputs.append(outfilename)
         self.samplewiseMaps[processname].append(outfilename)
     
