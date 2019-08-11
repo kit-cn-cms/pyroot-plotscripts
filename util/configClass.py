@@ -62,6 +62,12 @@ class configData:
             sample.setShapes(self.systematics.get_shape_systs(sample.nick))
         self.plots=self.systematics.plot_shapes()
 
+        # also just plain copy systematic.csv to workdir
+        self.local_syst_path = workdir+"/systematics.csv"
+        cmd = "cp {} {}".format(self.cfgdir+"/"+systconfig+".csv", self.local_syst_path)
+        print(cmd)
+        os.system(cmd)
+
     def writeConfigDataToWorkdir(self):
         # deprecated
         return

@@ -2,7 +2,7 @@ import ROOT
 ROOT.gROOT.SetBatch(True)
 import re
 import numpy as np
-debug=0
+debug=10
 """
 ===============================================
 Class handling the Plotting
@@ -100,7 +100,7 @@ class Plot:
 # GET HISTOGRAMS AND ERROR BANDS
 # ===============================================
 
-def buildHistogramAndErrorBand(rootFile,sample,color,typ,label,systematics,nominalKey,procIden,systematicKey,sysIden):
+def buildHistogramAndErrorBand(rootFile,sample,color,typ,label,systematics,nominalKey,procIden,systematicKey,sysIden,systClass=None):
     print("new sample: "+str(sample))
     # replace keys to get histogram key
     if procIden in nominalKey:
@@ -111,6 +111,10 @@ def buildHistogramAndErrorBand(rootFile,sample,color,typ,label,systematics,nomin
     print("    type of hist is: "+str(type(rootHist)) )
     if not isinstance(rootHist, ROOT.TH1):
         return "ERROR"
+    if rootHist.Integral() <= 0:
+        print("integral zero")
+        return "ERROR"
+
     #moves underflow in the first and overflow in the last bin
     moveOverUnderFlow(rootHist)
     # replace keys to get systematic key
@@ -119,6 +123,27 @@ def buildHistogramAndErrorBand(rootFile,sample,color,typ,label,systematics,nomin
         sampleSystKey = systematicKey.replace(procIden, sample)
     else:
         sampleSystKey = systematicKey
+
+    """
+    check if systematic should be added when systClass is given
+    """
+    if not systClass is None:
+        systClass.getSystematicsForProcesses([sample])
+        systs = systClass.get_weight_systs(sample)
+        systs+= systClass.get_variation_systs(sample)
+        systs+= systClass.get_shape_systs(sample)
+
+        systematicsForProcess = []
+        for s in systs:
+            if      s.endswith("Down"): systematicsForProcess.append(s[1:-4])
+            elif    s.endswith("Up"):   systematicsForProcess.append(s[1:-2])
+            else:                       systematicsForProcess.append(s[1:])
+        systematicsForProcess = list(set(systematicsForProcess))
+        print(systematicsForProcess)
+    else:
+        systematicsForProcess = None
+
+
     #Lists for error band values
     upErrors=None
     downErrors=None
@@ -126,6 +151,14 @@ def buildHistogramAndErrorBand(rootFile,sample,color,typ,label,systematics,nomin
     Loop over systematics to get Error band for sample
     """
     for systematic in systematics:
+        """
+        check if systematic is in systForProcess list if option is activated
+        """
+        if not systematicsForProcess is None:
+            if not systematic in systematicsForProcess:
+                if debug>9: print("systematic {} not in list for this process. skipping.".format(systematic))
+                continue
+
         """
         create empty Error Band for sample to fill 
         """
@@ -160,6 +193,13 @@ def buildHistogramAndErrorBand(rootFile,sample,color,typ,label,systematics,nomin
                 print("        integral up   {}".format(up.Integral()))
                 print("        integral nom  {}".format(rootHist.Integral()))
                 print("        integral down {}".format(down.Integral()))
+                upRate      = (up.Integral()-rootHist.Integral())/rootHist.Integral()*100.
+                downRate    = (down.Integral()-rootHist.Integral())/rootHist.Integral()*100
+                cmd         = "        shift rate: {:.2f}% / {:.2f}%".format(upRate, downRate)
+                if abs(upRate)>10. or abs(downRate)>10.:
+                    print("\033[1;31m{}\033[0m".format(cmd))
+                else:
+                    print(cmd)
 
             for ibin in range(0, rootHist.GetNbinsX()):
                 # get up down variations
@@ -236,6 +276,7 @@ def addSamples(sample,color,typ,label,addsamples,PlotList,combineflag=None):
     combinedHist = None
     print("Adding samples for summarized process %s" % sample)
     for addsample in addsamples:
+        if PlotList[addsample] == "ERROR": continue
         print "    "+addsample
         if combinedHist:
             combinedHist.Add(PlotList[addsample].hist)
@@ -520,7 +561,7 @@ class DrawHistograms:
         Stacks      = {}
         for sample in self.PlotList:
             PlotObject = self.PlotList[sample]
-            
+            if PlotObject == "ERROR": continue
             if self.shape:
                 PlotObject.setStyle("signal")
                 Shapes[PlotObject.name] = PlotObject.hist.Integral()
