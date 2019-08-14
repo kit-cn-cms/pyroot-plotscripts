@@ -156,7 +156,7 @@ def buildHistogramAndErrorBand(rootFile,sample,color,typ,label,systematics,nomin
         """
         if not systematicsForProcess is None:
             if not systematic in systematicsForProcess:
-                if debug>9: print("systematic {} not in list for this process. skipping.".format(systematic))
+                if debug>9: print("    systematic {} not in list for this process. skipping.".format(systematic))
                 continue
 
         """
