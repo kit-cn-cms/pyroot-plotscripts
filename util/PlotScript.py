@@ -72,7 +72,8 @@ filesAndDirectories.add_option("--pdftag", dest="pdftag", default=None,
         help="adds the NAMETAG to the saved plot .pdf", metavar="something_NAMETAG.pdf")
 filesAndDirectories.add_option("--pdfname", dest="pdfname", default=None,
         help="NAME of the saved plot .pdf", metavar="NAME.pdf")
-
+filesAndDirectories.add_option("--systematicfile", dest="systfile", default=None,
+        help="PATH to a systematic.csv type file with a configuration of systematics for each process")
 parser.add_option_group(filesAndDirectories)
 
 """
@@ -180,7 +181,18 @@ workdir     = options.workdir
 import plot class
 """
 sys.path.append(tooldir)
-Plots       = importlib.import_module("Plots" )
+Plots       = importlib.import_module("Plots")
+
+"""
+import systematics class if needed
+"""
+systClass = None
+if not options.systfile is None:
+    if not os.path.exists(options.systfile):
+        sys.exit("path to systematic.csv {} does not exist".format(options.systfile))
+    Systematics = importlib.import_module("Systematics")
+    systClass = Systematics.Systematics(options.systfile)
+    print("loading systematic.csv for systematic setup")
 
 """
 creates emtpy Plotconfig
@@ -285,7 +297,8 @@ for sample in samples:
                                                         color=color,typ=typ,label=label,
                                                         systematics=systematics,
                                                         nominalKey=nominalKey,procIden=procIden,
-                                                        systematicKey=systematicKey,sysIden=sysIden)
+                                                        systematicKey=systematicKey,sysIden=sysIden,
+                                                        systClass=systClass)
 
 """
 Combine Histograms and errorbands for combined plot channels

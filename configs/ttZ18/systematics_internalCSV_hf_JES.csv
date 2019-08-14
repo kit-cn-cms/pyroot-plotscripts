@@ -10,11 +10,11 @@ PDF,shape,weight,"""weight_PDFUp:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*Weight_LHA
 #,,,,,,,,,,,,,,,,,,,,
 scaleMuF_ttH,shape,weight,"""weight_MuFUp_ttH:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*SCALEMUFUP)*DOWEIGHTS""","""weight_MuFDown_ttH:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*SCALEMUFDOWN)*DOWEIGHTS""",1,,,,,,,,,,,,1,,,
 scaleMuF_ttbar,shape,weight,"""weight_MuFUp_ttbar:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*SCALEMUFUP)*DOWEIGHTS""","""weight_MuFDown_ttbar:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*SCALEMUFDOWN)*DOWEIGHTS""",1,,,,1,1,1,,,,,,,,,
-#scaleMuF_ttZ,shape,weight,"""weight_MuFUp_ttZ:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*SCALEMUFUP)*DOWEIGHTS""","""weight_MuFDown_ttZ:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*SCALEMUFDOWN)*DOWEIGHTS""",1,1,1,1,,,,,,,,,,1,1,1
+scaleMuF_ttZ,shape,weight,"""weight_MuFUp_ttZ:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*SCALEMUFUP)*DOWEIGHTS""","""weight_MuFDown_ttZ:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*SCALEMUFDOWN)*DOWEIGHTS""",1,1,1,1,,,,,,,,,,1,1,1
 #,,,,,,,,,,,,,,,,,,,,
 scaleMuR_ttH,shape,weight,"""weight_MuRUp_ttH:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*SCALEMURUP)*DOWEIGHTS""","""weight_MuRDown_ttH:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*SCALEMURDOWN)*DOWEIGHTS""",1,,,,,,,,,,,,1,,,
 scaleMuR_ttbar,shape,weight,"""weight_MuRUp_ttbar:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*SCALEMURUP)*DOWEIGHTS""","""weight_MuRDown_ttbar:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*SCALEMURDOWN)*DOWEIGHTS""",1,,,,1,1,1,,,,,,,,,
-#scaleMuR_ttZ,shape,weight,"""weight_MuRUp_ttZ:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*SCALEMURUP)*DOWEIGHTS""","""weight_MuRDown_ttZ:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*SCALEMURDOWN)*DOWEIGHTS""",1,1,1,1,,,,,,,,,,1,1,1
+scaleMuR_ttZ,shape,weight,"""weight_MuRUp_ttZ:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*SCALEMURUP)*DOWEIGHTS""","""weight_MuRDown_ttZ:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*SCALEMURDOWN)*DOWEIGHTS""",1,1,1,1,,,,,,,,,,1,1,1
 #,,,,,,,,,,,,,,,,,,,,
 #ISR,shape,weight,"""weight_ISRUp:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*GenWeight_isr_Def_up)*DOWEIGHTS""","""weight_ISRDown:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*GenWeight_isr_Def_down)*DOWEIGHTS""",,,,,1,1,1,,,,,,1,,,
 #FSR,shape,weight,"""weight_FSRUp:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*GenWeight_fsr_Def_up)*DOWEIGHTS""","""weight_FSRDown:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*GenWeight_fsr_Def_down)*DOWEIGHTS""",,,,,1,1,1,,,,,,1,,,
@@ -84,7 +84,7 @@ JESRelativeJEREC1,shape,variation,JESRelativeJEREC1up,JESRelativeJEREC1down,1,1,
 JESRelativePtBB,shape,variation,JESRelativePtBBup,JESRelativePtBBdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 JESRelativePtEC1,shape,variation,JESRelativePtEC1up,JESRelativePtEC1down,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 JESRelativeBal,shape,variation,JESRelativeBalup,JESRelativeBaldown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-JESRelativeFSR,shape,variation,JESRelativeFSR,JESRelativeFSRdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+JESRelativeFSR,shape,variation,JESRelativeFSRup,JESRelativeFSRdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 JESRelativeStatFSR,shape,variation,JESRelativeStatFSRup,JESRelativeStatFSRdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 JESRelativeStatEC,shape,variation,JESRelativeStatECup,JESRelativeStatECdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 JESPileUpDataMC,shape,variation,JESPileUpDataMCup,JESPileUpDataMCdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
