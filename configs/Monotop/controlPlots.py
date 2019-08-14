@@ -26,7 +26,7 @@ def evtYieldCategories():
 def control_plots(data=None):
     label = "Puppi MET > 250, AK15 Jet Pt > 250, lepton veto"
     extension = "_SR"
-    selection = "(N_LooseMuons==0 && N_LooseElectrons==0 && N_LoosePhotons==0)*(Evt_Pt_MET>250.)"
+    selection = "(N_LooseMuons==0 && N_LooseElectrons==0 && N_LoosePhotons==0)*((Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX == 1) || (Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX == 1))*(Evt_Pt_MET>250.)"
 
     plots = [
         plotClasses.Plot(
@@ -290,7 +290,7 @@ def control_plots(data=None):
 def control_plots_mumu(data=None):
     label = "Hadr. Recoil > 250, AK15 Jet Pt > 250, 2 muons"
     extension = "_CRMuMu"
-    selection = "(N_LooseMuons==2 && N_TightMuons>=1 && N_LooseElectrons==0 && N_LoosePhotons==0)*(Hadr_Recoil_Pt>250.)"
+    selection = "(N_LooseMuons==2 && N_TightMuons>=1 && N_LooseElectrons==0 && N_LoosePhotons==0)*((Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX == 1) || (Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX == 1))*(Hadr_Recoil_Pt>250.)"
 
     plots = [
         plotClasses.Plot(
@@ -542,7 +542,7 @@ def control_plots_mumu(data=None):
 def control_plots_ttbar(data=None):
     label = "Hadr. Recoil > 250, AK15 Jet Pt > 250, 1 electron/muon"
     extension = "_CRttbar"
-    selection = "(((N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0) || (N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0)) && N_LoosePhotons==0)*(Hadr_Recoil_Pt>250.)"
+    selection = "(((N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && Triggered_HLT_IsoMu24_vX==1) || (N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1 || Triggered_HLT_Ele32_WPTight_Gsf_vX==1))) && N_LoosePhotons==0)*(Hadr_Recoil_Pt>250.)"
 
     plots = [
         plotClasses.Plot(
