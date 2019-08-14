@@ -40,11 +40,13 @@ def cleanupHistos(inFile, outFile, process, systcsv):
     print("all systematics:")
     print("\n".join(systNames))
 
-    # get systematics for the process
-    systematics.getSystematicsForProcesses([process])
-    procSysts = systematics.get_weight_systs(process)
-    procSysts+= systematics.get_variation_systs(process)
-    procSysts+= systematics.get_shape_systs(process)
+    procSysts = []
+    if not isDataSample:
+        # get systematics for the process
+        systematics.getSystematicsForProcesses([process])
+        procSysts+= systematics.get_weight_systs(process)
+        procSysts+= systematics.get_variation_systs(process)
+        procSysts+= systematics.get_shape_systs(process)
     print("\nsystematics for process {}".format(process))
     print("\n".join(procSysts))
 
@@ -133,11 +135,13 @@ def cleanupHistos(inFile, outFile, process, systcsv):
             thisHist.SetName(newName)
             thisHist.Write()
 
+    keysAfter = len(rootFile.GetListOfKeys())
     rootFile.Close()
     print("the renaming took {}".format(theclock.RealTime()))
     print("subtimes: "+str(subTimes))
+    print("{}/{} histograms left".format(keysAfter, nPlots))
 
-
+    return nPlots, keysAfter
 
 
 

@@ -107,8 +107,8 @@ def checkHistos(inFile, outFile, checkBins = False, eps = 0.0):
     print(cmd)
     os.system(cmd)
 
-    print("opening root file {}".format(inFile))
-    rootFile = ROOT.TFile(inFile, "UPDATE")
+    print("opening root file {}".format(outFile))
+    rootFile = ROOT.TFile(outFile, "UPDATE")
     rootKeys = rootFile.GetListOfKeys()
 
     # getting key names

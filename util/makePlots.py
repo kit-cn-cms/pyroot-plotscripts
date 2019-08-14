@@ -168,7 +168,8 @@ def createPlotScript(channel,pyrootdir,workdir,scriptPath,
     script += ' --channelname="'+channel+'" '
     script += ' --selectionlabel="'+selectionlabel+'"'
     script += ' --rootfile="'+rootfile+'" '
-    script += ' --directory="'+pyrootdir+'"' 
+    script += ' --directory="'+pyrootdir+'"'
+    script += ' --systematicfile="'+workdir+"/systematics.csv"+'"' 
     script += ' --workdir="'+workdir+'"\n' 
 
 

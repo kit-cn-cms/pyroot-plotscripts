@@ -216,6 +216,12 @@ class plotParallel:
         print("all jobs have terminated successfully")
         print("="*40)
 
+        # cleanup histograms
+        print("cleaning up histograms")
+        nafInterface.cleanupInterface(self.runscriptData["cleanup"], self.runscriptData["outputs"], skipCleanup = self.analysis.skipPlotParallel)
+        print("all jobs have terminated successfully")
+        print("="*40)
+
         # starting on hadd output
         # TODO maybe split this completely and add another instance into limitsall
         print("now we can start the hadd output\n")

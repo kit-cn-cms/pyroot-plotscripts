@@ -1,6 +1,8 @@
 import sys
 import os
 import nafSubmit
+
+fastLane = True
 #############################
 # parallel plotting
 #############################
@@ -17,7 +19,8 @@ def plotInterface(jobData, skipPlotParallel = False, maxTries = 10, nTries = 0):
             print("all plotParallel scripts have terminated successfully - skipping plotParallel")
             return
 
-    submitOptions = {"PeriodicHold": 7000}
+    submitOptions = {"PeriodicHold": 10001,
+                    "+RequestRuntime": 10000}
     if nTries == 0:
         print("submitting plotParallel scripts as array job")
         jobIDs = nafSubmit.submitArrayToNAF(jobData["scripts"], "makeTemplates", submitOptions = submitOptions)
@@ -77,6 +80,52 @@ def plotTerminationCheck(jobData):
 
 
 
+
+def cleanupInterface(jobsToSubmit, rootFiles, skipCleanup = False, maxTries = 10, nTries = 0):
+    if skipCleanup:
+        undoneJobs, undoneRootFiles = cleanupTerminationCheck(jobsToSubmit, rootFiles)       
+        if len(undoneJobs) > 0: return cleanupInterface( undoneJobs, undoneRootFiles )
+        else:
+            print("cleanup histos has terminated successfully")
+            return
+
+    submitOptions = {"PeriodicHold": 10001,
+                    "+RequestRuntime": 10000}
+
+    if nTries == 0:
+        print("submitting cleanup jobs as array job")
+        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "cleanupHistos", submitOptions = submitOptions)
+    elif nTries < maxTries:
+        print("resubmitting cleanup jobs")
+        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "cleanup_resubmit", submitOptions = submitOptions)
+    else:
+        print("cleaning up histograms did not work after {} tries - ABORTING".format(maxTries))
+        sys.exit(1)
+
+    # monitor running
+    nafSubmit.monitorJobStatus(jobIDs)
+    # check for termination of jobs
+    undoneJobs, undoneRootFiles = cleanupTerminationCheck(jobsToSubmit, rootFiles)
+
+    if len(undoneJobs) > 0:
+        return cleanupInterface( undoneJobs, undoneRootFiles, naxTrues = maxTries, nTries = nTries+1 )
+    
+    print("cleanup histos interface has terminated successfully")
+
+def cleanupTerminationCheck(jobs, outputFiles):
+    undoneJobs = []
+    undoneRootFiles = []
+    
+    for job, out in zip(jobs, outputFiles):
+        if not os.path.exists(out.replace('.root','_original_cleanedUp.txt')):
+            undoneJobs.append(job)
+            undoneRootFiles.append(out)
+
+    print("-"*50)
+    print("done checking outputs of cleanup scripts - results:")
+    print("jobs without cleanup file: {}".format(len(undoneJobs)))
+    print("-"*50)
+    return undoneJobs, undoneRootFiles
 
 
 
@@ -211,6 +260,10 @@ def datacardInterface(jobsToSubmit, datacardFiles, maxTries = 10, nTries = 0):
         sys.exit(1)
 
     # monitoring running of jobs
+    if fastLane:
+        print("monitoring of datacards is disabled to speed up the script")
+        return
+
     nafSubmit.monitorJobStatus(jobIDs)
     # checking output
     undoneJobs, undoneCards = datacardTerminationCheck(jobsToSubmit, datacardFiles)
@@ -256,6 +309,10 @@ def drawInterface(jobsToSubmit, outputPlots, nTries = 0):
         sys.exit(1)
     
     # monitoring running jobs
+    if fastLane:
+        print("monitoring of plotting jobs disabled to speed up the script")
+        return
+
     nafSubmit.monitorJobStatus(jobIDs)
     # checking output
     undoneScripts, undonePlots = drawTerminationCheck(jobsToSubmit, outputPlots)
