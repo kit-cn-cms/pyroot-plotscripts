@@ -41,6 +41,13 @@ def getAddVars():
         "GenWeight_isr_Def_up:=GenWeight_6",
         "GenWeight_fsr_Def_down:=GenWeight_9",
         "GenWeight_fsr_Def_up:=GenWeight_7",
+    
+        "discrete_CSV[0]:=((CSV[0]>=0.0494)*1+(CSV[0]>=0.277)*1+(CSV[0]>=0.7264)*1)",
+        "discrete_CSV[1]:=((CSV[1]>=0.0494)*1+(CSV[1]>=0.277)*1+(CSV[1]>=0.7264)*1)",
+        "discrete_CSV[2]:=((CSV[2]>=0.0494)*1+(CSV[2]>=0.277)*1+(CSV[2]>=0.7264)*1)",
+        "discrete_CSV[3]:=((CSV[3]>=0.0494)*1+(CSV[3]>=0.277)*1+(CSV[3]>=0.7264)*1)",
+        "discrete_CSV[4]:=((CSV[4]>=0.0494)*1+(CSV[4]>=0.277)*1+(CSV[4]>=0.7264)*1)",
+        "discrete_CSV[5]:=((CSV[5]>=0.0494)*1+(CSV[5]>=0.277)*1+(CSV[5]>=0.7264)*1)",
         ]
 
     return addVars
