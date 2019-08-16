@@ -399,7 +399,7 @@ class DNN:
         for var in sorted(list(variables.index)):
             # generate dictionary
             plotConfig = {
-                "histname":     "\""+self.category+"_"+var+"\"", 
+                "histname":     "\"ljets_"+self.category+"_"+var+"\"", 
                 "plotname":     "\""+variables.loc[var, "displayname"]+"\"",
                 "nbins":        variables.loc[var, "numberofbins"],
                 "minval":       variables.loc[var, "minvalue"],
