@@ -108,7 +108,7 @@ def cleanupInterface(jobsToSubmit, rootFiles, skipCleanup = False, maxTries = 10
     undoneJobs, undoneRootFiles = cleanupTerminationCheck(jobsToSubmit, rootFiles)
 
     if len(undoneJobs) > 0:
-        return cleanupInterface( undoneJobs, undoneRootFiles, naxTrues = maxTries, nTries = nTries+1 )
+        return cleanupInterface( undoneJobs, undoneRootFiles, naxTries = maxTries, nTries = nTries+1 )
     
     print("cleanup histos interface has terminated successfully")
 
