@@ -7,6 +7,8 @@ import optparse
 import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 
+
+
 filedir = os.path.dirname(os.path.realpath(__file__))
 pyrootdir = "/".join(filedir.split("/")[:-1])
 
@@ -29,14 +31,14 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttZControlPlots_v5'
+    name = 'ttZ18_5NodeDNN_hf_yields_v4'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
 
     # signal process
     signalProcess = "ttZ"
-    nSigSamples   = 4
+    nSigSamples   = 3
 
     # dataera
     dataera = "2018"
@@ -48,25 +50,26 @@ def main(pyrootdir, opts):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    config          = "ttZ18/pltcfg_controlPlots_internalCSV_4Node"
+    config          = "ttZ18/pltcfg_discrPlots_internalCSV_hf"
     variable_cfg    = "ttZ18/additionalVariables"
-    plot_cfg        = "ttZ18/controlPlots_4Node"
-    syst_cfg        = "ttZ18/systematics_internalCSV_JES"
+    plot_cfg        = "ttZ18/discrPlots_5Node_yields"
+    syst_cfg        = "ttZ18/systematics_internalCSV_hf_JES"
 
-    # file for rate factors
+    # file for rate factors1
     rateFactorsFile = pyrootdir+"/data/rateFactors/rateFactors_2018.csv"
+
 
     # script options
     analysisOptions = {
         # general options
-        "usePseudoData":        False,
+        "usePseudoData":        True,
         "testrun":              False,  # test run with less samples
-        "stopAfterCompile":     False,   # stop script after compiling
+        "stopAfterCompile":     False,  # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
-        "makeDataCards":        False,
-        "makeInputDatacards":   True, # create datacards also for all defined plots
-        "addData":              True,  # adding real data 
+        "makeDataCards":        True,
+        "makeInputDatacards":   False, # create datacards also for all defined plots
+        "addData":              True,  # adding real data
         "makePlots":            True,
         # options for makePlots
         "signalScaling":        -1,
@@ -89,9 +92,8 @@ def main(pyrootdir, opts):
     plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttZ_2018_v5.json"
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
-    #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-    #                "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/ttZ18_hf_recoVars"}
-    dnnInterface = None
+    dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
+                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/ttZ_5Node_top30_v1"}
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
@@ -173,15 +175,15 @@ def main(pyrootdir, opts):
     with monitor.Timer("plotParallel"):
         # initialize plotParallel class 
         pP = plotParallel.plotParallel(
-            analysis = analysis,
-            configData = configData)
+            analysis    = analysis,
+            configData  = configData)
 
         monitor.printClass(pP, "init")
         # set some changed values
         pP.setJson(plotJson)
         #pP.setDataBases(plotDataBases)
         #pP.setMEMDataBase(memDataBase)
-        #pP.setDNNInterface(dnnInterface)
+        pP.setDNNInterface(dnnInterface)
         pP.setMaxEvts(100000)
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
@@ -228,7 +230,6 @@ def main(pyrootdir, opts):
         # if no hadd files were created during plotparallel
         #       the renameInput is set to pp.getOutPath 
         #       (a.ka. the path to output.root)
-
         with monitor.Timer("checkHistos"):
             checkHistos.checkHistsManager(
                 inFiles         = pP.getRenameInput(),
@@ -246,9 +247,9 @@ def main(pyrootdir, opts):
         with monitor.Timer("addRealData"):
             if analysis.usePseudoData:
                 # pseudo data without ttH
-                pP.addData(samples = configData.samples[nSigSamples:])
+                #pP.addData(samples = configData.samples[nSigSamples:])
                 # pseudo data with signal
-                #pP.addData(samples = configData.samples)
+                pP.addData(samples = configData.samples)
             else:
                 # real data with ttH
                 pP.addData(samples = configData.controlSamples)
@@ -278,7 +279,7 @@ def main(pyrootdir, opts):
                 datacardmaker       = datacardmaker,
                 signalTag           = analysis.signalProcess,
                 skipDatacards       = analysis.skipDatacards)
-    
+
     if analysis.makePlots:
         print '''
         # ========================================================
@@ -294,7 +295,6 @@ def main(pyrootdir, opts):
     # this is the end of the script 
     # ========================================================
     '''
-
 
 if __name__ == "__main__":
     parser = optparse.OptionParser()
