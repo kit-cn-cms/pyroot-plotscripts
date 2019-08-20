@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttZControlPlots_v5'
+    name = 'ttZ_2DValidation_v5_ge6j_ge3t'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -50,8 +50,8 @@ def main(pyrootdir, opts):
     # configs
     config          = "ttZ18/pltcfg_controlPlots_internalCSV_4Node"
     variable_cfg    = "ttZ18/additionalVariables"
-    plot_cfg        = "ttZ18/controlPlots_4Node"
-    syst_cfg        = "ttZ18/systematics_internalCSV_JES"
+    plot_cfg        = "ttZ18/twoDimConfigs/twoDimPlots_ge6j_ge3t"
+    syst_cfg        = "ttZ18/systematics_internalCSV_noJES"
 
     # file for rate factors
     rateFactorsFile = pyrootdir+"/data/rateFactors/rateFactors_2018.csv"
@@ -67,7 +67,7 @@ def main(pyrootdir, opts):
         "makeDataCards":        False,
         "makeInputDatacards":   True, # create datacards also for all defined plots
         "addData":              True,  # adding real data 
-        "makePlots":            True,
+        "makePlots":            False,
         # options for makePlots
         "signalScaling":        -1,
         "lumiLabel":            True,
