@@ -27,7 +27,7 @@ def cleanupHistos(inFile, outFile, process, systcsv):
         print("new process name {}".format(process))
         
     isDataSample = False
-    dataSamples = ["SingleMu", "SingleEl", "EGamma"]
+    dataSamples = ["SingleMu", "SingleEl", "EGamma","MET"]
     if process in dataSamples:
         print("process name {} suggests that this is a data sample (will delete all systematics)".format(process))
         isDataSample = True
