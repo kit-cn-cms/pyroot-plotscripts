@@ -244,14 +244,14 @@ samples = [
 
     plotClasses.Sample('t#bar{t}+W',ROOT.kBlue-10,
             path_vdlinden+'/TTW*/*nominal*.root',
-            lumi+evenSel+sel_MET,
+            lumi+"*0.9"+evenSel+sel_MET,
             'ttW',
             samDict=sampleDict, readTrees=doReadTrees),
 
 
     plotClasses.Sample('Diboson',ROOT.kAzure+2,
             dibosonPathS,
-            lumi+evenSel+sel_MET,
+            lumi+"*1.1"+evenSel+sel_MET,
             'diboson',
             samDict=sampleDict, readTrees=doReadTrees),
 
@@ -270,9 +270,7 @@ datacard_processes  = processes
 
 plottingsamples = [
     plotClasses.Sample("t#bar{t}Z", ROOT.kOrange+7,
-        ttZpath,
-        lumi+evenSel+sel_MET,
-        "ttZ", addsamples = ["ttZbb", "ttZqq", "ttZll"],
+        "", "", "ttZ", addsamples = ["ttZbb", "ttZqq", "ttZll"],
         samDict = sampleDict, readTrees = doReadTrees, typ = "signal"),
 
     plotClasses.Sample("misc.", ROOT.kGray,
