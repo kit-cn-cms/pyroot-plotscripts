@@ -230,16 +230,17 @@ samples = [
 
     plotClasses.Sample('t#bar{t}+W',ROOT.kBlue-10,
             path_vdlinden+'/TTW*/*nominal*.root',
-            lumi+evenSel+sel_MET,
+            lumi+"*0.9"+evenSel+sel_MET,
             'ttW',
             samDict=sampleDict, readTrees=doReadTrees),
 
 
     plotClasses.Sample('Diboson',ROOT.kAzure+2,
             dibosonPathS,
-            lumi+evenSel+sel_MET,
+            lumi+"*1.1"+evenSel+sel_MET,
             'diboson',
             samDict=sampleDict, readTrees=doReadTrees),
+
 
     plotClasses.Sample('t#bar{t}H',ROOT.kRed+1,
             ttHpath,
