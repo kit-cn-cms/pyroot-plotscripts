@@ -50,7 +50,7 @@ def main(pyrootdir, opts):
     # configs
     config          = "ttH17_legacyStrategy/pltcfg_2017_old_samples_combined_tthf_mergedTTbb"
     variable_cfg    = "ttH17_legacyStrategy/additionalVariables"
-    plot_cfg        = "ttH17_legacyStrategy/plots_toytests_noMEM_5node_ttH_only"
+    plot_cfg        = "ttH17_legacyStrategy/plots_toytests_noMEM_5node_mergedTTbb_ttH_only"
     syst_cfg        = "ttH17_legacyStrategy/systs_combined_tthf"
 
     # file for rate factors
