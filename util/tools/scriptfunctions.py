@@ -105,16 +105,16 @@ def initHistos(catnames, systnames, plots, edge_precision=4):
     rstr += "std::map<std::string, std::unique_ptr<TH1>> histos1D;\n"
     rstr += "std::map<std::string, std::unique_ptr<TH2>> histos2D;\n"
     for plot in plots:
-        if isinstance(plot, plotClasses.TwoDimPlot):
+        if plot.dim == 2:
             title  = plot.histo.GetTitle()+";"+plot.histo.GetXaxis().GetTitle()+";"+plot.histo.GetYaxis().GetTitle()
             name   = plot.histo.GetName()
             nbinsX = plot.histo.GetNbinsX()
             bin_edges_x = []
-            for i in range(1, nbins+2):
-              bin_edges.append(str(round(plot.histo.GetXaxis().GetBinLowEdge(i),edge_precision)))
+            for i in range(1, nbinsX+2):
+              bin_edges_x.append(str(round(plot.histo.GetXaxis().GetBinLowEdge(i),edge_precision)))
             nbinsY = plot.histo.GetNbinsY()
             bin_edges_y = []
-            for i in range(1, nbins+2):
+            for i in range(1, nbinsY+2):
               bin_edges_y.append(str(round(plot.histo.GetYaxis().GetBinLowEdge(i),edge_precision)))
             rstr  += """plotinfo2D["{0}"] = {{"{0}","{1}",{2},{{ {3} }}, {4}, {{ {5} }} }};\n""".format(name, title, 
                                                                                                         nbinsX, ",".join(bin_edges_x), 
@@ -424,8 +424,8 @@ def fillHistoSyst(histName, varNames, weight, systNames, systWeights):
             text += "       {histos2D[\""+histName+systName+"\"].get()"+", ("+systWeight+")*(weight_"+histName+")},\n"
             
         text += "       };\n"
-        text += "       variable1 = "+varNames[0]+":\n"
-        text += "       variable2 = "+varNames[1]+":\n"
+        text += "       variable1 = "+varNames[0]+";\n"
+        text += "       variable2 = "+varNames[1]+";\n"
 
         text += "       helperFillTwoDimHisto(helpWeightVec_"+histName+", variable1, variable2);\n"
         text += "       variable1 = -999;\n"
