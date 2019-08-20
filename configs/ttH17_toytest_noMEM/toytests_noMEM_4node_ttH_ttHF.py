@@ -103,7 +103,7 @@ def plots_ge4j_3t(data = None):
 
 def plots_dnn(data, discrname):
 
-    ndefaultbins = 15
+    ndefaultbins = 1
     category_dict = {}
     this_dict = {}
 

@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'toytests_noMEM_4node_split_ttbjets_ttH_ttHF'
+    name = 'toytests_noMEM_5node_combined_ttb_bb_ttH_ttHF'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -48,10 +48,10 @@ def main(pyrootdir, opts):
     # memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
     memexp = ""
     # configs
-    config          = "ttH17_toytest_noMEM/pltcfg_2017_old_samples"
+    config          = "ttH17_toytest_noMEM/pltcfg_2017_old_samples_combined_ttb_bb"
     variable_cfg    = "ttH17_toytest_noMEM/additionalVariables"
-    plot_cfg        = "ttH17_toytest_noMEM/toytests_noMEM_4node_ttH_ttHF"
-    syst_cfg        = "ttH17_toytest_noMEM/systs_split_ttbjets"
+    plot_cfg        = "ttH17_toytest_noMEM/toytests_noMEM_5node_ttH_ttHF"
+    syst_cfg        = "ttH17_toytest_noMEM/systs_combinedttb_bb"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -91,7 +91,7 @@ def main(pyrootdir, opts):
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                   "checkpointFiles":  "/nfs/dust/cms/user/pkeicher/ttH_legacy/tthlegacystrategystudy/DNNs/toytests_noMEM/4node"}
+                   "checkpointFiles":  "/nfs/dust/cms/user/pkeicher/ttH_legacy/tthlegacystrategystudy/DNNs/toytests_noMEM/5node"}
     # dnnInterface = None
 
     # path to datacardMaker directory

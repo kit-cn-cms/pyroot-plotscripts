@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'toytests_noMEM_4node_split_ttbjets_ttH_ttHF'
+    name = 'toytests_noMEM_5node_split_ttbjets_ttH_only'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -50,7 +50,7 @@ def main(pyrootdir, opts):
     # configs
     config          = "ttH17_toytest_noMEM/pltcfg_2017_old_samples"
     variable_cfg    = "ttH17_toytest_noMEM/additionalVariables"
-    plot_cfg        = "ttH17_toytest_noMEM/toytests_noMEM_4node_ttH_ttHF"
+    plot_cfg        = "ttH17_toytest_noMEM/toytests_noMEM_5node_ttH_only"
     syst_cfg        = "ttH17_toytest_noMEM/systs_split_ttbjets"
 
     # file for rate factors
@@ -91,7 +91,7 @@ def main(pyrootdir, opts):
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                   "checkpointFiles":  "/nfs/dust/cms/user/pkeicher/ttH_legacy/tthlegacystrategystudy/DNNs/toytests_noMEM/4node"}
+                   "checkpointFiles":  "/nfs/dust/cms/user/pkeicher/ttH_legacy/tthlegacystrategystudy/DNNs/toytests_noMEM/5node"}
     # dnnInterface = None
 
     # path to datacardMaker directory

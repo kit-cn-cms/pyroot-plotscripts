@@ -110,7 +110,8 @@ samples=[
             path_mwassmer+'/ttH*/*nominal*.root',
             '1.0*'+mcWeight+evenSel+sel_MET,
             'ttH',
-            samDict=sampleDict, readTrees=doReadTrees),
+            samDict=sampleDict, readTrees=doReadTrees, 
+            typ = "signal"),
 
 #     plotClasses.Sample('t#bar{t}H, H to b#bar{b}',ROOT.kBlue+1,
 #             path_mwassmer+'/ttHTobb*/*nominal*.root',
@@ -236,3 +237,4 @@ list_of_processes=processes
 # datacard_processes = [p for p in processes if not p=="ttH"]
 datacard_processes = [p for p in processes]
 
+plottingsamples = []

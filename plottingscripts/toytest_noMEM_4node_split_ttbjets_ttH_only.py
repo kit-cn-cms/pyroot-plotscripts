@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'toytests_noMEM_4node_split_ttbjets_ttH_ttHF'
+    name = 'toytests_noMEM_4node_split_ttbjets_ttH_only'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -50,7 +50,7 @@ def main(pyrootdir, opts):
     # configs
     config          = "ttH17_toytest_noMEM/pltcfg_2017_old_samples"
     variable_cfg    = "ttH17_toytest_noMEM/additionalVariables"
-    plot_cfg        = "ttH17_toytest_noMEM/toytests_noMEM_4node_ttH_ttHF"
+    plot_cfg        = "ttH17_toytest_noMEM/toytests_noMEM_4node_ttH_only"
     syst_cfg        = "ttH17_toytest_noMEM/systs_split_ttbjets"
 
     # file for rate factors
