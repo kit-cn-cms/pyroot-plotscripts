@@ -187,10 +187,10 @@ samples=[
             'ttbarPlus2B',
             samDict=sampleDict, readTrees=doReadTrees),
 
-    plotClasses.Sample('t#bar{t}+b/b#bar{b}',ROOT.kRed+3,
+    plotClasses.Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,
             mergedPath+"/TTbb_Powheg_Openloops_new_pmx/*nominal*.root",
             mcWeight+TTbbweight+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
-            'ttbarPlusB_BBbar',
+            'ttbarPlusBBbar',
             samDict=sampleDict, readTrees=doReadTrees), 
 
     # minor samples
