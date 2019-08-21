@@ -13,7 +13,7 @@ import util.tools.plotClasses as plotClasses
 # input path 
 path_karim_new = "/nfs/dust/cms/user/kelmorab/ttH_2018/ntuples_v5"
 path_mwassmer  = "/nfs/dust/cms/user/kelmorab/ttH_2018/ntuples_v5"
-mergedPath= "/nfs/dust/cms/user/swieland/ttH_legacy/ntuple/mergedStudy_v2"
+mergedPath= "/nfs/dust/cms/user/swieland/ttH_legacy/ntuple/mergedStudy_v3""
 
 ttbarPathS = path_karim_new+'/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8_v2/*nominal*.root'+';'+ \
              path_karim_new+'/TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8_new_pmx/*nominal*.root'+';'+\
