@@ -55,7 +55,7 @@ def main(pyrootdir, opts):
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
-    rateFactorsFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/rate_factors_V2.csv"
+    rateFactorsFile = pyrootdir + "/data/rateFactors_2017.csv"
 
     # script options
     analysisOptions = {
