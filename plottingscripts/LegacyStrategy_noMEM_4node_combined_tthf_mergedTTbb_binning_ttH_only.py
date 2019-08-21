@@ -51,7 +51,7 @@ def main(pyrootdir, opts):
     config          = "ttH17_legacyStrategy/pltcfg_2017_old_samples_combined_tthf_mergedTTbb"
     variable_cfg    = "ttH17_legacyStrategy/additionalVariables"
     plot_cfg        = "ttH17_legacyStrategy/plots_toytests_noMEM_4node_mergedTTbb_ttH_only"
-    syst_cfg        = "ttH17_legacyStrategy/systs_combined_tthf"
+    syst_cfg        = "ttH17_legacyStrategy/systs_mergedTTbb_combined_tthf"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
