@@ -20,11 +20,8 @@ def cleanupHistos(inFile, outFile, process, systcsv):
 
     isVariation = False
     if "Up" in process or "Down" in process:
-        print("process name has uncertainty - trying to separate the real process")
+        print("process name {0} has uncertainty".format(process))
         isVariation = True
-        # DANGERZONE PROCESSES SHOULD NOT CONTAIN UNDERSCORES
-        process = process.split("_")[0]
-        print("new process name {}".format(process))
         
     isDataSample = False
     dataSamples = ["SingleMu", "SingleEl", "EGamma","MET"]
