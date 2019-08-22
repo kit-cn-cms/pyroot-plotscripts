@@ -148,6 +148,7 @@ class configData:
                         newpath, 
                         newSel, 
                         sample.nick+sysName, 
+                        origName = sample.nick,
                         samDict = self.pltcfg.sampleDict ))
 
         return systSamples

@@ -77,7 +77,7 @@ weightReplacements = {
 # names of the systematics (proper names needed e.g. for combination)
 # Lumi weight
 mcWeight='41.53'
-TTbbweight='*0.0224708747152*831.76'
+TTbbweight='*35.8038266498504'
 evenSel="*(Evt_Odd==0)*2.0"
 
 nominalweight="NomWeight:="+usualWeight+"*"+scalefactors+"*"+mcTriggerWeight+"*internalCSVweight*1.0"+"*"+doWeightsFlag

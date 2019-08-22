@@ -386,7 +386,7 @@ class scriptWriter:
         script += "sys.path.append('"+self.pp.analysis.pyrootdir+"/util"+"')\n"
         script += "import cleanupHistos\n\n"
         script += "filename     = os.getenv('OUTFILENAME')\n\n"
-        script += "process      = os.getenv('PROCESSNAME')\n"
+        script += "process      = os.getenv('ORIGNAME')\n"
         script += "outname      = filename.replace('.root','_original.root')\n\n"
         systpath = self.pp.configData.local_syst_path
         script += "systematics  = \""+systpath+"\"\n\n"
@@ -511,6 +511,7 @@ class scriptWriter:
         outfilename = self.pp.plotPath+processname+'_'+str(nJob)+'.root'
         scriptname = self.pp.scriptsPath+'/'+processname+'_'+str(nJob)+'.sh'
         cleanupname = self.pp.scriptsPath+"/"+processname+"_cleanup_"+str(nJob)+".sh"
+        origName = sample.origName
         suffix = ""
         skipevents = 0
 
@@ -542,6 +543,7 @@ class scriptWriter:
         script += 'export SKIPEVENTS="'+str(skipevents)+'"\n'
         script += 'export SUFFIX="'+suffix+'"\n'
         script += 'export EVENTFILTERFILE="'+str(filterFile)+'"\n'
+        script += 'export ORIGNAME="'+str(origName)+'"\n'
         #DANGERZONE
         pPscript = script + self.ccPath[:-3]+'\n'
         cleanup  = script + 'python '+self.ccPath.replace('.cc','_cleanupHistos.py')+'\n'
