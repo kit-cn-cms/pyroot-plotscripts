@@ -55,11 +55,13 @@ class analysisConfig:
         self.skipHistoCheck         = False
         self.skipDatacards          = False
 
-        self.crossEvaluation    = True
+        self.crossEvaluation    = False
 
     def setSignalProcess(self, signalProcess, pltcfgName):
         if signalProcess == "ttbb":
             self.signalProcess = "ttbb"
+        elif signalProcess == "tthf":
+            self.signalProcess = "tthf"
         elif signalProcess == "ttH" or signalProcess == "tth":
             self.signalProcess = "ttH"
         elif signalProcess == "ttZ" or signalProcess == "ttbarZ":
