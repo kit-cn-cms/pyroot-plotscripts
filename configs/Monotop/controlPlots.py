@@ -542,7 +542,7 @@ def control_plots_mumu(data=None):
 def control_plots_ttbar(data=None):
     label = "Hadr. Recoil > 250, AK15 Jet Pt > 250, 1 electron/muon"
     extension = "_CRttbar"
-    selection = "(((N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && Triggered_HLT_IsoMu24_vX==1) || (N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1 || Triggered_HLT_Ele32_WPTight_Gsf_vX==1))) && N_LoosePhotons==0)*(Hadr_Recoil_Pt>250.)"
+    selection = "(((N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && Triggered_HLT_IsoMu24_vX==1 && Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==0 && Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==0) || (N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1 || Triggered_HLT_Ele32_WPTight_Gsf_vX==1) && Triggered_HLT_IsoMu24_vX==0)) && N_LoosePhotons==0 && N_BTagsM>1)*(Hadr_Recoil_Pt>250.)"
 
     plots = [
         plotClasses.Plot(
@@ -761,6 +761,18 @@ def control_plots_ttbar(data=None):
             selection,
             label,
         ),
+        plotClasses.Plot(
+            ROOT.TH1D("DeltaR_AK15Jet_AK4JetTagged", "DeltaR_AK15Jet_AK4JetTagged", 40, 0., 4.),
+            "DeltaR_AK15Jet_AK4JetTagged",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("DeltaR_AK15Jet_AK4Jet", "DeltaR_AK15Jet_AK4Jet", 40, 0., 4.),
+            "DeltaR_AK15Jet_AK4Jet",
+            selection,
+            label,
+        )
     ]
     if data:
         add_data_plots(plots=plots, data=data)
