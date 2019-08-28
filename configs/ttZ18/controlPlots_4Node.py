@@ -13,6 +13,27 @@ from array import array
 from copy import deepcopy
 
 
+def write_config(jt, plots):
+    template="\"{name}\",{min},{max},{nbins},-,\"{displayname}\""
+    string = ""
+    string+= "variablename,minvalue,maxvalue,numberofbins,logoption,displayname\n"
+    
+    for p in plots:
+        nbins = p.histo.GetNbinsX()
+        bin_edges = []
+        for i in range(1,nbins+2):
+            bin_edges.append(p.histo.GetBinLowEdge(i))
+        config = {
+            "name":         p.variable,#p.histo.GetName().replace(jt,"").replace("ljets__","").replace("ljets_","").replace("ljets",""),
+            "min":          bin_edges[0],
+            "max":          bin_edges[-1],
+            "nbins":        nbins,
+            "displayname":  p.histo.GetTitle()
+            }
+        string+=template.format(**config)+"\n"
+
+    with open("/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/ttZ_4Node_top30_v4/{}/new_plot_config.csv".format(jt), "w") as f:
+        f.write(string)
 
 def evtYieldCategories():
     return [
@@ -125,6 +146,7 @@ def plots_ge4j_ge4t(data = None):
         plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_RecoTTZ_TopLep_M","ttZ reconstruction M(t_{lep})",30,100.0,500.0),"RecoTTZ_TopLep_M",selection,label),
         ]
 
+    write_config("ge4j_ge4t", plots)
     if data:
         add_data_plots(plots=plots,data=data)
     return plots
@@ -168,6 +190,7 @@ def plots_ge6j_ge3t(data = None):
         plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_RecoTTZ_Z_M","ttZ reconstruction M(Z)",30,30.0,250.0),"RecoTTZ_Z_M",selection,label),
         ]
 
+    write_config("ge6j_ge3t", plots)
     if data:
         add_data_plots(plots=plots,data=data)
     return plots
@@ -211,6 +234,7 @@ def plots_le5j_ge3t(data = None):
         plotClasses.Plot(ROOT.TH1D("ljets_le5j_ge3t_RecoTTZ_TopLep_M","ttZ reconstruction M(t_{lep})",30,100.0,500.0),"RecoTTZ_TopLep_M",selection,label),
         ]
 
+    write_config("le5j_ge3t", plots)
     if data:
         add_data_plots(plots=plots,data=data)
     return plots
@@ -254,6 +278,7 @@ def plots_5j_ge3t(data = None):
         plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_RecoTTZ_TopLep_M","ttZ reconstruction M(t_{lep})",30,100.0,500.0),"RecoTTZ_TopLep_M",selection,label),
         ]
 
+    write_config("5j_ge3t", plots)
     if data:
         add_data_plots(plots=plots,data=data)
     return plots
@@ -297,6 +322,7 @@ def plots_ge4j_ge3t(data = None):
         plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_RecoTTZ_TopLep_M","ttZ reconstruction M(t_{lep})",30,100.0,500.0),"RecoTTZ_TopLep_M",selection,label),
         ]
 
+    write_config("ge4j_ge3t", plots)
     if data:
         add_data_plots(plots=plots,data=data)
     return plots
@@ -340,6 +366,7 @@ def plots_4j_ge3t(data = None):
         plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_RecoTTZ_TopLep_M","ttZ reconstruction M(t_{lep})",30,100.0,500.0),"RecoTTZ_TopLep_M",selection,label),
         ]
 
+    write_config("4j_ge3t", plots)
     if data:
         add_data_plots(plots=plots,data=data)
     return plots
@@ -383,6 +410,7 @@ def plots_ge4j_3t(data = None):
         plotClasses.Plot(ROOT.TH1D("ljets_ge4j_3t_RecoTTZ_TopLep_M","ttZ reconstruction M(t_{lep})",30,100.0,500.0),"RecoTTZ_TopLep_M",selection,label),
         ]
 
+    write_config("ge4j_3t", plots)
     if data:
         add_data_plots(plots=plots,data=data)
     return plots
@@ -409,3 +437,5 @@ def add_data_plots(plots, data):
         plotnames.append(plot.name)
     data.datavariables.extend(plotnames)
     
+if __name__ == "__main__":
+    getDiscriminatorPlots()
