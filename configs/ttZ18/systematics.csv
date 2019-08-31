@@ -2,7 +2,7 @@ Uncertainty,Type,Construction,Up,Down,Plot,ttZbb,ttZqq,ttZll,tthf,ttlf,ttcc,sing
 #,,,,,,,,,,,,,,,,,
 JER,shape,variation,JERup,JERdown,1,1,1,1,1,1,1,1,1,1,1,1,1
 #,,,,,,,,,,,,,,,,,
-PDF,shape,weight,"""weight_PDFUp:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*Weight_LHA_306000_up*internalNormFactor_Weight_LHA_306000_up)*DOWEIGHTS""","""weight_PDFDown:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*Weight_LHA_306000_down*internalNormFactor_Weight_LHA_306000_down)*DOWEIGHTS""",1,1,1,1,1,1,1,,,,,,1
+PDF,shape,weight,"""weight_PDFUp:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*Weight_LHA_306000_up*internalNormFactor_Weight_LHA_306000_up)*DOWEIGHTS""","""weight_PDFDown:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*Weight_LHA_306000_down*internalNormFactor_Weight_LHA_306000_down)*DOWEIGHTS""",1,,,,1,1,1,,,,,,1
 #,,,,,,,,,,,,,,,,,
 scaleMuF_ttH,shape,weight,"""weight_MuFUp_ttH:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*SCALEMUFUP)*DOWEIGHTS""","""weight_MuFDown_ttH:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*SCALEMUFDOWN)*DOWEIGHTS""",1,,,,,,,,,,,,1
 scaleMuF_ttbar,shape,weight,"""weight_MuFUp_ttbar:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*SCALEMUFUP)*DOWEIGHTS""","""weight_MuFDown_ttbar:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*SCALEMUFDOWN)*DOWEIGHTS""",1,,,,1,1,1,,,,,,
