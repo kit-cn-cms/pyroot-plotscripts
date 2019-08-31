@@ -31,7 +31,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttZ18_4NodeDNN_hf_binning5_v4_prenet'
+    name = 'ttZ18_discrPlots'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -50,12 +50,12 @@ def main(pyrootdir, opts):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    config          = "ttZ18/pltcfg_discrPlots_internalCSV_hf_prenet"
+    config          = "ttZ18/pltcfg_discrPlots"
     variable_cfg    = "ttZ18/additionalVariables"
-    plot_cfg        = "ttZ18/discrPlots_4Node_binning5"
-    syst_cfg        = "ttZ18/systematics_internalCSV_JES"
+    plot_cfg        = "ttZ18/discrPlots"
+    syst_cfg        = "ttZ18/systematics"
 
-    # file for rate factors1
+    # file for rate factors
     rateFactorsFile = pyrootdir+"/data/rateFactors/rateFactors_2018.csv"
 
     # script options
@@ -71,13 +71,13 @@ def main(pyrootdir, opts):
         "addData":              True,  # adding real data
         "makePlots":            True,
         # options for makePlots
-        "signalScaling":        -1,
+        "signalScaling":        1,
         "lumiLabel":            True,
         "CMSlabel":             "private Work",
-        "ratio":                "#frac{data}{MC Background}",
+        "ratio":                "#frac{pseudo data}{MC Backgrond}",
         "shape":                False, # for shape plots
         "normalize":            False, # normalize yield to integral 1
-        "logarithmic":          False,
+        "logarithmic":          True,
         "splitLegend":          True,
         # the skipX options try to skip the submission of files to the batch system
         # before skipping the output is crosschecked
@@ -92,7 +92,7 @@ def main(pyrootdir, opts):
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/ttZ_4Node_top30_v4_prenet"}
+                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/ttZConfig"}
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
@@ -183,7 +183,7 @@ def main(pyrootdir, opts):
         #pP.setDataBases(plotDataBases)
         #pP.setMEMDataBase(memDataBase)
         pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts(100000)
+        pP.setMaxEvts(333333)
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
 
