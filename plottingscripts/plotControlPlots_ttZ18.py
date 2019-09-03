@@ -29,14 +29,14 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttZControlPlots_bbComparison'
+    name = 'ttZControlPlots'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
 
     # signal process
     signalProcess = "ttZ"
-    nSigSamples   = 3
+    nSigSamples   = 4
 
     # dataera
     dataera = "2018"
@@ -48,10 +48,10 @@ def main(pyrootdir, opts):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    config          = "ttZ18/pltcfg_controlPlots_internalCSV"
+    config          = "ttZ18/pltcfg_controlPlots"
     variable_cfg    = "ttZ18/additionalVariables"
-    plot_cfg        = "ttZ18/controlPlots_4Node"
-    syst_cfg        = "ttZ18/systematics_internalCSV"
+    plot_cfg        = "ttZ18/controlPlots"
+    syst_cfg        = "ttZ18/systematics"
 
     # file for rate factors
     rateFactorsFile = pyrootdir+"/data/rateFactors/rateFactors_2018.csv"
@@ -65,7 +65,7 @@ def main(pyrootdir, opts):
         # options to activate parts of the script
         "haddFromWildcard":     True,
         "makeDataCards":        False,
-        "makeInputDatacards":   False, # create datacards also for all defined plots
+        "makeInputDatacards":   True, # create datacards also for all defined plots
         "addData":              True,  # adding real data 
         "makePlots":            True,
         # options for makePlots
@@ -182,7 +182,7 @@ def main(pyrootdir, opts):
         #pP.setDataBases(plotDataBases)
         #pP.setMEMDataBase(memDataBase)
         #pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts(250000)
+        pP.setMaxEvts(100000)
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
 

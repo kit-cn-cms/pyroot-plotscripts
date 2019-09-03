@@ -522,7 +522,7 @@ class DNN:
 
 
 class theInterface:
-    def __init__(self, workdir = None, dnnSet = None, crossEvaluation = True):
+    def __init__(self, workdir = None, dnnSet = None, crossEvaluation = False):
         # compile stuff
         self.includeString = includeString
         self.libraryString = libraryString

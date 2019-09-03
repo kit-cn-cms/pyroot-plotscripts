@@ -41,11 +41,7 @@ if opts.processes:
 else:
     print("using default processes:")
     opts.processes = [
-        "ttbarOther",
-        "ttbarPlusBBbar",
-        "ttbarPlus2B",
-        "ttbarPlusB",
-        "ttbarPlusCCbar"
+        "tthf", "ttlf", "ttcc"
         ]
     print("\n".join(opts.processes))
 
@@ -108,26 +104,34 @@ else:
     #    #"ge6j_ge3t_RecoTTZ_Z_M",
     #    ]
     opts.variables = [
-        "finaldiscr_ljets_ge4j_3t_ttZ_node",
-        "finaldiscr_ljets_ge4j_3t_tthf_node",
+        #"finaldiscr_ljets_ge4j_3t_ttZ_node",
+        #"finaldiscr_ljets_ge4j_3t_tthf_node",
 
-        "finaldiscr_ljets_ge4j_ge4t_ttZ_node",
-        "finaldiscr_ljets_ge4j_ge4t_tthf_node",
+        #"finaldiscr_ljets_ge4j_ge4t_ttZ_node",
+        #"finaldiscr_ljets_ge4j_ge4t_tthf_node",
 
-        "finaldiscr_ljets_ge4j_ge3t_ttZ_node",
-        "finaldiscr_ljets_ge4j_ge3t_tthf_node",
+        #"finaldiscr_ljets_ge4j_ge3t_ttZ_node",
+        #"finaldiscr_ljets_ge4j_ge3t_tthf_node",
 
-        "finaldiscr_ljets_ge6j_ge3t_ttZ_node",
-        "finaldiscr_ljets_ge6j_ge3t_tthf_node",
+        "finaldiscr_ljets_ge6j_ge3t_ttHNodeDNN_ttZ_node",
+        "finaldiscr_ljets_ge6j_ge3t_ttHNodeDNN_ttH_node",
+        "finaldiscr_ljets_ge6j_ge3t_ttHNodeDNN_tthf_node",
+        "finaldiscr_ljets_ge6j_ge3t_ttHNodeDNN_ttcc_node",
+        "finaldiscr_ljets_ge6j_ge3t_ttHNodeDNN_ttlf_node",
 
-        "finaldiscr_ljets_le5j_ge3t_ttZ_node",
-        "finaldiscr_ljets_le5j_ge3t_tthf_node",
+        #"finaldiscr_ljets_le5j_ge3t_ttZ_node",
+        #"finaldiscr_ljets_le5j_ge3t_tthf_node",
+        "finaldiscr_ljets_5j_ge3t_ttHNodeDNN_ttZ_node",
+        "finaldiscr_ljets_5j_ge3t_ttHNodeDNN_ttZ_node",
+        "finaldiscr_ljets_5j_ge3t_ttHNodeDNN_ttH_node",
+        "finaldiscr_ljets_5j_ge3t_ttHNodeDNN_tthf_node",
+        "finaldiscr_ljets_5j_ge3t_ttHNodeDNN_ttcc_node",
 
-        "finaldiscr_ljets_4j_ge3t_ttZ_node",
-        "finaldiscr_ljets_4j_ge3t_tthf_node",
-
-        "finaldiscr_ljets_5j_ge3t_ttZ_node",
-        "finaldiscr_ljets_5j_ge3t_tthf_node",
+        "finaldiscr_ljets_4j_ge3t_ttHNodeDNN_ttlf_node",
+        "finaldiscr_ljets_4j_ge3t_ttHNodeDNN_ttH_node",
+        "finaldiscr_ljets_4j_ge3t_ttHNodeDNN_tthf_node",
+        "finaldiscr_ljets_4j_ge3t_ttHNodeDNN_ttcc_node",
+        "finaldiscr_ljets_4j_ge3t_ttHNodeDNN_ttlf_node",
         ]
 
     print("\n".join(opts.variables))
