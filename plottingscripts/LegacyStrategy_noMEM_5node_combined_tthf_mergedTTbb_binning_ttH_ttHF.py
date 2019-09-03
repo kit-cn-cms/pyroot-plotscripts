@@ -187,7 +187,7 @@ def main(pyrootdir, opts):
         #pP.setMEMDataBase(memDataBase)
         pP.setDNNInterface(dnnInterface)
         pP.setMaxEvts(200000)
-        pP.setRateFactorsFile(rateFactorsFile)
+        # pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
 
         # run plotParallel
