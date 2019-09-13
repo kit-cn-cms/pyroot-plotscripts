@@ -12,7 +12,7 @@ import util.tools.plotClasses as plotClasses
 
 # samples
 # input path
-path_mwassmer = "/nfs/dust/cms/user/mwassmer/MonoTop/ntuples_2018"
+path_mwassmer = "/nfs/dust/cms/user/mwassmer/MonoTop/ntuples_2018_new_skims"
 
 ttbarPathS = (
     path_mwassmer
@@ -24,58 +24,6 @@ ttbarPathS = (
     + path_mwassmer
     + "/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/*nominal*.root"
 )
-
-# VJetsPathS = (
-# path_mwassmer
-# + "/DYJets*/*nominal*.root"
-# + ";"
-# + path_mwassmer
-# + "/WJets*/*nominal*.root"
-# )
-
-# ttVPathS = (
-# path_mwassmer
-# + "/TTW*/*nominal*.root"
-# + ";"
-# + path_mwassmer
-# + "/TTZToLLNuNu*/*nominal*.root"
-# + ";"
-# + path_mwassmer
-# + "/TTZToQQ*/*nominal*.root"
-# )
-
-# dibosonPathS = (
-# path_mwassmer
-# + "/WW_*/*nominal*.root"
-# + ";"
-# + path_mwassmer
-# + "/WZ_*/*nominal*.root"
-# + ";"
-# + path_mwassmer
-# + "/ZZ_*/*nominal*.root"
-# )
-
-# stpath = path_mwassmer + "/ST_*/*nominal*.root"
-
-# ttHpath = (
-# path_mwassmer
-# + "/ttHTobb_M125*/*nominal*.root"
-# + ";"
-# + path_mwassmer
-# + "/ttHToNonbb_M125*/*nominal*.root"
-# )
-
-# ttZpath = (
-# path_mwassmer
-# + "/TTZToQQ*/*nominal*.root"
-# + ";"
-# + path_mwassmer
-# + "/TTZToBB*/*nominal*.root"
-# + ";"
-# + path_mwassmer
-# + "/TTZToLLNuNu_M-10*/*nominal*.root"
-# + ";"
-# )
 
 # SELECTIONS
 
@@ -192,24 +140,35 @@ doReadTrees = True
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
 samplesDataControlPlots = [
-    plotClasses.Sample(
-    "MET",
-    ROOT.kBlack,
-    path_mwassmer + "/MET*/*nominal*.root",
-    sel_MET ,
-    "MET",
-    samDict=sampleDict,
-    readTrees=doReadTrees,
-    ),
     #plotClasses.Sample(
-    #"SingleEl",
+    #"MET",
     #ROOT.kBlack,
-    #path_mwassmer + "/EGamma*/*nominal*.root",
-    #sel_singleel ,
-    #"SingleEl",
+    #path_mwassmer + "/MET*/*nominal*.root",
+    #"(Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX == 1) || (Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX == 1)" ,
+    #"MET",
     #samDict=sampleDict,
     #readTrees=doReadTrees,
     #),
+    plotClasses.Sample(
+    "SingleEl",
+    ROOT.kBlack,
+    path_mwassmer + "/EGamma*/*nominal*.root",
+    "N_LooseElectrons>0",
+    #"(N_TightElectrons==1) && (N_LooseElectrons==1) && ((Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1) || (Triggered_HLT_Ele32_WPTight_Gsf_vX==1))" ,
+    "SingleEl",
+    samDict=sampleDict,
+    readTrees=doReadTrees,
+    ),
+    plotClasses.Sample(
+    "SingleMu",
+    ROOT.kBlack,
+    path_mwassmer + "/SingleMuon*/*nominal*.root",
+    "N_LooseMuons>0",
+    #"(N_TightMuons==1) && (N_LooseMuons==1) && (Triggered_HLT_IsoMu24_vX==1)" ,
+    "SingleMu",
+    samDict=sampleDict,
+    readTrees=doReadTrees,
+    ),
 ]
 
 
@@ -217,12 +176,12 @@ samplesDataControlPlots = [
 samples = [
     # signal samples
     plotClasses.Sample(
-        "VectorMonotop_Mphi_2000_Mchi_1500",
+        "#splitline{VectorMonotop}{M_{#phi}=2000 M_{#chi}=500}",
         ROOT.kCyan,
-        path_mwassmer + "/VectorMonotop_Mphi_2000_Mchi_1500/*nominal*.root",
+        path_mwassmer + "/VectorMonotop_Mphi_2000_Mchi_500/*nominal*.root",
         # lumi reweighting factor due to stupid cross section calculation
         lumi + sel_MET,
-        "VectorMonotop_Mphi_2000_Mchi_1500",
+        "VectorMonotop_Mphi_2000_Mchi_500",
         samDict=sampleDict,
         readTrees=doReadTrees,
         typ="signal",
@@ -291,7 +250,7 @@ samples = [
     plotClasses.Sample(
         "Diboson",
         ROOT.kAzure + 2,
-        path_mwassmer + "/??_TuneCP5_13TeV-pythia8*/*nominal*.root",
+        path_mwassmer + "/??_TuneCP5*/*nominal*.root",
         lumi + sel_MET,
         "diboson",
         samDict=sampleDict,

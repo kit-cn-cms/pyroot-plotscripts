@@ -1,4 +1,4 @@
-Uncertainty,Type,Construction,Up,Down,Plot,VectorMonotop_Mphi_2000_Mchi_1500,ttbar,znunujets,wlnujets,singlet,diboson,qcd,zlljets
+Uncertainty,Type,Construction,Up,Down,Plot,VectorMonotop_Mphi_2000_Mchi_500,ttbar,znunujets,wlnujets,singlet,diboson,qcd,zlljets
 #,,,,,,,,,,,,,,,,,,,
 #CMS_res_j_2018,shape,variation,JERup,JERdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 #CMS_scale_j_2018,shape,variation,JESup,JESdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
