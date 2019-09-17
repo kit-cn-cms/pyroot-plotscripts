@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttZControlPlots'
+    name = 'ttZControlPlots_v1'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -51,7 +51,7 @@ def main(pyrootdir, opts):
     config          = "ttZ18/pltcfg_controlPlots"
     variable_cfg    = "ttZ18/additionalVariables"
     plot_cfg        = "ttZ18/controlPlots"
-    syst_cfg        = "ttZ18/systematics"
+    syst_cfg        = "ttZ18/systematics_reduced"
 
     # file for rate factors
     rateFactorsFile = pyrootdir+"/data/rateFactors/rateFactors_2018.csv"
@@ -75,7 +75,7 @@ def main(pyrootdir, opts):
         "ratio":                "#frac{data}{MC Background}",
         "shape":                False, # for shape plots
         "normalize":            False, # normalize yield to integral 1
-        "logarithmic":          False,
+        "logarithmic":          True,
         "splitLegend":          True,
         # the skipX options try to skip the submission of files to the batch system
         # before skipping the output is crosschecked
@@ -86,7 +86,7 @@ def main(pyrootdir, opts):
         "skipHistoCheck":       opts.skipHistoCheck,
         "skipDatacards":        opts.skipDatacards}
 
-    plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttZ_2018_v5.json"
+    plotJson = ""
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
@@ -182,7 +182,7 @@ def main(pyrootdir, opts):
         #pP.setDataBases(plotDataBases)
         #pP.setMEMDataBase(memDataBase)
         #pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts(100000)
+        pP.setMaxEvts(350000)
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
 

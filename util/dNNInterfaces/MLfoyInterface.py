@@ -401,7 +401,7 @@ class DNN:
             plotConfig = {
                 "histname":     "\"ljets_"+self.category+"_"+var+"\"", 
                 "plotname":     "\""+variables.loc[var, "displayname"]+"\"",
-                "nbins":        variables.loc[var, "numberofbins"],
+                "nbins":        int(variables.loc[var, "numberofbins"]),
                 "minval":       variables.loc[var, "minvalue"],
                 "maxval":       variables.loc[var, "maxvalue"],
                 "expression":   "\""+var+"\""}
@@ -703,7 +703,7 @@ def plots_dnn(data, discrname):
 
     for l in this_dict:
         this_dict[l]["histoname"] = discrname+"_"+l
-        this_dict[l]["histotitle"] = "final discriminator ({})".format(l)
+        this_dict[l]["histotitle"] = "ANN output ({})".format(translateName(l))
         this_dict[l]["plotPreselections"] = this_dict[l]["category"][0]
 
     DNNPlots = init_plots(dictionary = this_dict, data = data)
@@ -718,6 +718,23 @@ def plots_dnn(data, discrname):
 
     def generateInitPlotsFunc(self):
         code ="""
+def translateName(name):
+    name = name.replace("ljets_","")
+    name = name.replace("ge6j_ge3t_","")
+    name = name.replace("ge4j_ge3t_","")
+    name = name.replace("ge4j_3t_","")
+    name = name.replace("ge4j_ge4t_","")
+    name = name.replace("4j_ge3t_","")
+    name = name.replace("le5j_ge3t_","")
+    name = name.replace("5j_ge3t_","")
+
+    name = name.replace("ttZ_","t#bar{t}+Z ")
+    name = name.replace("ttH_","t#bar{t}+H ")
+    name = name.replace("ttbb_","t#bar{t}+b#bar{b} ")
+    name = name.replace("ttlf_","t#bar{t}+lf ")
+    name = name.replace("ttcc_","t#bar{t}+c#bar{c} ")
+    return name
+
 def init_plots(dictionary, data = None):
     plots = [] #init list of plotClasses objects to return
     for label in dictionary:

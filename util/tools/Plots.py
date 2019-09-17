@@ -86,13 +86,13 @@ class Plot:
             print("ERROR! Type wrong!")
         #sets style for error band
         if self.errorband:
-            self.errorband.SetFillStyle(3004)
+            self.errorband.SetFillStyle(1001)#save
             self.errorband.SetLineColor(ROOT.kBlack)
             self.errorband.SetFillColor(ROOT.kBlack)
         #sets style for error band
         if self.specificerrorband:
             for n,seb in enumerate(specificerrorband):
-                seb.SetFillStyle(3004)
+                seb.SetFillStyle(1001)#save
                 seb.SetLineColor(self.sebColor[n])
                 seb.SetFillColor(self.sebColor[n])
 
@@ -264,7 +264,7 @@ def getHistogramAndErrorband(rootFile,sample,color,typ,label,nominalKey,procIden
 
 def GetErrorGraph(histo):
     error_graph = ROOT.TGraphAsymmErrors(histo)
-    error_graph.SetFillStyle(3005)
+    error_graph.SetFillStyle(1001)#save
     error_graph.SetFillColor(ROOT.kBlack)
     return error_graph
 
@@ -469,7 +469,7 @@ class DrawHistograms:
         scaling maximal and minimal y value for better readability
         """
         if self.logoption:
-            firstHist.GetYaxis().SetRangeUser(self.yMinMax/10000, self.yMax*1000)
+            firstHist.GetYaxis().SetRangeUser(max(self.yMinMax/10000,0.1), self.yMax*1000)
             ROOT.gPad.SetLogy(1)
         else:
             firstHist.GetYaxis().SetRangeUser(0, self.yMax*1.5)
@@ -478,7 +478,8 @@ class DrawHistograms:
         Handle titles
         """
         firstHist.GetYaxis().SetTitle(self.GetyTitle())
-        firstHist.GetYaxis().SetTitleSize(firstHist.GetYaxis().GetTitleSize()*1.2)
+        firstHist.GetYaxis().SetTitleSize(firstHist.GetYaxis().GetTitleSize()*1.6)
+        firstHist.GetYaxis().SetLabelSize(firstHist.GetYaxis().GetLabelSize()*1.4)
         canvaslabel=firstHist.GetTitle()
 
 
@@ -507,14 +508,16 @@ class DrawHistograms:
             h.DrawCopy(option+"same")
 
         if self.errorband:
-            self.errorband.SetFillStyle(3004)
-            self.errorband.SetLineColor(ROOT.kBlack)
-            self.errorband.SetFillColor(ROOT.kBlack)
+            self.errorband.SetFillStyle(1001)#save
+            self.errorband.SetLineColorAlpha(ROOT.kBlack,0.3)
+            self.errorband.SetFillColorAlpha(ROOT.kBlack,0.3)
             self.errorband.Draw("same2")
         elif self.combinederrorband:
-            self.combinederrorband.SetFillStyle(3004)
-            self.combinederrorband.SetLineColor(ROOT.kBlack)
-            self.combinederrorband.SetFillColor(ROOT.kBlack)
+            self.combinederrorband.SetFillStyle(1001)#save
+            self.combinederrorband.SetLineColorAlpha(ROOT.kBlack,0.3)
+            self.combinederrorband.SetFillColorAlpha(ROOT.kBlack,0.3)
+            #self.combinederrorband.SetLineColor(ROOT.kGray)
+            #self.combinederrorband.SetFillColor(ROOT.kGray)
             self.combinederrorband.Draw("same2")
 
 
@@ -677,12 +680,12 @@ class DrawHistograms:
 
         line.SetTitle("")
 
-        line.GetXaxis().SetLabelSize(line.GetXaxis().GetLabelSize()*2.4)
-        line.GetYaxis().SetLabelSize(line.GetYaxis().GetLabelSize()*2.2)
+        line.GetXaxis().SetLabelSize(line.GetXaxis().GetLabelSize()*3.0)
+        line.GetYaxis().SetLabelSize(line.GetYaxis().GetLabelSize()*3.0)
         line.GetXaxis().SetTitle(canvaslabel)
 
-        line.GetXaxis().SetTitleSize(line.GetXaxis().GetTitleSize()*3)
-        line.GetYaxis().SetTitleSize(line.GetYaxis().GetTitleSize()*2.5)
+        line.GetXaxis().SetTitleSize(line.GetXaxis().GetTitleSize()*3.7)
+        line.GetYaxis().SetTitleSize(line.GetYaxis().GetTitleSize()*3.0)
 
         line.GetYaxis().SetTitleOffset(0.5)
         line.GetYaxis().SetNdivisions(505)
@@ -815,7 +818,7 @@ class DrawHistograms:
         latex = ROOT.TLatex() 
         latex.SetNDC() 
         latex.SetTextColor(ROOT.kBlack) 
-        latex.SetTextSize(0.04)
+        latex.SetTextSize(0.05)
 
         text = "CMS #bf{#it{"+cmslabel+"}}"
 
@@ -861,29 +864,29 @@ def getCanvas(name, ratiopad = False):
     return canvas
 
 def getLegend():
-    legend=ROOT.TLegend(0.70,0.6,0.95,0.9)
+    legend=ROOT.TLegend(0.70,0.5,0.95,0.9)
     legend.SetBorderSize(0);
     legend.SetLineStyle(0);
     legend.SetTextFont(42);
-    legend.SetTextSize(0.03);
+    legend.SetTextSize(0.04);
     legend.SetFillStyle(0);
     return legend
 
 def getLegend1():
-    legend=ROOT.TLegend(0.65,0.7,0.8,0.9)
+    legend=ROOT.TLegend(0.6,0.7,0.8,0.9)
     legend.SetBorderSize(0);
     legend.SetLineStyle(0);
     legend.SetTextFont(42);
-    legend.SetTextSize(0.03);
+    legend.SetTextSize(0.04);
     legend.SetFillStyle(0);
     return legend
 
 def getLegend2():
-    legend=ROOT.TLegend(0.8,0.7,0.95,0.9)
+    legend=ROOT.TLegend(0.75,0.7,0.99,0.9)
     legend.SetBorderSize(0);
     legend.SetLineStyle(0);
     legend.SetTextFont(42);
-    legend.SetTextSize(0.03);
+    legend.SetTextSize(0.04);
     legend.SetFillStyle(0);
     return legend
 

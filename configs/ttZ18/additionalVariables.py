@@ -37,11 +37,6 @@ def getAddVars():
         "Weight_CSVCErr2up",
         "Weight_CSVCErr2down",
         "Weight_pu69p2",
-        "GenWeight_isr_Def_down:=GenWeight_8",
-        "GenWeight_isr_Def_up:=GenWeight_6",
-        "GenWeight_fsr_Def_down:=GenWeight_9",
-        "GenWeight_fsr_Def_up:=GenWeight_7",
-    
         ]
 
     return addVars
