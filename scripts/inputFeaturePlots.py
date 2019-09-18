@@ -14,6 +14,7 @@ parser.add_option("-v",dest="variableset",
 
 template = """
 \\begin{{figure}}[h!]
+    \\centering
 
 {graphics}
     \\caption[input features]{{\\textbf{{Final selection of input features for the {jt} jet region before the fit to data.}} The predicted contributions of all background samples are stacked. the \\ttZ contribution is overlaid as a line scaled to match the integral of the total background. Ratios between data (black dots) and total background are shown in the bottom. The error bands correspond to the systematic uncertainties of the background contributions with a shape changing effect.

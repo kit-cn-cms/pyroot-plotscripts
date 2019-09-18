@@ -31,14 +31,14 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttZ18_discrPlots'
+    name = 'ttZ18_discrPlots_v3'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
 
     # signal process
     signalProcess = "ttZ"
-    nSigSamples   = 3
+    nSigSamples   = 1
 
     # dataera
     dataera = "2018"
@@ -50,10 +50,10 @@ def main(pyrootdir, opts):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    config          = "ttZ18/pltcfg_discrPlots"
+    config          = "ttZ18/pltcfg_discrPlots2"
     variable_cfg    = "ttZ18/additionalVariables"
     plot_cfg        = "ttZ18/discrPlots"
-    syst_cfg        = "ttZ18/systematics"
+    syst_cfg        = "ttZ18/systematics_reduced2"
 
     # file for rate factors
     rateFactorsFile = pyrootdir+"/data/rateFactors/rateFactors_2018.csv"
@@ -74,7 +74,7 @@ def main(pyrootdir, opts):
         "signalScaling":        1,
         "lumiLabel":            True,
         "CMSlabel":             "private Work",
-        "ratio":                "#frac{pseudo data}{MC Backgrond}",
+        "ratio":                False,#"#frac{Pseudo Data}{Background}",
         "shape":                False, # for shape plots
         "normalize":            False, # normalize yield to integral 1
         "logarithmic":          True,
@@ -88,11 +88,11 @@ def main(pyrootdir, opts):
         "skipHistoCheck":       opts.skipHistoCheck,
         "skipDatacards":        opts.skipDatacards}
 
-    plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttZ_2018_v5.json"
+    plotJson = ""
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/ttZConfig"}
+                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/ttZAnalysis/DNNSets/finalSet"}
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"

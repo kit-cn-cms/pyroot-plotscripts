@@ -1,5 +1,6 @@
 
 \begin{figure}[h!]
+    \centering
 
 \includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_4j_ge3t_CSV_2.pdf}
 \includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_4j_ge3t_CSV_3.pdf}\\
@@ -7,8 +8,8 @@
 \includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_4j_ge3t_Evt_CSV_avg_tagged.pdf}
 \includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_4j_ge3t_Evt_CSV_dev.pdf}\\
 
-\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_4j_ge3t_Evt_CSV_min.pdf}
-\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_4j_ge3t_Evt_CSV_min_tagged.pdf}\\
+\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_4j_ge3t_Evt_Deta_JetsAverage.pdf}
+\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_4j_ge3t_Evt_Deta_TaggedJetsAverage.pdf}\\
 
 
     \caption[input features]{\textbf{Final selection of input features for the four jet region before the fit to data.} The predicted contributions of all background samples are stacked. the \ttZ contribution is overlaid as a line scaled to match the integral of the total background. Ratios between data (black dots) and total background are shown in the bottom. The error bands correspond to the systematic uncertainties of the background contributions with a shape changing effect.
@@ -18,9 +19,7 @@
 \newpage
 
 \begin{figure}[h!]
-
-\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_4j_ge3t_Evt_Deta_JetsAverage.pdf}
-\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_4j_ge3t_Evt_Deta_TaggedJetsAverage.pdf}\\
+    \centering
 
 \includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_4j_ge3t_Evt_Dr_minDrJets.pdf}
 \includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_4j_ge3t_Evt_Dr_minDrTaggedJets.pdf}\\
@@ -28,6 +27,9 @@
 \includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_4j_ge3t_Evt_M2_closestTo125TaggedJets.pdf}
 \includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_4j_ge3t_Evt_M2_closestTo91TaggedJets.pdf}\\
 
+\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_4j_ge3t_Evt_MHT.pdf}
+\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_4j_ge3t_Evt_Pt_TaggedJetsAverage.pdf}\\
+
 
     \caption[input features]{\textbf{Final selection of input features for the four jet region before the fit to data.} The predicted contributions of all background samples are stacked. the \ttZ contribution is overlaid as a line scaled to match the integral of the total background. Ratios between data (black dots) and total background are shown in the bottom. The error bands correspond to the systematic uncertainties of the background contributions with a shape changing effect.
     }
@@ -36,24 +38,13 @@
 \newpage
 
 \begin{figure}[h!]
-
-\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_4j_ge3t_Evt_MHT.pdf}
-\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_4j_ge3t_Evt_Pt_TaggedJetsAverage.pdf}\\
+    \centering
 
 \includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_4j_ge3t_Evt_blr_transformed.pdf}
 \includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_4j_ge3t_RecoTTZ_Chi2Total_log.pdf}\\
 
 \includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_4j_ge3t_RecoTTZ_Chi2WHad_log.pdf}
 \includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_4j_ge3t_RecoTTZ_TopHad_M.pdf}\\
-
-
-    \caption[input features]{\textbf{Final selection of input features for the four jet region before the fit to data.} The predicted contributions of all background samples are stacked. the \ttZ contribution is overlaid as a line scaled to match the integral of the total background. Ratios between data (black dots) and total background are shown in the bottom. The error bands correspond to the systematic uncertainties of the background contributions with a shape changing effect.
-    }
-\end{figure}
-
-\newpage
-
-\begin{figure}[h!]
 
 \includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_4j_ge3t_RecoTTZ_TopHad_W_M.pdf}
 
@@ -64,33 +55,16 @@
 \newpage
 
 \begin{figure}[h!]
+    \centering
 
 \includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_CSV_2.pdf}
 \includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_CSV_3.pdf}\\
 
-\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_CSV_avg.pdf}
-\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_CSV_avg_tagged.pdf}\\
+\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_CSV_avg_tagged.pdf}
+\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_CSV_dev.pdf}\\
 
-\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_CSV_dev.pdf}
-\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_CSV_min.pdf}\\
-
-
-    \caption[input features]{\textbf{Final selection of input features for the five jet region before the fit to data.} The predicted contributions of all background samples are stacked. the \ttZ contribution is overlaid as a line scaled to match the integral of the total background. Ratios between data (black dots) and total background are shown in the bottom. The error bands correspond to the systematic uncertainties of the background contributions with a shape changing effect.
-    }
-\end{figure}
-
-\newpage
-
-\begin{figure}[h!]
-
-\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_Deta_TaggedJetsAverage.pdf}
-\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_Dr_JetsAverage.pdf}\\
-
-\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_Dr_TaggedJetsAverage.pdf}
-\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_Dr_minDrJets.pdf}\\
-
-\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_Dr_minDrTaggedJets.pdf}
-\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_M2_TaggedJetsAverage.pdf}\\
+\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_CSV_min.pdf}
+\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_Deta_TaggedJetsAverage.pdf}\\
 
 
     \caption[input features]{\textbf{Final selection of input features for the five jet region before the fit to data.} The predicted contributions of all background samples are stacked. the \ttZ contribution is overlaid as a line scaled to match the integral of the total background. Ratios between data (black dots) and total background are shown in the bottom. The error bands correspond to the systematic uncertainties of the background contributions with a shape changing effect.
@@ -100,15 +74,35 @@
 \newpage
 
 \begin{figure}[h!]
+    \centering
 
-\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_M2_closestTo125TaggedJets.pdf}
-\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_M2_closestTo91TaggedJets.pdf}\\
+\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_Dr_JetsAverage.pdf}
+\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_Dr_TaggedJetsAverage.pdf}\\
 
-\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_M2_minDrJets.pdf}
-\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_M_TaggedJetsAverage.pdf}\\
+\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_Dr_minDrJets.pdf}
+\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_Dr_minDrTaggedJets.pdf}\\
 
-\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_M_Total.pdf}
-\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_Pt_minDrJets.pdf}\\
+\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_M2_TaggedJetsAverage.pdf}
+\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_M2_closestTo125TaggedJets.pdf}\\
+
+
+    \caption[input features]{\textbf{Final selection of input features for the five jet region before the fit to data.} The predicted contributions of all background samples are stacked. the \ttZ contribution is overlaid as a line scaled to match the integral of the total background. Ratios between data (black dots) and total background are shown in the bottom. The error bands correspond to the systematic uncertainties of the background contributions with a shape changing effect.
+    }
+\end{figure}
+
+\newpage
+
+\begin{figure}[h!]
+    \centering
+
+\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_M2_closestTo91TaggedJets.pdf}
+\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_M2_minDrJets.pdf}\\
+
+\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_M_TaggedJetsAverage.pdf}
+\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_M_Total.pdf}\\
+
+\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_Pt_minDrJets.pdf}
+\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_blr.pdf}\\
 
 
     \caption[input features]{\textbf{Final selection of input features for the five jet region before the fit to data.} The predicted contributions of all background samples are stacked. the \ttZ contribution is overlaid as a line scaled to match the integral of the total background. Ratios between data (black dots) and total background are shown in the bottom. The error bands correspond to the systematic uncertainties of the background contributions with a shape changing effect.
@@ -118,14 +112,14 @@
 \newpage
 
 \begin{figure}[h!]
+    \centering
 
-\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_blr.pdf}
-\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_blr_transformed.pdf}\\
+\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_blr_transformed.pdf}
+\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_h1.pdf}\\
 
-\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_Evt_h1.pdf}
-\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_RecoTTZ_Chi2Total_log.pdf}\\
+\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_RecoTTZ_Chi2Total_log.pdf}
+\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_RecoTTZ_Chi2WHad_log.pdf}\\
 
-\includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_5j_ge3t_RecoTTZ_Chi2WHad_log.pdf}
 
     \caption[input features]{\textbf{Final selection of input features for the five jet region before the fit to data.} The predicted contributions of all background samples are stacked. the \ttZ contribution is overlaid as a line scaled to match the integral of the total background. Ratios between data (black dots) and total background are shown in the bottom. The error bands correspond to the systematic uncertainties of the background contributions with a shape changing effect.
     }
@@ -134,6 +128,7 @@
 \newpage
 
 \begin{figure}[h!]
+    \centering
 
 \includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_ge6j_ge3t_CSV_3.pdf}
 \includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_ge6j_ge3t_Evt_CSV_avg.pdf}\\
@@ -152,6 +147,7 @@
 \newpage
 
 \begin{figure}[h!]
+    \centering
 
 \includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_ge6j_ge3t_Evt_M2_closestTo125TaggedJets.pdf}
 \includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_ge6j_ge3t_Evt_M2_closestTo91TaggedJets.pdf}\\
@@ -170,6 +166,7 @@
 \newpage
 
 \begin{figure}[h!]
+    \centering
 
 \includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_ge6j_ge3t_Evt_blr_transformed.pdf}
 \includegraphics[width=0.45\textwidth]{figures/InputFeatures/ljets_ge6j_ge3t_Jet_Pt_0.pdf}\\

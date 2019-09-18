@@ -469,17 +469,23 @@ class DrawHistograms:
         scaling maximal and minimal y value for better readability
         """
         if self.logoption:
-            firstHist.GetYaxis().SetRangeUser(max(self.yMinMax/10000,0.1), self.yMax*1000)
+            firstHist.GetYaxis().SetRangeUser(max(self.yMinMax/10000,1.1e-1), self.yMax*1000)
             ROOT.gPad.SetLogy(1)
         else:
-            firstHist.GetYaxis().SetRangeUser(0, self.yMax*1.5)
+            firstHist.GetYaxis().SetRangeUser(0, self.yMax*1.45)
         
         """
         Handle titles
         """
         firstHist.GetYaxis().SetTitle(self.GetyTitle())
-        firstHist.GetYaxis().SetTitleSize(firstHist.GetYaxis().GetTitleSize()*1.6)
-        firstHist.GetYaxis().SetLabelSize(firstHist.GetYaxis().GetLabelSize()*1.4)
+        firstHist.GetYaxis().SetTitleSize(firstHist.GetYaxis().GetTitleSize()*1.7)
+        firstHist.GetXaxis().SetTitleSize(firstHist.GetXaxis().GetTitleSize()*1.7)
+        if self.logoption:
+            firstHist.GetYaxis().SetTitleOffset(0.9)
+        else:
+            firstHist.GetYaxis().SetTitleOffset(1.3)
+        firstHist.GetYaxis().SetLabelSize(firstHist.GetYaxis().GetLabelSize()*1.5)
+        firstHist.GetXaxis().SetLabelSize(firstHist.GetXaxis().GetLabelSize()*1.5)
         canvaslabel=firstHist.GetTitle()
 
 
@@ -527,6 +533,8 @@ class DrawHistograms:
         if self.data:
             self.data.SetLineColor(ROOT.kBlack)
             self.data.SetMarkerStyle(20)
+            self.data.SetMarkerSize(1.5)
+            self.data.SetLineWidth(1)
             self.data.Draw("same1")
 
         self.canvas.cd(1)
@@ -680,14 +688,15 @@ class DrawHistograms:
 
         line.SetTitle("")
 
-        line.GetXaxis().SetLabelSize(line.GetXaxis().GetLabelSize()*3.0)
-        line.GetYaxis().SetLabelSize(line.GetYaxis().GetLabelSize()*3.0)
+        line.GetXaxis().SetLabelSize(line.GetXaxis().GetLabelSize()*3.3)
+        line.GetYaxis().SetLabelSize(line.GetYaxis().GetLabelSize()*3.3)
         line.GetXaxis().SetTitle(canvaslabel)
 
-        line.GetXaxis().SetTitleSize(line.GetXaxis().GetTitleSize()*3.7)
-        line.GetYaxis().SetTitleSize(line.GetYaxis().GetTitleSize()*3.0)
+        line.GetXaxis().SetTitleSize(line.GetXaxis().GetTitleSize()*4.0)
+        line.GetYaxis().SetTitleSize(line.GetYaxis().GetTitleSize()*2.8)
 
-        line.GetYaxis().SetTitleOffset(0.5)
+        line.GetYaxis().SetTitleOffset(0.6)
+        line.GetYaxis().CenterTitle()
         line.GetYaxis().SetNdivisions(505)
         for i in range(line.GetNbinsX()+1):
             line.SetBinContent(i, 1)
@@ -702,6 +711,7 @@ class DrawHistograms:
         ratioPlot.SetLineColor(ROOT.kBlack)
         ratioPlot.SetLineWidth(1)
         ratioPlot.SetMarkerStyle(20)
+        ratioPlot.SetMarkerSize(1.5)
         ROOT.gStyle.SetErrorX(0)
         ratioPlot.DrawCopy("sameP")
 
@@ -873,7 +883,7 @@ def getLegend():
     return legend
 
 def getLegend1():
-    legend=ROOT.TLegend(0.6,0.7,0.8,0.9)
+    legend=ROOT.TLegend(0.55,0.7,0.8,0.9)
     legend.SetBorderSize(0);
     legend.SetLineStyle(0);
     legend.SetTextFont(42);

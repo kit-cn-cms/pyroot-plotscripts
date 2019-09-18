@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttZControlPlots_v1'
+    name = 'ttZControlPlots_v2'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -75,7 +75,7 @@ def main(pyrootdir, opts):
         "ratio":                "#frac{data}{MC Background}",
         "shape":                False, # for shape plots
         "normalize":            False, # normalize yield to integral 1
-        "logarithmic":          True,
+        "logarithmic":          False,
         "splitLegend":          True,
         # the skipX options try to skip the submission of files to the batch system
         # before skipping the output is crosschecked
