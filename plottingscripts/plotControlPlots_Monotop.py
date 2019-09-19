@@ -39,8 +39,8 @@ def main(pyrootdir, opts):
     workdir = pyrootdir + "/workdir/" + name
 
     # signal process
-    signalProcess = "VectorMonotop_Mphi_2000_Mchi_1500"
-    nSigSamples = 0
+    signalProcess = "VectorMonotop_Mphi_2000_Mchi_500"
+    nSigSamples = 1
 
     # dataera
     dataera = "2018"
@@ -77,7 +77,7 @@ def main(pyrootdir, opts):
         "shape": False, # for shape plots
         "normalize": False, # normalize yield to integral 1
         "logarithmic": False,
-        "splitLegend": False,
+        "splitLegend": True,
         # the skipX options try to skip the submission of files to the batch system
         # before skipping the output is crosschecked
         # if the output is not complete, the skipped part is done anyways
@@ -264,7 +264,7 @@ def main(pyrootdir, opts):
         with monitor.Timer("addRealData"):
             if analysis.usePseudoData:
                 # pseudo data without ttH
-                # pP.addData(samples = configData.samples[nSigSamples:])
+                #pP.addData(samples = configData.samples[nSigSamples:])
                 # pseudo data with signal
                 pP.addData(samples=configData.samples)
             else:

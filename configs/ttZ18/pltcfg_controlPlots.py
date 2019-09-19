@@ -12,6 +12,7 @@ import util.tools.plotClasses as plotClasses
 # samples
 # input path 
 path_vdlinden  = "/nfs/dust/cms/user/vdlinden/legacyTTH/ntuples/legacy_2018_ttZ_v4"
+path_vdlinden_data  = "/nfs/dust/cms/user/vdlinden/legacyTTH/ntuples/legacy_2018_ttZ_v2"
 
 ttbarPathS = path_vdlinden+'/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
              path_vdlinden+'/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'+';'+\
@@ -51,8 +52,8 @@ sel_MET="*(Evt_MET_Pt>20.)"
 #sel_MET="*1.0"
 
 # select events without huge MuR/MuF weights
-#sel_StrangeMuWeights='*(abs(Weight_scale_variation_muR_0p5_muF_0p5)<=100 && abs(Weight_scale_variation_muR_0p5_muF_1p0)<=100 && abs(Weight_scale_variation_muR_0p5_muF_2p0)<=100 && abs(Weight_scale_variation_muR_1p0_muF_0p5)<=100 && abs(Weight_scale_variation_muR_1p0_muF_1p0)<=100 && abs(Weight_scale_variation_muR_1p0_muF_2p0)<=100 && abs(Weight_scale_variation_muR_2p0_muF_0p5)<=100 && abs(Weight_scale_variation_muR_2p0_muF_1p0)<=100 && abs(Weight_scale_variation_muR_2p0_muF_2p0)<=100)'
-sel_StrangeMuWeights ="*1.0"
+sel_StrangeMuWeights='*(abs(Weight_scale_variation_muR_0p5_muF_0p5)<=100 && abs(Weight_scale_variation_muR_0p5_muF_1p0)<=100 && abs(Weight_scale_variation_muR_0p5_muF_2p0)<=100 && abs(Weight_scale_variation_muR_1p0_muF_0p5)<=100 && abs(Weight_scale_variation_muR_1p0_muF_1p0)<=100 && abs(Weight_scale_variation_muR_1p0_muF_2p0)<=100 && abs(Weight_scale_variation_muR_2p0_muF_0p5)<=100 && abs(Weight_scale_variation_muR_2p0_muF_1p0)<=100 && abs(Weight_scale_variation_muR_2p0_muF_2p0)<=100)'
+#sel_StrangeMuWeights ="*1.0"
 
 
 # higgs decay selections
@@ -145,7 +146,7 @@ lumi = '59.7'
 nominalweight="NomWeight:=("+defaultWeight+"*"+"("+electronSFs+"+"+muonSFs+")"+"*"+"("+electronTrigger+"+"+muonTrigger+")"+")*(DoWeights==1)+(DoWeights==0)*1.0"
 
 # even selection for sample splitting
-evenSel="*(Evt_Odd==0)*2.0"
+evenSel="*1.0"
 
 sampleDict=plotClasses.SampleDictionary()
 sampleDict.doPrintout()
@@ -153,15 +154,15 @@ doReadTrees=True
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
 samplesDataControlPlots=[
-#    plotClasses.Sample('SingleMu',ROOT.kBlack,
-#            path_vdlinden+'/SingleMuon*/*nominal*.root',
-#            sel_singlemu+sel_MET,
-#            'SingleMu', samDict=sampleDict, readTrees=doReadTrees),
-#
-#    plotClasses.Sample('SingleEl',ROOT.kBlack,
-#            path_vdlinden+'/EGamma*/*nominal*.root',
-#            sel_singleel+sel_MET,
-#            'SingleEl', samDict=sampleDict, readTrees=doReadTrees)
+    plotClasses.Sample('SingleMu',ROOT.kBlack,
+            path_vdlinden+'/SingleMuon*/*nominal*.root',
+            sel_singlemu+"*"+sel_jettag+sel_MET,
+            'SingleMu', samDict=sampleDict, readTrees=doReadTrees),
+
+    plotClasses.Sample('SingleEl',ROOT.kBlack,
+            path_vdlinden+'/EGamma*/*nominal*.root',
+            sel_singleel+"*"+sel_jettag+sel_MET,
+            'SingleEl', samDict=sampleDict, readTrees=doReadTrees)
 ]
 
 print "samples"
@@ -173,19 +174,19 @@ samples = [
     plotClasses.Sample('t#bar{t}Z(b#bar{b})',ROOT.kOrange+7,
             path_vdlinden+'/TTZToBB*/*nominal*.root',
             # lumi reweighting factor due to stupid cross section calculation
-            lumi+"*1.014"+evenSel+sel_MET,
+            lumi+"*1.014"+evenSel+sel_MET+sel_StrangeMuWeights,
             'ttZbb',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
     plotClasses.Sample('t#bar{t}Z(q#bar{q})',ROOT.kOrange+7,
             path_vdlinden+'/TTZToQQ*/*nominal*.root',
-            lumi+"*1.014"+evenSel+"*(GenEvt_I_TTZ==0)"+sel_MET,
+            lumi+"*1.014"+evenSel+"*(GenEvt_I_TTZ==0)"+sel_MET+sel_StrangeMuWeights,
             'ttZqq',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
     plotClasses.Sample('t#bar{t}Z(ll)', ROOT.kOrange+7,
             path_vdlinden+'/TTZToLLNuNu_M-10*/*nominal*.root',
-            lumi+"*1.014"+evenSel+sel_MET,
+            lumi+"*1.014"+evenSel+sel_MET+sel_StrangeMuWeights,
             'ttZll',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
     
@@ -202,24 +203,6 @@ samples = [
             lumi+evenSel+'*(GenEvt_I_TTPlusCC==1)'+sel_MET+sel_StrangeMuWeights,
             'ttcc',
             samDict=sampleDict, readTrees=doReadTrees),
-
-    plotClasses.Sample('t#bar{t}+b',ROOT.kAzure+9,
-            ttbarPathS,
-            lumi+evenSel+'*(GenEvt_I_TTPlusBB==1)'+sel_MET+sel_StrangeMuWeights,
-            'ttb',
-            samDict=sampleDict, readTrees=doReadTrees),
-
-    plotClasses.Sample('t#bar{t}+2b',ROOT.kAzure+4,
-            ttbarPathS,
-            lumi+evenSel+'*(GenEvt_I_TTPlusBB==2)'+sel_MET+sel_StrangeMuWeights,
-            'tt2b',
-            samDict=sampleDict, readTrees=doReadTrees),
-
-    plotClasses.Sample('t#bar{t}+b#bar{b}',ROOT.kAzure+3,
-            ttbarPathS,
-            lumi+evenSel+'*(GenEvt_I_TTPlusBB==3)'+sel_MET+sel_StrangeMuWeights,
-            'ttbb',
-            samDict=sampleDict, readTrees=doReadTrees), 
 
     # minor samples
     
@@ -256,8 +239,14 @@ samples = [
 
     plotClasses.Sample('t#bar{t}H',ROOT.kRed+1,
             ttHpath,
-            lumi+evenSel+sel_MET,
+            lumi+evenSel+sel_MET+sel_StrangeMuWeights,
             'ttH',
+            samDict=sampleDict, readTrees=doReadTrees),
+
+    plotClasses.Sample('t#bar{t}+hf',ROOT.kAzure+3,
+            ttbarPathS,
+            lumi+"*1.312"+evenSel+'*(GenEvt_I_TTPlusBB>=1)'+sel_MET+sel_StrangeMuWeights,
+            'tthf',
             samDict=sampleDict, readTrees=doReadTrees),
 ]
 
@@ -281,7 +270,7 @@ plottingsamples = [
 
 
 # sort subset of processes in plots. descending order
-sortedProcesses = ["ttlf", "ttcc", "ttb", "tt2b", "ttbb", "singlet", "ttH", "misc"]
+sortedProcesses = ["ttZ", "ttlf", "ttcc", "tthf", "singlet", "misc", "ttH"]
 
 
 
