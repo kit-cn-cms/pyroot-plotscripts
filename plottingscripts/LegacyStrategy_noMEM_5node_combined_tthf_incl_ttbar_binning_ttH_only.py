@@ -29,54 +29,55 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttZControlPlots_v5'
+    name = 'toytests_noMEM_5node_combined_tthf_incl_ttbar_binning_ttH_only'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
 
     # signal process
-    signalProcess = "ttZ"
-    nSigSamples   = 4
+    signalProcess = "ttH"
+    nSigSamples   = 0
 
     # dataera
-    dataera = "2018"
+    dataera = "2017_deepCSV"
     
     # Name of final discriminator, should not contain underscore
     discrName = 'finaldiscr'
 
     # define MEM discriminator variable
-    memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
-
+    # memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
+    memexp = ""
     # configs
-    config          = "ttZ18/pltcfg_controlPlots_internalCSV_4Node"
-    variable_cfg    = "ttZ18/additionalVariables"
-    plot_cfg        = "ttZ18/controlPlots_4Node"
-    syst_cfg        = "ttZ18/systematics_internalCSV_JES"
+    config          = "ttH17_toytest_noMEM/pltcfg_2017_old_samples.py"
+    variable_cfg    = "ttH17_legacyStrategy/additionalVariables"
+    plot_cfg        = "ttH17_legacyStrategy/plots_toytests_noMEM_5node_mergedTTbb_ttH_only"
+    syst_cfg        = "ttH17_legacyStrategy/systs_combined_tthf_alt_generators"
 
     # file for rate factors
-    rateFactorsFile = pyrootdir+"/data/rateFactors/rateFactors_2018.csv"
+    #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
+    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2017.csv"
 
     # script options
     analysisOptions = {
         # general options
-        "usePseudoData":        False,
+        "usePseudoData":        True,
         "testrun":              False,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
-        "makeDataCards":        False,
-        "makeInputDatacards":   True, # create datacards also for all defined plots
+        "makeDataCards":        True,
+        "makeInputDatacards":   False, # create datacards also for all defined plots
         "addData":              True,  # adding real data 
         "makePlots":            True,
         # options for makePlots
-        "signalScaling":        -1,
+        "signalScaling":        1,
         "lumiLabel":            True,
         "CMSlabel":             "private Work",
         "ratio":                "#frac{data}{MC Background}",
-        "shape":                False, # for shape plots
-        "normalize":            False, # normalize yield to integral 1
+        "shape":                False,
         "logarithmic":          False,
         "splitLegend":          True,
+        "normalize":            False,
         # the skipX options try to skip the submission of files to the batch system
         # before skipping the output is crosschecked
         # if the output is not complete, the skipped part is done anyways
@@ -86,12 +87,15 @@ def main(pyrootdir, opts):
         "skipHistoCheck":       opts.skipHistoCheck,
         "skipDatacards":        opts.skipDatacards}
 
-    plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttZ_2018_v5.json"
+    # plotJson = "/nfs/dust/cms/user/swieland/ttH_legacy/theRealPlotscript/pyroot-plotscripts/configs/ttH17/treejson.json"
+    # plotJson = "/nfs/dust/cms/user/swieland/ttH_legacy/theRealPlotscript/pyroot-plotscripts/configs/ttH17/treejson_noSingleEl.json"
+    # plotJson = "/nfs/dust/cms/user/pkeicher/ttH_legacy/pyroot-plotscripts/treejson.json"
+    plotJson = "/nfs/dust/cms/user/pkeicher/ttH_legacy/pyroot-plotscripts/treejson.json"
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
-    #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-    #                "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/ttZ18_hf_recoVars"}
-    dnnInterface = None
+    dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
+                   "checkpointFiles":  "/nfs/dust/cms/user/swieland/ttH_legacy/tthlegacystrategystudy/DNNs/5node_mergedSample/"}
+    # dnnInterface = None
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
@@ -181,8 +185,8 @@ def main(pyrootdir, opts):
         pP.setJson(plotJson)
         #pP.setDataBases(plotDataBases)
         #pP.setMEMDataBase(memDataBase)
-        #pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts(100000)
+        pP.setDNNInterface(dnnInterface)
+        pP.setMaxEvts(200000)
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
 
@@ -216,7 +220,7 @@ def main(pyrootdir, opts):
     else:
         print '''
         # ========================================================
-        # checking Histograms
+        # renaming Histograms
         # ========================================================
         '''
 
@@ -237,6 +241,7 @@ def main(pyrootdir, opts):
                 eps             = 0.0,
                 skipHistoCheck  = analysis.skipHistoCheck)
 
+
     if analysis.addData:
         print '''
         # ========================================================
@@ -245,11 +250,13 @@ def main(pyrootdir, opts):
         '''
         with monitor.Timer("addRealData"):
             if analysis.usePseudoData:
+                print("adding data_obs histograms as pseudo data")
                 # pseudo data without ttH
                 pP.addData(samples = configData.samples[nSigSamples:])
                 # pseudo data with signal
                 #pP.addData(samples = configData.samples)
             else:
+                print("adding data_obs histograms as real data")
                 # real data with ttH
                 pP.addData(samples = configData.controlSamples)
 
@@ -303,18 +310,8 @@ if __name__ == "__main__":
     parser.add_option("--skipHaddFromWildcard", dest = "skipHaddFromWildcard",  action = "store_true", default = False)
     parser.add_option("--skipHistoCheck",       dest = "skipHistoCheck",        action = "store_true", default = False)
     parser.add_option("--skipDatacards",        dest = "skipDatacards",         action = "store_true", default = False)
-    parser.add_option("--skip",                 dest = "skip",                  default = 0,            type = "int",
-        help = "skip first INT parallel stages. plotParallel (1), haddParallel (2), haddFromWildcard (3), histoCheck (4), Datacards (5)")
 
     (opts, args) = parser.parse_args()
-
-    if opts.skip >= 1: opts.skipPlotParallel        = True
-    if opts.skip >= 2: opts.skipHaddParallel        = True
-    if opts.skip >= 3: opts.skipHaddFromWildcard    = True
-    if opts.skip >= 4: opts.skipHistoCheck          = True
-    if opts.skip >= 5: opts.skipDatacards           = True
-
-
     main(pyrootdir, opts)
 
 
