@@ -28,6 +28,9 @@ ttHpath             = path_vdlinden+'/ttHTobb_M125*_1/*nominal*.root'+';'+ \
 
 vjetpath            = path_vdlinden+"/WJets*_1/*nominal*.root"+";"+ \
                       path_vdlinden+"/DYJets*_1/*nominal*.root"
+
+ttZpath             = path_vdlinden+'/TTZToLLNuNu*_1/*nominal*.root'+";"+ \
+                      path_vdlinden+'/TTZToQQ*_1/*nominal*.root'
 # SELECTIONS
 
 # need to veto muon events in electron dataset to avoid double counting and vice versa
@@ -132,22 +135,22 @@ samples = [
 
     # signal samples     
 
-    plotClasses.Sample('t#bar{t}+Z (Z #rightarrow b#bar{b})',ROOT.kOrange+7,
-            path_vdlinden+'/TTZToBB*_1/*nominal*.root',
-            lumi+evenSel+sel_StrangeMuWeights,
-            'ttZbb',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+    #plotClasses.Sample('t#bar{t}+Z (Z #rightarrow b#bar{b})',ROOT.kOrange+7,
+    #        path_vdlinden+'/TTZToBB*_1/*nominal*.root',
+    #        lumi+evenSel+sel_StrangeMuWeights,
+    #        'ttZbb',
+    #        samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
-    plotClasses.Sample('t#bar{t}+Z (Z #rightarrow q#bar{q})',ROOT.kOrange+7,
-            path_vdlinden+'/TTZToQQ*_1/*nominal*.root',
-            lumi+"*(GenEvt_I_TTZ==0)"+sel_StrangeMuWeights,
-            'ttZqq',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+    #plotClasses.Sample('t#bar{t}+Z (Z #rightarrow q#bar{q})',ROOT.kOrange+7,
+    #        path_vdlinden+'/TTZToQQ*_1/*nominal*.root',
+    #        lumi+"*(GenEvt_I_TTZ==0)"+sel_StrangeMuWeights,
+    #        'ttZqq',
+    #        samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
-    plotClasses.Sample('t#bar{t}+Z (Z #rightarrow ll/#nu#nu)', ROOT.kOrange+7,
-            path_vdlinden+'/TTZToLLNuNu*_1/*nominal*.root',
+    plotClasses.Sample('t#bar{t}+Z', ROOT.kOrange+7,
+            ttZpath,
             lumi+sel_StrangeMuWeights,
-            'ttZll',
+            'ttZ',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
     
     # background samples
@@ -223,9 +226,6 @@ list_of_processes   = processes
 datacard_processes  = processes
 
 plottingsamples = [
-    plotClasses.Sample("t#bar{t}+Z", ROOT.kOrange+7,
-        "", "", "ttZ", addsamples = ["ttZbb", "ttZqq", "ttZll"],
-        samDict = sampleDict, readTrees = doReadTrees, typ = "signal"),
 
     plotClasses.Sample("misc.", ROOT.kGray,
         "", "", "misc", addsamples = ["vjets", "diboson", "ttW"],

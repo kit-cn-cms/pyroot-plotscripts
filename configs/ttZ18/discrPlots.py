@@ -33,16 +33,16 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "\geq 6 jets, \geq 3 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["bin_edges"] = [ 
-				0.1715,
-				0.2854,
-				0.3992,
-				0.5131,
-				0.57,
-				0.6269,
-				0.6838,
-				0.7408,
-				0.7977,
-				0.94
+				0.1719,
+				0.2842,
+				0.3965,
+				0.5088,
+				0.565,
+				0.6212,
+				0.6773,
+				0.7335,
+				0.7896,
+				0.93
 				]
     this_dict["ljets_ge6j_ge3t_ttZ_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -67,12 +67,12 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "\geq 6 jets, \geq 3 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["bin_edges"] = [ 
-				0.1762,
-				0.3669,
-				0.4623,
-				0.5577,
-				0.6531,
-				0.82
+				0.1742,
+				0.3804,
+				0.4835,
+				0.5865,
+				0.6896,
+				0.87
 				]
     this_dict["ljets_ge6j_ge3t_ttbb_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -82,8 +82,8 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "\geq 6 jets, \geq 3 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["bin_edges"] = [ 
-				0.1815,
-				0.68
+				0.1858,
+				0.57
 				]
     this_dict["ljets_ge6j_ge3t_ttcc_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -93,8 +93,8 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "\geq 6 jets, \geq 3 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["bin_edges"] = [ 
-				0.1819,
-				0.67
+				0.1835,
+				0.63
 				]
     this_dict["ljets_ge6j_ge3t_ttlf_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -108,16 +108,16 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "5 jets, \geq 3 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["bin_edges"] = [ 
-				0.1762,
-				0.2715,
-				0.3669,
-				0.4623,
-				0.51,
-				0.5577,
-				0.6054,
-				0.6531,
-				0.7008,
-				0.82
+				0.1769,
+				0.2692,
+				0.3615,
+				0.4538,
+				0.5,
+				0.5462,
+				0.5923,
+				0.6385,
+				0.6846,
+				0.8
 				]
     this_dict["ljets_5j_ge3t_ttZ_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -142,12 +142,12 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "5 jets, \geq 3 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["bin_edges"] = [ 
-				0.1754,
-				0.3723,
-				0.4708,
-				0.5692,
-				0.6677,
-				0.84
+				0.1765,
+				0.3642,
+				0.4581,
+				0.5519,
+				0.6458,
+				0.81
 				]
     this_dict["ljets_5j_ge3t_ttbb_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -157,8 +157,8 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "5 jets, \geq 3 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["bin_edges"] = [ 
-				0.1858,
-				0.57
+				0.1862,
+				0.56
 				]
     this_dict["ljets_5j_ge3t_ttcc_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -168,8 +168,8 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "5 jets, \geq 3 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["bin_edges"] = [ 
-				0.185,
-				0.59
+				0.1842,
+				0.61
 				]
     this_dict["ljets_5j_ge3t_ttlf_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -183,16 +183,16 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "4 jets, \geq 3 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["bin_edges"] = [ 
-				0.1781,
-				0.2658,
-				0.3535,
-				0.4412,
-				0.485,
-				0.5288,
-				0.5727,
-				0.6165,
-				0.6604,
-				0.77
+				0.1773,
+				0.2681,
+				0.3588,
+				0.4496,
+				0.495,
+				0.5404,
+				0.5858,
+				0.6312,
+				0.6765,
+				0.79
 				]
     this_dict["ljets_4j_ge3t_ttZ_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -217,12 +217,12 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "4 jets, \geq 3 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["bin_edges"] = [ 
-				0.175,
-				0.375,
-				0.475,
-				0.575,
-				0.675,
-				0.85
+				0.1754,
+				0.3723,
+				0.4708,
+				0.5692,
+				0.6677,
+				0.84
 				]
     this_dict["ljets_4j_ge3t_ttbb_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -232,8 +232,8 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "4 jets, \geq 3 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["bin_edges"] = [ 
-				0.1865,
-				0.55
+				0.1869,
+				0.54
 				]
     this_dict["ljets_4j_ge3t_ttcc_node"] = deepcopy(category_dict)
     category_dict.clear()
@@ -243,8 +243,8 @@ def plots_dnn(data, discrname):
     category_dict["catlabel"] = "4 jets, \geq 3 b-tags"
     category_dict["nhistobins"] = ndefaultbins
     category_dict["bin_edges"] = [ 
-				0.1792,
-				0.74
+				0.1785,
+				0.76
 				]
     this_dict["ljets_4j_ge3t_ttlf_node"] = deepcopy(category_dict)
     category_dict.clear()
