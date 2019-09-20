@@ -35,7 +35,7 @@ THWpath = path+'/THW_*ctcvcp*/*nominal*.root'
 THQpath = path+'/THQ_*ctcvcp*/*nominal*.root'
 
 
-ttHpath = path+'/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8/*pythia8_16*nominal*.root'+';'+ \
+ttHpath = path+'/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
 	  path+'/ttHToNonbb_M125*/*nominal*.root'
 
 ttZpath =  path+'/TTZToQQ*/*nominal*.root'+';'+ \
@@ -199,7 +199,8 @@ samples=[
 
     plotClasses.Sample('t#bar{t}+hf',ROOT.kRed+3,
             path+"/TTbb_Powheg_Openloops_new_pmx/*nominal*.root",
-            lumi+TTbbweight+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
+        #     lumi+TTbbweight+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
+            lumi+TTbbweight+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET,
             'ttbarPlusHF',
             samDict=sampleDict, readTrees=doReadTrees), 
 
