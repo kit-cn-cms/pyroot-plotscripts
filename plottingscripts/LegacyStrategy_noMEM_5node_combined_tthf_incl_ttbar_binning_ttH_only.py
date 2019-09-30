@@ -48,10 +48,10 @@ def main(pyrootdir, opts):
     # memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
     memexp = ""
     # configs
-    config          = "ttH17_toytest_noMEM/pltcfg_2017_old_samples.py"
+    config          = "ttH17_toytest_noMEM/pltcfg_2017_old_samples"
     variable_cfg    = "ttH17_legacyStrategy/additionalVariables"
     plot_cfg        = "ttH17_legacyStrategy/plots_toytests_noMEM_5node_mergedTTbb_ttH_only"
-    syst_cfg        = "ttH17_legacyStrategy/systs_combined_tthf_alt_generators"
+    syst_cfg        = "ttH17_legacyStrategy/systs_split_ttbjets_empty"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"

@@ -238,3 +238,4 @@ list_of_processes=processes
 datacard_processes = [p for p in processes]
 
 plottingsamples = []
+sortedProcesses=[]
