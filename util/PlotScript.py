@@ -416,7 +416,7 @@ DrawHistogramObject = Plots.DrawHistograms(PlotList,options.channelName,
                                 errorband=errorband, logoption=logarithmic,
                                 normalize=normalize,splitlegend=splitlegend,
                                 combineflag=combineflag,shape=shape,
-                                sortedProcesses=sortedProcesses)
+                                sortedProcesses=sortedProcesses,datalabel=datalabel)
 
 DrawHistogramObject.drawHistsOnCanvas()
 
