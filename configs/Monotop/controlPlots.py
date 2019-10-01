@@ -24,11 +24,17 @@ def evtYieldCategories():
 
 
 def control_plots_SR(data=None):
-    label = "#scale[0.7]{Puppi MET > 250 GeV, AK15 Jet Pt > 250 GeV, lepton veto}"
+    label = "#scale[0.8]{signal region}"
     extension = "_SR"
-    selection = "(N_LooseMuons==0 && N_LooseElectrons==0 && N_LoosePhotons==0)*((Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX == 1) || (Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX == 1))*(Evt_Pt_MET>250.)"
+    selection = "(N_LooseMuons==0 && N_LooseElectrons==0 && N_LoosePhotons==0)*((Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX == 1) || (Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX == 1))*(Hadr_Recoil_Pt>250.)*(AK15Jet_SoftDrop_Pt[0]>250)"
 
     plots = [
+        plotClasses.Plot(
+            ROOT.TH1D("yield"+extension, "yield", 1, 0., 2.),
+            "1.",
+            selection,
+            label,
+        ),
         plotClasses.Plot(
             ROOT.TH1D("Evt_Pt_MET"+extension, "Puppi MET", 40, 200.0, 1200.0),
             "Evt_Pt_MET",
@@ -48,14 +54,14 @@ def control_plots_SR(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("CaloMET_PFMET_ratio"+extension, "CaloMET_PFMET_ratio", 40, 0.0, 4.0),
+            ROOT.TH1D("CaloMET_PFMET_ratio"+extension, "CaloMET_PFMET_ratio", 50, 0.0, 10.0),
             "CaloMET_PFMET_ratio",
             selection,
             label,
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "CaloMET_Hadr_Recoil_ratio"+extension, "CaloMET_Hadr_Recoil_ratio", 40, 0.0, 4.0
+                "CaloMET_Hadr_Recoil_ratio"+extension, "CaloMET_Hadr_Recoil_ratio", 50, 0.0, 10.0
             ),
             "CaloMET_Hadr_Recoil_ratio",
             selection,
@@ -76,6 +82,30 @@ def control_plots_SR(data=None):
         plotClasses.Plot(
             ROOT.TH1D("AK15Jet_Phi"+extension, "AK15 Jet #phi", 30, -3.14, 3.14),
             "AK15Jet_Phi",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_SoftDrop_Pt"+extension, "AK15 SD Jet p_{t}", 40, 200.0, 1200.0),
+            "AK15Jet_SoftDrop_Pt",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_SoftDrop_Eta"+extension, "AK15 SD Jet #eta", 25, -2.5, 2.5),
+            "AK15Jet_SoftDrop_Eta",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_SoftDrop_Phi"+extension, "AK15 SD Jet #phi", 30, -3.14, 3.14),
+            "AK15Jet_SoftDrop_Phi",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_SoftDrop_Mass"+extension, "AK15 SD Jet mass", 40, 0.0, 1000.0),
+            "AK15Jet_SoftDrop_M",
             selection,
             label,
         ),
@@ -168,8 +198,20 @@ def control_plots_SR(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("AK15Jet_PuppiSoftDropMass"+extension, "AK15 Jet SD mass", 20, 50.0, 250.0),
+            ROOT.TH1D("AK15Jet_PuppiSoftDropMass"+extension, "AK15 Jet SD mass", 25, 0.0, 250.0),
             "AK15Jet_PuppiSoftDropMass",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_CHF"+extension, "AK15 Jet CHF", 20, 0.0, 1.0),
+            "AK15Jet_CHF",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_NHF"+extension, "AK15 Jet NHF", 20, 0.0, 1.0),
+            "AK15Jet_NHF",
             selection,
             label,
         ),
@@ -312,7 +354,7 @@ def control_plots_SR(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("Jet_Pt"+extension, "AK4 Jet pt", 10, 20, 320),
+            ROOT.TH1D("Jet_Pt"+extension, "AK4 Jet pt", 15, 20, 470),
             "Jet_Pt",
             selection,
             label,
@@ -347,6 +389,12 @@ def control_plots_SR(data=None):
             selection,
             label,
         ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK4Jet_AK15Jet_pt_ratio"+extension, "AK4Jet/AK15Jet pt ratio", 40, 0., 2.),
+            "Jet_Pt[0]/AK15Jet_Pt[0]",
+            selection,
+            label,
+        ),
     ]
     if data:
         add_data_plots(plots=plots, data=data)
@@ -354,11 +402,17 @@ def control_plots_SR(data=None):
     return plots
 
 def control_plots_mumu(data=None):
-    label = "#splitline{#scale[0.7]{Hadr. Recoil > 250 GeV, AK15 Jet Pt > 250 GeV, 2 muons,}}{#scale[0.7]{M_{#mu#mu} in [60,120] GeV}}"
+    label = "#scale[0.8]{Z(#mu#bar{#mu}) control region}"
     extension = "_CRMuMu"
-    selection = "(N_LooseMuons==2 && N_TightMuons>=1 && N_LooseElectrons==0 && N_LoosePhotons==0)*(Triggered_HLT_IsoMu24_vX==1)*(Hadr_Recoil_Pt>250.)*(DiMuon_Mass>60)*(DiMuon_Mass<120)"
+    selection = "(N_LooseMuons==2 && N_TightMuons>=1 && N_LooseElectrons==0 && N_LoosePhotons==0)*(Triggered_HLT_IsoMu24_vX==1)*(Hadr_Recoil_Pt>250.)*(DiMuon_Mass>60)*(DiMuon_Mass<120)*(DiMuon_Pt>200)*(AK15Jet_SoftDrop_Pt[0]>250)"
 
     plots = [
+        plotClasses.Plot(
+            ROOT.TH1D("yield"+extension, "yield", 1, 0., 2.),
+            "1.",
+            selection,
+            label,
+        ),
         plotClasses.Plot(
             ROOT.TH1D("Evt_Pt_MET"+extension, "Puppi MET", 20, 0.0, 200.0),
             "Evt_Pt_MET",
@@ -378,14 +432,14 @@ def control_plots_mumu(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("CaloMET_PFMET_ratio"+extension, "CaloMET_PFMET_ratio", 100, 0.0, 10.0),
+            ROOT.TH1D("CaloMET_PFMET_ratio"+extension, "CaloMET_PFMET_ratio", 50, 0.0, 10.0),
             "CaloMET_PFMET_ratio",
             selection,
             label,
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "CaloMET_Hadr_Recoil_ratio"+extension, "CaloMET_Hadr_Recoil_ratio", 100, 0.0, 10.0
+                "CaloMET_Hadr_Recoil_ratio"+extension, "CaloMET_Hadr_Recoil_ratio", 50, 0.0, 10.0
             ),
             "CaloMET_Hadr_Recoil_ratio",
             selection,
@@ -406,6 +460,30 @@ def control_plots_mumu(data=None):
         plotClasses.Plot(
             ROOT.TH1D("AK15Jet_Phi"+extension, "AK15 Jet #phi", 30, -3.14, 3.14),
             "AK15Jet_Phi",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_SoftDrop_Pt"+extension, "AK15 SD Jet p_{t}", 40, 200.0, 1200.0),
+            "AK15Jet_SoftDrop_Pt",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_SoftDrop_Eta"+extension, "AK15 SD Jet #eta", 25, -2.5, 2.5),
+            "AK15Jet_SoftDrop_Eta",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_SoftDrop_Phi"+extension, "AK15 SD Jet #phi", 30, -3.14, 3.14),
+            "AK15Jet_SoftDrop_Phi",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_SoftDrop_Mass"+extension, "AK15 SD Jet mass", 40, 0.0, 1000.0),
+            "AK15Jet_SoftDrop_M",
             selection,
             label,
         ),
@@ -475,7 +553,7 @@ def control_plots_mumu(data=None):
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "AK15Jet_Njettiness_tau3_AK15Jet_Njettiness_tau2"+extension,
+                "AK15pJet_Njettiness_tau3_AK15Jet_Njettiness_tau2"+extension,
                 "AK15 Jet #tau_{3}/#tau_{2}",
                 20,
                 0.0,
@@ -498,8 +576,120 @@ def control_plots_mumu(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("AK15Jet_PuppiSoftDropMass"+extension, "AK15 Jet SD mass", 20, 50.0, 250.0),
+            ROOT.TH1D("AK15Jet_PuppiSoftDropMass"+extension, "AK15 Jet SD mass", 25, 0.0, 250.0),
             "AK15Jet_PuppiSoftDropMass",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK8Jet_Pt"+extension, "AK8 Jet p_{t}", 40, 200.0, 1200.0),
+            "AK8Jet_Pt",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK8Jet_Eta"+extension, "AK8 Jet #eta", 25, -2.5, 2.5),
+            "AK8Jet_Eta",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK8Jet_Phi"+extension, "AK8 Jet #phi", 30, -3.14, 3.14),
+            "AK8Jet_Phi",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK8Jet_SoftDropJet1_Pt"+extension, "AK8 SD Jet1 p_{t}", 40, 0.0, 1000.0),
+            "AK8Jet_SoftDropJet1_Pt",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK8Jet_SoftDropJet2_Pt"+extension, "AK8 SD Jet2 p_{t}", 40, 0.0, 1000.0),
+            "AK8Jet_SoftDropJet2_Pt",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK8Jet_SoftDropJet1_DeepJetCSV"+extension, "AK8 SD Jet1 DeepJetCSV", 20, 0.0, 1.0),
+            "AK8Jet_SoftDropJet1_DeepJetCSV",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK8Jet_SoftDropJet2_DeepJetCSV"+extension, "AK8 SD Jet2 DeepJetCSV", 20, 0.0, 1.0),
+            "AK8Jet_SoftDropJet2_DeepJetCSV",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+               "AK8Jet_DeepAK8_TvsQCD"+extension, "AK8 Jet DeepAK8 TvsQCD", 20, 0.0, 1.0
+            ),
+            "AK8Jet_DeepAK8_TvsQCD",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+               "AK8Jet_DeepAK8_probTbc"+extension, "AK8 Jet DeepAK8 probTbc", 20, 0.0, 1.0
+            ),
+            "AK8Jet_DeepAK8_probTbc",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+               "AK8Jet_DeepAK8_probTbcq"+extension, "AK8 Jet DeepAK8 probTbcq", 20, 0.0, 1.0
+            ),
+            "AK8Jet_DeepAK8_probTbcq",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+               "AK8Jet_DeepAK8_probTbq"+extension, "AK8 Jet DeepAK8 probTbq", 20, 0.0, 1.0
+            ),
+            "AK8Jet_DeepAK8_probTbq",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+               "AK8Jet_DeepAK8_probTbqq"+extension, "AK8 Jet DeepAK8 probTbqq", 20, 0.0, 1.0
+            ),
+            "AK8Jet_DeepAK8_probTbqq",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "AK8Jet_Njettiness_tau3_AK8Jet_Njettiness_tau2"+extension,
+                "AK8 Jet #tau_{3}/#tau_{2}",
+                20,
+                0.0,
+                1.0,
+            ),
+            "AK8Jet_Njettiness_tau3/AK8Jet_Njettiness_tau2",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "AK8Jet_Njettiness_tau2_AK8Jet_Njettiness_tau1"+extension,
+                "AK8 Jet #tau_{2}/#tau_{1}",
+                20,
+                0.0,
+                1.0,
+            ),
+            "AK8Jet_Njettiness_tau2/AK8Jet_Njettiness_tau1",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK8Jet_PuppiSoftDropMass"+extension, "AK8 Jet SD mass", 25, 0.0, 250.0),
+            "AK8Jet_PuppiSoftDropMass",
             selection,
             label,
         ),
@@ -630,7 +820,7 @@ def control_plots_mumu(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("Jet_Pt"+extension, "AK4 Jet pt", 10, 20, 320),
+            ROOT.TH1D("Jet_Pt"+extension, "AK4 Jet pt", 15, 20, 470),
             "Jet_Pt",
             selection,
             label,
@@ -665,6 +855,42 @@ def control_plots_mumu(data=None):
             selection,
             label,
         ),
+        plotClasses.Plot(
+            ROOT.TH1D("DeltaR_AK8Jet_AK4JetTagged"+extension, "DeltaR_AK8Jet_AK4JetTagged", 40, 0., 4.),
+            "DeltaR_AK8Jet_AK4JetTagged",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("DeltaR_AK8Jet_AK4Jet"+extension, "DeltaR_AK8Jet_AK4Jet", 40, 0., 4.),
+            "DeltaR_AK8Jet_AK4Jet",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK4Jet_AK15Jet_pt_ratio"+extension, "AK4Jet/AK15Jet pt ratio", 40, 0., 2.),
+            "Jet_Pt[0]/AK15Jet_Pt[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_CHF"+extension, "AK15 Jet CHF", 20, 0.0, 1.0),
+            "AK15Jet_CHF",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_NHF"+extension, "AK15 Jet NHF", 20, 0.0, 1.0),
+            "AK15Jet_NHF",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("DeltaR_AK15Jet_DiMuon"+extension, "DeltaR_AK15Jet_DiMuon", 50, 0., 5.),
+            "sqrt(pow(AK15Jet_Eta[0]-DiMuon_Eta,2)+pow(AK15Jet_Phi[0]-DiMuon_Phi,2))",
+            selection,
+            label,
+        ),
     ]
     if data:
         add_data_plots(plots=plots, data=data)
@@ -672,11 +898,17 @@ def control_plots_mumu(data=None):
     return plots
 
 def control_plots_elel(data=None):
-    label = "#splitline{#scale[0.7]{Hadr. Recoil > 250 GeV, AK15 Jet Pt > 250 GeV, 2 electrons,}}{#scale[0.7]{M_{ee} in [60,120] GeV}}"
+    label = "#scale[0.8]{Z(e#bar{e}) control region}"
     extension = "_CRElEl"
-    selection = "(N_LooseElectrons==2 && N_TightElectrons>=1 && N_LooseMuons==0 && N_TightPhotons==0)*(Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1 || Triggered_HLT_Ele32_WPTight_Gsf_vX==1)*(Hadr_Recoil_Pt>250.)*(DiElectron_Mass>60)*(DiElectron_Mass<120)"
+    selection = "(N_LooseElectrons==2 && N_TightElectrons>=1 && N_LooseMuons==0 && N_TightPhotons==0)*(Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1 || Triggered_HLT_Ele32_WPTight_Gsf_vX==1)*(Hadr_Recoil_Pt>250.)*(DiElectron_Mass>60)*(DiElectron_Mass<120)*(DiElectron_Pt>200)*(AK15Jet_SoftDrop_Pt[0]>250)"
 
     plots = [
+        plotClasses.Plot(
+            ROOT.TH1D("yield"+extension, "yield", 1, 0., 2.),
+            "1.",
+            selection,
+            label,
+        ),
         plotClasses.Plot(
             ROOT.TH1D("Evt_Pt_MET"+extension, "Puppi MET", 20, 0.0, 200.0),
             "Evt_Pt_MET",
@@ -696,14 +928,14 @@ def control_plots_elel(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("CaloMET_PFMET_ratio"+extension, "CaloMET_PFMET_ratio", 100, 0.0, 10.0),
+            ROOT.TH1D("CaloMET_PFMET_ratio"+extension, "CaloMET_PFMET_ratio", 50, 0.0, 10.0),
             "CaloMET_PFMET_ratio",
             selection,
             label,
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "CaloMET_Hadr_Recoil_ratio"+extension, "CaloMET_Hadr_Recoil_ratio", 100, 0.0, 10.0
+                "CaloMET_Hadr_Recoil_ratio"+extension, "CaloMET_Hadr_Recoil_ratio", 50, 0.0, 10.0
             ),
             "CaloMET_Hadr_Recoil_ratio",
             selection,
@@ -724,6 +956,30 @@ def control_plots_elel(data=None):
         plotClasses.Plot(
             ROOT.TH1D("AK15Jet_Phi"+extension, "AK15 Jet #phi", 30, -3.14, 3.14),
             "AK15Jet_Phi",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_SoftDrop_Pt"+extension, "AK15 SD Jet p_{t}", 40, 200.0, 1200.0),
+            "AK15Jet_SoftDrop_Pt",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_SoftDrop_Eta"+extension, "AK15 SD Jet #eta", 25, -2.5, 2.5),
+            "AK15Jet_SoftDrop_Eta",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_SoftDrop_Phi"+extension, "AK15 SD Jet #phi", 30, -3.14, 3.14),
+            "AK15Jet_SoftDrop_Phi",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_SoftDrop_Mass"+extension, "AK15 SD Jet mass", 40, 0.0, 1000.0),
+            "AK15Jet_SoftDrop_M",
             selection,
             label,
         ),
@@ -816,8 +1072,120 @@ def control_plots_elel(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("AK15Jet_PuppiSoftDropMass"+extension, "AK15 Jet SD mass", 20, 50.0, 250.0),
+            ROOT.TH1D("AK15Jet_PuppiSoftDropMass"+extension, "AK15 Jet SD mass", 25, 0.0, 250.0),
             "AK15Jet_PuppiSoftDropMass",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK8Jet_Pt"+extension, "AK8 Jet p_{t}", 40, 200.0, 1200.0),
+            "AK8Jet_Pt",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK8Jet_Eta"+extension, "AK8 Jet #eta", 25, -2.5, 2.5),
+            "AK8Jet_Eta",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK8Jet_Phi"+extension, "AK8 Jet #phi", 30, -3.14, 3.14),
+            "AK8Jet_Phi",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK8Jet_SoftDropJet1_Pt"+extension, "AK8 SD Jet1 p_{t}", 40, 0.0, 1000.0),
+            "AK8Jet_SoftDropJet1_Pt",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK8Jet_SoftDropJet2_Pt"+extension, "AK8 SD Jet2 p_{t}", 40, 0.0, 1000.0),
+            "AK8Jet_SoftDropJet2_Pt",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK8Jet_SoftDropJet1_DeepJetCSV"+extension, "AK8 SD Jet1 DeepJetCSV", 20, 0.0, 1.0),
+            "AK8Jet_SoftDropJet1_DeepJetCSV",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK8Jet_SoftDropJet2_DeepJetCSV"+extension, "AK8 SD Jet2 DeepJetCSV", 20, 0.0, 1.0),
+            "AK8Jet_SoftDropJet2_DeepJetCSV",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "AK8Jet_DeepAK8_TvsQCD"+extension, "AK8 Jet DeepAK8 TvsQCD", 20, 0.0, 1.0
+            ),
+            "AK8Jet_DeepAK8_TvsQCD",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "AK8Jet_DeepAK8_probTbc"+extension, "AK8 Jet DeepAK8 probTbc", 20, 0.0, 1.0
+            ),
+            "AK8Jet_DeepAK8_probTbc",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "AK8Jet_DeepAK8_probTbcq"+extension, "AK8 Jet DeepAK8 probTbcq", 20, 0.0, 1.0
+            ),
+            "AK8Jet_DeepAK8_probTbcq",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "AK8Jet_DeepAK8_probTbq"+extension, "AK8 Jet DeepAK8 probTbq", 20, 0.0, 1.0
+            ),
+            "AK8Jet_DeepAK8_probTbq",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "AK8Jet_DeepAK8_probTbqq"+extension, "AK8 Jet DeepAK8 probTbqq", 20, 0.0, 1.0
+            ),
+            "AK8Jet_DeepAK8_probTbqq",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "AK8Jet_Njettiness_tau3_AK8Jet_Njettiness_tau2"+extension,
+                "AK8 Jet #tau_{3}/#tau_{2}",
+                20,
+                0.0,
+                1.0,
+            ),
+            "AK8Jet_Njettiness_tau3/AK8Jet_Njettiness_tau2",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "AK8Jet_Njettiness_tau2_AK8Jet_Njettiness_tau1"+extension,
+                "AK8 Jet #tau_{2}/#tau_{1}",
+                20,
+                0.0,
+                1.0,
+            ),
+            "AK8Jet_Njettiness_tau2/AK8Jet_Njettiness_tau1",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK8Jet_PuppiSoftDropMass"+extension, "AK8 Jet SD mass", 25, 0.0, 250.0),
+            "AK8Jet_PuppiSoftDropMass",
             selection,
             label,
         ),
@@ -948,7 +1316,7 @@ def control_plots_elel(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("Jet_Pt"+extension, "AK4 Jet pt", 10, 20, 320),
+            ROOT.TH1D("Jet_Pt"+extension, "AK4 Jet pt", 15, 20, 470),
             "Jet_Pt",
             selection,
             label,
@@ -983,6 +1351,42 @@ def control_plots_elel(data=None):
             selection,
             label,
         ),
+        plotClasses.Plot(
+            ROOT.TH1D("DeltaR_AK8Jet_AK4JetTagged"+extension, "DeltaR_AK8Jet_AK4JetTagged", 40, 0., 4.),
+            "DeltaR_AK8Jet_AK4JetTagged",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("DeltaR_AK8Jet_AK4Jet"+extension, "DeltaR_AK8Jet_AK4Jet", 40, 0., 4.),
+            "DeltaR_AK8Jet_AK4Jet",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK4Jet_AK15Jet_pt_ratio"+extension, "AK4Jet/AK15Jet pt ratio", 40, 0., 2.),
+            "Jet_Pt[0]/AK15Jet_Pt[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_CHF"+extension, "AK15 Jet CHF", 20, 0.0, 1.0),
+            "AK15Jet_CHF",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_NHF"+extension, "AK15 Jet NHF", 20, 0.0, 1.0),
+            "AK15Jet_NHF",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("DeltaR_AK15Jet_DiElectron"+extension, "DeltaR_AK15Jet_DiElectron", 50, 0., 5.),
+            "sqrt(pow(AK15Jet_Eta[0]-DiElectron_Eta,2)+pow(AK15Jet_Phi[0]-DiElectron_Phi,2))",
+            selection,
+            label,
+        ),
     ]
     if data:
         add_data_plots(plots=plots, data=data)
@@ -990,11 +1394,17 @@ def control_plots_elel(data=None):
     return plots
 
 def control_plots_ttbar(data=None):
-    label = "t#bar{t} control region"
+    label = "#scale[0.8]{t#bar{t} control region}"
     extension = "_CRttbar"
-    selection = "((N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && Triggered_HLT_IsoMu24_vX==1) || (N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1 || Triggered_HLT_Ele32_WPTight_Gsf_vX==1))) && (Hadr_Recoil_Pt>250.) && N_LoosePhotons==0 && N_BTagsL>=2 && (N_HEM_Electrons==0 && N_HEM_Muons==0)"
+    selection = "((N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && Triggered_HLT_IsoMu24_vX==1) || (N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1 || Triggered_HLT_Ele32_WPTight_Gsf_vX==1))) && (Hadr_Recoil_Pt>250.) && (N_TightPhotons==0) && (N_AK4JetsTagged_outside_AK15Jets==1) && (N_HEM_Electrons==0 && N_HEM_Muons==0) && (AK15Jet_SoftDrop_Pt[0]>250)"
 
     plots = [
+        plotClasses.Plot(
+            ROOT.TH1D("yield"+extension, "yield", 1, 0., 2.),
+            "1.",
+            selection,
+            label,
+        ),
         plotClasses.Plot(
             ROOT.TH1D("Evt_Pt_MET"+extension, "Puppi MET", 25, 0.0, 500.0),
             "Evt_Pt_MET",
@@ -1014,14 +1424,14 @@ def control_plots_ttbar(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("CaloMET_PFMET_ratio"+extension, "CaloMET_PFMET_ratio", 40, 0.0, 4.0),
+            ROOT.TH1D("CaloMET_PFMET_ratio"+extension, "CaloMET_PFMET_ratio", 50, 0.0, 10.0),
             "CaloMET_PFMET_ratio",
             selection,
             label,
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "CaloMET_Hadr_Recoil_ratio"+extension, "CaloMET_Hadr_Recoil_ratio", 40, 0.0, 4.0
+                "CaloMET_Hadr_Recoil_ratio"+extension, "CaloMET_Hadr_Recoil_ratio", 50, 0.0, 10.0
             ),
             "CaloMET_Hadr_Recoil_ratio",
             selection,
@@ -1042,6 +1452,30 @@ def control_plots_ttbar(data=None):
         plotClasses.Plot(
             ROOT.TH1D("AK15Jet_Phi"+extension, "AK15 Jet #phi", 30, -3.14, 3.14),
             "AK15Jet_Phi",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_SoftDrop_Pt"+extension, "AK15 SD Jet p_{t}", 40, 200.0, 1200.0),
+            "AK15Jet_SoftDrop_Pt",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_SoftDrop_Eta"+extension, "AK15 SD Jet #eta", 25, -2.5, 2.5),
+            "AK15Jet_SoftDrop_Eta",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_SoftDrop_Phi"+extension, "AK15 SD Jet #phi", 30, -3.14, 3.14),
+            "AK15Jet_SoftDrop_Phi",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_SoftDrop_Mass"+extension, "AK15 SD Jet mass", 40, 0.0, 1000.0),
+            "AK15Jet_SoftDrop_M",
             selection,
             label,
         ),
@@ -1146,8 +1580,132 @@ def control_plots_ttbar(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("AK15Jet_PuppiSoftDropMass"+extension, "AK15 Jet SD mass", 20, 50.0, 250.0),
+            ROOT.TH1D("AK15Jet_PuppiSoftDropMass"+extension, "AK15 Jet SD mass", 25, 0.0, 250.0),
             "AK15Jet_PuppiSoftDropMass",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK8Jet_Pt"+extension, "AK8 Jet p_{t}", 40, 200.0, 1200.0),
+            "AK8Jet_Pt",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK8Jet_Eta"+extension, "AK8 Jet #eta", 25, -2.5, 2.5),
+            "AK8Jet_Eta",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK8Jet_Phi"+extension, "AK8 Jet #phi", 30, -3.14, 3.14),
+            "AK8Jet_Phi",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK8Jet_CHF"+extension, "AK8 Jet CHF", 20, 0.0, 1.0),
+            "AK8Jet_CHF",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK8Jet_NHF"+extension, "AK8 Jet NHF", 20, 0.0, 1.0),
+            "AK8Jet_NHF",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK8Jet_SoftDropJet1_Pt"+extension, "AK8 SD Jet1 p_{t}", 40, 0.0, 1000.0),
+            "AK8Jet_SoftDropJet1_Pt",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK8Jet_SoftDropJet2_Pt"+extension, "AK8 SD Jet2 p_{t}", 40, 0.0, 1000.0),
+            "AK8Jet_SoftDropJet2_Pt",
+            selection,
+            label,
+        ),   
+        plotClasses.Plot(
+            ROOT.TH1D("AK8Jet_SoftDropJet1_DeepJetCSV"+extension, "AK8 SD Jet1 DeepJetCSV", 20, 0.0, 1.0),
+            "AK8Jet_SoftDropJet1_DeepJetCSV",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK8Jet_SoftDropJet2_DeepJetCSV"+extension, "AK8 SD Jet2 DeepJetCSV", 20, 0.0, 1.0),
+            "AK8Jet_SoftDropJet2_DeepJetCSV",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "AK8Jet_DeepAK8_TvsQCD"+extension, "AK8 Jet DeepAK8 TvsQCD", 20, 0.0, 1.0
+            ),
+            "AK8Jet_DeepAK8_TvsQCD",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "AK8Jet_DeepAK8_probTbc"+extension, "AK8 Jet DeepAK8 probTbc", 20, 0.0, 1.0
+            ),
+            "AK8Jet_DeepAK8_probTbc",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "AK8Jet_DeepAK8_probTbcq"+extension, "AK8 Jet DeepAK8 probTbcq", 20, 0.0, 1.0
+            ),
+            "AK8Jet_DeepAK8_probTbcq",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "AK8Jet_DeepAK8_probTbq"+extension, "AK8 Jet DeepAK8 probTbq", 20, 0.0, 1.0
+            ),
+            "AK8Jet_DeepAK8_probTbq",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "AK8Jet_DeepAK8_probTbqq"+extension, "AK8 Jet DeepAK8 probTbqq", 20, 0.0, 1.0
+            ),
+            "AK8Jet_DeepAK8_probTbqq",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "AK8Jet_Njettiness_tau3_AK8Jet_Njettiness_tau2"+extension,
+                "AK8 Jet #tau_{3}/#tau_{2}",
+                20,
+                0.0,
+                1.0,
+            ),
+            "AK8Jet_Njettiness_tau3/AK8Jet_Njettiness_tau2",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "AK8Jet_Njettiness_tau2_AK8Jet_Njettiness_tau1"+extension,
+                "AK8 Jet #tau_{2}/#tau_{1}",
+                20,
+                0.0,
+                1.0,
+            ),
+            "AK8Jet_Njettiness_tau2/AK8Jet_Njettiness_tau1",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK8Jet_PuppiSoftDropMass"+extension, "AK8 Jet SD mass", 25, 0.0, 250.0),
+            "AK8Jet_PuppiSoftDropMass",
             selection,
             label,
         ),
@@ -1248,6 +1806,18 @@ def control_plots_ttbar(data=None):
             label,
         ),
         plotClasses.Plot(
+            ROOT.TH1D("DeltaR_AK8Jet_AK4JetTagged"+extension, "DeltaR_AK8Jet_AK4JetTagged", 40, 0., 4.),
+            "DeltaR_AK8Jet_AK4JetTagged",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("DeltaR_AK8Jet_AK4Jet"+extension, "DeltaR_AK8Jet_AK4Jet", 40, 0., 4.),
+            "DeltaR_AK8Jet_AK4Jet",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
             ROOT.TH1D("N_BTagsM"+extension, "medium btags", 5, 0.5, 5.5),
             "N_BTagsM",
             selection,
@@ -1266,7 +1836,7 @@ def control_plots_ttbar(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("Jet_Pt"+extension, "AK4 Jet pt", 10, 20, 320),
+            ROOT.TH1D("Jet_Pt"+extension, "AK4 Jet pt", 15, 20, 470),
             "Jet_Pt",
             selection,
             label,
@@ -1289,8 +1859,18 @@ def control_plots_ttbar(data=None):
             selection,
             label,
         ),
-
-        
+        plotClasses.Plot(
+            ROOT.TH1D("Weight_TopPt"+extension, "Weight Top Pt", 20, 0., 2.),
+            "Weight_TopPt",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK4Jet_AK15Jet_pt_ratio"+extension, "AK4Jet/AK15Jet pt ratio", 40, 0., 2.),
+            "Jet_Pt[0]/AK15Jet_Pt[0]",
+            selection,
+            label,
+        ),
     ]
     if data:
         add_data_plots(plots=plots, data=data)
@@ -1308,9 +1888,9 @@ def getDiscriminatorPlots(data=None, discrname=""):
     # discriminatorPlots += plots_4j_ge3t(data)
     # discriminatorPlots += plots_ge4j_3t(data)
     #discriminatorPlots += control_plots_SR(data)
-    #discriminatorPlots += control_plots_mumu(data)
-    #discriminatorPlots += control_plots_ttbar(data)
-    #discriminatorPlots += control_plots_elel(data)
+    discriminatorPlots += control_plots_mumu(data)
+    discriminatorPlots += control_plots_ttbar(data)
+    discriminatorPlots += control_plots_elel(data)
 
     return discriminatorPlots
 

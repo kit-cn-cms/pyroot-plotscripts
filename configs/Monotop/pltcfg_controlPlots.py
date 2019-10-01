@@ -43,7 +43,7 @@ sel_StrangeMuWeights = "*1.0"
 # WEIGHTS #
 # ======= #
 # defaultWeight = "Weight_GEN_nom*Weight_pu69p2*Weight_CSV"
-defaultWeight = "Weight_GEN_nom*Weight_pu69p2"
+defaultWeight = "Weight_GEN_nom*Weight_pu69p2*Weight_CSV*Weight_TopPt"
 
 # pile up weights
 pileupWeightUp = "Weight_GEN_nom*Weight_pu69p2Up"
