@@ -54,14 +54,14 @@ def control_plots_SR(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("CaloMET_PFMET_ratio"+extension, "CaloMET_PFMET_ratio", 50, 0.0, 10.0),
+            ROOT.TH1D("CaloMET_PFMET_ratio"+extension, "CaloMET_PFMET_ratio", 25, 0.0, 10.0),
             "CaloMET_PFMET_ratio",
             selection,
             label,
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "CaloMET_Hadr_Recoil_ratio"+extension, "CaloMET_Hadr_Recoil_ratio", 50, 0.0, 10.0
+                "CaloMET_Hadr_Recoil_ratio"+extension, "CaloMET_Hadr_Recoil_ratio", 25, 0.0, 10.0
             ),
             "CaloMET_Hadr_Recoil_ratio",
             selection,
@@ -354,7 +354,7 @@ def control_plots_SR(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("Jet_Pt"+extension, "AK4 Jet pt", 15, 20, 470),
+            ROOT.TH1D("Jet_Pt"+extension, "AK4 Jet pt", 25, 20, 770),
             "Jet_Pt",
             selection,
             label,
@@ -374,6 +374,12 @@ def control_plots_SR(data=None):
         plotClasses.Plot(
             ROOT.TH1D("Jet_CSV"+extension, "AK4 Jet DeepJet", 20, 0., 1.),
             "Jet_CSV",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("N_Jets"+extension, "number of AK4 jets", 5, 0.5, 5.5),
+            "N_Jets",
             selection,
             label,
         ),
@@ -432,14 +438,14 @@ def control_plots_mumu(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("CaloMET_PFMET_ratio"+extension, "CaloMET_PFMET_ratio", 50, 0.0, 10.0),
+            ROOT.TH1D("CaloMET_PFMET_ratio"+extension, "CaloMET_PFMET_ratio", 25, 0.0, 10.0),
             "CaloMET_PFMET_ratio",
             selection,
             label,
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "CaloMET_Hadr_Recoil_ratio"+extension, "CaloMET_Hadr_Recoil_ratio", 50, 0.0, 10.0
+                "CaloMET_Hadr_Recoil_ratio"+extension, "CaloMET_Hadr_Recoil_ratio", 25, 0.0, 10.0
             ),
             "CaloMET_Hadr_Recoil_ratio",
             selection,
@@ -820,7 +826,7 @@ def control_plots_mumu(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("Jet_Pt"+extension, "AK4 Jet pt", 15, 20, 470),
+            ROOT.TH1D("Jet_Pt"+extension, "AK4 Jet pt", 25, 20, 770),
             "Jet_Pt",
             selection,
             label,
@@ -840,6 +846,12 @@ def control_plots_mumu(data=None):
         plotClasses.Plot(
             ROOT.TH1D("Jet_CSV"+extension, "AK4 Jet DeepJet", 20, 0., 1.),
             "Jet_CSV",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("N_Jets"+extension, "number of AK4 jets", 5, 0.5, 5.5),
+            "N_Jets",
             selection,
             label,
         ),
@@ -928,14 +940,14 @@ def control_plots_elel(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("CaloMET_PFMET_ratio"+extension, "CaloMET_PFMET_ratio", 50, 0.0, 10.0),
+            ROOT.TH1D("CaloMET_PFMET_ratio"+extension, "CaloMET_PFMET_ratio", 25, 0.0, 10.0),
             "CaloMET_PFMET_ratio",
             selection,
             label,
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "CaloMET_Hadr_Recoil_ratio"+extension, "CaloMET_Hadr_Recoil_ratio", 50, 0.0, 10.0
+                "CaloMET_Hadr_Recoil_ratio"+extension, "CaloMET_Hadr_Recoil_ratio", 25, 0.0, 10.0
             ),
             "CaloMET_Hadr_Recoil_ratio",
             selection,
@@ -1316,7 +1328,7 @@ def control_plots_elel(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("Jet_Pt"+extension, "AK4 Jet pt", 15, 20, 470),
+            ROOT.TH1D("Jet_Pt"+extension, "AK4 Jet pt", 25, 20, 770),
             "Jet_Pt",
             selection,
             label,
@@ -1336,6 +1348,12 @@ def control_plots_elel(data=None):
         plotClasses.Plot(
             ROOT.TH1D("Jet_CSV"+extension, "AK4 Jet DeepJet", 20, 0., 1.),
             "Jet_CSV",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("N_Jets"+extension, "number of AK4 jets", 5, 0.5, 5.5),
+            "N_Jets",
             selection,
             label,
         ),
@@ -1424,14 +1442,14 @@ def control_plots_ttbar(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("CaloMET_PFMET_ratio"+extension, "CaloMET_PFMET_ratio", 50, 0.0, 10.0),
+            ROOT.TH1D("CaloMET_PFMET_ratio"+extension, "CaloMET_PFMET_ratio", 25, 0.0, 10.0),
             "CaloMET_PFMET_ratio",
             selection,
             label,
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "CaloMET_Hadr_Recoil_ratio"+extension, "CaloMET_Hadr_Recoil_ratio", 50, 0.0, 10.0
+                "CaloMET_Hadr_Recoil_ratio"+extension, "CaloMET_Hadr_Recoil_ratio", 25, 0.0, 10.0
             ),
             "CaloMET_Hadr_Recoil_ratio",
             selection,
@@ -1836,7 +1854,7 @@ def control_plots_ttbar(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("Jet_Pt"+extension, "AK4 Jet pt", 15, 20, 470),
+            ROOT.TH1D("Jet_Pt"+extension, "AK4 Jet pt", 25, 20, 770),
             "Jet_Pt",
             selection,
             label,
@@ -1856,6 +1874,12 @@ def control_plots_ttbar(data=None):
         plotClasses.Plot(
             ROOT.TH1D("Jet_CSV"+extension, "AK4 Jet DeepJet", 20, 0., 1.),
             "Jet_CSV",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("N_Jets"+extension, "number of AK4 jets", 5, 0.5, 5.5),
+            "N_Jets",
             selection,
             label,
         ),
