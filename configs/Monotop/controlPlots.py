@@ -742,6 +742,24 @@ def control_plots_mumu(data=None):
             label,
         ),
         plotClasses.Plot(
+            ROOT.TH1D("DeltaPhi_AK4Jet_MET"+extension, "DeltaPhi_AK4Jet_MET", 30, 0.0, 3.14),
+            "DeltaPhi_AK4Jet_MET",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaPhi_AK4Jet_Hadr_Recoil"+extension,
+                "DeltaPhi_AK4Jet_Hadr_Recoil",
+                30,
+                0.0,
+                3.14,
+            ),
+            "DeltaPhi_AK4Jet_Hadr_Recoil",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
             ROOT.TH1D("Weight_GEN_nom"+extension, "Generator weight", 1100, -100.0, 1000.0),
             "Weight_GEN_nom",
             selection,
@@ -828,6 +846,24 @@ def control_plots_mumu(data=None):
         plotClasses.Plot(
             ROOT.TH1D("Jet_Pt"+extension, "AK4 Jet pt", 25, 20, 770),
             "Jet_Pt",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("Jet_Pt_0"+extension, "leading AK4 Jet pt", 25, 20, 770),
+            "Jet_Pt[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("Jet_Pt_1"+extension, "sub-leading AK4 Jet pt", 25, 20, 770),
+            "Jet_Pt[1]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("Jet_Pt_2"+extension, "sub-sub-leading AK4 Jet pt", 25, 20, 770),
+            "Jet_Pt[2]",
             selection,
             label,
         ),
@@ -1244,6 +1280,24 @@ def control_plots_elel(data=None):
             label,
         ),
         plotClasses.Plot(
+            ROOT.TH1D("DeltaPhi_AK4Jet_MET"+extension, "DeltaPhi_AK4Jet_MET", 30, 0.0, 3.14),
+            "DeltaPhi_AK4Jet_MET",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaPhi_AK4Jet_Hadr_Recoil"+extension,
+                "DeltaPhi_AK4Jet_Hadr_Recoil",
+                30,
+                0.0,
+                3.14,
+            ),
+            "DeltaPhi_AK4Jet_Hadr_Recoil",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
             ROOT.TH1D("Weight_GEN_nom"+extension, "Generator weight", 1100, -100.0, 1000.0),
             "Weight_GEN_nom",
             selection,
@@ -1330,6 +1384,24 @@ def control_plots_elel(data=None):
         plotClasses.Plot(
             ROOT.TH1D("Jet_Pt"+extension, "AK4 Jet pt", 25, 20, 770),
             "Jet_Pt",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("Jet_Pt_0"+extension, "leading AK4 Jet pt", 25, 20, 770),
+            "Jet_Pt[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("Jet_Pt_1"+extension, "sub-leading AK4 Jet pt", 25, 20, 770),
+            "Jet_Pt[1]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("Jet_Pt_2"+extension, "sub-sub-leading AK4 Jet pt", 25, 20, 770),
+            "Jet_Pt[2]",
             selection,
             label,
         ),
@@ -1770,6 +1842,24 @@ def control_plots_ttbar(data=None):
             label,
         ),
         plotClasses.Plot(
+            ROOT.TH1D("DeltaPhi_AK4Jet_MET"+extension, "DeltaPhi_AK4Jet_MET", 30, 0.0, 3.14),
+            "DeltaPhi_AK4Jet_MET",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaPhi_AK4Jet_Hadr_Recoil"+extension,
+                "DeltaPhi_AK4Jet_Hadr_Recoil",
+                30,
+                0.0,
+                3.14,
+            ),
+            "DeltaPhi_AK4Jet_Hadr_Recoil",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
             ROOT.TH1D("Weight_GEN_nom"+extension, "Generator weight", 1100, -100.0, 1000.0),
             "Weight_GEN_nom",
             selection,
@@ -1856,6 +1946,24 @@ def control_plots_ttbar(data=None):
         plotClasses.Plot(
             ROOT.TH1D("Jet_Pt"+extension, "AK4 Jet pt", 25, 20, 770),
             "Jet_Pt",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("Jet_Pt_0"+extension, "leading AK4 Jet pt", 25, 20, 770),
+            "Jet_Pt[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("Jet_Pt_1"+extension, "sub-leading AK4 Jet pt", 25, 20, 770),
+            "Jet_Pt[1]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("Jet_Pt_2"+extension, "sub-sub-leading AK4 Jet pt", 25, 20, 770),
+            "Jet_Pt[2]",
             selection,
             label,
         ),
