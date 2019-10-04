@@ -26,7 +26,7 @@ def evtYieldCategories():
 def control_plots_SR(data=None):
     label = "#scale[0.8]{signal region}"
     extension = "_SR"
-    selection = "(N_LooseMuons==0 && N_LooseElectrons==0 && N_LoosePhotons==0)*((Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX == 1) || (Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX == 1))*(Hadr_Recoil_Pt>250.)*(AK15Jet_SoftDrop_Pt[0]>250)"
+    selection = "(N_LooseMuons==0 && N_LooseElectrons==0 && N_LoosePhotons==0)*((Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX == 1) || (Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX == 1))*(Hadr_Recoil_Pt>250.)"
 
     plots = [
         plotClasses.Plot(
@@ -410,7 +410,7 @@ def control_plots_SR(data=None):
 def control_plots_mumu(data=None):
     label = "#scale[0.8]{Z(#mu#bar{#mu}) control region}"
     extension = "_CRMuMu"
-    selection = "(N_LooseMuons==2 && N_TightMuons>=1 && N_LooseElectrons==0 && N_LoosePhotons==0)*(Triggered_HLT_IsoMu24_vX==1)*(Hadr_Recoil_Pt>250.)*(DiMuon_Mass>60)*(DiMuon_Mass<120)*(DiMuon_Pt>200)*(AK15Jet_SoftDrop_Pt[0]>250)"
+    selection = "(N_LooseMuons==2 && N_TightMuons>=1 && N_LooseElectrons==0 && N_LoosePhotons==0)*(Triggered_HLT_IsoMu24_vX==1)*(Hadr_Recoil_Pt>250.)*(DiMuon_Mass>60)*(DiMuon_Mass<120)*(DiMuon_Pt>200)"
 
     plots = [
         plotClasses.Plot(
@@ -948,7 +948,7 @@ def control_plots_mumu(data=None):
 def control_plots_elel(data=None):
     label = "#scale[0.8]{Z(e#bar{e}) control region}"
     extension = "_CRElEl"
-    selection = "(N_LooseElectrons==2 && N_TightElectrons>=1 && N_LooseMuons==0 && N_TightPhotons==0)*(Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1 || Triggered_HLT_Ele32_WPTight_Gsf_vX==1)*(Hadr_Recoil_Pt>250.)*(DiElectron_Mass>60)*(DiElectron_Mass<120)*(DiElectron_Pt>200)*(AK15Jet_SoftDrop_Pt[0]>250)"
+    selection = "(N_LooseElectrons==2 && N_TightElectrons>=1 && N_LooseMuons==0 && N_TightPhotons==0)*(Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1 || Triggered_HLT_Ele32_WPTight_Gsf_vX==1)*(Hadr_Recoil_Pt>250.)*(DiElectron_Mass>60)*(DiElectron_Mass<120)*(DiElectron_Pt>200)"
 
     plots = [
         plotClasses.Plot(
@@ -1486,7 +1486,7 @@ def control_plots_elel(data=None):
 def control_plots_ttbar(data=None):
     label = "#scale[0.8]{t#bar{t} control region}"
     extension = "_CRttbar"
-    selection = "((N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && Triggered_HLT_IsoMu24_vX==1) || (N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1 || Triggered_HLT_Ele32_WPTight_Gsf_vX==1))) && (Hadr_Recoil_Pt>250.) && (N_TightPhotons==0) && (N_AK4JetsTagged_outside_AK15Jets==1) && (N_HEM_Electrons==0 && N_HEM_Muons==0) && (AK15Jet_SoftDrop_Pt[0]>250)"
+    selection = "((N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && Triggered_HLT_IsoMu24_vX==1) || (N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1 || Triggered_HLT_Ele32_WPTight_Gsf_vX==1))) && (Hadr_Recoil_Pt>250.) && (N_TightPhotons==0) && (N_AK4JetsTagged_outside_AK15Jets==1) && (N_HEM_Electrons==0 && N_HEM_Muons==0)"
 
     plots = [
         plotClasses.Plot(
