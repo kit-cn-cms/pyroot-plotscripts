@@ -43,20 +43,28 @@ sel_StrangeMuWeights = "*1.0"
 # WEIGHTS #
 # ======= #
 # defaultWeight = "Weight_GEN_nom*Weight_pu69p2*Weight_CSV"
-defaultWeight = "Weight_GEN_nom*Weight_pu69p2*Weight_CSV*Weight_TopPt"
+defaultWeight = "Weight_GEN_nom"
+
+# csv weights
+csvWeightNom = "Weight_CSV"
+
 
 # pile up weights
-pileupWeightUp = "Weight_GEN_nom*Weight_pu69p2Up"
-pileupWeightDown = "Weight_GEN_nom*Weight_pu69p2Down"
+pileupWeightNom = "Weight_pu69p2"
+pileupWeightUp = "Weight_pu69p2Up"
+pileupWeightDown = "Weight_pu69p2Down"
 
 ## lepton scale factors
 electronSFs = "((N_TightElectrons==1 && N_LooseElectrons==2)*Electron_IdentificationSF[0]*Electron_ReconstructionSF[0]*LooseElectron_IdentificationSF[1]*LooseElectron_ReconstructionSF[1]+(N_TightElectrons==2 && N_LooseElectrons==2)*Electron_IdentificationSF[0]*Electron_ReconstructionSF[0]*Electron_IdentificationSF[1]*Electron_ReconstructionSF[1]+(N_TightElectrons==1 && N_LooseElectrons==1)*Electron_IdentificationSF[0]*Electron_ReconstructionSF[0]+(N_LooseElectrons==0)*1.)"
 muonSFs = "((N_TightMuons==1 && N_LooseMuons==2)*Muon_IdentificationSF[0]*Muon_IsolationSF[0]*LooseMuon_IdentificationSF[1]*LooseMuon_IsolationSF[1]+(N_TightMuons==2 && N_LooseMuons==2)*Muon_IdentificationSF[0]*Muon_IsolationSF[0]*Muon_IdentificationSF[1]*Muon_IsolationSF[1]+(N_TightMuons==1 && N_LooseMuons==1)*Muon_IdentificationSF[0]*Muon_IsolationSF[0]+(N_LooseMuons==0)*1.)"
 
-#electronSFs_up = "((N_TightElectrons==1 && N_LooseElectrons==2)*Electron_IdentificationSFUp[0]*Electron_ReconstructionSFUp[0]*LooseElectron_IdentificationSFUp[1]*LooseElectron_ReconstructionSFUp[1]+(N_TightElectrons==2 && N_LooseElectrons==2)*Electron_IdentificationSFUp[0]*Electron_ReconstructionSFUp[0]*Electron_IdentificationSFUp[1]*Electron_ReconstructionSFUp[1]+(N_TightElectrons==1 && N_LooseElectrons==1)*Electron_IdentificationSFUp[0]*Electron_ReconstructionSFUp[0]+(N_LooseElectrons==0)*1.)"
-#electronSFs_down = "((N_TightElectrons==1 && N_LooseElectrons==2)*Electron_IdentificationSFDown[0]*Electron_ReconstructionSFDown[0]*LooseElectron_IdentificationSFDown[1]*LooseElectron_ReconstructionSFDown[1]+(N_TightElectrons==2 && N_LooseElectrons==2)*Electron_IdentificationSFDown[0]*Electron_ReconstructionSFDown[0]*Electron_IdentificationSFDown[1]*Electron_ReconstructionSFDown[1]+(N_TightElectrons==1 && N_LooseElectrons==1)*Electron_IdentificationSFDown[0]*Electron_ReconstructionSFDown[0]+(N_LooseElectrons==0)*1.)"
-#muonSFs_up = "((N_TightMuons==1 && N_LooseMuons==2)*Muon_IdentificationSFUp[0]*Muon_IsolationSFUp[0]*LooseMuon_IdentificationSFUp[1]*LooseMuon_IsolationSFUp[1]+(N_TightMuons==2 && N_LooseMuons==2)*Muon_IdentificationSFUp[0]*Muon_IsolationSFUp[0]*Muon_IdentificationSFUp[1]*Muon_IsolationSFUp[1]+(N_TightMuons==1 && N_LooseMuons==1)*Muon_IdentificationSFUp[0]*Muon_IsolationSFUp[0]+(N_LooseMuons==0)*1.)"
-#muonSFs_down = "((N_TightMuons==1 && N_LooseMuons==2)*Muon_IdentificationSFDown[0]*Muon_IsolationSFDown[0]*LooseMuon_IdentificationSFDown[1]*LooseMuon_IsolationSFDown[1]+(N_TightMuons==2 && N_LooseMuons==2)*Muon_IdentificationSFDown[0]*Muon_IsolationSFDown[0]*Muon_IdentificationSFDown[1]*Muon_IsolationSFDown[1]+(N_TightMuons==1 && N_LooseMuons==1)*Muon_IdentificationSFDown[0]*Muon_IsolationSFDown[0]+(N_LooseMuons==0)*1.)"
+# top pt weight
+topptWeightNom = "Weight_TopPt"
+
+electronSFs_up = "((N_TightElectrons==1 && N_LooseElectrons==2)*Electron_IdentificationSFUp[0]*Electron_ReconstructionSFUp[0]*LooseElectron_IdentificationSFUp[1]*LooseElectron_ReconstructionSFUp[1]+(N_TightElectrons==2 && N_LooseElectrons==2)*Electron_IdentificationSFUp[0]*Electron_ReconstructionSFUp[0]*Electron_IdentificationSFUp[1]*Electron_ReconstructionSFUp[1]+(N_TightElectrons==1 && N_LooseElectrons==1)*Electron_IdentificationSFUp[0]*Electron_ReconstructionSFUp[0]+(N_LooseElectrons==0)*1.)"
+electronSFs_down = "((N_TightElectrons==1 && N_LooseElectrons==2)*Electron_IdentificationSFDown[0]*Electron_ReconstructionSFDown[0]*LooseElectron_IdentificationSFDown[1]*LooseElectron_ReconstructionSFDown[1]+(N_TightElectrons==2 && N_LooseElectrons==2)*Electron_IdentificationSFDown[0]*Electron_ReconstructionSFDown[0]*Electron_IdentificationSFDown[1]*Electron_ReconstructionSFDown[1]+(N_TightElectrons==1 && N_LooseElectrons==1)*Electron_IdentificationSFDown[0]*Electron_ReconstructionSFDown[0]+(N_LooseElectrons==0)*1.)"
+muonSFs_up = "((N_TightMuons==1 && N_LooseMuons==2)*Muon_IdentificationSFUp[0]*Muon_IsolationSFUp[0]*LooseMuon_IdentificationSFUp[1]*LooseMuon_IsolationSFUp[1]+(N_TightMuons==2 && N_LooseMuons==2)*Muon_IdentificationSFUp[0]*Muon_IsolationSFUp[0]*Muon_IdentificationSFUp[1]*Muon_IsolationSFUp[1]+(N_TightMuons==1 && N_LooseMuons==1)*Muon_IdentificationSFUp[0]*Muon_IsolationSFUp[0]+(N_LooseMuons==0)*1.)"
+muonSFs_down = "((N_TightMuons==1 && N_LooseMuons==2)*Muon_IdentificationSFDown[0]*Muon_IsolationSFDown[0]*LooseMuon_IdentificationSFDown[1]*LooseMuon_IsolationSFDown[1]+(N_TightMuons==2 && N_LooseMuons==2)*Muon_IdentificationSFDown[0]*Muon_IsolationSFDown[0]*Muon_IdentificationSFDown[1]*Muon_IsolationSFDown[1]+(N_TightMuons==1 && N_LooseMuons==1)*Muon_IdentificationSFDown[0]*Muon_IsolationSFDown[0]+(N_LooseMuons==0)*1.)"
 
 ## trigger scale factors
 ## DANGERZONE: ELECTRON TRIGGER NOT ADDED TO NTUPLES YET, USE INTERNAL SFS
@@ -89,14 +97,20 @@ weightReplacements = {
     # default weight
     "DEFAULTWEIGHT": defaultWeight,
     # pileup weights
+    "PUWEIGHTNOM": pileupWeightNom,
     "PUWEIGHTUP": pileupWeightUp,
     "PUWEIGHTDOWN": pileupWeightDown,
-    ## lepton scale factors
-    # "LEPTONSFS": "(" + electronSFs + "+" + muonSFs + ")",
-    # "ELESFUP": "(" + electronSFs_up + "+" + muonSFs + ")",
-    # "ELESFDOWN": "(" + electronSFs_down + "+" + muonSFs + ")",
-    # "MUSFUP": "(" + electronSFs + "+" + muonSFs_up + ")",
-    # "MUSFDOWN": "(" + electronSFs + "+" + muonSFs_down + ")",
+    # csv weight
+    "CSVWEIGHTNOM": csvWeightNom,
+    # top pt weight
+    "TOPPTWEIGHTNOM": topptWeightNom,
+    # lepton scale factors
+    "ELESFNOM": electronSFs,
+    "ELESFUP": electronSFs_up,
+    "ELESFDOWN": electronSFs_down,
+    "MUSFNOM": muonSFs,
+    "MUSFUP": muonSFs_up,
+    "MUSFDOWN": muonSFs_down,
     ## trigger scale factors
     # "TRIGGERSFS": "(" + electronTrigger + "+" + muonTrigger + ")",
     # "ELETRIGSUP": "(" + electronTrigger_up + "+" + muonTrigger + ")",
@@ -104,7 +118,7 @@ weightReplacements = {
     # "MUTRIGSUP": "(" + electronTrigger + "+" + muonTrigger_up + ")",
     # "MUTRIGSDOWN": "(" + electronTrigger + "+" + muonTrigger_down + ")",
     ## do weights for data
-    #"DOWEIGHTS": "(DoWeights==1)+(DoWeights==0)*1.0",
+    "DOWEIGHTS": "(DoWeights==1)+(DoWeights==0)*1.0",
 }
 
 # Lumi weight
@@ -114,6 +128,12 @@ lumi = "59.7*"
 nominalweight = (
     "NomWeight:=("
     + defaultWeight
+    + "*"
+    + pileupWeightNom
+    + "*"
+    + csvWeightNom
+    + "*"
+    + topptWeightNom
     + "*"
     + muonSFs
     + "*"
