@@ -110,6 +110,8 @@ plotOptions.add_option("--ratio", dest="ratio",  default=None,
         help="make ratio plot", metavar="ratio")
 plotOptions.add_option("--logarithmic", dest="logarithmic", default=None,
         help="enable logarithmic plots")
+plotOptions.add_option("--combineDatacard", dest = "datacard", default=None,
+        help="PATH to datacard file rootfile path and channel name for correct binning of prefit/postfit plots")
 
 parser.add_option_group(plotOptions)
 
@@ -129,6 +131,8 @@ styleOptions.add_option("--signalscaling", dest="signalscaling", default=None,
         help="scale factor of the signal processes, -1 to scale with background integral")
 styleOptions.add_option("--lumilabel", dest="lumilabel", default=None,
         help="print luminosity label on canvas")
+styleOptions.add_option("--yLabel", dest="yLabel", default=None,
+        help="axis label of y-axis")
 styleOptions.add_option("--cmslabel", dest="cmslabel", default=None,
         help="print CMS label on canvas")
 styleOptions.add_option("--splitlegend", dest="splitlegend",  default=None,
@@ -256,11 +260,36 @@ combineIden = "$FLAG"
 
 
 combineflag             = plotoptions.get("combineflag", options.combineflag)
+binEdges                = None
+outputName              = None
+xLabel                  = ""
 if combineflag:
     options.nominalKey  = "$FLAG/$CHANNEL/$PROCESS"
     options.data        = "data"
     options.nominalKey  = options.nominalKey.replace(combineIden, combineflag)
-
+    
+    if options.datacard:
+        with open(options.datacard, "r") as card:
+            lines = card.readlines()
+        lines = [l for l in lines if l.startswith("shapes")]
+        channelLine = False
+        for l in lines:
+            line = l.split(" ")
+            if options.channelName in line:
+                channelLine = line
+                break
+        if channelLine is None: sys.exit("no channel {} found in datacard".format(options.channelName))
+        channelLine = [elem for elem in channelLine if not elem == ""]
+        binFileName = channelLine[3]
+        binKey = channelLine[4].replace("$PROCESS","data_obs")
+        outputName = binKey.replace("data_obs_","")
+        
+        binFile = ROOT.TFile(binFileName)
+        binHist = binFile.Get(binKey)
+        xLabel = binHist.GetTitle()
+        binEdges = []
+        for i in range(binHist.GetNbinsX()+1):
+            binEdges.append( binHist.GetBinLowEdge(i+1) )
 
 # build keys
 if chIden in options.nominalKey:
@@ -279,19 +308,22 @@ PlotList    = {}
 rootfilename    = options.Rootfile
 rootFile        = ROOT.TFile(rootfilename, "readonly") 
 
+
 # load samples
 print "start loading  samples" 
 for sample in samples:
     color   = samples[sample]['color']
     typ     = samples[sample]['typ']
     label   = samples[sample]['label']
+
     if combineflag:
         if typ=="signal":
             continue
         else:
             PlotList[sample] = Plots.getHistogramAndErrorband(rootFile=rootFile,sample=sample,
                                                         color=color,typ=typ,label=label,
-                                                        nominalKey=nominalKey,procIden=procIden)
+                                                        nominalKey=nominalKey,procIden=procIden,
+                                                        binEdges=binEdges,newTitle=xLabel)
     else:
         PlotList[sample] = Plots.buildHistogramAndErrorBand(rootFile=rootFile,sample=sample,
                                                         color=color,typ=typ,label=label,
@@ -325,9 +357,12 @@ Get errorband and signalhist in case of combine output file,
 else no signal
 """
 
+background = None
 if combineflag:
     totalsignalkey  = nominalKey.replace(procIden, "total_signal")
     totalsignal     = rootFile.Get(totalsignalkey)
+    if not binEdges is None:
+        totalsignal = Plots.updateBinEdges(totalsignal, binEdges)
 
     signallabel   = getParserConfigDefaultValue(parser=options.signallabel,config="signallabel",
                                             plotoptions=plotoptions,defaultvalue="signal")
@@ -345,6 +380,8 @@ if combineflag:
                                         typ="signal", OverUnderFlowInc=True)
     # from total background or total background+signal prediction histogram in mlfit file, get the error band
     background = rootFile.Get(bkgKey)
+    if not binEdges is None:
+        background = Plots.updateBinEdges(background, binEdges)
     errorband = Plots.GetErrorGraph(background)
 else:
     errorband = None
@@ -368,8 +405,8 @@ if data:
     # data in combine in TGraphAsymmErrors, get TH1 out of it
     elif isinstance(dataHist, ROOT.TGraphAsymmErrors):
         n_bins   = Plots.FindNewBinNumber(background)
-        dataHist = Plots.GetHistoFromTGraphAE(dataHist, data, n_bins)
-        Plots.moveOverUnderFlow(dataHist)
+        dataHist = Plots.GetHistoFromTGraphAE(dataHist, data, n_bins, binEdges)
+        #Plots.moveOverUnderFlow(dataHist)
         dataHist.SetStats(False)
     else:
         print "ATTENTION: Not using data!"
@@ -394,6 +431,8 @@ lumilabel       = getParserConfigDefaultValue(parser=options.lumilabel,config="l
                                             plotoptions=plotoptions,defaultvalue=False)
 cmslabel        = getParserConfigDefaultValue(parser=options.cmslabel,config="cmslabel",
                                             plotoptions=plotoptions,defaultvalue=False)
+yLabel          = getParserConfigDefaultValue(parser=options.yLabel,config="yLabel",
+                                            plotoptions=plotoptions,defaultvalue="Events expected")
 logarithmic     = getParserConfigDefaultBool(parser=options.logarithmic,config="logarithmic",
                                             plotoptions=plotoptions,defaultbool=False)
 splitlegend     = getParserConfigDefaultBool(parser=options.splitlegend,config="splitlegend",
@@ -402,6 +441,7 @@ normalize       = getParserConfigDefaultBool(parser=options.normalize,config="no
                                             plotoptions=plotoptions,defaultbool=False)
 shape           = getParserConfigDefaultBool(parser=options.shape,config="shape",
                                             plotoptions=plotoptions,defaultbool=False)
+
 if shape:
     dataHist        = None
     ratio           = False
@@ -416,14 +456,15 @@ else:
 
 """
 
-
 DrawHistogramObject = Plots.DrawHistograms(PlotList,options.channelName,
                                 data=dataHist,ratio=ratio, 
                                 signalscaling=int(signalscaling),
-                                errorband=errorband, logoption=logarithmic,
+                                errorband=errorband, background=background,
+                                logoption=logarithmic,
                                 normalize=normalize,splitlegend=splitlegend,
                                 combineflag=combineflag,shape=shape,
-                                sortedProcesses=sortedProcesses,datalabel=datalabel)
+                                sortedProcesses=sortedProcesses,
+                                yLabel=yLabel)
 
 DrawHistogramObject.drawHistsOnCanvas()
 
@@ -449,8 +490,11 @@ pdftag           = getParserConfigDefaultValue(parser=options.pdftag,config="pdf
 
 if options.pdfname:
     path = plotpath+"/"+options.pdfname
+elif not outputName is None:
+    path = plotpath+"/"+outputName
 else:
     path = plotpath+"/"+options.channelName
+
 
 if pdftag:
     path += "_"+str(pdftag)
