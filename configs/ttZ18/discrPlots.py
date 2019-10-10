@@ -14,8 +14,42 @@ from copy import deepcopy
 
 
 memexp = ""
+jtYieldExpression = "(N_Jets==4&&N_BTagsM==3)*1"
+jtYieldExpression+="+(N_Jets==5&&N_BTagsM==3)*2"
+jtYieldExpression+="+(N_Jets>=6&&N_BTagsM==3)*3"
+jtYieldExpression+="+(N_Jets==4&&N_BTagsM>=4)*4"
+jtYieldExpression+="+(N_Jets==5&&N_BTagsM>=4)*5"
+jtYieldExpression+="+(N_Jets>=6&&N_BTagsM>=4)*6"
+
+dnnYieldExpression = "(DNNPredictedClass_4j_ge3t==0)*1"
+dnnYieldExpression+="+(DNNPredictedClass_4j_ge3t==1)*2"
+dnnYieldExpression+="+(DNNPredictedClass_4j_ge3t==2)*3"
+dnnYieldExpression+="+(DNNPredictedClass_4j_ge3t==3)*4"
+dnnYieldExpression+="+(DNNPredictedClass_4j_ge3t==4)*5"
+dnnYieldExpression+="+(DNNPredictedClass_5j_ge3t==0)*6"
+dnnYieldExpression+="+(DNNPredictedClass_5j_ge3t==1)*7"
+dnnYieldExpression+="+(DNNPredictedClass_5j_ge3t==2)*8"
+dnnYieldExpression+="+(DNNPredictedClass_5j_ge3t==3)*9"
+dnnYieldExpression+="+(DNNPredictedClass_5j_ge3t==4)*10"
+dnnYieldExpression+="+(DNNPredictedClass_ge6j_ge3t==0)*11"
+dnnYieldExpression+="+(DNNPredictedClass_ge6j_ge3t==1)*12"
+dnnYieldExpression+="+(DNNPredictedClass_ge6j_ge3t==2)*13"
+dnnYieldExpression+="+(DNNPredictedClass_ge6j_ge3t==3)*14"
+dnnYieldExpression+="+(DNNPredictedClass_ge6j_ge3t==4)*15"
 
 
+def controlplots(data):
+    label = "event yields"
+    selection = "(N_Jets>=4&&N_BTagsM>=3)&&(1.)"
+    plots = [
+        plotClasses.Plot(ROOT.TH1D("inclusive_annYields","ANN Discriminator Yields",15,0.5,15.5),dnnYieldExpression,selection,label),
+        plotClasses.Plot(ROOT.TH1D("inclusive_eventYields","event yields",6,0.5,6.5),jtYieldExpression,selection,label),
+        plotClasses.Plot(ROOT.TH1D("inclusive_yield","event yield",1,0,1),"0.5",selection,label),
+        ]
+    
+    if data:
+        add_data_plots(plots=plots,data=data)
+    return plots
 
 def plots_dnn(data, discrname):
 
@@ -262,6 +296,7 @@ def plots_dnn(data, discrname):
 def getDiscriminatorPlots(data = None, discrname = ''):
     discriminatorPlots = []
     discriminatorPlots += plots_dnn(data, discrname)
+    discriminatorPlots += controlplots(data)
 
     return discriminatorPlots
 

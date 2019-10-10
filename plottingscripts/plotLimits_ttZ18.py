@@ -31,7 +31,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttZAnalysis'
+    name = 'ttZAnalysis_final'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -61,7 +61,7 @@ def main(pyrootdir, opts):
     # script options
     analysisOptions = {
         # general options
-        "usePseudoData":        True,
+        "usePseudoData":        False,
         "testrun":              False,  # test run with less samples
         "stopAfterCompile":     False,  # stop script after compiling
         # options to activate parts of the script
@@ -74,7 +74,7 @@ def main(pyrootdir, opts):
         "signalScaling":        1,
         "lumiLabel":            True,
         "CMSlabel":             "private Work",
-        "ratio":                "#frac{Pseudo Data}{Background}",
+        "ratio":                "#frac{Data}{Background}",
         "shape":                False, # for shape plots
         "normalize":            False, # normalize yield to integral 1
         "logarithmic":          True,

@@ -28,14 +28,38 @@ def yields(data = None):
     plots = [
         plotClasses.Plot(ROOT.TH1D("inclusive_eventYields","event yields",6,0.5,6.5),jtYieldExpression,selection,label),
         plotClasses.Plot(ROOT.TH1D("inclusive_yield","event yield",1,0,1),"0.5",selection,label),
-        plotClasses.Plot(ROOT.TH1D("inclusive_nomWeight","weight",100,-0.2,0.2),"Weight_GEN_nom*Weight_CSV*Weight_XS*Weight_pu69p2",selection,label),
         ]
 
     if data:
         add_data_plots(plots=plots,data=data)
     return plots
 
+def control_plots(data=None):
+    label = "\geq 4 jets, \geq 3 b-tags"
+    selection = "(N_Jets>=4&&N_BTagsM>=3)"
 
+    plots = [
+        plotClasses.Plot(ROOT.TH1D("inclusive_Jet_Pt","p_{T} of all jets",30,20.0,400.0),"Jet_Pt",selection,label),
+        plotClasses.Plot(ROOT.TH1D("inclusive_Jet_Eta","#eta of all jets",30,-2.4,2.4),"Jet_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("inclusive_Jet_Phi","#phi of all jets",30,-3.1416,3.1416),"Jet_Phi",selection,label),
+        plotClasses.Plot(ROOT.TH1D("inclusive_N_BTagsM","number of b-tags (medium)",3,2.5,5.5),"N_BTagsM",selection,label),
+        plotClasses.Plot(ROOT.TH1D("inclusive_N_Jets","number of reconstructed jets",8,3.5,11.5),"N_Jets",selection,label),
+
+        plotClasses.Plot(ROOT.TH1D("inclusive_Electron_Pt","p_{T}(electron)",30,30,200),"Electron_Pt[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("inclusive_Electron_Eta","#eta(electron)",30,-2.5,2.5),"Electron_Eta[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("inclusive_Electron_Phi","#phi(electron)",30,-3.1416,3.1416),"Electron_Phi[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("inclusive_Muon_Pt","p_{T}(muon)",30,25,200),"Muon_Pt[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("inclusive_Muon_Eta","#eta(muon)",30,-2.5,2.5),"Muon_Eta[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("inclusive_Muon_Phi","#phi(muon)",30,-3.1416,3.1416),"Muon_Phi[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("inclusive_Lepton_Pt","p_{T}(lepton)",30,25,200),"LooseLepton_Pt[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("inclusive_Lepton_Eta","#eta(lepton)",30,-2.5,2.5),"LooseLepton_Eta[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("inclusive_Lepton_Phi","#phi(lepton)",30,-3.1416,3.1416),"LooseLepton_Phi[0]",selection,label),
+
+        ]
+    if data:
+        add_data_plots(plots=plots,data=data)
+
+    return plots
 
 def plots_ge6j_ge3t(data = None):
     label = "\geq 6 jets, \geq 3 b-tags"
@@ -68,7 +92,7 @@ def plots_ge6j_ge3t(data = None):
         plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_Evt_blr_transformed","transformed b-tag likelihood ratio",30,-1.0,12.0),"Evt_blr_transformed",selection,label),
         plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_Jet_Pt_0","p_{T} of leading jet [GeV]",30,50.0,600.0),"Jet_Pt[0]",selection,label),
         #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_N_BTagsL","number of b-tags (loose)",4,2.5,6.5),"N_BTagsL",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_N_BTagsM","number of b-tags (medium)",3,2.5,5.5),"N_BTagsM",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_N_BTagsM","number of b-tags",3,2.5,5.5),"N_BTagsM",selection,label),
     #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_RecoTTZ_Chi2Total_log","t#bar{t}+Z reconstruction ln(#chi^{2})",30,-2.0,8.0),"RecoTTZ_Chi2Total_log",selection,label),
         plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_RecoTTZ_Chi2Z_log","t#bar{t}+Z reconstruction ln(#chi^{2})(Z)",30,-10.0,7.0),"RecoTTZ_Chi2Z_log",selection,label),
         plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_RecoTTZ_Z_M_log","t#bar{t}+Z reconstruction ln(m)(Z) [ln(GeV)]",30,3.5,6.0),"RecoTTZ_Z_M_log",selection,label),
@@ -184,6 +208,7 @@ def getDiscriminatorPlots(data = None, discrname = ''):
     discriminatorPlots += plots_ge6j_ge3t(data)
     discriminatorPlots += plots_5j_ge3t(data)
     discriminatorPlots += plots_4j_ge3t(data)
+    discriminatorPlots += control_plots(data)
     discriminatorPlots += yields(data)
 
     return discriminatorPlots

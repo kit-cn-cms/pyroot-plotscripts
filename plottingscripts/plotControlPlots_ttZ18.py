@@ -29,14 +29,14 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttZControlPlots_v2'
+    name = 'ttZControlPlots_final'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
 
     # signal process
     signalProcess = "ttZ"
-    nSigSamples   = 4
+    nSigSamples   = 1
 
     # dataera
     dataera = "2018"
@@ -51,7 +51,7 @@ def main(pyrootdir, opts):
     config          = "ttZ18/pltcfg_controlPlots"
     variable_cfg    = "ttZ18/additionalVariables"
     plot_cfg        = "ttZ18/controlPlots"
-    syst_cfg        = "ttZ18/systematics_reduced"
+    syst_cfg        = "ttZ18/systematics"
 
     # file for rate factors
     rateFactorsFile = pyrootdir+"/data/rateFactors/rateFactors_2018.csv"
@@ -72,7 +72,7 @@ def main(pyrootdir, opts):
         "signalScaling":        -1,
         "lumiLabel":            True,
         "CMSlabel":             "private Work",
-        "ratio":                "#frac{data}{MC Background}",
+        "ratio":                "#frac{Data}{Background}",
         "shape":                False, # for shape plots
         "normalize":            False, # normalize yield to integral 1
         "logarithmic":          False,
