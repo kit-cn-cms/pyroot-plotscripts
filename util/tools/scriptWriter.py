@@ -349,6 +349,17 @@ class scriptWriter:
             script += addCodeInt.getVariableInitInsideEventLoopLines()
         script += "     totalTimeEvalDNN+=timerEvalDNN->RealTime();\n"
 
+        script += "     timerEvalWeightsAndBDT->Start();\n"
+        # calculate varibles and get TMVA outputs
+        script += self.varManager.calculateVariables()
+        script += "     totalTimeEvalWeightsAndBDT+=timerEvalWeightsAndBDT->RealTime();\n"
+
+        script += "     timerEvalDNN->Start();\n"
+        for addCodeInt in self.pp.addInterfaces:
+            script += addCodeInt.getEventLoopCodeLines()
+            script += "\n"
+        script += "     totalTimeEvalDNN+=timerEvalDNN->RealTime();\n"
+
         script += "     timerSampleWeight->Start();\n"
         script += '        float sampleweight=1;\n'
         script += scriptfunctions.encodeSampleSelection(self.pp.configData.allSamples, self.varManager)
@@ -360,18 +371,7 @@ class scriptWriter:
         script += "\n"
         script += "     totalTimeReadDataBase+=timerReadDataBase->RealTime();\n"
         
-        script += "     timerEvalDNN->Start();\n"
-        for addCodeInt in self.pp.addInterfaces:
-            script += addCodeInt.getEventLoopCodeLines()
-            script += "\n"
-        script += "     totalTimeEvalDNN+=timerEvalDNN->RealTime();\n"
 
-        script += "     timerEvalWeightsAndBDT->Start();\n"
-
-        # calculate varibles and get TMVA outputs
-        script += self.varManager.calculateVariables()
-        print("done")
-        script += "     totalTimeEvalWeightsAndBDT+=timerEvalWeightsAndBDT->RealTime();\n"
         
         script += "     timerFillHistograms->Start();\n"
 
