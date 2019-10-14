@@ -160,15 +160,15 @@ doReadTrees = True
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
 samplesDataControlPlots = [
-    #plotClasses.Sample(
-    #"MET",
-    #ROOT.kBlack,
-    #path_mwassmer + "/MET*/*nominal*.root",
-    #"(Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX == 1) || (Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX == 1)" ,
-    #"MET",
-    #samDict=sampleDict,
-    #readTrees=doReadTrees,
-    #),
+    plotClasses.Sample(
+    "MET",
+    ROOT.kBlack,
+    path_mwassmer + "/MET*/*nominal*.root",
+    "(N_LooseElectrons==0) && (N_LooseMuons==0)" ,
+    "MET",
+    samDict=sampleDict,
+    readTrees=doReadTrees,
+    ),
     plotClasses.Sample(
     "SingleEl",
     ROOT.kBlack,
