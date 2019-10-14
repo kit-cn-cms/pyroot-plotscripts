@@ -33,7 +33,7 @@ def main(pyrootdir, opts):
     """
     )
     # name of the analysis (i.e. workdir name)
-    name = "Monotop_controlplots"
+    name = "Monotop_controlplots_lep"
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -51,7 +51,7 @@ def main(pyrootdir, opts):
     # configs
     config = "Monotop/pltcfg_controlPlots"
     variable_cfg = "Monotop/additionalVariables"
-    plot_cfg = "Monotop/controlPlots"
+    plot_cfg = "Monotop/controlPlots_lep"
     syst_cfg = "Monotop/systematics"
 
     # file for rate factors
