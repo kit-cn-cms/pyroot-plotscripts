@@ -456,19 +456,19 @@ def control_plots_ttbar_lep(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("N_BTagsM"+extension, "medium btags", 5, 0.5, 5.5),
+            ROOT.TH1D("N_BTagsM"+extension, "medium btags", 6, -0.5, 5.5),
             "N_BTagsM",
             selection,
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("N_BTagsL"+extension, "loose btags", 5, 0.5, 5.5),
+            ROOT.TH1D("N_BTagsL"+extension, "loose btags", 6, -0.5, 5.5),
             "N_BTagsL",
             selection,
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("N_BTagsT"+extension, "tight btags", 5, 0.5, 5.5),
+            ROOT.TH1D("N_BTagsT"+extension, "tight btags", 6, -0.5, 5.5),
             "N_BTagsT",
             selection,
             label,
@@ -516,7 +516,7 @@ def control_plots_ttbar_lep(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("N_Jets"+extension, "number of AK4 jets", 5, 0.5, 5.5),
+            ROOT.TH1D("N_Jets"+extension, "number of AK4 jets", 6, -0.5, 5.5),
             "N_Jets",
             selection,
             label,
@@ -988,19 +988,19 @@ def control_plots_W_lep(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("N_BTagsM"+extension, "medium btags", 5, 0.5, 5.5),
+            ROOT.TH1D("N_BTagsM"+extension, "medium btags", 6, -0.5, 5.5),
             "N_BTagsM",
             selection,
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("N_BTagsL"+extension, "loose btags", 5, 0.5, 5.5),
+            ROOT.TH1D("N_BTagsL"+extension, "loose btags", 6, -0.5, 5.5),
             "N_BTagsL",
             selection,
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("N_BTagsT"+extension, "tight btags", 5, 0.5, 5.5),
+            ROOT.TH1D("N_BTagsT"+extension, "tight btags", 6, -0.5, 5.5),
             "N_BTagsT",
             selection,
             label,
@@ -1048,7 +1048,7 @@ def control_plots_W_lep(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("N_Jets"+extension, "number of AK4 jets", 5, 0.5, 5.5),
+            ROOT.TH1D("N_Jets"+extension, "number of AK4 jets", 6, -0.5, 5.5),
             "N_Jets",
             selection,
             label,
@@ -1521,19 +1521,19 @@ def control_plots_SR_lep(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("N_BTagsM"+extension, "medium btags", 5, 0.5, 5.5),
+            ROOT.TH1D("N_BTagsM"+extension, "medium btags", 6, -0.5, 5.5),
             "N_BTagsM",
             selection,
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("N_BTagsL"+extension, "loose btags", 5, 0.5, 5.5),
+            ROOT.TH1D("N_BTagsL"+extension, "loose btags", 6, -0.5, 5.5),
             "N_BTagsL",
             selection,
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("N_BTagsT"+extension, "tight btags", 5, 0.5, 5.5),
+            ROOT.TH1D("N_BTagsT"+extension, "tight btags", 6, -0.5, 5.5),
             "N_BTagsT",
             selection,
             label,
@@ -1581,7 +1581,7 @@ def control_plots_SR_lep(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("N_Jets"+extension, "number of AK4 jets", 5, 0.5, 5.5),
+            ROOT.TH1D("N_Jets"+extension, "number of AK4 jets", 6, -0.5, 5.5),
             "N_Jets",
             selection,
             label,
@@ -1615,7 +1615,7 @@ def getDiscriminatorPlots(data=None, discrname=""):
     discriminatorPlots = []
     discriminatorPlots += control_plots_ttbar_lep(data)
     discriminatorPlots += control_plots_W_lep(data)
-    #discriminatorPlots += control_plots_SR_lep(data)
+    discriminatorPlots += control_plots_SR_lep(data)
 
     return discriminatorPlots
 
