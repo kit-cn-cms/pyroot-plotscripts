@@ -420,12 +420,16 @@ void LeptonSFHelper::SetElectronHistos( ){
   std::string TRIGGERinputFile = "";
   std::string TRIGGERhistName  = "";
   if( dataera == "2017" || dataera == "2017_deepCSV") {
-      TRIGGERinputFile = plotscriptBaseDir+"/data/triggerSFs/SingleEG_JetHT_Trigger_Scale_Factors_ttHbb_Legacy2017_v1.root";
+      TRIGGERinputFile = plotscriptBaseDir+"/data/triggerSFs/SingleEG_JetHT_Trigger_Scale_Factors_ttHbb2017_v2.root";
       TRIGGERhistName  = "ele28_ht150_OR_ele32_ele_pt_ele_sceta";
       }
   else if( dataera == "2018" ) {
-      TRIGGERinputFile = plotscriptBaseDir+"/data/triggerSFs/SingleEG_JetHT_Trigger_Scale_Factors_ttHbb_Legacy2018_v1.root";
+      TRIGGERinputFile = plotscriptBaseDir+"/data/triggerSFs/SingleEG_JetHT_Trigger_Scale_Factors_ttHbb2018_v2.root";
       TRIGGERhistName  = "ele28_ht150_OR_ele32_ele_pt_ele_sceta";
+      }
+  else if( dataera == "2016" ) {
+      TRIGGERinputFile = plotscriptBaseDir+"/data/triggerSFs/SingleEG_JetHT_Trigger_Scale_Factors_ttHbb2016_v2.root";
+      TRIGGERhistName  = "ele27_ele_pt_ele_sceta";
       }
 
   //std::string ISOinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/oct202017/ele_Reco_EGM2D.root"; // DANGERZONE: no iso SF yet??

@@ -84,6 +84,10 @@ void plot(){
       csvHFfile=plotscriptBaseDir+"/data/CSV/sfs_deepjet_2018_hf.root";
       csvLFfile=plotscriptBaseDir+"/data/CSV/sfs_deepjet_2018_lf.root";
       }
+  else if( dataera == "2016" ) {
+      csvHFfile=plotscriptBaseDir+"/data/CSV/sfs_deepjet_2016_hf.root";
+      csvLFfile=plotscriptBaseDir+"/data/CSV/sfs_deepjet_2016_lf.root";
+      }
   else if( dataera == "2017_deepCSV" ) {
       csvHFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_V3_2017/deepCSV_sfs_hf.root";
       csvLFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_V3_2017/deepCSV_sfs_lf.root";
