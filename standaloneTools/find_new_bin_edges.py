@@ -10,6 +10,7 @@ def split_comma_list(tosplit):
     print(tosplit)
     for c in tosplit:
         returnlist += c.split(",")
+    print(returnlist)
     return returnlist
 
 def do_rebinning(histo, threshold):
@@ -17,24 +18,40 @@ def do_rebinning(histo, threshold):
     val = 0.
     bin_edges = []
     last_added_edge = 0
-    for i in range(1, histo.GetNbinsX()+1):
-        if i == 1:
-            last_added_edge = histo.GetBinLowEdge(i)
+    nbins = histo.GetNbinsX()
+    if threshold > 1:
+        print("Will compare potential bin content to threshold {}".format(threshold))
+    for i in range(nbins, 0, -1):
+        # print(i)
+        if i == nbins:
+            last_added_edge = histo.GetBinLowEdge(i+1)
             bin_edges.append(last_added_edge)
 
         errorsqared += histo.GetBinError(i)**2
         val += histo.GetBinContent(i)
         relerror = errorsqared**0.5/val if not val == 0 else errorsqared**0.5
-        print("Rel. Error: {}".format(relerror))
-        if relerror <= threshold:
-            last_added_edge = histo.GetBinLowEdge(i+1)
-            bin_edges.append(last_added_edge)
-            # last_added_edge = histo.GetBinLowEdge(i+1)
-            errorsqared = 0.
-            val = 0
-    overflow_edge = histo.GetBinLowEdge(histo.GetNbinsX()+2)
-    if not overflow_edge in bin_edges: bin_edges.append(overflow_edge)
-    print("\tNew Edges:[{}]".format(",".join([str(round(b,4)) for b in bin_edges])))
+        # print("Rel. Error: {}".format(relerror))
+        if threshold > 1.:
+            print("bin {}, value: {}".format(i,val))
+            if val >= threshold:
+                
+                last_added_edge = histo.GetBinLowEdge(i)
+                print("saving edge {}".format(last_added_edge))
+                bin_edges.append(last_added_edge)
+                # last_added_edge = histo.GetBinLowEdge(i+1)
+                errorsqared = 0.
+                val = 0
+        else:
+            if relerror <= threshold:
+                last_added_edge = histo.GetBinLowEdge(i)
+                bin_edges.append(last_added_edge)
+                # last_added_edge = histo.GetBinLowEdge(i+1)
+                errorsqared = 0.
+                val = 0
+    underflow_edge = histo.GetBinLowEdge(1)
+    if not underflow_edge in bin_edges: bin_edges.append(underflow_edge)
+    print("\tNew Edges:[{}]".format(",".join([str(round(b,4)) for b in sorted(bin_edges)])))
+    # return sorted(bin_edges)
 
 
 def prepare_rebinning(rootfile, histolist, threshold = 0.1):
@@ -58,18 +75,28 @@ def prepare_rebinning(rootfile, histolist, threshold = 0.1):
 
 
 def rebin_histos_in_rootfile(inputfile, options):
-    key = options.key
+    
     cats = split_comma_list(options.channels)
     
     procs = split_comma_list(options.processes)
-
+    inputfile = os.path.abspath(inputfile)
+    print(inputfile)
+    print("ITS HAPPENING NOW")
+    rfile = None
     rfile = ROOT.TFile.Open(inputfile)
+    if not isinstance(rfile, ROOT.TFile):
+        print("{} is not a TFile!".format(inputfile))
+        return
+    print("opened root file")
+
     keylist = [x.GetName() for x in rfile.GetListOfKeys()]
+    key = "$PROCESS_$CHANNEL"
     for cat in cats:
         print("Doing channel '{}'".format(cat))
         consider_for_rebinning = []
         for p in procs:
             tmp = key.replace("$PROCESS", p).replace("$CHANNEL", cat)
+            print(tmp)
             if tmp in keylist:
                 consider_for_rebinning.append(tmp)
             else:
@@ -89,11 +116,11 @@ def main(options, histofiles):
 def parse_arguments():
     parser = OptionParser()
 
-    parser.add_option("-k", "--key",
+    parser.add_option("-k", "--nomkey",
                         help = "use this string to select histogram keys, e.g. '$PROCESS_finaldiscr_$CHANNEL' (this is the default)",
-                        dest = "key",
+                        dest = "nomkey",
                         type = "str",
-                        default = "$PROCESS_finaldiscr_$CHANNEL"
+                        default = '$PROCESS_finaldiscr_$CHANNEL'
                     )
     parser.add_option( "-c", "--channel",
                         help = """Do rebinning for this channel, e.g. 'ljets_ge4j_ge4t_ttH_node'.
@@ -111,7 +138,6 @@ def parse_arguments():
                         action = "append",
                         dest = "processes",
                         type = "str",
-                        default = ["ttbarOther,ttbarPlusB,ttbarPlus2B,ttbarPlusBBbar,ttbarPlusCCbar"]
         )
     parser.add_option( "-t", "--threshold",
                         help = "threshold to use when bin uncertainties are used to decide on binning (default = 0.1)",
@@ -123,6 +149,8 @@ def parse_arguments():
     options, args = parser.parse_args()
     if len(options.channels) == 0:
         parser.error("ERROR: You need to provide at least one category for rebinning")
+    if options.processes is None:
+        options.processes = ["ttbarOther,ttbarPlusB,ttbarPlus2B,ttbarPlusBBbar,ttbarPlusCCbar"]
     return options, args
 
 if __name__ == '__main__':
