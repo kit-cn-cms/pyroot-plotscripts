@@ -158,6 +158,17 @@ def getCanvas(name):
     c.cd(1).SetTicks(1, 1)
     return c
 
+def get_ratios(nom, up, down, places = 2):
+    nom_yield = nom.Integral()
+    up_yield = up.Integral()
+    down_yield = down.Integral()
+    
+    ratio_up = 0
+    ratio_down = 0
+    if not nom_yield == 0:
+        ratio_up = up_yield / nom_yield
+        ratio_down = down_yield / nom_yield
+    return round(ratio_up, places), round(ratio_down,places)
 
 def drawshifts(file, outdir, processes, variable, syst, procLabel = "", procName = ""):
     if procName == "":
@@ -239,10 +250,15 @@ def drawshifts(file, outdir, processes, variable, syst, procLabel = "", procName
     down.SetLineColor(4)
     down.SetLineWidth(2)
 
+    ratio_up, ratio_down = get_ratios(  nom  = nom,
+                                        up   = up,
+                                        down = down
+                                    )
+
     legend = ROOT.TLegend(0.6, 0.8, 0.9, 0.9)
     legend.AddEntry(nom, "nominal", "P")
-    legend.AddEntry(up, syst+" up", "l")
-    legend.AddEntry(down, syst+" down", "l")
+    legend.AddEntry(up, syst+" up ({})".format(ratio_up), "l")
+    legend.AddEntry(down, syst+" down ({})".format(ratio_down), "l")
     legend.Draw()
     legend.SetBorderSize(0)
     legend.SetLineStyle(0)
