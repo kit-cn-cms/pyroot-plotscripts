@@ -29,6 +29,11 @@ parser.add_option("--dataobs", dest="dataobs",
         help="Name of observed data", metavar="dataobs",default="data_obs")
 parser.add_option("--signaltag", dest="tag",
         help="tag of signal classes", metavar="signaltag",default="ttH")
+parser.add_option("--nominal_key", dest= "nom_key",
+        help = "Use this key to find nominal templates. Should contain keywords '$PROCESS' and '$CHANNEL'")
+parser.add_option("--syst_key", dest= "syst_key",
+        help = "".join("""Use this key to find templates for systematic variations. 
+            Should contain keywords '$PROCESS', '$CHANNEL' and _must_ contain keyword '$SYSTEMATIC'""".split()))
 
 (options, args) = parser.parse_args()
 
@@ -57,6 +62,10 @@ key_generator = identificationLogic()
 
 nominalkey = key_generator.generic_nominal_key
 systkey = key_generator.generic_systematics_key
+if not options.nom_key is None:
+    nominalkey = options.nom_key
+if not options.sys_key is None:
+    systkey = options.syst_key
 
 #Initialize analysisObject
 analysis=analysisObject()
