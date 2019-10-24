@@ -32,9 +32,10 @@ def doRebinning(rootfile, histolist, threshold):
     binContent = 0.
     bin_edges = []
     last_added_edge = 0
-    for i in range(1, combinedHist.GetNbinsX()+1):
-        if i == 1:
-            last_added_edge = combinedHist.GetBinLowEdge(i)
+    nbins = combinedHist.GetNbinsX()
+    for i in range(nbins, 0, -1):
+        if i == nbins:
+            last_added_edge = combinedHist.GetBinLowEdge(nbins+1)
             bin_edges.append(last_added_edge)
 
         # add together squared bin errors and bin contents
@@ -44,24 +45,35 @@ def doRebinning(rootfile, histolist, threshold):
         # calculate relative error
         relerror = squaredError**0.5/binContent if not binContent == 0 else squaredError**0.5
         
-        # if relative error is smaller than threshold, start new bin
-        if relerror <= threshold and not binContent == 0:
-            last_added_edge = combinedHist.GetBinLowEdge(i+1)
-            bin_edges.append(last_added_edge)
-            squaredError = 0.
-            binContent = 0.
+        if binContent == 0: continue
+        if threshold > 1:
+            # do rebinning based on the population of the bins enterly
+            # bins are ok if the bin content is larger than the threshold
+            if bincontent >= threshold:
+                # if relative error is smaller than threshold, start new bin
+                last_added_edge = combinedHist.GetBinLowEdge(i)
+                bin_edges.append(last_added_edge)
+                squaredError = 0.
+                binContent = 0.
+        else:
+            # if relative error is smaller than threshold, start new bin
+            if relerror <= threshold:
+                last_added_edge = combinedHist.GetBinLowEdge(i+1)
+                bin_edges.append(last_added_edge)
+                squaredError = 0.
+                binContent = 0.
     
     
-    overflow_edge = combinedHist.GetBinLowEdge(combinedHist.GetNbinsX()+1)
-    if not overflow_edge in bin_edges:
-        # if overflow_edge is not in bin_edges list the relative
+    underflow_edge = combinedHist.GetBinLowEdge(1)
+    if not underflow_edge in bin_edges:
+        # if underflow_edge is not in bin_edges list the relative
         # error of the last bin is too small, so just merge the
-        # last two bins by replacing the last_added_edge with
-        # the overflow_edge 
-        bin_edges[-1] = overflow_edge
+        # first two bins by replacing the last_added_edge with
+        # the underflow_edge 
+        bin_edges[-1] = underflow_edge
 
     print("\tnew bin edges: [{}]".format(",".join([str(round(b,4)) for b in bin_edges])))
-    return bin_edges
+    return sorted(bin_edges)
 
 
 def getOptimizedBinEdges(label, opts):
