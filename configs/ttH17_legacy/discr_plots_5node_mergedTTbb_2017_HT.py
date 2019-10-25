@@ -65,7 +65,7 @@ def plots_ge4j_3t(data = None):
     category_dict["catlabel"] = label
     category_dict["nhistobins"] = ndefaultbins
     category_dict["bin_edges"] = [200.0,230.0,260.0,290.0,320.0,350.0,380.0,410.0,440.0,470.0,500.0,530.0,560.0,590.0,620.0,650.0,680.0,710.0,740.0,770.0,800.0,830.0,860.0,890.0,920.0,950.0,980.0,1010.0,1040.0,1070.0,1100.0,1130.0,1160.0,1190.0,1220.0,1250.0,1280.0,1310.0,1340.0,1370.0,1400.0,1430.0,1460.0,1490.0,1520.0,1550.0,1580.0,1610.0,1640.0,1670.0,1700.0]
-    category_dict["histoname"] = "_ljets_ge4j_3t_Evt_HT"
+    category_dict["histoname"] = "ljets_ge4j_3t_Evt_HT"
     category_dict["histotitle"] = "H_{T}"
     category_dict["plotPreselections"] = category_dict["category"][0]
 
@@ -77,7 +77,7 @@ def plots_ge4j_3t(data = None):
     category_dict["catlabel"] = label
     category_dict["nhistobins"] = ndefaultbins
     category_dict["bin_edges"] = [200.0,226.0,252.0,278.0,304.0,330.0,356.0,382.0,408.0,434.0,460.0,486.0,512.0,538.0,564.0,590.0,616.0,642.0,668.0,694.0,720.0,746.0,772.0,798.0,824.0,850.0,876.0,902.0,928.0,954.0,980.0,1006.0,1032.0,1058.0,1084.0,1110.0,1136.0,1162.0,1188.0,1214.0,1240.0,1266.0,1292.0,1318.0,1344.0,1370.0,1396.0,1422.0,1448.0,1474.0,1500.0]
-    category_dict["histoname"] = "_ljets_ge4j_3t_Evt_HT_jets"
+    category_dict["histoname"] = "ljets_ge4j_3t_Evt_HT_jets"
     category_dict["histotitle"] = "H_{T}(jets)"
     category_dict["plotPreselections"] = category_dict["category"][0]
 
@@ -89,7 +89,7 @@ def plots_ge4j_3t(data = None):
     category_dict["catlabel"] = label
     category_dict["nhistobins"] = ndefaultbins
     category_dict["bin_edges"] = [200.0,226.0,252.0,278.0,304.0,330.0,356.0,382.0,408.0,434.0,460.0,486.0,512.0,538.0,564.0,590.0,616.0,642.0,668.0,694.0,720.0,746.0,772.0,798.0,824.0,850.0,876.0,902.0,928.0,954.0,980.0,1006.0,1032.0,1058.0,1084.0,1110.0,1136.0,1162.0,1188.0,1214.0,1240.0,1266.0,1292.0,1318.0,1344.0,1370.0,1396.0,1422.0,1448.0,1474.0,1500.0]
-    category_dict["histoname"] = "_ljets_ge4j_3t_Evt_HT_wo_MET"
+    category_dict["histoname"] = "ljets_ge4j_3t_Evt_HT_wo_MET"
     category_dict["histotitle"] = "H_{T} without MET"
     category_dict["plotPreselections"] = category_dict["category"][0]
     
@@ -153,7 +153,7 @@ def plots_ge4j_ge4t(data = None):
     category_dict["catlabel"] = label
     category_dict["nhistobins"] = ndefaultbins
     category_dict["bin_edges"] = [200.0,260.0,290.0,320.0,350.0,380.0,410.0,440.0,470.0,500.0,530.0,560.0,590.0,620.0,650.0,680.0,710.0,740.0,770.0,800.0,830.0,860.0,890.0,920.0,950.0,980.0,1010.0,1040.0,1070.0,1100.0,1130.0,1160.0,1190.0,1220.0,1250.0,1280.0,1310.0,1340.0,1370.0,1400.0,1460.0,1520.0,1580.0,1670.0,1700.0]
-    category_dict["histoname"] = "_ljets_ge4j_ge4t_Evt_HT"
+    category_dict["histoname"] = "ljets_ge4j_ge4t_Evt_HT"
     category_dict["histotitle"] = "H_{T}"
     category_dict["plotPreselections"] = category_dict["category"][0]
     
@@ -165,7 +165,7 @@ def plots_ge4j_ge4t(data = None):
     category_dict["catlabel"] = label
     category_dict["nhistobins"] = ndefaultbins
     category_dict["bin_edges"] = [200.0,226.0,252.0,278.0,304.0,330.0,356.0,382.0,408.0,434.0,460.0,486.0,512.0,538.0,564.0,590.0,616.0,642.0,668.0,694.0,720.0,746.0,772.0,798.0,824.0,850.0,876.0,902.0,928.0,954.0,980.0,1006.0,1032.0,1058.0,1084.0,1110.0,1162.0,1188.0,1240.0,1292.0,1344.0,1396.0,1474.0,1500.0]
-    category_dict["histoname"] = "_ljets_ge4j_ge4t_Evt_HT_jets"
+    category_dict["histoname"] = "ljets_ge4j_ge4t_Evt_HT_jets"
     category_dict["histotitle"] = "H_{T}(jets)"
     category_dict["plotPreselections"] = category_dict["category"][0]
 
@@ -177,7 +177,7 @@ def plots_ge4j_ge4t(data = None):
     category_dict["catlabel"] = label
     category_dict["nhistobins"] = ndefaultbins
     category_dict["bin_edges"] = [200.0,226.0,252.0,278.0,304.0,330.0,356.0,382.0,408.0,434.0,460.0,486.0,512.0,538.0,564.0,590.0,616.0,642.0,668.0,694.0,720.0,746.0,772.0,798.0,824.0,850.0,876.0,902.0,928.0,954.0,980.0,1006.0,1032.0,1058.0,1084.0,1110.0,1136.0,1162.0,1188.0,1214.0,1240.0,1292.0,1318.0,1370.0,1422.0,1474.0,1500.0]
-    category_dict["histoname"] = "_ljets_ge4j_ge4t_Evt_HT_wo_MET"
+    category_dict["histoname"] = "ljets_ge4j_ge4t_Evt_HT_wo_MET"
     category_dict["histotitle"] = "H_{T} without MET"
     category_dict["plotPreselections"] = category_dict["category"][0]
 
