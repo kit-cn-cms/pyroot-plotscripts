@@ -26,7 +26,7 @@ def writeSubmitCode(script, logdir, hold = False, isArray = False, nScripts = 0,
     # handling options
     defaults = {"RequestMemory": "1000M",
                 "RequestDisk": "1000M",
-                "+RequestRuntime": 7200,
+                "+RequestRuntime": 3600,
                 "PeriodicHold": 3600,
                 "PeriodicRelease": 5}
     for opt in defaults:
@@ -316,7 +316,7 @@ def monitorJobStatus(jobIDs = None):
     helds = []
     totals = []
     while not allfinished:
-        time.sleep(300)
+        time.sleep(60)
         # calling condor_q command
         a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
         a.wait()

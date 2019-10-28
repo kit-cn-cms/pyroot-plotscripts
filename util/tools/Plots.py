@@ -819,8 +819,8 @@ class DrawHistograms:
 
         text = "CMS #bf{#it{"+cmslabel+"}}"
 
-        if self.ratio:      latex.DrawLatex(l+0.05,1.-t+0.04, text) 
-        else:               latex.DrawLatex(l,1.-t+0.01, text)
+        if self.ratio:      latex.DrawLatex(l+0.12,1.-t+0.04, text) 
+        else:               latex.DrawLatex(l+0.7,1.-t+0.01, text)
 
     def saveCanvas(self, path):
         self.canvas.SaveAs(path)
@@ -870,7 +870,7 @@ def getLegend():
     return legend
 
 def getLegend1():
-    legend=ROOT.TLegend(0.65,0.7,0.8,0.9)
+    legend=ROOT.TLegend(0.60,0.60,0.8,0.85)
     legend.SetBorderSize(0);
     legend.SetLineStyle(0);
     legend.SetTextFont(42);
@@ -879,7 +879,7 @@ def getLegend1():
     return legend
 
 def getLegend2():
-    legend=ROOT.TLegend(0.8,0.7,0.95,0.9)
+    legend=ROOT.TLegend(0.75,0.60,0.95,0.85)
     legend.SetBorderSize(0);
     legend.SetLineStyle(0);
     legend.SetTextFont(42);
