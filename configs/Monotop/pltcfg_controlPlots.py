@@ -66,6 +66,8 @@ electronSFs_down = "((N_TightElectrons==1 && N_LooseElectrons==2)*Electron_Ident
 muonSFs_up = "((N_TightMuons==1 && N_LooseMuons==2)*Muon_IdentificationSFUp[0]*Muon_IsolationSFUp[0]*LooseMuon_IdentificationSFUp[1]*LooseMuon_IsolationSFUp[1]+(N_TightMuons==2 && N_LooseMuons==2)*Muon_IdentificationSFUp[0]*Muon_IsolationSFUp[0]*Muon_IdentificationSFUp[1]*Muon_IsolationSFUp[1]+(N_TightMuons==1 && N_LooseMuons==1)*Muon_IdentificationSFUp[0]*Muon_IsolationSFUp[0]+(N_LooseMuons==0)*1.)"
 muonSFs_down = "((N_TightMuons==1 && N_LooseMuons==2)*Muon_IdentificationSFDown[0]*Muon_IsolationSFDown[0]*LooseMuon_IdentificationSFDown[1]*LooseMuon_IsolationSFDown[1]+(N_TightMuons==2 && N_LooseMuons==2)*Muon_IdentificationSFDown[0]*Muon_IsolationSFDown[0]*Muon_IdentificationSFDown[1]*Muon_IsolationSFDown[1]+(N_TightMuons==1 && N_LooseMuons==1)*Muon_IdentificationSFDown[0]*Muon_IsolationSFDown[0]+(N_LooseMuons==0)*1.)"
 
+bosonWeightNom = "internalBosonWeight"
+
 ## trigger scale factors
 ## DANGERZONE: ELECTRON TRIGGER NOT ADDED TO NTUPLES YET, USE INTERNAL SFS
 ## electronTrigger = "("+sel_singleel+"&&(Weight_EleTriggerSF>0.))*Weight_EleTriggerSF"
@@ -111,6 +113,7 @@ weightReplacements = {
     "MUSFNOM": muonSFs,
     "MUSFUP": muonSFs_up,
     "MUSFDOWN": muonSFs_down,
+    "BOSONWEIGHTNOM": bosonWeightNom,
     ## trigger scale factors
     # "TRIGGERSFS": "(" + electronTrigger + "+" + muonTrigger + ")",
     # "ELETRIGSUP": "(" + electronTrigger_up + "+" + muonTrigger + ")",
@@ -138,6 +141,8 @@ nominalweight = (
     + muonSFs
     + "*"
     + electronSFs
+    + "*"
+    + bosonWeightNom
     + ")"
     + "*(DoWeights==1)+(DoWeights==0)*1.0"
     # + electronSFs
