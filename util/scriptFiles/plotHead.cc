@@ -106,8 +106,8 @@ void plot(){
 
 
 
-  std::cout<<"processname" <<processname<<std::endl;
-  std::cout<<"suffix" <<suffix<<std::endl;
+  std::cout<<"processname: " <<processname<<std::endl;
+  std::cout<<"suffix: " <<suffix<<std::endl;
 
   std::vector<TString> databaseRelevantFilenames;
 
