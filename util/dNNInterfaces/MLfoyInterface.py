@@ -278,8 +278,8 @@ class DNN:
     const string pathToGraph_{cat} = "{path}/trained_model.meta";
     const string checkpointPath_{cat} = "{path}/trained_model";
 
-    auto session_{cat} = NewSession( SessionOptions() );
-    auto session_{cat} = tensorflow_utils::init_session(session_{cat}, pathToGraph_{cat}, checkpointPath_{cat});
+    Status status_{cat};
+    auto session_{cat} = tensorflow_utils::init_session(status_{cat}, pathToGraph_{cat}, checkpointPath_{cat});
         """.format( cat = self.category+self.evalSuffix, path = self.path )
         
 
@@ -300,7 +300,7 @@ class DNN:
             string += "        double {} = -6;\n".format(discr)
         string += """
         int {pred_var} = -6;
-        Tensor tensor_{cat} (DT_FLOAT, TensorShape( {{1, num_features_{cat}}}));
+        tensorflow::Tensor tensor_{cat} (tensorflow::DT_FLOAT, tensorflow::TensorShape( {{1, num_features_{cat}}}));
         """.format(pred_var = self.predictionVariable, cat = self.category)
         return string
 
@@ -648,16 +648,25 @@ class theInterface:
 
 
     # setting up C code
-    def getIncludeLines(self):
-        return """
+    def getIncludeLines(self, pathToScriptDir, toinclude):
+        s = """
 #include <tensorflow/core/protobuf/meta_graph.pb.h>
 #include "tensorflow/core/public/session.h"
 #include "tensorflow/cc/framework/ops.h"
 #include "tensorflow/core/framework/tensor.h"
 
+"""
+        path = os.path.join(pathToScriptDir, toinclude)
+        if os.path.exists(path):
+            s += '#include "{}"\n'.format(toinclude)
+        else:
+            print "WARNING: Could not find DNN helper class in '{}'!".format(path)
+            print "This could mean that some functions will be missing in final c++ code!"
+        s += """
 // Should be removed for future work
 using namespace tensorflow;
 """
+        return s
 
     def getAdditionalFunctionDefinitionLines(self):
         """
