@@ -69,7 +69,8 @@ class scriptWriter:
             print( "c++ code already existed without differences -- skipping compilation" )
         
         # check if compiling was successful
-        if not os.path.exists(self.ccPath[:-3]):
+        fname = ".".join(self.ccPath.split(".")[-1])
+        if not os.path.exists(fname):
             print( "could not compile c++ program - exiting" )
             sys.exit(-1)
 
@@ -110,7 +111,10 @@ class scriptWriter:
         
         # write program
         # start writing program
-        script = scriptfunctions.getHead(self.pp.analysis.pyrootdir, self.pp.dataBases, self.pp.memDBpath, self.pp.addInterfaces)
+        script = scriptfunctions.getHead(   basepath          = self.pp.analysis.pyrootdir, 
+                                            dataBases         = self.pp.dataBases, 
+                                            memDB_path        = self.pp.memDBpath, 
+                                            addCodeInterfaces = self.pp.addInterfaces)
 
         if self.pp.useGenWeightNormMap:
             script += self.genWeightNormalization.declareNormFactors()
@@ -219,8 +223,20 @@ class scriptWriter:
         # if python cflags are used -O3 optimization is set, resulting in long compilation times, set it back to default -O0
         resetCompilerOpt = '-O0'
 
+        # include path for scriptFiles folder
+        print "pyroot dir: " + self.pp.analysis.pyrootdir
+        scriptFilesPath = os.path.join(self.pp.analysis.pyrootdir, *("util/scriptFiles".split("/")))
+        if not os.path.exists(scriptFilesPath):
+            sys.exit("ERROR: Could not find path with scriptFiles in '{}'".format(scriptFilesPath))
+
         print("creating compile command")
-        cmd= ['g++']+[improveRAM]+out[:-1].replace("\n"," ").split(' ')+dnnfiles+lhapdf+['-lTMVA']+memDBccfiles+[resetCompilerOpt]+[self.ccPath,'-o',self.ccPath.replace(".cc","")]
+        # cmd= ['g++']+[improveRAM]+out[:-1].replace("\n"," ").split(' ')+dnnfiles+lhapdf+['-lTMVA']+memDBccfiles+[resetCompilerOpt]+[self.ccPath,'-o',self.ccPath.replace(".cc","")]
+        cmd = ['g++']+[improveRAM]
+        cmd += out[:-1].split()
+        # add necessary libraries and file paths
+        cmd += dnnfiles+lhapdf+['-lTMVA'] + ["-I"+scriptFilesPath]
+        cmd += memDBccfiles+[resetCompilerOpt]
+        cmd += [self.ccPath,'-o',self.ccPath.replace(".cc","")]
         print "compile command:"
         cmdstring = " ".join(cmd)
         print cmdstring

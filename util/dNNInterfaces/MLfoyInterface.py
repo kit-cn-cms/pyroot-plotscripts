@@ -217,6 +217,54 @@ class DNN:
         return self.discrNames + [self.predictionVariable]
 
 
+    # def getBeforeLoopLines(self):
+    #     if self.multiDNN:
+    #         string = ""
+    #         for dnn in self.DNNs:
+    #             string += dnn.getBeforeLoopLines()
+    #             string += "\n"
+    #         return string
+
+    #     return """
+    # // category {cat}
+    # const string pathToGraph_{cat} = "{path}/trained_model.meta";
+    # const string checkpointPath_{cat} = "{path}/trained_model";
+
+    # auto session_{cat} = NewSession( SessionOptions() );
+    # if( session_{cat} == nullptr ) {{
+    #     throw runtime_error("Could not create Tensorflow session.");
+    #     }}
+    
+    # Status status_{cat};
+
+    # // Read in protobuf we exported
+    # MetaGraphDef graph_def_{cat};
+    # status_{cat} = ReadBinaryProto( Env::Default(), pathToGraph_{cat}, &graph_def_{cat});
+    # if( !status_{cat}.ok() ) {{
+    #     throw runtime_error("Status could not be read");
+    #     }}
+
+    # // Add the graph to the session
+    # status_{cat} = session_{cat}->Create( graph_def_{cat}.graph_def() );
+    # if( !status_{cat}.ok() ) {{
+    #     throw runtime_error("Error creating graph: "+status_{cat}.ToString());
+    #     }}
+
+    # // Read weights from the saved checkpoint
+    # Tensor checkpointPathTensor_{cat}( DT_STRING, TensorShape() );
+    # checkpointPathTensor_{cat}.scalar<std::string>()() = checkpointPath_{cat};
+
+    # status_{cat} = session_{cat}->Run(
+    #     {{ {{graph_def_{cat}.saver_def().filename_tensor_name(), checkpointPathTensor_{cat} }} }}, 
+    #     {{}}, 
+    #     {{ graph_def_{cat}.saver_def().restore_op_name() }},
+    #     nullptr);
+
+    # if( !status_{cat}.ok() ) {{
+    #     throw runtime_error("Error loading checkpoint from "+checkpointPath_{cat}+": "+status_{cat}.ToString());
+    #     }}
+    #     """.format( cat = self.category+self.evalSuffix, path = self.path )
+
     def getBeforeLoopLines(self):
         if self.multiDNN:
             string = ""
@@ -231,38 +279,7 @@ class DNN:
     const string checkpointPath_{cat} = "{path}/trained_model";
 
     auto session_{cat} = NewSession( SessionOptions() );
-    if( session_{cat} == nullptr ) {{
-        throw runtime_error("Could not create Tensorflow session.");
-        }}
-    
-    Status status_{cat};
-
-    // Read in protobuf we exported
-    MetaGraphDef graph_def_{cat};
-    status_{cat} = ReadBinaryProto( Env::Default(), pathToGraph_{cat}, &graph_def_{cat});
-    if( !status_{cat}.ok() ) {{
-        throw runtime_error("Status could not be read");
-        }}
-
-    // Add the graph to the session
-    status_{cat} = session_{cat}->Create( graph_def_{cat}.graph_def() );
-    if( !status_{cat}.ok() ) {{
-        throw runtime_error("Error creating graph: "+status_{cat}.ToString());
-        }}
-
-    // Read weights from the saved checkpoint
-    Tensor checkpointPathTensor_{cat}( DT_STRING, TensorShape() );
-    checkpointPathTensor_{cat}.scalar<std::string>()() = checkpointPath_{cat};
-
-    status_{cat} = session_{cat}->Run(
-        {{ {{graph_def_{cat}.saver_def().filename_tensor_name(), checkpointPathTensor_{cat} }} }}, 
-        {{}}, 
-        {{ graph_def_{cat}.saver_def().restore_op_name() }},
-        nullptr);
-
-    if( !status_{cat}.ok() ) {{
-        throw runtime_error("Error loading checkpoint from "+checkpointPath_{cat}+": "+status_{cat}.ToString());
-        }}
+    auto session_{cat} = tensorflow_utils::init_session(session_{cat}, pathToGraph_{cat}, checkpointPath_{cat});
         """.format( cat = self.category+self.evalSuffix, path = self.path )
         
 
@@ -335,7 +352,7 @@ class DNN:
 
         # get prediction
         string += """
-            {pred_var} = getMaxPosition(outputTensors, {ncls});""".format(
+            {pred_var} = tensorflow_utils::getMaxPosition(outputTensors, {ncls});""".format(
             pred_var = self.predictionVariable, ncls = len(self.out_nodes))
 
         if testPrint:
@@ -643,6 +660,10 @@ using namespace tensorflow;
 """
 
     def getAdditionalFunctionDefinitionLines(self):
+        """
+        Function to identify the class with the largest output.
+        Note that this function was moved to the "tensorflow_util" class
+        """
         return """
 int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses) {
     double max_value = -5;
