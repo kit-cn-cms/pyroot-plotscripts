@@ -110,8 +110,8 @@ class Systematics:
             if systematic["Construction"]=="weight":
                 #adds variable name to list of weightsysts
                 systName=systematic["Uncertainty"]
-                up="__"+systName+"Up"
-                down="__"+systName+"Down"
+                up="_"+systName+"Up"
+                down="_"+systName+"Down"
                 weightsysts.append(up)
                 weightsysts.append(down)
         return weightsysts
@@ -138,8 +138,8 @@ class Systematics:
             if systematic["Construction"]=="variation":
                 #adds variable name to list of variationsysts
                 systName=systematic["Uncertainty"]
-                up="__"+systName+"Up"
-                down="__"+systName+"Down"
+                up="_"+systName+"Up"
+                down="_"+systName+"Down"
                 variationsysts.append(up)
                 variationsysts.append(down)
         return variationsysts
