@@ -69,8 +69,9 @@ class scriptWriter:
             print( "c++ code already existed without differences -- skipping compilation" )
         
         # check if compiling was successful
-        fname = ".".join(self.ccPath.split(".")[-1])
+        fname = ".".join(self.ccPath.split(".")[:-1])
         if not os.path.exists(fname):
+            print("ERROR: Did not find file '{}'".format(fname))
             print( "could not compile c++ program - exiting" )
             sys.exit(-1)
 
@@ -335,7 +336,7 @@ class scriptWriter:
         script = ""
         script += "     timerMapping->Start();\n"
         if self.pp.useGenWeightNormMap:
-            script += self.genWeightNormalization.resetNormalizationFactors()
+            # script += self.genWeightNormalization.resetNormalizationFactors()
             script += self.genWeightNormalization.relateMapToNormalizationFactor()
 
         script += "     totalTimeMapping+=timerMapping->RealTime();\n"
