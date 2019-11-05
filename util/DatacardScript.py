@@ -64,7 +64,7 @@ nominalkey = key_generator.generic_nominal_key
 systkey = key_generator.generic_systematics_key
 if not options.nom_key is None:
     nominalkey = options.nom_key
-if not options.sys_key is None:
+if not options.syst_key is None:
     systkey = options.syst_key
 
 #Initialize analysisObject
