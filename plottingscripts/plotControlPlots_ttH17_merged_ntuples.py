@@ -48,14 +48,12 @@ def main(pyrootdir, opts):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    config          = "ttH1X_Nikita/pltcfg_controlPlots_17_merged_ntuple"
-    variable_cfg    = "ttH1X_Nikita/additionalVariables"
-    plot_cfg        = "ttH1X_Nikita/controlPlots_v2"
-    syst_cfg        = "ttH1X_Nikita/systs_17_merged"
-
+    config          = "ttH17_legacy/pltcfg_2017_combined_tthf_mergedTTbb_synced_v2"
+    variable_cfg    = "ttH17_legacy/additionalVariables"
+    plot_cfg        = "ttH17_legacy/controlPlots_v2"
+    syst_cfg        = "ttH17_legacy/systs_mergedTTbb_combined_tthf_synced_v2"
     # file for rate factors
-    rateFactorsFile = "/nfs/dust/cms/user/nshadski/plotscripts/data/rateFactors/rateFactors_2017.csv"
-    #rateFactorsFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/rate_factors_V2.csv"
+    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2017.csv"
 
     # script options
     analysisOptions = {
