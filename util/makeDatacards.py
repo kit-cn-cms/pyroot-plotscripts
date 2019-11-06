@@ -11,6 +11,21 @@ sys.path.append(filedir+"/tools")
 import nafInterface
 
 
+cmssw_head = """
+export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch
+source $VO_CMS_SW_DIR/cmsset_default.sh
+export SCRAM_ARCH={scram_arch}
+cd {cmsswpath}/src
+eval `scram runtime -sh`
+cd -
+"""
+
+script_template = """#!/bin/bash
+{cmssw_info}
+python {script_path} {options}
+"""
+
+
 # -- making data cards (parallel) ----------------------------------------------------------------- 
 def makeDatacardsParallel(filePath, workdir, 
                     categories = None, doHdecay = True, 
@@ -18,7 +33,9 @@ def makeDatacardsParallel(filePath, workdir,
                     datacardmaker = ' ',
                     datacardcsv=' ',
                     skipDatacards = False,
-                    signalTag = "ttH"):
+                    signalTag = "ttH",
+                    nominal_key = None,
+                    syst_key = None):
 
     # init directory for scripts
     datacardcsv=workdir+"/datacard.csv"
@@ -50,23 +67,34 @@ def makeDatacardsParallel(filePath, workdir,
         #bbbFiles.append(filePath.replace(".root","BBB_"+cat+".root"))
         
         if not skipDatacards:
-            script = "#!/bin/bash \n"
+            cmssw_info = ''
             if cmsswpath != '':
-                script += "export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch \n"
-                script += "source $VO_CMS_SW_DIR/cmsset_default.sh \n"
-                script += "export SCRAM_ARCH="+os.environ['SCRAM_ARCH']+"\n"
-                script += 'cd '+cmsswpath+'/src\n'
-                script += 'eval `scram runtime -sh`\n'
-                script += 'cd - \n'
+                cmssw_info = cmssw_head.format(scram_arch  = os.environ['SCRAM_ARCH'],
+                                            cmsswpath   = cmsswpath)
             #--categoryName=CATEGORYNAME --rootfile=FILE --outputfile=FILE --directory=PATH -csvfile=FILE
-            script += 'python '+filedir+'/DatacardScript.py '
-            script += '--categoryname='+cat+' '
-            script += '--rootfile='+filePath+' '
-            script += '--outputfile='+outPath+'/'+cat+'_hdecay.txt '
-            script += '--directory='+datacardmaker+' '
-            script += '--signaltag='+signalTag+' '
-            script += '--csvfile='+datacardcsv+' \n'
+            scriptdir = os.path.join(filedir,'DatacardScript.py')
+            if not os.path.exists(scriptdir):
+                sys.exit("ERROR: Could not find script in '{}'".format(scriptdir))
+            options = []
+            options += ('--categoryname='+cat).split()
+            options += ('--rootfile='+filePath).split()
 
+            datacard_name = "{}_hdecay.txt".format(cat)
+            options += ('--outputfile={}'.format(os.path.join(outPath, datacard_name))).split()
+
+            options += ('--directory='+datacardmaker).split()
+            options += ('--signaltag='+signalTag).split()
+            options += ('--csvfile='+datacardcsv).split()
+            if not nominal_key is None:
+                options += ('--nominal_key='+nominal_key).split()
+            if not syst_key is None:
+                options += ('--syst_key='+syst_key).split()
+            
+            script = script_template.format(
+                cmssw_info  = cmssw_info,
+                script_path = scriptdir,
+                options     = "\\ \n\t".join(options)
+            )
             # saving and chmodding script
             with open(scriptName, "w") as dcs:
                 dcs.write(script)

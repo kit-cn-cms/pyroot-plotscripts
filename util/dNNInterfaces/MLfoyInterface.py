@@ -32,9 +32,10 @@ def doRebinning(rootfile, histolist, threshold):
     binContent = 0.
     bin_edges = []
     last_added_edge = 0
-    for i in range(1, combinedHist.GetNbinsX()+1):
-        if i == 1:
-            last_added_edge = combinedHist.GetBinLowEdge(i)
+    nbins = combinedHist.GetNbinsX()
+    for i in range(nbins, 0, -1):
+        if i == nbins:
+            last_added_edge = combinedHist.GetBinLowEdge(nbins+1)
             bin_edges.append(last_added_edge)
 
         # add together squared bin errors and bin contents
@@ -44,24 +45,35 @@ def doRebinning(rootfile, histolist, threshold):
         # calculate relative error
         relerror = squaredError**0.5/binContent if not binContent == 0 else squaredError**0.5
         
-        # if relative error is smaller than threshold, start new bin
-        if relerror <= threshold and not binContent == 0:
-            last_added_edge = combinedHist.GetBinLowEdge(i+1)
-            bin_edges.append(last_added_edge)
-            squaredError = 0.
-            binContent = 0.
+        if binContent == 0: continue
+        if threshold > 1:
+            # do rebinning based on the population of the bins enterly
+            # bins are ok if the bin content is larger than the threshold
+            if bincontent >= threshold:
+                # if relative error is smaller than threshold, start new bin
+                last_added_edge = combinedHist.GetBinLowEdge(i)
+                bin_edges.append(last_added_edge)
+                squaredError = 0.
+                binContent = 0.
+        else:
+            # if relative error is smaller than threshold, start new bin
+            if relerror <= threshold:
+                last_added_edge = combinedHist.GetBinLowEdge(i+1)
+                bin_edges.append(last_added_edge)
+                squaredError = 0.
+                binContent = 0.
     
     
-    overflow_edge = combinedHist.GetBinLowEdge(combinedHist.GetNbinsX()+1)
-    if not overflow_edge in bin_edges:
-        # if overflow_edge is not in bin_edges list the relative
+    underflow_edge = combinedHist.GetBinLowEdge(1)
+    if not underflow_edge in bin_edges:
+        # if underflow_edge is not in bin_edges list the relative
         # error of the last bin is too small, so just merge the
-        # last two bins by replacing the last_added_edge with
-        # the overflow_edge 
-        bin_edges[-1] = overflow_edge
+        # first two bins by replacing the last_added_edge with
+        # the underflow_edge 
+        bin_edges[-1] = underflow_edge
 
     print("\tnew bin edges: [{}]".format(",".join([str(round(b,4)) for b in bin_edges])))
-    return bin_edges
+    return sorted(bin_edges)
 
 
 def getOptimizedBinEdges(label, opts):
@@ -205,6 +217,54 @@ class DNN:
         return self.discrNames + [self.predictionVariable]
 
 
+    # def getBeforeLoopLines(self):
+    #     if self.multiDNN:
+    #         string = ""
+    #         for dnn in self.DNNs:
+    #             string += dnn.getBeforeLoopLines()
+    #             string += "\n"
+    #         return string
+
+    #     return """
+    # // category {cat}
+    # const string pathToGraph_{cat} = "{path}/trained_model.meta";
+    # const string checkpointPath_{cat} = "{path}/trained_model";
+
+    # auto session_{cat} = NewSession( SessionOptions() );
+    # if( session_{cat} == nullptr ) {{
+    #     throw runtime_error("Could not create Tensorflow session.");
+    #     }}
+    
+    # Status status_{cat};
+
+    # // Read in protobuf we exported
+    # MetaGraphDef graph_def_{cat};
+    # status_{cat} = ReadBinaryProto( Env::Default(), pathToGraph_{cat}, &graph_def_{cat});
+    # if( !status_{cat}.ok() ) {{
+    #     throw runtime_error("Status could not be read");
+    #     }}
+
+    # // Add the graph to the session
+    # status_{cat} = session_{cat}->Create( graph_def_{cat}.graph_def() );
+    # if( !status_{cat}.ok() ) {{
+    #     throw runtime_error("Error creating graph: "+status_{cat}.ToString());
+    #     }}
+
+    # // Read weights from the saved checkpoint
+    # Tensor checkpointPathTensor_{cat}( DT_STRING, TensorShape() );
+    # checkpointPathTensor_{cat}.scalar<std::string>()() = checkpointPath_{cat};
+
+    # status_{cat} = session_{cat}->Run(
+    #     {{ {{graph_def_{cat}.saver_def().filename_tensor_name(), checkpointPathTensor_{cat} }} }}, 
+    #     {{}}, 
+    #     {{ graph_def_{cat}.saver_def().restore_op_name() }},
+    #     nullptr);
+
+    # if( !status_{cat}.ok() ) {{
+    #     throw runtime_error("Error loading checkpoint from "+checkpointPath_{cat}+": "+status_{cat}.ToString());
+    #     }}
+    #     """.format( cat = self.category+self.evalSuffix, path = self.path )
+
     def getBeforeLoopLines(self):
         if self.multiDNN:
             string = ""
@@ -218,39 +278,8 @@ class DNN:
     const string pathToGraph_{cat} = "{path}/trained_model.meta";
     const string checkpointPath_{cat} = "{path}/trained_model";
 
-    auto session_{cat} = NewSession( SessionOptions() );
-    if( session_{cat} == nullptr ) {{
-        throw runtime_error("Could not create Tensorflow session.");
-        }}
-    
     Status status_{cat};
-
-    // Read in protobuf we exported
-    MetaGraphDef graph_def_{cat};
-    status_{cat} = ReadBinaryProto( Env::Default(), pathToGraph_{cat}, &graph_def_{cat});
-    if( !status_{cat}.ok() ) {{
-        throw runtime_error("Status could not be read");
-        }}
-
-    // Add the graph to the session
-    status_{cat} = session_{cat}->Create( graph_def_{cat}.graph_def() );
-    if( !status_{cat}.ok() ) {{
-        throw runtime_error("Error creating graph: "+status_{cat}.ToString());
-        }}
-
-    // Read weights from the saved checkpoint
-    Tensor checkpointPathTensor_{cat}( DT_STRING, TensorShape() );
-    checkpointPathTensor_{cat}.scalar<std::string>()() = checkpointPath_{cat};
-
-    status_{cat} = session_{cat}->Run(
-        {{ {{graph_def_{cat}.saver_def().filename_tensor_name(), checkpointPathTensor_{cat} }} }}, 
-        {{}}, 
-        {{ graph_def_{cat}.saver_def().restore_op_name() }},
-        nullptr);
-
-    if( !status_{cat}.ok() ) {{
-        throw runtime_error("Error loading checkpoint from "+checkpointPath_{cat}+": "+status_{cat}.ToString());
-        }}
+    auto session_{cat} = tensorflow_utils::init_session(status_{cat}, pathToGraph_{cat}, checkpointPath_{cat});
         """.format( cat = self.category+self.evalSuffix, path = self.path )
         
 
@@ -271,7 +300,7 @@ class DNN:
             string += "        double {} = -6;\n".format(discr)
         string += """
         int {pred_var} = -6;
-        Tensor tensor_{cat} (DT_FLOAT, TensorShape( {{1, num_features_{cat}}}));
+        tensorflow::Tensor tensor_{cat} (tensorflow::DT_FLOAT, tensorflow::TensorShape( {{1, num_features_{cat}}}));
         """.format(pred_var = self.predictionVariable, cat = self.category)
         return string
 
@@ -323,7 +352,7 @@ class DNN:
 
         # get prediction
         string += """
-            {pred_var} = getMaxPosition(outputTensors, {ncls});""".format(
+            {pred_var} = tensorflow_utils::getMaxPosition(outputTensors, {ncls});""".format(
             pred_var = self.predictionVariable, ncls = len(self.out_nodes))
 
         if testPrint:
@@ -619,18 +648,31 @@ class theInterface:
 
 
     # setting up C code
-    def getIncludeLines(self):
-        return """
+    def getIncludeLines(self, pathToScriptDir, toinclude):
+        s = """
 #include <tensorflow/core/protobuf/meta_graph.pb.h>
 #include "tensorflow/core/public/session.h"
 #include "tensorflow/cc/framework/ops.h"
 #include "tensorflow/core/framework/tensor.h"
 
+"""
+        path = os.path.join(pathToScriptDir, toinclude)
+        if os.path.exists(path):
+            s += '#include "{}"\n'.format(toinclude)
+        else:
+            print "WARNING: Could not find DNN helper class in '{}'!".format(path)
+            print "This could mean that some functions will be missing in final c++ code!"
+        s += """
 // Should be removed for future work
 using namespace tensorflow;
 """
+        return s
 
     def getAdditionalFunctionDefinitionLines(self):
+        """
+        Function to identify the class with the largest output.
+        Note that this function was moved to the "tensorflow_util" class
+        """
         return """
 int getMaxPosition(std::vector<tensorflow::Tensor> &output, int nClasses) {
     double max_value = -5;
