@@ -480,7 +480,7 @@ class Variable:
             alt_file.Close()
         if "Weight_LHA_320900" in self.varName :
             self.inTree = True
-            alt_file = ROOT.TFile("/nfs/dust/cms/user/swieland/ttH_legacy/ntuple/mergedStudy_v3/TTbb_Powheg_Openloops_new_pmx/TTbb_Powheg_Openloops_new_pmx_43_nominal_Tree.root")
+            alt_file = ROOT.TFile("/nfs/dust/cms/user/swieland/ttH_legacy/ntupleHadded_2017/TTbb_Powheg_Openloops_new_pmx/TTbb_Powheg_Openloops_new_pmx_1_nominal_Tree.root")
             alt_tree = alt_file.Get("MVATree")
             branch = alt_tree.GetBranch(self.varName)
             branchTitle = branch.GetTitle()
