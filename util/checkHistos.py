@@ -175,9 +175,11 @@ if __name__ == "__main__":
     parser.add_option("-o",dest="outFile")
     parser.add_option("-e",dest="epsilon",type="float")
     parser.add_option("--checkBins",dest="checkBins")
+    parser.add_option("-d", "--debug", dest = "debug", default = 0)
 
     (opts, _) = parser.parse_args()
-    
+    global debug
+    debug = opts.debug
     print(opts.checkBins)
     print(bool(opts.checkBins))
     checkHistos(opts.inFile, opts.outFile, bool(opts.checkBins), opts.epsilon)

@@ -1,5 +1,6 @@
 import ROOT
 import json
+import os
 
 # local imports
 import plotClasses
@@ -15,22 +16,24 @@ def getHead(basepath, dataBases, memDB_path, addCodeInterfaces=[]):
                 '"LHAPDF/LHAPDF.h"', '"TGraphAsymmErrors.h"', '"TStopwatch.h"',
                 '<tuple>']
   retstr = ""
+
   for include in includes:
     retstr += "#include "+include+"\n"
   
+  # build paths for additional external c++ files
+  # note: '*' (splat operator) returns all elements of list returned by "split"
+  scriptdirpath = os.path.join(basepath,*("/util/scriptFiles".split("/")))
+  include_template = os.path.join(*("src/{}.cc".split("/")))
+
+
   for addCodeInt in addCodeInterfaces:
-    retstr += addCodeInt.getIncludeLines()
+    retstr += addCodeInt.getIncludeLines( pathToScriptDir = scriptdirpath,
+                                          toinclude = include_template.format("tensorflow_utils")
+                                        )
   
   if dataBases != []:
     retstr+='#include "'+str(memDB_path)+'/interface/MEMDataBase.h"\n'
 
-  retstr+="""
-using namespace std;
-"""
-
-  for addCodeInt in addCodeInterfaces:
-    retstr += addCodeInt.getAdditionalFunctionDefinitionLines()
-  
   includedClasses = [
     "EventFilter",
     "LeptonSFHelper",
@@ -39,11 +42,32 @@ using namespace std;
     #"QCDHelper",
     #"TTbarSystHelper",
     ]
+  
+  counter = 0
   for cls in includedClasses:
-    with open(basepath+"/util/scriptFiles/class"+cls+".cc", "r") as clsCode:
-      retstr += clsCode.read()
+    includepath = include_template.format(cls)
+    path = os.path.join(scriptdirpath,includepath)
+    print "checking path to include: " + path
+    if os.path.exists(path):
+      if counter == 0:
+        retstr += "// following files can be found in {}\n".format(scriptdirpath)
+      retstr += '#include "{}"\n'.format(includepath)
+      counter += 1
+    else:
+      print "WARNING: could not find file '{}', will not include it!".format(path)
 
-  with open(basepath+"/util/scriptFiles/plotHead.cc", "r") as head:
+  retstr+="""
+using namespace std;
+"""
+  # exported into class "tensorflow_utils"
+  # for addCodeInt in addCodeInterfaces:
+  #   retstr += addCodeInt.getAdditionalFunctionDefinitionLines()
+  
+  
+  plotHeadPath = os.path.join(scriptdirpath, "plotHead.cc")
+  if not os.path.exists(plotHeadPath):
+    exit("ERROR: Could not find file '{}'!".format(plotHeadPath))
+  with open(plotHeadPath, "r") as head:
     retstr += head.read()
 
   return retstr
