@@ -91,3 +91,4 @@ CMS_FSR_ttlf,shape,weight,"""weight_FSR_ttlf_Up:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGE
 #CMS_HDAMP_tt2b,shape,variation,,,,,,,,,,,,,,
 #CMS_HDAMP_ttcc,shape,variation,,,,,,,,,,,,,,
 #CMS_HDAMP_ttlf,shape,variation,,,,,,,,,,,,,,
+

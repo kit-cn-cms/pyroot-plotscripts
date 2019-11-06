@@ -16,7 +16,7 @@ from copy import deepcopy
 def control_plots_SR_had(data=None):
     label = "#scale[0.8]{signal region (hadronic)}"
     extension = "_SR_had"
-    selection = "(N_AK15Jets==1)*(N_LooseMuons==0 && N_LooseElectrons==0 && N_LoosePhotons==0)*((Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX == 1) || (Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX == 1))*(Hadr_Recoil_Pt>250.)*(N_AK4JetsTagged_outside_AK15Jets==0)*(N_HEM_Jets==0)*(N_HEM_AK15Jets==0)"
+    selection = "(N_AK15Jets==1)*(N_LooseMuons==0 && N_LooseElectrons==0 && N_LoosePhotons==0)*((Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX == 1) || (Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX == 1))*(Hadr_Recoil_Pt>250.)*(N_AK4JetsTagged_outside_AK15Jets==0)*(CaloMET_PFMET_ratio<0.5)*(DeltaPhi_AK4Jet_MET[0]>0.5)*(N_HEM_Jets==0)*(N_HEM_AK15Jets==0)"
 
     plots = [
         plotClasses.Plot(
@@ -2186,7 +2186,7 @@ def control_plots_elel(data=None):
 def control_plots_ttbar_had(data=None):
     label = "#scale[0.8]{t#bar{t} control region (hadronic)}"
     extension = "_CRttbar_had"
-    selection = "(N_AK15Jets==1)*(N_LooseMuons==0 && N_LooseElectrons==0 && N_LoosePhotons==0)*((Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX == 1) || (Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX == 1))*(Hadr_Recoil_Pt>250.)*(N_AK4JetsTagged_outside_AK15Jets==1)*(N_HEM_Jets==0)*(N_HEM_AK15Jets==0)"
+    selection = "(N_AK15Jets==1)*(N_LooseMuons==0 && N_LooseElectrons==0 && N_LoosePhotons==0)*((Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX == 1) || (Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX == 1))*(Hadr_Recoil_Pt>250.)*(N_AK4JetsTagged_outside_AK15Jets>=1)*(CaloMET_PFMET_ratio<0.5)*(DeltaPhi_AK4Jet_MET[0]>0.5)*(N_HEM_Jets==0)*(N_HEM_AK15Jets==0)"
 
     plots = [
         plotClasses.Plot(
