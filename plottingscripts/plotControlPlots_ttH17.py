@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttHControlPlots_2017_noMuonF_v4'
+    name = 'ttHControlPlots_17_'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -40,7 +40,7 @@ def main(pyrootdir, opts):
 
     # dataera
     dataera = "2017"
-    
+
     # Name of final discriminator, should not contain underscore
     discrName = 'finaldiscr'
 
@@ -48,14 +48,13 @@ def main(pyrootdir, opts):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    config          = "ttH17/pltcfg_controlPlots"
-    variable_cfg    = "ttH17/additionalVariables"
-    plot_cfg        = "ttH17/controlPlots"
-    syst_cfg        = "ttH17/Systematics_old"
+    config          = "ttH17_legacy/pltcfg_2017_combined_tthf_4FS_5FS_synced_v2"
+    variable_cfg    = "ttH17_legacy/additionalVariables"
+    plot_cfg        = "ttH17_legacy/controlPlots_v2"
+    syst_cfg        = "ttH17_legacy/systs_mergedTTbb_combined_tthf_synced_v2"
 
     # file for rate factors
-    #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
-    #rateFactorsFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/rate_factors_V2.csv"
+    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2017.csv"
 
     # script options
     analysisOptions = {
@@ -67,7 +66,7 @@ def main(pyrootdir, opts):
         "haddFromWildcard":     True,
         "makeDataCards":        False,
         "makeInputDatacards":   False, # create datacards also for all defined plots
-        "addData":              True,  # adding real data 
+        "addData":              True,  # adding real data
         "makePlots":            True,
         # options for makePlots
         "signalScaling":        -1,
@@ -87,9 +86,8 @@ def main(pyrootdir, opts):
         "skipHistoCheck":       opts.skipHistoCheck,
         "skipDatacards":        opts.skipDatacards}
 
-    plotJson = "/nfs/dust/cms/user/swieland/ttH_legacy/theRealPlotscript/pyroot-plotscripts/configs/ttH17/treejson.json"
-    # plotJson = ""
-    #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
+    plotJson = "/nfs/dust/cms/user/swieland/ttH_legacy/theRealPlotscript/pyroot-plotscripts/workdir/ttHControlPlots_ttbar_ntuple_17_1p0/treejson.json"
+    #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]]
     #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
     #                "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/ttZ18_hf_recoVars"}
@@ -100,20 +98,20 @@ def main(pyrootdir, opts):
 
     print '''
     # ========================================================
-    # initializing analysisClass 
+    # initializing analysisClass
     # ========================================================
     '''
 
     # save a lot of useful information concerning the analysis
     analysis = analysisClass.analysisConfig(
-        workdir         = workdir, 
-        pyrootdir       = pyrootdir, 
-        signalProcess   = signalProcess, 
+        workdir         = workdir,
+        pyrootdir       = pyrootdir,
+        signalProcess   = signalProcess,
         pltcfgName      = config,
         discrName       = discrName,
         dataera         = dataera)
 
-    
+
     analysis.initAnalysisOptions( analysisOptions )
 
     pltcfg = analysis.initPlotConfig()
@@ -143,20 +141,20 @@ def main(pyrootdir, opts):
     configData.genDiscriminatorPlots(memexp, dnnInterface)
     configData.writeConfigDataToWorkdir()
     monitor.printClass(configData, "init")
-    print '''    
+    print '''
     # ========================================================
     # define additional variables necessary for selection in plotparallel
     # ========================================================
     '''
     configData.getAddVariables() # also adds DNN variables
 
-    print '''    
+    print '''
     # ========================================================
     # loading samples and samples data
     # ========================================================
     '''
     configData.initSamples()
-    
+
 
     print '''
     # ========================================================
@@ -171,9 +169,9 @@ def main(pyrootdir, opts):
     # starting with plotParallel step
     # ========================================================
     '''
-    
+
     with monitor.Timer("plotParallel"):
-        # initialize plotParallel class 
+        # initialize plotParallel class
         pP = plotParallel.plotParallel(
             analysis = analysis,
             configData = configData)
@@ -185,7 +183,7 @@ def main(pyrootdir, opts):
         #pP.setMEMDataBase(memDataBase)
         #pP.setDNNInterface(dnnInterface)
         pP.setMaxEvts(150000)
-        #pP.setRateFactorsFile(rateFactorsFile)
+        pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
 
         # run plotParallel
@@ -194,7 +192,7 @@ def main(pyrootdir, opts):
     pP.checkTermination()
     monitor.printClass(pP, "after plotParallel")
 
-    # hadd histo files before renaming. The histograms are actually already renamed. 
+    # hadd histo files before renaming. The histograms are actually already renamed.
     # But the checkbins thingy will not have been done yet.
     print '''
     # ========================================================
@@ -202,16 +200,16 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     with monitor.Timer("haddFilesFromWildCard"):
-        haddParallel.haddSplitter( 
+        haddParallel.haddSplitter(
             input               = pP.getHaddOutPath(),
             outName             = analysis.ppRootPath,
             subName             = "haddParts",
             nHistosRemainSame   = True,
             skipHadd            = analysis.skipHaddFromWildcard)
-     
 
 
-    # Deactivate check bins functionality in renameHistos 
+
+    # Deactivate check bins functionality in renameHistos
     #   if additional plot variables are added via analysis class
     if os.path.exists( analysis.setRenamedPath(name = "limitInput") ):
         print( "renamed file already exists - skipping renaming histos" )
@@ -225,10 +223,10 @@ def main(pyrootdir, opts):
         pP.setRenameInput()
         # in this function the variable self.renameInput is set
         # if hadd files were created during plotParallel
-        #       the renameInput is set to pP.getHaddFiles 
+        #       the renameInput is set to pP.getHaddFiles
         #       (a.k.a. the list of hadd files)
         # if no hadd files were created during plotparallel
-        #       the renameInput is set to pp.getOutPath 
+        #       the renameInput is set to pp.getOutPath
         #       (a.ka. the path to output.root)
 
         with monitor.Timer("checkHistos"):
@@ -258,9 +256,9 @@ def main(pyrootdir, opts):
                 # real data with ttH
                 pP.addData(samples = configData.controlSamples)
 
-    
 
-    pP.checkTermination()       
+
+    pP.checkTermination()
     monitor.printClass(pP, "after plotParallel completely done")
 
     print("########## DONE WITH PLOTPARALLEL STEP ##########")
@@ -283,7 +281,7 @@ def main(pyrootdir, opts):
                 datacardmaker       = datacardmaker,
                 signalTag           = analysis.signalProcess,
                 skipDatacards       = analysis.skipDatacards)
-    
+
     if analysis.makePlots:
         print '''
         # ========================================================
@@ -296,7 +294,7 @@ def main(pyrootdir, opts):
 
     print '''
     # ========================================================
-    # this is the end of the script 
+    # this is the end of the script
     # ========================================================
     '''
 
@@ -311,5 +309,3 @@ if __name__ == "__main__":
 
     (opts, args) = parser.parse_args()
     main(pyrootdir, opts)
-
-
