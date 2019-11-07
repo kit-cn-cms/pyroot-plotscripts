@@ -27,52 +27,12 @@ def evtYieldCategories():
 
 memexp = ""
 
-def plots_ge3j_ge3t(data=None):
-    label = "\geq 3 jets, \geq 3 b-tags, \geq 1 ljet"
-    selection = "(N_Jets>=3 && N_BTagsM>=3 && (N_LooseJets-N_Jets)>=1)"
-    jet_sel = "*((LooseJet_Eta>=2.4||LooseJet_Eta<=-2.4)&&(LooseJet_Pt>=40))"
-
-    plots = [
-        #plotClasses.Plot(ROOT.TH1D("ge3j_ge3t_N_Jets","N_Jets",12,0,12),"N_Jets",selection+jet_sel,label),
-        #plotClasses.Plot(ROOT.TH1D("ge3j_ge3t_N_BTagsM","N_BTagsM",9,1.5,10.5),"N_BTagsM",selection+jet_sel,label),
-        #plotClasses.Plot(ROOT.TH1D("ge3j_ge3t_Jet_Pt","Jet_Pt",70,0,700),"Jet_Pt",selection+jet_sel,label),
-        #plotClasses.Plot(ROOT.TH1D("ge3j_ge3t_Jet_Pt0","Leading Jet_Pt",70,0,700),"Jet_Pt[0]",selection+jet_sel,label),
-        #plotClasses.Plot(ROOT.TH1D("ge3j_ge3t_Jet_Pt1","Subleading Jet_Pt",70,0,700),"Jet_Pt[1]",selection+jet_sel,label),
-        #plotClasses.Plot(ROOT.TH1D("ge3j_ge3t_CSV","DeepCSV",50,0,1),"CSV",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge3j_ge3t_N_LooseJets","N(LooseJets)",7,3.5,10.5),"N_LooseJets",selection+jet_sel,label),
-        plotClasses.Plot(ROOT.TH1D("ge3j_ge3t_Evt_Deta_JetsAverage","average #Delta#eta(jets)",30,0.25,5.0),"Evt_Deta_JetsAverage",selection+jet_sel,label),
-        #plotClasses.Plot(ROOT.TH1D("ge3j_ge3t_Jet_M_0","mass of leading jet",30,0.0,100.0),"Jet_M[0]",selection+jet_sel,label),
-        #plotClasses.Plot(ROOT.TH1D("ge3j_ge3t_Evt_CSV_Min_Tagged","min btag value of tagged jets",30,0.3,1.0),"Evt_CSV_min_tagged",selection+jet_sel,label),
-        plotClasses.Plot(ROOT.TH1D("ge3j_ge3t_Evt_CSV_Average_Tagged","average btag value of tagged jets",30,0.3,1.0),"Evt_CSV_avg_tagged",selection+jet_sel,label),
-        plotClasses.Plot(ROOT.TH1D("ge3j_ge3t_CSV_3","fourth highest btag value",30,0.0,1.0),"CSV[3]",selection+jet_sel,label),
-        plotClasses.Plot(ROOT.TH1D("ge3j_ge3t_Evt_Eta_JetsAverage","average eta of Jets",50,-5.0,5.0),"Evt_Eta_JetsAverage",selection+jet_sel,label),
-        plotClasses.Plot(ROOT.TH1D("ge3j_ge3t_Evt_Eta_TaggedJetsAverage","average #eta of tagged Jets",50,-5.0,5.0),"Evt_Eta_TaggedJetsAverage",selection+jet_sel,label),
-        plotClasses.Plot(ROOT.TH1D("ge3j_ge3t_Evt_Eta_UntaggedJetsAverage","average #eta of untagged Jets",50,-5.0,5.0),"Evt_Eta_UntaggedJetsAverage",selection+jet_sel,label),
-        plotClasses.Plot(ROOT.TH1D("ge3j_ge3t_Reco_tHq_ljet_eta","Reco_tHq_ljet_eta",50,-5.0,5.0),"Reco_tHq_ljet_eta",selection+jet_sel,label),
-        plotClasses.Plot(ROOT.TH1D("ge3j_ge3t_Reco_tHq_ljet_m","Reco_tHq_ljet_m",60,0,120),"Reco_tHq_ljet_m",selection+jet_sel,label),
-        plotClasses.Plot(ROOT.TH1D("ge3j_ge3t_Reco_tHq_ljet_phi","Reco_tHq_ljet_phi",35,-3.5,3.5),"Reco_tHq_ljet_phi",selection+jet_sel,label),
-        plotClasses.Plot(ROOT.TH1D("ge3j_ge3t_Reco_JABDT_tHq_log_ljet_pt","Reco_JABDT_tHq_log_ljet_pt",21,3.0,7.2),"Reco_JABDT_tHq_log_ljet_pt",selection+jet_sel,label),
-        plotClasses.Plot(ROOT.TH1D("ge3j_ge3t_Reco_tHq_ljet_pt","Reco_tHq_ljet_pt",70,0,700),"Reco_tHq_ljet_pt",selection+jet_sel,label),
-        #plotClasses.Plot(ROOT.TH1D("ge3j_ge3t_Jet_Eta","Jet_Eta",30,-3,3),"Jet_Eta",selection+jet_sel,label),
-        plotClasses.Plot(ROOT.TH1D("ge3j_ge3t_LooseJet_Eta","LooseJet_Eta",50,-5,5),"LooseJet_Eta",selection+jet_sel,label),
-        #plotClasses.Plot(ROOT.TH1D("ge3j_ge3t_TaggedJet_Eta","TaggedJet_Eta",30,-3,3),"TaggedJet_Eta",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge3j_ge3t_LooseJet_Pt","LooseJet_Pt",50,0,500),"LooseJet_Pt",selection+jet_sel,label),
-        #plotClasses.Plot(ROOT.TH1D("ge3j_ge3t_TaggedJet_Pt","TaggedJet_Pt",70,0,700),"TaggedJet_Pt",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge3j_ge3t_LooseJet_E","LooseJet_E",100,0,1000),"LooseJet_E",selection+jet_sel,label),
-        plotClasses.Plot(ROOT.TH1D("ge3j_ge3t_LooseJet_M","LooseJet_M",20,0,80),"LooseJet_M",selection+jet_sel,label),
-        plotClasses.Plot(ROOT.TH1D("ge3j_ge3t_LooseJet_Phi","LooseJet_Phi",35,-3.5,3.5),"LooseJet_Phi",selection+jet_sel,label),
-        ]
-
-    if data:
-        add_data_plots(plots=plots,data=data)
-
-    return plots
-
 def plots_ge4j_ge3t(data=None):
     label = "\geq 4 jets, \geq 3 b-tags"
     selection = "(N_Jets>=4&&N_BTagsM>=3)"
 
     plots = [
+        plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_N_PV","N_PrimaryVertices",50,0,80),"N_PrimaryVertices",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Electron_Pt","p_{T}(electron)",50,0,400),"Electron_Pt",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Electron_E","E(electron)",50,0,450),"Electron_E",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Electron_Eta","#eta(electron)",50,-2.5,2.5),"Electron_Eta[0]",selection,label),
@@ -113,6 +73,7 @@ def plots_ge4j_ge3t(data=None):
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Evt_HT","H_{T}",50,150.0,2000.0),"Evt_HT",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Evt_M2_TaggedJetsAverage","average M_{2}(tags)",40,0.0,600.0),"Evt_M2_TaggedJetsAverage",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Evt_MET","MET",30,10.0,300),"Evt_MET",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Evt_MET_Phi","MET Phi",30,-3.3,3.3),"Evt_MET_Phi",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Evt_M_TaggedJetsAverage","average M(tags)",30,3.0,35.0),"Evt_M_TaggedJetsAverage",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Evt_Pt_TaggedJetsAverage","average p_{T}(tags)",30,20.0,300.0),"Evt_Pt_TaggedJetsAverage",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Evt_TaggedJetPt_over_TaggedJetE","p_{T}(tags)/E(tags)",30,0.2,1.0),"Evt_TaggedJetPt_over_TaggedJetE",selection,label),
@@ -197,7 +158,7 @@ def plots_ge4j_ge3t(data=None):
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Reco_ttH_whaddau_eta2","Reco_ttH_whaddau_eta2",50,-4.2,4.2),"Reco_ttH_whaddau_eta2",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Reco_ttH_btophad_idx","Reco_ttH_btophad_idx",10,0,10),"Reco_ttH_btophad_idx",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Reco_ttH_whad_pt","Reco_ttH_whad_pt",50,0,800),"Reco_ttH_whad_pt",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Reco_ttH_toplep_w_dr","Reco_ttH_toplep_w_dr",50,0,4),"Reco_ttH_toplep_w_dr",selection,label),
+        # plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Reco_ttH_toplep_w_dr","Reco_ttH_toplep_w_dr",50,0,4),"Reco_ttH_toplep_w_dr",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Reco_JABDT_ttH_log_toplep_m","Reco_JABDT_ttH_log_toplep_m",50,0,10),"Reco_JABDT_ttH_log_toplep_m",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Reco_ttH_hdau_phi1","Reco_ttH_hdau_phi1",50,-3.1416,3.1416),"Reco_ttH_hdau_phi1",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Reco_ttH_hdau_phi2","Reco_ttH_hdau_phi2",50,-3.1416,3.1416),"Reco_ttH_hdau_phi2",selection,label),
@@ -239,7 +200,7 @@ def plots_ge4j_ge3t(data=None):
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Reco_ttbar_btophad_eta","Reco_ttbar_btophad_eta",50,-2.5,2.5),"Reco_ttbar_btophad_eta",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Reco_ttbar_btoplep_eta","Reco_ttbar_btoplep_eta",50,-2.5,2.5),"Reco_ttbar_btoplep_eta",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Reco_ttbar_btophad_phi","Reco_ttbar_btophad_phi",50,-3.1416,3.1416),"Reco_ttbar_btophad_phi",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Reco_ttbar_tophad_dr","Reco_ttbar_tophad_dr",50,0,4),"Reco_ttbar_tophad_dr",selection,label),
+        # plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Reco_ttbar_tophad_dr","Reco_ttbar_tophad_dr",50,0,4),"Reco_ttbar_tophad_dr",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Reco_ttbar_btoplep_phi","Reco_ttbar_btoplep_phi",50,-3.1416,3.1416),"Reco_ttbar_btoplep_phi",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Reco_JABDT_ttbar_Jet_CSV_btoplep","Reco_JABDT_ttbar_Jet_CSV_btoplep",50,0,1),"Reco_JABDT_ttbar_Jet_CSV_btoplep",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Reco_ttbar_whad_m","Reco_ttbar_whad_m",50,0,300),"Reco_ttbar_whad_m",selection,label),
@@ -247,7 +208,7 @@ def plots_ge4j_ge3t(data=None):
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Reco_ttbar_whaddau_m2","Reco_ttbar_whaddau_m2",50,0,50),"Reco_ttbar_whaddau_m2",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Reco_ttbar_whaddau_m1","Reco_ttbar_whaddau_m1",50,0,50),"Reco_ttbar_whaddau_m1",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Reco_ttbar_toplep_phi","Reco_ttbar_toplep_phi",50,-3.1416,3.1416),"Reco_ttbar_toplep_phi",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Reco_JABDT_ttbar_log_tophad_m__M__whad_m","Reco_JABDT_ttbar_log_tophad_m__M__whad_m",50,0,10),"Reco_JABDT_ttbar_log_tophad_m__M__whad_m",selection,label),
+        # plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Reco_JABDT_ttbar_log_tophad_m__M__whad_m","Reco_JABDT_ttbar_log_tophad_m__M__whad_m",50,0,10),"Reco_JABDT_ttbar_log_tophad_m__M__whad_m",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Reco_ttbar_tophad_eta","Reco_ttbar_tophad_eta",50,-4.2,4.2),"Reco_ttbar_tophad_eta",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Reco_ttbar_whad_dr","Reco_ttbar_whad_dr",50,0,4),"Reco_ttbar_whad_dr",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Reco_ttbar_tophad_pt","Reco_ttbar_tophad_pt",50,0,800),"Reco_ttbar_tophad_pt",selection,label),
@@ -409,10 +370,10 @@ def plots_ge4j_ge3t(data=None):
     ]
 
 
-    #plots += plots_ttH
-    #plots += plots_ttbar
-    #plots += plots_tHW
-    #plots += plots_THQ
+    plots += plots_ttH
+    plots += plots_ttbar
+    # plots += plots_tHW
+    # plots += plots_THQ
 
     if data:
         add_data_plots(plots=plots,data=data)
@@ -895,6 +856,7 @@ def plots_ge6j_ge3t(data=None):
         #plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_Jet_Pt1","Subleading Jet_Pt",50,0,800),"Jet_Pt[1]",selection,label),
         #plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_CSV","DeepCSV",50,0,1),"CSV",selection,label),
 
+        plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_N_PV","N_PrimaryVertices",50,0,80),"N_PrimaryVertices",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_N_BTagsM","N_BTagsM",8,2.5,10.5),"N_BTagsM",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_N_Jets","N_Jets",9,3.5,12.5),"N_Jets",selection,label),
 
@@ -918,6 +880,7 @@ def plots_ge6j_ge3t(data=None):
         plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_Evt_HT","H_{T}",50,150.0,2000.0),"Evt_HT",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_Evt_M2_TaggedJetsAverage","average M_{2}(tags)",40,0.0,600.0),"Evt_M2_TaggedJetsAverage",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_Evt_MET","MET",30,10.0,300),"Evt_MET",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_Evt_MET_Phi","MET Phi",30,-3.3,3.3),"Evt_MET_Phi",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_Evt_M_TaggedJetsAverage","average M(tags)",30,3.0,35.0),"Evt_M_TaggedJetsAverage",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_Evt_Pt_TaggedJetsAverage","average p_{T}(tags)",30,20.0,300.0),"Evt_Pt_TaggedJetsAverage",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_Evt_TaggedJetPt_over_TaggedJetE","p_{T}(tags)/E(tags)",30,0.2,1.0),"Evt_TaggedJetPt_over_TaggedJetE",selection,label),
@@ -929,6 +892,7 @@ def plots_ge6j_ge3t(data=None):
         plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_Evt_blr","Evt_blr",30,-0.05,1.0),"Evt_blr",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_Evt_blr_transformed","Evt_blr_transformed",30,-6.0,16.0),"Evt_blr_transformed",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_Jet_Pt_0","Jet_Pt[0]",30,20,500),"Jet_Pt[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_Jet_Pt_1","Jet_Pt[1]",30,20,350),"Jet_Pt[1]",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_Jet_Pt_2","Jet_Pt[2]",30,20,350),"Jet_Pt[2]",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_Evt_HT_tags","Evt_HT_tags",50,50.0,1200.0),"Evt_HT_tags",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge6j_ge3t_Evt_M_minDrLepTag","Evt_M_minDrLepTag",30,0.0,350.0),"Evt_M_minDrLepTag",selection,label),
@@ -1103,8 +1067,7 @@ def plots_ge6j_ge3t(data=None):
 
 def getDiscriminatorPlots(data = None, discrname = ''):
     discriminatorPlots = []
-    #discriminatorPlots += plots_ge3j_ge3t(data)
-    #discriminatorPlots += plots_ge4j_ge3t(data)
+    discriminatorPlots += plots_ge4j_ge3t(data)
     discriminatorPlots += plots_ge4j_3t(data)
     discriminatorPlots += plots_ge4j_ge4t(data)
     #discriminatorPlots += plots_ge6j_ge3t(data)
