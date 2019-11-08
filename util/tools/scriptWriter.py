@@ -96,6 +96,11 @@ class scriptWriter:
         for i in range(len(samplesToCheck)):
             thistreeisgood = False
             for j in range(len(samplesToCheck[i].files)):
+                print samplesToCheck[i].files[j]
+                if not "ttHTobb" in samplesToCheck[i].files[j]:
+                    print("DANGERZONE!!! No ttHTobb sample - continue with next sample")
+                #    continue
+                else:   print samplesToCheck[i].files[j]
                 f = ROOT.TFile(samplesToCheck[i].files[j])
                 tree = f.Get('MVATree')
                 if tree.GetEntries() > 0:
