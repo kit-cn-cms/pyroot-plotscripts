@@ -76,8 +76,9 @@ def doRebinning(rootfile, histolist, threshold):
     return sorted(bin_edges)
 
 
-def getOptimizedBinEdges(label, opts):
-    channel = opts.discrname+"_"+label
+def getOptimizedBinEdges(label, opts, channel = None):
+    if channel is None:
+        channel = opts.discrname+"_"+label
 
     # open rootfile
     rfile = ROOT.TFile.Open(opts.histogram_file)
@@ -87,7 +88,8 @@ def getOptimizedBinEdges(label, opts):
     # collect keys to conider for rebinning
     consider_for_rebinning = []
     for p in opts.considered_processes.split(","):
-        branch = p+"_"+channel
+        branch = opts.histkey.replace("$PROCESS", p)
+        branch = branch.replace("$CHANNEL", channel)
         if branch in keylist:
             consider_for_rebinning.append(branch)
         else:
@@ -396,8 +398,41 @@ class DNN:
                 string += "            feed_dict.push_back( std::make_pair(\"{name}\", dropout_disable));\n".format(name = op.name)
         return string
 
+    def generateDefaultPlots(self, variables):
+        string= "    plots = ["
 
-    def generateInputPlots(self):
+        for var in sorted(list(variables.index)):
+            # generate dictionary
+            plotConfig = {
+                "histname":     "\"ljets_"+self.category+"_"+var+"\"", 
+                "plotname":     "\""+variables.loc[var, "displayname"]+"\"",
+                "nbins":        variables.loc[var, "numberofbins"],
+                "minval":       variables.loc[var, "minvalue"],
+                "maxval":       variables.loc[var, "maxvalue"],
+                "expression":   "\""+var+"\""}
+            
+            # var[1]->var_1 renaming
+            plotConfig["histname"] = plotConfig["histname"].replace("[","_").replace("]","")
+
+            # special case: MEM
+            if var == "memDBp": plotConfig["expression"] = "memexp"
+
+            # generate the plot string
+            string += """
+        plotClasses.Plot(ROOT.TH1D({histname},{plotname},{nbins},{minval},{maxval}),{expression},selection,label),""".format(**plotConfig)
+
+        string += """
+        ]
+        
+    if data:
+        add_data_plots(plots=plots,data=data)
+    return plots
+    
+
+    """
+        return string
+
+    def generateInputPlots(self, opts = None):
         if self.multiDNN:
             string = ""
             for dnn in self.DNNs:
@@ -423,32 +458,10 @@ class DNN:
             string+= "    selection = \"{}\"\n\n".format(self.selection.replace(" ","").replace("and","&&"))
         else:
             string+= "    selection = \"{}\"\n\n".format(self.selection.replace(" ","").replace("and","&&")+self.evalSelection)
-        string+= "    plots = ["
-
-        for var in sorted(list(variables.index)):
-            # generate dictionary
-            plotConfig = {
-                "histname":     "\"ljets_"+self.category+"_"+var+"\"", 
-                "plotname":     "\""+variables.loc[var, "displayname"]+"\"",
-                "nbins":        variables.loc[var, "numberofbins"],
-                "minval":       variables.loc[var, "minvalue"],
-                "maxval":       variables.loc[var, "maxvalue"],
-                "expression":   "\""+var+"\""}
-            
-            # var[1]->var_1 renaming
-            plotConfig["histname"] = plotConfig["histname"].replace("[","_").replace("]","")
-
-            # special case: MEM
-            if var == "memDBp": plotConfig["expression"] = "memexp"
-
-            # generate the plot string
-            string += """
-        plotClasses.Plot(ROOT.TH1D({histname},{plotname},{nbins},{minval},{maxval}),{expression},selection,label),""".format(**plotConfig)
-
-        string += "\n        ]\n\n"
-        string += "    if data:\n"
-        string += "        add_data_plots(plots=plots,data=data)\n"
-        string += "    return plots\n\n\n\n"
+        if opts and opts.optimizeInputVarBins:
+            pass
+        else:
+            string += self.generateDefaultPlots(variables)
         return string
     
     def generatePlotCall(self, opts):
@@ -465,6 +478,61 @@ class DNN:
         string += "discriminatorPlots += plots_{}(data)\n".format(self.category)
         return string
    
+    def generateInfoCollectionString(self, **kwargs):
+        category = kwargs.get("category", "")
+        varname = kwargs.get("variable_name", "")
+        category_label = kwargs.get("category_label", "")
+        nhistobins = kwargs.get("nhistobins", None)
+        histotitle = kwargs.get("histotitle", None)
+        histoname = kwargs.get("histoname", None)
+        selection = kwargs.get("selection", None)
+        label = kwargs.get("label", "")
+
+        minxval = kwargs.get("minxval", None)
+        maxxval = kwargs.get("maxxval", None)
+        bin_edges = kwargs.get("bin_edges", None)
+
+        # template for basic variableHistoInterface constructor
+        template ="""
+    interf_{LABEL} = vhi.variableHistoInterface(variable_name  = "{DISCR_NAME}",
+                                            category_label = label,
+                                            label          = "{LABEL}",
+                                            selection      = {PRESELECTION})
+    interf_{LABEL}.category = ("{PRESELECTION}","{LABEL}","")\n"""
+        # parse additional information for histo interface
+        addlines = []
+        indent = "    "
+        base = indent + "interf_{LABEL}"
+        # if there are bin edges, add them to the interface
+        if not bin_edges is None:
+            # write bin edges to file
+            indents = "\t\t\t\t"
+            separator = ",\n"+indents
+            s = base + '.bin_edges = '
+            s += '[ \n{INDENTS}{VALS}\n{INDENTS}]'.format(
+                INDENTS = indents,
+                VALS = separator.join([str(round(x,4)) for x in bin_edges])
+                )
+            addlines.append(s)
+        elif not (minxval is None or maxxval is None):
+            # fill binranges
+            addlines.append(base + '.minxval = {}'.format(minxval))
+            addlines.append(base + '.maxxval = {}'.format(maxxval))
+
+        #parse histogram title, name and number of bins if available
+        if not histotitle is None:
+            addlines.append(base + '.category = "{}"'.format(histotitle))
+        if not histoname is None:
+            addlines.append(base + '.histoname = "{}"'.format(histoname)) 
+        if not nhistobins is None:
+            addlines.append(base + '.nhistobins = "{}"'.format(nhistobins))  
+        template += "\n".join(addlines)
+        template += """
+    interfaces.append(interf_{LABEL})
+    """
+        return template.format(LABEL=label, PRESELECTION = selection, CATLABEL = category_label,
+                            DISCR_NAME = varname)
+
 
     def generateOutputPlots(self, opts):
         if self.multiDNN:
@@ -476,11 +544,9 @@ class DNN:
 
         # generate categoires list
         string = "\n\n\n    # plots for {}\n".format(self.category)
-        template ="""
-    category_dict["category"] = ("{PRESELECTION}","{LABEL}","")
-    category_dict["discr"] = "{DISCR_NAME}"
-    category_dict["catlabel"] = "{CATLABEL}"
-    category_dict["nhistobins"] = ndefaultbins\n"""
+        bin_edges = None
+        minval = None
+        maxval = None
 
         if not opts.binning_rule is None:
             with open(opts.binning_rule, 'r') as f:
@@ -499,13 +565,6 @@ class DNN:
                     sel         = self.selection.replace(" ","").replace("and","&&")+self.evalSelection, 
                     pred_var    = self.predictionVariable, 
                     i           = i)
-                
-
-            string += template.format(  
-                PRESELECTION    = preselection,
-                LABEL           = label,
-                CATLABEL        = self.label,
-                DISCR_NAME      = self.discrNames[i])
 
             if opts.variable_binning or opts.optimize_binning:
                 if opts.optimize_binning and opts.binning_rule is None:
@@ -525,26 +584,19 @@ class DNN:
                 
                 if not opts.binning_rule is None:
                     bin_edges = [bin_edges[i] for i in rules[node]]
-
-                # write bin edges to file
-                indents = "\t\t\t\t"
-                separator = ",\n"+indents
-                string += '    category_dict["bin_edges"] = [ \n{}{}\n{}]'.format(
-                    indents,
-                    separator.join([str(round(x,4)) for x in bin_edges]),
-                    indents
-                    )
                 
             else:
-                # fill binranges
-                string += '    category_dict["minxval"] = {}\n'.format(self.node_mins[i])
-                string += '    category_dict["maxxval"] = {}\n'.format(self.node_maxs[i])
-                # string += "\n\n"
+                minval = self.node_mins[i]
+                maxval = self.node_maxs[i]
 
-            string += """
-    this_dict["{LABEL}"] = deepcopy(category_dict)
-    category_dict.clear()
-    """.format(LABEL=label)
+            string += self.generateInfoCollectionString(  
+                selection       = preselection,
+                label           = label,
+                category_label  = self.label,
+                variable_name   = self.discrNames[i],
+                nhistobins      = "nhistobins",
+                bin_edges = bin_edges, minxval = minval, maxxval = maxval)
+            
         return string
 
 
@@ -634,7 +686,7 @@ class theInterface:
             string += "\n"
         string += """
 
-        Tensor dropout_disable (DT_FLOAT, TensorShape({1}));
+        tensorflow::Tensor dropout_disable (tensorflow::DT_FLOAT, tensorflow::TensorShape({1}));
         dropout_disable.tensor<float, 1>()(0) = 1.0;
         """
         return string
@@ -709,6 +761,7 @@ sys.path.append(pyrootdir)
 sys.path.append(basedir)
 
 import util.tools.plotClasses as plotClasses
+import util.variableHistoInterface as vhi
 import ROOT
 from array import array
 from copy import deepcopy\n\n\n"""
@@ -732,8 +785,7 @@ from copy import deepcopy\n\n\n"""
 def plots_dnn(data, discrname):
 
     ndefaultbins = {}
-    category_dict = {{}}
-    this_dict = {{}}\n\n""".format(opts.ndefaultbins)
+    interfaces = []""".format(opts.ndefaultbins)
 
 
         # loop over dnns witing code for DNN discr plots
@@ -743,12 +795,13 @@ def plots_dnn(data, discrname):
         # generating plot classes for DNN plots and adding info to data class
         string += """
 
-    for l in this_dict:
-        this_dict[l]["histoname"] = discrname+"_"+l
-        this_dict[l]["histotitle"] = "final discriminator ({})".format(l)
-        this_dict[l]["plotPreselections"] = this_dict[l]["category"][0]
+    for interf in interfaces:
+        l = interf.label
+        interf.histoname = discrname+"_"+l
+        interf.histotitle = "final discriminator ({})".format(l)
+        interf.selection = interf.category[0]
 
-    DNNPlots = init_plots(dictionary = this_dict, data = data)
+    DNNPlots = init_plots(interfaces = interfaces, data = data)
     return DNNPlots\n\n\n"""
 
         string += funcstring
@@ -760,37 +813,37 @@ def plots_dnn(data, discrname):
 
     def generateInitPlotsFunc(self):
         code ="""
-def init_plots(dictionary, data = None):
+def init_plots(interfaces, data = None):
     plots = [] #init list of plotClasses objects to return
-    for label in dictionary:
-        subdict     = dictionary[label] #for easy access
-        discr       = subdict["discr"] # load discriminator name
-        sel         = subdict["plotPreselections"] # load selection
-        histoname   = subdict["histoname"] # load histogram name
-        histotitle  = subdict["histotitle"] # load histogram title
-        catlabel    = subdict["catlabel"] # category label
+    dictionary = {{}}
+    for interf in interfaces:
 
         # check if initialization uses bin edges or min/max vals
         # if 'subdict' contains the keyword 'bin_edges', an array
         # of type float is created from the corresponding python list.
         # Else, the min/maxvals are used 
-        if "bin_edges" in subdict:
-            bins  = array("f", subdict["bin_edges"])
+        if not interf.bin_edges is None:
+            bins  = array("f", interf.bin_edges)
             nbins = len(bins)-1 # last bin edge in array is overflow bin => subtract for nbins
-            subdict["nhistobins"] = nbins # update number of bins
+            interf.nhistobins = nbins # update number of bins
             plots.append(
                 plotClasses.Plot(
-                    ROOT.TH1F(histoname,histotitle,nbins,bins),
-                    discr,sel,catlabel))
+                    ROOT.TH1F(interf.histoname,interf.histotitle,nbins,bins),
+                    interf.varname,interf.selection,interf.category_label))
 
-        elif "minxval" in subdict and "maxxval" in subdict:
-            nbins = subdict["nhistobins"]
-            xmax  = subdict["maxxval"]
-            xmin  = subdict["minxval"]
+        elif not (interf.minxval is None or interf.maxxval is None):
+            nbins = interf.nhistobins
+            xmax  = interf.maxxval
+            xmin  = interf.minxval
             plots.append(
                 plotClasses.Plot(
-                    ROOT.TH1F(histoname, histotitle,nbins,xmin, xmax),
-                    discr,sel,catlabel))
+                    ROOT.TH1F(interf.histoname,interf.histotitle,nbins,xmin, xmax),
+                    interf.varname,interf.selection,interf.category_label))
+        else:
+            print("FATAL ERROR: Unable to load bin edges or min/max values for histogram!")
+            print(interf)
+            raise ValueError
+        dictionary[interf.label] = interf.getDictionary()
 
     if not data is None:
         data.categories.update(dictionary)
@@ -834,6 +887,8 @@ no separate plots and no separate discriminators are produced""")
         "settings concerning the variable binning of discriminator plots")
     binningOptions.add_option("--optimizeBinning",dest="optimize_binning",default=False,action="store_true",metavar="OPTBINNING",
         help = "enable optimization of binning. Requires some additional input information from already produced output plots")
+    binningOptions.add_option("--optimizeInputVarBins",dest="optimizeInputVarBins",default=False,action="store_true",
+        help = "enable optimization of binning for input feature plots. Requires some additional input information from already produced output plots")
     binningOptions.add_option("-f",dest="histogram_file",default="output_limitInput.root",metavar="HISTFILE",
         help = "root file with histograms for binning optimization")
     binningOptions.add_option("-p",dest="considered_processes",default="ttbarOther,ttbarPlusB,ttbarPlus2B,ttbarPlusBBbar,ttbarPlusCCbar",metavar="PROCESSES",
@@ -844,6 +899,9 @@ no separate plots and no separate discriminators are produced""")
         help = "name of discriminator in histogram file for binning optimization")
     binningOptions.add_option("-r","--rules",dest="binning_rule",default=None,
         help = "file with binning rules as dictionary of 'nodename: [list, of, binedges, to, keep]'")
+    binningOptions.add_option("--histkey", dest = "histkey",
+        help = "Use this key template to get the histograms. Should contain keywords '$PROCESS' and '$CHANNEL'. Default is '$PROCESS_$CHANNEL",
+        default = "$PROCESS_$CHANNEL'")
 
     parser.add_option_group(binningOptions)
     (opts, args) = parser.parse_args()
