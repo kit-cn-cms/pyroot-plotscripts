@@ -29,14 +29,14 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttHControlPlots_17_'
+    name = 'ttHControlPlots_2017'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
 
     # signal process
     signalProcess = "ttH"
-    nSigSamples   = 3
+    nSigSamples   = 10
 
     # dataera
     dataera = "2017"
@@ -48,10 +48,10 @@ def main(pyrootdir, opts):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    config          = "ttH17_legacy/pltcfg_2017_combined_tthf_4FS_5FS_synced_v2"
+    config          = "ttH17_legacy_v4/samples_4FS_5FS_synced_v4"
     variable_cfg    = "ttH17_legacy/additionalVariables"
-    plot_cfg        = "ttH17_legacy/controlPlots_v2"
-    syst_cfg        = "ttH17_legacy/systs_mergedTTbb_combined_tthf_synced_v2"
+    plot_cfg        = "ttH17_legacy_v4/controlPlots_v2"
+    syst_cfg        = "ttH17_legacy_v4/systs_4FS_5FS_synced_v4"
 
     # file for rate factors
     rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2017.csv"
