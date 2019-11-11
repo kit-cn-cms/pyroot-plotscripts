@@ -29,6 +29,9 @@ class scriptWriter:
         if self.pp.useGenWeightNormMap:
             # initialize class to handle genWeight normalization stuff
             self.genWeightNormalization = GenWeightUtils.GenWeightNormalization(self.pp.rateFactorsFile)
+        self.nominalHistoKey = plotParaClass.nominalHistoKey
+        self.systHistoKey = plotParaClass.systHistoKey
+        self.histNameSeparator = plotParaClass.histNameSeparator
 
 
     ## main function for writing and compiling c++ code ##
@@ -397,20 +400,28 @@ class scriptWriter:
 
 
     ## cleanup script (during plot parallel) ##
+    # comment: this could be integrated into "cleanupHistos"
     def writeCleanupScript(self):
-        script = "import sys\n"
-        script += "import os\n"
-        script += "sys.path.append('"+self.pp.analysis.pyrootdir+"/util"+"')\n"
-        script += "import cleanupHistos\n\n"
-        script += "filename     = os.getenv('OUTFILENAME')\n\n"
-        script += "process      = os.getenv('ORIGNAME')\n"
-        script += "outname      = filename.replace('.root','_original.root')\n\n"
-        systpath = self.pp.configData.local_syst_path
-        script += "systematics  = \""+systpath+"\"\n\n"
-        script += "nHistsBefore, nHistsAfter = cleanupHistos.cleanupHistos(filename, outname, process, systematics)\n"
-        script += "with open(outname.replace('.root','_cleanedUp.txt'), 'w') as f:\n"
-        script += "    f.write('{} : {}'.format(nHistsBefore, nHistsAfter))\n"
-  
+        script = """
+import sys
+import os
+sys.path.append('{path}')
+import cleanupHistos
+
+filename     = os.getenv('OUTFILENAME')
+
+process      = os.getenv('ORIGNAME')
+syst_key     = os.getenv('SYSTHISTKEY')
+separator    = os.getenv('SEPARATOR')
+
+outname      = filename.replace('.root','_original.root')
+systematics  = "{systpath}"
+
+nHistsBefore, nHistsAfter = cleanupHistos.cleanupHistos(filename, outname, process, systematics, syst_key, separator)
+with open(outname.replace('.root','_cleanedUp.txt'), 'w') as f:
+    f.write('{{}} : {{}}'.format(nHistsBefore, nHistsAfter))
+  """.format(path = os.path.join(self.pp.analysis.pyrootdir,"util"),
+            systpath = self.pp.configData.local_syst_path)
         # write script to file
         with open(self.ccPath.replace(".cc","_cleanupHistos.py"), "w") as srcfile:
             srcfile.write(script)
@@ -561,8 +572,11 @@ class scriptWriter:
         script += 'export SUFFIX="'+suffix+'"\n'
         script += 'export EVENTFILTERFILE="'+str(filterFile)+'"\n'
         script += 'export ORIGNAME="'+str(origName)+'"\n'
+        script += "export NOMHISTKEY='{}'\n".format(self.nominalHistoKey)
+        script += "export SYSTHISTKEY='{}'\n".format(self.systHistoKey)
+        script += 'export SEPARATOR="{}"\n'.format(self.histNameSeparator)
         #DANGERZONE
-        pPscript = script + self.ccPath[:-3]+'\n'
+        pPscript = script + ".".join(self.ccPath.split(".")[:-1])+'\n'
         cleanup  = script + 'python '+self.ccPath.replace('.cc','_cleanupHistos.py')+'\n'
 
         # writing script to file and chmodding
