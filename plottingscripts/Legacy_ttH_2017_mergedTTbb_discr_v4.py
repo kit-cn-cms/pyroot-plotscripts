@@ -36,7 +36,7 @@ def main(pyrootdir, opts):
 
     # signal process
     signalProcess = "ttH"
-    nSigSamples   = 3
+    nSigSamples   = 10
 
     # dataera
     dataera = "2017"
