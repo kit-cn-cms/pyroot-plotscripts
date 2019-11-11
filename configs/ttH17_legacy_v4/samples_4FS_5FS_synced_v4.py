@@ -277,7 +277,7 @@ samples=[
     # minor samples
     plotClasses.Sample('t#bar{t}+V',ROOT.kCyan,
             ttVPathS,
-            lumi+evenSel+sel_MET,
+            lumi+sel_MET,
             'ttV',
             samDict=sampleDict, readTrees=doReadTrees),
 
@@ -302,19 +302,19 @@ samples=[
 
     plotClasses.Sample('Single Top',ROOT.kMagenta,
             stpath,
-            lumi+evenSel+sel_MET,
+            lumi+sel_MET,
             'singlet',
             samDict=sampleDict, readTrees=doReadTrees),
  
-#     plotClasses.Sample('Z+jets',ROOT.kGreen-3,
-#             path+'/DYJets*/*nominal*.root',
-#             lumi+evenSel+sel_MET,
-#             'zjets',
-#             samDict=sampleDict, readTrees=doReadTrees),
+    plotClasses.Sample('Z+jets',ROOT.kGreen-3,
+            path+'/DYJets*/*nominal*.root',
+            lumi+sel_MET,
+            'zjets',
+            samDict=sampleDict, readTrees=doReadTrees),
  
     plotClasses.Sample('W+jets',ROOT.kGreen-7,
             path+'/WJets*/*nominal*.root',
-            lumi+evenSel+sel_MET,
+            lumi+sel_MET,
             'wjets',
             samDict=sampleDict, readTrees=doReadTrees), 
 
