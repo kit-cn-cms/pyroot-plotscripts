@@ -465,7 +465,7 @@ class DNN:
             # print(plotConfig)
             string += self.generateInfoCollectionString(**plotConfig)
         string += """
-        plots = init_plots(interfaces = interfaces, data = data)"""
+    plots = init_plots(interfaces = interfaces, data = data)"""
         return string
 
 
