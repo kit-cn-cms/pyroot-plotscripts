@@ -43,7 +43,7 @@ CMS_scaleRelativeJEREC1_j,shape,variation,JESRelativeJEREC1up,JESRelativeJEREC1d
 CMS_scaleRelativePtBB_j,shape,variation,JESRelativePtBBup,JESRelativePtBBdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 CMS_scaleRelativePtEC1_j,shape,variation,JESRelativePtEC1up,JESRelativePtEC1down,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 CMS_scaleRelativeBal_j,shape,variation,JESRelativeBalup,JESRelativeBaldown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-CMS_scaleRelativeSample,shape,variation,JESRelativeSampleup,JESRelativeSampledown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+#CMS_scaleRelativeSample,shape,variation,JESRelativeSampleup,JESRelativeSampledown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 CMS_scaleRelativeFSR_j,shape,variation,JESRelativeFSRup,JESRelativeFSRdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 CMS_scaleRelativeStatFSR_j,shape,variation,JESRelativeStatFSRup,JESRelativeStatFSRdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 CMS_scaleRelativeStatEC_j,shape,variation,JESRelativeStatECup,JESRelativeStatECdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
