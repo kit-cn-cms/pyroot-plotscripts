@@ -306,11 +306,11 @@ samples=[
             'singlet',
             samDict=sampleDict, readTrees=doReadTrees),
  
-#     plotClasses.Sample('Z+jets',ROOT.kGreen-3,
-#             path+'/DYJets*/*nominal*.root',
-#             lumi+evenSel+sel_MET,
-#             'zjets',
-#             samDict=sampleDict, readTrees=doReadTrees),
+    plotClasses.Sample('Z+jets',ROOT.kGreen-3,
+            path+'/DYJets*/*nominal*.root',
+            lumi+evenSel+sel_MET,
+            'zjets',
+            samDict=sampleDict, readTrees=doReadTrees),
  
     plotClasses.Sample('W+jets',ROOT.kGreen-7,
             path+'/WJets*/*nominal*.root',
