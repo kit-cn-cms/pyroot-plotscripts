@@ -48,14 +48,13 @@ def main(pyrootdir, opts):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    config          = "ttH1X_Nikita/pltcfg_controlPlots_17_ttbar_ntuple"
-    variable_cfg    = "ttH1X_Nikita/additionalVariables"
-    plot_cfg        = "ttH1X_Nikita/controlPlots_v2"
-    syst_cfg        = "ttH1X_Nikita/systs_17"
+    config          = "ttH17_legacy/pltcfg_2017_combined_tthf_synced_v2"
+    variable_cfg    = "ttH17_legacy/additionalVariables"
+    plot_cfg        = "ttH17_legacy/controlPlots_v2"
+    syst_cfg        = "ttH17_legacy/systs_mergedTTbb_combined_tthf_synced_v2"
 
     # file for rate factors
-    rateFactorsFile = "/nfs/dust/cms/user/nshadski/plotscripts/data/rateFactors/rateFactors_2017.csv"
-    #rateFactorsFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/rate_factors_V2.csv"
+    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2017.csv"
 
     # script options
     analysisOptions = {
@@ -87,9 +86,7 @@ def main(pyrootdir, opts):
         "skipHistoCheck":       opts.skipHistoCheck,
         "skipDatacards":        opts.skipDatacards}
 
-    # plotJson = "/nfs/dust/cms/user/swieland/ttH_legacy/theRealPlotscript/pyroot-plotscripts/configs/ttH17/treejson.json"
-    plotJson = "/nfs/dust/cms/user/nshadski/plotscripts/configs/ttH1X_Nikita/treejson_17_ttbar.json"
-    #plotJson = ""
+    plotJson = "/nfs/dust/cms/user/swieland/ttH_legacy/theRealPlotscript/pyroot-plotscripts/workdir/ttHControlPlots_ttbar_ntuple_17_1p0/treejson.json"
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]]
     #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
