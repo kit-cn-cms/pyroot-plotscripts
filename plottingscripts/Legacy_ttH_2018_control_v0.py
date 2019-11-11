@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttHControlPlots_ttbar_ntuple_17_1p0'
+    name = 'ttHControlPlots_2018'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -39,7 +39,7 @@ def main(pyrootdir, opts):
     nSigSamples   = 3
 
     # dataera
-    dataera = "2017"
+    dataera = "2018"
 
     # Name of final discriminator, should not contain underscore
     discrName = 'finaldiscr'
@@ -48,10 +48,10 @@ def main(pyrootdir, opts):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    config          = "ttH17_legacy/pltcfg_2017_combined_tthf_synced_v2"
+    config          = "ttH17_legacy_v4/samples_2018_5FS_synced_v0"
     variable_cfg    = "ttH17_legacy/additionalVariables"
-    plot_cfg        = "ttH17_legacy/controlPlots_v2"
-    syst_cfg        = "ttH17_legacy/systs_mergedTTbb_combined_tthf_synced_v2"
+    plot_cfg        = "ttH17_legacy_v4/controlPlots_v2"
+    syst_cfg        = "ttH17_legacy_v4/systs_4FS_5FS_synced_v4"
 
     # file for rate factors
     rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2017.csv"

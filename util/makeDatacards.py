@@ -93,7 +93,7 @@ def makeDatacardsParallel(filePath, workdir,
             script = script_template.format(
                 cmssw_info  = cmssw_info,
                 script_path = scriptdir,
-                options     = "\\ \n\t".join(options)
+                options     = " ".join(options)
             )
             # saving and chmodding script
             with open(scriptName, "w") as dcs:
