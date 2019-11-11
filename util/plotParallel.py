@@ -21,7 +21,7 @@ import haddParallel
 #        C L A S S        #
 ###########################
 class plotParallel:
-    def __init__(self, analysis, configData):
+    def __init__(self, analysis, configData, nominalHistKey, systHistKey, separator):
         ''' default init 
 
         takes analysisConfig class,
@@ -35,6 +35,11 @@ class plotParallel:
         # status variables
         self.finished = False
         self.haddFiles = None
+
+        # information about histogram naming to be parsed to scriptWriter
+        self.nominalHistoKey     = nominalHistKey
+        self.systHistoKey        = systHistKey
+        self.histNameSeparator  = separator
 
         # init defaults
         self.initDefaults()

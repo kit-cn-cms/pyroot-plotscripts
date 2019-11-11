@@ -25,6 +25,7 @@ def construct_name(current_name, process, syst, syst_key, separator):
     current_parts = current_name.split(separator)
     if debug > 0:
         print("DEBUG IN 'construct_name' function")
+        print("\tsyst_key = '{}'".format(syst_key))
         print("\ttemplate_parts = [{}]".format(",".join(template_parts)))
         print("\tcurrent_parts = [{}]".format(",".join(current_parts)))
         print("\tprocess index: {}".format(idx_process))
