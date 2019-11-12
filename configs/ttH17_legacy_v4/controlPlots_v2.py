@@ -32,7 +32,7 @@ def plots_ge4j_ge3t(data=None):
     selection = "(N_Jets>=4&&N_BTagsM>=3)"
 
     plots = [
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_N_PV","N_PrimaryVertices",50,0,80),"N_PrimaryVertices",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_N_PV","N_PrimaryVertices",80,0,80),"N_PrimaryVertices",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Electron_Pt","p_{T}(electron)",50,0,400),"Electron_Pt",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Electron_E","E(electron)",50,0,450),"Electron_E",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Electron_Eta","#eta(electron)",50,-2.5,2.5),"Electron_Eta[0]",selection,label),
@@ -52,6 +52,12 @@ def plots_ge4j_ge3t(data=None):
 
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_N_BTagsM","N_BTagsM",8,2.5,10.5),"N_BTagsM",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_N_Jets","N_Jets",9,3.5,12.5),"N_Jets",selection,label),
+
+        plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_N_ForwardJets","N_ForwardJets",9,3.5,12.5),"N_ForwardJets",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_ForwardJet_Pt","ForwardJet_Pt",40,20,400),"ForwardJet_Pt",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_ForwardJet_Eta","ForwardJet_Eta",30,-2.5,2.5),"ForwardJet_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_ForwardJet_M","ForwardJet_M",30,0.0,50.0),"ForwardJet_M",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_ForwardJet_Phi","ForwardJet_Phi",30,-3.3,3.3),"ForwardJet_Phi",selection,label),
 
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_CSV","CSV",30,0,1),"CSV",selection,label),
         plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Jet_DeepJetCSV","Jet_DeepJetCSV",30,0.0,1.0),"Jet_DeepJetCSV",selection,label),
