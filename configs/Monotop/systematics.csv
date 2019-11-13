@@ -1,4 +1,6 @@
 Uncertainty,Type,Construction,Up,Down,Plot,ttbar,znunujets,wlnujets,singlet,diboson,qcd,zlljets,VectorMonotop_Mphi_2000_Mchi_500
+#,,,,,,,,,,,,,
+#lumi_13TeV,lnN,rate,-,-,1,0.975/1.025,0.975/1.025,0.975/1.025,0.975/1.025,0.975/1.025,0.975/1.025,0.975/1.025,0.975/1.025,0.975/1.025
 ,,,,,,,,,,,,,
 JES,shape,variation,JESup,JESdown,1,1,1,1,1,1,1,1,1
 ,,,,,,,,,,,,,
@@ -34,3 +36,6 @@ CMS_btag_cferr2_2018,shape,weight,"""weight_CSVcferr2Up:=(DEFAULTWEIGHT*PUWEIGHT
 #vjets_EW2,shape,weight,"""weight_vjets_EW2Up:=(DEFAULTWEIGHT*PUWEIGHTNOM*CSVWEIGHTNOM*TOPPTWEIGHTNOM*ELESFNOM*MUSFNOM*internalBosonWeight_EW2Up)*DOWEIGHTS""","""weight_vjets_EW2Down:=(DEFAULTWEIGHT*PUWEIGHTNOM*CSVWEIGHTNOM*TOPPTWEIGHTNOM*ELESFNOM*MUSFNOM*internalBosonWeight_EW2Down)*DOWEIGHTS""",1,0,0,1,0,0,0,1,0
 #vjets_EW3,shape,weight,"""weight_vjets_EW3Up:=(DEFAULTWEIGHT*PUWEIGHTNOM*CSVWEIGHTNOM*TOPPTWEIGHTNOM*ELESFNOM*MUSFNOM*internalBosonWeight_EW3Up)*DOWEIGHTS""","""weight_vjets_EW3Down:=(DEFAULTWEIGHT*PUWEIGHTNOM*CSVWEIGHTNOM*TOPPTWEIGHTNOM*ELESFNOM*MUSFNOM*internalBosonWeight_EW3Down)*DOWEIGHTS""",1,0,0,1,0,0,0,1,0
 #vjets_MIX,shape,weight,"""weight_vjets_MIXUp:=(DEFAULTWEIGHT*PUWEIGHTNOM*CSVWEIGHTNOM*TOPPTWEIGHTNOM*ELESFNOM*MUSFNOM*internalBosonWeight_MixedUp)*DOWEIGHTS""","""weight_vjets_MIXDown:=(DEFAULTWEIGHT*PUWEIGHTNOM*CSVWEIGHTNOM*TOPPTWEIGHTNOM*ELESFNOM*MUSFNOM*internalBosonWeight_MixedDown)*DOWEIGHTS""",1,0,0,1,0,0,0,1,0
+#,,,,,,,,,,,,,
+#TH_QCDscale_ttbar,lnN,rate,-,-,1,0.965/1.024,-,-,-,-,-,-,-
+#TH_QCDscale_singlet,lnN,rate,-,-,1,-,-,-,0.979/1.031,-,-,-,-
