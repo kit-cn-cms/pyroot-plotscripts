@@ -3635,6 +3635,18 @@ def control_plots_W_lep(data=None):
             label,
         ),
         plotClasses.Plot(
+            ROOT.TH1D(
+                "CaloMET_PFMET_Recoil_ratio" + extension,
+                "CaloMET_PFMET_Recoil_ratio",
+                20,
+                0.0,
+                2.0,
+            ),
+            "fabs(CaloMET-Evt_Pt_MET)/Hadr_Recoil_Pt",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
             ROOT.TH1D("AK15Jet_Pt" + extension, "AK15 Jet p_{t}", 40, 200.0, 1200.0),
             "AK15Jet_Pt",
             selection,
@@ -4282,6 +4294,12 @@ def control_plots_W_lep(data=None):
             selection,
             label,
         ),
+        plotClasses.Plot(
+            ROOT.TH1D("M_W_transverse" + extension, "m_{W,transverse}", 30, 0., 600.),
+            "M_W_transverse",
+            selection,
+            label,
+        ),
     ]
     if data:
         add_data_plots(plots=plots, data=data)
@@ -4292,11 +4310,11 @@ def control_plots_W_lep(data=None):
 def getDiscriminatorPlots(data=None, discrname=""):
     discriminatorPlots = []
     discriminatorPlots += control_plots_SR_had(data)
-    #discriminatorPlots += control_plots_mumu(data)
-    #discriminatorPlots += control_plots_elel(data)
-    #discriminatorPlots += control_plots_ttbar_had(data)
-    #discriminatorPlots += control_plots_ttbar_lep(data)
-    #discriminatorPlots += control_plots_W_lep(data)
+    discriminatorPlots += control_plots_mumu(data)
+    discriminatorPlots += control_plots_elel(data)
+    discriminatorPlots += control_plots_ttbar_had(data)
+    discriminatorPlots += control_plots_ttbar_lep(data)
+    discriminatorPlots += control_plots_W_lep(data)
 
     return discriminatorPlots
 
