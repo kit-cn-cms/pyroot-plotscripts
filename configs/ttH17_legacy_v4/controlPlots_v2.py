@@ -50,9 +50,9 @@ def plots_control(cat,selection,label):
         plotClasses.Plot(ROOT.TH1D(cat+"_N_BTagsM","N_BTagsM",8,2.5,10.5),"N_BTagsM",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_N_Jets","N_Jets",9,3.5,12.5),"N_Jets",selection,label),
 
-        plotClasses.Plot(ROOT.TH1D(cat+"_N_ForwardJets","N_ForwardJets",9,3.5,12.5),"N_ForwardJets",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_N_ForwardJets","N_ForwardJets",9,0.5,6.5),"N_ForwardJets",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_ForwardJet_Pt","ForwardJet_Pt",40,20,400),"ForwardJet_Pt",selection,label),
-        plotClasses.Plot(ROOT.TH1D(cat+"_ForwardJet_Eta","ForwardJet_Eta",30,-2.5,2.5),"ForwardJet_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_ForwardJet_Eta","ForwardJet_Eta",30,-5.5,5.5),"ForwardJet_Eta",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_ForwardJet_M","ForwardJet_M",30,0.0,50.0),"ForwardJet_M",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_ForwardJet_Phi","ForwardJet_Phi",30,-3.3,3.3),"ForwardJet_Phi",selection,label),
 
