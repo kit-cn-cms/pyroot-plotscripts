@@ -2,6 +2,7 @@
   // loop over all events
   long nentries = chain->GetEntries();
   cout << "total number of events: " << nentries << endl;
+	int warningCounter = 0;    
 
   for (long iEntry=skipevents;iEntry<nentries;iEntry++) {
     //if(iEntry==maxevents) break;
