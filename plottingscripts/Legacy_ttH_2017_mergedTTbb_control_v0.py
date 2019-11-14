@@ -48,7 +48,7 @@ def main(pyrootdir, opts):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    config          = "ttH17_legacy_v4/samples_2017_4FS_5FS_synced_v4"
+    config          = "ttH17_legacy_v4/samples_2017_4FS_5FS_synced_v0"
     variable_cfg    = "ttH17_legacy/additionalVariables"
     plot_cfg        = "ttH17_legacy_v4/controlPlots_v2"
     syst_cfg        = "ttH17_legacy_v4/systs_4FS_5FS_synced_v4"
