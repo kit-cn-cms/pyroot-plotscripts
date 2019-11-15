@@ -55,7 +55,7 @@ def doRebinning(rootfile, histolist, threshold):
         if threshold > 1:
             # do rebinning based on the population of the bins enterly
             # bins are ok if the bin content is larger than the threshold
-            if bincontent >= threshold:
+            if binContent >= threshold:
                 # if relative error is smaller than threshold, start new bin
                 last_added_edge = combinedHist.GetBinLowEdge(i)
                 bin_edges.append(last_added_edge)
@@ -492,6 +492,7 @@ class DNN:
         # generate header
         string = "\ndef plots_{}(data = None):\n".format(self.category)
         string+= "    label = \"{}\"\n".format(self.label)
+        string += "    interfaces = []\n"    
         if self.xEval:
             string+= "    selection = \"{}\"\n\n".format(self.selection.replace(" ","").replace("and","&&"))
         else:
@@ -570,7 +571,7 @@ class DNN:
         if not histoname is None:
             addlines.append(base + '.histoname = "{}"'.format(histoname)) 
         if not nhistobins is None:
-            addlines.append(base + '.nhistobins = "{}"'.format(nhistobins))  
+            addlines.append(base + '.nhistobins = {}'.format(nhistobins))  
         template += "\n".join(addlines)
         template += """
     interfaces.append(interf_{LABEL})
@@ -639,7 +640,7 @@ class DNN:
                 label           = label,
                 category_label  = self.label,
                 variable_name   = self.discrNames[i],
-                nhistobins      = "nhistobins",
+                nhistobins      = "ndefaultbins",
                 bin_edges = bin_edges, minxval = minval, maxxval = maxval)
             
         return string
@@ -860,7 +861,7 @@ def plots_dnn(data, discrname):
         code ="""
 def init_plots(interfaces, data = None):
     plots = [] #init list of plotClasses objects to return
-    dictionary = {{}}
+    dictionary = {}
     for interf in interfaces:
 
         # check if initialization uses bin edges or min/max vals
