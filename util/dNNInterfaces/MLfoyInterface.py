@@ -571,7 +571,7 @@ class DNN:
         if not histoname is None:
             addlines.append(base + '.histoname = "{}"'.format(histoname)) 
         if not nhistobins is None:
-            addlines.append(base + '.nhistobins = "{}"'.format(nhistobins))  
+            addlines.append(base + '.nhistobins = {}'.format(nhistobins))  
         template += "\n".join(addlines)
         template += """
     interfaces.append(interf_{LABEL})
@@ -640,7 +640,7 @@ class DNN:
                 label           = label,
                 category_label  = self.label,
                 variable_name   = self.discrNames[i],
-                nhistobins      = "nhistobins",
+                nhistobins      = "ndefaultbins",
                 bin_edges = bin_edges, minxval = minval, maxxval = maxval)
             
         return string
