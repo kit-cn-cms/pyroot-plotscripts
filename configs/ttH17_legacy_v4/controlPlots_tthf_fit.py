@@ -33,6 +33,8 @@ def plots_inclusive(data=None):
 
     plots = [
         plotClasses.Plot(ROOT.TH1D("inclusive_Evt_M2_closestTo125TaggedJets","M2_closestTo125TaggedJets",200,0.0,300.0),"Evt_M2_closestTo125TaggedJets",selection,label),
+        plotClasses.Plot(ROOT.TH1D("inclusive_Evt_N_Jets","N_Jets",4,3.5,7.5),"N_Jets",selection,label),
+        plotClasses.Plot(ROOT.TH1D("inclusive_Evt_N_BTagsM","N_BTagsM",3,2.5,5.5),"N_BTagsM",selection,label),
         plotClasses.Plot(ROOT.TH1D("inclusive_yield","yield",1,0.,1.),"1.",selection,label)
         ]
     if data:
