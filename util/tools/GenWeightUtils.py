@@ -83,7 +83,8 @@ class GenWeightNormalization():
     if( GenWeight_Norm_Map.find({sampleNameVar}+"_{weightName}")!=GenWeight_Norm_Map.end()){{
         internalNormFactor_{weightName} = GenWeight_Norm_Map[{sampleNameVar}+"_{weightName}"];
     }}
-    else std::cout << "WARNING: Could not find entry ' "<< {sampleNameVar} << "_{weightName}' in GenWeight_Norm_Map!" << std::endl; 
+    else if(warningCounter<100) std::cout << "WARNING: Could not find entry ' "<< {sampleNameVar} << "_{weightName}' in GenWeight_Norm_Map!" << std::endl; 
+    warningCounter+=1;
             """.format(weightName = weight, sampleNameVar = "currentRelevantSampleNameForGenWeights")
         # uncomment the following lines for additional debug output about the weights down below
     #     code += """
