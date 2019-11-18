@@ -89,8 +89,8 @@ def cleanupInterface(jobsToSubmit, rootFiles, skipCleanup = False, maxTries = 10
             print("cleanup histos has terminated successfully")
             return
 
-    submitOptions = {"PeriodicHold": 10001,
-                    "+RequestRuntime": 10000}
+    submitOptions = {"PeriodicHold": 3601,
+                    "+RequestRuntime": 3600}
 
     if nTries == 0:
         print("submitting cleanup jobs as array job")
