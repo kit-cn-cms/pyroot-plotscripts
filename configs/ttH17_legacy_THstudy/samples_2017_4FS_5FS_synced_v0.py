@@ -217,15 +217,39 @@ samples=[
 #             'ttH_hzg',
 #             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
-    plotClasses.Sample('tHW',ROOT.kBlue+3,
+    plotClasses.Sample('tHW_ITC',ROOT.kBlue+3,
             THWpath,
             lumi+sel_MET,
             'THW',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
-    
-    plotClasses.Sample('tHQ',ROOT.kBlue+5,
+
+    plotClasses.Sample('tHW_SM',ROOT.kBlue+4,
+            THWpath,
+            lumi+sel_MET+'*(Weight_rwgt_12/Weight_GEN_nom)',
+            'THW',
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+
+    plotClasses.Sample('tHW_5',ROOT.kBlue+5,
+            THWpath,
+            lumi+sel_MET+'*(Weight_rwgt_5/Weight_GEN_nom)',
+            'THW',
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+
+    plotClasses.Sample('tHQ_ITC',ROOT.kBlue+6,
             THQpath,
             lumi+sel_MET,
+            'THQ',
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+
+    plotClasses.Sample('tHQ_SM',ROOT.kBlue+7,
+            THQpath,
+            lumi+sel_MET+'*(Weight_rwgt_12/Weight_GEN_nom)',
+            'THQ',
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+
+     plotClasses.Sample('tHQ_5',ROOT.kBlue+8,
+            THQpath,
+            lumi+sel_MET+'*(Weight_rwgt_5/Weight_GEN_nom)',
             'THQ',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
