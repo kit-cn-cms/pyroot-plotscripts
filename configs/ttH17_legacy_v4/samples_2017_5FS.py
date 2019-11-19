@@ -14,8 +14,8 @@ import util.tools.plotClasses as plotClasses
 path  = "/nfs/dust/cms/user/swieland/ttH_legacy/ntupleHadded_2017"
 
 ttbarPathS = path+'/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
-             path+'/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'
-        #      path+'/TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'+\
+             path+'/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+";"+\
+             path+'/TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8_new_pmx/*nominal*.root'
 
 VJetsPathS = path+'/DYJets*/*nominal*.root'+';'+ \
              path+'/WJets*/*nominal*.root'
@@ -39,7 +39,7 @@ THQpath = path+'/THQ_*ctcvcp*/*nominal*.root'
 
 
 ttHpath = path+'/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
-	  path+'/ttHToNonbb_M125*/*nominal*.root'
+	      path+'/ttHToNonbb_M125*/*nominal*.root'
 
 	  
 
@@ -49,7 +49,7 @@ ttHpath = path+'/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'+';'+ 
 # SELECTIONS
 
 # need to veto muon events in electron dataset to avoid double counting and vice versa
-sel_singleel="(N_LooseMuons==0 && N_TightElectrons==1 && (Triggered_HLT_Ele32_WPTight_Gsf_2017SeedsX==1 && Triggered_HLT_Ele32_WPTight_Gsf_L1DoubleEG_vX==1))"
+sel_singleel="(N_LooseMuons==0 && N_TightElectrons==1)"# && (Triggered_HLT_Ele32_WPTight_Gsf_2017SeedsX==1 && Triggered_HLT_Ele32_WPTight_Gsf_L1DoubleEG_vX==1))"
 # sel_singlemu="(N_LooseElectrons==0 && N_TightMuons==1 && (Triggered_HLT_IsoMu27_vX==1))"
 # sel_singleel="(N_LooseMuons==0 && N_TightElectrons==1)"
 sel_singlemu="(N_LooseElectrons==0 && N_TightMuons==1)"
@@ -239,7 +239,7 @@ samples=[
 
     plotClasses.Sample('t#bar{t}+c#bar{c}',ROOT.kAzure+8,
             ttbarPathS,
-            lumi+'*(GenEvt_I_TTPlusCC==1)'+sel_MET+sel_StrangeMuWeights,
+            lumi+'*(GenEvt_I_TTPlusCC==1&&GenEvt_I_TTPlusBB==0)'+sel_MET+sel_StrangeMuWeights,
             'ttcc',
             samDict=sampleDict, readTrees=doReadTrees),
 
