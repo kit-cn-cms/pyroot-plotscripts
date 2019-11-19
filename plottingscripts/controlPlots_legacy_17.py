@@ -29,14 +29,14 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'dataMC_2017/tthf_fit_v5'
+    name = 'ttZ2017/v1'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
 
     # signal process
-    signalProcess = "ttH"
-    nSigSamples   = 3
+    signalProcess = "ttZ"
+    nSigSamples   = 2
 
     # dataera
     dataera = "2017"
@@ -48,10 +48,10 @@ def main(pyrootdir, opts):
     # memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
     memexp = ""
     # configs
-    config          = "ttH17_legacy_v4/samples_2017_5FS"
-    variable_cfg    = "ttH17_legacy/additionalVariables"
-    plot_cfg        = "ttH17_legacy_v4/controlPlots_tthf_fit"
-    syst_cfg        = "ttH17_legacy_v4/no_systs"
+    config          = "ttZ17/samples"
+    variable_cfg    = "ttZ17/additionalVariables"
+    plot_cfg        = "ttZ17/controlPlots"
+    syst_cfg        = "ttZ17/no_systs"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -60,13 +60,13 @@ def main(pyrootdir, opts):
     # script options
     analysisOptions = {
         # general options
-        "usePseudoData":        False,
+        "usePseudoData":        True,
         "testrun":              False,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
-        "makeDataCards":        True,
-        "makeInputDatacards":   True, # create datacards also for all defined plots
+        "makeDataCards":        False,
+        "makeInputDatacards":   False, # create datacards also for all defined plots
         "addData":              True,  # adding real data 
         "makePlots":            True,
         # options for makePlots
