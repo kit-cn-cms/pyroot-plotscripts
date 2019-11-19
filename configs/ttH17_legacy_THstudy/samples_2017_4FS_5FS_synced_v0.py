@@ -24,6 +24,12 @@ ttVPathS = path+'/TTW*/*nominal*.root'+';'+ \
            path+'/TTZToLLNuNu*/*nominal*.root'+';'+ \
            path+'/TTZToQQ*/*nominal*.root'
 
+
+ttZPathS = path+'/TTZToLLNuNu*/*nominal*.root'+';'+ \
+           path+'/TTZToQQ*/*nominal*.root'
+
+ttWPath = path+'/TTW*/*nominal*.root'+';'+ \
+
 dibosonPathS = path+'/WW_*/*nominal*.root'+';'+ \
                path+'/WZ_*/*nominal*.root'+';'+ \
                path+'/ZZ_*/*nominal*.root'
@@ -158,15 +164,15 @@ doReadTrees=True
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
 samplesDataControlPlots=[
-    plotClasses.Sample('SingleMu',ROOT.kBlack,
-            path+'/SingleMuon*/*nominal*.root',
-            sel_singlemu+sel_MET,
-            'SingleMu', samDict=sampleDict, readTrees=doReadTrees),
+#     plotClasses.Sample('SingleMu',ROOT.kBlack,
+#             path+'/SingleMuon*/*nominal*.root',
+#             sel_singlemu+sel_MET,
+#             'SingleMu', samDict=sampleDict, readTrees=doReadTrees),
 
-    plotClasses.Sample('SingleEl',ROOT.kBlack,
-            path+'/SingleElectron*/*nominal*.root',
-            sel_singleel+sel_MET,
-            'SingleEl', samDict=sampleDict, readTrees=doReadTrees)
+#     plotClasses.Sample('SingleEl',ROOT.kBlack,
+#             path+'/SingleElectron*/*nominal*.root',
+#             sel_singleel+sel_MET,
+#             'SingleEl', samDict=sampleDict, readTrees=doReadTrees)
 ]
 
 samples=[
@@ -298,10 +304,22 @@ samples=[
 #             samDict=sampleDict, readTrees=doReadTrees), 
 
     # minor samples
-    plotClasses.Sample('t#bar{t}+V',ROOT.kCyan,
-            ttVPathS,
+#     plotClasses.Sample('t#bar{t}+V',ROOT.kCyan,
+#             ttVPathS,
+#             lumi+sel_MET,
+#             'ttV',
+#             samDict=sampleDict, readTrees=doReadTrees),
+
+    plotClasses.Sample('t#bar{t}+Z',ROOT.kCyan,
+            ttZPathS,
             lumi+sel_MET,
-            'ttV',
+            'ttZ',
+            samDict=sampleDict, readTrees=doReadTrees),
+
+    plotClasses.Sample('t#bar{t}+W',ROOT.kBlue-10,
+            ttWPath,  
+            lumi+sel_MET,
+            'ttW',
             samDict=sampleDict, readTrees=doReadTrees),
 
     #plotClasses.Sample('t#bar{t}Z(b#bar{b})',ROOT.kCyan,
@@ -340,12 +358,6 @@ samples=[
             lumi+sel_MET,
             'wjets',
             samDict=sampleDict, readTrees=doReadTrees), 
-
-#     plotClasses.Sample('t#bar{t}+W',ROOT.kBlue-10,
-#             path+'/TTW*/*nominal*.root',  
-#             lumi+evenSel+sel_MET,
-#             'ttW',
-#             samDict=sampleDict, readTrees=doReadTrees),
 
 
     plotClasses.Sample('Diboson',ROOT.kAzure+2,
