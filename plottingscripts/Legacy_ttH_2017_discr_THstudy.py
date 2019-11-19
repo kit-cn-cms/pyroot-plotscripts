@@ -36,7 +36,7 @@ def main(pyrootdir, opts):
 
     # signal process
     signalProcess = "ttH"
-    nSigSamples   = 3
+    nSigSamples   = 7
 
     # dataera
     dataera = "2017"
@@ -90,7 +90,7 @@ def main(pyrootdir, opts):
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]]
     #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                   "checkpointFiles":  "/nfs/dust/cms/user/pkraemer/DNNCheckpoints/tH_final/plotCheckpoints"}
+                   "checkpointFiles":  "/nfs/dust/cms/user/swieland/ttH_legacy/DNNs/DNNs_THstudy"}
     # dnnInterface = None
 
     # path to datacardMaker directory
