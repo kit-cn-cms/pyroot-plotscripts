@@ -29,14 +29,14 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'Legacy_ttH_2017_discr_mergedTTbb_v4_ttH_hbb'
+    name = 'Legacy_ttH_2017_discr_mergedTTbb_v4'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
 
     # signal process
     signalProcess = "ttH"
-    nSigSamples   = 1
+    nSigSamples   = 10
 
     # dataera
     dataera = "2017"
@@ -50,7 +50,7 @@ def main(pyrootdir, opts):
     # configs
     config          = "ttH17_legacy_v4/samples_4FS_5FS_synced_v4"
     variable_cfg    = "ttH17_legacy/additionalVariables"
-    plot_cfg        = "ttH17_legacy_v4/discr_plots_5node_mergedTTbb_2017_HT_v2"
+    plot_cfg        = "ttH17_legacy_v4/discr_plots_5node_mergedTTbb_2017_HT"
     syst_cfg        = "ttH17_legacy_v4/systs_4FS_5FS_synced_v4"
 
     # file for rate factors
