@@ -14,8 +14,8 @@ import util.tools.plotClasses as plotClasses
 path  = "/nfs/dust/cms/user/swieland/ttH_legacy/ntupleHadded_2016"
 
 ttbarPathS = path+'/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
-             path+'/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'
-             path+'/TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'+\
+             path+'/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
+             path+'/TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'
 
 VJetsPathS = path+'/DYJets*/*nominal*.root'+';'+ \
              path+'/WJets*/*nominal*.root'
@@ -31,8 +31,8 @@ dibosonPathS = path+'/WW_*/*nominal*.root'+';'+ \
 stpath = path+'/ST_s-channel_4f_leptonDecays_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/*nominal*.root'+';'+ \
          path+'/ST_tW_antitop_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
          path+'/ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
-         path+'/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8'+';'+ \
-         path+'/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8'
+         path+'/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
+         path+'/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'
 #STH
 THWpath = path+'/THW_*ctcvcp*/*nominal*.root'
 THQpath = path+'/THQ_*ctcvcp*/*nominal*.root'
@@ -61,6 +61,8 @@ sel_StrangeMuWeights='*(abs(Weight_scale_variation_muR_0p5_muF_0p5)<=100 && abs(
 
 
 # higgs decay selections
+# hbb is gammagamma with id 5
+hbbSel='*((abs(GenHiggs_DecProd1_PDGID)==5 && abs(GenHiggs_DecProd2_PDGID)==5))'
 # hcc is uu dd ss cc with ids 1 2 3 4
 hccSel='*((abs(GenHiggs_DecProd1_PDGID)==1 && abs(GenHiggs_DecProd2_PDGID)==1) || (abs(GenHiggs_DecProd1_PDGID)==2 && abs(GenHiggs_DecProd2_PDGID)==2) || (abs(GenHiggs_DecProd1_PDGID)==3 && abs(GenHiggs_DecProd2_PDGID)==3) || (abs(GenHiggs_DecProd1_PDGID)==4 && abs(GenHiggs_DecProd2_PDGID)==4) )'
 # htt is mumu tautau with ids 13 15
@@ -165,11 +167,51 @@ samplesDataControlPlots=[
 ]
 
 samples=[
-    # signal samples     
-    plotClasses.Sample('t#bar{t}H',ROOT.kBlue+1,
+     # signal samples
+    plotClasses.Sample('t#bar{t}H (bb)',ROOT.kBlue+1,
             ttHpath,
-            lumi+sel_MET,
-            'ttH',
+            lumi+sel_MET+hbbSel,
+            'ttH_hbb',
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),     
+#     plotClasses.Sample('t#bar{t}H (nonbb)',ROOT.kBlue+1,
+#             ttHpath,
+#             lumi+sel_MET,
+#             'ttH',
+#             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+    plotClasses.Sample('t#bar{t}H(cc)',ROOT.kBlue+1,
+            ttHpath,
+            lumi+sel_MET+hccSel,
+            'ttH_hcc',
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+    plotClasses.Sample('t#bar{t}H(ll)',ROOT.kBlue+1,
+            ttHpath,
+            lumi+sel_MET+httSel,
+            'ttH_htt',
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+    plotClasses.Sample('t#bar{t}H(#gamma#gamma)',ROOT.kBlue+1,
+            ttHpath,
+            lumi+sel_MET+hggSel,
+            'ttH_hgg',
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+    plotClasses.Sample('t#bar{t}H(gg)',ROOT.kBlue+1,
+            ttHpath,
+            lumi+sel_MET+hglugluSel,
+            'ttH_hgluglu',
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+    plotClasses.Sample('t#bar{t}H(WW)',ROOT.kBlue+1,
+            ttHpath,
+            lumi+sel_MET+hwwSel,
+            'ttH_hww',
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+    plotClasses.Sample('t#bar{t}H(ZZ)',ROOT.kBlue+1,
+            ttHpath,
+            lumi+sel_MET+hzzSel,
+            'ttH_hzz',
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+    plotClasses.Sample('t#bar{t}H(Z#gamma)',ROOT.kBlue+1,
+            ttHpath,
+            lumi+sel_MET+hzgSel,
+            'ttH_hzg',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
     plotClasses.Sample('tHW',ROOT.kBlue+3,
@@ -256,19 +298,19 @@ samples=[
 
     plotClasses.Sample('Single Top',ROOT.kMagenta,
             stpath,
-            lumi+evenSel+sel_MET,
+            lumi+sel_MET,
             'singlet',
             samDict=sampleDict, readTrees=doReadTrees),
  
     plotClasses.Sample('Z+jets',ROOT.kGreen-3,
             path+'/DYJets*/*nominal*.root',
-            lumi+evenSel+sel_MET,
+            lumi+sel_MET,
             'zjets',
             samDict=sampleDict, readTrees=doReadTrees),
  
     plotClasses.Sample('W+jets',ROOT.kGreen-7,
             path+'/WJets*/*nominal*.root',
-            lumi+evenSel+sel_MET,
+            lumi+sel_MET,
             'wjets',
             samDict=sampleDict, readTrees=doReadTrees), 
 
@@ -281,7 +323,7 @@ samples=[
 
     plotClasses.Sample('Diboson',ROOT.kAzure+2,
             dibosonPathS,
-            lumi+evenSel+sel_MET,
+            lumi+sel_MET,
             'diboson',
             samDict=sampleDict, readTrees=doReadTrees),
 

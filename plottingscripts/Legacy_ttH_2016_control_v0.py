@@ -36,7 +36,7 @@ def main(pyrootdir, opts):
 
     # signal process
     signalProcess = "ttH"
-    nSigSamples   = 3
+    nSigSamples   = 10
 
     # dataera
     dataera = "2016"
@@ -54,7 +54,7 @@ def main(pyrootdir, opts):
     syst_cfg        = "ttH17_legacy_v4/systs_4FS_5FS_synced_v4"
 
     # file for rate factors
-    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2016.csv"
+    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2017.csv"
 
     # script options
     analysisOptions = {
@@ -86,7 +86,7 @@ def main(pyrootdir, opts):
         "skipHistoCheck":       opts.skipHistoCheck,
         "skipDatacards":        opts.skipDatacards}
 
-    plotJson = ""
+    plotJson = pyrootdir + "/configs/ttH17_legacy_v4/treejson2016.json"
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]]
     #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
