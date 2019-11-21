@@ -487,6 +487,15 @@ class Variable:
             self.setupVariableType(branchTitle, verbose)
             self.isArray = branchTitle.split("/")[0][-1] == "]"
             alt_file.Close()
+        elif self.varName.startswith("Weight_rwgt") :
+            self.inTree = True
+            alt_file = ROOT.TFile("/nfs/dust/cms/user/swieland/ttH_legacy/ntupleHadded_2017/THQ_ctcvcp_4f_Hincl_13TeV_madgraph_pythia8/THQ_ctcvcp_4f_Hincl_13TeV_madgraph_pythia8_1_nominal_Tree.root")
+            alt_tree = alt_file.Get("MVATree")
+            branch = alt_tree.GetBranch(self.varName)
+            branchTitle = branch.GetTitle()
+            self.setupVariableType(branchTitle, verbose)
+            self.isArray = branchTitle.split("/")[0][-1] == "]"
+            alt_file.Close()
         elif hasattr(tree, self.varName):
             if verbose > 20: print("variable is in tree")
             self.inTree = True
