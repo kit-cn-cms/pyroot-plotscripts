@@ -36,7 +36,7 @@ def main(pyrootdir, opts):
 
     # signal process
     signalProcess = "ttH"
-    nSigSamples   = 7
+    nSigSamples   = 14
 
     # dataera
     dataera = "2017"
@@ -65,8 +65,8 @@ def main(pyrootdir, opts):
         # options to activate parts of the script
         "haddFromWildcard":     True,
         "makeDataCards":        True,
-        "makeInputDatacards":   False, # create datacards also for all defined plots
-        "addData":              False,  # adding real data
+        "makeInputDatacards":   True, # create datacards also for all defined plots
+        "addData":              True,  # adding real data
         "makePlots":            True,
         # options for makePlots
         "signalScaling":        -1,
@@ -75,7 +75,7 @@ def main(pyrootdir, opts):
         "ratio":                "#frac{data}{MC Background}",
         "shape":                False, # for shape plots
         "normalize":            False, # normalize yield to integral 1
-        "logarithmic":          False,
+        "logarithmic":          True,
         "splitLegend":          True,
         # the skipX options try to skip the submission of files to the batch system
         # before skipping the output is crosschecked
@@ -86,11 +86,11 @@ def main(pyrootdir, opts):
         "skipHistoCheck":       opts.skipHistoCheck,
         "skipDatacards":        opts.skipDatacards}
 
-    plotJson = pyrootdir + "/configs//ttH17_legacy_v4/treejson2017.json"
+    plotJson = pyrootdir + "/configs/ttH17_legacy_THstudy/treejson2017.json"
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]]
     #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                   "checkpointFiles":  "/nfs/dust/cms/user/swieland/ttH_legacy/DNNs/DNNs_THstudy"}
+                   "checkpointFiles":  "/nfs/dust/cms/user/swieland/ttH_legacy/DNNs/DNNs_THstudy/Checkpoints"}
     # dnnInterface = None
 
     # path to datacardMaker directory
