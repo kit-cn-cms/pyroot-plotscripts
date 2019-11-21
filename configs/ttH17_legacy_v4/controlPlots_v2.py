@@ -50,7 +50,7 @@ def plots_control(cat,selection,label):
         plotClasses.Plot(ROOT.TH1D(cat+"_N_BTagsM","N_BTagsM",8,2.5,10.5),"N_BTagsM",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_N_Jets","N_Jets",9,3.5,12.5),"N_Jets",selection,label),
 
-        plotClasses.Plot(ROOT.TH1D(cat+"_N_ForwardJets","N_ForwardJets",9,0.5,6.5),"N_ForwardJets",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_N_ForwardJets","N_ForwardJets",6,0.5,6.5),"N_ForwardJets",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_ForwardJet_Pt","ForwardJet_Pt",40,20,400),"ForwardJet_Pt",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_ForwardJet_Eta","ForwardJet_Eta",30,-5.5,5.5),"ForwardJet_Eta",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_ForwardJet_M","ForwardJet_M",30,0.0,50.0),"ForwardJet_M",selection,label),
@@ -527,13 +527,13 @@ def getDiscriminatorPlots(data = None, discrname = ''):
     discriminatorPlots += plots_ge4j_ge4t(data)
 
     #analysis categories w/ N_Jets=Normal+Fwd Jets
-    discriminatorPlots += plots_ge4j_fwd_3t(data)
-    discriminatorPlots += plots_ge4j_fwd_ge4t(data)
+    # discriminatorPlots += plots_ge4j_fwd_3t(data)
+    # discriminatorPlots += plots_ge4j_fwd_ge4t(data)
 
     #analysis categories w/ explicit forward requirement
-    discriminatorPlots += plots_ge4j_3t_0fwd(data)
-    discriminatorPlots += plots_ge4j_ge4t_0fwd(data)
-    discriminatorPlots += plots_ge3j_ge3t_ge1fwd(data)
+    # discriminatorPlots += plots_ge4j_3t_0fwd(data)
+    # discriminatorPlots += plots_ge4j_ge4t_0fwd(data)
+    # discriminatorPlots += plots_ge3j_ge3t_ge1fwd(data)
 
     return discriminatorPlots
 
