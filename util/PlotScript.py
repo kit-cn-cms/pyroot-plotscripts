@@ -303,7 +303,7 @@ for sample in samples:
 """
 Combine Histograms and errorbands for combined plot channels
 """
-rootFile.ReOpen("UPDATE")
+# rootFile.ReOpen("UPDATE")
 for sample in plottingsamples:
     color       = plottingsamples[sample]['color']
     typ         = plottingsamples[sample]['typ']
@@ -317,8 +317,8 @@ for sample in plottingsamples:
     addedHist.Print()
     addedHist.SetName(label+"_"+addedHist.GetName()) 
     addedHist.Print()
-    rootFile.Write(addedHist.GetName())
-rootFile.ReOpen("readonly")
+    # rootFile.Write(addedHist.GetName())
+# rootFile.ReOpen("readonly")
 """
 Get errorband and signalhist in case of combine output file,
 else no signal
