@@ -870,7 +870,7 @@ def getLegend():
     return legend
 
 def getLegend1():
-    legend=ROOT.TLegend(0.50,0.64,0.70,0.89)
+    legend=ROOT.TLegend(0.48,0.64,0.68,0.89)
     legend.SetBorderSize(0);
     legend.SetLineStyle(0);
     legend.SetTextFont(42);
@@ -879,7 +879,7 @@ def getLegend1():
     return legend
 
 def getLegend2():
-    legend=ROOT.TLegend(0.66,0.64,0.86,0.89)
+    legend=ROOT.TLegend(0.64,0.64,0.84,0.89)
     legend.SetBorderSize(0);
     legend.SetLineStyle(0);
     legend.SetTextFont(42);
