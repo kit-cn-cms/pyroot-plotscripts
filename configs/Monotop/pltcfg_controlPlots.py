@@ -245,7 +245,7 @@ samples = [
     plotClasses.Sample(
         "Z(ll)+jets",
         ROOT.kGreen - 5,
-        path_mwassmer + "/DYJetsToLL*/*nominal*.root",
+        path_mwassmer + "/DYJetsToLL_M-50_HT*/*nominal*.root",
         lumi + sel_MET,
         "zlljets",
         samDict=sampleDict,
@@ -255,7 +255,7 @@ samples = [
     plotClasses.Sample(
         "W(l#nu)+jets",
         ROOT.kOrange,
-        path_mwassmer + "/WJetsToLNu*/*nominal*.root",
+        path_mwassmer + "/WJetsToLNu_HT*/*nominal*.root",
         lumi + sel_MET,
         "wlnujets",
         samDict=sampleDict,

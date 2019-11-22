@@ -166,7 +166,7 @@
       internalEleGFSWeightUp=internalLeptonSFHelper->GetElectronSF(electronPt,electronEta,1,"GFS");
       internalEleGFSWeightDown=internalLeptonSFHelper->GetElectronSF(electronPt,electronEta,-1,"GFS");
     }
-  float internalBosonWeight = 1.0; 
+  float internalBosonWeight = 1.0;
   float internalBosonWeight_QCD1Up = 1.0;
   float internalBosonWeight_QCD1Down = 1.0;
   float internalBosonWeight_QCD2Up = 1.0;
@@ -182,23 +182,23 @@
   float internalBosonWeight_MixedUp = 1.0;
   float internalBosonWeight_MixedDown = 1.0;
   
-  if((processname.find("wlnujets")!=std::string::npos && W_Pt>30.) || (processname.find("zlljets")!=std::string::npos &&  Z_Pt>30.)){
+  if((processname.find("wlnujets")!=std::string::npos && W_Pt>30.) || (processname.find("zlljets")!=std::string::npos &&  Z_Pt>30.) || (processname.find("znunujets")!=std::string::npos &&  Z_Pt>30.)){
   
-      internalBosonWeight = BosonWeight_nominal/Weight_XS;
-      internalBosonWeight_QCD1Up = BosonWeight_QCD1Up/Weight_XS;
-      internalBosonWeight_QCD1Down = BosonWeight_QCD1Down/Weight_XS;
-      internalBosonWeight_QCD2Up = BosonWeight_QCD2Up/Weight_XS;
-      internalBosonWeight_QCD2Down = BosonWeight_QCD2Down/Weight_XS;
-      internalBosonWeight_QCD3Up = BosonWeight_QCD3Up/Weight_XS;
-      internalBosonWeight_QCD3Down = BosonWeight_QCD3Down/Weight_XS;
-      internalBosonWeight_EW1Up = BosonWeight_EW1Up/Weight_XS;
-      internalBosonWeight_EW1Down = BosonWeight_EW1Down/Weight_XS;
-      internalBosonWeight_EW2Up = BosonWeight_EW2Up/Weight_XS;
-      internalBosonWeight_EW2Down = BosonWeight_EW2Down/Weight_XS;
-      internalBosonWeight_EW3Up = BosonWeight_EW3Up/Weight_XS;
-      internalBosonWeight_EW3Down = BosonWeight_EW3Down/Weight_XS;
-      internalBosonWeight_MixedUp = BosonWeight_MixedUp/Weight_XS;
-      internalBosonWeight_MixedDown = BosonWeight_MixedDown/Weight_XS;
+      internalBosonWeight = BosonWeight_nominal;
+      internalBosonWeight_QCD1Up = BosonWeight_QCD1Up;
+      internalBosonWeight_QCD1Down = BosonWeight_QCD1Down;
+      internalBosonWeight_QCD2Up = BosonWeight_QCD2Up;
+      internalBosonWeight_QCD2Down = BosonWeight_QCD2Down;
+      internalBosonWeight_QCD3Up = BosonWeight_QCD3Up;
+      internalBosonWeight_QCD3Down = BosonWeight_QCD3Down;
+      internalBosonWeight_EW1Up = BosonWeight_EW1Up;
+      internalBosonWeight_EW1Down = BosonWeight_EW1Down;
+      internalBosonWeight_EW2Up = BosonWeight_EW2Up;
+      internalBosonWeight_EW2Down = BosonWeight_EW2Down;
+      internalBosonWeight_EW3Up = BosonWeight_EW3Up;
+      internalBosonWeight_EW3Down = BosonWeight_EW3Down;
+      internalBosonWeight_MixedUp = BosonWeight_MixedUp;
+      internalBosonWeight_MixedDown = BosonWeight_MixedDown;
   }
   
    
