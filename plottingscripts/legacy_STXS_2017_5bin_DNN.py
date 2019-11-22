@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'STXS_2017_legacy/14_5bin_DNN_wSysts'
+    name = 'STXS_2017_legacy/24_5bin_DNN_wSysts'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
