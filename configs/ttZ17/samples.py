@@ -16,6 +16,7 @@ path  = "/nfs/dust/cms/user/swieland/ttH_legacy/ntupleHadded_2017"
 ttbarPathS = path+'/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
              path+'/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+";"+\
              path+'/TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8_new_pmx/*nominal*.root'
+             #'TTbb_Powheg_Openloops_new_pmx' needs to be added?
 
 VJetsPathS = path+'/DYJets*/*nominal*.root'+';'+ \
              path+'/WJets*/*nominal*.root'
@@ -23,7 +24,7 @@ VJetsPathS = path+'/DYJets*/*nominal*.root'+';'+ \
 ttWPath  = path+'/TTW*/*nominal*.root'
 
 ttZPath  = path+'/TTZToLLNuNu*/*nominal*.root'+';'+ \
-           path+'/TTZToQQ*/*nominal*.root'
+           path+'TTZToQQ_TuneCP5_13TeV-amcatnlo-pythia8_1/*nominal*.root'
 
 dibosonPathS = path+'/WW_*/*nominal*.root'+';'+ \
                path+'/WZ_*/*nominal*.root'+';'+ \
@@ -40,7 +41,7 @@ THQpath = path+'/THQ_*ctcvcp*/*nominal*.root'
 
 
 ttHpath = path+'/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
-	      path+'/ttHToNonbb_M125*/*nominal*.root'
+	      path+'/ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8_new_pmx/*nominal*.root'
 
 	  
 

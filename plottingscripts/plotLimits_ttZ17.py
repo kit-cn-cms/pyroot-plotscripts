@@ -7,6 +7,8 @@ import optparse
 import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 
+
+
 filedir = os.path.dirname(os.path.realpath(__file__))
 pyrootdir = "/".join(filedir.split("/")[:-1])
 
@@ -29,14 +31,14 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttZ2017_largeSet/v2'
+    name = 'ttZ17_discrPlots'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
 
     # signal process
     signalProcess = "ttZ"
-    nSigSamples   = 2
+    nSigSamples   = 3
 
     # dataera
     dataera = "2017"
@@ -45,39 +47,38 @@ def main(pyrootdir, opts):
     discrName = 'finaldiscr'
 
     # define MEM discriminator variable
-    # memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
-    memexp = ""
-    # configs
-    config          = "ttZ17/samples"
-    variable_cfg    = "ttZ17/additionalVariables"
-    plot_cfg        = "ttZ17/controlPlots"
-    syst_cfg        = "ttZ17/no_systs"
+    memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
-    # file for rate factors
-    #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
-    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2017.csv"
+    # configs
+    config          = "ttZ18/pltcfg_discrPlots"
+    variable_cfg    = "ttZ18/additionalVariables"
+    plot_cfg        = "ttZ18/discrPlots"
+    syst_cfg        = "ttZ18/systematics"
+
+    # file for rate factors #what updates need to be applied for the other root files??
+    rateFactorsFile = pyrootdir+"/data/rateFactors/rateFactors_2017.csv"    
 
     # script options
     analysisOptions = {
         # general options
-        "usePseudoData":        False,
+        "usePseudoData":        True,
         "testrun":              False,  # test run with less samples
-        "stopAfterCompile":     False,   # stop script after compiling
+        "stopAfterCompile":     False,  # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
-        "makeDataCards":        False,
+        "makeDataCards":        True,
         "makeInputDatacards":   False, # create datacards also for all defined plots
-        "addData":              True,  # adding real data 
+        "addData":              True,  # adding real data
         "makePlots":            True,
         # options for makePlots
-        "signalScaling":        -1,
+        "signalScaling":        1,
         "lumiLabel":            True,
         "CMSlabel":             "private Work",
-        "ratio":                "#frac{data}{MC Background}",
-        "shape":                False,
-        "logarithmic":          False,
+        "ratio":                "#frac{pseudo data}{MC Backgrond}",
+        "shape":                False, # for shape plots
+        "normalize":            False, # normalize yield to integral 1
+        "logarithmic":          True,
         "splitLegend":          True,
-        "normalize":            False,
         # the skipX options try to skip the submission of files to the batch system
         # before skipping the output is crosschecked
         # if the output is not complete, the skipped part is done anyways
@@ -87,12 +88,11 @@ def main(pyrootdir, opts):
         "skipHistoCheck":       opts.skipHistoCheck,
         "skipDatacards":        opts.skipDatacards}
 
-    plotJson = ""
+    plotJson = "/nfs/dust/cms/user/vdlinden/TreeJsonFiles/treeJson_ttZ_2018_v5.json"
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
-    #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-    #               "checkpointFiles":  "/nfs/dust/cms/user/swieland/ttH_legacy/DNNs/oldModel/"}
-    dnnInterface = None
+    dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
+                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/ttZConfig"}
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
@@ -174,15 +174,15 @@ def main(pyrootdir, opts):
     with monitor.Timer("plotParallel"):
         # initialize plotParallel class 
         pP = plotParallel.plotParallel(
-            analysis = analysis,
-            configData = configData)
+            analysis    = analysis,
+            configData  = configData)
 
         monitor.printClass(pP, "init")
         # set some changed values
         pP.setJson(plotJson)
         #pP.setDataBases(plotDataBases)
         #pP.setMEMDataBase(memDataBase)
-        #pP.setDNNInterface(dnnInterface)
+        pP.setDNNInterface(dnnInterface)
         pP.setMaxEvts(333333)
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
@@ -217,7 +217,7 @@ def main(pyrootdir, opts):
     else:
         print '''
         # ========================================================
-        # renaming Histograms
+        # checking Histograms
         # ========================================================
         '''
 
@@ -229,7 +229,6 @@ def main(pyrootdir, opts):
         # if no hadd files were created during plotparallel
         #       the renameInput is set to pp.getOutPath 
         #       (a.ka. the path to output.root)
-
         with monitor.Timer("checkHistos"):
             checkHistos.checkHistsManager(
                 inFiles         = pP.getRenameInput(),
@@ -237,7 +236,6 @@ def main(pyrootdir, opts):
                 checkBins       = True,
                 eps             = 0.0,
                 skipHistoCheck  = analysis.skipHistoCheck)
-
 
     if analysis.addData:
         print '''
@@ -247,13 +245,11 @@ def main(pyrootdir, opts):
         '''
         with monitor.Timer("addRealData"):
             if analysis.usePseudoData:
-                print("adding data_obs histograms as pseudo data")
                 # pseudo data without ttH
-                pP.addData(samples = configData.samples[nSigSamples:])
+                #pP.addData(samples = configData.samples[nSigSamples:])
                 # pseudo data with signal
-                #pP.addData(samples = configData.samples)
+                pP.addData(samples = configData.samples)
             else:
-                print("adding data_obs histograms as real data")
                 # real data with ttH
                 pP.addData(samples = configData.controlSamples)
 
@@ -282,7 +278,7 @@ def main(pyrootdir, opts):
                 datacardmaker       = datacardmaker,
                 signalTag           = analysis.signalProcess,
                 skipDatacards       = analysis.skipDatacards)
-    
+
     if analysis.makePlots:
         print '''
         # ========================================================
@@ -299,7 +295,6 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
 
-
 if __name__ == "__main__":
     parser = optparse.OptionParser()
     parser.add_option("--skipPlotParallel",     dest = "skipPlotParallel",      action = "store_true", default = False)
@@ -307,8 +302,18 @@ if __name__ == "__main__":
     parser.add_option("--skipHaddFromWildcard", dest = "skipHaddFromWildcard",  action = "store_true", default = False)
     parser.add_option("--skipHistoCheck",       dest = "skipHistoCheck",        action = "store_true", default = False)
     parser.add_option("--skipDatacards",        dest = "skipDatacards",         action = "store_true", default = False)
+    parser.add_option("--skip",                 dest = "skip",                  default = 0,            type = "int",
+        help = "skip first INT parallel stages. plotParallel (1), haddParallel (2), haddFromWildcard (3), histoCheck (4), Datacards (5)")
 
     (opts, args) = parser.parse_args()
+
+    if opts.skip >= 1: opts.skipPlotParallel        = True
+    if opts.skip >= 2: opts.skipHaddParallel        = True
+    if opts.skip >= 3: opts.skipHaddFromWildcard    = True
+    if opts.skip >= 4: opts.skipHistoCheck          = True
+    if opts.skip >= 5: opts.skipDatacards           = True
+
+
     main(pyrootdir, opts)
 
 
