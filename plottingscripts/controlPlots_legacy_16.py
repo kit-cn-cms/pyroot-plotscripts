@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'dataMC_2017/tthf_fit_v1'
+    name = 'dataMC_2016/tthf_fit_v1'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -39,7 +39,7 @@ def main(pyrootdir, opts):
     nSigSamples   = 3
 
     # dataera
-    dataera = "2017"
+    dataera = "2016"
     
     # Name of final discriminator, should not contain underscore
     discrName = 'finaldiscr'
@@ -48,14 +48,14 @@ def main(pyrootdir, opts):
     # memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
     memexp = ""
     # configs
-    config          = "ttH17_legacy_v4/samples_2017_4FS_5FS_synced_v0_v2"
+    config          = "ttH17_legacy_v4/samples_2016_5FS_synced_v0"
     variable_cfg    = "ttH17_legacy/additionalVariables"
     plot_cfg        = "ttH17_legacy_v4/controlPlots_tthf_fit"
     syst_cfg        = "ttH17_legacy_v4/no_systs"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
-    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2017.csv"
+    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2016.csv"
 
     # script options
     analysisOptions = {
