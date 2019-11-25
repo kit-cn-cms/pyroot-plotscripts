@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttHControlPlots_2018'
+    name = 'ttH_2018/ControlPlots_v1'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -54,7 +54,7 @@ def main(pyrootdir, opts):
     syst_cfg        = "ttH17_legacy_v4/systs_4FS_5FS_synced_v4"
 
     # file for rate factors
-    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2017.csv"
+    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2018.csv"
 
     # script options
     analysisOptions = {
@@ -86,7 +86,7 @@ def main(pyrootdir, opts):
         "skipHistoCheck":       opts.skipHistoCheck,
         "skipDatacards":        opts.skipDatacards}
 
-    plotJson = "/nfs/dust/cms/user/swieland/ttH_legacy/theRealPlotscript/pyroot-plotscripts/workdir/ttHControlPlots_ttbar_ntuple_17_1p0/treejson.json"
+    plotJson = ""
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]]
     #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
@@ -182,7 +182,7 @@ def main(pyrootdir, opts):
         #pP.setDataBases(plotDataBases)
         #pP.setMEMDataBase(memDataBase)
         #pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts(150000)
+        pP.setMaxEvts(300000)
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
 
