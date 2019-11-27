@@ -23,106 +23,106 @@ def control_plots_SR_had(data=None):
     selection = generalselection
     selection += "*(N_LooseMuons==0 && N_LooseElectrons==0 && N_LoosePhotons==0)"
     selection += "*((Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX == 1) || (Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX == 1))"
-    selection += "*(N_AK4JetsLooseTagged_inside_AK15Jets>=1)"
+    selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets==0)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
     
     plots = [
-        plotClasses.Plot(
-            ROOT.TH1D("Evt_Pt_GenMET" + extension, "Puppi GEN MET", 40, 0.0, 1000.0),
-            "Evt_Pt_GenMET",
-            selection,
-            label,
-        ),
-        plotClasses.Plot(
-            ROOT.TH1D("NaiveMET" + extension, "Naive GEN MET", 40, 0.0, 1000.0),
-            "NaiveMET",
-            selection,
-            label,
-        ),
-        plotClasses.Plot(
-            ROOT.TH1D("N1_N2_Mass" + extension, "Mediator Mass", 50, 0.0, 5000.0),
-            "N1_N2_Mass",
-            selection,
-            label,
-        ),
-        plotClasses.Plot(
-            ROOT.TH1D("N1_N2_Pt" + extension, "Mediator p_{t}", 50, 0.0, 5000.0),
-            "N1_N2_Pt",
-            selection,
-            label,
-        ),
-        plotClasses.Plot(
-            ROOT.TH1D("Neutralino_Pt" + extension, "Neutralino p_{t}", 40, 0.0, 2000.0),
-            "Neutralino_Pt",
-            selection,
-            label,
-        ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "Neutralino_Mass" + extension, "Neutralino Mass", 40, 0.0, 2000.0
-            ),
-            "Neutralino_Mass",
-            selection,
-            label,
-        ),
-        plotClasses.Plot(
-            ROOT.TH1D("GenTopHad_B_DR" + extension, "GenTopHad_B_DR", 30, 0.0, 4.0),
-            "GenTopHad_B_DR",
-            selection,
-            label,
-        ),
-        plotClasses.Plot(
-            ROOT.TH1D("GenTopHad_Q1_DR" + extension, "GenTopHad_Q1_DR", 30, 0.0, 4.0),
-            "GenTopHad_Q1_DR",
-            selection,
-            label,
-        ),
-        plotClasses.Plot(
-            ROOT.TH1D("GenTopHad_Q2_DR" + extension, "GenTopHad_Q2_DR", 30, 0.0, 4.0),
-            "GenTopHad_Q2_DR",
-            selection,
-            label,
-        ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "GenTopHad_B_Q1_DR" + extension, "GenTopHad_B_Q1_DR", 30, 0.0, 4.0
-            ),
-            "GenTopHad_B_Q1_DR",
-            selection,
-            label,
-        ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "GenTopHad_B_Q2_DR" + extension, "GenTopHad_B_Q2_DR", 30, 0.0, 4.0
-            ),
-            "GenTopHad_B_Q2_DR",
-            selection,
-            label,
-        ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "GenTopHad_Q1_Q2_DR" + extension, "GenTopHad_Q1_Q2_DR", 30, 0.0, 4.0
-            ),
-            "GenTopHad_Q1_Q2_DR",
-            selection,
-            label,
-        ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "GenTopHad_W_Q1_DR" + extension, "GenTopHad_W_Q1_DR", 30, 0.0, 4.0
-            ),
-            "GenTopHad_W_Q1_DR",
-            selection,
-            label,
-        ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "GenTopHad_W_Q2_DR" + extension, "GenTopHad_W_Q2_DR", 30, 0.0, 4.0
-            ),
-            "GenTopHad_W_Q2_DR",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D("Evt_Pt_GenMET" + extension, "Puppi GEN MET", 40, 0.0, 1000.0),
+            #"Evt_Pt_GenMET",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D("NaiveMET" + extension, "Naive GEN MET", 40, 0.0, 1000.0),
+            #"NaiveMET",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D("N1_N2_Mass" + extension, "Mediator Mass", 50, 0.0, 5000.0),
+            #"N1_N2_Mass",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D("N1_N2_Pt" + extension, "Mediator p_{t}", 50, 0.0, 5000.0),
+            #"N1_N2_Pt",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D("Neutralino_Pt" + extension, "Neutralino p_{t}", 40, 0.0, 2000.0),
+            #"Neutralino_Pt",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"Neutralino_Mass" + extension, "Neutralino Mass", 40, 0.0, 2000.0
+            #),
+            #"Neutralino_Mass",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D("GenTopHad_B_DR" + extension, "GenTopHad_B_DR", 30, 0.0, 4.0),
+            #"GenTopHad_B_DR",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D("GenTopHad_Q1_DR" + extension, "GenTopHad_Q1_DR", 30, 0.0, 4.0),
+            #"GenTopHad_Q1_DR",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D("GenTopHad_Q2_DR" + extension, "GenTopHad_Q2_DR", 30, 0.0, 4.0),
+            #"GenTopHad_Q2_DR",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"GenTopHad_B_Q1_DR" + extension, "GenTopHad_B_Q1_DR", 30, 0.0, 4.0
+            #),
+            #"GenTopHad_B_Q1_DR",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"GenTopHad_B_Q2_DR" + extension, "GenTopHad_B_Q2_DR", 30, 0.0, 4.0
+            #),
+            #"GenTopHad_B_Q2_DR",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"GenTopHad_Q1_Q2_DR" + extension, "GenTopHad_Q1_Q2_DR", 30, 0.0, 4.0
+            #),
+            #"GenTopHad_Q1_Q2_DR",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"GenTopHad_W_Q1_DR" + extension, "GenTopHad_W_Q1_DR", 30, 0.0, 4.0
+            #),
+            #"GenTopHad_W_Q1_DR",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"GenTopHad_W_Q2_DR" + extension, "GenTopHad_W_Q2_DR", 30, 0.0, 4.0
+            #),
+            #"GenTopHad_W_Q2_DR",
+            #selection,
+            #label,
+        #),
         plotClasses.Plot(
             ROOT.TH1D("yield" + extension, "yield", 1, 0.0, 2.0), "1.", selection, label
         ),
@@ -177,7 +177,7 @@ def control_plots_SR_had(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("AK15Jet_Pt" + extension, "AK15 Jet p_{t}", 40, 200.0, 1200.0),
+            ROOT.TH1D("AK15Jet_Pt" + extension, "AK15 Jet p_{t}", 20, 200.0, 1200.0),
             "AK15Jet_Pt",
             selection,
             label,
@@ -198,7 +198,7 @@ def control_plots_SR_had(data=None):
             ROOT.TH1D(
                 "AK15Jet_SoftDrop_Pt" + extension,
                 "AK15 SD Jet p_{t}",
-                40,
+                20,
                 200.0,
                 1200.0,
             ),
@@ -246,7 +246,7 @@ def control_plots_SR_had(data=None):
             ROOT.TH1D(
                 "AK15Jet_SoftDropJet1_Pt" + extension,
                 "AK15 SD Jet1 p_{t}",
-                40,
+                20,
                 0.0,
                 1000.0,
             ),
@@ -258,7 +258,7 @@ def control_plots_SR_had(data=None):
             ROOT.TH1D(
                 "AK15Jet_SoftDropJet2_Pt" + extension,
                 "AK15 SD Jet2 p_{t}",
-                40,
+                20,
                 0.0,
                 1000.0,
             ),
@@ -799,8 +799,7 @@ def control_plots_mumu(data=None):
     selection += "*(N_LooseMuons==2 && N_TightMuons>=1 && N_LooseElectrons==0 && N_LoosePhotons==0)"
     selection += "*((Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX == 1) || (Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX == 1))"
     selection += "*(DiMuon_Mass>60.)*(DiMuon_Mass<120.)"
-    selection += "*(N_AK4JetsLooseTagged_inside_AK15Jets>=1)"
-    #selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets==0)"
+    selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets==0)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
 
     plots = [
@@ -858,7 +857,7 @@ def control_plots_mumu(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("AK15Jet_Pt" + extension, "AK15 Jet p_{t}", 40, 200.0, 1200.0),
+            ROOT.TH1D("AK15Jet_Pt" + extension, "AK15 Jet p_{t}", 20, 200.0, 1200.0),
             "AK15Jet_Pt",
             selection,
             label,
@@ -879,7 +878,7 @@ def control_plots_mumu(data=None):
             ROOT.TH1D(
                 "AK15Jet_SoftDrop_Pt" + extension,
                 "AK15 SD Jet p_{t}",
-                40,
+                20,
                 200.0,
                 1200.0,
             ),
@@ -915,7 +914,7 @@ def control_plots_mumu(data=None):
             ROOT.TH1D(
                 "AK15Jet_SoftDropJet1_Pt" + extension,
                 "AK15 SD Jet1 p_{t}",
-                40,
+                20,
                 0.0,
                 1000.0,
             ),
@@ -927,7 +926,7 @@ def control_plots_mumu(data=None):
             ROOT.TH1D(
                 "AK15Jet_SoftDropJet2_Pt" + extension,
                 "AK15 SD Jet2 p_{t}",
-                40,
+                20,
                 0.0,
                 1000.0,
             ),
@@ -1546,8 +1545,7 @@ def control_plots_elel(data=None):
     selection += "*(N_LooseElectrons==2 && N_TightElectrons>=1 && N_LooseMuons==0 && N_LoosePhotons==0)"
     selection += "*(Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1 || Triggered_HLT_Ele32_WPTight_Gsf_vX==1)"
     selection += "*(DiElectron_Mass>60.)*(DiElectron_Mass<120.)"
-    selection += "*(N_AK4JetsLooseTagged_inside_AK15Jets>=1)"
-    #selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets==0)"
+    selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets==0)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
 
     plots = [
@@ -1605,7 +1603,7 @@ def control_plots_elel(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("AK15Jet_Pt" + extension, "AK15 Jet p_{t}", 40, 200.0, 1200.0),
+            ROOT.TH1D("AK15Jet_Pt" + extension, "AK15 Jet p_{t}", 20, 200.0, 1200.0),
             "AK15Jet_Pt",
             selection,
             label,
@@ -1626,7 +1624,7 @@ def control_plots_elel(data=None):
             ROOT.TH1D(
                 "AK15Jet_SoftDrop_Pt" + extension,
                 "AK15 SD Jet p_{t}",
-                40,
+                20,
                 200.0,
                 1200.0,
             ),
@@ -1662,7 +1660,7 @@ def control_plots_elel(data=None):
             ROOT.TH1D(
                 "AK15Jet_SoftDropJet1_Pt" + extension,
                 "AK15 SD Jet1 p_{t}",
-                40,
+                20,
                 0.0,
                 1000.0,
             ),
@@ -1674,7 +1672,7 @@ def control_plots_elel(data=None):
             ROOT.TH1D(
                 "AK15Jet_SoftDropJet2_Pt" + extension,
                 "AK15 SD Jet2 p_{t}",
-                40,
+                20,
                 0.0,
                 1000.0,
             ),
@@ -2302,7 +2300,7 @@ def control_plots_ttbar_had(data=None):
     selection = generalselection
     selection += "*(N_LooseMuons==0 && N_LooseElectrons==0 && N_LoosePhotons==0)"
     selection += "*((Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX == 1) || (Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX == 1))"
-    selection += "*(N_AK4JetsLooseTagged_inside_AK15Jets>=1)"
+    selection += "*(N_AK4JetsTagged_outside_AK15Jets>=1)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
 
     plots = [
@@ -2360,7 +2358,7 @@ def control_plots_ttbar_had(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("AK15Jet_Pt" + extension, "AK15 Jet p_{t}", 40, 200.0, 1200.0),
+            ROOT.TH1D("AK15Jet_Pt" + extension, "AK15 Jet p_{t}", 20, 200.0, 1200.0),
             "AK15Jet_Pt",
             selection,
             label,
@@ -2381,7 +2379,7 @@ def control_plots_ttbar_had(data=None):
             ROOT.TH1D(
                 "AK15Jet_SoftDrop_Pt" + extension,
                 "AK15 SD Jet p_{t}",
-                40,
+                20,
                 200.0,
                 1200.0,
             ),
@@ -2429,7 +2427,7 @@ def control_plots_ttbar_had(data=None):
             ROOT.TH1D(
                 "AK15Jet_SoftDropJet1_Pt" + extension,
                 "AK15 SD Jet1 p_{t}",
-                40,
+                20,
                 0.0,
                 1000.0,
             ),
@@ -2441,7 +2439,7 @@ def control_plots_ttbar_had(data=None):
             ROOT.TH1D(
                 "AK15Jet_SoftDropJet2_Pt" + extension,
                 "AK15 SD Jet2 p_{t}",
-                40,
+                20,
                 0.0,
                 1000.0,
             ),
@@ -2992,8 +2990,7 @@ def control_plots_ttbar_lep(data=None):
     selection = generalselection
     selection += "*((N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && ((Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX == 1) || (Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX == 1))) || (N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1 || Triggered_HLT_Ele32_WPTight_Gsf_vX==1)))"
     selection += "*(N_LoosePhotons==0)"
-    selection += "*(N_AK4JetsLooseTagged_inside_AK15Jets>=1)"
-    selection += "*(N_BTagsM>=1)"
+    selection += "*(N_AK4JetsTagged_outside_AK15Jets>=1)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
 
     plots = [
@@ -3051,7 +3048,7 @@ def control_plots_ttbar_lep(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("AK15Jet_Pt" + extension, "AK15 Jet p_{t}", 40, 200.0, 1200.0),
+            ROOT.TH1D("AK15Jet_Pt" + extension, "AK15 Jet p_{t}", 20, 200.0, 1200.0),
             "AK15Jet_Pt",
             selection,
             label,
@@ -3072,7 +3069,7 @@ def control_plots_ttbar_lep(data=None):
             ROOT.TH1D(
                 "AK15Jet_SoftDrop_Pt" + extension,
                 "AK15 SD Jet p_{t}",
-                40,
+                20,
                 200.0,
                 1200.0,
             ),
@@ -3108,7 +3105,7 @@ def control_plots_ttbar_lep(data=None):
             ROOT.TH1D(
                 "AK15Jet_SoftDropJet1_Pt" + extension,
                 "AK15 SD Jet1 p_{t}",
-                40,
+                20,
                 0.0,
                 1000.0,
             ),
@@ -3120,7 +3117,7 @@ def control_plots_ttbar_lep(data=None):
             ROOT.TH1D(
                 "AK15Jet_SoftDropJet2_Pt" + extension,
                 "AK15 SD Jet2 p_{t}",
-                40,
+                20,
                 0.0,
                 1000.0,
             ),
@@ -3717,8 +3714,7 @@ def control_plots_W_lep(data=None):
     selection = generalselection
     selection += "*((N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && ((Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX == 1) || (Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX == 1))) || (N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1 || Triggered_HLT_Ele32_WPTight_Gsf_vX==1) && Evt_Pt_MET>50.))"
     selection += "*(N_LoosePhotons==0)"
-    selection += "*(N_BTagsM==0)"
-    selection += "*(N_AK4JetsLooseTagged_inside_AK15Jets>=1)"
+    selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets==0)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
 
     plots = [
@@ -3776,7 +3772,7 @@ def control_plots_W_lep(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("AK15Jet_Pt" + extension, "AK15 Jet p_{t}", 40, 200.0, 1200.0),
+            ROOT.TH1D("AK15Jet_Pt" + extension, "AK15 Jet p_{t}", 20, 200.0, 1200.0),
             "AK15Jet_Pt",
             selection,
             label,
@@ -3797,7 +3793,7 @@ def control_plots_W_lep(data=None):
             ROOT.TH1D(
                 "AK15Jet_SoftDrop_Pt" + extension,
                 "AK15 SD Jet p_{t}",
-                40,
+                20,
                 200.0,
                 1200.0,
             ),
@@ -3833,7 +3829,7 @@ def control_plots_W_lep(data=None):
             ROOT.TH1D(
                 "AK15Jet_SoftDropJet1_Pt" + extension,
                 "AK15 SD Jet1 p_{t}",
-                40,
+                20,
                 0.0,
                 1000.0,
             ),
@@ -3845,7 +3841,7 @@ def control_plots_W_lep(data=None):
             ROOT.TH1D(
                 "AK15Jet_SoftDropJet2_Pt" + extension,
                 "AK15 SD Jet2 p_{t}",
-                40,
+                20,
                 0.0,
                 1000.0,
             ),
@@ -4447,7 +4443,7 @@ def getDiscriminatorPlots(data=None, discrname=""):
     discriminatorPlots += control_plots_SR_had(data)
     discriminatorPlots += control_plots_mumu(data)
     discriminatorPlots += control_plots_elel(data)
-    #discriminatorPlots += control_plots_ttbar_had(data)
+    discriminatorPlots += control_plots_ttbar_had(data)
     discriminatorPlots += control_plots_ttbar_lep(data)
     discriminatorPlots += control_plots_W_lep(data)
 

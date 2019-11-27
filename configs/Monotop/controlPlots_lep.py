@@ -12,11 +12,14 @@ import ROOT
 from array import array
 from copy import deepcopy
 
+generalselection = "(N_HEM_Jets==0)*(Evt_Pt_MET>150.)*(N_LoosePhotons==0)"
 
 def control_plots_ttbar_lep(data=None):
     label = "#scale[0.8]{t#bar{t} control region (leptonic)}"
     extension = "_CRttbar_lep"
-    selection = "((N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && Triggered_HLT_IsoMu24_vX==1) || (N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1 || Triggered_HLT_Ele32_WPTight_Gsf_vX==1))) && (Evt_Pt_MET>150.) && (N_LoosePhotons==0) && (N_BTagsM>=2) && (N_HEM_Jets==0 && N_HEM_Electrons==0)"
+    selection = generalselection
+    selection += "*((N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && Triggered_HLT_IsoMu24_vX==1) || (N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1 || Triggered_HLT_Ele32_WPTight_Gsf_vX==1)))"
+    selection += "*(N_BTagsM>=2)"
 
     plots = [
         plotClasses.Plot(
@@ -254,7 +257,9 @@ def control_plots_ttbar_lep(data=None):
 def control_plots_W_lep(data=None):
     label = "#scale[0.8]{W control region (leptonic)}"
     extension = "_CRW_lep"
-    selection = "((N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && Triggered_HLT_IsoMu24_vX==1) || (N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1 || Triggered_HLT_Ele32_WPTight_Gsf_vX==1))) && (Evt_Pt_MET>150.) && (N_LoosePhotons==0) && (N_BTagsM==0) && (N_HEM_Jets==0 && N_HEM_Electrons==0)"
+    selection = generalselection
+    selection += "*((N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && Triggered_HLT_IsoMu24_vX==1) || (N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1 || Triggered_HLT_Ele32_WPTight_Gsf_vX==1)))"
+    selection += "*(N_BTagsL==0)"
 
     plots = [
         plotClasses.Plot(
@@ -492,7 +497,9 @@ def control_plots_W_lep(data=None):
 def control_plots_SR_lep(data=None):
     label = "#scale[0.8]{signal region (leptonic)}"
     extension = "_SR_lep"
-    selection = "((N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && Triggered_HLT_IsoMu24_vX==1) || (N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1 || Triggered_HLT_Ele32_WPTight_Gsf_vX==1))) && (Evt_Pt_MET>150.) && (N_LoosePhotons==0) && (N_BTagsM==1) && (N_HEM_Jets==0 && N_HEM_Electrons==0)"
+    selection = generalselection
+    selection += "*((N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && Triggered_HLT_IsoMu24_vX==1) || (N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1 || Triggered_HLT_Ele32_WPTight_Gsf_vX==1)))"
+    selection += "*(N_BTagsM<=1 && N_BTagsL>=1 && N_BTagsL<=2)"
 
     plots = [
         plotClasses.Plot(
@@ -729,7 +736,9 @@ def control_plots_SR_lep(data=None):
 def control_plots_ttbar_dilep(data=None):
     label = "#scale[0.8]{t#bar{t} control region (dileptonic)}"
     extension = "_CRttbar_dilep"
-    selection = "((N_LooseMuons==2 && N_TightMuons>=1 && N_LooseElectrons==0 && Triggered_HLT_IsoMu24_vX==1 && (DiMuon_Mass<60 || DiMuon_Mass>120)) || (N_LooseElectrons==2 && N_TightElectrons>=1 && N_LooseMuons==0 && (Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1 || Triggered_HLT_Ele32_WPTight_Gsf_vX==1) && (DiElectron_Mass<60 || DiElectron_Mass>120)) || (N_LooseMuons==1 && N_LooseElectrons==1 && ((N_TightMuons==1 && Triggered_HLT_IsoMu24_vX==1) || (N_TightElectrons==1 && (Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1 || Triggered_HLT_Ele32_WPTight_Gsf_vX==1))))) && (Hadr_Recoil_Pt>250.) && (N_LoosePhotons==0) && (N_BTagsM>=2) && (N_HEM_Jets==0 && N_HEM_Electrons==0)"
+    selection = generalselection
+    selection += "*((N_LooseMuons==2 && N_TightMuons>=1 && N_LooseElectrons==0 && Triggered_HLT_IsoMu24_vX==1 && (DiMuon_Mass<60 || DiMuon_Mass>120)) || (N_LooseElectrons==2 && N_TightElectrons>=1 && N_LooseMuons==0 && (Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1 || Triggered_HLT_Ele32_WPTight_Gsf_vX==1) && (DiElectron_Mass<60 || DiElectron_Mass>120)) || (N_LooseMuons==1 && N_LooseElectrons==1 && ((N_TightMuons==1 && Triggered_HLT_IsoMu24_vX==1) || (N_TightElectrons==1 && (Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1 || Triggered_HLT_Ele32_WPTight_Gsf_vX==1)))))"
+    selection += "*(N_BTagsM>=2)"
 
     plots = [
         plotClasses.Plot(
