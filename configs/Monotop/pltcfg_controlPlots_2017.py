@@ -66,7 +66,7 @@ electronSFs_down = "((N_TightElectrons==1 && N_LooseElectrons==2)*Electron_Ident
 muonSFs_up = "((N_TightMuons==1 && N_LooseMuons==2)*Muon_IdentificationSFUp[0]*Muon_IsolationSFUp[0]*LooseMuon_IdentificationSFUp[1]*LooseMuon_IsolationSFUp[1]+(N_TightMuons==2 && N_LooseMuons==2)*Muon_IdentificationSFUp[0]*Muon_IsolationSFUp[0]*Muon_IdentificationSFUp[1]*Muon_IsolationSFUp[1]+(N_TightMuons==1 && N_LooseMuons==1)*Muon_IdentificationSFUp[0]*Muon_IsolationSFUp[0]+(N_LooseMuons==0)*1.)"
 muonSFs_down = "((N_TightMuons==1 && N_LooseMuons==2)*Muon_IdentificationSFDown[0]*Muon_IsolationSFDown[0]*LooseMuon_IdentificationSFDown[1]*LooseMuon_IsolationSFDown[1]+(N_TightMuons==2 && N_LooseMuons==2)*Muon_IdentificationSFDown[0]*Muon_IsolationSFDown[0]*Muon_IdentificationSFDown[1]*Muon_IsolationSFDown[1]+(N_TightMuons==1 && N_LooseMuons==1)*Muon_IdentificationSFDown[0]*Muon_IsolationSFDown[0]+(N_LooseMuons==0)*1.)"
 
-bosonWeightNom = "internalBosonWeight"
+bosonWeightNom = "1."#"internalBosonWeight"
 
 ## trigger scale factors
 ## DANGERZONE: ELECTRON TRIGGER NOT ADDED TO NTUPLES YET, USE INTERNAL SFS
@@ -179,6 +179,7 @@ samplesDataControlPlots = [
     ROOT.kBlack,
     path_mwassmer + "/SingleElectron*/*nominal*.root",
     "N_LooseElectrons>0",
+    #"(N_TightElectrons==1) && (N_LooseElectrons==1) && ((Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1) || (Triggered_HLT_Ele32_WPTight_Gsf_vX==1))" ,
     "SingleEl",
     samDict=sampleDict,
     readTrees=doReadTrees,
@@ -188,6 +189,7 @@ samplesDataControlPlots = [
     ROOT.kBlack,
     path_mwassmer + "/SingleMuon*/*nominal*.root",
     "N_LooseMuons>0",
+    #"(N_TightMuons==1) && (N_LooseMuons==1) && (Triggered_HLT_IsoMu24_vX==1)" ,
     "SingleMu",
     samDict=sampleDict,
     readTrees=doReadTrees,
@@ -243,7 +245,7 @@ samples = [
     plotClasses.Sample(
         "Z(ll)+jets",
         ROOT.kGreen - 5,
-        path_mwassmer + "/DYJetsToLL_?J_*/*nominal*.root",
+        path_mwassmer + "/DYJetsToLL_M-50_HT*/*nominal*.root",
         lumi + sel_MET,
         "zlljets",
         samDict=sampleDict,
@@ -253,7 +255,7 @@ samples = [
     plotClasses.Sample(
         "W(l#nu)+jets",
         ROOT.kOrange,
-        path_mwassmer + "/WJetsToLNu_?J_*/*nominal*.root",
+        path_mwassmer + "/WJetsToLNu_HT*/*nominal*.root",
         lumi + sel_MET,
         "wlnujets",
         samDict=sampleDict,
