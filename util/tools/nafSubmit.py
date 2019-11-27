@@ -26,8 +26,8 @@ def writeSubmitCode(script, logdir, hold = False, isArray = False, nScripts = 0,
     # handling options
     defaults = {"RequestMemory": "1000M",
                 "RequestDisk": "1000M",
-                "+RequestRuntime": 3600,
-                "PeriodicHold": 3600,
+                "+RequestRuntime": 10740,
+                "PeriodicHold": 10741,
                 "PeriodicRelease": 5}
     for opt in defaults:
         if opt in options:
