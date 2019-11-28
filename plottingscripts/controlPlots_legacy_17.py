@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'dataMC_2017/tthf_fit_v5'
+    name = 'dataMC_2017/tthf_fit_v1'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -48,7 +48,7 @@ def main(pyrootdir, opts):
     # memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
     memexp = ""
     # configs
-    config          = "ttH17_legacy_v4/samples_2017_5FS"
+    config          = "ttH17_legacy_v4/samples_2017_4FS_5FS_synced_v0_v2"
     variable_cfg    = "ttH17_legacy/additionalVariables"
     plot_cfg        = "ttH17_legacy_v4/controlPlots_tthf_fit"
     syst_cfg        = "ttH17_legacy_v4/no_systs"
@@ -183,7 +183,7 @@ def main(pyrootdir, opts):
         #pP.setDataBases(plotDataBases)
         #pP.setMEMDataBase(memDataBase)
         #pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts(333333)
+        pP.setMaxEvts(150000)
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
 
