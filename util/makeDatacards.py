@@ -39,6 +39,9 @@ def makeDatacardsParallel(filePath, workdir,
 
     # init directory for scripts
     datacardcsv=workdir+"/datacard.csv"
+    if not os.path.exists(datacardcsv):
+        print("WARNING: datacardcsv does not exist here: " + datacardcsv)
+        print("workdir: " + workdir)
     outPath = workdir+"/datacards"
     if not os.path.exists(outPath):
         os.makedirs(outPath)
@@ -93,7 +96,7 @@ def makeDatacardsParallel(filePath, workdir,
             script = script_template.format(
                 cmssw_info  = cmssw_info,
                 script_path = scriptdir,
-                options     = "\\ \n\t".join(options)
+                options     = " ".join(options)
             )
             # saving and chmodding script
             with open(scriptName, "w") as dcs:

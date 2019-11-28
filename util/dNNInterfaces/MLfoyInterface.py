@@ -18,11 +18,17 @@ def doRebinning(rootfile, histolist, threshold):
 
     # loop over hists and add them to a combined histogram
     for h in histolist:
-        h_tmp = rootfile.Get(h)
-        if combinedHist is None:
+        h_tmp = rootfile.Get(str(h))
+        if not isinstance(h_tmp, ROOT.TH1):
+            print("ERROR: Could not load '{}'".format(h))
+            print(h_tmp)
+            combinedHist = None
+            break
+        elif combinedHist is None:
             combinedHist = h_tmp.Clone("combinedHist")
             combinedHist.Reset()
-        combinedHist.Add(h_tmp)
+        elif isinstance(combinedHist, ROOT.TH1):
+            combinedHist.Add(h_tmp)
 
     if combinedHist is None:
         print("ERROR: could not add any histograms!")
@@ -49,7 +55,7 @@ def doRebinning(rootfile, histolist, threshold):
         if threshold > 1:
             # do rebinning based on the population of the bins enterly
             # bins are ok if the bin content is larger than the threshold
-            if bincontent >= threshold:
+            if binContent >= threshold:
                 # if relative error is smaller than threshold, start new bin
                 last_added_edge = combinedHist.GetBinLowEdge(i)
                 bin_edges.append(last_added_edge)
@@ -58,7 +64,7 @@ def doRebinning(rootfile, histolist, threshold):
         else:
             # if relative error is smaller than threshold, start new bin
             if relerror <= threshold:
-                last_added_edge = combinedHist.GetBinLowEdge(i+1)
+                last_added_edge = combinedHist.GetBinLowEdge(i)
                 bin_edges.append(last_added_edge)
                 squaredError = 0.
                 binContent = 0.
@@ -90,7 +96,9 @@ def getOptimizedBinEdges(label, opts, channel = None):
     for p in opts.considered_processes.split(","):
         branch = opts.histkey.replace("$PROCESS", p)
         branch = branch.replace("$CHANNEL", channel)
+        print(branch)
         if branch in keylist:
+            print("\twill use '{}' for rebinning".format(branch))
             consider_for_rebinning.append(branch)
         else:
             print("ERROR: Could not find histogram with name {} in inputfile {}".format(
@@ -423,20 +431,50 @@ class DNN:
 
         string += """
         ]
-        
-    if data:
-        add_data_plots(plots=plots,data=data)
-    return plots
-    
 
     """
         return string
+
+    def generateVariableBinningInputPlots(self, variables, opts):
+        string = ""
+        for var in sorted(list(variables.index)):
+            # generate dictionary
+            plotConfig = {
+                # DANGERZONE
+                # "histoname":     "\"ljets_"+self.category+"_"+var+"\"",
+                "histoname":     self.category+"_"+var, 
+                "histotitle":     variables.loc[var, "displayname"],
+                "nhistobins":        variables.loc[var, "numberofbins"],
+                "minxval":       variables.loc[var, "minvalue"],
+                "maxxval":       variables.loc[var, "maxvalue"],
+                "variable_name":   var}
+            
+            # var[1]->var_1 renaming
+            plotConfig["histoname"] = plotConfig["histoname"].replace("[","_").replace("]","")
+
+            # special case: MEM
+            if var == "memDBp": plotConfig["variable_name"] = "memexp"
+            channel = plotConfig["histoname"].replace('"','')
+            # print(channel)
+            plotConfig["label"] = channel
+            plotConfig["selection"] = self.selection.replace(" ","").replace("and","&&")+self.evalSelection
+            
+            plotConfig["bin_edges"] = getOptimizedBinEdges(label = "", opts = opts, channel = channel)
+            if len(plotConfig["bin_edges"]) == 0:
+                plotConfig["bin_edges"] = None
+            # print(plotConfig)
+            string += self.generateInfoCollectionString(**plotConfig)
+        string += """
+    plots = init_plots(interfaces = interfaces, data = data)"""
+        return string
+
+
 
     def generateInputPlots(self, opts = None):
         if self.multiDNN:
             string = ""
             for dnn in self.DNNs:
-                string += dnn.generateInputPlots()
+                string += dnn.generateInputPlots(opts = opts)
                 string += "\n"
                 # only read one set of input plots if cross evaluation activated
                 if self.xEval: break
@@ -452,16 +490,25 @@ class DNN:
         variables = pd.read_csv(csv_path, sep = ",").set_index("variablename", drop = True)
 
         # generate header
-        string = "def plots_{}(data = None):\n".format(self.category)
+        string = "\ndef plots_{}(data = None):\n".format(self.category)
         string+= "    label = \"{}\"\n".format(self.label)
+        string += "    interfaces = []\n"    
         if self.xEval:
             string+= "    selection = \"{}\"\n\n".format(self.selection.replace(" ","").replace("and","&&"))
         else:
             string+= "    selection = \"{}\"\n\n".format(self.selection.replace(" ","").replace("and","&&")+self.evalSelection)
         if opts and opts.optimizeInputVarBins:
-            pass
+            print("="*130)
+            print("WILL GENERATE VARIABLE BINNING FOR INPUTS")
+            string += self.generateVariableBinningInputPlots(variables, opts)
         else:
             string += self.generateDefaultPlots(variables)
+
+        string += """    
+    if data:
+        add_data_plots(plots=plots,data=data)
+    return plots
+    """
         return string
     
     def generatePlotCall(self, opts):
@@ -481,7 +528,6 @@ class DNN:
     def generateInfoCollectionString(self, **kwargs):
         category = kwargs.get("category", "")
         varname = kwargs.get("variable_name", "")
-        category_label = kwargs.get("category_label", "")
         nhistobins = kwargs.get("nhistobins", None)
         histotitle = kwargs.get("histotitle", None)
         histoname = kwargs.get("histoname", None)
@@ -495,14 +541,14 @@ class DNN:
         # template for basic variableHistoInterface constructor
         template ="""
     interf_{LABEL} = vhi.variableHistoInterface(variable_name  = "{DISCR_NAME}",
-                                            category_label = label,
                                             label          = "{LABEL}",
-                                            selection      = {PRESELECTION})
+                                            selection      = "{PRESELECTION}")
     interf_{LABEL}.category = ("{PRESELECTION}","{LABEL}","")\n"""
         # parse additional information for histo interface
+        template = template.format(LABEL=label, PRESELECTION = selection, DISCR_NAME = varname)
         addlines = []
         indent = "    "
-        base = indent + "interf_{LABEL}"
+        base = indent + "interf_{LABEL}".format(LABEL = label)
         # if there are bin edges, add them to the interface
         if not bin_edges is None:
             # write bin edges to file
@@ -521,17 +567,17 @@ class DNN:
 
         #parse histogram title, name and number of bins if available
         if not histotitle is None:
-            addlines.append(base + '.category = "{}"'.format(histotitle))
+            addlines.append(base + '.histotitle = "{}"'.format(histotitle))
         if not histoname is None:
             addlines.append(base + '.histoname = "{}"'.format(histoname)) 
         if not nhistobins is None:
-            addlines.append(base + '.nhistobins = "{}"'.format(nhistobins))  
+            addlines.append(base + '.nhistobins = {}'.format(nhistobins))  
         template += "\n".join(addlines)
         template += """
     interfaces.append(interf_{LABEL})
-    """
-        return template.format(LABEL=label, PRESELECTION = selection, CATLABEL = category_label,
-                            DISCR_NAME = varname)
+    """.format(LABEL = label)
+        
+        return template
 
 
     def generateOutputPlots(self, opts):
@@ -594,7 +640,7 @@ class DNN:
                 label           = label,
                 category_label  = self.label,
                 variable_name   = self.discrNames[i],
-                nhistobins      = "nhistobins",
+                nhistobins      = "ndefaultbins",
                 bin_edges = bin_edges, minxval = minval, maxxval = maxval)
             
         return string
@@ -776,7 +822,7 @@ from copy import deepcopy\n\n\n"""
         # loop over dnns writing code for plots
         if opts.input_plots:
             for dnn in self.DNNs:
-                string += dnn.generateInputPlots()
+                string += dnn.generateInputPlots(opts)
                 funcstring += dnn.generatePlotCall(opts)
 
 
@@ -815,7 +861,7 @@ def plots_dnn(data, discrname):
         code ="""
 def init_plots(interfaces, data = None):
     plots = [] #init list of plotClasses objects to return
-    dictionary = {{}}
+    dictionary = {}
     for interf in interfaces:
 
         # check if initialization uses bin edges or min/max vals
@@ -901,7 +947,7 @@ no separate plots and no separate discriminators are produced""")
         help = "file with binning rules as dictionary of 'nodename: [list, of, binedges, to, keep]'")
     binningOptions.add_option("--histkey", dest = "histkey",
         help = "Use this key template to get the histograms. Should contain keywords '$PROCESS' and '$CHANNEL'. Default is '$PROCESS_$CHANNEL",
-        default = "$PROCESS_$CHANNEL'")
+        default = '$PROCESS_$CHANNEL')
 
     parser.add_option_group(binningOptions)
     (opts, args) = parser.parse_args()

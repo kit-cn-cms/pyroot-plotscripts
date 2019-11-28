@@ -43,7 +43,7 @@ CMS_scaleRelativeJEREC1_j,shape,variation,JESRelativeJEREC1up,JESRelativeJEREC1d
 CMS_scaleRelativePtBB_j,shape,variation,JESRelativePtBBup,JESRelativePtBBdown,1,1,1,1,1,1,1,1,1,1,1,1
 CMS_scaleRelativePtEC1_j,shape,variation,JESRelativePtEC1up,JESRelativePtEC1down,1,1,1,1,1,1,1,1,1,1,1,1
 CMS_scaleRelativeBal_j,shape,variation,JESRelativeBalup,JESRelativeBaldown,1,1,1,1,1,1,1,1,1,1,1,1
-CMS_scaleRelativeSample,shape,variation,JESRelativeSampleup,JESRelativeSampledown,1,1,1,1,1,1,1,1,1,1,1,1
+#CMS_scaleRelativeSample_j,shape,variation,JESRelativeSampleup,JESRelativeSampledown,1,1,1,1,1,1,1,1,1,1,1,1
 CMS_scaleRelativeFSR_j,shape,variation,JESRelativeFSRup,JESRelativeFSRdown,1,1,1,1,1,1,1,1,1,1,1,1
 CMS_scaleRelativeStatFSR_j,shape,variation,JESRelativeStatFSRup,JESRelativeStatFSRdown,1,1,1,1,1,1,1,1,1,1,1,1
 CMS_scaleRelativeStatEC_j,shape,variation,JESRelativeStatECup,JESRelativeStatECdown,1,1,1,1,1,1,1,1,1,1,1,1
@@ -52,13 +52,13 @@ CMS_scalePileUpPtRef_j,shape,variation,JESPileUpPtRefup,JESPileUpPtRefdown,1,1,1
 CMS_scalePileUpPtBB_j,shape,variation,JESPileUpPtBBup,JESPileUpPtBBdown,1,1,1,1,1,1,1,1,1,1,1,1
 CMS_scalePileUpPtEC1_j,shape,variation,JESPileUpPtEC1up,JESPileUpPtEC1down,1,1,1,1,1,1,1,1,1,1,1,1
 #,,,,,,,,,,,,,,,,
-CMS_scaleRelativeJEREC2,shape,variation,JESRelativeJEREC2up,JESRelativeJEREC2down,1,1,1,1,1,1,1,1,1,1,1,1
-CMS_scaleRelativeJERHF,shape,variation,JESRelativeJERHFup,JESRelativeJERHFdown,1,1,1,1,1,1,1,1,1,1,1,1
-CMS_scalePileUpPtEC2,shape,variation,JESPileUpPtEC2up,JESPileUpPtEC2down,1,1,1,1,1,1,1,1,1,1,1,1
-CMS_scaleRelativePtHF,shape,variation,JESRelativePtHFup,JESRelativePtHFdown,1,1,1,1,1,1,1,1,1,1,1,1
-CMS_scaleRelativePtEC2,shape,variation,JESRelativePtEC2up,JESRelativePtEC2down,1,1,1,1,1,1,1,1,1,1,1,1
-CMS_scaleRelativeStatHF,shape,variation,JESRelativeStatHFup,JESRelativeStatHFdown,1,1,1,1,1,1,1,1,1,1,1,1
-CMS_scalePileUpPtH,shape,variation,JESPileUpPtHFup,JESPileUpPtHFdown,1,1,1,1,1,1,1,1,1,1,1,1
+CMS_scaleRelativeJEREC2_j,shape,variation,JESRelativeJEREC2up,JESRelativeJEREC2down,1,1,1,1,1,1,1,1,1,1,1,1
+CMS_scaleRelativeJERHF_j,shape,variation,JESRelativeJERHFup,JESRelativeJERHFdown,1,1,1,1,1,1,1,1,1,1,1,1
+CMS_scalePileUpPtEC2_j,shape,variation,JESPileUpPtEC2up,JESPileUpPtEC2down,1,1,1,1,1,1,1,1,1,1,1,1
+CMS_scaleRelativePtHF_j,shape,variation,JESRelativePtHFup,JESRelativePtHFdown,1,1,1,1,1,1,1,1,1,1,1,1
+CMS_scaleRelativePtEC2_j,shape,variation,JESRelativePtEC2up,JESRelativePtEC2down,1,1,1,1,1,1,1,1,1,1,1,1
+CMS_scaleRelativeStatHF_j,shape,variation,JESRelativeStatHFup,JESRelativeStatHFdown,1,1,1,1,1,1,1,1,1,1,1,1
+CMS_scalePileUpPtHF_j,shape,variation,JESPileUpPtHFup,JESPileUpPtHFdown,1,1,1,1,1,1,1,1,1,1,1,1
 #,,,,,,,,,,,,,,,,
 CMS_ttHbb_PDF,shape,weight,"""dummyWeight_CMS_ttH_NNPDF_Up:=DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*fmax(0.0,Weight_LHA_306000_up)*internalNormFactor_weight_LHA_306000_up*1.0*DOWEIGHTS""","""dummyWeight_CMS_ttH_NNPDF_Down:=DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*fmax(0.0,Weight_LHA_306000_down)*internalNormFactor_weight_LHA_306000_down*1.0*DOWEIGHTS""",1,-,1,-,1,-,,,,,,
 CMS_ttHbb_PDF_ttbbNLO,shape,weight,"""dummyWeight_CMS_ttH_NNPDF_ttbbNLO_Up:=DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*fmax(0.0,Weight_LHA_320900_up)*internalNormFactor_weight_LHA_320900_up*1.0*DOWEIGHTS""","""dummyWeight_CMS_ttH_NNPDF_ttbbNLO_Down:=DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*fmax(0.0,Weight_LHA_320900_down)*internalNormFactor_weight_LHA_320900_down*1.0*DOWEIGHTS""",1,-,-,1,-,-,,,,,,
@@ -91,4 +91,3 @@ CMS_FSR_ttlf,shape,weight,"""weight_FSR_ttlf_Up:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGE
 #CMS_HDAMP_tt2b,shape,variation,,,,,,,,,,,,,,
 #CMS_HDAMP_ttcc,shape,variation,,,,,,,,,,,,,,
 #CMS_HDAMP_ttlf,shape,variation,,,,,,,,,,,,,,
-
