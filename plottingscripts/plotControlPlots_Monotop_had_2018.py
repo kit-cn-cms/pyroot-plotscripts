@@ -33,7 +33,7 @@ def main(pyrootdir, opts):
     """
     )
     # name of the analysis (i.e. workdir name)
-    name = "Monotop_controlplots_lep_2018"
+    name = "Monotop_controlplots_had_2018"
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -49,10 +49,10 @@ def main(pyrootdir, opts):
     discrName = "finaldiscr"
 
     # configs
-    config = "Monotop/pltcfg_controlPlots"
+    config = "Monotop/pltcfg_controlPlots_2018"
     variable_cfg = "Monotop/additionalVariables"
-    plot_cfg = "Monotop/controlPlots_lep"
-    syst_cfg = "Monotop/systematics"
+    plot_cfg = "Monotop/controlPlots_had_2018"
+    syst_cfg = "Monotop/systematics_2018"
 
     # file for rate factors
     # rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
