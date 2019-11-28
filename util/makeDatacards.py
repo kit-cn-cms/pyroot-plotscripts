@@ -39,6 +39,9 @@ def makeDatacardsParallel(filePath, workdir,
 
     # init directory for scripts
     datacardcsv=workdir+"/datacard.csv"
+    if not os.path.exists(datacardcsv):
+        print("WARNING: datacardcsv does not exist here: " + datacardcsv)
+        print("workdir: " + workdir)
     outPath = workdir+"/datacards"
     if not os.path.exists(outPath):
         os.makedirs(outPath)
