@@ -46,6 +46,14 @@ def makePlots(configData):
 
 
     # creates plot wrapper of the plotting information
+def init_plottingsamples(plotsample):
+    returndict ={
+                "label": plotsample.name,
+                "typ": plotsample.typ,
+                "color": plotsample.color,
+                "addSamples":plotsample.addsamples,
+                }
+    return returndict
 def createPlotConfig(configData,workdir):
     #get plotting information
     signalScaling       = configData.analysis.signalScaling
@@ -73,12 +81,13 @@ def createPlotConfig(configData,workdir):
     #combined samples
     plottingsamples={}
     for plotsample in configData.pltcfg.plottingsamples:
-        plottingsamples[plotsample.nick]={
-                "label": plotsample.name,
-                "typ": plotsample.typ,
-                "color": plotsample.color,
-                "addSamples":plotsample.addsamples,
-                }
+        print plotsample
+        if isinstance(plotsample, list):
+            for p in plotsample:
+                plottingsamples[p.nick] = init_plottingsamples(p)
+        else:
+            plottingsamples[plotsample.nick] = init_plottingsamples(plotsample)
+        
 
     #systematics to be plotted
     systematics=configData.plots
