@@ -29,17 +29,17 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'STXS_2017_legacy/24_5bin_DNN_wSysts'
+    name = 'dataMC_2016/tthf_fit_v1'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
 
     # signal process
     signalProcess = "ttH"
-    nSigSamples   = 5
+    nSigSamples   = 3
 
     # dataera
-    dataera = "2017"
+    dataera = "2016"
     
     # Name of final discriminator, should not contain underscore
     discrName = 'finaldiscr'
@@ -48,29 +48,29 @@ def main(pyrootdir, opts):
     # memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
     memexp = ""
     # configs
-    config          = "STXS17_legacy/new_5bins_pltcfg"
-    variable_cfg    = "STXS17_legacy/additionalVariables"
-    plot_cfg        = "STXS17_legacy/newFoy_5bin-test"
-    syst_cfg        = "ttH17_legacy_THstudy/systs_4FS_5FS_synced_v4"
+    config          = "ttH17_legacy_v4/samples_2016_5FS_synced_v0"
+    variable_cfg    = "ttH17_legacy/additionalVariables"
+    plot_cfg        = "ttH17_legacy_v4/controlPlots_tthf_fit"
+    syst_cfg        = "ttH17_legacy_v4/no_systs"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
-    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2017.csv"
+    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2016.csv"
 
     # script options
     analysisOptions = {
         # general options
-        "usePseudoData":        True,
+        "usePseudoData":        False,
         "testrun":              False,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
         "makeDataCards":        True,
-        "makeInputDatacards":   False, # create datacards also for all defined plots
-        "addData":              False,  # adding real data 
+        "makeInputDatacards":   True, # create datacards also for all defined plots
+        "addData":              True,  # adding real data 
         "makePlots":            True,
         # options for makePlots
-        "signalScaling":        25,
+        "signalScaling":        1,
         "lumiLabel":            True,
         "CMSlabel":             "private Work",
         "ratio":                "#frac{data}{MC Background}",
@@ -87,12 +87,12 @@ def main(pyrootdir, opts):
         "skipHistoCheck":       opts.skipHistoCheck,
         "skipDatacards":        opts.skipDatacards}
 
-    plotJson = "/nfs/dust/cms/user/swieland/ttH_legacy/theRealPlotscript/pyroot-plotscripts/configs/ttH17_legacy/treejson.json"
+    plotJson = ""
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
-    dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                   "checkpointFiles":  "/nfs/dust/cms/user/pkraemer/DNNCheckpoints/legacyRef/06_5bin_DNN"}
-    # dnnInterface = None
+    #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
+    #               "checkpointFiles":  "/nfs/dust/cms/user/swieland/ttH_legacy/DNNs/oldModel/"}
+    dnnInterface = None
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
@@ -182,8 +182,8 @@ def main(pyrootdir, opts):
         pP.setJson(plotJson)
         #pP.setDataBases(plotDataBases)
         #pP.setMEMDataBase(memDataBase)
-        pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts(200000)
+        #pP.setDNNInterface(dnnInterface)
+        pP.setMaxEvts(150000)
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
 
