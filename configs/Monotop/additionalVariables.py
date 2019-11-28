@@ -57,6 +57,8 @@ def getAddVars():
         "BosonWeight_EW3Down",
         "BosonWeight_MixedUp",
         "BosonWeight_MixedDown",
+        "BosonWeight_AlphaUp",
+        "BosonWeight_AlphaDown",
         "W_Pt",
         "Z_Pt",
     ]
