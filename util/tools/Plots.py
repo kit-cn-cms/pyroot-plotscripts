@@ -108,6 +108,7 @@ def buildHistogramAndErrorBand(rootFile,sample,color,typ,label,systematics,nomin
     else:
         sampleKey=nominalKey
     rootHist = rootFile.Get(sampleKey)
+    print("    loading key '{}'".format(sampleKey))
     print("    type of hist is: "+str(type(rootHist)) )
     if not isinstance(rootHist, ROOT.TH1):
         return "ERROR"
