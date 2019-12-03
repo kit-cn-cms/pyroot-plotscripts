@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'dataMC_2017/tthf_fit_v1'
+    name = 'dataMC_2017/v2'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -48,10 +48,10 @@ def main(pyrootdir, opts):
     # memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
     memexp = ""
     # configs
-    config          = "ttH17_legacy_v4/samples_2017_4FS_5FS_synced_v0_v2"
-    variable_cfg    = "ttH17_legacy/additionalVariables"
-    plot_cfg        = "ttH17_legacy_v4/controlPlots_tthf_fit"
-    syst_cfg        = "ttH17_legacy_v4/no_systs"
+    config          = "legacyAnalysis/samples_2017_4FS_5FS"
+    variable_cfg    = "legacyAnalysis/additionalVariables"
+    plot_cfg        = "legacyAnalysis/controlPlots_tthf_fit"
+    syst_cfg        = "legacyAnalysis/no_systs"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -255,7 +255,7 @@ def main(pyrootdir, opts):
             else:
                 print("adding data_obs histograms as real data")
                 # real data with ttH
-                pP.addData(samples = configData.controlSamples)
+                pP.addData(samples = configData.controlSamples[:2])
 
     
 
@@ -307,8 +307,16 @@ if __name__ == "__main__":
     parser.add_option("--skipHaddFromWildcard", dest = "skipHaddFromWildcard",  action = "store_true", default = False)
     parser.add_option("--skipHistoCheck",       dest = "skipHistoCheck",        action = "store_true", default = False)
     parser.add_option("--skipDatacards",        dest = "skipDatacards",         action = "store_true", default = False)
+    parser.add_option("--skip",                 dest = "skip",                  default = 0,            type = "int",
+        help = "skip first INT parallel stages. plotParallel (1), haddParallel (2), haddFromWildcard (3), histoCheck (4), Datacards (5)")
 
     (opts, args) = parser.parse_args()
+
+    if opts.skip >= 1: opts.skipPlotParallel        = True
+    if opts.skip >= 2: opts.skipHaddParallel        = True
+    if opts.skip >= 3: opts.skipHaddFromWildcard    = True
+    if opts.skip >= 4: opts.skipHistoCheck          = True
+    if opts.skip >= 5: opts.skipDatacards           = True
+
+
     main(pyrootdir, opts)
-
-

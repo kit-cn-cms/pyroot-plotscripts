@@ -32,10 +32,93 @@ def plots_inclusive(data=None):
     selection = "(N_Jets>=4&&N_BTagsM>=3)"
 
     plots = [
-        plotClasses.Plot(ROOT.TH1D("inclusive_Evt_M2_closestTo125TaggedJets","M2_closestTo125TaggedJets",200,0.0,300.0),"Evt_M2_closestTo125TaggedJets",selection,label),
+        plotClasses.Plot(ROOT.TH1D("inclusive_Evt_M2_closestTo125TaggedJets","M2_closestTo125TaggedJets",100,0.0,300.0),"Evt_M2_closestTo125TaggedJets",selection,label),
         plotClasses.Plot(ROOT.TH1D("inclusive_Evt_N_Jets","N_Jets",4,3.5,7.5),"N_Jets",selection,label),
         plotClasses.Plot(ROOT.TH1D("inclusive_Evt_N_BTagsM","N_BTagsM",3,2.5,5.5),"N_BTagsM",selection,label),
-        plotClasses.Plot(ROOT.TH1D("inclusive_yield","yield",1,0.,1.),"1.",selection,label)
+        plotClasses.Plot(ROOT.TH1D("inclusive_yield","yield",1,0.,1.),"1.",selection,label),
+        plotClasses.Plot(ROOT.TH1D("inclusive_Electron_Pt","p_{T}(electron)",50,0,400),"Electron_Pt[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("inclusive_Muon_Pt","p_{T}(muon)",50,0,300),"Muon_Pt[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("inclusive_Lepton_Pt","p_{T}(lepton)",50,0,300),"LooseLepton_Pt[0]",selection,label),
+
+        ]
+
+    label = "\geq 4 jets, \geq 3 b-tags, \delta m(H)>30 GeV"
+    selection = "(N_Jets>=4&&N_BTagsM>=3&&abs(Evt_M2_closestTo125TaggedJets-125.)>30.)"
+
+    plots+= [
+        plotClasses.Plot(ROOT.TH1D("massveto30_Evt_M2_closestTo125TaggedJets","M2_closestTo125TaggedJets",100,0.0,300.0),"Evt_M2_closestTo125TaggedJets",selection,label),
+        plotClasses.Plot(ROOT.TH1D("massveto30_Evt_N_Jets","N_Jets",4,3.5,7.5),"N_Jets",selection,label),
+        plotClasses.Plot(ROOT.TH1D("massveto30_Evt_N_BTagsM","N_BTagsM",3,2.5,5.5),"N_BTagsM",selection,label),
+        plotClasses.Plot(ROOT.TH1D("massveto30_yield","yield",1,0.,1.),"1.",selection,label),
+        plotClasses.Plot(ROOT.TH1D("massveto30_Electron_Pt","p_{T}(electron)",50,0,400),"Electron_Pt[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("massveto30_Muon_Pt","p_{T}(muon)",50,0,300),"Muon_Pt[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("massveto30_Lepton_Pt","p_{T}(lepton)",50,0,300),"LooseLepton_Pt[0]",selection,label),
+
+        ]
+
+    label = "\geq 4 jets, \geq 4 b-tags"
+    selection = "(N_Jets>=4&&N_BTagsM>=4)"
+
+    plots+= [
+        plotClasses.Plot(ROOT.TH1D("tags4_Evt_M2_closestTo125TaggedJets","M2_closestTo125TaggedJets",100,0.0,300.0),"Evt_M2_closestTo125TaggedJets",selection,label),
+        plotClasses.Plot(ROOT.TH1D("tags4_Evt_N_Jets","N_Jets",4,3.5,7.5),"N_Jets",selection,label),
+        plotClasses.Plot(ROOT.TH1D("tags4_Evt_N_BTagsM","N_BTagsM",3,2.5,5.5),"N_BTagsM",selection,label),
+        plotClasses.Plot(ROOT.TH1D("tags4_yield","yield",1,0.,1.),"1.",selection,label),
+        plotClasses.Plot(ROOT.TH1D("tags4_Electron_Pt","p_{T}(electron)",50,0,400),"Electron_Pt[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("tags4_Muon_Pt","p_{T}(muon)",50,0,300),"Muon_Pt[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("tags4_Lepton_Pt","p_{T}(lepton)",50,0,300),"LooseLepton_Pt[0]",selection,label),
+
+        ]
+
+    label = "\geq 4 jets, 3 b-tags"
+    selection = "(N_Jets>=4&&N_BTagsM==3)"
+
+    plots+= [
+        plotClasses.Plot(ROOT.TH1D("tags3_Evt_M2_closestTo125TaggedJets","M2_closestTo125TaggedJets",100,0.0,300.0),"Evt_M2_closestTo125TaggedJets",selection,label),
+        plotClasses.Plot(ROOT.TH1D("tags3_Evt_N_Jets","N_Jets",4,3.5,7.5),"N_Jets",selection,label),
+        plotClasses.Plot(ROOT.TH1D("tags3_Evt_N_BTagsM","N_BTagsM",3,2.5,5.5),"N_BTagsM",selection,label),
+        plotClasses.Plot(ROOT.TH1D("tags3_yield","yield",1,0.,1.),"1.",selection,label),
+        plotClasses.Plot(ROOT.TH1D("tags3_Electron_Pt","p_{T}(electron)",50,0,400),"Electron_Pt[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("tags3_Muon_Pt","p_{T}(muon)",50,0,300),"Muon_Pt[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("tags3_Lepton_Pt","p_{T}(lepton)",50,0,300),"LooseLepton_Pt[0]",selection,label),
+
+        ]
+
+
+    label = "\geq 4 jets, \geq 3 b-tags, p_{T}(lep) \geq 60"
+    selection = "(N_Jets>=4&&N_BTagsM>=3&&LooseLepton_Pt>=60)"
+    plots += [
+        plotClasses.Plot(ROOT.TH1D("leppt60_Evt_M2_closestTo125TaggedJets","M2_closestTo125TaggedJets",100,0.0,300.0),"Evt_M2_closestTo125TaggedJets",selection,label),
+        plotClasses.Plot(ROOT.TH1D("leppt60_Evt_N_Jets","N_Jets",4,3.5,7.5),"N_Jets",selection,label),
+        plotClasses.Plot(ROOT.TH1D("leppt60_Evt_N_BTagsM","N_BTagsM",3,2.5,5.5),"N_BTagsM",selection,label),
+        plotClasses.Plot(ROOT.TH1D("leppt60_yield","yield",1,0.,1.),"1.",selection,label),
+        plotClasses.Plot(ROOT.TH1D("leppt60_Electron_Pt","p_{T}(electron)",50,0,400),"Electron_Pt[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("leppt60_Muon_Pt","p_{T}(muon)",50,0,300),"Muon_Pt[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("leppt60_Lepton_Pt","p_{T}(lepton)",50,0,300),"LooseLepton_Pt[0]",selection,label),
+        ]
+
+    label = "\geq 4 jets, \geq 3 b-tags, electrons"
+    selection = "(N_Jets>=4&&N_BTagsM>=3&&N_TightElectrons==1&&N_LooseMuons==0)"
+    plots += [
+        plotClasses.Plot(ROOT.TH1D("electrons_Evt_M2_closestTo125TaggedJets","M2_closestTo125TaggedJets",100,0.0,300.0),"Evt_M2_closestTo125TaggedJets",selection,label),
+        plotClasses.Plot(ROOT.TH1D("electrons_Evt_N_Jets","N_Jets",4,3.5,7.5),"N_Jets",selection,label),
+        plotClasses.Plot(ROOT.TH1D("electrons_Evt_N_BTagsM","N_BTagsM",3,2.5,5.5),"N_BTagsM",selection,label),
+        plotClasses.Plot(ROOT.TH1D("electrons_yield","yield",1,0.,1.),"1.",selection,label),
+        plotClasses.Plot(ROOT.TH1D("electrons_Electron_Pt","p_{T}(electron)",50,0,400),"Electron_Pt[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("electrons_Muon_Pt","p_{T}(muon)",50,0,300),"Muon_Pt[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("electrons_Lepton_Pt","p_{T}(lepton)",50,0,300),"LooseLepton_Pt[0]",selection,label),
+        ]
+
+    label = "\geq 4 jets, \geq 3 b-tags, muons"
+    selection = "(N_Jets>=4&&N_BTagsM>=3&&N_TightMuons==1&&N_LooseElectrons==0)"
+    plots += [
+        plotClasses.Plot(ROOT.TH1D("muons_Evt_M2_closestTo125TaggedJets","M2_closestTo125TaggedJets",100,0.0,300.0),"Evt_M2_closestTo125TaggedJets",selection,label),
+        plotClasses.Plot(ROOT.TH1D("muons_Evt_N_Jets","N_Jets",4,3.5,7.5),"N_Jets",selection,label),
+        plotClasses.Plot(ROOT.TH1D("muons_Evt_N_BTagsM","N_BTagsM",3,2.5,5.5),"N_BTagsM",selection,label),
+        plotClasses.Plot(ROOT.TH1D("muons_yield","yield",1,0.,1.),"1.",selection,label),
+        plotClasses.Plot(ROOT.TH1D("muons_Electron_Pt","p_{T}(electron)",50,0,400),"Electron_Pt[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("muons_Muon_Pt","p_{T}(muon)",50,0,300),"Muon_Pt[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("muons_Lepton_Pt","p_{T}(lepton)",50,0,300),"LooseLepton_Pt[0]",selection,label),
         ]
     if data:
         add_data_plots(plots=plots,data=data)
