@@ -22,11 +22,11 @@ VJetsPathS = path+'/DYJets*/*nominal*.root'+';'+ \
 
 ttVPathS = path+'/TTW*/*nominal*.root'+';'+ \
            path+'/TTZToLLNuNu*/*nominal*.root'+';'+ \
-           path+'/TTZToQQ*/*nominal*.root'
+           path+'/TTZToQQ_TuneCP5_13TeV-amcatnlo-pythia8/*nominal*.root'
 
 
 ttZPathS = path+'/TTZToLLNuNu*/*nominal*.root'+';'+ \
-           path+'/TTZToQQ*/*nominal*.root'
+           path+'/TTZToQQ_TuneCP5_13TeV-amcatnlo-pythia8/*nominal*.root'
 
 ttWPath = path+'/TTW*/*nominal*.root'
 
@@ -56,7 +56,7 @@ ttHpath = path+'/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'+';'+ 
 # SELECTIONS
 
 # need to veto muon events in electron dataset to avoid double counting and vice versa
-sel_singleel="(N_LooseMuons==0 && N_TightElectrons==1 && (Triggered_HLT_Ele32_WPTight_Gsf_2017SeedsX==1 && Triggered_HLT_Ele32_WPTight_Gsf_L1DoubleEG_vX==1))"
+sel_singleel="((N_LooseMuons==0 && N_TightElectrons==1) && (Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX || ( Triggered_HLT_Ele32_WPTight_Gsf_L1DoubleEG_vX && Triggered_HLT_Ele32_WPTight_Gsf_2017SeedsX )))"
 sel_singlemu="(N_LooseElectrons==0 && N_TightMuons==1)"
 # jet tag base selection
 sel_jettag = "(N_Jets>=4 && N_BTagsM>=3)"
