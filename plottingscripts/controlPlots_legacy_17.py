@@ -45,12 +45,12 @@ def main(pyrootdir, opts):
     discrName = 'finaldiscr'
 
     # define MEM discriminator variable
-    # memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
-    memexp = ""
+    memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
+    # memexp = ""
     # configs
     config          = "legacyAnalysis/samples_2017_4FS_5FS"
     variable_cfg    = "legacyAnalysis/additionalVariables"
-    plot_cfg        = "legacyAnalysis/controlPlots_tthf_fit"
+    plot_cfg        = "legacyAnalysis/controlPlots"
     syst_cfg        = "legacyAnalysis/no_systs"
 
     # file for rate factors
@@ -65,7 +65,7 @@ def main(pyrootdir, opts):
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
-        "makeDataCards":        True,
+        "makeDataCards":        False,
         "makeInputDatacards":   True, # create datacards also for all defined plots
         "addData":              True,  # adding real data 
         "makePlots":            True,
@@ -88,8 +88,10 @@ def main(pyrootdir, opts):
         "skipDatacards":        opts.skipDatacards}
 
     plotJson = ""
-    #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
-    #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
+    # plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
+    # memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
+    plotDataBases = [["memDB","/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/databases/2017_/",True]] 
+    memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
     #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
     #               "checkpointFiles":  "/nfs/dust/cms/user/swieland/ttH_legacy/DNNs/oldModel/"}
     dnnInterface = None
@@ -180,8 +182,8 @@ def main(pyrootdir, opts):
         monitor.printClass(pP, "init")
         # set some changed values
         pP.setJson(plotJson)
-        #pP.setDataBases(plotDataBases)
-        #pP.setMEMDataBase(memDataBase)
+        pP.setDataBases(plotDataBases)
+        pP.setMEMDataBase(memDataBase)
         #pP.setDNNInterface(dnnInterface)
         pP.setMaxEvts(150000)
         pP.setRateFactorsFile(rateFactorsFile)

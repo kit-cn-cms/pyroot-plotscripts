@@ -27,8 +27,15 @@ def evtYieldCategories():
 
 memexp = ""
 
+def plots_control_mem(cat,selection,label):
+    plots = [
+        plotClasses.Plot(ROOT.TH1D(cat+"_memDBp","MEM",30,0.0,1.0),memexp,selection,label)
+    ]
+    return plots
+
 def plots_control(cat,selection,label):
     plots = [
+        # plotClasses.Plot(ROOT.TH1D(cat+"_memDBp","MEM",30,0.0,1.0),memexp,selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_N_PV","N_PrimaryVertices",80,0,80),"N_PrimaryVertices",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_Electron_Pt","p_{T}(electron)",50,0,400),"Electron_Pt",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_Electron_E","E(electron)",50,0,450),"Electron_E",selection,label),
@@ -88,6 +95,7 @@ def plots_control(cat,selection,label):
         plotClasses.Plot(ROOT.TH1D(cat+"_Evt_blr","Evt_blr",30,-0.05,1.0),"Evt_blr",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_Evt_blr_transformed","Evt_blr_transformed",30,-6.0,16.0),"Evt_blr_transformed",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Pt_0","Jet_Pt[0]",30,20,500),"Jet_Pt[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Pt_1","Jet_Pt[1]",30,20,500),"Jet_Pt[1]",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Pt_2","Jet_Pt[2]",30,20,350),"Jet_Pt[2]",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_Evt_HT_tags","Evt_HT_tags",50,50.0,1200.0),"Evt_HT_tags",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_Evt_M_minDrLepTag","Evt_M_minDrLepTag",30,0.0,350.0),"Evt_M_minDrLepTag",selection,label),
@@ -390,6 +398,7 @@ def plots_ge4j_ge3t(data=None):
     selection = "(N_Jets>=4&&N_BTagsM>=3)"
 
     tag = "ge4j_ge3t"
+    # plots = plots_control_mem(tag, selection, label)    
     plots = plots_control(tag, selection, label)    
     plots += plots_ttHReco(tag, selection, label)
     plots += plots_ttbarReco(tag, selection, label)
@@ -407,6 +416,7 @@ def plots_ge4j_3t(data=None):
     selection = "(N_Jets>=4&&N_BTagsM==3)"
 
     tag = "ge4j_3t"
+    # plots = plots_control_mem(tag, selection, label)    
     plots = plots_control(tag, selection, label)    
     plots += plots_ttHReco(tag, selection, label)
     plots += plots_ttbarReco(tag, selection, label)
@@ -423,6 +433,7 @@ def plots_ge4j_ge4t(data=None):
     selection = "(N_Jets>=4&&N_BTagsM>=4)"
 
     tag = "ge4j_ge4t"
+    # plots = plots_control_mem(tag, selection, label)    
     plots = plots_control(tag, selection, label)    
     plots += plots_ttHReco(tag, selection, label)
     plots += plots_ttbarReco(tag, selection, label)
