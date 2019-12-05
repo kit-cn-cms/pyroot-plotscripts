@@ -153,6 +153,10 @@ TTbbweightSL='*35.8038266498504*0.4393'
 TTbbweightDL='*35.8038266498504*0.1062'
 TTbbweightFH='*35.8038266498504*0.4545'
 
+# DANGERZONE: derived in 2018
+ttbb_4FS_scale = "*(1.22161)"
+ttbb_5FS_scale = "*(1.31264)"
+
 tHq_XS_scale = "*(0.7927/0.07425)"
 tHW_XS_scale = "*(0.1472/0.01517)"
 
