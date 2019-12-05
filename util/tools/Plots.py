@@ -18,6 +18,9 @@ class Plot:
     def __init__(self, hist, name, label = None, 
                     color=None, typ='bkg', OverUnderFlowInc=False, 
                     errorband=None, specificerrorband=None):
+        if debug > 5:
+            print("input hist in Plot class: ")
+            print(hist)
         self.hist=hist
         self.name=name
         self.label=label
@@ -95,6 +98,13 @@ class Plot:
                 seb.SetFillStyle(3004)
                 seb.SetLineColor(self.sebColor[n])
                 seb.SetFillColor(self.sebColor[n])
+
+    def __str__(self):
+        indent = " "*4
+        s = ""
+        for key in self.__dict__.keys():
+            s += "{}{}: {}\n".format(indent, key, self.__dict__[key])
+        return s
 
 # ===============================================
 # GET HISTOGRAMS AND ERROR BANDS
@@ -253,6 +263,7 @@ def getHistogramAndErrorband(rootFile,sample,color,typ,label,nominalKey,procIden
         sampleKey = nominalKey.replace(procIden, sample)
     else:
         sampleKey=nominalKey
+    print("    loading key '{}'".format(sampleKey))
     rootHist = rootFile.Get(sampleKey)
     print("    type of hist is: "+str(type(rootHist)) )
     if not isinstance(rootHist, ROOT.TH1):
