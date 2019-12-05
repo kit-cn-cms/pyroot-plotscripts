@@ -232,7 +232,7 @@ else:
 print "using plotconfig: %s" % (plotconfigfile)
 
 samples         = pltcfg.samples
-plottingsamples = pltcfg.plottingsamples
+plottingsamples = pltcfg.get("plottingsamples", {})
 systematics     = pltcfg.systematics
 plotoptions     = pltcfg.plotoptions
 
@@ -255,7 +255,7 @@ sysIden     = "$SYSTEMATIC"
 combineIden = "$FLAG"
 
 
-combineflag             = options.combineflag
+combineflag             = plotoptions.get("combineflag", options.combineflag)
 if combineflag:
     options.nominalKey  = "$FLAG/$CHANNEL/$PROCESS"
     options.data        = "data"
@@ -310,9 +310,10 @@ for sample in plottingsamples:
     if combineflag and typ=="signal":
         continue
     label       = plottingsamples[sample]['label']
-    addsamples  = plottingsamples[sample]['addSamples']
+    addsamples  = plottingsamples[sample].get('addSamples', [])
     PlotList = Plots.addSamples(sample=sample,color=color,typ=typ,label=label,
                                     addsamples=addsamples,PlotList=PlotList,combineflag=combineflag)
+
     addedHist = PlotList[sample].hist
     addedHist.Print()
     addedHist.SetName(label+"_"+addedHist.GetName()) 
