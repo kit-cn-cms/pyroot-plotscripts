@@ -141,7 +141,7 @@ def plots_dnn(data, discrname):
 				0.52,
 				0.584,
 				0.648,
-				0.712,
+				# 0.712,
 				0.84
 				]
     interf_ljets_ge4j_ge4t_07_ttH_ttH_node.nhistobins = ndefaultbins
