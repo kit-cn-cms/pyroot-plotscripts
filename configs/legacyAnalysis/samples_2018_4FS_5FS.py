@@ -229,7 +229,7 @@ samples_splitData = [
 
     ]
 
-samplesDataControlPlots+=samples_splitData
+#samplesDataControlPlots+=samples_splitData
 
 
 samples_ttH_decay = [
@@ -288,13 +288,13 @@ samples_tH = [
             THWpath,
             lumi+tHW_XS_scale+sel_MET,
             'tHW_ITC',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal", plot = False),
 
     plotClasses.Sample('tHq (ITC)',ROOT.kBlue+6,
             THQpath,
             lumi+tHq_XS_scale+sel_MET,
             'tHQ_ITC',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal", plot = False),
 
     # SM case
     plotClasses.Sample('tHW (SM)',ROOT.kBlue+3,
@@ -314,13 +314,13 @@ samples_tH = [
             THWpath,
             lumi+tHW_XS_scale+tH_5_rwgt+sel_MET,
             'tHW_5',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal", plot = False),
 
     plotClasses.Sample('tHq (5)',ROOT.kBlue+6,
             THQpath,
             lumi+tHq_XS_scale+tH_5_rwgt+sel_MET,
             'tHQ_5',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal", plot = False),
 
     ]
 
@@ -331,13 +331,13 @@ samples_ttbb_4FS = [
      plotClasses.Sample('t#bar{t}(sl)+b#bar{b} (4FS)',ROOT.kRed+3,
              path_ttbbSL,
              lumi+TTbbweightSL+ttbb_4FS_scale+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
-             'ttbb_4FS_SL',
+             'ttbb_SL',
              samDict=sampleDict, readTrees=doReadTrees),
 
      plotClasses.Sample('t#bar{t}(dl)+b#bar{b} (4FS)',ROOT.kRed+3,
              path_ttbbDL,
              lumi+TTbbweightDL+ttbb_4FS_scale+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
-             'ttbb_4FS_DL',
+             'ttbb_DL',
              samDict=sampleDict, readTrees=doReadTrees),
     ]
 
@@ -457,7 +457,7 @@ samples = [
             ttbarPathS,
             lumi+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+ttbb_5FS_scale+sel_MET+sel_StrangeMuWeights,
             'ttbb_5FS',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"), 
+            samDict=sampleDict, readTrees=doReadTrees, plot = False), 
 
     ]
 
@@ -490,7 +490,7 @@ plottingsamples = [
 #        "misc", addsamples ["ttZ", "ttW", "wjets", "zjets", "diboson"],
 #        samDict = sampleDict, readTrees = doReadTrees)
      plotClasses.Sample('t#bar{t}+b#bar{b} (4FS)',ROOT.kRed+3, "", "",
-             'ttbb', addsamples = ["ttbb_4FS_DL", "ttbb_4FS_SL"],
+             'ttbb', addsamples = ["ttbb_DL", "ttbb_SL"],
              samDict=sampleDict, readTrees=doReadTrees),
 
      ]
