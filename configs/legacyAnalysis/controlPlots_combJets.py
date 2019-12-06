@@ -543,15 +543,15 @@ def plots_ge3j_ge3t_ge1fwd(data=None):
 def getDiscriminatorPlots(data = None, discrname = ''):
     discriminatorPlots = []
     #baseline
-    discriminatorPlots += plots_ge4j_ge3t(data)
+    #discriminatorPlots += plots_ge4j_ge3t(data)
 
     #analysis categories w/o forward stuff
-    discriminatorPlots += plots_ge4j_3t(data)
-    discriminatorPlots += plots_ge4j_ge4t(data)
+    #discriminatorPlots += plots_ge4j_3t(data)
+    #discriminatorPlots += plots_ge4j_ge4t(data)
 
     #analysis categories w/ N_Jets=Normal+Fwd Jets
-    #discriminatorPlots += plots_ge4j_fwd_3t(data)
-    #discriminatorPlots += plots_ge4j_fwd_ge4t(data)
+    discriminatorPlots += plots_ge4j_fwd_3t(data)
+    discriminatorPlots += plots_ge4j_fwd_ge4t(data)
 
     #analysis categories w/ explicit forward requirement
     #discriminatorPlots += plots_ge4j_3t_0fwd(data)
