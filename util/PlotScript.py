@@ -110,7 +110,8 @@ plotOptions.add_option("--ratio", dest="ratio",  default=None,
         help="make ratio plot", metavar="ratio")
 plotOptions.add_option("--logarithmic", dest="logarithmic", default=None,
         help="enable logarithmic plots")
-
+plotOptions.add_option("--statErr", dest="addStatErrorband", default = None,
+        help="add statistics errorband")
 parser.add_option_group(plotOptions)
 
 """
@@ -279,6 +280,10 @@ PlotList    = {}
 rootfilename    = options.Rootfile
 rootFile        = ROOT.TFile(rootfilename, "readonly") 
 
+addStatErrorband = getParserConfigDefaultValue(
+                    parser = options.addStatErrorband, config = "statErrorband",
+                    plotoptions = plotoptions, defaultvalue = False)
+
 # load samples
 print "start loading  samples" 
 for sample in samples:
@@ -298,7 +303,8 @@ for sample in samples:
                                                         systematics=systematics,
                                                         nominalKey=nominalKey,procIden=procIden,
                                                         systematicKey=systematicKey,sysIden=sysIden,
-                                                        systClass=systClass)
+                                                        systClass=systClass,
+                                                        addStatErrorband=addStatErrorband)
 
 """
 Combine Histograms and errorbands for combined plot channels
