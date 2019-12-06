@@ -29,14 +29,14 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'legacyTTH_2018_dataMC/v1'
+    name = 'ttbb_2018/v4'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
 
     # signal process
-    signalProcess = "ttH"
-    nSigSamples   = 3
+    signalProcess = "ttbb"
+    nSigSamples   = 0
 
     # dataera
     dataera = "2018"
@@ -48,10 +48,10 @@ def main(pyrootdir, opts):
     # memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
     memexp = ""
     # configs
-    config          = "legacyAnalysis/samples_2018_4FS_5FS"
-    variable_cfg    = "legacyAnalysis/additionalVariables"
-    plot_cfg        = "legacyAnalysis/controlPlots"
-    syst_cfg        = "legacyAnalysis/no_systs"
+    config          = "ttbb/samples_2018_5FS"
+    variable_cfg    = "ttbb/additionalVariables"
+    plot_cfg        = "ttbb/controlPlots"
+    syst_cfg        = "ttbb/no_systs"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -65,12 +65,12 @@ def main(pyrootdir, opts):
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
-        "makeDataCards":        True,
-        "makeInputDatacards":   True, # create datacards also for all defined plots
+        "makeDataCards":        False,
+        "makeInputDatacards":   False, # create datacards also for all defined plots
         "addData":              True,  # adding real data 
         "makePlots":            True,
         # options for makePlots
-        "signalScaling":        -1,
+        "signalScaling":        1,
         "lumiLabel":            True,
         "CMSlabel":             "private Work",
         "ratio":                "#frac{data}{MC Background}",
@@ -183,7 +183,7 @@ def main(pyrootdir, opts):
         #pP.setDataBases(plotDataBases)
         #pP.setMEMDataBase(memDataBase)
         #pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts(100000)
+        pP.setMaxEvts(333333)
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
 
@@ -255,7 +255,7 @@ def main(pyrootdir, opts):
             else:
                 print("adding data_obs histograms as real data")
                 # real data with ttH
-                pP.addData(samples = configData.controlSamples[2:])
+                pP.addData(samples = configData.controlSamples)
 
     
 
