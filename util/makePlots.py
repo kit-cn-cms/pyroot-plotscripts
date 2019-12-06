@@ -69,13 +69,16 @@ def createPlotConfig(configData,workdir):
     shape               = configData.analysis.shape
     sortedProcesses     = configData.pltcfg.sortedProcesses
 
-    samples={}
+    samples = {}
     #samples named in the rootfile
     for sample in configData.pltcfg.samples:
-        samples[sample.nick]={
-        "label": sample.name,
-        "typ": sample.typ,
-        "color": sample.color,
+        samples[sample.nick]= {
+        "plot": sample.plot, 
+        "info": {
+            "label": sample.name,
+            "typ": sample.typ,
+            "color": sample.color,
+            }
         }
 
     #combined samples
@@ -101,7 +104,9 @@ def createPlotConfig(configData,workdir):
         outfile.write('#samples named in the rootfile\n')
         outfile.write('samples = {\n')
         for key, value in samples.items():
-             outfile.write(' '*8+'"%s":%s,\n' % (key, value))
+            outfile.write(" "*8)
+            if not value["plot"]: outfile.write("#") 
+            outfile.write('"%s":%s,\n' % (key, value["info"]))
         outfile.write(' '*4+'}\n')
         outfile.write('\n')
         outfile.write('#combined samples\n')
@@ -145,7 +150,8 @@ def createPlotConfig(configData,workdir):
         outfile.write(' '*4+'"cmslabel":"'+str(cmslabel)+'",\n')
         outfile.write(' '*4+'"splitlegend":'+str(splitLegend)+',\n')
         outfile.write(' '*4+'"datalabel":"data",\n')
-
+        outfile.write(' '*4+'"statErrorband": True,\n')
+    
         outfile.write('\n')
         outfile.write(' '*4+'#use for combine plots, use shapes_prefit for prefit and shapes_fit_s for post fit\n')
         outfile.write(' '*4+'#only uses total signal and does not split signal processes\n')
