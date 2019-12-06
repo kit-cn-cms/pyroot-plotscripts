@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttH_discr_plots_THstudy_2017_v4'
+    name = 'ttH_discr_plots_THstudy_2017_binning_right'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -48,10 +48,10 @@ def main(pyrootdir, opts):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    config          = "ttH17_legacy_THstudy/samples_2017_4FS_5FS_synced_v0"
+    config          = "ttH17_legacy_THstudy_v2/samples_2017_4FS_5FS_synced_v0"
     variable_cfg    = "ttH17_legacy/additionalVariables"
-    plot_cfg        = "ttH17_legacy_THstudy/discr_plots_2017_THstudy_v3"
-    syst_cfg        = "ttH17_legacy_THstudy/systs_4FS_5FS_synced_v4"
+    plot_cfg        = "ttH17_legacy_THstudy_v2/discr_plots_2017_THstudy_v3"
+    syst_cfg        = "ttH17_legacy_THstudy_v2/systs_4FS_5FS_synced_v4"
 
     # file for rate factors
     rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2017.csv"
