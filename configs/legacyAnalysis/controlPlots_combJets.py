@@ -527,7 +527,7 @@ def plots_ge3j_ge3t_ge1fwd(data=None):
     label = "\geq 3 jets, \geq 3 b-tags, \geq 1 fwd-jets"
     selection = "(N_Jets>=3&&N_BTagsM>=3&&N_ForwardJets>=1)"
 
-    tag = "ge4j_ge4t_1fwd"
+    tag = "ge3j_ge3t_1fwd"
     plots = plots_control(tag, selection, label)    
     plots += plots_ttHReco(tag, selection, label)
     plots += plots_ttbarReco(tag, selection, label)
