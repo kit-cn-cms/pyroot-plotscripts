@@ -330,13 +330,13 @@ samples_tH = [
 samples_ttbb_4FS = [
      plotClasses.Sample('t#bar{t}(sl)+b#bar{b} (4FS)',ROOT.kRed+3,
              path_ttbbSL,
-             lumi+TTbbweightSL+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
+             lumi+TTbbweightSL+ttbb_4FS_scale+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
              'ttbb_4FS_SL',
              samDict=sampleDict, readTrees=doReadTrees),
 
      plotClasses.Sample('t#bar{t}(dl)+b#bar{b} (4FS)',ROOT.kRed+3,
              path_ttbbDL,
-             lumi+TTbbweightDL+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
+             lumi+TTbbweightDL+ttbb_4FS_scale+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
              'ttbb_4FS_DL',
              samDict=sampleDict, readTrees=doReadTrees),
     ]
@@ -372,7 +372,7 @@ samples_minor_backgrounds = [
             samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}+Z',ROOT.kCyan,
-            ttZPathS,
+            ttZpath,
             lumi+sel_MET,
             'ttZ',
             samDict=sampleDict, readTrees=doReadTrees),
@@ -455,7 +455,7 @@ samples = [
 
     plotClasses.Sample('t#bar{t}+b#bar{b} (5FS)',ROOT.kRed+3,
             ttbarPathS,
-            lumi+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
+            lumi+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+ttbb_5FS_scale+sel_MET+sel_StrangeMuWeights,
             'ttbb_5FS',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"), 
 
@@ -464,7 +464,7 @@ samples = [
 samples += samples_tH
 samples += samples_ttbb_4FS
 samples += samples_minor_backgrounds
-samples += samples_ttbb_decay_modes_5FS
+#samples += samples_ttbb_decay_modes_5FS
 #samples += samples_ttbar_hf_spilt
 #samples += samples_ttH_decay
 
