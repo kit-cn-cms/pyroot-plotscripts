@@ -56,8 +56,8 @@ class Plot:
             "ttbar":        ROOT.kOrange,
             "ttmergedb":    ROOT.kRed-1,
         
-            "sig":          ROOT.kOrange+7,
-            "total_signal": ROOT.kOrange+7,
+            "sig":          601,
+            "total_signal": 601,
             "bkg":          ROOT.kOrange,
             }
         cls = self.name
