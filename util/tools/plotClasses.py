@@ -31,13 +31,13 @@ class SampleDictionary:
 
 class Sample:
     def __init__(self, name, color = ROOT.kBlack, path = '', selection = '', 
-            nick = '', origName = '', up = 0, down = None, samDict = "",addsamples=None,
+            nick = '', origName = '', up = 0, down = None, samDict = "",addsamples=None, plot = True,
             readTrees = True, filterFile = "NONE", checknevents = -1, treename = 'MVATree',typ="bkg"):
 
         self.name = name
         self.color = color
         self.path = path
-
+        self.plot = plot
 
         self.selection = selection
         self.files = []
