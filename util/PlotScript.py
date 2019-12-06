@@ -236,7 +236,13 @@ else:
 print "using plotconfig: %s" % (plotconfigfile)
 
 samples         = pltcfg.samples
-plottingsamples = pltcfg.get("plottingsamples", {})
+try:
+    plottingsamples = pltcfg.plottingsamples
+except ImportError as e:
+    print("WARNING: could not load 'plottingsamples'")
+    print(e)
+    plottingsamples = {}
+
 systematics     = pltcfg.systematics
 plotoptions     = pltcfg.plotoptions
 
@@ -259,7 +265,9 @@ sysIden     = "$SYSTEMATIC"
 combineIden = "$FLAG"
 
 
-combineflag             = plotoptions.get("combineflag", options.combineflag)
+combineflag             = getParserConfigDefaultValue(parser=options.combineflag,config="combineflag",
+                                            plotoptions=plotoptions,defaultvalue=None)
+
 binEdges                = None
 outputName              = None
 xLabel                  = ""
@@ -269,6 +277,9 @@ if combineflag:
     options.nominalKey  = options.nominalKey.replace(combineIden, combineflag)
     
     if options.datacard:
+        if not os.path.exists(options.datacard):
+            print("ERROR: could not load datacard from '{}'".format(options.datacard))
+        datacard_dir = os.path.dirname(os.path.abspath(options.datacard))
         with open(options.datacard, "r") as card:
             lines = card.readlines()
         lines = [l for l in lines if l.startswith("shapes")]
@@ -281,6 +292,7 @@ if combineflag:
         if channelLine is None: sys.exit("no channel {} found in datacard".format(options.channelName))
         channelLine = [elem for elem in channelLine if not elem == ""]
         binFileName = channelLine[3]
+        binFileName = binFileName if os.path.isabs(binFileName) else os.path.join(datacard_dir, binFileName)
         binKey = channelLine[4].replace("$PROCESS","data_obs")
         outputName = binKey.replace("data_obs_","")
         
@@ -379,6 +391,8 @@ if combineflag:
         PlotList["total_signal"] = Plots.Plot(totalsignal,"total_signal",label=signallabel,
                                         typ="signal", OverUnderFlowInc=True)
     # from total background or total background+signal prediction histogram in mlfit file, get the error band
+    if not xLabel == "":
+        PlotList["total_signal"].hist.SetTitle(xLabel)
     background = rootFile.Get(bkgKey)
     if not binEdges is None:
         background = Plots.updateBinEdges(background, binEdges)
@@ -487,13 +501,14 @@ safe options
 """
 pdftag           = getParserConfigDefaultValue(parser=options.pdftag,config="pdftag",
                                             plotoptions=plotoptions,defaultvalue=False)
-
+if combineflag:
+    pdftag = "_".join([pdftag, combineflag]) if pdftag else combineflag
 if options.pdfname:
-    path = plotpath+"/"+options.pdfname
+    path = os.path.join(plotpath, options.pdfname)
 elif not outputName is None:
-    path = plotpath+"/"+outputName
+    path = os.path.join(plotpath, outputName)
 else:
-    path = plotpath+"/"+options.channelName
+    path = os.path.join(plotpath, options.channelName)
 
 
 if pdftag:
