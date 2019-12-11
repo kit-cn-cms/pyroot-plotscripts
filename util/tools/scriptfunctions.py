@@ -438,6 +438,14 @@ def fillHistoSyst(histName, varNames, weight, systNames, systWeights):
             
         text += "       };\n"
         text += "       variable = "+varNames[0]+";\n"
+        
+        ####### PFUSCH: NEUER COUNTER FUER JETS MIT PT>=50GeV ## UNBEDINGT DEAKTIVIEREN DANACH
+        #if histName+systName == "inclusive_Evt_N_Jets":
+            #text+= "        int N_Jets_50 = 0;\n"
+            #text+= "       for(int ijet=0; ijet<N_Jets; ijet++) {\n"
+            #text+= "            if(Jet_Pt[ijet] >= 50) N_Jets_50++;\n"
+            #text+= "       };\n"
+            #text+= "       variable = N_Jets_50;\n"
 
         text += "       helperFillHisto(helpWeightVec_"+histName+", variable);\n"
         text += "       variable = -999;\n"

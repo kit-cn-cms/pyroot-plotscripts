@@ -24,7 +24,7 @@ VJetsPathS = path+'/DYJets*/*nominal*.root'+';'+ \
 ttWPath  = path+'/TTW*/*nominal*.root'
 
 ttZPath  = path+'/TTZToLLNuNu*/*nominal*.root'+';'+ \
-           path+'TTZToQQ_TuneCP5_13TeV-amcatnlo-pythia8_1/*nominal*.root'
+           path+'/TTZToQQ_TuneCP5_13TeV-amcatnlo-pythia8_1/*nominal*.root'
 
 dibosonPathS = path+'/WW_*/*nominal*.root'+';'+ \
                path+'/WZ_*/*nominal*.root'+';'+ \
@@ -55,8 +55,8 @@ sel_singleel="(N_LooseMuons==0 && N_TightElectrons==1)"# && (Triggered_HLT_Ele32
 # sel_singlemu="(N_LooseElectrons==0 && N_TightMuons==1 && (Triggered_HLT_IsoMu27_vX==1))"
 # sel_singleel="(N_LooseMuons==0 && N_TightElectrons==1)"
 sel_singlemu="(N_LooseElectrons==0 && N_TightMuons==1)"
-# jet tag base selection
-sel_jettag = "(N_Jets>=4 && N_BTagsM>=3)"
+# jet tag base selection #and selection on Pt added
+sel_jettag = "(N_Jets>=4 && N_BTagsM>=3)"#&&(Jet_Pt>=50)"
 
 # MET base selection
 sel_MET="*(Evt_MET_Pt>20.)"

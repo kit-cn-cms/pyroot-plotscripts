@@ -32,12 +32,12 @@ def plots_inclusive(data=None):
     selection = "(N_Jets>=4&&N_BTagsM>=3)"
 
     plots = [
-        plotClasses.Plot(ROOT.TH1D("inclusive_Evt_M2_closestTo125TaggedJets","M2_closestTo125TaggedJets",200,0.0,300.0),"Evt_M2_closestTo125TaggedJets",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("inclusive_Evt_M2_closestTo125TaggedJets","M2_closestTo125TaggedJets",200,0.0,300.0),"Evt_M2_closestTo125TaggedJets",selection,label),
         plotClasses.Plot(ROOT.TH1D("inclusive_Evt_N_Jets","N_Jets",4,3.5,7.5),"N_Jets",selection,label),
-        plotClasses.Plot(ROOT.TH1D("inclusive_Evt_N_BTagsM","N_BTagsM",3,2.5,5.5),"N_BTagsM",selection,label),
-        plotClasses.Plot(ROOT.TH1D("inclusive_yield","yield",1,0.,1.),"1.",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Reco_ttH_btophad_m","Reco_ttH_btophad_m",50,0,60),"Reco_ttH_btophad_m",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Evt_blr","Evt_blr",30,-0.05,1.0),"Evt_blr",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("inclusive_Evt_N_BTagsM","N_BTagsM",3,2.5,5.5),"N_BTagsM",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("inclusive_yield","yield",1,0.,1.),"1.",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Reco_ttH_btophad_m","Reco_ttH_btophad_m",50,0,60),"Reco_ttH_btophad_m",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ge4j_ge3t_Evt_blr","Evt_blr",30,-0.05,1.0),"Evt_blr",selection,label),
         ]
     if data:
         add_data_plots(plots=plots,data=data)

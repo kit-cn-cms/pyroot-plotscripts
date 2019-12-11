@@ -31,14 +31,14 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttZ17_discrPlots'
+    name = 'ttZ17_discrPlots_S04'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
 
     # signal process
     signalProcess = "ttZ"
-    nSigSamples   = 3
+    nSigSamples   = 2
 
     # dataera
     dataera = "2017"
@@ -50,10 +50,10 @@ def main(pyrootdir, opts):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    config          = "ttZ18/pltcfg_discrPlots"
+    config          = "ttZ17/samples"
     variable_cfg    = "ttZ18/additionalVariables"
-    plot_cfg        = "ttZ18/discrPlots"
-    syst_cfg        = "ttZ18/systematics"
+    plot_cfg        = "ttZ17/S04_cnfg"
+    syst_cfg        = "ttZ17/no_systs"
 
     # file for rate factors #what updates need to be applied for the other root files??
     rateFactorsFile = pyrootdir+"/data/rateFactors/rateFactors_2017.csv"    
@@ -92,7 +92,7 @@ def main(pyrootdir, opts):
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                    "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/ttZConfig"}
+                    "checkpointFiles":  "/nfs/dust/cms/user/lbosch/checkpoints/S03"} #needs to be adjusted
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
