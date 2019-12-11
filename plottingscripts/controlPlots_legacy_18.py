@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'legacyTTH_2018_dataMC/v1'
+    name = 'legacyTTH_2018_dataMC/v1_validation'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -50,7 +50,7 @@ def main(pyrootdir, opts):
     # configs
     config          = "legacyAnalysis/samples_2018_4FS_5FS"
     variable_cfg    = "legacyAnalysis/additionalVariables"
-    plot_cfg        = "legacyAnalysis/controlPlots"
+    plot_cfg        = "legacyAnalysis/controlPlots_rebinned"
     syst_cfg        = "legacyAnalysis/no_systs"
 
     # file for rate factors
@@ -183,7 +183,7 @@ def main(pyrootdir, opts):
         #pP.setDataBases(plotDataBases)
         #pP.setMEMDataBase(memDataBase)
         #pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts(100000)
+        pP.setMaxEvts(200000)
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
 
@@ -255,7 +255,7 @@ def main(pyrootdir, opts):
             else:
                 print("adding data_obs histograms as real data")
                 # real data with ttH
-                pP.addData(samples = configData.controlSamples[2:])
+                pP.addData(samples = configData.controlSamples)
 
     
 
