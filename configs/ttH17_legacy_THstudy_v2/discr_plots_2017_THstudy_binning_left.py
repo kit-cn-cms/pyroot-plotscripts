@@ -134,14 +134,14 @@ def plots_dnn(data, discrname):
     interf_ljets_ge4j_ge4t_07_ttH_ttH_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_07_ttH==0))","ljets_ge4j_ge4t_07_ttH_ttH_node","")
     interf_ljets_ge4j_ge4t_07_ttH_ttH_node.bin_edges = [ 
 				0.2,
-				0.264,
-				0.328,
-				0.392,
-				0.456,
+				# 0.264,
+				# 0.328,
+				# 0.392,
+				# 0.456,
 				0.52,
 				0.584,
 				0.648,
-				# 0.712,
+				0.712,
 				0.84
 				]
     interf_ljets_ge4j_ge4t_07_ttH_ttH_node.nhistobins = ndefaultbins

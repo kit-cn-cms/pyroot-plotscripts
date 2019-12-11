@@ -141,7 +141,7 @@ def plots_dnn(data, discrname):
 				0.52,
 				0.584,
 				0.648,
-				# 0.712,
+				0.712,
 				0.84
 				]
     interf_ljets_ge4j_ge4t_07_ttH_ttH_node.nhistobins = ndefaultbins
@@ -151,11 +151,10 @@ def plots_dnn(data, discrname):
                                             label          = "ljets_ge4j_ge4t_07_ttH_tt2b_node",
                                             selection      = "((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_07_ttH==1))")
     interf_ljets_ge4j_ge4t_07_ttH_tt2b_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_07_ttH==1))","ljets_ge4j_ge4t_07_ttH_tt2b_node","")
-    interf_ljets_ge4j_ge4t_07_ttH_tt2b_node.bin_edges = [ 
-				0.2,
-				0.86
-				]
-    interf_ljets_ge4j_ge4t_07_ttH_tt2b_node.nhistobins = ndefaultbins
+    interf_ljets_ge4j_ge4t_07_ttH_tt2b_node.minxval = 0.2
+    interf_ljets_ge4j_ge4t_07_ttH_tt2b_node.maxxval = 0.86
+
+    interf_ljets_ge4j_ge4t_07_ttH_tt2b_node.nhistobins = 4
     interfaces.append(interf_ljets_ge4j_ge4t_07_ttH_tt2b_node)
     
     interf_ljets_ge4j_ge4t_07_ttH_ttcc_node = vhi.variableHistoInterface(variable_name  = "DNNOutput_ge4j_ge4t_07_ttH_node_ttcc",
@@ -184,11 +183,10 @@ def plots_dnn(data, discrname):
                                             label          = "ljets_ge4j_ge4t_07_ttH_ttb_bb_node",
                                             selection      = "((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_07_ttH==4))")
     interf_ljets_ge4j_ge4t_07_ttH_ttb_bb_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_07_ttH==4))","ljets_ge4j_ge4t_07_ttH_ttb_bb_node","")
-    interf_ljets_ge4j_ge4t_07_ttH_ttb_bb_node.bin_edges = [ 
-				0.2,
-				0.68
-				]
-    interf_ljets_ge4j_ge4t_07_ttH_ttb_bb_node.nhistobins = ndefaultbins
+    interf_ljets_ge4j_ge4t_07_ttH_ttb_bb_node.minxval = 0.2
+    interf_ljets_ge4j_ge4t_07_ttH_ttb_bb_node.maxxval = 0.68
+
+    interf_ljets_ge4j_ge4t_07_ttH_ttb_bb_node.nhistobins = 4
     interfaces.append(interf_ljets_ge4j_ge4t_07_ttH_ttb_bb_node)
     
 
