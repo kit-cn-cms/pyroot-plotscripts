@@ -135,7 +135,9 @@ void CSVHelper::fillCSVHistos(TFile *fileHF, TFile *fileLF, const std::vector<Sy
 
 TH1* CSVHelper::readHistogram(TFile* file, const TString& name) const {
   TH1* h = NULL;
-  file->GetObject(name,h);
+  TF1* f = NULL;
+  file->GetObject(name,f);
+  h = f->GetHistogram();
   if( h==NULL ) {
     //throw cms::Exception("BadCSVWeightInit")
     std::cerr << "BadCSVWeightInit" << std::endl
