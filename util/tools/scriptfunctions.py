@@ -32,10 +32,10 @@ using namespace std;
     retstr += addCodeInt.getAdditionalFunctionDefinitionLines()
   
   includedClasses = [
-    "EventFilter",
-    "LeptonSFHelper",
+    #"EventFilter",
+    #"LeptonSFHelper",
     "Systematics",
-    "CSVHelper",
+    #"CSVHelper",
     #"QCDHelper",
     #"TTbarSystHelper",
     ]
@@ -442,7 +442,6 @@ def endLoop():
   return """
   }\n // end of event loop
   totalTime+=timerTotal->RealTime();
-  std::cout<<"skipped a total of "<<evtFilter->GetNFiltered()<<std::endl;
 """
 # -------------------------------------------------------------------------------------------------
 

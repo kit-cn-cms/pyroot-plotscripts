@@ -76,43 +76,10 @@ void plot()
     std::vector< Systematics::Type > v_SystTypes = Systematics::getTypeVector();
     // for(auto itsyst : v_SystTypes){std::cout<< " Know :" << itsyst << std::endl;}
 
-    std::string csvHFfile = "";
-    std::string csvLFfile = "";
-    if (dataera == "2017") {
-        csvHFfile = plotscriptBaseDir + "/data/CSV/sfs_deepjet_2017_hf.root";
-        csvLFfile = plotscriptBaseDir + "/data/CSV/sfs_deepjet_2017_lf.root";
-    }
-    else if (dataera == "2018") {
-        csvHFfile = plotscriptBaseDir + "/data/CSV/sfs_deepjet_2018_hf.root";
-        csvLFfile = plotscriptBaseDir + "/data/CSV/sfs_deepjet_2018_lf.root";
-    }
-    else if (dataera == "2016") {
-        csvHFfile = plotscriptBaseDir + "/data/CSV/sfs_deepjet_2016_hf.root";
-        csvLFfile = plotscriptBaseDir + "/data/CSV/sfs_deepjet_2016_lf.root";
-    }
-    else if (dataera == "2017_deepCSV") {
-        csvHFfile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_V3_2017/deepCSV_sfs_hf.root";
-        csvLFfile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_V3_2017/deepCSV_sfs_lf.root";
-    }
-    else {
-        std::cout << "NO VALID DATAERA CHOSEN!!" << std::endl;
-        std::cout << "dataera: " << dataera << std::endl;
-    }
-
-    TString qcd_file = "/nfs/dust/cms/user/mwassmer/QCD_Estimation_September17/QCD_Estimation/QCD_Estimation_FakeScaleFactor_nominal.root";
-
-    CSVHelper*      internalCSVHelper      = new CSVHelper(csvHFfile, csvLFfile, 5, 4, 3, v_SystTypes);
-    LeptonSFHelper* internalLeptonSFHelper = new LeptonSFHelper(dataera, plotscriptBaseDir);
-    // QCDHelper* internalQCDHelper = new QCDHelper(qcd_file);
-    // ttbarsysthelper* internalttbarsysthelper = new ttbarsysthelper();
-
-    std::cout << "processname" << processname << std::endl;
-    std::cout << "suffix" << suffix << std::endl;
+    std::cout << "processname: " << processname << std::endl;
+    std::cout << "suffix: " << suffix << std::endl;
 
     std::vector< TString > databaseRelevantFilenames;
-
-    // create event filter class
-    EventFilter* evtFilter = new EventFilter(eventFilterFile);
 
     int   eventsAnalyzed = 0;
     float sumOfWeights   = 0;
@@ -132,14 +99,6 @@ void plot()
         std::cout << "is data, dont use nominal weights!!!!" << std::endl;
     }
 
-    // Hack to find out if sample is ttH or other
-    if ((processname.find("ttH") != std::string::npos)) {
-        isTthSample = 1;
-        std::cout << "This is a ttH sample!!!!" << std::endl;
-    }
-    else {
-        std::cout << "This is NOT a ttH sample!!!!" << std::endl;
-    }
 
     // read in samples to add to chain and get relevant names for the database
     std::map< TString, TString >                   sampleDataBaseIdentifiers;
@@ -161,107 +120,8 @@ void plot()
     TString      samplename_in_database = "";
     while (ss >> buf) {
         chain->Add(buf.c_str());
-        TString thisfilename     = buf.c_str();
-        TString originalfilename = buf.c_str();
-        // std::cout<<"file "<<buf.c_str()<<" "<<thisfilename<<std::endl; // karim debug
-        // cut of directories
-        thisfilename.Replace(0, thisfilename.Last('/') + 1, "");
-        // cut of trailing tree and root
-        thisfilename.Replace(thisfilename.Last('_'), thisfilename.Length(), "");
-        // copy the string for figuring out internalSystType
-        TString filenameforSytType = TString(thisfilename);
-        // remove syst name in case of JES or JER. Not needed in current database format
-        // std::cout<<thisfilename<<std::endl;
-        if (thisfilename.Contains("JES") == 1 or thisfilename.Contains("JER") == 1 or thisfilename.Contains("nominal") == 1) {
-            thisfilename.Replace(thisfilename.Last('_'), thisfilename.Length() - 1, "");
-        }
-        // std::cout<<thisfilename<<std::endl;
-        // remove number
-        int lastUnderscore = thisfilename.Last('_');
-        // thisfilename.Replace(thisfilename.Last('_'),1,"");
-        // thisfilename.Replace(thisfilename.Last('_'),lastUnderscore-thisfilename.Last('_'),"");
-        thisfilename.Replace(thisfilename.Last('_'), thisfilename.Length(), "");
-        // remove remaining underscores
-        while (thisfilename.Last('_') >= 0) { thisfilename.Replace(thisfilename.Last('_'), 1, ""); }
-        // remove remaining dashes
-        while (thisfilename.Last('-') >= 0) { thisfilename.Replace(thisfilename.Last('-'), 1, ""); }
-        std::cout << " relevant database name " << thisfilename << std::endl;
-
-        if (thisfilename.Contains("SingleEl")) { thisfilename = "SingleElectron"; }
-        if (thisfilename.Contains("SingleMu")) { thisfilename = "SingleMuon"; }
-
-        // now replace remaining v2 and newmpx strings because of different namings in new MEM DB
-        if (thisfilename.Contains("v2") == 1) { thisfilename.ReplaceAll("v2", ""); }
-        if (thisfilename.Contains("newpmx") == 1) { thisfilename.ReplaceAll("newpmx", ""); }
-        std::cout << " relevant database name " << thisfilename << std::endl;
-        sampleDataBaseIdentifiers[originalfilename] = thisfilename;
-
-        // check if already in vectr
-        // TString translatedFileNameForDataBase;
-
-        // DANGERZONE
-        // hardcode sample translation map for now
-        std::cout << "WARNING!: Hardcoded sampleTranslationMapCPP !" << std::endl;
-        sampleTranslationMapCPP[TString("TTToSemiLeptonicTuneCP5PSweights13TeVpowhegpythia8")] = TString("TTToSemiLeptonicTuneCP5PSweights13TeVpowhegpythia8");
-        sampleTranslationMapCPP[TString("TTToSemiLeptonicTuneCP513TeVpowhegpythia8")]          = TString("TTToSemiLeptonicTuneCP513TeVpowhegpythia8");
-
-        sampleTranslationMapCPP[TString("TTTo2L2NuTuneCP5PSweights13TeVpowhegpythia8")] = TString("TTTo2L2NuTuneCP5PSweights13TeVpowhegpythia8");
-        sampleTranslationMapCPP[TString("TTTo2L2NuTuneCP513TeVpowhegpythia8")]          = TString("TTTo2L2NuTuneCP513TeVpowhegpythia8");
-
-        sampleTranslationMapCPP[TString("TTToHadronicTuneCP5PSweights13TeVpowhegpythia8")] = TString("TTToHadronicTuneCP5PSweights13TeVpowhegpythia8");
-        sampleTranslationMapCPP[TString("TTToHadronicTuneCP513TeVpowhegpythia8")]          = TString("TTToHadronicTuneCP513TeVpowhegpythia8");
-
-        sampleTranslationMapCPP[TString("ttHTobbM125TuneCP513TeVpowhegpythia8")]    = TString("ttHTobbM125TuneCP513TeVpowhegpythia8");
-        sampleTranslationMapCPP[TString("ttHToNonbbM125TuneCP513TeVpowhegpythia8")] = TString("ttHToNonbbM125TuneCP513TeVpowhegpythia8");
-
-        samplename_in_database = thisfilename;
-        if (!(std::find(databaseRelevantFilenames.begin(), databaseRelevantFilenames.end(), thisfilename) != databaseRelevantFilenames.end())) {
-            databaseRelevantFilenames.push_back(thisfilename.Copy());
-            // sampleDataBaseFoundEvents["jt42"][thisfilename]=0;
-            // sampleDataBaseLostEvents["jt42"][thisfilename]=0;
-            // sampleDataBaseFoundEvents["jt52"][thisfilename]=0;
-            // sampleDataBaseLostEvents["jt52"][thisfilename]=0;
-            // sampleDataBaseFoundEvents["jt62"][thisfilename]=0;
-            // sampleDataBaseLostEvents["jt62"][thisfilename]=0;
-            sampleDataBaseFoundEvents["jt43"][thisfilename] = 0;
-            sampleDataBaseLostEvents["jt43"][thisfilename]  = 0;
-            sampleDataBaseFoundEvents["jt53"][thisfilename] = 0;
-            sampleDataBaseLostEvents["jt53"][thisfilename]  = 0;
-            sampleDataBaseFoundEvents["jt63"][thisfilename] = 0;
-            sampleDataBaseLostEvents["jt63"][thisfilename]  = 0;
-            sampleDataBaseFoundEvents["jt44"][thisfilename] = 0;
-            sampleDataBaseLostEvents["jt44"][thisfilename]  = 0;
-            sampleDataBaseFoundEvents["jt54"][thisfilename] = 0;
-            sampleDataBaseLostEvents["jt54"][thisfilename]  = 0;
-            sampleDataBaseFoundEvents["jt64"][thisfilename] = 0;
-            sampleDataBaseLostEvents["jt64"][thisfilename]  = 0;
-        }
-
-        // now figure out internalSystType
-        filenameforSytType.Replace(0, filenameforSytType.Last('_') + 1, "");
-        // nominal is the empty string here
-        if (filenameforSytType == "nominal") { filenameforSytType = ""; }
-        internalSystType = Systematics::get(filenameforSytType.Data());
-        std::cout << "internal systematic filename, int and typename " << filenameforSytType << " " << internalSystType << " "
-                  << Systematics::toString(internalSystType) << std::endl;
-        if (filenameforSytType != TString(Systematics::toString(internalSystType))) {
-            std::cout << "ERROR could not recover systematic from enum" << std::endl;
-            exit(0);
-        }
-        globalFileNameForSystType = filenameforSytType;
     }  // end loop of filename parsing
 
-    TString vecNameForDataBase = "mem_p";
-    if (globalFileNameForSystType != "") {
-        TString vecNameForDataBaseBuffer = globalFileNameForSystType;
-        if (globalFileNameForSystType.Contains("JES") == 1) { vecNameForDataBaseBuffer.Replace(0, 3, ""); }
-        vecNameForDataBase = "mem_" + vecNameForDataBaseBuffer + "_p";
-    }
-    std::vector< TString > vec_memStrings;
-    vec_memStrings.push_back(vecNameForDataBase);
-
-    std::cout << "relevant db samplenames" << std::endl;
-    for (unsigned int isn = 0; isn < databaseRelevantFilenames.size(); isn++) { std::cout << databaseRelevantFilenames.at(isn) << std::endl; }
 
     chain->SetBranchStatus("*", 0);
 
