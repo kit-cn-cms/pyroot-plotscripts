@@ -14,7 +14,7 @@ from copy import deepcopy
 
 discr_binning = [250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 800, 1000, 1500]
 
-generalselection = "(N_AK15Jets==1)*(Hadr_Recoil_Pt>250.)*(N_HEM_Jets==0)*(CaloMET_PFMET_Recoil_ratio<0.5)*(DeltaPhi_AK4Jet_MET[0]>0.5)"
+generalselection = "(N_AK15Jets==1)*(Hadr_Recoil_Pt>250.)*(CaloMET_PFMET_Recoil_ratio<0.5)*(DeltaPhi_AK4Jet_MET[0]>0.5)"
 
 def control_plots_SR_had(data=None):
     label = "#scale[0.8]{signal region (hadronic)}"
