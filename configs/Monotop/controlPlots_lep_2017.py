@@ -12,7 +12,7 @@ import ROOT
 from array import array
 from copy import deepcopy
 
-generalselection = "(N_HEM_Jets==0)*(Evt_Pt_MET>150.)*(N_LoosePhotons==0)"
+generalselection = "(Evt_Pt_MET>150.)*(N_LoosePhotons==0)"
 
 def control_plots_ttbar_lep(data=None):
     label = "#scale[0.8]{t#bar{t} control region (leptonic)}"
