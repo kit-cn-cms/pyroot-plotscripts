@@ -7,7 +7,6 @@
 
 #include "TFile.h"
 #include "TH1.h"
-#include "TF1.h"
 #include "TString.h"
 
 #include "Systematics.h"
