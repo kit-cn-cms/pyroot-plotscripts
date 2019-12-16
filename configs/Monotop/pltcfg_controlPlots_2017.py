@@ -66,7 +66,7 @@ electronSFs_down = "((N_TightElectrons==1 && N_LooseElectrons==2)*Electron_Ident
 muonSFs_up = "((N_TightMuons==1 && N_LooseMuons==2)*Muon_IdentificationSFUp[0]*Muon_IsolationSFUp[0]*LooseMuon_IdentificationSFUp[1]*LooseMuon_IsolationSFUp[1]+(N_TightMuons==2 && N_LooseMuons==2)*Muon_IdentificationSFUp[0]*Muon_IsolationSFUp[0]*Muon_IdentificationSFUp[1]*Muon_IsolationSFUp[1]+(N_TightMuons==1 && N_LooseMuons==1)*Muon_IdentificationSFUp[0]*Muon_IsolationSFUp[0]+(N_LooseMuons==0)*1.)"
 muonSFs_down = "((N_TightMuons==1 && N_LooseMuons==2)*Muon_IdentificationSFDown[0]*Muon_IsolationSFDown[0]*LooseMuon_IdentificationSFDown[1]*LooseMuon_IsolationSFDown[1]+(N_TightMuons==2 && N_LooseMuons==2)*Muon_IdentificationSFDown[0]*Muon_IsolationSFDown[0]*Muon_IdentificationSFDown[1]*Muon_IsolationSFDown[1]+(N_TightMuons==1 && N_LooseMuons==1)*Muon_IdentificationSFDown[0]*Muon_IsolationSFDown[0]+(N_LooseMuons==0)*1.)"
 
-bosonWeightNom = "1."#"internalBosonWeight"
+bosonWeightNom = "internalBosonWeight"
 
 ## trigger scale factors
 ## DANGERZONE: ELECTRON TRIGGER NOT ADDED TO NTUPLES YET, USE INTERNAL SFS
@@ -203,7 +203,7 @@ samples = [
     plotClasses.Sample(
         "#splitline{VectorMonotop}{M_{#phi}=2000 M_{#chi}=500}",
         ROOT.kCyan,
-        path_mwassmer + "/VectorMonotop_Mphi_2000_Mchi_500/*nominal*.root",
+        "/nfs/dust/cms/user/mwassmer/MonoTop/ntuples_2018_new_skims/VectorMonotop_Mphi_2000_Mchi_500/*nominal*.root",
         # lumi reweighting factor due to stupid cross section calculation
         lumi + sel_MET,
         "VectorMonotop_Mphi_2000_Mchi_500",
