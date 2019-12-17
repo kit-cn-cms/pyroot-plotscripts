@@ -346,11 +346,6 @@ class scriptWriter:
             script += addCodeInt.getVariableInitInsideEventLoopLines()
         script += "     totalTimeEvalDNN+=timerEvalDNN->RealTime();\n"
 
-        script += "     timerSampleWeight->Start();\n"
-        script += '        float sampleweight=1;\n'
-        script += scriptfunctions.encodeSampleSelection(self.pp.configData.allSamples, self.varManager)
-        script += "     totalTimeSampleWeight+=timerSampleWeight->RealTime();\n"
-        
         script += "     timerReadDataBase->Start();\n"
         for db in self.pp.dataBases:
             script += scriptfunctions.readOutDataBase(db)    
@@ -369,6 +364,11 @@ class scriptWriter:
         script += self.varManager.calculateVariables()
         print("done")
         script += "     totalTimeEvalWeightsAndBDT+=timerEvalWeightsAndBDT->RealTime();\n"
+        
+        script += "     timerSampleWeight->Start();\n"
+        script += '        float sampleweight=1;\n'
+        script += scriptfunctions.encodeSampleSelection(self.pp.configData.allSamples, self.varManager)
+        script += "     totalTimeSampleWeight+=timerSampleWeight->RealTime();\n"
         
         script += "     timerFillHistograms->Start();\n"
 
