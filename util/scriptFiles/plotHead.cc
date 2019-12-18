@@ -119,6 +119,7 @@ void plot(){
 
   int DoWeights=1;
   int isTthSample=0;
+  int isTTbarSample=0;
   int electron_data=0;
   int muon_data=0;
 
@@ -131,7 +132,14 @@ void plot(){
   //Hack to find out if sample is ttH or other
   if((processname.find("ttH") != std::string::npos) ) {isTthSample=1; std::cout<<"This is a ttH sample!!!!"<<std::endl;}    
   else{ std::cout << "This is NOT a ttH sample!!!!"<<std::endl;}
-
+  
+  //Hack to find out if sample is ttbar or other
+  if( (processname.find("tt") != std::string::npos) and (isTthSample ==0) 
+      and not (processname.find("ttW") != std::string::npos or processname.find("ttZ") != std::string::npos or processname.find("ttV") != std::string::npos ) ) {
+    isTTbarSample=1; 
+    std::cout<<"This is a TTbar sample!!!!"<<std::endl;
+  }    
+  else{ std::cout << "This is NOT a TTbar sample!!!!"<<std::endl;}
   // read in samples to add to chain and get relevant names for the database
   std::map<TString, TString> sampleDataBaseIdentifiers;
   std::map<TString, std::map<TString, long>> sampleDataBaseFoundEvents;
