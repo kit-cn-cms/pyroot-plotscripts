@@ -50,7 +50,7 @@ def main(pyrootdir, opts):
     # configs
     config          = "legacyAnalysis/samples_2018_4FS_5FS_NJetCorrections"
     variable_cfg    = "legacyAnalysis/additionalVariables_2018"
-    plot_cfg        = "legacyAnalysis/controlPlots_rebinned"
+    plot_cfg        = "legacyAnalysis/controlPlots"
     syst_cfg        = "legacyAnalysis/systs_4FS_5FS_noJEC_NJetCorrections"
 
     # file for rate factors
