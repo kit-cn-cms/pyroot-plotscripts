@@ -156,8 +156,8 @@ TTbbweightSL='*35.8038266498504*0.4393'
 TTbbweightDL='*35.8038266498504*0.1062'
 TTbbweightFH='*35.8038266498504*0.4545'
 
-TTbbSLDLweight =  "*((abs(Weight_XS-0.00022759124112781137228)<1e-10)"+TTbbweightDL+")"
-TTbbSLDLweight += "*((abs(Weight_XS-0.0001323300384683534503)<1e-10)"+TTbbweightSL+")"
+TTbbSLDLweight =  "*((abs(Weight_XS-0.00022759124112781137228)<1e-6)"+TTbbweightDL+")"
+TTbbSLDLweight += "*((abs(Weight_XS-0.0001323300384683534503)<1e-6)"+TTbbweightSL+")"
 
 tHq_XS_scale = "*(0.7927/0.07425)"
 tHW_XS_scale = "*(0.1472/0.01517)"
