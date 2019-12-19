@@ -499,9 +499,9 @@ plottingsamples = [
 #    plotClasses.Sample("misc.", 18, "", "",
 #        "misc", addsamples ["ttZ", "ttW", "wjets", "zjets", "diboson"],
 #        samDict = sampleDict, readTrees = doReadTrees)
-     plotClasses.Sample('t#bar{t}+b#bar{b} (4FS)',ROOT.kRed+3, "", "",
-             'ttbb', addsamples = ["ttbb_DL", "ttbb_SL"],
-             samDict=sampleDict, readTrees=doReadTrees),
+#      plotClasses.Sample('t#bar{t}+b#bar{b} (4FS)',ROOT.kRed+3, "", "",
+        #      'ttbb', addsamples = ["ttbb_DL", "ttbb_SL"],
+        #      samDict=sampleDict, readTrees=doReadTrees),
 
      ]
 
