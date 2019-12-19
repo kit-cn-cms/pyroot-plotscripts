@@ -332,7 +332,7 @@ samples_tH = [
 samples_ttbb_4FS = [
      plotClasses.Sample('t#bar{t}+b#bar{b} (4FS)',ROOT.kRed+3,
              path_ttbb,
-             lumi+TTbbSLDLweight+ttbb_4FS_scale+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
+             lumi+TTbbSLDLweight+evenSel+ttbb_4FS_scale+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
              'ttbb',
              samDict=sampleDict, readTrees=doReadTrees),
 
