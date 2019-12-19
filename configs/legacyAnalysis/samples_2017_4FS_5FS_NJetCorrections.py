@@ -21,11 +21,11 @@ ttbarPathS = path+'/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/*nom
 VJetsPathS = path+'/DYJets*/*nominal*.root'+';'+ \
              path+'/WJets*/*nominal*.root'
 
+
 path_ttbb = path+"/TTbb_Powheg_Openloops_new_pmx/*nominal*.root"+';'+ \
-            path+"/TTbb_Powheg_Openloops_new_pmx/*nominal*.root"
+            path+"/TTbb_Powheg_Openloops_DL/*nominal*.root"
 
 path_ttbbSL = path+"/TTbb_Powheg_Openloops_new_pmx/*nominal*.root"
-
 path_ttbbDL = path+"/TTbb_Powheg_Openloops_DL/*nominal*.root"
 
 ttVPathS = path+'/TTW*/*nominal*.root'+';'+ \
@@ -96,7 +96,7 @@ hzgSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==22)
 # ======= # 
 # WEIGHTS #
 # ======= #
-defaultWeight = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2*internalCSVweight*Weight_L1ECALPrefire"
+defaultWeight = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2*internalCSVweight*Weight_L1ECALPrefire*N_JetWeight_Nominal"
 
 # pile up weights
 pileupWeightUp   = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2Up*internalCSVweight"
@@ -160,12 +160,11 @@ TTbbweightSL='*35.8038266498504*0.4393'
 TTbbweightDL='*35.8038266498504*0.1062'
 TTbbweightFH='*35.8038266498504*0.4545'
 
+TTbbSLDLweight =  "*((abs(Weight_XS-5.9241865528e-05)<1e-10)"+TTbbweightDL+")"
+TTbbSLDLweight += "*((abs(Weight_XS-6.63789523969e-06)<1e-10)"+TTbbweightSL+")"
 # DANGERZONE: derived in 2018
 ttbb_4FS_scale = "*(1.22161)"
 ttbb_5FS_scale = "*(1.31264)"
-
-TTbbSLDLweight =  "*((abs(Weight_XS-5.9241865528e-05)<1e-10)"+TTbbweightDL+")"
-TTbbSLDLweight += "*((abs(Weight_XS-6.63789523969e-06)<1e-10)"+TTbbweightSL+")"
 
 tHq_XS_scale = "*(0.7927/0.07425)"
 tHW_XS_scale = "*(0.1472/0.01517)"
@@ -342,8 +341,7 @@ samples_tH = [
 
 
 samples_ttbb_4FS = [
-
-    plotClasses.Sample('t#bar{t}+b#bar{b} (4FS)',ROOT.kRed+3,
+     plotClasses.Sample('t#bar{t}+b#bar{b} (4FS)',ROOT.kRed+3,
              path_ttbb,
              lumi+TTbbSLDLweight+evenSel+ttbb_4FS_scale+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
              'ttbb',

@@ -16,13 +16,14 @@ path  = "/nfs/dust/cms/user/vdlinden/legacyTTH/ntuples/legacy_2018_ttH"
 ttbarPathS = path+'/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
              path+'/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'+";"+ \
              path+'/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'
-
-path_ttbbSL = path+"/TTbb_4f_TTToSemiLeptonic_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"
-
-path_ttbbDL = path+"/TTbb_4f_TTTo2l2nu_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"
-
+             
 path_ttbb = path+"/TTbb_4f_TTToSemiLeptonic_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"+";"+ \
             path+"/TTbb_4f_TTTo2l2nu_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"
+
+path_ttbbSL = path+"/TTbb_4f_TTToSemiLeptonic_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"
+path_ttbbDL = path+"/TTbb_4f_TTTo2l2nu_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"
+
+
 
 
 VJetsPathS = path+'/DYJets*/*nominal*.root'+';'+ \
@@ -94,7 +95,7 @@ hzgSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==22)
 # ======= # 
 # WEIGHTS #
 # ======= #
-defaultWeight = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2*internalCSVweight"
+defaultWeight = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2*internalCSVweight*N_JetWeight_Nominal"
 
 # pile up weights
 pileupWeightUp   = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2Up*internalCSVweight"
@@ -156,6 +157,9 @@ lumi = '59.7'
 TTbbweightSL='*35.8038266498504*0.4393'
 TTbbweightDL='*35.8038266498504*0.1062'
 TTbbweightFH='*35.8038266498504*0.4545'
+
+TTbbSLDLweight =  "*(((Weight_XS-6.098641461e-05)<1e-10)"+TTbbweightDL+")"
+TTbbSLDLweight += "*(((Weight_XS-8.5467709141e-06)<1e-10)"+TTbbweightSL+")"
 
 tHq_XS_scale = "*(0.7927/0.07425)"
 tHW_XS_scale = "*(0.1472/0.01517)"
@@ -235,7 +239,7 @@ samples_splitData = [
 samples_ttH_decay = [
     plotClasses.Sample('t#bar{t}H (bb)',ROOT.kBlue+1,
             ttHpath,
-            lumi+sel_MET+hbbSel+"*weight_CSVSF_SF_ttH_2018",
+            lumi+sel_MET+hbbSel,
             'ttH_hbb',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),     
     #plotClasses.Sample('t#bar{t}H (nonbb)',ROOT.kBlue+1,
@@ -245,37 +249,37 @@ samples_ttH_decay = [
     #         samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
     plotClasses.Sample('t#bar{t}H(cc)',ROOT.kBlue+1,
             ttHpath,
-            lumi+sel_MET+hccSel+"*weight_CSVSF_SF_ttH_2018",
+            lumi+sel_MET+hccSel,
             'ttH_hcc',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
     plotClasses.Sample('t#bar{t}H(ll)',ROOT.kBlue+1,
             ttHpath,
-            lumi+sel_MET+httSel+"*weight_CSVSF_SF_ttH_2018",
+            lumi+sel_MET+httSel,
             'ttH_htt',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
     plotClasses.Sample('t#bar{t}H(#gamma#gamma)',ROOT.kBlue+1,
             ttHpath,
-            lumi+sel_MET+hggSel+"*weight_CSVSF_SF_ttH_2018",
+            lumi+sel_MET+hggSel,
             'ttH_hgg',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
     plotClasses.Sample('t#bar{t}H(gg)',ROOT.kBlue+1,
             ttHpath,
-            lumi+sel_MET+hglugluSel+"*weight_CSVSF_SF_ttH_2018",
+            lumi+sel_MET+hglugluSel,
             'ttH_hgluglu',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
     plotClasses.Sample('t#bar{t}H(WW)',ROOT.kBlue+1,
             ttHpath,
-            lumi+sel_MET+hwwSel+"*weight_CSVSF_SF_ttH_2018",
+            lumi+sel_MET+hwwSel,
             'ttH_hww',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
     plotClasses.Sample('t#bar{t}H(ZZ)',ROOT.kBlue+1,
             ttHpath,
-            lumi+sel_MET+hzzSel+"*weight_CSVSF_SF_ttH_2018",
+            lumi+sel_MET+hzzSel,
             'ttH_hzz',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
     plotClasses.Sample('t#bar{t}H(Z#gamma)',ROOT.kBlue+1,
             ttHpath,
-            lumi+sel_MET+hzgSel+"*weight_CSVSF_SF_ttH_2018",
+            lumi+sel_MET+hzgSel,
             'ttH_hzg',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
     ]
@@ -299,13 +303,13 @@ samples_tH = [
     # SM case
     plotClasses.Sample('tHW (SM)',ROOT.kBlue+3,
             THWpath,
-            lumi+tHW_XS_scale+tH_SM_rwgt+sel_MET+"*weight_CSVSF_SF_Others_2018",
+            lumi+tHW_XS_scale+tH_SM_rwgt+sel_MET,
             'tHW_hbb',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
     plotClasses.Sample('tHq (SM)',ROOT.kBlue+6,
             THQpath,
-            lumi+tHq_XS_scale+tH_SM_rwgt+sel_MET+"*weight_CSVSF_SF_Others_2018",
+            lumi+tHq_XS_scale+tH_SM_rwgt+sel_MET,
             'tHq_hbb',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
@@ -328,17 +332,23 @@ samples_tH = [
 
 
 samples_ttbb_4FS = [
-     plotClasses.Sample('t#bar{t}(sl)+b#bar{b} (4FS)',ROOT.kRed+3,
-             path_ttbbSL,
-             lumi+TTbbweightSL+ttbb_4FS_scale+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights+"*weight_CSVSF_SF_ttbb_2018",
-             'ttbb_SL',
+     plotClasses.Sample('t#bar{t}+b#bar{b} (4FS)',ROOT.kRed+3,
+             path_ttbb,
+             lumi+TTbbSLDLweight+evenSel+ttbb_4FS_scale+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
+             'ttbb',
              samDict=sampleDict, readTrees=doReadTrees),
 
-     plotClasses.Sample('t#bar{t}(dl)+b#bar{b} (4FS)',ROOT.kRed+3,
-             path_ttbbDL,
-             lumi+TTbbweightDL+ttbb_4FS_scale+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights+"*weight_CSVSF_SF_ttbb_2018",
-             'ttbb_DL',
-             samDict=sampleDict, readTrees=doReadTrees),
+#      plotClasses.Sample('t#bar{t}(sl)+b#bar{b} (4FS)',ROOT.kRed+3,
+#              path_ttbbSL,
+#              lumi+TTbbweightSL+ttbb_4FS_scale+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
+#              'ttbb_SL',
+#              samDict=sampleDict, readTrees=doReadTrees),
+
+#      plotClasses.Sample('t#bar{t}(dl)+b#bar{b} (4FS)',ROOT.kRed+3,
+#              path_ttbbDL,
+#              lumi+TTbbweightDL+ttbb_4FS_scale+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
+#              'ttbb_DL',
+#              samDict=sampleDict, readTrees=doReadTrees),
     ]
 
 
@@ -367,19 +377,19 @@ samples_ttbar_hf_spilt = [
 samples_minor_backgrounds = [
     plotClasses.Sample('t',ROOT.kMagenta,
             stpath,
-            lumi+sel_MET+"*weight_CSVSF_SF_Others_2018",
+            lumi+sel_MET,
             'singlet',
             samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}+Z',ROOT.kCyan,
             ttZpath,
-            lumi+sel_MET+"*weight_CSVSF_SF_Others_2018",
+            lumi+sel_MET,
             'ttZ',
             samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}+W',ROOT.kBlue-10,
              ttWPath,  
-             lumi+sel_MET+"*weight_CSVSF_SF_Others_2018",
+             lumi+sel_MET,
              'ttW',
              samDict=sampleDict, readTrees=doReadTrees),
 
@@ -391,13 +401,13 @@ samples_minor_backgrounds = [
  
     plotClasses.Sample('Z+jets',ROOT.kGreen-3,
             path+'/DYJets*/*nominal*.root',
-            lumi+sel_MET+"*weight_CSVSF_SF_Others_2018",
+            lumi+sel_MET,
             'zjets',
             samDict=sampleDict, readTrees=doReadTrees),
  
     plotClasses.Sample('W+jets',ROOT.kGreen-7,
             path+'/WJets*/*nominal*.root',
-            lumi+sel_MET+"*weight_CSVSF_SF_Others_2018",
+            lumi+sel_MET,
             'wjets',
             samDict=sampleDict, readTrees=doReadTrees), 
 
@@ -409,7 +419,7 @@ samples_minor_backgrounds = [
 
     plotClasses.Sample('VV',ROOT.kAzure+2,
             dibosonPathS,
-            lumi+sel_MET+"*weight_CSVSF_SF_Others_2018",
+            lumi+sel_MET,
             'diboson',
             samDict=sampleDict, readTrees=doReadTrees),
     ]
@@ -417,17 +427,17 @@ samples_minor_backgrounds = [
 samples_ttbb_decay_modes_5FS = [
     plotClasses.Sample('t#bar{t}+b#bar{b}(sl) (5FS)',ROOT.kRed+3,
             path+'/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/*nominal*.root',
-            lumi+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights+"*weight_CSVSF_SF_ttbb_2018",
+            lumi+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
             'ttbb_5FS_SL',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"), 
     plotClasses.Sample('t#bar{t}+b#bar{b}(dl) (5FS)',ROOT.kRed+3,
             path+'/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/*nominal*.root',
-            lumi+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights+"*weight_CSVSF_SF_ttbb_2018",
+            lumi+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
             'ttbb_5FS_DL',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"), 
     plotClasses.Sample('t#bar{t}+b#bar{b}(fh) (5FS)',ROOT.kRed+3,
             path+'/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/*nominal*.root',
-            lumi+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights+"*weight_CSVSF_SF_ttbb_2018",
+            lumi+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
             'ttbb_5FS_FH',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"), 
     ]
@@ -436,26 +446,26 @@ samples = [
      # signal samples
     plotClasses.Sample('t#bar{t}+H',ROOT.kBlue+1,
             ttHpath,
-            lumi+sel_MET+"*weight_CSVSF_SF_ttH_2018",
+            lumi+sel_MET,
             'ttH',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),     
 
     # ttbar 5FS default background samples
     plotClasses.Sample('t#bar{t}+lf',ROOT.kRed-7,
             ttbarPathS,
-            lumi+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)'+sel_MET+sel_StrangeMuWeights+"*weight_CSVSF_SF_ttbarOther_2018",
+            lumi+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)'+sel_MET+sel_StrangeMuWeights,
             'ttlf',
             samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,
             ttbarPathS,
-            lumi+'*(GenEvt_I_TTPlusCC==1)'+sel_MET+sel_StrangeMuWeights+"*weight_CSVSF_SF_ttbarPlusCCbar_2018",
+            lumi+'*(GenEvt_I_TTPlusCC==1)'+sel_MET+sel_StrangeMuWeights,
             'ttcc',
             samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}+b#bar{b} (5FS)',ROOT.kRed+3,
             ttbarPathS,
-            lumi+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+ttbb_5FS_scale+sel_MET+sel_StrangeMuWeights+"*weight_CSVSF_SF_ttbb_2018",
+            lumi+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+ttbb_5FS_scale+sel_MET+sel_StrangeMuWeights,
             'ttbb_5FS',
             samDict=sampleDict, readTrees=doReadTrees, plot = False), 
 
