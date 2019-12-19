@@ -17,8 +17,10 @@ ttbarPathS = path+'/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/*nom
              path+'/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
              path+'/TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'
 
-path_ttbbSL = path+"/TTbb_4f_TTToSemiLeptonic_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"
+path_ttbb = path+"/TTbb_4f_TTToSemiLeptonic_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"+';'+ \
+            path+"/TTbb_4f_TTTo2l2nu_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"
 
+path_ttbbSL = path+"/TTbb_4f_TTToSemiLeptonic_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"
 path_ttbbDL = path+"/TTbb_4f_TTTo2l2nu_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"
 
 VJetsPathS = path+'/DYJets*/*nominal*.root'+';'+ \
@@ -29,6 +31,7 @@ ttVPathS = path+'/TTW*/*nominal*.root'+';'+ \
            path+'/TTZToQQ*/*nominal*.root'
 
 ttWPath = path+'/TTW*/*nominal*.root'
+ttZPathS = path+'/TTZ*/*nominal*.root'
 
 dibosonPathS = path+'/WW_*/*nominal*.root'+';'+ \
                path+'/WZ_*/*nominal*.root'+';'+ \
@@ -152,6 +155,9 @@ TTbbweight='*35.8038266498504*0.43937838'
 TTbbweightSL='*35.8038266498504*0.4393'
 TTbbweightDL='*35.8038266498504*0.1062'
 TTbbweightFH='*35.8038266498504*0.4545'
+
+TTbbSLDLweight =  "*((abs(Weight_XS-0.00022759124112781137228)<1e-10)"+TTbbweightDL+")"
+TTbbSLDLweight += "*((abs(Weight_XS-0.0001323300384683534503)<1e-10)"+TTbbweightSL+")"
 
 tHq_XS_scale = "*(0.7927/0.07425)"
 tHW_XS_scale = "*(0.1472/0.01517)"
@@ -346,16 +352,22 @@ samples_tH = [
 
 
 samples_ttbb_4FS = [
-     plotClasses.Sample('t#bar{t}(sl)+b#bar{b} (4FS)',ROOT.kRed+3,
-             path_ttbbSL,
-             lumi+TTbbweightSL+evenSel+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
-             'ttbb_SL',
+     plotClasses.Sample('t#bar{t}+b#bar{b} (4FS)',ROOT.kRed+3,
+             path_ttbb,
+             lumi+TTbbSLDLweight+ttbb_4FS_scale+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
+             'ttbb',
              samDict=sampleDict, readTrees=doReadTrees),
-     plotClasses.Sample('t#bar{t}(dl)+b#bar{b} (4FS)',ROOT.kRed+3,
-             path_ttbbDL,
-             lumi+TTbbweightDL+evenSel+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
-             'ttbb_DL',
-             samDict=sampleDict, readTrees=doReadTrees),
+
+#      plotClasses.Sample('t#bar{t}(sl)+b#bar{b} (4FS)',ROOT.kRed+3,
+#              path_ttbbSL,
+#              lumi+TTbbweightSL+evenSel+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
+#              'ttbb_SL',
+#              samDict=sampleDict, readTrees=doReadTrees),
+#      plotClasses.Sample('t#bar{t}(dl)+b#bar{b} (4FS)',ROOT.kRed+3,
+#              path_ttbbDL,
+#              lumi+TTbbweightDL+evenSel+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
+#              'ttbb_DL',
+#              samDict=sampleDict, readTrees=doReadTrees),
     ]
 
 
