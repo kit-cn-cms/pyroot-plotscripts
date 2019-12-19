@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'legacyTTH_2018_dataMC/v4_newSF'
+    name = 'legacyTTH_2018_inputValidation/v1'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -49,8 +49,8 @@ def main(pyrootdir, opts):
     memexp = ""
     # configs
     config          = "legacyAnalysis/samples_2018_4FS_5FS_NJetCorrections"
-    variable_cfg    = "legacyAnalysis/additionalVariables"
-    plot_cfg        = "legacyAnalysis/controlPlots"
+    variable_cfg    = "legacyAnalysis/additionalVariables_2018"
+    plot_cfg        = "legacyAnalysis/controlPlots_inputValidation"
     syst_cfg        = "legacyAnalysis/no_systs"
 
     # file for rate factors
