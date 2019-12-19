@@ -284,7 +284,7 @@ def getAddVars():
 ##########
 # combined factors with logic for syst csv
 ##########
-    "N_JetWeight_Nominal:= (((isTTbarSample==1)*weight_NJet_SF_ttbb_Nominal+weight_NJet_SF_ttcc_Nominal+weight_NJet_SF_ttlf_Nominal)*((isTthSample==1)*weight_NJet_SF_ttH_Nominal)*((isTthSample==0&&isTTbarSample==0)*weight_NJet_SF_Others_Nominal))",
+    "N_JetWeight_Nominal:= ( (isTTbarSample==1)*(weight_NJet_SF_ttbb_Nominal+weight_NJet_SF_ttcc_Nominal+weight_NJet_SF_ttlf_Nominal)+((isTthSample==1)*weight_NJet_SF_ttH_Nominal)+((isTthSample==0&&isTTbarSample==0)*weight_NJet_SF_Others_Nominal) )",
     "N_JetWeight_BSTAT1_UP:= (((isTTbarSample==1)*weight_NJet_SF_ttbb_BSTAT1_UP+weight_NJet_SF_ttcc_BSTAT1_UP+weight_NJet_SF_ttlf_BSTAT1_UP)*((isTthSample==1)*weight_NJet_SF_ttH_BSTAT1_UP)*((isTthSample==0&&isTTbarSample==0)*weight_NJet_SF_Others_BSTAT1_UP))",
     "N_JetWeight_BSTAT1_DOWN:= (((isTTbarSample==1)*weight_NJet_SF_ttbb_BSTAT1_DOWN+weight_NJet_SF_ttcc_BSTAT1_DOWN+weight_NJet_SF_ttlf_BSTAT1_DOWN)*((isTthSample==1)*weight_NJet_SF_ttH_BSTAT1_DOWN)*((isTthSample==0&&isTTbarSample==0)*weight_NJet_SF_Others_BSTAT1_DOWN))",
     "N_JetWeight_BSTAT2_UP:= (((isTTbarSample==1)*weight_NJet_SF_ttbb_BSTAT2_UP+weight_NJet_SF_ttcc_BSTAT2_UP+weight_NJet_SF_ttlf_BSTAT2_UP)*((isTthSample==1)*weight_NJet_SF_ttH_BSTAT2_UP)*((isTthSample==0&&isTTbarSample==0)*weight_NJet_SF_Others_BSTAT2_UP))",
