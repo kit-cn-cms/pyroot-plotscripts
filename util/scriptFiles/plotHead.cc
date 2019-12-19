@@ -94,7 +94,7 @@ void plot()
     // Hack for subsampling test
     // if(processname=="SingleEl" || processname=="SingleMu"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
     if ((processname.find("SingleEl") != std::string::npos) || (processname.find("SingleMu") != std::string::npos) ||
-        (processname.find("MET") != std::string::npos)) {
+        (processname.find("MET") != std::string::npos) || (processname.find("SinglePh") != std::string::npos)) {
         DoWeights = 0;
         std::cout << "is data, dont use nominal weights!!!!" << std::endl;
     }

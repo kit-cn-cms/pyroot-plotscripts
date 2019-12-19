@@ -24,7 +24,7 @@ def cleanupHistos(inFile, outFile, process, systcsv):
         isVariation = True
         
     isDataSample = False
-    dataSamples = ["SingleMu", "SingleEl", "EGamma","MET"]
+    dataSamples = ["SingleMu", "SingleEl", "EGamma","MET","SinglePh"]
     if process in dataSamples:
         print("process name {} suggests that this is a data sample (will delete all systematics)".format(process))
         isDataSample = True
