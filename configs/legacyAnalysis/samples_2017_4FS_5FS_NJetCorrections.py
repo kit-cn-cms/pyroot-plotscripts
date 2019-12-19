@@ -21,8 +21,11 @@ ttbarPathS = path+'/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/*nom
 VJetsPathS = path+'/DYJets*/*nominal*.root'+';'+ \
              path+'/WJets*/*nominal*.root'
 
-path_ttbbSL = path+"/TTbb_Powheg_Openloops_new_pmx/*nominal*.root"
 
+path_ttbb = path+"/TTbb_Powheg_Openloops_new_pmx/*nominal*.root"+';'+ \
+            path+"/TTbb_Powheg_Openloops_DL/*nominal*.root"
+
+path_ttbbSL = path+"/TTbb_Powheg_Openloops_new_pmx/*nominal*.root"
 path_ttbbDL = path+"/TTbb_Powheg_Openloops_DL/*nominal*.root"
 
 ttVPathS = path+'/TTW*/*nominal*.root'+';'+ \
@@ -157,6 +160,8 @@ TTbbweightSL='*35.8038266498504*0.4393'
 TTbbweightDL='*35.8038266498504*0.1062'
 TTbbweightFH='*35.8038266498504*0.4545'
 
+TTbbSLDLweight =  "*((abs(Weight_XS-5.9241865528e-05)<1e-10)"+TTbbweightDL+")"
+TTbbSLDLweight += "*((abs(Weight_XS-6.63789523969e-06)<1e-10)"+TTbbweightSL+")"
 # DANGERZONE: derived in 2018
 ttbb_4FS_scale = "*(1.22161)"
 ttbb_5FS_scale = "*(1.31264)"
@@ -336,16 +341,22 @@ samples_tH = [
 
 
 samples_ttbb_4FS = [
-     plotClasses.Sample('t#bar{t}(sl)+b#bar{b} (4FS)',ROOT.kRed+3,
-             path_ttbbSL,
-             lumi+TTbbweightSL+evenSel+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
-             'ttbb_SL',
+     plotClasses.Sample('t#bar{t}+b#bar{b} (4FS)',ROOT.kRed+3,
+             path_ttbb,
+             lumi+TTbbSLDLweight+ttbb_4FS_scale+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
+             'ttbb',
              samDict=sampleDict, readTrees=doReadTrees),
-     plotClasses.Sample('t#bar{t}(dl)+b#bar{b} (4FS)',ROOT.kRed+3,
-             path_ttbbDL,
-             lumi+TTbbweightDL+evenSel+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
-             'ttbb_DL',
-             samDict=sampleDict, readTrees=doReadTrees),
+
+#      plotClasses.Sample('t#bar{t}(sl)+b#bar{b} (4FS)',ROOT.kRed+3,
+#              path_ttbbSL,
+#              lumi+TTbbweightSL+evenSel+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
+#              'ttbb_SL',
+#              samDict=sampleDict, readTrees=doReadTrees),
+#      plotClasses.Sample('t#bar{t}(dl)+b#bar{b} (4FS)',ROOT.kRed+3,
+#              path_ttbbDL,
+#              lumi+TTbbweightDL+evenSel+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
+#              'ttbb_DL',
+#              samDict=sampleDict, readTrees=doReadTrees),
     ]
 
 
