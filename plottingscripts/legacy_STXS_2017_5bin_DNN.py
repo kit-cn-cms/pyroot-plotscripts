@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'STXS_2017_legacy/24_5bin_DNN_wSysts'
+    name = '2017_STXS_5FS/04_2DNN_JT'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -50,8 +50,8 @@ def main(pyrootdir, opts):
     # configs
     config          = "STXS17_legacy/new_5bins_pltcfg"
     variable_cfg    = "STXS17_legacy/additionalVariables"
-    plot_cfg        = "STXS17_legacy/newFoy_5bin-test"
-    syst_cfg        = "ttH17_legacy_THstudy/systs_4FS_5FS_synced_v4"
+    plot_cfg        = "STXS17_legacy/2017_STXS_5FS_04_JT_DNN"
+    syst_cfg        = "STXS17_legacy/systs_4FS_5FS_STXS"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -70,7 +70,7 @@ def main(pyrootdir, opts):
         "addData":              False,  # adding real data 
         "makePlots":            True,
         # options for makePlots
-        "signalScaling":        25,
+        "signalScaling":        -1,
         "lumiLabel":            True,
         "CMSlabel":             "private Work",
         "ratio":                "#frac{data}{MC Background}",
@@ -91,7 +91,7 @@ def main(pyrootdir, opts):
     #plotDataBases = [["memDB","/nfs/dust/cms/user/kelmorab/DataBases/MemDataBase_ttH_2018_newJEC",True]] 
     #memDataBase = "/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                   "checkpointFiles":  "/nfs/dust/cms/user/pkraemer/DNNCheckpoints/legacyRef/06_5bin_DNN"}
+                   "checkpointFiles":  "/nfs/dust/cms/user/pkraemer/DNNCheckpoints/2017_STXS_5FS/03_2DNNs_JetTag/"}
     # dnnInterface = None
 
     # path to datacardMaker directory
