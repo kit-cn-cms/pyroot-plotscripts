@@ -160,8 +160,8 @@ TTbbweightSL='*35.8038266498504*0.4393'
 TTbbweightDL='*35.8038266498504*0.1062'
 TTbbweightFH='*35.8038266498504*0.4545'
 
-TTbbSLDLweight =  "*((abs(Weight_XS-5.9241865528e-05)<1e-6)"+TTbbweightDL+")"
-TTbbSLDLweight += "*((abs(Weight_XS-6.63789523969e-06)<1e-6)"+TTbbweightSL+")"
+TTbbSLDLweight =  "*(((abs(Weight_XS-5.9241865528e-05)<1e-6)"+TTbbweightDL+")"
+TTbbSLDLweight += "+((abs(Weight_XS-6.63789523969e-06)<1e-6)"+TTbbweightSL+"))"
 # DANGERZONE: derived in 2018
 ttbb_4FS_scale = "*(1.0)"
 ttbb_5FS_scale = "*(1.0)"
