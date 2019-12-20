@@ -164,8 +164,8 @@ TTbbweightFH='*35.8038266498504*0.4545'
 ttbb_4FS_scale = "*(1.0)"
 ttbb_5FS_scale = "*(1.0)"
 
-TTbbSLDLweight =  "*((abs(Weight_XS-5.9241865528e-05)<1e-6)"+TTbbweightDL+")"
-TTbbSLDLweight += "*((abs(Weight_XS-6.63789523969e-06)<1e-6)"+TTbbweightSL+")"
+TTbbSLDLweight =  "*(((N_GenTopLep==2)"+TTbbweightDL+")"
+TTbbSLDLweight += "+((N_GenTopLep==1)"+TTbbweightSL+"))"
 
 tHq_XS_scale = "*(0.7927/0.07425)"
 tHW_XS_scale = "*(0.1472/0.01517)"
