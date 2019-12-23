@@ -278,12 +278,13 @@ def getHistogramAndErrorband(rootFile,sample,color,typ,label,nominalKey,procIden
         sampleKey=nominalKey
     print("    loading key '{}'".format(sampleKey))
     rootHist = rootFile.Get(sampleKey)
-    if not binEdges is None:
-        rootHist = updateBinEdges(rootHist, binEdges)
-        rootHist.SetTitle(newTitle)
     print("    type of hist is: "+str(type(rootHist)) )
     if not isinstance(rootHist, ROOT.TH1):
         return "ERROR"
+
+    if not binEdges is None:
+        rootHist = updateBinEdges(rootHist, binEdges)
+        rootHist.SetTitle(newTitle)
     PlotObject=Plot(rootHist,sample,label=label,
                                     color=color,typ=typ,
                                     OverUnderFlowInc=True)
@@ -304,7 +305,8 @@ def addSamples(sample,color,typ,label,addsamples,PlotList,combineflag=None):
     combinedHist = None
     print("Adding samples for summarized process %s" % sample)
     for addsample in addsamples:
-        if PlotList[addsample] == "ERROR": continue
+        entry = PlotList.get(addsample, "ERROR")
+        if entry == "ERROR": continue
         print "    "+addsample
         if combinedHist:
             combinedHist.Add(PlotList[addsample].hist)
