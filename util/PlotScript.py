@@ -327,22 +327,24 @@ for sample in samples:
     color   = samples[sample]['color']
     typ     = samples[sample]['typ']
     label   = samples[sample]['label']
-
+    entry   = None
     if combineflag:
         if typ=="signal":
             continue
         else:
-            PlotList[sample] = Plots.getHistogramAndErrorband(rootFile=rootFile,sample=sample,
+            entry = Plots.getHistogramAndErrorband(rootFile=rootFile,sample=sample,
                                                         color=color,typ=typ,label=label,
                                                         nominalKey=nominalKey,procIden=procIden,
                                                         binEdges=binEdges,newTitle=xLabel)
     else:
-        PlotList[sample] = Plots.buildHistogramAndErrorBand(rootFile=rootFile,sample=sample,
+        entry = Plots.buildHistogramAndErrorBand(rootFile=rootFile,sample=sample,
                                                         color=color,typ=typ,label=label,
                                                         systematics=systematics,
                                                         nominalKey=nominalKey,procIden=procIden,
                                                         systematicKey=systematicKey,sysIden=sysIden,
                                                         systClass=systClass)
+
+    PlotList[sample] = entry
 
 """
 Combine Histograms and errorbands for combined plot channels
@@ -355,13 +357,17 @@ for sample in plottingsamples:
         continue
     label       = plottingsamples[sample]['label']
     addsamples  = plottingsamples[sample].get('addSamples', [])
+    print(PlotList)
     PlotList = Plots.addSamples(sample=sample,color=color,typ=typ,label=label,
                                     addsamples=addsamples,PlotList=PlotList,combineflag=combineflag)
 
     addedHist = PlotList[sample].hist
-    addedHist.Print()
-    addedHist.SetName(label+"_"+addedHist.GetName()) 
-    addedHist.Print()
+    if isinstance(addedHist, ROOT.TH1F):
+        addedHist.Print()
+        addedHist.SetName(label+"_"+addedHist.GetName()) 
+        addedHist.Print()
+    else:
+        PlotList[sample] = "ERROR"
     # rootFile.Write(addedHist.GetName())
 # rootFile.ReOpen("readonly")
 """
