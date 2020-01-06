@@ -255,13 +255,17 @@ def main(pyrootdir, opts):
             if analysis.usePseudoData:
                 print("adding data_obs histograms as pseudo data")
                 # pseudo data without ttH
-                pP.addData(samples = configData.samples[nSigSamples:])
+                pP.addData( samples = configData.samples[nSigSamples:], 
+                            nominal_hist_template = nom_histname_template,
+                            discrName = discrName)
                 # pseudo data with signal
                 #pP.addData(samples = configData.samples)
             else:
                 print("adding data_obs histograms as real data")
                 # real data with ttH
-                pP.addData(samples = configData.controlSamples)
+                pP.addData( samples = configData.controlSamples, 
+                            nominal_hist_template = nom_histname_template,
+                            discrName = discrName)
 
     
 
@@ -272,7 +276,7 @@ def main(pyrootdir, opts):
     print("at the moment the outputpath is "+str(analysis.renamedPath))
     print("#################################################")
 
-    if analysis.makeDataCards or analysis.makeInputDatacards:
+    if analysis.makeDataCards or analysis.makeInputDatacards and not opts.skipDatacards:
         print '''
         # ========================================================
         # Making Datacards.
@@ -299,7 +303,9 @@ def main(pyrootdir, opts):
         # ========================================================
         '''
         with monitor.Timer("makePlots"):
-            makePlots.makePlots(configData = configData)
+            makePlots.makePlots(configData  = configData,
+                                nominal_key = nom_histname_template,
+                                syst_key    = syst_histname_template)
 
 
     print '''
