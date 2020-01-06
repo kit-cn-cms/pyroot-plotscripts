@@ -111,23 +111,25 @@ def InitDataBase(thisDataBase=[]):
 
 
 # -- initializing histograms ----------------------------------------------------------------------
-def initHistos(catnames, systnames, plots, edge_precision=4):
-    rstr = ""
-    rstr += "double variable = -999;\n"
-    rstr += "double variable1 = -999;\n"
-    rstr += "double variable2 = -999;\n"
-    rstr += "std::vector<std::string> systematics = {\n"
-    for syst in systnames:
-        rstr += "    \""+syst+"\",\n"
-    rstr = rstr[:-2]+"\n};\n"
-    rstr += "std::vector<std::string> categs = {\n"
-    for cat in catnames:
-        rstr += "    \""+cat+"\",\n"
-    rstr = rstr[:-2]+"\n};\n"
-    rstr += "std::map<std::string, Plot1DInfoStruct> plotinfo1D;\n"
-    rstr += "std::map<std::string, Plot2DInfoStruct> plotinfo2D;\n"
-    rstr += "std::map<std::string, std::unique_ptr<TH1>> histos1D;\n"
-    rstr += "std::map<std::string, std::unique_ptr<TH2>> histos2D;\n"
+def initHistos(catnames, systnames, plots, nom_histname_template, syst_histname_template, edge_precision=4):
+    rstr = """
+double variable = -999;
+double variable1 = -999;
+double variable2 = -999;
+std::vector<std::string> systematics = {{
+{}
+}};
+
+""".format(",\n".join(['\t"{}"'.format(x) for x in systnames]))
+# std::vector<std::string> categs = {\n"
+# for cat in catnames:
+#     rstr += "    \""+cat+"\",\n"
+# rstr = rstr[:-2]+"\n};\n"
+    rstr += """std::map<std::string, Plot1DInfoStruct> plotinfo1D;
+std::map<std::string, Plot2DInfoStruct> plotinfo2D;
+std::map<std::string, std::unique_ptr<TH1>> histos1D;
+std::map<std::string, std::unique_ptr<TH2>> histos2D;
+"""
     for plot in plots:
         if plot.dim == 2:
             title  = plot.histo.GetTitle()+";"+plot.histo.GetXaxis().GetTitle()+";"+plot.histo.GetYaxis().GetTitle()
@@ -153,29 +155,36 @@ def initHistos(catnames, systnames, plots, edge_precision=4):
               bin_edges.append(str(round(plot.histo.GetBinLowEdge(i),edge_precision)))
             rstr  += """plotinfo1D["{0}"] = {{"{0}","{1}",{2},{{ {3} }} }};\n""".format(name, title, nbins, ",".join(bin_edges))
 
-    rstr += "\n\n"
-    rstr += "for(const auto& cat: categs){\n"
-    rstr += "    for(const auto& obj: plotinfo1D){\n"
-    rstr += "        for(const auto& syst: systematics){\n"
-    rstr += "            const auto& PlotInfo1D = obj.second;\n"
-    rstr += "            histos1D[cat+obj.first+syst] = "
-    rstr += "std::unique_ptr<TH1>(new TH1F((processname+\"_\"+cat+obj.first+syst+suffix).c_str(), (PlotInfo1D.title).c_str(), PlotInfo1D.nbins, PlotInfo1D.edges.data()));\n"
-    rstr += "            histos1D[cat+obj.first+syst]->SetDirectory(0);\n"
-    rstr += "        }\n"
-    rstr += "    }\n"
-    rstr += "}\n"
+    rstr += """
+TString histname;
+for(const auto& obj: plotinfo1D){{
+  for(const auto& syst: systematics){{
+    const auto& PlotInfo1D = obj.second;
+    if(syst == "") histname = "{nom_hist_temp}";
+    else histname = "{syst_hist_temp}";
+    histname.ReplaceAll("$PROCESS", processname);
+    histname.ReplaceAll("$CHANNEL", obj.first);
+    histname.ReplaceAll("$SYSTEMATIC", syst);
+    histos1D[obj.first+syst] = std::unique_ptr<TH1>(new TH1F((histname.Data()+suffix).c_str(), (PlotInfo1D.title).c_str(), PlotInfo1D.nbins, PlotInfo1D.edges.data()));
+    histos1D[obj.first+syst]->SetDirectory(0);
+  }}
+}}
 
-    rstr += "for(const auto& cat: categs){\n"
-    rstr += "    for(const auto& obj: plotinfo2D){\n"
-    rstr += "        for(const auto& syst: systematics){\n"
-    rstr += "            const auto& PlotInfo2D = obj.second;\n"
-    rstr += "            histos2D[cat+obj.first+syst] = "
-    rstr += "std::unique_ptr<TH2>(new TH2F((processname+\"_\"+cat+obj.first+syst+suffix).c_str(), (PlotInfo2D.title).c_str(), "
-    rstr += "PlotInfo2D.nbinsx, PlotInfo2D.edges_x.data(), PlotInfo2D.nbinsy, PlotInfo2D.edges_y.data()));\n"
-    rstr += "            histos2D[cat+obj.first+syst]->SetDirectory(0);\n"
-    rstr += "        }\n"
-    rstr += "    }\n"
-    rstr += "}\n"
+for(const auto& obj: plotinfo2D){{
+  for(const auto& syst: systematics){{
+    const auto& PlotInfo2D = obj.second;
+    if(syst == "") histname = "{nom_hist_temp}";
+    else histname = "{syst_hist_temp}";
+    histname.ReplaceAll("$PROCESS", processname);
+    histname.ReplaceAll("$CHANNEL", obj.first);
+    histname.ReplaceAll("$SYSTEMATIC", syst);
+    histos2D[obj.first+syst] = std::unique_ptr<TH2>(new TH2F((histname.Data()+suffix).c_str(), (PlotInfo2D.title).c_str(), 
+                                                                PlotInfo2D.nbinsx, PlotInfo2D.edges_x.data(), 
+                                                                PlotInfo2D.nbinsy, PlotInfo2D.edges_y.data()));
+    histos2D[obj.first+syst]->SetDirectory(0);
+  }}
+}}""".format( nom_hist_temp   = nom_histname_template,
+              syst_hist_temp  = syst_histname_template)
     
     return rstr
 
