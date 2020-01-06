@@ -29,9 +29,6 @@ class scriptWriter:
         if self.pp.useGenWeightNormMap:
             # initialize class to handle genWeight normalization stuff
             self.genWeightNormalization = GenWeightUtils.GenWeightNormalization(self.pp.rateFactorsFile)
-        self.nominalHistoKey = plotParaClass.nominalHistoKey
-        self.systHistoKey = plotParaClass.systHistoKey
-        self.histNameSeparator = plotParaClass.histNameSeparator
 
 
     ## main function for writing and compiling c++ code ##
@@ -141,7 +138,9 @@ class scriptWriter:
         script += scriptfunctions.initHistos(
             catnames  = self.pp.categoryNames, 
             systnames = self.pp.systNames, 
-            plots     = self.pp.configData.getDiscriminatorPlots())
+            plots     = self.pp.configData.getDiscriminatorPlots(),
+            nom_histname_template = self.pp.nominalHistoKey, 
+            syst_histname_template = self.pp.systHistoKey)
 
         # start event loop
         #if self.pp.useGenWeightNormMap:
@@ -572,9 +571,9 @@ with open(outname.replace('.root','_cleanedUp.txt'), 'w') as f:
         script += 'export SUFFIX="'+suffix+'"\n'
         script += 'export EVENTFILTERFILE="'+str(filterFile)+'"\n'
         script += 'export ORIGNAME="'+str(origName)+'"\n'
-        script += "export NOMHISTKEY='{}'\n".format(self.nominalHistoKey)
-        script += "export SYSTHISTKEY='{}'\n".format(self.systHistoKey)
-        script += 'export SEPARATOR="{}"\n'.format(self.histNameSeparator)
+        script += "export NOMHISTKEY='{}'\n".format(self.pp.nominalHistoKey)
+        script += "export SYSTHISTKEY='{}'\n".format(self.pp.systHistoKey)
+        script += 'export SEPARATOR="{}"\n'.format(self.pp.histNameSeparator)
         #DANGERZONE
         pPscript = script + ".".join(self.ccPath.split(".")[:-1])+'\n'
         cleanup  = script + 'python '+self.ccPath.replace('.cc','_cleanupHistos.py')+'\n'
