@@ -294,9 +294,11 @@ if combineflag:
         binFileName = channelLine[3]
         binFileName = binFileName if os.path.isabs(binFileName) else os.path.join(datacard_dir, binFileName)
         binKey = channelLine[4].replace("$PROCESS","data_obs")
+        binKey = binKey.replace("$CHANNEL", options.channelName)
         outputName = binKey.replace("data_obs_","")
         
         binFile = ROOT.TFile(binFileName)
+        print("loading " + binKey)
         binHist = binFile.Get(binKey)
         xLabel = binHist.GetTitle()
         binEdges = []
