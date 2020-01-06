@@ -83,12 +83,12 @@ of the root file
 keyOptions       = optparse.OptionGroup(parser, "Key Options")
 
 keyOptions.add_option("-k","--nominalkey", dest="nominalKey", default="$PROCESS_$CHANNEL",
-        help="KEY of the systematics histograms")
+        help="KEY of the systematics histograms", type = "str")
 keyOptions.add_option("-s","--systematickey", dest="systematicKey", default="$PROCESS_$CHANNEL_$SYSTEMATIC",
-        help="KEY of the nominal histograms")
-keyOptions.add_option("-d","--data", dest="data", default=None,
+        help="KEY of the nominal histograms", type = "str")
+keyOptions.add_option("-d","--data", dest="data", default=None, type = "str",
         help="NAME of the data in the root file, used to replace the process identifier ($PROCESS) in the nominal key to get the data sample", metavar="datakeyreplace")
-keyOptions.add_option("-c","--channelname", dest="channelName",
+keyOptions.add_option("-c","--channelname", dest="channelName", type = "str",
         help="NAME of the channel in the root file, used to replace the channel identifier ($CHANNEL) in the nominal and systematic key")
 
 parser.add_option_group(keyOptions)
@@ -267,6 +267,10 @@ combineIden = "$FLAG"
 
 combineflag             = getParserConfigDefaultValue(parser=options.combineflag,config="combineflag",
                                             plotoptions=plotoptions,defaultvalue=None)
+options.nominalKey      = getParserConfigDefaultValue(parser = None, config = "nominalKey",
+                                            plotoptions=plotoptions,defaultvalue="$PROCESS_$CHANNEL")
+options.systematicKey   = getParserConfigDefaultValue(parser = None, config = "systematicKey",
+                                            plotoptions=plotoptions,defaultvalue="$PROCESS_$CHANNEL_$SYSTEMATIC")
 
 binEdges                = None
 outputName              = None
@@ -307,6 +311,7 @@ if combineflag:
 
 # build keys
 if chIden in options.nominalKey:
+    print("inserting channel name '{}' into nominal template".format(options.channelName))
     nominalKey      = options.nominalKey.replace(chIden, options.channelName)
 else:
     nominalKey      = options.nominalKey
