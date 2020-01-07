@@ -372,6 +372,11 @@ class scriptWriter:
         
 
         
+        script += "     timerSampleWeight->Start();\n"
+        script += '        float sampleweight=1;\n'
+        script += scriptfunctions.encodeSampleSelection(self.pp.configData.allSamples, self.varManager)
+        script += "     totalTimeSampleWeight+=timerSampleWeight->RealTime();\n"
+        
         script += "     timerFillHistograms->Start();\n"
 
         return script
