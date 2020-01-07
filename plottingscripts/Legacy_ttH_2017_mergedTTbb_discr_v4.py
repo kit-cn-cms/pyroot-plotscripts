@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'Legacy_ttH_2017_discr_mergedTTbb_v4'
+    name = 'Legacy_ttH_2017_discr_mergedTTbb_v5'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -40,8 +40,12 @@ def main(pyrootdir, opts):
 
     # dataera
     dataera = "2017"
+    template_nominal_histkey = "$PROCESS_finaldiscr_$CHANNEL"
+    template_syst_histkey = "$PROCESS_finaldiscr_$CHANNEL_$SYSTEMATIC"
+    separator = "_finaldiscr_"
     
     # Name of final discriminator, should not contain underscore
+    # aming to get rid of this
     discrName = 'finaldiscr'
 
     # define MEM discriminator variable
@@ -50,7 +54,7 @@ def main(pyrootdir, opts):
     # configs
     config          = "ttH17_legacy_v4/samples_4FS_5FS_synced_v4"
     variable_cfg    = "ttH17_legacy/additionalVariables"
-    plot_cfg        = "ttH17_legacy_v4/discr_plots_5node_mergedTTbb_2017_HT"
+    plot_cfg        = "ttH17_legacy_v4/discr_plots_5node_mergedTTbb_2017_HT_v2"
     syst_cfg        = "ttH17_legacy_v4/systs_4FS_5FS_synced_v4"
 
     # file for rate factors
@@ -62,7 +66,7 @@ def main(pyrootdir, opts):
         # general options
         "usePseudoData":        True,
         "testrun":              False,  # test run with less samples
-        "stopAfterCompile":     False,   # stop script after compiling
+        "stopAfterCompile":     True,   # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
         "makeDataCards":        True,
@@ -175,7 +179,11 @@ def main(pyrootdir, opts):
         # initialize plotParallel class 
         pP = plotParallel.plotParallel(
             analysis = analysis,
-            configData = configData)
+            configData = configData,
+            nominalHistKey = template_nominal_histkey,
+            systHistKey = template_syst_histkey,
+            separator = separator
+            )
 
         monitor.printClass(pP, "init")
         # set some changed values
