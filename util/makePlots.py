@@ -63,6 +63,8 @@ def createPlotConfig(configData,workdir, nominal_key, syst_key):
     #get plotting information
     plotinfo = {
         "signalScaling"     : configData.analysis.signalScaling,
+        "datalabel"         : "data",
+        "data"              : "data_obs",
         
         "cmslabel"          : configData.analysis.cmslabel,
         "normalize"         : bool(configData.analysis.normalize),
@@ -70,6 +72,8 @@ def createPlotConfig(configData,workdir, nominal_key, syst_key):
         "logarithmic"       : bool(configData.analysis.logarithmic),
         "splitLegend"       : bool(configData.analysis.splitLegend),
         "shape"             : bool(configData.analysis.shape),
+      
+        "statErrorband"     : True,
         "nominalKey"        : nominal_key,
         "systematicKey"     : syst_key,
     }
@@ -79,13 +83,16 @@ def createPlotConfig(configData,workdir, nominal_key, syst_key):
             lumiLabel   = configData.analysis.getLumi()
     plotinfo["lumiLabel"] = lumiLabel
 
-    samples={}
+    samples = {}
     #samples named in the rootfile
     for sample in configData.pltcfg.samples:
-        samples[sample.nick]={
-        "label": sample.name,
-        "typ": sample.typ,
-        "color": sample.color,
+        samples[sample.nick]= {
+        "plot": sample.plot, 
+        "info": {
+            "label": sample.name,
+            "typ": sample.typ,
+            "color": sample.color,
+            }
         }
 
     #combined samples
@@ -139,7 +146,6 @@ plotoptions = {plotoptionstring}
     """
     with open(outputpath,'w') as outfile:
         outfile.write(configstring)
-
     return outputpath
 
 # creates PlotScript to make plots for a specific channel

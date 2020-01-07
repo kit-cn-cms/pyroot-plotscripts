@@ -21,6 +21,13 @@ ttbarPathS = path+'/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/*nom
 VJetsPathS = path+'/DYJets*/*nominal*.root'+';'+ \
              path+'/WJets*/*nominal*.root'
 
+path_ttbb = path+"/TTbb_Powheg_Openloops_new_pmx/*nominal*.root"+';'+ \
+            path+"/TTbb_Powheg_Openloops_new_pmx/*nominal*.root"
+
+path_ttbbSL = path+"/TTbb_Powheg_Openloops_new_pmx/*nominal*.root"
+
+path_ttbbDL = path+"/TTbb_Powheg_Openloops_DL/*nominal*.root"
+
 ttVPathS = path+'/TTW*/*nominal*.root'+';'+ \
            path+'/TTZToLLNuNu*/*nominal*.root'+';'+ \
            path+'/TTZToQQ_TuneCP5_13TeV-amcatnlo-pythia8_1/*nominal*.root'
@@ -154,8 +161,11 @@ TTbbweightDL='*35.8038266498504*0.1062'
 TTbbweightFH='*35.8038266498504*0.4545'
 
 # DANGERZONE: derived in 2018
-ttbb_4FS_scale = "*(1.22161)"
-ttbb_5FS_scale = "*(1.31264)"
+ttbb_4FS_scale = "*(1.0)"
+ttbb_5FS_scale = "*(1.0)"
+
+TTbbSLDLweight =  "*(((N_GenTopLep==2)"+TTbbweightDL+")"
+TTbbSLDLweight += "+((N_GenTopLep==1)"+TTbbweightSL+"))"
 
 tHq_XS_scale = "*(0.7927/0.07425)"
 tHW_XS_scale = "*(0.1472/0.01517)"
@@ -287,43 +297,43 @@ samples_ttH_decay = [
 
 samples_tH = [
     # ITC case
-    plotClasses.Sample('tHW (ITC)',ROOT.kBlue+3,
-            THWpath,
-            lumi+tHW_XS_scale+sel_MET,
-            'tHW_ITC',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+    #plotClasses.Sample('tHW (ITC)',ROOT.kBlue+3,
+    #        THWpath,
+    #        lumi+tHW_XS_scale+sel_MET,
+    #        'tHW_ITC',
+    #        samDict=sampleDict, readTrees=doReadTrees, typ = "signal", plot = False),
 
-    plotClasses.Sample('tHq (ITC)',ROOT.kBlue+6,
-            THQpath,
-            lumi+tHq_XS_scale+sel_MET,
-            'tHQ_ITC',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+    #plotClasses.Sample('tHq (ITC)',ROOT.kBlue+6,
+    #        THQpath,
+    #        lumi+tHq_XS_scale+sel_MET,
+    #        'tHQ_ITC',
+    #        samDict=sampleDict, readTrees=doReadTrees, typ = "signal", plot = False),
 
     # SM case
     plotClasses.Sample('tHW (SM)',ROOT.kBlue+3,
             THWpath,
             lumi+tHW_XS_scale+tH_SM_rwgt+sel_MET,
-            'tHW_SM',
+            'tHW_hbb',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
     plotClasses.Sample('tHq (SM)',ROOT.kBlue+6,
             THQpath,
             lumi+tHq_XS_scale+tH_SM_rwgt+sel_MET,
-            'tHQ_SM',
+            'tHq_hbb',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
     # point 5
-    plotClasses.Sample('tHW (5)',ROOT.kBlue+3,
-            THWpath,
-            lumi+tHW_XS_scale+tH_5_rwgt+sel_MET,
-            'tHW_5',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+    #plotClasses.Sample('tHW (5)',ROOT.kBlue+3,
+    #        THWpath,
+    #        lumi+tHW_XS_scale+tH_5_rwgt+sel_MET,
+    #        'tHW_5',
+    #        samDict=sampleDict, readTrees=doReadTrees, typ = "signal", plot = False),
 
-    plotClasses.Sample('tHq (5)',ROOT.kBlue+6,
-            THQpath,
-            lumi+tHq_XS_scale+tH_5_rwgt+sel_MET,
-            'tHQ_5',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+    #plotClasses.Sample('tHq (5)',ROOT.kBlue+6,
+    #        THQpath,
+    #        lumi+tHq_XS_scale+tH_5_rwgt+sel_MET,
+    #        'tHQ_5',
+    #        samDict=sampleDict, readTrees=doReadTrees, typ = "signal", plot = False),
 
 
     ]
@@ -332,16 +342,23 @@ samples_tH = [
 
 
 samples_ttbb_4FS = [
-     plotClasses.Sample('t#bar{t}(sl)+b#bar{b} (4FS)',ROOT.kRed+3,
-             path+"/TTbb_Powheg_Openloops_new_pmx/*nominal*.root",
-             lumi+TTbbweightSL+evenSel+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
-             'ttbb_SL',
+
+    plotClasses.Sample('t#bar{t}+b#bar{b} (4FS)',ROOT.kRed+3,
+             path_ttbb,
+             lumi+TTbbSLDLweight+evenSel+ttbb_4FS_scale+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
+             'ttbb',
              samDict=sampleDict, readTrees=doReadTrees),
-     plotClasses.Sample('t#bar{t}(dl)+b#bar{b} (4FS)',ROOT.kRed+3,
-             path+"/TTbb_Powheg_Openloops_DL/*nominal*.root",
-             lumi+TTbbweightDL+evenSel+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
-             'ttbb_DL',
-             samDict=sampleDict, readTrees=doReadTrees),
+
+#      plotClasses.Sample('t#bar{t}(sl)+b#bar{b} (4FS)',ROOT.kRed+3,
+#              path_ttbbSL,
+#              lumi+TTbbweightSL+evenSel+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
+#              'ttbb_SL',
+#              samDict=sampleDict, readTrees=doReadTrees),
+#      plotClasses.Sample('t#bar{t}(dl)+b#bar{b} (4FS)',ROOT.kRed+3,
+#              path_ttbbDL,
+#              lumi+TTbbweightDL+evenSel+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
+#              'ttbb_DL',
+#              samDict=sampleDict, readTrees=doReadTrees),
     ]
 
 

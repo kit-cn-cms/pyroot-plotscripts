@@ -113,6 +113,8 @@ plotOptions.add_option("--logarithmic", dest="logarithmic", default=None,
 plotOptions.add_option("--combineDatacard", dest = "datacard", default=None,
         help="PATH to datacard file rootfile path and channel name for correct binning of prefit/postfit plots")
 
+plotOptions.add_option("--statErr", dest="addStatErrorband", default = None,
+        help="add statistics errorband")
 parser.add_option_group(plotOptions)
 
 """
@@ -328,6 +330,10 @@ rootfilename    = options.Rootfile
 rootFile        = ROOT.TFile(rootfilename, "readonly") 
 
 
+addStatErrorband = getParserConfigDefaultValue(
+                    parser = options.addStatErrorband, config = "statErrorband",
+                    plotoptions = plotoptions, defaultvalue = False)
+
 # load samples
 print "start loading  samples" 
 for sample in samples:
@@ -349,7 +355,8 @@ for sample in samples:
                                                         systematics=systematics,
                                                         nominalKey=nominalKey,procIden=procIden,
                                                         systematicKey=systematicKey,sysIden=sysIden,
-                                                        systClass=systClass)
+                                                        systClass=systClass,
+                                                        addStatErrorband=addStatErrorband)
 
     PlotList[sample] = entry
 
