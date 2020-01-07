@@ -7,6 +7,7 @@
 
 #include "TFile.h"
 #include "TH1.h"
+#include "TF1.h"
 #include "TString.h"
 
 #include "Systematics.h"
@@ -67,9 +68,9 @@ private:
   int nLFetaBins_;//number of eta bins in lf histograms
   bool allowJetsOutOfBinning_;
 
-  std::vector< std::vector<TH1*> > h_csv_wgt_hf;//vector to store pointers to the needed hf histograms
-  std::vector< std::vector<TH1*> > c_csv_wgt_hf;//vector to store pointers to the needed c flavour histograms
-  std::vector< std::vector< std::vector<TH1*> > > h_csv_wgt_lf;//vector to store pointers to the needed lf histograms
+  std::vector< std::vector<TF1*> > h_csv_wgt_hf;//vector to store pointers to the needed hf histograms
+  std::vector< std::vector<TF1*> > c_csv_wgt_hf;//vector to store pointers to the needed c flavour histograms
+  std::vector< std::vector< std::vector<TF1*> > > h_csv_wgt_lf;//vector to store pointers to the needed lf histograms
   // vector for the csv systematics
   std::vector<Systematics::Type> csvsysts = {   
                                                 Systematics::CSVLFup,
@@ -94,7 +95,8 @@ private:
   // function to get the histograms from the provided root files
   void fillCSVHistos(TFile *fileHF, TFile *fileLF, const std::vector<Systematics::Type>& systs);
   // function which reads the desired histogram from the provided root file
-  TH1* readHistogram(TFile* file, const TString& name) const;
+  TH1* readHistogram_TH1(TFile* file, const TString& name) const;
+  TF1* readHistogram_TF1(TFile* file, const TString& name) const;
 
 
 };

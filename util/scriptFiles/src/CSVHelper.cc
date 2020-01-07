@@ -65,9 +65,9 @@ void CSVHelper::init(const std::string& hf, const std::string& lf, const int& nH
 void CSVHelper::fillCSVHistos(TFile *fileHF, TFile *fileLF, const std::vector<Systematics::Type>& systs)
 {
   const size_t nSys = systs.size();//purity,stats1,stats2 with up/down + jec systs including nominal variation
-  h_csv_wgt_hf = std::vector< std::vector<TH1*> >(nSys,std::vector<TH1*>(nHFptBins_,NULL));
-  c_csv_wgt_hf = std::vector< std::vector<TH1*> >(nSys,std::vector<TH1*>(nHFptBins_,NULL));
-  h_csv_wgt_lf = std::vector< std::vector< std::vector<TH1*> > >(nSys,std::vector< std::vector<TH1*> >(nLFptBins_,std::vector<TH1*>(nLFetaBins_,NULL)));
+  h_csv_wgt_hf = std::vector< std::vector<TF1*> >(nSys,std::vector<TF1*>(nHFptBins_,NULL));
+  c_csv_wgt_hf = std::vector< std::vector<TF1*> >(nSys,std::vector<TF1*>(nHFptBins_,NULL));
+  h_csv_wgt_lf = std::vector< std::vector< std::vector<TF1*> > >(nSys,std::vector< std::vector<TF1*> >(nLFptBins_,std::vector<TF1*>(nLFetaBins_,NULL)));
   TString syst_csv_suffix = "final";
   // loop over all the available systematics
   for (size_t iSys = 0; iSys < nSys; iSys++) {
@@ -92,12 +92,12 @@ void CSVHelper::fillCSVHistos(TFile *fileHF, TFile *fileLF, const std::vector<Sy
         TString name = Form("csv_ratio_Pt%i_Eta0_%s", iPt, (syst_csv_suffix+systematic).Data());
         // only read the histogram if it exits in the root file
         if(fileHF->GetListOfKeys()->Contains(name)) {
-            h_csv_wgt_hf.at(iSys).at(iPt) = readHistogram(fileHF,name);
+            h_csv_wgt_hf.at(iSys).at(iPt) = readHistogram_TF1(fileHF,name);
             std::cout <<"for "<<systematic_original<< " added " <<  h_csv_wgt_hf.at(iSys).at(iPt)->GetName() << " from HF file" << std::endl;
         }
         else {
             std::cout << "WARNING: didn't find Histogram " << name << " in HF File, using nominal instead" << std::endl;     
-            h_csv_wgt_hf.at(iSys).at(iPt) = readHistogram(fileHF,name.ReplaceAll(systematic,""));
+            h_csv_wgt_hf.at(iSys).at(iPt) = readHistogram_TF1(fileHF,name.ReplaceAll(systematic,""));
             std::cout <<"for "<<systematic_original<< " added " <<  h_csv_wgt_hf.at(iSys).at(iPt)->GetName() << " from HF file" << std::endl;
         }
     }
@@ -105,12 +105,12 @@ void CSVHelper::fillCSVHistos(TFile *fileHF, TFile *fileLF, const std::vector<Sy
     for (int iPt = 0; iPt < nHFptBins_; iPt++) {
         TString name = Form("c_csv_ratio_Pt%i_Eta0_%s", iPt, (syst_csv_suffix+systematic).Data());
         if(fileHF->GetListOfKeys()->Contains(name)) {
-            c_csv_wgt_hf.at(iSys).at(iPt) = readHistogram(fileHF,name);
+            c_csv_wgt_hf.at(iSys).at(iPt) = readHistogram_TF1(fileHF,name);
             std::cout <<"for "<<systematic_original<< " added " << c_csv_wgt_hf.at(iSys).at(iPt)->GetName() << " from CF(HF) file" << std::endl;
         }
         else {
             std::cout << "WARNING: didn't find Histogram " << name << " in CF(HF) File, using nominal instead" << std::endl;     
-            c_csv_wgt_hf.at(iSys).at(iPt) = readHistogram(fileHF,name.ReplaceAll(systematic,""));
+            c_csv_wgt_hf.at(iSys).at(iPt) = readHistogram_TF1(fileHF,name.ReplaceAll(systematic,""));
             std::cout <<"for "<<systematic_original<< " added " << c_csv_wgt_hf.at(iSys).at(iPt)->GetName() << " from CF(HF) file" << std::endl;
         }
     }
@@ -119,12 +119,12 @@ void CSVHelper::fillCSVHistos(TFile *fileHF, TFile *fileLF, const std::vector<Sy
         for (int iEta = 0; iEta < nLFetaBins_; iEta++) {
             TString name = Form("csv_ratio_Pt%i_Eta%i_%s", iPt, iEta, (syst_csv_suffix+systematic).Data());
             if(fileLF->GetListOfKeys()->Contains(name)) {
-                h_csv_wgt_lf.at(iSys).at(iPt).at(iEta) = readHistogram(fileLF,name);
+                h_csv_wgt_lf.at(iSys).at(iPt).at(iEta) = readHistogram_TF1(fileLF,name);
                 std::cout <<"for "<<systematic_original<< " added " << h_csv_wgt_lf.at(iSys).at(iPt).at(iEta)->GetName() << " from LF file" << std::endl;
             }
             else {
                 std::cout << "WARNING: didn't find Histogram " << name << " in LF File, using nominal instead" << std::endl;     
-                h_csv_wgt_lf.at(iSys).at(iPt).at(iEta) = readHistogram(fileLF,name.ReplaceAll(systematic,""));
+                h_csv_wgt_lf.at(iSys).at(iPt).at(iEta) = readHistogram_TF1(fileLF,name.ReplaceAll(systematic,""));
                 std::cout <<"for "<<systematic_original<< " added " << h_csv_wgt_lf.at(iSys).at(iPt).at(iEta)->GetName() << " from LF file" << std::endl;
             }
         }
@@ -133,9 +133,11 @@ void CSVHelper::fillCSVHistos(TFile *fileHF, TFile *fileLF, const std::vector<Sy
 }
 
 
-TH1* CSVHelper::readHistogram(TFile* file, const TString& name) const {
+TH1* CSVHelper::readHistogram_TH1(TFile* file, const TString& name) const {
   TH1* h = NULL;
-  file->GetObject(name,h);
+  TF1* f = NULL;
+  file->GetObject(name,f);
+  h = f->GetHistogram();
   if( h==NULL ) {
     //throw cms::Exception("BadCSVWeightInit")
     std::cerr << "BadCSVWeightInit" << std::endl
@@ -145,6 +147,22 @@ TH1* CSVHelper::readHistogram(TFile* file, const TString& name) const {
   h->SetDirectory(0);
   
   return h;
+}
+
+TF1* CSVHelper::readHistogram_TF1(TFile* file, const TString& name) const {
+  //TH1* h = NULL;
+  TF1* f = NULL;
+  file->GetObject(name,f);
+  //h = f->GetHistogram();
+  if( f==NULL ) {
+    //throw cms::Exception("BadCSVWeightInit")
+    std::cerr << "BadCSVWeightInit" << std::endl
+      << "Could not find CSV SF histogram '" << name
+      << "' in file '" << file->GetName() << "'";
+  }
+  //f->SetDirectory(0);
+  
+  return f;
 }
 
 
@@ -232,8 +250,8 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
           iPt=nHFptBins_-1;// [20-30], [30-50], [50-70], [70,100] and [100-10000] only 5 Pt bins for hf
       }
       if(h_csv_wgt_hf.at(iSys).at(iPt)) {
-        const int useCSVBin = (csv >= 0.) ? h_csv_wgt_hf.at(iSys).at(iPt)->FindBin(csv) : 1;
-        const double iCSVWgtHF = h_csv_wgt_hf.at(iSys).at(iPt)->GetBinContent(useCSVBin);
+        //const int useCSVBin = (csv >= 0.) ? h_csv_wgt_hf.at(iSys).at(iPt)->FindBin(csv) : 1;
+        const double iCSVWgtHF = h_csv_wgt_hf.at(iSys).at(iPt)->Eval(csv);
         if (iCSVWgtHF != 0) csvWgthf *= iCSVWgtHF;
       }
     } // c flavour jet
@@ -246,8 +264,8 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
           iPt=nHFptBins_-1;// [20-30], [30-50], [50-70], [70,100] and [100-10000] only 5 Pt bins for hf
       }
       if(c_csv_wgt_hf.at(iSys).at(iPt)) {
-        const int useCSVBin = (csv >= 0.) ? c_csv_wgt_hf.at(iSys).at(iPt)->FindBin(csv) : 1;
-        const double iCSVWgtC = c_csv_wgt_hf.at(iSys).at(iPt)->GetBinContent(useCSVBin);
+        //const int useCSVBin = (csv >= 0.) ? c_csv_wgt_hf.at(iSys).at(iPt)->FindBin(csv) : 1;
+        const double iCSVWgtC = c_csv_wgt_hf.at(iSys).at(iPt)->Eval(csv);
         if (iCSVWgtC != 0) csvWgtC *= iCSVWgtC;
       }
     } // light flavour jet
@@ -259,8 +277,8 @@ CSVHelper::getCSVWeight(const std::vector<double>& jetPts,
         iPt = nLFptBins_-1; // [20-30], [30-40], [40-60] and [60-10000] only 4 Pt bins for lf
       }
       if(h_csv_wgt_lf.at(iSys).at(iPt).at(iEta)) {
-        const int useCSVBin = (csv >= 0.) ? h_csv_wgt_lf.at(iSys).at(iPt).at(iEta)->FindBin(csv) : 1;
-        const double iCSVWgtLF = h_csv_wgt_lf.at(iSys).at(iPt).at(iEta)->GetBinContent(useCSVBin);
+        //const int useCSVBin = (csv >= 0.) ? h_csv_wgt_lf.at(iSys).at(iPt).at(iEta)->FindBin(csv) : 1;
+        const double iCSVWgtLF = h_csv_wgt_lf.at(iSys).at(iPt).at(iEta)->Eval(csv);
         if (iCSVWgtLF != 0) csvWgtlf *= iCSVWgtLF;
       }
     }
@@ -359,8 +377,8 @@ CSVHelper::getCSVWeightsDiff(const std::vector<double>& jetPts,
           iPt=nHFptBins_-1;// [20-30], [30-50], [50-70], [70,100] and [100-10000] only 5 Pt bins for hf
       }
       if(h_csv_wgt_hf.at(iSys).at(iPt)) {
-        const int useCSVBin = (csv >= 0.) ? h_csv_wgt_hf.at(iSys).at(iPt)->FindBin(csv) : 1;
-        const double iCSVWgtHF = h_csv_wgt_hf.at(iSys).at(iPt)->GetBinContent(useCSVBin);
+        //const int useCSVBin = (csv >= 0.) ? h_csv_wgt_hf.at(iSys).at(iPt)->FindBin(csv) : 1;
+        const double iCSVWgtHF = h_csv_wgt_hf.at(iSys).at(iPt)->Eval(csv);
         w_HF.at(iPt) *= iCSVWgtHF;
         if (iCSVWgtHF != 0) csvWgthf *= iCSVWgtHF;
       }
@@ -374,8 +392,8 @@ CSVHelper::getCSVWeightsDiff(const std::vector<double>& jetPts,
           iPt=nHFptBins_-1;// [20-30], [30-50], [50-70], [70,100] and [100-10000] only 5 Pt bins for hf
       }
       if(c_csv_wgt_hf.at(iSys).at(iPt)) {
-        const int useCSVBin = (csv >= 0.) ? c_csv_wgt_hf.at(iSys).at(iPt)->FindBin(csv) : 1;
-        const double iCSVWgtC = c_csv_wgt_hf.at(iSys).at(iPt)->GetBinContent(useCSVBin);
+        //const int useCSVBin = (csv >= 0.) ? c_csv_wgt_hf.at(iSys).at(iPt)->FindBin(csv) : 1;
+        const double iCSVWgtC = c_csv_wgt_hf.at(iSys).at(iPt)->Eval(csv);
         w_HF.at(iPt) *= iCSVWgtC;
         if (iCSVWgtC != 0) csvWgtC *= iCSVWgtC;
       }
@@ -388,8 +406,8 @@ CSVHelper::getCSVWeightsDiff(const std::vector<double>& jetPts,
         iPt = nLFptBins_-1; // [20-30], [30-40], [40-60] and [60-10000] only 4 Pt bins for lf
       }
       if(h_csv_wgt_lf.at(iSys).at(iPt).at(iEta)) {
-        const int useCSVBin = (csv >= 0.) ? h_csv_wgt_lf.at(iSys).at(iPt).at(iEta)->FindBin(csv) : 1;
-        const double iCSVWgtLF = h_csv_wgt_lf.at(iSys).at(iPt).at(iEta)->GetBinContent(useCSVBin);
+        //const int useCSVBin = (csv >= 0.) ? h_csv_wgt_lf.at(iSys).at(iPt).at(iEta)->FindBin(csv) : 1;
+        const double iCSVWgtLF = h_csv_wgt_lf.at(iSys).at(iPt).at(iEta)->Eval(csv);
         w_LF[iPt][iEta] *= iCSVWgtLF;
         if (iCSVWgtLF != 0) csvWgtlf *= iCSVWgtLF;
       }
