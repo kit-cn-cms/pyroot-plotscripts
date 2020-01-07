@@ -48,8 +48,9 @@ def construct_name(current_name, process, syst, syst_key, separator):
         print("\tchannel index: {}".format(idx_channel))
         print("\tsystematic index: {}".format(idx_syst))
         print("\tconstructed name: {}".format(new_name))
-        new_name = current_name.replace("_"+syst, "")
-        new_name += "_"+syst
+        new_name = current_name.replace(syst, "")
+        if not new_name.endswith("_"): new_name += "_"
+        new_name += syst
         print("Will return hardcoded name: " + new_name)
     if debug > 0:
         print("\tconstructed name: {}".format(new_name))
