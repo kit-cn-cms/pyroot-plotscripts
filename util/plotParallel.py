@@ -21,7 +21,8 @@ import haddParallel
 #        C L A S S        #
 ###########################
 class plotParallel:
-    def __init__(self, analysis, configData, nominalHistKey, systHistKey, separator):
+    def __init__(self, analysis, configData, nominalHistKey = "$PROCESS_$CHANNEL", 
+                systHistKey = "$PROCESS_$CHANNEL_$SYSTEMATIC", separator = "_finaldiscr_"):
         ''' default init 
 
         takes analysisConfig class,
@@ -246,7 +247,7 @@ class plotParallel:
 
 
     # -- adding pseudo and real data --------------------------------------------------------------
-    def addData(self, samples, nominal_hist_template, discrName = None):
+    def addData(self, samples, discrName = None):
 
         sampleNicks = [s.nick for s in samples]
         print(sampleNicks)
@@ -262,8 +263,7 @@ class plotParallel:
         all_labels += self.configData.getVariablelabels()
         for label in all_labels:
             print("doing {}".format(label))
-            histNameTemplate = nominal_hist_template.replace("$CHANNEL", label)
-            # histName = histNameTemplate.replace("$PROCESS", str(sampleNicks[0]))
+            histNameTemplate = self.nominalHistoKey.replace("$CHANNEL", label)
 
             newHist = None
             for nick in sampleNicks:
