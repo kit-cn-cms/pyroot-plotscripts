@@ -244,7 +244,7 @@ samples_splitData = [
 
     ]
 
-samplesDataControlPlots+=samples_splitData
+#samplesDataControlPlots+=samples_splitData
 
 samples_ttH_decay = [
     plotClasses.Sample('t#bar{t}H (bb)',ROOT.kBlue+1,
@@ -298,43 +298,43 @@ samples_ttH_decay = [
 
 samples_tH = [
     # ITC case
-    plotClasses.Sample('tHW (ITC)',ROOT.kBlue+3,
-            THWpath,
-            lumi+tHW_XS_scale+sel_MET,
-            'tHW_ITC',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+    #plotClasses.Sample('tHW (ITC)',ROOT.kBlue+3,
+    #        THWpath,
+    #        lumi+tHW_XS_scale+sel_MET,
+    #        'tHW_ITC',
+    #        samDict=sampleDict, readTrees=doReadTrees, typ = "signal", plot = False),
 
-    plotClasses.Sample('tHq (ITC)',ROOT.kBlue+6,
-            THQpath,
-            lumi+tHq_XS_scale+sel_MET,
-            'tHQ_ITC',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+    #plotClasses.Sample('tHq (ITC)',ROOT.kBlue+6,
+    #        THQpath,
+    #        lumi+tHq_XS_scale+sel_MET,
+    #        'tHQ_ITC',
+    #        samDict=sampleDict, readTrees=doReadTrees, typ = "signal", plot = False),
 
     # SM case
     plotClasses.Sample('tHW (SM)',ROOT.kBlue+3,
             THWpath,
             lumi+tHW_XS_scale+tH_SM_rwgt+sel_MET,
-            'tHW_SM',
+            'tHW_hbb',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
     plotClasses.Sample('tHq (SM)',ROOT.kBlue+6,
             THQpath,
             lumi+tHq_XS_scale+tH_SM_rwgt+sel_MET,
-            'tHQ_SM',
+            'tHq_hbb',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
     # point 5
-    plotClasses.Sample('tHW (5)',ROOT.kBlue+3,
-            THWpath,
-            lumi+tHW_XS_scale+tH_5_rwgt+sel_MET,
-            'tHW_5',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+    #plotClasses.Sample('tHW (5)',ROOT.kBlue+3,
+    #        THWpath,
+    #        lumi+tHW_XS_scale+tH_5_rwgt+sel_MET,
+    #        'tHW_5',
+    #        samDict=sampleDict, readTrees=doReadTrees, typ = "signal", plot = False),
 
-    plotClasses.Sample('tHq (5)',ROOT.kBlue+6,
-            THQpath,
-            lumi+tHq_XS_scale+tH_5_rwgt+sel_MET,
-            'tHQ_5',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+    #plotClasses.Sample('tHq (5)',ROOT.kBlue+6,
+    #        THQpath,
+    #        lumi+tHq_XS_scale+tH_5_rwgt+sel_MET,
+    #        'tHQ_5',
+    #        samDict=sampleDict, readTrees=doReadTrees, typ = "signal", plot = False),
 
     ]
 
@@ -449,7 +449,7 @@ samples = [
             ttbarPathS,
             lumi+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
             'ttbb_5FS',
-            samDict=sampleDict, readTrees=doReadTrees), 
+            samDict=sampleDict, readTrees=doReadTrees, plot = False), 
 
     ]
 

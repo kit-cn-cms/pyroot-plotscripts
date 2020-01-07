@@ -96,7 +96,7 @@ class Plot:
             self.errorband.SetFillColor(ROOT.kBlack)
         #sets style for error band
         if self.specificerrorband:
-            for n,seb in enumerate(specificerrorband):
+            for n,seb in enumerate(self.specificerrorband):
                 seb.SetFillStyle(3004)
                 seb.SetLineColor(self.sebColor[n])
                 seb.SetFillColor(self.sebColor[n])
@@ -112,7 +112,7 @@ class Plot:
 # GET HISTOGRAMS AND ERROR BANDS
 # ===============================================
 
-def buildHistogramAndErrorBand(rootFile,sample,color,typ,label,systematics,nominalKey,procIden,systematicKey,sysIden,systClass=None):
+def buildHistogramAndErrorBand(rootFile,sample,color,typ,label,systematics,nominalKey,procIden,systematicKey,sysIden,systClass=None,addStatErrorband=False):
     print("new sample: "+str(sample))
     # replace keys to get histogram key
     if procIden in nominalKey:
@@ -240,6 +240,8 @@ def buildHistogramAndErrorBand(rootFile,sample,color,typ,label,systematics,nomin
             else:
                 continue
 
+    errorband = None
+    statErrorband = None
     if upErrors:
         errorband = ROOT.TGraphAsymmErrors(rootHist)
         for i in range(len(upErrors)):
@@ -247,13 +249,23 @@ def buildHistogramAndErrorBand(rootFile,sample,color,typ,label,systematics,nomin
             errorband.SetPointEYhigh(i, upErrors[i])
             errorband.SetPointEXlow(i, rootHist.GetBinWidth(i+1)/2.)
             errorband.SetPointEXhigh(i, rootHist.GetBinWidth(i+1)/2.)
-        PlotObject=Plot(rootHist,sample,label=label,
-                                    color=color,typ=typ,
-                                    errorband=errorband,OverUnderFlowInc=True)
-    else:
-        PlotObject=Plot(rootHist,sample,label=label,
-                                    color=color,typ=typ,
-                                    OverUnderFlowInc=True)
+
+    if addStatErrorband:
+        statErrorband = ROOT.TGraphAsymmErrors(rootHist)
+        for i in range(rootHist.GetNbinsX()+1):
+            statErrorband.SetPointEYlow(i, rootHist.GetBinError(i))
+            statErrorband.SetPointEYhigh(i, rootHist.GetBinError(i))
+            statErrorband.SetPointEXlow(i, rootHist.GetBinWidth(i+1)/2.)
+            statErrorband.SetPointEXhigh(i, rootHist.GetBinWidth(i+1)/2.)
+            
+    PlotObject=Plot(rootHist, sample, 
+                    label = label,
+                    color = color,  
+                    typ = typ,
+                    errorband = errorband, 
+                    specificerrorband = statErrorband,
+                    OverUnderFlowInc=True)
+
     return PlotObject
 
 
@@ -496,7 +508,7 @@ class DrawHistograms:
         """
         firstHistIntegral=firstHist.Integral()
         if self.shape:
-            firstHist.Scale(1/firstHistIntegral)
+            firstHist.Scale(1./firstHistIntegral)
         elif self.normalize:
             self.normalizePlot(PlotHist=firstHist)
 
@@ -549,15 +561,16 @@ class DrawHistograms:
             h.DrawCopy(option+"same")
 
         if self.errorband:
-            self.errorband.SetFillStyle(3004)
-            self.errorband.SetLineColor(ROOT.kBlack)
-            self.errorband.SetFillColor(ROOT.kBlack)
+            self.errorband.SetFillStyle(1001)
+            self.errorband.SetLineColorAlpha(ROOT.kBlack, 0.3)
+            self.errorband.SetFillColorAlpha(ROOT.kBlack, 0.3)
             self.errorband.Draw("same2")
-        elif self.combinederrorband:
-            self.combinederrorband.SetFillStyle(3004)
-            self.combinederrorband.SetLineColor(ROOT.kBlack)
-            self.combinederrorband.SetFillColor(ROOT.kBlack)
-            self.combinederrorband.Draw("same2")
+        elif self.combinederrorbands:
+            for ceb in self.combinederrorbands:
+                ceb.SetFillStyle(1001)
+                ceb.SetLineColorAlpha(ROOT.kBlack,0.1)
+                ceb.SetFillColorAlpha(ROOT.kBlack,0.1)
+                ceb.Draw("same2")
 
 
 
@@ -652,24 +665,53 @@ class DrawHistograms:
         add errorbands of background histograms to a list
         to combine them for the errorband of all backgrounds
         """
-        errorbands         = []
+        # figure out number of errorbands:
+        errorbands = []
+    
+        if len(sortedPlots) >= 1:
+            PlotObject = self.PlotList[sortedPlots[0]]
+            if not PlotObject.errorband is None:
+                print("default errorband found")
+                errorbands.append( [] )
+            if not PlotObject.specificerrorband is None:
+                for seb in PlotObject.specificerrorband:
+                    print("specific errorband found")
+                    errorbands.append( [] )
+
         self.stackPlots         = []
-        self.combinederrorband  = None
+        self.combinederrorbands = None
         for i in range(len(sortedPlots),0,-1):
             Plot        = sortedPlots[i-1]
             PlotObject  = self.PlotList[Plot]
             if len(self.stackPlots)==0:
                 self.stackPlots.append(PlotObject.hist.Clone())
-                if not self.combineflag and not PlotObject.errorband is None:
-                    errorbands.append(PlotObject.errorband.Clone())
+                if not self.combineflag:
+                    idx = 0
+                    if not PlotObject.errorband is None:
+                        errorbands[idx].append(PlotObject.errorband.Clone())
+                        idx += 1
+                    if not PlotObject.specificerrorband is None:
+                        for seb in PlotObject.specificerrorband:
+                            errorbands[idx].append(seb.Clone())
+                            idx += 1
             else:
                 hist = PlotObject.hist.Clone()
                 hist.Add(self.stackPlots[0])
                 self.stackPlots.insert(0, hist)
-                if not self.combineflag and not PlotObject.errorband is None:
-                    errorbands.append(PlotObject.errorband.Clone())
-        if self.stackPlots and not self.combineflag:
-            self.combinederrorband=addErrorbands(errorbands,self.stackPlots[0])
+                if not self.combineflag:
+                    idx = 0
+                    if not PlotObject.errorband is None:
+                        errorbands[idx].append(PlotObject.errorband.Clone())
+                        idx += 1
+                    if not PlotObject.specificerrorband is None:
+                        for seb in PlotObject.specificerrorband:
+                            errorbands[idx].append(seb.Clone())
+                            idx += 1
+
+        if not len(self.stackPlots) == 0 and not self.combineflag:
+            self.combinederrorbands = []
+            for eb in errorbands:
+                self.combinederrorbands.append(addErrorbands(eb,self.stackPlots[0]))
 
 
     def shapePlots(self,sortedPlots):
@@ -781,24 +823,28 @@ class DrawHistograms:
 
     # scales the Errorband for the ratio plot
     def generateRatioErrorband(self):
-        if self.combinederrorband:
-            self.ratioerrorband = self.combinederrorband.Clone()
+        self.ratioerrorbands = []
+        if self.combinederrorbands:
+            for ceb in self.combinederrorbands:
+                self.ratioerrorbands.append( ceb.Clone() )
         elif self.errorband:
-            self.ratioerrorband = self.errorband.Clone()
+            self.ratioerrorbands.append(self.errorband.Clone())
         else: return 
-        for i in range(self.ratioerrorband.GetN()):
-            x=ROOT.Double()
-            y=ROOT.Double()
-            self.ratioerrorband.GetPoint(i,x,y)
-            self.ratioerrorband.SetPoint(i,x,1)
-            if y>0.:
-                self.ratioerrorband.SetPointEYlow(i,self.ratioerrorband.GetErrorYlow(i)/y)
-                self.ratioerrorband.SetPointEYhigh(i,self.ratioerrorband.GetErrorYhigh(i)/y)
-            else:
-                self.ratioerrorband.SetPointEYlow(i,0)
-                self.ratioerrorband.SetPointEYhigh(i,0)
 
-        self.ratioerrorband.Draw("same2")
+        for reb in self.ratioerrorbands:
+            for i in range(reb.GetN()):
+                x=ROOT.Double()
+                y=ROOT.Double()
+                reb.GetPoint(i,x,y)
+                reb.SetPoint(i,x,1)
+                if y>0.:
+                    reb.SetPointEYlow(i,reb.GetErrorYlow(i)/y)
+                    reb.SetPointEYhigh(i,reb.GetErrorYhigh(i)/y)
+                else:
+                    reb.SetPointEYlow(i,0)
+                    reb.SetPointEYhigh(i,0)
+
+            reb.Draw("same2")
         
     def GetyTitle(self):
         # normalize plots to unit area
