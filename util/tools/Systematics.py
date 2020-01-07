@@ -44,10 +44,10 @@ class Systematics:
             for process in list_of_processes:
                 if systematic[process] is not "-":
                     if Up:
-                        up="_"+name+"Up"    
+                        up=name+"Up"    
                         self.processes[process][up]=SystematicsForProcess(up,process,typ,construction,Up)
                     if Down:
-                        down="_"+name+"Down"
+                        down=name+"Down"
                         self.processes[process][down]=SystematicsForProcess(down,process,typ,construction,Down)
                     if not Up and not Down:
                         self.processes[process][name]=SystematicsForProcess(name,process,typ,construction)
@@ -110,8 +110,8 @@ class Systematics:
             if systematic["Construction"]=="weight":
                 #adds variable name to list of weightsysts
                 systName=systematic["Uncertainty"]
-                up="_"+systName+"Up"
-                down="_"+systName+"Down"
+                up=systName+"Up"
+                down=systName+"Down"
                 weightsysts.append(up)
                 weightsysts.append(down)
         return weightsysts
@@ -138,8 +138,8 @@ class Systematics:
             if systematic["Construction"]=="variation":
                 #adds variable name to list of variationsysts
                 systName=systematic["Uncertainty"]
-                up="_"+systName+"Up"
-                down="_"+systName+"Down"
+                up=systName+"Up"
+                down=systName+"Down"
                 variationsysts.append(up)
                 variationsysts.append(down)
         return variationsysts

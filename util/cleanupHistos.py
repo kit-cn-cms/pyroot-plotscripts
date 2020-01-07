@@ -6,9 +6,57 @@ filedir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(filedir+"/tools")
 import Systematics
 
-debug = 0
+debug = 10
 
-def cleanupHistos(inFile, outFile, process, systcsv):
+def find_index(parts, keyword):
+    for i, p in enumerate(parts):
+        if keyword in p:
+            return i
+
+def construct_name(current_name, process, syst, syst_key, separator):
+    if debug > 9:
+        print("="*130)
+        print("DEBUG: analyzing key " + current_name)
+    template_parts = syst_key.split(separator)
+    idx_process = find_index(parts = template_parts, keyword = "$PROCESS")
+    idx_channel = find_index(parts = template_parts, keyword = "$CHANNEL")
+    idx_syst    = find_index(parts = template_parts, keyword = "$SYSTEMATIC")
+    
+    current_parts = current_name.split(separator)
+    if debug > 0:
+        print("DEBUG IN 'construct_name' function")
+        print("\tsyst_key = '{}'".format(syst_key))
+        print("\ttemplate_parts = [{}]".format(",".join(template_parts)))
+        print("\tcurrent_parts = [{}]".format(",".join(current_parts)))
+        print("\tprocess index: {}".format(idx_process))
+        print("\tchannel index: {}".format(idx_channel))
+        print("\tsystematic index: {}".format(idx_syst))
+    try:
+        channel = current_parts[idx_channel]
+    except IndexError:
+        channel = "None"
+
+    new_name = syst_key.replace("$PROCESS", process)
+    new_name = new_name.replace("$CHANNEL", channel)
+    new_name = new_name.replace("$SYSTEMATIC", syst)
+    if idx_process == idx_channel or idx_process == idx_syst or idx_syst == idx_channel or channel is "None":
+        print("WARNING: no clear separation between keywords possible!")
+        print("Construction of new histogram name is likely to fail!")
+        print("\ttemplate_parts = [{}]".format(",".join(template_parts)))
+        print("\tcurrent_parts = [{}]".format(",".join(current_parts)))
+        print("\tprocess index: {}".format(idx_process))
+        print("\tchannel index: {}".format(idx_channel))
+        print("\tsystematic index: {}".format(idx_syst))
+        print("\tconstructed name: {}".format(new_name))
+        new_name = current_name.replace("_"+syst, "")
+        new_name += "_"+syst
+        print("Will return hardcoded name: " + new_name)
+    if debug > 0:
+        print("\tconstructed name: {}".format(new_name))
+    return new_name
+
+
+def cleanupHistos(inFile, outFile, process, systcsv, syst_key, separator):
     # starting the clocks      
     theclock = ROOT.TStopwatch()
     theclock.Start()
@@ -99,8 +147,8 @@ def cleanupHistos(inFile, outFile, process, systcsv):
         for syst in systNames:
             if syst in newName:
                 currentSysts.append(syst)
-                newName = newName.replace(syst, "")
-                newName+= syst
+                # newName = newName.replace(syst, "")
+                # newName+= syst
                 nSysts += 1
 
         # remove histogram if more than two systematics in name
@@ -122,7 +170,11 @@ def cleanupHistos(inFile, outFile, process, systcsv):
                 if debug>9: print("Deleting {};1 (systematic {} not in list of systs for process {})".format(thisName, currentSyst, process))
                 rootFile.Delete(thisName+";1")
                 continue
-    
+            newName = construct_name(   current_name = newName, 
+                                        process = process, 
+                                        syst = currentSyst, 
+                                        syst_key = syst_key, 
+                                        separator = separator)
         
         # update histogram if has new name
         if newName != thisName:

@@ -2,6 +2,7 @@ import sys
 import os
 import stat
 import json
+import pprint
 import configClass as configClass
 import analysisClass as analysisClass
 
@@ -14,12 +15,15 @@ import nafInterface
 
 
 
-def makePlots(configData):
+def makePlots(configData, nominal_key = "$PROCESS_$CHANNEL", syst_key = "$PROCESS_$CHANNEL_$SYSTEMATIC"):
 
     ListOfPlots     = configData.getDiscriminatorPlots()
     workdir         = configData.analysis.workdir
     pyrootdir       = configData.analysis.pyrootdir
-    plotconfig      = createPlotConfig(configData,workdir)
+    plotconfig      = createPlotConfig( configData = configData,
+                                        workdir = workdir,
+                                        nominal_key = nominal_key,
+                                        syst_key = syst_key )
     rootfile        = configData.analysis.rootPath
 
     # create output folders
@@ -36,10 +40,11 @@ def makePlots(configData):
                                                     workdir=workdir, scriptPath=scriptPath,
                                                     plotconfig=plotconfig,
                                                     rootfile=rootfile, 
-                                                    selectionlabel=Plot.label) )
+                                                    selectionlabel=Plot.label)
+                            )
 
 
-    print "Submitting ", len(ListOfScripts), " PlotScripts"
+    # print "Submitting ", len(ListOfScripts), " PlotScripts"
     nafInterface.drawInterface(ListOfScripts, ListOfPlots)
 
     return
@@ -54,20 +59,29 @@ def init_plottingsamples(plotsample):
                 "addSamples":plotsample.addsamples,
                 }
     return returndict
-def createPlotConfig(configData,workdir):
+def createPlotConfig(configData,workdir, nominal_key, syst_key):
     #get plotting information
-    signalScaling       = configData.analysis.signalScaling
+    plotinfo = {
+        "signalScaling"     : configData.analysis.signalScaling,
+        "datalabel"         : "data",
+        "data"              : "data_obs",
+        
+        "cmslabel"          : configData.analysis.cmslabel,
+        "normalize"         : bool(configData.analysis.normalize),
+        "ratio"             : configData.analysis.ratio,
+        "logarithmic"       : bool(configData.analysis.logarithmic),
+        "splitLegend"       : bool(configData.analysis.splitLegend),
+        "shape"             : bool(configData.analysis.shape),
+      
+        "statErrorband"     : True,
+        "nominalKey"        : nominal_key,
+        "systematicKey"     : syst_key,
+    }
     lumiLabel           = configData.analysis.lumiLabel
     if lumiLabel:
         if isinstance(lumiLabel,bool):
             lumiLabel   = configData.analysis.getLumi()
-    cmslabel            = configData.analysis.cmslabel
-    normalize           = configData.analysis.normalize
-    ratio               = configData.analysis.ratio
-    logarithmic         = configData.analysis.logarithmic
-    splitLegend         = configData.analysis.splitLegend
-    shape               = configData.analysis.shape
-    sortedProcesses     = configData.pltcfg.sortedProcesses
+    plotinfo["lumiLabel"] = lumiLabel
 
     samples = {}
     #samples named in the rootfile
@@ -90,7 +104,8 @@ def createPlotConfig(configData,workdir):
                 plottingsamples[p.nick] = init_plottingsamples(p)
         else:
             plottingsamples[plotsample.nick] = init_plottingsamples(plotsample)
-        
+    
+    sortedProcesses   = configData.pltcfg.sortedProcesses
 
     #systematics to be plotted
     systematics=configData.plots
@@ -99,85 +114,59 @@ def createPlotConfig(configData,workdir):
     #writes config to file
     outputpath=workdir+'/plotconfig.py'
     print outputpath
+    pretty_options = {
+        "indent" : 4,
+        "width" : 1,
+        }
 
+    configstring = """#samples named in the rootfile
+samples = {samplestring}
+
+#combined samples
+plottingsamples = {plottingsamplesstr}
+
+#systematics to be plotted
+systematics = {systematicsstring}
+
+# order of the stack processes, descending from top to bottom
+sortedprocesses = {sortedprocstring}
+
+#options for the plotting style
+plotoptions = {plotoptionstring}
+""".format( samplestring = pprint.pformat(samples, **pretty_options),
+            plottingsamplesstr = pprint.pformat(plottingsamples, **pretty_options),
+            systematicsstring = pprint.pformat(systematics, **pretty_options),
+            sortedprocstring = pprint.pformat(sortedProcesses, **pretty_options),
+            plotoptionstring = pprint.pformat(plotinfo, **pretty_options),
+            )
+    configstring = configstring[:-2] + """,
+    # "combineflag" : "shapes_prefit"/"shapes_fit_s",
+    # "signallabel" : "Signal"
+}
+    """
     with open(outputpath,'w') as outfile:
-        outfile.write('#samples named in the rootfile\n')
-        outfile.write('samples = {\n')
-        for key, value in samples.items():
-            outfile.write(" "*8)
-            if not value["plot"]: outfile.write("#") 
-            outfile.write('"%s":%s,\n' % (key, value["info"]))
-        outfile.write(' '*4+'}\n')
-        outfile.write('\n')
-        outfile.write('#combined samples\n')
-        outfile.write('plottingsamples = {\n')
-        for key, value in plottingsamples.items():
-            outfile.write(' '*8+'"%s":%s,\n' % (key, value))
-        outfile.write(' '*4+'}\n')
-        outfile.write('\n')
-        outfile.write('#systematics to be plotted\n')
-        outfile.write('systematics = [\n')
-        for systematic in systematics:
-            if systematic.startswith('#'):
-                systematic.replace('#','')
-                outfile.write(' '*8+'#"'+systematic+'",\n')
-            else:
-                outfile.write(' '*8+'"'+systematic+'",\n')
-        outfile.write(' '*4+']\n')
-        outfile.write('\n')
-
-        outfile.write('# order of the stack processes, descending from top to bottom\n')      
-        outfile.write('sortedprocesses='+str(sortedProcesses)+'\n')
-        outfile.write('\n')
-
-        outfile.write('#options for the plotting style\n')
-        outfile.write('plotoptions = {\n')
-
-        outfile.write(' '*4+'# "pdftag":"matti_schrode_KIT_cool",\n')
-
-        outfile.write('\n')
-        outfile.write(' '*4+'"data":"data_obs",\n')
-
-        outfile.write('\n')
-        outfile.write(' '*4+'"ratio":"'+str(ratio)+'",\n')
-        outfile.write(' '*4+'"logarithmic":'+str(logarithmic)+',\n')
-        outfile.write(' '*4+'"shape":'+str(shape)+',\n')
-        outfile.write(' '*4+'"normalize":'+str(normalize)+',\n')
-
-        outfile.write('\n')
-        outfile.write(' '*4+'"signalscaling":'+str(signalScaling)+',\n')
-        outfile.write(' '*4+'"lumilabel":'+str(lumiLabel)+',\n')
-        outfile.write(' '*4+'"cmslabel":"'+str(cmslabel)+'",\n')
-        outfile.write(' '*4+'"splitlegend":'+str(splitLegend)+',\n')
-        outfile.write(' '*4+'"datalabel":"data",\n')
-        outfile.write(' '*4+'"statErrorband": True,\n')
-    
-        outfile.write('\n')
-        outfile.write(' '*4+'#use for combine plots, use shapes_prefit for prefit and shapes_fit_s for post fit\n')
-        outfile.write(' '*4+'#only uses total signal and does not split signal processes\n')
-        outfile.write('\n')
-        outfile.write(' '*4+'# "combineflag":"shapes_prefit"/"shapes_fit_s",\n')
-        outfile.write(' '*4+'# "signallabel":"Signal",\n')
-
-        outfile.write(' '*4+'}\n')
-
+        outfile.write(configstring)
     return outputpath
 
 # creates PlotScript to make plots for a specific channel
 def createPlotScript(channel,pyrootdir,workdir,scriptPath,
-                        plotconfig,rootfile,selectionlabel):
+                        plotconfig,rootfile,selectionlabel,
+                        nominal_key = "$PROCESS_$CHANNEL", syst_key = "$PROCESS_$CHANNEL_$SYSTEMATIC"):
 
     pathtoself=pyrootdir+'/util/'
     cmsswpath = os.environ['CMSSW_BASE']
-    script="#!/bin/bash \n"
+    script="#!/bin/bash"
     if cmsswpath != '':
-        script += "export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch \n"
-        script += "source $VO_CMS_SW_DIR/cmsset_default.sh \n"
-        script += "export SCRAM_ARCH="+os.environ['SCRAM_ARCH']+"\n"
-        script += 'export OUTFILENAME="'+"plot" +str(channel)+'"\n'
-        script += 'cd '+cmsswpath+'/src\n'
-        script += 'eval `scram runtime -sh`\n'
-        script += 'cd - \n'
+        script += """
+export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch
+source $VO_CMS_SW_DIR/cmsset_default.sh
+export SCRAM_ARCH={scram_arch}
+export OUTFILENAME="{outfilename}"
+cd {cmsswpath}/src
+eval `scram runtime -sh`
+cd - 
+""".format(scram_arch = os.environ['SCRAM_ARCH'], outfilename = "plot" +str(channel),
+            cmsswpath = cmsswpath)
 
     script += 'python '+pathtoself+'PlotScript.py --plotconfig="'+plotconfig+'" '
     script += ' --channelname="'+channel+'" '
@@ -185,7 +174,7 @@ def createPlotScript(channel,pyrootdir,workdir,scriptPath,
     script += ' --rootfile="'+rootfile+'" '
     script += ' --directory="'+pyrootdir+'"'
     script += ' --systematicfile="'+workdir+"/systematics.csv"+'"' 
-    script += ' --workdir="'+workdir+'"\n' 
+    script += ' --workdir="'+workdir+'"\n'
 
 
     scriptPath = scriptPath+'makePlots_'+str(channel)+'.sh'

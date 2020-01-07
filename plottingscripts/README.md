@@ -53,3 +53,13 @@ dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/dNNInterface_
 ```
 - path to datacardMaker directory 
 `datacardmaker = "/path/to/datacardMaker"`
+
+
+# prefit/postfit plotting
+
+examplary commands (need a lotta options, sorry)
+```
+python ../util/PlotScript.py --plotconfig /some/plotconfig/in/workdir/plotconfig.py --channelname "ch1" --rootfile /some/fitdiagnositcs/file/fitDiagnostics.root --directory /path/to/plotscript --workdir ../workdir/testPath --data "data_obs" --ratio "#frac{Data}{Background}" --combineflag "shapes_prefit" --selectionlabel "#scale[0.8]{#splitline{4 jets (pre fit)}{t#bar{t}+H node}}" --combineDatacard /path/to/combined/datacard/combined_datacard.txt
+
+python ../util/PlotScript.py --plotconfig /some/plotconfig/in/workdir/plotconfig.py --channelname "ch1" --rootfile /some/fitdiagnositcs/file/fitDiagnostics.root --directory /path/to/plotscript --workdir ../workdir/testPath --data "data_obs" --ratio "#frac{Data}{S+B}" --combineflag "shapes_fit_s" --selectionlabel "#scale[0.8]{#splitline{4 jets (post fit)}{t#bar{t}+H node}}" --combineDatacard /path/to/combined/datacard/combined_datacard.txt
+```
