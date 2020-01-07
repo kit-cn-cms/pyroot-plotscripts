@@ -44,7 +44,7 @@ def makePlots(configData, nominal_key = "$PROCESS_$CHANNEL", syst_key = "$PROCES
                             )
 
 
-    # print "Submitting ", len(ListOfScripts), " PlotScripts"
+    print "Submitting ", len(ListOfScripts), " PlotScripts"
     nafInterface.drawInterface(ListOfScripts, ListOfPlots)
 
     return
