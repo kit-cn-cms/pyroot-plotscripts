@@ -337,10 +337,12 @@ addStatErrorband = getParserConfigDefaultValue(
 # load samples
 print "start loading  samples" 
 for sample in samples:
-    color   = samples[sample]['color']
-    typ     = samples[sample]['typ']
-    label   = samples[sample]['label']
+    color   = samples[sample]["info"]['color']
+    typ     = samples[sample]["info"]['typ']
+    label   = samples[sample]["info"]['label']
     entry   = None
+    if samples[sample]['plot'] == False:
+        continue
     if combineflag:
         if typ=="signal":
             continue
@@ -461,7 +463,7 @@ signalscaling   = getParserConfigDefaultValue(parser=options.signalscaling,confi
                                             plotoptions=plotoptions,defaultvalue=-1)
 ratio           = getParserConfigDefaultValue(parser=options.ratio,config="ratio",
                                             plotoptions=plotoptions,defaultvalue="#frac{data}{MC Background}")
-lumilabel       = getParserConfigDefaultValue(parser=options.lumilabel,config="lumilabel",
+lumilabel       = getParserConfigDefaultValue(parser=options.lumilabel,config="lumiLabel",
                                             plotoptions=plotoptions,defaultvalue=False)
 cmslabel        = getParserConfigDefaultValue(parser=options.cmslabel,config="cmslabel",
                                             plotoptions=plotoptions,defaultvalue=False)
@@ -469,7 +471,7 @@ yLabel          = getParserConfigDefaultValue(parser=options.yLabel,config="yLab
                                             plotoptions=plotoptions,defaultvalue="Events expected")
 logarithmic     = getParserConfigDefaultBool(parser=options.logarithmic,config="logarithmic",
                                             plotoptions=plotoptions,defaultbool=False)
-splitlegend     = getParserConfigDefaultBool(parser=options.splitlegend,config="splitlegend",
+splitlegend     = getParserConfigDefaultBool(parser=options.splitlegend,config="splitLegend",
                                             plotoptions=plotoptions,defaultbool=False)
 normalize       = getParserConfigDefaultBool(parser=options.normalize,config="normalize",
                                             plotoptions=plotoptions,defaultbool=False)
