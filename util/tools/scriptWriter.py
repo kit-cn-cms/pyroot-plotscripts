@@ -216,7 +216,7 @@ class scriptWriter:
         # getting databases
         memDBccfiles=[]
         if self.pp.useDataBases:
-            memDBccfiles=glob.glob('/nfs/dust/cms/user/kelmorab/DataBaseCodeForScriptGenerator/MEMDataBase_ttH2018/MEMDataBase/MEMDataBase/src/*.cc') 
+            memDBccfiles=glob.glob('/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase/src/*.cc') 
             #TODO update the dataBases code
 
         # improve ram usage and reduce garbage of g++ compiler
