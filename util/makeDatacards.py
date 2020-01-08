@@ -89,9 +89,9 @@ def makeDatacardsParallel(filePath, workdir,
             options += ('--signaltag='+signalTag).split()
             options += ('--csvfile='+datacardcsv).split()
             if not nominal_key is None:
-                options += ('--nominal_key='+nominal_key).split()
+                options += ('--nominal_key='+"'"+nominal_key+"'").split()
             if not syst_key is None:
-                options += ('--syst_key='+syst_key).split()
+                options += ('--syst_key='+"'"+syst_key+"'").split()
             
             script = script_template.format(
                 cmssw_info  = cmssw_info,
