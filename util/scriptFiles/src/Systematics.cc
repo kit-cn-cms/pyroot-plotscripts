@@ -10,6 +10,26 @@ std::map<Systematics::Type,std::string> Systematics::typeLabelMap_  = std::map<S
 void Systematics::init() {
   add( JESup,JESdown,"JES","Uncertainty");
   add( JERup,JERdown,"JER","JER");
+  // JEY groups
+  add( JERpt0eta0up,JERpt0eta0down,"JERpt0eta0","JERpt0eta0");
+  add( JERpt0eta1up,JERpt0eta1down,"JERpt0eta1","JERpt0eta1");
+  add( JERpt1eta0up,JERpt1eta0down,"JERpt1eta0","JERpt1eta0");
+  add( JERpt1eta1up,JERpt1eta1down,"JERpt1eta1","JERpt1eta1");
+  add( JEReta2up,JEReta2down,"JEReta2","JEReta2");
+
+  add(JESAbsoluteup,             JESAbsolutedown,            "JESAbsolute",              "Absolute"          );
+  add(JESAbsoluteyearup,         JESAbsoluteyeardown,        "JESAbsoluteyear",          "Absoluteyear"       );
+  // add(JESFlavorQCDup,            JESFlavorQCDdown,           "JESFlavorQCD",             "FlavorQCD"           );
+  add(JESBBEC1up,                JESBBEC1down,               "JESBBEC1",                 "BBEC1"               );
+  add(JESBBEC1yearup,            JESBBEC1yeardown,           "JESBBEC1year",             "BBEC1year"          );
+  add(JESEC2up,                  JESEC2down,                 "JESEC2",                   "EC2"                 );
+  add(JESEC2yearup,              JESEC2yeardown,             "JESEC2year",               "EC2year"            );
+  add(JESHFup,                   JESHFdown,                  "JESHF",                    "HF"                  );
+  add(JESHFyearup,               JESHFyeardown,              "JESHFyear",                "HFyear"             );
+  // add(JESRelativeBalup,          JESRelativeBaldown,         "JESRelativeBal",           "RelativeBal"         );
+  add(JESRelativeSampleyearup,   JESRelativeSampleyeardown,  "JESRelativeSampleyear",    "RelativeSampleyear" );
+
+  // all sources
   add( JESAbsoluteStatup,        JESAbsoluteStatdown,        "JESAbsoluteStat",          "AbsoluteStat"        );             
   add( JESAbsoluteScaleup,       JESAbsoluteScaledown,       "JESAbsoluteScale",         "AbsoluteScale"       );             
   add( JESAbsoluteFlavMapup,     JESAbsoluteFlavMapdown,     "JESAbsoluteFlavMap",       "AbsoluteFlavMap"     );                             
