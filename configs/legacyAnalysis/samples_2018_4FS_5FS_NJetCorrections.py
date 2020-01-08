@@ -242,11 +242,11 @@ samples_ttH_decay = [
             lumi+sel_MET+hbbSel,
             'ttH_hbb',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),     
-    #plotClasses.Sample('t#bar{t}H (nonbb)',ROOT.kBlue+1,
-    #         ttHpath,
-    #         lumi+sel_MET,
-    #         'ttH',
-    #         samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+#     plotClasses.Sample('t#bar{t}H (nonbb)',ROOT.kBlue+1,
+#             ttHpath,
+#             lumi+sel_MET,
+#             'ttH',
+#             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
     plotClasses.Sample('t#bar{t}H(cc)',ROOT.kBlue+1,
             ttHpath,
             lumi+sel_MET+hccSel,
@@ -488,13 +488,13 @@ datacard_processes  = processes
 
 
 plottingsamples = [
-#     plotClasses.Sample("t#bar{t}+V", ROOT.kCyan, "", "",
-#         "ttV", addsamples = ["ttZ","ttW"],
-#         samDict = sampleDict, readTrees = doReadTrees),
+    plotClasses.Sample("t#bar{t}+V", ROOT.kCyan, "", "",
+        "ttV", addsamples = ["ttZ","ttW"],
+        samDict = sampleDict, readTrees = doReadTrees),
 
-#     plotClasses.Sample("V+jets", 18,
-#         "vjets", addsamples = ["wjets", "zjets"],
-#         samDict = sampleDict, readTrees = doReadTrees)
+    plotClasses.Sample("V+jets", 18,
+        "vjets", addsamples = ["wjets", "zjets"],
+        samDict = sampleDict, readTrees = doReadTrees)
 
 #    plotClasses.Sample("misc.", 18, "", "",
 #        "misc", addsamples ["ttZ", "ttW", "wjets", "zjets", "diboson"],

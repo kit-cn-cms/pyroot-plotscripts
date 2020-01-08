@@ -246,6 +246,10 @@ void plot(){
   filenameforSytType.Replace(0,filenameforSytType.Last('_')+1,"");
   // nominal is the empty string here
   if(filenameforSytType=="nominal"){filenameforSytType="";}
+  if(filenameforSytType.Contains("JESHEM")){
+    std::cout << "DANGERZONE: will translate 'JESHEM' to 'JESHEMIssue'!";
+    filenameforSytType = filenameforSytType.ReplaceAll("JESHEM", "JESHEMIssue");
+  }
   internalSystType = Systematics::get(filenameforSytType.Data());
   std::cout<<"internal systematic filename, int and typename "<<filenameforSytType<<" "<<internalSystType<<" "<<Systematics::toString(internalSystType)<<std::endl;
   if(filenameforSytType!=TString(Systematics::toString(internalSystType))){std::cout<<"ERROR could not recover systematic from enum"<<std::endl; exit(0);}

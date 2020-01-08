@@ -21,7 +21,8 @@ import haddParallel
 #        C L A S S        #
 ###########################
 class plotParallel:
-    def __init__(self, analysis, configData):
+    def __init__(self, analysis, configData, nominalHistKey = "$PROCESS_$CHANNEL", 
+                systHistKey = "$PROCESS_$CHANNEL_$SYSTEMATIC", separator = "_finaldiscr_"):
         ''' default init 
 
         takes analysisConfig class,
@@ -35,6 +36,11 @@ class plotParallel:
         # status variables
         self.finished = False
         self.haddFiles = None
+
+        # information about histogram naming to be parsed to scriptWriter
+        self.nominalHistoKey     = nominalHistKey
+        self.systHistoKey        = systHistKey
+        self.histNameSeparator  = separator
 
         # init defaults
         self.initDefaults()
@@ -241,7 +247,7 @@ class plotParallel:
 
 
     # -- adding pseudo and real data --------------------------------------------------------------
-    def addData(self, samples):
+    def addData(self, samples, discrName = None):
 
         sampleNicks = [s.nick for s in samples]
         print(sampleNicks)
@@ -249,35 +255,28 @@ class plotParallel:
         """
         get histograms and add them to data obs
         """
-        for label in self.configData.getBinlabels():
+        all_labels = self.configData.getBinlabels()
+        #DANGERZONE:    discriminator name is prepended. This has to be adjusted
+        #               if corresponding config does something else 
+        if not discrName is None:
+            all_labels = ["{}_{}".format(discrName, l) for l in all_labels]
+        all_labels += self.configData.getVariablelabels()
+        for label in all_labels:
             print("doing {}".format(label))
-            histName = str(sampleNicks[0])+"_"+str(self.analysis.discrName)+"_"+label
-            print("getting "+histName)
-            oldHist = rootFile.Get(histName)
-            newHist = oldHist.Clone("data_obs_"+self.analysis.discrName+"_"+label)
-            print("hewHist: "+str(newHist))
-            for nick in sampleNicks[1:]:
-                sampleName = str(nick)+"_"+self.analysis.discrName+"_"+label
+            histNameTemplate = self.nominalHistoKey.replace("$CHANNEL", label)
+
+            newHist = None
+            for nick in sampleNicks:
+                sampleName = histNameTemplate.replace("$PROCESS",str(nick))
                 print("doing "+sampleName)
                 bufferHist = rootFile.Get(sampleName)
                 print("bufferHist: "+str(bufferHist))
-                newHist.Add(bufferHist)
+                if newHist is None:
+                    dataname = histNameTemplate.replace("$PROCESS","data_obs")
+                    newHist = bufferHist.Clone(dataname)
+                else:
+                    newHist.Add(bufferHist)
             newHist.Write()
 
-        for datavariable in self.configData.getVariablelabels():
-            print("doing {}".format(datavariable))
-            histName = str(sampleNicks[0])+"_"+datavariable
-            print("getting "+histName)
-            oldHist = rootFile.Get(histName)
-            newHist = oldHist.Clone("data_obs_"+datavariable)
-            print("hewHist: "+str(newHist))
-            for nick in sampleNicks[1:]:
-                sampleName = str(nick)+"_"+datavariable
-                print("doing "+sampleName)
-                bufferHist = rootFile.Get(sampleName)
-                print("bufferHist: "+str(bufferHist))
-                newHist.Add(bufferHist)
-            newHist.Write()
-            
         rootFile.Close()
 

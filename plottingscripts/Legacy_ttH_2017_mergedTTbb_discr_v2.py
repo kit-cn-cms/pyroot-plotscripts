@@ -43,8 +43,9 @@ def main(pyrootdir, opts):
     
     # Name of final discriminator, should not contain underscore
     discrName = 'finaldiscr'
-    # nom_histname_template = "$PROCESS__$CHANNEL"
-    # syst_histname_template = nom_histname_template + "__$SYSTEMATIC"
+    nom_histname_template = "$PROCESS__$CHANNEL"
+    syst_histname_template = nom_histname_template + "__$SYSTEMATIC"
+    histname_separator = "__"
 
     # define MEM discriminator variable
     # memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
@@ -63,8 +64,8 @@ def main(pyrootdir, opts):
     analysisOptions = {
         # general options
         "usePseudoData":        True,
-        "testrun":              False,  # test run with less samples
-        "stopAfterCompile":     True,   # stop script after compiling
+        "testrun":              True,  # test run with less samples
+        "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
         "makeDataCards":        True,
@@ -177,7 +178,10 @@ def main(pyrootdir, opts):
         # initialize plotParallel class 
         pP = plotParallel.plotParallel(
             analysis = analysis,
-            configData = configData)
+            configData = configData,
+            nominalHistKey = nom_histname_template,
+            systHistKey = syst_histname_template,
+            separator = histname_separator)
 
         monitor.printClass(pP, "init")
         # set some changed values
@@ -251,13 +255,17 @@ def main(pyrootdir, opts):
             if analysis.usePseudoData:
                 print("adding data_obs histograms as pseudo data")
                 # pseudo data without ttH
-                pP.addData(samples = configData.samples[nSigSamples:])
+                pP.addData( samples = configData.samples[nSigSamples:], 
+                            nominal_hist_template = nom_histname_template,
+                            discrName = discrName)
                 # pseudo data with signal
                 #pP.addData(samples = configData.samples)
             else:
                 print("adding data_obs histograms as real data")
                 # real data with ttH
-                pP.addData(samples = configData.controlSamples)
+                pP.addData( samples = configData.controlSamples, 
+                            nominal_hist_template = nom_histname_template,
+                            discrName = discrName)
 
     
 
@@ -268,7 +276,7 @@ def main(pyrootdir, opts):
     print("at the moment the outputpath is "+str(analysis.renamedPath))
     print("#################################################")
 
-    if analysis.makeDataCards or analysis.makeInputDatacards:
+    if analysis.makeDataCards or analysis.makeInputDatacards and not opts.skipDatacards:
         print '''
         # ========================================================
         # Making Datacards.
@@ -284,8 +292,8 @@ def main(pyrootdir, opts):
                 datacardmaker       = datacardmaker,
                 signalTag           = analysis.signalProcess,
                 skipDatacards       = analysis.skipDatacards,
-                # nominal_key         = nom_histname_template,
-                # syst_key            = syst_histname_template
+                nominal_key         = nom_histname_template,
+                syst_key            = syst_histname_template
                 )
     
     if analysis.makePlots:
@@ -295,7 +303,9 @@ def main(pyrootdir, opts):
         # ========================================================
         '''
         with monitor.Timer("makePlots"):
-            makePlots.makePlots(configData = configData)
+            makePlots.makePlots(configData  = configData,
+                                nominal_key = nom_histname_template,
+                                syst_key    = syst_histname_template)
 
 
     print '''
