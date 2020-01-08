@@ -2,6 +2,8 @@ import ROOT
 ROOT.gROOT.SetBatch(True)
 import re
 import numpy as np
+from array import array
+import sys
 debug=10
 """
 ===============================================
@@ -18,6 +20,9 @@ class Plot:
     def __init__(self, hist, name, label = None, 
                     color=None, typ='bkg', OverUnderFlowInc=False, 
                     errorband=None, specificerrorband=None):
+        if debug > 5:
+            print("input hist in Plot class: ")
+            print(hist)
         self.hist=hist
         self.name=name
         self.label=label
@@ -51,8 +56,8 @@ class Plot:
             "ttbar":        ROOT.kOrange,
             "ttmergedb":    ROOT.kRed-1,
         
-            "sig":          ROOT.kCyan,
-            "total_signal": ROOT.kCyan,
+            "sig":          601,
+            "total_signal": 601,
             "bkg":          ROOT.kOrange,
             }
         cls = self.name
@@ -96,6 +101,13 @@ class Plot:
                 seb.SetLineColor(self.sebColor[n])
                 seb.SetFillColor(self.sebColor[n])
 
+    def __str__(self):
+        indent = " "*4
+        s = ""
+        for key in self.__dict__.keys():
+            s += "{}{}: {}\n".format(indent, key, self.__dict__[key])
+        return s
+
 # ===============================================
 # GET HISTOGRAMS AND ERROR BANDS
 # ===============================================
@@ -107,6 +119,7 @@ def buildHistogramAndErrorBand(rootFile,sample,color,typ,label,systematics,nomin
         sampleKey = nominalKey.replace(procIden, sample)
     else:
         sampleKey=nominalKey
+    print(sampleKey)
     rootHist = rootFile.Get(sampleKey)
     print("    loading key '{}'".format(sampleKey))
     print("    type of hist is: "+str(type(rootHist)) )
@@ -255,20 +268,35 @@ def buildHistogramAndErrorBand(rootFile,sample,color,typ,label,systematics,nomin
 
     return PlotObject
 
+
+def updateBinEdges(hist, edges):
+    newHist = ROOT.TH1F(hist.GetName(), hist.GetTitle(), len(edges)-1, array("f", edges))
+    for i in range(len(edges)+1):
+        newHist.SetBinContent(i, hist.GetBinContent(i))
+        newHist.SetBinError(i, hist.GetBinError(i))
+    
+    return newHist
+
+
 """
 Combine Output Style where Errorbands already exist
 """
-def getHistogramAndErrorband(rootFile,sample,color,typ,label,nominalKey,procIden):
+def getHistogramAndErrorband(rootFile,sample,color,typ,label,nominalKey,procIden,binEdges=None,newTitle=""):
     print("new sample: "+str(sample))
     # replace keys to get histogram key
     if procIden in nominalKey:
         sampleKey = nominalKey.replace(procIden, sample)
     else:
         sampleKey=nominalKey
+    print("    loading key '{}'".format(sampleKey))
     rootHist = rootFile.Get(sampleKey)
     print("    type of hist is: "+str(type(rootHist)) )
     if not isinstance(rootHist, ROOT.TH1):
         return "ERROR"
+
+    if not binEdges is None:
+        rootHist = updateBinEdges(rootHist, binEdges)
+        rootHist.SetTitle(newTitle)
     PlotObject=Plot(rootHist,sample,label=label,
                                     color=color,typ=typ,
                                     OverUnderFlowInc=True)
@@ -289,7 +317,8 @@ def addSamples(sample,color,typ,label,addsamples,PlotList,combineflag=None):
     combinedHist = None
     print("Adding samples for summarized process %s" % sample)
     for addsample in addsamples:
-        if PlotList[addsample] == "ERROR": continue
+        entry = PlotList.get(addsample, "ERROR")
+        if entry == "ERROR": continue
         print "    "+addsample
         if combinedHist:
             combinedHist.Add(PlotList[addsample].hist)
@@ -334,6 +363,7 @@ def addErrorbands(combinedErrorbands,combinedHist,correlated=False):
 
 
 def moveOverUnderFlow(hist):
+    print("zeroth bin: {}".format(hist.GetBinContent(0)))
     # move underflow
     hist.SetBinContent(1, hist.GetBinContent(0)+hist.GetBinContent(1))
     # move overflow
@@ -353,10 +383,12 @@ def moveOverUnderFlow(hist):
     hist.SetBinError(hist.GetNbinsX()+1,0)
 
 # converts the TGraphAsymmError data object in the mlfit file to a histogram (therby dropping bins again) and in addition sets asymmetric errors***
-def GetHistoFromTGraphAE(tgraph,process,nbins_new):
+def GetHistoFromTGraphAE(tgraph,process,nbins_new,binEdges=None):
     nbins_old = tgraph.GetN()
     # add category to name of histogram so each histogram has a different name to avoid problems with ROOT
     histo = ROOT.TH1F(process,process,nbins_new,0,nbins_new)
+    if not binEdges is None:
+        histo = updateBinEdges(histo, binEdges)
     # set this flag for asymmetric errors in data histogram
     histo.Sumw2(ROOT.kFALSE)
     # loop has to go from 0..nbins_new-1 for a tgraphasymmerror with nbins_new points
@@ -364,7 +396,7 @@ def GetHistoFromTGraphAE(tgraph,process,nbins_new):
         # first point (point 0) in tgraphae corresponds to first bin (bin 1 (0..1)) in histogram
         entries = tgraph.GetY()[i]
         for k in range(int(round(entries))):# rounding necessary if used with asimov dataset because entries can be non-integer in this case
-            histo.Fill(i+0.5)
+            histo.Fill(histo.GetBinCenter(i+1))
     # set this flag for calculation of asymmetric errors in data histogram
     histo.SetBinErrorOption(ROOT.TH1.kPoisson)
     return histo
@@ -388,9 +420,9 @@ Class handling the Drawing of the Histograms
 """
 class DrawHistograms:
     def __init__(self, PlotList, canvasName, data=None, ratio=False, signalscaling=1, 
-                    errorband=None, displayname=None, logoption=False, shape=False,
+                    errorband=None, background=None, displayname=None, logoption=False, shape=False,
                     normalize=False, combineflag=False, splitlegend=False, datalabel="data",
-                    sortedProcesses=False):
+                    sortedProcesses=False, yLabel="Events expected"):
         self.PlotList       = PlotList
         self.canvasName     = canvasName
         self.data           = data 
@@ -401,6 +433,7 @@ class DrawHistograms:
             self.ratio      = False
         self.signalscaling  = signalscaling
         self.errorband      = errorband 
+        self.background     = background
         self.displayname    = displayname 
         if not self.displayname:
             self.displayname = canvasName
@@ -413,7 +446,7 @@ class DrawHistograms:
         if self.combineflag and not self.sortedProcesses:
             self.sortedProcesses = ["total_signal"]
 
-
+        self.yLabel          = yLabel
     # ===============================================
     # DRAW HISTOGRAMS ON CANVAS
     # ===============================================
@@ -424,6 +457,12 @@ class DrawHistograms:
         get the integral of the hists to sort it by event yield for plotting
         sort it by Event Yield, lowest to highest
         """
+        #c = ROOT.TCanvas()
+        #self.data.Draw()
+        #c.SaveAs("test.pdf")
+        #c.Clear()        
+
+
         self.sortPlots()
 
         """
@@ -460,6 +499,8 @@ class DrawHistograms:
         else:
             firstHist = self.stackPlots[0]
 
+
+        firstHist.SetStats(False)
         """
         get the total background event yield
         to scale the signal
@@ -485,7 +526,7 @@ class DrawHistograms:
             firstHist.GetYaxis().SetRangeUser(self.yMinMax/10000, self.yMax*1000)
             ROOT.gPad.SetLogy(1)
         else:
-            firstHist.GetYaxis().SetRangeUser(0, self.yMax*1.5)
+            firstHist.GetYaxis().SetRangeUser(0.01, self.yMax*1.6)
         
         """
         Handle titles
@@ -507,7 +548,7 @@ class DrawHistograms:
         """
         option = "histo"
         if self.stackPlots:
-            firstHist.DrawCopy(option+"E0")
+            firstHist.DrawCopy(option+"")
         else:
             firstHist.DrawCopy(option)
 
@@ -534,11 +575,6 @@ class DrawHistograms:
 
 
 
-        # draw data
-        if self.data:
-            self.data.SetLineColor(ROOT.kBlack)
-            self.data.SetMarkerStyle(20)
-            self.data.Draw("same1")
 
         self.canvas.cd(1)
         # redraw axis
@@ -559,13 +595,27 @@ class DrawHistograms:
             # draw signal histogram
             shape.DrawCopy(option+" same")
 
+        # draw data
+        if self.data:
+            self.data.SetLineColor(ROOT.kBlack)
+            self.data.SetMarkerStyle(20)
+            self.data.SetFillStyle(0)
+            self.data.SetMarkerSize(1.5)
+            self.data.SetLineWidth(1)
+            #self.data.Draw("same1")
+            self.data.Draw("histPEX0same")
+
         """
         Draws the ratio plot, scales the background, signal and errorband to the background
         """
         if self.ratio:
             self.canvas.cd(2)
-            self.drawRatio(stackhist = firstHist, canvaslabel = canvaslabel)
+            if self.errorband:
+                self.drawRatioCombine(title = "", canvaslabel=canvaslabel)
+            else:
+                self.drawRatio(stackhist = firstHist, canvaslabel = canvaslabel)
 
+    
     def sortPlots(self):
         """
         set the Style for the Signal and Background Plots
@@ -708,14 +758,15 @@ class DrawHistograms:
         print self.yMinMax
 
 
-    def drawRatio(self,stackhist,canvaslabel=""):
+    def drawRatioLine(self, canvaslabel):
         """
         Draws the ratio plot, scales the background, signal and errorband to the background
         """
         
         line = self.data.Clone()
         line.Divide(self.data)
-        line.GetYaxis().SetRangeUser(0.5,1.5)
+        #line.GetYaxis().SetRangeUser(0.5,1.5)
+        line.GetYaxis().SetRangeUser(0.3,1.7)
         line.GetYaxis().SetTitle(self.ratio)
 
         line.SetTitle("")
@@ -735,6 +786,10 @@ class DrawHistograms:
         line.SetLineWidth(1)
         line.SetLineColor(ROOT.kBlack)
         line.DrawCopy("histo")
+
+    def drawRatio(self,stackhist,canvaslabel=""):
+        self.drawRatioLine(canvaslabel)
+
         # ratio plot
         ratioPlot = self.data.Clone()
         ratioPlot.Divide(stackhist)
@@ -746,6 +801,24 @@ class DrawHistograms:
         ratioPlot.DrawCopy("sameP")
 
         self.generateRatioErrorband()
+        self.canvas.cd(1)
+
+    def drawRatioCombine(self,title="",canvaslabel = ""):
+        self.drawRatioLine(canvaslabel)    
+        self.ratio_error_graph = self.errorband.Clone()
+        for i in range(0,self.errorband.GetN(),1):
+            self.ratio_error_graph.SetPoint(i,self.errorband.GetX()[i],1)
+            self.ratio_error_graph.SetPointEYhigh(i,self.errorband.GetErrorYhigh(i)/self.errorband.GetY()[i])
+            self.ratio_error_graph.SetPointEYlow(i,self.errorband.GetErrorYlow(i)/self.errorband.GetY()[i])
+        self.ratio_error_graph.Draw("same2")
+
+        self.ratioPlot = ROOT.TGraphAsymmErrors(self.data.Clone())
+        for i in range(1,self.data.GetNbinsX()+1,1):
+            self.ratioPlot.SetPoint(i-1,self.errorband.GetX()[i-1],self.data.GetBinContent(i)/self.background.GetBinContent(i))
+            self.ratioPlot.SetPointError(i-1,0.,0.,
+                (self.data.GetBinErrorLow(i))/self.background.GetBinContent(i),(self.data.GetBinErrorUp(i))/self.background.GetBinContent(i))
+        self.ratioPlot.SetMarkerStyle(20)
+        self.ratioPlot.Draw("P2 same")
         self.canvas.cd(1)
 
     # scales the Errorband for the ratio plot
@@ -777,7 +850,7 @@ class DrawHistograms:
         # normalize plots to unit area
         if self.normalize:
             return "normalized to unit area"
-        return "Events expected"
+        return self.yLabel
 
     def builtLegend(self):
         # drawing the legend
@@ -849,7 +922,7 @@ class DrawHistograms:
         latex.SetNDC()
         latex.SetTextColor(ROOT.kBlack)
 
-        if self.ratio:  latex.DrawLatex(l+0.07,1.-t-0.04, channelLabel)
+        if self.ratio:  latex.DrawLatex(l+0.09,1.-t-0.06, channelLabel)
         else:           latex.DrawLatex(l+0.02,1.-t-0.06, channelLabel)
 
     def printCMSLabel(self, cmslabel):

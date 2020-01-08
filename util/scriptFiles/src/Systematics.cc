@@ -18,7 +18,11 @@ void Systematics::init() {
   add( JESSinglePionECALup,      JESSinglePionECALdown,      "JESSinglePionECAL",        "SinglePionECAL"      );                             
   add( JESSinglePionHCALup,      JESSinglePionHCALdown,      "JESSinglePionHCAL",        "SinglePionHCAL"      );                             
   add( JESFlavorQCDup,           JESFlavorQCDdown,           "JESFlavorQCD",             "FlavorQCD"           );                        
-  add( JESTimePtEtaup,           JESTimePtEtadown,           "JESTimePtEta",             "TimePtEta"           );                        
+  add( JESTimePtEtaup,           JESTimePtEtadown,           "JESTimePtEta",             "TimePtEta"           ); 
+  // HEM
+  add( JESHEMup,                 JESHEMdown,                 "JESHEMIssue",              "HEMIssue"            );
+
+  add( JESRelativeSampleup,      JESRelativeSampledown,      "JESRelativeSample",        "RelativeSample"      );                       
   add( JESRelativeJEREC1up,      JESRelativeJEREC1down,      "JESRelativeJEREC1",        "RelativeJEREC1"      );                             
   add( JESRelativeJEREC2up,      JESRelativeJEREC2down,      "JESRelativeJEREC2",        "RelativeJEREC2"      );                             
   add( JESRelativeJERHFup,       JESRelativeJERHFdown,       "JESRelativeJERHF",         "RelativeJERHF"       );             
@@ -58,7 +62,8 @@ void Systematics::init() {
   add( JESTimeRunBCDup,          JESTimeRunBCDdown,          "JESTimeRunBCD",            "TimeRunBCD"          );                  
   add( JESTimeRunEFup,           JESTimeRunEFdown,           "JESTimeRunEF",             "TimeRunEF"           );                        
   add( JESTimeRunGup,            JESTimeRunGdown,            "JESTimeRunG",              "TimeRunG"            );                                 
-  add( JESTimeRunHup,            JESTimeRunHdown,            "JESTimeRunH",              "TimeRunH"            );   
+  add( JESTimeRunHup,            JESTimeRunHdown,            "JESTimeRunH",              "TimeRunH"            );
+
   add( CSVLFup,                  CSVLFdown,                  "CSVLF",                    "LF"                  );
   add( CSVHFup,                  CSVHFdown,                  "CSVHF",                    "HF"                  );
   add( CSVLFStats1up,            CSVLFStats1down,            "CSVLFStats1",              "LFStats1"            );
@@ -98,7 +103,7 @@ Systematics::Type Systematics::get(const std::string& name) {
   if( name == "" ) return NA;
 
   if( !isInit() ) init();
-
+  
   std::map<std::string,Systematics::Type>::const_iterator it = stringTypeMap_.find(name);
   if( it == stringTypeMap_.end() ) {
     std::cout << "ERROR: No uncertainty with name " << name << " will use nominal "<<std::endl;
