@@ -247,7 +247,7 @@ class plotParallel:
 
 
   # -- adding pseudo and real data --------------------------------------------------------------
-    def addData(self, samples, nominal_hist_template, discrName = None):
+    def addData(self, samples, discrName = None):
 
         sampleNicks = [s.nick for s in samples]
         print(sampleNicks)
@@ -263,7 +263,7 @@ class plotParallel:
         all_labels += self.configData.getVariablelabels()
         for label in all_labels:
             print("doing {}".format(label))
-            histNameTemplate = nominal_hist_template.replace("$CHANNEL", label)
+            histNameTemplate = self.nominalHistoKey.replace("$CHANNEL", label)
             # histName = histNameTemplate.replace("$PROCESS", str(sampleNicks[0]))
 
             newHist = None
