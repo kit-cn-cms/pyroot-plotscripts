@@ -533,6 +533,7 @@ class DNN:
         histoname = kwargs.get("histoname", None)
         selection = kwargs.get("selection", None)
         label = kwargs.get("label", "")
+        category_label = kwargs.get("category_label", "label") 
 
         minxval = kwargs.get("minxval", None)
         maxxval = kwargs.get("maxxval", None)
@@ -543,9 +544,13 @@ class DNN:
     interf_{LABEL} = vhi.variableHistoInterface(variable_name  = "{DISCR_NAME}",
                                             label          = "{LABEL}",
                                             selection      = "{PRESELECTION}")
-    interf_{LABEL}.category = ("{PRESELECTION}","{LABEL}","")\n"""
+    interf_{LABEL}.category = ("{PRESELECTION}","{LABEL}","")
+    interf_{LABEL}.category_label = {CATEGORY_LABEL}
+    """
         # parse additional information for histo interface
-        template = template.format(LABEL=label, PRESELECTION = selection, DISCR_NAME = varname)
+        template = template.format( LABEL=label, PRESELECTION = selection, 
+                                    DISCR_NAME = varname, 
+                                    CATEGORY_LABEL = category_label)
         addlines = []
         indent = "    "
         base = indent + "interf_{LABEL}".format(LABEL = label)
@@ -638,7 +643,7 @@ class DNN:
             string += self.generateInfoCollectionString(  
                 selection       = preselection,
                 label           = label,
-                category_label  = self.label,
+                category_label  = '"{}"'.format(self.label),
                 variable_name   = self.discrNames[i],
                 nhistobins      = "ndefaultbins",
                 bin_edges = bin_edges, minxval = minval, maxxval = maxval)
