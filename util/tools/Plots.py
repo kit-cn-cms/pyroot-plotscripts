@@ -252,9 +252,9 @@ def buildHistogramAndErrorBand(rootFile,sample,color,typ,label,systematics,nomin
 
     if addStatErrorband:
         statErrorband = ROOT.TGraphAsymmErrors(rootHist)
-        for i in range(rootHist.GetNbinsX()+1):
-            statErrorband.SetPointEYlow(i, rootHist.GetBinError(i))
-            statErrorband.SetPointEYhigh(i, rootHist.GetBinError(i))
+        for i in range(rootHist.GetNbinsX()):
+            statErrorband.SetPointEYlow(i, rootHist.GetBinError(i+1))
+            statErrorband.SetPointEYhigh(i, rootHist.GetBinError(i+1))
             statErrorband.SetPointEXlow(i, rootHist.GetBinWidth(i+1)/2.)
             statErrorband.SetPointEXhigh(i, rootHist.GetBinWidth(i+1)/2.)
             
@@ -348,13 +348,14 @@ def addErrorbands(combinedErrorbands,combinedHist,correlated=False):
         up=0
         down=0
         for errorband in combinedErrorbands:
-                if errorband is None: continue
-                if correlated:
-                   up=up+errorband.GetErrorYhigh(i)
-                   down=down+errorband.GetErrorYlow(i)
-                else:
-                    up=ROOT.TMath.Sqrt(up*up+errorband.GetErrorYhigh(i)*errorband.GetErrorYhigh(i))
-                    down=ROOT.TMath.Sqrt(down*down+errorband.GetErrorYlow(i)*errorband.GetErrorYlow(i))
+            if errorband is None: continue
+            
+            if correlated:
+                up=up+errorband.GetErrorYhigh(i)
+                down=down+errorband.GetErrorYlow(i)
+            else:
+                up=ROOT.TMath.Sqrt(up*up+errorband.GetErrorYhigh(i)*errorband.GetErrorYhigh(i))
+                down=ROOT.TMath.Sqrt(down*down+errorband.GetErrorYlow(i)*errorband.GetErrorYlow(i))
         newErrorband.SetPointEYlow(i, down)
         newErrorband.SetPointEYhigh(i, up)
         newErrorband.SetPointEXlow(i, combinedHist.GetBinWidth(i+1)/2.)
