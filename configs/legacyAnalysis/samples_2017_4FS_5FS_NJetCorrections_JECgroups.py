@@ -162,8 +162,8 @@ TTbbweightFH='*35.8038266498504*0.4545'
 
 TTbbSLDLweight =  "*(((N_GenTopLep==2)"+TTbbweightDL+")"
 TTbbSLDLweight += "+((N_GenTopLep==1)"+TTbbweightSL+"))"
-# DANGERZONE: derived in 2018
-ttbb_4FS_scale = "*(1.0)"
+# DANGERZONE: derived in January 2020
+ttbb_4FS_scale = "*1.82462*(1.0)"
 ttbb_5FS_scale = "*(1.0)"
 
 tHq_XS_scale = "*(0.7927/0.07425)"
