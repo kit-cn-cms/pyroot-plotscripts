@@ -983,29 +983,29 @@ def getCanvas(name, ratiopad = False):
 
 def getLegend():
     legend=ROOT.TLegend(0.70,0.6,0.95,0.9)
-    legend.SetBorderSize(0);
-    legend.SetLineStyle(0);
-    legend.SetTextFont(42);
-    legend.SetTextSize(0.03);
-    legend.SetFillStyle(0);
+    legend.SetBorderSize(0)
+    legend.SetLineStyle(0)
+    legend.SetTextFont(42)
+    legend.SetTextSize(0.03)
+    legend.SetFillStyle(0)
     return legend
 
 def getLegend1():
     legend=ROOT.TLegend(0.65,0.7,0.8,0.9)
-    legend.SetBorderSize(0);
-    legend.SetLineStyle(0);
-    legend.SetTextFont(42);
-    legend.SetTextSize(0.03);
-    legend.SetFillStyle(0);
+    legend.SetBorderSize(0)
+    legend.SetLineStyle(0)
+    legend.SetTextFont(42)
+    legend.SetTextSize(0.03)
+    legend.SetFillStyle(0)
     return legend
 
 def getLegend2():
     legend=ROOT.TLegend(0.8,0.7,0.95,0.9)
-    legend.SetBorderSize(0);
-    legend.SetLineStyle(0);
-    legend.SetTextFont(42);
-    legend.SetTextSize(0.03);
-    legend.SetFillStyle(0);
+    legend.SetBorderSize(0)
+    legend.SetLineStyle(0)
+    legend.SetTextFont(42)
+    legend.SetTextSize(0.03)
+    legend.SetFillStyle(0)
     return legend
 
 
@@ -1096,4 +1096,4 @@ plotinfo = {
     with open(outputpath,'w') as outfile:
         outfile.write(code)
 
-        print("saved Example Plotconfig at {}".format(outputpath))
+    print("saved Example Plotconfig at {}".format(outputpath))
