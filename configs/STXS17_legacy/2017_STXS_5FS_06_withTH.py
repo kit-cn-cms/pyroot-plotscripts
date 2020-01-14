@@ -80,7 +80,7 @@ def plots_dnn(data, discrname):
                                             selection      = "((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_ttH==0)&&(DNNPredictedClass_ge4j_ge4t_STXS==0))")
     interf_ljets_ge4j_ge4t_ttH_ttH_1_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_ttH==0)&&(DNNPredictedClass_ge4j_ge4t_STXS==0))","ljets_ge4j_ge4t_ttH_ttH_1_node","")
     interf_ljets_ge4j_ge4t_ttH_ttH_1_node.minxval = 0.2
-    interf_ljets_ge4j_ge4t_ttH_ttH_1_node.maxxval = 0.72
+    interf_ljets_ge4j_ge4t_ttH_ttH_1_node.maxxval = 0.58
     interf_ljets_ge4j_ge4t_ttH_ttH_1_node.nhistobins = ndefaultbins
     interfaces.append(interf_ljets_ge4j_ge4t_ttH_ttH_1_node)
 
@@ -89,7 +89,7 @@ def plots_dnn(data, discrname):
                                             selection      = "((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_ttH==0)&&(DNNPredictedClass_ge4j_ge4t_STXS==1))")
     interf_ljets_ge4j_ge4t_ttH_ttH_2_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_ttH==0)&&(DNNPredictedClass_ge4j_ge4t_STXS==1))","ljets_ge4j_ge4t_ttH_ttH_2_node","")
     interf_ljets_ge4j_ge4t_ttH_ttH_2_node.minxval = 0.2
-    interf_ljets_ge4j_ge4t_ttH_ttH_2_node.maxxval = 0.72
+    interf_ljets_ge4j_ge4t_ttH_ttH_2_node.maxxval = 0.58
     interf_ljets_ge4j_ge4t_ttH_ttH_2_node.nhistobins = ndefaultbins
     interfaces.append(interf_ljets_ge4j_ge4t_ttH_ttH_2_node)
 
@@ -98,7 +98,7 @@ def plots_dnn(data, discrname):
                                             selection      = "((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_ttH==0)&&(DNNPredictedClass_ge4j_ge4t_STXS==2))")
     interf_ljets_ge4j_ge4t_ttH_ttH_3_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_ttH==0)&&(DNNPredictedClass_ge4j_ge4t_STXS==2))","ljets_ge4j_ge4t_ttH_ttH_3_node","")
     interf_ljets_ge4j_ge4t_ttH_ttH_3_node.minxval = 0.2
-    interf_ljets_ge4j_ge4t_ttH_ttH_3_node.maxxval = 0.72
+    interf_ljets_ge4j_ge4t_ttH_ttH_3_node.maxxval = 0.56
     interf_ljets_ge4j_ge4t_ttH_ttH_3_node.nhistobins = ndefaultbins
     interfaces.append(interf_ljets_ge4j_ge4t_ttH_ttH_3_node)
 
@@ -107,7 +107,7 @@ def plots_dnn(data, discrname):
                                             selection      = "((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_ttH==0)&&(DNNPredictedClass_ge4j_ge4t_STXS==3))")
     interf_ljets_ge4j_ge4t_ttH_ttH_4_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_ttH==0)&&(DNNPredictedClass_ge4j_ge4t_STXS==3))","ljets_ge4j_ge4t_ttH_ttH_4_node","")
     interf_ljets_ge4j_ge4t_ttH_ttH_4_node.minxval = 0.24
-    interf_ljets_ge4j_ge4t_ttH_ttH_4_node.maxxval = 0.72
+    interf_ljets_ge4j_ge4t_ttH_ttH_4_node.maxxval = 0.51
     interf_ljets_ge4j_ge4t_ttH_ttH_4_node.nhistobins = ndefaultbins
     interfaces.append(interf_ljets_ge4j_ge4t_ttH_ttH_4_node)
 
@@ -116,7 +116,7 @@ def plots_dnn(data, discrname):
                                             selection      = "((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_ttH==0)&&(DNNPredictedClass_ge4j_ge4t_STXS==4))")
     interf_ljets_ge4j_ge4t_ttH_ttH_5_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_ttH==0)&&(DNNPredictedClass_ge4j_ge4t_STXS==4))","ljets_ge4j_ge4t_ttH_ttH_5_node","")
     interf_ljets_ge4j_ge4t_ttH_ttH_5_node.minxval = 0.26
-    interf_ljets_ge4j_ge4t_ttH_ttH_5_node.maxxval = 0.72
+    interf_ljets_ge4j_ge4t_ttH_ttH_5_node.maxxval = 0.45
     interf_ljets_ge4j_ge4t_ttH_ttH_5_node.nhistobins = ndefaultbins
     interfaces.append(interf_ljets_ge4j_ge4t_ttH_ttH_5_node)
 
@@ -133,8 +133,8 @@ def plots_dnn(data, discrname):
                                             label          = "ljets_ge4j_ge4t_ttH_ttbb_node",
                                             selection      = "((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_ttH==1))")
     interf_ljets_ge4j_ge4t_ttH_ttbb_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_ttH==1))","ljets_ge4j_ge4t_ttH_ttbb_node","")
-    interf_ljets_ge4j_ge4t_ttH_ttbb_node.minxval = 0.14
-    interf_ljets_ge4j_ge4t_ttH_ttbb_node.maxxval = 0.67
+    interf_ljets_ge4j_ge4t_ttH_ttbb_node.minxval = 0.16
+    interf_ljets_ge4j_ge4t_ttH_ttbb_node.maxxval = 0.5
     interf_ljets_ge4j_ge4t_ttH_ttbb_node.nhistobins = ndefaultbins
     interfaces.append(interf_ljets_ge4j_ge4t_ttH_ttbb_node)
     
@@ -143,7 +143,7 @@ def plots_dnn(data, discrname):
                                             selection      = "((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_ttH==2))")
     interf_ljets_ge4j_ge4t_ttH_tt2b_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_ttH==2))","ljets_ge4j_ge4t_ttH_tt2b_node","")
     interf_ljets_ge4j_ge4t_ttH_tt2b_node.minxval = 0.14
-    interf_ljets_ge4j_ge4t_ttH_tt2b_node.maxxval = 0.86
+    interf_ljets_ge4j_ge4t_ttH_tt2b_node.maxxval = 0.5
     interf_ljets_ge4j_ge4t_ttH_tt2b_node.nhistobins = ndefaultbins
     interfaces.append(interf_ljets_ge4j_ge4t_ttH_tt2b_node)
     
@@ -151,8 +151,8 @@ def plots_dnn(data, discrname):
                                             label          = "ljets_ge4j_ge4t_ttH_ttcc_node",
                                             selection      = "((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_ttH==3))")
     interf_ljets_ge4j_ge4t_ttH_ttcc_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_ttH==3))","ljets_ge4j_ge4t_ttH_ttcc_node","")
-    interf_ljets_ge4j_ge4t_ttH_ttcc_node.minxval = 0.14
-    interf_ljets_ge4j_ge4t_ttH_ttcc_node.maxxval = 0.5
+    interf_ljets_ge4j_ge4t_ttH_ttcc_node.minxval = 0.17
+    interf_ljets_ge4j_ge4t_ttH_ttcc_node.maxxval = 0.45
     interf_ljets_ge4j_ge4t_ttH_ttcc_node.nhistobins = ndefaultbins
     interfaces.append(interf_ljets_ge4j_ge4t_ttH_ttcc_node)
     
@@ -250,7 +250,7 @@ def plots_dnn(data, discrname):
                                             selection      = "((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_ttH==0)&&(DNNPredictedClass_ge4j_3t_STXS==0))")
     interf_ljets_ge4j_3t_ttH_ttH_1_node.category = ("((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_ttH==0)&&(DNNPredictedClass_ge4j_3t_STXS==0))","ljets_ge4j_3t_ttH_ttH_1_node","")
     interf_ljets_ge4j_3t_ttH_ttH_1_node.minxval = 0.2
-    interf_ljets_ge4j_3t_ttH_ttH_1_node.maxxval = 0.7
+    interf_ljets_ge4j_3t_ttH_ttH_1_node.maxxval = 0.56
     interf_ljets_ge4j_3t_ttH_ttH_1_node.nhistobins = ndefaultbins
     interfaces.append(interf_ljets_ge4j_3t_ttH_ttH_1_node)
 
@@ -259,7 +259,7 @@ def plots_dnn(data, discrname):
                                             selection      = "((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_ttH==0)&&(DNNPredictedClass_ge4j_3t_STXS==1))")
     interf_ljets_ge4j_3t_ttH_ttH_2_node.category = ("((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_ttH==0)&&(DNNPredictedClass_ge4j_3t_STXS==1))","ljets_ge4j_3t_ttH_ttH_2_node","")
     interf_ljets_ge4j_3t_ttH_ttH_2_node.minxval = 0.2
-    interf_ljets_ge4j_3t_ttH_ttH_2_node.maxxval = 0.7
+    interf_ljets_ge4j_3t_ttH_ttH_2_node.maxxval = 0.51
     interf_ljets_ge4j_3t_ttH_ttH_2_node.nhistobins = ndefaultbins
     interfaces.append(interf_ljets_ge4j_3t_ttH_ttH_2_node)
 
@@ -268,7 +268,7 @@ def plots_dnn(data, discrname):
                                             selection      = "((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_ttH==0)&&(DNNPredictedClass_ge4j_3t_STXS==2))")
     interf_ljets_ge4j_3t_ttH_ttH_3_node.category = ("((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_ttH==0)&&(DNNPredictedClass_ge4j_3t_STXS==2))","ljets_ge4j_3t_ttH_ttH_3_node","")
     interf_ljets_ge4j_3t_ttH_ttH_3_node.minxval = 0.2
-    interf_ljets_ge4j_3t_ttH_ttH_3_node.maxxval = 0.7
+    interf_ljets_ge4j_3t_ttH_ttH_3_node.maxxval = 0.52
     interf_ljets_ge4j_3t_ttH_ttH_3_node.nhistobins = ndefaultbins
     interfaces.append(interf_ljets_ge4j_3t_ttH_ttH_3_node)
 
@@ -277,7 +277,7 @@ def plots_dnn(data, discrname):
                                             selection      = "((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_ttH==0)&&(DNNPredictedClass_ge4j_3t_STXS==3))")
     interf_ljets_ge4j_3t_ttH_ttH_4_node.category = ("((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_ttH==0)&&(DNNPredictedClass_ge4j_3t_STXS==3))","ljets_ge4j_3t_ttH_ttH_4_node","")
     interf_ljets_ge4j_3t_ttH_ttH_4_node.minxval = 0.2
-    interf_ljets_ge4j_3t_ttH_ttH_4_node.maxxval = 0.7
+    interf_ljets_ge4j_3t_ttH_ttH_4_node.maxxval = 0.54
     interf_ljets_ge4j_3t_ttH_ttH_4_node.nhistobins = ndefaultbins
     interfaces.append(interf_ljets_ge4j_3t_ttH_ttH_4_node)
 
@@ -286,7 +286,7 @@ def plots_dnn(data, discrname):
                                             selection      = "((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_ttH==0)&&(DNNPredictedClass_ge4j_3t_STXS==4))")
     interf_ljets_ge4j_3t_ttH_ttH_5_node.category = ("((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_ttH==0)&&(DNNPredictedClass_ge4j_3t_STXS==4))","ljets_ge4j_3t_ttH_ttH_5_node","")
     interf_ljets_ge4j_3t_ttH_ttH_5_node.minxval = 0.2
-    interf_ljets_ge4j_3t_ttH_ttH_5_node.maxxval = 0.7
+    interf_ljets_ge4j_3t_ttH_ttH_5_node.maxxval = 0.51
     interf_ljets_ge4j_3t_ttH_ttH_5_node.nhistobins = ndefaultbins
     interfaces.append(interf_ljets_ge4j_3t_ttH_ttH_5_node)
     
@@ -294,8 +294,8 @@ def plots_dnn(data, discrname):
                                             label          = "ljets_ge4j_3t_ttH_ttbb_node",
                                             selection      = "((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_ttH==1))")
     interf_ljets_ge4j_3t_ttH_ttbb_node.category = ("((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_ttH==1))","ljets_ge4j_3t_ttH_ttbb_node","")
-    interf_ljets_ge4j_3t_ttH_ttbb_node.minxval = 0.14
-    interf_ljets_ge4j_3t_ttH_ttbb_node.maxxval = 0.45
+    interf_ljets_ge4j_3t_ttH_ttbb_node.minxval = 0.16
+    interf_ljets_ge4j_3t_ttH_ttbb_node.maxxval = 0.41
     interf_ljets_ge4j_3t_ttH_ttbb_node.nhistobins = ndefaultbins
     interfaces.append(interf_ljets_ge4j_3t_ttH_ttbb_node)
     
@@ -304,7 +304,7 @@ def plots_dnn(data, discrname):
                                             selection      = "((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_ttH==2))")
     interf_ljets_ge4j_3t_ttH_tt2b_node.category = ("((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_ttH==2))","ljets_ge4j_3t_ttH_tt2b_node","")
     interf_ljets_ge4j_3t_ttH_tt2b_node.minxval = 0.14
-    interf_ljets_ge4j_3t_ttH_tt2b_node.maxxval = 0.92
+    interf_ljets_ge4j_3t_ttH_tt2b_node.maxxval = 0.7
     interf_ljets_ge4j_3t_ttH_tt2b_node.nhistobins = ndefaultbins
     interfaces.append(interf_ljets_ge4j_3t_ttH_tt2b_node)
     
