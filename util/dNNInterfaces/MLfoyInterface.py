@@ -70,13 +70,13 @@ def doRebinning(rootfile, histolist, threshold):
                 binContent = 0.
     
     
-    underflow_edge = combinedHist.GetBinLowEdge(1)
-    if not underflow_edge in bin_edges:
-        # if underflow_edge is not in bin_edges list the relative
-        # error of the last bin is too small, so just merge the
-        # first two bins by replacing the last_added_edge with
-        # the underflow_edge 
-        bin_edges[-1] = underflow_edge
+    # underflow_edge = combinedHist.GetBinLowEdge(1)
+    # if not underflow_edge in bin_edges:
+    #     # if underflow_edge is not in bin_edges list the relative
+    #     # error of the last bin is too small, so just merge the
+    #     # first two bins by replacing the last_added_edge with
+    #     # the underflow_edge 
+    #     bin_edges[-1] = underflow_edge
 
     print("\tnew bin edges: [{}]".format(",".join([str(round(b,4)) for b in bin_edges])))
     return sorted(bin_edges)
@@ -94,8 +94,8 @@ def getOptimizedBinEdges(label, opts, channel = None):
     # collect keys to conider for rebinning
     consider_for_rebinning = []
     for p in opts.considered_processes.split(","):
-        branch = opts.histkey.replace("$PROCESS", p)
-        branch = branch.replace("$CHANNEL", channel)
+        branch = opts.histkey.replace("PROCESS", p)
+        branch = branch.replace("CHANNEL", channel)
         print(branch)
         if branch in keylist:
             print("\twill use '{}' for rebinning".format(branch))
@@ -465,7 +465,7 @@ class DNN:
             # print(plotConfig)
             string += self.generateInfoCollectionString(**plotConfig)
         string += """
-    plots = init_plots(interfaces = interfaces, data = data)"""
+    plots = init_plots(interfaces = interfaces)"""
         return string
 
 
@@ -533,6 +533,7 @@ class DNN:
         histoname = kwargs.get("histoname", None)
         selection = kwargs.get("selection", None)
         label = kwargs.get("label", "")
+        category_label = kwargs.get("category_label", "label") 
 
         minxval = kwargs.get("minxval", None)
         maxxval = kwargs.get("maxxval", None)
@@ -543,9 +544,13 @@ class DNN:
     interf_{LABEL} = vhi.variableHistoInterface(variable_name  = "{DISCR_NAME}",
                                             label          = "{LABEL}",
                                             selection      = "{PRESELECTION}")
-    interf_{LABEL}.category = ("{PRESELECTION}","{LABEL}","")\n"""
+    interf_{LABEL}.category = ("{PRESELECTION}","{LABEL}","")
+    interf_{LABEL}.category_label = {CATEGORY_LABEL}
+    """
         # parse additional information for histo interface
-        template = template.format(LABEL=label, PRESELECTION = selection, DISCR_NAME = varname)
+        template = template.format( LABEL=label, PRESELECTION = selection, 
+                                    DISCR_NAME = varname, 
+                                    CATEGORY_LABEL = category_label)
         addlines = []
         indent = "    "
         base = indent + "interf_{LABEL}".format(LABEL = label)
@@ -638,7 +643,7 @@ class DNN:
             string += self.generateInfoCollectionString(  
                 selection       = preselection,
                 label           = label,
-                category_label  = self.label,
+                category_label  = '"{}"'.format(self.label),
                 variable_name   = self.discrNames[i],
                 nhistobins      = "ndefaultbins",
                 bin_edges = bin_edges, minxval = minval, maxxval = maxval)
@@ -946,8 +951,8 @@ no separate plots and no separate discriminators are produced""")
     binningOptions.add_option("-r","--rules",dest="binning_rule",default=None,
         help = "file with binning rules as dictionary of 'nodename: [list, of, binedges, to, keep]'")
     binningOptions.add_option("--histkey", dest = "histkey",
-        help = "Use this key template to get the histograms. Should contain keywords '$PROCESS' and '$CHANNEL'. Default is '$PROCESS_$CHANNEL",
-        default = '$PROCESS_$CHANNEL')
+        help = "Use this key template to get the histograms. Should contain keywords 'PROCESS' and 'CHANNEL'. Default is 'PROCESS_CHANNEL",
+        default = 'PROCESS_CHANNEL')
 
     parser.add_option_group(binningOptions)
     (opts, args) = parser.parse_args()
