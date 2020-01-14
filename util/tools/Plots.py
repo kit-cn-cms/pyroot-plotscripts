@@ -252,9 +252,9 @@ def buildHistogramAndErrorBand(rootFile,sample,color,typ,label,systematics,nomin
 
     if addStatErrorband:
         statErrorband = ROOT.TGraphAsymmErrors(rootHist)
-        for i in range(rootHist.GetNbinsX()+1):
-            statErrorband.SetPointEYlow(i, rootHist.GetBinError(i))
-            statErrorband.SetPointEYhigh(i, rootHist.GetBinError(i))
+        for i in range(rootHist.GetNbinsX()):
+            statErrorband.SetPointEYlow(i, rootHist.GetBinError(i+1))
+            statErrorband.SetPointEYhigh(i, rootHist.GetBinError(i+1))
             statErrorband.SetPointEXlow(i, rootHist.GetBinWidth(i+1)/2.)
             statErrorband.SetPointEXhigh(i, rootHist.GetBinWidth(i+1)/2.)
             
@@ -348,13 +348,14 @@ def addErrorbands(combinedErrorbands,combinedHist,correlated=False):
         up=0
         down=0
         for errorband in combinedErrorbands:
-                if errorband is None: continue
-                if correlated:
-                   up=up+errorband.GetErrorYhigh(i)
-                   down=down+errorband.GetErrorYlow(i)
-                else:
-                    up=ROOT.TMath.Sqrt(up*up+errorband.GetErrorYhigh(i)*errorband.GetErrorYhigh(i))
-                    down=ROOT.TMath.Sqrt(down*down+errorband.GetErrorYlow(i)*errorband.GetErrorYlow(i))
+            if errorband is None: continue
+            
+            if correlated:
+                up=up+errorband.GetErrorYhigh(i)
+                down=down+errorband.GetErrorYlow(i)
+            else:
+                up=ROOT.TMath.Sqrt(up*up+errorband.GetErrorYhigh(i)*errorband.GetErrorYhigh(i))
+                down=ROOT.TMath.Sqrt(down*down+errorband.GetErrorYlow(i)*errorband.GetErrorYlow(i))
         newErrorband.SetPointEYlow(i, down)
         newErrorband.SetPointEYhigh(i, up)
         newErrorband.SetPointEXlow(i, combinedHist.GetBinWidth(i+1)/2.)
@@ -982,97 +983,117 @@ def getCanvas(name, ratiopad = False):
 
 def getLegend():
     legend=ROOT.TLegend(0.70,0.6,0.95,0.9)
-    legend.SetBorderSize(0);
-    legend.SetLineStyle(0);
-    legend.SetTextFont(42);
-    legend.SetTextSize(0.03);
-    legend.SetFillStyle(0);
+    legend.SetBorderSize(0)
+    legend.SetLineStyle(0)
+    legend.SetTextFont(42)
+    legend.SetTextSize(0.03)
+    legend.SetFillStyle(0)
     return legend
 
 def getLegend1():
     legend=ROOT.TLegend(0.65,0.7,0.8,0.9)
-    legend.SetBorderSize(0);
-    legend.SetLineStyle(0);
-    legend.SetTextFont(42);
-    legend.SetTextSize(0.03);
-    legend.SetFillStyle(0);
+    legend.SetBorderSize(0)
+    legend.SetLineStyle(0)
+    legend.SetTextFont(42)
+    legend.SetTextSize(0.03)
+    legend.SetFillStyle(0)
     return legend
 
 def getLegend2():
     legend=ROOT.TLegend(0.8,0.7,0.95,0.9)
-    legend.SetBorderSize(0);
-    legend.SetLineStyle(0);
-    legend.SetTextFont(42);
-    legend.SetTextSize(0.03);
-    legend.SetFillStyle(0);
+    legend.SetBorderSize(0)
+    legend.SetLineStyle(0)
+    legend.SetTextFont(42)
+    legend.SetTextSize(0.03)
+    legend.SetFillStyle(0)
     return legend
 
 
 
 def createExamplePlotconfig(outputpath):
     outputpath=outputpath+'/ExamplePlotconfig.py'
+    code = """# samples named in the rootfile
+plottingsamples = {
+    "ttH_hbb" : {
+        "info" : {
+            "label" : "t#bar{t}H, H to b#bar{b}",   # text that will be displayed in the plot legend for this process 
+            "color": ROOT.kCyan,    # color of the process in the plot. You can use both kCOLOR or the number attributed to the enum keyword
+            "typ": "signal"     # defines type of process. Signal are not part of the stack and are drawn as lines
+            },
+        "plot" : True   # decides is process is drawn in the first place or not
+    },
+    "ttH_hgg" : {
+        "info" : {
+            "label" : "t#bar{t}H, H to #gamma#gamma",   # text that will be displayed in the plot legend for this process 
+            "color": ROOT.kCyan,    # color of the process in the plot. You can use both kCOLOR or the number attributed to the enum keyword
+            "typ": "signal"     # defines type of process. Signal are not part of the stack and are drawn as lines
+            },
+        "plot" : True   # decides is process is drawn in the first place or not
+    },
+    "ttbb" : {
+        "info" : {
+            "label" : "t#bar{t}+b#bar{b}",
+            "color": ROOT.kRed+3,
+            "typ": "bkg"
+            },
+        "plot" : True
+    },
+    "ttbarZ" : {
+        "info" : {
+            "label" : 't#bar{t}+Z',
+            "color": 432,
+            "typ": "bkg"
+            },
+        "plot" : False
+    }
+}
 
+# combined samples. This allows to merge process for a plot
+plottingsamples = {
+    "ttH" : {
+        "color": ROOT.kCyan, 
+        "addSamples": ["ttH_hbb", "ttH_hgg"], 
+        "typ": "signal", 
+        "label": "t#bar{t}H"
+    }
+}
+
+# systematics to be plotted. Uncertainties will be used for the uncertainty band in the plot, i.e. merged
+systematics = [
+    "CMS_ttHbb_PU",
+    "CMS_eff_e_2018",
+    "CMS_scale_j_2018"
+]
+
+# order of the stack processes, descending from top to bottom
+sortedprocesses=["ttH","ttbb"]
+
+# options for the plotting style
+plotinfo = {
+    "signalScaling"     : -1,   # factor with which the signal processes will be scaled. Choose -1 to normalize signal processes to background stack
+    "datalabel"         : "data", # name of data displayed in legend
+    "data"              : "data_obs", # name of data in the input root file
+    "lumiLabel"         : "41.5",     # string in upper right corner next to '(13 TeV)'
+    
+    "cmslabel"          : "private Work",   # text in cursive in upper left corner next to 'CMS'
+    "normalize"         : False,    # normalize all processes to unity
+    "ratio"             : '#frac{data}{MC Background}', # label for y axis of ratio plot
+    "logarithmic"       : False,    # draw y axis logarithmic
+    "splitLegend"       : True,     # split the legend into two columns
+    "shape"             : False,    # normalize to first histogram
+    
+    "statErrorband"     : True,     # draw statistical uncertainty band in a separate error band (additional to systematics)
+    "nominalKey"        : "$PROCESS__$CHANNEL", # name template for histograms in .root file. Keywords will be replaced
+    "systematicKey"     : "$PROCESS__$CHANNEL__$SYSTEMATIC",  # name template for systematic variations in .root file. Keywords will be replaced
+
+    # use for combine plots, use 'shapes_prefit' for prefit OR 'shapes_fit_s' for post fit
+    # only uses total signal and does not split signal processes
+    # 
+    # "combineflag"     : "shapes_prefit"/"shapes_fit_s",
+    # "signallabel"     : "Signal"  # label in legend for signal
+}
+    """
     with open(outputpath,'w') as outfile:
-        outfile.write("import ROOT")
-        outfile.write('\n')
+        outfile.write(code)
 
-        outfile.write('#samples named in the rootfile\n')
-        outfile.write('samples = {\n')
-        outfile.write(' '*8+'"ttH_hbb":{"color": ROOT.kCyan, "typ": "signal", "label": "t#bar{t}H, H to b#bar{b}"},\n')
-        outfile.write(' '*8+'"ttH_hgg":{"color": ROOT.kCyan, "typ": "signal", "label": "t#bar{t}H, H to #gamma#gamma"},\n')
-        outfile.write(' '*8+'"ttbarOther":{"color": ROOT.kRed-7, "typ": "bkg", "label": "t#bar{t}+lf"},\n')
-        outfile.write(' '*8+'"ttbarW":{"color": ROOT.kBlue-10, "typ": "bkg", "label": "t#bar{t}+W"},\n')
-        outfile.write(' '*8+'"ttbarZ":{"color": ROOT.kBlue-6, "typ": "bkg", "label": "t#bar{t}+Z"},\n')
-        outfile.write(' '*8+'"ttbarPlusBBbar":{"color": ROOT.kRed+3, "typ": "bkg", "label": "t#bar{t}+b#bar{b}"},\n')
-        outfile.write(' '*4+'}\n')
-        outfile.write('\n')
-
-        outfile.write('#combined samples\n')
-        outfile.write('plottingsamples = {\n')
-        outfile.write(' '*8+'"ttH":{"color": ROOT.kCyan, "addSamples": ["ttH_hbb", "ttH_hgg"], "typ": "signal", "label": "t#bar{t}H"},\n' )
-        outfile.write(' '*8+'"ttV":{"color": ROOT.kBlue-10, "addSamples": ["ttbarW", "ttbarZ"], "typ": "bkg", "label": "t#bar{t}+V"},\n')
-        outfile.write(' '*4+'}\n')
-        outfile.write('\n')
-
-        outfile.write('#systematics to be plotted\n')
-        outfile.write('systematics = [\n')
-        outfile.write(' '*8+'"CMS_ttHbb_PU",\n')
-        outfile.write(' '*8+'"CMS_eff_e_2018",\n')
-        outfile.write(' '*8+'"CMS_scale_j_2018",\n')
-        outfile.write(' '*4+']\n')
-        outfile.write('\n')
-
-        outfile.write('# order of the stack processes, descending from top to bottom\n')      
-        outfile.write('sortedprocesses=["ttV","ttbarPlusBBbar"],\n')
-        outfile.write('\n')
-
-        outfile.write('#options for the plotting style\n')
-        outfile.write('plotoptions = {\n')
-        outfile.write(' '*4+'# "pdftag":"matti_schrode_KIT_cool",\n')
-
-        outfile.write('\n')
-        outfile.write(' '*4+'"data":"data_obs",\n')
-
-        outfile.write('\n')
-        outfile.write(' '*4+'"ratio":"#frac{data}{MC Background}",\n')
-        outfile.write(' '*4+'"logarithmic":False,\n')
-        outfile.write(' '*4+'"shape":False,\n')
-        outfile.write(' '*4+'"normalize":False,\n')
-
-        outfile.write('\n')
-        outfile.write(' '*4+'"signalscaling":-1,\n')
-        outfile.write(' '*4+'# "lumilabel":59.7,\n')
-        outfile.write(' '*4+'# "cmslabel":"private Work",\n')
-        outfile.write(' '*4+'# "splitlegend":True,\n')
-        outfile.write(' '*4+'# "sortedprocesses":,\n')
-        outfile.write(' '*4+'# "datalabel":data,\n')
-
-        outfile.write('\n')
-        outfile.write(' '*4+'#use for combine plots, use shapes_prefit for prefit and shapes_fit_s for post fit\n')
-        outfile.write(' '*4+'#only uses total signal and does not split signal processes\n')
-        outfile.write('\n')
-        outfile.write(' '*4+'# "combineflag":"shapes_prefit"/"shapes_fit_s",\n')
-        outfile.write(' '*4+'# "signallabel":"Signal",\n')
-        outfile.write(' '*4+'}\n')
-
-        print("saved Example Plotconfig at {}".format(outputpath))
+    print("saved Example Plotconfig at {}".format(outputpath))
