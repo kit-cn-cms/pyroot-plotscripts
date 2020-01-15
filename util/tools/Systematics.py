@@ -1,7 +1,7 @@
 import os
 import sys
 import pandas
-import json
+import importlib
 from collections import OrderedDict
 
 class SystematicsForProcess:
@@ -22,18 +22,31 @@ class Systematics:
         self.weightDictionary = weightDictionary
 
         self.replacing_config = None
-        if replacing_config and os.path.exists(replacing_config):
-            try:
-                with open(replacing_config) as f:
-                    self.replacing_config = json.load(replacing_config)
-            except:
-                print("ERROR: Could not load replacing config from '{}'".format(replacing_config))
-                
+        self.init_replace_config(replacing_config)
+        
         self.__dict_weight_systs = self.construct_syst_dict("weight")
         self.__dict_variation_systs = self.construct_syst_dict("variation")
         self.__dict_rate_systs = self.construct_syst_dict("rate")
 
-        
+    def init_replace_config(self, replacing_config):
+        replace_module = None
+        print("replacing config: {}".format(replacing_config))
+        if replacing_config:
+            try:
+                cfg_dir = os.path.dirname(replacing_config)
+                cfg_base = os.path.basename(replacing_config)
+                if not cfg_dir in sys.path:
+                    sys.path.append(cfg_dir)
+                replace_module = importlib.import_module(cfg_base)
+            except:
+                print("ERROR: Could not import replacing config '{}'".format(replacing_config))
+        if replace_module:
+            try:
+                self.replacing_config = replace_module.config
+            except:
+                print("ERROR: Could not load replacing config from '{}'".format(replacing_config))
+        if self.replacing_config:
+            print("WILL USE REPLACE CONFIGURATION FROM '{}'".format(replacing_config))
 
     def construct_syst_dict(self, construct_type):
         syst_dict = OrderedDict()
@@ -56,7 +69,9 @@ class Systematics:
 
     def replace_in_expression(self, insert_list, to_replace, systname, expression):
         new_systs = {}
+        print("ATTENTION: REPLACING {}".format(systname))
         for insert in insert_list:
+            print("\t{}".format(insert))
             new_name = "_".join([systname, insert])
             new_systs[new_name] = expression.replace(to_replace, insert)
         return new_systs
@@ -64,35 +79,45 @@ class Systematics:
     def expand_uncertainties(self, syst):
         expanded_systs = {}
         systName = syst["Uncertainty"]
-        up_variation = syst["Up"]
-        down_variation = syst["Down"]
+        up_variation = self.replaceDummies(syst["Up"])
+        down_variation = self.replaceDummies(syst["Down"])
         syst_variations = {}
         if up_variation == "-" or down_variation == "-":
             syst_variations[systName] = up_variation if not up_variation == "-" else down_variation
         else:
             syst_variations[systName+"Up"] = up_variation
             syst_variations[systName+"Down"] = down_variation
-        to_replace = self.replacing_config.get("to_replace", None)
-        if to_replace:
-            expand_with = self.replacing_config.get("expand_with", None)
-            if isinstance(expand_with, list):
-                for syst in syst_variations:
-                    expr = syst_variations[syst]
-                    if not to_replace in expr:
-                        print("ERROR: connot replace '{}' in '{}'".format(to_replace, syst))
-                        break
-                    expanded_systs.update(self.replace_in_expression(   insert_list = expand_with,
-                                                                        to_replace = to_replace,
-                                                                        systname = syst,
-                                                                        expression = expr
-                                                                        )
-                                            )
+        infodict = self.replacing_config.get(systName, None)
+        broken = True
+        if infodict:
+            to_replace = infodict.get("to_replace", None)
+            if to_replace:
+                expand_with = infodict.get("expand_with", None)
+                if isinstance(expand_with, list):
+                    for syst in syst_variations:
+                        expr = syst_variations[syst]
+                        if not to_replace in expr:
+                            print("ERROR: cannot replace '{}' in '{}'".format(to_replace, syst))
+                            broken = True
+                            break
+                            
+                        expanded_systs.update(self.replace_in_expression(   insert_list = expand_with,
+                                                                            to_replace = to_replace,
+                                                                            systname = syst,
+                                                                            expression = expr
+                                                                            )
+                                                )
+                        broken = False
+                else:
+                    print("ERROR: Could not load keyword 'expand_with' from config!")
             else:
-                print("ERROR: Could not load keyword 'expand_with' from config!")
+                print("ERROR: Could not load keyword 'to_replace' from config!")
         else:
-            print("ERROR: Could not load keyword 'to_replace' from config!")
-        print("Skipping uncertainty '{}'".format(systName))
-        return {}
+            print("ERROR: Found no information for systematic '{}' in syst replacing config")
+        if broken:
+            print("Skipping uncertainty '{}'".format(systName))
+            expanded_systs = {}
+        return expanded_systs
 
 
     """
