@@ -36,7 +36,7 @@ def main(pyrootdir, opts):
 
     # signal process
     signalProcess = "ttH"
-    nSigSamples   = 3
+    nSigSamples   = 1
 
     # dataera
     dataera = "2017"
@@ -256,7 +256,6 @@ def main(pyrootdir, opts):
                 print("adding data_obs histograms as pseudo data")
                 # pseudo data without ttH
                 pP.addData( samples = configData.samples[nSigSamples:], 
-                            nominal_hist_template = nom_histname_template,
                             discrName = discrName)
                 # pseudo data with signal
                 #pP.addData(samples = configData.samples)
@@ -264,7 +263,6 @@ def main(pyrootdir, opts):
                 print("adding data_obs histograms as real data")
                 # real data with ttH
                 pP.addData( samples = configData.controlSamples, 
-                            nominal_hist_template = nom_histname_template,
                             discrName = discrName)
 
     
