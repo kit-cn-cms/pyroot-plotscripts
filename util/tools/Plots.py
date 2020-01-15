@@ -149,9 +149,9 @@ def buildHistogramAndErrorBand(rootFile,sample,color,typ,label,systematics,nomin
 
         systematicsForProcess = []
         for s in systs:
-            if      s.endswith("Down"): systematicsForProcess.append(s[1:-4])
-            elif    s.endswith("Up"):   systematicsForProcess.append(s[1:-2])
-            else:                       systematicsForProcess.append(s[1:])
+            if      s.endswith("Down"): systematicsForProcess.append(s[:-4])
+            elif    s.endswith("Up"):   systematicsForProcess.append(s[:-2])
+            else:                       systematicsForProcess.append(s)
         systematicsForProcess = list(set(systematicsForProcess))
         print(systematicsForProcess)
     else:
