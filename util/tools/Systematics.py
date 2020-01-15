@@ -1,6 +1,7 @@
 import os
 import sys
 import pandas
+import json
 from collections import OrderedDict
 
 class SystematicsForProcess:
@@ -14,15 +15,25 @@ class SystematicsForProcess:
 
 
 class Systematics:
-    def __init__(self,systematicconfig,weightDictionary = {}):
+    def __init__(self,systematicconfig,weightDictionary = {}, replacing_config = None):
         print "loading systematics config ..."
         self.systematics=pandas.read_csv(systematicconfig,sep=",")
         self.systematics.fillna("-", inplace=True)
         self.weightDictionary = weightDictionary
 
+        self.replacing_config = None
+        if replacing_config and os.path.exists(replacing_config):
+            try:
+                with open(replacing_config) as f:
+                    self.replacing_config = json.load(replacing_config)
+            except:
+                print("ERROR: Could not load replacing config from '{}'".format(replacing_config))
+                
         self.__dict_weight_systs = self.construct_syst_dict("weight")
         self.__dict_variation_systs = self.construct_syst_dict("variation")
         self.__dict_rate_systs = self.construct_syst_dict("rate")
+
+        
 
     def construct_syst_dict(self, construct_type):
         syst_dict = OrderedDict()
@@ -31,15 +42,59 @@ class Systematics:
             systName=systematic["Uncertainty"]
             if systName.startswith("#"):
                 continue
-            #adds variable name to list of weightsysts
-            
-            name_var=systName+"Up"
-            expr = self.replaceDummies(systematic["Up"])
-            syst_dict[name_var] = expr
-            name_var=systName+"Down"
-            expr = self.replaceDummies(systematic["Down"])
-            syst_dict[name_var] = expr
+            #adds variable name to list of systs
+            if self.replacing_config and systName in self.replacing_config:
+                syst_dict.update(self.expand_uncertainties(systematic))
+            else:
+                name_var=systName+"Up"
+                expr = self.replaceDummies(systematic["Up"])
+                syst_dict[name_var] = expr
+                name_var=systName+"Down"
+                expr = self.replaceDummies(systematic["Down"])
+                syst_dict[name_var] = expr
         return syst_dict
+
+    def replace_in_expression(self, insert_list, to_replace, systname, expression):
+        new_systs = {}
+        for insert in insert_list:
+            new_name = "_".join([systname, insert])
+            new_systs[new_name] = expression.replace(to_replace, insert)
+        return new_systs
+
+    def expand_uncertainties(self, syst):
+        expanded_systs = {}
+        systName = syst["Uncertainty"]
+        up_variation = syst["Up"]
+        down_variation = syst["Down"]
+        syst_variations = {}
+        if up_variation == "-" or down_variation == "-":
+            syst_variations[systName] = up_variation if not up_variation == "-" else down_variation
+        else:
+            syst_variations[systName+"Up"] = up_variation
+            syst_variations[systName+"Down"] = down_variation
+        to_replace = self.replacing_config.get("to_replace", None)
+        if to_replace:
+            expand_with = self.replacing_config.get("expand_with", None)
+            if isinstance(expand_with, list):
+                for syst in syst_variations:
+                    expr = syst_variations[syst]
+                    if not to_replace in expr:
+                        print("ERROR: connot replace '{}' in '{}'".format(to_replace, syst))
+                        break
+                    expanded_systs.update(self.replace_in_expression(   insert_list = expand_with,
+                                                                        to_replace = to_replace,
+                                                                        systname = syst,
+                                                                        expression = expr
+                                                                        )
+                                            )
+            else:
+                print("ERROR: Could not load keyword 'expand_with' from config!")
+        else:
+            print("ERROR: Could not load keyword 'to_replace' from config!")
+        print("Skipping uncertainty '{}'".format(systName))
+        return {}
+
+
     """
     get all variables that shall be used, 
     for each shape variable makes two variables
@@ -72,9 +127,6 @@ class Systematics:
                         self.processes[process][down]=SystematicsForProcess(down,process,typ,construction,Down)
                     if not Up and not Down:
                         self.processes[process][name]=SystematicsForProcess(name,process,typ,construction)
-
-    def construct_pdf_relic_systs(self):
-        pass
 
     # only gets variables to plot, without variation of name with up and down!
     def plotSystematicsForProcesses(self,list_of_processes):
