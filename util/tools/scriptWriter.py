@@ -414,11 +414,14 @@ separator    = os.getenv('SEPARATOR')
 outname      = filename.replace('.root','_original.root')
 systematics  = "{systpath}"
 
-nHistsBefore, nHistsAfter = cleanupHistos.cleanupHistos(filename, outname, process, systematics, syst_key, separator)
+nHistsBefore, nHistsAfter = cleanupHistos.cleanupHistos(filename, outname, process, 
+                                                        systematics, syst_key, separator, 
+                                                        replacing_confing = {replace_config})
 with open(outname.replace('.root','_cleanedUp.txt'), 'w') as f:
     f.write('{{}} : {{}}'.format(nHistsBefore, nHistsAfter))
   """.format(path = os.path.join(self.pp.analysis.pyrootdir,"util"),
-            systpath = self.pp.configData.local_syst_path)
+            systpath = self.pp.configData.local_syst_path,
+            replace_config = self.pp.configData.replace_config)
         # write script to file
         with open(self.ccPath.replace(".cc","_cleanupHistos.py"), "w") as srcfile:
             srcfile.write(script)
