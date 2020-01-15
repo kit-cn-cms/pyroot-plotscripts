@@ -1,6 +1,7 @@
 import os
 import sys
 import pandas
+from collections import OrderedDict
 
 class SystematicsForProcess:
     def __init__(self,name,process,typ,construction,expression=None,plot=None):
@@ -19,6 +20,26 @@ class Systematics:
         self.systematics.fillna("-", inplace=True)
         self.weightDictionary = weightDictionary
 
+        self.__dict_weight_systs = self.construct_syst_dict("weight")
+        self.__dict_variation_systs = self.construct_syst_dict("variation")
+        self.__dict_rate_systs = self.construct_syst_dict("rate")
+
+    def construct_syst_dict(self, construct_type):
+        syst_dict = OrderedDict()
+        systs = self.systematics.loc[self.systematics["Construction"] == construct_type]
+        for i,systematic in systs.iterrows():
+            systName=systematic["Uncertainty"]
+            if systName.startswith("#"):
+                continue
+            #adds variable name to list of weightsysts
+            
+            name_var=systName+"Up"
+            expr = self.replaceDummies(systematic["Up"])
+            syst_dict[name_var] = expr
+            name_var=systName+"Down"
+            expr = self.replaceDummies(systematic["Down"])
+            syst_dict[name_var] = expr
+        return syst_dict
     """
     get all variables that shall be used, 
     for each shape variable makes two variables
@@ -51,6 +72,9 @@ class Systematics:
                         self.processes[process][down]=SystematicsForProcess(down,process,typ,construction,Down)
                     if not Up and not Down:
                         self.processes[process][name]=SystematicsForProcess(name,process,typ,construction)
+
+    def construct_pdf_relic_systs(self):
+        pass
 
     # only gets variables to plot, without variation of name with up and down!
     def plotSystematicsForProcesses(self,list_of_processes):
@@ -100,35 +124,21 @@ class Systematics:
         shape_systs=self.get_weight_systs(process)+self.get_variation_systs(process)
         return shape_systs
 
-
     #returns all weight systematics
     def get_all_weight_systs(self):
-        weightsysts=[]
-        for i,systematic in self.systematics.iterrows():
-            if systematic["Uncertainty"].startswith("#"):
-                continue
-            if systematic["Construction"]=="weight":
-                #adds variable name to list of weightsysts
-                systName=systematic["Uncertainty"]
-                up=systName+"Up"
-                down=systName+"Down"
-                weightsysts.append(up)
-                weightsysts.append(down)
-        return weightsysts
+        """
+        function to return names of weight systematics
+        return list of strings
+        """
+        return self.__dict_weight_systs.keys()
 
     def get_all_weight_expressions(self):
-        weightexp=[]
-        weightsysts=[]
-        for i,systematic in self.systematics.iterrows():
-            if systematic["Uncertainty"].startswith("#"):
-                continue
-            if systematic["Construction"]=="weight":
-                #adds variable name to list of weightsysts
-                up=self.replaceDummies(systematic["Up"])
-                down=self.replaceDummies(systematic["Down"])
-                weightsysts.append(up)
-                weightsysts.append(down)
-        return weightsysts
+        """
+        function to return expressions for weight systematics
+        returns list of strings
+        """
+        return self.__dict_weight_systs.values()
+
     #returns all variation systematics
     def get_all_variation_systs(self):
         variationsysts=[]
