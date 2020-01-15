@@ -59,12 +59,15 @@ class Systematics:
             if self.replacing_config and systName in self.replacing_config:
                 syst_dict.update(self.expand_uncertainties(systematic))
             else:
-                name_var=systName+"Up"
-                expr = self.replaceDummies(systematic["Up"])
-                syst_dict[name_var] = expr
-                name_var=systName+"Down"
-                expr = self.replaceDummies(systematic["Down"])
-                syst_dict[name_var] = expr
+                expr_up = self.replaceDummies(systematic["Up"])
+                expr_down = self.replaceDummies(systematic["Down"])
+                if expr_up == "-" and expr_down == "-":
+                    syst_dict[systName] = "-"
+                else:
+                    name_var=systName+"Up"
+                    syst_dict[name_var] = expr
+                    name_var=systName+"Down"
+                    syst_dict[name_var] = expr
         return syst_dict
 
     def replace_in_expression(self, insert_list, to_replace, systname, expression):
@@ -134,24 +137,37 @@ class Systematics:
             name=systematic["Uncertainty"]
             if name.startswith("#"):
                 continue
+            names = []
             typ=systematic["Type"]
-            construction=systematic["Construction"]
-            Up=self.replaceDummies(systematic["Up"])
-            if Up=="-":
-                Up=None
-            Down=self.replaceDummies(systematic["Down"])
-            if Down=="-":
-                Down=None
+            up = systematic["Up"]
+            down = systematic["Down"]
+            if up == "-" or down == "-":
+                names.append(name)
+            else:
+                names = [name+x for x in ["Up", "Down"]]
+
+            if self.replacing_config and name in self.replacing_config:
+                expand_with = self.replacing_config.get(name, {}).get("expand_with",[])
+                names = ["_".join([name, x]) for x in expand_with for name in names]
+
             for process in list_of_processes:
                 if systematic[process] is not "-":
-                    if Up:
-                        up=name+"Up"    
-                        self.processes[process][up]=SystematicsForProcess(up,process,typ,construction,Up)
-                    if Down:
-                        down=name+"Down"
-                        self.processes[process][down]=SystematicsForProcess(down,process,typ,construction,Down)
-                    if not Up and not Down:
-                        self.processes[process][name]=SystematicsForProcess(name,process,typ,construction)
+                    for n in names:
+                        construction = "-"
+                        expr = "-"
+                        if n in self.__dict_weight_systs:
+                            construction = "weight"
+                            expr = self.__dict_weight_systs[n]
+                        elif n in self.__dict_variation_systs:
+                            construction = "variation"
+                            expr = self.__dict_variation_systs[n]
+                        elif n in self.__dict_rate_systs:
+                            construction = "rate"
+                            expr = self.__dict_rate_systs[n]
+                        else:
+                            print("WARNING: no systematics entry found for '{}'".format(n))
+                            continue
+                        self.processes[process][n]=SystematicsForProcess(n,process,typ,construction,expr)
 
     # only gets variables to plot, without variation of name with up and down!
     def plotSystematicsForProcesses(self,list_of_processes):

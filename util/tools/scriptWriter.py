@@ -416,7 +416,7 @@ systematics  = "{systpath}"
 
 nHistsBefore, nHistsAfter = cleanupHistos.cleanupHistos(filename, outname, process, 
                                                         systematics, syst_key, separator, 
-                                                        replacing_confing = {replace_config})
+                                                        replace_config = "{replace_config}")
 with open(outname.replace('.root','_cleanedUp.txt'), 'w') as f:
     f.write('{{}} : {{}}'.format(nHistsBefore, nHistsAfter))
   """.format(path = os.path.join(self.pp.analysis.pyrootdir,"util"),
