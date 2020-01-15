@@ -352,7 +352,6 @@ samples_ttbb_4FS = [
     ]
 
 
-
 samples_ttbar_hf_spilt = [
      plotClasses.Sample('t#bar{t}+b',ROOT.kRed-2,
              ttbarPathS,
@@ -442,6 +441,14 @@ samples_ttbb_decay_modes_5FS = [
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"), 
     ]
 
+samples_5FS = [
+    plotClasses.Sample('t#bar{t}+b#bar{b} (5FS)',ROOT.kRed+3,
+            ttbarPathS,
+            lumi+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+ttbb_5FS_scale+sel_MET+sel_StrangeMuWeights,
+            'ttbb_5FS',
+            samDict=sampleDict, readTrees=doReadTrees, plot = False), 
+    ]
+
 samples = [
      # signal samples
     plotClasses.Sample('t#bar{t}+H',ROOT.kBlue+1,
@@ -462,18 +469,13 @@ samples = [
             lumi+'*(GenEvt_I_TTPlusCC==1)'+sel_MET+sel_StrangeMuWeights,
             'ttcc',
             samDict=sampleDict, readTrees=doReadTrees),
-
-    plotClasses.Sample('t#bar{t}+b#bar{b} (5FS)',ROOT.kRed+3,
-            ttbarPathS,
-            lumi+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+ttbb_5FS_scale+sel_MET+sel_StrangeMuWeights,
-            'ttbb_5FS',
-            samDict=sampleDict, readTrees=doReadTrees, plot = False), 
-
     ]
+
 
 samples += samples_tH
 samples += samples_ttbb_4FS
 samples += samples_minor_backgrounds
+samples += samples_5FS
 #samples += samples_ttbb_decay_modes_5FS
 #samples += samples_ttbar_hf_spilt
 #samples += samples_ttH_decay
@@ -484,7 +486,7 @@ processes = []
 for sample in samples:
     processes.append(sample.nick)
 list_of_processes   = processes
-datacard_processes  = processes
+datacard_processes  = [p for p in processes if not p == "ttbb_5FS"]
 
 
 plottingsamples = [
@@ -492,7 +494,7 @@ plottingsamples = [
         "ttV", addsamples = ["ttZ","ttW"],
         samDict = sampleDict, readTrees = doReadTrees),
 
-    plotClasses.Sample("V+jets", 18,
+    plotClasses.Sample("V+jets", 18, "", "",
         "vjets", addsamples = ["wjets", "zjets"],
         samDict = sampleDict, readTrees = doReadTrees)
 
