@@ -442,7 +442,7 @@ class DNN:
             plotConfig = {
                 # DANGERZONE
                 # "histoname":     "\"ljets_"+self.category+"_"+var+"\"",
-                "histoname":     self.category+"_"+var, 
+                "histoname":     "ljets_{}_{}".format(self.category, var), 
                 "histotitle":     variables.loc[var, "displayname"],
                 "nhistobins":        variables.loc[var, "numberofbins"],
                 "minxval":       variables.loc[var, "minvalue"],
@@ -545,8 +545,7 @@ class DNN:
                                             label          = "{LABEL}",
                                             selection      = "{PRESELECTION}")
     interf_{LABEL}.category = ("{PRESELECTION}","{LABEL}","")
-    interf_{LABEL}.category_label = {CATEGORY_LABEL}
-    """
+    interf_{LABEL}.category_label = {CATEGORY_LABEL}\n"""
         # parse additional information for histo interface
         template = template.format( LABEL=label, PRESELECTION = selection, 
                                     DISCR_NAME = varname, 
