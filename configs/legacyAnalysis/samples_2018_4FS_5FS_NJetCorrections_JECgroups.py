@@ -383,13 +383,13 @@ samples_minor_backgrounds = [
     plotClasses.Sample('t#bar{t}+Z',ROOT.kCyan,
             ttZpath,
             lumi+sel_MET,
-            'ttZ',
+            'ttbarZ',
             samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}+W',ROOT.kBlue-10,
              ttWPath,  
              lumi+sel_MET,
-             'ttW',
+             'ttbarW',
              samDict=sampleDict, readTrees=doReadTrees),
 
     #plotClasses.Sample('t#bar{t}+V',ROOT.kCyan,
@@ -491,7 +491,7 @@ datacard_processes  = [p for p in processes if not p == "ttbb_5FS"]
 
 plottingsamples = [
     plotClasses.Sample("t#bar{t}+V", ROOT.kCyan, "", "",
-        "ttV", addsamples = ["ttZ","ttW"],
+        "ttV", addsamples = ["ttbarZ","ttbarW"],
         samDict = sampleDict, readTrees = doReadTrees),
 
     plotClasses.Sample("V+jets", 18, "", "",
@@ -499,12 +499,8 @@ plottingsamples = [
         samDict = sampleDict, readTrees = doReadTrees)
 
 #    plotClasses.Sample("misc.", 18, "", "",
-#        "misc", addsamples ["ttZ", "ttW", "wjets", "zjets", "diboson"],
+#        "misc", addsamples ["ttbarZ", "ttbarW", "wjets", "zjets", "diboson"],
 #        samDict = sampleDict, readTrees = doReadTrees)
-#      plotClasses.Sample('t#bar{t}+b#bar{b} (4FS)',ROOT.kRed+3, "", "",
-        #      'ttbb', addsamples = ["ttbb_DL", "ttbb_SL"],
-        #      samDict=sampleDict, readTrees=doReadTrees),
-
      ]
 
 # sort subset of processes in plots. descending order
