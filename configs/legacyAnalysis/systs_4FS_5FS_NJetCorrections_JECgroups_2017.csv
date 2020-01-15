@@ -32,16 +32,16 @@ CMS_ttHbb_PU,shape,weight,"""dummyweight_PUUp:=(PUWEIGHTUP*LEPTONSFS*TRIGGERSFS)
 #,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 # CMS_scale_j,shape,variation,JESup,JESdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 CMS_scaleAbsolute_j,shape,variation,JESAbsoluteup,JESAbsolutedown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-CMS_scaleAbsoluteyear_j,shape,variation,JESAbsoluteyearup,JESAbsoluteyeardown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+CMS_scaleAbsolute2017_j,shape,variation,JESAbsoluteyearup,JESAbsoluteyeardown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 CMS_scaleFlavorQCD_j,shape,variation,JESFlavorQCDup,JESFlavorQCDdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 CMS_scaleBBEC1_j,shape,variation,JESBBEC1up,JESBBEC1down,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-CMS_scaleBBEC1year_j,shape,variation,JESBBEC1yearup,JESBBEC1yeardown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+CMS_scaleBBEC12017_j,shape,variation,JESBBEC1yearup,JESBBEC1yeardown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 CMS_scaleEC2_j,shape,variation,JESEC2up,JESEC2down,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-CMS_scaleEC2year_j,shape,variation,JESEC2yearup,JESEC2yeardown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+CMS_scaleEC22017_j,shape,variation,JESEC2yearup,JESEC2yeardown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 CMS_scaleHF_j,shape,variation,JESHFup,JESHFdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-CMS_scaleHFyear_j,shape,variation,JESHFyearup,JESHFyeardown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+CMS_scaleHF2017_j,shape,variation,JESHFyearup,JESHFyeardown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 CMS_scaleRelativeBal_j,shape,variation,JESRelativeBalup,JESRelativeBaldown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-CMS_scaleRelativeSampleyear_j,shape,variation,JESRelativeSampleyearup,JESRelativeSampleyeardown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+CMS_scaleRelativeSample2017_j,shape,variation,JESRelativeSampleyearup,JESRelativeSampleyeardown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 #,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 CMS_res_j,shape,variation,JERup,JERdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 CMS_resPt0Eta0_j,shape,variation,JERpt0eta0up,JERpt0eta0down,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
