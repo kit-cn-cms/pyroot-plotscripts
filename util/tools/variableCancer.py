@@ -39,6 +39,7 @@ class VariableManager:
 
         # adding expression to list
         self.expressionsToInit = list(set(self.expressionsToInit+expressionList))
+        self.expressionsToInit = sorted(self.expressionsToInit)
 
     def run(self):
         '''
@@ -169,7 +170,7 @@ class VariableManager:
         self.variablesToInit = {}
 
         # loop over all variables and initialize them
-        for var in self.variables:
+        for var in sorted(self.variables):
             if self.variables[var].isInitialized: continue
             self.variables[var].setupVariable(self.tree, self.verbose, self)
         print("total: {} variables initialized".format(len(self.variables)))
@@ -212,7 +213,8 @@ class VariableManager:
         #text+= "std::map<std::string, Long64_t*> longMap;\n\n"
 
         # loop over all variables
-        for name, var in self.variables.iteritems():
+        for name in sorted(self.variables):
+            var = self.variables[name]
             stubInit, stubCast = var.writeVariableInitialization()
             text+= stubInit
             castText+= stubCast
@@ -223,7 +225,8 @@ class VariableManager:
         code = ""
         
         # loop over all variables
-        for name, var in self.variables.iteritems():
+        for name in sorted(self.variables):
+            var = self.variables[name]
             code += var.resetInitializedVariables()
         return code
 
@@ -231,7 +234,8 @@ class VariableManager:
     def writeBranchAdresses(self):
         text = ""
         # loop over all variables
-        for name, var in self.variables.iteritems():
+        for name in sorted(self.variables):
+            var = self.variables[name]
             if var.inTree:
                 text += var.writeBranchAdress()
         text += "\n"
@@ -242,7 +246,8 @@ class VariableManager:
     def writeTMVAReader(self):
         text = ""
         # loop over all variables
-        for name, var in self.variables.iteritems():
+        for name in sorted(self.variables):
+            var = self.variables[name]
             if var.isBDTVar:
                 text += var.writeTMVAReader(self)
         text += "\n"
