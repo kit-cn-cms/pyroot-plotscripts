@@ -50,16 +50,6 @@ CMS_resPt1Eta0_j,shape,variation,JERpt1eta0up,JERpt1eta0down,1,1,1,1,1,1,1,1,1,1
 CMS_resPt1Eta1_j,shape,variation,JERpt1eta1up,JERpt1eta1down,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 CMS_resEta2_j,shape,variation,JEReta2up,JEReta2down,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 # CMS_scale_j,shape,variation,JESup,JESdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-CMS_scaleAbsolute_j,shape,variation,JESAbsoluteup,JESAbsolutedown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-CMS_scaleAbsoluteyear_j,shape,variation,JESAbsoluteyearup,JESAbsoluteyeardown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-CMS_scaleFlavorQCD_j,shape,variation,JESFlavorQCDup,JESFlavorQCDdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-CMS_scaleBBEC1_j,shape,variation,JESBBEC1up,JESBBEC1down,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-CMS_scaleBBEC1year_j,shape,variation,JESBBEC1yearup,JESBBEC1yeardown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-CMS_scaleEC2_j,shape,variation,JESEC2up,JESEC2down,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-CMS_scaleEC2year_j,shape,variation,JESEC2yearup,JESEC2yeardown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-CMS_scaleHF_j,shape,variation,JESHFup,JESHFdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-CMS_scaleHFyear_j,shape,variation,JESHFyearup,JESHFyeardown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-CMS_scaleRelativeBal_j,shape,variation,JESRelativeBalup,JESRelativeBaldown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 #,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 CMS_ttHbb_PDF,shape,weight,"""dummyWeight_CMS_ttH_NNPDF_Up:=DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*fmax(0.0,Weight_LHA_306000_up)*internalNormFactor_weight_LHA_306000_up*1.0*DOWEIGHTS""","""dummyWeight_CMS_ttH_NNPDF_Down:=DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*fmax(0.0,Weight_LHA_306000_down)*internalNormFactor_weight_LHA_306000_down*1.0*DOWEIGHTS""",1,1,1,1,1,1,1,1,1,1,1,1,-,-,-,1,-,-,-,1,-,,,,,,,,,,,
 CMS_ttHbb_PDF_tHq,shape,weight,"""dummyWeight_CMS_ttH_NNPDF_tHq_Up:=DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*fmax(0.0,Weight_LHA_306000_up)*internalNormFactor_weight_LHA_306000_up*1.0*DOWEIGHTS""","""dummyWeight_CMS_ttH_NNPDF_tHq_Down:=DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*fmax(0.0,Weight_LHA_306000_down)*internalNormFactor_weight_LHA_306000_down*1.0*DOWEIGHTS""",1,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,,,,1,1,1,,,,,
