@@ -11,7 +11,7 @@ import util.tools.plotClasses as plotClasses
 
 # samples
 # input path 
-path  = "/nfs/dust/cms/user/swieland/ttH_legacy/ntupleHadded_2017_JECgroups"
+path  = "/nfs/dust/cms/user/swieland/ttH_legacy/ntupleHadded_2017_JECgroups/"
 
 #ttbarPathS = path+'/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'
 ttbarPathS = path+'/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
@@ -30,11 +30,11 @@ path_ttbbDL = path+"/TTbb_Powheg_Openloops_DL/*nominal*.root"
 
 ttVPathS = path+'/TTW*/*nominal*.root'+';'+ \
            path+'/TTZToLLNuNu*/*nominal*.root'+';'+ \
-           path+'/TTZToQQ_TuneCP5_13TeV-amcatnlo-pythia8_1/*nominal*.root'
+           path+'/TTZToQQ_TuneCP5_13TeV-amcatnlo-pythia8/*nominal*.root'
 
 
 ttZPathS = path+'/TTZToLLNuNu*/*nominal*.root'+';'+ \
-           path+'/TTZToQQ_TuneCP5_13TeV-amcatnlo-pythia8_1/*nominal*.root'
+           path+'/TTZToQQ_TuneCP5_13TeV-amcatnlo-pythia8/*nominal*.root'
 
 ttWPath = path+'/TTW*/*nominal*.root'
 
@@ -54,7 +54,7 @@ THWpath = path+'/THW_*ctcvcp*/*nominal*.root'
 THQpath = path+'/THQ_*ctcvcp*/*nominal*.root'
 
 
-ttHpath = path+'/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
+ttHpath = path+'/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8*/*nominal*.root'+';'+ \
 	      path+'/ttHToNonbb_M125*/*nominal*.root'
 
 # SELECTIONS
@@ -392,13 +392,13 @@ samples_minor_backgrounds = [
     plotClasses.Sample('t#bar{t}+Z',ROOT.kCyan,
            ttZPathS,
            lumi+sel_MET,
-           'ttbarZ',
+           'ttZ',
            samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}+W',ROOT.kBlue-10,
             ttWPath,  
             lumi+sel_MET,
-            'ttbarW',
+            'ttW',
             samDict=sampleDict, readTrees=doReadTrees),
 
 #     plotClasses.Sample('t#bar{t}+V',ROOT.kCyan,
@@ -433,6 +433,13 @@ samples_minor_backgrounds = [
     ]
 
 
+samples_5FS = [
+    plotClasses.Sample('t#bar{t}+b#bar{b} (5FS)',ROOT.kRed+3,
+            ttbarPathS,
+            lumi+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
+            'ttbb_5FS',
+            samDict=sampleDict, readTrees=doReadTrees, plot = False), 
+    ]
 
 samples = [
 #      signal samples
@@ -454,18 +461,13 @@ samples = [
             lumi+'*(GenEvt_I_TTPlusCC==1)'+sel_MET+sel_StrangeMuWeights,
             'ttcc',
             samDict=sampleDict, readTrees=doReadTrees),
-
-    plotClasses.Sample('t#bar{t}+b#bar{b} (5FS)',ROOT.kRed+3,
-            ttbarPathS,
-            lumi+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
-            'ttbb_5FS',
-            samDict=sampleDict, readTrees=doReadTrees, plot = False), 
-
     ]
+
 
 samples += samples_tH
 samples += samples_ttbb_4FS
 samples += samples_minor_backgrounds
+samples += samples_5FS
 #samples += samples_ttbar_hf_spilt
 # samples += samples_ttH_decay
 
@@ -475,7 +477,7 @@ processes = []
 for sample in samples:
     processes.append(sample.nick)
 list_of_processes   = processes
-datacard_processes  = processes
+datacard_processes  = [p for p in processes if not p == "ttbb_5FS"]
 
 
 plottingsamples = [
@@ -483,7 +485,7 @@ plottingsamples = [
         "ttV", addsamples = ["ttbarZ","ttbarW"],
         samDict = sampleDict, readTrees = doReadTrees),
 
-    plotClasses.Sample("V+jets", 18,
+    plotClasses.Sample("V+jets", 18, "", "",
         "vjets", addsamples = ["wjets", "zjets"],
         samDict = sampleDict, readTrees = doReadTrees)
 
