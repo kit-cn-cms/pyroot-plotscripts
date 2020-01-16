@@ -376,12 +376,15 @@ for sample in plottingsamples:
     print(PlotList)
     PlotList = Plots.addSamples(sample=sample,color=color,typ=typ,label=label,
                                     addsamples=addsamples,PlotList=PlotList,combineflag=combineflag)
-
-    addedHist = PlotList[sample].hist
-    if isinstance(addedHist, ROOT.TH1F):
-        addedHist.Print()
-        addedHist.SetName(label+"_"+addedHist.GetName()) 
-        addedHist.Print()
+    entry = PlotList.get(sample, "ERROR")
+    if not entry == "ERROR":
+        addedHist = PlotList[sample].hist
+        if isinstance(addedHist, ROOT.TH1F):
+            addedHist.Print()
+            addedHist.SetName(label+"_"+addedHist.GetName()) 
+            addedHist.Print()
+        else:
+            PlotList[sample] = "ERROR"
     else:
         PlotList[sample] = "ERROR"
     # rootFile.Write(addedHist.GetName())
