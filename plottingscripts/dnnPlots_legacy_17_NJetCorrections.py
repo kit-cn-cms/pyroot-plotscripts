@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'dataMC_2017/tthf_v1'
+    name = 'discriminatorPlots/v1_2017'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -46,6 +46,10 @@ def main(pyrootdir, opts):
     nom_histname_template = "$PROCESS__$CHANNEL"
     syst_histname_template = nom_histname_template + "__$SYSTEMATIC"
     histname_separator = "__"
+    # hotfix for datacards
+    nom_histname_template_dc = "$PROCESS__"+discrName+"_$CHANNEL"
+    syst_histname_template_dc = nom_histname_template_dc + "__$SYSTEMATIC"
+
 
     # define MEM discriminator variable
     # memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
@@ -53,8 +57,8 @@ def main(pyrootdir, opts):
     # configs
     config          = "legacyAnalysis/samples_2017_4FS_5FS_NJetCorrections_JECgroups"
     variable_cfg    = "legacyAnalysis/additionalVariables_2017"
-    plot_cfg        = "legacyAnalysis/controlPlots_tthf_fit"
-    syst_cfg        = "legacyAnalysis/no_systs"
+    plot_cfg        = "legacyAnalysis/discrPlots"
+    syst_cfg        = "legacyAnalysis/systs_4FS_5FS_NJetCorrections_JECgroups_2017"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -63,20 +67,20 @@ def main(pyrootdir, opts):
     # script options
     analysisOptions = {
         # general options
-        "usePseudoData":        False,
+        "usePseudoData":        True,
         "testrun":              False,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
-        "makeDataCards":        False,
-        "makeInputDatacards":   True, # create datacards also for all defined plots
+        "makeDataCards":        True,
+        "makeInputDatacards":   False, # create datacards also for all defined plots
         "addData":              True,  # adding real data 
         "makePlots":            True,
         # options for makePlots
         "signalScaling":        -1,
         "lumiLabel":            True,
         "CMSlabel":             "private Work",
-        "ratio":                "#frac{data}{MC Background}",
+        "ratio":                "#frac{pseudo data}{simulation}",
         "shape":                False,
         "logarithmic":          False,
         "splitLegend":          True,
@@ -93,9 +97,8 @@ def main(pyrootdir, opts):
     plotJson = ""
     # plotDataBases = [["memDB","/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/databases/2017_/",True]] 
     # memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
-    #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-    #               "checkpointFiles":  "/nfs/dust/cms/user/swieland/ttH_legacy/DNNs/oldModel/"}
-    dnnInterface = None
+    dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
+                   "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/legacyAnalysis_v1"}
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
@@ -188,8 +191,8 @@ def main(pyrootdir, opts):
         pP.setJson(plotJson)
         #pP.setDataBases(plotDataBases)
         #pP.setMEMDataBase(memDataBase)
-        # pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts(200000)
+        pP.setDNNInterface(dnnInterface)
+        pP.setMaxEvts(500000)
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
 
@@ -255,7 +258,7 @@ def main(pyrootdir, opts):
             if analysis.usePseudoData:
                 print("adding data_obs histograms as pseudo data")
                 # pseudo data without ttH
-                pP.addData( samples = configData.samples[nSigSamples:], 
+                pP.addData( samples = configData.samples[:-1], 
                             discrName = discrName)
                 # pseudo data with signal
                 #pP.addData(samples = configData.samples)
@@ -290,8 +293,8 @@ def main(pyrootdir, opts):
                 datacardmaker       = datacardmaker,
                 signalTag           = analysis.signalProcess,
                 skipDatacards       = analysis.skipDatacards,
-                nominal_key         = nom_histname_template,
-                syst_key            = syst_histname_template
+                nominal_key         = nom_histname_template_dc,
+                syst_key            = syst_histname_template_dc
                 )
     
     if analysis.makePlots:
