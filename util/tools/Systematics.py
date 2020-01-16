@@ -65,9 +65,9 @@ class Systematics:
                     syst_dict[systName] = "-"
                 else:
                     name_var=systName+"Up"
-                    syst_dict[name_var] = expr
+                    syst_dict[name_var] = expr_up
                     name_var=systName+"Down"
-                    syst_dict[name_var] = expr
+                    syst_dict[name_var] = expr_down
         return syst_dict
 
     def replace_in_expression(self, insert_list, to_replace, systname, expression):

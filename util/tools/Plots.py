@@ -330,8 +330,10 @@ def addSamples(sample,color,typ,label,addsamples,PlotList,combineflag=None):
             if not combineflag: 
                 combinedErrorbands.append(PlotList[addsample].errorband)
             del PlotList[addsample]
+    if not combinedHist:
+        print "WARNING: Could not load any histograms for sample '{}'".format(sample)
     # add all Errorbands together
-    if not combineflag:
+    elif not combineflag:
         errorband=addErrorbands(combinedErrorbands,combinedHist)
         # add the new combined sample
         PlotList[sample]=Plot(combinedHist, sample, color=color, typ=typ, label=label, errorband=errorband)
