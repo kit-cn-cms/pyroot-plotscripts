@@ -30,11 +30,11 @@ path_ttbbDL = path+"/TTbb_Powheg_Openloops_DL/*nominal*.root"
 
 ttVPathS = path+'/TTW*/*nominal*.root'+';'+ \
            path+'/TTZToLLNuNu*/*nominal*.root'+';'+ \
-           path+'/TTZToQQ_TuneCP5_13TeV-amcatnlo-pythia8_1/*nominal*.root'
+           path+'/TTZToQQ_TuneCP5_13TeV-amcatnlo-pythia8/*nominal*.root'
 
 
 ttZPathS = path+'/TTZToLLNuNu*/*nominal*.root'+';'+ \
-           path+'/TTZToQQ_TuneCP5_13TeV-amcatnlo-pythia8_1/*nominal*.root'
+           path+'/TTZToQQ_TuneCP5_13TeV-amcatnlo-pythia8/*nominal*.root'
 
 ttWPath = path+'/TTW*/*nominal*.root'
 
@@ -54,7 +54,7 @@ THWpath = path+'/THW_*ctcvcp*/*nominal*.root'
 THQpath = path+'/THQ_*ctcvcp*/*nominal*.root'
 
 
-ttHpath = path+'/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
+ttHpath = path+'/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8*/*nominal*.root'+';'+ \
 	      path+'/ttHToNonbb_M125*/*nominal*.root'
 
 # SELECTIONS
