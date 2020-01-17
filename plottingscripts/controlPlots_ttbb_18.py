@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttbb_2018/v4'
+    name = 'ttbb_2018/newSF_v1'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -48,7 +48,7 @@ def main(pyrootdir, opts):
     # memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
     memexp = ""
     # configs
-    config          = "ttbb/samples_2018_5FS"
+    config          = "ttbb/samples_2018"
     variable_cfg    = "ttbb/additionalVariables"
     plot_cfg        = "ttbb/controlPlots"
     syst_cfg        = "ttbb/no_systs"
