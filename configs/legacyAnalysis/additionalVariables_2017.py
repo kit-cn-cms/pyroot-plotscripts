@@ -553,6 +553,6 @@ def getAddVars():
 
 
 
-        ]
+    ]
 
-
+    return addVars
