@@ -42,13 +42,22 @@ def construct_new_hist(h_nom, name, vals):
         new_hist.SetBinContent(i, val)
     return new_hist
 
-def combine_hessian_systs(nom_key, syst_key, rfile, systname, syst_list):
+def load_values(key, rfile, syst_list):
+    values = None
+    for syst in syst_list:
+        pass
+    return values
+
+def combine_systs(nom_key, syst_key, rfile, systname, replace_cfg):
+    keyword = replace_cfg[syst].get("construction", "")
+    syst_list = replace_cfg[syst].get("expand_with", [])
     h_nom = rfile.Get(nom_key)
     name = syst_key.replace(systname)
     if not isinstance(h_nom, ROOT.TH1):
         print("ERROR: Could not load histogram '{}'".format(nom_key))
         return
     nom_vals = histo2np(h)
+    values = load_values(key = syst_key, rfile = rfile, syst_list = syst_list)
     
 
 def load_config(cfg_path):
@@ -110,17 +119,10 @@ def combine_intermid_syst(h_nominal_key, h_syst_key, syst_csvpath,
                                 **kwargs
                                 )
     for syst in replace_cfg:
-        keyword = replace_cfg[syst].get("construction", "")
-        syst_list = replace_cfg[syst].get("expand_with", [])
-        if keyword == "Hessian":
-            for nom_key, syst_key in proc_keys:
-                combine_hessian_systs(  nom_key = nom_key, 
-                                        syst_key = syst_key,
-                                        rfile = rfile,
-                                        syst_name = syst,
-                                        syst_list = syst_list)
-        else:
-            print("ERROR: unrecognized mode '{}' for syst '{}'".format(keyword, syst))
+        for nom_key, syst_key in proc_keys:
+            combine_systs(  nom_key = nom_key, syst_key = syst_key,
+                            syst_name = syst,
+                            rfile = rfile, replace_cfg = replace_cfg)
 
 
 if __name__ == "__main__":
