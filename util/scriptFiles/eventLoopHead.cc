@@ -283,7 +283,7 @@
     std::cout<<"m BTags "<<N_BTagsM<<std::endl;
     
     std::cout<<"XS weight "<<Weight_XS<<std::endl;
-    std::cout<<"PU weight "<<Weight_pu69p2<<std::endl;
+    //std::cout<<"PU weight "<<Weight_pu69p2<<std::endl;
     std::cout<<"ele ID weight (both) "<<internalEleIDWeight<<std::endl;
     std::cout<<"ele Reco weight (both) "<<internalEleGFSWeight<<std::endl;
     std::cout<<"ele trigger weight "<<internalEleTriggerWeight<<std::endl;
