@@ -44,11 +44,11 @@ CMS_scaleRelativeBal_j,shape,variation,JESRelativeBalup,JESRelativeBaldown,1,1,1
 CMS_scaleRelativeSample2018_j,shape,variation,JESRelativeSampleyearup,JESRelativeSampleyeardown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 #,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 CMS_res_j,shape,variation,JERup,JERdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-CMS_resPt0Eta0_j,shape,variation,JERpt0eta0up,JERpt0eta0down,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-CMS_resPt0Eta1_j,shape,variation,JERpt0eta1up,JERpt0eta1down,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-CMS_resPt1Eta0_j,shape,variation,JERpt1eta0up,JERpt1eta0down,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-CMS_resPt1Eta1_j,shape,variation,JERpt1eta1up,JERpt1eta1down,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-CMS_resEta2_j,shape,variation,JEReta2up,JEReta2down,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+#CMS_resPt0Eta0_j,shape,variation,JERpt0eta0up,JERpt0eta0down,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+#CMS_resPt0Eta1_j,shape,variation,JERpt0eta1up,JERpt0eta1down,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+#CMS_resPt1Eta0_j,shape,variation,JERpt1eta0up,JERpt1eta0down,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+#CMS_resPt1Eta1_j,shape,variation,JERpt1eta1up,JERpt1eta1down,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+#CMS_resEta2_j,shape,variation,JEReta2up,JEReta2down,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 # CMS_scale_j,shape,variation,JESup,JESdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 #,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 CMS_ttHbb_PDF,shape,weight,"""dummyWeight_CMS_ttH_NNPDF_Up:=DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*fmax(0.0,Weight_LHA_306000_up)*internalNormFactor_weight_LHA_306000_up*1.0*DOWEIGHTS""","""dummyWeight_CMS_ttH_NNPDF_Down:=DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*fmax(0.0,Weight_LHA_306000_down)*internalNormFactor_weight_LHA_306000_down*1.0*DOWEIGHTS""",1,1,1,1,1,1,1,1,1,1,1,1,-,-,-,1,-,-,-,1,-,,,,,,,,,,,
