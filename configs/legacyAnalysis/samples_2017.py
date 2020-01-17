@@ -96,7 +96,7 @@ hzgSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==22)
 # ======= # 
 # WEIGHTS #
 # ======= #
-defaultWeight = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2*internalCSVweight*Weight_L1ECALPrefire*N_JetWeight_Nominal"
+defaultWeight = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2*internalCSVweight*Weight_L1ECALPrefire*sf_N_Jets__btag_NOMINAL"
 
 # pile up weights
 pileupWeightUp   = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2Up*internalCSVweight"
@@ -155,20 +155,14 @@ weightReplacements = {
 
 # Lumi weight
 lumi = '41.5'
-TTbbweight='*35.8038266498504*0.43937838'
-TTbbweightSL='*35.8038266498504*0.4393'
-TTbbweightDL='*35.8038266498504*0.1062'
-TTbbweightFH='*35.8038266498504*0.4545'
 
-TTbbSLDLweight =  "*(((N_GenTopLep==2)"+TTbbweightDL+")"
-TTbbSLDLweight += "+((N_GenTopLep==1)"+TTbbweightSL+"))"
 # DANGERZONE: derived in January 2020
-ttbb_4FS_scale = "*1.82462*(1.0)"
+#ttbb_4FS_scale = "*1.82462*(1.0)"
 ttbb_4FS_scale = "*(1.0)"
 ttbb_5FS_scale = "*(1.0)"
 
-tHq_XS_scale = "*(0.7927/0.07425)"
-tHW_XS_scale = "*(0.1472/0.01517)"
+#tHq_XS_scale = "*(0.7927/0.07425)"
+#tHW_XS_scale = "*(0.1472/0.01517)"
 
 tH_SM_rwgt = "*(Weight_rwgt_12/Weight_GEN_nom)"
 tH_5_rwgt = "*(Weight_rwgt_5/Weight_GEN_nom)"
@@ -347,17 +341,6 @@ samples_ttbb_4FS = [
              lumi+evenSel+ttbb_4FS_scale+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
              'ttbb',
              samDict=sampleDict, readTrees=doReadTrees),
-
-#      plotClasses.Sample('t#bar{t}(sl)+b#bar{b} (4FS)',ROOT.kRed+3,
-#              path_ttbbSL,
-#              lumi+TTbbweightSL+evenSel+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
-#              'ttbb_SL',
-#              samDict=sampleDict, readTrees=doReadTrees),
-#      plotClasses.Sample('t#bar{t}(dl)+b#bar{b} (4FS)',ROOT.kRed+3,
-#              path_ttbbDL,
-#              lumi+TTbbweightDL+evenSel+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
-#              'ttbb_DL',
-#              samDict=sampleDict, readTrees=doReadTrees),
     ]
 
 

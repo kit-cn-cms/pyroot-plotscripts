@@ -95,7 +95,7 @@ hzgSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==22)
 # ======= # 
 # WEIGHTS #
 # ======= #
-defaultWeight = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2*internalCSVweight*N_JetWeight_Nominal"
+defaultWeight = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2*internalCSVweight*sf_N_Jets__btag_NOMINAL"
 
 # pile up weights
 pileupWeightUp   = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2Up*internalCSVweight"
@@ -154,12 +154,6 @@ weightReplacements = {
 
 # Lumi weight
 lumi = '59.7'
-TTbbweightSL='*35.8038266498504*0.4393'
-TTbbweightDL='*35.8038266498504*0.1062'
-TTbbweightFH='*35.8038266498504*0.4545'
-
-TTbbSLDLweight =  "*(((N_GenTopLep==2)"+TTbbweightDL+")"
-TTbbSLDLweight += "+((N_GenTopLep==1)"+TTbbweightSL+"))"
 
 #tHq_XS_scale = "*(0.7927/0.07425)"
 #tHW_XS_scale = "*(0.1472/0.01517)"
@@ -338,17 +332,6 @@ samples_ttbb_4FS = [
              'ttbb',
              samDict=sampleDict, readTrees=doReadTrees),
 
-#      plotClasses.Sample('t#bar{t}(sl)+b#bar{b} (4FS)',ROOT.kRed+3,
-#              path_ttbbSL,
-#              lumi+TTbbweightSL+ttbb_4FS_scale+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
-#              'ttbb_SL',
-#              samDict=sampleDict, readTrees=doReadTrees),
-
-#      plotClasses.Sample('t#bar{t}(dl)+b#bar{b} (4FS)',ROOT.kRed+3,
-#              path_ttbbDL,
-#              lumi+TTbbweightDL+ttbb_4FS_scale+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
-#              'ttbb_DL',
-#              samDict=sampleDict, readTrees=doReadTrees),
     ]
 
 
