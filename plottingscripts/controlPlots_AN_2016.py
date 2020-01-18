@@ -90,7 +90,7 @@ def main(pyrootdir, opts):
         "skipHistoCheck":       opts.skipHistoCheck,
         "skipDatacards":        opts.skipDatacards}
 
-    plotJson = ""
+    plotJson = pyrootdir+"/configs/legacyAnalysis/treeJson_2016.json"
     # plotDataBases = [["memDB","/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/databases/2017_/",True]] 
     # memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
     #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
@@ -256,7 +256,6 @@ def main(pyrootdir, opts):
                 print("adding data_obs histograms as pseudo data")
                 # pseudo data without ttH
                 pP.addData( samples = configData.samples[nSigSamples:], 
-                            nominal_hist_template = nom_histname_template,
                             discrName = discrName)
                 # pseudo data with signal
                 #pP.addData(samples = configData.samples)
@@ -264,7 +263,6 @@ def main(pyrootdir, opts):
                 print("adding data_obs histograms as real data")
                 # real data with ttH
                 pP.addData( samples = configData.controlSamples, 
-                            nominal_hist_template = nom_histname_template,
                             discrName = discrName)
 
     
@@ -314,7 +312,6 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
 
-
 if __name__ == "__main__":
     parser = optparse.OptionParser()
     parser.add_option("--skipPlotParallel",     dest = "skipPlotParallel",      action = "store_true", default = False)
@@ -322,6 +319,16 @@ if __name__ == "__main__":
     parser.add_option("--skipHaddFromWildcard", dest = "skipHaddFromWildcard",  action = "store_true", default = False)
     parser.add_option("--skipHistoCheck",       dest = "skipHistoCheck",        action = "store_true", default = False)
     parser.add_option("--skipDatacards",        dest = "skipDatacards",         action = "store_true", default = False)
+    parser.add_option("--skip",                 dest = "skip",                  default = 0,            type = "int",
+        help = "skip first INT parallel stages. plotParallel (1), haddParallel (2), haddFromWildcard (3), histoCheck (4), Datacards (5)")
 
     (opts, args) = parser.parse_args()
+
+    if opts.skip >= 1: opts.skipPlotParallel        = True
+    if opts.skip >= 2: opts.skipHaddParallel        = True
+    if opts.skip >= 3: opts.skipHaddFromWildcard    = True
+    if opts.skip >= 4: opts.skipHistoCheck          = True
+    if opts.skip >= 5: opts.skipDatacards           = True
+
+
     main(pyrootdir, opts)
