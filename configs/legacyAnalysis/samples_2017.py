@@ -23,7 +23,8 @@ VJetsPathS = path+'/DYJets*/*nominal*.root'+';'+ \
 
 
 path_ttbb = path+"/TTbb_Powheg_Openloops_new_pmx/*nominal*.root"+';'+ \
-            path+"/TTbb_Powheg_Openloops_DL/*nominal*.root"
+            path+"/TTbb_Powheg_Openloops_DL/*nominal*.root"+";"+ \
+            "/nfs/dust/cms/user/vdlinden/legacyTTH/ntuples/legacy_2017_ttH_newJEC/TTbb_4f_TTToHadronic_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"
 
 path_ttbbSL = path+"/TTbb_Powheg_Openloops_new_pmx/*nominal*.root"
 path_ttbbDL = path+"/TTbb_Powheg_Openloops_DL/*nominal*.root"
