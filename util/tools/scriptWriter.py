@@ -426,7 +426,33 @@ with open(outname.replace('.root','_cleanedUp.txt'), 'w') as f:
         with open(self.ccPath.replace(".cc","_cleanupHistos.py"), "w") as srcfile:
             srcfile.write(script)
 
+    def writeMergeSystsScript(self):
+        script = """
+import sys
+import os
+sys.path.append('{path}')
+import combine_intermid_systs
 
+filename     = os.getenv('OUTFILENAME')
+
+process      = os.getenv('ORIGNAME')
+nom_key      = os.getenv('NOMHISTKEY')
+syst_key     = os.getenv('SYSTHISTKEY')
+separator    = os.getenv('SEPARATOR')
+
+
+combine_intermid_systs.combine_intermid_syst(   h_nominal_key   = nom_key, 
+                                                h_syst_key      = syst_key, 
+                                                rfile_path      = filename,
+                                                replace_config  = "{replace_config}",
+                                                processes       = process,
+                                                separator       = separator
+                                            )
+""".format(path = os.path.join(self.pp.analysis.pyrootdir,"util"),
+            replace_config = self.pp.configData.replace_config)
+        # write script to file
+        with open(self.ccPath.replace(".cc","_combineSysts.py"), "w") as srcfile:
+            srcfile.write(script)
 
 
     ## run scripts ##
@@ -578,6 +604,8 @@ with open(outname.replace('.root','_cleanedUp.txt'), 'w') as f:
         #DANGERZONE
         pPscript = script + ".".join(self.ccPath.split(".")[:-1])+'\n'
         cleanup  = script + 'python '+self.ccPath.replace('.cc','_cleanupHistos.py')+'\n'
+        if self.pp.configData.replace_config:
+            cleanup  += 'python '+self.ccPath.replace('.cc','_combineSysts.py')+'\n'
 
         # writing script to file and chmodding
         with open(scriptname, "w") as f:
