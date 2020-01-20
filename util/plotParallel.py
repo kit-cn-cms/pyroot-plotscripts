@@ -199,6 +199,9 @@ class plotParallel:
         # create cleanup script
         writer.writeCleanupScript()
 
+        # create script to merge systematics
+        writer.writeMergeSystsScript()
+
         # creating output folders
         print( "creating output folders" )
         if not os.path.exists(self.scriptsPath):
