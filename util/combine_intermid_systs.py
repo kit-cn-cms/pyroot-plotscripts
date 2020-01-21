@@ -78,26 +78,29 @@ def combine_systs(nom_key, syst_key, rfile, systname, replace_cfg):
         return
     nom_vals = histo2np(h_nom)
     values = load_values(key = syst_key, rfile = rfile, syst_list = syst_list)
-    if keyword == "Hessian":
-        # compute squared differences
-        values = (values - nom_vals)**2
-        # final values is squared sum per bin
-        values = (values.sum(axis=0))**0.5
-    else:
-        msg = "Did not recognize keyword '{}'!".format(keyword)
-        msg = "\nCurrent choices: Hessian"
-        raise ValueError(msg)
-    print("nominal (nElements: {}):".format(nom_vals.size))
-    print(nom_vals)
-    print("varied (nElements: {}):".format(values.size))
-    print(values)
-    h_up = construct_new_hist(h_nom = h_nom, name = name+"Up", vals = values + nom_vals)
-    print("Writing '{}'".format(h_up.GetName()))
-    rfile.WriteTObject(h_up, h_up.GetName(), "Overwrite")
+    if values.size != 0:
+        if keyword == "Hessian":
+            # compute squared differences
+            values = (values - nom_vals)**2
+            # final values is squared sum per bin
+            values = (values.sum(axis=0))**0.5
+        else:
+            msg = "Did not recognize keyword '{}'!".format(keyword)
+            msg = "\nCurrent choices: Hessian"
+            raise ValueError(msg)
+        print("nominal (nElements: {}):".format(nom_vals.size))
+        print(nom_vals)
+        print("varied (nElements: {}):".format(values.size))
+        print(values)
+        h_up = construct_new_hist(h_nom = h_nom, name = name+"Up", vals = values + nom_vals)
+        print("Writing '{}'".format(h_up.GetName()))
+        rfile.WriteTObject(h_up, h_up.GetName(), "Overwrite")
 
-    h_down = construct_new_hist(h_nom = h_nom, name = name+"Down", vals = nom_vals - values)
-    print("Writing '{}'".format(h_down.GetName()))
-    rfile.WriteTObject(h_down, h_down.GetName(), "Overwrite")
+        h_down = construct_new_hist(h_nom = h_nom, name = name+"Down", vals = nom_vals - values)
+        print("Writing '{}'".format(h_down.GetName()))
+        rfile.WriteTObject(h_down, h_down.GetName(), "Overwrite")
+    else:
+        print("Unable to load values for key '{}'".format(syst_key))
 
     
 
@@ -210,6 +213,7 @@ def combine_intermid_syst(**kwargs):
             combine_systs(  nom_key = nom_key, syst_key = syst_key,
                             systname = syst,
                             rfile = rfile, replace_cfg = replace_cfg)
+    print("DONE")
 
 def parse_arguments():
     parser = OptionParser()
