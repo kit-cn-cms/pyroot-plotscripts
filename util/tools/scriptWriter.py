@@ -18,6 +18,15 @@ import variableCancer
 # S C R I P T W R I T E R #
 #        C L A S S        #
 ###########################
+
+cmssw_head ="""export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch
+source $VO_CMS_SW_DIR/cmsset_default.sh
+export SCRAM_ARCH={scram_arch}
+cd {cmssw_base}/src
+eval `scram runtime -sh`
+cd - 
+"""
+
 class scriptWriter:
     def __init__(self, plotParaClass):
         ''' default init
@@ -433,14 +442,14 @@ import os
 sys.path.append('{path}')
 import combine_intermid_systs
 
-filename     = os.getenv('OUTFILENAME')
+filename     = os.getenv('INFILE')
 
 process      = os.getenv('ORIGNAME')
 nom_key      = os.getenv('NOMHISTKEY')
 syst_key     = os.getenv('SYSTHISTKEY')
 separator    = os.getenv('SEPARATOR')
 
-
+print(process)
 combine_intermid_systs.combine_intermid_syst(   h_nominal_key   = nom_key, 
                                                 h_syst_key      = syst_key, 
                                                 rfile_path      = filename,
@@ -451,8 +460,10 @@ combine_intermid_systs.combine_intermid_syst(   h_nominal_key   = nom_key,
 """.format(path = os.path.join(self.pp.analysis.pyrootdir,"util"),
             replace_config = self.pp.configData.replace_config)
         # write script to file
-        with open(self.ccPath.replace(".cc","_combineSysts.py"), "w") as srcfile:
+        script_path = self.ccPath.replace(".cc","_combineSysts.py")
+        with open(script_path, "w") as srcfile:
             srcfile.write(script)
+        return script_path
 
 
     ## run scripts ##
@@ -560,34 +571,24 @@ combine_intermid_systs.combine_intermid_syst(   h_nominal_key   = nom_key,
 
     def writeSingleScript(self, sample, filenames, nJob, filterFile, writeOptions = {}):
         # defaults
-        maxevents = self.pp.maxevents
+        maxevents = writeOptions.get("maxevents", self.pp.maxevents)
         processname = sample.nick
         outfilename = self.pp.plotPath+processname+'_'+str(nJob)+'.root'
         scriptname = self.pp.scriptsPath+'/'+processname+'_'+str(nJob)+'.sh'
         cleanupname = self.pp.scriptsPath+"/"+processname+"_cleanup_"+str(nJob)+".sh"
         origName = sample.origName
-        suffix = ""
-        skipevents = 0
+        suffix = writeOptions.get("suffix", "")
+        skipevents = writeOptions.get("skipEvents", 0)
 
         # check options
-        if "maxevents" in writeOptions:
-            maxevents = writeOptions["maxevents"]
         if self.pp.analysis.testrun and maxevents < 100:
             maxevents = 100
-        if "suffix" in writeOptions:
-            suffix = writeOptions["suffix"]
-        if "skipEvents" in writeOptions:
-            skipevents = writeOptions["skipEvents"]
 
         # writing script
         script = "#!/bin/bash \n"
         if self.pp.cmsswpath != '':
-            script += "export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch \n"
-            script += "source $VO_CMS_SW_DIR/cmsset_default.sh \n"
-            script += "export SCRAM_ARCH="+os.environ['SCRAM_ARCH']+"\n"
-            script += 'cd '+self.pp.cmsswpath+'/src\n'
-            script += 'eval `scram runtime -sh`\n'
-            script += 'cd - \n'
+            script += cmssw_head.format(scram_arch = os.environ['SCRAM_ARCH'], 
+                                        cmssw_base = self.pp.cmsswpath)
         script += 'export PLOTSCRIPTBASEDIR="'+self.pp.analysis.pyrootdir+'"\n'
         script += 'export DATAERA="'+self.pp.analysis.dataera+'"\n'
         script += 'export PROCESSNAME="'+processname+'"\n'
@@ -623,10 +624,6 @@ combine_intermid_systs.combine_intermid_syst(   h_nominal_key   = nom_key,
         self.cleanup_scripts.append(cleanupname)
         self.outputs.append(outfilename)
         self.samplewiseMaps[processname].append(outfilename)
-    
-
-
-
 
     ## hadd parallel script ##
     def writeHaddScript(self):
@@ -662,11 +659,8 @@ combine_intermid_systs.combine_intermid_syst(   h_nominal_key   = nom_key,
     def writeHaddShell(self, scriptname, haddedRootName, haddedLogName, sampleData):
         script = "#!/bin/bash \n"
         if self.pp.cmsswpath!='':
-            script += "export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch \n"
-            script += "source $VO_CMS_SW_DIR/cmsset_default.sh \n"
-            script += "export SCRAM_ARCH="+os.environ['SCRAM_ARCH']+"\n"
-            script += 'cd '+self.pp.cmsswpath+'/src\neval `scram runtime -sh`\n'
-            script += 'cd - \n'
+            script += cmssw_head.format(scram_arch = os.environ['SCRAM_ARCH'], 
+                                        cmssw_base = self.pp.cmsswpath)
         script += 'python '+self.haddScript+' '+haddedRootName+' '
         script += haddedLogName+' '+' '.join(sampleData)+'\n'
 
@@ -678,3 +672,40 @@ combine_intermid_systs.combine_intermid_syst(   h_nominal_key   = nom_key,
         st = os.stat(scriptname)
         os.chmod(scriptname, st.st_mode | stat.S_IEXEC)
 
+    def writeSystMergeScript(self, out_path, script_path, **options):
+        """
+        script to write .sh script that merge systematics for one process.
+        Inputs:
+        out_path            :   path where the script is to be written
+        script_path         :   path to python script that will be called
+        additional keywords :   variables that will be exported in the .sh script
+                                keywords will be variable names, values are
+                                the exported values
+        
+        current list of required values in this script:
+        ORIGNAME    : original name of the process
+        INFILE      : path to .root file with histograms
+        NOMHISTKEY  : nominal key template for histogram names
+        SYSTHISTKEY : key template for histograms of systematic variations
+        SEPARATOR   : string that separates the keywords in the key templates
+        """
+        # writing script
+        script = "#!/bin/bash \n"
+        if self.pp.cmsswpath != '':
+            script += cmssw_head.format(scram_arch = os.environ['SCRAM_ARCH'], 
+                                        cmssw_base = self.pp.cmsswpath)
+        # export additional variables 
+        for name in options:
+            script += "export {}='{}'\n".format(name, options[name])
+        script += "\npython {}".format(script_path)
+
+        # writing script to file and chmodding
+        with open(out_path, "w") as f:
+            f.write(script)
+        st = os.stat(out_path)
+        os.chmod(out_path, st.st_mode | stat.S_IEXEC)
+
+        if os.path.exists(out_path):
+            return out_path
+        else:
+            return None
