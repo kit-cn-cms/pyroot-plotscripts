@@ -174,9 +174,6 @@ class plotParallel:
         return allFiles
 
 
-
-
-
     ## main function ##
     def run(self):
         # creating paths and folders
@@ -198,9 +195,6 @@ class plotParallel:
 
         # create cleanup script
         writer.writeCleanupScript()
-
-        # create script to merge systematics
-        writer.writeMergeSystsScript()
 
         # creating output folders
         print( "creating output folders" )
@@ -283,3 +277,41 @@ class plotParallel:
             newHist.Write()
 
         rootFile.Close()
+
+    #====================================================
+    # merge systematics per process
+    #====================================================
+    def mergeSystematics(self):
+        script_path = os.path.join(self.analysis.workdir, "mergeSystScripts")
+        print("script path: {}".format(script_path))
+        if not os.path.exists(script_path):
+            os.mkdir(script_path)
+        options = {
+            "INFILE" : self.analysis.renamedPath,
+            "NOMHISTKEY" : self.nominalHistoKey,
+            "SYSTHISTKEY": self.systHistoKey,
+            "SEPARATOR"  : self.histNameSeparator
+        }
+
+        # create script to merge systematics
+        writer = scriptWriter.scriptWriter(self)
+        python_script = writer.writeMergeSystsScript()
+        scripts = []
+        for sample in self.configData.samples:
+            final_opts = {
+                "ORIGNAME" : sample.origName
+            }
+            final_opts.update(options)
+            name = "mergeSysts_{}.sh".format(sample.nick)
+            script_name = os.path.join(script_path, name)
+            path = writer.writeSystMergeScript(out_path = script_name, 
+                                        script_path = python_script, 
+                                        **final_opts)
+            if path:
+                scripts.append(path)
+            else:
+                msg = "Could not write script to merge systematics for process"
+                msg += " {} (nick: {})".format(sample.origName, sample.nick)
+                raise ValueError(msg)
+        
+        nafInterface.mergeSystematicsInterface(scripts)
