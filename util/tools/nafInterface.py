@@ -1,6 +1,7 @@
 import sys
 import os
 import nafSubmit
+from glob import glob
 
 fastLane = True
 #############################
@@ -241,8 +242,46 @@ def checkHistoTerminationCheck(shellScripts, outputFiles):
     print("-"*50)
     return undoneJobs, undoneOutFiles
 
+def mergeSystematicsInterface(jobsToSubmit, maxTries = 10, nTries = 0):
+    if nTries == 0:
+        print("submitting scripts to merge systematics as array job")
+        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, arrayName = "merge_systs")
+    elif nTries < maxTries:
+        print("resubmitting scripts to merge systematics")
+        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, arrayName = "merge_systs_resubmit")
+    else:
+        print("renaming did not work after "+str(maxTries)+" tries - ABORTING")
+        sys.exit(1)
 
+    # monitor running of jobs
+    nafSubmit.monitorJobStatus(jobIDs)
+    # checking for undone jobs
+    undoneJobs = mergeSystematicsTerminationCheck(jobsToSubmit)
 
+    if len(undoneJobs) > 0:
+        return mergeSystematicsInterface(undoneJobs, maxTries = maxTries, nTries = nTries+1)
+
+    print("mergeSystematics submit interface has terminated successfully")
+
+def mergeSystematicsTerminationCheck(jobsToSubmit):
+    missing_processes = []
+    for job in jobsToSubmit:
+        jobdir = os.path.dirname(job)
+        logdir = os.path.join(jobdir, "logs")
+        outfiles = os.path.join(logdir, "*.out")
+        files = glob(outfiles)
+        for fpath in files:
+            with open(fpath) as f:
+                lines = f.read().splitlines()
+            if not lines[-1] == "DONE":
+                p = lines[1]
+                missing_processes.append(p)
+                print("Will resubmit process '{}'".format(p))
+                print("log:")
+                print("\n".join(lines))
+
+    missing_jobs = ["mergeSysts_{}.sh".format(x) for x in missing_processes]
+    return missing_jobs
 
 
 #############################
