@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttbb_2018/v4'
+    name = 'ttbb_2018/v5'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -43,12 +43,15 @@ def main(pyrootdir, opts):
     
     # Name of final discriminator, should not contain underscore
     discrName = 'finaldiscr'
+    nom_histname_template = "$PROCESS__$CHANNEL"
+    syst_histname_template = nom_histname_template + "__$SYSTEMATIC"
+    histname_separator = "__"
 
     # define MEM discriminator variable
     # memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
     memexp = ""
     # configs
-    config          = "ttbb/samples_2018_5FS"
+    config          = "ttbb/samples_2018"
     variable_cfg    = "ttbb/additionalVariables"
     plot_cfg        = "ttbb/controlPlots"
     syst_cfg        = "ttbb/no_systs"
@@ -175,7 +178,10 @@ def main(pyrootdir, opts):
         # initialize plotParallel class 
         pP = plotParallel.plotParallel(
             analysis = analysis,
-            configData = configData)
+            configData = configData,
+            nominalHistKey = nom_histname_template,
+            systHistKey = syst_histname_template,
+            separator = histname_separator)
 
         monitor.printClass(pP, "init")
         # set some changed values
@@ -281,8 +287,11 @@ def main(pyrootdir, opts):
                 discrname           = analysis.discrName,
                 datacardmaker       = datacardmaker,
                 signalTag           = analysis.signalProcess,
-                skipDatacards       = analysis.skipDatacards)
-    
+                skipDatacards       = analysis.skipDatacards,
+                nominal_key         = nom_histname_template,
+                syst_key            = syst_histname_template
+                )
+
     if analysis.makePlots:
         print '''
         # ========================================================
@@ -290,7 +299,9 @@ def main(pyrootdir, opts):
         # ========================================================
         '''
         with monitor.Timer("makePlots"):
-            makePlots.makePlots(configData = configData)
+            makePlots.makePlots(configData  = configData,
+                                nominal_key = nom_histname_template,
+                                syst_key    = syst_histname_template)
 
 
     print '''
