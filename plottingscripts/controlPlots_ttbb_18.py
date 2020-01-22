@@ -8,7 +8,7 @@ import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 filedir = os.path.dirname(os.path.realpath(__file__))
-pyrootdir = "/".join(filedir.split("/")[:-2])
+pyrootdir = "/".join(filedir.split("/")[:-1])
 
 sys.path.append(pyrootdir)
 
