@@ -277,19 +277,19 @@
   // print stuff for synchronizing
   bool printSyncStuff=0;
   //
-  if(printSyncStuff){
-    std::cout<<"event "<<Evt_ID<<std::endl;
-    std::cout<<"n Jets "<<N_Jets<<std::endl;
-    std::cout<<"m BTags "<<N_BTagsM<<std::endl;
+  //if(printSyncStuff){
+  //  std::cout<<"event "<<Evt_ID<<std::endl;
+  //  std::cout<<"n Jets "<<N_Jets<<std::endl;
+  //  std::cout<<"m BTags "<<N_BTagsM<<std::endl;
     
-    std::cout<<"XS weight "<<Weight_XS<<std::endl;
-    std::cout<<"PU weight "<<Weight_pu69p2<<std::endl;
-    std::cout<<"ele ID weight (both) "<<internalEleIDWeight<<std::endl;
-    std::cout<<"ele Reco weight (both) "<<internalEleGFSWeight<<std::endl;
-    std::cout<<"ele trigger weight "<<internalEleTriggerWeight<<std::endl;
-    std::cout<<"mu ID weight (both) "<<internalMuIDWeight<<std::endl;
-    std::cout<<"mu Tracking weight (both) "<<internalMuHIPWeight<<std::endl;
-    std::cout<<"mu ISO weight (both) "<<internalMuIsoWeight<<std::endl;
-    std::cout<<"mu trigger weight "<<internalMuTriggerWeight<<std::endl;
-    std::cout<<"CSV weight "<<internalCSVweight<<std::endl;
- }   
+  //  std::cout<<"XS weight "<<Weight_XS<<std::endl;
+    //std::cout<<"PU weight "<<Weight_pu69p2<<std::endl;
+  //  std::cout<<"ele ID weight (both) "<<internalEleIDWeight<<std::endl;
+  //  std::cout<<"ele Reco weight (both) "<<internalEleGFSWeight<<std::endl;
+  //  std::cout<<"ele trigger weight "<<internalEleTriggerWeight<<std::endl;
+  //  std::cout<<"mu ID weight (both) "<<internalMuIDWeight<<std::endl;
+  //  std::cout<<"mu Tracking weight (both) "<<internalMuHIPWeight<<std::endl;
+  //  std::cout<<"mu ISO weight (both) "<<internalMuIsoWeight<<std::endl;
+  //  std::cout<<"mu trigger weight "<<internalMuTriggerWeight<<std::endl;
+  //  std::cout<<"CSV weight "<<internalCSVweight<<std::endl;
+ //}   
