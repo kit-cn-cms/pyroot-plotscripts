@@ -28,10 +28,10 @@ def evtYieldCategories():
 memexp = ""
 
 yieldExpression = "(N_Jets==4 && N_BTagsM==3)*1"
-yieldExpression+="+(N_Jets==4 && N_BTagsM>=4)*2"
-yieldExpression+="+(N_Jets==5 && N_BTagsM==3)*3"
-yieldExpression+="+(N_Jets==5 && N_BTagsM>=4)*4"
-yieldExpression+="+(N_Jets>=6 && N_BTagsM==3)*5"
+yieldExpression+="+(N_Jets==5 && N_BTagsM==3)*2"
+yieldExpression+="+(N_Jets>=6 && N_BTagsM==3)*3"
+yieldExpression+="+(N_Jets==4 && N_BTagsM>=4)*4"
+yieldExpression+="+(N_Jets==5 && N_BTagsM>=4)*5"
 yieldExpression+="+(N_Jets>=6 && N_BTagsM>=4)*6"
 
 
@@ -44,8 +44,9 @@ def plots_control_mem(cat,selection,label):
 
 def plots_control(cat,selection,label):
     plots = [
-        # plotClasses.Plot(ROOT.TH1D(cat+"_memDBp","MEM",30,0.0,1.0),memexp,selection,label),
-        plotClasses.Plot(ROOT.TH1D(cat+"_evtYield","yields",6,0.5,6.5),yieldExpression,selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_memDBp","MEM",30,0.0,1.0),memexp,selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_evtYields","event yields",6,0.5,6.5),yieldExpression,selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_yields","total yield",1,-1.,1.),"0.",selection,label),
 
         plotClasses.Plot(ROOT.TH1D(cat+"_N_PV","N_PrimaryVertices",80,0,80),"N_PrimaryVertices",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_Electron_Pt","p_{T}(electron)",50,0,400),"Electron_Pt",selection,label),
@@ -59,14 +60,15 @@ def plots_control(cat,selection,label):
         plotClasses.Plot(ROOT.TH1D(cat+"_Lepton_Pt","p_{T}(lepton)",50,0,300),"LooseLepton_Pt",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_Lepton_E","E(lepton)",50,0,450),"LooseLepton_E",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_Lepton_Eta","#eta(lepton)",50,-2.5,2.5),"LooseLepton_Eta[0]",selection,label),
-        plotClasses.Plot(ROOT.TH1D(cat+"_Lepton_Phi","#phi(lepton)",50,-3.3,3.3),"LooseLepton_Phi[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_Lepton_Phi","#phi(lepton)",50,-3.141,3.141),"LooseLepton_Phi[0]",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_TightLepton_Pt","p_{T}(tight lepton)",50,0,300),"TightLepton_Pt",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_TightLepton_E","E(tight lepton)",50,0,450),"TightLepton_E",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_TightLepton_Eta","#eta(tight lepton)",50,-2.5,2.5),"TightLepton_Eta[0]",selection,label),
-        plotClasses.Plot(ROOT.TH1D(cat+"_TightLepton_Phi","#phi(tight lepton)",50,-3.3,3.3),"TightLepton_Phi[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_TightLepton_Phi","#phi(tight lepton)",50,-3.141,3.141),"TightLepton_Phi[0]",selection,label),
 
         plotClasses.Plot(ROOT.TH1D(cat+"_N_BTagsM","N_BTagsM",8,2.5,10.5),"N_BTagsM",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_N_Jets","N_Jets",9,3.5,12.5),"N_Jets",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_Evt_HT","H_{T}",45,150.0,1500.0),"Evt_HT",selection,label),
 
         plotClasses.Plot(ROOT.TH1D(cat+"_Jet_CSV","Jet_CSV",30,0.0,1.0),"Jet_CSV",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_Jet_CSV_0","Jet CSV[0]",30,0.3,1.0),"Jet_CSV[0]",selection,label),
@@ -97,29 +99,29 @@ def plots_control(cat,selection,label):
 
 def plots_HiggsReco(cat,selection,label):
     plots_Higgs=[
-        plotClasses.Plot(ROOT.TH1D(cat+"_RecoHiggs_BJet1_E","RecoHiggs_BJet1_E",50,0.,400.),"RecoHiggs_BJet1_E",selection,label),
-        plotClasses.Plot(ROOT.TH1D(cat+"_RecoHiggs_BJet1_Eta","RecoHiggs_BJet1_Eta",50,-2.5,2.5),"RecoHiggs_BJet1_Eta",selection,label),
-        plotClasses.Plot(ROOT.TH1D(cat+"_RecoHiggs_BJet1_M","RecoHiggs_BJet1_M",50,0.,100.),"RecoHiggs_BJet1_M",selection,label),
-        plotClasses.Plot(ROOT.TH1D(cat+"_RecoHiggs_BJet1_Phi","RecoHiggs_BJet1_Phi",50,-3.141,3.141),"RecoHiggs_BJet1_Phi",selection,label),
-        plotClasses.Plot(ROOT.TH1D(cat+"_RecoHiggs_BJet1_Pt","RecoHiggs_BJet1_Pt",50,0.,400.),"RecoHiggs_BJet1_Pt",selection,label),
-        plotClasses.Plot(ROOT.TH1D(cat+"_RecoHiggs_BJet2_E","RecoHiggs_BJet2_E",50,0.,400.),"RecoHiggs_BJet2_E",selection,label),
-        plotClasses.Plot(ROOT.TH1D(cat+"_RecoHiggs_BJet2_Eta","RecoHiggs_BJet2_Eta",50,-2.5,2.5),"RecoHiggs_BJet2_Eta",selection,label),
-        plotClasses.Plot(ROOT.TH1D(cat+"_RecoHiggs_BJet2_M","RecoHiggs_BJet2_M",50,0.,100.),"RecoHiggs_BJet2_M",selection,label),
-        plotClasses.Plot(ROOT.TH1D(cat+"_RecoHiggs_BJet2_Phi","RecoHiggs_BJet2_Phi",50,-3.141,3.141),"RecoHiggs_BJet2_Phi",selection,label),
-        plotClasses.Plot(ROOT.TH1D(cat+"_RecoHiggs_BJet2_Pt","RecoHiggs_BJet2_Pt",50,0.,400.),"RecoHiggs_BJet2_Pt",selection,label),
+        #plotClasses.Plot(ROOT.TH1D(cat+"_RecoHiggs_BJet1_E","RecoHiggs_BJet1_E",50,0.,400.),"RecoHiggs_BJet1_E",selection,label),
+        #plotClasses.Plot(ROOT.TH1D(cat+"_RecoHiggs_BJet1_Eta","RecoHiggs_BJet1_Eta",50,-2.5,2.5),"RecoHiggs_BJet1_Eta",selection,label),
+        #plotClasses.Plot(ROOT.TH1D(cat+"_RecoHiggs_BJet1_M","RecoHiggs_BJet1_M",50,0.,100.),"RecoHiggs_BJet1_M",selection,label),
+        #plotClasses.Plot(ROOT.TH1D(cat+"_RecoHiggs_BJet1_Phi","RecoHiggs_BJet1_Phi",50,-3.141,3.141),"RecoHiggs_BJet1_Phi",selection,label),
+        #plotClasses.Plot(ROOT.TH1D(cat+"_RecoHiggs_BJet1_Pt","RecoHiggs_BJet1_Pt",50,0.,400.),"RecoHiggs_BJet1_Pt",selection,label),
+        #plotClasses.Plot(ROOT.TH1D(cat+"_RecoHiggs_BJet2_E","RecoHiggs_BJet2_E",50,0.,400.),"RecoHiggs_BJet2_E",selection,label),
+        #plotClasses.Plot(ROOT.TH1D(cat+"_RecoHiggs_BJet2_Eta","RecoHiggs_BJet2_Eta",50,-2.5,2.5),"RecoHiggs_BJet2_Eta",selection,label),
+        #plotClasses.Plot(ROOT.TH1D(cat+"_RecoHiggs_BJet2_M","RecoHiggs_BJet2_M",50,0.,100.),"RecoHiggs_BJet2_M",selection,label),
+        #plotClasses.Plot(ROOT.TH1D(cat+"_RecoHiggs_BJet2_Phi","RecoHiggs_BJet2_Phi",50,-3.141,3.141),"RecoHiggs_BJet2_Phi",selection,label),
+        #plotClasses.Plot(ROOT.TH1D(cat+"_RecoHiggs_BJet2_Pt","RecoHiggs_BJet2_Pt",50,0.,400.),"RecoHiggs_BJet2_Pt",selection,label),
 
 
         plotClasses.Plot(ROOT.TH1D(cat+"_RecoHiggs_Chi2","RecoHiggs_Chi2",50,0.,10.),"RecoHiggs_Chi2",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_RecoHiggs_Deta","RecoHiggs_Deta",50,0.,5.),"RecoHiggs_Deta",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_RecoHiggs_Dphi","RecoHiggs_Dphi",50,0.,2.*3.141),"RecoHiggs_Dphi",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_RecoHiggs_Dr","RecoHiggs_Dr",50,0.,6.),"RecoHiggs_Dr",selection,label),
-        plotClasses.Plot(ROOT.TH1D(cat+"_RecoHiggs_E","RecoHiggs_E",50,0.,500.),"RecoHiggs_E",selection,label),
-        plotClasses.Plot(ROOT.TH1D(cat+"_RecoHiggs_Eta","RecoHiggs_Eta",50,-2.5,2.5),"RecoHiggs_Eta",selection,label),
-        plotClasses.Plot(ROOT.TH1D(cat+"_RecoHiggs_M","RecoHiggs_M",50,0.,500.),"RecoHiggs_M",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_RecoHiggs_E","RecoHiggs_E",50,0.,1000.),"RecoHiggs_E",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_RecoHiggs_Eta","RecoHiggs_Eta",50,-4.5,4.5),"RecoHiggs_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_RecoHiggs_M","RecoHiggs_M",50,0.,300.),"RecoHiggs_M",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_RecoHiggs_Phi","RecoHiggs_Phi",50,-3.141,3.141),"RecoHiggs_Phi",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_RecoHiggs_Pt","RecoHiggs_Pt",50,0.,500.),"RecoHiggs_Pt",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_RecoHiggs_cosdTheta","RecoHiggs_cosdTheta",50,-1.,1.),"RecoHiggs_cosdTheta",selection,label),
-        plotClasses.Plot(ROOT.TH1D(cat+"_RecoHiggs_logChi2","RecoHiggs_logChi2",50,-5.,10.),"RecoHiggs_logChi2",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_RecoHiggs_logChi2","RecoHiggs_logChi2",50,-10.,10.),"RecoHiggs_logChi2",selection,label),
     ]
     return plots_Higgs
 
