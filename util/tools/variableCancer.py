@@ -436,7 +436,7 @@ class VariableManager:
                 regex = (var.encode("string-escape")+r'+\b(?!\[)')
                 newExpression = re.sub(regex, var+"["+str(index)+"]", newExpression)
 
-        print("returning newExpression: "+str(newExpression))
+        #print("returning newExpression: "+str(newExpression))
         return newExpression
                 
         
