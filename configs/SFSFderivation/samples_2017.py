@@ -11,7 +11,7 @@ import util.tools.plotClasses as plotClasses
 
 # samples
 # input path 
-path  = "/nfs/dust/cms/user/vdlinden/legacyTTH/ratefactors_ntuples/2017/"
+path  = "/nfs/dust/cms/user/vdlinden/legacyTTH/ntuples/sfDerivation_new/2017/"
 
 
 path_4FS_ttbb_SL  = path+"/TTbb*_new_pmx/*nominal*.root"
@@ -31,7 +31,7 @@ defaultWeight = "Weight_GEN_nom"
 # dictionary of expressions to replace in systematics csv
 weightReplacements = {
     # default weight
-    "DEFAULTWEIGHT":    defaultWeight,
+    "DEFAULTWEIGHT":    defaultWeight+"*internalCSVweight",
     }
 
 # Lumi weight
@@ -39,6 +39,7 @@ lumi = '59.7'
 sel_ttb =  "(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==1)"
 sel_tt2b = "(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==2)"
 sel_ttbb = "(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==3)"
+sel_tthf = "(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB>=1)"
 sel_ttcc = "(GenEvt_I_TTPlusCC==1)"
 sel_ttlf = "(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)"
 
@@ -71,61 +72,61 @@ samples  = [
 
      plotClasses.Sample('t#bar{t}+b#bar{b} (4FS,SL)',ROOT.kRed+3,
              path_4FS_ttbb_SL,
-             lumi+"*"+sel_ttbb,
+             lumi+"*"+sel_tthf,
              'ttbb_4FS_SL',
              samDict=sampleDict, readTrees=doReadTrees),
 
      plotClasses.Sample('t#bar{t}+b#bar{b} (4FS,DL)',ROOT.kRed+3,
              path_4FS_ttbb_DL,
-             lumi+"*"+sel_ttbb,
+             lumi+"*"+sel_tthf,
              'ttbb_4FS_DL',
              samDict=sampleDict, readTrees=doReadTrees),
 
      plotClasses.Sample('t#bar{t}+b#bar{b} (4FS,FH)',ROOT.kRed+3,
              path_4FS_ttbb_FH,
-             lumi+"*"+sel_ttbb,
+             lumi+"*"+sel_tthf,
              'ttbb_4FS_FH',
              samDict=sampleDict, readTrees=doReadTrees),
 
 
 
-     plotClasses.Sample('t#bar{t}+b (4FS,SL)',ROOT.kRed+3,
-             path_4FS_ttbb_SL,
-             lumi+"*"+sel_ttb,
-             'ttb_4FS_SL',
-             samDict=sampleDict, readTrees=doReadTrees),
+     #plotClasses.Sample('t#bar{t}+b (4FS,SL)',ROOT.kRed+3,
+     #        path_4FS_ttbb_SL,
+     #        lumi+"*"+sel_ttb,
+     #        'ttb_4FS_SL',
+     #        samDict=sampleDict, readTrees=doReadTrees),
 
-     plotClasses.Sample('t#bar{t}+b (4FS,DL)',ROOT.kRed+3,
-             path_4FS_ttbb_DL,
-             lumi+"*"+sel_ttb,
-             'ttb_4FS_DL',
-             samDict=sampleDict, readTrees=doReadTrees),
+     #plotClasses.Sample('t#bar{t}+b (4FS,DL)',ROOT.kRed+3,
+     #        path_4FS_ttbb_DL,
+     #        lumi+"*"+sel_ttb,
+     #        'ttb_4FS_DL',
+     #        samDict=sampleDict, readTrees=doReadTrees),
 
-     plotClasses.Sample('t#bar{t}+b (4FS,FH)',ROOT.kRed+3,
-             path_4FS_ttbb_FH,
-             lumi+"*"+sel_ttb,
-             'ttb_4FS_FH',
-             samDict=sampleDict, readTrees=doReadTrees),
+     #plotClasses.Sample('t#bar{t}+b (4FS,FH)',ROOT.kRed+3,
+     #        path_4FS_ttbb_FH,
+     #        lumi+"*"+sel_ttb,
+     #        'ttb_4FS_FH',
+     #        samDict=sampleDict, readTrees=doReadTrees),
 
 
 
-     plotClasses.Sample('t#bar{t}+2b (4FS,SL)',ROOT.kRed+3,
-             path_4FS_ttbb_SL,
-             lumi+"*"+sel_tt2b,
-             'tt2b_4FS_SL',
-             samDict=sampleDict, readTrees=doReadTrees),
+     #plotClasses.Sample('t#bar{t}+2b (4FS,SL)',ROOT.kRed+3,
+     #        path_4FS_ttbb_SL,
+     #        lumi+"*"+sel_tt2b,
+     #        'tt2b_4FS_SL',
+     #        samDict=sampleDict, readTrees=doReadTrees),
 
-     plotClasses.Sample('t#bar{t}+2b (4FS,DL)',ROOT.kRed+3,
-             path_4FS_ttbb_DL,
-             lumi+"*"+sel_tt2b,
-             'tt2b_4FS_DL',
-             samDict=sampleDict, readTrees=doReadTrees),
+     #plotClasses.Sample('t#bar{t}+2b (4FS,DL)',ROOT.kRed+3,
+     #        path_4FS_ttbb_DL,
+     #        lumi+"*"+sel_tt2b,
+     #        'tt2b_4FS_DL',
+     #        samDict=sampleDict, readTrees=doReadTrees),
 
-     plotClasses.Sample('t#bar{t}+2b (4FS,FH)',ROOT.kRed+3,
-             path_4FS_ttbb_FH,
-             lumi+"*"+sel_tt2b,
-             'tt2b_4FS_FH',
-             samDict=sampleDict, readTrees=doReadTrees),
+     #plotClasses.Sample('t#bar{t}+2b (4FS,FH)',ROOT.kRed+3,
+     #        path_4FS_ttbb_FH,
+     #        lumi+"*"+sel_tt2b,
+     #        'tt2b_4FS_FH',
+     #        samDict=sampleDict, readTrees=doReadTrees),
 
 
      #plotClasses.Sample('t#bar{t}+b#bar{b} (5FS)',ROOT.kRed+3,
