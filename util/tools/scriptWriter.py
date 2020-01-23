@@ -448,6 +448,7 @@ process      = os.getenv('ORIGNAME')
 nom_key      = os.getenv('NOMHISTKEY')
 syst_key     = os.getenv('SYSTHISTKEY')
 separator    = os.getenv('SEPARATOR')
+syst_csvpath = "{systpath}"
 
 print(process)
 combine_intermid_systs.combine_intermid_syst(   h_nominal_key   = nom_key, 
@@ -455,9 +456,11 @@ combine_intermid_systs.combine_intermid_syst(   h_nominal_key   = nom_key,
                                                 rfile_path      = filename,
                                                 replace_config  = "{replace_config}",
                                                 processes       = process,
-                                                separator       = separator
+                                                separator       = separator,
+                                                syst_csvpath    = syst_csvpath
                                             )
 """.format(path = os.path.join(self.pp.analysis.pyrootdir,"util"),
+            systpath = self.pp.configData.local_syst_path,
             replace_config = self.pp.configData.replace_config)
         # write script to file
         script_path = self.ccPath.replace(".cc","_combineSysts.py")
