@@ -42,15 +42,13 @@ def getAddVars():
         # NJet weights ##
         #################
 
+
         "selection_hbb:=((abs(GenHiggs_DecProd1_PDGID)==5 && abs(GenHiggs_DecProd2_PDGID)==5))",
         "selection_nonhbb:=((abs(GenHiggs_DecProd1_PDGID)!=5 && abs(GenHiggs_DecProd2_PDGID)!=5))",
         "selection_ttsl:=(N_GenTopLep==1)",
         "selection_ttdl:=(N_GenTopLep==2)",
         "selection_ttfh:=(N_GenTopLep==0)",
 
-        "selection_ttbb:=(GenEvt_I_TTPlusBB==3&&GenEvt_I_TTPlusCC==0)",
-        "selection_ttb:=(GenEvt_I_TTPlusBB==1&&GenEvt_I_TTPlusCC==0)",
-        "selection_tt2b:=(GenEvt_I_TTPlusBB==2&&GenEvt_I_TTPlusCC==0)",
         "selection_tthf:=(GenEvt_I_TTPlusBB>=1&&GenEvt_I_TTPlusCC==0)",
         "selection_ttcc:=(GenEvt_I_TTPlusBB==0&&GenEvt_I_TTPlusCC==1)",
         "selection_ttlf:=(GenEvt_I_TTPlusBB==0&&GenEvt_I_TTPlusCC==0)",
@@ -58,24 +56,30 @@ def getAddVars():
 
 
 
-        "weight_SF_N_Jets__ttH_bb__btag_NOMINAL:=(((N_Jets==4)*0.984565317631)+((N_Jets==5)*0.983602821827)+((N_Jets==6)*0.981831669807)+((N_Jets==7)*0.976474165916)+((N_Jets==8)*0.970335483551)+((N_Jets>=9)*0.955639779568))",
+        "weight_SF_N_Jets__ttH_bb__btag_NOMINAL:=(((N_Jets==0)*1.0)+((N_Jets==1)*0.982494771481)+((N_Jets==2)*0.982300698757)+((N_Jets==3)*0.984105169773)+((N_Jets==4)*0.98446816206)+((N_Jets==5)*0.983937501907)+((N_Jets==6)*0.982140183449)+((N_Jets==7)*0.978164792061)+((N_Jets==8)*0.971113085747)+((N_Jets>=9)*0.955243468285))",
 
-        "weight_SF_N_Jets__ttH_nonbb__btag_NOMINAL:=(((N_Jets==4)*0.973557591438)+((N_Jets==5)*0.966978728771)+((N_Jets==6)*0.961382508278)+((N_Jets==7)*0.954805850983)+((N_Jets==8)*0.945866346359)+((N_Jets>=9)*0.929779529572))",
-        "weight_SF_N_Jets__ttbb_4FS_SL__btag_NOMINAL:=(((N_Jets==4)*0.965403258801)+((N_Jets==5)*0.95841383934)+((N_Jets==6)*0.952480196953)+((N_Jets==7)*0.93900001049)+((N_Jets==8)*0.924579381943)+((N_Jets>=9)*0.911359548569))",
+        "weight_SF_N_Jets__ttH_nonbb__btag_NOMINAL:=(((N_Jets==0)*1.0)+((N_Jets==1)*0.986445188522)+((N_Jets==2)*0.981625318527)+((N_Jets==3)*0.977841675282)+((N_Jets==4)*0.973282277584)+((N_Jets==5)*0.96854943037)+((N_Jets==6)*0.962581634521)+((N_Jets==7)*0.955457091331)+((N_Jets==8)*0.946955680847)+((N_Jets>=9)*0.931564331055))",
 
-        "weight_SF_N_Jets__ttbb_4FS_DL__btag_NOMINAL:=(((N_Jets==4)*0.95858836174)+((N_Jets==5)*0.948531806469)+((N_Jets==6)*0.934358894825)+((N_Jets==7)*0.926142632961)+((N_Jets==8)*0.905910730362)+((N_Jets>=9)*0.890256285667))",
+        "weight_SF_N_Jets__ttbb_4FS_SL__btag_NOMINAL:=(((N_Jets==0)*1.0)+((N_Jets==1)*0.98113411665)+((N_Jets==2)*0.973539292812)+((N_Jets==3)*0.969055652618)+((N_Jets==4)*0.965047955513)+((N_Jets==5)*0.960202157497)+((N_Jets==6)*0.951478362083)+((N_Jets==7)*0.941661596298)+((N_Jets==8)*0.929684400558)+((N_Jets>=9)*0.912008106709))",
 
-        "weight_SF_N_Jets__ttlf_SL__btag_NOMINAL:=(((N_Jets==4)*0.992296516895)+((N_Jets==5)*0.983445227146)+((N_Jets==6)*0.971713364124)+((N_Jets==7)*0.959662795067)+((N_Jets==8)*0.930347323418)+((N_Jets>=9)*0.932259321213))",
+        "weight_SF_N_Jets__ttbb_4FS_DL__btag_NOMINAL:=(((N_Jets==0)*1.0)+((N_Jets==1)*0.990555524826)+((N_Jets==2)*0.981050610542)+((N_Jets==3)*0.969926655293)+((N_Jets==4)*0.958970069885)+((N_Jets==5)*0.94923889637)+((N_Jets==6)*0.936845242977)+((N_Jets==7)*0.927608847618)+((N_Jets==8)*0.910140275955)+((N_Jets>=9)*0.886935412884))",
 
-        "weight_SF_N_Jets__ttlf_DL__btag_NOMINAL:=(((N_Jets==4)*0.970946669579)+((N_Jets==5)*0.958418726921)+((N_Jets==6)*0.946982383728)+((N_Jets==7)*0.933883786201)+((N_Jets==8)*0.910023331642)+((N_Jets>=9)*0.889549970627))",
+        "weight_SF_N_Jets__ttlf_SL__btag_NOMINAL:=(((N_Jets==0)*1.0)+((N_Jets==1)*0.991251349449)+((N_Jets==2)*0.993392527103)+((N_Jets==3)*0.99547547102)+((N_Jets==4)*0.992564558983)+((N_Jets==5)*0.983659446239)+((N_Jets==6)*0.973386108875)+((N_Jets==7)*0.95909267664)+((N_Jets==8)*0.940494179726)+((N_Jets>=9)*0.921710908413))",
 
-        "weight_SF_N_Jets__ttlf_FH__btag_NOMINAL:=(((N_Jets==4)*0.997999727726)+((N_Jets==5)*0.997933328152)+((N_Jets==6)*0.994646906853)+((N_Jets==7)*0.981338918209)+((N_Jets==8)*0.972643733025)+((N_Jets>=9)*0.952476978302))",
+        "weight_SF_N_Jets__ttlf_DL__btag_NOMINAL:=(((N_Jets==0)*1.0)+((N_Jets==1)*0.994752705097)+((N_Jets==2)*0.989726424217)+((N_Jets==3)*0.980377614498)+((N_Jets==4)*0.969927966595)+((N_Jets==5)*0.958158373833)+((N_Jets==6)*0.944619834423)+((N_Jets==7)*0.928691506386)+((N_Jets==8)*0.909633100033)+((N_Jets>=9)*0.887500941753))",
 
-        "weight_SF_N_Jets__ttcc_SL__btag_NOMINAL:=(((N_Jets==4)*0.992126882076)+((N_Jets==5)*0.986204743385)+((N_Jets==6)*0.977002203465)+((N_Jets==7)*0.967050671577)+((N_Jets==8)*0.956334590912)+((N_Jets>=9)*0.927379727364))",
+        "weight_SF_N_Jets__ttlf_FH__btag_NOMINAL:=(((N_Jets==0)*1.0)+((N_Jets==1)*0.988212883472)+((N_Jets==2)*0.990465700626)+((N_Jets==3)*0.994249284267)+((N_Jets==4)*0.998134672642)+((N_Jets==5)*0.999131202698)+((N_Jets==6)*0.99506098032)+((N_Jets==7)*0.984604120255)+((N_Jets==8)*0.972359478474)+((N_Jets>=9)*0.952823519707))",
 
-        "weight_SF_N_Jets__ttcc_DL__btag_NOMINAL:=(((N_Jets==4)*0.979719817638)+((N_Jets==5)*0.969132423401)+((N_Jets==6)*0.950487554073)+((N_Jets==7)*0.93201571703)+((N_Jets==8)*0.940331816673)+((N_Jets>=9)*0.925750851631))",
+        "weight_SF_N_Jets__ttcc_SL__btag_NOMINAL:=(((N_Jets==0)*1.0)+((N_Jets==1)*0.994210422039)+((N_Jets==2)*0.993563950062)+((N_Jets==3)*0.994744062424)+((N_Jets==4)*0.992002487183)+((N_Jets==5)*0.986479520798)+((N_Jets==6)*0.976410210133)+((N_Jets==7)*0.96356344223)+((N_Jets==8)*0.952506363392)+((N_Jets>=9)*0.931370913982))",
 
-        "weight_SF_N_Jets__ttcc_FH__btag_NOMINAL:=(((N_Jets==4)*0.996325850487)+((N_Jets==5)*0.996693789959)+((N_Jets==6)*0.992396354675)+((N_Jets==7)*0.983017206192)+((N_Jets==8)*0.975648164749)+((N_Jets>=9)*0.952305614948))",
+        "weight_SF_N_Jets__ttcc_DL__btag_NOMINAL:=(((N_Jets==0)*1.0)+((N_Jets==1)*0.996512711048)+((N_Jets==2)*0.993187069893)+((N_Jets==3)*0.988283991814)+((N_Jets==4)*0.97943520546)+((N_Jets==5)*0.968304812908)+((N_Jets==6)*0.954210877419)+((N_Jets==7)*0.943681657314)+((N_Jets==8)*0.930189013481)+((N_Jets>=9)*0.90473729372))",
+
+        "weight_SF_N_Jets__ttcc_FH__btag_NOMINAL:=(((N_Jets==0)*1.0)+((N_Jets==1)*0.987637758255)+((N_Jets==2)*0.991748988628)+((N_Jets==3)*0.992637097836)+((N_Jets==4)*0.99407595396)+((N_Jets==5)*0.994823038578)+((N_Jets==6)*0.990967512131)+((N_Jets==7)*0.983588337898)+((N_Jets==8)*0.974810242653)+((N_Jets>=9)*0.954049825668))",
+
+
+
+
+
 
         "sf_N_Jets__ttH__btag_NOMINAL:=((selection_hbb*weight_SF_N_Jets__ttH_bb__btag_NOMINAL)+(selection_nonhbb*weight_SF_N_Jets__ttH_nonbb__btag_NOMINAL))",
         "sf_N_Jets__ttbb__btag_NOMINAL:=((selection_ttdl*selection_tthf*weight_SF_N_Jets__ttbb_4FS_DL__btag_NOMINAL)+(selection_ttsl*selection_tthf*weight_SF_N_Jets__ttbb_4FS_SL__btag_NOMINAL))",
@@ -83,6 +87,8 @@ def getAddVars():
         "sf_N_Jets__ttlf__btag_NOMINAL:=((selection_ttdl*selection_ttlf*weight_SF_N_Jets__ttlf_DL__btag_NOMINAL)+(selection_ttsl*selection_ttlf*weight_SF_N_Jets__ttlf_SL__btag_NOMINAL)+(selection_ttfh*selection_ttlf*weight_SF_N_Jets__ttlf_FH__btag_NOMINAL))",
 
         "sf_N_Jets__btag_NOMINAL:=((isTTbarSample==1)*(sf_N_Jets__ttlf__btag_NOMINAL+sf_N_Jets__ttcc__btag_NOMINAL+sf_N_Jets__ttbb__btag_NOMINAL)+(isTthSample==1)*(sf_N_Jets__ttH__btag_NOMINAL)+(isTTbarSample==0&&isTthSample==0)*(1.))",
+
+
 
 
 
