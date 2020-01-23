@@ -127,8 +127,8 @@ class analysisConfig:
         Overwrite defaults specified in '__init__' and 'SetDefaults'.
         Object '__dict__' contains all variables of instance self
         """
-        for key in self.__dict__:
-            self.__dict__[key] = analysisOptions.get(key, self.__dict__[key])
+        for key in analysisOptions:
+            self.__dict__[key] = analysisOptions[key]
 
     def initPlotConfig(self):
         configdir = self.pyrootdir+"/configs/"+self.plotConfig
