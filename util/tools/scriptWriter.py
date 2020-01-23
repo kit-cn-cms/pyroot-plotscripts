@@ -119,17 +119,28 @@ class scriptWriter:
         # initialize variables with variablebox
         self.initVariables(tree)
         
+        # if a GenWeightNormMap is used, create new header file
+        genWeightNormHeader_name = None
+        if self.pp.useGenWeightNormMap:
+            genWeightNormHeader_name = "GenNormMap.h"
+            genWeightNormHeader_path = os.path.join(self.pp.analysis.workdir, 
+                                                    genWeightNormHeader_name)
+            header_code = self.genWeightNormalization.declareNormalizationMapHeader()
+            with open(genWeightNormHeader_path, "w") as headerfile:
+                headerfile.write(header_code)
         # write program
         # start writing program
         script = scriptfunctions.getHead(   basepath          = self.pp.analysis.pyrootdir, 
                                             dataBases         = self.pp.dataBases, 
                                             memDB_path        = self.pp.memDBpath, 
-                                            addCodeInterfaces = self.pp.addInterfaces)
-
+                                            addCodeInterfaces = self.pp.addInterfaces,
+                                            useNormHeader     = genWeightNormHeader_name
+                                            )
         if self.pp.useGenWeightNormMap:
-            script += self.genWeightNormalization.declareNormFactors()
-            script += self.genWeightNormalization.addNormalizationMap()
-        
+            # exported to new file GenNormMap.h
+            # script += self.genWeightNormalization.declareNormFactors()
+            # script += self.genWeightNormalization.addNormalizationMap()
+            script += self.genWeightNormalization.loadNormFactors()
         for db in self.pp.dataBases:
             script += scriptfunctions.InitDataBase(db)
         for addCodeInt in self.pp.addInterfaces:
@@ -161,10 +172,8 @@ class scriptWriter:
         startLoopStub = startLoopStub.replace("//PLACEHOLDERFORVARIABLERESET",self.varManager.resetVariableInitialization())
         script += startLoopStub
         script += self.initLoop()
-
         # plotting
         script += self.eventLoop(tree)
-
         script += "     totalTimeFillHistograms+=timerFillHistograms->RealTime();\n"
 
         # finish loop
@@ -391,6 +400,7 @@ class scriptWriter:
         
         for catname, catselection in zip(self.pp.categoryNames, self.pp.categorySelections):
             # for every category
+            
             plotText = plotClass.startCat(catselection)
             # plot everything
             for plot in self.pp.configData.getDiscriminatorPlots():
