@@ -256,31 +256,35 @@ def mergeSystematicsInterface(jobsToSubmit, maxTries = 10, nTries = 0):
     # monitor running of jobs
     nafSubmit.monitorJobStatus(jobIDs)
     # checking for undone jobs
-    undoneJobs = mergeSystematicsTerminationCheck(jobsToSubmit)
+    undoneJobs = mergeSystematicsTerminationCheck(os.path.dirname(jobsToSubmit[0]), jobIDs)
 
     if len(undoneJobs) > 0:
         return mergeSystematicsInterface(undoneJobs, maxTries = maxTries, nTries = nTries+1)
 
     print("mergeSystematics submit interface has terminated successfully")
 
-def mergeSystematicsTerminationCheck(jobsToSubmit):
+def mergeSystematicsTerminationCheck(jobdir, jobIDs):
     missing_processes = []
-    for job in jobsToSubmit:
-        jobdir = os.path.dirname(job)
-        logdir = os.path.join(jobdir, "logs")
-        outfiles = os.path.join(logdir, "*.out")
+    logdir = os.path.join(jobdir, "logs")
+    for jobid in jobIDs:
+        outfiles = os.path.join(logdir, "*{}*.out".format(jobid))
         files = glob(outfiles)
         for fpath in files:
             with open(fpath) as f:
                 lines = f.read().splitlines()
             if not lines[-1] == "DONE":
-                p = lines[1]
+                #DANGERZONE: index seems to be different between local and grid run
+                p = lines[2]
                 missing_processes.append(p)
                 print("Will resubmit process '{}'".format(p))
                 print("log:")
                 print("\n".join(lines))
-
-    missing_jobs = ["mergeSysts_{}.sh".format(x) for x in missing_processes]
+    template = os.path.join(jobdir, "mergeSysts_{}.sh")
+    missing_jobs = [template.format(x) for x in missing_processes]
+    if not all(os.path.exists(x) for x in missing_jobs):
+        msg = "Scripts scheduled for resubmit does not exist! Scripts:"
+        msg += "\n\t".join(missing_jobs)
+        raise ValueError(msg)
     return missing_jobs
 
 
