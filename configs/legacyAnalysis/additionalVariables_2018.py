@@ -48,9 +48,6 @@ def getAddVars():
         "selection_ttdl:=(N_GenTopLep==2)",
         "selection_ttfh:=(N_GenTopLep==0)",
 
-        "selection_ttbb:=(GenEvt_I_TTPlusBB==3&&GenEvt_I_TTPlusCC==0)",
-        "selection_ttb:=(GenEvt_I_TTPlusBB==1&&GenEvt_I_TTPlusCC==0)",
-        "selection_tt2b:=(GenEvt_I_TTPlusBB==2&&GenEvt_I_TTPlusCC==0)",
         "selection_tthf:=(GenEvt_I_TTPlusBB>=1&&GenEvt_I_TTPlusCC==0)",
         "selection_ttcc:=(GenEvt_I_TTPlusBB==0&&GenEvt_I_TTPlusCC==1)",
         "selection_ttlf:=(GenEvt_I_TTPlusBB==0&&GenEvt_I_TTPlusCC==0)",
@@ -58,27 +55,27 @@ def getAddVars():
 
 
 
-        "weight_SF_N_Jets__ttH_bb__btag_NOMINAL:=(((N_Jets==4)*0.970481455326)+((N_Jets==5)*0.962268292904)+((N_Jets==6)*0.956493616104)+((N_Jets==7)*0.950274646282)+((N_Jets==8)*0.935249090195)+((N_Jets>=9)*0.897339820862))",
+        "weight_SF_N_Jets__ttH_bb__btag_NOMINAL:=(((N_Jets==0)*1.0)+((N_Jets==1)*0.987944662571)+((N_Jets==2)*0.983631968498)+((N_Jets==3)*0.976970016956)+((N_Jets==4)*0.96991199255)+((N_Jets==5)*0.965793609619)+((N_Jets==6)*0.96144080162)+((N_Jets==7)*0.955342948437)+((N_Jets==8)*0.940639138222)+((N_Jets>=9)*0.906148672104))",
 
-        "weight_SF_N_Jets__ttH_nonbb__btag_NOMINAL:=(((N_Jets==4)*0.923768460751)+((N_Jets==5)*0.909187436104)+((N_Jets==6)*0.899537801743)+((N_Jets==7)*0.889305531979)+((N_Jets==8)*0.86739128828)+((N_Jets>=9)*0.839902997017))",
+        "weight_SF_N_Jets__ttH_nonbb__btag_NOMINAL:=(((N_Jets==0)*1.0)+((N_Jets==1)*0.979229271412)+((N_Jets==2)*0.95835596323)+((N_Jets==3)*0.941134333611)+((N_Jets==4)*0.928279161453)+((N_Jets==5)*0.916184127331)+((N_Jets==6)*0.905698120594)+((N_Jets==7)*0.893927335739)+((N_Jets==8)*0.879107773304)+((N_Jets>=9)*0.846335947514))",
 
-        "weight_SF_N_Jets__ttbb_4FS_SL__btag_NOMINAL:=(((N_Jets==4)*0.956253767014)+((N_Jets==5)*0.938967347145)+((N_Jets==6)*0.907697737217)+((N_Jets==7)*0.873156309128)+((N_Jets==8)*0.841914653778)+((N_Jets>=9)*0.806181013584))",
+        "weight_SF_N_Jets__ttbb_4FS_SL__btag_NOMINAL:=(((N_Jets==0)*1.0)+((N_Jets==1)*0.984696626663)+((N_Jets==2)*0.976046919823)+((N_Jets==3)*0.968483269215)+((N_Jets==4)*0.957964777946)+((N_Jets==5)*0.939464688301)+((N_Jets==6)*0.913318574429)+((N_Jets==7)*0.886076927185)+((N_Jets==8)*0.855828821659)+((N_Jets>=9)*0.815186977386))",
 
-        "weight_SF_N_Jets__ttbb_4FS_DL__btag_NOMINAL:=(((N_Jets==4)*0.899950027466)+((N_Jets==5)*0.861929535866)+((N_Jets==6)*0.832655131817)+((N_Jets==7)*0.808143079281)+((N_Jets==8)*0.782385587692)+((N_Jets>=9)*0.731020450592))",
+        "weight_SF_N_Jets__ttbb_4FS_DL__btag_NOMINAL:=(((N_Jets==0)*1.0)+((N_Jets==1)*0.988386750221)+((N_Jets==2)*0.968368291855)+((N_Jets==3)*0.939254999161)+((N_Jets==4)*0.898201704025)+((N_Jets==5)*0.867239177227)+((N_Jets==6)*0.836635291576)+((N_Jets==7)*0.808776140213)+((N_Jets==8)*0.773631095886)+((N_Jets>=9)*0.738255798817))",
 
-        "weight_SF_N_Jets__ttbb_4FS_FH__btag_NOMINAL:=(((N_Jets==4)*0.970512211323)+((N_Jets==5)*0.96704107523)+((N_Jets==6)*0.967137515545)+((N_Jets==7)*0.946990668774)+((N_Jets==8)*0.931310713291)+((N_Jets>=9)*0.888953924179))",
+        "weight_SF_N_Jets__ttbb_4FS_FH__btag_NOMINAL:=(((N_Jets==0)*1.0)+((N_Jets==1)*0.982359170914)+((N_Jets==2)*0.973529160023)+((N_Jets==3)*0.969319880009)+((N_Jets==4)*0.971303761005)+((N_Jets==5)*0.97164106369)+((N_Jets==6)*0.967205941677)+((N_Jets==7)*0.95445817709)+((N_Jets==8)*0.934999644756)+((N_Jets>=9)*0.896767854691))",
 
-        "weight_SF_N_Jets__ttlf_SL__btag_NOMINAL:=(((N_Jets==4)*0.982537746429)+((N_Jets==5)*0.953815460205)+((N_Jets==6)*0.916884481907)+((N_Jets==7)*0.889544725418)+((N_Jets==8)*0.837062060833)+((N_Jets>=9)*0.80877995491))",
+        "weight_SF_N_Jets__ttlf_SL__btag_NOMINAL:=(((N_Jets==0)*1.0)+((N_Jets==1)*0.998926758766)+((N_Jets==2)*1.00131475925)+((N_Jets==3)*1.00113630295)+((N_Jets==4)*0.987345576286)+((N_Jets==5)*0.958571255207)+((N_Jets==6)*0.926406800747)+((N_Jets==7)*0.894873797894)+((N_Jets==8)*0.853602707386)+((N_Jets>=9)*0.803937494755))",
 
-        "weight_SF_N_Jets__ttlf_DL__btag_NOMINAL:=(((N_Jets==4)*0.881663143635)+((N_Jets==5)*0.840722262859)+((N_Jets==6)*0.805276632309)+((N_Jets==7)*0.794540822506)+((N_Jets==8)*0.723813295364)+((N_Jets>=9)*0.632046401501))",
+        "weight_SF_N_Jets__ttlf_DL__btag_NOMINAL:=(((N_Jets==0)*1.0)+((N_Jets==1)*0.990425229073)+((N_Jets==2)*0.968368649483)+((N_Jets==3)*0.920110404491)+((N_Jets==4)*0.884227454662)+((N_Jets==5)*0.851005911827)+((N_Jets==6)*0.815002679825)+((N_Jets==7)*0.785849571228)+((N_Jets==8)*0.745138525963)+((N_Jets>=9)*0.690179049969))",
 
-        "weight_SF_N_Jets__ttlf_FH__btag_NOMINAL:=(((N_Jets==4)*1.02495276928)+((N_Jets==5)*1.02721893787)+((N_Jets==6)*1.01985883713)+((N_Jets==7)*0.998580396175)+((N_Jets==8)*0.969238340855)+((N_Jets>=9)*0.916663885117))",
+        "weight_SF_N_Jets__ttlf_FH__btag_NOMINAL:=(((N_Jets==0)*1.0)+((N_Jets==1)*1.00115025043)+((N_Jets==2)*1.00643789768)+((N_Jets==3)*1.01712059975)+((N_Jets==4)*1.02871286869)+((N_Jets==5)*1.03414750099)+((N_Jets==6)*1.02775597572)+((N_Jets==7)*1.00635373592)+((N_Jets==8)*0.979930400848)+((N_Jets>=9)*0.93187636137))",
 
-        "weight_SF_N_Jets__ttcc_SL__btag_NOMINAL:=(((N_Jets==4)*0.982042789459)+((N_Jets==5)*0.961056947708)+((N_Jets==6)*0.937591254711)+((N_Jets==7)*0.902606189251)+((N_Jets==8)*0.871568977833)+((N_Jets>=9)*0.849099159241))",
+        "weight_SF_N_Jets__ttcc_SL__btag_NOMINAL:=(((N_Jets==0)*1.0)+((N_Jets==1)*0.999156951904)+((N_Jets==2)*0.995605587959)+((N_Jets==3)*0.992774605751)+((N_Jets==4)*0.98462665081)+((N_Jets==5)*0.967760384083)+((N_Jets==6)*0.939565718174)+((N_Jets==7)*0.914899647236)+((N_Jets==8)*0.88917952776)+((N_Jets>=9)*0.848915874958))",
 
-        "weight_SF_N_Jets__ttcc_DL__btag_NOMINAL:=(((N_Jets==4)*0.919116318226)+((N_Jets==5)*0.875444710255)+((N_Jets==6)*0.824504375458)+((N_Jets==7)*0.805679142475)+((N_Jets==8)*0.800388813019)+((N_Jets>=9)*0.893658876419))",
+        "weight_SF_N_Jets__ttcc_DL__btag_NOMINAL:=(((N_Jets==0)*1.0)+((N_Jets==1)*0.993640065193)+((N_Jets==2)*0.979560494423)+((N_Jets==3)*0.953917443752)+((N_Jets==4)*0.920010626316)+((N_Jets==5)*0.885033488274)+((N_Jets==6)*0.846443235874)+((N_Jets==7)*0.807622611523)+((N_Jets==8)*0.788562119007)+((N_Jets>=9)*0.74731618166))",
 
-        "weight_SF_N_Jets__ttcc_FH__btag_NOMINAL:=(((N_Jets==4)*1.01068091393)+((N_Jets==5)*1.00892996788)+((N_Jets==6)*1.0000667572)+((N_Jets==7)*0.993484854698)+((N_Jets==8)*0.963474154472)+((N_Jets>=9)*0.948463380337))",
+        "weight_SF_N_Jets__ttcc_FH__btag_NOMINAL:=(((N_Jets==0)*1.0)+((N_Jets==1)*0.997326254845)+((N_Jets==2)*0.996948957443)+((N_Jets==3)*1.00287139416)+((N_Jets==4)*1.01527678967)+((N_Jets==5)*1.01272332668)+((N_Jets==6)*1.01043140888)+((N_Jets==7)*0.997365355492)+((N_Jets==8)*0.969473421574)+((N_Jets>=9)*0.941547572613))",
 
 
 
@@ -91,6 +88,8 @@ def getAddVars():
         "sf_N_Jets__ttlf__btag_NOMINAL:=((selection_ttdl*selection_ttlf*weight_SF_N_Jets__ttlf_DL__btag_NOMINAL)+(selection_ttsl*selection_ttlf*weight_SF_N_Jets__ttlf_SL__btag_NOMINAL)+(selection_ttfh*selection_ttlf*weight_SF_N_Jets__ttlf_FH__btag_NOMINAL))",
 
         "sf_N_Jets__btag_NOMINAL:=((isTTbarSample==1)*(sf_N_Jets__ttlf__btag_NOMINAL+sf_N_Jets__ttcc__btag_NOMINAL+sf_N_Jets__ttbb__btag_NOMINAL)+(isTthSample==1)*(sf_N_Jets__ttH__btag_NOMINAL)+(isTTbarSample==0&&isTthSample==0)*(1.))",
+
+
 
 
 
