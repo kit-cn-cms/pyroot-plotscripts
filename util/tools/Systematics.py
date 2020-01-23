@@ -63,6 +63,8 @@ class Systematics:
                 expr_down = self.replaceDummies(systematic["Down"])
                 if expr_up == "-" and expr_down == "-":
                     syst_dict[systName] = "-"
+                elif expr_up == "-" or expr_down == "-":
+                    syst_dict[systName] = expr_up if not expr_up == "-" else expr_down
                 else:
                     name_var=systName+"Up"
                     syst_dict[name_var] = expr_up
