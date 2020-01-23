@@ -7,6 +7,9 @@ class GenWeightNormalization():
         self.csvfile = csvfile
         self.csv_dict = self.readCSVFile()
         self.weightList = self.getWeightVarsList()
+        self.namespace_name = "GenNormMap"
+        # print(self.weightList)
+        # exit("DEBUG EXIT")
 
     
     # GetGenWeightAddVariablesList
@@ -41,24 +44,89 @@ class GenWeightNormalization():
     # GetGenWeightNormVetoList
     def getVetolist(self):
         # get vetolist for CC program
-        weightVetoList = []
-        for weight in self.weightList:
-            weightVetoList.append("internalNormFactor_"+weight)
-        return weightVetoList
+        # weightVetoList = []
+        # for weight in self.weightList:
+        #     weightVetoList.append("internalNormFactor_"+weight)
+        # return weightVetoList
+        return ["internalNormFactors"]
 
 
     # DeclareGenWeightNormFactors
     def declareNormFactors(self):
-        code = ""
-        for weight in self.weightList:
-            code += "float internalNormFactor_"+weight+"= 1.0;\n"
+        code = "\tstd::map< TString, float> internalNormFactors = \n  {\n"
+        tmp = []
+        for weight in sorted(self.weightList):
+            tmp.append('\t{{ "{}", 1.0 }}'.format(weight))
+        code += ",\n".join(tmp)
+        code += "\n  };"
         return code
+
+    def loadNormFactors(self):
+        return "auto internalNormFactors = {}::internalNormFactors;\n".format(self.namespace_name)
 
     # AddGenWeightNormMap
     def addNormalizationMap(self):
-        code = "std::map<TString,float> GenWeight_Norm_Map;\n"
-        for key in self.csv_dict:
-            code += 'GenWeight_Norm_Map["{}_{}"]={};\n'.format(str(key[0]),str(key[1]), str(self.csv_dict[key]))
+        code = "\tstd::map<TString,float> GenWeight_Norm_Map = \n  {\n"
+        tmp = []
+        for key in sorted(self.csv_dict):
+            tmp.append('\t{{ "{}_{}", {} }}'.format( key[0], key[1], 
+                                                            self.csv_dict[key])
+                        )
+        code += ",\n".join(tmp)
+        code += "\n  };"
+        return code
+
+    def declareFillFunction(self):
+        """
+        writes declaration for function which resets all values of input map
+        to input value 
+        """
+
+        code = """
+    void fillInternalNormFactors(std::map<TString, float>& input, const TString& currentSample, int& counter){
+        TString keyword;
+        for(auto& entry : input){
+            keyword = TString::Format("%s_%s", currentSample.Data(), entry.first.Data());
+            if( GenWeight_Norm_Map.find(keyword)!=GenWeight_Norm_Map.end()){
+                std::cout << "returning entry '" << GenWeight_Norm_Map[keyword];
+                std::cout << "' for keyword '" << keyword.Data() << "'\n";
+                entry.second = GenWeight_Norm_Map[keyword];
+            }
+            else if(counter<100) {
+                std::cout << "WARNING: Could not find entry ' "<< keyword.Data();
+                std::cout << "' in GenWeight_Norm_Map!" << std::endl; 
+                counter+=1;
+            }
+        }
+    }
+"""
+        return code
+    def declareNormalizationMapHeader(self):
+        """
+        function to declare namespace 'GenNormMap', which includes 
+        -   std::map<TString, float> GenWeight_Norm_Map
+            with all gen weight normalizations
+        -   std::map<TString, float> internalNormFactors
+            with gen weight normalizations for given sample
+        -   function to fill internalNormFactors 
+        """
+        code = """
+#ifndef {allcaps}
+#include <map>
+#include "TString.h"
+namespace {namespace_name}{{
+{init_normMap}
+
+{init_normFactors}
+
+{fill_function}
+}}
+#endif""".format( allcaps = self.namespace_name.upper(),
+                namespace_name    = self.namespace_name,
+              init_normMap      = self.addNormalizationMap(),
+              init_normFactors  = self.declareNormFactors(),
+              fill_function     = self.declareFillFunction())
+        
         return code
     
 
@@ -72,40 +140,15 @@ class GenWeightNormalization():
 
     # RelateGenWeightMapToNormFactor
     def relateMapToNormalizationFactor(self):
-        code = ""
-        code += """
-        TString currentRelevantSampleNameForGenWeights = sampleDataBaseIdentifiers[currentfilename];
         """
-        for weight in self.weightList:
-            
-            code += """
-    internalNormFactor_{weightName} = 1.0;
-    if( GenWeight_Norm_Map.find({sampleNameVar}+"_{weightName}")!=GenWeight_Norm_Map.end()){{
-        internalNormFactor_{weightName} = GenWeight_Norm_Map[{sampleNameVar}+"_{weightName}"];
-    }}
-    else if(warningCounter<100) std::cout << "WARNING: Could not find entry ' "<< {sampleNameVar} << "_{weightName}' in GenWeight_Norm_Map!" << std::endl; 
-    warningCounter+=1;
-            """.format(weightName = weight, sampleNameVar = "currentRelevantSampleNameForGenWeights")
-        # uncomment the following lines for additional debug output about the weights down below
-    #     code += """
-    #     std::cout << "==================================================================================" << std::endl;
-    # std::cout << "Filling 'dummyWeight_CMS_ttH_scaleMuR_ttbbNLO_Down' with" << std::endl;
-    # std::cout << "internalNormFactor_weight_LHA_306000_nominal: " << internalNormFactor_weight_LHA_306000_nominal << std::endl;
-    # std::cout << "internalNormFactor_weight_scale_variation_muR_1p0_muF_1p0: " << internalNormFactor_weight_scale_variation_muR_1p0_muF_1p0 << std::endl;
-    # std::cout << "'internalNormFactor_weight_scale_variation_muR_2p0_muF_1p0: '" << internalNormFactor_weight_scale_variation_muR_2p0_muF_1p0 << std::endl;
-    # std::cout << "'internalNormFactor_weight_scale_variation_muR_0p5_muF_1p0: '" << internalNormFactor_weight_scale_variation_muR_0p5_muF_1p0 << std::endl;    
-    
-    # std::cout << "'internalNormFactor_weight_scale_variation_muR_2p0_muF_1p0: '" << internalNormFactor_weight_scale_variation_muR_2p0_muF_1p0 << std::endl;
-    # std::cout << "'internalNormFactor_weight_LHA_306000_down: '" << internalNormFactor_weight_LHA_306000_down << std::endl;
-    # std::cout << "'internalNormFactor_weight_LHA_306000_up: '" << internalNormFactor_weight_LHA_306000_up << std::endl;
-    # std::cout << "'internalNormFactor_weight_scale_variation_muR_1p0_muF_2p0: '" << internalNormFactor_weight_scale_variation_muR_1p0_muF_2p0 << std::endl;
-    # std::cout << "'internalNormFactor_weight_LHA_320900_down: '" << internalNormFactor_weight_LHA_320900_down << std::endl;
-    # std::cout << "'internalNormFactor_weight_scale_variation_muR_1p0_muF_0p5: '" << internalNormFactor_weight_scale_variation_muR_1p0_muF_0p5 << std::endl;
-    # std::cout << "'internalNormFactor_weight_LHA_320900_up: '" << internalNormFactor_weight_LHA_320900_up << std::endl;
-    # std::cout << "'internalNormFactor_weight_LHA_320900_nominal: '" << internalNormFactor_weight_LHA_320900_nominal << std::endl;
-    # std::cout << "'internalNormFactor_weight_LHA_320900_up: '" << internalNormFactor_weight_LHA_320900_up << std::endl;
-    # std::cout << "'internalNormFactor_weight_LHA_320900_down: '" << internalNormFactor_weight_LHA_320900_down << std::endl;
-    # std::cout << "==================================================================================" << std::endl;
-    # """
+        load internal norm factors for the current sample.
+        This uses the functions in namespace 'GenNormMap' and the
+        'resetMap' function in plotHead.CC
+        """
+        code = """
+        TString currentRelevantSampleNameForGenWeights = sampleDataBaseIdentifiers[currentfilename];
+        resetMap(internalNormFactors, 1.0);
+        GenNormMap::fillInternalNormFactors(internalNormFactors, currentRelevantSampleNameForGenWeights, warningCounter);
+        """
         return code
 
