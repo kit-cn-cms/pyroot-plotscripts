@@ -6,7 +6,13 @@ import ROOT
 from fnmatch import filter
 from optparse import OptionParser
 
+thisdir = os.path.realpath(os.path.dirname(__file__))
+syst_module_path = os.path.join(thisdir, "tools")
 
+if not syst_module_path in sys.path:
+    sys.path.append(syst_module_path)
+import Systematics
+debug = 0
 def load_rfile(path):
     r = ROOT.TFile.Open(path, "UPDATE")
     if not isinstance(r, ROOT.TFile):
@@ -24,6 +30,8 @@ def histo2np(h, binlist = None):
     contents = np.zeros(len(binlist))
     for n, i in enumerate(binlist):
         contents[n] = h.GetBinContent(i)
+    if debug >= 10:
+        print(contents)
     return contents
 
 def load_bins(h):
@@ -40,6 +48,7 @@ def load_bins(h):
 
 def construct_new_hist(h_nom, name, vals):
     new_hist = h_nom.Clone(name)
+    new_hist.Reset()
     bins = load_bins(new_hist)
     for i, val in zip(bins, vals):
         new_hist.SetBinContent(i, val)
@@ -48,10 +57,11 @@ def construct_new_hist(h_nom, name, vals):
 def load_values(key, rfile, syst_list):
     values = None
     keylist = [x.GetName() for x in rfile.GetListOfKeys()]
-    # print("syst_list:")
-    # print(syst_list)
+    print("syst_list:")
+    print(syst_list)
     # print("list of keys:")
     # print(keylist)
+
     for syst in syst_list:
         wildcard = key.replace("$SYSTEMATIC", "*"+syst)
         sublist = filter(keylist, wildcard)
@@ -66,6 +76,8 @@ def load_values(key, rfile, syst_list):
             values = histo2np(h)
         else:
             values = np.row_stack((values, histo2np(h)))
+    if debug >= 5:
+        print(values)
     return values
 
 def combine_systs(nom_key, syst_key, rfile, systname, replace_cfg):
@@ -82,16 +94,18 @@ def combine_systs(nom_key, syst_key, rfile, systname, replace_cfg):
         if keyword == "Hessian":
             # compute squared differences
             values = (values - nom_vals)**2
+            
             # final values is squared sum per bin
             values = (values.sum(axis=0))**0.5
         else:
             msg = "Did not recognize keyword '{}'!".format(keyword)
             msg = "\nCurrent choices: Hessian"
             raise ValueError(msg)
-        print("nominal (nElements: {}):".format(nom_vals.size))
-        print(nom_vals)
-        print("varied (nElements: {}):".format(values.size))
-        print(values)
+        if debug >= 3:
+            print("nominal (nElements: {}):".format(nom_vals.size))
+            print(nom_vals)
+            print("varied (nElements: {}):".format(values.size))
+            print(values)
         h_up = construct_new_hist(h_nom = h_nom, name = name+"Up", vals = values + nom_vals)
         print("Writing '{}'".format(h_up.GetName()))
         rfile.WriteTObject(h_up, h_up.GetName(), "Overwrite")
@@ -102,7 +116,41 @@ def combine_systs(nom_key, syst_key, rfile, systname, replace_cfg):
     else:
         print("Unable to load values for key '{}'".format(syst_key))
 
-    
+def merge_systs(nom_key, syst_key, rfile, systname, replace_cfg):
+    orig_list = replace_cfg[systname].get("merge_with", [])
+    if len(orig_list) == 0:
+        print("Found no specifications to merge systematic '{}' with something else".format(systname))
+        return
+    syst_list = orig_list + [systname]
+    print("merging {}".format(syst_list))
+    h_nom = rfile.Get(nom_key)
+    name = syst_key.replace("$SYSTEMATIC", systname)
+    if not isinstance(h_nom, ROOT.TH1):
+        print("ERROR: Could not load histogram '{}' from file '{}'".format(nom_key, rfile.GetName()))
+        return
+    nom_vals = histo2np(h_nom)
+    for var in ["Up", "Down"]:
+        values = load_values(key = syst_key, rfile = rfile, syst_list = [x+var for x in syst_list])
+        if values.size != 0:
+            # compute squared differences
+            if var == "Up": values = (values - nom_vals)**2
+            if var == "Down": values = (values + nom_vals)**2
+            # final values is squared sum per bin
+            values = (values.sum(axis=0))**0.5
+
+            if debug >= 3:
+                print("nominal (nElements: {}):".format(nom_vals.size))
+                print(nom_vals)
+                print("varied (nElements: {}):".format(values.size))
+                print(values)
+            if var == "Up": values = values + nom_vals
+            else: values = nom_vals - values
+            h_new = construct_new_hist(h_nom = h_nom, name = name+var, vals = values)
+            print("Writing '{}'".format(h_new.GetName()))
+            rfile.WriteTObject(h_new, h_new.GetName(), "Overwrite")
+
+        else:
+            print("Unable to load values for key '{}'".format(syst_key))
 
 def load_config(cfg_path):
     if not cfg_path:
@@ -188,6 +236,8 @@ def get_histo_keys(nom_key, syst_key, **kwargs):
     return keylist
 
 def combine_intermid_syst(**kwargs):
+    print("debug level: {}".format(debug))
+    # check if the most basic arguments are given
     h_nominal_key = kwargs.get("h_nominal_key", None)
     h_syst_key = kwargs.get("h_syst_key", None)
     rfile_path = kwargs.get("rfile_path", None)
@@ -195,24 +245,67 @@ def combine_intermid_syst(**kwargs):
         msg = "Parsing error!\n"
         msg += str(locals())
         raise ValueError(msg)
-
+    # load root file
     if not os.path.exists(rfile_path):
         raise ValueError("file '{}' does not exist!".format(rfile_path))
     rfile = load_rfile(rfile_path)
     if not rfile:
         raise ValueError()
+    # load config with specifications for merging systematics
     replace_cfg_path = kwargs.get("replace_config", None)
     replace_cfg = load_config(replace_cfg_path)
-    proc_keys = get_histo_keys(nom_key = h_nominal_key,
-                                syst_key = h_syst_key,
-                                rfile = rfile,
-                                **kwargs
-                                )
-    for syst in replace_cfg:
-        for nom_key, syst_key in proc_keys:
-            combine_systs(  nom_key = nom_key, syst_key = syst_key,
-                            systname = syst,
-                            rfile = rfile, replace_cfg = replace_cfg)
+    # load csv file with systematics. This is necessary in order to perform
+    # a check whether a given systematic is relevant for a given process
+    syst_csv_path = kwargs.get("syst_csvpath", "")
+    if not syst_csv_path:
+        raise ValueError("Could not load path to csv with systematics!")
+    elif not os.path.exists(syst_csv_path):
+        raise ValueError("Could not find file with systematics in '{}'".format(syst_csv_path))
+    systematics = Systematics.Systematics(syst_csv_path)
+
+    #load processes (if none are given already)
+    procs = get_list(key = "processes", nom_key = h_nominal_key, rfile = rfile, **kwargs)
+    systematics.getSystematicsForProcesses(procs)
+
+    # for each process, check if a given systematic in the replace config is relevant.
+    # if yes, continue with merging. If not, skip this uncertainty
+    for process in procs:
+        process_systs = systematics.get_shape_systs(process)
+        subdict = {}
+        subdict.update(kwargs)
+        if "processes" in subdict:
+            subdict["processes"] = process
+        
+        proc_keys = get_histo_keys( nom_key = h_nominal_key, 
+                                    syst_key = h_syst_key, 
+                                    rfile = rfile, **subdict)
+        
+        # do two iterations through systematics in replace config
+        # first iteration will construct/merge uncertainties
+        # second iteration combine uncertainties
+        for syst in replace_cfg:
+            if not syst in process_systs:
+                print("systematic '{}' does not belong to process '{}'".format(syst, process))
+                continue
+
+            for nom_key, syst_key in proc_keys:
+                combine_systs(  nom_key = nom_key, syst_key = syst_key,
+                                systname = syst,
+                                rfile = rfile, replace_cfg = replace_cfg)
+        
+        #WIP: include logic to merge two uncertainties here
+        for syst in replace_cfg:
+            if not syst in process_systs:
+                print("systematic '{}' does not belong to process '{}'".format(syst, process))
+                continue
+            for nom_key, syst_key in proc_keys:
+                merge_systs(  nom_key = nom_key, syst_key = syst_key,
+                                systname = syst,
+                                rfile = rfile, replace_cfg = replace_cfg)
+
+
+
+    # the final output should be 'DONE' so the nafInterface module can check on the jobs
     print("DONE")
 
 def parse_arguments():
@@ -301,7 +394,19 @@ def parse_arguments():
                         dest = "channels",
                         action = "append"
                     )
-    
+    parser.add_option(  "-v", "--verbosity",
+                        help = " ".join(
+                            """
+                            manages amount of output. Default: 0
+                            """.split()
+                        ),
+                        dest = "verbosity",
+                        default = 0,
+                        type = "int"
+                    )
+
+    global debug 
+    debug = options.verbosity
     options, args = parser.parse_args()
     if options.processes:
         tmp = []
