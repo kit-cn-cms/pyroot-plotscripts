@@ -27,6 +27,7 @@ path_ttbb = path+"/TTbb_Powheg_Openloops_new_pmx/*nominal*.root"+';'+ \
 
 path_ttbbSL = path+"/TTbb_Powheg_Openloops_new_pmx/*nominal*.root"
 path_ttbbDL = path+"/TTbb_Powheg_Openloops_DL/*nominal*.root"
+path_ttbbDL = path+"/TTbb_Powheg_Openloops_DL/*nominal*.root"
 
 ttVPathS = path+'/TTW*/*nominal*.root'+';'+ \
            path+'/TTZToLLNuNu*/*nominal*.root'+';'+ \
@@ -160,11 +161,13 @@ TTbbweightSL='*35.8038266498504*0.4393'
 TTbbweightDL='*35.8038266498504*0.1062'
 TTbbweightFH='*35.8038266498504*0.4545'
 
-TTbbSLDLweight =  "*(((N_GenTopLep==2)"+TTbbweightDL+")"
-TTbbSLDLweight += "+((N_GenTopLep==1)"+TTbbweightSL+"))"
+TTbbSLDLFHweight =  "*(((N_GenTopLep==2)"+TTbbweightDL+")"
+TTbbSLDLFHweight += "+((N_GenTopLep==1)"+TTbbweightSL+")"
+TTbbSLDLFHweight += "+((N_GenTopLep==0)"+TTbbweightFH+"))"
+
 # DANGERZONE: derived in January 2020
 ttbb_4FS_scale = "*1.82462*(1.0)"
-ttbb_4FS_scale = "*(1.0)"
+# ttbb_4FS_scale = "*(1.0)"
 ttbb_5FS_scale = "*(1.0)"
 
 tHq_XS_scale = "*(0.7927/0.07425)"
