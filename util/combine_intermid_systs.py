@@ -91,15 +91,19 @@ def combine_systs(nom_key, syst_key, rfile, systname, replace_cfg):
     nom_vals = histo2np(h_nom)
     values = load_values(key = syst_key, rfile = rfile, syst_list = syst_list)
     if values.size != 0:
+        residuals = values - nom_vals
         if keyword == "Hessian":
             # compute squared differences
-            values = (values - nom_vals)**2
+            values = (residuals)**2
             
             # final values is squared sum per bin
             values = (values.sum(axis=0))**0.5
+        elif keyword == "MCReplica":
+            # values are the root mean squared values of the respective variations
+            values = (np.mean(residuals**2, axis=0))**0.5
         else:
             msg = "Did not recognize keyword '{}'!".format(keyword)
-            msg = "\nCurrent choices: Hessian"
+            msg = "\nCurrent choices: Hessian, MCReplics"
             raise ValueError(msg)
         if debug >= 3:
             print("nominal (nElements: {}):".format(nom_vals.size))
