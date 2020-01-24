@@ -75,6 +75,8 @@ class Systematics:
     def replace_in_expression(self, insert_list, to_replace, systname, expression):
         new_systs = {}
         print("ATTENTION: REPLACING {}".format(systname))
+        print("expression:")
+        print(expression)
         for insert in insert_list:
             print("\t{}".format(insert))
             new_name = "_".join([systname, insert])
@@ -287,7 +289,7 @@ class Systematics:
         for dummy in self.weightDictionary:
             variationString = variationString.replace(dummy, self.weightDictionary[dummy])
         
-        variationString = variationString.replace("\"","")
+        variationString = variationString.strip('"')
         return variationString
 
 
