@@ -12,7 +12,7 @@ import util.tools.plotClasses as plotClasses
 
 # samples
 # input path
-path_mwassmer = "/nfs/dust/cms/user/mwassmer/MonoTop/ntuples_2018_new_skims"
+path_mwassmer = "/nfs/dust/cms/user/mwassmer/MonoTop/ntuples_2018"
 
 ttbarPathS = (
     path_mwassmer
@@ -178,7 +178,7 @@ samplesDataControlPlots = [
     "SingleEl",
     ROOT.kBlack,
     path_mwassmer + "/EGamma*/*nominal*.root",
-    "N_LooseElectrons>0",
+    "(N_LooseElectrons>0)",
     #"(N_TightElectrons==1) && (N_LooseElectrons==1) && ((Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1) || (Triggered_HLT_Ele32_WPTight_Gsf_vX==1))" ,
     "SingleEl",
     samDict=sampleDict,
@@ -213,7 +213,7 @@ samples = [
     ),
     plotClasses.Sample(
         "t#bar{t}",
-        ROOT.kMagenta,
+        ROOT.kBlue,
         ttbarPathS,
         lumi + sel_MET,
         "ttbar",
@@ -224,7 +224,7 @@ samples = [
     # minor samples
     plotClasses.Sample(
         "Single Top",
-        ROOT.kBlue,
+        ROOT.kBlue - 7,
         path_mwassmer + "/ST_*/*nominal*.root",
         lumi + sel_MET,
         "singlet",
@@ -234,7 +234,7 @@ samples = [
     ),
     plotClasses.Sample(
         "Z(#nu#nu)+jets",
-        ROOT.kGreen - 3,
+        ROOT.kOrange + 7,
         path_mwassmer + "/ZJetsToNuNu_HT*/*nominal*.root",
         lumi + sel_MET,
         "znunujets",
@@ -244,7 +244,7 @@ samples = [
     ),
     plotClasses.Sample(
         "Z(ll)+jets",
-        ROOT.kGreen - 5,
+        ROOT.kOrange + 1,
         path_mwassmer + "/DYJetsToLL_M-50_HT*/*nominal*.root",
         lumi + sel_MET,
         "zlljets",
@@ -263,8 +263,18 @@ samples = [
         typ="bkg",
     ),
     plotClasses.Sample(
+        "#gamma+jets",
+        ROOT.kOrange - 4,
+        path_mwassmer + "/GJets_HT*/*nominal*.root",
+        lumi + sel_MET,
+        "gammajets",
+        samDict=sampleDict,
+        readTrees=doReadTrees,
+        typ="bkg", 
+    ),
+    plotClasses.Sample(
         "QCD",
-        ROOT.kBlue - 10,
+        ROOT.kGray,
         path_mwassmer + "/QCD*/*nominal*.root",
         lumi + sel_MET,
         "qcd",
@@ -274,7 +284,7 @@ samples = [
     ),
     plotClasses.Sample(
         "Diboson",
-        ROOT.kAzure + 2,
+        ROOT.kGreen + 2,
         path_mwassmer + "/??_TuneCP5*/*nominal*.root",
         lumi + sel_MET,
         "diboson",
