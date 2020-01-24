@@ -323,7 +323,6 @@ class scriptWriter:
 
         # get systematic weight variables
         variableManager.add( self.systWeights )
-
         systWeights = []
         for w in self.systWeights:
             if ":=" in w:   systWeights.append( w.split(":=")[0] )
