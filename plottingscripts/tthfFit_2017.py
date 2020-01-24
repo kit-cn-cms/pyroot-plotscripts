@@ -29,13 +29,13 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'dataMC_2017/tthf_v2'
+    name = 'tthf_fit/2017'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
 
     # signal process
-    signalProcess = "ttH"
+    signalProcess = "ttbb"
     nSigSamples   = 1
 
     # dataera

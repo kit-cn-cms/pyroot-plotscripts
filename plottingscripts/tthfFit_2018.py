@@ -29,13 +29,13 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'dataMC_2018/tthf_v2'
+    name = 'tthf_fit/2018'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
 
     # signal process
-    signalProcess = "ttH"
+    signalProcess = "ttbb"
     nSigSamples   = 3
 
     # dataera
@@ -256,7 +256,6 @@ def main(pyrootdir, opts):
                 print("adding data_obs histograms as pseudo data")
                 # pseudo data without ttH
                 pP.addData( samples = configData.samples[nSigSamples:], 
-                            nominal_hist_template = nom_histname_template,
                             discrName = discrName)
                 # pseudo data with signal
                 #pP.addData(samples = configData.samples)
@@ -264,7 +263,6 @@ def main(pyrootdir, opts):
                 print("adding data_obs histograms as real data")
                 # real data with ttH
                 pP.addData( samples = configData.controlSamples, 
-                            nominal_hist_template = nom_histname_template,
                             discrName = discrName)
 
     
