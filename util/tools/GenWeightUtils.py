@@ -87,17 +87,19 @@ class GenWeightNormalization():
         TString keyword;
         for(auto& entry : input){
             keyword = TString::Format("%s_%s", currentSample.Data(), entry.first.Data());
+            //std::cout << "loading " << keyword << std::endl;
             if( GenWeight_Norm_Map.find(keyword)!=GenWeight_Norm_Map.end()){
-                std::cout << "returning entry '" << GenWeight_Norm_Map[keyword];
-                std::cout << "' for keyword '" << keyword.Data() << "'\n";
-                entry.second = GenWeight_Norm_Map[keyword];
+                //std::cout << "returning entry '" << GenWeight_Norm_Map[keyword];
+                //std::cout << "' for keyword '" << keyword.Data() << "'" << std::endl;
+                input.at(entry.first) = GenWeight_Norm_Map.at(keyword);
             }
             else if(counter<100) {
-                std::cout << "WARNING: Could not find entry ' "<< keyword.Data();
+                std::cout << "WARNING: Could not find entry '"<< keyword.Data();
                 std::cout << "' in GenWeight_Norm_Map!" << std::endl; 
                 counter+=1;
             }
         }
+        //exit(0);
     }
 """
         return code
