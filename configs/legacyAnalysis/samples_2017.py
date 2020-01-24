@@ -158,8 +158,7 @@ weightReplacements = {
 lumi = '41.5'
 
 # DANGERZONE: derived in January 2020
-#ttbb_4FS_scale = "*1.82462*(1.0)"
-ttbb_4FS_scale = "*(1.0)"
+ttbb_4FS_scale = "*(1.8983)"
 ttbb_5FS_scale = "*(1.0)"
 
 #tHq_XS_scale = "*(0.7927/0.07425)"
