@@ -29,14 +29,14 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'tthf_fit/2016'
+    name = 'SFSFderivation/testSFs_2016'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
 
     # signal process
-    signalProcess = "ttbb"
-    nSigSamples   = 3
+    signalProcess = "ttH"
+    nSigSamples   = 1
 
     # dataera
     dataera = "2016"
@@ -51,10 +51,10 @@ def main(pyrootdir, opts):
     # memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
     memexp = ''
     # configs
-    config          = "legacyAnalysis/samples_2016"
+    config          = "SFSFderivation/samples_testSFs_2016"
     variable_cfg    = "legacyAnalysis/additionalVariables_2016"
-    plot_cfg        = "legacyAnalysis/controlPlots_tthf_fit"
-    syst_cfg        = "legacyAnalysis/no_systs"
+    plot_cfg        = "SFSFderivation/plots_testSFs"
+    syst_cfg        = "SFSFderivation/systs_testSFs"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -63,13 +63,13 @@ def main(pyrootdir, opts):
     # script options
     analysisOptions = {
         # general options
-        "usePseudoData":        False,
+        "usePseudoData":        True,
         "testrun":              False,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
         "makeDataCards":        False,
-        "makeInputDatacards":   True, # create datacards also for all defined plots
+        "makeInputDatacards":   False, # create datacards also for all defined plots
         "addData":              True,  # adding real data 
         "makePlots":            True,
         # options for makePlots
@@ -91,7 +91,7 @@ def main(pyrootdir, opts):
         "skipDatacards":        opts.skipDatacards}
 
     plotJson = pyrootdir+"/configs/legacyAnalysis/treeJson_2016.json"
-    # plotDataBases = [["memDB","/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/databases/2017_/",True]] 
+    # plotDataBases = [["memDB","/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/databases/2016_/",True]] 
     # memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
     #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
     #               "checkpointFiles":  "/nfs/dust/cms/user/swieland/ttH_legacy/DNNs/oldModel/"}
@@ -255,7 +255,7 @@ def main(pyrootdir, opts):
             if analysis.usePseudoData:
                 print("adding data_obs histograms as pseudo data")
                 # pseudo data without ttH
-                pP.addData( samples = configData.samples[nSigSamples:], 
+                pP.addData( samples = configData.samples, 
                             discrName = discrName)
                 # pseudo data with signal
                 #pP.addData(samples = configData.samples)
@@ -312,7 +312,6 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
 
-
 if __name__ == "__main__":
     parser = optparse.OptionParser()
     parser.add_option("--skipPlotParallel",     dest = "skipPlotParallel",      action = "store_true", default = False)
@@ -320,6 +319,16 @@ if __name__ == "__main__":
     parser.add_option("--skipHaddFromWildcard", dest = "skipHaddFromWildcard",  action = "store_true", default = False)
     parser.add_option("--skipHistoCheck",       dest = "skipHistoCheck",        action = "store_true", default = False)
     parser.add_option("--skipDatacards",        dest = "skipDatacards",         action = "store_true", default = False)
+    parser.add_option("--skip",                 dest = "skip",                  default = 0,            type = "int",
+        help = "skip first INT parallel stages. plotParallel (1), haddParallel (2), haddFromWildcard (3), histoCheck (4), Datacards (5)")
 
     (opts, args) = parser.parse_args()
+
+    if opts.skip >= 1: opts.skipPlotParallel        = True
+    if opts.skip >= 2: opts.skipHaddParallel        = True
+    if opts.skip >= 3: opts.skipHaddFromWildcard    = True
+    if opts.skip >= 4: opts.skipHistoCheck          = True
+    if opts.skip >= 5: opts.skipDatacards           = True
+
+
     main(pyrootdir, opts)
