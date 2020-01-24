@@ -149,6 +149,10 @@ def merge_systs(nom_key, syst_key, rfile, systname, replace_cfg):
                 print(values)
             if var == "Up": values = values + nom_vals
             else: values = nom_vals - values
+            # backup original systematic
+            h = rfile.Get(name+var)
+            bu_name = "{}_premerge{}".format(name, var)
+            rfile.WriteTObject(h, bu_name, "Overwrite")
             h_new = construct_new_hist(h_nom = h_nom, name = name+var, vals = values)
             print("Writing '{}'".format(h_new.GetName()))
             rfile.WriteTObject(h_new, h_new.GetName(), "Overwrite")
