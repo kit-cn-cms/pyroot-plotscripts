@@ -14,16 +14,6 @@ import util.tools.plotClasses as plotClasses
 # input path
 path_mwassmer = "/nfs/dust/cms/user/mwassmer/MonoTop/ntuples_2018"
 
-ttbarPathS = (
-    path_mwassmer
-    + "/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/*nominal*.root"
-    + ";"
-    + path_mwassmer
-    + "/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/*nominal*.root"
-    + ";"
-    + path_mwassmer
-    + "/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/*nominal*.root"
-)
 
 # SELECTIONS
 
@@ -165,11 +155,12 @@ doReadTrees = True
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
 samplesDataControlPlots = [
+    # comment this sample for the leptonic monotop channel
     plotClasses.Sample(
     "MET",
     ROOT.kBlack,
     path_mwassmer + "/MET*/*nominal*.root",
-    "(N_LooseElectrons==0) && (N_LooseMuons==0)" ,
+    "(N_LooseElectrons==0) && (N_LooseMuons>=0) && (N_LoosePhotons==0)" ,
     "MET",
     samDict=sampleDict,
     readTrees=doReadTrees,
@@ -178,22 +169,21 @@ samplesDataControlPlots = [
     "SingleEl",
     ROOT.kBlack,
     path_mwassmer + "/EGamma*/*nominal*.root",
-    "(N_LooseElectrons>0)",
-    #"(N_TightElectrons==1) && (N_LooseElectrons==1) && ((Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1) || (Triggered_HLT_Ele32_WPTight_Gsf_vX==1))" ,
+    "((N_LooseElectrons>0) || (N_LoosePhotons>0)) && (N_LooseMuons==0)",
     "SingleEl",
     samDict=sampleDict,
     readTrees=doReadTrees,
     ),
-    plotClasses.Sample(
-    "SingleMu",
-    ROOT.kBlack,
-    path_mwassmer + "/SingleMuon*/*nominal*.root",
-    "N_LooseMuons>0",
-    #"(N_TightMuons==1) && (N_LooseMuons==1) && (Triggered_HLT_IsoMu24_vX==1)" ,
-    "SingleMu",
-    samDict=sampleDict,
-    readTrees=doReadTrees,
-    ),
+    # uncomment this sample for the leptonic monotop channel
+    #plotClasses.Sample(
+    #"SingleMu",
+    #ROOT.kBlack,
+    #path_mwassmer + "/SingleMuon*/*nominal*.root",
+    #"(N_LooseMuons>0) && (N_LooseElectrons==0) && (N_LoosePhotons==0)",
+    #"SingleMu",
+    #samDict=sampleDict,
+    #readTrees=doReadTrees,
+    #),
 ]
 
 
@@ -214,7 +204,7 @@ samples = [
     plotClasses.Sample(
         "t#bar{t}",
         ROOT.kBlue,
-        ttbarPathS,
+        path_mwassmer + "/TTTo*/*nominal*.root",
         lumi + sel_MET,
         "ttbar",
         samDict=sampleDict,
