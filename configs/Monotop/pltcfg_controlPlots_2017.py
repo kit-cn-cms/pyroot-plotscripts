@@ -68,6 +68,10 @@ muonSFs_down = "((N_TightMuons==1 && N_LooseMuons==2)*Muon_IdentificationSFDown[
 
 bosonWeightNom = "internalBosonWeight"
 
+prefireWeightNom = "Weight_L1_Prefire"
+prefireWeightUp = "Weight_L1_Prefire_Up"
+prefireWeightDown = "Weight_L1_Prefire_Down"
+
 ## trigger scale factors
 ## DANGERZONE: ELECTRON TRIGGER NOT ADDED TO NTUPLES YET, USE INTERNAL SFS
 ## electronTrigger = "("+sel_singleel+"&&(Weight_EleTriggerSF>0.))*Weight_EleTriggerSF"
@@ -114,6 +118,9 @@ weightReplacements = {
     "MUSFUP": muonSFs_up,
     "MUSFDOWN": muonSFs_down,
     "BOSONWEIGHTNOM": bosonWeightNom,
+    "PREFIREWEIGHTNOM": prefireWeightNom,
+    "PREFIREWEIGHTUP": prefireWeightUp,
+    "PREFIREWEIGHTDOWN": prefireWeightDown,
     ## trigger scale factors
     # "TRIGGERSFS": "(" + electronTrigger + "+" + muonTrigger + ")",
     # "ELETRIGSUP": "(" + electronTrigger_up + "+" + muonTrigger + ")",
@@ -143,6 +150,8 @@ nominalweight = (
     + electronSFs
     + "*"
     + bosonWeightNom
+    + "*"
+    + prefireWeightNom
     + ")"
     + "*(DoWeights==1)+(DoWeights==0)*1.0"
     # + electronSFs
@@ -212,7 +221,7 @@ samples = [
     plotClasses.Sample(
         "#splitline{VectorMonotop}{M_{#phi}=2000 M_{#chi}=500}",
         ROOT.kCyan,
-        "/nfs/dust/cms/user/mwassmer/MonoTop/ntuples_2018_new_skims/VectorMonotop_Mphi_2000_Mchi_500/*nominal*.root",
+        "/nfs/dust/cms/user/mwassmer/MonoTop/ntuples_2018/VectorMonotop_Mphi_2000_Mchi_500/*nominal*.root",
         # lumi reweighting factor due to stupid cross section calculation
         lumi + sel_MET,
         "VectorMonotop_Mphi_2000_Mchi_500",
