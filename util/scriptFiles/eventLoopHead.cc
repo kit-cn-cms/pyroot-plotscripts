@@ -54,6 +54,10 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     float internalBosonWeight_MixedDown = 1.0;
     float internalBosonWeight_AlphaSUp  = 1.0;
     float internalBosonWeight_AlphaSDown= 1.0;
+    float internalBosonWeight_muRUp     = 1.0;
+    float internalBosonWeight_muRDown   = 1.0;
+    float internalBosonWeight_muFUp     = 1.0;
+    float internalBosonWeight_muFDown   = 1.0;
 
     if ((processname.find("wlnujets") != std::string::npos && W_Pt > 30.) || (processname.find("zlljets") != std::string::npos && Z_Pt > 30.) ||
         (processname.find("znunujets") != std::string::npos && Z_Pt > 30.)) {
@@ -74,6 +78,10 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
         internalBosonWeight_MixedDown = BosonWeight_MixedDown;
         internalBosonWeight_AlphaSUp  = BosonWeight_AlphaUp;
         internalBosonWeight_AlphaSDown= BosonWeight_AlphaDown;
+        internalBosonWeight_muRUp     = BosonWeight_muRUp;
+        internalBosonWeight_muRDown   = BosonWeight_muRDown;
+        internalBosonWeight_muFUp     = BosonWeight_muFUp;
+        internalBosonWeight_muFDown   = BosonWeight_muFDown;
     }
 
 
