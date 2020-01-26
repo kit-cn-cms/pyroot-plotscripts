@@ -59,6 +59,10 @@ def getAddVars():
         "BosonWeight_MixedDown",
         "BosonWeight_AlphaUp",
         "BosonWeight_AlphaDown",
+        "BosonWeight_muRUp",
+        "BosonWeight_muRDown",
+        "BosonWeight_muFUp",
+        "BosonWeight_muFDown",
         "W_Pt",
         "Z_Pt",
     ]
