@@ -1,6 +1,7 @@
 import sys
 import os
 import nafSubmit
+from glob import glob
 
 fastLane = True
 #############################
@@ -241,8 +242,52 @@ def checkHistoTerminationCheck(shellScripts, outputFiles):
     print("-"*50)
     return undoneJobs, undoneOutFiles
 
+def mergeSystematicsInterface(jobsToSubmit, maxTries = 10, nTries = 0):
+    if nTries == 0:
+        print("submitting scripts to merge systematics as array job")
+        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, arrayName = "merge_systs")
+    elif nTries < maxTries:
+        print("resubmitting scripts to merge systematics")
+        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, arrayName = "merge_systs_resubmit")
+    else:
+        print("renaming did not work after "+str(maxTries)+" tries - ABORTING")
+        sys.exit(1)
 
+    # monitor running of jobs
+    nafSubmit.monitorJobStatus(jobIDs)
+    # checking for undone jobs
+    undoneJobs = mergeSystematicsTerminationCheck(os.path.dirname(jobsToSubmit[0]), jobIDs)
 
+    if len(undoneJobs) > 0:
+        return mergeSystematicsInterface(undoneJobs, maxTries = maxTries, nTries = nTries+1)
+
+    print("mergeSystematics submit interface has terminated successfully")
+
+def mergeSystematicsTerminationCheck(jobdir, jobIDs):
+    missing_processes = []
+    logdir = os.path.join(jobdir, "logs")
+    for jobid in jobIDs:
+        outfiles = os.path.join(logdir, "*{}*.out".format(jobid))
+        files = glob(outfiles)
+        for fpath in files:
+            with open(fpath) as f:
+                lines = f.read().splitlines()
+            if not lines[-1] == "DONE":
+                #DANGERZONE: index seems to be different between local and grid run
+                p = lines[2]
+                missing_processes.append(p)
+                print("Will resubmit process '{}'".format(p))
+                print("error log:")
+                with open(fpath.replace(".out", ".err")) as ferr:
+                    errlines = ferr.read().splitlines()
+                    print("\n".join(errlines))
+    template = os.path.join(jobdir, "mergeSysts_{}.sh")
+    missing_jobs = [template.format(x) for x in missing_processes]
+    if not all(os.path.exists(x) for x in missing_jobs):
+        msg = "Script scheduled for resubmit does not exist! Scripts:"
+        msg += "\n\t".join(missing_jobs)
+        raise ValueError(msg)
+    return missing_jobs
 
 
 #############################

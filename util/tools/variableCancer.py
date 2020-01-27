@@ -39,6 +39,7 @@ class VariableManager:
 
         # adding expression to list
         self.expressionsToInit = list(set(self.expressionsToInit+expressionList))
+        self.expressionsToInit = sorted(self.expressionsToInit)
 
     def run(self):
         '''
@@ -106,7 +107,7 @@ class VariableManager:
         '''
         # dont add variables that are in the vetolist
         if varName in self.vetolist:
-            if self.verbose > 20: print("variable is in vetolist not adding it.")
+            if self.verbose > 20: print("variable '{}' is in vetolist, not adding it.".format(varName))
             return
         
         # dont add variables that already exist
@@ -169,7 +170,7 @@ class VariableManager:
         self.variablesToInit = {}
 
         # loop over all variables and initialize them
-        for var in self.variables:
+        for var in sorted(self.variables):
             if self.variables[var].isInitialized: continue
             self.variables[var].setupVariable(self.tree, self.verbose, self)
         print("total: {} variables initialized".format(len(self.variables)))
@@ -212,7 +213,8 @@ class VariableManager:
         #text+= "std::map<std::string, Long64_t*> longMap;\n\n"
 
         # loop over all variables
-        for name, var in self.variables.iteritems():
+        for name in sorted(self.variables):
+            var = self.variables[name]
             stubInit, stubCast = var.writeVariableInitialization()
             text+= stubInit
             castText+= stubCast
@@ -223,7 +225,8 @@ class VariableManager:
         code = ""
         
         # loop over all variables
-        for name, var in self.variables.iteritems():
+        for name in sorted(self.variables):
+            var = self.variables[name]
             code += var.resetInitializedVariables()
         return code
 
@@ -231,7 +234,8 @@ class VariableManager:
     def writeBranchAdresses(self):
         text = ""
         # loop over all variables
-        for name, var in self.variables.iteritems():
+        for name in sorted(self.variables):
+            var = self.variables[name]
             if var.inTree:
                 text += var.writeBranchAdress()
         text += "\n"
@@ -242,7 +246,8 @@ class VariableManager:
     def writeTMVAReader(self):
         text = ""
         # loop over all variables
-        for name, var in self.variables.iteritems():
+        for name in sorted(self.variables):
+            var = self.variables[name]
             if var.isBDTVar:
                 text += var.writeTMVAReader(self)
         text += "\n"
@@ -312,7 +317,7 @@ class VariableManager:
         for var in self.sortedVariables:
             if "conditionFor" in var.varName:
                 if self.verbose >= 1: print("adding variable to conditionVariables: "+str(var.varName))
-                conditionVariables.append(var)
+                self.conditionVariables.append(var)
 
         # now loop over all variables in sorted list and write code
         for var in self.sortedVariables:
@@ -321,7 +326,7 @@ class VariableManager:
             # check for condition
             hasCondition = False
             for condVar in self.conditionVariables:
-                if var.varName in conVar.varName:
+                if var.varName in condVar.varName:
                     hasCondition = True
                     text += "    if("+str(condVar.expression)+")\n    {\n"
 
@@ -351,7 +356,6 @@ class VariableManager:
         while not allHandled:
             counter += 1
             var = rawVariableList[counter]
-
             # if the last element is reached
             # start the loop from the beginning
             if counter == nVariables-1: 
@@ -478,14 +482,19 @@ class Variable:
             self.setupVariableType(branchTitle, verbose)
             self.isArray = branchTitle.split("/")[0][-1] == "]"
             alt_file.Close()
-        if "Weight_LHA_320900" in self.varName :
+        if "Weight_pdf_variation_32" in self.varName and not self.varName.startswith("dummy"):
             self.inTree = True
-            alt_file = ROOT.TFile("/nfs/dust/cms/user/swieland/ttH_legacy/ntupleHadded_2017/TTbb_Powheg_Openloops_new_pmx/TTbb_Powheg_Openloops_new_pmx_1_nominal_Tree.root")
-            alt_tree = alt_file.Get("MVATree")
-            branch = alt_tree.GetBranch(self.varName)
-            branchTitle = branch.GetTitle()
-            self.setupVariableType(branchTitle, verbose)
-            self.isArray = branchTitle.split("/")[0][-1] == "]"
+            try:
+                alt_file = ROOT.TFile("/nfs/dust/cms/user/swieland/ttH_legacy/ntupleHadded_2017/TTbb_Powheg_Openloops_new_pmx/TTbb_Powheg_Openloops_new_pmx_1_nominal_Tree.root")
+                alt_tree = alt_file.Get("MVATree")
+                branch = alt_tree.GetBranch(self.varName)
+                branchTitle = branch.GetTitle()
+                self.setupVariableType(branchTitle, verbose)
+                self.isArray = branchTitle.split("/")[0][-1] == "]"
+            except Exception as e:
+                print("Could not set up variable '{}'".format(self.varName))
+                print(e)
+            
             alt_file.Close()
         elif self.varName.startswith("Weight_rwgt") :
             self.inTree = True
