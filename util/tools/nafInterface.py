@@ -277,12 +277,14 @@ def mergeSystematicsTerminationCheck(jobdir, jobIDs):
                 p = lines[2]
                 missing_processes.append(p)
                 print("Will resubmit process '{}'".format(p))
-                print("log:")
-                print("\n".join(lines))
+                print("error log:")
+                with open(fpath.replace(".out", ".err")) as ferr:
+                    errlines = ferr.read().splitlines()
+                    print("\n".join(errlines))
     template = os.path.join(jobdir, "mergeSysts_{}.sh")
     missing_jobs = [template.format(x) for x in missing_processes]
     if not all(os.path.exists(x) for x in missing_jobs):
-        msg = "Scripts scheduled for resubmit does not exist! Scripts:"
+        msg = "Script scheduled for resubmit does not exist! Scripts:"
         msg += "\n\t".join(missing_jobs)
         raise ValueError(msg)
     return missing_jobs
