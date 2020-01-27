@@ -14,14 +14,16 @@ import util.tools.plotClasses as plotClasses
 path  = "/nfs/dust/cms/user/vdlinden/legacyTTH/ntuples/legacy_2018_ttH_newJEC"
 
 path_ttbarSL = path+'/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'
-
 path_ttbarFH = path+'/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'
-
 path_ttbarDL = path+'/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'
 
-path_ttbbSL = path+"/TTbb_4f_TTToSemiLeptonic_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"
+path_ttbar = path_ttbarSL+";"+path_ttbarFH+";"+path_ttbarDL
 
+path_ttbbSL = path+"/TTbb_4f_TTToSemiLeptonic_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"
 path_ttbbDL = path+"/TTbb_4f_TTTo2l2nu_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"
+path_ttbbFH = path+"/TTbb_4f_TTToHadronic_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"
+
+path_ttbb = path_ttbbSL+";"+path_ttbbDL+";"+path_ttbbFH 
 
 path_vjets = path+'/DYJets*/*nominal*.root'+';'+ \
              path+'/WJets*/*nominal*.root'
@@ -131,9 +133,6 @@ weightReplacements = {
 
 # Lumi weight
 lumi = '59.7'
-TTbbweightSL="*1.0"#'*35.8038266498504*0.4393'
-TTbbweightDL="*1.0"#'*35.8038266498504*0.1062'
-TTbbweightFH="*1.0"#'*35.8038266498504*0.4545'
 
 # nominal weight
 nominalweight="NomWeight:=("+defaultWeight+"*"+"("+electronSFs+"+"+muonSFs+")"+"*"+"("+electronTrigger+"+"+muonTrigger+")"+")*(DoWeights==1)+(DoWeights==0)*1.0"
@@ -204,28 +203,16 @@ samples_splitData = [
 samples_ttbb_4FS = [
     # ttbb
      plotClasses.Sample('t#bar{t}+b#bar{b} (4FS)',ROOT.kAzure+3,
-             path_ttbbSL,
-             lumi+TTbbweightSL+sel_ttbb+sel_MET+sel_StrangeMuWeights,
-             'ttbb_4FS_SL',
-             samDict=sampleDict, readTrees=doReadTrees),
-
-     plotClasses.Sample('t#bar{t}(DL)+b#bar{b} (4FS)',ROOT.kAzure+3,
-             path_ttbbDL,
-             lumi+TTbbweightDL+sel_ttbb+sel_MET+sel_StrangeMuWeights,
-             'ttbb_4FS_DL',
+             path_ttbb,
+             lumi+sel_ttbb+sel_MET+sel_StrangeMuWeights,
+             'ttbb_4FS',
              samDict=sampleDict, readTrees=doReadTrees),
 
     # ttbj 
     plotClasses.Sample('t#bar{t}+bj (4FS)',ROOT.kAzure+9,
-             path_ttbbSL,
-             lumi+TTbbweightSL+sel_ttbj+sel_MET+sel_StrangeMuWeights,
-             'ttbj_4FS_SL',
-             samDict=sampleDict, readTrees=doReadTrees),
-
-     plotClasses.Sample('t#bar{t}(DL)+bj (4FS)',ROOT.kAzure+9,
-             path_ttbbDL,
-             lumi+TTbbweightDL+sel_ttbj+sel_MET+sel_StrangeMuWeights,
-             'ttbj_4FS_DL',
+             path_ttbb,
+             lumi+sel_ttbj+sel_MET+sel_StrangeMuWeights,
+             'ttbj_4FS',
              samDict=sampleDict, readTrees=doReadTrees),
 
     ]
@@ -234,28 +221,16 @@ samples_ttbb_4FS = [
 samples_ttbb_5FS = [
     #ttbb
     plotClasses.Sample('t#bar{t}+b#bar{b} (5FS)',ROOT.kAzure+3,
-            path_ttbarSL,
+            path_ttbar,
             lumi+sel_ttbb+sel_MET+sel_StrangeMuWeights,
-            'ttbb_5FS_SL',
-            samDict=sampleDict, readTrees=doReadTrees, plot = False), 
-
-    plotClasses.Sample('t#bar{t}(DL)+b#bar{b} (5FS)',ROOT.kTeal,
-            path_ttbarDL,
-            lumi+sel_ttbb+sel_MET+sel_StrangeMuWeights,
-            'ttbb_5FS_DL',
+            'ttbb_5FS',
             samDict=sampleDict, readTrees=doReadTrees, plot = False), 
 
     # ttbj
     plotClasses.Sample('t#bar{t}(sl)+bj (5FS)',ROOT.kAzure+9,
-            path_ttbarSL,
+            path_ttbar,
             lumi+sel_ttbj+sel_MET+sel_StrangeMuWeights,
-            'ttbj_5FS_SL',
-            samDict=sampleDict, readTrees=doReadTrees, plot = False),
-
-    plotClasses.Sample('t#bar{t}(DL)+bj (5FS)',ROOT.kTeal,
-            path_ttbarDL,
-            lumi+sel_ttbj+sel_MET+sel_StrangeMuWeights,
-            'ttbj_5FS_DL',
+            'ttbj_5FS',
             samDict=sampleDict, readTrees=doReadTrees, plot = False),
 
     ]
@@ -309,13 +284,13 @@ samples_minor_backgrounds = [
 
 samples = [
     plotClasses.Sample('t#bar{t}+jj',ROOT.kAzure-9,
-             path_ttbarSL+";"+path_ttbarDL+";"+path_ttbarFH,
+             path_ttbar,
              lumi+sel_ttjj+sel_MET+sel_StrangeMuWeights,
              'ttjj',
              samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}+c#bar{c}',ROOT.kAzure+8,
-             path_ttbarSL+";"+path_ttbarDL+";"+path_ttbarFH,
+             path_ttbar,
              lumi+sel_ttcc+sel_MET+sel_StrangeMuWeights,
              'ttcc',
              samDict=sampleDict, readTrees=doReadTrees),
@@ -371,10 +346,7 @@ plottingsamples = [
 #     plotClasses.Sample('t#bar{t}+bj (4FS)',ROOT.kAzure+9, "", "",
 #             'ttbj_4FS', addsamples = ["ttbj_4FS_DL", "ttbj_4FS_SL"],
 #             samDict=sampleDict, readTrees=doReadTrees),
-    plotClasses.Sample("t#bar{t}+b (DL, 4FS)", ROOT.kTeal, "", "",
-            "ttb_DL_4FS", addsamples = ["ttbb_4FS_DL", "ttbj_4FS_DL"],
-            samDict = sampleDict, readTrees=doReadTrees),
      ]
 
 # sort subset of processes in plots. descending order
-sortedProcesses = ["ttbb_4FS_SL", "ttbj_4FS_SL", "ttjj", "ttcc", "ttbb_4FS_DL", "ttbj_4FS_DL"]
+sortedProcesses = ["ttbb_4FS", "ttbj_4FS", "ttjj", "ttcc"]
