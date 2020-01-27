@@ -26,10 +26,10 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
                   << "Evt_ID " << Evt_ID << " " << Int_t(Evt_ID) << std::endl;
     }
 
-    TString currentfilename = "";
-    currentfilename         = chain->GetCurrentFile()->GetName();
-    int hasTrigger          = 0;
-    if (currentfilename.Index("withTrigger") != -1) { hasTrigger = 1; }
+    //TString currentfilename = "";
+    //currentfilename         = chain->GetCurrentFile()->GetName();
+    //int hasTrigger          = 0;
+    //if (currentfilename.Index("withTrigger") != -1) { hasTrigger = 1; }
     eventsAnalyzed++;
     sumOfWeights += Weight;
 
