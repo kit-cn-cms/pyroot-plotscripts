@@ -98,12 +98,12 @@ def combine_systs(nom_key, syst_key, rfile, systname, replace_cfg):
             
             # final values is squared sum per bin
             values = (values.sum(axis=0))**0.5
-        elif keyword == "MCReplica":
+        elif keyword == "MCrelic":
             # values are the root mean squared values of the respective variations
             values = (np.mean(residuals**2, axis=0))**0.5
         else:
             msg = "Did not recognize keyword '{}'!".format(keyword)
-            msg = "\nCurrent choices: Hessian, MCReplics"
+            msg += "\nCurrent choices: Hessian, MCrelic"
             raise ValueError(msg)
         if debug >= 3:
             print("nominal (nElements: {}):".format(nom_vals.size))
@@ -137,8 +137,7 @@ def merge_systs(nom_key, syst_key, rfile, systname, replace_cfg):
         values = load_values(key = syst_key, rfile = rfile, syst_list = [x+var for x in syst_list])
         if values.size != 0:
             # compute squared differences
-            if var == "Up": values = (values - nom_vals)**2
-            if var == "Down": values = (values + nom_vals)**2
+            values = (values - nom_vals)**2
             # final values is squared sum per bin
             values = (values.sum(axis=0))**0.5
 
@@ -413,8 +412,6 @@ def parse_arguments():
                         type = "int"
                     )
 
-    global debug 
-    debug = options.verbosity
     options, args = parser.parse_args()
     if options.processes:
         tmp = []
@@ -427,6 +424,10 @@ def parse_arguments():
         for p in options.channels:
             tmp += p.split(",")
         options.channels = tmp
+
+    global debug 
+    debug = options.verbosity
+
     return options, args
 
 if __name__ == "__main__":
