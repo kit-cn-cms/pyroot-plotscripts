@@ -116,7 +116,7 @@ weightReplacements = {
 }
 
 # Lumi weight
-lumi = "41.5*"
+lumi = "41.5"
 
 # nominal weight
 nominalweight = (
