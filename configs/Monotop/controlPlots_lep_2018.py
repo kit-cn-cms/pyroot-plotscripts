@@ -12,11 +12,11 @@ import ROOT
 from array import array
 from copy import deepcopy
 
-generalselection = "(N_HEM_Jets==0)*(Evt_Pt_MET>150.)*(N_LoosePhotons==0)"
+generalselection = "(N_HEM_Jets==0)*(Evt_Pt_MET>100.)*(N_LoosePhotons==0)"
 
-def control_plots_ttbar_lep(data=None):
+def control_plots_lep_CR_ttbarlep(data=None):
     label = "#scale[0.8]{t#bar{t} control region (leptonic)}"
-    extension = "_CRttbar_lep"
+    extension = "_lep_CR_ttbarlep"
     selection = generalselection
     selection += "*((N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && Triggered_HLT_IsoMu24_vX==1) || (N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1 || Triggered_HLT_Ele32_WPTight_Gsf_vX==1)))"
     selection += "*(N_BTagsM>=2)"
@@ -63,18 +63,18 @@ def control_plots_ttbar_lep(data=None):
             selection,
             label,
         ),
-        plotClasses.Plot(
-            ROOT.TH1D("Evt_Pt_GenMET" + extension, "Puppi GEN MET", 40, 0.0, 1000.0),
-            "Evt_Pt_GenMET",
-            selection,
-            label,
-        ),
-        plotClasses.Plot(
-            ROOT.TH1D("NaiveMET" + extension, "Naive GEN MET", 40, 0.0, 1000.0),
-            "NaiveMET",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D("Evt_Pt_GenMET" + extension, "Puppi GEN MET", 40, 0.0, 1000.0),
+            #"Evt_Pt_GenMET",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D("NaiveMET" + extension, "Naive GEN MET", 40, 0.0, 1000.0),
+            #"NaiveMET",
+            #selection,
+            #label,
+        #),
         plotClasses.Plot(
             ROOT.TH1D(
                 "Hadr_Recoil_Pt" + extension, "Hadronic Recoil", 40, 200.0, 1200.0
@@ -111,14 +111,14 @@ def control_plots_ttbar_lep(data=None):
             selection,
             label,
         ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "Weight_GEN_nom" + extension, "Generator weight", 1100, -100.0, 1000.0
-            ),
-            "Weight_GEN_nom",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"Weight_GEN_nom" + extension, "Generator weight", 1100, -100.0, 1000.0
+            #),
+            #"Weight_GEN_nom",
+            #selection,
+            #label,
+        #),
         plotClasses.Plot(
             ROOT.TH1D("Muon_Pt" + extension, "Tight Muon p_{t}", 20, 10.0, 410.0),
             "Muon_Pt",
@@ -254,9 +254,9 @@ def control_plots_ttbar_lep(data=None):
     return plots
 
 
-def control_plots_W_lep(data=None):
+def control_plots_lep_CR_Wlep(data=None):
     label = "#scale[0.8]{W control region (leptonic)}"
-    extension = "_CRW_lep"
+    extension = "_lep_CR_Wlep"
     selection = generalselection
     selection += "*((N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && Triggered_HLT_IsoMu24_vX==1) || (N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1 || Triggered_HLT_Ele32_WPTight_Gsf_vX==1)))"
     selection += "*(N_BTagsL==0)"
@@ -303,18 +303,18 @@ def control_plots_W_lep(data=None):
             selection,
             label,
         ),
-        plotClasses.Plot(
-            ROOT.TH1D("Evt_Pt_GenMET" + extension, "Puppi GEN MET", 40, 0.0, 1000.0),
-            "Evt_Pt_GenMET",
-            selection,
-            label,
-        ),
-        plotClasses.Plot(
-            ROOT.TH1D("NaiveMET" + extension, "Naive GEN MET", 40, 0.0, 1000.0),
-            "NaiveMET",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D("Evt_Pt_GenMET" + extension, "Puppi GEN MET", 40, 0.0, 1000.0),
+            #"Evt_Pt_GenMET",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D("NaiveMET" + extension, "Naive GEN MET", 40, 0.0, 1000.0),
+            #"NaiveMET",
+            #selection,
+            #label,
+        #),
         plotClasses.Plot(
             ROOT.TH1D(
                 "Hadr_Recoil_Pt" + extension, "Hadronic Recoil", 40, 200.0, 1200.0
@@ -351,14 +351,14 @@ def control_plots_W_lep(data=None):
             selection,
             label,
         ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "Weight_GEN_nom" + extension, "Generator weight", 1100, -100.0, 1000.0
-            ),
-            "Weight_GEN_nom",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"Weight_GEN_nom" + extension, "Generator weight", 1100, -100.0, 1000.0
+            #),
+            #"Weight_GEN_nom",
+            #selection,
+            #label,
+        #),
         plotClasses.Plot(
             ROOT.TH1D("Muon_Pt" + extension, "Tight Muon p_{t}", 20, 10.0, 410.0),
             "Muon_Pt",
@@ -494,9 +494,9 @@ def control_plots_W_lep(data=None):
     return plots
 
 
-def control_plots_SR_lep(data=None):
+def control_plots_lep_SR(data=None):
     label = "#scale[0.8]{signal region (leptonic)}"
-    extension = "_SR_lep"
+    extension = "_lep_SR"
     selection = generalselection
     selection += "*((N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && Triggered_HLT_IsoMu24_vX==1) || (N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1 || Triggered_HLT_Ele32_WPTight_Gsf_vX==1)))"
     selection += "*(N_BTagsM<=1 && N_BTagsL>=1 && N_BTagsL<=2)"
@@ -543,18 +543,18 @@ def control_plots_SR_lep(data=None):
             selection,
             label,
         ),
-        plotClasses.Plot(
-            ROOT.TH1D("Evt_Pt_GenMET" + extension, "Puppi GEN MET", 40, 0.0, 1000.0),
-            "Evt_Pt_GenMET",
-            selection,
-            label,
-        ),
-        plotClasses.Plot(
-            ROOT.TH1D("NaiveMET" + extension, "Naive GEN MET", 40, 0.0, 1000.0),
-            "NaiveMET",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D("Evt_Pt_GenMET" + extension, "Puppi GEN MET", 40, 0.0, 1000.0),
+            #"Evt_Pt_GenMET",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D("NaiveMET" + extension, "Naive GEN MET", 40, 0.0, 1000.0),
+            #"NaiveMET",
+            #selection,
+            #label,
+        #),
         plotClasses.Plot(
             ROOT.TH1D(
                 "Hadr_Recoil_Pt" + extension, "Hadronic Recoil", 40, 200.0, 1200.0
@@ -591,14 +591,14 @@ def control_plots_SR_lep(data=None):
             selection,
             label,
         ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "Weight_GEN_nom" + extension, "Generator weight", 1100, -100.0, 1000.0
-            ),
-            "Weight_GEN_nom",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"Weight_GEN_nom" + extension, "Generator weight", 1100, -100.0, 1000.0
+            #),
+            #"Weight_GEN_nom",
+            #selection,
+            #label,
+        #),
         plotClasses.Plot(
             ROOT.TH1D("Muon_Pt" + extension, "Tight Muon p_{t}", 20, 10.0, 410.0),
             "Muon_Pt",
@@ -733,9 +733,9 @@ def control_plots_SR_lep(data=None):
 
     return plots
 
-def control_plots_ttbar_dilep(data=None):
+def control_plots_lep_CR_ttbardilep(data=None):
     label = "#scale[0.8]{t#bar{t} control region (dileptonic)}"
-    extension = "_CRttbar_dilep"
+    extension = "_lep_CR_ttbardilep"
     selection = generalselection
     selection += "*((N_LooseMuons==2 && N_TightMuons>=1 && N_LooseElectrons==0 && Triggered_HLT_IsoMu24_vX==1 && (DiMuon_Mass<60 || DiMuon_Mass>120)) || (N_LooseElectrons==2 && N_TightElectrons>=1 && N_LooseMuons==0 && (Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1 || Triggered_HLT_Ele32_WPTight_Gsf_vX==1) && (DiElectron_Mass<60 || DiElectron_Mass>120)) || (N_LooseMuons==1 && N_LooseElectrons==1 && ((N_TightMuons==1 && Triggered_HLT_IsoMu24_vX==1) || (N_TightElectrons==1 && (Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1 || Triggered_HLT_Ele32_WPTight_Gsf_vX==1)))))"
     selection += "*(N_BTagsM>=2)"
@@ -782,18 +782,18 @@ def control_plots_ttbar_dilep(data=None):
             selection,
             label,
         ),
-        plotClasses.Plot(
-            ROOT.TH1D("Evt_Pt_GenMET" + extension, "Puppi GEN MET", 40, 0.0, 1000.0),
-            "Evt_Pt_GenMET",
-            selection,
-            label,
-        ),
-        plotClasses.Plot(
-            ROOT.TH1D("NaiveMET" + extension, "Naive GEN MET", 40, 0.0, 1000.0),
-            "NaiveMET",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D("Evt_Pt_GenMET" + extension, "Puppi GEN MET", 40, 0.0, 1000.0),
+            #"Evt_Pt_GenMET",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D("NaiveMET" + extension, "Naive GEN MET", 40, 0.0, 1000.0),
+            #"NaiveMET",
+            #selection,
+            #label,
+        #),
         plotClasses.Plot(
             ROOT.TH1D(
                 "Hadr_Recoil_Pt" + extension, "Hadronic Recoil", 40, 200.0, 1200.0
@@ -830,14 +830,14 @@ def control_plots_ttbar_dilep(data=None):
             selection,
             label,
         ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "Weight_GEN_nom" + extension, "Generator weight", 1100, -100.0, 1000.0
-            ),
-            "Weight_GEN_nom",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"Weight_GEN_nom" + extension, "Generator weight", 1100, -100.0, 1000.0
+            #),
+            #"Weight_GEN_nom",
+            #selection,
+            #label,
+        #),
         plotClasses.Plot(
             ROOT.TH1D("Muon_Pt" + extension, "Tight Muon p_{t}", 39, 10.0, 400.0),
             "Muon_Pt",
@@ -975,10 +975,10 @@ def control_plots_ttbar_dilep(data=None):
 
 def getDiscriminatorPlots(data=None, discrname=""):
     discriminatorPlots = []
-    discriminatorPlots += control_plots_ttbar_lep(data)
-    discriminatorPlots += control_plots_W_lep(data)
-    discriminatorPlots += control_plots_SR_lep(data)
-    #discriminatorPlots += control_plots_ttbar_dilep(data)
+    discriminatorPlots += control_plots_lep_CR_ttbarlep(data)
+    discriminatorPlots += control_plots_lep_CR_Wlep(data)
+    discriminatorPlots += control_plots_lep_SR(data)
+    #discriminatorPlots += control_plots_lep_CR_ttbardilep(data)
 
     return discriminatorPlots
 
