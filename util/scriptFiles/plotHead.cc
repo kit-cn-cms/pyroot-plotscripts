@@ -54,6 +54,12 @@ void helperFillTwoDimHisto(const std::vector<structHelpFillTwoDimHisto>& paramVe
   }
 }
 
+void resetMap(std::map<TString, float>& input, const float& val = 1){
+  for(auto& entry : input){
+    entry.second = val;
+  }
+}
+
 void plot(){
   TH1F::SetDefaultSumw2();
 

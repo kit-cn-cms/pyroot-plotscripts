@@ -28,6 +28,7 @@ path_ttbb = path+"/TTbb_Powheg_Openloops_new_pmx/*nominal*.root"+';'+ \
 
 path_ttbbSL = path+"/TTbb_Powheg_Openloops_new_pmx/*nominal*.root"
 path_ttbbDL = path+"/TTbb_Powheg_Openloops_DL/*nominal*.root"
+path_ttbbDL = path+"/TTbb_Powheg_Openloops_DL/*nominal*.root"
 
 ttVPathS = path+'/TTW*/*nominal*.root'+';'+ \
            path+'/TTZToLLNuNu*/*nominal*.root'+';'+ \
