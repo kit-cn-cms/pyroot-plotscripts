@@ -281,7 +281,7 @@ class plotParallel:
     #====================================================
     # merge systematics per process
     #====================================================
-    def mergeSystematics(self):
+    def mergeSystematics(self, runLocal = True):
         script_path = os.path.join(self.analysis.workdir, "mergeSystScripts")
         print("script path: {}".format(script_path))
         if not os.path.exists(script_path):
@@ -313,5 +313,9 @@ class plotParallel:
                 msg = "Could not write script to merge systematics for process"
                 msg += " {} (nick: {})".format(sample.origName, sample.nick)
                 raise ValueError(msg)
-        
-        nafInterface.mergeSystematicsInterface(scripts)
+        if runLocal:
+            for s in scripts:
+                print(s)
+                subprocess.call([s], shell = True)
+        else:
+            nafInterface.mergeSystematicsInterface(scripts)
