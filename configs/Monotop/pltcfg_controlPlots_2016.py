@@ -17,12 +17,6 @@ path_mwassmer = "/nfs/dust/cms/user/mwassmer/MonoTop/ntuples_2016"
 
 # SELECTIONS
 
-# need to veto muon events in electron dataset to avoid double counting and vice versa
-#sel_MET = (
-#    "(1.)"
-#)
-
-sel_MET = "1."
 
 # select events without huge MuR/MuF weights
 # sel_StrangeMuWeights='*(abs(Weight_scale_variation_muR_0p5_muF_0p5)<=100 && abs(Weight_scale_variation_muR_0p5_muF_1p0)<=100 && abs(Weight_scale_variation_muR_0p5_muF_2p0)<=100 && abs(Weight_scale_variation_muR_1p0_muF_0p5)<=100 && abs(Weight_scale_variation_muR_1p0_muF_1p0)<=100 && abs(Weight_scale_variation_muR_1p0_muF_2p0)<=100 && abs(Weight_scale_variation_muR_2p0_muF_0p5)<=100 && abs(Weight_scale_variation_muR_2p0_muF_1p0)<=100 && abs(Weight_scale_variation_muR_2p0_muF_2p0)<=100)'
@@ -205,7 +199,7 @@ samples = [
         ROOT.kCyan,
         "/nfs/dust/cms/user/mwassmer/MonoTop/ntuples_2018/VectorMonotop_Mphi_2000_Mchi_500/*nominal*.root",
         # lumi reweighting factor due to stupid cross section calculation
-        lumi + sel_MET,
+        lumi,
         "VectorMonotop_Mphi_2000_Mchi_500",
         samDict=sampleDict,
         readTrees=doReadTrees,
@@ -215,7 +209,7 @@ samples = [
         "t#bar{t}",
         ROOT.kBlue,
         path_mwassmer + "/TTTo*/*nominal*.root",
-        lumi + sel_MET,
+        lumi,
         "ttbar",
         samDict=sampleDict,
         readTrees=doReadTrees,
@@ -226,7 +220,7 @@ samples = [
         "Single Top",
         ROOT.kBlue - 7,
         path_mwassmer + "/ST_*/*nominal*.root",
-        lumi + sel_MET,
+        lumi,
         "singlet",
         samDict=sampleDict,
         readTrees=doReadTrees,
@@ -236,7 +230,7 @@ samples = [
         "Z(#nu#nu)+jets",
         ROOT.kOrange + 7,
         path_mwassmer + "/ZJetsToNuNu_HT*/*nominal*.root",
-        lumi + sel_MET,
+        lumi,
         "znunujets",
         samDict=sampleDict,
         readTrees=doReadTrees,
@@ -246,7 +240,7 @@ samples = [
         "Z(ll)+jets",
         ROOT.kOrange + 1,
         path_mwassmer + "/DYJetsToLL_M-50_HT*/*nominal*.root",
-        lumi + sel_MET,
+        lumi,
         "zlljets",
         samDict=sampleDict,
         readTrees=doReadTrees,
@@ -256,7 +250,7 @@ samples = [
         "W(l#nu)+jets",
         ROOT.kOrange,
         path_mwassmer + "/WJetsToLNu_HT*/*nominal*.root",
-        lumi + sel_MET,
+        lumi,
         "wlnujets",
         samDict=sampleDict,
         readTrees=doReadTrees,
@@ -266,7 +260,7 @@ samples = [
         "#gamma+jets",
         ROOT.kOrange - 4,
         path_mwassmer + "/GJets_HT*/*nominal*.root",
-        lumi + sel_MET,
+        lumi,
         "gammajets",
         samDict=sampleDict,
         readTrees=doReadTrees,
@@ -276,7 +270,7 @@ samples = [
         "QCD",
         ROOT.kGray,
         path_mwassmer + "/QCD*/*nominal*.root",
-        lumi + sel_MET,
+        lumi,
         "qcd",
         samDict=sampleDict,
         readTrees=doReadTrees,
@@ -286,7 +280,7 @@ samples = [
         "Diboson",
         ROOT.kGreen + 2,
         path_mwassmer + "/??_TuneCUETP8M1*/*nominal*.root",
-        lumi + sel_MET,
+        lumi,
         "diboson",
         samDict=sampleDict,
         readTrees=doReadTrees,
