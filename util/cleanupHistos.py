@@ -57,7 +57,7 @@ def construct_name(current_name, process, syst, syst_key, separator):
     return new_name
 
 
-def cleanupHistos(inFile, outFile, process, systcsv, syst_key, separator):
+def cleanupHistos(inFile, outFile, process, systcsv, syst_key, separator, replace_config = None):
     # starting the clocks      
     theclock = ROOT.TStopwatch()
     theclock.Start()
@@ -65,7 +65,9 @@ def cleanupHistos(inFile, outFile, process, systcsv, syst_key, separator):
     subclock = ROOT.TStopwatch()
     subclock.Start()
 
-    systematics = Systematics.Systematics(systcsv)
+    systematics = Systematics.Systematics(  systematicconfig = systcsv,
+                                            replacing_config   = replace_config
+                                            )
 
     isVariation = False
     if "Up" in process or "Down" in process:

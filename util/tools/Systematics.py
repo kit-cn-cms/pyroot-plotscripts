@@ -1,6 +1,8 @@
 import os
 import sys
 import pandas
+import importlib
+from collections import OrderedDict
 
 class SystematicsForProcess:
     def __init__(self,name,process,typ,construction,expression=None,plot=None):
@@ -13,11 +15,117 @@ class SystematicsForProcess:
 
 
 class Systematics:
-    def __init__(self,systematicconfig,weightDictionary = {}):
+    def __init__(self,systematicconfig,weightDictionary = {}, replacing_config = None):
         print "loading systematics config ..."
         self.systematics=pandas.read_csv(systematicconfig,sep=",")
         self.systematics.fillna("-", inplace=True)
         self.weightDictionary = weightDictionary
+
+        self.replacing_config = None
+        self.init_replace_config(replacing_config)
+        
+        self.__dict_weight_systs = self.construct_syst_dict("weight")
+        self.__dict_variation_systs = self.construct_syst_dict("variation")
+        self.__dict_rate_systs = self.construct_syst_dict("rate")
+
+    def init_replace_config(self, replacing_config):
+        replace_module = None
+        print("replacing config: {}".format(replacing_config))
+        if replacing_config:
+            try:
+                cfg_dir = os.path.dirname(replacing_config)
+                cfg_base = os.path.basename(replacing_config)
+                if not cfg_dir in sys.path:
+                    sys.path.append(cfg_dir)
+                replace_module = importlib.import_module(cfg_base)
+            except:
+                print("ERROR: Could not import replacing config '{}'".format(replacing_config))
+        if replace_module:
+            try:
+                self.replacing_config = replace_module.config
+            except:
+                print("ERROR: Could not load replacing config from '{}'".format(replacing_config))
+        if self.replacing_config:
+            print("WILL USE REPLACE CONFIGURATION FROM '{}'".format(replacing_config))
+
+    def construct_syst_dict(self, construct_type):
+        syst_dict = OrderedDict()
+        systs = self.systematics.loc[self.systematics["Construction"] == construct_type]
+        for i,systematic in systs.iterrows():
+            systName=systematic["Uncertainty"]
+            if systName.startswith("#"):
+                continue
+            #adds variable name to list of systs
+            if self.replacing_config and systName in self.replacing_config:
+                syst_dict.update(self.expand_uncertainties(systematic))
+            else:
+                expr_up = self.replaceDummies(systematic["Up"])
+                expr_down = self.replaceDummies(systematic["Down"])
+                if expr_up == "-" and expr_down == "-":
+                    syst_dict[systName] = "-"
+                elif expr_up == "-" or expr_down == "-":
+                    syst_dict[systName] = expr_up if not expr_up == "-" else expr_down
+                else:
+                    name_var=systName+"Up"
+                    syst_dict[name_var] = expr_up
+                    name_var=systName+"Down"
+                    syst_dict[name_var] = expr_down
+        return syst_dict
+
+    def replace_in_expression(self, insert_list, to_replace, systname, expression):
+        new_systs = {}
+        print("ATTENTION: REPLACING {}".format(systname))
+        print("expression:")
+        print(expression)
+        for insert in insert_list:
+            print("\t{}".format(insert))
+            new_name = "_".join([systname, insert])
+            new_systs[new_name] = expression.replace(to_replace, insert)
+        return new_systs
+
+    def expand_uncertainties(self, syst):
+        expanded_systs = {}
+        systName = syst["Uncertainty"]
+        up_variation = self.replaceDummies(syst["Up"])
+        down_variation = self.replaceDummies(syst["Down"])
+        syst_variations = {}
+        if up_variation == "-" or down_variation == "-":
+            syst_variations[systName] = up_variation if not up_variation == "-" else down_variation
+        else:
+            syst_variations[systName+"Up"] = up_variation
+            syst_variations[systName+"Down"] = down_variation
+        infodict = self.replacing_config.get(systName, None)
+        broken = True
+        if infodict:
+            to_replace = infodict.get("to_replace", None)
+            if to_replace:
+                expand_with = infodict.get("expand_with", None)
+                if isinstance(expand_with, list):
+                    for syst in syst_variations:
+                        expr = syst_variations[syst]
+                        if not to_replace in expr:
+                            print("ERROR: cannot replace '{}' in '{}'".format(to_replace, syst))
+                            broken = True
+                            break
+                            
+                        expanded_systs.update(self.replace_in_expression(   insert_list = expand_with,
+                                                                            to_replace = to_replace,
+                                                                            systname = syst,
+                                                                            expression = expr
+                                                                            )
+                                                )
+                        broken = False
+                else:
+                    print("ERROR: Could not load keyword 'expand_with' from config!")
+            else:
+                print("ERROR: Could not load keyword 'to_replace' from config!")
+        else:
+            print("ERROR: Found no information for systematic '{}' in syst replacing config")
+        if broken:
+            print("Skipping uncertainty '{}'".format(systName))
+            expanded_systs = {}
+        return expanded_systs
+
 
     """
     get all variables that shall be used, 
@@ -33,24 +141,37 @@ class Systematics:
             name=systematic["Uncertainty"]
             if name.startswith("#"):
                 continue
+            names = []
             typ=systematic["Type"]
-            construction=systematic["Construction"]
-            Up=self.replaceDummies(systematic["Up"])
-            if Up=="-":
-                Up=None
-            Down=self.replaceDummies(systematic["Down"])
-            if Down=="-":
-                Down=None
+            up = systematic["Up"]
+            down = systematic["Down"]
+            if up == "-" or down == "-":
+                names.append(name)
+            else:
+                names = [name+x for x in ["Up", "Down"]]
+
+            if self.replacing_config and name in self.replacing_config:
+                expand_with = self.replacing_config.get(name, {}).get("expand_with",[])
+                names = ["_".join([name, x]) for x in expand_with for name in names]
+
             for process in list_of_processes:
                 if systematic[process] is not "-":
-                    if Up:
-                        up=name+"Up"    
-                        self.processes[process][up]=SystematicsForProcess(up,process,typ,construction,Up)
-                    if Down:
-                        down=name+"Down"
-                        self.processes[process][down]=SystematicsForProcess(down,process,typ,construction,Down)
-                    if not Up and not Down:
-                        self.processes[process][name]=SystematicsForProcess(name,process,typ,construction)
+                    for n in names:
+                        construction = "-"
+                        expr = "-"
+                        if n in self.__dict_weight_systs:
+                            construction = "weight"
+                            expr = self.__dict_weight_systs[n]
+                        elif n in self.__dict_variation_systs:
+                            construction = "variation"
+                            expr = self.__dict_variation_systs[n]
+                        elif n in self.__dict_rate_systs:
+                            construction = "rate"
+                            expr = self.__dict_rate_systs[n]
+                        else:
+                            print("WARNING: no systematics entry found for '{}'".format(n))
+                            continue
+                        self.processes[process][n]=SystematicsForProcess(n,process,typ,construction,expr)
 
     # only gets variables to plot, without variation of name with up and down!
     def plotSystematicsForProcesses(self,list_of_processes):
@@ -100,35 +221,21 @@ class Systematics:
         shape_systs=self.get_weight_systs(process)+self.get_variation_systs(process)
         return shape_systs
 
-
     #returns all weight systematics
     def get_all_weight_systs(self):
-        weightsysts=[]
-        for i,systematic in self.systematics.iterrows():
-            if systematic["Uncertainty"].startswith("#"):
-                continue
-            if systematic["Construction"]=="weight":
-                #adds variable name to list of weightsysts
-                systName=systematic["Uncertainty"]
-                up=systName+"Up"
-                down=systName+"Down"
-                weightsysts.append(up)
-                weightsysts.append(down)
-        return weightsysts
+        """
+        function to return names of weight systematics
+        return list of strings
+        """
+        return self.__dict_weight_systs.keys()
 
     def get_all_weight_expressions(self):
-        weightexp=[]
-        weightsysts=[]
-        for i,systematic in self.systematics.iterrows():
-            if systematic["Uncertainty"].startswith("#"):
-                continue
-            if systematic["Construction"]=="weight":
-                #adds variable name to list of weightsysts
-                up=self.replaceDummies(systematic["Up"])
-                down=self.replaceDummies(systematic["Down"])
-                weightsysts.append(up)
-                weightsysts.append(down)
-        return weightsysts
+        """
+        function to return expressions for weight systematics
+        returns list of strings
+        """
+        return self.__dict_weight_systs.values()
+
     #returns all variation systematics
     def get_all_variation_systs(self):
         variationsysts=[]
@@ -182,7 +289,7 @@ class Systematics:
         for dummy in self.weightDictionary:
             variationString = variationString.replace(dummy, self.weightDictionary[dummy])
         
-        variationString = variationString.replace("\"","")
+        variationString = variationString.strip('"')
         return variationString
 
 

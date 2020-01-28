@@ -42,7 +42,7 @@ def writeSubmitCode(script, logdir, hold = False, isArray = False, nScripts = 0,
 
     # writing code
     submitPath = script.replace(".sh",".sub")
-    submitScript = script.split("/")[-1].replace(".sh","")
+    submitScript = os.path.basename(script).replace(".sh","")
     
 
     submitCode = ""
@@ -70,17 +70,19 @@ def writeSubmitCode(script, logdir, hold = False, isArray = False, nScripts = 0,
         submitCode+= "hold = True\n"
 
     if isArray:
-        submitCode+= "error = "+logdir+"/"+submitScript+".$(Cluster)_$(ProcId).err\n"
-        submitCode+= "output = "+logdir+"/"+submitScript+".$(Cluster)_$(ProcId).out\n"
-        submitCode+= "log = "+logdir+"/"+submitScript+".$(Cluster)_$(ProcId).log\n"
+        tmp = os.path.join(logdir, "{}.$(Cluster)_$(ProcId)".format(submitScript))
+        submitCode+= "error = {}.err\n".format(tmp)
+        submitCode+= "output = {}.out\n".format(tmp)
+        submitCode+= "log = {}.log\n".format(tmp)
         submitCode+= "Queue Environment From (\n"
         for taskID in range(nScripts):
             submitCode+="\"SGE_TASK_ID="+str(taskID+1)+"\"\n"
         submitCode+=")"
     else:
-        submitCode+="error = "+logdir+"/"+submitScript+".$(Cluster).err\n"
-        submitCode+="output = "+logdir+"/"+submitScript+".$(Cluster).out\n"
-        submitCode+="log = "+logdir+"/"+submitScript+".$(Cluster).log\n"
+        tmp = os.path.join(logdir, "{}.$(Cluster)".format(submitScript))
+        submitCode+= "error = {}.err\n".format(tmp)
+        submitCode+= "output = {}.out\n".format(tmp)
+        submitCode+= "log = {}.log\n".format(tmp)
         submitCode+="queue"
 
     with open(submitPath, "w") as sF:
@@ -265,8 +267,8 @@ def submitArrayToNAF(scripts, arrayName="", holdIDs=None, submitOptions = {}):
     '''
     submitclock=ROOT.TStopwatch()
     submitclock.Start()
-    workdir = scripts[0].split("/")[:-1]
-    logdir = "/".join(workdir)+"/logs"
+    workdir = os.path.dirname(scripts[0])
+    logdir = os.path.join(workdir, "logs")
     print "logdir:", logdir
     if not os.path.exists(logdir):
          os.makedirs(logdir)

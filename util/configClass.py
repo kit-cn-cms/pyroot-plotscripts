@@ -19,7 +19,7 @@ class catData:
 
 
 class configData:
-    def __init__(self, analysisClass, variable_config, plot_config, execute_file = None):
+    def __init__(self, analysisClass, variable_config, plot_config, execute_file = None, replace_config = None):
 
         print("loading configdata ...")
         # name of files in config
@@ -30,7 +30,8 @@ class configData:
 
         self.analysis = analysisClass
         self.pltcfg = self.analysis.getPlotConfig()
-        self.cfgdir = self.analysis.pyrootdir + "/configs/"
+        self.cfgdir = os.path.join(self.analysis.pyrootdir, "configs/")
+        self.replace_config = os.path.join(self.cfgdir, replace_config) if replace_config else None
         self.Data = None
 
         if self.execute_file:
@@ -53,8 +54,11 @@ class configData:
         self.systconfig=systconfig
         processes=self.pltcfg.list_of_processes
         workdir=self.analysis.workdir
-        outputpath=workdir+"/datacard.csv"
-        self.systematics=Systematics.Systematics(self.cfgdir+"/"+systconfig+".csv", self.pltcfg.weightReplacements)
+        outputpath=os.path.join(workdir,"datacard.csv")
+        config_path = os.path.join(self.cfgdir, systconfig)+".csv"
+        self.systematics=Systematics.Systematics(   systematicconfig = config_path, 
+                                                    weightDictionary = self.pltcfg.weightReplacements,
+                                                    replacing_config = self.replace_config)
         self.systematics.getSystematicsForProcesses(processes)
         datacard_processes = self.pltcfg.datacard_processes
         self.systematics.makeCSV(datacard_processes,outputpath)
@@ -63,8 +67,8 @@ class configData:
         self.plots=self.systematics.plot_shapes()
 
         # also just plain copy systematic.csv to workdir
-        self.local_syst_path = workdir+"/systematics.csv"
-        cmd = "cp {} {}".format(self.cfgdir+"/"+systconfig+".csv", self.local_syst_path)
+        self.local_syst_path = os.path.join(workdir,"systematics.csv")
+        cmd = "cp {} {}".format(config_path, self.local_syst_path)
         print(cmd)
         os.system(cmd)
 
