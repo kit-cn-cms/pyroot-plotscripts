@@ -1543,7 +1543,7 @@ def control_plots_had_CR_ZElEl(data=None):
     
     selection = generalselection
     selection += "*(N_LooseElectrons==2 && N_TightElectrons>=1 && N_LooseMuons==0 && N_LoosePhotons==0)"
-    selection += "*(Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1 || Triggered_HLT_Ele32_WPTight_Gsf_vX_2017==1)"
+    selection += "*(Triggered_HLT_Ele32_WPTight_Gsf_vX_2017==1 || Triggered_HLT_Photon200_vX==1)"
     selection += "*(DiElectron_Mass>60.)*(DiElectron_Mass<120.)"
     selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets==0)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
@@ -2988,7 +2988,7 @@ def control_plots_had_CR_ttbarlep(data=None):
     extension = "_had_CR_ttbarlep"
     
     selection = generalselection
-    selection += "*((N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && ((Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX == 1) || (Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX == 1))) || (N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1 || Triggered_HLT_Ele32_WPTight_Gsf_vX_2017==1)))"
+    selection += "*((N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && ((Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX == 1) || (Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX == 1))) || (N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele32_WPTight_Gsf_vX_2017==1 || Triggered_HLT_Photon200_vX==1)))"
     selection += "*(N_LoosePhotons==0)"
     selection += "*(N_AK4JetsTagged_outside_AK15Jets>=1)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
@@ -3712,7 +3712,7 @@ def control_plots_had_CR_Wlep(data=None):
     extension = "_had_CR_Wlep"
     
     selection = generalselection
-    selection += "*((N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && ((Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX == 1) || (Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX == 1))) || (N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX==1 || Triggered_HLT_Ele32_WPTight_Gsf_vX_2017==1) && Evt_Pt_MET>50.))"
+    selection += "*((N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && ((Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX == 1) || (Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX == 1))) || (N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele32_WPTight_Gsf_vX_2017==1 || Triggered_HLT_Photon200_vX==1) && Evt_Pt_MET>50.))"
     selection += "*(N_LoosePhotons==0)"
     selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets==0)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
@@ -4442,7 +4442,7 @@ def control_plots_had_CR_Gamma(data=None):
     extension = "_had_CR_Gamma"
     
     selection = generalselection
-    selection += "*(N_TightPhotons==1 && N_LoosePhotons==1 && N_LooseMuons==0 && N_LooseElectrons==0)"
+    selection += "*(N_TightPhotons==1 && N_LoosePhotons==1 && N_LooseMuons==0 && N_LooseElectrons==0 && Triggered_HLT_Photon200_vX==1)"
     selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets==0)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
 
