@@ -115,12 +115,12 @@ elif len(processes) == 0:
 
 if not opts.proclabel:
     print("using default process label:")
-    opts.proclabel = "t#bar{t}"
+    opts.proclabel = ""
     print(opts.proclabel)
 
 if not opts.procname:
     print("using default process name:")
-    opts.procname = "ttbar"
+    opts.procname = ""
     print(opts.procname)
 
 
@@ -246,14 +246,15 @@ def drawshifts(file, outdir, processes, variable, syst, procLabel = "", procName
     up      = None
     down    = None
     for proc in processes:
-        nomName = nomkey.replace("$PROCESS", proc).replace("$CHANNEL", variable)
-        systName = systkey.replace("$PROCESS", proc).replace("$CHANNEL", variable)
-        systName = systName.replace("$SYSTEMATIC", syst)
+        print(nomkey, systkey)
+        nomName = str(nomkey.replace("$PROCESS", proc).replace("$CHANNEL", variable))
+        systName = str(systkey.replace("$PROCESS", proc).replace("$CHANNEL", variable))
+        systName = str(systName.replace("$SYSTEMATIC", syst))
         print("adding {}".format(nomName))
-        print(nomName)
-        # print(file.ls(nomName))
-        tmp_nom     = file.Get(nomName)
-        print(tmp_nom)
+        #print(nomName)
+        #file.ls(nomName)
+        tmp_nom = file.Get(nomName)
+        #print(tmp_nom)
         if not isinstance(tmp_nom, ROOT.TH1):
             sys.exit("wups")
         tmp_up      = file.Get(systName+"Up")
