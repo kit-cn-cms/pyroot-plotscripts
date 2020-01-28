@@ -7,7 +7,7 @@ import plotClasses
 ROOT.gROOT.SetBatch(True)
 
 # -- generating the head of the script ------------------------------------------------------------
-def getHead(basepath, dataBases, memDB_path, addCodeInterfaces=[]):
+def getHead(basepath, dataBases, memDB_path, addCodeInterfaces=[], useNormHeader = None):
   
   includes = ['"TChain.h"', '"TBranch.h"', '"TLorentzVector.h"', '"TFile.h"',
                 '"TH1F.h"', '"TH2F.h"', '<iostream>', '<string>', '<sstream>',
@@ -15,6 +15,8 @@ def getHead(basepath, dataBases, memDB_path, addCodeInterfaces=[]):
                 '<map>', '"TStopwatch.h"', '<TString.h>', '<TH2D.h>',
                 '"LHAPDF/LHAPDF.h"', '"TGraphAsymmErrors.h"', '"TStopwatch.h"',
                 '<tuple>']
+  if useNormHeader:
+    includes.append('"{}"'.format(useNormHeader))
   retstr = ""
 
   for include in includes:
