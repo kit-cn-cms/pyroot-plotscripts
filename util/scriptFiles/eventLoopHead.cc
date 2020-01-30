@@ -21,7 +21,11 @@
     
     
 //     std::cout<<"Evt_ID "<<Evt_ID <<" "<<Int_t(Evt_ID)<<" "<<std::endl;
-     if(Evt_ID!=Int_t(Evt_ID)){std::cout<<"PROBLEM"<<"Evt_ID "<<Evt_ID <<" "<<Int_t(Evt_ID)<<std::endl;}
+     if(Evt_ID!=Int_t(Evt_ID)){
+       std::cout<<"PROBLEM "<<"Evt_ID "<<Evt_ID <<" "<<Int_t(Evt_ID)<<std::endl;
+       std::cout << "recasting Long to Int " << std::endl;
+       Evt_ID = Int_t(Evt_ID);
+       }
 //    std::cout<<"NJEts "<<N_Jets<<" "<<N_JetsLONGDUMMY<<std::endl;
 //    std::cout<<"NBtagsM "<<N_BTagsM<<" "<<N_BTagsMLONGDUMMY<<std::endl;
   ///////////////////////////////////////////
