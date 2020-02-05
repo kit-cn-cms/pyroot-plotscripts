@@ -200,7 +200,7 @@ void plot(){
     // now replace remaining v2 and newmpx strings because of different namings in new MEM DB
     if(thisfilename.Contains("v2")==1){ thisfilename.ReplaceAll("v2","");}
     if(thisfilename.Contains("newpmx")==1){ thisfilename.ReplaceAll("newpmx","");}
-    if(thisfilename==("TTbbPowhegOpenloops")){thisfilename="TTbbPowhegOpenloopsSL";}
+    if(thisfilename==("TTbbPowhegOpenloops")){thisfilename="TTbbPowhegOpenloops";}
 
     std::cout<<" relevant database name "<<thisfilename<<std::endl;
    sampleDataBaseIdentifiers[originalfilename]=thisfilename;
