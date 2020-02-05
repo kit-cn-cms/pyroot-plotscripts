@@ -19,6 +19,7 @@ def doRebinning(rootfile, histolist, threshold):
     # loop over hists and add them to a combined histogram
     for h in histolist:
         h_tmp = rootfile.Get(str(h))
+        # h_tmp.Print("range")
         if not isinstance(h_tmp, ROOT.TH1):
             print("ERROR: Could not load '{}'".format(h))
             print(h_tmp)
@@ -26,10 +27,12 @@ def doRebinning(rootfile, histolist, threshold):
             break
         elif combinedHist is None:
             combinedHist = h_tmp.Clone("combinedHist")
-            combinedHist.Reset()
+            # combinedHist.Reset()
         elif isinstance(combinedHist, ROOT.TH1):
             combinedHist.Add(h_tmp)
-
+        # if combinedHist:
+        #     print("AFTER ADDING")
+        #     combinedHist.Print("range")
     if combinedHist is None:
         print("ERROR: could not add any histograms!")
         return []
@@ -47,6 +50,9 @@ def doRebinning(rootfile, histolist, threshold):
         # add together squared bin errors and bin contents
         squaredError += combinedHist.GetBinError(i)**2
         binContent += combinedHist.GetBinContent(i)
+        # print("bin (low edge): {} ({})".format(i, combinedHist.GetBinLowEdge(i)))
+        # print("bkg stack: {}".format(combinedHist.GetBinContent(i)))
+        # print("sum: {}".format(binContent))
 
         # calculate relative error
         relerror = squaredError**0.5/binContent if not binContent == 0 else squaredError**0.5
