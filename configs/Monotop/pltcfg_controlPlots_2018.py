@@ -147,38 +147,45 @@ sampleDict = plotClasses.SampleDictionary()
 sampleDict.doPrintout()
 doReadTrees = True
 
+leptonic = False
+
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
-samplesDataControlPlots = [
-    # comment this sample for the leptonic monotop channel
+samplesDataControlPlots = []
+samplesDataControlPlots += [
     plotClasses.Sample(
-    "MET",
-    ROOT.kBlack,
-    path_mwassmer + "/MET*/*nominal*.root",
-    "(N_LooseElectrons==0) && (N_LooseMuons>=0) && (N_LoosePhotons==0)" ,
-    "MET",
-    samDict=sampleDict,
-    readTrees=doReadTrees,
-    ),
-    plotClasses.Sample(
-    "SingleEl",
-    ROOT.kBlack,
-    path_mwassmer + "/EGamma*/*nominal*.root",
-    "((N_LooseElectrons>0) || (N_LoosePhotons>0)) && (N_LooseMuons==0)",
-    "SingleEl",
-    samDict=sampleDict,
-    readTrees=doReadTrees,
-    ),
-    # uncomment this sample for the leptonic monotop channel
-    #plotClasses.Sample(
-    #"SingleMu",
-    #ROOT.kBlack,
-    #path_mwassmer + "/SingleMuon*/*nominal*.root",
-    #"(N_LooseMuons>0) && (N_LooseElectrons==0) && (N_LoosePhotons==0)",
-    #"SingleMu",
-    #samDict=sampleDict,
-    #readTrees=doReadTrees,
-    #),
+        "SingleEl",
+        ROOT.kBlack,
+        path_mwassmer + "/EGamma*/*nominal*.root",
+        "((N_LooseElectrons>0) || (N_LoosePhotons>0)) && (N_LooseMuons==0)",
+        "SingleEl",
+        samDict=sampleDict,
+        readTrees=doReadTrees,
+    )
 ]
+if not leptonic:
+    samplesDataControlPlots += [
+        plotClasses.Sample(
+            "MET",
+            ROOT.kBlack,
+            path_mwassmer + "/MET*/*nominal*.root",
+            "(N_LooseElectrons==0) && (N_LooseMuons>=0) && (N_LoosePhotons==0)",
+            "MET",
+            samDict=sampleDict,
+            readTrees=doReadTrees,
+        )
+    ]
+if leptonic:
+    samplesDataControlPlots += [
+        plotClasses.Sample(
+            "SingleMu",
+            ROOT.kBlack,
+            path_mwassmer + "/SingleMuon*/*nominal*.root",
+            "(N_LooseMuons>0) && (N_LooseElectrons==0) && (N_LoosePhotons==0)",
+            "SingleMu",
+            samDict=sampleDict,
+            readTrees=doReadTrees,
+        )
+    ]
 
 
 # print("limit samples")
@@ -254,7 +261,7 @@ samples = [
         "gammajets",
         samDict=sampleDict,
         readTrees=doReadTrees,
-        typ="bkg", 
+        typ="bkg",
     ),
     plotClasses.Sample(
         "QCD",
