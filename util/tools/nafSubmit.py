@@ -60,10 +60,10 @@ def writeSubmitCode(script, logdir, hold = False, isArray = False, nScripts = 0,
         if defaults[opt]:
             if "Request" in opt:
                 submitCode+=opt+" = "+str(defaults[opt])+"\n"
-            if "PeriodicHold" in opt:
-                submitCode+= "periodic_hold = ((JobStatus == 2) && (time() - EnteredCurrentStatus) > "+str(defaults[opt])+")\n"
-            if "PeriodicRelease" in opt:
-                submitCode+= "periodic_release = ((JobStatus == 5) && (time() - EnteredCurrentStatus) > "+str(defaults[opt])+")\n"  
+            #if "PeriodicHold" in opt:
+                #submitCode+= "periodic_hold = ((JobStatus == 2) && (time() - EnteredCurrentStatus) > "+str(defaults[opt])+")\n"
+            #if "PeriodicRelease" in opt:
+                #submitCode+= "periodic_release = ((JobStatus == 5) && (time() - EnteredCurrentStatus) > "+str(defaults[opt])+")\n"  
     if hold:
         submitCode+= "hold = True\n"
 

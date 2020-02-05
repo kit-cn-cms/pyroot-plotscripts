@@ -19,12 +19,13 @@ def plotInterface(jobData, skipPlotParallel = False, maxTries = 10, nTries = 0):
             print("all plotParallel scripts have terminated successfully - skipping plotParallel")
             return
 
-    submitOptions = {"PeriodicHold": 10741,
-                    "+RequestRuntime": 10740}
+    submitOptions = {"+RequestRuntime": 10800, "RequestMemory": "1000M"}
     if nTries == 0:
         print("submitting plotParallel scripts as array job")
         jobIDs = nafSubmit.submitArrayToNAF(jobData["scripts"], "makeTemplates", submitOptions = submitOptions)
     elif nTries < maxTries:
+        submitOptions["+RequestRuntime"]=21600
+        submitOptions["RequestMemory"]="2000M"
         print("resubmitting plotParallel scripts as single jobs")
         jobIDs = nafSubmit.submitArrayToNAF(jobData["scripts"], "makeTemplates_resubmit", submitOptions = submitOptions)
     else:
@@ -89,13 +90,14 @@ def cleanupInterface(jobsToSubmit, rootFiles, skipCleanup = False, maxTries = 10
             print("cleanup histos has terminated successfully")
             return
 
-    submitOptions = {"PeriodicHold": 3601,
-                    "+RequestRuntime": 3600}
+    submitOptions = {"+RequestRuntime": 1800, "RequestMemory": "500M"}
 
     if nTries == 0:
         print("submitting cleanup jobs as array job")
         jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "cleanupHistos", submitOptions = submitOptions)
     elif nTries < maxTries:
+        submitOptions["+RequestRuntime"]=3600
+        submitOptions["RequestMemory"]="1000M"
         print("resubmitting cleanup jobs")
         jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "cleanup_resubmit", submitOptions = submitOptions)
     else:
@@ -133,12 +135,15 @@ def cleanupTerminationCheck(jobs, outputFiles):
 # parallel hadding
 #############################
 def haddInterface(jobsToSubmit, outfilesFromSubmit, maxTries = 10, nTries = 0):
+    submitOptions = {"+RequestRuntime": 1800, "RequestMemory": "500M"}
     if nTries == 0:
         print("submitting haddParallel scripts as array job")
-        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "hadding")
+        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "hadding", submitOptions = submitOptions)
     elif nTries < maxTries:
+        submitOptions["+RequestRuntime"]=3600
+        submitOptions["RequestMemory"]="1000M"
         print("resubmitting haddParallel scripts as single jobs")
-        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "hadding_resubmit")
+        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "hadding_resubmit", submitOptions = submitOptions)
     else:
         print("hadding did not work after "+str(maxTries)+" tries - ABORTING")
         sys.exit(1)
@@ -202,13 +207,17 @@ def checkHistoInterface(jobsToSubmit, outfilesFromSubmit, maxTries = 10, nTries 
     if len(jobsToSubmit) != len(outfilesFromSubmit):
         print("number of jobs should be equal to number of output files - ABORTING")
         sys.exit(1)
+    
+    submitOptions = {"+RequestRuntime": 1800, "RequestMemory": "500M"}
 
     if nTries == 0:
         print("submitting rename scripts as array job")
-        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, arrayName = "checkingHistos")
+        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, arrayName = "checkingHistos", submitOptions = submitOptions)
     elif nTries < maxTries:
+        submitOptions["+RequestRuntime"]=3600
+        submitOptions["RequestMemory"]="1000M"
         print("resubmitting rename scripts as single jobs")
-        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, arrayName = "checkingHistos_resubmit")
+        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, arrayName = "checkingHistos_resubmit", submitOptions = submitOptions)
     else:
         print("renaming did not work after "+str(maxTries)+" tries - ABORTING")
         sys.exit(1)
