@@ -227,12 +227,12 @@ def control_plots_lep_CR_ttbarlep(data=None):
             selection,
             label,
         ),
-        plotClasses.Plot(
-            ROOT.TH1D("Weight_TopPt" + extension, "Weight Top Pt", 20, 0.0, 2.0),
-            "Weight_TopPt",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D("Weight_TopPt" + extension, "Weight Top Pt", 20, 0.0, 2.0),
+            #"Weight_TopPt",
+            #selection,
+            #label,
+        #),
         plotClasses.Plot(
             ROOT.TH1D(
                 "N_PVs" + extension, "number of primary vertices", 20, 0.0, 100.0
@@ -467,12 +467,12 @@ def control_plots_lep_CR_Wlep(data=None):
             selection,
             label,
         ),
-        plotClasses.Plot(
-            ROOT.TH1D("Weight_TopPt" + extension, "Weight Top Pt", 20, 0.0, 2.0),
-            "Weight_TopPt",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D("Weight_TopPt" + extension, "Weight Top Pt", 20, 0.0, 2.0),
+            #"Weight_TopPt",
+            #selection,
+            #label,
+        #),
         plotClasses.Plot(
             ROOT.TH1D(
                 "N_PVs" + extension, "number of primary vertices", 20, 0.0, 100.0
@@ -707,12 +707,12 @@ def control_plots_lep_SR(data=None):
             selection,
             label,
         ),
-        plotClasses.Plot(
-            ROOT.TH1D("Weight_TopPt" + extension, "Weight Top Pt", 20, 0.0, 2.0),
-            "Weight_TopPt",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D("Weight_TopPt" + extension, "Weight Top Pt", 20, 0.0, 2.0),
+            #"Weight_TopPt",
+            #selection,
+            #label,
+        #),
         plotClasses.Plot(
             ROOT.TH1D(
                 "N_PVs" + extension, "number of primary vertices", 20, 0.0, 100.0
@@ -946,12 +946,12 @@ def control_plots_lep_CR_ttbardilep(data=None):
             selection,
             label,
         ),
-        plotClasses.Plot(
-            ROOT.TH1D("Weight_TopPt" + extension, "Weight Top Pt", 20, 0.0, 2.0),
-            "Weight_TopPt",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D("Weight_TopPt" + extension, "Weight Top Pt", 20, 0.0, 2.0),
+            #"Weight_TopPt",
+            #selection,
+            #label,
+        #),
         plotClasses.Plot(
             ROOT.TH1D(
                 "N_PVs" + extension, "number of primary vertices", 20, 0.0, 100.0
