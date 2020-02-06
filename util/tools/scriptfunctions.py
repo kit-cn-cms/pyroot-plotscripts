@@ -100,23 +100,9 @@ def InitDataBase(thisDataBase=[]):
   double {DBname}p_err_bkg=-99.9;
   double {DBname}n_perm_sig=-99.9;
   double {DBname}n_perm_bkg=-99.9;
-  DataBaseMEMResult* {DBname}DummyResultPointer= new DataBaseMEMResult(vec_memStrings);
+  auto {DBname}DummyResultPointer = std::unique_ptr<DataBaseMEMResult>(new DataBaseMEMResult(vec_memStrings));
+  int {DBname}FoundResult = 1;
   """.format(DBname = thisDataBaseName, DBpath = thisDataBasePath)
-  
-  rstr+="  "+thisDataBaseName+"\n"
-  rstr+="  "+thisDataBaseName+"\n"
-  rstr+="  \n"
-  rstr+="  }\n"
-  rstr+="  \n"
-  rstr+="  \n"
-  rstr+="  \n"
-  rstr+="  \n"
-  rstr+="  \n"
-  rstr+="  \n"
-  rstr+="  \n"
-  rstr+="  \n"
-  rstr+="  int "+thisDataBaseName+"FoundResult = 1;\n"
-  
   return rstr
 
 # -------------------------------------------------------------------------------------------------
