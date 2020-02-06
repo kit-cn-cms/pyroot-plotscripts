@@ -27,13 +27,11 @@ def writeSubmitCode(script, logdir, hold = False, isArray = False, nScripts = 0,
     defaults = {
         # "RequestMemory": "1000M",
         # "RequestDisk": "1000M",
-        "+RequestRuntime": 18000,
+        # "+RequestRuntime": 18000,
         "PeriodicHold": 3600,
         "PeriodicRelease": 5
         }
-    for opt in defaults:
-        if opt in options:
-            defaults[opt] = options[opt]
+    defaults.update(options)
 
   # if hold = True there should not be a periodic release
     if hold:
