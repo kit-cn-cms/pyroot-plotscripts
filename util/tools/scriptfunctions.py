@@ -41,6 +41,7 @@ def getHead(basepath, dataBases, memDB_path, addCodeInterfaces=[], useNormHeader
     "LeptonSFHelper",
     "Systematics",
     "CSVHelper",
+    "SFCorrectionHelper"
     #"QCDHelper",
     #"TTbarSystHelper",
     ]
@@ -106,6 +107,75 @@ def InitDataBase(thisDataBase=[]):
   rstr+="  int "+thisDataBaseName+"FoundResult = 1;\n"
   
   return rstr
+
+def getCorrName(varList):
+    name = "SF_"
+    vectorizedVariables = [v.replace("[","_").replace("]","") for v in varList]
+    name+= "_vs_".join(vectorizedVariables)
+    return name
+
+def InitSFCorrection(sfCorrection):
+    # open root file and get list of all keys belonging to hist of correct dimension
+    rf = ROOT.TFile(sfCorrection["sfFile"])
+    histNames = [k.GetName() for k in list(rf.GetListOfKeys())]
+    
+    # get list of histograms
+    template_histList = "    \"{histName}\","
+    histList = []
+    for key in histNames:
+        for corr in sfCorrection["corrections"]:
+            if getCorrName(sfCorrection["corrections"][corr]]) in key:
+                h = rf.Get(key)
+                histList.append(template_histList.format(histName = key))
+                print("added key {}".format(key))
+    rf.Close()
+
+    # get list of corrections and dimensions
+    template_corrections = "  sfCorrections[TString(\"{corr}\")] = \"{histName}\";"
+    template_dimensions  = "  sfDims[TString(\"{corr}\")] = {nDim};"
+    correctionList = []
+    dimList = []
+    for corr in sfCorrection["corrections"]:
+        correctionList.append(template_corrections.format(
+            corr=corr, histName = getCorrName(sfCorrection["corrections"][corr])))
+        dimList.append(template_corrections.format(
+            corr=corr, nDim = len(sfCorrection["corrections"][corr])))
+
+    sfInit = """
+  // set path to file where sf histograms are stored
+  TString sfCorrectionFile = TString("{sfFile}");
+
+  // list of histograms to load
+  std::vector<TString> sfHistograms = {{
+{histList}
+    }};
+
+  // map names of correction variables and sf histograms
+  std::map<TString, TString> sfCorrections;
+{correctionsInit}
+
+  // map dimensions of correction variables
+  std::map<TString, int> sfDims;
+{dimensionInit}
+
+  // set naming template
+  TString nameTemplate = TString("{nameTemplate}");
+
+  // initialize correction helper
+  SFCorrectionHelper* internalSFCorrectionHelper = new SFCorrectionHelper(
+    sfCorrectionFile, nameTemplate, sfHistograms, sfCorrections, sfDims);
+
+  // set dummy for procID variable. needed for finding correct sf histogram during event loop
+  TString procID;
+
+    """.format(
+        sfFile          = sfCorrection["sfFile"],
+        nameTemplate    = sfCorrection["nameTemplate"],
+        histList        = "\n".join(histList),
+        correctionsInit = "\n".join(correctionList),
+        dimensionInit   = "\n".join(dimList),
+        )
+    return sfInit
 
 # -------------------------------------------------------------------------------------------------
 

@@ -55,6 +55,7 @@ class plotParallel:
 
         self.jsonFile = ""
         self.dataBases = []
+        self.sfCorrection = None
         self.memDBpath = ""
         self.useDataBases = False
         self.addInterfaces = []
@@ -84,6 +85,10 @@ class plotParallel:
         self.jsonFile = jsonFile
         print("set jsonFile to "+str(jsonFile))
 
+    def setSFCorrection(self, sfCorrection):
+        self.sfCorrection = sfCorrection
+        print("set sfCorrection to: {}".format(sfCorrection))
+        
     def setDataBases(self, dataBases):
         self.dataBases = dataBases
         print("set dataBases to "+str(dataBases))

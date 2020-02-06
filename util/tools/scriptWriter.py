@@ -39,7 +39,6 @@ class scriptWriter:
             # initialize class to handle genWeight normalization stuff
             self.genWeightNormalization = GenWeightUtils.GenWeightNormalization(self.pp.rateFactorsFile)
 
-
     ## main function for writing and compiling c++ code ##
     def writeCC(self):
         print("#"*50)
@@ -136,6 +135,12 @@ class scriptWriter:
                                             addCodeInterfaces = self.pp.addInterfaces,
                                             useNormHeader     = genWeightNormHeader_name
                                             )
+
+        # replace SFCORRECTIONHELPER placeholder
+        if not self.pp.sfCorrection is None:
+            sfInit = scriptfunctions.InitSFCorrection(self.pp.sfCorrection)
+            script = script.replace("//PLACEHOLDERSFCORRECTIONHELPER",sfInit)
+
         if self.pp.useGenWeightNormMap:
             # exported to new file GenNormMap.h
             # script += self.genWeightNormalization.declareNormFactors()
@@ -310,7 +315,7 @@ class scriptWriter:
 
     def initVariables(self, tree):
         # initialize variables objects
-        variableManager = variableCancer.VariableManager(tree, self.vetolist)
+        variableManager = variableCancer.VariableManager(tree, self.vetolist, self.pp.sfCorrection)
         variableManager.add( ["Weight", "Weight_CSV", "Weight_XS"] )
         
         # get additional variables
