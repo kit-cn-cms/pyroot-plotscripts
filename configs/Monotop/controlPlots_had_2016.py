@@ -224,7 +224,7 @@ def control_plots_had_SR(data=None):
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "AK15Jet_SoftDrop_Mass" + extension, "AK15 SD Jet mass", 40, 0.0, 1000.0
+                "AK15Jet_SoftDrop_Mass" + extension, "AK15 SD Jet mass", 20, 0.0, 400.0
             ),
             "AK15Jet_SoftDrop_M",
             selection,
@@ -390,9 +390,9 @@ def control_plots_had_SR(data=None):
             ROOT.TH1D(
                 "AK15Jet_PuppiSoftDropMass" + extension,
                 "AK15 Jet SD mass",
-                25,
+                20,
                 0.0,
-                250.0,
+                400.0,
             ),
             "AK15Jet_PuppiSoftDropMass",
             selection,
@@ -904,7 +904,7 @@ def control_plots_had_CR_ZMuMu(data=None):
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "AK15Jet_SoftDrop_Mass" + extension, "AK15 SD Jet mass", 40, 0.0, 1000.0
+                "AK15Jet_SoftDrop_Mass" + extension, "AK15 SD Jet mass", 20, 0.0, 400.0
             ),
             "AK15Jet_SoftDrop_M",
             selection,
@@ -1058,9 +1058,9 @@ def control_plots_had_CR_ZMuMu(data=None):
             ROOT.TH1D(
                 "AK15Jet_PuppiSoftDropMass" + extension,
                 "AK15 Jet SD mass",
-                25,
+                20,
                 0.0,
-                250.0,
+                400.0,
             ),
             "AK15Jet_PuppiSoftDropMass",
             selection,
@@ -1650,7 +1650,7 @@ def control_plots_had_CR_ZElEl(data=None):
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "AK15Jet_SoftDrop_Mass" + extension, "AK15 SD Jet mass", 40, 0.0, 1000.0
+                "AK15Jet_SoftDrop_Mass" + extension, "AK15 SD Jet mass", 20, 0.0, 400.0
             ),
             "AK15Jet_SoftDrop_M",
             selection,
@@ -1804,9 +1804,9 @@ def control_plots_had_CR_ZElEl(data=None):
             ROOT.TH1D(
                 "AK15Jet_PuppiSoftDropMass" + extension,
                 "AK15 Jet SD mass",
-                25,
+                20,
                 0.0,
-                250.0,
+                400.0,
             ),
             "AK15Jet_PuppiSoftDropMass",
             selection,
@@ -2405,7 +2405,7 @@ def control_plots_had_CR_ttbarhad(data=None):
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "AK15Jet_SoftDrop_Mass" + extension, "AK15 SD Jet mass", 40, 0.0, 1000.0
+                "AK15Jet_SoftDrop_Mass" + extension, "AK15 SD Jet mass", 20, 0.0, 400.0
             ),
             "AK15Jet_SoftDrop_M",
             selection,
@@ -2571,9 +2571,9 @@ def control_plots_had_CR_ttbarhad(data=None):
             ROOT.TH1D(
                 "AK15Jet_PuppiSoftDropMass" + extension,
                 "AK15 Jet SD mass",
-                25,
+                20,
                 0.0,
-                250.0,
+                400.0,
             ),
             "AK15Jet_PuppiSoftDropMass",
             selection,
@@ -3095,7 +3095,7 @@ def control_plots_had_CR_ttbarlep(data=None):
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "AK15Jet_SoftDrop_Mass" + extension, "AK15 SD Jet mass", 40, 0.0, 1000.0
+                "AK15Jet_SoftDrop_Mass" + extension, "AK15 SD Jet mass", 20, 0.0, 400.0
             ),
             "AK15Jet_SoftDrop_M",
             selection,
@@ -3249,9 +3249,9 @@ def control_plots_had_CR_ttbarlep(data=None):
             ROOT.TH1D(
                 "AK15Jet_PuppiSoftDropMass" + extension,
                 "AK15 Jet SD mass",
-                25,
+                20,
                 0.0,
-                250.0,
+                400.0,
             ),
             "AK15Jet_PuppiSoftDropMass",
             selection,
@@ -3819,7 +3819,7 @@ def control_plots_had_CR_Wlep(data=None):
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "AK15Jet_SoftDrop_Mass" + extension, "AK15 SD Jet mass", 40, 0.0, 1000.0
+                "AK15Jet_SoftDrop_Mass" + extension, "AK15 SD Jet mass", 20, 0.0, 400.0
             ),
             "AK15Jet_SoftDrop_M",
             selection,
@@ -3973,9 +3973,9 @@ def control_plots_had_CR_Wlep(data=None):
             ROOT.TH1D(
                 "AK15Jet_PuppiSoftDropMass" + extension,
                 "AK15 Jet SD mass",
-                25,
+                20,
                 0.0,
-                250.0,
+                400.0,
             ),
             "AK15Jet_PuppiSoftDropMass",
             selection,
@@ -4548,7 +4548,7 @@ def control_plots_had_CR_Gamma(data=None):
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "AK15Jet_SoftDrop_Mass" + extension, "AK15 SD Jet mass", 40, 0.0, 1000.0
+                "AK15Jet_SoftDrop_Mass" + extension, "AK15 SD Jet mass", 20, 0.0, 400.0
             ),
             "AK15Jet_SoftDrop_M",
             selection,
@@ -4702,9 +4702,9 @@ def control_plots_had_CR_Gamma(data=None):
             ROOT.TH1D(
                 "AK15Jet_PuppiSoftDropMass" + extension,
                 "AK15 Jet SD mass",
-                25,
+                20,
                 0.0,
-                250.0,
+                400.0,
             ),
             "AK15Jet_PuppiSoftDropMass",
             selection,
@@ -5147,13 +5147,13 @@ def control_plots_had_CR_Gamma(data=None):
 
 def getDiscriminatorPlots(data=None, discrname=""):
     discriminatorPlots = []
-    #discriminatorPlots += control_plots_had_SR(data)
+    discriminatorPlots += control_plots_had_SR(data)
     discriminatorPlots += control_plots_had_CR_ZMuMu(data)
     discriminatorPlots += control_plots_had_CR_ZElEl(data)
     #discriminatorPlots += control_plots_had_CR_ttbarhad(data)
     discriminatorPlots += control_plots_had_CR_ttbarlep(data)
     discriminatorPlots += control_plots_had_CR_Wlep(data)
-    discriminatorPlots += control_plots_had_CR_Gamma(data)
+    #discriminatorPlots += control_plots_had_CR_Gamma(data)
 
     return discriminatorPlots
 
