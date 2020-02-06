@@ -482,7 +482,7 @@ class Variable:
             self.setupVariableType(branchTitle, verbose)
             self.isArray = branchTitle.split("/")[0][-1] == "]"
             alt_file.Close()
-        if "Weight_pdf_variation_32" in self.varName and not self.varName.startswith("dummy"):
+        if ("Weight_pdf_variation_32" in self.varName and not self.varName.startswith("dummy")) or "Weight_LHA_320900" in self.varName:
             self.inTree = True
             try:
                 alt_file = ROOT.TFile("/nfs/dust/cms/user/swieland/ttH_legacy/ntupleHadded_2017/TTbb_Powheg_Openloops_new_pmx/TTbb_Powheg_Openloops_new_pmx_1_nominal_Tree.root")
