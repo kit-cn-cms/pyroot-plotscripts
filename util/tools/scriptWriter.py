@@ -183,7 +183,6 @@ class scriptWriter:
             script += "\n"
             script += addCodeInt.getTestCallLines()
             script += "\n"
-        
         # get program footer
         script += scriptfunctions.getFoot(self.pp.addInterfaces)
 
@@ -236,7 +235,7 @@ class scriptWriter:
         # getting databases
         memDBccfiles=[]
         if self.pp.useDataBases:
-            memDBccfiles=glob.glob('/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase/src/*.cc') 
+            memDBccfiles=glob.glob(os.path.join(self.pp.memDBpath,'src/*.cc')) 
             #TODO update the dataBases code
 
         # improve ram usage and reduce garbage of g++ compiler
@@ -360,6 +359,12 @@ class scriptWriter:
 
         script += "     totalTimeMapping+=timerMapping->RealTime();\n"
 
+        script += "     timerReadDataBase->Start();\n"
+        for db in self.pp.dataBases:
+            script += scriptfunctions.readOutDataBase(db)    
+        script += "\n"
+        script += "     totalTimeReadDataBase+=timerReadDataBase->RealTime();\n"
+
         script += "     timerEvalDNN->Start();\n"
         for addCodeInt in self.pp.addInterfaces:
             script += addCodeInt.getVariableInitInsideEventLoopLines()
@@ -381,11 +386,6 @@ class scriptWriter:
         script += scriptfunctions.encodeSampleSelection(self.pp.configData.allSamples, self.varManager)
         script += "     totalTimeSampleWeight+=timerSampleWeight->RealTime();\n"
         
-        script += "     timerReadDataBase->Start();\n"
-        for db in self.pp.dataBases:
-            script += scriptfunctions.readOutDataBase(db)    
-        script += "\n"
-        script += "     totalTimeReadDataBase+=timerReadDataBase->RealTime();\n"
                 
         script += "     timerFillHistograms->Start();\n"
 

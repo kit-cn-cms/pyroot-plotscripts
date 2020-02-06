@@ -85,26 +85,24 @@ def InitDataBase(thisDataBase=[]):
  
   rstr= """
   // book the database
-  
-  """
-  
-  rstr+="  std::vector<MEMDataBase*> "+thisDataBaseName+"DB; \n"
-  rstr+="  for(unsigned int isn=0; isn<databaseRelevantFilenames.size();isn++){ \n"
-  rstr+="  "+thisDataBaseName+"DB.push_back(new MEMDataBase(\""+thisDataBasePath+"\",vec_memStrings));"+"\n"
-  rstr+="  "+thisDataBaseName+"DB.back()->AddSample(databaseRelevantFilenames.at(isn),databaseRelevantFilenames.at(isn)+\"_index.txt\");\n"
-  rstr+="  "+thisDataBaseName+"DB.back()->PrintStructure();\n"
-  rstr+="  std::cout<<\"loaded database for \"<<databaseRelevantFilenames.at(isn)<<std::endl;\n"
-  rstr+="  }\n"
-  rstr+="  double "+thisDataBaseName+"p=-99.9;\n"
-  rstr+="  double "+thisDataBaseName+"p_sig=-99.9;\n"
-  rstr+="  double "+thisDataBaseName+"p_bkg=-99.9;\n"
-  rstr+="  double "+thisDataBaseName+"p_err_sig=-99.9;\n"
-  rstr+="  double "+thisDataBaseName+"p_err_bkg=-99.9;\n"
-  rstr+="  double "+thisDataBaseName+"n_perm_sig=-99.9;\n"
-  rstr+="  double "+thisDataBaseName+"n_perm_bkg=-99.9;\n"
-  rstr+="  DataBaseMEMResult* "+thisDataBaseName+"DummyResultPointer= new DataBaseMEMResult(vec_memStrings);\n"
-  rstr+="  int "+thisDataBaseName+"FoundResult = 1;\n"
-  
+  std::vector<MEMDataBase*> {DBname}DB;
+
+  for(unsigned int isn=0; isn<databaseRelevantFilenames.size();isn++){{
+    {DBname}DB.push_back(new MEMDataBase("{DBpath}",vec_memStrings));
+    {DBname}DB.back()->AddSample(databaseRelevantFilenames.at(isn),databaseRelevantFilenames.at(isn)+"_index.txt");
+    {DBname}DB.back()->PrintStructure();
+    std::cout<<"loaded database for "<<databaseRelevantFilenames.at(isn)<<std::endl;
+  }}
+  double {DBname}p=-99.9;
+  double {DBname}p_sig=-99.9;
+  double {DBname}p_bkg=-99.9;
+  double {DBname}p_err_sig=-99.9;
+  double {DBname}p_err_bkg=-99.9;
+  double {DBname}n_perm_sig=-99.9;
+  double {DBname}n_perm_bkg=-99.9;
+  auto {DBname}DummyResultPointer = std::unique_ptr<DataBaseMEMResult>(new DataBaseMEMResult(vec_memStrings));
+  int {DBname}FoundResult = 1;
+  """.format(DBname = thisDataBaseName, DBpath = thisDataBasePath)
   return rstr
 
 # -------------------------------------------------------------------------------------------------
