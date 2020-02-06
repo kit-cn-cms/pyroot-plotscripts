@@ -24,32 +24,18 @@ path_5FS_ttbar_FH = path+"/TTToHadronic*/*nominal*.root"
 
 path_ttH_bb       = path+"/ttHTobb*/*nominal*.root"
 path_ttH_nonbb    = path+"/ttHToNonbb*/*nominal*.root"
+
 # SELECTIONS
 
-# need to veto muon events in electron dataset to avoid double counting and vice versa
-sel_singleel="((N_LooseMuons==0 && N_TightElectrons==1))"
-sel_singlemu="(N_LooseElectrons==0 && N_TightMuons==1)"
-# jet tag base selection
-
-sel_jettag = "(N_Jets>=4)*(Evt_MET_Pt>20.)"
-
-# ======= # 
-# WEIGHTS #
-# ======= #
-defaultWeight = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2"
-
-# lepton scale factors
-electronSFs = "((N_TightElectrons==1)&&(Electron_IdentificationSF[0]>0.)&&(Electron_ReconstructionSF[0]>0.))*Electron_IdentificationSF[0]*Electron_ReconstructionSF[0]"
-muonSFs     = "((N_TightMuons==1)&&(Muon_IdentificationSF[0]>0.)&&(Muon_IsolationSF[0]>0.))*Muon_IdentificationSF[0]*Muon_IsolationSF[0]"
-electronTrigger = "("+sel_singleel+"&&(internalEleTriggerWeight>0.))*internalEleTriggerWeight"
-muonTrigger = "("+sel_singlemu+"&&(Weight_MuonTriggerSF>0.))*Weight_MuonTriggerSF"
-
-defaultWeight += "*"+"("+electronSFs+"+"+muonSFs+")"+"*"+"("+electronTrigger+"+"+muonTrigger+")"
-# dictionary of expressions to replace in systematics csv
 weightReplacements = {
     # default weight
-    "DEFAULTWEIGHT":    "internalCSVweight*"+defaultWeight,
+    "FINALWEIGHTNJET":  "Weight_GEN_nom*internalCSVweight*sf__NJet__btag_NOMINAL",
+    "FINALWEIGHTJETPT": "Weight_GEN_nom*internalCSVweight*sf__JetPt_vs_NJet__btag_NOMINAL",
+    "FINALWEIGHTNPV":   "Weight_GEN_nom*internalCSVweight*sf__NPV_vs_NJet__btag_NOMINAL",
+    "CSVSFWEIGHT":      "Weight_GEN_nom*internalCSVweight",
+    "ORIGINALWEIGHT":   "Weight_GEN_nom",
     }
+
 
 # Lumi weight
 lumi = '59.7'
@@ -61,7 +47,8 @@ sel_ttcc = "(GenEvt_I_TTPlusCC==1)"
 sel_ttlf = "(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)"
 
 # nominal weight
-nominalweight="NomWeight:=("+defaultWeight+")"
+nominalweight="NomWeight:=(Weight_GEN_nom)"
+
 
 sampleDict=plotClasses.SampleDictionary()
 sampleDict.doPrintout()
@@ -123,6 +110,9 @@ samples  = [
              lumi+"*"+sel_tthf,
              'ttbb_5FS_FH',
              samDict=sampleDict, readTrees=doReadTrees),
+
+
+
 
 
      #plotClasses.Sample('t#bar{t}+b (4FS,SL)',ROOT.kRed+3,
