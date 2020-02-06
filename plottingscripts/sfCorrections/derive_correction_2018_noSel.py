@@ -30,7 +30,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'sfCorrections/2018'
+    name = 'sfCorrections/2018_noSel'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -48,7 +48,7 @@ def main(pyrootdir, opts):
 
 
     # configs
-    config          = "SFSFderivation/samples_2018"
+    config          = "SFSFderivation/samples_2018_noSel"
     variable_cfg    = "SFSFderivation/additionalVariables"
     plot_cfg        = "SFSFderivation/plots"
     syst_cfg        = "SFSFderivation/systs"

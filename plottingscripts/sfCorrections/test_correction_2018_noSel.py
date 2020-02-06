@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'sfCorrections/test_2016'
+    name = 'sfCorrections/test_2018'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -39,7 +39,7 @@ def main(pyrootdir, opts):
     nSigSamples   = 1
 
     # dataera
-    dataera = "2016"
+    dataera = "2018"
 
     # Name of final discriminator, should not contain underscore
     discrName = 'finaldiscr'
@@ -51,18 +51,18 @@ def main(pyrootdir, opts):
     # memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
     memexp = ''
     # configs
-    config          = "SFSFderivation/samples_testSFs_2016"
-    variable_cfg    = "SFSFderivation/additionalVariables_2016"
-    plot_cfg        = "SFSFderivation/plots_testSFs"
+    config          = "SFSFderivation/samples_testSFs_2018_noSel"
+    variable_cfg    = "SFSFderivation/additionalVariables"
+    plot_cfg        = "SFSFderivation/plots_testSFs_noSel"
     syst_cfg        = "SFSFderivation/systs_testSFs"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
-    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2016.csv"
+    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2018.csv"
 
     # file for btagging SF corrections
     sfCorrection = {}
-    sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2016_deepJet.root"
+    sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2018_deepJet_noSel.root"
     # variables for the correction
     sfCorrection["corrections"] = {}
     sfCorrection["corrections"]["NJet"] = ["N_Jets"]
@@ -108,7 +108,7 @@ def main(pyrootdir, opts):
         "skipHistoCheck":       opts.skipHistoCheck,
         "skipDatacards":        opts.skipDatacards}
 
-    plotJson = pyrootdir+"/configs/legacyAnalysis/treeJson_2016.json"
+    plotJson = pyrootdir+"/configs/legacyAnalysis/treeJson_2018.json"
     # plotDataBases = [["memDB","/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/databases/2017_/",True]] 
     # memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
     #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",

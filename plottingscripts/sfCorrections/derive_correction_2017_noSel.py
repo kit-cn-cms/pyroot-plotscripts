@@ -30,7 +30,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'sfCorrections/2018'
+    name = 'sfCorrections/2017_noSel'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -39,7 +39,7 @@ def main(pyrootdir, opts):
     signalProcess = "ttH"
 
     # dataera
-    dataera = "2018"
+    dataera = "2017"
 
     # Name of final discriminator, should not contain underscore
     nom_histname_template = "$PROCESS__$CHANNEL"
@@ -48,7 +48,7 @@ def main(pyrootdir, opts):
 
 
     # configs
-    config          = "SFSFderivation/samples_2018"
+    config          = "SFSFderivation/samples_2017_noSel"
     variable_cfg    = "SFSFderivation/additionalVariables"
     plot_cfg        = "SFSFderivation/plots"
     syst_cfg        = "SFSFderivation/systs"
@@ -158,7 +158,7 @@ def main(pyrootdir, opts):
 
         monitor.printClass(pP, "init")
         # set some changed values
-        pP.setMaxEvts(500000)
+        pP.setMaxEvts(200000)
         pP.setSampleForVariableSetup(configData.samples[1])
 
         # run plotParallel
