@@ -51,7 +51,7 @@ def main(pyrootdir, opts):
     # memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
     memexp = ''
     # configs
-    config          = "legacyAnalysis/samples_2017_4FS_5FS_NJetCorrections_JECgroups"
+    config          = "legacyAnalysis/samples_2017"
     variable_cfg    = "legacyAnalysis/additionalVariables_2017"
     plot_cfg        = "legacyAnalysis/ttH_legacy_inputfeatures"
     syst_cfg        = "legacyAnalysis/systs_pdf"
@@ -65,7 +65,7 @@ def main(pyrootdir, opts):
     analysisOptions = {
         # general options
         "usePseudoData":        False,
-        "testrun":              True,  # test run with less samples
+        "testrun":              False,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
