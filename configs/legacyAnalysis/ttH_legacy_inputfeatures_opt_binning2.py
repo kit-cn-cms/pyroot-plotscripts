@@ -14,7 +14,7 @@ from array import array
 from copy import deepcopy
 
 
-memexp = ""
+memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
 
 
