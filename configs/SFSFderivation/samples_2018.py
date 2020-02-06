@@ -26,12 +26,29 @@ path_ttH_bb       = path+"/ttHTobb*/*nominal*.root"
 path_ttH_nonbb    = path+"/ttHToNonbb*/*nominal*.root"
 # SELECTIONS
 
-defaultWeight = "Weight_GEN_nom"
+# need to veto muon events in electron dataset to avoid double counting and vice versa
+sel_singleel="((N_LooseMuons==0 && N_TightElectrons==1))"
+sel_singlemu="(N_LooseElectrons==0 && N_TightMuons==1)"
+# jet tag base selection
 
+sel_jettag = "(N_Jets>=4)*(Evt_MET_Pt>20.)"
+
+# ======= # 
+# WEIGHTS #
+# ======= #
+defaultWeight = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2"
+
+# lepton scale factors
+electronSFs = "((N_TightElectrons==1)&&(Electron_IdentificationSF[0]>0.)&&(Electron_ReconstructionSF[0]>0.))*Electron_IdentificationSF[0]*Electron_ReconstructionSF[0]"
+muonSFs     = "((N_TightMuons==1)&&(Muon_IdentificationSF[0]>0.)&&(Muon_IsolationSF[0]>0.))*Muon_IdentificationSF[0]*Muon_IsolationSF[0]"
+electronTrigger = "("+sel_singleel+"&&(internalEleTriggerWeight>0.))*internalEleTriggerWeight"
+muonTrigger = "("+sel_singlemu+"&&(Weight_MuonTriggerSF>0.))*Weight_MuonTriggerSF"
+
+defaultWeight += "*"+"("+electronSFs+"+"+muonSFs+")"+"*"+"("+electronTrigger+"+"+muonTrigger+")"
 # dictionary of expressions to replace in systematics csv
 weightReplacements = {
     # default weight
-    "DEFAULTWEIGHT":    defaultWeight+"*internalCSVweight",
+    "DEFAULTWEIGHT":    "internalCSVweight*"+defaultWeight,
     }
 
 # Lumi weight
@@ -73,20 +90,40 @@ samples  = [
      plotClasses.Sample('t#bar{t}+b#bar{b} (4FS,SL)',ROOT.kRed+3,
              path_4FS_ttbb_SL,
              lumi+"*"+sel_tthf,
-             'ttbb_4FS_SL',
+             'ttbb_SL',
              samDict=sampleDict, readTrees=doReadTrees),
 
      plotClasses.Sample('t#bar{t}+b#bar{b} (4FS,DL)',ROOT.kRed+3,
              path_4FS_ttbb_DL,
              lumi+"*"+sel_tthf,
-             'ttbb_4FS_DL',
+             'ttbb_DL',
              samDict=sampleDict, readTrees=doReadTrees),
 
      plotClasses.Sample('t#bar{t}+b#bar{b} (4FS,FH)',ROOT.kRed+3,
              path_4FS_ttbb_FH,
              lumi+"*"+sel_tthf,
-             'ttbb_4FS_FH',
+             'ttbb_FH',
              samDict=sampleDict, readTrees=doReadTrees),
+
+
+     plotClasses.Sample('t#bar{t}+b#bar{b} (5FS,SL)',ROOT.kRed+3,
+             path_5FS_ttbar_SL,
+             lumi+"*"+sel_tthf,
+             'ttbb_5FS_SL',
+             samDict=sampleDict, readTrees=doReadTrees),
+
+     plotClasses.Sample('t#bar{t}+b#bar{b} (5FS,DL)',ROOT.kRed+3,
+             path_5FS_ttbar_DL,
+             lumi+"*"+sel_tthf,
+             'ttbb_5FS_DL',
+             samDict=sampleDict, readTrees=doReadTrees),
+
+     plotClasses.Sample('t#bar{t}+b#bar{b} (5FS,FH)',ROOT.kRed+3,
+             path_5FS_ttbar_FH,
+             lumi+"*"+sel_tthf,
+             'ttbb_5FS_FH',
+             samDict=sampleDict, readTrees=doReadTrees),
+
 
 
 
