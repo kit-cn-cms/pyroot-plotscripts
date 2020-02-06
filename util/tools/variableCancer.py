@@ -10,13 +10,21 @@ class VariableManager:
     add lists of variables/single variables with .add
     run the initialization program with .run
     '''
-    def __init__(self, tree, vetolist = [], verbose = 0):
+    def __init__(self, tree, vetolist = [], sfCorrection = None, verbose = 0):
         # all initialized Variables
         self.variables          = {}
         # all Variables that are not initialized yet
         self.variablesToInit    = {}
         # list of variables to be ignored when initializing
         self.vetolist           = vetolist
+        # list of naming remnant to add to veto list
+        self.correctionNames = []
+        self.sfBinning = []
+        if not sfCorrection is None:
+            self.correctionNames    = sfCorrection["names"]
+            self.sfBinning          = sfCorrection["corrections"]
+        # list of variables identified as correction variables
+        self.correctionVars     = []
         # tree to get variable information from
         self.tree               = tree
         # list of expressions to search for variables
@@ -64,7 +72,6 @@ class VariableManager:
         self.initializeAllVariables()
 
 
-
     def searchVariables(self, expression):
         '''
         search for variables in a given expression
@@ -109,7 +116,7 @@ class VariableManager:
         if varName in self.vetolist:
             if self.verbose > 20: print("variable '{}' is in vetolist, not adding it.".format(varName))
             return
-        
+
         # dont add variables that already exist
         if varName in self.variables:
             if self.verbose > 20: print("variable already in variableList")
@@ -142,6 +149,18 @@ class VariableManager:
             if hasattr(self.tree, expressionHead) and expressionTail.isdigit():
                 if self.verbose > 20: print("found vectorlike variable: "+str(expression)+" converted to "+str(expressionHead))
                 self.addVariable(expressionHead, expressionHead, varType, indexVariable)
+                return
+
+        # handle variables that are for sf corrections
+        for name in self.correctionNames:
+            if varName.endswith(name):
+                print("variable '{}' identified as correction variable".format(varName))
+                self.correctionVars.append(varName)
+                self.variablesToInit[varName] = Variable(varName, expression, varType, indexVariable)
+                # set flag defining this variable as SF variable that needs to be initialized differently
+                # also give this variable the list of variables needed for binning of SFs
+                _, correction, samename = varName.split("__")
+                self.variablesToInit[varName].setAsSFVariable(self.sfBinning[correction])
                 return
 
         # everything remaining is added to the variable list
@@ -372,9 +391,15 @@ class VariableManager:
                 
                 if var in sortedVariables: continue
 
+            varExpression = var.expression
+            if var.varName in self.correctionVars:
+                # create dummy expression for variables used for sf corrections
+                # dummy is built from all variables used for determination of sf bin
+                varExpression = "+".join(self.sfBinning)
+
             # consider the variable
             if self.verbose > 5: print("considering variable "+str(var.varName))
-            if var.varName == var.expression:
+            if var.varName == varExpression:
                 # no problem here, just add variable
                 sortedVariables.append( var )
                 if self.verbose >= 1: print("adding variable to list: "+str(var.varName))
@@ -395,7 +420,7 @@ class VariableManager:
             
             # loop over variables and check for dependencies
             for dependentVariable in rawVariableList:
-                if dependentVariable.varName in var.expression:
+                if dependentVariable.varName in varExpression:
                     # if a variable is in expression, check if it already in sorted list
                     # as the expression is dependent on this variable, the variable needs to be initialized first
                     if dependentVariable not in sortedVariables:
@@ -464,7 +489,12 @@ class Variable:
         self.isInitialized          = False
         self.expressionVariables    = []
     
+        self.isSFVariable           = False
         self.initError              = False
+
+    def setAsSFVariable(self, sfBinning):
+        self.isSFVariable = True
+        self.sfBinning    = sfBinning
 
     def setupVariable(self, tree, verbose, variableManager):
         '''
@@ -650,6 +680,18 @@ class Variable:
         return text
 
 
+    def writeSFCorrectionCalculation(self, indent):
+        text = "\n"
+        # get procID
+        text+= "    "+indent+"procID = internalSFCorrectionHelper->GetProcID(processname, isTTbarSample, isTthSample, N_GenTopLep, GenHiggs_DecProd1_PDGID);\n"
+        # calculate output scalefactor
+        # split sf name in parts
+        _, correction, name = self.varName.split("__") 
+        text+= "    "+indent+self.varName+" = "+"internalSFCorrectionHelper->GetSF(procID, TString(\"{}\"), TString(\"{}\"), {});\n".format(
+            correction, name, ", ".join(self.sfBinning))
+        #text+= "    {indent}cout << procID;\n    {indent}cout << {sf} << endl;\n".format(indent = indent, sf = self.varName)
+        text+= "\n"
+        return text
 
     def writeVariableCalculation(self, hasCondition):
         '''
@@ -661,6 +703,9 @@ class Variable:
         elif self.isBDTVar: return "    "+indent+self.varName+" = r_"+self.varName+"->EvaluateMVA('BDT'):\n"
         else:               
             if self.varName == self.expression:
+                if self.isSFVariable:
+                    return self.writeSFCorrectionCalculation(indent)
+
                 self.initError = True
                 print("trying to initialize variable '{}' with itself (var = var) - this does not work".format(self.varName))
             return "    "+indent+self.varName+" = "+self.expression+";\n"
