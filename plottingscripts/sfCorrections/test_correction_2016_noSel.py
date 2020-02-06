@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'sfCorrections/test_2016'
+    name = 'sfCorrections/test_2016_noSel'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -51,9 +51,9 @@ def main(pyrootdir, opts):
     # memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
     memexp = ''
     # configs
-    config          = "SFSFderivation/samples_testSFs_2016"
-    variable_cfg    = "SFSFderivation/additionalVariables_2016"
-    plot_cfg        = "SFSFderivation/plots_testSFs"
+    config          = "SFSFderivation/samples_testSFs_2016_noSel"
+    variable_cfg    = "SFSFderivation/additionalVariables"
+    plot_cfg        = "SFSFderivation/plots_testSFs_noSel"
     syst_cfg        = "SFSFderivation/systs_testSFs"
 
     # file for rate factors
@@ -62,7 +62,7 @@ def main(pyrootdir, opts):
 
     # file for btagging SF corrections
     sfCorrection = {}
-    sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2016_deepJet.root"
+    sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2016_deepJet_noSel.root"
     # variables for the correction
     sfCorrection["corrections"] = {}
     sfCorrection["corrections"]["NJet"] = ["N_Jets"]

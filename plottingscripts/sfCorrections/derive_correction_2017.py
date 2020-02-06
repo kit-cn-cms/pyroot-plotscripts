@@ -8,7 +8,7 @@ import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 filedir = os.path.dirname(os.path.realpath(__file__))
-pyrootdir = "/".join(filedir.split("/")[:-1])
+pyrootdir = "/".join(filedir.split("/")[:-2])
 
 sys.path.append(pyrootdir)
 
@@ -21,6 +21,7 @@ import util.makePlots as makePlots
 import util.haddParallel as haddParallel
 import util.checkHistos as checkHistos
 import util.makeDatacards as makeDatacards
+import util.scaleFactorCreator as scaleFactorCreator
 
 def main(pyrootdir, opts):
     print '''
@@ -29,7 +30,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'SFSFderivation/2017'
+    name = 'sfCorrections/2017'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -65,6 +66,7 @@ def main(pyrootdir, opts):
         "skipPlotParallel":     opts.skipPlotParallel,
         "skipHaddParallel":     opts.skipHaddParallel,
         "skipHaddFromWildcard": opts.skipHaddFromWildcard,
+        "sanicMode":            opts.sanicMode
         }
     
     print '''
@@ -84,6 +86,10 @@ def main(pyrootdir, opts):
 
     
     analysis.initAnalysisOptions( analysisOptions )
+
+    # setting sanic mode
+    import util.tools.__init__ as toolInitializer
+    toolInitializer.nafInterface.sanicMode = analysis.sanicMode
 
     pltcfg = analysis.initPlotConfig()
     print "We will import the following plotconfig: ", analysis.getPlotConfig()
@@ -177,158 +183,8 @@ def main(pyrootdir, opts):
             skipHadd            = analysis.skipHaddFromWildcard)
      
 
-    # infile
-    infile = ROOT.TFile(analysis.ppRootPath)
-
-    # outfiles
-    outfile_path = analysis.workdir+"/SFratios.root"
-    outfile = ROOT.TFile(outfile_path, "RECREATE")
-    weightString = ""
-    # basic selections and weights
-    weightString += """
-        "selection_hbb:=((abs(GenHiggs_DecProd1_PDGID)==5 && abs(GenHiggs_DecProd2_PDGID)==5))",
-        "selection_nonhbb:=((abs(GenHiggs_DecProd1_PDGID)!=5 && abs(GenHiggs_DecProd2_PDGID)!=5))",
-        "selection_ttsl:=(N_GenTopLep==1)",
-        "selection_ttdl:=(N_GenTopLep==2)",
-        "selection_ttfh:=(N_GenTopLep==0)",
-
-        "selection_tthf:=(GenEvt_I_TTPlusBB>=1&&GenEvt_I_TTPlusCC==0)",
-        "selection_ttcc:=(GenEvt_I_TTPlusBB==0&&GenEvt_I_TTPlusCC==1)",
-        "selection_ttlf:=(GenEvt_I_TTPlusBB==0&&GenEvt_I_TTPlusCC==0)",
-
-
-"""
-
-
-    # loop over variables
-    for plot in configData.getDiscriminatorPlots():
-        weightString += "\n"
-        channel = plot.name
-        # loop over samples
-        for sample in configData.samples:
-            weightString += "\n"
-            process = sample.nick
-
-            # get the nominal histogram for that combination
-            nom = infile.Get(
-                nom_histname_template.replace("$PROCESS", process).replace("$CHANNEL", channel)
-                )
-
-            # loop over systematics
-            for syst in ["nom"]+configData.allSystNames:
-                if "NOMINAL" in syst: continue
-
-                print("calculating SFs for {}, {}, {}".format(channel, process, syst))
-                systName = syst
-                if syst == "nom": systName = "btag_NOMINALUp"
-
-                systHist = infile.Get(
-                    syst_histname_template.replace("$PROCESS", process).replace("$CHANNEL", channel).replace("$SYSTEMATIC", systName)
-                    )
-                ratioHist = nom.Clone()
-                ratioHist.Divide(systHist)
-
-                if syst == "nom":
-                    nomHist = ratioHist.Clone()
-                else:
-                    ratioHist.Divide(nomHist)
-
-                outName = "SF_$CHANNEL__$PROCESS__$SYSTEMATIC".replace("$PROCESS", process).replace("$CHANNEL", channel).replace("$SYSTEMATIC", systName)
-
-                # add ratio as weight expression to output file
-                weightExpression = ""
-                for iBin in range(ratioHist.GetNbinsX()):
-                    #if ratioHist.GetBinCenter(iBin+1) < 4: continue
-                    weight="(({}=={})*{})+".format(
-                        channel,
-                        int(ratioHist.GetBinCenter(iBin+1)),
-                        ratioHist.GetBinContent(iBin+1)
-                        )
-                    if int(iBin) == int(ratioHist.GetNbinsX()-1):
-                        weight = weight.replace("==",">=").replace("+","")
-                    weightExpression += weight
-
-                #hardcoded shit
-                if syst == "nom": outName = outName.replace(systName, "btag_NOMINAL")
-                weightString+="        \"weight_"+outName+":=({})\",\n".format(weightExpression)
-
-                # save ratio hist
-                outfile.cd()
-                ratioHist.Write(outName)
-
-    print("\nsummarizing weights ...\n")
-    # more hardcoded stuff
-    weightString +="\n\n\n"
-    weightTemplate = "weight_SF_$CHANNEL__$PROCESS__$SYSTEMATIC"
-    for plot in configData.getDiscriminatorPlots():
-        weightString += "\n"
-        channel = plot.name
-
-        for syst in configData.allSystNames:
-            if syst == "btag_NOMINALUp": continue
-            systName = syst
-            if syst == "btag_NOMINALDown":
-                systName = "btag_NOMINAL"
-
-            weightString += "\n\n"
-            # generate one weight for ttH, tthf, ttcc and ttlf
-            weightName = "sf_$CHANNEL__$PROCESS__$SYSTEMATIC".replace("$CHANNEL", channel).replace("$SYSTEMATIC", systName)
-
-            # ttH
-            expression = ""
-            expression += "(selection_hbb*"+weightTemplate.replace("$PROCESS", "ttH_bb").replace("$CHANNEL", channel).replace("$SYSTEMATIC", systName)+")"
-            expression +="+(selection_nonhbb*"+weightTemplate.replace("$PROCESS", "ttH_nonbb").replace("$CHANNEL", channel).replace("$SYSTEMATIC", systName)+")"
-
-            weightString+="        \""+weightName.replace("$PROCESS", "ttH")+":=({})\",\n".format(expression)
-
-            # tthf
-            expression = ""
-            expression += "(selection_ttdl*selection_tthf*"+weightTemplate.replace("$PROCESS", "ttbb_4FS_DL").replace("$CHANNEL", channel).replace("$SYSTEMATIC", systName)+")"
-            #expression +="+(selection_ttdl*selection_ttb*"+weightTemplate.replace("$PROCESS", "ttb_4FS_DL").replace("$CHANNEL", channel).replace("$SYSTEMATIC", systName)+")"
-            #expression +="+(selection_ttdl*selection_tt2b*"+weightTemplate.replace("$PROCESS", "tt2b_4FS_DL").replace("$CHANNEL", channel).replace("$SYSTEMATIC", systName)+")"
-            expression +="+(selection_ttsl*selection_tthf*"+weightTemplate.replace("$PROCESS", "ttbb_4FS_SL").replace("$CHANNEL", channel).replace("$SYSTEMATIC", systName)+")"
-            #expression +="+(selection_ttsl*selection_ttb*"+weightTemplate.replace("$PROCESS", "ttb_4FS_SL").replace("$CHANNEL", channel).replace("$SYSTEMATIC", systName)+")"
-            #expression +="+(selection_ttsl*selection_tt2b*"+weightTemplate.replace("$PROCESS", "tt2b_4FS_SL").replace("$CHANNEL", channel).replace("$SYSTEMATIC", systName)+")"
-            expression +="+(selection_ttfh*selection_tthf*"+weightTemplate.replace("$PROCESS", "ttbb_4FS_FH").replace("$CHANNEL", channel).replace("$SYSTEMATIC", systName)+")"
-            #expression +="+(selection_ttfh*selection_ttb*"+weightTemplate.replace("$PROCESS", "ttb_4FS_FH").replace("$CHANNEL", channel).replace("$SYSTEMATIC", systName)+")"
-            #expression +="+(selection_ttfh*selection_tt2b*"+weightTemplate.replace("$PROCESS", "tt2b_4FS_FH").replace("$CHANNEL", channel).replace("$SYSTEMATIC", systName)+")"
-
-            weightString+="        \""+weightName.replace("$PROCESS", "ttbb")+":=({})\",\n".format(expression)
-
-            # ttcc
-            expression = ""
-            expression += "(selection_ttdl*selection_ttcc*"+weightTemplate.replace("$PROCESS", "ttcc_DL").replace("$CHANNEL", channel).replace("$SYSTEMATIC", systName)+")"
-            expression +="+(selection_ttsl*selection_ttcc*"+weightTemplate.replace("$PROCESS", "ttcc_SL").replace("$CHANNEL", channel).replace("$SYSTEMATIC", systName)+")"
-            expression +="+(selection_ttfh*selection_ttcc*"+weightTemplate.replace("$PROCESS", "ttcc_FH").replace("$CHANNEL", channel).replace("$SYSTEMATIC", systName)+")"
-
-            weightString+="        \""+weightName.replace("$PROCESS", "ttcc")+":=({})\",\n".format(expression)
-
-            # ttlf
-            expression = ""
-            expression += "(selection_ttdl*selection_ttlf*"+weightTemplate.replace("$PROCESS", "ttlf_DL").replace("$CHANNEL", channel).replace("$SYSTEMATIC", systName)+")"
-            expression +="+(selection_ttsl*selection_ttlf*"+weightTemplate.replace("$PROCESS", "ttlf_SL").replace("$CHANNEL", channel).replace("$SYSTEMATIC", systName)+")"
-            expression +="+(selection_ttfh*selection_ttlf*"+weightTemplate.replace("$PROCESS", "ttlf_FH").replace("$CHANNEL", channel).replace("$SYSTEMATIC", systName)+")"
-
-            weightString+="        \""+weightName.replace("$PROCESS", "ttlf")+":=({})\",\n".format(expression)
-
-
-            # combined weight
-            weightString+="\n"
-            expression = ""
-            expression += "(isTTbarSample==1)*("+weightName.replace("$PROCESS", "ttlf")+"+"+weightName.replace("$PROCESS", "ttcc")+"+"+weightName.replace("$PROCESS", "ttbb")+")"
-            expression += "+(isTthSample==1)*("+weightName.replace("$PROCESS", "ttH")+")"
-            expression += "+(isTTbarSample==0&&isTthSample==0)*(1.)"
-
-            weightString+="        \""+weightName.replace("_$PROCESS_","")+":=({})\",\n\n\n\n".format(expression)
-            print("calculated usable weight: {}".format(weightName.replace("_$PROCESS_","")))
-
-    # save weight expressions
-    with open(outfile_path.replace(".root",".txt"), "w") as f:
-        f.write(weightString)
-    print("\nadd content of {} to additionalVariables.py and apply usable weights in syst.csv and sample config\n".format(outfile_path.replace(".root",".txt")))
-
-    outfile.Close()
-
+    scaleFactorCreator.deriveSFs(
+        analysis, configData, nom_histname_template, syst_histname_template)    
 
 
 if __name__ == "__main__":
@@ -337,5 +193,6 @@ if __name__ == "__main__":
     parser.add_option("--skipHaddParallel",     dest = "skipHaddParallel",      action = "store_true", default = False)
     parser.add_option("--skipHaddFromWildcard", dest = "skipHaddFromWildcard",  action = "store_true", default = False)
 
+    parser.add_option("--sanic", dest="sanicMode", action = "store_true", default = False, help = "activate Sanic super speed mode (changes prio of condor jobs to 1000)")
     (opts, args) = parser.parse_args()
     main(pyrootdir, opts)
