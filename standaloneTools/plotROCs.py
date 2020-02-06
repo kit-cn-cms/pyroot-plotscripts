@@ -4,16 +4,17 @@ import optparse
 import ROOT
 from array import array
 import numpy
+from math import sqrt
 
 def get_roc_point(threshold,h_sig,h_bkg):
     x_axis_sig = h_sig.GetXaxis()
     x_axis_bkg = h_bkg.GetXaxis()
     nbins = x_axis_sig.GetNbins()
-    true_sig = 0.
-    true_bkg = 0.
-    all_sig = 0.
-    all_bkg = 0.
-    for i in range(nbins + 2):
+    true_sig = 0.0
+    true_bkg = 0.0
+    all_sig = 0.0
+    all_bkg = 0.0
+    for i in range(1,nbins + 2):
         if x_axis_sig.GetBinLowEdge(i) >= threshold:
             true_sig += h_sig.GetBinContent(i)
         elif x_axis_bkg.GetBinLowEdge(i) < threshold:
@@ -21,13 +22,19 @@ def get_roc_point(threshold,h_sig,h_bkg):
         all_sig += h_sig.GetBinContent(i)
         all_bkg += h_bkg.GetBinContent(i)
     if all_sig != 0:
-        sig_efficiency = true_sig / float(all_sig)
+        sig_efficiency = true_sig / all_sig
     else:
         sig_efficiency = 0
     if all_bkg != 0:
-        bkg_efficiency = true_bkg / float(all_bkg)
+        bkg_efficiency = true_bkg / all_bkg
     else:
         bkg_efficiency = 0
+    s_b = None
+    try:
+        s_b = true_sig/sqrt(all_bkg-true_bkg)
+    except ZeroDivisionError:
+        s_b = None
+    print("WP:",round(threshold,3),"sig eff:",round(sig_efficiency,3),"bkg rej",round((bkg_efficiency),3),"S/sqrt(B):",s_b )
     return sig_efficiency, 1-bkg_efficiency
 
 def get_roc_graph(h_sig, h_bkg, min, max):
@@ -35,7 +42,6 @@ def get_roc_graph(h_sig, h_bkg, min, max):
     y_points = array('f')
     for threshold in numpy.linspace(min, max, 50):
         sig_eff, bkg_eff = get_roc_point(threshold, h_sig, h_bkg)
-        print("WP:",round(threshold,3),"sig eff:",round(sig_eff,3),"bkg rej",round(1-bkg_eff,3))
         x_points.append(1 - bkg_eff)
         y_points.append(sig_eff)
     roc_graph = ROOT.TGraph(len(x_points), x_points, y_points)
