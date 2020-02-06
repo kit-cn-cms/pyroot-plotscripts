@@ -30,11 +30,12 @@ def get_roc_point(threshold,h_sig,h_bkg):
         bkg_efficiency = 0
     return sig_efficiency, 1-bkg_efficiency
 
-def get_roc_graph(h_sig, h_bkg):
+def get_roc_graph(h_sig, h_bkg, min, max):
     x_points = array('f')
     y_points = array('f')
-    for threshold in numpy.linspace(0., 1., 50):
+    for threshold in numpy.linspace(min, max, 50):
         sig_eff, bkg_eff = get_roc_point(threshold, h_sig, h_bkg)
+        print("WP:",round(threshold,3),"sig eff:",round(sig_eff,3),"bkg rej",round(1-bkg_eff,3))
         x_points.append(1 - bkg_eff)
         y_points.append(sig_eff)
     roc_graph = ROOT.TGraph(len(x_points), x_points, y_points)
@@ -43,13 +44,18 @@ def get_roc_graph(h_sig, h_bkg):
 def drawROC(roc,label):
     c = ROOT.TCanvas(label,label,1000,1000)
     c.cd()
-    roc.Draw("AC*")
+    roc.Draw("ACP")
+    roc.SetTitle("ROC")
     roc.GetXaxis().SetTitle("background rejection")
     roc.GetYaxis().SetTitle("signal efficiency")
-    integral = 1-roc.Integral()
+    roc.SetLineColor(ROOT.kRed)
+    roc.SetLineWidth(2)
+    roc.SetMarkerStyle(20)
+    roc.SetMarkerColor(ROOT.kBlack)
+    integral = round(1-roc.Integral(),3)
     print("{0}: ROCAUC: {1}".format(label,integral))
 
-    text = ROOT.TLatex(0.11,0.8,"{0}: ROCAUC: {1}".format(label,integral))
+    text = ROOT.TLatex(0.11,0.92,"{0}: ROCAUC: {1}".format(label,integral))
     text.SetNDC(ROOT.kTRUE)
     text.SetTextSize(0.025)
     text.Draw()
@@ -72,6 +78,8 @@ parser.add_option("-f", "--file", dest="file", type="string",help="Specify the o
 parser.add_option("-s", "--signal", dest="signal", type="string",help="Specify the name of the signal process , or a list of processes to be considered")
 parser.add_option("-b", "--bkg", dest="bkg", type="string",help="Specify the name of the bkq process, or a list of processes to be considered")
 parser.add_option("-d", "--discr", dest="discr",help="Specify a list of discriminators to plot the ROCs for")
+parser.add_option("--discr_min", dest="discr_min", type="string", default="0.0", help="minimum value of discriminator range")
+parser.add_option("--discr_max", dest="discr_max", type="string", default="1.0", help="maximum value of discriminator range")
 parser.add_option("-l", "--label", dest="label",help="Specify an additional label to find bkg hists")
 
 (opts, args) = parser.parse_args()
@@ -85,15 +93,15 @@ for discr in opts.discr.split(","):
     print("Checking Discrimination of {0} (sig) vs {1} (bkg)".format(opts.signal,opts.bkg))
     lBKGS = []
     for bkg in opts.bkg.split(","):
-        lBKGS.append(rFile.Get(bkg+"_"+discr))
+        lBKGS.append(rFile.Get(bkg+"_"+discr+"_"+opts.label))
     h_bkg = addHistos(lBKGS)
 
     lSigs = []
     for sig in opts.signal.split(","):
-        lSigs.append(rFile.Get(bkg+"_"+discr))
+        lSigs.append(rFile.Get(sig+"_"+discr+"_"+opts.label))
     h_sig = addHistos(lSigs)
 
-    roc = get_roc_graph(h_sig, h_bkg)
+    roc = get_roc_graph(h_sig, h_bkg,float(opts.discr_min),float(opts.discr_max))
     drawROC(roc, discr+"_"+opts.signal+"_vs_"+opts.bkg.replace(",","_"))
 
 print("="*50)
