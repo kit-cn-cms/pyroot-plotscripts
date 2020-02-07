@@ -114,6 +114,10 @@ void plot(){
 
   std::cout<<"processname: " <<processname<<std::endl;
   std::cout<<"suffix: " <<suffix<<std::endl;
+  bool skipWeightSysts = TString(processname).EndsWith("Up") or TString(processname).EndsWith("Down");
+  if (skipWeightSysts) {
+    std::cout << "Detected syst varied Sample, going to skip weight systematics" << std::endl;
+  }
 
   std::vector<TString> databaseRelevantFilenames;
 
