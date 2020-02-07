@@ -20,8 +20,8 @@ def plotInterface(jobData, skipPlotParallel = False, maxTries = 10, nTries = 0):
             print("all plotParallel scripts have terminated successfully - skipping plotParallel")
             return
 
-    submitOptions = {"PeriodicHold": 10001,
-                    "+RequestRuntime": 10000}
+    submitOptions = {"PeriodicHold": 10801,
+                    "+RequestRuntime": 10800}
     if nTries == 0:
         print("submitting plotParallel scripts as array job")
         jobIDs = nafSubmit.submitArrayToNAF(jobData["scripts"], "makeTemplates", submitOptions = submitOptions)
