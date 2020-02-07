@@ -460,13 +460,15 @@ def fillHistoSyst(histName, varNames, weight, systNames, systWeights):
     if len(varNames) == 2:
         # 2D Histograms
         text += '       std::vector<structHelpFillTwoDimHisto> helpWeightVec_' + histName + ' = {\n'
-        for systName, systWeight in zip(systNames, systWeights):
-            text += "       {histos2D[\""+histName+systName+"\"].get()"+", ("+systWeight+")*(weight_"+histName+")},\n"
-            
+        # Do Nominal Plot for sure
+        text += "           {histos2D[\""+histName+"\"].get()"+", (weight_"+histName+")},\n"
         text += "       };\n"
-        text += "       variable1 = "+varNames[0]+";\n"
-        text += "       variable2 = "+varNames[1]+";\n"
 
+        text += "       if (!skipWeightSysts) { // append plots for weight systs if neccessary \n"
+        for systName, systWeight in zip(systNames[1:], systWeights[1:]):
+            text += "             helpWeightVec_" + histName + ".push_back({histos2D[\""+histName+systName+"\"].get()"+", ("+systWeight+")*(weight_"+histName+")});\n"
+        text += "       };\n"
+            
         text += "       helperFillTwoDimHisto(helpWeightVec_"+histName+", variable1, variable2);\n"
         text += "       variable1 = -999;\n"
         text += "       variable2 = -999;\n"
