@@ -445,7 +445,7 @@ def fillHistoSyst(histName, varNames, weight, systNames, systWeights):
         # 1D Histograms
         text += '       std::vector<structHelpFillHisto> helpWeightVec_' + histName + ' = {\n'
         # Do Nominal Plot for sure
-        text += "           {histos1D[\""+histName+"\"].get()"+", (weight_"+histName+")},\n"
+        text += "           {histos1D[\""+histName+"\"].get()"+", ((NomWeight)*(weight_"+histName+"))},\n"
         text += "       };\n"
 
         text += "       if (!skipWeightSysts) { // append plots for weight systs if neccessary \n"
@@ -461,7 +461,7 @@ def fillHistoSyst(histName, varNames, weight, systNames, systWeights):
         # 2D Histograms
         text += '       std::vector<structHelpFillTwoDimHisto> helpWeightVec_' + histName + ' = {\n'
         # Do Nominal Plot for sure
-        text += "           {histos2D[\""+histName+"\"].get()"+", (weight_"+histName+")},\n"
+        text += "           {histos2D[\""+histName+"\"].get()"+", ((NomWeight)*(weight_"+histName+"))},\n"
         text += "       };\n"
 
         text += "       if (!skipWeightSysts) { // append plots for weight systs if neccessary \n"
