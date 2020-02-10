@@ -61,6 +61,7 @@ class plotParallel:
         self.rateFactorsFile = None
         self.useGenWeightNormMap = False
         self.sampleForVariableSetup = None
+        self.request_runtime = None
 
         # check cmssw
         self.cmsswpath = os.environ['CMSSW_BASE']
@@ -215,7 +216,12 @@ class plotParallel:
             sys.exit(0)
 
         # job submission
-        nafInterface.plotInterface(self.runscriptData, skipPlotParallel = self.analysis.skipPlotParallel)
+        opts = {}
+        if self.request_runtime:
+            opts["+RequestRuntime"] = self.request_runtime
+        nafInterface.plotInterface( self.runscriptData, 
+                                    skipPlotParallel = self.analysis.skipPlotParallel, 
+                                    options = opts)
         print("all jobs have terminated successfully")
         print("="*40)
 

@@ -193,6 +193,7 @@ def main(pyrootdir, opts):
         pP.setMEMDataBase(memDataBase)
         # pP.setDNNInterface(dnnInterface)
         pP.setMaxEvts(100000)
+        pP.request_runtime = 60*60*7 #request 7 hours
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
 
