@@ -11,7 +11,7 @@ import util.tools.plotClasses as plotClasses
 
 # samples
 # input path 
-path  = "/nfs/dust/cms/user/vdlinden/legacyTTH/ntuples/sfDerivation_new/2016/"
+path  = "/nfs/dust/cms/user/vdlinden/legacyTTH/ntuples/sfDerivation_final/2016/"
 
 
 path_4FS_ttbb_SL  = path+"/TTbb_4f*SemiLeptonic*/*nominal*.root"
@@ -51,6 +51,7 @@ weightReplacements = {
     # default weight
     "FINALWEIGHTNJET":  defaultWeight+"*internalCSVweight*sf__NJet__btag_NOMINAL",
     "FINALWEIGHTJETPT": defaultWeight+"*internalCSVweight*sf__JetPt_vs_NJet__btag_NOMINAL",
+    "FINALWEIGHTHT":    defaultWeight+"*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL",
     "FINALWEIGHTNPV":   defaultWeight+"*internalCSVweight*sf__NPV_vs_NJet__btag_NOMINAL",
     "CSVSFWEIGHT":      defaultWeight+"*internalCSVweight",
     }

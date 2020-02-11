@@ -20,7 +20,7 @@ def deriveSFs(analysis, configData, nom_histname_template, syst_histname_templat
             nom = infile.Get(
                 nom_histname_template.replace("$PROCESS", process).replace("$CHANNEL", channel)
                 )
-
+            print("nom", nom)
             # loop over systematics
             for syst in ["nom"]+configData.allSystNames:
                 if "NOMINAL" in syst: continue
@@ -32,6 +32,7 @@ def deriveSFs(analysis, configData, nom_histname_template, syst_histname_templat
                 systHist = infile.Get(
                     syst_histname_template.replace("$PROCESS", process).replace("$CHANNEL", channel).replace("$SYSTEMATIC", systName)
                     )
+                print("sh", systHist)
                 ratioHist = nom.Clone()
                 ratioHist.Divide(systHist)
 

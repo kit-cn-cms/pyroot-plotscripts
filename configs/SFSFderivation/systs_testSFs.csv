@@ -10,6 +10,7 @@ Uncertainty,Type,Construction,Up,Down,Plot,ttH,ttH,ttlf,ttcc,ttbb,ttbb_5FS,ttb_4
 #btag_cferr2,shape,weight,"""dummyWeight_CSVCErr2up:=(DEFAULTWEIGHT*internalCSVweight_CSVCErr2Up)""","""dummyWeight_CSVCErr2down:=(DEFAULTWEIGHT*internalCSVweight_CSVCErr2Down)""",1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 btag_njet,shape,weight,"""dummyWeight_CSV_1D_NJet:=(FINALWEIGHTNJET)""",-,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 btag_npv,shape,weight,"""dummyWeight_CSV_2D_NPV:=(FINALWEIGHTNPV)""",-,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-btag_jetpt,shape,weight,"""dummyWeight_CSV_2D_JetPt:=(FINALWEIGHTJETPT)""",-,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+#btag_jetpt,shape,weight,"""dummyWeight_CSV_2D_JetPt:=(FINALWEIGHTJETPT)""",-,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+btag_ht,shape,weight,"""dummyWeight_CSV_2D_HT:=(FINALWEIGHTHT)""",-,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 btag_csv,shape,weight,"""dummyWeight_CSVSF:=(CSVSFWEIGHT)""",-,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 #,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

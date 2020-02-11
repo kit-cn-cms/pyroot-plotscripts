@@ -11,7 +11,7 @@ import util.tools.plotClasses as plotClasses
 
 # samples
 # input path 
-path  = "/nfs/dust/cms/user/vdlinden/legacyTTH/ntuples/sfDerivation_new/2017/"
+path  = "/nfs/dust/cms/user/vdlinden/legacyTTH/ntuples/sfDerivation_final/2017/"
 
 
 path_4FS_ttbb_SL  = path+"/TTbb*_new_pmx/*nominal*.root"
