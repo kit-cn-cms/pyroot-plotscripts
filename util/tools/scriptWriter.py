@@ -588,9 +588,10 @@ combine_intermid_systs.combine_intermid_syst(   h_nominal_key   = nom_key,
         outfilename = self.pp.plotPath+processname+'_'+str(nJob)+'.root'
         scriptname = self.pp.scriptsPath+'/'+processname+'_'+str(nJob)+'.sh'
         cleanupname = self.pp.scriptsPath+"/"+processname+"_cleanup_"+str(nJob)+".sh"
-        origName = sample.origName
+        origName = str(sample.origName)
         suffix = writeOptions.get("suffix", "")
         skipevents = writeOptions.get("skipEvents", 0)
+        variation = processname.split(origName)[1]
 
         # check options
         if self.pp.analysis.testrun and maxevents < 100:
@@ -610,10 +611,11 @@ combine_intermid_systs.combine_intermid_syst(   h_nominal_key   = nom_key,
         script += 'export SKIPEVENTS="'+str(skipevents)+'"\n'
         script += 'export SUFFIX="'+suffix+'"\n'
         script += 'export EVENTFILTERFILE="'+str(filterFile)+'"\n'
-        script += 'export ORIGNAME="'+str(origName)+'"\n'
+        script += 'export ORIGNAME="'+origName+'"\n'
         script += "export NOMHISTKEY='{}'\n".format(self.pp.nominalHistoKey)
         script += "export SYSTHISTKEY='{}'\n".format(self.pp.systHistoKey)
         script += 'export SEPARATOR="{}"\n'.format(self.pp.histNameSeparator)
+        script += 'export VARIATION="{}"\n'.format(variation)
         #DANGERZONE
         pPscript = script + ".".join(self.ccPath.split(".")[:-1])+'\n'
         cleanup  = script + 'python '+self.ccPath.replace('.cc','_cleanupHistos.py')+'\n'
