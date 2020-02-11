@@ -7,7 +7,7 @@ fastLane = True
 #############################
 # parallel plotting
 #############################
-def plotInterface(jobData, skipPlotParallel = False, maxTries = 10, nTries = 0):
+def plotInterface(jobData, skipPlotParallel = False, maxTries = 10, nTries = 0, options = None):
     print("NUMBER OF JOBS TO BE SUBMITTED: {}".format(len(jobData["scripts"])))
     if skipPlotParallel:
         print("skip plot parallel was activated")
@@ -22,6 +22,11 @@ def plotInterface(jobData, skipPlotParallel = False, maxTries = 10, nTries = 0):
 
     submitOptions = {"PeriodicHold": 10001,
                     "+RequestRuntime": 10000}
+    if options:
+        for opt in options:
+            submitOptions[opt] = options[opt]
+    if "+RequestRuntime" in submitOptions:
+        submitOptions["PeriodicHold"] = submitOptions["+RequestRuntime"] + 1
     if nTries == 0:
         print("submitting plotParallel scripts as array job")
         jobIDs = nafSubmit.submitArrayToNAF(jobData["scripts"], "makeTemplates", submitOptions = submitOptions)
@@ -82,7 +87,7 @@ def plotTerminationCheck(jobData):
 
 
 
-def cleanupInterface(jobsToSubmit, rootFiles, skipCleanup = False, maxTries = 10, nTries = 0):
+def cleanupInterface(jobsToSubmit, rootFiles, skipCleanup = False, maxTries = 10, nTries = 0, options = None):
     if skipCleanup:
         undoneJobs, undoneRootFiles = cleanupTerminationCheck(jobsToSubmit, rootFiles)       
         if len(undoneJobs) > 0: return cleanupInterface( undoneJobs, undoneRootFiles )
@@ -92,7 +97,11 @@ def cleanupInterface(jobsToSubmit, rootFiles, skipCleanup = False, maxTries = 10
 
     submitOptions = {"PeriodicHold": 10001,
                     "+RequestRuntime": 10000}
-
+    if options:
+        for opt in options:
+            submitOptions[opt] = options[opt]
+    if "+RequestRuntime" in submitOptions:
+        submitOptions["PeriodicHold"] = submitOptions["+RequestRuntime"] + 1
     if nTries == 0:
         print("submitting cleanup jobs as array job")
         jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "cleanupHistos", submitOptions = submitOptions)
