@@ -60,7 +60,7 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     float internalBosonWeight_muFDown   = 1.0;
 
     if ((processname.find("wlnujets") != std::string::npos && W_Pt > 30.) || (processname.find("zlljets") != std::string::npos && Z_Pt > 30.) ||
-        (processname.find("znunujets") != std::string::npos && Z_Pt > 30.)) {
+        (processname.find("znunujets") != std::string::npos && Z_Pt > 30.) || (processname.find("gammajets") != std::string::npos && Gamma_Pt > 30.)) {
         internalBosonWeight           = BosonWeight_nominal;
         internalBosonWeight_QCD1Up    = BosonWeight_QCD1Up;
         internalBosonWeight_QCD1Down  = BosonWeight_QCD1Down;

@@ -65,6 +65,7 @@ def getAddVars():
         "BosonWeight_muFDown",
         "W_Pt",
         "Z_Pt",
+        "Gamma_Pt",
     ]
 
     return addVars
