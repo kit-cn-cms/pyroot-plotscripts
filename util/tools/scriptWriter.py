@@ -411,78 +411,10 @@ class scriptWriter:
         return script
 
 
-
-
-
-    ## cleanup script (during plot parallel) ##
-    # comment: this could be integrated into "cleanupHistos"
-    def writeCleanupScript(self):
-        script = """
-import sys
-import os
-sys.path.append('{path}')
-import cleanupHistos
-
-filename     = os.getenv('OUTFILENAME')
-
-process      = os.getenv('ORIGNAME')
-syst_key     = os.getenv('SYSTHISTKEY')
-separator    = os.getenv('SEPARATOR')
-
-outname      = filename.replace('.root','_original.root')
-systematics  = "{systpath}"
-
-nHistsBefore, nHistsAfter = cleanupHistos.cleanupHistos(filename, outname, process, 
-                                                        systematics, syst_key, separator, 
-                                                        replace_config = "{replace_config}")
-with open(outname.replace('.root','_cleanedUp.txt'), 'w') as f:
-    f.write('{{}} : {{}}'.format(nHistsBefore, nHistsAfter))
-  """.format(path = os.path.join(self.pp.analysis.pyrootdir,"util"),
-            systpath = self.pp.configData.local_syst_path,
-            replace_config = self.pp.configData.replace_config)
-        # write script to file
-        with open(self.ccPath.replace(".cc","_cleanupHistos.py"), "w") as srcfile:
-            srcfile.write(script)
-
-    def writeMergeSystsScript(self):
-        script = """
-import sys
-import os
-sys.path.append('{path}')
-import combine_intermid_systs
-
-filename     = os.getenv('INFILE')
-
-process      = os.getenv('ORIGNAME')
-nom_key      = os.getenv('NOMHISTKEY')
-syst_key     = os.getenv('SYSTHISTKEY')
-separator    = os.getenv('SEPARATOR')
-syst_csvpath = "{systpath}"
-
-print(process)
-combine_intermid_systs.combine_intermid_syst(   h_nominal_key   = nom_key, 
-                                                h_syst_key      = syst_key, 
-                                                rfile_path      = filename,
-                                                replace_config  = "{replace_config}",
-                                                processes       = process,
-                                                separator       = separator,
-                                                syst_csvpath    = syst_csvpath
-                                            )
-""".format(path = os.path.join(self.pp.analysis.pyrootdir,"util"),
-            systpath = self.pp.configData.local_syst_path,
-            replace_config = self.pp.configData.replace_config)
-        # write script to file
-        script_path = self.ccPath.replace(".cc","_combineSysts.py")
-        with open(script_path, "w") as srcfile:
-            srcfile.write(script)
-        return script_path
-
-
     ## run scripts ##
     def writeRunScripts(self):
         # init outputs
         self.scripts = []
-        self.cleanup_scripts = []
         self.outputs = []
         self.nentries = []
         self.samplewiseMaps = {}
@@ -574,7 +506,6 @@ combine_intermid_systs.combine_intermid_syst(   h_nominal_key   = nom_key,
             #jsonfile.write(treejson)
         print "Saved information about events in trees to ", self.pp.analysis.workdir+'/'+"treejson.json"
         returnData = {  "scripts": self.scripts,
-                        "cleanup": self.cleanup_scripts,
                         "outputs": self.outputs, 
                         "entries": self.nentries, 
                         "maps": self.samplewiseMaps}
@@ -587,7 +518,6 @@ combine_intermid_systs.combine_intermid_syst(   h_nominal_key   = nom_key,
         processname = sample.nick
         outfilename = self.pp.plotPath+processname+'_'+str(nJob)+'.root'
         scriptname = self.pp.scriptsPath+'/'+processname+'_'+str(nJob)+'.sh'
-        cleanupname = self.pp.scriptsPath+"/"+processname+"_cleanup_"+str(nJob)+".sh"
         origName = str(sample.origName)
         suffix = writeOptions.get("suffix", "")
         skipevents = writeOptions.get("skipEvents", 0)
@@ -618,9 +548,6 @@ combine_intermid_systs.combine_intermid_syst(   h_nominal_key   = nom_key,
         script += 'export VARIATION="{}"\n'.format(variation)
         #DANGERZONE
         pPscript = script + ".".join(self.ccPath.split(".")[:-1])+'\n'
-        cleanup  = script + 'python '+self.ccPath.replace('.cc','_cleanupHistos.py')+'\n'
-        if self.pp.configData.replace_config:
-            cleanup  += 'python '+self.ccPath.replace('.cc','_combineSysts.py')+'\n'
 
         # writing script to file and chmodding
         with open(scriptname, "w") as f:
@@ -628,14 +555,8 @@ combine_intermid_systs.combine_intermid_syst(   h_nominal_key   = nom_key,
         st = os.stat(scriptname)
         os.chmod(scriptname, st.st_mode | stat.S_IEXEC)
 
-        with open(cleanupname, "w") as f:
-            f.write(cleanup)
-        st = os.stat(cleanupname)
-        os.chmod(cleanupname, st.st_mode | stat.S_IEXEC)
-
         # saving script info to lists
         self.scripts.append(scriptname)
-        self.cleanup_scripts.append(cleanupname)
         self.outputs.append(outfilename)
         self.samplewiseMaps[processname].append(outfilename)
 
@@ -668,6 +589,36 @@ combine_intermid_systs.combine_intermid_syst(   h_nominal_key   = nom_key,
         with open(self.haddScript, "w") as sf:
             sf.write(script)
         print("haddScript written to "+self.haddScript)
+
+    def writeMergeSystsScript(self):
+        script = """
+import sys
+import os
+sys.path.append('{path}')
+import combine_intermid_systs
+filename     = os.getenv('INFILE')
+process      = os.getenv('ORIGNAME')
+nom_key      = os.getenv('NOMHISTKEY')
+syst_key     = os.getenv('SYSTHISTKEY')
+separator    = os.getenv('SEPARATOR')
+syst_csvpath = "{systpath}"
+print(process)
+combine_intermid_systs.combine_intermid_syst(   h_nominal_key   = nom_key, 
+                                                h_syst_key      = syst_key, 
+                                                rfile_path      = filename,
+                                                replace_config  = "{replace_config}",
+                                                processes       = process,
+                                                separator       = separator,
+                                                syst_csvpath    = syst_csvpath
+                                            )
+""".format(path = os.path.join(self.pp.analysis.pyrootdir,"util"),
+            systpath = self.pp.configData.local_syst_path,
+            replace_config = self.pp.configData.replace_config)
+        # write script to file
+        script_path = self.ccPath.replace(".cc","_combineSysts.py")
+        with open(script_path, "w") as srcfile:
+            srcfile.write(script)
+        return script_path
 
 
     def writeHaddShell(self, scriptname, haddedRootName, haddedLogName, sampleData):
