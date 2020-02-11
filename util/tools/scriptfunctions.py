@@ -124,7 +124,7 @@ def InitSFCorrection(sfCorrection):
     histList = []
     for key in histNames:
         for corr in sfCorrection["corrections"]:
-            if getCorrName(sfCorrection["corrections"][corr]]) in key:
+            if getCorrName(sfCorrection["corrections"][corr]) in key:
                 h = rf.Get(key)
                 histList.append(template_histList.format(histName = key))
                 print("added key {}".format(key))
@@ -138,7 +138,7 @@ def InitSFCorrection(sfCorrection):
     for corr in sfCorrection["corrections"]:
         correctionList.append(template_corrections.format(
             corr=corr, histName = getCorrName(sfCorrection["corrections"][corr])))
-        dimList.append(template_corrections.format(
+        dimList.append(template_dimensions.format(
             corr=corr, nDim = len(sfCorrection["corrections"][corr])))
 
     sfInit = """

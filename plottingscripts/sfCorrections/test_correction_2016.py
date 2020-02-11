@@ -52,7 +52,7 @@ def main(pyrootdir, opts):
     memexp = ''
     # configs
     config          = "SFSFderivation/samples_testSFs_2016"
-    variable_cfg    = "SFSFderivation/additionalVariables_2016"
+    variable_cfg    = "SFSFderivation/additionalVariables"
     plot_cfg        = "SFSFderivation/plots_testSFs"
     syst_cfg        = "SFSFderivation/systs_testSFs"
 
@@ -68,6 +68,7 @@ def main(pyrootdir, opts):
     sfCorrection["corrections"]["NJet"] = ["N_Jets"]
     sfCorrection["corrections"]["NPV_vs_NJet"] = ["N_GenPVs", "N_Jets"]
     sfCorrection["corrections"]["JetPt_vs_NJet"] = ["Jet_Pt[0]", "N_Jets"]
+    sfCorrection["corrections"]["HT_vs_NJet"] = ["Evt_HT_jets", "N_Jets"]
     # in root file sf histograms exist with some naming scheme
     sfCorrection["nameTemplate"] = "$BINNING__$PROCESS__$NAME"
     # SF_ is always preprended by default, that should not be changed

@@ -7,4 +7,4 @@ Uncertainty,Type,Construction,Up,Down,Plot,ttH,ttlf,ttcc,ttbb_4FS,ttbb_5FS,ttb_4
 #btag_LSTAT2,shape,weight,"""dummyWeight_CSVLFStats2up:=(DEFAULTWEIGHT*internalCSVweight_CSVLFStats2Up)""","""dummyWeight_CSVLFStats2down:=(DEFAULTWEIGHT*internalCSVweight_CSVLFStats2Down)""",1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 #btag_CERR1,shape,weight,"""dummyWeight_CSVCErr1up:=(DEFAULTWEIGHT*internalCSVweight_CSVCErr1Up)""","""dummyWeight_CSVCErr1down:=(DEFAULTWEIGHT*internalCSVweight_CSVCErr1Down)""",1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 #btag_CERR2,shape,weight,"""dummyWeight_CSVCErr2up:=(DEFAULTWEIGHT*internalCSVweight_CSVCErr2Up)""","""dummyWeight_CSVCErr2down:=(DEFAULTWEIGHT*internalCSVweight_CSVCErr2Down)""",1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-btag_NOMINAL,shape,weight,"""dummyWeight_CSVSF:=(DEFAULTWEIGHT)""",-,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+btag_NOMINAL,shape,weight,"""dummyWeight_btagCorr:=(DEFAULTWEIGHT)""",-,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1

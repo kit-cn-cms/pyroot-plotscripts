@@ -11,7 +11,7 @@ import util.tools.plotClasses as plotClasses
 
 # samples
 # input path 
-path  = "/nfs/dust/cms/user/vdlinden/legacyTTH/ntuples/sfDerivation_new/2016/"
+path  = "/nfs/dust/cms/user/vdlinden/legacyTTH/ntuples/sfDerivation_final/2016/"
 
 
 path_4FS_ttbb_SL  = path+"/TTbb_4f*SemiLeptonic*/*nominal*.root"
@@ -30,6 +30,7 @@ weightReplacements = {
     # default weight
     "FINALWEIGHTNJET":  "Weight_GEN_nom*internalCSVweight*sf__NJet__btag_NOMINAL",
     "FINALWEIGHTJETPT": "Weight_GEN_nom*internalCSVweight*sf__JetPt_vs_NJet__btag_NOMINAL",
+    "FINALWEIGHTHT":    "Weight_GEN_nom*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL",
     "FINALWEIGHTNPV":   "Weight_GEN_nom*internalCSVweight*sf__NPV_vs_NJet__btag_NOMINAL",
     "CSVSFWEIGHT":      "Weight_GEN_nom*internalCSVweight",
     "ORIGINALWEIGHT":   "Weight_GEN_nom",
@@ -48,7 +49,8 @@ sel_ttlf = "(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)"
 # nominal weight
 nominalweight="NomWeight:=(Weight_GEN_nom)"
 
-
+                                                                                                                                                                  
+sampleDict=plotClasses.SampleDictionary() 
 sampleDict.doPrintout()
 doReadTrees=True
 

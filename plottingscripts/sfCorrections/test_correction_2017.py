@@ -52,7 +52,7 @@ def main(pyrootdir, opts):
     memexp = ''
     # configs
     config          = "SFSFderivation/samples_testSFs_2017"
-    variable_cfg    = "SFSFderivation/additionalVariables_2017"
+    variable_cfg    = "SFSFderivation/additionalVariables"
     plot_cfg        = "SFSFderivation/plots_testSFs"
     syst_cfg        = "SFSFderivation/systs_testSFs"
 

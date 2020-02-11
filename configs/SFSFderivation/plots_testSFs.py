@@ -18,6 +18,10 @@ pTbinEdges = [30.,50.,75.,100.,150.,250.,350.,500.,1000.]
 npTbins = len(pTbinEdges)-1
 pTbinEdges = array("f", pTbinEdges)
 
+HTbinEdges = [0,50,100,200,300,500,1000]
+nHTbins = len(HTbinEdges)-1
+HTbinEdges = array("f", HTbinEdges)
+
 nJbinEdges = [-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,10.5]
 nJbins = len(nJbinEdges)-1
 nJbinEdges = array("f", nJbinEdges)
@@ -40,6 +44,9 @@ def plots_control(data = None):
         #plotClasses.Plot(ROOT.TH1D("HT","HT",75,0.,1500.),htDummy,selection,label),
         plotClasses.Plot(ROOT.TH1D("N_PV","PV",pvbins,pvbinEdges),"N_PrimaryVertices",selection,label),
         plotClasses.Plot(ROOT.TH1D("N_GenPV","GenPV",pvbins,pvbinEdges),"N_GenPVs",selection,label),
+        plotClasses.Plot(ROOT.TH1F("HT_jets","HT_jets",nHTbins, HTbinEdges),"Evt_HT_jets",selection,label),
+        plotClasses.Plot(ROOT.TH1F("HT","HT",75,0.,1500.),"Evt_HT_jets",selection,label),
+
         ]
     selection = "(1.)"
     label = "inclusive"
@@ -54,6 +61,9 @@ def plots_control(data = None):
         #plotClasses.Plot(ROOT.TH1D("inclusive_HT","HT",75,0.,1500.),htDummy,selection,label),
         plotClasses.Plot(ROOT.TH1D("inclusive_N_PV","PV",pvbins,pvbinEdges),"N_PrimaryVertices",selection,label),
         plotClasses.Plot(ROOT.TH1D("inclusive_N_GenPV","GenPV",pvbins,pvbinEdges),"N_GenPVs",selection,label),
+        plotClasses.Plot(ROOT.TH1F("inclusive_HT_jets","HT_jets",nHTbins, HTbinEdges),"Evt_HT_jets",selection,label),
+        plotClasses.Plot(ROOT.TH1F("inclusive_HT","HT",75,0.,1500.),"Evt_HT_jets",selection,label),
+
         ]
 
     if data:
