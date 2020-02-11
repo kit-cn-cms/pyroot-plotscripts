@@ -93,13 +93,13 @@ def InitDataBase(thisDataBase=[]):
     {DBname}DB.back()->PrintStructure();
     std::cout<<"loaded database for "<<databaseRelevantFilenames.at(isn)<<std::endl;
   }}
-  double {DBname}p=-99.9;
-  double {DBname}p_sig=-99.9;
-  double {DBname}p_bkg=-99.9;
-  double {DBname}p_err_sig=-99.9;
-  double {DBname}p_err_bkg=-99.9;
-  double {DBname}n_perm_sig=-99.9;
-  double {DBname}n_perm_bkg=-99.9;
+  double {DBname}p=-1.;
+  double {DBname}p_sig=-1.;
+  double {DBname}p_bkg=-1.;
+  double {DBname}p_err_sig=-1.;
+  double {DBname}p_err_bkg=-1.;
+  double {DBname}n_perm_sig=-1.;
+  double {DBname}n_perm_bkg=-1.;
   auto {DBname}DummyResultPointer = std::unique_ptr<DataBaseMEMResult>(new DataBaseMEMResult(vec_memStrings));
   int {DBname}FoundResult = 1;
   """.format(DBname = thisDataBaseName, DBpath = thisDataBasePath)
