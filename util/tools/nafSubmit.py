@@ -323,7 +323,7 @@ def monitorJobStatus(jobIDs = None):
     helds = []
     totals = []
     while not allfinished:
-        time.sleep(300)
+        time.sleep(100)
         # calling condor_q command
         a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
         a.wait()

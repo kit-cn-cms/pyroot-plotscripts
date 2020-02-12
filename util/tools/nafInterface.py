@@ -82,54 +82,6 @@ def plotTerminationCheck(jobData):
 
 
 
-def cleanupInterface(jobsToSubmit, rootFiles, skipCleanup = False, maxTries = 10, nTries = 0):
-    if skipCleanup:
-        undoneJobs, undoneRootFiles = cleanupTerminationCheck(jobsToSubmit, rootFiles)       
-        if len(undoneJobs) > 0: return cleanupInterface( undoneJobs, undoneRootFiles )
-        else:
-            print("cleanup histos has terminated successfully")
-            return
-
-    submitOptions = {"PeriodicHold": 10001,
-                    "+RequestRuntime": 10000}
-
-    if nTries == 0:
-        print("submitting cleanup jobs as array job")
-        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "cleanupHistos", submitOptions = submitOptions)
-    elif nTries < maxTries:
-        print("resubmitting cleanup jobs")
-        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "cleanup_resubmit", submitOptions = submitOptions)
-    else:
-        print("cleaning up histograms did not work after {} tries - ABORTING".format(maxTries))
-        sys.exit(1)
-
-    # monitor running
-    nafSubmit.monitorJobStatus(jobIDs)
-    # check for termination of jobs
-    undoneJobs, undoneRootFiles = cleanupTerminationCheck(jobsToSubmit, rootFiles)
-
-    if len(undoneJobs) > 0:
-        return cleanupInterface( undoneJobs, undoneRootFiles, maxTries = maxTries, nTries = nTries+1 )
-    
-    print("cleanup histos interface has terminated successfully")
-
-def cleanupTerminationCheck(jobs, outputFiles):
-    undoneJobs = []
-    undoneRootFiles = []
-    
-    for job, out in zip(jobs, outputFiles):
-        if not os.path.exists(out.replace('.root','_original_cleanedUp.txt')):
-            undoneJobs.append(job)
-            undoneRootFiles.append(out)
-
-    print("-"*50)
-    print("done checking outputs of cleanup scripts - results:")
-    print("jobs without cleanup file: {}".format(len(undoneJobs)))
-    print("-"*50)
-    return undoneJobs, undoneRootFiles
-
-
-
 #############################
 # parallel hadding
 #############################
