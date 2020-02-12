@@ -74,6 +74,8 @@ void plot(){
   int skipevents = atoi(getenv ("SKIPEVENTS"));
   string eventFilterFile = string(getenv("EVENTFILTERFILE"));
   std::string dataera = string(getenv ("DATAERA"));
+  std::string variation = string(getenv ("VARIATION"));
+  std::string origName = string(getenv ("ORIGNAME"));
 
   // create vector of systematics
   std::vector<Systematics::Type> v_SystTypes = Systematics::getTypeVector();
@@ -114,9 +116,17 @@ void plot(){
 
   std::cout<<"processname: " <<processname<<std::endl;
   std::cout<<"suffix: " <<suffix<<std::endl;
-  bool skipWeightSysts = TString(processname).EndsWith("Up") or TString(processname).EndsWith("Down");
+  bool skipWeightSysts = false;
+  if (variation != "") {
+    skipWeightSysts = true;
+  }
+  if (TString(processname).Contains("SingleMu") or TString(processname).Contains("SingleEl") or TString(processname).Contains("EGamma") or TString(processname).Contains("MET")){
+    std::cout << "Detected Data Sample, going to skip weight systematics" << std::endl;
+    skipWeightSysts = true;
+  }
+
   if (skipWeightSysts) {
-    std::cout << "Detected syst varied Sample, going to skip weight systematics" << std::endl;
+    std::cout << "Detected syst varied or Data Sample, going to skip weight systematics" << std::endl;
   }
 
   std::vector<TString> databaseRelevantFilenames;
@@ -136,7 +146,6 @@ void plot(){
   //initialize Trigger Helper
 
   // Hack for subsampling test
-  //if(processname=="SingleEl" || processname=="SingleMu"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
   if((processname.find("SingleEl")!= std::string::npos) || (processname.find("SingleMu")!= std::string::npos) || (processname.find("MET")!= std::string::npos)){DoWeights=0; std::cout<<"is data, dont use nominal weights!!!!"<<std::endl;}
 
   //Hack to find out if sample is ttH or other

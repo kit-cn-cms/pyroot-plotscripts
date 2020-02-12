@@ -93,13 +93,13 @@ def InitDataBase(thisDataBase=[]):
     {DBname}DB.back()->PrintStructure();
     std::cout<<"loaded database for "<<databaseRelevantFilenames.at(isn)<<std::endl;
   }}
-  double {DBname}p=-99.9;
-  double {DBname}p_sig=-99.9;
-  double {DBname}p_bkg=-99.9;
-  double {DBname}p_err_sig=-99.9;
-  double {DBname}p_err_bkg=-99.9;
-  double {DBname}n_perm_sig=-99.9;
-  double {DBname}n_perm_bkg=-99.9;
+  double {DBname}p=-1.;
+  double {DBname}p_sig=-1.;
+  double {DBname}p_bkg=-1.;
+  double {DBname}p_err_sig=-1.;
+  double {DBname}p_err_bkg=-1.;
+  double {DBname}n_perm_sig=-1.;
+  double {DBname}n_perm_bkg=-1.;
   auto {DBname}DummyResultPointer = std::unique_ptr<DataBaseMEMResult>(new DataBaseMEMResult(vec_memStrings));
   int {DBname}FoundResult = 1;
   """.format(DBname = thisDataBaseName, DBpath = thisDataBasePath)
@@ -116,11 +116,19 @@ def initHistos(catnames, systnames, plots, nom_histname_template, syst_histname_
 double variable = -999;
 double variable1 = -999;
 double variable2 = -999;
+
 std::vector<std::string> systematics = {{
 {}
 }};
 
 """.format(",\n".join(['\t"{}"'.format(x) for x in systnames]))
+    rstr += """
+if(skipWeightSysts){
+  systematics = {
+    variation
+  };
+};
+"""
 # std::vector<std::string> categs = {\n"
 # for cat in catnames:
 #     rstr += "    \""+cat+"\",\n"
@@ -162,7 +170,7 @@ for(const auto& obj: plotinfo1D){{
     const auto& PlotInfo1D = obj.second;
     if(syst == "") histname = "{nom_hist_temp}";
     else histname = "{syst_hist_temp}";
-    histname.ReplaceAll("$PROCESS", processname);
+    histname.ReplaceAll("$PROCESS", origName);
     histname.ReplaceAll("$CHANNEL", obj.first);
     histname.ReplaceAll("$SYSTEMATIC", syst);
     histos1D[obj.first+syst] = std::unique_ptr<TH1>(new TH1F((histname.Data()+suffix).c_str(), (PlotInfo1D.title).c_str(), PlotInfo1D.nbins, PlotInfo1D.edges.data()));
@@ -176,7 +184,7 @@ for(const auto& obj: plotinfo2D){{
     const auto& PlotInfo2D = obj.second;
     if(syst == "") histname = "{nom_hist_temp}";
     else histname = "{syst_hist_temp}";
-    histname.ReplaceAll("$PROCESS", processname);
+    histname.ReplaceAll("$PROCESS", origName);
     histname.ReplaceAll("$CHANNEL", obj.first);
     histname.ReplaceAll("$SYSTEMATIC", syst);
     histos2D[obj.first+syst] = std::unique_ptr<TH2>(new TH2F((histname.Data()+suffix).c_str(), (PlotInfo2D.title).c_str(), 
@@ -445,7 +453,7 @@ def fillHistoSyst(histName, varNames, weight, systNames, systWeights):
         # 1D Histograms
         text += '       std::vector<structHelpFillHisto> helpWeightVec_' + histName + ' = {\n'
         # Do Nominal Plot for sure
-        text += "           {histos1D[\""+histName+"\"].get()"+", ((NomWeight)*(weight_"+histName+"))},\n"
+        text += "           {histos1D[\""+histName+"\"+variation].get()"+", ((NomWeight)*(weight_"+histName+"))},\n"
         text += "       };\n"
 
         text += "       if (!skipWeightSysts) { // append plots for weight systs if neccessary \n"
@@ -461,7 +469,7 @@ def fillHistoSyst(histName, varNames, weight, systNames, systWeights):
         # 2D Histograms
         text += '       std::vector<structHelpFillTwoDimHisto> helpWeightVec_' + histName + ' = {\n'
         # Do Nominal Plot for sure
-        text += "           {histos2D[\""+histName+"\"].get()"+", ((NomWeight)*(weight_"+histName+"))},\n"
+        text += "           {histos2D[\""+histName+"\"+variation].get()"+", ((NomWeight)*(weight_"+histName+"))},\n"
         text += "       };\n"
 
         text += "       if (!skipWeightSysts) { // append plots for weight systs if neccessary \n"
