@@ -79,7 +79,7 @@ def makeDatacardsParallel(filePath, workdir,
             if not os.path.exists(scriptdir):
                 sys.exit("ERROR: Could not find script in '{}'".format(scriptdir))
             options = []
-            options += ('--categoryname='+discrname+"_"+cat).split()
+            options += ('--categoryname='+cat).split()
             options += ('--rootfile='+filePath).split()
 
             datacard_name = "{}_hdecay.txt".format(cat)
