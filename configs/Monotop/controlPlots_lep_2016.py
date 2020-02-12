@@ -19,7 +19,7 @@ def control_plots_lep_CR_ttbarlep(data=None):
     extension = "_lep_CR_ttbarlep"
     selection = generalselection
     selection += "*((N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && Triggered_HLT_IsoMu24_vX==1) || (N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele27_WPTight_Gsf_vX==1 || Triggered_HLT_Photon175_vX==1)))"
-    selection += "*(N_BTagsM>=2)"
+    selection += "*(N_BTagsM>=1 && N_BTagsL>=2)"
 
     plots = [
         plotClasses.Plot(
@@ -499,7 +499,7 @@ def control_plots_lep_SR(data=None):
     extension = "_lep_SR"
     selection = generalselection
     selection += "*((N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && Triggered_HLT_IsoMu24_vX==1) || (N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele27_WPTight_Gsf_vX==1 || Triggered_HLT_Photon175_vX==1)))"
-    selection += "*(N_BTagsM<=1 && N_BTagsL>=1 && N_BTagsL<=2)"
+    selection += "*(N_BTagsM==1 && N_BTagsL==1)"
 
     plots = [
         plotClasses.Plot(
