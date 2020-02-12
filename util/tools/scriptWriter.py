@@ -230,7 +230,10 @@ class scriptWriter:
         print dnnfiles
         
         #lhapdf=[' `/cvmfs/cms.cern.ch/slc6_amd64_gcc530/external/lhapdf/6.1.6-ikhhed2/bin/lhapdf-config --cflags --ldflags`']
-        lhapdf=[' `/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/lhapdf/6.2.1-fmblme/bin/lhapdf-config --cflags --ldflags`']
+        lhapdf_path = os.environ["LHAPDF_DATA_PATH"]
+        lhapdf_relpath = "../../bin/lhapdf-config"
+        lhapdf_cfg = os.path.join(lhapdf_path, *(lhapdf_relpath.split("/")))
+        lhapdf=['`{} --cflags --ldflags`'.format(lhapdf_cfg)]
 
         # getting databases
         memDBccfiles=[]
