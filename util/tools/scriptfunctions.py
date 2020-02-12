@@ -254,98 +254,96 @@ def encodeSampleSelection(samples, varManager):
 
 # -- reading data base ----------------------------------------------------------------------------
 def readOutDataBase(thisDataBase=[]):
-  thisDataBaseName=thisDataBase[0]
-  thisDataBasePath=thisDataBase[1]
-  skipNonExistingEvent=thisDataBase[2]
-  
-  rstr= """
-  // read the database
-    //std::cout<<std::endl<<"run lumi event "<<Evt_Run<<" "<<Evt_Lumi<<" "<<Evt_ID<<std::endl;
-  """
-  
-  rstr+="  "+thisDataBaseName+"p="+thisDataBaseName+"DummyResultPointer->p_vec[0];\n"
-  rstr+="  "+thisDataBaseName+"p_sig="+thisDataBaseName+"DummyResultPointer->p_sig;\n"
-  rstr+="  "+thisDataBaseName+"p_bkg="+thisDataBaseName+"DummyResultPointer->p_bkg;\n"
-  rstr+="  "+thisDataBaseName+"p_err_sig="+thisDataBaseName+"DummyResultPointer->p_err_sig;\n"
-  rstr+="  "+thisDataBaseName+"p_err_bkg="+thisDataBaseName+"DummyResultPointer->p_err_bkg;\n"
-  rstr+="  "+thisDataBaseName+"n_perm_sig="+thisDataBaseName+"DummyResultPointer->n_perm_sig;\n"
-  rstr+="  "+thisDataBaseName+"n_perm_bkg="+thisDataBaseName+"DummyResultPointer->n_perm_bkg;\n"
-  
-  rstr+="""
+    thisDataBaseName=thisDataBase[0]
+    thisDataBasePath=thisDataBase[1]
+    skipNonExistingEvent=thisDataBase[2]
+
+    rstr= """
+    // read the database
+      //std::cout<<std::endl<<"run lumi event "<<Evt_Run<<" "<<Evt_Lumi<<" "<<Evt_ID<<std::endl;
+    """
+    things_to_read = "p_sig p_bkg p_err_sig p_err_bkg n_perm_sig n_perm_bkg".split()
+    rstr += "{thisDataBaseName}p={thisDataBaseName}DummyResultPointer->p_vec[0];\n"
+    for obj in things_to_read:
+      rstr += "  {thisDataBaseName}{obj}={thisDataBaseName}DummyResultPointer->{obj};\n".format(thisDataBaseName = thisDataBaseName,
+                                                                                            obj = obj)
+    rstr+="""
     TString currentRelevantSampleName=sampleDataBaseIdentifiers[currentfilename];
     //TString translatedCurrentRelevantSampleName=sampleTranslationMapCPP[currentRelevantSampleName];
-    //if(processname=="QCD" or processname=="QCD_CMS_ttH_QCDScaleFactorUp" or processname=="QCD_CMS_ttH_QCDScaleFactorDown"){
+    //if(processname=="QCD" or processname=="QCD_CMS_ttH_QCDScaleFactorUp" or processname=="QCD_CMS_ttH_QCDScaleFactorDown"){{
     //  translatedCurrentRelevantSampleName+="QCD";
-    //  }
+    //  }}
     //std::cout<<currentfilename<<" "<<currentRelevantSampleName<<" "<<translatedCurrentRelevantSampleName<<std::endl;
-  """
-  
-  rstr+=" // loop over subsamples of this database\n"
-  rstr+="    int nfoundresults=0;\n"
-  
-  # at the moment we want the MEM for everything
-  #rstr+="  if((N_BTagsM>=3 && N_Jets>=6) || (N_BTagsM>=4 && (N_Jets==4 || N_Jets==5))){ \n"
-  rstr+="  if((N_BTagsM>=3 && N_Jets>=4)){ \n"
-  rstr+="  databaseWatch->Start(); \n"
-  
-  rstr+="  for(unsigned int isn=0; isn<"+thisDataBaseName+"DB.size();isn++){ \n"
-  rstr+="    if(databaseRelevantFilenames.at(isn)==currentRelevantSampleName){;\n"
-  rstr+="         DataBaseMEMResult "+thisDataBaseName+"Result = "+thisDataBaseName+"DB.at(isn)->GetMEMResult(databaseRelevantFilenames.at(isn),Evt_Run,Evt_Lumi,Evt_ID);\n"
 
-  #rstr+="        std::cout<<\" p p_sig p_bkg p_err_sig p_err_bkg n_perm_sig n_perm_bkg \"<<"+thisDataBaseName+"p<<\" \"<<"+thisDataBaseName+"p_sig<<\"   \"<<"+thisDataBaseName+"p_bkg<<\" \"<<"+thisDataBaseName+"p_err_sig<<\" \"<<"+thisDataBaseName+"p_err_bkg<<\" \"<<"+thisDataBaseName+"n_perm_sig<<\" \"<<"+thisDataBaseName+"n_perm_bkg<<\" \"<<std::endl;\n"
-  
-  rstr+="        // check if the event was found using the default values. If any event was found the return values should be different and the resuilt will be replaced\n"
-  #rstr+="        if(("+thisDataBaseName+"Result.p != "+thisDataBaseName+"DummyResultPointer->p) or ("+thisDataBaseName+"Result.p_sig != "+thisDataBaseName+"DummyResultPointer->p_sig) or ("+thisDataBaseName+"Result.p_bkg != "+thisDataBaseName+"DummyResultPointer->p_bkg) or ("+thisDataBaseName+"Result.p_err_sig != "+thisDataBaseName+"DummyResultPointer->p_err_sig) or ("+thisDataBaseName+"Result.p_err_bkg != "+thisDataBaseName+"DummyResultPointer->p_err_bkg) or ("+thisDataBaseName+"Result.n_perm_sig != "+thisDataBaseName+"DummyResultPointer->n_perm_sig) or ("+thisDataBaseName+"Result.n_perm_bkg != "+thisDataBaseName+"DummyResultPointer->n_perm_bkg)){\n"
-  rstr+="        if(("+thisDataBaseName+"Result.p_vec[0] != -99)){\n"
-  rstr+="        nfoundresults+=1;"
+    // loop over subsamples of this database
+    int nfoundresults=0;
+    if((N_BTagsM>=3 && N_Jets>=4)){{
+      databaseWatch->Start();
+      for(unsigned int isn=0; isn<{thisDataBaseName}DB.size();isn++){{
+        if(databaseRelevantFilenames.at(isn)==currentRelevantSampleName){{
+          DataBaseMEMResult {thisDataBaseName}Result = {thisDataBaseName}DB.at(isn)->GetMEMResult(databaseRelevantFilenames.at(isn),Evt_Run,Evt_Lumi,Evt_ID);
+          // check if the event was found using the default values. 
+          // If any event was found the return values should be different and the result will be replaced
+          if(({thisDataBaseName}Result.p_vec[0] != -1.)){{
+            nfoundresults+=1;
+            {thisDataBaseName}p={thisDataBaseName}Result.p_vec[0];
+    """
+    # at the moment we want the MEM for everything
+    #rstr+="  if((N_BTagsM>=3 && N_Jets>=6) || (N_BTagsM>=4 && (N_Jets==4 || N_Jets==5))){ \n"
+    for obj in things_to_read:
+      rstr += "          {thisDataBaseName}{obj}={thisDataBaseName}Result.{obj};\n".format(thisDataBaseName = thisDataBaseName, obj = obj)
 
-  rstr+="      "+thisDataBaseName+"p="+thisDataBaseName+"Result.p_vec[0];\n"
-  rstr+="      "+thisDataBaseName+"p_sig="+thisDataBaseName+"Result.p_sig;\n"
-  rstr+="      "+thisDataBaseName+"p_bkg="+thisDataBaseName+"Result.p_bkg;\n"
-  rstr+="      "+thisDataBaseName+"p_err_sig="+thisDataBaseName+"Result.p_err_sig;\n"
-  rstr+="      "+thisDataBaseName+"p_err_bkg="+thisDataBaseName+"Result.p_err_bkg;\n"
-  rstr+="      "+thisDataBaseName+"n_perm_sig="+thisDataBaseName+"Result.n_perm_sig;\n"
-  rstr+="      "+thisDataBaseName+"n_perm_bkg="+thisDataBaseName+"Result.n_perm_bkg;\n"
-  #rstr+="      std::cout<<\"found database entry \"<<std::endl;\n"
-  rstr+="    }\n"
-  rstr+="    }\n"
-  rstr+="  }// end db loop \n"
-  rstr+="    if(nfoundresults!=1){\n"
-  rstr+="    std::cout<<\"WARNING found not exaclty one result \"<<nfoundresults<<\" \"<<currentRelevantSampleName<<\" \"<<Evt_ID<<\" \"<<N_Jets<<\" \"<<N_BTagsM<<std::endl;\n"
-  rstr+="    if(N_BTagsM>=3){\n"
-  rstr+="      std::cout<<\"VETO this event\"<<\" \"<<currentRelevantSampleName<<\" \"<<Evt_ID<<\" \"<<N_Jets<<\" \"<<N_BTagsM<<std::endl;\n"
-  rstr+="      //std::cout<<\"RedoThisEvent\"<<\" \"<<currentRelevantSampleName<<\" \"<<currentfilename<<\" \"<<Evt_Run<<\" \"<<Evt_Lumi<<\" \"<<Evt_ID<<std::endl;\n"
-  rstr+="      "+thisDataBaseName+"FoundResult=0;\n"
-  rstr+="      nEventsVetoed+=1;\n"
-  rstr+="""
-	       if(N_Jets==4 && N_BTagsM==3){sampleDataBaseLostEvents["jt43"][currentRelevantSampleName]+=1;}
-	       else if(N_Jets==4 && N_BTagsM>=4){sampleDataBaseLostEvents["jt44"][currentRelevantSampleName]+=1;}  
-	       else if(N_Jets==5 && N_BTagsM==3){sampleDataBaseLostEvents["jt53"][currentRelevantSampleName]+=1;}  
-	       else if(N_Jets==5 && N_BTagsM>=4){sampleDataBaseLostEvents["jt54"][currentRelevantSampleName]+=1;}  
-	       else if(N_Jets>=6 && N_BTagsM==3){sampleDataBaseLostEvents["jt63"][currentRelevantSampleName]+=1;}  
-	       else if(N_Jets>=6 && N_BTagsM>=4){sampleDataBaseLostEvents["jt64"][currentRelevantSampleName]+=1;}  
-	"""
-  rstr+="    }\n"
-  rstr+="  }\n"
-  rstr+="  else{\n"
-  rstr+="      "+thisDataBaseName+"FoundResult=1;\n"
-  rstr+="""
-	       if(N_Jets==4 && N_BTagsM==3){sampleDataBaseFoundEvents["jt43"][currentRelevantSampleName]+=1;}
-	       else if(N_Jets==4 && N_BTagsM>=4){sampleDataBaseFoundEvents["jt44"][currentRelevantSampleName]+=1;}  
-	       else if(N_Jets==5 && N_BTagsM==3){sampleDataBaseFoundEvents["jt53"][currentRelevantSampleName]+=1;}  
-	       else if(N_Jets==5 && N_BTagsM>=4){sampleDataBaseFoundEvents["jt54"][currentRelevantSampleName]+=1;}  
-	       else if(N_Jets>=6 && N_BTagsM==3){sampleDataBaseFoundEvents["jt63"][currentRelevantSampleName]+=1;}  
-	       else if(N_Jets>=6 && N_BTagsM>=4){sampleDataBaseFoundEvents["jt64"][currentRelevantSampleName]+=1;}  
-      """  
-  rstr+="  //std::cout<<\"FOUNDEVENT\"<<\" \"<<currentRelevantSampleName<<\" \"<<Evt_ID<<\" \"<<N_Jets<<\" \"<<N_BTagsM<<std::endl;\n"
-  rstr+=" }\n"
-  rstr+="  databaseWatch->Stop(); memTime+=databaseWatch->RealTime();\n"
-  if skipNonExistingEvent:
-    rstr+="  if("+thisDataBaseName+"FoundResult==0 and N_BTagsM>=3){ std::cout<<\"skipping\"<<std::endl; continue; }\n"
-  rstr+="  }\n"
-  
-  rstr+="  //std::cout<<\"FINAL p p_sig p_bkg p_err_sig p_err_bkg n_perm_sig n_perm_bkg \"<<"+thisDataBaseName+"p<<\" \"<<"+thisDataBaseName+"p_sig<<\" \"<<"+thisDataBaseName+"p_bkg<<\" \"<<"+thisDataBaseName+"p_err_sig<<\" \"<<"+thisDataBaseName+"p_err_bkg<<\" \"<<"+thisDataBaseName+"n_perm_sig<<\" \"<<"+thisDataBaseName+"n_perm_bkg<<\" \"<<std::endl;\n"
-  return rstr
+    rstr+="""
+          }}
+        }}
+      }}// end db loop
+      if(nfoundresults!=1){{
+        std::cout << "WARNING found not exaclty one result "<<nfoundresults<<std::endl;
+        std::cout << "\\tcurrentRelevantSampleName: " << currentRelevantSampleName << std::endl;
+        std::cout << "\\tEvt_ID: " << Evt_ID << std::endl;
+        std::cout << "\\tN_Jets: " << N_Jets << std::endl;
+        std::cout << "\\tN_BTagsM: " << N_BTagsM << std::endl;
+
+        if(N_BTagsM>=3){{
+          std::cout << "VETO this event" << std::endl;
+          std::cout << "\\tcurrentRelevantSampleName: " << currentRelevantSampleName << std::endl;
+          std::cout << "\\tEvt_ID: " << Evt_ID << std::endl;
+          std::cout << "\\tN_Jets: " << N_Jets << std::endl;
+          std::cout << "\\tN_BTagsM: " << N_BTagsM << std::endl;
+          //std::cout<<"RedoThisEvent"<<" "<<currentRelevantSampleName<<" "<<currentfilename<<" "<<Evt_Run<<" "<<Evt_Lumi<<" "<<Evt_ID<<std::endl;
+          {thisDataBaseName}FoundResult=0;
+          nEventsVetoed+=1;
+          if(N_Jets==4 && N_BTagsM==3){{sampleDataBaseLostEvents["jt43"][currentRelevantSampleName]+=1;}}
+          else if(N_Jets==4 && N_BTagsM>=4){{sampleDataBaseLostEvents["jt44"][currentRelevantSampleName]+=1;}}  
+          else if(N_Jets==5 && N_BTagsM==3){{sampleDataBaseLostEvents["jt53"][currentRelevantSampleName]+=1;}}  
+          else if(N_Jets==5 && N_BTagsM>=4){{sampleDataBaseLostEvents["jt54"][currentRelevantSampleName]+=1;}}  
+          else if(N_Jets>=6 && N_BTagsM==3){{sampleDataBaseLostEvents["jt63"][currentRelevantSampleName]+=1;}}  
+          else if(N_Jets>=6 && N_BTagsM>=4){{sampleDataBaseLostEvents["jt64"][currentRelevantSampleName]+=1;}}
+        }}
+      }}
+      else{{
+        {thisDataBaseName}FoundResult=1;
+        if(N_Jets==4 && N_BTagsM==3){{sampleDataBaseFoundEvents["jt43"][currentRelevantSampleName]+=1;}}
+        else if(N_Jets==4 && N_BTagsM>=4){{sampleDataBaseFoundEvents["jt44"][currentRelevantSampleName]+=1;}}  
+        else if(N_Jets==5 && N_BTagsM==3){{sampleDataBaseFoundEvents["jt53"][currentRelevantSampleName]+=1;}}  
+        else if(N_Jets==5 && N_BTagsM>=4){{sampleDataBaseFoundEvents["jt54"][currentRelevantSampleName]+=1;}}  
+        else if(N_Jets>=6 && N_BTagsM==3){{sampleDataBaseFoundEvents["jt63"][currentRelevantSampleName]+=1;}}  
+        else if(N_Jets>=6 && N_BTagsM>=4){{sampleDataBaseFoundEvents["jt64"][currentRelevantSampleName]+=1;}}
+        //std::cout<<"FOUNDEVENT"<<" "<<currentRelevantSampleName<<" "<<Evt_ID<<" "<<N_Jets<<" "<<N_BTagsM<<std::endl;
+      }}
+      databaseWatch->Stop();
+      memTime+=databaseWatch->RealTime();
+    """
+    if skipNonExistingEvent:
+      rstr+="""  if({thisDataBaseName}FoundResult==0 and N_BTagsM>=3){{ std::cout<<"skipping"<<std::endl; continue; }}\n"""
+    rstr+="  }}\n"
+
+    rstr+="""  //std::cout<<"FINAL" << std::endl;\n"""
+    things_to_read = ["p"] + things_to_read
+    for obj in things_to_read:
+        rstr += """  //std::cout << "\\t{name}: " << {name} << std::endl;\n""".format(name = thisDataBaseName+obj)
+      
+    return rstr.format(thisDataBaseName = thisDataBaseName)
 # -------------------------------------------------------------------------------------------------
 
 
