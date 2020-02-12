@@ -87,6 +87,7 @@ def plotTerminationCheck(jobData):
 
 
 
+<<<<<<< HEAD
 def cleanupInterface(jobsToSubmit, rootFiles, skipCleanup = False, maxTries = 10, nTries = 0, options = None):
     if skipCleanup:
         undoneJobs, undoneRootFiles = cleanupTerminationCheck(jobsToSubmit, rootFiles)       
@@ -139,6 +140,8 @@ def cleanupTerminationCheck(jobs, outputFiles):
 
 
 
+=======
+>>>>>>> 1fdaa7518c82dd38ff4b98063062f1e90e9668e4
 #############################
 # parallel hadding
 #############################

@@ -29,17 +29,17 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'inputFeatures_final/2017_v1'
+    name = 'discr/2018_HTXS_Systs'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
 
     # signal process
     signalProcess = "ttH"
-    nSigSamples   = 1
+    nSigSamples   = 8
 
     # dataera
-    dataera = "2017"
+    dataera = "2018"
 
     # Name of final discriminator, should not contain underscore
     discrName = 'finaldiscr'
@@ -49,26 +49,27 @@ def main(pyrootdir, opts):
 
     # define MEM discriminator variable
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
+
     # configs
-    config          = "legacyAnalysis/samples_2017"
-    variable_cfg    = "legacyAnalysis/additionalVariables_2017"
-    plot_cfg        = "legacyAnalysis/ttH_legacy_inputfeatures_opt_binning2"
-    syst_cfg        = "legacyAnalysis/systs_2017"
+    config          = "legacyAnalysis/samples_2018"
+    variable_cfg    = "legacyAnalysis/additionalVariables_2018"
+    plot_cfg        = "legacyAnalysis/STXS_discr_binning"
+    syst_cfg        = "legacyAnalysis/systs_2018"
     replace_cfg     = "legacyAnalysis/pdf_relic_names"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
-    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2017_split.csv"
+    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2018_split.csv"
 
     # script options
     analysisOptions = {
         # general options
-        "usePseudoData":        False,
+        "usePseudoData":        True,
         "testrun":              False,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
-        "makeDataCards":        False,
+        "makeDataCards":        True,
         "makeInputDatacards":   False, # create datacards also for all defined plots
         "addData":              True,  # adding real data 
         "makePlots":            True,
@@ -90,12 +91,12 @@ def main(pyrootdir, opts):
         "skipHistoCheck":       opts.skipHistoCheck,
         "skipDatacards":        opts.skipDatacards}
 
-    plotJson = pyrootdir+"/configs/legacyAnalysis/treeJson_2017.json"
-    plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2017/",True]] 
+    plotJson = pyrootdir+"/configs/legacyAnalysis/treeJson_2018.json"
+    plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2018/",True]] 
     memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
-    #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-    #               "checkpointFiles":  "/nfs/dust/cms/user/swieland/ttH_legacy/DNNs/oldModel/"}
-    dnnInterface = None
+    dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
+                  "checkpointFiles":  "/nfs/dust/cms/user/swieland/ttH_legacy/DNNs/HTXS_Study/"}
+    # dnnInterface = None
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
@@ -136,8 +137,7 @@ def main(pyrootdir, opts):
         variable_config = variable_cfg,
         plot_config     = plot_cfg,
         execute_file    = os.path.realpath(inspect.getsourcefile(lambda:0)),
-        replace_config  = replace_cfg
-        )
+        replace_config  = replace_cfg)
 
     configData.initSystematics(systconfig = syst_cfg)
 
@@ -190,7 +190,7 @@ def main(pyrootdir, opts):
         pP.setJson(plotJson)
         pP.setDataBases(plotDataBases)
         pP.setMEMDataBase(memDataBase)
-        # pP.setDNNInterface(dnnInterface)
+        pP.setDNNInterface(dnnInterface)
         pP.setMaxEvts(100000)
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
@@ -264,7 +264,7 @@ def main(pyrootdir, opts):
                 pP.addData( samples = configData.samples[nSigSamples:], 
                             discrName = discrName)
                 # pseudo data with signal
-                #pP.addData(samples = configData.samples)
+                # pP.addData(samples = configData.samples)
             else:
                 print("adding data_obs histograms as real data")
                 # real data with ttH
@@ -316,7 +316,7 @@ def main(pyrootdir, opts):
     # ========================================================
     # this is the end of the script 
     # ========================================================
-    '''
+    # '''
 
 if __name__ == "__main__":
     parser = optparse.OptionParser()

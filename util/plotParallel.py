@@ -194,9 +194,6 @@ class plotParallel:
         writer = scriptWriter.scriptWriter(self)
         writer.writeCC()
 
-        # create cleanup script
-        writer.writeCleanupScript()
-
         # creating output folders
         print( "creating output folders" )
         if not os.path.exists(self.scriptsPath):
@@ -222,12 +219,6 @@ class plotParallel:
         nafInterface.plotInterface( self.runscriptData, 
                                     skipPlotParallel = self.analysis.skipPlotParallel, 
                                     options = opts)
-        print("all jobs have terminated successfully")
-        print("="*40)
-
-        # cleanup histograms
-        print("cleaning up histograms")
-        nafInterface.cleanupInterface(self.runscriptData["cleanup"], self.runscriptData["outputs"], skipCleanup = self.analysis.skipPlotParallel, options = opts)
         print("all jobs have terminated successfully")
         print("="*40)
 
@@ -325,3 +316,4 @@ class plotParallel:
                 subprocess.call([s], shell = True)
         else:
             nafInterface.mergeSystematicsInterface(scripts)
+
