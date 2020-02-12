@@ -291,7 +291,7 @@ def main(pyrootdir, opts):
             makeDatacards.makeDatacardsParallel(
                 filePath            = analysis.renamedPath,
                 workdir             = analysis.workdir,
-                categories          = configData.getDatacardLabels(analysis.makeInputDatacards),
+                categories          = configData.getDatacardLabels(analysis.makeInputDatacards, discrName = discrName),
                 doHdecay            = True,
                 discrname           = analysis.discrName,
                 datacardmaker       = datacardmaker,
