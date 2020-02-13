@@ -164,7 +164,8 @@ lumi = '59.7'
 #tHq_XS_scale = "*(0.7927/0.07425)"
 #tHW_XS_scale = "*(0.1472/0.01517)"
 
-ttbb_4FS_scale = "*(1.6836)"
+# ttbb_4FS_scale = "*(1.6836)"
+ttbb_4FS_scale = "*(1.0)"
 ttbb_5FS_scale = "*(1.0)"
 
 tH_SM_rwgt = "*(Weight_rwgt_12/Weight_GEN_nom)"
