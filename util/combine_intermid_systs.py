@@ -89,6 +89,7 @@ def combine_systs(nom_key, syst_key, rfile, systname, replace_cfg):
         print("ERROR: Could not load histogram '{}' from file '{}'".format(nom_key, rfile.GetName()))
         return
     nom_vals = histo2np(h_nom)
+    syst_list = ["{}_{}".format(syst_list, x) for x in syst_list]
     values = load_values(key = syst_key, rfile = rfile, syst_list = syst_list)
     if values.size != 0:
         residuals = values - nom_vals
