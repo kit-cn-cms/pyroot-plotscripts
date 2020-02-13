@@ -120,7 +120,7 @@ class configData:
 
     def getDatacardLabels(self, doVariables = False, discrName = None):
         bin_labels = self.getBinlabels()
-        if discrName:
+        if discrName and bin_labels:
             bin_labels = ["{}_{}".format(discrName, x) for x in bin_lables]
         if not doVariables:
             return bin_labels
