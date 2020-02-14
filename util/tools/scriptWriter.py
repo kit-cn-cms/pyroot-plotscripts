@@ -456,9 +456,7 @@ class scriptWriter:
                     tree = f.Get('MVATree')
                     nEventsInFile = tree.GetEntries()
 
-                SaveTreeInformation[filename] = nEventsInFile
-
-                
+                SaveTreeInformation[filename] = nEventsInFile                
                 # if the file is larger than self.maxevents it is analyzed in portions of nevents
                 if nEventsInFile > self.pp.maxevents:
                     for ijob in range(nEventsInFile / self.pp.maxevents + 1):
@@ -466,7 +464,7 @@ class scriptWriter:
                         writeOptions = {"skipEvents": (ijob)*self.pp.maxevents}
 
                         self.writeSingleScript(sample, filename, nJob, filterFile, writeOptions)
-                    self.nentries.append(nEventsInFile)
+                        self.nentries.append(nEventsInFile)
                     nEvents += nEventsInFile
 
                 # else additional files are appended to list of files to be submitted
@@ -477,7 +475,6 @@ class scriptWriter:
                         nJob += 1
                         filenames = ' '.join(filesToSubmit)
                         self.writeSingleScript(sample, filenames, nJob, filterFile)
-
                         self.nentries.append(nEventsInFiles)
                         nEvents += nEventsInFiles
 
@@ -493,7 +490,6 @@ class scriptWriter:
                 nJob += 1
                 filenames = ' '.join(filesToSubmit)
                 self.writeSingleScript(sample, filenames, nJob, filterFile)
-                
                 self.nentries.append(nEventsInFiles)
                 nEvents += nEventsInFiles
 
