@@ -14,7 +14,7 @@ from array import array
 from copy import deepcopy
 
 
-memexp = ""
+memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
 
 
@@ -6218,6 +6218,83 @@ def init_plots(interfaces, data = None):
 
     if not data is None:
         data.categories.update(dictionary)
+
+    return plots
+
+def init_plots_2D(interfaces):
+    plots = [] #init list of plotClasses objects to return
+    dictionary = {}
+    for i, interf in enumerate(interfaces):
+        for interf2 in interfaces[i+1:]:
+            binsX = None
+            nbinsX = None
+            xmin = None
+            xmax = None
+            binsY = None
+            nbinsY = None
+            ymin = None
+            ymax = None
+            
+            # check if initialization uses bin edges or min/max vals
+            # if 'subdict' contains the keyword 'bin_edges', an array
+            # of type float is created from the corresponding python list.
+            # Else, the min/maxvals are used 
+            if not interf.bin_edges is None:
+                binsX  = array("f", interf.bin_edges)
+                nbinsX = len(binsX)-1 # last bin edge in array is overflow bin => subtract for nbins
+                interf.nhistobins = nbinsX # update number of bins
+
+            elif not (interf.minxval is None or interf.maxxval is None):
+                nbinsX = interf.nhistobins
+                xmax  = interf.maxxval
+                xmin  = interf.minxval
+            
+            if not interf2.bin_edges is None:
+                binsY  = array("f", interf2.bin_edges)
+                nbinsY = len(binsY)-1 # last bin edge in array is overflow bin => subtract for nbins
+                interf2.nhistobins = nbinsY # update number of bins
+            elif not (interf2.minxval is None or interf2.maxxval is None):
+                nbinsY = interf2.nhistobins
+                ymax  = interf2.maxxval
+                ymin  = interf2.minxval
+
+            hname_2D = "{}_{}".format(interf.histoname, interf2.histoname)
+            htitle_2D = "{}_{}".format(interf.histotitle, intef2.histotitle)
+            if not binsX is None:
+                if not binsY is None:
+                    plots.append(
+                            plotClasses.TwoDimPlot( histo = ROOT.TH2F(hname_2D,htitle_2D,nbinsX,binsX, nbinsY,binsY),
+                                variable1 = interf.varname,
+                                variable2 = interf2.varname,
+                                selection = interf.selection,
+                                label = interf.category_label))
+                else: 
+                    plots.append(
+                            plotClasses.TwoDimPlot( histo = ROOT.TH2F(hname_2D,htitle_2D,nbinsX,binsX, nbinsY,ymin, ymax),
+                                variable1 = interf.varname,
+                                variable2 = interf2.varname,
+                                selection = interf.selection,
+                                label = interf.category_label))
+            elif not (xmin is None or xmax is None):
+                if not binsY is None:
+                    plots.append(
+                            plotClasses.TwoDimPlot( histo = ROOT.TH2F(hname_2D,htitle_2D,nbinsX,xmin, xmax, nbinsY,binsY),
+                                variable1 = interf.varname,
+                                variable2 = interf2.varname,
+                                selection = interf.selection,
+                                label = interf.category_label))
+                else: 
+                    plots.append(
+                            plotClasses.TwoDimPlot( histo = ROOT.TH2F(hname_2D,htitle_2D,nbinsX,xmin, xmax, nbinsY,ymin, ymax),
+                                variable1 = interf.varname,
+                                variable2 = interf2.varname,
+                                selection = interf.selection,
+                                label = interf.category_label))
+            else:
+                s = "FATAL ERROR: Unable to load bin edges or min/max values for histogram!\n"
+                s += "interface 1:\n{}".format(interf)
+                s += "interface 2:\n{}".format(interf2)
+                raise ValueError(s)
 
     return plots
 

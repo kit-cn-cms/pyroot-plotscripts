@@ -27,13 +27,11 @@ def writeSubmitCode(script, logdir, hold = False, isArray = False, nScripts = 0,
     defaults = {
         # "RequestMemory": "1000M",
         # "RequestDisk": "1000M",
-        # "+RequestRuntime": 7200,
+        # "+RequestRuntime": 18000,
         "PeriodicHold": 3600,
         "PeriodicRelease": 5
         }
-    for opt in defaults:
-        if opt in options:
-            defaults[opt] = options[opt]
+    defaults.update(options)
 
   # if hold = True there should not be a periodic release
     if hold:
@@ -323,7 +321,7 @@ def monitorJobStatus(jobIDs = None):
     helds = []
     totals = []
     while not allfinished:
-        time.sleep(300)
+        time.sleep(100)
         # calling condor_q command
         a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
         a.wait()

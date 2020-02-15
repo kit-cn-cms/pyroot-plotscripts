@@ -20,30 +20,11 @@
     //PLACEHOLDERFORCASTLINES
     
     
-//     std::cout<<"Evt_ID "<<Evt_ID <<" "<<Int_t(Evt_ID)<<" "<<std::endl;
-     if(Evt_ID!=Int_t(Evt_ID)){std::cout<<"PROBLEM"<<"Evt_ID "<<Evt_ID <<" "<<Int_t(Evt_ID)<<std::endl;}
-//    std::cout<<"NJEts "<<N_Jets<<" "<<N_JetsLONGDUMMY<<std::endl;
-//    std::cout<<"NBtagsM "<<N_BTagsM<<" "<<N_BTagsMLONGDUMMY<<std::endl;
-  ///////////////////////////////////////////
-  /////////////////DANGERZONE!!!/////////////
-  ////Hack to handle bad default values ////
-  //////////////////////////////////////////
-    // if (Reco_ttH_tophad_m == -999) Reco_ttH_tophad_m=-1;
-    // if (Reco_ttH_h_phi == -999) Reco_ttH_h_phi=-4;
-    // if (Reco_ttH_h_eta == -999) Reco_ttH_h_eta=-3;
-    // if (Reco_ttH_tophad_pt == -999) Reco_ttH_tophad_pt=-1;
-    // if (Reco_ttH_whad_dr == -999) Reco_ttH_whad_dr=-1;
-    // if (Reco_ttH_whaddau_m2 == -999) Reco_ttH_whaddau_m2=-1;
-    // if (Reco_JABDT_ttH_tophad_pt__P__toplep_pt__P__h_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt == -999) Reco_JABDT_ttH_tophad_pt__P__toplep_pt__P__h_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt=-1;
-    // if (Reco_ttH_toplep_m == -999) Reco_ttH_toplep_m=-1;
-    // "Reco_ttH_h_phi":{-999:-4},
-    // "Reco_ttH_h_eta":{-999:-3},
-    // "Reco_ttH_tophad_pt":{-999:-1},
-    // "Reco_ttH_whad_dr":{-999:-1},
-    // "Reco_ttH_whaddau_m2":{-999:-1},
-    // "Reco_JABDT_ttH_tophad_pt__P__toplep_pt__P__h_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt":{-999:-1},
-    // "Reco_ttH_toplep_m":{-999:-1}
-
+     if(Evt_ID!=Int_t(Evt_ID)){
+       std::cout<<"PROBLEM "<<"Evt_ID "<<Evt_ID <<" "<<Int_t(Evt_ID)<<std::endl;
+       std::cout << "recasting Long to Int " << std::endl;
+       Evt_ID = Int_t(Evt_ID);
+       }
 
     TString currentfilename="";
     currentfilename = chain->GetCurrentFile()->GetName();   
