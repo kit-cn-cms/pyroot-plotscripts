@@ -66,7 +66,6 @@ def main(pyrootdir, opts):
         "skipPlotParallel":     opts.skipPlotParallel,
         "skipHaddParallel":     opts.skipHaddParallel,
         "skipHaddFromWildcard": opts.skipHaddFromWildcard,
-        "sanicMode":            opts.sanicMode
         }
     
     print '''
@@ -86,10 +85,6 @@ def main(pyrootdir, opts):
 
     
     analysis.initAnalysisOptions( analysisOptions )
-
-    # setting sanic mode
-    import util.tools.__init__ as toolInitializer
-    toolInitializer.nafInterface.sanicMode = analysis.sanicMode
 
     pltcfg = analysis.initPlotConfig()
     print "We will import the following plotconfig: ", analysis.getPlotConfig()
@@ -158,7 +153,7 @@ def main(pyrootdir, opts):
 
         monitor.printClass(pP, "init")
         # set some changed values
-        pP.setMaxEvts(200000)
+        pP.setMaxEvts(500000)
         pP.setSampleForVariableSetup(configData.samples[1])
 
         # run plotParallel
@@ -193,6 +188,5 @@ if __name__ == "__main__":
     parser.add_option("--skipHaddParallel",     dest = "skipHaddParallel",      action = "store_true", default = False)
     parser.add_option("--skipHaddFromWildcard", dest = "skipHaddFromWildcard",  action = "store_true", default = False)
 
-    parser.add_option("--sanic", dest="sanicMode", action = "store_true", default = False, help = "activate Sanic super speed mode (changes prio of condor jobs to 1000)")
     (opts, args) = parser.parse_args()
     main(pyrootdir, opts)
