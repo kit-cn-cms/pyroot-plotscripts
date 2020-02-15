@@ -62,7 +62,7 @@ def main(pyrootdir, opts):
 
     # file for btagging SF corrections
     sfCorrection = {}
-    sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2016_deepJet.root"
+    sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2016_deepJet_fineBinning.root"
     # variables for the correction
     sfCorrection["corrections"] = {}
     sfCorrection["corrections"]["NJet"]       = ["N_Jets"]
