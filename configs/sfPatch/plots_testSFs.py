@@ -18,11 +18,13 @@ pTbinEdges = [30.,50.,75.,100.,150.,250.,350.,500.,1000.]
 npTbins = len(pTbinEdges)-1
 pTbinEdges = array("f", pTbinEdges)
 
-HTbinEdges = [0,50,100,150,200,300,400,500,1000]
+#HTbinEdges = [0,50,100,150,200,300,400,500,1000]
+HTbinEdges = [0,100,200,300,500,1000]
 nHTbins = len(HTbinEdges)-1
 HTbinEdges = array("f", HTbinEdges)
 
-nJbinEdges = [3.5,4.5,5.5,6.5,7.5,10.5]
+#nJbinEdges = [2.5,4.5,5.5,6.5,7.5,10.5]
+nJbinEdges = [2.5,4.5,5.5,6.5,10.5]
 nJbins = len(nJbinEdges)-1
 nJbinEdges = array("f", nJbinEdges)
 
