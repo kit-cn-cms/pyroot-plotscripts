@@ -1,7 +1,7 @@
 Uncertainty,Type,Construction,Up,Down,Plot,znunujets,wlnujets,zlljets,gammajets,ttbar,singlet,diboson,qcd,vectormonotop_mphi_1000_mchi_1000,vectormonotop_mphi_195_mchi_100,vectormonotop_mphi_1995_mchi_1000,vectormonotop_mphi_2000_mchi_1500,vectormonotop_mphi_2000_mchi_500,vectormonotop_mphi_200_mchi_150,vectormonotop_mphi_200_mchi_50,vectormonotop_mphi_2995_mchi_1500,vectormonotop_mphi_3000_mchi_1000,vectormonotop_mphi_3000_mchi_2000
 ,,,,,,,,,,,,,,,,,,,,,,,
 JES,shape,variation,JESup,JESdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-JER,shape,variation,JERup,JERdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+JER_2018,shape,variation,JERup,JERdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 ,,,,,,,,,,,,,,,,,,,,,,,
 CMS_eff_e_2018,shape,weight,"""weight_elEffUp:=(DEFAULTWEIGHT*PUWEIGHTNOM*CSVWEIGHTNOM*TOPPTWEIGHTNOM*ELESFUP*MUSFNOM*PHSFNOM*BOSONWEIGHTNOM)*DOWEIGHTS""","""weight_elEffDown:=(DEFAULTWEIGHT*PUWEIGHTNOM*CSVWEIGHTNOM*TOPPTWEIGHTNOM*ELESFDOWN*MUSFNOM*PHSFNOM*BOSONWEIGHTNOM)*DOWEIGHTS""",1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 CMS_eff_m_2018,shape,weight,"""weight_muEffUp:=(DEFAULTWEIGHT*PUWEIGHTNOM*CSVWEIGHTNOM*TOPPTWEIGHTNOM*MUSFUP*ELESFNOM*PHSFNOM*BOSONWEIGHTNOM)*DOWEIGHTS""","""weight_muEffDown:=(DEFAULTWEIGHT*PUWEIGHTNOM*CSVWEIGHTNOM*TOPPTWEIGHTNOM*MUSFDOWN*ELESFNOM*PHSFNOM*BOSONWEIGHTNOM)*DOWEIGHTS""",1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
