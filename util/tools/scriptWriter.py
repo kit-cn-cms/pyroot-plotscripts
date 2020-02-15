@@ -464,7 +464,7 @@ class scriptWriter:
                         writeOptions = {"skipEvents": (ijob)*self.pp.maxevents}
 
                         self.writeSingleScript(sample, filename, nJob, filterFile, writeOptions)
-                        self.nentries.append(nEventsInFile)
+                        self.nentries.append(nEventsInFile-(ijob)*self.pp.maxevents)
                     nEvents += nEventsInFile
 
                 # else additional files are appended to list of files to be submitted
