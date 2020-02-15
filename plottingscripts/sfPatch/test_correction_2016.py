@@ -208,7 +208,7 @@ def main(pyrootdir, opts):
         #pP.setMEMDataBase(memDataBase)
         # pP.setDNNInterface(dnnInterface)
         pP.setSFCorrection(sfCorrection)
-        pP.setMaxEvts(200000)
+        pP.setMaxEvts(500000)
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
 

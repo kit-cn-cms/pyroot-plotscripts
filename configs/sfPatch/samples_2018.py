@@ -228,7 +228,7 @@ samples  = [
 
     plotClasses.Sample('t#bar{t}+Z(qq)',ROOT.kOrange+7,
             path_ttZ_qq,
-            lumi
+            lumi,
             'ttZqq',
             samDict=sampleDict, readTrees=doReadTrees),
 
