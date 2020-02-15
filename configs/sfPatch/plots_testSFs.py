@@ -18,11 +18,11 @@ pTbinEdges = [30.,50.,75.,100.,150.,250.,350.,500.,1000.]
 npTbins = len(pTbinEdges)-1
 pTbinEdges = array("f", pTbinEdges)
 
-HTbinEdges = [0,50,100,200,300,500,1000]
+HTbinEdges = [0,50,100,150,200,300,400,500,1000]
 nHTbins = len(HTbinEdges)-1
 HTbinEdges = array("f", HTbinEdges)
 
-nJbinEdges = [-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,10.5]
+nJbinEdges = [3.5,4.5,5.5,6.5,7.5,10.5]
 nJbins = len(nJbinEdges)-1
 nJbinEdges = array("f", nJbinEdges)
 
@@ -36,16 +36,15 @@ def plots_control(data = None):
     plots = [
         plotClasses.Plot(ROOT.TH1D("N_Jets","N_Jets",nJbins,nJbinEdges),"N_Jets",selection,label),
         plotClasses.Plot(ROOT.TH1D("Jet_Pt","Jet_Pt",50,0.,500.),"Jet_Pt",selection,label),
-        plotClasses.Plot(ROOT.TH1D("Jet_Pt_0","Jet_Pt_0",npTbins, pTbinEdges),"Jet_Pt[0]",selection,label),
-        #plotClasses.Plot(ROOT.TH1D("Jet_Pt_0","Jet_Pt_0",50,0.,500.),"Jet_Pt[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("Jet_Pt_0","Jet_Pt_0",50,0.,500.),"Jet_Pt[0]",selection,label),
         plotClasses.Plot(ROOT.TH1D("N_BTagsM","N_BTagsM",5,2.5,7.5),"N_BTagsM",selection,label),
-        plotClasses.Plot(ROOT.TH1D("Jet_Eta","Jet_Eta",30,-2.5,2.5),"Jet_Eta",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("Jet_Eta","Jet_Eta",30,-2.5,2.5),"Jet_Eta",selection,label),
         plotClasses.Plot(ROOT.TH1D("CSV","CSV",50,0.,1.),"CSV",selection,label),
         #plotClasses.Plot(ROOT.TH1D("HT","HT",75,0.,1500.),htDummy,selection,label),
-        plotClasses.Plot(ROOT.TH1D("N_PV","PV",pvbins,pvbinEdges),"N_PrimaryVertices",selection,label),
-        plotClasses.Plot(ROOT.TH1D("N_GenPV","GenPV",pvbins,pvbinEdges),"N_GenPVs",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("N_PV","PV",pvbins,pvbinEdges),"N_PrimaryVertices",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("N_GenPV","GenPV",pvbins,pvbinEdges),"N_GenPVs",selection,label),
         plotClasses.Plot(ROOT.TH1F("HT_jets","HT_jets",nHTbins, HTbinEdges),"Evt_HT_jets",selection,label),
-        plotClasses.Plot(ROOT.TH1F("HT","HT",75,0.,1500.),"Evt_HT_jets",selection,label),
+        plotClasses.Plot(ROOT.TH1F("HT","HT",50,0.,1500.),"Evt_HT_jets",selection,label),
 
         ]
     selection = "(1.)"
@@ -53,16 +52,14 @@ def plots_control(data = None):
     plots+= [
         plotClasses.Plot(ROOT.TH1D("inclusive_N_Jets","N_Jets",nJbins,nJbinEdges),"N_Jets",selection,label),
         plotClasses.Plot(ROOT.TH1D("inclusive_Jet_Pt","Jet_Pt",50,0.,500.),"Jet_Pt",selection,label),
-        #plotClasses.Plot(ROOT.TH1D("inclusive_Jet_Pt_0","Jet_Pt_0",50,0.,500.),"Jet_Pt[0]",selection,label),
-        plotClasses.Plot(ROOT.TH1D("inclusive_Jet_Pt_0","Jet_Pt_0",npTbins, pTbinEdges),"Jet_Pt[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D("inclusive_Jet_Pt_0","Jet_Pt_0",50,0.,500.),"Jet_Pt[0]",selection,label),
         plotClasses.Plot(ROOT.TH1D("inclusive_N_BTagsM","N_BTagsM",9,-0.5,8.5),"N_BTagsM",selection,label),
-        plotClasses.Plot(ROOT.TH1D("inclusive_Jet_Eta","Jet_Eta",30,-2.5,2.5),"Jet_Eta",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("inclusive_Jet_Eta","Jet_Eta",30,-2.5,2.5),"Jet_Eta",selection,label),
         plotClasses.Plot(ROOT.TH1D("inclusive_CSV","CSV",50,0.,1.),"CSV",selection,label),
-        #plotClasses.Plot(ROOT.TH1D("inclusive_HT","HT",75,0.,1500.),htDummy,selection,label),
-        plotClasses.Plot(ROOT.TH1D("inclusive_N_PV","PV",pvbins,pvbinEdges),"N_PrimaryVertices",selection,label),
-        plotClasses.Plot(ROOT.TH1D("inclusive_N_GenPV","GenPV",pvbins,pvbinEdges),"N_GenPVs",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("inclusive_N_PV","PV",pvbins,pvbinEdges),"N_PrimaryVertices",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("inclusive_N_GenPV","GenPV",pvbins,pvbinEdges),"N_GenPVs",selection,label),
         plotClasses.Plot(ROOT.TH1F("inclusive_HT_jets","HT_jets",nHTbins, HTbinEdges),"Evt_HT_jets",selection,label),
-        plotClasses.Plot(ROOT.TH1F("inclusive_HT","HT",75,0.,1500.),"Evt_HT_jets",selection,label),
+        plotClasses.Plot(ROOT.TH1F("inclusive_HT","HT",50,0.,1500.),"Evt_HT_jets",selection,label),
 
         ]
 

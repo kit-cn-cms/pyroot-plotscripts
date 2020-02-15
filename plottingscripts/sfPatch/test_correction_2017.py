@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'sfCorrections/test_2017'
+    name = 'sfPatch/test_2017'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -51,10 +51,10 @@ def main(pyrootdir, opts):
     # memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
     memexp = ''
     # configs
-    config          = "SFSFderivation/samples_testSFs_2017"
-    variable_cfg    = "SFSFderivation/additionalVariables"
-    plot_cfg        = "SFSFderivation/plots_testSFs"
-    syst_cfg        = "SFSFderivation/systs_testSFs"
+    config          = "sfPatch/samples_2017"
+    variable_cfg    = "sfPatch/additionalVariables"
+    plot_cfg        = "sfPatch/plots_testSFs"
+    syst_cfg        = "sfPatch/systs_testSFs"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
@@ -62,12 +62,11 @@ def main(pyrootdir, opts):
 
     # file for btagging SF corrections
     sfCorrection = {}
-    sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2017_deepJet.root"
+    sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2016_deepJet.root"
     # variables for the correction
     sfCorrection["corrections"] = {}
-    sfCorrection["corrections"]["NJet"] = ["N_Jets"]
-    sfCorrection["corrections"]["NPV_vs_NJet"] = ["N_GenPVs", "N_Jets"]
-    sfCorrection["corrections"]["JetPt_vs_NJet"] = ["Jet_Pt[0]", "N_Jets"]
+    sfCorrection["corrections"]["NJet"]       = ["N_Jets"]
+    sfCorrection["corrections"]["HT_vs_NJet"] = ["Evt_HT_jets", "N_Jets"]
     # in root file sf histograms exist with some naming scheme
     sfCorrection["nameTemplate"] = "$BINNING__$PROCESS__$NAME"
     # SF_ is always preprended by default, that should not be changed
@@ -75,7 +74,6 @@ def main(pyrootdir, opts):
     # DANGER: order of variables is important
     # name of corrections to be applied (should match whats defined in syst.csv or samples.py)
     sfCorrection["names"] = ["btag_NOMINAL"]
-    # variable names are searched that end with $NAME (.endswith)
     # sfCorrection = None
 
     # script options

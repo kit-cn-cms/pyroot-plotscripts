@@ -23,7 +23,6 @@ import util.checkHistos as checkHistos
 import util.makeDatacards as makeDatacards
 import util.scaleFactorCreator as scaleFactorCreator
 
-
 def main(pyrootdir, opts):
     print '''
     # ========================================================
@@ -31,7 +30,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'sfCorrections/2016'
+    name = 'sfPatch/2018'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -40,7 +39,7 @@ def main(pyrootdir, opts):
     signalProcess = "ttH"
 
     # dataera
-    dataera = "2016"
+    dataera = "2018"
 
     # Name of final discriminator, should not contain underscore
     nom_histname_template = "$PROCESS__$CHANNEL"
@@ -49,10 +48,10 @@ def main(pyrootdir, opts):
 
 
     # configs
-    config          = "SFSFderivation/samples_2016"
-    variable_cfg    = "SFSFderivation/additionalVariables"
-    plot_cfg        = "SFSFderivation/plots"
-    syst_cfg        = "SFSFderivation/systs"
+    config          = "sfPatch/samples_2018"
+    variable_cfg    = "sfPatch/additionalVariables"
+    plot_cfg        = "sfPatch/plots"
+    syst_cfg        = "sfPatch/systs"
 
     # script options
     analysisOptions = {
@@ -67,6 +66,7 @@ def main(pyrootdir, opts):
         "skipPlotParallel":     opts.skipPlotParallel,
         "skipHaddParallel":     opts.skipHaddParallel,
         "skipHaddFromWildcard": opts.skipHaddFromWildcard,
+        "sanicMode":            opts.sanicMode
         }
     
     print '''
@@ -86,6 +86,10 @@ def main(pyrootdir, opts):
 
     
     analysis.initAnalysisOptions( analysisOptions )
+
+    # setting sanic mode
+    import util.tools.__init__ as toolInitializer
+    toolInitializer.nafInterface.sanicMode = analysis.sanicMode
 
     pltcfg = analysis.initPlotConfig()
     print "We will import the following plotconfig: ", analysis.getPlotConfig()
@@ -154,7 +158,7 @@ def main(pyrootdir, opts):
 
         monitor.printClass(pP, "init")
         # set some changed values
-        pP.setMaxEvts(200000)
+        pP.setMaxEvts(500000)
         pP.setSampleForVariableSetup(configData.samples[1])
 
         # run plotParallel
@@ -178,8 +182,10 @@ def main(pyrootdir, opts):
             nHistosRemainSame   = True,
             skipHadd            = analysis.skipHaddFromWildcard)
      
+
     scaleFactorCreator.deriveSFs(
-        analysis, configData, nom_histname_template, syst_histname_template)
+        analysis, configData, nom_histname_template, syst_histname_template)    
+
 
 if __name__ == "__main__":
     parser = optparse.OptionParser()
