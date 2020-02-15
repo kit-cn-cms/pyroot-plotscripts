@@ -278,13 +278,13 @@ class plotParallel:
     #====================================================
     # merge systematics per process
     #====================================================
-    def mergeSystematics(self, runLocal = True):
+    def mergeSystematics(self, runLocal = False):
         script_path = os.path.join(self.analysis.workdir, "mergeSystScripts")
         print("script path: {}".format(script_path))
         if not os.path.exists(script_path):
             os.mkdir(script_path)
+        infiles = self.getRenameInput()
         options = {
-            "INFILE" : self.analysis.renamedPath,
             "NOMHISTKEY" : self.nominalHistoKey,
             "SYSTHISTKEY": self.systHistoKey,
             "SEPARATOR"  : self.histNameSeparator
@@ -295,7 +295,15 @@ class plotParallel:
         python_script = writer.writeMergeSystsScript()
         scripts = []
         for sample in self.configData.samples:
+            file = [x for x in infiles 
+                    if x.endswith("{}_hadded.root".format(sample.nick))]
+            if not len(file) == 1:
+                print("WARNING: unable to locate file for merge systs!")
+                print("sample: " + sample.nick)
+                continue
             final_opts = {
+                "INFILE" : file[0],
+
                 "ORIGNAME" : sample.origName
             }
             final_opts.update(options)
