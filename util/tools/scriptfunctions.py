@@ -544,7 +544,10 @@ def fillHistoSyst(histName, varNames, weight, systNames, systWeights):
         for systName, systWeight in zip(systNames[1:], systWeights[1:]):
             text += "             helpWeightVec_" + histName + ".push_back({histos2D[\""+histName+systName+"\"].get()"+", ("+systWeight+")*(weight_"+histName+")});\n"
         text += "       };\n"
-            
+
+        text += "       variable1 = "+varNames[0]+";\n"
+        text += "       variable2 = "+varNames[1]+";\n"
+
         text += "       helperFillTwoDimHisto(helpWeightVec_"+histName+", variable1, variable2);\n"
         text += "       variable1 = -999;\n"
         text += "       variable2 = -999;\n"
