@@ -11,12 +11,12 @@ import util.tools.plotClasses as plotClasses
 
 # samples
 # input path 
-path  = "/nfs/dust/cms/user/vdlinden/legacyTTH/ntuples/sfDerivation_final/2016/"
+path  = "/nfs/dust/cms/user/vdlinden/legacyTTH/ntuples/nobtags/2018/"
 
 
 path_4FS_ttbb_SL  = path+"/TTbb_4f*SemiLeptonic*/*nominal*.root"
 path_4FS_ttbb_DL  = path+"/TTbb_4f*2l2nu*/*nominal*.root"
-#path_4FS_ttbb_FH  = path+"/TTbb_4f*Hadronic*/*nominal*.root"
+path_4FS_ttbb_FH  = path+"/TTbb_4f*Hadronic*/*nominal*.root"
 
 path_5FS_ttbar_SL = path+"/TTToSemiLeptonic*/*nominal*.root"
 path_5FS_ttbar_DL = path+"/TTTo2L2Nu*/*nominal*.root"
@@ -25,6 +25,8 @@ path_5FS_ttbar_FH = path+"/TTToHadronic*/*nominal*.root"
 path_ttH_bb       = path+"/ttHTobb*/*nominal*.root"
 path_ttH_nonbb    = path+"/ttHToNonbb*/*nominal*.root"
 
+path_ttZ_qq       = path+"/TTZToQQ*/*nominal*.root"
+path_ttZ_ll       = path+"/TTZToLL*/*nominal*.root"
 # SELECTIONS
 # need to veto muon events in electron dataset to avoid double counting and vice versa
 sel_singleel="((N_LooseMuons==0 && N_TightElectrons==1))"
@@ -50,10 +52,8 @@ defaultWeight += "*"+"("+electronSFs+"+"+muonSFs+")"+"*"+"("+electronTrigger+"+"
 weightReplacements = {
     # default weight
     "FINALWEIGHTNJET":  defaultWeight+"*internalCSVweight*sf__NJet__btag_NOMINAL",
-    "FINALWEIGHTJETPT": defaultWeight+"*internalCSVweight*sf__JetPt_vs_NJet__btag_NOMINAL",
     "FINALWEIGHTHT":    defaultWeight+"*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL",
-    "FINALWEIGHTNPV":   defaultWeight+"*internalCSVweight*sf__NPV_vs_NJet__btag_NOMINAL",
-    "CSVSFWEIGHT":      defaultWeight+"*internalCSVweight",
+    "DEFAULTWEIGHT":    defaultWeight+"*internalCSVweight",
     }
 
 
@@ -92,7 +92,6 @@ samples  = [
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),     
 
 
-
      plotClasses.Sample('t#bar{t}+b#bar{b} (4FS,SL)',ROOT.kRed+3,
              path_4FS_ttbb_SL,
              lumi+"*"+sel_tthf,
@@ -105,11 +104,11 @@ samples  = [
              'ttbb_DL',
              samDict=sampleDict, readTrees=doReadTrees),
 
-     #plotClasses.Sample('t#bar{t}+b#bar{b} (4FS,FH)',ROOT.kRed+3,
-     #        path_4FS_ttbb_FH,
-     #        lumi+"*"+sel_tthf,
-     #        'ttbb_FH',
-     #        samDict=sampleDict, readTrees=doReadTrees),
+     plotClasses.Sample('t#bar{t}+b#bar{b} (4FS,FH)',ROOT.kRed+3,
+             path_4FS_ttbb_FH,
+             lumi+"*"+sel_tthf,
+             'ttbb_FH',
+             samDict=sampleDict, readTrees=doReadTrees),
 
 
      plotClasses.Sample('t#bar{t}+b#bar{b} (5FS,SL)',ROOT.kRed+3,
@@ -124,11 +123,11 @@ samples  = [
              'ttbb_5FS_DL',
              samDict=sampleDict, readTrees=doReadTrees),
 
-     #plotClasses.Sample('t#bar{t}+b#bar{b} (5FS,FH)',ROOT.kRed+3,
-     #        path_5FS_ttbar_FH,
-     #        lumi+"*"+sel_tthf,
-     #        'ttbb_5FS_FH',
-     #        samDict=sampleDict, readTrees=doReadTrees),
+     plotClasses.Sample('t#bar{t}+b#bar{b} (5FS,FH)',ROOT.kRed+3,
+             path_5FS_ttbar_FH,
+             lumi+"*"+sel_tthf,
+             'ttbb_5FS_FH',
+             samDict=sampleDict, readTrees=doReadTrees),
 
 
 
@@ -139,10 +138,10 @@ samples  = [
      #        samDict=sampleDict, readTrees=doReadTrees),
 
      #plotClasses.Sample('t#bar{t}+b (4FS,DL)',ROOT.kRed+3,
-      #       path_4FS_ttbb_DL,
-      #       lumi+"*"+sel_ttb,
-      #       'ttb_4FS_DL',
-      #       samDict=sampleDict, readTrees=doReadTrees),
+     #        path_4FS_ttbb_DL,
+     #        lumi+"*"+sel_ttb,
+     #        'ttb_4FS_DL',
+     #        samDict=sampleDict, readTrees=doReadTrees),
 
      #plotClasses.Sample('t#bar{t}+b (4FS,FH)',ROOT.kRed+3,
      #        path_4FS_ttbb_FH,
@@ -225,6 +224,18 @@ samples  = [
             path_5FS_ttbar_FH,
             lumi+"*"+sel_ttcc,
             'ttcc_FH',
+            samDict=sampleDict, readTrees=doReadTrees),
+
+    plotClasses.Sample('t#bar{t}+Z(qq)',ROOT.kOrange+7,
+            path_ttZ_qq,
+            lumi
+            'ttZqq',
+            samDict=sampleDict, readTrees=doReadTrees),
+
+    plotClasses.Sample('t#bar{t}+Z(ll)',ROOT.kOrange,
+            path_ttZ_ll,
+            lumi,
+            'ttZll',
             samDict=sampleDict, readTrees=doReadTrees),
     ]
 
