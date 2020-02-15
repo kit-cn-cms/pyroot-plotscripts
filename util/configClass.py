@@ -118,11 +118,14 @@ class configData:
     def getVariablelabels(self):
         return self.Data.datavariables
 
-    def getDatacardLabels(self, doVariables = False):
+    def getDatacardLabels(self, doVariables = False, discrName = None):
+        bin_labels = self.getBinlabels()
+        if discrName and bin_labels:
+            bin_labels = ["{}_{}".format(discrName, x) for x in bin_lables]
         if not doVariables:
-            return self.getBinlabels()
+            return bin_labels
         else:
-            return self.getBinlabels() + self.getVariablelabels()
+            return bin_labels + self.getVariablelabels()
 
     def getAddVariables(self):
         fileName = self.cfgdir+"/"+self.variable_config

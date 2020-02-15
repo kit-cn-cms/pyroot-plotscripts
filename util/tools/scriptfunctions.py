@@ -86,26 +86,24 @@ def InitDataBase(thisDataBase=[]):
  
   rstr= """
   // book the database
-  
-  """
-  
-  rstr+="  std::vector<MEMDataBase*> "+thisDataBaseName+"DB; \n"
-  rstr+="  for(unsigned int isn=0; isn<databaseRelevantFilenames.size();isn++){ \n"
-  rstr+="  "+thisDataBaseName+"DB.push_back(new MEMDataBase(\""+thisDataBasePath+"\",vec_memStrings));"+"\n"
-  rstr+="  "+thisDataBaseName+"DB.back()->AddSample(databaseRelevantFilenames.at(isn),databaseRelevantFilenames.at(isn)+\"_index.txt\");\n"
-  rstr+="  "+thisDataBaseName+"DB.back()->PrintStructure();\n"
-  rstr+="  std::cout<<\"loaded database for \"<<databaseRelevantFilenames.at(isn)<<std::endl;\n"
-  rstr+="  }\n"
-  rstr+="  double "+thisDataBaseName+"p=-99.9;\n"
-  rstr+="  double "+thisDataBaseName+"p_sig=-99.9;\n"
-  rstr+="  double "+thisDataBaseName+"p_bkg=-99.9;\n"
-  rstr+="  double "+thisDataBaseName+"p_err_sig=-99.9;\n"
-  rstr+="  double "+thisDataBaseName+"p_err_bkg=-99.9;\n"
-  rstr+="  double "+thisDataBaseName+"n_perm_sig=-99.9;\n"
-  rstr+="  double "+thisDataBaseName+"n_perm_bkg=-99.9;\n"
-  rstr+="  DataBaseMEMResult* "+thisDataBaseName+"DummyResultPointer= new DataBaseMEMResult(vec_memStrings);\n"
-  rstr+="  int "+thisDataBaseName+"FoundResult = 1;\n"
-  
+  std::vector<MEMDataBase*> {DBname}DB;
+
+  for(unsigned int isn=0; isn<databaseRelevantFilenames.size();isn++){{
+    {DBname}DB.push_back(new MEMDataBase("{DBpath}",vec_memStrings));
+    {DBname}DB.back()->AddSample(databaseRelevantFilenames.at(isn),databaseRelevantFilenames.at(isn)+"_index.txt");
+    {DBname}DB.back()->PrintStructure();
+    std::cout<<"loaded database for "<<databaseRelevantFilenames.at(isn)<<std::endl;
+  }}
+  double {DBname}p=-1.;
+  double {DBname}p_sig=-1.;
+  double {DBname}p_bkg=-1.;
+  double {DBname}p_err_sig=-1.;
+  double {DBname}p_err_bkg=-1.;
+  double {DBname}n_perm_sig=-1.;
+  double {DBname}n_perm_bkg=-1.;
+  auto {DBname}DummyResultPointer = std::unique_ptr<DataBaseMEMResult>(new DataBaseMEMResult(vec_memStrings));
+  int {DBname}FoundResult = 1;
+  """.format(DBname = thisDataBaseName, DBpath = thisDataBasePath)
   return rstr
 
 def getCorrName(varList):
@@ -188,11 +186,19 @@ def initHistos(catnames, systnames, plots, nom_histname_template, syst_histname_
 double variable = -999;
 double variable1 = -999;
 double variable2 = -999;
+
 std::vector<std::string> systematics = {{
 {}
 }};
 
 """.format(",\n".join(['\t"{}"'.format(x) for x in systnames]))
+    rstr += """
+if(skipWeightSysts){
+  systematics = {
+    variation
+  };
+};
+"""
 # std::vector<std::string> categs = {\n"
 # for cat in catnames:
 #     rstr += "    \""+cat+"\",\n"
@@ -234,11 +240,12 @@ for(const auto& obj: plotinfo1D){{
     const auto& PlotInfo1D = obj.second;
     if(syst == "") histname = "{nom_hist_temp}";
     else histname = "{syst_hist_temp}";
-    histname.ReplaceAll("$PROCESS", processname);
+    histname.ReplaceAll("$PROCESS", origName);
     histname.ReplaceAll("$CHANNEL", obj.first);
     histname.ReplaceAll("$SYSTEMATIC", syst);
     histos1D[obj.first+syst] = std::unique_ptr<TH1>(new TH1F((histname.Data()+suffix).c_str(), (PlotInfo1D.title).c_str(), PlotInfo1D.nbins, PlotInfo1D.edges.data()));
     histos1D[obj.first+syst]->SetDirectory(0);
+    if (skipWeightSysts) break;
   }}
 }}
 
@@ -247,13 +254,14 @@ for(const auto& obj: plotinfo2D){{
     const auto& PlotInfo2D = obj.second;
     if(syst == "") histname = "{nom_hist_temp}";
     else histname = "{syst_hist_temp}";
-    histname.ReplaceAll("$PROCESS", processname);
+    histname.ReplaceAll("$PROCESS", origName);
     histname.ReplaceAll("$CHANNEL", obj.first);
     histname.ReplaceAll("$SYSTEMATIC", syst);
     histos2D[obj.first+syst] = std::unique_ptr<TH2>(new TH2F((histname.Data()+suffix).c_str(), (PlotInfo2D.title).c_str(), 
                                                                 PlotInfo2D.nbinsx, PlotInfo2D.edges_x.data(), 
                                                                 PlotInfo2D.nbinsy, PlotInfo2D.edges_y.data()));
     histos2D[obj.first+syst]->SetDirectory(0);
+    if (skipWeightSysts) break;
   }}
 }}""".format( nom_hist_temp   = nom_histname_template,
               syst_hist_temp  = syst_histname_template)
@@ -316,98 +324,96 @@ def encodeSampleSelection(samples, varManager):
 
 # -- reading data base ----------------------------------------------------------------------------
 def readOutDataBase(thisDataBase=[]):
-  thisDataBaseName=thisDataBase[0]
-  thisDataBasePath=thisDataBase[1]
-  skipNonExistingEvent=thisDataBase[2]
-  
-  rstr= """
-  // read the database
-    //std::cout<<std::endl<<"run lumi event "<<Evt_Run<<" "<<Evt_Lumi<<" "<<Evt_ID<<std::endl;
-  """
-  
-  rstr+="  "+thisDataBaseName+"p="+thisDataBaseName+"DummyResultPointer->p_vec[0];\n"
-  rstr+="  "+thisDataBaseName+"p_sig="+thisDataBaseName+"DummyResultPointer->p_sig;\n"
-  rstr+="  "+thisDataBaseName+"p_bkg="+thisDataBaseName+"DummyResultPointer->p_bkg;\n"
-  rstr+="  "+thisDataBaseName+"p_err_sig="+thisDataBaseName+"DummyResultPointer->p_err_sig;\n"
-  rstr+="  "+thisDataBaseName+"p_err_bkg="+thisDataBaseName+"DummyResultPointer->p_err_bkg;\n"
-  rstr+="  "+thisDataBaseName+"n_perm_sig="+thisDataBaseName+"DummyResultPointer->n_perm_sig;\n"
-  rstr+="  "+thisDataBaseName+"n_perm_bkg="+thisDataBaseName+"DummyResultPointer->n_perm_bkg;\n"
-  
-  rstr+="""
+    thisDataBaseName=thisDataBase[0]
+    thisDataBasePath=thisDataBase[1]
+    skipNonExistingEvent=thisDataBase[2]
+
+    rstr= """
+    // read the database
+      //std::cout<<std::endl<<"run lumi event "<<Evt_Run<<" "<<Evt_Lumi<<" "<<Evt_ID<<std::endl;
+    """
+    things_to_read = "p_sig p_bkg p_err_sig p_err_bkg n_perm_sig n_perm_bkg".split()
+    rstr += "{thisDataBaseName}p={thisDataBaseName}DummyResultPointer->p_vec[0];\n"
+    for obj in things_to_read:
+      rstr += "  {thisDataBaseName}{obj}={thisDataBaseName}DummyResultPointer->{obj};\n".format(thisDataBaseName = thisDataBaseName,
+                                                                                            obj = obj)
+    rstr+="""
     TString currentRelevantSampleName=sampleDataBaseIdentifiers[currentfilename];
     //TString translatedCurrentRelevantSampleName=sampleTranslationMapCPP[currentRelevantSampleName];
-    //if(processname=="QCD" or processname=="QCD_CMS_ttH_QCDScaleFactorUp" or processname=="QCD_CMS_ttH_QCDScaleFactorDown"){
+    //if(processname=="QCD" or processname=="QCD_CMS_ttH_QCDScaleFactorUp" or processname=="QCD_CMS_ttH_QCDScaleFactorDown"){{
     //  translatedCurrentRelevantSampleName+="QCD";
-    //  }
+    //  }}
     //std::cout<<currentfilename<<" "<<currentRelevantSampleName<<" "<<translatedCurrentRelevantSampleName<<std::endl;
-  """
-  
-  rstr+=" // loop over subsamples of this database\n"
-  rstr+="    int nfoundresults=0;\n"
-  
-  # at the moment we want the MEM for everything
-  #rstr+="  if((N_BTagsM>=3 && N_Jets>=6) || (N_BTagsM>=4 && (N_Jets==4 || N_Jets==5))){ \n"
-  rstr+="  if((N_BTagsM>=3 && N_Jets>=4)){ \n"
-  rstr+="  databaseWatch->Start(); \n"
-  
-  rstr+="  for(unsigned int isn=0; isn<"+thisDataBaseName+"DB.size();isn++){ \n"
-  rstr+="    if(databaseRelevantFilenames.at(isn)==currentRelevantSampleName){;\n"
-  rstr+="         DataBaseMEMResult "+thisDataBaseName+"Result = "+thisDataBaseName+"DB.at(isn)->GetMEMResult(databaseRelevantFilenames.at(isn),Evt_Run,Evt_Lumi,Evt_ID);\n"
 
-  #rstr+="        std::cout<<\" p p_sig p_bkg p_err_sig p_err_bkg n_perm_sig n_perm_bkg \"<<"+thisDataBaseName+"p<<\" \"<<"+thisDataBaseName+"p_sig<<\"   \"<<"+thisDataBaseName+"p_bkg<<\" \"<<"+thisDataBaseName+"p_err_sig<<\" \"<<"+thisDataBaseName+"p_err_bkg<<\" \"<<"+thisDataBaseName+"n_perm_sig<<\" \"<<"+thisDataBaseName+"n_perm_bkg<<\" \"<<std::endl;\n"
-  
-  rstr+="        // check if the event was found using the default values. If any event was found the return values should be different and the resuilt will be replaced\n"
-  #rstr+="        if(("+thisDataBaseName+"Result.p != "+thisDataBaseName+"DummyResultPointer->p) or ("+thisDataBaseName+"Result.p_sig != "+thisDataBaseName+"DummyResultPointer->p_sig) or ("+thisDataBaseName+"Result.p_bkg != "+thisDataBaseName+"DummyResultPointer->p_bkg) or ("+thisDataBaseName+"Result.p_err_sig != "+thisDataBaseName+"DummyResultPointer->p_err_sig) or ("+thisDataBaseName+"Result.p_err_bkg != "+thisDataBaseName+"DummyResultPointer->p_err_bkg) or ("+thisDataBaseName+"Result.n_perm_sig != "+thisDataBaseName+"DummyResultPointer->n_perm_sig) or ("+thisDataBaseName+"Result.n_perm_bkg != "+thisDataBaseName+"DummyResultPointer->n_perm_bkg)){\n"
-  rstr+="        if(("+thisDataBaseName+"Result.p_vec[0] != -99)){\n"
-  rstr+="        nfoundresults+=1;"
+    // loop over subsamples of this database
+    int nfoundresults=0;
+    if((N_BTagsM>=3 && N_Jets>=4)){{
+      databaseWatch->Start();
+      for(unsigned int isn=0; isn<{thisDataBaseName}DB.size();isn++){{
+        if(databaseRelevantFilenames.at(isn)==currentRelevantSampleName){{
+          DataBaseMEMResult {thisDataBaseName}Result = {thisDataBaseName}DB.at(isn)->GetMEMResult(databaseRelevantFilenames.at(isn),Evt_Run,Evt_Lumi,Evt_ID);
+          // check if the event was found using the default values. 
+          // If any event was found the return values should be different and the result will be replaced
+          if(({thisDataBaseName}Result.p_vec[0] != -1.)){{
+            nfoundresults+=1;
+            {thisDataBaseName}p={thisDataBaseName}Result.p_vec[0];
+    """
+    # at the moment we want the MEM for everything
+    #rstr+="  if((N_BTagsM>=3 && N_Jets>=6) || (N_BTagsM>=4 && (N_Jets==4 || N_Jets==5))){ \n"
+    for obj in things_to_read:
+      rstr += "          {thisDataBaseName}{obj}={thisDataBaseName}Result.{obj};\n".format(thisDataBaseName = thisDataBaseName, obj = obj)
 
-  rstr+="      "+thisDataBaseName+"p="+thisDataBaseName+"Result.p_vec[0];\n"
-  rstr+="      "+thisDataBaseName+"p_sig="+thisDataBaseName+"Result.p_sig;\n"
-  rstr+="      "+thisDataBaseName+"p_bkg="+thisDataBaseName+"Result.p_bkg;\n"
-  rstr+="      "+thisDataBaseName+"p_err_sig="+thisDataBaseName+"Result.p_err_sig;\n"
-  rstr+="      "+thisDataBaseName+"p_err_bkg="+thisDataBaseName+"Result.p_err_bkg;\n"
-  rstr+="      "+thisDataBaseName+"n_perm_sig="+thisDataBaseName+"Result.n_perm_sig;\n"
-  rstr+="      "+thisDataBaseName+"n_perm_bkg="+thisDataBaseName+"Result.n_perm_bkg;\n"
-  #rstr+="      std::cout<<\"found database entry \"<<std::endl;\n"
-  rstr+="    }\n"
-  rstr+="    }\n"
-  rstr+="  }// end db loop \n"
-  rstr+="    if(nfoundresults!=1){\n"
-  rstr+="    std::cout<<\"WARNING found not exaclty one result \"<<nfoundresults<<\" \"<<currentRelevantSampleName<<\" \"<<Evt_ID<<\" \"<<N_Jets<<\" \"<<N_BTagsM<<std::endl;\n"
-  rstr+="    if(N_BTagsM>=3){\n"
-  rstr+="      std::cout<<\"VETO this event\"<<\" \"<<currentRelevantSampleName<<\" \"<<Evt_ID<<\" \"<<N_Jets<<\" \"<<N_BTagsM<<std::endl;\n"
-  rstr+="      //std::cout<<\"RedoThisEvent\"<<\" \"<<currentRelevantSampleName<<\" \"<<currentfilename<<\" \"<<Evt_Run<<\" \"<<Evt_Lumi<<\" \"<<Evt_ID<<std::endl;\n"
-  rstr+="      "+thisDataBaseName+"FoundResult=0;\n"
-  rstr+="      nEventsVetoed+=1;\n"
-  rstr+="""
-	       if(N_Jets==4 && N_BTagsM==3){sampleDataBaseLostEvents["jt43"][currentRelevantSampleName]+=1;}
-	       else if(N_Jets==4 && N_BTagsM>=4){sampleDataBaseLostEvents["jt44"][currentRelevantSampleName]+=1;}  
-	       else if(N_Jets==5 && N_BTagsM==3){sampleDataBaseLostEvents["jt53"][currentRelevantSampleName]+=1;}  
-	       else if(N_Jets==5 && N_BTagsM>=4){sampleDataBaseLostEvents["jt54"][currentRelevantSampleName]+=1;}  
-	       else if(N_Jets>=6 && N_BTagsM==3){sampleDataBaseLostEvents["jt63"][currentRelevantSampleName]+=1;}  
-	       else if(N_Jets>=6 && N_BTagsM>=4){sampleDataBaseLostEvents["jt64"][currentRelevantSampleName]+=1;}  
-	"""
-  rstr+="    }\n"
-  rstr+="  }\n"
-  rstr+="  else{\n"
-  rstr+="      "+thisDataBaseName+"FoundResult=1;\n"
-  rstr+="""
-	       if(N_Jets==4 && N_BTagsM==3){sampleDataBaseFoundEvents["jt43"][currentRelevantSampleName]+=1;}
-	       else if(N_Jets==4 && N_BTagsM>=4){sampleDataBaseFoundEvents["jt44"][currentRelevantSampleName]+=1;}  
-	       else if(N_Jets==5 && N_BTagsM==3){sampleDataBaseFoundEvents["jt53"][currentRelevantSampleName]+=1;}  
-	       else if(N_Jets==5 && N_BTagsM>=4){sampleDataBaseFoundEvents["jt54"][currentRelevantSampleName]+=1;}  
-	       else if(N_Jets>=6 && N_BTagsM==3){sampleDataBaseFoundEvents["jt63"][currentRelevantSampleName]+=1;}  
-	       else if(N_Jets>=6 && N_BTagsM>=4){sampleDataBaseFoundEvents["jt64"][currentRelevantSampleName]+=1;}  
-      """  
-  rstr+="  //std::cout<<\"FOUNDEVENT\"<<\" \"<<currentRelevantSampleName<<\" \"<<Evt_ID<<\" \"<<N_Jets<<\" \"<<N_BTagsM<<std::endl;\n"
-  rstr+=" }\n"
-  rstr+="  databaseWatch->Stop(); memTime+=databaseWatch->RealTime();\n"
-  if skipNonExistingEvent:
-    rstr+="  if("+thisDataBaseName+"FoundResult==0 and N_BTagsM>=3){ std::cout<<\"skipping\"<<std::endl; continue; }\n"
-  rstr+="  }\n"
-  
-  rstr+="  //std::cout<<\"FINAL p p_sig p_bkg p_err_sig p_err_bkg n_perm_sig n_perm_bkg \"<<"+thisDataBaseName+"p<<\" \"<<"+thisDataBaseName+"p_sig<<\" \"<<"+thisDataBaseName+"p_bkg<<\" \"<<"+thisDataBaseName+"p_err_sig<<\" \"<<"+thisDataBaseName+"p_err_bkg<<\" \"<<"+thisDataBaseName+"n_perm_sig<<\" \"<<"+thisDataBaseName+"n_perm_bkg<<\" \"<<std::endl;\n"
-  return rstr
+    rstr+="""
+          }}
+        }}
+      }}// end db loop
+      if(nfoundresults!=1){{
+        std::cout << "WARNING found not exaclty one result "<<nfoundresults<<std::endl;
+        std::cout << "\\tcurrentRelevantSampleName: " << currentRelevantSampleName << std::endl;
+        std::cout << "\\tEvt_ID: " << Evt_ID << std::endl;
+        std::cout << "\\tN_Jets: " << N_Jets << std::endl;
+        std::cout << "\\tN_BTagsM: " << N_BTagsM << std::endl;
+
+        if(N_BTagsM>=3){{
+          std::cout << "VETO this event" << std::endl;
+          std::cout << "\\tcurrentRelevantSampleName: " << currentRelevantSampleName << std::endl;
+          std::cout << "\\tEvt_ID: " << Evt_ID << std::endl;
+          std::cout << "\\tN_Jets: " << N_Jets << std::endl;
+          std::cout << "\\tN_BTagsM: " << N_BTagsM << std::endl;
+          //std::cout<<"RedoThisEvent"<<" "<<currentRelevantSampleName<<" "<<currentfilename<<" "<<Evt_Run<<" "<<Evt_Lumi<<" "<<Evt_ID<<std::endl;
+          {thisDataBaseName}FoundResult=0;
+          nEventsVetoed+=1;
+          if(N_Jets==4 && N_BTagsM==3){{sampleDataBaseLostEvents["jt43"][currentRelevantSampleName]+=1;}}
+          else if(N_Jets==4 && N_BTagsM>=4){{sampleDataBaseLostEvents["jt44"][currentRelevantSampleName]+=1;}}  
+          else if(N_Jets==5 && N_BTagsM==3){{sampleDataBaseLostEvents["jt53"][currentRelevantSampleName]+=1;}}  
+          else if(N_Jets==5 && N_BTagsM>=4){{sampleDataBaseLostEvents["jt54"][currentRelevantSampleName]+=1;}}  
+          else if(N_Jets>=6 && N_BTagsM==3){{sampleDataBaseLostEvents["jt63"][currentRelevantSampleName]+=1;}}  
+          else if(N_Jets>=6 && N_BTagsM>=4){{sampleDataBaseLostEvents["jt64"][currentRelevantSampleName]+=1;}}
+        }}
+      }}
+      else{{
+        {thisDataBaseName}FoundResult=1;
+        if(N_Jets==4 && N_BTagsM==3){{sampleDataBaseFoundEvents["jt43"][currentRelevantSampleName]+=1;}}
+        else if(N_Jets==4 && N_BTagsM>=4){{sampleDataBaseFoundEvents["jt44"][currentRelevantSampleName]+=1;}}  
+        else if(N_Jets==5 && N_BTagsM==3){{sampleDataBaseFoundEvents["jt53"][currentRelevantSampleName]+=1;}}  
+        else if(N_Jets==5 && N_BTagsM>=4){{sampleDataBaseFoundEvents["jt54"][currentRelevantSampleName]+=1;}}  
+        else if(N_Jets>=6 && N_BTagsM==3){{sampleDataBaseFoundEvents["jt63"][currentRelevantSampleName]+=1;}}  
+        else if(N_Jets>=6 && N_BTagsM>=4){{sampleDataBaseFoundEvents["jt64"][currentRelevantSampleName]+=1;}}
+        //std::cout<<"FOUNDEVENT"<<" "<<currentRelevantSampleName<<" "<<Evt_ID<<" "<<N_Jets<<" "<<N_BTagsM<<std::endl;
+      }}
+      databaseWatch->Stop();
+      memTime+=databaseWatch->RealTime();
+    """
+    if skipNonExistingEvent:
+      rstr+="""  if({thisDataBaseName}FoundResult==0 and N_BTagsM>=3){{ std::cout<<"skipping"<<std::endl; continue; }}\n"""
+    rstr+="  }}\n"
+
+    rstr+="""  //std::cout<<"FINAL" << std::endl;\n"""
+    things_to_read = ["p"] + things_to_read
+    for obj in things_to_read:
+        rstr += """  //std::cout << "\\t{name}: " << {name} << std::endl;\n""".format(name = thisDataBaseName+obj)
+      
+    return rstr.format(thisDataBaseName = thisDataBaseName)
 # -------------------------------------------------------------------------------------------------
 
 
@@ -421,7 +427,7 @@ class initPlots:
         self.varManager = varManager
 
     def startCat(self, catWeight):
-        script ='\n    // staring category\n'
+        script ='\n    // starting category\n'
 
         arraySelection = self.varManager.checkArrayLengths(catWeight)
         print("arraySelection:" +str(arraySelection))
@@ -514,10 +520,15 @@ def fillHistoSyst(histName, varNames, weight, systNames, systWeights):
     if len(varNames) == 1:
         # 1D Histograms
         text += '       std::vector<structHelpFillHisto> helpWeightVec_' + histName + ' = {\n'
-        for systName, systWeight in zip(systNames, systWeights):
-            text += "       {histos1D[\""+histName+systName+"\"].get()"+", ("+systWeight+")*(weight_"+histName+")},\n"
-            
+        # Do Nominal Plot for sure
+        text += "           {histos1D[\""+histName+"\"+variation].get()"+", ((NomWeight)*(weight_"+histName+"))},\n"
         text += "       };\n"
+
+        text += "       if (!skipWeightSysts) { // append plots for weight systs if neccessary \n"
+        for systName, systWeight in zip(systNames[1:], systWeights[1:]):
+            text += "             helpWeightVec_" + histName + ".push_back({histos1D[\""+histName+systName+"\"].get()"+", ("+systWeight+")*(weight_"+histName+")});\n"
+        text += "       };\n"
+            
         text += "       variable = "+varNames[0]+";\n"
 
         text += "       helperFillHisto(helpWeightVec_"+histName+", variable);\n"
@@ -525,13 +536,15 @@ def fillHistoSyst(histName, varNames, weight, systNames, systWeights):
     if len(varNames) == 2:
         # 2D Histograms
         text += '       std::vector<structHelpFillTwoDimHisto> helpWeightVec_' + histName + ' = {\n'
-        for systName, systWeight in zip(systNames, systWeights):
-            text += "       {histos2D[\""+histName+systName+"\"].get()"+", ("+systWeight+")*(weight_"+histName+")},\n"
-            
+        # Do Nominal Plot for sure
+        text += "           {histos2D[\""+histName+"\"+variation].get()"+", ((NomWeight)*(weight_"+histName+"))},\n"
         text += "       };\n"
-        text += "       variable1 = "+varNames[0]+";\n"
-        text += "       variable2 = "+varNames[1]+";\n"
 
+        text += "       if (!skipWeightSysts) { // append plots for weight systs if neccessary \n"
+        for systName, systWeight in zip(systNames[1:], systWeights[1:]):
+            text += "             helpWeightVec_" + histName + ".push_back({histos2D[\""+histName+systName+"\"].get()"+", ("+systWeight+")*(weight_"+histName+")});\n"
+        text += "       };\n"
+            
         text += "       helperFillTwoDimHisto(helpWeightVec_"+histName+", variable1, variable2);\n"
         text += "       variable1 = -999;\n"
         text += "       variable2 = -999;\n"

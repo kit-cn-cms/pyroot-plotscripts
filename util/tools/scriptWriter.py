@@ -188,7 +188,6 @@ class scriptWriter:
             script += "\n"
             script += addCodeInt.getTestCallLines()
             script += "\n"
-        
         # get program footer
         script += scriptfunctions.getFoot(self.pp.addInterfaces)
 
@@ -236,12 +235,15 @@ class scriptWriter:
         print dnnfiles
         
         #lhapdf=[' `/cvmfs/cms.cern.ch/slc6_amd64_gcc530/external/lhapdf/6.1.6-ikhhed2/bin/lhapdf-config --cflags --ldflags`']
-        lhapdf=[' `/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/lhapdf/6.2.1-fmblme/bin/lhapdf-config --cflags --ldflags`']
+        lhapdf_path = os.environ["LHAPDF_DATA_PATH"]
+        lhapdf_relpath = "../../bin/lhapdf-config"
+        lhapdf_cfg = os.path.join(lhapdf_path, *(lhapdf_relpath.split("/")))
+        lhapdf=['`{} --cflags --ldflags`'.format(lhapdf_cfg)]
 
         # getting databases
         memDBccfiles=[]
         if self.pp.useDataBases:
-            memDBccfiles=glob.glob('/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase/src/*.cc') 
+            memDBccfiles=glob.glob(os.path.join(self.pp.memDBpath,'src/*.cc')) 
             #TODO update the dataBases code
 
         # improve ram usage and reduce garbage of g++ compiler
@@ -365,6 +367,12 @@ class scriptWriter:
 
         script += "     totalTimeMapping+=timerMapping->RealTime();\n"
 
+        script += "     timerReadDataBase->Start();\n"
+        for db in self.pp.dataBases:
+            script += scriptfunctions.readOutDataBase(db)    
+        script += "\n"
+        script += "     totalTimeReadDataBase+=timerReadDataBase->RealTime();\n"
+
         script += "     timerEvalDNN->Start();\n"
         for addCodeInt in self.pp.addInterfaces:
             script += addCodeInt.getVariableInitInsideEventLoopLines()
@@ -386,11 +394,6 @@ class scriptWriter:
         script += scriptfunctions.encodeSampleSelection(self.pp.configData.allSamples, self.varManager)
         script += "     totalTimeSampleWeight+=timerSampleWeight->RealTime();\n"
         
-        script += "     timerReadDataBase->Start();\n"
-        for db in self.pp.dataBases:
-            script += scriptfunctions.readOutDataBase(db)    
-        script += "\n"
-        script += "     totalTimeReadDataBase+=timerReadDataBase->RealTime();\n"
                 
         script += "     timerFillHistograms->Start();\n"
 
@@ -416,78 +419,10 @@ class scriptWriter:
         return script
 
 
-
-
-
-    ## cleanup script (during plot parallel) ##
-    # comment: this could be integrated into "cleanupHistos"
-    def writeCleanupScript(self):
-        script = """
-import sys
-import os
-sys.path.append('{path}')
-import cleanupHistos
-
-filename     = os.getenv('OUTFILENAME')
-
-process      = os.getenv('ORIGNAME')
-syst_key     = os.getenv('SYSTHISTKEY')
-separator    = os.getenv('SEPARATOR')
-
-outname      = filename.replace('.root','_original.root')
-systematics  = "{systpath}"
-
-nHistsBefore, nHistsAfter = cleanupHistos.cleanupHistos(filename, outname, process, 
-                                                        systematics, syst_key, separator, 
-                                                        replace_config = "{replace_config}")
-with open(outname.replace('.root','_cleanedUp.txt'), 'w') as f:
-    f.write('{{}} : {{}}'.format(nHistsBefore, nHistsAfter))
-  """.format(path = os.path.join(self.pp.analysis.pyrootdir,"util"),
-            systpath = self.pp.configData.local_syst_path,
-            replace_config = self.pp.configData.replace_config)
-        # write script to file
-        with open(self.ccPath.replace(".cc","_cleanupHistos.py"), "w") as srcfile:
-            srcfile.write(script)
-
-    def writeMergeSystsScript(self):
-        script = """
-import sys
-import os
-sys.path.append('{path}')
-import combine_intermid_systs
-
-filename     = os.getenv('INFILE')
-
-process      = os.getenv('ORIGNAME')
-nom_key      = os.getenv('NOMHISTKEY')
-syst_key     = os.getenv('SYSTHISTKEY')
-separator    = os.getenv('SEPARATOR')
-syst_csvpath = "{systpath}"
-
-print(process)
-combine_intermid_systs.combine_intermid_syst(   h_nominal_key   = nom_key, 
-                                                h_syst_key      = syst_key, 
-                                                rfile_path      = filename,
-                                                replace_config  = "{replace_config}",
-                                                processes       = process,
-                                                separator       = separator,
-                                                syst_csvpath    = syst_csvpath
-                                            )
-""".format(path = os.path.join(self.pp.analysis.pyrootdir,"util"),
-            systpath = self.pp.configData.local_syst_path,
-            replace_config = self.pp.configData.replace_config)
-        # write script to file
-        script_path = self.ccPath.replace(".cc","_combineSysts.py")
-        with open(script_path, "w") as srcfile:
-            srcfile.write(script)
-        return script_path
-
-
     ## run scripts ##
     def writeRunScripts(self):
         # init outputs
         self.scripts = []
-        self.cleanup_scripts = []
         self.outputs = []
         self.nentries = []
         self.samplewiseMaps = {}
@@ -526,9 +461,7 @@ combine_intermid_systs.combine_intermid_syst(   h_nominal_key   = nom_key,
                     tree = f.Get('MVATree')
                     nEventsInFile = tree.GetEntries()
 
-                SaveTreeInformation[filename] = nEventsInFile
-
-                
+                SaveTreeInformation[filename] = nEventsInFile                
                 # if the file is larger than self.maxevents it is analyzed in portions of nevents
                 if nEventsInFile > self.pp.maxevents:
                     for ijob in range(nEventsInFile / self.pp.maxevents + 1):
@@ -536,7 +469,7 @@ combine_intermid_systs.combine_intermid_syst(   h_nominal_key   = nom_key,
                         writeOptions = {"skipEvents": (ijob)*self.pp.maxevents}
 
                         self.writeSingleScript(sample, filename, nJob, filterFile, writeOptions)
-                    self.nentries.append(nEventsInFile)
+                        self.nentries.append(nEventsInFile-(ijob)*self.pp.maxevents)
                     nEvents += nEventsInFile
 
                 # else additional files are appended to list of files to be submitted
@@ -547,7 +480,6 @@ combine_intermid_systs.combine_intermid_syst(   h_nominal_key   = nom_key,
                         nJob += 1
                         filenames = ' '.join(filesToSubmit)
                         self.writeSingleScript(sample, filenames, nJob, filterFile)
-
                         self.nentries.append(nEventsInFiles)
                         nEvents += nEventsInFiles
 
@@ -563,7 +495,6 @@ combine_intermid_systs.combine_intermid_syst(   h_nominal_key   = nom_key,
                 nJob += 1
                 filenames = ' '.join(filesToSubmit)
                 self.writeSingleScript(sample, filenames, nJob, filterFile)
-                
                 self.nentries.append(nEventsInFiles)
                 nEvents += nEventsInFiles
 
@@ -579,7 +510,6 @@ combine_intermid_systs.combine_intermid_syst(   h_nominal_key   = nom_key,
             #jsonfile.write(treejson)
         print "Saved information about events in trees to ", self.pp.analysis.workdir+'/'+"treejson.json"
         returnData = {  "scripts": self.scripts,
-                        "cleanup": self.cleanup_scripts,
                         "outputs": self.outputs, 
                         "entries": self.nentries, 
                         "maps": self.samplewiseMaps}
@@ -592,10 +522,10 @@ combine_intermid_systs.combine_intermid_syst(   h_nominal_key   = nom_key,
         processname = sample.nick
         outfilename = self.pp.plotPath+processname+'_'+str(nJob)+'.root'
         scriptname = self.pp.scriptsPath+'/'+processname+'_'+str(nJob)+'.sh'
-        cleanupname = self.pp.scriptsPath+"/"+processname+"_cleanup_"+str(nJob)+".sh"
-        origName = sample.origName
+        origName = str(sample.origName)
         suffix = writeOptions.get("suffix", "")
         skipevents = writeOptions.get("skipEvents", 0)
+        variation = processname.split(origName)[1]
 
         # check options
         if self.pp.analysis.testrun and maxevents < 100:
@@ -615,15 +545,13 @@ combine_intermid_systs.combine_intermid_syst(   h_nominal_key   = nom_key,
         script += 'export SKIPEVENTS="'+str(skipevents)+'"\n'
         script += 'export SUFFIX="'+suffix+'"\n'
         script += 'export EVENTFILTERFILE="'+str(filterFile)+'"\n'
-        script += 'export ORIGNAME="'+str(origName)+'"\n'
+        script += 'export ORIGNAME="'+origName+'"\n'
         script += "export NOMHISTKEY='{}'\n".format(self.pp.nominalHistoKey)
         script += "export SYSTHISTKEY='{}'\n".format(self.pp.systHistoKey)
         script += 'export SEPARATOR="{}"\n'.format(self.pp.histNameSeparator)
+        script += 'export VARIATION="{}"\n'.format(variation)
         #DANGERZONE
         pPscript = script + ".".join(self.ccPath.split(".")[:-1])+'\n'
-        cleanup  = script + 'python '+self.ccPath.replace('.cc','_cleanupHistos.py')+'\n'
-        if self.pp.configData.replace_config:
-            cleanup  += 'python '+self.ccPath.replace('.cc','_combineSysts.py')+'\n'
 
         # writing script to file and chmodding
         with open(scriptname, "w") as f:
@@ -631,14 +559,8 @@ combine_intermid_systs.combine_intermid_syst(   h_nominal_key   = nom_key,
         st = os.stat(scriptname)
         os.chmod(scriptname, st.st_mode | stat.S_IEXEC)
 
-        with open(cleanupname, "w") as f:
-            f.write(cleanup)
-        st = os.stat(cleanupname)
-        os.chmod(cleanupname, st.st_mode | stat.S_IEXEC)
-
         # saving script info to lists
         self.scripts.append(scriptname)
-        self.cleanup_scripts.append(cleanupname)
         self.outputs.append(outfilename)
         self.samplewiseMaps[processname].append(outfilename)
 
@@ -671,6 +593,36 @@ combine_intermid_systs.combine_intermid_syst(   h_nominal_key   = nom_key,
         with open(self.haddScript, "w") as sf:
             sf.write(script)
         print("haddScript written to "+self.haddScript)
+
+    def writeMergeSystsScript(self):
+        script = """
+import sys
+import os
+sys.path.append('{path}')
+import combine_intermid_systs
+filename     = os.getenv('INFILE')
+process      = os.getenv('ORIGNAME')
+nom_key      = os.getenv('NOMHISTKEY')
+syst_key     = os.getenv('SYSTHISTKEY')
+separator    = os.getenv('SEPARATOR')
+syst_csvpath = "{systpath}"
+print(process)
+combine_intermid_systs.combine_intermid_syst(   h_nominal_key   = nom_key, 
+                                                h_syst_key      = syst_key, 
+                                                rfile_path      = filename,
+                                                replace_config  = "{replace_config}",
+                                                processes       = process,
+                                                separator       = separator,
+                                                syst_csvpath    = syst_csvpath
+                                            )
+""".format(path = os.path.join(self.pp.analysis.pyrootdir,"util"),
+            systpath = self.pp.configData.local_syst_path,
+            replace_config = self.pp.configData.replace_config)
+        # write script to file
+        script_path = self.ccPath.replace(".cc","_combineSysts.py")
+        with open(script_path, "w") as srcfile:
+            srcfile.write(script)
+        return script_path
 
 
     def writeHaddShell(self, scriptname, haddedRootName, haddedLogName, sampleData):

@@ -62,6 +62,7 @@ class plotParallel:
         self.rateFactorsFile = None
         self.useGenWeightNormMap = False
         self.sampleForVariableSetup = None
+        self.request_runtime = None
 
         # check cmssw
         self.cmsswpath = os.environ['CMSSW_BASE']
@@ -198,9 +199,6 @@ class plotParallel:
         writer = scriptWriter.scriptWriter(self)
         writer.writeCC()
 
-        # create cleanup script
-        writer.writeCleanupScript()
-
         # creating output folders
         print( "creating output folders" )
         if not os.path.exists(self.scriptsPath):
@@ -220,13 +218,12 @@ class plotParallel:
             sys.exit(0)
 
         # job submission
-        nafInterface.plotInterface(self.runscriptData, skipPlotParallel = self.analysis.skipPlotParallel)
-        print("all jobs have terminated successfully")
-        print("="*40)
-
-        # cleanup histograms
-        print("cleaning up histograms")
-        nafInterface.cleanupInterface(self.runscriptData["cleanup"], self.runscriptData["outputs"], skipCleanup = self.analysis.skipPlotParallel)
+        opts = {}
+        if self.request_runtime:
+            opts["+RequestRuntime"] = self.request_runtime
+        nafInterface.plotInterface( self.runscriptData, 
+                                    skipPlotParallel = self.analysis.skipPlotParallel, 
+                                    options = opts)
         print("all jobs have terminated successfully")
         print("="*40)
 

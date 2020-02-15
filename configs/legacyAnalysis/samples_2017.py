@@ -24,10 +24,9 @@ VJetsPathS = path+'/DYJets*/*nominal*.root'+';'+ \
 
 path_ttbb = path+"/TTbb_Powheg_Openloops_new_pmx/*nominal*.root"+';'+ \
             path+"/TTbb_Powheg_Openloops_DL/*nominal*.root"+";"+ \
-            "/nfs/dust/cms/user/vdlinden/legacyTTH/ntuples/legacy_2017_ttH_newJEC/TTbb_4f_TTToHadronic_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"
+            path+"/TTbb_4f_TTToHadronic_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"
 
 path_ttbbSL = path+"/TTbb_Powheg_Openloops_new_pmx/*nominal*.root"
-path_ttbbDL = path+"/TTbb_Powheg_Openloops_DL/*nominal*.root"
 path_ttbbDL = path+"/TTbb_Powheg_Openloops_DL/*nominal*.root"
 
 ttVPathS = path+'/TTW*/*nominal*.root'+';'+ \
@@ -159,7 +158,7 @@ weightReplacements = {
 lumi = '41.5'
 
 # DANGERZONE: derived in January 2020
-ttbb_4FS_scale = "*(1.8983)"
+ttbb_4FS_scale = "*(1.0))"
 ttbb_5FS_scale = "*(1.0)"
 
 #tHq_XS_scale = "*(0.7927/0.07425)"

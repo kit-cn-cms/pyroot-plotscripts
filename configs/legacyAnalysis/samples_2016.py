@@ -156,7 +156,8 @@ lumi = '35.9'
 #tHW_XS_scale = "*(0.1472/0.01517)"
 
 # DANGERZONE: derived in 2018
-ttbb_4FS_scale = "*(1.2143)"
+# ttbb_4FS_scale = "*(1.2143)"
+ttbb_4FS_scale = "*(1.0)"
 ttbb_5FS_scale = "*(1.0)"
 
 tH_SM_rwgt = "*(Weight_rwgt_12/Weight_GEN_nom)"
