@@ -65,6 +65,8 @@ void plot(){
 
   // open files
   TChain* chain = new TChain("MVATree");
+//PLACEHOLDERFRIENDTREEINIT
+
   char* filenames = getenv ("FILENAMES");
   char* outfilename = getenv ("OUTFILENAME");
   std::string plotscriptBaseDir = getenv ("PLOTSCRIPTBASEDIR");
@@ -183,6 +185,17 @@ void plot(){
     chain->Add(buf.c_str());
     TString thisfilename = buf.c_str();
     TString originalfilename=buf.c_str();
+
+    TString treename = buf.c_str();
+    treename.Replace(0,treename.Last('/'),"");
+    TString samplename = buf.c_str();
+    samplename.ReplaceAll(treename,"");
+    samplename.Replace(0,samplename.Last('/')+1,"");
+    samplename+=treename;
+    std::cout << "samplename "<<samplename<<std::endl;
+
+//PLACEHOLDERFRIENDTREECHAINS
+    
     //std::cout<<"file "<<buf.c_str()<<" "<<thisfilename<<std::endl; // karim debug 
     // cut of directories
     thisfilename.Replace(0,thisfilename.Last('/')+1,"");
@@ -218,7 +231,7 @@ void plot(){
 
     std::cout<<" relevant database name "<<thisfilename<<std::endl;
    sampleDataBaseIdentifiers[originalfilename]=thisfilename;
-    
+
     //check if already in vectr
    // TString translatedFileNameForDataBase;
 
@@ -290,7 +303,10 @@ void plot(){
   for(unsigned int isn=0; isn<databaseRelevantFilenames.size();isn++){
     std::cout<<databaseRelevantFilenames.at(isn)<<std::endl;
     }
-    
+   
+
+//PLACEHOLDERFRIENDTREEADD
+ 
   chain->SetBranchStatus("*",0);
 
   TFile* outfile=new TFile(outfilename,"RECREATE");

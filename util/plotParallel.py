@@ -63,6 +63,8 @@ class plotParallel:
         self.useGenWeightNormMap = False
         self.sampleForVariableSetup = None
         self.request_runtime = None
+        self.useFriendTrees = False
+        self.friendTrees = {}
 
         # check cmssw
         self.cmsswpath = os.environ['CMSSW_BASE']
@@ -90,6 +92,13 @@ class plotParallel:
         self.sfCorrection = sfCorrection
         print("set sfCorrection to: {}".format(sfCorrection))
         
+    def setUseFriendTrees(self, useFriendTrees):
+        self.useFriendTrees = useFriendTrees
+        self.friendTrees = self.configData.pltcfg.friendTrees
+        print("set useFriendTrees to: {}".format(useFriendTrees))
+        print("config:")
+        print(self.friendTrees)
+
     def setDataBases(self, dataBases):
         self.dataBases = dataBases
         print("set dataBases to "+str(dataBases))
