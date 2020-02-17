@@ -95,26 +95,26 @@ def drawROC(roc, signal_label, background_label, discr_label, cat_label):
     text_auc.SetTextSize(0.025)
     text_auc.Draw()
 
-    text_signal = ROOT.TLatex(0.2, 0.4, "Signal: {signal}".format(signal=signal_label))
+    text_signal = ROOT.TLatex(0.15, 0.4, "Signal: {signal}".format(signal=signal_label))
     text_signal.SetNDC(ROOT.kTRUE)
     text_signal.SetTextSize(0.025)
     text_signal.Draw()
 
     text_bkg = ROOT.TLatex(
-        0.2, 0.35, "Background: {background}".format(background=background_label)
+        0.15, 0.35, "Background: {background}".format(background=background_label)
     )
     text_bkg.SetNDC(ROOT.kTRUE)
     text_bkg.SetTextSize(0.025)
     text_bkg.Draw()
 
     text_discr = ROOT.TLatex(
-        0.2, 0.3, "Discriminator: {discr}".format(discr=discr_label)
+        0.15, 0.3, "Discriminator: {discr}".format(discr=discr_label)
     )
     text_discr.SetNDC(ROOT.kTRUE)
     text_discr.SetTextSize(0.025)
     text_discr.Draw()
 
-    text_cat = ROOT.TLatex(0.2, 0.25, "Category: {cat}".format(cat=cat_label))
+    text_cat = ROOT.TLatex(0.15, 0.25, "Category: {cat}".format(cat=cat_label))
     text_cat.SetNDC(ROOT.kTRUE)
     text_cat.SetTextSize(0.025)
     text_cat.Draw()
