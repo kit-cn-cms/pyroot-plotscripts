@@ -71,3 +71,45 @@ If the option is set to `False` the `c++` code that is written will evaluate all
 - execute the top-level-script as usual.
 
 
+
+### b tagging sf corrections
+#### setup for deriving b tagging scale factor patches
+- module `util/scaleFactorCreator.py` can be called in a top level script to create SF histograms
+- SF are caluclated as ratios between nominal template and dummy systematic templates for each variable and process
+- example configs are added in `configs/sfPatch/`
+- example scripts are added in `plottingscripts/sfPatch/derive_X.py`
+
+#### new SF histograms
+- sf histograms are added to the `data/btagSFCorrection/` directory
+- three different binnings are available for each year (which one to use is still to be decided)
+- sf histograms are available for all ttbar, ttbb, ttH and ttZ processes
+
+#### setup for applying b tagging scale factor patches
+- C++ module `SFCorrectionHelper` has been included
+- module is loaded per default into the created C script
+- add the following excerpt to the top level script
+```
+    sfCorrection = {}
+    sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2018_deepJet_fineBinning.root"
+    # variables for the correction
+    sfCorrection["corrections"] = {}
+    sfCorrection["corrections"]["HT_vs_NJet"] = ["Evt_HT_jets", "N_Jets"]
+    # in root file sf histograms exist with some naming scheme
+    sfCorrection["nameTemplate"] = "$BINNING__$PROCESS__$NAME"
+    # SF_ is always preprended by default, that should not be changed
+    # $BINNING = "_vs_".join(corrections[X])
+    # DANGER: order of variables is important
+    # name of corrections to be applied (should match whats defined in syst.csv or samples.py)
+    sfCorrection["names"] = ["btag_NOMINAL"]
+```
+- pass information to `plotParallel` via `pP.setSFCorrection(sfCorrection)`
+- new SFs can for example be applied by using variables with naming scheme
+```
+sf__$BINNING__$NAME
+```
+e.g.
+```
+sf__HT_vs_NJet__btag_NOMINAL
+```
+
+
