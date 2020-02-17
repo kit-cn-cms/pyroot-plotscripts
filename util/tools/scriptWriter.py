@@ -110,10 +110,25 @@ class scriptWriter:
                 tree = f.Get('MVATree')
                 if tree.GetEntries() > 0:
                     print("using "+str(samplesToCheck[i].files[j])+" to determine variable types")
+                    thistree = samplesToCheck[i].files[j]
                     thistreeisgood = True
                     break
             if thistreeisgood:
                 break
+
+        # check for friend trees
+        if self.pp.useFriendTrees:
+            # sample file should have path BASE/SAMPLENAME/FILE.root
+            # -> strip base
+            for ftName in self.pp.friendTrees:
+                sampledir, treename = os.path.split(thistree)
+                basedir, samplename = os.path.split(sampledir)
+                friendtree = "/".join([self.pp.friendTrees[ftName], samplename, treename])
+                print("checking friend tree {}".format(friendtree))
+                if not os.path.exists(friendtree):
+                    exit("cannot use file for variable setup because required friend tree does not exist.")
+                tree.AddFriend("{}=MVATree".format(ftName), friendtree)
+        
 
         # initialize variables with variablebox
         self.initVariables(tree)
@@ -136,6 +151,13 @@ class scriptWriter:
                                             useNormHeader     = genWeightNormHeader_name
                                             )
 
+        # replace FRIENDTREE placeholders
+        if self.pp.useFriendTrees:
+            ftInit, ftChain, ftAdd = scriptfunctions.InitFriendTrees(self.pp.friendTrees)
+            script = script.replace("//PLACEHOLDERFRIENDTREEINIT",ftInit)
+            script = script.replace("//PLACEHOLDERFRIENDTREECHAINS",ftChain)
+            script = script.replace("//PLACEHOLDERFRIENDTREEADD",ftAdd)
+    
         # replace SFCORRECTIONHELPER placeholder
         if not self.pp.sfCorrection is None:
             sfInit = scriptfunctions.InitSFCorrection(self.pp.sfCorrection)
@@ -317,7 +339,7 @@ class scriptWriter:
 
     def initVariables(self, tree):
         # initialize variables objects
-        variableManager = variableCancer.VariableManager(tree, self.vetolist, self.pp.sfCorrection)
+        variableManager = variableCancer.VariableManager(tree, self.vetolist, self.pp.sfCorrection, self.pp.friendTrees)
         variableManager.add( ["Weight", "Weight_CSV", "Weight_XS"] )
         
         # get additional variables
