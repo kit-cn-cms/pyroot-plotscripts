@@ -8,7 +8,7 @@ import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 filedir = os.path.dirname(os.path.realpath(__file__))
-pyrootdir = "/".join(filedir.split("/")[:-1])
+pyrootdir = "/".join(filedir.split("/")[:-2])
 
 sys.path.append(pyrootdir)
 
@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'SFSFderivation/testSFs_2017'
+    name = 'sfPatch/test_2016_fine'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -39,7 +39,7 @@ def main(pyrootdir, opts):
     nSigSamples   = 1
 
     # dataera
-    dataera = "2017"
+    dataera = "2016"
 
     # Name of final discriminator, should not contain underscore
     discrName = 'finaldiscr'
@@ -51,14 +51,32 @@ def main(pyrootdir, opts):
     # memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
     memexp = ''
     # configs
-    config          = "SFSFderivation/samples_testSFs_2017"
-    variable_cfg    = "legacyAnalysis/additionalVariables_2017"
-    plot_cfg        = "SFSFderivation/plots_testSFs"
-    syst_cfg        = "SFSFderivation/systs_testSFs"
+    config          = "sfPatch/samples_2016"
+    variable_cfg    = "sfPatch/additionalVariables"
+    plot_cfg        = "sfPatch/plots_testSFs"
+    syst_cfg        = "sfPatch/systs_testSFs"
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
-    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2017.csv"
+    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2016.csv"
+
+    # file for btagging SF corrections
+    sfCorrection = {}
+    sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2016_deepJet_fineBinning.root"
+    # variables for the correction
+    sfCorrection["corrections"] = {}
+    sfCorrection["corrections"]["NJet"]       = ["N_Jets"]
+    sfCorrection["corrections"]["HT_vs_NJet"] = ["Evt_HT_jets", "N_Jets"]
+    # in root file sf histograms exist with some naming scheme
+    sfCorrection["nameTemplate"] = "$BINNING__$PROCESS__$NAME"
+    # SF_ is always preprended by default, that should not be changed
+    # $BINNING = "_vs_".join(corrections[X])
+    # DANGER: order of variables is important
+    # name of corrections to be applied (should match whats defined in syst.csv or samples.py)
+    sfCorrection["names"] = ["btag_NOMINAL"]
+
+    # variable names are searched that end with $NAME (.endswith)
+    # sfCorrection = None
 
     # script options
     analysisOptions = {
@@ -70,11 +88,11 @@ def main(pyrootdir, opts):
         "haddFromWildcard":     True,
         "makeDataCards":        False,
         "makeInputDatacards":   False, # create datacards also for all defined plots
-        "addData":              True,  # adding real data 
-        "makePlots":            True,
+        "addData":              False,  # adding real data 
+        "makePlots":            False,
         # options for makePlots
         "signalScaling":        -1,
-        "lumiLabel":            True,
+        "lumilabel":            True,
         "CMSlabel":             "private Work",
         "ratio":                "#frac{data}{MC Background}",
         "shape":                False,
@@ -90,7 +108,7 @@ def main(pyrootdir, opts):
         "skipHistoCheck":       opts.skipHistoCheck,
         "skipDatacards":        opts.skipDatacards}
 
-    plotJson = pyrootdir+"/configs/legacyAnalysis/treeJson_2017.json"
+    plotJson = pyrootdir+"/configs/legacyAnalysis/treeJson_2016.json"
     # plotDataBases = [["memDB","/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/databases/2017_/",True]] 
     # memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
     #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
@@ -189,7 +207,8 @@ def main(pyrootdir, opts):
         #pP.setDataBases(plotDataBases)
         #pP.setMEMDataBase(memDataBase)
         # pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts(200000)
+        pP.setSFCorrection(sfCorrection)
+        pP.setMaxEvts(500000)
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
 
