@@ -112,6 +112,24 @@ def getCorrName(varList):
     name+= "_vs_".join(vectorizedVariables)
     return name
 
+
+def InitFriendTrees(friendTrees):
+    ftInit = ""
+    ftChain = ""
+    ftAdd = ""
+    for tName in friendTrees:
+        tPath = friendTrees[tName]
+
+        ftInit+= "  TChain* chain_{} = new TChain(\"MVATree\");\n".format(tName)
+
+        ftChain+= "    chain_{}->Add(TString(\"{}/\")+samplename);\n".format(tName, tPath)
+
+        ftAdd+= "  chain->AddFriend(chain_{}, \"{}\");\n".format(tName, tName)
+    
+    return ftInit, ftChain, ftAdd
+
+
+
 def InitSFCorrection(sfCorrection):
     # open root file and get list of all keys belonging to hist of correct dimension
     rf = ROOT.TFile(sfCorrection["sfFile"])
@@ -513,6 +531,7 @@ def varLoop(i,n):
     return '      for(int '+str(i)+'=0; '+str(i)+'<'+str(n)+'; '+str(i)+'++)'
 
 def fillHistoSyst(histName, varNames, weight, systNames, systWeights):
+    varNames = [v.replace(".","_friendTree_") for v in varNames]
     text = '      float weight_'+histName+'='+weight+';\n'
     # Write all individual systnames and systweights in nested vector 
     # to use together with function allowing variadic vector size 
