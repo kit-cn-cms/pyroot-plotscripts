@@ -112,4 +112,32 @@ e.g.
 sf__HT_vs_NJet__btag_NOMINAL
 ```
 
+### friend trees
+
+friend trees can be used to get additional variables (i.e. branches) from other root ntuple files. 
+Creation of such friend tree files is currently implemented in the `karim` framework for reconstruction information. 
+The friend tree files need to have the same order of events as the original ntuple files. In the current implementation it is also required to have the same folder structure for the original ntuple files and the friend tree files:
+```
+BASEPATH/
+----/SAMPLEA/
+----/----/FILE1.root
+----/----/FILE2.root
+----/SAMPLEB/
+----/----/FILE3.root
+...
+```
+The current implementation of friend trees replaces the `BASEPATH` of the original ntuple files with a new path where the friend trees are supposed to be stored.
+To activate the use add a dictionary to your sample config, e.g.
+```
+friendTrees = {
+	"friendTreeName": "/new/base/path/to/friend/trees/",
+	...
+	}
+```
+and add `pP.SetUseFriendTrees(True)` to your top level script.
+
+
+If the name of a branch you want to access is unique between the friend trees and the original tree, you can just use the variable name.
+If the same variable exists in a friend tree and your original tree, the content of the original tree will be accessed when you call the plain variable name. 
+To access any variable in a friend tree, you can use the variable name `friendTreeName.variableName`.
 
