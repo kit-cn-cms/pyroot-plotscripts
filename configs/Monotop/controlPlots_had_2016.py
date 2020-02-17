@@ -362,30 +362,30 @@ def control_plots_had_SR(data=None):
             selection,
             label,
         ),    
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "AK15Jet_Njettiness_tau3_AK15Jet_Njettiness_tau2" + extension,
-                "AK15 Jet #tau_{3}/#tau_{2}",
-                20,
-                0.0,
-                1.0,
-            ),
-            "AK15Jet_Njettiness_tau3/AK15Jet_Njettiness_tau2",
-            selection,
-            label,
-        ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "AK15Jet_Njettiness_tau2_AK15Jet_Njettiness_tau1" + extension,
-                "AK15 Jet #tau_{2}/#tau_{1}",
-                20,
-                0.0,
-                1.0,
-            ),
-            "AK15Jet_Njettiness_tau2/AK15Jet_Njettiness_tau1",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"AK15Jet_Njettiness_tau3_AK15Jet_Njettiness_tau2" + extension,
+                #"AK15 Jet #tau_{3}/#tau_{2}",
+                #20,
+                #0.0,
+                #1.0,
+            #),
+            #"AK15Jet_Njettiness_tau3/AK15Jet_Njettiness_tau2",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"AK15Jet_Njettiness_tau2_AK15Jet_Njettiness_tau1" + extension,
+                #"AK15 Jet #tau_{2}/#tau_{1}",
+                #20,
+                #0.0,
+                #1.0,
+            #),
+            #"AK15Jet_Njettiness_tau2/AK15Jet_Njettiness_tau1",
+            #selection,
+            #label,
+        #),
         plotClasses.Plot(
             ROOT.TH1D(
                 "AK15Jet_PuppiSoftDropMass" + extension,
@@ -1030,30 +1030,30 @@ def control_plots_had_CR_ZMuMu(data=None):
             selection,
             label,
         ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "AK15pJet_Njettiness_tau3_AK15Jet_Njettiness_tau2" + extension,
-                "AK15 Jet #tau_{3}/#tau_{2}",
-                20,
-                0.0,
-                1.0,
-            ),
-            "AK15Jet_Njettiness_tau3/AK15Jet_Njettiness_tau2",
-            selection,
-            label,
-        ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "AK15Jet_Njettiness_tau2_AK15Jet_Njettiness_tau1" + extension,
-                "AK15 Jet #tau_{2}/#tau_{1}",
-                20,
-                0.0,
-                1.0,
-            ),
-            "AK15Jet_Njettiness_tau2/AK15Jet_Njettiness_tau1",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"AK15pJet_Njettiness_tau3_AK15Jet_Njettiness_tau2" + extension,
+                #"AK15 Jet #tau_{3}/#tau_{2}",
+                #20,
+                #0.0,
+                #1.0,
+            #),
+            #"AK15Jet_Njettiness_tau3/AK15Jet_Njettiness_tau2",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"AK15Jet_Njettiness_tau2_AK15Jet_Njettiness_tau1" + extension,
+                #"AK15 Jet #tau_{2}/#tau_{1}",
+                #20,
+                #0.0,
+                #1.0,
+            #),
+            #"AK15Jet_Njettiness_tau2/AK15Jet_Njettiness_tau1",
+            #selection,
+            #label,
+        #),
         plotClasses.Plot(
             ROOT.TH1D(
                 "AK15Jet_PuppiSoftDropMass" + extension,
@@ -1776,30 +1776,30 @@ def control_plots_had_CR_ZElEl(data=None):
             selection,
             label,
         ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "AK15Jet_Njettiness_tau3_AK15Jet_Njettiness_tau2" + extension,
-                "AK15 Jet #tau_{3}/#tau_{2}",
-                20,
-                0.0,
-                1.0,
-            ),
-            "AK15Jet_Njettiness_tau3/AK15Jet_Njettiness_tau2",
-            selection,
-            label,
-        ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "AK15Jet_Njettiness_tau2_AK15Jet_Njettiness_tau1" + extension,
-                "AK15 Jet #tau_{2}/#tau_{1}",
-                20,
-                0.0,
-                1.0,
-            ),
-            "AK15Jet_Njettiness_tau2/AK15Jet_Njettiness_tau1",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"AK15Jet_Njettiness_tau3_AK15Jet_Njettiness_tau2" + extension,
+                #"AK15 Jet #tau_{3}/#tau_{2}",
+                #20,
+                #0.0,
+                #1.0,
+            #),
+            #"AK15Jet_Njettiness_tau3/AK15Jet_Njettiness_tau2",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"AK15Jet_Njettiness_tau2_AK15Jet_Njettiness_tau1" + extension,
+                #"AK15 Jet #tau_{2}/#tau_{1}",
+                #20,
+                #0.0,
+                #1.0,
+            #),
+            #"AK15Jet_Njettiness_tau2/AK15Jet_Njettiness_tau1",
+            #selection,
+            #label,
+        #),
         plotClasses.Plot(
             ROOT.TH1D(
                 "AK15Jet_PuppiSoftDropMass" + extension,
@@ -2543,30 +2543,30 @@ def control_plots_had_CR_ttbarhad(data=None):
             selection,
             label,
         ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "AK15Jet_Njettiness_tau3_AK15Jet_Njettiness_tau2" + extension,
-                "AK15 Jet #tau_{3}/#tau_{2}",
-                20,
-                0.0,
-                1.0,
-            ),
-            "AK15Jet_Njettiness_tau3/AK15Jet_Njettiness_tau2",
-            selection,
-            label,
-        ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "AK15Jet_Njettiness_tau2_AK15Jet_Njettiness_tau1" + extension,
-                "AK15 Jet #tau_{2}/#tau_{1}",
-                20,
-                0.0,
-                1.0,
-            ),
-            "AK15Jet_Njettiness_tau2/AK15Jet_Njettiness_tau1",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"AK15Jet_Njettiness_tau3_AK15Jet_Njettiness_tau2" + extension,
+                #"AK15 Jet #tau_{3}/#tau_{2}",
+                #20,
+                #0.0,
+                #1.0,
+            #),
+            #"AK15Jet_Njettiness_tau3/AK15Jet_Njettiness_tau2",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"AK15Jet_Njettiness_tau2_AK15Jet_Njettiness_tau1" + extension,
+                #"AK15 Jet #tau_{2}/#tau_{1}",
+                #20,
+                #0.0,
+                #1.0,
+            #),
+            #"AK15Jet_Njettiness_tau2/AK15Jet_Njettiness_tau1",
+            #selection,
+            #label,
+        #),
         plotClasses.Plot(
             ROOT.TH1D(
                 "AK15Jet_PuppiSoftDropMass" + extension,
@@ -3221,30 +3221,30 @@ def control_plots_had_CR_ttbarEl(data=None):
             selection,
             label,
         ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "AK15pJet_Njettiness_tau3_AK15Jet_Njettiness_tau2" + extension,
-                "AK15 Jet #tau_{3}/#tau_{2}",
-                20,
-                0.0,
-                1.0,
-            ),
-            "AK15Jet_Njettiness_tau3/AK15Jet_Njettiness_tau2",
-            selection,
-            label,
-        ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "AK15Jet_Njettiness_tau2_AK15Jet_Njettiness_tau1" + extension,
-                "AK15 Jet #tau_{2}/#tau_{1}",
-                20,
-                0.0,
-                1.0,
-            ),
-            "AK15Jet_Njettiness_tau2/AK15Jet_Njettiness_tau1",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"AK15pJet_Njettiness_tau3_AK15Jet_Njettiness_tau2" + extension,
+                #"AK15 Jet #tau_{3}/#tau_{2}",
+                #20,
+                #0.0,
+                #1.0,
+            #),
+            #"AK15Jet_Njettiness_tau3/AK15Jet_Njettiness_tau2",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"AK15Jet_Njettiness_tau2_AK15Jet_Njettiness_tau1" + extension,
+                #"AK15 Jet #tau_{2}/#tau_{1}",
+                #20,
+                #0.0,
+                #1.0,
+            #),
+            #"AK15Jet_Njettiness_tau2/AK15Jet_Njettiness_tau1",
+            #selection,
+            #label,
+        #),
         plotClasses.Plot(
             ROOT.TH1D(
                 "AK15Jet_PuppiSoftDropMass" + extension,
@@ -3915,30 +3915,30 @@ def control_plots_had_CR_ttbarMu(data=None):
             selection,
             label,
         ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "AK15pJet_Njettiness_tau3_AK15Jet_Njettiness_tau2" + extension,
-                "AK15 Jet #tau_{3}/#tau_{2}",
-                20,
-                0.0,
-                1.0,
-            ),
-            "AK15Jet_Njettiness_tau3/AK15Jet_Njettiness_tau2",
-            selection,
-            label,
-        ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "AK15Jet_Njettiness_tau2_AK15Jet_Njettiness_tau1" + extension,
-                "AK15 Jet #tau_{2}/#tau_{1}",
-                20,
-                0.0,
-                1.0,
-            ),
-            "AK15Jet_Njettiness_tau2/AK15Jet_Njettiness_tau1",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"AK15pJet_Njettiness_tau3_AK15Jet_Njettiness_tau2" + extension,
+                #"AK15 Jet #tau_{3}/#tau_{2}",
+                #20,
+                #0.0,
+                #1.0,
+            #),
+            #"AK15Jet_Njettiness_tau3/AK15Jet_Njettiness_tau2",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"AK15Jet_Njettiness_tau2_AK15Jet_Njettiness_tau1" + extension,
+                #"AK15 Jet #tau_{2}/#tau_{1}",
+                #20,
+                #0.0,
+                #1.0,
+            #),
+            #"AK15Jet_Njettiness_tau2/AK15Jet_Njettiness_tau1",
+            #selection,
+            #label,
+        #),
         plotClasses.Plot(
             ROOT.TH1D(
                 "AK15Jet_PuppiSoftDropMass" + extension,
@@ -4605,30 +4605,30 @@ def control_plots_had_CR_WEl(data=None):
             selection,
             label,
         ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "AK15pJet_Njettiness_tau3_AK15Jet_Njettiness_tau2" + extension,
-                "AK15 Jet #tau_{3}/#tau_{2}",
-                20,
-                0.0,
-                1.0,
-            ),
-            "AK15Jet_Njettiness_tau3/AK15Jet_Njettiness_tau2",
-            selection,
-            label,
-        ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "AK15Jet_Njettiness_tau2_AK15Jet_Njettiness_tau1" + extension,
-                "AK15 Jet #tau_{2}/#tau_{1}",
-                20,
-                0.0,
-                1.0,
-            ),
-            "AK15Jet_Njettiness_tau2/AK15Jet_Njettiness_tau1",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"AK15pJet_Njettiness_tau3_AK15Jet_Njettiness_tau2" + extension,
+                #"AK15 Jet #tau_{3}/#tau_{2}",
+                #20,
+                #0.0,
+                #1.0,
+            #),
+            #"AK15Jet_Njettiness_tau3/AK15Jet_Njettiness_tau2",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"AK15Jet_Njettiness_tau2_AK15Jet_Njettiness_tau1" + extension,
+                #"AK15 Jet #tau_{2}/#tau_{1}",
+                #20,
+                #0.0,
+                #1.0,
+            #),
+            #"AK15Jet_Njettiness_tau2/AK15Jet_Njettiness_tau1",
+            #selection,
+            #label,
+        #),
         plotClasses.Plot(
             ROOT.TH1D(
                 "AK15Jet_PuppiSoftDropMass" + extension,
@@ -5305,30 +5305,30 @@ def control_plots_had_CR_WMu(data=None):
             selection,
             label,
         ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "AK15pJet_Njettiness_tau3_AK15Jet_Njettiness_tau2" + extension,
-                "AK15 Jet #tau_{3}/#tau_{2}",
-                20,
-                0.0,
-                1.0,
-            ),
-            "AK15Jet_Njettiness_tau3/AK15Jet_Njettiness_tau2",
-            selection,
-            label,
-        ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "AK15Jet_Njettiness_tau2_AK15Jet_Njettiness_tau1" + extension,
-                "AK15 Jet #tau_{2}/#tau_{1}",
-                20,
-                0.0,
-                1.0,
-            ),
-            "AK15Jet_Njettiness_tau2/AK15Jet_Njettiness_tau1",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"AK15pJet_Njettiness_tau3_AK15Jet_Njettiness_tau2" + extension,
+                #"AK15 Jet #tau_{3}/#tau_{2}",
+                #20,
+                #0.0,
+                #1.0,
+            #),
+            #"AK15Jet_Njettiness_tau3/AK15Jet_Njettiness_tau2",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"AK15Jet_Njettiness_tau2_AK15Jet_Njettiness_tau1" + extension,
+                #"AK15 Jet #tau_{2}/#tau_{1}",
+                #20,
+                #0.0,
+                #1.0,
+            #),
+            #"AK15Jet_Njettiness_tau2/AK15Jet_Njettiness_tau1",
+            #selection,
+            #label,
+        #),
         plotClasses.Plot(
             ROOT.TH1D(
                 "AK15Jet_PuppiSoftDropMass" + extension,
@@ -6000,30 +6000,30 @@ def control_plots_had_CR_Gamma(data=None):
             selection,
             label,
         ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "AK15pJet_Njettiness_tau3_AK15Jet_Njettiness_tau2" + extension,
-                "AK15 Jet #tau_{3}/#tau_{2}",
-                20,
-                0.0,
-                1.0,
-            ),
-            "AK15Jet_Njettiness_tau3/AK15Jet_Njettiness_tau2",
-            selection,
-            label,
-        ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "AK15Jet_Njettiness_tau2_AK15Jet_Njettiness_tau1" + extension,
-                "AK15 Jet #tau_{2}/#tau_{1}",
-                20,
-                0.0,
-                1.0,
-            ),
-            "AK15Jet_Njettiness_tau2/AK15Jet_Njettiness_tau1",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"AK15pJet_Njettiness_tau3_AK15Jet_Njettiness_tau2" + extension,
+                #"AK15 Jet #tau_{3}/#tau_{2}",
+                #20,
+                #0.0,
+                #1.0,
+            #),
+            #"AK15Jet_Njettiness_tau3/AK15Jet_Njettiness_tau2",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"AK15Jet_Njettiness_tau2_AK15Jet_Njettiness_tau1" + extension,
+                #"AK15 Jet #tau_{2}/#tau_{1}",
+                #20,
+                #0.0,
+                #1.0,
+            #),
+            #"AK15Jet_Njettiness_tau2/AK15Jet_Njettiness_tau1",
+            #selection,
+            #label,
+        #),
         plotClasses.Plot(
             ROOT.TH1D(
                 "AK15Jet_PuppiSoftDropMass" + extension,
