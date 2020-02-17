@@ -1,5 +1,7 @@
 def getAddVars():
     addVars = [
+        "N_GenTopLep",
+        "GenHiggs_DecProd1_PDGID",
         "Jet_Pt",
         "Muon_Pt",
         "Electron_Pt",
@@ -21,21 +23,6 @@ def getAddVars():
         "Evt_Phi_PrimaryLepton:=LooseLepton_Phi[0]",
         "Evt_Eta_PrimaryLepton:=LooseLepton_Eta[0]",
         "Evt_MET_Pt",
-        #"Weight_CSV",
-        #"Weight_CSVLFup",
-        #"Weight_CSVLFdown",
-        #"Weight_CSVHFup",
-        #"Weight_CSVHFdown",
-        #"Weight_CSVHFStats1up",
-       # "Weight_CSVHFStats1down",
-       # "Weight_CSVLFStats1down",
-       # "Weight_CSVHFStats2up",
-       # "Weight_CSVHFStats2down",
-       # "Weight_CSVLFStats2up",
-       # "Weight_CSVLFStats2down",
-       # "Weight_CSVCErr1down",
-       # "Weight_CSVCErr2up",
-        #"Weight_CSVCErr2down",
         ]
 
     return addVars
