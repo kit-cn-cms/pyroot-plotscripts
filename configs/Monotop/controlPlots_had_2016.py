@@ -5768,7 +5768,7 @@ def control_plots_had_CR_Gamma(data=None):
     extension = "_had_CR_Gamma"
     
     selection = generalselection
-    selection += "*(N_TightPhotons==1 && N_LoosePhotons==1 && N_LooseMuons==0 && N_LooseElectrons==0 && Triggered_HLT_Photon175_vX==1)"
+    selection += "*(N_TightPhotons==1 && N_LoosePhotons==1 && N_LooseMuons==0 && N_LooseElectrons==0 && Triggered_HLT_Photon175_vX==1 && Photon_Pt[0]>=200.)"
     selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets==0)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
 
