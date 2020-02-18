@@ -56,6 +56,19 @@ def main(pyrootdir, opts):
     syst_cfg        = "legacyAnalysis/systs_2017"
     replace_cfg     = "legacyAnalysis/pdf_relic_names"
 
+    sfCorrection = {}
+    sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2017_deepJet_fineBinning.root"
+    # variables for the correction
+    sfCorrection["corrections"] = {}
+    sfCorrection["corrections"]["HT_vs_NJet"] = ["Evt_HT_jets", "N_Jets"]
+    # in root file sf histograms exist with some naming scheme
+    sfCorrection["nameTemplate"] = "$BINNING__$PROCESS__$NAME"
+    # SF_ is always preprended by default, that should not be changed
+    # $BINNING = "_vs_".join(corrections[X])
+    # DANGER: order of variables is important
+    # name of corrections to be applied (should match whats defined in syst.csv or samples.py)
+    sfCorrection["names"] = ["btag_NOMINAL"]
+
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
     rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2017_split.csv"
@@ -194,6 +207,7 @@ def main(pyrootdir, opts):
         pP.setMaxEvts(100000)
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
+        pP.setSFCorrection(sfCorrection)
 
         # run plotParallel
         pP.run()
