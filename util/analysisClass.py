@@ -25,7 +25,7 @@ class analysisConfig:
         self.renamedPath = self.rootPath
     
         self.dataera = dataera
-        if not self.dataera in ["2017", "2018", "2017_deepCSV","2016"]:
+        if not self.dataera in ["2017", "2018", "2016", "2017_deepCSV", "2016_deepCSV", "2018_deepCSV"]:
             sys.exit("invalid dataera")
 
         self.setDefaults()
@@ -139,9 +139,11 @@ class analysisConfig:
     def getLumi(self):
         lumi = {
             "2016":         "35.9",
+            "2016_deepCSV": "35.9",
             "2017":         "41.5",  
             "2017_deepCSV": "41.5",
             "2018":         "59.7",
+            "2018_deepCSV": "59.7",
         }
         return lumi[self.dataera]
 
