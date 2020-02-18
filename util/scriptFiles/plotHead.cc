@@ -65,6 +65,8 @@ void plot(){
 
   // open files
   TChain* chain = new TChain("MVATree");
+//PLACEHOLDERFRIENDTREEINIT
+
   char* filenames = getenv ("FILENAMES");
   char* outfilename = getenv ("OUTFILENAME");
   std::string plotscriptBaseDir = getenv ("PLOTSCRIPTBASEDIR");
@@ -97,8 +99,16 @@ void plot(){
       csvLFfile=plotscriptBaseDir+"/data/CSV/sfs_deepjet_2016_lf.root";
       }
   else if( dataera == "2017_deepCSV" ) {
-      csvHFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_V3_2017/deepCSV_sfs_hf.root";
-      csvLFfile="/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/DeepCSV_SF_V3_2017/deepCSV_sfs_lf.root";
+      csvHFfile=plotscriptBaseDir+"/data/CSV/sfs_deepcsv_2017_hf.root";
+      csvLFfile=plotscriptBaseDir+"/data/CSV/sfs_deepcsv_2017_lf.root";
+      }
+  else if( dataera == "2018_deepCSV" ) {
+      csvHFfile=plotscriptBaseDir+"/data/CSV/sfs_deepcsv_2018_hf.root";
+      csvLFfile=plotscriptBaseDir+"/data/CSV/sfs_deepcsv_2018_lf.root";
+      }
+  else if( dataera == "2016_deepCSV" ) {
+      csvHFfile=plotscriptBaseDir+"/data/CSV/sfs_deepcsv_2016_hf.root";
+      csvLFfile=plotscriptBaseDir+"/data/CSV/sfs_deepcsv_2016_lf.root";
       }
   else {
       std::cout << "NO VALID DATAERA CHOSEN!!" << std::endl;
@@ -112,6 +122,7 @@ void plot(){
   //QCDHelper* internalQCDHelper = new QCDHelper(qcd_file);
   //ttbarsysthelper* internalttbarsysthelper = new ttbarsysthelper();
 
+  //PLACEHOLDERSFCORRECTIONHELPER
 
 
   std::cout<<"processname: " <<processname<<std::endl;
@@ -182,6 +193,17 @@ void plot(){
     chain->Add(buf.c_str());
     TString thisfilename = buf.c_str();
     TString originalfilename=buf.c_str();
+
+    TString treename = buf.c_str();
+    treename.Replace(0,treename.Last('/'),"");
+    TString samplename = buf.c_str();
+    samplename.ReplaceAll(treename,"");
+    samplename.Replace(0,samplename.Last('/')+1,"");
+    samplename+=treename;
+    std::cout << "samplename "<<samplename<<std::endl;
+
+//PLACEHOLDERFRIENDTREECHAINS
+    
     //std::cout<<"file "<<buf.c_str()<<" "<<thisfilename<<std::endl; // karim debug 
     // cut of directories
     thisfilename.Replace(0,thisfilename.Last('/')+1,"");
@@ -217,7 +239,7 @@ void plot(){
 
     std::cout<<" relevant database name "<<thisfilename<<std::endl;
    sampleDataBaseIdentifiers[originalfilename]=thisfilename;
-    
+
     //check if already in vectr
    // TString translatedFileNameForDataBase;
 
@@ -289,7 +311,10 @@ void plot(){
   for(unsigned int isn=0; isn<databaseRelevantFilenames.size();isn++){
     std::cout<<databaseRelevantFilenames.at(isn)<<std::endl;
     }
-    
+   
+
+//PLACEHOLDERFRIENDTREEADD
+ 
   chain->SetBranchStatus("*",0);
 
   TFile* outfile=new TFile(outfilename,"RECREATE");

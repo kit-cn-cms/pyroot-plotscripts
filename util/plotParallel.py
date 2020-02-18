@@ -55,6 +55,7 @@ class plotParallel:
 
         self.jsonFile = ""
         self.dataBases = []
+        self.sfCorrection = None
         self.memDBpath = ""
         self.useDataBases = False
         self.addInterfaces = []
@@ -62,6 +63,8 @@ class plotParallel:
         self.useGenWeightNormMap = False
         self.sampleForVariableSetup = None
         self.request_runtime = None
+        self.useFriendTrees = False
+        self.friendTrees = {}
 
         # check cmssw
         self.cmsswpath = os.environ['CMSSW_BASE']
@@ -84,6 +87,17 @@ class plotParallel:
     def setJson(self, jsonFile):
         self.jsonFile = jsonFile
         print("set jsonFile to "+str(jsonFile))
+
+    def setSFCorrection(self, sfCorrection):
+        self.sfCorrection = sfCorrection
+        print("set sfCorrection to: {}".format(sfCorrection))
+        
+    def setUseFriendTrees(self, useFriendTrees):
+        self.useFriendTrees = useFriendTrees
+        self.friendTrees = self.configData.pltcfg.friendTrees
+        print("set useFriendTrees to: {}".format(useFriendTrees))
+        print("config:")
+        print(self.friendTrees)
 
     def setDataBases(self, dataBases):
         self.dataBases = dataBases
@@ -278,13 +292,13 @@ class plotParallel:
     #====================================================
     # merge systematics per process
     #====================================================
-    def mergeSystematics(self, runLocal = True):
+    def mergeSystematics(self, runLocal = False):
         script_path = os.path.join(self.analysis.workdir, "mergeSystScripts")
         print("script path: {}".format(script_path))
         if not os.path.exists(script_path):
             os.mkdir(script_path)
+        infiles = self.getRenameInput()
         options = {
-            "INFILE" : self.analysis.renamedPath,
             "NOMHISTKEY" : self.nominalHistoKey,
             "SYSTHISTKEY": self.systHistoKey,
             "SEPARATOR"  : self.histNameSeparator
@@ -295,7 +309,15 @@ class plotParallel:
         python_script = writer.writeMergeSystsScript()
         scripts = []
         for sample in self.configData.samples:
+            file = [x for x in infiles 
+                    if x.endswith("{}_hadded.root".format(sample.nick))]
+            if not len(file) == 1:
+                print("WARNING: unable to locate file for merge systs!")
+                print("sample: " + sample.nick)
+                continue
             final_opts = {
+                "INFILE" : file[0],
+
                 "ORIGNAME" : sample.origName
             }
             final_opts.update(options)
@@ -316,4 +338,3 @@ class plotParallel:
                 subprocess.call([s], shell = True)
         else:
             nafInterface.mergeSystematicsInterface(scripts)
-

@@ -8,7 +8,7 @@ import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 filedir = os.path.dirname(os.path.realpath(__file__))
-pyrootdir = "/".join(filedir.split("/")[:-1])
+pyrootdir = "/".join(filedir.split("/")[:-2])
 
 sys.path.append(pyrootdir)
 
@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'inputFeatures_final/2017_v1'
+    name = 'sfPatch/test_2016_fine'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -39,7 +39,7 @@ def main(pyrootdir, opts):
     nSigSamples   = 1
 
     # dataera
-    dataera = "2017"
+    dataera = "2016"
 
     # Name of final discriminator, should not contain underscore
     discrName = 'finaldiscr'
@@ -48,18 +48,24 @@ def main(pyrootdir, opts):
     histname_separator = "__"
 
     # define MEM discriminator variable
-    memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
+    # memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
+    memexp = ''
     # configs
-    config          = "legacyAnalysis/samples_2017"
-    variable_cfg    = "legacyAnalysis/additionalVariables_2017"
-    plot_cfg        = "legacyAnalysis/ttH_legacy_inputfeatures_opt_binning2"
-    syst_cfg        = "legacyAnalysis/systs_2017"
-    replace_cfg     = "legacyAnalysis/pdf_relic_names"
+    config          = "sfPatch/samples_2016"
+    variable_cfg    = "sfPatch/additionalVariables"
+    plot_cfg        = "sfPatch/plots_testSFs"
+    syst_cfg        = "sfPatch/systs_testSFs"
 
+    # file for rate factors
+    #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
+    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2016.csv"
+
+    # file for btagging SF corrections
     sfCorrection = {}
-    sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2017_deepJet_fineBinning.root"
+    sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2016_deepJet_fineBinning.root"
     # variables for the correction
     sfCorrection["corrections"] = {}
+    sfCorrection["corrections"]["NJet"]       = ["N_Jets"]
     sfCorrection["corrections"]["HT_vs_NJet"] = ["Evt_HT_jets", "N_Jets"]
     # in root file sf histograms exist with some naming scheme
     sfCorrection["nameTemplate"] = "$BINNING__$PROCESS__$NAME"
@@ -69,26 +75,25 @@ def main(pyrootdir, opts):
     # name of corrections to be applied (should match whats defined in syst.csv or samples.py)
     sfCorrection["names"] = ["btag_NOMINAL"]
 
-    # file for rate factors
-    #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
-    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2017_split.csv"
+    # variable names are searched that end with $NAME (.endswith)
+    # sfCorrection = None
 
     # script options
     analysisOptions = {
         # general options
-        "usePseudoData":        False,
+        "usePseudoData":        True,
         "testrun":              False,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
         "makeDataCards":        False,
         "makeInputDatacards":   False, # create datacards also for all defined plots
-        "addData":              True,  # adding real data 
-        "makePlots":            True,
+        "addData":              False,  # adding real data 
+        "makePlots":            False,
         # options for makePlots
         "signalScaling":        -1,
-        "lumiLabel":            True,
-        "cmslabel":             "private Work",
+        "lumilabel":            True,
+        "CMSlabel":             "private Work",
         "ratio":                "#frac{data}{MC Background}",
         "shape":                False,
         "logarithmic":          False,
@@ -103,9 +108,9 @@ def main(pyrootdir, opts):
         "skipHistoCheck":       opts.skipHistoCheck,
         "skipDatacards":        opts.skipDatacards}
 
-    plotJson = pyrootdir+"/configs/legacyAnalysis/treeJson_2017.json"
-    plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2017/",True]] 
-    memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
+    plotJson = pyrootdir+"/configs/legacyAnalysis/treeJson_2016.json"
+    # plotDataBases = [["memDB","/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/databases/2017_/",True]] 
+    # memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
     #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
     #               "checkpointFiles":  "/nfs/dust/cms/user/swieland/ttH_legacy/DNNs/oldModel/"}
     dnnInterface = None
@@ -148,9 +153,7 @@ def main(pyrootdir, opts):
         analysisClass   = analysis,
         variable_config = variable_cfg,
         plot_config     = plot_cfg,
-        execute_file    = os.path.realpath(inspect.getsourcefile(lambda:0)),
-        replace_config  = replace_cfg
-        )
+        execute_file    = os.path.realpath(inspect.getsourcefile(lambda:0)))
 
     configData.initSystematics(systconfig = syst_cfg)
 
@@ -201,13 +204,13 @@ def main(pyrootdir, opts):
         monitor.printClass(pP, "init")
         # set some changed values
         pP.setJson(plotJson)
-        pP.setDataBases(plotDataBases)
-        pP.setMEMDataBase(memDataBase)
+        #pP.setDataBases(plotDataBases)
+        #pP.setMEMDataBase(memDataBase)
         # pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts(100000)
+        pP.setSFCorrection(sfCorrection)
+        pP.setMaxEvts(500000)
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
-        pP.setSFCorrection(sfCorrection)
 
         # run plotParallel
         pP.run()
@@ -260,10 +263,6 @@ def main(pyrootdir, opts):
                 eps             = 0.0,
                 skipHistoCheck  = analysis.skipHistoCheck)
 
-    if pP.configData.replace_config and not analysis.skipMergeSysts:
-        with monitor.Timer("mergeSystematics"):
-            print("merging systematics")
-            pP.mergeSystematics()
 
     if analysis.addData:
         print '''
@@ -275,7 +274,7 @@ def main(pyrootdir, opts):
             if analysis.usePseudoData:
                 print("adding data_obs histograms as pseudo data")
                 # pseudo data without ttH
-                pP.addData( samples = configData.samples[nSigSamples:], 
+                pP.addData( samples = configData.samples, 
                             discrName = discrName)
                 # pseudo data with signal
                 #pP.addData(samples = configData.samples)
