@@ -56,7 +56,7 @@ def get_graphs(h_sig, h_bkg, min, max):
     # add (0,0) point for calculation of correct integral
     x_roc_points.append(0.0)
     y_roc_points.append(0.0)
-    for threshold in numpy.linspace(min, max, 20):
+    for threshold in numpy.linspace(min, max, 40):
         sig_eff, bkg_eff, s_b = get_roc_point(threshold, h_sig, h_bkg)
         x_roc_points.append(1 - bkg_eff)
         y_roc_points.append(sig_eff)
