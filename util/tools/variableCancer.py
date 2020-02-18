@@ -10,20 +10,34 @@ class VariableManager:
     add lists of variables/single variables with .add
     run the initialization program with .run
     '''
-    def __init__(self, tree, vetolist = [], verbose = 0):
+    def __init__(self, tree, vetolist = [], sfCorrection = None, friendTrees = {}, verbose = 0):
         # all initialized Variables
         self.variables          = {}
         # all Variables that are not initialized yet
         self.variablesToInit    = {}
         # list of variables to be ignored when initializing
         self.vetolist           = vetolist
+        # list of naming remnant to add to veto list
+        self.correctionNames = []
+        self.sfBinning = []
+        if not sfCorrection is None:
+            self.correctionNames    = sfCorrection["names"]
+            self.sfBinning          = sfCorrection["corrections"]
+        
+        # list of variables identified as correction variables
+        self.correctionVars     = []
+        # add friend tree names
+        self.friendTreeNames = [key for key in friendTrees]
         # tree to get variable information from
         self.tree               = tree
         # list of expressions to search for variables
         self.expressionsToInit  = []
         # verbosity setting
         self.verbose            = verbose
-        
+            
+        for key in self.sfBinning:
+            self.add(self.sfBinning[key])
+
     # functions for variable setup
     # =============================================================================================
     def add(self, expressionList):
@@ -38,8 +52,7 @@ class VariableManager:
             exit()
 
         # adding expression to list
-        self.expressionsToInit = list(set(self.expressionsToInit+expressionList))
-        self.expressionsToInit = sorted(self.expressionsToInit)
+        self.expressionsToInit = sorted(list(set(self.expressionsToInit+expressionList)))
 
     def run(self):
         '''
@@ -64,12 +77,20 @@ class VariableManager:
         self.initializeAllVariables()
 
 
-
     def searchVariables(self, expression):
         '''
         search for variables in a given expression
         '''
         if self.verbose > 5: print("\ncalling searchVariables with expression "+str(expression))
+
+        if "." in expression:
+            treeName, varName = expression.split(".", 1)
+            if treeName in self.friendTreeNames:
+                print("found variable that appears to be a tree name")
+                if hasattr(self.tree, expression):
+                    dummyExpression = expression.replace(".","_friendTree_")
+                    self.addVariable(dummyExpression, dummyExpression, "F")
+                    return
 
         # search for variable definitions in expression of form varName:=expression
         if ":=" in expression:
@@ -84,7 +105,7 @@ class VariableManager:
         else:
             # search for other variables in expression
             variableNames = self.getVariableNames( expression )
-            for varName in variableNames: 
+            for varName in variableNames:
                 self.addVariable(varName, varName, "F")
 
     def getVariableNames(self, expression):
@@ -103,13 +124,13 @@ class VariableManager:
 
     def addVariable(self, varName, expression = "", varType = "F", indexVariable = None):
         '''
-        add variable to dictionary if conditions are fullfiiled
+        add variable to dictionary if conditions are fullfilled
         '''
         # dont add variables that are in the vetolist
         if varName in self.vetolist:
             if self.verbose > 20: print("variable '{}' is in vetolist, not adding it.".format(varName))
             return
-        
+
         # dont add variables that already exist
         if varName in self.variables:
             if self.verbose > 20: print("variable already in variableList")
@@ -142,6 +163,18 @@ class VariableManager:
             if hasattr(self.tree, expressionHead) and expressionTail.isdigit():
                 if self.verbose > 20: print("found vectorlike variable: "+str(expression)+" converted to "+str(expressionHead))
                 self.addVariable(expressionHead, expressionHead, varType, indexVariable)
+                return
+
+        # handle variables that are for sf corrections
+        for name in self.correctionNames:
+            if varName.endswith(name):
+                print("variable '{}' identified as correction variable".format(varName))
+                self.correctionVars.append(varName)
+                self.variablesToInit[varName] = Variable(varName, expression, varType, indexVariable)
+                # set flag defining this variable as SF variable that needs to be initialized differently
+                # also give this variable the list of variables needed for binning of SFs
+                _, correction, samename = varName.split("__")
+                self.variablesToInit[varName].setAsSFVariable(self.sfBinning[correction])
                 return
 
         # everything remaining is added to the variable list
@@ -372,9 +405,15 @@ class VariableManager:
                 
                 if var in sortedVariables: continue
 
+            varExpression = var.expression
+            if var.varName in self.correctionVars:
+                # create dummy expression for variables used for sf corrections
+                # dummy is built from all variables used for determination of sf bin
+                varExpression = "+".join(self.sfBinning)
+
             # consider the variable
             if self.verbose > 5: print("considering variable "+str(var.varName))
-            if var.varName == var.expression:
+            if var.varName == varExpression:
                 # no problem here, just add variable
                 sortedVariables.append( var )
                 if self.verbose >= 1: print("adding variable to list: "+str(var.varName))
@@ -395,7 +434,7 @@ class VariableManager:
             
             # loop over variables and check for dependencies
             for dependentVariable in rawVariableList:
-                if dependentVariable.varName in var.expression:
+                if dependentVariable.varName in varExpression:
                     # if a variable is in expression, check if it already in sorted list
                     # as the expression is dependent on this variable, the variable needs to be initialized first
                     if dependentVariable not in sortedVariables:
@@ -464,14 +503,19 @@ class Variable:
         self.isInitialized          = False
         self.expressionVariables    = []
     
+        self.isSFVariable           = False
         self.initError              = False
+
+    def setAsSFVariable(self, sfBinning):
+        self.isSFVariable = True
+        self.sfBinning    = sfBinning
 
     def setupVariable(self, tree, verbose, variableManager):
         '''
         program to setup variable
         '''
         if verbose > 10: print("initializing variable: "+str(self.varName))
-
+    
         # check if variable is in tree
         if self.varName == "GenEvt_I_TTZ":
             self.inTree = True
@@ -505,10 +549,10 @@ class Variable:
             self.setupVariableType(branchTitle, verbose)
             self.isArray = branchTitle.split("/")[0][-1] == "]"
             alt_file.Close()
-        elif hasattr(tree, self.varName):
+        elif hasattr(tree, self.varName.replace("_friendTree_",".")):
             if verbose > 20: print("variable is in tree")
             self.inTree = True
-            branch = tree.GetBranch(self.varName)
+            branch = tree.GetBranch(self.varName.replace("_friendTree_","."))
             branchTitle = branch.GetTitle()
             if verbose > 20: print("branchTitle is "+str(branchTitle))
 
@@ -621,12 +665,12 @@ class Variable:
         text = ""
 
         if self.isArray:
-            text += "    chain->SetBranchAddress(\""+self.varName+"\", "+self.varName+".get());\n"
+            text += "    chain->SetBranchAddress(\""+self.varName.replace("_friendTree_",".")+"\", "+self.varName+".get());\n"
         else:
             if self.varType == "I" or self.varType == "L":
-                text += "    chain->SetBranchAddress(\""+self.varName+"\", &"+self.varName+"LONGDUMMY);\n"
+                text += "    chain->SetBranchAddress(\""+self.varName.replace("_friendTree_",".")+"\", &"+self.varName+"LONGDUMMY);\n"
             else:
-                text += "    chain->SetBranchAddress(\""+self.varName+"\", &"+self.varName+");\n"
+                text += "    chain->SetBranchAddress(\""+self.varName.replace("_friendTree_",".")+"\", &"+self.varName+");\n"
         return text
 
     def writeTMVAReader(self, variableManager):
@@ -650,6 +694,18 @@ class Variable:
         return text
 
 
+    def writeSFCorrectionCalculation(self, indent):
+        text = "\n"
+        # get procID
+        text+= "    "+indent+"procID = internalSFCorrectionHelper->GetProcID(processname, isTTbarSample, isTthSample, N_GenTopLep, GenHiggs_DecProd1_PDGID);\n"
+        # calculate output scalefactor
+        # split sf name in parts
+        _, correction, name = self.varName.split("__") 
+        text+= "    "+indent+self.varName+" = "+"internalSFCorrectionHelper->GetSF(procID, TString(\"{}\"), TString(\"{}\"), {});\n".format(
+            correction, name, ", ".join(self.sfBinning))
+        #text+= "    {indent}cout << procID;\n    {indent}cout << {sf} << endl;\n".format(indent = indent, sf = self.varName)
+        text+= "\n"
+        return text
 
     def writeVariableCalculation(self, hasCondition):
         '''
@@ -661,6 +717,9 @@ class Variable:
         elif self.isBDTVar: return "    "+indent+self.varName+" = r_"+self.varName+"->EvaluateMVA('BDT'):\n"
         else:               
             if self.varName == self.expression:
+                if self.isSFVariable:
+                    return self.writeSFCorrectionCalculation(indent)
+
                 self.initError = True
                 print("trying to initialize variable '{}' with itself (var = var) - this does not work".format(self.varName))
             if "dummyWeight" in self.varName:

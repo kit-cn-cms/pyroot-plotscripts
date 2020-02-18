@@ -346,11 +346,11 @@ void LeptonSFHelper::SetElectronHistos( ){
       TRIGGERinputFile = plotscriptBaseDir+"/data/triggerSFs/SingleEG_JetHT_Trigger_Scale_Factors_ttHbb2017_v3.root";
       TRIGGERhistName  = "ele28_ht150_OR_ele32_ele_pt_ele_sceta";
       }
-  else if( dataera == "2018" ) {
+  else if( dataera == "2018" || dataera == "2018_deepCSV" ) {
       TRIGGERinputFile = plotscriptBaseDir+"/data/triggerSFs/SingleEG_JetHT_Trigger_Scale_Factors_ttHbb2018_v3.root";
       TRIGGERhistName  = "ele28_ht150_OR_ele32_ele_pt_ele_sceta";
       }
-  else if( dataera == "2016" ) {
+  else if( dataera == "2016" || dataera == "2016_deepCSV" ) {
       TRIGGERinputFile = plotscriptBaseDir+"/data/triggerSFs/SingleEG_JetHT_Trigger_Scale_Factors_ttHbb2016_v4.root";
       TRIGGERhistName  = "ele27_ele_pt_ele_sceta";
       }

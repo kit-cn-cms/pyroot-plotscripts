@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'tthf_fit/2017'
+    name = 'tthf_fit/2017_noCorr'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -51,7 +51,7 @@ def main(pyrootdir, opts):
     # memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
     memexp = ''
     # configs
-    config          = "legacyAnalysis/samples_2017"
+    config          = "legacyAnalysis/samples_2017_noCorr"
     variable_cfg    = "legacyAnalysis/additionalVariables_2017"
     plot_cfg        = "legacyAnalysis/controlPlots_tthf_fit"
     syst_cfg        = "legacyAnalysis/no_systs"

@@ -71,3 +71,73 @@ If the option is set to `False` the `c++` code that is written will evaluate all
 - execute the top-level-script as usual.
 
 
+
+### b tagging sf corrections
+#### setup for deriving b tagging scale factor patches
+- module `util/scaleFactorCreator.py` can be called in a top level script to create SF histograms
+- SF are caluclated as ratios between nominal template and dummy systematic templates for each variable and process
+- example configs are added in `configs/sfPatch/`
+- example scripts are added in `plottingscripts/sfPatch/derive_X.py`
+
+#### new SF histograms
+- sf histograms are added to the `data/btagSFCorrection/` directory
+- three different binnings are available for each year (which one to use is still to be decided)
+- sf histograms are available for all ttbar, ttbb, ttH and ttZ processes
+
+#### setup for applying b tagging scale factor patches
+- C++ module `SFCorrectionHelper` has been included
+- module is loaded per default into the created C script
+- add the following excerpt to the top level script
+```
+    sfCorrection = {}
+    sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2018_deepJet_fineBinning.root"
+    # variables for the correction
+    sfCorrection["corrections"] = {}
+    sfCorrection["corrections"]["HT_vs_NJet"] = ["Evt_HT_jets", "N_Jets"]
+    # in root file sf histograms exist with some naming scheme
+    sfCorrection["nameTemplate"] = "$BINNING__$PROCESS__$NAME"
+    # SF_ is always preprended by default, that should not be changed
+    # $BINNING = "_vs_".join(corrections[X])
+    # DANGER: order of variables is important
+    # name of corrections to be applied (should match whats defined in syst.csv or samples.py)
+    sfCorrection["names"] = ["btag_NOMINAL"]
+```
+- pass information to `plotParallel` via `pP.setSFCorrection(sfCorrection)`
+- new SFs can for example be applied by using variables with naming scheme
+```
+sf__$BINNING__$NAME
+```
+e.g.
+```
+sf__HT_vs_NJet__btag_NOMINAL
+```
+
+### friend trees
+
+friend trees can be used to get additional variables (i.e. branches) from other root ntuple files. 
+Creation of such friend tree files is currently implemented in the `karim` framework for reconstruction information. 
+The friend tree files need to have the same order of events as the original ntuple files. In the current implementation it is also required to have the same folder structure for the original ntuple files and the friend tree files:
+```
+BASEPATH/
+----/SAMPLEA/
+----/----/FILE1.root
+----/----/FILE2.root
+----/SAMPLEB/
+----/----/FILE3.root
+...
+```
+The current implementation of friend trees replaces the `BASEPATH` of the original ntuple files with a new path where the friend trees are supposed to be stored.
+To activate the use add a dictionary to your sample config, e.g.
+```
+friendTrees = {
+	"friendTreeName": "/new/base/path/to/friend/trees/",
+	...
+	}
+```
+and add `pP.SetUseFriendTrees(True)` to your top level script.
+
+
+If the name of a branch you want to access is unique between the friend trees and the original tree, you can just use the variable name.
+If the same variable exists in a friend tree and your original tree, the content of the original tree will be accessed when you call the plain variable name. 
+To access any variable in a friend tree, you can use the variable name `friendTreeName.variableName`.
+
