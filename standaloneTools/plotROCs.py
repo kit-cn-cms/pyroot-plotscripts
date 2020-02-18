@@ -45,25 +45,31 @@ def get_roc_point(threshold, h_sig, h_bkg):
         "S/sqrt(B):",
         s_b,
     )
-    return sig_efficiency, 1 - bkg_efficiency
+    return sig_efficiency, 1 - bkg_efficiency, s_b
 
 
-def get_roc_graph(h_sig, h_bkg, min, max):
-    x_points = array("f")
-    y_points = array("f")
+def get_graphs(h_sig, h_bkg, min, max):
+    x_roc_points = array("f")
+    y_roc_points = array("f")
+    x_sb_points = array("f")
+    y_sb_points = array("f")
     # add (0,0) point for calculation of correct integral
-    x_points.append(0.0)
-    y_points.append(0.0)
-    for threshold in numpy.linspace(min, max, 40):
-        sig_eff, bkg_eff = get_roc_point(threshold, h_sig, h_bkg)
-        x_points.append(1 - bkg_eff)
-        y_points.append(sig_eff)
-    roc_graph = ROOT.TGraph(len(x_points), x_points, y_points)
-    return roc_graph
+    x_roc_points.append(0.0)
+    y_roc_points.append(0.0)
+    for threshold in numpy.linspace(min, max, 20):
+        sig_eff, bkg_eff, s_b = get_roc_point(threshold, h_sig, h_bkg)
+        x_roc_points.append(1 - bkg_eff)
+        y_roc_points.append(sig_eff)
+        if s_b!=None:
+            x_sb_points.append(threshold)
+            y_sb_points.append(s_b) 
+    roc_graph = ROOT.TGraph(len(x_roc_points), x_roc_points, y_roc_points)
+    sb_graph = ROOT.TGraph(len(x_sb_points), x_sb_points, y_sb_points)
+    return roc_graph,sb_graph
 
 
 def drawROC(roc, signal_label, background_label, discr_label, cat_label):
-    c = ROOT.TCanvas("ROC" + "_" + signal_label, "ROC", 1000, 1000)
+    c = ROOT.TCanvas("ROC" + "_" + signal_label, "ROC", 1200, 1200)
     c.cd()
     c.SetGrid()
     # calculate integral with (0,0) included to get correct result
@@ -80,12 +86,12 @@ def drawROC(roc, signal_label, background_label, discr_label, cat_label):
     roc.SetMarkerColor(ROOT.kBlack)
     print ("ROCAUC: {integral}".format(integral=integral))
 
-    text_cms = ROOT.TLatex(0.12, 0.94, "CMS #scale[0.8]{simulation}")
+    text_cms = ROOT.TLatex(0.2, 0.94, "CMS #scale[0.8]{simulation}")
     text_cms.SetNDC(ROOT.kTRUE)
     text_cms.SetTextSize(0.035)
     text_cms.Draw()
 
-    text_wip = ROOT.TLatex(0.12, 0.91, "work in progress")
+    text_wip = ROOT.TLatex(0.2, 0.91, "work in progress")
     text_wip.SetNDC(ROOT.kTRUE)
     text_wip.SetTextSize(0.025)
     text_wip.Draw()
@@ -122,6 +128,56 @@ def drawROC(roc, signal_label, background_label, discr_label, cat_label):
     c.SaveAs("roc_" + discr_label + "_" + signal_label + ".png")
     c.SaveAs("roc_" + discr_label + "_" + signal_label + ".pdf")
 
+def drawSoverB(sb_graph, signal_label, background_label, discr_label, cat_label):
+    c = ROOT.TCanvas("S_B" + "_" + signal_label, "S/sqrt(B)", 1300, 1000)
+    pad = c.cd()
+    pad.SetLeftMargin(0.12)
+    c.SetGrid()
+    sb_graph.Draw("ALP")
+    sb_graph.SetTitle("")
+    sb_graph.GetXaxis().SetTitle("working point")
+    sb_graph.GetYaxis().SetTitle("s/#sqrt{b}")
+    sb_graph.SetLineColor(ROOT.kRed)
+    sb_graph.SetLineWidth(2)
+    sb_graph.SetMarkerStyle(20)
+    sb_graph.SetMarkerColor(ROOT.kBlack)
+
+    text_cms = ROOT.TLatex(0.20, 0.94, "CMS #scale[0.8]{simulation}")
+    text_cms.SetNDC(ROOT.kTRUE)
+    text_cms.SetTextSize(0.035)
+    text_cms.Draw()
+
+    text_wip = ROOT.TLatex(0.20, 0.91, "work in progress")
+    text_wip.SetNDC(ROOT.kTRUE)
+    text_wip.SetTextSize(0.025)
+    text_wip.Draw()
+
+    text_signal = ROOT.TLatex(0.15, 0.8, "Signal: {signal}".format(signal=signal_label))
+    text_signal.SetNDC(ROOT.kTRUE)
+    text_signal.SetTextSize(0.025)
+    text_signal.Draw()
+
+    text_bkg = ROOT.TLatex(
+        0.15, 0.75, "Background: {background}".format(background=background_label)
+    )
+    text_bkg.SetNDC(ROOT.kTRUE)
+    text_bkg.SetTextSize(0.025)
+    text_bkg.Draw()
+
+    text_discr = ROOT.TLatex(
+        0.15, 0.7, "Discriminator: {discr}".format(discr=discr_label)
+    )
+    text_discr.SetNDC(ROOT.kTRUE)
+    text_discr.SetTextSize(0.025)
+    text_discr.Draw()
+
+    text_cat = ROOT.TLatex(0.15, 0.65, "Category: {cat}".format(cat=cat_label))
+    text_cat.SetNDC(ROOT.kTRUE)
+    text_cat.SetTextSize(0.025)
+    text_cat.Draw()
+
+    c.SaveAs("sb_" + discr_label + "_" + signal_label + ".png")
+    c.SaveAs("sb_" + discr_label + "_" + signal_label + ".pdf")
 
 def addHistos(lHistos):
     h_added = lHistos[0].Clone()
@@ -197,6 +253,7 @@ for discr in opts.discr.split(","):
     backgrounds = opts.bkg.split(",")
     lBkgs = []
     for bkg in backgrounds:
+        print(bkg + "_" + discr + "_" + opts.label)
         lBkgs.append(rFile.Get(bkg + "_" + discr + "_" + opts.label))
     h_bkg = addHistos(lBkgs)
 
@@ -208,7 +265,8 @@ for discr in opts.discr.split(","):
 
     for i, sig in enumerate(lSigs):
         h_sig = sig
-        roc = get_roc_graph(h_sig, h_bkg, float(opts.discr_min), float(opts.discr_max))
+        roc,sb = get_graphs(h_sig, h_bkg, float(opts.discr_min), float(opts.discr_max))
         drawROC(roc, signals[i], opts.bkg.replace(",", "_"), discr, opts.label)
+        drawSoverB(sb, signals[i], opts.bkg.replace(",", "_"), discr, opts.label)
 
 print ("=" * 50)
