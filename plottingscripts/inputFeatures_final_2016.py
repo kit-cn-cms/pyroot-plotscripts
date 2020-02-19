@@ -57,6 +57,19 @@ def main(pyrootdir, opts):
     syst_cfg        = "legacyAnalysis/systs_2016"
     replace_cfg     = "legacyAnalysis/pdf_relic_names"
 
+    sfCorrection = {}
+    sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2016_deepJet_fineBinning.root"
+    # variables for the correction
+    sfCorrection["corrections"] = {}
+    sfCorrection["corrections"]["HT_vs_NJet"] = ["Evt_HT_jets", "N_Jets"]
+    # in root file sf histograms exist with some naming scheme
+    sfCorrection["nameTemplate"] = "$BINNING__$PROCESS__$NAME"
+    # SF_ is always preprended by default, that should not be changed
+    # $BINNING = "_vs_".join(corrections[X])
+    # DANGER: order of variables is important
+    # name of corrections to be applied (should match whats defined in syst.csv or samples.py)
+    sfCorrection["names"] = ["btag_NOMINAL"]
+
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
     rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2016_split.csv"
@@ -197,6 +210,7 @@ def main(pyrootdir, opts):
         pP.request_runtime = 60*60*5
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
+        pP.setSFCorrection(sfCorrection)
 
         # run plotParallel
         pP.run()
@@ -219,8 +233,11 @@ def main(pyrootdir, opts):
             nHistosRemainSame   = True,
             skipHadd            = analysis.skipHaddFromWildcard)
      
-
-
+    pP.setRenameInput()
+    if pP.configData.replace_config and not analysis.skipMergeSysts:
+        with monitor.Timer("mergeSystematics"):
+            print("merging systematics")
+            pP.mergeSystematics()
     # Deactivate check bins functionality in renameHistos 
     #   if additional plot variables are added via analysis class
     if os.path.exists( analysis.setRenamedPath(name = "limitInput") ):
@@ -232,7 +249,6 @@ def main(pyrootdir, opts):
         # ========================================================
         '''
 
-        pP.setRenameInput()
         # in this function the variable self.renameInput is set
         # if hadd files were created during plotParallel
         #       the renameInput is set to pP.getHaddFiles 
@@ -249,10 +265,6 @@ def main(pyrootdir, opts):
                 eps             = 0.0,
                 skipHistoCheck  = analysis.skipHistoCheck)
 
-    if pP.configData.replace_config and not analysis.skipMergeSysts:
-        with monitor.Timer("mergeSystematics"):
-            print("merging systematics")
-            pP.mergeSystematics()
 
     if analysis.addData:
         print '''
