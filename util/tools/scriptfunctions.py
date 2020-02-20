@@ -531,7 +531,7 @@ def varLoop(i,n):
     return '      for(int '+str(i)+'=0; '+str(i)+'<'+str(n)+'; '+str(i)+'++)'
 
 def fillHistoSyst(histName, varNames, weight, systNames, systWeights):
-    varNames = [v.replace(".","_friendTree_") for v in varNames]
+    varNames = [v.replace(".","_friendTree_") if not v.split(".")[0].isdigit() or v.split(".")[1].isdigit() else v for v in varNames]
     text = '      float weight_'+histName+'='+weight+';\n'
     # Write all individual systnames and systweights in nested vector 
     # to use together with function allowing variadic vector size 
