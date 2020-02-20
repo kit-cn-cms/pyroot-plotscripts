@@ -163,10 +163,10 @@ TString SFCorrectionHelper::GetProcID(TString procName, int ttbar, int ttH, int 
     if( ttH == 1 ) 
     {
         procID+="ttH";
-        if (hdPDGID == -5 || hdPDGID == 5)
-            procID+="_bb";
-        else 
-            procID+="_nonbb";
+        //if (hdPDGID == -5 || hdPDGID == 5)
+        //    procID+="_bb";
+        //else 
+        //    procID+="_nonbb";
         return procID;
     }
 
@@ -191,12 +191,17 @@ TString SFCorrectionHelper::GetProcID(TString procName, int ttbar, int ttH, int 
             procID+=procName;
 
 
-        if(nTopLep==0) procID+="_FH";
-        if(nTopLep==1) procID+="_SL";
-        if(nTopLep==2) procID+="_DL";
+        //if(nTopLep==0) procID+="_FH";
+        //if(nTopLep==1) procID+="_SL";
+        //if(nTopLep==2) procID+="_DL";
         return procID;
     }
-
+    
+    if(procName.Index("ttZ")!=-1)
+    {
+        procID+="ttZ";
+        return procID;
+    }    
     return procID;
 }
 
