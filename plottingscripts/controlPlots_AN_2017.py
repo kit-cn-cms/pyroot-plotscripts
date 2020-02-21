@@ -57,7 +57,7 @@ def main(pyrootdir, opts):
     replace_cfg     = "legacyAnalysis/pdf_relic_names"
 
     sfCorrection = {}
-    sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2017_deepJet_fineBinning.root"
+    sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2017_deepJet_combined.root"
     # variables for the correction
     sfCorrection["corrections"] = {}
     sfCorrection["corrections"]["HT_vs_NJet"] = ["Evt_HT_jets", "N_Jets"]
