@@ -53,7 +53,7 @@ def main(pyrootdir, opts):
     # configs
     config          = "legacyAnalysis/samples_2016"
     variable_cfg    = "legacyAnalysis/additionalVariables_2016"
-    plot_cfg        = "legacyAnalysis/ttH_legacy_inputfeatures_opt_binning2"
+    plot_cfg        = "legacyAnalysis/ttH_legacy_inputfeatures_ClassPlusHTXS_opt_binning"
     syst_cfg        = "legacyAnalysis/systs_2016"
     replace_cfg     = "legacyAnalysis/pdf_relic_names"
 
@@ -70,6 +70,7 @@ def main(pyrootdir, opts):
     # name of corrections to be applied (should match whats defined in syst.csv or samples.py)
     sfCorrection["names"] = ["btag_NOMINAL"]
 
+
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
     rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2016_split.csv"
@@ -83,7 +84,7 @@ def main(pyrootdir, opts):
         # options to activate parts of the script
         "haddFromWildcard":     True,
         "makeDataCards":        False,
-        "makeInputDatacards":   True, # create datacards also for all defined plots
+        "makeInputDatacards":   False, # create datacards also for all defined plots
         "addData":              True,  # adding real data 
         "makePlots":            True,
         # options for makePlots
@@ -104,8 +105,7 @@ def main(pyrootdir, opts):
         "skipHistoCheck":       opts.skipHistoCheck,
         "skipDatacards":        opts.skipDatacards}
 
-    # plotJson = pyrootdir+"/configs/legacyAnalysis/treeJson_2016.json"
-    plotJson = ""
+    plotJson = pyrootdir+"/configs/legacyAnalysis/treeJson_2016.json"
     plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2016/",False]] 
     memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
 
@@ -207,7 +207,7 @@ def main(pyrootdir, opts):
         pP.setMEMDataBase(memDataBase)
         # pP.setDNNInterface(dnnInterface)
         pP.setMaxEvts(70000)
-        pP.request_runtime = 60*60*5
+        pP.request_runtime = 60*60*5 #request 5 hours
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
         pP.setSFCorrection(sfCorrection)
@@ -233,6 +233,7 @@ def main(pyrootdir, opts):
             nHistosRemainSame   = True,
             skipHadd            = analysis.skipHaddFromWildcard)
      
+
     pP.setRenameInput()
     if pP.configData.replace_config and not analysis.skipMergeSysts:
         with monitor.Timer("mergeSystematics"):
@@ -249,6 +250,7 @@ def main(pyrootdir, opts):
         # ========================================================
         '''
 
+        
         # in this function the variable self.renameInput is set
         # if hadd files were created during plotParallel
         #       the renameInput is set to pP.getHaddFiles 
@@ -264,7 +266,6 @@ def main(pyrootdir, opts):
                 checkBins       = True,
                 eps             = 0.0,
                 skipHistoCheck  = analysis.skipHistoCheck)
-
 
     if analysis.addData:
         print '''
@@ -339,10 +340,9 @@ if __name__ == "__main__":
     parser.add_option("--skipHaddParallel",     dest = "skipHaddParallel",      action = "store_true", default = False)
     parser.add_option("--skipHaddFromWildcard", dest = "skipHaddFromWildcard",  action = "store_true", default = False)
     parser.add_option("--skipHistoCheck",       dest = "skipHistoCheck",        action = "store_true", default = False)
-    parser.add_option("--skipMergeSysts",       dest = "skipMergeSysts",        action = "store_true", default = False)
     parser.add_option("--skipDatacards",        dest = "skipDatacards",         action = "store_true", default = False)
     parser.add_option("--skip",                 dest = "skip",                  default = 0,            type = "int",
-        help = "skip first INT parallel stages. plotParallel (1), haddParallel (2), haddFromWildcard (3), histoCheck (4), mergeSysts (5), Datacards (6)")
+        help = "skip first INT parallel stages. plotParallel (1), haddParallel (2), haddFromWildcard (3), histoCheck (4), Datacards (5)")
 
     (opts, args) = parser.parse_args()
 
@@ -350,7 +350,7 @@ if __name__ == "__main__":
     if opts.skip >= 2: opts.skipHaddParallel        = True
     if opts.skip >= 3: opts.skipHaddFromWildcard    = True
     if opts.skip >= 4: opts.skipHistoCheck          = True
-    if opts.skip >= 5: opts.skipMergeSysts          = True
-    if opts.skip >= 6: opts.skipDatacards           = True
+    if opts.skip >= 5: opts.skipDatacards           = True
+
 
     main(pyrootdir, opts)
