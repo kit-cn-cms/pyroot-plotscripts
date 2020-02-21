@@ -30,7 +30,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'sfPatch/2017_fine'
+    name = 'sfPatch/2017_fine_simple'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -48,7 +48,7 @@ def main(pyrootdir, opts):
 
 
     # configs
-    config          = "sfPatch/samples_2017"
+    config          = "sfPatch/samples_2017_simple"
     variable_cfg    = "sfPatch/additionalVariables"
     plot_cfg        = "sfPatch/plots"
     syst_cfg        = "sfPatch/systs"
