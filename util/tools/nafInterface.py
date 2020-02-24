@@ -3,7 +3,7 @@ import os
 import nafSubmit
 from glob import glob
 
-fastLane = True
+fastLane = False
 #############################
 # parallel plotting
 #############################
@@ -299,7 +299,7 @@ def datacardTerminationCheck(shellScripts, datacardFiles):
 #############################
 # make Plots
 #############################
-def drawInterface(jobsToSubmit, outputPlots, nTries = 0):
+def drawInterface(jobsToSubmit, outputPlots, maxTries = 10, nTries = 0):
     if nTries == 0:
         print("submitting makePlots scripts as array job")
         jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "makePlots")
@@ -315,6 +315,8 @@ def drawInterface(jobsToSubmit, outputPlots, nTries = 0):
         print("monitoring of plotting jobs disabled to speed up the script")
         return
 
+    print("monitoring for drawing plots is not implemented yet!")
+    return
     nafSubmit.monitorJobStatus(jobIDs)
     # checking output
     undoneScripts, undonePlots = drawTerminationCheck(jobsToSubmit, outputPlots)
