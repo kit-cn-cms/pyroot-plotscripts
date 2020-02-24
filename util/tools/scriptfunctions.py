@@ -1,6 +1,7 @@
 import ROOT
 import json
 import os
+import re
 
 # local imports
 import plotClasses
@@ -531,7 +532,21 @@ def varLoop(i,n):
     return '      for(int '+str(i)+'=0; '+str(i)+'<'+str(n)+'; '+str(i)+'++)'
 
 def fillHistoSyst(histName, varNames, weight, systNames, systWeights):
-    varNames = [v.replace(".","_friendTree_") if not v.split(".")[0].isdigit() or v.split(".")[1].isdigit() else v for v in varNames]
+    varNames_new = []
+    for v in varNames:
+        varNames_new.append(v)
+        #candidates = re.findall( r"\w+\b(?!\()", v )
+        split = v.split(".")
+        # DANGER: this only works in most of the cases
+        #  if a variable which is supposed to be defined in a friend tree
+        #  but is part of an expression, e.g. '(ftName.variable/0.5)',
+        #  this implementatin fails, as the variable is not recognized
+        # TODO: needs to be fixed
+        if len(split)==2:
+            if not (split[0].isdigit() or split[1].isdigit()):
+                varNames_new[-1] = v.replace(".","_friendTree_")
+    varNames = varNames_new
+
     text = '      float weight_'+histName+'='+weight+';\n'
     # Write all individual systnames and systweights in nested vector 
     # to use together with function allowing variadic vector size 
