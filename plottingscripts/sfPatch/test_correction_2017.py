@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'sfPatch/test_2017_fine'
+    name = 'sfPatch/test_2017_fine_simple'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -51,7 +51,7 @@ def main(pyrootdir, opts):
     # memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
     memexp = ''
     # configs
-    config          = "sfPatch/samples_2017"
+    config          = "sfPatch/samples_2017_simple"
     variable_cfg    = "sfPatch/additionalVariables"
     plot_cfg        = "sfPatch/plots_testSFs"
     syst_cfg        = "sfPatch/systs_testSFs"
@@ -62,7 +62,7 @@ def main(pyrootdir, opts):
 
     # file for btagging SF corrections
     sfCorrection = {}
-    sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2017_deepJet_fineBinning.root"
+    sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2017_deepJet_combined.root"
     # variables for the correction
     sfCorrection["corrections"] = {}
     sfCorrection["corrections"]["NJet"]       = ["N_Jets"]
