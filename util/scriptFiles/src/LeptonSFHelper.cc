@@ -4,7 +4,7 @@
 //PUBLIC
 LeptonSFHelper::LeptonSFHelper(std::string dataera_, std::string basedir_){
 
-  //std::cout << "Initializing Lepton scale factors" << std::endl;
+  // std::cout << "Initializing Lepton scale factors" << std::endl;
   
   dataera = dataera_;
   plotscriptBaseDir = basedir_;
@@ -86,6 +86,7 @@ float LeptonSFHelper::GetElectronSF(  float electronPt , float electronEta , int
 
 
   if ( type == "ID" ){
+
     thisBin = h_ele_ID_abseta_pt_ratioBtoF->FindBin( searchEta , searchPt );
     nomvalBtoF=h_ele_ID_abseta_pt_ratioBtoF->GetBinContent( thisBin );
     errorBtoF=h_ele_ID_abseta_pt_ratioBtoF->GetBinError( thisBin );
@@ -104,11 +105,13 @@ float LeptonSFHelper::GetElectronSF(  float electronPt , float electronEta , int
 
   }
   else if ( type == "Trigger" ){
+
     thisBin = h_ele_TRIGGER_abseta_pt_ratio->FindBin( searchPt, searchEta );
     nomval=h_ele_TRIGGER_abseta_pt_ratio->GetBinContent( thisBin );
     error=h_ele_TRIGGER_abseta_pt_ratio->GetBinError( thisBin );
     upval=nomval+error;
     downval=nomval-error;
+
 
   }
   else if ( type == "Iso" ){
@@ -317,7 +320,7 @@ float LeptonSFHelper::GetElectronMuonSF(  float electronEta , float muonEta , in
 }
 
 void LeptonSFHelper::ChangeMuIsoHistos(bool is_DL) {
-    std::string ISOinputFileBtoF =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/oct202017/mu_ISO_EfficienciesAndSF_BCDEF.root";
+    std::string ISOinputFileBtoF =  plotscriptBaseDir+"/data/triggerSFs/mu_ISO_EfficienciesAndSF_BCDEF.root";
 //     std::string ISOinputFileGtoH =  "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/oct202017/mu_ISO_EfficienciesAndSF_GH.root";
     TFile *f_ISOSFBtoF = new TFile(std::string(ISOinputFileBtoF).c_str(),"READ");
 //     TFile *f_ISOSFGtoH = new TFile(std::string(ISOinputFileGtoH).c_str(),"READ");
@@ -337,7 +340,7 @@ void LeptonSFHelper::ChangeMuIsoHistos(bool is_DL) {
 
 void LeptonSFHelper::SetElectronHistos( ){
   
-  std::string IDinputFileBtoF = "/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/egammaEffi.txt_EGM2D_runBCDEF_passingTight94X.root";
+  std::string IDinputFileBtoF = plotscriptBaseDir+"/data/LeptonSFs/egammaEffi.txt_EGM2D_runBCDEF_passingTight94X.root";
   // std::string IDinputFileGtoH = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/oct202017/ele_ID_SF_tight_GH.root";
 
   std::string TRIGGERinputFile = "";
@@ -356,8 +359,8 @@ void LeptonSFHelper::SetElectronHistos( ){
       }
 
   //std::string ISOinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/oct202017/ele_Reco_EGM2D.root"; // DANGERZONE: no iso SF yet??
-  std::string GFSinputFile = "/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/egammaEffi.txt_EGM2D_runBCDEF_passingRECO.root"; //reco SFs for pt > 20
-  std::string GFSinputFile_lowEt = "/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/egammaEffi.txt_EGM2D_runBCDEF_passingRECO_lowEt.root"; //reco SFs for pt<20
+  std::string GFSinputFile = plotscriptBaseDir+"/data/LeptonSFs/egammaEffi.txt_EGM2D_runBCDEF_passingRECO.root"; //reco SFs for pt > 20
+  std::string GFSinputFile_lowEt = plotscriptBaseDir+"/data/LeptonSFs/egammaEffi.txt_EGM2D_runBCDEF_passingRECO_lowEt.root"; //reco SFs for pt<20
   // std::string TRIGGERinputFile = GFSinputFile;  //not available yet
   // std::string ISOinputFile = GFSinputFile;      //not available yet
 
@@ -380,11 +383,11 @@ void LeptonSFHelper::SetElectronHistos( ){
 
 void LeptonSFHelper::SetMuonHistos( ){
 
-  std::string IDinputFileBtoF = "/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/Muon_RunBCDEF_SF_ID_syst.root";
+  std::string IDinputFileBtoF = plotscriptBaseDir+"/data/LeptonSFs/Muon_RunBCDEF_SF_ID_syst.root";
   
-  std::string ISOinputFileBtoF =  "/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/Muon_RunBCDEF_SF_ISO_syst.root";
+  std::string ISOinputFileBtoF =  plotscriptBaseDir+"/data/LeptonSFs/Muon_RunBCDEF_SF_ISO_syst.root";
   
-  std::string TRIGGERinputFileBtoF =  "/nfs/dust/cms/user/pkeicher/DataFilesForScriptGenerator/Summer18_2017data/Fall17/new_JEC/Muon_Trigger_SF_EfficienciesAndSF_RunBtoF_Nov17Nov2017.root";
+  std::string TRIGGERinputFileBtoF =  plotscriptBaseDir+"/data/LeptonSFs/Muon_Trigger_SF_EfficienciesAndSF_RunBtoF_Nov17Nov2017.root";
   
   TFile *f_IDSFBtoF = new TFile(std::string(IDinputFileBtoF).c_str(),"READ");
   
@@ -401,7 +404,7 @@ void LeptonSFHelper::SetMuonHistos( ){
 }
 
 void LeptonSFHelper::SetElectronElectronHistos( ){
-  std::string TRIGGERinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/oct202017/triggerSummary_ee_ReReco2016_ttH.root";
+  std::string TRIGGERinputFile = plotscriptBaseDir+"/data/triggerSFs/triggerSummary_ee_ReReco2016_ttH.root";
 
   TFile *f_TRIGGERSF = new TFile(std::string(TRIGGERinputFile).c_str(),"READ");
 
@@ -409,7 +412,7 @@ void LeptonSFHelper::SetElectronElectronHistos( ){
 }
 
 void LeptonSFHelper::SetMuonMuonHistos( ){
-  std::string TRIGGERinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/oct202017/triggerSummary_mumu_ReReco2016_ttH.root";
+  std::string TRIGGERinputFile = plotscriptBaseDir+"/data/triggerSFs/triggerSummary_mumu_ReReco2016_ttH.root";
 
   TFile *f_TRIGGERSF = new TFile(std::string(TRIGGERinputFile).c_str(),"READ");
 
@@ -417,7 +420,7 @@ void LeptonSFHelper::SetMuonMuonHistos( ){
 }
 
 void LeptonSFHelper::SetElectronMuonHistos( ){
-  std::string TRIGGERinputFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/oct202017/triggerSummary_emu_ReReco2016_ttH.root";
+  std::string TRIGGERinputFile = plotscriptBaseDir+"/data/triggerSFs/triggerSummary_emu_ReReco2016_ttH.root";
 
   TFile *f_TRIGGERSF = new TFile(std::string(TRIGGERinputFile).c_str(),"READ");
 

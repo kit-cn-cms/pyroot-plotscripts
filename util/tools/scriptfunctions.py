@@ -1,6 +1,7 @@
 import ROOT
 import json
 import os
+import re
 
 # local imports
 import plotClasses
@@ -537,6 +538,11 @@ def fillHistoSyst(histName, varNames, weight, systNames, systWeights):
     # character belongs to a digit! Therefore, first split the variable
     # name and check if the part before the '.' or the first character
     # after the '.' is a digit
+    # DANGER: this only works in most of the cases
+    #  if a variable which is supposed to be defined in a friend tree
+    #  but is part of an expression, e.g. '(ftName.variable/0.5)',
+    #  this implementatin fails, as the variable is not recognized
+    # TODO: needs to be fixed
     varNames = [v.replace(".","_friendTree_") if not any( \
                         v.split(".")[i][-1].isdigit() or v.split(".")[i+1][0].isdigit() \
                             for i in range(len(v.split("."))-1) \
