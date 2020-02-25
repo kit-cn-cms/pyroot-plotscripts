@@ -531,45 +531,83 @@ def varLoop(i,n):
     return '      for(int '+str(i)+'=0; '+str(i)+'<'+str(n)+'; '+str(i)+'++)'
 
 def fillHistoSyst(histName, varNames, weight, systNames, systWeights):
-    varNames = [v.replace(".","_friendTree_") if not v.split(".")[0].isdigit() or v.split(".")[1].isdigit() else v for v in varNames]
-    text = '      float weight_'+histName+'='+weight+';\n'
+    print(varNames)
+    final_names = []
+    # perform replacement for friendTrees. Important: check if the '.'
+    # character belongs to a digit! Therefore, first split the variable
+    # name and check if the part before the '.' or the first character
+    # after the '.' is a digit
+    varNames = [v.replace(".","_friendTree_") if not any( \
+                        v.split(".")[i][-1].isdigit() or v.split(".")[i+1][0].isdigit() \
+                            for i in range(len(v.split("."))-1) \
+                    ) else v for v in varNames]
+    if any("_friendTree_" in x for x in varNames):
+        exit("DEBUG OUT")
+    text = '      float weight_{}={};\n'.format(histName, weight)
+
+    histVectorName = "histos2D" if len(varNames) == 2 else "histos1D"
+
+
+    # write lines to fill systematics
+    systline_template = " ".join("""helpWeightVec_{histName}.push_back(
+        {{  
+            {histVectorName}["{histName}{systName}"].get(), 
+            ({systWeight})*(weight_{histName})
+        }}
+    );""".split())
+    indent = "        "
+    systlines = [indent+systline_template.format(
+                                histVectorName = histVectorName,
+                                histName = histName,
+                                systName = sname,
+                                systWeight = sweight) \
+                for sname, sweight in zip(systNames[1:], systWeights[1:])]
+
     # Write all individual systnames and systweights in nested vector 
     # to use together with function allowing variadic vector size 
     # -> speed-up of compilation and less code lines
     if len(varNames) == 1:
         # 1D Histograms
-        text += '       std::vector<structHelpFillHisto> helpWeightVec_' + histName + ' = {\n'
-        # Do Nominal Plot for sure
-        text += "           {histos1D[\""+histName+"\"+variation].get()"+", ((NomWeight)*(weight_"+histName+"))},\n"
-        text += "       };\n"
+        
+        text += """
+        // nominal plot
+        std::vector<structHelpFillHisto> helpWeightVec_{histName} = {{
+            {{{histVectorName}["{histName}"+variation].get(), ((NomWeight)*(weight_{histName}))}},
+        }};
+        if (!skipWeightSysts) {{ // append plots for weight systs if neccessary
+            {systlines}
+        }}
+        variable = {varName};
+        helperFillHisto(helpWeightVec_{histName}, variable);
+        variable = -999;\n""".format(
+                        histVectorName = histVectorName,
+                        histName = histName,
+                        systlines = "\n".join(systlines),
+                        varName = varNames[0]
+                        )
+        
 
-        text += "       if (!skipWeightSysts) { // append plots for weight systs if neccessary \n"
-        for systName, systWeight in zip(systNames[1:], systWeights[1:]):
-            text += "             helpWeightVec_" + histName + ".push_back({histos1D[\""+histName+systName+"\"].get()"+", ("+systWeight+")*(weight_"+histName+")});\n"
-        text += "       };\n"
-            
-        text += "       variable = "+varNames[0]+";\n"
-
-        text += "       helperFillHisto(helpWeightVec_"+histName+", variable);\n"
-        text += "       variable = -999;\n"
-    if len(varNames) == 2:
+    elif len(varNames) == 2:
         # 2D Histograms
-        text += '       std::vector<structHelpFillTwoDimHisto> helpWeightVec_' + histName + ' = {\n'
-        # Do Nominal Plot for sure
-        text += "           {histos2D[\""+histName+"\"+variation].get()"+", ((NomWeight)*(weight_"+histName+"))},\n"
-        text += "       };\n"
-
-        text += "       if (!skipWeightSysts) { // append plots for weight systs if neccessary \n"
-        for systName, systWeight in zip(systNames[1:], systWeights[1:]):
-            text += "             helpWeightVec_" + histName + ".push_back({histos2D[\""+histName+systName+"\"].get()"+", ("+systWeight+")*(weight_"+histName+")});\n"
-        text += "       };\n"
-
-        text += "       variable1 = "+varNames[0]+";\n"
-        text += "       variable2 = "+varNames[1]+";\n"
-
-        text += "       helperFillTwoDimHisto(helpWeightVec_"+histName+", variable1, variable2);\n"
-        text += "       variable1 = -999;\n"
-        text += "       variable2 = -999;\n"
+        text += """
+        // nominal plot
+        std::vector<structHelpFillTwoDimHisto> helpWeightVec_{histName} = {{
+            {{{histVectorName}["{histName}"+variation].get(), ((NomWeight)*(weight_{histName}))}},
+        }};
+        if (!skipWeightSysts) {{ // append plots for weight systs if neccessary
+            {systlines}
+        }}
+        variable1 = {varName1};
+        variable2 = {varName2};
+        helperFillTwoDimHisto(helpWeightVec_{histName}, variable1, variable2);
+        variable1 = -999;
+        variable2 = -999;\n""".format(
+                        histVectorName = histVectorName,
+                        histName = histName,
+                        systlines = "\n".join(systlines),
+                        varName1 = varNames[0],
+                        varName2 = varNames[1]
+                        )
     return text
 # -------------------------------------------------------------------------------------------------
 
