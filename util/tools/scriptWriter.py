@@ -96,7 +96,7 @@ class scriptWriter:
     def createProgram(self):
         # generate a vetolist for variables that should not be generated automatically
         self.genVetolist()
-
+        tree = ROOT.TTree()
         # get tree for variable check
         TreeFileMap = {"trees":[], "files": []}
         print("getting tree to setup with")
@@ -118,7 +118,7 @@ class scriptWriter:
                     TreeFileMap["files"].append(str(samplesToCheck[i].files[j]))
                     break
         print("#"*30)
-        print("Using {} rootFiles for variable Setup".format(len(Trees["files"])))
+        print("Using {} rootFiles for variable Setup".format(len(TreeFileMap["files"])))
         print("#"*30)
 
         # check for friend trees
