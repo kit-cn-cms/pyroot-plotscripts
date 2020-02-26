@@ -35,7 +35,8 @@ def makeDatacardsParallel(filePath, workdir,
                     skipDatacards = False,
                     signalTag = "ttH",
                     nominal_key = None,
-                    syst_key = None):
+                    syst_key = None,
+                    RunMode = "NAF"):
 
     # init directory for scripts
     datacardcsv=workdir+"/datacard.csv"
@@ -105,7 +106,7 @@ def makeDatacardsParallel(filePath, workdir,
             os.chmod(scriptName, st.st_mode | stat.S_IEXEC)
     
     if skipDatacards:
-        undoneShells, undoneCards = nafInterface.datacardTerminationCheck(shellScripts, datacardFiles)
+        undoneShells, undoneCards = nafInterface.datacardTerminationCheck(shellScripts, datacardFiles, mode = RunMode)
         if len(undoneShells) > 0 or len(undoneCards) > 0:
             print("datacard making has not terminated sucessfully")
             print("redoing datacard making")
@@ -118,7 +119,7 @@ def makeDatacardsParallel(filePath, workdir,
             return 
     
     # submitting datacardmaking scripts
-    nafInterface.datacardInterface(shellScripts, datacardFiles)
+    nafInterface.datacardInterface(shellScripts, datacardFiles, mode = RunMode)
     
     # hadding binbybin files to output
     #haddBinByBinFiles(bbbFiles, filePath)
