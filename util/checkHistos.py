@@ -11,7 +11,7 @@ utilpath = os.path.dirname(os.path.realpath(__file__))
 
 debug = 0
 
-def checkHistsManager(inFiles, outFile, checkBins = False, eps = 0.0, skipHistoCheck = False, RunMode = "NAF"):
+def checkHistsManager(inFiles, outFile, checkBins = False, eps = 0.0, skipHistoCheck = False):
     if type(inFiles) == str:
         print("input for checkHistos was string - performing actual check")
         checkHistos(inFiles, outFile, checkBins, eps)
@@ -50,12 +50,12 @@ def checkHistsManager(inFiles, outFile, checkBins = False, eps = 0.0, skipHistoC
         undoneJobs, undoneFiles = nafInterface.checkHistoTerminationCheck( shellList, outFileList)
         if len(undoneJobs) > 0 or len(undoneFiles) > 0:
             print("checking Histograms output not complete - redoing checkHistos")
-            return checkHistsManager(inFiles, outFile, checkBins, eps, skipHistoCheck = False, RunMode = RunMode)
+            return checkHistsManager(inFiles, outFile, checkBins, eps, skipHistoCheck = False)
         else:
             print("check Histos output complete - skipping")
 
     else:
-        nafInterface.checkHistoInterface(shellList, outFileList, mode = RunMode)
+        nafInterface.checkHistoInterface(shellList, outFileList)
     
 
     # hadd the checked files

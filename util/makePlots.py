@@ -15,7 +15,7 @@ import nafInterface
 
 
 
-def makePlots(configData, nominal_key = "$PROCESS_$CHANNEL", syst_key = "$PROCESS_$CHANNEL_$SYSTEMATIC", RunMode = "NAF"):
+def makePlots(configData, nominal_key = "$PROCESS_$CHANNEL", syst_key = "$PROCESS_$CHANNEL_$SYSTEMATIC"):
 
     ListOfPlots     = configData.getDiscriminatorPlots()
     workdir         = configData.analysis.workdir
@@ -45,7 +45,7 @@ def makePlots(configData, nominal_key = "$PROCESS_$CHANNEL", syst_key = "$PROCES
 
 
     print "Submitting ", len(ListOfScripts), " PlotScripts"
-    nafInterface.drawInterface(ListOfScripts, ListOfPlots, mode = RunMode)
+    nafInterface.drawInterface(ListOfScripts, ListOfPlots)
 
     return
 

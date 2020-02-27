@@ -65,7 +65,6 @@ class plotParallel:
         self.request_runtime = None
         self.useFriendTrees = False
         self.friendTrees = {}
-        self.RunMode = "NAF"
 
         # check cmssw
         self.cmsswpath = os.environ['CMSSW_BASE']
@@ -111,9 +110,6 @@ class plotParallel:
         self.memDBpath = db_path
         print("set path for MEM DataBase to "+str(db_path))
 
-    def setRunMode(self, mode):
-        self.RunMode = mode
-        print("set Runmode to"+str(mode))
 
     def setAddInterfaces(self, interfaces):
         interfaceCounter = len(self.addInterfaces)
@@ -169,9 +165,6 @@ class plotParallel:
     
     def getOutPath(self):
         return self.analysis.renamedPath
-
-    def getRunMode(self):
-        return self.RunMode
 
     ## other public functions ##
     def checkTermination(self):
@@ -240,7 +233,7 @@ class plotParallel:
             opts["+RequestRuntime"] = self.request_runtime
         nafInterface.plotInterface( self.runscriptData, 
                                     skipPlotParallel = self.analysis.skipPlotParallel, 
-                                    options = opts, mode = self.RunMode)
+                                    options = opts)
         print("all jobs have terminated successfully")
         print("="*40)
 
@@ -345,4 +338,4 @@ class plotParallel:
                 print(s)
                 subprocess.call([s], shell = True)
         else:
-            nafInterface.mergeSystematicsInterface(scripts, mode = self.RunMode)
+            nafInterface.mergeSystematicsInterface(scripts)

@@ -31,7 +31,6 @@ class haddParallel:
         self.haddFiles = plotParaClass.haddFiles
 
         self.skipHaddParallel = plotParaClass.analysis.skipHaddParallel
-        self.RunMode = plotParaClass.RunMode
         if self.skipHaddParallel:
             print("skipping HaddParallel")
 
@@ -114,7 +113,7 @@ class haddParallel:
                 self.skipHaddParallel = False
                 return self.run(writer)
 
-        nafInterface.haddInterface( outputScripts, outputFiles, mode = self.RunMode)
+        nafInterface.haddInterface( outputScripts, outputFiles)
         print("all jobs have terminated successfully")
         print("="*40)
 
