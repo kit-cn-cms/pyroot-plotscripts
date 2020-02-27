@@ -47,7 +47,7 @@ def checkHistsManager(inFiles, outFile, checkBins = False, eps = 0.0, skipHistoC
             writeShellScript(shellPath, inFile, outFilePath, checkBins, eps)
 
     if skipHistoCheck:
-        undoneJobs, undoneFiles = nafInterface.checkHistoTerminationCheck( shellList, outFileList, RunMode)
+        undoneJobs, undoneFiles = nafInterface.checkHistoTerminationCheck( shellList, outFileList)
         if len(undoneJobs) > 0 or len(undoneFiles) > 0:
             print("checking Histograms output not complete - redoing checkHistos")
             return checkHistsManager(inFiles, outFile, checkBins, eps, skipHistoCheck = False, RunMode = RunMode)
