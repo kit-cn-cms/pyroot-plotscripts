@@ -8,7 +8,7 @@ import stat
 import ROOT
 default_scheduler = "bird-htc-sched13.desy.de"
 
-def writeSubmitCode(script, logdir, hold = False, isArray = False, nScripts = 0, name = "", options = {}, mode = "NAF"):
+def writeSubmitCode(script, logdir, hold = False, isArray = False, nScripts = 0, name = "", options = {}):
     ''' write the code for condor_submit file
 
     script: path to .sh-script that should be executed
@@ -42,7 +42,7 @@ def writeSubmitCode(script, logdir, hold = False, isArray = False, nScripts = 0,
     submitPath = script.replace(".sh",".sub")
     submitScript = os.path.basename(script).replace(".sh","")
     
-    if mode == "NAF":
+    if "naf" in os.environ["HOSTNAME"]: # Run on NAF
         submitCode = ""
         submitCode+= "universe = vanilla\n"
         submitCode+= "should_transfer_files = IF_NEEDED\n"
@@ -68,7 +68,7 @@ def writeSubmitCode(script, logdir, hold = False, isArray = False, nScripts = 0,
                 if "PeriodicRelease" in opt:
                     submitCode+= "periodic_release = ((JobStatus == 5) && (time() - EnteredCurrentStatus) > "+str(defaults[opt])+")\n"  
 
-    if mode == "ETP":
+    else: # Run on ETP
         submitCode = ""
         submitCode+= "should_transfer_files = IF_NEEDED\n"
         submitCode+= "executable = /bin/zsh\n"
@@ -84,9 +84,6 @@ def writeSubmitCode(script, logdir, hold = False, isArray = False, nScripts = 0,
         submitCode+= "requirements = TARGET.ProvidesIO && TARGET.ProvidesEKPResources\n"
         submitCode+= "universe = docker\n"
         submitCode+= "docker_image = mschnepf/slc7-condocker\n"
-    else:
-        print("Didn't recognize BatchSystem RunMode: {}".format(mode))
-        sys.exit(1)
         
         for opt in defaults:
             if defaults[opt]:
@@ -283,7 +280,7 @@ def submitToNAF(scripts, holdIDs = None, submitOptions = {}):
 
     return jobIDs
 
-def submitArrayToNAF(scripts, arrayName="", holdIDs=None, submitOptions = {}, mode="NAF"):
+def submitArrayToNAF(scripts, arrayName="", holdIDs=None, submitOptions = {}):
     ''' submit scripts to NAF as array job
 
     scripts: list of scripts to be submitted
@@ -307,7 +304,7 @@ def submitArrayToNAF(scripts, arrayName="", holdIDs=None, submitOptions = {}, mo
     arrayscriptpath = writeArrayCode(scripts, arrayName)
     # generating code for condor_submit 
     hold = True if holdIDs else False
-    submitPath = writeSubmitCode(arrayscriptpath, logdir, hold = hold, isArray=True, nScripts=nScripts, name = arrayName, options = submitOptions, mode = mode)
+    submitPath = writeSubmitCode(arrayscriptpath, logdir, hold = hold, isArray=True, nScripts=nScripts, name = arrayName, options = submitOptions)
 
     # submitting script
     print('submitting '+ submitPath)
