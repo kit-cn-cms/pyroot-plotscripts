@@ -28,7 +28,7 @@ def writeSubmitCode(script, logdir, hold = False, isArray = False, nScripts = 0,
         # "RequestMemory": "1000M",
         # "RequestDisk": "1000M",
         # "+RequestRuntime": 18000,
-        "PeriodicHold": 3600,
+        # "PeriodicHold": 3600,
         "PeriodicRelease": 5
         }
     defaults.update(options)
@@ -42,31 +42,55 @@ def writeSubmitCode(script, logdir, hold = False, isArray = False, nScripts = 0,
     submitPath = script.replace(".sh",".sub")
     submitScript = os.path.basename(script).replace(".sh","")
     
+    if "naf" in os.environ["HOSTNAME"]: # Run on NAF
+        submitCode = ""
+        submitCode+= "universe = vanilla\n"
+        submitCode+= "should_transfer_files = IF_NEEDED\n"
+        submitCode+= "executable = /bin/zsh\n"
+        submitCode+= "arguments = " + script + "\n"
+        submitCode+= "initialdir = "+os.getcwd()+"\n"
+        submitCode+= "notification = Never\n"
+        #submitCode+= "priority = 0\n"
+        #submitCode+= "RequestMemory = 2000\n"
+        #submitCode+= "RequestDisk = 500000\n"
+        submitCode+= "run_as_owner = True\n"
+        #submitCode+= "job_lease_duration = 60\n"
+        submitCode+= "JobBatchName = "+name+"\n"
+        submitCode+= '+MySingularityImage="/nfs/dust/cms/user/swieland/slc6_latest.sif"\n'
+        submitCode+= 'Requirements = ( OpSysAndVer == "CentOS7")\n'    
+        
+        for opt in defaults:
+            if defaults[opt]:
+                if "Request" in opt:
+                    submitCode+=opt+" = "+str(defaults[opt])+"\n"
+                if "PeriodicHold" in opt:
+                    submitCode+= "periodic_hold = ((JobStatus == 2) && (time() - EnteredCurrentStatus) > "+str(defaults[opt])+")\n"
+                if "PeriodicRelease" in opt:
+                    submitCode+= "periodic_release = ((JobStatus == 5) && (time() - EnteredCurrentStatus) > "+str(defaults[opt])+")\n"  
 
-    submitCode = ""
-    submitCode+= "universe = vanilla\n"
-    submitCode+= "should_transfer_files = IF_NEEDED\n"
-    submitCode+= "executable = /bin/zsh\n"
-    submitCode+= "arguments = " + script + "\n"
-    submitCode+= "initialdir = "+os.getcwd()+"\n"
-    submitCode+= "notification = Never\n"
-    #submitCode+= "priority = 0\n"
-    #submitCode+= "RequestMemory = 2000\n"
-    #submitCode+= "RequestDisk = 500000\n"
-    submitCode+= "run_as_owner = True\n"
-    #submitCode+= "job_lease_duration = 60\n"
-    submitCode+= "JobBatchName = "+name+"\n"
-    submitCode+= '+MySingularityImage="/nfs/dust/cms/user/swieland/slc6_latest.sif"\n'
-    submitCode+= 'Requirements = ( OpSysAndVer == "CentOS7")\n'    
-     
-    for opt in defaults:
-        if defaults[opt]:
-            if "Request" in opt:
-                submitCode+=opt+" = "+str(defaults[opt])+"\n"
-            if "PeriodicHold" in opt:
-                submitCode+= "periodic_hold = ((JobStatus == 2) && (time() - EnteredCurrentStatus) > "+str(defaults[opt])+")\n"
-            if "PeriodicRelease" in opt:
-                submitCode+= "periodic_release = ((JobStatus == 5) && (time() - EnteredCurrentStatus) > "+str(defaults[opt])+")\n"  
+    else: # Run on ETP
+        submitCode = ""
+        submitCode+= "should_transfer_files = IF_NEEDED\n"
+        submitCode+= "executable = /bin/zsh\n"
+        submitCode+= "arguments = " + script + "\n"
+        submitCode+= "initialdir = "+os.getcwd()+"\n"
+        submitCode+= "notification = Never\n"
+        submitCode+= "RequestMemory = 2000\n"
+        #submitCode+= "RequestDisk = 500000\n"
+        submitCode+= "run_as_owner = True\n"
+        submitCode+= "JobBatchName = "+name+"\n"
+        submitCode+= "RequestCPUs = 1\n"
+        submitCode+= "accounting_group=cms.higgs\n"
+        submitCode+= "requirements = TARGET.ProvidesIO && TARGET.ProvidesEKPResources\n"
+        submitCode+= "universe = docker\n"
+        submitCode+= "docker_image = mschnepf/slc7-condocker\n"
+        
+        for opt in defaults:
+            if defaults[opt]:
+                if "Request" in opt:
+                    submitCode+=opt.replace("RequestRuntime","RequestWalltime")+" = "+str(defaults[opt])+"\n"
+                if "PeriodicRelease" in opt:
+                    submitCode+= "periodic_release = ((JobStatus == 5) && (time() - EnteredCurrentStatus) > "+str(defaults[opt])+")\n"  
     if hold:
         submitCode+= "hold = True\n"
 
@@ -321,7 +345,7 @@ def monitorJobStatus(jobIDs = None):
     helds = []
     totals = []
     while not allfinished:
-        time.sleep(100)
+        time.sleep(60)
         # calling condor_q command
         a = subprocess.Popen(command, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE)
         a.wait()

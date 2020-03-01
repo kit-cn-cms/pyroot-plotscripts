@@ -3,7 +3,7 @@ import os
 import nafSubmit
 from glob import glob
 
-fastLane = False
+fastLane = True
 #############################
 # parallel plotting
 #############################
@@ -20,8 +20,13 @@ def plotInterface(jobData, skipPlotParallel = False, maxTries = 10, nTries = 0, 
             print("all plotParallel scripts have terminated successfully - skipping plotParallel")
             return
 
-    submitOptions = {"PeriodicHold": 10001,
-                    "+RequestRuntime": 10000}
+    if "naf" in os.environ["HOSTNAME"]: # Run on NAF
+        submitOptions = {"PeriodicHold": 17501,
+                         "+RequestRuntime": 17500}
+    else:    
+        submitOptions = {"+RequestWalltime": 100000}
+
+
     if options:
         for opt in options:
             submitOptions[opt] = options[opt]
@@ -107,7 +112,7 @@ def haddInterface(jobsToSubmit, outfilesFromSubmit, maxTries = 10, nTries = 0):
     undoneJobs, undoneOutFiles = haddTerminationCheck(jobsToSubmit, outfilesFromSubmit)
 
     if len(undoneJobs) > 0 or len(undoneOutFiles) > 0:
-        return haddInterface( undoneJobs, undoneOutFiles, maxTries, nTries+1 )
+        return haddInterface( undoneJobs, undoneOutFiles, maxTries, nTries+1)
     
     print("haddParallel submit interface has terminated successfully")
 
@@ -154,7 +159,7 @@ def haddTerminationCheck(outputScripts, outputFiles):
 #############################
 # checking histos
 #############################
-def checkHistoInterface(jobsToSubmit, outfilesFromSubmit, maxTries = 10, nTries = 0):
+def checkHistoInterface(jobsToSubmit, outfilesFromSubmit, maxTries = 10, nTries = 0,):
     # shellList = renamescriptlist = listOfJobsToSubmit
     # outFileList = outnamelist = listOfJobOutFilesToGetFromSubmit
     if len(jobsToSubmit) != len(outfilesFromSubmit):
@@ -299,7 +304,7 @@ def datacardTerminationCheck(shellScripts, datacardFiles):
 #############################
 # make Plots
 #############################
-def drawInterface(jobsToSubmit, outputPlots, maxTries = 10, nTries = 0):
+def drawInterface(jobsToSubmit, outputPlots, maxTries = 10, nTries = 0,):
     if nTries == 0:
         print("submitting makePlots scripts as array job")
         jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "makePlots")
