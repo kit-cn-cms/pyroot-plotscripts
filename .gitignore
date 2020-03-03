@@ -8,3 +8,4 @@ workdir/*
 *.nav
 *.sub
 *.err
+*.csv
