@@ -134,6 +134,7 @@ class scriptWriter:
                     if not os.path.exists(friendtree):
                         exit("cannot use file for variable setup because required friend tree does not exist.")
                     TreeFileMap["trees"][i].AddFriend("{}=MVATree".format(ftName), friendtree)
+                    break # one Friend File should be enough, since a friend variable should be avaiable in all friends
         
 
         # initialize variables with variablebox
@@ -470,6 +471,14 @@ class scriptWriter:
             #print '\ncreating scripts for',sample.name,'from',sample.path
             self.samplewiseMaps[sample.nick] = []
 
+            # figure out, if sample is syst varied one
+            maxEvents = self.pp.MaxEvts_nom
+            if "CMS_scale" in sample.name or "CMS_res" in sample.name:
+                if self.pp.MaxEvts_systs != self.pp.Neventsdefault:
+                    maxEvents = self.pp.MaxEvts_systs
+
+            print("maxEvents: {}".format(maxEvents))           
+
             nEvents = 0
             nJob = 0
             nEventsInFiles = 0
@@ -491,20 +500,20 @@ class scriptWriter:
 
                 SaveTreeInformation[filename] = nEventsInFile                
                 # if the file is larger than self.maxevents it is analyzed in portions of nevents
-                if nEventsInFile > self.pp.maxevents:
-                    for ijob in range(nEventsInFile / self.pp.maxevents + 1):
+                if nEventsInFile > maxEvents:
+                    for ijob in range(nEventsInFile / maxEvents + 1):
                         nJob += 1
-                        writeOptions = {"skipEvents": (ijob)*self.pp.maxevents}
+                        writeOptions = {"skipEvents": (ijob)*maxEvents   }
 
-                        self.writeSingleScript(sample, filename, nJob, filterFile, writeOptions)
-                        self.nentries.append(nEventsInFile-(ijob)*self.pp.maxevents)
+                        self.writeSingleScript(sample, filename, nJob, filterFile, maxEvents, writeOptions)
+                        self.nentries.append(nEventsInFile-(ijob)*maxEvents)
                     nEvents += nEventsInFile
 
                 # else additional files are appended to list of files to be submitted
                 else :
                     filesToSubmit += [filename]
                     nEventsInFiles += nEventsInFile
-                    if nEventsInFiles > self.pp.maxevents or filename == sample.files[-1] or len(filesToSubmit)>400: 
+                    if nEventsInFiles > maxEvents or filename == sample.files[-1] or len(filesToSubmit)>400: 
                         nJob += 1
                         filenames = ' '.join(filesToSubmit)
                         self.writeSingleScript(sample, filenames, nJob, filterFile)
@@ -544,9 +553,9 @@ class scriptWriter:
         return returnData
     
 
-    def writeSingleScript(self, sample, filenames, nJob, filterFile, writeOptions = {}):
+    def writeSingleScript(self, sample, filenames, nJob, filterFile, maxEvents = 5000000, writeOptions = {}):
         # defaults
-        maxevents = writeOptions.get("maxevents", self.pp.maxevents)
+        maxevents = writeOptions.get("maxevents", maxEvents)
         processname = sample.nick
         outfilename = self.pp.plotPath+processname+'_'+str(nJob)+'.root'
         scriptname = self.pp.scriptsPath+'/'+processname+'_'+str(nJob)+'.sh'

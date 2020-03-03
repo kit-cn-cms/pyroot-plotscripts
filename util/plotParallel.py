@@ -46,7 +46,9 @@ class plotParallel:
         self.initDefaults()
 
     def initDefaults(self):
-        self.maxevents = 5000000
+        self.Neventsdefault = 500000
+        self.MaxEvts_nom = self.Neventsdefault
+        self.MaxEvts_systs = self.Neventsdefault        
         self.categoryNames = [""]
         self.categorySelections = ["1."]        
         
@@ -143,10 +145,20 @@ class plotParallel:
     def setUseGenWeightNormMap(self, use_genWeightNormMap):
         self.useGenWeightNormMap = use_genWeightNormMap
         print("set useGenWeightNormMap to "+str(use_genWeightNormMap))
-       
+
     def setMaxEvts(self, maxevts):
-        self.maxevents = maxevts
-        print("set maxevents to "+str(maxevts))
+        self.MaxEvts_nom = maxevts
+        self.MaxEvts_systs = maxevts
+        print("set MaxEvts_nom to "+str(maxevts))
+        print("set MaxEvts_systs to "+str(maxevts))
+
+    def setMaxEvts_nom(self, maxevts):
+        self.MaxEvts_nom = maxevts
+        print("set MaxEvts_nom to "+str(maxevts))
+
+    def setMaxEvts_systs(self, maxevts):
+        self.MaxEvts_systs = maxevts
+        print("set MaxEvts_systs to "+str(maxevts))
 
     def setRenameInput(self):
         if self.checkHaddFiles():

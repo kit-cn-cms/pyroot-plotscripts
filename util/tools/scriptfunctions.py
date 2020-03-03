@@ -547,8 +547,8 @@ def fillHistoSyst(histName, varNames, weight, systNames, systWeights):
                         v.split(".")[i][-1].isdigit() or v.split(".")[i+1][0].isdigit() \
                             for i in range(len(v.split("."))-1) \
                     ) else v for v in varNames]
-    if any("_friendTree_" in x for x in varNames):
-        exit("DEBUG OUT")
+    # if any("_friendTree_" in x for x in varNames):
+        # exit("DEBUG OUT")
     text = '      float weight_{}={};\n'.format(histName, weight)
 
     histVectorName = "histos2D" if len(varNames) == 2 else "histos1D"
