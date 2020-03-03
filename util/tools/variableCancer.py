@@ -10,7 +10,7 @@ class VariableManager:
     add lists of variables/single variables with .add
     run the initialization program with .run
     '''
-    def __init__(self, tree, vetolist = [], sfCorrection = None, friendTrees = {}, verbose = 0):
+    def __init__(self, trees, vetolist = [], sfCorrection = None, friendTrees = {}, verbose = 0):
         # all initialized Variables
         self.variables          = {}
         # all Variables that are not initialized yet
@@ -29,7 +29,7 @@ class VariableManager:
         # add friend tree names
         self.friendTreeNames = [key for key in friendTrees]
         # tree to get variable information from
-        self.tree               = tree
+        self.trees               = trees
         # list of expressions to search for variables
         self.expressionsToInit  = []
         # verbosity setting
@@ -83,14 +83,15 @@ class VariableManager:
         '''
         if self.verbose > 5: print("\ncalling searchVariables with expression "+str(expression))
 
-        if "." in expression:
-            treeName, varName = expression.split(".", 1)
-            if treeName in self.friendTreeNames:
-                print("found variable that appears to be a tree name")
-                if hasattr(self.tree, expression):
-                    dummyExpression = expression.replace(".","_friendTree_")
-                    self.addVariable(dummyExpression, dummyExpression, "F")
-                    return
+        for tree in self.trees:
+            if "." in expression:
+                treeName, varName = expression.split(".", 1)
+                if treeName in self.friendTreeNames:
+                    print("found variable that appears to be a tree name")
+                    if hasattr(tree, expression):
+                        dummyExpression = expression.replace(".","_friendTree_")
+                        self.addVariable(dummyExpression, dummyExpression, "F")
+                        return
 
         # search for variable definitions in expression of form varName:=expression
         if ":=" in expression:
@@ -147,35 +148,35 @@ class VariableManager:
                 return
             else:
                 if self.verbose > 20: print("adding variable again with new expression")
-
-        # adding variables that 
-        #   are BDT weight files (.xml)
-        #   are in the tree
-        #   are Weights
-        if ".xml" in expression or hasattr(self.tree, expression) or "Weight_" in varName:
-            if self.verbose > 5: print("adding variable "+str(expression)+" with name "+str(varName))
-            self.variablesToInit[varName] = Variable(varName, expression, varType, indexVariable)
-            return
-
-        # check remaining variables, whether they are vector variables
-        if "_" in expression:
-            expressionHead, expressionTail = expression.rsplit("_",1)
-            if hasattr(self.tree, expressionHead) and expressionTail.isdigit():
-                if self.verbose > 20: print("found vectorlike variable: "+str(expression)+" converted to "+str(expressionHead))
-                self.addVariable(expressionHead, expressionHead, varType, indexVariable)
-                return
-
-        # handle variables that are for sf corrections
-        for name in self.correctionNames:
-            if varName.endswith(name):
-                print("variable '{}' identified as correction variable".format(varName))
-                self.correctionVars.append(varName)
+        for tree in self.trees:
+            # adding variables that 
+            #   are BDT weight files (.xml)
+            #   are in the tree
+            #   are Weights
+            if ".xml" in expression or hasattr(tree, expression) or "Weight_" in varName:
+                if self.verbose > 5: print("adding variable "+str(expression)+" with name "+str(varName))
                 self.variablesToInit[varName] = Variable(varName, expression, varType, indexVariable)
-                # set flag defining this variable as SF variable that needs to be initialized differently
-                # also give this variable the list of variables needed for binning of SFs
-                _, correction, samename = varName.split("__")
-                self.variablesToInit[varName].setAsSFVariable(self.sfBinning[correction])
                 return
+
+            # check remaining variables, whether they are vector variables
+            if "_" in expression:
+                expressionHead, expressionTail = expression.rsplit("_",1)
+                if hasattr(tree, expressionHead) and expressionTail.isdigit():
+                    if self.verbose > 20: print("found vectorlike variable: "+str(expression)+" converted to "+str(expressionHead))
+                    self.addVariable(expressionHead, expressionHead, varType, indexVariable)
+                    return
+
+            # handle variables that are for sf corrections
+            for name in self.correctionNames:
+                if varName.endswith(name):
+                    print("variable '{}' identified as correction variable".format(varName))
+                    self.correctionVars.append(varName)
+                    self.variablesToInit[varName] = Variable(varName, expression, varType, indexVariable)
+                    # set flag defining this variable as SF variable that needs to be initialized differently
+                    # also give this variable the list of variables needed for binning of SFs
+                    _, correction, samename = varName.split("__")
+                    self.variablesToInit[varName].setAsSFVariable(self.sfBinning[correction])
+                    return
 
         # everything remaining is added to the variable list
         if self.verbose > 5: print("adding variable "+str(expression)+" with name "+str(varName))
@@ -205,7 +206,9 @@ class VariableManager:
         # loop over all variables and initialize them
         for var in sorted(self.variables):
             if self.variables[var].isInitialized: continue
-            self.variables[var].setupVariable(self.tree, self.verbose, self)
+            for tree in self.trees:
+                self.variables[var].setupVariable(tree, self.verbose, self)
+                if self.variables[var].isInitialized: break
         print("total: {} variables initialized".format(len(self.variables)))
 
         # check if new variables need to be initialized
@@ -515,41 +518,7 @@ class Variable:
         program to setup variable
         '''
         if verbose > 10: print("initializing variable: "+str(self.varName))
-    
-        # check if variable is in tree
-        if self.varName == "GenEvt_I_TTZ":
-            self.inTree = True
-            alt_file = ROOT.TFile("/nfs/dust/cms/user/vdlinden/legacyTTH/ntuples/legacy_2018_ttZ_v2/TTZToBB_TuneCP5_13TeV-amcatnlo-pythia8/TTZToBB_TuneCP5_13TeV-amcatnlo-pythia8_31_nominal_Tree.root")
-            alt_tree = alt_file.Get("MVATree")
-            branch = alt_tree.GetBranch(self.varName)
-            branchTitle = branch.GetTitle()
-            self.setupVariableType(branchTitle, verbose)
-            self.isArray = branchTitle.split("/")[0][-1] == "]"
-            alt_file.Close()
-        if ("Weight_pdf_variation_32" in self.varName and not self.varName.startswith("dummy")) or "Weight_LHA_320900" in self.varName:
-            self.inTree = True
-            try:
-                alt_file = ROOT.TFile("/nfs/dust/cms/user/swieland/ttH_legacy/ntupleHadded_2017/TTbb_Powheg_Openloops_new_pmx/TTbb_Powheg_Openloops_new_pmx_1_nominal_Tree.root")
-                alt_tree = alt_file.Get("MVATree")
-                branch = alt_tree.GetBranch(self.varName)
-                branchTitle = branch.GetTitle()
-                self.setupVariableType(branchTitle, verbose)
-                self.isArray = branchTitle.split("/")[0][-1] == "]"
-            except Exception as e:
-                print("Could not set up variable '{}'".format(self.varName))
-                print(e)
-            
-            alt_file.Close()
-        elif self.varName.startswith("Weight_rwgt") :
-            self.inTree = True
-            alt_file = ROOT.TFile("/nfs/dust/cms/user/swieland/ttH_legacy/ntupleHadded_2017/THQ_ctcvcp_4f_Hincl_13TeV_madgraph_pythia8/THQ_ctcvcp_4f_Hincl_13TeV_madgraph_pythia8_1_nominal_Tree.root")
-            alt_tree = alt_file.Get("MVATree")
-            branch = alt_tree.GetBranch(self.varName)
-            branchTitle = branch.GetTitle()
-            self.setupVariableType(branchTitle, verbose)
-            self.isArray = branchTitle.split("/")[0][-1] == "]"
-            alt_file.Close()
-        elif hasattr(tree, self.varName.replace("_friendTree_",".")):
+        if hasattr(tree, self.varName.replace("_friendTree_",".")):
             if verbose > 20: print("variable is in tree")
             self.inTree = True
             branch = tree.GetBranch(self.varName.replace("_friendTree_","."))
@@ -566,6 +535,7 @@ class Variable:
             if self.isArray:
                 if verbose > 20: print("variable is an array variable")
                 self.setupVariableArray(tree, variableManager, branchTitle, verbose)
+            self.isInitialized = True
         else:
             # variable is not in tree
             if verbose > 20: print(self.varName +" does not exist in tree")
@@ -576,8 +546,10 @@ class Variable:
             if self.expression.endswith(".xml"):
                 if verbose > 20: print("variable is BDT variable")
                 self.setupBDTVariable(tree, variableManager, verbose)
-
-        self.isInitialized = True
+                self.isInitialized = True
+            else:
+                self.isInitialized = False
+        # self.isInitialized = True
     
 
     # setup functions =========================================================
