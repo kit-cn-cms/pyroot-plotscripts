@@ -110,6 +110,7 @@ class plotParallel:
         self.memDBpath = db_path
         print("set path for MEM DataBase to "+str(db_path))
 
+
     def setAddInterfaces(self, interfaces):
         interfaceCounter = len(self.addInterfaces)
         for interface in interfaces:
@@ -164,7 +165,7 @@ class plotParallel:
     
     def getOutPath(self):
         return self.analysis.renamedPath
-    
+
     ## other public functions ##
     def checkTermination(self):
         if self.finished:

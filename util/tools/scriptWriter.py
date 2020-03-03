@@ -7,6 +7,7 @@ import glob
 import json
 import filecmp
 import pandas
+from copy import deepcopy
 
 # local imports 
 import GenWeightUtils
@@ -95,43 +96,48 @@ class scriptWriter:
     def createProgram(self):
         # generate a vetolist for variables that should not be generated automatically
         self.genVetolist()
-
-        # get tree for variable check
         tree = ROOT.TTree()
+        # get tree for variable check
+        TreeFileMap = {"trees":[], "files": []}
         print("getting tree to setup with")
-        if self.sampleForVariableSetup:
-            samplesToCheck = [self.sampleForVariableSetup]
-        else:
-            samplesToCheck = self.pp.configData.allSamples
+        # if self.sampleForVariableSetup:
+            # samplesToCheck = [self.sampleForVariableSetup]
+        # else:
+        samplesToCheck = self.pp.configData.allSamples
+        print("#"*30)
+        print("Globbing one File of each sample to init Variables")
+        print("#"*30)
         for i in range(len(samplesToCheck)):
-            thistreeisgood = False
             for j in range(len(samplesToCheck[i].files)):
+                # tree = ROOT.TTree()
                 f = ROOT.TFile(samplesToCheck[i].files[j])
                 tree = f.Get('MVATree')
                 if tree.GetEntries() > 0:
                     print("using "+str(samplesToCheck[i].files[j])+" to determine variable types")
-                    thistree = samplesToCheck[i].files[j]
-                    thistreeisgood = True
+                    TreeFileMap["trees"].append(deepcopy(tree))
+                    TreeFileMap["files"].append(str(samplesToCheck[i].files[j]))
                     break
-            if thistreeisgood:
-                break
+        print("#"*30)
+        print("Using {} rootFiles for variable Setup".format(len(TreeFileMap["files"])))
+        print("#"*30)
 
         # check for friend trees
         if self.pp.useFriendTrees:
             # sample file should have path BASE/SAMPLENAME/FILE.root
             # -> strip base
             for ftName in self.pp.friendTrees:
-                sampledir, treename = os.path.split(thistree)
-                basedir, samplename = os.path.split(sampledir)
-                friendtree = "/".join([self.pp.friendTrees[ftName], samplename, treename])
-                print("checking friend tree {}".format(friendtree))
-                if not os.path.exists(friendtree):
-                    exit("cannot use file for variable setup because required friend tree does not exist.")
-                tree.AddFriend("{}=MVATree".format(ftName), friendtree)
+                for i,thistree in enumerate(TreeFileMap["files"]): 
+                    sampledir, treename = os.path.split(thistree)
+                    basedir, samplename = os.path.split(sampledir)
+                    friendtree = "/".join([self.pp.friendTrees[ftName], samplename, treename])
+                    print("checking friend tree {}".format(friendtree))
+                    if not os.path.exists(friendtree):
+                        exit("cannot use file for variable setup because required friend tree does not exist.")
+                    TreeFileMap["trees"][i].AddFriend("{}=MVATree".format(ftName), friendtree)
         
 
         # initialize variables with variablebox
-        self.initVariables(tree)
+        self.initVariables(TreeFileMap["trees"])
         
         # if a GenWeightNormMap is used, create new header file
         genWeightNormHeader_name = None
@@ -256,7 +262,7 @@ class scriptWriter:
         print("dnnfiles:")     
         print dnnfiles
         
-        #lhapdf=[' `/cvmfs/cms.cern.ch/slc6_amd64_gcc530/external/lhapdf/6.1.6-ikhhed2/bin/lhapdf-config --cflags --ldflags`']
+        # lhapdf=[' `/cvmfs/cms.cern.ch/slc6_amd64_gcc530/external/lhapdf/6.1.6-ikhhed2/bin/lhapdf-config --cflags --ldflags`']
         lhapdf_path = os.environ["LHAPDF_DATA_PATH"]
         lhapdf_relpath = "../../bin/lhapdf-config"
         lhapdf_cfg = os.path.join(lhapdf_path, *(lhapdf_relpath.split("/")))
@@ -337,9 +343,9 @@ class scriptWriter:
         self.vetolist = vetolist
 
 
-    def initVariables(self, tree):
+    def initVariables(self, trees):
         # initialize variables objects
-        variableManager = variableCancer.VariableManager(tree, self.vetolist, self.pp.sfCorrection, self.pp.friendTrees)
+        variableManager = variableCancer.VariableManager(trees, self.vetolist, self.pp.sfCorrection, self.pp.friendTrees)
         variableManager.add( ["Weight", "Weight_CSV", "Weight_XS"] )
         
         # get additional variables
