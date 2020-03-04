@@ -56,7 +56,7 @@ def writeSubmitCode(script, logdir, hold = False, isArray = False, nScripts = 0,
         submitCode+= "run_as_owner = True\n"
         #submitCode+= "job_lease_duration = 60\n"
         submitCode+= "JobBatchName = "+name+"\n"
-        submitCode+= '+MySingularityImage="/nfs/dust/cms/user/swieland/slc6_latest.sif"\n'
+        # submitCode+= '+MySingularityImage="/nfs/dust/cms/user/swieland/slc6_latest.sif"\n'
         submitCode+= 'Requirements = ( OpSysAndVer == "CentOS7")\n'    
         
         for opt in defaults:
