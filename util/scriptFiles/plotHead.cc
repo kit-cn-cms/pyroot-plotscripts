@@ -1,59 +1,3 @@
-// struct to store information 1D histograms
-struct Plot1DInfoStruct{
-    std::string identifier;
-    std::string title;
-    int nbins;
-    std::vector<float> edges;
-    //std::unique_ptr<TH1> histoptr;
-};
-
-
-// Helper struct to fill plots more efficiently
-// Until GCC 4.9 struct cannot have init values if one wants to initialize it with bracket lists
-struct structHelpFillHisto{
-  TH1* histo;
-  double weight;
-};
-
-// helper function to fill plots more efficiently
-void helperFillHisto(const std::vector<structHelpFillHisto>& paramVec, const double& val)
-{
-  for (const auto &singleParams: paramVec)
-  // singleParams: histo, var, weight
-  {
-    if((singleParams.weight)!=0)
-        singleParams.histo->Fill(fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,val)),singleParams.weight);
-  }
-}
-
-// Helper struct to fill plots more efficiently
-// Until GCC 4.9 struct cannot have init values if one wants to initialize it with bracket lists
-struct Plot2DInfoStruct{
-    std::string identifier;
-    std::string title;
-    int nbinsx;
-    std::vector<float> edges_x;
-    int nbinsy;
-    std::vector<float> edges_y;
-    //std::unique_ptr<TH2> histoptr;
-};
-
-struct structHelpFillTwoDimHisto{
-  TH2* histo;
-  double weight;
-};
-
-// helper function to fill plots more efficiently
-void helperFillTwoDimHisto(const std::vector<structHelpFillTwoDimHisto>& paramVec, const double& val1, const double& val2)
-{
-  for (const auto &singleParams: paramVec)
-  // singleParams: histo, var1, var2, weight
-  {
-    if((singleParams.weight)!=0)
-        singleParams.histo->Fill(fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,val1)),fmin(singleParams.histo->GetYaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetYaxis()->GetXmin()+1e-6,val2)),singleParams.weight);
-  }
-}
-
 void resetMap(std::map<TString, float>& input, const float& val = 1){
   for(auto& entry : input){
     entry.second = val;
@@ -139,6 +83,10 @@ void plot(){
   if (skipWeightSysts) {
     std::cout << "Detected syst varied or Data Sample, going to skip weight systematics" << std::endl;
   }
+
+  // init HistHelperClass
+  HistHelper* internalHistHelper= new HistHelper(skipWeightSysts, variation, origName, suffix);
+
 
   std::vector<TString> databaseRelevantFilenames;
 
@@ -311,7 +259,8 @@ void plot(){
   for(unsigned int isn=0; isn<databaseRelevantFilenames.size();isn++){
     std::cout<<databaseRelevantFilenames.at(isn)<<std::endl;
     }
-   
+  float weight;
+  std::map<std::string, std::tuple<float, float, float>> PlotWeightMap;
 
 //PLACEHOLDERFRIENDTREEADD
  

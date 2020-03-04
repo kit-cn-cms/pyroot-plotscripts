@@ -34,6 +34,8 @@ class scriptWriter:
          inheriting all public functions/varaibles from plotParallel class '''
         self.pp = plotParaClass
         self.ccPath = plotParaClass.ccPath
+        self.HistHelperCC = self.pp.analysis.workdir +"/HistHelper.cc"
+        self.HistHelperH = self.pp.analysis.workdir +"/HistHelper.h"
         self.systWeights = plotParaClass.systWeights
         self.sampleForVariableSetup = plotParaClass.sampleForVariableSetup
         if self.pp.useGenWeightNormMap:
@@ -42,6 +44,16 @@ class scriptWriter:
 
     ## main function for writing and compiling c++ code ##
     def writeCC(self):
+        print("#"*50)
+        print("Copying templates to workdir")
+        cmd = "cp -v "+ self.pp.analysis.pyrootdir+"/util/scriptFiles/templates/HistHelper.cc"+" "+self.HistHelperCC
+        print("cmd: "+cmd)
+        subprocess.call(cmd, shell = True)
+        cmd = "cp -v "+ self.pp.analysis.pyrootdir+"/util/scriptFiles/templates/HistHelper.h"+" "+self.HistHelperH
+        subprocess.call(cmd, shell = True)
+        print("cmd: "+cmd)
+        subprocess.call(cmd, shell = True)
+
         print("#"*50)
         print("starting to write and compile c++ code")
         print("c++ path is "+self.ccPath)
@@ -188,14 +200,6 @@ class scriptWriter:
         # initialize TMVA Readers
         script += self.varManager.writeTMVAReader()
 
-        # initialize histograms in all categories and for all systematics
-        script += scriptfunctions.initHistos(
-            catnames  = self.pp.categoryNames, 
-            systnames = self.pp.systNames, 
-            plots     = self.pp.configData.getDiscriminatorPlots(),
-            nom_histname_template = self.pp.nominalHistoKey, 
-            syst_histname_template = self.pp.systHistoKey)
-
         # start event loop
         #if self.pp.useGenWeightNormMap:
         #    script += scriptfunctions.DefineLHAPDF()
@@ -225,6 +229,21 @@ class scriptWriter:
             scriptf.write(script)
         print(self.ccPath + " written")
 
+        # Write HistHelper
+                # initialize histograms in all categories and for all systematics in HistHelper
+        script = scriptfunctions.initHistos(
+            catnames  = self.pp.categoryNames, 
+            systnames = self.pp.systNames, 
+            plots     = self.pp.configData.getDiscriminatorPlots(),
+            nom_histname_template = self.pp.nominalHistoKey, 
+            syst_histname_template = self.pp.systHistoKey)
+        with open(self.HistHelperCC,"r") as file:
+            s = file.read()
+            # s = open(self.HistHelperCC).read()
+            s = s.replace("//PLACEHOLDERFORINITHISTOS", script)
+        with open(self.HistHelperCC,"w") as file:
+            file.write(s)
+        
         # check if all variables are initialized correctly - exit otherwise
         self.varManager.checkVariableInitialization()
 
@@ -293,7 +312,7 @@ class scriptWriter:
         # add necessary libraries and file paths
         cmd += dnnfiles+lhapdf+['-lTMVA'] + ["-I"+scriptFilesPath]
         cmd += memDBccfiles+[resetCompilerOpt]
-        cmd += [self.ccPath,'-o',self.ccPath.replace(".cc","")]
+        cmd += [self.ccPath, self.HistHelperCC, '-o',self.ccPath.replace(".cc","")]
         print "compile command:"
         cmdstring = " ".join(cmd)
         print cmdstring
@@ -444,6 +463,7 @@ class scriptWriter:
             # finish category
             plotText += plotClass.endCat()
             script += plotText
+        script += "    internalHistHelper->FillHistos(PlotWeightMap);\n"
         
         return script
 

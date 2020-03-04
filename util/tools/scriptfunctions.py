@@ -15,7 +15,7 @@ def getHead(basepath, dataBases, memDB_path, addCodeInterfaces=[], useNormHeader
                 '<vector>', '<algorithm>', '"TMVA/Reader.h"', '<algorithm>',
                 '<map>', '"TStopwatch.h"', '<TString.h>', '<TH2D.h>',
                 '"LHAPDF/LHAPDF.h"', '"TGraphAsymmErrors.h"', '"TStopwatch.h"',
-                '<tuple>']
+                '<tuple>', '"HistHelper.h"']
   if useNormHeader:
     includes.append('"{}"'.format(useNormHeader))
   retstr = ""
@@ -202,11 +202,8 @@ def InitSFCorrection(sfCorrection):
 # -- initializing histograms ----------------------------------------------------------------------
 def initHistos(catnames, systnames, plots, nom_histname_template, syst_histname_template, edge_precision=4):
     rstr = """
-double variable = -999;
-double variable1 = -999;
-double variable2 = -999;
 
-std::vector<std::string> systematics = {{
+systematics = {{
 {}
 }};
 
@@ -222,10 +219,7 @@ if(skipWeightSysts){
 # for cat in catnames:
 #     rstr += "    \""+cat+"\",\n"
 # rstr = rstr[:-2]+"\n};\n"
-    rstr += """std::map<std::string, Plot1DInfoStruct> plotinfo1D;
-std::map<std::string, Plot2DInfoStruct> plotinfo2D;
-std::map<std::string, std::unique_ptr<TH1>> histos1D;
-std::map<std::string, std::unique_ptr<TH2>> histos2D;
+    rstr += """
 """
     for plot in plots:
         if plot.dim == 2:
@@ -253,7 +247,6 @@ std::map<std::string, std::unique_ptr<TH2>> histos2D;
             rstr  += """plotinfo1D["{0}"] = {{"{0}","{1}",{2},{{ {3} }} }};\n""".format(name, title, nbins, ",".join(bin_edges))
 
     rstr += """
-TString histname;
 for(const auto& obj: plotinfo1D){{
   for(const auto& syst: systematics){{
     const auto& PlotInfo1D = obj.second;
@@ -506,7 +499,7 @@ class initPlots:
             arraySelection = self.varManager.checkArrayLengths(",".join(variables + [sel]))
             weight = "("+arraySelection+")*("+sel_i+")*Weight_XS*categoryweight*sampleweight"
 
-            script += fillHistoSyst(histName, var_i, weight, self.systnames, self.systweights)
+            script += generatePlotWeightmap(histName, var_i, weight, self.systnames, self.systweights)
             script += "            }\n"
         else:
             # only handle one dimensional plots that are not BDT variables, are not in tree and have '_' in name
@@ -521,7 +514,7 @@ class initPlots:
 
             arraySelection = self.varManager.checkArrayLengths(",".join(variables + [sel]))
             weight = '('+arraySelection+')*('+sel+')*Weight_XS*categoryweight*sampleweight'
-            script += fillHistoSyst(histName, variables, weight, self.systnames, self.systweights)
+            script += generatePlotWeightmap(histName, variables, weight, self.systnames, self.systweights)
         if self.varManager.verbose > 20: print("\n\ninit plot code for "+str(plotName)+":\n"+str(script))
         return script
         
@@ -531,9 +524,7 @@ class initPlots:
 def varLoop(i,n):
     return '      for(int '+str(i)+'=0; '+str(i)+'<'+str(n)+'; '+str(i)+'++)'
 
-def fillHistoSyst(histName, varNames, weight, systNames, systWeights):
-    print(varNames)
-    final_names = []
+def generatePlotWeightmap(histName, varNames, weight, systNames, systWeights):
     # perform replacement for friendTrees. Important: check if the '.'
     # character belongs to a digit! Therefore, first split the variable
     # name and check if the part before the '.' or the first character
@@ -549,76 +540,29 @@ def fillHistoSyst(histName, varNames, weight, systNames, systWeights):
                     ) else v for v in varNames]
     # if any("_friendTree_" in x for x in varNames):
         # exit("DEBUG OUT")
-    text = '      float weight_{}={};\n'.format(histName, weight)
-
-    histVectorName = "histos2D" if len(varNames) == 2 else "histos1D"
-
-
-    # write lines to fill systematics
-    systline_template = " ".join("""helpWeightVec_{histName}.push_back(
-        {{  
-            {histVectorName}["{histName}{systName}"].get(), 
-            ({systWeight})*(weight_{histName})
-        }}
-    );""".split())
-    indent = "        "
-    systlines = [indent+systline_template.format(
-                                histVectorName = histVectorName,
-                                histName = histName,
-                                systName = sname,
-                                systWeight = sweight) \
-                for sname, sweight in zip(systNames[1:], systWeights[1:])]
-
-    # Write all individual systnames and systweights in nested vector 
-    # to use together with function allowing variadic vector size 
-    # -> speed-up of compilation and less code lines
     if len(varNames) == 1:
-        # 1D Histograms
-        
-        text += """
-        // nominal plot
-        std::vector<structHelpFillHisto> helpWeightVec_{histName} = {{
-            {{{histVectorName}["{histName}"+variation].get(), ((NomWeight)*(weight_{histName}))}},
-        }};
-        if (!skipWeightSysts) {{ // append plots for weight systs if neccessary
-            {systlines}
-        }}
-        variable = {varName};
-        helperFillHisto(helpWeightVec_{histName}, variable);
-        variable = -999;\n""".format(
-                        histVectorName = histVectorName,
-                        histName = histName,
-                        systlines = "\n".join(systlines),
-                        varName = varNames[0]
-                        )
-        
-
+        var1 = varNames[0]
+        var2 = '-999'
     elif len(varNames) == 2:
-        # 2D Histograms
-        text += """
-        // nominal plot
-        std::vector<structHelpFillTwoDimHisto> helpWeightVec_{histName} = {{
-            {{{histVectorName}["{histName}"+variation].get(), ((NomWeight)*(weight_{histName}))}},
-        }};
-        if (!skipWeightSysts) {{ // append plots for weight systs if neccessary
-            {systlines}
-        }}
-        variable1 = {varName1};
-        variable2 = {varName2};
-        helperFillTwoDimHisto(helpWeightVec_{histName}, variable1, variable2);
-        variable1 = -999;
-        variable2 = -999;\n""".format(
-                        histVectorName = histVectorName,
-                        histName = histName,
-                        systlines = "\n".join(systlines),
-                        varName1 = varNames[0],
-                        varName2 = varNames[1]
-                        )
+        var1 = varNames[0]
+        var2 = varNames[1]
+    indent = "        "
+    mapline_template = " ".join("""PlotWeightMap["{histName}{systName}"] = std::make_tuple(({systWeight})*(weight), {var1} , {var2});""".split())
+    systlines = [indent+mapline_template.format(
+                                    histName = histName,
+                                    systName = sname,
+                                    weight = weight,
+                                    var1 = var1,
+                                    var2 = var2,
+                                    systWeight = sweight) \
+                    for sname, sweight in zip(systNames[1:], systWeights[1:])]
+    text = """        weight = {weight};
+        PlotWeightMap["{histName}"+variation] = std::make_tuple((NomWeight)*(weight), {var1} , {var2});
+    """.format(histName = histName, weight = weight, var1 = var1, var2 = var2)        
+    text += """    if (!skipWeightSysts) {{ // append plots for weight systs if neccessary
+    {systlines}
+    }}\n""".format(systlines = "\n".join(systlines))
     return text
-# -------------------------------------------------------------------------------------------------
-
-
-
 
 
 # -- finishing loop over events -------------------------------------------------------------------
@@ -637,8 +581,8 @@ def endLoop():
 # -- generating foot of the script ----------------------------------------------------------------
 def getFoot(addCodeInterfaces):
   rstr= """
-  for(auto& histo1D: histos1D){ outfile->WriteTObject(histo1D.second.get()); }
-  for(auto& histo2D: histos2D){ outfile->WriteTObject(histo2D.second.get()); }
+  for(auto& histo1D: internalHistHelper->histos1D){ outfile->WriteTObject(histo1D.second.get()); }
+  for(auto& histo2D: internalHistHelper->histos2D){ outfile->WriteTObject(histo2D.second.get()); }
   //outfile->Write();
 
   outfile->Close();
