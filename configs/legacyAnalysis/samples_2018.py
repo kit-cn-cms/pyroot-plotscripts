@@ -57,6 +57,10 @@ ttHpath = path+'/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'+';'+ 
 ttZpath =  path+'/TTZToQQ*/*nominal*.root'+';'+ \
            path+'/TTZToLLNuNu_M-10*/*nominal*.root'+';'
 
+friendTrees = {
+    "MEMDB": "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/friends/2018/",
+    }
+
 # SELECTIONS
 STXS_stage0 = '*(abs(GenHiggs_Y<2.5))'
 STXS_stage1_0 = '*(GenHiggs_Pt<=60)'

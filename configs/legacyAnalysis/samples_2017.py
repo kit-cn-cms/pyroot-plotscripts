@@ -58,6 +58,10 @@ THQpath = path+'/THQ_*ctcvcp*/*nominal*.root'
 ttHpath = path+'/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8*/*nominal*.root'+';'+ \
 	      path+'/ttHToNonbb_M125*/*nominal*.root'
 
+friendTrees = {
+    "MEMDB": "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/friends/2017/",
+    }
+
 # SELECTIONS
 
 # need to veto muon events in electron dataset to avoid double counting and vice versa
