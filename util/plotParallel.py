@@ -46,7 +46,7 @@ class plotParallel:
         self.initDefaults()
 
     def initDefaults(self):
-        self.Neventsdefault = 500000
+        self.Neventsdefault = 999999999
         self.MaxEvts_nom = self.Neventsdefault
         self.MaxEvts_systs = self.Neventsdefault        
         self.categoryNames = [""]
