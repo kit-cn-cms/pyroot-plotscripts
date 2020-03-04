@@ -36,15 +36,12 @@ yieldExpression+="+(N_Jets>=6 && N_BTagsM>=4)*6"
 
 
 
-def plots_control_mem(cat,selection,label):
-    plots = [
-        plotClasses.Plot(ROOT.TH1D(cat+"_memDBp","MEM",30,0.0,1.0),memexp,selection,label)
-    ]
-    return plots
-
 def plots_control(cat,selection,label):
     plots = [
-        # plotClasses.Plot(ROOT.TH1D(cat+"_memDBp","MEM",30,0.0,1.0),memexp,selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_memDBp","MEM",30,0.0,1.0),"memDBp",selection,label),
+        plotClasses.TwoDimPlot(
+            ROOT.TH2F(cat+"_crosscheck_N_Jets","number of jets (orig tree vs friend tree)",6,3.5,9.5,6,3.5,9.5),
+            "N_Jets","MEMDB.N_Jets",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_evtYield","yields",6,0.5,6.5),yieldExpression,selection,label),
 
         plotClasses.Plot(ROOT.TH1D(cat+"_N_PV","N_PrimaryVertices",80,0,80),"N_PrimaryVertices",selection,label),
@@ -81,10 +78,16 @@ def plots_control(cat,selection,label):
         plotClasses.Plot(ROOT.TH1D(cat+"_Jet_CSV_1","Jet CSV[1]",30,0.3,1.0),"Jet_CSV[1]",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_Jet_CSV_2","Jet CSV[2]",30,0.3,1.0),"Jet_CSV[2]",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_Jet_CSV_3","Jet CSV[3]",30,0.0,1.0),"Jet_CSV[3]",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_Jet_CSV_4","Jet CSV[4]",30,0.0,1.0),"Jet_CSV[4]",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_Jet_CSV_5","Jet CSV[5]",30,0.0,1.0),"Jet_CSV[5]",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_Jet_CSV_6","Jet CSV[6]",30,0.0,1.0),"Jet_CSV[6]",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_CSV_0","CSV[0]",30,0.3,1.0),"CSV[0]",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_CSV_1","CSV[1]",30,0.3,1.0),"CSV[1]",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_CSV_2","CSV[2]",30,0.3,1.0),"CSV[2]",selection,label),
-        plotClasses.Plot(ROOT.TH1D(cat+"_CSV_3","CSV[3]",30,0.0,1.0),"CSV[3]",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_CSV_3","CSV[4]",30,0.0,1.0),"CSV[3]",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_CSV_4","CSV[5]",30,0.0,1.0),"CSV[4]",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_CSV_5","CSV[6]",30,0.0,1.0),"CSV[5]",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_CSV_6","CSV[7]",30,0.0,1.0),"CSV[6]",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_Evt_CSV_min_tagged","min b-tag value of tagged jets",30,0.3,1.0),"Evt_CSV_min_tagged",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_Evt_CSV_avg","average b-tag value",30,0.1,1.0),"Evt_CSV_avg",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_Evt_Deta_TaggedJetsAverage","average #Delta#eta(tags)",30,0.0,3.5),"Evt_Deta_TaggedJetsAverage",selection,label),
@@ -109,6 +112,24 @@ def plots_control(cat,selection,label):
         plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Pt_1","Jet_Pt[1]",30,20,500),"Jet_Pt[1]",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Pt_2","Jet_Pt[2]",30,20,350),"Jet_Pt[2]",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Pt_3","Jet_Pt[3]",30,20,250),"Jet_Pt[3]",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Pt_4","Jet_Pt[4]",30,20,250),"Jet_Pt[4]",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Pt_5","Jet_Pt[5]",30,20,250),"Jet_Pt[5]",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Pt_6","Jet_Pt[6]",30,20,250),"Jet_Pt[6]",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Eta_0","Jet_Eta[0]",30,-2.5,2.5),"Jet_Eta[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Eta_1","Jet_Eta[1]",30,-2.5,2.5),"Jet_Eta[1]",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Eta_2","Jet_Eta[2]",30,-2.5,2.5),"Jet_Eta[2]",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Eta_3","Jet_Eta[3]",30,-2.5,2.5),"Jet_Eta[3]",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Eta_4","Jet_Eta[4]",30,-2.5,2.5),"Jet_Eta[4]",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Eta_5","Jet_Eta[5]",30,-2.5,2.5),"Jet_Eta[5]",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Eta_6","Jet_Eta[6]",30,-2.5,2.5),"Jet_Eta[6]",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Phi_0","Jet_Phi[0]",30,-3.3,3.3),"Jet_Phi[0]",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Phi_1","Jet_Phi[1]",30,-3.3,3.3),"Jet_Phi[1]",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Phi_2","Jet_Phi[2]",30,-3.3,3.3),"Jet_Phi[2]",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Phi_3","Jet_Phi[3]",30,-3.3,3.3),"Jet_Phi[3]",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Phi_4","Jet_Phi[4]",30,-3.3,3.3),"Jet_Phi[4]",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Phi_5","Jet_Phi[5]",30,-3.3,3.3),"Jet_Phi[5]",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Phi_6","Jet_Phi[6]",30,-3.3,3.3),"Jet_Phi[6]",selection,label),
+
         plotClasses.Plot(ROOT.TH1D(cat+"_Evt_HT_tags","Evt_HT_tags",50,50.0,1200.0),"Evt_HT_tags",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_Evt_M_minDrLepTag","Evt_M_minDrLepTag",30,0.0,350.0),"Evt_M_minDrLepTag",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_Evt_CSV_avg_tagged","Evt_CSV_avg_tagged",30,0.3,1.0),"Evt_CSV_avg_tagged",selection,label),
@@ -410,12 +431,11 @@ def plots_ge4j_ge3t(data=None):
     selection = "(N_Jets>=4&&N_BTagsM>=3)"
 
     tag = "ge4j_ge3t"
-    # plots = plots_control_mem(tag, selection, label)    
     plots = plots_control(tag, selection, label)    
-    plots += plots_ttHReco(tag, selection, label)
-    plots += plots_ttbarReco(tag, selection, label)
-    plots += plots_tHWReco(tag, selection, label)
-    plots += plots_tHQReco(tag, selection, label) 
+    # plots += plots_ttHReco(tag, selection, label)
+    # plots += plots_ttbarReco(tag, selection, label)
+    # plots += plots_tHWReco(tag, selection, label)
+    # plots += plots_tHQReco(tag, selection, label) 
 
     if data:
         add_data_plots(plots=plots,data=data)
@@ -428,12 +448,11 @@ def plots_ge4j_3t(data=None):
     selection = "(N_Jets>=4&&N_BTagsM==3)"
 
     tag = "ge4j_3t"
-    # plots = plots_control_mem(tag, selection, label)    
     plots = plots_control(tag, selection, label)    
-    plots += plots_ttHReco(tag, selection, label)
-    plots += plots_ttbarReco(tag, selection, label)
-    plots += plots_tHWReco(tag, selection, label)
-    plots += plots_tHQReco(tag, selection, label) 
+    # plots += plots_ttHReco(tag, selection, label)
+    # plots += plots_ttbarReco(tag, selection, label)
+    # plots += plots_tHWReco(tag, selection, label)
+    # plots += plots_tHQReco(tag, selection, label) 
 
     if data:
         add_data_plots(plots=plots,data=data)
@@ -445,94 +464,11 @@ def plots_ge4j_ge4t(data=None):
     selection = "(N_Jets>=4&&N_BTagsM>=4)"
 
     tag = "ge4j_ge4t"
-    # plots = plots_control_mem(tag, selection, label)    
     plots = plots_control(tag, selection, label)    
-    plots += plots_ttHReco(tag, selection, label)
-    plots += plots_ttbarReco(tag, selection, label)
-    plots += plots_tHWReco(tag, selection, label)
-    plots += plots_tHQReco(tag, selection, label)  
-
-    if data:
-        add_data_plots(plots=plots,data=data)
-
-    return plots
-
-#analysis categories w/ N_Jets=Normal+Fwd Jets
-def plots_ge4j_fwd_3t(data=None):
-    label = "\geq 4 (jets+fwd-jets), 3 b-tags"
-    selection = "((N_Jets+N_ForwardJets)>=4&&N_BTagsM==3)"
-
-    tag = "ge4j_fwd_3t"
-    plots = plots_control(tag, selection, label)    
-    plots += plots_ttHReco(tag, selection, label)
-    plots += plots_ttbarReco(tag, selection, label)
-    plots += plots_tHWReco(tag, selection, label)
-    plots += plots_tHQReco(tag, selection, label) 
-
-    if data:
-        add_data_plots(plots=plots,data=data)
-
-    return plots
-
-def plots_ge4j_fwd_ge4t(data=None):
-    label = "\geq 4 (jets+fwd-jets), \geq 4 b-tags"
-    selection = "((N_Jets+N_ForwardJets)>=4&&N_BTagsM>=4)"
-
-    tag = "ge4j_fwd_ge4t"
-    plots = plots_control(tag, selection, label)    
-    plots += plots_ttHReco(tag, selection, label)
-    plots += plots_ttbarReco(tag, selection, label)
-    plots += plots_tHWReco(tag, selection, label)
-    plots += plots_tHQReco(tag, selection, label)  
-
-    if data:
-        add_data_plots(plots=plots,data=data)
-
-    return plots
-
-#analysis categories w/ explicit forward requirement
-def plots_ge4j_3t_0fwd(data=None):
-    label = "\geq 4 jets, 3 b-tags, = 0 fwd-jets"
-    selection = "(N_Jets>=4&&N_BTagsM==3&&N_ForwardJets==0)"
-
-    tag = "ge4j_3t_0fwd"
-    plots = plots_control(tag, selection, label)    
-    plots += plots_ttHReco(tag, selection, label)
-    plots += plots_ttbarReco(tag, selection, label)
-    plots += plots_tHWReco(tag, selection, label)
-    plots += plots_tHQReco(tag, selection, label)  
-
-    if data:
-        add_data_plots(plots=plots,data=data)
-
-    return plots
-
-def plots_ge4j_ge4t_0fwd(data=None):
-    label = "\geq 4 jets, \geq 4 b-tags, = 0 fwd-jets"
-    selection = "(N_Jets>=4&&N_BTagsM>=4&&N_ForwardJets==0)"
-
-    tag = "ge4j_ge4t_0fwd"
-    plots = plots_control(tag, selection, label)    
-    plots += plots_ttHReco(tag, selection, label)
-    plots += plots_ttbarReco(tag, selection, label)
-    plots += plots_tHWReco(tag, selection, label)
-    plots += plots_tHQReco(tag, selection, label)  
-
-    if data:
-        add_data_plots(plots=plots,data=data)
-
-    return plots
-
-def plots_ge3j_ge3t_ge1fwd(data=None):
-    label = "\geq 3 jets, \geq 3 b-tags, \geq 1 fwd-jets"
-    selection = "(N_Jets>=3&&N_BTagsM>=3&&N_ForwardJets>=1)"
-
-    tag = "ge3j_ge3t_1fwd"
-    plots = plots_control(tag, selection, label)    
-    plots += plots_ttHReco(tag, selection, label)
-    plots += plots_ttbarReco(tag, selection, label)
-    plots += plots_tHWReco(tag, selection, label)
-    plots += plots_tHQReco(tag, selection, label)  
+    # plots += plots_ttHReco(tag, selection, label)
+    # plots += plots_ttbarReco(tag, selection, label)
+    # plots += plots_tHWReco(tag, selection, label)
+    # plots += plots_tHQReco(tag, selection, label)  
 
     if data:
         add_data_plots(plots=plots,data=data)
@@ -548,16 +484,6 @@ def getDiscriminatorPlots(data = None, discrname = ''):
     #analysis categories w/o forward stuff
     discriminatorPlots += plots_ge4j_3t(data)
     discriminatorPlots += plots_ge4j_ge4t(data)
-
-    #analysis categories w/ N_Jets=Normal+Fwd Jets
-    #discriminatorPlots += plots_ge4j_fwd_3t(data)
-    #discriminatorPlots += plots_ge4j_fwd_ge4t(data)
-
-    #analysis categories w/ explicit forward requirement
-    #discriminatorPlots += plots_ge4j_3t_0fwd(data)
-    #discriminatorPlots += plots_ge4j_ge4t_0fwd(data)
-    #discriminatorPlots += plots_ge3j_ge3t_ge1fwd(data)
-
     return discriminatorPlots
 
 
