@@ -7605,7 +7605,7 @@ def init_plots_2D(interfaces):
                 ymin  = interf2.minxval
 
             hname_2D = "{}_{}".format(interf.histoname, interf2.histoname)
-            htitle_2D = "{}_{}".format(interf.histotitle, intef2.histotitle)
+            htitle_2D = "{}_{}".format(interf.histotitle, interf2.histotitle)
             if not binsX is None:
                 if not binsY is None:
                     plots.append(
