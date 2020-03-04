@@ -21,8 +21,8 @@ def plotInterface(jobData, skipPlotParallel = False, maxTries = 10, nTries = 0, 
             return
 
     if "naf" in os.environ["HOSTNAME"]: # Run on NAF
-        submitOptions = {"PeriodicHold": 17501,
-                         "+RequestRuntime": 17500}
+        submitOptions = {"PeriodicHold": 10799,
+                         "+RequestRuntime": 10800}
     else:    
         submitOptions = {"+RequestWalltime": 100000}
 
