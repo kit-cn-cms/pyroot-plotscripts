@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'inputFeatures_final/2017_v1'
+    name = 'controlPlots/2017'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -48,12 +48,14 @@ def main(pyrootdir, opts):
     histname_separator = "__"
 
     # define MEM discriminator variable
-    memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
+    # memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
+    memexp = ""
     # configs
     config          = "legacyAnalysis/samples_2017"
     variable_cfg    = "legacyAnalysis/additionalVariables_2017"
-    plot_cfg        = "legacyAnalysis/ttH_legacy_inputfeatures_opt_binning2"
+    plot_cfg        = "legacyAnalysis/controlPlots"
     syst_cfg        = "legacyAnalysis/systs_2017"
+    # syst_cfg        = "legacyAnalysis/no_systs"
     replace_cfg     = "legacyAnalysis/pdf_relic_names"
 
     sfCorrection = {}
@@ -101,11 +103,12 @@ def main(pyrootdir, opts):
         "skipHaddParallel":     opts.skipHaddParallel,
         "skipHaddFromWildcard": opts.skipHaddFromWildcard,
         "skipHistoCheck":       opts.skipHistoCheck,
+        "skipMergeSysts":       opts.skipMergeSysts,
         "skipDatacards":        opts.skipDatacards}
 
     plotJson = pyrootdir+"/configs/legacyAnalysis/treeJson_2017.json"
-    plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2017/",True]] 
-    memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
+    # plotDataBases = [["memDB","/portal/ekpbms1/home/swieland/ttH/memTrees/2017/",False]] 
+    # memDataBase = "/portal/ekpbms1/home/swieland/ttH/MEMDataBase/MEMDataBase/"
     #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
     #               "checkpointFiles":  "/nfs/dust/cms/user/swieland/ttH_legacy/DNNs/oldModel/"}
     dnnInterface = None
@@ -201,13 +204,16 @@ def main(pyrootdir, opts):
         monitor.printClass(pP, "init")
         # set some changed values
         pP.setJson(plotJson)
-        pP.setDataBases(plotDataBases)
-        pP.setMEMDataBase(memDataBase)
+        # pP.setDataBases(plotDataBases)
+        # pP.setMEMDataBase(memDataBase)
         # pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts(100000)
+        pP.setMaxEvts_nom(10000)
+        pP.setMaxEvts_systs(400000)
+        # pP.request_runtime = 60*60*5
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
         pP.setSFCorrection(sfCorrection)
+        pP.setUseFriendTrees(True)
 
         # run plotParallel
         pP.run()
@@ -231,6 +237,11 @@ def main(pyrootdir, opts):
             skipHadd            = analysis.skipHaddFromWildcard)
      
 
+    pP.setRenameInput()
+    if pP.configData.replace_config and not analysis.skipMergeSysts:
+        with monitor.Timer("mergeSystematics"):
+            print("merging systematics")
+            pP.mergeSystematics()
 
     # Deactivate check bins functionality in renameHistos 
     #   if additional plot variables are added via analysis class
@@ -243,7 +254,6 @@ def main(pyrootdir, opts):
         # ========================================================
         '''
 
-        pP.setRenameInput()
         # in this function the variable self.renameInput is set
         # if hadd files were created during plotParallel
         #       the renameInput is set to pP.getHaddFiles 
@@ -258,12 +268,9 @@ def main(pyrootdir, opts):
                 outFile         = analysis.renamedPath,
                 checkBins       = True,
                 eps             = 0.0,
-                skipHistoCheck  = analysis.skipHistoCheck)
+                skipHistoCheck  = analysis.skipHistoCheck
+                )
 
-    if pP.configData.replace_config and not analysis.skipMergeSysts:
-        with monitor.Timer("mergeSystematics"):
-            print("merging systematics")
-            pP.mergeSystematics()
 
     if analysis.addData:
         print '''
@@ -311,8 +318,7 @@ def main(pyrootdir, opts):
                 signalTag           = analysis.signalProcess,
                 skipDatacards       = analysis.skipDatacards,
                 nominal_key         = nom_histname_template,
-                syst_key            = syst_histname_template
-                )
+                syst_key            = syst_histname_template)
     
     if analysis.makePlots:
         print '''
@@ -338,9 +344,10 @@ if __name__ == "__main__":
     parser.add_option("--skipHaddParallel",     dest = "skipHaddParallel",      action = "store_true", default = False)
     parser.add_option("--skipHaddFromWildcard", dest = "skipHaddFromWildcard",  action = "store_true", default = False)
     parser.add_option("--skipHistoCheck",       dest = "skipHistoCheck",        action = "store_true", default = False)
+    parser.add_option("--skipMergeSysts",       dest = "skipMergeSysts",        action = "store_true", default = False)
     parser.add_option("--skipDatacards",        dest = "skipDatacards",         action = "store_true", default = False)
     parser.add_option("--skip",                 dest = "skip",                  default = 0,            type = "int",
-        help = "skip first INT parallel stages. plotParallel (1), haddParallel (2), haddFromWildcard (3), histoCheck (4), Datacards (5)")
+        help = "skip first INT parallel stages. plotParallel (1), haddParallel (2), haddFromWildcard (3), histoCheck (4), mergeSysts (5), Datacards (6)")
 
     (opts, args) = parser.parse_args()
 
@@ -348,7 +355,8 @@ if __name__ == "__main__":
     if opts.skip >= 2: opts.skipHaddParallel        = True
     if opts.skip >= 3: opts.skipHaddFromWildcard    = True
     if opts.skip >= 4: opts.skipHistoCheck          = True
-    if opts.skip >= 5: opts.skipDatacards           = True
+    if opts.skip >= 5: opts.skipMergeSysts          = True
+    if opts.skip >= 6: opts.skipDatacards           = True
 
 
     main(pyrootdir, opts)
