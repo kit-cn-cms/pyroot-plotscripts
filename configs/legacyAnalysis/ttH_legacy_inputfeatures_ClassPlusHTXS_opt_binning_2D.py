@@ -14,7 +14,8 @@ from array import array
 from copy import deepcopy
 import numpy as np
 
-memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
+# memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
+memexp = 'memDBp'
 
 def interfaces_STXS_ljets_ge4j_ge4t():
     label = "\geq 4 jets, \geq 4 b-tags"
