@@ -80,9 +80,9 @@ void CSVHelper::fillCSVHistos(TFile *fileHF, TFile *fileLF, const std::vector<Sy
     systematic.ReplaceAll("CSV","");
     systematic.ReplaceAll("Stats","stats");
 
-    std::cout << "############################################### " << std::endl;
-    std::cout << "adding histograms for systematic " << systematic << std::endl;
-    std::cout << "############################################### " << std::endl;
+    // std::cout << "############################################### " << std::endl;
+    // std::cout << "adding histograms for systematic " << systematic << std::endl;
+    // std::cout << "############################################### " << std::endl;
 
     if(systematic!="") {systematic="_"+systematic;}
     
