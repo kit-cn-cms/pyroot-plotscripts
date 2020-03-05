@@ -508,7 +508,7 @@ class scriptWriter:
                     filesToSubmit += [filename]
                     nEventsInFiles += nEventsInFile
                     if nEventsInFiles > maxEvents or filename == sample.files[-1] or len(filesToSubmit)>400: 
-                        self.writeSplittedScripts(sample , filterFile, maxEvents, nEventsInFile, filesToSubmit)
+                        self.writeSplittedScripts(sample , filterFile, maxEvents, nEventsInFiles, filesToSubmit)
                         filesToSubmit = []
                         nEventsInFiles = 0
                         
@@ -591,7 +591,7 @@ class scriptWriter:
         script += 'export OUTFILENAME="'+outfilename+'"\n'
         script += 'export MAXEVENTS="'+str(maxevents)+'"\n'
         script += 'export SKIPEVENTS="'+str(skipevents)+'"\n'
-        script += 'export EVENTSINFILE="'+str(events_File)+'"\n'
+        script += 'export EVENTSINFILES="'+str(events_File)+'"\n'
         script += 'export EVENTSOFJOB="'+str(events_job)+'"\n'
         script += 'export SUFFIX="'+suffix+'"\n'
         script += 'export EVENTFILTERFILE="'+str(filterFile)+'"\n'
