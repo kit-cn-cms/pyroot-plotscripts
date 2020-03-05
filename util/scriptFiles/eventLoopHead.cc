@@ -5,7 +5,7 @@
 	int warningCounter = 0;    
 
   for (long iEntry=skipevents;iEntry<nentries;iEntry++) {
-    //if(iEntry==maxevents) break;
+    if(iEntry==maxevents) break;
     if(iEntry%10000==0) cout << "analyzing event " << iEntry << " of " << nentries << " Total events" << endl;
     
     timerGetEntry->Start();

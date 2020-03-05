@@ -480,7 +480,7 @@ class scriptWriter:
             print("maxEvents: {}".format(maxEvents))           
 
             nEvents = 0
-            nJob = 0
+            self.nJob = 0
             nEventsInFiles = 0
 
             filterFile = sample.filterFile
@@ -501,42 +501,26 @@ class scriptWriter:
                 SaveTreeInformation[filename] = nEventsInFile                
                 # if the file is larger than self.maxevents it is analyzed in portions of nevents
                 if nEventsInFile > maxEvents:
-                    for ijob in range(nEventsInFile / maxEvents + 1):
-                        nJob += 1
-                        writeOptions = {"skipEvents": (ijob)*maxEvents   }
-
-                        self.writeSingleScript(sample, filename, nJob, filterFile, maxEvents, writeOptions)
-                        self.nentries.append(nEventsInFile-(ijob)*maxEvents)
-                    nEvents += nEventsInFile
+                    self.writeSplittedScripts(sample , filterFile, maxEvents, nEventsInFile, [filename])
 
                 # else additional files are appended to list of files to be submitted
-                else :
+                else:
                     filesToSubmit += [filename]
                     nEventsInFiles += nEventsInFile
                     if nEventsInFiles > maxEvents or filename == sample.files[-1] or len(filesToSubmit)>400: 
-                        nJob += 1
-                        filenames = ' '.join(filesToSubmit)
-                        self.writeSingleScript(sample, filenames, nJob, filterFile)
-                        self.nentries.append(nEventsInFiles)
-                        nEvents += nEventsInFiles
-
+                        self.writeSplittedScripts(sample , filterFile, maxEvents, nEventsInFile, filesToSubmit)
                         filesToSubmit = []
                         nEventsInFiles = 0
                         
                 # If self.options["testrun"] = true, only use small number of files             
                 if self.pp.analysis.testrun: 
                     break
+                nEvents += nEventsInFile
 
             # submit remaining scripts (can happen if the last file was large)
             if len(filesToSubmit) > 0:
-                nJob += 1
-                filenames = ' '.join(filesToSubmit)
-                self.writeSingleScript(sample, filenames, nJob, filterFile)
-                self.nentries.append(nEventsInFiles)
+                self.writeSplittedScripts(sample , filterFile, maxEvents, nEventsInFiles, filesToSubmit)
                 nEvents += nEventsInFiles
-
-                filesToSubmit = []
-                nEventsInFiles = 0
 
             print '\t', nEvents, 'events found'
         
@@ -551,11 +535,39 @@ class scriptWriter:
                         "entries": self.nentries, 
                         "maps": self.samplewiseMaps}
         return returnData
-    
 
-    def writeSingleScript(self, sample, filenames, nJob, filterFile, maxEvents = 5000000, writeOptions = {}):
+    def writeSplittedScripts(self, sample, filterFile, maxEvents, nEventsInFile, filesToSubmit):
+        filenames = ' '.join(filesToSubmit)
+        # for f in filesToSubmit:
+            # print(f)
+        for ijob in range(nEventsInFile // maxEvents + 1):
+            self.nJob += 1
+
+            skipEvents = (ijob)*maxEvents
+            if (ijob+1)*maxEvents > nEventsInFile:
+                maxEventsinJob = nEventsInFile
+            else:
+                maxEventsinJob = (ijob+1)*maxEvents
+
+            if (ijob+1)*maxEvents < nEventsInFile:
+                nEnt = maxEvents
+            else:
+                nEnt = nEventsInFile - ((ijob)*maxEvents)   
+            writeOptions = {"skipEvents":   skipEvents,
+                            "events_File":  nEventsInFile,
+                            "events_job": nEnt}         
+            # print(writeOptions)    
+            self.writeSingleScript(sample, filenames, self.nJob, filterFile, maxEventsinJob, writeOptions)
+            self.nentries.append(nEnt)
+        
+
+
+
+    def writeSingleScript(self, sample, filenames, nJob, filterFile, maxEventsinJob = 5000000, writeOptions = {}):
         # defaults
-        maxevents = writeOptions.get("maxevents", maxEvents)
+        maxevents = writeOptions.get("maxEventsinJob", maxEventsinJob)
+        events_File = writeOptions.get("events_File", -1)
+        events_job = writeOptions.get("events_job", -1)
         processname = sample.nick
         outfilename = self.pp.plotPath+processname+'_'+str(nJob)+'.root'
         scriptname = self.pp.scriptsPath+'/'+processname+'_'+str(nJob)+'.sh'
@@ -563,7 +575,6 @@ class scriptWriter:
         suffix = writeOptions.get("suffix", "")
         skipevents = writeOptions.get("skipEvents", 0)
         variation = processname.split(origName)[1]
-
         # check options
         if self.pp.analysis.testrun and maxevents < 100:
             maxevents = 100
@@ -580,6 +591,8 @@ class scriptWriter:
         script += 'export OUTFILENAME="'+outfilename+'"\n'
         script += 'export MAXEVENTS="'+str(maxevents)+'"\n'
         script += 'export SKIPEVENTS="'+str(skipevents)+'"\n'
+        script += 'export EVENTSINFILE="'+str(events_File)+'"\n'
+        script += 'export EVENTSOFJOB="'+str(events_job)+'"\n'
         script += 'export SUFFIX="'+suffix+'"\n'
         script += 'export EVENTFILTERFILE="'+str(filterFile)+'"\n'
         script += 'export ORIGNAME="'+origName+'"\n'
