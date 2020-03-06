@@ -332,8 +332,8 @@ def parse_arguments():
     parser.add_option(  "-s", "--systematic",
                         help = " ".join(
                             """
-                            Use this as nominal key for histograms.
-                            Default: '$PROCESS__$CHANNEL'
+                            Use this as systematic key for histograms.
+                            Default: '$PROCESS__$CHANNEL__$SYSTEMATIC'
                             """.split()
                         ),
                         default = "$PROCESS__$CHANNEL__$SYSTEMATIC",
