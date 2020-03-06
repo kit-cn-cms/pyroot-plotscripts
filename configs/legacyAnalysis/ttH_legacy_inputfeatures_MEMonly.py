@@ -16,7 +16,7 @@ import numpy as np
 
 memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
-def plots_ljets_ge4j_ge4t():
+def plots_ljets_ge4j_ge4t(data = None):
     label = "\geq 4 jets, \geq 4 b-tags"
     interfaces = []
     selection = "(N_Jets>=4&&N_BTagsM>=4)&&(1.)"
@@ -71,7 +71,7 @@ def plots_ljets_ge4j_ge4t():
     return plots
 
 
-def plots_ljets_ge4j_3t():
+def plots_ljets_ge4j_3t(data = None):
     label = "\geq 4 jets, 3 b-tags"
     interfaces = []
     selection = "(N_Jets>=4&&N_BTagsM==3)&&(1.)"
