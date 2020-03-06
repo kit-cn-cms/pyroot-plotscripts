@@ -2007,11 +2007,11 @@ def plots_ljets_ge4j_ge4t(data = None):
     interf_ljets_ge4j_ge4t_Reco_JABDT_tHW_Jet_CSV_whaddau1.nhistobins = 50
     interfaces.append(interf_ljets_ge4j_ge4t_Reco_JABDT_tHW_Jet_CSV_whaddau1)
     
-    interf_ljets_ge4j_ge4t_Reco_JABDT_tHW_top_pt__P__h_pt__P__wb_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt = vhi.variableHistoInterface(variable_name  = "Reco_JABDT_tHW_top_pt__P__h_pt__P__wb_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt",
-                                            label          = "ljets_ge4j_ge4t_Reco_JABDT_tHW_top_pt__P__h_pt__P__wb_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt",
+    interf_ljets_ge4j_ge4t_Reco_JABDT_tHW_energy_fraction = vhi.variableHistoInterface(variable_name  = "Reco_JABDT_tHW_top_pt__P__h_pt__P__wb_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt",
+                                            label          = "ljets_ge4j_ge4t_Reco_JABDT_tHW_energy_fraction",
                                             selection      = "(N_Jets>=4&&N_BTagsM>=4)&&(1.)")
-    interf_ljets_ge4j_ge4t_Reco_JABDT_tHW_top_pt__P__h_pt__P__wb_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_Reco_JABDT_tHW_top_pt__P__h_pt__P__wb_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt","")
-    interf_ljets_ge4j_ge4t_Reco_JABDT_tHW_top_pt__P__h_pt__P__wb_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt.bin_edges = [ 
+    interf_ljets_ge4j_ge4t_Reco_JABDT_tHW_energy_fraction.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_Reco_JABDT_tHW_energy_fraction","")
+    interf_ljets_ge4j_ge4t_Reco_JABDT_tHW_energy_fraction.bin_edges = [ 
                 -0.5,
                 0.0,
                 0.25,
@@ -2031,10 +2031,10 @@ def plots_ljets_ge4j_ge4t(data = None):
                 0.95,
                 1.0
                 ]
-    interf_ljets_ge4j_ge4t_Reco_JABDT_tHW_top_pt__P__h_pt__P__wb_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt.histotitle = "Reco_JABDT_tHW_energy_fraction"
-    interf_ljets_ge4j_ge4t_Reco_JABDT_tHW_top_pt__P__h_pt__P__wb_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt.histoname = "ljets_ge4j_ge4t_Reco_JABDT_tHW_top_pt__P__h_pt__P__wb_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt"
-    interf_ljets_ge4j_ge4t_Reco_JABDT_tHW_top_pt__P__h_pt__P__wb_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt.nhistobins = 50
-    interfaces.append(interf_ljets_ge4j_ge4t_Reco_JABDT_tHW_top_pt__P__h_pt__P__wb_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt)
+    interf_ljets_ge4j_ge4t_Reco_JABDT_tHW_energy_fraction.histotitle = "Reco_JABDT_tHW_energy_fraction"
+    interf_ljets_ge4j_ge4t_Reco_JABDT_tHW_energy_fraction.histoname = "ljets_ge4j_ge4t_Reco_JABDT_tHW_energy_fraction"
+    interf_ljets_ge4j_ge4t_Reco_JABDT_tHW_energy_fraction.nhistobins = 50
+    interfaces.append(interf_ljets_ge4j_ge4t_Reco_JABDT_tHW_energy_fraction)
     
     interf_ljets_ge4j_ge4t_Reco_JABDT_tHq_Jet_CSV_btop = vhi.variableHistoInterface(variable_name  = "Reco_JABDT_tHq_Jet_CSV_btop",
                                             label          = "ljets_ge4j_ge4t_Reco_JABDT_tHq_Jet_CSV_btop",
