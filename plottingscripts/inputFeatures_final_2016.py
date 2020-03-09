@@ -48,7 +48,8 @@ def main(pyrootdir, opts):
     histname_separator = "__"
 
     # define MEM discriminator variable
-    memexp = ""
+    memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
+
     # configs
     config          = "legacyAnalysis/samples_2016"
     variable_cfg    = "legacyAnalysis/additionalVariables_2016"
