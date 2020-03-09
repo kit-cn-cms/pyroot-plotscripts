@@ -710,12 +710,12 @@ def interfaces_STXS_ljets_ge4j_ge4t():
     interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_tHq_log_top_m.nhistobins = 50
     interfaces.append(interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_tHq_log_top_m)
     
-    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_ttH_tophad_pt__P__toplep_pt__P__h_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt = vhi.variableHistoInterface(variable_name  = "Reco_JABDT_ttH_tophad_pt__P__toplep_pt__P__h_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt",
-                                            label          = "ljets_ge4j_ge4t_HTXS_Reco_JABDT_ttH_tophad_pt__P__toplep_pt__P__h_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt",
+    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_ttH_energy_fraction = vhi.variableHistoInterface(variable_name  = "Reco_JABDT_ttH_tophad_pt__P__toplep_pt__P__h_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt",
+                                            label          = "ljets_ge4j_ge4t_HTXS_Reco_JABDT_ttH_energy_fraction",
                                             selection      = "(N_Jets>=4&&N_BTagsM>=4)&&(1.)")
-    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_ttH_tophad_pt__P__toplep_pt__P__h_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_HTXS_Reco_JABDT_ttH_tophad_pt__P__toplep_pt__P__h_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt","")
-    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_ttH_tophad_pt__P__toplep_pt__P__h_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt.category_label = label
-    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_ttH_tophad_pt__P__toplep_pt__P__h_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt.bin_edges = [ 
+    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_ttH_energy_fraction.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_HTXS_Reco_JABDT_ttH_energy_fraction","")
+    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_ttH_energy_fraction.category_label = label
+    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_ttH_energy_fraction.bin_edges = [ 
                 0.0,
                 0.1,
                 0.25,
@@ -735,10 +735,10 @@ def interfaces_STXS_ljets_ge4j_ge4t():
                 0.95,
                 1.0
                 ]
-    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_ttH_tophad_pt__P__toplep_pt__P__h_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt.histotitle = "Reco_JABDT_ttH_tophad_pt__P__toplep_pt__P__h_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt"
-    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_ttH_tophad_pt__P__toplep_pt__P__h_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt.histoname = "ljets_ge4j_ge4t_HTXS_Reco_JABDT_ttH_tophad_pt__P__toplep_pt__P__h_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt"
-    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_ttH_tophad_pt__P__toplep_pt__P__h_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt.nhistobins = 20
-    interfaces.append(interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_ttH_tophad_pt__P__toplep_pt__P__h_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt)
+    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_ttH_energy_fraction.histotitle = "Reco_JABDT_ttH_energy_fraction"
+    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_ttH_energy_fraction.histoname = "ljets_ge4j_ge4t_HTXS_Reco_JABDT_ttH_energy_fraction"
+    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_ttH_energy_fraction.nhistobins = 20
+    interfaces.append(interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_ttH_energy_fraction)
     
     interf_ljets_ge4j_ge4t_HTXS_Reco_tHW_h_m = vhi.variableHistoInterface(variable_name  = "Reco_tHW_h_m",
                                             label          = "ljets_ge4j_ge4t_HTXS_Reco_tHW_h_m",
@@ -3631,12 +3631,12 @@ def interfaces_STXS_ljets_ge4j_3t():
     interf_ljets_ge4j_3t_Reco_JABDT_ttH_log_h_m.nhistobins = 50
     interfaces.append(interf_ljets_ge4j_3t_Reco_JABDT_ttH_log_h_m)
 
-    interf_ljets_ge4j_3t_Reco_JABDT_ttH_tophad_pt__P__toplep_pt__P__h_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt = vhi.variableHistoInterface(variable_name  = "Reco_JABDT_ttH_tophad_pt__P__toplep_pt__P__h_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt",
-                                            label          = "ljets_ge4j_3t_Reco_JABDT_ttH_tophad_pt__P__toplep_pt__P__h_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt",
+    interf_ljets_ge4j_3t_Reco_JABDT_ttH_energy_fraction = vhi.variableHistoInterface(variable_name  = "Reco_JABDT_ttH_tophad_pt__P__toplep_pt__P__h_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt",
+                                            label          = "ljets_ge4j_3t_Reco_JABDT_ttH_energy_fraction",
                                             selection      = "(N_Jets>=4&&N_BTagsM==3)&&(1.)")
-    interf_ljets_ge4j_3t_Reco_JABDT_ttH_tophad_pt__P__toplep_pt__P__h_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt.category = ("(N_Jets>=4&&N_BTagsM==3)&&(1.)","ljets_ge4j_3t_Reco_JABDT_ttH_tophad_pt__P__toplep_pt__P__h_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt","")
-    interf_ljets_ge4j_3t_Reco_JABDT_ttH_tophad_pt__P__toplep_pt__P__h_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt.category_label = label
-    interf_ljets_ge4j_3t_Reco_JABDT_ttH_tophad_pt__P__toplep_pt__P__h_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt.bin_edges = [ 
+    interf_ljets_ge4j_3t_Reco_JABDT_ttH_energy_fraction.category = ("(N_Jets>=4&&N_BTagsM==3)&&(1.)","ljets_ge4j_3t_Reco_JABDT_ttH_energy_fraction","")
+    interf_ljets_ge4j_3t_Reco_JABDT_ttH_energy_fraction.category_label = label
+    interf_ljets_ge4j_3t_Reco_JABDT_ttH_energy_fraction.bin_edges = [ 
                 -1.0,
                 0.0,
                 0.2,
@@ -3657,10 +3657,10 @@ def interfaces_STXS_ljets_ge4j_3t():
                 0.95,
                 1.0
                 ]
-    interf_ljets_ge4j_3t_Reco_JABDT_ttH_tophad_pt__P__toplep_pt__P__h_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt.histotitle = "Reco_JABDT_ttH_tophad_pt__P__toplep_pt__P__h_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt"
-    interf_ljets_ge4j_3t_Reco_JABDT_ttH_tophad_pt__P__toplep_pt__P__h_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt.histoname = "ljets_ge4j_3t_Reco_JABDT_ttH_tophad_pt__P__toplep_pt__P__h_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt"
-    interf_ljets_ge4j_3t_Reco_JABDT_ttH_tophad_pt__P__toplep_pt__P__h_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt.nhistobins = 20
-    interfaces.append(interf_ljets_ge4j_3t_Reco_JABDT_ttH_tophad_pt__P__toplep_pt__P__h_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt)
+    interf_ljets_ge4j_3t_Reco_JABDT_ttH_energy_fraction.histotitle = "Reco_JABDT_ttH_energy_fraction"
+    interf_ljets_ge4j_3t_Reco_JABDT_ttH_energy_fraction.histoname = "ljets_ge4j_3t_Reco_JABDT_ttH_energy_fraction"
+    interf_ljets_ge4j_3t_Reco_JABDT_ttH_energy_fraction.nhistobins = 20
+    interfaces.append(interf_ljets_ge4j_3t_Reco_JABDT_ttH_energy_fraction)
 
     interf_ljets_ge4j_3t_Reco_tHW_h_pt = vhi.variableHistoInterface(variable_name  = "Reco_tHW_h_pt",
                                             label          = "ljets_ge4j_3t_Reco_tHW_h_pt",
