@@ -133,7 +133,7 @@ def plots_ljets_ge4j_3t(data = None):
 def getDiscriminatorPlots(data = None, discrname = ''):
     discriminatorPlots = []
     discriminatorPlots += plots_ljets_ge4j_ge4t(data)
-
+    discriminatorPlots += plots_ljets_ge4j_3t(data)
     return discriminatorPlots
 
 
