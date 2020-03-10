@@ -28,7 +28,7 @@ def writeSubmitCode(script, logdir, hold = False, isArray = False, nScripts = 0,
                 "RequestDisk": "1000M",
                 "+RequestRuntime": 10740,
                 "PeriodicHold": 10741,
-                "PeriodicRelease": 5}
+                "PeriodicRelease": 60}
     for opt in defaults:
         if opt in options:
             defaults[opt] = options[opt]
@@ -62,8 +62,8 @@ def writeSubmitCode(script, logdir, hold = False, isArray = False, nScripts = 0,
                 submitCode+=opt+" = "+str(defaults[opt])+"\n"
             #if "PeriodicHold" in opt:
                 #submitCode+= "periodic_hold = ((JobStatus == 2) && (time() - EnteredCurrentStatus) > "+str(defaults[opt])+")\n"
-            #if "PeriodicRelease" in opt:
-                #submitCode+= "periodic_release = ((JobStatus == 5) && (time() - EnteredCurrentStatus) > "+str(defaults[opt])+")\n"  
+            if "PeriodicRelease" in opt:
+                submitCode+= "periodic_release = ((JobStatus == 5) && (time() - EnteredCurrentStatus) > "+str(defaults[opt])+")\n"  
     if hold:
         submitCode+= "hold = True\n"
 

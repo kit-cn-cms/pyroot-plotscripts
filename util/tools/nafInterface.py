@@ -90,13 +90,13 @@ def cleanupInterface(jobsToSubmit, rootFiles, skipCleanup = False, maxTries = 10
             print("cleanup histos has terminated successfully")
             return
 
-    submitOptions = {"+RequestRuntime": 1800, "RequestMemory": "500M"}
+    submitOptions = {"+RequestRuntime": 5400, "RequestMemory": "500M"}
 
     if nTries == 0:
         print("submitting cleanup jobs as array job")
         jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "cleanupHistos", submitOptions = submitOptions)
     elif nTries < maxTries:
-        submitOptions["+RequestRuntime"]=3600
+        submitOptions["+RequestRuntime"]=10800
         submitOptions["RequestMemory"]="1000M"
         print("resubmitting cleanup jobs")
         jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "cleanup_resubmit", submitOptions = submitOptions)
