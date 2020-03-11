@@ -1,6 +1,6 @@
 Uncertainty,Type,Construction,Up,Down,Plot,znunujets,wlnujets,zlljets,gammajets,ttbar,singlet,diboson,qcd,vectormonotop_mphi_1000_mchi_1000,vectormonotop_mphi_195_mchi_100,vectormonotop_mphi_1995_mchi_1000,vectormonotop_mphi_2000_mchi_1500,vectormonotop_mphi_2000_mchi_500,vectormonotop_mphi_200_mchi_150,vectormonotop_mphi_200_mchi_50,vectormonotop_mphi_2995_mchi_1500,vectormonotop_mphi_3000_mchi_1000,vectormonotop_mphi_3000_mchi_2000
 ,,,,,,,,,,,,,,,,,,,,,,,
-JES,shape,variation,JESup,JESdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+JES_2018,shape,variation,JESup,JESdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 JER_2018,shape,variation,JERup,JERdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 ,,,,,,,,,,,,,,,,,,,,,,,
 CMS_eff_e_2018,shape,weight,"""weight_elEffUp:=(DEFAULTWEIGHT*PUWEIGHTNOM*CSVWEIGHTNOM*TOPPTWEIGHTNOM*ELESFUP*MUSFNOM*PHSFNOM*BOSONWEIGHTNOM)*DOWEIGHTS""","""weight_elEffDown:=(DEFAULTWEIGHT*PUWEIGHTNOM*CSVWEIGHTNOM*TOPPTWEIGHTNOM*ELESFDOWN*MUSFNOM*PHSFNOM*BOSONWEIGHTNOM)*DOWEIGHTS""",1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
@@ -27,7 +27,7 @@ muF_madgraph,shape,weight,"""weight_madgraph_muFUp:=(DEFAULTWEIGHT*PUWEIGHTNOM*C
 #muR_pythia,shape,weight,"""weight_pythia_muRUp:=(DEFAULTWEIGHT*PUWEIGHTNOM*CSVWEIGHTNOM*TOPPTWEIGHTNOM*ELESFNOM*MUSFNOM*PHSFNOM*BOSONWEIGHTNOM*Weight_scale_variation_muR_2p0_muF_1p0)*DOWEIGHTS""","""weight_pythia_muRDown:=(DEFAULTWEIGHT*PUWEIGHTNOM*CSVWEIGHTNOM*TOPPTWEIGHTNOM*ELESFNOM*MUSFNOM*PHSFNOM*BOSONWEIGHTNOM*Weight_scale_variation_muR_0p5_muF_1p0)*DOWEIGHTS""",1,-,-,-,-,-,-,1,-,-,-,-,-,-,-,-,-,-,-
 #muF_pythia,shape,weight,"""weight_pythia_muFUp:=(DEFAULTWEIGHT*PUWEIGHTNOM*CSVWEIGHTNOM*TOPPTWEIGHTNOM*ELESFNOM*MUSFNOM*PHSFNOM*BOSONWEIGHTNOM*Weight_scale_variation_muR_1p0_muF_2p0)*DOWEIGHTS""","""weight_pythia_muFDown:=(DEFAULTWEIGHT*PUWEIGHTNOM*CSVWEIGHTNOM*TOPPTWEIGHTNOM*ELESFNOM*MUSFNOM*PHSFNOM*BOSONWEIGHTNOM*Weight_scale_variation_muR_1p0_muF_0p5)*DOWEIGHTS""",1,-,-,-,-,-,-,1,-,-,-,-,-,-,-,-,-,-,-
 #,,,,,,,,,,,,,,,,,,,,,,,
-#PDF,shape,weight,"""weight_PDFUp:=(DEFAULTWEIGHT*PUWEIGHTNOM*CSVWEIGHTNOM*TOPPTWEIGHTNOM*ELESFNOM*MUSFNOM*PHSFNOM*Weight_LHA_306000_up)*DOWEIGHTS""","""weight_PDFDown:=(DEFAULTWEIGHT*PUWEIGHTNOM*CSVWEIGHTNOM*TOPPTWEIGHTNOM*ELESFNOM*MUSFNOM*PHSFNOM*Weight_LHA_306000_down)*DOWEIGHTS""",1,-,-,-,-,1,1,-,-,-,-,-,-,-,-,-,-,-,-
+PDF,shape,weight,"""weight_PDFUp:=(DEFAULTWEIGHT*PUWEIGHTNOM*CSVWEIGHTNOM*TOPPTWEIGHTNOM*ELESFNOM*MUSFNOM*PHSFNOM*BOSONWEIGHTNOM*Weight_LHA_306000_up)*DOWEIGHTS""","""weight_PDFDown:=(DEFAULTWEIGHT*PUWEIGHTNOM*CSVWEIGHTNOM*TOPPTWEIGHTNOM*ELESFNOM*MUSFNOM*PHSFNOM*BOSONWEIGHTNOM*Weight_LHA_306000_down)*DOWEIGHTS""",1,1,1,1,1,1,-,-,1,-,-,-,-,-,-,-,-,-,-
 #,,,,,,,,,,,,,,,,,,,,,,,
 TH_vjets_QCD1,shape,weight,"""weight_vjets_QCD1Up:=(DEFAULTWEIGHT*PUWEIGHTNOM*CSVWEIGHTNOM*TOPPTWEIGHTNOM*ELESFNOM*MUSFNOM*PHSFNOM*internalBosonWeight_QCD1Up)*DOWEIGHTS""","""weight_vjets_QCD1Down:=(DEFAULTWEIGHT*PUWEIGHTNOM*CSVWEIGHTNOM*TOPPTWEIGHTNOM*ELESFNOM*MUSFNOM*PHSFNOM*internalBosonWeight_QCD1Down)*DOWEIGHTS""",1,1,1,1,1,-,-,-,-,-,-,-,-,-,-,-,-,-,-
 TH_vjets_QCD2,shape,weight,"""weight_vjets_QCD2Up:=(DEFAULTWEIGHT*PUWEIGHTNOM*CSVWEIGHTNOM*TOPPTWEIGHTNOM*ELESFNOM*MUSFNOM*PHSFNOM*internalBosonWeight_QCD2Up)*DOWEIGHTS""","""weight_vjets_QCD2Down:=(DEFAULTWEIGHT*PUWEIGHTNOM*CSVWEIGHTNOM*TOPPTWEIGHTNOM*ELESFNOM*MUSFNOM*PHSFNOM*internalBosonWeight_QCD2Down)*DOWEIGHTS""",1,1,1,1,1,-,-,-,-,-,-,-,-,-,-,-,-,-,-
@@ -49,3 +49,6 @@ TH_vjets_AlphaS,shape,weight,"""weight_vjets_AlphaSUp:=(DEFAULTWEIGHT*PUWEIGHTNO
 #,,,,,,,,,,,,,,,,,,,,,,,
 #TH_QCDscale_ttbar,lnN,rate,-,-,1,-,-,-,-,0.965/1.024,-,-,-,-,-,-,-,-,-,-,-,-,-
 #TH_QCDscale_singlet,lnN,rate,-,-,1,-,-,-,-,-,0.979/1.031,-,-,-,-,-,-,-,-,-,-,-,-
+#TH_QCDscale_ww,lnN,rate,-,-,1,-,-,-,-,-,-,0.978/1.025,-,-,-,-,-,-,-,-,-,-,-
+#TH_QCDscale_wz,lnN,rate,-,-,1,-,-,-,-,-,-,0.968/1.041,-,-,-,-,-,-,-,-,-,-,-
+#TH_QCDscale_zz,lnN,rate,-,-,1,-,-,-,-,-,-,0.976/1.032,-,-,-,-,-,-,-,-,-,-,-
