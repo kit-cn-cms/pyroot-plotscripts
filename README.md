@@ -10,8 +10,8 @@ For readability there is a README for each step, if deeper adjustments have to b
 - standaloneTools: files not correlated to the pyroot-plotscript but Karim insists on keeping them
 
 ## Package-requirements
-- `CMSSW_9_4_X`, e.g. `9_4_10`, newer versions might lead to C++ library problems. (WIP)
-
+- `export SCRAM_ARCH=slc7_amd64_gcc700`
+- `CMSSW_11_1_0_pre4`
 ## Workflow
 ### Configs
 - create/adjust a plotconfig file named `pltcfg_STR.py`, that includes all samples that shall be used in the pyroot-plotscript and the nominal weight expression. Two lists of Samples 

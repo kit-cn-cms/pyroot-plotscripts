@@ -8,9 +8,11 @@ import glob
 import pandas as pd
 import numpy as np
 import ROOT
-
-includeString = "-I/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/tensorflow-cc/1.3.0-elfike/tensorflow_cc/include -I/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/eigen/c7dc0a897676/include/eigen3 -I/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/protobuf/3.4.0-fmblme/include"
-libraryString = "-L/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/tensorflow-cc/1.3.0-elfike/tensorflow_cc/lib -ltensorflow_cc -L/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/protobuf/3.4.0-fmblme/lib -lprotobuf -lrt"
+# 
+# includeString = "-I/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/tensorflow-cc/1.3.0-elfike/tensorflow_cc/include -I/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/eigen/c7dc0a897676/include/eigen3 -I/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/protobuf/3.4.0-fmblme/include"
+# libraryString = "-L/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/tensorflow-cc/1.3.0-elfike/tensorflow_cc/lib -ltensorflow_cc -L/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/protobuf/3.4.0-fmblme/lib -Lprotobuf -lrt"
+includeString = "-I/cvmfs/cms.cern.ch/slc7_amd64_gcc820/external/tensorflow/2.1.0/include -I/cvmfs/cms.cern.ch/slc7_amd64_gcc820/external/eigen/d812f411c3f9/include/eigen3 -I/cvmfs/cms.cern.ch/slc7_amd64_gcc820/external/protobuf/3.8.0/include"
+libraryString = "-L/cvmfs/cms.cern.ch/slc7_amd64_gcc820/external/tensorflow/2.1.0/lib -ltensorflow_cc -ltensorflow_framework -L/cvmfs/cms.cern.ch/slc7_amd64_gcc820/external/protobuf/3.8.0/lib -Lprotobuf -lrt"
 
 
 def doRebinning(rootfile, histolist, threshold):
@@ -401,12 +403,13 @@ class DNN:
 
 
     def __fixDropout(self):
-        tf.reset_default_graph()
+        tf.compat.v1.disable_eager_execution()
+        tf.compat.v1.reset_default_graph()
         string = ""
-        self.sess = tf.Session()
-        self.saver = tf.train.import_meta_graph( self.path+"/trained_model.meta" )
+        self.sess = tf.compat.v1.Session()
+        self.saver = tf.compat.v1.train.import_meta_graph( self.path+"/trained_model.meta" )
         self.saver.restore( self.sess, self.path+"/trained_model" )
-        self.graph = tf.get_default_graph()
+        self.graph = tf.compat.v1.get_default_graph()
         for op in self.graph.get_operations():
             if op.name.find("dropout/keep_prob") != -1:
                 string += "            feed_dict.push_back( std::make_pair(\"{name}\", dropout_disable));\n".format(name = op.name)
