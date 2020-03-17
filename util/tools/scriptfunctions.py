@@ -38,6 +38,7 @@ using namespace std;
     #"CSVHelper",
     #"QCDHelper",
     #"TTbarSystHelper",
+    "CSVWeightSFHelper"
     ]
   for cls in includedClasses:
     with open(basepath+"/util/scriptFiles/class"+cls+".cc", "r") as clsCode:
