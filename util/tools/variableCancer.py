@@ -567,14 +567,14 @@ class Variable:
         # manage array variables
         if self.isArray:
             if varType == "F":
-                text = "    std::unique_ptr<float[]> "+varName+" ( new float[10] );\n"
-                text+= "    std::fill_n ("+varName+".get(), 10, -999);\n"
+                text = "    std::unique_ptr<float[]> "+varName+" ( new float[20] );\n"
+                text+= "    std::fill_n ("+varName+".get(), 20, -999);\n"
             elif varType == "I":
-                text = "    std::unique_ptr<Long64_t[]> "+varName+" ( new Long64_t[10] );\n"
-                text+= "    std::fill_n ("+varName+".get(), 10, -999);\n"
+                text = "    std::unique_ptr<Long64_t[]> "+varName+" ( new Long64_t[20] );\n"
+                text+= "    std::fill_n ("+varName+".get(), 20, -999);\n"
             elif varType == "L":
-                text = "    std::unique_ptr<Long64_t[]> "+varName+" ( new Long64_t[10] );\n"
-                text+= "    std::fill_n ("+varName+".get(),10,-999);\n"
+                text = "    std::unique_ptr<Long64_t[]> "+varName+" ( new Long64_t[20] );\n"
+                text+= "    std::fill_n ("+varName+".get(), 20, -999);\n"
             else: print("UNKNOWN TYPE: "+str(varType))
 
         else:
