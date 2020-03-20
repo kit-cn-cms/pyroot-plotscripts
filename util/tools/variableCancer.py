@@ -205,7 +205,6 @@ class VariableManager:
 
     ## initialization of variables in cpp ##
     def writeVariableInitialization(self):
-        castText = ""
         text = ""
         #text+= "std::map<std::string, float*> floatMap;\n"
         #text+= "std::map<std::string, Int_t*> intMap;\n"
@@ -213,11 +212,10 @@ class VariableManager:
 
         # loop over all variables
         for name, var in self.variables.iteritems():
-            stubInit, stubCast = var.writeVariableInitialization()
+            stubInit = var.writeVariableInitialization()
             text+= stubInit
-            castText+= stubCast
         if self.verbose > 20: print("\n\nvariable Init:\n"+text)
-        return text, castText
+        return text
     
     def resetVariableInitialization(self):
         code = ""
@@ -562,7 +560,6 @@ class Variable:
         varName = self.varName
         varType = self.varType
         
-        castText = ""
 
         # manage array variables
         if self.isArray:
@@ -580,12 +577,12 @@ class Variable:
         else:
             if varType == "F":
                 text = "    float "+varName+" = -999;\n"
-            elif varType == "I" or varType == "L":
-                text = "    Long64_t "+varName+"LONGDUMMY = -999;\n"
-                text+= "    Int_t "+varName+" = -999;\n"
-                castText = "    "+varName+" = Int_t("+varName+"LONGDUMMY);\n"
+            elif varType == "I":
+                text = "    Int_t "+varName+" = -999;\n"
+            elif varType == "L":
+                text = "    Long64_t "+varName+" = -999;\n"
             else: print("UNKNOWN TYPE: "+str(varType))
-        return text, castText
+        return text
     
     def resetInitializedVariables(self):
         varName = self.varName
@@ -605,10 +602,7 @@ class Variable:
         if self.isArray:
             text += "    chain->SetBranchAddress(\""+self.varName+"\", "+self.varName+".get());\n"
         else:
-            if self.varType == "I" or self.varType == "L":
-                text += "    chain->SetBranchAddress(\""+self.varName+"\", &"+self.varName+"LONGDUMMY);\n"
-            else:
-                text += "    chain->SetBranchAddress(\""+self.varName+"\", &"+self.varName+");\n"
+            text += "    chain->SetBranchAddress(\""+self.varName+"\", &"+self.varName+");\n"
         return text
 
     def writeTMVAReader(self, variableManager):

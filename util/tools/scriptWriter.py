@@ -122,7 +122,7 @@ class scriptWriter:
             script += addCodeInt.getBeforeLoopLines()
             
         # initialize all variables
-        initStub, castStub = self.varManager.writeVariableInitialization()
+        initStub = self.varManager.writeVariableInitialization()
         script += initStub
         script += self.varManager.writeBranchAdresses()
 
@@ -140,8 +140,6 @@ class scriptWriter:
         #    script += scriptfunctions.DefineLHAPDF()
         startLoopStub = scriptfunctions.startLoop(self.pp.analysis.pyrootdir)
 
-        if castStub!="":
-            startLoopStub = startLoopStub.replace("//PLACEHOLDERFORCASTLINES", castStub)
         startLoopStub = startLoopStub.replace("//PLACEHOLDERFORVARIABLERESET",self.varManager.resetVariableInitialization())
         script += startLoopStub
         script += self.initLoop()
