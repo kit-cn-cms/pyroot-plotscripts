@@ -36,7 +36,7 @@ void CSVWeightSFHelper::LoadFile(TString path_to_sf_file_)
         throw std::exception();
     }
     if (scalefactor_file) {
-        SF_hist = (TH2D*) scalefactor_file->Get("csv_weight_sfs_2018");
+        SF_hist = (TH2D*) scalefactor_file->Get("csv_weight_sfs");
         if (SF_hist) { initialized = true; }
         else {
             std::cout << "CSVWeightSFHelper: scale factor histogram not found in file " << scalefactor_file << std::endl;

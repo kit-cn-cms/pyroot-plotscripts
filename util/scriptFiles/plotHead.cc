@@ -89,7 +89,8 @@ void plot()
     int electron_data = 0;
     int muon_data     = 0;
 
-    // initialize Trigger Helper
+    // initialize CSV Weight Scale Factor Helper
+    CSVWeightSFHelper csv_calibration_helper("/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/csv_weight_sfs_"+dataera+".root");
 
     // Hack for subsampling test
     // if(processname=="SingleEl" || processname=="SingleMu"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}

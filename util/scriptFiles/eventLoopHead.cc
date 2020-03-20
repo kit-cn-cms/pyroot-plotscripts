@@ -83,7 +83,15 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
         internalBosonWeight_muFUp     = BosonWeight_muFUp;
         internalBosonWeight_muFDown   = BosonWeight_muFDown;
     }
-
+    
+    float HT_Jets = 0.;
+    for(size_t m = 0;m<N_Jets;m++) HT_Jets+=Jet_Pt[m];
+    
+    //std::cout << "N_Jets: " << N_Jets << " HT: " << HT_Jets << std::endl;
+    
+    float internalCSVWeightSF = csv_calibration_helper.GetScaleFactor(N_Jets,HT_Jets);
+    
+    //std::cout << " DeepJet patch: " << internalCSVWeightSF << std::endl;
 
     // double primlepPt;
     // double primlepEta;
