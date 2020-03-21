@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'inputFeatures_final/2017'
+    name = 'DNN_combined1618_opt/2017'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -52,7 +52,7 @@ def main(pyrootdir, opts):
     # configs
     config          = "legacyAnalysis/samples_2017"
     variable_cfg    = "legacyAnalysis/additionalVariables_2017"
-    plot_cfg        = "legacyAnalysis/ttH_legacy_inputfeatures_ClassPlusHTXS_opt_binning"
+    plot_cfg        = "legacyAnalysis/DNN_16-03-2020/combined1618_DNNs_top10_vs_top20_opt_binning"
     syst_cfg        = "legacyAnalysis/systs_2017"
     replace_cfg     = "legacyAnalysis/pdf_relic_names"
 
@@ -76,13 +76,13 @@ def main(pyrootdir, opts):
     # script options
     analysisOptions = {
         # general options
-        "usePseudoData":        False,
+        "usePseudoData":        True,
         "testrun":              False,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
         "makeDataCards":        False,
-        "makeInputDatacards":   True, # create datacards also for all defined plots
+        "makeInputDatacards":   False, # create datacards also for all defined plots
         "addData":              True,  # adding real data 
         "makePlots":            True,
         # options for makePlots
@@ -107,9 +107,9 @@ def main(pyrootdir, opts):
     plotJson = pyrootdir+"/configs/legacyAnalysis/treeJson_2017.json"
     # plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2017/",True]] 
     # memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
-    #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-    #               "checkpointFiles":  "/nfs/dust/cms/user/swieland/ttH_legacy/DNNs/oldModel/"}
-    dnnInterface = None
+    dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
+                  "checkpointFiles":  "/nfs/dust/cms/user/pkeicher/ttH_legacy/pyroot-plotscripts/configs/legacyAnalysis/DNN_16-03-2020/DNNInputData"}
+    # dnnInterface = None
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
@@ -204,7 +204,7 @@ def main(pyrootdir, opts):
         pP.setJson(plotJson)
         # pP.setDataBases(plotDataBases)
         # pP.setMEMDataBase(memDataBase)
-        # pP.setDNNInterface(dnnInterface)
+        pP.setDNNInterface(dnnInterface)
         pP.setMaxEvts_nom(50000)
         pP.setMaxEvts_systs(200000)
         # pP.request_runtime = 60*60*5

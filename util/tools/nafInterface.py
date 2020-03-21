@@ -3,7 +3,7 @@ import os
 import nafSubmit
 from glob import glob
 
-fastLane = True
+fastLane = False
 #############################
 # parallel plotting
 #############################
