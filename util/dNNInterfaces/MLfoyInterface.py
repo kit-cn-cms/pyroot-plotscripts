@@ -131,7 +131,7 @@ class DNN:
         if type(cpPath) == dict:
             self.DNNs       = [DNN(
                     cpPath  = cpPath[key], 
-                    suffix  = "_"+key, 
+                    # suffix  = "_"+key, 
                     xEval   = xEval) 
                     for key in cpPath]
             self.multiDNN   = True
