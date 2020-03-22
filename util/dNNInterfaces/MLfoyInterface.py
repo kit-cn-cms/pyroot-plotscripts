@@ -133,7 +133,7 @@ class DNN:
                     cpPath  = cpPath[key], 
                     # suffix  = "_"+key, 
                     xEval   = xEval) 
-                    for key in cpPath]
+                    for key in sorted(cpPath)]
             self.multiDNN   = True
             self.xEval      = xEval
             return
@@ -689,8 +689,9 @@ class theInterface:
         for dnnDir in dnnDirs:
             dnnDict = {}
             # check if there are subdirectories 
-            subDirs = glob.glob(dnnDir+"/*")
-            for subDir in subDirs:
+            print(dnnDir)
+            subDirs = sorted(glob.glob(dnnDir+"/*"))
+            for subDir in sorted(subDirs):
                 if not os.path.isdir(subDir): continue
                 # append subdir to dnnDict
                 dnnDict[os.path.basename(subDir)] = subDir
@@ -703,7 +704,7 @@ class theInterface:
 
             # now loop over all dnnDicts and find files
             errors = False
-            for key in dnnDict:
+            for key in sorted(dnnDict):
                 for req in requirements:
                     if not os.path.exists(dnnDict[key]+"/"+req):
                         errors = True
