@@ -3,6 +3,7 @@ import sys
 import pandas
 import importlib
 from collections import OrderedDict
+import pprint
 
 class SystematicsForProcess:
     def __init__(self,name,process,typ,construction,expression=None,plot=None):
@@ -15,10 +16,17 @@ class SystematicsForProcess:
 
 
 class Systematics:
-    def __init__(self,systematicconfig,weightDictionary = {}, replacing_config = None):
+    def __init__(self,systematicconfig,weightDictionary = {}, replacing_config = None, relevantProcesses = []):
         print "loading systematics config ..."
         self.systematics=pandas.read_csv(systematicconfig,sep=",")
         self.systematics.fillna("-", inplace=True)
+        self.relevantProcesses = relevantProcesses
+        columns = ['Uncertainty','Type','Construction','Up','Down','Plot']+self.relevantProcesses
+        # drop all non relevant processes
+        self.systematics.drop(self.systematics.columns.difference(columns), 1, inplace=True)
+        # drop all non relevant systs
+        self.systematics = self.systematics[columns]
+        self.systematics = self.systematics[~self.systematics[self.relevantProcesses].eq('-', axis=0).all(axis=1)]
         self.weightDictionary = weightDictionary
 
         self.replacing_config = None
