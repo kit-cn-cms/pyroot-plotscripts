@@ -79,8 +79,8 @@ class haddParallel:
         outputFiles = []
 
         # initializing folders    
-        self.haddScriptFolder = self.workdir+'/HaddScripts/'
-        self.haddOutputFolder = self.workdir+'/HaddOutputs/'
+        self.haddScriptFolder = os.path.join(self.workdir, 'HaddScripts')
+        self.haddOutputFolder = os.path.join(self.workdir, 'HaddOutputs')
         if not os.path.exists(self.haddScriptFolder):
             os.makedirs(self.haddScriptFolder)
         if not os.path.exists(self.haddOutputFolder):
@@ -90,9 +90,11 @@ class haddParallel:
         for sample in self.inputmap:
             
             # writing shell script
-            scriptname = self.haddScriptFolder+'haddscript_'+sample+'.sh'
-            haddedRootName = self.haddOutputFolder+'/'+sample+'_hadded.root'
-            haddedLogName = self.haddOutputFolder+'/'+sample+'_hadded.log'
+            scriptname = "haddscript_{}.sh".format(sample)
+            scriptname = os.path.join(self.haddScriptFolder, scriptname)
+            haddedBaseName = "{}_hadded".format(sample)
+            haddedRootName = os.path.join(self.haddOutputFolder, haddedBaseName +'.root')
+            haddedLogName = os.path.join(self.haddOutputFolder, haddedBaseName +'.log')
             if not self.skipHaddParallel:
                 writer.writeHaddShell(scriptname, haddedRootName, haddedLogName, self.inputmap[sample])
 
@@ -147,10 +149,26 @@ def callHadd(targetFile, inputFiles, force = False, verbosity = 1):
     print('outfile: '+str(targetFile))
     subprocess.call( cmd, shell = True )
 
-
+def file_is_ok(infile, vebosity = 1):
+    if os.path.exists(infile):
+        f = ROOT.TFile.Open(infile)
+        if f.IsOpen():
+            if not f.IsZombie():
+                if not f.TestBit(ROOT.TFile.kRecovered):
+                    return True
+                else:
+                    if verbosity >= 3:
+                        print("File '{}' is broken!".format(infile))
+            else:
+                if verbosity >= 3:
+                    print("File '{}' is Zombie!".format(infile))
+        else:
+            if verbosity >= 3:
+                print("Could not open file '{}'".format(infile))
+    return False
 
 # -- main function for hadd handling --------------------------------------------------------------
-def haddSplitter(input, outName = "", subName = "",  nHistosRemainSame = False, skipHadd = False, forceHadd = True):
+def haddSplitter(input, outName = "", subName = "",  nHistosRemainSame = True, skipHadd = False, forceHadd = True):
     # determine wheter input is a list or a wildcard
     if type(input) == str:
         print "\nhadding from wildcard\n"
@@ -195,11 +213,13 @@ def haddSplitter(input, outName = "", subName = "",  nHistosRemainSame = False, 
             allFiles = [] 
 
             # create subfolder for haddFiles
-            splitPath = outName.split("/")
-            subPath = "/".join( splitPath[:-1] + [subName] )    
+            # splitPath = outName.split("/")
+            dirname = os.path.dirname(outName)
+            fname = os.path.basename(outName)
+            subPath = os.path.join( dirname, subName)    
             if not os.path.exists(subPath):
                 os.makedirs(subPath)
-            subPath = "/".join( splitPath[:-1] + [subName, splitPath[-1]] )
+            subPath = os.path.join( dirname, subName, fname)
 
             # loop over files
             for iFile, inFile in enumerate(inFiles):
@@ -211,6 +231,18 @@ def haddSplitter(input, outName = "", subName = "",  nHistosRemainSame = False, 
                     partName = subPath.replace( ".root", "_part_"+str(len(haddParts))+".root" )
                     haddParts.append( partName )
                     callHadd( partName, haddFiles, force = forceHadd)
+                    counter = 0
+                    while not file_is_ok(partName):
+                        if counter >= 10:
+                            msg = "ERROR in hadd: Could not create file"
+                            msg +=  '{}\n'.format(partName)
+                            msg += "infiles: \n{}".format("\n".join(["\t"+x \
+                                                        for x in haddFiles]))
+                            
+                            raise ValueError(msg)
+                        print("File '{}' not ok! hadd iteration {}".format(partName, counter))
+                        callHadd( partName, haddFiles, force = forceHadd)
+                        counter += 1
                     haddFiles = [] # empty out list for files to hadd for next hadd
 
             # consistency check
