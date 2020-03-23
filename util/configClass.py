@@ -2,6 +2,7 @@ import ROOT
 import os
 import sys
 import importlib 
+import pprint
 
 # local imports       
 filedir = os.path.dirname(os.path.realpath(__file__))
@@ -58,14 +59,14 @@ class configData:
         config_path = os.path.join(self.cfgdir, systconfig)+".csv"
         self.systematics=Systematics.Systematics(   systematicconfig = config_path, 
                                                     weightDictionary = self.pltcfg.weightReplacements,
-                                                    replacing_config = self.replace_config)
+                                                    replacing_config = self.replace_config,
+                                                    relevantProcesses = processes)
         self.systematics.getSystematicsForProcesses(processes)
         datacard_processes = self.pltcfg.datacard_processes
         self.systematics.makeCSV(datacard_processes,outputpath)
         for sample in self.pltcfg.samples:
             sample.setShapes(self.systematics.get_shape_systs(sample.nick))
         self.plots=self.systematics.plot_shapes()
-
         # also just plain copy systematic.csv to workdir
         self.local_syst_path = os.path.join(workdir,"systematics.csv")
         cmd = "cp {} {}".format(config_path, self.local_syst_path)
