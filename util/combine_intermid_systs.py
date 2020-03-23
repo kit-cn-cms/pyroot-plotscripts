@@ -265,11 +265,12 @@ def combine_intermid_syst(**kwargs):
     # load csv file with systematics. This is necessary in order to perform
     # a check whether a given systematic is relevant for a given process
     syst_csv_path = kwargs.get("syst_csvpath", "")
+    process = kwargs.get("processes","")
     if not syst_csv_path:
         raise ValueError("Could not load path to csv with systematics!")
     elif not os.path.exists(syst_csv_path):
         raise ValueError("Could not find file with systematics in '{}'".format(syst_csv_path))
-    systematics = Systematics.Systematics(syst_csv_path)
+    systematics = Systematics.Systematics(syst_csv_path, relevantProcesses = [process])
 
     #load processes (if none are given already)
     procs = get_list(key = "processes", nom_key = h_nominal_key, rfile = rfile, **kwargs)
