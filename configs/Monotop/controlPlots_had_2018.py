@@ -3100,6 +3100,7 @@ def control_plots_had_CR_ttbarEl(data=None):
     selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele32_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1))"
     selection += "*(N_LoosePhotons==0)"
     selection += "*(N_AK4JetsTagged_outside_AK15Jets>=1)"
+    selection += "*(M_W_transverse[0]<50.)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
 
     plots = [
@@ -3804,6 +3805,12 @@ def control_plots_had_CR_ttbarEl(data=None):
             selection,
             label,
         ),
+        plotClasses.Plot(
+            ROOT.TH1D("M_W_transverse" + extension, "m_{W,transverse}", 30, 0., 600.),
+            "M_W_transverse",
+            selection,
+            label,
+        ),
     ]
     if data:
         add_data_plots(plots=plots, data=data)
@@ -3818,6 +3825,7 @@ def control_plots_had_CR_ttbarMu(data=None):
     selection += "*(N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && ((Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX == 1) || (Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX == 1)))"
     selection += "*(N_LoosePhotons==0)"
     selection += "*(N_AK4JetsTagged_outside_AK15Jets>=1)"
+    selection += "*(M_W_transverse[0]<50.)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
 
     plots = [
@@ -4518,6 +4526,12 @@ def control_plots_had_CR_ttbarMu(data=None):
             selection,
             label,
         ),
+        plotClasses.Plot(
+            ROOT.TH1D("M_W_transverse" + extension, "m_{W,transverse}", 30, 0., 600.),
+            "M_W_transverse",
+            selection,
+            label,
+        ),
     ]
     if data:
         add_data_plots(plots=plots, data=data)
@@ -4532,6 +4546,7 @@ def control_plots_had_CR_WEl(data=None):
     selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele32_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1) && Evt_Pt_MET>50.)"
     selection += "*(N_LoosePhotons==0)"
     selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets==0)"
+    selection += "*(M_W_transverse[0]<50.)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
 
     plots = [
@@ -5256,6 +5271,7 @@ def control_plots_had_CR_WMu(data=None):
     selection += "*(N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && ((Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX == 1) || (Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX == 1)))"
     selection += "*(N_LoosePhotons==0)"
     selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets==0)"
+    selection += "*(M_W_transverse[0]<50.)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
 
     plots = [
