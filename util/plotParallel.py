@@ -173,7 +173,7 @@ class plotParallel:
     
     ## getter functions ##
     def getHaddOutPath(self):
-        return self.analysis.workdir+"/HaddOutputs/*.root"
+        return os.path.join(self.analysis.workdir, "HaddOutputs", "*.root")
     
     def getOutPath(self):
         return self.analysis.renamedPath
