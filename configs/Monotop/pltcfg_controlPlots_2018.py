@@ -30,7 +30,7 @@ sel_StrangeMuWeights = "*1.0"
 defaultWeight = "Weight_GEN_nom"
 
 # csv weights
-csvWeightNom = "Weight_CSV"
+csvWeightNom = "Weight_CSV*internalCSVWeightSF"
 
 
 # pile up weights
@@ -195,21 +195,20 @@ if leptonic:
         )
     ]
 
-
 # print("limit samples")
 samples = [
     # signal samples
-    plotClasses.Sample(
-        "#splitline{VectorMonotop}{M_{#phi}=2000 M_{#chi}=500}",
-        ROOT.kCyan,
-        path_mwassmer + "/VectorMonotop_Mphi_2000_Mchi_500/*nominal*.root",
+    #plotClasses.Sample(
+        #"#splitline{VectorMonotop}{M_{#phi}=2000 M_{#chi}=500}",
+        #ROOT.kCyan,
+        #path_mwassmer + "/VectorMonotop_Mphi_2000_Mchi_500/*nominal*.root",
         # lumi reweighting factor due to stupid cross section calculation
-        lumi,
-        "vectormonotop_mphi_2000_mchi_500",
-        samDict=sampleDict,
-        readTrees=doReadTrees,
-        typ="signal",
-    ),
+        #lumi,
+        #"vectormonotop_mphi_2000_mchi_500",
+        #samDict=sampleDict,
+        #readTrees=doReadTrees,
+        #typ="signal",
+    #),
     plotClasses.Sample(
         "t#bar{t}",
         ROOT.kBlue,
@@ -293,12 +292,12 @@ samples = [
     ),
 ]
 
-#sample_folders = os.listdir(path_mwassmer)
+sample_folders = os.listdir(path_mwassmer)
 #print(sample_folders)
-#for sample_folder in sample_folders:
-    #if "VectorMonotop" in sample_folder:
-        #sample_name = sample_folder
-        #samples += [plotClasses.Sample(sample_name,ROOT.kCyan,path_mwassmer+"/"+sample_folder+"/*nominal*.root",lumi,sample_name.lower(),samDict=sampleDict,readTrees=doReadTrees,typ="signal")]
+for sample_folder in sample_folders:
+    if "VectorMonotop" in sample_folder:
+        sample_name = sample_folder
+        samples += [plotClasses.Sample(sample_name,ROOT.kCyan,path_mwassmer+"/"+sample_folder+"/*nominal*.root",lumi,sample_name.lower(),samDict=sampleDict,readTrees=doReadTrees,typ="signal")]
 
 processes = []
 for sample in samples:
