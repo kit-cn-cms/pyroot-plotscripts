@@ -54,7 +54,7 @@ def main(pyrootdir, opts):
     config          = "legacyAnalysis/samples_2016"
     variable_cfg    = "legacyAnalysis/additionalVariables_2016"
     plot_cfg        = "legacyAnalysis/ttH_legacy_inputfeatures_ClassPlusHTXS_opt_binning"
-    syst_cfg        = "legacyAnalysis/systs_2016"
+    syst_cfg        = "legacyAnalysis/inputFeature_validation/systs_2016"
     replace_cfg     = "legacyAnalysis/pdf_relic_names"
 
     sfCorrection = {}
