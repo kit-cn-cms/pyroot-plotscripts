@@ -29,13 +29,13 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'inputFeatures_final/2017'
+    name = 'inputFeatures_final/2017_newGT'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
 
     # signal process
-    signalProcess = "ttH"
+    signalProcess = "tH"
     nSigSamples   = 1
 
     # dataera
@@ -48,11 +48,12 @@ def main(pyrootdir, opts):
     histname_separator = "__"
 
     # define MEM discriminator variable
-    memexp = "(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)"
+    # memexp = "(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)"
+    memexp = ''
     # configs
-    config          = "legacyAnalysis/samples_2017"
+    config          = "legacyAnalysis/samples_2017_newGT"
     variable_cfg    = "legacyAnalysis/additionalVariables_2017"
-    plot_cfg        = "legacyAnalysis/ttH_legacy_inputfeatures_ClassPlusHTXS_opt_binning"
+    plot_cfg        = "legacyAnalysis/inputFeature_validation/ttH_legacy_inputfeatures_ClassPlusHTXS_opt_binning"
     syst_cfg        = "legacyAnalysis/systs_2017"
     replace_cfg     = "legacyAnalysis/pdf_relic_names"
 
@@ -104,7 +105,8 @@ def main(pyrootdir, opts):
         "skipMergeSysts":       opts.skipMergeSysts,
         "skipDatacards":        opts.skipDatacards}
 
-    plotJson = pyrootdir+"/configs/legacyAnalysis/treeJson_2017.json"
+    # plotJson = pyrootdir+"/configs/legacyAnalysis/treeJson_2017.json"
+    plotJson = ""
     # plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2017/",True]] 
     # memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
     #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
@@ -211,7 +213,7 @@ def main(pyrootdir, opts):
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
         pP.setSFCorrection(sfCorrection)
-        pP.setUseFriendTrees(True)
+        # pP.setUseFriendTrees(True)
 
         # run plotParallel
         pP.run()
