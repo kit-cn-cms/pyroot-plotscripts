@@ -29,17 +29,17 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'discr/2018_HTXS_Systs'
+    name = 'controlPlots/2016_incl'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
 
     # signal process
     signalProcess = "ttH"
-    nSigSamples   = 8
+    nSigSamples   = 1
 
     # dataera
-    dataera = "2018"
+    dataera = "2016"
 
     # Name of final discriminator, should not contain underscore
     discrName = 'finaldiscr'
@@ -51,25 +51,40 @@ def main(pyrootdir, opts):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    config          = "legacyAnalysis/samples_2018"
-    variable_cfg    = "legacyAnalysis/additionalVariables_2018"
-    plot_cfg        = "legacyAnalysis/STXS_discr_binning"
-    syst_cfg        = "legacyAnalysis/systs_2018"
+    config          = "legacyAnalysis/samples_2016"
+    variable_cfg    = "legacyAnalysis/additionalVariables_2016"
+    plot_cfg        = "legacyAnalysis/controlPlots_incl"
+    syst_cfg        = "legacyAnalysis/systs_2016"
+    # syst_cfg        = "legacyAnalysis/no_systs"
     replace_cfg     = "legacyAnalysis/pdf_relic_names"
+
+    sfCorrection = {}
+    sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2016_deepJet_combined.root"
+    # variables for the correction
+    sfCorrection["corrections"] = {}
+    sfCorrection["corrections"]["HT_vs_NJet"] = ["Evt_HT_jets", "N_Jets"]
+    # in root file sf histograms exist with some naming scheme
+    sfCorrection["nameTemplate"] = "$BINNING__$PROCESS__$NAME"
+    # SF_ is always preprended by default, that should not be changed
+    # $BINNING = "_vs_".join(corrections[X])
+    # DANGER: order of variables is important
+    # name of corrections to be applied (should match whats defined in syst.csv or samples.py)
+    sfCorrection["names"] = ["btag_NOMINAL"]
+
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
-    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2018_split.csv"
+    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2016_split.csv"
 
     # script options
     analysisOptions = {
         # general options
-        "usePseudoData":        True,
+        "usePseudoData":        False,
         "testrun":              False,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
-        "makeDataCards":        True,
+        "makeDataCards":        False,
         "makeInputDatacards":   False, # create datacards also for all defined plots
         "addData":              True,  # adding real data 
         "makePlots":            True,
@@ -91,12 +106,13 @@ def main(pyrootdir, opts):
         "skipHistoCheck":       opts.skipHistoCheck,
         "skipDatacards":        opts.skipDatacards}
 
-    plotJson = pyrootdir+"/configs/legacyAnalysis/treeJson_2018.json"
-    plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2018/",True]] 
-    memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
-    dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                  "checkpointFiles":  "/nfs/dust/cms/user/swieland/ttH_legacy/DNNs/HTXS_Study/"}
-    # dnnInterface = None
+    plotJson = pyrootdir+"/configs/legacyAnalysis/treeJson_2016.json"
+    # plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2016/",False]] 
+    # memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
+
+    #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
+    #               "checkpointFiles":  "/nfs/dust/cms/user/swieland/ttH_legacy/DNNs/oldModel/"}
+    dnnInterface = None
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
@@ -110,7 +126,7 @@ def main(pyrootdir, opts):
     # save a lot of useful information concerning the analysis
     analysis = analysisClass.analysisConfig(
         workdir         = workdir, 
-        pyrootdir       = pyrootdir, 
+        pyrootdir       = pyrootdir,
         signalProcess   = signalProcess, 
         pltcfgName      = config,
         discrName       = discrName,
@@ -188,12 +204,17 @@ def main(pyrootdir, opts):
         monitor.printClass(pP, "init")
         # set some changed values
         pP.setJson(plotJson)
-        pP.setDataBases(plotDataBases)
-        pP.setMEMDataBase(memDataBase)
-        pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts(100000)
+        # pP.setDataBases(plotDataBases)
+        # pP.setMEMDataBase(memDataBase)
+        # pP.setDNNInterface(dnnInterface)
+        pP.setMaxEvts_nom(200000)
+        pP.setMaxEvts_systs(400000)
+        # pP.request_runtime = 60*60*7 #request 7 hours
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
+        pP.setSFCorrection(sfCorrection),
+        pP.setUseFriendTrees(True)
+
 
         # run plotParallel
         pP.run()
@@ -246,10 +267,10 @@ def main(pyrootdir, opts):
                 eps             = 0.0,
                 skipHistoCheck  = analysis.skipHistoCheck)
 
-    if pP.configData.replace_config and not analysis.skipMergeSysts:
-        with monitor.Timer("mergeSystematics"):
-            print("merging systematics")
-            pP.mergeSystematics()
+    # if pP.configData.replace_config and not analysis.skipMergeSysts:
+    #     with monitor.Timer("mergeSystematics"):
+    #         print("merging systematics")
+    #         pP.mergeSystematics()
 
     if analysis.addData:
         print '''
@@ -264,7 +285,7 @@ def main(pyrootdir, opts):
                 pP.addData( samples = configData.samples[nSigSamples:], 
                             discrName = discrName)
                 # pseudo data with signal
-                # pP.addData(samples = configData.samples)
+                #pP.addData(samples = configData.samples)
             else:
                 print("adding data_obs histograms as real data")
                 # real data with ttH
@@ -290,7 +311,7 @@ def main(pyrootdir, opts):
             makeDatacards.makeDatacardsParallel(
                 filePath            = analysis.renamedPath,
                 workdir             = analysis.workdir,
-                categories          = configData.getDatacardLabels(analysis.makeInputDatacards),
+                categories          = configData.getDatacardLabels(analysis.makeInputDatacards, discrName = discrName),
                 doHdecay            = True,
                 discrname           = analysis.discrName,
                 datacardmaker       = datacardmaker,
@@ -316,7 +337,7 @@ def main(pyrootdir, opts):
     # ========================================================
     # this is the end of the script 
     # ========================================================
-    # '''
+    '''
 
 if __name__ == "__main__":
     parser = optparse.OptionParser()
