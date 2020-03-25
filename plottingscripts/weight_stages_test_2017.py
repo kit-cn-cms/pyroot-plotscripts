@@ -52,14 +52,14 @@ def main(pyrootdir, opts):
 
     # configs
     config          = "weight_stages_test/weight_stages_2017"
-    variable_cfg    = "legacyAnalysis/additionalVariables_2017"
+    variable_cfg    = "legacyAnalysis/additionalVariables_2017_noMEM"
     plot_cfg        = "legacyAnalysis/controlPlots_tthf_fit"
     syst_cfg        = "weight_stages_test/systs"
     # replace_cfg     = "legacyAnalysis/pdf_relic_names"
     replace_cfg = None
 
     sfCorrection = {}
-    sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2016_deepJet_combined.root"
+    sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2017_deepJet_combined.root"
     # variables for the correction
     sfCorrection["corrections"] = {}
     sfCorrection["corrections"]["HT_vs_NJet"] = ["Evt_HT_jets", "N_Jets"]
@@ -107,8 +107,8 @@ def main(pyrootdir, opts):
 
     # plotJson = pyrootdir+"/configs/legacyAnalysis/treeJson_2016.json"
     plotJson = ""
-    plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2017/",True]] 
-    memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
+    # plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2017/",True]] 
+    # memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
 
     #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
     #               "checkpointFiles":  "/nfs/dust/cms/user/swieland/ttH_legacy/DNNs/oldModel/"}
@@ -204,10 +204,10 @@ def main(pyrootdir, opts):
         monitor.printClass(pP, "init")
         # set some changed values
         pP.setJson(plotJson)
-        pP.setDataBases(plotDataBases)
-        pP.setMEMDataBase(memDataBase)
+        # pP.setDataBases(plotDataBases)
+        # pP.setMEMDataBase(memDataBase)
         # pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts(100000)
+        pP.setMaxEvts(200000)
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
         pP.setSFCorrection(sfCorrection)
