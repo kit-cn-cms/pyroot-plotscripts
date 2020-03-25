@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'weight_stages_v2/2018'
+    name = 'controlPlots/2016_incl'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -39,7 +39,7 @@ def main(pyrootdir, opts):
     nSigSamples   = 1
 
     # dataera
-    dataera = "2018"
+    dataera = "2016"
 
     # Name of final discriminator, should not contain underscore
     discrName = 'finaldiscr'
@@ -48,19 +48,18 @@ def main(pyrootdir, opts):
     histname_separator = "__"
 
     # define MEM discriminator variable
-    # memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
-    memexp = ''
+    memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    config          = "weight_stages_test/weight_stages_2018"
-    variable_cfg    = "legacyAnalysis/additionalVariables_2018"
-    plot_cfg        = "legacyAnalysis/controlPlots_tthf_fit"
-    syst_cfg        = "weight_stages_test/systs"
-    # replace_cfg     = "legacyAnalysis/pdf_relic_names"
-    replace_cfg = None
+    config          = "legacyAnalysis/samples_2016"
+    variable_cfg    = "legacyAnalysis/additionalVariables_2016"
+    plot_cfg        = "legacyAnalysis/controlPlots_incl"
+    syst_cfg        = "legacyAnalysis/systs_2016"
+    # syst_cfg        = "legacyAnalysis/no_systs"
+    replace_cfg     = "legacyAnalysis/pdf_relic_names"
 
     sfCorrection = {}
-    sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2018_deepJet_combined.root"
+    sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2016_deepJet_combined.root"
     # variables for the correction
     sfCorrection["corrections"] = {}
     sfCorrection["corrections"]["HT_vs_NJet"] = ["Evt_HT_jets", "N_Jets"]
@@ -72,9 +71,10 @@ def main(pyrootdir, opts):
     # name of corrections to be applied (should match whats defined in syst.csv or samples.py)
     sfCorrection["names"] = ["btag_NOMINAL"]
 
+
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
-    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2018_split.csv"
+    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2016_split.csv"
 
     # script options
     analysisOptions = {
@@ -85,7 +85,7 @@ def main(pyrootdir, opts):
         # options to activate parts of the script
         "haddFromWildcard":     True,
         "makeDataCards":        False,
-        "makeInputDatacards":   True, # create datacards also for all defined plots
+        "makeInputDatacards":   False, # create datacards also for all defined plots
         "addData":              True,  # adding real data 
         "makePlots":            True,
         # options for makePlots
@@ -106,9 +106,8 @@ def main(pyrootdir, opts):
         "skipHistoCheck":       opts.skipHistoCheck,
         "skipDatacards":        opts.skipDatacards}
 
-    # plotJson = pyrootdir+"/configs/legacyAnalysis/treeJson_2016.json"
-    plotJson = ""
-    # plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2018/",True]] 
+    plotJson = pyrootdir+"/configs/legacyAnalysis/treeJson_2016.json"
+    # plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2016/",False]] 
     # memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
 
     #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
@@ -127,7 +126,7 @@ def main(pyrootdir, opts):
     # save a lot of useful information concerning the analysis
     analysis = analysisClass.analysisConfig(
         workdir         = workdir, 
-        pyrootdir       = pyrootdir, 
+        pyrootdir       = pyrootdir,
         signalProcess   = signalProcess, 
         pltcfgName      = config,
         discrName       = discrName,
@@ -208,10 +207,14 @@ def main(pyrootdir, opts):
         # pP.setDataBases(plotDataBases)
         # pP.setMEMDataBase(memDataBase)
         # pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts(200000)
+        pP.setMaxEvts_nom(200000)
+        pP.setMaxEvts_systs(400000)
+        # pP.request_runtime = 60*60*7 #request 7 hours
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
-        pP.setSFCorrection(sfCorrection)
+        pP.setSFCorrection(sfCorrection),
+        pP.setUseFriendTrees(True)
+
 
         # run plotParallel
         pP.run()
@@ -264,10 +267,10 @@ def main(pyrootdir, opts):
                 eps             = 0.0,
                 skipHistoCheck  = analysis.skipHistoCheck)
 
-    if pP.configData.replace_config and not analysis.skipMergeSysts:
-        with monitor.Timer("mergeSystematics"):
-            print("merging systematics")
-            pP.mergeSystematics()
+    # if pP.configData.replace_config and not analysis.skipMergeSysts:
+    #     with monitor.Timer("mergeSystematics"):
+    #         print("merging systematics")
+    #         pP.mergeSystematics()
 
     if analysis.addData:
         print '''
@@ -308,7 +311,7 @@ def main(pyrootdir, opts):
             makeDatacards.makeDatacardsParallel(
                 filePath            = analysis.renamedPath,
                 workdir             = analysis.workdir,
-                categories          = configData.getDatacardLabels(analysis.makeInputDatacards),
+                categories          = configData.getDatacardLabels(analysis.makeInputDatacards, discrName = discrName),
                 doHdecay            = True,
                 discrname           = analysis.discrName,
                 datacardmaker       = datacardmaker,
