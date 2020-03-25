@@ -14,7 +14,12 @@ pdf_Higgs_tHW,lnN,rate,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,,1.
 pdf_gg,lnN,rate,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,1.042,1.042,1.042,1.042,1.042,1.042,1.042,1.042,1.042,-,,,,,,,,,,,
 pdf_qqbar,lnN,rate,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,,,,,,,,1.038,,,1.05
 pdf_qg,lnN,rate,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,1.028,,,,,,,,,,,
-#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+CMS_effTrigger_m_2018,shape,weight,"""dummyWeight_CMS_ttH_effTrigger_muUp:=DEFAULTWEIGHT*LEPTONSFS*MUTRIGSUP*1.0*DOWEIGHTS""","""dummyWeight_CMS_ttH_effTrigger_muDown:=DEFAULTWEIGHT*LEPTONSFS*MUTRIGSDOWN*1.0*DOWEIGHTS""",1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+CMS_effTrigger_e_2018,shape,weight,"""dummyWeight_CMS_ttH_effTrigger_elUp:=DEFAULTWEIGHT*LEPTONSFS*ELETRIGSUP*1.0*DOWEIGHTS""","""dummyWeight_CMS_ttH_effTrigger_elDown:=DEFAULTWEIGHT*LEPTONSFS*ELETRIGSDOWN*1.0*DOWEIGHTS""",1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+CMS_eff_m_2018,shape,weight,"""dummyWeight_CMS_ttH_eff_muUp:=DEFAULTWEIGHT*MUSFUP*TRIGGERSFS*1.0*DOWEIGHTS""","""dummyWeight_CMS_ttH_eff_muDown:=DEFAULTWEIGHT*MUSFDOWN*TRIGGERSFS*1.0*DOWEIGHTS""",1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+CMS_eff_e_2018,shape,weight,"""dummyWeight_CMS_ttH_eff_elUp:=DEFAULTWEIGHT*ELESFUP*TRIGGERSFS*1.0*DOWEIGHTS""","""dummyWeight_CMS_ttH_eff_elDown:=DEFAULTWEIGHT*ELESFDOWN*TRIGGERSFS*1.0*DOWEIGHTS""",1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 CMS_btag_lf,shape,weight,"""dummyWeight_CSVLFup:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*internalCSVweight_CSVLFUp)*DOWEIGHTS""","""dummyWeight_CSVLFdown:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*internalCSVweight_CSVLFDown)*DOWEIGHTS""",1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 CMS_btag_hf,shape,weight,"""dummyWeight_CSVHFup:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*internalCSVweight_CSVHFUp)*DOWEIGHTS""","""dummyWeight_CSVHFdown:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*internalCSVweight_CSVHFDown)*DOWEIGHTS""",1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 CMS_btag_hfstats1_2018,shape,weight,"""dummyWeight_CSVHFStats1up:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*internalCSVweight_CSVHFStats1Up)*DOWEIGHTS""","""dummyWeight_CSVHFStats1down:=(DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*internalCSVweight_CSVHFStats1Down)*DOWEIGHTS""",1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
