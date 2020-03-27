@@ -32,15 +32,28 @@ def plots_dnn(data, discrname):
     interf_ljets_top10_ge4j_ge4t_ttH_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_top10_ge4j_ge4t==0))","ljets_top10_ge4j_ge4t_ttH_node","")
     interf_ljets_top10_ge4j_ge4t_ttH_node.category_label = "\geq 4 jets, \geq 4 b-tags"
     interf_ljets_top10_ge4j_ge4t_ttH_node.bin_edges = [ 
-				0.14,
-				0.2238,
-				0.3075,
-				0.3913,
-				0.475,
-				0.5588,
-				0.6425,
-				0.81
-				]
+	                0.207,
+                0.2293,
+                0.2517,
+                0.274,
+                0.2963,
+                0.3187,
+                0.341,
+                0.3633,
+                0.3857,
+                0.408,
+                0.4303,
+                0.4527,
+                0.475,
+                0.4973,
+                0.5197,
+                0.542,
+                0.5643,
+                0.5867,
+                0.609,
+                0.6537,
+                0.81
+                ]
     interf_ljets_top10_ge4j_ge4t_ttH_node.nhistobins = ndefaultbins
     interfaces.append(interf_ljets_top10_ge4j_ge4t_ttH_node)
     
@@ -50,14 +63,25 @@ def plots_dnn(data, discrname):
     interf_ljets_top10_ge4j_ge4t_ttmb_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_top10_ge4j_ge4t==1))","ljets_top10_ge4j_ge4t_ttmb_node","")
     interf_ljets_top10_ge4j_ge4t_ttmb_node.category_label = "\geq 4 jets, \geq 4 b-tags"
     interf_ljets_top10_ge4j_ge4t_ttmb_node.bin_edges = [ 
-				0.2087,
-				0.2775,
-				0.3463,
-				0.415,
-				0.4837,
-				0.5525,
-				0.69
-				]
+	               0.2133,
+                0.2317,
+                0.25,
+                0.2683,
+                0.2867,
+                0.305,
+                0.3233,
+                0.3417,
+                0.36,
+                0.3783,
+                0.3967,
+                0.415,
+                0.4333,
+                0.4517,
+                0.47,
+                0.4883,
+                0.525,
+                0.69
+                ]
     interf_ljets_top10_ge4j_ge4t_ttmb_node.nhistobins = ndefaultbins
     interfaces.append(interf_ljets_top10_ge4j_ge4t_ttmb_node)
     
@@ -67,13 +91,21 @@ def plots_dnn(data, discrname):
     interf_ljets_top10_ge4j_ge4t_tt2b_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_top10_ge4j_ge4t==2))","ljets_top10_ge4j_ge4t_tt2b_node","")
     interf_ljets_top10_ge4j_ge4t_tt2b_node.category_label = "\geq 4 jets, \geq 4 b-tags"
     interf_ljets_top10_ge4j_ge4t_tt2b_node.bin_edges = [ 
-				0.14,
-				0.2125,
-				0.285,
-				0.3575,
-				0.43,
-				0.72
-				]
+		              0.198,
+                # 0.2173,
+                # 0.2367,
+                # 0.256,
+                # 0.2753,
+                # 0.2947,
+                # 0.314,
+                # 0.3333,
+                # 0.3527,
+                # 0.372,
+                # 0.3913,
+                # 0.43,
+                # 0.4687,
+                0.72
+                ]
     interf_ljets_top10_ge4j_ge4t_tt2b_node.nhistobins = ndefaultbins
     interfaces.append(interf_ljets_top10_ge4j_ge4t_tt2b_node)
     
@@ -83,15 +115,27 @@ def plots_dnn(data, discrname):
     interf_ljets_top10_ge4j_ge4t_ttcc_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_top10_ge4j_ge4t==3))","ljets_top10_ge4j_ge4t_ttcc_node","")
     interf_ljets_top10_ge4j_ge4t_ttcc_node.category_label = "\geq 4 jets, \geq 4 b-tags"
     interf_ljets_top10_ge4j_ge4t_ttcc_node.bin_edges = [ 
-				0.18,
-				0.22,
-				0.26,
-				0.3,
-				0.34,
-				0.38,
-				0.42,
-				0.46
-				]
+		           0.1933,
+                # 0.2147,
+                # 0.2253,
+                # 0.236,
+                # 0.2467,
+                # 0.2573,
+                # 0.268,
+                # 0.2787,
+                # 0.2893,
+                # 0.3,
+                # 0.3107,
+                # 0.3213,
+                # 0.332,
+                # 0.3427,
+                # 0.3533,
+                # 0.364,
+                # 0.3747,
+                # 0.3853,
+                # 0.4067,
+                0.46
+                ]
     interf_ljets_top10_ge4j_ge4t_ttcc_node.nhistobins = ndefaultbins
     interfaces.append(interf_ljets_top10_ge4j_ge4t_ttcc_node)
     
@@ -101,15 +145,31 @@ def plots_dnn(data, discrname):
     interf_ljets_top10_ge4j_ge4t_ttlf_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_top10_ge4j_ge4t==4))","ljets_top10_ge4j_ge4t_ttlf_node","")
     interf_ljets_top10_ge4j_ge4t_ttlf_node.category_label = "\geq 4 jets, \geq 4 b-tags"
     interf_ljets_top10_ge4j_ge4t_ttlf_node.bin_edges = [ 
-				0.2137,
-				0.2875,
-				0.3613,
-				0.435,
-				0.5088,
-				0.5825,
-				0.6563,
-				0.73
-				]
+		               0.199,
+                # 0.2187,
+                # 0.2383,
+                # 0.258,
+                # 0.2777,
+                # 0.2973,
+                # 0.317,
+                # 0.3367,
+                # 0.3563,
+                # 0.376,
+                # 0.3957,
+                # 0.4153,
+                # 0.435,
+                # 0.4547,
+                # 0.4743,
+                # 0.494,
+                # 0.5137,
+                # 0.5333,
+                # 0.553,
+                # 0.5727,
+                # 0.5923,
+                # 0.612,
+                # 0.6513,
+                0.73
+                ]
     interf_ljets_top10_ge4j_ge4t_ttlf_node.nhistobins = ndefaultbins
     interfaces.append(interf_ljets_top10_ge4j_ge4t_ttlf_node)
     
@@ -119,15 +179,29 @@ def plots_dnn(data, discrname):
     interf_ljets_top10_ge4j_ge4t_tHq_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_top10_ge4j_ge4t==5))","ljets_top10_ge4j_ge4t_tHq_node","")
     interf_ljets_top10_ge4j_ge4t_tHq_node.category_label = "\geq 4 jets, \geq 4 b-tags"
     interf_ljets_top10_ge4j_ge4t_tHq_node.bin_edges = [ 
-				0.14,
-				0.2463,
-				0.3525,
-				0.4587,
-				0.565,
-				0.6713,
-				0.7775,
-				0.99
-				]
+		              0.225,
+                0.2533,
+                0.2817,
+                0.31,
+                0.3383,
+                0.3667,
+                0.395,
+                0.4233,
+                0.4517,
+                0.48,
+                0.5083,
+                0.5367,
+                0.565,
+                0.5933,
+                0.6217,
+                0.65,
+                0.6783,
+                0.7067,
+                0.735,
+                0.7917,
+                0.8483,
+                0.99
+                ]
     interf_ljets_top10_ge4j_ge4t_tHq_node.nhistobins = ndefaultbins
     interfaces.append(interf_ljets_top10_ge4j_ge4t_tHq_node)
     
@@ -137,16 +211,25 @@ def plots_dnn(data, discrname):
     interf_ljets_top10_ge4j_ge4t_tHW_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_top10_ge4j_ge4t==6))","ljets_top10_ge4j_ge4t_tHW_node","")
     interf_ljets_top10_ge4j_ge4t_tHW_node.category_label = "\geq 4 jets, \geq 4 b-tags"
     interf_ljets_top10_ge4j_ge4t_tHW_node.bin_edges = [ 
-				0.14,
-				0.2475,
-				0.355,
-				0.4625,
-				0.57,
-				0.6775,
-				0.785,
-				0.8925,
-				1.0
-				]
+			             0.226,
+                0.2547,
+                0.2833,
+                0.312,
+                0.3407,
+                0.3693,
+                0.398,
+                0.4267,
+                0.4553,
+                0.484,
+                0.5127,
+                0.5413,
+                0.57,
+                0.6273,
+                0.6847,
+                0.7707,
+                0.8853,
+                1.0
+                ]
     interf_ljets_top10_ge4j_ge4t_tHW_node.nhistobins = ndefaultbins
     interfaces.append(interf_ljets_top10_ge4j_ge4t_tHW_node)
     
@@ -332,16 +415,31 @@ def plots_dnn(data, discrname):
     interf_ljets_top10_ge4j_3t_ttmb_node.category = ("((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_top10_ge4j_3t==1))","ljets_top10_ge4j_3t_ttmb_node","")
     interf_ljets_top10_ge4j_3t_ttmb_node.category_label = "\geq 4 jets, 3 b-tags"
     interf_ljets_top10_ge4j_3t_ttmb_node.bin_edges = [ 
-				0.14,
-				0.18,
-				0.22,
-				0.26,
-				0.3,
-				0.34,
-				0.38,
-				0.42,
-				0.46
-				]
+	                0.172,
+                0.1827,
+                0.1933,
+                0.204,
+                0.2147,
+                0.2253,
+                0.236,
+                0.2467,
+                0.2573,
+                0.268,
+                0.2787,
+                0.2893,
+                0.3,
+                0.3107,
+                0.3213,
+                0.332,
+                0.3427,
+                0.3533,
+                0.364,
+                0.3747,
+                0.3853,
+                0.396,
+                0.4173,
+                0.46
+                ]
     interf_ljets_top10_ge4j_3t_ttmb_node.nhistobins = ndefaultbins
     interfaces.append(interf_ljets_top10_ge4j_3t_ttmb_node)
     
@@ -351,15 +449,31 @@ def plots_dnn(data, discrname):
     interf_ljets_top10_ge4j_3t_tt2b_node.category = ("((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_top10_ge4j_3t==2))","ljets_top10_ge4j_3t_tt2b_node","")
     interf_ljets_top10_ge4j_3t_tt2b_node.category_label = "\geq 4 jets, 3 b-tags"
     interf_ljets_top10_ge4j_3t_tt2b_node.bin_edges = [ 
-				0.14,
-				0.2137,
-				0.2875,
-				0.3613,
-				0.435,
-				0.5088,
-				0.5825,
-				0.73
-				]
+	                0.1793,
+                # 0.199,
+                # 0.2187,
+                # 0.2383,
+                # 0.258,
+                # 0.2777,
+                # 0.2973,
+                # 0.317,
+                # 0.3367,
+                # 0.3563,
+                # 0.376,
+                # 0.3957,
+                # 0.4153,
+                # 0.435,
+                # 0.4547,
+                # 0.4743,
+                # 0.494,
+                # 0.5137,
+                # 0.5333,
+                # 0.553,
+                # 0.5727,
+                # 0.5923,
+                # 0.612,
+                0.73
+                ]
     interf_ljets_top10_ge4j_3t_tt2b_node.nhistobins = ndefaultbins
     interfaces.append(interf_ljets_top10_ge4j_3t_tt2b_node)
     
@@ -369,16 +483,31 @@ def plots_dnn(data, discrname):
     interf_ljets_top10_ge4j_3t_ttcc_node.category = ("((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_top10_ge4j_3t==3))","ljets_top10_ge4j_3t_ttcc_node","")
     interf_ljets_top10_ge4j_3t_ttcc_node.category_label = "\geq 4 jets, 3 b-tags"
     interf_ljets_top10_ge4j_3t_ttcc_node.bin_edges = [ 
-				0.14,
-				0.185,
-				0.23,
-				0.275,
-				0.32,
-				0.365,
-				0.41,
-				0.455,
-				0.5
-				]
+	                0.176,
+                # 0.188,
+                # 0.2,
+                # 0.212,
+                # 0.224,
+                # 0.236,
+                # 0.248,
+                # 0.26,
+                # 0.272,
+                # 0.284,
+                # 0.296,
+                # 0.308,
+                # 0.32,
+                # 0.332,
+                # 0.344,
+                # 0.356,
+                # 0.368,
+                # 0.38,
+                # 0.392,
+                # 0.404,
+                # 0.416,
+                # 0.428,
+                # 0.44,
+                0.5
+                ]
     interf_ljets_top10_ge4j_3t_ttcc_node.nhistobins = ndefaultbins
     interfaces.append(interf_ljets_top10_ge4j_3t_ttcc_node)
     
@@ -388,16 +517,36 @@ def plots_dnn(data, discrname):
     interf_ljets_top10_ge4j_3t_ttlf_node.category = ("((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_top10_ge4j_3t==4))","ljets_top10_ge4j_3t_ttlf_node","")
     interf_ljets_top10_ge4j_3t_ttlf_node.category_label = "\geq 4 jets, 3 b-tags"
     interf_ljets_top10_ge4j_3t_ttlf_node.bin_edges = [ 
-				0.14,
-				0.22,
-				0.3,
-				0.38,
-				0.46,
-				0.54,
-				0.62,
-				0.7,
-				0.78
-				]
+	                0.1613,
+                # 0.1827,
+                # 0.204,
+                # 0.2253,
+                # 0.2467,
+                # 0.268,
+                # 0.2893,
+                # 0.3107,
+                # 0.332,
+                # 0.3533,
+                # 0.3747,
+                # 0.396,
+                # 0.4173,
+                # 0.4387,
+                # 0.46,
+                # 0.4813,
+                # 0.5027,
+                # 0.524,
+                # 0.5453,
+                # 0.5667,
+                # 0.588,
+                # 0.6093,
+                # 0.6307,
+                # 0.652,
+                # 0.6733,
+                # 0.6947,
+                # 0.716,
+                # 0.7373,
+                0.78
+                ]
     interf_ljets_top10_ge4j_3t_ttlf_node.nhistobins = ndefaultbins
     interfaces.append(interf_ljets_top10_ge4j_3t_ttlf_node)
     
@@ -407,16 +556,34 @@ def plots_dnn(data, discrname):
     interf_ljets_top10_ge4j_3t_tHq_node.category = ("((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_top10_ge4j_3t==5))","ljets_top10_ge4j_3t_tHq_node","")
     interf_ljets_top10_ge4j_3t_tHq_node.category_label = "\geq 4 jets, 3 b-tags"
     interf_ljets_top10_ge4j_3t_tHq_node.bin_edges = [ 
-				0.14,
-				0.2463,
-				0.3525,
-				0.4587,
-				0.565,
-				0.6713,
-				0.7775,
-				0.8838,
-				0.99
-				]
+	              0.1683,
+                0.1967,
+                0.225,
+                0.2533,
+                0.2817,
+                0.31,
+                0.3383,
+                0.3667,
+                0.395,
+                0.4233,
+                0.4517,
+                0.48,
+                0.5083,
+                0.5367,
+                0.565,
+                0.5933,
+                0.6217,
+                0.65,
+                0.6783,
+                0.7067,
+                0.735,
+                0.7633,
+                0.7917,
+                0.82,
+                0.8483,
+                0.8767,
+                0.99
+                ]
     interf_ljets_top10_ge4j_3t_tHq_node.nhistobins = ndefaultbins
     interfaces.append(interf_ljets_top10_ge4j_3t_tHq_node)
     
@@ -426,16 +593,36 @@ def plots_dnn(data, discrname):
     interf_ljets_top10_ge4j_3t_tHW_node.category = ("((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_top10_ge4j_3t==6))","ljets_top10_ge4j_3t_tHW_node","")
     interf_ljets_top10_ge4j_3t_tHW_node.category_label = "\geq 4 jets, 3 b-tags"
     interf_ljets_top10_ge4j_3t_tHW_node.bin_edges = [ 
-				0.14,
-				0.2475,
-				0.355,
-				0.4625,
-				0.57,
-				0.6775,
-				0.785,
-				0.8925,
-				1.0
-				]
+		                0.1687,
+                0.1973,
+                0.226,
+                0.2547,
+                0.2833,
+                0.312,
+                0.3407,
+                0.3693,
+                0.398,
+                0.4267,
+                0.4553,
+                0.484,
+                0.5127,
+                0.5413,
+                0.57,
+                0.5987,
+                0.6273,
+                0.656,
+                0.6847,
+                0.7133,
+                0.742,
+                0.7707,
+                0.7993,
+                0.828,
+                0.8567,
+                0.8853,
+                0.914,
+                0.9427,
+                1.0
+                ]
     interf_ljets_top10_ge4j_3t_tHW_node.nhistobins = ndefaultbins
     interfaces.append(interf_ljets_top10_ge4j_3t_tHW_node)
     
