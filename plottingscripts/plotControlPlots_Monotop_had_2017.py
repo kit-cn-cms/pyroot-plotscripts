@@ -61,7 +61,7 @@ def main(pyrootdir, opts):
     # script options
     analysisOptions = {
         # general options
-        "usePseudoData": True,
+        "usePseudoData": False,
         "testrun": False,  # test run with less samples
         "stopAfterCompile": False,  # stop script after compiling
         # options to activate parts of the script
@@ -194,9 +194,12 @@ def main(pyrootdir, opts):
         # pP.setDataBases(plotDataBases)
         # pP.setMEMDataBase(memDataBase)
         # pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts(200000)
+        pP.setMaxEvts(150000)
         # pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
+        
+        pP.setCatNames([""])
+        pP.setCatSelections(["(Hadr_Recoil_Pt>250.)*(N_AK15Jets==1)*(N_Jets>=1)*(N_Taus==0)*(DeltaPhi_AK15Jet_Hadr_Recoil[0]>2.5)"])
 
         # run plotParallel
         pP.run()
@@ -264,9 +267,9 @@ def main(pyrootdir, opts):
         with monitor.Timer("addRealData"):
             if analysis.usePseudoData:
                 # pseudo data without ttH
-                #pP.addData(samples = configData.samples[nSigSamples:])
+                pP.addData(samples = [sample for sample in configData.samples if sample.typ=="bkg"])
                 # pseudo data with signal
-                pP.addData(samples=configData.samples)
+                #pP.addData(samples=configData.samples)
             else:
                 # real data
                 pP.addData(samples=configData.controlSamples)

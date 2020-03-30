@@ -14,7 +14,16 @@ from copy import deepcopy
 
 discr_binning = [250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 800, 1000, 1500]
 
-generalselection = "(N_AK15Jets==1)*(Hadr_Recoil_Pt>250.)*(DeltaPhi_AK15Jet_MET[0]>1.5)*(AK15Jet_Pt[0]>=200.)"
+# met/recoil + 1 ak15jet phase space
+generalselection = "(Hadr_Recoil_Pt>250.)*(N_AK15Jets==1)*(N_Jets>=1)*(N_Taus==0)"
+# QCD rejection
+generalselection += "*(DeltaPhi_AK15Jet_Hadr_Recoil[0]>2.5)"
+# MET quality cut???
+#generalselection += "*(CaloMET_PFMET_Recoil_ratio<0.2)"
+# ak15 jet quality cuts
+generalselection += "*(AK15Jet_CHF[0]>0.1)*(AK15Jet_NHF[0]<0.8)*(AK15Jet_CEMF[0]<0.9)*(AK15Jet_NEMF[0]<0.8)*(AK15Jet_MF[0]<0.4)"
+# top mass window
+#generalselection += "*(AK15Jet_PuppiSoftDropMass[0]>110.)*(AK15Jet_PuppiSoftDropMass[0]<210.)"
 
 def control_plots_had_SR(data=None):
     label = "#scale[0.8]{signal region (hadronic)}"
@@ -139,14 +148,14 @@ def control_plots_had_SR(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("CaloMET" + extension, "Calo MET", 25, 0.0, 500.0),
+            ROOT.TH1D("CaloMET" + extension, "Calo MET", 50, 0.0, 1000.0),
             "CaloMET",
             selection,
             label,
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "CaloMET_PFMET_ratio" + extension, "CaloMET_PFMET_ratio", 25, 0.0, 10.0
+                "CaloMET_PFMET_ratio" + extension, "CaloMET_PFMET_ratio", 50, 0.0, 10.0
             ),
             "CaloMET_PFMET_ratio",
             selection,
@@ -156,7 +165,7 @@ def control_plots_had_SR(data=None):
             ROOT.TH1D(
                 "CaloMET_Hadr_Recoil_ratio" + extension,
                 "CaloMET_Hadr_Recoil_ratio",
-                25,
+                50,
                 0.0,
                 10.0,
             ),
@@ -168,7 +177,7 @@ def control_plots_had_SR(data=None):
             ROOT.TH1D(
                 "CaloMET_PFMET_Recoil_ratio" + extension,
                 "CaloMET_PFMET_Recoil_ratio",
-                20,
+                40,
                 0.0,
                 2.0,
             ),
@@ -231,14 +240,32 @@ def control_plots_had_SR(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("AK15Jet_CHF" + extension, "AK15 Jet CHF", 20, 0.0, 1.0),
+            ROOT.TH1D("AK15Jet_CHF" + extension, "AK15 Jet CHF", 40, 0.0, 1.0),
             "AK15Jet_CHF",
             selection,
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("AK15Jet_NHF" + extension, "AK15 Jet NHF", 20, 0.0, 1.0),
+            ROOT.TH1D("AK15Jet_NHF" + extension, "AK15 Jet NHF", 40, 0.0, 1.0),
             "AK15Jet_NHF",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_CEMF" + extension, "AK15 Jet CEMF", 40, 0.0, 1.0),
+            "AK15Jet_CEMF",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_NEMF" + extension, "AK15 Jet NEMF", 40, 0.0, 1.0),
+            "AK15Jet_NEMF",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_MF" + extension, "AK15 Jet MF", 40, 0.0, 1.0),
+            "AK15Jet_MF",
             selection,
             label,
         ),
@@ -753,6 +780,12 @@ def control_plots_had_SR(data=None):
             label,
         ),
         plotClasses.Plot(
+            ROOT.TH1D("N_Taus" + extension, "number of taus", 6, -0.5, 5.5),
+            "N_Taus",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
             ROOT.TH1D("Weight_TopPt" + extension, "Weight Top Pt", 20, 0.0, 2.0),
             "Weight_TopPt",
             selection,
@@ -800,6 +833,7 @@ def control_plots_had_CR_ZMuMu(data=None):
     selection += "*((Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX == 1) || (Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX == 1))"
     selection += "*(DiMuon_Mass>60.)*(DiMuon_Mass<120.)"
     selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets==0)"
+    selection += "*(DiMuon_Pt>200.)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
 
     plots = [
@@ -819,14 +853,14 @@ def control_plots_had_CR_ZMuMu(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("CaloMET" + extension, "Calo MET", 20, 0.0, 200.0),
+            ROOT.TH1D("CaloMET" + extension, "Calo MET", 50, 0.0, 1000.0),
             "CaloMET",
             selection,
             label,
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "CaloMET_PFMET_ratio" + extension, "CaloMET_PFMET_ratio", 25, 0.0, 10.0
+                "CaloMET_PFMET_ratio" + extension, "CaloMET_PFMET_ratio", 50, 0.0, 10.0
             ),
             "CaloMET_PFMET_ratio",
             selection,
@@ -836,7 +870,7 @@ def control_plots_had_CR_ZMuMu(data=None):
             ROOT.TH1D(
                 "CaloMET_Hadr_Recoil_ratio" + extension,
                 "CaloMET_Hadr_Recoil_ratio",
-                25,
+                50,
                 0.0,
                 10.0,
             ),
@@ -848,7 +882,7 @@ def control_plots_had_CR_ZMuMu(data=None):
             ROOT.TH1D(
                 "CaloMET_PFMET_Recoil_ratio" + extension,
                 "CaloMET_PFMET_Recoil_ratio",
-                20,
+                40,
                 0.0,
                 2.0,
             ),
@@ -1437,6 +1471,12 @@ def control_plots_had_CR_ZMuMu(data=None):
             label,
         ),
         plotClasses.Plot(
+            ROOT.TH1D("N_Taus" + extension, "number of taus", 6, -0.5, 5.5),
+            "N_Taus",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
             ROOT.TH1D(
                 "DeltaR_AK15Jet_AK4JetTagged" + extension,
                 "DeltaR_AK15Jet_AK4JetTagged",
@@ -1493,14 +1533,32 @@ def control_plots_had_CR_ZMuMu(data=None):
             #label,
         #),
         plotClasses.Plot(
-            ROOT.TH1D("AK15Jet_CHF" + extension, "AK15 Jet CHF", 20, 0.0, 1.0),
+            ROOT.TH1D("AK15Jet_CHF" + extension, "AK15 Jet CHF", 40, 0.0, 1.0),
             "AK15Jet_CHF",
             selection,
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("AK15Jet_NHF" + extension, "AK15 Jet NHF", 20, 0.0, 1.0),
+            ROOT.TH1D("AK15Jet_NHF" + extension, "AK15 Jet NHF", 40, 0.0, 1.0),
             "AK15Jet_NHF",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_CEMF" + extension, "AK15 Jet CEMF", 40, 0.0, 1.0),
+            "AK15Jet_CEMF",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_NEMF" + extension, "AK15 Jet NEMF", 40, 0.0, 1.0),
+            "AK15Jet_NEMF",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_MF" + extension, "AK15 Jet MF", 40, 0.0, 1.0),
+            "AK15Jet_MF",
             selection,
             label,
         ),
@@ -1546,6 +1604,7 @@ def control_plots_had_CR_ZElEl(data=None):
     selection += "*(Triggered_HLT_Ele27_WPTight_Gsf_vX==1 || Triggered_HLT_Photon175_vX==1)"
     selection += "*(DiElectron_Mass>60.)*(DiElectron_Mass<120.)"
     selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets==0)"
+    selection += "*(DiElectron_Pt>200.)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
 
     plots = [
@@ -1565,14 +1624,14 @@ def control_plots_had_CR_ZElEl(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("CaloMET" + extension, "Calo MET", 20, 0.0, 200.0),
+            ROOT.TH1D("CaloMET" + extension, "Calo MET", 50, 0.0, 1000.0),
             "CaloMET",
             selection,
             label,
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "CaloMET_PFMET_ratio" + extension, "CaloMET_PFMET_ratio", 25, 0.0, 10.0
+                "CaloMET_PFMET_ratio" + extension, "CaloMET_PFMET_ratio", 50, 0.0, 10.0
             ),
             "CaloMET_PFMET_ratio",
             selection,
@@ -1582,7 +1641,7 @@ def control_plots_had_CR_ZElEl(data=None):
             ROOT.TH1D(
                 "CaloMET_Hadr_Recoil_ratio" + extension,
                 "CaloMET_Hadr_Recoil_ratio",
-                25,
+                50,
                 0.0,
                 10.0,
             ),
@@ -1594,7 +1653,7 @@ def control_plots_had_CR_ZElEl(data=None):
             ROOT.TH1D(
                 "CaloMET_PFMET_Recoil_ratio" + extension,
                 "CaloMET_PFMET_Recoil_ratio",
-                20,
+                40,
                 0.0,
                 2.0,
             ),
@@ -2193,6 +2252,12 @@ def control_plots_had_CR_ZElEl(data=None):
             label,
         ),
         plotClasses.Plot(
+            ROOT.TH1D("N_Taus" + extension, "number of taus", 6, -0.5, 5.5),
+            "N_Taus",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
             ROOT.TH1D(
                 "DeltaR_AK15Jet_AK4JetTagged" + extension,
                 "DeltaR_AK15Jet_AK4JetTagged",
@@ -2249,14 +2314,32 @@ def control_plots_had_CR_ZElEl(data=None):
             #label,
         #),
         plotClasses.Plot(
-            ROOT.TH1D("AK15Jet_CHF" + extension, "AK15 Jet CHF", 20, 0.0, 1.0),
+            ROOT.TH1D("AK15Jet_CHF" + extension, "AK15 Jet CHF", 40, 0.0, 1.0),
             "AK15Jet_CHF",
             selection,
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("AK15Jet_NHF" + extension, "AK15 Jet NHF", 20, 0.0, 1.0),
+            ROOT.TH1D("AK15Jet_NHF" + extension, "AK15 Jet NHF", 40, 0.0, 1.0),
             "AK15Jet_NHF",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_CEMF" + extension, "AK15 Jet CEMF", 40, 0.0, 1.0),
+            "AK15Jet_CEMF",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_NEMF" + extension, "AK15 Jet NEMF", 40, 0.0, 1.0),
+            "AK15Jet_NEMF",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_MF" + extension, "AK15 Jet MF", 40, 0.0, 1.0),
+            "AK15Jet_MF",
             selection,
             label,
         ),
@@ -2320,14 +2403,14 @@ def control_plots_had_CR_ttbarhad(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("CaloMET" + extension, "Calo MET", 25, 0.0, 500.0),
+            ROOT.TH1D("CaloMET" + extension, "Calo MET", 50, 0.0, 1000.0),
             "CaloMET",
             selection,
             label,
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "CaloMET_PFMET_ratio" + extension, "CaloMET_PFMET_ratio", 25, 0.0, 10.0
+                "CaloMET_PFMET_ratio" + extension, "CaloMET_PFMET_ratio", 50, 0.0, 10.0
             ),
             "CaloMET_PFMET_ratio",
             selection,
@@ -2337,7 +2420,7 @@ def control_plots_had_CR_ttbarhad(data=None):
             ROOT.TH1D(
                 "CaloMET_Hadr_Recoil_ratio" + extension,
                 "CaloMET_Hadr_Recoil_ratio",
-                25,
+                50,
                 0.0,
                 10.0,
             ),
@@ -2349,7 +2432,7 @@ def control_plots_had_CR_ttbarhad(data=None):
             ROOT.TH1D(
                 "CaloMET_PFMET_Recoil_ratio" + extension,
                 "CaloMET_PFMET_Recoil_ratio",
-                20,
+                40,
                 0.0,
                 2.0,
             ),
@@ -2412,14 +2495,32 @@ def control_plots_had_CR_ttbarhad(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("AK15Jet_CHF" + extension, "AK15 Jet CHF", 20, 0.0, 1.0),
+            ROOT.TH1D("AK15Jet_CHF" + extension, "AK15 Jet CHF", 40, 0.0, 1.0),
             "AK15Jet_CHF",
             selection,
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("AK15Jet_NHF" + extension, "AK15 Jet NHF", 20, 0.0, 1.0),
+            ROOT.TH1D("AK15Jet_NHF" + extension, "AK15 Jet NHF", 40, 0.0, 1.0),
             "AK15Jet_NHF",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_CEMF" + extension, "AK15 Jet CEMF", 40, 0.0, 1.0),
+            "AK15Jet_CEMF",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_NEMF" + extension, "AK15 Jet NEMF", 40, 0.0, 1.0),
+            "AK15Jet_NEMF",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_MF" + extension, "AK15 Jet MF", 40, 0.0, 1.0),
+            "AK15Jet_MF",
             selection,
             label,
         ),
@@ -2946,6 +3047,12 @@ def control_plots_had_CR_ttbarhad(data=None):
             label,
         ),
         plotClasses.Plot(
+            ROOT.TH1D("N_Taus" + extension, "number of taus", 6, -0.5, 5.5),
+            "N_Taus",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
             ROOT.TH1D("Weight_TopPt" + extension, "Weight Top Pt", 20, 0.0, 2.0),
             "Weight_TopPt",
             selection,
@@ -2991,6 +3098,7 @@ def control_plots_had_CR_ttbarEl(data=None):
     selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele27_WPTight_Gsf_vX==1 || Triggered_HLT_Photon175_vX==1))"
     selection += "*(N_LoosePhotons==0)"
     selection += "*(N_AK4JetsTagged_outside_AK15Jets>=1)"
+    selection += "*(M_W_transverse[0]<50.)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
 
     plots = [
@@ -3010,14 +3118,14 @@ def control_plots_had_CR_ttbarEl(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("CaloMET" + extension, "Calo MET", 20, 0.0, 200.0),
+            ROOT.TH1D("CaloMET" + extension, "Calo MET", 50, 0.0, 1000.0),
             "CaloMET",
             selection,
             label,
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "CaloMET_PFMET_ratio" + extension, "CaloMET_PFMET_ratio", 25, 0.0, 10.0
+                "CaloMET_PFMET_ratio" + extension, "CaloMET_PFMET_ratio", 50, 0.0, 10.0
             ),
             "CaloMET_PFMET_ratio",
             selection,
@@ -3027,7 +3135,7 @@ def control_plots_had_CR_ttbarEl(data=None):
             ROOT.TH1D(
                 "CaloMET_Hadr_Recoil_ratio" + extension,
                 "CaloMET_Hadr_Recoil_ratio",
-                25,
+                50,
                 0.0,
                 10.0,
             ),
@@ -3039,7 +3147,7 @@ def control_plots_had_CR_ttbarEl(data=None):
             ROOT.TH1D(
                 "CaloMET_PFMET_Recoil_ratio" + extension,
                 "CaloMET_PFMET_Recoil_ratio",
-                20,
+                40,
                 0.0,
                 2.0,
             ),
@@ -3590,6 +3698,12 @@ def control_plots_had_CR_ttbarEl(data=None):
             label,
         ),
         plotClasses.Plot(
+            ROOT.TH1D("N_Taus" + extension, "number of taus", 6, -0.5, 5.5),
+            "N_Taus",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
             ROOT.TH1D(
                 "DeltaR_AK15Jet_AK4JetTagged" + extension,
                 "DeltaR_AK15Jet_AK4JetTagged",
@@ -3646,14 +3760,32 @@ def control_plots_had_CR_ttbarEl(data=None):
             #label,
         #),
         plotClasses.Plot(
-            ROOT.TH1D("AK15Jet_CHF" + extension, "AK15 Jet CHF", 20, 0.0, 1.0),
+            ROOT.TH1D("AK15Jet_CHF" + extension, "AK15 Jet CHF", 40, 0.0, 1.0),
             "AK15Jet_CHF",
             selection,
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("AK15Jet_NHF" + extension, "AK15 Jet NHF", 20, 0.0, 1.0),
+            ROOT.TH1D("AK15Jet_NHF" + extension, "AK15 Jet NHF", 40, 0.0, 1.0),
             "AK15Jet_NHF",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_CEMF" + extension, "AK15 Jet CEMF", 40, 0.0, 1.0),
+            "AK15Jet_CEMF",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_NEMF" + extension, "AK15 Jet NEMF", 40, 0.0, 1.0),
+            "AK15Jet_NEMF",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_MF" + extension, "AK15 Jet MF", 40, 0.0, 1.0),
+            "AK15Jet_MF",
             selection,
             label,
         ),
@@ -3671,6 +3803,12 @@ def control_plots_had_CR_ttbarEl(data=None):
             selection,
             label,
         ),
+        plotClasses.Plot(
+            ROOT.TH1D("M_W_transverse" + extension, "m_{W,transverse}", 30, 0., 600.),
+            "M_W_transverse",
+            selection,
+            label,
+        ),
     ]
     if data:
         add_data_plots(plots=plots, data=data)
@@ -3685,6 +3823,7 @@ def control_plots_had_CR_ttbarMu(data=None):
     selection += "*(N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && ((Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX == 1) || (Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX == 1)))"
     selection += "*(N_LoosePhotons==0)"
     selection += "*(N_AK4JetsTagged_outside_AK15Jets>=1)"
+    selection += "*(M_W_transverse[0]<50.)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
 
     plots = [
@@ -3704,14 +3843,14 @@ def control_plots_had_CR_ttbarMu(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("CaloMET" + extension, "Calo MET", 20, 0.0, 200.0),
+            ROOT.TH1D("CaloMET" + extension, "Calo MET", 50, 0.0, 1000.0),
             "CaloMET",
             selection,
             label,
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "CaloMET_PFMET_ratio" + extension, "CaloMET_PFMET_ratio", 25, 0.0, 10.0
+                "CaloMET_PFMET_ratio" + extension, "CaloMET_PFMET_ratio", 50, 0.0, 10.0
             ),
             "CaloMET_PFMET_ratio",
             selection,
@@ -3721,7 +3860,7 @@ def control_plots_had_CR_ttbarMu(data=None):
             ROOT.TH1D(
                 "CaloMET_Hadr_Recoil_ratio" + extension,
                 "CaloMET_Hadr_Recoil_ratio",
-                25,
+                50,
                 0.0,
                 10.0,
             ),
@@ -3733,7 +3872,7 @@ def control_plots_had_CR_ttbarMu(data=None):
             ROOT.TH1D(
                 "CaloMET_PFMET_Recoil_ratio" + extension,
                 "CaloMET_PFMET_Recoil_ratio",
-                20,
+                40,
                 0.0,
                 2.0,
             ),
@@ -4280,6 +4419,12 @@ def control_plots_had_CR_ttbarMu(data=None):
             label,
         ),
         plotClasses.Plot(
+            ROOT.TH1D("N_Taus" + extension, "number of taus", 6, -0.5, 5.5),
+            "N_Taus",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
             ROOT.TH1D(
                 "DeltaR_AK15Jet_AK4JetTagged" + extension,
                 "DeltaR_AK15Jet_AK4JetTagged",
@@ -4336,14 +4481,32 @@ def control_plots_had_CR_ttbarMu(data=None):
             #label,
         #),
         plotClasses.Plot(
-            ROOT.TH1D("AK15Jet_CHF" + extension, "AK15 Jet CHF", 20, 0.0, 1.0),
+            ROOT.TH1D("AK15Jet_CHF" + extension, "AK15 Jet CHF", 40, 0.0, 1.0),
             "AK15Jet_CHF",
             selection,
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("AK15Jet_NHF" + extension, "AK15 Jet NHF", 20, 0.0, 1.0),
+            ROOT.TH1D("AK15Jet_NHF" + extension, "AK15 Jet NHF", 40, 0.0, 1.0),
             "AK15Jet_NHF",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_CEMF" + extension, "AK15 Jet CEMF", 40, 0.0, 1.0),
+            "AK15Jet_CEMF",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_NEMF" + extension, "AK15 Jet NEMF", 40, 0.0, 1.0),
+            "AK15Jet_NEMF",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_MF" + extension, "AK15 Jet MF", 40, 0.0, 1.0),
+            "AK15Jet_MF",
             selection,
             label,
         ),
@@ -4361,6 +4524,12 @@ def control_plots_had_CR_ttbarMu(data=None):
             selection,
             label,
         ),
+        plotClasses.Plot(
+            ROOT.TH1D("M_W_transverse" + extension, "m_{W,transverse}", 30, 0., 600.),
+            "M_W_transverse",
+            selection,
+            label,
+        ),
     ]
     if data:
         add_data_plots(plots=plots, data=data)
@@ -4372,9 +4541,10 @@ def control_plots_had_CR_WEl(data=None):
     extension = "_had_CR_WEl"
     
     selection = generalselection
-    selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele27_WPTight_Gsf_vX==1 || Triggered_HLT_Photon175_vX==1) && Evt_Pt_MET>50.)"
+    selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele27_WPTight_Gsf_vX==1 || Triggered_HLT_Photon175_vX==1))"
     selection += "*(N_LoosePhotons==0)"
     selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets==0)"
+    selection += "*(M_W_transverse[0]<50.)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
 
     plots = [
@@ -4394,14 +4564,14 @@ def control_plots_had_CR_WEl(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("CaloMET" + extension, "Calo MET", 20, 0.0, 200.0),
+            ROOT.TH1D("CaloMET" + extension, "Calo MET", 50, 0.0, 1000.0),
             "CaloMET",
             selection,
             label,
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "CaloMET_PFMET_ratio" + extension, "CaloMET_PFMET_ratio", 25, 0.0, 10.0
+                "CaloMET_PFMET_ratio" + extension, "CaloMET_PFMET_ratio", 50, 0.0, 10.0
             ),
             "CaloMET_PFMET_ratio",
             selection,
@@ -4411,7 +4581,7 @@ def control_plots_had_CR_WEl(data=None):
             ROOT.TH1D(
                 "CaloMET_Hadr_Recoil_ratio" + extension,
                 "CaloMET_Hadr_Recoil_ratio",
-                25,
+                50,
                 0.0,
                 10.0,
             ),
@@ -4423,7 +4593,7 @@ def control_plots_had_CR_WEl(data=None):
             ROOT.TH1D(
                 "CaloMET_PFMET_Recoil_ratio" + extension,
                 "CaloMET_PFMET_Recoil_ratio",
-                20,
+                40,
                 0.0,
                 2.0,
             ),
@@ -4974,6 +5144,12 @@ def control_plots_had_CR_WEl(data=None):
             label,
         ),
         plotClasses.Plot(
+            ROOT.TH1D("N_Taus" + extension, "number of taus", 6, -0.5, 5.5),
+            "N_Taus",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
             ROOT.TH1D(
                 "DeltaR_AK15Jet_AK4JetTagged" + extension,
                 "DeltaR_AK15Jet_AK4JetTagged",
@@ -5030,14 +5206,32 @@ def control_plots_had_CR_WEl(data=None):
             #label,
         #),
         plotClasses.Plot(
-            ROOT.TH1D("AK15Jet_CHF" + extension, "AK15 Jet CHF", 20, 0.0, 1.0),
+            ROOT.TH1D("AK15Jet_CHF" + extension, "AK15 Jet CHF", 40, 0.0, 1.0),
             "AK15Jet_CHF",
             selection,
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("AK15Jet_NHF" + extension, "AK15 Jet NHF", 20, 0.0, 1.0),
+            ROOT.TH1D("AK15Jet_NHF" + extension, "AK15 Jet NHF", 40, 0.0, 1.0),
             "AK15Jet_NHF",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_CEMF" + extension, "AK15 Jet CEMF", 40, 0.0, 1.0),
+            "AK15Jet_CEMF",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_NEMF" + extension, "AK15 Jet NEMF", 40, 0.0, 1.0),
+            "AK15Jet_NEMF",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_MF" + extension, "AK15 Jet MF", 40, 0.0, 1.0),
+            "AK15Jet_MF",
             selection,
             label,
         ),
@@ -5075,6 +5269,7 @@ def control_plots_had_CR_WMu(data=None):
     selection += "*(N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && ((Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX == 1) || (Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX == 1)))"
     selection += "*(N_LoosePhotons==0)"
     selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets==0)"
+    selection += "*(M_W_transverse[0]<50.)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
 
     plots = [
@@ -5094,14 +5289,14 @@ def control_plots_had_CR_WMu(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("CaloMET" + extension, "Calo MET", 20, 0.0, 200.0),
+            ROOT.TH1D("CaloMET" + extension, "Calo MET", 50, 0.0, 1000.0),
             "CaloMET",
             selection,
             label,
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "CaloMET_PFMET_ratio" + extension, "CaloMET_PFMET_ratio", 25, 0.0, 10.0
+                "CaloMET_PFMET_ratio" + extension, "CaloMET_PFMET_ratio", 50, 0.0, 10.0
             ),
             "CaloMET_PFMET_ratio",
             selection,
@@ -5111,7 +5306,7 @@ def control_plots_had_CR_WMu(data=None):
             ROOT.TH1D(
                 "CaloMET_Hadr_Recoil_ratio" + extension,
                 "CaloMET_Hadr_Recoil_ratio",
-                25,
+                50,
                 0.0,
                 10.0,
             ),
@@ -5123,7 +5318,7 @@ def control_plots_had_CR_WMu(data=None):
             ROOT.TH1D(
                 "CaloMET_PFMET_Recoil_ratio" + extension,
                 "CaloMET_PFMET_Recoil_ratio",
-                20,
+                40,
                 0.0,
                 2.0,
             ),
@@ -5670,6 +5865,12 @@ def control_plots_had_CR_WMu(data=None):
             label,
         ),
         plotClasses.Plot(
+            ROOT.TH1D("N_Taus" + extension, "number of taus", 6, -0.5, 5.5),
+            "N_Taus",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
             ROOT.TH1D(
                 "DeltaR_AK15Jet_AK4JetTagged" + extension,
                 "DeltaR_AK15Jet_AK4JetTagged",
@@ -5726,14 +5927,32 @@ def control_plots_had_CR_WMu(data=None):
             #label,
         #),
         plotClasses.Plot(
-            ROOT.TH1D("AK15Jet_CHF" + extension, "AK15 Jet CHF", 20, 0.0, 1.0),
+            ROOT.TH1D("AK15Jet_CHF" + extension, "AK15 Jet CHF", 40, 0.0, 1.0),
             "AK15Jet_CHF",
             selection,
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("AK15Jet_NHF" + extension, "AK15 Jet NHF", 20, 0.0, 1.0),
+            ROOT.TH1D("AK15Jet_NHF" + extension, "AK15 Jet NHF", 40, 0.0, 1.0),
             "AK15Jet_NHF",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_CEMF" + extension, "AK15 Jet CEMF", 40, 0.0, 1.0),
+            "AK15Jet_CEMF",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_NEMF" + extension, "AK15 Jet NEMF", 40, 0.0, 1.0),
+            "AK15Jet_NEMF",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_MF" + extension, "AK15 Jet MF", 40, 0.0, 1.0),
+            "AK15Jet_MF",
             selection,
             label,
         ),
@@ -5768,7 +5987,7 @@ def control_plots_had_CR_Gamma(data=None):
     extension = "_had_CR_Gamma"
     
     selection = generalselection
-    selection += "*(N_TightPhotons==1 && N_LoosePhotons==1 && N_LooseMuons==0 && N_LooseElectrons==0 && Triggered_HLT_Photon175_vX==1 && Photon_Pt[0]>=200.)"
+    selection += "*(N_TightPhotons==1 && N_LoosePhotons==1 && N_LooseMuons==0 && N_LooseElectrons==0 && Triggered_HLT_Photon200_vX==1 && Photon_Pt[0]>=230.)"
     selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets==0)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
 
@@ -5789,14 +6008,14 @@ def control_plots_had_CR_Gamma(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("CaloMET" + extension, "Calo MET", 20, 0.0, 200.0),
+            ROOT.TH1D("CaloMET" + extension, "Calo MET", 50, 0.0, 1000.0),
             "CaloMET",
             selection,
             label,
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "CaloMET_PFMET_ratio" + extension, "CaloMET_PFMET_ratio", 25, 0.0, 10.0
+                "CaloMET_PFMET_ratio" + extension, "CaloMET_PFMET_ratio", 50, 0.0, 10.0
             ),
             "CaloMET_PFMET_ratio",
             selection,
@@ -5806,7 +6025,7 @@ def control_plots_had_CR_Gamma(data=None):
             ROOT.TH1D(
                 "CaloMET_Hadr_Recoil_ratio" + extension,
                 "CaloMET_Hadr_Recoil_ratio",
-                25,
+                50,
                 0.0,
                 10.0,
             ),
@@ -5818,7 +6037,7 @@ def control_plots_had_CR_Gamma(data=None):
             ROOT.TH1D(
                 "CaloMET_PFMET_Recoil_ratio" + extension,
                 "CaloMET_PFMET_Recoil_ratio",
-                20,
+                40,
                 0.0,
                 2.0,
             ),
@@ -6365,6 +6584,12 @@ def control_plots_had_CR_Gamma(data=None):
             label,
         ),
         plotClasses.Plot(
+            ROOT.TH1D("N_Taus" + extension, "number of taus", 6, -0.5, 5.5),
+            "N_Taus",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
             ROOT.TH1D(
                 "DeltaR_AK15Jet_AK4JetTagged" + extension,
                 "DeltaR_AK15Jet_AK4JetTagged",
@@ -6421,14 +6646,32 @@ def control_plots_had_CR_Gamma(data=None):
             #label,
         #),
         plotClasses.Plot(
-            ROOT.TH1D("AK15Jet_CHF" + extension, "AK15 Jet CHF", 20, 0.0, 1.0),
+            ROOT.TH1D("AK15Jet_CHF" + extension, "AK15 Jet CHF", 40, 0.0, 1.0),
             "AK15Jet_CHF",
             selection,
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("AK15Jet_NHF" + extension, "AK15 Jet NHF", 20, 0.0, 1.0),
+            ROOT.TH1D("AK15Jet_NHF" + extension, "AK15 Jet NHF", 40, 0.0, 1.0),
             "AK15Jet_NHF",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_CEMF" + extension, "AK15 Jet CEMF", 40, 0.0, 1.0),
+            "AK15Jet_CEMF",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_NEMF" + extension, "AK15 Jet NEMF", 40, 0.0, 1.0),
+            "AK15Jet_NEMF",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("AK15Jet_MF" + extension, "AK15 Jet MF", 40, 0.0, 1.0),
+            "AK15Jet_MF",
             selection,
             label,
         ),
@@ -6469,7 +6712,7 @@ def getDiscriminatorPlots(data=None, discrname=""):
     discriminatorPlots += control_plots_had_CR_ttbarMu(data)
     discriminatorPlots += control_plots_had_CR_WEl(data)
     discriminatorPlots += control_plots_had_CR_WMu(data)
-    #discriminatorPlots += control_plots_had_CR_Gamma(data)
+    discriminatorPlots += control_plots_had_CR_Gamma(data)
 
     return discriminatorPlots
 

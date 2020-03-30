@@ -53,7 +53,7 @@ def main(pyrootdir, opts):
     variable_cfg = "Monotop/additionalVariables"
     plot_cfg = "Monotop/controlPlots_had_2018"
     syst_cfg = "Monotop/systematics_2018"
-
+    
     # file for rate factors
     # rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
     # rateFactorsFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/rate_factors_V2.csv"
@@ -61,7 +61,7 @@ def main(pyrootdir, opts):
     # script options
     analysisOptions = {
         # general options
-        "usePseudoData": True,
+        "usePseudoData": False,
         "testrun": False,  # test run with less samples
         "stopAfterCompile": False,  # stop script after compiling
         # options to activate parts of the script
@@ -197,6 +197,9 @@ def main(pyrootdir, opts):
         pP.setMaxEvts(150000)
         # pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
+        
+        pP.setCatNames([""])
+        pP.setCatSelections(["(Hadr_Recoil_Pt>250.)*(N_AK15Jets==1)*(N_Jets>=1)*(N_HEM_Jets==0)*(N_HEM_AK15Jets==0)*(N_HEM_METS==0)*(N_Taus==0)*(DeltaPhi_AK15Jet_Hadr_Recoil[0]>2.5)"])
 
         # run plotParallel
         pP.run()

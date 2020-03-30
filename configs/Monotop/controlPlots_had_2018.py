@@ -25,7 +25,7 @@ generalselection += "*(DeltaPhi_AK15Jet_Hadr_Recoil[0]>2.5)"
 # ak15 jet quality cuts
 generalselection += "*(AK15Jet_CHF[0]>0.1)*(AK15Jet_NHF[0]<0.8)*(AK15Jet_CEMF[0]<0.9)*(AK15Jet_NEMF[0]<0.8)*(AK15Jet_MF[0]<0.4)"
 # top mass window
-generalselection += "*(AK15Jet_PuppiSoftDropMass[0]>110.)*(AK15Jet_PuppiSoftDropMass[0]<210.)"
+#generalselection += "*(AK15Jet_PuppiSoftDropMass[0]>110.)*(AK15Jet_PuppiSoftDropMass[0]<210.)"
 
 def control_plots_had_SR(data=None):
     label = "#scale[0.8]{signal region (hadronic)}"
@@ -835,7 +835,7 @@ def control_plots_had_CR_ZMuMu(data=None):
     selection += "*((Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX == 1) || (Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX == 1))"
     selection += "*(DiMuon_Mass>60.)*(DiMuon_Mass<120.)"
     selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets==0)"
-    selection += "*(DiMuon_Pt>250.)"
+    selection += "*(DiMuon_Pt>200.)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
 
     plots = [
@@ -1606,7 +1606,7 @@ def control_plots_had_CR_ZElEl(data=None):
     selection += "*(Triggered_HLT_Ele32_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1)"
     selection += "*(DiElectron_Mass>60.)*(DiElectron_Mass<120.)"
     selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets==0)"
-    selection += "*(DiElectron_Pt>250.)"
+    selection += "*(DiElectron_Pt>200.)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
 
     plots = [
@@ -4543,7 +4543,7 @@ def control_plots_had_CR_WEl(data=None):
     extension = "_had_CR_WEl"
     
     selection = generalselection
-    selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele32_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1) && Evt_Pt_MET>50.)"
+    selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele32_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1))"
     selection += "*(N_LoosePhotons==0)"
     selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets==0)"
     selection += "*(M_W_transverse[0]<50.)"
