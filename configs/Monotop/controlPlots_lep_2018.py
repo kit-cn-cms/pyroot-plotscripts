@@ -12,14 +12,14 @@ import ROOT
 from array import array
 from copy import deepcopy
 
-generalselection = "(N_HEM_Jets==0)*(N_HEM_METS==0)*(Evt_Pt_MET>100.)*(N_LoosePhotons==0)*(DeltaPhi_AK4Jet_MET[0]>1.0)"
+generalselection = "(N_HEM_Jets==0)*(N_HEM_METS==0)*(Evt_Pt_MET>150.)*(N_LoosePhotons==0)*(CaloMET>150.)*(DeltaPhi_AK4Jet_MET[0]>2.0)"
+generalselection += "*(M_W_transverse[0]>=50.)"
+generalselection += "*((N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && Triggered_HLT_IsoMu24_vX==1) || (N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele32_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1)))"
 
 def control_plots_lep_CR_ttbarlep(data=None):
     label = "#scale[0.8]{t#bar{t} control region (leptonic)}"
     extension = "_lep_CR_ttbarlep"
     selection = generalselection
-    selection += "*((N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && Triggered_HLT_IsoMu24_vX==1) || (N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele32_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1)))"
-    selection += "*(M_W_transverse[0]>=50.)"
     selection += "*(N_BTagsM>=1 && N_BTagsL>=2)"
 
     plots = [
@@ -102,6 +102,30 @@ def control_plots_lep_CR_ttbarlep(data=None):
         ),
         plotClasses.Plot(
             ROOT.TH1D(
+                "DeltaPhi_AK4Jet_MET_0" + extension, "DeltaPhi_AK4Jet_MET_0", 30, 0.0, 3.14
+            ),
+            "DeltaPhi_AK4Jet_MET[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaPhi_AK4Jet_MET_1" + extension, "DeltaPhi_AK4Jet_MET_1", 30, 0.0, 3.14
+            ),
+            "DeltaPhi_AK4Jet_MET[1]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaPhi_AK4Jet_MET_2" + extension, "DeltaPhi_AK4Jet_MET_2", 30, 0.0, 3.14
+            ),
+            "DeltaPhi_AK4Jet_MET[2]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
                 "DeltaPhi_AK4Jet_Hadr_Recoil" + extension,
                 "DeltaPhi_AK4Jet_Hadr_Recoil",
                 30,
@@ -223,6 +247,36 @@ def control_plots_lep_CR_ttbarlep(data=None):
             label,
         ),
         plotClasses.Plot(
+            ROOT.TH1D("Jet_NHF" + extension, "AK4 Jet NHF", 20, 0, 1.),
+            "Jet_NHF",
+            selection,
+        label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("Jet_CHF" + extension, "AK4 Jet CHF", 20, 0, 1.),
+            "Jet_CHF",
+            selection,
+        label,
+        ),
+        #plotClasses.Plot(
+        #    ROOT.TH1D("Jet_NEMF" + extension, "AK4 Jet NEMF", 20, 0, 1.),
+        #    "Jet_NEMF",
+        #    selection,
+        #label,
+        #),
+        #plotClasses.Plot(
+        #    ROOT.TH1D("Jet_CEMF" + extension, "AK4 Jet CEMF", 20, 0, 1.),
+        #    "Jet_CEMF",
+        #    selection,
+        #label,
+        #),
+        #plotClasses.Plot(
+        #    ROOT.TH1D("Jet_MF" + extension, "AK4 Jet MF", 20, 0, 1.),
+        #    "Jet_MF",
+        #    selection,
+        #label,
+        #),
+        plotClasses.Plot(
             ROOT.TH1D("N_Jets" + extension, "number of AK4 jets", 6, -0.5, 5.5),
             "N_Jets",
             selection,
@@ -248,6 +302,87 @@ def control_plots_lep_CR_ttbarlep(data=None):
             selection,
             label,
         ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaPhi_LooseMuon_MET" + extension, "DeltaPhi_LooseMuon_MET", 30, 0.0, 3.14
+            ),
+            "DeltaPhi_LooseMuon_MET",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaR_AK4Jet_LooseMuon" + extension, "DeltaR_AK4Jet_LooseMuon", 30, 0.0, 6.0
+            ),
+            "DeltaR_AK4Jet_LooseMuon",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaR_AK4Jet_LooseMuon_0" + extension, "DeltaR_AK4Jet_LooseMuon_0", 30, 0.0, 6.0
+            ),
+            "DeltaR_AK4Jet_LooseMuon[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaR_AK4Jet_LooseMuon_1" + extension, "DeltaR_AK4Jet_LooseMuon_1", 30, 0.0, 6.0
+            ),
+            "DeltaR_AK4Jet_LooseMuon[1]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaR_AK4Jet_LooseMuon_2" + extension, "DeltaR_AK4Jet_LooseMuon_2", 30, 0.0, 6.0
+            ),
+            "DeltaR_AK4Jet_LooseMuon[2]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaPhi_LooseElectron_MET" + extension, "DeltaPhi_LooseElectron_MET", 30, 0.0, 3.14
+            ),
+            "DeltaPhi_LooseElectron_MET",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaR_AK4Jet_LooseElectron" + extension, "DeltaR_AK4Jet_LooseElectron", 30, 0.0, 6.0 
+            ),
+            "DeltaR_AK4Jet_LooseElectron",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaR_AK4Jet_LooseElectron_0" + extension, "DeltaR_AK4Jet_LooseElectron_0", 30, 0.0, 6.0
+            ),
+            "DeltaR_AK4Jet_LooseElectron[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaR_AK4Jet_LooseElectron_1" + extension, "DeltaR_AK4Jet_LooseElectron_1", 30, 0.0, 6.0
+            ),
+            "DeltaR_AK4Jet_LooseElectron[1]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaR_AK4Jet_LooseElectron_2" + extension, "DeltaR_AK4Jet_LooseElectron_2", 30, 0.0, 6.0
+            ),
+            "DeltaR_AK4Jet_LooseElectron[2]",
+            selection,
+            label,
+        ),
+
     ]
     if data:
         add_data_plots(plots=plots, data=data)
@@ -259,8 +394,6 @@ def control_plots_lep_CR_Wlep(data=None):
     label = "#scale[0.8]{W control region (leptonic)}"
     extension = "_lep_CR_Wlep"
     selection = generalselection
-    selection += "*((N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && Triggered_HLT_IsoMu24_vX==1) || (N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele32_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1)))"
-    selection += "*(M_W_transverse[0]>=50.)"
     selection += "*(N_BTagsL==0)"
 
     plots = [
@@ -343,6 +476,30 @@ def control_plots_lep_CR_Wlep(data=None):
         ),
         plotClasses.Plot(
             ROOT.TH1D(
+                "DeltaPhi_AK4Jet_MET_0" + extension, "DeltaPhi_AK4Jet_MET_0", 30, 0.0, 3.14
+            ),
+            "DeltaPhi_AK4Jet_MET[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaPhi_AK4Jet_MET_1" + extension, "DeltaPhi_AK4Jet_MET_1", 30, 0.0, 3.14
+            ),
+            "DeltaPhi_AK4Jet_MET[1]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaPhi_AK4Jet_MET_2" + extension, "DeltaPhi_AK4Jet_MET_2", 30, 0.0, 3.14
+            ),
+            "DeltaPhi_AK4Jet_MET[2]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
                 "DeltaPhi_AK4Jet_Hadr_Recoil" + extension,
                 "DeltaPhi_AK4Jet_Hadr_Recoil",
                 30,
@@ -464,6 +621,36 @@ def control_plots_lep_CR_Wlep(data=None):
             label,
         ),
         plotClasses.Plot(
+            ROOT.TH1D("Jet_NHF" + extension, "AK4 Jet NHF", 20, 0, 1.),
+            "Jet_NHF",
+            selection,
+        label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("Jet_CHF" + extension, "AK4 Jet CHF", 20, 0, 1.),
+            "Jet_CHF",
+            selection,
+        label,
+        ),
+        #plotClasses.Plot(
+        #    ROOT.TH1D("Jet_NEMF" + extension, "AK4 Jet NEMF", 20, 0, 1.),
+        #    "Jet_NEMF",
+        #    selection,
+        #label,
+        #),
+        #plotClasses.Plot(
+        #    ROOT.TH1D("Jet_CEMF" + extension, "AK4 Jet CEMF", 20, 0, 1.),
+        #    "Jet_CEMF",
+        #    selection,
+        #label,
+        #),
+        #plotClasses.Plot(
+        #    ROOT.TH1D("Jet_MF" + extension, "AK4 Jet MF", 20, 0, 1.),
+        #    "Jet_MF",
+        #    selection,
+        #label,
+        #),
+        plotClasses.Plot(
             ROOT.TH1D("N_Jets" + extension, "number of AK4 jets", 6, -0.5, 5.5),
             "N_Jets",
             selection,
@@ -489,6 +676,86 @@ def control_plots_lep_CR_Wlep(data=None):
             selection,
             label,
         ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaPhi_LooseMuon_MET" + extension, "DeltaPhi_LooseMuon_MET", 30, 0.0, 3.14
+            ),
+            "DeltaPhi_LooseMuon_MET",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaR_AK4Jet_LooseMuon" + extension, "DeltaR_AK4Jet_LooseMuon", 30, 0.0, 6.0
+            ),
+            "DeltaR_AK4Jet_LooseMuon",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaR_AK4Jet_LooseMuon_0" + extension, "DeltaR_AK4Jet_LooseMuon_0", 30, 0.0, 6.0
+            ),
+            "DeltaR_AK4Jet_LooseMuon[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaR_AK4Jet_LooseMuon_1" + extension, "DeltaR_AK4Jet_LooseMuon_1", 30, 0.0, 6.0
+            ),
+            "DeltaR_AK4Jet_LooseMuon[1]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaR_AK4Jet_LooseMuon_2" + extension, "DeltaR_AK4Jet_LooseMuon_2", 30, 0.0, 6.0
+            ),
+            "DeltaR_AK4Jet_LooseMuon[2]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaPhi_LooseElectron_MET" + extension, "DeltaPhi_LooseElectron_MET", 30, 0.0, 3.14
+            ),
+            "DeltaPhi_LooseElectron_MET",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaR_AK4Jet_LooseElectron" + extension, "DeltaR_AK4Jet_LooseElectron", 30, 0.0, 6.0
+            ),
+            "DeltaR_AK4Jet_LooseElectron",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaR_AK4Jet_LooseElectron_0" + extension, "DeltaR_AK4Jet_LooseElectron_0", 30, 0.0, 6.0
+            ),
+            "DeltaR_AK4Jet_LooseElectron[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaR_AK4Jet_LooseElectron_1" + extension, "DeltaR_AK4Jet_LooseElectron_1", 30, 0.0, 6.0
+            ),
+            "DeltaR_AK4Jet_LooseElectron[1]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaR_AK4Jet_LooseElectron_2" + extension, "DeltaR_AK4Jet_LooseElectron_2", 30, 0.0, 6.0
+            ),
+            "DeltaR_AK4Jet_LooseElectron[2]",
+            selection,
+            label,
+        ),
     ]
     if data:
         add_data_plots(plots=plots, data=data)
@@ -500,8 +767,6 @@ def control_plots_lep_SR(data=None):
     label = "#scale[0.8]{signal region (leptonic)}"
     extension = "_lep_SR"
     selection = generalselection
-    selection += "*((N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && Triggered_HLT_IsoMu24_vX==1) || (N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele32_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1)))"
-    selection += "*(M_W_transverse[0]>=50.)"
     selection += "*(N_BTagsM==1 && N_BTagsL==1)"
 
     plots = [
@@ -584,6 +849,30 @@ def control_plots_lep_SR(data=None):
         ),
         plotClasses.Plot(
             ROOT.TH1D(
+                "DeltaPhi_AK4Jet_MET_0" + extension, "DeltaPhi_AK4Jet_MET_0", 30, 0.0, 3.14
+            ),
+            "DeltaPhi_AK4Jet_MET[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaPhi_AK4Jet_MET_1" + extension, "DeltaPhi_AK4Jet_MET_1", 30, 0.0, 3.14
+            ),
+            "DeltaPhi_AK4Jet_MET[1]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaPhi_AK4Jet_MET_2" + extension, "DeltaPhi_AK4Jet_MET_2", 30, 0.0, 3.14
+            ),
+            "DeltaPhi_AK4Jet_MET[2]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
                 "DeltaPhi_AK4Jet_Hadr_Recoil" + extension,
                 "DeltaPhi_AK4Jet_Hadr_Recoil",
                 30,
@@ -705,6 +994,36 @@ def control_plots_lep_SR(data=None):
             label,
         ),
         plotClasses.Plot(
+            ROOT.TH1D("Jet_NHF" + extension, "AK4 Jet NHF", 20, 0, 1.),
+            "Jet_NHF",
+            selection,
+        label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("Jet_CHF" + extension, "AK4 Jet CHF", 20, 0, 1.),
+            "Jet_CHF",
+            selection,
+        label,
+        ),
+        #plotClasses.Plot(
+        #    ROOT.TH1D("Jet_NEMF" + extension, "AK4 Jet NEMF", 20, 0, 1.),
+        #    "Jet_NEMF",
+        #    selection,
+        #label,
+        #),
+        #plotClasses.Plot(
+        #    ROOT.TH1D("Jet_CEMF" + extension, "AK4 Jet CEMF", 20, 0, 1.),
+        #    "Jet_CEMF",
+        #    selection,
+        #label,
+        #),
+        #plotClasses.Plot(
+        #    ROOT.TH1D("Jet_MF" + extension, "AK4 Jet MF", 20, 0, 1.),
+        #    "Jet_MF",
+        #    selection,
+        #label,
+        #),
+        plotClasses.Plot(
             ROOT.TH1D("N_Jets" + extension, "number of AK4 jets", 6, -0.5, 5.5),
             "N_Jets",
             selection,
@@ -727,6 +1046,86 @@ def control_plots_lep_SR(data=None):
         plotClasses.Plot(
             ROOT.TH1D("M_W_transverse" + extension, "m_{W,transverse}", 30, 0., 600.),
             "M_W_transverse",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaPhi_LooseMuon_MET" + extension, "DeltaPhi_LooseMuon_MET", 30, 0.0, 3.14
+            ),
+            "DeltaPhi_LooseMuon_MET",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaR_AK4Jet_LooseMuon" + extension, "DeltaR_AK4Jet_LooseMuon", 30, 0.0, 6.0
+            ),
+            "DeltaR_AK4Jet_LooseMuon",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaR_AK4Jet_LooseMuon_0" + extension, "DeltaR_AK4Jet_LooseMuon_0", 30, 0.0, 6.0
+            ),
+            "DeltaR_AK4Jet_LooseMuon[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaR_AK4Jet_LooseMuon_1" + extension, "DeltaR_AK4Jet_LooseMuon_1", 30, 0.0, 6.0
+            ),
+            "DeltaR_AK4Jet_LooseMuon[1]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaR_AK4Jet_LooseMuon_2" + extension, "DeltaR_AK4Jet_LooseMuon_2", 30, 0.0, 6.0
+            ),
+            "DeltaR_AK4Jet_LooseMuon[2]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaPhi_LooseElectron_MET" + extension, "DeltaPhi_LooseElectron_MET", 30, 0.0, 3.14
+            ),
+            "DeltaPhi_LooseElectron_MET",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaR_AK4Jet_LooseElectron" + extension, "DeltaR_AK4Jet_LooseElectron", 30, 0.0, 6.0
+            ),
+            "DeltaR_AK4Jet_LooseElectron",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaR_AK4Jet_LooseElectron_0" + extension, "DeltaR_AK4Jet_LooseElectron_0", 30, 0.0, 6.0
+            ),
+            "DeltaR_AK4Jet_LooseElectron[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaR_AK4Jet_LooseElectron_1" + extension, "DeltaR_AK4Jet_LooseElectron_1", 30, 0.0, 6.0
+            ),
+            "DeltaR_AK4Jet_LooseElectron[1]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaR_AK4Jet_LooseElectron_2" + extension, "DeltaR_AK4Jet_LooseElectron_2", 30, 0.0, 6.0
+            ),
+            "DeltaR_AK4Jet_LooseElectron[2]",
             selection,
             label,
         ),
