@@ -12,6 +12,8 @@ import ROOT
 from array import array
 from copy import deepcopy
 
+fast = True
+
 discr_binning = [250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 800, 1000, 1500]
 
 # met/recoil + 1 ak15jet phase space
@@ -820,6 +822,16 @@ def control_plots_had_SR(data=None):
             label,
         ),
     ]
+    if fast:
+        plots = [
+            plotClasses.Plot(
+                ROOT.TH1D(
+                    "Hadr_Recoil_Pt" + extension, "Hadronic Recoil", len(discr_binning)-1, array('d',discr_binning)
+                ),
+                "Hadr_Recoil_Pt",
+                selection,
+                label,)
+            ]
     if data:
         add_data_plots(plots=plots, data=data)
 
@@ -1591,6 +1603,16 @@ def control_plots_had_CR_ZMuMu(data=None):
             label,
         ),
     ]
+    if fast:
+        plots = [
+            plotClasses.Plot(
+                ROOT.TH1D(
+                    "Hadr_Recoil_Pt" + extension, "Hadronic Recoil", len(discr_binning)-1, array('d',discr_binning)
+                ),
+                "Hadr_Recoil_Pt",
+                selection,
+                label,)
+            ]
     if data:
         add_data_plots(plots=plots, data=data)
 
@@ -2372,6 +2394,16 @@ def control_plots_had_CR_ZElEl(data=None):
             label,
         ),
     ]
+    if fast:
+        plots = [
+            plotClasses.Plot(
+                ROOT.TH1D(
+                    "Hadr_Recoil_Pt" + extension, "Hadronic Recoil", len(discr_binning)-1, array('d',discr_binning)
+                ),
+                "Hadr_Recoil_Pt",
+                selection,
+                label,)
+            ]
     if data:
         add_data_plots(plots=plots, data=data)
 
@@ -3087,6 +3119,16 @@ def control_plots_had_CR_ttbarhad(data=None):
             label,
         ),
     ]
+    if fast:
+        plots = [
+            plotClasses.Plot(
+                ROOT.TH1D(
+                    "Hadr_Recoil_Pt" + extension, "Hadronic Recoil", len(discr_binning)-1, array('d',discr_binning)
+                ),
+                "Hadr_Recoil_Pt",
+                selection,
+                label,)
+            ]
     if data:
         add_data_plots(plots=plots, data=data)
 
@@ -3812,6 +3854,16 @@ def control_plots_had_CR_ttbarEl(data=None):
             label,
         ),
     ]
+    if fast:
+        plots = [
+            plotClasses.Plot(
+                ROOT.TH1D(
+                    "Hadr_Recoil_Pt" + extension, "Hadronic Recoil", len(discr_binning)-1, array('d',discr_binning)
+                ),
+                "Hadr_Recoil_Pt",
+                selection,
+                label,)
+            ]
     if data:
         add_data_plots(plots=plots, data=data)
 
@@ -4533,6 +4585,16 @@ def control_plots_had_CR_ttbarMu(data=None):
             label,
         ),
     ]
+    if fast:
+        plots = [
+            plotClasses.Plot(
+                ROOT.TH1D(
+                    "Hadr_Recoil_Pt" + extension, "Hadronic Recoil", len(discr_binning)-1, array('d',discr_binning)
+                ),
+                "Hadr_Recoil_Pt",
+                selection,
+                label,)
+            ]
     if data:
         add_data_plots(plots=plots, data=data)
 
@@ -5258,6 +5320,16 @@ def control_plots_had_CR_WEl(data=None):
             label,
         ),
     ]
+    if fast:
+        plots = [
+            plotClasses.Plot(
+                ROOT.TH1D(
+                    "Hadr_Recoil_Pt" + extension, "Hadronic Recoil", len(discr_binning)-1, array('d',discr_binning)
+                ),
+                "Hadr_Recoil_Pt",
+                selection,
+                label,)
+            ]
     if data:
         add_data_plots(plots=plots, data=data)
 
@@ -5979,6 +6051,16 @@ def control_plots_had_CR_WMu(data=None):
             label,
         ),
     ]
+    if fast:
+        plots = [
+            plotClasses.Plot(
+                ROOT.TH1D(
+                    "Hadr_Recoil_Pt" + extension, "Hadronic Recoil", len(discr_binning)-1, array('d',discr_binning)
+                ),
+                "Hadr_Recoil_Pt",
+                selection,
+                label,)
+            ]
     if data:
         add_data_plots(plots=plots, data=data)
 
@@ -6698,6 +6780,16 @@ def control_plots_had_CR_Gamma(data=None):
             label,
         ),
     ]
+    if fast:
+        plots = [
+            plotClasses.Plot(
+                ROOT.TH1D(
+                    "Hadr_Recoil_Pt" + extension, "Hadronic Recoil", len(discr_binning)-1, array('d',discr_binning)
+                ),
+                "Hadr_Recoil_Pt",
+                selection,
+                label,)
+            ]
     if data:
         add_data_plots(plots=plots, data=data)
 
