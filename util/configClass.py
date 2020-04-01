@@ -157,6 +157,7 @@ class configData:
                         newSel, 
                         sample.nick+sysName, 
                         origName = sample.nick,
+                        vetoEventWeights = sample.vetoEventWeights,
                         samDict = self.pltcfg.sampleDict ))
 
         return systSamples
