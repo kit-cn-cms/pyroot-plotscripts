@@ -59,7 +59,7 @@ ttHpath = path+'/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8*/*nominal*.root'+';'+
 	      path+'/ttHToNonbb_M125*/*nominal*.root'
 
 friendTrees = {
-    "MEMDB": "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/friends/2017/",
+    "MEMDB": "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/friends_final/2017",
     }
 
 # SELECTIONS
