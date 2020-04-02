@@ -333,8 +333,12 @@ def encodeSampleSelection(samples, varManager):
         if arraySelection == '':  arraySelection = '1'
         sampleSelection = sample.selection
         if sampleSelection == '': sampleSelection = '1'
+        
+        if not sample.vetoEventWeights is None:
+            text+= '    if(processname=="'+sample.nick+'" && abs(NomWeight*Weight_XS) >= '+str(sample.vetoEventWeights)+') continue;\n'
+
         text+= '    if(processname=="'+sample.nick+'" && (!('+arraySelection+') || ('+sampleSelection+')==0) ) continue;\n'
-        text+= '    else if(processname=="'+sample.nick+'") sampleweight='+sampleSelection+';\n'
+        text+= '    else if(processname=="'+sample.nick+'") sampleweight='+sampleSelection+';\n\n'
     return text
 # -------------------------------------------------------------------------------------------------
 
