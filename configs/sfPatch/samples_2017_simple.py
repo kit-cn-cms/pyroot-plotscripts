@@ -17,20 +17,26 @@ path  = "/nfs/dust/cms/user/vdlinden/legacyTTH/ntuples/nobtags/2017/"
 path_4FS_ttbb_SL  = path+"/TTbb*_new_pmx/*nominal*.root"
 path_4FS_ttbb_DL  = path+"/TTbb*DL/*nominal*.root"
 path_4FS_ttbb_FH  = path+"/TTbb_4f*Hadronic*/*nominal*.root"
+path_4FS_ttbb     = path+"/TTbb*/*nominal*.root"
 
 path_5FS_ttbar_SL = path+"/TTToSemiLeptonic*/*nominal*.root"
 path_5FS_ttbar_DL = path+"/TTTo2L2Nu*/*nominal*.root"
 path_5FS_ttbar_FH = path+"/TTToHadronic*/*nominal*.root"
+path_5FS_ttbar    = path+"/TTTo*/*nominal*.root"
 
 path_ttH_bb       = path+"/ttHTobb*/*nominal*.root"
 path_ttH_nonbb    = path+"/ttHToNonbb*/*nominal*.root"
+path_ttH          = path+"/ttH*/*nominal*.root"
 
 path_ttZ_qq       = path+"/TTZToQQ*/*nominal*.root"
 path_ttZ_ll       = path+"/TTZToLL*/*nominal*.root"
+path_ttZ          = path+"/TTZ*/*nominal*.root"
+
 # SELECTIONS
 # need to veto muon events in electron dataset to avoid double counting and vice versa
-sel_singleel="((N_LooseMuons==0 && N_TightElectrons==1))"
-sel_singlemu="(N_LooseElectrons==0 && N_TightMuons==1)"
+sel_singleel="((N_LooseMuons==0 && N_TightElectrons==1) && (Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX || ( Triggered_HLT_Ele32_WPTight_Gsf_L1DoubleEG_vX && Triggered_HLT_Ele32_WPTight_Gsf_2017SeedsX )))"
+sel_singlemu="(N_LooseElectrons==0 && N_TightMuons==1 && (Triggered_HLT_IsoMu27_vX))"
+
 # jet tag base selection
 
 sel_jettag = "(N_Jets>=4)*(Evt_MET_Pt>20.)"
@@ -81,37 +87,37 @@ samplesDataControlPlots=[
 
 samples  = [
      plotClasses.Sample('t#bar{t}+H',ROOT.kBlue+1,
-            path_ttH_bb+";"+path_ttH_nonbb,
+            path_ttH,
             lumi,
             'ttH',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
      plotClasses.Sample('t#bar{t}+b#bar{b} (4FS)',ROOT.kRed+3,
-             path_4FS_ttbb_SL+";"+path_4FS_ttbb_DL+";"+path_4FS_ttbb_FH,
+             path_4FS_ttbb,
              lumi+"*"+sel_tthf,
              'ttbb',
              samDict=sampleDict, readTrees=doReadTrees),
 
      plotClasses.Sample('t#bar{t}+b#bar{b} (5FS)',ROOT.kRed+3,
-             path_5FS_ttbar_SL+";"+path_5FS_ttbar_DL+";"+path_5FS_ttbar_FH,
+             path_5FS_ttbar,
              lumi+"*"+sel_tthf,
              'ttbb_5FS',
              samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}+lf',ROOT.kRed-7,
-            path_5FS_ttbar_SL+";"+path_5FS_ttbar_DL+";"+path_5FS_ttbar_FH,
+            path_5FS_ttbar,
             lumi+"*"+sel_ttlf,
             'ttlf',
             samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,
-            path_5FS_ttbar_SL+";"+path_5FS_ttbar_DL+";"+path_5FS_ttbar_FH,
+            path_5FS_ttbar,
             lumi+"*"+sel_ttcc,
             'ttcc',
             samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}+Z',ROOT.kOrange+7,
-            path_ttZ_qq+";"+path_ttZ_ll,
+            path_ttZ,
             lumi,
             'ttZ',
             samDict=sampleDict, readTrees=doReadTrees),
