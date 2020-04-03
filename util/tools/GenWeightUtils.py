@@ -89,8 +89,8 @@ class GenWeightNormalization():
             keyword = TString::Format("%s_%s", currentSample.Data(), entry.first.Data());
             //std::cout << "loading " << keyword << std::endl;
             if( GenWeight_Norm_Map.find(keyword)!=GenWeight_Norm_Map.end()){
-                std::cout << "returning entry '" << GenWeight_Norm_Map[keyword];
-                std::cout << "' for keyword '" << keyword.Data() << "'" << std::endl;
+                //std::cout << "returning entry '" << GenWeight_Norm_Map[keyword];
+                //std::cout << "' for keyword '" << keyword.Data() << "'" << std::endl;
                 input.at(entry.first) = GenWeight_Norm_Map.at(keyword);
             }
             else if(counter<100) {

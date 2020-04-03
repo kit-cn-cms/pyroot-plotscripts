@@ -40,7 +40,7 @@ def getAddVars():
         # "Evt_blr_ETH_transformed",
         "N_GenTopLep",
         "GenHiggs_DecProd1_PDGID",
-
+        "memDBp",
 
         ]
 
