@@ -24,6 +24,42 @@ def plots_ljets_ge4j_ge4t(data = None):
     selection = "(N_Jets>=4&&N_BTagsM>=4)&&(1.)"
 
 
+    interf_ljets_ge4j_ge4t_Reco_JABDT_ttH_log_h_pt = vhi.variableHistoInterface(variable_name  = "Reco_JABDT_ttH_log_h_pt",
+                                            label          = "ljets_ge4j_ge4t_Reco_JABDT_ttH_log_h_pt",
+                                            selection      = "(N_Jets>=4&&N_BTagsM>=4)&&(1.)")
+    interf_ljets_ge4j_ge4t_Reco_JABDT_ttH_log_h_pt.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_Reco_JABDT_ttH_log_h_pt","")
+    interf_ljets_ge4j_ge4t_Reco_JABDT_ttH_log_h_pt.category_label = label
+    interf_ljets_ge4j_ge4t_Reco_JABDT_ttH_log_h_pt.bin_edges = [ 
+				0.0,
+				1.2,
+				1.8,
+				2.2,
+				2.4,
+				2.6,
+				2.8,
+				3.0,
+				3.2,
+				3.4,
+				3.6,
+				3.8,
+				4.0,
+				4.2,
+				4.4,
+				4.6,
+				4.8,
+				5.0,
+				5.2,
+				5.4,
+				5.6,
+				5.8,
+				6.0,
+				6.2,
+				6.4,
+				]
+    interf_ljets_ge4j_ge4t_Reco_JABDT_ttH_log_h_pt.histotitle = "Reco_JABDT_ttH_log_h_pt"
+    interf_ljets_ge4j_ge4t_Reco_JABDT_ttH_log_h_pt.histoname = "ljets_ge4j_ge4t_Reco_JABDT_ttH_log_h_pt"
+    interfaces.append(interf_ljets_ge4j_ge4t_Reco_JABDT_ttH_log_h_pt)
+
     interf_ljets_ge4j_ge4t_CSV_1 = vhi.variableHistoInterface(variable_name  = "CSV[1]",
                                             label          = "ljets_ge4j_ge4t_CSV_1",
                                             selection      = "(N_Jets>=4&&N_BTagsM>=4)&&(1.)")
@@ -1638,6 +1674,63 @@ def plots_ljets_ge4j_3t(data = None):
     label = "\geq 4 jets, 3 b-tags"
     interfaces = []
     selection = "(N_Jets>=4&&N_BTagsM==3)&&(1.)"
+
+    interf_ljets_ge4j_3t_Reco_JABDT_tHq_log_h_m = vhi.variableHistoInterface(variable_name  = "Reco_JABDT_tHq_log_h_m",
+                                            label          = "ljets_ge4j_3t_Reco_JABDT_tHq_log_h_m",
+                                            selection      = "(N_Jets>=4&&N_BTagsM==3)&&(1.)")
+    interf_ljets_ge4j_3t_Reco_JABDT_tHq_log_h_m.category = ("(N_Jets>=4&&N_BTagsM==3)&&(1.)","ljets_ge4j_3t_Reco_JABDT_tHq_log_h_m","")
+    interf_ljets_ge4j_3t_Reco_JABDT_tHq_log_h_m.category_label = label
+    interf_ljets_ge4j_3t_Reco_JABDT_tHq_log_h_m.bin_edges = [ 
+				3.252,
+				3.336,
+				3.42,
+				3.504,
+				3.588,
+				3.672,
+				3.756,
+				3.84,
+				3.924,
+				4.008,
+				4.092,
+				4.176,
+				4.26,
+				4.344,
+				4.428,
+				4.512,
+				4.596,
+				4.68,
+				4.764,
+				4.848,
+				4.932,
+				5.016,
+				5.1,
+				5.184,
+				5.268,
+				5.352,
+				5.436,
+				5.52,
+				5.604,
+				5.688,
+				5.772,
+				5.856,
+				5.94,
+				6.024,
+				6.108,
+				6.192,
+				6.276,
+				6.36,
+				6.444,
+				6.528,
+				6.612,
+				6.696,
+				6.78,
+				6.948,
+				7.116,
+				7.2
+				]
+    interf_ljets_ge4j_3t_Reco_JABDT_tHq_log_h_m.histotitle = "Reco_JABDT_tHq_log_h_m"
+    interf_ljets_ge4j_3t_Reco_JABDT_tHq_log_h_m.histoname = "ljets_ge4j_3t_Reco_JABDT_tHq_log_h_m"
+    interfaces.append(interf_ljets_ge4j_3t_Reco_JABDT_tHq_log_h_m)
 
 
     interf_ljets_ge4j_3t_CSV_1 = vhi.variableHistoInterface(variable_name  = "CSV[1]",

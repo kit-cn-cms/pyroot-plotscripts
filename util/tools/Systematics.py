@@ -21,12 +21,14 @@ class Systematics:
         self.systematics=pandas.read_csv(systematicconfig,sep=",")
         self.systematics.fillna("-", inplace=True)
         self.relevantProcesses = relevantProcesses
-        columns = ['Uncertainty','Type','Construction','Up','Down','Plot']+self.relevantProcesses
-        # drop all non relevant processes
-        self.systematics.drop(self.systematics.columns.difference(columns), 1, inplace=True)
-        # drop all non relevant systs
-        self.systematics = self.systematics[columns]
-        self.systematics = self.systematics[~self.systematics[self.relevantProcesses].eq('-', axis=0).all(axis=1)]
+        # drop not neccessary stuff, if relevantProcesses are given
+        if len(self.relevantProcesses) != 0:
+            columns = ['Uncertainty','Type','Construction','Up','Down','Plot']+self.relevantProcesses
+            # drop all non relevant processes
+            self.systematics.drop(self.systematics.columns.difference(columns), 1, inplace=True)
+            # drop all non relevant systs
+            self.systematics = self.systematics[columns]
+            self.systematics = self.systematics[~self.systematics[self.relevantProcesses].eq('-', axis=0).all(axis=1)]
         self.weightDictionary = weightDictionary
 
         self.replacing_config = None

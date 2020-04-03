@@ -58,7 +58,7 @@ ttZpath =  path+'/TTZToQQ*/*nominal*.root'+';'+ \
            path+'/TTZToLLNuNu_M-10*/*nominal*.root'+';'
 
 friendTrees = {
-    "MEMDB": "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/friends/2018/",
+    "MEMDB": "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/friends_final/2018/",
     }
 
 # SELECTIONS
@@ -426,12 +426,14 @@ samples_minor_backgrounds = [
             path+'/DYJets*/*nominal*.root',
             lumi+sel_MET,
             'zjets',
+            vetoEventWeights = float(1./59.7),
             samDict=sampleDict, readTrees=doReadTrees),
  
     plotClasses.Sample('W+jets',ROOT.kGreen-7,
             path+'/WJets*/*nominal*.root',
             lumi+sel_MET,
             'wjets',
+            vetoEventWeights = float(2./59.7),
             samDict=sampleDict, readTrees=doReadTrees), 
 
     #plotClasses.Sample('V+jets',18,

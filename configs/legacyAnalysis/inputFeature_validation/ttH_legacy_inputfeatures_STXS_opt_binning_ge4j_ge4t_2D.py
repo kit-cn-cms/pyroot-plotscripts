@@ -21,6 +21,42 @@ def interfaces_STXS_ljets_ge4j_ge4t():
     interfaces = []
     selection = "(N_Jets>=4&&N_BTagsM>=4)&&(1.)"
 
+    interf_ljets_ge4j_ge4t_Reco_JABDT_ttH_log_h_pt = vhi.variableHistoInterface(variable_name  = "Reco_JABDT_ttH_log_h_pt",
+                                            label          = "ljets_ge4j_ge4t_Reco_JABDT_ttH_log_h_pt",
+                                            selection      = "(N_Jets>=4&&N_BTagsM>=4)&&(1.)")
+    interf_ljets_ge4j_ge4t_Reco_JABDT_ttH_log_h_pt.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_Reco_JABDT_ttH_log_h_pt","")
+    interf_ljets_ge4j_ge4t_Reco_JABDT_ttH_log_h_pt.category_label = label
+    interf_ljets_ge4j_ge4t_Reco_JABDT_ttH_log_h_pt.bin_edges = [ 
+				0.0,
+				1.2,
+				1.8,
+				2.2,
+				2.4,
+				2.6,
+				2.8,
+				3.0,
+				3.2,
+				3.4,
+				3.6,
+				3.8,
+				4.0,
+				4.2,
+				4.4,
+				4.6,
+				4.8,
+				5.0,
+				5.2,
+				5.4,
+				5.6,
+				5.8,
+				6.0,
+				6.2,
+				6.4,
+				]
+    interf_ljets_ge4j_ge4t_Reco_JABDT_ttH_log_h_pt.histotitle = "Reco_JABDT_ttH_log_h_pt"
+    interf_ljets_ge4j_ge4t_Reco_JABDT_ttH_log_h_pt.histoname = "ljets_ge4j_ge4t_Reco_JABDT_ttH_log_h_pt"
+    interfaces.append(interf_ljets_ge4j_ge4t_Reco_JABDT_ttH_log_h_pt)
+
     interf_ljets_ge4j_ge4t_Evt_Dr_TaggedJetsAverage = vhi.variableHistoInterface(variable_name  = "Evt_Dr_TaggedJetsAverage",
                                             label          = "ljets_ge4j_ge4t_Evt_Dr_TaggedJetsAverage",
                                             selection      = "(N_Jets>=4&&N_BTagsM>=4)&&(1.)")
@@ -487,12 +523,12 @@ def interfaces_STXS_ljets_ge4j_ge4t():
     interf_ljets_ge4j_ge4t_TaggedJet_Pt_1.nhistobins = 50
     interfaces.append(interf_ljets_ge4j_ge4t_TaggedJet_Pt_1)
 
-    interf_ljets_ge4j_ge4t_HTXS_Evt_E_TaggedJetsAverage = vhi.variableHistoInterface(variable_name  = "Evt_E_TaggedJetsAverage",
-                                            label          = "ljets_ge4j_ge4t_HTXS_Evt_E_TaggedJetsAverage",
+    interf_ljets_ge4j_ge4t_Evt_E_TaggedJetsAverage = vhi.variableHistoInterface(variable_name  = "Evt_E_TaggedJetsAverage",
+                                            label          = "ljets_ge4j_ge4t_Evt_E_TaggedJetsAverage",
                                             selection      = "(N_Jets>=4&&N_BTagsM>=4)&&(1.)")
-    interf_ljets_ge4j_ge4t_HTXS_Evt_E_TaggedJetsAverage.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_HTXS_Evt_E_TaggedJetsAverage","")
-    interf_ljets_ge4j_ge4t_HTXS_Evt_E_TaggedJetsAverage.category_label = label
-    interf_ljets_ge4j_ge4t_HTXS_Evt_E_TaggedJetsAverage.bin_edges = [ 
+    interf_ljets_ge4j_ge4t_Evt_E_TaggedJetsAverage.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_Evt_E_TaggedJetsAverage","")
+    interf_ljets_ge4j_ge4t_Evt_E_TaggedJetsAverage.category_label = label
+    interf_ljets_ge4j_ge4t_Evt_E_TaggedJetsAverage.bin_edges = [ 
                 48.0,
                 64.0,
                 80.0,
@@ -526,17 +562,17 @@ def interfaces_STXS_ljets_ge4j_ge4t():
                 672.0,
                 800.0
                 ]
-    interf_ljets_ge4j_ge4t_HTXS_Evt_E_TaggedJetsAverage.histotitle = "average E(tags)"
-    interf_ljets_ge4j_ge4t_HTXS_Evt_E_TaggedJetsAverage.histoname = "ljets_ge4j_ge4t_HTXS_Evt_E_TaggedJetsAverage"
-    interf_ljets_ge4j_ge4t_HTXS_Evt_E_TaggedJetsAverage.nhistobins = 50
-    interfaces.append(interf_ljets_ge4j_ge4t_HTXS_Evt_E_TaggedJetsAverage)
+    interf_ljets_ge4j_ge4t_Evt_E_TaggedJetsAverage.histotitle = "average E(tags)"
+    interf_ljets_ge4j_ge4t_Evt_E_TaggedJetsAverage.histoname = "ljets_ge4j_ge4t_Evt_E_TaggedJetsAverage"
+    interf_ljets_ge4j_ge4t_Evt_E_TaggedJetsAverage.nhistobins = 50
+    interfaces.append(interf_ljets_ge4j_ge4t_Evt_E_TaggedJetsAverage)
     
-    interf_ljets_ge4j_ge4t_HTXS_Evt_HT_tags = vhi.variableHistoInterface(variable_name  = "Evt_HT_tags",
-                                            label          = "ljets_ge4j_ge4t_HTXS_Evt_HT_tags",
+    interf_ljets_ge4j_ge4t_Evt_HT_tags = vhi.variableHistoInterface(variable_name  = "Evt_HT_tags",
+                                            label          = "ljets_ge4j_ge4t_Evt_HT_tags",
                                             selection      = "(N_Jets>=4&&N_BTagsM>=4)&&(1.)")
-    interf_ljets_ge4j_ge4t_HTXS_Evt_HT_tags.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_HTXS_Evt_HT_tags","")
-    interf_ljets_ge4j_ge4t_HTXS_Evt_HT_tags.category_label = label
-    interf_ljets_ge4j_ge4t_HTXS_Evt_HT_tags.bin_edges = [ 
+    interf_ljets_ge4j_ge4t_Evt_HT_tags.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_Evt_HT_tags","")
+    interf_ljets_ge4j_ge4t_Evt_HT_tags.category_label = label
+    interf_ljets_ge4j_ge4t_Evt_HT_tags.bin_edges = [ 
                 136.0,
                 154.0,
                 172.0,
@@ -584,17 +620,17 @@ def interfaces_STXS_ljets_ge4j_ge4t():
                 982.0,
                 1000.0
                 ]
-    interf_ljets_ge4j_ge4t_HTXS_Evt_HT_tags.histotitle = "Evt_HT_tags"
-    interf_ljets_ge4j_ge4t_HTXS_Evt_HT_tags.histoname = "ljets_ge4j_ge4t_HTXS_Evt_HT_tags"
-    interf_ljets_ge4j_ge4t_HTXS_Evt_HT_tags.nhistobins = 50
-    interfaces.append(interf_ljets_ge4j_ge4t_HTXS_Evt_HT_tags)
+    interf_ljets_ge4j_ge4t_Evt_HT_tags.histotitle = "Evt_HT_tags"
+    interf_ljets_ge4j_ge4t_Evt_HT_tags.histoname = "ljets_ge4j_ge4t_Evt_HT_tags"
+    interf_ljets_ge4j_ge4t_Evt_HT_tags.nhistobins = 50
+    interfaces.append(interf_ljets_ge4j_ge4t_Evt_HT_tags)
     
-    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_tHW_log_h_pt = vhi.variableHistoInterface(variable_name  = "Reco_JABDT_tHW_log_h_pt",
-                                            label          = "ljets_ge4j_ge4t_HTXS_Reco_JABDT_tHW_log_h_pt",
+    interf_ljets_ge4j_ge4t_Reco_JABDT_tHW_log_h_pt = vhi.variableHistoInterface(variable_name  = "Reco_JABDT_tHW_log_h_pt",
+                                            label          = "ljets_ge4j_ge4t_Reco_JABDT_tHW_log_h_pt",
                                             selection      = "(N_Jets>=4&&N_BTagsM>=4)&&(1.)")
-    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_tHW_log_h_pt.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_HTXS_Reco_JABDT_tHW_log_h_pt","")
-    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_tHW_log_h_pt.category_label = label
-    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_tHW_log_h_pt.bin_edges = [ 
+    interf_ljets_ge4j_ge4t_Reco_JABDT_tHW_log_h_pt.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_Reco_JABDT_tHW_log_h_pt","")
+    interf_ljets_ge4j_ge4t_Reco_JABDT_tHW_log_h_pt.category_label = label
+    interf_ljets_ge4j_ge4t_Reco_JABDT_tHW_log_h_pt.bin_edges = [ 
                 0.0,
                 0.01,
                 1.82,
@@ -632,17 +668,17 @@ def interfaces_STXS_ljets_ge4j_ge4t():
                 6.58,
                 7.0
                 ]
-    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_tHW_log_h_pt.histotitle = "Reco_JABDT_tHW_log_h_pt"
-    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_tHW_log_h_pt.histoname = "ljets_ge4j_ge4t_HTXS_Reco_JABDT_tHW_log_h_pt"
-    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_tHW_log_h_pt.nhistobins = 50
-    interfaces.append(interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_tHW_log_h_pt)
+    interf_ljets_ge4j_ge4t_Reco_JABDT_tHW_log_h_pt.histotitle = "Reco_JABDT_tHW_log_h_pt"
+    interf_ljets_ge4j_ge4t_Reco_JABDT_tHW_log_h_pt.histoname = "ljets_ge4j_ge4t_Reco_JABDT_tHW_log_h_pt"
+    interf_ljets_ge4j_ge4t_Reco_JABDT_tHW_log_h_pt.nhistobins = 50
+    interfaces.append(interf_ljets_ge4j_ge4t_Reco_JABDT_tHW_log_h_pt)
     
-    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_tHq_log_h_pt = vhi.variableHistoInterface(variable_name  = "Reco_JABDT_tHq_log_h_pt",
-                                            label          = "ljets_ge4j_ge4t_HTXS_Reco_JABDT_tHq_log_h_pt",
+    interf_ljets_ge4j_ge4t_Reco_JABDT_tHq_log_h_pt = vhi.variableHistoInterface(variable_name  = "Reco_JABDT_tHq_log_h_pt",
+                                            label          = "ljets_ge4j_ge4t_Reco_JABDT_tHq_log_h_pt",
                                             selection      = "(N_Jets>=4&&N_BTagsM>=4)&&(1.)")
-    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_tHq_log_h_pt.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_HTXS_Reco_JABDT_tHq_log_h_pt","")
-    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_tHq_log_h_pt.category_label = label
-    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_tHq_log_h_pt.bin_edges = [ 
+    interf_ljets_ge4j_ge4t_Reco_JABDT_tHq_log_h_pt.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_Reco_JABDT_tHq_log_h_pt","")
+    interf_ljets_ge4j_ge4t_Reco_JABDT_tHq_log_h_pt.category_label = label
+    interf_ljets_ge4j_ge4t_Reco_JABDT_tHq_log_h_pt.bin_edges = [ 
                 0.0,
                 0.01,
                 2.1,
@@ -678,17 +714,17 @@ def interfaces_STXS_ljets_ge4j_ge4t():
                 6.44,
                 7.0
                 ]
-    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_tHq_log_h_pt.histotitle = "Reco_JABDT_tHq_log_h_pt"
-    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_tHq_log_h_pt.histoname = "ljets_ge4j_ge4t_HTXS_Reco_JABDT_tHq_log_h_pt"
-    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_tHq_log_h_pt.nhistobins = 50
-    interfaces.append(interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_tHq_log_h_pt)
+    interf_ljets_ge4j_ge4t_Reco_JABDT_tHq_log_h_pt.histotitle = "Reco_JABDT_tHq_log_h_pt"
+    interf_ljets_ge4j_ge4t_Reco_JABDT_tHq_log_h_pt.histoname = "ljets_ge4j_ge4t_Reco_JABDT_tHq_log_h_pt"
+    interf_ljets_ge4j_ge4t_Reco_JABDT_tHq_log_h_pt.nhistobins = 50
+    interfaces.append(interf_ljets_ge4j_ge4t_Reco_JABDT_tHq_log_h_pt)
     
-    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_tHq_log_top_m = vhi.variableHistoInterface(variable_name  = "Reco_JABDT_tHq_log_top_m",
-                                            label          = "ljets_ge4j_ge4t_HTXS_Reco_JABDT_tHq_log_top_m",
+    interf_ljets_ge4j_ge4t_Reco_JABDT_tHq_log_top_m = vhi.variableHistoInterface(variable_name  = "Reco_JABDT_tHq_log_top_m",
+                                            label          = "ljets_ge4j_ge4t_Reco_JABDT_tHq_log_top_m",
                                             selection      = "(N_Jets>=4&&N_BTagsM>=4)&&(1.)")
-    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_tHq_log_top_m.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_HTXS_Reco_JABDT_tHq_log_top_m","")
-    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_tHq_log_top_m.category_label = label
-    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_tHq_log_top_m.bin_edges = [ 
+    interf_ljets_ge4j_ge4t_Reco_JABDT_tHq_log_top_m.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_Reco_JABDT_tHq_log_top_m","")
+    interf_ljets_ge4j_ge4t_Reco_JABDT_tHq_log_top_m.category_label = label
+    interf_ljets_ge4j_ge4t_Reco_JABDT_tHq_log_top_m.bin_edges = [ 
                 -1.5,
                 4.0,
                 4.62,
@@ -705,17 +741,17 @@ def interfaces_STXS_ljets_ge4j_ge4t():
                 6.49,
                 7.0
                 ]
-    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_tHq_log_top_m.histotitle = "Reco_JABDT_tHq_log_top_m"
-    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_tHq_log_top_m.histoname = "ljets_ge4j_ge4t_HTXS_Reco_JABDT_tHq_log_top_m"
-    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_tHq_log_top_m.nhistobins = 50
-    interfaces.append(interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_tHq_log_top_m)
+    interf_ljets_ge4j_ge4t_Reco_JABDT_tHq_log_top_m.histotitle = "Reco_JABDT_tHq_log_top_m"
+    interf_ljets_ge4j_ge4t_Reco_JABDT_tHq_log_top_m.histoname = "ljets_ge4j_ge4t_Reco_JABDT_tHq_log_top_m"
+    interf_ljets_ge4j_ge4t_Reco_JABDT_tHq_log_top_m.nhistobins = 50
+    interfaces.append(interf_ljets_ge4j_ge4t_Reco_JABDT_tHq_log_top_m)
     
-    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_ttH_energy_fraction = vhi.variableHistoInterface(variable_name  = "Reco_JABDT_ttH_tophad_pt__P__toplep_pt__P__h_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt",
-                                            label          = "ljets_ge4j_ge4t_HTXS_Reco_JABDT_ttH_energy_fraction",
+    interf_ljets_ge4j_ge4t_Reco_JABDT_ttH_energy_fraction = vhi.variableHistoInterface(variable_name  = "Reco_JABDT_ttH_tophad_pt__P__toplep_pt__P__h_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt",
+                                            label          = "ljets_ge4j_ge4t_Reco_JABDT_ttH_energy_fraction",
                                             selection      = "(N_Jets>=4&&N_BTagsM>=4)&&(1.)")
-    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_ttH_energy_fraction.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_HTXS_Reco_JABDT_ttH_energy_fraction","")
-    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_ttH_energy_fraction.category_label = label
-    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_ttH_energy_fraction.bin_edges = [ 
+    interf_ljets_ge4j_ge4t_Reco_JABDT_ttH_energy_fraction.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_Reco_JABDT_ttH_energy_fraction","")
+    interf_ljets_ge4j_ge4t_Reco_JABDT_ttH_energy_fraction.category_label = label
+    interf_ljets_ge4j_ge4t_Reco_JABDT_ttH_energy_fraction.bin_edges = [ 
                 0.0,
                 0.1,
                 0.25,
@@ -735,17 +771,17 @@ def interfaces_STXS_ljets_ge4j_ge4t():
                 0.95,
                 1.0
                 ]
-    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_ttH_energy_fraction.histotitle = "Reco_JABDT_ttH_energy_fraction"
-    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_ttH_energy_fraction.histoname = "ljets_ge4j_ge4t_HTXS_Reco_JABDT_ttH_energy_fraction"
-    interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_ttH_energy_fraction.nhistobins = 20
-    interfaces.append(interf_ljets_ge4j_ge4t_HTXS_Reco_JABDT_ttH_energy_fraction)
+    interf_ljets_ge4j_ge4t_Reco_JABDT_ttH_energy_fraction.histotitle = "Reco_JABDT_ttH_energy_fraction"
+    interf_ljets_ge4j_ge4t_Reco_JABDT_ttH_energy_fraction.histoname = "ljets_ge4j_ge4t_Reco_JABDT_ttH_energy_fraction"
+    interf_ljets_ge4j_ge4t_Reco_JABDT_ttH_energy_fraction.nhistobins = 20
+    interfaces.append(interf_ljets_ge4j_ge4t_Reco_JABDT_ttH_energy_fraction)
     
-    interf_ljets_ge4j_ge4t_HTXS_Reco_tHW_h_m = vhi.variableHistoInterface(variable_name  = "Reco_tHW_h_m",
-                                            label          = "ljets_ge4j_ge4t_HTXS_Reco_tHW_h_m",
+    interf_ljets_ge4j_ge4t_Reco_tHW_h_m = vhi.variableHistoInterface(variable_name  = "Reco_tHW_h_m",
+                                            label          = "ljets_ge4j_ge4t_Reco_tHW_h_m",
                                             selection      = "(N_Jets>=4&&N_BTagsM>=4)&&(1.)")
-    interf_ljets_ge4j_ge4t_HTXS_Reco_tHW_h_m.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_HTXS_Reco_tHW_h_m","")
-    interf_ljets_ge4j_ge4t_HTXS_Reco_tHW_h_m.category_label = label
-    interf_ljets_ge4j_ge4t_HTXS_Reco_tHW_h_m.bin_edges = [ 
+    interf_ljets_ge4j_ge4t_Reco_tHW_h_m.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_Reco_tHW_h_m","")
+    interf_ljets_ge4j_ge4t_Reco_tHW_h_m.category_label = label
+    interf_ljets_ge4j_ge4t_Reco_tHW_h_m.bin_edges = [ 
                 -1.5,
                 19.00,
                 32.16,
@@ -772,18 +808,18 @@ def interfaces_STXS_ljets_ge4j_ge4t():
                 73.47,
                 75.0
                 ]
-    interf_ljets_ge4j_ge4t_HTXS_Reco_tHW_h_m.bin_edges += list(np.linspace(77.5, 180, 42))
-    interf_ljets_ge4j_ge4t_HTXS_Reco_tHW_h_m.histotitle = "Reco_tHW_h_m"
-    interf_ljets_ge4j_ge4t_HTXS_Reco_tHW_h_m.histoname = "ljets_ge4j_ge4t_HTXS_Reco_tHW_h_m"
-    interf_ljets_ge4j_ge4t_HTXS_Reco_tHW_h_m.nhistobins = 50
-    interfaces.append(interf_ljets_ge4j_ge4t_HTXS_Reco_tHW_h_m)
+    interf_ljets_ge4j_ge4t_Reco_tHW_h_m.bin_edges += list(np.linspace(77.5, 180, 42))
+    interf_ljets_ge4j_ge4t_Reco_tHW_h_m.histotitle = "Reco_tHW_h_m"
+    interf_ljets_ge4j_ge4t_Reco_tHW_h_m.histoname = "ljets_ge4j_ge4t_Reco_tHW_h_m"
+    interf_ljets_ge4j_ge4t_Reco_tHW_h_m.nhistobins = 50
+    interfaces.append(interf_ljets_ge4j_ge4t_Reco_tHW_h_m)
     
-    interf_ljets_ge4j_ge4t_HTXS_Reco_tHq_h_dr = vhi.variableHistoInterface(variable_name  = "Reco_tHq_h_dr",
-                                            label          = "ljets_ge4j_ge4t_HTXS_Reco_tHq_h_dr",
+    interf_ljets_ge4j_ge4t_Reco_tHq_h_dr = vhi.variableHistoInterface(variable_name  = "Reco_tHq_h_dr",
+                                            label          = "ljets_ge4j_ge4t_Reco_tHq_h_dr",
                                             selection      = "(N_Jets>=4&&N_BTagsM>=4)&&(1.)")
-    interf_ljets_ge4j_ge4t_HTXS_Reco_tHq_h_dr.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_HTXS_Reco_tHq_h_dr","")
-    interf_ljets_ge4j_ge4t_HTXS_Reco_tHq_h_dr.category_label = label
-    interf_ljets_ge4j_ge4t_HTXS_Reco_tHq_h_dr.bin_edges = [ 
+    interf_ljets_ge4j_ge4t_Reco_tHq_h_dr.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_Reco_tHq_h_dr","")
+    interf_ljets_ge4j_ge4t_Reco_tHq_h_dr.category_label = label
+    interf_ljets_ge4j_ge4t_Reco_tHq_h_dr.bin_edges = [ 
                 0.0,
                 0.4,
                 0.5,
@@ -818,17 +854,17 @@ def interfaces_STXS_ljets_ge4j_ge4t():
                 3.4,
                 5.0
                 ]
-    interf_ljets_ge4j_ge4t_HTXS_Reco_tHq_h_dr.histotitle = "Reco_tHq_h_dr"
-    interf_ljets_ge4j_ge4t_HTXS_Reco_tHq_h_dr.histoname = "ljets_ge4j_ge4t_HTXS_Reco_tHq_h_dr"
-    interf_ljets_ge4j_ge4t_HTXS_Reco_tHq_h_dr.nhistobins = 50
-    interfaces.append(interf_ljets_ge4j_ge4t_HTXS_Reco_tHq_h_dr)
+    interf_ljets_ge4j_ge4t_Reco_tHq_h_dr.histotitle = "Reco_tHq_h_dr"
+    interf_ljets_ge4j_ge4t_Reco_tHq_h_dr.histoname = "ljets_ge4j_ge4t_Reco_tHq_h_dr"
+    interf_ljets_ge4j_ge4t_Reco_tHq_h_dr.nhistobins = 50
+    interfaces.append(interf_ljets_ge4j_ge4t_Reco_tHq_h_dr)
     
-    interf_ljets_ge4j_ge4t_HTXS_Reco_tHq_h_m = vhi.variableHistoInterface(variable_name  = "Reco_tHq_h_m",
-                                            label          = "ljets_ge4j_ge4t_HTXS_Reco_tHq_h_m",
+    interf_ljets_ge4j_ge4t_Reco_tHq_h_m = vhi.variableHistoInterface(variable_name  = "Reco_tHq_h_m",
+                                            label          = "ljets_ge4j_ge4t_Reco_tHq_h_m",
                                             selection      = "(N_Jets>=4&&N_BTagsM>=4)&&(1.)")
-    interf_ljets_ge4j_ge4t_HTXS_Reco_tHq_h_m.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_HTXS_Reco_tHq_h_m","")
-    interf_ljets_ge4j_ge4t_HTXS_Reco_tHq_h_m.category_label = label
-    interf_ljets_ge4j_ge4t_HTXS_Reco_tHq_h_m.bin_edges = [ 
+    interf_ljets_ge4j_ge4t_Reco_tHq_h_m.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_Reco_tHq_h_m","")
+    interf_ljets_ge4j_ge4t_Reco_tHq_h_m.category_label = label
+    interf_ljets_ge4j_ge4t_Reco_tHq_h_m.bin_edges = [ 
                 -1.5,
                 20.0,
                 48.65,
@@ -850,17 +886,17 @@ def interfaces_STXS_ljets_ge4j_ge4t():
                 309.43,
                 500.0
                 ]
-    interf_ljets_ge4j_ge4t_HTXS_Reco_tHq_h_m.histotitle = "Reco_tHq_h_m"
-    interf_ljets_ge4j_ge4t_HTXS_Reco_tHq_h_m.histoname = "ljets_ge4j_ge4t_HTXS_Reco_tHq_h_m"
-    interf_ljets_ge4j_ge4t_HTXS_Reco_tHq_h_m.nhistobins = 50
-    interfaces.append(interf_ljets_ge4j_ge4t_HTXS_Reco_tHq_h_m)
+    interf_ljets_ge4j_ge4t_Reco_tHq_h_m.histotitle = "Reco_tHq_h_m"
+    interf_ljets_ge4j_ge4t_Reco_tHq_h_m.histoname = "ljets_ge4j_ge4t_Reco_tHq_h_m"
+    interf_ljets_ge4j_ge4t_Reco_tHq_h_m.nhistobins = 50
+    interfaces.append(interf_ljets_ge4j_ge4t_Reco_tHq_h_m)
     
-    interf_ljets_ge4j_ge4t_HTXS_Reco_tHq_h_pt = vhi.variableHistoInterface(variable_name  = "Reco_tHq_h_pt",
-                                            label          = "ljets_ge4j_ge4t_HTXS_Reco_tHq_h_pt",
+    interf_ljets_ge4j_ge4t_Reco_tHq_h_pt = vhi.variableHistoInterface(variable_name  = "Reco_tHq_h_pt",
+                                            label          = "ljets_ge4j_ge4t_Reco_tHq_h_pt",
                                             selection      = "(N_Jets>=4&&N_BTagsM>=4)&&(1.)")
-    interf_ljets_ge4j_ge4t_HTXS_Reco_tHq_h_pt.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_HTXS_Reco_tHq_h_pt","")
-    interf_ljets_ge4j_ge4t_HTXS_Reco_tHq_h_pt.category_label = label
-    interf_ljets_ge4j_ge4t_HTXS_Reco_tHq_h_pt.bin_edges = [ 
+    interf_ljets_ge4j_ge4t_Reco_tHq_h_pt.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_Reco_tHq_h_pt","")
+    interf_ljets_ge4j_ge4t_Reco_tHq_h_pt.category_label = label
+    interf_ljets_ge4j_ge4t_Reco_tHq_h_pt.bin_edges = [ 
                 0.0,
                 12.0,
                 24.0,
@@ -905,17 +941,17 @@ def interfaces_STXS_ljets_ge4j_ge4t():
                 588.0,
                 600.0
                 ]
-    interf_ljets_ge4j_ge4t_HTXS_Reco_tHq_h_pt.histotitle = "Reco_tHq_h_pt"
-    interf_ljets_ge4j_ge4t_HTXS_Reco_tHq_h_pt.histoname = "ljets_ge4j_ge4t_HTXS_Reco_tHq_h_pt"
-    interf_ljets_ge4j_ge4t_HTXS_Reco_tHq_h_pt.nhistobins = 50
-    interfaces.append(interf_ljets_ge4j_ge4t_HTXS_Reco_tHq_h_pt)
+    interf_ljets_ge4j_ge4t_Reco_tHq_h_pt.histotitle = "Reco_tHq_h_pt"
+    interf_ljets_ge4j_ge4t_Reco_tHq_h_pt.histoname = "ljets_ge4j_ge4t_Reco_tHq_h_pt"
+    interf_ljets_ge4j_ge4t_Reco_tHq_h_pt.nhistobins = 50
+    interfaces.append(interf_ljets_ge4j_ge4t_Reco_tHq_h_pt)
     
-    interf_ljets_ge4j_ge4t_HTXS_Reco_ttH_h_dr = vhi.variableHistoInterface(variable_name  = "Reco_ttH_h_dr",
-                                            label          = "ljets_ge4j_ge4t_HTXS_Reco_ttH_h_dr",
+    interf_ljets_ge4j_ge4t_Reco_ttH_h_dr = vhi.variableHistoInterface(variable_name  = "Reco_ttH_h_dr",
+                                            label          = "ljets_ge4j_ge4t_Reco_ttH_h_dr",
                                             selection      = "(N_Jets>=4&&N_BTagsM>=4)&&(1.)")
-    interf_ljets_ge4j_ge4t_HTXS_Reco_ttH_h_dr.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_HTXS_Reco_ttH_h_dr","")
-    interf_ljets_ge4j_ge4t_HTXS_Reco_ttH_h_dr.category_label = label
-    interf_ljets_ge4j_ge4t_HTXS_Reco_ttH_h_dr.bin_edges = [ 
+    interf_ljets_ge4j_ge4t_Reco_ttH_h_dr.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_Reco_ttH_h_dr","")
+    interf_ljets_ge4j_ge4t_Reco_ttH_h_dr.category_label = label
+    interf_ljets_ge4j_ge4t_Reco_ttH_h_dr.bin_edges = [ 
                 -1.5,
                 0.0,
                 0.48,
@@ -949,17 +985,17 @@ def interfaces_STXS_ljets_ge4j_ge4t():
                 3.78,
                 4.0
                 ]
-    interf_ljets_ge4j_ge4t_HTXS_Reco_ttH_h_dr.histotitle = "Reco_ttH_h_dr"
-    interf_ljets_ge4j_ge4t_HTXS_Reco_ttH_h_dr.histoname = "ljets_ge4j_ge4t_HTXS_Reco_ttH_h_dr"
-    interf_ljets_ge4j_ge4t_HTXS_Reco_ttH_h_dr.nhistobins = 50
-    interfaces.append(interf_ljets_ge4j_ge4t_HTXS_Reco_ttH_h_dr)
+    interf_ljets_ge4j_ge4t_Reco_ttH_h_dr.histotitle = "Reco_ttH_h_dr"
+    interf_ljets_ge4j_ge4t_Reco_ttH_h_dr.histoname = "ljets_ge4j_ge4t_Reco_ttH_h_dr"
+    interf_ljets_ge4j_ge4t_Reco_ttH_h_dr.nhistobins = 50
+    interfaces.append(interf_ljets_ge4j_ge4t_Reco_ttH_h_dr)
     
-    interf_ljets_ge4j_ge4t_HTXS_Reco_ttH_h_m = vhi.variableHistoInterface(variable_name  = "Reco_ttH_h_m",
-                                            label          = "ljets_ge4j_ge4t_HTXS_Reco_ttH_h_m",
+    interf_ljets_ge4j_ge4t_Reco_ttH_h_m = vhi.variableHistoInterface(variable_name  = "Reco_ttH_h_m",
+                                            label          = "ljets_ge4j_ge4t_Reco_ttH_h_m",
                                             selection      = "(N_Jets>=4&&N_BTagsM>=4)&&(1.)")
-    interf_ljets_ge4j_ge4t_HTXS_Reco_ttH_h_m.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_HTXS_Reco_ttH_h_m","")
-    interf_ljets_ge4j_ge4t_HTXS_Reco_ttH_h_m.category_label = label
-    interf_ljets_ge4j_ge4t_HTXS_Reco_ttH_h_m.bin_edges = [ 
+    interf_ljets_ge4j_ge4t_Reco_ttH_h_m.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_Reco_ttH_h_m","")
+    interf_ljets_ge4j_ge4t_Reco_ttH_h_m.category_label = label
+    interf_ljets_ge4j_ge4t_Reco_ttH_h_m.bin_edges = [ 
                 80.0,
                 82.0,
                 84.0,
@@ -1007,17 +1043,17 @@ def interfaces_STXS_ljets_ge4j_ge4t():
                 178.0,
                 180.0
                 ]
-    interf_ljets_ge4j_ge4t_HTXS_Reco_ttH_h_m.histotitle = "Reco_ttH_h_m"
-    interf_ljets_ge4j_ge4t_HTXS_Reco_ttH_h_m.histoname = "ljets_ge4j_ge4t_HTXS_Reco_ttH_h_m"
-    interf_ljets_ge4j_ge4t_HTXS_Reco_ttH_h_m.nhistobins = 50
-    interfaces.append(interf_ljets_ge4j_ge4t_HTXS_Reco_ttH_h_m)
+    interf_ljets_ge4j_ge4t_Reco_ttH_h_m.histotitle = "Reco_ttH_h_m"
+    interf_ljets_ge4j_ge4t_Reco_ttH_h_m.histoname = "ljets_ge4j_ge4t_Reco_ttH_h_m"
+    interf_ljets_ge4j_ge4t_Reco_ttH_h_m.nhistobins = 50
+    interfaces.append(interf_ljets_ge4j_ge4t_Reco_ttH_h_m)
     
-    interf_ljets_ge4j_ge4t_HTXS_Reco_ttH_hdau_pt1 = vhi.variableHistoInterface(variable_name  = "Reco_ttH_hdau_pt1",
-                                            label          = "ljets_ge4j_ge4t_HTXS_Reco_ttH_hdau_pt1",
+    interf_ljets_ge4j_ge4t_Reco_ttH_hdau_pt1 = vhi.variableHistoInterface(variable_name  = "Reco_ttH_hdau_pt1",
+                                            label          = "ljets_ge4j_ge4t_Reco_ttH_hdau_pt1",
                                             selection      = "(N_Jets>=4&&N_BTagsM>=4)&&(1.)")
-    interf_ljets_ge4j_ge4t_HTXS_Reco_ttH_hdau_pt1.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_HTXS_Reco_ttH_hdau_pt1","")
-    interf_ljets_ge4j_ge4t_HTXS_Reco_ttH_hdau_pt1.category_label = label
-    interf_ljets_ge4j_ge4t_HTXS_Reco_ttH_hdau_pt1.bin_edges = [ 
+    interf_ljets_ge4j_ge4t_Reco_ttH_hdau_pt1.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_Reco_ttH_hdau_pt1","")
+    interf_ljets_ge4j_ge4t_Reco_ttH_hdau_pt1.category_label = label
+    interf_ljets_ge4j_ge4t_Reco_ttH_hdau_pt1.bin_edges = [ 
                 -1.5,
                 20.0,
                 38.62,
@@ -1058,17 +1094,17 @@ def interfaces_STXS_ljets_ge4j_ge4t():
                 489.97,
                 500.0
                 ]
-    interf_ljets_ge4j_ge4t_HTXS_Reco_ttH_hdau_pt1.histotitle = "Reco_ttH_hdau_pt1"
-    interf_ljets_ge4j_ge4t_HTXS_Reco_ttH_hdau_pt1.histoname = "ljets_ge4j_ge4t_HTXS_Reco_ttH_hdau_pt1"
-    interf_ljets_ge4j_ge4t_HTXS_Reco_ttH_hdau_pt1.nhistobins = 50
-    interfaces.append(interf_ljets_ge4j_ge4t_HTXS_Reco_ttH_hdau_pt1)
+    interf_ljets_ge4j_ge4t_Reco_ttH_hdau_pt1.histotitle = "Reco_ttH_hdau_pt1"
+    interf_ljets_ge4j_ge4t_Reco_ttH_hdau_pt1.histoname = "ljets_ge4j_ge4t_Reco_ttH_hdau_pt1"
+    interf_ljets_ge4j_ge4t_Reco_ttH_hdau_pt1.nhistobins = 50
+    interfaces.append(interf_ljets_ge4j_ge4t_Reco_ttH_hdau_pt1)
     
-    interf_ljets_ge4j_ge4t_HTXS_Reco_ttH_hdau_pt2 = vhi.variableHistoInterface(variable_name  = "Reco_ttH_hdau_pt2",
-                                            label          = "ljets_ge4j_ge4t_HTXS_Reco_ttH_hdau_pt2",
+    interf_ljets_ge4j_ge4t_Reco_ttH_hdau_pt2 = vhi.variableHistoInterface(variable_name  = "Reco_ttH_hdau_pt2",
+                                            label          = "ljets_ge4j_ge4t_Reco_ttH_hdau_pt2",
                                             selection      = "(N_Jets>=4&&N_BTagsM>=4)&&(1.)")
-    interf_ljets_ge4j_ge4t_HTXS_Reco_ttH_hdau_pt2.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_HTXS_Reco_ttH_hdau_pt2","")
-    interf_ljets_ge4j_ge4t_HTXS_Reco_ttH_hdau_pt2.category_label = label
-    interf_ljets_ge4j_ge4t_HTXS_Reco_ttH_hdau_pt2.bin_edges = [ 
+    interf_ljets_ge4j_ge4t_Reco_ttH_hdau_pt2.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_Reco_ttH_hdau_pt2","")
+    interf_ljets_ge4j_ge4t_Reco_ttH_hdau_pt2.category_label = label
+    interf_ljets_ge4j_ge4t_Reco_ttH_hdau_pt2.bin_edges = [ 
                 -1.5,
                 20.0,
                 30.74,
@@ -1104,17 +1140,17 @@ def interfaces_STXS_ljets_ge4j_ge4t():
                 195.97,
                 200.0
                 ]
-    interf_ljets_ge4j_ge4t_HTXS_Reco_ttH_hdau_pt2.histotitle = "Reco_ttH_hdau_pt2"
-    interf_ljets_ge4j_ge4t_HTXS_Reco_ttH_hdau_pt2.histoname = "ljets_ge4j_ge4t_HTXS_Reco_ttH_hdau_pt2"
-    interf_ljets_ge4j_ge4t_HTXS_Reco_ttH_hdau_pt2.nhistobins = 50
-    interfaces.append(interf_ljets_ge4j_ge4t_HTXS_Reco_ttH_hdau_pt2)
+    interf_ljets_ge4j_ge4t_Reco_ttH_hdau_pt2.histotitle = "Reco_ttH_hdau_pt2"
+    interf_ljets_ge4j_ge4t_Reco_ttH_hdau_pt2.histoname = "ljets_ge4j_ge4t_Reco_ttH_hdau_pt2"
+    interf_ljets_ge4j_ge4t_Reco_ttH_hdau_pt2.nhistobins = 50
+    interfaces.append(interf_ljets_ge4j_ge4t_Reco_ttH_hdau_pt2)
     
-    interf_ljets_ge4j_ge4t_HTXS_TaggedJet_Pt_0 = vhi.variableHistoInterface(variable_name  = "TaggedJet_Pt[0]",
-                                            label          = "ljets_ge4j_ge4t_HTXS_TaggedJet_Pt_0",
+    interf_ljets_ge4j_ge4t_TaggedJet_Pt_0 = vhi.variableHistoInterface(variable_name  = "TaggedJet_Pt[0]",
+                                            label          = "ljets_ge4j_ge4t_TaggedJet_Pt_0",
                                             selection      = "(N_Jets>=4&&N_BTagsM>=4)&&(1.)")
-    interf_ljets_ge4j_ge4t_HTXS_TaggedJet_Pt_0.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_HTXS_TaggedJet_Pt_0","")
-    interf_ljets_ge4j_ge4t_HTXS_TaggedJet_Pt_0.category_label = label
-    interf_ljets_ge4j_ge4t_HTXS_TaggedJet_Pt_0.bin_edges = [ 
+    interf_ljets_ge4j_ge4t_TaggedJet_Pt_0.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_TaggedJet_Pt_0","")
+    interf_ljets_ge4j_ge4t_TaggedJet_Pt_0.category_label = label
+    interf_ljets_ge4j_ge4t_TaggedJet_Pt_0.bin_edges = [ 
                 41.4,
                 52.8,
                 64.2,
@@ -1159,10 +1195,10 @@ def interfaces_STXS_ljets_ge4j_ge4t():
                 588.6,
                 600.0
                 ]
-    interf_ljets_ge4j_ge4t_HTXS_TaggedJet_Pt_0.histotitle = "TaggedJet_Pt[0]"
-    interf_ljets_ge4j_ge4t_HTXS_TaggedJet_Pt_0.histoname = "ljets_ge4j_ge4t_HTXS_TaggedJet_Pt_0"
-    interf_ljets_ge4j_ge4t_HTXS_TaggedJet_Pt_0.nhistobins = 50
-    interfaces.append(interf_ljets_ge4j_ge4t_HTXS_TaggedJet_Pt_0)
+    interf_ljets_ge4j_ge4t_TaggedJet_Pt_0.histotitle = "TaggedJet_Pt[0]"
+    interf_ljets_ge4j_ge4t_TaggedJet_Pt_0.histoname = "ljets_ge4j_ge4t_TaggedJet_Pt_0"
+    interf_ljets_ge4j_ge4t_TaggedJet_Pt_0.nhistobins = 50
+    interfaces.append(interf_ljets_ge4j_ge4t_TaggedJet_Pt_0)
 
     # overlapp with classifier
     interf_ljets_ge4j_ge4t_Reco_ttH_bestJABDToutput = vhi.variableHistoInterface(variable_name  = "Reco_ttH_bestJABDToutput",
