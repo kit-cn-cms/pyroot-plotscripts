@@ -30,7 +30,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'sfPatch/2017_fine_simple'
+    name = 'sfPatch/2017_final_rerun_v2'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -153,7 +153,8 @@ def main(pyrootdir, opts):
 
         monitor.printClass(pP, "init")
         # set some changed values
-        pP.setMaxEvts(500000)
+        pP.setMaxEvts_nom(500000)
+        pP.setMaxEvts_systs(500000)
         pP.setSampleForVariableSetup(configData.samples[1])
 
         # run plotParallel
