@@ -736,7 +736,7 @@ class DrawHistograms:
         """
         self.yMax = 1e-9
         self.yMinMax = 1000.
-        for hist in self.stackPlots+self.shapePlots:
+        for hist in self.stackPlots:#+self.shapePlots:
             if self.shape and hist.Integral()!=0:
                 self.yMax = max(hist.GetBinContent(hist.GetMaximumBin())/hist.Integral(), self.yMax)
             else:
@@ -883,7 +883,7 @@ class DrawHistograms:
             self.legend1.Draw("same")
             self.legend2.Draw("same")
         else:
-            self.legend = getLegend2()
+            self.legend = getLegend()
             if self.data:
                 self.legend.AddEntry(self.data,self.datalabel,"P")
 
@@ -984,7 +984,7 @@ def getCanvas(name, ratiopad = False):
     return canvas
 
 def getLegend():
-    legend=ROOT.TLegend(0.70,0.6,0.95,0.9)
+    legend=ROOT.TLegend(0.65,0.7,0.95,0.9)
     legend.SetBorderSize(0)
     legend.SetLineStyle(0)
     legend.SetTextFont(42)
