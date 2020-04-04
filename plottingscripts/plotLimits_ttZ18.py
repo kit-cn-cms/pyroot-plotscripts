@@ -31,7 +31,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttZAnalysis_final'
+    name = 'ttZAnalysis_fullRunII'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -50,7 +50,7 @@ def main(pyrootdir, opts):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    config          = "ttZ18/pltcfg_discrPlots"
+    config          = "ttZ18/pltcfg_discrPlots_fullRunII"
     variable_cfg    = "ttZ18/additionalVariables"
     plot_cfg        = "ttZ18/discrPlots"
     syst_cfg        = "ttZ18/systematics"
@@ -61,7 +61,7 @@ def main(pyrootdir, opts):
     # script options
     analysisOptions = {
         # general options
-        "usePseudoData":        False,
+        "usePseudoData":        True,
         "testrun":              False,  # test run with less samples
         "stopAfterCompile":     False,  # stop script after compiling
         # options to activate parts of the script
@@ -74,7 +74,7 @@ def main(pyrootdir, opts):
         "signalScaling":        1,
         "lumiLabel":            True,
         "CMSlabel":             "private Work",
-        "ratio":                "#frac{Data}{Background}",
+        "ratio":                "#frac{Pseudo Data}{Background}",
         "shape":                False, # for shape plots
         "normalize":            False, # normalize yield to integral 1
         "logarithmic":          True,
