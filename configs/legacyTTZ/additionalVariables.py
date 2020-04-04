@@ -23,6 +23,13 @@ def getAddVars():
         "Evt_MET_Pt",
         "N_GenTopLep",
         "GenHiggs_DecProd1_PDGID",
+
+        "dnnRecoZ_Z_M_dev:=abs(dnnRecoZ_Z_M-90.)/20.",
+        "dnnRecoZ_Z_M_dev_log:=log(dnnRecoZ_Z_M_dev+1e-5)",
+        "dnnRecoZ_Z_M_weird:=dnnRecoZ_Z_M_dev*dnnRecoZ_Z_M",
+        "dnnRecoZ_Z_M_weird_log:=log(dnnRecoZ_Z_M_weird+1e-5)",
+        "dnnRecoZ_Z_M_weird_v2:=dnnRecoZ_Z_M_dev_log*dnnRecoZ_Z_M",
+
         ]
 
     return addVars
