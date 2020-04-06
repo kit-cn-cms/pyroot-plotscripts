@@ -93,10 +93,10 @@ def initHistos(catnames, systnames, plots, edge_precision=4):
     rstr += "double variable = -999;\n"
     rstr += "double variable1 = -999;\n"
     rstr += "double variable2 = -999;\n"
-    rstr += "std::vector<std::string> systematics = {\n"
-    for syst in systnames:
-        rstr += "    \""+syst+"\",\n"
-    rstr = rstr[:-2]+"\n};\n"
+    #rstr += "std::vector<std::string> systematics = {\n"
+    #for syst in systnames:
+        #rstr += "    \""+syst+"\",\n"
+    #rstr = rstr[:-2]+"\n};\n"
     rstr += "std::vector<std::string> categs = {\n"
     for cat in catnames:
         rstr += "    \""+cat+"\",\n"
@@ -135,9 +135,9 @@ def initHistos(catnames, systnames, plots, edge_precision=4):
     rstr += "    for(const auto& obj: plotinfo1D){\n"
     rstr += "        for(const auto& syst: systematics){\n"
     rstr += "            const auto& PlotInfo1D = obj.second;\n"
-    rstr += "            histos1D[cat+obj.first+syst] = "
-    rstr += "std::unique_ptr<TH1>(new TH1F((processname+\"_\"+cat+obj.first+syst+suffix).c_str(), (PlotInfo1D.title).c_str(), PlotInfo1D.nbins, PlotInfo1D.edges.data()));\n"
-    rstr += "            histos1D[cat+obj.first+syst]->SetDirectory(0);\n"
+    rstr += "            histos1D[cat+obj.first+syst.first] = "
+    rstr += "std::unique_ptr<TH1>(new TH1F((processname+\"_\"+cat+obj.first+syst.first+suffix).c_str(), (PlotInfo1D.title).c_str(), PlotInfo1D.nbins, PlotInfo1D.edges.data()));\n"
+    rstr += "            histos1D[cat+obj.first+syst.first]->SetDirectory(0);\n"
     rstr += "        }\n"
     rstr += "    }\n"
     rstr += "}\n"
@@ -146,10 +146,10 @@ def initHistos(catnames, systnames, plots, edge_precision=4):
     rstr += "    for(const auto& obj: plotinfo2D){\n"
     rstr += "        for(const auto& syst: systematics){\n"
     rstr += "            const auto& PlotInfo2D = obj.second;\n"
-    rstr += "            histos2D[cat+obj.first+syst] = "
-    rstr += "std::unique_ptr<TH2>(new TH2F((processname+\"_\"+cat+obj.first+syst+suffix).c_str(), (PlotInfo2D.title).c_str(), "
+    rstr += "            histos2D[cat+obj.first+syst.first] = "
+    rstr += "std::unique_ptr<TH2>(new TH2F((processname+\"_\"+cat+obj.first+syst.first+suffix).c_str(), (PlotInfo2D.title).c_str(), "
     rstr += "PlotInfo2D.nbinsx, PlotInfo2D.edges_x.data(), PlotInfo2D.nbinsy, PlotInfo2D.edges_y.data()));\n"
-    rstr += "            histos2D[cat+obj.first+syst]->SetDirectory(0);\n"
+    rstr += "            histos2D[cat+obj.first+syst.first]->SetDirectory(0);\n"
     rstr += "        }\n"
     rstr += "    }\n"
     rstr += "}\n"
@@ -409,22 +409,32 @@ def fillHistoSyst(histName, varNames, weight, systNames, systWeights):
     # -> speed-up of compilation and less code lines
     if len(varNames) == 1:
         # 1D Histograms
-        text += '       std::vector<structHelpFillHisto> helpWeightVec_' + histName + ' = {\n'
-        for systName, systWeight in zip(systNames, systWeights):
-            text += "       {histos1D[\""+histName+systName+"\"].get()"+", ("+systWeight+")*(weight_"+histName+")},\n"
+        #text += '       std::vector<structHelpFillHisto> helpWeightVec_' + histName + ' = {\n'
+        #for systName, systWeight in zip(systNames, systWeights):
+            #text += "       {histos1D[\""+histName+systName+"\"].get()"+", ("+systWeight+")*(weight_"+histName+")},\n"
             
-        text += "       };\n"
+        #text += "       };\n"
+        text += "       std::vector<structHelpFillHisto> helpWeightVec_" + histName + ";\n"
+        text += "       for(const auto& syst : systematics){\n"
+        text += "           helpWeightVec_" + histName + ".push_back({histos1D[\""+ histName +"\"+syst.first].get(),(*syst.second)*(weight_"+histName+")});\n"
+        text += "       }\n"
+        
         text += "       variable = "+varNames[0]+";\n"
 
         text += "       helperFillHisto(helpWeightVec_"+histName+", variable);\n"
         text += "       variable = -999;\n"
     if len(varNames) == 2:
         # 2D Histograms
-        text += '       std::vector<structHelpFillTwoDimHisto> helpWeightVec_' + histName + ' = {\n'
-        for systName, systWeight in zip(systNames, systWeights):
-            text += "       {histos2D[\""+histName+systName+"\"].get()"+", ("+systWeight+")*(weight_"+histName+")},\n"
+        #text += '       std::vector<structHelpFillTwoDimHisto> helpWeightVec_' + histName + ' = {\n'
+        #for systName, systWeight in zip(systNames, systWeights):
+            #text += "       {histos2D[\""+histName+systName+"\"].get()"+", ("+systWeight+")*(weight_"+histName+")},\n"
             
-        text += "       };\n"
+        #text += "       };\n"
+        text += "       std::vector<structHelpFillTwoDimHisto> helpWeightVec_" + histName + ";\n"
+        text += "       for(const auto& syst : systematics){\n"
+        text += "           helpWeightVec_" + histName + ".push_back({histos2D[\""+ histName +"\"+syst.first].get(),(*syst.second)*(weight_"+histName+")});\n"
+        text += "       }\n"
+        
         text += "       variable1 = "+varNames[0]+";\n"
         text += "       variable2 = "+varNames[1]+";\n"
 

@@ -218,8 +218,11 @@ class plotParallel:
 
         # cleanup histograms
         print("cleaning up histograms")
-        nafInterface.cleanupInterface(self.runscriptData["cleanup"], self.runscriptData["outputs"], skipCleanup = self.analysis.skipPlotParallel)
-        print("all jobs have terminated successfully")
+        if len(self.runscriptData["cleanup"])>0 and len(self.runscriptData["outputs_cleanup"])>0:
+            nafInterface.cleanupInterface(self.runscriptData["cleanup"], self.runscriptData["outputs_cleanup"], skipCleanup = self.analysis.skipPlotParallel)
+            print("all jobs have terminated successfully")
+        else:
+            print("nothing to cleanup")
         print("="*40)
 
         # starting on hadd output
@@ -241,8 +244,12 @@ class plotParallel:
 
 
     # -- adding pseudo and real data --------------------------------------------------------------
-    def addData(self, samples):
+    def addData(self, samples, is_real_data):
 
+        if is_real_data:
+            data_name = "data_obs"
+        else:
+            data_name = "pseudodata_obs"
         sampleNicks = [s.nick for s in samples]
         print(sampleNicks)
         rootFile = ROOT.TFile(self.getOutPath(), "UPDATE")
@@ -254,7 +261,7 @@ class plotParallel:
             histName = str(sampleNicks[0])+"_"+str(self.analysis.discrName)+"_"+label
             print("getting "+histName)
             oldHist = rootFile.Get(histName)
-            newHist = oldHist.Clone("data_obs_"+self.analysis.discrName+"_"+label)
+            newHist = oldHist.Clone(data_name+"_"+self.analysis.discrName+"_"+label)
             print("hewHist: "+str(newHist))
             for nick in sampleNicks[1:]:
                 sampleName = str(nick)+"_"+self.analysis.discrName+"_"+label
@@ -269,7 +276,7 @@ class plotParallel:
             histName = str(sampleNicks[0])+"_"+datavariable
             print("getting "+histName)
             oldHist = rootFile.Get(histName)
-            newHist = oldHist.Clone("data_obs_"+datavariable)
+            newHist = oldHist.Clone(data_name+"_"+datavariable)
             print("hewHist: "+str(newHist))
             for nick in sampleNicks[1:]:
                 sampleName = str(nick)+"_"+datavariable

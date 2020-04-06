@@ -128,7 +128,19 @@ class scriptWriter:
 
         # initialize TMVA Readers
         script += self.varManager.writeTMVAReader()
-
+        
+        # create a map with correspondence between systnames and systweights
+        script +="\n"
+        script +="std::map<std::string,float*> systematics;\n"
+        for systName,systWeight in zip(self.pp.systNames,self.systWeights):
+            if not ("up" in systName.lower() or "down" in systName.lower()):
+                script +="systematics[\""+systName+"\"]=&"+systWeight+";\n"
+        script += "if(!((processname.find(\"JES\")!=std::string::npos || processname.find(\"JER\")!=std::string::npos) && (processname.find(\"Up\")!=std::string::npos || processname.find(\"Down\")!=std::string::npos)) && DoWeights==1){\n"
+        for systName,systWeight in zip(self.pp.systNames,self.systWeights):
+            if ("up" in systName.lower() or "down" in systName.lower()):
+                script +="    systematics[\""+systName+"\"]=&"+systWeight+";\n"
+        script += "}\n"
+        
         # initialize histograms in all categories and for all systematics
         script += scriptfunctions.initHistos(
             catnames  = self.pp.categoryNames, 
@@ -405,6 +417,7 @@ class scriptWriter:
         self.scripts = []
         self.cleanup_scripts = []
         self.outputs = []
+        self.outputs_cleanup = []
         self.nentries = []
         self.samplewiseMaps = {}
 
@@ -429,6 +442,10 @@ class scriptWriter:
 
             filterFile = sample.filterFile
             filesToSubmit = []
+            
+            maxevents = self.pp.maxevents
+            if (("jes" in sample.nick.lower() or "jer" in sample.nick.lower()) and ("up" in sample.nick.lower() or "down" in sample.nick.lower())) or (sample.nick=="SingleEl" or sample.nick=="SingleMu" or sample.nick=="MET" or sample.nick=="SinglePh"):
+                maxevents = 5*maxevents
 
             # looping over files in sample
             for filename in sample.files:
@@ -446,10 +463,10 @@ class scriptWriter:
 
                 
                 # if the file is larger than self.maxevents it is analyzed in portions of nevents
-                if nEventsInFile > self.pp.maxevents:
-                    for ijob in range(nEventsInFile / self.pp.maxevents + 1):
+                if nEventsInFile > maxevents:
+                    for ijob in range(nEventsInFile / maxevents + 1):
                         nJob += 1
-                        writeOptions = {"skipEvents": (ijob)*self.pp.maxevents}
+                        writeOptions = {"skipEvents": (ijob)*maxevents}
 
                         self.writeSingleScript(sample, filename, nJob, filterFile, writeOptions)
                     self.nentries.append(nEventsInFile)
@@ -459,7 +476,7 @@ class scriptWriter:
                 else :
                     filesToSubmit += [filename]
                     nEventsInFiles += nEventsInFile
-                    if nEventsInFiles > self.pp.maxevents or filename == sample.files[-1] or len(filesToSubmit)>400: 
+                    if nEventsInFiles > maxevents or filename == sample.files[-1] or len(filesToSubmit)>400: 
                         nJob += 1
                         filenames = ' '.join(filesToSubmit)
                         self.writeSingleScript(sample, filenames, nJob, filterFile)
@@ -496,6 +513,7 @@ class scriptWriter:
         print "Saved information about events in trees to ", self.pp.analysis.workdir+'/'+"treejson.json"
         returnData = {  "scripts": self.scripts,
                         "cleanup": self.cleanup_scripts,
+                        "outputs_cleanup":self.outputs_cleanup,
                         "outputs": self.outputs, 
                         "entries": self.nentries, 
                         "maps": self.samplewiseMaps}
@@ -512,6 +530,9 @@ class scriptWriter:
         origName = sample.origName
         suffix = ""
         skipevents = 0
+        
+        if (("jes" in processname.lower() or "jer" in processname.lower()) and ("up" in processname.lower() or "down" in processname.lower())) or (processname=="SingleEl" or processname=="SingleMu" or processname=="MET" or processname=="SinglePh"):
+            maxevents = 5*maxevents
 
         # check options
         if "maxevents" in writeOptions:
@@ -552,14 +573,16 @@ class scriptWriter:
         st = os.stat(scriptname)
         os.chmod(scriptname, st.st_mode | stat.S_IEXEC)
 
-        with open(cleanupname, "w") as f:
-            f.write(cleanup)
-        st = os.stat(cleanupname)
-        os.chmod(cleanupname, st.st_mode | stat.S_IEXEC)
+        if ("jes" in processname.lower() or "jer" in processname.lower()) and ("up" in processname.lower() or "down" in processname.lower()):
+            with open(cleanupname, "w") as f:
+                f.write(cleanup)
+            st = os.stat(cleanupname)
+            os.chmod(cleanupname, st.st_mode | stat.S_IEXEC)
+            self.cleanup_scripts.append(cleanupname)
+            self.outputs_cleanup.append(outfilename)
 
         # saving script info to lists
         self.scripts.append(scriptname)
-        self.cleanup_scripts.append(cleanupname)
         self.outputs.append(outfilename)
         self.samplewiseMaps[processname].append(outfilename)
     
