@@ -56,7 +56,7 @@ THQpath = path+'/THQ_*ctcvcp*/*nominal*.root'
 
 
 ttHpath = path+'/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8*/*nominal*.root'+';'+ \
-	      path+'/ttHToNonbb_M125*/*nominal*.root'
+	      path+'/ttHToNonbb_M125_NNPDF31nnlo_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'
 
 friendTrees = {
     "MEMDB": "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/friends_final/2017",
