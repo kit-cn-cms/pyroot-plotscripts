@@ -341,7 +341,7 @@ class DNN:
         for i, var in enumerate(self.variables):
             string += """
             tensor_{cat}.tensor<float,2>()(0,{i}) = float( (({var})-({mean}))/({std}) );""".format(
-            cat = self.category, i = i, var = var.replace(".","_friendTree_"), mean = self.var_means[i], std = self.var_stds[i])
+            cat = self.category, i = i, var = var, mean = self.var_means[i], std = self.var_stds[i])
 
         # run graph
         string += """

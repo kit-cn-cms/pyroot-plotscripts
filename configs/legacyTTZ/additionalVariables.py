@@ -24,11 +24,17 @@ def getAddVars():
         "N_GenTopLep",
         "GenHiggs_DecProd1_PDGID",
 
-        "dnnRecoZ_Z_M_dev:=abs(dnnRecoZ_Z_M-90.)/20.",
-        "dnnRecoZ_Z_M_dev_log:=log(dnnRecoZ_Z_M_dev+1e-5)",
-        "dnnRecoZ_Z_M_weird:=dnnRecoZ_Z_M_dev*dnnRecoZ_Z_M",
-        "dnnRecoZ_Z_M_weird_log:=log(dnnRecoZ_Z_M_weird+1e-5)",
-        "dnnRecoZ_Z_M_weird_v2:=dnnRecoZ_Z_M_dev_log*dnnRecoZ_Z_M",
+        "RecoZ_Z_M_dev:=abs(dnnZ_ft_RecoZ_Z_M-90.)/20.",
+        "RecoZ_Z_M_dev_log:=log(RecoZ_Z_M_dev+1e-10)",
+        "RecoZ_Z_M_weird:=RecoZ_Z_M_dev*dnnZ_ft_RecoZ_Z_M",
+        "RecoZ_Z_M_weird_log:=log(RecoZ_Z_M_weird+1e-5)",
+        "RecoZ_Z_M_weird_v2:=RecoZ_Z_M_dev_log*dnnZ_ft_RecoZ_Z_M",
+
+        "RecoHiggs_H_M_dev:=abs(dnnH_ft_RecoHiggs_H_M-120.)/20.",
+        "RecoHiggs_H_M_dev_log:=log(RecoHiggs_H_M_dev+1e-10)",
+        "RecoHiggs_H_M_weird:=RecoHiggs_H_M_dev*dnnH_ft_RecoHiggs_H_M",
+        "RecoHiggs_H_M_weird_log:=log(RecoHiggs_H_M_weird+1e-5)",
+        "RecoHiggs_H_M_weird_v2:=RecoHiggs_H_M_dev_log*dnnH_ft_RecoHiggs_H_M",
 
         ]
 
