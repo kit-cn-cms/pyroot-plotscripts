@@ -8,7 +8,7 @@ import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 filedir = os.path.dirname(os.path.realpath(__file__))
-pyrootdir = "/".join(filedir.split("/")[:-2])
+pyrootdir = "/".join(filedir.split("/")[:-1])
 
 sys.path.append(pyrootdir)
 
@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'sfPatch/test_2017_fine_simple_rerun_v3_nPV_PU'
+    name = 'inputFeatures_final_2D/Classifier_top10_ge4j_3t/2017'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -48,24 +48,20 @@ def main(pyrootdir, opts):
     histname_separator = "__"
 
     # define MEM discriminator variable
-    # memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
-    memexp = ''
+    memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
+    # memexp = ""
     # configs
-    config          = "sfPatch/samples_2017_simple"
-    variable_cfg    = "sfPatch/additionalVariables"
-    plot_cfg        = "sfPatch/plots_testSFs"
-    syst_cfg        = "sfPatch/systs_testSFs"
+    config          = "legacyAnalysis/samples_2017_newGT"
+    variable_cfg    = "legacyAnalysis/additionalVariables_2017"
+    plot_cfg        = "legacyAnalysis/inputFeature_validation/ttH_legacy_inputfeatures_top10_Classifier_opt_binning_ge4j_3t_2D"
+    syst_cfg        = "legacyAnalysis/inputFeature_validation/systs_2017"
+    # syst_cfg        = "legacyAnalysis/no_systs"
+    replace_cfg     = "legacyAnalysis/pdf_relic_names"
 
-    # file for rate factors
-    #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
-    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2017.csv"
-
-    # file for btagging SF corrections
     sfCorrection = {}
     sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2017_deepJet_combined.root"
     # variables for the correction
     sfCorrection["corrections"] = {}
-    sfCorrection["corrections"]["NJet"]       = ["N_Jets"]
     sfCorrection["corrections"]["HT_vs_NJet"] = ["Evt_HT_jets", "N_Jets"]
     # in root file sf histograms exist with some naming scheme
     sfCorrection["nameTemplate"] = "$BINNING__$PROCESS__$NAME"
@@ -74,24 +70,27 @@ def main(pyrootdir, opts):
     # DANGER: order of variables is important
     # name of corrections to be applied (should match whats defined in syst.csv or samples.py)
     sfCorrection["names"] = ["btag_NOMINAL"]
-    # sfCorrection = None
+
+    # file for rate factors
+    #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
+    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2017_split.csv"
 
     # script options
     analysisOptions = {
         # general options
-        "usePseudoData":        True,
+        "usePseudoData":        False,
         "testrun":              False,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
         "makeDataCards":        False,
-        "makeInputDatacards":   False, # create datacards also for all defined plots
-        "addData":              False,  # adding real data 
-        "makePlots":            False,
+        "makeInputDatacards":   True, # create datacards also for all defined plots
+        "addData":              True,  # adding real data 
+        "makePlots":            True,
         # options for makePlots
         "signalScaling":        -1,
-        "lumilabel":            True,
-        "CMSlabel":             "private Work",
+        "lumiLabel":            True,
+        "cmslabel":             "private Work",
         "ratio":                "#frac{data}{MC Background}",
         "shape":                False,
         "logarithmic":          False,
@@ -104,11 +103,12 @@ def main(pyrootdir, opts):
         "skipHaddParallel":     opts.skipHaddParallel,
         "skipHaddFromWildcard": opts.skipHaddFromWildcard,
         "skipHistoCheck":       opts.skipHistoCheck,
+        "skipMergeSysts":       opts.skipMergeSysts,
         "skipDatacards":        opts.skipDatacards}
 
     plotJson = pyrootdir+"/configs/legacyAnalysis/treeJson_2017.json"
-    # plotDataBases = [["memDB","/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/databases/2017_/",True]] 
-    # memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
+    # plotDataBases = [["memDB","/portal/ekpbms1/home/swieland/ttH/memTrees/2017/",False]] 
+    # memDataBase = "/portal/ekpbms1/home/swieland/ttH/MEMDataBase/MEMDataBase/"
     #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
     #               "checkpointFiles":  "/nfs/dust/cms/user/swieland/ttH_legacy/DNNs/oldModel/"}
     dnnInterface = None
@@ -151,7 +151,9 @@ def main(pyrootdir, opts):
         analysisClass   = analysis,
         variable_config = variable_cfg,
         plot_config     = plot_cfg,
-        execute_file    = os.path.realpath(inspect.getsourcefile(lambda:0)))
+        execute_file    = os.path.realpath(inspect.getsourcefile(lambda:0)),
+        replace_config  = replace_cfg
+        )
 
     configData.initSystematics(systconfig = syst_cfg)
 
@@ -202,13 +204,16 @@ def main(pyrootdir, opts):
         monitor.printClass(pP, "init")
         # set some changed values
         pP.setJson(plotJson)
-        #pP.setDataBases(plotDataBases)
-        #pP.setMEMDataBase(memDataBase)
+        # pP.setDataBases(plotDataBases)
+        # pP.setMEMDataBase(memDataBase)
         # pP.setDNNInterface(dnnInterface)
-        pP.setSFCorrection(sfCorrection)
-        pP.setMaxEvts(500000)
+        pP.setMaxEvts_nom(10000)
+        pP.setMaxEvts_systs(400000)
+        # pP.request_runtime = 60*60*5
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
+        pP.setSFCorrection(sfCorrection)
+        pP.setUseFriendTrees(True)
 
         # run plotParallel
         pP.run()
@@ -232,6 +237,11 @@ def main(pyrootdir, opts):
             skipHadd            = analysis.skipHaddFromWildcard)
      
 
+    pP.setRenameInput()
+    if pP.configData.replace_config and not analysis.skipMergeSysts:
+        with monitor.Timer("mergeSystematics"):
+            print("merging systematics")
+            pP.mergeSystematics()
 
     # Deactivate check bins functionality in renameHistos 
     #   if additional plot variables are added via analysis class
@@ -244,7 +254,6 @@ def main(pyrootdir, opts):
         # ========================================================
         '''
 
-        pP.setRenameInput()
         # in this function the variable self.renameInput is set
         # if hadd files were created during plotParallel
         #       the renameInput is set to pP.getHaddFiles 
@@ -259,7 +268,8 @@ def main(pyrootdir, opts):
                 outFile         = analysis.renamedPath,
                 checkBins       = True,
                 eps             = 0.0,
-                skipHistoCheck  = analysis.skipHistoCheck)
+                skipHistoCheck  = analysis.skipHistoCheck
+                )
 
 
     if analysis.addData:
@@ -272,7 +282,7 @@ def main(pyrootdir, opts):
             if analysis.usePseudoData:
                 print("adding data_obs histograms as pseudo data")
                 # pseudo data without ttH
-                pP.addData( samples = configData.samples, 
+                pP.addData( samples = configData.samples[nSigSamples:], 
                             discrName = discrName)
                 # pseudo data with signal
                 #pP.addData(samples = configData.samples)
@@ -308,8 +318,7 @@ def main(pyrootdir, opts):
                 signalTag           = analysis.signalProcess,
                 skipDatacards       = analysis.skipDatacards,
                 nominal_key         = nom_histname_template,
-                syst_key            = syst_histname_template
-                )
+                syst_key            = syst_histname_template)
     
     if analysis.makePlots:
         print '''
@@ -335,9 +344,10 @@ if __name__ == "__main__":
     parser.add_option("--skipHaddParallel",     dest = "skipHaddParallel",      action = "store_true", default = False)
     parser.add_option("--skipHaddFromWildcard", dest = "skipHaddFromWildcard",  action = "store_true", default = False)
     parser.add_option("--skipHistoCheck",       dest = "skipHistoCheck",        action = "store_true", default = False)
+    parser.add_option("--skipMergeSysts",       dest = "skipMergeSysts",        action = "store_true", default = False)
     parser.add_option("--skipDatacards",        dest = "skipDatacards",         action = "store_true", default = False)
     parser.add_option("--skip",                 dest = "skip",                  default = 0,            type = "int",
-        help = "skip first INT parallel stages. plotParallel (1), haddParallel (2), haddFromWildcard (3), histoCheck (4), Datacards (5)")
+        help = "skip first INT parallel stages. plotParallel (1), haddParallel (2), haddFromWildcard (3), histoCheck (4), mergeSysts (5), Datacards (6)")
 
     (opts, args) = parser.parse_args()
 
@@ -345,7 +355,8 @@ if __name__ == "__main__":
     if opts.skip >= 2: opts.skipHaddParallel        = True
     if opts.skip >= 3: opts.skipHaddFromWildcard    = True
     if opts.skip >= 4: opts.skipHistoCheck          = True
-    if opts.skip >= 5: opts.skipDatacards           = True
+    if opts.skip >= 5: opts.skipMergeSysts          = True
+    if opts.skip >= 6: opts.skipDatacards           = True
 
 
     main(pyrootdir, opts)

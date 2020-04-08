@@ -11,7 +11,7 @@ import util.tools.plotClasses as plotClasses
 
 # samples
 # input path 
-path  = "/nfs/dust/cms/user/vdlinden/legacyTTH/ntuples/ntuples_ttZ/"
+path  = "/nfs/dust/cms/user/vdlinden/legacyTTH/ntuples/ntuples_ttZ_v2/"
 
 ttbarPathS = path+'/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
              path+'/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+";"+\
@@ -22,6 +22,9 @@ VJetsPathS = path+'/DYJets*/*nominal*.root'+';'+ \
              path+'/WJets*/*nominal*.root'
 
 ttWPath  = path+'/TTW*/*nominal*.root'
+
+ttZqqPath = path+'/TTZToQQ*/*nominal*.root'
+ttZllPath = path+'/TTZToLLNuNu*/*nominal*.root'
 
 ttZPath  = path+'/TTZToLLNuNu*/*nominal*.root'+';'+ \
            path+'/TTZToQQ*/*nominal*.root'
@@ -44,7 +47,8 @@ ttHpath = path+'/ttHTobb*/*nominal*.root'+';'+ \
           path+'/ttHToNonbb*/*nominal*.root'
 
 friendTrees = {
-    "RecoDNN_Z": "/nfs/dust/cms/user/vdlinden/legacyTTH/karim/workdir/ntuples/RecoDNN_Z/",
+    "dnnRecoZ": "/nfs/dust/cms/user/vdlinden/legacyTTZ/ntuples/friendTrees/reconstructed_Z_bosons_v2/",
+    "matchZ": "/nfs/dust/cms/user/vdlinden/legacyTTZ/ntuples/friendTrees/matched_Z_bosons/",
     }
 
 # ttZpath =  path+'/TTZToQQ*/*nominal*.root'+';'+ \
@@ -172,18 +176,52 @@ samplesDataControlPlots=[
     #        'SingleEl', samDict=sampleDict, readTrees=doReadTrees)
 ]
 
+
+matchable = "((dnnRecoZ_dRGen_Z_genB1_recoB1<=0.4)*(dnnRecoZ_dRGen_Z_genB2_recoB2<=0.4))+((dnnRecoZ_dRGen_Z_genB2_recoB1<=0.4)*(dnnRecoZ_dRGen_Z_genB1_recoB2<=0.4))"
+nonZbb = "(GenEvt_I_TTZ==0)"
+Zbb    = "(GenEvt_I_TTZ==1)"
 samples=[
     # signal samples     
     plotClasses.Sample('t#bar{t}+H',ROOT.kRed+1,
             ttHpath,
             lumi+sel_MET+evenSel,
             'ttH',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+            samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}+Z',ROOT.kOrange+7,
             ttZPath,
             lumi+sel_MET+evenSel,
             'ttZ',
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal", plot = False),
+
+    plotClasses.Sample('t#bar{t}+Z (correct Z)',ROOT.kOrange+7,
+            ttZqqPath,
+            lumi+sel_MET+evenSel+"*(RecoZ_matchable>0.)*("+matchable+")",
+            'ttZ_correctZ',
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+
+    plotClasses.Sample('t#bar{t}+Z (false Z)',ROOT.kMagenta+1,
+            ttZqqPath,
+            lumi+sel_MET+evenSel+"*(RecoZ_matchable>0.)*("+matchable+"==0)",
+            'ttZ_falseZ',
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+
+    plotClasses.Sample('t#bar{t}+Z (no Z)',ROOT.kAzure+8,
+            ttZqqPath,
+            lumi+sel_MET+evenSel+"*(RecoZ_matchable<=0.)*"+Zbb,
+            'ttZ_noZ',
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+
+    plotClasses.Sample('t#bar{t}+Z (Z to qq)',ROOT.kSpring-6,
+            ttZqqPath,
+            lumi+sel_MET+evenSel+"*(RecoZ_matchable<=0.)*"+nonZbb,
+            'ttZ_Zqq',
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+
+    plotClasses.Sample('t#bar{t}+Z (Z to ll)',ROOT.kYellow-7,
+            ttZllPath,
+            lumi+sel_MET+evenSel+"*(RecoZ_matchable<=0.)*"+nonZbb,
+            'ttZ_Zll',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
     plotClasses.Sample('t#bar{t}+lf',ROOT.kAzure-9,
@@ -214,6 +252,10 @@ datacard_processes  = processes
 
 
 plottingsamples = [
+    plotClasses.Sample("t#bar{t}", 18, "", "",
+        "ttbar", addsamples = ["ttlf", "ttcc", "ttbb"],
+        samDict = sampleDict, readTrees = doReadTrees)
+
     ]
 
 # sort subset of processes in plots. descending order

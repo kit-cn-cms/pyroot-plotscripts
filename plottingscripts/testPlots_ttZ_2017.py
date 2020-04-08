@@ -29,13 +29,13 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'testTreeFriend/2017_ttZ'
+    name = 'zMassPeakCorrection/v14'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
 
     # signal process
-    signalProcess = "ttH"
+    signalProcess = "ttZ"
     nSigSamples   = 1
 
     # dataera
@@ -52,7 +52,7 @@ def main(pyrootdir, opts):
     # configs
     config          = "legacyTTZ/samples"
     variable_cfg    = "legacyTTZ/additionalVariables"
-    plot_cfg        = "legacyTTZ/plots"
+    plot_cfg        = "legacyTTZ/corr_plots"
     syst_cfg        = "legacyTTZ/systs_v1"
     replace_cfg     = None
 
@@ -103,9 +103,8 @@ def main(pyrootdir, opts):
     plotJson = ""#pyrootdir+"/configs/legacyAnalysis/treeJson_2017.json"
     plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2017/",True]] 
     memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
-    #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-    #               "checkpointFiles":  "/nfs/dust/cms/user/swieland/ttH_legacy/DNNs/oldModel/"}
-    dnnInterface = None
+    dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
+                   "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/massCorrection_v3/"}
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
@@ -200,8 +199,9 @@ def main(pyrootdir, opts):
         pP.setJson(plotJson)
         #pP.setDataBases(plotDataBases)
         #pP.setMEMDataBase(memDataBase)
-        # pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts(100000)
+        pP.setDNNInterface(dnnInterface)
+        pP.setMaxEvts_nom(100000)
+        pP.setMaxEvts_systs(100000)
         #pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
         pP.setSFCorrection(sfCorrection)

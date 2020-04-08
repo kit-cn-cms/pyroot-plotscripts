@@ -38,7 +38,7 @@ sel_jettag = "(N_Jets>=4)*(Evt_MET_Pt>20.)"
 # ======= # 
 # WEIGHTS #
 # ======= #
-defaultWeight = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2"
+defaultWeight = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2*Weight_L1ECALPrefire"
 
 # lepton scale factors
 electronSFs = "((N_TightElectrons==1)&&(Electron_IdentificationSF[0]>0.)&&(Electron_ReconstructionSF[0]>0.))*Electron_IdentificationSF[0]*Electron_ReconstructionSF[0]"
