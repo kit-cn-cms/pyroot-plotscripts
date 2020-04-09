@@ -59,8 +59,8 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     float internalBosonWeight_muFUp     = 1.0;
     float internalBosonWeight_muFDown   = 1.0;
 
-    if ((processname.find("wlnujets") != std::string::npos && W_Pt > 30.) || (processname.find("zlljets") != std::string::npos && Z_Pt > 30.) ||
-        (processname.find("znunujets") != std::string::npos && Z_Pt > 30.) || (processname.find("gammajets") != std::string::npos && Gamma_Pt > 30.)) {
+    if ((processname.find("wlnujets") != std::string::npos && W_Pt > 70.) || (processname.find("zlljets") != std::string::npos && Z_Pt > 70.) ||
+        (processname.find("znunujets") != std::string::npos && Z_Pt > 100.) || (processname.find("gammajets") != std::string::npos && Gamma_Pt > 40.)) {
         internalBosonWeight           = BosonWeight_nominal;
         internalBosonWeight_QCD1Up    = BosonWeight_QCD1Up;
         internalBosonWeight_QCD1Down  = BosonWeight_QCD1Down;
@@ -118,3 +118,10 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
         std::cout << "XS weight " << Weight_XS << std::endl;
         std::cout << "PU weight " << Weight_pu69p2 << std::endl;
     }
+    
+    bool DeltaR_AK4Jets_LooseElectron_Smaller_3p4;
+    bool DeltaR_AK4Jets_LooseMuon_Smaller_3p4;
+    DeltaR_AK4Jets_LooseElectron_Smaller_3p4 = check_if_every_element_smaller(DeltaR_AK4Jet_LooseElectron.get(), N_Jets*N_LooseElectrons, 3.4);
+    DeltaR_AK4Jets_LooseMuon_Smaller_3p4 = check_if_every_element_smaller(DeltaR_AK4Jet_LooseMuon.get(), N_Jets*N_LooseMuons, 3.4);
+    //std::cout << "DeltaR_AK4Jets_LooseElectron_Smaller_3p4: " << DeltaR_AK4Jets_LooseElectron_Smaller_3p4 << std::endl;
+    //std::cout << "DeltaR_AK4Jets_LooseMuon_Smaller_3p4: " << DeltaR_AK4Jets_LooseMuon_Smaller_3p4 << std::endl;

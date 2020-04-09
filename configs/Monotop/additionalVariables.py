@@ -66,6 +66,11 @@ def getAddVars():
         "W_Pt",
         "Z_Pt",
         "Gamma_Pt",
+        "DeltaR_AK4Jet_LooseElectron",
+        "DeltaR_AK4Jet_LooseMuon",
+        "N_Jets",
+        "N_LooseElectrons",
+        "N_LooseMuons",
     ]
 
     return addVars
