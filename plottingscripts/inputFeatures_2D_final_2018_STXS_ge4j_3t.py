@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'inputFeatures_final_2D/HTXS_ge4j_3t/2018'
+    name = 'inputFeatures_final_2D/STXS_ge4j_3t/2018'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -53,7 +53,7 @@ def main(pyrootdir, opts):
     # configs
     config          = "legacyAnalysis/samples_2018"
     variable_cfg    = "legacyAnalysis/additionalVariables_2018"
-    plot_cfg        = "legacyAnalysis/ttH_legacy_inputfeatures_ClassPlusHTXS_opt_binning_HTXS_ge4j_3t2D"
+    plot_cfg        = "legacyAnalysis/inputFeature_validation/ttH_legacy_inputfeatures_top10_STXS_opt_binning_ge4j_3t_2D"
     syst_cfg        = "legacyAnalysis/inputFeature_validation/systs_2018"
     # syst_cfg        = "legacyAnalysis/no_systs"
     replace_cfg     = "legacyAnalysis/pdf_relic_names"
@@ -207,9 +207,8 @@ def main(pyrootdir, opts):
         # pP.setDataBases(plotDataBases)
         # pP.setMEMDataBase(memDataBase)
         # pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts_nom(15000)
-        pP.setMaxEvts_systs(400000)
-        pP.request_runtime = 60*60*7
+        pP.setMaxEvts_nom(20000)
+        pP.setMaxEvts_systs(200000)
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
         pP.setSFCorrection(sfCorrection)
