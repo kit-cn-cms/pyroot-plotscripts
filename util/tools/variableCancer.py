@@ -588,7 +588,7 @@ class Variable:
         varName = self.varName
         code =""
         if self.isArray:
-            code+="    std::fill_n ("+varName+".get(), 10, -999);\n"
+            code+="    std::fill_n ("+varName+".get(), 40, -999);\n"
         else:
             code+="    "+varName+" = -999;\n"
         return code
