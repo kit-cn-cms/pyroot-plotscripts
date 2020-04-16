@@ -12,8 +12,17 @@ import ROOT
 from array import array
 from copy import deepcopy
 
-generalselection = "(N_HEM_Jets==0)*(N_HEM_METS==0)*(Evt_Pt_MET>150.)*(N_LoosePhotons==0)*(CaloMET>150.)*(DeltaPhi_AK4Jet_MET[0]>2.0)"
-generalselection += "*(M_W_transverse[0]>=50.)"
+fast = True
+
+#discr_binning = [0+(2*i) for i in range(150)]
+#discr_binning += [300+(5*i) for i in range(80)]
+#discr_binning += [700+(10*i) for i in range(31)]
+#discr_binning = [100.0, 102.0, 106.0, 110.0, 114.0, 118.0, 122.0, 126.0, 130.0, 134.0, 138.0, 142.0, 146.0,
+discr_binning = [150.0, 154.0, 158.0, 162.0, 166.0, 170.0, 174.0, 178.0, 182.0, 186.0, 190.0, 194.0, 198.0, 202.0, 206.0, 210.0, 214.0, 218.0, 224.0, 230.0, 236.0, 242.0, 248.0, 254.0, 262.0, 270.0, 278.0, 288.0, 298.0, 315.0, 335.0, 360.0, 395.0, 465.0]
+discr_binning.append(1000.)
+
+generalselection = "(N_HEM_Jets==0)*(N_HEM_METS==0)*(Evt_Pt_MET>100.)*(N_LoosePhotons==0)*(Jet_Pt[0]>80.)*(CaloMET_PFMET_ratio<1.0)*(DeltaPhi_AK4Jet_MET[0]>1.5)"
+generalselection += "*(M_W_transverse[0]>=150.)"
 
 def control_plots_lep_CR_ttbarEl(data=None):
     label = "#scale[0.8]{t#bar{t} control region (e)}"
@@ -21,6 +30,8 @@ def control_plots_lep_CR_ttbarEl(data=None):
     selection = generalselection
     selection += "*(N_BTagsM>=1 && N_BTagsL>=2)"
     selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele32_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1))"
+    selection += "*(DeltaR_AK4Jet_LooseElectron[0]<3.4)"
+    #selection += "*(DeltaR_AK4Jets_LooseElectron_Smaller_3p4)"
 
     plots = [
         plotClasses.Plot(
@@ -52,18 +63,18 @@ def control_plots_lep_CR_ttbarEl(data=None):
             selection,
             label,
         ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "CaloMET_Hadr_Recoil_ratio" + extension,
-                "CaloMET_Hadr_Recoil_ratio",
-                25,
-                0.0,
-                10.0,
-            ),
-            "CaloMET_Hadr_Recoil_ratio",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"CaloMET_Hadr_Recoil_ratio" + extension,
+                #"CaloMET_Hadr_Recoil_ratio",
+                #25,
+                #0.0,
+                #10.0,
+            #),
+            #"CaloMET_Hadr_Recoil_ratio",
+            #selection,
+            #label,
+        #),
         #plotClasses.Plot(
             #ROOT.TH1D("Evt_Pt_GenMET" + extension, "Puppi GEN MET", 40, 0.0, 1000.0),
             #"Evt_Pt_GenMET",
@@ -76,22 +87,22 @@ def control_plots_lep_CR_ttbarEl(data=None):
             #selection,
             #label,
         #),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "Hadr_Recoil_Pt" + extension, "Hadronic Recoil", 40, 200.0, 1200.0
-            ),
-            "Hadr_Recoil_Pt",
-            selection,
-            label,
-        ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "Hadr_Recoil_Phi" + extension, "Hadronic Recoil #phi", 30, -3.14, 3.14
-            ),
-            "Hadr_Recoil_Phi",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"Hadr_Recoil_Pt" + extension, "Hadronic Recoil", 40, 200.0, 1200.0
+            #),
+            #"Hadr_Recoil_Pt",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"Hadr_Recoil_Phi" + extension, "Hadronic Recoil #phi", 30, -3.14, 3.14
+            #),
+            #"Hadr_Recoil_Phi",
+            #selection,
+            #label,
+        #),
         plotClasses.Plot(
             ROOT.TH1D(
                 "DeltaPhi_AK4Jet_MET" + extension, "DeltaPhi_AK4Jet_MET", 30, 0.0, 3.14
@@ -124,18 +135,18 @@ def control_plots_lep_CR_ttbarEl(data=None):
             selection,
             label,
         ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "DeltaPhi_AK4Jet_Hadr_Recoil" + extension,
-                "DeltaPhi_AK4Jet_Hadr_Recoil",
-                30,
-                0.0,
-                3.14,
-            ),
-            "DeltaPhi_AK4Jet_Hadr_Recoil",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"DeltaPhi_AK4Jet_Hadr_Recoil" + extension,
+                #"DeltaPhi_AK4Jet_Hadr_Recoil",
+                #30,
+                #0.0,
+                #3.14,
+            #),
+            #"DeltaPhi_AK4Jet_Hadr_Recoil",
+            #selection,
+            #label,
+        #),
         #plotClasses.Plot(
             #ROOT.TH1D(
                 #"Weight_GEN_nom" + extension, "Generator weight", 1100, -100.0, 1000.0
@@ -240,6 +251,18 @@ def control_plots_lep_CR_ttbarEl(data=None):
             selection,
         label,
         ),
+        plotClasses.Plot(
+            ROOT.TH1D("Jet_NHF_0" + extension, "leading AK4 Jet NHF", 40, 0, 1.),
+            "Jet_NHF[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("Jet_CHF_0" + extension, "leading AK4 Jet CHF", 40, 0, 1.),
+            "Jet_CHF[0]",
+            selection,
+            label,
+        ),
         #plotClasses.Plot(
         #    ROOT.TH1D("Jet_NEMF" + extension, "AK4 Jet NEMF", 20, 0, 1.),
         #    "Jet_NEMF",
@@ -279,7 +302,7 @@ def control_plots_lep_CR_ttbarEl(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("M_W_transverse" + extension, "m_{W,transverse}", 30, 0., 600.),
+            ROOT.TH1D("M_W_transverse" + extension, "m_{W,transverse}", len(discr_binning)-1, array('d',discr_binning)),
             "M_W_transverse",
             selection,
             label,
@@ -324,8 +347,63 @@ def control_plots_lep_CR_ttbarEl(data=None):
             selection,
             label,
         ),
-
     ]
+    if fast:
+        plots = [
+        plotClasses.Plot(
+            ROOT.TH1D("M_W_transverse" + extension, "m_{W,transverse}", len(discr_binning)-1, array('d',discr_binning)),
+            "M_W_transverse",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "CaloMET_PFMET_ratio" + extension, "CaloMET_PFMET_ratio", 25, 0.0, 5.0
+            ),
+            "CaloMET_PFMET_ratio",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("Evt_Pt_MET" + extension, "Puppi MET", 25, 0.0, 500.0),
+            "Evt_Pt_MET",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("Jet_Pt_0" + extension, "leading AK4 Jet pt", 25, 20, 770),
+            "Jet_Pt[0]",
+            selection,
+            label,
+        ),
+         plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaPhi_AK4Jet_MET_0" + extension, "DeltaPhi_AK4Jet_MET_0", 30, 0.0, 3.14
+            ),
+            "DeltaPhi_AK4Jet_MET[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaR_AK4Jet_LooseElectron_0" + extension, "DeltaR_AK4Jet_LooseElectron_0", 30, 0.0, 6.0
+            ),
+            "DeltaR_AK4Jet_LooseElectron[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "Electron_Pt" + extension, "Tight Electron p_{t}", 20, 10.0, 410.0
+            ),
+            "Electron_Pt",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("yield" + extension, "yield", 1, 0.0, 2.0), "1.", selection, label
+        ),
+        ]
     if data:
         add_data_plots(plots=plots, data=data)
 
@@ -337,6 +415,8 @@ def control_plots_lep_CR_ttbarMu(data=None):
     selection = generalselection
     selection += "*(N_BTagsM>=1 && N_BTagsL>=2)"
     selection += "*(N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && Triggered_HLT_IsoMu24_vX==1)"
+    selection += "*(DeltaR_AK4Jet_LooseMuon[0]<3.4)"
+    #selection += "*(DeltaR_AK4Jets_LooseMuon_Smaller_3p4)"
 
     plots = [
         plotClasses.Plot(
@@ -368,18 +448,18 @@ def control_plots_lep_CR_ttbarMu(data=None):
             selection,
             label,
         ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "CaloMET_Hadr_Recoil_ratio" + extension,
-                "CaloMET_Hadr_Recoil_ratio",
-                25,
-                0.0,
-                10.0,
-            ),
-            "CaloMET_Hadr_Recoil_ratio",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"CaloMET_Hadr_Recoil_ratio" + extension,
+                #"CaloMET_Hadr_Recoil_ratio",
+                #25,
+                #0.0,
+                #10.0,
+            #),
+            #"CaloMET_Hadr_Recoil_ratio",
+            #selection,
+            #label,
+        #),
         #plotClasses.Plot(
             #ROOT.TH1D("Evt_Pt_GenMET" + extension, "Puppi GEN MET", 40, 0.0, 1000.0),
             #"Evt_Pt_GenMET",
@@ -392,22 +472,22 @@ def control_plots_lep_CR_ttbarMu(data=None):
             #selection,
             #label,
         #),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "Hadr_Recoil_Pt" + extension, "Hadronic Recoil", 40, 200.0, 1200.0
-            ),
-            "Hadr_Recoil_Pt",
-            selection,
-            label,
-        ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "Hadr_Recoil_Phi" + extension, "Hadronic Recoil #phi", 30, -3.14, 3.14
-            ),
-            "Hadr_Recoil_Phi",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"Hadr_Recoil_Pt" + extension, "Hadronic Recoil", 40, 200.0, 1200.0
+            #),
+            #"Hadr_Recoil_Pt",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"Hadr_Recoil_Phi" + extension, "Hadronic Recoil #phi", 30, -3.14, 3.14
+            #),
+            #"Hadr_Recoil_Phi",
+            #selection,
+            #label,
+        #),
         plotClasses.Plot(
             ROOT.TH1D(
                 "DeltaPhi_AK4Jet_MET" + extension, "DeltaPhi_AK4Jet_MET", 30, 0.0, 3.14
@@ -440,18 +520,18 @@ def control_plots_lep_CR_ttbarMu(data=None):
             selection,
             label,
         ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "DeltaPhi_AK4Jet_Hadr_Recoil" + extension,
-                "DeltaPhi_AK4Jet_Hadr_Recoil",
-                30,
-                0.0,
-                3.14,
-            ),
-            "DeltaPhi_AK4Jet_Hadr_Recoil",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"DeltaPhi_AK4Jet_Hadr_Recoil" + extension,
+                #"DeltaPhi_AK4Jet_Hadr_Recoil",
+                #30,
+                #0.0,
+                #3.14,
+            #),
+            #"DeltaPhi_AK4Jet_Hadr_Recoil",
+            #selection,
+            #label,
+        #),
         #plotClasses.Plot(
             #ROOT.TH1D(
                 #"Weight_GEN_nom" + extension, "Generator weight", 1100, -100.0, 1000.0
@@ -552,6 +632,18 @@ def control_plots_lep_CR_ttbarMu(data=None):
             selection,
         label,
         ),
+        plotClasses.Plot(
+            ROOT.TH1D("Jet_NHF_0" + extension, "leading AK4 Jet NHF", 40, 0, 1.),
+            "Jet_NHF[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("Jet_CHF_0" + extension, "leading AK4 Jet CHF", 40, 0, 1.),
+            "Jet_CHF[0]",
+            selection,
+            label,
+        ),
         #plotClasses.Plot(
         #    ROOT.TH1D("Jet_NEMF" + extension, "AK4 Jet NEMF", 20, 0, 1.),
         #    "Jet_NEMF",
@@ -591,7 +683,7 @@ def control_plots_lep_CR_ttbarMu(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("M_W_transverse" + extension, "m_{W,transverse}", 30, 0., 600.),
+            ROOT.TH1D("M_W_transverse" + extension, "m_{W,transverse}", len(discr_binning)-1, array('d',discr_binning)),
             "M_W_transverse",
             selection,
             label,
@@ -638,6 +730,60 @@ def control_plots_lep_CR_ttbarMu(data=None):
         ),
 
     ]
+    if fast:
+        plots = [
+        plotClasses.Plot(
+            ROOT.TH1D("M_W_transverse" + extension, "m_{W,transverse}", len(discr_binning)-1, array('d',discr_binning)),
+            "M_W_transverse",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "CaloMET_PFMET_ratio" + extension, "CaloMET_PFMET_ratio", 25, 0.0, 5.0
+            ),
+            "CaloMET_PFMET_ratio",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("Evt_Pt_MET" + extension, "Puppi MET", 25, 0.0, 500.0),
+            "Evt_Pt_MET",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("Jet_Pt_0" + extension, "leading AK4 Jet pt", 25, 20, 770),
+            "Jet_Pt[0]",
+            selection,
+            label,
+        ),
+         plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaPhi_AK4Jet_MET_0" + extension, "DeltaPhi_AK4Jet_MET_0", 30, 0.0, 3.14
+            ),
+            "DeltaPhi_AK4Jet_MET[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaR_AK4Jet_LooseMuon_0" + extension, "DeltaR_AK4Jet_LooseMuon_0", 30, 0.0, 6.0
+            ),
+            "DeltaR_AK4Jet_LooseMuon[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("Muon_Pt" + extension, "Tight Muon p_{t}", 20, 10.0, 410.0),
+            "Muon_Pt",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("yield" + extension, "yield", 1, 0.0, 2.0), "1.", selection, label
+        ),
+        ]
     if data:
         add_data_plots(plots=plots, data=data)
 
@@ -650,6 +796,8 @@ def control_plots_lep_CR_WEl(data=None):
     selection = generalselection
     selection += "*(N_BTagsL==0)"
     selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele32_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1))"
+    selection += "*(DeltaR_AK4Jet_LooseElectron[0]<3.4)"
+    #selection += "*(DeltaR_AK4Jets_LooseElectron_Smaller_3p4)"
 
     plots = [
         plotClasses.Plot(
@@ -681,18 +829,18 @@ def control_plots_lep_CR_WEl(data=None):
             selection,
             label,
         ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "CaloMET_Hadr_Recoil_ratio" + extension,
-                "CaloMET_Hadr_Recoil_ratio",
-                25,
-                0.0,
-                10.0,
-            ),
-            "CaloMET_Hadr_Recoil_ratio",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"CaloMET_Hadr_Recoil_ratio" + extension,
+                #"CaloMET_Hadr_Recoil_ratio",
+                #25,
+                #0.0,
+                #10.0,
+            #),
+            #"CaloMET_Hadr_Recoil_ratio",
+            #selection,
+            #label,
+        #),
         #plotClasses.Plot(
             #ROOT.TH1D("Evt_Pt_GenMET" + extension, "Puppi GEN MET", 40, 0.0, 1000.0),
             #"Evt_Pt_GenMET",
@@ -705,22 +853,22 @@ def control_plots_lep_CR_WEl(data=None):
             #selection,
             #label,
         #),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "Hadr_Recoil_Pt" + extension, "Hadronic Recoil", 40, 200.0, 1200.0
-            ),
-            "Hadr_Recoil_Pt",
-            selection,
-            label,
-        ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "Hadr_Recoil_Phi" + extension, "Hadronic Recoil #phi", 30, -3.14, 3.14
-            ),
-            "Hadr_Recoil_Phi",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"Hadr_Recoil_Pt" + extension, "Hadronic Recoil", 40, 200.0, 1200.0
+            #),
+            #"Hadr_Recoil_Pt",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"Hadr_Recoil_Phi" + extension, "Hadronic Recoil #phi", 30, -3.14, 3.14
+            #),
+            #"Hadr_Recoil_Phi",
+            #selection,
+            #label,
+        #),
         plotClasses.Plot(
             ROOT.TH1D(
                 "DeltaPhi_AK4Jet_MET" + extension, "DeltaPhi_AK4Jet_MET", 30, 0.0, 3.14
@@ -753,18 +901,18 @@ def control_plots_lep_CR_WEl(data=None):
             selection,
             label,
         ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "DeltaPhi_AK4Jet_Hadr_Recoil" + extension,
-                "DeltaPhi_AK4Jet_Hadr_Recoil",
-                30,
-                0.0,
-                3.14,
-            ),
-            "DeltaPhi_AK4Jet_Hadr_Recoil",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"DeltaPhi_AK4Jet_Hadr_Recoil" + extension,
+                #"DeltaPhi_AK4Jet_Hadr_Recoil",
+                #30,
+                #0.0,
+                #3.14,
+            #),
+            #"DeltaPhi_AK4Jet_Hadr_Recoil",
+            #selection,
+            #label,
+        #),
         #plotClasses.Plot(
             #ROOT.TH1D(
                 #"Weight_GEN_nom" + extension, "Generator weight", 1100, -100.0, 1000.0
@@ -869,6 +1017,18 @@ def control_plots_lep_CR_WEl(data=None):
             selection,
         label,
         ),
+        plotClasses.Plot(
+            ROOT.TH1D("Jet_NHF_0" + extension, "leading AK4 Jet NHF", 40, 0, 1.),
+            "Jet_NHF[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("Jet_CHF_0" + extension, "leading AK4 Jet CHF", 40, 0, 1.),
+            "Jet_CHF[0]",
+            selection,
+            label,
+        ),
         #plotClasses.Plot(
         #    ROOT.TH1D("Jet_NEMF" + extension, "AK4 Jet NEMF", 20, 0, 1.),
         #    "Jet_NEMF",
@@ -908,7 +1068,7 @@ def control_plots_lep_CR_WEl(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("M_W_transverse" + extension, "m_{W,transverse}", 30, 0., 600.),
+            ROOT.TH1D("M_W_transverse" + extension, "m_{W,transverse}", len(discr_binning)-1, array('d',discr_binning)),
             "M_W_transverse",
             selection,
             label,
@@ -954,6 +1114,62 @@ def control_plots_lep_CR_WEl(data=None):
             label,
         ),
     ]
+    if fast:
+        plots = [
+        plotClasses.Plot(
+            ROOT.TH1D("M_W_transverse" + extension, "m_{W,transverse}", len(discr_binning)-1, array('d',discr_binning)),
+            "M_W_transverse",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "CaloMET_PFMET_ratio" + extension, "CaloMET_PFMET_ratio", 25, 0.0, 5.0
+            ),
+            "CaloMET_PFMET_ratio",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("Evt_Pt_MET" + extension, "Puppi MET", 25, 0.0, 500.0),
+            "Evt_Pt_MET",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("Jet_Pt_0" + extension, "leading AK4 Jet pt", 25, 20, 770),
+            "Jet_Pt[0]",
+            selection,
+            label,
+        ),
+         plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaPhi_AK4Jet_MET_0" + extension, "DeltaPhi_AK4Jet_MET_0", 30, 0.0, 3.14
+            ),
+            "DeltaPhi_AK4Jet_MET[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaR_AK4Jet_LooseElectron_0" + extension, "DeltaR_AK4Jet_LooseElectron_0", 30, 0.0, 6.0
+            ),
+            "DeltaR_AK4Jet_LooseElectron[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "Electron_Pt" + extension, "Tight Electron p_{t}", 20, 10.0, 410.0
+            ),
+            "Electron_Pt",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("yield" + extension, "yield", 1, 0.0, 2.0), "1.", selection, label
+        ),
+        ]
     if data:
         add_data_plots(plots=plots, data=data)
 
@@ -965,6 +1181,8 @@ def control_plots_lep_CR_WMu(data=None):
     selection = generalselection
     selection += "*(N_BTagsL==0)"
     selection += "*(N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && Triggered_HLT_IsoMu24_vX==1)"
+    selection += "*(DeltaR_AK4Jet_LooseMuon[0]<3.4)"
+    #selection += "*(DeltaR_AK4Jets_LooseMuon_Smaller_3p4)"
 
     plots = [
         plotClasses.Plot(
@@ -996,18 +1214,18 @@ def control_plots_lep_CR_WMu(data=None):
             selection,
             label,
         ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "CaloMET_Hadr_Recoil_ratio" + extension,
-                "CaloMET_Hadr_Recoil_ratio",
-                25,
-                0.0,
-                10.0,
-            ),
-            "CaloMET_Hadr_Recoil_ratio",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"CaloMET_Hadr_Recoil_ratio" + extension,
+                #"CaloMET_Hadr_Recoil_ratio",
+                #25,
+                #0.0,
+                #10.0,
+            #),
+            #"CaloMET_Hadr_Recoil_ratio",
+            #selection,
+            #label,
+        #),
         #plotClasses.Plot(
             #ROOT.TH1D("Evt_Pt_GenMET" + extension, "Puppi GEN MET", 40, 0.0, 1000.0),
             #"Evt_Pt_GenMET",
@@ -1020,22 +1238,22 @@ def control_plots_lep_CR_WMu(data=None):
             #selection,
             #label,
         #),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "Hadr_Recoil_Pt" + extension, "Hadronic Recoil", 40, 200.0, 1200.0
-            ),
-            "Hadr_Recoil_Pt",
-            selection,
-            label,
-        ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "Hadr_Recoil_Phi" + extension, "Hadronic Recoil #phi", 30, -3.14, 3.14
-            ),
-            "Hadr_Recoil_Phi",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"Hadr_Recoil_Pt" + extension, "Hadronic Recoil", 40, 200.0, 1200.0
+            #),
+            #"Hadr_Recoil_Pt",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"Hadr_Recoil_Phi" + extension, "Hadronic Recoil #phi", 30, -3.14, 3.14
+            #),
+            #"Hadr_Recoil_Phi",
+            #selection,
+            #label,
+        #),
         plotClasses.Plot(
             ROOT.TH1D(
                 "DeltaPhi_AK4Jet_MET" + extension, "DeltaPhi_AK4Jet_MET", 30, 0.0, 3.14
@@ -1068,18 +1286,18 @@ def control_plots_lep_CR_WMu(data=None):
             selection,
             label,
         ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "DeltaPhi_AK4Jet_Hadr_Recoil" + extension,
-                "DeltaPhi_AK4Jet_Hadr_Recoil",
-                30,
-                0.0,
-                3.14,
-            ),
-            "DeltaPhi_AK4Jet_Hadr_Recoil",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"DeltaPhi_AK4Jet_Hadr_Recoil" + extension,
+                #"DeltaPhi_AK4Jet_Hadr_Recoil",
+                #30,
+                #0.0,
+                #3.14,
+            #),
+            #"DeltaPhi_AK4Jet_Hadr_Recoil",
+            #selection,
+            #label,
+        #),
         #plotClasses.Plot(
             #ROOT.TH1D(
                 #"Weight_GEN_nom" + extension, "Generator weight", 1100, -100.0, 1000.0
@@ -1202,6 +1420,18 @@ def control_plots_lep_CR_WMu(data=None):
             selection,
         label,
         ),
+        plotClasses.Plot(
+            ROOT.TH1D("Jet_NHF_0" + extension, "leading AK4 Jet NHF", 40, 0, 1.),
+            "Jet_NHF[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("Jet_CHF_0" + extension, "leading AK4 Jet CHF", 40, 0, 1.),
+            "Jet_CHF[0]",
+            selection,
+            label,
+        ),
         #plotClasses.Plot(
         #    ROOT.TH1D("Jet_NEMF" + extension, "AK4 Jet NEMF", 20, 0, 1.),
         #    "Jet_NEMF",
@@ -1241,7 +1471,7 @@ def control_plots_lep_CR_WMu(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("M_W_transverse" + extension, "m_{W,transverse}", 30, 0., 600.),
+            ROOT.TH1D("M_W_transverse" + extension, "m_{W,transverse}", len(discr_binning)-1, array('d',discr_binning)),
             "M_W_transverse",
             selection,
             label,
@@ -1287,6 +1517,60 @@ def control_plots_lep_CR_WMu(data=None):
             label,
         ),
     ]
+    if fast:
+        plots = [
+        plotClasses.Plot(
+            ROOT.TH1D("M_W_transverse" + extension, "m_{W,transverse}", len(discr_binning)-1, array('d',discr_binning)),
+            "M_W_transverse",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "CaloMET_PFMET_ratio" + extension, "CaloMET_PFMET_ratio", 25, 0.0, 5.0
+            ),
+            "CaloMET_PFMET_ratio",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("Evt_Pt_MET" + extension, "Puppi MET", 25, 0.0, 500.0),
+            "Evt_Pt_MET",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("Jet_Pt_0" + extension, "leading AK4 Jet pt", 25, 20, 770),
+            "Jet_Pt[0]",
+            selection,
+            label,
+        ),
+         plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaPhi_AK4Jet_MET_0" + extension, "DeltaPhi_AK4Jet_MET_0", 30, 0.0, 3.14
+            ),
+            "DeltaPhi_AK4Jet_MET[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaR_AK4Jet_LooseMuon_0" + extension, "DeltaR_AK4Jet_LooseMuon_0", 30, 0.0, 6.0
+            ),
+            "DeltaR_AK4Jet_LooseMuon[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("Muon_Pt" + extension, "Tight Muon p_{t}", 20, 10.0, 410.0),
+            "Muon_Pt",
+            selection,
+         label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("yield" + extension, "yield", 1, 0.0, 2.0), "1.", selection, label
+        ),
+        ]
     if data:
         add_data_plots(plots=plots, data=data)
 
@@ -1299,6 +1583,8 @@ def control_plots_lep_SR_El(data=None):
     selection = generalselection
     selection += "*(N_BTagsM==1 && N_BTagsL==1)"
     selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele32_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1))"
+    selection += "*(DeltaR_AK4Jet_LooseElectron[0]<3.4)"
+    #selection += "*(DeltaR_AK4Jets_LooseElectron_Smaller_3p4)"
 
     plots = [
         plotClasses.Plot(
@@ -1330,18 +1616,18 @@ def control_plots_lep_SR_El(data=None):
             selection,
             label,
         ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "CaloMET_Hadr_Recoil_ratio" + extension,
-                "CaloMET_Hadr_Recoil_ratio",
-                25,
-                0.0,
-                10.0,
-            ),
-            "CaloMET_Hadr_Recoil_ratio",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"CaloMET_Hadr_Recoil_ratio" + extension,
+                #"CaloMET_Hadr_Recoil_ratio",
+                #25,
+                #0.0,
+                #10.0,
+            #),
+            #"CaloMET_Hadr_Recoil_ratio",
+            #selection,
+            #label,
+        #),
         #plotClasses.Plot(
             #ROOT.TH1D("Evt_Pt_GenMET" + extension, "Puppi GEN MET", 40, 0.0, 1000.0),
             #"Evt_Pt_GenMET",
@@ -1354,22 +1640,22 @@ def control_plots_lep_SR_El(data=None):
             #selection,
             #label,
         #),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "Hadr_Recoil_Pt" + extension, "Hadronic Recoil", 40, 200.0, 1200.0
-            ),
-            "Hadr_Recoil_Pt",
-            selection,
-            label,
-        ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "Hadr_Recoil_Phi" + extension, "Hadronic Recoil #phi", 30, -3.14, 3.14
-            ),
-            "Hadr_Recoil_Phi",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"Hadr_Recoil_Pt" + extension, "Hadronic Recoil", 40, 200.0, 1200.0
+            #),
+            #"Hadr_Recoil_Pt",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"Hadr_Recoil_Phi" + extension, "Hadronic Recoil #phi", 30, -3.14, 3.14
+            #),
+            #"Hadr_Recoil_Phi",
+            #selection,
+            #label,
+        #),
         plotClasses.Plot(
             ROOT.TH1D(
                 "DeltaPhi_AK4Jet_MET" + extension, "DeltaPhi_AK4Jet_MET", 30, 0.0, 3.14
@@ -1402,18 +1688,18 @@ def control_plots_lep_SR_El(data=None):
             selection,
             label,
         ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "DeltaPhi_AK4Jet_Hadr_Recoil" + extension,
-                "DeltaPhi_AK4Jet_Hadr_Recoil",
-                30,
-                0.0,
-                3.14,
-            ),
-            "DeltaPhi_AK4Jet_Hadr_Recoil",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"DeltaPhi_AK4Jet_Hadr_Recoil" + extension,
+                #"DeltaPhi_AK4Jet_Hadr_Recoil",
+                #30,
+                #0.0,
+                #3.14,
+            #),
+            #"DeltaPhi_AK4Jet_Hadr_Recoil",
+            #selection,
+            #label,
+        #),
         #plotClasses.Plot(
             #ROOT.TH1D(
                 #"Weight_GEN_nom" + extension, "Generator weight", 1100, -100.0, 1000.0
@@ -1518,6 +1804,18 @@ def control_plots_lep_SR_El(data=None):
             selection,
         label,
         ),
+        plotClasses.Plot(
+            ROOT.TH1D("Jet_NHF_0" + extension, "leading AK4 Jet NHF", 40, 0, 1.),
+            "Jet_NHF[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("Jet_CHF_0" + extension, "leading AK4 Jet CHF", 40, 0, 1.),
+            "Jet_CHF[0]",
+            selection,
+            label,
+        ),
         #plotClasses.Plot(
         #    ROOT.TH1D("Jet_NEMF" + extension, "AK4 Jet NEMF", 20, 0, 1.),
         #    "Jet_NEMF",
@@ -1557,7 +1855,7 @@ def control_plots_lep_SR_El(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("M_W_transverse" + extension, "m_{W,transverse}", 30, 0., 600.),
+            ROOT.TH1D("M_W_transverse" + extension, "m_{W,transverse}", len(discr_binning)-1, array('d',discr_binning)),
             "M_W_transverse",
             selection,
             label,
@@ -1603,6 +1901,62 @@ def control_plots_lep_SR_El(data=None):
             label,
         ),
     ]
+    if fast:
+        plots = [
+        plotClasses.Plot(
+            ROOT.TH1D("M_W_transverse" + extension, "m_{W,transverse}", len(discr_binning)-1, array('d',discr_binning)),
+            "M_W_transverse",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "CaloMET_PFMET_ratio" + extension, "CaloMET_PFMET_ratio", 25, 0.0, 5.0
+            ),
+            "CaloMET_PFMET_ratio",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("Evt_Pt_MET" + extension, "Puppi MET", 25, 0.0, 500.0),
+            "Evt_Pt_MET",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("Jet_Pt_0" + extension, "leading AK4 Jet pt", 25, 20, 770),
+            "Jet_Pt[0]",
+            selection,
+            label,
+        ),
+         plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaPhi_AK4Jet_MET_0" + extension, "DeltaPhi_AK4Jet_MET_0", 30, 0.0, 3.14
+            ),
+            "DeltaPhi_AK4Jet_MET[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaR_AK4Jet_LooseElectron_0" + extension, "DeltaR_AK4Jet_LooseElectron_0", 30, 0.0, 6.0
+            ),
+            "DeltaR_AK4Jet_LooseElectron[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "Electron_Pt" + extension, "Tight Electron p_{t}", 20, 10.0, 410.0
+            ),
+            "Electron_Pt",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("yield" + extension, "yield", 1, 0.0, 2.0), "1.", selection, label
+        ),
+        ]
     if data:
         add_data_plots(plots=plots, data=data)
 
@@ -1614,6 +1968,8 @@ def control_plots_lep_SR_Mu(data=None):
     selection = generalselection
     selection += "*(N_BTagsM==1 && N_BTagsL==1)"
     selection += "*(N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && Triggered_HLT_IsoMu24_vX==1)"
+    selection += "*(DeltaR_AK4Jet_LooseMuon[0]<3.4)"
+    #selection += "*(DeltaR_AK4Jets_LooseMuon_Smaller_3p4)"
 
     plots = [
         plotClasses.Plot(
@@ -1645,18 +2001,18 @@ def control_plots_lep_SR_Mu(data=None):
             selection,
             label,
         ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "CaloMET_Hadr_Recoil_ratio" + extension,
-                "CaloMET_Hadr_Recoil_ratio",
-                25,
-                0.0,
-                10.0,
-            ),
-            "CaloMET_Hadr_Recoil_ratio",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"CaloMET_Hadr_Recoil_ratio" + extension,
+                #"CaloMET_Hadr_Recoil_ratio",
+                #25,
+                #0.0,
+                #10.0,
+            #),
+            #"CaloMET_Hadr_Recoil_ratio",
+            #selection,
+            #label,
+        #),
         #plotClasses.Plot(
             #ROOT.TH1D("Evt_Pt_GenMET" + extension, "Puppi GEN MET", 40, 0.0, 1000.0),
             #"Evt_Pt_GenMET",
@@ -1669,22 +2025,22 @@ def control_plots_lep_SR_Mu(data=None):
             #selection,
             #label,
         #),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "Hadr_Recoil_Pt" + extension, "Hadronic Recoil", 40, 200.0, 1200.0
-            ),
-            "Hadr_Recoil_Pt",
-            selection,
-            label,
-        ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "Hadr_Recoil_Phi" + extension, "Hadronic Recoil #phi", 30, -3.14, 3.14
-            ),
-            "Hadr_Recoil_Phi",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"Hadr_Recoil_Pt" + extension, "Hadronic Recoil", 40, 200.0, 1200.0
+            #),
+            #"Hadr_Recoil_Pt",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"Hadr_Recoil_Phi" + extension, "Hadronic Recoil #phi", 30, -3.14, 3.14
+            #),
+            #"Hadr_Recoil_Phi",
+            #selection,
+            #label,
+        #),
         plotClasses.Plot(
             ROOT.TH1D(
                 "DeltaPhi_AK4Jet_MET" + extension, "DeltaPhi_AK4Jet_MET", 30, 0.0, 3.14
@@ -1717,18 +2073,18 @@ def control_plots_lep_SR_Mu(data=None):
             selection,
             label,
         ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "DeltaPhi_AK4Jet_Hadr_Recoil" + extension,
-                "DeltaPhi_AK4Jet_Hadr_Recoil",
-                30,
-                0.0,
-                3.14,
-            ),
-            "DeltaPhi_AK4Jet_Hadr_Recoil",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"DeltaPhi_AK4Jet_Hadr_Recoil" + extension,
+                #"DeltaPhi_AK4Jet_Hadr_Recoil",
+                #30,
+                #0.0,
+                #3.14,
+            #),
+            #"DeltaPhi_AK4Jet_Hadr_Recoil",
+            #selection,
+            #label,
+        #),
         #plotClasses.Plot(
             #ROOT.TH1D(
                 #"Weight_GEN_nom" + extension, "Generator weight", 1100, -100.0, 1000.0
@@ -1829,6 +2185,18 @@ def control_plots_lep_SR_Mu(data=None):
             selection,
         label,
         ),
+        plotClasses.Plot(
+            ROOT.TH1D("Jet_NHF_0" + extension, "leading AK4 Jet NHF", 40, 0, 1.),
+            "Jet_NHF[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("Jet_CHF_0" + extension, "leading AK4 Jet CHF", 40, 0, 1.),
+            "Jet_CHF[0]",
+            selection,
+            label,
+        ),
         #plotClasses.Plot(
         #    ROOT.TH1D("Jet_NEMF" + extension, "AK4 Jet NEMF", 20, 0, 1.),
         #    "Jet_NEMF",
@@ -1868,7 +2236,7 @@ def control_plots_lep_SR_Mu(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("M_W_transverse" + extension, "m_{W,transverse}", 30, 0., 600.),
+            ROOT.TH1D("M_W_transverse" + extension, "m_{W,transverse}", len(discr_binning)-1, array('d',discr_binning)),
             "M_W_transverse",
             selection,
             label,
@@ -1914,6 +2282,60 @@ def control_plots_lep_SR_Mu(data=None):
             label,
         ),
     ]
+    if fast:
+        plots = [
+        plotClasses.Plot(
+            ROOT.TH1D("M_W_transverse" + extension, "m_{W,transverse}", len(discr_binning)-1, array('d',discr_binning)),
+            "M_W_transverse",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "CaloMET_PFMET_ratio" + extension, "CaloMET_PFMET_ratio", 25, 0.0, 5.0
+            ),
+            "CaloMET_PFMET_ratio",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("Evt_Pt_MET" + extension, "Puppi MET", 25, 0.0, 500.0),
+            "Evt_Pt_MET",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("Jet_Pt_0" + extension, "leading AK4 Jet pt", 25, 20, 770),
+            "Jet_Pt[0]",
+            selection,
+            label,
+        ),
+         plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaPhi_AK4Jet_MET_0" + extension, "DeltaPhi_AK4Jet_MET_0", 30, 0.0, 3.14
+            ),
+            "DeltaPhi_AK4Jet_MET[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaR_AK4Jet_LooseMuon_0" + extension, "DeltaR_AK4Jet_LooseMuon_0", 30, 0.0, 6.0
+            ),
+            "DeltaR_AK4Jet_LooseMuon[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("Muon_Pt" + extension, "Tight Muon p_{t}", 20, 10.0, 410.0),
+            "Muon_Pt",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D("yield" + extension, "yield", 1, 0.0, 2.0), "1.", selection, label
+        ),
+        ]
     if data:
         add_data_plots(plots=plots, data=data)
 
@@ -1956,18 +2378,18 @@ def control_plots_lep_CR_ttbardilep(data=None):
             selection,
             label,
         ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "CaloMET_Hadr_Recoil_ratio" + extension,
-                "CaloMET_Hadr_Recoil_ratio",
-                25,
-                0.0,
-                10.0,
-            ),
-            "CaloMET_Hadr_Recoil_ratio",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"CaloMET_Hadr_Recoil_ratio" + extension,
+                #"CaloMET_Hadr_Recoil_ratio",
+                #25,
+                #0.0,
+                #10.0,
+            #),
+            #"CaloMET_Hadr_Recoil_ratio",
+            #selection,
+            #label,
+        #),
         #plotClasses.Plot(
             #ROOT.TH1D("Evt_Pt_GenMET" + extension, "Puppi GEN MET", 40, 0.0, 1000.0),
             #"Evt_Pt_GenMET",
@@ -1980,22 +2402,22 @@ def control_plots_lep_CR_ttbardilep(data=None):
             #selection,
             #label,
         #),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "Hadr_Recoil_Pt" + extension, "Hadronic Recoil", 40, 200.0, 1200.0
-            ),
-            "Hadr_Recoil_Pt",
-            selection,
-            label,
-        ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "Hadr_Recoil_Phi" + extension, "Hadronic Recoil #phi", 30, -3.14, 3.14
-            ),
-            "Hadr_Recoil_Phi",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"Hadr_Recoil_Pt" + extension, "Hadronic Recoil", 40, 200.0, 1200.0
+            #),
+            #"Hadr_Recoil_Pt",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"Hadr_Recoil_Phi" + extension, "Hadronic Recoil #phi", 30, -3.14, 3.14
+            #),
+            #"Hadr_Recoil_Phi",
+            #selection,
+            #label,
+        #),
         plotClasses.Plot(
             ROOT.TH1D(
                 "DeltaPhi_AK4Jet_MET" + extension, "DeltaPhi_AK4Jet_MET", 30, 0.0, 3.14
@@ -2004,18 +2426,18 @@ def control_plots_lep_CR_ttbardilep(data=None):
             selection,
             label,
         ),
-        plotClasses.Plot(
-            ROOT.TH1D(
-                "DeltaPhi_AK4Jet_Hadr_Recoil" + extension,
-                "DeltaPhi_AK4Jet_Hadr_Recoil",
-                30,
-                0.0,
-                3.14,
-            ),
-            "DeltaPhi_AK4Jet_Hadr_Recoil",
-            selection,
-            label,
-        ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"DeltaPhi_AK4Jet_Hadr_Recoil" + extension,
+                #"DeltaPhi_AK4Jet_Hadr_Recoil",
+                #30,
+                #0.0,
+                #3.14,
+            #),
+            #"DeltaPhi_AK4Jet_Hadr_Recoil",
+            #selection,
+            #label,
+        #),
         #plotClasses.Plot(
             #ROOT.TH1D(
                 #"Weight_GEN_nom" + extension, "Generator weight", 1100, -100.0, 1000.0

@@ -194,12 +194,12 @@ def main(pyrootdir, opts):
         # pP.setDataBases(plotDataBases)
         # pP.setMEMDataBase(memDataBase)
         # pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts(150000)
+        pP.setMaxEvts(500000)
         # pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
         
         pP.setCatNames([""])
-        pP.setCatSelections(["(N_HEM_Jets==0)*(N_HEM_METS==0)*(Evt_Pt_MET>150.)*(N_LoosePhotons==0)*(M_W_transverse[0]>=50.)*((N_LooseElectrons+N_LooseMuons)==1)*((N_TightElectrons+N_TightMuons)==1)*(DeltaPhi_AK4Jet_MET[0]>2.0)"])
+        pP.setCatSelections(["(N_HEM_Jets==0)*(N_HEM_METS==0)*(Evt_Pt_MET>100.)*(N_LoosePhotons==0)*((N_LooseElectrons+N_LooseMuons)==1)*((N_TightElectrons+N_TightMuons)==1)*(Jet_Pt[0]>80.)*(CaloMET_PFMET_ratio<1.0)*(DeltaPhi_AK4Jet_MET[0]>1.5)*(M_W_transverse[0]>=150.)"])
 
         # run plotParallel
         pP.run()
@@ -265,14 +265,16 @@ def main(pyrootdir, opts):
         """
         )
         with monitor.Timer("addRealData"):
-            if analysis.usePseudoData:
+            #if analysis.usePseudoData:
                 # pseudo data without ttH
-                pP.addData(samples = [sample for sample in configData.samples if sample.typ=="bkg"])
+                #pP.addData(samples = [sample for sample in configData.samples if sample.typ=="bkg"])
                 # pseudo data with signal
                 #pP.addData(samples=configData.samples)
-            else:
+            #else:
                 # real data
-                pP.addData(samples=configData.controlSamples)
+                #pP.addData(samples=configData.controlSamples)
+            pP.addData(samples = [sample for sample in configData.samples if sample.typ=="bkg"], is_real_data = False)
+            pP.addData(samples=configData.controlSamples, is_real_data = True)
 
     pP.checkTermination()
     monitor.printClass(pP, "after plotParallel completely done")
