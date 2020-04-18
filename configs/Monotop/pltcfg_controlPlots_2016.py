@@ -53,6 +53,8 @@ muonIDSFs = "((N_TightMuons==1 && N_LooseMuons==2)*Muon_IdentificationSF[0]*Loos
 
 photonSFs = "((N_LoosePhotons==1 && N_TightPhotons==1)*Photon_IdentificationSF[0]+(N_LoosePhotons==0)*1.)"
 
+triggerSFs = "((N_TightElectrons>0 && N_LooseMuons==0)*TriggerSF_SingleElectron+(N_TightMuons==1 && N_LooseMuons==1 && N_LooseElectrons==0 && M_W_transverse[0]>=150)*TriggerSF_SingleMuon+(N_TightMuons==1 && N_LooseMuons==1 && N_LooseElectrons==0 && M_W_transverse[0]<150.)*TriggerSF_MET+(N_LooseElectrons==0 && N_LooseMuons==0 && N_LoosePhotons==0)*TriggerSF_MET+(N_TightMuons>0 && N_LooseMuons==2 && N_LooseElectrons==0)*TriggerSF_MET+(N_LoosePhotons>0)*1.)"
+
 # top pt weight
 topptWeightNom = "Weight_TopPt"
 
@@ -80,6 +82,15 @@ muonIDSFs_down = "((N_TightMuons==1 && N_LooseMuons==2)*Muon_IdentificationSFDow
 
 photonSFs_up = "((N_LoosePhotons==1 && N_TightPhotons==1)*Photon_IdentificationSFUp[0]+(N_LoosePhotons==0)*1.)"
 photonSFs_down = "((N_LoosePhotons==1 && N_TightPhotons==1)*Photon_IdentificationSFDown[0]+(N_LoosePhotons==0)*1.)"
+
+electronTriggerSFs_up = "((N_TightElectrons>0 && N_LooseMuons==0)*TriggerSF_SingleElectron_Up+(N_TightMuons==1 && N_LooseMuons==1 && N_LooseElectrons==0 && M_W_transverse[0]>=150)*TriggerSF_SingleMuon+(N_TightMuons==1 && N_LooseMuons==1 && N_LooseElectrons==0 && M_W_transverse[0]<150.)*TriggerSF_MET+(N_LooseElectrons==0 && N_LooseMuons==0 && N_LoosePhotons==0)*TriggerSF_MET+(N_TightMuons>0 && N_LooseMuons==2 && N_LooseElectrons==0)*TriggerSF_MET+(N_LoosePhotons>0)*1.)"
+electronTriggerSFs_down = "((N_TightElectrons>0 && N_LooseMuons==0)*TriggerSF_SingleElectron_Down+(N_TightMuons==1 && N_LooseMuons==1 && N_LooseElectrons==0 && M_W_transverse[0]>=150)*TriggerSF_SingleMuon+(N_TightMuons==1 && N_LooseMuons==1 && N_LooseElectrons==0 && M_W_transverse[0]<150.)*TriggerSF_MET+(N_LooseElectrons==0 && N_LooseMuons==0 && N_LoosePhotons==0)*TriggerSF_MET+(N_TightMuons>0 && N_LooseMuons==2 && N_LooseElectrons==0)*TriggerSF_MET+(N_LoosePhotons>0)*1.)"
+
+muonTriggerSFs_up = "((N_TightElectrons>0 && N_LooseMuons==0)*TriggerSF_SingleElectron+(N_TightMuons==1 && N_LooseMuons==1 && N_LooseElectrons==0 && M_W_transverse[0]>=150)*TriggerSF_SingleMuon_Up+(N_TightMuons==1 && N_LooseMuons==1 && N_LooseElectrons==0 && M_W_transverse[0]<150.)*TriggerSF_MET+(N_LooseElectrons==0 && N_LooseMuons==0 && N_LoosePhotons==0)*TriggerSF_MET+(N_TightMuons>0 && N_LooseMuons==2 && N_LooseElectrons==0)*TriggerSF_MET+(N_LoosePhotons>0)*1.)"
+muonTriggerSFs_down = "((N_TightElectrons>0 && N_LooseMuons==0)*TriggerSF_SingleElectron+(N_TightMuons==1 && N_LooseMuons==1 && N_LooseElectrons==0 && M_W_transverse[0]>=150)*TriggerSF_SingleMuon_Down+(N_TightMuons==1 && N_LooseMuons==1 && N_LooseElectrons==0 && M_W_transverse[0]<150.)*TriggerSF_MET+(N_LooseElectrons==0 && N_LooseMuons==0 && N_LoosePhotons==0)*TriggerSF_MET+(N_TightMuons>0 && N_LooseMuons==2 && N_LooseElectrons==0)*TriggerSF_MET+(N_LoosePhotons>0)*1.)"
+
+metTriggerSFs_up = "((N_TightElectrons>0 && N_LooseMuons==0)*TriggerSF_SingleElectron+(N_TightMuons==1 && N_LooseMuons==1 && N_LooseElectrons==0 && M_W_transverse[0]>=150)*TriggerSF_SingleMuon+(N_TightMuons==1 && N_LooseMuons==1 && N_LooseElectrons==0 && M_W_transverse[0]<150.)*TriggerSF_MET_Up+(N_LooseElectrons==0 && N_LooseMuons==0 && N_LoosePhotons==0)*TriggerSF_MET_Up+(N_TightMuons>0 && N_LooseMuons==2 && N_LooseElectrons==0)*TriggerSF_MET_Up+(N_LoosePhotons>0)*1.)"
+metTriggerSFs_down = "((N_TightElectrons>0 && N_LooseMuons==0)*TriggerSF_SingleElectron+(N_TightMuons==1 && N_LooseMuons==1 && N_LooseElectrons==0 && M_W_transverse[0]>=150)*TriggerSF_SingleMuon+(N_TightMuons==1 && N_LooseMuons==1 && N_LooseElectrons==0 && M_W_transverse[0]<150.)*TriggerSF_MET_Down+(N_LooseElectrons==0 && N_LooseMuons==0 && N_LoosePhotons==0)*TriggerSF_MET_Down+(N_TightMuons>0 && N_LooseMuons==2 && N_LooseElectrons==0)*TriggerSF_MET_Down+(N_LoosePhotons>0)*1.)"
 
 bosonWeightNom = "internalBosonWeight"
 
@@ -151,6 +162,13 @@ weightReplacements = {
     "PREFIREWEIGHTNOM": prefireWeightNom,
     "PREFIREWEIGHTUP": prefireWeightUp,
     "PREFIREWEIGHTDOWN": prefireWeightDown,
+    "TRIGGERSFNOM" : triggerSFs,
+    "ELTRIGGERSFUP" : electronTriggerSFs_up,
+    "ELTRIGGERSFDOWN" : electronTriggerSFs_down,
+    "MUTRIGGERSFUP" : muonTriggerSFs_up,
+    "MUTRIGGERSFDOWN" : muonTriggerSFs_down,
+    "METTRIGGERSFUP" : metTriggerSFs_up,
+    "METTRIGGERSFDOWN" : metTriggerSFs_down,
     ## trigger scale factors
     # "TRIGGERSFS": "(" + electronTrigger + "+" + muonTrigger + ")",
     # "ELETRIGSUP": "(" + electronTrigger_up + "+" + muonTrigger + ")",
@@ -188,6 +206,8 @@ nominalweight = (
     + bosonWeightNom
     + "*"
     + prefireWeightNom
+    + "*"
+    + triggerSFs
     + ")"
     + "*(DoWeights==1)+(DoWeights==0)*1.0"
     # + electronSFs
