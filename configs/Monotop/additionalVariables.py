@@ -71,6 +71,11 @@ def getAddVars():
         "N_Jets",
         "N_LooseElectrons",
         "N_LooseMuons",
+        "DeltaPhi_AK4Jet_MET",
+        "HT_AK4Jets",
+        "N_AK15Jets",
+        "AK15Jet_Pt",
+        "Hadr_Recoil_Pt",
     ]
 
     return addVars

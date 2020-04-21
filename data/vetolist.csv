@@ -89,7 +89,9 @@ internalBosonWeight_muRUp
 internalBosonWeight_muRDown
 internalBosonWeight_muFUp
 internalBosonWeight_muFDown
-internalCSVWeightSF
+internalCSVWeightSF_had
+internalCSVWeightSF_lep
 DeltaR_AK4Jets_LooseElectron_Smaller_3p4
 DeltaR_AK4Jets_LooseMuon_Smaller_3p4
-
+HT_Jets
+DeltaPhi_AK4Jets_MET_Larger_0p5
