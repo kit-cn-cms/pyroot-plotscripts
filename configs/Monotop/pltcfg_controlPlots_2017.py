@@ -30,7 +30,7 @@ sel_StrangeMuWeights = "*1.0"
 defaultWeight = "Weight_GEN_nom"
 
 # csv weights
-csvWeightNom = "Weight_CSV*internalCSVWeightSF"
+csvWeightNom = "Weight_CSV*internalCSVWeightSF_had"
 
 
 # pile up weights
@@ -228,8 +228,6 @@ sampleDict = plotClasses.SampleDictionary()
 sampleDict.doPrintout()
 doReadTrees = True
 
-leptonic = False
-
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
 samplesDataControlPlots = []
 samplesDataControlPlots += [
@@ -243,43 +241,28 @@ samplesDataControlPlots += [
         readTrees=doReadTrees,
     )
 ]
-if not leptonic:
-    samplesDataControlPlots += [
-        plotClasses.Sample(
-            "MET",
-            ROOT.kBlack,
-            path_mwassmer + "/MET*/*nominal*.root",
-            "(N_LooseElectrons==0) && (N_LooseMuons>=0) && (N_LoosePhotons==0)",
-            "MET",
-            samDict=sampleDict,
-            readTrees=doReadTrees,
-        )
-    ]
-if leptonic:
-    samplesDataControlPlots += [
-        plotClasses.Sample(
-            "SingleMu",
-            ROOT.kBlack,
-            path_mwassmer + "/SingleMuon*/*nominal*.root",
-            "(N_LooseMuons>0) && (N_LooseElectrons==0) && (N_LoosePhotons==0)",
-            "SingleMu",
-            samDict=sampleDict,
-            readTrees=doReadTrees,
-        )
-    ]
-if not leptonic:
-    samplesDataControlPlots += [
-        plotClasses.Sample(
-            "SinglePh",
-            ROOT.kBlack,
-            path_mwassmer + "/SinglePhoton*/*nominal*.root",
-            "(N_LoosePhotons>0) && (N_LooseMuons==0) && (N_LooseElectrons==0)",
-            "SinglePh",
-            samDict=sampleDict,
-            readTrees=doReadTrees,
-        )
-    ]
-
+samplesDataControlPlots += [
+    plotClasses.Sample(
+        "MET",
+        ROOT.kBlack,
+        path_mwassmer + "/MET*/*nominal*.root",
+        "(N_LooseElectrons==0) && (N_LooseMuons>=0) && (N_LoosePhotons==0)",
+        "MET",
+        samDict=sampleDict,
+        readTrees=doReadTrees,
+    )
+]
+samplesDataControlPlots += [
+    plotClasses.Sample(
+        "SinglePh",
+        ROOT.kBlack,
+        path_mwassmer + "/SinglePhoton*/*nominal*.root",
+        "(N_LoosePhotons>0) && (N_LooseMuons==0) && (N_LooseElectrons==0)",
+        "SinglePh",
+        samDict=sampleDict,
+        readTrees=doReadTrees,
+    )
+]
 
 # print("limit samples")
 samples = [
