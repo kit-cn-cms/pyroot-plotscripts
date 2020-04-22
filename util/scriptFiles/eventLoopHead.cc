@@ -70,11 +70,11 @@
     //if(chain->GetBranch("Electron_Pt_BeforeRun2Calibration") && chain->GetBranch("Electron_Eta_Supercluster") && chain->GetBranch("Muon_Pt_BeForeRC")){
     //if(false){
       //std::cout<<"using superclister and stuff"<<std::endl;
-      if(chain->GetBranch("Electron_Pt_BeforeRun2Calibration") && chain->GetBranch("Electron_Eta_Supercluster")){
+    if(chain->GetBranch("Electron_Pt_BeforeRun2Calibration") && chain->GetBranch("Electron_Eta_Supercluster")){
 //      if(N_TightMuons==1){muonPt=Muon_Pt_BeForeRC[0]; muonEta=Muon_Eta[0];}
       if(N_TightMuons==1){muonPt=Muon_Pt[0]; muonEta=Muon_Eta[0];}
       else{muonPt=0.0; muonEta=0.0;}
-      if(N_TightElectrons==1){electronPt=Electron_Pt_BeforeRun2Calibration[0]; electronEta=Electron_Eta_Supercluster[0];}
+      if(N_TightElectrons==1){electronPt=Electron_Pt[0]; electronEta=Electron_Eta_Supercluster[0];}
       else{electronPt=0.0; electronEta=0.0;}
     }
     else{
