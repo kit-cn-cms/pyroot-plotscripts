@@ -11,7 +11,7 @@ import util.tools.plotClasses as plotClasses
 
 # samples
 # input path 
-path  = "/nfs/dust/cms/user/swieland/ttH_legacy/ntupleHadded_2017_JECgroups/"
+path  = "/nfs/dust/cms/user/swieland/ttH_legacy/ntupleHadded_2017_JECgroups_newGT/"
 
 #ttbarPathS = path+'/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'
 ttbarPathS = path+'/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
@@ -56,13 +56,13 @@ THQpath = path+'/THQ_*ctcvcp*/*nominal*.root'
 
 
 ttHbbpath    = path+'/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8*/*nominal*.root'
-ttHnonbbpath = path+'/ttHToNonbb_M125*/*nominal*.root'
+ttHnonbbpath = path+'/ttHToNonbb_M125_NNPDF31nnlo*/*nominal*.root'
 
-ttHpath = path+'/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8*/*nominal*.root'+';'+ \
+ttHpath = path+'/ttHToNonbb_M125_NNPDF31nnlo*/*nominal*.root'+';'+ \
 	      path+'/ttHToNonbb_M125*/*nominal*.root'
 
 friendTrees = {
-    "MEMDB": "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/friends/2017_wrongGT/",
+    "memdb": "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/friends_final/2017/",
     }
 
 # SELECTIONS
