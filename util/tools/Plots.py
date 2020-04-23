@@ -252,6 +252,7 @@ def buildHistogramAndErrorBand(rootFile,sample,color,typ,label,systematics,nomin
 
     if addStatErrorband:
         statErrorband = ROOT.TGraphAsymmErrors(rootHist)
+        statErrorband.SetFillStyle(ROOT.kOrange)
         for i in range(rootHist.GetNbinsX()):
             statErrorband.SetPointEYlow(i, rootHist.GetBinError(i+1))
             statErrorband.SetPointEYhigh(i, rootHist.GetBinError(i+1))
@@ -569,10 +570,14 @@ class DrawHistograms:
             self.errorband.SetFillColorAlpha(ROOT.kBlack, 0.3)
             self.errorband.Draw("same2")
         elif self.combinederrorbands:
-            for ceb in self.combinederrorbands:
+            for i, ceb in enumerate(self.combinederrorbands):
                 ceb.SetFillStyle(1001)
-                ceb.SetLineColorAlpha(ROOT.kBlack,0.1)
-                ceb.SetFillColorAlpha(ROOT.kBlack,0.1)
+                if i == 0:
+                    ceb.SetLineColorAlpha(ROOT.kBlack,0.3)
+                    ceb.SetFillColorAlpha(ROOT.kBlack,0.3)
+                else:
+                    ceb.SetLineColorAlpha(ROOT.kOrange,0.3)
+                    ceb.SetFillColorAlpha(ROOT.kOrange,0.3)
                 ceb.Draw("same2")
 
 
@@ -768,8 +773,8 @@ class DrawHistograms:
         
         line = self.data.Clone()
         line.Divide(self.data)
-        #line.GetYaxis().SetRangeUser(0.5,1.5)
-        line.GetYaxis().SetRangeUser(0.3,1.7)
+        line.GetYaxis().SetRangeUser(0.5,1.5)
+        #line.GetYaxis().SetRangeUser(0.3,1.7)
         line.GetYaxis().SetTitle(self.ratio)
 
         line.SetTitle("")
