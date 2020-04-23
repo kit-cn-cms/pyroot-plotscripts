@@ -292,7 +292,7 @@ processes = []
 for sample in samples:
     processes.append(sample.nick)
 list_of_processes   = processes
-datacard_processes  = processes
+datacard_processes  = [p for p in processes if not ("ttZ_" in p or "ttH_" in p)]
 
 
 plottingsamples = [
