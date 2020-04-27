@@ -29,7 +29,7 @@ def control_plots_lep_CR_ttbarEl(data=None):
     extension = "_lep_CR_ttbarEl"
     selection = generalselection
     selection += "*(N_BTagsM>=1 && N_BTagsL>=2)"
-    selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1))"
+    selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1) && Electron_Pt[0]>=37.)"
     selection += "*(DeltaR_AK4Jet_LooseElectron[0]<3.4)"
     #selection += "*(DeltaR_AK4Jets_LooseElectron_Smaller_3p4)"
 
@@ -795,7 +795,7 @@ def control_plots_lep_CR_WEl(data=None):
     extension = "_lep_CR_WEl"
     selection = generalselection
     selection += "*(N_BTagsL==0)"
-    selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1))"
+    selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1) && Electron_Pt[0]>=37.)"
     selection += "*(DeltaR_AK4Jet_LooseElectron[0]<3.4)"
     #selection += "*(DeltaR_AK4Jets_LooseElectron_Smaller_3p4)"
 
@@ -1582,7 +1582,7 @@ def control_plots_lep_SR_El(data=None):
     extension = "_lep_SR_El"
     selection = generalselection
     selection += "*(N_BTagsM==1 && N_BTagsL==1)"
-    selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1))"
+    selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1) && Electron_Pt[0]>=37.)"
     selection += "*(DeltaR_AK4Jet_LooseElectron[0]<3.4)"
     #selection += "*(DeltaR_AK4Jets_LooseElectron_Smaller_3p4)"
 
