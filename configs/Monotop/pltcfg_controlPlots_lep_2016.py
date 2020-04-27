@@ -30,7 +30,7 @@ sel_StrangeMuWeights = "*1.0"
 defaultWeight = "Weight_GEN_nom"
 
 # csv weights
-csvWeightNom = "Weight_CSV*internalCSVWeightSF"
+csvWeightNom = "Weight_CSV*internalCSVWeightSF_lep"
 
 
 # pile up weights
