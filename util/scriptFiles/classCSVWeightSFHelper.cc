@@ -1,79 +1,93 @@
 
 class CSVWeightSFHelper {
    public:
-    // see the definition/implementation file for a description of the functions
-    CSVWeightSFHelper(TString path_to_sf_file_);
+    CSVWeightSFHelper();
     ~CSVWeightSFHelper();
-    float GetScaleFactor(int n_jets, float ht_jets) const;
-    void  Reset(TString path_to_sf_file_);
+    float GetScaleFactor(std::string process, auto x, auto y);
+    void  Reset();
+    void  AddScaleFactorHistogram(std::string process, std::string path_to_file, std::string histogram_name);
 
    private:
-    // function to load root file with scale factor histogram
-    void LoadFile(TString path_to_sf_file_);
-    // pointer for the root file containing the desired histograms
-    TFile* scalefactor_file = nullptr;
-    // path to the root file
-    TString path_to_sf_file = "";
-    // histograms containing the scale factors for electron and muon channel separately
-    TH2D* SF_hist = nullptr;
-    // flag if the file and the histograms were read properly
-    bool initialized = false;
+    std::map< std::string, TH2D* > scalefactor_map;
+    bool                           initialized = false;
 };
 
-CSVWeightSFHelper::CSVWeightSFHelper(TString path_to_sf_file_)
-{
-    // just the constructor which loads a root file containing the histograms with the scale factors using the LoadFile function
-    LoadFile(path_to_sf_file_);
-}
+CSVWeightSFHelper::CSVWeightSFHelper() {}
 
-void CSVWeightSFHelper::LoadFile(TString path_to_sf_file_)
+void CSVWeightSFHelper::AddScaleFactorHistogram(std::string process, std::string path_to_file, std::string histogram_name)
 {
-    // this function loads the file given by a string and initializes the 2 needed histograms if the file was loaded correctly
-    path_to_sf_file = path_to_sf_file_;
-    if (path_to_sf_file != "") { scalefactor_file = TFile::Open(path_to_sf_file); }
+    TFile* scalefactor_file = nullptr;
+    TH2D*  scalefactor_hist = nullptr;
+    if (path_to_file != "") { scalefactor_file = TFile::Open(path_to_file.c_str(), "READ"); }
     else {
         std::cout << "CSVWeightSFHelper: no scale factor file given" << std::endl;
         throw std::exception();
     }
     if (scalefactor_file) {
-        SF_hist = (TH2D*) scalefactor_file->Get("csv_weight_sfs");
-        if (SF_hist) { initialized = true; }
+        scalefactor_hist = (TH2D*) scalefactor_file->Get(histogram_name.c_str());
+        if (scalefactor_hist) {
+            scalefactor_hist->SetDirectory(0);
+            scalefactor_map[process] = scalefactor_hist;
+            initialized              = true;
+        }
         else {
             std::cout << "CSVWeightSFHelper: scale factor histogram not found in file " << scalefactor_file << std::endl;
             throw std::exception();
         }
+        scalefactor_file->Close();
+    }
+    else {
+        std::cout << "CSVWeightSFHelper: scale factor file not read" << std::endl;
+        throw std::exception();
     }
 }
 
-void CSVWeightSFHelper::Reset(TString path_to_sf_file_)
+void CSVWeightSFHelper::Reset()
 {
-    // resets all member data
-    scalefactor_file = nullptr;
-    path_to_sf_file  = "";
-    SF_hist          = nullptr;
-    initialized      = false;
-    // load new file
-    LoadFile(path_to_sf_file_);
+    scalefactor_map.clear();
+    initialized = false;
 }
 
-float CSVWeightSFHelper::GetScaleFactor(int n_jets, float ht_jets) const
+float CSVWeightSFHelper::GetScaleFactor(std::string process, auto x, auto y)
 {
-    // this function gets the scale factor for a event dependent on the number of jets,btags and the lepton flavor
     if (!initialized) {
         std::cout << "CSVWeightSFHelper: not initiliazed" << std::endl;
         throw std::exception();
     }
-    int   bin     = -1;
-    float sf      = 0.;
-    int   N_jets  = n_jets > 6 ? 6 : n_jets;
-    float HT_jets = ht_jets >= 2000. ? 1999. : ht_jets;
-    bin           = SF_hist->FindBin(N_jets, HT_jets);
-    sf            = SF_hist->GetBinContent(bin);
-    return sf <= 0. ? 1. : sf;
+
+    if (scalefactor_map.find(process) == scalefactor_map.end()) return 1.;
+
+    // std::cout << "hist " << scalefactor_map[process] << std::endl;
+
+    // std::cout << "x " << x << std::endl;
+    // std::cout << "y " << y << std::endl;
+
+    int   bin      = -1;
+    float sf       = 1.;
+    float sf_error = 0.;
+
+    // std::cout << "xmin " << scalefactor_map[process]->GetXaxis()->GetXmin() << std::endl;
+    // std::cout << "xmax " << scalefactor_map[process]->GetXaxis()->GetXmax() << std::endl;
+
+    // std::cout << "ymin " << scalefactor_map[process]->GetYaxis()->GetXmin() << std::endl;
+    // std::cout << "ymax " << scalefactor_map[process]->GetYaxis()->GetXmax() << std::endl;
+
+    bool x_in_range = (x > scalefactor_map[process]->GetXaxis()->GetXmin()) && (x < scalefactor_map[process]->GetXaxis()->GetXmax());
+    bool y_in_range = (y > scalefactor_map[process]->GetYaxis()->GetXmin()) && (y < scalefactor_map[process]->GetYaxis()->GetXmax());
+
+    if (x_in_range && y_in_range) {
+        bin      = scalefactor_map[process]->FindBin(x, y);
+        sf       = scalefactor_map[process]->GetBinContent(bin);
+        sf_error = scalefactor_map[process]->GetBinError(bin);
+    }
+
+    // std::cout << "sf " << sf << std::endl;
+    // std::cout << "sf err " << sf_error << std::endl;
+
+    if ((sf > 0.) && (sf_error / sf < 0.2))
+        return sf;
+    else
+        return 1.;
 }
 
-CSVWeightSFHelper::~CSVWeightSFHelper()
-{
-    // destructor which closes the file if it was loaded in the first place
-    if (initialized) scalefactor_file->Close();
-}
+CSVWeightSFHelper::~CSVWeightSFHelper() {}

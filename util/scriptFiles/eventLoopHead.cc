@@ -59,8 +59,8 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     float internalBosonWeight_muFUp     = 1.0;
     float internalBosonWeight_muFDown   = 1.0;
 
-    if ((processname.find("wlnujets") != std::string::npos && W_Pt > 70.) || (processname.find("zlljets") != std::string::npos && Z_Pt > 70.) ||
-        (processname.find("znunujets") != std::string::npos && Z_Pt > 100.) || (processname.find("gammajets") != std::string::npos && Gamma_Pt > 40.)) {
+    if ((processname.find("wlnujets") != std::string::npos && W_Pt > 40.) || (processname.find("zlljets") != std::string::npos && Z_Pt > 40.) ||
+        (processname.find("znunujets") != std::string::npos && Z_Pt > 40.) || (processname.find("gammajets") != std::string::npos && Gamma_Pt > 40.)) {
         internalBosonWeight           = BosonWeight_nominal;
         internalBosonWeight_QCD1Up    = BosonWeight_QCD1Up;
         internalBosonWeight_QCD1Down  = BosonWeight_QCD1Down;
@@ -84,14 +84,16 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
         internalBosonWeight_muFDown   = BosonWeight_muFDown;
     }
     
-    float HT_Jets = 0.;
-    for(size_t m = 0;m<N_Jets;m++) HT_Jets+=Jet_Pt[m];
+    //float HT_Jets = 0.;
+    //for(size_t m = 0;m<N_Jets;m++) HT_Jets+=Jet_Pt[m];
     
     //std::cout << "N_Jets: " << N_Jets << " HT: " << HT_Jets << std::endl;
+    float internalCSVWeightSF_had = 1.0;
+    if(N_AK15Jets>0) internalCSVWeightSF_had = csv_calibration_helper_had.GetScaleFactor(process, Hadr_Recoil_Pt, AK15Jet_Pt[0]);
+    float internalCSVWeightSF_lep = 1.0;
+    if(N_LooseElectrons>0 || N_LooseMuons>0) internalCSVWeightSF_lep = csv_calibration_helper_lep.GetScaleFactor(process, M_W_transverse[0], Evt_Pt_MET);
     
-    float internalCSVWeightSF = csv_calibration_helper.GetScaleFactor(N_Jets,HT_Jets);
-    
-    //std::cout << " DeepJet patch: " << internalCSVWeightSF << std::endl;
+    //std::cout << " DeepJet patch: " << internalCSVWeightSF_had << std::endl;
 
     // double primlepPt;
     // double primlepEta;
@@ -125,3 +127,13 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     DeltaR_AK4Jets_LooseMuon_Smaller_3p4 = check_if_every_element_smaller(DeltaR_AK4Jet_LooseMuon.get(), N_Jets*N_LooseMuons, 3.4);
     //std::cout << "DeltaR_AK4Jets_LooseElectron_Smaller_3p4: " << DeltaR_AK4Jets_LooseElectron_Smaller_3p4 << std::endl;
     //std::cout << "DeltaR_AK4Jets_LooseMuon_Smaller_3p4: " << DeltaR_AK4Jets_LooseMuon_Smaller_3p4 << std::endl;
+    
+    bool DeltaPhi_AK4Jets_MET_Larger_0p5;
+    DeltaPhi_AK4Jets_MET_Larger_0p5 = check_if_every_element_greater(DeltaPhi_AK4Jet_MET.get(), N_Jets, 0.5);
+    
+    // hack against prefireweight with 2018 signal samples
+    if(processname.find("vectormonotop")!=std::string::npos) {
+        Weight_L1_Prefire = 1.0;
+        Weight_L1_Prefire_Up = 1.0;
+        Weight_L1_Prefire_Down = 1.0;
+    }
