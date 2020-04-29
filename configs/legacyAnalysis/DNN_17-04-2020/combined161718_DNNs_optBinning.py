@@ -84,12 +84,9 @@ def plots_ge4j_3t(data = None):
         add_data_plots(plots=plots,data=data)
     return plots
     
-def plots_dnn(data, discrname):
-
+def plots_dnn_ge4j_ge4t_v2(data, discrname):
     ndefaultbins = 20
     interfaces = []
-
-
     # plots for ge4j_ge4t_v2
 
     interf_ljets_ge4j_ge4t_v2_ttH_node = vhi.variableHistoInterface(variable_name  = "DNNOutput_ge4j_ge4t_v2_node_ttH",
@@ -234,8 +231,21 @@ def plots_dnn(data, discrname):
 				]
     interf_ljets_ge4j_ge4t_v2_tHW_node.nhistobins = ndefaultbins
     interfaces.append(interf_ljets_ge4j_ge4t_v2_tHW_node)
-    
 
+
+    for interf in interfaces:
+        l = interf.label
+        interf.histoname = discrname+"_"+l
+        interf.histotitle = "final discriminator ({})".format(l)
+        interf.selection = interf.category[0]
+
+    DNNPlots = init_plots(interfaces = interfaces, data = data)
+    return DNNPlots
+    
+def plots_dnn(data, discrname):
+
+    ndefaultbins = 20
+    interfaces = []
 
     # plots for ge4j_3t
 
@@ -563,7 +573,7 @@ def plots_dnn(data, discrname):
 
 def getDiscriminatorPlots(data = None, discrname = ''):
     discriminatorPlots = []
-    discriminatorPlots += plots_ge4j_ge4t_v2(data)
+    # discriminatorPlots += plots_ge4j_ge4t_v2(data)
     discriminatorPlots += plots_ge4j_3t(data)
     discriminatorPlots += plots_dnn(data, discrname)
 
