@@ -10,6 +10,25 @@ pyrootdir = os.path.dirname(os.path.dirname(filedir))
 sys.path.append(pyrootdir)
 import util.tools.plotClasses as plotClasses
 
+def find_masses(dataset_name):
+    #dataset_name = dataset_name.replace("-","_")
+    dataset_name = dataset_name.lower()
+    index_1 = dataset_name.find("mphi_")
+    index_2 = dataset_name.find("mchi_")
+    #print(index_1,index_2)
+    number_1 = ""
+    number_2 = ""
+    for char in dataset_name[index_1+5:]:
+        #print(char)
+        if not char.isdigit(): break
+        number_1+=char
+    for char in dataset_name[index_2+5:]:
+        #print(char)
+        if not char.isdigit(): break
+        number_2+=char
+    print("Mphi="+number_1+" Mchi="+number_2)
+    return number_1,number_2
+
 # samples
 # input path
 path_mwassmer = "/nfs/dust/cms/user/mwassmer/MonoTop/ntuples_2018"
@@ -346,7 +365,10 @@ sample_folders = os.listdir(path_mwassmer)
 for sample_folder in sample_folders:
     if "VectorMonotop" in sample_folder:
         sample_name = sample_folder
-        samples += [plotClasses.Sample(sample_name,ROOT.kCyan,path_mwassmer+"/"+sample_folder+"/*nominal*.root",lumi,sample_name.lower(),samDict=sampleDict,readTrees=doReadTrees,typ="signal")]
+        mphi,mchi = find_masses(sample_name)
+        sample_label = "#splitline{Vector Monotop}{M_{#phi}="+mphi+" GeV, "+"M_{#chi}="+mchi+" GeV}"
+        print sample_label
+        samples += [plotClasses.Sample(sample_label,ROOT.kCyan,path_mwassmer+"/"+sample_folder+"/*nominal*.root",lumi,sample_name.lower(),samDict=sampleDict,readTrees=doReadTrees,typ="signal")]
 
 processes = []
 for sample in samples:
