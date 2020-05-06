@@ -29,13 +29,13 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'DNN_combined161718/2017_Systs_v2'
+    name = 'DNN_combined161718_acceptance/2017_Systs'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
 
     # signal process
-    signalProcess = "tH"
+    signalProcess = "ttH"
     nSigSamples   = 1
 
     # dataera
@@ -52,8 +52,8 @@ def main(pyrootdir, opts):
     # configs
     config          = "legacyAnalysis/samples_2017_newGT"
     variable_cfg    = "legacyAnalysis/additionalVariables"
-    plot_cfg        = "legacyAnalysis/DNN_17-04-2020/combined161718_DNNs_optBinning"
-    # plot_cfg        = "legacyAnalysis/DNN_17-04-2020/combined161718_DNNs"
+    plot_cfg        = "legacyAnalysis/DNN_06-05-2020/combined161718_DNNs_optBinning"
+    # plot_cfg        = "legacyAnalysis/DNN_06-05-2020/combined161718_DNNs"
     syst_cfg        = "legacyAnalysis/systs_2017"
     # syst_cfg        = "legacyAnalysis/no_systs"
     replace_cfg     = "legacyAnalysis/pdf_relic_names"
@@ -110,7 +110,7 @@ def main(pyrootdir, opts):
     # plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2017/",True]] 
     # memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                  "checkpointFiles":  pyrootdir+"/configs/legacyAnalysis/DNN_17-04-2020/DNNInputData/"}
+                  "checkpointFiles":  pyrootdir+"/configs/legacyAnalysis/DNN_06-05-2020/DNNInputData/"}
     # dnnInterface = None
 
     # path to datacardMaker directory
