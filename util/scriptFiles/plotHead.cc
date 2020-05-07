@@ -110,9 +110,10 @@ void plot()
 
     // initialize CSV Weight Scale Factor Helper
     std::string process = "";
+    process = processname;
     if(processname.find("_CMS_JES")!=std::string::npos) process = processname.substr(0,processname.find("_CMS_JES"));
-    else if(processname.find("_CMS_JER")!=std::string::npos) process = processname.substr(0,processname.find("_CMS_JER"));
-    else process = processname;
+    if(processname.find("_CMS_JER")!=std::string::npos) process = processname.substr(0,processname.find("_CMS_JER"));
+    if(processname.find("vectormonotop")!=std::string::npos) process = "vectormonotop";
     CSVWeightSFHelper csv_calibration_helper_had;
     csv_calibration_helper_had.AddScaleFactorHistogram("znunujets","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_had_znunujets_"+dataera+".root","csv_patches_Hadr_Recoil_Pt_AK15Jet_Pt_0");
     csv_calibration_helper_had.AddScaleFactorHistogram("wlnujets","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_had_wlnujets_"+dataera+".root","csv_patches_Hadr_Recoil_Pt_AK15Jet_Pt_0");
@@ -122,6 +123,7 @@ void plot()
     csv_calibration_helper_had.AddScaleFactorHistogram("singlet","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_had_singlet_"+dataera+".root","csv_patches_Hadr_Recoil_Pt_AK15Jet_Pt_0");
     csv_calibration_helper_had.AddScaleFactorHistogram("diboson","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_had_diboson_"+dataera+".root","csv_patches_Hadr_Recoil_Pt_AK15Jet_Pt_0");
     csv_calibration_helper_had.AddScaleFactorHistogram("qcd","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_had_qcd_"+dataera+".root","csv_patches_Hadr_Recoil_Pt_AK15Jet_Pt_0");
+    csv_calibration_helper_had.AddScaleFactorHistogram("vectormonotop","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_had_vectormonotop_"+dataera+".root","csv_patches_Hadr_Recoil_Pt_AK15Jet_Pt_0");
     CSVWeightSFHelper csv_calibration_helper_lep;
     csv_calibration_helper_lep.AddScaleFactorHistogram("znunujets","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_lep_znunujets_"+dataera+".root","csv_patches_M_W_transverse_0_Evt_Pt_MET");
     csv_calibration_helper_lep.AddScaleFactorHistogram("wlnujets","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_lep_wlnujets_"+dataera+".root","csv_patches_M_W_transverse_0_Evt_Pt_MET");
@@ -131,6 +133,7 @@ void plot()
     csv_calibration_helper_lep.AddScaleFactorHistogram("singlet","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_lep_singlet_"+dataera+".root","csv_patches_M_W_transverse_0_Evt_Pt_MET");
     csv_calibration_helper_lep.AddScaleFactorHistogram("diboson","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_lep_diboson_"+dataera+".root","csv_patches_M_W_transverse_0_Evt_Pt_MET");
     csv_calibration_helper_lep.AddScaleFactorHistogram("qcd","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_lep_qcd_"+dataera+".root","csv_patches_M_W_transverse_0_Evt_Pt_MET");
+    csv_calibration_helper_lep.AddScaleFactorHistogram("vectormonotop","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_lep_vectormonotop_"+dataera+".root","csv_patches_M_W_transverse_0_Evt_Pt_MET");
     
 
     // Hack for subsampling test
