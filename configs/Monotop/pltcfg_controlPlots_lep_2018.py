@@ -113,6 +113,14 @@ metTriggerSFs_down = "((N_TightElectrons>0 && N_LooseMuons==0)*TriggerSF_SingleE
 
 bosonWeightNom = "internalBosonWeight"
 
+deepakMistagSF = "1."
+deepakMistagSF_up = "1."
+deepakMistagSF_down = "1."
+
+deepakEfficiencySF = "1."
+deepakEfficiencySF_up = "1."
+deepakEfficiencySF_down = "1."
+
 ## trigger scale factors
 ## DANGERZONE: ELECTRON TRIGGER NOT ADDED TO NTUPLES YET, USE INTERNAL SFS
 ## electronTrigger = "("+sel_singleel+"&&(Weight_EleTriggerSF>0.))*Weight_EleTriggerSF"
@@ -181,6 +189,12 @@ weightReplacements = {
     "MUTRIGGERSFDOWN" : muonTriggerSFs_down,
     "METTRIGGERSFUP" : metTriggerSFs_up,
     "METTRIGGERSFDOWN" : metTriggerSFs_down,
+    "DEEPAKMISTAGNOM" : deepakMistagSF,
+    "DEEPAKMISTAGUP" : deepakMistagSF_up,
+    "DEEPAKMISTAGDOWN" : deepakMistagSF_down,
+    "DEEPAKEFFICIENCYNOM" : deepakEfficiencySF,
+    "DEEPAKEFFICIENCYUP" : deepakEfficiencySF_up,
+    "DEEPAKEFFICIENCYDOWN" : deepakEfficiencySF_down,
     ## trigger scale factors
     # "TRIGGERSFS": "(" + electronTrigger + "+" + muonTrigger + ")",
     # "ELETRIGSUP": "(" + electronTrigger_up + "+" + muonTrigger + ")",

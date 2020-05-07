@@ -113,6 +113,14 @@ metTriggerSFs_down = "((N_TightElectrons>0 && N_LooseMuons==0)*TriggerSF_SingleE
 
 bosonWeightNom = "internalBosonWeight"
 
+deepakMistagSF = "1."
+deepakMistagSF_up = "1."
+deepakMistagSF_down = "1."
+
+deepakEfficiencySF = "1."
+deepakEfficiencySF_up = "1."
+deepakEfficiencySF_down = "1."
+
 prefireWeightNom = "Weight_L1_Prefire"
 prefireWeightUp = "Weight_L1_Prefire_Up"
 prefireWeightDown = "Weight_L1_Prefire_Down"
@@ -188,6 +196,12 @@ weightReplacements = {
     "MUTRIGGERSFDOWN" : muonTriggerSFs_down,
     "METTRIGGERSFUP" : metTriggerSFs_up,
     "METTRIGGERSFDOWN" : metTriggerSFs_down,
+    "DEEPAKMISTAGNOM" : deepakMistagSF,
+    "DEEPAKMISTAGUP" : deepakMistagSF_up,
+    "DEEPAKMISTAGDOWN" : deepakMistagSF_down,
+    "DEEPAKEFFICIENCYNOM" : deepakEfficiencySF,
+    "DEEPAKEFFICIENCYUP" : deepakEfficiencySF_up,
+    "DEEPAKEFFICIENCYDOWN" : deepakEfficiencySF_down,
     ## trigger scale factors
     # "TRIGGERSFS": "(" + electronTrigger + "+" + muonTrigger + ")",
     # "ELETRIGSUP": "(" + electronTrigger_up + "+" + muonTrigger + ")",
