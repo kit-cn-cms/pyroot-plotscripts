@@ -39,26 +39,26 @@ def control_plots_lep_CR_ttbarEl(data=None):
             ROOT.TH1D("yield" + extension, "yield", 1, 0.0, 2.0), "1.", selection, label
         ),
         plotClasses.Plot(
-            ROOT.TH1D("Evt_Pt_MET" + extension, "#slash{E}{T} [GeV]", 25, 0.0, 500.0),
+            ROOT.TH1D("Evt_Pt_MET" + extension, "#slash{E}_{T} [GeV]", 25, 0.0, 500.0),
             "Evt_Pt_MET",
             selection,
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("Evt_Phi_MET" + extension, "#phi(#slash{E}{T})", 30, -3.14, 3.14),
+            ROOT.TH1D("Evt_Phi_MET" + extension, "#phi(#slash{E}_{T})", 30, -3.14, 3.14),
             "Evt_Phi_MET",
             selection,
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("CaloMET" + extension, "Calo #slash{E}{T} [GeV]", 25, 0.0, 500.0),
+            ROOT.TH1D("CaloMET" + extension, "Calo #slash{E}_{T} [GeV]", 25, 0.0, 500.0),
             "CaloMET",
             selection,
             label,
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "CaloMET_PFMET_ratio" + extension, "|Calo #slash{E}{T} - #slash{E}{T}|/Calo #slash{E}{T}", 25, 0.0, 10.0
+                "CaloMET_PFMET_ratio" + extension, "|Calo #slash{E}_{T} - #slash{E}_{T}|/Calo #slash{E}_{T}", 25, 0.0, 10.0
             ),
             "CaloMET_PFMET_ratio",
             selection,
@@ -359,14 +359,14 @@ def control_plots_lep_CR_ttbarEl(data=None):
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "CaloMET_PFMET_ratio" + extension, "|Calo #slash{E}{T} - #slash{E}{T}|/Calo #slash{E}{T}", 25, 0.0, 5.0
+                "CaloMET_PFMET_ratio" + extension, "|Calo #slash{E}_{T} - #slash{E}_{T}|/Calo #slash{E}_{T}", 25, 0.0, 5.0
             ),
             "CaloMET_PFMET_ratio",
             selection,
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("Evt_Pt_MET" + extension, "#slash{E}{T} [GeV]", 25, 0.0, 500.0),
+            ROOT.TH1D("Evt_Pt_MET" + extension, "#slash{E}_{T} [GeV]", 25, 0.0, 500.0),
             "Evt_Pt_MET",
             selection,
             label,
@@ -424,26 +424,26 @@ def control_plots_lep_CR_ttbarMu(data=None):
             ROOT.TH1D("yield" + extension, "yield", 1, 0.0, 2.0), "1.", selection, label
         ),
         plotClasses.Plot(
-            ROOT.TH1D("Evt_Pt_MET" + extension, "#slash{E}{T} [GeV]", 25, 0.0, 500.0),
+            ROOT.TH1D("Evt_Pt_MET" + extension, "#slash{E}_{T} [GeV]", 25, 0.0, 500.0),
             "Evt_Pt_MET",
             selection,
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("Evt_Phi_MET" + extension, "#phi(#slash{E}{T})", 30, -3.14, 3.14),
+            ROOT.TH1D("Evt_Phi_MET" + extension, "#phi(#slash{E}_{T})", 30, -3.14, 3.14),
             "Evt_Phi_MET",
             selection,
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("CaloMET" + extension, "Calo #slash{E}{T} [GeV]", 25, 0.0, 500.0),
+            ROOT.TH1D("CaloMET" + extension, "Calo #slash{E}_{T} [GeV]", 25, 0.0, 500.0),
             "CaloMET",
             selection,
             label,
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "CaloMET_PFMET_ratio" + extension, "|Calo #slash{E}{T} - #slash{E}{T}|/Calo #slash{E}{T}", 25, 0.0, 10.0
+                "CaloMET_PFMET_ratio" + extension, "|Calo #slash{E}_{T} - #slash{E}_{T}|/Calo #slash{E}_{T}", 25, 0.0, 10.0
             ),
             "CaloMET_PFMET_ratio",
             selection,
@@ -741,14 +741,14 @@ def control_plots_lep_CR_ttbarMu(data=None):
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "CaloMET_PFMET_ratio" + extension, "|Calo #slash{E}{T} - #slash{E}{T}|/Calo #slash{E}{T}", 25, 0.0, 5.0
+                "CaloMET_PFMET_ratio" + extension, "|Calo #slash{E}_{T} - #slash{E}_{T}|/Calo #slash{E}_{T}", 25, 0.0, 5.0
             ),
             "CaloMET_PFMET_ratio",
             selection,
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("Evt_Pt_MET" + extension, "#slash{E}{T} [GeV]", 25, 0.0, 500.0),
+            ROOT.TH1D("Evt_Pt_MET" + extension, "#slash{E}_{T} [GeV]", 25, 0.0, 500.0),
             "Evt_Pt_MET",
             selection,
             label,
@@ -805,26 +805,26 @@ def control_plots_lep_CR_WEl(data=None):
             ROOT.TH1D("yield" + extension, "yield", 1, 0.0, 2.0), "1.", selection, label
         ),
         plotClasses.Plot(
-            ROOT.TH1D("Evt_Pt_MET" + extension, "#slash{E}{T} [GeV]", 25, 0.0, 500.0),
+            ROOT.TH1D("Evt_Pt_MET" + extension, "#slash{E}_{T} [GeV]", 25, 0.0, 500.0),
             "Evt_Pt_MET",
             selection,
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("Evt_Phi_MET" + extension, "#phi(#slash{E}{T})", 30, -3.14, 3.14),
+            ROOT.TH1D("Evt_Phi_MET" + extension, "#phi(#slash{E}_{T})", 30, -3.14, 3.14),
             "Evt_Phi_MET",
             selection,
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("CaloMET" + extension, "Calo #slash{E}{T} [GeV]", 25, 0.0, 500.0),
+            ROOT.TH1D("CaloMET" + extension, "Calo #slash{E}_{T} [GeV]", 25, 0.0, 500.0),
             "CaloMET",
             selection,
             label,
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "CaloMET_PFMET_ratio" + extension, "|Calo #slash{E}{T} - #slash{E}{T}|/Calo #slash{E}{T}", 25, 0.0, 10.0
+                "CaloMET_PFMET_ratio" + extension, "|Calo #slash{E}_{T} - #slash{E}_{T}|/Calo #slash{E}_{T}", 25, 0.0, 10.0
             ),
             "CaloMET_PFMET_ratio",
             selection,
@@ -1125,14 +1125,14 @@ def control_plots_lep_CR_WEl(data=None):
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "CaloMET_PFMET_ratio" + extension, "|Calo #slash{E}{T} - #slash{E}{T}|/Calo #slash{E}{T}", 25, 0.0, 5.0
+                "CaloMET_PFMET_ratio" + extension, "|Calo #slash{E}_{T} - #slash{E}_{T}|/Calo #slash{E}_{T}", 25, 0.0, 5.0
             ),
             "CaloMET_PFMET_ratio",
             selection,
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("Evt_Pt_MET" + extension, "#slash{E}{T} [GeV]", 25, 0.0, 500.0),
+            ROOT.TH1D("Evt_Pt_MET" + extension, "#slash{E}_{T} [GeV]", 25, 0.0, 500.0),
             "Evt_Pt_MET",
             selection,
             label,
@@ -1190,26 +1190,26 @@ def control_plots_lep_CR_WMu(data=None):
             ROOT.TH1D("yield" + extension, "yield", 1, 0.0, 2.0), "1.", selection, label
         ),
         plotClasses.Plot(
-            ROOT.TH1D("Evt_Pt_MET" + extension, "#slash{E}{T} [GeV]", 25, 0.0, 500.0),
+            ROOT.TH1D("Evt_Pt_MET" + extension, "#slash{E}_{T} [GeV]", 25, 0.0, 500.0),
             "Evt_Pt_MET",
             selection,
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("Evt_Phi_MET" + extension, "#phi(#slash{E}{T})", 30, -3.14, 3.14),
+            ROOT.TH1D("Evt_Phi_MET" + extension, "#phi(#slash{E}_{T})", 30, -3.14, 3.14),
             "Evt_Phi_MET",
             selection,
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("CaloMET" + extension, "Calo #slash{E}{T} [GeV]", 25, 0.0, 500.0),
+            ROOT.TH1D("CaloMET" + extension, "Calo #slash{E}_{T} [GeV]", 25, 0.0, 500.0),
             "CaloMET",
             selection,
             label,
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "CaloMET_PFMET_ratio" + extension, "|Calo #slash{E}{T} - #slash{E}{T}|/Calo #slash{E}{T}", 25, 0.0, 10.0
+                "CaloMET_PFMET_ratio" + extension, "|Calo #slash{E}_{T} - #slash{E}_{T}|/Calo #slash{E}_{T}", 25, 0.0, 10.0
             ),
             "CaloMET_PFMET_ratio",
             selection,
@@ -1528,14 +1528,14 @@ def control_plots_lep_CR_WMu(data=None):
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "CaloMET_PFMET_ratio" + extension, "|Calo #slash{E}{T} - #slash{E}{T}|/Calo #slash{E}{T}", 25, 0.0, 5.0
+                "CaloMET_PFMET_ratio" + extension, "|Calo #slash{E}_{T} - #slash{E}_{T}|/Calo #slash{E}_{T}", 25, 0.0, 5.0
             ),
             "CaloMET_PFMET_ratio",
             selection,
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("Evt_Pt_MET" + extension, "#slash{E}{T} [GeV]", 25, 0.0, 500.0),
+            ROOT.TH1D("Evt_Pt_MET" + extension, "#slash{E}_{T} [GeV]", 25, 0.0, 500.0),
             "Evt_Pt_MET",
             selection,
             label,
@@ -1592,26 +1592,26 @@ def control_plots_lep_SR_El(data=None):
             ROOT.TH1D("yield" + extension, "yield", 1, 0.0, 2.0), "1.", selection, label
         ),
         plotClasses.Plot(
-            ROOT.TH1D("Evt_Pt_MET" + extension, "#slash{E}{T} [GeV]", 50, 0.0, 1000.0),
+            ROOT.TH1D("Evt_Pt_MET" + extension, "#slash{E}_{T} [GeV]", 50, 0.0, 1000.0),
             "Evt_Pt_MET",
             selection,
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("Evt_Phi_MET" + extension, "#phi(#slash{E}{T})", 30, -3.14, 3.14),
+            ROOT.TH1D("Evt_Phi_MET" + extension, "#phi(#slash{E}_{T})", 30, -3.14, 3.14),
             "Evt_Phi_MET",
             selection,
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("CaloMET" + extension, "Calo #slash{E}{T} [GeV]", 50, 0.0, 1000.0),
+            ROOT.TH1D("CaloMET" + extension, "Calo #slash{E}_{T} [GeV]", 50, 0.0, 1000.0),
             "CaloMET",
             selection,
             label,
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "CaloMET_PFMET_ratio" + extension, "|Calo #slash{E}{T} - #slash{E}{T}|/Calo #slash{E}{T}", 25, 0.0, 10.0
+                "CaloMET_PFMET_ratio" + extension, "|Calo #slash{E}_{T} - #slash{E}_{T}|/Calo #slash{E}_{T}", 25, 0.0, 10.0
             ),
             "CaloMET_PFMET_ratio",
             selection,
@@ -1912,14 +1912,14 @@ def control_plots_lep_SR_El(data=None):
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "CaloMET_PFMET_ratio" + extension, "|Calo #slash{E}{T} - #slash{E}{T}|/Calo #slash{E}{T}", 25, 0.0, 5.0
+                "CaloMET_PFMET_ratio" + extension, "|Calo #slash{E}_{T} - #slash{E}_{T}|/Calo #slash{E}_{T}", 25, 0.0, 5.0
             ),
             "CaloMET_PFMET_ratio",
             selection,
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("Evt_Pt_MET" + extension, "#slash{E}{T} [GeV]", 25, 0.0, 500.0),
+            ROOT.TH1D("Evt_Pt_MET" + extension, "#slash{E}_{T} [GeV]", 25, 0.0, 500.0),
             "Evt_Pt_MET",
             selection,
             label,
@@ -1977,26 +1977,26 @@ def control_plots_lep_SR_Mu(data=None):
             ROOT.TH1D("yield" + extension, "yield", 1, 0.0, 2.0), "1.", selection, label
         ),
         plotClasses.Plot(
-            ROOT.TH1D("Evt_Pt_MET" + extension, "#slash{E}{T} [GeV]", 50, 0.0, 1000.0),
+            ROOT.TH1D("Evt_Pt_MET" + extension, "#slash{E}_{T} [GeV]", 50, 0.0, 1000.0),
             "Evt_Pt_MET",
             selection,
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("Evt_Phi_MET" + extension, "#phi(#slash{E}{T})", 30, -3.14, 3.14),
+            ROOT.TH1D("Evt_Phi_MET" + extension, "#phi(#slash{E}_{T})", 30, -3.14, 3.14),
             "Evt_Phi_MET",
             selection,
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("CaloMET" + extension, "Calo #slash{E}{T} [GeV]", 50, 0.0, 1000.0),
+            ROOT.TH1D("CaloMET" + extension, "Calo #slash{E}_{T} [GeV]", 50, 0.0, 1000.0),
             "CaloMET",
             selection,
             label,
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "CaloMET_PFMET_ratio" + extension, "|Calo #slash{E}{T} - #slash{E}{T}|/Calo #slash{E}{T}", 25, 0.0, 10.0
+                "CaloMET_PFMET_ratio" + extension, "|Calo #slash{E}_{T} - #slash{E}_{T}|/Calo #slash{E}_{T}", 25, 0.0, 10.0
             ),
             "CaloMET_PFMET_ratio",
             selection,
@@ -2293,14 +2293,14 @@ def control_plots_lep_SR_Mu(data=None):
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "CaloMET_PFMET_ratio" + extension, "|Calo #slash{E}{T} - #slash{E}{T}|/Calo #slash{E}{T}", 25, 0.0, 5.0
+                "CaloMET_PFMET_ratio" + extension, "|Calo #slash{E}_{T} - #slash{E}_{T}|/Calo #slash{E}_{T}", 25, 0.0, 5.0
             ),
             "CaloMET_PFMET_ratio",
             selection,
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("Evt_Pt_MET" + extension, "#slash{E}{T} [GeV]", 25, 0.0, 500.0),
+            ROOT.TH1D("Evt_Pt_MET" + extension, "#slash{E}_{T} [GeV]", 25, 0.0, 500.0),
             "Evt_Pt_MET",
             selection,
             label,
