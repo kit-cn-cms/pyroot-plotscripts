@@ -199,7 +199,7 @@ def main(pyrootdir, opts):
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
         
         pP.setCatNames([""])
-        pP.setCatSelections(["(Hadr_Recoil_Pt>250.)*(N_AK15Jets==1)*(N_Jets>=1)*(N_HEM_Jets==0)*(N_HEM_AK15Jets==0)*(N_HEM_METS==0)*(N_Taus==0)*(DeltaPhi_AK15Jet_Hadr_Recoil[0]>2.5)"])
+        pP.setCatSelections(["(Hadr_Recoil_Pt>250.)*(N_AK15Jets==1)*(N_Jets>=1)*(N_Taus==0)*(AK15Jet_Pt[0]>200.)*(DeltaPhi_AK15Jet_Hadr_Recoil[0]>1.5)*(N_HEM_Jets==0)*(N_HEM_AK15Jets==0)*(N_HEM_METS==0)*(AK15Jet_PuppiSoftDropMass[0]>105.)*(AK15Jet_PuppiSoftDropMass[0]<210.)*(AK15Jet_DeepAK15_TvsQCD[0]>0.3)"])
 
         # run plotParallel
         pP.run()
@@ -265,14 +265,16 @@ def main(pyrootdir, opts):
         """
         )
         with monitor.Timer("addRealData"):
-            if analysis.usePseudoData:
+            #if analysis.usePseudoData:
                 # pseudo data without ttH
-                pP.addData(samples = [sample for sample in configData.samples if sample.typ=="bkg"])
+                #pP.addData(samples = [sample for sample in configData.samples if sample.typ=="bkg"])
                 # pseudo data with signal
                 #pP.addData(samples=configData.samples)
-            else:
+            #else:
                 # real data
-                pP.addData(samples=configData.controlSamples)
+                #pP.addData(samples=configData.controlSamples)
+            pP.addData(samples = [sample for sample in configData.samples if sample.typ=="bkg"], is_real_data = False)
+            pP.addData(samples=configData.controlSamples, is_real_data = True)
 
     pP.checkTermination()
     monitor.printClass(pP, "after plotParallel completely done")

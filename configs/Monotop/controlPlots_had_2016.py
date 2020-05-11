@@ -14,7 +14,8 @@ from copy import deepcopy
 
 fast = False
 
-discr_binning = [250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 800, 1000, 1500]
+#discr_binning = [250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 800, 1000, 1500]
+discr_binning = [250.0, 270.0, 290.0, 310.0, 330.0, 360.0, 390.0, 430.0, 480.0, 560.0, 1000.]
 
 # met/recoil + 1 ak15jet phase space
 generalselection = "(Hadr_Recoil_Pt>250.)*(N_AK15Jets==1)*(AK15Jet_Pt[0]>200.)*(N_Jets>=1)*(N_Taus==0)"#*(AK15Jet_NHF[0]>0.04 || CaloMET_PFMET_Recoil_ratio<0.2)"
@@ -26,7 +27,8 @@ generalselection += "*(DeltaPhi_AK15Jet_Hadr_Recoil[0]>1.5)"
 # ak15 jet quality cuts
 #generalselection += "*(AK15Jet_CHF[0]>0.1)*(AK15Jet_NHF[0]<0.8)*(AK15Jet_CEMF[0]<0.8)*(AK15Jet_NEMF[0]<0.7)*(AK15Jet_MF[0]<0.2)"
 # top mass window
-#generalselection += "*(AK15Jet_PuppiSoftDropMass[0]>60.)"#*(AK15Jet_PuppiSoftDropMass[0]<210.)"
+generalselection += "*(AK15Jet_PuppiSoftDropMass[0]>105.)*(AK15Jet_PuppiSoftDropMass[0]<210.)"
+generalselection += "*(AK15Jet_DeepAK15_TvsQCD[0]>0.3)"
 
 def control_plots_had_SR(data=None):
     label = "#scale[0.8]{signal region (hadronic)}"
