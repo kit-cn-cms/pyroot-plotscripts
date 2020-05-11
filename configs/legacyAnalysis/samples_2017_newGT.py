@@ -422,7 +422,7 @@ samples = [
 #      signal samples
 #     plotClasses.Sample('t#bar{t}+H',ROOT.kBlue+1,
 #             ttHpath,
-#             lumi+evenSel+sel_MET,
+#             lumi+sel_MET,
 #             'ttH',
 #             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),     
 
