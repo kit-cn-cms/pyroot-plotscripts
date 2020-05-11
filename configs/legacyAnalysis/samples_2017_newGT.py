@@ -246,7 +246,7 @@ samples_splitData = [
 samples_ttH_decay = [
     plotClasses.Sample('t#bar{t}H (bb)',ROOT.kBlue+1,
             ttHpath,
-            lumi+evenSel+sel_MET+hbbSel,
+            lumi+sel_MET+hbbSel,
             'ttH_hbb',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),     
     #plotClasses.Sample('t#bar{t}H (nonbb)',ROOT.kBlue+1,
@@ -256,37 +256,37 @@ samples_ttH_decay = [
     #         samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
     plotClasses.Sample('t#bar{t}H(cc)',ROOT.kBlue+1,
             ttHpath,
-            lumi+evenSel+sel_MET+hccSel,
+            lumi+sel_MET+hccSel,
             'ttH_hcc',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
     plotClasses.Sample('t#bar{t}H(ll)',ROOT.kBlue+1,
             ttHpath,
-            lumi+evenSel+sel_MET+httSel,
+            lumi+sel_MET+httSel,
             'ttH_htt',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
     plotClasses.Sample('t#bar{t}H(#gamma#gamma)',ROOT.kBlue+1,
             ttHpath,
-            lumi+evenSel+sel_MET+hggSel,
+            lumi+sel_MET+hggSel,
             'ttH_hgg',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
     plotClasses.Sample('t#bar{t}H(gg)',ROOT.kBlue+1,
             ttHpath,
-            lumi+evenSel+sel_MET+hglugluSel,
+            lumi+sel_MET+hglugluSel,
             'ttH_hgluglu',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
     plotClasses.Sample('t#bar{t}H(WW)',ROOT.kBlue+1,
             ttHpath,
-            lumi+evenSel+sel_MET+hwwSel,
+            lumi+sel_MET+hwwSel,
             'ttH_hww',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
     plotClasses.Sample('t#bar{t}H(ZZ)',ROOT.kBlue+1,
             ttHpath,
-            lumi+evenSel+sel_MET+hzzSel,
+            lumi+sel_MET+hzzSel,
             'ttH_hzz',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
     plotClasses.Sample('t#bar{t}H(Z#gamma)',ROOT.kBlue+1,
             ttHpath,
-            lumi+evenSel+sel_MET+hzgSel,
+            lumi+sel_MET+hzgSel,
             'ttH_hzg',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
     ]
@@ -420,11 +420,11 @@ samples_5FS = [
 
 samples = [
 #      signal samples
-    plotClasses.Sample('t#bar{t}+H',ROOT.kBlue+1,
-            ttHpath,
-            lumi+evenSel+sel_MET,
-            'ttH',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),     
+#     plotClasses.Sample('t#bar{t}+H',ROOT.kBlue+1,
+#             ttHpath,
+#             lumi+evenSel+sel_MET,
+#             'ttH',
+#             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),     
 
     # ttbar 5FS default background samples
     plotClasses.Sample('t#bar{t}+lf',ROOT.kRed-7,
@@ -446,7 +446,7 @@ samples += samples_ttbb_4FS
 samples += samples_minor_backgrounds
 samples += samples_5FS
 #samples += samples_ttbar_hf_spilt
-# samples += samples_ttH_decay
+samples += samples_ttH_decay
 
 
 
