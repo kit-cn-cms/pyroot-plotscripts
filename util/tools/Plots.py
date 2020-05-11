@@ -478,7 +478,8 @@ class DrawHistograms:
         Handle titles
         """
         firstHist.GetYaxis().SetTitle(self.GetyTitle())
-        firstHist.GetYaxis().SetTitleSize(firstHist.GetYaxis().GetTitleSize()*1.2)
+        firstHist.GetYaxis().SetTitleSize(firstHist.GetYaxis().GetTitleSize()*1.3)
+        firstHist.GetYaxis().SetLabelSize(firstHist.GetYaxis().GetLabelSize()*1.2)
         canvaslabel=firstHist.GetTitle()
 
 
@@ -541,7 +542,8 @@ class DrawHistograms:
                 scalefactor=self.signalscaling
             shape.Scale(scalefactor)
             if scalefactor != 1 and not self.normalize and not self.shape:
-                self.PlotList[self.sortedShapes[n]].label += " x "+str(int(scalefactor))
+                #self.PlotList[self.sortedShapes[n]].label += " x "+str(int(scalefactor))
+                self.PlotList[self.sortedShapes[n]].label = "#splitline{"+self.PlotList[self.sortedShapes[n]].label+"}{"+" x "+str(int(scalefactor))+"}"
             # draw signal histogram
             shape.DrawCopy(option+" same")
 
@@ -672,17 +674,17 @@ class DrawHistograms:
         
         line = self.data.Clone()
         line.Divide(self.data)
-        line.GetYaxis().SetRangeUser(0.5,1.5)
+        line.GetYaxis().SetRangeUser(0.25,1.75)
         line.GetYaxis().SetTitle(self.ratio)
 
         line.SetTitle("")
 
-        line.GetXaxis().SetLabelSize(line.GetXaxis().GetLabelSize()*2.4)
-        line.GetYaxis().SetLabelSize(line.GetYaxis().GetLabelSize()*2.2)
+        line.GetXaxis().SetLabelSize(line.GetXaxis().GetLabelSize()*2.7)
+        line.GetYaxis().SetLabelSize(line.GetYaxis().GetLabelSize()*2.8)
         line.GetXaxis().SetTitle(canvaslabel)
 
         line.GetXaxis().SetTitleSize(line.GetXaxis().GetTitleSize()*3)
-        line.GetYaxis().SetTitleSize(line.GetYaxis().GetTitleSize()*2.5)
+        line.GetYaxis().SetTitleSize(line.GetYaxis().GetTitleSize()*2.7)
 
         line.GetYaxis().SetTitleOffset(0.5)
         line.GetYaxis().SetNdivisions(505)
@@ -739,18 +741,21 @@ class DrawHistograms:
         if self.splitlegend:
             self.legend1 = getLegend1()
             self.legend2 = getLegend2()
+            self.legend_signals = getLegendSignal()
             n = 0
             if self.data:
                 self.legend1.AddEntry(self.data,self.datalabel,"P")
                 n+=1
 
             legendentries = len(self.sortedShapes)+len(self.sortedStacks)
+            #for i,shape in enumerate(self.sortedShapes):
+                #if not n%2:
+                    #self.legend1.AddEntry(self.shapePlots[i], self.PlotList[shape].label, "L")
+                #else:
+                    #self.legend2.AddEntry(self.shapePlots[i], self.PlotList[shape].label, "L")
+                #n+=1
             for i,shape in enumerate(self.sortedShapes):
-                if not n%2:
-                    self.legend1.AddEntry(self.shapePlots[i], self.PlotList[shape].label, "L")
-                else:
-                    self.legend2.AddEntry(self.shapePlots[i], self.PlotList[shape].label, "L")
-                n+=1
+                self.legend_signals.AddEntry(self.shapePlots[i], self.PlotList[shape].label, "L")
             for i,stack in enumerate(self.sortedStacks):
                 if not n%2:
                     self.legend1.AddEntry(self.stackPlots[i], self.PlotList[stack].label, "F")
@@ -759,6 +764,7 @@ class DrawHistograms:
                 n+=1
             self.legend1.Draw("same")
             self.legend2.Draw("same")
+            self.legend_signals.Draw("same")
         else:
             self.legend = getLegend2()
             if self.data:
@@ -817,7 +823,7 @@ class DrawHistograms:
         latex.SetTextColor(ROOT.kBlack) 
         latex.SetTextSize(0.04)
 
-        text = "CMS #bf{#it{"+cmslabel+"}}"
+        text = "#scale[1.3]{CMS} #bf{"+cmslabel+"}"
 
         if self.ratio:      latex.DrawLatex(l+0.12,1.-t+0.04, text) 
         else:               latex.DrawLatex(l+0.7,1.-t+0.01, text)
@@ -870,24 +876,31 @@ def getLegend():
     return legend
 
 def getLegend1():
-    legend=ROOT.TLegend(0.48,0.64,0.68,0.89)
+    legend=ROOT.TLegend(0.57,0.59,0.72,0.89)
     legend.SetBorderSize(0);
     legend.SetLineStyle(0);
     legend.SetTextFont(42);
-    legend.SetTextSize(0.03);
+    legend.SetTextSize(0.04);
     legend.SetFillStyle(0);
     return legend
 
 def getLegend2():
-    legend=ROOT.TLegend(0.64,0.64,0.84,0.89)
+    legend=ROOT.TLegend(0.74,0.59,0.89,0.89)
     legend.SetBorderSize(0);
     legend.SetLineStyle(0);
     legend.SetTextFont(42);
-    legend.SetTextSize(0.03);
+    legend.SetTextSize(0.04);
     legend.SetFillStyle(0);
     return legend
 
-
+def getLegendSignal():
+    legend=ROOT.TLegend(0.57,0.25,0.72,0.57)
+    legend.SetBorderSize(0);
+    legend.SetLineStyle(0);
+    legend.SetTextFont(42);
+    legend.SetTextSize(0.04);
+    legend.SetFillStyle(0);
+    return legend
 
 def createExamplePlotconfig(outputpath):
     outputpath=outputpath+'/ExamplePlotconfig.py'
