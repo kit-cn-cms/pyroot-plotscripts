@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'DNN_combined161718_acceptance/2017_Systs'
+    name = 'DNN_combined161718_optimized/2017_Systs'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -52,8 +52,8 @@ def main(pyrootdir, opts):
     # configs
     config          = "legacyAnalysis/samples_2017_newGT"
     variable_cfg    = "legacyAnalysis/additionalVariables"
-    plot_cfg        = "legacyAnalysis/DNN_06-05-2020/combined161718_DNNs_optBinning"
-    # plot_cfg        = "legacyAnalysis/DNN_06-05-2020/combined161718_DNNs"
+    plot_cfg        = "legacyAnalysis/DNN_14-05-2020/combined161718_DNNs_optBinning"
+    # plot_cfg        = "legacyAnalysis/DNN_14-05-2020/combined161718_DNNs"
     syst_cfg        = "legacyAnalysis/systs_2017"
     # syst_cfg        = "legacyAnalysis/no_systs"
     replace_cfg     = "legacyAnalysis/pdf_relic_names"
@@ -110,7 +110,7 @@ def main(pyrootdir, opts):
     # plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2017/",True]] 
     # memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                  "checkpointFiles":  pyrootdir+"/configs/legacyAnalysis/DNN_06-05-2020/DNNInputData/"}
+                  "checkpointFiles":  pyrootdir+"/configs/legacyAnalysis/DNN_14-05-2020/DNNInputData/"}
     # dnnInterface = None
 
     # path to datacardMaker directory
@@ -176,7 +176,6 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     configData.initSamples()
-    
 
     print '''
     # ========================================================
@@ -208,6 +207,7 @@ def main(pyrootdir, opts):
         # pP.setMEMDataBase(memDataBase)
         pP.setDNNInterface(dnnInterface)
         pP.setMaxEvts_nom(50000)
+        # pP.setMaxEvts_nom(200000)
         pP.setMaxEvts_systs(200000)
         # pP.request_runtime = 60*60*5
         pP.setRateFactorsFile(rateFactorsFile)
@@ -280,10 +280,11 @@ def main(pyrootdir, opts):
         with monitor.Timer("addRealData"):
             if analysis.usePseudoData:
                 print("adding data_obs histograms as pseudo data")
-                # pseudo data without ttH
-                pP.addData( samples = configData.samples[:-1], 
+                # pseudo data without ttbb 5FS
+                # pP.addData( samples = configData.samples[:-1], 
+                #             discrName = discrName)
+                pP.addData( samples = configData.samples[:-9], 
                             discrName = discrName)
-                # pseudo data with signal
                 #pP.addData(samples = configData.samples)
             else:
                 print("adding data_obs histograms as real data")
