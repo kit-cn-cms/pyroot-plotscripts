@@ -114,12 +114,16 @@ metTriggerSFs_down = "1."
 bosonWeightNom = "internalBosonWeight"
 
 deepakMistagSF = "1."
-deepakMistagSF_up = "1."
-deepakMistagSF_down = "1."
+deepakMistagSF_low_up = "1."
+deepakMistagSF_low_down = "1."
+deepakMistagSF_high_up = "1."
+deepakMistagSF_high_down = "1."
 
 deepakEfficiencySF = "1."
-deepakEfficiencySF_up = "1."
-deepakEfficiencySF_down = "1."
+deepakEfficiencySF_low_up = "1."
+deepakEfficiencySF_low_down = "1."
+deepakEfficiencySF_high_up = "1."
+deepakEfficiencySF_high_down = "1."
 
 ## trigger scale factors
 ## DANGERZONE: ELECTRON TRIGGER NOT ADDED TO NTUPLES YET, USE INTERNAL SFS
@@ -190,11 +194,15 @@ weightReplacements = {
     "METTRIGGERSFUP" : metTriggerSFs_up,
     "METTRIGGERSFDOWN" : metTriggerSFs_down,
     "DEEPAKMISTAGNOM" : deepakMistagSF,
-    "DEEPAKMISTAGUP" : deepakMistagSF_up,
-    "DEEPAKMISTAGDOWN" : deepakMistagSF_down,
+    "DEEPAKMISTAGLOWUP" : deepakMistagSF_low_up,
+    "DEEPAKMISTAGLOWDOWN" : deepakMistagSF_low_down,
+    "DEEPAKMISTAGHIGHUP" : deepakMistagSF_high_up,
+    "DEEPAKMISTAGHIGHDOWN" : deepakMistagSF_high_down,
     "DEEPAKEFFICIENCYNOM" : deepakEfficiencySF,
-    "DEEPAKEFFICIENCYUP" : deepakEfficiencySF_up,
-    "DEEPAKEFFICIENCYDOWN" : deepakEfficiencySF_down,
+    "DEEPAKEFFICIENCYLOWUP" : deepakEfficiencySF_low_up,
+    "DEEPAKEFFICIENCYLOWDOWN" : deepakEfficiencySF_low_down,
+    "DEEPAKEFFICIENCYHIGHUP" : deepakEfficiencySF_high_up,
+    "DEEPAKEFFICIENCYHIGHDOWN" : deepakEfficiencySF_high_down,
     ## trigger scale factors
     # "TRIGGERSFS": "(" + electronTrigger + "+" + muonTrigger + ")",
     # "ELETRIGSUP": "(" + electronTrigger_up + "+" + muonTrigger + ")",

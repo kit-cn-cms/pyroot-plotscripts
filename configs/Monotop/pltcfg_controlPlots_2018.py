@@ -114,12 +114,16 @@ metTriggerSFs_down = "((N_TightElectrons>0 && N_LooseMuons==0)*TriggerSF_SingleE
 bosonWeightNom = "internalBosonWeight"
 
 deepakMistagSF = "((AK15Jet_TopMatched[0]<0.5)*1.0+(AK15Jet_TopMatched[0]>0.5)*1.)"
-deepakMistagSF_up = "((AK15Jet_TopMatched[0]<0.5)*1.3+(AK15Jet_TopMatched[0]>0.5)*1.)"
-deepakMistagSF_down = "((AK15Jet_TopMatched[0]<0.5)*0.7+(AK15Jet_TopMatched[0]>0.5)*1.)"
+deepakMistagSF_low_up = "((AK15Jet_TopMatched[0]<0.5 && AK15Jet_Pt[0]<600.)*1.5+(AK15Jet_TopMatched[0]>0.5 && AK15Jet_Pt[0]<600.)*1.+(AK15Jet_Pt[0]>=600.)*1.)"
+deepakMistagSF_low_down = "((AK15Jet_TopMatched[0]<0.5 && AK15Jet_Pt[0]<600.)*0.5+(AK15Jet_TopMatched[0]>0.5 && AK15Jet_Pt[0]<600.)*1.+(AK15Jet_Pt[0]>=600.)*1.)"
+deepakMistagSF_high_up = "((AK15Jet_TopMatched[0]<0.5 && AK15Jet_Pt[0]>=600.)*1.5+(AK15Jet_TopMatched[0]>0.5 && AK15Jet_Pt[0]>=600.)*1.+(AK15Jet_Pt[0]<600.)*1.)"
+deepakMistagSF_high_down = "((AK15Jet_TopMatched[0]<0.5 && AK15Jet_Pt[0]>=600.)*0.5+(AK15Jet_TopMatched[0]>0.5 && AK15Jet_Pt[0]>=600.)*1.+(AK15Jet_Pt[0]<600.)*1.)"
 
 deepakEfficiencySF = "((AK15Jet_TopMatched[0]>0.5)*1.0+(AK15Jet_TopMatched[0]<0.5)*1.)"
-deepakEfficiencySF_up = "((AK15Jet_TopMatched[0]>0.5)*1.3+(AK15Jet_TopMatched[0]<0.5)*1.)"
-deepakEfficiencySF_down = "((AK15Jet_TopMatched[0]>0.5)*0.7+(AK15Jet_TopMatched[0]<0.5)*1.)"
+deepakEfficiencySF_low_up = "((AK15Jet_TopMatched[0]>0.5 && AK15Jet_Pt[0]<600.)*1.5+(AK15Jet_TopMatched[0]<0.5 && AK15Jet_Pt[0]<600.)*1.+(AK15Jet_Pt[0]>=600.)*1.)"
+deepakEfficiencySF_low_down = "((AK15Jet_TopMatched[0]>0.5 && AK15Jet_Pt[0]<600.)*0.5+(AK15Jet_TopMatched[0]<0.5 && AK15Jet_Pt[0]<600.)*1.+(AK15Jet_Pt[0]>=600.)*1.)"
+deepakEfficiencySF_high_up = "((AK15Jet_TopMatched[0]>0.5 && AK15Jet_Pt[0]>=600.)*1.5+(AK15Jet_TopMatched[0]<0.5 && AK15Jet_Pt[0]>=600.)*1.+(AK15Jet_Pt[0]<600.)*1.)"
+deepakEfficiencySF_high_down = "((AK15Jet_TopMatched[0]>0.5 && AK15Jet_Pt[0]>=600.)*0.5+(AK15Jet_TopMatched[0]<0.5 && AK15Jet_Pt[0]>=600.)*1.+(AK15Jet_Pt[0]<600.)*1.)"
 
 ## trigger scale factors
 ## DANGERZONE: ELECTRON TRIGGER NOT ADDED TO NTUPLES YET, USE INTERNAL SFS
@@ -190,11 +194,15 @@ weightReplacements = {
     "METTRIGGERSFUP" : metTriggerSFs_up,
     "METTRIGGERSFDOWN" : metTriggerSFs_down,
     "DEEPAKMISTAGNOM" : deepakMistagSF,
-    "DEEPAKMISTAGUP" : deepakMistagSF_up,
-    "DEEPAKMISTAGDOWN" : deepakMistagSF_down,
+    "DEEPAKMISTAGLOWUP" : deepakMistagSF_low_up,
+    "DEEPAKMISTAGLOWDOWN" : deepakMistagSF_low_down,
+    "DEEPAKMISTAGHIGHUP" : deepakMistagSF_high_up,
+    "DEEPAKMISTAGHIGHDOWN" : deepakMistagSF_high_down,
     "DEEPAKEFFICIENCYNOM" : deepakEfficiencySF,
-    "DEEPAKEFFICIENCYUP" : deepakEfficiencySF_up,
-    "DEEPAKEFFICIENCYDOWN" : deepakEfficiencySF_down,
+    "DEEPAKEFFICIENCYLOWUP" : deepakEfficiencySF_low_up,
+    "DEEPAKEFFICIENCYLOWDOWN" : deepakEfficiencySF_low_down,
+    "DEEPAKEFFICIENCYHIGHUP" : deepakEfficiencySF_high_up,
+    "DEEPAKEFFICIENCYHIGHDOWN" : deepakEfficiencySF_high_down,
     ## trigger scale factors
     # "TRIGGERSFS": "(" + electronTrigger + "+" + muonTrigger + ")",
     # "ELETRIGSUP": "(" + electronTrigger_up + "+" + muonTrigger + ")",
