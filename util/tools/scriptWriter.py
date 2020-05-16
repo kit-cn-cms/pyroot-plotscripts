@@ -135,7 +135,7 @@ class scriptWriter:
         for systName,systWeight in zip(self.pp.systNames,self.systWeights):
             if not ("up" in systName.lower() or "down" in systName.lower()):
                 script +="systematics[\""+systName+"\"]=&"+systWeight+";\n"
-        script += "if(!((processname.find(\"JES\")!=std::string::npos || processname.find(\"JER\")!=std::string::npos) && (processname.find(\"Up\")!=std::string::npos || processname.find(\"Down\")!=std::string::npos)) && DoWeights==1){\n"
+        script += "if(!((processname.find(\"JES\")!=std::string::npos || processname.find(\"JER\")!=std::string::npos || processname.find(\"METUnclEn\")!=std::string::npos) && (processname.find(\"Up\")!=std::string::npos || processname.find(\"Down\")!=std::string::npos)) && DoWeights==1){\n"
         for systName,systWeight in zip(self.pp.systNames,self.systWeights):
             if ("up" in systName.lower() or "down" in systName.lower()):
                 script +="    systematics[\""+systName+"\"]=&"+systWeight+";\n"
@@ -444,7 +444,7 @@ class scriptWriter:
             filesToSubmit = []
             
             maxevents = self.pp.maxevents
-            if (("jes" in sample.nick.lower() or "jer" in sample.nick.lower()) and ("up" in sample.nick.lower() or "down" in sample.nick.lower())) or (sample.nick=="SingleEl" or sample.nick=="SingleMu" or sample.nick=="MET" or sample.nick=="SinglePh"):
+            if (("jes" in sample.nick.lower() or "jer" in sample.nick.lower() or "metunclen" in sample.nick.lower()) and ("up" in sample.nick.lower() or "down" in sample.nick.lower())) or (sample.nick=="SingleEl" or sample.nick=="SingleMu" or sample.nick=="MET" or sample.nick=="SinglePh"):
                 maxevents = 5*maxevents
 
             # looping over files in sample
@@ -531,7 +531,7 @@ class scriptWriter:
         suffix = ""
         skipevents = 0
         
-        if (("jes" in processname.lower() or "jer" in processname.lower()) and ("up" in processname.lower() or "down" in processname.lower())) or (processname=="SingleEl" or processname=="SingleMu" or processname=="MET" or processname=="SinglePh"):
+        if (("jes" in processname.lower() or "jer" in processname.lower() or "metunclen" in processname.lower()) and ("up" in processname.lower() or "down" in processname.lower())) or (processname=="SingleEl" or processname=="SingleMu" or processname=="MET" or processname=="SinglePh"):
             maxevents = 5*maxevents
 
         # check options
@@ -573,7 +573,7 @@ class scriptWriter:
         st = os.stat(scriptname)
         os.chmod(scriptname, st.st_mode | stat.S_IEXEC)
 
-        if ("jes" in processname.lower() or "jer" in processname.lower()) and ("up" in processname.lower() or "down" in processname.lower()):
+        if ("jes" in processname.lower() or "jer" in processname.lower() or "metunclen" in processname.lower()) and ("up" in processname.lower() or "down" in processname.lower()):
             with open(cleanupname, "w") as f:
                 f.write(cleanup)
             st = os.stat(cleanupname)

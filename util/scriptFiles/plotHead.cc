@@ -113,6 +113,7 @@ void plot()
     process = processname;
     if(processname.find("_CMS_JES")!=std::string::npos) process = processname.substr(0,processname.find("_CMS_JES"));
     if(processname.find("_CMS_JER")!=std::string::npos) process = processname.substr(0,processname.find("_CMS_JER"));
+    if(processname.find("_CMS_METUnclEn")!=std::string::npos) process = processname.substr(0,processname.find("_CMS_METUnclEn"));
     if(processname.find("vectormonotop")!=std::string::npos) process = "vectormonotop";
     CSVWeightSFHelper csv_calibration_helper_had;
     csv_calibration_helper_had.AddScaleFactorHistogram("znunujets","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_had_znunujets_"+dataera+".root","csv_patches_Hadr_Recoil_Pt_AK15Jet_Pt_0");
