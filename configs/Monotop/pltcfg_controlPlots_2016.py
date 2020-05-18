@@ -31,7 +31,7 @@ def find_masses(dataset_name):
 
 # samples
 # input path
-path_mwassmer = "/nfs/dust/cms/user/mwassmer/MonoTop/ntuples_2016_backup"
+path_mwassmer = "/nfs/dust/cms/user/mwassmer/MonoTop/ntuples_2016"
 
 
 # SELECTIONS
