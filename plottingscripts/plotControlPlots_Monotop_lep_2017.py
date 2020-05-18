@@ -72,7 +72,7 @@ def main(pyrootdir, opts):
         # options for makePlots
         "signalScaling": -1,
         "lumiLabel": 41.5,
-        "CMSlabel": "private Work",
+        "CMSlabel": "work in progress",
         "ratio": "#frac{data}{MC Background}",
         "shape": False, # for shape plots
         "normalize": False, # normalize yield to integral 1

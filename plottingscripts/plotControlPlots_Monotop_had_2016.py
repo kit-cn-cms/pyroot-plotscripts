@@ -72,7 +72,7 @@ def main(pyrootdir, opts):
         # options for makePlots
         "signalScaling": -1,
         "lumiLabel": 35.9,
-        "CMSlabel": "private Work",
+        "CMSlabel": "work in progress",
         "ratio": "#frac{data}{MC Background}",
         "shape": False, # for shape plots
         "normalize": False, # normalize yield to integral 1
@@ -194,7 +194,7 @@ def main(pyrootdir, opts):
         # pP.setDataBases(plotDataBases)
         # pP.setMEMDataBase(memDataBase)
         # pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts(150000)
+        pP.setMaxEvts(500000)
         # pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
         
