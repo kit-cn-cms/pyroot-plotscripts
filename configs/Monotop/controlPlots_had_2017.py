@@ -12,7 +12,7 @@ import ROOT
 from array import array
 from copy import deepcopy
 
-fast = False
+fast = True
 
 #discr_binning = [250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 800, 1000, 1500]
 discr_binning = [250.0, 270.0, 290.0, 310.0, 330.0, 360.0, 390.0, 430.0, 480.0, 560.0, 1000.]
