@@ -475,13 +475,13 @@ samples_5FS = [
             samDict=sampleDict, readTrees=doReadTrees, plot = False), 
     ]
 
-samples = [
+samples_ttnonbb = [
      # signal samples
-    plotClasses.Sample('t#bar{t}+H',ROOT.kBlue+1,
-            ttHpath,
-            lumi+sel_MET,
-            'ttH',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),     
+#     plotClasses.Sample('t#bar{t}+H',ROOT.kBlue+1,
+#             ttHpath,
+#             lumi+sel_MET,
+#             'ttH',
+#             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),     
 
     # ttbar 5FS default background samples
     plotClasses.Sample('t#bar{t}+lf',ROOT.kRed-7,
@@ -497,12 +497,13 @@ samples = [
             samDict=sampleDict, readTrees=doReadTrees),
     ]
 
-
+samples = samples_ttH_decay
 samples += samples_tH
+samples += samples_ttnonbb
 # samples += samples_ttH_HTXS
 samples += samples_ttbb_4FS
 samples += samples_minor_backgrounds
-samples += samples_5FS
+# samples += samples_5FS
 
 
 #samples += samples_ttbb_decay_modes_5FS
