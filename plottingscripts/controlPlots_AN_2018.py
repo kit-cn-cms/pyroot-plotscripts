@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'controlPlots/2018'
+    name = 'controlplots/2018_final_Systs'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -48,12 +48,11 @@ def main(pyrootdir, opts):
     histname_separator = "__"
 
     # define MEM discriminator variable
-    # memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
-    memexp = ""
+    memexp = "(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)"
     # configs
     config          = "legacyAnalysis/samples_2018"
-    variable_cfg    = "legacyAnalysis/additionalVariables_2018"
-    plot_cfg        = "legacyAnalysis/controlPlots"
+    variable_cfg    = "legacyAnalysis/additionalVariables"
+    plot_cfg        = "legacyAnalysis/controlPlots_final"
     syst_cfg        = "legacyAnalysis/systs_2018"
     # syst_cfg        = "legacyAnalysis/no_systs"
     replace_cfg     = "legacyAnalysis/pdf_relic_names"
@@ -91,7 +90,7 @@ def main(pyrootdir, opts):
         "signalScaling":        -1,
         "lumiLabel":            True,
         "cmslabel":             "private Work",
-        "ratio":                "#frac{data}{MC Background}",
+        "ratio":                "#frac{data}{MC}",
         "shape":                False,
         "logarithmic":          False,
         "splitLegend":          True,
@@ -106,11 +105,11 @@ def main(pyrootdir, opts):
         "skipMergeSysts":       opts.skipMergeSysts,
         "skipDatacards":        opts.skipDatacards}
 
-    plotJson = pyrootdir+"/configs/legacyAnalysis/treeJson_2018.json"
-    # plotDataBases = [["memDB","/portal/ekpbms1/home/swieland/ttH/memTrees/2017/",False]] 
-    # memDataBase = "/portal/ekpbms1/home/swieland/ttH/MEMDataBase/MEMDataBase/"
-    #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-    #               "checkpointFiles":  "/nfs/dust/cms/user/swieland/ttH_legacy/DNNs/oldModel/"}
+    plotJson = ""#pyrootdir+"/configs/legacyAnalysis/treeJson_2018.json"
+    # plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2018/",True]] 
+    # memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
+    # dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
+                #   "checkpointFiles":  pyrootdir+"/configs/legacyAnalysis/DNN_14-05-2020/DNNInputData/"}
     dnnInterface = None
 
     # path to datacardMaker directory
@@ -176,7 +175,6 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     configData.initSamples()
-    
 
     print '''
     # ========================================================
@@ -207,8 +205,9 @@ def main(pyrootdir, opts):
         # pP.setDataBases(plotDataBases)
         # pP.setMEMDataBase(memDataBase)
         # pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts_nom(20000)
-        pP.setMaxEvts_systs(500000)
+        pP.setMaxEvts_nom(30000)
+        # pP.setMaxEvts_nom(200000)
+        pP.setMaxEvts_systs(200000)
         # pP.request_runtime = 60*60*5
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
@@ -268,8 +267,7 @@ def main(pyrootdir, opts):
                 outFile         = analysis.renamedPath,
                 checkBins       = True,
                 eps             = 0.0,
-                skipHistoCheck  = analysis.skipHistoCheck
-                )
+                skipHistoCheck  = analysis.skipHistoCheck)
 
 
     if analysis.addData:
@@ -281,10 +279,11 @@ def main(pyrootdir, opts):
         with monitor.Timer("addRealData"):
             if analysis.usePseudoData:
                 print("adding data_obs histograms as pseudo data")
-                # pseudo data without ttH
-                pP.addData( samples = configData.samples[nSigSamples:], 
+                # pseudo data without ttbb 5FS
+                # pP.addData( samples = configData.samples[:-1], 
+                #             discrName = discrName)
+                pP.addData( samples = configData.samples[:-9], 
                             discrName = discrName)
-                # pseudo data with signal
                 #pP.addData(samples = configData.samples)
             else:
                 print("adding data_obs histograms as real data")
@@ -317,8 +316,9 @@ def main(pyrootdir, opts):
                 datacardmaker       = datacardmaker,
                 signalTag           = analysis.signalProcess,
                 skipDatacards       = analysis.skipDatacards,
-                nominal_key         = nom_histname_template,
-                syst_key            = syst_histname_template)
+                nominal_key         = nom_histname_template.replace("__$CHANNEL","__finaldiscr_$CHANNEL"),
+                syst_key            = syst_histname_template.replace("__$CHANNEL","__finaldiscr_$CHANNEL")
+                )
     
     if analysis.makePlots:
         print '''
