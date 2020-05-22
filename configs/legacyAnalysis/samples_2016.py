@@ -469,7 +469,7 @@ samples += samples_ttbb_4FS
 samples += samples_minor_backgrounds
 samples += samples_5FS
 #samples += samples_ttbar_hf_spilt
-#samples += samples_ttH_decay
+# samples += samples_ttH_decay
 
 
 
@@ -489,6 +489,9 @@ plottingsamples = [
         "vjets", addsamples = ["wjets", "zjets"],
         samDict = sampleDict, readTrees = doReadTrees),
 
+    plotClasses.Sample("t#bar{t}+H", ROOT.kBlue+1, "", "",
+        "ttH", addsamples = ["ttH_hbb", "ttH_hcc", "ttH_htt", "ttH_hgg", "ttH_hgluglu", "ttH_hww", "ttH_hzz", "ttH_hzg"],
+        samDict = sampleDict, readTrees = doReadTrees),
 #    plotClasses.Sample("misc.", 18, "", "",
 #        "misc", addsamples ["ttbarZ", "ttbarW", "wjets", "zjets", "diboson"],
 #        samDict = sampleDict, readTrees = doReadTrees)
