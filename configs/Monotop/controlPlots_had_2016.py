@@ -856,34 +856,6 @@ def control_plots_had_SR(data=None):
                 label,
             ),
             plotClasses.Plot(
-                ROOT.TH1D("AK15Jet_NHF" + extension, "AK15 Jet NHF", 40, 0.0, 1.0),
-                "AK15Jet_NHF",
-                selection,
-                label,
-            ),
-            plotClasses.Plot(
-                ROOT.TH1D(
-                "CaloMET_PFMET_Recoil_ratio" + extension, "|Calo #slash{E}{T} - #slash{E}{T}|/#slash{U}{T}",
-                40,
-                0.0,
-                2.0,
-                ),
-                "CaloMET_PFMET_Recoil_ratio",
-                selection,
-                label,
-            ),
-            plotClasses.Plot(
-                ROOT.TH1D(
-                "Hadr_Recoil_AK15Jet_Pt_ratio" + extension, "Hadr_Recoil_AK15Jet_Pt_ratio",
-                40,
-                -1.0,
-                1.0,
-                ),
-                "(Hadr_Recoil_Pt-AK15Jet_Pt)/Hadr_Recoil_Pt",
-                selection,
-                label,
-            ),
-            plotClasses.Plot(
                 ROOT.TH1D(
                 "AK15Jet_DeepAK15_TvsQCD" + extension,
                 "AK15 Jet DeepAK15 TvsQCD",
@@ -904,18 +876,6 @@ def control_plots_had_SR(data=None):
                 400.0,
                 ),
                 "AK15Jet_PuppiSoftDropMass",
-                selection,
-                label,
-            ),
-            plotClasses.Plot(
-            ROOT.TH1D(
-                "DeltaPhi_AK4Jet_MET" + extension,
-                "#Delta#phi(AK4 Jet, #slash{E}_{T})",
-                30,
-                0.0,
-                3.14,
-                ),
-                "DeltaPhi_AK4Jet_MET",
                 selection,
                 label,
             ),
@@ -1722,34 +1682,6 @@ def control_plots_had_CR_ZMuMu(data=None):
                 label,
             ),
             plotClasses.Plot(
-                ROOT.TH1D("AK15Jet_NHF" + extension, "AK15 Jet NHF", 40, 0.0, 1.0),
-                "AK15Jet_NHF",
-                selection,
-                label,
-            ),
-            plotClasses.Plot(
-                ROOT.TH1D(
-                "CaloMET_PFMET_Recoil_ratio" + extension, "|Calo #slash{E}{T} - #slash{E}{T}|/#slash{U}{T}",
-                40,
-                0.0,
-                2.0,
-                ),
-                "CaloMET_PFMET_Recoil_ratio",
-                selection,
-                label,
-            ),
-            plotClasses.Plot(
-                ROOT.TH1D(
-                "Hadr_Recoil_AK15Jet_Pt_ratio" + extension, "Hadr_Recoil_AK15Jet_Pt_ratio",
-                20,
-                -1.0,
-                1.0,
-                ),
-                "(Hadr_Recoil_Pt-AK15Jet_Pt)/Hadr_Recoil_Pt",
-                selection,
-                label,
-            ),
-            plotClasses.Plot(
                 ROOT.TH1D(
                 "AK15Jet_DeepAK15_TvsQCD" + extension,
                 "AK15 Jet DeepAK15 TvsQCD",
@@ -1774,14 +1706,14 @@ def control_plots_had_CR_ZMuMu(data=None):
                 label,
             ),
             plotClasses.Plot(
-            ROOT.TH1D(
-                "DeltaPhi_AK4Jet_MET" + extension,
-                "#Delta#phi(AK4 Jet, #slash{E}_{T})",
-                30,
-                0.0,
-                3.14,
-                ),
-                "DeltaPhi_AK4Jet_MET",
+                ROOT.TH1D("DiMuon_Pt" + extension, "DiMuon p_{T} [GeV]", 40, 10.0, 810.0),
+                "DiMuon_Pt",
+                selection,
+                label,
+            ),
+            plotClasses.Plot(
+                ROOT.TH1D("Muon_Pt" + extension, "Tight Muon p_{T} [GeV]", 49, 10.0, 500.0),
+                "Muon_Pt",
                 selection,
                 label,
             ),
@@ -2598,34 +2530,6 @@ def control_plots_had_CR_ZElEl(data=None):
                 label,
             ),
             plotClasses.Plot(
-                ROOT.TH1D("AK15Jet_NHF" + extension, "AK15 Jet NHF", 40, 0.0, 1.0),
-                "AK15Jet_NHF",
-                selection,
-                label,
-            ),
-            plotClasses.Plot(
-                ROOT.TH1D(
-                "CaloMET_PFMET_Recoil_ratio" + extension, "|Calo #slash{E}{T} - #slash{E}{T}|/#slash{U}{T}",
-                40,
-                0.0,
-                2.0,
-                ),
-                "CaloMET_PFMET_Recoil_ratio",
-                selection,
-                label,
-            ),
-            plotClasses.Plot(
-                ROOT.TH1D(
-                "Hadr_Recoil_AK15Jet_Pt_ratio" + extension, "Hadr_Recoil_AK15Jet_Pt_ratio",
-                20,
-                -1.0,
-                1.0,
-                ),
-                "(Hadr_Recoil_Pt-AK15Jet_Pt)/Hadr_Recoil_Pt",
-                selection,
-                label,
-            ),
-            plotClasses.Plot(
                 ROOT.TH1D(
                 "AK15Jet_DeepAK15_TvsQCD" + extension,
                 "AK15 Jet DeepAK15 TvsQCD",
@@ -2650,14 +2554,16 @@ def control_plots_had_CR_ZElEl(data=None):
                 label,
             ),
             plotClasses.Plot(
-            ROOT.TH1D(
-                "DeltaPhi_AK4Jet_MET" + extension,
-                "#Delta#phi(AK4 Jet, #slash{E}_{T})",
-                30,
-                0.0,
-                3.14,
+                ROOT.TH1D("DiElectron_Pt" + extension, "DiElectron p_{T} [GeV]", 40, 10.0, 810.0),
+                "DiElectron_Pt",
+                selection,
+                label,
+            ),
+            plotClasses.Plot(
+                ROOT.TH1D(
+                "Electron_Pt" + extension, "Tight Electron p_{T} [GeV]", 49, 10.0, 500.0
                 ),
-                "DeltaPhi_AK4Jet_MET",
+                "Electron_Pt",
                 selection,
                 label,
             ),
@@ -3420,34 +3326,6 @@ def control_plots_had_CR_ttbarEl(data=None):
                 label,
             ),
             plotClasses.Plot(
-                ROOT.TH1D("AK15Jet_NHF" + extension, "AK15 Jet NHF", 40, 0.0, 1.0),
-                "AK15Jet_NHF",
-                selection,
-                label,
-            ),
-            plotClasses.Plot(
-                ROOT.TH1D(
-                "CaloMET_PFMET_Recoil_ratio" + extension, "|Calo #slash{E}{T} - #slash{E}{T}|/#slash{U}{T}",
-                40,
-                0.0,
-                2.0,
-                ),
-                "CaloMET_PFMET_Recoil_ratio",
-                selection,
-                label,
-            ),
-            plotClasses.Plot(
-                ROOT.TH1D(
-                "Hadr_Recoil_AK15Jet_Pt_ratio" + extension, "Hadr_Recoil_AK15Jet_Pt_ratio",
-                20,
-                -1.0,
-                1.0,
-                ),
-                "(Hadr_Recoil_Pt-AK15Jet_Pt)/Hadr_Recoil_Pt",
-                selection,
-                label,
-            ),
-            plotClasses.Plot(
                 ROOT.TH1D(
                 "AK15Jet_DeepAK15_TvsQCD" + extension,
                 "AK15 Jet DeepAK15 TvsQCD",
@@ -3472,14 +3350,10 @@ def control_plots_had_CR_ttbarEl(data=None):
                 label,
             ),
             plotClasses.Plot(
-            ROOT.TH1D(
-                "DeltaPhi_AK4Jet_MET" + extension,
-                "#Delta#phi(AK4 Jet, #slash{E}_{T})",
-                30,
-                0.0,
-                3.14,
+                ROOT.TH1D(
+                "Electron_Pt" + extension, "Tight Electron p_{T} [GeV]", 49, 10.0, 500.0
                 ),
-                "DeltaPhi_AK4Jet_MET",
+                "Electron_Pt",
                 selection,
                 label,
             ),
@@ -4237,34 +4111,6 @@ def control_plots_had_CR_ttbarMu(data=None):
                 label,
             ),
             plotClasses.Plot(
-                ROOT.TH1D("AK15Jet_NHF" + extension, "AK15 Jet NHF", 40, 0.0, 1.0),
-                "AK15Jet_NHF",
-                selection,
-                label,
-            ),
-            plotClasses.Plot(
-                ROOT.TH1D(
-                "CaloMET_PFMET_Recoil_ratio" + extension, "|Calo #slash{E}{T} - #slash{E}{T}|/#slash{U}{T}",
-                40,
-                0.0,
-                2.0,
-                ),
-                "CaloMET_PFMET_Recoil_ratio",
-                selection,
-                label,
-            ),
-            plotClasses.Plot(
-                ROOT.TH1D(
-                "Hadr_Recoil_AK15Jet_Pt_ratio" + extension, "Hadr_Recoil_AK15Jet_Pt_ratio",
-                20,
-                -1.0,
-                1.0,
-                ),
-                "(Hadr_Recoil_Pt-AK15Jet_Pt)/Hadr_Recoil_Pt",
-                selection,
-                label,
-            ),
-            plotClasses.Plot(
                 ROOT.TH1D(
                 "AK15Jet_DeepAK15_TvsQCD" + extension,
                 "AK15 Jet DeepAK15 TvsQCD",
@@ -4289,14 +4135,8 @@ def control_plots_had_CR_ttbarMu(data=None):
                 label,
             ),
             plotClasses.Plot(
-            ROOT.TH1D(
-                "DeltaPhi_AK4Jet_MET" + extension,
-                "#Delta#phi(AK4 Jet, #slash{E}_{T})",
-                30,
-                0.0,
-                3.14,
-                ),
-                "DeltaPhi_AK4Jet_MET",
+                ROOT.TH1D("Muon_Pt" + extension, "Tight Muon p_{T} [GeV]", 49, 10.0, 500.0),
+                "Muon_Pt",
                 selection,
                 label,
             ),
@@ -5059,34 +4899,6 @@ def control_plots_had_CR_WEl(data=None):
                 label,
             ),
             plotClasses.Plot(
-                ROOT.TH1D("AK15Jet_NHF" + extension, "AK15 Jet NHF", 40, 0.0, 1.0),
-                "AK15Jet_NHF",
-                selection,
-                label,
-            ),
-            plotClasses.Plot(
-                ROOT.TH1D(
-                "CaloMET_PFMET_Recoil_ratio" + extension, "|Calo #slash{E}{T} - #slash{E}{T}|/#slash{U}{T}",
-                40,
-                0.0,
-                2.0,
-                ),
-                "CaloMET_PFMET_Recoil_ratio",
-                selection,
-                label,
-            ),
-            plotClasses.Plot(
-                ROOT.TH1D(
-                "Hadr_Recoil_AK15Jet_Pt_ratio" + extension, "Hadr_Recoil_AK15Jet_Pt_ratio",
-                20,
-                -1.0,
-                1.0,
-                ),
-                "(Hadr_Recoil_Pt-AK15Jet_Pt)/Hadr_Recoil_Pt",
-                selection,
-                label,
-            ),
-            plotClasses.Plot(
                 ROOT.TH1D(
                 "AK15Jet_DeepAK15_TvsQCD" + extension,
                 "AK15 Jet DeepAK15 TvsQCD",
@@ -5111,14 +4923,10 @@ def control_plots_had_CR_WEl(data=None):
                 label,
             ),
             plotClasses.Plot(
-            ROOT.TH1D(
-                "DeltaPhi_AK4Jet_MET" + extension,
-                "#Delta#phi(AK4 Jet, #slash{E}_{T})",
-                30,
-                0.0,
-                3.14,
+                ROOT.TH1D(
+                "Electron_Pt" + extension, "Tight Electron p_{T} [GeV]", 49, 10.0, 500.0
                 ),
-                "DeltaPhi_AK4Jet_MET",
+                "Electron_Pt",
                 selection,
                 label,
             ),
@@ -5876,34 +5684,6 @@ def control_plots_had_CR_WMu(data=None):
                 label,
             ),
             plotClasses.Plot(
-                ROOT.TH1D("AK15Jet_NHF" + extension, "AK15 Jet NHF", 40, 0.0, 1.0),
-                "AK15Jet_NHF",
-                selection,
-                label,
-            ),
-            plotClasses.Plot(
-                ROOT.TH1D(
-                "CaloMET_PFMET_Recoil_ratio" + extension, "|Calo #slash{E}{T} - #slash{E}{T}|/#slash{U}{T}",
-                40,
-                0.0,
-                2.0,
-                ),
-                "CaloMET_PFMET_Recoil_ratio",
-                selection,
-                label,
-            ),
-            plotClasses.Plot(
-                ROOT.TH1D(
-                "Hadr_Recoil_AK15Jet_Pt_ratio" + extension, "Hadr_Recoil_AK15Jet_Pt_ratio",
-                20,
-                -1.0,
-                1.0,
-                ),
-                "(Hadr_Recoil_Pt-AK15Jet_Pt)/Hadr_Recoil_Pt",
-                selection,
-                label,
-            ),
-            plotClasses.Plot(
                 ROOT.TH1D(
                 "AK15Jet_DeepAK15_TvsQCD" + extension,
                 "AK15 Jet DeepAK15 TvsQCD",
@@ -5928,14 +5708,8 @@ def control_plots_had_CR_WMu(data=None):
                 label,
             ),
             plotClasses.Plot(
-            ROOT.TH1D(
-                "DeltaPhi_AK4Jet_MET" + extension,
-                "#Delta#phi(AK4 Jet, #slash{E}_{T})",
-                30,
-                0.0,
-                3.14,
-                ),
-                "DeltaPhi_AK4Jet_MET",
+                ROOT.TH1D("Muon_Pt" + extension, "Tight Muon p_{T} [GeV]", 49, 10.0, 500.0),
+                "Muon_Pt",
                 selection,
                 label,
             ),
@@ -6690,34 +6464,6 @@ def control_plots_had_CR_Gamma(data=None):
                 label,
             ),
             plotClasses.Plot(
-                ROOT.TH1D("AK15Jet_NHF" + extension, "AK15 Jet NHF", 40, 0.0, 1.0),
-                "AK15Jet_NHF",
-                selection,
-                label,
-            ),
-            plotClasses.Plot(
-                ROOT.TH1D(
-                "CaloMET_PFMET_Recoil_ratio" + extension, "|Calo #slash{E}{T} - #slash{E}{T}|/#slash{U}{T}",
-                40,
-                0.0,
-                2.0,
-                ),
-                "CaloMET_PFMET_Recoil_ratio",
-                selection,
-                label,
-            ),
-            plotClasses.Plot(
-                ROOT.TH1D(
-                "Hadr_Recoil_AK15Jet_Pt_ratio" + extension, "Hadr_Recoil_AK15Jet_Pt_ratio",
-                20,
-                -1.0,
-                1.0,
-                ),
-                "(Hadr_Recoil_Pt-AK15Jet_Pt)/Hadr_Recoil_Pt",
-                selection,
-                label,
-            ),
-            plotClasses.Plot(
                 ROOT.TH1D(
                 "AK15Jet_DeepAK15_TvsQCD" + extension,
                 "AK15 Jet DeepAK15 TvsQCD",
@@ -6742,14 +6488,8 @@ def control_plots_had_CR_Gamma(data=None):
                 label,
             ),
             plotClasses.Plot(
-            ROOT.TH1D(
-                "DeltaPhi_AK4Jet_MET" + extension,
-                "#Delta#phi(AK4 Jet, #slash{E}_{T})",
-                30,
-                0.0,
-                3.14,
-                ),
-                "DeltaPhi_AK4Jet_MET",
+                ROOT.TH1D("Photon_Pt" + extension, "Tight Photon p_{T} [GeV]", 49, 10.0, 500.0),
+                "Photon_Pt",
                 selection,
                 label,
             ),
