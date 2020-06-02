@@ -28,8 +28,8 @@ generalselection += "*(N_HEM_Jets==0)*(N_HEM_METS==0)*(N_HEM_AK15Jets==0)"
 # ak15 jet quality cuts
 #generalselection += "*(AK15Jet_CHF[0]>0.1)*(AK15Jet_NHF[0]<0.8)*(AK15Jet_CEMF[0]<0.8)*(AK15Jet_NEMF[0]<0.7)*(AK15Jet_MF[0]<0.2)"
 # top mass window
-generalselection += "*(AK15Jet_PuppiSoftDropMass[0]>105.)*(AK15Jet_PuppiSoftDropMass[0]<210.)"
-generalselection += "*(AK15Jet_DeepAK15_TvsQCD[0]>0.3)"
+#generalselection += "*(AK15Jet_PuppiSoftDropMass[0]>105.)*(AK15Jet_PuppiSoftDropMass[0]<210.)"
+#generalselection += "*(AK15Jet_DeepAK15_TvsQCD[0]>0.3)"
 
 def control_plots_had_SR(data=None):
     label = "#scale[0.8]{signal region (hadronic)}"
