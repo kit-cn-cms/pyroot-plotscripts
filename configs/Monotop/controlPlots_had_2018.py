@@ -40,6 +40,7 @@ def control_plots_had_SR(data=None):
     selection += "*((Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX == 1) || (Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX == 1))"
     selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0)"
     selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p5)"
+    #selection += "*(Evt_Phi_MET>-0.87 || Evt_Phi_MET<-1.57)"
     #selection += "*(CaloMET>200.)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
     
