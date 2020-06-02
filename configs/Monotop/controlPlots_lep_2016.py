@@ -22,8 +22,8 @@ fast = True
 discr_binning = [150.0, 165.0, 180.0, 200.0, 220.0, 240.0, 270.0, 310.0, 350.0, 500.0]
 discr_binning.append(1000.)
 
-generalselection = "(Evt_Pt_MET>100.)*(N_LoosePhotons==0)*(Jet_Pt[0]>80.)*(CaloMET_PFMET_ratio<1.0)*(DeltaPhi_AK4Jet_MET[0]>1.5)"
-generalselection += "*(M_W_transverse[0]>=150.)*(N_Jets<=3)"
+generalselection = "(Evt_Pt_MET>100.)*(N_LoosePhotons==0)*(Jet_Pt[0]>50.)*(DeltaPhi_AK4Jet_MET[0]>1.5)*(N_Jets<=3)"
+generalselection += "*(M_W_transverse[0]>=40.)"
 
 def control_plots_lep_CR_ttbarEl(data=None):
     label = "#scale[0.8]{t#bar{t} control region (e)}"
@@ -31,7 +31,7 @@ def control_plots_lep_CR_ttbarEl(data=None):
     selection = generalselection
     selection += "*(N_BTagsM>=1 && N_BTagsL>=2)"
     selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele27_WPTight_Gsf_vX==1 || Triggered_HLT_Photon175_vX==1))"
-    selection += "*(DeltaR_AK4Jet_LooseElectron[0]<3.4)"
+    #selection += "*(DeltaR_AK4Jet_LooseElectron[0]<3.4)"
     #selection += "*(DeltaR_AK4Jets_LooseElectron_Smaller_3p4)"
 
     plots = [
@@ -416,7 +416,7 @@ def control_plots_lep_CR_ttbarMu(data=None):
     selection = generalselection
     selection += "*(N_BTagsM>=1 && N_BTagsL>=2)"
     selection += "*(N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && (Triggered_HLT_IsoMu24_vX==1 || Triggered_HLT_IsoTkMu24_vX==1))"
-    selection += "*(DeltaR_AK4Jet_LooseMuon[0]<3.4)"
+    #selection += "*(DeltaR_AK4Jet_LooseMuon[0]<3.4)"
     #selection += "*(DeltaR_AK4Jets_LooseMuon_Smaller_3p4)"
 
     plots = [
@@ -797,7 +797,7 @@ def control_plots_lep_CR_WEl(data=None):
     selection = generalselection
     selection += "*(N_BTagsL==0)"
     selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele27_WPTight_Gsf_vX==1 || Triggered_HLT_Photon175_vX==1))"
-    selection += "*(DeltaR_AK4Jet_LooseElectron[0]<3.4)"
+    #selection += "*(DeltaR_AK4Jet_LooseElectron[0]<3.4)"
     #selection += "*(DeltaR_AK4Jets_LooseElectron_Smaller_3p4)"
 
     plots = [
@@ -1182,7 +1182,7 @@ def control_plots_lep_CR_WMu(data=None):
     selection = generalselection
     selection += "*(N_BTagsL==0)"
     selection += "*(N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && (Triggered_HLT_IsoMu24_vX==1 || Triggered_HLT_IsoTkMu24_vX==1))"
-    selection += "*(DeltaR_AK4Jet_LooseMuon[0]<3.4)"
+    #selection += "*(DeltaR_AK4Jet_LooseMuon[0]<3.4)"
     #selection += "*(DeltaR_AK4Jets_LooseMuon_Smaller_3p4)"
 
     plots = [
@@ -1584,7 +1584,7 @@ def control_plots_lep_SR_El(data=None):
     selection = generalselection
     selection += "*(N_BTagsM==1 && N_BTagsL==1)"
     selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele27_WPTight_Gsf_vX==1 || Triggered_HLT_Photon175_vX==1))"
-    selection += "*(DeltaR_AK4Jet_LooseElectron[0]<3.4)"
+    #selection += "*(DeltaR_AK4Jet_LooseElectron[0]<3.4)"
     #selection += "*(DeltaR_AK4Jets_LooseElectron_Smaller_3p4)"
 
     plots = [
@@ -1969,7 +1969,7 @@ def control_plots_lep_SR_Mu(data=None):
     selection = generalselection
     selection += "*(N_BTagsM==1 && N_BTagsL==1)"
     selection += "*(N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && (Triggered_HLT_IsoMu24_vX==1 || Triggered_HLT_IsoTkMu24_vX==1))"
-    selection += "*(DeltaR_AK4Jet_LooseMuon[0]<3.4)"
+    #selection += "*(DeltaR_AK4Jet_LooseMuon[0]<3.4)"
     #selection += "*(DeltaR_AK4Jets_LooseMuon_Smaller_3p4)"
 
     plots = [
