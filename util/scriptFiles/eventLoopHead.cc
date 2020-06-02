@@ -89,11 +89,12 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     
     //std::cout << "N_Jets: " << N_Jets << " HT: " << HT_Jets << std::endl;
     float internalCSVWeightSF_had = 1.0;
-    if(N_AK15Jets>0) internalCSVWeightSF_had = csv_calibration_helper_had.GetScaleFactor(process, Hadr_Recoil_Pt, AK15Jet_Pt[0]);
+    internalCSVWeightSF_had = csv_calibration_helper_had.GetScaleFactor(process, N_Jets, HT_AK4Jets);
     float internalCSVWeightSF_lep = 1.0;
-    if(N_LooseElectrons>0 || N_LooseMuons>0) internalCSVWeightSF_lep = csv_calibration_helper_lep.GetScaleFactor(process, M_W_transverse[0], Evt_Pt_MET);
+    internalCSVWeightSF_lep = csv_calibration_helper_lep.GetScaleFactor(process, N_Jets, HT_AK4Jets);
     
-    //std::cout << " DeepJet patch: " << internalCSVWeightSF_had << std::endl;
+    //std::cout << " DeepJet patch had: " << internalCSVWeightSF_had << std::endl;
+    //std::cout << " DeepJet patch lep: " << internalCSVWeightSF_lep << std::endl;
 
     // double primlepPt;
     // double primlepEta;

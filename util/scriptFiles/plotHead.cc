@@ -116,31 +116,31 @@ void plot()
     if(processname.find("_CMS_METUnclEn")!=std::string::npos) process = processname.substr(0,processname.find("_CMS_METUnclEn"));
     if(processname.find("vectormonotop")!=std::string::npos) process = "vectormonotop";
     CSVWeightSFHelper csv_calibration_helper_had;
-    csv_calibration_helper_had.AddScaleFactorHistogram("znunujets","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_had_znunujets_"+dataera+".root","csv_patches_Hadr_Recoil_Pt_AK15Jet_Pt_0");
-    csv_calibration_helper_had.AddScaleFactorHistogram("wlnujets","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_had_wlnujets_"+dataera+".root","csv_patches_Hadr_Recoil_Pt_AK15Jet_Pt_0");
-    csv_calibration_helper_had.AddScaleFactorHistogram("zlljets","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_had_zlljets_"+dataera+".root","csv_patches_Hadr_Recoil_Pt_AK15Jet_Pt_0");
-    csv_calibration_helper_had.AddScaleFactorHistogram("gammajets","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_had_gammajets_"+dataera+".root","csv_patches_Hadr_Recoil_Pt_AK15Jet_Pt_0");
-    csv_calibration_helper_had.AddScaleFactorHistogram("ttbar","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_had_ttbar_"+dataera+".root","csv_patches_Hadr_Recoil_Pt_AK15Jet_Pt_0");
-    csv_calibration_helper_had.AddScaleFactorHistogram("singlet","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_had_singlet_"+dataera+".root","csv_patches_Hadr_Recoil_Pt_AK15Jet_Pt_0");
-    csv_calibration_helper_had.AddScaleFactorHistogram("diboson","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_had_diboson_"+dataera+".root","csv_patches_Hadr_Recoil_Pt_AK15Jet_Pt_0");
-    csv_calibration_helper_had.AddScaleFactorHistogram("qcd","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_had_qcd_"+dataera+".root","csv_patches_Hadr_Recoil_Pt_AK15Jet_Pt_0");
-    csv_calibration_helper_had.AddScaleFactorHistogram("vectormonotop","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_had_vectormonotop_"+dataera+".root","csv_patches_Hadr_Recoil_Pt_AK15Jet_Pt_0");
+    csv_calibration_helper_had.AddScaleFactorHistogram("znunujets","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_had_znunujets_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
+    csv_calibration_helper_had.AddScaleFactorHistogram("wlnujets","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_had_wlnujets_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
+    csv_calibration_helper_had.AddScaleFactorHistogram("zlljets","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_had_zlljets_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
+    csv_calibration_helper_had.AddScaleFactorHistogram("gammajets","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_had_gammajets_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
+    csv_calibration_helper_had.AddScaleFactorHistogram("ttbar","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_had_ttbar_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
+    csv_calibration_helper_had.AddScaleFactorHistogram("singlet","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_had_singlet_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
+    csv_calibration_helper_had.AddScaleFactorHistogram("diboson","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_had_diboson_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
+    csv_calibration_helper_had.AddScaleFactorHistogram("qcd","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_had_qcd_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
+    csv_calibration_helper_had.AddScaleFactorHistogram("vectormonotop","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_had_vectormonotop_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
     CSVWeightSFHelper csv_calibration_helper_lep;
-    csv_calibration_helper_lep.AddScaleFactorHistogram("znunujets","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_lep_znunujets_"+dataera+".root","csv_patches_M_W_transverse_0_Evt_Pt_MET");
-    csv_calibration_helper_lep.AddScaleFactorHistogram("wlnujets","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_lep_wlnujets_"+dataera+".root","csv_patches_M_W_transverse_0_Evt_Pt_MET");
-    csv_calibration_helper_lep.AddScaleFactorHistogram("zlljets","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_lep_zlljets_"+dataera+".root","csv_patches_M_W_transverse_0_Evt_Pt_MET");
-    csv_calibration_helper_lep.AddScaleFactorHistogram("gammajets","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_lep_gammajets_"+dataera+".root","csv_patches_M_W_transverse_0_Evt_Pt_MET");
-    csv_calibration_helper_lep.AddScaleFactorHistogram("ttbar","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_lep_ttbar_"+dataera+".root","csv_patches_M_W_transverse_0_Evt_Pt_MET");
-    csv_calibration_helper_lep.AddScaleFactorHistogram("singlet","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_lep_singlet_"+dataera+".root","csv_patches_M_W_transverse_0_Evt_Pt_MET");
-    csv_calibration_helper_lep.AddScaleFactorHistogram("diboson","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_lep_diboson_"+dataera+".root","csv_patches_M_W_transverse_0_Evt_Pt_MET");
-    csv_calibration_helper_lep.AddScaleFactorHistogram("qcd","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_lep_qcd_"+dataera+".root","csv_patches_M_W_transverse_0_Evt_Pt_MET");
-    csv_calibration_helper_lep.AddScaleFactorHistogram("vectormonotop","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_lep_vectormonotop_"+dataera+".root","csv_patches_M_W_transverse_0_Evt_Pt_MET");
+    csv_calibration_helper_lep.AddScaleFactorHistogram("znunujets","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_lep_znunujets_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
+    csv_calibration_helper_lep.AddScaleFactorHistogram("wlnujets","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_lep_wlnujets_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
+    csv_calibration_helper_lep.AddScaleFactorHistogram("zlljets","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_lep_zlljets_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
+    csv_calibration_helper_lep.AddScaleFactorHistogram("gammajets","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_lep_gammajets_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
+    csv_calibration_helper_lep.AddScaleFactorHistogram("ttbar","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_lep_ttbar_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
+    csv_calibration_helper_lep.AddScaleFactorHistogram("singlet","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_lep_singlet_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
+    csv_calibration_helper_lep.AddScaleFactorHistogram("diboson","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_lep_diboson_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
+    csv_calibration_helper_lep.AddScaleFactorHistogram("qcd","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_lep_qcd_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
+    csv_calibration_helper_lep.AddScaleFactorHistogram("vectormonotop","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_lep_vectormonotop_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
     
 
     // Hack for subsampling test
     // if(processname=="SingleEl" || processname=="SingleMu"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
     if ((processname.find("SingleEl") != std::string::npos) || (processname.find("SingleMu") != std::string::npos) ||
-        (processname.find("MET") != std::string::npos) || (processname.find("SinglePh") != std::string::npos)) {
+        (processname.find("MET") != std::string::npos && processname.find("Uncl")==std::string::npos) || (processname.find("SinglePh") != std::string::npos)) {
         DoWeights = 0;
         std::cout << "is data, dont use nominal weights!!!!" << std::endl;
     }

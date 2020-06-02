@@ -84,7 +84,7 @@ float CSVWeightSFHelper::GetScaleFactor(std::string process, auto x, auto y)
     // std::cout << "sf " << sf << std::endl;
     // std::cout << "sf err " << sf_error << std::endl;
 
-    if ((sf > 0.) && (sf_error / sf < 0.2))
+    if (sf > 0.)
         return sf;
     else
         return 1.;
