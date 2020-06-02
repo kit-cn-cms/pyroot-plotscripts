@@ -22,7 +22,7 @@ fast = True
 discr_binning = [150.0, 165.0, 180.0, 200.0, 220.0, 240.0, 270.0, 310.0, 350.0, 500.0]
 discr_binning.append(1000.)
 
-generalselection = "(Evt_Pt_MET>100.)*(N_LoosePhotons==0)*(Jet_Pt[0]>50.)*(DeltaPhi_AK4Jet_MET[0]>1.5)*(N_Jets<=3)"
+generalselection = "(Evt_Pt_MET>100.)*(N_LoosePhotons==0)*(Jet_Pt[0]>50.)*(N_Jets<=3)"
 generalselection += "*(M_W_transverse[0]>=40.)"
 
 def control_plots_lep_CR_ttbarEl(data=None):
