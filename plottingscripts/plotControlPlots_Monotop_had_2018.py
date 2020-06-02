@@ -49,7 +49,7 @@ def main(pyrootdir, opts):
     discrName = "finaldiscr"
 
     # configs
-    config = "Monotop/pltcfg_controlPlots_2018"
+    config = "Monotop/pltcfg_controlPlots_had_2018"
     variable_cfg = "Monotop/additionalVariables"
     plot_cfg = "Monotop/controlPlots_had_2018"
     syst_cfg = "Monotop/systematics_2018"
