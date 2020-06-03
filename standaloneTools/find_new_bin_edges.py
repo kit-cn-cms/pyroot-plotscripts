@@ -13,45 +13,56 @@ def split_comma_list(tosplit):
     print(returnlist)
     return returnlist
 
-def do_rebinning(histo, threshold):
-    errorsqared = 0.
-    val = 0.
+def do_rebinning(combinedHist, threshold):
+    squaredError = 0.
+    binContent = 0.
     bin_edges = []
     last_added_edge = 0
-    nbins = histo.GetNbinsX()
-    if threshold > 1:
-        print("Will compare potential bin content to threshold {}".format(threshold))
+    nbins = combinedHist.GetNbinsX()
     for i in range(nbins, 0, -1):
-        # print(i)
         if i == nbins:
-            last_added_edge = histo.GetBinLowEdge(i+1)
+            last_added_edge = combinedHist.GetBinLowEdge(nbins+1)
             bin_edges.append(last_added_edge)
 
-        errorsqared += histo.GetBinError(i)**2
-        val += histo.GetBinContent(i)
-        relerror = errorsqared**0.5/val if not val == 0 else errorsqared**0.5
-        # print("Rel. Error: {}".format(relerror))
-        if threshold > 1.:
-            print("bin {}, value: {}".format(i,val))
-            if val >= threshold:
-                
-                last_added_edge = histo.GetBinLowEdge(i)
-                print("saving edge {}".format(last_added_edge))
+        # add together squared bin errors and bin contents
+        squaredError += combinedHist.GetBinError(i)**2
+        binContent += combinedHist.GetBinContent(i)
+        # print("bin (low edge): {} ({})".format(i, combinedHist.GetBinLowEdge(i)))
+        # print("bkg stack: {}".format(combinedHist.GetBinContent(i)))
+        # print("sum: {}".format(binContent))
+
+        # calculate relative error
+        relerror = squaredError**0.5/binContent if not binContent == 0 else squaredError**0.5
+        
+        if binContent == 0: continue
+        if threshold > 1:
+            # do rebinning based on the population of the bins enterly
+            # bins are ok if the bin content is larger than the threshold
+            if binContent >= threshold:
+                # if relative error is smaller than threshold, start new bin
+                last_added_edge = combinedHist.GetBinLowEdge(i)
                 bin_edges.append(last_added_edge)
-                # last_added_edge = histo.GetBinLowEdge(i+1)
-                errorsqared = 0.
-                val = 0
+                squaredError = 0.
+                binContent = 0.
         else:
+            # if relative error is smaller than threshold, start new bin
             if relerror <= threshold:
-                last_added_edge = histo.GetBinLowEdge(i)
+                last_added_edge = combinedHist.GetBinLowEdge(i)
                 bin_edges.append(last_added_edge)
-                # last_added_edge = histo.GetBinLowEdge(i+1)
-                errorsqared = 0.
-                val = 0
-    underflow_edge = histo.GetBinLowEdge(1)
-    if not underflow_edge in bin_edges: bin_edges.append(underflow_edge)
-    print("\tNew Edges:[{}]".format(",".join([str(round(b,4)) for b in sorted(bin_edges)])))
-    # return sorted(bin_edges)
+                squaredError = 0.
+                binContent = 0.
+    
+    
+    # underflow_edge = combinedHist.GetBinLowEdge(1)
+    # if not underflow_edge in bin_edges:
+    #     # if underflow_edge is not in bin_edges list the relative
+    #     # error of the last bin is too small, so just merge the
+    #     # first two bins by replacing the last_added_edge with
+    #     # the underflow_edge 
+    #     bin_edges[-1] = underflow_edge
+
+    print("\tnew bin edges: [{}]".format(",".join([str(round(b,4)) for b in bin_edges])))
+    return sorted(bin_edges)
 
 
 def prepare_rebinning(rootfile, histolist, threshold = 0.1):
@@ -69,7 +80,7 @@ def prepare_rebinning(rootfile, histolist, threshold = 0.1):
         print("\toriginal lower bin edges:")
         for i in range(1, h_added.GetNbinsX()+1):
             print("\t{}\t{}".format(i, h_added.GetBinLowEdge(i)))
-        do_rebinning(histo = h_added, threshold = threshold)
+        do_rebinning(combinedHist = h_added, threshold = threshold)
     else:
         print("ERROR: could not add any histograms!")
 
@@ -90,7 +101,8 @@ def rebin_histos_in_rootfile(inputfile, options):
     print("opened root file")
 
     keylist = [x.GetName() for x in rfile.GetListOfKeys()]
-    key = "$PROCESS_$CHANNEL"
+    # key = "$PROCESS_$CHANNEL"
+    key = options.nomkey
     for cat in cats:
         print("Doing channel '{}'".format(cat))
         consider_for_rebinning = []
@@ -117,10 +129,10 @@ def parse_arguments():
     parser = OptionParser()
 
     parser.add_option("-k", "--nomkey",
-                        help = "use this string to select histogram keys, e.g. '$PROCESS_finaldiscr_$CHANNEL' (this is the default)",
+                        help = "use this string to select histogram keys, e.g. '$PROCESS__$CHANNEL' (this is the default)",
                         dest = "nomkey",
                         type = "str",
-                        default = '$PROCESS_finaldiscr_$CHANNEL'
+                        default = '$PROCESS__$CHANNEL'
                     )
     parser.add_option( "-c", "--channel",
                         help = """Do rebinning for this channel, e.g. 'ljets_ge4j_ge4t_ttH_node'.
