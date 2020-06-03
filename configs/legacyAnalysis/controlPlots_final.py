@@ -391,68 +391,56 @@ def plots_inputfeatures_ge4j_ge4t(data = None):
     interf_ljets_ge4j_ge4t_Evt_Pt_minDrTaggedJets.nhistobins = 50
     interfaces.append(interf_ljets_ge4j_ge4t_Evt_Pt_minDrTaggedJets)
 
-    interf_ljets_ge4j_3t_Evt_Deta_TaggedJetsAverage = vhi.variableHistoInterface(variable_name  = "Evt_Deta_TaggedJetsAverage",
-                                            label          = "ljets_ge4j_3t_Evt_Deta_TaggedJetsAverage",
-                                            selection      = "(N_Jets>=4&&N_BTagsM==3)&&(1.)")
-    interf_ljets_ge4j_3t_Evt_Deta_TaggedJetsAverage.category_label = label
-    interf_ljets_ge4j_3t_Evt_Deta_TaggedJetsAverage.category = ("(N_Jets>=4&&N_BTagsM==3)&&(1.)","ljets_ge4j_3t_Evt_Deta_TaggedJetsAverage","")
-    interf_ljets_ge4j_3t_Evt_Deta_TaggedJetsAverage.bin_edges = [ 
-				0.0,
-				0.06,
-				0.12,
-				0.18,
-				0.24,
-				0.3,
-				0.36,
-				0.42,
-				0.48,
-				0.54,
-				0.6,
-				0.66,
-				0.72,
-				0.78,
-				0.84,
-				0.9,
-				0.96,
-				1.02,
-				1.08,
-				1.14,
-				1.2,
-				1.26,
-				1.32,
-				1.38,
-				1.44,
-				1.5,
-				1.56,
-				1.62,
-				1.68,
-				1.74,
-				1.8,
-				1.86,
-				1.92,
-				1.98,
-				2.04,
-				2.1,
-				2.16,
-				2.22,
-				2.28,
-				2.34,
-				2.4,
-				2.46,
-				2.52,
-				2.58,
-				2.64,
-				2.7,
-				2.76,
-				2.82,
-				2.88,
-				2.94,
-				3.0
-				]
-    interf_ljets_ge4j_3t_Evt_Deta_TaggedJetsAverage.histotitle = "Evt_Deta_TaggedJetsAverage"
-    interf_ljets_ge4j_3t_Evt_Deta_TaggedJetsAverage.histoname = "ljets_ge4j_3t_Evt_Deta_TaggedJetsAverage"
-    interf_ljets_ge4j_3t_Evt_Deta_TaggedJetsAverage.nhistobins = 50
-    interfaces.append(interf_ljets_ge4j_3t_Evt_Deta_TaggedJetsAverage)
+    interf_ljets_ge4j_ge4t_Evt_Deta_TaggedJetsAverage = vhi.variableHistoInterface(variable_name  = "Evt_Deta_TaggedJetsAverage",
+                                            label          = "ljets_ge4j_ge4t_Evt_Deta_TaggedJetsAverage",
+                                            selection      = "(N_Jets>=4&&N_BTagsM>=4)&&(1.)")
+    interf_ljets_ge4j_ge4t_Evt_Deta_TaggedJetsAverage.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_Evt_Deta_TaggedJetsAverage","")
+    interf_ljets_ge4j_ge4t_Evt_Deta_TaggedJetsAverage.bin_edges = [ 
+                0.06,
+                0.18,
+                0.24,
+                0.3,
+                0.36,
+                0.42,
+                0.48,
+                0.54,
+                0.6,
+                0.66,
+                0.72,
+                0.78,
+                0.84,
+                0.9,
+                0.96,
+                1.02,
+                1.08,
+                1.14,
+                1.2,
+                1.26,
+                1.32,
+                1.38,
+                1.44,
+                1.5,
+                1.56,
+                1.62,
+                1.68,
+                1.74,
+                1.8,
+                1.86,
+                1.92,
+                1.98,
+                2.04,
+                2.1,
+                2.16,
+                2.22,
+                2.28,
+                2.34,
+                2.46,
+                3.0
+                ]
+    interf_ljets_ge4j_ge4t_Evt_Deta_TaggedJetsAverage.histotitle = "Evt_Deta_TaggedJetsAverage"
+    interf_ljets_ge4j_ge4t_Evt_Deta_TaggedJetsAverage.histoname = "ljets_ge4j_ge4t_Evt_Deta_TaggedJetsAverage"
+    interf_ljets_ge4j_ge4t_Evt_Deta_TaggedJetsAverage.nhistobins = 50
+    interfaces.append(interf_ljets_ge4j_ge4t_Evt_Deta_TaggedJetsAverage)
 
     interf_ljets_ge4j_ge4t_Evt_Deta_JetsAverage = vhi.variableHistoInterface(variable_name  = "Evt_Deta_JetsAverage",
                                             label          = "ljets_ge4j_ge4t_Evt_Deta_JetsAverage",
@@ -593,50 +581,41 @@ def plots_inputfeatures_ge4j_ge4t(data = None):
     interf_ljets_ge4j_ge4t_Reco_ttbar_toplep_m.nhistobins = 50
     interfaces.append(interf_ljets_ge4j_ge4t_Reco_ttbar_toplep_m)
 
-    interf_ljets_ge4j_3t_Reco_tHq_bestJABDToutput = vhi.variableHistoInterface(variable_name  = "Reco_tHq_bestJABDToutput",
-                                            label          = "ljets_ge4j_3t_Reco_tHq_bestJABDToutput",
-                                            selection      = "(N_Jets>=4&&N_BTagsM==3)&&(1.)")
-    interf_ljets_ge4j_3t_Reco_tHq_bestJABDToutput.category_label = label
-    interf_ljets_ge4j_3t_Reco_tHq_bestJABDToutput.category = ("(N_Jets>=4&&N_BTagsM==3)&&(1.)","ljets_ge4j_3t_Reco_tHq_bestJABDToutput","")
-    interf_ljets_ge4j_3t_Reco_tHq_bestJABDToutput.bin_edges = [ 
-				-0.558,
-				-0.49,
-				-0.456,
-				-0.422,
-				-0.388,
-				-0.354,
-				-0.32,
-				-0.286,
-				-0.252,
-				-0.218,
-				-0.184,
-				-0.15,
-				-0.116,
-				-0.082,
-				-0.048,
-				-0.014,
-				0.02,
-				0.054,
-				0.088,
-				0.122,
-				0.156,
-				0.19,
-				0.224,
-				0.258,
-				0.292,
-				0.326,
-				0.36,
-				0.394,
-				0.428,
-				0.462,
-				0.496,
-				0.53,
-				0.7
-				]
-    interf_ljets_ge4j_3t_Reco_tHq_bestJABDToutput.histotitle = "Reco_tHq_bestJABDToutput"
-    interf_ljets_ge4j_3t_Reco_tHq_bestJABDToutput.histoname = "ljets_ge4j_3t_Reco_tHq_bestJABDToutput"
-    interf_ljets_ge4j_3t_Reco_tHq_bestJABDToutput.nhistobins = 50
-    interfaces.append(interf_ljets_ge4j_3t_Reco_tHq_bestJABDToutput)
+    interf_ljets_ge4j_ge4t_Reco_tHq_bestJABDToutput = vhi.variableHistoInterface(variable_name  = "Reco_tHq_bestJABDToutput",
+                                            label          = "ljets_ge4j_ge4t_Reco_tHq_bestJABDToutput",
+                                            selection      = "(N_Jets>=4&&N_BTagsM>=4)&&(1.)")
+    interf_ljets_ge4j_ge4t_Reco_tHq_bestJABDToutput.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_Reco_tHq_bestJABDToutput","")
+    interf_ljets_ge4j_ge4t_Reco_tHq_bestJABDToutput.bin_edges = [ 
+                -1.0,
+                -0.6,
+                -0.218,
+                -0.184,
+                -0.15,
+                -0.116,
+                -0.082,
+                -0.048,
+                -0.014,
+                0.02,
+                0.054,
+                0.088,
+                0.122,
+                0.156,
+                0.19,
+                0.224,
+                0.258,
+                0.292,
+                0.326,
+                0.36,
+                0.394,
+                0.428,
+                0.462,
+                0.496,
+                0.7
+                ]
+    interf_ljets_ge4j_ge4t_Reco_tHq_bestJABDToutput.histotitle = "Reco_tHq_bestJABDToutput"
+    interf_ljets_ge4j_ge4t_Reco_tHq_bestJABDToutput.histoname = "ljets_ge4j_ge4t_Reco_tHq_bestJABDToutput"
+    interf_ljets_ge4j_ge4t_Reco_tHq_bestJABDToutput.nhistobins = 50
+    interfaces.append(interf_ljets_ge4j_ge4t_Reco_tHq_bestJABDToutput)
 
     interf_ljets_ge4j_ge4t_Reco_JABDT_tHq_abs_ljet_eta = vhi.variableHistoInterface(variable_name  = "Reco_JABDT_tHq_abs_ljet_eta",
                                             label          = "ljets_ge4j_ge4t_Reco_JABDT_tHq_abs_ljet_eta",
@@ -2449,7 +2428,7 @@ def getDiscriminatorPlots(data = None, discrname = ''):
     discriminatorPlots = []
     #baseline
     discriminatorPlots += plots_ge4j_ge3t(data)
-    # discriminatorPlots += plots_ge4j_3t(data)
+    discriminatorPlots += plots_ge4j_3t(data)
     discriminatorPlots += plots_ge4j_ge4t(data)
     # input features
     discriminatorPlots += plots_inputfeatures_ge4j_3t(data)
