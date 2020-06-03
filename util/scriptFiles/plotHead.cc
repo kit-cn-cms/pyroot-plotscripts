@@ -105,13 +105,13 @@ float get_msd_weight(float pt, float eta){
     else {
         weight = forweight;
     }
-    std::cout << "--------" << std::endl;
-    std::cout << "getting msd correction weight for Pt: " << pt << " Eta: " << eta << std::endl;
-    std::cout << "genw*weight: " << genw*weight << std::endl;
-    std::cout << "genw: " << genw << std::endl;
-    std::cout << "weight: " << weight << std::endl;
-    std::cout << "cenweight: " << cenweight << std::endl;
-    std::cout << "forweight: " << forweight << std::endl;
+    // std::cout << "--------" << std::endl;
+    // std::cout << "getting msd correction weight for Pt: " << pt << " Eta: " << eta << std::endl;
+    // std::cout << "genw*weight: " << genw*weight << std::endl;
+    // std::cout << "genw: " << genw << std::endl;
+    // std::cout << "weight: " << weight << std::endl;
+    // std::cout << "cenweight: " << cenweight << std::endl;
+    // std::cout << "forweight: " << forweight << std::endl;
     return genw*weight;
 }
 
