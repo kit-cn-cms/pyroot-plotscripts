@@ -59,6 +59,8 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     float internalBosonWeight_muFUp     = 1.0;
     float internalBosonWeight_muFDown   = 1.0;
 
+    float weight_sdm_corr = 1.0;
+
     if ((processname.find("wlnujets") != std::string::npos && W_Pt > 100.) || (processname.find("zlljets") != std::string::npos && Z_Pt > 100.) ||
         (processname.find("znunujets") != std::string::npos && Z_Pt > 100.) || (processname.find("gammajets") != std::string::npos && Gamma_Pt > 100.)) {
         internalBosonWeight           = BosonWeight_nominal;
@@ -132,6 +134,8 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     bool DeltaPhi_AK4Jets_MET_Larger_0p5;
     DeltaPhi_AK4Jets_MET_Larger_0p5 = check_if_every_element_greater(DeltaPhi_AK4Jet_MET.get(), N_Jets, 0.5);
     
+    weight_sdm_corr = get_msd_weight(AK15Jet_Pt[0], AK15Jet_Eta[0]);
+
     // hack against prefireweight with 2018 signal samples
     if(processname.find("vectormonotop")!=std::string::npos) {
         Weight_L1_Prefire = 1.0;

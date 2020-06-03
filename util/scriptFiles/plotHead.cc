@@ -75,6 +75,47 @@ inline bool check_if_every_element_greater(auto* array, int number_of_elements, 
     return true;
 }
 
+float get_msd_weight(float pt, float eta){
+    // according to https://github.com/mcremone/decaf/blob/master/analysis/util/corrections.py#L202
+    // gpar = np.array([1.00626, -1.06161, 0.0799900, 1.20454])
+    // cpar = np.array([1.09302, -0.000150068, 3.44866e-07, -2.68100e-10, 8.67440e-14, -1.00114e-17])
+    // fpar = np.array([1.27212, -0.000571640, 8.37289e-07, -5.20433e-10, 1.45375e-13, -1.50389e-17])
+    // genw = gpar[0] + gpar[1]*np.power(pt*gpar[2], -gpar[3])
+    // ptpow = np.power.outer(pt, np.arange(cpar.size))    
+    // cenweight = np.dot(ptpow, cpar)
+    // forweight = np.dot(ptpow, fpar)
+    // weight = np.where(np.abs(eta)<1.3, cenweight, forweight)
+    // return genw*weight
+    std::vector<float> gpar = {1.00626, -1.06161, 0.0799900, 1.20454};
+    std::vector<float> cpar = {1.09302, -0.000150068, 3.44866e-07, -2.68100e-10, 8.67440e-14, -1.00114e-17};
+    std::vector<float> fpar = {1.27212, -0.000571640, 8.37289e-07, -5.20433e-10, 1.45375e-13, -1.50389e-17};
+    float genw = gpar[0] + gpar[1]*pow(pt*gpar[2], -gpar[3]);
+    std::vector<float> ptpow; 
+    float cenweight = 0.;
+    float forweight = 0.;
+    for (int i = 0; i<cpar.size(); ++i){
+        ptpow.push_back(pow(pt,i));
+        cenweight += cpar[i]*pow(pt,i);
+        forweight += fpar[i]*pow(pt,i);
+    } 
+    float weight = 0.;
+    if (abs(eta)<1.3){
+        weight = cenweight;
+    }
+    else {
+        weight = forweight;
+    }
+    std::cout << "--------" << std::endl;
+    std::cout << "getting msd correction weight for Pt: " << pt << " Eta: " << eta << std::endl;
+    std::cout << "genw*weight: " << genw*weight << std::endl;
+    std::cout << "genw: " << genw << std::endl;
+    std::cout << "weight: " << weight << std::endl;
+    std::cout << "cenweight: " << cenweight << std::endl;
+    std::cout << "forweight: " << forweight << std::endl;
+    return genw*weight;
+}
+
+
 void plot()
 {
     TH1F::SetDefaultSumw2();
