@@ -835,6 +835,39 @@ def control_plots_had_SR(data=None):
             selection,
             label,
         ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+            "AK15Jet_Puppi_ChargedMultiplicity" + extension, "AK15Jet_Puppi_ChargedMultiplicity",
+            101,
+            -0.5,
+            100.5,
+            ),
+            "AK15Jet_Puppi_ChargedMultiplicity[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+            "AK15Jet_Puppi_NeutralMultiplicity" + extension, "AK15Jet_Puppi_NeutralMultiplicity",
+            101,
+            -0.5,
+            100.5,
+            ),
+            "AK15Jet_Puppi_NeutralMultiplicity[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+            "AK15Jet_Puppi_Multiplicity" + extension, "AK15Jet_Puppi_Multiplicity",
+            101,
+            -0.5,
+            100.5,
+            ),
+            "AK15Jet_Puppi_Multiplicity[0]",
+            selection,
+            label,
+        ),
     ]
     if fast:
         plots = [
@@ -1658,6 +1691,39 @@ def control_plots_had_CR_ZMuMu(data=None):
             1.0,
             ),
             "(Hadr_Recoil_Pt-AK15Jet_Pt)/Hadr_Recoil_Pt",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+            "AK15Jet_Puppi_ChargedMultiplicity" + extension, "AK15Jet_Puppi_ChargedMultiplicity",
+            101,
+            -0.5,
+            100.5,
+            ),
+            "AK15Jet_Puppi_ChargedMultiplicity[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+            "AK15Jet_Puppi_NeutralMultiplicity" + extension, "AK15Jet_Puppi_NeutralMultiplicity",
+            101,
+            -0.5,
+            100.5,
+            ),
+            "AK15Jet_Puppi_NeutralMultiplicity[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+            "AK15Jet_Puppi_Multiplicity" + extension, "AK15Jet_Puppi_Multiplicity",
+            101,
+            -0.5,
+            100.5,
+            ),
+            "AK15Jet_Puppi_Multiplicity[0]",
             selection,
             label,
         ),
@@ -2509,6 +2575,39 @@ def control_plots_had_CR_ZElEl(data=None):
             selection,
             label,
         ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+            "AK15Jet_Puppi_ChargedMultiplicity" + extension, "AK15Jet_Puppi_ChargedMultiplicity",
+            101,
+            -0.5,
+            100.5,
+            ),
+            "AK15Jet_Puppi_ChargedMultiplicity[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+            "AK15Jet_Puppi_NeutralMultiplicity" + extension, "AK15Jet_Puppi_NeutralMultiplicity",
+            101,
+            -0.5,
+            100.5,
+            ),
+            "AK15Jet_Puppi_NeutralMultiplicity[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+            "AK15Jet_Puppi_Multiplicity" + extension, "AK15Jet_Puppi_Multiplicity",
+            101,
+            -0.5,
+            100.5,
+            ),
+            "AK15Jet_Puppi_Multiplicity[0]",
+            selection,
+            label,
+        ),
     ]
     if fast:
         plots = [
@@ -3305,6 +3404,39 @@ def control_plots_had_CR_ttbarEl(data=None):
             selection,
             label,
         ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+            "AK15Jet_Puppi_ChargedMultiplicity" + extension, "AK15Jet_Puppi_ChargedMultiplicity",
+            101,
+            -0.5,
+            100.5,
+            ),
+            "AK15Jet_Puppi_ChargedMultiplicity[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+            "AK15Jet_Puppi_NeutralMultiplicity" + extension, "AK15Jet_Puppi_NeutralMultiplicity",
+            101,
+            -0.5,
+            100.5,
+            ),
+            "AK15Jet_Puppi_NeutralMultiplicity[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+            "AK15Jet_Puppi_Multiplicity" + extension, "AK15Jet_Puppi_Multiplicity",
+            101,
+            -0.5,
+            100.5,
+            ),
+            "AK15Jet_Puppi_Multiplicity[0]",
+            selection,
+            label,
+        ),
     ]
     if fast:
         plots = [
@@ -4087,6 +4219,39 @@ def control_plots_had_CR_ttbarMu(data=None):
             1.0,
             ),
             "(Hadr_Recoil_Pt-AK15Jet_Pt)/Hadr_Recoil_Pt",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+            "AK15Jet_Puppi_ChargedMultiplicity" + extension, "AK15Jet_Puppi_ChargedMultiplicity",
+            101,
+            -0.5,
+            100.5,
+            ),
+            "AK15Jet_Puppi_ChargedMultiplicity[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+            "AK15Jet_Puppi_NeutralMultiplicity" + extension, "AK15Jet_Puppi_NeutralMultiplicity",
+            101,
+            -0.5,
+            100.5,
+            ),
+            "AK15Jet_Puppi_NeutralMultiplicity[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+            "AK15Jet_Puppi_Multiplicity" + extension, "AK15Jet_Puppi_Multiplicity",
+            101,
+            -0.5,
+            100.5,
+            ),
+            "AK15Jet_Puppi_Multiplicity[0]",
             selection,
             label,
         ),
@@ -4878,6 +5043,39 @@ def control_plots_had_CR_WEl(data=None):
             selection,
             label,
         ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+            "AK15Jet_Puppi_ChargedMultiplicity" + extension, "AK15Jet_Puppi_ChargedMultiplicity",
+            101,
+            -0.5,
+            100.5,
+            ),
+            "AK15Jet_Puppi_ChargedMultiplicity[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+            "AK15Jet_Puppi_NeutralMultiplicity" + extension, "AK15Jet_Puppi_NeutralMultiplicity",
+            101,
+            -0.5,
+            100.5,
+            ),
+            "AK15Jet_Puppi_NeutralMultiplicity[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+            "AK15Jet_Puppi_Multiplicity" + extension, "AK15Jet_Puppi_Multiplicity",
+            101,
+            -0.5,
+            100.5,
+            ),
+            "AK15Jet_Puppi_Multiplicity[0]",
+            selection,
+            label,
+        ),
     ]
     if fast:
         plots = [
@@ -5663,6 +5861,39 @@ def control_plots_had_CR_WMu(data=None):
             selection,
             label,
         ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+            "AK15Jet_Puppi_ChargedMultiplicity" + extension, "AK15Jet_Puppi_ChargedMultiplicity",
+            101,
+            -0.5,
+            100.5,
+            ),
+            "AK15Jet_Puppi_ChargedMultiplicity[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+            "AK15Jet_Puppi_NeutralMultiplicity" + extension, "AK15Jet_Puppi_NeutralMultiplicity",
+            101,
+            -0.5,
+            100.5,
+            ),
+            "AK15Jet_Puppi_NeutralMultiplicity[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+            "AK15Jet_Puppi_Multiplicity" + extension, "AK15Jet_Puppi_Multiplicity",
+            101,
+            -0.5,
+            100.5,
+            ),
+            "AK15Jet_Puppi_Multiplicity[0]",
+            selection,
+            label,
+        ),
     ]
     if fast:
         plots = [
@@ -6440,6 +6671,39 @@ def control_plots_had_CR_Gamma(data=None):
             1.0,
             ),
             "(Hadr_Recoil_Pt-AK15Jet_Pt)/Hadr_Recoil_Pt",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+            "AK15Jet_Puppi_ChargedMultiplicity" + extension, "AK15Jet_Puppi_ChargedMultiplicity",
+            101,
+            -0.5,
+            100.5,
+            ),
+            "AK15Jet_Puppi_ChargedMultiplicity[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+            "AK15Jet_Puppi_NeutralMultiplicity" + extension, "AK15Jet_Puppi_NeutralMultiplicity",
+            101,
+            -0.5,
+            100.5,
+            ),
+            "AK15Jet_Puppi_NeutralMultiplicity[0]",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+            "AK15Jet_Puppi_Multiplicity" + extension, "AK15Jet_Puppi_Multiplicity",
+            101,
+            -0.5,
+            100.5,
+            ),
+            "AK15Jet_Puppi_Multiplicity[0]",
             selection,
             label,
         ),
