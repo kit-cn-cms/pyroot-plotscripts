@@ -46,6 +46,7 @@ CMS_scaleHF_j,shape,variation,JESHFup,JESHFdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 CMS_scaleHF_j_2018,shape,variation,JESHFyearup,JESHFyeardown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 CMS_scaleRelativeBal_j,shape,variation,JESRelativeBalup,JESRelativeBaldown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 CMS_scaleRelativeSample_j_2018,shape,variation,JESRelativeSampleyearup,JESRelativeSampleyeardown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+CMS_scaleHEM1516_j_2018,shape,variation,nominal,JESHEMdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 #,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 CMS_res_j_2018,shape,variation,JERup,JERdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 #CMS_resPt0Eta0_j,shape,variation,JERpt0eta0up,JERpt0eta0down,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
