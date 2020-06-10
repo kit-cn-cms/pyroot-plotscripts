@@ -1,0 +1,11 @@
+variablename,minvalue,maxvalue,numberofbins,logoption,displayname
+memDBp,0,1,50,-,MEM
+Evt_Deta_JetsAverage,0,3,50,-,Evt_Deta_JetsAverage
+Evt_M_TaggedJetsAverage,5.,70,50,-,Evt_M_TaggedJetsAverage
+Evt_CSV_avg,0.15,1,50,-,Evt_CSV_avg
+Evt_blr_transformed,-2.5,15,50,-,Evt_blr_transformed
+N_Jets,3.5,10.5,7,-,N_Jets
+Reco_ttbar_toplep_m,80,500,50,-,Reco_ttbar_toplep_m
+Reco_ttbar_whad_m,0,600,50,-,Reco_ttbar_whad_m
+Reco_JABDT_ttH_Jet_CSV_btoplep,-1.5,1.,50,-,Reco_JABDT_ttH_Jet_CSV_btoplep
+Reco_JABDT_tHW_log_wb_m,-1.5,8.5,50,-,Reco_JABDT_tHW_log_wb_m
