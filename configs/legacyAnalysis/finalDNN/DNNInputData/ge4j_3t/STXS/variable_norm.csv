@@ -1,0 +1,14 @@
+,mu,std
+Reco_JABDT_tHW_log_h_m,3.716769,2.30587
+Reco_tHq_h_pt,169.76234,103.08034
+Reco_JABDT_tHq_log_h_m,4.7361917,0.20319481
+Reco_JABDT_tHq_log_h_pt,4.9368052,0.68098146
+Reco_JABDT_tHq_log_min_hdau1_pt_hdau2_pt,4.0483975,0.41367275
+Reco_tHW_h_pt,139.44493,114.998474
+Reco_tHW_h_dr,1.0479743,1.2652003
+Reco_JABDT_tHW_log_h_pt,3.8685231,2.448088
+Reco_ttH_h_dr,0.19135676,1.6563852
+Evt_Pt_JetsAverage,94.204,38.262897
+Evt_Pt_TaggedJetsAverage,97.08513,44.67445
+Evt_Dr_TaggedJetsAverage,2.0687447,0.4291231
+TaggedJet_Pt[0],147.35657476488333,84.80218887914565
