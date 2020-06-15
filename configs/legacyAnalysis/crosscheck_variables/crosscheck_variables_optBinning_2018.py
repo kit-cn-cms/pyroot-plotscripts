@@ -73,7 +73,7 @@ def plots_ljets_ge4j_ge4t(data = None):
     interf_ljets_ge4j_ge4t_Evt_HT_jets.nhistobins = 50
     interfaces.append(interf_ljets_ge4j_ge4t_Evt_HT_jets)
     
-    interf_ljets_ge4j_ge4t_Jet_CSV_0 = vhi.variableHistoInterface(variable_name  = "Jet_CSV_0",
+    interf_ljets_ge4j_ge4t_Jet_CSV_0 = vhi.variableHistoInterface(variable_name  = "Jet_CSV[0]",
                                             label          = "ljets_ge4j_ge4t_Jet_CSV_0",
                                             selection      = "(N_Jets>=4&&N_BTagsM>=4)&&(1.)")
     interf_ljets_ge4j_ge4t_Jet_CSV_0.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_Jet_CSV_0","")
@@ -116,7 +116,7 @@ def plots_ljets_ge4j_ge4t(data = None):
     interf_ljets_ge4j_ge4t_Jet_CSV_0.nhistobins = 50
     interfaces.append(interf_ljets_ge4j_ge4t_Jet_CSV_0)
     
-    interf_ljets_ge4j_ge4t_Jet_Pt_0 = vhi.variableHistoInterface(variable_name  = "Jet_Pt_0",
+    interf_ljets_ge4j_ge4t_Jet_Pt_0 = vhi.variableHistoInterface(variable_name  = "Jet_Pt[0]",
                                             label          = "ljets_ge4j_ge4t_Jet_Pt_0",
                                             selection      = "(N_Jets>=4&&N_BTagsM>=4)&&(1.)")
     interf_ljets_ge4j_ge4t_Jet_Pt_0.category = ("(N_Jets>=4&&N_BTagsM>=4)&&(1.)","ljets_ge4j_ge4t_Jet_Pt_0","")
@@ -227,7 +227,7 @@ def plots_ljets_ge4j_3t(data = None):
     interf_ljets_ge4j_3t_Evt_HT_jets.nhistobins = 50
     interfaces.append(interf_ljets_ge4j_3t_Evt_HT_jets)
     
-    interf_ljets_ge4j_3t_Jet_CSV_0 = vhi.variableHistoInterface(variable_name  = "Jet_CSV_0",
+    interf_ljets_ge4j_3t_Jet_CSV_0 = vhi.variableHistoInterface(variable_name  = "Jet_CSV[0]",
                                             label          = "ljets_ge4j_3t_Jet_CSV_0",
                                             selection      = "(N_Jets>=4&&N_BTagsM==3)&&(1.)")
     interf_ljets_ge4j_3t_Jet_CSV_0.category = ("(N_Jets>=4&&N_BTagsM==3)&&(1.)","ljets_ge4j_3t_Jet_CSV_0","")
@@ -270,7 +270,7 @@ def plots_ljets_ge4j_3t(data = None):
     interf_ljets_ge4j_3t_Jet_CSV_0.nhistobins = 50
     interfaces.append(interf_ljets_ge4j_3t_Jet_CSV_0)
     
-    interf_ljets_ge4j_3t_Jet_Pt_0 = vhi.variableHistoInterface(variable_name  = "Jet_Pt_0",
+    interf_ljets_ge4j_3t_Jet_Pt_0 = vhi.variableHistoInterface(variable_name  = "Jet_Pt[0]",
                                             label          = "ljets_ge4j_3t_Jet_Pt_0",
                                             selection      = "(N_Jets>=4&&N_BTagsM==3)&&(1.)")
     interf_ljets_ge4j_3t_Jet_Pt_0.category = ("(N_Jets>=4&&N_BTagsM==3)&&(1.)","ljets_ge4j_3t_Jet_Pt_0","")
