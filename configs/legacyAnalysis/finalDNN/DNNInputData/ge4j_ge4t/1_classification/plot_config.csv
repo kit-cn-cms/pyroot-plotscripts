@@ -1,0 +1,16 @@
+variablename,minvalue,maxvalue,numberofbins,logoption,displayname
+Evt_CSV_avg_tagged,0.3,1,50,-,Evt_CSV_avg_tagged
+Evt_CSV_avg,0.15,1,50,-,Evt_CSV_avg
+Evt_M_minDrLepTag,15.,400.,50,-,Evt_M_minDrLepTag
+Evt_Pt_JetsAverage,30,500,50,-,Evt_Pt_JetsAverage
+Evt_Pt_minDrTaggedJets,20,600,50,-,Evt_Pt_minDrTaggedJets
+Evt_Deta_TaggedJetsAverage,0,3,50,-,Evt_Deta_TaggedJetsAverage
+Evt_Deta_JetsAverage,0,3,50,-,Evt_Deta_JetsAverage
+N_Jets,3.5,10.5,7,-,N_Jets
+Reco_JABDT_ttbar_Jet_CSV_whaddau2,0,1,50,-,Reco_JABDT_ttbar_Jet_CSV_whaddau2
+Reco_ttbar_toplep_m,80,500,50,-,Reco_ttbar_toplep_m
+Reco_tHq_bestJABDToutput,-1,0.7,50,-,Reco_tHq_bestJABDToutput
+Reco_JABDT_tHq_abs_ljet_eta,-1.5,4.5,50,-,Reco_JABDT_tHq_abs_ljet_eta
+Reco_JABDT_tHq_Jet_CSV_hdau1,-1.5,1,50,-,Reco_JABDT_tHq_Jet_CSV_hdau1
+Reco_JABDT_tHW_Jet_CSV_btop,-1.5,1,50,-,Reco_JABDT_tHW_Jet_CSV_btop
+memDBp,0,1,50,-,MEM
