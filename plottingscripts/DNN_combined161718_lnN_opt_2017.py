@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'DNN_combined161718_lnN_optimized_fiducialRF/2018'
+    name = 'DNN_combined161718_lnN_optimized_fiducialRF/2017'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -39,7 +39,7 @@ def main(pyrootdir, opts):
     nSigSamples   = 8
 
     # dataera
-    dataera = "2018"
+    dataera = "2017"
 
     # Name of final discriminator, should not contain underscore
     discrName = 'finaldiscr'
@@ -50,16 +50,16 @@ def main(pyrootdir, opts):
     # define MEM discriminator variable
     memexp = "(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)"
     # configs
-    config          = "legacyAnalysis/samples_2018"
+    config          = "legacyAnalysis/samples_2017_newGT"
     variable_cfg    = "legacyAnalysis/additionalVariables"
     plot_cfg        = "legacyAnalysis/DNN_14-05-2020/combined161718_DNNs_optBinning"
     # plot_cfg        = "legacyAnalysis/DNN_14-05-2020/combined161718_DNNs"
-    syst_cfg        = "legacyAnalysis/systs_2018"
+    syst_cfg        = "legacyAnalysis/systs_2017"
     # syst_cfg        = "legacyAnalysis/no_systs"
     replace_cfg     = "legacyAnalysis/pdf_relic_names"
 
     sfCorrection = {}
-    sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2018_deepJet_combined.root"
+    sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2017_deepJet_combined.root"
     # variables for the correction
     sfCorrection["corrections"] = {}
     sfCorrection["corrections"]["HT_vs_NJet"] = ["Evt_HT_jets", "N_Jets"]
@@ -73,7 +73,7 @@ def main(pyrootdir, opts):
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
-    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2018_fiducial.csv"
+    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2017_fiducial.csv"
 
     # script options
     analysisOptions = {
@@ -106,8 +106,8 @@ def main(pyrootdir, opts):
         "skipMergeSysts":       opts.skipMergeSysts,
         "skipDatacards":        opts.skipDatacards}
 
-    plotJson = ""#pyrootdir+"/configs/legacyAnalysis/treeJson_2018.json"
-    # plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2018/",True]] 
+    plotJson = ""#pyrootdir+"/configs/legacyAnalysis/treeJson_2017.json"
+    # plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2017/",True]] 
     # memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
                   "checkpointFiles":  pyrootdir+"/configs/legacyAnalysis/DNN_14-05-2020/DNNInputData/"}

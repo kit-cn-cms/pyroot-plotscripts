@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'DNN_combined161718_lnN_optimized/2016'
+    name = 'DNN_combined161718_lnN_optimized_fiducialRF/2016'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -43,7 +43,7 @@ def main(pyrootdir, opts):
 
     # Name of final discriminator, should not contain underscore
     discrName = 'finaldiscr'
-    nom_histname_template = "$PROCESS__$CHANNEL"
+    nom_histname_template = "$CHANNEL__$PROCESS"
     syst_histname_template = nom_histname_template + "__$SYSTEMATIC"
     histname_separator = "__"
 
@@ -73,7 +73,7 @@ def main(pyrootdir, opts):
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
-    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2016_split.csv"
+    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2016_fiducial.csv"
 
     # script options
     analysisOptions = {
@@ -106,7 +106,7 @@ def main(pyrootdir, opts):
         "skipMergeSysts":       opts.skipMergeSysts,
         "skipDatacards":        opts.skipDatacards}
 
-    plotJson = ""#pyrootdir+"/configs/legacyAnalysis/treeJson_2017.json"
+    plotJson = ""#pyrootdir+"/configs/legacyAnalysis/treeJson_2016.json"
     # plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2017/",True]] 
     # memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
