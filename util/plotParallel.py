@@ -279,7 +279,7 @@ class plotParallel:
         all_labels = self.configData.getBinlabels()
         #DANGERZONE:    discriminator name is prepended. This has to be adjusted
         #               if corresponding config does something else 
-        if not discrName is None:
+        if not discrName is None and not discrName == "":
             all_labels = ["{}_{}".format(discrName, l) for l in all_labels]
         all_labels += self.configData.getVariablelabels()
         for label in all_labels:

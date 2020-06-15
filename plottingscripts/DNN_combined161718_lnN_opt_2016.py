@@ -42,7 +42,7 @@ def main(pyrootdir, opts):
     dataera = "2016"
 
     # Name of final discriminator, should not contain underscore
-    discrName = 'finaldiscr'
+    discrName = ''
     nom_histname_template = "$CHANNEL__$PROCESS"
     syst_histname_template = nom_histname_template + "__$SYSTEMATIC"
     histname_separator = "__"
