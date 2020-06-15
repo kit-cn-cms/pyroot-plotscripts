@@ -337,7 +337,7 @@ def plots_dnn(data, discrname):
 
     for interf in interfaces:
         l = interf.label
-        interf.histoname = discrname+"_"+l
+        # interf.histoname = discrname+"_"+l if not discrname == "" else l
         interf.histotitle = "final discriminator ({})".format(l)
         interf.selection = interf.category[0]
 
