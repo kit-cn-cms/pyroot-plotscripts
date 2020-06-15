@@ -421,12 +421,12 @@ class DNN:
         for var in sorted(list(variables.index)):
             # generate dictionary
             plotConfig = {
-                "histname":     "\"ljets_"+self.category+"_"+var+"\"", 
-                "plotname":     "\""+variables.loc[var, "displayname"]+"\"",
+                "histname":     "\"ljets_{}_{}\"".format(self.category, var), 
+                "plotname":     "\"{}\"".format(variables.loc[var, "displayname"]),
                 "nbins":        variables.loc[var, "numberofbins"],
                 "minval":       variables.loc[var, "minvalue"],
                 "maxval":       variables.loc[var, "maxvalue"],
-                "expression":   "\""+var+"\""}
+                "expression":   "\"{}\"".format(var)}
             
             # var[1]->var_1 renaming
             plotConfig["histname"] = plotConfig["histname"].replace("[","_").replace("]","")
@@ -857,7 +857,7 @@ def plots_dnn(data, discrname):
 
     for interf in interfaces:
         l = interf.label
-        interf.histoname = discrname+"_"+l
+        interf.histoname = discrname+"_"+l if not discrname == "" else l 
         interf.histotitle = "final discriminator ({})".format(l)
         interf.selection = interf.category[0]
 
