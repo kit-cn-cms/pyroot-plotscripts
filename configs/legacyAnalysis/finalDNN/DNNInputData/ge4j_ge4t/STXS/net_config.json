@@ -82,6 +82,6 @@
   "evalSelection": "1.",
   "categoryLabel": "\\geq 4 jets, \\geq 4 b-tags",
   "L2_Norm": 1e-05,
-  "JetTagCategory": "ge4j_ge4t",
+  "JetTagCategory": "ge4j_ge4t_STXS",
   "output_activation": "Softmax"
 }
