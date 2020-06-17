@@ -56,18 +56,18 @@ void helperFillTwoDimHisto(const std::vector< structHelpFillTwoDimHisto >& param
     }
 }
 
-inline bool check_if_every_element_smaller(auto* array, int number_of_elements, float value){
+inline bool check_if_every_element_smaller(auto* array, int number_of_elements, int max_number_of_elements, float value){
     if(number_of_elements == 0) return false;
-    for(int i=0;i<number_of_elements;i++){
+    for(int i=0;(i<number_of_elements) && (i<max_number_of_elements);i++){
         if(array[i]>value){
             return false;
         }
     }
     return true;
 }
-inline bool check_if_every_element_greater(auto* array, int number_of_elements, float value){
+inline bool check_if_every_element_greater(auto* array, int number_of_elements, int max_number_of_elements, float value){
     if(number_of_elements == 0) return false;
-    for(int i=0;i<number_of_elements;i++){
+    for(int i=0;(i<number_of_elements) && (i<max_number_of_elements);i++){
         if(array[i]<value){
             return false;
         }
