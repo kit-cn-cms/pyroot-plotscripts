@@ -27,8 +27,8 @@ path_ttbbDL = path+"/TTbb_4f_TTTo2l2nu_TuneCP5-Powheg-Openloops-Pythia8/*nominal
 
 
 
-VJetsPathS = path+'/DYJets*/*nominal*.root'+';'+ \
-             path+'/WJets*/*nominal*.root'
+VJetsPathS = path+'/DYJets*madgraphMLM*/*nominal*.root'+';'+ \
+             path+'/WJets*madgraphMLM*/*nominal*.root'
 
 ttVPathS = path+'/TTW*/*nominal*.root'+';'+ \
            path+'/TTZToLLNuNu*/*nominal*.root'+';'+ \
@@ -340,13 +340,13 @@ samples_tH = [
             THWpath,
             lumi+tH_SM_rwgt+sel_MET,
             'tHW_hbb',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+            samDict=sampleDict, readTrees=doReadTrees, typ = "bkg"),
 
     plotClasses.Sample('tHq (SM)',ROOT.kBlue+6,
             THQpath,
             lumi+tH_SM_rwgt+sel_MET,
             'tHq_hbb',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+            samDict=sampleDict, readTrees=doReadTrees, typ = "bkg"),
 
     # point 5
     #plotClasses.Sample('tHW (5)',ROOT.kBlue+3,
@@ -530,7 +530,7 @@ plottingsamples = [
 
     plotClasses.Sample("t#bar{t}+H", ROOT.kBlue+1, "", "",
         "ttH", addsamples = ["ttH_hbb", "ttH_hcc", "ttH_htt", "ttH_hgg", "ttH_hgluglu", "ttH_hww", "ttH_hzz", "ttH_hzg"],
-        samDict = sampleDict, readTrees = doReadTrees),
+        samDict = sampleDict, readTrees = doReadTrees, typ = "signal"),
 #    plotClasses.Sample("misc.", 18, "", "",
 #        "misc", addsamples ["ttbarZ", "ttbarW", "wjets", "zjets", "diboson"],
 #        samDict = sampleDict, readTrees = doReadTrees)
