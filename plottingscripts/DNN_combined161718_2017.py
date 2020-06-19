@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'DNN_combined161718_optimized/2017_Systs'
+    name = 'DNN_combined161718_optimized/2017_HDAMPtest_v3'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -50,11 +50,12 @@ def main(pyrootdir, opts):
     # define MEM discriminator variable
     memexp = "(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)"
     # configs
-    config          = "legacyAnalysis/samples_2017_newGT"
+    config          = "legacyAnalysis/samples_2017_HDAMPtest"
+    # config          = "legacyAnalysis/samples_2017_newGT"
     variable_cfg    = "legacyAnalysis/additionalVariables"
-    plot_cfg        = "legacyAnalysis/DNN_14-05-2020/combined161718_DNNs_optBinning"
+    plot_cfg        = "legacyAnalysis/DNN_14-05-2020/combined161718_DNNs_optBinning_HDAMPtest"
     # plot_cfg        = "legacyAnalysis/DNN_14-05-2020/combined161718_DNNs"
-    syst_cfg        = "legacyAnalysis/systs_2017"
+    syst_cfg        = "legacyAnalysis/systs_2017_hdampTest"
     # syst_cfg        = "legacyAnalysis/no_systs"
     replace_cfg     = "legacyAnalysis/pdf_relic_names"
 
@@ -80,10 +81,10 @@ def main(pyrootdir, opts):
         # general options
         "usePseudoData":        True,
         "testrun":              False,  # test run with less samples
-        "stopAfterCompile":     False,   # stop script after compiling
+        "stopAfterCompile":     True,   # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
-        "makeDataCards":        True,
+        "makeDataCards":        False,
         "makeInputDatacards":   False, # create datacards also for all defined plots
         "addData":              True,  # adding real data 
         "makePlots":            True,
@@ -281,10 +282,10 @@ def main(pyrootdir, opts):
             if analysis.usePseudoData:
                 print("adding data_obs histograms as pseudo data")
                 # pseudo data without ttbb 5FS
-                # pP.addData( samples = configData.samples[:-1], 
-                #             discrName = discrName)
-                pP.addData( samples = configData.samples[:-9], 
+                pP.addData( samples = configData.samples[:-1], 
                             discrName = discrName)
+                # pP.addData( samples = configData.samples[:-9], 
+                            # discrName = discrName)
                 #pP.addData(samples = configData.samples)
             else:
                 print("adding data_obs histograms as real data")
