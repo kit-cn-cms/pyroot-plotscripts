@@ -43,6 +43,7 @@ def getAddVars():
         #################a
         "N_GenTopLep",
         "GenHiggs_DecProd1_PDGID",
+        "memDBp"
 
 
 

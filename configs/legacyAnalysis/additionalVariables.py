@@ -41,6 +41,13 @@ def getAddVars():
         "N_GenTopLep",
         "GenHiggs_DecProd1_PDGID",
         "memDBp",
+        "mem_kNN",
+        # "memDBp:=(isHDAMPSample*mem_kNN)+((1-isHDAMPSample)*memDBp)",
+        "TRF_weight_4j3b",
+        "TRF_weight_4j4b",
+        "selection_3B:=(float(isHDAMPSample*N_BTagsM>=2)*TRF_weight_4j3b)+((1-isHDAMPSample)*N_BTagsM==3)",
+        "selection_3B_noWeight:=(isHDAMPSample*N_BTagsM>=2)+((1-isHDAMPSample)*N_BTagsM==3)",
+        "selection_4B:=(float(isHDAMPSample*N_BTagsM>=2)*TRF_weight_4j4b)+((1-isHDAMPSample)*N_BTagsM>=4)"
 
         ]
 
