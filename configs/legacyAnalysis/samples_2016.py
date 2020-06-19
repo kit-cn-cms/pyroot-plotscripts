@@ -24,8 +24,8 @@ path_ttbb = path+"/TTbb_4f_TTToSemiLeptonic_TuneCP5-Powheg-Openloops-Pythia8/*no
 path_ttbbSL = path+"/TTbb_4f_TTToSemiLeptonic_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"
 path_ttbbDL = path+"/TTbb_4f_TTTo2l2nu_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"
 
-VJetsPathS = path+'/DYJets*/*nominal*.root'+';'+ \
-             path+'/WJets*/*nominal*.root'
+VJetsPathS = path+'/DYJets*madgraph*/*nominal*.root'+';'+ \
+             path+'/WJets*madgraph*/*nominal*.root'
 
 ttVPathS = path+'/TTW*/*nominal*.root'+';'+ \
            path+'/TTZToLLNuNu*/*nominal*.root'+';'+ \
@@ -406,14 +406,14 @@ samples_minor_backgrounds = [
     #        samDict=sampleDict, readTrees=doReadTrees),
  
     plotClasses.Sample('Z+jets',ROOT.kGreen-3,
-            path+'/DYJets*/*nominal*.root',
+            path+'/DYJets*madgraph*/*nominal*.root',
             lumi+sel_MET,
             'zjets',
             vetoEventWeights = float(1./35.9),
             samDict=sampleDict, readTrees=doReadTrees),
  
     plotClasses.Sample('W+jets',ROOT.kGreen-7,
-            path+'/WJets*/*nominal*.root',
+            path+'/WJets*madgraph*/*nominal*.root',
             lumi+sel_MET,
             'wjets',
             vetoEventWeights = float(2./35.9),
@@ -443,11 +443,11 @@ samples_5FS =  [
 
 samples_ttnonbb = [
      # signal samples
-#     plotClasses.Sample('t#bar{t}+H',ROOT.kBlue+1,
-#             ttHpath,
-#             lumi+sel_MET,
-#             'ttH',
-#             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),     
+    plotClasses.Sample('t#bar{t}+H',ROOT.kBlue+1,
+            ttHpath,
+            lumi+sel_MET,
+            'ttH',
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),     
 
     # ttbar 5FS default background samples
     plotClasses.Sample('t#bar{t}+lf',ROOT.kRed-7,
@@ -463,8 +463,8 @@ samples_ttnonbb = [
             samDict=sampleDict, readTrees=doReadTrees),
     ]
 
-samples = samples_ttH_decay
-samples += samples_ttnonbb
+# samples = samples_ttH_decay
+samples = samples_ttnonbb
 samples += samples_tH
 samples += samples_ttbb_4FS
 samples += samples_minor_backgrounds
