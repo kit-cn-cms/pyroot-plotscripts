@@ -19,7 +19,11 @@
     
     //PLACEHOLDERFORCASTLINES
     
-    
+    if(isHDAMPSample){
+      memDBp = mem_kNN;
+    }
+
+
      if(Evt_ID!=Int_t(Evt_ID)){
        std::cout<<"PROBLEM "<<"Evt_ID "<<Evt_ID <<" "<<Int_t(Evt_ID)<<std::endl;
        std::cout << "recasting Long to Int " << std::endl;

@@ -120,13 +120,14 @@ class scriptWriter:
         print("#"*30)
         print("Using {} rootFiles for variable Setup".format(len(TreeFileMap["files"])))
         print("#"*30)
-
         # check for friend trees
         if self.pp.useFriendTrees:
             # sample file should have path BASE/SAMPLENAME/FILE.root
             # -> strip base
             for ftName in self.pp.friendTrees:
                 for i,thistree in enumerate(TreeFileMap["files"]): 
+                    if ftName == "TRF" and not "hdamp" in thistree:
+                        continue
                     sampledir, treename = os.path.split(thistree)
                     basedir, samplename = os.path.split(sampledir)
                     friendtree = "/".join([self.pp.friendTrees[ftName], samplename, treename])
@@ -135,7 +136,6 @@ class scriptWriter:
                         exit("cannot use file for variable setup because required friend tree does not exist.")
                     TreeFileMap["trees"][i].AddFriend("{}=MVATree".format(ftName), friendtree)
                     break # one Friend File should be enough, since a friend variable should be avaiable in all friends
-        
 
         # initialize variables with variablebox
         self.initVariables(TreeFileMap["trees"])
@@ -473,7 +473,7 @@ class scriptWriter:
 
             # figure out, if sample is syst varied one
             maxEvents = self.pp.MaxEvts_nom
-            if "CMS_scale" in sample.name or "CMS_res" in sample.name:
+            if "CMS_scale" in sample.name or "CMS_res" in sample.name or "HDAMP" in sample.name:
                 if self.pp.MaxEvts_systs != self.pp.Neventsdefault:
                     maxEvents = self.pp.MaxEvts_systs
 

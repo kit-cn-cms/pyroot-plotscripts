@@ -330,12 +330,13 @@ class DNN:
             return string
 
         string = """
-        if( {selection} ) {{
+        if( ({selection} && !isHDAMPSample) || (isHDAMPSample && {selection_}) ) {{
             // initialize tensors 
             std::vector<std::pair<std::string, tensorflow::Tensor>> feed_dict;
             std::vector<tensorflow::Tensor> outputTensors;
 
-            // loading data\n""".format(selection = self.selection.replace(" and ","&&")+self.evalSelection)
+            // loading data\n""".format(selection = self.selection.replace(" and ","&&")+self.evalSelection,
+                                        selection_ = self.selection.replace(" and ","&&").replace("N_BTagsM >= 4","N_BTagsM>=2").replace("N_BTagsM == 3","N_BTagsM>=2")+self.evalSelection)
 
         # fill vector
         for i, var in enumerate(self.variables):

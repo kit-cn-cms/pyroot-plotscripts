@@ -191,7 +191,7 @@ def haddSplitter(input, outName = "", subName = "",  nHistosRemainSame = True, s
         print("#"*50 + "\n")
 
     # boundaries
-    filesPerHadd = 50
+    filesPerHadd = 30
     nHistosBefore = 0
     nHistosAfter = 0
 
