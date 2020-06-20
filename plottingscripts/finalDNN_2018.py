@@ -42,7 +42,7 @@ def main(pyrootdir, opts):
     dataera = "2018"
 
     # Name of final discriminator, should not contain underscore
-    discrName = 'finaldiscr'
+    discrName = ''
     nom_histname_template = "$CHANNEL__$PROCESS"
     syst_histname_template = nom_histname_template + "__$SYSTEMATIC"
     histname_separator = "__"
@@ -52,7 +52,7 @@ def main(pyrootdir, opts):
     # configs
     config          = "legacyAnalysis/samples_2018"
     variable_cfg    = "legacyAnalysis/additionalVariables"
-    plot_cfg        = "legacyAnalysis/finalDNN/finalDNN_optimized_2018"
+    plot_cfg        = "legacyAnalysis/finalDNN/finalDNN_optimized_classifier_2018"
     # plot_cfg        = "legacyAnalysis/DNN_14-05-2020/combined161718_DNNs"
     syst_cfg        = "legacyAnalysis/systs_2018"
     # syst_cfg        = "legacyAnalysis/no_systs"
