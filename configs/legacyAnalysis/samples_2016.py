@@ -441,11 +441,11 @@ samples_5FS =  [
 
 samples_ttnonbb = [
      # signal samples
-    plotClasses.Sample('t#bar{t}+H',ROOT.kBlue+1,
-            ttHpath,
-            lumi+sel_MET,
-            'ttH',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),     
+    #plotClasses.Sample('t#bar{t}+H',ROOT.kBlue+1,
+    #        ttHpath,
+    #        lumi+sel_MET,
+    #        'ttH',
+    #        samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),     
 
     # ttbar 5FS default background samples
     plotClasses.Sample('t#bar{t}+lf',ROOT.kRed-7,
@@ -461,8 +461,8 @@ samples_ttnonbb = [
             samDict=sampleDict, readTrees=doReadTrees),
     ]
 
-# samples = samples_ttH_decay
-samples = samples_ttnonbb
+samples = samples_ttH_decay
+samples += samples_ttnonbb
 samples += samples_tH
 samples += samples_ttbb_4FS
 samples += samples_minor_backgrounds
