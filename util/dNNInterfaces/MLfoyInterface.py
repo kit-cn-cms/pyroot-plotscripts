@@ -642,7 +642,7 @@ class DNN:
                     bin_edges = []
                 
                 if not opts.binning_rule is None:
-                    bin_edges = [bin_edges[i] for i in rules[node]]
+                    bin_edges = [bin_edges[i2] for i2 in rules[node]]
                 
             else:
                 minval = self.node_mins[i]

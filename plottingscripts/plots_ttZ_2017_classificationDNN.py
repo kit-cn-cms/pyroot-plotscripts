@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'analysisDNN/v5_all_jtr_opt'
+    name = 'dnnA/chi2_allVars'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -50,9 +50,9 @@ def main(pyrootdir, opts):
     # define MEM discriminator variable
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
     # configs
-    config          = "legacyTTZ/samples"
+    config          = "ttZ17/samples"
     variable_cfg    = "legacyTTZ/additionalVariables"
-    plot_cfg        = "legacyTTZ/dnn_plots_v2_opt_0p1"
+    plot_cfg        = "ttZ17/"+name
     syst_cfg        = "legacyTTZ/systs_v1"
     replace_cfg     = None
 
@@ -104,7 +104,7 @@ def main(pyrootdir, opts):
     plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2017/",True]] 
     memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                   "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTZ/dnnSets/v3_reducedVars/"}
+                   "checkpointFiles":  "/nfs/dust/cms/user/thsu/runII_ttZ/dnnSets/"+name+"/"}
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
@@ -307,8 +307,8 @@ def main(pyrootdir, opts):
                 datacardmaker       = datacardmaker,
                 signalTag           = analysis.signalProcess,
                 skipDatacards       = analysis.skipDatacards,
-                nominal_key         = nom_histname_template,
-                syst_key            = syst_histname_template
+                nominal_key         = "$PROCESS__finaldiscr_$CHANNEL",
+                syst_key            = "$PROCESS__finaldiscr_$CHANNEL__$SYSTEMATIC$"
                 )
     
     if analysis.makePlots:
