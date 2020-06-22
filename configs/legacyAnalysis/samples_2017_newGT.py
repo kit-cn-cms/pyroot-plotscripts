@@ -18,8 +18,8 @@ ttbarPathS = path+'/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/*nom
              path+'/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'+\
              path+'/TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8_new_pmx/*nominal*.root'
 
-VJetsPathS = path+'/DYJets*/*nominal*.root'+';'+ \
-             path+'/WJets*/*nominal*.root'
+VJetsPathS = path+'/DYJets*madgraph*/*nominal*.root'+';'+ \
+             path+'/WJets*madgraph*/*nominal*.root'
 
 
 path_ttbb = path+"/TTbb_Powheg_Openloops_new_pmx/*nominal*.root"+';'+ \
@@ -391,13 +391,13 @@ samples_minor_backgrounds = [
 
  
     plotClasses.Sample('Z+jets',ROOT.kGreen-3,
-           path+'/DYJets*/*nominal*.root',
+           path+'/DYJets*madgraph*/*nominal*.root',
            lumi+sel_MET,
            'zjets',
            samDict=sampleDict, readTrees=doReadTrees),
  
     plotClasses.Sample('W+jets',ROOT.kGreen-7,
-           path+'/WJets*/*nominal*.root',
+           path+'/WJets*madgraph*/*nominal*.root',
            lumi+sel_MET,
            'wjets',
            samDict=sampleDict, readTrees=doReadTrees), 
