@@ -129,7 +129,7 @@ def plots_ge4j_3t_STXS(data = None):
 
 def plots_dnn(data, discrname):
 
-    ndefaultbins = 50
+    ndefaultbins = 15
     interfaces = []
 
 
@@ -390,7 +390,7 @@ def plots_dnn(data, discrname):
 
     for interf in interfaces:
         l = interf.label
-        interf.histoname = discrname+"_"+l
+        interf.histoname = discrname+"_"+l if not discrname == "" else l
         interf.histotitle = "final discriminator ({})".format(l)
         interf.selection = interf.category[0]
 
