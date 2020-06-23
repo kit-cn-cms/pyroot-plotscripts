@@ -92,7 +92,7 @@ def doRebinning(rootfile, histolist, threshold):
 
 def getOptimizedBinEdges(label, opts, channel = None):
     if channel is None:
-        channel = opts.discrname+"_"+label
+        channel = opts.discrname+"_"+label if not opts.discrname == "" else label
 
     # open rootfile
     rfile = ROOT.TFile.Open(opts.histogram_file)
