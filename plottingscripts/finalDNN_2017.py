@@ -52,7 +52,7 @@ def main(pyrootdir, opts):
     # configs
     config          = "legacyAnalysis/samples_2017_newGT"
     variable_cfg    = "legacyAnalysis/additionalVariables"
-    plot_cfg        = "legacyAnalysis/finalDNN/finalDNN_optimized_2017"
+    plot_cfg        = "legacyAnalysis/finalDNN/finalDNN_optimized_classifier_2017"
     # plot_cfg        = "legacyAnalysis/DNN_14-05-2020/combined161718_DNNs"
     syst_cfg        = "legacyAnalysis/systs_2017"
     # syst_cfg        = "legacyAnalysis/no_systs"
@@ -283,7 +283,7 @@ def main(pyrootdir, opts):
                 # pseudo data without ttbb 5FS
                 # pP.addData( samples = configData.samples[:-1], 
                 #             discrName = discrName)
-                pP.addData( samples = configData.samples[:-9], 
+                pP.addData( samples = configData.samples[:-nSigSamples], 
                             discrName = discrName)
                 #pP.addData(samples = configData.samples)
             else:
@@ -317,8 +317,10 @@ def main(pyrootdir, opts):
                 datacardmaker       = datacardmaker,
                 signalTag           = analysis.signalProcess,
                 skipDatacards       = analysis.skipDatacards,
-                nominal_key         = nom_histname_template.replace("__$CHANNEL","__finaldiscr_$CHANNEL"),
-                syst_key            = syst_histname_template.replace("__$CHANNEL","__finaldiscr_$CHANNEL")
+                # nominal_key         = nom_histname_template.replace("__$CHANNEL","__finaldiscr_$CHANNEL"),
+                # syst_key            = syst_histname_template.replace("__$CHANNEL","__finaldiscr_$CHANNEL")
+                nominal_key         = nom_histname_template,
+                syst_key            = syst_histname_template
                 )
     
     if analysis.makePlots:
