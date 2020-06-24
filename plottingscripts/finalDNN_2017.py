@@ -73,7 +73,7 @@ def main(pyrootdir, opts):
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
-    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2017_fiducial.csv"
+    rateFactorsFile = pyrootdir + "/data/rateFactors/ratefactors_2017_with_correction.csv"
 
     # script options
     analysisOptions = {
