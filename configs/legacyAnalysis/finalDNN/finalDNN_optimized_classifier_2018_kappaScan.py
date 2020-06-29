@@ -162,7 +162,6 @@ def plots_dnn(data, discrname):
     interf_ljets_ge4j_ge4t_classifier_ttmb_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_classifier==1))","ljets_ge4j_ge4t_classifier_ttmb_node","")
     interf_ljets_ge4j_ge4t_classifier_ttmb_node.category_label = "\geq 4 jets, \geq 4 b-tags"
     interf_ljets_ge4j_ge4t_classifier_ttmb_node.bin_edges = [ 
-				0.1793,
 				0.2187,
 				0.258,
 				0.2973,
@@ -173,6 +172,7 @@ def plots_dnn(data, discrname):
 				0.494,
 				0.5333,
 				0.5727,
+				0.612,
 				0.73
 				]
     interf_ljets_ge4j_ge4t_classifier_ttmb_node.nhistobins = ndefaultbins
@@ -193,6 +193,7 @@ def plots_dnn(data, discrname):
 				# 0.3107,
 				# 0.332,
 				# 0.3533,
+				# 0.3747,
 				0.46
 				]
     interf_ljets_ge4j_ge4t_classifier_tt2b_node.nhistobins = ndefaultbins
@@ -211,6 +212,7 @@ def plots_dnn(data, discrname):
 				# 0.3133,
 				# 0.348,
 				# 0.3827,
+				# 0.4173,
 				0.66
 				]
     interf_ljets_ge4j_ge4t_classifier_ttcc_node.nhistobins = ndefaultbins
@@ -234,6 +236,7 @@ def plots_dnn(data, discrname):
 				# 0.4933,
 				# 0.5287,
 				# 0.564,
+				# 0.5993,
 				0.67
 				]
     interf_ljets_ge4j_ge4t_classifier_ttlf_node.nhistobins = ndefaultbins
@@ -274,12 +277,14 @@ def plots_dnn(data, discrname):
 				0.4267,
 				0.484,
 				0.5413,
-				0.656,
+				0.5987,
+				0.7133,
 				1.0
 				]
     interf_ljets_ge4j_ge4t_classifier_tHW_node.nhistobins = ndefaultbins
     interfaces.append(interf_ljets_ge4j_ge4t_classifier_tHW_node)
-   
+    
+
     # plots for ge4j_3t_classifier
 
     interf_ljets_ge4j_3t_classifier_ttH_node = vhi.variableHistoInterface(variable_name  = "DNNOutput_ge4j_3t_classifier_node_ttH",
@@ -363,7 +368,6 @@ def plots_dnn(data, discrname):
 				# 0.446,
 				# 0.48,
 				# 0.514,
-				# 0.548,
 				0.65
 				]
     interf_ljets_ge4j_3t_classifier_ttcc_node.nhistobins = ndefaultbins
@@ -442,7 +446,7 @@ def plots_dnn(data, discrname):
 				]
     interf_ljets_ge4j_3t_classifier_tHW_node.nhistobins = ndefaultbins
     interfaces.append(interf_ljets_ge4j_3t_classifier_tHW_node)
-
+    
 
     for interf in interfaces:
         l = interf.label
@@ -450,233 +454,8 @@ def plots_dnn(data, discrname):
         interf.histotitle = "final discriminator ({})".format(l)
         interf.selection = interf.category[0]
 
-    DNNPlots = init_plots(interfaces = interfaces, data = data)
+    DNNPlots = init_plots_KappaScan(interfaces = interfaces, data = data, discrname = discrname)
     return DNNPlots
-
-
-def plots_STXS(data, discrname):
-
-    ndefaultbins = 15
-    interfaces = []
-
-     # plots for ge4j_3t_STXS
-
-    interf_ljets_ge4j_3t_STXS_ttHbb_STXS_0_node = vhi.variableHistoInterface(variable_name  = "DNNOutput_ge4j_3t_STXS_node_ttHbb_STXS_0",
-                                            label          = "ljets_ge4j_3t_STXS_ttHbb_STXS_0_node",
-                                            selection      = "((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_STXS==0)&&(DNNPredictedClass_ge4j_3t_classifier==0))")
-    interf_ljets_ge4j_3t_STXS_ttHbb_STXS_0_node.category = ("((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_STXS==0)&&(DNNPredictedClass_ge4j_3t_classifier==0))","ljets_ge4j_3t_STXS_ttHbb_STXS_0_node","")
-    interf_ljets_ge4j_3t_STXS_ttHbb_STXS_0_node.category_label = "\geq 4 jets, 3 b-tags"
-    interf_ljets_ge4j_3t_STXS_ttHbb_STXS_0_node.bin_edges = [ 
-				0.252,
-				0.304,
-				0.356,
-				0.408,
-				0.46,
-				0.512,
-				0.564,
-				0.616,
-				0.668,
-				0.72,
-				0.772,
-				0.824,
-				0.876,
-				0.98
-				]
-    interf_ljets_ge4j_3t_STXS_ttHbb_STXS_0_node.nhistobins = ndefaultbins
-    interfaces.append(interf_ljets_ge4j_3t_STXS_ttHbb_STXS_0_node)
-    
-    interf_ljets_ge4j_3t_STXS_ttHbb_STXS_1_node = vhi.variableHistoInterface(variable_name  = "DNNOutput_ge4j_3t_STXS_node_ttHbb_STXS_1",
-                                            label          = "ljets_ge4j_3t_STXS_ttHbb_STXS_1_node",
-                                            selection      = "((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_STXS==1)&&(DNNPredictedClass_ge4j_3t_classifier==0))")
-    interf_ljets_ge4j_3t_STXS_ttHbb_STXS_1_node.category = ("((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_STXS==1)&&(DNNPredictedClass_ge4j_3t_classifier==0))","ljets_ge4j_3t_STXS_ttHbb_STXS_1_node","")
-    interf_ljets_ge4j_3t_STXS_ttHbb_STXS_1_node.category_label = "\geq 4 jets, 3 b-tags"
-    interf_ljets_ge4j_3t_STXS_ttHbb_STXS_1_node.bin_edges = [ 
-				0.234,
-				0.268,
-				0.302,
-				0.336,
-				0.37,
-				0.404,
-				0.438,
-				0.472,
-				0.506,
-				0.54,
-				0.574,
-				0.608,
-				0.642,
-				0.71
-				]
-    interf_ljets_ge4j_3t_STXS_ttHbb_STXS_1_node.nhistobins = ndefaultbins
-    interfaces.append(interf_ljets_ge4j_3t_STXS_ttHbb_STXS_1_node)
-    
-    interf_ljets_ge4j_3t_STXS_ttHbb_STXS_2_node = vhi.variableHistoInterface(variable_name  = "DNNOutput_ge4j_3t_STXS_node_ttHbb_STXS_2",
-                                            label          = "ljets_ge4j_3t_STXS_ttHbb_STXS_2_node",
-                                            selection      = "((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_STXS==2)&&(DNNPredictedClass_ge4j_3t_classifier==0))")
-    interf_ljets_ge4j_3t_STXS_ttHbb_STXS_2_node.category = ("((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_STXS==2)&&(DNNPredictedClass_ge4j_3t_classifier==0))","ljets_ge4j_3t_STXS_ttHbb_STXS_2_node","")
-    interf_ljets_ge4j_3t_STXS_ttHbb_STXS_2_node.category_label = "\geq 4 jets, 3 b-tags"
-    interf_ljets_ge4j_3t_STXS_ttHbb_STXS_2_node.bin_edges = [ 
-				0.2453,
-				0.2907,
-				0.336,
-				0.3813,
-				0.4267,
-				0.472,
-				0.5173,
-				0.5627,
-				0.608,
-				0.6533,
-				0.6987,
-				0.744,
-				0.7893,
-				0.88
-				]
-    interf_ljets_ge4j_3t_STXS_ttHbb_STXS_2_node.nhistobins = ndefaultbins
-    interfaces.append(interf_ljets_ge4j_3t_STXS_ttHbb_STXS_2_node)
-    
-    interf_ljets_ge4j_3t_STXS_ttHbb_STXS_3_node = vhi.variableHistoInterface(variable_name  = "DNNOutput_ge4j_3t_STXS_node_ttHbb_STXS_3",
-                                            label          = "ljets_ge4j_3t_STXS_ttHbb_STXS_3_node",
-                                            selection      = "((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_STXS==3)&&(DNNPredictedClass_ge4j_3t_classifier==0))")
-    interf_ljets_ge4j_3t_STXS_ttHbb_STXS_3_node.category = ("((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_STXS==3)&&(DNNPredictedClass_ge4j_3t_classifier==0))","ljets_ge4j_3t_STXS_ttHbb_STXS_3_node","")
-    interf_ljets_ge4j_3t_STXS_ttHbb_STXS_3_node.category_label = "\geq 4 jets, 3 b-tags"
-    interf_ljets_ge4j_3t_STXS_ttHbb_STXS_3_node.bin_edges = [ 
-				0.2,
-				0.2507,
-				0.3013,
-				0.352,
-				0.4027,
-				0.4533,
-				0.504,
-				0.5547,
-				0.6053,
-				0.656,
-				0.7067,
-				0.7573,
-				0.808,
-				0.8587,
-				0.9093,
-				0.96
-				]
-    interf_ljets_ge4j_3t_STXS_ttHbb_STXS_3_node.nhistobins = ndefaultbins
-    interfaces.append(interf_ljets_ge4j_3t_STXS_ttHbb_STXS_3_node)
-    
-    interf_ljets_ge4j_3t_STXS_ttHbb_STXS_4_node = vhi.variableHistoInterface(variable_name  = "DNNOutput_ge4j_3t_STXS_node_ttHbb_STXS_4",
-                                            label          = "ljets_ge4j_3t_STXS_ttHbb_STXS_4_node",
-                                            selection      = "((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_STXS==4)&&(DNNPredictedClass_ge4j_3t_classifier==0))")
-    interf_ljets_ge4j_3t_STXS_ttHbb_STXS_4_node.category = ("((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_STXS==4)&&(DNNPredictedClass_ge4j_3t_classifier==0))","ljets_ge4j_3t_STXS_ttHbb_STXS_4_node","")
-    interf_ljets_ge4j_3t_STXS_ttHbb_STXS_4_node.category_label = "\geq 4 jets, 3 b-tags"
-    interf_ljets_ge4j_3t_STXS_ttHbb_STXS_4_node.bin_edges = [ 
-				0.2527,
-				0.3053,
-				0.358,
-				0.4107,
-				0.4633,
-				0.516,
-				0.5687,
-				0.6213,
-				0.674,
-				0.7267,
-				0.7793,
-				0.832,
-				0.8847,
-				0.9373,
-				0.99
-				]
-    interf_ljets_ge4j_3t_STXS_ttHbb_STXS_4_node.nhistobins = ndefaultbins
-    interfaces.append(interf_ljets_ge4j_3t_STXS_ttHbb_STXS_4_node)
-
-
-   # plots for ge4j_ge4t_STXS
-
-    interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_0_node = vhi.variableHistoInterface(variable_name  = "DNNOutput_ge4j_ge4t_STXS_node_ttHbb_STXS_0",
-                                            label          = "ljets_ge4j_ge4t_STXS_ttHbb_STXS_0_node",
-                                            selection      = "((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_STXS==0)&&(DNNPredictedClass_ge4j_ge4t_classifier==0))")
-    interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_0_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_STXS==0)&&(DNNPredictedClass_ge4j_ge4t_classifier==0))","ljets_ge4j_ge4t_STXS_ttHbb_STXS_0_node","")
-    interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_0_node.category_label = "\geq 4 jets, \geq 4 b-tags"
-    interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_0_node.bin_edges = [ 
-				0.3013,
-				0.4027,
-				0.4533,
-				0.504,
-				0.5547,
-				0.6053,
-				0.656,
-				0.7573,
-				0.96
-				]
-    interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_0_node.nhistobins = ndefaultbins
-    interfaces.append(interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_0_node)
-    
-    interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_1_node = vhi.variableHistoInterface(variable_name  = "DNNOutput_ge4j_ge4t_STXS_node_ttHbb_STXS_1",
-                                            label          = "ljets_ge4j_ge4t_STXS_ttHbb_STXS_1_node",
-                                            selection      = "((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_STXS==1)&&(DNNPredictedClass_ge4j_ge4t_classifier==0))")
-    interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_1_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_STXS==1)&&(DNNPredictedClass_ge4j_ge4t_classifier==0))","ljets_ge4j_ge4t_STXS_ttHbb_STXS_1_node","")
-    interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_1_node.category_label = "\geq 4 jets, \geq 4 b-tags"
-    interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_1_node.bin_edges = [ 
-				0.352,
-				0.4027,
-				0.428,
-				0.4533,
-				0.4787,
-				0.58
-				]
-    interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_1_node.nhistobins = ndefaultbins
-    interfaces.append(interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_1_node)
-    
-    interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_2_node = vhi.variableHistoInterface(variable_name  = "DNNOutput_ge4j_ge4t_STXS_node_ttHbb_STXS_2",
-                                            label          = "ljets_ge4j_ge4t_STXS_ttHbb_STXS_2_node",
-                                            selection      = "((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_STXS==2)&&(DNNPredictedClass_ge4j_ge4t_classifier==0))")
-    interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_2_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_STXS==2)&&(DNNPredictedClass_ge4j_ge4t_classifier==0))","ljets_ge4j_ge4t_STXS_ttHbb_STXS_2_node","")
-    interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_2_node.category_label = "\geq 4 jets, \geq 4 b-tags"
-    interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_2_node.bin_edges = [ 
-				0.31,
-				0.3833,
-				0.42,
-				0.4567,
-				0.4933,
-				0.53,
-				0.6033,
-				0.75
-				]
-    interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_2_node.nhistobins = ndefaultbins
-    interfaces.append(interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_2_node)
-    
-    interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_3_node = vhi.variableHistoInterface(variable_name  = "DNNOutput_ge4j_ge4t_STXS_node_ttHbb_STXS_3",
-                                            label          = "ljets_ge4j_ge4t_STXS_ttHbb_STXS_3_node",
-                                            selection      = "((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_STXS==3)&&(DNNPredictedClass_ge4j_ge4t_classifier==0))")
-    interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_3_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_STXS==3)&&(DNNPredictedClass_ge4j_ge4t_classifier==0))","ljets_ge4j_ge4t_STXS_ttHbb_STXS_3_node","")
-    interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_3_node.category_label = "\geq 4 jets, \geq 4 b-tags"
-    interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_3_node.bin_edges = [ 
-				0.246,
-				0.43,
-				0.522,
-				0.614,
-				0.706,
-				0.89
-				]
-    interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_3_node.nhistobins = ndefaultbins
-    interfaces.append(interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_3_node)
-    
-    interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_4_node = vhi.variableHistoInterface(variable_name  = "DNNOutput_ge4j_ge4t_STXS_node_ttHbb_STXS_4",
-                                            label          = "ljets_ge4j_ge4t_STXS_ttHbb_STXS_4_node",
-                                            selection      = "((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_STXS==4)&&(DNNPredictedClass_ge4j_ge4t_classifier==0))")
-    interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_4_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_STXS==4)&&(DNNPredictedClass_ge4j_ge4t_classifier==0))","ljets_ge4j_ge4t_STXS_ttHbb_STXS_4_node","")
-    interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_4_node.category_label = "\geq 4 jets, \geq 4 b-tags"
-    interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_4_node.bin_edges = [ 
-				0.68,
-				1.0
-				]
-    interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_4_node.nhistobins = ndefaultbins
-    interfaces.append(interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_4_node)
-
-    for interf in interfaces:
-        l = interf.label
-        interf.histoname = discrname+"_"+l if not discrname == "" else l 
-        interf.histotitle = "final discriminator ({})".format(l)
-        interf.selection = interf.category[0]
-
-    DNNPlots = init_plots(interfaces = interfaces, data = data)
-    return DNNPlots
-
 
 def getDiscriminatorPlots(data = None, discrname = ''):
     discriminatorPlots = []
@@ -685,9 +464,50 @@ def getDiscriminatorPlots(data = None, discrname = ''):
     # discriminatorPlots += plots_ge4j_3t_classifier(data)
     # discriminatorPlots += plots_ge4j_3t_STXS(data)
     discriminatorPlots += plots_dnn(data, discrname)
-    discriminatorPlots += plots_STXS(data, discrname)
 
     return discriminatorPlots
+
+def init_plots_KappaScan(interfaces, data = None, discrname = ''):
+    plots = [] #init list of plotClasses objects to return
+    for interf in interfaces:
+        # check if initialization uses bin edges or min/max vals
+        # if 'subdict' contains the keyword 'bin_edges', an array
+        # of type float is created from the corresponding python list.
+        # Else, the min/maxvals are used 
+        points = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,18,20,21,23,24,26,27,29,30,32,34,35,37,47,49,50]
+        # 50..69 -> CP SCAN
+        for i in points:
+            if i !=0:
+                weight = "*(Weight_rwgt_{}/Weight_GEN_nom)".format(i)
+            else:
+                weight = "*(1)"
+            histoname = "P"+str(i)+'_'+discrname+"_"+interf.label
+            histotitle = interf.histotitle
+            if not interf.bin_edges is None:
+                bins  = array("f", interf.bin_edges)
+                nbins = len(bins)-1 # last bin edge in array is overflow bin => subtract for nbins
+                interf.nhistobins = nbins # update number of bins
+                plots.append(
+                    plotClasses.Plot(
+                        histo = ROOT.TH1F(histoname,histotitle,nbins,bins),
+                        variable = interf.varname,
+                        selection = interf.selection + weight,
+                        label= interf.category_label))
+            elif not (interf.minxval is None or interf.maxxval is None):
+                nbins = interf.nhistobins
+                xmax  = interf.maxxval
+                xmin  = interf.minxval
+                plots.append(
+                    plotClasses.Plot(
+                        histo = ROOT.TH1F(histoname,histotitle,nbins,xmin, xmax),
+                        variable = interf.varname,
+                        selection = interf.selection + weight,
+                        label = interf.category_label))
+            else:
+                print("FATAL ERROR: Unable to load bin edges or min/max values for histogram!")
+                print(interf)
+                raise ValueError
+    return plots
 
 
 def init_plots(interfaces, data = None):
