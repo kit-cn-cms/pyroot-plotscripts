@@ -211,8 +211,8 @@ def plots_dnn(data, discrname):
 
     interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_0_node = vhi.variableHistoInterface(variable_name  = "DNNOutput_ge4j_ge4t_STXS_node_ttHbb_STXS_0",
                                             label          = "ljets_ge4j_ge4t_STXS_ttHbb_STXS_0_node",
-                                            selection      = "((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_STXS==0))")
-    interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_0_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_STXS==0))","ljets_ge4j_ge4t_STXS_ttHbb_STXS_0_node","")
+                                            selection      = "((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_STXS==0)&&(DNNPredictedClass_ge4j_ge4t_classifier==0))")
+    interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_0_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_STXS==0)&&(DNNPredictedClass_ge4j_ge4t_classifier==0))","ljets_ge4j_ge4t_STXS_ttHbb_STXS_0_node","")
     interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_0_node.category_label = "\geq 4 jets, \geq 4 b-tags"
     interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_0_node.minxval = 0.2
     interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_0_node.maxxval = 0.96
@@ -221,8 +221,8 @@ def plots_dnn(data, discrname):
     
     interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_1_node = vhi.variableHistoInterface(variable_name  = "DNNOutput_ge4j_ge4t_STXS_node_ttHbb_STXS_1",
                                             label          = "ljets_ge4j_ge4t_STXS_ttHbb_STXS_1_node",
-                                            selection      = "((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_STXS==1))")
-    interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_1_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_STXS==1))","ljets_ge4j_ge4t_STXS_ttHbb_STXS_1_node","")
+                                            selection      = "((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_STXS==1)&&(DNNPredictedClass_ge4j_ge4t_classifier==0))")
+    interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_1_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_STXS==1)&&(DNNPredictedClass_ge4j_ge4t_classifier==0))","ljets_ge4j_ge4t_STXS_ttHbb_STXS_1_node","")
     interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_1_node.category_label = "\geq 4 jets, \geq 4 b-tags"
     interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_1_node.minxval = 0.2
     interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_1_node.maxxval = 0.58
@@ -231,8 +231,8 @@ def plots_dnn(data, discrname):
     
     interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_2_node = vhi.variableHistoInterface(variable_name  = "DNNOutput_ge4j_ge4t_STXS_node_ttHbb_STXS_2",
                                             label          = "ljets_ge4j_ge4t_STXS_ttHbb_STXS_2_node",
-                                            selection      = "((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_STXS==2))")
-    interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_2_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_STXS==2))","ljets_ge4j_ge4t_STXS_ttHbb_STXS_2_node","")
+                                            selection      = "((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_STXS==2)&&(DNNPredictedClass_ge4j_ge4t_classifier==0))")
+    interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_2_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_STXS==2)&&(DNNPredictedClass_ge4j_ge4t_classifier==0))","ljets_ge4j_ge4t_STXS_ttHbb_STXS_2_node","")
     interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_2_node.category_label = "\geq 4 jets, \geq 4 b-tags"
     interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_2_node.minxval = 0.2
     interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_2_node.maxxval = 0.75
@@ -241,8 +241,8 @@ def plots_dnn(data, discrname):
     
     interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_3_node = vhi.variableHistoInterface(variable_name  = "DNNOutput_ge4j_ge4t_STXS_node_ttHbb_STXS_3",
                                             label          = "ljets_ge4j_ge4t_STXS_ttHbb_STXS_3_node",
-                                            selection      = "((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_STXS==3))")
-    interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_3_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_STXS==3))","ljets_ge4j_ge4t_STXS_ttHbb_STXS_3_node","")
+                                            selection      = "((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_STXS==3)&&(DNNPredictedClass_ge4j_ge4t_classifier==0))")
+    interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_3_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_STXS==3)&&(DNNPredictedClass_ge4j_ge4t_classifier==0))","ljets_ge4j_ge4t_STXS_ttHbb_STXS_3_node","")
     interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_3_node.category_label = "\geq 4 jets, \geq 4 b-tags"
     interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_3_node.minxval = 0.2
     interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_3_node.maxxval = 0.89
@@ -251,8 +251,8 @@ def plots_dnn(data, discrname):
     
     interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_4_node = vhi.variableHistoInterface(variable_name  = "DNNOutput_ge4j_ge4t_STXS_node_ttHbb_STXS_4",
                                             label          = "ljets_ge4j_ge4t_STXS_ttHbb_STXS_4_node",
-                                            selection      = "((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_STXS==4))")
-    interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_4_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_STXS==4))","ljets_ge4j_ge4t_STXS_ttHbb_STXS_4_node","")
+                                            selection      = "((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_STXS==4)&&(DNNPredictedClass_ge4j_ge4t_classifier==0))")
+    interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_4_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_STXS==4)&&(DNNPredictedClass_ge4j_ge4t_classifier==0))","ljets_ge4j_ge4t_STXS_ttHbb_STXS_4_node","")
     interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_4_node.category_label = "\geq 4 jets, \geq 4 b-tags"
     interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_4_node.minxval = 0.2
     interf_ljets_ge4j_ge4t_STXS_ttHbb_STXS_4_node.maxxval = 1.0
@@ -339,8 +339,8 @@ def plots_dnn(data, discrname):
 
     interf_ljets_ge4j_3t_STXS_ttHbb_STXS_0_node = vhi.variableHistoInterface(variable_name  = "DNNOutput_ge4j_3t_STXS_node_ttHbb_STXS_0",
                                             label          = "ljets_ge4j_3t_STXS_ttHbb_STXS_0_node",
-                                            selection      = "((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_STXS==0))")
-    interf_ljets_ge4j_3t_STXS_ttHbb_STXS_0_node.category = ("((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_STXS==0))","ljets_ge4j_3t_STXS_ttHbb_STXS_0_node","")
+                                            selection      = "((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_STXS==0)&&(DNNPredictedClass_ge4j_3t_classifier==0))")
+    interf_ljets_ge4j_3t_STXS_ttHbb_STXS_0_node.category = ("((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_STXS==0)&&(DNNPredictedClass_ge4j_3t_classifier==0))","ljets_ge4j_3t_STXS_ttHbb_STXS_0_node","")
     interf_ljets_ge4j_3t_STXS_ttHbb_STXS_0_node.category_label = "\geq 4 jets, 3 b-tags"
     interf_ljets_ge4j_3t_STXS_ttHbb_STXS_0_node.minxval = 0.2
     interf_ljets_ge4j_3t_STXS_ttHbb_STXS_0_node.maxxval = 0.98
@@ -349,8 +349,8 @@ def plots_dnn(data, discrname):
     
     interf_ljets_ge4j_3t_STXS_ttHbb_STXS_1_node = vhi.variableHistoInterface(variable_name  = "DNNOutput_ge4j_3t_STXS_node_ttHbb_STXS_1",
                                             label          = "ljets_ge4j_3t_STXS_ttHbb_STXS_1_node",
-                                            selection      = "((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_STXS==1))")
-    interf_ljets_ge4j_3t_STXS_ttHbb_STXS_1_node.category = ("((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_STXS==1))","ljets_ge4j_3t_STXS_ttHbb_STXS_1_node","")
+                                            selection      = "((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_STXS==1)&&(DNNPredictedClass_ge4j_3t_classifier==0))")
+    interf_ljets_ge4j_3t_STXS_ttHbb_STXS_1_node.category = ("((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_STXS==1)&&(DNNPredictedClass_ge4j_3t_classifier==0))","ljets_ge4j_3t_STXS_ttHbb_STXS_1_node","")
     interf_ljets_ge4j_3t_STXS_ttHbb_STXS_1_node.category_label = "\geq 4 jets, 3 b-tags"
     interf_ljets_ge4j_3t_STXS_ttHbb_STXS_1_node.minxval = 0.2
     interf_ljets_ge4j_3t_STXS_ttHbb_STXS_1_node.maxxval = 0.71
@@ -359,8 +359,8 @@ def plots_dnn(data, discrname):
     
     interf_ljets_ge4j_3t_STXS_ttHbb_STXS_2_node = vhi.variableHistoInterface(variable_name  = "DNNOutput_ge4j_3t_STXS_node_ttHbb_STXS_2",
                                             label          = "ljets_ge4j_3t_STXS_ttHbb_STXS_2_node",
-                                            selection      = "((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_STXS==2))")
-    interf_ljets_ge4j_3t_STXS_ttHbb_STXS_2_node.category = ("((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_STXS==2))","ljets_ge4j_3t_STXS_ttHbb_STXS_2_node","")
+                                            selection      = "((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_STXS==2)&&(DNNPredictedClass_ge4j_3t_classifier==0))")
+    interf_ljets_ge4j_3t_STXS_ttHbb_STXS_2_node.category = ("((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_STXS==2)&&(DNNPredictedClass_ge4j_3t_classifier==0))","ljets_ge4j_3t_STXS_ttHbb_STXS_2_node","")
     interf_ljets_ge4j_3t_STXS_ttHbb_STXS_2_node.category_label = "\geq 4 jets, 3 b-tags"
     interf_ljets_ge4j_3t_STXS_ttHbb_STXS_2_node.minxval = 0.2
     interf_ljets_ge4j_3t_STXS_ttHbb_STXS_2_node.maxxval = 0.88
@@ -369,8 +369,8 @@ def plots_dnn(data, discrname):
     
     interf_ljets_ge4j_3t_STXS_ttHbb_STXS_3_node = vhi.variableHistoInterface(variable_name  = "DNNOutput_ge4j_3t_STXS_node_ttHbb_STXS_3",
                                             label          = "ljets_ge4j_3t_STXS_ttHbb_STXS_3_node",
-                                            selection      = "((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_STXS==3))")
-    interf_ljets_ge4j_3t_STXS_ttHbb_STXS_3_node.category = ("((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_STXS==3))","ljets_ge4j_3t_STXS_ttHbb_STXS_3_node","")
+                                            selection      = "((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_STXS==3)&&(DNNPredictedClass_ge4j_3t_classifier==0))")
+    interf_ljets_ge4j_3t_STXS_ttHbb_STXS_3_node.category = ("((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_STXS==3)&&(DNNPredictedClass_ge4j_3t_classifier==0))","ljets_ge4j_3t_STXS_ttHbb_STXS_3_node","")
     interf_ljets_ge4j_3t_STXS_ttHbb_STXS_3_node.category_label = "\geq 4 jets, 3 b-tags"
     interf_ljets_ge4j_3t_STXS_ttHbb_STXS_3_node.minxval = 0.2
     interf_ljets_ge4j_3t_STXS_ttHbb_STXS_3_node.maxxval = 0.96
@@ -379,8 +379,8 @@ def plots_dnn(data, discrname):
     
     interf_ljets_ge4j_3t_STXS_ttHbb_STXS_4_node = vhi.variableHistoInterface(variable_name  = "DNNOutput_ge4j_3t_STXS_node_ttHbb_STXS_4",
                                             label          = "ljets_ge4j_3t_STXS_ttHbb_STXS_4_node",
-                                            selection      = "((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_STXS==4))")
-    interf_ljets_ge4j_3t_STXS_ttHbb_STXS_4_node.category = ("((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_STXS==4))","ljets_ge4j_3t_STXS_ttHbb_STXS_4_node","")
+                                            selection      = "((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_STXS==4)&&(DNNPredictedClass_ge4j_3t_classifier==0))")
+    interf_ljets_ge4j_3t_STXS_ttHbb_STXS_4_node.category = ("((N_Jets>=4&&N_BTagsM==3)&&(1.)&&(DNNPredictedClass_ge4j_3t_STXS==4)&&(DNNPredictedClass_ge4j_3t_classifier==0))","ljets_ge4j_3t_STXS_ttHbb_STXS_4_node","")
     interf_ljets_ge4j_3t_STXS_ttHbb_STXS_4_node.category_label = "\geq 4 jets, 3 b-tags"
     interf_ljets_ge4j_3t_STXS_ttHbb_STXS_4_node.minxval = 0.2
     interf_ljets_ge4j_3t_STXS_ttHbb_STXS_4_node.maxxval = 0.99
