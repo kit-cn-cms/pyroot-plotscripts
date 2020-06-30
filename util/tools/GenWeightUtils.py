@@ -31,7 +31,7 @@ class GenWeightNormalization():
         csv_dict = {}
         data = pandas.read_csv(self.csvfile)
         data["sample_name_modified"] = pandas.Series(
-            (x.replace("_","").replace("-","").replace("newpmx","") for x in data.sample.values),
+            (x.replace("_","").replace("-","").replace("newpmx","") for x in data["sample"].values),
             index = data.index)
         for index in range(len(data.variation.values)):
             csv_dict[ (data.sample_name_modified[index], data.variation[index]) ] = data.final_weight_sl_analysis[index]
