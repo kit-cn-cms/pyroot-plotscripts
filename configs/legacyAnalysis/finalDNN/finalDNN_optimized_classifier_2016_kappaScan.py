@@ -15,7 +15,6 @@ from copy import deepcopy
 
 
 memexp = ""
-    
 
 def plots_dnn(data, discrname):
 
@@ -40,7 +39,6 @@ def plots_dnn(data, discrname):
 				0.5087,
 				0.5613,
 				0.614,
-				0.6667,
 				0.93
 				]
     interf_ljets_ge4j_ge4t_classifier_ttH_node.nhistobins = ndefaultbins
@@ -52,6 +50,7 @@ def plots_dnn(data, discrname):
     interf_ljets_ge4j_ge4t_classifier_ttmb_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_classifier==1))","ljets_ge4j_ge4t_classifier_ttmb_node","")
     interf_ljets_ge4j_ge4t_classifier_ttmb_node.category_label = "\geq 4 jets, \geq 4 b-tags"
     interf_ljets_ge4j_ge4t_classifier_ttmb_node.bin_edges = [ 
+				0.1793,
 				0.2187,
 				0.258,
 				0.2973,
@@ -62,7 +61,6 @@ def plots_dnn(data, discrname):
 				0.494,
 				0.5333,
 				0.5727,
-				0.612,
 				0.73
 				]
     interf_ljets_ge4j_ge4t_classifier_ttmb_node.nhistobins = ndefaultbins
@@ -102,7 +100,6 @@ def plots_dnn(data, discrname):
 				# 0.3133,
 				# 0.348,
 				# 0.3827,
-				# 0.4173,
 				0.66
 				]
     interf_ljets_ge4j_ge4t_classifier_ttcc_node.nhistobins = ndefaultbins
@@ -126,7 +123,6 @@ def plots_dnn(data, discrname):
 				# 0.4933,
 				# 0.5287,
 				# 0.564,
-				# 0.5993,
 				0.67
 				]
     interf_ljets_ge4j_ge4t_classifier_ttlf_node.nhistobins = ndefaultbins
@@ -148,7 +144,7 @@ def plots_dnn(data, discrname):
 				0.588,
 				0.644,
 				0.7,
-				0.812,
+				0.756,
 				0.98
 				]
     interf_ljets_ge4j_ge4t_classifier_tHq_node.nhistobins = ndefaultbins
@@ -344,7 +340,8 @@ def plots_dnn(data, discrname):
         interf.histotitle = "final discriminator ({})".format(l)
         interf.selection = interf.category[0]
 
-    DNNPlots = init_plots_CPScan(interfaces = interfaces, data = data, discrname = discrname)
+    DNNPlots = init_plots_KappaScan(interfaces = interfaces, data = data, discrname = discrname)
+
     return DNNPlots
 
 
@@ -354,25 +351,22 @@ def getDiscriminatorPlots(data = None, discrname = ''):
 
     return discriminatorPlots
 
-def init_plots_CPScan(interfaces, data = None, discrname = ''):
+def init_plots_KappaScan(interfaces, data = None, discrname = ''):
     plots = [] #init list of plotClasses objects to return
     for interf in interfaces:
         # check if initialization uses bin edges or min/max vals
         # if 'subdict' contains the keyword 'bin_edges', an array
         # of type float is created from the corresponding python list.
-        # Else, the min/maxvals are used
-        # Kappa Scan 
-        # points = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,18,20,21,23,24,26,27,29,30,32,34,35,37,47,49,50]
-        # CP SCAN
-        points = range (50,70) + [0,12]
+        # Else, the min/maxvals are used 
+        points = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,18,20,21,23,24,26,27,29,30,32,34,35,37,47,49,50]
+        # 50..69 -> CP SCAN
         for i in points:
-            histoname = "P"+str(i)+'_'+discrname+"_"+interf.label
-            histotitle = interf.histotitle
             if i !=0:
                 weight = "*(Weight_rwgt_{}/Weight_GEN_nom)".format(i)
             else:
                 weight = "*(1)"
-
+            histoname = "P"+str(i)+'_'+discrname+"_"+interf.label
+            histotitle = interf.histotitle
             if not interf.bin_edges is None:
                 bins  = array("f", interf.bin_edges)
                 nbins = len(bins)-1 # last bin edge in array is overflow bin => subtract for nbins
@@ -400,7 +394,6 @@ def init_plots_CPScan(interfaces, data = None, discrname = ''):
     if data:
         add_data_plots(plots=plots,data=data)
     return plots
-
 
 def init_plots(interfaces, data = None):
     plots = [] #init list of plotClasses objects to return

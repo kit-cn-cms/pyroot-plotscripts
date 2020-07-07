@@ -502,6 +502,8 @@ def init_plots_KappaScan(interfaces, data = None, discrname = ''):
                 print("FATAL ERROR: Unable to load bin edges or min/max values for histogram!")
                 print(interf)
                 raise ValueError
+    if data:
+        add_data_plots(plots=plots,data=data)
     return plots
 
 
