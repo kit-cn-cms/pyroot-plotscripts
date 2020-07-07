@@ -191,7 +191,7 @@ samplesDataControlPlots=[
 ]
 
 
-samples_tH = [
+samples = [
     # SM case
     plotClasses.Sample('tHW (SM)',ROOT.kBlue+3,
             THWpath,
@@ -206,6 +206,8 @@ samples_tH = [
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
     ]
+
+
 
 processes = []
 for sample in samples:
