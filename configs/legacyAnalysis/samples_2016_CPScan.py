@@ -179,12 +179,6 @@ doReadTrees=True
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
 samplesDataControlPlots=[
-    plotClasses.Sample('t#bar{t}+H',ROOT.kBlue+1,
-            path+'/ttH_4f_ctcvcp_TuneCP5_13TeV_madgraph_pythia8/*nominal*.root',
-            lumi+sel_MET,
-            'ttH',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"), 
-
     plotClasses.Sample('SingleMu',ROOT.kBlack,
             path+'/SingleMuon*/*nominal*.root',
             sel_singlemu+sel_MET,
@@ -211,14 +205,14 @@ samples = [
             'tHq_hbb',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
+    plotClasses.Sample('t#bar{t}+H',ROOT.kBlue+1,
+            path+'/ttH_4f_ctcvcp_TuneCP5_13TeV_madgraph_pythia8/*nominal*.root',
+            lumi+sel_MET,
+            'ttH',
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+
     ]
 
-
-
-
-
-
-samples 
 
 
 processes = []
