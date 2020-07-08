@@ -27,8 +27,8 @@ path_ttbbDL = path+"/TTbb_4f_TTTo2l2nu_TuneCP5-Powheg-Openloops-Pythia8/*nominal
 
 
 
-VJetsPathS = path+'/DYJets*/*nominal*.root'+';'+ \
-             path+'/WJets*/*nominal*.root'
+VJetsPathS = path+'/DYJets*madgraphMLM*/*nominal*.root'+';'+ \
+             path+'/WJets*madgraphMLM*/*nominal*.root'
 
 ttVPathS = path+'/TTW*/*nominal*.root'+';'+ \
            path+'/TTZToLLNuNu*/*nominal*.root'+';'+ \
@@ -58,7 +58,7 @@ ttZpath =  path+'/TTZToQQ*/*nominal*.root'+';'+ \
            path+'/TTZToLLNuNu_M-10*/*nominal*.root'+';'
 
 friendTrees = {
-    "MEMDB": "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/friends/2018/",
+    "MEMDB": "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/friends_final/2018_wrongJERsources/",
     }
 
 # SELECTIONS
@@ -340,13 +340,13 @@ samples_tH = [
             THWpath,
             lumi+tH_SM_rwgt+sel_MET,
             'tHW_hbb',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+            samDict=sampleDict, readTrees=doReadTrees, typ = "bkg"),
 
     plotClasses.Sample('tHq (SM)',ROOT.kBlue+6,
             THQpath,
             lumi+tH_SM_rwgt+sel_MET,
             'tHq_hbb',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+            samDict=sampleDict, readTrees=doReadTrees, typ = "bkg"),
 
     # point 5
     #plotClasses.Sample('tHW (5)',ROOT.kBlue+3,
@@ -473,7 +473,7 @@ samples_5FS = [
             samDict=sampleDict, readTrees=doReadTrees, plot = False), 
     ]
 
-samples = [
+samples_ttnonbb = [
      # signal samples
 #     plotClasses.Sample('t#bar{t}+H',ROOT.kBlue+1,
 #             ttHpath,
@@ -495,12 +495,12 @@ samples = [
             samDict=sampleDict, readTrees=doReadTrees),
     ]
 
-
-# samples += samples_tH
-samples += samples_ttH_HTXS
+samples = samples_ttH_HTXS
+samples += samples_tH
+samples += samples_ttnonbb
 samples += samples_ttbb_4FS
 samples += samples_minor_backgrounds
-samples += samples_5FS
+# samples += samples_5FS
 
 
 #samples += samples_ttbb_decay_modes_5FS
@@ -523,8 +523,11 @@ plottingsamples = [
 
     plotClasses.Sample("V+jets", 18, "", "",
         "vjets", addsamples = ["wjets", "zjets"],
-        samDict = sampleDict, readTrees = doReadTrees)
+        samDict = sampleDict, readTrees = doReadTrees),
 
+    plotClasses.Sample("t#bar{t}+H", ROOT.kBlue+1, "", "",
+        "ttH", addsamples = ["ttH_hbb", "ttH_hcc", "ttH_htt", "ttH_hgg", "ttH_hgluglu", "ttH_hww", "ttH_hzz", "ttH_hzg"],
+        samDict = sampleDict, readTrees = doReadTrees, typ = "signal"),
 #    plotClasses.Sample("misc.", 18, "", "",
 #        "misc", addsamples ["ttbarZ", "ttbarW", "wjets", "zjets", "diboson"],
 #        samDict = sampleDict, readTrees = doReadTrees)
