@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'crosscheck_variables_optBins/2018'
+    name = 'crosscheck_variables_finalRFs/2018'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -71,7 +71,7 @@ def main(pyrootdir, opts):
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
-    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2018_split.csv"
+    rateFactorsFile = pyrootdir + "/data/rateFactors/ratefactors_2018_with_correction.csv"
 
     # script options
     analysisOptions = {
