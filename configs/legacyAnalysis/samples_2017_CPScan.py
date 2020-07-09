@@ -11,7 +11,7 @@ import util.tools.plotClasses as plotClasses
 
 # samples
 # input path 
-path  = "/nfs/dust/cms/user/swieland/ttH_legacy/ntupleHadded_2017_JECgroups/"
+path  = "/nfs/dust/cms/user/swieland/ttH_legacy/ntupleHadded_2017_JECgroups_newGT/"
 
 #TH
 THWpath = path+'/THW_*ctcvcp*/*nominal*.root'
@@ -22,7 +22,7 @@ ttHpath = path+'/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8*/*nominal*.root'+';'+
 	      path+'/ttHToNonbb_M125*/*nominal*.root'
 
 friendTrees = {
-    "MEMDB": "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/friends/2017/",
+    "MEMDB": "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/friends_final/2017/",
     }
 
 # SELECTIONS
