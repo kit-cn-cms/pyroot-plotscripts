@@ -126,21 +126,26 @@ class scriptWriter:
             # sample file should have path BASE/SAMPLENAME/FILE.root
             # -> strip base
 
-            # take first tree as base
-            basetree = TreeFileMap["files"][0]
-            sampledir, treename = os.path.split(basetree)
-            basedir, samplename = os.path.split(sampledir)
-
             for ftName in self.pp.friendTrees:
-                # add one friend tree to list of trees
-                friendtree = "/".join([self.pp.friendTrees[ftName], samplename, treename])
-                print("checking friend tree {}".format(friendtree))
-                if not os.path.exists(friendtree):
-                    exit("cannot use file for variable setup because required friend tree does not exist.")
-                TreeFileMap["files"].append(friendtree)
-                f = ROOT.TFile(friendtree)
-                tree = f.Get("MVATree")
-                TreeFileMap["trees"].append(deepcopy(tree))
+                found = False
+                for basetree in TreeFileMap["files"]:
+                    # take first tree as base
+                    sampledir, treename = os.path.split(basetree)
+                    basedir, samplename = os.path.split(sampledir)
+
+                    # add one friend tree to list of trees
+                    friendtree = "/".join([self.pp.friendTrees[ftName], samplename, treename])
+                    print("checking friend tree {}".format(friendtree))
+                    if os.path.exists(friendtree):
+                        TreeFileMap["files"].append(friendtree)
+                        f = ROOT.TFile(friendtree)
+                        tree = f.Get("MVATree")
+                        TreeFileMap["trees"].append(deepcopy(tree))
+                        found = True
+                        break
+                if not found:
+                    sys.exit("didnt find friend tree")
+                       
         
 
         # initialize variables with variablebox
