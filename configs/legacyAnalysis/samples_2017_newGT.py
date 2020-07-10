@@ -165,6 +165,8 @@ lumi = '41.5'
 ttbb_4FS_scale = "*(1.0)"
 ttbb_5FS_scale = "*(1.0)"
 
+kfactor_wjets = "*1.21"
+kfactor_zjets = "*1.23"
 #tHq_XS_scale = "*(0.7927/0.07425)"
 #tHW_XS_scale = "*(0.1472/0.01517)"
 
@@ -392,13 +394,13 @@ samples_minor_backgrounds = [
  
     plotClasses.Sample('Z+jets',ROOT.kGreen-3,
            path+'/DYJets*madgraph*/*nominal*.root',
-           lumi+sel_MET,
+           lumi+sel_MET+kfactor_zjets,
            'zjets',
            samDict=sampleDict, readTrees=doReadTrees),
  
     plotClasses.Sample('W+jets',ROOT.kGreen-7,
            path+'/WJets*madgraph*/*nominal*.root',
-           lumi+sel_MET,
+           lumi+sel_MET+kfactor_wjets,
            'wjets',
            samDict=sampleDict, readTrees=doReadTrees), 
 
