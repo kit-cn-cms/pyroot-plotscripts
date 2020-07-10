@@ -690,7 +690,7 @@ def getDiscriminatorPlots(data = None, discrname = ''):
     # discriminatorPlots += plots_ge4j_3t_classifier(data)
     # discriminatorPlots += plots_ge4j_3t_STXS(data)
     discriminatorPlots += plots_dnn(data, discrname)
-    discriminatorPlots += plots_STXS(data, discrname)
+    # discriminatorPlots += plots_STXS(data, discrname)
 
     return discriminatorPlots
 

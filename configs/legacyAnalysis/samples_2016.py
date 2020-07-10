@@ -156,6 +156,8 @@ weightReplacements = {
 # Lumi weight
 lumi = '35.9'
 
+kfactor_zjets = "*1.23"
+kfactor_wjets = "*1.21"
 #tHq_XS_scale = "*(0.7927/0.07425)"
 #tHW_XS_scale = "*(0.1472/0.01517)"
 
@@ -407,13 +409,13 @@ samples_minor_backgrounds = [
  
     plotClasses.Sample('Z+jets',ROOT.kGreen-3,
             path+'/DYJets*madgraph*/*nominal*.root',
-            lumi+sel_MET,
+            lumi+sel_MET+kfactor_zjets,
             'zjets',
             samDict=sampleDict, readTrees=doReadTrees),
  
     plotClasses.Sample('W+jets',ROOT.kGreen-7,
             path+'/WJets*madgraph*/*nominal*.root',
-            lumi+sel_MET,
+            lumi+sel_MET+kfactor_wjets,
             'wjets',
             samDict=sampleDict, readTrees=doReadTrees), 
 
