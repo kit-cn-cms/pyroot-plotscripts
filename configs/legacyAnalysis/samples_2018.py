@@ -62,12 +62,6 @@ friendTrees = {
     }
 
 # SELECTIONS
-STXS_stage0 = '*(abs(GenHiggs_Y<2.5))'
-STXS_stage1_0 = '*(GenHiggs_Pt<=60)'
-STXS_stage1_1 = '*((GenHiggs_Pt>=60)&&(GenHiggs_Pt<120))'
-STXS_stage1_2 = '*((GenHiggs_Pt>=120)&&(GenHiggs_Pt<200))'
-STXS_stage1_3 = '*((GenHiggs_Pt>=200)&&(GenHiggs_Pt<300))'
-STXS_stage1_4 = '*(GenHiggs_Pt>=300)'
 # need to veto muon events in electron dataset to avoid double counting and vice versa
 sel_singleel="((N_LooseMuons==0 && N_TightElectrons==1) && (Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX || ( Triggered_HLT_Ele32_WPTight_Gsf_vX )))"
 sel_singlemu="(N_LooseElectrons==0 && N_TightMuons==1 && Triggered_HLT_IsoMu24_vX)"
@@ -291,38 +285,6 @@ samples_ttH_decay = [
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
     ]
 
-samples_ttH_HTXS = [
-    plotClasses.Sample('t#bar{t}H_0',830,
-            ttHpath,
-            lumi+sel_MET+STXS_stage0+STXS_stage1_0,
-            'ttH_0',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
-
-    plotClasses.Sample('t#bar{t}H_1',418,
-            ttHpath,
-            lumi+sel_MET+STXS_stage0+STXS_stage1_1,
-            'ttH_1',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
-
-    plotClasses.Sample('t#bar{t}H_2',433,
-            ttHpath,
-            lumi+sel_MET+STXS_stage0+STXS_stage1_2,
-            'ttH_2',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
-
-    plotClasses.Sample('t#bar{t}H_3',867,
-            ttHpath,
-            lumi+sel_MET+STXS_stage0+STXS_stage1_3,
-            'ttH_3',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
-
-    plotClasses.Sample('t#bar{t}H_4',602,
-            ttHpath,
-            lumi+sel_MET+STXS_stage0+STXS_stage1_4,
-            'ttH_4',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
-]
-
 samples_tH = [
     # ITC case
     #plotClasses.Sample('tHW (ITC)',ROOT.kBlue+3,
@@ -428,14 +390,12 @@ samples_minor_backgrounds = [
             path+'/DYJets*/*nominal*.root',
             lumi+sel_MET+kfactor_zjets,
             'zjets',
-            vetoEventWeights = float(1./59.7),
             samDict=sampleDict, readTrees=doReadTrees),
  
     plotClasses.Sample('W+jets',ROOT.kGreen-7,
             path+'/WJets*/*nominal*.root',
             lumi+sel_MET+kfactor_wjets,
             'wjets',
-            vetoEventWeights = float(2./59.7),
             samDict=sampleDict, readTrees=doReadTrees), 
 
     #plotClasses.Sample('V+jets',18,
@@ -502,7 +462,6 @@ samples_ttnonbb = [
 samples = samples_ttH_decay
 samples += samples_tH
 samples += samples_ttnonbb
-# samples += samples_ttH_HTXS
 samples += samples_ttbb_4FS
 samples += samples_minor_backgrounds
 # samples += samples_5FS

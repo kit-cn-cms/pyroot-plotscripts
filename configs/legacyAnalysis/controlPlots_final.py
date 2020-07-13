@@ -144,6 +144,9 @@ def plots_control(cat,selection,label):
             plotClasses.Plot(ROOT.TH1D(cat+"_TaggedJet_M","TaggedJet_M",30,0,50),"TaggedJet_M",selection,label),
             plotClasses.Plot(ROOT.TH1D(cat+"_TaggedJet_Phi","TaggedJet_Phi",30,-3.3,3.3),"TaggedJet_Phi",selection,label),
             plotClasses.Plot(ROOT.TH1D(cat+"_TaggedJet_Pt","TaggedJet_Pt",30,20,400),"TaggedJet_Pt",selection,label),
+
+            plotClasses.Plot(ROOT.TH1D(cat+"_Evt_MET","MET",30,10.0,300),"Evt_MET",selection,label),
+            plotClasses.Plot(ROOT.TH1D(cat+"_Evt_MET_Phi","MET Phi",30,-3.3,3.3),"Evt_MET_Phi",selection,label),
         ]
     return plots
 

@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'controlplots/2018_final_Systs'
+    name = 'finalDNN/2018_STXS'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -42,7 +42,7 @@ def main(pyrootdir, opts):
     dataera = "2018"
 
     # Name of final discriminator, should not contain underscore
-    discrName = 'finaldiscr'
+    discrName = ''
     nom_histname_template = "$PROCESS__$CHANNEL"
     syst_histname_template = nom_histname_template + "__$SYSTEMATIC"
     histname_separator = "__"
@@ -50,12 +50,14 @@ def main(pyrootdir, opts):
     # define MEM discriminator variable
     memexp = "(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)"
     # configs
-    config          = "legacyAnalysis/samples_2018"
+    config          = "legacyAnalysis/samples_2018_STXS"
     variable_cfg    = "legacyAnalysis/additionalVariables"
-    plot_cfg        = "legacyAnalysis/controlPlots_final"
+    plot_cfg        = "legacyAnalysis/finalDNN/finalDNN_optimized_STXS_2018"
+    # plot_cfg        = "legacyAnalysis/finalDNN/finalDNN_defaultBinning_STXSmultiplied"
     syst_cfg        = "legacyAnalysis/systs_2018"
     # syst_cfg        = "legacyAnalysis/no_systs"
     replace_cfg     = "legacyAnalysis/pdf_relic_names"
+    # replace_cfg     = None
 
     sfCorrection = {}
     sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2018_deepJet_combined.root"
@@ -77,20 +79,20 @@ def main(pyrootdir, opts):
     # script options
     analysisOptions = {
         # general options
-        "usePseudoData":        False,
+        "usePseudoData":        True,
         "testrun":              False,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
-        "makeDataCards":        False,
-        "makeInputDatacards":   True, # create datacards also for all defined plots
+        "makeDataCards":        True,
+        "makeInputDatacards":   False, # create datacards also for all defined plots
         "addData":              True,  # adding real data 
         "makePlots":            True,
         # options for makePlots
         "signalScaling":        -1,
         "lumiLabel":            True,
         "cmslabel":             "private Work",
-        "ratio":                "#frac{data}{MC}",
+        "ratio":                "#frac{S+B}{B}",
         "shape":                False,
         "logarithmic":          False,
         "splitLegend":          True,
@@ -108,9 +110,9 @@ def main(pyrootdir, opts):
     plotJson = ""#pyrootdir+"/configs/legacyAnalysis/treeJson_2018.json"
     # plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2018/",True]] 
     # memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
-    # dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                #   "checkpointFiles":  pyrootdir+"/configs/legacyAnalysis/DNN_14-05-2020/DNNInputData/"}
-    dnnInterface = None
+    dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
+                  "checkpointFiles":  pyrootdir+"/configs/legacyAnalysis/finalDNN/DNNInputData/"}
+    # dnnInterface = None
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
@@ -204,8 +206,8 @@ def main(pyrootdir, opts):
         pP.setJson(plotJson)
         # pP.setDataBases(plotDataBases)
         # pP.setMEMDataBase(memDataBase)
-        # pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts_nom(80000)
+        pP.setDNNInterface(dnnInterface)
+        pP.setMaxEvts_nom(50000)
         # pP.setMaxEvts_nom(200000)
         pP.setMaxEvts_systs(200000)
         # pP.request_runtime = 60*60*5
@@ -282,7 +284,7 @@ def main(pyrootdir, opts):
                 # pseudo data without ttbb 5FS
                 # pP.addData( samples = configData.samples[:-1], 
                 #             discrName = discrName)
-                pP.addData( samples = configData.samples[:-9], 
+                pP.addData( samples = configData.samples[:-nSigSamples], 
                             discrName = discrName)
                 #pP.addData(samples = configData.samples)
             else:
@@ -316,8 +318,10 @@ def main(pyrootdir, opts):
                 datacardmaker       = datacardmaker,
                 signalTag           = analysis.signalProcess,
                 skipDatacards       = analysis.skipDatacards,
-                nominal_key         = nom_histname_template.replace("__$CHANNEL","__finaldiscr_$CHANNEL"),
-                syst_key            = syst_histname_template.replace("__$CHANNEL","__finaldiscr_$CHANNEL")
+                # nominal_key         = nom_histname_template.replace("__$CHANNEL","__finaldiscr_$CHANNEL"),
+                # syst_key            = syst_histname_template.replace("__$CHANNEL","__finaldiscr_$CHANNEL")
+                nominal_key         = nom_histname_template,
+                syst_key            = syst_histname_template
                 )
     
     if analysis.makePlots:
