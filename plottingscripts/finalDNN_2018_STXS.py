@@ -52,7 +52,7 @@ def main(pyrootdir, opts):
     # configs
     config          = "legacyAnalysis/samples_2018_STXS"
     variable_cfg    = "legacyAnalysis/additionalVariables"
-    plot_cfg        = "legacyAnalysis/finalDNN/finalDNN_optimized_STXS_2018"
+    plot_cfg        = "legacyAnalysis/finalDNN/finalDNN_optimized_STXS"
     # plot_cfg        = "legacyAnalysis/finalDNN/finalDNN_defaultBinning_STXSmultiplied"
     syst_cfg        = "legacyAnalysis/systs_2018"
     # syst_cfg        = "legacyAnalysis/no_systs"
