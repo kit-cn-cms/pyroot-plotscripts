@@ -128,14 +128,15 @@ class plotParallel:
                 print( "unknown additional code interface type: " + str(interface) )
     
     def setDNNInterface(self, interfaceConfig):
-        interfacePath = interfaceConfig["interfacePath"]
-        checkpointFiles = interfaceConfig["checkpointFiles"]
-        addModule = "addModule"+str(len(self.addInterfaces)+1)
-        print("loading module "+str(interfacePath)+" as "+addModule+" module.")
-        self.addInterfaces.append(
-            imp.load_source(addModule, interfacePath).theInterface(
-                self.analysis.workdir, checkpointFiles, 
-                crossEvaluation = self.analysis.crossEvaluation))
+        if interfaceConfig:
+            interfacePath = interfaceConfig["interfacePath"]
+            checkpointFiles = interfaceConfig["checkpointFiles"]
+            addModule = "addModule"+str(len(self.addInterfaces)+1)
+            print("loading module "+str(interfacePath)+" as "+addModule+" module.")
+            self.addInterfaces.append(
+                imp.load_source(addModule, interfacePath).theInterface(
+                    self.analysis.workdir, checkpointFiles, 
+                    crossEvaluation = self.analysis.crossEvaluation))
 
     def setRateFactorsFile(self, csvfile):
         self.rateFactorsFile = csvfile
