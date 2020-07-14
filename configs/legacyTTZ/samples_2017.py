@@ -199,13 +199,13 @@ combined_sig_samples = [
             ttHpath,
             lumi+sel_MET+evenSel,
             'ttH',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal", plot = False),
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal", plot = True),
 
     plotClasses.Sample('t#bar{t}+Z',ROOT.kMagenta+1,
             ttZPath,
             lumi+sel_MET+evenSel,
             'ttZ',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal", plot = False),
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal", plot = True),
     ]
 
 split_sig_samples = [

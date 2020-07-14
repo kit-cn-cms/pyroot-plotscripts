@@ -33,11 +33,10 @@ def plots_jtr(label, selection, jtr, data = None):
         plotClasses.Plot(ROOT.TH1D(jtr+"_TightLepton_Eta","#eta(lepton)",50,-2.5,2.5),"TightLepton_Eta[0]",selection,label),
         plotClasses.Plot(ROOT.TH1D(jtr+"_TightLepton_Phi","#phi(lepton)",50,-3.3,3.3),"TightLepton_Phi[0]",selection,label),
 
-        plotClasses.Plot(ROOT.TH1D(jtr+"_N_BTagsM","b tag multiplicity",8,2.5,10.5),"N_BTagsM",selection,label),
+        plotClasses.Plot(ROOT.TH1D(jtr+"_N_BTagsM","b tag multiplicity",5,2.5,7.5),"N_BTagsM",selection,label),
         plotClasses.Plot(ROOT.TH1D(jtr+"_N_Jets","jet multiplicity",7,3.5,10.5),"N_Jets",selection,label),
 
-        plotClasses.Plot(ROOT.TH1D(jtr+"_btagValue","b tag value",30,0,1),"btagValue",selection,label),
-        plotClasses.Plot(ROOT.TH1D(jtr+"_Jet_btagValue","Jet_btagValue",30,0.0,1.0),"Jet_btagValue",selection,label),
+        plotClasses.Plot(ROOT.TH1D(jtr+"_btagValue","b tag value of all jets",30,0,1),"btagValue",selection,label),
         plotClasses.Plot(ROOT.TH1D(jtr+"_Jet_btagValue_0","b tag value of 1st jet",30,0.0,1.0),"Jet_btagValue[0]",selection,label),
         plotClasses.Plot(ROOT.TH1D(jtr+"_Jet_btagValue_1","b tag value of 2nd jet",30,0.0,1.0),"Jet_btagValue[1]",selection,label),
         plotClasses.Plot(ROOT.TH1D(jtr+"_Jet_btagValue_2","b tag value of 3rd jet",30,0.0,1.0),"Jet_btagValue[2]",selection,label),
