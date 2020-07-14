@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'analysisDNN/v5_all_jtr_opt'
+    name = 'dnnEval/advanced_v3'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -43,16 +43,21 @@ def main(pyrootdir, opts):
 
     # Name of final discriminator, should not contain underscore
     discrName = 'finaldiscr'
+
     nom_histname_template = "$PROCESS__$CHANNEL"
     syst_histname_template = nom_histname_template + "__$SYSTEMATIC"
+
+    nom_histname_template_datacards = "$PROCESS__"+discrName+"_$CHANNEL"
+    syst_histname_template_datacards = nom_histname_template_datacards + "__$SYSTEMATIC"
+
     histname_separator = "__"
 
     # define MEM discriminator variable
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
     # configs
-    config          = "legacyTTZ/samples"
+    config          = "legacyTTZ/samples_matchable"
     variable_cfg    = "legacyTTZ/additionalVariables"
-    plot_cfg        = "legacyTTZ/dnn_plots_v2_opt_0p1"
+    plot_cfg        = "legacyTTZ/dnnPlots_advanced_v3_opt"
     syst_cfg        = "legacyTTZ/systs_v1"
     replace_cfg     = None
 
@@ -86,9 +91,9 @@ def main(pyrootdir, opts):
         "signalScaling":        -1,
         "lumiLabel":            True,
         "cmslabel":             "private Work",
-        "ratio":                "#frac{data}{MC Background}",
+        "ratio":                "#frac{pseudo data}{MC Background}",
         "shape":                False,
-        "logarithmic":          False,
+        "logarithmic":          True,
         "splitLegend":          False,
         "normalize":            False,
         # the skipX options try to skip the submission of files to the batch system
@@ -104,7 +109,7 @@ def main(pyrootdir, opts):
     plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2017/",True]] 
     memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                   "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTZ/dnnSets/v3_reducedVars/"}
+                   "checkpointFiles":  "/nfs/dust/cms/user/larmbrus/ttZAnalysis/dnnSets/advanced_v3/"}
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
@@ -272,7 +277,7 @@ def main(pyrootdir, opts):
             if analysis.usePseudoData:
                 print("adding data_obs histograms as pseudo data")
                 # pseudo data without ttH
-                pP.addData( samples = configData.samples[2:], 
+                pP.addData( samples = configData.samples, 
                             discrName = discrName)
                 # pseudo data with signal
                 #pP.addData(samples = configData.samples)
@@ -307,8 +312,8 @@ def main(pyrootdir, opts):
                 datacardmaker       = datacardmaker,
                 signalTag           = analysis.signalProcess,
                 skipDatacards       = analysis.skipDatacards,
-                nominal_key         = nom_histname_template,
-                syst_key            = syst_histname_template
+                nominal_key         = nom_histname_template_datacards,
+                syst_key            = syst_histname_template_datacards
                 )
     
     if analysis.makePlots:

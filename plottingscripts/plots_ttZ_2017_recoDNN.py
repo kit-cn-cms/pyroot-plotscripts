@@ -52,7 +52,7 @@ def main(pyrootdir, opts):
     # configs
     config          = "legacyTTZ/samples"
     variable_cfg    = "legacyTTZ/additionalVariables"
-    plot_cfg        = "legacyTTZ/input_plots"
+    plot_cfg        = "legacyTTZ/plots"
     syst_cfg        = "legacyTTZ/systs_v1"
     replace_cfg     = None
 
@@ -273,7 +273,7 @@ def main(pyrootdir, opts):
             if analysis.usePseudoData:
                 print("adding data_obs histograms as pseudo data")
                 # pseudo data without ttH
-                pP.addData( samples = configData.samples[2:], 
+                pP.addData( samples = configData.samples, 
                             discrName = discrName)
                 # pseudo data with signal
                 #pP.addData(samples = configData.samples)
