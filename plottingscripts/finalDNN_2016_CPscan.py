@@ -52,7 +52,7 @@ def main(pyrootdir, opts):
     # configs
     config          = "legacyAnalysis/samples_2016_CPScan"
     variable_cfg    = "legacyAnalysis/additionalVariables"
-    plot_cfg        = "legacyAnalysis/finalDNN/finalDNN_optimized_classifier_2016_CPScan"
+    plot_cfg        = "legacyAnalysis/finalDNN/finalDNN_optimized_classifier_CPScan"
     syst_cfg        = "legacyAnalysis/systs_2016"
     # syst_cfg        = "legacyAnalysis/no_systs"
     replace_cfg     = "legacyAnalysis/pdf_relic_names"

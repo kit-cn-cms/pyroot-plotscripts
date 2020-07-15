@@ -52,7 +52,7 @@ def main(pyrootdir, opts):
     # configs
     config          = "legacyAnalysis/samples_2018"
     variable_cfg    = "legacyAnalysis/additionalVariables"
-    plot_cfg        = "legacyAnalysis/controlPlots_final_missing"
+    plot_cfg        = "legacyAnalysis/controlPlots_final"
     syst_cfg        = "legacyAnalysis/systs_2018"
     # syst_cfg        = "legacyAnalysis/no_systs"
     replace_cfg     = "legacyAnalysis/pdf_relic_names"
@@ -72,7 +72,7 @@ def main(pyrootdir, opts):
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
-    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2018_split.csv"
+    rateFactorsFile = pyrootdir + "/data/rateFactors/ratefactors_2018_with_correction.csv"
 
     # script options
     analysisOptions = {
@@ -83,7 +83,7 @@ def main(pyrootdir, opts):
         # options to activate parts of the script
         "haddFromWildcard":     True,
         "makeDataCards":        False,
-        "makeInputDatacards":   False, # create datacards also for all defined plots
+        "makeInputDatacards":   True, # create datacards also for all defined plots
         "addData":              True,  # adding real data 
         "makePlots":            True,
         # options for makePlots
