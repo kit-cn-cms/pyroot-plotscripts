@@ -52,7 +52,7 @@ def main(pyrootdir, opts):
     # configs
     config          = "legacyAnalysis/samples_2016"
     variable_cfg    = "legacyAnalysis/additionalVariables"
-    plot_cfg        = "legacyAnalysis/controlPlots_final_missing"
+    plot_cfg        = "legacyAnalysis/controlPlots_final"
     syst_cfg        = "legacyAnalysis/systs_2016"
     # syst_cfg        = "legacyAnalysis/no_systs"
     replace_cfg     = "legacyAnalysis/pdf_relic_names"
@@ -72,7 +72,7 @@ def main(pyrootdir, opts):
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
-    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2016_split.csv"
+    rateFactorsFile = pyrootdir + "/data/rateFactors/ratefactors_2016_with_correction.csv"
 
     # script options
     analysisOptions = {
@@ -205,7 +205,7 @@ def main(pyrootdir, opts):
         # pP.setDataBases(plotDataBases)
         # pP.setMEMDataBase(memDataBase)
         # pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts_nom(80000)
+        pP.setMaxEvts_nom(50000)
         # pP.setMaxEvts_nom(200000)
         pP.setMaxEvts_systs(200000)
         # pP.request_runtime = 60*60*5
