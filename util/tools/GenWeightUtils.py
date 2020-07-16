@@ -5,7 +5,11 @@ class GenWeightNormalization():
     # -- init functions ---------------------------------------------
     def __init__(self, csvfile):
         self.csvfile = csvfile
-        self.csv_dict = self.readCSVFile()
+        self.csv_dict = self.readCSVFile("final_weight_sl_analysis")
+        self.factions = {}
+        self.factions["ttbb"] = self.readCSVFile("fraction_ttB")
+        self.factions["ttcc"] = self.readCSVFile("fraction_ttC")
+        self.factions["ttlf"] = self.readCSVFile("fraction_ttLF")
         self.weightList = self.getWeightVarsList()
         self.namespace_name = "GenNormMap"
         # print(self.weightList)
@@ -26,7 +30,7 @@ class GenWeightNormalization():
 
 
     # ReadGenWeightNormalizations
-    def readCSVFile(self):
+    def readCSVFile(self, keyword):
         # read csv file as dictionary
         csv_dict = {}
         data = pandas.read_csv(self.csvfile)
@@ -34,7 +38,7 @@ class GenWeightNormalization():
             (x.replace("_","").replace("-","").replace("newpmx","") for x in data["sample"].values),
             index = data.index)
         for index in range(len(data.variation.values)):
-            csv_dict[ (data.sample_name_modified[index], data.variation[index]) ] = data.final_weight_sl_analysis[index]
+            csv_dict[ (data.sample_name_modified[index], data.variation[index]) ] = data.[keyword][index]
 
         return csv_dict
     # ---------------------------------------------------------------
@@ -64,17 +68,30 @@ class GenWeightNormalization():
     def loadNormFactors(self):
         return "auto internalNormFactors = {}::internalNormFactors;\n".format(self.namespace_name)
 
+    def generateDictLines(self, dic, indent = "\t"):
+        tmp = []
+        code = ""
+        for key in sorted(dic):
+            tmp.append('{}{{ "{}_{}", {} }}'.format( indent, key[0], key[1], dic[key]) )
+        code += ",\n".join(tmp)
+        return code
+
     # AddGenWeightNormMap
     def addNormalizationMap(self):
         code = "\tstd::map<TString,float> GenWeight_Norm_Map = \n  {\n"
-        tmp = []
-        for key in sorted(self.csv_dict):
-            tmp.append('\t{{ "{}_{}", {} }}'.format( key[0], key[1], 
-                                                            self.csv_dict[key])
-                        )
-        code += ",\n".join(tmp)
+        code += self.generateDictLines(self.csv_dict)
+        code += "\n  };"
+        code += "\tstd::map<TString, std::map< TString, float> > fractions = \n {\n"
+        
+        for k in self.fractions:
+            tmp = []
+            code += '\t "{}", \n {\n'.format(k)
+            code += self.generateDictLines(self.fractions[k], intent = "\t\t")
+            code += "\t },\n"
         code += "\n  };"
         return code
+
+    
 
     def declareFillFunction(self):
         """
