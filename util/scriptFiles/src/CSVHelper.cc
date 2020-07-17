@@ -77,7 +77,7 @@ void CSVHelper::fillCSVHistos(TFile *fileHF, TFile *fileLF, const std::vector<Sy
     
     systematic.ReplaceAll("up","Up");
     systematic.ReplaceAll("down","Down");
-    systematic.ReplaceAll("CSV","");
+    systematic.ReplaceAll("btagValue","");
     systematic.ReplaceAll("Stats","stats");
 
     // std::cout << "############################################### " << std::endl;
