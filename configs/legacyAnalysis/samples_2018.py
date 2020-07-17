@@ -8,7 +8,7 @@ pyrootdir = os.path.dirname(filedir)
 
 sys.path.append(pyrootdir)
 import util.tools.plotClasses as plotClasses
-
+import generate_phasespace_corrections
 # samples
 # input path 
 path  = "/nfs/dust/cms/user/vdlinden/legacyTTH/ntuples/legacy_2018_ttH_newJEC"
@@ -155,6 +155,7 @@ weightReplacements = {
     "DOWEIGHTS":        "(DoWeights==1)+(DoWeights==0)*1.0",
 
     }
+weightReplacements.update(generate_phasespace_corrections.main())
 
 # Lumi weight
 lumi = '59.7'
