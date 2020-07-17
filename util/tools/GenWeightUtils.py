@@ -8,8 +8,8 @@ class GenWeightNormalization():
         self.csv_dict = self.readCSVFile("final_weight_sl_analysis")
         self.fractions = {}
         self.fractions["ttbb"] = self.readCSVFile("fraction_ttB")
-        # self.fractions["ttcc"] = self.readCSVFile("fraction_ttC")
-        # self.fractions["ttlf"] = self.readCSVFile("fraction_ttLF")
+        self.fractions["ttcc"] = self.readCSVFile("fraction_ttC")
+        self.fractions["ttlf"] = self.readCSVFile("fraction_ttLF")
         self.weightList = self.getWeightVarsList()
         self.namespace_name = "GenNormMap"
         # print(self.weightList)
@@ -52,7 +52,9 @@ class GenWeightNormalization():
         # for weight in self.weightList:
         #     weightVetoList.append("internalNormFactor_"+weight)
         # return weightVetoList
-        return ["internalNormFactors"]
+        vetolist = ["internalNormFactors"]
+        vetolist += ["fractions_{}".format(x) for x in self.fractions.keys()]
+        return vetolist
 
 
     def initMap(self, map_name, default = 1.0):
