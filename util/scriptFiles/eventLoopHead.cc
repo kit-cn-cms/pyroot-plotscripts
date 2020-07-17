@@ -86,6 +86,27 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
         internalBosonWeight_muFDown   = BosonWeight_muFDown;
     }
     
+    // DarkHiggs PU Weights
+    float internalPUWeight_2018 = 1.0;
+    float internalPUWeight_2018_Up = 1.0;
+    float internalPUWeight_2018_Down = 1.0;
+    float internalPUWeight_2017 = 1.0;
+    float internalPUWeight_2017_Up = 1.0;
+    float internalPUWeight_2017_Down = 1.0;
+    float internalPUWeight_2016 = 1.0;
+    float internalPUWeight_2016_Up = 1.0;
+    float internalPUWeight_2016_Down = 1.0;
+
+    internalPUWeight_2018 = pu_helper.GetScaleFactor("2018", N_GenPVs);
+    internalPUWeight_2018_Up = pu_helper.GetScaleFactor("2018Up", N_GenPVs);
+    internalPUWeight_2018_Down = pu_helper.GetScaleFactor("2018Down", N_GenPVs);
+    internalPUWeight_2017 = pu_helper.GetScaleFactor("2017", N_GenPVs);
+    internalPUWeight_2017_Up = pu_helper.GetScaleFactor("2017Up", N_GenPVs);
+    internalPUWeight_2017_Down = pu_helper.GetScaleFactor("2017Down", N_GenPVs);
+    internalPUWeight_2016 = pu_helper.GetScaleFactor("2016", N_GenPVs);
+    internalPUWeight_2016_Up = pu_helper.GetScaleFactor("2016Up", N_GenPVs);
+    internalPUWeight_2016_Down = pu_helper.GetScaleFactor("2016Down", N_GenPVs);
+    
     //float HT_Jets = 0.;
     //for(size_t m = 0;m<N_Jets;m++) HT_Jets+=Jet_Pt[m];
     
@@ -135,12 +156,23 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     DeltaPhi_AK4Jets_MET_Larger_0p5 = check_if_every_element_greater(DeltaPhi_AK4Jet_MET.get(), N_Jets, 4, 0.5);
     bool DeltaPhi_AK4Jets_Recoil_Larger_0p5;
     DeltaPhi_AK4Jets_Recoil_Larger_0p5 = check_if_every_element_greater(DeltaPhi_AK4Jet_Hadr_Recoil.get(), N_Jets, 4, 0.5);
+    bool DeltaPhi_AK4Jets_MET_Larger_0p7;
+    DeltaPhi_AK4Jets_MET_Larger_0p7 = check_if_every_element_greater(DeltaPhi_AK4Jet_MET.get(), N_Jets, N_Jets, 0.7);
+    bool DeltaPhi_AK4Jets_Recoil_Larger_0p8;
+    DeltaPhi_AK4Jets_Recoil_Larger_0p8 = check_if_every_element_greater(DeltaPhi_AK4Jet_Hadr_Recoil.get(), N_Jets, N_Jets, 0.8);
+    
+    //bool AK15Jets_NHF_Smaller_0p8;
+    //AK15Jets_NHF_Smaller_0p8 = check_if_every_element_smaller(AK15Jet_NHF.get(), N_AK15Jets, N_AK15Jets, 0.8);
+    //bool AK15Jets_CHF_Larger_0p1;
+    //AK15Jets_CHF_Larger_0p1 = check_if_every_element_greater(AK15Jet_CHF.get(), N_AK15Jets, N_AK15Jets, 0.1);
+    
+    bool min_AK15Jet_pt = check_if_every_element_greater(AK15Jet_Pt.get(), N_AK15Jets, N_AK15Jets, 160.);
     
     if(N_AK15Jets>0) weight_sdm_corr = get_msd_weight(AK15Jet_Pt[0], AK15Jet_Eta[0]);
 
     // hack against prefireweight with 2018 signal samples
-    if(processname.find("vectormonotop")!=std::string::npos) {
-        Weight_L1_Prefire = 1.0;
-        Weight_L1_Prefire_Up = 1.0;
-        Weight_L1_Prefire_Down = 1.0;
-    }
+    //if(processname.find("vectormonotop")!=std::string::npos) {
+    //    Weight_L1_Prefire = 1.0;
+    //    Weight_L1_Prefire_Up = 1.0;
+    //    Weight_L1_Prefire_Down = 1.0;
+    //}

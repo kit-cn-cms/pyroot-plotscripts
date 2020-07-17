@@ -177,6 +177,17 @@ void plot()
     csv_calibration_helper_lep.AddScaleFactorHistogram("qcd","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_lep_qcd_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
     csv_calibration_helper_lep.AddScaleFactorHistogram("vectormonotop","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_lep_vectormonotop_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
     
+    // Dark Higgs Pileup weights
+    PUHelper pu_helper;
+    pu_helper.AddScaleFactorHistogram("2018","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/puWeights_10x_56ifb.root","puWeights");
+    pu_helper.AddScaleFactorHistogram("2018Up","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/puWeights_10x_56ifb.root","puWeightsUp");
+    pu_helper.AddScaleFactorHistogram("2018Down","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/puWeights_10x_56ifb.root","puWeightsDown");
+    pu_helper.AddScaleFactorHistogram("2017","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/puWeights_90x_41ifb.root","puWeights");
+    pu_helper.AddScaleFactorHistogram("2017Up","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/puWeights_90x_41ifb.root","puWeightsUp");
+    pu_helper.AddScaleFactorHistogram("2017Down","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/puWeights_90x_41ifb.root","puWeightsDown");
+    pu_helper.AddScaleFactorHistogram("2016","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/puWeights_80x_37ifb.root","puWeights");
+    pu_helper.AddScaleFactorHistogram("2016Up","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/puWeights_80x_37ifb.root","puWeightsUp");
+    pu_helper.AddScaleFactorHistogram("2016Down","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/puWeights_80x_37ifb.root","puWeightsDown");
 
     // Hack for subsampling test
     // if(processname=="SingleEl" || processname=="SingleMu"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
