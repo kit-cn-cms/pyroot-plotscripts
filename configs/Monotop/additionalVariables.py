@@ -77,8 +77,9 @@ def getAddVars():
         "N_AK15Jets",
         "AK15Jet_Pt",
         "Hadr_Recoil_Pt",
-        "AK15Jet_TopMatched",
-        "AK15Jet_Eta"
+        #"AK15Jet_TopMatched",
+        "AK15Jet_Eta",
+        "N_GenPVs"
     ]
 
     return addVars
