@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'dnnEval/advanced_v3'
+    name = 'recoDNN/inputs_v2_split'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -43,13 +43,8 @@ def main(pyrootdir, opts):
 
     # Name of final discriminator, should not contain underscore
     discrName = 'finaldiscr'
-
     nom_histname_template = "$PROCESS__$CHANNEL"
     syst_histname_template = nom_histname_template + "__$SYSTEMATIC"
-
-    nom_histname_template_datacards = "$PROCESS__"+discrName+"_$CHANNEL"
-    syst_histname_template_datacards = nom_histname_template_datacards + "__$SYSTEMATIC"
-
     histname_separator = "__"
 
     # define MEM discriminator variable
@@ -57,7 +52,7 @@ def main(pyrootdir, opts):
     # configs
     config          = "legacyTTZ/samples_matchable"
     variable_cfg    = "legacyTTZ/additionalVariables"
-    plot_cfg        = "legacyTTZ/dnnPlots_advanced_v3_opt"
+    plot_cfg        = "legacyTTZ/plots"
     syst_cfg        = "legacyTTZ/systs_v1"
     replace_cfg     = None
 
@@ -73,7 +68,7 @@ def main(pyrootdir, opts):
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
-    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2017_split.csv"
+    rateFactorsFile = ""#pyrootdir + "/data/rateFactors/rateFactors_2017_split.csv"
 
     # script options
     analysisOptions = {
@@ -83,7 +78,7 @@ def main(pyrootdir, opts):
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
-        "makeDataCards":        True,
+        "makeDataCards":        False,
         "makeInputDatacards":   False, # create datacards also for all defined plots
         "addData":              True,  # adding real data 
         "makePlots":            True,
@@ -91,9 +86,9 @@ def main(pyrootdir, opts):
         "signalScaling":        -1,
         "lumiLabel":            True,
         "cmslabel":             "private Work",
-        "ratio":                "#frac{pseudo data}{MC Background}",
+        "ratio":                "#frac{data}{MC Background}",
         "shape":                False,
-        "logarithmic":          True,
+        "logarithmic":          False,
         "splitLegend":          False,
         "normalize":            False,
         # the skipX options try to skip the submission of files to the batch system
@@ -109,7 +104,8 @@ def main(pyrootdir, opts):
     plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2017/",True]] 
     memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                   "checkpointFiles":  "/nfs/dust/cms/user/larmbrus/ttZAnalysis/dnnSets/advanced_v3/"}
+                   "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/massCorrection_v3/"}
+    dnnInterface = None
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
@@ -204,7 +200,7 @@ def main(pyrootdir, opts):
         pP.setJson(plotJson)
         #pP.setDataBases(plotDataBases)
         #pP.setMEMDataBase(memDataBase)
-        pP.setDNNInterface(dnnInterface)
+        #pP.setDNNInterface(dnnInterface)
         pP.setMaxEvts_nom(100000)
         pP.setMaxEvts_systs(100000)
         #pP.setRateFactorsFile(rateFactorsFile)
@@ -312,8 +308,8 @@ def main(pyrootdir, opts):
                 datacardmaker       = datacardmaker,
                 signalTag           = analysis.signalProcess,
                 skipDatacards       = analysis.skipDatacards,
-                nominal_key         = nom_histname_template_datacards,
-                syst_key            = syst_histname_template_datacards
+                nominal_key         = nom_histname_template,
+                syst_key            = syst_histname_template
                 )
     
     if analysis.makePlots:

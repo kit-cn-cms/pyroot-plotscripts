@@ -22,7 +22,6 @@ def getAddVars():
         "Evt_Eta_PrimaryLepton:=TightLepton_Eta[0]",
         "Evt_MET_Pt",
 
-
         ]
 
     return addVars
