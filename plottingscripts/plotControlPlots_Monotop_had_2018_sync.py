@@ -33,7 +33,7 @@ def main(pyrootdir, opts):
     """
     )
     # name of the analysis (i.e. workdir name)
-    name = "Monotop_controlplots_had_2018_sync_hard_nocsvweight_withDarkHiggspileupweight_PuppiMET_nobtagsel"
+    name = "Monotop_controlplots_had_2018_compile_check"
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -49,9 +49,9 @@ def main(pyrootdir, opts):
     discrName = "finaldiscr"
 
     # configs
-    config = "Monotop/pltcfg_controlPlots_had_2018"
+    config = "Monotop/pltcfg_controlPlots_had_2018_sync"
     variable_cfg = "Monotop/additionalVariables"
-    plot_cfg = "Monotop/controlPlots_had_2018"
+    plot_cfg = "Monotop/controlPlots_had_2018_sync"
     syst_cfg = "Monotop/systematics_2018"
     
     # file for rate factors
