@@ -4,6 +4,18 @@ import nafSubmit
 from glob import glob
 
 fastLane = False
+thisdir = os.path.dirname(os.path.realpath((__file__)))
+standAloneDir = os.path.join(thisdir, "..", "..", "standaloneTools")
+if not standAloneDir in sys.path:
+    sys.path.append(standAloneDir)
+
+import findCorruptFiles
+
+def check_files(inputs):
+    brokenFiles = findCorruptFiles.find_broken_files(inputs)
+    brokenFiles = [x for x in brokenFiles if os.path.exists(x)]
+    for f in brokenFiles:
+        os.remove(f)
 #############################
 # parallel plotting
 #############################
@@ -60,6 +72,8 @@ def plotTerminationCheck(jobData):
     undoneJobData["entries"] = []
     noCutflow = 0
     wrongEntry = 0
+    if len(jobData["outputs"])>0:
+        check_files(jobData["outputs"])
 
     for script, output, entries in zip(jobData["scripts"], jobData["outputs"], jobData["entries"]):
         if os.path.exists(output+".cutflow.txt"):
@@ -123,6 +137,9 @@ def haddTerminationCheck(outputScripts, outputFiles):
     noFile = 0
     wrongEntry = 0
     wrongLen = 0
+    
+    if len(outputFiles)>0:
+        check_files(outputFiles)
 
     # looping over jobs to find missing pieces
     for job, jobscript in zip(outputFiles, outputScripts):
@@ -191,6 +208,9 @@ def checkHistoTerminationCheck(shellScripts, outputFiles):
     undoneJobs = []
     undoneOutFiles = []
     noFile = 0
+    
+    if len(outputFiles)>0:
+        check_files(outputFiles)
 
     for job, outFile in zip(shellScripts, outputFiles):
         if not os.path.exists(outFile):
