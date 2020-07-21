@@ -568,13 +568,13 @@ class scriptWriter:
         maxevents = writeOptions.get("maxEventsinJob", maxEventsinJob)
         events_File = writeOptions.get("events_File", -1)
         events_job = writeOptions.get("events_job", -1)
-        processname = sample.nick
+        processname = sample.nick #ttccCMS_ttHbb_HDAMP_ttccDown
         outfilename = self.pp.plotPath+processname+'_'+str(nJob)+'.root'
         scriptname = self.pp.scriptsPath+'/'+processname+'_'+str(nJob)+'.sh'
-        origName = str(sample.origName)
+        origName = str(sample.origName) #ttcc
         suffix = writeOptions.get("suffix", "")
         skipevents = writeOptions.get("skipEvents", 0)
-        variation = processname.split(origName)[1]
+        variation = processname.split(origName,1)[1]
         # check options
         if self.pp.analysis.testrun and maxevents < 100:
             maxevents = 100
