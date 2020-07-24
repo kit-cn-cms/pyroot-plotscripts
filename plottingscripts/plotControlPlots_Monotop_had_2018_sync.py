@@ -33,7 +33,7 @@ def main(pyrootdir, opts):
     """
     )
     # name of the analysis (i.e. workdir name)
-    name = "Monotop_controlplots_had_2018_compile_check"
+    name = "Monotop_controlplots_had_2018_sync"
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -194,12 +194,12 @@ def main(pyrootdir, opts):
         # pP.setDataBases(plotDataBases)
         # pP.setMEMDataBase(memDataBase)
         # pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts(120000)
+        pP.setMaxEvts(80000)
         # pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
         
         pP.setCatNames([""])
-        pP.setCatSelections(["(Hadr_Recoil_Pt>250.)*(N_AK15Jets>=1)*(min_AK15Jet_pt)*(N_HEM_Jets==0)*(DeltaPhi_AK4Jets_Recoil_Larger_0p8)*(N_Taus==0)"])
+        pP.setCatSelections(["(Hadr_Recoil_Pt>250.)*(N_AK15Jets>=1)*(N_HEM_Jets==0)*(DeltaPhi_AK4Jets_Recoil_Larger_0p8)*(N_Taus==0)"])
 
         # run plotParallel
         pP.run()

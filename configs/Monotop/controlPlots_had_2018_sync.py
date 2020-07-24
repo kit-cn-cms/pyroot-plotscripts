@@ -19,7 +19,7 @@ fast = False
 discr_binning = [250.0, 280.0, 310.0, 340.0, 370.0, 400.0, 430.0, 470.0, 510.0, 550.0, 590.0, 640.0, 690.0, 740.0, 790.0, 840.0, 900.0, 960.0, 1020.0, 1090.0, 1160.0, 1250.0, 3000]
 
 # met/recoil + 1 ak15jet phase space
-generalselection = "(Hadr_Recoil_Pt>250.)*(N_AK15Jets>=1)*(min_AK15Jet_pt)*(N_Taus==0)"
+generalselection = "(Hadr_Recoil_Pt>250.)*(N_AK15Jets>=1)*(N_Taus==0)"
 #generalselection += "*(DeltaPhi_AK15Jet_Hadr_Recoil[0]>1.5)"
 generalselection += "*(N_HEM_Jets==0)"#*(N_HEM_AK15Jets==0)"#*(N_HEM_METS==0)"
 # QCD rejection
@@ -39,13 +39,61 @@ def control_plots_had_SR(data=None):
     selection = generalselection
     selection += "*(N_LooseMuons==0 && N_LooseElectrons==0 && N_LoosePhotons==0)"
     selection += "*((Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX == 1) || (Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX == 1))"
-    #selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0)"
+    selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0)"
     #selection += "*(DeltaPhi_AK4Jets_Recoil_Larger_0p8)"
     selection += "*(Evt_Pt_MET>470. || Evt_Phi_MET>-0.62 || Evt_Phi_MET<-1.62)"
     #selection += "*(CaloMET>200.)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
     
     plots = [
+        #plotClasses.Plot(
+            #ROOT.TH1D("N_LooseMuons" + extension, "number of loose muons", 6, -0.5, 5.5),
+            #"N_LooseMuons",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D("N_TightMuons" + extension, "number of tight muons", 6, -0.5, 5.5),
+            #"N_TightMuons",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D("LooseMuon_Pt" + extension, "Loose Muon p_{T} [GeV]", 49, 10.0, 500.0),
+            #"LooseMuon_Pt",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D("LooseMuon_Eta" + extension, "Loose Muon #eta", 25, -2.5, 2.5),
+            #"LooseMuon_Eta",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D("LooseMuon_Phi" + extension, "Loose Muon #phi", 30, -3.14, 3.14),
+            #"LooseMuon_Phi",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D("Muon_Pt" + extension, "Tight Muon p_{T} [GeV]", 49, 10.0, 500.0),
+            #"Muon_Pt",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D("Muon_Eta" + extension, "Tight Muon #eta", 25, -2.5, 2.5),
+            #"Muon_Eta",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D("Muon_Phi" + extension, "Tight Muon #phi", 30, -3.14, 3.14),
+            #"Muon_Phi",
+            #selection,
+            #label,
+        #),
         #plotClasses.Plot(
             #ROOT.TH1D("Evt_Pt_GenMET" + extension, "Puppi GEN MET", 40, 0.0, 1000.0),
             #"Evt_Pt_GenMET",
@@ -2673,7 +2721,7 @@ def control_plots_had_CR_ttbarEl(data=None):
     selection = generalselection
     selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele32_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1 || Triggered_HLT_Ele115_CaloIdVT_GsfTrkIdT_vX==1))"
     selection += "*(N_LoosePhotons==0)"
-    #selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]>=1)"
+    selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]>=1)"
     selection += "*(Evt_Pt_MET>100.)"
     #selection += "*(M_W_transverse[0]<150.)"
     selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p7)"
@@ -3492,7 +3540,7 @@ def control_plots_had_CR_ttbarMu(data=None):
     selection = generalselection
     selection += "*(N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && ((Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX == 1) || (Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX == 1)))"
     selection += "*(N_LoosePhotons==0)"
-    #selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]>=1)"
+    selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]>=1)"
     #selection += "*(M_W_transverse[0]<150.)"
     #selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p5)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
@@ -4304,7 +4352,7 @@ def control_plots_had_CR_WEl(data=None):
     selection = generalselection
     selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele32_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1 || Triggered_HLT_Ele115_CaloIdVT_GsfTrkIdT_vX==1))"
     selection += "*(N_LoosePhotons==0)"
-    #selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0)"
+    selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0)"
     #selection += "*(M_W_transverse[0]<150.)"
     selection += "*(Evt_Pt_MET>100.)"
     selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p7)"
@@ -5123,7 +5171,7 @@ def control_plots_had_CR_WMu(data=None):
     selection = generalselection
     selection += "*(N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && ((Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX == 1) || (Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX == 1)))"
     selection += "*(N_LoosePhotons==0)"
-    #selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0)"
+    selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0)"
     #selection += "*(M_W_transverse[0]<150.)"
     #selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p5)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
