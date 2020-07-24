@@ -111,13 +111,6 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     //for(size_t m = 0;m<N_Jets;m++) HT_Jets+=Jet_Pt[m];
     
     //std::cout << "N_Jets: " << N_Jets << " HT: " << HT_Jets << std::endl;
-    float internalCSVWeightSF_had = 1.0;
-    internalCSVWeightSF_had = csv_calibration_helper_had.GetScaleFactor(process, N_Jets, HT_AK4Jets);
-    float internalCSVWeightSF_lep = 1.0;
-    internalCSVWeightSF_lep = csv_calibration_helper_lep.GetScaleFactor(process, N_Jets, HT_AK4Jets);
-    
-    //std::cout << " DeepJet patch had: " << internalCSVWeightSF_had << std::endl;
-    //std::cout << " DeepJet patch lep: " << internalCSVWeightSF_lep << std::endl;
 
     // double primlepPt;
     // double primlepEta;
