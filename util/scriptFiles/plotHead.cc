@@ -149,6 +149,40 @@ void plot()
     int electron_data = 0;
     int muon_data     = 0;
 
+    // BTAG SF Stuff
+    std::string csvFile = "";
+    std::string effFile = "";
+    double wp_loose = 0.;
+    double wp_medium = 0.;
+    if( dataera == "2016" ) {
+        csvFile=plotscriptBaseDir+"/data/CSV/sfs_deepjet_fixedWP_2016.csv";
+        effFile=plotscriptBaseDir+"/data/CSV/eff_deepjet_2016.root";
+        wp_loose = 	0.0614;
+        wp_medium = 0.3093;
+        }
+    else if( dataera == "2017" ) {
+        csvFile=plotscriptBaseDir+"/data/CSV/sfs_deepjet_fixedWP_2017.csv";
+        effFile=plotscriptBaseDir+"/data/CSV/eff_deepjet_2017.root";
+        wp_loose = 	0.0521;
+        wp_medium = 0.3033;
+        }
+    else if( dataera == "2018" ) {
+        csvFile=plotscriptBaseDir+"/data/CSV/sfs_deepjet_fixedWP_2018.csv";
+        effFile=plotscriptBaseDir+"/data/CSV/btag_efficiencies_deepjet_2018.root";
+        wp_loose = 	0.0494;
+        wp_medium = 0.2770;
+        }
+    else {
+      std::cout << "NO VALID DATAERA CHOSEN!!" << std::endl;
+      std::cout << "dataera: " << dataera << std::endl;
+    }
+
+    BtagSFHelper* internalBtagSFHelper_loose= new BtagSFHelper(csvFile,effFile, "loose", wp_loose);
+    BtagSFHelper* internalBtagSFHelper_medium= new BtagSFHelper(csvFile,effFile, "medium", wp_medium);
+    BtagSFHelper* internalBtagSFHelper_medium_outside= new BtagSFHelper(csvFile,effFile, "medium_outside", wp_medium);
+    BtagSFHelper* internalBtagSFHelper_loose_outside= new BtagSFHelper(csvFile,effFile, "loose_outside", wp_loose);
+
+
     // initialize CSV Weight Scale Factor Helper
     std::string process = "";
     process = processname;

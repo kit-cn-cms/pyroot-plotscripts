@@ -130,7 +130,128 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     // primlepPhi=Evt_Phi_PrimaryLepton;
     // primlepEta=Evt_Eta_PrimaryLepton;
     // primlepM=Evt_M_PrimaryLepton;
+    std::vector<double> jetPts;    
+    std::vector<double> jetEtas;    
+    std::vector<double> jetPhis; 
+    std::vector<double> jetMasses;
+    std::vector<double> jetEnergies; 
+    std::vector<double> jetCSVs;    
+    std::vector<int> jetFlavors;    
 
+    std::vector<double> jetPts_outside_untagged_medium;    
+    std::vector<double> jetEtas_outside_untagged_medium;    
+    std::vector<int> jetFlavors_outside_untagged_medium;    
+    
+    std::vector<double> jetPts_outside_tagged_medium;    
+    std::vector<double> jetEtas_outside_tagged_medium;    
+    std::vector<int> jetFlavors_outside_tagged_medium; 
+ 
+    std::vector<double> jetPts_outside_untagged_loose;    
+    std::vector<double> jetEtas_outside_untagged_loose;    
+    std::vector<int> jetFlavors_outside_untagged_loose;    
+    
+    std::vector<double> jetPts_outside_tagged_loose;    
+    std::vector<double> jetEtas_outside_tagged_loose;    
+    std::vector<int> jetFlavors_outside_tagged_loose; 
+
+    for(int ijet =0; ijet<N_Jets; ijet++){
+        jetPts.push_back(Jet_Pt[ijet]);
+        jetEtas.push_back(Jet_Eta[ijet]);
+        jetCSVs.push_back(Jet_CSV[ijet]);
+        jetFlavors.push_back(Jet_Flav[ijet]);
+        jetMasses.push_back(Jet_M[ijet]);
+        jetPhis.push_back(Jet_Phi[ijet]);
+        jetEnergies.push_back(Jet_E[ijet]);
+    }
+
+    // AK4 Jets outside AK15 Jet -> medium tags
+    for(int ijet =0; ijet<N_JetsMediumUntagged_outside_lead_AK15Jet; ijet++){
+        jetPts_outside_untagged_medium.push_back(JetMediumUntagged_outside_lead_AK15Jet_Pt[ijet]);
+        jetEtas_outside_untagged_medium.push_back(JetMediumUntagged_outside_lead_AK15Jet_Eta[ijet]);
+        jetFlavors_outside_untagged_medium.push_back(JetMediumUntagged_outside_lead_AK15Jet_Flav[ijet]);
+    }
+    for(int ijet =0; ijet<N_JetsMediumTagged_outside_lead_AK15Jet; ijet++){
+        jetPts_outside_tagged_medium.push_back(JetMediumTagged_outside_lead_AK15Jet_Pt[ijet]);
+        jetEtas_outside_tagged_medium.push_back(JetMediumTagged_outside_lead_AK15Jet_Eta[ijet]);
+        jetFlavors_outside_tagged_medium.push_back(JetMediumTagged_outside_lead_AK15Jet_Flav[ijet]);
+    }
+    // AK4 Jets outside AK15 Jet -> loose tags
+    for(int ijet =0; ijet<N_JetsLooseUntagged_outside_lead_AK15Jet; ijet++){
+        jetPts_outside_untagged_loose.push_back(JetLooseUntagged_outside_lead_AK15Jet_Pt[ijet]);
+        jetEtas_outside_untagged_loose.push_back(JetLooseUntagged_outside_lead_AK15Jet_Eta[ijet]);
+        jetFlavors_outside_untagged_loose.push_back(JetLooseUntagged_outside_lead_AK15Jet_Flav[ijet]);
+    }
+    for(int ijet =0; ijet<N_JetsLooseTagged_outside_lead_AK15Jet; ijet++){
+        jetPts_outside_tagged_loose.push_back(JetLooseTagged_outside_lead_AK15Jet_Pt[ijet]);
+        jetEtas_outside_tagged_loose.push_back(JetLooseTagged_outside_lead_AK15Jet_Eta[ijet]);
+        jetFlavors_outside_tagged_loose.push_back(JetLooseTagged_outside_lead_AK15Jet_Flav[ijet]);
+    }
+
+    float internalCSVweight_loose=internalBtagSFHelper_loose->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,"central","central");
+    float internalCSVweight_looseLFUP=internalBtagSFHelper_loose->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,"up","central");
+    float internalCSVweight_looseLFDOWN=internalBtagSFHelper_loose->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,"down","central");
+    float internalCSVweight_looseHFUP=internalBtagSFHelper_loose->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,"central","up");
+    float internalCSVweight_looseHFDOWN=internalBtagSFHelper_loose->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,"central","down");
+ 
+    float internalCSVweight_medium=internalBtagSFHelper_medium->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,"central","central");
+    float internalCSVweight_mediumLFUP=internalBtagSFHelper_medium->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,"up","central");
+    float internalCSVweight_mediumLFDOWN=internalBtagSFHelper_medium->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,"down","central");
+    float internalCSVweight_mediumHFUP=internalBtagSFHelper_medium->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,"central","up");
+    float internalCSVweight_mediumHFDOWN=internalBtagSFHelper_medium->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,"central","down");
+
+    float internalCSVweight_medium_outside=internalBtagSFHelper_medium_outside->getCSVWeight(jetPts_outside_tagged_medium,jetEtas_outside_tagged_medium,jetFlavors_outside_tagged_medium,
+                                                                                            jetPts_outside_untagged_medium,jetEtas_outside_untagged_medium,jetFlavors_outside_untagged_medium,
+                                                                                            "central","central");
+    float internalCSVweight_medium_outsideLFUP=internalBtagSFHelper_medium_outside->getCSVWeight(jetPts_outside_tagged_medium,jetEtas_outside_tagged_medium,jetFlavors_outside_tagged_medium,
+                                                                                                 jetPts_outside_untagged_medium,jetEtas_outside_untagged_medium,jetFlavors_outside_untagged_medium,
+                                                                                                 "up","central");
+    float internalCSVweight_medium_outsideLFDOWN=internalBtagSFHelper_medium_outside->getCSVWeight(jetPts_outside_tagged_medium,jetEtas_outside_tagged_medium,jetFlavors_outside_tagged_medium,
+                                                                                                   jetPts_outside_untagged_medium,jetEtas_outside_untagged_medium,jetFlavors_outside_untagged_medium,
+                                                                                                   "down","central");
+    float internalCSVweight_medium_outsideHFUP=internalBtagSFHelper_medium_outside->getCSVWeight(jetPts_outside_tagged_medium,jetEtas_outside_tagged_medium,jetFlavors_outside_tagged_medium,
+                                                                                                 jetPts_outside_untagged_medium,jetEtas_outside_untagged_medium,jetFlavors_outside_untagged_medium,
+                                                                                                 "central","up");
+    float internalCSVweight_medium_outsideHFDOWN=internalBtagSFHelper_medium_outside->getCSVWeight( jetPts_outside_tagged_medium,jetEtas_outside_tagged_medium,jetFlavors_outside_tagged_medium,
+                                                                                                    jetPts_outside_untagged_medium,jetEtas_outside_untagged_medium,jetFlavors_outside_untagged_medium,
+                                                                                                    "central","down");
+
+    float internalCSVweight_loose_outside=internalBtagSFHelper_loose_outside->getCSVWeight(jetPts_outside_tagged_loose,jetEtas_outside_tagged_loose,jetFlavors_outside_tagged_loose,
+                                                                                            jetPts_outside_untagged_loose,jetEtas_outside_untagged_loose,jetFlavors_outside_untagged_loose,
+                                                                                            "central","central");
+    float internalCSVweight_loose_outsideLFUP=internalBtagSFHelper_loose_outside->getCSVWeight(jetPts_outside_tagged_loose,jetEtas_outside_tagged_loose,jetFlavors_outside_tagged_loose,
+                                                                                                 jetPts_outside_untagged_loose,jetEtas_outside_untagged_loose,jetFlavors_outside_untagged_loose,
+                                                                                                 "up","central");
+    float internalCSVweight_loose_outsideLFDOWN=internalBtagSFHelper_loose_outside->getCSVWeight(jetPts_outside_tagged_loose,jetEtas_outside_tagged_loose,jetFlavors_outside_tagged_loose,
+                                                                                                   jetPts_outside_untagged_loose,jetEtas_outside_untagged_loose,jetFlavors_outside_untagged_loose,
+                                                                                                   "down","central");
+    float internalCSVweight_loose_outsideHFUP=internalBtagSFHelper_loose_outside->getCSVWeight(jetPts_outside_tagged_loose,jetEtas_outside_tagged_loose,jetFlavors_outside_tagged_loose,
+                                                                                                 jetPts_outside_untagged_loose,jetEtas_outside_untagged_loose,jetFlavors_outside_untagged_loose,
+                                                                                                 "central","up");
+    float internalCSVweight_loose_outsideHFDOWN=internalBtagSFHelper_loose_outside->getCSVWeight( jetPts_outside_tagged_loose,jetEtas_outside_tagged_loose,jetFlavors_outside_tagged_loose,
+                                                                                                    jetPts_outside_untagged_loose,jetEtas_outside_untagged_loose,jetFlavors_outside_untagged_loose,
+                                                                                                    "central","down");
+
+
+    // std::cout << "-------------" << std::endl;
+    // std::cout << "internalCSVweight_loose: " << internalCSVweight_loose << std::endl;
+    // std::cout << "internalCSVweight_looseLFUP: " << internalCSVweight_looseLFUP << std::endl;
+    // std::cout << "internalCSVweight_looseLFDOWN: " << internalCSVweight_looseLFDOWN << std::endl;
+    // std::cout << "internalCSVweight_looseHFUP: " << internalCSVweight_looseHFUP << std::endl;
+    // std::cout << "internalCSVweight_looseHFDOWN: " << internalCSVweight_looseHFDOWN << std::endl;
+
+    // std::cout << "-------------" << std::endl;
+    // std::cout << "internalCSVweight_medium_outside: " << internalCSVweight_medium_outside << std::endl;
+    // std::cout << "internalCSVweight_medium_outsideLFUP: " << internalCSVweight_medium_outsideLFUP << std::endl;
+    // std::cout << "internalCSVweight_medium_outsideLFDOWN: " << internalCSVweight_medium_outsideLFDOWN << std::endl;
+    // std::cout << "internalCSVweight_medium_outsideHFUP: " << internalCSVweight_medium_outsideHFUP << std::endl;
+    // std::cout << "internalCSVweight_medium_outsideHFDOWN: " << internalCSVweight_medium_outsideHFDOWN << std::endl;
+
+    // std::cout << "internalCSVweight_loose_outside: " << internalCSVweight_loose_outside << std::endl;
+    // std::cout << "internalCSVweight_loose_outsideLFUP: " << internalCSVweight_loose_outsideLFUP << std::endl;
+    // std::cout << "internalCSVweight_loose_outsideLFDOWN: " << internalCSVweight_loose_outsideLFDOWN << std::endl;
+    // std::cout << "internalCSVweight_loose_outsideHFUP: " << internalCSVweight_loose_outsideHFUP << std::endl;
+    // std::cout << "internalCSVweight_loose_outsideHFDOWN: " << internalCSVweight_loose_outsideHFDOWN << std::endl;    
+    
     totalTimeCalculateSFs += timerCalculateSFs->RealTime();
 
     // print stuff for synchronizing

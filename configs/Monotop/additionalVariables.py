@@ -79,7 +79,39 @@ def getAddVars():
         "Hadr_Recoil_Pt",
         #"AK15Jet_TopMatched",
         "AK15Jet_Eta",
-        "N_GenPVs"
-    ]
+        "N_GenPVs",
+        "N_JetsMediumTagged_outside_lead_AK15Jet",
+        "JetMediumTagged_outside_lead_AK15Jet_Pt",
+        "JetMediumTagged_outside_lead_AK15Jet_Eta",
+        "JetMediumTagged_outside_lead_AK15Jet_Flav",
+        "JetLooseTagged_outside_lead_AK15Jet_Pt",
+        "JetLooseTagged_outside_lead_AK15Jet_Eta",
+        "JetLooseTagged_outside_lead_AK15Jet_Flav",
+
+        "N_JetsMediumUntagged_outside_lead_AK15Jet",
+        "JetMediumUntagged_outside_lead_AK15Jet_Pt",
+        "JetMediumUntagged_outside_lead_AK15Jet_Eta",
+        "JetMediumUntagged_outside_lead_AK15Jet_Flav",
+        "JetLooseUntagged_outside_lead_AK15Jet_Pt",
+        "JetLooseUntagged_outside_lead_AK15Jet_Eta",
+        "JetLooseUntagged_outside_lead_AK15Jet_Flav",
+       
+        "N_JetsLooseTagged_outside_lead_AK15Jet",
+        "JetLooseTagged_outside_lead_AK15Jet_Pt",
+        "JetLooseTagged_outside_lead_AK15Jet_Eta",
+        "JetLooseTagged_outside_lead_AK15Jet_Flav",
+        "JetLooseTagged_outside_lead_AK15Jet_Pt",
+        "JetLooseTagged_outside_lead_AK15Jet_Eta",
+        "JetLooseTagged_outside_lead_AK15Jet_Flav",
+
+        "N_JetsLooseUntagged_outside_lead_AK15Jet",
+        "JetLooseUntagged_outside_lead_AK15Jet_Pt",
+        "JetLooseUntagged_outside_lead_AK15Jet_Eta",
+        "JetLooseUntagged_outside_lead_AK15Jet_Flav",
+        "JetLooseUntagged_outside_lead_AK15Jet_Pt",
+        "JetLooseUntagged_outside_lead_AK15Jet_Eta",
+        "JetLooseUntagged_outside_lead_AK15Jet_Flav",
+       
+        ]
 
     return addVars
