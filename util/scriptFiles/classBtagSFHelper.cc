@@ -904,13 +904,11 @@ void BtagSFHelper::init(const std::string& csvFile, const std::string& effFile, 
     }
     else if (type == "medium_outside") {
       wp_ = BTagEntry::OP_MEDIUM;
-      // h_eff_name = "medium_outside_btagging_efficiency";
-      h_eff_name = "medium_btagging_efficiency";
+      h_eff_name = "medium_btagging_efficiency_outside";
     }
     else if (type == "loose_outside") {
       wp_ = BTagEntry::OP_LOOSE;
-      // h_eff_name = "loose_outside_btagging_efficiency";
-      h_eff_name = "medium_btagging_efficiency";
+      h_eff_name = "loose_btagging_efficiency_outside";
     }
     else{
       std::cout << "Please specifiy meaningful WP. Options are 'loose', 'medium', 'medium_outside', 'loose_outside' !!!" << std::endl;
