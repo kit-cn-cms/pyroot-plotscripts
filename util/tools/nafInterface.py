@@ -234,7 +234,7 @@ def mergeSystematicsTerminationCheck(jobdir, jobIDs):
         for fpath in files:
             with open(fpath) as f:
                 lines = f.read().splitlines()
-            if not lines[-1] == "DONE":
+            if len(lines) == 0 or not lines[-1] == "DONE":
                 #DANGERZONE: index seems to be different between local and grid run
                 p = lines[2]
                 missing_processes.append(p)
