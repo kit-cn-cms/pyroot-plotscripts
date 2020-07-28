@@ -29,14 +29,14 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'finalDNN_finalRFs/2016'
+    name = 'finalDNN_averagedRFs/2016'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
 
     # signal process
     signalProcess = "ttH"
-    nSigSamples   = 1
+    nSigSamples   = 8
 
     # dataera
     dataera = "2016"
@@ -73,7 +73,7 @@ def main(pyrootdir, opts):
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
-    rateFactorsFile = pyrootdir + "/data/rateFactors/ratefactors_2016_with_correction.csv"
+    rateFactorsFile = pyrootdir + "/data/rateFactors/ratefactors_new_with_correction_2016.csv"
 
     # script options
     analysisOptions = {
@@ -283,7 +283,7 @@ def main(pyrootdir, opts):
                 # pseudo data without ttbb 5FS
                 # pP.addData( samples = configData.samples[:-1], 
                 #             discrName = discrName)
-                pP.addData( samples = configData.samples[:-9], 
+                pP.addData( samples = configData.samples[nSigSamples:], 
                             discrName = discrName)
                 #pP.addData(samples = configData.samples)
             else:
