@@ -23,7 +23,7 @@ generalselection = "(Hadr_Recoil_Pt>250.)*(N_AK15Jets>=1)*(N_Taus==0)"
 #generalselection += "*(DeltaPhi_AK15Jet_Hadr_Recoil[0]>1.5)"
 generalselection += "*(N_HEM_Jets==0)"#*(N_HEM_AK15Jets==0)"#*(N_HEM_METS==0)"
 # QCD rejection
-generalselection += "*(DeltaPhi_AK4Jets_Recoil_Larger_0p8)"
+generalselection += "*(DeltaPhi_AK4Jets_Recoil_Larger_0p8)*(N_AK15Jets_SoftDrop==N_AK15Jets)"
 # MET quality cut???
 #generalselection += "*(CaloMET_PFMET_Recoil_ratio<0.2)"
 # ak15 jet quality cuts
@@ -39,7 +39,7 @@ def control_plots_had_SR(data=None):
     selection = generalselection
     selection += "*(N_LooseMuons==0 && N_LooseElectrons==0 && N_LoosePhotons==0)"
     selection += "*((Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX == 1) || (Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX == 1))"
-    selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0)"
+    #selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0)"
     #selection += "*(DeltaPhi_AK4Jets_Recoil_Larger_0p8)"
     selection += "*(Evt_Pt_MET>470. || Evt_Phi_MET>-0.62 || Evt_Phi_MET<-1.62)"
     #selection += "*(CaloMET>200.)"
@@ -739,13 +739,13 @@ def control_plots_had_SR(data=None):
         #),
         plotClasses.Plot(
             ROOT.TH1D(
-                "DeltaR_AK15Jet_AK4JetTagged" + extension,
-                "DeltaR_AK15Jet_AK4JetTagged",
+                "DeltaR_AK15Jet_AK4JetMediumTagged" + extension,
+                "DeltaR_AK15Jet_AK4JetMediumTagged",
                 40,
                 0.0,
                 4.0,
             ),
-            "DeltaR_AK15Jet_AK4JetTagged[0]",
+            "DeltaR_AK15Jet_AK4JetMediumTagged[0]",
             selection,
             label,
         ),
@@ -794,8 +794,8 @@ def control_plots_had_SR(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("N_BTagsT" + extension, "tight btag multiplicity", 6, -0.5, 5.5),
-            "N_BTagsT",
+            ROOT.TH1D("N_JetsLooseTagged_outside_lead_AK15Jet" + extension, "loose btags outside lead ak15 jet", 6, -0.5, 5.5),
+            "N_JetsLooseTagged_outside_lead_AK15Jet",
             selection,
             label,
         ),
@@ -976,7 +976,7 @@ def control_plots_had_CR_ZMuMu(data=None):
     selection += "*(DiMuon_Mass>60.)*(DiMuon_Mass<120.)"
     #selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0)"
     #selection += "*(DiMuon_Pt>200.)"
-    selection += "*(Evt_Pt_MET<80.)"
+    #selection += "*(Evt_Pt_MET<80.)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
 
     plots = [
@@ -1570,8 +1570,8 @@ def control_plots_had_CR_ZMuMu(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("N_BTagsT" + extension, "tight btag multiplicity", 6, -0.5, 5.5),
-            "N_BTagsT",
+            ROOT.TH1D("N_JetsLooseTagged_outside_lead_AK15Jet" + extension, "loose btags outside lead ak15 jet", 6, -0.5, 5.5),
+            "N_JetsLooseTagged_outside_lead_AK15Jet",
             selection,
             label,
         ),
@@ -1639,13 +1639,13 @@ def control_plots_had_CR_ZMuMu(data=None):
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "DeltaR_AK15Jet_AK4JetTagged" + extension,
-                "DeltaR_AK15Jet_AK4JetTagged",
+                "DeltaR_AK15Jet_AK4JetMediumTagged" + extension,
+                "DeltaR_AK15Jet_AK4JetMediumTagged",
                 40,
                 0.0,
                 4.0,
             ),
-            "DeltaR_AK15Jet_AK4JetTagged[0]",
+            "DeltaR_AK15Jet_AK4JetMediumTagged[0]",
             selection,
             label,
         ),
@@ -1844,7 +1844,7 @@ def control_plots_had_CR_ZElEl(data=None):
     selection += "*(DiElectron_Mass>60.)*(DiElectron_Mass<120.)"
     #selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0)"
     #selection += "*(DiElectron_Pt>200.)"
-    selection += "*(Evt_Pt_MET<80.)"
+    #selection += "*(Evt_Pt_MET<80.)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
 
     plots = [
@@ -2448,8 +2448,8 @@ def control_plots_had_CR_ZElEl(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("N_BTagsT" + extension, "tight btag multiplicity", 6, -0.5, 5.5),
-            "N_BTagsT",
+            ROOT.TH1D("N_JetsLooseTagged_outside_lead_AK15Jet" + extension, "loose btags outside lead ak15 jet", 6, -0.5, 5.5),
+            "N_JetsLooseTagged_outside_lead_AK15Jet",
             selection,
             label,
         ),
@@ -2517,13 +2517,13 @@ def control_plots_had_CR_ZElEl(data=None):
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "DeltaR_AK15Jet_AK4JetTagged" + extension,
-                "DeltaR_AK15Jet_AK4JetTagged",
+                "DeltaR_AK15Jet_AK4JetMediumTagged" + extension,
+                "DeltaR_AK15Jet_AK4JetMediumTagged",
                 40,
                 0.0,
                 4.0,
             ),
-            "DeltaR_AK15Jet_AK4JetTagged[0]",
+            "DeltaR_AK15Jet_AK4JetMediumTagged[0]",
             selection,
             label,
         ),
@@ -2721,10 +2721,10 @@ def control_plots_had_CR_ttbarEl(data=None):
     selection = generalselection
     selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele32_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1 || Triggered_HLT_Ele115_CaloIdVT_GsfTrkIdT_vX==1))"
     selection += "*(N_LoosePhotons==0)"
-    selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]>=1)"
-    selection += "*(Evt_Pt_MET>100.)"
+    #selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]>=1)"
+    #selection += "*(Evt_Pt_MET>100.)"
     #selection += "*(M_W_transverse[0]<150.)"
-    selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p7)"
+    #selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p7)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
 
     plots = [
@@ -3280,8 +3280,8 @@ def control_plots_had_CR_ttbarEl(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("N_BTagsT" + extension, "tight btag multiplicity", 6, -0.5, 5.5),
-            "N_BTagsT",
+            ROOT.TH1D("N_JetsLooseTagged_outside_lead_AK15Jet" + extension, "loose btags outside lead ak15 jet", 6, -0.5, 5.5),
+            "N_JetsLooseTagged_outside_lead_AK15Jet",
             selection,
             label,
         ),
@@ -3349,13 +3349,13 @@ def control_plots_had_CR_ttbarEl(data=None):
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "DeltaR_AK15Jet_AK4JetTagged" + extension,
-                "DeltaR_AK15Jet_AK4JetTagged",
+                "DeltaR_AK15Jet_AK4JetMediumTagged" + extension,
+                "DeltaR_AK15Jet_AK4JetMediumTagged",
                 40,
                 0.0,
                 4.0,
             ),
-            "DeltaR_AK15Jet_AK4JetTagged[0]",
+            "DeltaR_AK15Jet_AK4JetMediumTagged[0]",
             selection,
             label,
         ),
@@ -3540,7 +3540,7 @@ def control_plots_had_CR_ttbarMu(data=None):
     selection = generalselection
     selection += "*(N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && ((Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX == 1) || (Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX == 1)))"
     selection += "*(N_LoosePhotons==0)"
-    selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]>=1)"
+    #selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]>=1)"
     #selection += "*(M_W_transverse[0]<150.)"
     #selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p5)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
@@ -4094,8 +4094,8 @@ def control_plots_had_CR_ttbarMu(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("N_BTagsT" + extension, "tight btag multiplicity", 6, -0.5, 5.5),
-            "N_BTagsT",
+            ROOT.TH1D("N_JetsLooseTagged_outside_lead_AK15Jet" + extension, "loose btags outside lead ak15 jet", 6, -0.5, 5.5),
+            "N_JetsLooseTagged_outside_lead_AK15Jet",
             selection,
             label,
         ),
@@ -4163,13 +4163,13 @@ def control_plots_had_CR_ttbarMu(data=None):
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "DeltaR_AK15Jet_AK4JetTagged" + extension,
-                "DeltaR_AK15Jet_AK4JetTagged",
+                "DeltaR_AK15Jet_AK4JetMediumTagged" + extension,
+                "DeltaR_AK15Jet_AK4JetMediumTagged",
                 40,
                 0.0,
                 4.0,
             ),
-            "DeltaR_AK15Jet_AK4JetTagged[0]",
+            "DeltaR_AK15Jet_AK4JetMediumTagged[0]",
             selection,
             label,
         ),
@@ -4352,10 +4352,10 @@ def control_plots_had_CR_WEl(data=None):
     selection = generalselection
     selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele32_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1 || Triggered_HLT_Ele115_CaloIdVT_GsfTrkIdT_vX==1))"
     selection += "*(N_LoosePhotons==0)"
-    selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0)"
+    #selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0)"
     #selection += "*(M_W_transverse[0]<150.)"
-    selection += "*(Evt_Pt_MET>100.)"
-    selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p7)"
+    #selection += "*(Evt_Pt_MET>100.)"
+    #selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p7)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
 
     plots = [
@@ -4911,8 +4911,8 @@ def control_plots_had_CR_WEl(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("N_BTagsT" + extension, "tight btag multiplicity", 6, -0.5, 5.5),
-            "N_BTagsT",
+            ROOT.TH1D("N_JetsLooseTagged_outside_lead_AK15Jet" + extension, "loose btags outside lead ak15 jet", 6, -0.5, 5.5),
+            "N_JetsLooseTagged_outside_lead_AK15Jet",
             selection,
             label,
         ),
@@ -4980,13 +4980,13 @@ def control_plots_had_CR_WEl(data=None):
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "DeltaR_AK15Jet_AK4JetTagged" + extension,
-                "DeltaR_AK15Jet_AK4JetTagged",
+                "DeltaR_AK15Jet_AK4JetMediumTagged" + extension,
+                "DeltaR_AK15Jet_AK4JetMediumTagged",
                 40,
                 0.0,
                 4.0,
             ),
-            "DeltaR_AK15Jet_AK4JetTagged[0]",
+            "DeltaR_AK15Jet_AK4JetMediumTagged[0]",
             selection,
             label,
         ),
@@ -5171,7 +5171,7 @@ def control_plots_had_CR_WMu(data=None):
     selection = generalselection
     selection += "*(N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && ((Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX == 1) || (Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX == 1)))"
     selection += "*(N_LoosePhotons==0)"
-    selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0)"
+    #selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0)"
     #selection += "*(M_W_transverse[0]<150.)"
     #selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p5)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
@@ -5725,8 +5725,8 @@ def control_plots_had_CR_WMu(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("N_BTagsT" + extension, "tight btag multiplicity", 6, -0.5, 5.5),
-            "N_BTagsT",
+            ROOT.TH1D("N_JetsLooseTagged_outside_lead_AK15Jet" + extension, "loose btags outside lead ak15 jet", 6, -0.5, 5.5),
+            "N_JetsLooseTagged_outside_lead_AK15Jet",
             selection,
             label,
         ),
@@ -5794,13 +5794,13 @@ def control_plots_had_CR_WMu(data=None):
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "DeltaR_AK15Jet_AK4JetTagged" + extension,
-                "DeltaR_AK15Jet_AK4JetTagged",
+                "DeltaR_AK15Jet_AK4JetMediumTagged" + extension,
+                "DeltaR_AK15Jet_AK4JetMediumTagged",
                 40,
                 0.0,
                 4.0,
             ),
-            "DeltaR_AK15Jet_AK4JetTagged[0]",
+            "DeltaR_AK15Jet_AK4JetMediumTagged[0]",
             selection,
             label,
         ),
@@ -6534,8 +6534,8 @@ def control_plots_had_CR_Gamma(data=None):
             label,
         ),
         plotClasses.Plot(
-            ROOT.TH1D("N_BTagsT" + extension, "tight btag multiplicity", 6, -0.5, 5.5),
-            "N_BTagsT",
+            ROOT.TH1D("N_JetsLooseTagged_outside_lead_AK15Jet" + extension, "loose btags outside lead ak15 jet", 6, -0.5, 5.5),
+            "N_JetsLooseTagged_outside_lead_AK15Jet",
             selection,
             label,
         ),
@@ -6603,13 +6603,13 @@ def control_plots_had_CR_Gamma(data=None):
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "DeltaR_AK15Jet_AK4JetTagged" + extension,
-                "DeltaR_AK15Jet_AK4JetTagged",
+                "DeltaR_AK15Jet_AK4JetMediumTagged" + extension,
+                "DeltaR_AK15Jet_AK4JetMediumTagged",
                 40,
                 0.0,
                 4.0,
             ),
-            "DeltaR_AK15Jet_AK4JetTagged[0]",
+            "DeltaR_AK15Jet_AK4JetMediumTagged[0]",
             selection,
             label,
         ),
@@ -6791,8 +6791,8 @@ def getDiscriminatorPlots(data=None, discrname=""):
     discriminatorPlots += control_plots_had_SR(data)
     discriminatorPlots += control_plots_had_CR_ZMuMu(data)
     discriminatorPlots += control_plots_had_CR_ZElEl(data)
-    discriminatorPlots += control_plots_had_CR_ttbarEl(data)
-    discriminatorPlots += control_plots_had_CR_ttbarMu(data)
+    #discriminatorPlots += control_plots_had_CR_ttbarEl(data)
+    #discriminatorPlots += control_plots_had_CR_ttbarMu(data)
     discriminatorPlots += control_plots_had_CR_WEl(data)
     discriminatorPlots += control_plots_had_CR_WMu(data)
     discriminatorPlots += control_plots_had_CR_Gamma(data)
