@@ -2722,9 +2722,9 @@ def control_plots_had_CR_ttbarEl(data=None):
     selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele32_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1 || Triggered_HLT_Ele115_CaloIdVT_GsfTrkIdT_vX==1))"
     selection += "*(N_LoosePhotons==0)"
     #selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]>=1)"
-    #selection += "*(Evt_Pt_MET>100.)"
+    selection += "*(Evt_Pt_MET>80.)"
     #selection += "*(M_W_transverse[0]<150.)"
-    #selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p7)"
+    selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p7)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
 
     plots = [
@@ -3542,7 +3542,7 @@ def control_plots_had_CR_ttbarMu(data=None):
     selection += "*(N_LoosePhotons==0)"
     #selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]>=1)"
     #selection += "*(M_W_transverse[0]<150.)"
-    #selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p5)"
+    selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p7)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
 
     plots = [
@@ -4354,8 +4354,8 @@ def control_plots_had_CR_WEl(data=None):
     selection += "*(N_LoosePhotons==0)"
     #selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0)"
     #selection += "*(M_W_transverse[0]<150.)"
-    #selection += "*(Evt_Pt_MET>100.)"
-    #selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p7)"
+    selection += "*(Evt_Pt_MET>80.)"
+    selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p7)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
 
     plots = [
@@ -5173,7 +5173,7 @@ def control_plots_had_CR_WMu(data=None):
     selection += "*(N_LoosePhotons==0)"
     #selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0)"
     #selection += "*(M_W_transverse[0]<150.)"
-    #selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p5)"
+    selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p7)"
     #selection += "*((AK15Jet_DeepAK15_probTbqq[0]+AK15Jet_DeepAK15_probTbcq[0])>0.5)
 
     plots = [
