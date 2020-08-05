@@ -312,20 +312,20 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     double internalCSVweight_medium_HFUP_ge2B_final   = divideSavely((1-internalCSVweight_medium_HFUP_0B.first-internalCSVweight_medium_HFUP_1B.first),(1-internalCSVweight_medium_HFUP_0B.second-internalCSVweight_medium_HFUP_1B.second));
     double internalCSVweight_medium_HFDOWN_ge2B_final = divideSavely((1-internalCSVweight_medium_HFDOWN_0B.first-internalCSVweight_medium_HFDOWN_1B.first),(1-internalCSVweight_medium_HFDOWN_0B.second-internalCSVweight_medium_HFDOWN_1B.second));
 
-    if(N_BTagsM>=2){
-        std::cout << "-------------" << std::endl;
-        std::cout << "internalCSVweight_loose_outside_0B_final: " << internalCSVweight_loose_outside_0B_final << std::endl;
-        // std::cout << "internalCSVweight_loose_outside_zerotag: " << internalCSVweight_loose_outside_zerotag << std::endl;
-        std::cout << "internalCSVweight_loose_outside_ge1B_final: " << internalCSVweight_loose_outside_ge1B_final << std::endl;
+//    if(N_BTagsM>=2){
+//        std::cout << "-------------" << std::endl;
+//        std::cout << "internalCSVweight_loose_outside_0B_final: " << internalCSVweight_loose_outside_0B_final << std::endl;
+//        // std::cout << "internalCSVweight_loose_outside_zerotag: " << internalCSVweight_loose_outside_zerotag << std::endl;
+//        std::cout << "internalCSVweight_loose_outside_ge1B_final: " << internalCSVweight_loose_outside_ge1B_final << std::endl;
         // std::cout << "internalCSVweight_loose_outside_onetag: " << internalCSVweight_loose_outside_onetag << std::endl;
-        std::cout << "internalCSVweight_medium_0B_final: " << internalCSVweight_medium_0B_final << std::endl;
-        std::cout << "internalCSVweight_medium_ge1B_final: " << internalCSVweight_medium_ge1B_final << std::endl;
-        std::cout << "internalCSVweight_medium_ge2B_final: " << internalCSVweight_medium_ge2B_final << std::endl;
-        std::cout << "internalCSVweight_medium_0B.first: " << internalCSVweight_medium_0B.first << std::endl;
-        std::cout << "internalCSVweight_medium_1B.first: " << internalCSVweight_medium_1B.first << std::endl;
-        std::cout << "internalCSVweight_medium_0B.second: " << internalCSVweight_medium_0B.second << std::endl;
-        std::cout << "internalCSVweight_medium_1B.second: " << internalCSVweight_medium_1B.second << std::endl;
-    }
+//        std::cout << "internalCSVweight_medium_0B_final: " << internalCSVweight_medium_0B_final << std::endl;
+//        std::cout << "internalCSVweight_medium_ge1B_final: " << internalCSVweight_medium_ge1B_final << std::endl;
+//        std::cout << "internalCSVweight_medium_ge2B_final: " << internalCSVweight_medium_ge2B_final << std::endl;
+//        std::cout << "internalCSVweight_medium_0B.first: " << internalCSVweight_medium_0B.first << std::endl;
+//        std::cout << "internalCSVweight_medium_1B.first: " << internalCSVweight_medium_1B.first << std::endl;
+//        std::cout << "internalCSVweight_medium_0B.second: " << internalCSVweight_medium_0B.second << std::endl;
+//        std::cout << "internalCSVweight_medium_1B.second: " << internalCSVweight_medium_1B.second << std::endl;
+//    }
     totalTimeCalculateSFs += timerCalculateSFs->RealTime();
 
     // print stuff for synchronizing
