@@ -75,6 +75,13 @@ inline bool check_if_every_element_greater(auto* array, int number_of_elements, 
     return true;
 }
 
+inline double divideSavely(double num, double den, double returnVal = 1.){
+    if (den == 0.){
+        return returnVal;
+    }
+    else return num/den;
+}
+
 float get_msd_weight(float pt, float eta){
     // according to https://github.com/mcremone/decaf/blob/master/analysis/util/corrections.py#L202
     // gpar = np.array([1.00626, -1.06161, 0.0799900, 1.20454])
@@ -168,10 +175,10 @@ void plot()
         }
     else if( dataera == "2018" ) {
         csvFile=plotscriptBaseDir+"/data/CSV/sfs_deepjet_fixedWP_2018.csv";
-        effFile=plotscriptBaseDir+"/data/CSV/btag_efficiencies_deepjet_2018.root";
-        wp_loose = 	0.0494;
+        effFile=plotscriptBaseDir+"/data/CSV/btag_efficiencies_more_selection_2018.root";
+	    wp_loose = 	0.0494;
         wp_medium = 0.2770;
-        }
+        } 
     else {
       std::cout << "NO VALID DATAERA CHOSEN!!" << std::endl;
       std::cout << "dataera: " << dataera << std::endl;
@@ -179,8 +186,8 @@ void plot()
 
     BtagSFHelper* internalBtagSFHelper_loose= new BtagSFHelper(csvFile,effFile, "loose", wp_loose);
     BtagSFHelper* internalBtagSFHelper_medium= new BtagSFHelper(csvFile,effFile, "medium", wp_medium);
-    BtagSFHelper* internalBtagSFHelper_medium_outside= new BtagSFHelper(csvFile,effFile, "medium_outside", wp_medium);
     BtagSFHelper* internalBtagSFHelper_loose_outside= new BtagSFHelper(csvFile,effFile, "loose_outside", wp_loose);
+    BtagSFHelper* internalBtagSFHelper_medium_outside= new BtagSFHelper(csvFile,effFile, "medium_outside", wp_medium);
 
     // Dark Higgs Pileup weights
     PUHelper pu_helper;
