@@ -31,7 +31,7 @@ def find_masses(dataset_name):
 
 # samples
 # input path
-path_mwassmer = "/nfs/dust/cms/user/mwassmer/MonoTop/ntuples_2018"
+path_mwassmer = "/nfs/dust/cms/user/mwassmer/MonoTop/ntuples_2018_PuppiMET"
 
 
 # SELECTIONS
@@ -49,7 +49,7 @@ sel_StrangeMuWeights = "*1.0"
 defaultWeight = "Weight_GEN_nom"
 
 # csv weights
-csvWeightNom = "1."
+csvWeightNom = "1."#"internalCSVweight_loose"
 
 
 # pile up weights
@@ -328,7 +328,8 @@ samples = [
         "Z(#nu#nu)+jets",
         ROOT.kOrange + 7,
         path_mwassmer + "/ZJetsToNuNu_HT*/*nominal*.root",
-        lumi,
+        #lumi,
+        lumi + "*1.094*1.084",
         "znunujets",
         samDict=sampleDict,
         readTrees=doReadTrees,
@@ -338,7 +339,8 @@ samples = [
         "Z(ll)+jets",
         ROOT.kOrange + 1,
         path_mwassmer + "/DYJetsToLL_M-50_HT*/*nominal*.root",
-        lumi,
+        #lumi,
+        lumi + "*1.132*1.043",
         "zlljets",
         samDict=sampleDict,
         readTrees=doReadTrees,
@@ -348,7 +350,8 @@ samples = [
         "W(l#nu)+jets",
         ROOT.kOrange,
         path_mwassmer + "/WJetsToLNu_HT*/*nominal*.root",
-        lumi,
+        #lumi,
+        lumi + "*1.014*1.034",
         "wlnujets",
         samDict=sampleDict,
         readTrees=doReadTrees,
