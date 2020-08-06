@@ -50,7 +50,7 @@ def main(pyrootdir, opts):
     # define MEM discriminator variable
     memexp = "(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)"
     # configs
-    config          = "legacyAnalysis/samples_2017_newGT"
+    config          = "legacyAnalysis/samples_2017"
     variable_cfg    = "legacyAnalysis/additionalVariables"
     plot_cfg        = "legacyAnalysis/controlPlots_final"
     syst_cfg        = "legacyAnalysis/systs_2017"

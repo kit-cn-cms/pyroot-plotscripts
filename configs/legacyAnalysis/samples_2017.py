@@ -8,18 +8,19 @@ pyrootdir = os.path.dirname(filedir)
 
 sys.path.append(pyrootdir)
 import util.tools.plotClasses as plotClasses
+import generate_phasespace_corrections
 
 # samples
 # input path 
-path  = "/nfs/dust/cms/user/swieland/ttH_legacy/ntupleHadded_2017_JECgroups_newGT/"
+path  = "/nfs/dust/cms/group/ttx-kit/ntuples_ttH/2017/"
 
-#ttbarPathS = path+'/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'
+# ttbarPathS = path+'/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8_new_pmx/*nominal*.root'
 ttbarPathS = path+'/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
              path+'/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'+\
              path+'/TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8_new_pmx/*nominal*.root'
 
-VJetsPathS = path+'/DYJets*/*nominal*.root'+';'+ \
-             path+'/WJets*/*nominal*.root'
+VJetsPathS = path+'/DYJets*madgraph*/*nominal*.root'+';'+ \
+             path+'/WJets*madgraph*/*nominal*.root'
 
 
 path_ttbb = path+"/TTbb_Powheg_Openloops_new_pmx/*nominal*.root"+';'+ \
@@ -55,14 +56,11 @@ THWpath = path+'/THW_*ctcvcp*/*nominal*.root'
 THQpath = path+'/THQ_*ctcvcp*/*nominal*.root'
 
 
-ttHbbpath    = path+'/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8*/*nominal*.root'
-ttHnonbbpath = path+'/ttHToNonbb_M125_NNPDF31nnlo*/*nominal*.root'
-
-ttHpath = path+'/ttHToNonbb_M125_NNPDF31nnlo*/*nominal*.root'+';'+ \
-	      path+'/ttHToNonbb_M125*/*nominal*.root'
+ttHpath = path+'/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8*/*nominal*.root'+';'+ \
+	      path+'/ttHToNonbb_M125_NNPDF31nnlo_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'
 
 friendTrees = {
-    "MEMDB": "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/friends_final/2017/",
+    "MEMDB": "/nfs/dust/cms/group/ttx-kit/Friends_MEM_ttH/2017",
     }
 
 # SELECTIONS
@@ -107,8 +105,8 @@ hzgSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==22)
 defaultWeight = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL*Weight_L1ECALPrefire"
 
 # pile up weights
-pileupWeightUp   = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2Up*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL"
-pileupWeightDown = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2Down*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL"
+pileupWeightUp   = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2Up*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL*Weight_L1ECALPrefire"
+pileupWeightDown = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2Down*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL*Weight_L1ECALPrefire"
 
 # lepton scale factors
 electronSFs = "((N_TightElectrons==1)&&(Electron_IdentificationSF[0]>0.)&&(Electron_ReconstructionSF[0]>0.))*Electron_IdentificationSF[0]*Electron_ReconstructionSF[0]"
@@ -160,6 +158,7 @@ weightReplacements = {
     "DOWEIGHTS":        "(DoWeights==1)+(DoWeights==0)*1.0",
 
     }
+weightReplacements.update(generate_phasespace_corrections.main())
 
 # Lumi weight
 lumi = '41.5'
@@ -168,6 +167,8 @@ lumi = '41.5'
 ttbb_4FS_scale = "*(1.0)"
 ttbb_5FS_scale = "*(1.0)"
 
+kfactor_wjets = "*1.21"
+kfactor_zjets = "*1.23"
 #tHq_XS_scale = "*(0.7927/0.07425)"
 #tHW_XS_scale = "*(0.1472/0.01517)"
 
@@ -392,31 +393,18 @@ samples_minor_backgrounds = [
             'ttbarW',
             samDict=sampleDict, readTrees=doReadTrees),
 
-#     plotClasses.Sample('t#bar{t}+V',ROOT.kCyan,
-        #     ttVPathS,
-        #     lumi+sel_MET,
-        #     'ttV',
-        #     samDict=sampleDict, readTrees=doReadTrees),
  
     plotClasses.Sample('Z+jets',ROOT.kGreen-3,
-           path+'/DYJets*/*nominal*.root',
-           lumi+sel_MET,
+           path+'/DYJets*madgraph*/*nominal*.root',
+           lumi+sel_MET+kfactor_zjets,
            'zjets',
-            vetoEventWeights = float(1./41.5),
            samDict=sampleDict, readTrees=doReadTrees),
  
     plotClasses.Sample('W+jets',ROOT.kGreen-7,
-           path+'/WJets*/*nominal*.root',
-           lumi+sel_MET,
+           path+'/WJets*madgraph*/*nominal*.root',
+           lumi+sel_MET+kfactor_wjets,
            'wjets',
-            vetoEventWeights = float(2./41.5),
            samDict=sampleDict, readTrees=doReadTrees), 
-
-    #plotClasses.Sample('V+jets',18,
-    #        VJetsPathS
-    #        lumi+sel_MET,
-    #        'vjets',
-    #        samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('VV',ROOT.kAzure+2,
             dibosonPathS,
@@ -436,17 +424,11 @@ samples_5FS = [
 
 samples = [
 #      signal samples
-    plotClasses.Sample('t#bar{t}+H',ROOT.kBlue+1,
-            ttHbbpath,
-            lumi+sel_MET,
-            'ttH_hbb',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),     
-
-    plotClasses.Sample('t#bar{t}+H',ROOT.kBlue+1,
-            ttHnonbbpath,
-            lumi+sel_MET,
-            'ttH_hnonbb',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),     
+#     plotClasses.Sample('t#bar{t}+H',ROOT.kBlue+1,
+#             ttHpath,
+#             lumi+sel_MET,
+#             'ttH',
+#             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),     
 
     # ttbar 5FS default background samples
     plotClasses.Sample('t#bar{t}+lf',ROOT.kRed-7,
@@ -468,7 +450,7 @@ samples += samples_ttbb_4FS
 samples += samples_minor_backgrounds
 samples += samples_5FS
 #samples += samples_ttbar_hf_spilt
-# samples += samples_ttH_decay
+samples += samples_ttH_decay
 
 
 
@@ -489,8 +471,9 @@ plottingsamples = [
         samDict = sampleDict, readTrees = doReadTrees),
 
     plotClasses.Sample("t#bar{t}+H", ROOT.kBlue+1, "", "",
-        "ttH", addsamples = ["ttH_hbb", "ttH_hnonbb"],
+        "ttH", addsamples = ["ttH_hbb", "ttH_hcc", "ttH_htt", "ttH_hgg", "ttH_hgluglu", "ttH_hww", "ttH_hzz", "ttH_hzg"],
         samDict = sampleDict, readTrees = doReadTrees),
+
 #    plotClasses.Sample("misc.", 18, "", "",
 #        "misc", addsamples ["ttbarZ", "ttbarW", "wjets", "zjets", "diboson"],
 #        samDict = sampleDict, readTrees = doReadTrees)
