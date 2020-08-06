@@ -306,6 +306,12 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     double internalCSVweight_medium_HFUP_ge1B_final   = divideSavely((1-internalCSVweight_medium_HFUP_0B.first),(1-internalCSVweight_medium_HFUP_0B.second));
     double internalCSVweight_medium_HFDOWN_ge1B_final = divideSavely((1-internalCSVweight_medium_HFDOWN_0B.first),(1-internalCSVweight_medium_HFDOWN_0B.second));
 
+    double internalCSVweight_medium_1B_final        = divideSavely((internalCSVweight_medium_1B.first),(internalCSVweight_medium_1B.second));
+    double internalCSVweight_medium_LFUP_1B_final   = divideSavely((internalCSVweight_medium_LFUP_1B.first),(internalCSVweight_medium_LFUP_1B.second));
+    double internalCSVweight_medium_LFDOWN_1B_final = divideSavely((internalCSVweight_medium_LFDOWN_1B.first),(internalCSVweight_medium_LFDOWN_1B.second));
+    double internalCSVweight_medium_HFUP_1B_final   = divideSavely((internalCSVweight_medium_HFUP_1B.first),(internalCSVweight_medium_HFUP_1B.second));
+    double internalCSVweight_medium_HFDOWN_1B_final = divideSavely((internalCSVweight_medium_HFDOWN_1B.first),(internalCSVweight_medium_HFDOWN_1B.second));
+
     double internalCSVweight_medium_ge2B_final        = divideSavely((1-internalCSVweight_medium_0B.first-internalCSVweight_medium_1B.first),(1-internalCSVweight_medium_0B.second-internalCSVweight_medium_1B.second));
     double internalCSVweight_medium_LFUP_ge2B_final   = divideSavely((1-internalCSVweight_medium_LFUP_0B.first-internalCSVweight_medium_LFUP_1B.first),(1-internalCSVweight_medium_LFUP_0B.second-internalCSVweight_medium_LFUP_1B.second));
     double internalCSVweight_medium_LFDOWN_ge2B_final = divideSavely((1-internalCSVweight_medium_LFDOWN_0B.first-internalCSVweight_medium_LFDOWN_1B.first),(1-internalCSVweight_medium_LFDOWN_0B.second-internalCSVweight_medium_LFDOWN_1B.second));
@@ -317,7 +323,7 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
 //        std::cout << "internalCSVweight_loose_outside_0B_final: " << internalCSVweight_loose_outside_0B_final << std::endl;
 //        // std::cout << "internalCSVweight_loose_outside_zerotag: " << internalCSVweight_loose_outside_zerotag << std::endl;
 //        std::cout << "internalCSVweight_loose_outside_ge1B_final: " << internalCSVweight_loose_outside_ge1B_final << std::endl;
-        // std::cout << "internalCSVweight_loose_outside_onetag: " << internalCSVweight_loose_outside_onetag << std::endl;
+//         std::cout << "internalCSVweight_loose_outside_onetag: " << internalCSVweight_loose_outside_onetag << std::endl;
 //        std::cout << "internalCSVweight_medium_0B_final: " << internalCSVweight_medium_0B_final << std::endl;
 //        std::cout << "internalCSVweight_medium_ge1B_final: " << internalCSVweight_medium_ge1B_final << std::endl;
 //        std::cout << "internalCSVweight_medium_ge2B_final: " << internalCSVweight_medium_ge2B_final << std::endl;
