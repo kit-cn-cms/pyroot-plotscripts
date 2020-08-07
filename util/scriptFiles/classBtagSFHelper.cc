@@ -866,10 +866,20 @@ class BtagSFHelper {
     // another constructor
     BtagSFHelper(const std::string& csvFile, const std::string& effFile, const std::string& type, const double& WP);
     void init(const std::string& csvFile, const std::string& effFile, const std::string& type, const double& WP);
-    double getCSVWeight(const std::vector< double >& jetPts, const std::vector< double >& jetEtas, const std::vector< double >& jetCSVs,  const std::vector< int >& jetFlavors,  const std::string& LFvariation, const std::string& HFvariation);
-    double getCSVWeight(const std::vector< double >& jetPts_tagged, const std::vector< double >& jetEtas_tagged, const std::vector< int >& jetFlavors_tagged,
-                        const std::vector< double >& jetPts_untagged, const std::vector< double >& jetEtas_untagged, const std::vector< int >& jetFlavors_untagged,
-                        const std::string& LFvariation, const std::string& HFvariation);
+    // double getCSVWeight(const std::vector< double >& jetPts, const std::vector< double >& jetEtas, const std::vector< double >& jetCSVs,  const std::vector< int >& jetFlavors,  const std::string& LFvariation, const std::string& HFvariation);
+    // double getCSVWeight(const std::vector< double >& jetPts_tagged, const std::vector< double >& jetEtas_tagged, const std::vector< int >& jetFlavors_tagged,
+    //                     const std::vector< double >& jetPts_untagged, const std::vector< double >& jetEtas_untagged, const std::vector< int >& jetFlavors_untagged,
+    //                     const std::string& LFvariation, const std::string& HFvariation);
+    // double getCSVWeight_MethodOneB_ge1t(const std::vector< double >& jetPts, const std::vector< double >& jetEtas, const std::vector< int >& jetFlavors,
+                                      //  const std::string& LFvariation, const std::string& HFvariation, bool tag);
+    // double getCSVWeight_MethodOneB_1t(const std::vector< double >& jetPts, const std::vector< double >& jetEtas, const std::vector< int >& jetFlavors,
+    //                                    const std::string& LFvariation, const std::string& HFvariation, bool tag);
+    std::pair<double, double> getCSVWeight_0B(const std::vector< double >& jetPts, const std::vector< double >& jetEtas, const std::vector< int >& jetFlavors,
+                                       const std::string& LFvariation, const std::string& HFvariation);
+    std::pair<double, double> getCSVWeight_1B(const std::vector< double >& jetPts, const std::vector< double >& jetEtas, const std::vector< int >& jetFlavors,
+                                       const std::string& LFvariation, const std::string& HFvariation);
+        
+    
     double getEff(const double& jetPt, const double& jetEta, const int& jetFlavor);
     // destructor
     ~BtagSFHelper();
@@ -896,19 +906,19 @@ void BtagSFHelper::init(const std::string& csvFile, const std::string& effFile, 
     std::string h_eff_name = "";
     if (type == "loose") {
       wp_ = BTagEntry::OP_LOOSE;
-      h_eff_name = "loose_btagging_efficiency";
+      h_eff_name = "loose_btagging_efficiency_leptonic";
     }
     else if (type == "medium") {
       wp_ = BTagEntry::OP_MEDIUM;
-      h_eff_name = "medium_btagging_efficiency";
+      h_eff_name = "medium_btagging_efficiency_leptonic";
     }
     else if (type == "medium_outside") {
       wp_ = BTagEntry::OP_MEDIUM;
-      h_eff_name = "medium_btagging_efficiency_outside";
+      h_eff_name = "medium_btagging_efficiency_outside_hadronic";
     }
     else if (type == "loose_outside") {
       wp_ = BTagEntry::OP_LOOSE;
-      h_eff_name = "loose_btagging_efficiency_outside";
+      h_eff_name = "loose_btagging_efficiency_outside_hadronic";
     }
     else{
       std::cout << "Please specifiy meaningful WP. Options are 'loose', 'medium', 'medium_outside', 'loose_outside' !!!" << std::endl;
@@ -938,126 +948,295 @@ void BtagSFHelper::init(const std::string& csvFile, const std::string& effFile, 
     isInit_ = true;
 }
 
-double BtagSFHelper::getCSVWeight(const std::vector< double >& jetPts, const std::vector< double >& jetEtas, const std::vector< double >& jetCSVs, const std::vector< int >& jetFlavors, const std::string& LFvariation, const std::string& HFvariation){
-  double p_mc = 1.;
-  double p_data = 1.;
-  double sf = 1.;
-  double eff = 1.;
-  for (int i=0; i<jetPts.size(); ++i){
-    if (abs(jetFlavors[i]) == 5) {
-      sf = reader.eval_auto_bounds( HFvariation, 
-                                    BTagEntry::FLAV_B, 
-                                    abs(jetEtas[i]), // absolute value of eta
-                                    jetPts[i]
-                                ); 
-    } 
-    else if (abs(jetFlavors[i]) == 4) {
-      sf = reader.eval_auto_bounds( HFvariation, 
-                                BTagEntry::FLAV_C, 
-                                abs(jetEtas[i]), // absolute value of eta
-                                jetPts[i]
-                            ); 
-    }
-    else {
-      sf = reader.eval_auto_bounds( LFvariation, 
-                                BTagEntry::FLAV_UDSG, 
-                                abs(jetEtas[i]), // absolute value of eta
-                                jetPts[i]
-                            );       
-    }
-    eff = getEff(jetPts[i], jetEtas[i], jetFlavors[i]);
-    // std::cout << "-------------------------" << std::endl;
-    // std::cout << "pt, eta, flav" << std::endl;
-    // std::cout << jetPts[i] << ", " << jetEtas[i] << ", " << jetFlavors[i] << std::endl;
-    // std::cout << "sf, eff, p_mc, p_data" << std::endl;
-    // std::cout << sf << ", "<< eff << ", " << p_mc<< ", " << p_data << std::endl;
-    if (jetCSVs[i] > wp){
-      p_mc *= eff;
-      p_data *= eff*sf;
-    }
-    else {
-      p_mc *= 1-eff;
-      p_data *= 1-(eff*sf);
-    }
-  }
-  return p_data/p_mc;
-}
+// double BtagSFHelper::getCSVWeight(const std::vector< double >& jetPts, const std::vector< double >& jetEtas, const std::vector< double >& jetCSVs, const std::vector< int >& jetFlavors, const std::string& LFvariation, const std::string& HFvariation){
+//   double p_mc = 1.;
+//   double p_data = 1.;
+//   double sf = 1.;
+//   double eff = 1.;
+//   for (int i=0; i<jetPts.size(); ++i){
+//     if (abs(jetFlavors[i]) == 5) {
+//       sf = reader.eval_auto_bounds( HFvariation, 
+//                                     BTagEntry::FLAV_B, 
+//                                     abs(jetEtas[i]), // absolute value of eta
+//                                     jetPts[i]
+//                                 ); 
+//     } 
+//     else if (abs(jetFlavors[i]) == 4) {
+//       sf = reader.eval_auto_bounds( HFvariation, 
+//                                 BTagEntry::FLAV_C, 
+//                                 abs(jetEtas[i]), // absolute value of eta
+//                                 jetPts[i]
+//                             ); 
+//     }
+//     else {
+//       sf = reader.eval_auto_bounds( LFvariation, 
+//                                 BTagEntry::FLAV_UDSG, 
+//                                 abs(jetEtas[i]), // absolute value of eta
+//                                 jetPts[i]
+//                             );       
+//     }
+//     eff = getEff(jetPts[i], jetEtas[i], jetFlavors[i]);
+//     // std::cout << "-------------------------" << std::endl;
+//     // std::cout << "pt, eta, flav" << std::endl;
+//     // std::cout << jetPts[i] << ", " << jetEtas[i] << ", " << jetFlavors[i] << std::endl;
+//     // std::cout << "sf, eff, p_mc, p_data" << std::endl;
+//     // std::cout << sf << ", "<< eff << ", " << p_mc<< ", " << p_data << std::endl;
+//     if (jetCSVs[i] > wp){
+//       p_mc *= eff;
+//       p_data *= eff*sf;
+//     }
+//     else {
+//       p_mc *= 1-eff;
+//       p_data *= 1-(eff*sf);
+//     }
+//   }
+//   return p_data/p_mc;
+// }
 
-double BtagSFHelper::getCSVWeight(const std::vector< double >& jetPts_tagged, const std::vector< double >& jetEtas_tagged, const std::vector< int >& jetFlavors_tagged,
-                                  const std::vector< double >& jetPts_untagged, const std::vector< double >& jetEtas_untagged, const std::vector< int >& jetFlavors_untagged,
-                                  const std::string& LFvariation, const std::string& HFvariation){
-  double p_mc = 1.;
-  double p_data = 1.;
-  double sf = 1.;
-  double eff = 1.;
-  // tagged Jets
-  for (int i=0; i<jetPts_tagged.size(); ++i){
-    if (abs(jetFlavors_tagged[i]) == 5) {
-      sf = reader.eval_auto_bounds( HFvariation, 
-                                    BTagEntry::FLAV_B, 
-                                    abs(jetEtas_tagged[i]), // absolute value of eta
-                                    jetPts_tagged[i]
-                                ); 
-    } 
-    else if (abs(jetFlavors_tagged[i]) == 4) {
-      sf = reader.eval_auto_bounds( HFvariation, 
-                                BTagEntry::FLAV_C, 
-                                abs(jetEtas_tagged[i]), // absolute value of eta
-                                jetPts_tagged[i]
-                            ); 
-    }
-    else {
-      sf = reader.eval_auto_bounds( LFvariation, 
-                                BTagEntry::FLAV_UDSG, 
-                                abs(jetEtas_tagged[i]), // absolute value of eta
-                                jetPts_tagged[i]
-                            );       
-    }
-    eff = getEff(jetPts_tagged[i], jetEtas_tagged[i], jetFlavors_tagged[i]);
-    p_mc *= eff;
-    p_data *= eff*sf;
-    // std::cout << "--------tagged----------" << std::endl;
-    // std::cout << "pt, eta, flav" << std::endl;
-    // std::cout << jetPts_tagged[i] << ", " << jetEtas_tagged[i] << ", " << jetFlavors_tagged[i] << std::endl;
-    // std::cout << "sf, eff, p_mc, p_data" << std::endl;
-    // std::cout << sf << ", "<< eff << ", " << p_mc<< ", " << p_data << std::endl;
-  }
-  // untagged jets
-  for (int i=0; i<jetPts_untagged.size(); ++i){
-    if (abs(jetFlavors_untagged[i]) == 5) {
-      sf = reader.eval_auto_bounds( HFvariation, 
-                                    BTagEntry::FLAV_B, 
-                                    abs(jetEtas_untagged[i]), // absolute value of eta
-                                    jetPts_untagged[i]
-                                ); 
-    } 
-    else if (abs(jetFlavors_untagged[i]) == 4) {
-      sf = reader.eval_auto_bounds( HFvariation, 
-                                BTagEntry::FLAV_C, 
-                                abs(jetEtas_untagged[i]), // absolute value of eta
-                                jetPts_untagged[i]
-                            ); 
-    }
-    else {
-      sf = reader.eval_auto_bounds( LFvariation, 
-                                BTagEntry::FLAV_UDSG, 
-                                abs(jetEtas_untagged[i]), // absolute value of eta
-                                jetPts_untagged[i]
-                            );       
-    }
-    eff = getEff(jetPts_untagged[i], jetEtas_untagged[i], jetFlavors_untagged[i]);
-    p_mc *= 1-eff;
-    p_data *= 1-(eff*sf);
-    // std::cout << "-------untagged---------" << std::endl;
-    // std::cout << "pt, eta, flav" << std::endl;
-    // std::cout << jetPts_untagged[i] << ", " << jetEtas_untagged[i] << ", " << jetFlavors_untagged[i] << std::endl;
-    // std::cout << "sf, eff, p_mc, p_data" << std::endl;
-    // std::cout << sf << ", "<< eff << ", " << p_mc<< ", " << p_data << std::endl;
-  }
-  return p_data/p_mc;
-}
+// double BtagSFHelper::getCSVWeight(const std::vector< double >& jetPts_tagged, const std::vector< double >& jetEtas_tagged, const std::vector< int >& jetFlavors_tagged,
+//                                   const std::vector< double >& jetPts_untagged, const std::vector< double >& jetEtas_untagged, const std::vector< int >& jetFlavors_untagged,
+//                                   const std::string& LFvariation, const std::string& HFvariation){
+//   double p_mc = 1.;
+//   double p_data = 1.;
+//   double sf = 1.;
+//   double eff = 1.;
+//   // tagged Jets
+//   for (int i=0; i<jetPts_tagged.size(); ++i){
+//     // std::cout << "--------tagged----------" << std::endl;
+//     // h_eff->Print();
+//     if (abs(jetFlavors_tagged[i]) == 5) {
+//       sf = reader.eval_auto_bounds( HFvariation, 
+//                                     BTagEntry::FLAV_B, 
+//                                     abs(jetEtas_tagged[i]), // absolute value of eta
+//                                     jetPts_tagged[i]
+//                                 ); 
+//       // std::cout << "Flav 5: SF = " << sf << std::endl;
+//     } 
+//     else if (abs(jetFlavors_tagged[i]) == 4) {
+//       sf = reader.eval_auto_bounds( HFvariation, 
+//                                 BTagEntry::FLAV_C, 
+//                                 abs(jetEtas_tagged[i]), // absolute value of eta
+//                                 jetPts_tagged[i]
+//                             ); 
+//     }
+//     else {
+//       sf = reader.eval_auto_bounds( LFvariation, 
+//                                 BTagEntry::FLAV_UDSG, 
+//                                 abs(jetEtas_tagged[i]), // absolute value of eta
+//                                 jetPts_tagged[i]
+//                             );       
+//     }
+//     eff = getEff(jetPts_tagged[i], jetEtas_tagged[i], jetFlavors_tagged[i]);
+//     p_mc *= eff;
+//     p_data *= eff*sf;
+//     // std::cout << "LFvariation, HFvariation" << std::endl;
+//     // std::cout << LFvariation << ", " << HFvariation << std::endl;
+//     // std::cout << "pt, eta, flav" << std::endl;
+//     // std::cout << jetPts_tagged[i] << ", " << jetEtas_tagged[i] << ", " << jetFlavors_tagged[i] << std::endl;
+//     // std::cout << "sf, eff, p_mc, p_data" << std::endl;
+//     // std::cout << sf << ", "<< eff << ", " << p_mc<< ", " << p_data << std::endl;
+//   }
+//   // untagged jets
+//   for (int i=0; i<jetPts_untagged.size(); ++i){
+//     if (abs(jetFlavors_untagged[i]) == 5) {
+//       sf = reader.eval_auto_bounds( HFvariation, 
+//                                     BTagEntry::FLAV_B, 
+//                                     abs(jetEtas_untagged[i]), // absolute value of eta
+//                                     jetPts_untagged[i]
+//                                 ); 
+//     } 
+//     else if (abs(jetFlavors_untagged[i]) == 4) {
+//       sf = reader.eval_auto_bounds( HFvariation, 
+//                                 BTagEntry::FLAV_C, 
+//                                 abs(jetEtas_untagged[i]), // absolute value of eta
+//                                 jetPts_untagged[i]
+//                             ); 
+//     }
+//     else {
+//       sf = reader.eval_auto_bounds( LFvariation, 
+//                                 BTagEntry::FLAV_UDSG, 
+//                                 abs(jetEtas_untagged[i]), // absolute value of eta
+//                                 jetPts_untagged[i]
+//                             );       
+//     }
+//     eff = getEff(jetPts_untagged[i], jetEtas_untagged[i], jetFlavors_untagged[i]);
+//     p_mc *= 1-eff;
+//     p_data *= 1-(eff*sf);
+//     // std::cout << "-------untagged---------" << std::endl;
+//     // std::cout << "pt, eta, flav" << std::endl;
+//     // std::cout << jetPts_untagged[i] << ", " << jetEtas_untagged[i] << ", " << jetFlavors_untagged[i] << std::endl;
+//     // std::cout << "sf, eff, p_mc, p_data" << std::endl;
+//     // std::cout << sf << ", "<< eff << ", " << p_mc<< ", " << p_data << std::endl;
+//   }
+//   return p_data/p_mc;
+// }
+
+// double BtagSFHelper::getCSVWeight_MethodOneB_ge1t(const std::vector< double >& jetPts, const std::vector< double >& jetEtas, const std::vector< int >& jetFlavors,
+//                                        const std::string& LFvariation, const std::string& HFvariation, bool tag){
+//   double eff = 1.;
+//   double sf = 1.;
+//   double w_zeroTags_num = 1.;
+//   double w_zeroTags_den = 1.;
+//   // all Jets
+//   for (int i=0; i<jetPts.size(); ++i){
+//     // h_eff->Print();
+//     if (abs(jetFlavors[i]) == 5) {
+//       sf = reader.eval_auto_bounds( HFvariation, BTagEntry::FLAV_B, abs(jetEtas[i]), jetPts[i]); 
+//     } 
+//     else if (abs(jetFlavors[i]) == 4) {
+//       sf = reader.eval_auto_bounds( HFvariation, BTagEntry::FLAV_C, abs(jetEtas[i]), jetPts[i]); 
+//     }
+//     else {
+//       sf = reader.eval_auto_bounds( LFvariation, BTagEntry::FLAV_UDSG, abs(jetEtas[i]), jetPts[i]); 
+//     }
+//     eff = getEff(jetPts[i], jetEtas[i], jetFlavors[i]);
+//     w_zeroTags_num *= (1-sf*eff);
+//     w_zeroTags_den *= (1-eff);
+          
+//     // std::cout << "LFvariation, HFvariation" << std::endl;
+//     // std::cout << LFvariation << ", " << HFvariation << std::endl;
+//     // std::cout << "pt, eta, flav" << std::endl;
+//     // std::cout << jetPts[i] << ", " << jetEtas[i] << ", " << jetFlavors[i] << std::endl;
+//     // std::cout << "sf, eff, w_zeroTags" << std::endl;
+//     // std::cout << sf << ", "<< eff << ", " << w_zeroTags << std::endl;
+//   }
+//   if (tag == false) return w_zeroTags_num/w_zeroTags_den;
+//   else if (tag == true){
+//     if (1-w_zeroTags_den == 0.) return 0.;
+//     else return (1-w_zeroTags_num)/(1-w_zeroTags_den);
+  
+//   }
+// }
+
+// double BtagSFHelper::getCSVWeight_MethodOneB_1t(const std::vector< double >& jetPts, const std::vector< double >& jetEtas, const std::vector< int >& jetFlavors,
+//                                        const std::string& LFvariation, const std::string& HFvariation, bool tag){
+//   double eff_i = 1.;
+//   double eff_j = 1.;
+//   double sf_i = 1.;
+//   double sf_j = 1.;
+//   double w_oneTag_num = 1.;
+//   double w_oneTag_den = 1.;
+//   double w_zeroTags_num = 1.;
+//   double w_zeroTags_den = 1.;
+//   // all Jets
+//   for (int i=0; i<jetPts.size(); ++i){
+//     w_zeroTags_num = 1.;
+//     w_zeroTags_den = 1.;
+//     eff_i = getEff(jetPts[i], jetEtas[i], jetFlavors[i]);
+//     if (abs(jetFlavors[i]) == 5) {
+//       sf_i = reader.eval_auto_bounds( HFvariation, BTagEntry::FLAV_B, abs(jetEtas[i]), jetPts[i] ); 
+//     } 
+//     else if (abs(jetFlavors[i]) == 4) {
+//       sf_i = reader.eval_auto_bounds( HFvariation, BTagEntry::FLAV_C, abs(jetEtas[i]), jetPts[i] ); 
+//     }
+//     else {
+//       sf_i = reader.eval_auto_bounds( LFvariation, BTagEntry::FLAV_UDSG, abs(jetEtas[i]), jetPts[i] ); 
+//     }
+
+//     for (int j=0; (j<jetPts.size()) && (i!=j); ++j){
+//       if (abs(jetFlavors[i]) == 5) {
+//         sf_j = reader.eval_auto_bounds( HFvariation, BTagEntry::FLAV_B, abs(jetEtas[j]), jetPts[j]); 
+//       } 
+//       else if (abs(jetFlavors[i]) == 4) {
+//         sf_j = reader.eval_auto_bounds( HFvariation, BTagEntry::FLAV_C, abs(jetEtas[j]), jetPts[j]); 
+//       }
+//       else {
+//         sf_j = reader.eval_auto_bounds( LFvariation, BTagEntry::FLAV_UDSG, abs(jetEtas[j]), jetPts[j]); 
+//       }
+//       eff_j = getEff(jetPts[j], jetEtas[j], jetFlavors[j]);
+//       w_zeroTags_num *= (1-sf_j*eff_j);
+//       w_zeroTags_den *= (1-eff_j);
+//     }
+//     w_oneTag_num += eff_i*w_zeroTags_num;
+//     w_oneTag_den += sf_i*eff_i*w_zeroTags_den;
+//   }
+//   // if tag == True: ???
+//   return w_oneTag_num/w_oneTag_den;
+  
+// }
 
 
 double BtagSFHelper::getEff(const double& jetPt, const double& jetEta, const int& jetFlavor){
   return h_eff->GetBinContent(h_eff->FindBin(jetPt,abs(jetEta),jetFlavor));
 }
+
+// btag weights according to modified Version of 1B from https://twiki.cern.ch/twiki/bin/view/CMS/BTagSFMethods
+std::pair<double, double> BtagSFHelper::getCSVWeight_0B(const std::vector< double >& jetPts, const std::vector< double >& jetEtas, const std::vector< int >& jetFlavors,
+                                       const std::string& LFvariation, const std::string& HFvariation){
+  double eff = 1.;
+  double sf = 1.;
+  double w_zeroTags_num = 1.;
+  double w_zeroTags_den = 1.;
+  // all Jets
+  for (int i=0; i<jetPts.size(); ++i){
+    // h_eff->Print();
+    if (abs(jetFlavors[i]) == 5) {
+      sf = reader.eval_auto_bounds( HFvariation, BTagEntry::FLAV_B, abs(jetEtas[i]), jetPts[i]); 
+    } 
+    else if (abs(jetFlavors[i]) == 4) {
+      sf = reader.eval_auto_bounds( HFvariation, BTagEntry::FLAV_C, abs(jetEtas[i]), jetPts[i]); 
+    }
+    else {
+      sf = reader.eval_auto_bounds( LFvariation, BTagEntry::FLAV_UDSG, abs(jetEtas[i]), jetPts[i]); 
+    }
+    eff = getEff(jetPts[i], jetEtas[i], jetFlavors[i]);
+    w_zeroTags_num *= (1-sf*eff);
+    w_zeroTags_den *= (1-eff);
+          
+    // std::cout << "LFvariation, HFvariation" << std::endl;
+    // std::cout << LFvariation << ", " << HFvariation << std::endl;
+    // std::cout << "pt, eta, flav" << std::endl;
+    // std::cout << jetPts[i] << ", " << jetEtas[i] << ", " << jetFlavors[i] << std::endl;
+    // std::cout << "sf, eff, w_zeroTags" << std::endl;
+    // std::cout << sf << ", "<< eff << ", " << w_zeroTags << std::endl;
+  }
+  return std::make_pair(w_zeroTags_num, w_zeroTags_den);
+}
+
+std::pair<double, double> BtagSFHelper::getCSVWeight_1B(const std::vector< double >& jetPts, const std::vector< double >& jetEtas, const std::vector< int >& jetFlavors,
+                                       const std::string& LFvariation, const std::string& HFvariation){
+  double eff_i = 1.;
+  double eff_j = 1.;
+  double sf_i = 1.;
+  double sf_j = 1.;
+  double w_oneTag_num = 0.;
+  double w_oneTag_den = 0.;
+  double w_zeroTags_num = 1.;
+  double w_zeroTags_den = 1.;
+  // all Jets
+  for (int i=0; i<jetPts.size(); ++i){
+    w_zeroTags_num = 1.;
+    w_zeroTags_den = 1.;
+    eff_i = getEff(jetPts[i], jetEtas[i], jetFlavors[i]);
+    if (abs(jetFlavors[i]) == 5) {
+      sf_i = reader.eval_auto_bounds( HFvariation, BTagEntry::FLAV_B, abs(jetEtas[i]), jetPts[i] ); 
+    } 
+    else if (abs(jetFlavors[i]) == 4) {
+      sf_i = reader.eval_auto_bounds( HFvariation, BTagEntry::FLAV_C, abs(jetEtas[i]), jetPts[i] ); 
+    }
+    else {
+      sf_i = reader.eval_auto_bounds( LFvariation, BTagEntry::FLAV_UDSG, abs(jetEtas[i]), jetPts[i] ); 
+    }
+
+    for (int j=0; j<jetPts.size(); ++j){
+      if (i == j) continue;
+      if (abs(jetFlavors[j]) == 5) {
+        sf_j = reader.eval_auto_bounds( HFvariation, BTagEntry::FLAV_B, abs(jetEtas[j]), jetPts[j]); 
+      } 
+      else if (abs(jetFlavors[j]) == 4) {
+        sf_j = reader.eval_auto_bounds( HFvariation, BTagEntry::FLAV_C, abs(jetEtas[j]), jetPts[j]); 
+      }
+      else {
+        sf_j = reader.eval_auto_bounds( LFvariation, BTagEntry::FLAV_UDSG, abs(jetEtas[j]), jetPts[j]); 
+      }
+      eff_j = getEff(jetPts[j], jetEtas[j], jetFlavors[j]);
+      w_zeroTags_num *= (1-sf_j*eff_j);
+      w_zeroTags_den *= (1-eff_j);
+    }
+    w_oneTag_num += sf_i*eff_i*w_zeroTags_num;
+    w_oneTag_den += eff_i*w_zeroTags_den;
+  }
+  return std::make_pair(w_oneTag_num, w_oneTag_den);
+  
+}
+

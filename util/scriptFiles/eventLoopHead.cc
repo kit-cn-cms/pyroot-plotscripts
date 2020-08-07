@@ -125,11 +125,13 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     // primlepM=Evt_M_PrimaryLepton;
     std::vector<double> jetPts;    
     std::vector<double> jetEtas;    
-    std::vector<double> jetPhis; 
-    std::vector<double> jetMasses;
-    std::vector<double> jetEnergies; 
     std::vector<double> jetCSVs;    
     std::vector<int> jetFlavors;    
+
+    std::vector<double> jetPts_outside;    
+    std::vector<double> jetEtas_outside;    
+    std::vector<double> jetCSVs_outside;    
+    std::vector<int> jetFlavors_outside;   
 
     std::vector<double> jetPts_outside_untagged_medium;    
     std::vector<double> jetEtas_outside_untagged_medium;    
@@ -152,21 +154,27 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
         jetEtas.push_back(Jet_Eta[ijet]);
         jetCSVs.push_back(Jet_CSV[ijet]);
         jetFlavors.push_back(Jet_Flav[ijet]);
-        jetMasses.push_back(Jet_M[ijet]);
-        jetPhis.push_back(Jet_Phi[ijet]);
-        jetEnergies.push_back(Jet_E[ijet]);
     }
+
 
     // AK4 Jets outside AK15 Jet -> medium tags
     for(int ijet =0; ijet<N_JetsMediumUntagged_outside_lead_AK15Jet; ijet++){
         jetPts_outside_untagged_medium.push_back(JetMediumUntagged_outside_lead_AK15Jet_Pt[ijet]);
         jetEtas_outside_untagged_medium.push_back(JetMediumUntagged_outside_lead_AK15Jet_Eta[ijet]);
         jetFlavors_outside_untagged_medium.push_back(JetMediumUntagged_outside_lead_AK15Jet_Flav[ijet]);
+
+        jetPts_outside.push_back(JetMediumUntagged_outside_lead_AK15Jet_Pt[ijet]);
+        jetEtas_outside.push_back(JetMediumUntagged_outside_lead_AK15Jet_Eta[ijet]);
+        jetFlavors_outside.push_back(JetMediumUntagged_outside_lead_AK15Jet_Flav[ijet]);
     }
     for(int ijet =0; ijet<N_JetsMediumTagged_outside_lead_AK15Jet; ijet++){
         jetPts_outside_tagged_medium.push_back(JetMediumTagged_outside_lead_AK15Jet_Pt[ijet]);
         jetEtas_outside_tagged_medium.push_back(JetMediumTagged_outside_lead_AK15Jet_Eta[ijet]);
         jetFlavors_outside_tagged_medium.push_back(JetMediumTagged_outside_lead_AK15Jet_Flav[ijet]);
+    
+        jetPts_outside.push_back(JetMediumTagged_outside_lead_AK15Jet_Pt[ijet]);
+        jetEtas_outside.push_back(JetMediumTagged_outside_lead_AK15Jet_Eta[ijet]);
+        jetFlavors_outside.push_back(JetMediumTagged_outside_lead_AK15Jet_Flav[ijet]);
     }
     // AK4 Jets outside AK15 Jet -> loose tags
     for(int ijet =0; ijet<N_JetsLooseUntagged_outside_lead_AK15Jet; ijet++){
@@ -179,72 +187,151 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
         jetEtas_outside_tagged_loose.push_back(JetLooseTagged_outside_lead_AK15Jet_Eta[ijet]);
         jetFlavors_outside_tagged_loose.push_back(JetLooseTagged_outside_lead_AK15Jet_Flav[ijet]);
     }
-
-    float internalCSVweight_loose=internalBtagSFHelper_loose->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,"central","central");
-    float internalCSVweight_looseLFUP=internalBtagSFHelper_loose->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,"up","central");
-    float internalCSVweight_looseLFDOWN=internalBtagSFHelper_loose->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,"down","central");
-    float internalCSVweight_looseHFUP=internalBtagSFHelper_loose->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,"central","up");
-    float internalCSVweight_looseHFDOWN=internalBtagSFHelper_loose->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,"central","down");
- 
-    float internalCSVweight_medium=internalBtagSFHelper_medium->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,"central","central");
-    float internalCSVweight_mediumLFUP=internalBtagSFHelper_medium->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,"up","central");
-    float internalCSVweight_mediumLFDOWN=internalBtagSFHelper_medium->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,"down","central");
-    float internalCSVweight_mediumHFUP=internalBtagSFHelper_medium->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,"central","up");
-    float internalCSVweight_mediumHFDOWN=internalBtagSFHelper_medium->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,"central","down");
-
-    float internalCSVweight_medium_outside=internalBtagSFHelper_medium_outside->getCSVWeight(jetPts_outside_tagged_medium,jetEtas_outside_tagged_medium,jetFlavors_outside_tagged_medium,
-                                                                                            jetPts_outside_untagged_medium,jetEtas_outside_untagged_medium,jetFlavors_outside_untagged_medium,
-                                                                                            "central","central");
-    float internalCSVweight_medium_outsideLFUP=internalBtagSFHelper_medium_outside->getCSVWeight(jetPts_outside_tagged_medium,jetEtas_outside_tagged_medium,jetFlavors_outside_tagged_medium,
-                                                                                                 jetPts_outside_untagged_medium,jetEtas_outside_untagged_medium,jetFlavors_outside_untagged_medium,
-                                                                                                 "up","central");
-    float internalCSVweight_medium_outsideLFDOWN=internalBtagSFHelper_medium_outside->getCSVWeight(jetPts_outside_tagged_medium,jetEtas_outside_tagged_medium,jetFlavors_outside_tagged_medium,
-                                                                                                   jetPts_outside_untagged_medium,jetEtas_outside_untagged_medium,jetFlavors_outside_untagged_medium,
-                                                                                                   "down","central");
-    float internalCSVweight_medium_outsideHFUP=internalBtagSFHelper_medium_outside->getCSVWeight(jetPts_outside_tagged_medium,jetEtas_outside_tagged_medium,jetFlavors_outside_tagged_medium,
-                                                                                                 jetPts_outside_untagged_medium,jetEtas_outside_untagged_medium,jetFlavors_outside_untagged_medium,
-                                                                                                 "central","up");
-    float internalCSVweight_medium_outsideHFDOWN=internalBtagSFHelper_medium_outside->getCSVWeight( jetPts_outside_tagged_medium,jetEtas_outside_tagged_medium,jetFlavors_outside_tagged_medium,
-                                                                                                    jetPts_outside_untagged_medium,jetEtas_outside_untagged_medium,jetFlavors_outside_untagged_medium,
-                                                                                                    "central","down");
-
-    float internalCSVweight_loose_outside=internalBtagSFHelper_loose_outside->getCSVWeight(jetPts_outside_tagged_loose,jetEtas_outside_tagged_loose,jetFlavors_outside_tagged_loose,
-                                                                                            jetPts_outside_untagged_loose,jetEtas_outside_untagged_loose,jetFlavors_outside_untagged_loose,
-                                                                                            "central","central");
-    float internalCSVweight_loose_outsideLFUP=internalBtagSFHelper_loose_outside->getCSVWeight(jetPts_outside_tagged_loose,jetEtas_outside_tagged_loose,jetFlavors_outside_tagged_loose,
-                                                                                                 jetPts_outside_untagged_loose,jetEtas_outside_untagged_loose,jetFlavors_outside_untagged_loose,
-                                                                                                 "up","central");
-    float internalCSVweight_loose_outsideLFDOWN=internalBtagSFHelper_loose_outside->getCSVWeight(jetPts_outside_tagged_loose,jetEtas_outside_tagged_loose,jetFlavors_outside_tagged_loose,
-                                                                                                   jetPts_outside_untagged_loose,jetEtas_outside_untagged_loose,jetFlavors_outside_untagged_loose,
-                                                                                                   "down","central");
-    float internalCSVweight_loose_outsideHFUP=internalBtagSFHelper_loose_outside->getCSVWeight(jetPts_outside_tagged_loose,jetEtas_outside_tagged_loose,jetFlavors_outside_tagged_loose,
-                                                                                                 jetPts_outside_untagged_loose,jetEtas_outside_untagged_loose,jetFlavors_outside_untagged_loose,
-                                                                                                 "central","up");
-    float internalCSVweight_loose_outsideHFDOWN=internalBtagSFHelper_loose_outside->getCSVWeight( jetPts_outside_tagged_loose,jetEtas_outside_tagged_loose,jetFlavors_outside_tagged_loose,
-                                                                                                    jetPts_outside_untagged_loose,jetEtas_outside_untagged_loose,jetFlavors_outside_untagged_loose,
-                                                                                                    "central","down");
-
-
-    // std::cout << "-------------" << std::endl;
-    // std::cout << "internalCSVweight_loose: " << internalCSVweight_loose << std::endl;
-    // std::cout << "internalCSVweight_looseLFUP: " << internalCSVweight_looseLFUP << std::endl;
-    // std::cout << "internalCSVweight_looseLFDOWN: " << internalCSVweight_looseLFDOWN << std::endl;
-    // std::cout << "internalCSVweight_looseHFUP: " << internalCSVweight_looseHFUP << std::endl;
-    // std::cout << "internalCSVweight_looseHFDOWN: " << internalCSVweight_looseHFDOWN << std::endl;
-
-    // std::cout << "-------------" << std::endl;
-    // std::cout << "internalCSVweight_medium_outside: " << internalCSVweight_medium_outside << std::endl;
-    // std::cout << "internalCSVweight_medium_outsideLFUP: " << internalCSVweight_medium_outsideLFUP << std::endl;
-    // std::cout << "internalCSVweight_medium_outsideLFDOWN: " << internalCSVweight_medium_outsideLFDOWN << std::endl;
-    // std::cout << "internalCSVweight_medium_outsideHFUP: " << internalCSVweight_medium_outsideHFUP << std::endl;
-    // std::cout << "internalCSVweight_medium_outsideHFDOWN: " << internalCSVweight_medium_outsideHFDOWN << std::endl;
-
-    // std::cout << "internalCSVweight_loose_outside: " << internalCSVweight_loose_outside << std::endl;
-    // std::cout << "internalCSVweight_loose_outsideLFUP: " << internalCSVweight_loose_outsideLFUP << std::endl;
-    // std::cout << "internalCSVweight_loose_outsideLFDOWN: " << internalCSVweight_loose_outsideLFDOWN << std::endl;
-    // std::cout << "internalCSVweight_loose_outsideHFUP: " << internalCSVweight_loose_outsideHFUP << std::endl;
-    // std::cout << "internalCSVweight_loose_outsideHFDOWN: " << internalCSVweight_loose_outsideHFDOWN << std::endl;    
     
+    // Method 1a, according to https://twiki.cern.ch/twiki/bin/view/CMS/BTagSFMethods
+    // float internalCSVweight_loose=internalBtagSFHelper_loose->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,"central","central");
+    // float internalCSVweight_looseLFUP=internalBtagSFHelper_loose->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,"up","central");
+    // float internalCSVweight_looseLFDOWN=internalBtagSFHelper_loose->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,"down","central");
+    // float internalCSVweight_looseHFUP=internalBtagSFHelper_loose->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,"central","up");
+    // float internalCSVweight_looseHFDOWN=internalBtagSFHelper_loose->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,"central","down");
+ 
+    // float internalCSVweight_medium=internalBtagSFHelper_medium->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,"central","central");
+    // float internalCSVweight_mediumLFUP=internalBtagSFHelper_medium->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,"up","central");
+    // float internalCSVweight_mediumLFDOWN=internalBtagSFHelper_medium->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,"down","central");
+    // float internalCSVweight_mediumHFUP=internalBtagSFHelper_medium->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,"central","up");
+    // float internalCSVweight_mediumHFDOWN=internalBtagSFHelper_medium->getCSVWeight(jetPts,jetEtas,jetCSVs,jetFlavors,"central","down");
+
+    // float internalCSVweight_medium_outside=internalBtagSFHelper_medium_outside->getCSVWeight(jetPts_outside_tagged_medium,jetEtas_outside_tagged_medium,jetFlavors_outside_tagged_medium,
+    //                                                                                         jetPts_outside_untagged_medium,jetEtas_outside_untagged_medium,jetFlavors_outside_untagged_medium,
+    //                                                                                         "central","central");
+    // float internalCSVweight_medium_outsideLFUP=internalBtagSFHelper_medium_outside->getCSVWeight(jetPts_outside_tagged_medium,jetEtas_outside_tagged_medium,jetFlavors_outside_tagged_medium,
+    //                                                                                              jetPts_outside_untagged_medium,jetEtas_outside_untagged_medium,jetFlavors_outside_untagged_medium,
+    //                                                                                              "up","central");
+    // float internalCSVweight_medium_outsideLFDOWN=internalBtagSFHelper_medium_outside->getCSVWeight(jetPts_outside_tagged_medium,jetEtas_outside_tagged_medium,jetFlavors_outside_tagged_medium,
+    //                                                                                                jetPts_outside_untagged_medium,jetEtas_outside_untagged_medium,jetFlavors_outside_untagged_medium,
+    //                                                                                                "down","central");
+    // float internalCSVweight_medium_outsideHFUP=internalBtagSFHelper_medium_outside->getCSVWeight(jetPts_outside_tagged_medium,jetEtas_outside_tagged_medium,jetFlavors_outside_tagged_medium,
+    //                                                                                              jetPts_outside_untagged_medium,jetEtas_outside_untagged_medium,jetFlavors_outside_untagged_medium,
+    //                                                                                              "central","up");
+    // float internalCSVweight_medium_outsideHFDOWN=internalBtagSFHelper_medium_outside->getCSVWeight( jetPts_outside_tagged_medium,jetEtas_outside_tagged_medium,jetFlavors_outside_tagged_medium,
+    //                                                                                                 jetPts_outside_untagged_medium,jetEtas_outside_untagged_medium,jetFlavors_outside_untagged_medium,
+    //                                                                                                 "central","down");
+
+    // float internalCSVweight_loose_outside=internalBtagSFHelper_loose_outside->getCSVWeight(jetPts_outside_tagged_loose,jetEtas_outside_tagged_loose,jetFlavors_outside_tagged_loose,
+    //                                                                                         jetPts_outside_untagged_loose,jetEtas_outside_untagged_loose,jetFlavors_outside_untagged_loose,
+    //                                                                                         "central","central");
+    // float internalCSVweight_loose_outsideLFUP=internalBtagSFHelper_loose_outside->getCSVWeight(jetPts_outside_tagged_loose,jetEtas_outside_tagged_loose,jetFlavors_outside_tagged_loose,
+    //                                                                                              jetPts_outside_untagged_loose,jetEtas_outside_untagged_loose,jetFlavors_outside_untagged_loose,
+    //                                                                                              "up","central");
+    // float internalCSVweight_loose_outsideLFDOWN=internalBtagSFHelper_loose_outside->getCSVWeight(jetPts_outside_tagged_loose,jetEtas_outside_tagged_loose,jetFlavors_outside_tagged_loose,
+    //                                                                                                jetPts_outside_untagged_loose,jetEtas_outside_untagged_loose,jetFlavors_outside_untagged_loose,
+    //                                                                                                "down","central");
+    // float internalCSVweight_loose_outsideHFUP=internalBtagSFHelper_loose_outside->getCSVWeight(jetPts_outside_tagged_loose,jetEtas_outside_tagged_loose,jetFlavors_outside_tagged_loose,
+    //                                                                                              jetPts_outside_untagged_loose,jetEtas_outside_untagged_loose,jetFlavors_outside_untagged_loose,
+    //                                                                                              "central","up");
+    // float internalCSVweight_loose_outsideHFDOWN=internalBtagSFHelper_loose_outside->getCSVWeight( jetPts_outside_tagged_loose,jetEtas_outside_tagged_loose,jetFlavors_outside_tagged_loose,
+    //                                                                                                 jetPts_outside_untagged_loose,jetEtas_outside_untagged_loose,jetFlavors_outside_untagged_loose,
+    //                                                                                                 "central","down");
+
+
+    // Method 1b, according to https://twiki.cern.ch/twiki/bin/view/CMS/BTagSFMethods, modified according to Matteo from LPC
+    // float internalCSVweight_loose_outside_zerotag=internalBtagSFHelper_loose_outside->getCSVWeight_MethodOneB_ge1t(jetPts_outside,jetEtas_outside,jetFlavors_outside, "central","central",false);
+    // float internalCSVweight_loose_outsideLFUP_zerotag=internalBtagSFHelper_loose_outside->getCSVWeight_MethodOneB_ge1t(jetPts_outside,jetEtas_outside,jetFlavors_outside, "up","central",false);
+    // float internalCSVweight_loose_outsideLFDOWN_zerotag=internalBtagSFHelper_loose_outside->getCSVWeight_MethodOneB_ge1t(jetPts_outside,jetEtas_outside,jetFlavors_outside, "down","central",false);
+    // float internalCSVweight_loose_outsideHFUP_zerotag=internalBtagSFHelper_loose_outside->getCSVWeight_MethodOneB_ge1t(jetPts_outside,jetEtas_outside,jetFlavors_outside, "central","up",false);
+    // float internalCSVweight_loose_outsideHFDOWN_zerotag=internalBtagSFHelper_loose_outside->getCSVWeight_MethodOneB_ge1t(jetPts_outside,jetEtas_outside,jetFlavors_outside, "central","down",false);
+
+    // float internalCSVweight_loose_outside_onetag=internalBtagSFHelper_loose_outside->getCSVWeight_MethodOneB_ge1t(jetPts_outside,jetEtas_outside,jetFlavors_outside, "central","central",true);
+    // float internalCSVweight_loose_outsideLFUP_onetag=internalBtagSFHelper_loose_outside->getCSVWeight_MethodOneB_ge1t(jetPts_outside,jetEtas_outside,jetFlavors_outside, "up","central",true);
+    // float internalCSVweight_loose_outsideLFDOWN_onetag=internalBtagSFHelper_loose_outside->getCSVWeight_MethodOneB_ge1t(jetPts_outside,jetEtas_outside,jetFlavors_outside, "down","central",true);
+    // float internalCSVweight_loose_outsideHFUP_onetag=internalBtagSFHelper_loose_outside->getCSVWeight_MethodOneB_ge1t(jetPts_outside,jetEtas_outside,jetFlavors_outside, "central","up",true);
+    // float internalCSVweight_loose_outsideHFDOWN_onetag=internalBtagSFHelper_loose_outside->getCSVWeight_MethodOneB_ge1t(jetPts_outside,jetEtas_outside,jetFlavors_outside, "central","down",true);
+
+    // float internalCSVweight_medium_zerotag=internalBtagSFHelper_medium->getCSVWeight_MethodOneB_ge1t(jetPts_outside,jetEtas_outside,jetFlavors_outside, "central","central",false);
+    // float internalCSVweight_mediumLFUP_zerotag=internalBtagSFHelper_medium->getCSVWeight_MethodOneB_ge1t(jetPts_outside,jetEtas_outside,jetFlavors_outside, "up","central",false);
+    // float internalCSVweight_mediumLFDOWN_zerotag=internalBtagSFHelper_medium->getCSVWeight_MethodOneB_ge1t(jetPts_outside,jetEtas_outside,jetFlavors_outside, "down","central",false);
+    // float internalCSVweight_mediumHFUP_zerotag=internalBtagSFHelper_medium->getCSVWeight_MethodOneB_ge1t(jetPts_outside,jetEtas_outside,jetFlavors_outside, "central","up",false);
+    // float internalCSVweight_mediumHFDOWN_zerotag=internalBtagSFHelper_medium->getCSVWeight_MethodOneB_ge1t(jetPts_outside,jetEtas_outside,jetFlavors_outside, "central","down",false);
+
+    // float internalCSVweight_medium_onetag=internalBtagSFHelper_medium->getCSVWeight_MethodOneB_1t(jetPts_outside,jetEtas_outside,jetFlavors_outside, "central","central",false);
+    // float internalCSVweight_mediumLFUP_onetag=internalBtagSFHelper_medium->getCSVWeight_MethodOneB_1t(jetPts_outside,jetEtas_outside,jetFlavors_outside, "up","central",false);
+    // float internalCSVweight_mediumLFDOWN_onetag=internalBtagSFHelper_medium->getCSVWeight_MethodOneB_1t(jetPts_outside,jetEtas_outside,jetFlavors_outside, "down","central",false);
+    // float internalCSVweight_mediumHFUP_onetag=internalBtagSFHelper_medium->getCSVWeight_MethodOneB_1t(jetPts_outside,jetEtas_outside,jetFlavors_outside, "central","up",false);
+    // float internalCSVweight_mediumHFDOWN_onetag=internalBtagSFHelper_medium->getCSVWeight_MethodOneB_1t(jetPts_outside,jetEtas_outside,jetFlavors_outside, "central","down",false);
+
+
+    // only jets outside of AK15 -> hadronic analysis
+    auto internalCSVweight_loose_outside_0B         = internalBtagSFHelper_loose_outside->getCSVWeight_0B(jetPts_outside,jetEtas_outside,jetFlavors_outside, "central","central");
+    auto internalCSVweight_loose_outside_LFUP_0B    = internalBtagSFHelper_loose_outside->getCSVWeight_0B(jetPts_outside,jetEtas_outside,jetFlavors_outside, "up","central");
+    auto internalCSVweight_loose_outside_LFDOWN_0B  = internalBtagSFHelper_loose_outside->getCSVWeight_0B(jetPts_outside,jetEtas_outside,jetFlavors_outside, "down","central");
+    auto internalCSVweight_loose_outside_HFUP_0B    = internalBtagSFHelper_loose_outside->getCSVWeight_0B(jetPts_outside,jetEtas_outside,jetFlavors_outside, "central","up");
+    auto internalCSVweight_loose_outside_HFDOWN_0B  = internalBtagSFHelper_loose_outside->getCSVWeight_0B(jetPts_outside,jetEtas_outside,jetFlavors_outside, "central","down");
+
+    // calculate actual event weights
+    double internalCSVweight_loose_outside_0B_final         = divideSavely(internalCSVweight_loose_outside_0B.first,internalCSVweight_loose_outside_0B.second);
+    double internalCSVweight_loose_outside_LFUP_0B_final    = divideSavely(internalCSVweight_loose_outside_LFUP_0B.first,internalCSVweight_loose_outside_LFUP_0B.second);
+    double internalCSVweight_loose_outside_LFDOWN_0B_final  = divideSavely(internalCSVweight_loose_outside_LFDOWN_0B.first,internalCSVweight_loose_outside_LFDOWN_0B.second);
+    double internalCSVweight_loose_outside_HFUP_0B_final    = divideSavely(internalCSVweight_loose_outside_HFUP_0B.first,internalCSVweight_loose_outside_HFUP_0B.second);
+    double internalCSVweight_loose_outside_HFDOWN_0B_final  = divideSavely(internalCSVweight_loose_outside_HFDOWN_0B.first,internalCSVweight_loose_outside_HFDOWN_0B.second);
+
+    double internalCSVweight_loose_outside_ge1B_final        = divideSavely((1-internalCSVweight_loose_outside_0B.first),(1-internalCSVweight_loose_outside_0B.second));
+    double internalCSVweight_loose_outside_LFUP_ge1B_final   = divideSavely((1-internalCSVweight_loose_outside_LFUP_0B.first),(1-internalCSVweight_loose_outside_LFUP_0B.second));
+    double internalCSVweight_loose_outside_LFDOWN_ge1B_final = divideSavely((1-internalCSVweight_loose_outside_LFDOWN_0B.first),(1-internalCSVweight_loose_outside_LFDOWN_0B.second));
+    double internalCSVweight_loose_outside_HFUP_ge1B_final   = divideSavely((1-internalCSVweight_loose_outside_HFUP_0B.first),(1-internalCSVweight_loose_outside_HFUP_0B.second));
+    double internalCSVweight_loose_outside_HFDOWN_ge1B_final = divideSavely((1-internalCSVweight_loose_outside_HFDOWN_0B.first),(1-internalCSVweight_loose_outside_HFDOWN_0B.second));
+
+    // all jets -> leptopnic analysis
+    auto internalCSVweight_medium_0B        = internalBtagSFHelper_medium->getCSVWeight_0B(jetPts,jetEtas,jetFlavors, "central","central");
+    auto internalCSVweight_medium_LFUP_0B   = internalBtagSFHelper_medium->getCSVWeight_0B(jetPts,jetEtas,jetFlavors, "up","central");
+    auto internalCSVweight_medium_LFDOWN_0B = internalBtagSFHelper_medium->getCSVWeight_0B(jetPts,jetEtas,jetFlavors, "down","central");
+    auto internalCSVweight_medium_HFUP_0B   = internalBtagSFHelper_medium->getCSVWeight_0B(jetPts,jetEtas,jetFlavors, "central","up");
+    auto internalCSVweight_medium_HFDOWN_0B = internalBtagSFHelper_medium->getCSVWeight_0B(jetPts,jetEtas,jetFlavors, "central","down");
+
+    auto internalCSVweight_medium_1B        = internalBtagSFHelper_medium->getCSVWeight_1B(jetPts,jetEtas,jetFlavors, "central","central");
+    auto internalCSVweight_medium_LFUP_1B   = internalBtagSFHelper_medium->getCSVWeight_1B(jetPts,jetEtas,jetFlavors, "up","central");
+    auto internalCSVweight_medium_LFDOWN_1B = internalBtagSFHelper_medium->getCSVWeight_1B(jetPts,jetEtas,jetFlavors, "down","central");
+    auto internalCSVweight_medium_HFUP_1B   = internalBtagSFHelper_medium->getCSVWeight_1B(jetPts,jetEtas,jetFlavors, "central","up");
+    auto internalCSVweight_medium_HFDOWN_1B = internalBtagSFHelper_medium->getCSVWeight_1B(jetPts,jetEtas,jetFlavors, "central","down");
+
+    // calculate actual event weights
+    double internalCSVweight_medium_0B_final         = divideSavely(internalCSVweight_medium_0B.first,internalCSVweight_medium_0B.second);
+    double internalCSVweight_medium_LFUP_0B_final    = divideSavely(internalCSVweight_medium_LFUP_0B.first,internalCSVweight_medium_LFUP_0B.second);
+    double internalCSVweight_medium_LFDOWN_0B_final  = divideSavely(internalCSVweight_medium_LFDOWN_0B.first,internalCSVweight_medium_LFDOWN_0B.second);
+    double internalCSVweight_medium_HFUP_0B_final    = divideSavely(internalCSVweight_medium_HFUP_0B.first,internalCSVweight_medium_HFUP_0B.second);
+    double internalCSVweight_medium_HFDOWN_0B_final  = divideSavely(internalCSVweight_medium_HFDOWN_0B.first,internalCSVweight_medium_HFDOWN_0B.second);
+
+    double internalCSVweight_medium_ge1B_final        = divideSavely((1-internalCSVweight_medium_0B.first),(1-internalCSVweight_medium_0B.second));
+    double internalCSVweight_medium_LFUP_ge1B_final   = divideSavely((1-internalCSVweight_medium_LFUP_0B.first),(1-internalCSVweight_medium_LFUP_0B.second));
+    double internalCSVweight_medium_LFDOWN_ge1B_final = divideSavely((1-internalCSVweight_medium_LFDOWN_0B.first),(1-internalCSVweight_medium_LFDOWN_0B.second));
+    double internalCSVweight_medium_HFUP_ge1B_final   = divideSavely((1-internalCSVweight_medium_HFUP_0B.first),(1-internalCSVweight_medium_HFUP_0B.second));
+    double internalCSVweight_medium_HFDOWN_ge1B_final = divideSavely((1-internalCSVweight_medium_HFDOWN_0B.first),(1-internalCSVweight_medium_HFDOWN_0B.second));
+
+    double internalCSVweight_medium_1B_final        = divideSavely((internalCSVweight_medium_1B.first),(internalCSVweight_medium_1B.second));
+    double internalCSVweight_medium_LFUP_1B_final   = divideSavely((internalCSVweight_medium_LFUP_1B.first),(internalCSVweight_medium_LFUP_1B.second));
+    double internalCSVweight_medium_LFDOWN_1B_final = divideSavely((internalCSVweight_medium_LFDOWN_1B.first),(internalCSVweight_medium_LFDOWN_1B.second));
+    double internalCSVweight_medium_HFUP_1B_final   = divideSavely((internalCSVweight_medium_HFUP_1B.first),(internalCSVweight_medium_HFUP_1B.second));
+    double internalCSVweight_medium_HFDOWN_1B_final = divideSavely((internalCSVweight_medium_HFDOWN_1B.first),(internalCSVweight_medium_HFDOWN_1B.second));
+
+    double internalCSVweight_medium_ge2B_final        = divideSavely((1-internalCSVweight_medium_0B.first-internalCSVweight_medium_1B.first),(1-internalCSVweight_medium_0B.second-internalCSVweight_medium_1B.second));
+    double internalCSVweight_medium_LFUP_ge2B_final   = divideSavely((1-internalCSVweight_medium_LFUP_0B.first-internalCSVweight_medium_LFUP_1B.first),(1-internalCSVweight_medium_LFUP_0B.second-internalCSVweight_medium_LFUP_1B.second));
+    double internalCSVweight_medium_LFDOWN_ge2B_final = divideSavely((1-internalCSVweight_medium_LFDOWN_0B.first-internalCSVweight_medium_LFDOWN_1B.first),(1-internalCSVweight_medium_LFDOWN_0B.second-internalCSVweight_medium_LFDOWN_1B.second));
+    double internalCSVweight_medium_HFUP_ge2B_final   = divideSavely((1-internalCSVweight_medium_HFUP_0B.first-internalCSVweight_medium_HFUP_1B.first),(1-internalCSVweight_medium_HFUP_0B.second-internalCSVweight_medium_HFUP_1B.second));
+    double internalCSVweight_medium_HFDOWN_ge2B_final = divideSavely((1-internalCSVweight_medium_HFDOWN_0B.first-internalCSVweight_medium_HFDOWN_1B.first),(1-internalCSVweight_medium_HFDOWN_0B.second-internalCSVweight_medium_HFDOWN_1B.second));
+
+//    if(N_BTagsM>=2){
+//        std::cout << "-------------" << std::endl;
+//        std::cout << "internalCSVweight_loose_outside_0B_final: " << internalCSVweight_loose_outside_0B_final << std::endl;
+//        // std::cout << "internalCSVweight_loose_outside_zerotag: " << internalCSVweight_loose_outside_zerotag << std::endl;
+//        std::cout << "internalCSVweight_loose_outside_ge1B_final: " << internalCSVweight_loose_outside_ge1B_final << std::endl;
+//         std::cout << "internalCSVweight_loose_outside_onetag: " << internalCSVweight_loose_outside_onetag << std::endl;
+//        std::cout << "internalCSVweight_medium_0B_final: " << internalCSVweight_medium_0B_final << std::endl;
+//        std::cout << "internalCSVweight_medium_ge1B_final: " << internalCSVweight_medium_ge1B_final << std::endl;
+//        std::cout << "internalCSVweight_medium_ge2B_final: " << internalCSVweight_medium_ge2B_final << std::endl;
+//        std::cout << "internalCSVweight_medium_0B.first: " << internalCSVweight_medium_0B.first << std::endl;
+//        std::cout << "internalCSVweight_medium_1B.first: " << internalCSVweight_medium_1B.first << std::endl;
+//        std::cout << "internalCSVweight_medium_0B.second: " << internalCSVweight_medium_0B.second << std::endl;
+//        std::cout << "internalCSVweight_medium_1B.second: " << internalCSVweight_medium_1B.second << std::endl;
+//    }
     totalTimeCalculateSFs += timerCalculateSFs->RealTime();
 
     // print stuff for synchronizing

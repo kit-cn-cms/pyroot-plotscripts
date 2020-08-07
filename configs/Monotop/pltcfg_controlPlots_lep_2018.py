@@ -31,184 +31,209 @@ def find_masses(dataset_name):
 
 # samples
 # input path
-path_mwassmer = "/nfs/dust/cms/user/mwassmer/MonoTop/ntuples_2018"
-
-
-# SELECTIONS
-
-
-# select events without huge MuR/MuF weights
-# sel_StrangeMuWeights='*(abs(Weight_scale_variation_muR_0p5_muF_0p5)<=100 && abs(Weight_scale_variation_muR_0p5_muF_1p0)<=100 && abs(Weight_scale_variation_muR_0p5_muF_2p0)<=100 && abs(Weight_scale_variation_muR_1p0_muF_0p5)<=100 && abs(Weight_scale_variation_muR_1p0_muF_1p0)<=100 && abs(Weight_scale_variation_muR_1p0_muF_2p0)<=100 && abs(Weight_scale_variation_muR_2p0_muF_0p5)<=100 && abs(Weight_scale_variation_muR_2p0_muF_1p0)<=100 && abs(Weight_scale_variation_muR_2p0_muF_2p0)<=100)'
-sel_StrangeMuWeights = "*1.0"
-
+path_mwassmer = "/nfs/dust/cms/user/mwassmer/MonoTop/ntuples_2018_PuppiMET"
 
 # ======= #
 # WEIGHTS #
 # ======= #
-# defaultWeight = "Weight_GEN_nom*Weight_pu69p2*Weight_CSV"
+
+# generator weight
 defaultWeight = "Weight_GEN_nom"
 
-# csv weights
-csvWeightNom = "Weight_CSV"
 
+# csv weights
+# csvWeightNom = "Weight_CSV"
+# csvWeightNom = "1."
+csvWeightNom = "("
+csvWeightNom += " ((internalCSVweight_medium_0B_final)*(N_BTagsM==0))" #W region
+csvWeightNom += "+((internalCSVweight_medium_1B_final)*(N_BTagsM==1))" #SR
+csvWeightNom += "+((internalCSVweight_medium_ge2B_final)*(N_BTagsM>=2))" #ttbar region
+csvWeightNom += ")"
+
+# csvWeightLF_Up = "1."
+csvWeightLF_Up = "("
+csvWeightLF_Up += " ((internalCSVweight_medium_LFUP_0B_final)*(N_BTagsM==0))" #W region
+csvWeightLF_Up += "+((internalCSVweight_medium_LFUP_1B_final)*(N_BTagsM==1))" #SR
+csvWeightLF_Up += "+((internalCSVweight_medium_LFUP_ge2B_final)*(N_BTagsM>=2))" #ttbar region
+csvWeightLF_Up += ")"
+
+csvWeightLF_Down = "("
+csvWeightLF_Down += " ((internalCSVweight_medium_LFDOWN_0B_final)*(N_BTagsM==0))" #W region
+csvWeightLF_Down += "+((internalCSVweight_medium_LFDOWN_1B_final)*(N_BTagsM==1))" #SR
+csvWeightLF_Down += "+((internalCSVweight_medium_LFDOWN_ge2B_final)*(N_BTagsM>=2))" #ttbar region
+csvWeightLF_Down += ")"
+
+csvWeightHF_Up = "("
+csvWeightHF_Up += " ((internalCSVweight_medium_HFUP_0B_final)*(N_BTagsM==0))" #W region
+csvWeightHF_Up += "+((internalCSVweight_medium_HFUP_1B_final)*(N_BTagsM==1))" #SR
+csvWeightHF_Up += "+((internalCSVweight_medium_HFUP_ge2B_final)*(N_BTagsM>=2))" #ttbar region
+csvWeightHF_Up += ")"
+
+csvWeightHF_Down = "("
+csvWeightHF_Down += " ((internalCSVweight_medium_HFDOWN_0B_final)*(N_BTagsM==0))" #W region
+csvWeightHF_Down += "+((internalCSVweight_medium_HFDOWN_1B_final)*(N_BTagsM==1))" #SR
+csvWeightHF_Down += "+((internalCSVweight_medium_HFDOWN_ge2B_final)*(N_BTagsM>=2))" #ttbar region
+csvWeightHF_Down += ")"
 
 # pile up weights
-pileupWeightNom = "Weight_pu69p2"
-pileupWeightUp = "Weight_pu69p2Up"
-pileupWeightDown = "Weight_pu69p2Down"
+pileupWeightNom = "internalPUWeight_2018"
+pileupWeightUp = "internalPUWeight_2018_Up"
+pileupWeightDown = "internalPUWeight_2018_Down"
 
-## lepton scale factors
-#electronSFs = "((N_TightElectrons==1 && N_LooseElectrons==2)*Electron_IdentificationSF[0]*Electron_ReconstructionSF[0]*LooseElectron_IdentificationSF[1]*LooseElectron_ReconstructionSF[1]+(N_TightElectrons==2 && N_LooseElectrons==2)*Electron_IdentificationSF[0]*Electron_ReconstructionSF[0]*Electron_IdentificationSF[1]*Electron_ReconstructionSF[1]+(N_TightElectrons==1 && N_LooseElectrons==1)*Electron_IdentificationSF[0]*Electron_ReconstructionSF[0]+(N_LooseElectrons==0)*1.)"
 
-electronRecoSFs = "((N_TightElectrons==1 && N_LooseElectrons==1)*Electron_ReconstructionSF[0]+(N_LooseElectrons==0)*1.)"
+# lepton and photon scalefactors
 
-electronIDSFs = "((N_TightElectrons==1 && N_LooseElectrons==1)*Electron_IdentificationSF[0]+(N_LooseElectrons==0)*1.)"
+electronRecoSFs = "((N_LooseElectrons==2)*LooseElectron_ReconstructionSF[0]*LooseElectron_ReconstructionSF[1]+(N_TightElectrons==1 && N_LooseElectrons==1)*Electron_ReconstructionSF[0]+(N_TightElectrons==0 && N_LooseElectrons==1)*LooseElectron_ReconstructionSF[0]+(N_LooseElectrons==0)*1.)"
 
-#muonSFs = "((N_TightMuons==1 && N_LooseMuons==2)*Muon_IdentificationSF[0]*Muon_IsolationSF[0]*LooseMuon_IdentificationSF[1]*LooseMuon_IsolationSF[1]+(N_TightMuons==2 && N_LooseMuons==2)*Muon_IdentificationSF[0]*Muon_IsolationSF[0]*Muon_IdentificationSF[1]*Muon_IsolationSF[1]+(N_TightMuons==1 && N_LooseMuons==1)*Muon_IdentificationSF[0]*Muon_IsolationSF[0]+(N_LooseMuons==0)*1.)"
+electronRecoSFs_up = "((N_LooseElectrons==2)*LooseElectron_ReconstructionSFUp[0]*LooseElectron_ReconstructionSFUp[1]+(N_TightElectrons==1 && N_LooseElectrons==1)*Electron_ReconstructionSFUp[0]+(N_TightElectrons==0 && N_LooseElectrons==1)*LooseElectron_ReconstructionSFUp[0]+(N_LooseElectrons==0)*1.)"
 
-muonIsoSFs = "((N_TightMuons==1 && N_LooseMuons==1)*Muon_IsolationSF[0]+(N_LooseMuons==0)*1.)"
+electronRecoSFs_down = "((N_LooseElectrons==2)*LooseElectron_ReconstructionSFDown[0]*LooseElectron_ReconstructionSFDown[1]+(N_TightElectrons==1 && N_LooseElectrons==1)*Electron_ReconstructionSFDown[0]+(N_TightElectrons==0 && N_LooseElectrons==1)*LooseElectron_ReconstructionSFDown[0]+(N_LooseElectrons==0)*1.)"
 
-muonIDSFs = "((N_TightMuons==1 && N_LooseMuons==1)*Muon_IdentificationSF[0]+(N_LooseMuons==0)*1.)"
 
-photonSFs = "1."
+electronIDSFs = "((N_LooseElectrons==2)*LooseElectron_IdentificationSF[0]*LooseElectron_IdentificationSF[1]+(N_TightElectrons==1 && N_LooseElectrons==1)*Electron_IdentificationSF[0]+(N_TightElectrons==0 && N_LooseElectrons==1)*LooseElectron_IdentificationSF[0]+(N_LooseElectrons==0)*1.)"
 
-triggerSFs = "((N_TightElectrons==1 && N_LooseElectrons==1 && N_LooseMuons==0)*TriggerSF_SingleElectron+(N_TightMuons==1 && N_LooseMuons==1 && N_LooseElectrons==0)*TriggerSF_SingleMuon)"
+electronIDSFs_up = "((N_LooseElectrons==2)*LooseElectron_IdentificationSFUp[0]*LooseElectron_IdentificationSFUp[1]+(N_TightElectrons==1 && N_LooseElectrons==1)*Electron_IdentificationSFUp[0]+(N_TightElectrons==0 && N_LooseElectrons==1)*LooseElectron_IdentificationSFUp[0]+(N_LooseElectrons==0)*1.)"
+
+electronIDSFs_down = "((N_LooseElectrons==2)*LooseElectron_IdentificationSFDown[0]*LooseElectron_IdentificationSFDown[1]+(N_TightElectrons==1 && N_LooseElectrons==1)*Electron_IdentificationSFDown[0]+(N_TightElectrons==0 && N_LooseElectrons==1)*LooseElectron_IdentificationSFDown[0]+(N_LooseElectrons==0)*1.)"
+
+
+muonIsoSFs = "((N_LooseMuons==2)*LooseMuon_IsolationSF[0]*LooseMuon_IsolationSF[1]+(N_TightMuons==1 && N_LooseMuons==1)*Muon_IsolationSF[0]+(N_TightMuons==0 && N_LooseMuons==1)*LooseMuon_IsolationSF[0]+(N_LooseMuons==0)*1.)"
+
+muonIsoSFs_up = "((N_LooseMuons==2)*LooseMuon_IsolationSFUp[0]*LooseMuon_IsolationSFUp[1]+(N_TightMuons==1 && N_LooseMuons==1)*Muon_IsolationSFUp[0]+(N_TightMuons==0 && N_LooseMuons==1)*LooseMuon_IsolationSFUp[0]+(N_LooseMuons==0)*1.)"
+
+muonIsoSFs_down = "((N_LooseMuons==2)*LooseMuon_IsolationSFDown[0]*LooseMuon_IsolationSFDown[1]+(N_TightMuons==1 && N_LooseMuons==1)*Muon_IsolationSFDown[0]+(N_TightMuons==0 && N_LooseMuons==1)*LooseMuon_IsolationSFDown[0]+(N_LooseMuons==0)*1.)"
+
+
+muonIDSFs = "((N_LooseMuons==2)*LooseMuon_IdentificationSF[0]*LooseMuon_IdentificationSF[1]+(N_TightMuons==1 && N_LooseMuons==1)*Muon_IdentificationSF[0]+(N_TightMuons==0 && N_LooseMuons==1)*LooseMuon_IdentificationSF[0]+(N_LooseMuons==0)*1.)"
+
+muonIDSFs_up = "((N_LooseMuons==2)*LooseMuon_IdentificationSFUp[0]*LooseMuon_IdentificationSFUp[1]+(N_TightMuons==1 && N_LooseMuons==1)*Muon_IdentificationSFUp[0]+(N_TightMuons==0 && N_LooseMuons==1)*LooseMuon_IdentificationSFUp[0]+(N_LooseMuons==0)*1.)"
+
+muonIDSFs_down = "((N_LooseMuons==2)*LooseMuon_IdentificationSFDown[0]*LooseMuon_IdentificationSFDown[1]+(N_TightMuons==1 && N_LooseMuons==1)*Muon_IdentificationSFDown[0]+(N_TightMuons==0 && N_LooseMuons==1)*LooseMuon_IdentificationSFDown[0]+(N_LooseMuons==0)*1.)"
+
+
+photonSFs = "((N_LoosePhotons==1 && N_TightPhotons==1)*Photon_IdentificationSF[0]+(N_LoosePhotons==0)*1.)"
+
+photonSFs_up = "((N_LoosePhotons==1 && N_TightPhotons==1)*Photon_IdentificationSFUp[0]+(N_LoosePhotons==0)*1.)"
+
+photonSFs_down = "((N_LoosePhotons==1 && N_TightPhotons==1)*Photon_IdentificationSFDown[0]+(N_LoosePhotons==0)*1.)"
+
+
+# trigger scale factors
+
+triggerSFs = "((N_LooseElectrons>0 && N_LooseMuons==0 && N_LoosePhotons==0)*TriggerSF_SingleElectron+(N_LooseMuons>=0 && N_LooseElectrons==0 && N_LoosePhotons==0)*TriggerSF_SingleMuon+(N_LoosePhotons>0 && N_LooseElectrons==0 && N_LooseMuons==0)*TriggerSF_SinglePhoton)"
+
+
+electronTriggerSFs_up = "((N_LooseElectrons>0 && N_LooseMuons==0 && N_LoosePhotons==0)*TriggerSF_SingleElectron_Up+(N_LooseMuons>=0 && N_LooseElectrons==0 && N_LoosePhotons==0)*TriggerSF_MET+(N_LoosePhotons>0 && N_LooseElectrons==0 && N_LooseMuons==0)*TriggerSF_SinglePhoton)"
+
+electronTriggerSFs_down = "((N_LooseElectrons>0 && N_LooseMuons==0 && N_LoosePhotons==0)*TriggerSF_SingleElectron_Down+(N_LooseMuons>=0 && N_LooseElectrons==0 && N_LoosePhotons==0)*TriggerSF_MET+(N_LoosePhotons>0 && N_LooseElectrons==0 && N_LooseMuons==0)*TriggerSF_SinglePhoton)"
+
+
+metTriggerSFs_up = "((N_LooseElectrons>0 && N_LooseMuons==0 && N_LoosePhotons==0)*TriggerSF_SingleElectron+(N_LooseMuons>=0 && N_LooseElectrons==0 && N_LoosePhotons==0)*TriggerSF_MET_Up+(N_LoosePhotons>0 && N_LooseElectrons==0 && N_LooseMuons==0)*TriggerSF_SinglePhoton)"
+
+metTriggerSFs_down = "((N_LooseElectrons>0 && N_LooseMuons==0 && N_LoosePhotons==0)*TriggerSF_SingleElectron+(N_LooseMuons>=0 && N_LooseElectrons==0 && N_LoosePhotons==0)*TriggerSF_MET_Down+(N_LoosePhotons>0 && N_LooseElectrons==0 && N_LooseMuons==0)*TriggerSF_SinglePhoton)"
+
+
+photonTriggerSFs_up = "((N_LooseElectrons>0 && N_LooseMuons==0 && N_LoosePhotons==0)*TriggerSF_SingleElectron+(N_LooseMuons>=0 && N_LooseElectrons==0 && N_LoosePhotons==0)*TriggerSF_MET+(N_LoosePhotons>0 && N_LooseElectrons==0 && N_LooseMuons==0)*TriggerSF_SinglePhoton_Up)"
+
+photonTriggerSFs_down = "((N_LooseElectrons>0 && N_LooseMuons==0 && N_LoosePhotons==0)*TriggerSF_SingleElectron+(N_LooseMuons>=0 && N_LooseElectrons==0 && N_LoosePhotons==0)*TriggerSF_MET+(N_LoosePhotons>0 && N_LooseElectrons==0 && N_LooseMuons==0)*TriggerSF_SinglePhoton_Down)"
+
+
+muonTriggerSFs_up = "((N_LooseElectrons>0 && N_LooseMuons==0 && N_LoosePhotons==0)*TriggerSF_SingleElectron+(N_LooseMuons>=0 && N_LooseElectrons==0 && N_LoosePhotons==0)*TriggerSF_SingleMuon_Up+(N_LoosePhotons>0 && N_LooseElectrons==0 && N_LooseMuons==0)*TriggerSF_SinglePhoton)"
+
+muonTriggerSFs_down = "((N_LooseElectrons>0 && N_LooseMuons==0 && N_LoosePhotons==0)*TriggerSF_SingleElectron+(N_LooseMuons>=0 && N_LooseElectrons==0 && N_LoosePhotons==0)*TriggerSF_SingleMuon_Down+(N_LoosePhotons>0 && N_LooseElectrons==0 && N_LooseMuons==0)*TriggerSF_SinglePhoton)"
+
 
 # top pt weight
 topptWeightNom = "Weight_TopPt"
 
-#electronSFs_up = "((N_TightElectrons==1 && N_LooseElectrons==2)*Electron_IdentificationSFUp[0]*Electron_ReconstructionSFUp[0]*LooseElectron_IdentificationSFUp[1]*LooseElectron_ReconstructionSFUp[1]+(N_TightElectrons==2 && N_LooseElectrons==2)*Electron_IdentificationSFUp[0]*Electron_ReconstructionSFUp[0]*Electron_IdentificationSFUp[1]*Electron_ReconstructionSFUp[1]+(N_TightElectrons==1 && N_LooseElectrons==1)*Electron_IdentificationSFUp[0]*Electron_ReconstructionSFUp[0]+(N_LooseElectrons==0)*1.)"
-#electronSFs_down = "((N_TightElectrons==1 && N_LooseElectrons==2)*Electron_IdentificationSFDown[0]*Electron_ReconstructionSFDown[0]*LooseElectron_IdentificationSFDown[1]*LooseElectron_ReconstructionSFDown[1]+(N_TightElectrons==2 && N_LooseElectrons==2)*Electron_IdentificationSFDown[0]*Electron_ReconstructionSFDown[0]*Electron_IdentificationSFDown[1]*Electron_ReconstructionSFDown[1]+(N_TightElectrons==1 && N_LooseElectrons==1)*Electron_IdentificationSFDown[0]*Electron_ReconstructionSFDown[0]+(N_LooseElectrons==0)*1.)"
 
-electronRecoSFs_up = "((N_TightElectrons==1 && N_LooseElectrons==1)*Electron_ReconstructionSFUp[0]+(N_LooseElectrons==0)*1.)"
-
-electronRecoSFs_down = "((N_TightElectrons==1 && N_LooseElectrons==1)*Electron_ReconstructionSFDown[0]+(N_LooseElectrons==0)*1.)"
-
-electronIDSFs_up = "((N_TightElectrons==1 && N_LooseElectrons==1)*Electron_IdentificationSFUp[0]+(N_LooseElectrons==0)*1.)"
-
-electronIDSFs_down = "((N_TightElectrons==1 && N_LooseElectrons==1)*Electron_IdentificationSFDown[0]+(N_LooseElectrons==0)*1.)"
-
-#muonSFs_up = "((N_TightMuons==1 && N_LooseMuons==2)*Muon_IdentificationSFUp[0]*Muon_IsolationSFUp[0]*LooseMuon_IdentificationSFUp[1]*LooseMuon_IsolationSFUp[1]+(N_TightMuons==2 && N_LooseMuons==2)*Muon_IdentificationSFUp[0]*Muon_IsolationSFUp[0]*Muon_IdentificationSFUp[1]*Muon_IsolationSFUp[1]+(N_TightMuons==1 && N_LooseMuons==1)*Muon_IdentificationSFUp[0]*Muon_IsolationSFUp[0]+(N_LooseMuons==0)*1.)"
-#muonSFs_down = "((N_TightMuons==1 && N_LooseMuons==2)*Muon_IdentificationSFDown[0]*Muon_IsolationSFDown[0]*LooseMuon_IdentificationSFDown[1]*LooseMuon_IsolationSFDown[1]+(N_TightMuons==2 && N_LooseMuons==2)*Muon_IdentificationSFDown[0]*Muon_IsolationSFDown[0]*Muon_IdentificationSFDown[1]*Muon_IsolationSFDown[1]+(N_TightMuons==1 && N_LooseMuons==1)*Muon_IdentificationSFDown[0]*Muon_IsolationSFDown[0]+(N_LooseMuons==0)*1.)"
-
-muonIsoSFs_up = "((N_TightMuons==1 && N_LooseMuons==1)*Muon_IsolationSFUp[0]+(N_LooseMuons==0)*1.)"
-
-muonIsoSFs_down = "((N_TightMuons==1 && N_LooseMuons==1)*Muon_IsolationSFDown[0]+(N_LooseMuons==0)*1.)"
-
-muonIDSFs_up = "((N_TightMuons==1 && N_LooseMuons==1)*Muon_IdentificationSFUp[0]+(N_LooseMuons==0)*1.)"
-
-muonIDSFs_down = "((N_TightMuons==1 && N_LooseMuons==1)*Muon_IdentificationSFDown[0]+(N_LooseMuons==0)*1.)"
-
-photonSFs_up = "1."
-photonSFs_down = "1."
-
-electronTriggerSFs_up = "((N_TightElectrons==1 && N_LooseElectrons==1 && N_LooseMuons==0)*TriggerSF_SingleElectron_Up+(N_TightMuons==1 && N_LooseMuons==1 && N_LooseElectrons==0)*TriggerSF_SingleMuon)"
-electronTriggerSFs_down = "((N_TightElectrons==1 && N_LooseElectrons==1 && N_LooseMuons==0)*TriggerSF_SingleElectron_Down+(N_TightMuons==1 && N_LooseMuons==1 && N_LooseElectrons==0)*TriggerSF_SingleMuon)"
-
-muonTriggerSFs_up = "((N_TightElectrons==1 && N_LooseElectrons==1 && N_LooseMuons==0)*TriggerSF_SingleElectron+(N_TightMuons==1 && N_LooseMuons==1 && N_LooseElectrons==0)*TriggerSF_SingleMuon_Up)"
-muonTriggerSFs_down = "((N_TightElectrons==1 && N_LooseElectrons==1 && N_LooseMuons==0)*TriggerSF_SingleElectron+(N_TightMuons==1 && N_LooseMuons==1 && N_LooseElectrons==0)*TriggerSF_SingleMuon_Down)"
-
-metTriggerSFs_up = "1."
-metTriggerSFs_down = "1."
-
+# higher-order v+jets theory reweighting weight
 bosonWeightNom = "internalBosonWeight"
 
-deepakMistagSF = "1."
-deepakMistagSF_low_up = "1."
-deepakMistagSF_low_down = "1."
-deepakMistagSF_high_up = "1."
-deepakMistagSF_high_down = "1."
 
-deepakEfficiencySF = "1."
-deepakEfficiencySF_low_up = "1."
-deepakEfficiencySF_low_down = "1."
-deepakEfficiencySF_high_up = "1."
-deepakEfficiencySF_high_down = "1."
+#deepakMistagSF = "((AK15Jet_TopMatched[0]<0.5)*1.0+(AK15Jet_TopMatched[0]>0.5)*1.)"
+#deepakMistagSF_low_up = "((AK15Jet_TopMatched[0]<0.5 && AK15Jet_Pt[0]<400.)*1.5+(AK15Jet_TopMatched[0]>0.5 && AK15Jet_Pt[0]<400.)*1.+(AK15Jet_Pt[0]>=400.)*1.)"
+#deepakMistagSF_low_down = "((AK15Jet_TopMatched[0]<0.5 && AK15Jet_Pt[0]<400.)*0.5+(AK15Jet_TopMatched[0]>0.5 && AK15Jet_Pt[0]<400.)*1.+(AK15Jet_Pt[0]>=400.)*1.)"
+#deepakMistagSF_high_up = "((AK15Jet_TopMatched[0]<0.5 && AK15Jet_Pt[0]>=400.)*1.5+(AK15Jet_TopMatched[0]>0.5 && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
+#deepakMistagSF_high_down = "((AK15Jet_TopMatched[0]<0.5 && AK15Jet_Pt[0]>=400.)*0.5+(AK15Jet_TopMatched[0]>0.5 && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
 
-## trigger scale factors
-## DANGERZONE: ELECTRON TRIGGER NOT ADDED TO NTUPLES YET, USE INTERNAL SFS
-## electronTrigger = "("+sel_singleel+"&&(Weight_EleTriggerSF>0.))*Weight_EleTriggerSF"
-# electronTrigger = (
-# "(" + sel_singleel + "&&(internalEleTriggerWeight>0.))*internalEleTriggerWeight"
-# )
-# muonTrigger = "(" + sel_singlemu + "&&(Weight_MuonTriggerSF>0.))*Weight_MuonTriggerSF"
+#deepakEfficiencySF = "((AK15Jet_TopMatched[0]>0.5)*1.0+(AK15Jet_TopMatched[0]<0.5)*1.)"
+#deepakEfficiencySF_low_up = "((AK15Jet_TopMatched[0]>0.5 && AK15Jet_Pt[0]<400.)*1.5+(AK15Jet_TopMatched[0]<0.5 && AK15Jet_Pt[0]<400.)*1.+(AK15Jet_Pt[0]>=400.)*1.)"
+#deepakEfficiencySF_low_down = "((AK15Jet_TopMatched[0]>0.5 && AK15Jet_Pt[0]<400.)*0.5+(AK15Jet_TopMatched[0]<0.5 && AK15Jet_Pt[0]<400.)*1.+(AK15Jet_Pt[0]>=400.)*1.)"
+#deepakEfficiencySF_high_up = "((AK15Jet_TopMatched[0]>0.5 && AK15Jet_Pt[0]>=400.)*1.5+(AK15Jet_TopMatched[0]<0.5 && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
+#deepakEfficiencySF_high_down = "((AK15Jet_TopMatched[0]>0.5 && AK15Jet_Pt[0]>=400.)*0.5+(AK15Jet_TopMatched[0]<0.5 && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
 
-## electronTrigger_up = "("+sel_singleel+"&&(Weight_EleTriggerSF_Up>0.))*Weight_EleTriggerSF_Up"
-## electronTrigger_down = "("+sel_singleel+"&&(Weight_EleTriggerSF_Down>0.))*Weight_EleTriggerSF_Down"
-# electronTrigger_up = (
-# "(" + sel_singleel + "&&(internalEleTriggerWeightUp>0.))*internalEleTriggerWeightUp"
-# )
-# electronTrigger_down = (
-# "("
-# + sel_singleel
-# + "&&(internalEleTriggerWeightDown>0.))*internalEleTriggerWeightDown"
-# )
-# muonTrigger_up = (
-# "(" + sel_singlemu + "&&(Weight_MuonTriggerSF_Up>0.))*Weight_MuonTriggerSF_Up"
-# )
-# muonTrigger_down = (
-# "(" + sel_singlemu + "&&(Weight_MuonTriggerSF_Down>0.))*Weight_MuonTriggerSF_Down"
-# )
 
 
 # dictionary of expressions to replace in systematics csv
 weightReplacements = {
     # default weight
     "DEFAULTWEIGHT": defaultWeight,
+    
     # pileup weights
     "PUWEIGHTNOM": pileupWeightNom,
     "PUWEIGHTUP": pileupWeightUp,
     "PUWEIGHTDOWN": pileupWeightDown,
+    
     # csv weight
     "CSVWEIGHTNOM": csvWeightNom,
+    "CSVWEIGHTLFUP": csvWeightLF_Up,
+    "CSVWEIGHTLFDOWN": csvWeightLF_Down,
+    "CSVWEIGHTHFUP": csvWeightHF_Up,
+    "CSVWEIGHTHFDOWN": csvWeightHF_Down,
+    
     # top pt weight
     "TOPPTWEIGHTNOM": topptWeightNom,
-    # lepton scale factors
-    #"ELESFNOM": electronSFs,
-    #"ELESFUP": electronSFs_up,
-    #"ELESFDOWN": electronSFs_down,
+    
+    # lepton and photon scale factors
     "ELERECOSFNOM": electronRecoSFs,
     "ELERECOSFUP": electronRecoSFs_up,
     "ELERECOSFDOWN": electronRecoSFs_down,
+    
     "ELEIDSFNOM": electronIDSFs,
     "ELEIDSFUP": electronIDSFs_up,
     "ELEIDSFDOWN": electronIDSFs_down,
-    #"MUSFNOM": muonSFs,
-    #"MUSFUP": muonSFs_up,
-    #"MUSFDOWN": muonSFs_down,
+    
     "MUISOSFNOM": muonIsoSFs,
     "MUISOSFUP": muonIsoSFs_up,
     "MUISOSFDOWN": muonIsoSFs_down,
+    
     "MUIDSFNOM": muonIDSFs,
     "MUIDSFUP": muonIDSFs_up,
     "MUIDSFDOWN": muonIDSFs_down,
+    
     "PHSFNOM": photonSFs,
     "PHSFUP": photonSFs_up,
     "PHSFDOWN": photonSFs_down,
+    
+    # higher-order v+jets theory reweighting weight
     "BOSONWEIGHTNOM": bosonWeightNom,
+    
+    # trigger scale factors
     "TRIGGERSFNOM" : triggerSFs,
     "ELTRIGGERSFUP" : electronTriggerSFs_up,
     "ELTRIGGERSFDOWN" : electronTriggerSFs_down,
+    
     "MUTRIGGERSFUP" : muonTriggerSFs_up,
     "MUTRIGGERSFDOWN" : muonTriggerSFs_down,
+    
     "METTRIGGERSFUP" : metTriggerSFs_up,
     "METTRIGGERSFDOWN" : metTriggerSFs_down,
-    "DEEPAKMISTAGNOM" : deepakMistagSF,
-    "DEEPAKMISTAGLOWUP" : deepakMistagSF_low_up,
-    "DEEPAKMISTAGLOWDOWN" : deepakMistagSF_low_down,
-    "DEEPAKMISTAGHIGHUP" : deepakMistagSF_high_up,
-    "DEEPAKMISTAGHIGHDOWN" : deepakMistagSF_high_down,
-    "DEEPAKEFFICIENCYNOM" : deepakEfficiencySF,
-    "DEEPAKEFFICIENCYLOWUP" : deepakEfficiencySF_low_up,
-    "DEEPAKEFFICIENCYLOWDOWN" : deepakEfficiencySF_low_down,
-    "DEEPAKEFFICIENCYHIGHUP" : deepakEfficiencySF_high_up,
-    "DEEPAKEFFICIENCYHIGHDOWN" : deepakEfficiencySF_high_down,
-    ## trigger scale factors
-    # "TRIGGERSFS": "(" + electronTrigger + "+" + muonTrigger + ")",
-    # "ELETRIGSUP": "(" + electronTrigger_up + "+" + muonTrigger + ")",
-    # "ELETRIGSDOWN": "(" + electronTrigger_down + "+" + muonTrigger + ")",
-    # "MUTRIGSUP": "(" + electronTrigger + "+" + muonTrigger_up + ")",
-    # "MUTRIGSDOWN": "(" + electronTrigger + "+" + muonTrigger_down + ")",
+    
+    "PHOTONTRIGGERSFUP" : photonTriggerSFs_up,
+    "PHOTONTRIGGERSFDOWN" : photonTriggerSFs_down,
+    
+    "DEEPAKMISTAGNOM" : "1.",
+    #"DEEPAKMISTAGLOWUP" : deepakMistagSF_low_up,
+    #"DEEPAKMISTAGLOWDOWN" : deepakMistagSF_low_down,
+    #"DEEPAKMISTAGHIGHUP" : deepakMistagSF_high_up,
+    #"DEEPAKMISTAGHIGHDOWN" : deepakMistagSF_high_down,
+    "DEEPAKEFFICIENCYNOM" : "1.",
+    #"DEEPAKEFFICIENCYLOWUP" : deepakEfficiencySF_low_up,
+    #"DEEPAKEFFICIENCYLOWDOWN" : deepakEfficiencySF_low_down,
+    #"DEEPAKEFFICIENCYHIGHUP" : deepakEfficiencySF_high_up,
+    #"DEEPAKEFFICIENCYHIGHDOWN" : deepakEfficiencySF_high_down,
+   
     ## do weights for data
     "DOWEIGHTS": "(DoWeights==1)+(DoWeights==0)*1.0",
 }
@@ -240,19 +265,12 @@ nominalweight = (
     + bosonWeightNom
     + "*"
     + triggerSFs
+    #+ "*"
+    #+ deepakMistagSF
+    #+ "*"
+    #+ deepakEfficiencySF
     + ")"
     + "*(DoWeights==1)+(DoWeights==0)*1.0"
-    # + electronSFs
-    # + "+"
-    # + muonSFs
-    # + ")"
-    # + "*"
-    # + "("
-    # + electronTrigger
-    # + "+"
-    # + muonTrigger
-    # + ")"
-    # + ")*(DoWeights==1)+(DoWeights==0)*1.0"
 )
 
 

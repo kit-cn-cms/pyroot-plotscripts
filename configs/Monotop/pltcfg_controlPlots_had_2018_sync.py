@@ -42,8 +42,12 @@ defaultWeight = "Weight_GEN_nom"
 
 
 # csv weight
-csvWeightNom = "1."#"internalCSVweight_loose"
-
+# csvWeightNom = "1."#"internalCSVweight_loose"
+csvWeightNom = "("
+csvWeightNom += " (internalCSVweight_loose_outside_0B_final*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0 && N_LooseMuons<2 && N_LooseElectrons<2 && N_LoosePhotons==0))" #SR+SingleLep
+csvWeightNom += "+((internalCSVweight_loose_outside_ge1B_final)*(N_AK4JetsLooseTagged_outside_AK15Jets[0]>=1 && N_LooseMuons<2 && N_LooseElectrons<2 && N_LoosePhotons==0))" #SR+SingleLep
+csvWeightNom += "+((1.)*!(N_LooseMuons<2 && N_LooseElectrons<2 && N_LoosePhotons==0))" #DiLepton
+csvWeightNom += ")"
 
 # pile up weights
 pileupWeightNom = "internalPUWeight_2018"

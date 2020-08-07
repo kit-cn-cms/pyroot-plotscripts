@@ -12,27 +12,29 @@ import ROOT
 from array import array
 from copy import deepcopy
 
-fast = True
+fast = False
 
 #discr_binning = [0+(2*i) for i in range(150)]
 #discr_binning += [300+(5*i) for i in range(80)]
 #discr_binning += [700+(10*i) for i in range(31)]
 #discr_binning = [100.0, 102.0, 106.0, 110.0, 114.0, 118.0, 122.0, 126.0, 130.0, 134.0, 138.0, 142.0, 146.0,
 #discr_binning = [150.0, 154.0, 158.0, 162.0, 166.0, 170.0, 174.0, 178.0, 182.0, 186.0, 190.0, 194.0, 198.0, 202.0, 206.0, 210.0, 214.0, 218.0, 224.0, 230.0, 236.0, 242.0, 248.0, 254.0, 262.0, 270.0, 278.0, 288.0, 298.0, 315.0, 335.0, 360.0, 395.0, 465.0]
-discr_binning = [150.0, 165.0, 180.0, 200.0, 220.0, 240.0, 270.0, 310.0, 350.0, 500.0]
+# discr_binning = [150.0, 165.0, 180.0, 200.0, 220.0, 240.0, 270.0, 310.0, 350.0, 500.0]
+discr_binning = [40.0,60.0,80.0,100.0,125.0,150.0, 165.0, 180.0, 200.0, 220.0, 240.0, 270.0, 310.0, 350.0, 500.0]
 discr_binning.append(1000.)
 
-generalselection = "(N_HEM_Jets==0)*(Evt_Pt_MET>100.)*(N_LoosePhotons==0)*(Jet_Pt[0]>50.)"
+generalselection = "(N_HEM_Jets==0)*(Evt_Pt_MET>100.)*(N_LoosePhotons==0)*(Jet_Pt[0]>100.)"
 generalselection += "*(M_W_transverse[0]>=40.)"
+generalselection += "*(DeltaPhi_AK4Jet_MET[0]>1.5)"
 
 def control_plots_lep_CR_ttbarEl(data=None):
     label = "#scale[0.8]{t#bar{t} control region (e)}"
     extension = "_lep_CR_ttbarEl"
     selection = generalselection
-    selection += "*(N_BTagsM>=1 && N_BTagsL>=2)"
+    selection += "*(N_BTagsM>=2)"
     selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele32_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1))"
     #selection += "*(DeltaR_AK4Jet_LooseElectron[0]<3.4)"
-    #selection += "*(DeltaR_AK4Jets_LooseElectron_Smaller_3p4)"
+    selection += "*(DeltaR_AK4Jets_LooseElectron_Smaller_3p4)"
 
     plots = [
         plotClasses.Plot(
@@ -414,10 +416,10 @@ def control_plots_lep_CR_ttbarMu(data=None):
     label = "#scale[0.8]{t#bar{t} control region (mu)}"
     extension = "_lep_CR_ttbarMu"
     selection = generalselection
-    selection += "*(N_BTagsM>=1 && N_BTagsL>=2)"
+    selection += "*(N_BTagsM>=2)"
     selection += "*(N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && Triggered_HLT_IsoMu24_vX==1)"
     #selection += "*(DeltaR_AK4Jet_LooseMuon[0]<3.4)"
-    #selection += "*(DeltaR_AK4Jets_LooseMuon_Smaller_3p4)"
+    selection += "*(DeltaR_AK4Jets_LooseMuon_Smaller_3p4)"
 
     plots = [
         plotClasses.Plot(
@@ -795,10 +797,10 @@ def control_plots_lep_CR_WEl(data=None):
     label = "#scale[0.8]{W control region (e)}"
     extension = "_lep_CR_WEl"
     selection = generalselection
-    selection += "*(N_BTagsL==0)"
+    selection += "*(N_BTagsM==0)"
     selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele32_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1))"
     #selection += "*(DeltaR_AK4Jet_LooseElectron[0]<3.4)"
-    #selection += "*(DeltaR_AK4Jets_LooseElectron_Smaller_3p4)"
+    selection += "*(DeltaR_AK4Jets_LooseElectron_Smaller_3p4)"
 
     plots = [
         plotClasses.Plot(
@@ -1180,10 +1182,10 @@ def control_plots_lep_CR_WMu(data=None):
     label = "#scale[0.8]{W control region (mu)}"
     extension = "_lep_CR_WMu"
     selection = generalselection
-    selection += "*(N_BTagsL==0)"
+    selection += "*(N_BTagsM==0)"
     selection += "*(N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && Triggered_HLT_IsoMu24_vX==1)"
     #selection += "*(DeltaR_AK4Jet_LooseMuon[0]<3.4)"
-    #selection += "*(DeltaR_AK4Jets_LooseMuon_Smaller_3p4)"
+    selection += "*(DeltaR_AK4Jets_LooseMuon_Smaller_3p4)"
 
     plots = [
         plotClasses.Plot(
@@ -1582,10 +1584,10 @@ def control_plots_lep_SR_El(data=None):
     label = "#scale[0.8]{signal region (e)}"
     extension = "_lep_SR_El"
     selection = generalselection
-    selection += "*(N_BTagsM==1 && N_BTagsL==1)"
+    selection += "*(N_BTagsM==1)"
     selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && (Triggered_HLT_Ele32_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1))"
     #selection += "*(DeltaR_AK4Jet_LooseElectron[0]<3.4)"
-    #selection += "*(DeltaR_AK4Jets_LooseElectron_Smaller_3p4)"
+    selection += "*(DeltaR_AK4Jets_LooseElectron_Smaller_3p4)"
 
     plots = [
         plotClasses.Plot(
@@ -1967,10 +1969,10 @@ def control_plots_lep_SR_Mu(data=None):
     label = "#scale[0.8]{signal region (mu)}"
     extension = "_lep_SR_Mu"
     selection = generalselection
-    selection += "*(N_BTagsM==1 && N_BTagsL==1)"
+    selection += "*(N_BTagsM==1)"
     selection += "*(N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && Triggered_HLT_IsoMu24_vX==1)"
     #selection += "*(DeltaR_AK4Jet_LooseMuon[0]<3.4)"
-    #selection += "*(DeltaR_AK4Jets_LooseMuon_Smaller_3p4)"
+    selection += "*(DeltaR_AK4Jets_LooseMuon_Smaller_3p4)"
 
     plots = [
         plotClasses.Plot(
