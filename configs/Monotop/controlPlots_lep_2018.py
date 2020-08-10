@@ -23,7 +23,7 @@ fast = False
 discr_binning = [40.0,60.0,80.0,100.0,125.0,150.0, 165.0, 180.0, 200.0, 220.0, 240.0, 270.0, 310.0, 350.0, 500.0]
 discr_binning.append(1000.)
 
-generalselection = "(N_HEM_Jets==0)*(Evt_Pt_MET>100.)*(N_LoosePhotons==0)*(Jet_Pt[0]>100.)"
+generalselection = "(N_HEM_Jets==0)*(Evt_Pt_MET>100.)*(N_LoosePhotons==0)*(Jet_Pt[0]>50.)"
 generalselection += "*(M_W_transverse[0]>=40.)"
 generalselection += "*(DeltaPhi_AK4Jet_MET[0]>1.5)"
 
