@@ -223,7 +223,7 @@ def GetPlots(extension, selection, label):
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "AK15Jet_DeepAK15_TvsQCD_binning" + extension,
+                "AK15Jet_DeepAK15_TvsQCD_binning_studies" + extension,
                 "AK15 Jet DeepAK15 TvsQCD",
                 50,
                 0.0,
@@ -526,6 +526,14 @@ def GetPlots(extension, selection, label):
         plotClasses.Plot(
             ROOT.TH1D(
                 "Hadr_Recoil_Pt_generic_binning" + extension, "#slash{U}_{T} [GeV]", 20, 250, 1250
+            ),
+            "Hadr_Recoil_Pt",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "Hadr_Recoil_Pt_binning_studies" + extension, "#slash{U}_{T} [GeV]", 200, 250, 1250
             ),
             "Hadr_Recoil_Pt",
             selection,
@@ -1003,6 +1011,14 @@ def GetPlots(extension, selection, label):
                 label,
             ),
             plotClasses.Plot(
+                ROOT.TH1D(
+                    "Hadr_Recoil_Pt_binning_studies" + extension, "#slash{U}_{T} [GeV]", 200, 250, 1250
+                ),
+                "Hadr_Recoil_Pt",
+                selection,
+                label,
+            ),
+            plotClasses.Plot(
                 ROOT.TH1D("yield" + extension, "yield", 1, 0.0, 2.0), "1.", selection, label,
             ),
             plotClasses.Plot(
@@ -1025,7 +1041,7 @@ def GetPlots(extension, selection, label):
             ),
             plotClasses.Plot(
                 ROOT.TH1D(
-                    "AK15Jet_DeepAK15_TvsQCD_binning" + extension,
+                    "AK15Jet_DeepAK15_TvsQCD_binning_studies" + extension,
                     "AK15 Jet DeepAK15 TvsQCD",
                     50,
                     0.0,
