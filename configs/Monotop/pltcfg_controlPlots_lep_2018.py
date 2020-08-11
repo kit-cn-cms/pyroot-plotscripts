@@ -50,7 +50,6 @@ csvWeightNom += "+((internalCSVweight_medium_1B_final)*(N_BTagsM==1))" #SR
 csvWeightNom += "+((internalCSVweight_medium_ge2B_final)*(N_BTagsM>=2))" #ttbar region
 csvWeightNom += ")"
 
-# csvWeightLF_Up = "1."
 csvWeightLF_Up = "("
 csvWeightLF_Up += " ((internalCSVweight_medium_LFUP_0B_final)*(N_BTagsM==0))" #W region
 csvWeightLF_Up += "+((internalCSVweight_medium_LFUP_1B_final)*(N_BTagsM==1))" #SR
