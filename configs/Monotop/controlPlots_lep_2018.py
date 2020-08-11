@@ -407,6 +407,14 @@ def GetPlots(extension, selection, label):
             selection,
             label,
         ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "Hadr_Recoil_Pt" + extension, "#slash{U}_{T} [GeV]", 50, 0, 500
+            ),
+            "Hadr_Recoil_Pt",
+            selection,
+            label,
+        ),
     ]
     if fast:
         plots = [
