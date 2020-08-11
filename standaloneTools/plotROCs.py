@@ -7,7 +7,7 @@ import numpy
 from math import sqrt
 
 
-def get_roc_point(threshold, h_sig, h_bkg):
+def get_roc_point(threshold, h_sig, h_bkg, from_right = False):
     x_axis_sig = h_sig.GetXaxis()
     x_axis_bkg = h_bkg.GetXaxis()
     nbins = x_axis_sig.GetNbins()
@@ -15,13 +15,19 @@ def get_roc_point(threshold, h_sig, h_bkg):
     true_bkg = 0.0
     all_sig = 0.0
     all_bkg = 0.0
-    for i in range(1, nbins + 2):
+    for i in range(1, nbins + 1):
         if x_axis_sig.GetBinLowEdge(i) >= threshold:
             true_sig += h_sig.GetBinContent(i)
         elif x_axis_bkg.GetBinLowEdge(i) < threshold:
             true_bkg += h_bkg.GetBinContent(i)
         all_sig += h_sig.GetBinContent(i)
         all_bkg += h_bkg.GetBinContent(i)
+    if from_right:
+        true_sig = all_sig - true_sig
+        true_bkg = all_bkg - true_bkg
+    print "true sig: ",true_sig
+    print "true bkg: ",true_bkg
+    print "false bkg: ",all_bkg - true_bkg
     if all_sig != 0:
         sig_efficiency = true_sig / all_sig
     else:
@@ -48,7 +54,7 @@ def get_roc_point(threshold, h_sig, h_bkg):
     return sig_efficiency, 1 - bkg_efficiency, s_b
 
 
-def get_graphs(h_sig, h_bkg, min, max):
+def get_graphs(h_sig, h_bkg, min, max, from_right = False):
     x_roc_points = array("f")
     y_roc_points = array("f")
     x_sb_points = array("f")
@@ -57,7 +63,7 @@ def get_graphs(h_sig, h_bkg, min, max):
     x_roc_points.append(0.0)
     y_roc_points.append(0.0)
     for threshold in numpy.linspace(min, max, 40):
-        sig_eff, bkg_eff, s_b = get_roc_point(threshold, h_sig, h_bkg)
+        sig_eff, bkg_eff, s_b = get_roc_point(threshold, h_sig, h_bkg, from_right)
         x_roc_points.append(1 - bkg_eff)
         y_roc_points.append(sig_eff)
         if s_b!=None:
@@ -236,6 +242,9 @@ parser.add_option(
 parser.add_option(
     "-l", "--label", dest="label", help="Specify an additional label to find bkg hists"
 )
+parser.add_option(
+    "--from_right", dest="from_right", action = "store_true", default=False, help = "set this flag if you want to start from the right side of the histogram"
+)
 
 (opts, args) = parser.parse_args()
 
@@ -260,12 +269,14 @@ for discr in opts.discr.split(","):
     signals = opts.signal.split(",")
     lSigs = []
     for sig in signals:
-        lSigs.append(rFile.Get(sig + "_" + discr + "_" + opts.label))
+        sig_hist = rFile.Get(sig + "_" + discr + "_" + opts.label)
+        sig_hist.Scale(h_bkg.Integral()/sig_hist.Integral())
+        lSigs.append(sig_hist)
     print (lSigs)
 
     for i, sig in enumerate(lSigs):
         h_sig = sig
-        roc,sb = get_graphs(h_sig, h_bkg, float(opts.discr_min), float(opts.discr_max))
+        roc,sb = get_graphs(h_sig, h_bkg, float(opts.discr_min), float(opts.discr_max), opts.from_right)
         drawROC(roc, signals[i], opts.bkg.replace(",", "_"), discr, opts.label)
         drawSoverB(sb, signals[i], opts.bkg.replace(",", "_"), discr, opts.label)
 
