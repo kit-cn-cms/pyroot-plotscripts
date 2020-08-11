@@ -169,13 +169,13 @@ void plot()
         }
     else if( dataera == "2017" ) {
         csvFile=plotscriptBaseDir+"/data/CSV/sfs_deepjet_fixedWP_2017.csv";
-        effFile=plotscriptBaseDir+"/data/CSV/eff_deepjet_2017.root";
+        effFile=plotscriptBaseDir+"/data/CSV/btag_efficiencies_deepjet_2017.root";
         wp_loose = 	0.0521;
         wp_medium = 0.3033;
         }
     else if( dataera == "2018" ) {
         csvFile=plotscriptBaseDir+"/data/CSV/sfs_deepjet_fixedWP_2018.csv";
-        effFile=plotscriptBaseDir+"/data/CSV/btag_efficiencies_more_selection_2018.root";
+        effFile=plotscriptBaseDir+"/data/CSV/btag_efficiencies_deepjet_2018.root";
 	    wp_loose = 	0.0494;
         wp_medium = 0.2770;
         } 
