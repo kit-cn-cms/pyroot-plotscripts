@@ -983,6 +983,14 @@ def GetPlots(extension, selection, label):
             selection,
             label,
         ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "H_T" + extension, "H_{T} [GeV]", 20, 250, 1250
+            ),
+            "HT_AK4Jets",
+            selection,
+            label,
+        ),
     ]
     if fast:
         plots = [

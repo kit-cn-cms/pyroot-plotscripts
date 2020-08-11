@@ -42,7 +42,36 @@ defaultWeight = "Weight_GEN_nom"
 
 
 # csv weight
-csvWeightNom = "1."#"internalCSVweight_loose"
+# csvWeightNom = "1."
+csvWeightNom = "("
+csvWeightNom += " (internalCSVweight_loose_outside_0B_final*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0 && N_LooseMuons<2 && N_LooseElectrons<2 && N_LoosePhotons==0))" #SR+SingleLep
+csvWeightNom += "+((internalCSVweight_loose_outside_ge1B_final)*(N_AK4JetsLooseTagged_outside_AK15Jets[0]>=1 && N_LooseMuons<2 && N_LooseElectrons<2 && N_LoosePhotons==0))" #SR+SingleLep
+csvWeightNom += "+((1.)*!(N_LooseMuons<2 && N_LooseElectrons<2 && N_LoosePhotons==0))" #DiLepton
+csvWeightNom += ")"
+
+csvWeightLF_Up = "("
+csvWeightLF_Up += " (internalCSVweight_loose_outside_LFUP_0B_final*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0 && N_LooseMuons<2 && N_LooseElectrons<2 && N_LoosePhotons==0))" #SR+SingleLep
+csvWeightLF_Up += "+((internalCSVweight_loose_outside_LFUP_ge1B_final)*(N_AK4JetsLooseTagged_outside_AK15Jets[0]>=1 && N_LooseMuons<2 && N_LooseElectrons<2 && N_LoosePhotons==0))" #SR+SingleLep
+csvWeightLF_Up += "+((1.)*!(N_LooseMuons<2 && N_LooseElectrons<2 && N_LoosePhotons==0))" #DiLepton
+csvWeightLF_Up += ")"
+
+csvWeightLF_Down = "("
+csvWeightLF_Down += " (internalCSVweight_loose_outside_LFDOWN_0B_final*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0 && N_LooseMuons<2 && N_LooseElectrons<2 && N_LoosePhotons==0))" #SR+SingleLep
+csvWeightLF_Down += "+((internalCSVweight_loose_outside_LFDOWN_ge1B_final)*(N_AK4JetsLooseTagged_outside_AK15Jets[0]>=1 && N_LooseMuons<2 && N_LooseElectrons<2 && N_LoosePhotons==0))" #SR+SingleLep
+csvWeightLF_Down += "+((1.)*!(N_LooseMuons<2 && N_LooseElectrons<2 && N_LoosePhotons==0))" #DiLepton
+csvWeightLF_Down += ")"
+
+csvWeightHF_Up = "("
+csvWeightHF_Up += " (internalCSVweight_loose_outside_HFUP_0B_final*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0 && N_LooseMuons<2 && N_LooseElectrons<2 && N_LoosePhotons==0))" #SR+SingleLep
+csvWeightHF_Up += "+((internalCSVweight_loose_outside_HFUP_ge1B_final)*(N_AK4JetsLooseTagged_outside_AK15Jets[0]>=1 && N_LooseMuons<2 && N_LooseElectrons<2 && N_LoosePhotons==0))" #SR+SingleLep
+csvWeightHF_Up += "+((1.)*!(N_LooseMuons<2 && N_LooseElectrons<2 && N_LoosePhotons==0))" #DiLepton
+csvWeightHF_Up += ")"
+
+csvWeightHF_Down = "("
+csvWeightHF_Down += " (internalCSVweight_loose_outside_HFDOWN_0B_final*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0 && N_LooseMuons<2 && N_LooseElectrons<2 && N_LoosePhotons==0))" #SR+SingleLep
+csvWeightHF_Down += "+((internalCSVweight_loose_outside_HFDOWN_ge1B_final)*(N_AK4JetsLooseTagged_outside_AK15Jets[0]>=1 && N_LooseMuons<2 && N_LooseElectrons<2 && N_LoosePhotons==0))" #SR+SingleLep
+csvWeightHF_Down += "+((1.)*!(N_LooseMuons<2 && N_LooseElectrons<2 && N_LoosePhotons==0))" #DiLepton
+csvWeightHF_Down += ")"
 
 
 # pile up weights
@@ -153,6 +182,10 @@ weightReplacements = {
     
     # csv weight
     "CSVWEIGHTNOM": csvWeightNom,
+    "CSVWEIGHTLFUP": csvWeightLF_Up,
+    "CSVWEIGHTLFDOWN": csvWeightLF_Down,
+    "CSVWEIGHTHFUP": csvWeightHF_Up,
+    "CSVWEIGHTHFDOWN": csvWeightHF_Down,
     
     # top pt weight
     "TOPPTWEIGHTNOM": topptWeightNom,
