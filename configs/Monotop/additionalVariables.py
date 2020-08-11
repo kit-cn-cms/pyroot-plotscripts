@@ -82,6 +82,7 @@ def getAddVars():
         "AK15Jet_Eta",
         "N_GenPVs",
         "LoosePhoton_Phi",
+        "Hadr_Recoil_Phi",
         "N_JetsMediumTagged_outside_lead_AK15Jet",
         "JetMediumTagged_outside_lead_AK15Jet_Pt",
         "JetMediumTagged_outside_lead_AK15Jet_Eta",
