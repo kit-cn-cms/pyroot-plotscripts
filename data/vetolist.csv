@@ -99,6 +99,8 @@ DeltaPhi_AK4Jets_Recoil_Larger_0p5
 DeltaPhi_AK4Jets_MET_Larger_0p7
 DeltaPhi_AK4Jets_Recoil_Larger_0p8
 weight_sdm_corr
+DeltaPhi_Photon_MET
+DeltaPhi_Photon_Hadr_Recoil
 internalPUWeight_2018
 internalPUWeight_2018_Up
 internalPUWeight_2018_Down

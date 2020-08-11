@@ -993,6 +993,22 @@ def GetPlots(extension, selection, label):
         ),
         plotClasses.Plot(
             ROOT.TH1D(
+                "DeltaPhi_Photon_MET" + extension, "#Delta#phi(#gamma, #slash{E}_{T})", 32, 0.0, 3.2
+            ),
+            "DeltaPhi_Photon_MET",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "DeltaPhi_Photon_Hadr_Recoil" + extension, "#Delta#phi(#gamma, #slash{U}_{T})", 32, 0.0, 3.2
+            ),
+            "DeltaPhi_Photon_Hadr_Recoil",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
                 "H_T" + extension, "H_{T} [GeV]", 20, 250, 1250
             ),
             "HT_AK4Jets",
