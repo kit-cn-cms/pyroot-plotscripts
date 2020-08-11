@@ -377,3 +377,10 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     //    Weight_L1_Prefire_Up = 1.0;
     //    Weight_L1_Prefire_Down = 1.0;
     //}
+    
+    float DeltaPhi_Photon_MET = -999.0;
+    float DeltaPhi_Photon_Hadr_Recoil = -999.0;
+    if (N_LoosePhotons>0){
+        DeltaPhi_Photon_MET = fabs(TVector2::Phi_mpi_pi(Evt_Phi_MET - LoosePhoton_Phi[0]));
+        DeltaPhi_Photon_Hadr_Recoil = fabs(TVector2::Phi_mpi_pi(Hadr_Recoil_Phi - LoosePhoton_Phi[0]));
+    }
