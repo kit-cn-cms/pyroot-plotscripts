@@ -59,6 +59,12 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     float internalBosonWeight_muFUp     = 1.0;
     float internalBosonWeight_muFDown   = 1.0;
 
+    float internalBosonWeight_W_low_pt_Up = 1.0;
+    float internalBosonWeight_W_low_pt_Down = 1.0;
+    
+    float internalBosonWeight_G_low_pt_Up = 1.0;
+    float internalBosonWeight_G_low_pt_Down = 1.0;
+
     float weight_sdm_corr = 1.0;
 
     if ((processname.find("wlnujets") != std::string::npos && W_Pt > 100.) || (processname.find("zlljets") != std::string::npos && Z_Pt > 100.) ||
@@ -84,6 +90,16 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
         internalBosonWeight_muRDown   = BosonWeight_muRDown;
         internalBosonWeight_muFUp     = BosonWeight_muFUp;
         internalBosonWeight_muFDown   = BosonWeight_muFDown;
+    }
+    
+    if (processname.find("wlnujets") != std::string::npos && W_Pt > 30. && W_Pt < 100.){
+        internalBosonWeight_W_low_pt_Up = 1.3;
+        internalBosonWeight_W_low_pt_Down = 0.7;
+    }
+    
+    if (processname.find("gammajets") != std::string::npos && Gamma_Pt > 100. && Gamma_Pt < 290.){
+        internalBosonWeight_G_low_pt_Up = 1.3;
+        internalBosonWeight_G_low_pt_Down = 0.7;
     }
     
     // DarkHiggs PU Weights
