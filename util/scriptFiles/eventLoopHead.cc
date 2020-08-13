@@ -93,13 +93,13 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     }
     
     if (processname.find("wlnujets") != std::string::npos && W_Pt > 30. && W_Pt < 100.){
-        internalBosonWeight_W_low_pt_Up = 1.3;
-        internalBosonWeight_W_low_pt_Down = 0.7;
+        internalBosonWeight_W_low_pt_Up = 1.5;
+        internalBosonWeight_W_low_pt_Down = 0.5;
     }
     
     if (processname.find("gammajets") != std::string::npos && Gamma_Pt > 100. && Gamma_Pt < 290.){
-        internalBosonWeight_G_low_pt_Up = 1.3;
-        internalBosonWeight_G_low_pt_Down = 0.7;
+        internalBosonWeight_G_low_pt_Up = 1.5;
+        internalBosonWeight_G_low_pt_Down = 0.5;
     }
     
     // DarkHiggs PU Weights
