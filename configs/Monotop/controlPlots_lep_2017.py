@@ -508,6 +508,9 @@ generalselection += "*(M_W_transverse[0]>=40.)"
 # also modeling in the vetoed region is not great
 generalselection += "*(DeltaPhi_AK4Jet_MET[0]>1.5)"
 
+# cut away missing w+jets low HT phase space
+generalselection += "*(HT_AK4Jets>120.)*(Hadr_Recoil_Pt>120.)"
+
 def control_plots_lep_CR_ttbarEl(data=None):
     label = "#scale[0.8]{t#bar{t} control region (e)}"
     extension = "_lep_CR_ttbarEl"
