@@ -11,7 +11,7 @@ sys.path.append(pyrootdir)
 import util.tools.plotClasses as plotClasses
 
 def find_masses(dataset_name):
-    #dataset_name = dataset_name.replace("-","_")
+    dataset_name = dataset_name.replace("-","_")
     dataset_name = dataset_name.lower()
     index_1 = dataset_name.find("mphi_")
     index_2 = dataset_name.find("mchi_")
@@ -405,11 +405,16 @@ samples = [
 sample_folders = os.listdir(path_mwassmer)
 #print(sample_folders)
 for sample_folder in sample_folders:
-    if "VectorMonotop" in sample_folder:
+    if "Vector_MonoTop" in sample_folder:
         sample_name = sample_folder
         mphi,mchi = find_masses(sample_name)
         sample_label = "#splitline{Vector Monotop}{M_{#phi}="+mphi+" GeV, "+"M_{#chi}="+mchi+" GeV}"
         print sample_label
+        sample_name = sample_name.lower()
+        sample_name = sample_name.replace("-","_")
+        sample_name = sample_name.replace("_nlo_","_")
+        sample_name = sample_name.replace("_13tev_tunecp5_mcatnlo_pythia8","")
+        sample_name = sample_name.replace("vector_monotop","vectormonotop")
         samples += [plotClasses.Sample(sample_label,ROOT.kCyan,path_mwassmer+"/"+sample_folder+"/*nominal*.root",lumi,sample_name.lower(),samDict=sampleDict,readTrees=doReadTrees,typ="signal")]
 
 processes = []
