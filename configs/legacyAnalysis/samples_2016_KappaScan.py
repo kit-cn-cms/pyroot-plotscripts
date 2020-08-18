@@ -8,10 +8,11 @@ pyrootdir = os.path.dirname(filedir)
 
 sys.path.append(pyrootdir)
 import util.tools.plotClasses as plotClasses
+import generate_phasespace_corrections
 
 # samples
 # input path 
-path  = "/nfs/dust/cms/user/vdlinden/legacyTTH/ntuples/legacy_2016_ttH_newJEC_v3/"
+path  = "/nfs/dust/cms/group/ttx-kit/ntuples_ttH/2016/"
 
 ttbarPathS = path+'/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
              path+'/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
@@ -56,7 +57,7 @@ ttZpath =  path+'/TTZToQQ*/*nominal*.root'+';'+ \
            path+'/TTZToLLNuNu_M-10*/*nominal*.root'+';'
 
 friendTrees = {
-    "MEMDB": "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/friends_final/2016/",
+    "MEMDB": "/nfs/dust/cms/group/ttx-kit/Friends_MEM_ttH/2016/",
     }
 # SELECTIONS
 
@@ -152,6 +153,7 @@ weightReplacements = {
     "DOWEIGHTS":        "(DoWeights==1)+(DoWeights==0)*1.0",
 
     }
+weightReplacements.update(generate_phasespace_corrections.main())
 
 # Lumi weight
 lumi = '35.9'
