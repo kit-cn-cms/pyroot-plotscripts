@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'finalDNN_averagedRFs/2016'
+    name = 'finalDNN_fullSampleRFs/2016'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -283,7 +283,7 @@ def main(pyrootdir, opts):
                 # pseudo data without ttbb 5FS
                 # pP.addData( samples = configData.samples[:-1], 
                 #             discrName = discrName)
-                pP.addData( samples = configData.samples[nSigSamples:], 
+                pP.addData( samples = configData.pseudo_data_samples, 
                             discrName = discrName)
                 #pP.addData(samples = configData.samples)
             else:

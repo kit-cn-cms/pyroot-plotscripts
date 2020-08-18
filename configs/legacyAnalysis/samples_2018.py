@@ -479,7 +479,7 @@ for sample in samples:
     processes.append(sample.nick)
 list_of_processes   = processes
 datacard_processes  = [p for p in processes if not p == "ttbb_5FS"]
-
+pseudo_data_samples = [x for x in samples if not x.nick == "ttbb_5FS" and not x.typ == "signal"]
 
 plottingsamples = [
     plotClasses.Sample("t#bar{t}+V", ROOT.kCyan, "", "",
