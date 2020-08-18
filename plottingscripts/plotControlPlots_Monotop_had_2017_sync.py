@@ -33,7 +33,7 @@ def main(pyrootdir, opts):
     """
     )
     # name of the analysis (i.e. workdir name)
-    name = "Monotop_controlplots_lep_2018"
+    name = "Monotop_controlplots_had_2017_sync"
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -43,17 +43,17 @@ def main(pyrootdir, opts):
     nSigSamples = 1
 
     # dataera
-    dataera = "2018"
+    dataera = "2017"
 
     # Name of final discriminator, should not contain underscore
     discrName = "finaldiscr"
 
     # configs
-    config = "Monotop/pltcfg_controlPlots_lep_2018"
+    config = "Monotop/pltcfg_controlPlots_had_2017_sync"
     variable_cfg = "Monotop/additionalVariables"
-    plot_cfg = "Monotop/controlPlots_lep_2018"
-    syst_cfg = "Monotop/systematics_2018"
-
+    plot_cfg = "Monotop/controlPlots_had_2017_sync"
+    syst_cfg = "Monotop/systematics_2017"
+    
     # file for rate factors
     # rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
     # rateFactorsFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/rate_factors_V2.csv"
@@ -71,7 +71,7 @@ def main(pyrootdir, opts):
         "makePlots": True,
         # options for makePlots
         "signalScaling": -1,
-        "lumiLabel": 59.7,
+        "lumiLabel": 41.5,
         "CMSlabel": "work in progress",
         "ratio": "#frac{data}{MC Background}",
         "shape": False, # for shape plots
@@ -194,12 +194,12 @@ def main(pyrootdir, opts):
         # pP.setDataBases(plotDataBases)
         # pP.setMEMDataBase(memDataBase)
         # pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts(200000)
+        pP.setMaxEvts(80000)
         # pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
         
         pP.setCatNames([""])
-        pP.setCatSelections(["(N_HEM_Jets==0)*(Evt_Pt_MET>100.)*(N_LoosePhotons==0)*((N_LooseElectrons+N_LooseMuons)==1)*((N_TightElectrons+N_TightMuons)==1)*(Jet_Pt[0]>50.)*(M_W_transverse[0]>=40.)"])
+        pP.setCatSelections(["(Hadr_Recoil_Pt>250.)*(N_AK15Jets>=1)*(DeltaPhi_AK4Jets_Recoil_Larger_0p8)*(N_Taus==0)*(N_AK15Jets_SoftDrop==N_AK15Jets)"])
 
         # run plotParallel
         pP.run()

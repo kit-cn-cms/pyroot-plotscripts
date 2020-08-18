@@ -2,11 +2,15 @@ import ROOT
 import sys
 import os
 import optparse
+import json
 ROOT.gROOT.SetBatch(True)
 
 parser = optparse.OptionParser()
+parser.add_option("-f", "--filename",
+    help = "file name containing the histograms. Default is 'output_limitInput.root'",
+    dest = 'filename', default = 'output_limitInput.root')
 parser.add_option("-w","-i","--inputDir",dest="inputDir",
-    help = "path to working directory of plotscript where 'output_limitInput.root' file is stored")
+    help = "path to working directory of plotscript where file with histograms is stored")
 parser.add_option("-o","--outDir",dest="outDir",default="shiftPlots",
     help = "path to output directory for plots. If a relative path is given the path is interpreted relative to 'inputDir'")
 parser.add_option("-p","--processes",dest="processes",default=None,
@@ -19,49 +23,113 @@ parser.add_option("-s","--systs",dest="systematics",default=None,
     help = "considered systematics as a comma separated list. If none is given the defaults in this file are used")
 parser.add_option("-v","--variables",dest="variables",default=None,
     help = "considered variables as a comma sepatated list. If none is given the defaults in this file are used")
+parser.add_option("-c", "--config",
+    help = " ".join("""
+            path to a .json file which contains information about process names, systematics and variables.
+            Input from other options in the command line will overwrite information in the config.
+            The config can contain the following information:
+            'processes' : list of processes; 'systematics' : list of systematics;
+            'variables' : list of variables; 'nomkey' : key template for nominal histograms;
+            'systkey' : key template for histograms of systematic variations
+        """.split()),
+    dest = "config",
+    type = "str",
+    metavar = 'path/to/config'
+)
+parser.add_option("--nomkey",
+    help = " ".join("""
+            use this key template to load nominal histograms. Keywords that will be replaced are
+            '$PROCESS' (with process names) and '$CHANNEL' (with variable names).
+            Default = '$PROCESS_$CHANNEL' 
+        """.split()),
+    dest = 'nomkey',
+    default = '$PROCESS_$CHANNEL',
+    type = 'str'        
+)
+parser.add_option("--systkey",
+    help = " ".join("""
+            use this key template to load histograms for systematic variations. 
+            Keywords that will be replaced are
+            '$PROCESS' (with process names), '$CHANNEL' (with variable names)
+            and '$SYSTEMATIC' (with names of systematics).
+            Default = '$PROCESS_$CHANNEL_$SYSTEMATIC' 
+        """.split()),
+    dest = 'systkey',
+    default = '$PROCESS_$CHANNEL_$SYSTEMATIC',
+    type = 'str'        
+)
+
+
 (opts, args) = parser.parse_args()
+
+
 
 # manage parser options
 if not os.path.isabs(opts.inputDir):
     opts.inputDir = os.path.abspath(opts.inputDir)
 if not os.path.exists(opts.inputDir):
-    sys.exit("input directory {} does not exist".format(opts.inputDir))
-filePath = opts.inputDir+"/output_limitInput.root"
+    parser.error("input directory {} does not exist".format(opts.inputDir))
+filename = opts.filename
+filePath = os.path.join(opts.inputDir, filename)
 if not os.path.exists(filePath):
-    sys.exits("root file {} does not exist".format(filePath))
+    parser.error("root file {} does not exist".format(filePath))
 
+config = None
+if not opts.config is None:
+    cpath = opts.config
+    if not os.path.exists(cpath) or not cpath.endswith('.json'):
+        parser.error('ERROR: path to config "{}" is faulty'.format(cpath))
+    with open(cpath) as f:
+        config = json.load(f)
 
 if not os.path.isabs(opts.outDir):
     opts.outDir = opts.inputDir+"/"+opts.outDir
 if not os.path.exists(opts.outDir):
     os.makedirs(opts.outDir)
 
+processes = []
+systematics = []
+variables = []
+nomkey = opts.nomkey
+systkey = opts.systkey
+
+if not config is None:
+    # load information from .json config
+    # use dictionary ".get" function to 
+    # return an empty list if information
+    # is not inside the config
+    processes = config.get("processes", [])
+    systematics = config.get("systematics", [])
+    variables = config.get("variables", [])
+    nomkey = config.get("nomkey", nomkey)
+    systkey = config.get("systkey", systkey)
+
 if opts.processes:
-    opts.processes = opts.processes.split(",")
-else:
+    processes = opts.processes.split(",")
+elif len(processes) == 0:
     print("using default processes:")
-    opts.processes = [
+    processes = [
         "tthf", "ttlf", "ttcc"
         ]
-    print("\n".join(opts.processes))
+    print("\n".join(processes))
 
 if not opts.proclabel:
     print("using default process label:")
-    opts.proclabel = "t#bar{t}"
+    opts.proclabel = ""
     print(opts.proclabel)
 
 if not opts.procname:
     print("using default process name:")
-    opts.procname = "ttbar"
+    opts.procname = ""
     print(opts.procname)
 
 
 
 if opts.systematics:
-    opts.systematics = opts.systematics.split(",")
-else:
+    systematics = opts.systematics.split(",")
+elif len(systematics) == 0:
     print("using default systematics:")
-    opts.systematics = [
+    systematics = [
         "CMS_res_j_2018",
         "CMS_scale_j_2018",
         "CMS_HDAMP_2018",
@@ -85,11 +153,11 @@ else:
         "CMS_btag_cferr1_2018",
         "CMS_btag_cferr2_2018",
         ]
-    print("\n".join(opts.systematics))
+    print("\n".join(systematics))
 
 if opts.variables:
-    opts.variables = opts.variables.split(",")
-else:
+    variables = opts.variables.split(",")
+elif len(variables) == 0:
     print("using default variables:")
     #opts.variables = [
     #    #"finaldiscr_ljets_ge6j_ge3t_ttcc_node",
@@ -103,7 +171,7 @@ else:
     #    "inclusive_N_Jets"
     #    #"ge6j_ge3t_RecoTTZ_Z_M",
     #    ]
-    opts.variables = [
+    variables = [
         #"finaldiscr_ljets_ge4j_3t_ttZ_node",
         #"finaldiscr_ljets_ge4j_3t_tthf_node",
 
@@ -134,12 +202,7 @@ else:
         "finaldiscr_ljets_4j_ge3t_ttHNodeDNN_ttlf_node",
         ]
 
-    print("\n".join(opts.variables))
-
-
-
-
-
+    print("\n".join(variables))
 
 def getCanvas(name):
     c = ROOT.TCanvas(name, name, 1024, 1024)
@@ -158,7 +221,7 @@ def getCanvas(name):
     c.cd(1).SetTicks(1, 1)
     return c
 
-def get_ratios(nom, up, down, places = 2):
+def get_ratios(nom, up, down, places = 3):
     nom_yield = nom.Integral()
     up_yield = up.Integral()
     down_yield = down.Integral()
@@ -183,11 +246,19 @@ def drawshifts(file, outdir, processes, variable, syst, procLabel = "", procName
     up      = None
     down    = None
     for proc in processes:
-        nomName = proc+"_"+variable
+        print(nomkey, systkey)
+        nomName = str(nomkey.replace("$PROCESS", proc).replace("$CHANNEL", variable))
+        systName = str(systkey.replace("$PROCESS", proc).replace("$CHANNEL", variable))
+        systName = str(systName.replace("$SYSTEMATIC", syst))
         print("adding {}".format(nomName))
-        tmp_nom     = file.Get(nomName)
-        tmp_up      = file.Get(nomName+"_"+syst+"Up")
-        tmp_down    = file.Get(nomName+"_"+syst+"Down")
+        #print(nomName)
+        #file.ls(nomName)
+        tmp_nom = file.Get(nomName)
+        print(tmp_nom)
+        if not isinstance(tmp_nom, ROOT.TH1):
+            sys.exit("wups")
+        tmp_up      = file.Get(systName+"Up")
+        tmp_down    = file.Get(systName+"Down")
         title       = tmp_nom.GetTitle()
         if nom is None:
             nom     = tmp_nom.Clone()
@@ -313,14 +384,12 @@ def drawshifts(file, outdir, processes, variable, syst, procLabel = "", procName
     del up
     del down
 
-
-
-
-
 ROOT.gStyle.SetOptStat(0)
 
+print("loading file {}".format(filePath))
 rfile = ROOT.TFile.Open(filePath)
 
-for var in opts.variables:
-    for syst in opts.systematics:
-        drawshifts(rfile, opts.outDir, opts.processes, var, syst, procLabel = opts.proclabel, procName = opts.procname)
+for var in variables:
+    for syst in systematics:
+        drawshifts(rfile, opts.outDir, processes, var, syst, procLabel = opts.proclabel, procName = opts.procname)
+

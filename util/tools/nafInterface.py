@@ -25,7 +25,7 @@ def plotInterface(jobData, skipPlotParallel = False, maxTries = 10, nTries = 0):
         jobIDs = nafSubmit.submitArrayToNAF(jobData["scripts"], "makeTemplates", submitOptions = submitOptions)
     elif nTries < maxTries:
         submitOptions["+RequestRuntime"]=21600
-        submitOptions["RequestMemory"]="2000M"
+        submitOptions["RequestMemory"]="1000M"
         print("resubmitting plotParallel scripts as single jobs")
         jobIDs = nafSubmit.submitArrayToNAF(jobData["scripts"], "makeTemplates_resubmit", submitOptions = submitOptions)
     else:
@@ -90,13 +90,13 @@ def cleanupInterface(jobsToSubmit, rootFiles, skipCleanup = False, maxTries = 10
             print("cleanup histos has terminated successfully")
             return
 
-    submitOptions = {"+RequestRuntime": 5400, "RequestMemory": "500M"}
+    submitOptions = {"+RequestRuntime": 1800, "RequestMemory": "500M"}
 
     if nTries == 0:
         print("submitting cleanup jobs as array job")
         jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "cleanupHistos", submitOptions = submitOptions)
     elif nTries < maxTries:
-        submitOptions["+RequestRuntime"]=10800
+        submitOptions["+RequestRuntime"]=3600
         submitOptions["RequestMemory"]="1000M"
         print("resubmitting cleanup jobs")
         jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "cleanup_resubmit", submitOptions = submitOptions)
@@ -307,12 +307,13 @@ def datacardTerminationCheck(shellScripts, datacardFiles):
 # make Plots
 #############################
 def drawInterface(jobsToSubmit, outputPlots, nTries = 0):
+    submitOptions = {"+RequestRuntime": 600, "RequestMemory": "500M"}
     if nTries == 0:
         print("submitting makePlots scripts as array job")
-        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "makePlots")
+        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "makePlots", submitOptions)
     elif nTries < maxTries:
         print("resubmitting makePlots scripts as single jobs")
-        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "makePlots_resubmit")
+        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "makePlots_resubmit", submitOptions)
     else:
         print("make Plots did not work after "+str(maxTries)+" tries - ABORTING")
         sys.exit(1)

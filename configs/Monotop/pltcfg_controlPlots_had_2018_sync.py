@@ -31,7 +31,7 @@ def find_masses(dataset_name):
 
 # samples
 # input path
-path_mwassmer = "/nfs/dust/cms/user/mwassmer/MonoTop/ntuples_2017_PuppiMET"
+path_mwassmer = "/nfs/dust/cms/user/mwassmer/MonoTop/ntuples_2018_PuppiMET"
 
 # ======= #
 # WEIGHTS #
@@ -41,43 +41,42 @@ path_mwassmer = "/nfs/dust/cms/user/mwassmer/MonoTop/ntuples_2017_PuppiMET"
 defaultWeight = "Weight_GEN_nom"
 
 
-# csv weights
-# csvWeightNom = "Weight_CSV"
-#csvWeightNom = "1."
+# csv weight
+# csvWeightNom = "1."
 csvWeightNom = "("
-csvWeightNom += " ((internalCSVweight_medium_0B_final)*(N_BTagsM==0))" #W region
-csvWeightNom += "+((internalCSVweight_medium_1B_final)*(N_BTagsM==1))" #SR
-csvWeightNom += "+((internalCSVweight_medium_ge2B_final)*(N_BTagsM>=2))" #ttbar region
+csvWeightNom += " (internalCSVweight_loose_outside_0B_final*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0 && N_LooseMuons<2 && N_LooseElectrons<2 && N_LoosePhotons==0))" #SR+SingleLep
+csvWeightNom += "+((internalCSVweight_loose_outside_ge1B_final)*(N_AK4JetsLooseTagged_outside_AK15Jets[0]>=1 && N_LooseMuons<2 && N_LooseElectrons<2 && N_LoosePhotons==0))" #SR+SingleLep
+csvWeightNom += "+((1.)*!(N_LooseMuons<2 && N_LooseElectrons<2 && N_LoosePhotons==0))" #DiLepton
 csvWeightNom += ")"
 
 csvWeightLF_Up = "("
-csvWeightLF_Up += " ((internalCSVweight_medium_LFUP_0B_final)*(N_BTagsM==0))" #W region
-csvWeightLF_Up += "+((internalCSVweight_medium_LFUP_1B_final)*(N_BTagsM==1))" #SR
-csvWeightLF_Up += "+((internalCSVweight_medium_LFUP_ge2B_final)*(N_BTagsM>=2))" #ttbar region
+csvWeightLF_Up += " (internalCSVweight_loose_outside_LFUP_0B_final*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0 && N_LooseMuons<2 && N_LooseElectrons<2 && N_LoosePhotons==0))" #SR+SingleLep
+csvWeightLF_Up += "+((internalCSVweight_loose_outside_LFUP_ge1B_final)*(N_AK4JetsLooseTagged_outside_AK15Jets[0]>=1 && N_LooseMuons<2 && N_LooseElectrons<2 && N_LoosePhotons==0))" #SR+SingleLep
+csvWeightLF_Up += "+((1.)*!(N_LooseMuons<2 && N_LooseElectrons<2 && N_LoosePhotons==0))" #DiLepton
 csvWeightLF_Up += ")"
 
 csvWeightLF_Down = "("
-csvWeightLF_Down += " ((internalCSVweight_medium_LFDOWN_0B_final)*(N_BTagsM==0))" #W region
-csvWeightLF_Down += "+((internalCSVweight_medium_LFDOWN_1B_final)*(N_BTagsM==1))" #SR
-csvWeightLF_Down += "+((internalCSVweight_medium_LFDOWN_ge2B_final)*(N_BTagsM>=2))" #ttbar region
+csvWeightLF_Down += " (internalCSVweight_loose_outside_LFDOWN_0B_final*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0 && N_LooseMuons<2 && N_LooseElectrons<2 && N_LoosePhotons==0))" #SR+SingleLep
+csvWeightLF_Down += "+((internalCSVweight_loose_outside_LFDOWN_ge1B_final)*(N_AK4JetsLooseTagged_outside_AK15Jets[0]>=1 && N_LooseMuons<2 && N_LooseElectrons<2 && N_LoosePhotons==0))" #SR+SingleLep
+csvWeightLF_Down += "+((1.)*!(N_LooseMuons<2 && N_LooseElectrons<2 && N_LoosePhotons==0))" #DiLepton
 csvWeightLF_Down += ")"
 
 csvWeightHF_Up = "("
-csvWeightHF_Up += " ((internalCSVweight_medium_HFUP_0B_final)*(N_BTagsM==0))" #W region
-csvWeightHF_Up += "+((internalCSVweight_medium_HFUP_1B_final)*(N_BTagsM==1))" #SR
-csvWeightHF_Up += "+((internalCSVweight_medium_HFUP_ge2B_final)*(N_BTagsM>=2))" #ttbar region
+csvWeightHF_Up += " (internalCSVweight_loose_outside_HFUP_0B_final*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0 && N_LooseMuons<2 && N_LooseElectrons<2 && N_LoosePhotons==0))" #SR+SingleLep
+csvWeightHF_Up += "+((internalCSVweight_loose_outside_HFUP_ge1B_final)*(N_AK4JetsLooseTagged_outside_AK15Jets[0]>=1 && N_LooseMuons<2 && N_LooseElectrons<2 && N_LoosePhotons==0))" #SR+SingleLep
+csvWeightHF_Up += "+((1.)*!(N_LooseMuons<2 && N_LooseElectrons<2 && N_LoosePhotons==0))" #DiLepton
 csvWeightHF_Up += ")"
 
 csvWeightHF_Down = "("
-csvWeightHF_Down += " ((internalCSVweight_medium_HFDOWN_0B_final)*(N_BTagsM==0))" #W region
-csvWeightHF_Down += "+((internalCSVweight_medium_HFDOWN_1B_final)*(N_BTagsM==1))" #SR
-csvWeightHF_Down += "+((internalCSVweight_medium_HFDOWN_ge2B_final)*(N_BTagsM>=2))" #ttbar region
+csvWeightHF_Down += " (internalCSVweight_loose_outside_HFDOWN_0B_final*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0 && N_LooseMuons<2 && N_LooseElectrons<2 && N_LoosePhotons==0))" #SR+SingleLep
+csvWeightHF_Down += "+((internalCSVweight_loose_outside_HFDOWN_ge1B_final)*(N_AK4JetsLooseTagged_outside_AK15Jets[0]>=1 && N_LooseMuons<2 && N_LooseElectrons<2 && N_LoosePhotons==0))" #SR+SingleLep
+csvWeightHF_Down += "+((1.)*!(N_LooseMuons<2 && N_LooseElectrons<2 && N_LoosePhotons==0))" #DiLepton
 csvWeightHF_Down += ")"
 
 # pile up weights
-pileupWeightNom = "internalPUWeight_2017"
-pileupWeightUp = "internalPUWeight_2017_Up"
-pileupWeightDown = "internalPUWeight_2017_Down"
+pileupWeightNom = "internalPUWeight_2018"
+pileupWeightUp = "internalPUWeight_2018_Up"
+pileupWeightDown = "internalPUWeight_2018_Down"
 
 
 # lepton and photon scalefactors
@@ -119,12 +118,12 @@ photonSFs_down = "((N_LoosePhotons==1 && N_TightPhotons==1)*Photon_Identificatio
 
 # trigger scale factors
 
-triggerSFs = "((N_LooseElectrons>0 && N_LooseMuons==0 && N_LoosePhotons==0)*TriggerSF_SingleElectron+(N_LooseMuons>=0 && N_LooseElectrons==0 && N_LoosePhotons==0)*TriggerSF_SingleMuon+(N_LoosePhotons>0 && N_LooseElectrons==0 && N_LooseMuons==0)*TriggerSF_SinglePhoton)"
+triggerSFs = "((N_LooseElectrons>0 && N_LooseMuons==0 && N_LoosePhotons==0)*TriggerSF_SingleElectron+(N_LooseMuons>=0 && N_LooseElectrons==0 && N_LoosePhotons==0)*TriggerSF_MET+(N_LoosePhotons>0 && N_LooseElectrons==0 && N_LooseMuons==0)*TriggerSF_SinglePhoton)"
 
 
-electronTriggerSFs_up = "((N_LooseElectrons>0 && N_LooseMuons==0 && N_LoosePhotons==0)*TriggerSF_SingleElectron_Up+(N_LooseMuons>=0 && N_LooseElectrons==0 && N_LoosePhotons==0)*TriggerSF_SingleMuon+(N_LoosePhotons>0 && N_LooseElectrons==0 && N_LooseMuons==0)*TriggerSF_SinglePhoton)"
+electronTriggerSFs_up = "((N_LooseElectrons>0 && N_LooseMuons==0 && N_LoosePhotons==0)*TriggerSF_SingleElectron_Up+(N_LooseMuons>=0 && N_LooseElectrons==0 && N_LoosePhotons==0)*TriggerSF_MET+(N_LoosePhotons>0 && N_LooseElectrons==0 && N_LooseMuons==0)*TriggerSF_SinglePhoton)"
 
-electronTriggerSFs_down = "((N_LooseElectrons>0 && N_LooseMuons==0 && N_LoosePhotons==0)*TriggerSF_SingleElectron_Down+(N_LooseMuons>=0 && N_LooseElectrons==0 && N_LoosePhotons==0)*TriggerSF_SingleMuon+(N_LoosePhotons>0 && N_LooseElectrons==0 && N_LooseMuons==0)*TriggerSF_SinglePhoton)"
+electronTriggerSFs_down = "((N_LooseElectrons>0 && N_LooseMuons==0 && N_LoosePhotons==0)*TriggerSF_SingleElectron_Down+(N_LooseMuons>=0 && N_LooseElectrons==0 && N_LoosePhotons==0)*TriggerSF_MET+(N_LoosePhotons>0 && N_LooseElectrons==0 && N_LooseMuons==0)*TriggerSF_SinglePhoton)"
 
 
 metTriggerSFs_up = "((N_LooseElectrons>0 && N_LooseMuons==0 && N_LoosePhotons==0)*TriggerSF_SingleElectron+(N_LooseMuons>=0 && N_LooseElectrons==0 && N_LoosePhotons==0)*TriggerSF_MET_Up+(N_LoosePhotons>0 && N_LooseElectrons==0 && N_LooseMuons==0)*TriggerSF_SinglePhoton)"
@@ -137,9 +136,9 @@ photonTriggerSFs_up = "((N_LooseElectrons>0 && N_LooseMuons==0 && N_LoosePhotons
 photonTriggerSFs_down = "((N_LooseElectrons>0 && N_LooseMuons==0 && N_LoosePhotons==0)*TriggerSF_SingleElectron+(N_LooseMuons>=0 && N_LooseElectrons==0 && N_LoosePhotons==0)*TriggerSF_MET+(N_LoosePhotons>0 && N_LooseElectrons==0 && N_LooseMuons==0)*TriggerSF_SinglePhoton_Down)"
 
 
-muonTriggerSFs_up = "((N_LooseElectrons>0 && N_LooseMuons==0 && N_LoosePhotons==0)*TriggerSF_SingleElectron+(N_LooseMuons>=0 && N_LooseElectrons==0 && N_LoosePhotons==0)*TriggerSF_SingleMuon_Up+(N_LoosePhotons>0 && N_LooseElectrons==0 && N_LooseMuons==0)*TriggerSF_SinglePhoton)"
+muonTriggerSFs_up = "((N_LooseElectrons>0 && N_LooseMuons==0 && N_LoosePhotons==0)*TriggerSF_SingleElectron+(N_LooseMuons>=0 && N_LooseElectrons==0 && N_LoosePhotons==0)*TriggerSF_MET+(N_LoosePhotons>0 && N_LooseElectrons==0 && N_LooseMuons==0)*TriggerSF_SinglePhoton)"
 
-muonTriggerSFs_down = "((N_LooseElectrons>0 && N_LooseMuons==0 && N_LoosePhotons==0)*TriggerSF_SingleElectron+(N_LooseMuons>=0 && N_LooseElectrons==0 && N_LoosePhotons==0)*TriggerSF_SingleMuon_Down+(N_LoosePhotons>0 && N_LooseElectrons==0 && N_LooseMuons==0)*TriggerSF_SinglePhoton)"
+muonTriggerSFs_down = "((N_LooseElectrons>0 && N_LooseMuons==0 && N_LoosePhotons==0)*TriggerSF_SingleElectron+(N_LooseMuons>=0 && N_LooseElectrons==0 && N_LoosePhotons==0)*TriggerSF_MET+(N_LoosePhotons>0 && N_LooseElectrons==0 && N_LooseMuons==0)*TriggerSF_SinglePhoton)"
 
 
 # top pt weight
@@ -162,9 +161,7 @@ bosonWeightNom = "internalBosonWeight"
 #deepakEfficiencySF_high_up = "((AK15Jet_TopMatched[0]>0.5 && AK15Jet_Pt[0]>=400.)*1.5+(AK15Jet_TopMatched[0]<0.5 && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
 #deepakEfficiencySF_high_down = "((AK15Jet_TopMatched[0]>0.5 && AK15Jet_Pt[0]>=400.)*0.5+(AK15Jet_TopMatched[0]<0.5 && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
 
-prefireWeightNom = "Weight_L1_Prefire"
-prefireWeightUp = "Weight_L1_Prefire_Up"
-prefireWeightDown = "Weight_L1_Prefire_Down"
+
 
 # dictionary of expressions to replace in systematics csv
 weightReplacements = {
@@ -234,18 +231,13 @@ weightReplacements = {
     #"DEEPAKEFFICIENCYLOWDOWN" : deepakEfficiencySF_low_down,
     #"DEEPAKEFFICIENCYHIGHUP" : deepakEfficiencySF_high_up,
     #"DEEPAKEFFICIENCYHIGHDOWN" : deepakEfficiencySF_high_down,
-    
-    # prefire weights
-    "PREFIREWEIGHTNOM": prefireWeightNom,
-    "PREFIREWEIGHTUP": prefireWeightUp,
-    "PREFIREWEIGHTDOWN": prefireWeightDown,
    
     ## do weights for data
     "DOWEIGHTS": "(DoWeights==1)+(DoWeights==0)*1.0",
 }
 
 # Lumi weight
-lumi = "41.5"
+lumi = "59.7"
 
 # nominal weight
 nominalweight = (
@@ -275,8 +267,6 @@ nominalweight = (
     #+ deepakMistagSF
     #+ "*"
     #+ deepakEfficiencySF
-    + "*"
-    + prefireWeightNom
     + ")"
     + "*(DoWeights==1)+(DoWeights==0)*1.0"
 )
@@ -292,8 +282,8 @@ samplesDataControlPlots += [
     plotClasses.Sample(
         "SingleEl",
         ROOT.kBlack,
-        path_mwassmer + "/SingleElectron*/*nominal*.root",
-        "(N_LooseElectrons>0) && (N_LooseMuons==0) && (N_LoosePhotons==0)",
+        path_mwassmer + "/EGamma*/*nominal*.root",
+        "((N_LooseElectrons>0) || (N_LoosePhotons>0)) && (N_LooseMuons==0)",
         "SingleEl",
         samDict=sampleDict,
         readTrees=doReadTrees,
@@ -301,17 +291,16 @@ samplesDataControlPlots += [
 ]
 samplesDataControlPlots += [
     plotClasses.Sample(
-        "SingleMu",
+        "MET",
         ROOT.kBlack,
-        path_mwassmer + "/SingleMuon*/*nominal*.root",
-        "(N_LooseMuons>0) && (N_LooseElectrons==0) && (N_LoosePhotons==0)",
-        "SingleMu",
+        path_mwassmer + "/MET*/*nominal*.root",
+        "(N_LooseElectrons==0) && (N_LooseMuons>=0) && (N_LoosePhotons==0)",
+        "MET",
         samDict=sampleDict,
         readTrees=doReadTrees,
     )
 ]
 
-# print("limit samples")
 samples = [
     # signal samples
     #plotClasses.Sample(
@@ -350,7 +339,8 @@ samples = [
         "Z(#nu#nu)+jets",
         ROOT.kOrange + 7,
         path_mwassmer + "/ZJetsToNuNu_HT*/*nominal*.root",
-        lumi,
+        #lumi,
+        lumi + "*1.094*1.084",
         "znunujets",
         samDict=sampleDict,
         readTrees=doReadTrees,
@@ -360,7 +350,8 @@ samples = [
         "Z(ll)+jets",
         ROOT.kOrange + 1,
         path_mwassmer + "/DYJetsToLL_M-50_HT*/*nominal*.root",
-        lumi,
+        #lumi,
+        lumi + "*1.132*1.043",
         "zlljets",
         samDict=sampleDict,
         readTrees=doReadTrees,
@@ -370,7 +361,8 @@ samples = [
         "W(l#nu)+jets",
         ROOT.kOrange,
         path_mwassmer + "/WJetsToLNu_HT*/*nominal*.root",
-        lumi,
+        #lumi,
+        lumi + "*1.014*1.034",
         "wlnujets",
         samDict=sampleDict,
         readTrees=doReadTrees,
@@ -381,6 +373,8 @@ samples = [
         ROOT.kOrange - 4,
         path_mwassmer + "/GJets_HT*/*nominal*.root",
         lumi,
+        # first factor removes yield change due to reweighting, second factor is k factor for total cross section multiplied by fraction of isolated photons in analysis phase-space
+        #lumi + "*0.710*1.105/0.830
         "gammajets",
         samDict=sampleDict,
         readTrees=doReadTrees,
@@ -430,23 +424,7 @@ list_of_processes = processes
 datacard_processes = processes
 
 
-plottingsamples = [
-    # plotClasses.Sample("t#bar{t}Z", ROOT.kCyan,
-    #    ttZpath,
-    #    lumi+sel_MET+sel_MET,
-    #    "ttZ", addsamples = ["ttZbb", "ttZqq", "ttZll"],
-    #    samDict = sampleDict, readTrees = doReadTrees, typ = "signal"),
-    # plotClasses.Sample(
-    # "V+jets",
-    # ROOT.kGreen - 3,
-    # VJetsPathS,
-    # lumi + sel_MET ,
-    # "Vjets",
-    # addsamples=["wjets", "zjets"],
-    # samDict=sampleDict,
-    # readTrees=doReadTrees,
-    # )
-]
+plottingsamples = []
 
 # sort subset of processes in plots. descending order
 sortedProcesses = []

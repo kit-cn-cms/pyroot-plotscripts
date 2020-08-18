@@ -75,6 +75,13 @@ inline bool check_if_every_element_greater(auto* array, int number_of_elements, 
     return true;
 }
 
+inline double divideSavely(double num, double den, double returnVal = 1.){
+    if (den == 0.){
+        return returnVal;
+    }
+    else return num/den;
+}
+
 float get_msd_weight(float pt, float eta){
     // according to https://github.com/mcremone/decaf/blob/master/analysis/util/corrections.py#L202
     // gpar = np.array([1.00626, -1.06161, 0.0799900, 1.20454])
@@ -149,34 +156,50 @@ void plot()
     int electron_data = 0;
     int muon_data     = 0;
 
-    // initialize CSV Weight Scale Factor Helper
-    std::string process = "";
-    process = processname;
-    if(processname.find("_CMS_JES")!=std::string::npos) process = processname.substr(0,processname.find("_CMS_JES"));
-    if(processname.find("_CMS_JER")!=std::string::npos) process = processname.substr(0,processname.find("_CMS_JER"));
-    if(processname.find("_CMS_METUnclEn")!=std::string::npos) process = processname.substr(0,processname.find("_CMS_METUnclEn"));
-    if(processname.find("vectormonotop")!=std::string::npos) process = "vectormonotop";
-    CSVWeightSFHelper csv_calibration_helper_had;
-    csv_calibration_helper_had.AddScaleFactorHistogram("znunujets","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_had_znunujets_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
-    csv_calibration_helper_had.AddScaleFactorHistogram("wlnujets","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_had_wlnujets_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
-    csv_calibration_helper_had.AddScaleFactorHistogram("zlljets","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_had_zlljets_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
-    csv_calibration_helper_had.AddScaleFactorHistogram("gammajets","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_had_gammajets_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
-    csv_calibration_helper_had.AddScaleFactorHistogram("ttbar","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_had_ttbar_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
-    csv_calibration_helper_had.AddScaleFactorHistogram("singlet","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_had_singlet_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
-    csv_calibration_helper_had.AddScaleFactorHistogram("diboson","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_had_diboson_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
-    csv_calibration_helper_had.AddScaleFactorHistogram("qcd","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_had_qcd_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
-    csv_calibration_helper_had.AddScaleFactorHistogram("vectormonotop","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_had_vectormonotop_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
-    CSVWeightSFHelper csv_calibration_helper_lep;
-    csv_calibration_helper_lep.AddScaleFactorHistogram("znunujets","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_lep_znunujets_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
-    csv_calibration_helper_lep.AddScaleFactorHistogram("wlnujets","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_lep_wlnujets_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
-    csv_calibration_helper_lep.AddScaleFactorHistogram("zlljets","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_lep_zlljets_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
-    csv_calibration_helper_lep.AddScaleFactorHistogram("gammajets","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_lep_gammajets_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
-    csv_calibration_helper_lep.AddScaleFactorHistogram("ttbar","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_lep_ttbar_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
-    csv_calibration_helper_lep.AddScaleFactorHistogram("singlet","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_lep_singlet_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
-    csv_calibration_helper_lep.AddScaleFactorHistogram("diboson","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_lep_diboson_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
-    csv_calibration_helper_lep.AddScaleFactorHistogram("qcd","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_lep_qcd_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
-    csv_calibration_helper_lep.AddScaleFactorHistogram("vectormonotop","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/csv_weight_sfs/CSV_Patches_lep_vectormonotop_"+dataera+".root","csv_patches_N_Jets_HT_AK4Jets");
-    
+    // BTAG SF Stuff
+    std::string csvFile = "";
+    std::string effFile = "";
+    double wp_loose = 0.;
+    double wp_medium = 0.;
+    if( dataera == "2016" ) {
+        csvFile=plotscriptBaseDir+"/data/CSV/sfs_deepjet_fixedWP_2016.csv";
+        effFile=plotscriptBaseDir+"/data/CSV/eff_deepjet_2016.root";
+        wp_loose = 	0.0614;
+        wp_medium = 0.3093;
+        }
+    else if( dataera == "2017" ) {
+        csvFile=plotscriptBaseDir+"/data/CSV/sfs_deepjet_fixedWP_2017.csv";
+        effFile=plotscriptBaseDir+"/data/CSV/btag_efficiencies_deepjet_2017.root";
+        wp_loose = 	0.0521;
+        wp_medium = 0.3033;
+        }
+    else if( dataera == "2018" ) {
+        csvFile=plotscriptBaseDir+"/data/CSV/sfs_deepjet_fixedWP_2018.csv";
+        effFile=plotscriptBaseDir+"/data/CSV/btag_efficiencies_deepjet_2018.root";
+	    wp_loose = 	0.0494;
+        wp_medium = 0.2770;
+        } 
+    else {
+      std::cout << "NO VALID DATAERA CHOSEN!!" << std::endl;
+      std::cout << "dataera: " << dataera << std::endl;
+    }
+
+    BtagSFHelper* internalBtagSFHelper_loose= new BtagSFHelper(csvFile,effFile, "loose", wp_loose);
+    BtagSFHelper* internalBtagSFHelper_medium= new BtagSFHelper(csvFile,effFile, "medium", wp_medium);
+    BtagSFHelper* internalBtagSFHelper_loose_outside= new BtagSFHelper(csvFile,effFile, "loose_outside", wp_loose);
+    BtagSFHelper* internalBtagSFHelper_medium_outside= new BtagSFHelper(csvFile,effFile, "medium_outside", wp_medium);
+
+    // Dark Higgs Pileup weights
+    PUHelper pu_helper;
+    pu_helper.AddScaleFactorHistogram("2018","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/PileupHistograms_2018_69mb_pm5.root","pu_weights_central");
+    pu_helper.AddScaleFactorHistogram("2018Up","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/PileupHistograms_2018_69mb_pm5.root","pu_weights_up");
+    pu_helper.AddScaleFactorHistogram("2018Down","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/PileupHistograms_2018_69mb_pm5.root","pu_weights_down");
+    pu_helper.AddScaleFactorHistogram("2017","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/PileupHistograms_2017_69mb_pm5.root","pu_weights_central");
+    pu_helper.AddScaleFactorHistogram("2017Up","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/PileupHistograms_2017_69mb_pm5.root","pu_weights_up");
+    pu_helper.AddScaleFactorHistogram("2017Down","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/PileupHistograms_2017_69mb_pm5.root","pu_weights_down");
+    pu_helper.AddScaleFactorHistogram("2016","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/PileupHistograms_2016_69mb_pm5.root","pu_weights_central");
+    pu_helper.AddScaleFactorHistogram("2016Up","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/PileupHistograms_2016_69mb_pm5.root","pu_weights_up");
+    pu_helper.AddScaleFactorHistogram("2016Down","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/PileupHistograms_2016_69mb_pm5.root","pu_weights_down");
 
     // Hack for subsampling test
     // if(processname=="SingleEl" || processname=="SingleMu"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
