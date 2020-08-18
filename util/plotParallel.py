@@ -270,7 +270,9 @@ class plotParallel:
 
   # -- adding pseudo and real data --------------------------------------------------------------
     def addData(self, samples, discrName = None):
-
+        if len(samples) == 0:
+            print("WARNING: found not sample to generate data from, skipping")
+            return
         sampleNicks = [s.nick for s in samples]
         print(sampleNicks)
         rootFile = ROOT.TFile(self.getOutPath(), "UPDATE")
