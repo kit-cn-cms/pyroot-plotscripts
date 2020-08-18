@@ -35,6 +35,7 @@ class configData:
         self.cfgdir = os.path.join(self.analysis.pyrootdir, "configs/")
         self.replace_config = os.path.join(self.cfgdir, replace_config) if replace_config else None
         self.Data = None
+        self.pseudo_data_samples = []
 
         if self.execute_file:
             self.saveFile()
@@ -186,7 +187,12 @@ class configData:
             print(sample.name)
         print("-"*30)        
 
-
+        try:
+            self.pseudo_data_samples = self.pltcfg.pseudo_data_samples
+        except:
+            msg = "WARNING: could not load list 'pseudo_data_samples' "
+            msg += "from plot config '{}'".format(self.analysis.plotConfig)
+            print(msg)
         # list of controlsamples used in 'allSamples' list
         self.controlSamples = self.pltcfg.samplesDataControlPlots
         # debug printout
