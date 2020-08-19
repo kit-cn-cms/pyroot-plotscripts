@@ -34,7 +34,7 @@ CMS_ttHbb_tt2b_glusplit,shape,weight,"""dummyWeight_CMS_ttHbb_tt2bAcceptanceup:=
 #CMS_ttHbb_bgnorm_ttcc,lnN,rate,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,x,-,,,,,,,,,,,
 CMS_ttHbb_PU,shape,weight,"""dummyweight_PUUp:=(PUWEIGHTUP*LEPTONSFS*TRIGGERSFS)*DOWEIGHTS""","""dummyweight_PUDown:=(PUWEIGHTDOWN*LEPTONSFS*TRIGGERSFS)*DOWEIGHTS""",1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 #,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-# CMS_scale_j,shape,variation,JESup,JESdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+# CMS_scale_j,shape,variation,JESup,JESdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 CMS_scaleAbsolute_j,shape,variation,JESAbsoluteup,JESAbsolutedown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 CMS_scaleAbsolute_j_2018,shape,variation,JESAbsoluteyearup,JESAbsoluteyeardown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 CMS_scaleFlavorQCD_j,shape,variation,JESFlavorQCDup,JESFlavorQCDdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
@@ -55,13 +55,13 @@ CMS_res_j_2018,shape,variation,JERup,JERdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 #CMS_resPt1Eta1_j,shape,variation,JERpt1eta1up,JERpt1eta1down,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 #CMS_resEta2_j,shape,variation,JEReta2up,JEReta2down,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 #,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-CMS_ttHbb_PDF,shape,weight,"""dummyWeight_CMS_ttH_NNPDF_Up_PDF_RELIC:=DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*(PDFTTNONBB)*1.0*DOWEIGHTS""",-,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-,-,-,1,-,,,,,,,,,,,
-CMS_ttHbb_PDF_alphaS,shape,weight,"""dummyWeight_CMS_ttH_NNPDF_alphaS_Up_PDF_RELIC:=DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*(PDFTTNONBB)*1.0*DOWEIGHTS""",-,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-,-,-,1,-,,,,,,,,,,,
+CMS_ttHbb_PDF,shape,weight,"""dummyWeight_CMS_ttH_NNPDF_Up_PDF_RELIC:=DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*(PDFTTNONBB)*1.0*DOWEIGHTS""",-,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-,-,-,1,-,-,-,1,-,,,,,,,,,,,
+CMS_ttHbb_PDF_alphaS,shape,weight,"""dummyWeight_CMS_ttH_NNPDF_alphaS_Up_PDF_RELIC:=DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*(PDFTTNONBB)*1.0*DOWEIGHTS""",-,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-,-,-,1,-,-,-,1,-,,,,,,,,,,,
 CMS_ttHbb_PDF_tHq,shape,weight,"""dummyWeight_CMS_ttH_NNPDF_tHq_Up_PDF_RELIC:=DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*fmax(0.0,PDF_RELIC)*internalNormFactors.at(""PDF_RELIC"")*1.0*DOWEIGHTS""",-,1,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,,,,1,1,1,,,,,
 CMS_ttHbb_PDF_alphaS_tHq,shape,weight,"""dummyWeight_CMS_ttH_NNPDF_alphaS_tHq_Up_PDF_RELIC:=DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*fmax(0.0,PDF_RELIC)*internalNormFactors.at(""PDF_RELIC"")*1.0*DOWEIGHTS""",-,1,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,,,,1,1,1,,,,,
 CMS_ttHbb_PDF_tHW,shape,weight,"""dummyWeight_CMS_ttH_NNPDF_tHW_Up_PDF_RELIC:=DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*fmax(0.0,PDF_RELIC)*internalNormFactors.at(""PDF_RELIC"")*1.0*DOWEIGHTS""",-,1,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,1,1,1,,,,,,,,
 CMS_ttHbb_PDF_alphaS_tHW,shape,weight,"""dummyWeight_CMS_ttH_NNPDF_alphaS_tHW_Up_PDF_RELIC:=DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*(PDFTTBB)*1.0*DOWEIGHTS""",-,1,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,1,1,1,,,,,,,,
-CMS_ttHbb_PDF_ttbbNLO,shape,weight,"""dummyWeight_CMS_ttH_NNPDF_ttbbNLO_Up_PDF_RELIC:=DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*(PDFTTBB)*1.0*DOWEIGHTS""",-,1,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,1,1,1,1,-,1,1,1,1,-,,,,,,,,,,,
+CMS_ttHbb_PDF_ttbbNLO,shape,weight,"""dummyWeight_CMS_ttH_NNPDF_ttbbNLO_Up_PDF_RELIC:=DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*(PDFTTBB)*1.0*DOWEIGHTS""",-,1,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,1,1,1,-,1,1,1,-,-,,,,,,,,,,,
 #,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 CMS_ttHbb_scaleMuF_ttbbNLO,shape,weight,"""dummyWeight_CMS_ttH_scaleMuF_ttbbNLO_Up:=DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*(MUFUPTTBB)*1.0*DOWEIGHTS""","""dummyWeight_CMS_ttH_scaleMuF_ttbbNLO_Down:=DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*(MUFDOWNTTBB)*1.0*DOWEIGHTS""",1,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,1,1,1,1,-,1,1,1,1,-,,,,,,,,,,,
 CMS_ttHbb_scaleMuF,shape,weight,"""dummyWeight_CMS_ttH_scaleMuF_Up:=DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*(MUFUPTTNONBB)*1.0*DOWEIGHTS""","""dummyWeight_CMS_ttH_scaleMuF_Down:=DEFAULTWEIGHT*LEPTONSFS*TRIGGERSFS*(MUFDOWNTTNONBB)*1.0*DOWEIGHTS""",1,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,1,1,1,1,1,-,-,-,1,-,,,,,,,,,,,
