@@ -7,9 +7,9 @@ class GenWeightNormalization():
         self.csvfile = csvfile
         self.csv_dict = self.readCSVFile("final_weight_sl_analysis")
         self.fractions = {}
-        self.fractions["ttbb"] = self.readCSVFile("fraction_ttB")
-        self.fractions["ttcc"] = self.readCSVFile("fraction_ttC")
-        self.fractions["ttlf"] = self.readCSVFile("fraction_ttLF")
+        self.fractions["ttbb"] = self.readCSVFile("ratio_ttB_varied_vs_nom_5FS")
+        self.fractions["ttcc"] = self.readCSVFile("ratio_ttC_varied_vs_nom_5FS")
+        self.fractions["ttlf"] = self.readCSVFile("ratio_ttLF_varied_vs_nom_5FS")
         self.weightList = self.getWeightVarsList()
         self.namespace_name = "GenNormMap"
         # print(self.weightList)
@@ -53,7 +53,8 @@ class GenWeightNormalization():
         #     weightVetoList.append("internalNormFactor_"+weight)
         # return weightVetoList
         vetolist = ["internalNormFactors"]
-        vetolist += ["fractions_{}".format(x) for x in self.fractions.keys()]
+        vetolist += ["fracRatio_{}".format(x) for x in self.fractions.keys()]
+        vetolist.append("isFourFSsample")
         return vetolist
 
 
@@ -69,13 +70,13 @@ class GenWeightNormalization():
     def declareNormFactors(self):
         code = self.initMap("internalNormFactors")
         for k in self.fractions:
-            code += self.initMap("fractions_{}".format(k))
+            code += self.initMap("fracRatio_{}".format(k))
         return code
 
     def loadNormFactors(self):
         code = "auto internalNormFactors = {}::internalNormFactors;\n".format(self.namespace_name)
         for k in self.fractions:
-            code += "auto fractions_{key} = {name}::fractions_{key};\n".format(name = self.namespace_name, key = k)
+            code += "auto fracRatio_{key} = {name}::fracRatio_{key};\n".format(name = self.namespace_name, key = k)
         return code
 
     def generateDictLines(self, dic, indent = "\t", debug = False):
@@ -94,7 +95,7 @@ class GenWeightNormalization():
         code += self.generateDictLines(self.csv_dict)
         code += "\n  };"
         for k in self.fractions:
-            code += "\tstd::map<TString,float> private_fractions_{} = \n  {{\n".format(k)
+            code += "\tstd::map<TString,float> private_fracRatio_{} = \n  {{\n".format(k)
             code += self.generateDictLines(self.fractions[k])
             code += "\n  };"
         return code
@@ -175,13 +176,17 @@ namespace {namespace_name}{{
         """
         code = """
         TString currentRelevantSampleNameForGenWeights = sampleDataBaseIdentifiers[currentfilename];
+        isFourFSsample = 0.;
+        if (currentRelevantSampleNameForGenWeights.BeginsWith("TTbb4f")){{
+            isFourFSsample = 1.;
+        }}
         resetMap(internalNormFactors, 1.0);
         {}::fillInternalNormFactors(internalNormFactors, currentRelevantSampleNameForGenWeights, warningCounter);
         """.format(self.namespace_name)
         for k in self.fractions:
             code += """
-        resetMap(fractions_{key}, 1.0);
-        {namespace}::fillInternalNormFactors(fractions_{key}, currentRelevantSampleNameForGenWeights, warningCounter, {namespace}::private_fractions_{key});
+        resetMap(fracRatio_{key}, 1.0);
+        {namespace}::fillInternalNormFactors(fracRatio_{key}, currentRelevantSampleNameForGenWeights, warningCounter, {namespace}::private_fracRatio_{key});
         """.format(namespace = self.namespace_name, key = k)
         return code
 

@@ -241,8 +241,7 @@ void plot(){
    sampleDataBaseIdentifiers[originalfilename]=thisfilename;
 
     //check if already in vectr
-   // TString translatedFileNameForDataBase;
-
+    // TString translatedFileNameForDataBase;
 
   //DANGERZONE
   // hardcode sample translation map for now
@@ -297,7 +296,10 @@ void plot(){
   globalFileNameForSystType=filenameforSytType;
   }// end loop of filename parsing
   
-  
+  // init variable to differentiate between 4FS and 5FS samples
+
+  float isFourFSsample = 0.;
+
   TString vecNameForDataBase="mem_p";
   if(globalFileNameForSystType!=""){
     TString vecNameForDataBaseBuffer=globalFileNameForSystType;
