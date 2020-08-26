@@ -1,3 +1,37 @@
+def construct_single_expression(process, subdict, weight, nom_weight,\
+    current_process, expression_template):
+    sel = subdict["selection"].format(weight = weight, 
+                                        nom_weight = nom_weight)
+    phasespace_frac = subdict["phasespace_frac"].format(weight = weight, 
+                                                        nom_weight = nom_weight,
+                                                        current_process = current_process)
+    weight_norm = expression_template.format(weight = weight, 
+                                            nom_weight = nom_weight)
+    if process == current_process:
+        s = "*".join([sel, weight_norm])
+    else:
+        s = "*".join([sel, phasespace_frac])
+    return s
+
+def construct_multi_expression(process, subdict, weight, nom_weight,\
+    current_process, expression_template):
+    sel = subdict["selection"]
+    phasespace_frac = subdict["phasespace_frac"]
+    selection_parts = ["{}*{}".format(x, y) for x, y in zip(sel, phasespace_frac)]
+
+    weight_norm = expression_template.format(weight = weight, 
+                                            nom_weight = nom_weight)
+    if process == current_process:
+        final_selection = "({})".format("+".join(sel))
+        final_selection = final_selection.format(weight = weight, nom_weight = nom_weight)
+        s = "*".join([final_selection, weight_norm])
+    else:
+        s = " + ".join(selection_parts)
+        s = s.format(weight = weight, 
+                    nom_weight = nom_weight,
+                    current_process = current_process)
+    return s
+
 def construct_variations(weight_names, selection_dict, nom_weight, expression_template):
     variationdict = {}
     for keyword in weight_names:
@@ -9,17 +43,21 @@ def construct_variations(weight_names, selection_dict, nom_weight, expression_te
                 s = ""
                 # print(weight_names[keyword])
                 subdict = selection_dict[p]
-                sel = subdict["selection"].format(weight = weight_names[keyword], 
-                                                    nom_weight = nom_weight)
-                phasespace_frac = subdict["phasespace_frac"].format(weight = weight_names[keyword], 
-                                                                    nom_weight = nom_weight,
-                                                                    current_process = current_process)
-                weight_norm = expression_template.format(weight = weight_names[keyword], 
-                                                        nom_weight = nom_weight)
-                if p == current_process:
-                    s = "*".join([sel, weight_norm])
+                if isinstance(subdict["selection"], list):
+                    s = construct_multi_expression(process = p, 
+                                    subdict = subdict,
+                                    weight = weight_names[keyword],
+                                    nom_weight = nom_weight,
+                                    current_process = current_process,
+                                    expression_template = expression_template)
                 else:
-                    s = "*".join([sel, phasespace_frac])
+                    s = construct_single_expression(process = p, 
+                                    subdict = subdict,
+                                    weight = weight_names[keyword],
+                                    nom_weight = nom_weight,
+                                    current_process = current_process,
+                                    expression_template = expression_template)
+
                 # print("\t{} : {}".format(key, s))
                 # s.format(weight = weight_names[keyword], nom_weight = nom_weight)
                 weight_list.append(s)
@@ -45,16 +83,16 @@ def main():
 
     selection_dict = {
         "ttbb": {
-            "selection": "((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))",
-            "phasespace_frac" : """((1. - fractions_{current_process}.at("{weight}"))/(1 - fractions_{current_process}.at("{nom_weight}")))"""
+            "selection": "((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))*(isFourFSsample)",
+            "phasespace_frac" : """(fracRatio_ttbb.at("{weight}"))"""
             },
         "ttcc": {
-            "selection": "(GenEvt_I_TTPlusCC==1)",
-            "phasespace_frac" : """((1. - fractions_{current_process}.at("{weight}"))/(1 - fractions_{current_process}.at("{nom_weight}")))"""
+            "selection": "(GenEvt_I_TTPlusCC==1)*(!isFourFSsample)",
+            "phasespace_frac" : """(fracRatio_ttcc.at("{weight}"))"""
             },
         "ttlf": {
-            "selection": "(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)",
-            "phasespace_frac" : """((1. - fractions_{current_process}.at("{weight}"))/(1 - fractions_{current_process}.at("{nom_weight}")))"""
+            "selection": "(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)*(!isFourFSsample)",
+            "phasespace_frac" : """(fracRatio_ttlf.at("{weight}"))"""
             }
     }
 
@@ -81,12 +119,12 @@ def main():
 
     selection_dict = {
         "ttbb": {
-            "selection": "((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))",
-            "phasespace_frac" : """(fractions_ttbb.at("{weight}")/fractions_ttbb.at("{nom_weight}"))"""
+            "selection": "((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))*(isFourFSsample)",
+            "phasespace_frac" : """fracRatio_ttbb.at("{weight}")"""
             },
         "ttnonbb": {
-            "selection": "(GenEvt_I_TTPlusBB==0)",
-            "phasespace_frac" : """((1. - fractions_ttbb.at("{weight}"))/(1 - fractions_ttbb.at("{nom_weight}")))"""
+            "selection": ["(GenEvt_I_TTPlusCC==1)*(!isFourFSsample)", "(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)*(!isFourFSsample)"],
+            "phasespace_frac" : ["""(fracRatio_ttcc.at("{weight}"))""", """(fracRatio_ttlf.at("{weight}"))"""]
             },
     }
     variationdict = construct_variations(weight_names = weight_names, 
@@ -97,15 +135,20 @@ def main():
 
     # do PDF uncertainty. Same as muR/F, but has to be handled separately because the
     # weight expression is different and there is only one variation
-    weight_names = {}
-    weight_names["PDF"] = """PDF_RELIC"""
-    expression_template = """(fmax(0, {weight})*internalNormFactors.at("{weight}"))"""
-    variationdict = construct_variations(weight_names = weight_names, 
-                                            selection_dict = selection_dict, 
-                                            nom_weight = nom_weight,
-                                            expression_template = expression_template)
-    weightReplacements.update(variationdict)
+    # weight_names = {}
+    # weight_names["PDF"] = """PDF_RELIC"""
+    # expression_template = """(fmax(0, {weight})*internalNormFactors.at("{weight}"))"""
+    # variationdict = construct_variations(weight_names = weight_names, 
+    #                                         selection_dict = selection_dict, 
+    #                                         nom_weight = nom_weight,
+    #                                         expression_template = expression_template)
+    # weightReplacements.update(variationdict)
+    # for p in weightReplacements:
+    #     print(p)
+    #     print("\t{}".format(weightReplacements[p]))
+    # exit("DEBUG")
     return weightReplacements
 
 if __name__ == "__main__":
-    main()
+    dict = main()
+    print(dict)
