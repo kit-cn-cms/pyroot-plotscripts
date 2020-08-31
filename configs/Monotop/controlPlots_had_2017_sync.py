@@ -223,7 +223,7 @@ def GetPlots(extension, selection, label):
         ),
         plotClasses.Plot(
             ROOT.TH1D(
-                "AK15Jet_DeepAK15_TvsQCD_binning" + extension,
+                "AK15Jet_DeepAK15_TvsQCD_binning_studies" + extension,
                 "AK15 Jet DeepAK15 TvsQCD",
                 50,
                 0.0,
@@ -526,6 +526,14 @@ def GetPlots(extension, selection, label):
         plotClasses.Plot(
             ROOT.TH1D(
                 "Hadr_Recoil_Pt_generic_binning" + extension, "#slash{U}_{T} [GeV]", 20, 250, 1250
+            ),
+            "Hadr_Recoil_Pt",
+            selection,
+            label,
+        ),
+        plotClasses.Plot(
+            ROOT.TH1D(
+                "Hadr_Recoil_Pt_binning_studies" + extension, "#slash{U}_{T} [GeV]", 200, 250, 1250
             ),
             "Hadr_Recoil_Pt",
             selection,
@@ -1027,6 +1035,14 @@ def GetPlots(extension, selection, label):
                 label,
             ),
             plotClasses.Plot(
+                ROOT.TH1D(
+                    "Hadr_Recoil_Pt_binning_studies" + extension, "#slash{U}_{T} [GeV]", 200, 250, 1250
+                ),
+                "Hadr_Recoil_Pt",
+                selection,
+                label,
+            ),
+            plotClasses.Plot(
                 ROOT.TH1D("yield" + extension, "yield", 1, 0.0, 2.0), "1.", selection, label,
             ),
             plotClasses.Plot(
@@ -1049,7 +1065,7 @@ def GetPlots(extension, selection, label):
             ),
             plotClasses.Plot(
                 ROOT.TH1D(
-                    "AK15Jet_DeepAK15_TvsQCD_binning" + extension,
+                    "AK15Jet_DeepAK15_TvsQCD_binning_studies" + extension,
                     "AK15 Jet DeepAK15 TvsQCD",
                     50,
                     0.0,
@@ -1187,11 +1203,11 @@ def control_plots_had_SR(data=None):
     # lepton veto
     selection += "*(N_LooseMuons==0 && N_LooseElectrons==0 && N_LoosePhotons==0)"
     
-    # trigger requirement
+    # recoil/met trigger requirement
     selection += "*(Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX==1 || Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX==1)"
     
-    # btagging requirement
-    #selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0)"
+    # btagging requirement to suppress ttbar
+    selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0)"
     
     # specific HEM veto for hadronic region
     #selection += "*(Evt_Pt_MET>470. || Evt_Phi_MET>-0.62 || Evt_Phi_MET<-1.62)"
@@ -1213,13 +1229,13 @@ def control_plots_had_CR_ZMuMu(data=None):
     # dimuon requirement
     selection += "*(N_LooseMuons==2 && N_LooseElectrons==0 && N_LoosePhotons==0)"
     
-    # trigger requirement
+    # recoil/met trigger requirement
     selection += "*(Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX==1 || Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX==1)"
     
     # z mass requirement
     selection += "*(DiMuon_Mass>60. && DiMuon_Mass<120.)"
     
-    # btagging requirement
+    # no btagging requirement
     #selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0)"
     
     # anti ttbar requirements
@@ -1243,13 +1259,13 @@ def control_plots_had_CR_ZElEl(data=None):
     # dielectron requirement
     selection += "*(N_LooseElectrons==2 && LooseElectron_Pt[0]>=40. && N_LooseMuons==0 && N_LoosePhotons==0)"
     
-    # trigger requirement
+    # single electron trigger requirement
     selection += "*(Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1 || Triggered_HLT_Ele115_CaloIdVT_GsfTrkIdT_vX==1)"
     
     # z mass requirement
     selection += "*(DiElectron_Mass>60. && DiElectron_Mass<120.)"
     
-    # btagging requirement
+    # no btagging requirement
     #selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0)"
     
     # anti ttbar requirements
@@ -1273,11 +1289,11 @@ def control_plots_had_CR_ttbarEl(data=None):
     # single electron requirement
     selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && N_LoosePhotons==0)"
     
-    # trigger requirement
+    # single electron trigger requirement
     selection += "*(Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1 || Triggered_HLT_Ele115_CaloIdVT_GsfTrkIdT_vX==1)"
     
-    # btagging requirement
-    #selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]>=1)"
+    # btagging requirement to enrich ttbar
+    selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]>=1)"
     
     # suppress QCD and gamma+jets with MET cut
     selection += "*(Evt_Pt_MET>80.)"
@@ -1304,11 +1320,11 @@ def control_plots_had_CR_ttbarMu(data=None):
     # single muon requirement
     selection += "*(N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && N_LoosePhotons==0)"
     
-    # trigger requirement
+    # recoil/met trigger requirement
     selection += "*(Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX==1 || Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX==1)"
     
-    # btagging requirement
-    #selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]>=1)"
+    # btagging requirement to enrich ttbar
+    selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]>=1)"
     
     # cut to improve data/mc modeling
     selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p7)"
@@ -1332,11 +1348,11 @@ def control_plots_had_CR_WEl(data=None):
     # single electron requirement
     selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && N_LoosePhotons==0)"
     
-    # trigger requirement
+    # single electron trigger requirement
     selection += "*(Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1 || Triggered_HLT_Ele115_CaloIdVT_GsfTrkIdT_vX==1)"
     
-    # btagging requirement
-    #selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0)"
+    # btagging requirement to enrich w+jets
+    selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0)"
     
     # suppress QCD and gamma+jets with MET cut
     selection += "*(Evt_Pt_MET>80.)"
@@ -1363,11 +1379,11 @@ def control_plots_had_CR_WMu(data=None):
     # single muon requirement
     selection += "*(N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && N_LoosePhotons==0)"
     
-    # trigger requirement
+    # recoil/met trigger requirement
     selection += "*(Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX==1 || Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX==1)"
     
-    # btagging requirement
-    #selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0)"
+    # btagging requirement to enrich w+jets
+    selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0)"
     
     # cut to improve data/mc modeling
     selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p7)"
@@ -1391,11 +1407,68 @@ def control_plots_had_CR_Gamma(data=None):
     # single photon requirement
     selection += "*(N_TightPhotons==1 && N_LoosePhotons==1 && N_LooseMuons==0 && N_LooseElectrons==0 && Photon_Pt[0]>=230.)"
     
-    # trigger requirement
+    # single photon trigger requirement
     selection += "*(Triggered_HLT_Photon200_vX==1)"
     
-    # btagging requirement
+    # no btagging requirement
     #selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0)"
+
+    plots = GetPlots(extension, selection, label)
+    
+    if data:
+        add_data_plots(plots=plots, data=data)
+
+    return plots
+
+def control_plots_had_CR_inclEl(data=None):
+    label = "#scale[0.8]{inclusive control region (e)}"
+    extension = "_had_CR_inclEl"
+    
+    selection = generalselection
+    
+    # single electron requirement
+    selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && N_LoosePhotons==0)"
+    
+    # single electron trigger requirement
+    selection += "*(Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1 || Triggered_HLT_Ele115_CaloIdVT_GsfTrkIdT_vX==1)"
+    
+    # no btagging requirement
+    
+    # suppress QCD and gamma+jets with MET cut
+    selection += "*(Evt_Pt_MET>80.)"
+    
+    # cut to improve data/mc modeling
+    selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p7)"
+    
+    # cut to be orthogonal to leptonic analysis
+    #selection += "*(M_W_transverse[0]<150.)"
+
+    plots = GetPlots(extension, selection, label)
+    
+    if data:
+        add_data_plots(plots=plots, data=data)
+
+    return plots
+
+def control_plots_had_CR_inclMu(data=None):
+    label = "#scale[0.8]{inclusive control region (mu)}"
+    extension = "_had_CR_inclMu"
+    
+    selection = generalselection
+    
+    # single muon requirement
+    selection += "*(N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && N_LoosePhotons==0)"
+    
+    # recoil/met trigger requirement
+    selection += "*(Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX==1 || Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX==1)"
+    
+    # no btagging requirement
+    
+    # cut to improve data/mc modeling
+    selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p7)"
+    
+    # cut to be orthogonal to leptonic analysis
+    #selection += "*(M_W_transverse[0]<150.)"
 
     plots = GetPlots(extension, selection, label)
     
@@ -1410,11 +1483,13 @@ def getDiscriminatorPlots(data=None, discrname=""):
     discriminatorPlots += control_plots_had_SR(data)
     discriminatorPlots += control_plots_had_CR_ZMuMu(data)
     discriminatorPlots += control_plots_had_CR_ZElEl(data)
-    #discriminatorPlots += control_plots_had_CR_ttbarEl(data)
-    #discriminatorPlots += control_plots_had_CR_ttbarMu(data)
+    discriminatorPlots += control_plots_had_CR_ttbarEl(data)
+    discriminatorPlots += control_plots_had_CR_ttbarMu(data)
     discriminatorPlots += control_plots_had_CR_WEl(data)
     discriminatorPlots += control_plots_had_CR_WMu(data)
     discriminatorPlots += control_plots_had_CR_Gamma(data)
+    #discriminatorPlots += control_plots_had_CR_inclEl(data)
+    #discriminatorPlots += control_plots_had_CR_inclMu(data)
 
     return discriminatorPlots
 
