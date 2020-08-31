@@ -71,7 +71,7 @@ def main(pyrootdir, opts):
         "makePlots": True,
         # options for makePlots
         "signalScaling": -1,
-        "lumiLabel": 41.5,
+        "lumiLabel": 35.9,
         "CMSlabel": "work in progress",
         "ratio": "#frac{data}{MC Background}",
         "shape": False, # for shape plots
