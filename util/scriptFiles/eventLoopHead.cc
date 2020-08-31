@@ -4,9 +4,9 @@ long nentries = chain->GetEntries();
 cout << "total number of events: " << nentries << endl;
 
 for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
-    // if(iEntry==maxevents) break;
-    if (iEntry % 1000 == 0) cout << "analyzing event " << iEntry << endl;
-
+    if(iEntry==maxevents) break;
+    if(iEntry%10000==0) cout << "analyzing event " << iEntry << " of " << nentries << " Total events" << endl;
+    
     timerGetEntry->Start();
     
     //PLACEHOLDERFORVARIABLERESET
