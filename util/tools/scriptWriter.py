@@ -443,9 +443,9 @@ class scriptWriter:
             filterFile = sample.filterFile
             filesToSubmit = []
             
-            maxevents = self.pp.maxevents
+            maxEvents = self.pp.maxevents
             if (("jes" in sample.nick.lower() or "jer" in sample.nick.lower() or "metunclen" in sample.nick.lower()) and ("up" in sample.nick.lower() or "down" in sample.nick.lower())) or (sample.nick=="SingleEl" or sample.nick=="SingleMu" or sample.nick=="MET" or sample.nick=="SinglePh"):
-                maxevents = 5*maxevents
+                maxEvents = 5*maxEvents
 
             # looping over files in sample
             for filename in sample.files:
