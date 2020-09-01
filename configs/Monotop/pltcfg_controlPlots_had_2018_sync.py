@@ -362,7 +362,7 @@ samples = [
         ROOT.kOrange,
         path_mwassmer + "/WJetsToLNu_HT*/*nominal*.root",
         #lumi,
-        lumi + "*1.014*1.034",
+        lumi + "*1.036*1.034",
         "wlnujets",
         samDict=sampleDict,
         readTrees=doReadTrees,

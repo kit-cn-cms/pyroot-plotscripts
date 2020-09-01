@@ -1204,7 +1204,7 @@ def control_plots_had_SR(data=None):
     selection += "*(N_LooseMuons==0 && N_LooseElectrons==0 && N_LoosePhotons==0)"
     
     # recoil/met trigger requirement
-    selection += "*(Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX==1 || Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX==1)"
+    selection += "*(Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX==1 || Triggered_HLT_PFMETNoMu110_PFMHTNoMu110_IDTight_vX==1 || Triggered_HLT_PFMETNoMu100_PFMHTNoMu100_IDTight_vX==1 || Triggered_HLT_PFMETNoMu90_PFMHTNoMu90_IDTight_vX==1)"
     
     # btagging requirement to suppress ttbar
     selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0)"
@@ -1230,7 +1230,7 @@ def control_plots_had_CR_ZMuMu(data=None):
     selection += "*(N_LooseMuons==2 && N_LooseElectrons==0 && N_LoosePhotons==0)"
     
     # recoil/met trigger requirement
-    selection += "*(Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX==1 || Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX==1)"
+    selection += "*(Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX==1 || Triggered_HLT_PFMETNoMu110_PFMHTNoMu110_IDTight_vX==1 || Triggered_HLT_PFMETNoMu100_PFMHTNoMu100_IDTight_vX==1 || Triggered_HLT_PFMETNoMu90_PFMHTNoMu90_IDTight_vX==1)"
     
     # z mass requirement
     selection += "*(DiMuon_Mass>60. && DiMuon_Mass<120.)"
@@ -1260,7 +1260,7 @@ def control_plots_had_CR_ZElEl(data=None):
     selection += "*(N_LooseElectrons==2 && LooseElectron_Pt[0]>=40. && N_LooseMuons==0 && N_LoosePhotons==0)"
     
     # single electron trigger requirement
-    selection += "*(Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1 || Triggered_HLT_Ele115_CaloIdVT_GsfTrkIdT_vX==1)"
+    selection += "*(Triggered_HLT_Ele27_WPTight_Gsf_vX==1 || Triggered_HLT_Ele105_CaloIdVT_GsfTrkIdT_vX==1)"
     
     # z mass requirement
     selection += "*(DiElectron_Mass>60. && DiElectron_Mass<120.)"
@@ -1290,7 +1290,7 @@ def control_plots_had_CR_ttbarEl(data=None):
     selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && N_LoosePhotons==0)"
     
     # single electron trigger requirement
-    selection += "*(Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1 || Triggered_HLT_Ele115_CaloIdVT_GsfTrkIdT_vX==1)"
+    selection += "*(Triggered_HLT_Ele27_WPTight_Gsf_vX==1 || Triggered_HLT_Ele105_CaloIdVT_GsfTrkIdT_vX==1)"
     
     # btagging requirement to enrich ttbar
     selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]>=1)"
@@ -1321,7 +1321,7 @@ def control_plots_had_CR_ttbarMu(data=None):
     selection += "*(N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && N_LoosePhotons==0)"
     
     # recoil/met trigger requirement
-    selection += "*(Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX==1 || Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX==1)"
+    selection += "*(Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX==1 || Triggered_HLT_PFMETNoMu110_PFMHTNoMu110_IDTight_vX==1 || Triggered_HLT_PFMETNoMu100_PFMHTNoMu100_IDTight_vX==1 || Triggered_HLT_PFMETNoMu90_PFMHTNoMu90_IDTight_vX==1)"
     
     # btagging requirement to enrich ttbar
     selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]>=1)"
@@ -1349,7 +1349,7 @@ def control_plots_had_CR_WEl(data=None):
     selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && N_LoosePhotons==0)"
     
     # single electron trigger requirement
-    selection += "*(Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1 || Triggered_HLT_Ele115_CaloIdVT_GsfTrkIdT_vX==1)"
+    selection += "*(Triggered_HLT_Ele27_WPTight_Gsf_vX==1 || Triggered_HLT_Ele105_CaloIdVT_GsfTrkIdT_vX==1)"
     
     # btagging requirement to enrich w+jets
     selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0)"
@@ -1380,7 +1380,7 @@ def control_plots_had_CR_WMu(data=None):
     selection += "*(N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && N_LoosePhotons==0)"
     
     # recoil/met trigger requirement
-    selection += "*(Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX==1 || Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX==1)"
+    selection += "*(Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX==1 || Triggered_HLT_PFMETNoMu110_PFMHTNoMu110_IDTight_vX==1 || Triggered_HLT_PFMETNoMu100_PFMHTNoMu100_IDTight_vX==1 || Triggered_HLT_PFMETNoMu90_PFMHTNoMu90_IDTight_vX==1)"
     
     # btagging requirement to enrich w+jets
     selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0)"
@@ -1405,10 +1405,10 @@ def control_plots_had_CR_Gamma(data=None):
     selection = generalselection
     
     # single photon requirement
-    selection += "*(N_TightPhotons==1 && N_LoosePhotons==1 && N_LooseMuons==0 && N_LooseElectrons==0 && Photon_Pt[0]>=230.)"
+    selection += "*(N_TightPhotons==1 && N_LoosePhotons==1 && N_LooseMuons==0 && N_LooseElectrons==0 && Photon_Pt[0]>=200.)"
     
     # single photon trigger requirement
-    selection += "*(Triggered_HLT_Photon200_vX==1)"
+    selection += "*(Triggered_HLT_Photon175_vX==1 || Triggered_HLT_Photon165_HE10_vX==1)"
     
     # no btagging requirement
     #selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0)"
@@ -1430,7 +1430,7 @@ def control_plots_had_CR_inclEl(data=None):
     selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && N_LoosePhotons==0)"
     
     # single electron trigger requirement
-    selection += "*(Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1 || Triggered_HLT_Ele115_CaloIdVT_GsfTrkIdT_vX==1)"
+    selection += "*(Triggered_HLT_Ele27_WPTight_Gsf_vX==1 || Triggered_HLT_Ele105_CaloIdVT_GsfTrkIdT_vX==1)"
     
     # no btagging requirement
     
@@ -1460,7 +1460,7 @@ def control_plots_had_CR_inclMu(data=None):
     selection += "*(N_LooseMuons==1 && N_TightMuons==1 && N_LooseElectrons==0 && N_LoosePhotons==0)"
     
     # recoil/met trigger requirement
-    selection += "*(Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX==1 || Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX==1)"
+    selection += "*(Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX==1 || Triggered_HLT_PFMETNoMu110_PFMHTNoMu110_IDTight_vX==1 || Triggered_HLT_PFMETNoMu100_PFMHTNoMu100_IDTight_vX==1 || Triggered_HLT_PFMETNoMu90_PFMHTNoMu90_IDTight_vX==1)"
     
     # no btagging requirement
     

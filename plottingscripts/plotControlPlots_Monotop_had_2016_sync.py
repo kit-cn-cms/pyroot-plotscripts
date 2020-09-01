@@ -33,7 +33,7 @@ def main(pyrootdir, opts):
     """
     )
     # name of the analysis (i.e. workdir name)
-    name = "Monotop_controlplots_lep_2016"
+    name = "Monotop_controlplots_had_2016"
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -49,11 +49,11 @@ def main(pyrootdir, opts):
     discrName = "finaldiscr"
 
     # configs
-    config = "Monotop/pltcfg_controlPlots_lep_2016"
+    config = "Monotop/pltcfg_controlPlots_had_2016_sync"
     variable_cfg = "Monotop/additionalVariables"
-    plot_cfg = "Monotop/controlPlots_lep_2016"
+    plot_cfg = "Monotop/controlPlots_had_2016_sync"
     syst_cfg = "Monotop/systematics_2016"
-
+    
     # file for rate factors
     # rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
     # rateFactorsFile = "/nfs/dust/cms/user/kelmorab/DataFilesForScriptGenerator/Summer18_2017data/rate_factors_V2.csv"
@@ -194,12 +194,12 @@ def main(pyrootdir, opts):
         # pP.setDataBases(plotDataBases)
         # pP.setMEMDataBase(memDataBase)
         # pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts(200000)
+        pP.setMaxEvts(80000)
         # pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
         
         pP.setCatNames([""])
-        pP.setCatSelections(["(Evt_Pt_MET>100.)*(N_LoosePhotons==0)*((N_LooseElectrons+N_LooseMuons)==1)*((N_TightElectrons+N_TightMuons)==1)*(Jet_Pt[0]>50.)*(M_W_transverse[0]>=40.)"])
+        pP.setCatSelections(["(Hadr_Recoil_Pt>250.)*(N_AK15Jets>=1)*(DeltaPhi_AK4Jets_Recoil_Larger_0p8)*(N_Taus==0)*(N_AK15Jets_SoftDrop==N_AK15Jets)"])
 
         # run plotParallel
         pP.run()
