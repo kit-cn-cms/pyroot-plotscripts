@@ -246,6 +246,10 @@ parser.add_option(
     "--from_right", dest="from_right", action = "store_true", default=False, help = "set this flag if you want to start from the right side of the histogram"
 )
 
+parser.add_option(
+    "--add_sigs", dest="add_sigs", action = "store_true", default=False, help = "set this flag if you want to start add all signal histograms"
+)
+
 (opts, args) = parser.parse_args()
 
 rFile = ROOT.TFile(opts.file, "READ")
@@ -270,8 +274,13 @@ for discr in opts.discr.split(","):
     lSigs = []
     for sig in signals:
         sig_hist = rFile.Get(sig + "_" + discr + "_" + opts.label)
-        sig_hist.Scale(h_bkg.Integral()/sig_hist.Integral())
+        # if not opts.add_sigs:
+            # sig_hist.Scale(h_bkg.Integral()/sig_hist.Integral())
         lSigs.append(sig_hist)
+    if opts.add_sigs:
+        h_sig = addHistos(lSigs)
+        # h_sig.Scale(h_bkg.Integral()/h_sig.Integral())
+        lSigs = [h_sig]
     print (lSigs)
 
     for i, sig in enumerate(lSigs):
