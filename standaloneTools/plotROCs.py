@@ -245,10 +245,10 @@ parser.add_option(
 parser.add_option(
     "--from_right", dest="from_right", action = "store_true", default=False, help = "set this flag if you want to start from the right side of the histogram"
 )
-parser.add_option(
-    "--add_sigs", dest="add_sigs", action = "store_true", default=False, help = "set this flag if you want to add the signal histograms"
-)
 
+parser.add_option(
+    "--add_sigs", dest="add_sigs", action = "store_true", default=False, help = "set this flag if you want to start add all signal histograms"
+)
 
 (opts, args) = parser.parse_args()
 
@@ -267,34 +267,23 @@ for discr in opts.discr.split(","):
     lBkgs = []
     for bkg in backgrounds:
         print(bkg + "_" + discr + "_" + opts.label)
-        bkg_hist = rFile.Get(bkg + "_" + discr + "_" + opts.label)
-        if bkg_hist.Integral() == 0:
-            continue
-        lBkgs.append(bkg_hist)
+        lBkgs.append(rFile.Get(bkg + "_" + discr + "_" + opts.label))
     h_bkg = addHistos(lBkgs)
-    h_bkg.Print()
 
     signals = opts.signal.split(",")
     lSigs = []
     for sig in signals:
         sig_hist = rFile.Get(sig + "_" + discr + "_" + opts.label)
-        # sig_hist = rFile.Get(sig + "_" + discr)
-        # print(sig_hist.Integral())
-        if sig_hist.Integral() == 0:
-            continue
-        sig_hist.Print()
-        if not opts.add_sigs:
-            sig_hist.Scale(h_bkg.Integral()/sig_hist.Integral())
+        # if not opts.add_sigs:
+            # sig_hist.Scale(h_bkg.Integral()/sig_hist.Integral())
         lSigs.append(sig_hist)
     if opts.add_sigs:
-        h_sigs = addHistos(lSigs)
-        h_sigs.Scale(h_bkg.Integral()/h_sigs.Integral())
-        l_sigs = [h_sigs]
-    else:
-        l_sigs = lSigs
-    print(l_sigs)
+        h_sig = addHistos(lSigs)
+        # h_sig.Scale(h_bkg.Integral()/h_sig.Integral())
+        lSigs = [h_sig]
+    print (lSigs)
 
-    for i, sig in enumerate(l_sigs):
+    for i, sig in enumerate(lSigs):
         h_sig = sig
         roc,sb = get_graphs(h_sig, h_bkg, float(opts.discr_min), float(opts.discr_max), opts.from_right)
         drawROC(roc, signals[i], opts.bkg.replace(",", "_"), discr, opts.label)
