@@ -162,6 +162,9 @@ bosonWeightNom = "internalBosonWeight"
 #deepakEfficiencySF_high_up = "((AK15Jet_TopMatched[0]>0.5 && AK15Jet_Pt[0]>=400.)*1.5+(AK15Jet_TopMatched[0]<0.5 && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
 #deepakEfficiencySF_high_down = "((AK15Jet_TopMatched[0]>0.5 && AK15Jet_Pt[0]>=400.)*0.5+(AK15Jet_TopMatched[0]<0.5 && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
 
+vvj_sample_renorm_factor = "1.12"
+evj_sample_renorm_factor = "1.045"
+eej_sample_renorm_factor = "1.137"
 
 prefireWeightNom = "Weight_L1_Prefire"
 
@@ -213,6 +216,13 @@ weightReplacements = {
     
     # higher-order v+jets theory reweighting weight
     "BOSONWEIGHTNOM": bosonWeightNom,
+    
+    "VVJSAMPLERENORMUP" : vvj_sample_renorm_factor,
+    "VVJSAMPLERENORMDOWN" : "0.99",
+    "EVJSAMPLERENORMUP" : evj_sample_renorm_factor,
+    "EVJSAMPLERENORMDOWN" : "0.99",
+    "EEJSAMPLERENORMUP" : eej_sample_renorm_factor,
+    "EEJSAMPLERENORMDOWN" : "0.99",
     
     # trigger scale factors
     "TRIGGERSFNOM" : triggerSFs,
@@ -364,8 +374,8 @@ samples = [
         "Z(#nu#nu)+jets",
         ROOT.kOrange + 7,
         path_mwassmer + "/ZJetsToNuNu_HT*/*nominal*.root",
-        #lumi,
-        lumi + "*1.12*1.082",
+        lumi,
+        #lumi + "*1.12*1.082",
         "znunujets",
         samDict=sampleDict,
         readTrees=doReadTrees,
@@ -375,8 +385,8 @@ samples = [
         "Z(ll)+jets",
         ROOT.kOrange + 1,
         path_mwassmer + "/DYJetsToLL_M-50_HT*/*nominal*.root",
-        #lumi,
-        lumi + "*1.137*1.044",
+        lumi,
+        #lumi + "*1.137*1.044",
         "zlljets",
         samDict=sampleDict,
         readTrees=doReadTrees,
@@ -386,8 +396,8 @@ samples = [
         "W(l#nu)+jets",
         ROOT.kOrange,
         path_mwassmer + "/WJetsToLNu_HT*/*nominal*.root",
-        #lumi,
-        lumi + "*1.045*1.034",
+        lumi,
+        #lumi + "*1.045*1.034",
         "wlnujets",
         samDict=sampleDict,
         readTrees=doReadTrees,
