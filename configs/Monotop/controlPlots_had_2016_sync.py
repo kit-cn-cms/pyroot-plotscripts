@@ -1053,6 +1053,18 @@ def GetPlots(extension, selection, label):
             ),
             plotClasses.Plot(
                 ROOT.TH1D(
+                    "AK15Jet_SoftDrop_Pt" + extension,
+                    "AK15 SD Jet p_{T} [GeV]",
+                    21,
+                    150.0,
+                    1200.0,
+                ),
+                "AK15Jet_SoftDrop_Pt[0]",
+                selection,
+                label,
+            ),
+            plotClasses.Plot(
+                ROOT.TH1D(
                     "AK15Jet_DeepAK15_TvsQCD" + extension,
                     "AK15 Jet DeepAK15 TvsQCD",
                     20,
