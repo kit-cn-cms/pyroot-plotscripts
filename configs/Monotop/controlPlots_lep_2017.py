@@ -450,6 +450,20 @@ def GetPlots(extension, selection, label):
             ),
             plotClasses.Plot(
                 ROOT.TH1D(
+                    "H_T" + extension, "H_{T} [GeV]", 50, 0, 1000
+                ),
+                "HT_AK4Jets",
+                selection,
+                label,
+            ),
+            plotClasses.Plot(
+                ROOT.TH1D("N_Jets" + extension, "number of AK4 jets", 6, -0.5, 5.5),
+                "N_Jets",
+                selection,
+                label,
+            ),
+            plotClasses.Plot(
+                ROOT.TH1D(
                     "DeltaPhi_AK4Jet_MET_0" + extension, "#Delta#phi(AK4 Jet 0, #slash{E}_{T})", 32, 0.0, 3.2
                 ),
                 "DeltaPhi_AK4Jet_MET[0]",
@@ -475,6 +489,14 @@ def GetPlots(extension, selection, label):
             plotClasses.Plot(
                 ROOT.TH1D("Muon_Pt" + extension, "Tight Muon p_{T} [GeV]", 30, 10.0, 610.0),
                 "Muon_Pt",
+                selection,
+                label,
+            ),
+            plotClasses.Plot(
+                ROOT.TH1D(
+                    "DeltaR_AK4Jet_LooseMuon_0" + extension, "#DeltaR(#mu, AK4 Jet 0)", 30, 0.0, 6.0
+                ),
+                "DeltaR_AK4Jet_LooseMuon[0]",
                 selection,
                 label,
             ),
