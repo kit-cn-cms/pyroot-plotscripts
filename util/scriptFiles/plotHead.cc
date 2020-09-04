@@ -163,7 +163,7 @@ void plot()
     double wp_medium = 0.;
     if( dataera == "2016" ) {
         csvFile=plotscriptBaseDir+"/data/CSV/sfs_deepjet_fixedWP_2016.csv";
-        effFile=plotscriptBaseDir+"/data/CSV/eff_deepjet_2016.root";
+        effFile=plotscriptBaseDir+"/data/CSV/btag_efficiencies_deepjet_2016.root";
         wp_loose = 	0.0614;
         wp_medium = 0.3093;
         }
