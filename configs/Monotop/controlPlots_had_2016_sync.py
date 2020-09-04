@@ -1252,7 +1252,7 @@ def control_plots_had_CR_ZMuMu(data=None):
     
     # anti ttbar requirements
     #selection += "*(DiMuon_Pt>200.)"
-    #selection += "*(Evt_Pt_MET<80.)"
+    selection += "*(Evt_Pt_MET<80.)"
 
     plots = GetPlots(extension, selection, label)
     
@@ -1282,7 +1282,7 @@ def control_plots_had_CR_ZElEl(data=None):
     
     # anti ttbar requirements
     #selection += "*(DiElectron_Pt>200.)"
-    #selection += "*(Evt_Pt_MET<80.)"
+    selection += "*(Evt_Pt_MET<80.)"
 
     plots = GetPlots(extension, selection, label)
     
@@ -1308,7 +1308,7 @@ def control_plots_had_CR_ttbarEl(data=None):
     selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]>=1)"
     
     # suppress QCD and gamma+jets with MET cut
-    selection += "*(Evt_Pt_MET>80.)"
+    selection += "*(Evt_Pt_MET>100.)"
     
     # cut to improve data/mc modeling
     selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p7)"
@@ -1339,7 +1339,7 @@ def control_plots_had_CR_ttbarMu(data=None):
     selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]>=1)"
     
     # cut to improve data/mc modeling
-    selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p7)"
+    #selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p7)"
     
     # cut to be orthogonal to leptonic analysis
     #selection += "*(M_W_transverse[0]<150.)"
@@ -1367,7 +1367,7 @@ def control_plots_had_CR_WEl(data=None):
     selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0)"
     
     # suppress QCD and gamma+jets with MET cut
-    selection += "*(Evt_Pt_MET>80.)"
+    selection += "*(Evt_Pt_MET>100.)"
     
     # cut to improve data/mc modeling
     selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p7)"
@@ -1398,7 +1398,7 @@ def control_plots_had_CR_WMu(data=None):
     selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0)"
     
     # cut to improve data/mc modeling
-    selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p7)"
+    #selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p7)"
     
     # cut to be orthogonal to leptonic analysis
     #selection += "*(M_W_transverse[0]<150.)"
@@ -1447,7 +1447,7 @@ def control_plots_had_CR_inclEl(data=None):
     # no btagging requirement
     
     # suppress QCD and gamma+jets with MET cut
-    selection += "*(Evt_Pt_MET>80.)"
+    selection += "*(Evt_Pt_MET>100.)"
     
     # cut to improve data/mc modeling
     selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p7)"
@@ -1477,7 +1477,7 @@ def control_plots_had_CR_inclMu(data=None):
     # no btagging requirement
     
     # cut to improve data/mc modeling
-    selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p7)"
+    #selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p7)"
     
     # cut to be orthogonal to leptonic analysis
     #selection += "*(M_W_transverse[0]<150.)"
