@@ -313,9 +313,9 @@ samplesDataControlPlots += [
 samples = [
     # signal samples
     #plotClasses.Sample(
-        #"#splitline{VectorMonotop}{M_{#phi}=2000 M_{#chi}=500}",
+        #"#splitline{Vector Monotop}{M_{#phi}=2000 GeV M_{#chi}=500 GeV}",
         #ROOT.kCyan,
-        #path_mwassmer + "/VectorMonotop_Mphi_2000_Mchi_500/*nominal*.root",
+        #path_mwassmer + "/Vector_MonoTop_NLO_Mphi-2000_Mchi-500*/*nominal*.root",
         # lumi reweighting factor due to stupid cross section calculation
         #lumi,
         #"vectormonotop_mphi_2000_mchi_500",
