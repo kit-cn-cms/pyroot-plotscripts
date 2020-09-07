@@ -143,7 +143,7 @@ muonTriggerSFs_down = "((N_LooseElectrons>0 && N_LooseMuons==0 && N_LoosePhotons
 
 
 # top pt weight
-topptWeightNom = "Weight_TopPt"
+topptWeightNom = "1."
 
 
 # higher-order v+jets theory reweighting weight

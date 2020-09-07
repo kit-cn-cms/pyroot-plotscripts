@@ -31,7 +31,7 @@ def find_masses(dataset_name):
 
 # samples
 # input path
-path_mwassmer = "/nfs/dust/cms/user/mwassmer/MonoTop/ntuples_2018_PuppiMET"
+path_mwassmer = "/nfs/dust/cms/user/mwassmer/MonoTop/ntuples_2018"
 
 # ======= #
 # WEIGHTS #
@@ -142,7 +142,7 @@ muonTriggerSFs_down = "((N_LooseElectrons>0 && N_LooseMuons==0 && N_LoosePhotons
 
 
 # top pt weight
-topptWeightNom = "Weight_TopPt"
+topptWeightNom = "1."
 
 
 # higher-order v+jets theory reweighting weight
@@ -161,9 +161,9 @@ bosonWeightNom = "internalBosonWeight"
 #deepakEfficiencySF_high_up = "((AK15Jet_TopMatched[0]>0.5 && AK15Jet_Pt[0]>=400.)*1.5+(AK15Jet_TopMatched[0]<0.5 && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
 #deepakEfficiencySF_high_down = "((AK15Jet_TopMatched[0]>0.5 && AK15Jet_Pt[0]>=400.)*0.5+(AK15Jet_TopMatched[0]<0.5 && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
 
-vvj_sample_renorm_factor = "1.094"
-evj_sample_renorm_factor = "1.036"
-eej_sample_renorm_factor = "1.132"
+vvj_sample_renorm_factor = "1.1"
+evj_sample_renorm_factor = "1.07"
+eej_sample_renorm_factor = "1.1"
 
 # dictionary of expressions to replace in systematics csv
 weightReplacements = {
@@ -413,6 +413,7 @@ samples = [
 
 sample_folders = os.listdir(path_mwassmer)
 #print(sample_folders)
+
 for sample_folder in sample_folders:
     if "Vector_MonoTop" in sample_folder:
         sample_name = sample_folder
