@@ -86,6 +86,7 @@ sel_StrangeMuWeights="*(1.)"
 # higgs decay selections
 # hbb is gammagamma with id 5
 hbbSel='*((abs(GenHiggs_DecProd1_PDGID)==5 && abs(GenHiggs_DecProd2_PDGID)==5))'
+non_hbbSel='*(!(abs(GenHiggs_DecProd1_PDGID)==5 && abs(GenHiggs_DecProd2_PDGID)==5))'
 # hcc is uu dd ss cc with ids 1 2 3 4
 hccSel='*((abs(GenHiggs_DecProd1_PDGID)==1 && abs(GenHiggs_DecProd2_PDGID)==1) || (abs(GenHiggs_DecProd1_PDGID)==2 && abs(GenHiggs_DecProd2_PDGID)==2) || (abs(GenHiggs_DecProd1_PDGID)==3 && abs(GenHiggs_DecProd2_PDGID)==3) || (abs(GenHiggs_DecProd1_PDGID)==4 && abs(GenHiggs_DecProd2_PDGID)==4) )'
 # htt is mumu tautau with ids 13 15
@@ -205,8 +206,13 @@ samplesDataControlPlots=[
 samples = [
     plotClasses.Sample('t#bar{t}+H',ROOT.kBlue+1,
             path+'/TTH_4f_ctcvcp_TuneCP5_13TeV_madgraph_pythia8/*nominal*.root',
-            lumi+sel_MET,
-            'ttH',
+            lumi+sel_MET+hbbSel,
+            'ttH_hbb',
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"), 
+    plotClasses.Sample('t#bar{t}+H',ROOT.kBlue+1,
+            path+'/TTH_4f_ctcvcp_TuneCP5_13TeV_madgraph_pythia8/*nominal*.root',
+            lumi+sel_MET+non_hbbSel,
+            'ttH_hnonbb',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"), 
     plotClasses.Sample('tHW (SM)',ROOT.kBlue+3,
             THWpath,

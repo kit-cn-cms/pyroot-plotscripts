@@ -209,9 +209,14 @@ samples = [
 
     plotClasses.Sample('t#bar{t}+H',ROOT.kBlue+1,
             path+'/ttH_4f_ctcvcp_TuneCP5_13TeV_madgraph_pythia8/*nominal*.root',
-            lumi+sel_MET,
-            'ttH',
+            lumi+sel_MET+hbbSel,
+            'ttH_hbb',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+    plotClasses.Sample('t#bar{t}+H',ROOT.kBlue+1,
+            path+'/TTH_4f_ctcvcp_TuneCP5_13TeV_madgraph_pythia8/*nominal*.root',
+            lumi+sel_MET+non_hbbSel,
+            'ttH_hnonbb',
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"
 
     ]
 
