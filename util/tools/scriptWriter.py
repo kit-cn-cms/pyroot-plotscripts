@@ -284,7 +284,7 @@ class scriptWriter:
     def initVariables(self, tree):
         # initialize variables objects
         variableManager = variableCancer.VariableManager(tree, self.vetolist)
-        variableManager.add( ["Weight", "Weight_CSV", "Weight_XS"] )
+        variableManager.add( ["Weight", "Weight_XS"] )
         
         # get additional variables
         if len(self.pp.configData.addVars) > 0:
@@ -536,6 +536,7 @@ class scriptWriter:
         processname = sample.nick
         outfilename = self.pp.plotPath+processname+'_'+str(nJob)+'.root'
         scriptname = self.pp.scriptsPath+'/'+processname+'_'+str(nJob)+'.sh'
+        cleanupname = self.pp.scriptsPath+"/"+processname+"_cleanup_"+str(nJob)+".sh"
         origName = str(sample.origName)
         suffix = writeOptions.get("suffix", "")
         skipevents = writeOptions.get("skipEvents", 0)
