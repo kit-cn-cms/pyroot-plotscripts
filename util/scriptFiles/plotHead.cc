@@ -190,7 +190,7 @@ void plot()
     BtagSFHelper* internalBtagSFHelper_medium_outside= new BtagSFHelper(csvFile,effFile, "medium_outside", wp_medium);
 
     // Dark Higgs Pileup weights
-    PUHelper pu_helper;
+    SFHelper pu_helper;
     pu_helper.AddScaleFactorHistogram("2018","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/PileupHistograms_2018_69mb_pm5.root","pu_weights_central");
     pu_helper.AddScaleFactorHistogram("2018Up","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/PileupHistograms_2018_69mb_pm5.root","pu_weights_up");
     pu_helper.AddScaleFactorHistogram("2018Down","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/PileupHistograms_2018_69mb_pm5.root","pu_weights_down");

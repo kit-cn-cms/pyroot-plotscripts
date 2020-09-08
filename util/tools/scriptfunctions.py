@@ -39,7 +39,7 @@ using namespace std;
     #"QCDHelper",
     #"TTbarSystHelper",
     "CSVWeightSFHelper",
-    "PUHelper",
+    "SFHelper",
     "BtagSFHelper"
     ]
   for cls in includedClasses:
