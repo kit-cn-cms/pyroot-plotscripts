@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'finalDNN/2016_KAPPAscan'
+    name = 'finalDNN_fullSampleRFs_correctSeeSaw/2016_KAPPAscan'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -72,7 +72,7 @@ def main(pyrootdir, opts):
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
-    rateFactorsFile = pyrootdir + "/data/rateFactors/ratefactors_2016_with_correction.csv"
+    rateFactorsFile = pyrootdir + "/data/rateFactors/ratefactors_new_plotscript_2016.csv"
 
     # script options
     analysisOptions = {
