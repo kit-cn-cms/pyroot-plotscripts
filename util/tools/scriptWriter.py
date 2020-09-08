@@ -128,6 +128,7 @@ class scriptWriter:
 
             for ftName in self.pp.friendTrees:
                 found = False
+                print("searching for file for friend tree {}".format(ftName))
                 for basetree in TreeFileMap["files"]:
                     # take first tree as base
                     sampledir, treename = os.path.split(basetree)
@@ -135,14 +136,17 @@ class scriptWriter:
 
                     # add one friend tree to list of trees
                     friendtree = "/".join([self.pp.friendTrees[ftName], samplename, treename])
-                    print("checking friend tree {}".format(friendtree))
+                    print("looking at file {}".format(friendtree))
                     if os.path.exists(friendtree):
+                        print("\t\tfile exists - cool")
                         TreeFileMap["files"].append(friendtree)
                         f = ROOT.TFile(friendtree)
                         tree = f.Get("MVATree")
                         TreeFileMap["trees"].append(deepcopy(tree))
                         found = True
                         break
+                    else:
+                        print("\t\tfile does not exist")
                 if not found:
                     sys.exit("didnt find friend tree")
                        

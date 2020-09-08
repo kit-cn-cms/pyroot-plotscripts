@@ -24,55 +24,187 @@ def plots_ge4j_ge3t(data = None):
     selection = "(N_Jets>=4&&N_BTagsM>=3)&&(1.)"
 
     plots = [
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnZ_ft_RecoZ_B1_CSV","btag value of first Z b-jet",30,0.0,1.0),"dnnZ_ft_RecoZ_B1_CSV",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnZ_ft_RecoZ_B1_E","energy of first Z b-jet",30,0.,500.),"dnnZ_ft_RecoZ_B1_E",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnZ_ft_RecoZ_B1_Eta","#eta of first Z b-jet",30,-2.4,2.4),"dnnZ_ft_RecoZ_B1_Eta",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnZ_ft_RecoZ_B1_Pt","p_{T} of first Z b-jet",30,0.,500.),"dnnZ_ft_RecoZ_B1_Pt",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnZ_ft_RecoZ_B2_CSV","btag value of second Z b-jet",30,0.0,1.0),"dnnZ_ft_RecoZ_B2_CSV",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnZ_ft_RecoZ_B2_E","energy of second Z b-jet",30,0.,500.),"dnnZ_ft_RecoZ_B2_E",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnZ_ft_RecoZ_B2_Eta","#eta of second Z b-jet",30,-2.4,2.4),"dnnZ_ft_RecoZ_B2_Eta",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnZ_ft_RecoZ_B2_Pt","p_{T} of second Z b-jet",30,0.,500.),"dnnZ_ft_RecoZ_B2_Pt",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnZ_ft_RecoZ_Z_E","reconstructed Z boson energy",30,0.,1000.),"dnnZ_ft_RecoZ_Z_E",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnZ_ft_RecoZ_Z_Eta","reconstructed Z boson #eta",30,-2.4,2.4),"dnnZ_ft_RecoZ_Z_Eta",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnZ_ft_RecoZ_Z_M","reconstructed Z boson mass [GeV]",50,0.,250.),"dnnZ_ft_RecoZ_Z_M",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnZ_ft_RecoZ_Z_Pt","Reconstructed Z boson p_{T}",30,0.,500.),"dnnZ_ft_RecoZ_Z_Pt",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnZ_ft_RecoZ_dEta","#Delta #eta of Z b-jets",30,0.0,4.0),"dnnZ_ft_RecoZ_Z_dEta",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnZ_ft_RecoZ_dPhi","#Delta #phi of Z b-jets",30,0.0,3.141),"dnnZ_ft_RecoZ_Z_dPhi",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnZ_ft_RecoZ_dR","#DeltaR of Z b-jets",30,0.0,4.0),"dnnZ_ft_RecoZ_Z_dR",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnZ_ft_RecoX_B1_btagValue","btag value of first Z b-jet",30,0.0,1.0),"dnnZ_ft_RecoX_B1_btagValue",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnZ_ft_RecoX_B1_E","energy of first Z b-jet",30,0.,500.),"dnnZ_ft_RecoX_B1_E",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnZ_ft_RecoX_B1_Eta","#eta of first Z b-jet",30,-2.4,2.4),"dnnZ_ft_RecoX_B1_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnZ_ft_RecoX_B1_Pt","p_{T} of first Z b-jet",30,0.,500.),"dnnZ_ft_RecoX_B1_Pt",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnZ_ft_RecoX_B2_btagValue","btag value of second Z b-jet",30,0.0,1.0),"dnnZ_ft_RecoX_B2_btagValue",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnZ_ft_RecoX_B2_E","energy of second Z b-jet",30,0.,500.),"dnnZ_ft_RecoX_B2_E",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnZ_ft_RecoX_B2_Eta","#eta of second Z b-jet",30,-2.4,2.4),"dnnZ_ft_RecoX_B2_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnZ_ft_RecoX_B2_Pt","p_{T} of second Z b-jet",30,0.,500.),"dnnZ_ft_RecoX_B2_Pt",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnZ_ft_RecoX_X_E","reconstructed Z boson energy",30,0.,1000.),"dnnZ_ft_RecoX_X_E",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnZ_ft_RecoX_X_Eta","reconstructed Z boson #eta",30,-2.4,2.4),"dnnZ_ft_RecoX_X_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnZ_ft_RecoX_X_M","reconstructed Z boson mass [GeV]",50,0.,250.),"dnnZ_ft_RecoX_X_M",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnZ_ft_RecoX_X_Pt","Reconstructed Z boson p_{T}",30,0.,500.),"dnnZ_ft_RecoX_X_Pt",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnZ_ft_RecoX_dEta","#Delta #eta of Z b-jets",30,0.0,4.0),"dnnZ_ft_RecoX_X_dEta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnZ_ft_RecoX_dPhi","#Delta #phi of Z b-jets",30,0.0,3.141),"dnnZ_ft_RecoX_X_dPhi",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnZ_ft_RecoX_dR","#DeltaR of Z b-jets",30,0.0,4.0),"dnnZ_ft_RecoX_X_dR",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnZ_ft_RecoX_DNNOutput","Z boson reconstruction DNN output",50,0.,1.0),"dnnZ_ft_RecoX_DNNOutput",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnZ_ft_RecoX_transformedDNNOutput","transformed Z boson reconstruction DNN output",50,-6.,6.0),"dnnZ_ft_RecoX_transformedDNNOutput",selection,label),
 
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnZ_ft_RecoZ_DNNOutput","H boson reconstruction DNN output",50,0.,1.0),"dnnZ_ft_RecoZ_DNNOutput",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnZ_ft_RecoZ_transformedDNNOutput","transformed Z boson reconstruction DNN output",50,-6.,6.0),"dnnZ_ft_RecoZ_transformedDNNOutput",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_newTransformedOutput","transformed Z boson reconstruction DNN output",50,-6.,6.0),"newTransformedOutput",selection,label),
 
+
+        # random test plots
 	plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_N_Jets","jet multiplicty",7,3.5,10.5),"N_Jets",selection,label),
 	plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_Jet_Pt","p_{T} of jets",100,0.,1000.),"Jet_Pt",selection,label),
 	plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_Jet_Pt_0","p_{T} of leading jet",100,0.,1000.),"Jet_Pt[0]",selection,label),
 
 
 
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnH_ft_RecoHiggs_B1_CSV","btag value of first H b-jet",30,0.0,1.0),"dnnH_ft_RecoHiggs_B1_CSV",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnH_ft_RecoHiggs_B1_E","energy of first H b-jet",30,0.,500.),"dnnH_ft_RecoHiggs_B1_E",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnH_ft_RecoHiggs_B1_Eta","#eta of first H b-jet",30,-2.4,2.4),"dnnH_ft_RecoHiggs_B1_Eta",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnH_ft_RecoHiggs_B1_Pt","p_{T} of first H b-jet",30,0.,500.),"dnnH_ft_RecoHiggs_B1_Pt",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnH_ft_RecoHiggs_B2_CSV","btag value of second H b-jet",30,0.0,1.0),"dnnH_ft_RecoHiggs_B2_CSV",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnH_ft_RecoHiggs_B2_E","energy of second H b-jet",30,0.,500.),"dnnH_ft_RecoHiggs_B2_E",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnH_ft_RecoHiggs_B2_Eta","#eta of second H b-jet",30,-2.4,2.4),"dnnH_ft_RecoHiggs_B2_Eta",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnH_ft_RecoHiggs_B2_Pt","p_{T} of second H b-jet",30,0.,500.),"dnnH_ft_RecoHiggs_B2_Pt",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnH_ft_RecoHiggs_H_E","reconstructed H boson energy",30,0.,1000.),"dnnH_ft_RecoHiggs_H_E",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnH_ft_RecoHiggs_H_Eta","reconstructed H boson #eta",30,-2.4,2.4),"dnnH_ft_RecoHiggs_H_Eta",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnH_ft_RecoHiggs_H_M","reconstructed H boson mass [GeV]",50,0.,250.),"dnnH_ft_RecoHiggs_H_M",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnH_ft_RecoHiggs_H_Pt","Reconstructed H boson p_{T}",30,0.,500.),"dnnH_ft_RecoHiggs_H_Pt",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnH_ft_RecoHiggs_dEta","#Delta #eta of H b-jets",30,0.0,4.0),"dnnH_ft_RecoHiggs_H_dEta",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnH_ft_RecoHiggs_dPhi","#Delta #phi of H b-jets",30,0.0,3.141),"dnnH_ft_RecoHiggs_H_dPhi",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnH_ft_RecoHiggs_dR","#DeltaR of H b-jets",30,0.0,4.0),"dnnH_ft_RecoHiggs_H_dR",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnH_ft_RecoX_B1_btagValue","btag value of first H b-jet",30,0.0,1.0),"dnnH_ft_RecoX_B1_btagValue",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnH_ft_RecoX_B1_E","energy of first H b-jet",30,0.,500.),"dnnH_ft_RecoX_B1_E",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnH_ft_RecoX_B1_Eta","#eta of first H b-jet",30,-2.4,2.4),"dnnH_ft_RecoX_B1_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnH_ft_RecoX_B1_Pt","p_{T} of first H b-jet",30,0.,500.),"dnnH_ft_RecoX_B1_Pt",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnH_ft_RecoX_B2_btagValue","btag value of second H b-jet",30,0.0,1.0),"dnnH_ft_RecoX_B2_btagValue",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnH_ft_RecoX_B2_E","energy of second H b-jet",30,0.,500.),"dnnH_ft_RecoX_B2_E",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnH_ft_RecoX_B2_Eta","#eta of second H b-jet",30,-2.4,2.4),"dnnH_ft_RecoX_B2_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnH_ft_RecoX_B2_Pt","p_{T} of second H b-jet",30,0.,500.),"dnnH_ft_RecoX_B2_Pt",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnH_ft_RecoX_X_E","reconstructed H boson energy",30,0.,1000.),"dnnH_ft_RecoX_X_E",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnH_ft_RecoX_X_Eta","reconstructed H boson #eta",30,-2.4,2.4),"dnnH_ft_RecoX_X_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnH_ft_RecoX_X_M","reconstructed H boson mass [GeV]",50,0.,250.),"dnnH_ft_RecoX_X_M",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnH_ft_RecoX_X_Pt","Reconstructed H boson p_{T}",30,0.,500.),"dnnH_ft_RecoX_X_Pt",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnH_ft_RecoX_dEta","#Delta #eta of H b-jets",30,0.0,4.0),"dnnH_ft_RecoX_X_dEta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnH_ft_RecoX_dPhi","#Delta #phi of H b-jets",30,0.0,3.141),"dnnH_ft_RecoX_X_dPhi",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnH_ft_RecoX_dR","#DeltaR of H b-jets",30,0.0,4.0),"dnnH_ft_RecoX_X_dR",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnH_ft_RecoX_DNNOutput","H boson reconstruction DNN output",50,0.,1.0),"dnnH_ft_RecoX_DNNOutput",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnH_ft_RecoX_transformedDNNOutput","transformed H boson reconstruction DNN output",50,-6.,6.0),"dnnH_ft_RecoX_transformedDNNOutput",selection,label),
 
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnH_ft_RecoHiggs_DNNOutput","H boson reconstruction DNN output",50,0.,1.0),"dnnH_ft_RecoHiggs_DNNOutput",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_dnnH_ft_RecoHiggs_transformedDNNOutput","transformed H boson reconstruction DNN output",50,-6.,6.0),"dnnH_ft_RecoHiggs_transformedDNNOutput",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_newTransformedOutput","transformed Higgs boson reconstruction DNN output",50,-6.,6.0),"newTransformedOutput",selection,label),
         ]
 
         
     if data:
         add_data_plots(plots=plots,data=data)
     return plots
+
+
+
+def plots_4j_ge3t(data = None):
+    label = "4 jets, \geq 3 b-tags"
+    interfaces = []
+    selection = "(N_Jets==4&&N_BTagsM>=3)&&(1.)"
+
+    plots = [
+        plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_dnnZ_ft_RecoX_B1_btagValue","btag value of first Z b-jet",30,0.0,1.0),"dnnZ_ft_RecoX_B1_btagValue",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_dnnZ_ft_RecoX_B1_E","energy of first Z b-jet",30,0.,500.),"dnnZ_ft_RecoX_B1_E",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_dnnZ_ft_RecoX_B1_Eta","#eta of first Z b-jet",30,-2.4,2.4),"dnnZ_ft_RecoX_B1_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_dnnZ_ft_RecoX_B1_Pt","p_{T} of first Z b-jet",30,0.,500.),"dnnZ_ft_RecoX_B1_Pt",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_dnnZ_ft_RecoX_B2_btagValue","btag value of second Z b-jet",30,0.0,1.0),"dnnZ_ft_RecoX_B2_btagValue",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_dnnZ_ft_RecoX_B2_E","energy of second Z b-jet",30,0.,500.),"dnnZ_ft_RecoX_B2_E",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_dnnZ_ft_RecoX_B2_Eta","#eta of second Z b-jet",30,-2.4,2.4),"dnnZ_ft_RecoX_B2_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_dnnZ_ft_RecoX_B2_Pt","p_{T} of second Z b-jet",30,0.,500.),"dnnZ_ft_RecoX_B2_Pt",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_dnnZ_ft_RecoX_X_E","reconstructed Z boson energy",30,0.,1000.),"dnnZ_ft_RecoX_X_E",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_dnnZ_ft_RecoX_X_Eta","reconstructed Z boson #eta",30,-2.4,2.4),"dnnZ_ft_RecoX_X_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_dnnZ_ft_RecoX_X_M","reconstructed Z boson mass [GeV]",50,0.,250.),"dnnZ_ft_RecoX_X_M",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_dnnZ_ft_RecoX_X_Pt","Reconstructed Z boson p_{T}",30,0.,500.),"dnnZ_ft_RecoX_X_Pt",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_dnnZ_ft_RecoX_dEta","#Delta #eta of Z b-jets",30,0.0,4.0),"dnnZ_ft_RecoX_X_dEta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_dnnZ_ft_RecoX_dPhi","#Delta #phi of Z b-jets",30,0.0,3.141),"dnnZ_ft_RecoX_X_dPhi",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_dnnZ_ft_RecoX_dR","#DeltaR of Z b-jets",30,0.0,4.0),"dnnZ_ft_RecoX_X_dR",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_dnnZ_ft_RecoX_DNNOutput","Z boson reconstruction DNN output",50,0.,1.0),"dnnZ_ft_RecoX_DNNOutput",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_dnnZ_ft_RecoX_transformedDNNOutput","transformed Z boson reconstruction DNN output",50,-6.,6.0),"dnnZ_ft_RecoX_transformedDNNOutput",selection,label),
+
+        #plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_newTransformedOutput","transformed Z boson reconstruction DNN output",50,-6.,6.0),"newTransformedOutput",selection,label),
+
+
+        # random test plots
+	plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_N_Jets","jet multiplicty",7,3.5,10.5),"N_Jets",selection,label),
+	plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_Jet_Pt","p_{T} of jets",100,0.,1000.),"Jet_Pt",selection,label),
+	plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_Jet_Pt_0","p_{T} of leading jet",100,0.,1000.),"Jet_Pt[0]",selection,label),
+
+
+
+        plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_dnnH_ft_RecoX_B1_btagValue","btag value of first H b-jet",30,0.0,1.0),"dnnH_ft_RecoX_B1_btagValue",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_dnnH_ft_RecoX_B1_E","energy of first H b-jet",30,0.,500.),"dnnH_ft_RecoX_B1_E",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_dnnH_ft_RecoX_B1_Eta","#eta of first H b-jet",30,-2.4,2.4),"dnnH_ft_RecoX_B1_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_dnnH_ft_RecoX_B1_Pt","p_{T} of first H b-jet",30,0.,500.),"dnnH_ft_RecoX_B1_Pt",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_dnnH_ft_RecoX_B2_btagValue","btag value of second H b-jet",30,0.0,1.0),"dnnH_ft_RecoX_B2_btagValue",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_dnnH_ft_RecoX_B2_E","energy of second H b-jet",30,0.,500.),"dnnH_ft_RecoX_B2_E",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_dnnH_ft_RecoX_B2_Eta","#eta of second H b-jet",30,-2.4,2.4),"dnnH_ft_RecoX_B2_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_dnnH_ft_RecoX_B2_Pt","p_{T} of second H b-jet",30,0.,500.),"dnnH_ft_RecoX_B2_Pt",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_dnnH_ft_RecoX_X_E","reconstructed H boson energy",30,0.,1000.),"dnnH_ft_RecoX_X_E",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_dnnH_ft_RecoX_X_Eta","reconstructed H boson #eta",30,-2.4,2.4),"dnnH_ft_RecoX_X_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_dnnH_ft_RecoX_X_M","reconstructed H boson mass [GeV]",50,0.,250.),"dnnH_ft_RecoX_X_M",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_dnnH_ft_RecoX_X_Pt","Reconstructed H boson p_{T}",30,0.,500.),"dnnH_ft_RecoX_X_Pt",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_dnnH_ft_RecoX_dEta","#Delta #eta of H b-jets",30,0.0,4.0),"dnnH_ft_RecoX_X_dEta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_dnnH_ft_RecoX_dPhi","#Delta #phi of H b-jets",30,0.0,3.141),"dnnH_ft_RecoX_X_dPhi",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_dnnH_ft_RecoX_dR","#DeltaR of H b-jets",30,0.0,4.0),"dnnH_ft_RecoX_X_dR",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_dnnH_ft_RecoX_DNNOutput","H boson reconstruction DNN output",50,0.,1.0),"dnnH_ft_RecoX_DNNOutput",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_dnnH_ft_RecoX_transformedDNNOutput","transformed H boson reconstruction DNN output",50,-6.,6.0),"dnnH_ft_RecoX_transformedDNNOutput",selection,label),
+
+        #plotClasses.Plot(ROOT.TH1D("ljets_4j_ge3t_newTransformedOutput","transformed Higgs boson reconstruction DNN output",50,-6.,6.0),"newTransformedOutput",selection,label),
+        ]
+
+        
+    if data:
+        add_data_plots(plots=plots,data=data)
+    return plots
+
+
+
+
+def plots_5j_ge3t(data = None):
+    label = "5 jets, \geq 3 b-tags"
+    interfaces = []
+    selection = "(N_Jets==5&&N_BTagsM>=3)&&(1.)"
+
+    plots = [
+        plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_dnnZ_ft_RecoX_B1_btagValue","btag value of first Z b-jet",30,0.0,1.0),"dnnZ_ft_RecoX_B1_btagValue",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_dnnZ_ft_RecoX_B1_E","energy of first Z b-jet",30,0.,500.),"dnnZ_ft_RecoX_B1_E",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_dnnZ_ft_RecoX_B1_Eta","#eta of first Z b-jet",30,-2.4,2.4),"dnnZ_ft_RecoX_B1_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_dnnZ_ft_RecoX_B1_Pt","p_{T} of first Z b-jet",30,0.,500.),"dnnZ_ft_RecoX_B1_Pt",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_dnnZ_ft_RecoX_B2_btagValue","btag value of second Z b-jet",30,0.0,1.0),"dnnZ_ft_RecoX_B2_btagValue",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_dnnZ_ft_RecoX_B2_E","energy of second Z b-jet",30,0.,500.),"dnnZ_ft_RecoX_B2_E",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_dnnZ_ft_RecoX_B2_Eta","#eta of second Z b-jet",30,-2.4,2.4),"dnnZ_ft_RecoX_B2_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_dnnZ_ft_RecoX_B2_Pt","p_{T} of second Z b-jet",30,0.,500.),"dnnZ_ft_RecoX_B2_Pt",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_dnnZ_ft_RecoX_X_E","reconstructed Z boson energy",30,0.,1000.),"dnnZ_ft_RecoX_X_E",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_dnnZ_ft_RecoX_X_Eta","reconstructed Z boson #eta",30,-2.4,2.4),"dnnZ_ft_RecoX_X_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_dnnZ_ft_RecoX_X_M","reconstructed Z boson mass [GeV]",50,0.,250.),"dnnZ_ft_RecoX_X_M",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_dnnZ_ft_RecoX_X_Pt","Reconstructed Z boson p_{T}",30,0.,500.),"dnnZ_ft_RecoX_X_Pt",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_dnnZ_ft_RecoX_dEta","#Delta #eta of Z b-jets",30,0.0,4.0),"dnnZ_ft_RecoX_X_dEta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_dnnZ_ft_RecoX_dPhi","#Delta #phi of Z b-jets",30,0.0,3.141),"dnnZ_ft_RecoX_X_dPhi",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_dnnZ_ft_RecoX_dR","#DeltaR of Z b-jets",30,0.0,4.0),"dnnZ_ft_RecoX_X_dR",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_dnnZ_ft_RecoX_DNNOutput","Z boson reconstruction DNN output",50,0.,1.0),"dnnZ_ft_RecoX_DNNOutput",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_dnnZ_ft_RecoX_transformedDNNOutput","transformed Z boson reconstruction DNN output",50,-6.,6.0),"dnnZ_ft_RecoX_transformedDNNOutput",selection,label),
+
+        #plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_newTransformedOutput","transformed Z boson reconstruction DNN output",50,-6.,6.0),"newTransformedOutput",selection,label),
+
+
+        # random test plots
+	plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_N_Jets","jet multiplicty",7,3.5,10.5),"N_Jets",selection,label),
+	plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_Jet_Pt","p_{T} of jets",100,0.,1000.),"Jet_Pt",selection,label),
+	plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_Jet_Pt_0","p_{T} of leading jet",100,0.,1000.),"Jet_Pt[0]",selection,label),
+
+
+
+        plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_dnnH_ft_RecoX_B1_btagValue","btag value of first H b-jet",30,0.0,1.0),"dnnH_ft_RecoX_B1_btagValue",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_dnnH_ft_RecoX_B1_E","energy of first H b-jet",30,0.,500.),"dnnH_ft_RecoX_B1_E",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_dnnH_ft_RecoX_B1_Eta","#eta of first H b-jet",30,-2.4,2.4),"dnnH_ft_RecoX_B1_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_dnnH_ft_RecoX_B1_Pt","p_{T} of first H b-jet",30,0.,500.),"dnnH_ft_RecoX_B1_Pt",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_dnnH_ft_RecoX_B2_btagValue","btag value of second H b-jet",30,0.0,1.0),"dnnH_ft_RecoX_B2_btagValue",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_dnnH_ft_RecoX_B2_E","energy of second H b-jet",30,0.,500.),"dnnH_ft_RecoX_B2_E",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_dnnH_ft_RecoX_B2_Eta","#eta of second H b-jet",30,-2.4,2.4),"dnnH_ft_RecoX_B2_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_dnnH_ft_RecoX_B2_Pt","p_{T} of second H b-jet",30,0.,500.),"dnnH_ft_RecoX_B2_Pt",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_dnnH_ft_RecoX_X_E","reconstructed H boson energy",30,0.,1000.),"dnnH_ft_RecoX_X_E",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_dnnH_ft_RecoX_X_Eta","reconstructed H boson #eta",30,-2.4,2.4),"dnnH_ft_RecoX_X_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_dnnH_ft_RecoX_X_M","reconstructed H boson mass [GeV]",50,0.,250.),"dnnH_ft_RecoX_X_M",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_dnnH_ft_RecoX_X_Pt","Reconstructed H boson p_{T}",30,0.,500.),"dnnH_ft_RecoX_X_Pt",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_dnnH_ft_RecoX_dEta","#Delta #eta of H b-jets",30,0.0,4.0),"dnnH_ft_RecoX_X_dEta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_dnnH_ft_RecoX_dPhi","#Delta #phi of H b-jets",30,0.0,3.141),"dnnH_ft_RecoX_X_dPhi",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_dnnH_ft_RecoX_dR","#DeltaR of H b-jets",30,0.0,4.0),"dnnH_ft_RecoX_X_dR",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_dnnH_ft_RecoX_DNNOutput","H boson reconstruction DNN output",50,0.,1.0),"dnnH_ft_RecoX_DNNOutput",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_dnnH_ft_RecoX_transformedDNNOutput","transformed H boson reconstruction DNN output",50,-6.,6.0),"dnnH_ft_RecoX_transformedDNNOutput",selection,label),
+
+        #plotClasses.Plot(ROOT.TH1D("ljets_5j_ge3t_newTransformedOutput","transformed Higgs boson reconstruction DNN output",50,-6.,6.0),"newTransformedOutput",selection,label),
+        ]
+
+        
+    if data:
+        add_data_plots(plots=plots,data=data)
+    return plots
+
+
+
     
 def plots_ge6j_ge3t(data = None):
     label = "\geq 6 jets, \geq 3 b-tags"
@@ -80,41 +212,42 @@ def plots_ge6j_ge3t(data = None):
     selection = "(N_Jets>=6&&N_BTagsM>=3)&&(1.)"
 
     plots = [
-        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoZ_B1_CSV","btag value of first Z b-jet",30,0.0,1.0),"dnnZ_ft_RecoZ_B1_CSV",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoZ_B1_E","energy of first Z b-jet",30,0.,500.),"dnnZ_ft_RecoZ_B1_E",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoZ_B1_Eta","#eta of first Z b-jet",30,-2.4,2.4),"dnnZ_ft_RecoZ_B1_Eta",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoZ_B1_Pt","p_{T} of first Z b-jet",30,0.,500.),"dnnZ_ft_RecoZ_B1_Pt",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoZ_B2_CSV","btag value of second Z b-jet",30,0.0,1.0),"dnnZ_ft_RecoZ_B2_CSV",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoZ_B2_E","energy of second Z b-jet",30,0.,500.),"dnnZ_ft_RecoZ_B2_E",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoZ_B2_Eta","#eta of second Z b-jet",30,-2.4,2.4),"dnnZ_ft_RecoZ_B2_Eta",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoZ_B2_Pt","p_{T} of second Z b-jet",30,0.,500.),"dnnZ_ft_RecoZ_B2_Pt",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoZ_Z_E","reconstructed Z boson energy",30,0.,1000.),"dnnZ_ft_RecoZ_Z_E",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoZ_Z_Eta","reconstructed Z boson #eta",30,-2.4,2.4),"dnnZ_ft_RecoZ_Z_Eta",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoZ_Z_M","reconstructed Z boson mass [GeV]",50,0.,250.),"dnnZ_ft_RecoZ_Z_M",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoZ_Z_Pt","Reconstructed Z boson p_{T}",30,0.,500.),"dnnZ_ft_RecoZ_Z_Pt",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoZ_dEta","#Delta #eta of Z b-jets",30,0.0,4.0),"dnnZ_ft_RecoZ_Z_dEta",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoZ_dPhi","#Delta #phi of Z b-jets",30,0.0,3.141),"dnnZ_ft_RecoZ_Z_dPhi",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoZ_dR","#DeltaR of Z b-jets",30,0.0,4.0),"dnnZ_ft_RecoZ_Z_dR",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoZ_DNNOutput","Z boson reconstruction DNN output",50,0.,1.0),"dnnZ_ft_RecoZ_DNNOutput",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoZ_transformedDNNOutput","transformed Z boson reconstruction DNN output",50,-6.,6.0),"dnnZ_ft_RecoZ_transformedDNNOutput",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoX_B1_btagValue","btag value of first Z b-jet",30,0.0,1.0),"dnnZ_ft_RecoX_B1_btagValue",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoX_B1_E","energy of first Z b-jet",30,0.,500.),"dnnZ_ft_RecoX_B1_E",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoX_B1_Eta","#eta of first Z b-jet",30,-2.4,2.4),"dnnZ_ft_RecoX_B1_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoX_B1_Pt","p_{T} of first Z b-jet",30,0.,500.),"dnnZ_ft_RecoX_B1_Pt",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoX_B2_btagValue","btag value of second Z b-jet",30,0.0,1.0),"dnnZ_ft_RecoX_B2_btagValue",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoX_B2_E","energy of second Z b-jet",30,0.,500.),"dnnZ_ft_RecoX_B2_E",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoX_B2_Eta","#eta of second Z b-jet",30,-2.4,2.4),"dnnZ_ft_RecoX_B2_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoX_B2_Pt","p_{T} of second Z b-jet",30,0.,500.),"dnnZ_ft_RecoX_B2_Pt",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoX_X_E","reconstructed Z boson energy",30,0.,1000.),"dnnZ_ft_RecoX_X_E",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoX_X_Eta","reconstructed Z boson #eta",30,-2.4,2.4),"dnnZ_ft_RecoX_X_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoX_X_M","reconstructed Z boson mass [GeV]",50,0.,250.),"dnnZ_ft_RecoX_X_M",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoX_X_Pt","Reconstructed Z boson p_{T}",30,0.,500.),"dnnZ_ft_RecoX_X_Pt",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoX_dEta","#Delta #eta of Z b-jets",30,0.0,4.0),"dnnZ_ft_RecoX_X_dEta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoX_dPhi","#Delta #phi of Z b-jets",30,0.0,3.141),"dnnZ_ft_RecoX_X_dPhi",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoX_dR","#DeltaR of Z b-jets",30,0.0,4.0),"dnnZ_ft_RecoX_X_dR",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoX_DNNOutput","Z boson reconstruction DNN output",50,0.,1.0),"dnnZ_ft_RecoX_DNNOutput",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoX_transformedDNNOutput","transformed Z boson reconstruction DNN output",50,-6.,6.0),"dnnZ_ft_RecoX_transformedDNNOutput",selection,label),
         
-        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoHiggs_B1_CSV","btag value of first H b-jet",30,0.0,1.0),"dnnH_ft_RecoHiggs_B1_CSV",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoHiggs_B1_E","energy of first H b-jet",30,0.,500.),"dnnH_ft_RecoHiggs_B1_E",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoHiggs_B1_Eta","#eta of first H b-jet",30,-2.4,2.4),"dnnH_ft_RecoHiggs_B1_Eta",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoHiggs_B1_Pt","p_{T} of first H b-jet",30,0.,500.),"dnnH_ft_RecoHiggs_B1_Pt",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoHiggs_B2_CSV","btag value of second H b-jet",30,0.0,1.0),"dnnH_ft_RecoHiggs_B2_CSV",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoHiggs_B2_E","energy of second H b-jet",30,0.,500.),"dnnH_ft_RecoHiggs_B2_E",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoHiggs_B2_Eta","#eta of second H b-jet",30,-2.4,2.4),"dnnH_ft_RecoHiggs_B2_Eta",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoHiggs_B2_Pt","p_{T} of second H b-jet",30,0.,500.),"dnnH_ft_RecoHiggs_B2_Pt",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoHiggs_H_E","reconstructed H boson energy",30,0.,1000.),"dnnH_ft_RecoHiggs_H_E",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoHiggs_H_Eta","reconstructed H boson #eta",30,-2.4,2.4),"dnnH_ft_RecoHiggs_H_Eta",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoHiggs_H_M","reconstructed H boson mass [GeV]",50,0.,250.),"dnnH_ft_RecoHiggs_H_M",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoHiggs_H_Pt","Reconstructed H boson p_{T}",30,0.,500.),"dnnH_ft_RecoHiggs_H_Pt",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoHiggs_dEta","#Delta #eta of H b-jets",30,0.0,4.0),"dnnH_ft_RecoHiggs_H_dEta",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoHiggs_dPhi","#Delta #phi of H b-jets",30,0.0,3.141),"dnnH_ft_RecoHiggs_H_dPhi",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoHiggs_dR","#DeltaR of H b-jets",30,0.0,4.0),"dnnH_ft_RecoHiggs_H_dR",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoHiggs_DNNOutput","Z boson reconstruction DNN output",50,0.,1.0),"dnnH_ft_RecoHiggs_DNNOutput",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoHiggs_transformedDNNOutput","transformed H boson reconstruction DNN output",50,-6.,6.0),"dnnH_ft_RecoHiggs_transformedDNNOutput",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoX_B1_btagValue","btag value of first H b-jet",30,0.0,1.0),"dnnH_ft_RecoX_B1_btagValue",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoX_B1_E","energy of first H b-jet",30,0.,500.),"dnnH_ft_RecoX_B1_E",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoX_B1_Eta","#eta of first H b-jet",30,-2.4,2.4),"dnnH_ft_RecoX_B1_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoX_B1_Pt","p_{T} of first H b-jet",30,0.,500.),"dnnH_ft_RecoX_B1_Pt",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoX_B2_btagValue","btag value of second H b-jet",30,0.0,1.0),"dnnH_ft_RecoX_B2_btagValue",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoX_B2_E","energy of second H b-jet",30,0.,500.),"dnnH_ft_RecoX_B2_E",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoX_B2_Eta","#eta of second H b-jet",30,-2.4,2.4),"dnnH_ft_RecoX_B2_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoX_B2_Pt","p_{T} of second H b-jet",30,0.,500.),"dnnH_ft_RecoX_B2_Pt",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoX_X_E","reconstructed H boson energy",30,0.,1000.),"dnnH_ft_RecoX_X_E",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoX_X_Eta","reconstructed H boson #eta",30,-2.4,2.4),"dnnH_ft_RecoX_X_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoX_X_M","reconstructed H boson mass [GeV]",50,0.,250.),"dnnH_ft_RecoX_X_M",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoX_X_Pt","Reconstructed H boson p_{T}",30,0.,500.),"dnnH_ft_RecoX_X_Pt",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoX_dEta","#Delta #eta of H b-jets",30,0.0,4.0),"dnnH_ft_RecoX_X_dEta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoX_dPhi","#Delta #phi of H b-jets",30,0.0,3.141),"dnnH_ft_RecoX_X_dPhi",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoX_dR","#DeltaR of H b-jets",30,0.0,4.0),"dnnH_ft_RecoX_X_dR",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoX_DNNOutput","H boson reconstruction DNN output",50,0.,1.0),"dnnH_ft_RecoX_DNNOutput",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoX_transformedDNNOutput","transformed H boson reconstruction DNN output",50,-6.,6.0),"dnnH_ft_RecoX_transformedDNNOutput",selection,label),
+
         ]
 
         
@@ -128,41 +261,42 @@ def plots_ge4j_ge4t(data = None):
     selection = "(N_Jets>=4&&N_BTagsM>=4)&&(1.)"
 
     plots = [
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnZ_ft_RecoZ_B1_CSV","btag value of first Z b-jet",30,0.0,1.0),"dnnZ_ft_RecoZ_B1_CSV",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnZ_ft_RecoZ_B1_E","energy of first Z b-jet",30,0.,500.),"dnnZ_ft_RecoZ_B1_E",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnZ_ft_RecoZ_B1_Eta","#eta of first Z b-jet",30,-2.4,2.4),"dnnZ_ft_RecoZ_B1_Eta",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnZ_ft_RecoZ_B1_Pt","p_{T} of first Z b-jet",30,0.,500.),"dnnZ_ft_RecoZ_B1_Pt",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnZ_ft_RecoZ_B2_CSV","btag value of second Z b-jet",30,0.0,1.0),"dnnZ_ft_RecoZ_B2_CSV",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnZ_ft_RecoZ_B2_E","energy of second Z b-jet",30,0.,500.),"dnnZ_ft_RecoZ_B2_E",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnZ_ft_RecoZ_B2_Eta","#eta of second Z b-jet",30,-2.4,2.4),"dnnZ_ft_RecoZ_B2_Eta",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnZ_ft_RecoZ_B2_Pt","p_{T} of second Z b-jet",30,0.,500.),"dnnZ_ft_RecoZ_B2_Pt",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnZ_ft_RecoZ_Z_E","reconstructed Z boson energy",30,0.,1000.),"dnnZ_ft_RecoZ_Z_E",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnZ_ft_RecoZ_Z_Eta","reconstructed Z boson #eta",30,-2.4,2.4),"dnnZ_ft_RecoZ_Z_Eta",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnZ_ft_RecoZ_Z_M","reconstructed Z boson mass [GeV]",50,0.,250.),"dnnZ_ft_RecoZ_Z_M",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnZ_ft_RecoZ_Z_Pt","Reconstructed Z boson p_{T}",30,0.,500.),"dnnZ_ft_RecoZ_Z_Pt",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnZ_ft_RecoZ_dEta","#Delta #eta of Z b-jets",30,0.0,4.0),"dnnZ_ft_RecoZ_Z_dEta",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnZ_ft_RecoZ_dPhi","#Delta #phi of Z b-jets",30,0.0,3.141),"dnnZ_ft_RecoZ_Z_dPhi",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnZ_ft_RecoZ_dR","#DeltaR of Z b-jets",30,0.0,4.0),"dnnZ_ft_RecoZ_Z_dR",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnZ_ft_RecoZ_DNNOutput","Z boson reconstruction DNN output",50,0.,1.0),"dnnZ_ft_RecoZ_DNNOutput",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnZ_ft_RecoZ_transformedDNNOutput","transformed Z boson reconstruction DNN output",50,-6.0,6.0),"dnnZ_ft_RecoZ_transformedDNNOutput",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnZ_ft_RecoX_B1_btagValue","btag value of first Z b-jet",30,0.0,1.0),"dnnZ_ft_RecoX_B1_btagValue",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnZ_ft_RecoX_B1_E","energy of first Z b-jet",30,0.,500.),"dnnZ_ft_RecoX_B1_E",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnZ_ft_RecoX_B1_Eta","#eta of first Z b-jet",30,-2.4,2.4),"dnnZ_ft_RecoX_B1_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnZ_ft_RecoX_B1_Pt","p_{T} of first Z b-jet",30,0.,500.),"dnnZ_ft_RecoX_B1_Pt",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnZ_ft_RecoX_B2_btagValue","btag value of second Z b-jet",30,0.0,1.0),"dnnZ_ft_RecoX_B2_btagValue",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnZ_ft_RecoX_B2_E","energy of second Z b-jet",30,0.,500.),"dnnZ_ft_RecoX_B2_E",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnZ_ft_RecoX_B2_Eta","#eta of second Z b-jet",30,-2.4,2.4),"dnnZ_ft_RecoX_B2_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnZ_ft_RecoX_B2_Pt","p_{T} of second Z b-jet",30,0.,500.),"dnnZ_ft_RecoX_B2_Pt",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnZ_ft_RecoX_X_E","reconstructed Z boson energy",30,0.,1000.),"dnnZ_ft_RecoX_X_E",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnZ_ft_RecoX_X_Eta","reconstructed Z boson #eta",30,-2.4,2.4),"dnnZ_ft_RecoX_X_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnZ_ft_RecoX_X_M","reconstructed Z boson mass [GeV]",50,0.,250.),"dnnZ_ft_RecoX_X_M",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnZ_ft_RecoX_X_Pt","Reconstructed Z boson p_{T}",30,0.,500.),"dnnZ_ft_RecoX_X_Pt",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnZ_ft_RecoX_dEta","#Delta #eta of Z b-jets",30,0.0,4.0),"dnnZ_ft_RecoX_X_dEta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnZ_ft_RecoX_dPhi","#Delta #phi of Z b-jets",30,0.0,3.141),"dnnZ_ft_RecoX_X_dPhi",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnZ_ft_RecoX_dR","#DeltaR of Z b-jets",30,0.0,4.0),"dnnZ_ft_RecoX_X_dR",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnZ_ft_RecoX_DNNOutput","Z boson reconstruction DNN output",50,0.,1.0),"dnnZ_ft_RecoX_DNNOutput",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnZ_ft_RecoX_transformedDNNOutput","transformed Z boson reconstruction DNN output",50,-6.0,6.0),"dnnZ_ft_RecoX_transformedDNNOutput",selection,label),
         
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnH_ft_RecoHiggs_B1_CSV","btag value of first H b-jet",30,0.0,1.0),"dnnH_ft_RecoHiggs_B1_CSV",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnH_ft_RecoHiggs_B1_E","energy of first H b-jet",30,0.,500.),"dnnH_ft_RecoHiggs_B1_E",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnH_ft_RecoHiggs_B1_Eta","#eta of first H b-jet",30,-2.4,2.4),"dnnH_ft_RecoHiggs_B1_Eta",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnH_ft_RecoHiggs_B1_Pt","p_{T} of first H b-jet",30,0.,500.),"dnnH_ft_RecoHiggs_B1_Pt",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnH_ft_RecoHiggs_B2_CSV","btag value of second H b-jet",30,0.0,1.0),"dnnH_ft_RecoHiggs_B2_CSV",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnH_ft_RecoHiggs_B2_E","energy of second H b-jet",30,0.,500.),"dnnH_ft_RecoHiggs_B2_E",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnH_ft_RecoHiggs_B2_Eta","#eta of second H b-jet",30,-2.4,2.4),"dnnH_ft_RecoHiggs_B2_Eta",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnH_ft_RecoHiggs_B2_Pt","p_{T} of second H b-jet",30,0.,500.),"dnnH_ft_RecoHiggs_B2_Pt",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnH_ft_RecoHiggs_H_E","reconstructed H boson energy",30,0.,1000.),"dnnH_ft_RecoHiggs_H_E",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnH_ft_RecoHiggs_H_Eta","reconstructed H boson #eta",30,-2.4,2.4),"dnnH_ft_RecoHiggs_H_Eta",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnH_ft_RecoHiggs_H_M","reconstructed H boson mass [GeV]",50,0.,250.),"dnnH_ft_RecoHiggs_H_M",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnH_ft_RecoHiggs_H_Pt","Reconstructed H boson p_{T}",30,0.,500.),"dnnH_ft_RecoHiggs_H_Pt",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnH_ft_RecoHiggs_dEta","#Delta #eta of H b-jets",30,0.0,4.0),"dnnH_ft_RecoHiggs_H_dEta",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnH_ft_RecoHiggs_dPhi","#Delta #phi of H b-jets",30,0.0,3.141),"dnnH_ft_RecoHiggs_H_dPhi",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnH_ft_RecoHiggs_dR","#DeltaR of H b-jets",30,0.0,4.0),"dnnH_ft_RecoHiggs_H_dR",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnH_ft_RecoHiggs_DNNOutput","Z boson reconstruction DNN output",50,0.,1.0),"dnnH_ft_RecoHiggs_DNNOutput",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnH_ft_RecoHiggs_transformedDNNOutput","transformed H boson reconstruction DNN output",50,-6.0,6.0),"dnnH_ft_RecoHiggs_transformedDNNOutput",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnH_ft_RecoX_B1_btagValue","btag value of first H b-jet",30,0.0,1.0),"dnnH_ft_RecoX_B1_btagValue",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnH_ft_RecoX_B1_E","energy of first H b-jet",30,0.,500.),"dnnH_ft_RecoX_B1_E",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnH_ft_RecoX_B1_Eta","#eta of first H b-jet",30,-2.4,2.4),"dnnH_ft_RecoX_B1_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnH_ft_RecoX_B1_Pt","p_{T} of first H b-jet",30,0.,500.),"dnnH_ft_RecoX_B1_Pt",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnH_ft_RecoX_B2_btagValue","btag value of second H b-jet",30,0.0,1.0),"dnnH_ft_RecoX_B2_btagValue",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnH_ft_RecoX_B2_E","energy of second H b-jet",30,0.,500.),"dnnH_ft_RecoX_B2_E",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnH_ft_RecoX_B2_Eta","#eta of second H b-jet",30,-2.4,2.4),"dnnH_ft_RecoX_B2_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnH_ft_RecoX_B2_Pt","p_{T} of second H b-jet",30,0.,500.),"dnnH_ft_RecoX_B2_Pt",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnH_ft_RecoX_X_E","reconstructed H boson energy",30,0.,1000.),"dnnH_ft_RecoX_X_E",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnH_ft_RecoX_X_Eta","reconstructed H boson #eta",30,-2.4,2.4),"dnnH_ft_RecoX_X_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnH_ft_RecoX_X_M","reconstructed H boson mass [GeV]",50,0.,250.),"dnnH_ft_RecoX_X_M",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnH_ft_RecoX_X_Pt","Reconstructed H boson p_{T}",30,0.,500.),"dnnH_ft_RecoX_X_Pt",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnH_ft_RecoX_dEta","#Delta #eta of H b-jets",30,0.0,4.0),"dnnH_ft_RecoX_X_dEta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnH_ft_RecoX_dPhi","#Delta #phi of H b-jets",30,0.0,3.141),"dnnH_ft_RecoX_X_dPhi",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnH_ft_RecoX_dR","#DeltaR of H b-jets",30,0.0,4.0),"dnnH_ft_RecoX_X_dR",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnH_ft_RecoX_DNNOutput","H boson reconstruction DNN output",50,0.,1.0),"dnnH_ft_RecoX_DNNOutput",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_dnnH_ft_RecoX_transformedDNNOutput","transformed H boson reconstruction DNN output",50,-6.0,6.0),"dnnH_ft_RecoX_transformedDNNOutput",selection,label),
+
         ]
 
         

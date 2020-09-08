@@ -21,6 +21,7 @@ def getAddVars():
         "Evt_Phi_PrimaryLepton:=TightLepton_Phi[0]",
         "Evt_Eta_PrimaryLepton:=TightLepton_Eta[0]",
         "Evt_MET_Pt",
+        #"newTransformedOutput:=((1.-dnnX_ft_RecoX_DNNOutput)/(dnnX_ft_RecoX_DNNOutput))",
 
         ]
 

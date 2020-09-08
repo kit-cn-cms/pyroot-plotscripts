@@ -48,10 +48,10 @@ ttHpath = path+'/ttHTobb*/*nominal*.root'+';'+ \
 
 friendTrees = {
     #"ctag": "/nfs/dust/cms/user/vdlinden/legacyTTZ/ntuples/friendTrees/2017/ctagging"
-    "dnnZ": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/reconstructed_Z_v1",
-    "dnnH": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/reconstructed_Higgs_v1",
-    "matchZ": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/matchZ_v1",
-    "matchH": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/matchHiggs_v1",
+    "dnnZ": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/recoX/reco_Z_as_X_v1",
+    "dnnH": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/recoX/reco_Higgs_as_X_v1",
+    "matchZ": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/matchX/matchZ_as_X_v1",
+    "matchH": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/matchX/matchHiggs_as_X_v1",
     }
 
 # SELECTIONS

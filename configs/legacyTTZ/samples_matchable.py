@@ -11,7 +11,7 @@ import util.tools.plotClasses as plotClasses
 
 # samples
 # input path 
-path  = "/nfs/dust/cms/user/vdlinden/legacyTTH/ntuples/ntuples_ttZ_v2/"
+path  = "/nfs/dust/cms/user/vdlinden/legacyTTZ/ntuples/2017"
 
 ttbarPathS = path+'/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
              path+'/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+";"+\
@@ -50,11 +50,11 @@ ttHpath = path+'/ttHTobb*/*nominal*.root'+';'+ \
           path+'/ttHToNonbb*/*nominal*.root'
 
 friendTrees = {
-    "dnnZ": "/nfs/dust/cms/user/larmbrus/ttZAnalysis/ntuples/2017/reconstructed_Z_v1/",
-    "dnnH": "/nfs/dust/cms/user/larmbrus/ttZAnalysis/ntuples/2017/reconstructed_H_v1/",
+    "dnnZ": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/reconstructed_Z_v1/",
+    "dnnH": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/reconstructed_H_v1/",
     #"dnnH": "/nfs/dust/cms/user/vdlinden/legacyTTZ/ntuples/friendTrees/reconstruction/reco_H_boson/",
-    "matchZ": "/nfs/dust/cms/user/larmbrus/ttZAnalysis/ntuples/2017/matchZ_v1/",
-    "matchH": "/nfs/dust/cms/user/larmbrus/ttZAnalysis/ntuples/2017/matchH_v1/",
+    "matchZ": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/matchZ_v1/",
+    "matchH": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/matchHiggs_v1/",
     }
 
 # ttZpath =  path+'/TTZToQQ*/*nominal*.root'+';'+ \

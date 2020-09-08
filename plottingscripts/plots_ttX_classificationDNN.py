@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'new_ntuples/cnnEval/ttZ/v2_optBins'
+    name = 'new_ntuples/cnnEval/ttX/v1_optBins'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -55,9 +55,9 @@ def main(pyrootdir, opts):
     # define MEM discriminator variable
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
     # configs
-    config          = "legacyTTZ/samples_2017"
+    config          = "legacyTTZ/samples_ttX"
     variable_cfg    = "legacyTTZ/additionalVariables"
-    plot_cfg        = "legacyTTZ/dnnPlots_new_ntuples/v2_optBins"
+    plot_cfg        = "legacyTTZ/dnnPlots_new_ntuples/ttX_v1_optBins"
     syst_cfg        = "legacyTTZ/systs_v1"
     replace_cfg     = None
 
@@ -93,7 +93,7 @@ def main(pyrootdir, opts):
         "cmslabel":             "private Work",
         "ratio":                "#frac{pseudo data}{MC Background}",
         "shape":                False,
-        "logarithmic":          True,
+        "logarithmic":          False,
         "splitLegend":          False,
         "normalize":            False,
         # the skipX options try to skip the submission of files to the batch system
@@ -109,7 +109,7 @@ def main(pyrootdir, opts):
     plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2017/",True]] 
     memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                   "checkpointFiles":  "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/cnnData/new_ntuples/ttZ/complete_v3_set"}
+                   "checkpointFiles":  "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/cnnData/new_ntuples/ttX/ttH_ttZ_v1"}
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"

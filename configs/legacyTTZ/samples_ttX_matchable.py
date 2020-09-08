@@ -18,6 +18,11 @@ ttbarPathS = path+'/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/*nom
              path+'/TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8_new_pmx/*nominal*.root'
              #'TTbb_Powheg_Openloops_new_pmx' needs to be added?
 
+ttbbPath = path+'/TTbb_Powheg_Openloops_new_pmx/*nominal*.root'+';'+ \
+           path+'/TTbb_Powheg_Openloops_DL/*nominal*.root'+';'+ \
+           path+'/TTbb_4f_TTToHadronic_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root'
+
+
 VJetsPathS = path+'/DYJets*/*nominal*.root'+';'+ \
              path+'/WJets*/*nominal*.root'
 
@@ -26,8 +31,8 @@ ttWPath  = path+'/TTW*/*nominal*.root'
 ttZqqPath = path+'/TTZToQQ*/*nominal*.root'
 ttZllPath = path+'/TTZToLLNuNu*/*nominal*.root'
 
-ttZPath  =  path+'/TTZToQQ*/*nominal*.root'+';'+ \
-            path+'/TTZToLLNuNu*/*nominal*.root'
+ttZPath  = path+'/TTZToLLNuNu*/*nominal*.root'+';'+ \
+           path+'/TTZToQQ*/*nominal*.root'
 
 dibosonPathS = path+'/WW_*/*nominal*.root'+';'+ \
                path+'/WZ_*/*nominal*.root'+';'+ \
@@ -38,6 +43,9 @@ stpath = path+'/ST_s-channel_4f_leptonDecays_TuneCP5_PSweights_13TeV-amcatnlo-py
          path+'/ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8_new_pmx*/*nominal*.root'+';'+ \
          path+'/ST_t-channel_antitop_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8*/*nominal*.root'+';'+ \
          path+'/ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8_new_pmx*/*nominal*.root'
+#STH
+THWpath = path+'/THW_*ctcvcp*/*nominal*.root'
+THQpath = path+'/THQ_*ctcvcp*/*nominal*.root'
 
 
 ttHbbPath    = path+'/ttHTobb*/*nominal*.root'
@@ -47,12 +55,15 @@ ttHpath = path+'/ttHTobb*/*nominal*.root'+';'+ \
           path+'/ttHToNonbb*/*nominal*.root'
 
 friendTrees = {
-    #"ctag": "/nfs/dust/cms/user/vdlinden/legacyTTZ/ntuples/friendTrees/2017/ctagging"
-    "dnnZ": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/reconstructed_Z_v1",
-    "dnnH": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/reconstructed_Higgs_v1",
-    "matchZ": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/matchZ_v1",
-    "matchH": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/matchHiggs_v1",
+    "dnnZ": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/recoX/reco_Z_as_X_v1",
+    "dnnH": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/recoX/reco_Higgs_as_X_v1",
+    #"dnnH": "/nfs/dust/cms/user/vdlinden/legacyTTZ/ntuples/friendTrees/reconstruction/reco_H_boson/",
+    "matchZ": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/matchX/matchZ_as_X_v1",
+    "matchH": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/matchX/matchHiggs_as_X_v1",
     }
+
+# ttZpath =  path+'/TTZToQQ*/*nominal*.root'+';'+ \
+        #     path+'/TTZToLLNuNu_M-10*/*nominal*.root'+';'
 
 # SELECTIONS
 
@@ -92,11 +103,11 @@ hzgSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==22)
 # ======= # 
 # WEIGHTS #
 # ======= #
-defaultWeight = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2*Weight_btagSF*sf__HT_vs_NJet__btag_NOMINAL"
+defaultWeight = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL"
 
 # pile up weights
-pileupWeightUp   = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2Up*Weight_btagSF*sf__HT_vs_NJet__btag_NOMINAL"
-pileupWeightDown = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2Down*Weight_btagSF*sf__HT_vs_NJet__btag_NOMINAL"
+pileupWeightUp   = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2Up*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL"
+pileupWeightDown = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2Down*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL"
 
 # lepton scale factors
 electronSFs = "((N_TightElectrons==1)&&(Electron_IdentificationSF[0]>0.)&&(Electron_ReconstructionSF[0]>0.))*Electron_IdentificationSF[0]*Electron_ReconstructionSF[0]"
@@ -151,7 +162,6 @@ weightReplacements = {
 
 # Lumi weight
 lumi = '41.5'
-TTbbweight='*35.8038266498504*0.43937838'
 
 # nominal weight
 nominalweight="NomWeight:=("+defaultWeight+"*"+"("+electronSFs+"+"+muonSFs+")"+"*"+"("+electronTrigger+"+"+muonTrigger+")"+")*(DoWeights==1)+(DoWeights==0)*1.0"
@@ -165,111 +175,69 @@ doReadTrees=True
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
 samplesDataControlPlots=[
-    plotClasses.Sample('SingleMu',ROOT.kBlack,
-            path+'/SingleMuon*/*nominal*.root',
-            sel_singlemu+sel_MET+"*"+sel_jettag,
-            'SingleMu', samDict=sampleDict, readTrees=doReadTrees),
+    #plotClasses.Sample('SingleMu',ROOT.kBlack,
+    #        path+'/SingleMuon*/*nominal*.root',
+    #        sel_singlemu+sel_MET+"*"+sel_jettag,
+    #        'SingleMu', samDict=sampleDict, readTrees=doReadTrees),
 
-    plotClasses.Sample('SingleEl',ROOT.kBlack,
-            path+'/SingleElectron*/*nominal*.root',
-            sel_singleel+sel_MET+"*"+sel_jettag,
-            'SingleEl', samDict=sampleDict, readTrees=doReadTrees)
+    #plotClasses.Sample('SingleEl',ROOT.kBlack,
+    #        path+'/SingleElectron*/*nominal*.root',
+    #        sel_singleel+sel_MET+"*"+sel_jettag,
+    #        'SingleEl', samDict=sampleDict, readTrees=doReadTrees)
 ]
 
 
-matchableZ =    "((dnnZ_ft_RecoZ_dRGen_Z_genB1_recoB1<=0.4)*" + \
-                "(dnnZ_ft_RecoZ_dRGen_Z_genB2_recoB2<=0.4))+" + \
-                "((dnnZ_ft_RecoZ_dRGen_Z_genB2_recoB1<=0.4)*" + \
-                "(dnnZ_ft_RecoZ_dRGen_Z_genB1_recoB2<=0.4))"
+matchableZ =    "((dnnZ_ft_RecoX_dRGen_Z_genB1_recoB1<=0.4)*" + \
+                "(dnnZ_ft_RecoX_dRGen_Z_genB2_recoB2<=0.4))+" + \
+                "((dnnZ_ft_RecoX_dRGen_Z_genB2_recoB1<=0.4)*" + \
+                "(dnnZ_ft_RecoX_dRGen_Z_genB1_recoB2<=0.4))"
 
-matchableH =    "((dnnH_ft_RecoHiggs_dRGen_Higgs_genB1_recoB1<=0.4)*" + \
-                "(dnnH_ft_RecoHiggs_dRGen_Higgs_genB2_recoB2<=0.4))+" + \
-                "((dnnH_ft_RecoHiggs_dRGen_Higgs_genB2_recoB1<=0.4)*" + \
-                "(dnnH_ft_RecoHiggs_dRGen_Higgs_genB1_recoB2<=0.4))"
+matchableH =    "((dnnH_ft_RecoX_dRGen_Higgs_genB1_recoB1<=0.4)*" + \
+                "(dnnH_ft_RecoX_dRGen_Higgs_genB2_recoB2<=0.4))+" + \
+                "((dnnH_ft_RecoX_dRGen_Higgs_genB2_recoB1<=0.4)*" + \
+                "(dnnH_ft_RecoX_dRGen_Higgs_genB1_recoB2<=0.4))"
 
 nonZbb = "(GenEvt_I_TTZ==0)"
 Zbb    = "(GenEvt_I_TTZ==1)"
-
-
-samples = []
-
-combined_sig_samples = [
+samples=[
     # signal samples     
-    plotClasses.Sample('t#bar{t}+H',ROOT.kRed+1,
-            ttHpath,
-            lumi+sel_MET+evenSel,
-            'ttH',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal", plot = True),
-
-    plotClasses.Sample('t#bar{t}+Z',ROOT.kMagenta+1,
-            ttZPath,
-            lumi+sel_MET+evenSel,
-            'ttZ',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal", plot = True),
-    ]
-
-split_sig_samples = [
-    # ttH classes
-    plotClasses.Sample('t#bar{t}+H (correct H)',ROOT.kRed+1,
+    plotClasses.Sample('t#bar{t}+H(bb)',ROOT.kRed+1,
             ttHbbPath,
-            lumi+sel_MET+evenSel+"*(matchH_ft_RecoHiggs_matchable>0.)*("+matchableH+")",
-            'ttH_correctH',
+            lumi+sel_MET+"*(matchH_ft_RecoX_matchable>0.)"+evenSel,
+            'ttH_Hbb',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
-    plotClasses.Sample('t#bar{t}+H (false H)',ROOT.kViolet+1,
+    plotClasses.Sample('t#bar{t}+H(non-bb)',ROOT.kYellow-7,
             ttHbbPath,
-            lumi+sel_MET+evenSel+"*(matchH_ft_RecoHiggs_matchable>0.)*("+matchableH+"==0)",
-            'ttH_falseH',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
-
-    plotClasses.Sample('t#bar{t}+H (no H)',ROOT.kYellow-7,
-            ttHbbPath,
-            lumi+sel_MET+evenSel+"*(matchH_ft_RecoHiggs_matchable<=0.)",
+            lumi+sel_MET+"*(matchH_ft_RecoX_matchable<=0.)"+evenSel,
             'ttH_noH',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
-    plotClasses.Sample('t#bar{t}+H (H to non bb)',ROOT.kGreen-10,
+    plotClasses.Sample('t#bar{t}+H(non-bb)',ROOT.kYellow-7,
             ttHnonbbPath,
-            lumi+sel_MET+evenSel+"*(matchH_ft_RecoHiggs_matchable<=0.)",
-            'ttH_nonHbb',
+            lumi+sel_MET+evenSel,
+            'ttH_Hnonbb',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
-
-
-    # ttZ classes
-    plotClasses.Sample('t#bar{t}+Z (correct Z)',ROOT.kMagenta+1,
+    plotClasses.Sample('t#bar{t}+Z(bb)',ROOT.kMagenta+1,
             ttZqqPath,
-            lumi+sel_MET+evenSel+"*(matchZ_ft_RecoZ_matchable>0.)*("+matchableZ+")",
-            'ttZ_correctZ',
+            lumi+sel_MET+"*(matchZ_ft_RecoX_matchable>0.)"+evenSel,
+            'ttZ_Zbb',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
-    plotClasses.Sample('t#bar{t}+Z (false Z)',ROOT.kOrange+7,
+    plotClasses.Sample('t#bar{t}+Z(non-bb)',ROOT.kSpring-6,
             ttZqqPath,
-            lumi+sel_MET+evenSel+"*(matchZ_ft_RecoZ_matchable>0.)*("+matchableZ+"==0)",
-            'ttZ_falseZ',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
-
-    plotClasses.Sample('t#bar{t}+Z (no Z)',ROOT.kSpring-6,
-            ttZqqPath,
-            lumi+sel_MET+evenSel+"*(matchZ_ft_RecoZ_matchable<=0.)*"+Zbb,
+            lumi+sel_MET+"*(matchZ_ft_RecoX_matchable<=0.)"+evenSel,
             'ttZ_noZ',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
-    plotClasses.Sample('t#bar{t}+Z (Z to qq)',ROOT.kAzure+8,
-            ttZqqPath,
-            lumi+sel_MET+evenSel+"*(matchZ_ft_RecoZ_matchable<=0.)*"+nonZbb,
-            'ttZ_Zqq',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
-
-    plotClasses.Sample('t#bar{t}+Z (Z to ll)',ROOT.kBlue-4,
+    plotClasses.Sample('t#bar{t}+Z(non-bb)',ROOT.kSpring-6,
             ttZllPath,
-            lumi+sel_MET+evenSel+"*(matchZ_ft_RecoZ_matchable<=0.)*"+nonZbb,
-            'ttZ_Zll',
+            lumi+sel_MET+evenSel,
+            'ttZ_Znonbb',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
-    ]
 
 
-major_backgrounds = [
     # ttbar classes
     plotClasses.Sample('t#bar{t}+lf',ROOT.kAzure-9,
             ttbarPathS,
@@ -284,46 +252,12 @@ major_backgrounds = [
             samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}+b#bar{b}',ROOT.kAzure+3,
-            path+"/TTbb_Powheg_Openloops_new_pmx/*nominal*.root",
+            ttbbPath,
             lumi+evenSel+'*(GenEvt_I_TTPlusCC==0)*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
             'ttbb',
             samDict=sampleDict, readTrees=doReadTrees),
 
     ]
-
-minor_backgrounds = [
-
-    plotClasses.Sample('t',ROOT.kRed-2,
-            stpath,
-            lumi+sel_MET,
-            'singlet',
-            samDict=sampleDict, readTrees=doReadTrees),
-
-    #plotClasses.Sample('V+jets',18,
-    #        path+'/DYJets*/*nominal*.root',
-    #        lumi+sel_MET,
-    #        'vjets',
-    #        samDict=sampleDict, readTrees=doReadTrees),
-
-    #plotClasses.Sample('t#bar{t}+W',ROOT.kBlue-10,
-    #        path+'/TTW*/*nominal*.root',
-    #        lumi+sel_MET,
-    #        'ttW',
-    #        samDict=sampleDict, readTrees=doReadTrees),
-
-    plotClasses.Sample('VV',ROOT.kAzure+2,
-            dibosonPathS,
-            lumi+sel_MET,
-            'diboson',
-            samDict=sampleDict, readTrees=doReadTrees),
-    
-
-    ]
-
-samples += combined_sig_samples
-#samples += split_sig_samples
-samples += major_backgrounds
-samples += minor_backgrounds
 
 processes = []
 for sample in samples:
@@ -333,29 +267,14 @@ datacard_processes  = [p for p in processes if not ("ttZ_" in p or "ttH_" in p)]
 
 
 plottingsamples = [
-    plotClasses.Sample("misc.", 18, "", "",
-        "misc", addsamples = ["vjets", "diboson", "ttW"],
+    plotClasses.Sample("t#bar{t}+H(non-bb)", ROOT.kYellow-7, "", "",
+        "ttH_Hnonbb", addsamples = ["ttH_noH", "ttH_Hnonbb"], typ = "signal",
         samDict = sampleDict, readTrees = doReadTrees),
-        
-    #plotClasses.Sample("t#bar{t}", 18, "", "",
-    #    "ttbar", addsamples = ["ttlf", "ttcc", "ttbb"],
-    #    samDict = sampleDict, readTrees = doReadTrees),
-
-    #plotClasses.Sample("t#bar{t}+Z (Zbb in acc.)", ROOT.kMagenta+1, "", "",
-    #    "ttZ_ZbbiA", addsamples = ["ttZ_correctZ", "ttZ_falseZ"],
-    #    samDict = sampleDict, readTrees = doReadTrees, typ = "signal"),
-
-    #plotClasses.Sample("t#bar{t}+Z (no Zbb)", ROOT.kSpring-6, "", "",
-    #    "ttZ_noZbb", addsamples = ["ttZ_noZ", "ttZ_Zqq", "ttZ_Zll"],
-    #    samDict = sampleDict, readTrees = doReadTrees, typ = "signal"),
-
-    #plotClasses.Sample("t#bar{t}+H (Hbb in acc.)", ROOT.kRed+1, "", "",
-    #    "ttH_HbbiA", addsamples = ["ttH_correctH", "ttH_falseH"],
-    #    samDict = sampleDict, readTrees = doReadTrees, typ = "signal"),
-
-    #plotClasses.Sample("t#bar{t}+H (no Hbb)", ROOT.kYellow-7, "", "",
-    #    "ttH_noHbb", addsamples = ["ttH_noH", "ttH_nonHbb"],
-    #    samDict = sampleDict, readTrees = doReadTrees, typ = "signal"),
+    
+    plotClasses.Sample("t#bar{t}+Z(non-bb)", ROOT.kSpring-6, "", "",
+        "ttZ_Znonbb", addsamples = ["ttZ_noZ", "ttZ_Znonbb"], typ = "signal",
+        samDict = sampleDict, readTrees = doReadTrees),
+    
     ]
 
 # sort subset of processes in plots. descending order

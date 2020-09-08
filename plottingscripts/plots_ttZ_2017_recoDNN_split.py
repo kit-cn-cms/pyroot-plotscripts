@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'recoDNN/inputs_v2_split'
+    name = 'recoDNN/new_ntuples/inputs_v1'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -104,7 +104,7 @@ def main(pyrootdir, opts):
     plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2017/",True]] 
     memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                   "checkpointFiles":  "/nfs/dust/cms/user/vdlinden/legacyTTH/DNNSets/massCorrection_v3/"}
+                   "checkpointFiles":  "/nfs/dust/cms/user/larmbruster/ttZAnalysis/rnnData/new_ntuples/match_H_v1_ge4j_ge3t/checkpoints/"}
     dnnInterface = None
 
     # path to datacardMaker directory
