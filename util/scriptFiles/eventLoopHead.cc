@@ -400,3 +400,67 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
         DeltaPhi_Photon_MET = fabs(TVector2::Phi_mpi_pi(Evt_Phi_MET - LoosePhoton_Phi[0]));
         DeltaPhi_Photon_Hadr_Recoil = fabs(TVector2::Phi_mpi_pi(Hadr_Recoil_Phi - LoosePhoton_Phi[0]));
     }
+
+    double EleVetoWeight = 1.;
+    double EleVetoWeightRecoUp = 1.;
+    double EleVetoWeightRecoDown = 1.;
+
+    double EleVetoWeightIDUp = 1.;
+    double EleVetoWeightIDDown = 1.;
+    for(int iEle =0; iEle<N_LooseElectrons; iEle++){
+        if (DoWeights){    
+            EleVetoWeightRecoUp *= (1-LooseElectron_ReconstructionSFUp[iEle]*LooseElectron_IdentificationSF[iEle]);
+            EleVetoWeightRecoDown *= (1-LooseElectron_ReconstructionSFDown[iEle]*LooseElectron_IdentificationSF[iEle]);
+
+            EleVetoWeightIDUp *= (1-LooseElectron_ReconstructionSF[iEle]*LooseElectron_IdentificationSFUp[iEle]);
+            EleVetoWeightIDDown *= (1-LooseElectron_ReconstructionSF[iEle]*LooseElectron_IdentificationSFDown[iEle]);
+        }
+        else {
+            LooseElectron_ReconstructionSF[iEle] = 1.;
+            LooseElectron_IdentificationSF[iEle] = 1.;
+        }
+        EleVetoWeight *= (1-LooseElectron_ReconstructionSF[iEle]*LooseElectron_IdentificationSF[iEle]);
+    }
+
+    double MuonVetoWeight = 1.;
+    double MuonVetoWeightIsoUp = 1.;
+    double MuonVetoWeightIsoDown = 1.;
+
+    double MuonVetoWeightIDUp = 1.;
+    double MuonVetoWeightIDDown = 1.;
+    for(int iMuon =0; iMuon<N_LooseMuons; iMuon++){
+        if (DoWeights){    
+            MuonVetoWeightIsoUp *= (1-LooseMuon_IsolationSFUp[iMuon]*LooseMuon_IdentificationSF[iMuon]);
+            MuonVetoWeightIsoDown *= (1-LooseMuon_IsolationSFDown[iMuon]*LooseMuon_IdentificationSF[iMuon]);
+
+            MuonVetoWeightIDUp *= (1-LooseMuon_IsolationSF[iMuon]*LooseMuon_IdentificationSFUp[iMuon]);
+            MuonVetoWeightIDDown *= (1-LooseMuon_IsolationSF[iMuon]*LooseMuon_IdentificationSFDown[iMuon]);
+        }
+        else {
+            LooseMuon_IsolationSF[iMuon] = 1.;
+            LooseMuon_IdentificationSF[iMuon] = 1.;
+        }
+        MuonVetoWeight *= (1-LooseMuon_IsolationSF[iMuon]*LooseMuon_IdentificationSF[iMuon]);
+    }
+
+    double PhotonVetoWeight = 1.;
+    double PhotonVetoWeightIDUp = 1.;
+    double PhotonVetoWeightIDDown = 1.;
+
+    for(int iPhoton = 0; iPhoton<N_LoosePhotons; iPhoton++){
+        if (DoWeights){       
+            PhotonVetoWeightIDUp *= (1-LoosePhoton_IdentificationSFUp[iPhoton]);
+            PhotonVetoWeightIDDown *= (1-LoosePhoton_IdentificationSFDown[iPhoton]);
+        }
+        else{
+            LoosePhoton_IdentificationSF[iPhoton] = 1.;
+        }    
+        PhotonVetoWeight *= (1-LoosePhoton_IdentificationSF[iPhoton]);
+    }
+    // std::cout << "--------" << std::endl;
+    // std::cout << "N_LooseElectrons:" << N_LooseElectrons << std::endl;
+    // std::cout << "N_LooseMuons:" << N_LooseMuons << std::endl;
+    // std::cout << "N_LoosePhotons:" << N_LoosePhotons << std::endl;
+    // std::cout << "PhotonVetoWeight:" << PhotonVetoWeight << std::endl;
+    // std::cout << "MuonVetoWeight:" << MuonVetoWeight << std::endl;
+    // std::cout << "EleVetoWeight:" << EleVetoWeight << std::endl;

@@ -115,6 +115,26 @@ def getAddVars():
         "JetLooseUntagged_outside_lead_AK15Jet_Pt",
         "JetLooseUntagged_outside_lead_AK15Jet_Eta",
         "JetLooseUntagged_outside_lead_AK15Jet_Flav",
+
+        "LooseElectron_ReconstructionSF",
+        "LooseElectron_ReconstructionSFUp",
+        "LooseElectron_ReconstructionSFDown",
+
+        "LooseElectron_IdentificationSF",
+        "LooseElectron_IdentificationSFUp",
+        "LooseElectron_IdentificationSFDown",
+
+        "LooseMuon_IsolationSF",
+        "LooseMuon_IsolationSFUp",
+        "LooseMuon_IsolationSFDown",
+
+        "LooseMuon_IdentificationSF",
+        "LooseMuon_IdentificationSFUp",
+        "LooseMuon_IdentificationSFDown",
+
+        "LoosePhoton_IdentificationSF",
+        "LoosePhoton_IdentificationSFUp",
+        "LoosePhoton_IdentificationSFDown",
        
         ]
 
