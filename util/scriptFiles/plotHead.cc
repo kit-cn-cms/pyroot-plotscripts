@@ -178,10 +178,10 @@ void plot()
         effFile=plotscriptBaseDir+"/data/CSV/btag_efficiencies_deepjet_2018.root";
 	    wp_loose = 	0.0494;
         wp_medium = 0.2770;
-        } 
+        }
     else {
-      std::cout << "NO VALID DATAERA CHOSEN!!" << std::endl;
-      std::cout << "dataera: " << dataera << std::endl;
+        std::cout << "NO VALID DATAERA CHOSEN!!" << std::endl;
+        std::cout << "dataera: " << dataera << std::endl;
     }
 
     BtagSFHelper* internalBtagSFHelper_loose= new BtagSFHelper(csvFile,effFile, "loose", wp_loose);
@@ -214,6 +214,28 @@ void plot()
     ewk_nlo_z.AddScaleFactorHistogram("ewk_nlo_z","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/merged_kfactors_zjets.root","kfactor_monojet_ewk");
     SFHelper ewk_nlo_wlnu;
     ewk_nlo_wlnu.AddScaleFactorHistogram("ewk_nlo_wlnu","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/merged_kfactors_wjets.root","kfactor_monojet_ewk");
+
+    // tau scale factors
+    SFHelper tau_sfs;
+    if ( dataera == "2018" ) {
+        tau_sfs.AddScaleFactorHistogram("tau_sfs","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/tau_SFs/tau_sf.root","tau_sf_VLoose_2018_cent");
+        tau_sfs.AddScaleFactorHistogram("tau_sfs_up","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/tau_SFs/tau_sf.root","tau_sf_VLoose_2018_up");
+        tau_sfs.AddScaleFactorHistogram("tau_sfs_down","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/tau_SFs/tau_sf.root","tau_sf_VLoose_2018_down");
+    }
+    else if ( dataera == "2017" ) {
+        tau_sfs.AddScaleFactorHistogram("tau_sfs","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/tau_SFs/tau_sf.root","tau_sf_VLoose_2017_cent");
+        tau_sfs.AddScaleFactorHistogram("tau_sfs_up","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/tau_SFs/tau_sf.root","tau_sf_VLoose_2017_up");
+        tau_sfs.AddScaleFactorHistogram("tau_sfs_down","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/tau_SFs/tau_sf.root","tau_sf_VLoose_2017_down");
+    }
+    else if ( dataera == "2016" ) {
+        tau_sfs.AddScaleFactorHistogram("tau_sfs","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/tau_SFs/tau_sf.root","tau_sf_VLoose_2016_cent");
+        tau_sfs.AddScaleFactorHistogram("tau_sfs_up","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/tau_SFs/tau_sf.root","tau_sf_VLoose_2016_up");
+        tau_sfs.AddScaleFactorHistogram("tau_sfs_down","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/tau_SFs/tau_sf.root","tau_sf_VLoose_2016_down");
+    }
+    else {
+        std::cout << "NO VALID DATAERA CHOSEN!!" << std::endl;
+        std::cout << "dataera: " << dataera << std::endl;
+    }
 
     // Hack for subsampling test
     // if(processname=="SingleEl" || processname=="SingleMu"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}

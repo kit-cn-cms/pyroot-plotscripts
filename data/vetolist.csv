@@ -93,6 +93,7 @@ internalBosonWeight_W_low_pt_Up
 internalBosonWeight_W_low_pt_Down
 internalBosonWeight_G_low_pt_Up
 internalBosonWeight_G_low_pt_Down
+internalBosonWeight_monojet
 internalCSVWeightSF_had
 internalCSVWeightSF_lep
 DeltaR_AK4Jets_LooseElectron_Smaller_3p4
@@ -115,6 +116,9 @@ internalPUWeight_2016
 internalPUWeight_2016_Up
 internalPUWeight_2016_Down
 min_AK15Jet_pt
+internalTauSF
+internalTauSFUp
+internalTauSFDown
 internalCSVweight_loose_outside_0B_final
 internalCSVweight_loose_outside_LFUP_0B_final
 internalCSVweight_loose_outside_LFDOWN_0B_final

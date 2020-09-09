@@ -146,6 +146,16 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     internalPUWeight_2016_Up = pu_helper.GetScaleFactor("2016Up", N_GenPVs, false);
     internalPUWeight_2016_Down = pu_helper.GetScaleFactor("2016Down", N_GenPVs, false);
     
+    // tau sfs
+    float internalTauSF = 1.0;
+    float internalTauSFUp = 1.0;
+    float internalTauSFDown = 1.0;
+    for (uint iTau = 0; iTau < N_Taus; iTau++) {
+        internalTauSF *= tau_sfs.GetScaleFactor("tau_sfs", Tau_Pt[iTau], true);
+        internalTauSFUp *= tau_sfs.GetScaleFactor("tau_sfs_up", Tau_Pt[iTau], true);
+        internalTauSFDown *= tau_sfs.GetScaleFactor("tau_sfs_down", Tau_Pt[iTau], true);
+    }
+    
     //float HT_Jets = 0.;
     //for(size_t m = 0;m<N_Jets;m++) HT_Jets+=Jet_Pt[m];
     

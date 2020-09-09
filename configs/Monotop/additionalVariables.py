@@ -84,6 +84,8 @@ def getAddVars():
         "LoosePhoton_Phi",
         "Hadr_Recoil_Phi",
         "Evt_Phi_MET",
+        "N_Taus",
+        "Tau_Pt",
         "N_JetsMediumTagged_outside_lead_AK15Jet",
         "JetMediumTagged_outside_lead_AK15Jet_Pt",
         "JetMediumTagged_outside_lead_AK15Jet_Eta",
