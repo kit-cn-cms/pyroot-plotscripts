@@ -37,6 +37,7 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     totalTimeGetEntry += timerGetEntry->RealTime();
     timerCalculateSFs->Start();
 
+    // weights for higher-order vjets reweighting based on Lindert paper
     float internalBosonWeight           = 1.0;
     float internalBosonWeight_QCD1Up    = 1.0;
     float internalBosonWeight_QCD1Down  = 1.0;
@@ -64,8 +65,30 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     
     float internalBosonWeight_G_low_pt_Up = 1.0;
     float internalBosonWeight_G_low_pt_Down = 1.0;
-
-    float weight_sdm_corr = 1.0;
+    
+    // monojet higher-order vjets k factors
+    float qcd_nlo_sf = 1.0;
+    float ewk_nlo_sf = 1.0;
+    float internalBosonWeight_monojet = 1.0;
+    if (processname.find("wlnujets") != std::string::npos && W_Pt > 0.) {
+        qcd_nlo_sf = qcd_nlo_wlnu.GetScaleFactor("qcd_nlo_wlnu", W_Pt, true);
+        ewk_nlo_sf = ewk_nlo_wlnu.GetScaleFactor("ewk_nlo_wlnu", W_Pt, true);
+        internalBosonWeight_monojet = qcd_nlo_sf*ewk_nlo_sf;
+    }
+    else if (processname.find("znunujets") != std::string::npos && Z_Pt > 0.) {
+        qcd_nlo_sf = qcd_nlo_znunu.GetScaleFactor("qcd_nlo_znunu", Z_Pt, true);
+        ewk_nlo_sf = ewk_nlo_z.GetScaleFactor("ewk_nlo_z", Z_Pt, true);
+        internalBosonWeight_monojet = qcd_nlo_sf*ewk_nlo_sf;
+    }
+    else if (processname.find("zlljets") != std::string::npos && Z_Pt > 0.) {
+        qcd_nlo_sf = qcd_nlo_zll.GetScaleFactor("qcd_nlo_zll", Z_Pt, true);
+        ewk_nlo_sf = ewk_nlo_z.GetScaleFactor("ewk_nlo_z", Z_Pt, true);
+        internalBosonWeight_monojet = qcd_nlo_sf*ewk_nlo_sf;
+    }
+    
+    //std::cout << "NLO QCD SF from monojet: " << qcd_nlo_sf << std::endl;
+    //std::cout << "NLO EWK SF from monojet: " << ewk_nlo_sf << std::endl;
+    //std::cout << "COMBINED SF from monojet: " << qcd_nlo_sf*ewk_nlo_sf << std::endl;
 
     if ((processname.find("wlnujets") != std::string::npos && W_Pt > 100.) || (processname.find("zlljets") != std::string::npos && Z_Pt > 100.) ||
         (processname.find("znunujets") != std::string::npos && Z_Pt > 100.) || (processname.find("gammajets") != std::string::npos && Gamma_Pt > 100.)) {
@@ -113,15 +136,15 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     float internalPUWeight_2016_Up = 1.0;
     float internalPUWeight_2016_Down = 1.0;
 
-    internalPUWeight_2018 = pu_helper.GetScaleFactor("2018", N_GenPVs);
-    internalPUWeight_2018_Up = pu_helper.GetScaleFactor("2018Up", N_GenPVs);
-    internalPUWeight_2018_Down = pu_helper.GetScaleFactor("2018Down", N_GenPVs);
-    internalPUWeight_2017 = pu_helper.GetScaleFactor("2017", N_GenPVs);
-    internalPUWeight_2017_Up = pu_helper.GetScaleFactor("2017Up", N_GenPVs);
-    internalPUWeight_2017_Down = pu_helper.GetScaleFactor("2017Down", N_GenPVs);
-    internalPUWeight_2016 = pu_helper.GetScaleFactor("2016", N_GenPVs);
-    internalPUWeight_2016_Up = pu_helper.GetScaleFactor("2016Up", N_GenPVs);
-    internalPUWeight_2016_Down = pu_helper.GetScaleFactor("2016Down", N_GenPVs);
+    internalPUWeight_2018 = pu_helper.GetScaleFactor("2018", N_GenPVs, false);
+    internalPUWeight_2018_Up = pu_helper.GetScaleFactor("2018Up", N_GenPVs, false);
+    internalPUWeight_2018_Down = pu_helper.GetScaleFactor("2018Down", N_GenPVs, false);
+    internalPUWeight_2017 = pu_helper.GetScaleFactor("2017", N_GenPVs, false);
+    internalPUWeight_2017_Up = pu_helper.GetScaleFactor("2017Up", N_GenPVs, false);
+    internalPUWeight_2017_Down = pu_helper.GetScaleFactor("2017Down", N_GenPVs, false);
+    internalPUWeight_2016 = pu_helper.GetScaleFactor("2016", N_GenPVs, false);
+    internalPUWeight_2016_Up = pu_helper.GetScaleFactor("2016Up", N_GenPVs, false);
+    internalPUWeight_2016_Down = pu_helper.GetScaleFactor("2016Down", N_GenPVs, false);
     
     //float HT_Jets = 0.;
     //for(size_t m = 0;m<N_Jets;m++) HT_Jets+=Jet_Pt[m];
@@ -385,6 +408,7 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     
     bool min_AK15Jet_pt = check_if_every_element_greater(AK15Jet_Pt.get(), N_AK15Jets, N_AK15Jets, 160.);
     
+    float weight_sdm_corr = 1.0;
     if(N_AK15Jets>0) weight_sdm_corr = get_msd_weight(AK15Jet_Pt[0], AK15Jet_Eta[0]);
 
     // hack against prefireweight with 2018 signal samples

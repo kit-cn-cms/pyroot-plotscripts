@@ -201,6 +201,20 @@ void plot()
     pu_helper.AddScaleFactorHistogram("2016Up","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/PileupHistograms_2016_69mb_pm5.root","pu_weights_up");
     pu_helper.AddScaleFactorHistogram("2016Down","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/PileupHistograms_2016_69mb_pm5.root","pu_weights_down");
 
+    // vjets nlo qcd k factors from monojet
+    SFHelper qcd_nlo_znunu;
+    qcd_nlo_znunu.AddScaleFactorHistogram("qcd_nlo_znunu","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/SF_QCD_NLO_ZJetsToNuNu.root","kfac_znn_filter");
+    SFHelper qcd_nlo_zll;
+    qcd_nlo_zll.AddScaleFactorHistogram("qcd_nlo_zll","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/SF_QCD_NLO_DYJetsToLL.root","kfac_dy_filter");
+    SFHelper qcd_nlo_wlnu;
+    qcd_nlo_wlnu.AddScaleFactorHistogram("qcd_nlo_wlnu","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/SF_QCD_NLO_WJetsToLNu.root","wjet_dress_monojet");
+    
+    // vjets nlo ewk k factors from monojet
+    SFHelper ewk_nlo_z;
+    ewk_nlo_z.AddScaleFactorHistogram("ewk_nlo_z","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/merged_kfactors_zjets.root","kfactor_monojet_ewk");
+    SFHelper ewk_nlo_wlnu;
+    ewk_nlo_wlnu.AddScaleFactorHistogram("ewk_nlo_wlnu","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/merged_kfactors_wjets.root","kfactor_monojet_ewk");
+
     // Hack for subsampling test
     // if(processname=="SingleEl" || processname=="SingleMu"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
     if ((processname.find("SingleEl") != std::string::npos) || (processname.find("SingleMu") != std::string::npos) ||
