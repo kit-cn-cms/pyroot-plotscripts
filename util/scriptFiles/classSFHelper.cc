@@ -3,7 +3,7 @@ class SFHelper {
    public:
     SFHelper();
     ~SFHelper();
-    float GetScaleFactor(std::string identifier, auto x);
+    float GetScaleFactor(std::string identifier, auto x, bool use_edge_bins);
     void  Reset();
     void  AddScaleFactorHistogram(std::string identifier, std::string path_to_file, std::string histogram_name);
 
@@ -50,7 +50,7 @@ void SFHelper::Reset()
     initialized = false;
 }
 
-float SFHelper::GetScaleFactor(std::string identifier, auto x)
+float SFHelper::GetScaleFactor(std::string identifier, auto x, bool use_edge_bins)
 {
     if (!initialized) {
         std::cout << "SFHelper: not initiliazed" << std::endl;
@@ -68,6 +68,11 @@ float SFHelper::GetScaleFactor(std::string identifier, auto x)
 
     // std::cout << "xmin " << scalefactor_map[identifier]->GetXaxis()->GetXmin() << std::endl;
     // std::cout << "xmax " << scalefactor_map[identifier]->GetXaxis()->GetXmax() << std::endl;
+    
+    if (use_edge_bins) {
+        x = std::max(float(x),float(scalefactor_map[identifier]->GetXaxis()->GetXmin()+0.001));
+        x = std::min(float(x),float(scalefactor_map[identifier]->GetXaxis()->GetXmax()-0.001));
+    }
 
     bool x_in_range = (x > scalefactor_map[identifier]->GetXaxis()->GetXmin()) && (x < scalefactor_map[identifier]->GetXaxis()->GetXmax());
 
