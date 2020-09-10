@@ -336,7 +336,7 @@ samples_ttbb_4FS = [
              path_ttbb,
              lumi+evenSel+ttbb_4FS_scale+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
              'ttbb',
-             samDict=sampleDict, readTrees=doReadTrees),
+             samDict=sampleDict, readTrees=doReadTrees, plot = False),
 
     ]
 
@@ -388,13 +388,13 @@ samples_minor_backgrounds = [
     #        samDict=sampleDict, readTrees=doReadTrees),
  
     plotClasses.Sample('Z+jets',ROOT.kGreen-3,
-            path+'/DYJets*/*nominal*.root',
+            path+'/DYJets*HT*/*nominal*.root',
             lumi+sel_MET+kfactor_zjets,
             'zjets',
             samDict=sampleDict, readTrees=doReadTrees),
  
     plotClasses.Sample('W+jets',ROOT.kGreen-7,
-            path+'/WJets*/*nominal*.root',
+            path+'/WJets*HT*/*nominal*.root',
             lumi+sel_MET+kfactor_wjets,
             'wjets',
             samDict=sampleDict, readTrees=doReadTrees), 
@@ -435,7 +435,7 @@ samples_5FS = [
             ttbarPathS,
             lumi+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+ttbb_5FS_scale+sel_MET+sel_StrangeMuWeights,
             'ttbb_5FS',
-            samDict=sampleDict, readTrees=doReadTrees, plot = False), 
+            samDict=sampleDict, readTrees=doReadTrees, plot = True), 
     ]
 
 samples_ttnonbb = [
@@ -463,9 +463,9 @@ samples_ttnonbb = [
 samples = samples_ttH_decay
 samples += samples_tH
 samples += samples_ttnonbb
-samples += samples_ttbb_4FS
+#samples += samples_ttbb_4FS
+samples += samples_5FS
 samples += samples_minor_backgrounds
-# samples += samples_5FS
 
 
 #samples += samples_ttbb_decay_modes_5FS
@@ -478,8 +478,8 @@ processes = []
 for sample in samples:
     processes.append(sample.nick)
 list_of_processes   = processes
-datacard_processes  = [p for p in processes if not p == "ttbb_5FS"]
-pseudo_data_samples = [x for x in samples if not x.nick == "ttbb_5FS" and not x.typ == "signal"]
+datacard_processes  = [p for p in processes]
+pseudo_data_samples = [x for x in samples if not x.typ == "signal"]
 
 plottingsamples = [
     plotClasses.Sample("t#bar{t}+V", ROOT.kCyan, "", "",
