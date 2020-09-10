@@ -424,13 +424,13 @@ samples_minor_backgrounds = [
     #        samDict=sampleDict, readTrees=doReadTrees),
  
     plotClasses.Sample('Z+jets',ROOT.kGreen-3,
-            path+'/DYJets*/*nominal*.root',
+            path+'/DYJets*HT*/*nominal*.root',
             lumi+sel_MET,
             'zjets',
             samDict=sampleDict, readTrees=doReadTrees),
  
     plotClasses.Sample('W+jets',ROOT.kGreen-7,
-            path+'/WJets*/*nominal*.root',
+            path+'/WJets*HT*/*nominal*.root',
             lumi+sel_MET,
             'wjets',
             samDict=sampleDict, readTrees=doReadTrees), 
