@@ -156,10 +156,10 @@ bosonWeightNom = "internalBosonWeight"
 
 # ps shower uncertainties
 
-ps_isr_up = "GenWeight_isr_Con_up"
-ps_isr_down = "GenWeight_isr_Con_down"
-ps_fsr_up = "GenWeight_fsr_Con_up"
-ps_fsr_down = "GenWeight_fsr_G2GG_muR_down"
+ps_isr_up = "GenWeight_isr_Def_up"
+ps_isr_down = "GenWeight_isr_Def_down"
+ps_fsr_up = "GenWeight_fsr_Def_up"
+ps_fsr_down = "GenWeight_fsr_Def_down"
 
 #deepakMistagSF = "((AK15Jet_TopMatched[0]<0.5)*1.0+(AK15Jet_TopMatched[0]>0.5)*1.)"
 #deepakMistagSF_low_up = "((AK15Jet_TopMatched[0]<0.5 && AK15Jet_Pt[0]<400.)*1.5+(AK15Jet_TopMatched[0]>0.5 && AK15Jet_Pt[0]<400.)*1.+(AK15Jet_Pt[0]>=400.)*1.)"

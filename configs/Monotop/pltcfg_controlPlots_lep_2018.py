@@ -155,6 +155,12 @@ topptWeightNom = "1."
 bosonWeightNom = "internalBosonWeight"
 #bosonWeightNom = "internalBosonWeight_monojet"
 
+# ps shower uncertainties
+
+ps_isr_up = "GenWeight_isr_Def_up"
+ps_isr_down = "GenWeight_isr_Def_down"
+ps_fsr_up = "GenWeight_fsr_Def_up"
+ps_fsr_down = "GenWeight_fsr_Def_down"
 
 #deepakMistagSF = "((AK15Jet_TopMatched[0]<0.5)*1.0+(AK15Jet_TopMatched[0]>0.5)*1.)"
 #deepakMistagSF_low_up = "((AK15Jet_TopMatched[0]<0.5 && AK15Jet_Pt[0]<400.)*1.5+(AK15Jet_TopMatched[0]>0.5 && AK15Jet_Pt[0]<400.)*1.+(AK15Jet_Pt[0]>=400.)*1.)"
@@ -226,6 +232,12 @@ weightReplacements = {
     "EVJSAMPLERENORMDOWN" : "1.01",
     "EEJSAMPLERENORMUP" : eej_sample_renorm_factor,
     "EEJSAMPLERENORMDOWN" : "1.01",
+    
+    # ps uncertainties
+    "PSISRUP" : ps_isr_up,
+    "PSISRDOWN" : ps_isr_down,
+    "PSFSRUP" : ps_fsr_up,
+    "PSFSRDOWN" : ps_fsr_down,
     
     # trigger scale factors
     "TRIGGERSFNOM" : triggerSFs,
