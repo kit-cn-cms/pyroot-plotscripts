@@ -327,13 +327,13 @@ samples_tH = [
     plotClasses.Sample('tHW (SM)',ROOT.kBlue+3,
             THWpath,
             lumi+tH_SM_rwgt+sel_MET,
-            'tHW_hbb',
+            'tHW',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
     plotClasses.Sample('tHq (SM)',ROOT.kBlue+6,
             THQpath,
             lumi+tH_SM_rwgt+sel_MET,
-            'tHq_hbb',
+            'tHq',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
     # point 5
@@ -471,7 +471,7 @@ samples += samples_ttnonbb
 samples += samples_tH
 samples += samples_ttbb_4FS
 samples += samples_minor_backgrounds
-# samples += samples_5FS
+samples += samples_5FS
 #samples += samples_ttbar_hf_spilt
 # samples += samples_ttH_decay
 
