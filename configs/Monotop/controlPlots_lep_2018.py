@@ -546,7 +546,7 @@ def control_plots_lep_CR_ttbarEl(data=None):
     selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0)"
     
     # single electron trigger requirement
-    selection += "*(Triggered_HLT_Ele32_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1 || Triggered_HLT_Ele115_CaloIdVT_GsfTrkIdT_vX==1)"
+    selection += "*(Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1 || Triggered_HLT_Ele115_CaloIdVT_GsfTrkIdT_vX==1)"
     
     # no great modeling in the regions with large deltaR between leptons and jets
     #selection += "*(DeltaR_AK4Jet_LooseElectron[0]<3.4)"
@@ -599,7 +599,7 @@ def control_plots_lep_CR_WEl(data=None):
     selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0)"
     
     # single electron trigger requirement
-    selection += "*(Triggered_HLT_Ele32_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1 || Triggered_HLT_Ele115_CaloIdVT_GsfTrkIdT_vX==1)"
+    selection += "*(Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1 || Triggered_HLT_Ele115_CaloIdVT_GsfTrkIdT_vX==1)"
     
     # no great modeling in the regions with large deltaR between leptons and jets
     #selection += "*(DeltaR_AK4Jet_LooseElectron[0]<3.4)"
@@ -651,7 +651,7 @@ def control_plots_lep_SR_El(data=None):
     selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0)"
     
     # single electron trigger requirement
-    selection += "*(Triggered_HLT_Ele32_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1 || Triggered_HLT_Ele115_CaloIdVT_GsfTrkIdT_vX==1)"
+    selection += "*(Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1 || Triggered_HLT_Ele115_CaloIdVT_GsfTrkIdT_vX==1)"
     
     # no great modeling in the regions with large deltaR between leptons and jets
     #selection += "*(DeltaR_AK4Jet_LooseElectron[0]<3.4)"
@@ -702,7 +702,7 @@ def control_plots_lep_CR_inclEl(data=None):
     selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0)"
     
     # single electron trigger requirement
-    selection += "*(Triggered_HLT_Ele32_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1 || Triggered_HLT_Ele115_CaloIdVT_GsfTrkIdT_vX==1)"
+    selection += "*(Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1 || Triggered_HLT_Ele115_CaloIdVT_GsfTrkIdT_vX==1)"
     
     # no great modeling in the regions with large deltaR between leptons and jets
     #selection += "*(DeltaR_AK4Jet_LooseElectron[0]<3.4)"
