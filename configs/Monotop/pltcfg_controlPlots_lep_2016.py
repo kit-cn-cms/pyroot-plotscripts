@@ -168,6 +168,10 @@ bosonWeightNom = "internalBosonWeight"
 #deepakEfficiencySF_high_up = "((AK15Jet_TopMatched[0]>0.5 && AK15Jet_Pt[0]>=400.)*1.5+(AK15Jet_TopMatched[0]<0.5 && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
 #deepakEfficiencySF_high_down = "((AK15Jet_TopMatched[0]>0.5 && AK15Jet_Pt[0]>=400.)*0.5+(AK15Jet_TopMatched[0]<0.5 && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
 
+vvj_sample_renorm_factor = "0.87"
+evj_sample_renorm_factor = "0.82"
+eej_sample_renorm_factor = "0.82"
+
 prefireWeightNom = "Weight_L1_Prefire"
 prefireWeightUp = "Weight_L1_Prefire_Up"
 prefireWeightDown = "Weight_L1_Prefire_Down"
@@ -219,6 +223,13 @@ weightReplacements = {
     
     # higher-order v+jets theory reweighting weight
     "BOSONWEIGHTNOM": bosonWeightNom,
+    
+    "VVJSAMPLERENORMUP" : vvj_sample_renorm_factor,
+    "VVJSAMPLERENORMDOWN" : "1.01",
+    "EVJSAMPLERENORMUP" : evj_sample_renorm_factor,
+    "EVJSAMPLERENORMDOWN" : "1.01",
+    "EEJSAMPLERENORMUP" : eej_sample_renorm_factor,
+    "EEJSAMPLERENORMDOWN" : "1.01",
     
     # trigger scale factors
     "TRIGGERSFNOM" : triggerSFs,
