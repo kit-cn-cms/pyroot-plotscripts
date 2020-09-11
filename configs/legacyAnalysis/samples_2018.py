@@ -336,7 +336,7 @@ samples_ttbb_4FS = [
              path_ttbb,
              lumi+evenSel+ttbb_4FS_scale+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
              'ttbb',
-             samDict=sampleDict, readTrees=doReadTrees, plot = False),
+             samDict=sampleDict, readTrees=doReadTrees, plot = True),
 
     ]
 
@@ -463,8 +463,8 @@ samples_ttnonbb = [
 samples = samples_ttH_decay
 samples += samples_tH
 samples += samples_ttnonbb
-#samples += samples_ttbb_4FS
-samples += samples_5FS
+samples += samples_ttbb_4FS
+# samples += samples_5FS
 samples += samples_minor_backgrounds
 
 
