@@ -117,6 +117,11 @@ photonSFs_up = "((N_LoosePhotons==1 && N_TightPhotons==1)*Photon_IdentificationS
 photonSFs_down = "((N_LoosePhotons==1 && N_TightPhotons==1)*Photon_IdentificationSFDown[0]+(N_LoosePhotons==0)*1.)"
 
 
+#tauVetoSFs = "internalTauVetoWeight"
+#tauVetoSFs_up = "internalTauVetoWeightUp"
+#tauVetoSFs_down = "internalTauVetoWeightDown"
+
+
 # trigger scale factors
 
 triggerSFs = "((N_LooseElectrons>0 && N_LooseMuons==0 && N_LoosePhotons==0)*TriggerSF_SingleElectron+(N_LooseMuons>=0 && N_LooseElectrons==0 && N_LoosePhotons==0)*TriggerSF_MET+(N_LoosePhotons>0 && N_LooseElectrons==0 && N_LooseMuons==0)*TriggerSF_SinglePhoton)"
@@ -215,6 +220,10 @@ weightReplacements = {
     "PHSFUP": photonSFs_up,
     "PHSFDOWN": photonSFs_down,
     
+    #"TAUVETOSFNOM": tauVetoSFs,
+    #"TAUVETOSFUP": tauVetoSFs_up,
+    #"TAUVETOSFDOWN": tauVetoSFs_down,
+    
     # higher-order v+jets theory reweighting weight
     "BOSONWEIGHTNOM": bosonWeightNom,
     
@@ -282,6 +291,8 @@ nominalweight = (
     + electronIDSFs
     + "*"
     + photonSFs
+    #+ "*"
+    #+ tauVetoSFs
     + "*"
     + bosonWeightNom
     + "*"
@@ -308,7 +319,7 @@ samplesDataControlPlots += [
         "SingleEl",
         ROOT.kBlack,
         path_mwassmer + "/SingleElectron*/*nominal*.root",
-        "(N_LooseElectrons>0) && (N_LooseMuons==0) && (N_LoosePhotons==0)",
+        "(N_LooseElectrons>0) && (N_LooseMuons==0) && (N_LoosePhotons==0) && (N_Taus==0)",
         "SingleEl",
         samDict=sampleDict,
         readTrees=doReadTrees,
@@ -319,7 +330,7 @@ samplesDataControlPlots += [
         "MET",
         ROOT.kBlack,
         path_mwassmer + "/MET*/*nominal*.root",
-        "(N_LooseElectrons==0) && (N_LooseMuons>=0) && (N_LoosePhotons==0)",
+        "(N_LooseElectrons==0) && (N_LooseMuons>=0) && (N_LoosePhotons==0) && (N_Taus==0)",
         "MET",
         samDict=sampleDict,
         readTrees=doReadTrees,
@@ -330,7 +341,7 @@ samplesDataControlPlots += [
         "SinglePh",
         ROOT.kBlack,
         path_mwassmer + "/SinglePhoton*/*nominal*.root",
-        "(N_LoosePhotons>0) && (N_LooseMuons==0) && (N_LooseElectrons==0)",
+        "(N_LoosePhotons>0) && (N_LooseMuons==0) && (N_LooseElectrons==0) && (N_Taus==0)",
         "SinglePh",
         samDict=sampleDict,
         readTrees=doReadTrees,

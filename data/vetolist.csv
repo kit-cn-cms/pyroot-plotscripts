@@ -119,6 +119,9 @@ min_AK15Jet_pt
 internalTauSF
 internalTauSFUp
 internalTauSFDown
+internalTauVetoWeight
+internalTauVetoWeightUp
+internalTauVetoWeightDown
 internalCSVweight_loose_outside_0B_final
 internalCSVweight_loose_outside_LFUP_0B_final
 internalCSVweight_loose_outside_LFDOWN_0B_final

@@ -155,6 +155,9 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
         internalTauSFUp *= tau_sfs.GetScaleFactor("tau_sfs_up", Tau_Pt[iTau], true);
         internalTauSFDown *= tau_sfs.GetScaleFactor("tau_sfs_down", Tau_Pt[iTau], true);
     }
+    //std::cout << "Tau Weight: " << internalTauSF << std::endl;
+    //std::cout << "Tau Weight Up: " << internalTauSFUp << std::endl;
+    //std::cout << "Tau Weight Down: " << internalTauSFDown << std::endl;
     
     //float HT_Jets = 0.;
     //for(size_t m = 0;m<N_Jets;m++) HT_Jets+=Jet_Pt[m];
@@ -434,3 +437,16 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
         DeltaPhi_Photon_MET = fabs(TVector2::Phi_mpi_pi(Evt_Phi_MET - LoosePhoton_Phi[0]));
         DeltaPhi_Photon_Hadr_Recoil = fabs(TVector2::Phi_mpi_pi(Hadr_Recoil_Phi - LoosePhoton_Phi[0]));
     }
+    
+    // tau veto weights
+    float internalTauVetoWeight = 1.;
+    float internalTauVetoWeightUp = 1.;
+    float internalTauVetoWeightDown = 1.;
+    if (N_Taus > 0) {
+        internalTauVetoWeight = 1.-internalTauSF;
+        internalTauVetoWeightUp = 1.-internalTauSFUp;
+        internalTauVetoWeightDown = 1.-internalTauSFDown;
+    }
+    //std::cout << "Tau Veto Weight: " << internalTauVetoWeight << std::endl;
+    //std::cout << "Tau Veto Weight Up: " << internalTauVetoWeightUp << std::endl;
+    //std::cout << "Tau Veto Weight Down: " << internalTauVetoWeightDown << std::endl;
