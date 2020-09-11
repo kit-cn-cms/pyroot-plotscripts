@@ -90,7 +90,7 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     //std::cout << "NLO EWK SF from monojet: " << ewk_nlo_sf << std::endl;
     //std::cout << "COMBINED SF from monojet: " << qcd_nlo_sf*ewk_nlo_sf << std::endl;
 
-    if ((processname.find("wlnujets") != std::string::npos && W_Pt > 100.) || (processname.find("zlljets") != std::string::npos && Z_Pt > 100.) ||
+    if ((processname.find("wlnujets") != std::string::npos && W_Pt > 30.) || (processname.find("zlljets") != std::string::npos && Z_Pt > 100.) ||
         (processname.find("znunujets") != std::string::npos && Z_Pt > 100.) || (processname.find("gammajets") != std::string::npos && Gamma_Pt > 100.)) {
         internalBosonWeight           = BosonWeight_nominal;
         internalBosonWeight_QCD1Up    = BosonWeight_QCD1Up/internalBosonWeight;
