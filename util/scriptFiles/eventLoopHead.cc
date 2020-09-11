@@ -414,12 +414,11 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
 
             EleVetoWeightIDUp *= (1-LooseElectron_ReconstructionSF[iEle]*LooseElectron_IdentificationSFUp[iEle]);
             EleVetoWeightIDDown *= (1-LooseElectron_ReconstructionSF[iEle]*LooseElectron_IdentificationSFDown[iEle]);
+            EleVetoWeight *= (1-LooseElectron_ReconstructionSF[iEle]*LooseElectron_IdentificationSF[iEle]);
         }
         else {
-            LooseElectron_ReconstructionSF[iEle] = 1.;
-            LooseElectron_IdentificationSF[iEle] = 1.;
+            EleVetoWeight *= 0.;
         }
-        EleVetoWeight *= (1-LooseElectron_ReconstructionSF[iEle]*LooseElectron_IdentificationSF[iEle]);
     }
 
     double MuonVetoWeight = 1.;
@@ -435,12 +434,11 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
 
             MuonVetoWeightIDUp *= (1-LooseMuon_IsolationSF[iMuon]*LooseMuon_IdentificationSFUp[iMuon]);
             MuonVetoWeightIDDown *= (1-LooseMuon_IsolationSF[iMuon]*LooseMuon_IdentificationSFDown[iMuon]);
+            MuonVetoWeight *= (1-LooseMuon_IsolationSF[iMuon]*LooseMuon_IdentificationSF[iMuon]);
         }
         else {
-            LooseMuon_IsolationSF[iMuon] = 1.;
-            LooseMuon_IdentificationSF[iMuon] = 1.;
+            MuonVetoWeight *= 0.;
         }
-        MuonVetoWeight *= (1-LooseMuon_IsolationSF[iMuon]*LooseMuon_IdentificationSF[iMuon]);
     }
 
     double PhotonVetoWeight = 1.;
@@ -451,11 +449,12 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
         if (DoWeights){       
             PhotonVetoWeightIDUp *= (1-LoosePhoton_IdentificationSFUp[iPhoton]);
             PhotonVetoWeightIDDown *= (1-LoosePhoton_IdentificationSFDown[iPhoton]);
+            PhotonVetoWeight *= (1-LoosePhoton_IdentificationSF[iPhoton]);
         }
         else{
             LoosePhoton_IdentificationSF[iPhoton] = 1.;
+            PhotonVetoWeight *= 0;
         }    
-        PhotonVetoWeight *= (1-LoosePhoton_IdentificationSF[iPhoton]);
     }
     // std::cout << "--------" << std::endl;
     // std::cout << "N_LooseElectrons:" << N_LooseElectrons << std::endl;

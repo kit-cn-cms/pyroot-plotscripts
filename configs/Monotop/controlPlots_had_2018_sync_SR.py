@@ -13,27 +13,30 @@ from array import array
 from copy import deepcopy
 
 fast = True
-
+def GetPlotsVetoWeight(extension, selection, label):
+    plots = [
+            plotClasses.Plot(
+                ROOT.TH1D("EleVetoWeight" + extension, "EleVetoWeight", 100, -0.5, 1.5),
+                "EleVetoWeight",
+                selection,
+                label,
+            ),
+            plotClasses.Plot(
+                ROOT.TH1D("MuonVetoWeight" + extension, "MuonVetoWeight", 100, -0.5, 1.5),
+                "MuonVetoWeight",
+                selection,
+                label,
+            ),
+            plotClasses.Plot(
+                ROOT.TH1D("PhotonVetoWeight" + extension, "PhotonVetoWeight", 100, -0.5, 1.5),
+                "PhotonVetoWeight",
+                selection,
+                label,
+            )
+    ]
+    return plots
 def GetPlots(extension, selection, label):
     plots = [
-        plotClasses.Plot(
-            ROOT.TH1D("EleVetoWeight" + extension, "EleVetoWeight", 50, -0.5, 1.5),
-            "EleVetoWeight",
-            selection,
-            label,
-        ),
-        plotClasses.Plot(
-            ROOT.TH1D("MuonVetoWeight" + extension, "MuonVetoWeight", 50, -0.5, 1.5),
-            "MuonVetoWeight",
-            selection,
-            label,
-        ),
-        plotClasses.Plot(
-            ROOT.TH1D("PhotonVetoWeight" + extension, "PhotonVetoWeight", 50, -0.5, 1.5),
-            "PhotonVetoWeight",
-            selection,
-            label,
-        ),
         plotClasses.Plot(
             ROOT.TH1D("yield" + extension, "yield", 1, 0.0, 2.0), "1.", selection, label
         ),
@@ -1037,24 +1040,6 @@ def GetPlots(extension, selection, label):
     if fast:
         plots = [
             plotClasses.Plot(
-                ROOT.TH1D("EleVetoWeight" + extension, "EleVetoWeight", 50, -0.5, 1.5),
-                "EleVetoWeight",
-                selection,
-                label,
-            ),
-            plotClasses.Plot(
-                ROOT.TH1D("MuonVetoWeight" + extension, "MuonVetoWeight", 50, -0.5, 1.5),
-                "MuonVetoWeight",
-                selection,
-                label,
-            ),
-            plotClasses.Plot(
-                ROOT.TH1D("PhotonVetoWeight" + extension, "PhotonVetoWeight", 50, -0.5, 1.5),
-                "PhotonVetoWeight",
-                selection,
-                label,
-            ),
-            plotClasses.Plot(
                 ROOT.TH1D(
                     "Hadr_Recoil_Pt" + extension, "#slash{U}_{T} [GeV]", len(discr_binning)-1, array('d',discr_binning)
                 ),
@@ -1262,6 +1247,32 @@ def control_plots_had_SR(data=None):
     selection += "*(Evt_Pt_MET>470. || Evt_Phi_MET>-0.62 || Evt_Phi_MET<-1.62)"
     
     plots = GetPlots(extension, selection, label)
+    
+    if data:
+        add_data_plots(plots=plots, data=data)
+
+    return plots
+
+def control_plots_had_SR_allEvents(data=None):
+    label = "#scale[0.8]{signal region (hadronic)}"
+    extension = "_had_SR_allEvents"
+    
+    selection = generalselection
+    
+    # lepton veto
+    # selection += "*(MuonVetoWeight*EleVetoWeight*PhotonVetoWeight)"
+    # selection += "*(N_LooseMuons==0 && N_LooseElectrons==0 && N_LoosePhotons==0)"
+    
+    # recoil/met trigger requirement
+    selection += "*(Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60_vX==1 || Triggered_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_vX==1)"
+    
+    # btagging requirement to suppress ttbar
+    selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0)"
+    
+    # specific HEM veto for hadronic region
+    selection += "*(Evt_Pt_MET>470. || Evt_Phi_MET>-0.62 || Evt_Phi_MET<-1.62)"
+    
+    plots = GetPlotsVetoWeight(extension, selection, label)
     
     if data:
         add_data_plots(plots=plots, data=data)
@@ -1555,6 +1566,7 @@ def getDiscriminatorPlots(data=None, discrname=""):
     discriminatorPlots = []
     discriminatorPlots += control_plots_had_SR(data)
     discriminatorPlots += control_plots_had_SR_directCut(data)
+    discriminatorPlots += control_plots_had_SR_allEvents(data)
     
     # discriminatorPlots += control_plots_had_CR_ZMuMu(data)
     # discriminatorPlots += control_plots_had_CR_ZElEl(data)
