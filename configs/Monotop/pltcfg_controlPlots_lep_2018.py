@@ -75,9 +75,9 @@ csvWeightHF_Down += "+((internalCSVweight_medium_HFDOWN_ge2B_final)*(N_BTagsM>=2
 csvWeightHF_Down += ")"
 
 # pile up weights
-pileupWeightNom = "internalPUWeight_2018"
-pileupWeightUp = "internalPUWeight_2018_Up"
-pileupWeightDown = "internalPUWeight_2018_Down"
+pileupWeightNom = "internalPUWeight"
+pileupWeightUp = "internalPUWeight_Up"
+pileupWeightDown = "internalPUWeight_Down"
 
 
 # lepton and photon scalefactors

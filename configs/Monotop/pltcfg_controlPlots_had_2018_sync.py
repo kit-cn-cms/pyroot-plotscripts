@@ -74,9 +74,9 @@ csvWeightHF_Down += "+((1.)*!(N_LooseMuons<2 && N_LooseElectrons<2 && N_LoosePho
 csvWeightHF_Down += ")"
 
 # pile up weights
-pileupWeightNom = "internalPUWeight_2018"
-pileupWeightUp = "internalPUWeight_2018_Up"
-pileupWeightDown = "internalPUWeight_2018_Down"
+pileupWeightNom = "internalPUWeight"
+pileupWeightUp = "internalPUWeight_Up"
+pileupWeightDown = "internalPUWeight_Down"
 
 
 # lepton and photon scalefactors

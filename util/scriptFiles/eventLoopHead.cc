@@ -126,25 +126,13 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     }
     
     // DarkHiggs PU Weights
-    float internalPUWeight_2018 = 1.0;
-    float internalPUWeight_2018_Up = 1.0;
-    float internalPUWeight_2018_Down = 1.0;
-    float internalPUWeight_2017 = 1.0;
-    float internalPUWeight_2017_Up = 1.0;
-    float internalPUWeight_2017_Down = 1.0;
-    float internalPUWeight_2016 = 1.0;
-    float internalPUWeight_2016_Up = 1.0;
-    float internalPUWeight_2016_Down = 1.0;
+    float internalPUWeight = 1.0;
+    float internalPUWeight_Up = 1.0;
+    float internalPUWeight_Down = 1.0;
 
-    internalPUWeight_2018 = pu_helper.GetScaleFactor("2018", N_GenPVs, false);
-    internalPUWeight_2018_Up = pu_helper.GetScaleFactor("2018Up", N_GenPVs, false);
-    internalPUWeight_2018_Down = pu_helper.GetScaleFactor("2018Down", N_GenPVs, false);
-    internalPUWeight_2017 = pu_helper.GetScaleFactor("2017", N_GenPVs, false);
-    internalPUWeight_2017_Up = pu_helper.GetScaleFactor("2017Up", N_GenPVs, false);
-    internalPUWeight_2017_Down = pu_helper.GetScaleFactor("2017Down", N_GenPVs, false);
-    internalPUWeight_2016 = pu_helper.GetScaleFactor("2016", N_GenPVs, false);
-    internalPUWeight_2016_Up = pu_helper.GetScaleFactor("2016Up", N_GenPVs, false);
-    internalPUWeight_2016_Down = pu_helper.GetScaleFactor("2016Down", N_GenPVs, false);
+    internalPUWeight = pu_helper.GetScaleFactor("Nom", N_GenPVs, false);
+    internalPUWeight_Up = pu_helper.GetScaleFactor("Up", N_GenPVs, false);
+    internalPUWeight_Down = pu_helper.GetScaleFactor("Down", N_GenPVs, false);
     
     // tau sfs
     float internalTauSF = 1.0;

@@ -191,15 +191,25 @@ void plot()
 
     // Dark Higgs Pileup weights
     SFHelper pu_helper;
-    pu_helper.AddScaleFactorHistogram("2018","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/PileupHistograms_2018_69mb_pm5.root","pu_weights_central");
-    pu_helper.AddScaleFactorHistogram("2018Up","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/PileupHistograms_2018_69mb_pm5.root","pu_weights_up");
-    pu_helper.AddScaleFactorHistogram("2018Down","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/PileupHistograms_2018_69mb_pm5.root","pu_weights_down");
-    pu_helper.AddScaleFactorHistogram("2017","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/PileupHistograms_2017_69mb_pm5.root","pu_weights_central");
-    pu_helper.AddScaleFactorHistogram("2017Up","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/PileupHistograms_2017_69mb_pm5.root","pu_weights_up");
-    pu_helper.AddScaleFactorHistogram("2017Down","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/PileupHistograms_2017_69mb_pm5.root","pu_weights_down");
-    pu_helper.AddScaleFactorHistogram("2016","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/PileupHistograms_2016_69mb_pm5.root","pu_weights_central");
-    pu_helper.AddScaleFactorHistogram("2016Up","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/PileupHistograms_2016_69mb_pm5.root","pu_weights_up");
-    pu_helper.AddScaleFactorHistogram("2016Down","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/PileupHistograms_2016_69mb_pm5.root","pu_weights_down");
+    if( dataera == "2018" ) {
+        pu_helper.AddScaleFactorHistogram("Nom","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/PileupHistograms_2018_69mb_pm5.root","pu_weights_central");
+        pu_helper.AddScaleFactorHistogram("Up","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/PileupHistograms_2018_69mb_pm5.root","pu_weights_up");
+        pu_helper.AddScaleFactorHistogram("Down","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/PileupHistograms_2018_69mb_pm5.root","pu_weights_down");
+    }
+    else if( dataera == "2017" ) {
+        pu_helper.AddScaleFactorHistogram("Nom","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/PileupHistograms_2017_69mb_pm5.root","pu_weights_central");
+        pu_helper.AddScaleFactorHistogram("Up","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/PileupHistograms_2017_69mb_pm5.root","pu_weights_up");
+        pu_helper.AddScaleFactorHistogram("Down","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/PileupHistograms_2017_69mb_pm5.root","pu_weights_down");
+    }
+    else if( dataera == "2016" ) {
+        pu_helper.AddScaleFactorHistogram("Nom","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/PileupHistograms_2016_69mb_pm5.root","pu_weights_central");
+        pu_helper.AddScaleFactorHistogram("Up","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/PileupHistograms_2016_69mb_pm5.root","pu_weights_up");
+        pu_helper.AddScaleFactorHistogram("Down","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/puweights/PileupHistograms_2016_69mb_pm5.root","pu_weights_down");
+    }
+    else {
+        std::cout << "NO VALID DATAERA CHOSEN!!" << std::endl;
+        std::cout << "dataera: " << dataera << std::endl;
+    }
 
     // vjets nlo qcd k factors from monojet
     SFHelper qcd_nlo_znunu;

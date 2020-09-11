@@ -75,9 +75,9 @@ csvWeightHF_Down += ")"
 
 
 # pile up weights
-pileupWeightNom = "internalPUWeight_2016"
-pileupWeightUp = "internalPUWeight_2016_Up"
-pileupWeightDown = "internalPUWeight_2016_Down"
+pileupWeightNom = "internalPUWeight"
+pileupWeightUp = "internalPUWeight_Up"
+pileupWeightDown = "internalPUWeight_Down"
 
 
 # lepton and photon scalefactors
