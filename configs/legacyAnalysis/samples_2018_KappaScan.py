@@ -86,6 +86,7 @@ sel_StrangeMuWeights="*(1.)"
 # higgs decay selections
 # hbb is gammagamma with id 5
 hbbSel='*((abs(GenHiggs_DecProd1_PDGID)==5 && abs(GenHiggs_DecProd2_PDGID)==5))'
+nonhbbSel='*!((abs(GenHiggs_DecProd1_PDGID)==5 && abs(GenHiggs_DecProd2_PDGID)==5))'
 # hcc is uu dd ss cc with ids 1 2 3 4
 hccSel='*((abs(GenHiggs_DecProd1_PDGID)==1 && abs(GenHiggs_DecProd2_PDGID)==1) || (abs(GenHiggs_DecProd1_PDGID)==2 && abs(GenHiggs_DecProd2_PDGID)==2) || (abs(GenHiggs_DecProd1_PDGID)==3 && abs(GenHiggs_DecProd2_PDGID)==3) || (abs(GenHiggs_DecProd1_PDGID)==4 && abs(GenHiggs_DecProd2_PDGID)==4) )'
 # htt is mumu tautau with ids 13 15
@@ -202,16 +203,28 @@ samplesDataControlPlots=[
 #samplesDataControlPlots+=samples_splitData
 
 samples = [
-    plotClasses.Sample('tHW (SM)',ROOT.kBlue+3,
+    plotClasses.Sample('tHW(bb) (SM)',ROOT.kBlue+3,
             THWpath,
-            lumi+sel_MET,
+            lumi+sel_MET+hbbSel,
             'tHW_hbb',
             samDict=sampleDict, readTrees=doReadTrees, typ = "bkg"),
 
-    plotClasses.Sample('tHq (SM)',ROOT.kBlue+6,
+    plotClasses.Sample('tHW(nonbb) (SM)',ROOT.kBlue+3,
+            THWpath,
+            lumi+sel_MET+nonhbbSel,
+            'tHW_hnonbb',
+            samDict=sampleDict, readTrees=doReadTrees, typ = "bkg"),
+
+    plotClasses.Sample('tHq(bb) (SM)',ROOT.kBlue+6,
             THQpath,
-            lumi+sel_MET,
+            lumi+sel_MET+hbbSel,
             'tHq_hbb',
+            samDict=sampleDict, readTrees=doReadTrees, typ = "bkg"),
+
+    plotClasses.Sample('tHq(nonbb) (SM)',ROOT.kBlue+6,
+            THQpath,
+            lumi+sel_MET+nonhbbSel,
+            'tHq_hnonbb',
             samDict=sampleDict, readTrees=doReadTrees, typ = "bkg"),
 ]
 

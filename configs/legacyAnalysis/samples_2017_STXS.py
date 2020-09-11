@@ -303,31 +303,31 @@ samples_ttH_HTXS = [
     plotClasses.Sample('t#bar{t}H_0',830,
             ttHpath,
             lumi+evenSel+sel_MET+STXS_stage0+STXS_stage1_0,
-            'ttH_0',
+            'TTH_PTH_0_60',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
     plotClasses.Sample('t#bar{t}H_1',418,
             ttHpath,
             lumi+evenSel+sel_MET+STXS_stage0+STXS_stage1_1,
-            'ttH_1',
+            'TTH_PTH_60_120',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
     plotClasses.Sample('t#bar{t}H_2',433,
             ttHpath,
             lumi+evenSel+sel_MET+STXS_stage0+STXS_stage1_2,
-            'ttH_2',
+            'TTH_PTH_120_200',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
     plotClasses.Sample('t#bar{t}H_3',867,
             ttHpath,
             lumi+evenSel+sel_MET+STXS_stage0+STXS_stage1_3,
-            'ttH_3',
+            'TTH_PTH_200_300',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
     plotClasses.Sample('t#bar{t}H_4',602,
             ttHpath,
             lumi+evenSel+sel_MET+STXS_stage0+STXS_stage1_4,
-            'ttH_4',
+            'TTH_PTH_GT300',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 ]
 
@@ -349,13 +349,13 @@ samples_tH = [
     plotClasses.Sample('tHW (SM)',ROOT.kBlue+3,
             THWpath,
             lumi+tH_SM_rwgt+sel_MET,
-            'tHW_hbb',
+            'tHW',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
     plotClasses.Sample('tHq (SM)',ROOT.kBlue+6,
             THQpath,
             lumi+tH_SM_rwgt+sel_MET,
-            'tHq_hbb',
+            'tHq',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
     # point 5

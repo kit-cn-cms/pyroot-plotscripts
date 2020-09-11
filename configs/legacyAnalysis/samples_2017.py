@@ -315,13 +315,13 @@ samples_tH = [
     plotClasses.Sample('tHW (SM)',ROOT.kBlue+3,
             THWpath,
             lumi+tH_SM_rwgt+sel_MET,
-            'tHW_hbb',
+            'tHW',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
     plotClasses.Sample('tHq (SM)',ROOT.kBlue+6,
             THQpath,
             lumi+tH_SM_rwgt+sel_MET,
-            'tHq_hbb',
+            'tHq',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
     # point 5
