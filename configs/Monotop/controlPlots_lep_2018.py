@@ -518,7 +518,7 @@ discr_binning = [40.0,60.0,80.0,100.0,125.0,150.0, 165.0, 180.0, 200.0, 220.0, 2
 discr_binning.append(1000.)
 
 # met + no photons + "highly" energetic jet 
-generalselection = "(Evt_Pt_MET>100.)*(N_LoosePhotons==0)*(Jet_Pt[0]>50.)"
+generalselection = "(Evt_Pt_MET>100.)*(N_LoosePhotons==0)*(N_Jets>0)*(Jet_Pt[0]>50.)"
 
 # HEM jet veto
 generalselection += "*(N_HEM_Jets==0)"#"*(N_HEM_METS==0)"
@@ -531,7 +531,7 @@ generalselection += "*(M_W_transverse[0]>=40.)"
 generalselection += "*(DeltaPhi_AK4Jet_MET[0]>1.5)"
 
 # cut away missing w+jets low HT phase space
-generalselection += "*(HT_AK4Jets>120.)*(Hadr_Recoil_Pt>120.)"
+#generalselection += "*(HT_AK4Jets>120.)*(Hadr_Recoil_Pt>120.)"
 
 def control_plots_lep_CR_ttbarEl(data=None):
     label = "#scale[0.8]{t#bar{t} control region (e)}"
