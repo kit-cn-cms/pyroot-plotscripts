@@ -85,6 +85,11 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
         ewk_nlo_sf = ewk_nlo_z.GetScaleFactor("ewk_nlo_z", Z_Pt, true);
         internalBosonWeight_monojet = qcd_nlo_sf*ewk_nlo_sf;
     }
+    else if (processname.find("gammajets") != std::string::npos && Gamma_Pt > 0.) {
+        qcd_nlo_sf = qcd_nlo_gamma.GetScaleFactor("qcd_nlo_gamma", Gamma_Pt, true);
+        ewk_nlo_sf = ewk_nlo_gamma.GetScaleFactor("ewk_nlo_gamma", Gamma_Pt, true);
+        internalBosonWeight_monojet = qcd_nlo_sf*ewk_nlo_sf;
+    }
     
     //std::cout << "NLO QCD SF from monojet: " << qcd_nlo_sf << std::endl;
     //std::cout << "NLO EWK SF from monojet: " << ewk_nlo_sf << std::endl;

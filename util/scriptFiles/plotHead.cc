@@ -218,12 +218,16 @@ void plot()
     qcd_nlo_zll.AddScaleFactorHistogram("qcd_nlo_zll","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/SF_QCD_NLO_DYJetsToLL.root","kfac_dy_filter");
     SFHelper qcd_nlo_wlnu;
     qcd_nlo_wlnu.AddScaleFactorHistogram("qcd_nlo_wlnu","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/SF_QCD_NLO_WJetsToLNu.root","wjet_dress_monojet");
+    SFHelper qcd_nlo_gamma;
+    qcd_nlo_gamma.AddScaleFactorHistogram("qcd_nlo_gamma","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/SF_QCD_NLO_GJets.root","gjets_stat1_monojet");
     
     // vjets nlo ewk k factors from monojet
     SFHelper ewk_nlo_z;
     ewk_nlo_z.AddScaleFactorHistogram("ewk_nlo_z","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/merged_kfactors_zjets.root","kfactor_monojet_ewk");
     SFHelper ewk_nlo_wlnu;
     ewk_nlo_wlnu.AddScaleFactorHistogram("ewk_nlo_wlnu","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/merged_kfactors_wjets.root","kfactor_monojet_ewk");
+    SFHelper ewk_nlo_gamma;
+    ewk_nlo_gamma.AddScaleFactorHistogram("ewk_nlo_gamma","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/merged_kfactors_gjets.root","kfactor_monojet_ewk");
 
     // tau scale factors
     SFHelper tau_sfs;
