@@ -173,7 +173,11 @@ tH_SM_rwgt = "*(Weight_rwgt_12/Weight_GEN_nom)"
 tH_5_rwgt = "*(Weight_rwgt_5/Weight_GEN_nom)"
 
 # nominal weight
-nominalweight="NomWeight:=("+defaultWeight+"*"+"("+electronSFs+"+"+muonSFs+")"+"*"+"("+electronTrigger+"+"+muonTrigger+")"+")*(DoWeights==1)+(DoWeights==0)*1.0"
+nominalweight="NomWeight:=("+defaultWeight+"*"+"("+electronSFs+"+"+muonSFs+")"+"*"+"("+electronTrigger+"+"+muonTrigger+")"+")"
+# logic for ratefactors
+nominalweight+= "*(hdampSelection + ueSelection + (!isHDAMPttbb)*(!isHDAMPttcc)*(!isHDAMPttlf)*(!isUEVariation))"
+
+nominalweight+= "*(DoWeights==1)+(DoWeights==0)*1.0"
 
 # even selection for sample splitting
 evenSel="*(Evt_Odd==0)*2.0"
