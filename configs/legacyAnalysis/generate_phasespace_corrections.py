@@ -1,38 +1,34 @@
-def construct_single_expression(process, subdict, weight, nom_weight,\
+from sys import argv
+def construct_single_expression(process, subdict, weight,\
     current_process, expression_template):
-    sel = subdict["selection"].format(weight = weight, 
-                                        nom_weight = nom_weight)
+    sel = subdict["selection"].format(weight = weight)
     phasespace_frac = subdict["phasespace_frac"].format(weight = weight, 
-                                                        nom_weight = nom_weight,
                                                         current_process = current_process)
-    weight_norm = expression_template.format(weight = weight, 
-                                            nom_weight = nom_weight)
+    weight_norm = expression_template.format(weight = weight)
     if process == current_process:
         s = "*".join([sel, weight_norm])
     else:
         s = "*".join([sel, phasespace_frac])
     return s
 
-def construct_multi_expression(process, subdict, weight, nom_weight,\
+def construct_multi_expression(process, subdict, weight,\
     current_process, expression_template):
     sel = subdict["selection"]
     phasespace_frac = subdict["phasespace_frac"]
     selection_parts = ["{}*{}".format(x, y) for x, y in zip(sel, phasespace_frac)]
 
-    weight_norm = expression_template.format(weight = weight, 
-                                            nom_weight = nom_weight)
+    weight_norm = expression_template.format(weight = weight)
     if process == current_process:
         final_selection = "({})".format("+".join(sel))
-        final_selection = final_selection.format(weight = weight, nom_weight = nom_weight)
+        final_selection = final_selection.format(weight = weight)
         s = "*".join([final_selection, weight_norm])
     else:
         s = " + ".join(selection_parts)
         s = s.format(weight = weight, 
-                    nom_weight = nom_weight,
                     current_process = current_process)
     return s
 
-def construct_variations(weight_names, selection_dict, nom_weight, expression_template):
+def construct_variations(weight_names, selection_dict, expression_template):
     variationdict = {}
     for keyword in weight_names:
         for current_process in selection_dict:
@@ -47,14 +43,12 @@ def construct_variations(weight_names, selection_dict, nom_weight, expression_te
                     s = construct_multi_expression(process = p, 
                                     subdict = subdict,
                                     weight = weight_names[keyword],
-                                    nom_weight = nom_weight,
                                     current_process = current_process,
                                     expression_template = expression_template)
                 else:
                     s = construct_single_expression(process = p, 
                                     subdict = subdict,
                                     weight = weight_names[keyword],
-                                    nom_weight = nom_weight,
                                     current_process = current_process,
                                     expression_template = expression_template)
 
@@ -66,6 +60,53 @@ def construct_variations(weight_names, selection_dict, nom_weight, expression_te
             variationdict[key] = final_weight
     # print(variationdict)
     return variationdict
+
+def selections_for_variations():
+    weightReplacements = {}
+    variations = "UP DOWN".split()
+    # do ISR/FSR uncertainties. These are split for all three tt+X classes, so
+    # calculating the corrections depends on the exact flavor of the additional
+    # jets
+    weight_names = {
+        "HDAMP" : "nominal" 
+    }
+
+    expression_template = """(internalNormFactors.at("nominal"))"""
+
+    selection_dict = {
+        "ttbb": {
+            "selection": "((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))*(isFourFSsample)*(isHDAMPVariation)",
+            "phasespace_frac" : """(fracRatio_ttbb.at("{weight}"))"""
+            },
+        "ttcc": {
+            "selection": "(GenEvt_I_TTPlusCC==1)*(!isFourFSsample)*(isHDAMPVariation)",
+            "phasespace_frac" : """(fracRatio_ttcc.at("{weight}"))"""
+            },
+        "ttlf": {
+            "selection": "(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)*(!isFourFSsample)*(isHDAMPVariation)",
+            "phasespace_frac" : """(fracRatio_ttlf.at("{weight}"))"""
+            }
+    }
+
+    variationdict = construct_variations(weight_names = weight_names, 
+                                            selection_dict = selection_dict, 
+                                            expression_template = expression_template)
+    weightReplacements.update(variationdict)
+
+    weight_names = {
+        "UE" : "nominal" 
+    }
+    selection_dict = {
+        "ttbb": {
+            "selection": "((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))*(isFourFSsample)*(isUEVariation)",
+            "phasespace_frac" : """fracRatio_ttbb.at("{weight}")"""
+            },
+        "ttnonbb": {
+            "selection": ["(GenEvt_I_TTPlusCC==1)*(!isFourFSsample)", "(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)*(!isFourFSsample)*(isUEVariation)"],
+            "phasespace_frac" : ["""(fracRatio_ttcc.at("{weight}"))""", """(fracRatio_ttlf.at("{weight}"))"""]
+            },
+    }
+    return weightReplacements
 
 def main():
     weightReplacements = {}
@@ -79,7 +120,6 @@ def main():
     }
 
     expression_template = """({weight}*internalNormFactors.at("{weight}"))"""
-    nom_weight = "Weight_scale_variation_muR_1p0_muF_1p0"
 
     selection_dict = {
         "ttbb": {
@@ -98,7 +138,6 @@ def main():
 
     variationdict = construct_variations(weight_names = weight_names, 
                                             selection_dict = selection_dict, 
-                                            nom_weight = nom_weight,
                                             expression_template = expression_template)
     weightReplacements.update(variationdict)
 
@@ -129,7 +168,6 @@ def main():
     }
     variationdict = construct_variations(weight_names = weight_names, 
                                             selection_dict = selection_dict, 
-                                            nom_weight = nom_weight,
                                             expression_template = expression_template)
     weightReplacements.update(variationdict)
 
@@ -140,7 +178,6 @@ def main():
     # expression_template = """(fmax(0, {weight})*internalNormFactors.at("{weight}"))"""
     # variationdict = construct_variations(weight_names = weight_names, 
     #                                         selection_dict = selection_dict, 
-    #                                         nom_weight = nom_weight,
     #                                         expression_template = expression_template)
     # weightReplacements.update(variationdict)
     # for p in weightReplacements:
@@ -150,5 +187,5 @@ def main():
     return weightReplacements
 
 if __name__ == "__main__":
-    dict = main()
+    dict = main() if not argv[1] == "variation" else selections_for_variations()
     print(dict)
