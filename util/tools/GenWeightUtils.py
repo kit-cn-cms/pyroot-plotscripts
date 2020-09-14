@@ -3,13 +3,19 @@ import pandas
 
 class GenWeightNormalization():
     # -- init functions ---------------------------------------------
-    def __init__(self, csvfile):
+    def __init__(self, csvfile, loadSTXSnorms):
         self.csvfile = csvfile
         self.csv_dict = self.readCSVFile("final_weight_sl_analysis")
         self.fractions = {}
         self.fractions["ttbb"] = self.readCSVFile("ratio_ttB_varied_vs_nom_5FS")
         self.fractions["ttcc"] = self.readCSVFile("ratio_ttC_varied_vs_nom_5FS")
         self.fractions["ttlf"] = self.readCSVFile("ratio_ttLF_varied_vs_nom_5FS")
+        if loadSTXSnorms:
+            self.fractions["TTH_PTH_0_60"] = self.readCSVFile("fiducial_xs_norm_TTH_PTH_0_60")
+            self.fractions["TTH_PTH_60_120"] = self.readCSVFile("fiducial_xs_norm_TTH_PTH_60_120")
+            self.fractions["TTH_PTH_120_200"] = self.readCSVFile("fiducial_xs_norm_TTH_PTH_120_200")
+            self.fractions["TTH_PTH_200_300"] = self.readCSVFile("fiducial_xs_norm_TTH_PTH_200_300")
+            self.fractions["TTH_PTH_GT300"] = self.readCSVFile("fiducial_xs_norm_TTH_PTH_GT300")
         self.weightList = self.getWeightVarsList()
         self.namespace_name = "GenNormMap"
         # print(self.weightList)

@@ -38,7 +38,7 @@ class scriptWriter:
         self.sampleForVariableSetup = plotParaClass.sampleForVariableSetup
         if self.pp.useGenWeightNormMap:
             # initialize class to handle genWeight normalization stuff
-            self.genWeightNormalization = GenWeightUtils.GenWeightNormalization(self.pp.rateFactorsFile)
+            self.genWeightNormalization = GenWeightUtils.GenWeightNormalization(self.pp.rateFactorsFile, self.pp.loadSTXSnorms)
 
     ## main function for writing and compiling c++ code ##
     def writeCC(self):
