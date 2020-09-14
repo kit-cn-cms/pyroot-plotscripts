@@ -81,8 +81,8 @@ def main(pyrootdir, opts):
     analysisOptions = {
         # general options
         "usePseudoData":        True,
-        "testrun":              True,  # test run with less samples
-        "stopAfterCompile":     True,   # stop script after compiling
+        "testrun":              False,  # test run with less samples
+        "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
         "makeDataCards":        True,
