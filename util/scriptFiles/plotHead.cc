@@ -299,6 +299,12 @@ void plot(){
   // init variable to differentiate between 4FS and 5FS samples
 
   float isFourFSsample = 0.;
+  float isHDAMPttbb = 0.;
+  float isHDAMPttcc = 0.;
+  float isHDAMPttlf = 0.;
+  float isUEVariation = 0.;
+  float hdampSelection = 0.;
+  float ueSelection = 0.;
 
   TString vecNameForDataBase="mem_p";
   if(globalFileNameForSystType!=""){

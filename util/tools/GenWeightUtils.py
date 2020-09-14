@@ -55,6 +55,7 @@ class GenWeightNormalization():
         vetolist = ["internalNormFactors"]
         vetolist += ["fracRatio_{}".format(x) for x in self.fractions.keys()]
         vetolist.append("isFourFSsample")
+        vetolist += "isHDAMPttbb isHDAMPttcc isHDAMPttlf isUEVariation hdampSelection ueSelection".split()
         return vetolist
 
 
@@ -177,8 +178,26 @@ namespace {namespace_name}{{
         code = """
         TString currentRelevantSampleNameForGenWeights = sampleDataBaseIdentifiers[currentfilename];
         isFourFSsample = 0.;
-        if (currentRelevantSampleNameForGenWeights.BeginsWith("TTbb4f")){{
+        if (currentRelevantSampleNameForGenWeights.BeginsWith("TTbb")){{
             isFourFSsample = 1.;
+        }}
+        auto pos = variation.find("HDAMP_ttbb");
+        if (pos != std::string::npos){{
+            isHDAMPttbb = 1.;
+        }}else {{
+            pos = variation.find("HDAMP_ttcc");
+            if (pos != std::string::npos){{
+                isHDAMPttcc = 1.;
+            }}else {{
+                pos = variation.find("HDAMP_ttlf");
+                if (pos != std::string::npos){{
+                    isHDAMPttlf = 1.;
+                }}
+            }}
+        }}
+        pos = variation.find("UE");
+        if (pos != std::string::npos){{
+            isUEVariation = 1.;
         }}
         resetMap(internalNormFactors, 1.0);
         {}::fillInternalNormFactors(internalNormFactors, currentRelevantSampleNameForGenWeights, warningCounter);
@@ -188,5 +207,33 @@ namespace {namespace_name}{{
         resetMap(fracRatio_{key}, 1.0);
         {namespace}::fillInternalNormFactors(fracRatio_{key}, currentRelevantSampleNameForGenWeights, warningCounter, {namespace}::private_fracRatio_{key});
         """.format(namespace = self.namespace_name, key = k)
+        
+        code += """
+        {}
+        """.format(self.__generate_hdamp_ue_selections())
+
         return code
 
+    def __generate_hdamp_ue_selections(self):
+
+        selections = []
+        selection_parts = ["""((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))*(isFourFSsample)*(internalNormFactors.at("nominal"))"""]
+        selection_parts += ["""(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)*(!isFourFSsample)*(fracRatio_ttlf.at("nominal"))"""]
+        selection_parts += ["""(GenEvt_I_TTPlusCC==1)*(!isFourFSsample)*(fracRatio_ttcc.at("nominal"))"""]
+        selections.append("hdampSelection = ({}*({}));".format("(isHDAMPttbb)", " + ".join(selection_parts)))
+
+        selection_parts = ["""((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))*(isFourFSsample)*(fracRatio_ttbb.at("nominal"))"""]
+        selection_parts += ["""(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)*(!isFourFSsample)*(fracRatio_ttlf.at("nominal"))"""]
+        selection_parts += ["""(GenEvt_I_TTPlusCC==1)*(!isFourFSsample)*(internalNormFactors.at("nominal"))"""]
+        selections.append("hdampSelection += ({}*({}));".format("(isHDAMPttcc)", " + ".join(selection_parts)))
+
+        selection_parts = ["""((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))*(isFourFSsample)*(fracRatio_ttbb.at("nominal"))"""]
+        selection_parts += ["""(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)*(!isFourFSsample)*(internalNormFactors.at("nominal"))"""]
+        selection_parts += ["""(GenEvt_I_TTPlusCC==1)*(!isFourFSsample)*(fracRatio_ttcc.at("nominal"))"""]
+        selections.append("hdampSelection += ({}*({}));".format("(isHDAMPttlf)", " + ".join(selection_parts)))
+
+        selection_parts = ["""((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))*(isFourFSsample)"""]
+        selection_parts += ["""!((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))*(!isFourFSsample)"""]
+        selections.append("""ueSelection = (isUEVariation)*({})*(internalNormFactors.at("nominal"));""".format(" + ".join(selection_parts)))
+
+        return "\n\t\t\t\t".join(selections)
