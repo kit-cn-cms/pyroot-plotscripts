@@ -178,10 +178,11 @@ lumi = '35.9'
 
 #tHq_XS_scale = "*(0.7927/0.07425)"
 #tHW_XS_scale = "*(0.1472/0.01517)"
+ttbb_FH_scale = "(17.3107/16.2728)"
+ttbb_SL_scale = "(15.7315/15.7286)"
+ttbb_DL_scale = "(3.5378/3.8024)"
 
-# DANGERZONE: derived in 2018
-# ttbb_4FS_scale = "*(1.2143)"
-ttbb_4FS_scale = "*(1.0)"
+ttbb_4FS_scale = "((N_GenTopLep==0)*"+ttbb_FH_scale+"+(N_GenTopLep==1)*"+ttbb_SL_scale+"+(N_GenTopLep==2)*"+ttbb_DL_scale+")"
 ttbb_5FS_scale = "*(1.0)"
 
 tH_SM_rwgt = "*(Weight_rwgt_12/Weight_GEN_nom)"
