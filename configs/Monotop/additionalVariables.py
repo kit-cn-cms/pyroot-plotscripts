@@ -86,6 +86,8 @@ def getAddVars():
         "Evt_Phi_MET",
         "N_Taus",
         "Tau_Pt",
+        "isHF",
+        "isLF",
         "N_JetsMediumTagged_outside_lead_AK15Jet",
         "JetMediumTagged_outside_lead_AK15Jet_Pt",
         "JetMediumTagged_outside_lead_AK15Jet_Eta",

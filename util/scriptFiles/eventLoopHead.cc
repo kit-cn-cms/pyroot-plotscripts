@@ -120,18 +120,38 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
         internalBosonWeight_muFDown   = BosonWeight_muFDown;
     }
     
+    // additional uncertainty for low pt w bosons because of missing HT 0To70
     if (processname.find("wlnujets") != std::string::npos && W_Pt > 30. && W_Pt < 100.){
         internalBosonWeight_W_low_pt_Up = 1.5;
         internalBosonWeight_W_low_pt_Down = 0.5;
     }
     
+    // additional uncertainty for lower pt isolated photons because of crude isolation calculation and and weird corrections behavior in this range
     if (processname.find("gammajets") != std::string::npos && Gamma_Pt > 100. && Gamma_Pt < 290.){
         internalBosonWeight_G_low_pt_Up = 1.5;
         internalBosonWeight_G_low_pt_Down = 0.5;
     }
     
+    // use Lindert theory corrections in any case at the moment
     if (processname.find("gammajets") != std::string::npos){
         internalBosonWeight_monojet = internalBosonWeight;
+    }
+    
+    // additional uncertainty for for v+heavy flavor jet events
+    float vjets_hf_up = 1.0;
+    float vjets_hf_down = 1.0;
+    float vjets_lf_up = 1.0;
+    float vjets_lf_down = 1.0;
+    if ((processname.find("wlnujets") != std::string::npos) || (processname.find("zlljets") != std::string::npos) ||
+        (processname.find("znunujets") != std::string::npos) || (processname.find("gammajets") != std::string::npos)) {
+        if (isHF == 1) {
+            vjets_hf_up = 1.5;
+            vjets_hf_down = 0.5;
+        }
+        else if (isLF == 1) {
+            vjets_lf_up = 1.05;
+            vjets_lf_down = 0.95;
+        }
     }
     
     // DarkHiggs PU Weights
