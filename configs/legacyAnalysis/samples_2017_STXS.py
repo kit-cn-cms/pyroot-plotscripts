@@ -136,6 +136,15 @@ electronTrigger_down = "("+sel_singleel+"&&(internalEleTriggerWeightDown>0.))*in
 muonTrigger_up = "("+sel_singlemu+"&&(Weight_MuonTriggerSF_Up>0.))*Weight_MuonTriggerSF_Up"
 muonTrigger_down = "("+sel_singlemu+"&&(Weight_MuonTriggerSF_Down>0.))*Weight_MuonTriggerSF_Down"
 
+def constructSTXSnormedVariation(weight = "Weight_scale_variation_muR_1p0_muF_0p5"):
+    replacement =  "("
+    replacement +=  "("+STXS_stage0_+STXS_stage1_0+'*(fracRatio_TTH_PTH_0_60.at("{weight}")))+'
+    replacement += "("+STXS_stage0_+STXS_stage1_1+'*(fracRatio_TTH_PTH_60_120.at("{weight}")))+'
+    replacement += "("+STXS_stage0_+STXS_stage1_2+'*(fracRatio_TTH_PTH_120_200.at("{weight}")))+'
+    replacement += "("+STXS_stage0_+STXS_stage1_3+'*(fracRatio_TTH_PTH_200_300.at("{weight}")))+'
+    replacement += "("+STXS_stage0_+STXS_stage1_4+'*(fracRatio_TTH_PTH_GT300.at("{weight}")))'
+    replacement +=  ")"
+    return replacement.format(weight=weight)
 
 # dictionary of expressions to replace in systematics csv
 weightReplacements = {
@@ -162,6 +171,8 @@ weightReplacements = {
 
     # do weights for data
     "DOWEIGHTS":        "(DoWeights==1)+(DoWeights==0)*1.0",
+    'BOTHDOWN_STXS': constructSTXSnormedVariation(weight = "Weight_scale_variation_muR_0p5_muF_0p5"),
+    'BOTHUP_STXS': constructSTXSnormedVariation(weight = "Weight_scale_variation_muR_2p0_muF_2p0")
 
     }
 weightReplacements.update(generate_phasespace_corrections.main())
