@@ -130,6 +130,10 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
         internalBosonWeight_G_low_pt_Down = 0.5;
     }
     
+    if (processname.find("gammajets") != std::string::npos){
+        internalBosonWeight_monojet = internalBosonWeight;
+    }
+    
     // DarkHiggs PU Weights
     float internalPUWeight = 1.0;
     float internalPUWeight_Up = 1.0;
