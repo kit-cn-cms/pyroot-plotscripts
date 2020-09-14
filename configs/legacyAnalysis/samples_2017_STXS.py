@@ -183,7 +183,7 @@ ttbb_FH_scale = "(17.3731/16.2728)"
 ttbb_SL_scale = "(15.7438/15.7286)"
 ttbb_DL_scale = "(3.5531/3.8024)"
 
-ttbb_4FS_scale = "((N_GenTopLep==0)*"+ttbb_FH_scale+"+(N_GenTopLep==1)*"+ttbb_SL_scale+"+(N_GenTopLep==2)*"+ttbb_DL_scale+")"
+ttbb_4FS_scale = "*((N_GenTopLep==0)*"+ttbb_FH_scale+"+(N_GenTopLep==1)*"+ttbb_SL_scale+"+(N_GenTopLep==2)*"+ttbb_DL_scale+")"
 ttbb_5FS_scale = "*(1.0)"
 
 #tHq_XS_scale = "*(0.7927/0.07425)"
