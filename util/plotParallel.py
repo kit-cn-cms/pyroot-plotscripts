@@ -67,6 +67,7 @@ class plotParallel:
         self.request_runtime = None
         self.useFriendTrees = False
         self.friendTrees = {}
+        self.loadSTXSnorms = False
 
         # check cmssw
         self.cmsswpath = os.environ['CMSSW_BASE']
@@ -172,6 +173,10 @@ class plotParallel:
         self.sampleForVariableSetup = sample
         print("using "+str(sample)+" for variable setup in scriptWriter")
     
+    def setloadSTXSnorms(self, loadSTXSnorms):
+        self.loadSTXSnorms = loadSTXSnorms
+        print("set loadSTXSnorms to: {}".format(loadSTXSnorms))
+
     ## getter functions ##
     def getHaddOutPath(self):
         return os.path.join(self.analysis.workdir, "HaddOutputs", "*.root")
