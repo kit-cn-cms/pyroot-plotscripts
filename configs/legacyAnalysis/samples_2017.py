@@ -170,7 +170,7 @@ ttbb_DL_scale = "(3.5531/3.8024)"
 #tHW_XS_scale = "*(0.1472/0.01517)"
 
 # DANGERZONE: derived in 2018
-ttbb_4FS_scale = "((N_GenTopLep==0)*"+ttbb_FH_scale+"+(N_GenTopLep==1)*"+ttbb_SL_scale+"+(N_GenTopLep==2)*"+ttbb_DL_scale+")"
+ttbb_4FS_scale = "*((N_GenTopLep==0)*"+ttbb_FH_scale+"+(N_GenTopLep==1)*"+ttbb_SL_scale+"+(N_GenTopLep==2)*"+ttbb_DL_scale+")"
 ttbb_5FS_scale = "*(1.0)"
 
 kfactor_wjets = "*1.21"
