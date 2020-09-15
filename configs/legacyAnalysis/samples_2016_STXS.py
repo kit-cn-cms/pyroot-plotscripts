@@ -324,7 +324,7 @@ samples_ttH_decay = [
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
     ]
 
-samples_ttH_HTXS = [
+samples_ttH_STXS = [
     plotClasses.Sample('t#bar{t}H_PTH_0_60',830,
             ttHpath,
             lumi+sel_MET+STXS_stage0+STXS_stage1_0,
