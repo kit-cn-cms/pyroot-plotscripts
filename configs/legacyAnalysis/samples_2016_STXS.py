@@ -323,34 +323,34 @@ samples_ttH_decay = [
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
     ]
 
-samples_ttH_STXS = [
-    plotClasses.Sample('t#bar{t}H_0',830,
+samples_ttH_HTXS = [
+    plotClasses.Sample('t#bar{t}H_PTH_0_60',830,
             ttHpath,
-            lumi+evenSel+sel_MET+STXS_stage0+STXS_stage1_0,
+            lumi+sel_MET+STXS_stage0+STXS_stage1_0,
             'TTH_PTH_0_60',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
-    plotClasses.Sample('t#bar{t}H_1',418,
+    plotClasses.Sample('t#bar{t}H_PTH_60_120',418,
             ttHpath,
-            lumi+evenSel+sel_MET+STXS_stage0+STXS_stage1_1,
+            lumi+sel_MET+STXS_stage0+STXS_stage1_1,
             'TTH_PTH_60_120',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
-    plotClasses.Sample('t#bar{t}H_2',433,
+    plotClasses.Sample('t#bar{t}H_PTH_120_200',433,
             ttHpath,
-            lumi+evenSel+sel_MET+STXS_stage0+STXS_stage1_2,
+            lumi+sel_MET+STXS_stage0+STXS_stage1_2,
             'TTH_PTH_120_200',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
-    plotClasses.Sample('t#bar{t}H_3',867,
+    plotClasses.Sample('t#bar{t}H_PTH_200_300',867,
             ttHpath,
-            lumi+evenSel+sel_MET+STXS_stage0+STXS_stage1_3,
+            lumi+sel_MET+STXS_stage0+STXS_stage1_3,
             'TTH_PTH_200_300',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
-    plotClasses.Sample('t#bar{t}H_4',602,
+    plotClasses.Sample('t#bar{t}H_PTH_GT300',602,
             ttHpath,
-            lumi+evenSel+sel_MET+STXS_stage0+STXS_stage1_4,
+            lumi+sel_MET+STXS_stage0+STXS_stage1_4,
             'TTH_PTH_GT300',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 ]
