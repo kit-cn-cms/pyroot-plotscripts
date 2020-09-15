@@ -43,7 +43,8 @@ parser.add_option("--nomkey",
             Default = '$PROCESS_$CHANNEL' 
         """.split()),
     dest = 'nomkey',
-    default = '$PROCESS_$CHANNEL',
+    # default = '$CHANNEL__$PROCESS',
+    default = '$PROCESS__$CHANNEL',
     type = 'str'        
 )
 parser.add_option("--systkey",
@@ -55,7 +56,8 @@ parser.add_option("--systkey",
             Default = '$PROCESS_$CHANNEL_$SYSTEMATIC' 
         """.split()),
     dest = 'systkey',
-    default = '$PROCESS_$CHANNEL_$SYSTEMATIC',
+    # default = '$CHANNEL__$PROCESS__$SYSTEMATIC',
+    default = '$PROCESS__$CHANNEL__$SYSTEMATIC',
     type = 'str'        
 )
 
@@ -130,28 +132,30 @@ if opts.systematics:
 elif len(systematics) == 0:
     print("using default systematics:")
     systematics = [
-        "CMS_res_j_2018",
-        "CMS_scale_j_2018",
-        "CMS_HDAMP_2018",
-        "CMS_UE_2018",
-        "CMS_PDF_2018",
-        "CMS_PU_2018",
-        "CMS_scaleMuF_2018",
-        "CMS_scaleMuR_2018",
-        "CMS_ISR_2018",
-        "CMS_FSR_2018",
-        "CMS_eff_e_2018",
-        "CMS_eff_m_2018",
-        "CMS_trig_e_2018",
-        "CMS_trig_m_2018",
-        "CMS_btag_lf_2018",
-        "CMS_btag_lfstats1_2018",
-        "CMS_btag_lfstats2_2018",
-        "CMS_btag_hf_2018",
-        "CMS_btag_hfstats1_2018",
-        "CMS_btag_hfstats2_2018",
-        "CMS_btag_cferr1_2018",
-        "CMS_btag_cferr2_2018",
+        # "ttH_scale_lowpt",
+        # "ttH_scale_highpt",
+        # "CMS_res_j_2018",
+        # "CMS_scale_j_2018",
+        # "CMS_HDAMP_2018",
+        # "CMS_UE_2018",
+        # "CMS_PDF_2018",
+        # "CMS_PU_2018",
+        # "CMS_scaleMuF_2018",
+        # "CMS_scaleMuR_2018",
+        # "CMS_ISR_2018",
+        # "CMS_FSR_2018",
+        # "CMS_eff_e_2018",
+        # "CMS_eff_m_2018",
+        # "CMS_trig_e_2018",
+        # "CMS_trig_m_2018",
+        # "CMS_btag_lf_2018",
+        # "CMS_btag_lfstats1_2018",
+        # "CMS_btag_lfstats2_2018",
+        # "CMS_btag_hf_2018",
+        # "CMS_btag_hfstats1_2018",
+        # "CMS_btag_hfstats2_2018",
+        # "CMS_btag_cferr1_2018",
+        # "CMS_btag_cferr2_2018",
         ]
     print("\n".join(systematics))
 
@@ -172,34 +176,31 @@ elif len(variables) == 0:
     #    #"ge6j_ge3t_RecoTTZ_Z_M",
     #    ]
     variables = [
-        #"finaldiscr_ljets_ge4j_3t_ttZ_node",
-        #"finaldiscr_ljets_ge4j_3t_tthf_node",
+    "ljets_ge4j_ge4t_classifier_ttH_node",
+    "ljets_ge4j_ge4t_classifier_ttmb_node",
+    "ljets_ge4j_ge4t_classifier_tt2b_node",
+    "ljets_ge4j_ge4t_classifier_ttcc_node",
+    "ljets_ge4j_ge4t_classifier_ttlf_node",
+    "ljets_ge4j_ge4t_classifier_tHq_node",
+    "ljets_ge4j_ge4t_classifier_tHW_node",
+    "ljets_ge4j_3t_classifier_ttH_node",
+    "ljets_ge4j_3t_classifier_ttmb_node",
+    "ljets_ge4j_3t_classifier_tt2b_node",
+    "ljets_ge4j_3t_classifier_ttcc_node",
+    "ljets_ge4j_3t_classifier_ttlf_node",
+    "ljets_ge4j_3t_classifier_tHq_node",
+    "ljets_ge4j_3t_classifier_tHW_node",
+    "ljets_ge4j_3t_STXS_ttHbb_STXS_0_node_multiplied",
+    "ljets_ge4j_3t_STXS_ttHbb_STXS_1_node_multiplied",
+    "ljets_ge4j_3t_STXS_ttHbb_STXS_2_node_multiplied",
+    "ljets_ge4j_3t_STXS_ttHbb_STXS_3_node_multiplied",
+    "ljets_ge4j_3t_STXS_ttHbb_STXS_4_node_multiplied",
+    "ljets_ge4j_ge4t_STXS_ttHbb_STXS_0_node_multiplied",
+    "ljets_ge4j_ge4t_STXS_ttHbb_STXS_1_node_multiplied",
+    "ljets_ge4j_ge4t_STXS_ttHbb_STXS_2_node_multiplied",
+    "ljets_ge4j_ge4t_STXS_ttHbb_STXS_3_node_multiplied",
+    "ljets_ge4j_ge4t_STXS_ttHbb_STXS_4_node_multiplied",
 
-        #"finaldiscr_ljets_ge4j_ge4t_ttZ_node",
-        #"finaldiscr_ljets_ge4j_ge4t_tthf_node",
-
-        #"finaldiscr_ljets_ge4j_ge3t_ttZ_node",
-        #"finaldiscr_ljets_ge4j_ge3t_tthf_node",
-
-        "finaldiscr_ljets_ge6j_ge3t_ttHNodeDNN_ttZ_node",
-        "finaldiscr_ljets_ge6j_ge3t_ttHNodeDNN_ttH_node",
-        "finaldiscr_ljets_ge6j_ge3t_ttHNodeDNN_tthf_node",
-        "finaldiscr_ljets_ge6j_ge3t_ttHNodeDNN_ttcc_node",
-        "finaldiscr_ljets_ge6j_ge3t_ttHNodeDNN_ttlf_node",
-
-        #"finaldiscr_ljets_le5j_ge3t_ttZ_node",
-        #"finaldiscr_ljets_le5j_ge3t_tthf_node",
-        "finaldiscr_ljets_5j_ge3t_ttHNodeDNN_ttZ_node",
-        "finaldiscr_ljets_5j_ge3t_ttHNodeDNN_ttZ_node",
-        "finaldiscr_ljets_5j_ge3t_ttHNodeDNN_ttH_node",
-        "finaldiscr_ljets_5j_ge3t_ttHNodeDNN_tthf_node",
-        "finaldiscr_ljets_5j_ge3t_ttHNodeDNN_ttcc_node",
-
-        "finaldiscr_ljets_4j_ge3t_ttHNodeDNN_ttlf_node",
-        "finaldiscr_ljets_4j_ge3t_ttHNodeDNN_ttH_node",
-        "finaldiscr_ljets_4j_ge3t_ttHNodeDNN_tthf_node",
-        "finaldiscr_ljets_4j_ge3t_ttHNodeDNN_ttcc_node",
-        "finaldiscr_ljets_4j_ge3t_ttHNodeDNN_ttlf_node",
         ]
 
     print("\n".join(variables))
@@ -336,12 +337,12 @@ def drawshifts(file, outdir, processes, variable, syst, procLabel = "", procName
     legend.SetTextSize(0.03)
 
     c.cd(2)
-    ratioUp = nom.Clone()
-    ratioUp.Divide(up)
+    ratioUp = up.Clone()
+    ratioUp.Divide(nom)
     ratioUp.SetLineColor(up.GetLineColor())
     ratioUp.Draw("E0")
     ratioUp.SetMarkerSize(0)
-    ratioUp.GetYaxis().SetTitle("#frac{nominal}{variation}")
+    ratioUp.GetYaxis().SetTitle("#frac{variation}{nominal}")
     ratioUp.GetYaxis().CenterTitle()
     ratioUp.GetYaxis().SetRangeUser(0.68, 1.32)
     # ratioUp.GetXaxis().SetLabelSize(nom.GetXaxis().GetLabelSize() * 3.5)
@@ -358,8 +359,8 @@ def drawshifts(file, outdir, processes, variable, syst, procLabel = "", procName
     ratioUp.SetTitle("")
     ratioUp.GetYaxis().SetNdivisions(505)
 
-    ratioDown = nom.Clone()
-    ratioDown.Divide(down)
+    ratioDown = down.Clone()
+    ratioDown.Divide(nom)
     ratioDown.SetLineColor(down.GetLineColor())
     ratioDown.Draw("E0same")
     ratioDown.SetMarkerSize(0)
