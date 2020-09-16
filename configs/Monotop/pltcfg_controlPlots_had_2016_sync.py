@@ -152,8 +152,8 @@ topptWeightNom = "1."
 
 
 # higher-order v+jets theory reweighting weight
-bosonWeightNom = "internalBosonWeight"
-#bosonWeightNom = "internalBosonWeight_monojet"
+#bosonWeightNom = "internalBosonWeight"
+bosonWeightNom = "internalBosonWeight_monojet"
 
 
 #deepakMistagSF = "((AK15Jet_TopMatched[0]<0.5)*1.0+(AK15Jet_TopMatched[0]>0.5)*1.)"
@@ -386,7 +386,7 @@ samples = [
         "Z(#nu#nu)+jets",
         ROOT.kOrange + 7,
         path_mwassmer + "/ZJetsToNuNu_HT*/*nominal*.root",
-        lumi,
+        lumi + "*3.0",
         #lumi + "*1.12*1.082",
         "znunujets",
         samDict=sampleDict,
