@@ -85,7 +85,7 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
         qcd_nlo_sf = qcd_nlo_znunu.GetScaleFactor("qcd_nlo_znunu", Z_Pt, true);
         ewk_nlo_sf = ewk_nlo_z.GetScaleFactor("ewk_nlo_z", Z_Pt, true);
         internalBosonWeight_monojet = qcd_nlo_sf*ewk_nlo_sf;
-        if ((Z_Pt < qcd_nlo_znunu.GetHistogramLowerEdge("qcd_nlo_znunu")) || (Z_Pt < ewk_nlo_z.GetHistogramLowerEdge("ewl_nlo_z"))) {
+        if ((Z_Pt < qcd_nlo_znunu.GetHistogramLowerEdge("qcd_nlo_znunu")) || (Z_Pt < ewk_nlo_z.GetHistogramLowerEdge("ewk_nlo_z"))) {
             internalBosonWeight_monojet_low_pt_up = 1.5;
             internalBosonWeight_monojet_low_pt_down = 0.5;
         }
@@ -94,7 +94,7 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
         qcd_nlo_sf = qcd_nlo_zll.GetScaleFactor("qcd_nlo_zll", Z_Pt, true);
         ewk_nlo_sf = ewk_nlo_z.GetScaleFactor("ewk_nlo_z", Z_Pt, true);
         internalBosonWeight_monojet = qcd_nlo_sf*ewk_nlo_sf;
-        if ((Z_Pt < qcd_nlo_zll.GetHistogramLowerEdge("qcd_nlo_zll")) || (Z_Pt < ewk_nlo_z.GetHistogramLowerEdge("ewl_nlo_z"))) {
+        if ((Z_Pt < qcd_nlo_zll.GetHistogramLowerEdge("qcd_nlo_zll")) || (Z_Pt < ewk_nlo_z.GetHistogramLowerEdge("ewk_nlo_z"))) {
             internalBosonWeight_monojet_low_pt_up = 1.5;
             internalBosonWeight_monojet_low_pt_down = 0.5;
         }
@@ -103,7 +103,7 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
         qcd_nlo_sf = qcd_nlo_gamma.GetScaleFactor("qcd_nlo_gamma", Gamma_Pt, true);
         ewk_nlo_sf = ewk_nlo_gamma.GetScaleFactor("ewk_nlo_gamma", Gamma_Pt, true);
         internalBosonWeight_monojet = qcd_nlo_sf*ewk_nlo_sf;
-        if ((Gamma_Pt < qcd_nlo_gamma.GetHistogramLowerEdge("qcd_nlo_gamma")) || (Gamma_Pt < ewk_nlo_gamma.GetHistogramLowerEdge("ewl_nlo_gamma"))) {
+        if ((Gamma_Pt < qcd_nlo_gamma.GetHistogramLowerEdge("qcd_nlo_gamma")) || (Gamma_Pt < ewk_nlo_gamma.GetHistogramLowerEdge("ewk_nlo_gamma"))) {
             internalBosonWeight_monojet_low_pt_up = 1.5;
             internalBosonWeight_monojet_low_pt_down = 0.5;
         }
