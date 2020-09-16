@@ -6,6 +6,7 @@ class SFHelper {
     float GetScaleFactor(std::string identifier, auto x, bool use_edge_bins);
     void  Reset();
     void  AddScaleFactorHistogram(std::string identifier, std::string path_to_file, std::string histogram_name);
+    float GetHistogramLowerEdge(std::string identifier);
 
    private:
     std::map< std::string, TH1D* > scalefactor_map;
@@ -87,6 +88,20 @@ float SFHelper::GetScaleFactor(std::string identifier, auto x, bool use_edge_bin
         return sf;
     else
         return 1.;
+}
+
+float SFHelper::GetHistogramLowerEdge(std::string identifier)
+{
+   if (!initialized) {
+        std::cout << "SFHelper: not initiliazed" << std::endl;
+        throw std::exception();
+    }
+    
+    if (scalefactor_map.find(identifier) == scalefactor_map.end()) return 999999.;
+    
+    float lower_edge = scalefactor_map[identifier]->GetXaxis()->GetXmin();
+    
+    return lower_edge;
 }
 
 SFHelper::~SFHelper() {}

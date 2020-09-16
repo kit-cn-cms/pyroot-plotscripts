@@ -94,6 +94,8 @@ internalBosonWeight_W_low_pt_Down
 internalBosonWeight_G_low_pt_Up
 internalBosonWeight_G_low_pt_Down
 internalBosonWeight_monojet
+internalBosonWeight_monojet_low_pt_up
+internalBosonWeight_monojet_low_pt_down
 vjets_lf_up
 vjets_lf_down
 vjets_hf_up

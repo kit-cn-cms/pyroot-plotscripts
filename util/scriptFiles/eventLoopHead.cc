@@ -70,25 +70,43 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     float qcd_nlo_sf = 1.0;
     float ewk_nlo_sf = 1.0;
     float internalBosonWeight_monojet = 1.0;
+    float internalBosonWeight_monojet_low_pt_up = 1.0;
+    float internalBosonWeight_monojet_low_pt_down = 1.0;
     if (processname.find("wlnujets") != std::string::npos && W_Pt > 0.) {
         qcd_nlo_sf = qcd_nlo_wlnu.GetScaleFactor("qcd_nlo_wlnu", W_Pt, true);
         ewk_nlo_sf = ewk_nlo_wlnu.GetScaleFactor("ewk_nlo_wlnu", W_Pt, true);
         internalBosonWeight_monojet = qcd_nlo_sf*ewk_nlo_sf;
+        if ((W_Pt < qcd_nlo_wlnu.GetHistogramLowerEdge("qcd_nlo_wlnu")) || (W_Pt < ewk_nlo_wlnu.GetHistogramLowerEdge("ewk_nlo_wlnu"))) {
+            internalBosonWeight_monojet_low_pt_up = 1.5;
+            internalBosonWeight_monojet_low_pt_down = 0.5;
+        }
     }
     else if (processname.find("znunujets") != std::string::npos && Z_Pt > 0.) {
         qcd_nlo_sf = qcd_nlo_znunu.GetScaleFactor("qcd_nlo_znunu", Z_Pt, true);
         ewk_nlo_sf = ewk_nlo_z.GetScaleFactor("ewk_nlo_z", Z_Pt, true);
         internalBosonWeight_monojet = qcd_nlo_sf*ewk_nlo_sf;
+        if ((Z_Pt < qcd_nlo_znunu.GetHistogramLowerEdge("qcd_nlo_znunu")) || (Z_Pt < ewk_nlo_z.GetHistogramLowerEdge("ewl_nlo_z"))) {
+            internalBosonWeight_monojet_low_pt_up = 1.5;
+            internalBosonWeight_monojet_low_pt_down = 0.5;
+        }
     }
     else if (processname.find("zlljets") != std::string::npos && Z_Pt > 0.) {
         qcd_nlo_sf = qcd_nlo_zll.GetScaleFactor("qcd_nlo_zll", Z_Pt, true);
         ewk_nlo_sf = ewk_nlo_z.GetScaleFactor("ewk_nlo_z", Z_Pt, true);
         internalBosonWeight_monojet = qcd_nlo_sf*ewk_nlo_sf;
+        if ((Z_Pt < qcd_nlo_zll.GetHistogramLowerEdge("qcd_nlo_zll")) || (Z_Pt < ewk_nlo_z.GetHistogramLowerEdge("ewl_nlo_z"))) {
+            internalBosonWeight_monojet_low_pt_up = 1.5;
+            internalBosonWeight_monojet_low_pt_down = 0.5;
+        }
     }
     else if (processname.find("gammajets") != std::string::npos && Gamma_Pt > 0.) {
         qcd_nlo_sf = qcd_nlo_gamma.GetScaleFactor("qcd_nlo_gamma", Gamma_Pt, true);
         ewk_nlo_sf = ewk_nlo_gamma.GetScaleFactor("ewk_nlo_gamma", Gamma_Pt, true);
         internalBosonWeight_monojet = qcd_nlo_sf*ewk_nlo_sf;
+        if ((Gamma_Pt < qcd_nlo_gamma.GetHistogramLowerEdge("qcd_nlo_gamma")) || (Gamma_Pt < ewk_nlo_gamma.GetHistogramLowerEdge("ewl_nlo_gamma"))) {
+            internalBosonWeight_monojet_low_pt_up = 1.5;
+            internalBosonWeight_monojet_low_pt_down = 0.5;
+        }
     }
     
     //std::cout << "NLO QCD SF from monojet: " << qcd_nlo_sf << std::endl;
