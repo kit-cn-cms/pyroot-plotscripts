@@ -213,13 +213,25 @@ void plot()
 
     // vjets nlo qcd k factors from monojet
     SFHelper qcd_nlo_znunu;
-    qcd_nlo_znunu.AddScaleFactorHistogram("qcd_nlo_znunu","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/SF_QCD_NLO_ZJetsToNuNu.root","kfac_znn_filter");
     SFHelper qcd_nlo_zll;
-    qcd_nlo_zll.AddScaleFactorHistogram("qcd_nlo_zll","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/SF_QCD_NLO_DYJetsToLL.root","kfac_dy_filter");
     SFHelper qcd_nlo_wlnu;
-    qcd_nlo_wlnu.AddScaleFactorHistogram("qcd_nlo_wlnu","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/SF_QCD_NLO_WJetsToLNu.root","wjet_dress_monojet");
     SFHelper qcd_nlo_gamma;
-    qcd_nlo_gamma.AddScaleFactorHistogram("qcd_nlo_gamma","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/SF_QCD_NLO_GJets.root","gjets_stat1_monojet");
+    if ( dataera == "2018" || dataera == "2017") {
+        qcd_nlo_znunu.AddScaleFactorHistogram("qcd_nlo_znunu","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/SF_QCD_NLO_ZJetsToNuNu.root","kfac_znn_filter");
+        qcd_nlo_zll.AddScaleFactorHistogram("qcd_nlo_zll","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/SF_QCD_NLO_DYJetsToLL.root","kfac_dy_filter");
+        qcd_nlo_wlnu.AddScaleFactorHistogram("qcd_nlo_wlnu","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/SF_QCD_NLO_WJetsToLNu.root","wjet_dress_monojet");
+        qcd_nlo_gamma.AddScaleFactorHistogram("qcd_nlo_gamma","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/SF_QCD_NLO_GJets.root","gjets_stat1_monojet");
+    }
+    else if ( dataera == "2016" ) {
+        qcd_nlo_znunu.AddScaleFactorHistogram("qcd_nlo_znunu","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/merged_kfactors_zjets.root","kfactor_monojet_qcd");
+        qcd_nlo_zll.AddScaleFactorHistogram("qcd_nlo_zll","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/merged_kfactors_zjets.root","kfactor_monojet_qcd");
+        qcd_nlo_wlnu.AddScaleFactorHistogram("qcd_nlo_wlnu","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/merged_kfactors_wjets.root","kfactor_monojet_qcd");
+        qcd_nlo_gamma.AddScaleFactorHistogram("qcd_nlo_gamma","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/merged_kfactors_gjets.root","kfactor_monojet_qcd");
+    }
+    else {
+        std::cout << "NO VALID DATAERA CHOSEN!!" << std::endl;
+        std::cout << "dataera: " << dataera << std::endl;
+    }
     
     // vjets nlo ewk k factors from monojet
     SFHelper ewk_nlo_z;
