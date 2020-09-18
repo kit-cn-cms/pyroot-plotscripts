@@ -65,7 +65,44 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     
     float internalBosonWeight_G_low_pt_Up = 1.0;
     float internalBosonWeight_G_low_pt_Down = 1.0;
+
+    if ((processname.find("wlnujets") != std::string::npos && W_Pt > 30.) || (processname.find("zlljets") != std::string::npos && Z_Pt > 100.) ||
+        (processname.find("znunujets") != std::string::npos && Z_Pt > 100.) || (processname.find("gammajets") != std::string::npos && Gamma_Pt > 100.)) {
+        internalBosonWeight           = BosonWeight_nominal;
+        internalBosonWeight_QCD1Up    = BosonWeight_QCD1Up/internalBosonWeight;
+        internalBosonWeight_QCD1Down  = BosonWeight_QCD1Down/internalBosonWeight;
+        internalBosonWeight_QCD2Up    = BosonWeight_QCD2Up/internalBosonWeight;
+        internalBosonWeight_QCD2Down  = BosonWeight_QCD2Down/internalBosonWeight;
+        internalBosonWeight_QCD3Up    = BosonWeight_QCD3Up/internalBosonWeight;
+        internalBosonWeight_QCD3Down  = BosonWeight_QCD3Down/internalBosonWeight;
+        internalBosonWeight_EW1Up     = BosonWeight_EW1Up/internalBosonWeight;
+        internalBosonWeight_EW1Down   = BosonWeight_EW1Down/internalBosonWeight;
+        internalBosonWeight_EW2Up     = BosonWeight_EW2Up/internalBosonWeight;
+        internalBosonWeight_EW2Down   = BosonWeight_EW2Down/internalBosonWeight;
+        internalBosonWeight_EW3Up     = BosonWeight_EW3Up/internalBosonWeight;
+        internalBosonWeight_EW3Down   = BosonWeight_EW3Down/internalBosonWeight;
+        internalBosonWeight_MixedUp   = BosonWeight_MixedUp/internalBosonWeight;
+        internalBosonWeight_MixedDown = BosonWeight_MixedDown/internalBosonWeight;
+        internalBosonWeight_AlphaSUp  = BosonWeight_AlphaUp/internalBosonWeight;
+        internalBosonWeight_AlphaSDown= BosonWeight_AlphaDown/internalBosonWeight;
+        internalBosonWeight_muRUp     = BosonWeight_muRUp;
+        internalBosonWeight_muRDown   = BosonWeight_muRDown;
+        internalBosonWeight_muFUp     = BosonWeight_muFUp;
+        internalBosonWeight_muFDown   = BosonWeight_muFDown;
+    }
     
+    // additional uncertainty for low pt w bosons because of missing HT 0To70
+    //if (processname.find("wlnujets") != std::string::npos && W_Pt > 30. && W_Pt < 100.){
+    //    internalBosonWeight_W_low_pt_Up = 1.5;
+    //    internalBosonWeight_W_low_pt_Down = 0.5;
+    //}
+    
+    // additional uncertainty for lower pt isolated photons because of crude isolation calculation and and weird corrections behavior in this range
+    if (processname.find("gammajets") != std::string::npos && Gamma_Pt > 100. && Gamma_Pt < 290.){
+        internalBosonWeight_G_low_pt_Up = 1.5;
+        internalBosonWeight_G_low_pt_Down = 0.5;
+    }
+
     // monojet higher-order vjets k factors
     float qcd_nlo_sf = 1.0;
     float ewk_nlo_sf = 1.0;
@@ -79,6 +116,12 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
         if ((W_Pt < qcd_nlo_wlnu.GetHistogramLowerEdge("qcd_nlo_wlnu")) || (W_Pt < ewk_nlo_wlnu.GetHistogramLowerEdge("ewk_nlo_wlnu"))) {
             internalBosonWeight_monojet_low_pt_up = 1.5;
             internalBosonWeight_monojet_low_pt_down = 0.5;
+            if (W_Pt > 30.) {
+                //internalBosonWeight_monojet = internalBosonWeight;
+                float k_factor_ratio = internalBosonWeight/internalBosonWeight_monojet;
+                internalBosonWeight_W_low_pt_Up = (k_factor_ratio > 1.0) ? k_factor_ratio : 1.001;
+                internalBosonWeight_W_low_pt_Down = 0.999;
+            }
         }
     }
     else if (processname.find("znunujets") != std::string::npos && Z_Pt > 0.) {
@@ -112,43 +155,6 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     //std::cout << "NLO QCD SF from monojet: " << qcd_nlo_sf << std::endl;
     //std::cout << "NLO EWK SF from monojet: " << ewk_nlo_sf << std::endl;
     //std::cout << "COMBINED SF from monojet: " << qcd_nlo_sf*ewk_nlo_sf << std::endl;
-
-    if ((processname.find("wlnujets") != std::string::npos && W_Pt > 30.) || (processname.find("zlljets") != std::string::npos && Z_Pt > 100.) ||
-        (processname.find("znunujets") != std::string::npos && Z_Pt > 100.) || (processname.find("gammajets") != std::string::npos && Gamma_Pt > 100.)) {
-        internalBosonWeight           = BosonWeight_nominal;
-        internalBosonWeight_QCD1Up    = BosonWeight_QCD1Up/internalBosonWeight;
-        internalBosonWeight_QCD1Down  = BosonWeight_QCD1Down/internalBosonWeight;
-        internalBosonWeight_QCD2Up    = BosonWeight_QCD2Up/internalBosonWeight;
-        internalBosonWeight_QCD2Down  = BosonWeight_QCD2Down/internalBosonWeight;
-        internalBosonWeight_QCD3Up    = BosonWeight_QCD3Up/internalBosonWeight;
-        internalBosonWeight_QCD3Down  = BosonWeight_QCD3Down/internalBosonWeight;
-        internalBosonWeight_EW1Up     = BosonWeight_EW1Up/internalBosonWeight;
-        internalBosonWeight_EW1Down   = BosonWeight_EW1Down/internalBosonWeight;
-        internalBosonWeight_EW2Up     = BosonWeight_EW2Up/internalBosonWeight;
-        internalBosonWeight_EW2Down   = BosonWeight_EW2Down/internalBosonWeight;
-        internalBosonWeight_EW3Up     = BosonWeight_EW3Up/internalBosonWeight;
-        internalBosonWeight_EW3Down   = BosonWeight_EW3Down/internalBosonWeight;
-        internalBosonWeight_MixedUp   = BosonWeight_MixedUp/internalBosonWeight;
-        internalBosonWeight_MixedDown = BosonWeight_MixedDown/internalBosonWeight;
-        internalBosonWeight_AlphaSUp  = BosonWeight_AlphaUp/internalBosonWeight;
-        internalBosonWeight_AlphaSDown= BosonWeight_AlphaDown/internalBosonWeight;
-        internalBosonWeight_muRUp     = BosonWeight_muRUp;
-        internalBosonWeight_muRDown   = BosonWeight_muRDown;
-        internalBosonWeight_muFUp     = BosonWeight_muFUp;
-        internalBosonWeight_muFDown   = BosonWeight_muFDown;
-    }
-    
-    // additional uncertainty for low pt w bosons because of missing HT 0To70
-    if (processname.find("wlnujets") != std::string::npos && W_Pt > 30. && W_Pt < 100.){
-        internalBosonWeight_W_low_pt_Up = 1.5;
-        internalBosonWeight_W_low_pt_Down = 0.5;
-    }
-    
-    // additional uncertainty for lower pt isolated photons because of crude isolation calculation and and weird corrections behavior in this range
-    if (processname.find("gammajets") != std::string::npos && Gamma_Pt > 100. && Gamma_Pt < 290.){
-        internalBosonWeight_G_low_pt_Up = 1.5;
-        internalBosonWeight_G_low_pt_Down = 0.5;
-    }
     
     // use Lindert theory corrections in any case at the moment
     if (processname.find("gammajets") != std::string::npos){
