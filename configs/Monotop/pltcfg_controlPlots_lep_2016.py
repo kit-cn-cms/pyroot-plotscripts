@@ -373,7 +373,7 @@ samples = [
         "Z(#nu#nu)+jets",
         ROOT.kOrange + 7,
         path_mwassmer + "/ZJetsToNuNu_HT*/*nominal*.root",
-        lumi,
+        lumi + "*3.0",
         "znunujets",
         samDict=sampleDict,
         readTrees=doReadTrees,
