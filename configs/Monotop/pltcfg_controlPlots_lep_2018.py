@@ -152,8 +152,8 @@ topptWeightNom = "1."
 
 
 # higher-order v+jets theory reweighting weight
-bosonWeightNom = "internalBosonWeight"
-#bosonWeightNom = "internalBosonWeight_monojet"
+#bosonWeightNom = "internalBosonWeight"
+bosonWeightNom = "internalBosonWeight_monojet"
 
 # ps shower uncertainties
 

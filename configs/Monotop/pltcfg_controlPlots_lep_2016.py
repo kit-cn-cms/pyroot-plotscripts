@@ -152,8 +152,8 @@ topptWeightNom = "1."
 
 
 # higher-order v+jets theory reweighting weight
-bosonWeightNom = "internalBosonWeight"
-#bosonWeightNom = "internalBosonWeight_monojet"
+#bosonWeightNom = "internalBosonWeight"
+bosonWeightNom = "internalBosonWeight_monojet"
 
 
 #deepakMistagSF = "((AK15Jet_TopMatched[0]<0.5)*1.0+(AK15Jet_TopMatched[0]>0.5)*1.)"
