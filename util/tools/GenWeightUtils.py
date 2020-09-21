@@ -15,7 +15,8 @@ class GenWeightNormalization():
             self.fractions["TTH_PTH_60_120"] = self.readCSVFile("fiducial_xs_norm_TTH_PTH_60_120")
             self.fractions["TTH_PTH_120_200"] = self.readCSVFile("fiducial_xs_norm_TTH_PTH_120_200")
             self.fractions["TTH_PTH_200_300"] = self.readCSVFile("fiducial_xs_norm_TTH_PTH_200_300")
-            self.fractions["TTH_PTH_GT300"] = self.readCSVFile("fiducial_xs_norm_TTH_PTH_GT300")
+            self.fractions["TTH_PTH_300_450"] = self.readCSVFile("fiducial_xs_norm_TTH_PTH_300_450")
+            self.fractions["TTH_PTH_GT450"] = self.readCSVFile("fiducial_xs_norm_TTH_PTH_GT450")
         self.weightList = self.getWeightVarsList()
         self.namespace_name = "GenNormMap"
         # print(self.weightList)
