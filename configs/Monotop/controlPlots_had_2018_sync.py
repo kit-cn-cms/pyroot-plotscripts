@@ -819,6 +819,22 @@ def GetPlots(extension, selection, label):
             selection,
             label,
         ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+            #"DeltaPhi_LooseMuon_MET" + extension, "#Delta#phi(#mu, #slash{E}_{T})", 32, 0.0, 3.2
+            #),
+            #"DeltaPhi_LooseMuon_MET",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"DeltaR_AK4Jet_LooseMuon" + extension, "#DeltaR(#mu, AK4 Jet)", 30, 0.0, 6.0
+            #),
+            #"DeltaR_AK4Jet_LooseMuon",
+            #selection,
+            #label,
+        #),
         plotClasses.Plot(
             ROOT.TH1D("Muon_Pt" + extension, "Tight Muon p_{T} [GeV]", 30, 10.0, 610.0),
             "Muon_Pt",
@@ -909,6 +925,22 @@ def GetPlots(extension, selection, label):
             selection,
             label,
         ),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"DeltaPhi_LooseElectron_MET" + extension, "#Delta#phi(e, #slash{E}_{T})", 32, 0.0, 3.2
+            #),
+            #"DeltaPhi_LooseElectron_MET",
+            #selection,
+            #label,
+        #),
+        #plotClasses.Plot(
+            #ROOT.TH1D(
+                #"DeltaR_AK4Jet_LooseElectron" + extension, "#DeltaR(AK4 jet, e)", 30, 0.0, 6.0
+            #),
+            #"DeltaR_AK4Jet_LooseElectron",
+            #selection,
+            #label,
+        #),
         plotClasses.Plot(
             ROOT.TH1D(
                 "Electron_Pt" + extension, "Tight Electron p_{T} [GeV]", 30, 10.0, 610.0
@@ -1177,19 +1209,19 @@ def GetPlots(extension, selection, label):
 discr_binning = [250.0, 280.0, 310.0, 340.0, 370.0, 400.0, 430.0, 470.0, 510.0, 550.0, 590.0, 640.0, 690.0, 740.0, 790.0, 840.0, 900.0, 960.0, 1020.0, 1090.0, 1160.0, 1250.0, 3000]
 
 # met/recoil + >=1 ak15jet phase space
-generalselection = "(Hadr_Recoil_Pt>=250.)*(N_AK15Jets>=1)"
+generalselection = "(Hadr_Recoil_Pt>=250.)*(N_AK15Jets>=1)*(N_Jets>=1)"
 
 # tau veto
 generalselection += "*(N_Taus==0)"
 
 # leading ak15 jet back to back with recoil
-#generalselection += "*(DeltaPhi_AK15Jet_Hadr_Recoil[0]>1.5)"
+generalselection += "*(DeltaPhi_AK15Jet_Hadr_Recoil[0]>1.5)"
 
 # HEM jet veto
 generalselection += "*(N_HEM_Jets==0)"#*(N_HEM_AK15Jets==0)"#*(N_HEM_METS==0)"
 
 # QCD rejection
-generalselection += "*(DeltaPhi_AK4Jets_Recoil_Larger_0p8)"
+generalselection += "*(DeltaPhi_AK4Jets_Recoil_Larger_0p5)"
 
 # make sure that the each ak15 jet has actually also an associated softdropped jet
 generalselection += "*(N_AK15Jets_SoftDrop==N_AK15Jets)"
@@ -1198,7 +1230,7 @@ generalselection += "*(N_AK15Jets_SoftDrop==N_AK15Jets)"
 generalselection += "*(CaloMET_PFMET_Recoil_ratio<0.5)"
 
 # ak15 jet quality cuts
-#generalselection += "*(AK15Jet_CHF[0]>0.1)*(AK15Jet_NHF[0]<0.8)"#*(AK15Jet_CEMF[0]<0.8)*(AK15Jet_NEMF[0]<0.7)*(AK15Jet_MF[0]<0.2)"
+generalselection += "*(AK15Jet_CHF[0]>0.1)*(AK15Jet_NHF[0]<0.8)"
 
 # top mass window
 #generalselection += "*(AK15Jet_PuppiSoftDropMass[0]>105.)*(AK15Jet_PuppiSoftDropMass[0]<210.)"
@@ -1252,7 +1284,7 @@ def control_plots_had_CR_ZMuMu(data=None):
     
     # anti ttbar requirements
     #selection += "*(DiMuon_Pt>200.)"
-    selection += "*(Evt_Pt_MET<80.)"
+    selection += "*(Evt_Pt_MET<120.)"
 
     plots = GetPlots(extension, selection, label)
     
@@ -1282,7 +1314,7 @@ def control_plots_had_CR_ZElEl(data=None):
     
     # anti ttbar requirements
     #selection += "*(DiElectron_Pt>200.)"
-    selection += "*(Evt_Pt_MET<80.)"
+    selection += "*(Evt_Pt_MET<120.)"
 
     plots = GetPlots(extension, selection, label)
     
@@ -1311,7 +1343,7 @@ def control_plots_had_CR_ttbarEl(data=None):
     selection += "*(Evt_Pt_MET>100.)"
     
     # cut to improve data/mc modeling
-    selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p7)"
+    #selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p7)"
     
     # cut to be orthogonal to leptonic analysis
     #selection += "*(M_W_transverse[0]<150.)"
@@ -1337,6 +1369,8 @@ def control_plots_had_CR_ttbarMu(data=None):
     
     # btagging requirement to enrich ttbar
     selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]>=1)"
+    
+    selection += "*(Evt_Pt_MET>100.)"
     
     # cut to improve data/mc modeling
     #selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p7)"
@@ -1370,7 +1404,7 @@ def control_plots_had_CR_WEl(data=None):
     selection += "*(Evt_Pt_MET>100.)"
     
     # cut to improve data/mc modeling
-    selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p7)"
+    #selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p7)"
     
     # cut to be orthogonal to leptonic analysis
     #selection += "*(M_W_transverse[0]<150.)"
@@ -1396,6 +1430,8 @@ def control_plots_had_CR_WMu(data=None):
     
     # btagging requirement to enrich w+jets
     selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0)"
+    
+    selection += "*(Evt_Pt_MET>100.)"
     
     # cut to improve data/mc modeling
     #selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p7)"

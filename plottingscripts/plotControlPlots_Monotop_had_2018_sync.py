@@ -199,7 +199,7 @@ def main(pyrootdir, opts):
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
         
         pP.setCatNames([""])
-        pP.setCatSelections(["(Hadr_Recoil_Pt>250.)*(N_AK15Jets>=1)*(N_HEM_Jets==0)*(DeltaPhi_AK4Jets_Recoil_Larger_0p8)*(N_Taus==0)*(N_AK15Jets_SoftDrop==N_AK15Jets)"])
+        pP.setCatSelections(["(Hadr_Recoil_Pt>250.)*(N_AK15Jets>=1)*(N_Jets>=1)*(N_HEM_Jets==0)*(N_Taus==0)*(N_AK15Jets_SoftDrop==N_AK15Jets)*(DeltaPhi_AK4Jets_Recoil_Larger_0p5)*(CaloMET_PFMET_Recoil_ratio<0.5)*(AK15Jet_CHF[0]>0.1)*(AK15Jet_NHF[0]<0.8)"])
 
         # run plotParallel
         pP.run()
