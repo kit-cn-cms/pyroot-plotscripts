@@ -232,7 +232,7 @@ def mergeSystematicsInterface(jobsToSubmit, maxTries = 10, nTries = 0):
         print("resubmitting scripts to merge systematics")
         jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, arrayName = "merge_systs_resubmit")
     else:
-        print("renaming did not work after "+str(maxTries)+" tries - ABORTING")
+        print("merging did not work after "+str(maxTries)+" tries - ABORTING")
         sys.exit(1)
 
     # monitor running of jobs
@@ -240,6 +240,9 @@ def mergeSystematicsInterface(jobsToSubmit, maxTries = 10, nTries = 0):
     # checking for undone jobs
     undoneJobs = mergeSystematicsTerminationCheck(os.path.dirname(jobsToSubmit[0]), jobIDs)
 
+    if isinstance(undoneJobs, str) and undoneJobs == "all":
+        print("A fatal error occured when merging systematics, will try again")
+        return mergeSystematicsInterface(jobsToSubmit, maxTries = maxTries, nTries = nTries+1)
     if len(undoneJobs) > 0:
         return mergeSystematicsInterface(undoneJobs, maxTries = maxTries, nTries = nTries+1)
 
@@ -254,7 +257,9 @@ def mergeSystematicsTerminationCheck(jobdir, jobIDs):
         for fpath in files:
             with open(fpath) as f:
                 lines = f.read().splitlines()
-            if len(lines) == 0 or not lines[-1] == "DONE":
+            if len(lines) == 0: 
+                return "all"
+            elif not lines[-1] == "DONE":
                 #DANGERZONE: index seems to be different between local and grid run
                 p = lines[2]
                 missing_processes.append(p)
