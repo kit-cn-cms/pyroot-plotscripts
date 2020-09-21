@@ -66,7 +66,8 @@ STXS_stage1_0 = '*(GenHiggs_Pt<=60)'
 STXS_stage1_1 = '*((GenHiggs_Pt>=60)&&(GenHiggs_Pt<120))'
 STXS_stage1_2 = '*((GenHiggs_Pt>=120)&&(GenHiggs_Pt<200))'
 STXS_stage1_3 = '*((GenHiggs_Pt>=200)&&(GenHiggs_Pt<300))'
-STXS_stage1_4 = '*(GenHiggs_Pt>=300)'
+STXS_stage1_4 = '*((GenHiggs_Pt>=350)&&(GenHiggs_Pt<300))'
+STXS_stage1_5 = '*(GenHiggs_Pt>=450)'
 
 # need to veto muon events in electron dataset to avoid double counting and vice versa
 sel_singleel="(N_LooseMuons==0 && N_TightElectrons==1 && Triggered_HLT_Ele27_WPTight_Gsf_vX)"
@@ -138,7 +139,8 @@ def constructSTXSnormedVariation(weight = "Weight_scale_variation_muR_1p0_muF_0p
     replacement += "("+STXS_stage0_+STXS_stage1_1+'*(fracRatio_TTH_PTH_60_120.at("{weight}")))+'
     replacement += "("+STXS_stage0_+STXS_stage1_2+'*(fracRatio_TTH_PTH_120_200.at("{weight}")))+'
     replacement += "("+STXS_stage0_+STXS_stage1_3+'*(fracRatio_TTH_PTH_200_300.at("{weight}")))+'
-    replacement += "("+STXS_stage0_+STXS_stage1_4+'*(fracRatio_TTH_PTH_GT300.at("{weight}")))'
+    replacement += "("+STXS_stage0_+STXS_stage1_4+'*(fracRatio_TTH_PTH_300_450.at("{weight}")))'
+    replacement += "("+STXS_stage0_+STXS_stage1_5+'*(fracRatio_TTH_PTH_GT450.at("{weight}")))'
     replacement +=  ")"
     return replacement.format(weight=weight)
 
@@ -349,11 +351,17 @@ samples_ttH_STXS = [
             'TTH_PTH_200_300',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
-    plotClasses.Sample('t#bar{t}H_PTH_GT300',602,
+    plotClasses.Sample('t#bar{t}H_PTH_300_450',602,
             ttHpath,
             lumi+sel_MET+STXS_stage0+STXS_stage1_4,
-            'TTH_PTH_GT300',
+            'TTH_PTH_300_450',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+    plotClasses.Sample('t#bar{t}H_PTH_GT450',605,
+            ttHpath,
+            lumi+sel_MET+STXS_stage0+STXS_stage1_5,
+            'TTH_PTH_GT450',
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal")
+        
 ]
 
 samples_tH = [
