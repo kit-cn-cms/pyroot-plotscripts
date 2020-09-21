@@ -338,7 +338,7 @@ samplesDataControlPlots += [
 samples = [
     # signal samples
     #plotClasses.Sample(
-        #"#splitline{Vector Monotop}{M_{#phi}=2000 GeV M_{#chi}=500 GeV}",
+        #"#splitline{Vector Mono-top}{M_{V}=2000 GeV M_{#chi}=500 GeV}",
         #ROOT.kCyan,
         #path_mwassmer + "/Vector_MonoTop_NLO_Mphi-2000_Mchi-500*/*nominal*.root",
         # lumi reweighting factor due to stupid cross section calculation
@@ -457,7 +457,7 @@ for sample_folder in sample_folders:
     if "Vector_MonoTop" in sample_folder:
         sample_name = sample_folder
         mphi,mchi = find_masses(sample_name)
-        sample_label = "#splitline{Vector Monotop}{M_{#phi}="+mphi+" GeV, "+"M_{#chi}="+mchi+" GeV}"
+        sample_label = "#splitline{Vector Mono-top}{M_{V}="+mphi+" GeV, "+"M_{#chi}="+mchi+" GeV}"
         print sample_label
         sample_name = sample_name.lower()
         sample_name = sample_name.replace("-","_")
