@@ -35,7 +35,7 @@ def main(pyrootdir, opts):
     workdir = pyrootdir + "/workdir/" + name
 
     # signal process
-    signalProcess = "ttH"
+    signalProcess = "TTH"
     nSigSamples   = 1
 
     # dataera
