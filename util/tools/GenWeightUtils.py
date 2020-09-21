@@ -183,7 +183,7 @@ namespace {namespace_name}{{
         code = """
         TString currentRelevantSampleNameForGenWeights = sampleDataBaseIdentifiers[currentfilename];
         isFourFSsample = 0.;
-        if (currentRelevantSampleNameForGenWeights.BeginsWith("TTbb4f")){{
+        if (currentRelevantSampleNameForGenWeights.BeginsWith("TTbb")){{
             isFourFSsample = 1.;
         }}
         resetMap(internalNormFactors, 1.0);
