@@ -156,17 +156,17 @@ topptWeightNom = "1."
 bosonWeightNom = "internalBosonWeight_monojet"
 
 
-#deepakMistagSF = "((AK15Jet_TopMatched[0]<0.5)*1.0+(AK15Jet_TopMatched[0]>0.5)*1.)"
-#deepakMistagSF_low_up = "((AK15Jet_TopMatched[0]<0.5 && AK15Jet_Pt[0]<400.)*1.5+(AK15Jet_TopMatched[0]>0.5 && AK15Jet_Pt[0]<400.)*1.+(AK15Jet_Pt[0]>=400.)*1.)"
-#deepakMistagSF_low_down = "((AK15Jet_TopMatched[0]<0.5 && AK15Jet_Pt[0]<400.)*0.5+(AK15Jet_TopMatched[0]>0.5 && AK15Jet_Pt[0]<400.)*1.+(AK15Jet_Pt[0]>=400.)*1.)"
-#deepakMistagSF_high_up = "((AK15Jet_TopMatched[0]<0.5 && AK15Jet_Pt[0]>=400.)*1.5+(AK15Jet_TopMatched[0]>0.5 && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
-#deepakMistagSF_high_down = "((AK15Jet_TopMatched[0]<0.5 && AK15Jet_Pt[0]>=400.)*0.5+(AK15Jet_TopMatched[0]>0.5 && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
+deepakMistagSF = "((AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5)*1.0+(AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5)*1.)"
+deepakMistagSF_low_up = "((AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]<400.)*1.5+((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]<400.)*1.+(AK15Jet_Pt[0]>=400.)*1.)"
+deepakMistagSF_low_down = "((AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]<400.)*0.5+((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]<400.)*1.+(AK15Jet_Pt[0]>=400.)*1.)"
+deepakMistagSF_high_up = "((AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]>=400.)*1.5+((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
+deepakMistagSF_high_down = "((AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]>=400.)*0.5+((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
 
-#deepakEfficiencySF = "((AK15Jet_TopMatched[0]>0.5)*1.0+(AK15Jet_TopMatched[0]<0.5)*1.)"
-#deepakEfficiencySF_low_up = "((AK15Jet_TopMatched[0]>0.5 && AK15Jet_Pt[0]<400.)*1.5+(AK15Jet_TopMatched[0]<0.5 && AK15Jet_Pt[0]<400.)*1.+(AK15Jet_Pt[0]>=400.)*1.)"
-#deepakEfficiencySF_low_down = "((AK15Jet_TopMatched[0]>0.5 && AK15Jet_Pt[0]<400.)*0.5+(AK15Jet_TopMatched[0]<0.5 && AK15Jet_Pt[0]<400.)*1.+(AK15Jet_Pt[0]>=400.)*1.)"
-#deepakEfficiencySF_high_up = "((AK15Jet_TopMatched[0]>0.5 && AK15Jet_Pt[0]>=400.)*1.5+(AK15Jet_TopMatched[0]<0.5 && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
-#deepakEfficiencySF_high_down = "((AK15Jet_TopMatched[0]>0.5 && AK15Jet_Pt[0]>=400.)*0.5+(AK15Jet_TopMatched[0]<0.5 && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
+deepakEfficiencySF = "((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5)*1.0+(AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5)*1.)"
+deepakEfficiencySF_low_up = "(((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]<400.)*1.5+(AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]<400.)*1.+(AK15Jet_Pt[0]>=400.)*1.)"
+deepakEfficiencySF_low_down = "(((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]<400.)*0.5+(AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]<400.)*1.+(AK15Jet_Pt[0]>=400.)*1.)"
+deepakEfficiencySF_high_up = "(((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]>=400.)*1.5+(AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
+deepakEfficiencySF_high_down = "(((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]>=400.)*0.5+(AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
 
 vvj_sample_renorm_factor = "0.81"
 evj_sample_renorm_factor = "0.83"
@@ -248,16 +248,16 @@ weightReplacements = {
     "PHOTONTRIGGERSFUP" : photonTriggerSFs_up,
     "PHOTONTRIGGERSFDOWN" : photonTriggerSFs_down,
     
-    "DEEPAKMISTAGNOM" : "1.",
-    #"DEEPAKMISTAGLOWUP" : deepakMistagSF_low_up,
-    #"DEEPAKMISTAGLOWDOWN" : deepakMistagSF_low_down,
-    #"DEEPAKMISTAGHIGHUP" : deepakMistagSF_high_up,
-    #"DEEPAKMISTAGHIGHDOWN" : deepakMistagSF_high_down,
-    "DEEPAKEFFICIENCYNOM" : "1.",
-    #"DEEPAKEFFICIENCYLOWUP" : deepakEfficiencySF_low_up,
-    #"DEEPAKEFFICIENCYLOWDOWN" : deepakEfficiencySF_low_down,
-    #"DEEPAKEFFICIENCYHIGHUP" : deepakEfficiencySF_high_up,
-    #"DEEPAKEFFICIENCYHIGHDOWN" : deepakEfficiencySF_high_down,
+    "DEEPAKMISTAGNOM" : deepakMistagSF,
+    "DEEPAKMISTAGLOWUP" : deepakMistagSF_low_up,
+    "DEEPAKMISTAGLOWDOWN" : deepakMistagSF_low_down,
+    "DEEPAKMISTAGHIGHUP" : deepakMistagSF_high_up,
+    "DEEPAKMISTAGHIGHDOWN" : deepakMistagSF_high_down,
+    "DEEPAKEFFICIENCYNOM" : deepakEfficiencySF,
+    "DEEPAKEFFICIENCYLOWUP" : deepakEfficiencySF_low_up,
+    "DEEPAKEFFICIENCYLOWDOWN" : deepakEfficiencySF_low_down,
+    "DEEPAKEFFICIENCYHIGHUP" : deepakEfficiencySF_high_up,
+    "DEEPAKEFFICIENCYHIGHDOWN" : deepakEfficiencySF_high_down,
     
     # prefire weights
     "PREFIREWEIGHTNOM": prefireWeightNom,
