@@ -13,6 +13,7 @@ from array import array
 from copy import deepcopy
 
 fast = False
+superfast = False
 
 def GetPlots(extension, selection, label):
     plots = [
@@ -497,6 +498,30 @@ def GetPlots(extension, selection, label):
                     "DeltaR_AK4Jet_LooseMuon_0" + extension, "#DeltaR(#mu, AK4 Jet 0)", 30, 0.0, 6.0
                 ),
                 "DeltaR_AK4Jet_LooseMuon[0]",
+                selection,
+                label,
+            ),
+            plotClasses.Plot(
+                ROOT.TH1D("yield" + extension, "yield", 1, 0.0, 2.0), "1.", selection, label
+            )
+        ]
+    if superfast:
+        plots = [
+            plotClasses.Plot(
+                ROOT.TH1D("M_W_transverse" + extension, "m_{T} [GeV]", len(discr_binning)-1, array('d',discr_binning)),
+                "M_W_transverse",
+                selection,
+                label,
+            ),
+            plotClasses.Plot(
+                ROOT.TH1D("M_W_transverse_generic_binning" + extension, "m_{T} [GeV]", 40, 40, 440),
+                "M_W_transverse",
+                selection,
+                label,
+            ),
+            plotClasses.Plot(
+                ROOT.TH1D("M_W_transverse_binning_studies" + extension, "m_{T} [GeV]", 192, 40, 1000),
+                "M_W_transverse",
                 selection,
                 label,
             ),
