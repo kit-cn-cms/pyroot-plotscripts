@@ -254,15 +254,15 @@ weightReplacements = {
     "PHOTONTRIGGERSFDOWN" : photonTriggerSFs_down,
     
     "DEEPAKMISTAGNOM" : "1.",
-    #"DEEPAKMISTAGLOWUP" : deepakMistagSF_low_up,
-    #"DEEPAKMISTAGLOWDOWN" : deepakMistagSF_low_down,
-    #"DEEPAKMISTAGHIGHUP" : deepakMistagSF_high_up,
-    #"DEEPAKMISTAGHIGHDOWN" : deepakMistagSF_high_down,
+    "DEEPAKMISTAGLOWUP" : "1.",
+    "DEEPAKMISTAGLOWDOWN" : "1.",
+    "DEEPAKMISTAGHIGHUP" : "1.",
+    "DEEPAKMISTAGHIGHDOWN" : "1.",
     "DEEPAKEFFICIENCYNOM" : "1.",
-    #"DEEPAKEFFICIENCYLOWUP" : deepakEfficiencySF_low_up,
-    #"DEEPAKEFFICIENCYLOWDOWN" : deepakEfficiencySF_low_down,
-    #"DEEPAKEFFICIENCYHIGHUP" : deepakEfficiencySF_high_up,
-    #"DEEPAKEFFICIENCYHIGHDOWN" : deepakEfficiencySF_high_down,
+    "DEEPAKEFFICIENCYLOWUP" : "1.",
+    "DEEPAKEFFICIENCYLOWDOWN" : "1.",
+    "DEEPAKEFFICIENCYHIGHUP" : "1.",
+    "DEEPAKEFFICIENCYHIGHDOWN" : "1.",
    
     ## do weights for data
     "DOWEIGHTS": "(DoWeights==1)+(DoWeights==0)*1.0",
