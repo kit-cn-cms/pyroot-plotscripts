@@ -9,40 +9,19 @@ pyrootdir = os.path.dirname(filedir)
 sys.path.append(pyrootdir)
 import util.tools.plotClasses as plotClasses
 import unfolding_setup
-reco_bins = []
-gen_bins  = []
-
-genSel  = ""
-recoSel = ""
-recoLabel = ""
-recoTag = ""
-
-gen_variable = ""
-reco_variable = ""
-
-name_tag = ""
-gen_label_tag = ""
-reco_label_tag = ""
 # samples
 # input path 
 path  = "/nfs/dust/cms/group/ttx-kit/ntuples_ttH/2018/"
-path_ttbar_old = path+'/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
-                 path+'/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'+";"+ \
-                 path+'/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'
-path_ttbb_old = path+"/TTbb_4f_TTToSemiLeptonic_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"+";"+ \
-                path+"/TTbb_4f_TTTo2l2nu_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"+";"+ \
-                path+"/TTbb_4f_TTToHadronic_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"
-
 # separate ttjets samples
-path_ttjets = "/nfs/dust/cms/group/ttx-kit/ntuples_ttbb/2018_noTag/"
+path_ttjets = "/nfs/dust/cms/group/ttx-kit/ntuples_ttbb/2018_2tag/"
 
-path_ttbar = path_ttjets+'/incl_TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
-             path_ttjets+'/incl_TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'+";"+ \
-             path_ttjets+'/incl_TTToHadronic_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'
+path_ttbar = path_ttjets+'/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
+             path_ttjets+'/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'+";"+ \
+             path_ttjets+'/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'
              
-path_ttbb = path_ttjets+"/incl_TTbb_4f_TTToSemiLeptonic_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"+";"+ \
-            path_ttjets+"/incl_TTbb_4f_TTTo2l2nu_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"+";"+ \
-            path_ttjets+"/incl_TTbb_4f_TTToHadronic_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"
+path_ttbb = path_ttjets+"/TTbb_4f_TTToSemiLeptonic_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"+";"+ \
+            path_ttjets+"/TTbb_4f_TTTo2l2nu_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"+";"+ \
+            path_ttjets+"/TTbb_4f_TTToHadronic_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"
 
 
 
@@ -74,7 +53,7 @@ ttZpath =  path+'/TTZToQQ*/*nominal*.root'+';'+ \
            path+'/TTZToLLNuNu_M-10*/*nominal*.root'+';'
 
 friendTrees = {
-    "genInfo": "/nfs/dust/cms/group/ttx-kit/ntuples_ttbb/friendTrees/addbb/2018_noTag/"
+    "genInfo": "/nfs/dust/cms/group/ttx-kit/ntuples_ttbb/friendTrees/addbb/2018_2tag/"
     }
 
 # SELECTIONS
@@ -200,54 +179,15 @@ samplesDataControlPlots=[
             'SingleEl', samDict=sampleDict, readTrees=doReadTrees)
 ]
 
+samples_ttbb = [
+     plotClasses.Sample('t#bar{t}+B',ROOT.kOrange,
+             path_ttbb,
+             lumi+'*(GenEvt_I_TTPlusBB>=1)'+ttbb_4FS_scale+sel_MET,
+             'ttbb',
+             samDict=sampleDict, readTrees=doReadTrees),
+    ]
+
 extendSystematics = {}
-unfoldingSampleNames = []
-def setup_signal_samples():
-    samples = [
-         plotClasses.Sample('t#bar{t}+b#bar{b}',ROOT.kGreen+2,
-                 path_ttbb,
-                 lumi+'*(GenEvt_I_TTPlusBB==3)*'+genSel+ttbb_4FS_scale+sel_MET,
-                 'ttbb',
-                 samDict=sampleDict, readTrees=doReadTrees,
-                 plot = True, typ = "signal"),
-
-         plotClasses.Sample('t#bar{t}+b#bar{b} (5FS)',ROOT.kAzure,
-                 path_ttbar,
-                 lumi+'*(GenEvt_I_TTPlusBB==3)*'+genSel+ttbb_4FS_scale+sel_MET,
-                 'ttbb_5FS',
-                 samDict=sampleDict, readTrees=doReadTrees,
-                 plot = True, typ = "signal"),
-
-         plotClasses.Sample('t#bar{t}+b#bar{b} (ooA)',ROOT.kYellow+4,
-                 path_ttbb,
-                 lumi+'*(GenEvt_I_TTPlusBB==3)*(('+genSel+")==0)"+ttbb_4FS_scale+sel_MET,
-                 'bkg_ttbb',
-                 samDict=sampleDict, readTrees=doReadTrees),
-
-         plotClasses.Sample('t#bar{t}+2b',ROOT.kOrange,
-                 path_ttbb_old,
-                 lumi+'*(GenEvt_I_TTPlusBB==2)'+ttbb_4FS_scale+sel_MET,
-                 'tt2b',
-                 samDict=sampleDict, readTrees=doReadTrees),
-
-         plotClasses.Sample('t#bar{t}+b',ROOT.kOrange+1,
-                 path_ttbb_old,
-                 lumi+'*(GenEvt_I_TTPlusBB==1)'+ttbb_4FS_scale+sel_MET,
-                 'ttb',
-                 samDict=sampleDict, readTrees=doReadTrees),
-        ]
-
-    extendSystematics = {}
-    add_samples, extraSampleNames = unfolding_setup.generateGenLevelBins(
-        plotClasses = plotClasses, sampleDict = sampleDict, doReadTrees = doReadTrees,
-        copyClass = samples[0],
-        variable  = gen_variable,
-        binEdges  = gen_bins,
-        nameTag   = name_tag, labelTag = gen_label_tag,
-        type = 'bkg', plot = True)
-    extendSystematics["ttbb"] = extraSampleNames
-    samples+=add_samples
-    return samples, extraSampleNames, extendSystematics
 
 samples_minor_backgrounds = [
     plotClasses.Sample('t',ROOT.kAzure,
@@ -296,68 +236,44 @@ samples_minor_backgrounds = [
 samples_ttnonbb = [
     # ttbar 5FS default background samples
     plotClasses.Sample('t#bar{t}+jj',ROOT.kOrange+9,
-            path_ttbar_old,
+            path_ttbar,
             lumi+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)'+sel_MET+sel_StrangeMuWeights,
             'ttjj',
             samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}+c#bar{c}',ROOT.kOrange+7,
-            path_ttbar_old,
+            path_ttbar,
             lumi+'*(GenEvt_I_TTPlusCC==1)'+sel_MET+sel_StrangeMuWeights,
             'ttcc',
             samDict=sampleDict, readTrees=doReadTrees),
     ]
 
-samples = samples_ttnonbb
+samples = samples_ttbb
+samples += samples_ttnonbb
 samples += samples_minor_backgrounds
 
 
-def get_list_of_processes():
-    processes = []
-    for sample in samples:
-        processes.append(sample.nick)
-    return processes
 
-def get_datacard_processes():
-    processes = []
-    for sample in samples:
-        processes.append(sample.nick)
-    
-    datacard_processes  = [p for p in processes if not (p == "ttbb" or p == "ttbb_5FS")]
-    return datacard_processes
+processes = []
+for sample in samples:
+    processes.append(sample.nick)
+list_of_processes   = processes
+datacard_processes  = [p for p in processes if not (p == "ttbb" or p == "ttbb_5FS")]
+pseudo_data_samples = [x for x in samples if not p.startswith("ttbb_")]
 
-def get_pseudo_data_samples():
-    processes = []
-    for sample in samples:
-        processes.append(sample.nick)
-    pseudo_data_samples = [x for x in samples if not p.startswith("ttbb_")]
-    return pseudo_data_samples
+plottingsamples = [
+    plotClasses.Sample("t#bar{t}+X", ROOT.kRed, "", "",
+        "ttX", addsamples = ["ttZ","ttW","ttH"],
+        samDict = sampleDict, readTrees = doReadTrees),
 
-def get_plottingsamples():
-    plottingsamples = [
-        plotClasses.Sample("t#bar{t}+bj", ROOT.kOrange+1, "", "",
-            "ttbj", addsamples = ["tt2b", "ttb"],
-            samDict = sampleDict, readTrees = doReadTrees),
+    plotClasses.Sample("misc.", 18, "", "",
+        "vjets", addsamples = ["diboson", "wjets", "zjets"],
+        samDict = sampleDict, readTrees = doReadTrees),
 
-        #plotClasses.Sample("t#bar{t}+B", ROOT.kOrange, "", "",
-        #    "ttB", addsamples = ["ttbb", "tt2b", "ttb"],
-        #    samDict = sampleDict, readTrees = doReadTrees),
-
-        plotClasses.Sample("t#bar{t}+X", ROOT.kRed, "", "",
-            "ttX", addsamples = ["ttZ","ttW","ttH"],
-            samDict = sampleDict, readTrees = doReadTrees),
-
-        plotClasses.Sample("misc.", 18, "", "",
-            "vjets", addsamples = ["diboson", "wjets", "zjets"],
-            samDict = sampleDict, readTrees = doReadTrees),
-
-        # plotClasses.Sample("misc.", 18, "", "",
-        #    "misc", addsamples ["ttZ", "ttW", "wjets", "zjets", "diboson"],
-        #    samDict = sampleDict, readTrees = doReadTrees)
-         ]
-    return plottingsamples
+    # plotClasses.Sample("misc.", 18, "", "",
+    #    "misc", addsamples ["ttZ", "ttW", "wjets", "zjets", "diboson"],
+    #    samDict = sampleDict, readTrees = doReadTrees)
+     ]
 
 # sort subset of processes in plots. descending order
-def get_sortedProcesses():
-    sortedProcesses = ["ttB", "ttbb"] + unfoldingSampleNames+ ["bkg_ttbb", "ttbj", "tt2b", "ttb", "ttcc", "ttjj", "ttX"]
-    return sortedProcesses
+sortedProcesses = ["ttB", "ttbb", "bkg_ttbb", "ttbj", "tt2b", "ttb", "ttcc", "ttjj", "ttX"]

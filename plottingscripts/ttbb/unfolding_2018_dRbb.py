@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttbbUnfolding/2018_dRbb_v1'
+    name = 'ttbbUnfolding/2018_dRbb'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -50,9 +50,9 @@ def main(pyrootdir, opts):
     # define MEM discriminator variable
     memexp = "1."
     # configs
-    config          = "ttbb/samples_2018_new"
+    config          = "ttbb/samples_2018"
     variable_cfg    = "ttbb/additionalVariables"
-    plot_cfg        = "ttbb/controlPlots_rebinned"
+    plot_cfg        = "ttbb/controlPlots"
     syst_cfg        = "ttbb/systs_ttbb"
     # syst_cfg        = "legacyAnalysis/no_systs"
     replace_cfg     = "legacyAnalysis/pdf_relic_names"
@@ -207,9 +207,9 @@ def main(pyrootdir, opts):
         # pP.setDataBases(plotDataBases)
         # pP.setMEMDataBase(memDataBase)
         # pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts_nom(80000)
+        pP.setMaxEvts_nom(200000)
         # pP.setMaxEvts_nom(200000)
-        pP.setMaxEvts_systs(200000)
+        pP.setMaxEvts_systs(1000000)
         # pP.request_runtime = 60*60*5
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])

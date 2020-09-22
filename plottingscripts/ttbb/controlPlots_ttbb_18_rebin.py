@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttbbUnfolding/2018_dRbb_v1'
+    name = 'controlPlots/2018_rebin'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -50,13 +50,12 @@ def main(pyrootdir, opts):
     # define MEM discriminator variable
     memexp = "1."
     # configs
-    config          = "ttbb/samples_2018_new"
+    config          = "ttbb/samples_2018_new_rebin"
     variable_cfg    = "ttbb/additionalVariables"
-    plot_cfg        = "ttbb/controlPlots_rebinned"
-    syst_cfg        = "ttbb/systs_ttbb"
+    plot_cfg        = "ttbb/controlPlots_rebin"
+    syst_cfg        = "ttbb/no_systs"
     # syst_cfg        = "legacyAnalysis/no_systs"
     replace_cfg     = "legacyAnalysis/pdf_relic_names"
-    unfold_cfg      = "ttbb/unfold_dRbb"
 
     sfCorrection = {}
     sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2018_deepJet_combined.root"
@@ -78,13 +77,13 @@ def main(pyrootdir, opts):
     # script options
     analysisOptions = {
         # general options
-        "usePseudoData":        False,
+        "usePseudoData":        True,
         "testrun":              False,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
         "makeDataCards":        False,
-        "makeInputDatacards":   True, # create datacards also for all defined plots
+        "makeInputDatacards":   False, # create datacards also for all defined plots
         "addData":              True,  # adding real data 
         "makePlots":            True,
         # options for makePlots
@@ -152,8 +151,7 @@ def main(pyrootdir, opts):
         variable_config = variable_cfg,
         plot_config     = plot_cfg,
         execute_file    = os.path.realpath(inspect.getsourcefile(lambda:0)),
-        replace_config  = replace_cfg,
-        unfold_config   = unfold_cfg,
+        replace_config  = replace_cfg
         )
 
     configData.initSystematics(systconfig = syst_cfg)
