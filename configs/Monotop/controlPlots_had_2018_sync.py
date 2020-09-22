@@ -13,6 +13,7 @@ from array import array
 from copy import deepcopy
 
 fast = False
+superfast = False
 
 def GetPlots(extension, selection, label):
     plots = [
@@ -1200,6 +1201,36 @@ def GetPlots(extension, selection, label):
                 "Photon_Pt",
                 selection,
                 label,
+            ),
+        ]
+    if superfast:
+        plots = [
+            plotClasses.Plot(
+                ROOT.TH1D(
+                    "Hadr_Recoil_Pt" + extension, "#slash{U}_{T} [GeV]", len(discr_binning)-1, array('d',discr_binning)
+                ),
+                "Hadr_Recoil_Pt",
+                selection,
+                label,
+            ),
+            plotClasses.Plot(
+                ROOT.TH1D(
+                    "Hadr_Recoil_Pt_generic_binning" + extension, "#slash{U}_{T} [GeV]", 20, 250, 1250
+                ),
+                "Hadr_Recoil_Pt",
+                selection,
+                label,
+            ),
+            plotClasses.Plot(
+                ROOT.TH1D(
+                    "Hadr_Recoil_Pt_binning_studies" + extension, "#slash{U}_{T} [GeV]", 200, 250, 1250
+                ),
+                "Hadr_Recoil_Pt",
+                selection,
+                label,
+            ),
+            plotClasses.Plot(
+                ROOT.TH1D("yield" + extension, "yield", 1, 0.0, 2.0), "1.", selection, label,
             ),
         ]
     return plots
