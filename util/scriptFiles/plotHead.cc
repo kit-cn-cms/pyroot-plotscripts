@@ -22,7 +22,8 @@ void helperFillHisto(const std::vector<structHelpFillHisto>& paramVec, const dou
   // singleParams: histo, var, weight
   {
     if((singleParams.weight)!=0)
-        singleParams.histo->Fill(fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,val)),singleParams.weight);
+        //singleParams.histo->Fill(fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,val)),singleParams.weight);
+        singleParams.histo->Fill(val,singleParams.weight);
   }
 }
 
@@ -50,7 +51,7 @@ void helperFillTwoDimHisto(const std::vector<structHelpFillTwoDimHisto>& paramVe
   // singleParams: histo, var1, var2, weight
   {
     if((singleParams.weight)!=0)
-        singleParams.histo->Fill(fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,val1)),fmin(singleParams.histo->GetYaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetYaxis()->GetXmin()+1e-6,val2)),singleParams.weight);
+        singleParams.histo->Fill(val1,val2,singleParams.weight);
   }
 }
 

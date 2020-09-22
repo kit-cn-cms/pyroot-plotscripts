@@ -365,25 +365,25 @@ def addErrorbands(combinedErrorbands,combinedHist,correlated=False):
     return newErrorband
 
 
-def moveOverUnderFlow(hist):
-    print("zeroth bin: {}".format(hist.GetBinContent(0)))
-    # move underflow
-    hist.SetBinContent(1, hist.GetBinContent(0)+hist.GetBinContent(1))
-    # move overflow
-    hist.SetBinContent(hist.GetNbinsX(), hist.GetBinContent(hist.GetNbinsX()+1)+hist.GetBinContent(hist.GetNbinsX()))
+def moveOverUnderFlow(hist, move = False):
+    if move:
+        # move underflow
+        hist.SetBinContent(1, hist.GetBinContent(0)+hist.GetBinContent(1))
+        # move overflow
+        hist.SetBinContent(hist.GetNbinsX(), hist.GetBinContent(hist.GetNbinsX()+1)+hist.GetBinContent(hist.GetNbinsX()))
 
-    # set underflow error
-    hist.SetBinError(1, ROOT.TMath.Sqrt(
-        ROOT.TMath.Power(hist.GetBinError(0),2) + ROOT.TMath.Power(hist.GetBinError(1),2) ))
-    # set overflow error
-    hist.SetBinError(hist.GetNbinsX(), ROOT.TMath.Sqrt(
-        ROOT.TMath.Power(hist.GetBinError(hist.GetNbinsX()),2) + 
-        ROOT.TMath.Power(hist.GetBinError(hist.GetNbinsX()+1),2) ))
-    #delete overflow and underflow after moving
-    hist.SetBinContent(0,0)
-    hist.SetBinError(0,0)
-    hist.SetBinContent(hist.GetNbinsX()+1,0)
-    hist.SetBinError(hist.GetNbinsX()+1,0)
+        # set underflow error
+        hist.SetBinError(1, ROOT.TMath.Sqrt(
+            ROOT.TMath.Power(hist.GetBinError(0),2) + ROOT.TMath.Power(hist.GetBinError(1),2) ))
+        # set overflow error
+        hist.SetBinError(hist.GetNbinsX(), ROOT.TMath.Sqrt(
+            ROOT.TMath.Power(hist.GetBinError(hist.GetNbinsX()),2) + 
+            ROOT.TMath.Power(hist.GetBinError(hist.GetNbinsX()+1),2) ))
+        #delete overflow and underflow after moving
+        hist.SetBinContent(0,0)
+        hist.SetBinError(0,0)
+        hist.SetBinContent(hist.GetNbinsX()+1,0)
+        hist.SetBinError(hist.GetNbinsX()+1,0)
 
 # converts the TGraphAsymmError data object in the mlfit file to a histogram (therby dropping bins again) and in addition sets asymmetric errors***
 def GetHistoFromTGraphAE(tgraph,process,nbins_new,binEdges=None):

@@ -125,16 +125,27 @@ class scriptWriter:
         if self.pp.useFriendTrees:
             # sample file should have path BASE/SAMPLENAME/FILE.root
             # -> strip base
+
             for ftName in self.pp.friendTrees:
-                for i,thistree in enumerate(TreeFileMap["files"]): 
-                    sampledir, treename = os.path.split(thistree)
+                found = False
+                for basetree in TreeFileMap["files"]:
+                    # take first tree as base
+                    sampledir, treename = os.path.split(basetree)
                     basedir, samplename = os.path.split(sampledir)
+
+                    # add one friend tree to list of trees
                     friendtree = "/".join([self.pp.friendTrees[ftName], samplename, treename])
                     print("checking friend tree {}".format(friendtree))
-                    if not os.path.exists(friendtree):
-                        exit("cannot use file for variable setup because required friend tree does not exist.")
-                    TreeFileMap["trees"][i].AddFriend("{}=MVATree".format(ftName), friendtree)
-                    break # one Friend File should be enough, since a friend variable should be avaiable in all friends
+                    if os.path.exists(friendtree):
+                        TreeFileMap["files"].append(friendtree)
+                        f = ROOT.TFile(friendtree)
+                        tree = f.Get("MVATree")
+                        TreeFileMap["trees"].append(deepcopy(tree))
+                        found = True
+                        break
+                if not found:
+                    sys.exit("didnt find friend tree")
+                       
         
 
         # initialize variables with variablebox
@@ -568,10 +579,10 @@ class scriptWriter:
         maxevents = writeOptions.get("maxEventsinJob", maxEventsinJob)
         events_File = writeOptions.get("events_File", -1)
         events_job = writeOptions.get("events_job", -1)
-        processname = sample.nick #ttccCMS_ttHbb_HDAMP_ttccDown
+        processname = sample.nick
         outfilename = self.pp.plotPath+processname+'_'+str(nJob)+'.root'
         scriptname = self.pp.scriptsPath+'/'+processname+'_'+str(nJob)+'.sh'
-        origName = str(sample.origName) #ttcc
+        origName = str(sample.origName)
         suffix = writeOptions.get("suffix", "")
         skipevents = writeOptions.get("skipEvents", 0)
         variation = processname.split(origName,1)[1]

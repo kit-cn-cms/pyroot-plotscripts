@@ -21,7 +21,7 @@ class catData:
 
 
 class configData:
-    def __init__(self, analysisClass, variable_config, plot_config, execute_file = None, replace_config = None):
+    def __init__(self, analysisClass, variable_config, plot_config, execute_file = None, replace_config = None, unfold_config = None):
 
         print("loading configdata ...")
         # name of files in config
@@ -34,6 +34,18 @@ class configData:
         self.pltcfg = self.analysis.getPlotConfig()
         self.cfgdir = os.path.join(self.analysis.pyrootdir, "configs/")
         self.replace_config = os.path.join(self.cfgdir, replace_config) if replace_config else None
+        self.unfold_config = os.path.join(self.cfgdir, unfold_config) if unfold_config else None
+        if not self.unfold_config is None:
+            if not self.unfold_config.endswith(".py"):
+                self.unfold_config+=".py"
+            self.unfold_config = imp.load_source("unfolding", self.unfold_config)
+            self.unfold_config.setValues(self.pltcfg)
+
+            samples, names, extend = self.pltcfg.setup_signal_samples()
+            self.pltcfg.extendSystematics = extend
+            self.pltcfg.unfoldingSampleNames = names
+            self.pltcfg.samples += samples
+
         self.Data = None
         self.pseudo_data_samples = []
 
@@ -55,25 +67,35 @@ class configData:
 
         print "loading systematics..."
         self.systconfig=systconfig
-        processes=self.pltcfg.list_of_processes
+        processes=self.pltcfg.get_list_of_processes()
+
+        # get dictionary of additional samples from gen level unfolding bins
+        systematicsExtension = {}
+        if hasattr(self.pltcfg, "extendSystematics"):
+            systematicsExtension = self.pltcfg.extendSystematics
+        extensionProcesses = []
+        for proc in systematicsExtension:
+            extensionProcesses += systematicsExtension[proc]
+
         workdir=self.analysis.workdir
         outputpath=os.path.join(workdir,"datacard.csv")
         config_path = os.path.join(self.cfgdir, systconfig)+".csv"
         self.systematics=Systematics.Systematics(   systematicconfig = config_path, 
                                                     weightDictionary = self.pltcfg.weightReplacements,
                                                     replacing_config = self.replace_config,
-                                                    relevantProcesses = processes)
+                                                    relevantProcesses = processes,
+                                                    extensionProcesses = extensionProcesses)
+        self.systematics.extendProcesses(systematicsExtension)
         self.systematics.getSystematicsForProcesses(processes)
-        datacard_processes = self.pltcfg.datacard_processes
+        datacard_processes = self.pltcfg.get_datacard_processes()
         self.systematics.makeCSV(datacard_processes,outputpath)
         for sample in self.pltcfg.samples:
             sample.setShapes(self.systematics.get_shape_systs(sample.nick))
         self.plots=self.systematics.plot_shapes()
         # also just plain copy systematic.csv to workdir
         self.local_syst_path = os.path.join(workdir,"systematics.csv")
-        cmd = "cp {} {}".format(config_path, self.local_syst_path)
-        print(cmd)
-        os.system(cmd)
+        self.systematics.saveConfig(self.local_syst_path)
+        #cmd = "cp {} {}".format(config_path, self.local_syst_path)
 
     def writeConfigDataToWorkdir(self):
         # deprecated
@@ -114,6 +136,9 @@ class configData:
         print("loading plot_config from '{}'".format(fileName))
         configdatafile = imp.load_source( "configdatafile", fileName)
         configdatafile.memexp = memexp
+
+        if not self.unfold_config is None:
+            self.unfold_config.setValues(configdatafile)
 
         self.discriminatorPlots = configdatafile.getDiscriminatorPlots(self.Data, self.analysis.discrName)
         #self.evtYieldCategories = configdatafile.evtYieldCategories()
@@ -188,7 +213,7 @@ class configData:
         print("-"*30)        
 
         try:
-            self.pseudo_data_samples = self.pltcfg.pseudo_data_samples
+            self.pseudo_data_samples = self.pltcfg.get_pseudo_data_samples()
         except:
             msg = "WARNING: could not load list 'pseudo_data_samples' "
             msg += "from plot config '{}'".format(self.analysis.plotConfig)

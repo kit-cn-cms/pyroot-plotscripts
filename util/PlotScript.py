@@ -462,7 +462,7 @@ print '''
     '''
 
 #get plotting style information, prioritized by parser>config>default
-signalscaling   = getParserConfigDefaultValue(parser=options.signalscaling,config="signalscaling",
+signalscaling   = getParserConfigDefaultValue(parser=options.signalscaling,config="signalScaling",
                                             plotoptions=plotoptions,defaultvalue=-1)
 ratio           = getParserConfigDefaultValue(parser=options.ratio,config="ratio",
                                             plotoptions=plotoptions,defaultvalue="#frac{data}{MC Background}")

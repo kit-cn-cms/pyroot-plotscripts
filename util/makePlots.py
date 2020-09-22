@@ -97,7 +97,7 @@ def createPlotConfig(configData,workdir, nominal_key, syst_key):
 
     #combined samples
     plottingsamples={}
-    for plotsample in configData.pltcfg.plottingsamples:
+    for plotsample in configData.pltcfg.get_plottingsamples():
         print plotsample
         if isinstance(plotsample, list):
             for p in plotsample:
@@ -105,7 +105,7 @@ def createPlotConfig(configData,workdir, nominal_key, syst_key):
         else:
             plottingsamples[plotsample.nick] = init_plottingsamples(plotsample)
     
-    sortedProcesses   = configData.pltcfg.sortedProcesses
+    sortedProcesses   = configData.pltcfg.get_sortedProcesses()
 
     #systematics to be plotted
     systematics=configData.plots

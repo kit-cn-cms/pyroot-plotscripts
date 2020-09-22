@@ -18,8 +18,8 @@ class VariableManager:
         # list of variables to be ignored when initializing
         self.vetolist           = vetolist
         # list of naming remnant to add to veto list
-        self.correctionNames = []
-        self.sfBinning = []
+        self.correctionNames    = []
+        self.sfBinning          = []
         if not sfCorrection is None:
             self.correctionNames    = sfCorrection["names"]
             self.sfBinning          = sfCorrection["corrections"]
@@ -27,9 +27,11 @@ class VariableManager:
         # list of variables identified as correction variables
         self.correctionVars     = []
         # add friend tree names
-        self.friendTreeNames = [key for key in friendTrees]
+        self.friendTreeNames    = [key for key in friendTrees]
+        # faulty friend tree variables
+        self.faultyVariables    = []
         # tree to get variable information from
-        self.trees               = trees
+        self.trees              = trees
         # list of expressions to search for variables
         self.expressionsToInit  = []
         # verbosity setting
@@ -83,15 +85,6 @@ class VariableManager:
         '''
         if self.verbose > 5: print("\ncalling searchVariables with expression "+str(expression))
 
-        for tree in self.trees:
-            if "." in expression:
-                treeName, varName = expression.split(".", 1)
-                if treeName in self.friendTreeNames:
-                    print("found variable that appears to be a tree name")
-                    if hasattr(tree, expression):
-                        dummyExpression = expression.replace(".","_friendTree_")
-                        self.addVariable(dummyExpression, dummyExpression, "F")
-                        return
 
         # search for variable definitions in expression of form varName:=expression
         if ":=" in expression:
@@ -107,6 +100,19 @@ class VariableManager:
             # search for other variables in expression
             variableNames = self.getVariableNames( expression )
             for varName in variableNames:
+                if "_ft_" in varName:
+                    found = False
+                    treeName, ftVarName = varName.split("_ft_", 1)
+                    print("found potential friend tree variable ("+treeName+", "+ftVarName+")")
+                    if treeName in self.friendTreeNames:
+                        for tree in self.trees:
+                            if hasattr(tree, ftVarName):
+                                print("var is in tree: "+ftVarName)
+                                self.addVariable(varName, varName, "F")
+                                found = True
+                    if not found:
+                        print("name _ft_ in var name but no friend tree matches")
+                        self.faultyVariables.append(varName)
                 self.addVariable(varName, varName, "F")
 
     def getVariableNames(self, expression):
@@ -368,6 +374,8 @@ class VariableManager:
 
             # write code for variable
             text += var.writeVariableCalculation(hasCondition)
+            if var.varName in self.faultyVariables:
+                var.initError = True
             if hasCondition: text += "    }\n"
         text+="\n"
         if self.verbose > 20: print("\n\ncaluclate Variables:\n"+str(text))
@@ -518,10 +526,15 @@ class Variable:
         program to setup variable
         '''
         if verbose > 10: print("initializing variable: "+str(self.varName))
-        if hasattr(tree, self.varName.replace("_friendTree_",".")):
+
+        varName = self.varName
+        if "_ft_" in varName:
+            varName = varName.split("_ft_", 1)[1]
+        
+        if hasattr(tree, varName):
             if verbose > 20: print("variable is in tree")
             self.inTree = True
-            branch = tree.GetBranch(self.varName.replace("_friendTree_","."))
+            branch = tree.GetBranch(varName)
             branchTitle = branch.GetTitle()
             if verbose > 20: print("branchTitle is "+str(branchTitle))
 
@@ -560,6 +573,21 @@ class Variable:
     def setupVariableArray(self, tree, variableManager, branchTitle, verbose):
         # search for indexVariable in 'variableName[indexVariable]/variableType'
         self.indexVariable = re.findall(r"\[(.*?)\]", branchTitle.split("/")[0])[0]
+
+        # look if index variable is defined in friend tree
+        if "_ft_" in self.varName:
+            print("setup array variable from friend tree")
+            found = False
+            treeName, _ = self.varName.split("_ft_", 1)
+            if treeName in variableManager.friendTreeNames:
+                for tree in variableManager.trees:
+                    if hasattr(tree, self.indexVariable):
+                        print("\tindex of array var is in tree: "+treeName)
+                        found = True
+                        self.indexVariable = "_ft_".join([treeName, self.indexVariable])
+            if not found:
+                print("\t index of array var is not in fried tree.")
+
         if verbose > 20: print("indexVariable is "+str(self.indexVariable))
 
         # adding indexVariable to list of variables to be initialized in variableManager
@@ -637,12 +665,12 @@ class Variable:
         text = ""
 
         if self.isArray:
-            text += "    chain->SetBranchAddress(\""+self.varName.replace("_friendTree_",".")+"\", "+self.varName+".get());\n"
+            text += "    chain->SetBranchAddress(\""+self.varName.replace("_ft_",".")+"\", "+self.varName+".get());\n"
         else:
             if self.varType == "I" or self.varType == "L":
-                text += "    chain->SetBranchAddress(\""+self.varName.replace("_friendTree_",".")+"\", &"+self.varName+"LONGDUMMY);\n"
+                text += "    chain->SetBranchAddress(\""+self.varName.replace("_ft_",".")+"\", &"+self.varName+"LONGDUMMY);\n"
             else:
-                text += "    chain->SetBranchAddress(\""+self.varName.replace("_friendTree_",".")+"\", &"+self.varName+");\n"
+                text += "    chain->SetBranchAddress(\""+self.varName.replace("_ft_",".")+"\", &"+self.varName+");\n"
         return text
 
     def writeTMVAReader(self, variableManager):

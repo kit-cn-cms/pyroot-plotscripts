@@ -16,19 +16,21 @@ class SystematicsForProcess:
 
 
 class Systematics:
-    def __init__(self,systematicconfig,weightDictionary = {}, replacing_config = None, relevantProcesses = []):
+    def __init__(self,systematicconfig,weightDictionary = {}, replacing_config = None, relevantProcesses = [], extensionProcesses = []):
         print "loading systematics config ..."
         self.systematics=pandas.read_csv(systematicconfig,sep=",")
         self.systematics.fillna("-", inplace=True)
         self.relevantProcesses = relevantProcesses
         # drop not neccessary stuff, if relevantProcesses are given
         if len(self.relevantProcesses) != 0:
-            columns = ['Uncertainty','Type','Construction','Up','Down','Plot']+self.relevantProcesses
+            procs = [p for p in self.relevantProcesses if not p in extensionProcesses]
+            print(procs)
+            columns = ['Uncertainty','Type','Construction','Up','Down','Plot']+procs
             # drop all non relevant processes
             self.systematics.drop(self.systematics.columns.difference(columns), 1, inplace=True)
             # drop all non relevant systs
             self.systematics = self.systematics[columns]
-            self.systematics = self.systematics[~self.systematics[self.relevantProcesses].eq('-', axis=0).all(axis=1)]
+            self.systematics = self.systematics[~self.systematics[procs].eq('-', axis=0).all(axis=1)]
         self.weightDictionary = weightDictionary
 
         self.replacing_config = None
@@ -280,6 +282,9 @@ class Systematics:
         newCSV = newCSV[~newCSV["Uncertainty"].astype(str).str.startswith("#")]
         newCSV.to_csv(outputpath, index=False)
 
+    def saveConfig(self, outputpath):
+        self.systematics.to_csv(outputpath, index = False)
+
     def plot_shapes(self):
         plotShapes=[]
         for i,systematic in self.systematics.iterrows():
@@ -303,4 +308,10 @@ class Systematics:
         return variationString
 
 
+    def extendProcesses(self, extensionDict):
+        for origin in extensionDict:
+            newProcesses = extensionDict[origin]
+            for p in newProcesses:
+                print("adding process {} to systematics table".format(p))
+                self.systematics[p] = self.systematics[origin]
 
