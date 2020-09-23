@@ -85,10 +85,10 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
         internalBosonWeight_MixedDown = BosonWeight_MixedDown/internalBosonWeight;
         internalBosonWeight_AlphaSUp  = BosonWeight_AlphaUp/internalBosonWeight;
         internalBosonWeight_AlphaSDown= BosonWeight_AlphaDown/internalBosonWeight;
-        internalBosonWeight_muRUp     = BosonWeight_muRUp;
-        internalBosonWeight_muRDown   = BosonWeight_muRDown;
-        internalBosonWeight_muFUp     = BosonWeight_muFUp;
-        internalBosonWeight_muFDown   = BosonWeight_muFDown;
+        internalBosonWeight_muRUp     = BosonWeight_muRUp/internalBosonWeight;
+        internalBosonWeight_muRDown   = BosonWeight_muRDown/internalBosonWeight;
+        internalBosonWeight_muFUp     = BosonWeight_muFUp/internalBosonWeight;
+        internalBosonWeight_muFDown   = BosonWeight_muFDown/internalBosonWeight;
     }
     
     // additional uncertainty for low pt w bosons because of missing HT 0To70
