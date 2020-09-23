@@ -163,19 +163,19 @@ void plot()
     double wp_medium = 0.;
     if( dataera == "2016" ) {
         csvFile=plotscriptBaseDir+"/data/CSV/sfs_deepjet_fixedWP_2016.csv";
-        effFile=plotscriptBaseDir+"/data/CSV/btag_efficiencies_deepjet_2016_pfmet.root";
+        effFile=plotscriptBaseDir+"/data/CSV/btag_efficiencies_deepjet_pfmet_more_cuts_2016.root";
         wp_loose = 	0.0614;
         wp_medium = 0.3093;
         }
     else if( dataera == "2017" ) {
         csvFile=plotscriptBaseDir+"/data/CSV/sfs_deepjet_fixedWP_2017.csv";
-        effFile=plotscriptBaseDir+"/data/CSV/btag_efficiencies_deepjet_2017_pfmet.root";
+        effFile=plotscriptBaseDir+"/data/CSV/btag_efficiencies_deepjet_pfmet_more_cuts_2017.root";
         wp_loose = 	0.0521;
         wp_medium = 0.3033;
         }
     else if( dataera == "2018" ) {
         csvFile=plotscriptBaseDir+"/data/CSV/sfs_deepjet_fixedWP_2018.csv";
-        effFile=plotscriptBaseDir+"/data/CSV/btag_efficiencies_deepjet_2018_pfmet.root";
+        effFile=plotscriptBaseDir+"/data/CSV/btag_efficiencies_deepjet_pfmet_more_cuts_2018.root";
 	    wp_loose = 	0.0494;
         wp_medium = 0.2770;
         }
@@ -257,6 +257,26 @@ void plot()
         tau_sfs.AddScaleFactorHistogram("tau_sfs","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/tau_SFs/tau_sf.root","tau_sf_VLoose_2016_cent");
         tau_sfs.AddScaleFactorHistogram("tau_sfs_up","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/tau_SFs/tau_sf.root","tau_sf_VLoose_2016_up");
         tau_sfs.AddScaleFactorHistogram("tau_sfs_down","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/tau_SFs/tau_sf.root","tau_sf_VLoose_2016_down");
+    }
+    else {
+        std::cout << "NO VALID DATAERA CHOSEN!!" << std::endl;
+        std::cout << "dataera: " << dataera << std::endl;
+    }
+    
+    
+    // electron ID scale factors
+    SFHelper eleID_sfs;
+    if ( dataera == "2018" ) {
+        eleID_sfs.AddScaleFactorHistogram2D("veto_ID_sfs","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/electronSFs/2018_ElectronVeto_Fall17V2.root","EGamma_SF2D");
+        eleID_sfs.AddScaleFactorHistogram2D("tight_ID_sfs","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/electronSFs/2018_ElectronTight_Fall17V2.root","EGamma_SF2D");
+    }
+    else if ( dataera == "2017" ) {
+        eleID_sfs.AddScaleFactorHistogram2D("veto_ID_sfs","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/electronSFs/2017_ElectronVeto_Fall17V2.root","EGamma_SF2D");
+        eleID_sfs.AddScaleFactorHistogram2D("tight_ID_sfs","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/electronSFs/2017_ElectronTight_Fall17V2.root","EGamma_SF2D");
+    }
+    else if ( dataera == "2016" ) {
+        eleID_sfs.AddScaleFactorHistogram2D("veto_ID_sfs","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/electronSFs/2016_ElectronVeto_Fall17V2.root","EGamma_SF2D");
+        eleID_sfs.AddScaleFactorHistogram2D("tight_ID_sfs","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/electronSFs/2016_ElectronTight_Fall17V2.root","EGamma_SF2D");
     }
     else {
         std::cout << "NO VALID DATAERA CHOSEN!!" << std::endl;

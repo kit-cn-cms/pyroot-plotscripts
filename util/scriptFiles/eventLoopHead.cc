@@ -200,6 +200,37 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     //std::cout << "Tau Weight Up: " << internalTauSFUp << std::endl;
     //std::cout << "Tau Weight Down: " << internalTauSFDown << std::endl;
     
+    // electron ID sfs
+    float internalEleIDLooseSF = 1.0;
+    float internalEleIDLooseSFUp = 1.0;
+    float internalEleIDLooseSFDown = 1.0;
+    
+    float internalEleIDTightSF = 1.0;
+    float internalEleIDTightSFUp = 1.0;
+    float internalEleIDTightSFDown = 1.0;
+    
+    for (uint iEleLoose = 0; iEleLoose < N_LooseElectrons; iEleLoose++) {
+        std::vector<float> ele_sfs = eleID_sfs.GetScaleFactorPlusUnc2D("veto_ID_sfs", LooseElectron_Eta_Supercluster[iEleLoose], LooseElectron_Pt[iEleLoose], true);
+        internalEleIDLooseSF *= ele_sfs[0];
+        internalEleIDLooseSFUp *= ele_sfs[1];
+        internalEleIDLooseSFDown *= ele_sfs[2];
+    }
+    for (uint iEleTight = 0; iEleTight < N_TightElectrons; iEleTight++) {
+        std::vector<float> ele_sfs = eleID_sfs.GetScaleFactorPlusUnc2D("tight_ID_sfs", Electron_Eta_Supercluster[iEleTight], Electron_Pt[iEleTight], true);
+        internalEleIDTightSF *= ele_sfs[0];
+        internalEleIDTightSFUp *= ele_sfs[1];
+        internalEleIDTightSFDown *= ele_sfs[2];
+    }
+    
+    //std::cout << "N_LooseELectrons: " << N_LooseElectrons << std::endl;
+    //std::cout << "N_TightELectrons: " << N_TightElectrons << std::endl;
+    //std::cout << "ele id loose sf: " << internalEleIDLooseSF << std::endl;
+    //std::cout << "ele id loose sf up: " << internalEleIDLooseSFUp << std::endl;
+    //std::cout << "ele id loose sf down: " << internalEleIDLooseSFDown << std::endl;
+    //std::cout << "ele id tight sf: " << internalEleIDTightSF << std::endl;
+    //std::cout << "ele id tight sf up: " << internalEleIDTightSFUp << std::endl;
+    //std::cout << "ele id tight sf down: " << internalEleIDTightSFDown << std::endl;
+    
     //float HT_Jets = 0.;
     //for(size_t m = 0;m<N_Jets;m++) HT_Jets+=Jet_Pt[m];
     
