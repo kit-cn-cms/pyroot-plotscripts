@@ -4,6 +4,7 @@ class SFHelper {
     SFHelper();
     ~SFHelper();
     float GetScaleFactor(std::string identifier, auto x, bool use_edge_bins);
+    std::vector<float> GetScaleFactorPlusUnc(std::string identifier, auto x, bool use_edge_bins);
     void  Reset();
     void  AddScaleFactorHistogram(std::string identifier, std::string path_to_file, std::string histogram_name);
     float GetHistogramLowerEdge(std::string identifier);
@@ -88,6 +89,47 @@ float SFHelper::GetScaleFactor(std::string identifier, auto x, bool use_edge_bin
         return sf;
     else
         return 1.;
+}
+
+std::vector<float> SFHelper::GetScaleFactorPlusUnc(std::string identifier, auto x, bool use_edge_bins)
+{
+    if (!initialized) {
+        std::cout << "SFHelper: not initiliazed" << std::endl;
+        throw std::exception();
+    }
+
+    std::vector<float> sfs{1.0,1.0,1.0};
+    if (scalefactor_map.find(identifier) == scalefactor_map.end()) return sfs;
+
+    // std::cout << identifier << " " << "hist " << scalefactor_map[identifier]->GetName() << std::endl;
+
+    // std::cout << "x " << x << std::endl;
+
+    int   bin      = -1;
+
+    // std::cout << "xmin " << scalefactor_map[identifier]->GetXaxis()->GetXmin() << std::endl;
+    // std::cout << "xmax " << scalefactor_map[identifier]->GetXaxis()->GetXmax() << std::endl;
+    
+    if (use_edge_bins) {
+        x = std::max(float(x),float(scalefactor_map[identifier]->GetXaxis()->GetXmin()+0.001));
+        x = std::min(float(x),float(scalefactor_map[identifier]->GetXaxis()->GetXmax()-0.001));
+    }
+
+    bool x_in_range = (x > scalefactor_map[identifier]->GetXaxis()->GetXmin()) && (x < scalefactor_map[identifier]->GetXaxis()->GetXmax());
+
+    if (x_in_range) {
+        bin      = scalefactor_map[identifier]->FindBin(x);
+        sfs[0]   = scalefactor_map[identifier]->GetBinContent(bin);
+        sfs[1]   = sfs[0] + scalefactor_map[identifier]->GetBinError(bin);
+        sfs[2]   = sfs[0] - scalefactor_map[identifier]->GetBinError(bin);
+    }
+    // std::cout << "bin " << bin << std::endl;
+    // std::cout << "sf " << sf << std::endl;
+
+    if (sfs[0] > 0. && sfs[1] > 0. && sfs[2] > 0.)
+        return sfs;
+    else
+        return std::vector<float>{1.0,1.0,1.0};
 }
 
 float SFHelper::GetHistogramLowerEdge(std::string identifier)
