@@ -26,8 +26,11 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     //              << "Evt_ID " << Evt_ID << " " << Int_t(Evt_ID) << std::endl;
     //}
 
-    //TString currentfilename = "";
-    //currentfilename         = chain->GetCurrentFile()->GetName();
+    std::string currentfilename = "";
+    currentfilename         = chain->GetCurrentFile()->GetName();
+    bool wlnujets_ht = processname.find("wlnujets")!=std::string::npos && currentfilename.find("WJetsToLNu_HT")!=std::string::npos;
+    //std::cout << "wlnujets_ht flag: " << wlnujets_ht << std::endl;
+    //std::cout << "file name " << currentfilename << std::endl;
     //int hasTrigger          = 0;
     //if (currentfilename.Index("withTrigger") != -1) { hasTrigger = 1; }
     eventsAnalyzed++;
@@ -66,7 +69,7 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     float internalBosonWeight_G_low_pt_Up = 1.0;
     float internalBosonWeight_G_low_pt_Down = 1.0;
 
-    if ((processname.find("wlnujets") != std::string::npos && W_Pt > 30.) || (processname.find("zlljets") != std::string::npos && Z_Pt > 100.) ||
+    if ((processname.find("wlnujets") != std::string::npos && W_Pt > 100. && wlnujets_ht) || (processname.find("zlljets") != std::string::npos && Z_Pt > 100.) ||
         (processname.find("znunujets") != std::string::npos && Z_Pt > 100.) || (processname.find("gammajets") != std::string::npos && Gamma_Pt > 100.)) {
         internalBosonWeight           = BosonWeight_nominal;
         internalBosonWeight_QCD1Up    = BosonWeight_QCD1Up/internalBosonWeight;
@@ -109,7 +112,7 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     float internalBosonWeight_monojet = 1.0;
     float internalBosonWeight_monojet_low_pt_up = 1.0;
     float internalBosonWeight_monojet_low_pt_down = 1.0;
-    if (processname.find("wlnujets") != std::string::npos && W_Pt > 0.) {
+    if (processname.find("wlnujets") != std::string::npos && W_Pt > 0. && wlnujets_ht) {
         qcd_nlo_sf = qcd_nlo_wlnu.GetScaleFactor("qcd_nlo_wlnu", W_Pt, true);
         ewk_nlo_sf = ewk_nlo_wlnu.GetScaleFactor("ewk_nlo_wlnu", W_Pt, true);
         internalBosonWeight_monojet = qcd_nlo_sf*ewk_nlo_sf;
