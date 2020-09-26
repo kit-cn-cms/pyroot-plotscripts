@@ -40,7 +40,8 @@ using namespace std;
     #"TTbarSystHelper",
     "CSVWeightSFHelper",
     "SFHelper",
-    "BtagSFHelper"
+    "BtagSFHelper",
+    #"METPhiHelper"
     ]
   for cls in includedClasses:
     with open(basepath+"/util/scriptFiles/class"+cls+".cc", "r") as clsCode:

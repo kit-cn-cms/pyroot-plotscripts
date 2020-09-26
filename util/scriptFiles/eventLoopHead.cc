@@ -525,3 +525,23 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     //std::cout << "Tau Veto Weight: " << internalTauVetoWeight << std::endl;
     //std::cout << "Tau Veto Weight Up: " << internalTauVetoWeightUp << std::endl;
     //std::cout << "Tau Veto Weight Down: " << internalTauVetoWeightDown << std::endl;
+    
+    //float internal_M_W_transverse = -999.;
+    //float internal_MET_Pt = -999.;
+    //float internal_MET_Phi = -999.;
+
+    //std::pair<double,double> correctedMET = METXYCorr_Met_MetPhi(Evt_Pt_MET, Evt_Phi_MET, Evt_Run, std::stoi(dataera), DoWeights, N_PrimaryVertices);
+    //internal_MET_Pt = correctedMET.first;
+    //internal_MET_Phi = correctedMET.second;
+    
+    //if((N_TightElectrons==1 && N_TightMuons==0) || (N_TightElectrons==0 && N_TightMuons==1)){
+    //    float lepton_pt = N_TightElectrons==1 ? Electron_Pt[0] : Muon_Pt[0];
+    //    float lepton_phi = N_TightElectrons==1 ? Electron_Phi[0] : Muon_Phi[0];
+    //    internal_M_W_transverse = TMath::Sqrt(2*lepton_pt*internal_MET_Pt*(1-TMath::Cos(TVector2::Phi_mpi_pi(lepton_phi-internal_MET_Phi))));
+    //    //std::cout << "MET Pt uncorrected: " << Evt_Pt_MET << std::endl;
+    //    //std::cout << "MET Pt corrected: " << internal_MET_Pt << std::endl;
+    //    //std::cout << "MET Phi uncorrected: " << Evt_Phi_MET << std::endl;
+    //    //std::cout << "MET Phi corrected: " << internal_MET_Phi << std::endl;
+    //    //std::cout << "mw trans uncorrected: " << M_W_transverse[0] << std::endl;
+    //    //std::cout << "mw trans corrected: " << internal_M_W_transverse << std::endl;
+    //}
