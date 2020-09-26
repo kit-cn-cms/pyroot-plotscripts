@@ -1335,7 +1335,7 @@ def control_plots_had_CR_ZElEl(data=None):
     selection += "*(N_LooseElectrons==2 && LooseElectron_Pt[0]>=40. && N_LooseMuons==0 && N_LoosePhotons==0)"
     
     # single electron trigger requirement
-    selection += "*(Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1 || Triggered_HLT_Ele115_CaloIdVT_GsfTrkIdT_vX==1)"
+    selection += "*(Triggered_HLT_Ele32_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1 || Triggered_HLT_Ele115_CaloIdVT_GsfTrkIdT_vX==1)"
     
     # z mass requirement
     selection += "*(DiElectron_Mass>60. && DiElectron_Mass<120.)"
@@ -1365,7 +1365,7 @@ def control_plots_had_CR_ttbarEl(data=None):
     selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && N_LoosePhotons==0)"
     
     # single electron trigger requirement
-    selection += "*(Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1 || Triggered_HLT_Ele115_CaloIdVT_GsfTrkIdT_vX==1)"
+    selection += "*(Triggered_HLT_Ele32_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1 || Triggered_HLT_Ele115_CaloIdVT_GsfTrkIdT_vX==1)"
     
     # btagging requirement to enrich ttbar
     selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]>=1)"
@@ -1426,7 +1426,7 @@ def control_plots_had_CR_WEl(data=None):
     selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && N_LoosePhotons==0)"
     
     # single electron trigger requirement
-    selection += "*(Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1 || Triggered_HLT_Ele115_CaloIdVT_GsfTrkIdT_vX==1)"
+    selection += "*(Triggered_HLT_Ele32_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1 || Triggered_HLT_Ele115_CaloIdVT_GsfTrkIdT_vX==1)"
     
     # btagging requirement to enrich w+jets
     selection += "*(N_AK4JetsLooseTagged_outside_AK15Jets[0]==0)"
@@ -1509,7 +1509,7 @@ def control_plots_had_CR_inclEl(data=None):
     selection += "*(N_LooseElectrons==1 && N_TightElectrons==1 && N_LooseMuons==0 && N_LoosePhotons==0)"
     
     # single electron trigger requirement
-    selection += "*(Triggered_HLT_Ele35_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1 || Triggered_HLT_Ele115_CaloIdVT_GsfTrkIdT_vX==1)"
+    selection += "*(Triggered_HLT_Ele32_WPTight_Gsf_vX==1 || Triggered_HLT_Photon200_vX==1 || Triggered_HLT_Ele115_CaloIdVT_GsfTrkIdT_vX==1)"
     
     # no btagging requirement
     
