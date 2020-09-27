@@ -122,7 +122,9 @@ def getAddVars():
         "JetLooseUntagged_outside_lead_AK15Jet_Pt",
         "JetLooseUntagged_outside_lead_AK15Jet_Eta",
         "JetLooseUntagged_outside_lead_AK15Jet_Flav",
-       
+        "N_LooseJets",
+        "LooseJet_Eta",
+        "LooseJet_Phi"
         ]
 
     return addVars
