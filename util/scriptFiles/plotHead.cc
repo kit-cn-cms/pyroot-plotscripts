@@ -75,6 +75,14 @@ inline bool check_if_every_element_greater(auto* array, int number_of_elements, 
     return true;
 }
 
+inline bool HEM_veto(auto* eta, auto* phi, int n_jets){
+    if(n_jets==0) return false;
+    for(int i=0;i<n_jets;i++){
+        if((eta[i]<-1.3 && eta[i]>-3.2) && (phi[i]>-1.57 && phi[i]<-0.87)) return true;
+    }
+    return false;
+}
+
 inline double divideSavely(double num, double den, double returnVal = 1.){
     if (den == 0.){
         return returnVal;

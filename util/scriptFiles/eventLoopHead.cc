@@ -39,6 +39,11 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
 
     totalTimeGetEntry += timerGetEntry->RealTime();
     timerCalculateSFs->Start();
+    
+    // HEM veto
+    bool internalNOHEMEvent = true;
+    internalNOHEMEvent = !HEM_veto(LooseJet_Eta.get(),LooseJet_Phi.get(),N_LooseJets);
+    //std::cout << "NO HEM event: " << internalNOHEMEvent << std::endl;
 
     // weights for higher-order vjets reweighting based on Lindert paper
     float internalBosonWeight           = 1.0;
