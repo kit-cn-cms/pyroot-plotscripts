@@ -393,7 +393,9 @@ samples = [
     plotClasses.Sample(
         "W(l#nu)+jets",
         ROOT.kOrange,
+        #path_mwassmer + "/WJetsToLNu*/*nominal*.root",
         path_mwassmer + "/WJetsToLNu_HT*/*nominal*.root",
+        #lumi + "*((W_Pt>=100.)*wlnujets_ht+(W_Pt<100.)*(!wlnujets_ht))",
         lumi,
         "wlnujets",
         samDict=sampleDict,
