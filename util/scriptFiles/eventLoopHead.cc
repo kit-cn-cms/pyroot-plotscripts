@@ -559,3 +559,36 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     //    //std::cout << "mw trans uncorrected: " << M_W_transverse[0] << std::endl;
     //    //std::cout << "mw trans corrected: " << internal_M_W_transverse << std::endl;
     //}
+    
+    
+    //float internalMETPhiSF_SR_El = 1.0;
+    //float internalMETPhiSF_SR_Mu = 1.0;
+    //float internalMETPhiSF_CR_WEl = 1.0;
+    //float internalMETPhiSF_CR_WMu = 1.0;
+    //float internalMETPhiSF_CR_ttbarEl = 1.0;
+    //float internalMETPhiSF_CR_ttbarMu = 1.0;
+    
+    //internalMETPhiSF_SR_El = METPhi_SFs.GetScaleFactor("SR_El", DeltaPhi_LooseElectron_MET[0], false);
+    //internalMETPhiSF_SR_Mu = METPhi_SFs.GetScaleFactor("SR_Mu", DeltaPhi_LooseMuon_MET[0], false);
+    //internalMETPhiSF_CR_WEl = METPhi_SFs.GetScaleFactor("CR_WEl", DeltaPhi_LooseElectron_MET[0], false);
+    //internalMETPhiSF_CR_WMu = METPhi_SFs.GetScaleFactor("CR_WMu", DeltaPhi_LooseMuon_MET[0], false);
+    //internalMETPhiSF_CR_ttbarEl = METPhi_SFs.GetScaleFactor("CR_ttbarEl", DeltaPhi_LooseElectron_MET[0], false);
+    //internalMETPhiSF_CR_ttbarMu = METPhi_SFs.GetScaleFactor("CR_ttbarMu", DeltaPhi_LooseMuon_MET[0], false);
+
+    //std::cout << "MET Phi SF SR_El " << internalMETPhiSF_SR_El << std::endl;
+    //std::cout << "MET Phi SF SR_Mu " << internalMETPhiSF_SR_Mu << std::endl;
+    //std::cout << "MET Phi SF CR_WEl " << internalMETPhiSF_CR_WEl << std::endl;
+    //std::cout << "MET Phi SF CR_WMu " << internalMETPhiSF_CR_WMu << std::endl;
+    //std::cout << "MET Phi SF CR_ttbarEl " << internalMETPhiSF_CR_ttbarEl << std::endl;
+    //std::cout << "MET Phi SF CR_ttbarMu " << internalMETPhiSF_CR_ttbarMu << std::endl;
+    
+    //float internalMETPhiSF = 1.0;
+    //if(N_TightMuons==0 && N_TightElectrons==1 && N_BTagsM==1) internalMETPhiSF = internalMETPhiSF_SR_El;
+    //else if (N_TightMuons==1 && N_TightElectrons==0 && N_BTagsM==1) internalMETPhiSF = internalMETPhiSF_SR_Mu;
+    //else if(N_TightMuons==0 && N_TightElectrons==1 && N_BTagsM==0) internalMETPhiSF = internalMETPhiSF_CR_WEl;
+    //else if(N_TightMuons==1 && N_TightElectrons==0 && N_BTagsM==0) internalMETPhiSF = internalMETPhiSF_CR_WMu;
+    //else if(N_TightMuons==0 && N_TightElectrons==1 && N_BTagsM>=2) internalMETPhiSF = internalMETPhiSF_CR_ttbarEl;
+    //else if(N_TightMuons==1 && N_TightElectrons==0 && N_BTagsM>=2) internalMETPhiSF = internalMETPhiSF_CR_ttbarMu;
+
+    //std::cout << "MET Phi SF " << internalMETPhiSF << std::endl;
+    

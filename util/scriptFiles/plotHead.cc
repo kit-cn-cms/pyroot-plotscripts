@@ -291,6 +291,15 @@ void plot()
         std::cout << "dataera: " << dataera << std::endl;
     }
 
+    // MET Phi SFs
+    //SFHelper METPhi_SFs;
+    //METPhi_SFs.AddScaleFactorHistogram("SR_El","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/METPhiSFs/DeltaPhi_LooseLepton_MET_SFs.root","DeltaPhi_LooseElectron_MET_lep_SR_El_SFs");
+    //METPhi_SFs.AddScaleFactorHistogram("SR_Mu","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/METPhiSFs/DeltaPhi_LooseLepton_MET_SFs.root","DeltaPhi_LooseMuon_MET_lep_SR_Mu_SFs");
+    //METPhi_SFs.AddScaleFactorHistogram("CR_WEl","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/METPhiSFs/DeltaPhi_LooseLepton_MET_SFs.root","DeltaPhi_LooseElectron_MET_lep_CR_WEl_SFs");
+    //METPhi_SFs.AddScaleFactorHistogram("CR_WMu","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/METPhiSFs/DeltaPhi_LooseLepton_MET_SFs.root","DeltaPhi_LooseMuon_MET_lep_CR_WMu_SFs");
+    //METPhi_SFs.AddScaleFactorHistogram("CR_ttbarEl","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/METPhiSFs/DeltaPhi_LooseLepton_MET_SFs.root","DeltaPhi_LooseElectron_MET_lep_CR_ttbarEl_SFs");
+    //METPhi_SFs.AddScaleFactorHistogram("CR_ttbarMu","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/METPhiSFs/DeltaPhi_LooseLepton_MET_SFs.root","DeltaPhi_LooseMuon_MET_lep_CR_ttbarMu_SFs");
+    
     // Hack for subsampling test
     // if(processname=="SingleEl" || processname=="SingleMu"){DoWeights=0; std::cout<<"is data, dont use nominal weihgts"<<std::endl;}
     if ((processname.find("SingleEl") != std::string::npos) || (processname.find("SingleMu") != std::string::npos) ||
