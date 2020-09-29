@@ -55,8 +55,8 @@ ttHpath = path+'/ttHTobb*/*nominal*.root'+';'+ \
           path+'/ttHToNonbb*/*nominal*.root'
 
 friendTrees = {
-    "dnnZ": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/recoX/lepton_variables_integrated/v3_opt_v2/recoZ",
-    "dnnH": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/recoX/lepton_variables_integrated/v3_opt_v2/recoHiggs",
+    "dnnZ": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/recoX/lepton_variables_integrated/v3_opt_v4/recoZ",
+    "dnnH": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/recoX/lepton_variables_integrated/v3_opt_v4/recoHiggs",
     "matchZ": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/matchX/lepton_variables_integrated/v1/match_Z_as_X",
     "matchH": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/matchX/lepton_variables_integrated/v1/match_Higgs_as_X",
 

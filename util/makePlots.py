@@ -60,10 +60,11 @@ def init_plottingsamples(plotsample):
                 }
     return returndict
 def createPlotConfig(configData,workdir, nominal_key, syst_key):
-    #get plotting information
+    #get plotting information 
+
     plotinfo = {
         "signalScaling"     : configData.analysis.signalScaling,
-        "datalabel"         : "data",
+        #"datalabel"         : "data",
         "data"              : "data_obs",
         
         "cmslabel"          : configData.analysis.cmslabel,
@@ -77,6 +78,20 @@ def createPlotConfig(configData,workdir, nominal_key, syst_key):
         "nominalKey"        : nominal_key,
         "systematicKey"     : syst_key,
     }
+
+
+    ####################################################
+    datalabel = configData.analysis.usePseudoData
+    if datalabel:
+        if isinstance(datalabel,bool):
+            datalabel = "simData"
+    else:
+        if isinstance(datalabel,bool):
+            datalabel = "data"
+    plotinfo["datalabel"] = datalabel
+    ####################################################
+
+
     lumiLabel           = configData.analysis.lumiLabel
     if lumiLabel:
         if isinstance(lumiLabel,bool):

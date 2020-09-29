@@ -496,7 +496,9 @@ else:
 """
 
 DrawHistogramObject = Plots.DrawHistograms(PlotList,options.channelName,
-                                data=dataHist,ratio=ratio, 
+                                data=dataHist,
+                                datalabel=datalabel,
+                                ratio=ratio, 
                                 signalscaling=int(signalscaling),
                                 errorband=errorband, background=background,
                                 logoption=logarithmic,

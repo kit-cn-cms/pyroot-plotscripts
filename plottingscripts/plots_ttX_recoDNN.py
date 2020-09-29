@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'new_ntuples/recoDNN/recoX/lepton_variables_integrated/v1_opt_v2'
+    name = 'new_ntuples/recoDNN/test_datalabel'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -73,7 +73,7 @@ def main(pyrootdir, opts):
     # script options
     analysisOptions = {
         # general options
-        "usePseudoData":        True,
+        "usePseudoData":        False,
         "testrun":              False,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
@@ -104,7 +104,7 @@ def main(pyrootdir, opts):
     plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2017/",True]] 
     memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                   "checkpointFiles":  "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/recoDNNData/new_ntuples/H_Z_bkg_analysis/lepton_variables_integrated/v3_opt_v2"}
+                   "checkpointFiles":  "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/recoDNNData/new_ntuples/H_Z_bkg_analysis/lepton_variables_integrated/v3_opt_v5"}
     dnnInterface = None
 
     # path to datacardMaker directory
