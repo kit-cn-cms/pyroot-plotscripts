@@ -90,10 +90,13 @@ electronRecoSFs_down = "((N_LooseElectrons==2)*LooseElectron_ReconstructionSFDow
 
 
 electronIDSFs = "((N_LooseElectrons==2)*LooseElectron_IdentificationSF[0]*LooseElectron_IdentificationSF[1]+(N_TightElectrons==1 && N_LooseElectrons==1)*Electron_IdentificationSF[0]+(N_TightElectrons==0 && N_LooseElectrons==1)*LooseElectron_IdentificationSF[0]+(N_LooseElectrons==0)*1.)"
+#electronIDSFs = "((N_LooseElectrons==2)*internalEleIDLooseSF+(N_TightElectrons==1 && N_LooseElectrons==1)*internalEleIDTightSF+(N_TightElectrons==0 && N_LooseElectrons==1)*internalEleIDLooseSF+(N_LooseElectrons==0)*1.)"
 
 electronIDSFs_up = "((N_LooseElectrons==2)*LooseElectron_IdentificationSFUp[0]*LooseElectron_IdentificationSFUp[1]+(N_TightElectrons==1 && N_LooseElectrons==1)*Electron_IdentificationSFUp[0]+(N_TightElectrons==0 && N_LooseElectrons==1)*LooseElectron_IdentificationSFUp[0]+(N_LooseElectrons==0)*1.)"
+#electronIDSFs_up = "((N_LooseElectrons==2)*internalEleIDLooseSFUp+(N_TightElectrons==1 && N_LooseElectrons==1)*internalEleIDTightSFUp+(N_TightElectrons==0 && N_LooseElectrons==1)*internalEleIDLooseSFUp+(N_LooseElectrons==0)*1.)"
 
 electronIDSFs_down = "((N_LooseElectrons==2)*LooseElectron_IdentificationSFDown[0]*LooseElectron_IdentificationSFDown[1]+(N_TightElectrons==1 && N_LooseElectrons==1)*Electron_IdentificationSFDown[0]+(N_TightElectrons==0 && N_LooseElectrons==1)*LooseElectron_IdentificationSFDown[0]+(N_LooseElectrons==0)*1.)"
+#electronIDSFs_down = "((N_LooseElectrons==2)*internalEleIDLooseSFDown+(N_TightElectrons==1 && N_LooseElectrons==1)*internalEleIDTightSFDown+(N_TightElectrons==0 && N_LooseElectrons==1)*internalEleIDLooseSFDown+(N_LooseElectrons==0)*1.)"
 
 
 muonIsoSFs = "((N_LooseMuons==2)*LooseMuon_IsolationSF[0]*LooseMuon_IsolationSF[1]+(N_TightMuons==1 && N_LooseMuons==1)*Muon_IsolationSF[0]+(N_TightMuons==0 && N_LooseMuons==1)*LooseMuon_IsolationSF[0]+(N_LooseMuons==0)*1.)"
