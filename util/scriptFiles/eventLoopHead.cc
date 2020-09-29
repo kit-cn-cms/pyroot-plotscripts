@@ -150,9 +150,11 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
             internalBosonWeight_monojet_low_pt_down = 0.5;
         }
     }
-    else if (processname.find("gammajets") != std::string::npos && Gamma_Pt > 0.) {
-        qcd_nlo_sf = qcd_nlo_gamma.GetScaleFactor("qcd_nlo_gamma", Gamma_Pt, true);
-        ewk_nlo_sf = ewk_nlo_gamma.GetScaleFactor("ewk_nlo_gamma", Gamma_Pt, true);
+    else if (processname.find("gammajets") != std::string::npos && N_GenPhotons > 0) {
+        float lead_gen_photon_pt = *std::max_element(GenPhoton_Pt.get(),GenPhoton_Pt.get()+N_GenPhotons);
+        //std::cout << "lead gen photon pt " << lead_gen_photon_pt << std::endl;
+        qcd_nlo_sf = qcd_nlo_gamma.GetScaleFactor("qcd_nlo_gamma", lead_gen_photon_pt, true);
+        ewk_nlo_sf = ewk_nlo_gamma.GetScaleFactor("ewk_nlo_gamma", lead_gen_photon_pt, true);
         if(dataera == "2016"){
             internalBosonWeight_monojet = qcd_nlo_sf*ewk_nlo_sf;
         }
@@ -163,7 +165,7 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
             std::cout << "NO VALID DATAERA CHOSEN!!" << std::endl;
             std::cout << "dataera: " << dataera << std::endl;
         }
-        if ((Gamma_Pt < qcd_nlo_gamma.GetHistogramLowerEdge("qcd_nlo_gamma")) || (Gamma_Pt < ewk_nlo_gamma.GetHistogramLowerEdge("ewk_nlo_gamma"))) {
+        if ((lead_gen_photon_pt < qcd_nlo_gamma.GetHistogramLowerEdge("qcd_nlo_gamma")) || (lead_gen_photon_pt < ewk_nlo_gamma.GetHistogramLowerEdge("ewk_nlo_gamma"))) {
             internalBosonWeight_monojet_low_pt_up = 1.5;
             internalBosonWeight_monojet_low_pt_down = 0.5;
         }
@@ -171,7 +173,7 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     
     //std::cout << "NLO QCD SF from monojet: " << qcd_nlo_sf << std::endl;
     //std::cout << "NLO EWK SF from monojet: " << ewk_nlo_sf << std::endl;
-    //std::cout << "COMBINED SF from monojet: " << qcd_nlo_sf*ewk_nlo_sf << std::endl;
+    //std::cout << "COMBINED SF from monojet: " << internalBosonWeight_monojet << std::endl;
     
     // use Lindert theory corrections in any case at the moment
     //if (processname.find("gammajets") != std::string::npos){
