@@ -407,7 +407,8 @@ samples = [
     plotClasses.Sample(
         "#gamma+jets",
         ROOT.kOrange - 4,
-        path_mwassmer + "/GJets_HT*/*nominal*.root",
+        #path_mwassmer + "/GJets_HT*/*nominal*.root",
+        path_mwassmer + "/GJets_1j*/*nominal*.root",
         lumi,
         # first factor removes yield change due to reweighting, second factor is k factor for total cross section multiplied by fraction of isolated photons in analysis phase-space
         #lumi + "*0.710*1.105/0.830
