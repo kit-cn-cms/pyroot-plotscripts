@@ -76,6 +76,7 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
 
     if ((processname.find("wlnujets") != std::string::npos && W_Pt > 100. && wlnujets_ht) || (processname.find("zlljets") != std::string::npos && Z_Pt > 100.) ||
         (processname.find("znunujets") != std::string::npos && Z_Pt > 100.) || (processname.find("gammajets") != std::string::npos && Gamma_Pt > 100.)) {
+        if (BosonWeight_nominal>0.){
         internalBosonWeight           = BosonWeight_nominal;
         internalBosonWeight_QCD1Up    = BosonWeight_QCD1Up/internalBosonWeight;
         internalBosonWeight_QCD1Down  = BosonWeight_QCD1Down/internalBosonWeight;
@@ -97,6 +98,7 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
         internalBosonWeight_muRDown   = BosonWeight_muRDown/internalBosonWeight;
         internalBosonWeight_muFUp     = BosonWeight_muFUp/internalBosonWeight;
         internalBosonWeight_muFDown   = BosonWeight_muFDown/internalBosonWeight;
+        }
     }
     
     // additional uncertainty for low pt w bosons because of missing HT 0To70
