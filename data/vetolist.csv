@@ -98,6 +98,8 @@ internalBosonWeight_monojet_low_pt_up
 internalBosonWeight_monojet_low_pt_down
 vjets_lf_up
 vjets_lf_down
+vjets_cf_up
+vjets_cf_down
 vjets_hf_up
 vjets_hf_down
 internalCSVWeightSF_had

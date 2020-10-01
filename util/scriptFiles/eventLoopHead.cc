@@ -185,17 +185,23 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     // additional uncertainty for for v+heavy flavor jet events
     float vjets_hf_up = 1.0;
     float vjets_hf_down = 1.0;
+    float vjets_cf_up = 1.0;
+    float vjets_cf_down = 1.0;
     float vjets_lf_up = 1.0;
     float vjets_lf_down = 1.0;
     if ((processname.find("wlnujets") != std::string::npos) || (processname.find("zlljets") != std::string::npos) ||
         (processname.find("znunujets") != std::string::npos) || (processname.find("gammajets") != std::string::npos)) {
-        if (isHF == 1) {
-            vjets_hf_up = 1.5;
-            vjets_hf_down = 0.5;
+        if (N_BQuarks > 0) {
+            vjets_hf_up = 2.0;
+            vjets_hf_down = 0.0;
         }
-        else if (isLF == 1) {
-            vjets_lf_up = 1.05;
-            vjets_lf_down = 0.95;
+        else if (N_CQuarks > 0) {
+            vjets_cf_up = 1.3;
+            vjets_cf_down = 0.7;
+        }
+        else {
+            vjets_lf_up = 1.15;
+            vjets_lf_down = 0.85;
         }
     }
     

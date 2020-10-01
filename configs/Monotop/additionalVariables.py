@@ -124,7 +124,10 @@ def getAddVars():
         "JetLooseUntagged_outside_lead_AK15Jet_Flav",
         "N_LooseJets",
         "LooseJet_Eta",
-        "LooseJet_Phi"
+        "LooseJet_Phi",
+        "GenPhoton_Pt",
+        "N_BQuarks",
+        "N_CQuarks",
         ]
 
     return addVars
