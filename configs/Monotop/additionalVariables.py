@@ -128,6 +128,8 @@ def getAddVars():
         "GenPhoton_Pt",
         "N_BQuarks",
         "N_CQuarks",
+        "LooseMuon_Phi",
+        "LooseElectron_Phi",
         ]
 
     return addVars

@@ -536,6 +536,16 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
         DeltaPhi_Photon_MET = fabs(TVector2::Phi_mpi_pi(Evt_Phi_MET - LoosePhoton_Phi[0]));
         DeltaPhi_Photon_Hadr_Recoil = fabs(TVector2::Phi_mpi_pi(Hadr_Recoil_Phi - LoosePhoton_Phi[0]));
     }
+
+    // Calculate DeltaPhi between leading electron/muon and leading jet on the fly
+    float DeltaPhi_LooseElectron_Jet = -999.;
+    float DeltaPhi_LooseMuon_Jet = -999.;
+    if(N_LooseElectrons>0 && N_Jets>0){
+        DeltaPhi_LooseElectron_Jet = fabs(TVector2::Phi_mpi_pi(Jet_Phi[0] - LooseElectron_Phi[0]));
+    }
+    if(N_LooseMuons>0 && N_Jets>0){
+        DeltaPhi_LooseMuon_Jet = fabs(TVector2::Phi_mpi_pi(Jet_Phi[0] - LooseMuon_Phi[0]));
+    }
     
     // tau veto weights
     float internalTauVetoWeight = 1.;
