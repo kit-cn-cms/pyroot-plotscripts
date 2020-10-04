@@ -74,7 +74,7 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     float internalBosonWeight_G_low_pt_Up = 1.0;
     float internalBosonWeight_G_low_pt_Down = 1.0;
 
-    if ((processname.find("wlnujets") != std::string::npos && W_Pt > 100. && wlnujets_ht) || (processname.find("zlljets") != std::string::npos && Z_Pt > 100.) ||
+    if ((processname.find("wlnujets") != std::string::npos && W_Pt > 30. && wlnujets_ht) || (processname.find("zlljets") != std::string::npos && Z_Pt > 100.) ||
         (processname.find("znunujets") != std::string::npos && Z_Pt > 100.) || (processname.find("gammajets") != std::string::npos && Gamma_Pt > 100.)) {
         if (BosonWeight_nominal>0.){
         internalBosonWeight           = BosonWeight_nominal;
@@ -158,7 +158,8 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
         qcd_nlo_sf = qcd_nlo_gamma.GetScaleFactor("qcd_nlo_gamma", lead_gen_photon_pt, true);
         ewk_nlo_sf = ewk_nlo_gamma.GetScaleFactor("ewk_nlo_gamma", lead_gen_photon_pt, true);
         if(dataera == "2016"){
-            internalBosonWeight_monojet = qcd_nlo_sf*ewk_nlo_sf;
+            //internalBosonWeight_monojet = qcd_nlo_sf*ewk_nlo_sf;
+            internalBosonWeight_monojet  = internalBosonWeight;
         }
         else if(dataera == "2017" || dataera == "2018"){
             internalBosonWeight_monojet = ewk_nlo_sf;
