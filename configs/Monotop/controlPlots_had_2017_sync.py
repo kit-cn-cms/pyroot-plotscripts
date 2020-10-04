@@ -1051,14 +1051,14 @@ def GetPlots(extension, selection, label):
     ]
     if fast:
         plots = [
-            plotClasses.Plot(
-                ROOT.TH1D(
-                    "Hadr_Recoil_Pt" + extension, "#slash{U}_{T} [GeV]", len(discr_binning)-1, array('d',discr_binning)
-                ),
-                "Hadr_Recoil_Pt",
-                selection,
-                label,
-            ),
+            #plotClasses.Plot(
+                #ROOT.TH1D(
+                    #"Hadr_Recoil_Pt" + extension, "#slash{U}_{T} [GeV]", len(discr_binning)-1, array('d',discr_binning)
+                #),
+                #"Hadr_Recoil_Pt",
+                #selection,
+                #label,
+            #),
             plotClasses.Plot(
                 ROOT.TH1D(
                     "Hadr_Recoil_Pt_generic_binning" + extension, "#slash{U}_{T} [GeV]", 20, 250, 1250
@@ -1108,25 +1108,25 @@ def GetPlots(extension, selection, label):
                 selection,
                 label,
             ),
+            #plotClasses.Plot(
+                #ROOT.TH1D(
+                    #"AK15Jet_DeepAK15_TvsQCD_binning_studies" + extension,
+                    #"AK15 Jet DeepAK15 TvsQCD",
+                    #50,
+                    #0.0,
+                    #1.0,
+                #),
+                #"AK15Jet_DeepAK15_TvsQCD[0]",
+                #selection,
+                #label,
+            #),
             plotClasses.Plot(
                 ROOT.TH1D(
-                    "AK15Jet_DeepAK15_TvsQCD_binning_studies" + extension,
-                    "AK15 Jet DeepAK15 TvsQCD",
-                    50,
+                    "AK15Jet_PuppiSoftDropMass" + extension,
+                    "AK15 Jet SD mass [GeV]",
+                    40,
                     0.0,
-                    1.0,
-                ),
-                "AK15Jet_DeepAK15_TvsQCD[0]",
-                selection,
-                label,
-            ),
-            plotClasses.Plot(
-            ROOT.TH1D(
-                "AK15Jet_PuppiSoftDropMass" + extension,
-                "AK15 Jet SD mass [GeV]",
-                40,
-                0.0,
-                400.0,
+                    400.0,
                 ),
                 "AK15Jet_PuppiSoftDropMass[0]",
                 selection,
@@ -1134,9 +1134,29 @@ def GetPlots(extension, selection, label):
             ),
             plotClasses.Plot(
                 ROOT.TH1D(
-                    "AK15Jet_SoftDrop_Mass" + extension, "AK15 SD Jet mass [GeV]", 20, 0.0, 400.0
+                    "AK15Jet_PuppiSoftDropMass_corr" + extension,
+                    "corrected AK15 Jet SD mass [GeV]",
+                    40,
+                    0.0,
+                    400.0,
+                ),
+                "AK15Jet_PuppiSoftDropMass[0]*weight_sdm_corr",
+                selection,
+                label,
+            ),
+            plotClasses.Plot(
+                ROOT.TH1D(
+                    "AK15Jet_SoftDrop_Mass" + extension, "AK15 SD Jet mass [GeV]", 40, 0.0, 400.0
                 ),
                 "AK15Jet_SoftDrop_M[0]",
+                selection,
+                label,
+            ),
+            plotClasses.Plot(
+                ROOT.TH1D(
+                "AK15Jet_SoftDrop_Mass_corr" + extension, "corrected AK15 SD Jet mass [GeV]", 40, 0.0, 400.0
+                ),
+                "AK15Jet_SoftDrop_M[0]*weight_sdm_corr",
                 selection,
                 label,
             ),
