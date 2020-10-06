@@ -259,6 +259,20 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     //std::cout << "ele id tight sf up: " << internalEleIDTightSFUp << std::endl;
     //std::cout << "ele id tight sf down: " << internalEleIDTightSFDown << std::endl;
     
+    // photon extrapolation uncertainties
+    float photon_extrapolation_up = 1.0;
+    float photon_extrapolation_down = 1.0;
+    for(uint iPho=0;iPho<N_TightPhotons;iPho++){
+        if(dataera == "2017" || dataera == "2018"){
+            photon_extrapolation_up *= Photon_IdentificationSF[iPho]+(PhotonExtrapolationUnc.GetScaleFactor("photon_extrapolation_unc", fabs(Photon_Eta[iPho]), true)*(Photon_Pt[iPho]-150.0));
+            photon_extrapolation_down *= Photon_IdentificationSF[iPho]-(PhotonExtrapolationUnc.GetScaleFactor("photon_extrapolation_unc", fabs(Photon_Eta[iPho]), true)*(Photon_Pt[iPho]-150.0));
+        }
+    }
+    
+    //std::cout << "photon extrapolation up " << photon_extrapolation_up << std::endl;
+    //std::cout << "photon extrapolation down " << photon_extrapolation_down << std::endl;
+    //std::cout << "photon nominal sf " << Photon_IdentificationSF[0] << std::endl;
+    
     //float HT_Jets = 0.;
     //for(size_t m = 0;m<N_Jets;m++) HT_Jets+=Jet_Pt[m];
     

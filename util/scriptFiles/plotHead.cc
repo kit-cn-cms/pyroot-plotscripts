@@ -290,6 +290,21 @@ void plot()
         std::cout << "NO VALID DATAERA CHOSEN!!" << std::endl;
         std::cout << "dataera: " << dataera << std::endl;
     }
+    
+    // photon pt extrapolation uncertainty for 2017 and 2018 from mono-jet group
+    SFHelper PhotonExtrapolationUnc;
+    if ( dataera == "2018" ) {
+        PhotonExtrapolationUnc.AddScaleFactorHistogram("photon_extrapolation_unc","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/photon_SFs/photon_medium_id_sf_v0.root","photon_medium_id_extrap_unc_2018");
+    }
+    else if ( dataera == "2017" ) {
+        PhotonExtrapolationUnc.AddScaleFactorHistogram("photon_extrapolation_unc","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/photon_SFs/photon_medium_id_sf_v0.root","photon_medium_id_extrap_unc_2017");
+    }
+    else if ( dataera == "2016" ) {
+    }
+    else {
+        std::cout << "NO VALID DATAERA CHOSEN!!" << std::endl;
+        std::cout << "dataera: " << dataera << std::endl;
+    }
 
     // MET Phi SFs
     //SFHelper METPhi_SFs;

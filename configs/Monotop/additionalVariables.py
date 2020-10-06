@@ -130,6 +130,7 @@ def getAddVars():
         "N_CQuarks",
         "LooseMuon_Phi",
         "LooseElectron_Phi",
+        "Photon_Eta",
         ]
 
     return addVars
