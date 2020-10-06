@@ -118,6 +118,9 @@ photonSFs_up = "((N_LoosePhotons==1 && N_TightPhotons==1)*Photon_IdentificationS
 
 photonSFs_down = "((N_LoosePhotons==1 && N_TightPhotons==1)*Photon_IdentificationSFDown[0]+(N_LoosePhotons==0)*1.)"
 
+photonSFs_extra_up = "((N_LoosePhotons==1 && N_TightPhotons==1)*photon_extrapolation_up+(N_LoosePhotons==0)*1.)"
+
+photonSFs_extra_down = "((N_LoosePhotons==1 && N_TightPhotons==1)*photon_extrapolation_down+(N_LoosePhotons==0)*1.)"
 
 #tauVetoSFs = "internalTauVetoWeight"
 #tauVetoSFs_up = "internalTauVetoWeightUp"
@@ -220,6 +223,8 @@ weightReplacements = {
     "PHSFNOM": photonSFs,
     "PHSFUP": photonSFs_up,
     "PHSFDOWN": photonSFs_down,
+    "PHSFEXTRAUP": photonSFs_extra_up,
+    "PHSFEXTRADOWN": photonSFs_extra_down,
     
     #"TAUVETOSFNOM": tauVetoSFs,
     #"TAUVETOSFUP": tauVetoSFs_up,

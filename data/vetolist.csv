@@ -238,3 +238,5 @@ internalNOHEMEvent
 internalMETPhiSF
 DeltaPhi_LooseElectron_Jet
 DeltaPhi_LooseMuon_Jet
+photon_extrapolation_up
+photon_extrapolation_down
