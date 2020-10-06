@@ -31,7 +31,7 @@ def find_masses(dataset_name):
 
 # samples
 # input path
-path_mwassmer = "/nfs/dust/cms/user/swieland/monotop/ntuples/2017"
+path_mwassmer = "/nfs/dust/cms/user/mwassmer/MonoTop/ntuples_2017"
 
 # ======= #
 # WEIGHTS #
@@ -421,7 +421,8 @@ samples = [
     plotClasses.Sample(
         "#gamma+jets",
         ROOT.kOrange - 4,
-        path_mwassmer + "/GJets_HT*/*nominal*.root",
+        #path_mwassmer + "/GJets_HT*/*nominal*.root",
+        path_mwassmer + "/GJets_1j*/*nominal*.root",
         lumi,
         "gammajets",
         samDict=sampleDict,
