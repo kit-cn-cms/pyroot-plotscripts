@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'inputFeatures_final/2017_newGT'
+    name = 'inputFeatures_final/2017_v1'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -43,7 +43,7 @@ def main(pyrootdir, opts):
 
     # Name of final discriminator, should not contain underscore
     discrName = 'finaldiscr'
-    nom_histname_template = "$PROCESS__$CHANNEL"
+    nom_histname_template = "$CHANNEL__$PROCESS"
     syst_histname_template = nom_histname_template + "__$SYSTEMATIC"
     histname_separator = "__"
 
@@ -51,10 +51,10 @@ def main(pyrootdir, opts):
     memexp = "(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)"
     # memexp = ''
     # configs
-    config          = "legacyAnalysis/samples_2017_newGT"
-    variable_cfg    = "legacyAnalysis/additionalVariables_2017"
-    plot_cfg        = "legacyAnalysis/inputFeature_validation/ttH_legacy_inputfeatures_ClassPlusHTXS_opt_binning"
-    syst_cfg        = "legacyAnalysis/inputFeature_validation/systs_2017"
+    config          = "legacyAnalysis/samples_2017_controlPlots"
+    variable_cfg    = "legacyAnalysis/additionalVariables"
+    plot_cfg        = "legacyAnalysis/controlPlots_inputFeatures"
+    syst_cfg        = "legacyAnalysis/systs_2017"
     replace_cfg     = "legacyAnalysis/pdf_relic_names"
 
     sfCorrection = {}
@@ -72,7 +72,7 @@ def main(pyrootdir, opts):
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
-    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2017_split.csv"
+    rateFactorsFile = pyrootdir + "/data/rateFactors/ratefactors_new_plotscript_2017.csv"
 
     # script options
     analysisOptions = {
@@ -83,16 +83,16 @@ def main(pyrootdir, opts):
         # options to activate parts of the script
         "haddFromWildcard":     True,
         "makeDataCards":        False,
-        "makeInputDatacards":   True, # create datacards also for all defined plots
+        "makeInputDatacards":   False, # create datacards also for all defined plots
         "addData":              True,  # adding real data 
         "makePlots":            True,
         # options for makePlots
         "signalScaling":        -1,
         "lumiLabel":            True,
         "cmslabel":             "private Work",
-        "ratio":                "#frac{data}{MC Background}",
+        "ratio":                "#frac{data}{MC prediction}",
         "shape":                False,
-        "logarithmic":          False,
+        "logarithmic":          True,
         "splitLegend":          True,
         "normalize":            False,
         # the skipX options try to skip the submission of files to the batch system
@@ -208,7 +208,7 @@ def main(pyrootdir, opts):
         # pP.setMEMDataBase(memDataBase)
         # pP.setDNNInterface(dnnInterface)
         pP.setMaxEvts_nom(50000)
-        pP.setMaxEvts_systs(200000)
+        pP.setMaxEvts_systs(400000)
         # pP.request_runtime = 60*60*5
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
