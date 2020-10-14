@@ -543,7 +543,7 @@ discr_binning = [40.0,60.0,80.0,100.0,125.0,150.0, 165.0, 180.0, 200.0, 220.0, 2
 discr_binning.append(1000.)
 
 # met + no photons + "highly" energetic jet 
-generalselection = "(Evt_Pt_MET>100.)*(N_LoosePhotons==0)*(N_Jets>0)*(Jet_Pt[0]>50.)"
+generalselection = "(Evt_Pt_MET>100.)*(N_Jets>0)*(Jet_Pt[0]>50.)"
 
 # HEM jet veto
 #generalselection += "*(N_HEM_Jets==0)"#"*(N_HEM_METS==0)"
