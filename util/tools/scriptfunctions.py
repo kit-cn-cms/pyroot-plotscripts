@@ -38,7 +38,7 @@ using namespace std;
     #"CSVHelper",
     #"QCDHelper",
     #"TTbarSystHelper",
-    "CSVWeightSFHelper",
+    #"CSVWeightSFHelper",
     "SFHelper",
     "BtagSFHelper",
     #"METPhiHelper"

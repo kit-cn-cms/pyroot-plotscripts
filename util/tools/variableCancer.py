@@ -564,14 +564,14 @@ class Variable:
         # manage array variables
         if self.isArray:
             if varType == "F":
-                text = "    std::unique_ptr<float[]> "+varName+" ( new float[40] );\n"
-                text+= "    std::fill_n ("+varName+".get(), 40, -999);\n"
+                text = "    std::unique_ptr<float[]> "+varName+" ( new float[100] );\n"
+                text+= "    std::fill_n ("+varName+".get(), 100, -999);\n"
             elif varType == "I":
-                text = "    std::unique_ptr<Int_t[]> "+varName+" ( new Int_t[40] );\n"
-                text+= "    std::fill_n ("+varName+".get(), 40, -999);\n"
+                text = "    std::unique_ptr<Int_t[]> "+varName+" ( new Int_t[100] );\n"
+                text+= "    std::fill_n ("+varName+".get(), 100, -999);\n"
             elif varType == "L":
-                text = "    std::unique_ptr<Long64_t[]> "+varName+" ( new Long64_t[40] );\n"
-                text+= "    std::fill_n ("+varName+".get(), 40, -999);\n"
+                text = "    std::unique_ptr<Long64_t[]> "+varName+" ( new Long64_t[100] );\n"
+                text+= "    std::fill_n ("+varName+".get(), 100, -999);\n"
             else: print("UNKNOWN TYPE: "+str(varType))
 
         else:
@@ -588,7 +588,7 @@ class Variable:
         varName = self.varName
         code =""
         if self.isArray:
-            code+="    std::fill_n ("+varName+".get(), 40, -999);\n"
+            code+="    std::fill_n ("+varName+".get(), 100, -999);\n"
         else:
             code+="    "+varName+" = -999;\n"
         return code
