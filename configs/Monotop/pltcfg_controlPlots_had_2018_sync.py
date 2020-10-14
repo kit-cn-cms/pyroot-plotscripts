@@ -122,9 +122,9 @@ photonSFs_extra_up = "((N_LoosePhotons==1 && N_TightPhotons==1)*photon_extrapola
 
 photonSFs_extra_down = "((N_LoosePhotons==1 && N_TightPhotons==1)*photon_extrapolation_down+(N_LoosePhotons==0)*1.)"
 
-#tauVetoSFs = "internalTauVetoWeight"
-#tauVetoSFs_up = "internalTauVetoWeightUp"
-#tauVetoSFs_down = "internalTauVetoWeightDown"
+tauVetoSFs = "internalTauVetoWeight"
+tauVetoSFs_up = "internalTauVetoWeightUp"
+tauVetoSFs_down = "internalTauVetoWeightDown"
 
 
 # trigger scale factors
@@ -226,9 +226,9 @@ weightReplacements = {
     "PHSFEXTRAUP": photonSFs_extra_up,
     "PHSFEXTRADOWN": photonSFs_extra_down,
     
-    #"TAUVETOSFNOM": tauVetoSFs,
-    #"TAUVETOSFUP": tauVetoSFs_up,
-    #"TAUVETOSFDOWN": tauVetoSFs_down,
+    "TAUVETOSFNOM": tauVetoSFs,
+    "TAUVETOSFUP": tauVetoSFs_up,
+    "TAUVETOSFDOWN": tauVetoSFs_down,
     
     # higher-order v+jets theory reweighting weight
     "BOSONWEIGHTNOM": bosonWeightNom,
@@ -298,8 +298,8 @@ nominalweight = (
     + electronIDSFs
     + "*"
     + photonSFs
-    #+ "*"
-    #+ tauVetoSFs
+    + "*"
+    + tauVetoSFs
     + "*"
     + bosonWeightNom
     + "*"
