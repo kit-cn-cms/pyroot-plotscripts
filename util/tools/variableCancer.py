@@ -573,6 +573,21 @@ class Variable:
     def setupVariableArray(self, tree, variableManager, branchTitle, verbose):
         # search for indexVariable in 'variableName[indexVariable]/variableType'
         self.indexVariable = re.findall(r"\[(.*?)\]", branchTitle.split("/")[0])[0]
+
+        # look if index variable is defined in friend tree
+        if "_ft_" in self.varName:
+            print("setup array variable from friend tree")
+            found = False
+            treeName, _ = self.varName.split("_ft_", 1)
+            if treeName in variableManager.friendTreeNames:
+                for tree in variableManager.trees:
+                    if hasattr(tree, self.indexVariable):
+                        print("\tindex of array var is in tree: "+treeName)
+                        found = True
+                        self.indexVariable = "_ft_".join([treeName, self.indexVariable])
+            if not found:
+                print("\t index of array var is not in fried tree.")
+
         if verbose > 20: print("indexVariable is "+str(self.indexVariable))
 
         # adding indexVariable to list of variables to be initialized in variableManager

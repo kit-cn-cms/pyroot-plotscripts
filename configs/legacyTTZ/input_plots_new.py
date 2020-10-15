@@ -65,6 +65,10 @@ def plots_jtr(label, selection, jtr, data = None):
         plotClasses.Plot(ROOT.TH1D(jtr+"_Jet_DeepJet_CvsB_4","c tag value (vs. b flavor) of 4th jet",30,0.0,1.0),"ctag_ft_Jet_DeepJet_CvsB[3]",selection,label),
         plotClasses.Plot(ROOT.TH1D(jtr+"_Jet_DeepJet_CvsB_5","c tag value (vs. b flavor) of 5th jet",30,0.0,1.0),"ctag_ft_Jet_DeepJet_CvsB[4]",selection,label),
         plotClasses.Plot(ROOT.TH1D(jtr+"_Jet_DeepJet_CvsB_6","c tag value (vs. b flavor) of 6th jet",30,0.0,1.0),"ctag_ft_Jet_DeepJet_CvsB[5]",selection,label),
+
+        plotClasses.TwoDimPlot( 
+            ROOT.TH2F(jtr+"_deepJet_CvsL_vs_CvsB","CvsL vs CvsB",20,0.,1.,20,0.,1.), 
+            "ctag_ft_Jet_DeepJet_CvsL","ctag_ft_Jet_DeepJet_CvsB",selection,label),
         ]
 
 
@@ -73,12 +77,48 @@ def plots_jtr(label, selection, jtr, data = None):
     return plots
 
 
+def plots_gen(label, selection, jtr, data = None):
+    plots = [
+        plotClasses.Plot(ROOT.TH1D(jtr+"_N_bJets","b-jet multiplicity (gen flavor)",5,-0.5,4.5),"ctag_ft_N_bJets",selection,label),
+        plotClasses.Plot(ROOT.TH1D(jtr+"_bJet_btagValue","b tag value of b-jets (gen flavor)",30,0.3,1),"ctag_ft_bJet_btagValue",selection,label),
+        plotClasses.Plot(ROOT.TH1D(jtr+"_bJet_DeepJet_CvsL","c tag value (vs. light flavor) of b-jets (gen flavor)",30,0.0,1.0),"ctag_ft_bJet_DeepJet_CvsL",selection,label),
+        plotClasses.Plot(ROOT.TH1D(jtr+"_bJet_DeepJet_CvsB","c tag value (vs. b flavor) of b-jets (gen flavor)",30,0.0,1.0),"ctag_ft_bJet_DeepJet_CvsB",selection,label),
+
+        plotClasses.Plot(ROOT.TH1D(jtr+"_N_cJets","c-jet multiplicity (gen flavor)",5,-0.5,4.5),"ctag_ft_N_cJets",selection,label),
+        plotClasses.Plot(ROOT.TH1D(jtr+"_cJet_btagValue","b tag value of c-jets (gen flavor)",30,0.0,1),"ctag_ft_cJet_btagValue",selection,label),
+        plotClasses.Plot(ROOT.TH1D(jtr+"_cJet_DeepJet_CvsL","c tag value (vs. light flavor) of c-jets (gen flavor)",30,0.0,1.0),"ctag_ft_cJet_DeepJet_CvsL",selection,label),
+        plotClasses.Plot(ROOT.TH1D(jtr+"_cJet_DeepJet_CvsB","c tag value (vs. b flavor) of c-jets (gen flavor)",30,0.0,1.0),"ctag_ft_cJet_DeepJet_CvsB",selection,label),
+
+        plotClasses.Plot(ROOT.TH1D(jtr+"_N_lfJets","lf-jet multiplicity (gen flavor)",8,-0.5,7.5),"ctag_ft_N_lfJets",selection,label),
+        plotClasses.Plot(ROOT.TH1D(jtr+"_lfJet_btagValue","b tag value of lf-jets (gen flavor)",30,0.,0.3),"ctag_ft_lfJet_btagValue",selection,label),
+        plotClasses.Plot(ROOT.TH1D(jtr+"_lfJet_DeepJet_CvsL","c tag value (vs. light flavor) of lf-jets (gen flavor)",30,0.0,1.0),"ctag_ft_lfJet_DeepJet_CvsL",selection,label),
+        plotClasses.Plot(ROOT.TH1D(jtr+"_lfJet_DeepJet_CvsB","c tag value (vs. b flavor) of lf-jets (gen flavor)",30,0.0,1.0),"ctag_ft_lfJet_DeepJet_CvsB",selection,label),
+
+        plotClasses.TwoDimPlot(  
+            ROOT.TH2F(jtr+"_bJet_CvsL_vs_CvsB","CvsL vs CvsB of b-jets (gen flavor)",20,0.,1.,20,0.,1.),  
+            "ctag_ft_bJet_DeepJet_CvsL","ctag_ft_bJet_DeepJet_CvsB",selection,label), 
+
+        plotClasses.TwoDimPlot(  
+            ROOT.TH2F(jtr+"_cJet_CvsL_vs_CvsB","CvsL vs CvsB of c-jets (gen flavor)",20,0.,1.,20,0.,1.),  
+            "ctag_ft_cJet_DeepJet_CvsL","ctag_ft_cJet_DeepJet_CvsB",selection,label), 
+
+        plotClasses.TwoDimPlot(  
+            ROOT.TH2F(jtr+"_lfJet_CvsL_vs_CvsB","CvsL vs CvsB of lf-jets (gen flavor)",20,0.,1.,20,0.,1.),  
+            "ctag_ft_lfJet_DeepJet_CvsL","ctag_ft_lfJet_DeepJet_CvsB",selection,label), 
+
+        ]
+    if data:
+        add_data_plots(plots=plots,data=data)
+    return plots
+
+
 def plots_ge6j_ge3t(data = None):
-    label = "\geq 6 jets, \geq 3 b-tags"
-    selection = "(N_Jets>=6&&N_BTagsM>=3)&&(1.)"
-    jtr = "ljets_ge6j_ge3t"
+    label = "\geq 6 jets, \geq 4 b-tags"
+    selection = "(N_Jets>=6&&N_BTagsM>=4)&&(1.)"
+    jtr = "ljets_ge6j_ge4t"
 
     plots = plots_jtr(label, selection, jtr, data)
+    plots+= plots_gen(label, selection, jtr, data)
     return plots
 
 def plots_ge4j_ge3t(data = None):
@@ -87,6 +127,7 @@ def plots_ge4j_ge3t(data = None):
     jtr = "ljets_ge4j_ge3t"
 
     plots = plots_jtr(label, selection, jtr, data)
+    plots+= plots_gen(label, selection, jtr, data)
     return plots
 
 def getDiscriminatorPlots(data = None, discrname = ''):

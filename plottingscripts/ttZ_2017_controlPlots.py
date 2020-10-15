@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'controlPlots/2017/v2'
+    name = 'ctagPlots/2017/v2_noSysts'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -50,11 +50,11 @@ def main(pyrootdir, opts):
     # define MEM discriminator variable
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
     # configs
-    config          = "legacyTTZ/samples_new"
+    config          = "legacyTTZ/samples_2017"
     variable_cfg    = "legacyTTZ/additionalVariables"
     plot_cfg        = "legacyTTZ/input_plots_new"
-    syst_cfg        = "legacyTTZ/systs_2017"
-    replace_cfg     = "legacyTTZ/pdf_relic_names"
+    syst_cfg        = "legacyTTZ/no_systs"
+    replace_cfg     = None
 
 
     sfCorrection = {}
@@ -72,7 +72,7 @@ def main(pyrootdir, opts):
     # script options
     analysisOptions = {
         # general options
-        "usePseudoData":        False,
+        "usePseudoData":        True,
         "testrun":              False,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
