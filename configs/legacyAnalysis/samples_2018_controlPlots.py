@@ -9,31 +9,32 @@ pyrootdir = os.path.dirname(filedir)
 sys.path.append(pyrootdir)
 import util.tools.plotClasses as plotClasses
 import generate_phasespace_corrections
-
 # samples
 # input path 
-path  = "/nfs/dust/cms/group/ttx-kit/ntuples_ttH/2016/"
+path  = "/nfs/dust/cms/group/ttx-kit/ntuples_ttH/2018/"
 
-ttbarPathS = path+'/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
-             path+'/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
-             path+'/TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'
-
-path_ttbb = path+"/TTbb_4f_TTToSemiLeptonic_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"+';'+ \
-            path+"/TTbb_4f_TTTo2l2nu_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"+';'+ \
+ttbarPathS = path+'/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
+             path+'/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'+";"+ \
+             path+'/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'
+             
+path_ttbb = path+"/TTbb_4f_TTToSemiLeptonic_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"+";"+ \
+            path+"/TTbb_4f_TTTo2l2nu_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"+";"+ \
             path+"/TTbb_4f_TTToHadronic_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"
 
 path_ttbbSL = path+"/TTbb_4f_TTToSemiLeptonic_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"
 path_ttbbDL = path+"/TTbb_4f_TTTo2l2nu_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"
 
-VJetsPathS = path+'/DYJets*madgraph*/*nominal*.root'+';'+ \
-             path+'/WJets*madgraph*/*nominal*.root'
+
+
+
+VJetsPathS = path+'/DYJets*madgraphMLM*/*nominal*.root'+';'+ \
+             path+'/WJets*madgraphMLM*/*nominal*.root'
 
 ttVPathS = path+'/TTW*/*nominal*.root'+';'+ \
            path+'/TTZToLLNuNu*/*nominal*.root'+';'+ \
            path+'/TTZToQQ*/*nominal*.root'
 
 ttWPath = path+'/TTW*/*nominal*.root'
-ttZPathS = path+'/TTZ*/*nominal*.root'
 
 dibosonPathS = path+'/WW_*/*nominal*.root'+';'+ \
                path+'/WZ_*/*nominal*.root'+';'+ \
@@ -57,21 +58,13 @@ ttZpath =  path+'/TTZToQQ*/*nominal*.root'+';'+ \
            path+'/TTZToLLNuNu_M-10*/*nominal*.root'+';'
 
 friendTrees = {
-    "MEMDB": "/nfs/dust/cms/group/ttx-kit/Friends_MEM_ttH/2016/",
+    "MEMDB": "/nfs/dust/cms/group/ttx-kit/Friends_MEM_ttH/2018_wrongJERsources/",
     }
-# SELECTIONS
-STXS_stage0 = '*(abs(GenHiggs_Y<2.5))'
-STXS_stage0_ = '(abs(GenHiggs_Y<2.5))'
-STXS_stage1_0 = '*(GenHiggs_Pt<=60)'
-STXS_stage1_1 = '*((GenHiggs_Pt>=60)&&(GenHiggs_Pt<120))'
-STXS_stage1_2 = '*((GenHiggs_Pt>=120)&&(GenHiggs_Pt<200))'
-STXS_stage1_3 = '*((GenHiggs_Pt>=200)&&(GenHiggs_Pt<300))'
-STXS_stage1_4 = '*((GenHiggs_Pt>=300)&&(GenHiggs_Pt<450))'
-STXS_stage1_5 = '*(GenHiggs_Pt>=450)'
 
+# SELECTIONS
 # need to veto muon events in electron dataset to avoid double counting and vice versa
-sel_singleel="(N_LooseMuons==0 && N_TightElectrons==1 && Triggered_HLT_Ele27_WPTight_Gsf_vX)"
-sel_singlemu="((N_LooseElectrons==0 && N_TightMuons==1) && (Triggered_HLT_IsoMu24_vX || Triggered_HLT_IsoTkMu24_vX))"
+sel_singleel="((N_LooseMuons==0 && N_TightElectrons==1) && (Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX || ( Triggered_HLT_Ele32_WPTight_Gsf_vX )))"
+sel_singlemu="(N_LooseElectrons==0 && N_TightMuons==1 && Triggered_HLT_IsoMu24_vX)"
 # jet tag base selection
 sel_jettag = "(N_Jets>=4 && N_BTagsM>=3)"
 
@@ -81,6 +74,7 @@ sel_MET="*(Evt_MET_Pt>20.)"
 
 # select events without huge MuR/MuF weights
 sel_StrangeMuWeights='*(abs(Weight_scale_variation_muR_0p5_muF_0p5)<=100 && abs(Weight_scale_variation_muR_0p5_muF_1p0)<=100 && abs(Weight_scale_variation_muR_0p5_muF_2p0)<=100 && abs(Weight_scale_variation_muR_1p0_muF_0p5)<=100 && abs(Weight_scale_variation_muR_1p0_muF_1p0)<=100 && abs(Weight_scale_variation_muR_1p0_muF_2p0)<=100 && abs(Weight_scale_variation_muR_2p0_muF_0p5)<=100 && abs(Weight_scale_variation_muR_2p0_muF_1p0)<=100 && abs(Weight_scale_variation_muR_2p0_muF_2p0)<=100)'
+sel_StrangeMuWeights="*(1.)"
 
 
 # higgs decay selections
@@ -105,11 +99,11 @@ hzgSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==22)
 # ======= # 
 # WEIGHTS #
 # ======= #
-defaultWeight = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL*Weight_L1ECALPrefire"
+defaultWeight = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL"
 
 # pile up weights
-pileupWeightUp   = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2Up*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL*Weight_L1ECALPrefire"
-pileupWeightDown = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2Down*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL*Weight_L1ECALPrefire"
+pileupWeightUp   = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2Up*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL"
+pileupWeightDown = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2Down*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL"
 
 # lepton scale factors
 electronSFs = "((N_TightElectrons==1)&&(Electron_IdentificationSF[0]>0.)&&(Electron_ReconstructionSF[0]>0.))*Electron_IdentificationSF[0]*Electron_ReconstructionSF[0]"
@@ -133,16 +127,6 @@ electronTrigger_down = "("+sel_singleel+"&&(internalEleTriggerWeightDown>0.))*in
 muonTrigger_up = "("+sel_singlemu+"&&(Weight_MuonTriggerSF_Up>0.))*Weight_MuonTriggerSF_Up"
 muonTrigger_down = "("+sel_singlemu+"&&(Weight_MuonTriggerSF_Down>0.))*Weight_MuonTriggerSF_Down"
 
-def constructSTXSnormedVariation(weight = "Weight_scale_variation_muR_1p0_muF_0p5"):
-    replacement =  "("
-    replacement +=  "("+STXS_stage0_+STXS_stage1_0+'*(fracRatio_TTH_PTH_0_60.at("{weight}")))+'
-    replacement += "("+STXS_stage0_+STXS_stage1_1+'*(fracRatio_TTH_PTH_60_120.at("{weight}")))+'
-    replacement += "("+STXS_stage0_+STXS_stage1_2+'*(fracRatio_TTH_PTH_120_200.at("{weight}")))+'
-    replacement += "("+STXS_stage0_+STXS_stage1_3+'*(fracRatio_TTH_PTH_200_300.at("{weight}")))+'
-    replacement += "("+STXS_stage0_+STXS_stage1_4+'*(fracRatio_TTH_PTH_300_450.at("{weight}")))+'
-    replacement += "("+STXS_stage0_+STXS_stage1_5+'*(fracRatio_TTH_PTH_GT450.at("{weight}")))'
-    replacement +=  ")"
-    return replacement.format(weight=weight)
 
 # dictionary of expressions to replace in systematics csv
 weightReplacements = {
@@ -170,21 +154,21 @@ weightReplacements = {
     # do weights for data
     "DOWEIGHTS":        "(DoWeights==1)+(DoWeights==0)*1.0",
 
-    'BOTHDOWN_STXS': constructSTXSnormedVariation(weight = "Weight_scale_variation_muR_0p5_muF_0p5"),
-    'BOTHUP_STXS': constructSTXSnormedVariation(weight = "Weight_scale_variation_muR_2p0_muF_2p0")
-
     }
 weightReplacements.update(generate_phasespace_corrections.main())
 
 # Lumi weight
-lumi = '35.9'
+lumi = '59.7'
 
+kfactor_zjets = "*1.23"
+kfactor_wjets = "*1.21"
 #tHq_XS_scale = "*(0.7927/0.07425)"
 #tHW_XS_scale = "*(0.1472/0.01517)"
-ttbb_FH_scale = "(17.3107/16.2728)"
-ttbb_SL_scale = "(15.7315/15.7286)"
+ttbb_FH_scale = "(17.3853/16.2728)"
+ttbb_SL_scale = "(15.7322/15.7286)"
 ttbb_DL_scale = "(3.5378/3.8024)"
 
+# DANGERZONE: derived in 2018
 ttbb_4FS_scale = "*((N_GenTopLep==0)*"+ttbb_FH_scale+"+(N_GenTopLep==1)*"+ttbb_SL_scale+"+(N_GenTopLep==2)*"+ttbb_DL_scale+")"
 ttbb_5FS_scale = "*(1.0)"
 
@@ -201,6 +185,7 @@ sampleDict=plotClasses.SampleDictionary()
 sampleDict.doPrintout()
 doReadTrees=True
 
+
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
 samplesDataControlPlots=[
     plotClasses.Sample('SingleMu',ROOT.kBlack,
@@ -209,13 +194,18 @@ samplesDataControlPlots=[
             'SingleMu', samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('SingleEl',ROOT.kBlack,
-            path+'/SingleElectron*/*nominal*.root',
+            path+'/EGamma*/*nominal*.root',
             sel_singleel+sel_MET,
             'SingleEl', samDict=sampleDict, readTrees=doReadTrees)
 ]
 
 
+
 samples_splitData = [
+    plotClasses.Sample('SingleMuA',ROOT.kBlack,
+            path+'/SingleMuon*A/*nominal*.root',
+            sel_singlemu+sel_MET,
+            'SingleMuA', samDict=sampleDict, readTrees=doReadTrees),
     plotClasses.Sample('SingleMuB',ROOT.kBlack,
             path+'/SingleMuon*B/*nominal*.root',
             sel_singlemu+sel_MET,
@@ -228,55 +218,28 @@ samples_splitData = [
             path+'/SingleMuon*D/*nominal*.root',
             sel_singlemu+sel_MET,
             'SingleMuD', samDict=sampleDict, readTrees=doReadTrees),
-    plotClasses.Sample('SingleMuE',ROOT.kBlack,
-            path+'/SingleMuon*E/*nominal*.root',
-            sel_singlemu+sel_MET,
-            'SingleMuE', samDict=sampleDict, readTrees=doReadTrees),
-    plotClasses.Sample('SingleMuF',ROOT.kBlack,
-            path+'/SingleMuon*F/*nominal*.root',
-            sel_singlemu+sel_MET,
-            'SingleMuF', samDict=sampleDict, readTrees=doReadTrees),
-    plotClasses.Sample('SingleMuG',ROOT.kBlack,
-            path+'/SingleMuon*G/*nominal*.root',
-            sel_singlemu+sel_MET,
-            'SingleMuG', samDict=sampleDict, readTrees=doReadTrees),
-    plotClasses.Sample('SingleMuH',ROOT.kBlack,
-            path+'/SingleMuon*H/*nominal*.root',
-            sel_singlemu+sel_MET,
-            'SingleMuH', samDict=sampleDict, readTrees=doReadTrees),
 
+    plotClasses.Sample('SingleElA',ROOT.kBlack,
+            path+'/EGamma*A/*nominal*.root',
+            sel_singleel+sel_MET,
+            'SingleElA', samDict=sampleDict, readTrees=doReadTrees),
     plotClasses.Sample('SingleElB',ROOT.kBlack,
-            path+'/SingleElectron*B/*nominal*.root',
+            path+'/EGamma*B/*nominal*.root',
             sel_singleel+sel_MET,
             'SingleElB', samDict=sampleDict, readTrees=doReadTrees),
     plotClasses.Sample('SingleElC',ROOT.kBlack,
-            path+'/SingleElectron*C/*nominal*.root',
+            path+'/EGamma*C/*nominal*.root',
             sel_singleel+sel_MET,
             'SingleElC', samDict=sampleDict, readTrees=doReadTrees),
     plotClasses.Sample('SingleElD',ROOT.kBlack,
-            path+'/SingleElectron*D/*nominal*.root',
+            path+'/EGamma*D/*nominal*.root',
             sel_singleel+sel_MET,
             'SingleElD', samDict=sampleDict, readTrees=doReadTrees),
-    plotClasses.Sample('SingleElE',ROOT.kBlack,
-            path+'/SingleElectron*E/*nominal*.root',
-            sel_singleel+sel_MET,
-            'SingleElE', samDict=sampleDict, readTrees=doReadTrees),
-    plotClasses.Sample('SingleElF',ROOT.kBlack,
-            path+'/SingleElectron*F/*nominal*.root',
-            sel_singleel+sel_MET,
-            'SingleElF', samDict=sampleDict, readTrees=doReadTrees),
-    plotClasses.Sample('SingleElG',ROOT.kBlack,
-            path+'/SingleElectron*G/*nominal*.root',
-            sel_singleel+sel_MET,
-            'SingleElG', samDict=sampleDict, readTrees=doReadTrees),
-    plotClasses.Sample('SingleElH',ROOT.kBlack,
-            path+'/SingleElectron*H/*nominal*.root',
-            sel_singleel+sel_MET,
-            'SingleElH', samDict=sampleDict, readTrees=doReadTrees),
 
     ]
 
 #samplesDataControlPlots+=samples_splitData
+
 
 samples_ttH_decay = [
     plotClasses.Sample('t#bar{t}H (bb)',ROOT.kBlue+1,
@@ -284,11 +247,11 @@ samples_ttH_decay = [
             lumi+sel_MET+hbbSel,
             'ttH_hbb',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),     
-    #plotClasses.Sample('t#bar{t}H (nonbb)',ROOT.kBlue+1,
-    #         ttHpath,
-    #         lumi+sel_MET,
-    #         'ttH',
-    #         samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+#     plotClasses.Sample('t#bar{t}H (nonbb)',ROOT.kBlue+1,
+#             ttHpath,
+#             lumi+sel_MET,
+#             'ttH',
+#             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
     plotClasses.Sample('t#bar{t}H(cc)',ROOT.kBlue+1,
             ttHpath,
             lumi+sel_MET+hccSel,
@@ -326,44 +289,6 @@ samples_ttH_decay = [
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
     ]
 
-samples_ttH_STXS = [
-    plotClasses.Sample('t#bar{t}H_PTH_0_60',830,
-            ttHpath,
-            lumi+sel_MET+STXS_stage0+STXS_stage1_0,
-            'TTH_PTH_0_60',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
-
-    plotClasses.Sample('t#bar{t}H_PTH_60_120',418,
-            ttHpath,
-            lumi+sel_MET+STXS_stage0+STXS_stage1_1,
-            'TTH_PTH_60_120',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
-
-    plotClasses.Sample('t#bar{t}H_PTH_120_200',433,
-            ttHpath,
-            lumi+sel_MET+STXS_stage0+STXS_stage1_2,
-            'TTH_PTH_120_200',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
-
-    plotClasses.Sample('t#bar{t}H_PTH_200_300',867,
-            ttHpath,
-            lumi+sel_MET+STXS_stage0+STXS_stage1_3,
-            'TTH_PTH_200_300',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
-
-    plotClasses.Sample('t#bar{t}H_PTH_300_450',602,
-            ttHpath,
-            lumi+sel_MET+STXS_stage0+STXS_stage1_4,
-            'TTH_PTH_300_450',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
-    plotClasses.Sample('t#bar{t}H_PTH_GT450',605,
-            ttHpath,
-            lumi+sel_MET+STXS_stage0+STXS_stage1_5,
-            'TTH_PTH_GT450',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal")
-        
-]
-
 samples_tH = [
     # ITC case
     #plotClasses.Sample('tHW (ITC)',ROOT.kBlue+3,
@@ -383,13 +308,13 @@ samples_tH = [
             THWpath,
             lumi+tH_SM_rwgt+sel_MET,
             'tHW',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+            samDict=sampleDict, readTrees=doReadTrees, typ = "bkg"),
 
     plotClasses.Sample('tHq (SM)',ROOT.kBlue+6,
             THQpath,
             lumi+tH_SM_rwgt+sel_MET,
             'tHq',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+            samDict=sampleDict, readTrees=doReadTrees, typ = "bkg"),
 
     # point 5
     #plotClasses.Sample('tHW (5)',ROOT.kBlue+3,
@@ -414,9 +339,9 @@ samples_ttbb_4FS = [
              path_ttbb,
              lumi+evenSel+ttbb_4FS_scale+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
              'ttbb',
-             samDict=sampleDict, readTrees=doReadTrees),
-    ]
+             samDict=sampleDict, readTrees=doReadTrees, plot = True),
 
+    ]
 
 
 samples_ttbar_hf_spilt = [
@@ -448,7 +373,7 @@ samples_minor_backgrounds = [
             samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}+Z',ROOT.kCyan,
-            ttZPathS,
+            ttZpath,
             lumi+sel_MET,
             'ttbarZ',
             samDict=sampleDict, readTrees=doReadTrees),
@@ -466,19 +391,19 @@ samples_minor_backgrounds = [
     #        samDict=sampleDict, readTrees=doReadTrees),
  
     plotClasses.Sample('Z+jets',ROOT.kGreen-3,
-            path+'/DYJets*madgraph*/*nominal*.root',
-            lumi+sel_MET,
+            path+'/DYJets*HT*/*nominal*.root',
+            lumi+sel_MET+kfactor_zjets,
             'zjets',
             samDict=sampleDict, readTrees=doReadTrees),
  
     plotClasses.Sample('W+jets',ROOT.kGreen-7,
-            path+'/WJets*madgraph*/*nominal*.root',
-            lumi+sel_MET,
+            path+'/WJets*HT*/*nominal*.root',
+            lumi+sel_MET+kfactor_wjets,
             'wjets',
             samDict=sampleDict, readTrees=doReadTrees), 
 
     #plotClasses.Sample('V+jets',18,
-    #        VJetsPathS
+    #        VJetsPathS,
     #        lumi+sel_MET,
     #        'vjets',
     #        samDict=sampleDict, readTrees=doReadTrees),
@@ -490,22 +415,39 @@ samples_minor_backgrounds = [
             samDict=sampleDict, readTrees=doReadTrees),
     ]
 
-samples_5FS =  [
+samples_ttbb_decay_modes_5FS = [
+    plotClasses.Sample('t#bar{t}+b#bar{b}(sl) (5FS)',ROOT.kRed+3,
+            path+'/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/*nominal*.root',
+            lumi+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
+            'ttbb_5FS_SL',
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"), 
+    plotClasses.Sample('t#bar{t}+b#bar{b}(dl) (5FS)',ROOT.kRed+3,
+            path+'/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/*nominal*.root',
+            lumi+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
+            'ttbb_5FS_DL',
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"), 
+    plotClasses.Sample('t#bar{t}+b#bar{b}(fh) (5FS)',ROOT.kRed+3,
+            path+'/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/*nominal*.root',
+            lumi+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
+            'ttbb_5FS_FH',
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"), 
+    ]
+
+samples_5FS = [
     plotClasses.Sample('t#bar{t}+b#bar{b} (5FS)',ROOT.kRed+3,
             ttbarPathS,
-            lumi+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
+            lumi+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+ttbb_5FS_scale+sel_MET+sel_StrangeMuWeights,
             'ttbb_5FS',
             samDict=sampleDict, readTrees=doReadTrees, plot = False), 
     ]
 
-
 samples_ttnonbb = [
      # signal samples
-    #plotClasses.Sample('t#bar{t}+H',ROOT.kBlue+1,
-    #        ttHpath,
-    #        lumi+sel_MET,
-    #        'ttH',
-    #        samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),     
+     plotClasses.Sample('t#bar{t}+H',ROOT.kBlue+1,
+             ttHpath,
+             lumi+sel_MET,
+             'ttH',
+             samDict=sampleDict, readTrees=doReadTrees),     
 
     # ttbar 5FS default background samples
     plotClasses.Sample('t#bar{t}+lf',ROOT.kRed-7,
@@ -521,14 +463,17 @@ samples_ttnonbb = [
             samDict=sampleDict, readTrees=doReadTrees),
     ]
 
-samples = samples_ttH_STXS
+#samples = samples_ttH_decay
+samples = samples_tH
 samples += samples_ttnonbb
-samples += samples_tH
 samples += samples_ttbb_4FS
+samples += samples_5FS
 samples += samples_minor_backgrounds
-# samples += samples_5FS
+
+
+#samples += samples_ttbb_decay_modes_5FS
 #samples += samples_ttbar_hf_spilt
-# samples += samples_ttH_decay
+#samples += samples_ttH_decay
 
 
 
@@ -536,8 +481,8 @@ processes = []
 for sample in samples:
     processes.append(sample.nick)
 list_of_processes   = processes
-datacard_processes  = [p for p in processes if not p == "ttbb_5FS"]
-
+datacard_processes  = [p for p in processes]
+pseudo_data_samples = [x for x in samples if not x.typ == "signal"]
 
 plottingsamples = [
     plotClasses.Sample("t#bar{t}+V", ROOT.kCyan, "", "",
@@ -548,14 +493,13 @@ plottingsamples = [
         "vjets", addsamples = ["wjets", "zjets"],
         samDict = sampleDict, readTrees = doReadTrees),
 
-    plotClasses.Sample("t#bar{t}+H", ROOT.kBlue+1, "", "",
-        "ttH", addsamples = ["ttH_hbb", "ttH_hcc", "ttH_htt", "ttH_hgg", "ttH_hgluglu", "ttH_hww", "ttH_hzz", "ttH_hzg"],
-        samDict = sampleDict, readTrees = doReadTrees),
+    #plotClasses.Sample("t#bar{t}+H", ROOT.kBlue+1, "", "",
+    #    "ttH", addsamples = ["ttH_hbb", "ttH_hcc", "ttH_htt", "ttH_hgg", "ttH_hgluglu", "ttH_hww", "ttH_hzz", "ttH_hzg"],
+    #    samDict = sampleDict, readTrees = doReadTrees, typ = "signal"),
 #    plotClasses.Sample("misc.", 18, "", "",
 #        "misc", addsamples ["ttbarZ", "ttbarW", "wjets", "zjets", "diboson"],
 #        samDict = sampleDict, readTrees = doReadTrees)
      ]
 
 # sort subset of processes in plots. descending order
-sortedProcesses = ["ttlf", "ttcc", "ttbb", "ttbb_5FS", "ttbb_4FS"]
-
+sortedProcesses = ["ttlf", "ttcc", "ttbb", "ttbb_5FS", "ttbb_4FS", "singlet", "ttV", "vjets", "diboson", "tHq", "tHW", "ttH"]

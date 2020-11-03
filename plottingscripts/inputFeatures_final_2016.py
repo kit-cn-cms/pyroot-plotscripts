@@ -43,7 +43,7 @@ def main(pyrootdir, opts):
 
     # Name of final discriminator, should not contain underscore
     discrName = 'finaldiscr'
-    nom_histname_template = "$PROCESS__$CHANNEL"
+    nom_histname_template = "$CHANNEL__$PROCESS"
     syst_histname_template = nom_histname_template + "__$SYSTEMATIC"
     histname_separator = "__"
 
@@ -51,10 +51,10 @@ def main(pyrootdir, opts):
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
     # configs
-    config          = "legacyAnalysis/samples_2016"
-    variable_cfg    = "legacyAnalysis/additionalVariables_2016"
-    plot_cfg        = "legacyAnalysis/ttH_legacy_inputfeatures_ClassPlusHTXS_opt_binning"
-    syst_cfg        = "legacyAnalysis/inputFeature_validation/systs_2016"
+    config          = "legacyAnalysis/samples_2016_controlPlots"
+    variable_cfg    = "legacyAnalysis/additionalVariables"
+    plot_cfg        = "legacyAnalysis/controlPlots_inputFeatures"
+    syst_cfg        = "legacyAnalysis/systs_2016"
     replace_cfg     = "legacyAnalysis/pdf_relic_names"
 
     sfCorrection = {}
@@ -72,7 +72,7 @@ def main(pyrootdir, opts):
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
-    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2016_split.csv"
+    rateFactorsFile = pyrootdir + "/data/rateFactors/ratefactors_new_plotscript_2016.csv"
 
     # script options
     analysisOptions = {
@@ -83,16 +83,16 @@ def main(pyrootdir, opts):
         # options to activate parts of the script
         "haddFromWildcard":     True,
         "makeDataCards":        False,
-        "makeInputDatacards":   True, # create datacards also for all defined plots
+        "makeInputDatacards":   False, # create datacards also for all defined plots
         "addData":              True,  # adding real data 
         "makePlots":            True,
         # options for makePlots
         "signalScaling":        -1,
         "lumiLabel":            True,
         "cmslabel":             "private Work",
-        "ratio":                "#frac{data}{MC Background}",
+        "ratio":                "#frac{data}{MC prediction}",
         "shape":                False,
-        "logarithmic":          False,
+        "logarithmic":          True,
         "splitLegend":          True,
         "normalize":            False,
         # the skipX options try to skip the submission of files to the batch system
@@ -105,7 +105,7 @@ def main(pyrootdir, opts):
         "skipMergeSysts":       opts.skipMergeSysts,
         "skipDatacards":        opts.skipDatacards}
 
-    plotJson = pyrootdir+"/configs/legacyAnalysis/treeJson_2016.json"
+    plotJson = ""#pyrootdir+"/configs/legacyAnalysis/treeJson_2016.json"
     # plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2016/",True]] 
     # memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
     #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
