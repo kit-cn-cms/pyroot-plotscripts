@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'controlplots/2016_final_Systs'
+    name = 'controlPlotsAN/2016'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -43,16 +43,16 @@ def main(pyrootdir, opts):
 
     # Name of final discriminator, should not contain underscore
     discrName = 'finaldiscr'
-    nom_histname_template = "$PROCESS__$CHANNEL"
+    nom_histname_template = "$CHANNEL__$PROCESS"
     syst_histname_template = nom_histname_template + "__$SYSTEMATIC"
     histname_separator = "__"
 
     # define MEM discriminator variable
     memexp = "(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)"
     # configs
-    config          = "legacyAnalysis/samples_2016"
+    config          = "legacyAnalysis/samples_2016_controlPlots"
     variable_cfg    = "legacyAnalysis/additionalVariables"
-    plot_cfg        = "legacyAnalysis/controlPlots_final"
+    plot_cfg        = "legacyAnalysis/controlPlots"
     syst_cfg        = "legacyAnalysis/systs_2016"
     # syst_cfg        = "legacyAnalysis/no_systs"
     replace_cfg     = "legacyAnalysis/pdf_relic_names"
@@ -72,7 +72,7 @@ def main(pyrootdir, opts):
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
-    rateFactorsFile = pyrootdir + "/data/rateFactors/ratefactors_2016_with_correction.csv"
+    rateFactorsFile = pyrootdir + "/data/rateFactors/ratefactors_new_plotscript_2016.csv"
 
     # script options
     analysisOptions = {
@@ -90,9 +90,9 @@ def main(pyrootdir, opts):
         "signalScaling":        -1,
         "lumiLabel":            True,
         "cmslabel":             "private Work",
-        "ratio":                "#frac{data}{MC}",
+        "ratio":                "#frac{data}{MC prediction}",
         "shape":                False,
-        "logarithmic":          False,
+        "logarithmic":          True,
         "splitLegend":          True,
         "normalize":            False,
         # the skipX options try to skip the submission of files to the batch system

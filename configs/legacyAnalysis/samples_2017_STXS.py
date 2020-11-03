@@ -70,7 +70,7 @@ STXS_stage1_0 = '*(GenHiggs_Pt<=60)'
 STXS_stage1_1 = '*((GenHiggs_Pt>=60)&&(GenHiggs_Pt<120))'
 STXS_stage1_2 = '*((GenHiggs_Pt>=120)&&(GenHiggs_Pt<200))'
 STXS_stage1_3 = '*((GenHiggs_Pt>=200)&&(GenHiggs_Pt<300))'
-STXS_stage1_4 = '*((GenHiggs_Pt>=350)&&(GenHiggs_Pt<450))'
+STXS_stage1_4 = '*((GenHiggs_Pt>=300)&&(GenHiggs_Pt<450))'
 STXS_stage1_5 = '*(GenHiggs_Pt>=450)'
 
 # need to veto muon events in electron dataset to avoid double counting and vice versa
