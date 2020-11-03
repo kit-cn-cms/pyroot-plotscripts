@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'finalDNN_fullSampleRFs_correctSeeSaw_new_ttbbXS/2017_STXS'
+    name = 'finalDNN_fullSampleRFs_correctSeeSaw_new_ttbbXS_six_STXS/2017_STXS'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
