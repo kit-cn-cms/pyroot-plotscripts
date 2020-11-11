@@ -77,51 +77,6 @@ class analysisConfig:
         print("set plotConfig to "+str(self.plotConfig))
         
 
-    # def initAnalysisOptions(self, analysisOptions = {}):
-    #     self.testrun = bool(analysisOptions.get("testrun", self.testrun))
-    #     self.stopAfterCompile = bool(analysisOptions.get("stopAfterCompile", self.stopAfterCompile))
-    #         elif key in ("haddParallel"):
-    #             self.haddParallel = bool(analysisOptions[key])
-    #         elif key in ("skipPlotParallel"):
-    #             self.skipPlotParallel = bool(analysisOptions[key])
-    #         elif key in ("skipHaddParallel"):
-    #             self.skipHaddParallel = bool(analysisOptions[key])
-    #         elif key in ("skipHaddFromWildcard"):
-    #             self.skipHaddFromWildcard = bool(analysisOptions[key])
-    #         elif key in ("skipHistoCheck"):
-    #             self.skipHistoCheck = bool(analysisOptions[key])
-    #         elif key in ("skipDatacards"):
-    #             self.skipDatacards = bool(analysisOptions[key])
-    #         elif key in ("addData"):
-    #             self.addData = analysisOptions[key]
-    #         elif key in ("crossEvaluation"):
-    #             self.crossEvaluation = analysisOptions[key]
-    #         elif key in ("signalScaling"):
-    #             self.signalScaling = analysisOptions[key]
-    #         elif key in ("lumiLabel"):
-
-    #             self.lumiLabel= analysisOptions[key]
-    #         elif key in ("CMSlabel"):
-    #             self.cmslabel=analysisOptions[key]
-    #         elif key in ("ratio"):
-    #             self.ratio= analysisOptions[key]
-    #         elif key in ("normalize"):
-    #             self.normalize= analysisOptions[key]
-    #         elif key in ("logarithmic"):
-    #             self.logarithmic = analysisOptions[key]
-    #         elif key in ("splitLegend"):
-
-    #             self.splitLegend= analysisOptions[key] 
-    #         elif key in ("shape"):
-    #             self.shape= analysisOptions[key]
-    #         elif key in ("makeDataCards"):
-    #             self.makeDataCards = analysisOptions[key] 
-    #         elif key in ("makePlots"):
-    #             self.makePlots = analysisOptions[key] 
-    #         elif key in ("usePseudoData"):
-    #             self.usePseudoData = analysisOptions[key]
-    #         elif key in ("makeInputDatacards"):
-    #             self.makeInputDatacards = analysisOptions[key]
     def initAnalysisOptions(self, analysisOptions = {}):
         """
         Overwrite defaults specified in '__init__' and 'SetDefaults'.

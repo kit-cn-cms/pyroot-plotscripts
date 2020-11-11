@@ -55,14 +55,7 @@ class plotParallel:
         self.systNames = self.configData.weightSystNames
         self.systWeights = self.configData.systWeights
 
-        self.jsonFile = ""
-        self.dataBases = []
-        self.sfCorrection = None
-        self.memDBpath = ""
-        self.useDataBases = False
         self.addInterfaces = []
-        self.rateFactorsFile = None
-        self.useGenWeightNormMap = False
         self.sampleForVariableSetup = None
         self.request_runtime = None
         self.useFriendTrees = False
@@ -86,14 +79,6 @@ class plotParallel:
         self.categorySelections = categorySelections
         print("set categorySelections to "+str(categorySelections))
 
-    def setJson(self, jsonFile):
-        self.jsonFile = jsonFile
-        print("set jsonFile to "+str(jsonFile))
-
-    def setSFCorrection(self, sfCorrection):
-        self.sfCorrection = sfCorrection
-        print("set sfCorrection to: {}".format(sfCorrection))
-        
     def setUseFriendTrees(self, useFriendTrees):
         self.useFriendTrees = useFriendTrees
         self.friendTrees = self.configData.pltcfg.friendTrees
@@ -101,32 +86,6 @@ class plotParallel:
         print("config:")
         print(self.friendTrees)
 
-    def setDataBases(self, dataBases):
-        self.dataBases = dataBases
-        print("set dataBases to "+str(dataBases))
-        if self.dataBases != []:
-            self.useDataBases = True
-            print("set useDataBases to True")
-
-    def setMEMDataBase(self, db_path):
-        self.memDBpath = db_path
-        print("set path for MEM DataBase to "+str(db_path))
-
-
-    def setAddInterfaces(self, interfaces):
-        interfaceCounter = len(self.addInterfaces)
-        for interface in interfaces:
-            interfaceCounter += 1
-            if isinstance( interface, basestring ):
-                addModule = "addModule" + str(interfaceCounter)
-                print( "loading module: " + str(interface) + " as " + addModule + " module." )
-                self.addInterfaces.append(imp.load_source(addModule, interface).theInterface(self.analysis.workdir))
-            elif isinstance( interface, types.InstanceType ):
-                print( "appending class object initiated by user: " + str(interface) )
-                self.addInterfaces.append(interface)
-            else:
-                print( "unknown additional code interface type: " + str(interface) )
-    
     def setDNNInterface(self, interfaceConfig):
         interfacePath = interfaceConfig["interfacePath"]
         checkpointFiles = interfaceConfig["checkpointFiles"]
@@ -136,15 +95,6 @@ class plotParallel:
             imp.load_source(addModule, interfacePath).theInterface(
                 self.analysis.workdir, checkpointFiles, 
                 crossEvaluation = self.analysis.crossEvaluation))
-
-    def setRateFactorsFile(self, csvfile):
-        self.rateFactorsFile = csvfile
-        self.setUseGenWeightNormMap(True)
-        print("set rateFactorsFile to "+str(csvfile))
-    
-    def setUseGenWeightNormMap(self, use_genWeightNormMap):
-        self.useGenWeightNormMap = use_genWeightNormMap
-        print("set useGenWeightNormMap to "+str(use_genWeightNormMap))
 
     def setMaxEvts(self, maxevts):
         self.MaxEvts_nom = maxevts

@@ -10,22 +10,14 @@ class VariableManager:
     add lists of variables/single variables with .add
     run the initialization program with .run
     '''
-    def __init__(self, trees, vetolist = [], sfCorrection = None, friendTrees = {}, verbose = 0):
+    def __init__(self, trees, vetolist = [], friendTrees = {}, verbose = 0):
         # all initialized Variables
         self.variables          = {}
         # all Variables that are not initialized yet
         self.variablesToInit    = {}
         # list of variables to be ignored when initializing
         self.vetolist           = vetolist
-        # list of naming remnant to add to veto list
-        self.correctionNames    = []
-        self.sfBinning          = []
-        if not sfCorrection is None:
-            self.correctionNames    = sfCorrection["names"]
-            self.sfBinning          = sfCorrection["corrections"]
         
-        # list of variables identified as correction variables
-        self.correctionVars     = []
         # add friend tree names
         self.friendTreeNames    = [key for key in friendTrees]
         # faulty friend tree variables
@@ -37,9 +29,6 @@ class VariableManager:
         # verbosity setting
         self.verbose            = verbose
             
-        for key in self.sfBinning:
-            self.add(self.sfBinning[key])
-
     # functions for variable setup
     # =============================================================================================
     def add(self, expressionList):
@@ -90,11 +79,6 @@ class VariableManager:
         if ":=" in expression:
             varName, expression = expression.split(":=")
             self.addVariable(varName, expression, "F")
-
-            # if expression is not a .xml-path (i.e. is not a BDT weight file), search for other variables
-            if not expression.endswith(".xml"):
-                if self.verbose > 5: print("searching for other variables in expression "+str(expression))
-                self.searchVariables(expression)
 
         else:
             # search for other variables in expression
@@ -159,7 +143,7 @@ class VariableManager:
             #   are BDT weight files (.xml)
             #   are in the tree
             #   are Weights
-            if ".xml" in expression or hasattr(tree, expression) or "Weight_" in varName:
+            if hasattr(tree, expression): #or varName.startswith("dummy"):
                 if self.verbose > 5: print("adding variable "+str(expression)+" with name "+str(varName))
                 self.variablesToInit[varName] = Variable(varName, expression, varType, indexVariable)
                 return
@@ -170,18 +154,6 @@ class VariableManager:
                 if hasattr(tree, expressionHead) and expressionTail.isdigit():
                     if self.verbose > 20: print("found vectorlike variable: "+str(expression)+" converted to "+str(expressionHead))
                     self.addVariable(expressionHead, expressionHead, varType, indexVariable)
-                    return
-
-            # handle variables that are for sf corrections
-            for name in self.correctionNames:
-                if varName.endswith(name):
-                    print("variable '{}' identified as correction variable".format(varName))
-                    self.correctionVars.append(varName)
-                    self.variablesToInit[varName] = Variable(varName, expression, varType, indexVariable)
-                    # set flag defining this variable as SF variable that needs to be initialized differently
-                    # also give this variable the list of variables needed for binning of SFs
-                    _, correction, samename = varName.split("__")
-                    self.variablesToInit[varName].setAsSFVariable(self.sfBinning[correction])
                     return
 
         # everything remaining is added to the variable list
@@ -284,18 +256,6 @@ class VariableManager:
         if self.verbose > 20: print("\n\nbranch adresses:\n"+text)
         return text
 
-    ## write TMVA reader for BDT variables ##
-    def writeTMVAReader(self):
-        text = ""
-        # loop over all variables
-        for name in sorted(self.variables):
-            var = self.variables[name]
-            if var.isBDTVar:
-                text += var.writeTMVAReader(self)
-        text += "\n"
-        if self.verbose > 20: print("\n\ntmva reader:\n"+text)
-        return text
-    
     # ---------------------------------------------------------------------------------------------
     # functions for writing code of sample selections
 
@@ -417,20 +377,10 @@ class VariableManager:
                 if var in sortedVariables: continue
 
             varExpression = var.expression
-            if var.varName in self.correctionVars:
-                # create dummy expression for variables used for sf corrections
-                # dummy is built from all variables used for determination of sf bin
-                varExpression = "+".join(self.sfBinning)
-
             # consider the variable
             if self.verbose > 5: print("considering variable "+str(var.varName))
             if var.varName == varExpression:
                 # no problem here, just add variable
-                sortedVariables.append( var )
-                if self.verbose >= 1: print("adding variable to list: "+str(var.varName))
-                continue
-            if var.isBDTVar:
-                # no problem here, just BDT variable without dependencies
                 sortedVariables.append( var )
                 if self.verbose >= 1: print("adding variable to list: "+str(var.varName))
                 continue
@@ -510,16 +460,10 @@ class Variable:
         if expression == "":
             self.expression         = varName
         self.inTree                 = False
-        self.isBDTVar               = False
         self.isInitialized          = False
         self.expressionVariables    = []
     
-        self.isSFVariable           = False
         self.initError              = False
-
-    def setAsSFVariable(self, sfBinning):
-        self.isSFVariable = True
-        self.sfBinning    = sfBinning
 
     def setupVariable(self, tree, verbose, variableManager):
         '''
@@ -555,13 +499,7 @@ class Variable:
             self.inTree = False
             self.varType = "F"
             
-            # check if veriable is BDT variable
-            if self.expression.endswith(".xml"):
-                if verbose > 20: print("variable is BDT variable")
-                self.setupBDTVariable(tree, variableManager, verbose)
-                self.isInitialized = True
-            else:
-                self.isInitialized = False
+            self.isInitialized = False
         # self.isInitialized = True
     
 
@@ -593,28 +531,6 @@ class Variable:
         # adding indexVariable to list of variables to be initialized in variableManager
         if verbose > 20: print("adding indexVariable "+str(self.indexVariable)+" to variableManager")
         variableManager.addVariable( self.indexVariable, self.indexVariable, "I")
-
-
-    def setupBDTVariable(self, tree, variableManager, verbose):
-        self.isBDTVar = True
-
-        # parse xml file var variables
-        root = ET.parse(self.expression).getroot()
-        for var in root.iter("Variable"):
-            expressionName  = var.get("Internal")
-            expression      = var.get("Expression")
-            expressionType  = var.get("Type")
-
-            # add expression to expressionVariables list
-            self.expressionVariables.append(expressionName)
-
-            # for every newly found variable call variableManager to initialize this variable
-            if verbose > 20: print("adding "+str(expressionName)+" to variableManager")
-            variableManager.addVariable(expressionName, expression, expressionType)
-
-
-
-
 
 
     def writeVariableInitialization(self):
@@ -673,39 +589,6 @@ class Variable:
                 text += "    chain->SetBranchAddress(\""+self.varName.replace("_ft_",".")+"\", &"+self.varName+");\n"
         return text
 
-    def writeTMVAReader(self, variableManager):
-        '''
-        write TMVA reader to CC file
-        '''
-        text = ""
-        text += "   TMVA::Reader *r_"+self.varName+" = new TMVA:Reader('Silent');\n"
-        
-        # add variables to reader program
-        for expr in self.expressionVariables:
-            if not expr in variableManager.variables:
-                print("ERROR - variable not found")
-                return None
-
-            var = variableManager.variables[expr]
-            text += "   r_"+self.varName+"->AddVariable('"+var.expression+"', &"+var.varName+");\n"
-        
-        # book MVA
-        text += "   r_"+self.varName+"->BookMVA('BDT','"+self.expression+"');\n"
-        return text
-
-
-    def writeSFCorrectionCalculation(self, indent):
-        text = "\n"
-        # get procID
-        text+= "    "+indent+"procID = internalSFCorrectionHelper->GetProcID(processname, isTTbarSample, isTthSample);\n"
-        # calculate output scalefactor
-        # split sf name in parts
-        _, correction, name = self.varName.split("__") 
-        text+= "    "+indent+self.varName+" = "+"internalSFCorrectionHelper->GetSF(procID, TString(\"{}\"), TString(\"{}\"), {});\n".format(
-            correction, name, ", ".join(self.sfBinning))
-        #text+= "    {indent}cout << procID;\n    {indent}cout << {sf} << endl;\n".format(indent = indent, sf = self.varName)
-        text+= "\n"
-        return text
 
     def writeVariableCalculation(self, hasCondition):
         '''
@@ -714,15 +597,11 @@ class Variable:
         indent = ""
         if hasCondition: indent+= "    "
         if self.inTree:     return ""
-        elif self.isBDTVar: return "    "+indent+self.varName+" = r_"+self.varName+"->EvaluateMVA('BDT'):\n"
         else:               
             if self.varName == self.expression:
-                if self.isSFVariable:
-                    return self.writeSFCorrectionCalculation(indent)
-
                 self.initError = True
                 print("trying to initialize variable '{}' with itself (var = var) - this does not work".format(self.varName))
-            if "dummyWeight" in self.varName:
+            if self.varName.startswith("dummy"):
                 return "    if(!skipWeightSysts)    "+indent+self.varName+" = "+self.expression+";\n"
             else:
                 return "    "+indent+self.varName+" = "+self.expression+";\n"

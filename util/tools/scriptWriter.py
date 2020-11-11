@@ -10,7 +10,6 @@ import pandas
 from copy import deepcopy
 
 # local imports 
-import GenWeightUtils
 import plotClasses
 import scriptfunctions 
 import variableCancer
@@ -35,10 +34,6 @@ class scriptWriter:
         self.pp = plotParaClass
         self.ccPath = plotParaClass.ccPath
         self.systWeights = plotParaClass.systWeights
-        self.sampleForVariableSetup = plotParaClass.sampleForVariableSetup
-        if self.pp.useGenWeightNormMap:
-            # initialize class to handle genWeight normalization stuff
-            self.genWeightNormalization = GenWeightUtils.GenWeightNormalization(self.pp.rateFactorsFile)
 
     ## main function for writing and compiling c++ code ##
     def writeCC(self):
@@ -100,9 +95,7 @@ class scriptWriter:
         # get tree for variable check
         TreeFileMap = {"trees":[], "files": []}
         print("getting tree to setup with")
-        # if self.sampleForVariableSetup:
-            # samplesToCheck = [self.sampleForVariableSetup]
-        # else:
+
         samplesToCheck = self.pp.configData.allSamples
         print("#"*30)
         print("Globbing one File of each sample to init Variables")
@@ -155,22 +148,10 @@ class scriptWriter:
         # initialize variables with variablebox
         self.initVariables(TreeFileMap["trees"])
         
-        # if a GenWeightNormMap is used, create new header file
-        genWeightNormHeader_name = None
-        if self.pp.useGenWeightNormMap:
-            genWeightNormHeader_name = "GenNormMap.h"
-            genWeightNormHeader_path = os.path.join(self.pp.analysis.workdir, 
-                                                    genWeightNormHeader_name)
-            header_code = self.genWeightNormalization.declareNormalizationMapHeader()
-            with open(genWeightNormHeader_path, "w") as headerfile:
-                headerfile.write(header_code)
         # write program
         # start writing program
         script = scriptfunctions.getHead(   basepath          = self.pp.analysis.pyrootdir, 
-                                            dataBases         = self.pp.dataBases, 
-                                            memDB_path        = self.pp.memDBpath, 
                                             addCodeInterfaces = self.pp.addInterfaces,
-                                            useNormHeader     = genWeightNormHeader_name
                                             )
 
         # replace FRIENDTREE placeholders
@@ -180,18 +161,6 @@ class scriptWriter:
             script = script.replace("//PLACEHOLDERFRIENDTREECHAINS",ftChain)
             script = script.replace("//PLACEHOLDERFRIENDTREEADD",ftAdd)
     
-        # replace SFCORRECTIONHELPER placeholder
-        if not self.pp.sfCorrection is None:
-            sfInit = scriptfunctions.InitSFCorrection(self.pp.sfCorrection)
-            script = script.replace("//PLACEHOLDERSFCORRECTIONHELPER",sfInit)
-
-        if self.pp.useGenWeightNormMap:
-            # exported to new file GenNormMap.h
-            # script += self.genWeightNormalization.declareNormFactors()
-            # script += self.genWeightNormalization.addNormalizationMap()
-            script += self.genWeightNormalization.loadNormFactors()
-        for db in self.pp.dataBases:
-            script += scriptfunctions.InitDataBase(db)
         for addCodeInt in self.pp.addInterfaces:
             script += addCodeInt.getBeforeLoopLines()
             
@@ -199,9 +168,6 @@ class scriptWriter:
         initStub, castStub = self.varManager.writeVariableInitialization()
         script += initStub
         script += self.varManager.writeBranchAdresses()
-
-        # initialize TMVA Readers
-        script += self.varManager.writeTMVAReader()
 
         # initialize histograms in all categories and for all systematics
         script += scriptfunctions.initHistos(
@@ -211,9 +177,6 @@ class scriptWriter:
             nom_histname_template = self.pp.nominalHistoKey, 
             syst_histname_template = self.pp.systHistoKey)
 
-        # start event loop
-        #if self.pp.useGenWeightNormMap:
-        #    script += scriptfunctions.DefineLHAPDF()
         startLoopStub = scriptfunctions.startLoop(self.pp.analysis.pyrootdir)
 
         if castStub!="":
@@ -278,18 +241,6 @@ class scriptWriter:
         print("dnnfiles:")     
         print dnnfiles
         
-        # lhapdf=[' `/cvmfs/cms.cern.ch/slc6_amd64_gcc530/external/lhapdf/6.1.6-ikhhed2/bin/lhapdf-config --cflags --ldflags`']
-        lhapdf_path = os.environ["LHAPDF_DATA_PATH"]
-        lhapdf_relpath = "../../bin/lhapdf-config"
-        lhapdf_cfg = os.path.join(lhapdf_path, *(lhapdf_relpath.split("/")))
-        lhapdf=['`{} --cflags --ldflags`'.format(lhapdf_cfg)]
-
-        # getting databases
-        memDBccfiles=[]
-        if self.pp.useDataBases:
-            memDBccfiles=glob.glob(os.path.join(self.pp.memDBpath,'src/*.cc')) 
-            #TODO update the dataBases code
-
         # improve ram usage and reduce garbage of g++ compiler
         improveRAM = '--param ggc-min-expand=100 --param ggc-min-heapsize=2400000'
         # if python cflags are used -O3 optimization is set, resulting in long compilation times, set it back to default -O0
@@ -306,8 +257,8 @@ class scriptWriter:
         cmd = ['g++']+[improveRAM]
         cmd += out[:-1].split()
         # add necessary libraries and file paths
-        cmd += dnnfiles+lhapdf+['-lTMVA'] + ["-I"+scriptFilesPath]
-        cmd += memDBccfiles+[resetCompilerOpt]
+        cmd += dnnfiles + ["-I"+scriptFilesPath]
+        cmd += [resetCompilerOpt]
         cmd += [self.ccPath,'-o',self.ccPath.replace(".cc","")]
         print "compile command:"
         cmdstring = " ".join(cmd)
@@ -338,31 +289,17 @@ class scriptWriter:
         dataFrame = pandas.read_csv(self.pp.analysis.pyrootdir+"/data/vetolist.csv")
         vetolist = list(dataFrame.vetolist)
 
-        #self.pp.MEPDFCSVFile = self.pp.plotbase + /data/rate_factors_onlyinternal_powhegpythia.csv
-        if self.pp.useGenWeightNormMap:
-            vetolist += self.genWeightNormalization.getVetolist()
-
         for addCodeInt in self.pp.addInterfaces:
             vetolist += addCodeInt.getExternalyCallableVariables()
             
-        for db in self.pp.dataBases:
-            vetolist.append(db[0]+"p")
-            vetolist.append(db[0]+"p_sig")
-            vetolist.append(db[0]+"p_bkg")
-            vetolist.append(db[0]+"p_err_sig")
-            vetolist.append(db[0]+"p_err_bkg")
-            vetolist.append(db[0]+"n_perm_sig")
-            vetolist.append(db[0]+"n_perm_bkg")
-            vetolist.append(db[0]+"FoundResult")
-                
         # set self.vetolist so it can be accessed everywhere in the cls
         self.vetolist = vetolist
 
 
     def initVariables(self, trees):
         # initialize variables objects
-        variableManager = variableCancer.VariableManager(trees, self.vetolist, self.pp.sfCorrection, self.pp.friendTrees)
-        variableManager.add( ["Weight", "Weight_btagSF", "Weight_XS"] )
+        variableManager = variableCancer.VariableManager(trees, self.vetolist, self.pp.friendTrees)
+        variableManager.add( ["Weight_btagSF", "Weight_XS"] )
         
         # get additional variables
         if len(self.pp.configData.addVars) > 0:
@@ -405,17 +342,7 @@ class scriptWriter:
     def initLoop(self):
         script = ""
         script += "     timerMapping->Start();\n"
-        if self.pp.useGenWeightNormMap:
-            # script += self.genWeightNormalization.resetNormalizationFactors()
-            script += self.genWeightNormalization.relateMapToNormalizationFactor()
-
         script += "     totalTimeMapping+=timerMapping->RealTime();\n"
-
-        script += "     timerReadDataBase->Start();\n"
-        for db in self.pp.dataBases:
-            script += scriptfunctions.readOutDataBase(db)    
-        script += "\n"
-        script += "     totalTimeReadDataBase+=timerReadDataBase->RealTime();\n"
 
         script += "     timerEvalDNN->Start();\n"
         for addCodeInt in self.pp.addInterfaces:
@@ -474,11 +401,6 @@ class scriptWriter:
         # loading tree info from json file
         SaveTreeInformation = {}
         LoadedTreeInformation = {}
-        if self.pp.jsonFile != "":
-            print("Loading file with tree event information")
-            with open(self.pp.jsonFile,"r") as jsonfile:
-                LoadedTreeInformation = json.load(jsonfile)
-
     
         # looping over samples
         for sample in self.pp.configData.allSamples:

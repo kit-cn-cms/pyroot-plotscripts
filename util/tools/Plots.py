@@ -245,14 +245,19 @@ def buildHistogramAndErrorBand(rootFile,sample,color,typ,label,systematics,nomin
     if upErrors:
         errorband = ROOT.TGraphAsymmErrors(rootHist)
         for i in range(len(upErrors)):
-            errorband.SetPointEYlow(i, downErrors[i])
-            errorband.SetPointEYhigh(i, upErrors[i])
             errorband.SetPointEXlow(i, rootHist.GetBinWidth(i+1)/2.)
             errorband.SetPointEXhigh(i, rootHist.GetBinWidth(i+1)/2.)
+            if addStatErrorband:
+                errorband.SetPointEYlow(i, np.sqrt(downErrors[i]**2 + rootHist.GetBinError(i+1)**2))
+                errorband.SetPointEYhigh(i, np.sqrt(upErrors[i]**2 + rootHist.GetBinError(i+1)**2))
+            else:
+                errorband.SetPointEYlow(i, downErrors[i])
+                errorband.SetPointEYhigh(i, upErrors[i])
+
 
     if addStatErrorband:
         statErrorband = ROOT.TGraphAsymmErrors(rootHist)
-        statErrorband.SetFillStyle(ROOT.kOrange)
+        statErrorband.SetFillStyle(ROOT.kGray)
         for i in range(rootHist.GetNbinsX()):
             statErrorband.SetPointEYlow(i, rootHist.GetBinError(i+1))
             statErrorband.SetPointEYhigh(i, rootHist.GetBinError(i+1))
@@ -566,19 +571,19 @@ class DrawHistograms:
 
         if self.errorband:
             self.errorband.SetFillStyle(1001)
-            self.errorband.SetLineColorAlpha(ROOT.kBlack, 0.3)
-            self.errorband.SetFillColorAlpha(ROOT.kBlack, 0.3)
+            self.errorband.SetLineColorAlpha(ROOT.kBlack, 0.4)
+            self.errorband.SetFillColorAlpha(ROOT.kBlack, 0.4)
             self.errorband.Draw("same2")
         elif self.combinederrorbands:
             for i, ceb in enumerate(self.combinederrorbands):
                 ceb.SetFillStyle(1001)
                 if i == 0:
-                    ceb.SetLineColorAlpha(ROOT.kBlack,0.3)
-                    ceb.SetFillColorAlpha(ROOT.kBlack,0.3)
+                    ceb.SetLineColorAlpha(ROOT.kBlack,0.4)
+                    ceb.SetFillColorAlpha(ROOT.kBlack,0.4)
+                    ceb.Draw("same2")
                 else:
-                    ceb.SetLineColorAlpha(ROOT.kOrange,0.3)
-                    ceb.SetFillColorAlpha(ROOT.kOrange,0.3)
-                ceb.Draw("same2")
+                    ceb.SetLineColorAlpha(ROOT.kGray,0.8)
+                    ceb.SetFillColorAlpha(ROOT.kGray,0.8)
 
 
 
@@ -773,7 +778,7 @@ class DrawHistograms:
         
         line = self.data.Clone()
         line.Divide(self.data)
-        line.GetYaxis().SetRangeUser(0.5,1.5)
+        line.GetYaxis().SetRangeUser(1./1.45,1.45)
         #line.GetYaxis().SetRangeUser(0.3,1.7)
         line.GetYaxis().SetTitle(self.ratio)
 
@@ -794,21 +799,24 @@ class DrawHistograms:
         line.SetLineWidth(1)
         line.SetLineColor(ROOT.kBlack)
         line.DrawCopy("histo")
+        return line
 
     def drawRatio(self,stackhist,canvaslabel=""):
-        self.drawRatioLine(canvaslabel)
+        line = self.drawRatioLine(canvaslabel)
 
         # ratio plot
         ratioPlot = self.data.Clone()
         ratioPlot.Divide(stackhist)
         ratioPlot.SetTitle(stackhist.GetTitle())
         ratioPlot.SetLineColor(ROOT.kBlack)
-        ratioPlot.SetLineWidth(1)
+        ratioPlot.SetLineWidth(2)
         ratioPlot.SetMarkerStyle(20)
         ROOT.gStyle.SetErrorX(0)
-        ratioPlot.DrawCopy("sameP")
 
         self.generateRatioErrorband()
+        line.DrawCopy("hist same")
+        line.DrawCopy("axis same")
+        ratioPlot.DrawCopy("sameP")
         self.canvas.cd(1)
 
     def drawRatioCombine(self,title="",canvaslabel = ""):
@@ -832,6 +840,13 @@ class DrawHistograms:
     # scales the Errorband for the ratio plot
     def generateRatioErrorband(self):
         self.ratioerrorbands = []
+        self.ratioLegend=ROOT.TLegend(0.05,0.1,0.18,0.35)
+        self.ratioLegend.SetBorderSize(1)
+        self.ratioLegend.SetLineStyle(1)
+        self.ratioLegend.SetTextFont(42)
+        self.ratioLegend.SetTextSize(0.07)
+        self.ratioLegend.SetFillStyle(0)
+
         if self.combinederrorbands:
             for ceb in self.combinederrorbands:
                 self.ratioerrorbands.append( ceb.Clone() )
@@ -839,7 +854,15 @@ class DrawHistograms:
             self.ratioerrorbands.append(self.errorband.Clone())
         else: return 
 
-        for reb in self.ratioerrorbands:
+
+        # hardcoded because lazy
+        if len(self.ratioerrorbands) == 1:
+            names = ["sys"]
+        else:
+            names = ["sys+stat", "stat"]
+
+        # loop over error bands
+        for ib, reb in enumerate(self.ratioerrorbands):
             for i in range(reb.GetN()):
                 x=ROOT.Double()
                 y=ROOT.Double()
@@ -853,7 +876,9 @@ class DrawHistograms:
                     reb.SetPointEYhigh(i,0)
 
             reb.Draw("same2")
-        
+            self.ratioLegend.AddEntry(reb, names[ib], "F")
+        self.ratioLegend.Draw()
+
     def GetyTitle(self):
         # normalize plots to unit area
         if self.normalize:
