@@ -1,0 +1,38 @@
+{
+    "processes": [
+        "ttbb", 
+        "ttcc", 
+        "ttlf"
+    ], 
+    "systematics": [
+        "btag_lf", 
+        "btag_hf", 
+        "btag_hfstats1_2017", 
+        "btag_hfstats2_2017", 
+        "btag_lfstats1_2017", 
+        "btag_lfstats1_2017", 
+        "btag_cferr1", 
+        "btag_cferr2",
+        "L1PreFiring_2017",
+        "triggerEff_mu_2017",
+        "triggerEff_e_2017",
+        "eff_mu_2017",
+        "eff_e_2017",
+        "pileup",
+        "ISR_ttbb",
+        "ISR_ttcc",
+        "ISR_ttlf",
+        "FSR_ttbb",
+        "FSR_ttcc",
+        "FSR_ttlf",
+        "scaleMuF_ttbbNLO",
+        "scaleMuF",
+        "scaleMuR_ttbbNLO",
+        "scaleMuR"
+    ], 
+    "variables": [
+        "ge4j_ge3t_N_Jets", 
+        "ge4j_ge3t_Jet_Pt", 
+        "ge4j_ge3t_Jet_btagValue_0"
+    ]
+}

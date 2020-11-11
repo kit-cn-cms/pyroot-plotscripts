@@ -40,10 +40,10 @@ parser.add_option("--nomkey",
     help = " ".join("""
             use this key template to load nominal histograms. Keywords that will be replaced are
             '$PROCESS' (with process names) and '$CHANNEL' (with variable names).
-            Default = '$PROCESS_$CHANNEL' 
+            Default = '$CHANNEL__$PROCESS' 
         """.split()),
     dest = 'nomkey',
-    default = '$PROCESS_$CHANNEL',
+    default = '$CHANNEL__$PROCESS',
     type = 'str'        
 )
 parser.add_option("--systkey",
@@ -52,10 +52,10 @@ parser.add_option("--systkey",
             Keywords that will be replaced are
             '$PROCESS' (with process names), '$CHANNEL' (with variable names)
             and '$SYSTEMATIC' (with names of systematics).
-            Default = '$PROCESS_$CHANNEL_$SYSTEMATIC' 
+            Default = '$CHANNEL__$PROCESS__$SYSTEMATIC' 
         """.split()),
     dest = 'systkey',
-    default = '$PROCESS_$CHANNEL_$SYSTEMATIC',
+    default = '$CHANNEL__$PROCESS__$SYSTEMATIC',
     type = 'str'        
 )
 
@@ -81,7 +81,7 @@ if not opts.config is None:
         parser.error('ERROR: path to config "{}" is faulty'.format(cpath))
     with open(cpath) as f:
         config = json.load(f)
-
+    print(config)
 if not os.path.isabs(opts.outDir):
     opts.outDir = opts.inputDir+"/"+opts.outDir
 if not os.path.exists(opts.outDir):
@@ -280,14 +280,15 @@ def drawshifts(file, outdir, processes, variable, syst, procLabel = "", procName
     nom.SetMarkerColor(1)
 
     nom.SetFillColor(1)
+    originalTitle = nom.GetTitle()
     nom.SetTitle("")
     nom.GetXaxis().SetTitle(title)
     nom.GetXaxis().SetTitleSize(0.04)
     # nom.GetXaxis().SetTitleOffset(0.8)
     nom.GetYaxis().SetTitle("Events")
-    nom.GetYaxis().SetTitleSize(0.07)
+    nom.GetYaxis().SetTitleSize(0.06)
     nom.GetYaxis().SetTitleOffset(0.6)
-    nom.GetYaxis().SetLabelSize(0.04)
+    nom.GetYaxis().SetLabelSize(0.05)
 
 
     cms = ROOT.TLatex(0.15, 0.94, 'CMS #it{private work}'  )
@@ -295,7 +296,7 @@ def drawshifts(file, outdir, processes, variable, syst, procLabel = "", procName
     cms.SetTextSize(0.07)
     ROOT.gStyle.SetPalette(1)
 
-    lumi = ROOT.TLatex(0.7, 0.94, '59.7 fb^{-1} (13 TeV)'  )
+    lumi = ROOT.TLatex(0.7, 0.94, '41.5 fb^{-1} (13 TeV)'  )
     lumi.SetNDC()
     lumi.SetTextSize(0.05)
 
@@ -336,30 +337,31 @@ def drawshifts(file, outdir, processes, variable, syst, procLabel = "", procName
     legend.SetTextSize(0.03)
 
     c.cd(2)
-    ratioUp = nom.Clone()
-    ratioUp.Divide(up)
+    ratioUp = up.Clone()
+    ratioUp.Divide(nom)
     ratioUp.SetLineColor(up.GetLineColor())
     ratioUp.Draw("E0")
     ratioUp.SetMarkerSize(0)
-    ratioUp.GetYaxis().SetTitle("#frac{nominal}{variation}")
+    ratioUp.GetYaxis().SetTitle("#frac{variation}{nominal}")
     ratioUp.GetYaxis().CenterTitle()
-    ratioUp.GetYaxis().SetRangeUser(0.68, 1.32)
+    ratioUp.GetYaxis().SetRangeUser(1/1.4, 1.4)
     # ratioUp.GetXaxis().SetLabelSize(nom.GetXaxis().GetLabelSize() * 3.5)
     # ratioUp.GetYaxis().SetLabelSize(nom.GetYaxis().GetLabelSize() * 3.5)
     # ratioUp.GetXaxis().SetTitleSize(nom.GetXaxis().GetTitleSize() * 3.5)
     # ratioUp.GetYaxis().SetTitleSize(nom.GetYaxis().GetTitleSize() * 2.0)
-    ratioUp.GetYaxis().SetLabelSize(0.15)
+    ratioUp.GetYaxis().SetLabelSize(0.12)
     ratioUp.GetYaxis().SetTitleSize(0.12)
     ratioUp.GetYaxis().SetTitleOffset(0.6)
 
-    ratioUp.GetXaxis().SetLabelSize(0.15)
-    ratioUp.GetXaxis().SetTitleSize(0.15)
+    ratioUp.GetXaxis().SetLabelSize(0.12)
+    ratioUp.GetXaxis().SetTitleSize(0.12)
+    ratioUp.GetXaxis().SetTitle(originalTitle)
 
     ratioUp.SetTitle("")
     ratioUp.GetYaxis().SetNdivisions(505)
 
-    ratioDown = nom.Clone()
-    ratioDown.Divide(down)
+    ratioDown = down.Clone()
+    ratioDown.Divide(nom)
     ratioDown.SetLineColor(down.GetLineColor())
     ratioDown.Draw("E0same")
     ratioDown.SetMarkerSize(0)
