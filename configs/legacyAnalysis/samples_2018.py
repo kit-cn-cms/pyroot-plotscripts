@@ -164,9 +164,12 @@ kfactor_zjets = "*1.23"
 kfactor_wjets = "*1.21"
 #tHq_XS_scale = "*(0.7927/0.07425)"
 #tHW_XS_scale = "*(0.1472/0.01517)"
+ttbb_FH_scale = "(17.3853/16.2728)"
+ttbb_SL_scale = "(15.7322/15.7286)"
+ttbb_DL_scale = "(3.5378/3.8024)"
 
-# ttbb_4FS_scale = "*(1.6836)"
-ttbb_4FS_scale = "*(1.0)"
+# DANGERZONE: derived in 2018
+ttbb_4FS_scale = "*((N_GenTopLep==0)*"+ttbb_FH_scale+"+(N_GenTopLep==1)*"+ttbb_SL_scale+"+(N_GenTopLep==2)*"+ttbb_DL_scale+")"
 ttbb_5FS_scale = "*(1.0)"
 
 tH_SM_rwgt = "*(Weight_rwgt_12/Weight_GEN_nom)"

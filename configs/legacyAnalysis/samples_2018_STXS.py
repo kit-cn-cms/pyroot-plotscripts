@@ -69,7 +69,9 @@ STXS_stage1_0 = '*(GenHiggs_Pt<=60)'
 STXS_stage1_1 = '*((GenHiggs_Pt>=60)&&(GenHiggs_Pt<120))'
 STXS_stage1_2 = '*((GenHiggs_Pt>=120)&&(GenHiggs_Pt<200))'
 STXS_stage1_3 = '*((GenHiggs_Pt>=200)&&(GenHiggs_Pt<300))'
-STXS_stage1_4 = '*(GenHiggs_Pt>=300)'
+STXS_stage1_4 = '*((GenHiggs_Pt>=300)&&(GenHiggs_Pt<450))'
+STXS_stage1_5 = '*(GenHiggs_Pt>=450)'
+
 # need to veto muon events in electron dataset to avoid double counting and vice versa
 sel_singleel="((N_LooseMuons==0 && N_TightElectrons==1) && (Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX || ( Triggered_HLT_Ele32_WPTight_Gsf_vX )))"
 sel_singlemu="(N_LooseElectrons==0 && N_TightMuons==1 && Triggered_HLT_IsoMu24_vX)"
@@ -141,7 +143,8 @@ def constructSTXSnormedVariation(weight = "Weight_scale_variation_muR_1p0_muF_0p
     replacement += "("+STXS_stage0_+STXS_stage1_1+'*(fracRatio_TTH_PTH_60_120.at("{weight}")))+'
     replacement += "("+STXS_stage0_+STXS_stage1_2+'*(fracRatio_TTH_PTH_120_200.at("{weight}")))+'
     replacement += "("+STXS_stage0_+STXS_stage1_3+'*(fracRatio_TTH_PTH_200_300.at("{weight}")))+'
-    replacement += "("+STXS_stage0_+STXS_stage1_4+'*(fracRatio_TTH_PTH_GT300.at("{weight}")))'
+    replacement += "("+STXS_stage0_+STXS_stage1_4+'*(fracRatio_TTH_PTH_300_450.at("{weight}")))+'
+    replacement += "("+STXS_stage0_+STXS_stage1_5+'*(fracRatio_TTH_PTH_GT450.at("{weight}")))'
     replacement +=  ")"
     return replacement.format(weight=weight)
 
@@ -180,9 +183,12 @@ lumi = '59.7'
 
 #tHq_XS_scale = "*(0.7927/0.07425)"
 #tHW_XS_scale = "*(0.1472/0.01517)"
+ttbb_FH_scale = "(17.3853/16.2728)"
+ttbb_SL_scale = "(15.7322/15.7286)"
+ttbb_DL_scale = "(3.5378/3.8024)"
 
-# ttbb_4FS_scale = "*(1.6836)"
-ttbb_4FS_scale = "*(1.0)"
+# DANGERZONE: derived in 2018
+ttbb_4FS_scale = "*((N_GenTopLep==0)*"+ttbb_FH_scale+"+(N_GenTopLep==1)*"+ttbb_SL_scale+"+(N_GenTopLep==2)*"+ttbb_DL_scale+")"
 ttbb_5FS_scale = "*(1.0)"
 
 tH_SM_rwgt = "*(Weight_rwgt_12/Weight_GEN_nom)"
@@ -303,38 +309,44 @@ samples_ttH_decay = [
     ]
 
 samples_ttH_HTXS = [
-    plotClasses.Sample('t#bar{t}H_0',830,
+    plotClasses.Sample('t#bar{t}H_PTH_0_60',830,
             ttHpath,
             lumi+sel_MET+STXS_stage0+STXS_stage1_0,
             'TTH_PTH_0_60',
             filterFile=filterfiles,
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
-    plotClasses.Sample('t#bar{t}H_1',418,
+    plotClasses.Sample('t#bar{t}H_PTH_60_120',418,
             ttHpath,
             lumi+sel_MET+STXS_stage0+STXS_stage1_1,
             'TTH_PTH_60_120',
             filterFile=filterfiles,
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
-    plotClasses.Sample('t#bar{t}H_2',433,
+    plotClasses.Sample('t#bar{t}H_PTH_120_200',433,
             ttHpath,
             lumi+sel_MET+STXS_stage0+STXS_stage1_2,
             'TTH_PTH_120_200',
             filterFile=filterfiles,
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
-    plotClasses.Sample('t#bar{t}H_3',867,
+    plotClasses.Sample('t#bar{t}H_PTH_200_300',867,
             ttHpath,
             lumi+sel_MET+STXS_stage0+STXS_stage1_3,
             'TTH_PTH_200_300',
             filterFile=filterfiles,
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
-    plotClasses.Sample('t#bar{t}H_4',602,
+    plotClasses.Sample('t#bar{t}H_PTH_300_450',602,
             ttHpath,
             lumi+sel_MET+STXS_stage0+STXS_stage1_4,
-            'TTH_PTH_GT300',
+            'TTH_PTH_300_450',
+            filterFile=filterfiles,
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+    plotClasses.Sample('t#bar{t}H_PTH_GT450',605,
+            ttHpath,
+            lumi+sel_MET+STXS_stage0+STXS_stage1_5,
+            'TTH_PTH_GT450',
             filterFile=filterfiles,
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 ]

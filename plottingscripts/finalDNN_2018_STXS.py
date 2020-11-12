@@ -35,7 +35,7 @@ def main(pyrootdir, opts):
     workdir = pyrootdir + "/workdir/" + name
 
     # signal process
-    signalProcess = "ttH"
+    signalProcess = "TTH"
     nSigSamples   = 1
 
     # dataera
@@ -43,7 +43,7 @@ def main(pyrootdir, opts):
 
     # Name of final discriminator, should not contain underscore
     discrName = ''
-    nom_histname_template = "$PROCESS__$CHANNEL"
+    nom_histname_template = "$CHANNEL__$PROCESS"
     syst_histname_template = nom_histname_template + "__$SYSTEMATIC"
     histname_separator = "__"
 

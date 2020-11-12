@@ -330,13 +330,13 @@ samples_tH = [
             THWpath,
             lumi+tH_SM_rwgt+sel_MET,
             'tHW',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+            samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('tHq (SM)',ROOT.kBlue+6,
             THQpath,
             lumi+tH_SM_rwgt+sel_MET,
             'tHq',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+            samDict=sampleDict, readTrees=doReadTrees),
 
     # point 5
     #plotClasses.Sample('tHW (5)',ROOT.kBlue+3,
@@ -448,11 +448,11 @@ samples_5FS =  [
 
 samples_ttnonbb = [
      # signal samples
-    #plotClasses.Sample('t#bar{t}+H',ROOT.kBlue+1,
-    #        ttHpath,
-    #        lumi+sel_MET,
-    #        'ttH',
-    #        samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),     
+    plotClasses.Sample('t#bar{t}+H',ROOT.kBlue+1,
+            ttHpath,
+            lumi+sel_MET,
+            'ttH',
+            samDict=sampleDict, readTrees=doReadTrees),     
 
     # ttbar 5FS default background samples
     plotClasses.Sample('t#bar{t}+lf',ROOT.kRed-7,
@@ -468,8 +468,8 @@ samples_ttnonbb = [
             samDict=sampleDict, readTrees=doReadTrees),
     ]
 
-samples = samples_ttH_decay
-samples += samples_ttnonbb
+#samples = samples_ttH_decay
+samples = samples_ttnonbb
 samples += samples_tH
 samples += samples_ttbb_4FS
 samples += samples_minor_backgrounds
@@ -495,14 +495,14 @@ plottingsamples = [
         "vjets", addsamples = ["wjets", "zjets"],
         samDict = sampleDict, readTrees = doReadTrees),
 
-    plotClasses.Sample("t#bar{t}+H", ROOT.kBlue+1, "", "",
-        "ttH", addsamples = ["ttH_hbb", "ttH_hcc", "ttH_htt", "ttH_hgg", "ttH_hgluglu", "ttH_hww", "ttH_hzz", "ttH_hzg"],
-        samDict = sampleDict, readTrees = doReadTrees),
+    #plotClasses.Sample("t#bar{t}+H", ROOT.kBlue+1, "", "",
+    #    "ttH", addsamples = ["ttH_hbb", "ttH_hcc", "ttH_htt", "ttH_hgg", "ttH_hgluglu", "ttH_hww", "ttH_hzz", "ttH_hzg"],
+    #    samDict = sampleDict, readTrees = doReadTrees),
 #    plotClasses.Sample("misc.", 18, "", "",
 #        "misc", addsamples ["ttbarZ", "ttbarW", "wjets", "zjets", "diboson"],
 #        samDict = sampleDict, readTrees = doReadTrees)
      ]
 
 # sort subset of processes in plots. descending order
-sortedProcesses = ["ttlf", "ttcc", "ttbb", "ttbb_5FS", "ttbb_4FS"]
+sortedProcesses = ["ttlf", "ttcc", "ttbb", "ttbb_5FS", "ttbb_4FS", "singlet", "ttV", "vjets", "diboson", "tHq", "tHW", "ttH"]
 

@@ -2393,7 +2393,7 @@ def plots_ge4j_ge3t(data=None):
 
     tag = "ge4j_ge3t"
     plots = plots_control(tag, selection, label)   
-    plots += plots_crossCheck(tag, selection, label)   
+    #plots += plots_crossCheck(tag, selection, label)   
      
     if data:
         add_data_plots(plots=plots,data=data)
@@ -2419,7 +2419,7 @@ def plots_ge4j_ge4t(data=None):
 
     tag = "ge4j_ge4t"
     plots = plots_control(tag, selection, label)    
-    plots += plots_crossCheck(tag, selection, label)   
+    #plots += plots_crossCheck(tag, selection, label)   
 
     if data:
         add_data_plots(plots=plots,data=data)
@@ -2430,9 +2430,9 @@ def plots_ge4j_ge4t(data=None):
 def getDiscriminatorPlots(data = None, discrname = ''):
     discriminatorPlots = []
     #baseline
-    discriminatorPlots += plots_ge4j_ge3t(data)
-    discriminatorPlots += plots_ge4j_3t(data)
-    discriminatorPlots += plots_ge4j_ge4t(data)
+    #discriminatorPlots += plots_ge4j_ge3t(data)
+    #discriminatorPlots += plots_ge4j_3t(data)
+    #discriminatorPlots += plots_ge4j_ge4t(data)
     # input features
     discriminatorPlots += plots_inputfeatures_ge4j_3t(data)
     discriminatorPlots += plots_inputfeatures_ge4j_ge4t(data)
