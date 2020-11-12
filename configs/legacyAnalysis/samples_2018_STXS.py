@@ -60,6 +60,7 @@ ttZpath =  path+'/TTZToQQ*/*nominal*.root'+';'+ \
 friendTrees = {
     "MEMDB": "/nfs/dust/cms/group/ttx-kit/Friends_MEM_ttH/2018_wrongJERsources/",
     }
+filterfiles = "/nfs/dust/cms/user/swieland/ttH_legacy/theRealPlotscript/dev/pyroot-plotscripts/data/VETO_2018/"
 
 # SELECTIONS
 STXS_stage0 = '*(abs(GenHiggs_Y<2.5))'
@@ -306,30 +307,35 @@ samples_ttH_HTXS = [
             ttHpath,
             lumi+sel_MET+STXS_stage0+STXS_stage1_0,
             'TTH_PTH_0_60',
+            filterFile=filterfiles,
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
     plotClasses.Sample('t#bar{t}H_1',418,
             ttHpath,
             lumi+sel_MET+STXS_stage0+STXS_stage1_1,
             'TTH_PTH_60_120',
+            filterFile=filterfiles,
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
     plotClasses.Sample('t#bar{t}H_2',433,
             ttHpath,
             lumi+sel_MET+STXS_stage0+STXS_stage1_2,
             'TTH_PTH_120_200',
+            filterFile=filterfiles,
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
     plotClasses.Sample('t#bar{t}H_3',867,
             ttHpath,
             lumi+sel_MET+STXS_stage0+STXS_stage1_3,
             'TTH_PTH_200_300',
+            filterFile=filterfiles,
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
     plotClasses.Sample('t#bar{t}H_4',602,
             ttHpath,
             lumi+sel_MET+STXS_stage0+STXS_stage1_4,
             'TTH_PTH_GT300',
+            filterFile=filterfiles,
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 ]
 
@@ -383,6 +389,7 @@ samples_ttbb_4FS = [
              path_ttbb,
              lumi+evenSel+ttbb_4FS_scale+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
              'ttbb',
+            filterFile=filterfiles,
              samDict=sampleDict, readTrees=doReadTrees),
 
     ]
@@ -498,12 +505,14 @@ samples_ttnonbb = [
             ttbarPathS,
             lumi+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)'+sel_MET+sel_StrangeMuWeights,
             'ttlf',
+            filterFile=filterfiles,
             samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,
             ttbarPathS,
             lumi+'*(GenEvt_I_TTPlusCC==1)'+sel_MET+sel_StrangeMuWeights,
             'ttcc',
+            filterFile=filterfiles,
             samDict=sampleDict, readTrees=doReadTrees),
     ]
 

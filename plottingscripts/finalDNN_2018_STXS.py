@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'finalDNN_fullSampleRFs_correctSeeSaw/2018_STXS'
+    name = 'finalDNN_fullSampleRFs_correctSeeSaw/2018_STXS_Veto_v2'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -81,8 +81,8 @@ def main(pyrootdir, opts):
     analysisOptions = {
         # general options
         "usePseudoData":        True,
-        "testrun":              False,  # test run with less samples
-        "stopAfterCompile":     False,   # stop script after compiling
+        "testrun":              True,  # test run with less samples
+        "stopAfterCompile":     True,   # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
         "makeDataCards":        True,

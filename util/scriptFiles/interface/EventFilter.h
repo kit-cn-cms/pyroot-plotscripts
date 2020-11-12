@@ -8,15 +8,18 @@
 class EventFilter {
 
   public:
-    EventFilter(std::string filename);
+    EventFilter( std::vector<std::string> filenames);
+
     ~EventFilter();
-    bool KeepEvent(Long64_t Evt_Run, Long64_t Evt_Lumi, Long64_t Evt_ID);
+    bool KeepEvent(std::string file, Long64_t Evt_Run, Long64_t Evt_Lumi, Long64_t Evt_ID);
     int GetNFiltered();
+    std::vector<std::string> split (string s, string delimiter);
 
   private:
-    std::vector<long> vec_run;
-  std::vector<long> vec_lumi;
-  std::vector<long> vec_evt;
+  // std::vector<long> vec_run;
+  // std::vector<long> vec_lumi;
+  // std::vector<long> vec_evt;
+  std::map<std::string, std::vector<std::vector<long>>> VetoMap;
   int listLength;
   int nEventsFiltered;
 

@@ -34,10 +34,19 @@
     sumOfWeights+=Weight;
     
     // skip events in the filter list
-    if(evtFilter->KeepEvent(Evt_Run,Evt_Lumi,Evt_ID)==false){
-      std::cout<<"skipping event "<<Evt_Run<<" "<<Evt_Lumi<<" "<<Evt_ID<<std::endl;
+    TString treename = currentfilename;
+    treename.Replace(0,treename.Last('/'),"");
+    TString samplename = currentfilename;
+    samplename.ReplaceAll(treename,"");
+    samplename.Replace(0,samplename.Last('/')+1,"");
+    // std::cout << "###################" << std::endl;
+    // std::cout << samplename << std::endl;
+    // std::cout << filterFileMap[samplename.Data()] << std::endl;
+
+    if(evtFilter->KeepEvent(filterFileMap[samplename.Data()],Evt_Run,Evt_Lumi,Evt_ID)==false){
+      std::cout<<"skipping event "<<Evt_Run<<" "<<Evt_Lumi<<" "<<Evt_ID<<"  due to vetolist from " << filterFileMap[samplename.Data()]<< std::endl;
       continue;
-      }
+    }
     
 
 	// Do weighting correctly if data driven QCD sample is used: use the weights for MC part and not for Data part

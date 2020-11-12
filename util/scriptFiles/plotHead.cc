@@ -142,8 +142,7 @@ void plot(){
 
   std::vector<TString> databaseRelevantFilenames;
 
-  // create event filter class
-  EventFilter* evtFilter = new EventFilter(eventFilterFile);
+
 
   int eventsAnalyzed=0;
   float sumOfWeights=0;
@@ -189,6 +188,8 @@ void plot(){
   string buf;
   stringstream ss(filenames); 
   TString samplename_in_database="";
+  std::vector<std::string> filterFiles;
+  std::map<std::string, std::string> filterFileMap;
   while (ss >> buf){
     chain->Add(buf.c_str());
     TString thisfilename = buf.c_str();
@@ -199,6 +200,48 @@ void plot(){
     TString samplename = buf.c_str();
     samplename.ReplaceAll(treename,"");
     samplename.Replace(0,samplename.Last('/')+1,"");
+    TString SamplenameForVetoFile = "";
+
+    if (samplename.BeginsWith("ttHTobb")) {SamplenameForVetoFile = "ttHTobb";}
+    if (samplename.BeginsWith("ttHToNonbb")) {SamplenameForVetoFile = "ttHToNonbb";}
+    if (samplename.BeginsWith("TTbb_4f_TTTo2l2nu")) {SamplenameForVetoFile = "TTbb_4f_TTTo2l2nu";}
+    if (samplename.BeginsWith("TTbb_4f_TTToSemiLeptonic")) {SamplenameForVetoFile = "TTbb_4f_TTToSemiLeptonic";}
+    if (samplename.BeginsWith("TTToSemiLeptonic")) {SamplenameForVetoFile = "TTToSemiLeptonic";}
+    if (samplename.BeginsWith("TTTo2l2nu")){SamplenameForVetoFile = "TTTo2L2Nu";}
+
+
+
+    if (variation == "") {SamplenameForVetoFile = SamplenameForVetoFile +"_nominal";}
+    if (variation == "CMS_res_j_"+dataera+"Down") {SamplenameForVetoFile = SamplenameForVetoFile +"_jerDown";}
+    if (variation == "CMS_res_j_"+dataera+"Up") {SamplenameForVetoFile = SamplenameForVetoFile +"_jerUp";}
+    if (variation == "CMS_scaleAbsolute_jDown") {SamplenameForVetoFile = SamplenameForVetoFile +"_jesAbsoluteDown";}
+    if (variation == "CMS_scaleAbsolute_jUp") {SamplenameForVetoFile = SamplenameForVetoFile +"_jesAbsoluteUp";}
+    if (variation == "CMS_scaleAbsolute_j_"+dataera+"Down") {SamplenameForVetoFile = SamplenameForVetoFile +"_jesAbsolute_"+dataera+"Down";}
+    if (variation == "CMS_scaleAbsolute_j_"+dataera+"Up") {SamplenameForVetoFile = SamplenameForVetoFile +"_jesAbsolute_"+dataera+"Up";}
+    if (variation == "CMS_scaleBBEC1_jDown") {SamplenameForVetoFile = SamplenameForVetoFile +"_jesBBEC1Down";}
+    if (variation == "CMS_scaleBBEC1_jUp") {SamplenameForVetoFile = SamplenameForVetoFile +"_jesBBEC1Up";}
+    if (variation == "CMS_scaleBBEC1_j_"+dataera+"Down") {SamplenameForVetoFile = SamplenameForVetoFile +"_jesBBEC1_"+dataera+"Down";}
+    if (variation == "CMS_scaleBBEC1_j_"+dataera+"Up") {SamplenameForVetoFile = SamplenameForVetoFile +"_jesBBEC1_"+dataera+"Up";}
+    if (variation == "CMS_scaleEC2_jDown") {SamplenameForVetoFile = SamplenameForVetoFile +"_jesEC2Down";}
+    if (variation == "CMS_scaleEC2_jUp") {SamplenameForVetoFile = SamplenameForVetoFile +"_jesEC2Up";}
+    if (variation == "CMS_scaleEC2_j_"+dataera+"Down") {SamplenameForVetoFile = SamplenameForVetoFile +"_jesEC2_"+dataera+"Down";}
+    if (variation == "CMS_scaleEC2_j_"+dataera+"Up") {SamplenameForVetoFile = SamplenameForVetoFile +"_jesEC2_"+dataera+"Up";}
+    if (variation == "CMS_scaleFlavorQCD_jDown") {SamplenameForVetoFile = SamplenameForVetoFile +"_jesFlavorQCDDown";}
+    if (variation == "CMS_scaleFlavorQCD_jUp") {SamplenameForVetoFile = SamplenameForVetoFile +"_jesFlavorQCDUp";}
+    if (variation == "CMS_scaleHEM1516_jDown") {SamplenameForVetoFile = SamplenameForVetoFile +"jesHEMIssueDown";}
+    if (variation == "CMS_scaleHEM1516_jUp") {SamplenameForVetoFile = SamplenameForVetoFile +"jesHEMIssueUp";}
+    if (variation == "CMS_scaleHF_jDown") {SamplenameForVetoFile = SamplenameForVetoFile +"jesHFDown";}
+    if (variation == "CMS_scaleHF_jUp") {SamplenameForVetoFile = SamplenameForVetoFile +"jesHFUp";}
+    if (variation == "CMS_scaleHF_j_"+dataera+"Down") {SamplenameForVetoFile = SamplenameForVetoFile +"jesHF_"+dataera+"Down";}
+    if (variation == "CMS_scaleHF_j_"+dataera+"Up") {SamplenameForVetoFile = SamplenameForVetoFile +"jesHF_"+dataera+"Up";}
+    if (variation == "CMS_scaleRelativeBal_jDown") {SamplenameForVetoFile = SamplenameForVetoFile +"_jesRelativeBalDown";}
+    if (variation == "CMS_scaleRelativeBal_jUp") {SamplenameForVetoFile = SamplenameForVetoFile +"_jesRelativeBalUp";}
+    if (variation == "CMS_scaleRelativeSample_j_"+dataera+"Down") {SamplenameForVetoFile = SamplenameForVetoFile +"_jesRelativeSample_"+dataera+"Down";}
+    if (variation == "CMS_scaleRelativeSample_j_"+dataera+"Up") {SamplenameForVetoFile = SamplenameForVetoFile +"_jesRelativeSample_"+dataera+"Up";}
+
+    filterFiles.push_back(eventFilterFile+"/"+SamplenameForVetoFile.Data()+".txt");
+    filterFileMap[samplename.Data()] = eventFilterFile+"/"+SamplenameForVetoFile.Data()+".txt";
+
     samplename+=treename;
     std::cout << "samplename "<<samplename<<std::endl;
 
@@ -296,8 +339,15 @@ void plot(){
   globalFileNameForSystType=filenameforSytType;
   }// end loop of filename parsing
   
-  // init variable to differentiate between 4FS and 5FS samples
+  // create event filter class
+  EventFilter* evtFilter = new EventFilter(filterFiles);
+  std::cout << "---------------" << '\n';
+    for (const auto &p : filterFileMap) {
+    std::cout << "filterFileMap[" << p.first << "] = " << p.second << '\n';
+  }
+  std::cout << "---------------" << '\n';
 
+  // init variable to differentiate between 4FS and 5FS samples
   float isFourFSsample = 0.;
 
   TString vecNameForDataBase="mem_p";

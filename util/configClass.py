@@ -168,6 +168,7 @@ class configData:
                         newpath, 
                         newSel, 
                         sample.nick+sysName, 
+                        filterFile=sample.filterFile,
                         origName = sample.nick,
                         vetoEventWeights = sample.vetoEventWeights,
                         samDict = self.pltcfg.sampleDict ))
