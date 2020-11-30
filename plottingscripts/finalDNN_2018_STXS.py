@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'finalDNN_fullSampleRFs_correctSeeSaw/2018_STXS'
+    name = 'finalDNN_fullSampleRFs_correctSeeSaw/2018_STXS_isr_fsr'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -116,7 +116,7 @@ def main(pyrootdir, opts):
     # dnnInterface = None
 
     # path to datacardMaker directory
-    datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
+    datacardmaker = "/nfs/dust/cms/user/pkeicher/projects/datacardMaker"
 
     print '''
     # ========================================================
