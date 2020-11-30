@@ -171,8 +171,13 @@ weightReplacements = {
     "DOWEIGHTS":        "(DoWeights==1)+(DoWeights==0)*1.0",
 
     'BOTHDOWN_STXS': constructSTXSnormedVariation(weight = "Weight_scale_variation_muR_0p5_muF_0p5"),
-    'BOTHUP_STXS': constructSTXSnormedVariation(weight = "Weight_scale_variation_muR_2p0_muF_2p0")
+    'BOTHUP_STXS': constructSTXSnormedVariation(weight = "Weight_scale_variation_muR_2p0_muF_2p0"),
 
+    'ISRDOWN_STXS': constructSTXSnormedVariation(weight = "GenWeight_isr_Def_down"),
+    'ISRUP_STXS': constructSTXSnormedVariation(weight = "GenWeight_isr_Def_up"),
+
+    'FSRDOWN_STXS': constructSTXSnormedVariation(weight = "GenWeight_fsr_Def_down"),
+    'FSRUP_STXS': constructSTXSnormedVariation(weight = "GenWeight_fsr_Def_up")
     }
 weightReplacements.update(generate_phasespace_corrections.main())
 
