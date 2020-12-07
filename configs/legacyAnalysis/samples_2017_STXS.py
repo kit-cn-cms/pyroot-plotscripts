@@ -56,8 +56,8 @@ THWpath = path+'/THW_*ctcvcp*/*nominal*.root'
 THQpath = path+'/THQ_*ctcvcp*/*nominal*.root'
 
 
-ttHpath = path+'/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8*/*nominal*.root'+';'+ \
-	      path+'/ttHToNonbb_M125_NNPDF31nnlo_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'
+ttHpath = "/nfs/dust/cms/group/ttx-kit/ntuples_ttH/2017_newttH"+'/ttHTobb_M125_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
+	      "/nfs/dust/cms/group/ttx-kit/ntuples_ttH/2017_newttH"+'/ttHToNonbb_M125_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'
 
 friendTrees = {
     "MEMDB": "/nfs/dust/cms/group/ttx-kit/Friends_MEM_ttH/2017",
