@@ -497,7 +497,7 @@ samples = samples_ttH_decay
 samples += samples_tH
 samples += samples_ttnonbb
 samples += samples_ttbb_4FS
-# samples += samples_5FS
+samples += samples_5FS
 samples += samples_minor_backgrounds
 
 
@@ -526,6 +526,12 @@ plottingsamples = [
     plotClasses.Sample("t#bar{t}+H", ROOT.kBlue+1, "", "",
         "ttH", addsamples = ["ttH_hbb", "ttH_hcc", "ttH_htt", "ttH_hgg", "ttH_hgluglu", "ttH_hww", "ttH_hzz", "ttH_hzg"],
         samDict = sampleDict, readTrees = doReadTrees, typ = "signal"),
+    plotClasses.Sample("tHq (SM)", ROOT.kBlue+6, "", "",
+        "tHq", addsamples = ["tHq_hbb", "tHq_hcc", "tHq_htt", "tHq_hgg", "tHq_hgluglu", "tHq_hww", "tHq_hzz", "tHq_hzg"],
+        samDict = sampleDict, readTrees = doReadTrees, typ = "bkg"),
+    plotClasses.Sample("tHW (SM)", ROOT.kBlue+1, "", "",
+        "tHW", addsamples = ["tHW_hbb", "tHW_hcc", "tHW_htt", "tHW_hgg", "tHW_hgluglu", "tHW_hww", "tHW_hzz", "tHW_hzg"],
+        samDict = sampleDict, readTrees = doReadTrees, typ = "bkg"),
 #    plotClasses.Sample("misc.", 18, "", "",
 #        "misc", addsamples ["ttbarZ", "ttbarW", "wjets", "zjets", "diboson"],
 #        samDict = sampleDict, readTrees = doReadTrees)
