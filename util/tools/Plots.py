@@ -469,10 +469,10 @@ class DrawHistograms:
         scaling maximal and minimal y value for better readability
         """
         if self.logoption:
-            firstHist.GetYaxis().SetRangeUser(self.yMinMax/10000, self.yMax*1000)
+            firstHist.GetYaxis().SetRangeUser(max(self.yMinMax/10,1.0), self.yMax*100000)
             ROOT.gPad.SetLogy(1)
         else:
-            firstHist.GetYaxis().SetRangeUser(0, self.yMax*1.5)
+            firstHist.GetYaxis().SetRangeUser(0, self.yMax*2.0)
         
         """
         Handle titles
@@ -674,7 +674,7 @@ class DrawHistograms:
         
         line = self.data.Clone()
         line.Divide(self.data)
-        line.GetYaxis().SetRangeUser(0.25,1.75)
+        line.GetYaxis().SetRangeUser(0.0,2.0)
         line.GetYaxis().SetTitle(self.ratio)
 
         line.SetTitle("")
@@ -876,29 +876,29 @@ def getLegend():
     return legend
 
 def getLegend1():
-    legend=ROOT.TLegend(0.57,0.59,0.72,0.89)
+    legend=ROOT.TLegend(0.52,0.59,0.71,0.89)
     legend.SetBorderSize(0);
     legend.SetLineStyle(0);
     legend.SetTextFont(42);
-    legend.SetTextSize(0.04);
+    legend.SetTextSize(0.0375);
     legend.SetFillStyle(0);
     return legend
 
 def getLegend2():
-    legend=ROOT.TLegend(0.74,0.59,0.89,0.89)
+    legend=ROOT.TLegend(0.72,0.59,0.91,0.89)
     legend.SetBorderSize(0);
     legend.SetLineStyle(0);
     legend.SetTextFont(42);
-    legend.SetTextSize(0.04);
+    legend.SetTextSize(0.0375);
     legend.SetFillStyle(0);
     return legend
 
 def getLegendSignal():
-    legend=ROOT.TLegend(0.57,0.25,0.72,0.57)
+    legend=ROOT.TLegend(0.15,0.52,0.40,0.84)
     legend.SetBorderSize(0);
     legend.SetLineStyle(0);
     legend.SetTextFont(42);
-    legend.SetTextSize(0.04);
+    legend.SetTextSize(0.0375);
     legend.SetFillStyle(0);
     return legend
 

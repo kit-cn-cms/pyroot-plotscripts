@@ -86,6 +86,8 @@ def drawROC(roc, signal_label, background_label, discr_label, cat_label):
     roc.SetTitle("")
     roc.GetXaxis().SetTitle("background rejection")
     roc.GetYaxis().SetTitle("signal efficiency")
+    roc.GetXaxis().SetNdivisions(20)
+    roc.GetYaxis().SetNdivisions(20)
     roc.SetLineColor(ROOT.kRed)
     roc.SetLineWidth(2)
     roc.SetMarkerStyle(20)
@@ -94,17 +96,17 @@ def drawROC(roc, signal_label, background_label, discr_label, cat_label):
 
     text_cms = ROOT.TLatex(0.2, 0.94, "CMS #scale[0.8]{simulation}")
     text_cms.SetNDC(ROOT.kTRUE)
-    text_cms.SetTextSize(0.035)
+    text_cms.SetTextSize(0.04)
     text_cms.Draw()
 
     text_wip = ROOT.TLatex(0.2, 0.91, "work in progress")
     text_wip.SetNDC(ROOT.kTRUE)
-    text_wip.SetTextSize(0.025)
+    text_wip.SetTextSize(0.03)
     text_wip.Draw()
 
-    text_auc = ROOT.TLatex(0.70, 0.85, "ROCAUC: {integral}".format(integral=integral))
+    text_auc = ROOT.TLatex(0.65, 0.85, "ROCAUC: {integral}".format(integral=integral))
     text_auc.SetNDC(ROOT.kTRUE)
-    text_auc.SetTextSize(0.025)
+    text_auc.SetTextSize(0.03)
     text_auc.Draw()
 
     text_signal = ROOT.TLatex(0.15, 0.4, "Signal: {signal}".format(signal=signal_label))

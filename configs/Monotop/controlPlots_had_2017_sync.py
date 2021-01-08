@@ -13,7 +13,7 @@ from array import array
 from copy import deepcopy
 
 fast = False
-superfast = False
+superfast = True
 
 def GetPlots(extension, selection, label):
     plots = [
@@ -1257,13 +1257,14 @@ def GetPlots(extension, selection, label):
 
 #discr_binning = [250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 800, 1000, 1500]
 #discr_binning = [250.0, 270.0, 290.0, 310.0, 330.0, 360.0, 390.0, 430.0, 480.0, 560.0, 1000.]
-discr_binning = [250.0, 280.0, 310.0, 340.0, 370.0, 400.0, 430.0, 470.0, 510.0, 550.0, 590.0, 640.0, 690.0, 740.0, 790.0, 840.0, 900.0, 960.0, 1020.0, 1090.0, 1160.0, 1250.0, 3000]
+discr_binning = [250.0, 270.0, 290.0, 310.0, 330.0, 350.0, 370.0, 395.0, 420.0, 445.0, 475.0, 505.0, 535.0, 575.0, 625.0, 750.0, 1000.0]
+#discr_binning = [250.0,280.0,310.0,350.0,400.0,450.0,600.0,1000.0]#alt_binning
 
 # met/recoil + >=1 ak15jet phase space
 generalselection = "(Hadr_Recoil_Pt>=250.)*(N_AK15Jets>=1)*(N_Jets>=1)"
 
 # tau veto
-generalselection += "*(N_Taus==0)"
+#generalselection += "*(N_Taus==0)"
 
 # leading ak15 jet back to back with recoil
 generalselection += "*(DeltaPhi_AK15Jet_Hadr_Recoil[0]>1.5)"
@@ -1284,10 +1285,10 @@ generalselection += "*(CaloMET_PFMET_Recoil_ratio<0.5)"
 generalselection += "*(AK15Jet_CHF[0]>0.1)*(AK15Jet_NHF[0]<0.8)"
 
 # top mass window
-#generalselection += "*(AK15Jet_PuppiSoftDropMass[0]>105.)*(AK15Jet_PuppiSoftDropMass[0]<210.)"
+generalselection += "*((AK15Jet_PuppiSoftDropMass[0]*weight_sdm_corr)>105.)*((AK15Jet_PuppiSoftDropMass[0]*weight_sdm_corr)<210.)"
 
 # top-tagger cut
-#generalselection += "*(AK15Jet_DeepAK15_TvsQCD[0]>0.3)"
+generalselection += "*(AK15Jet_DeepAK15_TvsQCD[0]>0.3)"
 
 def control_plots_had_SR(data=None):
     label = "#scale[0.8]{signal region (hadronic)}"
@@ -1397,7 +1398,7 @@ def control_plots_had_CR_ttbarEl(data=None):
     #selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p7)"
     
     # cut to be orthogonal to leptonic analysis
-    #selection += "*(M_W_transverse[0]<150.)"
+    selection += "*(M_W_transverse[0]<100.)"
 
     plots = GetPlots(extension, selection, label)
     
@@ -1427,7 +1428,7 @@ def control_plots_had_CR_ttbarMu(data=None):
     #selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p7)"
     
     # cut to be orthogonal to leptonic analysis
-    #selection += "*(M_W_transverse[0]<150.)"
+    selection += "*(M_W_transverse[0]<100.)"
 
     plots = GetPlots(extension, selection, label)
     
@@ -1458,7 +1459,7 @@ def control_plots_had_CR_WEl(data=None):
     #selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p7)"
     
     # cut to be orthogonal to leptonic analysis
-    #selection += "*(M_W_transverse[0]<150.)"
+    selection += "*(M_W_transverse[0]<100.)"
 
     plots = GetPlots(extension, selection, label)
     
@@ -1488,7 +1489,7 @@ def control_plots_had_CR_WMu(data=None):
     #selection += "*(DeltaPhi_AK4Jets_MET_Larger_0p7)"
     
     # cut to be orthogonal to leptonic analysis
-    #selection += "*(M_W_transverse[0]<150.)"
+    selection += "*(M_W_transverse[0]<100.)"
 
     plots = GetPlots(extension, selection, label)
     

@@ -19,12 +19,12 @@ def plotInterface(jobData, skipPlotParallel = False, maxTries = 10, nTries = 0):
             print("all plotParallel scripts have terminated successfully - skipping plotParallel")
             return
 
-    submitOptions = {"+RequestRuntime": 10800, "RequestMemory": "1000M"}
+    submitOptions = {"+RequestRuntime": 3600, "RequestMemory": "1000M"}
     if nTries == 0:
         print("submitting plotParallel scripts as array job")
         jobIDs = nafSubmit.submitArrayToNAF(jobData["scripts"], "makeTemplates", submitOptions = submitOptions)
     elif nTries < maxTries:
-        submitOptions["+RequestRuntime"]=21600
+        submitOptions["+RequestRuntime"]=10800
         submitOptions["RequestMemory"]="2000M"
         print("resubmitting plotParallel scripts as single jobs")
         jobIDs = nafSubmit.submitArrayToNAF(jobData["scripts"], "makeTemplates_resubmit", submitOptions = submitOptions)
@@ -140,8 +140,8 @@ def haddInterface(jobsToSubmit, outfilesFromSubmit, maxTries = 10, nTries = 0):
         print("submitting haddParallel scripts as array job")
         jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "hadding", submitOptions = submitOptions)
     elif nTries < maxTries:
-        submitOptions["+RequestRuntime"]=10800
-        submitOptions["RequestMemory"]="2000M"
+        submitOptions["+RequestRuntime"]=int(3600*nTries)
+        submitOptions["RequestMemory"]=str(int(2000*nTries))+"M"#"2000M"
         print("resubmitting haddParallel scripts as single jobs")
         jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "hadding_resubmit", submitOptions = submitOptions)
     else:
