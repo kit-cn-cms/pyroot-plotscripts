@@ -351,6 +351,16 @@ samples_ttH_decay = [
 #             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 # ]
 
+h_decays= {
+    "hbb": hbbSel,
+    "hcc": hccSel,
+    "htt": httSel,
+    "hgg": hggSel,
+    "hgluglu": hglugluSel,
+    "hww": hwwSel,
+    "hzz": hzzSel,
+    "hzg": hzgSel
+}
 
 
 samples_tH = []
@@ -584,7 +594,7 @@ samples_ttnonbb = [
             samDict=sampleDict, readTrees=doReadTrees),
     ]
 
-samples = samples_ttH_HTXS
+samples = samples_ttH_STXS
 samples += samples_tH
 samples += samples_ttnonbb
 samples += samples_ttbb_4FS
