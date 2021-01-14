@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'finalDNN_fullSampleRFs_correctSeeSaw/2018'
+    name = 'finalDNN_unblinded/2018'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -78,7 +78,7 @@ def main(pyrootdir, opts):
     # script options
     analysisOptions = {
         # general options
-        "usePseudoData":        True,
+        "usePseudoData":        False,
         "testrun":              False,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
@@ -206,9 +206,9 @@ def main(pyrootdir, opts):
         # pP.setDataBases(plotDataBases)
         # pP.setMEMDataBase(memDataBase)
         pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts_nom(50000)
+        pP.setMaxEvts_nom(100000)
         # pP.setMaxEvts_nom(200000)
-        pP.setMaxEvts_systs(200000)
+        pP.setMaxEvts_systs(300000)
         # pP.request_runtime = 60*60*5
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
