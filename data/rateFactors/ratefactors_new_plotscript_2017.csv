@@ -444,7 +444,7 @@ ttHToNonbb_M125_TuneCP5_PSweights_13TeV-powheg-pythia8,Weight_pdf_variation_3060
 ttHToNonbb_M125_TuneCP5_PSweights_13TeV-powheg-pythia8,Weight_pdf_variation_306100,0.999975675124,0.999975675124,-1.0,-1.0,-1.0,-1.0,0.999975675124
 ttHToNonbb_M125_TuneCP5_PSweights_13TeV-powheg-pythia8,Weight_pdf_variation_306101,1.02867002719,1.02867002719,-1.0,-1.0,-1.0,-1.0,1.02867002719
 ttHToNonbb_M125_TuneCP5_PSweights_13TeV-powheg-pythia8,Weight_pdf_variation_306102,0.970314318037,0.970314318037,-1.0,-1.0,-1.0,-1.0,0.970314318037
-ttHToNonbb_M125_TuneCP5_PSweights_13TeV-powheg-pythia8,GenWeight_fsr_Def_down,0.999447460297,0.999447460297.-1.0,-1.0,-1.0,-1.0,0.999447460297
+ttHToNonbb_M125_TuneCP5_PSweights_13TeV-powheg-pythia8,GenWeight_fsr_Def_down,0.999447460297,0.999447460297,-1.0,-1.0,-1.0,-1.0,0.999447460297
 ttHToNonbb_M125_TuneCP5_PSweights_13TeV-powheg-pythia8,GenWeight_fsr_Def_up,1.00014325474,1.00014325474,-1.0,-1.0,-1.0,-1.0,1.00014325474
 ttHToNonbb_M125_TuneCP5_PSweights_13TeV-powheg-pythia8,GenWeight_isr_Def_down,0.999576335095,0.999576335095,-1.0,-1.0,-1.0,-1.0,0.999576335095
 ttHToNonbb_M125_TuneCP5_PSweights_13TeV-powheg-pythia8,GenWeight_isr_Def_up,0.99947348139,0.99947348139,-1.0,-1.0,-1.0,-1.0,0.99947348139
