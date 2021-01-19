@@ -322,7 +322,7 @@ samples_ttH_decay = [
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
     ]
 
-# samples_ttH_HTXS = [
+# samples_ttH_STXS = [
 #     plotClasses.Sample('t#bar{t}H_PTH_0_60',830,
 #             ttHpath,
 #             lumi+sel_MET+STXS_stage0+STXS_stage1_0,
@@ -359,7 +359,16 @@ samples_ttH_decay = [
 #             samDict=sampleDict, readTrees=doReadTrees, typ = "signal")
 # ]
 
-
+h_decays= {
+    "hbb": hbbSel,
+    "hcc": hccSel,
+    "htt": httSel,
+    "hgg": hggSel,
+    "hgluglu": hglugluSel,
+    "hww": hwwSel,
+    "hzz": hzzSel,
+    "hzg": hzgSel
+}
 samples_tH = []
 samples_ttH_STXS = []
 
@@ -567,7 +576,7 @@ samples = [
 samples += samples_tH
 samples += samples_ttbb_4FS
 samples += samples_minor_backgrounds
-samples += samples_ttH_HTXS
+samples += samples_ttH_STXS
 samples += samples_5FS
 #samples += samples_ttbar_hf_spilt
 # samples += samples_ttH_decay
