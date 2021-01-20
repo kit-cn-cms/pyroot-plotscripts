@@ -60,8 +60,8 @@ friendTrees = {
     "MEMDB": "/nfs/dust/cms/group/ttx-kit/Friends_MEM_ttH/2016/",
     }
 # SELECTIONS
-STXS_stage0 = '*(abs(GenHiggs_Y<2.5))'
-STXS_stage0_ = '(abs(GenHiggs_Y<2.5))'
+STXS_stage0 = '*(abs(GenHiggs_Y)<2.5)'
+STXS_stage0_ = '(abs(GenHiggs_Y)<2.5)'
 STXS_stage1_0 = '*(GenHiggs_Pt<=60)'
 STXS_stage1_1 = '*((GenHiggs_Pt>=60)&&(GenHiggs_Pt<120))'
 STXS_stage1_2 = '*((GenHiggs_Pt>=120)&&(GenHiggs_Pt<200))'
