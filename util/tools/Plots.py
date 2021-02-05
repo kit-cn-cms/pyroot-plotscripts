@@ -736,7 +736,7 @@ class DrawHistograms:
         """
         self.yMax = 1e-9
         self.yMinMax = 1000.
-        for hist in self.stackPlots:#+self.shapePlots:
+        for hist in self.stackPlots+self.shapePlots:
             if self.shape and hist.Integral()!=0:
                 self.yMax = max(hist.GetBinContent(hist.GetMaximumBin())/hist.Integral(), self.yMax)
             else:
@@ -915,6 +915,12 @@ class DrawHistograms:
         else:           latex.DrawLatex(l+0.53,1.-t+0.02,lumi_text)
 
     def printChannelLabel(self, channelLabel):
+
+        split = channelLabel.split("(", 1)
+        if len(split) == 2:
+            channelLabel = "#splitline{{{}}}{{{}}}".format(
+                split[0], "  ("+split[1])
+
         self.canvas.cd(1)
         l = self.canvas.GetLeftMargin()
         t = self.canvas.GetTopMargin()
@@ -924,6 +930,7 @@ class DrawHistograms:
         latex = ROOT.TLatex()
         latex.SetNDC()
         latex.SetTextColor(ROOT.kBlack)
+        latex.SetTextSize(0.04)
 
         if self.ratio:  latex.DrawLatex(l+0.09,1.-t-0.06, channelLabel)
         else:           latex.DrawLatex(l+0.02,1.-t-0.06, channelLabel)
@@ -984,7 +991,7 @@ def getCanvas(name, ratiopad = False):
     return canvas
 
 def getLegend():
-    legend=ROOT.TLegend(0.65,0.7,0.95,0.9)
+    legend=ROOT.TLegend(0.65,0.6,0.95,0.9)
     legend.SetBorderSize(0)
     legend.SetLineStyle(0)
     legend.SetTextFont(42)
@@ -993,7 +1000,7 @@ def getLegend():
     return legend
 
 def getLegend1():
-    legend=ROOT.TLegend(0.65,0.7,0.8,0.9)
+    legend=ROOT.TLegend(0.45,0.65,0.7,0.9)
     legend.SetBorderSize(0)
     legend.SetLineStyle(0)
     legend.SetTextFont(42)
@@ -1002,7 +1009,7 @@ def getLegend1():
     return legend
 
 def getLegend2():
-    legend=ROOT.TLegend(0.8,0.7,0.95,0.9)
+    legend=ROOT.TLegend(0.7,0.65,0.95,0.9)
     legend.SetBorderSize(0)
     legend.SetLineStyle(0)
     legend.SetTextFont(42)

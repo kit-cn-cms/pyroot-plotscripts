@@ -276,12 +276,16 @@ def mergeSystematicsTerminationCheck(jobdir, jobIDs):
 # making datacards
 #############################
 def datacardInterface(jobsToSubmit, datacardFiles, maxTries = 10, nTries = 0):
+
+    submitOptions = {
+        "RequestMemory": 5000
+        }
     if nTries == 0:
         print("submitting datacardmaking scripts as array job")
-        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, arrayName = "makeDatacards")
+        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, arrayName = "makeDatacards", submitOptions = submitOptions)
     elif nTries < maxTries:
         print("resubmitting datacardmaking scripts as single jobs")
-        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, arrayName = "makeDatacards_resubmit")
+        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, arrayName = "makeDatacards_resubmit", submitOptons = submitOptions)
     else:
         print("making datacards did not work after "+str(maxTries)+" tries -ABORTING")
         sys.exit(1)

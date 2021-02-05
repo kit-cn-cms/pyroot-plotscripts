@@ -30,11 +30,13 @@ def generateGenLevelBins(plotClasses, sampleDict, doReadTrees,
     return samples, nicks
 
 
-def generateRecoBins(label, selection, tag, binEdges, variable, nameTag, labelTag):
+def generateRecoBins(label, selection, tag, binEdges, bins_per_bin, variable, nameTag, labelTag):
     ranges = [[binEdges[i], binEdges[i+1]] for i in range(len(binEdges)-1)]
     newLabels = []
     newSelections = []
     newTags = []
+    binRanges = []
+    nBins = []
     for iBin, binRange in enumerate(ranges):
         l = label+" ({} bin{})".format(labelTag, iBin)
         s = selection+"*({var}>{lo}&&{var}<={hi})".format(
@@ -43,20 +45,10 @@ def generateRecoBins(label, selection, tag, binEdges, variable, nameTag, labelTa
         newLabels.append(l)
         newSelections.append(s)
         newTags.append(t)
-    return zip(newLabels, newSelections, newTags)
-
-reco_bins = []
-gen_bins  = []
-
-genSel  = ""
-recoSel = ""
-recoLabel = ""
-recoTag = ""
-
-gen_variable = ""
-reco_variable = ""
-
-name_tag = ""
-gen_label_tag = ""
-reco_label_tag = ""
+        binRanges.append(binRange)
+        if not type(bins_per_bin) == list:
+            nBins.append(bins_per_bin)
+        else:
+            nBins.append(bins_per_bin[iBin])
+    return zip(newLabels, newSelections, newTags, binRanges, nBins)
 

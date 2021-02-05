@@ -17,6 +17,7 @@ import unfolding_setup as unfolding_setup
 memexp = ""
 reco_bins = []
 gen_bins  = []
+n_bins_per_bin = []
 
 genSel  = ""
 recoSel = ""
@@ -64,8 +65,6 @@ def plots_control(cat,selection,label):
         #plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Phi","#phi(jets)",25,-3.1416,3.1416),"Jet_Phi",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Pt","p_{T}(jets) [GeV]",35, 30., 730),"Jet_Pt",selection,label),
 
-        plotClasses.Plot(ROOT.TH1D(cat+"_N_BTagsM","b-tagged jet multiplicity",5,2.5,7.5),"N_BTagsM",selection,label),
-        plotClasses.Plot(ROOT.TH1D(cat+"_N_Jets","jet multiplicity",5,3.5,8.5),"N_Jets",selection,label),
 
         plotClasses.Plot(ROOT.TH1D(cat+"_CSV","btag value",30,0.0,1.0),"CSV",selection,label),
         #plotClasses.Plot(ROOT.TH1D(cat+"_Jet_CSV","Jet_CSV",30,0.0,1.0),"Jet_CSV",selection,label),
@@ -150,10 +149,10 @@ def plots_controlregion(cat,selection,label):
 def plots_unfolding(cat,selection,label):
     plots = [
         plotClasses.Plot(ROOT.TH1D(cat+"_N_BTagsM","b-tagged jet multiplicity",3,3.5,6.5),"N_BTagsM",selection,label),
-        plotClasses.Plot(ROOT.TH1D(cat+"_N_Jets","jet multiplicity",5,5.5,10.5),"N_Jets",selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_N_Jets","jet multiplicity",4,5.5,9.5),"N_Jets",selection,label),
         ]
 
-    binEdges = [0., 0.1, 0.3, 0.5, 0.7, 0.9, 1.0]
+    binEdges = [0., 0.05, 0.3, 0.4, 0.7, 0.95, 1.0]
     plots += [
         plotClasses.Plot(ROOT.TH1D(cat+"_Jet_CSV_0","btag value of first jet",len(binEdges)-1,array("f", binEdges)),"Jet_CSV[0]",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_Jet_CSV_1","btag value of second jet",len(binEdges)-1,array("f", binEdges)),"Jet_CSV[1]",selection,label),
@@ -163,55 +162,61 @@ def plots_unfolding(cat,selection,label):
         plotClasses.Plot(ROOT.TH1D(cat+"_Jet_CSV_5","btag value of sixth jet",len(binEdges)-1,array("f", binEdges)),"Jet_CSV[5]",selection,label),
         ]
 
-    binEdges = [0.5, 0.8, 0.9, 0.97, 0.99, 1.0]
+    binEdges = [0.5, 0.85, 0.95, 0.99, 1.0]
     plots += [
         plotClasses.Plot(ROOT.TH1D(cat+"_CSV_0","highest btag value",len(binEdges)-1,array("f", binEdges)),"CSV[0]",selection,label),
         ]
 
-    binEdges = [0.3, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 1.0]
+    binEdges = [0.3, 0.6, 0.7, 0.8, 0.9, 0.97, 1.0]
     plots += [
         plotClasses.Plot(ROOT.TH1D(cat+"_CSV_1","second highest btag value",len(binEdges)-1,array("f", binEdges)),"CSV[1]",selection,label),
-
-        plotClasses.Plot(ROOT.TH1D(cat+"_CSV_2","third highest btag value",7,0.3,1.0),"CSV[2]",selection,label),
-        plotClasses.Plot(ROOT.TH1D(cat+"_CSV_3","fourth highest btag value",7,0.3,1.0),"CSV[3]",selection,label),
+        ]
+    binEdges = [0.3,0.5,0.7,0.9,1.0]
+    plots += [
+        plotClasses.Plot(ROOT.TH1D(cat+"_CSV_2","third highest btag value",len(binEdges)-1,array("f", binEdges)),"CSV[2]",selection,label),
+        ]
+    
+    binEdges = [0.3,0.4,0.6,0.8,1.0]
+    plots += [
+        plotClasses.Plot(ROOT.TH1D(cat+"_CSV_3","fourth highest btag value",len(binEdges)-1,array("f", binEdges)),"CSV[3]",selection,label),
         ]
 
-    binEdges = [0., 0.025, 0.05, 0.1, 0.15, 0.25, 0.5]
+    binEdges = [0., 0.02, 0.05, 0.1, 0.2, 0.5]
     plots += [
         plotClasses.Plot(ROOT.TH1D(cat+"_CSV_4","fifth highest btag value",len(binEdges)-1,array("f", binEdges)),"CSV[4]",selection,label),
         ]
 
-    binEdges = [0., 0.01, 0.02,  0.05, 0.1, 0.3]
+    binEdges = [0., 0.01, 0.02,  0.05, 0.3]
     plots += [
         plotClasses.Plot(ROOT.TH1D(cat+"_CSV_5","sixth highest btag value",len(binEdges)-1,array("f", binEdges)),"CSV[5]",selection,label),
         ]
 
-    binEdges = [30., 80., 130., 200., 300., 400., 550., 800.]
+    binEdges = [30., 100., 150., 200., 300., 400., 700.]
     plots += [
         plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Pt_0","leading jet p_{T} [GeV]",len(binEdges)-1,array("f", binEdges)),"Jet_Pt[0]",selection,label),
         ]
 
-    binEdges = [30., 70., 100., 150., 200., 300., 600.]
+    binEdges = [25., 75., 100., 125., 150., 200., 500.]
     plots += [
         plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Pt_1","subleading jet p_{T} [GeV]",len(binEdges)-1,array("f", binEdges)),"Jet_Pt[1]",selection,label),
         ]
 
-    binEdges = [30., 60., 80., 100., 150., 200., 350.]
+    binEdges = [30., 60., 80., 125., 150,  350.]
     plots += [
         plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Pt_2","3rd highest jet p_{T} [GeV]",len(binEdges)-1,array("f", binEdges)),"Jet_Pt[2]",selection,label),
         ]
 
-    binEdges = [30., 50., 70., 100., 150., 300.]
+    binEdges = [30., 50., 70., 100., 300.]
     plots += [
         plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Pt_3","4th highest jet p_{T} [GeV]",len(binEdges)-1,array("f", binEdges)),"Jet_Pt[3]",selection,label),
         ]
 
-    binEdges = [30., 40., 50., 60., 80., 100., 150.]
+    binEdges = [30., 40., 50., 60., 80., 150.]
     plots += [
         plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Pt_4","5th highest jet p_{T} [GeV]",len(binEdges)-1,array("f", binEdges)),"Jet_Pt[4]",selection,label),
         ]
 
-    binEdges = [30., 35., 40., 50., 60., 80., 150.]
+    binEdges = [30., 35., 40., 45., 50., 70., 150.]
     plots += [
         plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Pt_5","6th highest jet p_{T} [GeV]",len(binEdges)-1,array("f", binEdges)),"Jet_Pt[5]",selection,label),
 
@@ -224,31 +229,54 @@ def plots_unfolding(cat,selection,label):
         ]
 
         #plotClasses.Plot(ROOT.TH1D(cat+"_Evt_Dr_minDrLepJet","Evt_Dr_minDrLepJet",30,0.0,4.0),"Evt_Dr_minDrLepJet",selection,label),
-    binEdges = [i*0.1 for i in range(4,21)]+[4.]
+    binEdges = [0.]+[i*0.1 for i in range(5,19)]+[2., 3.]
     plots += [
         plotClasses.Plot(ROOT.TH1D(cat+"_Evt_Dr_minDrTaggedJets","min #DeltaR(bb)",len(binEdges)-1,array("f", binEdges)),"Evt_Dr_minDrTaggedJets",selection,label),
         ]
 
-    binEdges = [i*20 for i in range(2,19)]+[400., 500., 600.]
+    binEdges = [0.]+[i*20 for i in range(3,19)]+[400., 550.]
     plots += [
         plotClasses.Plot(ROOT.TH1D(cat+"_Evt_Pt_minDrTaggedJets","p_{T} of min #DeltaR(bb) [GeV]",len(binEdges)-1,array("f", binEdges)),"Evt_Pt_minDrTaggedJets",selection,label),
         ]
 
-    binEdges = [i*10 for i in range(3,19)]+[200., 250.,300.]
+    binEdges = [i*10 for i in range(3,19)]+[200., 300.]
     plots += [
         plotClasses.Plot(ROOT.TH1D(cat+"_Evt_M2_minDrTaggedJets","inv. mass of min #DeltaR(bb) [GeV]",len(binEdges)-1,array("f", binEdges)),"Evt_M2_minDrTaggedJets",selection,label),
         ]
     
-    btag2vs3_expr = "(CSV[2]<0.277&&CSV[3]<0.277)*0"
-    btag2vs3_expr+="+(CSV[2]>0.277&&CSV[3]<0.277)*1"
-    btag2vs3_expr+="+(CSV[2]<0.277&&CSV[3]>0.277)*2"
-    btag2vs3_expr+="+(CSV[2]>0.277&&CSV[3]>0.277)*3"
+    btag0vs1_expr = "(CSV[0]>=0.7264)*1 + (CSV[1]>=0.7264)*1"
     plots += [
-        plotClasses.Plot(ROOT.TH1D(cat+"_btag2vs3","second vs third highest btag value",4,-0.5,3),btag2vs3_expr,selection,label),
+        plotClasses.Plot(ROOT.TH1D(cat+"_btag0vs1","highest vs second highest btag value",3,-0.5,2.5),btag0vs1_expr,selection,label),
         ]
-    
-    
+    btag0vs2_expr = "(CSV[0]>=0.7264)*1 + (CSV[2]>=0.7264)*1"
+    plots += [
+        plotClasses.Plot(ROOT.TH1D(cat+"_btag0vs2","highest vs third highest btag value",3,-0.5,2.5),btag0vs2_expr,selection,label),
+        ]
+    btag0vs3_expr = "(CSV[0]>=0.7264)*1 + (CSV[3]>=0.7264)*1"
+    plots += [
+        plotClasses.Plot(ROOT.TH1D(cat+"_btag0vs3","highest vs fourth highest btag value",3,-0.5,2.5),btag0vs3_expr,selection,label),
+        ]
 
+    btag1vs2_expr = "(CSV[1]>=0.7264)*1 + (CSV[2]>=0.7264)*1"
+    plots += [
+        plotClasses.Plot(ROOT.TH1D(cat+"_btag1vs2","second vs third highest btag value",3,-0.5,2.5),btag1vs2_expr,selection,label),
+        ]
+    btag1vs3_expr = "(CSV[1]>=0.7264)*1 + (CSV[3]>=0.7264)*1"
+    plots += [
+        plotClasses.Plot(ROOT.TH1D(cat+"_btag1vs3","second vs fourth highest btag value",3,-0.5,2.5),btag1vs3_expr,selection,label),
+        ]
+
+    btag2vs3_expr = "(CSV[2]>=0.7264)*1 + (CSV[3]>=0.7264)*1"
+    plots += [
+        plotClasses.Plot(ROOT.TH1D(cat+"_btag2vs3","third vs fourth highest btag value",3,-0.5,2.5),btag2vs3_expr,selection,label),
+        ]
+
+    return plots
+
+def reco_binned_plot(cat, selection, label, nBins, binRange):
+    plots = [
+        plotClasses.Plot(ROOT.TH1D(cat+"_recoBinned_"+name_tag,reco_label_tag,nBins,binRange[0],binRange[1]),reco_variable,selection,label)
+        ]
     return plots
 
 def genInfo(label, data = None):
@@ -326,11 +354,13 @@ def unfolding(data=None):
 
     plots = plots_unfolding(tag, selection, label)    
 
-    for l, s, t in unfolding_setup.generateRecoBins(
-            label, selection, tag, reco_bins, 
+    for l, s, t, binRange, nbins in unfolding_setup.generateRecoBins(
+            label, selection, tag, reco_bins, n_bins_per_bin,
             variable = reco_variable, 
             nameTag = name_tag, labelTag = reco_label_tag):
         plots += plots_unfolding(t, s, l)
+        plots += reco_binned_plot(t, s, l, 
+            binRange = binRange, nBins = nbins)
 
 
     if data:

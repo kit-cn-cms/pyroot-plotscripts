@@ -113,7 +113,7 @@ def main(pyrootdir, opts):
     dnnInterface = None
 
     # path to datacardMaker directory
-    datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
+    datacardmaker = "/nfs/dust/cms/user/pkeicher/projects/datacardMaker"
 
     print '''
     # ========================================================
