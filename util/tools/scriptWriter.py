@@ -347,7 +347,7 @@ class scriptWriter:
     def initVariables(self, trees):
         # initialize variables objects
         variableManager = variableCancer.VariableManager(trees, self.vetolist, self.pp.sfCorrection, self.pp.friendTrees)
-        variableManager.add( ["Weight", "Weight_CSV", "Weight_XS"] )
+        #variableManager.add( ["Weight", "Weight_CSV", "Weight_XS"] )
         
         # get additional variables
         if len(self.pp.configData.addVars) > 0:
@@ -496,7 +496,10 @@ class scriptWriter:
                 else:
                     f = ROOT.TFile(filename)
                     tree = f.Get('MVATree')
-                    nEventsInFile = tree.GetEntries()
+                    if isinstance(tree,ROOT.TTree):
+                       nEventsInFile = tree.GetEntries()
+                    else:
+                       continue
 
                 SaveTreeInformation[filename] = nEventsInFile                
                 # if the file is larger than self.maxevents it is analyzed in portions of nevents
