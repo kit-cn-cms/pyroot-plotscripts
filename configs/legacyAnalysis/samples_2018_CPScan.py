@@ -59,6 +59,8 @@ ttZpath =  path+'/TTZToQQ*/*nominal*.root'+';'+ \
 
 friendTrees = {
     "MEMDB": "/nfs/dust/cms/group/ttx-kit/Friends_MEM_ttH/2018_wrongJERsources/",
+    "cpWeights":    "/nfs/dust/cms/group/ttx-kit/friendTrees_tHWeights/2018/",
+
     }
 
 # SELECTIONS
