@@ -1,0 +1,2 @@
+model_checkpoint_path: "/portal/ekpbms1/home/swieland/ttH/DRACO-MLfoy/workdir/legacy_16_17_18/final_STXS_acceptance_optimized_Taylor_ge4j_3t/checkpoints//trained_model"
+all_model_checkpoint_paths: "/portal/ekpbms1/home/swieland/ttH/DRACO-MLfoy/workdir/legacy_16_17_18/final_STXS_acceptance_optimized_Taylor_ge4j_3t/checkpoints//trained_model"
