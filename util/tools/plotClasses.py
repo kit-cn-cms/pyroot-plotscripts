@@ -45,6 +45,7 @@ class Sample:
         self.files = []
         self.filterFile = filterFile
         self.addsamples=addsamples
+        self.treename = treename
         subpaths = path.split(";")
 
         self.vetoEventWeights = vetoEventWeights
@@ -100,7 +101,7 @@ class Sample:
             nevents = 0
             for fn in self.files:
                 f = ROOT.TFile(fn)
-                t = f.Get('MVATree')
+                t = f.Get(self.treename)
                 nevents += t.GetEntries()
             if nevents != checknevents:
                 print 'wrong number of events in',self.name,':',nevents,'!=',checknevents
