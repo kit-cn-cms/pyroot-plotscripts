@@ -80,7 +80,7 @@ def main(pyrootdir, opts):
         # general options
         "usePseudoData":        True,
         "testrun":              False,  # test run with less samples
-        "stopAfterCompile":     True,   # stop script after compiling
+        "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
         "makeDataCards":        True,
