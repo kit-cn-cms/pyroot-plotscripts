@@ -19,7 +19,7 @@ memexp = ""
 def plots_ge4j_ge3t_classifier(data = None):
     label = "\geq 4 jets, \geq 3 b-tags"
     interfaces = []
-    selection = "(N_Jets>=4&&int(N_BTagsM)>=3)&&(1.)"
+    selection = "(N_Jets>=4)&&(1.)"
 
     plots = [
         plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_classifier_Evt_CSV_avg","Evt_CSV_avg",50,0.15,1.0),"Evt_CSV_avg",selection,label),
