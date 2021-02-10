@@ -79,7 +79,8 @@ ttHpath = "/nfs/dust/cms/group/ttx-kit/ntuples_ttH/2017_newttH"+'/ttHTobb_M125_T
 sel_singleel="((N_LooseMuons==0 && N_TightElectrons==1) && (Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX || ( Triggered_HLT_Ele32_WPTight_Gsf_L1DoubleEG_vX && Triggered_HLT_Ele32_WPTight_Gsf_2017SeedsX )))"
 sel_singlemu="(N_LooseElectrons==0 && N_TightMuons==1 && (Triggered_HLT_IsoMu27_vX))"
 # jet tag base selection
-sel_jettag = "(N_Jets>=4 && int(N_BTagsM)>=3)"
+#sel_jettag = "(N_Jets>=4 && int(N_BTagsM)>=3)"
+sel_jettag = "(N_Jets>=4 )"
 
 # MET base selection
 sel_MET="*(Evt_MET_Pt>20.)"
