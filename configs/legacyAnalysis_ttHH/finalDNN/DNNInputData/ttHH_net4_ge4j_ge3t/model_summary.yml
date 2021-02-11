@@ -1,0 +1,215 @@
+backend: tensorflow
+class_name: Model
+config:
+  input_layers:
+  - - inputLayer
+    - 0
+    - 0
+  layers:
+  - class_name: InputLayer
+    config:
+      batch_input_shape: !!python/tuple
+      - null
+      - 20
+      dtype: float32
+      name: inputLayer
+      ragged: false
+      sparse: false
+    inbound_nodes: []
+    name: inputLayer
+  - class_name: Dense
+    config:
+      activation: elu
+      activity_regularizer: null
+      bias_constraint: null
+      bias_initializer:
+        class_name: RandomUniform
+        config:
+          dtype: float32
+          maxval: 0.1
+          minval: -0.1
+          seed: null
+      bias_regularizer: null
+      dtype: float32
+      kernel_constraint: null
+      kernel_initializer:
+        class_name: RandomUniform
+        config:
+          dtype: float32
+          maxval: 0.1
+          minval: -0.1
+          seed: null
+      kernel_regularizer:
+        class_name: L1L2
+        config:
+          l1: 0.0
+          l2: 9.999999747378752e-06
+      name: DenseLayer_0
+      trainable: true
+      units: 100
+      use_bias: true
+    inbound_nodes:
+    - - - inputLayer
+        - 0
+        - 0
+        - {}
+    name: DenseLayer_0
+  - class_name: Dropout
+    config:
+      dtype: float32
+      name: DropoutLayer_0
+      noise_shape: null
+      rate: 0.5
+      seed: null
+      trainable: true
+    inbound_nodes:
+    - - - DenseLayer_0
+        - 0
+        - 0
+        - {}
+    name: DropoutLayer_0
+  - class_name: Dense
+    config:
+      activation: elu
+      activity_regularizer: null
+      bias_constraint: null
+      bias_initializer:
+        class_name: RandomUniform
+        config:
+          dtype: float32
+          maxval: 0.1
+          minval: -0.1
+          seed: null
+      bias_regularizer: null
+      dtype: float32
+      kernel_constraint: null
+      kernel_initializer:
+        class_name: RandomUniform
+        config:
+          dtype: float32
+          maxval: 0.1
+          minval: -0.1
+          seed: null
+      kernel_regularizer:
+        class_name: L1L2
+        config:
+          l1: 0.0
+          l2: 9.999999747378752e-06
+      name: DenseLayer_1
+      trainable: true
+      units: 100
+      use_bias: true
+    inbound_nodes:
+    - - - DropoutLayer_0
+        - 0
+        - 0
+        - {}
+    name: DenseLayer_1
+  - class_name: Dropout
+    config:
+      dtype: float32
+      name: DropoutLayer_1
+      noise_shape: null
+      rate: 0.5
+      seed: null
+      trainable: true
+    inbound_nodes:
+    - - - DenseLayer_1
+        - 0
+        - 0
+        - {}
+    name: DropoutLayer_1
+  - class_name: Dense
+    config:
+      activation: elu
+      activity_regularizer: null
+      bias_constraint: null
+      bias_initializer:
+        class_name: RandomUniform
+        config:
+          dtype: float32
+          maxval: 0.1
+          minval: -0.1
+          seed: null
+      bias_regularizer: null
+      dtype: float32
+      kernel_constraint: null
+      kernel_initializer:
+        class_name: RandomUniform
+        config:
+          dtype: float32
+          maxval: 0.1
+          minval: -0.1
+          seed: null
+      kernel_regularizer:
+        class_name: L1L2
+        config:
+          l1: 0.0
+          l2: 9.999999747378752e-06
+      name: DenseLayer_2
+      trainable: true
+      units: 100
+      use_bias: true
+    inbound_nodes:
+    - - - DropoutLayer_1
+        - 0
+        - 0
+        - {}
+    name: DenseLayer_2
+  - class_name: Dropout
+    config:
+      dtype: float32
+      name: DropoutLayer_2
+      noise_shape: null
+      rate: 0.5
+      seed: null
+      trainable: true
+    inbound_nodes:
+    - - - DenseLayer_2
+        - 0
+        - 0
+        - {}
+    name: DropoutLayer_2
+  - class_name: Dense
+    config:
+      activation: softmax
+      activity_regularizer: null
+      bias_constraint: null
+      bias_initializer:
+        class_name: RandomUniform
+        config:
+          dtype: float32
+          maxval: 0.1
+          minval: -0.1
+          seed: null
+      bias_regularizer: null
+      dtype: float32
+      kernel_constraint: null
+      kernel_initializer:
+        class_name: RandomUniform
+        config:
+          dtype: float32
+          maxval: 0.1
+          minval: -0.1
+          seed: null
+      kernel_regularizer:
+        class_name: L1L2
+        config:
+          l1: 0.0
+          l2: 9.999999747378752e-06
+      name: outputLayer
+      trainable: true
+      units: 6
+      use_bias: true
+    inbound_nodes:
+    - - - DropoutLayer_2
+        - 0
+        - 0
+        - {}
+    name: outputLayer
+  name: model
+  output_layers:
+  - - outputLayer
+    - 0
+    - 0
+keras_version: 2.2.4-tf

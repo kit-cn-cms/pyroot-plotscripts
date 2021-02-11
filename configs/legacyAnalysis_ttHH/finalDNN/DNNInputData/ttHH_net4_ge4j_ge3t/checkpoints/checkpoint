@@ -1,0 +1,2 @@
+model_checkpoint_path: "/home/nshadskiy/Documents/DRACO-MLfoy/workdir/ttHH_net4_ge4j_ge3t/checkpoints//trained_model"
+all_model_checkpoint_paths: "/home/nshadskiy/Documents/DRACO-MLfoy/workdir/ttHH_net4_ge4j_ge3t/checkpoints//trained_model"
