@@ -19,7 +19,7 @@ memexp = ""
 def plots_ge4j_ge3t_classifier(data = None):
     label = "\geq 4 jets, \geq 3 b-tags"
     interfaces = []
-    selection = "(N_Jets>=4&&int(N_BTagsM)>=3)&&(1.)"
+    selection = "(N_Jets>=4)&&(1.)"
 
     plots = [
         plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge3t_classifier_Evt_CSV_avg","Evt_CSV_avg",50,0.15,1.0),"Evt_CSV_avg",selection,label),
@@ -145,6 +145,65 @@ def plots_ge4j_3t_STXS(data = None):
     if data:
         add_data_plots(plots=plots,data=data)
     return plots
+    
+
+def plots_dnn_ttHH(data, discrname):
+    ndefaultbins = 15
+    interfaces = []
+
+
+    # plots for ge4j_ge4t_classifier
+
+    interf_ljets_ge4j_ge3t_classifier_ttH_node = vhi.variableHistoInterface(variable_name  = "DNNOutput_ge4j_ge3t_classifier_node_ttH",
+                                            label          = "ljets_ge4j_ge3t_classifier_ttH_node",
+                                            selection      = "((N_Jets>=4&&int(N_BTagsM)>=3)&&(1.)&&(DNNPredictedClass_ge4j_ge3t_classifier==0))")
+    interf_ljets_ge4j_ge3t_classifier_ttH_node.category = ("((N_Jets>=4&&int(N_BTagsM)>=3)&&(1.)&&(DNNPredictedClass_ge4j_ge3t_classifier==0))","ljets_ge4j_ge3t_classifier_ttH_node","")
+    interf_ljets_ge4j_ge3t_classifier_ttH_node.category_label = "\geq 4 jets, \geq 3 b-tags"
+    interf_ljets_ge4j_ge3t_classifier_ttH_node.bin_edges = [ # taken from 16
+                0.1927,
+                0.2453,
+                0.298,
+                0.3507,
+                0.4033,
+                0.456,
+                0.5087,
+                0.5613,
+                0.614,
+                0.93
+				]
+    interf_ljets_ge4j_ge3t_classifier_ttH_node.nhistobins = ndefaultbins
+    interfaces.append(interf_ljets_ge4j_ge3t_classifier_ttH_node)
+    
+    # # 
+    # interf_ljets_ge4j_ge3t_classifier_ttH_node = vhi.variableHistoInterface(variable_name  = "DNNOutput_ge4j_ge3t_classifier_node_ttH",
+    #                                         label          = "ljets_ge4j_ge3t_classifier_ttH_node",
+    #                                         selection      = "((N_Jets>=4&&int(N_BTagsM)>=3)&&(1.)&&(DNNPredictedClass_ge4j_ge3t_classifier==0))")
+    # interf_ljets_ge4j_ge3t_classifier_ttH_node.category = ("((N_Jets>=4&&int(N_BTagsM)>=3)&&(1.)&&(DNNPredictedClass_ge4j_ge3t_classifier==0))","ljets_ge4j_ge3t_classifier_ttH_node","")
+    # interf_ljets_ge4j_ge3t_classifier_ttH_node.category_label = "\geq 4 jets, \geq 3 b-tags"
+    # interf_ljets_ge4j_ge3t_classifier_ttH_node.bin_edges = [ # taken from 16
+    #             0.1927,
+    #             0.2453,
+    #             0.298,
+    #             0.3507,
+    #             0.4033,
+    #             0.456,
+    #             0.5087,
+    #             0.5613,
+    #             0.614,
+    #             0.93
+	# 			]
+    # interf_ljets_ge4j_ge3t_classifier_ttH_node.nhistobins = ndefaultbins
+    # interfaces.append(interf_ljets_ge4j_ge3t_classifier_ttH_node)
+    for interf in interfaces:
+        l = interf.label
+        interf.histoname = discrname+"_"+l if not discrname == "" else l 
+        interf.histotitle = "final discriminator ({})".format(l)
+        interf.selection = interf.category[0]
+
+    DNNPlots = init_plots(interfaces = interfaces, data = data)
+    return DNNPlots
+
+
     
 
 def plots_dnn(data, discrname):
@@ -703,7 +762,7 @@ def getDiscriminatorPlots(data = None, discrname = ''):
     # discriminatorPlots += plots_ge4j_ge4t_STXS(data)
     # discriminatorPlots += plots_ge4j_3t_classifier(data)
     # discriminatorPlots += plots_ge4j_3t_STXS(data)
-    #discriminatorPlots += plots_dnn(data, discrname)
+    discriminatorPlots += plots_dnn_ttHH(data, discrname)
     #discriminatorPlots += plots_STXS(data, discrname)
 
     return discriminatorPlots
