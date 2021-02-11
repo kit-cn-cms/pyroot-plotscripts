@@ -52,7 +52,7 @@ def main(pyrootdir, opts):
     # configs
     config          = "legacyAnalysis_ttHH/samples_2017"
     variable_cfg    = "legacyAnalysis_ttHH/additionalVariables"
-    plot_cfg        = "legacyAnalysis_ttHH/finalDNN/finalDNN_optimized_classifier"
+    plot_cfg        = "legacyAnalysis_ttHH/finalDNN/ttHH_DNN_2017_plots"
     # plot_cfg        = "legacyAnalysis_ttHH/DNN_14-05-2020/combined161718_DNNs"
     #syst_cfg        = "legacyAnalysis_ttHH/systs_2017"
     syst_cfg        = "legacyAnalysis_ttHH/no_systs"
@@ -110,7 +110,7 @@ def main(pyrootdir, opts):
     # plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2017/",True]] 
     # memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                  "checkpointFiles":  pyrootdir+"/configs/legacyAnalysis_ttHH/finalDNN/DNNInputData/ttHH_net4_ge4j_ge3t"}
+                  "checkpointFiles":  pyrootdir+"/configs/legacyAnalysis_ttHH/finalDNN/DNNInputData"}
     #dnnInterface = None
 
     # path to datacardMaker directory
