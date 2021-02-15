@@ -167,17 +167,64 @@ ps_isr_down = "GenWeight_isr_Def_down"
 ps_fsr_up = "GenWeight_fsr_Def_up"
 ps_fsr_down = "GenWeight_fsr_Def_down"
 
-deepakMistagSF = "((AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5)*1.0+(AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5)*1.)"
-deepakMistagSF_low_up = "((AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]<400.)*((AK15Jet_DeepAK15_TvsQCD[0]>=0.3)*1.2+(AK15Jet_DeepAK15_TvsQCD[0]<0.3)*0.8)+((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]<400.)*1.+(AK15Jet_Pt[0]>=400.)*1.)"
-deepakMistagSF_low_down = "((AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]<400.)*((AK15Jet_DeepAK15_TvsQCD[0]>=0.3)*0.8+(AK15Jet_DeepAK15_TvsQCD[0]<0.3)*1.2)+((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]<400.)*1.+(AK15Jet_Pt[0]>=400.)*1.)"
-deepakMistagSF_high_up = "((AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]>=400.)*((AK15Jet_DeepAK15_TvsQCD[0]>=0.3)*1.2+(AK15Jet_DeepAK15_TvsQCD[0]<0.3)*0.8)+((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
-deepakMistagSF_high_down = "((AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]>=400.)*((AK15Jet_DeepAK15_TvsQCD[0]>=0.3)*0.8+(AK15Jet_DeepAK15_TvsQCD[0]<0.3)*1.2)+((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
+#deepakMistagSF = "((AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5)*1.0+(AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5)*1.)"
+#deepakMistagSF_low_up = "((AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]<400.)*((AK15Jet_DeepAK15_TvsQCD[0]>=0.3)*1.2+(AK15Jet_DeepAK15_TvsQCD[0]<0.3)*0.8)+((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]<400.)*1.+(AK15Jet_Pt[0]>=400.)*1.)"
+#deepakMistagSF_low_down = "((AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]<400.)*((AK15Jet_DeepAK15_TvsQCD[0]>=0.3)*0.8+(AK15Jet_DeepAK15_TvsQCD[0]<0.3)*1.2)+((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]<400.)*1.+(AK15Jet_Pt[0]>=400.)*1.)"
+#deepakMistagSF_high_up = "((AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]>=400.)*((AK15Jet_DeepAK15_TvsQCD[0]>=0.3)*1.2+(AK15Jet_DeepAK15_TvsQCD[0]<0.3)*0.8)+((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
+#deepakMistagSF_high_down = "((AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]>=400.)*((AK15Jet_DeepAK15_TvsQCD[0]>=0.3)*0.8+(AK15Jet_DeepAK15_TvsQCD[0]<0.3)*1.2)+((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
 
-deepakEfficiencySF = "((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5)*1.0+(AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5)*1.)"
-deepakEfficiencySF_low_up = "(((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]<400.)*((AK15Jet_DeepAK15_TvsQCD[0]>=0.3)*1.2+(AK15Jet_DeepAK15_TvsQCD[0]<0.3)*0.8)+(AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]<400.)*1.+(AK15Jet_Pt[0]>=400.)*1.)"
-deepakEfficiencySF_low_down = "(((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]<400.)*((AK15Jet_DeepAK15_TvsQCD[0]>=0.3)*0.8+(AK15Jet_DeepAK15_TvsQCD[0]<0.3)*1.2)+(AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]<400.)*1.+(AK15Jet_Pt[0]>=400.)*1.)"
-deepakEfficiencySF_high_up = "(((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]>=400.)*((AK15Jet_DeepAK15_TvsQCD[0]>=0.3)*1.2+(AK15Jet_DeepAK15_TvsQCD[0]<0.3)*0.8)+(AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
-deepakEfficiencySF_high_down = "(((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]>=400.)*((AK15Jet_DeepAK15_TvsQCD[0]>=0.3)*0.8+(AK15Jet_DeepAK15_TvsQCD[0]<0.3)*1.2)+(AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
+#deepakEfficiencySF = "((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5)*1.0+(AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5)*1.)"
+#deepakEfficiencySF_low_up = "(((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]<400.)*((AK15Jet_DeepAK15_TvsQCD[0]>=0.3)*1.2+(AK15Jet_DeepAK15_TvsQCD[0]<0.3)*0.8)+(AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]<400.)*1.+(AK15Jet_Pt[0]>=400.)*1.)"
+#deepakEfficiencySF_low_down = "(((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]<400.)*((AK15Jet_DeepAK15_TvsQCD[0]>=0.3)*0.8+(AK15Jet_DeepAK15_TvsQCD[0]<0.3)*1.2)+(AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]<400.)*1.+(AK15Jet_Pt[0]>=400.)*1.)"
+#deepakEfficiencySF_high_up = "(((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]>=400.)*((AK15Jet_DeepAK15_TvsQCD[0]>=0.3)*1.2+(AK15Jet_DeepAK15_TvsQCD[0]<0.3)*0.8)+(AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
+#deepakEfficiencySF_high_down = "(((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]>=400.)*((AK15Jet_DeepAK15_TvsQCD[0]>=0.3)*0.8+(AK15Jet_DeepAK15_TvsQCD[0]<0.3)*1.2)+(AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
+
+pass_region = False
+fail_region = not pass_region
+
+deepakWeight = "1.0"
+gen_class = "(AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5)"
+tagger_pass = "(AK15Jet_DeepAK15_TvsQCD[0]>=0.3)"
+
+if pass_region:
+    deepakWeight = "("+tagger_pass+"*1.0+(!"+tagger_pass+")*0.0)"
+    
+    kin_region = "(AK15Jet_Pt[0]<400.)"
+    
+    deepakEfficiencySF_low_up = "("+kin_region+"*("+tagger_pass+"*("+gen_class+"*1.20+(!"+gen_class+")*1.0)+(!"+tagger_pass+")*0.0)+(!"+kin_region+")*"+deepakWeight+")"
+    deepakEfficiencySF_low_down = "("+kin_region+"*("+tagger_pass+"*("+gen_class+"*0.80+(!"+gen_class+")*1.0)+(!"+tagger_pass+")*0.0)+(!"+kin_region+")*"+deepakWeight+")"
+    
+    deepakMistagSF_low_up = "("+kin_region+"*("+tagger_pass+"*("+gen_class+"*1.0+(!"+gen_class+")*1.50)+(!"+tagger_pass+")*0.0)+(!"+kin_region+")*"+deepakWeight+")"
+    deepakMistagSF_low_down = "("+kin_region+"*("+tagger_pass+"*("+gen_class+"*1.0+(!"+gen_class+")*0.5)+(!"+tagger_pass+")*0.0)+(!"+kin_region+")*"+deepakWeight+")"
+    
+    kin_region = "(AK15Jet_Pt[0]>=400.)"
+    
+    deepakEfficiencySF_high_up = "("+kin_region+"*("+tagger_pass+"*("+gen_class+"*1.20+(!"+gen_class+")*1.0)+(!"+tagger_pass+")*0.0)+(!"+kin_region+")*"+deepakWeight+")"
+    deepakEfficiencySF_high_down = "("+kin_region+"*("+tagger_pass+"*("+gen_class+"*0.80+(!"+gen_class+")*1.0)+(!"+tagger_pass+")*0.0)+(!"+kin_region+")*"+deepakWeight+")"
+    
+    deepakMistagSF_high_up = "("+kin_region+"*("+tagger_pass+"*("+gen_class+"*1.0+(!"+gen_class+")*1.5)+(!"+tagger_pass+")*0.0)+(!"+kin_region+")*"+deepakWeight+")"
+    deepakMistagSF_high_down = "("+kin_region+"*("+tagger_pass+"*("+gen_class+"*1.0+(!"+gen_class+")*0.5)+(!"+tagger_pass+")*0.0)+(!"+kin_region+")*"+deepakWeight+")"
+    
+    
+
+if fail_region:
+    deepakWeight = "("+tagger_pass+"*0.0+(!"+tagger_pass+")*1.0)"
+    
+    kin_region = "(AK15Jet_Pt[0]<400.)"
+    
+    deepakEfficiencySF_low_up = "("+kin_region+"*("+tagger_pass+"*("+gen_class+"*(-0.20)+(!"+gen_class+")*0.0)+(!"+tagger_pass+")*1.0)+(!"+kin_region+")*"+deepakWeight+")"
+    deepakEfficiencySF_low_down = "("+kin_region+"*("+tagger_pass+"*("+gen_class+"*0.20+(!"+gen_class+")*0.0)+(!"+tagger_pass+")*1.0)+(!"+kin_region+")*"+deepakWeight+")"
+    
+    deepakMistagSF_low_up = "("+kin_region+"*("+tagger_pass+"*("+gen_class+"*0.0+(!"+gen_class+")*(-0.5))+(!"+tagger_pass+")*1.0)+(!"+kin_region+")*"+deepakWeight+")"
+    deepakMistagSF_low_down = "("+kin_region+"*("+tagger_pass+"*("+gen_class+"*0.0+(!"+gen_class+")*0.5)+(!"+tagger_pass+")*1.0)+(!"+kin_region+")*"+deepakWeight+")"
+    
+    kin_region = "(AK15Jet_Pt[0]>=400.)"
+    
+    deepakEfficiencySF_high_up = "("+kin_region+"*("+tagger_pass+"*("+gen_class+"*(-0.20)+(!"+gen_class+")*0.0)+(!"+tagger_pass+")*1.0)+(!"+kin_region+")*"+deepakWeight+")"
+    deepakEfficiencySF_high_down = "("+kin_region+"*("+tagger_pass+"*("+gen_class+"*0.20+(!"+gen_class+")*0.0)+(!"+tagger_pass+")*1.0)+(!"+kin_region+")*"+deepakWeight+")"
+    
+    deepakMistagSF_high_up = "("+kin_region+"*("+tagger_pass+"*("+gen_class+"*0.0+(!"+gen_class+")*(-0.5))+(!"+tagger_pass+")*1.0)+(!"+kin_region+")*"+deepakWeight+")"
+    deepakMistagSF_high_down = "("+kin_region+"*("+tagger_pass+"*("+gen_class+"*0.0+(!"+gen_class+")*0.5)+(!"+tagger_pass+")*1.0)+(!"+kin_region+")*"+deepakWeight+")"
 
 vvj_sample_renorm_factor = "1.1"
 evj_sample_renorm_factor = "1.07"
@@ -260,12 +307,11 @@ weightReplacements = {
     "PHOTONTRIGGERSFUP" : photonTriggerSFs_up,
     "PHOTONTRIGGERSFDOWN" : photonTriggerSFs_down,
     
-    "DEEPAKMISTAGNOM" : deepakMistagSF,
+    "DEEPAKWEIGHT" : deepakWeight,
     "DEEPAKMISTAGLOWUP" : deepakMistagSF_low_up,
     "DEEPAKMISTAGLOWDOWN" : deepakMistagSF_low_down,
     "DEEPAKMISTAGHIGHUP" : deepakMistagSF_high_up,
     "DEEPAKMISTAGHIGHDOWN" : deepakMistagSF_high_down,
-    "DEEPAKEFFICIENCYNOM" : deepakEfficiencySF,
     "DEEPAKEFFICIENCYLOWUP" : deepakEfficiencySF_low_up,
     "DEEPAKEFFICIENCYLOWDOWN" : deepakEfficiencySF_low_down,
     "DEEPAKEFFICIENCYHIGHUP" : deepakEfficiencySF_high_up,
@@ -304,10 +350,8 @@ nominalweight = (
     + bosonWeightNom
     + "*"
     + triggerSFs
-    #+ "*"
-    #+ deepakMistagSF
-    #+ "*"
-    #+ deepakEfficiencySF
+    + "*"
+    + deepakWeight
     + ")"
     + "*(DoWeights==1)+(DoWeights==0)*1.0"
 )
@@ -317,6 +361,15 @@ sampleDict = plotClasses.SampleDictionary()
 sampleDict.doPrintout()
 doReadTrees = True
 
+single_el_sel = "((N_LooseElectrons>0) || (N_LoosePhotons>0)) && (N_LooseMuons==0) && (N_Taus==0)"
+met_sel = "(N_LooseElectrons==0) && (N_LooseMuons>=0) && (N_LoosePhotons==0) && (N_Taus==0)"
+if pass_region:
+    single_el_sel += " && "+tagger_pass
+    met_sel += " && "+tagger_pass
+elif fail_region:
+    single_el_sel += " && "+"(!"+tagger_pass+")"
+    met_sel += " && "+"(!"+tagger_pass+")"
+
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
 samplesDataControlPlots = []
 samplesDataControlPlots += [
@@ -324,7 +377,7 @@ samplesDataControlPlots += [
         "SingleEl",
         ROOT.kBlack,
         path_mwassmer + "/EGamma*/*nominal*.root",
-        "((N_LooseElectrons>0) || (N_LoosePhotons>0)) && (N_LooseMuons==0) && (N_Taus==0)",
+        single_el_sel,
         "SingleEl",
         samDict=sampleDict,
         readTrees=doReadTrees,
@@ -335,7 +388,7 @@ samplesDataControlPlots += [
         "MET",
         ROOT.kBlack,
         path_mwassmer + "/MET*/*nominal*.root",
-        "(N_LooseElectrons==0) && (N_LooseMuons>=0) && (N_LoosePhotons==0) && (N_Taus==0)",
+        met_sel,
         "MET",
         samDict=sampleDict,
         readTrees=doReadTrees,
@@ -348,7 +401,6 @@ samples = [
         #"#splitline{Vector Mono-top}{M_{V}=2000 GeV M_{#chi}=500 GeV}",
         #ROOT.kCyan,
         #path_mwassmer + "/Vector_MonoTop_NLO_Mphi-2000_Mchi-500*/*nominal*.root",
-        # lumi reweighting factor due to stupid cross section calculation
         #lumi,
         #"vectormonotop_mphi_2000_mchi_500",
         #samDict=sampleDict,
