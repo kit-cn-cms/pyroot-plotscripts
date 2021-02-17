@@ -1,0 +1,23 @@
+variablename,minvalue,maxvalue,numberofbins,logoption,displayname
+Evt_Deta_JetsAverage,0,3,50,-,Evt_Deta_JetsAverage
+Evt_M_TaggedJetsAverage,5.,70,50,-,Evt_M_TaggedJetsAverage
+Evt_CSV_avg,0.15,1,50,-,Evt_CSV_avg
+Evt_blr_transformed,-2.5,15,50,-,Evt_blr_transformed
+N_Jets,3.5,10.5,7,-,N_Jets
+Reco_ttbar_toplep_m,80,500,50,-,Reco_ttbar_toplep_m
+Reco_ttbar_whad_m,0,600,50,-,Reco_ttbar_whad_m
+Reco_JABDT_ttH_Jet_CSV_btoplep,-1.5,1.,50,-,Reco_JABDT_ttH_Jet_CSV_btoplep
+Reco_JABDT_tHW_log_wb_m,-1.5,8.5,50,-,Reco_JABDT_tHW_log_wb_m
+Evt_Deta_maxDetaJetJet,0,2,50,-,"#Delta#eta( max #Delta#eta(jet,jet) )"
+Evt_Deta_maxDetaTagTag,0,1.8,50,-,"#Delta#eta( max #Delta#eta(tag,tag) )"
+Evt_Dr_TaggedJetsAverage,0.5,3.5,50,-,average #DeltaR(tags)
+Evt_M3,50,1000,50,-,M_{3} with highest p_{T}
+Evt_HT_jets,200,1500,50,-,H_{T}(jets)
+Evt_HT_tags,100.,1000.,50,-,Evt_HT_tags
+Jet_Pt[0],0,600,50,x,p_{T} of leading jet
+Jet_Pt[1],30,500,50,-,Jet_Pt[1]
+Jet_Pt[2],50,300,30,x,p_{T} of third jet
+Jet_Pt[3],50,200,30,x,p_{T} of fourth jet
+Evt_M2_minDrTaggedJets,0,400,50,-,"M_{2}( min #DeltaR(tag,tag) )"
+Evt_TaggedJetPt_over_TaggedJetE,0.2,1,50,-,p_{T}(tags)/E(tags)
+Evt_Pt_TaggedJetsAverage,30,600,50,-,Evt_Pt_TaggedJetsAverage
