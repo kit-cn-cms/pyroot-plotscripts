@@ -76,7 +76,7 @@ def main(pyrootdir, opts):
         "ratio": "#frac{data}{MC Background}",
         "shape": False, # for shape plots
         "normalize": False, # normalize yield to integral 1
-        "logarithmic": False,
+        "logarithmic": True,
         "splitLegend": True,
         # the skipX options try to skip the submission of files to the batch system
         # before skipping the output is crosschecked
