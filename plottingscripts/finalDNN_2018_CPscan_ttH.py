@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'finalDNN_unblinded/2018_CPscan'
+    name = 'finalDNN_unblinded/2018_CPscan_ttH'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -50,10 +50,10 @@ def main(pyrootdir, opts):
     # define MEM discriminator variable
     memexp = "(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)"
     # configs
-    config          = "legacyAnalysis/samples_2018_CPScan"
+    config          = "legacyAnalysis/samples_2018_CPScan_ttH"
     variable_cfg    = "legacyAnalysis/additionalVariables"
-    plot_cfg        = "legacyAnalysis/finalDNN/finalDNN_optimized_classifier_CPScan_newModel"
-    syst_cfg        = "legacyAnalysis/systs_2018"
+    plot_cfg        = "legacyAnalysis/finalDNN/finalDNN_optimized_classifier_CPScan_newModel_ttH"
+    syst_cfg        = "legacyAnalysis/systs_2018_ttH"
     # syst_cfg        = "legacyAnalysis/no_systs"
     replace_cfg     = "legacyAnalysis/pdf_relic_names"
 
@@ -77,7 +77,7 @@ def main(pyrootdir, opts):
     # script options
     analysisOptions = {
         # general options
-        "usePseudoData":        False,
+        "usePseudoData":        True,
         "testrun":              False,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
@@ -205,9 +205,9 @@ def main(pyrootdir, opts):
         # pP.setDataBases(plotDataBases)
         # pP.setMEMDataBase(memDataBase)
         pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts_nom(20000)
+        pP.setMaxEvts_nom(100000)
         # pP.setMaxEvts_nom(200000)
-        pP.setMaxEvts_systs(200000)
+        pP.setMaxEvts_systs(500000)
         # pP.request_runtime = 60*60*5
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
@@ -282,7 +282,7 @@ def main(pyrootdir, opts):
                 # pseudo data without ttbb 5FS
                 # pP.addData( samples = configData.samples[:-1], 
                 #             discrName = discrName)
-                pP.addData( samples = configData.samples[:-nSigSamples], 
+                pP.addData( samples = configData.samples, 
                             discrName = discrName)
                 #pP.addData(samples = configData.samples)
             else:
