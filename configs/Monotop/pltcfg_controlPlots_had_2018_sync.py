@@ -168,23 +168,23 @@ ps_fsr_up = "GenWeight_fsr_Def_up"
 ps_fsr_down = "GenWeight_fsr_Def_down"
 
 #deepakMistagSF = "((AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5)*1.0+(AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5)*1.)"
-#deepakMistagSF_low_up = "((AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]<400.)*((AK15Jet_DeepAK15_TvsQCD[0]>=0.3)*1.2+(AK15Jet_DeepAK15_TvsQCD[0]<0.3)*0.8)+((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]<400.)*1.+(AK15Jet_Pt[0]>=400.)*1.)"
-#deepakMistagSF_low_down = "((AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]<400.)*((AK15Jet_DeepAK15_TvsQCD[0]>=0.3)*0.8+(AK15Jet_DeepAK15_TvsQCD[0]<0.3)*1.2)+((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]<400.)*1.+(AK15Jet_Pt[0]>=400.)*1.)"
-#deepakMistagSF_high_up = "((AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]>=400.)*((AK15Jet_DeepAK15_TvsQCD[0]>=0.3)*1.2+(AK15Jet_DeepAK15_TvsQCD[0]<0.3)*0.8)+((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
-#deepakMistagSF_high_down = "((AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]>=400.)*((AK15Jet_DeepAK15_TvsQCD[0]>=0.3)*0.8+(AK15Jet_DeepAK15_TvsQCD[0]<0.3)*1.2)+((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
+#deepakMistagSF_low_up = "((AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]<400.)*((AK15Jet_DeepAK15_MD_TvsQCD[0]>=0.3)*1.2+(AK15Jet_DeepAK15_MD_TvsQCD[0]<0.3)*0.8)+((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]<400.)*1.+(AK15Jet_Pt[0]>=400.)*1.)"
+#deepakMistagSF_low_down = "((AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]<400.)*((AK15Jet_DeepAK15_MD_TvsQCD[0]>=0.3)*0.8+(AK15Jet_DeepAK15_MD_TvsQCD[0]<0.3)*1.2)+((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]<400.)*1.+(AK15Jet_Pt[0]>=400.)*1.)"
+#deepakMistagSF_high_up = "((AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]>=400.)*((AK15Jet_DeepAK15_MD_TvsQCD[0]>=0.3)*1.2+(AK15Jet_DeepAK15_MD_TvsQCD[0]<0.3)*0.8)+((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
+#deepakMistagSF_high_down = "((AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]>=400.)*((AK15Jet_DeepAK15_MD_TvsQCD[0]>=0.3)*0.8+(AK15Jet_DeepAK15_MD_TvsQCD[0]<0.3)*1.2)+((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
 
 #deepakEfficiencySF = "((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5)*1.0+(AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5)*1.)"
-#deepakEfficiencySF_low_up = "(((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]<400.)*((AK15Jet_DeepAK15_TvsQCD[0]>=0.3)*1.2+(AK15Jet_DeepAK15_TvsQCD[0]<0.3)*0.8)+(AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]<400.)*1.+(AK15Jet_Pt[0]>=400.)*1.)"
-#deepakEfficiencySF_low_down = "(((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]<400.)*((AK15Jet_DeepAK15_TvsQCD[0]>=0.3)*0.8+(AK15Jet_DeepAK15_TvsQCD[0]<0.3)*1.2)+(AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]<400.)*1.+(AK15Jet_Pt[0]>=400.)*1.)"
-#deepakEfficiencySF_high_up = "(((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]>=400.)*((AK15Jet_DeepAK15_TvsQCD[0]>=0.3)*1.2+(AK15Jet_DeepAK15_TvsQCD[0]<0.3)*0.8)+(AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
-#deepakEfficiencySF_high_down = "(((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]>=400.)*((AK15Jet_DeepAK15_TvsQCD[0]>=0.3)*0.8+(AK15Jet_DeepAK15_TvsQCD[0]<0.3)*1.2)+(AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
+#deepakEfficiencySF_low_up = "(((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]<400.)*((AK15Jet_DeepAK15_MD_TvsQCD[0]>=0.3)*1.2+(AK15Jet_DeepAK15_MD_TvsQCD[0]<0.3)*0.8)+(AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]<400.)*1.+(AK15Jet_Pt[0]>=400.)*1.)"
+#deepakEfficiencySF_low_down = "(((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]<400.)*((AK15Jet_DeepAK15_MD_TvsQCD[0]>=0.3)*0.8+(AK15Jet_DeepAK15_MD_TvsQCD[0]<0.3)*1.2)+(AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]<400.)*1.+(AK15Jet_Pt[0]>=400.)*1.)"
+#deepakEfficiencySF_high_up = "(((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]>=400.)*((AK15Jet_DeepAK15_MD_TvsQCD[0]>=0.3)*1.2+(AK15Jet_DeepAK15_MD_TvsQCD[0]<0.3)*0.8)+(AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
+#deepakEfficiencySF_high_down = "(((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]>=400.)*((AK15Jet_DeepAK15_MD_TvsQCD[0]>=0.3)*0.8+(AK15Jet_DeepAK15_MD_TvsQCD[0]<0.3)*1.2)+(AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
 
 pass_region = False
 fail_region = not pass_region
 
 deepakWeight = "1.0"
 gen_class = "(AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5)"
-tagger_pass = "(AK15Jet_DeepAK15_TvsQCD[0]>=0.3)"
+tagger_pass = "(AK15Jet_DeepAK15_MD_TvsQCD[0]>=0.3)"
 
 if pass_region:
     deepakWeight = "("+tagger_pass+"*1.0+(!"+tagger_pass+")*0.0)"
@@ -464,8 +464,8 @@ samples = [
     plotClasses.Sample(
         "#gamma+jets",
         ROOT.kOrange - 4,
-        #path_mwassmer + "/GJets_HT*/*nominal*.root",
-        path_mwassmer + "/GJets_1j*/*nominal*.root",
+        path_mwassmer + "/GJets_HT*/*nominal*.root",
+        #path_mwassmer + "/GJets_1j*/*nominal*.root",
         lumi,
         # first factor removes yield change due to reweighting, second factor is k factor for total cross section multiplied by fraction of isolated photons in analysis phase-space
         #lumi + "*0.710*1.105/0.830

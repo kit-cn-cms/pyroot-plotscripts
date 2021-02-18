@@ -218,7 +218,7 @@ def GetPlots(extension, selection, label):
                 0.0,
                 1.0,
             ),
-            "AK15Jet_DeepAK15_TvsQCD[0]",
+            "AK15Jet_DeepAK15_MD_TvsQCD[0]",
             selection,
             label,
         ),
@@ -230,7 +230,7 @@ def GetPlots(extension, selection, label):
                 0.0,
                 1.0,
             ),
-            "AK15Jet_DeepAK15_TvsQCD[0]",
+            "AK15Jet_DeepAK15_MD_TvsQCD[0]",
             selection,
             label,
         ),
@@ -1104,7 +1104,7 @@ def GetPlots(extension, selection, label):
                     0.0,
                     1.0,
                 ),
-                "AK15Jet_DeepAK15_TvsQCD[0]",
+                "AK15Jet_DeepAK15_MD_TvsQCD[0]",
                 selection,
                 label,
             ),
@@ -1116,7 +1116,7 @@ def GetPlots(extension, selection, label):
                     #0.0,
                     #1.0,
                 #),
-                #"AK15Jet_DeepAK15_TvsQCD[0]",
+                #"AK15Jet_DeepAK15_MD_TvsQCD[0]",
                 #selection,
                 #label,
             #),
@@ -1288,7 +1288,7 @@ generalselection += "*(AK15Jet_CHF[0]>0.1)*(AK15Jet_NHF[0]<0.8)"
 #generalselection += "*((AK15Jet_PuppiSoftDropMass[0]*weight_sdm_corr)>105.)*((AK15Jet_PuppiSoftDropMass[0]*weight_sdm_corr)<210.)"
 
 # top-tagger cut
-#generalselection += "*(AK15Jet_DeepAK15_TvsQCD[0]>=0.3)"
+#generalselection += "*(AK15Jet_DeepAK15_MD_TvsQCD[0]>=0.3)"
 
 def control_plots_had_SR(data=None):
     label = "#scale[0.8]{signal region (hadronic)}"

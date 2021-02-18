@@ -162,7 +162,7 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
             internalBosonWeight_monojet  = internalBosonWeight;
         }
         else if(dataera == "2017" || dataera == "2018"){
-            internalBosonWeight_monojet = ewk_nlo_sf;
+            internalBosonWeight_monojet = internalBosonWeight;
         }
         else {
             std::cout << "NO VALID DATAERA CHOSEN!!" << std::endl;
@@ -192,17 +192,17 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     float vjets_lf_down = 1.0;
     if ((processname.find("wlnujets") != std::string::npos) || (processname.find("zlljets") != std::string::npos) ||
         (processname.find("znunujets") != std::string::npos) || (processname.find("gammajets") != std::string::npos)) {
-        if (N_BQuarks > 0) {
-            vjets_hf_up = 2.0;
-            vjets_hf_down = 0.0;
+        if (N_BQuarks > 0 || N_CQuarks > 0) {
+            vjets_hf_up = 1.5;
+            vjets_hf_down = 0.5;
         }
-        else if (N_CQuarks > 0) {
-            vjets_cf_up = 1.3;
-            vjets_cf_down = 0.7;
-        }
+        //else if (N_CQuarks > 0) {
+        //    vjets_cf_up = 1.3;
+        //    vjets_cf_down = 0.7;
+        //}
         else {
-            vjets_lf_up = 1.15;
-            vjets_lf_down = 0.85;
+            vjets_lf_up = 1.05;
+            vjets_lf_down = 0.95;
         }
     }
     
